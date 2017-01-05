@@ -149,6 +149,16 @@ casper_netif_output_impl(struct netif *netif, struct pbuf *p)
   print("\n");
 #endif // DEBUG_PKT_TX
 
+#if 1 // TODO
+#else // TODO
+  // cheesy tcpdump
+  // last two octets of dst mac, ethertype, src udp port, udp length, tftp opcode, ms
+  // obviously udp and tftp fields are valid only for udp and tftp packet.
+  uint16_t *outbuf16 = (uint16_t *)TX_BUF_PTR32(ifstate.ptr);
+  xil_printf("TX %04x %04x %04x %04x %04x %u\n",
+    outbuf16[2^1], outbuf16[6^1], outbuf16[17^1], outbuf16[19^1], outbuf16[21^1], ms_tmrctr());
+#endif
+
   // Set TX buffer level to number of 8 byte words to send packet
   *TX_BUF_SIZE_PTR16(ifstate.ptr) = (words_sent >> 1);
 
@@ -409,6 +419,15 @@ casper_rx_packet()
       (size32<<2), size64, p->payload, ms_tmrctr());
 #endif // VERBOSE_ETH_IMPL
 
+#if 1 // TODO
+#else // TODO
+  // cheesy tcpdump
+  // last two octets of src mac, ethertype, dst udp port, udp length, tftp opcode, ms
+  // obviously udp and tftp fields are valid only for udp and tftp packet.
+  uint16_t *inbuf16 = (uint16_t *)RX_BUF_PTR32(ifstate.ptr);
+  xil_printf("RX %04x %04x %04x %04x %04x %u\n",
+    inbuf16[5^1], inbuf16[6^1], inbuf16[18^1], inbuf16[19^1], inbuf16[21^1], ms_tmrctr());
+#endif
 
   // Need to byte swap 32 bit words in RX buffer due to how AXI/Wishbone
   // interface orders bytes.
