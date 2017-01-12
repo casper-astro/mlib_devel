@@ -46,8 +46,7 @@ all_match = true;
 current_outprts = find_system(block, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'RegExp' ,'on', 'name', 'hdr[0-9].*', 'BlockType', 'Outport');
 num_inprts = length(current_outprts);
 num_headers = length(header_ids) - 4;
-
-if num_headers < 5,
+if length(header_ids) < 5,
     error('Must have at least compulsory headers and one other header!');
 end
 
