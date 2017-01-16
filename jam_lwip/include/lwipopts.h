@@ -312,6 +312,16 @@
 #define LWIP_STATS                      1
 
 /**
+ * TFTP timeout
+ */
+#define TFTP_TIMEOUT_MSECS    1000
+
+/**
+ * Max. number of retries when a file is read from server
+ */
+#define TFTP_MAX_RETRIES      3
+
+/**
  * Max. length of TFTP filename
  */
 // Not sure what's best, but the default of 20 is definitely too short for our
