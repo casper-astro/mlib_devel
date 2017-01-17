@@ -30,12 +30,12 @@ class i2c(YellowBlock):
 
         module = 'i2c_infrastructure'
         inst = top.get_instance(entity=module, name=self.fullname + '_infra', comment=self.fullname)
-        inst.add_port('scl_pad_i', self.fullname + '_scl_pad_i')
-        inst.add_port('scl_pad_o', self.fullname + '_scl_pad_o')
-        inst.add_port('scl_padoen_o', self.fullname + '_scl_padoen_o')
-        inst.add_port('sda_pad_i', self.fullname + '_sda_pad_i')
-        inst.add_port('sda_pad_o', self.fullname + '_sda_pad_o')
-        inst.add_port('sda_padoen_o', self.fullname + '_sda_padoen_o')
+        inst.add_port('scl_pad_i', self.fullname + '_scl_pad_o')
+        inst.add_port('scl_pad_o', self.fullname + '_scl_pad_i')
+        inst.add_port('scl_padoen_i', self.fullname + '_scl_padoen_o')
+        inst.add_port('sda_pad_i', self.fullname + '_sda_pad_o')
+        inst.add_port('sda_pad_o', self.fullname + '_sda_pad_i')
+        inst.add_port('sda_padoen_i', self.fullname + '_sda_padoen_o')
         inst.add_port('scl_io', self.fullname + '_scl_io', dir='inout', parent_port = True, width = 1)
         inst.add_port('sda_io', self.fullname + '_sda_io', dir='inout', parent_port = True, width = 1)
 

@@ -198,6 +198,17 @@ module i2c_master_byte_ctrl (
 	//
 	reg [4:0] c_state; // synopsys enum_state
 
+    // Jack
+    reg start_reg = 1'b0;
+    reg start_done = 1'b0;
+    always @(posedge clk) begin
+        if (start) begin
+            start_reg <= start;
+        end else if (start_done) begin
+            start_reg <= 1'b0;
+        end
+    end
+
 	always @(posedge clk or negedge nReset)
 	  if (!nReset)
 	    begin
@@ -226,13 +237,15 @@ module i2c_master_byte_ctrl (
 	      shift    <= #1 1'b0;
 	      ld       <= #1 1'b0;
 	      cmd_ack  <= #1 1'b0;
+          start_done <= 1'b0;
 
 	      case (c_state) // synopsys full_case parallel_case
 	        ST_IDLE:
 	          if (go)
 	            begin
-	                if (start)
+	                if (start_reg)
 	                  begin
+                          start_done <= 1'b1;
 	                      c_state  <= #1 ST_START;
 	                      core_cmd <= #1 `I2C_CMD_START;
 	                  end
