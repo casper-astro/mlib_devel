@@ -4,8 +4,9 @@ class ip(YellowBlock):
     def initialize(self):
         self.ips = [{'path':self.lib_path, 
                      'name':self.ip_name,
+                     'module_name':self.ip_name+'_ip',
                      'vendor':'User_Company',
-                     'library':'Sysgen',
+                     'library':'SysGen',
                      'version':'1.0',
                      }]
         
