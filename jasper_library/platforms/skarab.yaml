@@ -135,7 +135,7 @@ pins:
     loc: AT18
   FPGA_REFCLK_BUF1_N:
     iostd: LVDS
-  gpio:
+  led:
     iostd: LVCMOS18
     loc:
       - A29
@@ -146,6 +146,9 @@ pins:
       - B28
       - C28
       - E28
+  gpio:
+    iostd: LVCMOS18
+    loc:
       - BC35
       - BB35
       - BA34
@@ -649,7 +652,7 @@ pins:
   MEZ3_REFCLK_0_P:
     loc: J10
   MEZ3_REFCLK_0_N:
-    loc: J9    
+    loc: J9
   MEZ3_PHY11_LANE_TX_N:
     loc:
       - P3
@@ -673,7 +676,7 @@ pins:
       - L5
       - K7
       - J5
-      - H7            
+      - H7
   I2C_RESET_FPGA:
     iostd: LVCMOS18
     loc: BC19
