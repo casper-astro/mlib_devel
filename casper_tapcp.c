@@ -66,8 +66,38 @@
 //   - `/progdev[TBD]`  A future command will be added to allow uploading a new
 //     bitstream.  The exact details are under development.
 //
-//   - `/flash[TBD]` A future command will be added to access the FLASH device
-//     attached to the FPGA.
+//   - `/flash[.LEN].CMD`  Provides access to the SPI Flash device attached to
+//     the FPGA.  Both read and write access are supported.  The Flash device
+//     responds to a variety of commands to read, write, erase, or program its
+//     main memory array, various registers, and the special one-time
+//     programmable (OTP) memory region.  Most commands require additional data
+//     to guide their operation (e.g. an address to read or write) and some
+//     require some dummy bytes to ensure proper operation of the Flash
+//     device's internal control logic.  The command and any ancillary data
+//     should be provided in the CMD parameter as a sequence of hex digits.
+//     The bytes given in the CMD paramter will be sent to the Flash device to
+//     initiate the command's operation.
+//
+//     For a read operations, the CMD bytes plus a number of additional data
+//     bytes are returned as the data response. The number of additional bytes,
+//     beyond CMD, to be returned must be given as part of the request string
+//     as a hexidecimal value.  It may be given using the minimum required
+//     number of hex digits if it is delimited by an extra '.' character.
+//     Alternatively, it may be given as the first 8 hex digits of CMD.  The
+//     data returned for a READ operation are the bytes from CMD (not counting
+//     the 4 bytes of length if given as part of CMD) followed by LEN bytes of
+//     additional data read from the Flash device.
+//
+//     Write operations do not specify a length as it is implied by the number
+//     of data bytes sent by the client.  After CMD is sent to the Flash
+//     device, the data bytes to be written must be transferred as the data
+//     portion of the TFTP request.  When writing small amounts of data, it is
+//     possible to include all or some of the data bytes are part of CMD so
+//     long as the maximum filename supported by the TFTP server (255 bytes
+//     plus terminating NUL) is not exceeded.
+//
+//     TODO: Specify any length limitations (e.g. multiple of 4 bytes) for
+//     ASCII mode transfers.
 //
 // The `/help`, `/listdev`, `/temp`, and `/cpu` commands are read-only and can
 // only be used with "get" operations.  Trying to "put" to them will result in
@@ -173,6 +203,7 @@
 #include "casper_tapcp.h"
 #include "casper_devcsl.h"
 #include "csl.h"
+#include "spi.h"
 
 // FPGA memory space macros
 #define FPGA_BASEADDR XPAR_AXI_SLAVE_WISHBONE_CLASSIC_MASTER_0_BASEADDR
@@ -197,7 +228,37 @@ extern const uint8_t _core_info;
 
 // Utility functions
 
-// Convert ASCII hex digits to uint32_t.
+// Convert ASCII hex digits to byte array.  Blindly converts 2*nbytes input
+// characters as if they are hex digits.
+static
+uint8_t *
+hex_to_u8(uint8_t *src, uint8_t *dst, uint32_t nbytes)
+{
+  uint8_t i, c, val;
+
+  while(nbytes) {
+    val = 0;
+    // Do two nybbles
+    for(i=0; i<2; i++) {
+      val <<= 4;
+      c = *src++;
+      if(isdigit(c)) {
+        val |= (c - '0')  & 0xf;
+      } else {
+        // Ensure c is lower case
+        c |= 0x20;
+        val |= (c - 'a' + 10) & 0xf;
+      }
+    }
+    *dst++ = val;
+    nbytes--;
+  }
+
+  return src;
+}
+
+// Convert ASCII hex digits to uint32_t.  Converts up to 8 hex digits, stopping
+// on 9th hex digit or first non-hex-digit.
 static
 uint8_t *
 hex_to_u32(uint8_t *p, uint32_t *u32)
@@ -350,6 +411,11 @@ casper_tapcp_read_temp(struct tapcp_state *state, void *buf, int bytes)
 //     DEV_NAME "\t" MODE "\t" OFFSET "\t" SIZE "\t" TYPE "\n"
 //       255     1    1    1     8     1     8   1    2    1
 static uint8_t line_buf[256+2+9+9+3];
+
+// Buffer for SPI Flash transfer
+// Size is set by TFTP max filename
+#define SPI_BUF_LEN TFTP_MAX_FILENAME_LEN
+static uint8_t spi_buf[SPI_BUF_LEN];
 
 static
 int
@@ -641,6 +707,132 @@ casper_tapcp_read_fpga_words_ascii(
 
   return len;
 }
+
+// Reads data bytes from flash and sends it back in binary form
+static
+int
+casper_tapcp_read_flash_binary(
+    struct tapcp_state *state, void *buf, int bytes)
+{
+  // state->ptr is pointer to next spi_buf byte to send
+  // state->nleft is total number of bytes left to send to client
+  // state->u32 is number of bytes left in spi_buf to send back
+  int len = 0;
+  int n;
+
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("%s(%p, %p, %d) [%d/%d]\n", __FUNCTION__,
+      state, buf, bytes, state->u32, state->nleft);
+#endif
+
+  // While any bytes left in spi_buf and buf is not full
+  while(state->u32 && bytes) {
+    // Send as many as we can: n = min(bytes, state->u32)
+    n = bytes < state->u32 ? bytes : state->u32;
+    memcpy(buf, state->ptr, n);
+    len += n;
+    buf += n;
+    state->ptr += n;
+    bytes -= n;
+    state->u32 -= n;
+    state->nleft -= n;
+
+    // If spi_buf is empty and there are more bytes to send
+    if(!state->u32 && state->nleft) {
+      // Get more bytes from flash: state->u32 = min(state->nleft, SPI_BUF_LEN)
+      state->u32 = state->nleft < SPI_BUF_LEN ? state->nleft : SPI_BUF_LEN;
+      send_spi(spi_buf, spi_buf, state->u32, SEND_SPI_MORE);
+      state->ptr = spi_buf;
+    }
+  }
+
+  // If all done
+  if(len < bytes) {
+    // Close SPI transaction
+    send_spi(NULL, NULL, 0, 0);
+  }
+
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("%s(%p, %p, %d) = %d/%d\n", __FUNCTION__,
+      state, buf, bytes, len, state->nleft);
+#endif
+
+  return len;
+}
+
+#if 0
+// Reads data bytes from flash and sends it back in ascii form
+// This command outputs a simple ASCII hex dump, 8 digit label followed by
+// colon and then 16 bytes per line arranged as four groups of four bytes each:
+//
+//     00000000: 01234567 89ABCDEF 01234567 89ABCDEF
+//     00000010: 12345678 9ABCDEF0 12345678 9ABCDEF0
+//     00000020: 23456789 ABCDEF01 23456789 ABCDEF01
+//     [...]
+static
+int
+casper_tapcp_read_flash_ascii(
+    struct tapcp_state *state, void *buf, int bytes)
+{
+  // state->ptr is pointer to next byte
+  // state->lindex is index of next line_buf byte to send
+  // state->nleft is number of bytes left to retrieve from memory
+  // state->u32 is value for label of next line
+
+  int i;
+  int len = 0;
+  uint8_t *plb;
+
+  while(len < bytes && state->nleft > 0) {
+    // If need to start a new line
+    if(state->lidx == 0) {
+      // Init with label
+      plb = u32_to_hex(state->u32, line_buf, 1);
+      state->u32 += 16;
+      *plb++ = ':';
+      *plb++ = ' ';
+      // Loop to read up to 16 bytes for the line
+      for(i=0; i<16; i++) {
+        plb = u8_to_hex(*(uint32_t *)state->ptr++, plb, 0x11);
+        state->nleft--;
+        if((i & 3) == 3 && i != 15) {
+          *plb++ = ' ';
+        }
+        // All done?
+        if(state->nleft == 0) {
+          break;
+        }
+      }
+      // Terminate line
+      *plb++ = '\n';
+    }
+
+    // Copy data to buf
+    plb = line_buf + state->lidx;
+    while(len < bytes) {
+      // Copy byte
+      *(uint8_t *)buf++ = *plb;
+      // Increment len
+      len++;
+      // If end of line
+      if(*plb == '\n') {
+        state->lidx = 0;
+        break;
+      } else {
+        state->lidx++;
+      }
+      plb++;
+    }
+  }
+
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("%s(%p, %p, %d) = %d/%d\n", __FUNCTION__,
+      state, buf, bytes, len, state->nleft);
+#endif
+
+  return len;
+}
+#endif
 
 // Write helpers
 
@@ -1084,6 +1276,78 @@ casper_tapcp_open_mem(
       state->u32 = 0; // Used to detect line labels
       set_tftp_write((tftp_write_f)casper_tapcp_write_fpga_words_ascii);
     }
+  }
+
+  return state;
+}
+
+// Used to open `flash` requests.
+void *
+casper_tapcp_open_flash(
+    struct tapcp_state *state,
+    const char *fname)
+{
+  uint8_t *p;
+
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("%s fname '%s'\n", __FUNCTION__, fname);
+#endif
+
+  // TODO
+  if(state->write) {
+    return NULL;
+  }
+
+  // Parse "command line"
+  //
+  // Advance fname past leading "/flash.", if present
+  if(!strncmp("/flash.", fname, strlen("/flash."))) {
+    fname += strlen("/flash.");
+  }
+
+  // Walk p through parameters
+  p = (uint8_t *)fname;
+  // If reading, get LEN in state->nleft.
+  if(!state->write) {
+    p = hex_to_u32(p, (uint32_t *)&state->nleft);
+    // If delimited by another dot, advance past it
+    if(*p == '.') {
+      p++;
+    }
+  }
+  // Save CMD length (in binary bytes, not hex digits) to state->u32
+  // Note that this is strictly command/opcode plus address/dummy bytes; it
+  // does not include any of the optional 4 bytes for read length.
+  state->u32 = strlen((char *)p) >> 1;
+  // If reading
+  if(!state->write) {
+    // Increment nleft by CMD byte count
+    state->nleft += state->u32;
+  }
+  // Convert CMD hex digits to bytes in the spi_buf
+  // (an odd trailing digit will be ignored)
+  hex_to_u8(p, spi_buf, state->u32);
+  // Send to SPI device, results stored in place
+  send_spi(spi_buf, spi_buf, state->u32, SEND_SPI_MORE);
+  // Set state->ptr to first byte of spi_buf
+  state->ptr = spi_buf;
+
+  // Set read/write function for data transfer
+  if(!state->write) {
+    if(state->binary) {
+      set_tftp_read((tftp_read_f)casper_tapcp_read_flash_binary);
+    } else {
+#if 0
+      set_tftp_read((tftp_read_f)casper_tapcp_read_flash_ascii);
+#else
+      send_spi(NULL, NULL, 0, 0);
+      return NULL;
+#endif
+    }
+  } else {
+    // TODO
+    send_spi(NULL, NULL, 0, 0);
+    return NULL;
   }
 
   return state;

@@ -108,11 +108,11 @@ casper_tftp_open(const char *fname, const char *mode, u8_t write)
   // If filename starts with "progdev"
   } else if(!strncmp("progdev", fname, sizeof("progdev"))) {
     handle = NULL; // TODO
-
-  // If filename starts with "flash"
-  } else if(!strncmp("flash", fname, sizeof("flash"))) {
-    handle = NULL; // TODO
 #endif
+
+  // If filename starts with "/flash."
+  } else if(!strncmp("/flash.", fname, strlen("/flash."))) {
+    handle = casper_tapcp_open_flash(&tapcp_state, fname);
 
   // Otherwise, treat as /dev/... request
   } else {
