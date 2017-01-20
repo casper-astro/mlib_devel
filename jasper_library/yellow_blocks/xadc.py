@@ -17,12 +17,12 @@ class xadc(YellowBlock):
         module = 'xadc'
         inst = top.get_instance(entity=module, name='xadc_inst', comment=self.fullname)
         inst.add_wb_interface(regname='xadc', mode='rw', nbytes=512)
-        inst.add_port('vp_in', parent_port=True, dir='in')
-        inst.add_port('vn_in', parent_port=True, dir='in')
+        #inst.add_port('vp_in', 'xadc_vp_in', parent_port=True, dir='in')
+        #inst.add_port('vn_in', 'xadc_vp_in', parent_port=True, dir='in')
 
     def gen_constraints(self):
         consts = []
-        consts += [PortConstraint('vp_in', 'xadc_p')]
-        consts += [PortConstraint('vn_in', 'xadc_n')]
+        #consts += [PortConstraint('xadc_vp_in', 'xadc_p')]
+        #consts += [PortConstraint('xadc_vn_in', 'xadc_n')]
         return consts
         
