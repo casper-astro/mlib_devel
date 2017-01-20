@@ -19,6 +19,11 @@ class xsg(YellowBlock):
             self.provides.append('user_clk180')
             self.provides.append('user_clk270')
 
+    def gen_children(self):
+        this_block_params = self.blk.copy()
+        this_block_params['tag'] = 'xps:'+self.platform.name
+        return [YellowBlock.make_block(this_block_params, self.platform)]
+
     def modify_top(self,top):
         if self.platform.name == 'skarab':
             top.add_signal('user_clk')

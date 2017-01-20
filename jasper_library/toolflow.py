@@ -302,7 +302,6 @@ class Toolflow(object):
         for pk in self.peripherals.keys():
             self.logger.debug('Generating Yellow Block: %s'%pk)
             self.periph_objs.append(yellow_block.YellowBlock.make_block(self.peripherals[pk], self.plat))
-        self.periph_objs.append(yellow_block.YellowBlock.make_block({'tag': 'xps:'+self.plat.name}, self.plat))
         self._expand_children(self.periph_objs)
         self._drc()
 
