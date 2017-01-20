@@ -5,7 +5,6 @@ class snap(YellowBlock):
     def initialize(self):
         self.add_source('infrastructure')
         self.add_source('wbs_arbiter')
-        self.use_microblaze = False
     def modify_top(self,top):
         inst = top.get_instance('snap_infrastructure', 'snap_infrastructure_inst')
         inst.add_port('sys_clk_buf_n', 'sys_clk_n', parent_port=True, dir='in')
