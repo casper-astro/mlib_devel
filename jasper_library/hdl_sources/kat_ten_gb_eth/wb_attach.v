@@ -410,7 +410,7 @@ module wb_attach #(
 
   wire [31:0] opb_data_int = opb_data_src == REG_LOCAL_MAC_1   ? {16'b0, local_mac_reg[47:32]} :
                              opb_data_src == REG_LOCAL_MAC_0   ? local_mac_reg[31:0] :
-                             opb_data_src == REG_LOCAL_GATEWAY ? {write_data[23:0], local_gateway_reg} :
+                             opb_data_src == REG_LOCAL_GATEWAY ? {24'b0, local_gateway_reg} :
                              opb_data_src == REG_LOCAL_IPADDR  ? local_ip_reg[31:0] :
                              opb_data_src == REG_BUFFER_SIZES  ? {8'b0, cpu_tx_size_reg, 8'b0, cpu_rx_ack_reg ? 8'b0 : cpu_rx_size} :
                              opb_data_src == REG_VALID_PORTS   ? {7'b0, soft_reset_reg, 7'b0, local_enable_reg, local_port_reg} :
