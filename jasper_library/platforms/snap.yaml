@@ -450,6 +450,52 @@ pins:
       - 'H18'
       - '' # GND
       - 'H17'
+  i2c:
+    iostd: I2C
+    loc:
+      - '' # 3V3
+      - '' # 5V0
+      - '' # PMBUS_DATA
+      - '' # 5V0
+      - '' # PMBUS_CLK
+      - '' # GND
+      - 'E18'
+      - 'B16'
+      - '' # GND
+      - 'C16'
+
+      - '' # PMBUS_CTRL
+      - '' # PMBUS_ALERT
+      - '' # JTAG TMS
+      - '' # GND
+      - '' # JTAG_TDI
+      - '' # JTAG_TDO
+      - '' # NC
+      - '' # JTAG_TCLK
+      - 'J20'
+      - '' # GND
+
+      - 'K20'
+      - '' # DONE3V3
+      - 'E17'
+      - 'G19'
+      - '' # GND
+      - '' # FPGA_PROG_B
+      - '' # NC
+      - '' # NC
+      - 'C17'
+      - '' # GND
+
+      - 'C18'
+      - 'C19'
+      - 'B19'
+      - '' # GND
+      - 'A17'
+      - 'B17'
+      - 'D20'
+      - 'H18'
+      - '' # GND
+      - 'H17'
       
 
 
