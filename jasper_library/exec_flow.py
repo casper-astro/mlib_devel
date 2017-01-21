@@ -129,12 +129,12 @@ if opts.backend or opts.software:
 
     if opts.software:
         binary = backend.binary_loc
-        output_fpg = tf.frontend_target_base[:-4] + '_%d-%d-%d_%.2d%.2d.fpg' % (
+        output_fpg = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d.fpg' % (
             tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
             tf.start_time.tm_hour, tf.start_time.tm_min)
 
         # generate bot bof and fpg files for all platforms
-        backend.output_bof = tf.frontend_target_base[:-4] + '_%d-%d-%d_%.2d%.2d.bof' % (
+        backend.output_bof = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d.bof' % (
                          tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
                          tf.start_time.tm_hour, tf.start_time.tm_min)
         os.system('cp %s %s/top.bin' % (binary, backend.compile_dir))
@@ -142,4 +142,5 @@ if opts.backend or opts.software:
             (os.getenv('MLIB_DEVEL_PATH'), backend.output_dir, backend.output_bof, backend.compile_dir,
                 backend.compile_dir)
         os.system(mkbof_cmd)
+        print 'Created %s/%s' % (backend.output_dir, backend.output_bof)
         backend.mkfpg(binary, output_fpg)
