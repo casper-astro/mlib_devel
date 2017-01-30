@@ -691,6 +691,7 @@ architecture arch_forty_gbe of forty_gbe is
     signal fpga_reset : std_logic;
     signal gmii_fpga_rst : std_logic;
     signal qsfp_fpga_rst : std_logic;
+    signal sys_fpga_rst : std_logic;
     signal emcclk_fpga_rst : std_logic;    
     signal refclk_0 : std_logic;
     signal refclk_1 : std_logic;
@@ -701,10 +702,16 @@ architecture arch_forty_gbe of forty_gbe is
     signal user_clk : std_logic;
     signal user_clk_mmcm : std_logic;
     --Reset Synchroniser and user reset signals
+    signal sync_sys_fpga_rst : std_logic;
+    signal sync_sys_fpga_rst2 : std_logic;
+    signal sync_sys_fpga_rst3 : std_logic;
+    attribute ASYNC_REG : string;
+    attribute ASYNC_REG of sync_sys_fpga_rst: signal is "TRUE";
+    attribute ASYNC_REG of sync_sys_fpga_rst2: signal is "TRUE";
+    attribute ASYNC_REG of sync_sys_fpga_rst3: signal is "TRUE";      
     signal sync_user_rst : std_logic;
     signal sync_user_rst2 : std_logic;
     signal sync_user_rst3 : std_logic;
-    attribute ASYNC_REG : string;
     attribute ASYNC_REG of sync_user_rst: signal is "TRUE";
     attribute ASYNC_REG of sync_user_rst2: signal is "TRUE";
     attribute ASYNC_REG of sync_user_rst3: signal is "TRUE";    
@@ -726,13 +733,18 @@ architecture arch_forty_gbe of forty_gbe is
     attribute ASYNC_REG of sync_emcclk_fpga_rst: signal is "TRUE";
     attribute ASYNC_REG of sync_emcclk_fpga_rst2: signal is "TRUE";
     attribute ASYNC_REG of sync_emcclk_fpga_rst3: signal is "TRUE";                
-    signal user_rst : std_logic;     
+    signal user_rst : std_logic;
+    signal user_fpga_rst : std_logic;
     signal sys_clk : std_logic;
-    signal sys_rst : std_logic;
+    signal sys_rst : std_logic; 
     signal sys_rst_i : std_logic;
     signal sys_rst_z : std_logic;
     signal sys_rst_z2 : std_logic;
     signal sys_rst_z3 : std_logic;
+    signal user_rst_i : std_logic;
+    signal user_rst_z : std_logic;
+    signal user_rst_z2 : std_logic;
+    signal user_rst_z3 : std_logic;    
 
     signal gmii_clk : std_logic;
     signal gmii_rst : std_logic;
@@ -927,6 +939,9 @@ architecture arch_forty_gbe of forty_gbe is
     signal host_reset_z : std_logic;
     signal host_reset_z2 : std_logic;
     signal host_reset_z3 : std_logic;
+    signal host_reset_u : std_logic;
+    signal host_reset_u2 : std_logic;
+    signal host_reset_u3 : std_logic;    
 
     signal xlgmii_tx_valid : T_40GBE_DATA_VALID;
     signal xlgmii_tx_end_of_frame : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
@@ -1124,7 +1139,7 @@ begin
         --LOCKED    => LOCKED,
         CLKIN1    => refclk_1, -- Main clock input
         PWRDWN    => '0',
-        RST       => fpga_reset,
+        RST       => '0',--fpga_reset,
         CLKFBIN   => CLKFB   -- Feedback clock input
     );
 
@@ -1143,17 +1158,26 @@ begin
 -- RESETS
 ---------------------------------------------------------------------------
 
+    pFpgaResetSysSynchroniser: process(sys_clk)
+    begin
+        if (rising_edge(sys_clk) ) then
+            sync_sys_fpga_rst3 <= sync_sys_fpga_rst2;
+            sync_sys_fpga_rst2 <= sync_sys_fpga_rst;
+            sync_sys_fpga_rst <= fpga_reset;
+        end if;
+    end process pFpgaResetSysSynchroniser;  
+
     pUserResetSynchroniser: process(user_clk)
     begin
-        if (rising_edge(user_clk) ) then
+        if (rising_edge(user_clk) ) then         
             sync_user_rst3 <= sync_user_rst2;
             sync_user_rst2 <= sync_user_rst;
-            sync_user_rst <= sys_rst;
+            sync_user_rst <= fpga_reset;
         end if;
     end process pUserResetSynchroniser;
     
     pFpgaResetGmiiSynchroniser: process(gmii_clk)
-    begin
+    begin  
         if (rising_edge(gmii_clk) ) then
             sync_gmii_fpga_rst3 <= sync_gmii_fpga_rst2;
             sync_gmii_fpga_rst2 <= sync_gmii_fpga_rst;
@@ -1162,7 +1186,7 @@ begin
     end process pFpgaResetGmiiSynchroniser;
     
     pFpgaResetQsfpSynchroniser: process(qsfp_gtrefclk)
-    begin
+    begin     
         if (rising_edge(qsfp_gtrefclk) ) then
             sync_qsfp_fpga_rst3 <= sync_qsfp_fpga_rst2;
             sync_qsfp_fpga_rst2 <= sync_qsfp_fpga_rst;
@@ -1171,7 +1195,7 @@ begin
     end process pFpgaResetQsfpSynchroniser;
     
     pFpgaResetEmcclkSynchroniser: process(FPGA_EMCCLK2)
-    begin
+    begin    
         if (rising_edge(FPGA_EMCCLK2) ) then
             sync_emcclk_fpga_rst3 <= sync_emcclk_fpga_rst2;
             sync_emcclk_fpga_rst2 <= sync_emcclk_fpga_rst;
@@ -1179,9 +1203,9 @@ begin
         end if;
     end process pFpgaResetEmcclkSynchroniser;    
      
-    gen_sys_rst : process(fpga_reset, sys_clk)
+    gen_sys_rst : process(sys_fpga_rst, sys_clk)
     begin
-        if (fpga_reset = '1')then
+        if (sys_fpga_rst = '1')then
             sys_rst_i <= '1';
             sys_rst_z <= '1';
             sys_rst_z2 <= '1';
@@ -1200,7 +1224,29 @@ begin
             end if;
         end if;
     end process;
-
+    
+    gen_user_rst : process(user_fpga_rst, user_clk)
+    begin
+        if (user_fpga_rst = '1')then
+            user_rst_i <= '1';
+            user_rst_z <= '1';
+            user_rst_z2 <= '1';
+            user_rst_z3 <= '1';
+        elsif (rising_edge(user_clk))then
+            if (host_reset_u3 = '1')then
+                user_rst_i <= '1';
+                user_rst_z <= '1';
+                user_rst_z2 <= '1';
+                user_rst_z3 <= '1';
+            else
+                user_rst_z <= '0';
+                user_rst_z2 <= user_rst_z;
+                user_rst_z3 <= user_rst_z2;
+                user_rst_i <= user_rst_z3;
+            end if;
+        end if;
+    end process;    
+    
     sys_rst_bufg : BUFG
     port map (
         I  => sys_rst_i,
@@ -1208,8 +1254,18 @@ begin
         
     user_rst_bufg : BUFG
     port map (
+        I  => user_rst_i,
+        O  => user_rst);        
+        
+    fpga_sys_rst_bufg : BUFG
+     port map (
+        I  => sync_sys_fpga_rst3,
+        O  => sys_fpga_rst);         
+        
+    fpga_user_rst_bufg : BUFG
+    port map (
         I  => sync_user_rst3,
-        O  => user_rst);
+        O  => user_fpga_rst);
 
     fpga_gmii_rst_bufg : BUFG
     port map (
@@ -1272,6 +1328,7 @@ begin
 
     host_reset <= '0' when (host_reset_count = X"FF") else '1';
 
+    --host reset synchronised to the gmii_clk
     gen_host_reset_z : process(gmii_clk)
     begin
         if (rising_edge(gmii_clk))then
@@ -1280,6 +1337,16 @@ begin
             host_reset_z3 <= host_reset_z2;
         end if;
     end process;
+    
+    --host reset synchronised to the user_clk
+    gen_host_reset_u : process(user_clk)
+    begin
+        if (rising_edge(user_clk))then
+            host_reset_u <= host_reset;
+            host_reset_u2 <= host_reset_u;
+            host_reset_u3 <= host_reset_u2;
+        end if;
+    end process;    
 
 ----------------------------------------------------------------------------
 -- REGISTER CONNECTIONS
