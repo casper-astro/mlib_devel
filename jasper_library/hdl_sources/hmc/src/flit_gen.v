@@ -209,6 +209,7 @@ module flit_gen #(
   localparam STATE_WR_RD_DATA1  = 4'd3; // Write data data [959:448]
   localparam STATE_WR_RD_DATA2  = 4'd4; // Write data data [1023:960], issue WR128 Request tail, issue RD128 Request Header and Tail  
   localparam STATE_CHK_RD_DATA  = 4'd5; // Wait for RX AXI bus to present valid return data and then check it for errors
+  localparam WAIT_AXI_TX_RDY1   = 4'd6; // Wait for AXI TX bus to become available 
 
   // Generate a pseudo random sequence as a function of the supplied tag 
   // This will be used as data for the memory test
@@ -276,6 +277,12 @@ module flit_gen #(
         WAIT_AXI_TX_RDY: begin
           wr_flit_state <= WAIT_AXI_TX_RDY; // Wait for TX AXI FIFO to become available
           if (s_axis_tx_TREADY == 1'b1) begin // Make sure AXI TX FIFO is not FULL  
+            wr_flit_state <= WAIT_AXI_TX_RDY1;
+          end
+        end
+        WAIT_AXI_TX_RDY1: begin
+          wr_flit_state <= WAIT_AXI_TX_RDY1; // Wait for TX AXI FIFO to become available
+          if (s_axis_tx_TREADY == 1'b1) begin // Make sure AXI TX FIFO is not FULL  
             wr_flit_state <= STATE_WR_RD_DATA;
           end
         end
@@ -331,7 +338,7 @@ module flit_gen #(
             // increment address by two. LINK parameter will determine odd / even
             addr <= addr + 5'b10000; // Granularity: 16bytes (min granularity!) mem addr [3:0] = 0, this is a 128 byte write (ie 8 x 16byte)
             tag <= tag + 1'b1; 
-            wr_flit_state <= STATE_WR_RD_DATA; // Next round of FLITS (end of request, start a new WR128 and RD128 request sequence)
+            wr_flit_state <= WAIT_AXI_TX_RDY; // Next round of FLITS (end of request, start a new WR128 and RD128 request sequence)
             flit_retry <= 1'b0; // The AXI TX FIFO was not full - FLITS accepted
           end else begin
             if (flit_retry == 1'b0) begin // Uh-oh: The AXI TX FIFO was FULL - FLITS  NOT accepted 
