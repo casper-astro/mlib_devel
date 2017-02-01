@@ -24,135 +24,95 @@ class GitInfoError(RuntimeError):
     pass
 
 
-def get_commit_hash(file_or_dir):
+def run_subproc(cmd):
     """
-    Get the latest git commit hash for a file or dir
+
+    :param cmd:
+    :return:
+    """
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                         shell=True)
+    (output, err) = p.communicate()
+    return output, err
+
+
+def get_new_git_info(file_or_dir):
+    """
+
     :param file_or_dir:
     :return:
     """
-    if os.path.isdir(file_or_dir):
-        dirname = file_or_dir
-    else:
-        dirname = os.path.dirname(file_or_dir)
-    p = subprocess.Popen('git -C %s log -n 1 -- %s' % (dirname, file_or_dir),
-                         stdout=subprocess.PIPE,
-                         stderr=subprocess.PIPE,
-                         shell=True)
-    (output, err) = p.communicate()
-    if err != '':
-        raise GitInfoError('%s: error running git log:\n\t%s' %
-                           (file_or_dir, err))
-    commit_hash = output.replace('commit ', '')
-    hashlen = commit_hash.find('\n')
-    if hashlen != 40:
-        raise GitInfoError('%s: hash length incorrect, wanted 40, got %i' % (file_or_dir, hashlen))
-    commit_hash = commit_hash[0:40]
-    return commit_hash
-
-
-def get_status(file_or_dir):
-    """
-    Get the git status for a file or dir
-    :param file_or_dir:
-    :return: str: modified or unmodified
-    """
-    if os.path.isdir(file_or_dir):
-        dirname = file_or_dir
-    else:
-        dirname = os.path.dirname(file_or_dir)
-    p = subprocess.Popen('git -C %s status --porcelain -- %s' %
-                         (dirname, file_or_dir),
-                         stdout=subprocess.PIPE,
-                         stderr=subprocess.PIPE,
-                         shell=True)
-    (output, err) = p.communicate()
-    if err != '':
-        raise GitInfoError('%s: error running git status:\n\t%s' %
-                           (file_or_dir, err))
-    if output.strip() == '':
-        return 'unmodified'
-    outlist = output.split('\n')
-    modifications = []
-    for line in outlist:
-        if line[0:2] == ' M':
-            modifications.append(line.strip())
-    if modifications:
-        return 'modified-' + str(modifications).replace(' ', '\\_')
-    else:
-        return 'unmodified'
-
-if args.target or args.fpgstring:
-
-    def get_config(file_or_dir):
-        """
-        Get the git config for a file or dir
-        :param file_or_dir:
-        :return: str: modified or unmodified
-        """
+    try:
+        file_or_dir = os.path.abspath(file_or_dir)
         if os.path.isdir(file_or_dir):
             dirname = file_or_dir
+            filename = file_or_dir
         else:
             dirname = os.path.dirname(file_or_dir)
-        p = subprocess.Popen('git -C %s config -l' % dirname,
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE,
-                             shell=True)
-        (output, err) = p.communicate()
+            filename = os.path.basename(file_or_dir)
+        cmd1 = 'git -C {gitdir} log --max-count=1 --pretty=format:"%H - %ae' \
+               ' - %aD" {fpath}'.format(gitdir=dirname, fpath=filename)
+        cmd2 = 'git -C {gitdir} --no-pager status --porcelain -uno -- ' \
+               '{fpath}'.format(gitdir=dirname, fpath=filename)
+        cmd3 = 'git -C {gitdir} --no-pager status -uno -- {fpath}'.format(
+            gitdir=dirname, fpath=filename)
+        cmd4 = 'git -C {gitdir} --no-pager config --get remote.origin.url' \
+               ''.format(gitdir=dirname, fpath=filename)
+        (hostname, err) = run_subproc('hostname')
         if err != '':
-            raise GitInfoError('%s: error running git config:\n\t%s' %
-                               (file_or_dir, err))
-        outlist = output.split('\n')
-        output = {}
-        for line in outlist:
-            if line.strip(''):
-                _line = line.split('=')
-                output[_line[0]] = _line[1]
-        return output
+            raise GitInfoError('Could not determine hostname')
+        (username, err) = run_subproc('id -un')
+        if err != '':
+            raise GitInfoError('Could not determine username')
+        (output1, err) = run_subproc(cmd1)
+        if err != '':
+            raise GitInfoError('Error getting git log')
+        (output2, err) = run_subproc(cmd2)
+        if err != '':
+            raise GitInfoError('Error getting modified files from git')
+        output2 = output2.split('\n')
+        modified_files = []
+        for val in output2:
+            if val != '':
+                modified_files.append(val)
+        (output3, err) = run_subproc(cmd3)
+        if err != '':
+            raise GitInfoError('Error getting branch info from git')
+        output3 = output3.split('\n')
+        (output4, err) = run_subproc(cmd4)
+        output4 = output4.replace('\n', '')
+        if err != '':
+            raise GitInfoError('Error getting remote origin from git')
+        gitstring = '{filename}\t[{username}@{hostname}]\t[{origin}]\t' \
+                    '[{hashstring}]\t' \
+                    '[{branch}]\t{modified_files}'.format(
+                        username=username.replace('\n', ''),
+                        hostname=hostname.replace('\n', ''),
+                        hashstring=output1 or 'file not in Git',
+                        branch=output3[0] + ' - ' + output3[1],
+                        modified_files=modified_files,
+                        filename=file_or_dir,
+                        origin=output4)
+    except GitInfoError as e:
+        gitstring = file_or_dir + ' - ' + str(e)
+    return gitstring
 
-    def _info_to_lines(file_or_dir):
-        gitlines = []
-        try:
-            ghash = get_commit_hash(file_or_dir)
-            gstat = get_status(file_or_dir)
-            gconfig = get_config(file_or_dir)
-            gitlines.append('git_info_found\t1\n')
-            gitlines.append('commit_hash\t%s\n' % ghash)
-            gitlines.append('status\t%s\n' % gstat)
-            for key in gconfig:
-                param_str = key.replace(' ', '\\_')
-                value_str = gconfig[key].replace(' ', '\\_')
-                gitlines.append('%s\t%s\n' % (param_str, value_str))
-        except Exception as e:
-            gitlines.append('git_info_found\t0\n')
-            raise e
-        _fname = file_or_dir.replace(' ', '\\_')
-        prefix = '?meta 77777_git\trcs\t%s' % _fname
-        for ctr in range(len(gitlines)):
-            gitlines[ctr] = '%s\t%s' % (prefix, gitlines[ctr])
-        return gitlines
-
-    # get the info in a list
-    lines = _info_to_lines(args.file_dir)
-
-    if args.target:
-        try:
-            fptr = open(args.target, 'a')
-        except IOError:
-            import sys
-            sys.exit(-2)
-        for line in lines:
-            fptr.write(line)
-        fptr.close()
-    elif args.fpgstring:
-        fpgstring = ''
-        for line in lines:
-            fpgstring += line
-        print fpgstring,
+new_info = get_new_git_info(args.file_dir)
+if args.target:
+    try:
+        fptr = open(args.target, 'a')
+    except IOError:
+        import sys
+        sys.exit(-2)
+    fptr.write(new_info)
+    fptr.close()
+elif args.fpgstring:
+    print('?meta 77777_git\trcs\t{}'.format(new_info)),
 else:
     if not os.path.exists(args.file_dir):
-        print 'ERROR-no_such_file'
+        print ('ERROR no_such_file: ' + args.file_dir)
         import sys
         sys.exit(-1)
-    githash = get_commit_hash(args.file_dir)
-    gitstat = get_status(args.file_dir)
-    print githash, gitstat
+    print(new_info)
+
+# end

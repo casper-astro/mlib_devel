@@ -21,10 +21,10 @@ if status ~= 0,
 end
 
 % do python check
-[status, ~] = system('which python2.7');
+[status, ~] = system('which python2');
 if status ~= 0,
-    warning('python2.7 not found.');
-    git_info_struct.error_str = 'python2.7\_not\_found';
+    warning('python2 not found.');
+    git_info_struct.error_str = 'python2\_not\_found';
     git_result = -3;
     return;
 end
