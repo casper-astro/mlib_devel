@@ -174,7 +174,10 @@ module openhmc_async_fifo #(
         else
         begin
             full                <= set_full_w || (set_a_full_0_w && shift_in) ;
-            almost_full         <= set_full_w || (set_a_full_0_w) || (set_a_full_1_w && shift_in) ;
+            // Mod: Henno
+            // Jason would like to have at least 5 clock cycles before FIFO is full 
+            // Set almost_full when half full
+            almost_full         <= wp[LG_ENTRIES-2]; // set_full_w || (set_a_full_0_w) || (set_a_full_1_w && shift_in) ;
 
             thermo_wp           <= thermo_wp_w;
 
