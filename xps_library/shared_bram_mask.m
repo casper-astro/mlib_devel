@@ -41,11 +41,31 @@ try
   fpga_arch = xlgetparam(xsg_blk, 'xilinxfamily');
 end
 
+switch fpga_arch
+  case {'virtex6', 'Virtex6', 'virtex5', 'Virtex5'}
+    %if addressing less than 32k bytes
+    if (addr_width + ceil(log2(data_width))) < 15,   
+      errordlg(['Shared BRAM address width cannot be less than ',num2str(15-ceil(log2(data_width))),' when using a data width of ',num2str(data_width),' on Virtex-5 boards']);
+    end
+  case 'virtex2p'
+    if addr_width < 11 
+      errordlg('Shared BRAM address width cannot be less than 11 on Virtex-II Pro boards');
+    end
+  otherwise
+    if addr_width < 11 
+      errordlg('Shared BRAM address width cannot be less than 11 on unknown board');
+    end
+end
+
+%if addr_width > 16,
+%  errordlg('Shared BRAM address width cannot be greater than 16');
+%end
+
 %set up address manipulation blocks
 
 try
   set_param([c_sys, '/calc_add'], 'data_width', num2str(data_width), 'addr_width', num2str(addr_width));
-  %set_param([c_sys, '/mem/calc_add'], 'data_width', num2str(data_width), 'addr_width', num2str(addr_width));
+  set_param([c_sys, '/mem/calc_add'], 'data_width', num2str(data_width), 'addr_width', num2str(addr_width));
 catch
   warning('Shared BRAM block "%s" is out of date (needs its link restored)', c_sys);
 end
@@ -75,6 +95,8 @@ for i =1:length(gateway_outs)
   end
 end
 
+set_param([c_sys, '/mem/sim_data_in'], ...
+  'arith_type', 'Unsigned', 'bin_pt', num2str(data_bin_pt), 'n_bits', num2str(data_width));
 
 %set up simulation memory
 
