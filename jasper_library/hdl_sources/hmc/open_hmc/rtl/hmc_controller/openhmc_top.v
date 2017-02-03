@@ -220,7 +220,7 @@ assign phy_lane_polarity = (CTRL_LANE_POLARITY==1) ? {NUM_LANES{1'b0}} : rf_lane
 
 openhmc_async_fifo #(
     .DWIDTH(DWIDTH+(FPW*3)),
-    .ENTRIES(32),//(16)
+    .ENTRIES(32)//(16)
 ) fifo_tx_data (
     //System
     .si_clk(clk_user),
