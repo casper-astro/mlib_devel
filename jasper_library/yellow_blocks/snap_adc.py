@@ -27,7 +27,7 @@ class snap_adc(YellowBlock):
         """
         if self.i_am_the_first:
             lmx = YellowBlock.make_block({'tag':'xps:lmx2581', 'fullpath':'%s/lmx2581_from'%self.name, 'name':'lmx2581'}, self.platform)
-            swreg = YellowBlock.make_block({'tag':'xps:sw_reg', 'fullpath':'%s/adc16_use_synth'%self.name, 'io_dir':'From Processor', 'name':'adc16_use_synth'}, self.platform)
+            swreg = YellowBlock.make_block({'tag':'xps:sw_reg_sync', 'fullpath':'%s/adc16_use_synth'%self.name, 'io_dir':'From Processor', 'name':'adc16_use_synth'}, self.platform)
             return [lmx, swreg]
         else:
             return []
