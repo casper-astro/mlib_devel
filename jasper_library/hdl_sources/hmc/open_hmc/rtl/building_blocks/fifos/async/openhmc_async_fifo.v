@@ -58,7 +58,7 @@ module openhmc_async_fifo #(
 
         output reg              full,
         output reg              almost_full,
-        output reg              half_full,
+        output reg              almost_full4,
 
         // interface for shift_out side
         input wire              so_clk,
@@ -120,6 +120,11 @@ module openhmc_async_fifo #(
     wire                    set_a_full_0_w;
     wire                    set_a_full_1_w;
     wire                    set_a_full_2_w;
+    // Mod: Henno
+    wire                    set_a_full_3_w;
+    wire                    set_a_full_4_w;
+    wire                    set_a_full_5_w;
+    reg                     almost_full1,almost_full2,almost_full3;
 
     wire [LG_ENTRIES-1:0]   upper_bound;
 
@@ -135,6 +140,10 @@ module openhmc_async_fifo #(
     assign set_a_full_0_w   = &(thermo_wp ^ {~thermo_rp_synced_1[0],   thermo_rp_synced_1[ENTRIES-1:1]});
     assign set_a_full_1_w   = &(thermo_wp ^ {~thermo_rp_synced_1[1:0], thermo_rp_synced_1[ENTRIES-1:2]});
     assign set_a_full_2_w   = &(thermo_wp ^ {~thermo_rp_synced_1[2:0], thermo_rp_synced_1[ENTRIES-1:3]});
+    // Mod: Henno
+    assign set_a_full_3_w   = &(thermo_wp ^ {~thermo_rp_synced_1[3:0], thermo_rp_synced_1[ENTRIES-1:4]});
+    assign set_a_full_4_w   = &(thermo_wp ^ {~thermo_rp_synced_1[4:0], thermo_rp_synced_1[ENTRIES-1:5]});
+    assign set_a_full_5_w   = &(thermo_wp ^ {~thermo_rp_synced_1[5:0], thermo_rp_synced_1[ENTRIES-1:6]});
 
     assign upper_bound      = ENTRIES[LG_ENTRIES-1:0] - {{LG_ENTRIES-1 {1'b0}}, 1'b1};
 
@@ -171,6 +180,10 @@ module openhmc_async_fifo #(
             thermo_wp           <= {ENTRIES {1'b0}};
             full                <= 1'b0;
             almost_full         <= 1'b0;
+            almost_full1        <= 1'b0;
+            almost_full2        <= 1'b0;
+            almost_full3        <= 1'b0;
+            almost_full4        <= 1'b0;
             half_full           <= 1'b0;
         end
         else
@@ -179,8 +192,10 @@ module openhmc_async_fifo #(
             almost_full         <= set_full_w || (set_a_full_0_w) || (set_a_full_1_w && shift_in) ;
             // Mod: Henno
             // Jason would like to have at least 5 clock cycles before FIFO is full 
-            // Generate half full flag
-            half_full           <= wp[LG_ENTRIES-1];
+            almost_full1         <= set_full_w || (set_a_full_0_w) || (set_a_full_1_w) || (set_a_full_2_w && shift_in) ;
+            almost_full2         <= set_full_w || (set_a_full_0_w) || (set_a_full_1_w) || (set_a_full_2_w) || (set_a_full_3_w && shift_in) ;
+            almost_full3         <= set_full_w || (set_a_full_0_w) || (set_a_full_1_w) || (set_a_full_2_w) || (set_a_full_3_w) || (set_a_full_4_w && shift_in) ;
+            almost_full4         <= set_full_w || (set_a_full_0_w) || (set_a_full_1_w) || (set_a_full_2_w) || (set_a_full_3_w) || (set_a_full_4_w) || (set_a_full_5_w && shift_in) ;
 
             thermo_wp           <= thermo_wp_w;
 

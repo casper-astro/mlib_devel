@@ -220,7 +220,7 @@ assign phy_lane_polarity = (CTRL_LANE_POLARITY==1) ? {NUM_LANES{1'b0}} : rf_lane
 
 openhmc_async_fifo #(
     .DWIDTH(DWIDTH+(FPW*3)),
-    .ENTRIES(32)//(16)
+    .ENTRIES(128)//(32)//(16)
 ) fifo_tx_data (
     //System
     .si_clk(clk_user),
@@ -234,7 +234,7 @@ openhmc_async_fifo #(
     // Mod Henno: Move TX ready to FIFO almost full - must accept last write
     .full(),//.full(s_axis_tx_TREADY_n),
     .almost_full(),//(s_axis_tx_TREADY_n), //.almost_full(),
-    .half_full(s_axis_tx_TREADY_n), //.almost_full(),
+    .almost_full4(s_axis_tx_TREADY_n), //.almost_full(),
 
     //To TX Link Logic
     .d_out({tx_d_in_ctrl,tx_d_in_data}),
