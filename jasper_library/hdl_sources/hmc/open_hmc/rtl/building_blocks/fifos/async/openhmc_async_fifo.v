@@ -184,7 +184,7 @@ module openhmc_async_fifo #(
             almost_full2        <= 1'b0;
             almost_full3        <= 1'b0;
             almost_full4        <= 1'b0;
-            half_full           <= 1'b0;
+
         end
         else
         begin
