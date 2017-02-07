@@ -26,11 +26,14 @@ class microblaze(YellowBlock):
         inst.add_port('WE_O ', 'wbm_we_o ')
         inst.add_port('SEL_O', 'wbm_sel_o', width=4)
         inst.add_port('ADR_O', 'wbm_adr_o', width=32)
-        inst.add_port('DAT_O', 'wbm_dat_o', width=32)
-        inst.add_port('DAT_I', 'wbm_dat_i', width=32)
+        # endian flip for Microblaze compatibility.
+        inst.add_port('DAT_O', '{wbm_dat_o[7:0], wbm_dat_o[15:8], wbm_dat_o[23:16], wbm_dat_o[31:24]}', width=32, parent_sig=False)
+        inst.add_port('DAT_I', '{wbm_dat_i[7:0], wbm_dat_i[15:8], wbm_dat_i[23:16], wbm_dat_i[31:24]}', width=32, parent_sig=False)
         inst.add_port('ACK_I', 'wbm_ack_i')
         inst.add_port('RST_O', 'wbm_rst_o')
 
+        top.add_signal('wbm_dat_o', width=32)
+        top.add_signal('wbm_dat_i', width=32)
         top.assign_signal('wb_clk_i', 'sys_clk')
         top.assign_signal('wb_rst_i', 'sys_rst')
 
