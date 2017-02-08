@@ -1,9 +1,11 @@
 from yellow_block import YellowBlock
 from verilog import VerilogModule
 from constraints import PortConstraint, ClockConstraint, RawConstraint
+from yellow_block_typecodes import *
 
 class snap_adc(YellowBlock):
     def initialize(self):
+        self.typecode = TYPECODE_ADC16CTRL
         # num_units is the number of ADC chips
         # board_count is the number of boards
         self.num_units = 3
@@ -134,7 +136,7 @@ class snap_adc(YellowBlock):
         wbctrl.add_port('adc16_locked',    'adc16_locked', width=2)
         wbctrl.add_port('adc16_demux_mode', 'adc16_demux_mode', width=2)
         # and finally the wb interface
-        wbctrl.add_wb_interface(nbytes=2**8, regname='adc16_controller', mode='rw')
+        wbctrl.add_wb_interface(nbytes=2**8, regname='adc16_controller', mode='rw', typecode=self.typecode)
 
         snap_chan = ['a','b','c','d','e','f','g','h']
         for k in range(self.num_units):
@@ -144,7 +146,7 @@ class snap_adc(YellowBlock):
             wbram.add_parameter('LOG_USER_WIDTH','5')
             wbram.add_parameter('USER_ADDR_BITS','10')
             wbram.add_parameter('N_REGISTERS','2')
-            wbram.add_wb_interface(regname='adc16_wb_ram%d'%k, mode='rw', nbytes=4*2**10)
+            wbram.add_wb_interface(regname='adc16_wb_ram%d'%k, mode='rw', nbytes=4*2**10, typecode=TYPECODE_SWREG)
             wbram.add_port('user_clk','user_clk', parent_sig=False)
             wbram.add_port('user_addr','adc16_snap_addr', width=10)
             wbram.add_port('user_din','{%s1, %s2, %s3, %s4}'%(din,din,din,din), parent_sig=False)

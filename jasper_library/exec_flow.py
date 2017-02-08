@@ -89,6 +89,7 @@ if opts.middleware:
     tf.generate_hdl()
     tf.generate_consts()
     tf.write_core_info()
+    tf.write_core_jam_info()
     tf.constraints_rule_check()
     tf.dump_castro(tf.compile_dir+'/castro.yml')
 

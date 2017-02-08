@@ -114,6 +114,7 @@ class Toolflow(object):
         self.generate_consts()
         # Generate software cores file
         self.write_core_info()
+        self.write_core_jam_info()
         # print 'Initializing backend project'
         # self.backend.initialize(self.plat)
         
@@ -389,6 +390,32 @@ class Toolflow(object):
             # add aliases if the WB Devices have them
             for reg in core.memory_map:
                 s += format_str.format(reg.name, modemap[reg.mode], core.base_addr + reg.offset, reg.nbytes)
+            # s += '%s\t%d\t%x\t%x\n'%(core.regname, modemap[core.mode], core.base_addr, core.nbytes)
+        self.logger.debug('Opening %s' % basefile)
+        with open(newfile, 'w') as fh:
+            fh.write(s)
+
+    def write_core_jam_info(self):
+        self.cores = self.top.wb_devices
+        basefile = '%s/%s/core_info.jam.tab' % (os.getenv('HDL_ROOT'), self.plat.name)
+        newfile = '%s/core_info.jam.tab' % self.compile_dir
+        self.logger.debug('Opening %s' % basefile)
+        modemap = {'rw': 3, 'r': 1, 'w': 2}
+        try:
+            with open(basefile, 'r') as fh:
+               s = fh.read()
+        # If there isn't a basefile, just plow on
+        except IOError:
+            s = ''
+        if len(self.cores) != 0:
+            longest_name = max([len(core.regname) for core in self.cores])
+            format_str = '{0:%d} {1:1} {2:<16x} {3:<16x} {4:<2x}\n' % longest_name
+        for core in self.cores:
+            self.logger.debug('Adding core_info.tab entry for %s' % core.regname)
+            s += format_str.format(core.regname, modemap[core.mode], core.base_addr, core.nbytes, core.typecode)
+            # add aliases if the WB Devices have them
+            for reg in core.memory_map:
+                s += format_str.format(reg.name, modemap[reg.mode], core.base_addr + reg.offset, reg.nbytes, core.typecode)
             # s += '%s\t%d\t%x\t%x\n'%(core.regname, modemap[core.mode], core.base_addr, core.nbytes)
         self.logger.debug('Opening %s' % basefile)
         with open(newfile, 'w') as fh:

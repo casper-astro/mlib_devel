@@ -1,6 +1,7 @@
 from yellow_block import YellowBlock
 from constraints import PortConstraint, ClockConstraint, RawConstraint
 from itertools import count
+from yellow_block_typecodes import *
 
 class tengbe_v2(YellowBlock):
     @staticmethod
@@ -74,15 +75,19 @@ class tengbe_v2(YellowBlock):
         ktge.add_port('led_tx', '%s_led_tx'%self.fullname)
 
         # Wishbone memory for status registers / ARP table
-        ktge.add_wb_interface(self.unique_name, mode='rw', nbytes=0x4000) # as in matlab code
+        ktge.add_wb_interface(self.unique_name, mode='rw', nbytes=0x4000, typecode=self.typecode) # as in matlab code
 
 
 class tengbe_v2_xilinx_v6(tengbe_v2):
     def initialize(self):
+        self.typecode = TYPECODE_ETHCORE
         self.add_source('kat_ten_gb_eth')
         self.add_source('sfp_mdio_controller')
         self.add_source('xaui_infrastructure_v6')
         self.add_source('xaui_phy_v6')
+        self.provides = ['ethernet']
+        if self.cpu_rx_en and self.cpu_tx_en:
+            self.provides += ['cpu_ethernet']
 
         #roach2 mezzanine slot 0 has 4-7, roach2 mezzanine slot 1 has 0-3, so barrel shift
         if self.flavour == 'cx4':
@@ -189,6 +194,7 @@ class tengbaser_xilinx_k7(tengbe_v2):
         self.use_gth = use_gth
         tengbe_v2.__init__(self, blk, plat, hdl_root)
     def initialize(self):
+        self.typecode = TYPECODE_ETHCORE
         self.exc_requirements = ['tge%d'%self.slot]
         self.add_source('kat_ten_gb_eth/*')
         self.add_source('tengbaser_phy/tengbaser_phy.v')
@@ -209,6 +215,10 @@ class tengbaser_xilinx_k7(tengbe_v2):
         #    self.port = self.port_r2_sfpp + 4*((self.slot+1)%2)
         self.port = self.port_r1
         self.infrastructure_id = self.port // 4
+
+        self.provides = ['ethernet']
+        if self.cpu_rx_en and self.cpu_tx_en:
+            self.provides += ['cpu_ethernet']
 
     def gen_children(self):
         """

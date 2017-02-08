@@ -108,6 +108,7 @@ class YellowBlock(object):
         self.blk = blk
         self.platform = platform
         self.name = self.blk['tag'] + '%d'%self.inst_id #this can get overwritten by copy_attrs
+        self.typecode = 0xFF
         self.copy_attrs()
         try:
             self.fullname = self.fullpath.replace('/','_')

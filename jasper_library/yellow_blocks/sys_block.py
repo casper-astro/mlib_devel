@@ -1,8 +1,10 @@
 from yellow_block import YellowBlock
 from memory import Register
+from yellow_block_typecodes import *
 
 class sys_block(YellowBlock):
     def initialize(self):
+        self.typecode = TYPECODE_SYSBLOCK
         self.add_source('sys_block')
         # the internal memory_map
         self.memory_map = [
@@ -19,5 +21,5 @@ class sys_block(YellowBlock):
         inst.add_parameter('REV_MIN', self.rev_min)
         inst.add_parameter('REV_RCS', self.rev_rcs)
         inst.add_port('user_clk', 'user_clk')
-        inst.add_wb_interface('sys_block', mode='r', nbytes=64, memory_map=self.memory_map)
+        inst.add_wb_interface('sys_block', mode='r', nbytes=64, memory_map=self.memory_map, typecode=self.typecode)
         
