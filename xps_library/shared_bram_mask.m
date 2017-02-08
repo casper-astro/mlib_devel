@@ -65,7 +65,6 @@ end
 
 try
   set_param([c_sys, '/calc_add'], 'data_width', num2str(data_width), 'addr_width', num2str(addr_width));
-  set_param([c_sys, '/mem/calc_add'], 'data_width', num2str(data_width), 'addr_width', num2str(addr_width));
 catch
   warning('Shared BRAM block "%s" is out of date (needs its link restored)', c_sys);
 end
@@ -95,9 +94,6 @@ for i =1:length(gateway_outs)
   end
 end
 
-set_param([c_sys, '/mem/sim_data_in'], ...
-  'arith_type', 'Unsigned', 'bin_pt', num2str(data_bin_pt), 'n_bits', num2str(data_width));
-
 %set up simulation memory
 
 latency = 1;
@@ -107,14 +103,21 @@ end
 if strcmp(get_param(c_sys, 'reg_core_output'), 'on')
   latency = latency + 1;
 end
-set_param([c_sys, '/mem/ram'], 'latency', num2str(latency));
+set_param([c_sys, '/sim_mem'], 'latency', num2str(latency));
+
+set_param([c_sys, '/sim_mem'], 'data_width', get_param(c_sys, 'data_width'));
+set_param([c_sys, '/sim_mem'], 'arith_type', get_param(c_sys, 'arith_type'));
+set_param([c_sys, '/sim_mem'], 'addr_width', get_param(c_sys, 'addr_width'));
+set_param([c_sys, '/sim_mem'], 'data_bin_pt', get_param(c_sys, 'data_bin_pt'));
+set_param([c_sys, '/sim_mem'], 'init_vals', get_param(c_sys, 'init_vals'));
+set_param([c_sys, '/sim_mem'], 'sample_rate', get_param(c_sys, 'sample_rate'));
 
 %set up various munge blocks (which may have to redraw, so disable library link first)
 
 set_param(c_sys,'LinkStatus','inactive');
 
 divisions = ceil(data_width/32);
-for name = {'munge_in', 'mem/sim_munge_out'},
+for name = {'munge_in'},
   try
     set_param([c_sys, '/', name{1}], ... 
       'divisions', num2str(divisions), ...
@@ -127,7 +130,7 @@ for name = {'munge_in', 'mem/sim_munge_out'},
   end
 end %for
 
-for name = {'mem/sim_munge_in', 'munge_out'},
+for name = {'munge_out'},
   try
   set_param([c_sys, '/', name{1}], ... 
     'divisions', num2str(divisions), ...
