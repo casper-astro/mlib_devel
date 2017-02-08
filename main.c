@@ -57,6 +57,7 @@
 #include "casper_devcsl.h"
 
 #define HEARTBEAT_MS 10000
+#define DEBUG_ETH_0_CORE
 
 int main()
 {
@@ -191,10 +192,12 @@ int main()
     u32 *eth0_txbuf = NULL;
     u32 *eth0_rxbuf = NULL;
 
-    u32 *eth0_ptr32 = casper_find_dev("eth_0_core", NULL);
+    // Find the first Ethernet core in the core_info list
+    u32 *eth0_ptr32 = casper_find_dev_by_typecode(CASPER_CORE_INFO_TYPECODE_ETHCORE, 1, NULL, NULL);
     if(!eth0_ptr32) {
-      print("eth_0_core not found\n");
+      print("Ethernet core not found\n");
     } else {
+      print("Ethernet core found!\n");
       eth0_ptr8  = (u8  *)eth0_ptr32;
       eth0_ptr16 = (u16 *)eth0_ptr32;
       eth0_txbuf = TX_BUF_PTR32(eth0_ptr32);
@@ -237,6 +240,14 @@ int main()
       }
       print("\n");
 
+      // Check TX / RX are enabled
+      if (!(eth0_ptr8[ETH_MAC_REG8_RX_ENABLE] & eth0_ptr8[ETH_MAC_REG8_TX_ENABLE])) {
+        xil_printf("RX_ENABLE: %d, TX_ENABLE: %d\n", eth0_ptr8[ETH_MAC_REG8_RX_ENABLE], eth0_ptr8[ETH_MAC_REG8_TX_ENABLE]);
+        print("Ethernet core does not have CPU enabled RX/TX\n");
+      } else {
+        print("Ethernet core has TX/RX capability\n");
+      }
+
       // Broadcast ARP packet.  The packet format is based this tcpdump capture
       // of a unicast ARP packet:
       //
@@ -278,7 +289,7 @@ int main()
 
       // Set TX buffer level to number of 8 byte words to send packet
       *TX_BUF_SIZE_PTR16(eth0_ptr16) = pktlen32/2;
-    }
+    } // CPU core exists
 #endif
 
     while(1) {
