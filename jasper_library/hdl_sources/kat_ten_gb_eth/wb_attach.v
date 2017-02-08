@@ -416,7 +416,7 @@ module wb_attach #(
                              opb_data_src == REG_LOCAL_IPADDR  ? local_ip_reg[31:0] :
                              opb_data_src == REG_BUFFER_SIZES  ? {8'b0, cpu_tx_size_reg, 8'b0, cpu_rx_ack_reg ? 8'b0 : cpu_rx_size} :
                              opb_data_src == REG_VALID_PORTS   ? {7'b0, soft_reset_reg, 7'b0, local_enable_reg, local_port_reg} :
-                             opb_data_src == REG_XAUI_STATUS   ? {7'b0, CPU_TX_ENABLE, 7'b0, CPU_RX_ENABLE, 8'b0, xaui_status} :
+                             opb_data_src == REG_XAUI_STATUS   ? {7'b0, |CPU_TX_ENABLE, 7'b0, |CPU_RX_ENABLE, 8'b0, xaui_status} :
                              opb_data_src == REG_PHY_CONFIG    ? {4'b0, mgt_txdiffctrl_reg, 
                                                                   4'b0, mgt_txpreemphasis_reg,
                                                                   3'b0, mgt_txpostemphasis_reg, 
