@@ -250,7 +250,7 @@ casper_netif_init(struct netif *netif)
 }
 
 #define get_link_state() \
-  (((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_XAUI_STATUS] & 1)
+  (((uint8_t *)ifstate.ptr)[ETH_MAC_REG8_XAUI_STATUS] & 1)
 
 err_t
 casper_lwip_init()
