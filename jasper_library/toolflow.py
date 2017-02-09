@@ -411,7 +411,7 @@ class Toolflow(object):
             longest_name = max([len(core.regname) for core in self.cores])
             format_str = '{0:%d} {1:1} {2:<16x} {3:<16x} {4:<2x}\n' % longest_name
         for core in self.cores:
-            self.logger.debug('Adding core_info.tab entry for %s' % core.regname)
+            self.logger.debug('Adding core_info.jam.tab entry for %s' % core.regname)
             s += format_str.format(core.regname, modemap[core.mode], core.base_addr, core.nbytes, core.typecode)
             # add aliases if the WB Devices have them
             for reg in core.memory_map:
@@ -420,6 +420,9 @@ class Toolflow(object):
         self.logger.debug('Opening %s' % basefile)
         with open(newfile, 'w') as fh:
             fh.write(s)
+        # generate the binary and xilinx-style .mem versions of this table, using some Ruby(!) scripts.
+        os.system('ruby %s/jasper_library/cit2bin.rb %s > %s.bin' % (os.getenv('MLIB_DEVEL_PATH'), newfile, newfile))
+        os.system('ruby %s/jasper_library/cit2mem.rb %s > %s.mem' % (os.getenv('MLIB_DEVEL_PATH'), newfile, newfile))
 
     def regenerate_top(self):
         """
