@@ -817,6 +817,7 @@ class VivadoBackend(ToolflowBackend):
             'pre_bitgen'  : '',
             'bitgen'      : '',
             'post_bitgen' : '',
+            'promgen'     : '',
         }
 
         if plat.manufacturer != self.manufacturer:
@@ -951,6 +952,7 @@ class VivadoBackend(ToolflowBackend):
         s += self.tcl_cmds['pre_bitgen']
         s += self.tcl_cmds['bitgen']
         s += self.tcl_cmds['post_bitgen']
+        s += self.tcl_cmds['promgen']
         return s
 
     def add_compile_cmds(self, cores=8, plat=None):
@@ -980,6 +982,7 @@ class VivadoBackend(ToolflowBackend):
             self.add_tcl_cmd('wait_on_run synth_1', stage='synth')
 
             # Post-Synthesis Commands
+            self.add_tcl_cmd('open_run synth_1', stage='post_synth')
 
             # Pre-Implementation Commands
             self.add_tcl_cmd('set_property STEPS.WRITE_BITSTREAM.ARGS.BIN_FILE true [get_runs impl_1]', stage='pre_impl')
