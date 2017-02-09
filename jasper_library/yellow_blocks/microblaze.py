@@ -43,10 +43,15 @@ class microblaze(YellowBlock):
         return cons
 
     def gen_tcl_cmds(self):
-        #tcl_cmds.append('set_property SCOPED_TO_REF %s [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/imports/cont_microblaze/EMB123701U1R1.elf]' % self.fullname)
-        #tcl_cmds.append('set_property SCOPED_TO_CELLS %s [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/imports/cont_microblaze/EMB123701U1R1.elf]' % self.fullname)
-        tcl_cmds = []
-        tcl_cmds += ['source %s/microblaze_wb/microblaze_wb.tcl' % env['HDL_ROOT']]
-        tcl_cmds += ['set_property SCOPED_TO_REF cont_microblaze [get_files -all -of_objects [get_fileset sources_1] {%s}]' % self.elf]
-        tcl_cmds += ['set_property SCOPED_TO_CELLS { microblaze_0 } [get_files -all -of_objects [get_fileset sources_1] {%s}]' % self.elf]
+        tcl_cmds = {}
+        tcl_cmds['pre_synth'] = ['source %s/microblaze_wb/microblaze_wb.tcl' % env['HDL_ROOT']]
+        tcl_cmds['pre_synth'] += ['exec cat %s/microblaze_wb/executable.mem ../core_info.jam.tab.mem > ../executable_core_info.mem' % env['HDL_ROOT']]
+
+        #tcl_cmds['pre_synth'] += ['set_property SCOPED_TO_REF cont_microblaze [get_files -all -of_objects [get_fileset sources_1] {%s}]' % self.elf]
+        #tcl_cmds['pre_synth'] += ['set_property SCOPED_TO_CELLS { microblaze_0 } [get_files -all -of_objects [get_fileset sources_1] {%s}]' % self.elf]
+
+        # overwrite top.bit with version that includes microblaze code
+        # ignorestderr because this command fails even though it appears to work.
+        # Flags an awk error: see https://forums.xilinx.com/t5/Installation-and-Licensing/Vivado-2016-4-on-Ubuntu-16-04-LTS-quot-awk-symbol-lookup-error/m-p/747165
+        tcl_cmds['post_bitgen'] = ['exec -ignorestderr updatemem -bit ./myproj.runs/impl_1/top.bit -meminfo ./myproj.runs/impl_1/top.mmi -data ../executable_core_info.mem  -proc cont_microblaze_inst/microblaze_0 -out ./myproj.runs/impl_1/top.bit -force']
         return tcl_cmds

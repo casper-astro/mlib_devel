@@ -531,4 +531,4 @@ class forty_gbe(YellowBlock):
         tcl_cmds.append('set_property SCOPED_TO_REF cont_microblaze [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/cont_microblaze/cont_microblaze.bmm]')
         tcl_cmds.append('set_property SCOPED_TO_CELLS microblaze_0 [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/imports/cont_microblaze/EMB123701U1R1.elf]')
 
-        return tcl_cmds
+        return {'pre_synth': tcl_cmds}

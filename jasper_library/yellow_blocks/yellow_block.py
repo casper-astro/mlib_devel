@@ -190,7 +190,7 @@ class YellowBlock(object):
         This method is designed to be overridden by subclasses. It should
         return a list of Strings.
         """
-        return []
+        return {}
 
     #def add_resource(self, thing):
     #    """

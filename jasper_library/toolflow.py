@@ -806,7 +806,19 @@ class VivadoBackend(ToolflowBackend):
         ToolflowBackend.__init__(self, plat=plat, compile_dir=compile_dir)
 
     def initialize(self, plat):
-        self.tcl_cmd = ''
+        self.tcl_cmds = {
+            'init'        : '',
+            'pre_synth'   : '',
+            'synth'       : '',
+            'post_synth'  : '',
+            'pre_impl'    : '',
+            'impl'        : '',
+            'post_impl'   : '',
+            'pre_bitgen'  : '',
+            'bitgen'      : '',
+            'post_bitgen' : '',
+        }
+
         if plat.manufacturer != self.manufacturer:
             self.logger.error('Trying to compile a %s FPGA using %s %s'
                               % (plat.manufacturer, self.manufacturer, self.name))
@@ -918,14 +930,28 @@ class VivadoBackend(ToolflowBackend):
         else:
             self.logger.debug('Ignore constraint file: %s, with wrong file extension' % constfile)
 
-    def add_tcl_cmd(self,cmd):
+    def add_tcl_cmd(self, cmd, stage='pre_synth'):
         """
         Add a command to the tcl command list with
         a trailing newline.
         """
         self.logger.debug('Adding tcl command: %s' % cmd)
-        self.tcl_cmd += cmd
-        self.tcl_cmd += '\n'
+        self.tcl_cmds[stage] += cmd
+        self.tcl_cmds[stage] += '\n'
+
+    def eval_tcl(self):
+        s = ''
+        s += self.tcl_cmds['init']
+        s += self.tcl_cmds['pre_synth']
+        s += self.tcl_cmds['synth']
+        s += self.tcl_cmds['post_synth']
+        s += self.tcl_cmds['pre_impl']
+        s += self.tcl_cmds['impl']
+        s += self.tcl_cmds['post_impl']
+        s += self.tcl_cmds['pre_bitgen']
+        s += self.tcl_cmds['bitgen']
+        s += self.tcl_cmds['post_bitgen']
+        return s
 
     def add_compile_cmds(self, cores=8, plat=None):
         """
@@ -934,73 +960,92 @@ class VivadoBackend(ToolflowBackend):
         """
         # Project Mode is enabled
         if plat.project_mode:
-            self.add_tcl_cmd('set_property top top [current_fileset]')
-            self.gen_yellowblock_tcl_cmds()
-            self.add_tcl_cmd('update_compile_order -fileset sources_1')
-            self.add_tcl_cmd('set_property STEPS.WRITE_BITSTREAM.ARGS.BIN_FILE true [get_runs impl_1]')
-            self.add_tcl_cmd('set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]')
+            # Pre-Synthesis Commands
+            self.add_tcl_cmd('cd [get_property DIRECTORY [current_project]]', stage='pre_synth')
+            self.add_tcl_cmd('set_property top top [current_fileset]', stage='pre_synth')
+            self.add_tcl_cmd('update_compile_order -fileset sources_1', stage='pre_synth')
             # Hack to get the System generator RAMs to see their coefficient files.
             # Vivado (2016.1) doesn't seem to import the .coe and ram .xci files in the
             # correct relative directories as configured by System Generator.
-            self.add_tcl_cmd('if {[llength [glob -nocomplain [get_property directory [current_project]]/myproj.srcs/sources_1/imports/*.coe]] > 0} {')
-            self.add_tcl_cmd('file copy -force {*}[glob [get_property directory [current_project]]/myproj.srcs/sources_1/imports/*.coe] [get_property directory [current_project]]/myproj.srcs/sources_1/ip/')
-            self.add_tcl_cmd('}')
-            self.add_tcl_cmd('upgrade_ip -quiet [get_ips *]')
+            self.add_tcl_cmd('if {[llength [glob -nocomplain [get_property directory [current_project]]/myproj.srcs/sources_1/imports/*.coe]] > 0} {', stage='pre_synth')
+            self.add_tcl_cmd('file copy -force {*}[glob [get_property directory [current_project]]/myproj.srcs/sources_1/imports/*.coe] [get_property directory [current_project]]/myproj.srcs/sources_1/ip/', stage='pre_synth')
+            self.add_tcl_cmd('}', stage='pre_synth')
+            self.add_tcl_cmd('upgrade_ip -quiet [get_ips *]', stage='pre_synth')
             # Add in if ILA is being used to prevent signal names from changing during synthesis
             #self.add_tcl_cmd('set_property STEPS.SYNTH_DESIGN.ARGS.FLATTEN_HIERARCHY none [get_runs synth_1]')
-            self.add_tcl_cmd('reset_run synth_1')
-            self.add_tcl_cmd('launch_runs synth_1 -jobs %d' % cores)
-            self.add_tcl_cmd('wait_on_run synth_1')
-            # self.add_tcl_cmd('open_run synth_1')
-            self.add_tcl_cmd('launch_runs impl_1 -jobs %d' % cores)
-            self.add_tcl_cmd('wait_on_run impl_1')
-            self.add_tcl_cmd('open_run impl_1')
-            self.add_tcl_cmd('launch_runs impl_1 -to_step write_bitstream')
-            self.add_tcl_cmd('wait_on_run impl_1')
+
+            # Synthesis Commands   
+            self.add_tcl_cmd('reset_run synth_1', stage='synth')
+            self.add_tcl_cmd('launch_runs synth_1 -jobs %d' % cores, stage='synth')
+            self.add_tcl_cmd('wait_on_run synth_1', stage='synth')
+
+            # Post-Synthesis Commands
+
+            # Pre-Implementation Commands
+            self.add_tcl_cmd('set_property STEPS.WRITE_BITSTREAM.ARGS.BIN_FILE true [get_runs impl_1]', stage='pre_impl')
+            self.add_tcl_cmd('set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]', stage='pre_impl')
+
+            # Implementation Commands
+            self.add_tcl_cmd('launch_runs impl_1 -jobs %d' % cores, stage='impl')
+            self.add_tcl_cmd('wait_on_run impl_1', stage='impl')
+
+            # Post-Implementation Commands
+            self.add_tcl_cmd('open_run impl_1', stage='post_impl')
+
+            # Pre-Bitgen Commands
+
+            # Bitgen Commands
+            self.add_tcl_cmd('launch_runs impl_1 -to_step write_bitstream', stage='bitgen')
+            self.add_tcl_cmd('wait_on_run impl_1', stage='bitgen')
+
+            # Post-Bitgen Commands
             # Generate a binary file for SKARAB where the bits are reversed per byte. This is used by casperfpga for
             # configuring the FPGA
             try:
                 if plat.conf['bit_reversal'] == True:
                     self.add_tcl_cmd('write_cfgmem -force -format bin -interface bpix8 -size 128 -loadbit "up 0x0 '
                                  '%s/%s/%s.runs/impl_1/top.bit" -file %s'
-                                 % (self.compile_dir, self.project_name, self.project_name, self.binary_loc))
+                                 % (self.compile_dir, self.project_name, self.project_name, self.binary_loc), stage='post_bitgen')
             # just ignore if key is not present as only some platforms will have the key.
             except KeyError:
                 s = ""
 
             # Determine if the design meets timing or not
             # Look for Worst Negative Slack
-            self.add_tcl_cmd('if { [get_property STATS.WNS [get_runs impl_1] ] < 0 } {')
+            self.add_tcl_cmd('if { [get_property STATS.WNS [get_runs impl_1] ] < 0 } {', stage='post_bitgen')
             self.add_tcl_cmd('puts "Found timing violations => Worst Negative Slack:'
-                             ' [get_property STATS.WNS [get_runs impl_1]] ns" ')
-            self.add_tcl_cmd('} else {')
+                             ' [get_property STATS.WNS [get_runs impl_1]] ns" ', stage='post_bitgen')
+            self.add_tcl_cmd('} else {', stage='post_bitgen')
             self.add_tcl_cmd('puts "No timing violations => Worst Negative Slack:'
-                             ' [get_property STATS.WNS [get_runs impl_1]] ns" ')
-            self.add_tcl_cmd('}')
+                             ' [get_property STATS.WNS [get_runs impl_1]] ns" ', stage='post_bitgen')
+            self.add_tcl_cmd('}', stage='post_bitgen')
             # Look for Total Negative Slack
-            self.add_tcl_cmd('if { [get_property STATS.TNS [get_runs impl_1] ] < 0 } {')
+            self.add_tcl_cmd('if { [get_property STATS.TNS [get_runs impl_1] ] < 0 } {', stage='post_bitgen')
             self.add_tcl_cmd('puts "Found timing violations => Total Negative Slack:'
-                             ' [get_property STATS.TNS [get_runs impl_1]] ns" ')
-            self.add_tcl_cmd('} else {')
+                             ' [get_property STATS.TNS [get_runs impl_1]] ns" ', stage='post_bitgen')
+            self.add_tcl_cmd('} else {', stage='post_bitgen')
             self.add_tcl_cmd('puts "No timing violations => Total Negative Slack:'
-                             ' [get_property STATS.TNS [get_runs impl_1]] ns" ')
-            self.add_tcl_cmd('}')
+                             ' [get_property STATS.TNS [get_runs impl_1]] ns" ', stage='post_bitgen')
+            self.add_tcl_cmd('}', stage='post_bitgen')
             # Look for Worst Hold Slack
-            self.add_tcl_cmd('if { [get_property STATS.WHS [get_runs impl_1] ] < 0 } {')
+            self.add_tcl_cmd('if { [get_property STATS.WHS [get_runs impl_1] ] < 0 } {', stage='post_bitgen')
             self.add_tcl_cmd('puts "Found timing violations => Worst Hold Slack:'
-                             ' [get_property STATS.WHS [get_runs impl_1]] ns" ')
-            self.add_tcl_cmd('} else {')
+                             ' [get_property STATS.WHS [get_runs impl_1]] ns" ', stage='post_bitgen')
+            self.add_tcl_cmd('} else {', stage='post_bitgen')
             self.add_tcl_cmd('puts "No timing violations => Worst Hold Slack:'
-                             ' [get_property STATS.WHS [get_runs impl_1]] ns" ')
-            self.add_tcl_cmd('}')
+                             ' [get_property STATS.WHS [get_runs impl_1]] ns" ', stage='post_bitgen')
+            self.add_tcl_cmd('}', stage='post_bitgen')
             # Look for Total Hold Slack
-            self.add_tcl_cmd('if { [get_property STATS.THS [get_runs impl_1] ] < 0 } {')
+            self.add_tcl_cmd('if { [get_property STATS.THS [get_runs impl_1] ] < 0 } {', stage='post_bitgen')
             self.add_tcl_cmd('puts "Found timing violations => Total Hold Slack:'
-                             ' [get_property STATS.THS [get_runs impl_1]] ns" ')
-            self.add_tcl_cmd('} else {')
+                             ' [get_property STATS.THS [get_runs impl_1]] ns" ', stage='post_bitgen')
+            self.add_tcl_cmd('} else {', stage='post_bitgen')
             self.add_tcl_cmd('puts "No timing violations => Total Hold Slack:'
-                             ' [get_property STATS.THS [get_runs impl_1]] ns" ')
-            self.add_tcl_cmd('}')
+                             ' [get_property STATS.THS [get_runs impl_1]] ns" ', stage='post_bitgen')
+            self.add_tcl_cmd('}', stage='post_bitgen')
+
+            # Let Yellow Blocks add their own tcl commands
+            self.gen_yellowblock_tcl_cmds()
 
         # Non-Project mode is enabled
         # Options can be added to the *_design commands to change strategies or meet timing
@@ -1075,7 +1120,7 @@ class VivadoBackend(ToolflowBackend):
         self.add_compile_cmds(cores=cores, plat=plat)
         # write tcl command to file
         tcl_file = self.compile_dir+'/gogogo.tcl'
-        helpers.write_file(tcl_file,self.tcl_cmd)
+        helpers.write_file(tcl_file, self.eval_tcl())
         rv = os.system('vivado -jou %s/vivado.jou -log %s/vivado.log -mode batch -source %s'
                        % (self.compile_dir, self.compile_dir, tcl_file))
         if rv:
@@ -1143,13 +1188,12 @@ class VivadoBackend(ToolflowBackend):
         To be added to the final tcl script.
         """
         self.logger.info('Extracting yellow block tcl commands from peripherals')
-        self.tcl_cmds = []
-
         for obj in self.periph_objs:
             c = obj.gen_tcl_cmds()
-            if c is not None:
-                for o in c:
-                    self.add_tcl_cmd(o)
+            for key, val in c.iteritems():
+                if val is not None:
+                    for v in val:
+                        self.add_tcl_cmd(v, stage=key)
 
     def gen_constraint_file(self, constraints, plat):
         """
