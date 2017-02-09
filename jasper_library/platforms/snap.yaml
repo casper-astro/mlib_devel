@@ -1,8 +1,6 @@
 name: snap
 manufacturer: Xilinx
 fpga: xc7k160tffg676-2
-config_voltage: 2.5
-cfgbvs: VCCO
 backend_target: vivado
 sources: []
 constraints: []
