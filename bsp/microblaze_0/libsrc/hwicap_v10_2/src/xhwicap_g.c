@@ -38,21 +38,19 @@
 *******************************************************************/
 
 #include "xparameters.h"
-#include "xuartlite.h"
+#include "xhwicap.h"
 
 /*
 * The configuration table for devices
 */
 
-XUartLite_Config XUartLite_ConfigTable[] =
+XHwIcap_Config XHwIcap_ConfigTable[] =
 {
 	{
-		XPAR_AXI_UARTLITE_0_DEVICE_ID,
-		XPAR_AXI_UARTLITE_0_BASEADDR,
-		XPAR_AXI_UARTLITE_0_BAUDRATE,
-		XPAR_AXI_UARTLITE_0_USE_PARITY,
-		XPAR_AXI_UARTLITE_0_ODD_PARITY,
-		XPAR_AXI_UARTLITE_0_DATA_BITS
+		XPAR_AXI_HWICAP_0_DEVICE_ID,
+		XPAR_AXI_HWICAP_0_BASEADDR,
+		XPAR_AXI_HWICAP_0_ICAP_DWIDTH,
+		XPAR_AXI_HWICAP_0_MODE
 	}
 };
 
