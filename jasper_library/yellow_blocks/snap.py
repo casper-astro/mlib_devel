@@ -1,10 +1,11 @@
 from yellow_block import YellowBlock
-from constraints import ClockConstraint, PortConstraint
+from constraints import ClockConstraint, PortConstraint, RawConstraint
 
 class snap(YellowBlock):
     def initialize(self):
         self.add_source('infrastructure')
         self.add_source('wbs_arbiter')
+
     def modify_top(self,top):
         inst = top.get_instance('snap_infrastructure', 'snap_infrastructure_inst')
         inst.add_port('sys_clk_buf_n', 'sys_clk_n', parent_port=True, dir='in')
@@ -34,4 +35,14 @@ class snap(YellowBlock):
             PortConstraint('sys_clk_n', 'sys_clk_n'),
             PortConstraint('sys_clk_p', 'sys_clk_p'),
             ClockConstraint('sys_clk_p', period=5.0),
+            RawConstraint('set_property CONFIG_VOLTAGE 2.5 [current_design]'),
+            RawConstraint('set_property CFGBVS VCCO [current_design]'),
+            RawConstraint('set_property BITSTREAM.CONFIG.CONFIGRATE 33 [current_design]'),
+            RawConstraint('set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]'),
         ]
+
+    def gen_tcl_cmds(self):
+        tcl_cmds = {}
+        # After generating bitstream write PROM file
+        tcl_cmds['promgen'] = ['write_cfgmem  -format mcs -size 32 -interface SPIx4 -loadbit "up 0x00000000 ./myproj.runs/impl_1/top.bit " -checksum -file "./myproj.runs/impl_1/top.mcs"']
+        return tcl_cmds
