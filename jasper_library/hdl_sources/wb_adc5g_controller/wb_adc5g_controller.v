@@ -169,48 +169,48 @@ module wb_adc5g_controller(
           case (wb_adr_i[4:2])
             0:  begin
 	       wb_ack <= 1'b1;
-               if (wb_sel_i[3]) begin
-                  adc0_reset_reg <= wb_dat_i[31];
-                  adc1_reset_reg <= wb_dat_i[30];
+               if (wb_sel_i[0]) begin
+                  adc0_reset_reg <= wb_dat_i[0];
+                  adc1_reset_reg <= wb_dat_i[1];
 	       end
-	       if (wb_sel_i[1]) begin
-                  adc0_mmcm_psen_reg <= wb_dat_i[15];
-                  adc1_mmcm_psen_reg <= wb_dat_i[11];
-                  adc0_mmcm_psincdec_reg <= wb_dat_i[14];
-                  adc1_mmcm_psincdec_reg <= wb_dat_i[10];
+	       if (wb_sel_i[2]) begin
+                  adc0_mmcm_psen_reg <= wb_dat_i[16];
+                  adc1_mmcm_psen_reg <= wb_dat_i[20];
+                  adc0_mmcm_psincdec_reg <= wb_dat_i[17];
+                  adc1_mmcm_psincdec_reg <= wb_dat_i[21]
 	       end
             end
             1:  begin
 	      if (adc0_config_done) begin
 		 wb_ack <= 1'b1;
-		 if (wb_sel_i[3]) begin
-                    adc0_config_start_reg <= wb_dat_i[31];
-		 end
-		 if (wb_sel_i[2]) begin
-                    adc0_config_addr_reg <= wb_dat_i[23:16];
+		 if (wb_sel_i[0]) begin
+                    adc0_config_start_reg <= wb_dat_i[0];
 		 end
 		 if (wb_sel_i[1]) begin
-                    adc0_config_data_reg[7:0] <= wb_dat_i[15:8];
+                    adc0_config_addr_reg <= wb_dat_i[15:8];
 		 end
-		 if (wb_sel_i[0]) begin
-                    adc0_config_data_reg[15:8] <= wb_dat_i[7:0];
+		 if (wb_sel_i[2]) begin
+                    adc0_config_data_reg[7:0] <= wb_dat_i[23:16];
+		 end
+		 if (wb_sel_i[3]) begin
+                    adc0_config_data_reg[15:8] <= wb_dat_i[31:24];
 		 end
 	      end
             end
             2:  begin
 	      if (adc1_config_done) begin
 		 wb_ack <= 1'b1;
-		 if (wb_sel_i[3]) begin
-                    adc1_config_start_reg <= wb_dat_i[31];
-		 end
-		 if (wb_sel_i[2]) begin
-                    adc1_config_addr_reg <= wb_dat_i[23:16];
+		 if (wb_sel_i[0]) begin
+                    adc1_config_start_reg <= wb_dat_i[0];
 		 end
 		 if (wb_sel_i[1]) begin
-                    adc1_config_data_reg[7:0] <= wb_dat_i[15:8];
+                    adc1_config_addr_reg <= wb_dat_i[15:8];
 		 end
-		 if (wb_sel_i[0]) begin
-                    adc1_config_data_reg[15:8] <= wb_dat_i[7:0];
+		 if (wb_sel_i[2]) begin
+                    adc1_config_data_reg[7:0] <= wb_dat_i[23:16];
+		 end
+		 if (wb_sel_i[3]) begin
+                    adc1_config_data_reg[15:8] <= wb_dat_i[31:24];
 		 end
 	      end
             end
@@ -218,26 +218,26 @@ module wb_adc5g_controller(
 	    end
 	    4:  begin
 	       wb_ack <= 1'b1;
-	       if (wb_sel_i[3]) begin
-		  adc0_tap_rst_reg    <= wb_dat_i[31];
-	       end
-	       if (wb_sel_i[1]) begin
-		  adc0_datain_pin_reg <= wb_dat_i[15:11];
-	       end
 	       if (wb_sel_i[0]) begin
-		  adc0_datain_tap_reg <= wb_dat_i[7:3];
+		  adc0_tap_rst_reg    <= wb_dat_i[0];
+	       end
+	       if (wb_sel_i[2]) begin
+		  adc0_datain_pin_reg <= wb_dat_i[20:16];
+	       end
+	       if (wb_sel_i[3]) begin
+		  adc0_datain_tap_reg <= wb_dat_i[28:24];
 	       end
 	    end
 	    5:  begin
 	       wb_ack <= 1'b1;
-	       if (wb_sel_i[3]) begin
-		  adc1_tap_rst_reg    <= wb_dat_i[31];
-	       end
-	       if (wb_sel_i[1]) begin
-		  adc1_datain_pin_reg <= wb_dat_i[15:11];
-	       end
 	       if (wb_sel_i[0]) begin
-		  adc1_datain_tap_reg <= wb_dat_i[7:3];
+		  adc1_tap_rst_reg    <= wb_dat_i[0];
+	       end
+	       if (wb_sel_i[2]) begin
+		  adc1_datain_pin_reg <= wb_dat_i[20:16];
+	       end
+	       if (wb_sel_i[3]) begin
+		  adc1_datain_tap_reg <= wb_dat_i[28:24];
 	       end
             end
           endcase
