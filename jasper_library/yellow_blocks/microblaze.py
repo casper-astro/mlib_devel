@@ -31,9 +31,14 @@ class microblaze(YellowBlock):
         inst.add_port('DAT_I', 'wbm_dat_i', width=32)
         inst.add_port('ACK_I', 'wbm_ack_i')
         inst.add_port('RST_O', 'wbm_rst_o')
+        inst.add_port('ext_intr', 'mb_intr') 
 
         top.assign_signal('wb_clk_i', 'sys_clk')
         top.assign_signal('wb_rst_i', 'sys_rst')
+
+        top.add_signal('mb_intr_v', width=4)
+        top.assign_signal('mb_intr', '|mb_intr_v')
+
 
  
     def gen_constraints(self):
