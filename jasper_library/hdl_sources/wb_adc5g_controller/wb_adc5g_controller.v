@@ -177,7 +177,7 @@ module wb_adc5g_controller(
                   adc0_mmcm_psen_reg <= wb_dat_i[16];
                   adc1_mmcm_psen_reg <= wb_dat_i[20];
                   adc0_mmcm_psincdec_reg <= wb_dat_i[17];
-                  adc1_mmcm_psincdec_reg <= wb_dat_i[21]
+                  adc1_mmcm_psincdec_reg <= wb_dat_i[21];
 	       end
             end
             1:  begin
