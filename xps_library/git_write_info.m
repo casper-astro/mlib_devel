@@ -5,6 +5,6 @@ function git_write_info(fid, sysname)
         fprintf(fid, '%s', gitstruct.sys_info);
         fprintf(fid, '%s', gitstruct.mlib_info);
     else
-        fprintf(fid, '?meta 77777_git rcs %s\n', gitstruct.error_str);
+        fprintf(fid, '?meta\t77777_git rcs %s\n', gitstruct.error_str);
     end
 end

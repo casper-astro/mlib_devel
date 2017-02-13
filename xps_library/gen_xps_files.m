@@ -558,8 +558,7 @@ if run_edkgen,
         while 1,
             tline = fgetl(fid);
             if ~ischar(tline), break, end
-            newline = ['?meta ', tline];
-            fprintf(kcpfpg_fid, '%s\n', newline);
+            fprintf(kcpfpg_fid, '?meta\t%s\n', tline);
         end
         clear newline tline;
         fclose(fid);
