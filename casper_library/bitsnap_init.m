@@ -250,6 +250,7 @@ catch ex
 end
 
 function display_string = format_string(prefix)
+    totalbits = 0;
     numios = eval(strcat(prefix, '_numios'));
     wids = eval(strcat(prefix, '_current_widths'));
     typs = eval(strcat(prefix, '_current_types'));
@@ -269,9 +270,11 @@ function display_string = format_string(prefix)
             otherwise 
                 config_string = strcat(config_string, sprintf('uf%i.%i,', wids(ctr), bins(ctr)));
         end
+        totalbits = totalbits + wids(ctr);
     end
     display_string = strcat(display_string, ': ', config_string);
     display_string = regexprep(display_string, ',$', '');
+    display_string = sprintf('%s = %i bits', display_string, totalbits);
 end
 
 display_string = '';
