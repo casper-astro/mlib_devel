@@ -522,7 +522,11 @@ if run_edkgen,
     gen_xps_mod_ucf(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash);
 
     % add extra register and snapshot info from the design
-    gen_xps_add_design_info(sys, mssge_paths, slash);
+    try
+        gen_xps_add_design_info(sys, mssge_paths, slash);
+    catch
+        disp('WARNING WARNING PAIN SUFFERING ALARUM ALARUM - adding design info failed for some reason.');
+    end
 
     % shanly and mark's new format - generated from core_info and design_info
     if strcmp(hw_sys, 'ROACH') || strcmp(hw_sys, 'ROACH2') || strcmp(hw_sys, 'SKARAB'),
@@ -545,8 +549,7 @@ if run_edkgen,
         while 1,
             tline = fgetl(fid);
             if ~ischar(tline), break, end
-            newline = ['?meta ', tline];
-            fprintf(kcpfpg_fid, '%s\n', newline);
+            fprintf(kcpfpg_fid, '?meta\t%s\n', tline);
         end
         clear newline tline;
         fclose(fid);
@@ -680,31 +683,34 @@ if run_edk,
     end % switch hw_sys
     fprintf(fid, 'exit\n');
     fclose(fid);
+
     eval(['cd ', xps_path]);
     status = system('xps -nw -scr run_xps.tcl system.xmp');
     if status ~= 0,
-        edit 'implementation/system.twr';
+        if exist('implementation/system.twr', 'file') == 2,
+            edit 'implementation/system.twr';
+        end
         cd(simulink_path);
         error('XPS failed.');
+    end
+
+    if (strcmp(slash, '\')),
+        % Windows case
+        [status, ~] = dos('gen_prog_files.bat');
+        if status ~= 0,
+            cd(simulink_path);
+            error('Programation files generation failed, EDK compilation probably also failed.');
+        end % if dos('gen_prog_files.bat')
     else
-        if (strcmp(slash, '\')),
-            % Windows case
-            [status, ~] = dos('gen_prog_files.bat');
-            if status ~= 0,
-                cd(simulink_path);
-                error('Programation files generation failed, EDK compilation probably also failed.');
-            end % if dos('gen_prog_files.bat')
-        else
-            % Linux case
-            [~, ~] = unix('chmod +x gen_prog_files');
-            [status, message] = unix('./gen_prog_files');
-            if status ~= 0,
-                cd(simulink_path);
-                disp(message);
-                error('Programation files generation failed, EDK compilation probably also failed.');
-            end % if unix('gen_prog_files.bat')
-        end %if (strcmp(slash, '\'))
-    end % if(dos(['xps -nw -scr run_xps.tcl system.xmp']))
+        % Linux case
+        [~, ~] = unix('chmod +x gen_prog_files');
+        [status, message] = unix('./gen_prog_files');
+        if status ~= 0,
+            cd(simulink_path);
+            disp(message);
+            error('Programation files generation failed, EDK compilation probably also failed.');
+        end % if unix('gen_prog_files.bat')
+    end %if (strcmp(slash, '\'))
     cd(simulink_path);
 end % if run_edk
 time_edk = now - start_time;

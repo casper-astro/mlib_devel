@@ -39,47 +39,71 @@ end
 % add the indirect ones
 header_ind_ids = spead_process_header_string(hdrs_ind);
 header_ids = [header_ids, header_ind_ids];
-
-
-current_consts = find_system(block, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'RegExp' ,'on', 'name', '.*header_const[0-9]');
 num_headers = length(header_ids);
-if length(current_consts) == num_headers,
-    all_match = true;
-    for ctr = 1 : num_headers,
-        val = eval(get_param(current_consts{ctr}, 'const'));
-        val2 = header_ids(ctr);
-        if val ~= val2,
-            all_match = false;
-        end
-    end
-else
+
+if num_headers < 5,
+    error('Must have at least compulsory headers and one other header!');
+end
+
+all_match = true;
+
+% check the given headers against the current ones
+current_inprts = find_system(block, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'RegExp' ,'on', 'name', 'hdr[0-9].*', 'BlockType', 'Inport');
+num_inprts = length(current_inprts);
+num_headers = length(header_ids) - 4;
+
+% if there's a different number, we have to redraw
+if num_inprts ~= num_headers,
+    %fprintf('Different number of headers to last time, redrawing: %i -> %i\n', num_inprts, num_headers);
     all_match = false;
 end
 
-if num_headers < 5,
-    error('Must have at least compulsory headers and data!');
+% are there the same headers in the same order?
+if all_match == true,
+    for ctr = 1 : num_headers,
+        prt = current_inprts{ctr};
+        prtnum = str2double(get_param(prt, 'Port')) - 7;
+        if prtnum ~= ctr,
+            error('Receiving ports in an odd order - this should never happen?\n');
+        end
+        prt_hdrval = hex2dec(regexprep(regexprep(prt, [block, '/hdr[0-9]*_0x'], ''), '_.*', ''));
+        if ~isempty(strfind(prt, 'DIR')),
+            prt_hdrval = prt_hdrval + header_direct_mask;
+        end
+        new_hdrval = header_ids(ctr+4);
+        if new_hdrval ~= prt_hdrval,
+            %fprintf('Header at position %i has changed, redrawing: %i -> %i\n', ctr, prt_hdrval, new_hdrval);
+            all_match = false;
+            break
+        end
+    end
 end
+
+% has the number of bytes per word changed?
+if all_match == true,
+    padbits_new = log2(str2double(get_param(block, 'bytes_per_word')));
+    padbits_old = str2double(get_param([block, '/header_4const4'], 'n_bits'));
+    if padbits_new ~= padbits_old,
+        %fprintf('Bytes per word has changed, redrawing: %i -> %i\n', padbits_old, padbits_new);
+        all_match = false;
+    end
+end
+
+% return if the headers were the same, nothing more to do
+if all_match == true
+    %fprintf('Nothing has changed, exiting.\n');
+    return
+end
+
+num_headers = length(header_ids);
 num_total_hdrs = num2str(num_headers+1);
 total_hdrs_bits = num2str(ceil(log2(num_headers+2)));
 set_param([block, '/num_item_pts'], 'const', num2str(num_headers));
 set_param([block, '/num_headers'], 'const', num_total_hdrs);
 set_param([block, '/num_headers'], 'n_bits', total_hdrs_bits);
 set_param([block, '/hdr_ctr'], 'cnt_to', num_total_hdrs, 'n_bits', total_hdrs_bits);
-set_param([block, '/delay_data'], 'latency', num_total_hdrs);
-set_param([block, '/delay_valid'], 'latency', num_total_hdrs);
-
-% has the number of bytes per word changed?
-padbits_new = log2(str2double(get_param(block, 'bytes_per_word')));
-padbits_old = str2double(get_param([block, '/header_4const4'], 'n_bits'));
-if padbits_new ~= padbits_old,
-    all_match = false;
-    %error(sprintf('fack %d %d', padbits_new, padbits_old))
-end
-
-% return if the headers were the same, nothing more to do
-if all_match == true
-    return
-end
+set_param([block, '/delay_data'], 'latency', num_total_hdrs, 'reg_retiming', 'on');
+set_param([block, '/delay_valid'], 'latency', num_total_hdrs, 'reg_retiming', 'on');
 
 % remove existing header blocks and their lines
 header_blks = find_system(block, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'RegExp' ,'on', 'name', '.*(hdr|hdra_|header_).*[0-9]');
@@ -121,9 +145,11 @@ for ctr = 1 : num_headers,
         'n_bits', 'spead_lsw', ...
         'Position', [row_x + 50, row_y, row_x + 80, row_y + 14]);
 %     reuse_block(block, name_delay_in, 'xbsIndex_r4/Delay', ...
+%         'reg_retiming', 'on', ...
 %         'showname', 'on', 'latency', num2str(num_headers + 1), ...
 %         'Position', [row_x + 100, row_y, row_x + 120, row_y + 14]);
     reuse_block(block, name_delay_in, 'xbsIndex_r4/Delay', ...
+        'reg_retiming', 'on', ...
         'showname', 'on', 'latency', num2str(ctr + 1), ...
         'Position', [row_x + 100, row_y, row_x + 120, row_y + 14]);
     reuse_block(block, name_to, 'built-in/goto', ...

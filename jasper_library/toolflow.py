@@ -706,11 +706,11 @@ class ToolflowBackend(object):
             fh1 = open(basefile_core, 'r')
             for row in fh1:
                 col1, col2, col3, col4 = row.split()
-                fh4.write("?register "+col1+" 0x"+col3+" 0x"+col4+"\n")
+                fh4.write("?register\t"+col1+"\t0x"+col3+"\t0x"+col4+"\n")
             fh2 = open(basefile_design, 'r')
             line = fh2.readline()
             while line:
-                fh4.write("?meta " + line)
+                fh4.write("?meta\t" + line)
                 line = fh2.readline()
             fh3 = open(basefile_git, 'r')
             line = fh3.readline()
