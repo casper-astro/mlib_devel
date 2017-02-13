@@ -759,14 +759,23 @@ flit_gen_user_link2_inst (
   .WR_REQ(WR_REQ),
   .WR_READY(WR_READY),
 
-  // read interface
-  .RD_ADDRESS(27'd0),
-  .RD_REQ(1'b0), 
-  .DATA_OUT(),    
-  .TAG_IN(9'd0),
-  .TAG_OUT(),
-  .DATA_VALID(),
-  .RD_READY()
+//  // read interface
+//  .RD_ADDRESS(27'd0),
+//  .RD_REQ(1'b0), 
+//  .DATA_OUT(),    
+//  .TAG_IN(9'd0),
+//  .TAG_OUT(),
+//  .DATA_VALID(),
+//  .RD_READY()
+
+// Move both write and read to the same interface
+  .RD_ADDRESS(RD_ADDRESS),
+  .RD_REQ(RD_REQ), 
+  .DATA_OUT(DATA_OUT),
+  .TAG_IN(TAG_IN),   
+  .TAG_OUT(TAG_OUT),
+  .DATA_VALID(DATA_VALID),
+  .RD_READY(RD_READY)
 );
 
 // FLIT generator and checker for HMC LINK3 POST
@@ -804,14 +813,24 @@ flit_gen_user_link3_inst (
   .WR_REQ(1'b0),
   .WR_READY(),
 
+//  // read interface
+//  .RD_ADDRESS(RD_ADDRESS),
+//  .RD_REQ(RD_REQ), 
+//  .DATA_OUT(DATA_OUT),
+//  .TAG_IN(TAG_IN),   
+//  .TAG_OUT(TAG_OUT),
+//  .DATA_VALID(DATA_VALID),
+//  .RD_READY(RD_READY)
+
+// Move both write and read to the same interface
   // read interface
-  .RD_ADDRESS(RD_ADDRESS),
-  .RD_REQ(RD_REQ), 
-  .DATA_OUT(DATA_OUT),
-  .TAG_IN(TAG_IN),   
-  .TAG_OUT(TAG_OUT),
-  .DATA_VALID(DATA_VALID),
-  .RD_READY(RD_READY)
+  .RD_ADDRESS(27'd0),
+  .RD_REQ(1'b0), 
+  .DATA_OUT(),    
+  .TAG_IN(9'd0),
+  .TAG_OUT(),
+  .DATA_VALID(),
+  .RD_READY()
 );
 
 // AXI Mux between POST & User FLIT Generation
