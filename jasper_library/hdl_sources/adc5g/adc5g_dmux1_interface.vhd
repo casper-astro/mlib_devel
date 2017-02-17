@@ -302,7 +302,7 @@ architecture behavioral of adc5g_dmux1_interface is
   end component;
 
   -- async FIFO for clock-domain crossing
-  component fifo_generator_v5_3
+  component fifo_generator_0
     port (
       rst         : in  std_logic;
       wr_clk      : in  std_logic;
@@ -346,15 +346,10 @@ begin
       o=> adc_clk
       );
 
-  DIVBUF: BUFR
-    generic map (
-      BUFR_DIVIDE => bufr_div_str
-      )
+  bug_inst: BUFG
     port map (
-      CE  => '1',
-      CLR => ctrl_reset,
-      O   => adc_clk_div,
-      I   => adc_clk
+      I   => adc_clk,
+      O   => adc_clk_div
       );
   
   MMCM0: MMCM_ADV
@@ -461,23 +456,26 @@ begin
 
   
   IBUFDS0 : for i in adc_bit_width-1 downto 0 generate
-    IBUFI0  :  IBUFDS_LVDS_25
-      port map (  i  => adc_data0_p_i(i),
-                  ib => adc_data0_n_i(i),
-                  o  => data0(i)
-                  );
+    IBUFI0:   IBUFDS
+      generic map(
+        DIFF_TERM => TRUE,
+        IOSTANDARD => "LVDS_25"
+        )
+      port map (
+        i  => adc_data0_p_i(i),
+        ib => adc_data0_n_i(i),
+        o  => data0(i)
+        );
   end generate IBUFDS0;
 
   DATADLY0 : for i in adc_bit_width-1 downto 0 generate
-    IODLY0: IODELAYE1
+    IODLY0: IDELAYE2
       generic map (
-        CINVCTRL_SEL           => FALSE,            -- TRUE, FALSE
-        DELAY_SRC              => "I",              -- I, IO, O, CLKIN, DATAIN
-        HIGH_PERFORMANCE_MODE  => TRUE,             -- TRUE, FALSE
-        IDELAY_TYPE            => "VAR_LOADABLE",   -- FIXED, DEFAULT, VARIABLE, or VAR_LOADABLE
+        CINVCTRL_SEL           => "FALSE",            -- TRUE, FALSE
+        DELAY_SRC              => "IDATAIN",        -- I, IO, O, CLKIN, DATAIN
+        HIGH_PERFORMANCE_MODE  => "TRUE",             -- TRUE, FALSE
+        IDELAY_TYPE            => "VAR_LOAD",        -- FIXED, DEFAULT, VARIABLE, or VAR_LOADABLE
         IDELAY_VALUE           => 0,                -- 0 to 31
-        ODELAY_TYPE            => "FIXED",          -- Has to be set to FIXED when IODELAYE1 is configured for Input
-        ODELAY_VALUE           => 0,                -- Set to 0 as IODELAYE1 is configured for Input
         REFCLK_FREQUENCY       => 200.0,
         SIGNAL_PATTERN         => "DATA"            -- CLOCK, DATA
         )
@@ -488,34 +486,36 @@ begin
         CE                     => '0',
         INC                    => '0',
         IDATAIN                => data0(i),
-        ODATAIN                => '0',
-        RST                    => tap_rst0(i),
-        T                      => '1',
+        LD                     => tap_rst0(i),
+        LDPIPEEN               => '1',
+        REGRST                 => '0',
         CNTVALUEIN             => datain_tap0(i),
-        CNTVALUEOUT            => open,
-        CLKIN                  => '0',
-        CINVCTRL               => '0'
+        CINVCTRL               => '0',
+        CNTVALUEOUT            => open
         );
   end generate DATADLY0;
 
   IBUFDS1 : for i in adc_bit_width-1 downto 0 generate
-    IBUFI1  :  IBUFDS_LVDS_25
-      port map (  i  => adc_data1_p_i(i),
-                  ib => adc_data1_n_i(i),
-                  o  => data1(i)
-                  );
+    IBUFI1:   IBUFDS
+      generic map(
+        DIFF_TERM => TRUE,
+        IOSTANDARD => "LVDS_25"
+        )
+      port map (
+        i  => adc_data1_p_i(i),
+        ib => adc_data1_n_i(i),
+        o  => data1(i)
+        );
   end generate IBUFDS1;
 
   DATADLY1 : for i in adc_bit_width-1 downto 0 generate
-    IODLY1: IODELAYE1
+    IODLY1: IDELAYE2
       generic map (
-        CINVCTRL_SEL           => FALSE,            -- TRUE, FALSE
-        DELAY_SRC              => "I",              -- I, IO, O, CLKIN, DATAIN
-        HIGH_PERFORMANCE_MODE  => TRUE,             -- TRUE, FALSE
-        IDELAY_TYPE            => "VAR_LOADABLE",   -- FIXED, DEFAULT, VARIABLE, or VAR_LOADABLE
+        CINVCTRL_SEL           => "FALSE",            -- TRUE, FALSE
+        DELAY_SRC              => "IDATAIN",        -- I, IO, O, CLKIN, DATAIN
+        HIGH_PERFORMANCE_MODE  => "TRUE",             -- TRUE, FALSE
+        IDELAY_TYPE            => "VAR_LOAD",        -- FIXED, DEFAULT, VARIABLE, or VAR_LOADABLE
         IDELAY_VALUE           => 0,                -- 0 to 31
-        ODELAY_TYPE            => "FIXED",          -- Has to be set to FIXED when IODELAYE1 is configured for Input
-        ODELAY_VALUE           => 0,                -- Set to 0 as IODELAYE1 is configured for Input
         REFCLK_FREQUENCY       => 200.0,
         SIGNAL_PATTERN         => "DATA"            -- CLOCK, DATA
         )
@@ -526,34 +526,36 @@ begin
         CE                     => '0',
         INC                    => '0',
         IDATAIN                => data1(i),
-        ODATAIN                => '0',
-        RST                    => tap_rst1(i),
-        T                      => '1',
+        LD                     => tap_rst1(i),
+        LDPIPEEN               => '1',
+        REGRST                 => '0',
         CNTVALUEIN             => datain_tap1(i),
-        CNTVALUEOUT            => open,
-        CLKIN                  => '0',
-        CINVCTRL               => '0'
+        CINVCTRL               => '0',
+        CNTVALUEOUT            => open
         );
   end generate DATADLY1;
 
   IBUFDS2 : for i in adc_bit_width-1 downto 0 generate
-    IBUFI2  :  IBUFDS_LVDS_25
-      port map (  i  => adc_data2_p_i(i),
-                  ib => adc_data2_n_i(i),
-                  o  => data2(i)
-                  );
+    IBUFI2:   IBUFDS
+      generic map(
+        DIFF_TERM => TRUE,
+        IOSTANDARD => "LVDS_25"
+        )
+      port map (
+        i  => adc_data2_p_i(i),
+        ib => adc_data2_n_i(i),
+        o  => data2(i)
+        );
   end generate IBUFDS2;
 
   DATADLY2 : for i in adc_bit_width-1 downto 0 generate
-    IODLY2: IODELAYE1
+    IODLY2: IDELAYE2
       generic map (
-        CINVCTRL_SEL           => FALSE,            -- TRUE, FALSE
-        DELAY_SRC              => "I",              -- I, IO, O, CLKIN, DATAIN
-        HIGH_PERFORMANCE_MODE  => TRUE,             -- TRUE, FALSE
-        IDELAY_TYPE            => "VAR_LOADABLE",   -- FIXED, DEFAULT, VARIABLE, or VAR_LOADABLE
+        CINVCTRL_SEL           => "FALSE",            -- TRUE, FALSE
+        DELAY_SRC              => "IDATAIN",        -- I, IO, O, CLKIN, DATAIN
+        HIGH_PERFORMANCE_MODE  => "TRUE",             -- TRUE, FALSE
+        IDELAY_TYPE            => "VAR_LOAD",        -- FIXED, DEFAULT, VARIABLE, or VAR_LOADABLE
         IDELAY_VALUE           => 0,                -- 0 to 31
-        ODELAY_TYPE            => "FIXED",          -- Has to be set to FIXED when IODELAYE1 is configured for Input
-        ODELAY_VALUE           => 0,                -- Set to 0 as IODELAYE1 is configured for Input
         REFCLK_FREQUENCY       => 200.0,
         SIGNAL_PATTERN         => "DATA"            -- CLOCK, DATA
         )
@@ -564,34 +566,36 @@ begin
         CE                     => '0',
         INC                    => '0',
         IDATAIN                => data2(i),
-        ODATAIN                => '0',
-        RST                    => tap_rst2(i),
-        T                      => '1',
+        LD                     => tap_rst2(i),
+        LDPIPEEN               => '1',
+        REGRST                 => '0',
         CNTVALUEIN             => datain_tap2(i),
-        CNTVALUEOUT            => open,
-        CLKIN                  => '0',
-        CINVCTRL               => '0'
+        CINVCTRL               => '0',
+        CNTVALUEOUT            => open
         );
   end generate DATADLY2;
 
   IBUFDS3 : for i in adc_bit_width-1 downto 0 generate
-    IBUF3  :  IBUFDS_LVDS_25
-      port map (  i  => adc_data3_p_i(i),
-                  ib => adc_data3_n_i(i),
-                  o  => data3(i)
-                  );
+    IBUFI3  :  IBUFDS
+     generic map(
+        DIFF_TERM => TRUE,
+        IOSTANDARD => "LVDS_25"
+        )
+      port map (
+        i  => adc_data3_p_i(i),
+        ib => adc_data3_n_i(i),
+        o  => data3(i)
+        );
   end generate IBUFDS3;
 
   DATADLY3 : for i in adc_bit_width-1 downto 0 generate
-    IODLY3: IODELAYE1
+    IODLY3: IDELAYE2
       generic map (
-        CINVCTRL_SEL           => FALSE,            -- TRUE, FALSE
-        DELAY_SRC              => "I",              -- I, IO, O, CLKIN, DATAIN
-        HIGH_PERFORMANCE_MODE  => TRUE,             -- TRUE, FALSE
-        IDELAY_TYPE            => "VAR_LOADABLE",   -- FIXED, DEFAULT, VARIABLE, or VAR_LOADABLE
+        CINVCTRL_SEL           => "FALSE",            -- TRUE, FALSE
+        DELAY_SRC              => "IDATAIN",        -- I, IO, O, CLKIN, DATAIN
+        HIGH_PERFORMANCE_MODE  => "TRUE",             -- TRUE, FALSE
+        IDELAY_TYPE            => "VAR_LOAD",        -- FIXED, DEFAULT, VARIABLE, or VAR_LOADABLE
         IDELAY_VALUE           => 0,                -- 0 to 31
-        ODELAY_TYPE            => "FIXED",          -- Has to be set to FIXED when IODELAYE1 is configured for Input
-        ODELAY_VALUE           => 0,                -- Set to 0 as IODELAYE1 is configured for Input
         REFCLK_FREQUENCY       => 200.0,
         SIGNAL_PATTERN         => "DATA"            -- CLOCK, DATA
         )
@@ -602,19 +606,18 @@ begin
         CE                     => '0',
         INC                    => '0',
         IDATAIN                => data3(i),
-        ODATAIN                => '0',
-        RST                    => tap_rst3(i),
-        T                      => '1',
+        LD                     => tap_rst3(i),
+        LDPIPEEN               => '1',
+        REGRST                 => '0',
         CNTVALUEIN             => datain_tap3(i),
-        CNTVALUEOUT            => open,
-        CLKIN                  => '0',
-        CINVCTRL               => '0'
+        CINVCTRL               => '0',
+        CNTVALUEOUT            => open
         );
   end generate DATADLY3;
 
   iserdesx : for i in adc_bit_width-1 downto 0 generate
 
-    iserdes0  : ISERDESE1
+    iserdes0  : ISERDESE2
       generic map (
         DATA_RATE     => "DDR",
         DATA_WIDTH    =>  4,
@@ -636,9 +639,11 @@ begin
         CE1          => '1',
         CE2          => '1',
         CLK          => isd_clkdiv,
-        CLKB         => isd_clkdivn,
+        CLKB         => not isd_clkdiv,
         OCLK         => isd_clkdiv90,
+        OCLKB        => not isd_clkdiv90,
         CLKDIV       => '0',
+        CLKDIVP      => '0',
         DYNCLKSEL    => '0',
         DYNCLKDIVSEL => '0',
         SHIFTIN1     => '0',
@@ -649,7 +654,7 @@ begin
         OFB          => '0'
         );
 
-    iserdes1  : ISERDESE1
+    iserdes1  : ISERDESE2
       generic map (
         DATA_RATE     => "DDR",
         DATA_WIDTH    =>  4,
@@ -671,9 +676,11 @@ begin
         CE1          => '1',
         CE2          => '1',
         CLK          => isd_clkdiv,
-        CLKB         => isd_clkdivn,
+        CLKB         => not isd_clkdiv ,
         OCLK         => isd_clkdiv90,
+        OCLKB        => not isd_clkdiv90,
         CLKDIV       => '0',
+        CLKDIVP      => '0',
         DYNCLKSEL    => '0',
         DYNCLKDIVSEL => '0',
         SHIFTIN1     => '0',
@@ -684,7 +691,7 @@ begin
         OFB          => '0'
         );
 
-    iserdes2  : ISERDESE1
+    iserdes2  : ISERDESE2
       generic map (
         DATA_RATE     => "DDR",
         DATA_WIDTH    =>  4,
@@ -706,9 +713,11 @@ begin
         CE1          => '1',
         CE2          => '1',
         CLK          => isd_clkdiv,
-        CLKB         => isd_clkdivn,
+        CLKB         => not isd_clkdiv ,
         OCLK         => isd_clkdiv90,
+        OCLKB        => not isd_clkdiv90,
         CLKDIV       => '0',
+        CLKDIVP      => '0',
         DYNCLKSEL    => '0',
         DYNCLKDIVSEL => '0',
         SHIFTIN1     => '0',
@@ -719,7 +728,7 @@ begin
         OFB          => '0'
         );
 
-    iserdes3  : ISERDESE1
+    iserdes3  : ISERDESE2
       generic map (
         DATA_RATE     => "DDR",
         DATA_WIDTH    =>  4,
@@ -741,9 +750,11 @@ begin
         CE1          => '1',
         CE2          => '1',
         CLK          => isd_clkdiv,
-        CLKB         => isd_clkdivn,
+        CLKB         => not isd_clkdiv,
         OCLK         => isd_clkdiv90,
+        OCLKB        => not isd_clkdiv90,
         CLKDIV       => '0',
+        CLKDIVP      => '0',
         DYNCLKSEL    => '0',
         DYNCLKDIVSEL => '0',
         SHIFTIN1     => '0',
@@ -829,7 +840,7 @@ begin
   end generate data_buf;
   
   -- Use FIFO to cross clock domains
-  FIFO : fifo_generator_v5_3
+  FIFO : fifo_generator_0
     port map (
       rst         => fifo_rst,
       wr_clk      => fifo_wr_clk,
@@ -905,22 +916,23 @@ begin
 
   fifo_wr_clk <= isd_clkdiv;
   fifo_rd_clk <= ctrl_clk_in;
-  data0d <= fifo_dout(adc_bit_width*16-1 downto adc_bit_width*15); 
-  data0c <= fifo_dout(adc_bit_width*15-1 downto adc_bit_width*14);
-  data0b <= fifo_dout(adc_bit_width*14-1 downto adc_bit_width*13);
-  data0a <= fifo_dout(adc_bit_width*13-1 downto adc_bit_width*12);
-  data1d <= fifo_dout(adc_bit_width*12-1 downto adc_bit_width*11);
-  data1c <= fifo_dout(adc_bit_width*11-1 downto adc_bit_width*10);
-  data1b <= fifo_dout(adc_bit_width*10-1 downto adc_bit_width*9);
-  data1a <= fifo_dout(adc_bit_width*9-1  downto adc_bit_width*8);
-  data2d <= fifo_dout(adc_bit_width*8-1  downto adc_bit_width*7);
-  data2c <= fifo_dout(adc_bit_width*7-1  downto adc_bit_width*6);
-  data2b <= fifo_dout(adc_bit_width*6-1  downto adc_bit_width*5);
-  data2a <= fifo_dout(adc_bit_width*5-1  downto adc_bit_width*4);
-  data3d <= fifo_dout(adc_bit_width*4-1  downto adc_bit_width*3);
-  data3c <= fifo_dout(adc_bit_width*3-1  downto adc_bit_width*2);
-  data3b <= fifo_dout(adc_bit_width*2-1  downto adc_bit_width);
-  data3a <= fifo_dout(adc_bit_width-1    downto 0);
+  -- Flip MSB to convert from offset binary to two's complement
+  data0d <= not fifo_dout(adc_bit_width*16-1) & fifo_dout(adc_bit_width*16-2 downto adc_bit_width*15); 
+  data0c <= not fifo_dout(adc_bit_width*15-1) & fifo_dout(adc_bit_width*15-2 downto adc_bit_width*14);
+  data0b <= not fifo_dout(adc_bit_width*14-1) & fifo_dout(adc_bit_width*14-2 downto adc_bit_width*13);
+  data0a <= not fifo_dout(adc_bit_width*13-1) & fifo_dout(adc_bit_width*13-2 downto adc_bit_width*12);
+  data1d <= not fifo_dout(adc_bit_width*12-1) & fifo_dout(adc_bit_width*12-2 downto adc_bit_width*11);
+  data1c <= not fifo_dout(adc_bit_width*11-1) & fifo_dout(adc_bit_width*11-2 downto adc_bit_width*10);
+  data1b <= not fifo_dout(adc_bit_width*10-1) & fifo_dout(adc_bit_width*10-2 downto adc_bit_width*9);
+  data1a <= not fifo_dout(adc_bit_width*9-1)  & fifo_dout(adc_bit_width*9-2  downto adc_bit_width*8);
+  data2d <= not fifo_dout(adc_bit_width*8-1)  & fifo_dout(adc_bit_width*8-2  downto adc_bit_width*7);
+  data2c <= not fifo_dout(adc_bit_width*7-1)  & fifo_dout(adc_bit_width*7-2  downto adc_bit_width*6);
+  data2b <= not fifo_dout(adc_bit_width*6-1)  & fifo_dout(adc_bit_width*6-2  downto adc_bit_width*5);
+  data2a <= not fifo_dout(adc_bit_width*5-1)  & fifo_dout(adc_bit_width*5-2  downto adc_bit_width*4);
+  data3d <= not fifo_dout(adc_bit_width*4-1)  & fifo_dout(adc_bit_width*4-2  downto adc_bit_width*3);
+  data3c <= not fifo_dout(adc_bit_width*3-1)  & fifo_dout(adc_bit_width*3-2  downto adc_bit_width*2);
+  data3b <= not fifo_dout(adc_bit_width*2-1)  & fifo_dout(adc_bit_width*2-2  downto adc_bit_width*1);
+  data3a <= not fifo_dout(adc_bit_width*1-1)  & fifo_dout(adc_bit_width*1-2  downto adc_bit_width*0);
   
   -- Re-order the outputs
   -- when only one input is used (either A or C)
