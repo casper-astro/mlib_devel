@@ -118,9 +118,9 @@ architecture behavioral of adc5g_dmux1_interface is
   signal mmcm_rst      : std_logic;
 
   -- ISERDES signals
-  signal isd_clk       : std_logic;
-  signal isd_clkn      : std_logic;
   signal isd_clkdiv    : std_logic;
+  signal isd_clkdivn   : std_logic;
+  signal isd_clkdiv90  : std_logic;
   signal isd_rst       : std_logic;
   signal isd0_rst0     : std_logic_vector(adc_bit_width-1 downto 0);
   signal isd1_rst0     : std_logic_vector(adc_bit_width-1 downto 0);
@@ -302,7 +302,7 @@ architecture behavioral of adc5g_dmux1_interface is
   end component;
 
   -- async FIFO for clock-domain crossing
-  component fifo_generator_0
+  component fifo_generator_v5_3
     port (
       rst         : in  std_logic;
       wr_clk      : in  std_logic;
@@ -321,8 +321,8 @@ begin
   -- Resets
   adc_reset_o <= '0';
   isd_rst     <= ctrl_reset;
-  mmcm_rst    <= ctrl_reset;
-  fifo_rst    <= not mmcm_locked;
+  mmcm_rst    <= dcm_reset;
+  fifo_rst    <= (not mmcm_locked) or ctrl_reset;
 
   CBUF0:   IBUFDS
     generic map(
@@ -346,15 +346,20 @@ begin
       o=> adc_clk
       );
 
-  bug_inst: BUFG
+  DIVBUF: BUFR
+    generic map (
+      BUFR_DIVIDE => bufr_div_str
+      )
     port map (
-      I   => adc_clk,
-      O   => adc_clk_div
+      CE  => '1',
+      CLR => ctrl_reset,
+      O   => adc_clk_div,
+      I   => adc_clk
       );
   
   MMCM0: MMCM_ADV
     generic map (
-      BANDWIDTH            => "HIGH",
+      BANDWIDTH            => "OPTIMIZED",
       CLKFBOUT_MULT_F      => mmcm_m,
       DIVCLK_DIVIDE        => mmcm_d,
       CLKFBOUT_PHASE       => 0.0,
@@ -382,7 +387,7 @@ begin
       CLKINSEL  => '1',
       CLKIN1    => adc_clk_div,
       CLKIN2    => '0',
-      CLKOUT0   => mmcm_clkout0,
+      CLKOUT0   => open,
       CLKOUT1   => mmcm_clkout1,
       CLKOUT2   => mmcm_clkout2,
       CLKOUT3   => mmcm_clkout3,
@@ -406,9 +411,8 @@ begin
 
   --CBUF2a:  BUFG     port map (i=> mmcm_clkfbout, o=> mmcm_clkfbin);
   mmcm_clkfbin <= mmcm_clkfbout;
-  CBUF2b:  BUFG     port map (i=> mmcm_clkout0,  o=> isd_clk);
   CBUF2c:  BUFG     port map (i=> mmcm_clkout1,  o=> isd_clkdiv);
-  CBUF2d:  BUFG     port map (i=> mmcm_clkout2,  o=> ctrl_clk90_out);
+  CBUF2d:  BUFG     port map (i=> mmcm_clkout2,  o=> isd_clkdiv90);
   CBUF2e:  BUFG     port map (i=> mmcm_clkout3,  o=> ctrl_clk180_out);
   CBUF2f:  BUFG     port map (i=> mmcm_clkout4,  o=> ctrl_clk270_out);
 
@@ -416,7 +420,8 @@ begin
   sync <= adc_sync;
 
   ctrl_clk_out <= isd_clkdiv;
-  isd_clkn <= not isd_clk;
+  ctrl_clk90_out <= isd_clkdiv90;
+  isd_clkdivn <= not isd_clkdiv;
 
   -- purpose: Decode the datain pin and tap value
   -- type   : sequential
@@ -609,124 +614,144 @@ begin
 
   iserdesx : for i in adc_bit_width-1 downto 0 generate
 
-    iserdes0  : ISERDES_NODELAY
+    iserdes0  : ISERDESE1
       generic map (
         DATA_RATE     => "DDR",
         DATA_WIDTH    =>  4,
-        INTERFACE_TYPE=> "NETWORKING",
+        INTERFACE_TYPE=> "OVERSAMPLE",
         SERDES_MODE   => "MASTER",
+        IOBDELAY      => "BOTH",
         NUM_CE        =>  2
         )
       port map  (
-        Q1 => data0d_pre(i),
-        Q2 => data0c_pre(i),
-        Q3 => data0b_pre(i),
-        Q4 => data0a_pre(i),
+        Q1 => data0a_pre(i), -- THESE ARE DIFFERENT TO THOSE USED IN NETWORK MODE data0d_pre(i),
+        Q2 => data0c_pre(i), -- THESE ARE DIFFERENT TO THOSE USED IN NETWORK MODE data0c_pre(i),
+        Q3 => data0b_pre(i), -- THESE ARE DIFFERENT TO THOSE USED IN NETWORK MODE data0b_pre(i),
+        Q4 => data0d_pre(i), -- THESE ARE DIFFERENT TO THOSE USED IN NETWORK MODE data0a_pre(i),
         Q5 => open,
         Q6 => open,
-        SHIFTOUT1 => open,
-        SHIFTOUT2 => open,
-        BITSLIP   => '0',
-        CE1       => '1',
-        CE2       => '1',
-        CLK       => isd_clk,
-        CLKB      => isd_clkn,
-        CLKDIV    => isd_clkdiv,
-        D         => data0_delay(i),
-        OCLK      => '0',
-        RST       => isd_rst,
-        SHIFTIN1  => '0',
-        SHIFTIN2  => '0'
+        SHIFTOUT1    => open,
+        SHIFTOUT2    => open,
+        BITSLIP      => '0',
+        CE1          => '1',
+        CE2          => '1',
+        CLK          => isd_clkdiv,
+        CLKB         => isd_clkdivn,
+        OCLK         => isd_clkdiv90,
+        CLKDIV       => '0',
+        DYNCLKSEL    => '0',
+        DYNCLKDIVSEL => '0',
+        SHIFTIN1     => '0',
+        SHIFTIN2     => '0',
+        RST          => isd_rst,
+        D            => '0',
+        DDLY         => data0_delay(i),
+        OFB          => '0'
         );
 
-    iserdes1  : ISERDES_NODELAY
+    iserdes1  : ISERDESE1
       generic map (
         DATA_RATE     => "DDR",
         DATA_WIDTH    =>  4,
-        INTERFACE_TYPE=> "NETWORKING",
+        INTERFACE_TYPE=> "OVERSAMPLE",
         SERDES_MODE   => "MASTER",
+        IOBDELAY      => "BOTH",
         NUM_CE        =>  2
         )
       port map  (
-        Q1 => data1d_pre(i),
-        Q2 => data1c_pre(i),
-        Q3 => data1b_pre(i),
-        Q4 => data1a_pre(i),
+        Q1 => data1a_pre(i), -- THESE ARE DIFFERENT TO THOSE USED IN NETWORK MODE data1d_pre(i),
+        Q2 => data1c_pre(i), -- THESE ARE DIFFERENT TO THOSE USED IN NETWORK MODE data1c_pre(i),
+        Q3 => data1b_pre(i), -- THESE ARE DIFFERENT TO THOSE USED IN NETWORK MODE data1b_pre(i),
+        Q4 => data1d_pre(i), -- THESE ARE DIFFERENT TO THOSE USED IN NETWORK MODE data1a_pre(i),
         Q5 => open,
         Q6 => open,
-        SHIFTOUT1 => open,
-        SHIFTOUT2 => open,
-        BITSLIP   => '0',
-        CE1       => '1',
-        CE2       => '1',
-        CLK       => isd_clk,
-        CLKB      => isd_clkn,
-        CLKDIV    => isd_clkdiv,
-        D         => data1_delay(i),
-        OCLK      => '0',
-        RST       => isd_rst,
-        SHIFTIN1  => '0',
-        SHIFTIN2  => '0'
+        SHIFTOUT1    => open,
+        SHIFTOUT2    => open,
+        BITSLIP      => '0',
+        CE1          => '1',
+        CE2          => '1',
+        CLK          => isd_clkdiv,
+        CLKB         => isd_clkdivn,
+        OCLK         => isd_clkdiv90,
+        CLKDIV       => '0',
+        DYNCLKSEL    => '0',
+        DYNCLKDIVSEL => '0',
+        SHIFTIN1     => '0',
+        SHIFTIN2     => '0',
+        RST          => isd_rst,
+        D            => '0',
+        DDLY         => data1_delay(i),
+        OFB          => '0'
         );
 
-    iserdes2  : ISERDES_NODELAY
+    iserdes2  : ISERDESE1
       generic map (
         DATA_RATE     => "DDR",
         DATA_WIDTH    =>  4,
-        INTERFACE_TYPE=> "NETWORKING",
+        INTERFACE_TYPE=> "OVERSAMPLE",
         SERDES_MODE   => "MASTER",
+        IOBDELAY      => "BOTH",
         NUM_CE        =>  2
         )
       port map  (
-        Q1 => data2d_pre(i),
-        Q2 => data2c_pre(i),
-        Q3 => data2b_pre(i),
-        Q4 => data2a_pre(i),
+        Q1 => data2a_pre(i), -- THESE ARE DIFFERENT TO THOSE USED IN NETWORK MODE data2d_pre(i),
+        Q2 => data2c_pre(i), -- THESE ARE DIFFERENT TO THOSE USED IN NETWORK MODE data2c_pre(i),
+        Q3 => data2b_pre(i), -- THESE ARE DIFFERENT TO THOSE USED IN NETWORK MODE data2b_pre(i),
+        Q4 => data2d_pre(i), -- THESE ARE DIFFERENT TO THOSE USED IN NETWORK MODE data2a_pre(i),
         Q5 => open,
         Q6 => open,
-        SHIFTOUT1 => open,
-        SHIFTOUT2 => open,
-        BITSLIP   => '0',
-        CE1       => '1',
-        CE2       => '1',
-        CLK       => isd_clk,
-        CLKB      => isd_clkn,
-        CLKDIV    => isd_clkdiv,
-        D         => data2_delay(i),
-        OCLK      => '0',
-        RST       => isd_rst,
-        SHIFTIN1  => '0',
-        SHIFTIN2  => '0'
+        SHIFTOUT1    => open,
+        SHIFTOUT2    => open,
+        BITSLIP      => '0',
+        CE1          => '1',
+        CE2          => '1',
+        CLK          => isd_clkdiv,
+        CLKB         => isd_clkdivn,
+        OCLK         => isd_clkdiv90,
+        CLKDIV       => '0',
+        DYNCLKSEL    => '0',
+        DYNCLKDIVSEL => '0',
+        SHIFTIN1     => '0',
+        SHIFTIN2     => '0',
+        RST          => isd_rst,
+        D            => '0',
+        DDLY         => data2_delay(i),
+        OFB          => '0'
         );
 
-    iserdes3  : ISERDES_NODELAY
+    iserdes3  : ISERDESE1
       generic map (
         DATA_RATE     => "DDR",
         DATA_WIDTH    =>  4,
-        INTERFACE_TYPE=> "NETWORKING",
+        INTERFACE_TYPE=> "OVERSAMPLE",
         SERDES_MODE   => "MASTER",
+        IOBDELAY      => "BOTH",
         NUM_CE        =>  2
         )
       port map  (
-        Q1 => data3d_pre(i),
-        Q2 => data3c_pre(i),
-        Q3 => data3b_pre(i),
-        Q4 => data3a_pre(i),
+        Q1 => data3a_pre(i), -- THESE ARE DIFFERENT TO THOSE USED IN NETWORK MODE data3d_pre(i),
+        Q2 => data3c_pre(i), -- THESE ARE DIFFERENT TO THOSE USED IN NETWORK MODE data3c_pre(i),
+        Q3 => data3b_pre(i), -- THESE ARE DIFFERENT TO THOSE USED IN NETWORK MODE data3b_pre(i),
+        Q4 => data3d_pre(i), -- THESE ARE DIFFERENT TO THOSE USED IN NETWORK MODE data3a_pre(i),
         Q5 => open,
         Q6 => open,
-        SHIFTOUT1 => open,
-        SHIFTOUT2 => open,
-        BITSLIP   => '0',
-        CE1       => '1',
-        CE2       => '1',
-        CLK       => isd_clk,
-        CLKB      => isd_clkn,
-        CLKDIV    => isd_clkdiv,
-        D         => data3_delay(i),
-        OCLK      => '0',
-        RST       => isd_rst,
-        SHIFTIN1  => '0',
-        SHIFTIN2  => '0'
+        SHIFTOUT1    => open,
+        SHIFTOUT2    => open,
+        BITSLIP      => '0',
+        CE1          => '1',
+        CE2          => '1',
+        CLK          => isd_clkdiv,
+        CLKB         => isd_clkdivn,
+        OCLK         => isd_clkdiv90,
+        CLKDIV       => '0',
+        DYNCLKSEL    => '0',
+        DYNCLKDIVSEL => '0',
+        SHIFTIN1     => '0',
+        SHIFTIN2     => '0',
+        RST          => isd_rst,
+        D            => '0',
+        DDLY         => data3_delay(i),
+        OFB          => '0'
         );
   end generate iserdesx;
 
@@ -804,7 +829,7 @@ begin
   end generate data_buf;
   
   -- Use FIFO to cross clock domains
-  FIFO : fifo_generator_0
+  FIFO : fifo_generator_v5_3
     port map (
       rst         => fifo_rst,
       wr_clk      => fifo_wr_clk,
