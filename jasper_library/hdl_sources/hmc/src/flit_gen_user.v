@@ -296,11 +296,6 @@ module flit_gen_user #(
 
   end else begin
       m_axis_rx_TREADY_i <= 1'b1; // After reset this module is always ready
-      next_flit_case3_second <= 1'b0;
-      next_flit_case3_third <= 1'b0;
-      next_flit_case4_second <= 1'b0;
-      next_flit_case4_third <= 1'b0;
-      
       rd_data_val <= 1'b0;
 
       // Start state decoding
@@ -371,6 +366,7 @@ module flit_gen_user #(
             rd_data [191:0] <= rd_data_i[191:0];
             rd_tag <= rd_tag_i;
             rd_data_val <= 1'b1;
+            next_flit_case3_second <= 1'b0;
           end
 
           // CASE 4 cont...
@@ -380,6 +376,7 @@ module flit_gen_user #(
             rd_data [63:0] <= rd_data_i[63:0];
             rd_tag <= rd_tag_i;
             rd_data_val <= 1'b1;
+            next_flit_case4_second <= 1'b0;
           end
           
         end
