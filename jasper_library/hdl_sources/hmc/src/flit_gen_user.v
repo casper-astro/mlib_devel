@@ -404,7 +404,6 @@ module flit_gen_user #(
                 next_flit_case4_second <= 1'b1;
               end
             end
-            
           end
         endcase
       end
