@@ -42,6 +42,10 @@ for i = 1 : length(gateway_ins),
         set_param(gw, 'Name', clear_name([cursys, '_rx_source_ip']));
     elseif regexp(get_param(gw, 'Name'), '_rx_source_port$')
         set_param(gw, 'Name', clear_name([cursys, '_rx_source_port']));
+    elseif regexp(get_param(gw, 'Name'), '_rx_dest_ip$')
+        set_param(gw, 'Name', clear_name([cursys, '_rx_dest_ip']));
+    elseif regexp(get_param(gw, 'Name'), '_rx_dest_port$')
+        set_param(gw, 'Name', clear_name([cursys, '_rx_dest_port']));
     elseif regexp(get_param(gw, 'Name'), '_rx_end_of_frame$')
         set_param(gw, 'Name', clear_name([cursys, '_rx_end_of_frame']));
     elseif regexp(get_param(gw, 'Name'), '_rx_bad_frame$')
