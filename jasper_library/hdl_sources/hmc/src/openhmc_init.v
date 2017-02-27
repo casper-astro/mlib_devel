@@ -195,7 +195,9 @@ module openhmc_init #(
           if (rf_access_complete == 1'b1) begin 
             hmc_init_state <= READ_HMC_INIT_REG;            
             // Check to see that [0] = 1 => Link is ready for operation 
-            if (rf_read_data[0] == 1'b1 && read_rf_addr == 5'h0) begin
+            //read_rf_addr is one ahead of where it is mean't to be and the actual read_rf_addr = 0 when
+            //reading (firmware address is not aligned to the data read back
+            if (rf_read_data[0] == 1'b1 && read_rf_addr == 5'h1) begin
               hmc_init_state <= OPEN_HMC_INIT_COMPLETED;
             end else begin
               hmc_init_state <= READ_HMC_INIT_REG;//POLL_AGAIN_HMC_STATUS_REG;  
