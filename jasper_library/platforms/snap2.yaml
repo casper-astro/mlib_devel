@@ -1,0 +1,36 @@
+name: snap2
+manufacturer: Xilinx
+fpga: xcku115-flvf1924-1-c
+backend_target: vivado
+sources: []
+constraints: []
+provides:
+  - qsfp0
+  - qsfp1
+  - qsfp2
+  - qsfp3
+  - sys_clk
+  - sys_clk90
+  - sys_clk180
+  - sys_clk270
+pins:
+  sys_clk_p:
+    loc: AR21
+    iostd: LVDS
+  sys_clk_n:
+    loc: AT20
+    iostd: LVDS
+  miso:
+    loc: AK26
+    iostd: LVCMOS33
+  mosi:
+    loc: AJ25
+    iostd: LVCMOS33
+  sclk:
+    loc: AK25
+    iostd: LVCMOS33
+  cs_n:
+    loc: AP25
+    iostd: LVCMOS33
+
+
