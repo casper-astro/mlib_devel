@@ -1,6 +1,8 @@
 *_sysgen.log
 *_sysgen_error.log
 *.asv
+*.jou
+*.pyc
 casper_library/Tests/*_output.mat
 casper_library/Tests/xldsp48e_isim.log
 *~
@@ -10,3 +12,5 @@ casper_library/casper_library_downconverter.*
 tags
 xps_base/XPS_ROACH2_base/system.xmp.sx475t.updated
 xps_base/XPS_ROACH2_base/system.xmp.updated
+*.local
+vivado_pid*.str

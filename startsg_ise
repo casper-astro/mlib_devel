@@ -1,0 +1,17 @@
+#!/bin/bash
+##############################################
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd $DIR
+if [ -f ise_config.local ];
+then
+    echo "Using configuration: $DIR/ise_config.local"
+    source ise_config.local
+else
+    echo "Using default configuration: $DIR/ise_config.sh"
+    source ise_config.sh
+fi
+export PATH=${PATH}:${XILINX}/ISE/bin/${PLATFORM}:${XILINX_PATH}/ISE/sysgen/bin/${PLATFORM}
+export PATH=${MATLAB_PATH}/bin:$PATH
+echo $PATH
+echo "EXECUTING: ${MATLAB_PATH}/bin/matlab $@"
+${MATLAB_PATH}/bin/matlab $@

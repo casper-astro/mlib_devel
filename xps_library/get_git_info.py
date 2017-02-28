@@ -107,7 +107,7 @@ if args.target:
     fptr.write(new_info)
     fptr.close()
 elif args.fpgstring:
-    print('?meta 77777_git\trcs\t{}'.format(new_info)),
+    print('?meta\t77777_git\trcs\t{}'.format(new_info)),
 else:
     if not os.path.exists(args.file_dir):
         print ('ERROR no_such_file: ' + args.file_dir)

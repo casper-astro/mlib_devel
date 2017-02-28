@@ -1,0 +1,16 @@
+Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2014.3.1 (win64) Build 1056140 Thu Oct 30 17:03:40 MDT 2014
+| Date         : Mon Nov 24 12:54:50 2014
+| Host         : gavin-win7 running 64-bit Service Pack 1  (build 7601)
+| Command      : upgrade_ip
+| Device       : xc7vx690tffg1927-2
+--------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'cont_microblaze_axi_slave_wishbone_classic_master_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of cont_microblaze_axi_slave_wishbone_classic_master_0_0 (peralex.com:user:axi_slave_wishbone_classic_master:1.0) from (Rev. 1) to (Rev. 3)
+
