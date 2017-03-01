@@ -24,11 +24,11 @@ function forty_gbe_mask(blk)
 
 cursys = blk;
 
-%set_param(cursys, 'LinkStatus', 'inactive');
+set_param(cursys, 'LinkStatus', 'inactive');
 
 % rename gateways
 gateway_ins = find_system(cursys, 'searchdepth', 1, 'FollowLinks', 'on', 'lookundermasks', 'all', 'masktype', 'Xilinx Gateway In Block');
-for i = 1 : length(gateway_ins),
+for i = 1 : length(gateway_ins)
     gw = gateway_ins{i};
     if regexp(get_param(gw, 'Name'), '_tx_afull$')
         set_param(gw, 'Name', clear_name([cursys, '_tx_afull']));
@@ -65,7 +65,7 @@ for i = 1 : length(gateway_ins),
     end
 end
 gateway_outs = find_system(cursys, 'searchdepth', 1, 'FollowLinks', 'on', 'lookundermasks', 'all', 'masktype', 'Xilinx Gateway Out Block');
-for i = 1 : length(gateway_outs),
+for i = 1 : length(gateway_outs)
     gw = gateway_outs{i};
     if regexp(get_param(gw, 'Name'), '_rst$')
         set_param(gw, 'Name', clear_name([cursys, '_rst']));
@@ -186,7 +186,7 @@ function draw_rxcounter(sys, ypos, targetname, sourceoef, sourcevalid)
             'arith_type', 'Unsigned', 'logical_function', 'AND', 'inputs', '2', ...
             'latency', '1', 'Position', [450 ypos 500 ypos+45]);
         reuse_block(sys, ed_name, 'casper_library_misc/edge_detect', ...
-            'edge', 'Rising', 'polarity', 'Active High',...
+            'edge', 'Rising', 'polarity', 'Active High', ...
             'Position', [550 ypos 600 ypos+20]);
         reuse_block(sys, ctr_name, 'xbsIndex_r4/Counter', ...
             'arith_type', 'Unsigned', 'n_bits', '32', 'explicit_period', 'on', ...
@@ -260,7 +260,7 @@ draw_counter(cursys, starty, 'rxeofctr', clear_name([cursys, '_rx_end_of_frame']
 % rx snapshot
 snaplen = get_param(cursys, 'rxsnaplen');
 snapname = 'rxs';
-if strcmp(snaplen, '0 - no snap') == 0,
+if strcmp(snaplen, '0 - no snap') == 0
     reuse_block(cursys, snapname, 'casper_library_scopes/bitfield snapshot', ...
         'Position', [1055         981        1160        1234], ...
         'io_names', '[led_up led_rx data_in valid_in ip_in eof_in bad_frame overrun]', ...
@@ -305,7 +305,7 @@ end
 % tx snapshot
 snaplen = get_param(cursys, 'txsnaplen');
 snapname = 'txs';
-if strcmp(snaplen, '0 - no snap') == 0,
+if strcmp(snaplen, '0 - no snap') == 0
     reuse_block(cursys, snapname, 'casper_library_scopes/bitfield snapshot', ...
         'Position', [1055        1302        1160        1528], ...
         'io_names', '[link_up led_tx tx_full tx_over valid eof data ip]', ...

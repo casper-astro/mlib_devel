@@ -35,7 +35,7 @@ outputWidth = str2double(get_param(blk, 'outputWidth'));
 mask_names = get_param(blk, 'MaskNames');
 mask_enables = get_param(blk, 'MaskEnables');
 
-if strcmp(mode, 'divisions of arbitrary size'),
+if strcmp(mode, 'divisions of arbitrary size')
   en = 'off';
   set_param(blk, 'outputNum', num2str(length(outputWidth)));
 else
@@ -48,7 +48,7 @@ mask_enables{ismember(mask_names, 'outputToModelAsWell')} = outputToWorkspace;
 set_param(gcb, 'MaskEnables', mask_enables);
 
 temp = get_param(blk, 'MaskPrompts');
-if strcmp(en, 'off'),
+if strcmp(en, 'off')
     temp(3) = {'Output width [msb ... lsb]:'};
     temp(4) = {'Output binary point position [msb ... lsb]:'};
     temp(5) = {'Output arithmetic type (ufix=0, fix=1, bool=2) [msb ... lsb]:'};
@@ -60,3 +60,5 @@ end
 set_param(blk, 'MaskPrompts', temp);
     
 clog('exiting bus_expand_callback', 'trace');
+
+% end

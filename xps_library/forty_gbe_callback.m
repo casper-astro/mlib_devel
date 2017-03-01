@@ -30,27 +30,27 @@ clog('entering forty_gbe_callback', 'trace');
 
 blk = gcb;
 
-masktype = get_param(blk, 'MaskType')
+% masktype = get_param(blk, 'MaskType');
 
 check_mask_type(blk, 'forty_gbe');
 
 %search for sysgen block and get target
-xps_xsg_blks = find_system(bdroot,'SearchDepth',1,'FollowLinks','on','LookUnderMasks','all','Tag','xps:xsg');
-if length(xps_xsg_blks) ~= 1,
+xps_xsg_blks = find_system(bdroot, 'SearchDepth', 1, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'xps:xsg');
+if length(xps_xsg_blks) ~= 1
   errordlg('forty_gbe requires a single MSSGE (XSG core config) block to be instantiated at the top level');
   return;
 end
 
 %get the target board for the design
-hw_sys = get_param(xps_xsg_blks(1),'hw_sys');
-flavour = get_param(blk,'flavour');
+hw_sys = get_param(xps_xsg_blks(1), 'hw_sys');
+% flavour = get_param(blk, 'flavour');
 show_param = get_param(blk, 'show_param');
 mask_names = get_param(blk, 'MaskNames');
 mask_visibilities = get_param(blk, 'MaskVisibilities');
 
 %turn everything off by default
 
-for p = 1:length(mask_visibilities),
+for p = 1:length(mask_visibilities)
   mask_visibilities{p} = 'off';
 end
 
@@ -82,7 +82,7 @@ mask_visibilities{ismember(mask_names, 'rxsnaplen')} = 'on';
 %these are visible if low level parameters enabled
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-if strcmp(show_param, 'on'),
+if strcmp(show_param, 'on')
   %these are visible regardless of target hardware
   mask_visibilities{ismember(mask_names, 'fab_en')} = 'on';
   mask_visibilities{ismember(mask_names, 'fab_mac')} = 'on';
@@ -92,7 +92,7 @@ if strcmp(show_param, 'on'),
   mask_visibilities{ismember(mask_names, 'cpu_rx_en')} = 'on';
   mask_visibilities{ismember(mask_names, 'cpu_tx_en')} = 'on';
 
-  if strcmp(hw_sys,'ROACH2:sx475t'),
+  if strcmp(hw_sys, 'ROACH2:sx475t')
     mask_visibilities{ismember(mask_names, 'pre_emph_r2')} = 'on';
     mask_visibilities{ismember(mask_names, 'swing_r2')} = 'on';
     mask_visibilities{ismember(mask_names, 'post_emph_r2')} = 'on';
@@ -111,3 +111,5 @@ end
 set_param(blk, 'MaskVisibilities', mask_visibilities);
 
 clog('exiting forty_gbe_callback', 'trace');
+
+% end

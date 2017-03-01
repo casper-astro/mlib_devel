@@ -24,11 +24,11 @@ function tengbe_v2_mask(blk)
 
 cursys = blk;
 
-%set_param(cursys, 'LinkStatus', 'inactive');
+set_param(cursys, 'LinkStatus', 'inactive');
 
 % rename gateways
 gateway_ins = find_system(cursys, 'searchdepth', 1, 'FollowLinks', 'on', 'lookundermasks', 'all', 'masktype', 'Xilinx Gateway In Block');
-for i = 1 : length(gateway_ins),
+for i = 1 : length(gateway_ins)
     gw = gateway_ins{i};
     if regexp(get_param(gw, 'Name'), '_tx_afull$')
         set_param(gw, 'Name', clear_name([cursys, '_tx_afull']));
@@ -65,7 +65,7 @@ for i = 1 : length(gateway_ins),
     end
 end
 gateway_outs = find_system(cursys, 'searchdepth', 1, 'FollowLinks', 'on', 'lookundermasks', 'all', 'masktype', 'Xilinx Gateway Out Block');
-for i = 1 : length(gateway_outs),
+for i = 1 : length(gateway_outs)
     gw = gateway_outs{i};
     if regexp(get_param(gw, 'Name'), '_rst$')
         set_param(gw, 'Name', clear_name([cursys, '_rst']));
@@ -101,7 +101,7 @@ if strcmp(get_param(blk, 'txctr'), 'on') || strcmp(get_param(blk, 'txerrctr'), '
         strcmp(get_param(blk, 'txvldctr'), 'on') || strcmp(get_param(blk, 'rxctr'), 'on') || ...
         strcmp(get_param(blk, 'rxerrctr'), 'on') || strcmp(get_param(blk, 'rxofctr'), 'on') || ...
         strcmp(get_param(blk, 'rxbadctr'), 'on') || strcmp(get_param(blk, 'rxvldctr'), 'on') || ...
-        strcmp(get_param(blk, 'rxeofctr'), 'on'),
+        strcmp(get_param(blk, 'rxeofctr'), 'on')
 	% make sure the terminator and port are there
     reuse_block(cursys, 'debug_rst', 'built-in/inport', 'Port', '9', 'Position', [120   137   150   153]);
     reuse_block(cursys, 'debug_rst_goto', 'built-in/goto', 'GotoTag', 'debug_rst', 'Position', [200   135   280   150]);
@@ -347,7 +347,7 @@ draw_counter(cursys, starty, 'rxeofctr', 'grx_eof');
 % rx snapshot
 snaplen = get_param(cursys, 'rxsnaplen');
 snapname = 'rxs';
-if strcmp(snaplen, '0 - no snap') == 0,
+if strcmp(snaplen, '0 - no snap') == 0
     ypos = 981;
     
     reuse_block(cursys, 'rxs_fr0',  'built-in/from', 'GotoTag', 'grx_led_up', 'Position',       [900 ypos 1000 ypos+12]); ypos = ypos + 15;
@@ -405,7 +405,7 @@ end
 % tx snapshot
 snaplen = get_param(cursys, 'txsnaplen');
 snapname = 'txs';
-if strcmp(snaplen, '0 - no snap') == 0,
+if strcmp(snaplen, '0 - no snap') == 0
     ypos = 1302;
     reuse_block(cursys, 'txs_fr0',  'built-in/from', 'GotoTag', 'grx_led_up', 'Position',      [900 ypos 1000 ypos+12]); ypos = ypos + 15;
     reuse_block(cursys, 'txs_fr1',  'built-in/from', 'GotoTag', 'grx_led_tx', 'Position',      [900 ypos 1000 ypos+12]); ypos = ypos + 15;
