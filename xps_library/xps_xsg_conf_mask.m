@@ -153,7 +153,7 @@ switch clk_src
             errordlg(['Invalid clock source ',clk_src,' for hardware platform: ',hw_sys]);
         end
     case {'aux_clk'}
-        if isempty(find(strcmp(hw_sys,{'ROACH2'})))
+        if (strcmp(hw_sys,{'ROACH', 'ROACH2', 'SKARAB'}))
             errordlg(['Invalid clock source ',clk_src,' for hardware platform: ',hw_sys]);
         end
     case {'aux0_clk' 'aux1_clk' 'aux0_clk2x' 'aux1_clk2x' 'arb_clk'}
