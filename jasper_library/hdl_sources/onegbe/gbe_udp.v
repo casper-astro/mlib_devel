@@ -165,6 +165,8 @@ end else begin : enable_cpu
     .LOCAL_PORT      (LOCAL_PORT),
     .LOCAL_GATEWAY   (LOCAL_GATEWAY),
     .CPU_PROMISCUOUS (CPU_PROMISCUOUS),
+    .CPU_TX_ENABLE   (!DIS_CPU_TX),
+    .CPU_RX_ENABLE   (!DIS_CPU_RX),
     .PHY_CONFIG      (0)
   ) gbe_cpu_attach_inst (
     .wb_clk_i (wb_clk_i),
