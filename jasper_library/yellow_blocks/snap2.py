@@ -7,7 +7,7 @@ class snap2(YellowBlock):
         self.add_source('wbs_arbiter')
 
     def modify_top(self,top):
-        inst = top.get_instance('snap_infrastructure', 'snap_infrastructure_inst')
+        inst = top.get_instance('snap2_infrastructure', 'snap2_infrastructure_inst')
         inst.add_port('sys_clk_buf_n', 'sys_clk_n', parent_port=True, dir='in')
         inst.add_port('sys_clk_buf_p', 'sys_clk_p', parent_port=True, dir='in')
         inst.add_port('sys_clk0     ', 'sys_clk   ')

@@ -5,7 +5,13 @@ from os import environ as env
 
 class microblaze(YellowBlock):
     def initialize(self):
-        self.elf = 'hw0.elf'
+        if self.platform.name == 'snap2':
+            self.memfile= 'executable_no_xadc.mem'
+            self.blkdiagram = 'microblaze_wb_no_xadc.tcl'
+        else:
+            self.memfile = 'executable.mem'
+            self.blkdiagram = 'microblaze_wb.tcl'
+
         self.add_source('microblaze_wb/%s' % self.elf)
         self.ips = [{'path':'%s/axi_wb_bridge/ip_repo' % env['HDL_ROOT'],
                      'name':'axi_slave_wishbone_classic_master',
@@ -13,7 +19,7 @@ class microblaze(YellowBlock):
                      'library':'user',
                      'version':'1.0',
                     }]
-        self.requires = ['cpu_ethernet']
+        #self.requires = ['cpu_ethernet']
 
     def modify_top(self,top):
         inst = top.get_instance(entity='cont_microblaze', name='cont_microblaze_inst', comment='%s: Microblaze Control and Monitoring subsystem' % self.fullname)
@@ -49,11 +55,8 @@ class microblaze(YellowBlock):
 
     def gen_tcl_cmds(self):
         tcl_cmds = {}
-        tcl_cmds['pre_synth'] = ['source %s/microblaze_wb/microblaze_wb.tcl' % env['HDL_ROOT']]
-        tcl_cmds['pre_synth'] += ['exec cat %s/microblaze_wb/executable.mem ../core_info.jam.tab.mem > ../executable_core_info.mem' % env['HDL_ROOT']]
-
-        #tcl_cmds['pre_synth'] += ['set_property SCOPED_TO_REF cont_microblaze [get_files -all -of_objects [get_fileset sources_1] {%s}]' % self.elf]
-        #tcl_cmds['pre_synth'] += ['set_property SCOPED_TO_CELLS { microblaze_0 } [get_files -all -of_objects [get_fileset sources_1] {%s}]' % self.elf]
+        tcl_cmds['pre_synth'] = ['source %s/microblaze_wb/%s' % (env['HDL_ROOT'], self.blkdiagram)]
+        tcl_cmds['pre_synth'] += ['exec cat %s/microblaze_wb/%s ../core_info.jam.tab.mem > ../executable_core_info.mem' % (env['HDL_ROOT'], self.memfile)]
 
         # overwrite top.bit with version that includes microblaze code
         # ignorestderr because this command fails even though it appears to work.
