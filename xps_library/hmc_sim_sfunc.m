@@ -32,170 +32,110 @@ setup(block);
 %%   C-Mex counterpart: mdlInitializeSizes
 %%
 function setup(block)
+%     tic
+    % Register number of ports
+    block.NumInputPorts  = 13;
+    block.NumOutputPorts = 10;
 
-% Register number of ports
-block.NumInputPorts  = 13;
-block.NumOutputPorts = 10;
+    % Setup port properties to be inherited or dynamic
+    block.SetPreCompInpPortInfoToDynamic;
+    block.SetPreCompOutPortInfoToDynamic;
 
-% Setup port properties to be inherited or dynamic
-block.SetPreCompInpPortInfoToDynamic;
-block.SetPreCompOutPortInfoToDynamic;
+    % Override input port properties
+    % read-enable
+    block.InputPort(1).Dimensions = 1;
+    block.InputPort(1).DatatypeID = 8;  % boolean
+    block.InputPort(1).Complexity = 'Real';
+    block.InputPort(1).DirectFeedthrough = true;
 
-% Override input port properties
-% read-enable
-block.InputPort(1).Dimensions = 1;
-block.InputPort(1).DatatypeID = 8;  % boolean
-block.InputPort(1).Complexity = 'Real';
-block.InputPort(1).DirectFeedthrough = true;
+    % write-enable
+    block.InputPort(2).Dimensions = 1;
+    block.InputPort(2).DatatypeID = 8;  % boolean
+    block.InputPort(2).Complexity = 'Real';
+    block.InputPort(2).DirectFeedthrough = true;
 
-% write-enable
-block.InputPort(2).Dimensions = 1;
-block.InputPort(2).DatatypeID = 8;  % boolean
-block.InputPort(2).Complexity = 'Real';
-block.InputPort(2).DirectFeedthrough = true;
+    % write address
+    block.InputPort(3).Dimensions = 1;
+    block.InputPort(3).DatatypeID = 1;  % single
+    block.InputPort(3).Complexity = 'Real';
+    block.InputPort(3).DirectFeedthrough = true;
 
-% write address
-block.InputPort(3).Dimensions = 1;
-block.InputPort(3).DatatypeID = 1;  % single
-block.InputPort(3).Complexity = 'Real';
-block.InputPort(3).DirectFeedthrough = true;
+    % data input lines
+    for ctr = 4 : 11
+        block.InputPort(ctr).Dimensions = 1;
+        block.InputPort(ctr).DatatypeID = 0;  % double
+        block.InputPort(ctr).Complexity = 'Real';
+        block.InputPort(ctr).DirectFeedthrough = true;
+    end
 
-% data
-block.InputPort(4).Dimensions = 1;
-block.InputPort(4).DatatypeID = 0;  % double
-block.InputPort(4).Complexity = 'Real';
-block.InputPort(4).DirectFeedthrough = true;
+    % read address
+    block.InputPort(12).Dimensions = 1;
+    block.InputPort(12).DatatypeID = 1;  % single
+    block.InputPort(12).Complexity = 'Real';
+    block.InputPort(12).DirectFeedthrough = true;
 
-block.InputPort(5).Dimensions = 1;
-block.InputPort(5).DatatypeID = 0;  % double
-block.InputPort(5).Complexity = 'Real';
-block.InputPort(5).DirectFeedthrough = true;
+    % read tag
+    block.InputPort(13).Dimensions = 1;
+    block.InputPort(13).DatatypeID = 1;  % single
+    block.InputPort(13).Complexity = 'Real';
+    block.InputPort(13).DirectFeedthrough = true;
 
-block.InputPort(6).Dimensions = 1;
-block.InputPort(6).DatatypeID = 0;  % double
-block.InputPort(6).Complexity = 'Real';
-block.InputPort(6).DirectFeedthrough = true;
+    % override output port properties
 
-block.InputPort(7).Dimensions = 1;
-block.InputPort(7).DatatypeID = 0;  % double
-block.InputPort(7).Complexity = 'Real';
-block.InputPort(7).DirectFeedthrough = true;
+    % data output lines
+    for ctr = 1 : 8
+        block.OutputPort(ctr).Dimensions = 1;
+        block.OutputPort(ctr).DatatypeID = 0; % double
+        block.OutputPort(ctr).Complexity = 'Real';
+    end
 
-block.InputPort(8).Dimensions = 1;
-block.InputPort(8).DatatypeID = 0;  % double
-block.InputPort(8).Complexity = 'Real';
-block.InputPort(8).DirectFeedthrough = true;
+    % dvalid
+    block.OutputPort(9).Dimensions = 1;
+    block.OutputPort(9).DatatypeID = 8; % boolean
+    block.OutputPort(9).Complexity = 'Real';
 
-block.InputPort(9).Dimensions = 1;
-block.InputPort(9).DatatypeID = 0;  % double
-block.InputPort(9).Complexity = 'Real';
-block.InputPort(9).DirectFeedthrough = true;
+    % tag out
+    block.OutputPort(10).Dimensions = 1;
+    block.OutputPort(10).DatatypeID = 1; % single
+    block.OutputPort(10).Complexity = 'Real';
 
-block.InputPort(10).Dimensions = 1;
-block.InputPort(10).DatatypeID = 0;  % double
-block.InputPort(10).Complexity = 'Real';
-block.InputPort(10).DirectFeedthrough = true;
+    % Register parameters
+    block.NumDialogPrms = 3;
 
-block.InputPort(11).Dimensions = 1;
-block.InputPort(11).DatatypeID = 0;  % double
-block.InputPort(11).Complexity = 'Real';
-block.InputPort(11).DirectFeedthrough = true;
+    % Register sample times
+    %  [0 offset]            : Continuous sample time
+    %  [positive_num offset] : Discrete sample time
+    %
+    %  [-1, 0]               : Inherited sample time
+    %  [-2, 0]               : Variable sample time
+    block.SampleTimes = [-1 0];
 
+    % Specify the block simStateCompliance. The allowed values are:
+    %    'UnknownSimState', < The default setting; warn and assume DefaultSimState
+    %    'DefaultSimState', < Same sim state as a built-in block
+    %    'HasNoSimState',   < No sim state
+    %    'CustomSimState',  < Has GetSimState and SetSimState methods
+    %    'DisallowSimState' < Error out when saving or restoring the model sim state
+    block.SimStateCompliance = 'DefaultSimState';
 
+    %% -----------------------------------------------------------------
+    %% The MATLAB S-function uses an internal registry for all
+    %% block methods. You should register all relevant methods
+    %% (optional and required) as illustrated below. You may choose
+    %% any suitable name for the methods and implement these methods
+    %% as local functions within the same file. See comments
+    %% provided for each function for more information.
+    %% -----------------------------------------------------------------
 
-% read address
-block.InputPort(12).Dimensions = 1;
-block.InputPort(12).DatatypeID = 1;  % single
-block.InputPort(12).Complexity = 'Real';
-block.InputPort(12).DirectFeedthrough = true;
+    block.RegBlockMethod('PostPropagationSetup',    @DoPostPropSetup);
+    block.RegBlockMethod('InitializeConditions', @InitializeConditions);
+    block.RegBlockMethod('Start', @Start);
+    block.RegBlockMethod('Outputs', @Outputs);     % Required
+    block.RegBlockMethod('Update', @Update);
+    block.RegBlockMethod('Derivatives', @Derivatives);
+    block.RegBlockMethod('Terminate', @Terminate); % Required
 
-% read tag
-block.InputPort(13).Dimensions = 1;
-block.InputPort(13).DatatypeID = 1;  % single
-block.InputPort(13).Complexity = 'Real';
-block.InputPort(13).DirectFeedthrough = true;
-
-% Override output port properties
-% output data
-block.OutputPort(1).Dimensions = 1;
-block.OutputPort(1).DatatypeID = 0; % double
-block.OutputPort(1).Complexity = 'Real';
-
-block.OutputPort(2).Dimensions = 1;
-block.OutputPort(2).DatatypeID = 0; % double
-block.OutputPort(2).Complexity = 'Real';
-
-block.OutputPort(3).Dimensions = 1;
-block.OutputPort(3).DatatypeID = 0; % double
-block.OutputPort(3).Complexity = 'Real';
-
-block.OutputPort(4).Dimensions = 1;
-block.OutputPort(4).DatatypeID = 0; % double
-block.OutputPort(4).Complexity = 'Real';
-
-block.OutputPort(5).Dimensions = 1;
-block.OutputPort(5).DatatypeID = 0; % double
-block.OutputPort(5).Complexity = 'Real';
-
-block.OutputPort(6).Dimensions = 1;
-block.OutputPort(6).DatatypeID = 0; % double
-block.OutputPort(6).Complexity = 'Real';
-
-block.OutputPort(7).Dimensions = 1;
-block.OutputPort(7).DatatypeID = 0; % double
-block.OutputPort(7).Complexity = 'Real';
-
-block.OutputPort(8).Dimensions = 1;
-block.OutputPort(8).DatatypeID = 0; % double
-block.OutputPort(8).Complexity = 'Real';
-
-% dvalid
-block.OutputPort(9).Dimensions = 1;
-block.OutputPort(9).DatatypeID = 8; % boolean
-block.OutputPort(9).Complexity = 'Real';
-
-% tag out
-block.OutputPort(10).Dimensions = 1;
-block.OutputPort(10).DatatypeID = 1; % single
-block.OutputPort(10).Complexity = 'Real';
-
-% Register parameters
-block.NumDialogPrms     = 2;
-
-% Register sample times
-%  [0 offset]            : Continuous sample time
-%  [positive_num offset] : Discrete sample time
-%
-%  [-1, 0]               : Inherited sample time
-%  [-2, 0]               : Variable sample time
-block.SampleTimes = [-1 0];
-
-% Specify the block simStateCompliance. The allowed values are:
-%    'UnknownSimState', < The default setting; warn and assume DefaultSimState
-%    'DefaultSimState', < Same sim state as a built-in block
-%    'HasNoSimState',   < No sim state
-%    'CustomSimState',  < Has GetSimState and SetSimState methods
-%    'DisallowSimState' < Error out when saving or restoring the model sim state
-block.SimStateCompliance = 'DefaultSimState';
-
-%% -----------------------------------------------------------------
-%% The MATLAB S-function uses an internal registry for all
-%% block methods. You should register all relevant methods
-%% (optional and required) as illustrated below. You may choose
-%% any suitable name for the methods and implement these methods
-%% as local functions within the same file. See comments
-%% provided for each function for more information.
-%% -----------------------------------------------------------------
-
-block.RegBlockMethod('PostPropagationSetup',    @DoPostPropSetup);
-block.RegBlockMethod('InitializeConditions', @InitializeConditions);
-block.RegBlockMethod('Start', @Start);
-block.RegBlockMethod('Outputs', @Outputs);     % Required
-block.RegBlockMethod('Update', @Update);
-block.RegBlockMethod('Derivatives', @Derivatives);
-block.RegBlockMethod('Terminate', @Terminate); % Required
-
-block.RegBlockMethod('SetInputPortSamplingMode', @SetInpPortFrameData);
+    block.RegBlockMethod('SetInputPortSamplingMode', @SetInpPortFrameData);
 
 %end setup
 
@@ -223,121 +163,65 @@ function SetInpPortFrameData(block, idx, fd)
 %%   C-Mex counterpart: mdlSetWorkWidths
 %%
 function DoPostPropSetup(block)
-    block.NumDworks = 18;
 
-    depth_bits = block.DialogPrm(1).Data;
-    latency = block.DialogPrm(2).Data - 1;
-
-    block.Dwork(1).Name            = 'latency_fifo_tag';
-    block.Dwork(1).Dimensions      = max(1, latency);
-    block.Dwork(1).DatatypeID      = 1;      % single
-    block.Dwork(1).Complexity      = 'Real'; % real
-    block.Dwork(1).UsedAsDiscState = true;
-
-    block.Dwork(2).Name            = 'latency_fifo_dvalid';
-    block.Dwork(2).Dimensions      = max(1, latency);
-    block.Dwork(2).DatatypeID      = 8;      % bool
-    block.Dwork(2).Complexity      = 'Real'; % real
-    block.Dwork(2).UsedAsDiscState = true;
+    block.NumDworks = 21;
     
-    % Storage for data (to level 'depth')
-    depth = pow2(depth_bits);
-    block.Dwork(3).Name            = 'mem_storage_0';
-    block.Dwork(3).Dimensions      = depth;
-    block.Dwork(3).DatatypeID      = 0;      % double
-    block.Dwork(3).Complexity      = 'Real'; % real
-    block.Dwork(3).UsedAsDiscState = true;
-
-    block.Dwork(4).Name            = 'mem_storage_1';
-    block.Dwork(4).Dimensions      = depth;
-    block.Dwork(4).DatatypeID      = 0;      % double
-    block.Dwork(4).Complexity      = 'Real'; % real
-    block.Dwork(4).UsedAsDiscState = true;
+    depth = pow2(block.DialogPrm(1).Data);
+    latency = block.DialogPrm(2).Data;
+%     randomise = block.DialogPrm(3).Data;
+%     fprintf('depth(%i) latency(%i) randomise(%i)\n', depth, latency, randomise);
     
-    block.Dwork(5).Name            = 'mem_storage_2';
-    block.Dwork(5).Dimensions      = depth;
-    block.Dwork(5).DatatypeID      = 0;      % double
-    block.Dwork(5).Complexity      = 'Real'; % real
-    block.Dwork(5).UsedAsDiscState = true;
+    % storage for data (to level 'depth')
+    for ctr = 1 : 8
+        block.Dwork(ctr).Name            = sprintf('mem_storage_%i', ctr-1);
+        block.Dwork(ctr).Dimensions      = depth;
+        block.Dwork(ctr).DatatypeID      = 0;      % double
+        block.Dwork(ctr).Complexity      = 'Real'; % real
+        block.Dwork(ctr).UsedAsDiscState = true;
+    end
     
-    block.Dwork(6).Name            = 'mem_storage_3';
-    block.Dwork(6).Dimensions      = depth;
-    block.Dwork(6).DatatypeID      = 0;      % double
-    block.Dwork(6).Complexity      = 'Real'; % real
-    block.Dwork(6).UsedAsDiscState = true;
-    
-    block.Dwork(7).Name            = 'mem_storage_4';
-    block.Dwork(7).Dimensions      = depth;
-    block.Dwork(7).DatatypeID      = 0;      % double
-    block.Dwork(7).Complexity      = 'Real'; % real
-    block.Dwork(7).UsedAsDiscState = true;
-    
-    block.Dwork(8).Name            = 'mem_storage_5';
-    block.Dwork(8).Dimensions      = depth;
-    block.Dwork(8).DatatypeID      = 0;      % double
-    block.Dwork(8).Complexity      = 'Real'; % real
-    block.Dwork(8).UsedAsDiscState = true;
-    
-    block.Dwork(9).Name            = 'mem_storage_6';
-    block.Dwork(9).Dimensions      = depth;
-    block.Dwork(9).DatatypeID      = 0;      % double
+    % fifo ptr
+    block.Dwork(9).Name            = 'latency_fifo_ptr';
+    block.Dwork(9).Dimensions      = 1;
+    block.Dwork(9).DatatypeID      = 0;      % single
     block.Dwork(9).Complexity      = 'Real'; % real
     block.Dwork(9).UsedAsDiscState = true;
     
-    block.Dwork(10).Name            = 'mem_storage_7';
-    block.Dwork(10).Dimensions      = depth;
-    block.Dwork(10).DatatypeID      = 0;      % double
+    block.Dwork(10).Name            = 'latency_fifo_tag';
+    block.Dwork(10).Dimensions      = max(1, latency);
+    block.Dwork(10).DatatypeID      = 1;      % single
     block.Dwork(10).Complexity      = 'Real'; % real
     block.Dwork(10).UsedAsDiscState = true;
     
-    % Storage for latency fifo
-    block.Dwork(11).Name            = 'latency_fifo_data_0';
+    block.Dwork(11).Name            = 'latency_fifo_dv';
     block.Dwork(11).Dimensions      = max(1, latency);
-    block.Dwork(11).DatatypeID      = 0;      % double
+    block.Dwork(11).DatatypeID      = 1;      % single
     block.Dwork(11).Complexity      = 'Real'; % real
     block.Dwork(11).UsedAsDiscState = true;
     
-    block.Dwork(12).Name            = 'latency_fifo_data_1';
-    block.Dwork(12).Dimensions      = max(1, latency);
-    block.Dwork(12).DatatypeID      = 0;      % double
-    block.Dwork(12).Complexity      = 'Real'; % real
-    block.Dwork(12).UsedAsDiscState = true;
-
-    block.Dwork(13).Name            = 'latency_fifo_data_2';
-    block.Dwork(13).Dimensions      = max(1, latency);
-    block.Dwork(13).DatatypeID      = 0;      % double
-    block.Dwork(13).Complexity      = 'Real'; % real
-    block.Dwork(13).UsedAsDiscState = true;
-
-    block.Dwork(14).Name            = 'latency_fifo_data_3';
-    block.Dwork(14).Dimensions      = max(1, latency);
-    block.Dwork(14).DatatypeID      = 0;      % double
-    block.Dwork(14).Complexity      = 'Real'; % real
-    block.Dwork(14).UsedAsDiscState = true;
-
-    block.Dwork(15).Name            = 'latency_fifo_data_4';
-    block.Dwork(15).Dimensions      = max(1, latency);
-    block.Dwork(15).DatatypeID      = 0;      % double
-    block.Dwork(15).Complexity      = 'Real'; % real
-    block.Dwork(15).UsedAsDiscState = true;
-
-    block.Dwork(16).Name            = 'latency_fifo_data_5';
-    block.Dwork(16).Dimensions      = max(1, latency);
-    block.Dwork(16).DatatypeID      = 0;      % double
-    block.Dwork(16).Complexity      = 'Real'; % real
-    block.Dwork(16).UsedAsDiscState = true;
-
-    block.Dwork(17).Name            = 'latency_fifo_data_6';
-    block.Dwork(17).Dimensions      = max(1, latency);
-    block.Dwork(17).DatatypeID      = 0;      % double
-    block.Dwork(17).Complexity      = 'Real'; % real
-    block.Dwork(17).UsedAsDiscState = true;
+    % storage for latency data fifos
+    for ctr = 12 : 19
+        block.Dwork(ctr).Name            = sprintf('latency_fifo_data_%i', ctr-12);
+        block.Dwork(ctr).Dimensions      = max(1, latency);
+        block.Dwork(ctr).DatatypeID      = 0;      % double
+        block.Dwork(ctr).Complexity      = 'Real'; % real
+        block.Dwork(ctr).UsedAsDiscState = true;
+    end
     
-    block.Dwork(18).Name            = 'latency_fifo_data_7';
-    block.Dwork(18).Dimensions      = max(1, latency);
-    block.Dwork(18).DatatypeID      = 0;      % double
-    block.Dwork(18).Complexity      = 'Real'; % real
-    block.Dwork(18).UsedAsDiscState = true;
+    block.Dwork(20).Name            = 'latency_fifo_swapped';
+    block.Dwork(20).Dimensions      = max(1, latency);
+    block.Dwork(20).DatatypeID      = 1;      % single
+    block.Dwork(20).Complexity      = 'Real'; % real
+    block.Dwork(20).UsedAsDiscState = true;
+    
+    block.Dwork(21).Name            = 'latency_fifo_counter';
+    block.Dwork(21).Dimensions      = 1;
+    block.Dwork(21).DatatypeID      = 1;      % single
+    block.Dwork(21).Complexity      = 'Real'; % real
+    block.Dwork(21).UsedAsDiscState = true;
+
+% end /DoPostPropSetup
+    
 %%
 %% InitializeConditions:
 %%   Functionality    : Called at the start of simulation and if it is 
@@ -361,26 +245,22 @@ function InitializeConditions(block)
 %%   C-MEX counterpart: mdlStart
 %%
 function Start(block)
-    block.Dwork(1).Data = zeros(1, length(block.Dwork(1).Data), 'single');
-    block.Dwork(2).Data = zeros(1, length(block.Dwork(2).Data), 'logical');
-    
-    block.Dwork(3).Data = zeros(1, length(block.Dwork(3).Data));
-    block.Dwork(4).Data = zeros(1, length(block.Dwork(4).Data));
-    block.Dwork(5).Data = zeros(1, length(block.Dwork(5).Data));
-    block.Dwork(6).Data = zeros(1, length(block.Dwork(6).Data));
-    block.Dwork(7).Data = zeros(1, length(block.Dwork(7).Data));
-    block.Dwork(8).Data = zeros(1, length(block.Dwork(8).Data));
-    block.Dwork(9).Data = zeros(1, length(block.Dwork(9).Data));
-    block.Dwork(10).Data = zeros(1, length(block.Dwork(10).Data));
-    
-    block.Dwork(11).Data = zeros(1, length(block.Dwork(11).Data));
-    block.Dwork(12).Data = zeros(1, length(block.Dwork(11).Data));
-    block.Dwork(13).Data = zeros(1, length(block.Dwork(11).Data));
-    block.Dwork(14).Data = zeros(1, length(block.Dwork(11).Data));
-    block.Dwork(15).Data = zeros(1, length(block.Dwork(11).Data));
-    block.Dwork(16).Data = zeros(1, length(block.Dwork(11).Data));
-    block.Dwork(17).Data = zeros(1, length(block.Dwork(11).Data));
-    block.Dwork(18).Data = zeros(1, length(block.Dwork(11).Data));
+    % data
+    for ctr = 1 : 8
+        block.Dwork(ctr).Data = zeros(1, length(block.Dwork(ctr).Data));
+    end
+    % ptr
+    block.Dwork(9).Data = 1;
+    % tag fifo
+    block.Dwork(10).Data = zeros(1, length(block.Dwork(10).Data), 'single');
+    % tag dv
+    block.Dwork(11).Data = zeros(1, length(block.Dwork(11).Data), 'single');
+    % data fifos
+    for ctr = 12 : 19
+        block.Dwork(ctr).Data = zeros(1, length(block.Dwork(ctr).Data));
+    end
+    block.Dwork(20).Data = zeros(1, length(block.Dwork(11).Data), 'single');
+    block.Dwork(21).Data = single(0);
     
 %end Start
 
@@ -398,6 +278,81 @@ function Outputs(block)
 %     block.OutputPort(1).Data = block.Dwork(1).Data(addr);
 % end Outputs
 
+function do_read(block)
+    fifo_ptr = block.Dwork(9).Data;
+    %fprintf('fifo_ptr(%i)\n', fifo_ptr);
+    % rd_en high
+    if block.InputPort(1).Data == 1
+        % get the current address and tag values on the ports
+        read_tag = block.InputPort(13).Data;
+        read_addr = block.InputPort(12).Data + 1;
+        % put the tag and valids into the fifos
+        block.Dwork(10).Data(fifo_ptr) = read_tag;
+        block.Dwork(11).Data(fifo_ptr) = 1;
+        % put the value read from memory and the tag into the fifos
+        for ctr = 0 : 7
+            block.Dwork(ctr+12).Data(fifo_ptr) = block.Dwork(ctr+1).Data(read_addr);
+        end
+        block.Dwork(21).Data = block.Dwork(21).Data + 1;
+        %fprintf('rd_tag(%i) rd_addr(%i) fifo_ctr(%i)\n', read_tag, read_addr, block.Dwork(21).Data);
+    else
+        block.Dwork(11).Data(fifo_ptr) = 0;
+    end
+    block.Dwork(20).Data(fifo_ptr) = 0;
+    
+    % is there any read data in the fifo?
+    if block.Dwork(21).Data == 0
+        block.OutputPort(9).Data = boolean(0);
+        return
+    end
+    
+    % increment the fifo ptr
+    fifo_ptr = fifo_ptr + 1;
+    if fifo_ptr > length(block.Dwork(11).Data)
+        fifo_ptr = 1;
+        %fprintf('reset fifo_ptr to 1\n');
+    end
+    block.Dwork(9).Data = fifo_ptr;
+    
+    % should we add a bit of randomisation?
+    randomise = block.DialogPrm(3).Data;
+    if (randomise == 1) && (rand > 0.5)
+%         fprintf('randomising some data');
+        fifo_len = length(block.Dwork(11).Data);
+        rand_pos = ceil(rand * fifo_len);
+        if (rand_pos ~= fifo_ptr) && (block.Dwork(20).Data(rand_pos) == 0) && (block.Dwork(11).Data(rand_pos) == 1) && (block.Dwork(11).Data(fifo_ptr) == 1)
+            for ctr = 0 : 7
+                temp_val = block.Dwork(ctr+12).Data(fifo_ptr);
+                block.Dwork(ctr+12).Data(fifo_ptr) = block.Dwork(ctr+12).Data(rand_pos);
+                block.Dwork(ctr+12).Data(rand_pos) = temp_val;
+            end
+            temp_val = block.Dwork(11).Data(fifo_ptr);
+            block.Dwork(11).Data(fifo_ptr) = block.Dwork(11).Data(rand_pos);
+            block.Dwork(11).Data(rand_pos) = temp_val;
+            temp_val = block.Dwork(10).Data(fifo_ptr);
+            block.Dwork(10).Data(fifo_ptr) = block.Dwork(10).Data(rand_pos);
+            block.Dwork(10).Data(rand_pos) = temp_val;
+            block.Dwork(20).Data(rand_pos) = 1;
+            block.Dwork(20).Data(fifo_ptr) = 1;
+%             fprintf(' - swapped %i and %i\n', rand_pos, fifo_ptr);
+        else
+%             fprintf(' - target already swapped\n');
+        end
+    end
+    
+    % place the items at the new fifo_ptr (oldest value) on the output
+    for ctr = 0 : 7
+        block.OutputPort(ctr+1).Data = block.Dwork(ctr+12).Data(fifo_ptr);
+    end
+    block.OutputPort(9).Data = boolean(block.Dwork(11).Data(fifo_ptr));
+    block.OutputPort(10).Data = block.Dwork(10).Data(fifo_ptr);
+    if block.Dwork(11).Data(fifo_ptr) == 1
+        block.Dwork(21).Data = block.Dwork(21).Data - 1;
+    end
+    
+% end \do_read
+
+
 %%
 %% Update:
 %%   Functionality    : Called to update discrete states
@@ -406,149 +361,19 @@ function Outputs(block)
 %%   C-MEX counterpart: mdlUpdate
 %%
 function Update(block)
-    % fprintf('call Update\n')
+%     % fprintf('call Update\n')
     % write data to the array if wr_en is high
     if block.InputPort(2).Data == 1
-        % Grab address (+1 as Matlab has indexing from 1)
+        % grab address (+1 as Matlab has indexing from 1)
         addr = block.InputPort(3).Data + 1;
-        %Grab data
-        block.Dwork(3).Data(addr) = block.InputPort(4).Data; 
-        block.Dwork(4).Data(addr) = block.InputPort(5).Data; 
-        block.Dwork(5).Data(addr) = block.InputPort(6).Data; 
-        block.Dwork(6).Data(addr) = block.InputPort(7).Data; 
-        block.Dwork(7).Data(addr) = block.InputPort(8).Data; 
-        block.Dwork(8).Data(addr) = block.InputPort(9).Data; 
-        block.Dwork(9).Data(addr) = block.InputPort(10).Data; 
-        block.Dwork(10).Data(addr) = block.InputPort(11).Data; 
-    end
-    
-
-    % rd_en high
-    if block.InputPort(1).Data == 1
-        read_tag = block.InputPort(13).Data;
-        read_addr = block.InputPort(12).Data + 1;
-        latency = block.DialogPrm(2).Data - 1;
-        
-        % read data from memory storage
-        read_val_0 = block.Dwork(3).Data(read_addr);
-        read_val_1 = block.Dwork(4).Data(read_addr);
-        read_val_2 = block.Dwork(5).Data(read_addr);
-        read_val_3 = block.Dwork(6).Data(read_addr);
-        read_val_4 = block.Dwork(7).Data(read_addr);
-        read_val_5 = block.Dwork(8).Data(read_addr);
-        read_val_6 = block.Dwork(9).Data(read_addr);
-        read_val_7 = block.Dwork(10).Data(read_addr);
-        
-        dvalid = block.InputPort(1).Data;
-        %fprintf('rd_tag(%i) rd_addr(%i) lat(%i) rd_val(%i)\n', read_tag, read_addr, latency, read_val);
-        
-        if latency > 1
-            fifo_val_0 = block.Dwork(11).Data(end);
-            fifo_val_1 = block.Dwork(12).Data(end);
-            fifo_val_2 = block.Dwork(13).Data(end);
-            fifo_val_3 = block.Dwork(14).Data(end);
-            fifo_val_4 = block.Dwork(15).Data(end);
-            fifo_val_5 = block.Dwork(16).Data(end);
-            fifo_val_6 = block.Dwork(17).Data(end);
-            fifo_val_7 = block.Dwork(18).Data(end);
-            
-            
-            fifo_tag = block.Dwork(1).Data(end);
-            fifo_dvalid = block.Dwork(2).Data(end);
-
-            last_bit_data_0 = block.Dwork(11).Data(1:end-1).';
-            last_bit_data_1 = block.Dwork(12).Data(1:end-1).';
-            last_bit_data_2 = block.Dwork(13).Data(1:end-1).';
-            last_bit_data_3 = block.Dwork(14).Data(1:end-1).';
-            last_bit_data_4 = block.Dwork(15).Data(1:end-1).';
-            last_bit_data_5 = block.Dwork(16).Data(1:end-1).';
-            last_bit_data_6 = block.Dwork(17).Data(1:end-1).';
-            last_bit_data_7 = block.Dwork(18).Data(1:end-1).';
-            
-            last_bit_tag = block.Dwork(1).Data(1:end-1).';
-            last_bit_dvalid = block.Dwork(2).Data(1:end-1).';
-            
-            tmp_data_0 =  [read_val_0, last_bit_data_0];
-            tmp_data_1 =  [read_val_1, last_bit_data_1];
-            tmp_data_2 =  [read_val_2, last_bit_data_2];
-            tmp_data_3 =  [read_val_3, last_bit_data_3];
-            tmp_data_4 =  [read_val_4, last_bit_data_4];
-            tmp_data_5 =  [read_val_5, last_bit_data_5];
-            tmp_data_6 =  [read_val_6, last_bit_data_6];
-            tmp_data_7 =  [read_val_7, last_bit_data_7];
-            
-            tmp_tag =  [read_tag, last_bit_tag];
-            tmp_dvalid = [dvalid, last_bit_dvalid];
-            
-            block.Dwork(11).Data = tmp_data_0.';
-            block.Dwork(12).Data = tmp_data_1.';
-            block.Dwork(13).Data = tmp_data_2.';
-            block.Dwork(14).Data = tmp_data_3.';
-            block.Dwork(15).Data = tmp_data_4.';
-            block.Dwork(16).Data = tmp_data_5.';
-            block.Dwork(17).Data = tmp_data_6.';
-            block.Dwork(18).Data = tmp_data_7.';
-            
-            block.Dwork(1).Data = tmp_tag.';
-            block.Dwork(2).Data = tmp_dvalid.';
-            
-            output_val_0 = fifo_val_0;
-            output_val_1 = fifo_val_1;
-            output_val_2 = fifo_val_2;
-            output_val_3 = fifo_val_3;
-            output_val_4 = fifo_val_4;
-            output_val_5 = fifo_val_5;
-            output_val_6 = fifo_val_6;
-            output_val_7 = fifo_val_7;
-            
-            output_tag = fifo_tag;
-            output_dvalid = fifo_dvalid;
-        else
-            output_val_0 = read_val_0;
-            output_val_1 = read_val_1;
-            output_val_2 = read_val_2;
-            output_val_3 = read_val_3;
-            output_val_4 = read_val_4;
-            output_val_5 = read_val_5;
-            output_val_6 = read_val_6;
-            output_val_7 = read_val_7;
-            output_tag = read_tag;
-            output_dvalid = dvalid;
+        % grab data from input port and put it in state storage
+        for ctr = 0 : 7
+            block.Dwork(ctr+1).Data(addr) = block.InputPort(ctr+4).Data; 
         end
-        block.OutputPort(1).Data = output_val_0;
-        block.OutputPort(2).Data = output_val_1;
-        block.OutputPort(3).Data = output_val_2;
-        block.OutputPort(4).Data = output_val_3;
-        block.OutputPort(5).Data = output_val_4;
-        block.OutputPort(6).Data = output_val_5;
-        block.OutputPort(7).Data = output_val_6;
-        block.OutputPort(8).Data = output_val_7;
-        
-        block.OutputPort(10).Data = output_tag;
-        block.OutputPort(9).Data = output_dvalid;
-
-    else
-        % data out
-        block.OutputPort(1).Data = 0;
-        block.OutputPort(2).Data = 0;
-        block.OutputPort(3).Data = 0;
-        block.OutputPort(4).Data = 0;
-        block.OutputPort(5).Data = 0;
-        block.OutputPort(6).Data = 0;
-        block.OutputPort(7).Data = 0;
-        block.OutputPort(8).Data = 0;
-        
-        % dvalid
-        block.OutputPort(9).Data = false;
-        
-        % tag
-        block.OutputPort(10).Data = single(0);
-    end
-
-    % get a random read/tag pair from the queue
-    % return it
-    % place the new one in the queue
+    end % /if wr_en high
     
+    % there's more to the reading
+    do_read(block)
 % end Update
 
 %%
@@ -569,6 +394,6 @@ function Derivatives(block)
 %%   C-MEX counterpart: mdlTerminate
 %%
 function Terminate(block)
+%     toc
 
 %end Terminate
-
