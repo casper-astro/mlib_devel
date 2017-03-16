@@ -12,7 +12,7 @@ class microblaze(YellowBlock):
             self.memfile = 'executable.mem'
             self.blkdiagram = 'microblaze_wb.tcl'
 
-        self.add_source('microblaze_wb/%s' % self.elf)
+        #self.add_source('microblaze_wb/%s' % self.elf)
         self.ips = [{'path':'%s/axi_wb_bridge/ip_repo' % env['HDL_ROOT'],
                      'name':'axi_slave_wishbone_classic_master',
                      'vendor':'peralex.com',
