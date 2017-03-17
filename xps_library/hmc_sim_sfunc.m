@@ -170,7 +170,7 @@ function DoPostPropSetup(block)
     latency = block.DialogPrm(2).Data;
 %     randomise = block.DialogPrm(3).Data;
 %     fprintf('depth(%i) latency(%i) randomise(%i)\n', depth, latency, randomise);
-    
+
     % storage for data (to level 'depth')
     for ctr = 1 : 8
         block.Dwork(ctr).Name            = sprintf('mem_storage_%i', ctr-1);
@@ -283,18 +283,30 @@ function do_read(block)
     %fprintf('fifo_ptr(%i)\n', fifo_ptr);
     % rd_en high
     if block.InputPort(1).Data == 1
+        
         % get the current address and tag values on the ports
         read_tag = block.InputPort(13).Data;
-        read_addr = block.InputPort(12).Data + 1;
-        % put the tag and valids into the fifos
-        block.Dwork(10).Data(fifo_ptr) = read_tag;
-        block.Dwork(11).Data(fifo_ptr) = 1;
-        % put the value read from memory and the tag into the fifos
-        for ctr = 0 : 7
-            block.Dwork(ctr+12).Data(fifo_ptr) = block.Dwork(ctr+1).Data(read_addr);
+        read_addr = block.InputPort(12).Data + 1;  
+        
+        % Check if the read address exceeds the depth. If not, proceed. If yes,
+        % bail hard.
+        depth = pow2(block.DialogPrm(1).Data);
+        if (read_addr > depth)
+            error('Read address exceeds HMC simulation depth. Change the depth field in the mask');
+        else
+            % put the tag and valids into the fifos
+            block.Dwork(10).Data(fifo_ptr) = read_tag;
+            block.Dwork(11).Data(fifo_ptr) = 1;
+
+
+            % put the value read from memory and the tag into the fifos
+            for ctr = 0 : 7
+                block.Dwork(ctr+12).Data(fifo_ptr) = block.Dwork(ctr+1).Data(read_addr);
+            end
+            block.Dwork(21).Data = block.Dwork(21).Data + 1;
+            %fprintf('rd_tag(%i) rd_addr(%i) fifo_ctr(%i)\n', read_tag, read_addr, block.Dwork(21).Data);
         end
-        block.Dwork(21).Data = block.Dwork(21).Data + 1;
-        %fprintf('rd_tag(%i) rd_addr(%i) fifo_ctr(%i)\n', read_tag, read_addr, block.Dwork(21).Data);
+        
     else
         block.Dwork(11).Data(fifo_ptr) = 0;
     end
@@ -372,8 +384,10 @@ function Update(block)
         end
     end % /if wr_en high
     
+
     % there's more to the reading
     do_read(block)
+
 % end Update
 
 %%
