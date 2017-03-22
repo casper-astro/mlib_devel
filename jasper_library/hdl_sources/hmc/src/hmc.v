@@ -9,26 +9,38 @@
 
 module hmc #(
     //Define width of the datapath
-    parameter LOG_FPW               = 2,        //Legal Values: 1,2,3
     parameter FPW                   = 4,        //Legal Values: 2,4,6,8
+    parameter LOG_FPW               = 2,        //Legal Values: 1 for FPW=2 ,2 for FPW=4 ,3 for FPW=6/8
     parameter DWIDTH                = FPW*128,  //Leave untouched
     //Define HMC interface width
     parameter LOG_NUM_LANES         = 3,                //Set 3 for half-width, 4 for full-width
     parameter NUM_LANES             = 2**LOG_NUM_LANES, //Leave untouched
     parameter NUM_DATA_BYTES        = FPW*16,           //Leave untouched
     //Define width of the register file
-    parameter HMC_RF_WWIDTH         = 64,
-    parameter HMC_RF_RWIDTH         = 64,
-    parameter HMC_RF_AWIDTH         = 5,
+    parameter HMC_RF_WWIDTH         = 64,   //Leave untouched    
+    parameter HMC_RF_RWIDTH         = 64,   //Leave untouched
+    parameter HMC_RF_AWIDTH         = 5,    //Leave untouched
     //Configure the Functionality
-    parameter LOG_MAX_RTC           = 8,   //Set the depth of the RX input buffer. Must be >= LOG(rf_rx_buffer_rtc) in the RF
-    parameter HMC_RX_AC_COUPLED     = 1,    //Set to 0 to remove the run length limiter, saves logic and 1 cycle delay
-    parameter CTRL_LANE_POLARITY    = 0,    //Set to 0 if lane polarity is not applicable or performed by the transceivers, saves logic and 1 cycle delay
+    parameter LOG_MAX_RX_TOKENS     = 8,    //Set the depth of the RX input buffer. Must be >= LOG(rf_rx_buffer_rtc) in the RF. Dont't care if OPEN_RSP_MODE=1
+    parameter LOG_MAX_HMC_TOKENS    = 10,   //Set the depth of the HMC input buffer. Must be >= LOG of the corresponding field in the HMC internal register
+    parameter HMC_RX_AC_COUPLED     = 1,    //Set to 0 to bypass the run length limiter, saves logic and 1 cycle delay
+    parameter DETECT_LANE_POLARITY  = 1,    //Set to 0 if lane polarity is not applicable, saves logic
+    parameter CTRL_LANE_POLARITY    = 1,    //Set to 0 if lane polarity is not applicable or performed by the transceivers, saves logic and 1 cycle delay
+                                            //If set to 1: Only valid if DETECT_LANE_POLARITY==1, otherwise tied to zero
     parameter CTRL_LANE_REVERSAL    = 0,    //Set to 0 if lane reversal is not applicable or performed by the transceivers, saves logic
+    parameter CTRL_SCRAMBLERS       = 0,    //Set to 0 to remove the option to disable (de-)scramblers for debugging, saves logic
+    parameter OPEN_RSP_MODE         = 0,    //Set to 1 if running response open loop mode, bypasses the RX input buffer
+    parameter RX_RELAX_INIT_TIMING  = 0,    //Per default, incoming TS1 sequences are only checked for the lane independent h'F0 sequence. Save resources and
+                                            //eases timing closure. !Lane reversal is still detected
+    parameter RX_BIT_SLIP_CNT_LOG   = 5,    //Define the number of cycles between bit slips. Refer to the transceiver user guide
+                                            //Example: RX_BIT_SLIP_CNT_LOG=5 results in 2^5=32 cycles between two bit slips
+    parameter SYNC_AXI4_IF          = 0,    //Set to 1 if AXI IF is synchronous to clk_hmc to use simple fifos
+    parameter XIL_CNT_PIPELINED     = 1,    //If Xilinx counters are used, set to 1 to enabled output register pipelining
     //Set the direction of bitslip. Set to 1 if bitslip performs a shift right, otherwise set to 0 (see the corresponding transceiver user guide)
-    parameter BITSLIP_SHIFT_RIGHT   = 1,    
+    parameter BITSLIP_SHIFT_RIGHT   = 1,//1,    
     //Debug Params
-    parameter DBG_RX_TOKEN_MON      = 1,     //Remove the RX Link token monitor, saves logic
+    parameter DBG_RX_TOKEN_MON      = 1,     //Set to 0 to remove the RX Link token monitor, saves logic
+            
     parameter USE_CHIPSCOPE         = 1,
     parameter USE_LEDS              = 1
 )(
@@ -72,7 +84,7 @@ module hmc #(
 
     // hard reset for mezzanine
     output wire HMC_MEZZ_RESET,
-
+    
     // IIC BUS for mezzanine
     output SDA_OUT,
     output SCL_OUT,
@@ -109,8 +121,13 @@ module hmc #(
 wire soft_reset_link2_async,soft_reset_link3_async;
 wire soft_reset_async,user_rst;
 
+//assign soft_reset_link2_async = (qpll_lock_link2 == 1'b0 || USER_RST == 1'b1 || time_out_cnt_rst == 1'b1);
+//assign soft_reset_link3_async = (qpll_lock_link3 == 1'b0 || USER_RST == 1'b1 || time_out_cnt_rst == 1'b1);
+//AI: debug. Reset HMC and OpenHMC when HMC does not reconfigure the first time
 assign soft_reset_link2_async = (qpll_lock_link2 == 1'b0 || USER_RST == 1'b1 || time_out_cnt_rst == 1'b1);
 assign soft_reset_link3_async = (qpll_lock_link3 == 1'b0 || USER_RST == 1'b1 || time_out_cnt_rst == 1'b1);
+
+
 assign soft_reset_async = (soft_reset_link2_async == 1'b1 || soft_reset_link3_async == 1'b1);
 
 // USER_CLK domain sync's
@@ -345,13 +362,26 @@ assign PHY22_LANE_TX_N[0] = GT_GTHTXN_OUT_LINK2[7];
 
 // wait for POST to run successfuly for 100s before declaring POST done
 wire post_done_i = ((data_rx_flit_cnt_link2[25] == 1'b1) && (data_rx_flit_cnt_link3[25] == 1'b1));
+//wire post_done_i = data_rx_flit_cnt_link2[25];
 reg post_done_reg;
 wire post_ok_i = ((data_rx_err_flit_cnt_link3 == 64'd0) && (data_rx_err_flit_cnt_link2 == 64'd0) && (data_rx_flit_cnt_link2[25] == 1'b1) && (data_rx_flit_cnt_link3[25] == 1'b1));
+//wire post_ok_i = ((data_rx_err_flit_cnt_link2 == 64'd0) && (data_rx_flit_cnt_link2[25] == 1'b1));
 
 (* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg post_okR,post_okRR,post_okRRR,post_okRRRR;
 reg post_ok_latch;
 reg [15:0] reset_cnt;
+reg [31:0] num_reset_cnt;
 reg issue_retry_rst;
+
+(* mark_debug = "true" *) wire [15:0] dbg_reset_cnt;
+(* mark_debug = "true" *) wire [31:0] dbg_num_reset_cnt;
+(* mark_debug = "true" *) wire dbg_hmc_resetRRRR;
+(* mark_debug = "true" *) wire dbg_hmc_reset_i;
+
+assign dbg_reset_cnt = reset_cnt;
+assign dbg_num_reset_cnt = num_reset_cnt;
+assign dbg_hmc_resetRRRR = hmc_resetRRRR;
+assign dbg_hmc_reset_i = hmc_reset_i;
 
 wire hmc_reset_i;
 (* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg hmc_resetR,hmc_resetRR,hmc_resetRRR,hmc_resetRRRR;
@@ -367,32 +397,44 @@ always @(posedge USER_CLK) begin
     time_out_cnt_rst <= 1'b0;
     reset_cnt <= 16'd0;
     issue_retry_rst <= 1'b0;
+    num_reset_cnt <= 32'd0;
   end else begin
     post_okR    <= post_ok_i;
     post_okRR   <= post_okR;
     post_okRRR  <= post_okRR;
     post_okRRRR <= post_okRRR; 
     time_out_cnt <= time_out_cnt + 1'b1;
-
-    if (time_out_cnt[30] == 1'b1) begin
+    
+    
+    //Issue a reset after every second until OpenHMC initialises
+    if (time_out_cnt[27] == 1'b1) begin      //time_out_cnt[30]
       time_out_cnt_rst <= 1'b1;      
     end     
     
+    //Time out has been reached and init done is not complete, so start the reset process
     if (time_out_cnt_rst == 1'b1) begin
       reset_cnt <= reset_cnt + 1'b1;
     end 
     
+    //Reset process is complete, so deassert reset and take note how many times this is executed
     if (reset_cnt[15] == 1'b1) begin
       reset_cnt <= 16'd0;
       time_out_cnt_rst <= 1'b0;
+      num_reset_cnt <= num_reset_cnt + 1'b1;
+      time_out_cnt <= 32'd0;  //reset time out count and try again
     end    
-
+    
+    //Post has been successful, so latch it through to the status output ports
     if ({post_okRRRR,post_okRRR} == 2'b01) begin
       post_ok_latch <= 1'b1;
     end
+    
+    //Do not increment timer when HMC is in reset
     if (hmc_resetRRRR == 1'b1) begin
       time_out_cnt <= 32'd0;
     end 
+    
+    //Once the OpenHMC and HMC has initialised the stop the reset process
     if (open_hmc_done_link2 == 1'b1 && open_hmc_done_link3 == 1'b1) begin
       time_out_cnt <= 32'd0;
     end 
@@ -469,6 +511,13 @@ end
 assign post_done_latch = post_done_latchRRRR;
 assign post_done = post_doneRRRR;
 
+wire tx_phy_reset_done, rx_phy_reset_done, tx_phy_reset_done_link2, tx_phy_reset_done_link3, rx_phy_reset_done_link2, rx_phy_reset_done_link3;
+wire tx_phy_reset, rx_phy_reset;
+
+assign tx_phy_reset_done = tx_phy_reset_done_link2 & tx_phy_reset_done_link3;
+assign rx_phy_reset_done = rx_phy_reset_done_link2 & rx_phy_reset_done_link3;
+
+
 hmc_iic_init 
 hmc_iic_init_inst (
   .CLK         (clk_hmc_out_link2),
@@ -479,6 +528,10 @@ hmc_iic_init_inst (
   .HMC_POST_DONE (post_done),
   .POST_DONE_LATCH(post_done_latch_i),
   .HMC_RESET   (hmc_reset_i),
+  .TX_PHY_RESET_DONE(tx_phy_reset_done), // Flag to indicate when the GTH TX PHY is ready
+  .RX_PHY_RESET_DONE(rx_phy_reset_done), // Flag to indicate when the GTH RX PHY is ready
+  .TX_PHY_RESET(tx_phy_reset), // Flag to reset the GTH TX PHY    
+  .RX_PHY_RESET(rx_phy_reset), //Flag to reset the GTH RX PHY   
 //  .SDA         (SDA),
 //  .SCL         (SCL) 
   .SDA_OUT(SDA_OUT),
@@ -493,27 +546,38 @@ assign HMC_MEZZ_RESET = hmc_resetRRRR;//~P_RST_N;
 
 // Instantiate core for HMC link2
 hmc_ska_sa_top #(
-   //Define width of the datapath
-  .LOG_FPW(LOG_FPW),        //Legal Values: 1,2,3
-  .FPW(FPW),        //Legal Values: 2,4,6,8
-  .DWIDTH(DWIDTH),  //Leave untouched
+  //Define width of the datapath
+  .FPW(FPW),                //Legal Values: 2,4,6,8
+  .LOG_FPW(LOG_FPW),        //Legal Values: 1 for FPW=2 ,2 for FPW=4 ,3 for FPW=6/8
+  .DWIDTH(DWIDTH),          //Leave untouched
   //Define HMC interface width
-  .LOG_NUM_LANES(LOG_NUM_LANES),                //Set 3 for half-width, 4 for full-width
-  .NUM_LANES(NUM_LANES), //Leave untouched
-  .NUM_DATA_BYTES(NUM_DATA_BYTES),           //Leave untouched
+  .LOG_NUM_LANES(LOG_NUM_LANES),     //Set 3 for half-width, 4 for full-width
+  .NUM_LANES(NUM_LANES),             //Leave untouched
+  .NUM_DATA_BYTES(NUM_DATA_BYTES),   //Leave untouched
   //Define width of the register file
-  .HMC_RF_WWIDTH(HMC_RF_WWIDTH),
-  .HMC_RF_RWIDTH(HMC_RF_RWIDTH),
-  .HMC_RF_AWIDTH(HMC_RF_AWIDTH),
+  .HMC_RF_WWIDTH(HMC_RF_WWIDTH),    //Leave untouched    
+  .HMC_RF_RWIDTH(HMC_RF_RWIDTH),    //Leave untouched
+  .HMC_RF_AWIDTH(HMC_RF_AWIDTH),    //Leave untouched
   //Configure the Functionality
-  .LOG_MAX_RTC       (LOG_MAX_RTC       ),    //Set the depth of the RX input buffer. Must be >= LOG(rf_rx_buffer_rtc) in the RF
-  .HMC_RX_AC_COUPLED (HMC_RX_AC_COUPLED ),    //Set to 0 to remove the run length limiter, saves logic and 1 cycle delay
-  .CTRL_LANE_POLARITY(CTRL_LANE_POLARITY),    //Set to 0 if lane polarity is not applicable or performed by the transceivers, saves logic and 1 cycle delay
-  .CTRL_LANE_REVERSAL(CTRL_LANE_REVERSAL),    //Set to 0 if lane reversal is not applicable or performed by the transceivers, saves logic
+  .LOG_MAX_RX_TOKENS(LOG_MAX_RX_TOKENS),    //Set the depth of the RX input buffer. Must be >= LOG(rf_rx_buffer_rtc) in the RF. Dont't care if OPEN_RSP_MODE=1
+  .LOG_MAX_HMC_TOKENS(LOG_MAX_HMC_TOKENS),  //Set the depth of the HMC input buffer. Must be >= LOG of the corresponding field in the HMC internal register
+  .HMC_RX_AC_COUPLED(HMC_RX_AC_COUPLED),    //Set to 0 to bypass the run length limiter, saves logic and 1 cycle delay
+  .DETECT_LANE_POLARITY(DETECT_LANE_POLARITY),    //Set to 0 if lane polarity is not applicable, saves logic
+  .CTRL_LANE_POLARITY(CTRL_LANE_POLARITY),        //Set to 0 if lane polarity is not applicable or performed by the transceivers, saves logic and 1 cycle delay
+                                                  //If set to 1: Only valid if DETECT_LANE_POLARITY==1, otherwise tied to zero
+  .CTRL_LANE_REVERSAL(CTRL_LANE_REVERSAL),  //Set to 0 if lane reversal is not applicable or performed by the transceivers, saves logic
+  .CTRL_SCRAMBLERS(CTRL_SCRAMBLERS),        //Set to 0 to remove the option to disable (de-)scramblers for debugging, saves logic
+  .OPEN_RSP_MODE(OPEN_RSP_MODE),            //Set to 1 if running response open loop mode, bypasses the RX input buffer
+  .RX_RELAX_INIT_TIMING(RX_RELAX_INIT_TIMING),    //Per default, incoming TS1 sequences are only checked for the lane independent h'F0 sequence. Save resources and
+                                                   //eases timing closure. !Lane reversal is still detected
+  .RX_BIT_SLIP_CNT_LOG(RX_BIT_SLIP_CNT_LOG),     //Define the number of cycles between bit slips. Refer to the transceiver user guide
+                                    //Example: RX_BIT_SLIP_CNT_LOG=5 results in 2^5=32 cycles between two bit slips
+  .SYNC_AXI4_IF(SYNC_AXI4_IF),    //Set to 1 if AXI IF is synchronous to clk_hmc to use simple fifos
+  .XIL_CNT_PIPELINED(XIL_CNT_PIPELINED),    //If Xilinx counters are used, set to 1 to enabled output register pipelining
   //Set the direction of bitslip. Set to 1 if bitslip performs a shift right, otherwise set to 0 (see the corresponding transceiver user guide)
   .BITSLIP_SHIFT_RIGHT(BITSLIP_SHIFT_RIGHT),    
   //Debug Params
-  .DBG_RX_TOKEN_MON (DBG_RX_TOKEN_MON),     //Remove the RX Link token monitor, saves logic
+  .DBG_RX_TOKEN_MON(DBG_RX_TOKEN_MON),     //Set to 0 to remove the RX Link token monitor, saves logic    
   .LINK(2)
 )  
 hmc_ska_sa_top_link2_inst(
@@ -565,35 +629,50 @@ hmc_ska_sa_top_link2_inst(
   //----Connect HMC
   //----------------------------------
   .P_RST_N(),
-  .FERR_N(1'b1), //Not connected
+  .FERR_N(1'b1),
   .OPEN_HMC_INIT_DONE(open_hmc_done_link2_i),
   .HMC_IIC_INIT_DONE(hmc_iic_init_done_i),
+  .TX_PHY_RESET_DONE(tx_phy_reset_done_link2), // Flag to indicate when the GTH TX PHY is ready
+  .RX_PHY_RESET_DONE(rx_phy_reset_done_link2), // Flag to indicate when the GTH RX PHY is ready
+  .TX_PHY_RESET(tx_phy_reset), // Flag to reset the GTH TX PHY    
+  .RX_PHY_RESET(rx_phy_reset), //Flag to reset the GTH RX PHY    
   .RX_CRC_ERR_CNT(rx_crc_err_cnt_link2)
 );
 
 // Instantiate core for HMC link3
 hmc_ska_sa_top #(
   //Define width of the datapath
-  .LOG_FPW(LOG_FPW),        //Legal Values: 1,2,3
-  .FPW(FPW),        //Legal Values: 2,4,6,8
-  .DWIDTH(DWIDTH),  //Leave untouched
+  .FPW(FPW),                //Legal Values: 2,4,6,8
+  .LOG_FPW(LOG_FPW),        //Legal Values: 1 for FPW=2 ,2 for FPW=4 ,3 for FPW=6/8
+  .DWIDTH(DWIDTH),          //Leave untouched
   //Define HMC interface width
-  .LOG_NUM_LANES(LOG_NUM_LANES),                //Set 3 for half-width, 4 for full-width
-  .NUM_LANES(NUM_LANES), //Leave untouched
-  .NUM_DATA_BYTES(NUM_DATA_BYTES),           //Leave untouched
+  .LOG_NUM_LANES(LOG_NUM_LANES),     //Set 3 for half-width, 4 for full-width
+  .NUM_LANES(NUM_LANES),             //Leave untouched
+  .NUM_DATA_BYTES(NUM_DATA_BYTES),   //Leave untouched
   //Define width of the register file
-  .HMC_RF_WWIDTH(HMC_RF_WWIDTH),
-  .HMC_RF_RWIDTH(HMC_RF_RWIDTH),
-  .HMC_RF_AWIDTH(HMC_RF_AWIDTH),
+  .HMC_RF_WWIDTH(HMC_RF_WWIDTH),    //Leave untouched    
+  .HMC_RF_RWIDTH(HMC_RF_RWIDTH),    //Leave untouched
+  .HMC_RF_AWIDTH(HMC_RF_AWIDTH),    //Leave untouched
   //Configure the Functionality
-  .LOG_MAX_RTC       (LOG_MAX_RTC       ),    //Set the depth of the RX input buffer. Must be >= LOG(rf_rx_buffer_rtc) in the RF
-  .HMC_RX_AC_COUPLED (HMC_RX_AC_COUPLED ),    //Set to 0 to remove the run length limiter, saves logic and 1 cycle delay
-  .CTRL_LANE_POLARITY(CTRL_LANE_POLARITY),    //Set to 0 if lane polarity is not applicable or performed by the transceivers, saves logic and 1 cycle delay
-  .CTRL_LANE_REVERSAL(CTRL_LANE_REVERSAL),    //Set to 0 if lane reversal is not applicable or performed by the transceivers, saves logic
+  .LOG_MAX_RX_TOKENS(LOG_MAX_RX_TOKENS),    //Set the depth of the RX input buffer. Must be >= LOG(rf_rx_buffer_rtc) in the RF. Dont't care if OPEN_RSP_MODE=1
+  .LOG_MAX_HMC_TOKENS(LOG_MAX_HMC_TOKENS),  //Set the depth of the HMC input buffer. Must be >= LOG of the corresponding field in the HMC internal register
+  .HMC_RX_AC_COUPLED(HMC_RX_AC_COUPLED),    //Set to 0 to bypass the run length limiter, saves logic and 1 cycle delay
+  .DETECT_LANE_POLARITY(DETECT_LANE_POLARITY),    //Set to 0 if lane polarity is not applicable, saves logic
+  .CTRL_LANE_POLARITY(CTRL_LANE_POLARITY),        //Set to 0 if lane polarity is not applicable or performed by the transceivers, saves logic and 1 cycle delay
+                                                  //If set to 1: Only valid if DETECT_LANE_POLARITY==1, otherwise tied to zero
+  .CTRL_LANE_REVERSAL(CTRL_LANE_REVERSAL),  //Set to 0 if lane reversal is not applicable or performed by the transceivers, saves logic
+  .CTRL_SCRAMBLERS(CTRL_SCRAMBLERS),        //Set to 0 to remove the option to disable (de-)scramblers for debugging, saves logic
+  .OPEN_RSP_MODE(OPEN_RSP_MODE),            //Set to 1 if running response open loop mode, bypasses the RX input buffer
+  .RX_RELAX_INIT_TIMING(RX_RELAX_INIT_TIMING),    //Per default, incoming TS1 sequences are only checked for the lane independent h'F0 sequence. Save resources and
+                                                   //eases timing closure. !Lane reversal is still detected
+  .RX_BIT_SLIP_CNT_LOG(RX_BIT_SLIP_CNT_LOG),     //Define the number of cycles between bit slips. Refer to the transceiver user guide
+                                    //Example: RX_BIT_SLIP_CNT_LOG=5 results in 2^5=32 cycles between two bit slips
+  .SYNC_AXI4_IF(SYNC_AXI4_IF),    //Set to 1 if AXI IF is synchronous to clk_hmc to use simple fifos
+  .XIL_CNT_PIPELINED(XIL_CNT_PIPELINED),    //If Xilinx counters are used, set to 1 to enabled output register pipelining
   //Set the direction of bitslip. Set to 1 if bitslip performs a shift right, otherwise set to 0 (see the corresponding transceiver user guide)
   .BITSLIP_SHIFT_RIGHT(BITSLIP_SHIFT_RIGHT),    
   //Debug Params
-  .DBG_RX_TOKEN_MON (DBG_RX_TOKEN_MON),     //Remove the RX Link token monitor, saves logic
+  .DBG_RX_TOKEN_MON(DBG_RX_TOKEN_MON),     //Set to 0 to remove the RX Link token monitor, saves logic    
   .LINK(3)
 )  
 hmc_ska_sa_top_link3_inst(
@@ -645,9 +724,13 @@ hmc_ska_sa_top_link3_inst(
   //----Connect HMC
   //----------------------------------
   .P_RST_N(),
-  .FERR_N(), //Not connected
+  .FERR_N(1'b1),
   .OPEN_HMC_INIT_DONE(open_hmc_done_link3_i),
   .HMC_IIC_INIT_DONE(hmc_iic_init_doneRRRR),
+  .TX_PHY_RESET_DONE(tx_phy_reset_done_link3), // Flag to indicate when the GTH TX PHY is ready
+  .RX_PHY_RESET_DONE(rx_phy_reset_done_link3), // Flag to indicate when the GTH RX PHY is ready
+  .TX_PHY_RESET(tx_phy_reset), // Flag to reset the GTH TX PHY    
+  .RX_PHY_RESET(rx_phy_reset), //Flag to reset the GTH RX PHY    
   .RX_CRC_ERR_CNT(rx_crc_err_cnt_link3)
 );
 

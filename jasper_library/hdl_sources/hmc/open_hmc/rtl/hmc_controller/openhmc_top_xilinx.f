@@ -39,37 +39,7 @@
 ### Make sure to source the path variable first.
 #use: export OPENHMC_PATH=path_to_openhmc_main_folder
 
-####HEADER
--incdir ${OPENHMC_PATH}/rtl/include/
-
-####Top
-${OPENHMC_PATH}/rtl/hmc_controller/openhmc_top.v
-
-####Controller TX
-${OPENHMC_PATH}/rtl/hmc_controller/tx/tx_link.v
-${OPENHMC_PATH}/rtl/hmc_controller/tx/tx_run_length_limiter.v
-${OPENHMC_PATH}/rtl/hmc_controller/tx/tx_scrambler.v
-${OPENHMC_PATH}/rtl/hmc_controller/tx/tx_crc_combine.v
-
-####Controller RX
-${OPENHMC_PATH}/rtl/hmc_controller/rx/rx_link.v
-${OPENHMC_PATH}/rtl/hmc_controller/rx/rx_lane_logic.v
-${OPENHMC_PATH}/rtl/hmc_controller/rx/rx_descrambler.v
-${OPENHMC_PATH}/rtl/hmc_controller/rx/rx_crc_compare.v
-
-####CRC
-${OPENHMC_PATH}/rtl/hmc_controller/crc/crc_128_init.v
-${OPENHMC_PATH}/rtl/hmc_controller/crc/crc_accu.v
-
-####Register File
-${OPENHMC_PATH}/rtl/hmc_controller/register_file/openhmc_rf.v
-
 ####Building blocks
--f ${OPENHMC_PATH}/rtl/building_blocks/fifos/sync/openhmc_sync_fifos.f
-${OPENHMC_PATH}/rtl/building_blocks/fifos/async/openhmc_async_fifo.v
-${OPENHMC_PATH}/rtl/building_blocks/counter/openhmc_counter48.v
-${OPENHMC_PATH}/rtl/building_blocks/rams/openhmc_ram.v
+${OPENHMC_PATH}/rtl/building_blocks/counter/openhmc_counter48_wrapper_xilinx.v
+-f ${OPENHMC_PATH}/rtl/building_blocks/fifos/sync/xilinx/openhmc_fifos_xilinx.f
 
-
-####Include this if using XILINX
-#${OPENHMC_PATH}/rtl/building_blocks/counter/openhmc_counter48_wrapper_xilinx.v

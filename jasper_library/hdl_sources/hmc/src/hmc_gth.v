@@ -76,7 +76,7 @@
     parameter   WRAPPER_SIM_GTRESET_SPEEDUP    = "FALSE"    // Set to "true" to speed up sim reset
 )
 (
-    input SOFT_RESET_IN,
+
 
     input REFCLK_PAD_N_IN_0,
     input REFCLK_PAD_P_IN_0,
@@ -122,8 +122,9 @@
     input           GT6_GTHRXP_IN,
     input           GT7_GTHRXP_IN,
     //------------ Receive Ports -RX Initialization and Reset Ports ------------
-    output          PHY_RDY,
-
+    output          PHY_RX_RDY,
+    input           SOFT_RESET_RX_IN,
+    output          GTH_RX_RST,
     //---------------- Transmit Ports - TX Data Path interface -----------------
     input   [63:0]  GT0_TXDATA_IN,
     input   [63:0]  GT1_TXDATA_IN,
@@ -151,14 +152,17 @@
     output          GT5_GTHTXP_OUT,
     output          GT6_GTHTXP_OUT,
     output          GT7_GTHTXP_OUT,
-
+    
     output FABRIC_CLK,
 
     output QPLL_LOCK0,
     output QPLL_LOCK1,
     output MMCM_LOCKED_OUT,
-    output GTH_RST
-
+    
+    //----------- Transmit Ports - TX Initialization and Reset Ports -----------
+    output PHY_TX_RDY,    
+    input SOFT_RESET_TX_IN,
+    output GTH_TX_RST
 );
 
   
@@ -233,7 +237,8 @@
         //---------------------- Receive Ports - RX AFE Ports ----------------------
         .GTHRXN_IN                      (GT0_GTHRXN_IN),
         //----------- Receive Ports - RX Initialization and Reset Ports ------------
-        .GTHRESET                       (gth_rst),
+        .GTHRXRESET                     (gth_rx_rst),
+        .PHY_RX_RST_DONE                (phy_rx_rst_done0),   
         //---------------------- Receive Ports -RX AFE Ports -----------------------
         .GTHRXP_IN                      (GT0_GTHRXP_IN),
         //------------------- TX Initialization and Reset Ports --------------------
@@ -250,7 +255,8 @@
         //--------- Transmit Ports - TX Fabric Clock Output Control Ports ----------
         .TXOUTCLK_OUT                   (gt0_txoutclk_i),
         //----------- Transmit Ports - TX Initialization and Reset Ports -----------
-        .PHY_RST_DONE                   (phy_rst_done0)
+        .PHY_TX_RST_DONE                (phy_tx_rst_done0),
+        .GTHTXRESET                     (gth_tx_rst)
 
     );
    
@@ -278,7 +284,8 @@
         //---------------------- Receive Ports - RX AFE Ports ----------------------
         .GTHRXN_IN                      (GT1_GTHRXN_IN),
         //----------- Receive Ports - RX Initialization and Reset Ports ------------
-        .GTHRESET                       (gth_rst),
+        .GTHRXRESET                     (gth_rx_rst),
+        .PHY_RX_RST_DONE                (phy_rx_rst_done1),          
         //---------------------- Receive Ports -RX AFE Ports -----------------------
         .GTHRXP_IN                      (GT1_GTHRXP_IN),
         //------------------- TX Initialization and Reset Ports --------------------
@@ -295,7 +302,8 @@
         //--------- Transmit Ports - TX Fabric Clock Output Control Ports ----------
         .TXOUTCLK_OUT                   (),
         //----------- Transmit Ports - TX Initialization and Reset Ports -----------
-        .PHY_RST_DONE                (phy_rst_done1)
+        .PHY_TX_RST_DONE                (phy_tx_rst_done1),
+        .GTHTXRESET                     (gth_tx_rst)        
 
     );
 
@@ -322,7 +330,8 @@
         //---------------------- Receive Ports - RX AFE Ports ----------------------
         .GTHRXN_IN                      (GT2_GTHRXN_IN),
         //----------- Receive Ports - RX Initialization and Reset Ports ------------
-        .GTHRESET                       (gth_rst),
+        .GTHRXRESET                     (gth_rx_rst),
+        .PHY_RX_RST_DONE                (phy_rx_rst_done2),                 
         //---------------------- Receive Ports -RX AFE Ports -----------------------
         .GTHRXP_IN                      (GT2_GTHRXP_IN),
         //------------------- TX Initialization and Reset Ports --------------------
@@ -339,7 +348,8 @@
         //--------- Transmit Ports - TX Fabric Clock Output Control Ports ----------
         .TXOUTCLK_OUT                   (),
         //----------- Transmit Ports - TX Initialization and Reset Ports -----------
-        .PHY_RST_DONE                (phy_rst_done2)
+        .PHY_TX_RST_DONE                (phy_tx_rst_done2),
+        .GTHTXRESET                     (gth_tx_rst)         
 
     );
 
@@ -366,7 +376,8 @@
         //---------------------- Receive Ports - RX AFE Ports ----------------------
         .GTHRXN_IN                      (GT3_GTHRXN_IN),
         //----------- Receive Ports - RX Initialization and Reset Ports ------------
-        .GTHRESET                       (gth_rst),
+        .GTHRXRESET                     (gth_rx_rst),
+        .PHY_RX_RST_DONE                (phy_rx_rst_done3),                 
         //---------------------- Receive Ports -RX AFE Ports -----------------------
         .GTHRXP_IN                      (GT3_GTHRXP_IN),
         //------------------- TX Initialization and Reset Ports --------------------
@@ -383,7 +394,8 @@
         //--------- Transmit Ports - TX Fabric Clock Output Control Ports ----------
         .TXOUTCLK_OUT                   (),
         //----------- Transmit Ports - TX Initialization and Reset Ports -----------
-        .PHY_RST_DONE                (phy_rst_done3)
+        .PHY_TX_RST_DONE                (phy_tx_rst_done3),
+        .GTHTXRESET                     (gth_tx_rst)          
 
     );
 
@@ -410,7 +422,8 @@
         //---------------------- Receive Ports - RX AFE Ports ----------------------
         .GTHRXN_IN                      (GT4_GTHRXN_IN),
         //----------- Receive Ports - RX Initialization and Reset Ports ------------
-        .GTHRESET                       (gth_rst),
+        .GTHRXRESET                     (gth_rx_rst),
+        .PHY_RX_RST_DONE                (phy_rx_rst_done4),      
         //---------------------- Receive Ports -RX AFE Ports -----------------------
         .GTHRXP_IN                      (GT4_GTHRXP_IN),
         //------------------- TX Initialization and Reset Ports --------------------
@@ -427,7 +440,8 @@
         //--------- Transmit Ports - TX Fabric Clock Output Control Ports ----------
         .TXOUTCLK_OUT                   (),
         //----------- Transmit Ports - TX Initialization and Reset Ports -----------
-        .PHY_RST_DONE                (phy_rst_done4)
+        .PHY_TX_RST_DONE             (phy_tx_rst_done4),
+        .GTHTXRESET                  (gth_tx_rst)         
 
     );
 
@@ -454,7 +468,8 @@
         //---------------------- Receive Ports - RX AFE Ports ----------------------
         .GTHRXN_IN                      (GT5_GTHRXN_IN),
         //----------- Receive Ports - RX Initialization and Reset Ports ------------
-        .GTHRESET                       (gth_rst),
+        .GTHRXRESET                     (gth_rx_rst),
+        .PHY_RX_RST_DONE                (phy_rx_rst_done5),         
         //---------------------- Receive Ports -RX AFE Ports -----------------------
         .GTHRXP_IN                      (GT5_GTHRXP_IN),
         //------------------- TX Initialization and Reset Ports --------------------
@@ -471,7 +486,8 @@
         //--------- Transmit Ports - TX Fabric Clock Output Control Ports ----------
         .TXOUTCLK_OUT                   (),
         //----------- Transmit Ports - TX Initialization and Reset Ports -----------
-        .PHY_RST_DONE                (phy_rst_done5)
+        .PHY_TX_RST_DONE             (phy_tx_rst_done5),
+        .GTHTXRESET                  (gth_tx_rst)         
 
     );
 
@@ -498,7 +514,8 @@
         //---------------------- Receive Ports - RX AFE Ports ----------------------
         .GTHRXN_IN                      (GT6_GTHRXN_IN),
         //----------- Receive Ports - RX Initialization and Reset Ports ------------
-        .GTHRESET                       (gth_rst),
+        .GTHRXRESET                     (gth_rx_rst),
+        .PHY_RX_RST_DONE                (phy_rx_rst_done6),         
         //---------------------- Receive Ports -RX AFE Ports -----------------------
         .GTHRXP_IN                      (GT6_GTHRXP_IN),
         //------------------- TX Initialization and Reset Ports --------------------
@@ -515,7 +532,8 @@
         //--------- Transmit Ports - TX Fabric Clock Output Control Ports ----------
         .TXOUTCLK_OUT                   (),
         //----------- Transmit Ports - TX Initialization and Reset Ports -----------
-        .PHY_RST_DONE                (phy_rst_done6)
+        .PHY_TX_RST_DONE             (phy_tx_rst_done6),
+        .GTHTXRESET                  (gth_tx_rst)          
 
     );
 
@@ -542,7 +560,8 @@
         //---------------------- Receive Ports - RX AFE Ports ----------------------
         .GTHRXN_IN                      (GT7_GTHRXN_IN),
         //----------- Receive Ports - RX Initialization and Reset Ports ------------
-        .GTHRESET                       (gth_rst),
+        .GTHRXRESET                     (gth_rx_rst),
+        .PHY_RX_RST_DONE                (phy_rx_rst_done7),         
         //---------------------- Receive Ports -RX AFE Ports -----------------------
         .GTHRXP_IN                      (GT7_GTHRXP_IN),
         //------------------- TX Initialization and Reset Ports --------------------
@@ -559,7 +578,8 @@
         //--------- Transmit Ports - TX Fabric Clock Output Control Ports ----------
         .TXOUTCLK_OUT                   (),
         //----------- Transmit Ports - TX Initialization and Reset Ports -----------
-        .PHY_RST_DONE                (phy_rst_done7)
+        .PHY_TX_RST_DONE             (phy_tx_rst_done7),
+        .GTHTXRESET                  (gth_tx_rst)         
 
     );
 
@@ -774,40 +794,74 @@
 
     );
 
-assign gth_rst =  (~qpll_lock0) || (~qpll_lock1) || SOFT_RESET_IN;
+assign gth_tx_rst =  (~qpll_lock0) || (~qpll_lock1); //AI: || SOFT_RESET_TX_IN;
+assign gth_rx_rst =  (~qpll_lock0) || (~qpll_lock1) || SOFT_RESET_RX_IN;
+
 assign FABRIC_CLK = gt0_txusrclk2_i;
 
 assign QPLL_LOCK0 = qpll_lock0;
 assign QPLL_LOCK1 = qpll_lock1;
 assign MMCM_LOCKED_OUT = txoutclk_mmcm0_locked_i; 
-assign GTH_RST = gth_rst; 
+assign GTH_TX_RST = gth_tx_rst;
+assign GTH_RX_RST = gth_rx_rst;
+ 
  
 reg 
-phy_rst_done0R,
-phy_rst_done1R,
-phy_rst_done2R,
-phy_rst_done3R,
-phy_rst_done4R,
-phy_rst_done5R,
-phy_rst_done6R,
-phy_rst_done7R,
-phy_rdyR;
+phy_rx_rst_done0R,
+phy_rx_rst_done1R,
+phy_rx_rst_done2R,
+phy_rx_rst_done3R,
+phy_rx_rst_done4R,
+phy_rx_rst_done5R,
+phy_rx_rst_done6R,
+phy_rx_rst_done7R,
+phy_rx_rdyR;
 
 
 always @(posedge gt0_txusrclk2_i) begin   
-  phy_rst_done0R <= phy_rst_done0;
-  phy_rst_done1R <= phy_rst_done1;
-  phy_rst_done2R <= phy_rst_done2;
-  phy_rst_done3R <= phy_rst_done3;
-  phy_rst_done4R <= phy_rst_done4;
-  phy_rst_done5R <= phy_rst_done5;
-  phy_rst_done6R <= phy_rst_done6;
-  phy_rst_done7R <= phy_rst_done7;   
-  phy_rdyR <= phy_rdy;
+  phy_rx_rst_done0R <= phy_rx_rst_done0;
+  phy_rx_rst_done1R <= phy_rx_rst_done1;
+  phy_rx_rst_done2R <= phy_rx_rst_done2;
+  phy_rx_rst_done3R <= phy_rx_rst_done3;
+  phy_rx_rst_done4R <= phy_rx_rst_done4;
+  phy_rx_rst_done5R <= phy_rx_rst_done5;
+  phy_rx_rst_done6R <= phy_rx_rst_done6;
+  phy_rx_rst_done7R <= phy_rx_rst_done7;   
+  phy_rx_rdyR <= phy_rx_rdy;
 end
 
-assign phy_rdy = phy_rst_done0R && phy_rst_done1R && phy_rst_done2R && phy_rst_done3R && phy_rst_done4R && phy_rst_done5R && phy_rst_done6R && phy_rst_done7R;
-assign PHY_RDY = phy_rdyR;
+assign phy_rx_rdy = phy_rx_rst_done0R && phy_rx_rst_done1R && phy_rx_rst_done2R && phy_rx_rst_done3R && phy_rx_rst_done4R && phy_rx_rst_done5R && phy_rx_rst_done6R && phy_rx_rst_done7R;
+assign PHY_RX_RDY = phy_rx_rdyR;
+
+reg 
+phy_tx_rst_done0R,
+phy_tx_rst_done1R,
+phy_tx_rst_done2R,
+phy_tx_rst_done3R,
+phy_tx_rst_done4R,
+phy_tx_rst_done5R,
+phy_tx_rst_done6R,
+phy_tx_rst_done7R,
+phy_tx_rdyR;
+
+
+always @(posedge gt0_txusrclk2_i) begin   
+  phy_tx_rst_done0R <= phy_tx_rst_done0;
+  phy_tx_rst_done1R <= phy_tx_rst_done1;
+  phy_tx_rst_done2R <= phy_tx_rst_done2;
+  phy_tx_rst_done3R <= phy_tx_rst_done3;
+  phy_tx_rst_done4R <= phy_tx_rst_done4;
+  phy_tx_rst_done5R <= phy_tx_rst_done5;
+  phy_tx_rst_done6R <= phy_tx_rst_done6;
+  phy_tx_rst_done7R <= phy_tx_rst_done7;   
+  phy_tx_rdyR <= phy_tx_rdy;
+end
+
+assign phy_tx_rdy = phy_tx_rst_done0R && phy_tx_rst_done1R && phy_tx_rst_done2R && phy_tx_rst_done3R && phy_tx_rst_done4R && phy_tx_rst_done5R && phy_tx_rst_done6R && phy_tx_rst_done7R;
+assign PHY_TX_RDY = phy_tx_rdyR;
+
+
+
 
 endmodule
 

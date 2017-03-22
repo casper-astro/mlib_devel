@@ -82,6 +82,7 @@ module rx_descrambler #(
     input wire              clk,
     input wire              res_n,
     input wire              bit_slip,
+    input wire              can_lock,
     output reg              locked,
     input wire [DWIDTH-1:0] data_in,
     output reg [DWIDTH-1:0] data_out
@@ -102,30 +103,45 @@ generate
     end
 endgenerate
 
+`ifdef SIMULATION
+    initial begin
+       lfsr     <= 15'h0; 
+    end
+`endif
+
 // SEQUENTIAL PROCESS
 `ifdef ASYNC_RES
 always @(posedge clk or negedge res_n)  begin `else
 always @(posedge clk)  begin `endif
-    if (!res_n) begin
-        locked   <= 1'b0;
-        lfsr     <= 15'h0;
-        data_out <= {DWIDTH {1'b0}};
-    end else begin
-
+    `ifdef RESET_ALL
+        if(!res_n) begin
+            data_out <= {DWIDTH {1'b0}};
+            lfsr     <= 15'h0;
+        end else 
+    `endif
+    begin
         data_out <= data_out_tmp;
-
-        if (!locked && |data_in) begin
+        if (!locked) begin
             lfsr <= calculated_seed;
-            // Locked when the calculated seeds match
-            if (calculated_seed == lfsr_steps[DWIDTH-1]) begin
-                locked <= 1'b1;
-            end
         end else begin
             if (bit_slip) begin
                 lfsr <= lfsr_slipped;
             end else begin
                 lfsr <= lfsr_steps[DWIDTH-1];
             end
+        end    
+    end
+
+    if(!res_n) begin
+        locked   <= 1'b0;
+    end else begin
+        if (!locked) begin
+            if (calculated_seed == lfsr_steps[DWIDTH-1]) begin
+                locked <= 1'b1;
+            end
+        end
+        if(!can_lock) begin
+            locked <= 1'b0;
         end
     end
 end                 // serial shift right with left input

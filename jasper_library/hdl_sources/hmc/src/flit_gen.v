@@ -51,6 +51,29 @@ module flit_gen #(
     input   wire [DWIDTH-1:0]            m_axis_rx_TDATA,
     input   wire [NUM_DATA_BYTES-1:0]    m_axis_rx_TUSER
   );
+  
+  //Debug HMC Registers
+  (* mark_debug = "true" *) wire dbg_flit_gen_post_done_in_new; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire dbg_flit_gen_s_tx_tvalid_new; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire dbg_flit_gen_s_tx_tready_new; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [DWIDTH-1:0] dbg_flit_gen_s_tx_tdata_new; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [NUM_DATA_BYTES-1:0] dbg_flit_gen_s_tx_tuser_new; //Virtual test probe for the logic analyser
+  
+  (* mark_debug = "true" *) wire dbg_flit_gen_m_rx_tvalid_new; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire dbg_flit_gen_m_rx_tready_new; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [DWIDTH-1:0] dbg_flit_gen_m_rx_tdata_new; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [NUM_DATA_BYTES-1:0] dbg_flit_gen_m_rx_tuser_new; //Virtual test probe for the logic analyser
+
+  assign dbg_flit_gen_post_done_in_new = POST_DONE_IN;
+  assign dbg_flit_gen_s_tx_tvalid_new = s_axis_tx_TVALID_i & s_axis_tx_TREADY;
+  assign dbg_flit_gen_s_tx_tready_new = s_axis_tx_TREADY;
+  assign dbg_flit_gen_s_tx_tdata_new = s_axis_tx_TDATA_i;
+  assign dbg_flit_gen_s_tx_tuser_new = s_axis_tx_TUSER_i; 
+  
+  assign dbg_flit_gen_m_rx_tvalid_new = m_axis_rx_TVALID;  
+  assign dbg_flit_gen_m_rx_tready_new = m_axis_rx_TREADY_i;  
+  assign dbg_flit_gen_m_rx_tdata_new = m_axis_rx_TDATA;
+  assign dbg_flit_gen_m_rx_tuser_new = m_axis_rx_TUSER;   
 
 // FLIT Layout
 // -----------
@@ -352,6 +375,24 @@ module flit_gen #(
   end
 
   assign POST_DONE_OUT = post_done_out_i;
+
+  //Debug OpenHMC Registers
+  (* mark_debug = "true" *) wire [3:0] dbg_flit_gen_rd_flit_state_new; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [3:0] dbg_flit_gen_wr_flit_state_new; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire dbg_flit_gen_open_hmc_init_done_new; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire dbg_flit_gen_flit0; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire dbg_flit_gen_flit1; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire dbg_flit_gen_flit2; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire dbg_flit_gen_flit3; //Virtual test probe for the logic analyser  
+
+  
+  assign dbg_flit_gen_rd_flit_state_new = rd_flit_state;
+  assign dbg_flit_gen_wr_flit_state_new = wr_flit_state;
+  assign dbg_flit_gen_open_hmc_init_done_new = OPEN_HMC_INIT_DONE;
+  assign dbg_flit_gen_flit0 = flit[0];
+  assign dbg_flit_gen_flit1 = flit[1];
+  assign dbg_flit_gen_flit2 = flit[2];
+  assign dbg_flit_gen_flit3 = flit[3];
 
 
   // ***************************************************************************************************************************************************************************************

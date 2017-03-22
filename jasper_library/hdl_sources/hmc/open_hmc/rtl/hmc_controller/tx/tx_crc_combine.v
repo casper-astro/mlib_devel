@@ -73,157 +73,7 @@ module tx_crc_combine #(
 //-----------------------------------------------------------------------------------------------------
 //=====================================================================================================
 
-//`include "hmc_field_functions.h"
- function [5:0] cmd;
-    input [127:0] flit;
-
-    begin
-        cmd = flit[5:0];
-    end
- endfunction
-
- function [5:0] num_requested_flits;
-    input [127:0] flit;
-
-    begin
-        num_requested_flits = flit[2:0] + 2;    //+1 for the encoding
-    end
- endfunction
- 
- function [2:0] flow_cmd;
-    input [127:0] flit;
-
-    begin
-        flow_cmd = flit[2:0];
-    end
- endfunction
-
- function [2:0] cmd_type;
-    input [127:0] flit;
-
-    begin
-        cmd_type = flit[5:3];
-    end
- endfunction
-
- function is_flow;
-    input [127:0] flit;
-    begin
-        if(flit[5:3]) begin
-            is_flow = 0;
-        end else begin
-            is_flow = 1;
-        end
-    end
- endfunction
-
- function irtry_start_retry_flag;
-    input [127:0] flit;
-
-    begin
-        irtry_start_retry_flag = flit[64+8];
-    end
- endfunction
-
- function irtry_clear_error_flag;
-    input [127:0] flit;
-
-    begin
-        irtry_clear_error_flag = flit[64+8+1];
-    end
- endfunction
-  
- function [3:0] lng;
-    input [127:0] flit;
-
-    begin
-        lng = flit[10:7];
-    end
- endfunction
- 
-  
- function [3:0] dln;
-    input [127:0]   flit;
-
-    begin
-        dln = flit[14:11];
-    end
- endfunction
- 
-  
- function [8:0] tag;
-    input [127:0] flit;
-
-    begin
-        tag = flit[23:15];
-    end
- endfunction
- 
- function [57:24] adrs;
-    input [127:0] flit;
-
-    begin
-        adrs = flit[57:24];
-    end
- endfunction
-
- function [2:0] cub;
-    input [127:0] flit;
-
-    begin
-        cub = flit[63:61];
-    end
- endfunction
- 
-//------------------------------------------------------------------------HMC TAIL FIELDS
- 
- function [7:0] rrp;
-    input [127:0]   flit;
-
-    begin
-        rrp = flit[64+7:64];
-    end
- endfunction
-
- function [7:0] frp;
-    input [127:0]   flit;
-
-    begin
-        frp = flit[64+15:64+8];
-    end
- endfunction
- 
- function [2:0] seq;
-        input [127:0]   flit;
-
-        begin
-                seq = flit[64+18:64+16];
-        end
- endfunction
- 
- function [6:0] errstat;
-        input [127:0]   flit;
-
-        begin
-                errstat = flit[64+26:64+20];
-        end
- endfunction
-
- function [4:0] rtc;
-        input [127:0]   flit;
-
-        begin
-                rtc = flit[64+31:64+27];
-        end
- endfunction
- 
- function [31:0] crc;
-    input [127:0]   flit;
-
-    begin
-        crc = flit[127:128-32];
-    end
- endfunction
+`include "hmc_field_functions.h"
 //------------------------------------------------------------------------------------General Assignments
 integer i_f;    //counts to FPW
 integer i_f2;   //counts to FPW inside another i_f loop
@@ -239,7 +89,7 @@ generate
     end
 endgenerate
 
-reg  [3:0]              d_in_flit_lng_dly     [FPW-1:0]; 
+reg  [3:0]              d_in_flit_lng_dly     [FPW-1:0];
 reg  [DWIDTH-1:0]       d_in_data_dly;
 reg  [FPW-1:0]          d_in_tail_dly;
 reg  [FPW-1:0]          d_in_hdr_dly;
@@ -273,7 +123,7 @@ generate
             assign crc_accu_in_combined[f][(f2*32)+31:(f2*32)] = crc_accu_in_valid[f][f2] ? crc_accu_in[f2] : 32'h0;
         end
     end
-endgenerate 
+endgenerate
 
 //------------------------------------------------------------------------------------Data Pipeline signals
 reg  [DWIDTH-1:0]       crc_data_pipe_in_data                               [1:0];
@@ -282,7 +132,7 @@ wire [128-1:0]          crc_data_pipe_out_data_flit                         [FPW
 
 generate
     for(f = 0; f < (FPW); f = f + 1) begin : assign_data_pipe_output
-        assign crc_data_pipe_out_data_flit[f]                        = crc_data_pipe_in_data[1][(f*128)+128-1:f*128];
+        assign crc_data_pipe_out_data_flit[f]                        = crc_data_pipe_in_data[1][(f*128)+127:f*128];
     end
 endgenerate
 
@@ -364,10 +214,10 @@ end else begin
 
     for(i_f=0;i_f<FPW;i_f=i_f+1)begin
         if(d_in_hdr[i_f])begin
-            
+
             if(i_f+lng(d_in_flit[i_f])>FPW) begin
             //If the current packet spreads over multiple cycles
-                
+
                 if(swap_crc) begin
                     //If the last packet was swapped and the current packet also spreads over the more than 1 cycle use crc 0 now
                     d_in_flit_target_crc[i_f]   <= 3'h0;
@@ -385,7 +235,7 @@ end else begin
                 if(swap_crc && !(d_in_hdr > d_in_tail)) begin
                     d_in_flit_target_crc[i_f] <= i_f-1;
                 end
-                
+
             end
         end
     end
@@ -397,21 +247,31 @@ end
 `ifdef ASYNC_RES
 always @(posedge clk or negedge res_n)  begin `else
 always @(posedge clk)  begin `endif
-if(!res_n) begin
-    for(i_f=0;i_f<FPW;i_f=i_f+1)begin
-        d_in_flit_lng_dly[i_f]  <= 4'h0;
-    end
-    d_in_data_dly <= {DWIDTH{1'b0}};
-    d_in_tail_dly <= {FPW{1'b0}};
-    d_in_hdr_dly  <= {FPW{1'b0}};
-end else begin
-    for(i_f=0;i_f<FPW;i_f=i_f+1)begin
-        d_in_flit_lng_dly[i_f]  <= lng(d_in_flit[i_f]);
-    end
+
+    //------------Data Propagation
+    `ifdef RESET_ALL
+        if(!res_n) d_in_data_dly <= {DWIDTH{1'b0}};
+        else
+    `endif
     d_in_data_dly <= d_in_data;
-    d_in_tail_dly <= d_in_tail;
-    d_in_hdr_dly  <= d_in_hdr;
-end
+    //----------------------------
+
+    `ifdef RESET_ALL
+    if(!res_n) begin
+        for(i_f=0;i_f<FPW;i_f=i_f+1)begin
+            d_in_flit_lng_dly[i_f]  <= 4'h0;
+        end
+        d_in_tail_dly <= {FPW{1'b0}};
+        d_in_hdr_dly  <= {FPW{1'b0}};
+    end else 
+    `endif
+    begin
+        for(i_f=0;i_f<FPW;i_f=i_f+1)begin
+            d_in_flit_lng_dly[i_f]  <= lng(d_in_flit[i_f]);
+        end
+        d_in_tail_dly <= d_in_tail;
+        d_in_hdr_dly  <= d_in_hdr;
+    end
 end
 
 //====================================================================
@@ -420,9 +280,19 @@ end
 `ifdef ASYNC_RES
 always @(posedge clk or negedge res_n)  begin `else
 always @(posedge clk)  begin `endif
+
+    //------------Data Propagation
+    for(i_f=0;i_f<FPW;i_f=i_f+1)begin
+    `ifdef RESET_ALL
+        if(!res_n) crc_accu_in[i_f] <= {32{1'b0}};
+        else
+    `endif
+        crc_accu_in[i_f] <= crc_init_out[i_f];
+    end
+    //----------------------------
+
 if(!res_n) begin
     for(i_f=0;i_f<FPW;i_f=i_f+1)begin
-        crc_accu_in[i_f] <= {32{1'b0}};
         crc_accu_in_valid[i_f]  <= {FPW{1'b0}};
         crc_accu_in_tail[i_f]  <= {FPW{1'b0}};
         payload_remain[i_f]     <= 4'h0;
@@ -430,7 +300,7 @@ if(!res_n) begin
 end else begin
 
     for(i_f=0;i_f<FPW;i_f=i_f+1)begin
-        crc_accu_in[i_f] <= crc_init_out[i_f];
+        
         crc_accu_in_valid[i_f]  <= 4'h0;
         crc_accu_in_tail[i_f]  <= 4'h0;
     end
@@ -438,7 +308,7 @@ end else begin
     for(i_f=0;i_f<FPW;i_f=i_f+1)begin
     //First go through accu crcs
 
-        if(|payload_remain[i_f]) begin    
+        if(|payload_remain[i_f]) begin
 
             if(payload_remain[i_f] > FPW) begin
                 crc_accu_in_valid[i_f]  <= {FPW{1'b1}};
@@ -446,15 +316,15 @@ end else begin
             end else begin
                 crc_accu_in_valid[i_f]  <= {FPW{1'b1}} >> (FPW-payload_remain[i_f]);
                 crc_accu_in_tail[i_f]   <= 1'b1 << (payload_remain[i_f]-1);
-                payload_remain[i_f]     <= 4'h0;                    
+                payload_remain[i_f]     <= 4'h0;
             end
         end
 
-        for(i_f2=0;i_f2<FPW;i_f2=i_f2+1)begin    
+        for(i_f2=0;i_f2<FPW;i_f2=i_f2+1)begin
             if(i_f==d_in_flit_target_crc[i_f2] && d_in_hdr_dly[i_f2]) begin
             //Then go through all input crcs from the init crc and find the crc's that must be assigned to the currently selected crc
 
-                if( (i_f2+d_in_flit_lng_dly[i_f2]) >FPW ) begin 
+                if( (i_f2+d_in_flit_lng_dly[i_f2]) >FPW ) begin
                     payload_remain[i_f] <= (d_in_flit_lng_dly[i_f2]-FPW+i_f2);
                     crc_accu_in_valid[i_f]   <=  {FPW{1'b1}} >> i_f2 << i_f2;
                 end else begin
@@ -474,32 +344,45 @@ end
 `ifdef ASYNC_RES
 always @(posedge clk or negedge res_n)  begin `else
 always @(posedge clk)  begin `endif
-if(!res_n) begin
-    for(i_c=0;i_c<2;i_c=i_c+1)begin
-        crc_data_pipe_in_data[i_c]       <= {DWIDTH{1'b0}};
-        crc_data_pipe_in_tail[i_c]       <= {FPW{1'b0}};
+    
+    //------------Data Propagation
+    `ifdef RESET_ALL
+        if (!res_n) begin
+            for(i_c=0;i_c<2;i_c=i_c+1)begin
+                crc_data_pipe_in_data[i_c]       <= {DWIDTH{1'b0}};
+            end
+        end else 
+    `endif
+    begin
+        crc_data_pipe_in_data[0]   <= d_in_data_dly;
+        crc_data_pipe_in_data[1]   <= crc_data_pipe_in_data[0];
     end
+    //----------------------------
 
-    for(i_f = 0; i_f < (FPW); i_f = i_f + 1) begin
-        target_crc_per_tail1[i_f] <= 3'h0;
-    end
-end else begin
+    `ifdef RESET_ALL
+    if(!res_n) begin
+        for(i_c=0;i_c<2;i_c=i_c+1)begin
+            crc_data_pipe_in_tail[i_c]       <= {FPW{1'b0}};
+        end
+
+        for(i_f=0;i_f<(FPW);i_f=i_f+ 1) begin
+            target_crc_per_tail1[i_f] <= {LOG_FPW{1'b0}};
+        end
+    end else
+    `endif
+    begin
 
     //We keep the tails per FLIT so they are not part of the data pipe
-    for(i_f = 0; i_f < (FPW); i_f = i_f + 1) begin
+    for(i_f=0;i_f<(FPW);i_f=i_f+ 1) begin
         target_crc_per_tail1[i_f] <= target_crc_per_tail[i_f];
     end
 
     //Set the first stage of the data pipeline
-    crc_data_pipe_in_data[0]       <= d_in_data_dly;
     crc_data_pipe_in_tail[0]       <= d_in_tail_dly;
 
     //Data Pipeline propagation
-    for(i_c=0;i_c<(1);i_c=i_c+1)begin
-        crc_data_pipe_in_data[i_c+1]       <= crc_data_pipe_in_data[i_c];
-        crc_data_pipe_in_tail[i_c+1]       <= crc_data_pipe_in_tail[i_c];
+    crc_data_pipe_in_tail[1]       <= crc_data_pipe_in_tail[0];
     end
-end
 end
 
 //====================================================================
@@ -509,23 +392,21 @@ end
 `ifdef ASYNC_RES
 always @(posedge clk or negedge res_n)  begin `else
 always @(posedge clk)  begin `endif
-if(!res_n) begin
 
     for(i_f=0;i_f<FPW;i_f=i_f+1)begin
-        data_rdy_flit[i_f]  <= {128{1'b0}};
-    end
-
-end else begin
-
-    for(i_f=0;i_f<FPW;i_f=i_f+1)begin
-
+    `ifdef RESET_ALL
+    if(!res_n) begin
+        data_rdy_flit[i_f]  <= {128{1'b0}};    
+    end else 
+    `endif
+    begin
         data_rdy_flit[i_f]  <= crc_data_pipe_out_data_flit[i_f];
 
         if(crc_data_pipe_in_tail[1][i_f])begin    //Finally add the crc
             data_rdy_flit[i_f][128-1:128-32] <= crc_per_flit[target_crc_per_tail1[i_f]];
         end
     end
-end
+    end
 end
 
 //=====================================================================================================
@@ -539,7 +420,9 @@ generate
         crc_128_init crc_init_I
         (
             .clk(clk),
-            .res_n(res_n),
+            `ifdef RESET_ALL
+                .res_n(res_n),
+            `endif
             .inData(d_in_flit[f]),
             .crc(crc_init_out[f])
         );
@@ -558,7 +441,6 @@ generate
             .res_n(res_n),
             .tail(crc_accu_in_tail[f]),
             .d_in(crc_accu_in_combined[f]),
-            .valid(crc_accu_in_valid[f]),
             .crc_out(crc_per_flit[f])
         );
     end
