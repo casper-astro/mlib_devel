@@ -212,23 +212,27 @@ entity forty_gbe is
         EMCCLK_FIX : out std_logic;
         GND        : out std_logic_vector(15 downto 0);
 
-        tx_valid        : in  std_logic;
-        tx_end_of_frame : in  std_logic;
-        tx_data         : in  std_logic_vector(63 downto 0);
-        tx_dest_ip      : in  std_logic_vector(31 downto 0);
-        tx_dest_port    : in  std_logic_vector(15 downto 0);
-        tx_overflow     : out std_logic;
-        tx_afull        : out std_logic;
-        rx_valid        : out std_logic;
-        rx_end_of_frame : out std_logic;
-        rx_data         : out std_logic_vector(63 downto 0);
-        rx_source_ip    : out std_logic_vector(31 downto 0);
-        rx_source_port  : out std_logic_vector(15 downto 0);
-        rx_bad_frame    : out std_logic;
-        rx_overrun      : out std_logic;
-        rx_overrun_ack  : in  std_logic;
-        rx_ack          : in  std_logic;
-        
+        forty_gbe_tx_valid        : in  std_logic_vector(3 downto 0);
+        forty_gbe_tx_end_of_frame : in  std_logic;
+        forty_gbe_tx_data         : in  std_logic_vector(255 downto 0);
+        forty_gbe_tx_dest_ip      : in  std_logic_vector(31 downto 0);
+        forty_gbe_tx_dest_port    : in  std_logic_vector(15 downto 0);
+        forty_gbe_tx_overflow     : out std_logic;
+        forty_gbe_tx_afull        : out std_logic;
+        forty_gbe_rx_valid        : out std_logic_vector(3 downto 0);
+        forty_gbe_rx_end_of_frame : out std_logic;
+        forty_gbe_rx_data         : out std_logic_vector(255 downto 0);
+        forty_gbe_rx_source_ip    : out std_logic_vector(31 downto 0);
+        forty_gbe_rx_source_port  : out std_logic_vector(15 downto 0);
+        forty_gbe_rx_bad_frame    : out std_logic;
+        forty_gbe_rx_overrun      : out std_logic;
+        forty_gbe_rx_overrun_ack  : in  std_logic;
+        forty_gbe_rx_ack          : in  std_logic;
+
+        forty_gbe_led_tx : out std_logic;
+        forty_gbe_led_rx : out std_logic;
+        forty_gbe_led_up : out std_logic;
+
         --DSP Wishbone Arbiter Interface
         WB_SLV_CLK_I_top : out std_logic;
         WB_SLV_RST_I_top:  out std_logic;
@@ -943,22 +947,43 @@ architecture arch_forty_gbe of forty_gbe is
     signal host_reset_u2 : std_logic;
     signal host_reset_u3 : std_logic;    
 
-    signal xlgmii_tx_valid : T_40GBE_DATA_VALID;
-    signal xlgmii_tx_end_of_frame : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
-    signal xlgmii_tx_data : T_40GBE_DATA;
-    signal xlgmii_tx_dest_ip : T_40GBE_IP_ADDRESS;
-    signal xlgmii_tx_dest_port : T_40GBE_PORT_ADDRESS;
-    signal xlgmii_tx_overflow : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
-    signal xlgmii_tx_afull : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
-    signal xlgmii_rx_valid : T_40GBE_DATA_VALID;
-    signal xlgmii_rx_end_of_frame : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
-    signal xlgmii_rx_data : T_40GBE_DATA;
-    signal xlgmii_rx_source_ip : T_40GBE_IP_ADDRESS;
-    signal xlgmii_rx_source_port : T_40GBE_PORT_ADDRESS;
-    signal xlgmii_rx_bad_frame : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
-    signal xlgmii_rx_overrun : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
-    signal xlgmii_rx_overrun_ack : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
-    signal xlgmii_rx_ack : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
+    signal xlgmii_tx_valid        : std_logic_vector(3 downto 0);
+    signal xlgmii_tx_end_of_frame : std_logic;
+    signal xlgmii_tx_data         : std_logic_vector(255 downto 0);
+    signal xlgmii_tx_dest_ip      : std_logic_vector(31 downto 0);
+    signal xlgmii_tx_dest_port    : std_logic_vector(15 downto 0);
+    signal xlgmii_tx_overflow     : std_logic;
+    signal xlgmii_tx_afull        : std_logic;
+    signal xlgmii_rx_valid        : std_logic_vector(3 downto 0);
+    signal xlgmii_rx_end_of_frame : std_logic;
+    signal xlgmii_rx_data         : std_logic_vector(255 downto 0);
+    signal xlgmii_rx_source_ip    : std_logic_vector(31 downto 0);
+    signal xlgmii_rx_source_port  : std_logic_vector(15 downto 0);
+    signal xlgmii_rx_bad_frame    : std_logic;
+    signal xlgmii_rx_overrun      : std_logic;
+    signal xlgmii_rx_overrun_ack  : std_logic;
+    signal xlgmii_rx_ack          : std_logic;
+
+    signal led_rx : std_logic;
+    signal led_tx : std_logic;
+    signal led_up : std_logic;
+
+    --signal xlgmii_tx_valid : T_40GBE_DATA_VALID;
+    --signal xlgmii_tx_end_of_frame : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
+    --signal xlgmii_tx_data : T_40GBE_DATA;
+    --signal xlgmii_tx_dest_ip : T_40GBE_IP_ADDRESS;
+    --signal xlgmii_tx_dest_port : T_40GBE_PORT_ADDRESS;
+    --signal xlgmii_tx_overflow : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
+    --signal xlgmii_tx_afull : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
+    --signal xlgmii_rx_valid : T_40GBE_DATA_VALID;
+    --signal xlgmii_rx_end_of_frame : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
+    --signal xlgmii_rx_data : T_40GBE_DATA;
+    --signal xlgmii_rx_source_ip : T_40GBE_IP_ADDRESS;
+    --signal xlgmii_rx_source_port : T_40GBE_PORT_ADDRESS;
+    --signal xlgmii_rx_bad_frame : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
+    --signal xlgmii_rx_overrun : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
+    --signal xlgmii_rx_overrun_ack : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
+    --signal xlgmii_rx_ack : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
 
     signal xlgmii_txd : T_40GBE_XLGMII_DATA;
     signal xlgmii_txc : T_40GBE_XLGMII_CONTROL;
@@ -1081,6 +1106,27 @@ architecture arch_forty_gbe of forty_gbe is
 begin
 
     EMCCLK_FIX <= EMCCLK;
+
+    xlgmii_tx_valid        <= forty_gbe_tx_valid;
+    xlgmii_tx_end_of_frame <= forty_gbe_tx_end_of_frame;
+    xlgmii_tx_data         <= forty_gbe_tx_data;
+    xlgmii_tx_dest_ip      <= forty_gbe_tx_dest_ip;
+    xlgmii_tx_dest_port    <= forty_gbe_tx_dest_port;
+    --xlgmii_rx_overrun_ack  <= forty_gbe_rx_overrun_ack;
+    --xlgmii_rx_ack          <= forty_gbe_rx_ack;
+    forty_gbe_led_rx <= led_rx;
+    forty_gbe_led_tx <= led_tx;
+    forty_gbe_led_up <= led_up;
+
+    forty_gbe_tx_overflow     <= xlgmii_tx_overflow;
+    forty_gbe_tx_afull        <= xlgmii_tx_afull;
+    forty_gbe_rx_valid        <= xlgmii_rx_valid;
+    forty_gbe_rx_end_of_frame <= xlgmii_rx_end_of_frame;
+    forty_gbe_rx_data         <= xlgmii_rx_data;
+    forty_gbe_rx_source_ip    <= xlgmii_rx_source_ip;
+    forty_gbe_rx_source_port  <= xlgmii_rx_source_port;
+    forty_gbe_rx_bad_frame    <= xlgmii_rx_bad_frame;
+    forty_gbe_rx_overrun      <= xlgmii_rx_overrun;
 
     -- These signals are not used but kept in for completeness sake.
     -- They are for the com express, which is not populated on the SKA boards
@@ -1709,14 +1755,14 @@ begin
         fgbe_app_clk            => sys_clk,
         fgbe_rx_valid           => xlgmii_rx_valid_flash_sdram_controller(0), --xlgmii_rx_valid(0),
         fgbe_rx_end_of_frame    => xlgmii_rx_end_of_frame_flash_sdram_controller(0),--xlgmii_rx_end_of_frame(0),
-        fgbe_rx_data            => xlgmii_rx_data(0),
-        fgbe_rx_source_ip       => xlgmii_rx_source_ip(0),
-        fgbe_rx_source_port     => xlgmii_rx_source_port(0),
-        fgbe_rx_bad_frame       => xlgmii_rx_bad_frame(0),
-        fgbe_rx_overrun         => xlgmii_rx_overrun(0),
+        fgbe_rx_data            => xlgmii_rx_data,
+        fgbe_rx_source_ip       => xlgmii_rx_source_ip,
+        fgbe_rx_source_port     => xlgmii_rx_source_port,
+        fgbe_rx_bad_frame       => xlgmii_rx_bad_frame,
+        fgbe_rx_overrun         => xlgmii_rx_overrun,
         fgbe_rx_overrun_ack     => xlgmii_rx_overrun_ack_flash_sdram_controller(0),--xlgmii_rx_overrun_ack(0),
-        fgbe_rx_ack             => xlgmii_rx_ack_flash_sdram_controller(0),--xlgmii_rx_ack(0),               
-        --AI End: Added fortygbe interface for configuration        
+        fgbe_rx_ack             => xlgmii_rx_ack_flash_sdram_controller(0),--xlgmii_rx_ack(0),
+        --AI End: Added fortygbe interface for configuration
         fpga_emcclk     => '0',
         fpga_emcclk2    => '0',
         flash_dq_in     => FLASH_DQ,
@@ -1961,9 +2007,9 @@ begin
         SEL_I => WB_SLV_SEL_I(9),
         STB_I => WB_SLV_STB_I(9),
         WE_I  => WB_SLV_WE_I(9),
-        led_up => open,
-        led_rx => open,
-        led_tx => open,
+        led_up => led_up,
+        led_rx => led_rx,
+        led_tx => led_tx,
         xaui_clk        => sys_clk,
         xaui_reset      => sys_rst,
         xaui_status     => gmii_xaui_status,
@@ -2019,14 +2065,16 @@ begin
     gmii_rx_ack <= gmii_rx_ack_flash_sdram_controller when (select_one_gbe_data_sel  = '0') else gmii_rx_ack_ramp_checker;
 
     -- MUX BETWEEN FLASH_SDRAM CONTROLLER AND 40GbE Data Streaming on link 1 (Eth 0)
-    xlgmii_rx_valid_flash_sdram_controller(0) <= xlgmii_rx_valid(0) when (select_forty_gbe_data_sel  = '0') else "0000";
-    xlgmii_rx_end_of_frame_flash_sdram_controller(0) <= xlgmii_rx_end_of_frame(0) when (select_forty_gbe_data_sel  = '0') else '0';
+    xlgmii_rx_valid_flash_sdram_controller(0) <= xlgmii_rx_valid when (select_forty_gbe_data_sel  = '0') else "0000";
+    xlgmii_rx_end_of_frame_flash_sdram_controller(0) <= xlgmii_rx_end_of_frame when (select_forty_gbe_data_sel  = '0') else '0';
 
-    --xlgmii_rx_valid_ramp_checker(0) <= xlgmii_rx_valid(0) when (select_forty_gbe_data_sel  = '1') else "0000";
-    --xlgmii_rx_end_of_frame_ramp_checker(0) <= xlgmii_rx_end_of_frame(0) when (select_forty_gbe_data_sel  = '1') else '0';
+    --xlgmii_rx_valid_ramp_checker(0) <= xlgmii_rx_valid when (select_forty_gbe_data_sel  = '1') else "0000";
+    --xlgmii_rx_end_of_frame_ramp_checker(0) <= xlgmii_rx_end_of_frame when (select_forty_gbe_data_sel  = '1') else '0';
 
-    xlgmii_rx_overrun_ack(0) <= xlgmii_rx_overrun_ack_flash_sdram_controller(0) when (select_forty_gbe_data_sel  = '0') else xlgmii_rx_overrun_ack_ramp_checker(0);
-    xlgmii_rx_ack(0) <= xlgmii_rx_ack_flash_sdram_controller(0) when (select_forty_gbe_data_sel  = '0') else xlgmii_rx_ack_ramp_checker(0);
+    --xlgmii_rx_overrun_ack <= xlgmii_rx_overrun_ack_flash_sdram_controller(0) when (select_forty_gbe_data_sel  = '0') else xlgmii_rx_overrun_ack_ramp_checker(0);
+    --xlgmii_rx_ack <= xlgmii_rx_ack_flash_sdram_controller(0) when (select_forty_gbe_data_sel  = '0') else xlgmii_rx_ack_ramp_checker(0);
+    xlgmii_rx_overrun_ack <= xlgmii_rx_overrun_ack_flash_sdram_controller(0) when (select_forty_gbe_data_sel  = '0') else forty_gbe_rx_overrun_ack;
+    xlgmii_rx_ack <= xlgmii_rx_ack_flash_sdram_controller(0) when (select_forty_gbe_data_sel  = '0') else forty_gbe_rx_ack;
     --AI End: Added fortygbe config interface
 
     -- WISHBONE SLAVE 10 - 40GBE MAC 0
@@ -2045,22 +2093,22 @@ begin
     port map(
         clk => sys_clk,
         rst => sys_rst,
-        tx_valid            => xlgmii_tx_valid(0),
-        tx_end_of_frame     => xlgmii_tx_end_of_frame(0),
-        tx_data             => xlgmii_tx_data(0),
-        tx_dest_ip          => xlgmii_tx_dest_ip(0),
-        tx_dest_port        => xlgmii_tx_dest_port(0),
-        tx_overflow         => xlgmii_tx_overflow(0),
-        tx_afull            => xlgmii_tx_afull(0),
-        rx_valid            => xlgmii_rx_valid(0),
-        rx_end_of_frame     => xlgmii_rx_end_of_frame(0),
-        rx_data             => xlgmii_rx_data(0),
-        rx_source_ip        => xlgmii_rx_source_ip(0),
-        rx_source_port      => xlgmii_rx_source_port(0),
-        rx_bad_frame        => xlgmii_rx_bad_frame(0),
-        rx_overrun          => xlgmii_rx_overrun(0),
-        rx_overrun_ack      => xlgmii_rx_overrun_ack(0),
-        rx_ack => xlgmii_rx_ack(0),
+        tx_valid            => xlgmii_tx_valid,
+        tx_end_of_frame     => xlgmii_tx_end_of_frame,
+        tx_data             => xlgmii_tx_data,
+        tx_dest_ip          => xlgmii_tx_dest_ip,
+        tx_dest_port        => xlgmii_tx_dest_port,
+        tx_overflow         => xlgmii_tx_overflow,
+        tx_afull            => xlgmii_tx_afull,
+        rx_valid            => xlgmii_rx_valid,
+        rx_end_of_frame     => xlgmii_rx_end_of_frame,
+        rx_data             => xlgmii_rx_data,
+        rx_source_ip        => xlgmii_rx_source_ip,
+        rx_source_port      => xlgmii_rx_source_port,
+        rx_bad_frame        => xlgmii_rx_bad_frame,
+        rx_overrun          => xlgmii_rx_overrun,
+        rx_overrun_ack      => xlgmii_rx_overrun_ack,
+        rx_ack => xlgmii_rx_ack,
         CLK_I => sys_clk,
         RST_I => sys_rst,
         DAT_I => WB_SLV_DAT_I(10),
