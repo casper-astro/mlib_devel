@@ -94,22 +94,40 @@ module hmc #(
     // Enable mezzanine1 SKARAB onboard clock 
     output wire MEZZ_CLK_SEL,
 
-    //simulink ports
+    //Simulink Ports 
+    //Link2
+    input  wire [255:0] DATA_IN_LINK2,
+    output wire [255:0] DATA_OUT_LINK2,
+    input  wire RD_REQ_LINK2,
+    input  wire WR_REQ_LINK2,
+    input  wire [26:0] WR_ADDRESS_LINK2,
+    input  wire [26:0] RD_ADDRESS_LINK2,
+    input  wire [8:0] TAG_IN_LINK2,
+    output wire [8:0] TAG_OUT_LINK2,
+    output wire DATA_VALID_LINK2,
+    output wire RD_READY_LINK2,
+    output wire WR_READY_LINK2,
+    
+    //Link3
+    input  wire [255:0] DATA_IN_LINK3,
+    output wire [255:0] DATA_OUT_LINK3,
+    input  wire RD_REQ_LINK3,
+    input  wire WR_REQ_LINK3,
+    input  wire [26:0] WR_ADDRESS_LINK3,
+    input  wire [26:0] RD_ADDRESS_LINK3,
+    input  wire [8:0] TAG_IN_LINK3,
+    output wire [8:0] TAG_OUT_LINK3,
+    output wire DATA_VALID_LINK3,
+    output wire RD_READY_LINK3,
+    output wire WR_READY_LINK3,
+    
+    //Simulink Ports Clocks and Status
     input  wire USER_CLK,
     input  wire USER_RST,
-    input  wire [255:0] DATA_IN,
-    output wire [255:0] DATA_OUT,
-    input  wire RD_REQ,
-    input  wire WR_REQ,
-    input  wire [26:0] WR_ADDRESS,
-    input  wire [26:0] RD_ADDRESS,
-    input  wire [8:0] TAG_IN,
-    output wire [8:0] TAG_OUT,
-    output wire DATA_VALID,
-    output wire POST_OK,
-    output wire RD_READY,
-    output wire WR_READY,
+    output wire POST_OK,    
     output wire INIT_DONE
+    
+    
 );
 
 //(* mark_debug = "true" *)
@@ -837,28 +855,19 @@ flit_gen_user_link2_inst (
   .m_axis_rx_TUSER(user_flit_m_axis_rx_TUSER_link2),
 
   // write interface
-  .WR_ADDRESS(WR_ADDRESS),
-  .DATA_IN(DATA_IN),
-  .WR_REQ(WR_REQ),
-  .WR_READY(WR_READY),
+  .WR_ADDRESS(WR_ADDRESS_LINK2),
+  .DATA_IN(DATA_IN_LINK2),
+  .WR_REQ(WR_REQ_LINK2),
+  .WR_READY(WR_READY_LINK2),
 
-//  // read interface
-//  .RD_ADDRESS(27'd0),
-//  .RD_REQ(1'b0), 
-//  .DATA_OUT(),    
-//  .TAG_IN(9'd0),
-//  .TAG_OUT(),
-//  .DATA_VALID(),
-//  .RD_READY()
-
-// Move both write and read to the same interface
-  .RD_ADDRESS(RD_ADDRESS),
-  .RD_REQ(RD_REQ), 
-  .DATA_OUT(DATA_OUT),
-  .TAG_IN(TAG_IN),   
-  .TAG_OUT(TAG_OUT),
-  .DATA_VALID(DATA_VALID),
-  .RD_READY(RD_READY)
+  // Move both write and read to the same interface
+  .RD_ADDRESS(RD_ADDRESS_LINK2),
+  .RD_REQ(RD_REQ_LINK2), 
+  .DATA_OUT(DATA_OUT_LINK2),
+  .TAG_IN(TAG_IN_LINK2),   
+  .TAG_OUT(TAG_OUT_LINK2),
+  .DATA_VALID(DATA_VALID_LINK2),
+  .RD_READY(RD_READY_LINK2)
 );
 
 // FLIT generator and checker for HMC LINK3 POST
@@ -890,30 +899,20 @@ flit_gen_user_link3_inst (
   .m_axis_rx_TDATA(user_flit_m_axis_rx_TDATA_link3),
   .m_axis_rx_TUSER(user_flit_m_axis_rx_TUSER_link3),
 
-    // write interface
-  .WR_ADDRESS(27'd0),
-  .DATA_IN(256'd0),
-  .WR_REQ(1'b0),
-  .WR_READY(),
+  // write interface
+  .WR_ADDRESS(WR_ADDRESS_LINK3),
+  .DATA_IN(DATA_IN_LINK3),
+  .WR_REQ(WR_REQ_LINK3),
+  .WR_READY(WR_READY_LINK3),
 
-//  // read interface
-//  .RD_ADDRESS(RD_ADDRESS),
-//  .RD_REQ(RD_REQ), 
-//  .DATA_OUT(DATA_OUT),
-//  .TAG_IN(TAG_IN),   
-//  .TAG_OUT(TAG_OUT),
-//  .DATA_VALID(DATA_VALID),
-//  .RD_READY(RD_READY)
-
-// Move both write and read to the same interface
-  // read interface
-  .RD_ADDRESS(27'd0),
-  .RD_REQ(1'b0), 
-  .DATA_OUT(),    
-  .TAG_IN(9'd0),
-  .TAG_OUT(),
-  .DATA_VALID(),
-  .RD_READY()
+  // Move both write and read to the same interface
+  .RD_ADDRESS(RD_ADDRESS_LINK3),
+  .RD_REQ(RD_REQ_LINK3), 
+  .DATA_OUT(DATA_OUT_LINK3),
+  .TAG_IN(TAG_IN_LINK3),   
+  .TAG_OUT(TAG_OUT_LINK3),
+  .DATA_VALID(DATA_VALID_LINK3),
+  .RD_READY(RD_READY_LINK3)
 );
 
 // AXI Mux between POST & User FLIT Generation

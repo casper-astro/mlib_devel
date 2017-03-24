@@ -38,24 +38,47 @@ end % end switch hw_sys
 gateway_outs = find_system(myname, 'searchdepth', 1, 'FollowLinks', 'on', 'lookundermasks', 'all', 'masktype', 'Xilinx Gateway Out Block');
 for i =1:length(gateway_outs)
     gw = gateway_outs{i};
-    if regexp(get_param(gw, 'Name'), '(wr_en)$')
-        toks = regexp(get_param(gw, 'Name'), '(wr_en)$', 'tokens');
+    if regexp(get_param(gw, 'Name'), '(wr_en_link2)$')
+        toks = regexp(get_param(gw, 'Name'), '(wr_en_link2)$', 'tokens');
         set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
-    elseif regexp(get_param(gw, 'Name'), '(rd_en)$')
-        toks = regexp(get_param(gw, 'Name'), '(rd_en)$', 'tokens');
+    elseif regexp(get_param(gw, 'Name'), '(rd_en_link2)$')
+        toks = regexp(get_param(gw, 'Name'), '(rd_en_link2)$', 'tokens');
         set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
-     elseif regexp(get_param(gw, 'Name'), '(rd_tag_in)$')
-        toks = regexp(get_param(gw, 'Name'), '(rd_tag_in)$', 'tokens');
+    elseif regexp(get_param(gw, 'Name'), '(rd_tag_in_link2)$')
+        toks = regexp(get_param(gw, 'Name'), '(rd_tag_in_link2)$', 'tokens');
         set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
-    elseif regexp(get_param(gw, 'Name'), '(wr_address)$')
-        toks = regexp(get_param(gw, 'Name'), '(wr_address)$', 'tokens');
+    elseif regexp(get_param(gw, 'Name'), '(wr_address_link2)$')
+        toks = regexp(get_param(gw, 'Name'), '(wr_address_link2)$', 'tokens');
         set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
-    elseif regexp(get_param(gw, 'Name'), '(rd_address)$')
-        toks = regexp(get_param(gw, 'Name'), '(rd_address)$', 'tokens');
+    elseif regexp(get_param(gw, 'Name'), '(rd_address_link2)$')
+        toks = regexp(get_param(gw, 'Name'), '(rd_address_link2)$', 'tokens');
         set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
-    elseif regexp(get_param(gw, 'Name'), '(data_in)$')
-        toks = regexp(get_param(gw, 'Name'), '(data_in)$', 'tokens');
+    elseif regexp(get_param(gw, 'Name'), '(data_in_link2)$')
+        toks = regexp(get_param(gw, 'Name'), '(data_in_link2)$', 'tokens');
         set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+
+    
+    elseif regexp(get_param(gw, 'Name'), '(wr_en_link3)$')
+        toks = regexp(get_param(gw, 'Name'), '(wr_en_link3)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+    elseif regexp(get_param(gw, 'Name'), '(rd_en_link3)$')
+        toks = regexp(get_param(gw, 'Name'), '(rd_en_link3)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+    elseif regexp(get_param(gw, 'Name'), '(rd_tag_in_link3)$')
+        toks = regexp(get_param(gw, 'Name'), '(rd_tag_in_link3)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+    elseif regexp(get_param(gw, 'Name'), '(wr_address_link3)$')
+        toks = regexp(get_param(gw, 'Name'), '(wr_address_link3)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+    elseif regexp(get_param(gw, 'Name'), '(rd_address_link3)$')
+        toks = regexp(get_param(gw, 'Name'), '(rd_address_link3)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+    elseif regexp(get_param(gw, 'Name'), '(data_in_link3)$')
+        toks = regexp(get_param(gw, 'Name'), '(data_in_link3)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+   
+
+
     else
         error(['Unknown gateway name: ', gw]);
     end
@@ -64,30 +87,49 @@ end
 gateway_ins =find_system(myname, 'searchdepth', 1, 'FollowLinks', 'on', 'lookundermasks', 'all', 'masktype', 'Xilinx Gateway In Block');
 for i =1:length(gateway_ins)
     gw = gateway_ins{i};
-    if regexp(get_param(gw, 'Name'), '(data_out)$')
-        toks = regexp(get_param(gw, 'Name'), '(data_out)$', 'tokens');
+    if regexp(get_param(gw, 'Name'), '(data_out_link2)$')
+        toks = regexp(get_param(gw, 'Name'), '(data_out_link2)$', 'tokens');
         new_gw_name = clear_name([myname, '_', toks{1}{1}]);
         %set_param(gw, 'n_bits', num2str(data_width));
         set_param(gw, 'Name', new_gw_name);
         gw = new_gw_name;
-    elseif regexp(get_param(gw, 'Name'), '(rd_tag_out)$')
-        toks = regexp(get_param(gw, 'Name'), '(rd_tag_out)$', 'tokens');
+    elseif regexp(get_param(gw, 'Name'), '(data_out_link3)$')
+        toks = regexp(get_param(gw, 'Name'), '(data_out_link3)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));	
+    elseif regexp(get_param(gw, 'Name'), '(rd_tag_out_link2)$')
+        toks = regexp(get_param(gw, 'Name'), '(rd_tag_out_link2)$', 'tokens');
         set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
     elseif regexp(get_param(gw, 'Name'), '(post_ok)$')
         toks = regexp(get_param(gw, 'Name'), '(post_ok)$', 'tokens');
         set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
-    elseif regexp(get_param(gw, 'Name'), '(rd_ready)$')
-        toks = regexp(get_param(gw, 'Name'), '(rd_ready)$', 'tokens');
+    elseif regexp(get_param(gw, 'Name'), '(rd_ready_link2)$')
+        toks = regexp(get_param(gw, 'Name'), '(rd_ready_link2)$', 'tokens');
         set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
-    elseif regexp(get_param(gw, 'Name'), '(data_valid)$')
-        toks = regexp(get_param(gw, 'Name'), '(data_valid)$', 'tokens');
+    elseif regexp(get_param(gw, 'Name'), '(data_valid_link2)$')
+        toks = regexp(get_param(gw, 'Name'), '(data_valid_link2)$', 'tokens');
         set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
     elseif regexp(get_param(gw, 'Name'), '(init_done)$')
         toks = regexp(get_param(gw, 'Name'), '(init_done)$', 'tokens');
         set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
-    elseif regexp(get_param(gw, 'Name'), '(wr_ready)$')
-        toks = regexp(get_param(gw, 'Name'), '(wr_ready)$', 'tokens');
+    elseif regexp(get_param(gw, 'Name'), '(wr_ready_link2)$')
+        toks = regexp(get_param(gw, 'Name'), '(wr_ready_link2)$', 'tokens');
         set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+
+    elseif regexp(get_param(gw, 'Name'), '(rd_tag_out_link3)$')
+        toks = regexp(get_param(gw, 'Name'), '(rd_tag_out_link3)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+   
+    elseif regexp(get_param(gw, 'Name'), '(rd_ready_link3)$')
+        toks = regexp(get_param(gw, 'Name'), '(rd_ready_link3)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+    elseif regexp(get_param(gw, 'Name'), '(data_valid_link3)$')
+        toks = regexp(get_param(gw, 'Name'), '(data_valid_link3)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+  
+    elseif regexp(get_param(gw, 'Name'), '(wr_ready_link3)$')
+        toks = regexp(get_param(gw, 'Name'), '(wr_ready_link3)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+
     else
         error(['Unknown gateway name: ', gw]);
     end
