@@ -61,7 +61,7 @@
 `default_nettype none
 
 module tx_scrambler #(
-    parameter LANE_WIDTH = 16,
+    parameter LANE_WIDTH        = 16,
     parameter HMC_RX_AC_COUPLED = 1
 )
 (
@@ -84,32 +84,24 @@ wire [LANE_WIDTH-1:0]   data_out_tmp;
 wire [LANE_WIDTH-1:0]   run_length_d_out;
 reg  [14:0]             lfsr; // LINEAR FEEDBACK SHIFT REGISTER
 wire [14:0]             lfsr_steps [LANE_WIDTH-1:0]; // LFSR values for serial time steps
-reg                     seed_set;
 
 // SEQUENTIAL PROCESS
 `ifdef ASYNC_RES
 always @(posedge clk or negedge res_n)  begin `else
 always @(posedge clk)  begin `endif
-    if (!res_n) begin
-        seed_set   <= 1'b0;
-        lfsr[14:0] <= 15'h0;
-        data_out   <= {LANE_WIDTH {1'b0}};
-    end
-    else
+    `ifdef RESET_ALL
+        if(!res_n) begin
+            data_out <= {LANE_WIDTH{1'b0}};
+        end else
+    `endif
     begin
-        if(!seed_set) begin
-           lfsr[14:0] <= seed; 
-           seed_set   <= 1'b1;
-        end else begin   
-            if (disable_scrambler) begin
-                lfsr[14:0] <= 15'h0;
-            end else begin
-                lfsr[14:0] <= lfsr_steps[LANE_WIDTH-1];
-            end
-        end
         data_out <= run_length_d_out;
     end
-end                 // serial shift right with left input
+
+    if(!res_n) lfsr <= seed;
+    else       lfsr <= disable_scrambler ? {15{1'b0}} : lfsr_steps[LANE_WIDTH-1];
+
+end
 
 // SCRAMBLE
 genvar j;

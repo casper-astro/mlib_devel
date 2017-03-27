@@ -454,6 +454,7 @@ class VerilogModule(object):
         rather than this method, so it may or may not still
         work correctly. It used to, at least...
         '''
+        default_nettype = self.gen_default_nettype_str()
         mod_dec        = self.gen_mod_dec_str()
         # declare inputs/outputs with the module dec
         port_dec       = ''#self.gen_ports_dec_str()
@@ -468,6 +469,8 @@ class VerilogModule(object):
         s += '/*'
         s += self.comment
         s += '*/'
+        s += '\n'
+        s += default_nettype
         s += '\n'
         s += '\n'
         s += mod_dec
@@ -664,6 +667,9 @@ class VerilogModule(object):
 
     def gen_endmod_str(self):
         return 'endmodule\n'
+
+    def gen_default_nettype_str(self):
+        return "`default_nettype wire\n"
 
     def gen_instance_verilog(self, instname):
         '''

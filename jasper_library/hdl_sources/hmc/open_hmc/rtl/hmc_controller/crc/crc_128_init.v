@@ -43,13 +43,15 @@ module crc_128_init (
     //----------------------------------
     //----SYSTEM INTERFACE
     //----------------------------------
-    input  wire         clk        ,
-    input  wire         res_n      ,
+    input  wire         clk,
+    `ifdef RESET_ALL
+        input  wire         res_n,
+    `endif
 
     //----------------------------------
     //----Input
     //----------------------------------
-    input  wire [127:0] inData     ,
+    input  wire [127:0] inData,
 
     //----------------------------------
     //----Output
@@ -61,10 +63,12 @@ module crc_128_init (
 always @(posedge clk or negedge res_n) `else
 always @(posedge clk) `endif
 begin
+`ifdef RESET_ALL
 if (!res_n) begin
-    crc      <= 32'h0;
-end
-else begin
+        crc      <= 32'h0;
+end else 
+`endif
+begin
         crc[31]  <= inData[2]^inData[5]^inData[10]^inData[12]^inData[13]^inData[14]^inData[16]^inData[17]^inData[20]^inData[21]^inData[23]^inData[25]^inData[26]^inData[28]^inData[32]^inData[34]^inData[36]^inData[40]^inData[41]^inData[43]^inData[45]^inData[47]^inData[49]^inData[51]^inData[53]^inData[54]^inData[57]^inData[58]^inData[60]^inData[61]^inData[64]^inData[65]^inData[66]^inData[71]^inData[74]^inData[76]^inData[77]^inData[78]^inData[80]^inData[81]^inData[82]^inData[84]^inData[92]^inData[93]^inData[94]^inData[100]^inData[102]^inData[103]^inData[104]^inData[105]^inData[106]^inData[108]^inData[111]^inData[115]^inData[116]^inData[119]^inData[121]^inData[122]^inData[125]^inData[126];
         crc[30]  <= inData[3]^inData[6]^inData[11]^inData[13]^inData[14]^inData[15]^inData[17]^inData[18]^inData[21]^inData[22]^inData[24]^inData[26]^inData[27]^inData[29]^inData[33]^inData[35]^inData[37]^inData[41]^inData[42]^inData[44]^inData[46]^inData[48]^inData[50]^inData[52]^inData[54]^inData[55]^inData[58]^inData[59]^inData[61]^inData[62]^inData[65]^inData[66]^inData[67]^inData[72]^inData[75]^inData[77]^inData[78]^inData[79]^inData[81]^inData[82]^inData[83]^inData[85]^inData[93]^inData[94]^inData[95]^inData[101]^inData[103]^inData[104]^inData[105]^inData[106]^inData[107]^inData[109]^inData[112]^inData[116]^inData[117]^inData[120]^inData[122]^inData[123]^inData[126]^inData[127];
         crc[29]  <= inData[2]^inData[4]^inData[5]^inData[7]^inData[10]^inData[13]^inData[15]^inData[17]^inData[18]^inData[19]^inData[20]^inData[21]^inData[22]^inData[26]^inData[27]^inData[30]^inData[32]^inData[38]^inData[40]^inData[41]^inData[42]^inData[54]^inData[55]^inData[56]^inData[57]^inData[58]^inData[59]^inData[61]^inData[62]^inData[63]^inData[64]^inData[65]^inData[67]^inData[68]^inData[71]^inData[73]^inData[74]^inData[77]^inData[79]^inData[81]^inData[83]^inData[86]^inData[92]^inData[93]^inData[95]^inData[96]^inData[100]^inData[103]^inData[107]^inData[110]^inData[111]^inData[113]^inData[115]^inData[116]^inData[117]^inData[118]^inData[119]^inData[122]^inData[123]^inData[124]^inData[125]^inData[126]^inData[127];

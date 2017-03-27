@@ -42,18 +42,30 @@
 `default_nettype none
 
 module rx_link #(
-    parameter LOG_FPW           = 2,
-    parameter FPW               = 4,
-    parameter DWIDTH            = FPW*128,
-    parameter LOG_NUM_LANES     = 3,
-    parameter NUM_LANES         = 2**LOG_NUM_LANES,
-    parameter HMC_PTR_SIZE      = 8,
-    parameter HMC_RF_RWIDTH     = 64,
-    //Configure functionality
-    parameter LOG_MAX_RTC        = 8,
-    parameter CTRL_LANE_POLARITY = 1,
-    parameter CTRL_LANE_REVERSAL = 1,
-    parameter BITSLIP_SHIFT_RIGHT= 1
+    parameter LOG_FPW              = 2,
+    parameter FPW                  = 4,
+    parameter NUM_CTRL_BITS        = 4*FPW,
+    parameter PASS_ERR_RSP         = 1,
+    parameter DWIDTH               = FPW*128,
+    parameter LOG_NUM_LANES        = 3,
+    parameter NUM_LANES            = 2**LOG_NUM_LANES,
+    parameter HMC_PTR_SIZE         = 8,
+    parameter RF_COUNTER_SIZE      = 64,
+    //Set Token Related
+    parameter LOG_MAX_RX_TOKENS    = 8,
+    parameter MAX_RTC_RET_LOG      = 8,
+    //Control
+    parameter CRC_PIPELINED        = 1,
+    parameter XILINX               = 1,
+    parameter XIL_CNT_PIPELINED    = 0,
+    parameter CTRL_LANE_POLARITY   = 1,
+    parameter RX_RELAX_INIT_TIMING = 1,
+    parameter RX_BIT_SLIP_CNT_LOG  = 5,
+    parameter DETECT_LANE_POLARITY = 1,
+    parameter CTRL_LANE_REVERSAL   = 1,
+    parameter DISABLE_RX_CHECKS    = 0,
+    parameter BITSLIP_SHIFT_RIGHT  = 1,
+    parameter OPEN_RSP_MODE        = 0
 ) (
 
     //----------------------------------
@@ -61,224 +73,69 @@ module rx_link #(
     //----------------------------------
     input   wire                        clk,
     input   wire                        res_n,
+    (* mark_debug="TRUE", keep="TRUE" *)
+    input   wire                        run_rx,
 
     //----------------------------------
     //----TO HMC PHY
     //----------------------------------
-    input   wire    [DWIDTH-1:0]        phy_scrambled_data_in,
-    output  reg     [NUM_LANES-1:0]     init_bit_slip,               //bit slip per lane
+    input   wire  [DWIDTH-1:0]          phy_scrambled_data_in,
+    (* mark_debug="TRUE", keep="TRUE" *)
+    output  reg   [NUM_LANES-1:0]       phy_bit_slip,
 
     //----------------------------------
     //----TO RX HTAX FIFO
     //----------------------------------
-    output  reg     [DWIDTH-1:0]        d_out_fifo_data,
-    input   wire                        d_out_fifo_full,
+    output  wire   [DWIDTH-1:0]         d_out_fifo_data,
     input   wire                        d_out_fifo_a_full,
-    output  reg                         d_out_fifo_shift_in,
-    output  reg     [4*FPW-1:0]         d_out_fifo_ctrl,
-
+    output  wire                        d_out_fifo_shift_in,
+    output  wire   [NUM_CTRL_BITS-1:0]  d_out_fifo_ctrl,
 
     //----------------------------------
     //----TO TX Block
     //----------------------------------
+    (* mark_debug="TRUE", keep="TRUE" *)
     output  reg                         tx_link_retry,
+    (* mark_debug="TRUE", keep="TRUE" *)
+    (* mark_debug="TRUE", keep="TRUE" *)
     output  reg                         tx_error_abort_mode,
+    (* mark_debug="TRUE", keep="TRUE" *)
     output  reg                         tx_error_abort_mode_cleared,
-    output  reg     [7:0]               tx_hmc_frp,
-    output  reg     [7:0]               tx_rrp,
-    output  reg     [7:0]               tx_returned_tokens,
-    output  reg     [LOG_FPW:0]         tx_hmc_tokens_to_return,
-    output  reg     [LOG_FPW:0]         tx_hmc_poisoned_tokens_to_return,
+    (* mark_debug="TRUE", keep="TRUE" *)
+    output  reg   [7:0]                 tx_hmc_frp,
+    (* mark_debug="TRUE", keep="TRUE" *)
+    output  reg   [7:0]                 tx_rrp,
+    output  reg   [MAX_RTC_RET_LOG-1:0] tx_returned_tokens,
+    output  wire  [LOG_FPW:0]           tx_hmc_tokens_to_return,
+    output  wire  [LOG_FPW:0]           tx_hmc_poisoned_tokens_to_return,
 
     //----------------------------------
     //----RF
     //----------------------------------
-    //Monitoring    1-cycle set to increment
-    output  reg     [HMC_RF_RWIDTH-1:0] rf_cnt_poisoned,
-    output  reg     [HMC_RF_RWIDTH-1:0] rf_cnt_rsp,
+    //Monitoring
+    output  wire  [RF_COUNTER_SIZE-1:0] rf_cnt_poisoned,
+    output  wire  [RF_COUNTER_SIZE-1:0] rf_cnt_rsp,
+    output  reg   [6:0]                 rf_errstat,
+    output  reg                         rf_errstat_valid,
     //Status
-    output  reg     [1:0]               rf_link_status,
-    output  reg     [2:0]               rf_hmc_init_status,
-    input   wire                        rf_tx_sends_ts1,
+    output  reg                         rf_link_up,
+    (* mark_debug="TRUE", keep="TRUE" *)
+    output  reg   [2:0]                 rf_rx_init_status,
     input   wire                        rf_hmc_sleep,
     //Init Status
-    output  wire    [NUM_LANES-1:0]     rf_descrambler_part_aligned,
-    output  wire    [NUM_LANES-1:0]     rf_descrambler_aligned,
-    output  wire                        rf_all_descramblers_aligned,
+    output  wire  [NUM_LANES-1:0]       rf_descrambler_part_aligned,
+    output  wire  [NUM_LANES-1:0]       rf_descrambler_aligned,
+    output  reg                        rf_all_descramblers_aligned,
     //Control
-    input   wire    [5:0]               rf_bit_slip_time,
-    input   wire                        rf_hmc_init_cont_set,
-    output  reg     [NUM_LANES-1:0]     rf_lane_polarity,
+    output  wire  [NUM_LANES-1:0]       rf_lane_polarity,           
     input   wire                        rf_scrambler_disable,
-    output  reg                         rf_lane_reversal_detected,
-    output  reg     [NUM_LANES-1:0]     rf_descramblers_locked,
-    input   wire    [4:0]               rf_irtry_received_threshold,
-
-    output wire [5:0] irtry_start_retry_cnt_o,
-    output wire [5:0] irtry_clear_error_cnt_o,
-    output wire [63:0] rf_dbg_reg,
-    output wire [63:0] rx_data_lane0,
-    output wire [63:0] rx_data_lane1,
-    output wire [63:0] rx_data_lane2,
-    output wire [63:0] rx_data_lane3,
-    output wire [63:0] rx_data_lane4,
-    output wire [63:0] rx_data_lane5,
-    output wire [63:0] rx_data_lane6,
-    output wire [63:0] rx_data_lane7,
-    output  wire [127:0] crc_out
+    output  wire                        rf_lane_reversal_detected,
+    (* mark_debug="TRUE", keep="TRUE" *)
+    output  reg   [NUM_LANES-1:0]       rf_descramblers_locked,
+    input   wire  [4:0]                 rf_irtry_received_threshold
 
 );
-//`include "hmc_field_functions.h"
- function [5:0] cmd;
-    input [127:0] flit;
-
-    begin
-        cmd = flit[5:0];
-    end
- endfunction
-
- function [5:0] num_requested_flits;
-    input [127:0] flit;
-
-    begin
-        num_requested_flits = flit[2:0] + 2;    //+1 for the encoding
-    end
- endfunction
- 
- function [2:0] flow_cmd;
-    input [127:0] flit;
-
-    begin
-        flow_cmd = flit[2:0];
-    end
- endfunction
-
- function [2:0] cmd_type;
-    input [127:0] flit;
-
-    begin
-        cmd_type = flit[5:3];
-    end
- endfunction
-
- function is_flow;
-    input [127:0] flit;
-    begin
-        if(flit[5:3]) begin
-            is_flow = 0;
-        end else begin
-            is_flow = 1;
-        end
-    end
- endfunction
-
- function irtry_start_retry_flag;
-    input [127:0] flit;
-
-    begin
-        irtry_start_retry_flag = flit[64+8];
-    end
- endfunction
-
- function irtry_clear_error_flag;
-    input [127:0] flit;
-
-    begin
-        irtry_clear_error_flag = flit[64+8+1];
-    end
- endfunction
-  
- function [3:0] lng;
-    input [127:0] flit;
-
-    begin
-        lng = flit[10:7];
-    end
- endfunction
- 
-  
- function [3:0] dln;
-    input [127:0]   flit;
-
-    begin
-        dln = flit[14:11];
-    end
- endfunction
- 
-  
- function [8:0] tag;
-    input [127:0] flit;
-
-    begin
-        tag = flit[23:15];
-    end
- endfunction
- 
- function [57:24] adrs;
-    input [127:0] flit;
-
-    begin
-        adrs = flit[57:24];
-    end
- endfunction
-
- function [2:0] cub;
-    input [127:0] flit;
-
-    begin
-        cub = flit[63:61];
-    end
- endfunction
- 
-//------------------------------------------------------------------------HMC TAIL FIELDS
- 
- function [7:0] rrp;
-    input [127:0]   flit;
-
-    begin
-        rrp = flit[64+7:64];
-    end
- endfunction
-
- function [7:0] frp;
-    input [127:0]   flit;
-
-    begin
-        frp = flit[64+15:64+8];
-    end
- endfunction
- 
- function [2:0] seq;
-        input [127:0]   flit;
-
-        begin
-                seq = flit[64+18:64+16];
-        end
- endfunction
- 
- function [6:0] errstat;
-        input [127:0]   flit;
-
-        begin
-                errstat = flit[64+26:64+20];
-        end
- endfunction
-
- function [4:0] rtc;
-        input [127:0]   flit;
-
-        begin
-                rtc = flit[64+31:64+27];
-        end
- endfunction
- 
- function [31:0] crc;
-    input [127:0]   flit;
-
-    begin
-        crc = flit[127:128-32];
-    end
- endfunction
+`include "hmc_field_functions.h"
 
 //=====================================================================================================
 //-----------------------------------------------------------------------------------------------------
@@ -287,17 +144,19 @@ module rx_link #(
 //=====================================================================================================
 
 //------------------------------------------------------------------------------------Some general things
-//Link state
-localparam              HMC_DOWN        = 3'b000;
-localparam              HMC_NULL        = 3'b001;
-localparam              HMC_TS1         = 3'b010;
-localparam              HMC_UP          = 3'b100;
+//Link state -- Most likely will be encoded as one-hot FSM
+localparam              HMC_DOWN            = 3'b000;
+localparam              HMC_WAIT_FOR_NULL   = 3'b001;
+localparam              HMC_NULL            = 3'b010;
+localparam              HMC_TS1_PART_ALIGN  = 3'b011;
+localparam              HMC_TS1_FIND_REF    = 3'b100;
+localparam              HMC_TS1_ALIGN       = 3'b101;
+localparam              HMC_NULL_NEXT       = 3'b110;
+localparam              HMC_UP              = 3'b111;
 
 //Commands
-localparam              CMD_IRTRY       = 3'b011;
-localparam              CMD_FLOW        = 3'b000;
-localparam              CMD_RSP         = 3'b111;
-localparam              CMD_RSP_ERROR   = 6'b111110;
+localparam              CMD_IRTRY           = 6'b000011;
+localparam              CMD_RSP_ERROR       = 6'b111110;
 
 //Other helpful defines
 localparam              WIDTH_PER_LANE          = (DWIDTH/NUM_LANES);
@@ -315,43 +174,64 @@ genvar n;   //Counts to NUM_LANES
 genvar w;   //Counts to WIDTH_PER_LANE
 
 //------------------------------------------------------------------------------------DESCRAMBLER AND DATA ORDERING
+(* mark_debug="TRUE", keep="TRUE" *)
+reg                     all_descramblers_part_aligned;
+(* mark_debug="TRUE", keep="TRUE" *)
 reg [NUM_LANES-1:0]     init_descrambler_part_aligned;
+wire [NUM_LANES-1:0]    lane_zero;
+(* mark_debug="TRUE", keep="TRUE" *)
 reg [NUM_LANES-1:0]     init_descrambler_aligned;
 assign                  rf_descrambler_part_aligned = init_descrambler_part_aligned;
 assign                  rf_descrambler_aligned      = init_descrambler_aligned;
 
 //DATA and REORDERING
-reg  [WIDTH_PER_LANE-1:0]   init_data_per_lane          [NUM_LANES-1:0];
-wire [DWIDTH-1:0]           init_d_in;
 wire [128-1:0]              init_d_in_flit              [FPW-1:0];
+(* mark_debug="TRUE", keep="TRUE" *)
 wire [WIDTH_PER_LANE-1:0]   descrambled_data_per_lane   [NUM_LANES-1:0];
+reg  [WIDTH_PER_LANE-1:0]   descrambled_data_per_lane_dly   [NUM_LANES-1:0];
 wire [DWIDTH-1:0]           d_in;
+wire [DWIDTH-1:0]           d_in_dly;
 wire [128-1:0]              d_in_flit                   [FPW-1:0];
 
 //Valid FLIT sources. A FLIT is valid when it is not NULL
-wire [FPW-1:0]              valid_flit_src;     //bit0 = flit0, ...
-wire [FPW-1:0]              init_valid_flit_src;     //bit0 = flit0, ...
+wire [FPW-1:0]              valid_flit_src;         //bit0 = flit0, ...
+wire [FPW-1:0]              init_valid_flit_src;    //bit0 = flit0, ...
 
-assign rx_data_lane0 = descrambled_data_per_lane[0];
-assign rx_data_lane1 = descrambled_data_per_lane[1];
-assign rx_data_lane2 = descrambled_data_per_lane[2];
-assign rx_data_lane3 = descrambled_data_per_lane[3];
-assign rx_data_lane4 = descrambled_data_per_lane[4];
-assign rx_data_lane5 = descrambled_data_per_lane[5];
-assign rx_data_lane6 = descrambled_data_per_lane[6];
-assign rx_data_lane7 = descrambled_data_per_lane[7];
+
+(* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_0; //Virtual test probe for the logic analyser  
+(* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_1; //Virtual test probe for the logic analyser  
+(* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_2; //Virtual test probe for the logic analyser  
+(* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_3; //Virtual test probe for the logic analyser  
+(* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_4; //Virtual test probe for the logic analyser  
+(* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_5; //Virtual test probe for the logic analyser  
+(* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_6; //Virtual test probe for the logic analyser  
+(* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_7; //Virtual test probe for the logic analyser
+(* mark_debug = "true" *) wire [2:0] dbg_rf_rx_init_status; //Virtual test probe for the logic analyser 
+(* mark_debug = "true" *) wire [NUM_LANES-1:0] dbg_rf_descramblers_locked; //Virtual test probe for the logic analyser  
+  
+assign dbg_descrambled_data_per_lane_0 = descrambled_data_per_lane[0][63:0];
+assign dbg_descrambled_data_per_lane_1 = descrambled_data_per_lane[1][63:0];
+assign dbg_descrambled_data_per_lane_2 = descrambled_data_per_lane[2][63:0];
+assign dbg_descrambled_data_per_lane_3 = descrambled_data_per_lane[3][63:0];  
+assign dbg_descrambled_data_per_lane_4 = descrambled_data_per_lane[4][63:0];
+assign dbg_descrambled_data_per_lane_5 = descrambled_data_per_lane[5][63:0];
+assign dbg_descrambled_data_per_lane_6 = descrambled_data_per_lane[6][63:0];
+assign dbg_descrambled_data_per_lane_7 = descrambled_data_per_lane[7][63:0];
+assign dbg_rf_rx_init_status =  rf_rx_init_status;
+assign dbg_rf_descramblers_locked = rf_descramblers_locked;
 
 generate
 
     //-- Apply lane reversal if detected
     for(n = 0; n < NUM_LANES; n = n + 1) begin : apply_lane_reversal
+        assign lane_zero[n]             = |descrambled_data_per_lane[n]==1'b0;
         for(w = 0; w < WIDTH_PER_LANE; w = w + 1) begin
             if(CTRL_LANE_REVERSAL==1)begin
                 assign d_in[w*NUM_LANES+n]      = rf_lane_reversal_detected ? descrambled_data_per_lane[NUM_LANES-1-n][w] : descrambled_data_per_lane[n][w];
-                assign init_d_in[w*NUM_LANES+n] = rf_lane_reversal_detected ? init_data_per_lane[NUM_LANES-1-n][w] : init_data_per_lane[n][w];
+                assign d_in_dly[w*NUM_LANES+n]  = rf_lane_reversal_detected ? descrambled_data_per_lane_dly[NUM_LANES-1-n][w] : descrambled_data_per_lane_dly[n][w];
             end else begin
                 assign d_in[w*NUM_LANES+n]      = descrambled_data_per_lane[n][w];
-                assign init_d_in[w*NUM_LANES+n] = init_data_per_lane[n][w];
+                assign d_in_dly[w*NUM_LANES+n]  = descrambled_data_per_lane_dly[n][w];
             end
         end
     end
@@ -360,72 +240,75 @@ generate
     for(f = 0; f < FPW; f = f + 1) begin : reorder_input_data
         //-- Reorder the descrambled data to FLITs
         assign d_in_flit[f]       = d_in[128-1+(f*128):f*128];
-        assign init_d_in_flit[f]  = init_d_in[128-1+(f*128):f*128];
-        //-- Generate valid flit positions for the init sequence
-        assign valid_flit_src[f]        = (|d_in_flit[f] == 1'b0) ? 1'b0 : 1'b1;
-        assign init_valid_flit_src[f]   = (|init_d_in_flit[f] == 1'b0) ? 1'b0 : 1'b1;
+        assign init_d_in_flit[f]  = d_in_dly[128-1+(f*128):f*128];
+        //-- Generate valid flit positions
+        assign valid_flit_src[f]        = |d_in_flit[f][5:0];
+        assign init_valid_flit_src[f]   = |init_d_in_flit[f];
     end
 
 endgenerate
 
 
 //------------------------------------------------------------------------------------INIT
-localparam                  LINK_DOWN   = 2'b00;
-localparam                  LINK_INIT   = 2'b01;
-localparam                  LINK_UP     = 2'b10;
+localparam                  LINK_DOWN   = 1'b0;
+localparam                  LINK_UP     = 1'b1;
 
-reg     [6:0]               init_bit_slip_cnt;
-reg     [4:0]               init_wait_time;
-wire    [NUM_LANES-1:0]     init_descrambler_locked;           //locked from the descrambler
-wire                        link_is_up;
-reg     [3:0]               init_tmp_seq;
-reg                         init_prbs_seen;
+(* mark_debug="TRUE", keep="TRUE" *)
+reg [NUM_LANES-1:0]         init_bit_slip;
+(* mark_debug="TRUE", keep="TRUE" *)
+reg [NUM_LANES-1:0]         init_bit_slip_part;
+reg [RX_BIT_SLIP_CNT_LOG-1:0]init_bit_slip_cnt;
+(* mark_debug="TRUE", keep="TRUE" *)
+wire[NUM_LANES-1:0]         init_descrambler_locked;           //locked from the descrambler
+reg [3:0]                   init_tmp_seq;
 
-assign                      link_is_up                  = rf_link_status[1];
-assign                      rf_all_descramblers_aligned = &init_descrambler_aligned;
+//assign                      rf_all_descramblers_aligned = &init_descrambler_aligned;
 
 //--------------TS1 recognition
-localparam                  ts1_independent_portion = {4'hF,4'h0};
-localparam                  ts1_lanex_portion       = {4'h5};
-localparam                  ts1_lane7or15_portion   = 4'hc;
-localparam                  ts1_lane0_portion       = 4'h3;
+localparam                  TS1_INDEPENDENT_PORTION = {4'hF,4'h0};
+localparam                  TS1_LANE0_PORTION       = 4'h3;         //Not used if RX_RELAX_INIT_TIMING==1
+localparam                  TS1_LANEX_PORTION       = 4'h5;         //Not used if RX_RELAX_INIT_TIMING==1
+localparam                  TS1_LANE7OR15_PORTION   = 4'hc;
 
-localparam                  ts1_per_cycle_and_lane = DWIDTH/NUM_LANES/16;
+localparam                  TS1_SEQS_PER_CYCLE_AND_LANE = DWIDTH/NUM_LANES/16;
 
-wire    [NUM_LANES-1:0]     init_lane_has_correct_ts1;
-wire    [ts1_per_cycle_and_lane-1:0]     init_lane_has_correct_ts1_vec   [NUM_LANES-1:0];
+wire    [NUM_LANES-1:0]                  init_lane_has_correct_ts1;
+wire    [TS1_SEQS_PER_CYCLE_AND_LANE-1:0]init_lane_has_correct_ts1_vec   [NUM_LANES-1:0];
 
 genvar t;
 generate
     //Make sure that the lanes have valid ts1 sequences throughout the entire data stream
     for(n=0;n<NUM_LANES;n=n+1) begin : lane_has_correct_ts1_gen
-
         assign init_lane_has_correct_ts1[n] = &init_lane_has_correct_ts1_vec[n];
+    end
 
-        for(t=0;t<ts1_per_cycle_and_lane;t=t+1) begin
-            if(n==0 || n==NUM_LANES-1) begin
-                assign init_lane_has_correct_ts1_vec[n][t] = (init_data_per_lane[n][(t*16)+16-1:(t*16)+4] == {ts1_independent_portion,ts1_lane7or15_portion})
-                                                             ||
-                                                             (init_data_per_lane[n][(t*16)+16-1:(t*16)+4] == {ts1_independent_portion,ts1_lane0_portion});            
-            end else begin
-                assign init_lane_has_correct_ts1_vec[n][t] = (init_data_per_lane[n][(t*16)+16-1:(t*16)+4] == {ts1_independent_portion,ts1_lanex_portion});
+    for(t=0;t<TS1_SEQS_PER_CYCLE_AND_LANE;t=t+1) begin : ts1_recognition_gen
+        if(RX_RELAX_INIT_TIMING==1) begin
+            for(n=0;n<NUM_LANES;n=n+1) begin 
+                assign init_lane_has_correct_ts1_vec[n][t] = (descrambled_data_per_lane[n][(t*16)+8+:8] == {TS1_INDEPENDENT_PORTION});
+            end            
+        end else begin
+            for(n=1;n<NUM_LANES-1;n=n+1) begin 
+                assign init_lane_has_correct_ts1_vec[n][t] = (descrambled_data_per_lane[n][(t*16)+4+:12] == {TS1_INDEPENDENT_PORTION,TS1_LANEX_PORTION});
             end
+            assign init_lane_has_correct_ts1_vec[0][t] = (descrambled_data_per_lane[0][(t*16)+4+:12] == {TS1_INDEPENDENT_PORTION,TS1_LANE0_PORTION})||
+                (CTRL_LANE_REVERSAL==1 ? descrambled_data_per_lane[0][(t*16)+4+:12] == {TS1_INDEPENDENT_PORTION,TS1_LANE7OR15_PORTION} : 0);
+            assign init_lane_has_correct_ts1_vec[NUM_LANES-1][t] = (descrambled_data_per_lane[NUM_LANES-1][(t*16)+4+:12] == {TS1_INDEPENDENT_PORTION,TS1_LANE7OR15_PORTION})||
+                (CTRL_LANE_REVERSAL==1 ? descrambled_data_per_lane[NUM_LANES-1][(t*16)+4+:12] == {TS1_INDEPENDENT_PORTION,TS1_LANE0_PORTION} : 0);                                                                     
         end
     end
 endgenerate
 
 //--------------Align the lanes, scan for the ts1 seq
-reg  [LOG_NUM_LANES-1:0]    init_lane_cnt;
-wire [3:0]                  init_seq_diff;
+wire [LOG_NUM_LANES-1:0] init_lane_cnt;
+assign                   init_lane_cnt = init_bit_slip_cnt[LOG_NUM_LANES-1:0];
+wire [3:0]               init_seq_diff;
 
 //If one of the descramblers is already partially aligned search for other lanes with their ts1 sequence number close this lane. 
-assign                      init_seq_diff = |init_descrambler_part_aligned ? 
-                                                (BITSLIP_SHIFT_RIGHT==1 ? (init_data_per_lane[init_lane_cnt][3:0] - init_tmp_seq) 
-                                                : init_tmp_seq - init_data_per_lane[init_lane_cnt][3:0])
-                                            : 0;
+assign                   init_seq_diff = (BITSLIP_SHIFT_RIGHT==1 ? (descrambled_data_per_lane[init_lane_cnt][3:0] - init_tmp_seq) 
+                                         : init_tmp_seq - descrambled_data_per_lane[init_lane_cnt][3:0]);
 
 //------------------------------------------------------------------------------------Input Stage: Scan for Packets, Headers, Tails ...
-reg  [DWIDTH-1:0]       data2crc;
 reg  [FPW-1:0]          data2crc_hdr;
 reg  [FPW-1:0]          data2crc_tail;
 reg  [FPW-1:0]          data2crc_valid;
@@ -440,8 +323,8 @@ reg  [3:0]              data2crc_lng_per_flit_comb [FPW-1:0];
 reg  [3:0]              data2crc_payload_remain_comb;
 
 generate
-        for(f = 0; f < (FPW); f = f + 1) begin
-            assign data2crc_lng[(f*4)+4-1:(f*4)] = data2crc_lng_per_flit[f];
+        for(f = 0; f < (FPW); f = f + 1) begin : reorder_crc_input
+            assign data2crc_lng[(f*4)+:4] = data2crc_lng_per_flit[f];
         end
 endgenerate
 
@@ -456,37 +339,24 @@ wire [FPW-1:0]          crc_d_out_flit_is_poisoned;
 wire [FPW-1:0]          crc_d_out_flit_has_rtc;
 wire [FPW-1:0]          crc_d_out_flit_is_flow;
 
-assign rf_dbg_reg[FPW-1:0] = crc_d_out_flit_is_error[FPW-1:0];
-
 generate
         for(f=0;f<FPW;f=f+1) begin : reorder_crc_output
             assign crc_d_out_flit[f] = crc_d_out_data[128-1+(f*128):f*128];
         end
 endgenerate
 
-//------------------------------------------------------------------------------------LNG and DLN stage
-reg     [128-1:0]       flit_after_lng_check                   [FPW-1:0];
-reg     [FPW-1:0]       flit_after_lng_check_is_hdr;
-reg     [FPW-1:0]       flit_after_lng_check_is_tail;
-reg     [FPW-1:0]       flit_after_lng_check_is_valid;
-reg     [FPW-1:0]       flit_after_lng_check_is_error;
-reg     [FPW-1:0]       flit_after_lng_check_is_poisoned;
-reg     [FPW-1:0]       flit_after_lng_check_is_flow;
-reg     [FPW-1:0]       flit_after_lng_check_has_rtc;
-
 //------------------------------------------------------------------------------------Start TX retry Stage
-reg     [128-1:0]       flit_after_retry_stage                   [FPW-1:0];
-reg     [FPW-1:0]       flit_after_retry_stage_is_hdr;
-reg     [FPW-1:0]       flit_after_retry_stage_is_tail;
-reg     [FPW-1:0]       flit_after_retry_stage_is_valid;
-reg     [FPW-1:0]       flit_after_retry_stage_is_valid_mask_msb;
-reg     [FPW-1:0]       flit_after_retry_stage_is_valid_mask_lsb;
-reg     [FPW-1:0]       flit_after_retry_stage_is_error;
-reg     [FPW-1:0]       flit_after_retry_stage_is_poisoned;
-reg     [FPW-1:0]       flit_after_retry_stage_is_flow;
-reg     [FPW-1:0]       flit_after_retry_stage_has_rtc;
-reg     [FPW-1:0]       flit_after_retry_stage_is_start_retry;
-reg     [FPW-1:0]       flit_after_retry_stage_is_start_retry_comb;
+reg     [128-1:0]       flit_after_irtry_stage                   [FPW-1:0];
+reg     [FPW-1:0]       flit_after_irtry_stage_is_hdr;
+reg     [FPW-1:0]       flit_after_irtry_stage_is_tail;
+reg     [FPW-1:0]       flit_after_irtry_stage_is_valid;
+reg     [FPW-1:0]       flit_after_irtry_stage_is_error;
+reg     [FPW-1:0]       flit_after_irtry_stage_is_poisoned;
+reg     [FPW-1:0]       flit_after_irtry_stage_has_rtc;
+reg     [FPW-1:0]       flit_after_irtry_stage_is_start_retry;
+reg     [FPW-1:0]       flit_after_irtry_stage_is_clear_error;
+reg     [FPW-1:0]       flit_after_irtry_stage_is_start_retry_comb;
+reg     [FPW-1:0]       flit_after_irtry_stage_is_clear_error_comb;
 
 //------------------------------------------------------------------------------------SeqStage and Seqnum
 reg     [128-1:0]       flit_after_seq_check                   [FPW-1:0];
@@ -496,36 +366,57 @@ reg     [FPW-1:0]       flit_after_seq_check_is_valid;
 reg     [FPW-1:0]       flit_after_seq_check_is_error;
 reg     [FPW-1:0]       flit_after_seq_check_is_error_comb;
 reg     [FPW-1:0]       flit_after_seq_check_is_poisoned;
-reg     [FPW-1:0]       flit_after_seq_check_is_flow;
 reg     [FPW-1:0]       flit_after_seq_check_has_rtc;
 reg     [FPW-1:0]       flit_after_seq_check_is_start_retry;
+reg     [FPW-1:0]       flit_after_seq_check_is_clear_error;
 
 reg     [2:0]           next_seqnum;
-reg     [2:0]           next_seqnum_comb; //use param instead
+reg     [2:0]           next_seqnum_comb; //can be reduced to [1:0] for 2FLIT config
 reg     [2:0]           first_seq_after_error;
 
+//------------------------------------------------------------------------------------IRTRY packet count stage
+(* mark_debug="TRUE", keep="TRUE" *)
+reg     [128-1:0]       flit_after_mask_stage                   [FPW-1:0];
+(* mark_debug="TRUE", keep="TRUE" *)
+reg     [FPW-1:0]       flit_after_mask_stage_is_hdr;
+(* mark_debug="TRUE", keep="TRUE" *)
+reg     [FPW-1:0]       flit_after_mask_stage_is_tail;
+(* mark_debug="TRUE", keep="TRUE" *)
+reg     [FPW-1:0]       flit_after_mask_stage_is_valid;
+reg     [FPW-1:0]       flit_after_mask_stage_is_valid_mask_lsb;
+reg     [FPW-1:0]       flit_after_mask_stage_is_valid_mask_msb;
+(* mark_debug="TRUE", keep="TRUE" *)
+reg     [FPW-1:0]       flit_after_mask_stage_is_error;
+(* mark_debug="TRUE", keep="TRUE" *)
+reg     [FPW-1:0]       flit_after_mask_stage_is_poisoned;
+(* mark_debug="TRUE", keep="TRUE" *)
+reg     [FPW-1:0]       flit_after_mask_stage_is_start_retry;
+(* mark_debug="TRUE", keep="TRUE" *)
+reg     [FPW-1:0]       flit_after_mask_stage_has_rtc;
+
+
+//Assign FLITs to word, necessary for the invalidation stage pipeline
+wire   [DWIDTH-1:0]            flit_after_mask_stage_word;
+generate
+        for(f = 0; f < (FPW); f = f + 1) begin : reorder_flits_to_word
+            assign flit_after_mask_stage_word[(f*128)+128-1:(f*128)] = flit_after_mask_stage[f];
+        end
+endgenerate
+
 //------------------------------------------------------------------------------------Invalidation Stage
+//Assuming Max Pkt size = 9 FLITs
 localparam CYCLES_TO_COMPLETE_FULL_PACKET   =   (FPW == 2) ? 5 :
-                                                (FPW == 4) ? 3 : //Assuming Max Pkt size = 9 FLITs
+                                                (FPW == 4) ? 3 :
                                                 (FPW == 6) ? 3 :
-                                                (FPW == 8) ? 2 :
-                                                1;
+                                                2;
 
 //Regs to retrieve the pkt length, assign the length to correspoding tail. The packet will be invalidated then
 reg     [3:0]        lng_per_tail      [FPW-1:0] ;
 reg     [3:0]        lng_per_tail_comb [FPW-1:0] ;
 reg     [3:0]        lng_temp;
 reg     [3:0]        lng_comb;
-//Signal that an error was detected. Invalid all FLITs after
-reg                  error_detected;
-
-//Assign FLITs to word, necessary for the invalidation stage pipeline
-wire   [DWIDTH-1:0]            flit_after_seq_check_word;
-generate
-        for(f = 0; f < (FPW); f = f + 1) begin : reorder_flits_after_seq_to_word
-            assign flit_after_seq_check_word[(f*128)+128-1:(f*128)] = flit_after_seq_check[f];
-        end
-endgenerate
+//Signal that an error was detected. Invalidate all FLITs after
+reg                  error;
 
 reg     [DWIDTH-1:0]    flit_in_invalidation_data          [CYCLES_TO_COMPLETE_FULL_PACKET-1:0];
 reg     [FPW-1:0]       flit_in_invalidation_is_hdr        [CYCLES_TO_COMPLETE_FULL_PACKET-1:0];
@@ -534,9 +425,6 @@ reg     [FPW-1:0]       flit_in_invalidation_is_valid      [CYCLES_TO_COMPLETE_F
 reg     [FPW-1:0]       flit_in_invalidation_mask_error;
 reg     [FPW-1:0]       flit_in_invalidation_is_poisoned   [CYCLES_TO_COMPLETE_FULL_PACKET-1:0];
 reg     [FPW-1:0]       flit_in_invalidation0_is_poisoned_comb;
-reg     [FPW-1:0]       flit_in_invalidation_is_flow       [CYCLES_TO_COMPLETE_FULL_PACKET-1:0];
-reg     [FPW-1:0]       flit_in_invalidation_has_rtc       [CYCLES_TO_COMPLETE_FULL_PACKET-1:0];
-reg     [FPW-1:0]       flit_in_invalidation_is_start_retry[CYCLES_TO_COMPLETE_FULL_PACKET-1:0];
 
 //------------------------------------------------------------------------------------Checked FLITs
 wire     [128-1:0]      checked_flit             [FPW-1:0];
@@ -544,17 +432,11 @@ wire     [FPW-1:0]      checked_flit_is_poisoned;
 wire     [FPW-1:0]      checked_flit_is_valid;
 wire     [FPW-1:0]      checked_flit_is_hdr;
 wire     [FPW-1:0]      checked_flit_is_tail;
-wire     [FPW-1:0]      checked_flit_has_rtc;
-wire     [FPW-1:0]      checked_flit_is_flow;
-wire     [FPW-1:0]      checked_flit_is_start_retry;
 
 assign checked_flit_is_hdr         = flit_in_invalidation_is_hdr       [CYCLES_TO_COMPLETE_FULL_PACKET-1] & flit_in_invalidation_is_valid     [CYCLES_TO_COMPLETE_FULL_PACKET-1];
 assign checked_flit_is_tail        = flit_in_invalidation_is_tail      [CYCLES_TO_COMPLETE_FULL_PACKET-1] & flit_in_invalidation_is_valid     [CYCLES_TO_COMPLETE_FULL_PACKET-1];
 assign checked_flit_is_valid       = flit_in_invalidation_is_valid     [CYCLES_TO_COMPLETE_FULL_PACKET-1] ;
 assign checked_flit_is_poisoned    = flit_in_invalidation_is_poisoned  [CYCLES_TO_COMPLETE_FULL_PACKET-1] & flit_in_invalidation_is_valid     [CYCLES_TO_COMPLETE_FULL_PACKET-1];
-assign checked_flit_is_flow        = flit_in_invalidation_is_flow      [CYCLES_TO_COMPLETE_FULL_PACKET-1] & flit_in_invalidation_is_valid     [CYCLES_TO_COMPLETE_FULL_PACKET-1];
-assign checked_flit_has_rtc        = flit_in_invalidation_has_rtc      [CYCLES_TO_COMPLETE_FULL_PACKET-1] & flit_in_invalidation_is_valid     [CYCLES_TO_COMPLETE_FULL_PACKET-1];
-assign checked_flit_is_start_retry = flit_in_invalidation_is_start_retry[CYCLES_TO_COMPLETE_FULL_PACKET-1];
 
 generate
         for(f = 0; f < (FPW); f = f + 1) begin : reorder_invalidation_word_back_to_flits
@@ -563,46 +445,43 @@ generate
 endgenerate
 
 //------------------------------------------------------------------------------------Counter
-reg [LOG_FPW:0]         rf_cnt_poisoned_comb;
-reg [LOG_FPW:0]         rf_cnt_rsp_comb;
+reg [LOG_FPW:0]             rf_cnt_poisoned_comb;
+reg [LOG_FPW:0]             rf_cnt_rsp_comb;
+reg [LOG_FPW:0]             rf_cnt_rsp_err_comb;
 
 //------------------------------------------------------------------------------------Input Buffer
-reg     [LOG_FPW:0]          tokens_out_of_fifo_sum_comb;
-reg     [LOG_FPW:0]          tokens_poisoned;
-reg     [7:0]                rtc_sum_comb; //for 8 FLIT config, maximum 8*31 tokens will be returned per cycle
+reg     [MAX_RTC_RET_LOG-1:0]rtc_sum_comb; //for 8 FLIT config, maximum 8*31 tokens will be returned per cycle
 
 reg     [128-1:0]            input_buffer_d_in_flit    [FPW-1:0];
-reg     [FPW-1:0]            input_buffer_valid;
+reg     [FPW-1:0]            input_buffer_is_valid;
 reg     [FPW-1:0]            input_buffer_is_hdr;
 reg     [FPW-1:0]            input_buffer_is_tail;
 reg     [FPW-1:0]            input_buffer_is_error_rsp;
-wire    [DWIDTH+(4*FPW)-1:0] input_buffer_d_in;
-wire    [DWIDTH+(4*FPW)-1:0] input_buffer_d_out;
+wire    [DWIDTH+NUM_CTRL_BITS-1:0] input_buffer_d_in;
+wire    [DWIDTH+NUM_CTRL_BITS-1:0] input_buffer_d_out;
 wire                         input_buffer_empty;
-reg                          input_buffer_shift_in;
+wire                         input_buffer_shift_in;
 wire                         input_buffer_shift_out;
 assign                       input_buffer_shift_out    =   ~(input_buffer_empty || d_out_fifo_a_full);
 
 generate
         for(f = 0; f < (FPW); f = f + 1) begin : assign_flits_to_input_buffer_to_a_single_reg
             assign input_buffer_d_in[f*128+128-1:f*128] = input_buffer_d_in_flit[f];
-            assign input_buffer_d_in[DWIDTH+f]          = input_buffer_valid[f];
+            assign input_buffer_d_in[DWIDTH+f]          = input_buffer_is_valid[f];
             assign input_buffer_d_in[DWIDTH+f+FPW]      = input_buffer_is_hdr[f];
             assign input_buffer_d_in[DWIDTH+f+(2*FPW)]  = input_buffer_is_tail[f];
-            assign input_buffer_d_in[DWIDTH+f+(3*FPW)]  = input_buffer_is_error_rsp[f];
+            if(PASS_ERR_RSP==1) begin
+                assign input_buffer_d_in[DWIDTH+f+(3*FPW)]  = input_buffer_is_error_rsp[f];
+            end
         end
 endgenerate
 
 //------------------------------------------------------------------------------------LINK RETRY
-reg  [5:0]     irtry_start_retry_cnt;
-reg  [5:0]     irtry_clear_error_cnt;
-reg  [5:0]     irtry_start_retry_cnt_comb;
-reg  [5:0]     irtry_clear_error_cnt_comb;
+reg  [4:0]     irtry_start_retry_cnt;
+reg  [4:0]     irtry_clear_error_cnt;
+reg  [4:0]     irtry_start_retry_cnt_comb;
+reg  [4:0]     irtry_clear_error_cnt_comb;
 reg            irtry_clear_trig;
-reg            irtry_clear_trig_comb;
-
-assign irtry_start_retry_cnt_o = irtry_start_retry_cnt;
-assign irtry_clear_error_cnt_o = irtry_clear_error_cnt;
 
 //=====================================================================================================
 //-----------------------------------------------------------------------------------------------------
@@ -614,172 +493,201 @@ assign irtry_clear_error_cnt_o = irtry_clear_error_cnt;
 //------------------------------------------------------------------INIT
 //========================================================================================================================================
 
-assign rf_dbg_reg[4] = !init_valid_flit_src;
-assign rf_dbg_reg[5] = init_prbs_seen;
-assign rf_dbg_reg[6] = &rf_descramblers_locked;
-assign rf_dbg_reg[7] = rf_tx_sends_ts1;
-
-
-assign rf_dbg_reg[10:8] = rf_hmc_init_status;
-
-assign rf_dbg_reg[12] = &init_valid_flit_src;
-assign rf_dbg_reg[13] = |init_valid_flit_src;
-
-assign rf_dbg_reg[16] = |init_d_in_flit[0][63:0];
-assign rf_dbg_reg[17] = |init_d_in_flit[0][127:64];
-assign rf_dbg_reg[18] = |init_d_in_flit[1][63:0];
-assign rf_dbg_reg[19] = |init_d_in_flit[1][127:64];
-assign rf_dbg_reg[20] = |init_d_in_flit[2][63:0];
-assign rf_dbg_reg[21] = |init_d_in_flit[2][127:64];
-assign rf_dbg_reg[22] = |init_d_in_flit[3][63:0];
-assign rf_dbg_reg[23] = |init_d_in_flit[3][127:64];
-
-
-
-
-always @(posedge clk)  begin
-    for(i_l = 0;i_l<NUM_LANES;i_l=i_l+1)begin
-        init_data_per_lane[i_l] <= descrambled_data_per_lane[i_l];
+generate
+    if(CTRL_LANE_REVERSAL==1) begin : control_lane_reversal
+        reg    init_lane_reversal_detected;
+        assign rf_lane_reversal_detected = init_lane_reversal_detected;
+        
+        `ifdef ASYNC_RES
+        always @(posedge clk or negedge res_n)  begin `else
+        always @(posedge clk)  begin `endif
+            if(!res_n) begin
+                init_lane_reversal_detected   <= 1'b0;
+            end else begin
+                if(rf_rx_init_status==HMC_DOWN) begin
+                    init_lane_reversal_detected   <= 1'b0;
+                end
+                if(rf_rx_init_status==HMC_TS1_ALIGN && rf_all_descramblers_aligned && (descrambled_data_per_lane[0][7:4] ==  TS1_LANE7OR15_PORTION)) begin
+                    //lane reversal detected, reverse the input stream lane by lane
+                    init_lane_reversal_detected   <= 1'b1;
+                end
+            end
+        end
+    end else begin
+        assign rf_lane_reversal_detected = 1'b0;
     end
-end
 
-reg [15:0] lock_cnt;
-reg rst_descramblers;
-reg NULL2;
+    if(DETECT_LANE_POLARITY==1) begin : detect_lane_reversal
+        reg [NUM_LANES-1:0] init_lane_polarity;
+        assign rf_lane_polarity = init_lane_polarity;
+        `ifdef ASYNC_RES
+        always @(posedge clk or negedge res_n)  begin `else
+        always @(posedge clk)  begin `endif
+            if(!res_n) begin
+                init_lane_polarity        <= {NUM_LANES{1'b0}};
+            end else begin
+                if(rf_rx_init_status==HMC_DOWN) begin
+                    init_lane_polarity    <= {NUM_LANES{1'b0}};
+                end
+                //Detect Lane polarity when HMC is sending first NULLs
+                if(rf_rx_init_status==HMC_WAIT_FOR_NULL) begin
+                    for(i_l = 0;i_l<NUM_LANES;i_l=i_l+1)begin
+                        if(descrambled_data_per_lane[i_l] == {WIDTH_PER_LANE{1'b1}})begin
+                            init_lane_polarity[i_l] <=  1'b1;
+                        end
+                    end
+                end
+            end
+        end
+    end else begin
+        assign rf_lane_polarity = {NUM_LANES{1'b0}};
+    end
+endgenerate
+
+(* mark_debug="TRUE", keep="TRUE" *)
+reg    init_no_valid_flit   ;
+(* mark_debug="TRUE", keep="TRUE" *)
+reg    init_all_flits_valid ;
+
+(* mark_debug="TRUE", keep="TRUE" *)
+reg [NUM_LANES-1:0] lock_int;
+(* mark_debug="TRUE", keep="TRUE" *)
+reg [4:0]           init_lock_cnt;
 
 `ifdef ASYNC_RES
 always @(posedge clk or negedge res_n)  begin `else
 always @(posedge clk)  begin `endif
+
+    for(i_l = 0;i_l<NUM_LANES;i_l=i_l+1)begin
+        `ifdef RESET_ALL
+            if(!res_n) descrambled_data_per_lane_dly[i_l] <= {WIDTH_PER_LANE{1'b0}};
+            else
+        `endif
+        descrambled_data_per_lane_dly[i_l] <= descrambled_data_per_lane[i_l];
+    end
+
 if(!res_n) begin
     //----Misc
-    init_descrambler_aligned         <= {NUM_LANES{1'b0}};
-    init_descrambler_part_aligned    <= {NUM_LANES{1'b0}};
-    init_bit_slip               <= {NUM_LANES{1'b0}};
-    init_bit_slip_cnt           <= 7'h0;
-    init_wait_time              <= 5'h0;
-    init_tmp_seq                <= 4'h0;
-    init_lane_cnt               <= {LOG_NUM_LANES{1'b0}};
-    init_prbs_seen              <= 1'b0;
-    rf_hmc_init_status          <= HMC_DOWN;
-    rf_link_status              <= LINK_DOWN;
-    rf_lane_polarity            <= {NUM_LANES{1'b0}};
-    rf_lane_reversal_detected   <= 1'b0;
-    rf_descramblers_locked      <= {NUM_LANES{1'b0}};
-    rst_descramblers <= 1'b1;
-    lock_cnt <= 16'd0;
-    NULL2 <= 1'b0;
+    init_descrambler_aligned        <= {NUM_LANES{1'b0}};
+    init_descrambler_part_aligned   <= {NUM_LANES{1'b0}};
+    phy_bit_slip                    <= {NUM_LANES{1'b0}};
+    init_bit_slip                   <= {NUM_LANES{1'b0}};
+    init_bit_slip_part              <= {NUM_LANES{1'b0}};
+    init_bit_slip_cnt               <= {RX_BIT_SLIP_CNT_LOG{1'b0}};
+    init_tmp_seq                    <= 4'h0;
+    rf_rx_init_status               <= HMC_DOWN;
+    rf_link_up                      <= LINK_DOWN;
+    rf_descramblers_locked          <= {NUM_LANES{1'b0}};
+    rf_all_descramblers_aligned     <= 'b0;
+    all_descramblers_part_aligned  <= 1'b0;
+
+    init_no_valid_flit   <= 1'b0;
+    init_all_flits_valid <= 1'b0;
+
+    lock_int      <= {NUM_LANES{1'b0}};
+    init_lock_cnt <= 'b0;
+
 end
 else begin
-    rst_descramblers <= 1'b0;
-    rf_descramblers_locked  <= init_descrambler_locked;
+
+    rf_all_descramblers_aligned <= &init_descrambler_aligned;
+    all_descramblers_part_aligned <= &init_descrambler_part_aligned;
+
+    rf_descramblers_locked  <= run_rx ? init_descrambler_locked : {NUM_LANES{1'b0}};
     init_bit_slip           <= {NUM_LANES{1'b0}};
+    init_bit_slip_part      <= {NUM_LANES{1'b0}};
+    phy_bit_slip            <= init_bit_slip | init_bit_slip_part;
+    init_tmp_seq            <= init_tmp_seq + INIT_SEQ_INC_PER_CYCLE;
 
+    init_bit_slip_cnt   <= init_bit_slip_cnt +1;
 
-    if(rf_hmc_sleep || !rf_hmc_init_cont_set) begin
-        rf_link_status <= LINK_DOWN;
-    end else if(rf_link_status == LINK_DOWN) begin
-        //Begin (Re-)Init
-        init_descrambler_aligned         <= {NUM_LANES{1'b0}};
-        init_descrambler_part_aligned    <= {NUM_LANES{1'b0}};
-        init_wait_time              <= 5'h1f;
-        init_tmp_seq                <= 4'h0;
-        init_lane_cnt               <= {LOG_NUM_LANES{1'b0}};
-        init_prbs_seen              <= 1'b1;//1'b0;
-        rf_hmc_init_status          <= HMC_DOWN;
-        rf_link_status              <= LINK_INIT;
-        rf_lane_polarity            <= {NUM_LANES{1'b0}};
-        rf_lane_reversal_detected   <= 1'b0;
-        rf_descramblers_locked      <= {NUM_LANES{1'b0}};        
-    end
+    init_no_valid_flit   <= |init_valid_flit_src==1'b0;
+    init_all_flits_valid <= &init_valid_flit_src;
 
-    //Detect Lane polarity when HMC is sending first NULLs
-    if(&rf_descramblers_locked && rf_link_status == LINK_INIT) begin
-        for(i_l = 0;i_l<NUM_LANES;i_l=i_l+1)begin
-            if(init_data_per_lane[i_l] == {WIDTH_PER_LANE{1'b1}})begin
-                rf_lane_polarity[i_l] <=  1'b1;
+    // init_no_valid_flit_dly <= {init_no_valid_flit_dly[14:0],init_no_valid_flit};
+
+    lock_int <= {NUM_LANES{1'b1}};
+
+    case (rf_rx_init_status)
+        HMC_DOWN: begin
+            init_descrambler_aligned         <= {NUM_LANES{1'b0}};
+            init_descrambler_part_aligned    <= {NUM_LANES{1'b0}};
+            // if(&rf_descramblers_locked) begin
+            init_lock_cnt <= 'b0;
+            if(&(rf_descramblers_locked&lane_zero)) begin
+                init_lock_cnt <= init_lock_cnt + 1'b1;
             end
-        end
-    end
-
-    if(rf_hmc_init_status == HMC_DOWN) begin
-        if(|init_valid_flit_src) begin
-            init_prbs_seen <= 1'b1;
-        end 
-        //if(!init_valid_flit_src && init_prbs_seen && &rf_descramblers_locked) begin
-        if(&rf_descramblers_locked) begin
-            lock_cnt <= lock_cnt + 1'b1;
-            if (lock_cnt == 16'h000F) begin
-               rf_hmc_init_status <= HMC_NULL;
-            end
-        end
-        if(|init_valid_flit_src && &rf_descramblers_locked) begin
-            lock_cnt <= 16'd0;
-            rst_descramblers <= 1'b1;
-        end 
-    end
-
-    //When TX block sends ts1, start init process
-    if(rf_tx_sends_ts1 && &init_valid_flit_src) begin
-        rf_hmc_init_status      <= HMC_TS1;
-    end
-
-    if(rf_hmc_init_status==HMC_TS1) begin
-        // -------------------------------------------------------------------------TS1 AND DESCRAMBLER SYNCHRONIZATION
-        if(!rf_all_descramblers_aligned) begin      // repeat this until all descramblers are aligned !!
-
-            if(|init_wait_time == 1'b0)begin
-
-                init_tmp_seq    <= init_tmp_seq + INIT_SEQ_INC_PER_CYCLE;
-
-                if(|init_bit_slip_cnt == 1'b0)begin
-
-                    init_lane_cnt        <= init_lane_cnt + 1;
-
-                    if(!init_descrambler_part_aligned[init_lane_cnt])begin     
-                        init_bit_slip[init_lane_cnt]                     <= ~init_lane_has_correct_ts1[init_lane_cnt];
-                        //if the current lane is more advanced than the current reference lane, set this lane as new reference
-                        if(init_seq_diff < 2 && init_lane_has_correct_ts1[init_lane_cnt]) begin
-                            init_tmp_seq                            <= init_data_per_lane[init_lane_cnt][3:0] + INIT_SEQ_INC_PER_CYCLE;
-                        end
-                    end
-
-                    if(&init_descrambler_part_aligned) begin
-                        if(|init_seq_diff==1'b0 && init_lane_has_correct_ts1[init_lane_cnt])begin
-                            init_descrambler_aligned[init_lane_cnt] <= 1'b1;
-                        end else begin
-                            init_bit_slip[init_lane_cnt] <= 1'b1;
-                        end
-                    end else begin
-                        init_descrambler_part_aligned[init_lane_cnt]          <= init_lane_has_correct_ts1[init_lane_cnt];
-                    end
-
-                    if(init_lane_cnt == NUM_LANES-1)begin
-                        init_bit_slip_cnt <= {1'b0,rf_bit_slip_time};
-                    end
-
-                end else begin
-                    init_bit_slip_cnt <= init_bit_slip_cnt -1;
+            for(i_l=0;i_l<NUM_LANES;i_l=i_l+1) begin
+                if(rf_descramblers_locked[i_l] && !lane_zero[i_l]) begin
+                    lock_int[i_l] <= 1'b0;
                 end
-
-            end else begin
-                init_wait_time <= init_wait_time -1;
             end
-        // -------------------------------------------------------------------------SECOND NULL SEQUENCE
-        end else begin  // now that all is synchronized continue with NULL and TRET
-
-            //lane reversal detected, reverse the input stream lane by lane
-            if(init_data_per_lane[0][7:4] ==  ts1_lane7or15_portion)begin
-                rf_lane_reversal_detected   <= 1'b1;
+            if(&init_lock_cnt) begin
+                rf_rx_init_status <= HMC_WAIT_FOR_NULL;
             end
-
-            //when received NULLs again, init done (initial TRETs are treated as normal packets)
-            if(|init_valid_flit_src == 1'b0)begin
-                rf_link_status      <= LINK_UP;
-                rf_hmc_init_status  <= HMC_UP;
+        end
+        HMC_WAIT_FOR_NULL: begin
+            // if(|init_valid_flit_src == 1'b0) begin
+            // if(init_no_valid_flit) begin
+            // if(&init_no_valid_flit_dly) begin
+                rf_rx_init_status <= HMC_NULL;
+            // end
+        end
+        HMC_NULL: begin
+            // if(&init_valid_flit_src) begin
+            if(init_all_flits_valid) begin
+                rf_rx_init_status      <= HMC_TS1_PART_ALIGN;
             end
+        end
+        HMC_TS1_PART_ALIGN: begin
+            if(|init_bit_slip_cnt[RX_BIT_SLIP_CNT_LOG-1:LOG_NUM_LANES] == 1'b0)begin
+                init_bit_slip_part[init_lane_cnt]                <= ~init_lane_has_correct_ts1[init_lane_cnt];
+                init_descrambler_part_aligned[init_lane_cnt]     <= init_lane_has_correct_ts1[init_lane_cnt];
+            end
+            if(all_descramblers_part_aligned) begin
+                rf_rx_init_status   <= HMC_TS1_FIND_REF;
+                init_tmp_seq        <= descrambled_data_per_lane[0][3:0] + INIT_SEQ_INC_PER_CYCLE;
+                init_bit_slip_cnt   <= {RX_BIT_SLIP_CNT_LOG{1'b0}};
+            end        
+        end
+        HMC_TS1_FIND_REF: begin
+            if(init_seq_diff < 2)
+                init_tmp_seq <= descrambled_data_per_lane[init_lane_cnt][3:0] + INIT_SEQ_INC_PER_CYCLE;
+            
+            if(&init_bit_slip_cnt==1'b1)
+                rf_rx_init_status   <= HMC_TS1_ALIGN;
 
         end
-    end
+        HMC_TS1_ALIGN: begin
+            
+            if(|init_bit_slip_cnt[RX_BIT_SLIP_CNT_LOG-1:LOG_NUM_LANES] == 1'b0)begin
+                if(|init_seq_diff==1'b0 && init_lane_has_correct_ts1[init_lane_cnt])begin
+                    init_descrambler_aligned[init_lane_cnt] <= 1'b1;
+                end else begin
+                    init_bit_slip[init_lane_cnt] <= 1'b1;
+                end
+            end
+
+            if(rf_all_descramblers_aligned) begin
+                rf_rx_init_status  <= HMC_NULL_NEXT;
+            end  
+        end
+        HMC_NULL_NEXT: begin
+             // if(|init_valid_flit_src == 1'b0) begin
+             if(init_no_valid_flit) begin
+                rf_rx_init_status   <= HMC_UP;
+                rf_link_up          <= LINK_UP;
+            end             
+        end
+
+        // HMC_UP: begin
+        default: begin
+        end
+    endcase
+    if(rf_hmc_sleep || !run_rx) begin
+        rf_rx_init_status   <= HMC_DOWN;
+        rf_link_up          <= LINK_DOWN;
+    end    
 end
 end
 
@@ -799,30 +707,33 @@ always @(*)  begin
 
     for(i_f=0;i_f<FPW;i_f=i_f+1) begin
 
-        data2crc_lng_per_flit_comb[i_f] = {128{1'b0}};
-
-        if(data2crc_payload_remain_comb ==4'h1) begin
-            data2crc_tail_comb[i_f]  = 1'b1;
-        end
-
-        if(data2crc_payload_remain_comb) begin
+        data2crc_lng_per_flit_comb[i_f] = 4'h0;
+        
+        case (data2crc_payload_remain_comb)
+        4'h1: begin
+            data2crc_tail_comb[i_f]      = 1'b1;
             data2crc_valid_comb[i_f]     = 1'b1;
-            data2crc_payload_remain_comb = data2crc_payload_remain_comb - 1;
-        end else if(valid_flit_src[i_f])begin
-
-            data2crc_hdr_comb[i_f]   = 1'b1;
-            data2crc_valid_comb[i_f] = 1'b1;
-
-            if(lng(d_in_flit[i_f]) < 2 || lng(d_in_flit[i_f]) > 9) begin
-                //Treat false lng values as single FLIT packets which will force error abort mode
-                data2crc_tail_comb[i_f]         = 1'b1;
-                data2crc_lng_per_flit_comb[i_f] = 1;
-            end else begin
-                data2crc_payload_remain_comb    = lng(d_in_flit[i_f]) -1;
-                data2crc_lng_per_flit_comb[i_f] = lng(d_in_flit[i_f]);
+            data2crc_payload_remain_comb = 4'h0;
+        end
+        4'h0: begin
+            if(valid_flit_src[i_f])begin
+                data2crc_hdr_comb[i_f]   = 1'b1;
+                data2crc_valid_comb[i_f] = 1'b1;
+                if(lng(d_in_flit[i_f])<2 || lng(d_in_flit[i_f])>9 || !lng_dln_equal(d_in_flit[i_f]))begin
+                    data2crc_lng_per_flit_comb[i_f] = 4'h1;
+                    data2crc_tail_comb[i_f]         = 1'b1;
+                    data2crc_payload_remain_comb    = 4'h0;
+                end else begin
+                    data2crc_payload_remain_comb    = lng(d_in_flit[i_f]) -1;
+                    data2crc_lng_per_flit_comb[i_f] = lng(d_in_flit[i_f]);
+                end
             end
         end
-
+        default: begin
+            data2crc_valid_comb[i_f]     = 1'b1;
+            data2crc_payload_remain_comb = data2crc_payload_remain_comb - 1;
+        end
+        endcase
     end
 end
 
@@ -832,147 +743,74 @@ always @(posedge clk or negedge res_n)  begin `else
 always @(posedge clk)  begin `endif
 if(!res_n) begin
 
-    data2crc_hdr    <= {FPW{1'b0}};
-    data2crc_tail   <= {FPW{1'b0}};
-    data2crc_valid  <= {FPW{1'b0}};
-
-    data2crc_payload_remain  <= {4{1'b0}};
+    data2crc_hdr             <= {FPW{1'b0}};
+    data2crc_tail            <= {FPW{1'b0}};
+    data2crc_valid           <= {FPW{1'b0}};
+    data2crc_payload_remain  <= 4'h0;
 
     for(i_f=0;i_f<FPW;i_f=i_f+1) begin
-        data2crc_lng_per_flit[i_f] <= {128{1'b0}};
+        data2crc_lng_per_flit[i_f] <= 4'h0;
     end
-
-    data2crc <= {DWIDTH{1'b0}};
 
 end else begin
-    if(link_is_up) begin
-        data2crc_hdr    <= data2crc_hdr_comb;
-        data2crc_tail   <= data2crc_tail_comb;
+    if(rf_link_up) begin
         data2crc_valid  <= data2crc_valid_comb;
     end
-
-    data2crc_payload_remain  <= data2crc_payload_remain_comb;
+    
+    data2crc_hdr            <= data2crc_hdr_comb;
+    data2crc_tail           <= data2crc_tail_comb;
+    data2crc_payload_remain <= data2crc_payload_remain_comb;
 
     for(i_f=0;i_f<FPW;i_f=i_f+1) begin
         data2crc_lng_per_flit[i_f] <= data2crc_lng_per_flit_comb[i_f];
     end
-
-    data2crc  <= d_in;
-
-end
-end
-
-//==================================================================================
-//---------------------------------LNG/DLN check
-//==================================================================================
-`ifdef ASYNC_RES
-always @(posedge clk or negedge res_n)  begin `else
-always @(posedge clk)  begin `endif
-if(!res_n) begin
-
-    flit_after_lng_check_is_hdr       <= {FPW{1'b0}};
-    flit_after_lng_check_is_tail      <= {FPW{1'b0}};
-    flit_after_lng_check_is_valid     <= {FPW{1'b0}};
-    flit_after_lng_check_is_poisoned  <= {FPW{1'b0}};
-    flit_after_lng_check_is_flow      <= {FPW{1'b0}};
-    flit_after_lng_check_has_rtc      <= {FPW{1'b0}};
-    flit_after_lng_check_is_error     <= {FPW{1'b0}};
-
-    for(i_f = 0; i_f < FPW; i_f = i_f + 1) begin
-        flit_after_lng_check[i_f]     <= {128{1'b0}};
-    end
-
-end else begin
-    flit_after_lng_check_is_hdr       <= crc_d_out_flit_is_hdr;
-    flit_after_lng_check_is_tail      <= crc_d_out_flit_is_tail;
-    flit_after_lng_check_is_valid     <= crc_d_out_flit_is_valid;
-    flit_after_lng_check_is_poisoned  <= crc_d_out_flit_is_poisoned;
-    flit_after_lng_check_is_flow      <= crc_d_out_flit_is_flow;
-    flit_after_lng_check_has_rtc      <= crc_d_out_flit_has_rtc;
-    flit_after_lng_check_is_error     <= crc_d_out_flit_is_error;
-
-    for(i_f = 0; i_f < FPW; i_f = i_f + 1) begin
-        flit_after_lng_check[i_f]     <= crc_d_out_flit[i_f];
-    end
-
-    //perform lng/dln check
-    for(i_f = 0; i_f < FPW; i_f = i_f + 1) begin
-        if(crc_d_out_flit_is_hdr[i_f] && (lng(crc_d_out_flit[i_f]) != dln(crc_d_out_flit[i_f]))) begin
-            flit_after_lng_check_is_error[i_f]  <= 1'b1;
-        end
-    end
 end
 end
 
 //====================================================================
-//---------------------------------Start Retry Stage
+//---------------------------------IRTRY Stage
 //====================================================================
 //-- Count all types of IRTRY packets
 always @(*)  begin
 
-    //Set the lower bit mask for the next stage: Mask out all error FLITs
-    flit_after_retry_stage_is_valid_mask_lsb   = {FPW{1'b1}};
-    for(i_f = FPW-1; i_f >=0; i_f = i_f - 1) begin
-        if(flit_after_lng_check_is_error[i_f])begin
-            //Pass the tail in case it is an crc error so that the corresponding FLITs of the packet can be invalidated
-            //but mask out single flit packets!
-            flit_after_retry_stage_is_valid_mask_lsb = {FPW{1'b1}} >> (FPW-i_f-(flit_after_lng_check_is_tail[i_f] & !flit_after_lng_check_is_hdr[i_f]));
-        end
-    end
-
-    //Next up, count both types of irtry packets and set the mask accordingly for irtry start packets in error abort mode and the
-    //final clear abort FLIT that reaches the threshold
-
-    flit_after_retry_stage_is_start_retry_comb = {FPW{1'b0}};
-
-    if( (tx_error_abort_mode && !irtry_clear_trig) ||
-        |(flit_after_retry_stage_is_error) ||
-        |(flit_after_seq_check_is_error)
-    )begin
-        flit_after_retry_stage_is_valid_mask_msb = {FPW{1'b0}};
-    end else begin
-        flit_after_retry_stage_is_valid_mask_msb = {FPW{1'b1}};
-    end
-
-    irtry_clear_trig_comb      = 1'b0;
+    flit_after_irtry_stage_is_start_retry_comb = {FPW{1'b0}};
+    flit_after_irtry_stage_is_clear_error_comb = {FPW{1'b0}};
 
     irtry_clear_error_cnt_comb = irtry_clear_error_cnt;
     irtry_start_retry_cnt_comb = irtry_start_retry_cnt;
 
 
-    for(i_f = 0; i_f < (FPW); i_f = i_f + 1) begin
+    for(i_f=0;i_f<(FPW);i_f=i_f+1) begin
 
-        if( flit_after_lng_check_is_flow[i_f] &&
-            cmd(flit_after_lng_check[i_f]) == {CMD_FLOW,CMD_IRTRY} &&
-            !flit_after_lng_check_is_error[i_f]
+        if( crc_d_out_flit_is_flow[i_f] &&
+            cmd(crc_d_out_flit[i_f]) == {CMD_IRTRY} &&
+            !crc_d_out_flit_is_error[i_f]
         ) begin
 
-            if(irtry_start_retry_flag(flit_after_lng_check[i_f])) begin
+            if(irtry_start_retry_flag(crc_d_out_flit[i_f])) begin
                 //it's a start tx retry pkt
-                irtry_start_retry_cnt_comb   = irtry_start_retry_cnt_comb + 6'h1;
-                irtry_clear_error_cnt_comb   = 6'h0;
+                irtry_start_retry_cnt_comb   = irtry_start_retry_cnt_comb + 5'h1;
+                irtry_clear_error_cnt_comb   = 5'h0;
             end else begin
                 //must be clear error pkt
-                irtry_clear_error_cnt_comb   = irtry_clear_error_cnt_comb + 6'h1;
-                irtry_start_retry_cnt_comb   = 6'h0;
+                irtry_clear_error_cnt_comb   = irtry_clear_error_cnt_comb + 5'h1;
+                irtry_start_retry_cnt_comb   = 5'h0;
             end
 
             if(irtry_start_retry_cnt_comb == rf_irtry_received_threshold) begin
                 //The start retry packet that reaches the trehold is treated as valid and will trigger tx retry
-                flit_after_retry_stage_is_valid_mask_msb[i_f]   = 1'b1;
-                flit_after_retry_stage_is_start_retry_comb[i_f] = 1'b1;
+                flit_after_irtry_stage_is_start_retry_comb[i_f] = 1'b1;
             end
 
             //Clear error abort when threshold reached, allow following FLITs to be valid
             if(irtry_clear_error_cnt_comb == rf_irtry_received_threshold) begin
-                irtry_clear_trig_comb                    = 1'b1;
-                flit_after_retry_stage_is_valid_mask_msb = {FPW{1'b1}} << (i_f);
+                flit_after_irtry_stage_is_clear_error_comb[i_f] = 1'b1;
             end
 
         end else begin
             //Reset both counters when received a non-irtry packet
-            irtry_start_retry_cnt_comb = 6'h0;
-            irtry_clear_error_cnt_comb = 6'h0;
+            irtry_start_retry_cnt_comb = 5'h0;
+            irtry_clear_error_cnt_comb = 5'h0;
         end
     end
 end
@@ -984,11 +822,11 @@ always @(posedge clk)  begin `endif
 if(!res_n) begin
     irtry_clear_trig      <= 1'b0;
 
-    irtry_clear_error_cnt <= {6{1'b0}};
-    irtry_start_retry_cnt <= {6{1'b0}};
+    irtry_clear_error_cnt <= {5{1'b0}};
+    irtry_start_retry_cnt <= {5{1'b0}};
 
 end else begin
-    irtry_clear_trig      <= irtry_clear_trig_comb;
+    irtry_clear_trig      <= |flit_after_irtry_stage_is_clear_error_comb;
 
     irtry_clear_error_cnt <= irtry_clear_error_cnt_comb;
     irtry_start_retry_cnt <= irtry_start_retry_cnt_comb;
@@ -999,36 +837,37 @@ end
 `ifdef ASYNC_RES
 always @(posedge clk or negedge res_n)  begin `else
 always @(posedge clk)  begin `endif
-if(!res_n) begin
-    for(i_f = 0;i_f<(FPW);i_f=i_f+1) begin
-        flit_after_retry_stage[i_f]       <= {128{1'b0}};
-    end
-    flit_after_retry_stage_is_hdr         <= {FPW{1'b0}};
-    flit_after_retry_stage_is_tail        <= {FPW{1'b0}};
-    flit_after_retry_stage_is_poisoned    <= {FPW{1'b0}};
-    flit_after_retry_stage_is_flow        <= {FPW{1'b0}};
-    flit_after_retry_stage_has_rtc        <= {FPW{1'b0}};
-    flit_after_retry_stage_is_error       <= {FPW{1'b0}};
-    flit_after_retry_stage_is_valid       <= {FPW{1'b0}};
-    flit_after_retry_stage_is_start_retry <= 1'b0;
-end else begin
 
     for(i_f = 0;i_f<(FPW);i_f=i_f+1) begin
-        flit_after_retry_stage[i_f] <= flit_after_lng_check[i_f];
+        `ifdef RESET_ALL
+        if(!res_n) flit_after_irtry_stage[i_f]  <= {128{1'b0}};
+        else
+        `endif
+        flit_after_irtry_stage[i_f] <= crc_d_out_flit[i_f];
     end
-    flit_after_retry_stage_is_hdr         <= flit_after_lng_check_is_hdr;
-    flit_after_retry_stage_is_tail        <= flit_after_lng_check_is_tail;
-    flit_after_retry_stage_is_poisoned    <= flit_after_lng_check_is_poisoned &
-                                             flit_after_retry_stage_is_valid_mask_msb &
-                                             flit_after_retry_stage_is_valid_mask_lsb;
-    flit_after_retry_stage_is_flow        <= flit_after_lng_check_is_flow;
-    flit_after_retry_stage_has_rtc        <= flit_after_lng_check_has_rtc;
-    flit_after_retry_stage_is_error       <= flit_after_lng_check_is_error;
-    flit_after_retry_stage_is_valid       <= flit_after_lng_check_is_valid &
-                                             flit_after_retry_stage_is_valid_mask_msb &
-                                             flit_after_retry_stage_is_valid_mask_lsb;
-    flit_after_retry_stage_is_start_retry <= flit_after_retry_stage_is_start_retry_comb;
+
+if(!res_n) begin
+    `ifdef RESET_ALL
+        flit_after_irtry_stage_is_hdr         <= {FPW{1'b0}};
+        flit_after_irtry_stage_is_tail        <= {FPW{1'b0}};
+        flit_after_irtry_stage_is_poisoned    <= {FPW{1'b0}};
+        flit_after_irtry_stage_has_rtc        <= {FPW{1'b0}};
+        flit_after_irtry_stage_is_error       <= {FPW{1'b0}};
+        flit_after_irtry_stage_is_valid       <= {FPW{1'b0}};
+    `endif
+    flit_after_irtry_stage_is_start_retry <= {FPW{1'b0}};
+    flit_after_irtry_stage_is_clear_error <= {FPW{1'b0}};
+end else begin
+
+    flit_after_irtry_stage_is_start_retry <= flit_after_irtry_stage_is_start_retry_comb;
+    flit_after_irtry_stage_is_clear_error <= flit_after_irtry_stage_is_clear_error_comb;
 end
+    flit_after_irtry_stage_is_hdr         <= crc_d_out_flit_is_hdr;
+    flit_after_irtry_stage_is_tail        <= crc_d_out_flit_is_tail;
+    flit_after_irtry_stage_is_poisoned    <= crc_d_out_flit_is_poisoned; 
+    flit_after_irtry_stage_has_rtc        <= crc_d_out_flit_has_rtc;
+    flit_after_irtry_stage_is_error       <= crc_d_out_flit_is_error;
+    flit_after_irtry_stage_is_valid       <= crc_d_out_flit_is_valid; 
 end
 
 //-------------------------------------------Error abort mode
@@ -1051,7 +890,7 @@ end else begin
     end
 
     //Set error abort mode again if error detected
-    if(|flit_after_lng_check_is_error || flit_after_seq_check_is_error)begin
+    if(|crc_d_out_flit_is_error || flit_after_seq_check_is_error)begin
         tx_error_abort_mode <= 1'b1;
     end
 
@@ -1063,18 +902,23 @@ end
 //==================================================================================
 //Check the seqnum FLIT by FLIT. Assign the last received seqnum when error abort mode is cleared
 //!Lots of logic levels for 8FLIT config
-always @(*)  begin
+if(DISABLE_RX_CHECKS==1) begin
+    always @(*)  begin
+        next_seqnum_comb                    = 3'h0;
+        flit_after_seq_check_is_error_comb  = {FPW{1'b0}};  
+    end 
+end else begin
+    always @(*)  begin
+        next_seqnum_comb                    = 3'h0;
+        flit_after_seq_check_is_error_comb  = {FPW{1'b0}};
 
-    next_seqnum_comb                    = 3'h0;
-    flit_after_seq_check_is_error_comb  = {FPW{1'b0}};
-
-    for(i_f = 0; i_f < (FPW); i_f = i_f + 1) begin
-        if(flit_after_retry_stage_has_rtc[i_f]) begin
-        //All packets that have an RTC also have a valid seqnum
-            if(seq(flit_after_retry_stage[i_f]) == next_seqnum + next_seqnum_comb) begin
+        for(i_f=0;i_f<(FPW);i_f=i_f+1) begin
+            if(flit_after_irtry_stage_has_rtc[i_f]) begin
+            //All packets that have an RTC also have a valid seqnum
                 next_seqnum_comb = next_seqnum_comb + 3'h1;
-            end else begin
-                flit_after_seq_check_is_error_comb[i_f]  = 1'b1;
+                if(seq(flit_after_irtry_stage[i_f]) != (next_seqnum + next_seqnum_comb)) begin
+                    flit_after_seq_check_is_error_comb[i_f]  = 1'b1;
+                end
             end
         end
     end
@@ -1083,52 +927,216 @@ end
 `ifdef ASYNC_RES
 always @(posedge clk or negedge res_n)  begin `else
 always @(posedge clk)  begin `endif
-if(!res_n) begin
-
-    //We expect the first packet to have the seqnum 1
-    next_seqnum                         <= 3'h1;
-
-    flit_after_seq_check_is_hdr         <= {FPW{1'b0}};
-    flit_after_seq_check_is_tail        <= {FPW{1'b0}};
-    flit_after_seq_check_is_valid       <= {FPW{1'b0}};
-    flit_after_seq_check_is_poisoned    <= {FPW{1'b0}};
-    flit_after_seq_check_is_flow        <= {FPW{1'b0}};
-    flit_after_seq_check_has_rtc        <= {FPW{1'b0}};
-    flit_after_seq_check_is_error       <= {FPW{1'b0}};
-    flit_after_seq_check_is_start_retry <= {FPW{1'b0}};
-    for(i_f = 0; i_f < (FPW); i_f = i_f + 1) begin
-        flit_after_seq_check[i_f]     <= {128{1'b0}};
+    
+    for(i_f = 0;i_f<(FPW);i_f=i_f+1) begin
+        `ifdef RESET_ALL
+        if(!res_n) flit_after_seq_check[i_f]  <= {128{1'b0}};
+        else
+        `endif
+        flit_after_seq_check[i_f] <= flit_after_irtry_stage[i_f];
     end
 
+if(!res_n) begin
+
+    next_seqnum                         <= 3'h0;
+
+    `ifdef RESET_ALL
+        flit_after_seq_check_is_hdr         <= {FPW{1'b0}};
+        flit_after_seq_check_is_tail        <= {FPW{1'b0}};
+        flit_after_seq_check_is_valid       <= {FPW{1'b0}};
+        flit_after_seq_check_is_poisoned    <= {FPW{1'b0}};
+        flit_after_seq_check_has_rtc        <= {FPW{1'b0}};
+        flit_after_seq_check_is_start_retry <= {FPW{1'b0}};
+        flit_after_seq_check_is_clear_error <= {FPW{1'b0}};
+    `endif
+    flit_after_seq_check_is_error       <= {FPW{1'b0}};
 end else begin
 
     //Set the expected sequence number to the first one after error abort mode was cleared
     //otherwise apply the last seqnum + combinatioanl offset
-    if(irtry_clear_trig_comb) begin
+    if(|flit_after_irtry_stage_is_clear_error_comb) begin
         next_seqnum     <= first_seq_after_error + next_seqnum_comb;
     end else begin
         next_seqnum     <= next_seqnum + next_seqnum_comb;
     end
 
     //propage data to next stage and include any error bits that were detected during sequence number check
-    flit_after_seq_check_is_hdr         <= flit_after_retry_stage_is_hdr;
-    flit_after_seq_check_is_tail        <= flit_after_retry_stage_is_tail;
-    flit_after_seq_check_is_valid       <= flit_after_retry_stage_is_valid;
-    flit_after_seq_check_is_poisoned    <= flit_after_retry_stage_is_poisoned;
-    flit_after_seq_check_is_flow        <= flit_after_retry_stage_is_flow;
-    flit_after_seq_check_has_rtc        <= flit_after_retry_stage_has_rtc;
-    flit_after_seq_check_is_error       <= flit_after_retry_stage_is_error |
+    flit_after_seq_check_is_error       <= flit_after_irtry_stage_is_error |
                                            flit_after_seq_check_is_error_comb;
-    flit_after_seq_check_is_start_retry <= flit_after_retry_stage_is_start_retry;
-    for(i_f = 0; i_f < (FPW); i_f = i_f + 1) begin
-        flit_after_seq_check[i_f]     <= flit_after_retry_stage[i_f];
+
+end
+    flit_after_seq_check_is_hdr         <= flit_after_irtry_stage_is_hdr;
+    flit_after_seq_check_is_tail        <= flit_after_irtry_stage_is_tail;
+    flit_after_seq_check_is_valid       <= flit_after_irtry_stage_is_valid;
+    flit_after_seq_check_is_poisoned    <= flit_after_irtry_stage_is_poisoned;
+    flit_after_seq_check_has_rtc        <= flit_after_irtry_stage_has_rtc;
+    flit_after_seq_check_is_start_retry <= flit_after_irtry_stage_is_start_retry; 
+    flit_after_seq_check_is_clear_error <= flit_after_irtry_stage_is_clear_error; 
+end
+
+//==================================================================================
+//---------------------------------Valid Mask - Remove valid bits for invalid FLITs
+//==================================================================================
+always@(*) begin
+    flit_after_mask_stage_is_valid_mask_lsb = {FPW{1'b0}}; 
+    flit_after_mask_stage_is_valid_mask_msb = {FPW{1'b0}}; 
+    for(i_f = FPW-1; i_f >=0; i_f = i_f - 1) begin
+        if(flit_after_seq_check_is_clear_error[i_f]) begin
+            flit_after_mask_stage_is_valid_mask_msb       = {{FPW-1{1'b1}},1'b0} << i_f;
+        end
+        if(flit_after_seq_check_is_error[i_f]) begin
+            flit_after_mask_stage_is_valid_mask_lsb       = {FPW{1'b1}} >> (FPW-i_f);
+        end
     end
+
+end
+
+`ifdef ASYNC_RES
+always @(posedge clk or negedge res_n)  begin `else
+always @(posedge clk)  begin `endif
+    
+    for(i_f = 0;i_f<(FPW);i_f=i_f+1) begin
+        flit_after_mask_stage[i_f] <= flit_after_seq_check[i_f];
+    end
+
+if(!res_n) begin
+
+    `ifdef RESET_ALL
+        flit_after_mask_stage_is_hdr         <= {FPW{1'b0}};
+        flit_after_mask_stage_is_tail        <= {FPW{1'b0}};
+        flit_after_mask_stage_is_poisoned    <= {FPW{1'b0}};
+        flit_after_mask_stage_has_rtc        <= {FPW{1'b0}};
+        flit_after_mask_stage_is_error       <= {FPW{1'b0}};
+        flit_after_mask_stage_is_start_retry <= 1'b0;
+    `endif
+    flit_after_mask_stage_is_valid  <= {FPW{1'b0}};
+    error                           <= 1'b0;
+end else begin
+
+    if(|flit_after_seq_check_is_clear_error)
+        error <= 1'b0;
+
+    if(|flit_after_seq_check_is_error)
+        error <= 1'b1; 
+
+    casex({error,|flit_after_seq_check_is_clear_error,|flit_after_seq_check_is_error})
+        3'b000: begin
+            flit_after_mask_stage_is_valid <= flit_after_seq_check_is_valid;
+        end
+        3'b001: begin
+            flit_after_mask_stage_is_valid <= flit_after_seq_check_is_valid & flit_after_mask_stage_is_valid_mask_lsb;
+        end
+        3'bx10: begin
+            flit_after_mask_stage_is_valid <= flit_after_seq_check_is_valid & flit_after_mask_stage_is_valid_mask_msb;
+        end
+        3'bx11: begin
+            flit_after_mask_stage_is_valid <= flit_after_seq_check_is_valid & flit_after_mask_stage_is_valid_mask_msb & flit_after_mask_stage_is_valid_mask_lsb;
+        end
+        default: begin
+            flit_after_mask_stage_is_valid <= {FPW{1'b0}};
+        end
+    endcase
+
+    //propage data to next stage and include any error bits that were detected
+
+end
+    flit_after_mask_stage_is_hdr         <= flit_after_seq_check_is_hdr;
+    flit_after_mask_stage_is_tail        <= flit_after_seq_check_is_tail;
+    flit_after_mask_stage_is_poisoned    <= flit_after_seq_check_is_poisoned;
+    flit_after_mask_stage_has_rtc        <= flit_after_seq_check_has_rtc;
+    flit_after_mask_stage_is_error       <= flit_after_seq_check_is_error & flit_after_seq_check_is_tail;
+    flit_after_mask_stage_is_start_retry <= flit_after_seq_check_is_start_retry;
+end
+
+//==================================================================================
+//---------------------------------Tokens/Pointers/Sequence numbers
+//==================================================================================
+//Count Tokens that were returned
+if(DISABLE_RX_CHECKS==1) begin
+    always @(*)  begin
+        rtc_sum_comb                  = {MAX_RTC_RET_LOG{1'b0}};
+        for(i_f=0;i_f<(FPW);i_f=i_f+1) begin
+            if(data2crc_tail[i_f] && data2crc_valid[i_f]/*crc_d_out_flit_has_rtc[i_f] && crc_d_out_flit_is_valid[i_f]*/)begin
+                rtc_sum_comb                  =  rtc_sum_comb + rtc(init_d_in_flit[i_f]);
+            end
+        end
+    end        
+end else begin 
+    always @(*)  begin
+        rtc_sum_comb                  = {MAX_RTC_RET_LOG{1'b0}};
+        for(i_f=0;i_f<(FPW);i_f=i_f+1) begin
+            if(flit_after_mask_stage_has_rtc[i_f] && flit_after_mask_stage_is_valid[i_f])begin
+                rtc_sum_comb                  =  rtc_sum_comb + rtc(flit_after_mask_stage[i_f]);
+            end
+        end
+    end
+end
+
+if(DISABLE_RX_CHECKS==1) begin
+    `ifdef ASYNC_RES
+    always @(posedge clk or negedge res_n)  begin `else
+    always @(posedge clk)  begin `endif
+    if(!res_n) begin
+        tx_hmc_frp                      <= {8{1'b0}};
+    end else begin
+        for(i_f=0;i_f<(FPW);i_f=i_f+1) begin
+            if(data2crc_tail[i_f] && data2crc_valid[i_f])begin
+                tx_hmc_frp                      <= frp(init_d_in_flit[i_f]);
+            end
+        end
+    end
+    end
+end else begin
+    `ifdef ASYNC_RES
+    always @(posedge clk or negedge res_n)  begin `else
+    always @(posedge clk)  begin `endif
+    if(!res_n) begin
+        tx_hmc_frp                      <= {8{1'b0}};
+    end else begin
+        for(i_f=0;i_f<(FPW);i_f=i_f+1) begin
+            if(flit_after_mask_stage_has_rtc[i_f] && flit_after_mask_stage_is_valid[i_f])begin
+                tx_hmc_frp                      <= frp(flit_after_mask_stage[i_f]);
+            end
+        end
+    end
+    end
+end
+
+//Extract FRP/RRP + last valid seq (which is necessary to check packets after error_abort_mode is cleared)
+`ifdef ASYNC_RES
+always @(posedge clk or negedge res_n)  begin `else
+always @(posedge clk)  begin `endif
+if(!res_n) begin
+
+    tx_rrp                          <= {8{1'b0}};
+    tx_returned_tokens              <= {MAX_RTC_RET_LOG{1'b0}};
+    first_seq_after_error           <= 3'h0;
+    tx_link_retry                   <= 1'b0;
+
+end else begin
+    //Return tokens
+    tx_returned_tokens              <= rtc_sum_comb;
+
+    //Process FLITs and extract frp/seq/rrp if applicable
+    for(i_f=0;i_f<(FPW);i_f=i_f+1) begin
+
+        if((flit_after_mask_stage_is_tail[i_f] && flit_after_mask_stage_is_valid[i_f]) || flit_after_mask_stage_is_start_retry[i_f]) begin
+            tx_rrp                  <=  rrp(flit_after_mask_stage[i_f]);
+        end
+
+        if(flit_after_mask_stage_has_rtc[i_f] && flit_after_mask_stage_is_valid[i_f])begin
+            first_seq_after_error           <= seq(flit_after_mask_stage[i_f]);
+        end
+    end
+
+    //-------------------------------------------TX retry
+    tx_link_retry              <= |flit_after_mask_stage_is_start_retry;
 
 end
 end
 
 //==================================================================================
-//---------------------------------Retrieve the lengths to invalide FLITs
+//---------------------------------Retrieve the lengths to invalidate FLITs
 //==================================================================================
 always @(*)  begin
 //Retrieve the length from the header and assign it to the tail. This information will be used in the
@@ -1136,22 +1144,20 @@ always @(*)  begin
 
     lng_comb = lng_temp;
 
-    for(i_f = 0; i_f < (FPW); i_f = i_f + 1) begin
+    for(i_f=0;i_f<(FPW);i_f=i_f+1) begin
 
-        if(flit_after_retry_stage_is_hdr[i_f]) begin
-            if( lng(flit_after_retry_stage[i_f]) < 2 ||
-                lng(flit_after_retry_stage[i_f]) > 9
-            ) begin
-                lng_comb = 1;
+        if(flit_after_seq_check_is_hdr[i_f]) begin
+            if(flit_after_seq_check_is_error[i_f]) begin
+                lng_comb = 4'h1;
             end else begin
-                lng_comb = lng(flit_after_retry_stage[i_f]);
+                lng_comb = lng(flit_after_seq_check[i_f]);
             end
         end
 
-        if(flit_after_retry_stage_is_tail[i_f]) begin
+        if(flit_after_seq_check_is_tail[i_f]) begin
             lng_per_tail_comb[i_f] = lng_comb;
         end else begin
-            lng_per_tail_comb[i_f] = {4{1'b0}};
+            lng_per_tail_comb[i_f] = 4'h0;
         end
 
     end
@@ -1162,12 +1168,12 @@ end
 always @(posedge clk or negedge res_n)  begin `else
 always @(posedge clk)  begin `endif
 if(!res_n) begin
-    for(i_f = 0; i_f < (FPW); i_f = i_f + 1) begin
+    for(i_f=0;i_f<(FPW);i_f=i_f+1) begin
         lng_per_tail[i_f] <= 0;
     end
-    lng_temp    <= {4{1'b0}};
+    lng_temp    <= 4'h0;
 end else begin
-    for(i_f = 0; i_f < (FPW); i_f = i_f + 1) begin
+    for(i_f=0;i_f<(FPW);i_f=i_f+1) begin
         lng_per_tail[i_f] <= lng_per_tail_comb[i_f];
     end
     lng_temp    <= lng_comb;
@@ -1181,40 +1187,38 @@ end
 `ifdef ASYNC_RES
 always @(posedge clk or negedge res_n)  begin `else
 always @(posedge clk)  begin `endif
-if(!res_n) begin
 
-    for(i_c=0; i_c<(CYCLES_TO_COMPLETE_FULL_PACKET); i_c=i_c+1) begin
-        flit_in_invalidation_data[i_c]            <= {DWIDTH{1'b0}};
-        flit_in_invalidation_is_hdr[i_c]          <= {FPW{1'b0}};
-        flit_in_invalidation_is_tail[i_c]         <= {FPW{1'b0}};
-        flit_in_invalidation_is_flow[i_c]         <= {FPW{1'b0}};
-        flit_in_invalidation_has_rtc[i_c]         <= {FPW{1'b0}};
-        flit_in_invalidation_is_start_retry[i_c]  <= {FPW{1'b0}};
+    `ifdef RESET_ALL
+    if(!res_n) begin
+        flit_in_invalidation_data[0]            <= {DWIDTH{1'b0}};
+
+        for(i_c=0; i_c<(CYCLES_TO_COMPLETE_FULL_PACKET-1); i_c=i_c+1) begin
+            flit_in_invalidation_data[i_c+1]    <= {DWIDTH{1'b0}};
+        end
+    end else 
+    `endif
+    begin
+        flit_in_invalidation_data[0]            <= flit_after_mask_stage_word;
+
+        for(i_c=0; i_c<(CYCLES_TO_COMPLETE_FULL_PACKET-1); i_c=i_c+1) begin
+            flit_in_invalidation_data[i_c+1]        <= flit_in_invalidation_data[i_c];
+        end
     end
-end else begin
-    flit_in_invalidation_data[0]            <= flit_after_seq_check_word;
-    flit_in_invalidation_is_hdr[0]          <= flit_after_seq_check_is_hdr;
-    flit_in_invalidation_is_tail[0]         <= flit_after_seq_check_is_tail;
-    flit_in_invalidation_is_flow[0]         <= flit_after_seq_check_is_flow;
-    flit_in_invalidation_has_rtc[0]         <= flit_after_seq_check_has_rtc;
-    flit_in_invalidation_is_start_retry[0]  <= flit_after_seq_check_is_start_retry;
+
+    flit_in_invalidation_is_hdr[0]          <= flit_after_mask_stage_is_hdr;
+    flit_in_invalidation_is_tail[0]         <= flit_after_mask_stage_is_tail;
 
     for(i_c=0; i_c<(CYCLES_TO_COMPLETE_FULL_PACKET-1); i_c=i_c+1) begin
-        flit_in_invalidation_data[i_c+1]            <= flit_in_invalidation_data[i_c];
         flit_in_invalidation_is_hdr[i_c+1]          <= flit_in_invalidation_is_hdr[i_c];
         flit_in_invalidation_is_tail[i_c+1]         <= flit_in_invalidation_is_tail[i_c];
-        flit_in_invalidation_is_flow[i_c+1]         <= flit_in_invalidation_is_flow[i_c];
-        flit_in_invalidation_has_rtc[i_c+1]         <= flit_in_invalidation_has_rtc[i_c];
-        flit_in_invalidation_is_start_retry[i_c+1]  <= flit_in_invalidation_is_start_retry[i_c];
     end
-end
 end
 
 //Mark all poisoned FLITs
 always @(*)  begin
     flit_in_invalidation0_is_poisoned_comb  = {FPW{1'b0}};
     for(i_f = FPW-1; i_f>=0; i_f = i_f-1) begin
-        if(flit_after_seq_check_is_poisoned[i_f])begin
+        if(flit_after_mask_stage_is_poisoned[i_f])begin
             flit_in_invalidation0_is_poisoned_comb =flit_in_invalidation0_is_poisoned_comb | 
                                                     (({FPW{1'b1}} >> (FPW-i_f-1)) & ~({FPW{1'b1}} >> lng_per_tail[i_f]+(FPW-i_f-1)));
         end
@@ -1226,7 +1230,7 @@ always @(posedge clk)  begin `endif
 if(!res_n) begin
 
     for(i_c = 0; i_c < (CYCLES_TO_COMPLETE_FULL_PACKET); i_c = i_c + 1) begin
-        flit_in_invalidation_is_poisoned[i_c]  <= 0;
+        flit_in_invalidation_is_poisoned[i_c]  <= {FPW{1'b0}};
     end
 
 end else begin
@@ -1238,9 +1242,7 @@ end else begin
 
     //If there is a poisoned packet mark all FLITs as such
     for(i_f = FPW-1; i_f>=0; i_f = i_f-1) begin
-        if(flit_after_seq_check_is_poisoned[i_f]) begin
-
-            // flit_in_invalidation_is_poisoned[0] <= ({FPW{1'b1}} >> (FPW-i_f-1)) & ~({FPW{1'b1}} >> lng_per_tail[i_f]+(FPW-i_f-1));
+        if(flit_after_mask_stage_is_poisoned[i_f]) begin
 
             for(i_c = 0; i_c < (CYCLES_TO_COMPLETE_FULL_PACKET-1); i_c = i_c + 1) begin
                 if(lng_per_tail[i_f] > ((i_c)*FPW)+i_f+1) begin
@@ -1261,19 +1263,14 @@ always @(posedge clk)  begin `endif
 if(!res_n) begin
 
     for(i_c = 0; i_c < (CYCLES_TO_COMPLETE_FULL_PACKET); i_c = i_c + 1) begin
-        flit_in_invalidation_is_valid[i_c]     <= 0;
+        flit_in_invalidation_is_valid[i_c]     <= {FPW{1'b0}};
     end
-    error_detected                  <= 0;
-    flit_in_invalidation_mask_error <= {FPW{1'b1}};
+    flit_in_invalidation_mask_error <= {FPW{1'b0}};
 
 end else begin
 
     //Reset the masks for invalidation stages
     flit_in_invalidation_mask_error         <= {FPW{1'b1}};
-
-    if(irtry_clear_trig) begin
-        error_detected <= 0;
-    end
 
     //Propate invalidation stages but apply error and poisoned masks to the second stage
     for(i_c = 1; i_c < (CYCLES_TO_COMPLETE_FULL_PACKET-1); i_c = i_c + 1) begin
@@ -1281,85 +1278,24 @@ end else begin
     end
     flit_in_invalidation_is_valid[1] <= flit_in_invalidation_is_valid[0] & flit_in_invalidation_mask_error;
 
-    if(error_detected) begin
-        //There is no valid FLIT when an error was detected
-        flit_in_invalidation_is_valid[0] <= {FPW{1'b0}};
-    end else begin
-        //First apply valids from previous stage
-        flit_in_invalidation_is_valid[0] <= flit_after_seq_check_is_valid;
+    //First apply valids from previous stage
+    flit_in_invalidation_is_valid[0] <= flit_after_mask_stage_is_valid;
 
-        //At least one FLIT contained an error in its tail. Leave all FLITs before the error untouched
-        for(i_f = FPW-1; i_f>=0; i_f = i_f-1) begin
-            if(flit_after_seq_check_is_error[i_f] && flit_after_seq_check_is_tail[i_f]) begin
-                error_detected <= 1'b1;
-                flit_in_invalidation_mask_error <= {FPW{1'b1}} >> (FPW-i_f-1+lng_per_tail[i_f]);
-            end
+    //At least one FLIT contained an error in its tail. Leave all FLITs before the error untouched
+    for(i_f = FPW-1; i_f>=0; i_f = i_f-1) begin
+        if(flit_after_mask_stage_is_error[i_f]) begin
+            flit_in_invalidation_mask_error <= {FPW{1'b1}} >> (FPW-i_f-1+lng_per_tail[i_f]);
         end
 
-        //Now use the length of the packet to invalidate FLITs that may reside in the next stages already
-        for(i_f = FPW-1; i_f>=0; i_f = i_f-1) begin
-            if(flit_after_seq_check_is_error[i_f] && flit_after_seq_check_is_tail[i_f]) begin
-                for(i_c = 0; i_c < (CYCLES_TO_COMPLETE_FULL_PACKET-1); i_c = i_c + 1) begin
-                    if(lng_per_tail[i_f] > ((i_c)*FPW)+i_f+1) begin
-                        flit_in_invalidation_is_valid[i_c+1] <= flit_in_invalidation_is_valid[i_c] &
-                                                                ({FPW{1'b1}} >> lng_per_tail[i_f]-(i_c*FPW)-i_f-1);
-                    end
+    //Now use the length of the packet to invalidate FLITs that may reside in the next stages already
+        if(flit_after_mask_stage_is_error[i_f] && &flit_in_invalidation_mask_error) begin
+            for(i_c = 0; i_c < (CYCLES_TO_COMPLETE_FULL_PACKET-1); i_c = i_c + 1) begin
+                if(lng_per_tail[i_f] > ((i_c)*FPW)+i_f+1) begin
+                    flit_in_invalidation_is_valid[i_c+1] <= flit_in_invalidation_is_valid[i_c] &
+                                                            ({FPW{1'b1}} >> lng_per_tail[i_f]-(i_c*FPW)-i_f-1);
                 end
             end
         end
-    end
-
-end
-end
-
-//====================================================================
-//---------------------------------FRP/RRP/RTC
-//====================================================================
-//Count Tokens that were returned
-always @(*)  begin
-    rtc_sum_comb                  = {8{1'b0}};
-    for(i_f = 0; i_f < (FPW); i_f = i_f + 1) begin
-        if(checked_flit_has_rtc[i_f])begin
-            rtc_sum_comb                  =  rtc_sum_comb + rtc(checked_flit[i_f]);
-        end
-    end
-end
-
-//Extract FRP/RRP + last seq (which is necessary to check packets after error_abort_mode is cleared)
-`ifdef ASYNC_RES
-always @(posedge clk or negedge res_n)  begin `else
-always @(posedge clk)  begin `endif
-if(!res_n) begin
-
-    tx_hmc_frp                      <= {8{1'b0}};
-    tx_rrp                          <= {8{1'b0}};
-    tx_returned_tokens              <= {8{1'b0}};
-    first_seq_after_error           <= 3'h1;
-
-    tx_link_retry                   <= 1'b0;
-
-end else begin
-    //Return tokens
-    tx_returned_tokens              <= rtc_sum_comb;
-
-    //Process FLITs and extract frp/seq/rrp if applicable
-    for(i_f = 0; i_f < (FPW); i_f = i_f + 1) begin
-
-        if(checked_flit_is_tail[i_f] || checked_flit_is_start_retry[i_f]) begin
-            tx_rrp                  <=  rrp(checked_flit[i_f]);
-
-            if(checked_flit_has_rtc[i_f])begin
-                tx_hmc_frp                      <= frp(checked_flit[i_f]);
-                first_seq_after_error           <= seq(checked_flit[i_f]) + 3'h1;
-            end
-        end
-    end
-
-    //-------------------------------------------TX retry
-    tx_link_retry   <= 1'b0;
-
-    if(|checked_flit_is_start_retry)begin
-        tx_link_retry              <= 1'b1;
     end
 
 end
@@ -1371,72 +1307,54 @@ end
 `ifdef ASYNC_RES
 always @(posedge clk or negedge res_n)  begin `else
 always @(posedge clk)  begin `endif
-if(!res_n) begin
 
-    input_buffer_shift_in     <= 1'b0;
-    input_buffer_valid        <= {FPW{1'b0}};
-    input_buffer_is_hdr       <= {FPW{1'b0}};
-    input_buffer_is_tail      <= {FPW{1'b0}};
-    input_buffer_is_error_rsp <= {FPW{1'b0}};
-
-    for(i_f = 0; i_f < (FPW); i_f = i_f + 1) begin
-        input_buffer_d_in_flit[i_f]     <= {128{1'b0}};
+    for(i_f=0;i_f<(FPW);i_f=i_f+1) begin
+        `ifdef RESET_ALL
+        if(!res_n) input_buffer_d_in_flit[i_f] <= {128{1'b0}};
+        else
+        `endif    
+        input_buffer_d_in_flit[i_f]           <= checked_flit[i_f];
     end
 
-end else begin
-
-    input_buffer_shift_in       <= 1'b0;
-    input_buffer_is_error_rsp   <= {FPW{1'b0}};
-
-    for(i_f = 0; i_f < (FPW); i_f = i_f + 1) begin
-        input_buffer_d_in_flit[i_f]        <= {128{1'b0}};
-
-        //Flow and poisoned packets are not forwarded
-        if(checked_flit_is_valid[i_f]) begin
-            if(!checked_flit_is_flow[i_f] && !checked_flit_is_poisoned[i_f])begin
-                input_buffer_d_in_flit[i_f]           <= checked_flit[i_f];
-            end
-            if(checked_flit_is_hdr[i_f] && (cmd(checked_flit[i_f])==CMD_RSP_ERROR)) begin
-                input_buffer_is_error_rsp[i_f]  <= 1'b1;
-            end
+    for(i_f=0;i_f<FPW;i_f=i_f+1) begin
+        input_buffer_is_error_rsp[i_f]  <= checked_flit_is_hdr[i_f]     && (cmd(checked_flit[i_f])==CMD_RSP_ERROR);
+        if(PASS_ERR_RSP==1) begin
+            input_buffer_is_hdr[i_f]        <= checked_flit_is_hdr[i_f]     && !checked_flit_is_poisoned[i_f] && !is_rsp_flow(checked_flit[i_f]);
+            input_buffer_is_valid[i_f]      <= checked_flit_is_valid[i_f]   && !checked_flit_is_poisoned[i_f] && !(is_rsp_flow(checked_flit[i_f]) && checked_flit_is_hdr[i_f]);
+            input_buffer_is_tail[i_f]       <= checked_flit_is_tail[i_f]    && !checked_flit_is_poisoned[i_f] && !(is_rsp_flow(checked_flit[i_f]) && checked_flit_is_hdr[i_f]);
+        end else begin
+            //Do not forward error response packets. Actually they are forwarded but not marked as valid at all
+            input_buffer_is_hdr[i_f]        <= checked_flit_is_hdr[i_f]     && !checked_flit_is_poisoned[i_f] && !is_rsp_flow(checked_flit[i_f])  && !is_unsolicited(checked_flit[i_f]);
+            input_buffer_is_valid[i_f]      <= checked_flit_is_valid[i_f]   && !checked_flit_is_poisoned[i_f] && !((is_rsp_flow(checked_flit[i_f]) || is_unsolicited(checked_flit[i_f])) && checked_flit_is_hdr[i_f]);
+            input_buffer_is_tail[i_f]       <= checked_flit_is_tail[i_f]    && !checked_flit_is_poisoned[i_f] && !((is_rsp_flow(checked_flit[i_f]) || is_unsolicited(checked_flit[i_f])) && checked_flit_is_hdr[i_f]);
         end
     end
 
-    //Mask out any flow or poisoned packets
-    input_buffer_valid      <=  checked_flit_is_valid &
-                                ~checked_flit_is_flow &
-                                ~checked_flit_is_poisoned;
-    input_buffer_is_hdr     <=  checked_flit_is_hdr   &
-                                ~checked_flit_is_flow &
-                                ~checked_flit_is_poisoned;
-    input_buffer_is_tail    <=  checked_flit_is_tail  &
-                                ~checked_flit_is_flow &
-                                ~checked_flit_is_poisoned;
-
-    //If there is still a valid packet remaining after applying the mask
-    if(|(checked_flit_is_valid  & ~checked_flit_is_flow & ~checked_flit_is_poisoned))begin
-       input_buffer_shift_in    <= 1'b1;
-    end
-
 end
-end
+assign input_buffer_shift_in = |input_buffer_is_valid;
 
-always @(*)  begin
-    tokens_poisoned          = {LOG_FPW+1{1'b0}};
-
-    for(i_f=0; i_f<FPW; i_f=i_f+1) begin
-        tokens_poisoned  =   tokens_poisoned + checked_flit_is_poisoned[i_f];
-    end
-end
+//==================================================================================
+//---------------------------------Error response monitoring
+//==================================================================================
 
 `ifdef ASYNC_RES
 always @(posedge clk or negedge res_n)  begin `else
 always @(posedge clk)  begin `endif
-if(!res_n) begin
-    tx_hmc_poisoned_tokens_to_return    <= {LOG_FPW+1{1'b0}};
-end else begin
-    tx_hmc_poisoned_tokens_to_return    <= tokens_poisoned;
-end
+
+    if(!res_n) begin
+        rf_errstat_valid <= 1'b0;
+        rf_errstat       <= 7'h00;
+    end else begin
+
+        rf_errstat_valid <= |input_buffer_is_error_rsp;
+
+        for(i_f=0;i_f<FPW;i_f=i_f+1) begin
+            if(input_buffer_is_error_rsp[i_f]) begin
+                rf_errstat <= errstat(input_buffer_d_in_flit[i_f]);
+            end
+        end
+    end
+
 end
 
 //==================================================================================
@@ -1445,76 +1363,166 @@ end
 always @(*)  begin
     rf_cnt_poisoned_comb = {LOG_FPW+1{1'b0}};
     rf_cnt_rsp_comb      = {LOG_FPW+1{1'b0}};
+    rf_cnt_rsp_err_comb  = {LOG_FPW+1{1'b0}};
 
-    for(i_f = 0; i_f < (FPW); i_f = i_f + 1) begin
+    for(i_f=0;i_f<(FPW);i_f=i_f+1) begin
         if(checked_flit_is_poisoned[i_f] && checked_flit_is_hdr[i_f])begin
             rf_cnt_poisoned_comb = rf_cnt_poisoned_comb + {{LOG_FPW{1'b0}},1'b1};
         end
-        if(input_buffer_is_tail[i_f] && !input_buffer_is_error_rsp[i_f])begin
-            //if its a tail but not error response
-            rf_cnt_rsp_comb = rf_cnt_rsp_comb + {{LOG_FPW{1'b0}},1'b1};
+        if(input_buffer_is_tail[i_f])begin
+            if(input_buffer_is_error_rsp[i_f]) begin
+                rf_cnt_rsp_err_comb = rf_cnt_rsp_err_comb + {{LOG_FPW{1'b0}},1'b1};  
+            end else begin
+                //if its a tail but not error response
+                rf_cnt_rsp_comb = rf_cnt_rsp_comb + {{LOG_FPW{1'b0}},1'b1};
+            end
         end
     end
 end
 
-`ifdef ASYNC_RES
-always @(posedge clk or negedge res_n)  begin `else
-always @(posedge clk)  begin `endif
-if(!res_n) begin
-    rf_cnt_poisoned <= {HMC_RF_RWIDTH{1'b0}};
-    rf_cnt_rsp      <= {HMC_RF_RWIDTH{1'b0}};
-end else begin
-    rf_cnt_poisoned <= rf_cnt_poisoned + {{HMC_RF_RWIDTH-LOG_FPW-1{1'b0}},rf_cnt_poisoned_comb};
-    rf_cnt_rsp      <= rf_cnt_rsp + {{HMC_RF_RWIDTH-LOG_FPW-1{1'b0}},rf_cnt_rsp_comb};
-end
-end
+generate 
+    if(XILINX==1) begin
+        //Use the openhmc_counter48_wrapper_xilinx in building_blocks/counter to directly instantiate DSP48
+        openhmc_counter48_wrapper_xilinx #(
+            .INC_SIZE(LOG_FPW+1),
+            .PIPELINED(XIL_CNT_PIPELINED)
+        )cnt_poisoned (
+            .clk(clk),
+            .res_n(res_n),
+            .inc_value(rf_cnt_poisoned_comb),
+            .value(rf_cnt_poisoned)
+        );
 
-//==================================================================================
-//---------------------------------Shift response packets into the output fifo, return a token for each processed FLIT
-//==================================================================================
-always @(*)  begin
-    tokens_out_of_fifo_sum_comb          = {LOG_FPW+1{1'b0}};
+        openhmc_counter48_wrapper_xilinx #(
+            .INC_SIZE(LOG_FPW+1),
+            .PIPELINED(XIL_CNT_PIPELINED)
+        )cnt_rsp (
+            .clk(clk),
+            .res_n(res_n),
+            .inc_value(rf_cnt_rsp_comb),
+            .value(rf_cnt_rsp)
+        );
 
-    if(input_buffer_shift_out)begin
-        for(i_f=0; i_f<FPW; i_f=i_f+1) begin
-            tokens_out_of_fifo_sum_comb  =   tokens_out_of_fifo_sum_comb + 
-                                             (input_buffer_d_out[DWIDTH+i_f] && 
-                                             !input_buffer_d_out[DWIDTH+i_f+(3*FPW)]);    //increment if there's a valid FLIT, but not an error response
+    end else begin
+        reg [RF_COUNTER_SIZE-1:0]   rf_cnt_poisoned_temp;
+        reg [RF_COUNTER_SIZE-1:0]   rf_cnt_rsp_temp;
+        assign rf_cnt_poisoned      = rf_cnt_poisoned_temp;
+        assign rf_cnt_rsp           = rf_cnt_rsp_temp;
+
+        `ifdef ASYNC_RES
+        always @(posedge clk or negedge res_n)  begin `else
+        always @(posedge clk)  begin `endif
+        if(!res_n) begin
+            rf_cnt_poisoned_temp <= {RF_COUNTER_SIZE{1'b0}};
+            rf_cnt_rsp_temp      <= {RF_COUNTER_SIZE{1'b0}};
+        end else begin
+            rf_cnt_poisoned_temp <= rf_cnt_poisoned_temp + {{RF_COUNTER_SIZE-LOG_FPW-1{1'b0}},rf_cnt_poisoned_comb};
+            rf_cnt_rsp_temp      <= rf_cnt_rsp_temp + {{RF_COUNTER_SIZE-LOG_FPW-1{1'b0}},rf_cnt_rsp_comb};
+        end
         end
     end
-end
+endgenerate
 
-`ifdef ASYNC_RES
-always @(posedge clk or negedge res_n)  begin `else
-always @(posedge clk)  begin `endif
-if(!res_n) begin
-    tx_hmc_tokens_to_return    <= {LOG_FPW+1{1'b0}};
-end else begin
-    tx_hmc_tokens_to_return    <= tokens_out_of_fifo_sum_comb;
-end
-end
+//==================================================================================
+//---------------------------------Return the tokens
+//==================================================================================
+generate
+    if(OPEN_RSP_MODE==0) begin : return_tokens
 
-`ifdef ASYNC_RES
-always @(posedge clk or negedge res_n)  begin `else
-always @(posedge clk)  begin `endif
-if(!res_n) begin
-    //----FIFO
-    d_out_fifo_shift_in          <= 1'b0;
-    d_out_fifo_ctrl              <= {4*FPW{1'b0}};
-    d_out_fifo_data              <= {DWIDTH{1'b0}};
+    reg   [MAX_RTC_RET_LOG-1:0] rtc_returned_tokens;
+    reg   [MAX_RTC_RET_LOG-1:0] rtc_poisoned_tokens_to_return;
+    reg   [LOG_FPW:0]           tokens_out_of_fifo_sum_comb;
+    reg   [LOG_FPW:0]           tokens_poisoned;
 
-end else begin
-    d_out_fifo_shift_in          <= 1'b0;
-    d_out_fifo_ctrl              <= {4*FPW{1'b0}};
+    assign tx_hmc_tokens_to_return          = rtc_returned_tokens;
+    assign tx_hmc_poisoned_tokens_to_return = rtc_poisoned_tokens_to_return;
 
+        //Poisoned tokens will be returned before they enter the input buffer
+        always @(*)  begin
+            tokens_poisoned          = {LOG_FPW+1{1'b0}};
 
-    if(input_buffer_shift_out)begin
-        d_out_fifo_data             <= input_buffer_d_out[DWIDTH-1:0];
-        d_out_fifo_shift_in         <= 1'b1;
-        d_out_fifo_ctrl             <= input_buffer_d_out[DWIDTH+(4*FPW)-1:DWIDTH];
+            for(i_f=0; i_f<FPW; i_f=i_f+1) begin
+                tokens_poisoned  =   tokens_poisoned + checked_flit_is_poisoned[i_f];
+            end
+        end
+
+        //All other tokens will be returned as they leave the input buffer
+        always @(*)  begin
+            tokens_out_of_fifo_sum_comb          = {LOG_FPW+1{1'b0}};
+            if(input_buffer_shift_out)begin
+                for(i_f=0; i_f<FPW; i_f=i_f+1) begin
+                    if(PASS_ERR_RSP==1) begin
+                        tokens_out_of_fifo_sum_comb  =   tokens_out_of_fifo_sum_comb + 
+                                                     (input_buffer_d_out[DWIDTH+i_f] && 
+                                                     !input_buffer_d_out[DWIDTH+i_f+(3*FPW)]);    //increment if there's a valid FLIT, but not an error response
+                    end else begin
+                        tokens_out_of_fifo_sum_comb  =   tokens_out_of_fifo_sum_comb + input_buffer_d_out[DWIDTH+i_f];
+                    end
+                end
+            end
+        end
+
+        `ifdef ASYNC_RES
+        always @(posedge clk or negedge res_n)  begin `else
+            always @(posedge clk)  begin `endif
+            if(!res_n) begin
+                rtc_returned_tokens            <= {LOG_FPW+1{1'b0}};
+                rtc_poisoned_tokens_to_return  <= {LOG_FPW+1{1'b0}};
+            end else begin
+                rtc_returned_tokens            <= tokens_out_of_fifo_sum_comb;
+                rtc_poisoned_tokens_to_return  <= tokens_poisoned;
+            end
+        end
+
+    end else begin
+        //no input buffer, and no tokens will be returned
+        assign tx_hmc_tokens_to_return          = {LOG_FPW+1{1'b0}};
+        assign tx_hmc_poisoned_tokens_to_return = {LOG_FPW+1{1'b0}}; 
     end
-end
-end
+endgenerate
+
+
+
+//==================================================================================
+//---------------------------------Shift response packets into the output fifo
+//==================================================================================
+generate
+    if(OPEN_RSP_MODE==0) begin : assign_output_data
+
+    reg   [DWIDTH-1:0]          out_data;
+    reg                         out_shift_in;
+    reg   [NUM_CTRL_BITS-1:0]   out_ctrl;
+
+    assign d_out_fifo_data      = out_data;
+    assign d_out_fifo_shift_in  = out_shift_in;
+    assign d_out_fifo_ctrl      = out_ctrl;
+
+        `ifdef ASYNC_RES
+        always @(posedge clk or negedge res_n)  begin `else
+        always @(posedge clk)  begin `endif
+            if(!res_n) begin
+                //----FIFO
+                out_shift_in          <= 'b0;
+                out_ctrl              <= 'b0;
+                out_data              <= 'b0;
+            end else begin
+                if(input_buffer_shift_out)begin
+                    out_shift_in         <= 1'b1;
+                    out_ctrl             <= input_buffer_d_out[DWIDTH+NUM_CTRL_BITS-1:DWIDTH];
+                    out_data             <= input_buffer_d_out[DWIDTH-1:0];
+                end else begin
+                    out_shift_in          <= 1'b0;
+                end
+            end
+        end
+    end else begin  //Open Response Mode
+
+    assign d_out_fifo_data      = input_buffer_d_in[DWIDTH-1:0];
+    assign d_out_fifo_shift_in  = input_buffer_shift_in;
+    assign d_out_fifo_ctrl      = input_buffer_d_in[DWIDTH+NUM_CTRL_BITS-1:DWIDTH];
+
+    end
+endgenerate
 
 
 
@@ -1524,14 +1532,30 @@ end
 //-----------------------------------------------------------------------------------------------------
 //=====================================================================================================
 
-wire   res_n_lanes;
-assign res_n_lanes = ((rf_link_status == LINK_DOWN) || !rf_hmc_init_cont_set || rst_descramblers) ? 1'b0 : 1'b1;
-//assign res_n_lanes = ((rf_link_status == LINK_DOWN) || !rf_hmc_init_cont_set) ? 1'b0 : 1'b1;
+wire   lanes_can_lock;
+assign lanes_can_lock = (rf_hmc_sleep || !run_rx) ? 1'b0 : 1'b1;
 
+wire   [47:0] bit_slip_cnt_temp [NUM_LANES-1:0];
+(* mark_debug="TRUE", keep="TRUE" *)
+wire   [7:0] bit_slip_cnt [NUM_LANES-1:0];
+// 
 //Lane Init
 genvar i;
 generate
 for(i=0;i<NUM_LANES;i=i+1)begin : lane_gen
+
+        assign bit_slip_cnt[i] = bit_slip_cnt_temp[i][7:0];
+
+        openhmc_counter48_wrapper_xilinx #(
+            .INC_SIZE(1),
+            .PIPELINED(XIL_CNT_PIPELINED)
+        ) bit_slip_counter_I (
+            .clk(clk),
+            .res_n(res_n),
+            .inc_value(phy_bit_slip[i]),
+            .value(bit_slip_cnt_temp[i])
+        ); 
+
     rx_lane_logic #(
         .DWIDTH(DWIDTH),
         .NUM_LANES(NUM_LANES),
@@ -1539,8 +1563,9 @@ for(i=0;i<NUM_LANES;i=i+1)begin : lane_gen
         .BITSLIP_SHIFT_RIGHT(BITSLIP_SHIFT_RIGHT)
     ) rx_lane_I (
         .clk(clk),
-        .res_n(res_n_lanes),
-        .bit_slip(init_bit_slip[i]),
+        .res_n(res_n),
+        .can_lock(lanes_can_lock && lock_int[i]),
+        .bit_slip(phy_bit_slip[i]),
         .descrambler_locked(init_descrambler_locked[i]),
         .descrambler_disable(rf_scrambler_disable),
         .lane_polarity(rf_lane_polarity[i]),
@@ -1554,6 +1579,7 @@ endgenerate
 rx_crc_compare #(
     .DWIDTH(DWIDTH),
     .FPW(FPW),
+    // .CRC_PIPELINED(CRC_PIPELINED),
     .LOG_FPW(LOG_FPW)
 )
 rx_crc_compare
@@ -1561,10 +1587,11 @@ rx_crc_compare
     .clk(clk),
     .res_n(res_n),
     //input
-    .d_in_data(data2crc),
+    .d_in_data(d_in_dly),
     .d_in_hdr(data2crc_hdr),
     .d_in_tail(data2crc_tail),
     .d_in_valid(data2crc_valid),
+    // .d_in_error(data2crc_error),
     .d_in_lng(data2crc_lng),
     //output
     .d_out_data(crc_d_out_data),
@@ -1574,213 +1601,51 @@ rx_crc_compare
     .d_out_error(crc_d_out_flit_is_error),
     .d_out_poisoned(crc_d_out_flit_is_poisoned),
     .d_out_rtc(crc_d_out_flit_has_rtc),
-    .d_out_flow(crc_d_out_flit_is_flow),
-    .crc_out(crc_out)
-);
+    .d_out_flow(crc_d_out_flit_is_flow)
+); 
 
-//Buffer Fifo - Depth = Max Tokens
-openhmc_sync_fifo #(
-        .DATASIZE(DWIDTH+(4*FPW)),   //+4*FPW for header/tail/valid/error response information -> AXI-4 TUSER signal
-        .ADDRSIZE(LOG_MAX_RTC)
-    ) input_buffer_I(
-        .clk(clk),
-        .res_n(res_n),
-        .d_in(input_buffer_d_in),
-        .shift_in(input_buffer_shift_in),
-        .d_out(input_buffer_d_out),
-        .shift_out(input_buffer_shift_out),
-        .next_stage_full(1'b1), // Dont touch!
-        .empty(input_buffer_empty)
-    );
-
-
-//  //===========================================================================
-//   // Chipscope modules used to debug the contoller
-//   //===========================================================================
-//   wire [35:0] ctrl0;
-//   wire [63:0] trig0,trig1,trig2,trig3,trig4,trig5,trig6,trig7,trig8,trig9,trig10,trig11,trig12,trig13,trig14,trig15; 
-//   wire [63:0] trig0_i,trig1_i,trig2_i,trig3_i,trig4_i,trig5_i,trig6_i,trig7_i,trig8_i,trig9_i,trig10_i,trig11_i,trig12_i,trig13_i,trig14_i,trig15_i; 
-//   reg [63:0] trig0_R;
-//   reg [63:0] trig1_R;
-//   reg [63:0] trig2_R;
-//   reg [63:0] trig3_R;
-//   reg [63:0] trig4_R;
-//   reg [63:0] trig5_R;
-//   reg [63:0] trig6_R;
-//   reg [63:0] trig7_R;
-//   reg [63:0] trig8_R;
-//   reg [63:0] trig9_R;
-//   reg [63:0] trig10_R;
-//   reg [63:0] trig11_R;
-//   reg [63:0] trig12_R;
-//   reg [63:0] trig13_R;
-//   reg [63:0] trig14_R;
-//   reg [63:0] trig15_R;
-//
-//   chipscope_icon chipscope_icon_inst(
-//     .CONTROL0    (ctrl0)
-//   );
-//
-//   chipscope_ila_16p_64b chipscope_ila_inst(
-//     .CONTROL   (ctrl0),
-//     .CLK       (clk),
-//     .TRIG0     (trig0),
-//     .TRIG1     (trig1),
-//     .TRIG2     (trig2),
-//     .TRIG3     (trig3),
-//     .TRIG4     (trig4),
-//     .TRIG5     (trig5),
-//     .TRIG6     (trig6),
-//     .TRIG7     (trig7),
-//     .TRIG8     (trig8),
-//     .TRIG9     (trig9),
-//     .TRIG10    (trig10),
-//     .TRIG11    (trig11),
-//     .TRIG12    (trig12),
-//     .TRIG13    (trig13),
-//     .TRIG14    (trig14),
-//     .TRIG15    (trig15)
-//   );
-//
-//
-////   localparam offset = 64;
-////
-////       //----------------------------------
-////    //----TO HMC PHY
-////    //----------------------------------
-////    input   wire    [DWIDTH-1:0]        phy_scrambled_data_in,
-////    output  reg     [NUM_LANES-1:0]     init_bit_slip,               //bit slip per lane
-////
-////    //----------------------------------
-////    //----TO RX HTAX FIFO
-////    //----------------------------------
-////    output  reg     [DWIDTH-1:0]        d_out_fifo_data,
-////    input   wire                        d_out_fifo_full,
-////    input   wire                        d_out_fifo_a_full,
-////    output  reg                         d_out_fifo_shift_in,
-////    output  reg     [4*FPW-1:0]         d_out_fifo_ctrl,
-////
-////
-////    //----------------------------------
-////    //----TO TX Block
-////    //----------------------------------
-////    output  reg                         tx_link_retry,
-////    output  reg                         tx_error_abort_mode,
-////    output  reg                         tx_error_abort_mode_cleared,
-////    output  reg     [7:0]               tx_hmc_frp,
-////    output  reg     [7:0]               tx_rrp,
-////    output  reg     [7:0]               tx_returned_tokens,
-////    output  reg     [LOG_FPW:0]         tx_hmc_tokens_to_return,
-////    output  reg     [LOG_FPW:0]         tx_hmc_poisoned_tokens_to_return,
-////
-////    //----------------------------------
-////    //----RF
-////    //----------------------------------
-////    //Monitoring    1-cycle set to increment
-////    output  reg     [HMC_RF_RWIDTH-1:0] rf_cnt_poisoned,
-////    output  reg     [HMC_RF_RWIDTH-1:0] rf_cnt_rsp,
-////    //Status
-////    output  reg     [1:0]               rf_link_status,
-////    output  reg     [2:0]               rf_hmc_init_status,
-////    input   wire                        rf_tx_sends_ts1,
-////    input   wire                        rf_hmc_sleep,
-////    //Init Status
-////    output  wire    [NUM_LANES-1:0]     rf_descrambler_part_aligned,
-////    output  wire    [NUM_LANES-1:0]     rf_descrambler_aligned,
-////    output  wire                        rf_all_descramblers_aligned,
-////    //Control
-////    input   wire    [5:0]               rf_bit_slip_time,
-////    input   wire                        rf_hmc_init_cont_set,
-////    output  reg     [NUM_LANES-1:0]     rf_lane_polarity,
-////    input   wire                        rf_scrambler_disable,
-////    output  reg                         rf_lane_reversal_detected,
-////    output  reg     [NUM_LANES-1:0]     rf_descramblers_locked,
-////    input   wire    [4:0]               rf_irtry_received_threshold
-//
-//// wire [DWIDTH-1:0]       crc_d_out_data;
-//// wire [128-1:0]          crc_d_out_flit              [FPW-1:0];
-//// wire [FPW-1:0]          crc_d_out_flit_is_hdr;
-//// wire [FPW-1:0]          crc_d_out_flit_is_tail;
-//// wire [FPW-1:0]          crc_d_out_flit_is_valid;
-//// wire [FPW-1:0]          crc_d_out_flit_is_error;
-//// wire [FPW-1:0]          crc_d_out_flit_is_poisoned;
-//// wire [FPW-1:0]          crc_d_out_flit_has_rtc;
-//// wire [FPW-1:0]          crc_d_out_flit_is_flow;
-//
-//
-//   ////assign trig0_i  = {gt_rxslide_in_i,m_axis_rx_TREADY,m_axis_rx_TVALID,s_axis_tx_TREADY,s_axis_tx_TVALID,rf_write_en,rf_read_en,rf_access_complete,rf_invalid_address,rf_address,1'h0,DATA_ERR_DETECT,iic_err,iic_busy, res_n_user, OPEN_HMC_INIT_DONE, HMC_IIC_INIT_DONE, phy_rx_ready_R, serdes_ready,res_n_transceiver, pll1_lock,pll0_lock};
-//   //assign trig0_i  = {20'd0,d_out_fifo_full,d_out_fifo_a_full,d_out_fifo_shift_in,tx_link_retry,tx_error_abort_mode,tx_error_abort_mode_cleared,rf_tx_sends_ts1,rf_hmc_sleep,rf_all_descramblers_aligned,rf_hmc_init_cont_set,rf_scrambler_disable,rf_lane_reversal_detected};
-//   //assign trig1_i  = {rf_descrambler_aligned,rf_lane_polarity,rf_descramblers_locked,3'd0,rf_irtry_received_threshold};
-//   //assign trig2_i  = {8'd0,2'd0,rf_link_status,1'b0,rf_hmc_init_status,2'd0,rf_bit_slip_time,rf_descrambler_part_aligned};
-//   //assign trig3_i  = {8'd0,tx_hmc_frp,tx_rrp,tx_returned_tokens};
-//   //assign trig4_i  = {4'd0,crc_d_out_flit_is_flow,crc_d_out_flit_has_rtc,crc_d_out_flit_is_valid,crc_d_out_flit_is_tail,crc_d_out_flit_is_hdr,crc_d_out_flit_is_poisoned,crc_d_out_flit_is_error};
-//   //assign trig5_i  = {32'd0};
-//   //assign trig6_i  = {32'd0};
-//   //assign trig7_i  = {32'd0};
-//   //assign trig8_i  = {32'd0};
-//   //assign trig9_i  = {32'd0};
-//   //assign trig10_i = {32'd0};
-//   //assign trig11_i = {32'd0};
-//   //assign trig12_i = {32'd0};
-//   //assign trig13_i = {32'd0};
-//   //assign trig14_i = {32'd0};
-//   //assign trig15_i = {32'd0};
-//
-//   //assign trig0_i  = {gt_rxslide_in_i,m_axis_rx_TREADY,m_axis_rx_TVALID,s_axis_tx_TREADY,s_axis_tx_TVALID,rf_write_en,rf_read_en,rf_access_complete,rf_invalid_address,rf_address,1'h0,DATA_ERR_DETECT,iic_err,iic_busy, res_n_user, OPEN_HMC_INIT_DONE, HMC_IIC_INIT_DONE, phy_rx_ready_R, serdes_ready,res_n_transceiver, pll1_lock,pll0_lock};
-//   assign trig0_i  = {32'd0,gt_rxslide_in_i,m_axis_rx_TREADY,m_axis_rx_TVALID,s_axis_tx_TREADY,s_axis_tx_TVALID,rf_write_en,rf_read_en,rf_access_complete,rf_address,1'h0,DATA_ERR_DETECT,iic_err,iic_busy, res_n_user, OPEN_HMC_INIT_DONE, HMC_IIC_INIT_DONE, phy_rx_ready_R, serdes_ready,res_n_transceiver, pll1_lock,pll0_lock};
-//
-//   assign trig1_i  = {phy_scrambled_data_in[(1*64)-1:(0*64)]};
-//   assign trig2_i  = {phy_scrambled_data_in[(2*64)-1:(1*64)]};
-//   assign trig3_i  = {phy_scrambled_data_in[(3*64)-1:(2*64)]};
-//   assign trig4_i  = {phy_scrambled_data_in[(4*64)-1:(3*64)]};
-//   assign trig5_i  = {phy_scrambled_data_in[(5*64)-1:(4*64)]};
-//   assign trig6_i  = {phy_scrambled_data_in[(6*64)-1:(5*64)]};
-//   assign trig7_i  = {phy_scrambled_data_in[(7*64)-1:(6*64)]};
-//   assign trig8_i  = {phy_scrambled_data_in[(8*64)-1:(7*64)]};
-//   assign trig9_i  = descrambled_data_per_lane[0];
-//   assign trig10_i = descrambled_data_per_lane[1];
-//   assign trig11_i = descrambled_data_per_lane[2];
-//   assign trig12_i = descrambled_data_per_lane[3];
-//   assign trig13_i = descrambled_data_per_lane[4];
-//   assign trig14_i = descrambled_data_per_lane[5];
-//   assign trig15_i = descrambled_data_per_lane[6];
-//
-//
-// always @(posedge clk) begin   
-//   trig0_R <= trig0_i ;
-//   trig1_R <= trig1_i ;
-//   trig2_R <= trig2_i ;
-//   trig3_R <= trig3_i ;
-//   trig4_R <= trig4_i ;
-//   trig5_R <= trig5_i ;
-//   trig6_R <= trig6_i ;
-//   trig7_R <= trig7_i ;
-//   trig8_R <= trig8_i ;
-//   trig9_R <= trig9_i ;
-//   trig10_R <= trig10_i;
-//   trig11_R <= trig11_i;
-//   trig12_R <= trig12_i;
-//   trig13_R <= trig13_i;
-//   trig14_R <= trig14_i;
-//   trig15_R <= trig15_i;
-//  end
-//
-//assign trig0  = trig0_R;
-//assign trig1  = trig1_R;
-//assign trig2  = trig2_R;
-//assign trig3  = trig3_R;
-//assign trig4  = trig4_R;
-//assign trig5  = trig5_R;
-//assign trig6  = trig6_R;
-//assign trig7  = trig7_R;
-//assign trig8  = trig8_R;
-//assign trig9  = trig9_R;
-//assign trig10 = trig10_R;
-//assign trig11 = trig11_R;
-//assign trig12 = trig12_R;
-//assign trig13 = trig13_R;
-//assign trig14 = trig14_R;
-//assign trig15 = trig15_R;
+generate
+    if(OPEN_RSP_MODE==0) begin : use_input_buffer
+        //Buffer Fifo - Depth = Max Tokens
+        // if(XILINX==1) begin
+        //     fast_fifo #(
+        //         .DATASIZE(DWIDTH+NUM_CTRL_BITS),
+        //         .USE_SRL(1),
+        //         .ADDRSIZE(LOG_MAX_RX_TOKENS),
+        //         .PIPELINED(1),
+        //         .SRL_REGISTERED(1),
+        //         .SRL_USE_BYPASS(1)
+        //     ) input_buffer_I(
+        //         .clk(clk),
+        //         .res_n(res_n),
+        //         .d_in(input_buffer_d_in),
+        //         .shift_in(input_buffer_shift_in),
+        //         .full(),
+        //         .almost_full(),
+        //         .d_out(input_buffer_d_out),
+        //         .d_out_nxt(),
+        //         .shift_out(input_buffer_shift_out),
+        //         .empty(input_buffer_empty),
+        //         .almost_empty(),
+        //         .sec(),
+        //         .ded()
+        //     );                
+        // end else begin
+        openhmc_sync_fifo #(
+                .DATASIZE(DWIDTH+NUM_CTRL_BITS),   //+NUM_CTRL_BITS for header/tail/valid/(error response) information -> AXI-4 TUSER signal
+                .ADDRSIZE(LOG_MAX_RX_TOKENS)
+            ) input_buffer_I(
+                .clk(clk),
+                .res_n(res_n),
+                .d_in(input_buffer_d_in),
+                .shift_in(input_buffer_shift_in),
+                .d_out(input_buffer_d_out),
+                .shift_out(input_buffer_shift_out),
+                .empty(input_buffer_empty)
+            );
+        // end
+    end
+endgenerate
 
 endmodule
 `default_nettype wire

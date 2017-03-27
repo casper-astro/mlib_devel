@@ -36,26 +36,20 @@
  *
  *
  *  Module name: crc_accu
- *
- *  Modifications: henno kriel
- *  Split up CRC calculation into duplicate steps. 
- *  This may seem bizarre, but it helps with the place and route of the Xilinx ISE tools to achieve timing closure.
- *
  */
 
 module crc_accu #(parameter FPW=4)(
     //----------------------------------
     //----SYSTEM INTERFACE
     //----------------------------------
-    input  wire         clk        ,
-    input  wire         res_n      ,
+    input  wire         clk,
+    input  wire         res_n,
 
     //----------------------------------
     //----Input
     //----------------------------------
-    input  wire [FPW-1:0]       tail  ,
-    input  wire [(FPW*32)-1:0]  d_in   ,
-    input  wire [FPW-1:0]       valid  ,
+    input  wire [FPW-1:0]       tail,
+    input  wire [(FPW*32)-1:0]  d_in,
 
     //----------------------------------
     //----Output
@@ -66,8 +60,6 @@ module crc_accu #(parameter FPW=4)(
 integer i_f;
 
 reg  [31:0]    crc_temp [FPW:0];
-reg  [31:0]    crc_temp1 [FPW:0];
-reg  [31:0]    crc_temp2 [FPW:0];
 wire [31:0]    in [FPW-1:0];
 
 
@@ -83,147 +75,67 @@ endgenerate
 always @(posedge clk or negedge res_n) `else
 always @(posedge clk) `endif
 begin
-if (!res_n) begin
-    crc_out     <= 32'h0;
-    crc_temp[0] <= 32'h0;
-    crc_temp1[0] <= 32'h0;
-    crc_temp2[0] <= 32'h0;
-end
-else begin
+`ifdef RESET_ALL
+    if (!res_n) begin
+            crc_out <= 32'h0;
+    end else 
+`endif
+begin
     crc_out <= 32'h0;
-
     for(i_f=0;i_f<FPW;i_f=i_f+1) begin
         if(tail[i_f]) begin
-            crc_out[31:16] <= crc_temp[i_f+1][31:16];
-            crc_out[23] <= crc_temp2[i_f+1][23];
-            crc_out[15:0] <= crc_temp1[i_f+1][15:0];
+            crc_out <= crc_temp[i_f+1];
         end
     end
+end
+end
 
-    if(|tail) begin
+`ifdef ASYNC_RES
+always @(posedge clk or negedge res_n) `else
+always @(posedge clk) `endif
+begin
+    if (!res_n) 
         crc_temp[0] <= 32'h0;
-        crc_temp1[0] <= 32'h0;
-        crc_temp2[0] <= 32'h0;
-    end else begin
-        crc_temp[0] <= crc_temp[FPW];
-        crc_temp1[0] <= crc_temp1[FPW];
-        crc_temp2[0] <= crc_temp2[FPW];
+    else 
+        crc_temp[0] <= |tail ? 32'h0 : crc_temp[FPW];
+end
+
+always @(*)
+begin
+    for(i_f=0;i_f<FPW;i_f=i_f+1) begin
+        crc_temp[i_f+1][31] = in[i_f][31] ^ crc_temp[i_f][3]^crc_temp[i_f][5]^crc_temp[i_f][6]^crc_temp[i_f][8]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][14]^crc_temp[i_f][15]^crc_temp[i_f][17]^crc_temp[i_f][18]^crc_temp[i_f][19]^crc_temp[i_f][21]^crc_temp[i_f][26]^crc_temp[i_f][29];
+        crc_temp[i_f+1][30] = in[i_f][30] ^ crc_temp[i_f][2]^crc_temp[i_f][4]^crc_temp[i_f][5]^crc_temp[i_f][7]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][16]^crc_temp[i_f][17]^crc_temp[i_f][18]^crc_temp[i_f][20]^crc_temp[i_f][25]^crc_temp[i_f][28];
+        crc_temp[i_f+1][29] = in[i_f][29] ^ crc_temp[i_f][1]^crc_temp[i_f][4]^crc_temp[i_f][5]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][16]^crc_temp[i_f][18]^crc_temp[i_f][21]^crc_temp[i_f][24]^crc_temp[i_f][26]^crc_temp[i_f][27]^crc_temp[i_f][29];
+        crc_temp[i_f+1][28] = in[i_f][28] ^ crc_temp[i_f][0]^crc_temp[i_f][4]^crc_temp[i_f][5]^crc_temp[i_f][6]^crc_temp[i_f][9]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][18]^crc_temp[i_f][19]^crc_temp[i_f][20]^crc_temp[i_f][21]^crc_temp[i_f][23]^crc_temp[i_f][25]^crc_temp[i_f][28]^crc_temp[i_f][29]^crc_temp[i_f][31];
+        crc_temp[i_f+1][27] = in[i_f][27] ^ crc_temp[i_f][4]^crc_temp[i_f][6]^crc_temp[i_f][10]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][15]^crc_temp[i_f][20]^crc_temp[i_f][21]^crc_temp[i_f][22]^crc_temp[i_f][24]^crc_temp[i_f][26]^crc_temp[i_f][27]^crc_temp[i_f][28]^crc_temp[i_f][29]^crc_temp[i_f][30]^crc_temp[i_f][31];
+        crc_temp[i_f+1][26] = in[i_f][26] ^ crc_temp[i_f][3]^crc_temp[i_f][5]^crc_temp[i_f][9]^crc_temp[i_f][11]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][19]^crc_temp[i_f][20]^crc_temp[i_f][21]^crc_temp[i_f][23]^crc_temp[i_f][25]^crc_temp[i_f][26]^crc_temp[i_f][27]^crc_temp[i_f][28]^crc_temp[i_f][29]^crc_temp[i_f][30]^crc_temp[i_f][31];
+        crc_temp[i_f+1][25] = in[i_f][25] ^ crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][4]^crc_temp[i_f][5]^crc_temp[i_f][6]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][15]^crc_temp[i_f][17]^crc_temp[i_f][20]^crc_temp[i_f][21]^crc_temp[i_f][22]^crc_temp[i_f][24]^crc_temp[i_f][25]^crc_temp[i_f][27]^crc_temp[i_f][28]^crc_temp[i_f][30]^crc_temp[i_f][31];
+        crc_temp[i_f+1][24] = in[i_f][24] ^ crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][4]^crc_temp[i_f][5]^crc_temp[i_f][11]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][16]^crc_temp[i_f][19]^crc_temp[i_f][20]^crc_temp[i_f][21]^crc_temp[i_f][23]^crc_temp[i_f][24]^crc_temp[i_f][26]^crc_temp[i_f][27]^crc_temp[i_f][29]^crc_temp[i_f][30];
+        crc_temp[i_f+1][23] = in[i_f][23] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][4]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][15]^crc_temp[i_f][18]^crc_temp[i_f][19]^crc_temp[i_f][20]^crc_temp[i_f][22]^crc_temp[i_f][23]^crc_temp[i_f][25]^crc_temp[i_f][26]^crc_temp[i_f][28]^crc_temp[i_f][29];
+        crc_temp[i_f+1][22] = in[i_f][22] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][12]^crc_temp[i_f][14]^crc_temp[i_f][17]^crc_temp[i_f][18]^crc_temp[i_f][19]^crc_temp[i_f][21]^crc_temp[i_f][22]^crc_temp[i_f][24]^crc_temp[i_f][25]^crc_temp[i_f][27]^crc_temp[i_f][28];
+        crc_temp[i_f+1][21] = in[i_f][21] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][8]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][13]^crc_temp[i_f][16]^crc_temp[i_f][17]^crc_temp[i_f][18]^crc_temp[i_f][20]^crc_temp[i_f][21]^crc_temp[i_f][23]^crc_temp[i_f][24]^crc_temp[i_f][26]^crc_temp[i_f][27];
+        crc_temp[i_f+1][20] = in[i_f][20] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][7]^crc_temp[i_f][8]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][12]^crc_temp[i_f][15]^crc_temp[i_f][16]^crc_temp[i_f][17]^crc_temp[i_f][19]^crc_temp[i_f][20]^crc_temp[i_f][22]^crc_temp[i_f][23]^crc_temp[i_f][25]^crc_temp[i_f][26]^crc_temp[i_f][31];
+        crc_temp[i_f+1][19] = in[i_f][19] ^ crc_temp[i_f][0]^crc_temp[i_f][3]^crc_temp[i_f][5]^crc_temp[i_f][7]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][16]^crc_temp[i_f][17]^crc_temp[i_f][22]^crc_temp[i_f][24]^crc_temp[i_f][25]^crc_temp[i_f][26]^crc_temp[i_f][29]^crc_temp[i_f][30];
+        crc_temp[i_f+1][18] = in[i_f][18] ^ crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][4]^crc_temp[i_f][5]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][14]^crc_temp[i_f][16]^crc_temp[i_f][17]^crc_temp[i_f][18]^crc_temp[i_f][19]^crc_temp[i_f][23]^crc_temp[i_f][24]^crc_temp[i_f][25]^crc_temp[i_f][26]^crc_temp[i_f][28];
+        crc_temp[i_f+1][17] = in[i_f][17] ^ crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][4]^crc_temp[i_f][8]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][13]^crc_temp[i_f][15]^crc_temp[i_f][16]^crc_temp[i_f][17]^crc_temp[i_f][18]^crc_temp[i_f][22]^crc_temp[i_f][23]^crc_temp[i_f][24]^crc_temp[i_f][25]^crc_temp[i_f][27]^crc_temp[i_f][31];
+        crc_temp[i_f+1][16] = in[i_f][16] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][5]^crc_temp[i_f][6]^crc_temp[i_f][7]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][12]^crc_temp[i_f][16]^crc_temp[i_f][18]^crc_temp[i_f][19]^crc_temp[i_f][22]^crc_temp[i_f][23]^crc_temp[i_f][24]^crc_temp[i_f][29]^crc_temp[i_f][30]^crc_temp[i_f][31];
+        crc_temp[i_f+1][15] = in[i_f][15] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][3]^crc_temp[i_f][4]^crc_temp[i_f][9]^crc_temp[i_f][14]^crc_temp[i_f][19]^crc_temp[i_f][22]^crc_temp[i_f][23]^crc_temp[i_f][26]^crc_temp[i_f][28]^crc_temp[i_f][30]^crc_temp[i_f][31];
+        crc_temp[i_f+1][14] = in[i_f][14] ^ crc_temp[i_f][0]^crc_temp[i_f][2]^crc_temp[i_f][5]^crc_temp[i_f][6]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][15]^crc_temp[i_f][17]^crc_temp[i_f][19]^crc_temp[i_f][22]^crc_temp[i_f][25]^crc_temp[i_f][26]^crc_temp[i_f][27]^crc_temp[i_f][30]^crc_temp[i_f][31];
+        crc_temp[i_f+1][13] = in[i_f][13] ^ crc_temp[i_f][1]^crc_temp[i_f][4]^crc_temp[i_f][5]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][16]^crc_temp[i_f][18]^crc_temp[i_f][21]^crc_temp[i_f][24]^crc_temp[i_f][25]^crc_temp[i_f][26]^crc_temp[i_f][29]^crc_temp[i_f][30];
+        crc_temp[i_f+1][12] = in[i_f][12] ^ crc_temp[i_f][0]^crc_temp[i_f][3]^crc_temp[i_f][4]^crc_temp[i_f][8]^crc_temp[i_f][9]^crc_temp[i_f][11]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][15]^crc_temp[i_f][17]^crc_temp[i_f][20]^crc_temp[i_f][23]^crc_temp[i_f][24]^crc_temp[i_f][25]^crc_temp[i_f][28]^crc_temp[i_f][29]^crc_temp[i_f][31];
+        crc_temp[i_f+1][11] = in[i_f][11] ^ crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][7]^crc_temp[i_f][8]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][12]^crc_temp[i_f][14]^crc_temp[i_f][16]^crc_temp[i_f][19]^crc_temp[i_f][22]^crc_temp[i_f][23]^crc_temp[i_f][24]^crc_temp[i_f][27]^crc_temp[i_f][28]^crc_temp[i_f][30];
+        crc_temp[i_f+1][10] = in[i_f][10] ^ crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][5]^crc_temp[i_f][7]^crc_temp[i_f][8]^crc_temp[i_f][9]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][17]^crc_temp[i_f][19]^crc_temp[i_f][22]^crc_temp[i_f][23]^crc_temp[i_f][27];
+        crc_temp[i_f+1][ 9] = in[i_f][ 9] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][4]^crc_temp[i_f][5]^crc_temp[i_f][7]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][15]^crc_temp[i_f][16]^crc_temp[i_f][17]^crc_temp[i_f][19]^crc_temp[i_f][22]^crc_temp[i_f][29]^crc_temp[i_f][31];
+        crc_temp[i_f+1][ 8] = in[i_f][ 8] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][4]^crc_temp[i_f][6]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][15]^crc_temp[i_f][16]^crc_temp[i_f][18]^crc_temp[i_f][21]^crc_temp[i_f][28]^crc_temp[i_f][30];
+        crc_temp[i_f+1][ 7] = in[i_f][ 7] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][5]^crc_temp[i_f][8]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][15]^crc_temp[i_f][17]^crc_temp[i_f][20]^crc_temp[i_f][27]^crc_temp[i_f][29]^crc_temp[i_f][31];
+        crc_temp[i_f+1][ 6] = in[i_f][ 6] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][4]^crc_temp[i_f][5]^crc_temp[i_f][6]^crc_temp[i_f][7]^crc_temp[i_f][9]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][15]^crc_temp[i_f][16]^crc_temp[i_f][17]^crc_temp[i_f][18]^crc_temp[i_f][21]^crc_temp[i_f][28]^crc_temp[i_f][29]^crc_temp[i_f][30]^crc_temp[i_f][31];
+        crc_temp[i_f+1][ 5] = in[i_f][ 5] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][4]^crc_temp[i_f][10]^crc_temp[i_f][12]^crc_temp[i_f][16]^crc_temp[i_f][18]^crc_temp[i_f][19]^crc_temp[i_f][20]^crc_temp[i_f][21]^crc_temp[i_f][26]^crc_temp[i_f][27]^crc_temp[i_f][28]^crc_temp[i_f][30];
+        crc_temp[i_f+1][ 4] = in[i_f][ 4] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][3]^crc_temp[i_f][9]^crc_temp[i_f][11]^crc_temp[i_f][15]^crc_temp[i_f][17]^crc_temp[i_f][18]^crc_temp[i_f][19]^crc_temp[i_f][20]^crc_temp[i_f][25]^crc_temp[i_f][26]^crc_temp[i_f][27]^crc_temp[i_f][29]^crc_temp[i_f][31];
+        crc_temp[i_f+1][ 3] = in[i_f][ 3] ^ crc_temp[i_f][0]^crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][5]^crc_temp[i_f][6]^crc_temp[i_f][11]^crc_temp[i_f][15]^crc_temp[i_f][16]^crc_temp[i_f][21]^crc_temp[i_f][24]^crc_temp[i_f][25]^crc_temp[i_f][28]^crc_temp[i_f][29]^crc_temp[i_f][30]^crc_temp[i_f][31];
+        crc_temp[i_f+1][ 2] = in[i_f][ 2] ^ crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][4]^crc_temp[i_f][5]^crc_temp[i_f][10]^crc_temp[i_f][14]^crc_temp[i_f][15]^crc_temp[i_f][20]^crc_temp[i_f][23]^crc_temp[i_f][24]^crc_temp[i_f][27]^crc_temp[i_f][28]^crc_temp[i_f][29]^crc_temp[i_f][30]^crc_temp[i_f][31];
+        crc_temp[i_f+1][ 1] = in[i_f][ 1] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][4]^crc_temp[i_f][5]^crc_temp[i_f][6]^crc_temp[i_f][8]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][13]^crc_temp[i_f][15]^crc_temp[i_f][17]^crc_temp[i_f][18]^crc_temp[i_f][21]^crc_temp[i_f][22]^crc_temp[i_f][23]^crc_temp[i_f][27]^crc_temp[i_f][28]^crc_temp[i_f][30]^crc_temp[i_f][31];
+        crc_temp[i_f+1][ 0] = in[i_f][ 0] ^ crc_temp[i_f][0]^crc_temp[i_f][4]^crc_temp[i_f][6]^crc_temp[i_f][7]^crc_temp[i_f][9]^crc_temp[i_f][11]^crc_temp[i_f][12]^crc_temp[i_f][15]^crc_temp[i_f][16]^crc_temp[i_f][18]^crc_temp[i_f][19]^crc_temp[i_f][20]^crc_temp[i_f][22]^crc_temp[i_f][27]^crc_temp[i_f][30];
     end
-end
-end
-
-always @(*)
-begin
-        for(i_f=0;i_f<FPW;i_f=i_f+1) begin
-            crc_temp[i_f+1][31] = in[i_f][31] ^ crc_temp[i_f][3]^crc_temp[i_f][5]^crc_temp[i_f][6]^crc_temp[i_f][8]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][14]^crc_temp[i_f][15]^crc_temp[i_f][17]^crc_temp[i_f][18]^crc_temp[i_f][19]^crc_temp[i_f][21]^crc_temp[i_f][26]^crc_temp[i_f][29];
-            crc_temp[i_f+1][30] = in[i_f][30] ^ crc_temp[i_f][2]^crc_temp[i_f][4]^crc_temp[i_f][5]^crc_temp[i_f][7]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][16]^crc_temp[i_f][17]^crc_temp[i_f][18]^crc_temp[i_f][20]^crc_temp[i_f][25]^crc_temp[i_f][28];
-            crc_temp[i_f+1][29] = in[i_f][29] ^ crc_temp[i_f][1]^crc_temp[i_f][4]^crc_temp[i_f][5]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][16]^crc_temp[i_f][18]^crc_temp[i_f][21]^crc_temp[i_f][24]^crc_temp[i_f][26]^crc_temp[i_f][27]^crc_temp[i_f][29];
-            crc_temp[i_f+1][28] = in[i_f][28] ^ crc_temp[i_f][0]^crc_temp[i_f][4]^crc_temp[i_f][5]^crc_temp[i_f][6]^crc_temp[i_f][9]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][18]^crc_temp[i_f][19]^crc_temp[i_f][20]^crc_temp[i_f][21]^crc_temp[i_f][23]^crc_temp[i_f][25]^crc_temp[i_f][28]^crc_temp[i_f][29]^crc_temp[i_f][31];
-            crc_temp[i_f+1][27] = in[i_f][27] ^ crc_temp[i_f][4]^crc_temp[i_f][6]^crc_temp[i_f][10]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][15]^crc_temp[i_f][20]^crc_temp[i_f][21]^crc_temp[i_f][22]^crc_temp[i_f][24]^crc_temp[i_f][26]^crc_temp[i_f][27]^crc_temp[i_f][28]^crc_temp[i_f][29]^crc_temp[i_f][30]^crc_temp[i_f][31];
-            crc_temp[i_f+1][26] = in[i_f][26] ^ crc_temp[i_f][3]^crc_temp[i_f][5]^crc_temp[i_f][9]^crc_temp[i_f][11]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][19]^crc_temp[i_f][20]^crc_temp[i_f][21]^crc_temp[i_f][23]^crc_temp[i_f][25]^crc_temp[i_f][26]^crc_temp[i_f][27]^crc_temp[i_f][28]^crc_temp[i_f][29]^crc_temp[i_f][30]^crc_temp[i_f][31];
-            crc_temp[i_f+1][25] = in[i_f][25] ^ crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][4]^crc_temp[i_f][5]^crc_temp[i_f][6]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][15]^crc_temp[i_f][17]^crc_temp[i_f][20]^crc_temp[i_f][21]^crc_temp[i_f][22]^crc_temp[i_f][24]^crc_temp[i_f][25]^crc_temp[i_f][27]^crc_temp[i_f][28]^crc_temp[i_f][30]^crc_temp[i_f][31];
-            crc_temp[i_f+1][24] = in[i_f][24] ^ crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][4]^crc_temp[i_f][5]^crc_temp[i_f][11]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][16]^crc_temp[i_f][19]^crc_temp[i_f][20]^crc_temp[i_f][21]^crc_temp[i_f][23]^crc_temp[i_f][24]^crc_temp[i_f][26]^crc_temp[i_f][27]^crc_temp[i_f][29]^crc_temp[i_f][30];
-            crc_temp[i_f+1][23] = in[i_f][23] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][4]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][15]^crc_temp[i_f][18]^crc_temp[i_f][19]^crc_temp[i_f][20]^crc_temp[i_f][22]^crc_temp[i_f][23]^crc_temp[i_f][25]^crc_temp[i_f][26]^crc_temp[i_f][28]^crc_temp[i_f][29];
-            crc_temp[i_f+1][22] = in[i_f][22] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][12]^crc_temp[i_f][14]^crc_temp[i_f][17]^crc_temp[i_f][18]^crc_temp[i_f][19]^crc_temp[i_f][21]^crc_temp[i_f][22]^crc_temp[i_f][24]^crc_temp[i_f][25]^crc_temp[i_f][27]^crc_temp[i_f][28];
-            crc_temp[i_f+1][21] = in[i_f][21] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][8]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][13]^crc_temp[i_f][16]^crc_temp[i_f][17]^crc_temp[i_f][18]^crc_temp[i_f][20]^crc_temp[i_f][21]^crc_temp[i_f][23]^crc_temp[i_f][24]^crc_temp[i_f][26]^crc_temp[i_f][27];
-            crc_temp[i_f+1][20] = in[i_f][20] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][7]^crc_temp[i_f][8]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][12]^crc_temp[i_f][15]^crc_temp[i_f][16]^crc_temp[i_f][17]^crc_temp[i_f][19]^crc_temp[i_f][20]^crc_temp[i_f][22]^crc_temp[i_f][23]^crc_temp[i_f][25]^crc_temp[i_f][26]^crc_temp[i_f][31];
-            crc_temp[i_f+1][19] = in[i_f][19] ^ crc_temp[i_f][0]^crc_temp[i_f][3]^crc_temp[i_f][5]^crc_temp[i_f][7]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][16]^crc_temp[i_f][17]^crc_temp[i_f][22]^crc_temp[i_f][24]^crc_temp[i_f][25]^crc_temp[i_f][26]^crc_temp[i_f][29]^crc_temp[i_f][30];
-            crc_temp[i_f+1][18] = in[i_f][18] ^ crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][4]^crc_temp[i_f][5]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][14]^crc_temp[i_f][16]^crc_temp[i_f][17]^crc_temp[i_f][18]^crc_temp[i_f][19]^crc_temp[i_f][23]^crc_temp[i_f][24]^crc_temp[i_f][25]^crc_temp[i_f][26]^crc_temp[i_f][28];
-            crc_temp[i_f+1][17] = in[i_f][17] ^ crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][4]^crc_temp[i_f][8]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][13]^crc_temp[i_f][15]^crc_temp[i_f][16]^crc_temp[i_f][17]^crc_temp[i_f][18]^crc_temp[i_f][22]^crc_temp[i_f][23]^crc_temp[i_f][24]^crc_temp[i_f][25]^crc_temp[i_f][27]^crc_temp[i_f][31];
-            crc_temp[i_f+1][16] = in[i_f][16] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][5]^crc_temp[i_f][6]^crc_temp[i_f][7]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][12]^crc_temp[i_f][16]^crc_temp[i_f][18]^crc_temp[i_f][19]^crc_temp[i_f][22]^crc_temp[i_f][23]^crc_temp[i_f][24]^crc_temp[i_f][29]^crc_temp[i_f][30]^crc_temp[i_f][31];
-            crc_temp[i_f+1][15] = in[i_f][15] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][3]^crc_temp[i_f][4]^crc_temp[i_f][9]^crc_temp[i_f][14]^crc_temp[i_f][19]^crc_temp[i_f][22]^crc_temp[i_f][23]^crc_temp[i_f][26]^crc_temp[i_f][28]^crc_temp[i_f][30]^crc_temp[i_f][31];
-            crc_temp[i_f+1][14] = in[i_f][14] ^ crc_temp[i_f][0]^crc_temp[i_f][2]^crc_temp[i_f][5]^crc_temp[i_f][6]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][15]^crc_temp[i_f][17]^crc_temp[i_f][19]^crc_temp[i_f][22]^crc_temp[i_f][25]^crc_temp[i_f][26]^crc_temp[i_f][27]^crc_temp[i_f][30]^crc_temp[i_f][31];
-            crc_temp[i_f+1][13] = in[i_f][13] ^ crc_temp[i_f][1]^crc_temp[i_f][4]^crc_temp[i_f][5]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][16]^crc_temp[i_f][18]^crc_temp[i_f][21]^crc_temp[i_f][24]^crc_temp[i_f][25]^crc_temp[i_f][26]^crc_temp[i_f][29]^crc_temp[i_f][30];
-            crc_temp[i_f+1][12] = in[i_f][12] ^ crc_temp[i_f][0]^crc_temp[i_f][3]^crc_temp[i_f][4]^crc_temp[i_f][8]^crc_temp[i_f][9]^crc_temp[i_f][11]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][15]^crc_temp[i_f][17]^crc_temp[i_f][20]^crc_temp[i_f][23]^crc_temp[i_f][24]^crc_temp[i_f][25]^crc_temp[i_f][28]^crc_temp[i_f][29]^crc_temp[i_f][31];
-            crc_temp[i_f+1][11] = in[i_f][11] ^ crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][7]^crc_temp[i_f][8]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][12]^crc_temp[i_f][14]^crc_temp[i_f][16]^crc_temp[i_f][19]^crc_temp[i_f][22]^crc_temp[i_f][23]^crc_temp[i_f][24]^crc_temp[i_f][27]^crc_temp[i_f][28]^crc_temp[i_f][30];
-            crc_temp[i_f+1][10] = in[i_f][10] ^ crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][5]^crc_temp[i_f][7]^crc_temp[i_f][8]^crc_temp[i_f][9]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][17]^crc_temp[i_f][19]^crc_temp[i_f][22]^crc_temp[i_f][23]^crc_temp[i_f][27];
-            crc_temp[i_f+1][ 9] = in[i_f][ 9] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][4]^crc_temp[i_f][5]^crc_temp[i_f][7]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][15]^crc_temp[i_f][16]^crc_temp[i_f][17]^crc_temp[i_f][19]^crc_temp[i_f][22]^crc_temp[i_f][29]^crc_temp[i_f][31];
-            crc_temp[i_f+1][ 8] = in[i_f][ 8] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][4]^crc_temp[i_f][6]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][15]^crc_temp[i_f][16]^crc_temp[i_f][18]^crc_temp[i_f][21]^crc_temp[i_f][28]^crc_temp[i_f][30];
-            crc_temp[i_f+1][ 7] = in[i_f][ 7] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][5]^crc_temp[i_f][8]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][14]^crc_temp[i_f][15]^crc_temp[i_f][17]^crc_temp[i_f][20]^crc_temp[i_f][27]^crc_temp[i_f][29]^crc_temp[i_f][31];
-            crc_temp[i_f+1][ 6] = in[i_f][ 6] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][4]^crc_temp[i_f][5]^crc_temp[i_f][6]^crc_temp[i_f][7]^crc_temp[i_f][9]^crc_temp[i_f][12]^crc_temp[i_f][13]^crc_temp[i_f][15]^crc_temp[i_f][16]^crc_temp[i_f][17]^crc_temp[i_f][18]^crc_temp[i_f][21]^crc_temp[i_f][28]^crc_temp[i_f][29]^crc_temp[i_f][30]^crc_temp[i_f][31];
-            crc_temp[i_f+1][ 5] = in[i_f][ 5] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][4]^crc_temp[i_f][10]^crc_temp[i_f][12]^crc_temp[i_f][16]^crc_temp[i_f][18]^crc_temp[i_f][19]^crc_temp[i_f][20]^crc_temp[i_f][21]^crc_temp[i_f][26]^crc_temp[i_f][27]^crc_temp[i_f][28]^crc_temp[i_f][30];
-            crc_temp[i_f+1][ 4] = in[i_f][ 4] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][3]^crc_temp[i_f][9]^crc_temp[i_f][11]^crc_temp[i_f][15]^crc_temp[i_f][17]^crc_temp[i_f][18]^crc_temp[i_f][19]^crc_temp[i_f][20]^crc_temp[i_f][25]^crc_temp[i_f][26]^crc_temp[i_f][27]^crc_temp[i_f][29]^crc_temp[i_f][31];
-            crc_temp[i_f+1][ 3] = in[i_f][ 3] ^ crc_temp[i_f][0]^crc_temp[i_f][2]^crc_temp[i_f][3]^crc_temp[i_f][5]^crc_temp[i_f][6]^crc_temp[i_f][11]^crc_temp[i_f][15]^crc_temp[i_f][16]^crc_temp[i_f][21]^crc_temp[i_f][24]^crc_temp[i_f][25]^crc_temp[i_f][28]^crc_temp[i_f][29]^crc_temp[i_f][30]^crc_temp[i_f][31];
-            crc_temp[i_f+1][ 2] = in[i_f][ 2] ^ crc_temp[i_f][1]^crc_temp[i_f][2]^crc_temp[i_f][4]^crc_temp[i_f][5]^crc_temp[i_f][10]^crc_temp[i_f][14]^crc_temp[i_f][15]^crc_temp[i_f][20]^crc_temp[i_f][23]^crc_temp[i_f][24]^crc_temp[i_f][27]^crc_temp[i_f][28]^crc_temp[i_f][29]^crc_temp[i_f][30]^crc_temp[i_f][31];
-            crc_temp[i_f+1][ 1] = in[i_f][ 1] ^ crc_temp[i_f][0]^crc_temp[i_f][1]^crc_temp[i_f][4]^crc_temp[i_f][5]^crc_temp[i_f][6]^crc_temp[i_f][8]^crc_temp[i_f][9]^crc_temp[i_f][10]^crc_temp[i_f][11]^crc_temp[i_f][13]^crc_temp[i_f][15]^crc_temp[i_f][17]^crc_temp[i_f][18]^crc_temp[i_f][21]^crc_temp[i_f][22]^crc_temp[i_f][23]^crc_temp[i_f][27]^crc_temp[i_f][28]^crc_temp[i_f][30]^crc_temp[i_f][31];
-            crc_temp[i_f+1][ 0] = in[i_f][ 0] ^ crc_temp[i_f][0]^crc_temp[i_f][4]^crc_temp[i_f][6]^crc_temp[i_f][7]^crc_temp[i_f][9]^crc_temp[i_f][11]^crc_temp[i_f][12]^crc_temp[i_f][15]^crc_temp[i_f][16]^crc_temp[i_f][18]^crc_temp[i_f][19]^crc_temp[i_f][20]^crc_temp[i_f][22]^crc_temp[i_f][27]^crc_temp[i_f][30];
-        end
-end
-
-always @(*)
-begin
-        for(i_f=0;i_f<FPW;i_f=i_f+1) begin
-            crc_temp1[i_f+1][31] = in[i_f][31] ^ crc_temp1[i_f][3]^crc_temp1[i_f][5]^crc_temp1[i_f][6]^crc_temp1[i_f][8]^crc_temp1[i_f][10]^crc_temp1[i_f][11]^crc_temp1[i_f][14]^crc_temp1[i_f][15]^crc_temp1[i_f][17]^crc_temp1[i_f][18]^crc_temp1[i_f][19]^crc_temp1[i_f][21]^crc_temp1[i_f][26]^crc_temp1[i_f][29];
-            crc_temp1[i_f+1][30] = in[i_f][30] ^ crc_temp1[i_f][2]^crc_temp1[i_f][4]^crc_temp1[i_f][5]^crc_temp1[i_f][7]^crc_temp1[i_f][9]^crc_temp1[i_f][10]^crc_temp1[i_f][13]^crc_temp1[i_f][14]^crc_temp1[i_f][16]^crc_temp1[i_f][17]^crc_temp1[i_f][18]^crc_temp1[i_f][20]^crc_temp1[i_f][25]^crc_temp1[i_f][28];
-            crc_temp1[i_f+1][29] = in[i_f][29] ^ crc_temp1[i_f][1]^crc_temp1[i_f][4]^crc_temp1[i_f][5]^crc_temp1[i_f][9]^crc_temp1[i_f][10]^crc_temp1[i_f][11]^crc_temp1[i_f][12]^crc_temp1[i_f][13]^crc_temp1[i_f][14]^crc_temp1[i_f][16]^crc_temp1[i_f][18]^crc_temp1[i_f][21]^crc_temp1[i_f][24]^crc_temp1[i_f][26]^crc_temp1[i_f][27]^crc_temp1[i_f][29];
-            crc_temp1[i_f+1][28] = in[i_f][28] ^ crc_temp1[i_f][0]^crc_temp1[i_f][4]^crc_temp1[i_f][5]^crc_temp1[i_f][6]^crc_temp1[i_f][9]^crc_temp1[i_f][12]^crc_temp1[i_f][13]^crc_temp1[i_f][14]^crc_temp1[i_f][18]^crc_temp1[i_f][19]^crc_temp1[i_f][20]^crc_temp1[i_f][21]^crc_temp1[i_f][23]^crc_temp1[i_f][25]^crc_temp1[i_f][28]^crc_temp1[i_f][29]^crc_temp1[i_f][31];
-            crc_temp1[i_f+1][27] = in[i_f][27] ^ crc_temp1[i_f][4]^crc_temp1[i_f][6]^crc_temp1[i_f][10]^crc_temp1[i_f][12]^crc_temp1[i_f][13]^crc_temp1[i_f][14]^crc_temp1[i_f][15]^crc_temp1[i_f][20]^crc_temp1[i_f][21]^crc_temp1[i_f][22]^crc_temp1[i_f][24]^crc_temp1[i_f][26]^crc_temp1[i_f][27]^crc_temp1[i_f][28]^crc_temp1[i_f][29]^crc_temp1[i_f][30]^crc_temp1[i_f][31];
-            crc_temp1[i_f+1][26] = in[i_f][26] ^ crc_temp1[i_f][3]^crc_temp1[i_f][5]^crc_temp1[i_f][9]^crc_temp1[i_f][11]^crc_temp1[i_f][12]^crc_temp1[i_f][13]^crc_temp1[i_f][14]^crc_temp1[i_f][19]^crc_temp1[i_f][20]^crc_temp1[i_f][21]^crc_temp1[i_f][23]^crc_temp1[i_f][25]^crc_temp1[i_f][26]^crc_temp1[i_f][27]^crc_temp1[i_f][28]^crc_temp1[i_f][29]^crc_temp1[i_f][30]^crc_temp1[i_f][31];
-            crc_temp1[i_f+1][25] = in[i_f][25] ^ crc_temp1[i_f][2]^crc_temp1[i_f][3]^crc_temp1[i_f][4]^crc_temp1[i_f][5]^crc_temp1[i_f][6]^crc_temp1[i_f][12]^crc_temp1[i_f][13]^crc_temp1[i_f][14]^crc_temp1[i_f][15]^crc_temp1[i_f][17]^crc_temp1[i_f][20]^crc_temp1[i_f][21]^crc_temp1[i_f][22]^crc_temp1[i_f][24]^crc_temp1[i_f][25]^crc_temp1[i_f][27]^crc_temp1[i_f][28]^crc_temp1[i_f][30]^crc_temp1[i_f][31];
-            crc_temp1[i_f+1][24] = in[i_f][24] ^ crc_temp1[i_f][1]^crc_temp1[i_f][2]^crc_temp1[i_f][3]^crc_temp1[i_f][4]^crc_temp1[i_f][5]^crc_temp1[i_f][11]^crc_temp1[i_f][12]^crc_temp1[i_f][13]^crc_temp1[i_f][14]^crc_temp1[i_f][16]^crc_temp1[i_f][19]^crc_temp1[i_f][20]^crc_temp1[i_f][21]^crc_temp1[i_f][23]^crc_temp1[i_f][24]^crc_temp1[i_f][26]^crc_temp1[i_f][27]^crc_temp1[i_f][29]^crc_temp1[i_f][30];
-            crc_temp1[i_f+1][23] = in[i_f][23] ^ crc_temp1[i_f][0]^crc_temp1[i_f][1]^crc_temp1[i_f][2]^crc_temp1[i_f][3]^crc_temp1[i_f][4]^crc_temp1[i_f][10]^crc_temp1[i_f][11]^crc_temp1[i_f][12]^crc_temp1[i_f][13]^crc_temp1[i_f][15]^crc_temp1[i_f][18]^crc_temp1[i_f][19]^crc_temp1[i_f][20]^crc_temp1[i_f][22]^crc_temp1[i_f][23]^crc_temp1[i_f][25]^crc_temp1[i_f][26]^crc_temp1[i_f][28]^crc_temp1[i_f][29];
-            crc_temp1[i_f+1][22] = in[i_f][22] ^ crc_temp1[i_f][0]^crc_temp1[i_f][1]^crc_temp1[i_f][2]^crc_temp1[i_f][3]^crc_temp1[i_f][9]^crc_temp1[i_f][10]^crc_temp1[i_f][11]^crc_temp1[i_f][12]^crc_temp1[i_f][14]^crc_temp1[i_f][17]^crc_temp1[i_f][18]^crc_temp1[i_f][19]^crc_temp1[i_f][21]^crc_temp1[i_f][22]^crc_temp1[i_f][24]^crc_temp1[i_f][25]^crc_temp1[i_f][27]^crc_temp1[i_f][28];
-            crc_temp1[i_f+1][21] = in[i_f][21] ^ crc_temp1[i_f][0]^crc_temp1[i_f][1]^crc_temp1[i_f][2]^crc_temp1[i_f][8]^crc_temp1[i_f][9]^crc_temp1[i_f][10]^crc_temp1[i_f][11]^crc_temp1[i_f][13]^crc_temp1[i_f][16]^crc_temp1[i_f][17]^crc_temp1[i_f][18]^crc_temp1[i_f][20]^crc_temp1[i_f][21]^crc_temp1[i_f][23]^crc_temp1[i_f][24]^crc_temp1[i_f][26]^crc_temp1[i_f][27];
-            crc_temp1[i_f+1][20] = in[i_f][20] ^ crc_temp1[i_f][0]^crc_temp1[i_f][1]^crc_temp1[i_f][7]^crc_temp1[i_f][8]^crc_temp1[i_f][9]^crc_temp1[i_f][10]^crc_temp1[i_f][12]^crc_temp1[i_f][15]^crc_temp1[i_f][16]^crc_temp1[i_f][17]^crc_temp1[i_f][19]^crc_temp1[i_f][20]^crc_temp1[i_f][22]^crc_temp1[i_f][23]^crc_temp1[i_f][25]^crc_temp1[i_f][26]^crc_temp1[i_f][31];
-            crc_temp1[i_f+1][19] = in[i_f][19] ^ crc_temp1[i_f][0]^crc_temp1[i_f][3]^crc_temp1[i_f][5]^crc_temp1[i_f][7]^crc_temp1[i_f][9]^crc_temp1[i_f][10]^crc_temp1[i_f][16]^crc_temp1[i_f][17]^crc_temp1[i_f][22]^crc_temp1[i_f][24]^crc_temp1[i_f][25]^crc_temp1[i_f][26]^crc_temp1[i_f][29]^crc_temp1[i_f][30];
-            crc_temp1[i_f+1][18] = in[i_f][18] ^ crc_temp1[i_f][2]^crc_temp1[i_f][3]^crc_temp1[i_f][4]^crc_temp1[i_f][5]^crc_temp1[i_f][9]^crc_temp1[i_f][10]^crc_temp1[i_f][11]^crc_temp1[i_f][14]^crc_temp1[i_f][16]^crc_temp1[i_f][17]^crc_temp1[i_f][18]^crc_temp1[i_f][19]^crc_temp1[i_f][23]^crc_temp1[i_f][24]^crc_temp1[i_f][25]^crc_temp1[i_f][26]^crc_temp1[i_f][28];
-            crc_temp1[i_f+1][17] = in[i_f][17] ^ crc_temp1[i_f][1]^crc_temp1[i_f][2]^crc_temp1[i_f][3]^crc_temp1[i_f][4]^crc_temp1[i_f][8]^crc_temp1[i_f][9]^crc_temp1[i_f][10]^crc_temp1[i_f][13]^crc_temp1[i_f][15]^crc_temp1[i_f][16]^crc_temp1[i_f][17]^crc_temp1[i_f][18]^crc_temp1[i_f][22]^crc_temp1[i_f][23]^crc_temp1[i_f][24]^crc_temp1[i_f][25]^crc_temp1[i_f][27]^crc_temp1[i_f][31];
-            crc_temp1[i_f+1][16] = in[i_f][16] ^ crc_temp1[i_f][0]^crc_temp1[i_f][1]^crc_temp1[i_f][2]^crc_temp1[i_f][5]^crc_temp1[i_f][6]^crc_temp1[i_f][7]^crc_temp1[i_f][9]^crc_temp1[i_f][10]^crc_temp1[i_f][11]^crc_temp1[i_f][12]^crc_temp1[i_f][16]^crc_temp1[i_f][18]^crc_temp1[i_f][19]^crc_temp1[i_f][22]^crc_temp1[i_f][23]^crc_temp1[i_f][24]^crc_temp1[i_f][29]^crc_temp1[i_f][30]^crc_temp1[i_f][31];
-            crc_temp1[i_f+1][15] = in[i_f][15] ^ crc_temp1[i_f][0]^crc_temp1[i_f][1]^crc_temp1[i_f][3]^crc_temp1[i_f][4]^crc_temp1[i_f][9]^crc_temp1[i_f][14]^crc_temp1[i_f][19]^crc_temp1[i_f][22]^crc_temp1[i_f][23]^crc_temp1[i_f][26]^crc_temp1[i_f][28]^crc_temp1[i_f][30]^crc_temp1[i_f][31];
-            crc_temp1[i_f+1][14] = in[i_f][14] ^ crc_temp1[i_f][0]^crc_temp1[i_f][2]^crc_temp1[i_f][5]^crc_temp1[i_f][6]^crc_temp1[i_f][10]^crc_temp1[i_f][11]^crc_temp1[i_f][13]^crc_temp1[i_f][14]^crc_temp1[i_f][15]^crc_temp1[i_f][17]^crc_temp1[i_f][19]^crc_temp1[i_f][22]^crc_temp1[i_f][25]^crc_temp1[i_f][26]^crc_temp1[i_f][27]^crc_temp1[i_f][30]^crc_temp1[i_f][31];
-            crc_temp1[i_f+1][13] = in[i_f][13] ^ crc_temp1[i_f][1]^crc_temp1[i_f][4]^crc_temp1[i_f][5]^crc_temp1[i_f][9]^crc_temp1[i_f][10]^crc_temp1[i_f][12]^crc_temp1[i_f][13]^crc_temp1[i_f][14]^crc_temp1[i_f][16]^crc_temp1[i_f][18]^crc_temp1[i_f][21]^crc_temp1[i_f][24]^crc_temp1[i_f][25]^crc_temp1[i_f][26]^crc_temp1[i_f][29]^crc_temp1[i_f][30];
-            crc_temp1[i_f+1][12] = in[i_f][12] ^ crc_temp1[i_f][0]^crc_temp1[i_f][3]^crc_temp1[i_f][4]^crc_temp1[i_f][8]^crc_temp1[i_f][9]^crc_temp1[i_f][11]^crc_temp1[i_f][12]^crc_temp1[i_f][13]^crc_temp1[i_f][15]^crc_temp1[i_f][17]^crc_temp1[i_f][20]^crc_temp1[i_f][23]^crc_temp1[i_f][24]^crc_temp1[i_f][25]^crc_temp1[i_f][28]^crc_temp1[i_f][29]^crc_temp1[i_f][31];
-            crc_temp1[i_f+1][11] = in[i_f][11] ^ crc_temp1[i_f][2]^crc_temp1[i_f][3]^crc_temp1[i_f][7]^crc_temp1[i_f][8]^crc_temp1[i_f][10]^crc_temp1[i_f][11]^crc_temp1[i_f][12]^crc_temp1[i_f][14]^crc_temp1[i_f][16]^crc_temp1[i_f][19]^crc_temp1[i_f][22]^crc_temp1[i_f][23]^crc_temp1[i_f][24]^crc_temp1[i_f][27]^crc_temp1[i_f][28]^crc_temp1[i_f][30];
-            crc_temp1[i_f+1][10] = in[i_f][10] ^ crc_temp1[i_f][1]^crc_temp1[i_f][2]^crc_temp1[i_f][3]^crc_temp1[i_f][5]^crc_temp1[i_f][7]^crc_temp1[i_f][8]^crc_temp1[i_f][9]^crc_temp1[i_f][13]^crc_temp1[i_f][14]^crc_temp1[i_f][17]^crc_temp1[i_f][19]^crc_temp1[i_f][22]^crc_temp1[i_f][23]^crc_temp1[i_f][27];
-            crc_temp1[i_f+1][ 9] = in[i_f][ 9] ^ crc_temp1[i_f][0]^crc_temp1[i_f][1]^crc_temp1[i_f][2]^crc_temp1[i_f][3]^crc_temp1[i_f][4]^crc_temp1[i_f][5]^crc_temp1[i_f][7]^crc_temp1[i_f][10]^crc_temp1[i_f][11]^crc_temp1[i_f][12]^crc_temp1[i_f][13]^crc_temp1[i_f][14]^crc_temp1[i_f][15]^crc_temp1[i_f][16]^crc_temp1[i_f][17]^crc_temp1[i_f][19]^crc_temp1[i_f][22]^crc_temp1[i_f][29]^crc_temp1[i_f][31];
-            crc_temp1[i_f+1][ 8] = in[i_f][ 8] ^ crc_temp1[i_f][0]^crc_temp1[i_f][1]^crc_temp1[i_f][2]^crc_temp1[i_f][3]^crc_temp1[i_f][4]^crc_temp1[i_f][6]^crc_temp1[i_f][9]^crc_temp1[i_f][10]^crc_temp1[i_f][11]^crc_temp1[i_f][12]^crc_temp1[i_f][13]^crc_temp1[i_f][14]^crc_temp1[i_f][15]^crc_temp1[i_f][16]^crc_temp1[i_f][18]^crc_temp1[i_f][21]^crc_temp1[i_f][28]^crc_temp1[i_f][30];
-            crc_temp1[i_f+1][ 7] = in[i_f][ 7] ^ crc_temp1[i_f][0]^crc_temp1[i_f][1]^crc_temp1[i_f][2]^crc_temp1[i_f][3]^crc_temp1[i_f][5]^crc_temp1[i_f][8]^crc_temp1[i_f][9]^crc_temp1[i_f][10]^crc_temp1[i_f][11]^crc_temp1[i_f][12]^crc_temp1[i_f][13]^crc_temp1[i_f][14]^crc_temp1[i_f][15]^crc_temp1[i_f][17]^crc_temp1[i_f][20]^crc_temp1[i_f][27]^crc_temp1[i_f][29]^crc_temp1[i_f][31];
-            crc_temp1[i_f+1][ 6] = in[i_f][ 6] ^ crc_temp1[i_f][0]^crc_temp1[i_f][1]^crc_temp1[i_f][2]^crc_temp1[i_f][3]^crc_temp1[i_f][4]^crc_temp1[i_f][5]^crc_temp1[i_f][6]^crc_temp1[i_f][7]^crc_temp1[i_f][9]^crc_temp1[i_f][12]^crc_temp1[i_f][13]^crc_temp1[i_f][15]^crc_temp1[i_f][16]^crc_temp1[i_f][17]^crc_temp1[i_f][18]^crc_temp1[i_f][21]^crc_temp1[i_f][28]^crc_temp1[i_f][29]^crc_temp1[i_f][30]^crc_temp1[i_f][31];
-            crc_temp1[i_f+1][ 5] = in[i_f][ 5] ^ crc_temp1[i_f][0]^crc_temp1[i_f][1]^crc_temp1[i_f][2]^crc_temp1[i_f][4]^crc_temp1[i_f][10]^crc_temp1[i_f][12]^crc_temp1[i_f][16]^crc_temp1[i_f][18]^crc_temp1[i_f][19]^crc_temp1[i_f][20]^crc_temp1[i_f][21]^crc_temp1[i_f][26]^crc_temp1[i_f][27]^crc_temp1[i_f][28]^crc_temp1[i_f][30];
-            crc_temp1[i_f+1][ 4] = in[i_f][ 4] ^ crc_temp1[i_f][0]^crc_temp1[i_f][1]^crc_temp1[i_f][3]^crc_temp1[i_f][9]^crc_temp1[i_f][11]^crc_temp1[i_f][15]^crc_temp1[i_f][17]^crc_temp1[i_f][18]^crc_temp1[i_f][19]^crc_temp1[i_f][20]^crc_temp1[i_f][25]^crc_temp1[i_f][26]^crc_temp1[i_f][27]^crc_temp1[i_f][29]^crc_temp1[i_f][31];
-            crc_temp1[i_f+1][ 3] = in[i_f][ 3] ^ crc_temp1[i_f][0]^crc_temp1[i_f][2]^crc_temp1[i_f][3]^crc_temp1[i_f][5]^crc_temp1[i_f][6]^crc_temp1[i_f][11]^crc_temp1[i_f][15]^crc_temp1[i_f][16]^crc_temp1[i_f][21]^crc_temp1[i_f][24]^crc_temp1[i_f][25]^crc_temp1[i_f][28]^crc_temp1[i_f][29]^crc_temp1[i_f][30]^crc_temp1[i_f][31];
-            crc_temp1[i_f+1][ 2] = in[i_f][ 2] ^ crc_temp1[i_f][1]^crc_temp1[i_f][2]^crc_temp1[i_f][4]^crc_temp1[i_f][5]^crc_temp1[i_f][10]^crc_temp1[i_f][14]^crc_temp1[i_f][15]^crc_temp1[i_f][20]^crc_temp1[i_f][23]^crc_temp1[i_f][24]^crc_temp1[i_f][27]^crc_temp1[i_f][28]^crc_temp1[i_f][29]^crc_temp1[i_f][30]^crc_temp1[i_f][31];
-            crc_temp1[i_f+1][ 1] = in[i_f][ 1] ^ crc_temp1[i_f][0]^crc_temp1[i_f][1]^crc_temp1[i_f][4]^crc_temp1[i_f][5]^crc_temp1[i_f][6]^crc_temp1[i_f][8]^crc_temp1[i_f][9]^crc_temp1[i_f][10]^crc_temp1[i_f][11]^crc_temp1[i_f][13]^crc_temp1[i_f][15]^crc_temp1[i_f][17]^crc_temp1[i_f][18]^crc_temp1[i_f][21]^crc_temp1[i_f][22]^crc_temp1[i_f][23]^crc_temp1[i_f][27]^crc_temp1[i_f][28]^crc_temp1[i_f][30]^crc_temp1[i_f][31];
-            crc_temp1[i_f+1][ 0] = in[i_f][ 0] ^ crc_temp1[i_f][0]^crc_temp1[i_f][4]^crc_temp1[i_f][6]^crc_temp1[i_f][7]^crc_temp1[i_f][9]^crc_temp1[i_f][11]^crc_temp1[i_f][12]^crc_temp1[i_f][15]^crc_temp1[i_f][16]^crc_temp1[i_f][18]^crc_temp1[i_f][19]^crc_temp1[i_f][20]^crc_temp1[i_f][22]^crc_temp1[i_f][27]^crc_temp1[i_f][30];
-        end
-end
-
-always @(*)
-begin
-        for(i_f=0;i_f<FPW;i_f=i_f+1) begin
-            crc_temp2[i_f+1][31] = in[i_f][31] ^ crc_temp2[i_f][3]^crc_temp2[i_f][5]^crc_temp2[i_f][6]^crc_temp2[i_f][8]^crc_temp2[i_f][10]^crc_temp2[i_f][11]^crc_temp2[i_f][14]^crc_temp2[i_f][15]^crc_temp2[i_f][17]^crc_temp2[i_f][18]^crc_temp2[i_f][19]^crc_temp2[i_f][21]^crc_temp2[i_f][26]^crc_temp2[i_f][29];
-            crc_temp2[i_f+1][30] = in[i_f][30] ^ crc_temp2[i_f][2]^crc_temp2[i_f][4]^crc_temp2[i_f][5]^crc_temp2[i_f][7]^crc_temp2[i_f][9]^crc_temp2[i_f][10]^crc_temp2[i_f][13]^crc_temp2[i_f][14]^crc_temp2[i_f][16]^crc_temp2[i_f][17]^crc_temp2[i_f][18]^crc_temp2[i_f][20]^crc_temp2[i_f][25]^crc_temp2[i_f][28];
-            crc_temp2[i_f+1][29] = in[i_f][29] ^ crc_temp2[i_f][1]^crc_temp2[i_f][4]^crc_temp2[i_f][5]^crc_temp2[i_f][9]^crc_temp2[i_f][10]^crc_temp2[i_f][11]^crc_temp2[i_f][12]^crc_temp2[i_f][13]^crc_temp2[i_f][14]^crc_temp2[i_f][16]^crc_temp2[i_f][18]^crc_temp2[i_f][21]^crc_temp2[i_f][24]^crc_temp2[i_f][26]^crc_temp2[i_f][27]^crc_temp2[i_f][29];
-            crc_temp2[i_f+1][28] = in[i_f][28] ^ crc_temp2[i_f][0]^crc_temp2[i_f][4]^crc_temp2[i_f][5]^crc_temp2[i_f][6]^crc_temp2[i_f][9]^crc_temp2[i_f][12]^crc_temp2[i_f][13]^crc_temp2[i_f][14]^crc_temp2[i_f][18]^crc_temp2[i_f][19]^crc_temp2[i_f][20]^crc_temp2[i_f][21]^crc_temp2[i_f][23]^crc_temp2[i_f][25]^crc_temp2[i_f][28]^crc_temp2[i_f][29]^crc_temp2[i_f][31];
-            crc_temp2[i_f+1][27] = in[i_f][27] ^ crc_temp2[i_f][4]^crc_temp2[i_f][6]^crc_temp2[i_f][10]^crc_temp2[i_f][12]^crc_temp2[i_f][13]^crc_temp2[i_f][14]^crc_temp2[i_f][15]^crc_temp2[i_f][20]^crc_temp2[i_f][21]^crc_temp2[i_f][22]^crc_temp2[i_f][24]^crc_temp2[i_f][26]^crc_temp2[i_f][27]^crc_temp2[i_f][28]^crc_temp2[i_f][29]^crc_temp2[i_f][30]^crc_temp2[i_f][31];
-            crc_temp2[i_f+1][26] = in[i_f][26] ^ crc_temp2[i_f][3]^crc_temp2[i_f][5]^crc_temp2[i_f][9]^crc_temp2[i_f][11]^crc_temp2[i_f][12]^crc_temp2[i_f][13]^crc_temp2[i_f][14]^crc_temp2[i_f][19]^crc_temp2[i_f][20]^crc_temp2[i_f][21]^crc_temp2[i_f][23]^crc_temp2[i_f][25]^crc_temp2[i_f][26]^crc_temp2[i_f][27]^crc_temp2[i_f][28]^crc_temp2[i_f][29]^crc_temp2[i_f][30]^crc_temp2[i_f][31];
-            crc_temp2[i_f+1][25] = in[i_f][25] ^ crc_temp2[i_f][2]^crc_temp2[i_f][3]^crc_temp2[i_f][4]^crc_temp2[i_f][5]^crc_temp2[i_f][6]^crc_temp2[i_f][12]^crc_temp2[i_f][13]^crc_temp2[i_f][14]^crc_temp2[i_f][15]^crc_temp2[i_f][17]^crc_temp2[i_f][20]^crc_temp2[i_f][21]^crc_temp2[i_f][22]^crc_temp2[i_f][24]^crc_temp2[i_f][25]^crc_temp2[i_f][27]^crc_temp2[i_f][28]^crc_temp2[i_f][30]^crc_temp2[i_f][31];
-            crc_temp2[i_f+1][24] = in[i_f][24] ^ crc_temp2[i_f][1]^crc_temp2[i_f][2]^crc_temp2[i_f][3]^crc_temp2[i_f][4]^crc_temp2[i_f][5]^crc_temp2[i_f][11]^crc_temp2[i_f][12]^crc_temp2[i_f][13]^crc_temp2[i_f][14]^crc_temp2[i_f][16]^crc_temp2[i_f][19]^crc_temp2[i_f][20]^crc_temp2[i_f][21]^crc_temp2[i_f][23]^crc_temp2[i_f][24]^crc_temp2[i_f][26]^crc_temp2[i_f][27]^crc_temp2[i_f][29]^crc_temp2[i_f][30];
-            crc_temp2[i_f+1][23] = in[i_f][23] ^ crc_temp2[i_f][0]^crc_temp2[i_f][1]^crc_temp2[i_f][2]^crc_temp2[i_f][3]^crc_temp2[i_f][4]^crc_temp2[i_f][10]^crc_temp2[i_f][11]^crc_temp2[i_f][12]^crc_temp2[i_f][13]^crc_temp2[i_f][15]^crc_temp2[i_f][18]^crc_temp2[i_f][19]^crc_temp2[i_f][20]^crc_temp2[i_f][22]^crc_temp2[i_f][23]^crc_temp2[i_f][25]^crc_temp2[i_f][26]^crc_temp2[i_f][28]^crc_temp2[i_f][29];
-            crc_temp2[i_f+1][22] = in[i_f][22] ^ crc_temp2[i_f][0]^crc_temp2[i_f][1]^crc_temp2[i_f][2]^crc_temp2[i_f][3]^crc_temp2[i_f][9]^crc_temp2[i_f][10]^crc_temp2[i_f][11]^crc_temp2[i_f][12]^crc_temp2[i_f][14]^crc_temp2[i_f][17]^crc_temp2[i_f][18]^crc_temp2[i_f][19]^crc_temp2[i_f][21]^crc_temp2[i_f][22]^crc_temp2[i_f][24]^crc_temp2[i_f][25]^crc_temp2[i_f][27]^crc_temp2[i_f][28];
-            crc_temp2[i_f+1][21] = in[i_f][21] ^ crc_temp2[i_f][0]^crc_temp2[i_f][1]^crc_temp2[i_f][2]^crc_temp2[i_f][8]^crc_temp2[i_f][9]^crc_temp2[i_f][10]^crc_temp2[i_f][11]^crc_temp2[i_f][13]^crc_temp2[i_f][16]^crc_temp2[i_f][17]^crc_temp2[i_f][18]^crc_temp2[i_f][20]^crc_temp2[i_f][21]^crc_temp2[i_f][23]^crc_temp2[i_f][24]^crc_temp2[i_f][26]^crc_temp2[i_f][27];
-            crc_temp2[i_f+1][20] = in[i_f][20] ^ crc_temp2[i_f][0]^crc_temp2[i_f][1]^crc_temp2[i_f][7]^crc_temp2[i_f][8]^crc_temp2[i_f][9]^crc_temp2[i_f][10]^crc_temp2[i_f][12]^crc_temp2[i_f][15]^crc_temp2[i_f][16]^crc_temp2[i_f][17]^crc_temp2[i_f][19]^crc_temp2[i_f][20]^crc_temp2[i_f][22]^crc_temp2[i_f][23]^crc_temp2[i_f][25]^crc_temp2[i_f][26]^crc_temp2[i_f][31];
-            crc_temp2[i_f+1][19] = in[i_f][19] ^ crc_temp2[i_f][0]^crc_temp2[i_f][3]^crc_temp2[i_f][5]^crc_temp2[i_f][7]^crc_temp2[i_f][9]^crc_temp2[i_f][10]^crc_temp2[i_f][16]^crc_temp2[i_f][17]^crc_temp2[i_f][22]^crc_temp2[i_f][24]^crc_temp2[i_f][25]^crc_temp2[i_f][26]^crc_temp2[i_f][29]^crc_temp2[i_f][30];
-            crc_temp2[i_f+1][18] = in[i_f][18] ^ crc_temp2[i_f][2]^crc_temp2[i_f][3]^crc_temp2[i_f][4]^crc_temp2[i_f][5]^crc_temp2[i_f][9]^crc_temp2[i_f][10]^crc_temp2[i_f][11]^crc_temp2[i_f][14]^crc_temp2[i_f][16]^crc_temp2[i_f][17]^crc_temp2[i_f][18]^crc_temp2[i_f][19]^crc_temp2[i_f][23]^crc_temp2[i_f][24]^crc_temp2[i_f][25]^crc_temp2[i_f][26]^crc_temp2[i_f][28];
-            crc_temp2[i_f+1][17] = in[i_f][17] ^ crc_temp2[i_f][1]^crc_temp2[i_f][2]^crc_temp2[i_f][3]^crc_temp2[i_f][4]^crc_temp2[i_f][8]^crc_temp2[i_f][9]^crc_temp2[i_f][10]^crc_temp2[i_f][13]^crc_temp2[i_f][15]^crc_temp2[i_f][16]^crc_temp2[i_f][17]^crc_temp2[i_f][18]^crc_temp2[i_f][22]^crc_temp2[i_f][23]^crc_temp2[i_f][24]^crc_temp2[i_f][25]^crc_temp2[i_f][27]^crc_temp2[i_f][31];
-            crc_temp2[i_f+1][16] = in[i_f][16] ^ crc_temp2[i_f][0]^crc_temp2[i_f][1]^crc_temp2[i_f][2]^crc_temp2[i_f][5]^crc_temp2[i_f][6]^crc_temp2[i_f][7]^crc_temp2[i_f][9]^crc_temp2[i_f][10]^crc_temp2[i_f][11]^crc_temp2[i_f][12]^crc_temp2[i_f][16]^crc_temp2[i_f][18]^crc_temp2[i_f][19]^crc_temp2[i_f][22]^crc_temp2[i_f][23]^crc_temp2[i_f][24]^crc_temp2[i_f][29]^crc_temp2[i_f][30]^crc_temp2[i_f][31];
-            crc_temp2[i_f+1][15] = in[i_f][15] ^ crc_temp2[i_f][0]^crc_temp2[i_f][1]^crc_temp2[i_f][3]^crc_temp2[i_f][4]^crc_temp2[i_f][9]^crc_temp2[i_f][14]^crc_temp2[i_f][19]^crc_temp2[i_f][22]^crc_temp2[i_f][23]^crc_temp2[i_f][26]^crc_temp2[i_f][28]^crc_temp2[i_f][30]^crc_temp2[i_f][31];
-            crc_temp2[i_f+1][14] = in[i_f][14] ^ crc_temp2[i_f][0]^crc_temp2[i_f][2]^crc_temp2[i_f][5]^crc_temp2[i_f][6]^crc_temp2[i_f][10]^crc_temp2[i_f][11]^crc_temp2[i_f][13]^crc_temp2[i_f][14]^crc_temp2[i_f][15]^crc_temp2[i_f][17]^crc_temp2[i_f][19]^crc_temp2[i_f][22]^crc_temp2[i_f][25]^crc_temp2[i_f][26]^crc_temp2[i_f][27]^crc_temp2[i_f][30]^crc_temp2[i_f][31];
-            crc_temp2[i_f+1][13] = in[i_f][13] ^ crc_temp2[i_f][1]^crc_temp2[i_f][4]^crc_temp2[i_f][5]^crc_temp2[i_f][9]^crc_temp2[i_f][10]^crc_temp2[i_f][12]^crc_temp2[i_f][13]^crc_temp2[i_f][14]^crc_temp2[i_f][16]^crc_temp2[i_f][18]^crc_temp2[i_f][21]^crc_temp2[i_f][24]^crc_temp2[i_f][25]^crc_temp2[i_f][26]^crc_temp2[i_f][29]^crc_temp2[i_f][30];
-            crc_temp2[i_f+1][12] = in[i_f][12] ^ crc_temp2[i_f][0]^crc_temp2[i_f][3]^crc_temp2[i_f][4]^crc_temp2[i_f][8]^crc_temp2[i_f][9]^crc_temp2[i_f][11]^crc_temp2[i_f][12]^crc_temp2[i_f][13]^crc_temp2[i_f][15]^crc_temp2[i_f][17]^crc_temp2[i_f][20]^crc_temp2[i_f][23]^crc_temp2[i_f][24]^crc_temp2[i_f][25]^crc_temp2[i_f][28]^crc_temp2[i_f][29]^crc_temp2[i_f][31];
-            crc_temp2[i_f+1][11] = in[i_f][11] ^ crc_temp2[i_f][2]^crc_temp2[i_f][3]^crc_temp2[i_f][7]^crc_temp2[i_f][8]^crc_temp2[i_f][10]^crc_temp2[i_f][11]^crc_temp2[i_f][12]^crc_temp2[i_f][14]^crc_temp2[i_f][16]^crc_temp2[i_f][19]^crc_temp2[i_f][22]^crc_temp2[i_f][23]^crc_temp2[i_f][24]^crc_temp2[i_f][27]^crc_temp2[i_f][28]^crc_temp2[i_f][30];
-            crc_temp2[i_f+1][10] = in[i_f][10] ^ crc_temp2[i_f][1]^crc_temp2[i_f][2]^crc_temp2[i_f][3]^crc_temp2[i_f][5]^crc_temp2[i_f][7]^crc_temp2[i_f][8]^crc_temp2[i_f][9]^crc_temp2[i_f][13]^crc_temp2[i_f][14]^crc_temp2[i_f][17]^crc_temp2[i_f][19]^crc_temp2[i_f][22]^crc_temp2[i_f][23]^crc_temp2[i_f][27];
-            crc_temp2[i_f+1][ 9] = in[i_f][ 9] ^ crc_temp2[i_f][0]^crc_temp2[i_f][1]^crc_temp2[i_f][2]^crc_temp2[i_f][3]^crc_temp2[i_f][4]^crc_temp2[i_f][5]^crc_temp2[i_f][7]^crc_temp2[i_f][10]^crc_temp2[i_f][11]^crc_temp2[i_f][12]^crc_temp2[i_f][13]^crc_temp2[i_f][14]^crc_temp2[i_f][15]^crc_temp2[i_f][16]^crc_temp2[i_f][17]^crc_temp2[i_f][19]^crc_temp2[i_f][22]^crc_temp2[i_f][29]^crc_temp2[i_f][31];
-            crc_temp2[i_f+1][ 8] = in[i_f][ 8] ^ crc_temp2[i_f][0]^crc_temp2[i_f][1]^crc_temp2[i_f][2]^crc_temp2[i_f][3]^crc_temp2[i_f][4]^crc_temp2[i_f][6]^crc_temp2[i_f][9]^crc_temp2[i_f][10]^crc_temp2[i_f][11]^crc_temp2[i_f][12]^crc_temp2[i_f][13]^crc_temp2[i_f][14]^crc_temp2[i_f][15]^crc_temp2[i_f][16]^crc_temp2[i_f][18]^crc_temp2[i_f][21]^crc_temp2[i_f][28]^crc_temp2[i_f][30];
-            crc_temp2[i_f+1][ 7] = in[i_f][ 7] ^ crc_temp2[i_f][0]^crc_temp2[i_f][1]^crc_temp2[i_f][2]^crc_temp2[i_f][3]^crc_temp2[i_f][5]^crc_temp2[i_f][8]^crc_temp2[i_f][9]^crc_temp2[i_f][10]^crc_temp2[i_f][11]^crc_temp2[i_f][12]^crc_temp2[i_f][13]^crc_temp2[i_f][14]^crc_temp2[i_f][15]^crc_temp2[i_f][17]^crc_temp2[i_f][20]^crc_temp2[i_f][27]^crc_temp2[i_f][29]^crc_temp2[i_f][31];
-            crc_temp2[i_f+1][ 6] = in[i_f][ 6] ^ crc_temp2[i_f][0]^crc_temp2[i_f][1]^crc_temp2[i_f][2]^crc_temp2[i_f][3]^crc_temp2[i_f][4]^crc_temp2[i_f][5]^crc_temp2[i_f][6]^crc_temp2[i_f][7]^crc_temp2[i_f][9]^crc_temp2[i_f][12]^crc_temp2[i_f][13]^crc_temp2[i_f][15]^crc_temp2[i_f][16]^crc_temp2[i_f][17]^crc_temp2[i_f][18]^crc_temp2[i_f][21]^crc_temp2[i_f][28]^crc_temp2[i_f][29]^crc_temp2[i_f][30]^crc_temp2[i_f][31];
-            crc_temp2[i_f+1][ 5] = in[i_f][ 5] ^ crc_temp2[i_f][0]^crc_temp2[i_f][1]^crc_temp2[i_f][2]^crc_temp2[i_f][4]^crc_temp2[i_f][10]^crc_temp2[i_f][12]^crc_temp2[i_f][16]^crc_temp2[i_f][18]^crc_temp2[i_f][19]^crc_temp2[i_f][20]^crc_temp2[i_f][21]^crc_temp2[i_f][26]^crc_temp2[i_f][27]^crc_temp2[i_f][28]^crc_temp2[i_f][30];
-            crc_temp2[i_f+1][ 4] = in[i_f][ 4] ^ crc_temp2[i_f][0]^crc_temp2[i_f][1]^crc_temp2[i_f][3]^crc_temp2[i_f][9]^crc_temp2[i_f][11]^crc_temp2[i_f][15]^crc_temp2[i_f][17]^crc_temp2[i_f][18]^crc_temp2[i_f][19]^crc_temp2[i_f][20]^crc_temp2[i_f][25]^crc_temp2[i_f][26]^crc_temp2[i_f][27]^crc_temp2[i_f][29]^crc_temp2[i_f][31];
-            crc_temp2[i_f+1][ 3] = in[i_f][ 3] ^ crc_temp2[i_f][0]^crc_temp2[i_f][2]^crc_temp2[i_f][3]^crc_temp2[i_f][5]^crc_temp2[i_f][6]^crc_temp2[i_f][11]^crc_temp2[i_f][15]^crc_temp2[i_f][16]^crc_temp2[i_f][21]^crc_temp2[i_f][24]^crc_temp2[i_f][25]^crc_temp2[i_f][28]^crc_temp2[i_f][29]^crc_temp2[i_f][30]^crc_temp2[i_f][31];
-            crc_temp2[i_f+1][ 2] = in[i_f][ 2] ^ crc_temp2[i_f][1]^crc_temp2[i_f][2]^crc_temp2[i_f][4]^crc_temp2[i_f][5]^crc_temp2[i_f][10]^crc_temp2[i_f][14]^crc_temp2[i_f][15]^crc_temp2[i_f][20]^crc_temp2[i_f][23]^crc_temp2[i_f][24]^crc_temp2[i_f][27]^crc_temp2[i_f][28]^crc_temp2[i_f][29]^crc_temp2[i_f][30]^crc_temp2[i_f][31];
-            crc_temp2[i_f+1][ 1] = in[i_f][ 1] ^ crc_temp2[i_f][0]^crc_temp2[i_f][1]^crc_temp2[i_f][4]^crc_temp2[i_f][5]^crc_temp2[i_f][6]^crc_temp2[i_f][8]^crc_temp2[i_f][9]^crc_temp2[i_f][10]^crc_temp2[i_f][11]^crc_temp2[i_f][13]^crc_temp2[i_f][15]^crc_temp2[i_f][17]^crc_temp2[i_f][18]^crc_temp2[i_f][21]^crc_temp2[i_f][22]^crc_temp2[i_f][23]^crc_temp2[i_f][27]^crc_temp2[i_f][28]^crc_temp2[i_f][30]^crc_temp2[i_f][31];
-            crc_temp2[i_f+1][ 0] = in[i_f][ 0] ^ crc_temp2[i_f][0]^crc_temp2[i_f][4]^crc_temp2[i_f][6]^crc_temp2[i_f][7]^crc_temp2[i_f][9]^crc_temp2[i_f][11]^crc_temp2[i_f][12]^crc_temp2[i_f][15]^crc_temp2[i_f][16]^crc_temp2[i_f][18]^crc_temp2[i_f][19]^crc_temp2[i_f][20]^crc_temp2[i_f][22]^crc_temp2[i_f][27]^crc_temp2[i_f][30];
-        end
 end
 
 endmodule

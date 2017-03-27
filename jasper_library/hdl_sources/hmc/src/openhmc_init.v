@@ -3,7 +3,7 @@ module openhmc_init #(
     parameter HMC_RF_WWIDTH         = 64,
     parameter HMC_RF_RWIDTH         = 64,
     parameter HMC_RF_AWIDTH         = 5
-
+    
   )  (
     input wire clk_hmc,
     input wire res_n_hmc,    
@@ -32,6 +32,9 @@ module openhmc_init #(
   (* mark_debug = "true" *) wire dbg_rf_read_en; //Virtual test probe for the logic analyser
   (* mark_debug = "true" *) wire dbg_rf_write_en; //Virtual test probe for the logic analyser
   (* mark_debug = "true" *) wire [HMC_RF_WWIDTH-1:0] dbg_rf_write_data; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [HMC_RF_AWIDTH-1:0] dbg_read_rf_addr; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire dbg_rf_read_data_lsb; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire dbg_open_hmc_init_done_i; //Virtual test probe for the logic analyser  
   
   assign dbg_hmc_init_state = hmc_init_state;
   assign dbg_rf_address = rf_address_i;
@@ -40,7 +43,10 @@ module openhmc_init #(
   assign dbg_rf_access_complete = rf_access_complete; 
   assign dbg_rf_read_en = rf_read_en_i;  
   assign dbg_rf_write_en = rf_write_en_i;  
-  assign dbg_rf_write_data = rf_write_data_i;  
+  assign dbg_rf_write_data = rf_write_data_i; 
+  assign dbg_read_rf_addr = read_rf_addr;
+  assign dbg_rf_read_data_lsb = rf_read_data[0];
+  assign dbg_open_hmc_init_done_i = open_hmc_init_done_i;
   
 
   // State machine states
@@ -77,9 +83,9 @@ module openhmc_init #(
 
   // OpenHMC registers via RF (Register File) Interface
   localparam CONTROL_REG_ADDR = 5'h2;
-                                          // [63:54],[53:48],[47:45],[44:40],[39:37],[36:32],[31:26],[25:16],[15:11],[10],[9] ,[8] ,[7:5] ,[4] ,[3] ,[2] ,[1] ,[0]
-  localparam RELEASE_HMC_P_RST_N_REG_DATA = {10'd0  ,6'h3f  ,3'd0   ,5'h16  ,3'd0   ,5'h10  ,6'd0   ,10'hff ,5'd0   ,1'b0,1'b0,1'b0,3'b000,1'b1,1'b0,1'b0,1'b0,1'b1}; // 8'h13 : [1] = 1 => Allow descrablers to lock, [0] = 1 => p_rst_n = 1 
-  localparam HMC_INIT_CONT_SET_DATA       = {10'd0  ,6'h3f  ,3'd0   ,5'h16  ,3'd0   ,5'h10  ,6'd0   ,10'hff ,5'd0   ,1'b0,1'b0,1'b0,3'b000,1'b1,1'b0,1'b0,1'b1,1'b1}; // 8'h13 : [1] = 1 => Allow descrablers to lock = hmc_init_cont_set, [0] = 1 => p_rst_n = 1 
+                                          // [63:54],[53:48],[47:45],[44:40],[39:37],[36:32],[31:24],[23:16],[15:11],[10],[9] ,[8] ,[7:5] ,[4] ,[3] ,[2] ,[1] ,[0]
+  localparam RELEASE_HMC_P_RST_N_REG_DATA = {10'd0  ,6'h00  ,3'd0   ,5'h18  ,3'd0   ,5'h10  ,8'd0   ,8'hff ,5'd0   ,1'b0,1'b0,1'b0,3'b000,1'b1,1'b0,1'b0,1'b0,1'b1}; // 8'h13 : [1] = 1 => Allow descrablers to lock, [0] = 1 => p_rst_n = 1 
+  localparam HMC_INIT_CONT_SET_DATA       = {10'd0  ,6'h00  ,3'd0   ,5'h18  ,3'd0   ,5'h10  ,8'd0   ,8'hff ,5'd0   ,1'b0,1'b0,1'b0,3'b000,1'b1,1'b0,1'b0,1'b1,1'b1}; // 8'h13 : [1] = 1 => Allow descrablers to lock = hmc_init_cont_set, [0] = 1 => p_rst_n = 1 
 //                                                                                                   Juri Advised setting tokens to 255 [25:16]
 //  localparam RELEASE_HMC_P_RST_N_REG_DATA = {10'd0  ,6'h3f  ,3'd0   ,5'h16  ,3'd0   ,5'h10  ,6'd0   ,10'h64 ,5'd0   ,1'b0,1'b0,1'b0,3'b000,1'b1,1'b0,1'b0,1'b0,1'b1}; // 8'h13 : [1] = 1 => Allow descrablers to lock, [0] = 1 => p_rst_n = 1 
 //  localparam HMC_INIT_CONT_SET_DATA       = {10'd0  ,6'h3f  ,3'd0   ,5'h16  ,3'd0   ,5'h10  ,6'd0   ,10'h64 ,5'd0   ,1'b0,1'b0,1'b0,3'b000,1'b1,1'b0,1'b0,1'b1,1'b1}; // 8'h13 : [1] = 1 => Allow descrablers to lock = hmc_init_cont_set, [0] = 1 => p_rst_n = 1 
@@ -194,9 +200,9 @@ module openhmc_init #(
         WAIT_RF_ACCESS_COMPLETE3: begin
           if (rf_access_complete == 1'b1) begin 
             hmc_init_state <= READ_HMC_INIT_REG;            
-            // Check to see that [0] = 1 => Link is ready for operation 
+            // Check to see that [0] = 1 => Link is ready for operation
             //read_rf_addr is one ahead of where it is mean't to be and the actual read_rf_addr = 0 when
-            //reading (firmware address is not aligned to the data read back
+            //reading 
             if (rf_read_data[0] == 1'b1 && read_rf_addr == 5'h1) begin
               hmc_init_state <= OPEN_HMC_INIT_COMPLETED;
             end else begin

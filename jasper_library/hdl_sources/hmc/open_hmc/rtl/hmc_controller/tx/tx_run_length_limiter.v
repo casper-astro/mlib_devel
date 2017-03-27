@@ -132,22 +132,30 @@ assign bit_flip = count_top > (RUN_LIMIT - (GRANULARITY-1) - (REM_BITS ? REM_BIT
 `ifdef ASYNC_RES
 always @(posedge clk or negedge res_n)  begin `else
 always @(posedge clk)  begin `endif
+
+    `ifdef RESET_ALL
+        if(!res_n) begin
+            data_out <= {DWIDTH {1'b0}};
+        end else 
+    `endif
+    begin
+        if (enable && bit_flip) begin
+            data_out    <= {data_in[LANE_WIDTH-1:1], ~data_in[0]};
+        end else begin
+            data_out    <= data_in;
+        end
+    end
     if (!res_n) begin
         count_bottom_d1   <= { COUNT_BITS {1'b0}};
         no_flip_bottom_d1 <= 1'b0;
         data_in_bottom_d1 <= 1'b0;
         rf_bit_flip       <= 1'b0;
-        data_out          <= {LANE_WIDTH{1'b0}};
     end else begin
         count_bottom_d1   <= count_bottom;
         no_flip_bottom_d1 <= no_flip[NUM_CHUNKS-1];
         data_in_bottom_d1 <= data_in[LANE_WIDTH-1];
-
         if (enable && bit_flip) begin
-            data_out    <= {data_in[LANE_WIDTH-1:1], ~data_in[0]};
             rf_bit_flip <= bit_flip;
-        end else begin
-            data_out    <= data_in;
         end
     end
 end

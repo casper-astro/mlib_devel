@@ -1,4 +1,5 @@
 `timescale 1ns/1ps
+`default_nettype wire
 
 module mac_hard_crc (
     input         clk,

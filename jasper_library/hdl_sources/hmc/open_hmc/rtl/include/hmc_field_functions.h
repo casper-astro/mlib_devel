@@ -73,13 +73,37 @@
     end
  endfunction
 
- function is_flow;
+ function is_req_flow;
     input [127:0] flit;
     begin
-        if(flit[5:3]) begin
-            is_flow = 0;
+        //according to spec it should check for bits [5:2]. However, all regular requests have bit 3,4 or 5 set so we reduce logic by checking only these
+        if(flit[5:3]) begin 
+            is_req_flow = 0;
         end else begin
-            is_flow = 1;
+            is_req_flow = 1;
+        end
+    end
+ endfunction
+
+ function is_rsp_flow;
+    input [127:0] flit;
+    begin
+        //according to spec it should check for bits [5:2]. However, all responses have bit 5 set so we reduce logic by only checking this single bit
+        if(flit[5]) begin 
+            is_rsp_flow = 0;
+        end else begin
+            is_rsp_flow = 1;
+        end
+    end
+ endfunction
+
+  function lng_dln_equal;
+    input [127:0] flit;
+    begin
+        if(!(lng(flit)^dln(flit))) begin
+            lng_dln_equal = 1;
+        end else begin
+            lng_dln_equal = 0;
         end
     end
  endfunction

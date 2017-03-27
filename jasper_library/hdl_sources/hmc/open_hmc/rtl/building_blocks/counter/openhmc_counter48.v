@@ -35,19 +35,18 @@
  *   along with this source file.  If not, see <http://www.gnu.org/licenses/>.
  *
  *
- *  Module name: counter48
+ *  Module name: openhmc_counter48
  *
  */
 
 `default_nettype none
 
-module counter48 #(
+module openhmc_counter48 #(
         parameter DATASIZE  = 16    // width of the counter, must be <=48 bits!
     ) (
         input wire                  clk,
         input wire                  res_n,
         input wire                  increment,
-        input wire  [DATASIZE-1:0]  load,
         input wire                  load_enable,
         output wire [DATASIZE-1:0]  value
 );
@@ -61,13 +60,10 @@ module counter48 #(
     always @(posedge clk or negedge res_n) `else
     always @(posedge clk) `endif
     begin
-        if (!res_n)
-        begin
+        if(!res_n) begin
             value_reg               <= {DATASIZE{1'b0}};
             load_enable_reg         <= 1'b0;
-        end
-        else
-        begin
+        end else begin
             load_enable_reg         <= load_enable;
             case ({load_enable_reg,increment})
                     2'b00:

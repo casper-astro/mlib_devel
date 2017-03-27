@@ -63,6 +63,82 @@ module flit_gen_user #(
 
 
   );
+  
+  
+  //Debug HMC Registers
+  (* mark_debug = "true" *) wire dbg_flit_gen_post_done; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire dbg_flit_gen_s_tx_tvalid; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire dbg_flit_gen_s_tx_tready; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [DWIDTH-1:0] dbg_flit_gen_s_tx_tdata; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [NUM_DATA_BYTES-1:0] dbg_flit_gen_s_tx_tuser; //Virtual test probe for the logic analyser
+  
+  (* mark_debug = "true" *) wire dbg_flit_gen_m_rx_tvalid; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire dbg_flit_gen_m_rx_tready; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [DWIDTH-1:0] dbg_flit_gen_m_rx_tdata; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [NUM_DATA_BYTES-1:0] dbg_flit_gen_m_rx_tuser; //Virtual test probe for the logic analyser
+  
+  (* mark_debug = "true" *) wire [26:0] dbg_flit_gen_wr_address; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire dbg_flit_gen_wr_req; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [255:0] dbg_flit_gen_data_in; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire dbg_flit_gen_wr_ready; //Virtual test probe for the logic analyser
+  
+  (* mark_debug = "true" *) wire [26:0] dbg_flit_gen_rd_address; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire dbg_flit_gen_rd_req; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [255:0] dbg_flit_gen_data_out; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [8:0] dbg_flit_gen_tag_in; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [8:0] dbg_flit_gen_tag_out; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire dbg_flit_gen_data_valid; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire dbg_flit_gen_rd_ready; //Virtual test probe for the logic analyser
+  
+  (* mark_debug = "true" *) wire [3:0] dbg_flit_gen_rd_flit_state; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [3:0] dbg_flit_gen_wr_flit_state; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case3_second; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case3_third; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case4_second; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case4_third; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire [63:0] data_valid_rx_valid_count; //Virtual test probe for the logic analyser    
+  (* mark_debug = "true" *) wire [63:0] data_valid_rx_hmc_valid_count; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire [63:0] dbg_flit_case1_first_count; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire [63:0] dbg_flit_case2_first_count; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire [63:0] dbg_flit_case3_first_count; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire [63:0] dbg_flit_case4_first_count; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire [63:0] dbg_flit_case3_second_count; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire [63:0] dbg_flit_case4_second_count; //Virtual test probe for the logic analyser  
+  (* mark_debug = "true" *) wire [63:0] dbg_flit_case3_second_spec_count; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [3:0] dbg_flit_error_rsp; //Virtual test probe for the logic analyser
+  
+  
+  assign dbg_flit_gen_post_done = POST_DONE;
+  assign dbg_flit_gen_s_tx_tvalid = s_axis_tx_TVALID_i & s_axis_tx_TREADY;
+  assign dbg_flit_gen_s_tx_tready = s_axis_tx_TREADY;
+  assign dbg_flit_gen_s_tx_tdata = s_axis_tx_TDATA_i;
+  assign dbg_flit_gen_s_tx_tuser = s_axis_tx_TUSER_i; 
+  
+  assign dbg_flit_gen_m_rx_tvalid = m_axis_rx_TVALID;  
+  assign dbg_flit_gen_m_rx_tready = m_axis_rx_TREADY_i;  
+  assign dbg_flit_gen_m_rx_tdata = m_axis_rx_TDATA;
+  assign dbg_flit_gen_m_rx_tuser = m_axis_rx_TUSER;  
+  
+  assign dbg_flit_gen_wr_address = WR_ADDRESS;  
+  assign dbg_flit_gen_wr_req = WR_REQ;  
+  assign dbg_flit_gen_data_in = DATA_IN;
+  assign dbg_flit_gen_wr_ready = (req_rdy == 1'b1) ? s_axis_tx_TREADY : 1'b0; 
+  
+  assign dbg_flit_gen_rd_address = RD_ADDRESS;  
+  assign dbg_flit_gen_rd_req = RD_REQ;  
+  assign dbg_flit_gen_data_out = rd_data;
+  assign dbg_flit_gen_tag_in = TAG_IN; 
+  assign dbg_flit_gen_tag_out = rd_tag;  
+  assign dbg_flit_gen_data_valid = rd_data_val;  
+  assign dbg_flit_gen_rd_ready = (req_rdy == 1'b1) ? s_axis_tx_TREADY : 1'b0;
+  
+  assign dbg_flit_gen_rd_flit_state = rd_flit_state;
+  assign dbg_flit_gen_wr_flit_state = wr_flit_state;
+  
+  assign dbg_flit_gen_next_flit_case3_second =  next_flit_case3_second;
+  assign dbg_flit_gen_next_flit_case3_third = next_flit_case3_third;
+  assign dbg_flit_gen_next_flit_case4_second =  next_flit_case4_second;
+  assign dbg_flit_gen_next_flit_case4_third =  next_flit_case4_third;
 
 // FLIT Layout
 // -----------
@@ -274,9 +350,32 @@ module flit_gen_user #(
   // Read state machine 
   // Checks incomming memory data from HMC that was requested in the write state machine (WR32 and RD32 request FLITs)
   // ***************************************************************************************************************************************************************************************
-  reg [8:0] rd_tag,rd_tag_i,rd_tag_hold;
-  reg [255:0] rd_data, rd_data_i,rd_data_hold;
-  reg rd_data_val,rd_data_val_hold;
+  reg [8:0] rd_tag,rd_tag_i, rd_tag_hold;
+  reg [255:0] rd_data, rd_data_i, rd_data_hold;
+  reg rd_data_val, rd_data_val_hold;
+  reg [63:0] r_data_valid_rx_valid_count;
+  reg [63:0] r_data_valid_rx_hmc_valid_count;
+  
+  reg [63:0] r_flit_case1_first_count;
+  reg [63:0] r_flit_case2_first_count;
+  reg [63:0] r_flit_case3_first_count;
+  reg [63:0] r_flit_case4_first_count;
+  reg [63:0] r_flit_case3_second_count;
+  reg [63:0] r_flit_case4_second_count;
+  reg [63:0] r_flit_case3_second_spec_count;
+  reg [3:0] r_flit_error_rsp;
+  
+  assign data_valid_rx_valid_count = r_data_valid_rx_valid_count;
+  assign data_valid_rx_hmc_valid_count = r_data_valid_rx_hmc_valid_count;
+  assign dbg_flit_case1_first_count = r_flit_case1_first_count;
+  assign dbg_flit_case2_first_count = r_flit_case2_first_count;
+  assign dbg_flit_case3_first_count = r_flit_case3_first_count;
+  assign dbg_flit_case4_first_count = r_flit_case4_first_count;
+  assign dbg_flit_case3_second_count = r_flit_case3_second_count;
+  assign dbg_flit_case4_second_count = r_flit_case4_second_count;
+  assign dbg_flit_case3_second_spec_count = r_flit_case3_second_spec_count;
+  assign dbg_flit_error_rsp = r_flit_error_rsp;
+  
 
   always @(posedge CLK) begin : rd_flit
 
@@ -294,119 +393,160 @@ module flit_gen_user #(
 
     rd_data_val <= 1'b0;
     rd_data_val_hold <= 1'b0;  // in the case were 2 valid responses falls on the same AXI transaction
-
+    
+    
+    r_data_valid_rx_valid_count <= 64'b0;
+    r_data_valid_rx_hmc_valid_count <= 64'b0;
+    r_flit_case1_first_count <= 64'b0;
+    r_flit_case2_first_count <= 64'b0;
+    r_flit_case3_first_count <= 64'b0;
+    r_flit_case4_first_count <= 64'b0;
+    r_flit_case3_second_count <= 64'b0;
+    r_flit_case4_second_count <= 64'b0;
+    r_flit_case3_second_spec_count <= 64'b0;
+    r_flit_error_rsp <= 4'b0;
+    
   end else begin
-      m_axis_rx_TREADY_i <= 1'b1; // After reset this module is always ready, except when 2 valid responses are received in the same AXI transaction!
+      m_axis_rx_TREADY_i <= 1'b1; // After reset this module is always ready
       rd_data_val <= 1'b0;
       rd_data_val_hold <= 1'b0;
-
+      
+      if ((rd_data_val == 1'b1) && (POST_DONE == 1'b1))
+      begin
+         r_data_valid_rx_hmc_valid_count <= r_data_valid_rx_hmc_valid_count + 1'b1;
+      end 
+      if ((m_axis_rx_TVALID == 1'b1) && (POST_DONE == 1'b1))
+      begin
+          r_data_valid_rx_valid_count <= r_data_valid_rx_valid_count + 1'b1;
+          r_flit_error_rsp [3:0] <= m_axis_rx_TUSER[15:12];
+      end 
+            
       // in the case were 2 valid responses falls on the same AXI transaction on the previous cycle, this module asserted m_axis_rx_TREADY_i <= 1'b0 (not ready - hold off for one cycle)
       // Now generate data valid from 2nd transaction data
       if (rd_data_val_hold == 1'b1) begin
         rd_tag <= rd_tag_hold;
         rd_data <= rd_data_hold;
-        rd_data_val <= rd_data_val_hold;        
-      end
-       // do not decode next axi cycle, as it was put on hold
-       else begin
+        rd_data_val <= rd_data_val_hold;
+      // do not decode next axi cycle, as it was put on hold  
+      end else begin     
+      
+    
 
-        // Start state decoding
-        case (rd_flit_state)
-          // State: Entry to state machine (from reset)
-          STATE_IDLE: begin
-            rd_flit_state <= STATE_IDLE;
-            if (POST_DONE == 1'b1) begin
-              rd_flit_state <= STATE_CHK_RD_DATA;
-            end
-          end
-          // State: Decode AXI bus and figure out what is data, overheads or NULL FLITs
-          //        If there is HMC memory data returned, check this data with the data written to HMC memory in the write state machine 
-          STATE_CHK_RD_DATA: begin 
-            // 4 FLITs per AXI Access [511:0]:
-            //   FLIT0 axis bus [127:0]
-            //   FLIT1 axis bus [255:128]
-            //   FLIT2 axis bus [383:256]
-            //   FLIT3 axis bus [511:384]
-            // ****************** First time around FLITs ******************
-            // CASE 1 Start
-            // Valid FLITSs 2,1,0
-            // This case follows the same sequence as the RD32 request issued by the write state machine
-            // The read data returned will be in the same sequence
-            // The RD32 tag that is returned in the FLIT header(m_axis_rx_TDATA[23:15])
-            if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[10:8] == 3'b100 && m_axis_rx_TUSER[6:4] == 3'b001 && m_axis_rx_TUSER[2:0] == 3'b111) begin
-              rd_tag <= m_axis_rx_TDATA[23:15];
-              rd_data [255:0] <= m_axis_rx_TDATA[255+64:64];
-              rd_data_val <= 1'b1;
-            end 
-            // ****************** First time around FLITs ******************
-            // CASE 2 Start
-            // Valid FLITSs 3,2,1
-            if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[11:9] == 3'b100 && m_axis_rx_TUSER[7:5] == 3'b001 && m_axis_rx_TUSER[3:1] == 3'b111) begin
-              rd_tag <= m_axis_rx_TDATA[23+128:15+128];
-              rd_data [255:0] <= m_axis_rx_TDATA[255+64+128:64+128];
-              rd_data_val <= 1'b1;
-            end 
-            // ****************** First time around FLITs ******************
-            // CASE 3 Start
-            // Valid FLITSs 3,2
-            if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[11:10] == 2'b00 && m_axis_rx_TUSER[7:6] == 2'b01 && m_axis_rx_TUSER[3:2] == 2'b11) begin
-              rd_tag_i <= m_axis_rx_TDATA[23+256:15+256];
-              rd_data_i[191:0] <= m_axis_rx_TDATA[191+64+256:64+256];
-              next_flit_case3_second <= 1'b1;  // AXI access 2 of 2 
-            end 
-            // ****************** First time around FLITs ******************
-            // CASE 4 Start
-            // Valid FLITSs 3
-            if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[11] == 1'b0 && m_axis_rx_TUSER[7] == 1'b1 && m_axis_rx_TUSER[3] == 1'b1) begin
-              rd_tag_i <= m_axis_rx_TDATA[23+384:15+384];
-              rd_data_i[63:0] <= m_axis_rx_TDATA[63+64+384:64+384];
-              next_flit_case4_second <= 1'b1;  // AXI access 2 of 2 
-            end 
-            // ****************** Second time around FLITs ******************
-            // CASE 3 cont...
-            // Valid FLITSs 0
-            if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[8] == 1'b1 && m_axis_rx_TUSER[4] == 1'b0 && m_axis_rx_TUSER[0] == 1'b1 && next_flit_case3_second == 1'b1) begin
-              rd_data [255:192] <= m_axis_rx_TDATA[63:0];
-              rd_data [191:0] <= rd_data_i[191:0];
-              rd_tag <= rd_tag_i;
-              rd_data_val <= 1'b1;
-              next_flit_case3_second <= 1'b0;
-              // do not clear if there are stil case 3 responeses comming on FLIT 2,3!
-              if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[11:10] == 2'b00 && m_axis_rx_TUSER[7:6] == 2'b01 && m_axis_rx_TUSER[3:2] == 2'b11) begin
-                next_flit_case3_second <= 1'b1;
-              end 
-              
-            end
-            // Special CASE 3 cont... There can also be 3 valid FLITS in this same cycle, producing a second valid! 
-            // Valid FLITSs 3,2,1,0
-            if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[11:8] == 4'b1001 && m_axis_rx_TUSER[7:4] == 4'b0010 && m_axis_rx_TUSER[3:0] == 4'b1111 && next_flit_case3_second == 1'b1) begin
-              rd_data [255:192] <= m_axis_rx_TDATA[63:0];
-              rd_data [191:0] <= rd_data_i[191:0];
-              rd_tag <= rd_tag_i;
-              rd_data_val <= 1'b1;
-              next_flit_case3_second <= 1'b0;
-              m_axis_rx_TREADY_i <= 1'b0; // have to deal with 2 valids -> inform AXI to standby, so that next cycle does not produce data to deal with!
-              // valid data from case 2
-              rd_tag_hold <= m_axis_rx_TDATA[23+128:15+128];
-              rd_data_hold [255:0] <= m_axis_rx_TDATA[255+64+128:64+128];
-              rd_data_val_hold <= 1'b1;
-            end
-            // CASE 4 cont...
-            // Valid FLITSs 1,0
-            if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[9:8] == 2'b10 && m_axis_rx_TUSER[5:4] == 4'b00 && m_axis_rx_TUSER[1:0] == 4'b11 && next_flit_case4_second == 1'b1) begin
-              rd_data [255:64] <= m_axis_rx_TDATA[191:0];
-              rd_data [63:0] <= rd_data_i[63:0];
-              rd_tag <= rd_tag_i;
-              rd_data_val <= 1'b1;
-              next_flit_case4_second <= 1'b0;
-              // do not clear if there are still case 4 responeses comming on FLIT 3!
-              if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[11] == 1'b0 && m_axis_rx_TUSER[7] == 1'b1 && m_axis_rx_TUSER[3] == 1'b1) begin
-                next_flit_case4_second <= 1'b1;
+          // Start state decoding
+          case (rd_flit_state)
+            // State: Entry to state machine (from reset)
+            STATE_IDLE: begin
+              rd_flit_state <= STATE_IDLE;
+              if (POST_DONE == 1'b1) begin
+                rd_flit_state <= STATE_CHK_RD_DATA;
               end
             end
-          end
-        endcase
-      end
+            // State: Decode AXI bus and figure out what is data, overheads or NULL FLITs
+            //        If there is HMC memory data returned, check this data with the data written to HMC memory in the write state machine 
+            STATE_CHK_RD_DATA: begin 
+    
+              // 4 FLITs per AXI Access [511:0]:
+              //   FLIT0 axis bus [127:0]
+              //   FLIT1 axis bus [255:128]
+              //   FLIT2 axis bus [383:256]
+              //   FLIT3 axis bus [511:384]
+    
+    
+              // ****************** First time around FLITs ******************
+              // CASE 1 Start
+              // Valid FLITSs 2,1,0
+              // This case follows the same sequence as the RD32 request issued by the write state machine
+              // The read data returned will be in the same sequence
+              // The RD32 tag that is returned in the FLIT header(m_axis_rx_TDATA[23:15])
+              if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[10:8] == 3'b100 && m_axis_rx_TUSER[6:4] == 3'b001 && m_axis_rx_TUSER[2:0] == 3'b111) begin
+                rd_tag <= m_axis_rx_TDATA[23:15];
+                rd_data [255:0] <= m_axis_rx_TDATA[255+64:64];
+                rd_data_val <= 1'b1;
+                r_flit_case1_first_count <= r_flit_case1_first_count + 1'b1;
+              end 
+    
+              // ****************** First time around FLITs ******************
+              // CASE 2 Start
+              // Valid FLITSs 3,2,1
+              if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[11:9] == 3'b100 && m_axis_rx_TUSER[7:5] == 3'b001 && m_axis_rx_TUSER[3:1] == 3'b111) begin
+                rd_tag <= m_axis_rx_TDATA[23+128:15+128];
+                rd_data [255:0] <= m_axis_rx_TDATA[255+64+128:64+128];
+                rd_data_val <= 1'b1;
+                r_flit_case2_first_count <= r_flit_case2_first_count + 1'b1;
+              end 
+    
+              // ****************** First time around FLITs ******************
+              // CASE 3 Start
+              // Valid FLITSs 3,2
+              if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[11:10] == 2'b00 && m_axis_rx_TUSER[7:6] == 2'b01 && m_axis_rx_TUSER[3:2] == 2'b11) begin
+                rd_tag_i <= m_axis_rx_TDATA[23+256:15+256];
+                rd_data_i[191:0] <= m_axis_rx_TDATA[191+64+256:64+256];
+                next_flit_case3_second <= 1'b1;  // AXI access 2 of 2 
+                r_flit_case3_first_count <= r_flit_case3_first_count + 1'b1;
+              end 
+    
+              // ****************** First time around FLITs ******************
+              // CASE 4 Start
+              // Valid FLITSs 3
+              if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[11] == 1'b0 && m_axis_rx_TUSER[7] == 1'b1 && m_axis_rx_TUSER[3] == 1'b1) begin
+                rd_tag_i <= m_axis_rx_TDATA[23+384:15+384];
+                rd_data_i[63:0] <= m_axis_rx_TDATA[63+64+384:64+384];
+                next_flit_case4_second <= 1'b1;  // AXI access 2 of 2 
+                r_flit_case4_first_count <= r_flit_case4_first_count + 1'b1;
+              end 
+    
+    
+              // ****************** Second time around FLITs ******************
+              // CASE 3 cont...
+              // Valid FLITSs 0
+              if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[8] == 1'b1 && m_axis_rx_TUSER[4] == 1'b0 && m_axis_rx_TUSER[0] == 1'b1 && next_flit_case3_second == 1'b1) begin
+                rd_data [255:192] <= m_axis_rx_TDATA[63:0];
+                rd_data [191:0] <= rd_data_i[191:0];
+                rd_tag <= rd_tag_i;
+                rd_data_val <= 1'b1;
+                next_flit_case3_second <= 1'b0;
+                r_flit_case3_second_count <= r_flit_case3_second_count + 1'b1;
+              //do not clear if there are still case 3 responses coming on FLIT 2,3!
+                if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[11:10] == 2'b00 && m_axis_rx_TUSER[7:6] == 2'b01 && m_axis_rx_TUSER[3:2] == 2'b11) begin
+                  next_flit_case3_second <= 1'b1;
+                end 
+                
+              end
+              
+              // Special CASE 3 cont... There can also be 3 valid FLITS in this same cycle, producing a second valid! 
+              // Valid FLITSs 0
+              if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[11:8] == 4'b1001 && m_axis_rx_TUSER[7:4] == 4'b0010 && m_axis_rx_TUSER[3:0] == 4'b1111 && next_flit_case3_second == 1'b1) begin
+                rd_data [255:192] <= m_axis_rx_TDATA[63:0];
+                rd_data [191:0] <= rd_data_i[191:0];
+                rd_tag <= rd_tag_i;
+                rd_data_val <= 1'b1;
+                next_flit_case3_second <= 1'b0;
+                m_axis_rx_TREADY_i <= 1'b0; // have to deal with 2 valids -> inform AXI to standby, so that next cycle does not produce data to deal with!
+                // valid data from case 2
+                rd_tag_hold <= m_axis_rx_TDATA[23+128:15+128];
+                rd_data_hold [255:0] <= m_axis_rx_TDATA[255+64+128:64+128];
+                rd_data_val_hold <= 1'b1;
+                r_flit_case3_second_spec_count <= r_flit_case3_second_spec_count + 1'b1;
+              end          
+    
+              // CASE 4 cont...
+              // Valid FLITSs 1,0
+              if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[9:8] == 2'b10 && m_axis_rx_TUSER[5:4] == 4'b00 && m_axis_rx_TUSER[1:0] == 4'b11 && next_flit_case4_second == 1'b1) begin
+                rd_data [255:64] <= m_axis_rx_TDATA[191:0];
+                rd_data [63:0] <= rd_data_i[63:0];
+                rd_tag <= rd_tag_i;
+                rd_data_val <= 1'b1;
+                next_flit_case4_second <= 1'b0;
+                //do not clear if there are still case 4 responses coming on FLIT 3!
+                if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[11] == 1'b0 && m_axis_rx_TUSER[7] == 1'b1 && m_axis_rx_TUSER[3] == 1'b1) begin
+                  next_flit_case4_second <= 1'b1;
+                end                
+                r_flit_case4_second_count <= r_flit_case4_second_count + 1'b1;
+              end
+              
+            end
+          endcase
+       end  
     end    
   end
 

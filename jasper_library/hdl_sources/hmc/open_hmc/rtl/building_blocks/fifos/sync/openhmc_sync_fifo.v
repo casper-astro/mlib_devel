@@ -62,7 +62,6 @@ module openhmc_sync_fifo #(
         input wire [DATASIZE-1:0]   d_in,
         input wire                  shift_in,
         input wire                  shift_out,
-        input wire                  next_stage_full, // Set to 1 if not chained
         output wire [DATASIZE-1:0]  d_out,
         output wire                 empty
     );

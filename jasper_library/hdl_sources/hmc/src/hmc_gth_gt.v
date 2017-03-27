@@ -93,7 +93,8 @@ module hmc_gth_GT #
     //------------------- Receive Ports - RX Equalizer Ports -------------------
     //------------- Receive Ports - RX Fabric Output Control Ports -------------
     //----------- Receive Ports - RX Initialization and Reset Ports ------------
-    input           GTHRESET,
+    input           GTHRXRESET,
+    output          PHY_RX_RST_DONE,
     //---------------------- Receive Ports -RX AFE Ports -----------------------
     input           GTHRXP_IN,
     //------------------- TX Initialization and Reset Ports --------------------
@@ -109,8 +110,8 @@ module hmc_gth_GT #
     //--------- Transmit Ports - TX Fabric Clock Output Control Ports ----------
     output          TXOUTCLK_OUT,
     //----------- Transmit Ports - TX Initialization and Reset Ports -----------
-    output          PHY_RST_DONE
-
+    output          PHY_TX_RST_DONE,
+    input           GTHTXRESET
 
 );
 
@@ -132,7 +133,9 @@ module hmc_gth_GT #
     //TX Datapath signals
     wire    [63:0]  txdata_i;   
 
-    reg  rx_slide;       
+    reg  rx_slide;
+    
+    wire rxphaligndone;       
         
 // 
 //********************************* Main Body of Code**************************
@@ -147,20 +150,26 @@ module hmc_gth_GT #
     //-------------------  GT Datapath byte mapping  -----------------
 
  //The GT deserializes the rightmost parallel bit (LSb) first
- reg rx_rst_doneR,rx_rst_doneRR,phy_rst_done;
+ reg rx_rst_doneR,rx_rst_doneRR,rx_rst_doneRRR,phy_tx_rst_done, phy_rx_rst_done;
  always @(posedge TXUSRCLK2_IN) begin 
    rx_rst_doneR <= rx_rst_done;
    rx_rst_doneRR <= rx_rst_doneR;
-   phy_rst_done <= 1'b0;
-   if (rx_rst_doneRR == 1'b1 && tx_rst_done == 1'b1) begin
-     phy_rst_done <= 1'b1;
-   end;    
+   rx_rst_doneRRR <= rx_rst_doneRR; 
+   phy_rx_rst_done <= 1'b0;
+   phy_tx_rst_done <= 1'b0;
+   if (rx_rst_doneRRR == 1'b1) begin
+     phy_rx_rst_done <= 1'b1;
+   end; 
+   if (tx_rst_done == 1'b1) begin
+     phy_tx_rst_done <= 1'b1;
+   end;       
   end
 
- assign PHY_RST_DONE = phy_rst_done;
+    assign PHY_TX_RST_DONE = phy_tx_rst_done;
+    assign PHY_RX_RST_DONE = phy_rx_rst_done;
 
     //The GT serializes the rightmost parallel bit (LSb) first
-            assign txdata_i =   TXDATA_IN;
+    assign txdata_i =   TXDATA_IN;
 
 
 
@@ -180,7 +189,7 @@ module hmc_gth_GT #
            //----------------RX Byte and Word Alignment Attributes---------------
             .ALIGN_COMMA_DOUBLE                     ("FALSE"),
             .ALIGN_COMMA_ENABLE                     (10'b1111111111),
-            .ALIGN_COMMA_WORD                       (1),
+            .ALIGN_COMMA_WORD                       (4),//(1),
             .ALIGN_MCOMMA_DET                       ("FALSE"),//("TRUE"),
             .ALIGN_MCOMMA_VALUE                     (10'b1010000011),
             .ALIGN_PCOMMA_DET                       ("FALSE"),//("TRUE"),
@@ -280,9 +289,9 @@ module hmc_gth_GT #
             .RXBUF_ADDR_MODE                        ("FAST"),
             .RXBUF_EIDLE_HI_CNT                     (4'b1000),
             .RXBUF_EIDLE_LO_CNT                     (4'b0000),
-            .RXBUF_EN                               ("TRUE"),
+            .RXBUF_EN                               ("FALSE"),//AI:("TRUE"),
             .RX_BUFFER_CFG                          (6'b000000),
-            .RXBUF_RESET_ON_CB_CHANGE               ("TRUE"),
+            .RXBUF_RESET_ON_CB_CHANGE               ("FALSE"),//AI:("TRUE"),
             .RXBUF_RESET_ON_COMMAALIGN              ("FALSE"),
             .RXBUF_RESET_ON_EIDLE                   ("FALSE"),
             .RXBUF_RESET_ON_RATE_CHANGE             ("FALSE"),//("TRUE"),
@@ -296,7 +305,7 @@ module hmc_gth_GT #
             .RXPH_CFG                               (24'hC00002),
             .RXPHDLY_CFG                            (24'h084020),
             .RXPH_MONITOR_SEL                       (5'b00000),
-            .RX_XCLK_SEL                            ("RXREC"),
+            .RX_XCLK_SEL                            ("RXUSR"),//AI:("RXREC"),
             .RX_DDI_SEL                             (6'b000000),
             .RX_DEFER_RESET_BUF_EN                  ("TRUE"),
 
@@ -619,14 +628,14 @@ module hmc_gth_GT #
         //----------------- Receive Ports - RX Buffer Bypass Ports -----------------
         .RXBUFRESET                     (tied_to_ground_i),
         .RXBUFSTATUS                    (),
-        .RXDDIEN                        (tied_to_ground_i),
+        .RXDDIEN                        (tied_to_vcc_i),//AI:(tied_to_ground_i),
         .RXDLYBYPASS                    (tied_to_vcc_i),
         .RXDLYEN                        (tied_to_ground_i),
         .RXDLYOVRDEN                    (tied_to_ground_i),
         .RXDLYSRESET                    (tied_to_ground_i),
         .RXDLYSRESETDONE                (),
         .RXPHALIGN                      (tied_to_ground_i),
-        .RXPHALIGNDONE                  (),
+        .RXPHALIGNDONE                  (rxphaligndone),//AI:(),
         .RXPHALIGNEN                    (tied_to_ground_i),
         .RXPHDLYPD                      (tied_to_ground_i),
         .RXPHDLYRESET                   (tied_to_ground_i),
@@ -634,10 +643,10 @@ module hmc_gth_GT #
         .RXPHOVRDEN                     (tied_to_ground_i),
         .RXPHSLIPMONITOR                (),
         .RXSTATUS                       (),
-        .RXSYNCALLIN                    (tied_to_ground_i),
+        .RXSYNCALLIN                    (rxphaligndone),//AI:(tied_to_ground_i),
         .RXSYNCDONE                     (),
         .RXSYNCIN                       (tied_to_ground_i),
-        .RXSYNCMODE                     (tied_to_ground_i),
+        .RXSYNCMODE                     (tied_to_vcc_i),//AI(tied_to_ground_i),
         .RXSYNCOUT                      (),
         //------------ Receive Ports - RX Byte and Word Alignment Ports ------------
         .RXBYTEISALIGNED                (),
@@ -733,7 +742,7 @@ module hmc_gth_GT #
         //------------------- Receive Ports - RX Gearbox Ports  --------------------
         .RXGEARBOXSLIP                  (tied_to_ground_i),
         //----------- Receive Ports - RX Initialization and Reset Ports ------------
-        .GTRXRESET                      (GTHRESET),
+        .GTRXRESET                      (GTHRXRESET),
         .RXOOBRESET                     (tied_to_ground_i),
         .RXPCSRESET                     (tied_to_ground_i),
         .RXPMARESET                     (tied_to_ground_i),
@@ -774,7 +783,7 @@ module hmc_gth_GT #
         .TXQPIWEAKPUP                   (tied_to_ground_i),
         //------------------- TX Initialization and Reset Ports --------------------
         .CFGRESET                       (tied_to_ground_i),
-        .GTTXRESET                      (GTHRESET),
+        .GTTXRESET                      (GTHTXRESET),
         .PCSRSVDOUT                     (),
         .TXUSERRDY                      (TXUSERRDY_IN),
         //--------------- TX Phase Interpolator PPM Controller Ports ---------------

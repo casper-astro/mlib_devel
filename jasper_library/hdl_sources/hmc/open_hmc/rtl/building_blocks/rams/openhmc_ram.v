@@ -44,7 +44,7 @@
 module openhmc_ram #(
         parameter DATASIZE  = 78,   // Memory data word width
         parameter ADDRSIZE  = 9,    // Number of memory address bits
-        parameter PIPELINED = 0
+        parameter PIPELINED = 0     
     ) (
         //----------------------------------
         //----SYSTEM INTERFACE
@@ -93,11 +93,10 @@ module openhmc_ram #(
     endgenerate
 
     reg [DATASIZE-1:0]  MEM [0:(2**ADDRSIZE)-1];
+
     reg [DATASIZE-1:0]  data_out;
 
     assign rdata_ram = data_out;
-
-
 
     always @(posedge clk)
     begin

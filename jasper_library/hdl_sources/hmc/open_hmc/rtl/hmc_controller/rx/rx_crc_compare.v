@@ -72,8 +72,7 @@ module rx_crc_compare #(
     output  reg  [FPW-1:0]      d_out_error,
     output  reg  [FPW-1:0]      d_out_poisoned,
     output  reg  [FPW-1:0]      d_out_rtc,
-    output  reg  [FPW-1:0]      d_out_flow,
-    output  wire [127:0] crc_out
+    output  reg  [FPW-1:0]      d_out_flow
 
 );
 
@@ -83,157 +82,7 @@ module rx_crc_compare #(
 //-----------------------------------------------------------------------------------------------------
 //=====================================================================================================
 
-//`include "hmc_field_functions.h"
- function [5:0] cmd;
-    input [127:0] flit;
-
-    begin
-        cmd = flit[5:0];
-    end
- endfunction
-
- function [5:0] num_requested_flits;
-    input [127:0] flit;
-
-    begin
-        num_requested_flits = flit[2:0] + 2;    //+1 for the encoding
-    end
- endfunction
- 
- function [2:0] flow_cmd;
-    input [127:0] flit;
-
-    begin
-        flow_cmd = flit[2:0];
-    end
- endfunction
-
- function [2:0] cmd_type;
-    input [127:0] flit;
-
-    begin
-        cmd_type = flit[5:3];
-    end
- endfunction
-
- function is_flow;
-    input [127:0] flit;
-    begin
-        if(flit[5:3]) begin
-            is_flow = 0;
-        end else begin
-            is_flow = 1;
-        end
-    end
- endfunction
-
- function irtry_start_retry_flag;
-    input [127:0] flit;
-
-    begin
-        irtry_start_retry_flag = flit[64+8];
-    end
- endfunction
-
- function irtry_clear_error_flag;
-    input [127:0] flit;
-
-    begin
-        irtry_clear_error_flag = flit[64+8+1];
-    end
- endfunction
-  
- function [3:0] lng;
-    input [127:0] flit;
-
-    begin
-        lng = flit[10:7];
-    end
- endfunction
- 
-  
- function [3:0] dln;
-    input [127:0]   flit;
-
-    begin
-        dln = flit[14:11];
-    end
- endfunction
- 
-  
- function [8:0] tag;
-    input [127:0] flit;
-
-    begin
-        tag = flit[23:15];
-    end
- endfunction
- 
- function [57:24] adrs;
-    input [127:0] flit;
-
-    begin
-        adrs = flit[57:24];
-    end
- endfunction
-
- function [2:0] cub;
-    input [127:0] flit;
-
-    begin
-        cub = flit[63:61];
-    end
- endfunction
- 
-//------------------------------------------------------------------------HMC TAIL FIELDS
- 
- function [7:0] rrp;
-    input [127:0]   flit;
-
-    begin
-        rrp = flit[64+7:64];
-    end
- endfunction
-
- function [7:0] frp;
-    input [127:0]   flit;
-
-    begin
-        frp = flit[64+15:64+8];
-    end
- endfunction
- 
- function [2:0] seq;
-        input [127:0]   flit;
-
-        begin
-                seq = flit[64+18:64+16];
-        end
- endfunction
- 
- function [6:0] errstat;
-        input [127:0]   flit;
-
-        begin
-                errstat = flit[64+26:64+20];
-        end
- endfunction
-
- function [4:0] rtc;
-        input [127:0]   flit;
-
-        begin
-                rtc = flit[64+31:64+27];
-        end
- endfunction
- 
- function [31:0] crc;
-    input [127:0]   flit;
-
-    begin
-        crc = flit[127:128-32];
-    end
- endfunction
+`include "hmc_field_functions.h"
 //------------------------------------------------------------------------------------General Assignments
 integer i_f;    //counts to FPW
 integer i_f2;   //counts to FPW inside another i_f loop
@@ -285,7 +134,6 @@ reg  [31:0]    crc_accu_in       [FPW-1:0];
 reg  [FPW-1:0] crc_accu_in_valid [FPW-1:0];
 reg  [FPW-1:0] crc_accu_in_tail  [FPW-1:0];
 wire [31:0]    crc_per_flit      [FPW-1:0];
-assign crc_out = {crc_per_flit[3],crc_per_flit[2],crc_per_flit[1],crc_per_flit[0]};
 
 //------------------------------------------------------------------------------------Inter CRC stage
 reg  [3:0]              payload_remain    [FPW-1:0];
@@ -424,23 +272,33 @@ end
 `ifdef ASYNC_RES
 always @(posedge clk or negedge res_n)  begin `else
 always @(posedge clk)  begin `endif
-if(!res_n) begin
-    for(i_f=0;i_f<FPW;i_f=i_f+1)begin
-        d_in_lng_per_flit_dly[i_f]  <= 4'h0;
+    `ifdef RESET_ALL
+        if(!res_n) d_in_data_dly   <= {DWIDTH{1'b0}};
+        else
+    `endif
+    begin
+        d_in_data_dly   <= d_in_data;
     end
-    d_in_data_dly   <= {DWIDTH{1'b0}};
-    d_in_hdr_dly    <= {FPW{1'b0}};
-    d_in_tail_dly   <= {FPW{1'b0}};
-    d_in_valid_dly  <= {FPW{1'b0}};
-end else begin
+
+    `ifdef RESET_ALL
+        if(!res_n) begin
+            for(i_f=0;i_f<FPW;i_f=i_f+1)begin
+                d_in_lng_per_flit_dly[i_f]  <= 4'h0;
+            end
+
+            d_in_hdr_dly    <= {FPW{1'b0}};
+            d_in_tail_dly   <= {FPW{1'b0}};
+            d_in_valid_dly  <= {FPW{1'b0}};
+        end else 
+    `endif
+    begin
     for(i_f=0;i_f<FPW;i_f=i_f+1)begin
         d_in_lng_per_flit_dly[i_f]  <= d_in_lng_per_flit[i_f];
     end
-    d_in_data_dly   <= d_in_data;
-    d_in_hdr_dly    <= d_in_hdr;
-    d_in_tail_dly   <= d_in_tail;
+    d_in_hdr_dly    <= d_in_hdr & d_in_valid;
+    d_in_tail_dly   <= d_in_tail & d_in_valid;
     d_in_valid_dly  <= d_in_valid;
-end
+    end
 end
 
 //====================================================================
@@ -449,9 +307,20 @@ end
 `ifdef ASYNC_RES
 always @(posedge clk or negedge res_n)  begin `else
 always @(posedge clk)  begin `endif
+
+    for(i_f=0;i_f<FPW;i_f=i_f+1)begin
+        `ifdef RESET_ALL
+            if (!res_n) crc_accu_in[i_f] <= {32{1'b0}};
+            else
+        `endif
+        begin
+            crc_accu_in[i_f]        <= crc_init_out[i_f];
+        end
+    end
+
 if(!res_n) begin
     for(i_f=0;i_f<FPW;i_f=i_f+1)begin
-        crc_accu_in[i_f] <= {32{1'b0}};
+
         crc_accu_in_valid[i_f]  <= {FPW{1'b0}};
         crc_accu_in_tail[i_f]  <= {FPW{1'b0}};
         payload_remain[i_f]     <= 4'h0;
@@ -459,14 +328,12 @@ if(!res_n) begin
 end else begin
 
     for(i_f=0;i_f<FPW;i_f=i_f+1)begin
-        crc_accu_in[i_f] <= crc_init_out[i_f];
         crc_accu_in_valid[i_f]  <= 4'h0;
-        crc_accu_in_tail[i_f]  <= 4'h0;
+        crc_accu_in_tail[i_f]   <= 4'h0;
     end
 
     for(i_f=0;i_f<FPW;i_f=i_f+1)begin
     //First go through accu crcs
-
         if(|payload_remain[i_f]) begin    
 
             if(payload_remain[i_f] > FPW) begin
@@ -484,10 +351,10 @@ end else begin
             //Then go through all input crcs from the init crc and find the crc's that must be assigned to the currently selected crc
 
                 if( (i_f2+d_in_lng_per_flit_dly[i_f2]) >FPW ) begin 
-                    payload_remain[i_f] <= (d_in_lng_per_flit_dly[i_f2]-FPW+i_f2);
+                    payload_remain[i_f]      <= (d_in_lng_per_flit_dly[i_f2]-FPW+i_f2);
                     crc_accu_in_valid[i_f]   <=  {FPW{1'b1}} >> i_f2 << i_f2;
                 end else begin
-                    crc_accu_in_tail[i_f] <= 1'b1 << d_in_lng_per_flit_dly[i_f2]+i_f2-1;
+                    crc_accu_in_tail[i_f]    <= 1'b1 << d_in_lng_per_flit_dly[i_f2]+i_f2-1;
                     crc_accu_in_valid[i_f]   <=  ({FPW{1'b1}} >> (FPW-i_f2-d_in_lng_per_flit_dly[i_f2])) >> i_f2 << i_f2;
                 end
             end
@@ -503,38 +370,49 @@ end
 `ifdef ASYNC_RES
 always @(posedge clk or negedge res_n)  begin `else
 always @(posedge clk)  begin `endif
-if(!res_n) begin
-    for(i_c=0;i_c<2;i_c=i_c+1)begin
-        crc_data_pipe_in_data[i_c]       <= {DWIDTH{1'b0}};
-        crc_data_pipe_in_hdr[i_c]        <= {FPW{1'b0}};
-        crc_data_pipe_in_tail[i_c]       <= {FPW{1'b0}};
-        crc_data_pipe_in_valid[i_c]      <= {FPW{1'b0}};
+    
+    `ifdef ASYNC_RES
+        if (!res_n) begin
+            for(i_c=0;i_c<2;i_c=i_c+1)begin
+                crc_data_pipe_in_data[i_c]       <= {DWIDTH{1'b0}};
+            end
+        end else 
+    `endif
+    begin
+        //Data forward
+        crc_data_pipe_in_data[0]   <= d_in_data_dly;
+        crc_data_pipe_in_data[1]   <= crc_data_pipe_in_data[0];
     end
 
-    for(i_f = 0; i_f < (FPW); i_f = i_f + 1) begin
-        target_crc_per_tail1[i_f] <= 3'h0;
-    end
-end else begin
+    `ifdef RESET_ALL
+    if(!res_n) begin
+        for(i_c=0;i_c<2;i_c=i_c+1)begin
+            crc_data_pipe_in_hdr[i_c]        <= {FPW{1'b0}};
+            crc_data_pipe_in_tail[i_c]       <= {FPW{1'b0}};
+            crc_data_pipe_in_valid[i_c]      <= {FPW{1'b0}};
+        end
 
-    for(i_f = 0; i_f < (FPW); i_f = i_f + 1) begin
-        target_crc_per_tail1[i_f] <= target_crc_per_tail[i_f];
-    end
+        for(i_f = 0; i_f < (FPW); i_f = i_f + 1) begin
+            target_crc_per_tail1[i_f] <= 3'h0;
+        end
+    end else 
+    `endif
+    begin
+        for(i_f = 0; i_f < (FPW); i_f = i_f + 1) begin
+            target_crc_per_tail1[i_f] <= target_crc_per_tail[i_f];
+        end
 
-    //Set the first stage of the data pipeline
-    crc_data_pipe_in_data[0]       <= d_in_data_dly;
-    crc_data_pipe_in_hdr[0]        <= d_in_hdr_dly;
-    crc_data_pipe_in_tail[0]       <= d_in_tail_dly;
-    crc_data_pipe_in_valid[0]      <= d_in_valid_dly;
+        //Set the first stage of the data pipeline
+        crc_data_pipe_in_hdr[0]    <= d_in_hdr_dly;
+        crc_data_pipe_in_tail[0]   <= d_in_tail_dly;
+        crc_data_pipe_in_valid[0]  <= d_in_valid_dly;
 
-    //Data Pipeline propagation
-    for(i_c=0;i_c<(1);i_c=i_c+1)begin
-        crc_data_pipe_in_data[i_c+1]   <= crc_data_pipe_in_data[i_c];
-        crc_data_pipe_in_tail[i_c+1]   <= crc_data_pipe_in_tail[i_c];
-        crc_data_pipe_in_hdr[i_c+1]    <= crc_data_pipe_in_hdr[i_c];
-        crc_data_pipe_in_tail[i_c+1]   <= crc_data_pipe_in_tail[i_c];
-        crc_data_pipe_in_valid[i_c+1]  <= crc_data_pipe_in_valid[i_c];
+        //Second Stage
+        crc_data_pipe_in_tail[1]   <= crc_data_pipe_in_tail[0];
+        crc_data_pipe_in_hdr[1]    <= crc_data_pipe_in_hdr[0];
+        crc_data_pipe_in_tail[1]   <= crc_data_pipe_in_tail[0];
+        crc_data_pipe_in_valid[1]  <= crc_data_pipe_in_valid[0];
     end
-end
 end
 
 //====================================================================
@@ -543,20 +421,28 @@ end
 `ifdef ASYNC_RES
 always @(posedge clk or negedge res_n)  begin `else
 always @(posedge clk)  begin `endif
+    
+    for(i_f=0;i_f<FPW;i_f=i_f+1)begin
+        `ifdef ASYNC_RES
+            if(!res_n)data_rdy_flit[i_f]  <= {128{1'b0}};
+            else 
+        `endif
+        begin // Datapath
+            data_rdy_flit[i_f]  <= crc_data_pipe_out_data_flit[i_f];
+        end
+    end
+    //Propagate
+    d_out_hdr           <= crc_data_pipe_in_hdr[1];
+    d_out_tail          <= crc_data_pipe_in_tail[1];
+    d_out_valid         <= crc_data_pipe_in_valid[1];
+
 if(!res_n) begin
 
     //Reset the outputs
-    d_out_hdr             <= {FPW{1'b0}};
-    d_out_tail            <= {FPW{1'b0}};
-    d_out_valid           <= {FPW{1'b0}};
     d_out_error           <= {FPW{1'b0}};
     d_out_poisoned        <= {FPW{1'b0}};
     d_out_rtc             <= {FPW{1'b0}};
     d_out_flow            <= {FPW{1'b0}};
-
-    for(i_f=0;i_f<FPW;i_f=i_f+1)begin
-        data_rdy_flit[i_f]  <= {128{1'b0}};
-    end
 
 end else begin
 
@@ -565,15 +451,12 @@ end else begin
     d_out_poisoned          <= {FPW{1'b0}};
     d_out_flow              <= {FPW{1'b0}};
 
-    //Propagate
-    d_out_hdr           <= crc_data_pipe_in_hdr[1];
-    d_out_tail          <= crc_data_pipe_in_tail[1];
-    d_out_valid         <= crc_data_pipe_in_valid[1];
+
 
     for(i_f=0;i_f<FPW;i_f=i_f+1)begin
-
-        //Propagate data
-        data_rdy_flit[i_f]  <= crc_data_pipe_out_data_flit[i_f];
+        d_out_error[i_f] <=  crc_data_pipe_in_hdr[1][i_f] && (  ~|lng(crc_data_pipe_out_data_flit[i_f]) 
+                                                                || lng(crc_data_pipe_out_data_flit[i_f])>9 
+                                                                || !lng_dln_equal(crc_data_pipe_out_data_flit[i_f]));
 
         if(crc_data_pipe_in_tail[1][i_f])begin
         //Finally compare the CRC and add flow/rtc information if there is a tail
@@ -592,25 +475,12 @@ end else begin
                 d_out_rtc[i_f] <= 1'b1;
             end else begin
 
-                if((cmd(crc_data_pipe_out_data_flit[i_f]) == CMD_TRET) || !is_flow(crc_data_pipe_out_data_flit[i_f])) begin
-                    //All non-flow packets have a valid RTC
+                if((cmd(crc_data_pipe_out_data_flit[i_f]) == CMD_TRET) || !is_rsp_flow(crc_data_pipe_out_data_flit[i_f])) begin
+                    //All non-flow packets have a valid RTC, except TRET
                     d_out_rtc[i_f] <= 1'b1;
                 end
-                if(is_flow(crc_data_pipe_out_data_flit[i_f])) begin
-                    //Set the flow packet indicator
-                    d_out_flow[i_f] <= 1'b1;
-
-                    //Check flow packets zero fields
-                    if(|adrs(crc_data_pipe_out_data_flit[i_f]) || |tag(crc_data_pipe_out_data_flit[i_f])) begin
-                        d_out_error[i_f]    <= 1'b1;
-                    end
-                    if( (cmd(crc_data_pipe_out_data_flit[i_f]) != CMD_TRET) && 
-                        (|rtc(crc_data_pipe_out_data_flit[i_f]) || |seq(crc_data_pipe_out_data_flit[i_f]))) begin
-                        d_out_error[i_f]    <= 1'b1;
-                    end
-                    if((cmd(crc_data_pipe_out_data_flit[i_f]) == CMD_PRET) && |frp(crc_data_pipe_out_data_flit[i_f])) begin
-                        d_out_error[i_f] <= 1'b1;
-                    end
+                if(is_rsp_flow(crc_data_pipe_out_data_flit[i_f])) begin
+               	    d_out_flow[i_f] <= 1'b1;
                 end
             end
 
@@ -630,7 +500,9 @@ generate
         crc_128_init crc_init_I
         (
             .clk(clk),
-            .res_n(res_n),
+            `ifdef ASYNC_RES
+                .res_n(res_n),
+            `endif
             .inData(d_in_flit_removed_crc[f]),
             .crc(crc_init_out[f])
         );
@@ -649,7 +521,6 @@ generate
             .res_n(res_n),
             .tail(crc_accu_in_tail[f]),
             .d_in(crc_accu_in_combined[f]),
-            .valid(crc_accu_in_valid[f]),
             .crc_out(crc_per_flit[f])
         );
     end

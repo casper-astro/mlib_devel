@@ -61,6 +61,7 @@ module rx_lane_logic #(
     input   wire [LANE_DWIDTH-1:0]      scrambled_data_in,
     input   wire                        bit_slip,   //bit slip per lane
     input   wire                        lane_polarity,
+    input   wire                        can_lock,
     output  wire [LANE_DWIDTH-1:0]      descrambled_data_out,
     output  wire                        descrambler_locked,
     input   wire                        descrambler_disable
@@ -70,7 +71,7 @@ module rx_lane_logic #(
 wire    [LANE_DWIDTH-1:0]       descrambled_data_out_tmp;
 wire    [LANE_DWIDTH-1:0]       data_2_descrambler;
 wire                            descrambler_locked_tmp;
-assign descrambler_locked       = descrambler_disable ? 1'b1 : descrambler_locked_tmp;
+assign descrambler_locked       = descrambler_disable ? can_lock : descrambler_locked_tmp;
 
 
 
@@ -88,10 +89,12 @@ generate
         always @(posedge clk or negedge res_n)  begin `else
             always @(posedge clk)  begin `endif
 
+            `ifdef RESET_ALL
             if(!res_n) begin
                 scrambled_data_in_reg   <=  {LANE_DWIDTH{1'b0}};
-            end
-            else begin
+            end else 
+            `endif
+            begin
                 scrambled_data_in_reg   <= scrambled_data_in^{LANE_DWIDTH{lane_polarity}};
             end
         end
@@ -120,6 +123,7 @@ endgenerate
     ) descrambler_I (
         .clk(clk),
         .res_n(res_n),
+        .can_lock(can_lock),
         .bit_slip(bit_slip),
         .locked(descrambler_locked_tmp),
         .data_in(data_2_descrambler),

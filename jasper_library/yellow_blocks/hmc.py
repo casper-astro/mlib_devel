@@ -22,6 +22,7 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         hmcc.add_port('SDA_IN',  'mez%s_sda_in' % self.mez, dir='in')
         hmcc.add_port('SCL_IN',  'mez%s_scl_in' % self.mez, dir='in')
         hmcc.add_port('INIT_DONE', '%s_init_done' % self.fullname, dir='out')
+        hmcc.add_port('POST_OK', '%s_post_ok' % self.fullname, dir='out')
 
         hmcc.add_port('HMC_MEZZ_RESET', 'MEZZANINE_%s_RESET' % self.mez, parent_port=True, dir='out')
         hmcc.add_port('MEZZ_CLK_SEL', 'MEZZANINE_%s_CLK_SEL' % self.mez, parent_port=True, dir='out')
@@ -51,20 +52,34 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         hmcc.add_port('REFCLK_PAD_P_IN_1_LINK3', 'MEZ%s_REFCLK_1_P' % self.mez, parent_port=True,  dir='in')
 
 
-        # Simulink ports
+        # Simulink ports Link2
 
-        hmcc.add_port('RD_REQ', '%s_rd_en' % self.fullname, dir='in')
-        hmcc.add_port('WR_REQ', '%s_wr_en' % self.fullname, dir='in')
-        hmcc.add_port('WR_ADDRESS', '%s_wr_address' % self.fullname, dir='in', width=27)
-        hmcc.add_port('DATA_IN', '%s_data_in' % self.fullname, dir='in', width=256)
-        hmcc.add_port('RD_ADDRESS', '%s_rd_address' % self.fullname, dir='in', width=27)
-        hmcc.add_port('DATA_OUT', '%s_data_out' % self.fullname, dir='out', width=256)
-        hmcc.add_port('TAG_OUT', '%s_rd_tag_out' % self.fullname, dir='out', width=9)
-        hmcc.add_port('TAG_IN', '%s_rd_tag_in' % self.fullname, dir='in', width=9)
-        hmcc.add_port('DATA_VALID', '%s_data_valid' % self.fullname, dir='out')
-        hmcc.add_port('POST_OK', '%s_post_ok' % self.fullname, dir='out')
-        hmcc.add_port('RD_READY', '%s_rd_ready' % self.fullname, dir='out')
-        hmcc.add_port('WR_READY', '%s_wr_ready' % self.fullname, dir='out')
+        hmcc.add_port('RD_REQ_LINK2', '%s_rd_en_link2' % self.fullname, dir='in')
+        hmcc.add_port('WR_REQ_LINK2', '%s_wr_en_link2' % self.fullname, dir='in')
+        hmcc.add_port('WR_ADDRESS_LINK2', '%s_wr_address_link2' % self.fullname, dir='in', width=27)
+        hmcc.add_port('DATA_IN_LINK2', '%s_data_in_link2' % self.fullname, dir='in', width=256)
+        hmcc.add_port('RD_ADDRESS_LINK2', '%s_rd_address_link2' % self.fullname, dir='in', width=27)
+        hmcc.add_port('DATA_OUT_LINK2', '%s_data_out_link2' % self.fullname, dir='out', width=256)
+        hmcc.add_port('TAG_OUT_LINK2', '%s_rd_tag_out_link2' % self.fullname, dir='out', width=9)
+        hmcc.add_port('TAG_IN_LINK2', '%s_rd_tag_in_link2' % self.fullname, dir='in', width=9)
+        hmcc.add_port('DATA_VALID_LINK2', '%s_data_valid_link2' % self.fullname, dir='out')
+        hmcc.add_port('RD_READY_LINK2', '%s_rd_ready_link2' % self.fullname, dir='out')
+        hmcc.add_port('WR_READY_LINK2', '%s_wr_ready_link2' % self.fullname, dir='out')
+
+        # Simulink ports Link3
+
+        hmcc.add_port('RD_REQ_LINK3', '%s_rd_en_link3' % self.fullname, dir='in')
+        hmcc.add_port('WR_REQ_LINK3', '%s_wr_en_link3' % self.fullname, dir='in')
+        hmcc.add_port('WR_ADDRESS_LINK3', '%s_wr_address_link3' % self.fullname, dir='in', width=27)
+        hmcc.add_port('DATA_IN_LINK3', '%s_data_in_link3' % self.fullname, dir='in', width=256)
+        hmcc.add_port('RD_ADDRESS_LINK3', '%s_rd_address_link3' % self.fullname, dir='in', width=27)
+        hmcc.add_port('DATA_OUT_LINK3', '%s_data_out_link3' % self.fullname, dir='out', width=256)
+        hmcc.add_port('TAG_OUT_LINK3', '%s_rd_tag_out_link3' % self.fullname, dir='out', width=9)
+        hmcc.add_port('TAG_IN_LINK3', '%s_rd_tag_in_link3' % self.fullname, dir='in', width=9)
+        hmcc.add_port('DATA_VALID_LINK3', '%s_data_valid_link3' % self.fullname, dir='out')
+        hmcc.add_port('RD_READY_LINK3', '%s_rd_ready_link3' % self.fullname, dir='out')
+        hmcc.add_port('WR_READY_LINK3', '%s_wr_ready_link3' % self.fullname, dir='out')
+
 
     #----------------------------------------------------------------------------------------------------
 
