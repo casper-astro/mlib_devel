@@ -32,8 +32,6 @@ entity ska_forty_gb_eth is
         FABRIC_PORT    : std_logic_vector(15 downto 0);
         FABRIC_GATEWAY : std_logic_vector(7 downto 0);
         FABRIC_ENABLE  : std_logic;
-        MC_RECV_IP          : std_logic_vector(31 downto 0);
-        MC_RECV_IP_MASK     : std_logic_vector(31 downto 0);
         TTL                 : std_logic_vector(7 downto 0);
         PROMISC_MODE        : integer;
         RX_CRC_CHK_ENABLE   : integer);     
@@ -524,8 +522,8 @@ begin
         FABRIC_PORT    => FABRIC_PORT,
         FABRIC_GATEWAY => FABRIC_GATEWAY,
         FABRIC_ENABLE  => FABRIC_ENABLE,
-        MC_RECV_IP          => MC_RECV_IP,
-        MC_RECV_IP_MASK     => MC_RECV_IP_MASK)     
+        MC_RECV_IP          => X"FFFFFFFF",
+        MC_RECV_IP_MASK     => X"FFFFFFFF")
 	port map(
 		CLK_I => CLK_I,
 		RST_I => RST_I,

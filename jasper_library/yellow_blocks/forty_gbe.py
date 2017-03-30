@@ -18,9 +18,24 @@ class forty_gbe(YellowBlock):
         multiply, divide, divclk = clk_factors(156.25, self.platform.user_clk_rate)
 
         inst = top.get_instance(name=self.fullname, entity='forty_gbe', comment=self.fullname)
+        # mmcm specific parameters
         inst.add_parameter('MULTIPLY', multiply)
         inst.add_parameter('DIVIDE',   divide)
         inst.add_parameter('DIVCLK',   divclk)
+
+        # forty gbe specific parameters
+        inst.add_parameter('FABRIC_MAC',     "48'h%x"%self.fab_mac)
+        inst.add_parameter('FABRIC_IP',      "32'h%x"%self.fab_ip)
+        inst.add_parameter('FABRIC_PORT',    "16'h%x"%self.fab_udp)
+        inst.add_parameter('FABRIC_GATEWAY', " 8'h%x"%self.fab_gate)
+        inst.add_parameter('FABRIC_ENABLE',  " 1'b%x"%self.fab_en)
+        inst.add_parameter('LARGE_PACKETS',  " 1'b%x"%self.large_frames)
+        inst.add_parameter('RX_DIST_RAM',    " 1'b%x"%self.rx_dist_ram)
+        inst.add_parameter('CPU_RX_ENABLE',  " 1'b%x"%self.cpu_rx_en)
+        inst.add_parameter('CPU_TX_ENABLE',  " 1'b%x"%self.cpu_tx_en)
+        inst.add_parameter('TTL',            " 8'h%x"%self.ttl)
+        inst.add_parameter('PROMISC_MODE',   " 1'b%x"%self.promisc_mode)
+
         inst.add_port('user_clk_o', 'sys_clk', dir='out')
         inst.add_port('user_rst_o', 'sys_rst', dir='out')
         inst.add_port('GND', 'GND', parent_port=True, dir='out', width=16)
@@ -454,7 +469,7 @@ class forty_gbe(YellowBlock):
         cons.append(ClockGroupConstraint('VIRTUAL_clkout0', 'virtual_clock', 'asynchronous'))
 
         #Input Constraints
-        cons.append(InputDelayConstraint(clkname='FPGA_REFCLK_BUF0_P', consttype='min', constdelay_ns=2.0, add_delay_en=True, portname='FLASH_DQ[*]'))
+        cons.append(InputDelayConstraint(clkname='FPGA_REFCLK_BUF0_P', consttype='min', constdelay_ns=3.0, add_delay_en=True, portname='FLASH_DQ[*]'))
         cons.append(InputDelayConstraint(clkname='FPGA_REFCLK_BUF0_P', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='FLASH_DQ[*]'))
         cons.append(InputDelayConstraint(clkname='FPGA_REFCLK_BUF0_P', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='USB_FPGA[*]'))
         cons.append(InputDelayConstraint(clkname='FPGA_REFCLK_BUF0_P', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='USB_FPGA[*]'))
