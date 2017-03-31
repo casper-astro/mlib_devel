@@ -261,7 +261,6 @@ assign adc_fifo_din = {
 
 	
 // DCM(s) and CLock Management 
-// -----------------------------
 // Clock from ZDOK0 	
  IBUFGDS #(// Buffer for input clk
 	.DIFF_TERM("TRUE"),       	// Differential Termination (Virtex-4/5, Spartan-3E/3A)
@@ -272,43 +271,63 @@ assign adc_fifo_din = {
 	.IB(adc_clk_n) 						// Diff_n buffer input (connect directly to top-level port)
 );
 
-DCM #(
-	.CLK_FEEDBACK("1X"), 									// Specify clock feedback of NONE, 1X or 2X
-	.CLKDV_DIVIDE(2.0), 									// Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
-	.CLKFX_DIVIDE(1), 										// Can be any integer from 1 to 32
-	.CLKFX_MULTIPLY(4), 									// Can be any integer from 2 to 32
-	.CLKIN_DIVIDE_BY_2("FALSE"), 					// TRUE/FALSE to enable CLKIN divide by two feature
-	.CLKIN_PERIOD(2.6667), 									// Specify period of input clock in ns from 1.25 to 1000.00
-	.CLKOUT_PHASE_SHIFT("NONE"), 					// Specify phase shift mode of NONE or FIXED
-	.DESKEW_ADJUST("SOURCE_SYNCHRONOUS"), // SOURCE_SYNCHRONOUS, SYSTEM_SYNCHRONOUS or an integer from 0 to 15
-	.DFS_FREQUENCY_MODE("HIGH"), 					// LOW or HIGH frequency mode for frequency synthesis
-	.DLL_FREQUENCY_MODE("HIGH"), 					// LOW, HIGH, or HIGH_SER frequency mode for DLL
-	.DUTY_CYCLE_CORRECTION("TRUE"), 			// Duty cycle correction, TRUE or FALSE
-	.FACTORY_JF(16'hf0f0), 								// FACTORY JF value suggested to be set to 16'hf0f0
-	.PHASE_SHIFT(0), 											// Amount of fixed phase shift from -255 to 1023
-	.STARTUP_WAIT("FALSE"), 								// Delay configuration DONE until DCM LOCK, TRUE/FALSE
-	.DSS_MODE("NONE")
-) DCM_ZDOK0 (
-	.CLKFB(adc_clk),       		// DCM clock feedback
-	.CLKIN(adc_clk_buf),      // Clock input (from IBUFG, BUFG or DCM)		 
-	.DSSEN(0),
-	.PSCLK(), // dcm_psclk
-	.PSEN( 1'b0 ),
-	.PSINCDEC( 1'b0 ),
-	.RST( ctrl_reset ),           // DCM asynchronous reset input
-	.CLKDV( ),       						// Divided DCM CLK out (CLKDV_DIVIDE)
-	.CLKFX( ),       						// DCM CLK synthesis out (M/D)
-	.CLKFX180( ), 							// 180 degree CLK synthesis out			
-	.CLK0( adc_clk_dcm ),      	// 0 degree DCM CLK output
-	.CLK2X( ),       						// 2X DCM CLK output
-	.CLK2X180( ), 							// 2X, 180 degree DCM CLK out			
-	.CLK90( adc_clk90_dcm ),    // 90 degree DCM CLK output
-	.CLK180( adc_clk180_dcm ),	// 180 degree DCM CLK output
-	.CLK270( adc_clk270_dcm ),  // 270 degree DCM CLK output
-	.LOCKED( adc_dcm_locked ),  // DCM LOCK status output
-	.PSDONE( dcm_psdone ),
-	.STATUS( dcm0_status)
-);
+  wire clk_fb;
+
+  MMCM_BASE #(
+   .BANDWIDTH          ("OPTIMIZED"), // Jitter programming ("HIGH","LOW","OPTIMIZED")
+   .CLKFBOUT_MULT_F    (5), // Multiply value for all CLKOUT (5.0-64.0).
+   .CLKFBOUT_PHASE     (0.0),
+   .CLKIN1_PERIOD      (5.0),
+   .CLKOUT0_DIVIDE_F   (5.0), // Divide amount for CLKOUT0 (1.000-128.000).
+   .CLKOUT0_DUTY_CYCLE (0.5),
+   .CLKOUT1_DUTY_CYCLE (0.5),
+   .CLKOUT2_DUTY_CYCLE (0.5),
+   .CLKOUT3_DUTY_CYCLE (0.5),
+   .CLKOUT4_DUTY_CYCLE (0.5),
+   .CLKOUT5_DUTY_CYCLE (0.5),
+   .CLKOUT6_DUTY_CYCLE (0.5),
+   .CLKOUT0_PHASE      (0.0),
+   .CLKOUT1_PHASE      (90),
+   .CLKOUT2_PHASE      (180),
+   .CLKOUT3_PHASE      (270),
+   .CLKOUT4_PHASE      (0.0),
+   .CLKOUT5_PHASE      (0.0),
+   .CLKOUT6_PHASE      (0.0),
+   .CLKOUT1_DIVIDE     (5),
+   .CLKOUT2_DIVIDE     (5),
+   .CLKOUT3_DIVIDE     (5),
+   .CLKOUT4_DIVIDE     (1),
+   .CLKOUT5_DIVIDE     (1),
+   .CLKOUT6_DIVIDE     (1),
+   .CLKOUT4_CASCADE    ("FALSE"),
+   .CLOCK_HOLD         ("FALSE"),
+   .DIVCLK_DIVIDE      (1), // Master division value (1-80)
+   .REF_JITTER1        (0.0),
+   .STARTUP_WAIT       ("FALSE")
+  ) MMCM_BASE_inst (
+   .CLKIN1   (adc_clk_buf),
+   .CLKFBIN  (clk_fb),
+
+   .CLKFBOUT  (clk_fb),
+   .CLKFBOUTB (),
+
+   .CLKOUT0  (adc_clk_dcm),
+   .CLKOUT0B (),
+   .CLKOUT1  (adc_clk90_dcm),
+   .CLKOUT1B (),
+   .CLKOUT2  (adc_clk180_dcm),
+   .CLKOUT2B (),
+   .CLKOUT3  (adc_clk270_dcm),
+   .CLKOUT3B (),
+   .CLKOUT4  (),
+   .CLKOUT5  (),
+   .CLKOUT6  (),
+   .LOCKED   (adc_dcm_locked),
+
+   .PWRDWN   (1'b0),
+   .RST      (ctrl_reset)
+  );
+  assign dcm0_status = 8'b0;
 
 // Buffer outputs of DCM
 BUFG adc_clk0_bufg (.I( adc_clk_dcm ), .O( adc_clk ));
