@@ -12,7 +12,7 @@ addpath([getenv('XILINX_PATH'), '/ISE/sysgen/bin/lin64']);
 addpath([getenv('MLIB_DEVEL_PATH'), '/casper_library']);
 addpath([getenv('MLIB_DEVEL_PATH'), '/xps_library']);
 xlAddSysgen([getenv('XILINX_PATH'), '/ISE'])
-sysgen_startup
+%sysgen_startup
 % If CASPER_BACKPORT is in the environment with non-zero length, then force
 % block reuse and do NOT preload CASPER libraries.  This prevents problems when
 % saving libraries in older Simulink formats (aka "backporting"), but should

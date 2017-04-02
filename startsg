@@ -114,5 +114,10 @@ export CASPER_STARTUP_DIR=`pwd`
 # (so MATLAB will find our startup.m file).
 cd "${MLIB_DEVEL_PATH}"
 
+export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu:/lib64:/lib:$LD_LIBRARY_PATH
+
+export PATH=$PATH:/$MATLAB_PATH/bin
+
+
 # Start MATLAB
 "${MATLAB}/bin/matlab"
