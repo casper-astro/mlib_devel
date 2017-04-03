@@ -53,6 +53,8 @@ entity ska_forty_gb_eth is
         rx_data             : out std_logic_vector(255 downto 0);
         rx_source_ip        : out std_logic_vector(31 downto 0);
         rx_source_port      : out std_logic_vector(15 downto 0);
+        rx_dest_ip          : out std_logic_vector(31 downto 0);
+        rx_dest_port        : out std_logic_vector(15 downto 0);
         rx_bad_frame        : out std_logic;
         rx_overrun          : out std_logic;
         rx_overrun_ack      : in std_logic;
@@ -270,6 +272,8 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
         app_rx_data             : out std_logic_vector(255 downto 0);
         app_rx_source_ip        : out std_logic_vector(31 downto 0);
         app_rx_source_port      : out std_logic_vector(15 downto 0);
+        app_rx_dest_ip          : out std_logic_vector(31 downto 0);
+        app_rx_dest_port        : out std_logic_vector(15 downto 0);
         app_rx_bad_frame        : out std_logic;
         app_rx_overrun          : out std_logic;
         app_rx_overrun_ack      : in std_logic;
@@ -842,6 +846,8 @@ begin
         app_rx_data             => rx_data,
         app_rx_source_ip        => rx_source_ip,
         app_rx_source_port      => rx_source_port,
+        app_rx_dest_ip          => rx_dest_ip,
+        app_rx_dest_port        => rx_dest_port,
         app_rx_bad_frame        => rx_bad_frame,
         app_rx_overrun          => rx_overrun,
         app_rx_overrun_ack      => rx_overrun_ack,

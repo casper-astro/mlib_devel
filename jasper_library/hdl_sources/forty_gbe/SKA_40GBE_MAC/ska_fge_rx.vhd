@@ -47,6 +47,8 @@ entity ska_fge_rx is
     app_rx_data             : out std_logic_vector(255 downto 0);
     app_rx_source_ip        : out std_logic_vector(31 downto 0);
     app_rx_source_port      : out std_logic_vector(15 downto 0);
+    app_rx_dest_ip          : out std_logic_vector(31 downto 0);
+    app_rx_dest_port        : out std_logic_vector(15 downto 0);
     app_rx_bad_frame        : out std_logic;
     app_rx_overrun          : out std_logic;
     app_rx_overrun_ack      : in std_logic;
@@ -272,6 +274,9 @@ architecture arch_ska_fge_rx of ska_fge_rx is
     signal ctrl_fifo_rd_data : std_logic_vector(47 downto 0);
     signal ctrl_fifo_rd_en : std_logic;
     signal ctrl_fifo_empty : std_logic;
+    signal txctrl_fifo_wr_data : std_logic_vector(47 downto 0);
+    signal txctrl_fifo_almost_full : std_logic;
+    signal txctrl_fifo_rd_data : std_logic_vector(47 downto 0);
     
     signal current_app_state : T_APP_STATE;
     signal first_word : std_logic;
@@ -979,9 +984,9 @@ begin
     rx_eof <= '1' when
     ((app_goodframe = '1')or
     (app_badframe = '1')or
-    ((app_dvld = '1')and((packet_fifo_almost_full = '1')or(ctrl_fifo_almost_full = '1')))) else '0';
+    ((app_dvld = '1')and((packet_fifo_almost_full = '1')or(ctrl_fifo_almost_full = '1')or(txctrl_fifo_almost_full = '1')))) else '0';
     rx_bad <= app_badframe;
-    rx_over <= packet_fifo_almost_full or ctrl_fifo_almost_full;
+    rx_over <= packet_fifo_almost_full or ctrl_fifo_almost_full or txctrl_fifo_almost_full;
 
     packet_fifo_wr_data(255 downto 0) <= payload3_z1 & payload2_z1 & payload1_z1 & payload0_z1;
     packet_fifo_wr_data(256) <= payload0_val_z1;
@@ -1011,15 +1016,17 @@ begin
 
     packet_fifo_rd_en <= app_rx_ack;
     
-    app_rx_valid <= packet_fifo_rd_data(259 downto 256) when (packet_fifo_empty = '0') else (others => '0');
+    app_rx_valid        <= packet_fifo_rd_data(259 downto 256) when (packet_fifo_empty = '0') else (others => '0');
     app_rx_end_of_frame <= packet_fifo_rd_data(260);
-    app_rx_bad_frame <= packet_fifo_rd_data(261);
-    app_rx_overrun <= packet_fifo_rd_data(262);
-    app_rx_data <= packet_fifo_rd_data(255 downto 0);
+    app_rx_bad_frame    <= packet_fifo_rd_data(261);
+    app_rx_overrun      <= packet_fifo_rd_data(262);
+    app_rx_data         <= packet_fifo_rd_data(255 downto 0);
     
     ctrl_fifo_wr_data <= app_source_port & app_source_ip;
-    ctrl_fifo_wr_en <= '1' when ((app_dvld = '1')and(first_word = '1')and(current_app_state = APP_RUN)) else '0';
-    
+    ctrl_fifo_wr_en   <= '1' when ((app_dvld = '1')and(first_word = '1')and(current_app_state = APP_RUN)) else '0';
+    txctrl_fifo_wr_data <= destination_port & destination_ip;
+    --txctrl_fifo_wr_en   <= '1' when ((app_dvld = '1')and(first_word = '1')and(current_app_state = APP_RUN)) else '0';
+
     ska_rx_packet_ctrl_fifo_0 : ska_rx_packet_ctrl_fifo
     port map(
         rst         => app_rst,
@@ -1035,8 +1042,26 @@ begin
     
     ctrl_fifo_rd_en <= app_rx_ack and  packet_fifo_rd_data(260) and packet_fifo_rd_data(256);
     
-    app_rx_source_ip <= ctrl_fifo_rd_data(31 downto 0);
+    app_rx_source_ip   <= ctrl_fifo_rd_data(31 downto 0);
     app_rx_source_port <= ctrl_fifo_rd_data(47 downto 32);
+
+    ska_rx_packet_ctrl_fifo_1 : ska_rx_packet_ctrl_fifo
+    port map(
+        rst         => app_rst,
+        wr_clk      => mac_clk,
+        rd_clk      => app_clk,
+        din         => txctrl_fifo_wr_data,
+        wr_en       => ctrl_fifo_wr_en,
+        rd_en       => ctrl_fifo_rd_en,
+        dout        => txctrl_fifo_rd_data,
+        full        => open,
+        empty       => open,
+        prog_full   => txctrl_fifo_almost_full);
+    
+    --ctrl_fifo_rd_en <= app_rx_ack and  packet_fifo_rd_data(260) and packet_fifo_rd_data(256);
+    
+    app_rx_dest_ip   <= txctrl_fifo_rd_data(31 downto 0);
+    app_rx_dest_port <= txctrl_fifo_rd_data(47 downto 32);
 
 ---------------------------------------------------------------------------------------------
 -- STATE MACHINE TO HANDLE OVERFLOW CASE
@@ -1061,7 +1086,7 @@ begin
                     first_word <= '1';
                 end if;
                 
-                if ((app_dvld = '1')and((packet_fifo_almost_full = '1')or(ctrl_fifo_almost_full = '1')))then
+                if ((app_dvld = '1')and((packet_fifo_almost_full = '1')or(ctrl_fifo_almost_full = '1')or(txctrl_fifo_almost_full = '1')))then
                     current_app_state <= APP_OVER;
                 end if;
                 
