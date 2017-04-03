@@ -96,7 +96,7 @@ localparam IIC_IO_EXPANDER_CONFIG = 16'b000_0011_1001_0111; //Port Configuration
   localparam GLOBAL_CONF_REG_DATA = 32'h00000040;  // issue warm reset
 
   localparam ADDR_CONF_REG_ADDR = 32'h002c0000;  // Address Configuration Register
-  localparam ADDR_CONF_REG_DATA = 32'h00000002;  // [3:0] == 0 => 32-byte block size (MAX). 
+  localparam ADDR_CONF_REG_DATA = 32'h00000000;  // [3:0] == 0 => 32-byte block size (MAX). 
                                                  // [3:0] == 1 => 64-byte block size (MAX). 
                                                  // [3:0] == 2 => 128-byte block size (MAX). 
                                                  // Low-interleave address mapping with the byte address set as the lowest five 

@@ -113,7 +113,10 @@ module hmc_ska_sa_top #(
     output wire TX_PHY_RESET_DONE, // Flag to indicate when the GTH TX PHY is ready
     output wire RX_PHY_RESET_DONE, // Flag to indicate when the GTH RX PHY is ready
     input  wire TX_PHY_RESET, // Flag to reset the GTH TX PHY    
-    input  wire RX_PHY_RESET, //Flag to reset the GTH RX PHY     
+    input  wire RX_PHY_RESET, //Flag to reset the GTH RX 
+    input  wire MMCM_RESET_IN,
+    input  wire QPLL0_RESET_IN,
+    input  wire QPLL1_RESET_IN,     
     output wire [15:0] RX_CRC_ERR_CNT
 );
 
@@ -344,7 +347,10 @@ hmc_gth hmc_gth_inst(
 
     .QPLL_LOCK0(qpll_lock0),
     .QPLL_LOCK1(qpll_lock1),
+    .MMCM_RESET_IN(MMCM_RESET_IN),
     .MMCM_LOCKED_OUT(mmcm_locked),
+    .QPLL0_RESET_IN(QPLL0_RESET_IN),
+    .QPLL1_RESET_IN(QPLL1_RESET_IN),
     .PHY_TX_RDY(phy_tx_ready),
     .SOFT_RESET_TX_IN(SOFT_RESET_IN | TX_PHY_RESET),
     .GTH_TX_RST()

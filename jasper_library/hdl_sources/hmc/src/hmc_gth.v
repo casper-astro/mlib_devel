@@ -157,7 +157,10 @@
 
     output QPLL_LOCK0,
     output QPLL_LOCK1,
+    input MMCM_RESET_IN,
     output MMCM_LOCKED_OUT,
+    input QPLL0_RESET_IN,
+    input QPLL1_RESET_IN,
     
     //----------- Transmit Ports - TX Initialization and Reset Ports -----------
     output PHY_TX_RDY,    
@@ -200,6 +203,8 @@
 
     wire            gt0_qpllclk_i;
     wire            gt0_qpllrefclk_i;
+    
+    wire            txoutclk_mmcm0_reset_i;
          
 //********************************* Main Body of Code**************************
 
@@ -601,7 +606,7 @@
         //.CLK3_OUT                       (),
         .CLK_IN                         (gt0_txoutclk_i),
         .MMCM_LOCKED_OUT                (txoutclk_mmcm0_locked_i),
-        .MMCM_RESET_IN                  (1'b0)//(txoutclk_mmcm0_reset_i)
+        .MMCM_RESET_IN                  (MMCM_RESET_IN)//(1'b0)//(txoutclk_mmcm0_reset_i)
     );
 
 
@@ -687,7 +692,7 @@
         .QPLLPD                         (tied_to_ground_i),
         .QPLLREFCLKLOST                 (),
         .QPLLREFCLKSEL                  (3'b001),
-        .QPLLRESET                      (1'b0),// the onboard OSC is always there! //(GT0_QPLLRESET_IN),
+        .QPLLRESET                      (QPLL0_RESET_IN),//(1'b0),// the onboard OSC is always there! //(GT0_QPLLRESET_IN),
         .QPLLRSVD1                      (16'b0000000000000000),
         .QPLLRSVD2                      (5'b11111),
         //------------------------------- QPLL Ports -------------------------------
@@ -781,7 +786,7 @@
         .QPLLPD                         (tied_to_ground_i),
         .QPLLREFCLKLOST                 (),
         .QPLLREFCLKSEL                  (3'b001),
-        .QPLLRESET                      (1'b0),//(GT0_QPLLRESET_IN),
+        .QPLLRESET                      (QPLL1_RESET_IN),//(1'b0),//(GT0_QPLLRESET_IN),
         .QPLLRSVD1                      (16'b0000000000000000),
         .QPLLRSVD2                      (5'b11111),
         //------------------------------- QPLL Ports -------------------------------
@@ -794,7 +799,7 @@
 
     );
 
-assign gth_tx_rst =  (~qpll_lock0) || (~qpll_lock1); //AI: || SOFT_RESET_TX_IN;
+assign gth_tx_rst =  (~qpll_lock0) || (~qpll_lock1) || SOFT_RESET_TX_IN; //AI: || SOFT_RESET_TX_IN;
 assign gth_rx_rst =  (~qpll_lock0) || (~qpll_lock1) || SOFT_RESET_RX_IN;
 
 assign FABRIC_CLK = gt0_txusrclk2_i;
@@ -859,9 +864,6 @@ end
 
 assign phy_tx_rdy = phy_tx_rst_done0R && phy_tx_rst_done1R && phy_tx_rst_done2R && phy_tx_rst_done3R && phy_tx_rst_done4R && phy_tx_rst_done5R && phy_tx_rst_done6R && phy_tx_rst_done7R;
 assign PHY_TX_RDY = phy_tx_rdyR;
-
-
-
 
 endmodule
 

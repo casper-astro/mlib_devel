@@ -387,19 +387,39 @@ wire post_ok_i = ((data_rx_err_flit_cnt_link3 == 64'd0) && (data_rx_err_flit_cnt
 
 (* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg post_okR,post_okRR,post_okRRR,post_okRRRR;
 reg post_ok_latch;
+reg init_done_latch;
 reg [15:0] reset_cnt;
 reg [31:0] num_reset_cnt;
 reg issue_retry_rst;
+reg mmcm_reset;
+reg [15:0] mmcm_reset_cnt;
+reg mmcm_reset_cnt_en;
+reg qpll_reset;
+reg [15:0] qpll_reset_cnt;
+reg qpll_reset_cnt_en;
 
 (* mark_debug = "true" *) wire [15:0] dbg_reset_cnt;
 (* mark_debug = "true" *) wire [31:0] dbg_num_reset_cnt;
 (* mark_debug = "true" *) wire dbg_hmc_resetRRRR;
 (* mark_debug = "true" *) wire dbg_hmc_reset_i;
+(* mark_debug = "true" *) wire dbg_mmcm_reset;
+(* mark_debug = "true" *) wire [15:0] dbg_mmcm_reset_cnt;
+(* mark_debug = "true" *) wire dbg_mmcm_reset_cnt_en;
+(* mark_debug = "true" *) wire dbg_qpll_reset;
+(* mark_debug = "true" *) wire [15:0] dbg_qpll_reset_cnt;
+(* mark_debug = "true" *) wire dbg_qpll_reset_cnt_en;
+
 
 assign dbg_reset_cnt = reset_cnt;
 assign dbg_num_reset_cnt = num_reset_cnt;
 assign dbg_hmc_resetRRRR = hmc_resetRRRR;
 assign dbg_hmc_reset_i = hmc_reset_i;
+assign dbg_mmcm_reset = mmcm_reset;
+assign dbg_mmcm_reset_cnt = mmcm_reset_cnt;
+assign dbg_mmcm_reset_cnt_en = mmcm_reset_cnt_en;
+assign dbg_qpll_reset = qpll_reset;
+assign dbg_qpll_reset_cnt = qpll_reset_cnt;
+assign dbg_qpll_reset_cnt_en = qpll_reset_cnt_en;
 
 wire hmc_reset_i;
 (* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg hmc_resetR,hmc_resetRR,hmc_resetRRR,hmc_resetRRRR;
@@ -407,6 +427,7 @@ wire hmc_reset_i;
 always @(posedge USER_CLK) begin 
   if (user_rst == 1'b1) begin
     post_ok_latch <= 1'b0;
+    init_done_latch <= 1'b0;
     post_okR <= 1'b0;
     post_okRR <= 1'b0;
     post_okRRR <= 1'b0;
@@ -416,6 +437,12 @@ always @(posedge USER_CLK) begin
     reset_cnt <= 16'd0;
     issue_retry_rst <= 1'b0;
     num_reset_cnt <= 32'd0;
+    mmcm_reset <= 1'b0;
+    mmcm_reset_cnt <= 16'd0;
+    mmcm_reset_cnt_en <= 1'b0;
+    qpll_reset <= 1'b0;
+    qpll_reset_cnt <= 16'd0;
+    qpll_reset_cnt_en <= 1'b0;    
   end else begin
     post_okR    <= post_ok_i;
     post_okRR   <= post_okR;
@@ -435,13 +462,50 @@ always @(posedge USER_CLK) begin
     end 
     
     //Reset process is complete, so deassert reset and take note how many times this is executed
-    if (reset_cnt[15] == 1'b1) begin
+    //if (reset_cnt[15] == 1'b1) begin
+    if (reset_cnt[4] == 1'b1) begin   
       reset_cnt <= 16'd0;
       time_out_cnt_rst <= 1'b0;
       num_reset_cnt <= num_reset_cnt + 1'b1;
       time_out_cnt <= 32'd0;  //reset time out count and try again
-    end    
+      mmcm_reset_cnt_en <= 1'b1; //Enable the MMCM reset counter
+    end
     
+    //Increment the MMCM reset counter
+    if (mmcm_reset_cnt_en == 1'b1) begin
+       mmcm_reset_cnt <= mmcm_reset_cnt + 1'b1;
+    end    
+
+    //MMCM Reset process is enabled
+    if (mmcm_reset_cnt >= 16'd250 && mmcm_reset_cnt <= 16'd255) begin   
+      mmcm_reset <= 1'b1;
+    end
+    
+    //MMCM Reset process is disabled
+    if (mmcm_reset_cnt >= 16'd256) begin   
+      mmcm_reset_cnt <= 16'd0;
+      mmcm_reset <= 1'b0;
+      mmcm_reset_cnt_en <= 1'b0;
+      qpll_reset_cnt_en <= 1'b1; //Enable the QPLL reset counter
+    end 
+    
+    //Increment the QPLL reset counter
+    if (qpll_reset_cnt_en == 1'b1) begin
+       qpll_reset_cnt <= qpll_reset_cnt + 1'b1;
+    end    
+
+    //QPLL Reset process is enabled
+    if (qpll_reset_cnt >= 16'd250 && qpll_reset_cnt <= 16'd255) begin   
+      qpll_reset <= 1'b1;
+    end
+    
+    //QPLL Reset process is disabled
+    if (qpll_reset_cnt >= 16'd256) begin   
+      qpll_reset_cnt <= 16'd0;
+      qpll_reset <= 1'b0;
+      qpll_reset_cnt_en <= 1'b0;
+    end       
+
     //Post has been successful, so latch it through to the status output ports
     if ({post_okRRRR,post_okRRR} == 2'b01) begin
       post_ok_latch <= 1'b1;
@@ -452,8 +516,9 @@ always @(posedge USER_CLK) begin
       time_out_cnt <= 32'd0;
     end 
     
-    //Once the OpenHMC and HMC has initialised the stop the reset process
+    //Once the OpenHMC and HMC has initialised then stop the reset process
     if (open_hmc_done_link2 == 1'b1 && open_hmc_done_link3 == 1'b1) begin
+      init_done_latch <= 1'b1;
       time_out_cnt <= 32'd0;
     end 
   end
@@ -559,7 +624,7 @@ hmc_iic_init_inst (
 );
 
 assign POST_OK = post_ok_latch;
-assign INIT_DONE = post_done_latch;
+assign INIT_DONE = init_done_latch; //post_done_latch;
 assign HMC_MEZZ_RESET = hmc_resetRRRR;//~P_RST_N; 
 
 // Instantiate core for HMC link2
@@ -653,7 +718,10 @@ hmc_ska_sa_top_link2_inst(
   .TX_PHY_RESET_DONE(tx_phy_reset_done_link2), // Flag to indicate when the GTH TX PHY is ready
   .RX_PHY_RESET_DONE(rx_phy_reset_done_link2), // Flag to indicate when the GTH RX PHY is ready
   .TX_PHY_RESET(tx_phy_reset), // Flag to reset the GTH TX PHY    
-  .RX_PHY_RESET(rx_phy_reset), //Flag to reset the GTH RX PHY    
+  .RX_PHY_RESET(rx_phy_reset), //Flag to reset the GTH RX 
+  .MMCM_RESET_IN(mmcm_reset),
+  .QPLL0_RESET_IN(qpll_reset),
+  .QPLL1_RESET_IN(qpll_reset),      
   .RX_CRC_ERR_CNT(rx_crc_err_cnt_link2)
 );
 
@@ -748,7 +816,10 @@ hmc_ska_sa_top_link3_inst(
   .TX_PHY_RESET_DONE(tx_phy_reset_done_link3), // Flag to indicate when the GTH TX PHY is ready
   .RX_PHY_RESET_DONE(rx_phy_reset_done_link3), // Flag to indicate when the GTH RX PHY is ready
   .TX_PHY_RESET(tx_phy_reset), // Flag to reset the GTH TX PHY    
-  .RX_PHY_RESET(rx_phy_reset), //Flag to reset the GTH RX PHY    
+  .RX_PHY_RESET(rx_phy_reset), //Flag to reset the GTH RX PHY
+  .MMCM_RESET_IN(mmcm_reset), 
+  .QPLL0_RESET_IN(qpll_reset_in),
+  .QPLL1_RESET_IN(qpll_reset_in),       
   .RX_CRC_ERR_CNT(rx_crc_err_cnt_link3)
 );
 
