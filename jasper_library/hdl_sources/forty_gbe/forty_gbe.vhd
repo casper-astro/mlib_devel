@@ -30,9 +30,19 @@ use work.parameter.all;
 
 entity forty_gbe is
     generic (
+    	-- mmcm parameters
         MULTIPLY : REAL    := 6.0;
         DIVIDE   : REAL    := 6.0;
-        DIVCLK   : INTEGER := 1);
+        DIVCLK   : INTEGER := 1;
+        -- forty gbe specific parameters
+        FABRIC_MAC        : std_logic_vector(47 downto 0);
+        FABRIC_IP         : std_logic_vector(31 downto 0);
+        FABRIC_PORT       : std_logic_vector(15 downto 0);
+        FABRIC_GATEWAY    : std_logic_vector( 7 downto 0);
+        FABRIC_ENABLE     : std_logic;
+        TTL               : std_logic_vector( 7 downto 0);
+        PROMISC_MODE      : integer;
+        RX_CRC_CHK_ENABLE : integer := 0);
     port(
         user_clk_o : out std_logic;
         user_rst_o : out std_logic;
@@ -585,16 +595,14 @@ architecture arch_forty_gbe of forty_gbe is
 
     component ska_forty_gb_eth
     generic (
-        FABRIC_MAC     : std_logic_vector(47 downto 0);
-        FABRIC_IP      : std_logic_vector(31 downto 0);
-        FABRIC_PORT    : std_logic_vector(15 downto 0);
-        FABRIC_GATEWAY : std_logic_vector(7 downto 0);
-        FABRIC_ENABLE  : std_logic;
-        MC_RECV_IP          : std_logic_vector(31 downto 0);
-        MC_RECV_IP_MASK     : std_logic_vector(31 downto 0);
-        TTL                 : std_logic_vector(7 downto 0);
-        PROMISC_MODE        : integer;
-        RX_CRC_CHK_ENABLE   : integer);
+        FABRIC_MAC        : std_logic_vector(47 downto 0);
+        FABRIC_IP         : std_logic_vector(31 downto 0);
+        FABRIC_PORT       : std_logic_vector(15 downto 0);
+        FABRIC_GATEWAY    : std_logic_vector(7 downto 0);
+        FABRIC_ENABLE     : std_logic;
+        TTL               : std_logic_vector(7 downto 0);
+        PROMISC_MODE      : integer;
+        RX_CRC_CHK_ENABLE : integer);
     port (
         clk : in std_logic;
         rst : in std_logic;
@@ -2080,16 +2088,14 @@ begin
     -- WISHBONE SLAVE 10 - 40GBE MAC 0
     ska_forty_gb_eth_0 : ska_forty_gb_eth
     generic map(
-        FABRIC_MAC     => X"FFFFFFFFFFFF",
-        FABRIC_IP      => X"FFFFFFFF",
-        FABRIC_PORT    => X"FFFF",
-        FABRIC_GATEWAY => X"FF",
-        FABRIC_ENABLE  => '0',
-        MC_RECV_IP          => X"FFFFFFFF",
-        MC_RECV_IP_MASK     => X"FFFFFFFF",
-        TTL                 => X"01",
-        PROMISC_MODE        => 0,
-        RX_CRC_CHK_ENABLE   => 1)
+        FABRIC_MAC        => FABRIC_MAC,
+        FABRIC_IP         => FABRIC_IP,
+        FABRIC_PORT       => FABRIC_PORT,
+        FABRIC_GATEWAY    => FABRIC_GATEWAY,
+        FABRIC_ENABLE     => FABRIC_ENABLE,
+        TTL               => TTL,
+        PROMISC_MODE      => PROMISC_MODE,
+        RX_CRC_CHK_ENABLE => RX_CRC_CHK_ENABLE)
     port map(
         clk => sys_clk,
         rst => sys_rst,
@@ -2194,8 +2200,6 @@ begin
 --            FABRIC_PORT    => X"FFFF",
 --            FABRIC_GATEWAY => X"FF",
 --            FABRIC_ENABLE  => '0',
---            MC_RECV_IP          => X"FFFFFFFF",
---            MC_RECV_IP_MASK     => X"FFFFFFFF",
 --            TTL                 => X"01",
 --            PROMISC_MODE        => 0,
 --            RX_CRC_CHK_ENABLE   => 1)
@@ -2287,8 +2291,6 @@ begin
 --            FABRIC_PORT    => X"FFFF",
 --            FABRIC_GATEWAY => X"FF",
 --            FABRIC_ENABLE  => '0',
---            MC_RECV_IP          => X"FFFFFFFF",
---            MC_RECV_IP_MASK     => X"FFFFFFFF",
 --            TTL                 => X"01",
 --            PROMISC_MODE        => 0,
 --            RX_CRC_CHK_ENABLE   => 1)
@@ -2381,8 +2383,6 @@ begin
 --            FABRIC_PORT    => X"FFFF",
 --            FABRIC_GATEWAY => X"FF",
 --            FABRIC_ENABLE  => '0',
---            MC_RECV_IP          => X"FFFFFFFF",
---            MC_RECV_IP_MASK     => X"FFFFFFFF",
 --            TTL                 => X"01",
 --            PROMISC_MODE        => 0,
 --            RX_CRC_CHK_ENABLE   => 1)
