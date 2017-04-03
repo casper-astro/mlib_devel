@@ -35,6 +35,7 @@
 // tools. Ensure they are correct for your synthesis tool(s).
 
 `timescale 1ns/1ps
+`default_nettype wire
 
 module fifo_generator_v9_3_32b_64b(
   rst,
@@ -485,3 +486,4 @@ output empty;
 // synthesis translate_on
 
 endmodule
+
