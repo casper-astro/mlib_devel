@@ -452,7 +452,9 @@ always @(posedge USER_CLK) begin
     
     
     //Issue a reset after every second until OpenHMC initialises
-    if (time_out_cnt[27] == 1'b1) begin      //time_out_cnt[30]
+    //156.25MHz clock = 2.56s and 225MHz clock = 1.78s (needs to be greater than 1.2s, which is the time
+    //for the initialisation procedure
+    if (time_out_cnt == 32'd400000000) begin      //time_out_cnt[27]
       time_out_cnt_rst <= 1'b1;      
     end     
     
