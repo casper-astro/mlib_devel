@@ -20,7 +20,15 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function remove_all_blks(sys)
+function remove_all_blks(sys, varargin)
+
+% if an argument is given after the system name, do not dump and rethrow
+% on an exception, just rethrow the exception.
+if isempty(varargin),
+    dump = 1;
+else
+    dump = 0;
+end
 
 % Wrap whole function in try/catch
 try
@@ -39,5 +47,9 @@ try
       delete_line(lines(i).Handle);
   end
 catch ex
-    dump_and_rethrow(ex)
+    if dump,
+        dump_and_rethrow(ex)
+    else
+        rethrow(ex)
+    end
 end % try/catch

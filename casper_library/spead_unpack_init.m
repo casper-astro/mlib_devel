@@ -40,37 +40,58 @@ end
 header_ind_ids = spead_process_header_string(hdrs_ind);
 header_ids = [header_ids, header_ind_ids];
 
-combine_errors = strcmp(get_param(block, 'combine_errors'), 'on');
-current_consts = find_system(block, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'RegExp' ,'on', 'name', '.*header_const[0-9]');
-num_headers = length(header_ids);
-if length(current_consts) == num_headers,
-    headers_match = true;
+all_match = true;
+
+% check the given headers against the current ones
+current_outprts = find_system(block, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'RegExp' ,'on', 'name', 'hdr[0-9].*', 'BlockType', 'Outport');
+num_inprts = length(current_outprts);
+num_headers = length(header_ids) - 4;
+if length(header_ids) < 5,
+    error('Must have at least compulsory headers and one other header!');
+end
+
+% if there's a different number, we have to redraw
+if num_inprts ~= num_headers,
+    %fprintf('Different number of headers to last time, redrawing: %i -> %i\n', num_inprts, num_headers);
+    all_match = false;
+end
+
+% are there the same headers in the same order?
+if all_match == true,
     for ctr = 1 : num_headers,
-        val = eval(get_param(current_consts{ctr}, 'const'));
-        val2 = header_ids(ctr);
-        if val ~= val2,
-            headers_match = false;
+        prt = current_outprts{ctr};
+        prtnum = str2double(get_param(prt, 'Port')) - 9;
+        if prtnum ~= ctr,
+            error('Receiving ports in an odd order - this should never happen?\n');
+        end
+        prt_hdrval = hex2dec(regexprep(regexprep(prt, [block, '/hdr[0-9]*_0x'], ''), '_.*', ''));
+        if ~isempty(strfind(prt, 'DIR')),
+            prt_hdrval = prt_hdrval + header_direct_mask;
+        end
+        new_hdrval = header_ids(ctr+4);
+        if new_hdrval ~= prt_hdrval,
+            %fprintf('Header at position %i has changed, redrawing: %i -> %i\n', ctr, prt_hdrval, new_hdrval);
+            all_match = false;
+            break
         end
     end
-else
-    headers_match = false;
 end
 
 % has the error option changed?
-error_or_blk = find_system(block, 'LookUnderMasks', 'all', 'name', 'error_or');
 error_change = false;
+combine_errors = strcmp(get_param(block, 'combine_errors'), 'on');
+error_or_blk = find_system(block, 'LookUnderMasks', 'all', 'name', 'error_or');
 if (~isempty(error_or_blk) && (combine_errors == 0)) || (isempty(error_or_blk) && (combine_errors == 1)),
     error_change = true;
 end
 
 % everything still the same?
-if (headers_match == true) && (error_change == false),
+if (all_match == true) && (error_change == false),
+    %fprintf('Nothing has changed, exiting.\n');
     return
 end
 
-if num_headers < 5,
-    error('Must have at least compulsory headers and data!');
-end
+num_headers = length(header_ids);
 num_total_hdrs = num2str(num_headers+1);
 total_hdrs_bits = num2str(ceil(log2(num_headers+2)));
 set_param([block, '/num_item_pts'], 'const', num2str(num_headers));
@@ -159,6 +180,7 @@ for ctr = 1 : num_headers,
         'showname', showname, 'en', 'on', ...
         'Position', [row_x + 50, row_y, row_x + 100, row_y + 40]);
     reuse_block(block, name_delay, 'xbsIndex_r4/Delay', ...
+        'reg_retiming', 'on', ...
         'showname', showname, 'Latency', num2str(delay+1), ...
         'Position', [row_x + 210, row_y, row_x + 230, row_y + 20]);
     reuse_block(block, name_slice2, 'xbsIndex_r4/Slice', ...

@@ -56,7 +56,7 @@ circap = get_var('circap', 'defaults', defaults, varargin{:});
 offset = get_var('offset', 'defaults', defaults, varargin{:});
 value = get_var('value', 'defaults', defaults, varargin{:});
 
-%we double path width and decimate rate for DRAM
+% we double path width and decimate rate for DRAM
 if strcmp(storage,'dram'),
   nsamples = nsamples - 1;
   data_width = 128;
