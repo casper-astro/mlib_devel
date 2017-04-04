@@ -478,9 +478,9 @@ always @(posedge USER_CLK) begin
        mmcm_reset_cnt <= mmcm_reset_cnt + 1'b1;
     end    
 
-    //MMCM Reset process is enabled
+    //MMCM Reset process is enabled (Disabled and not used)
     if (mmcm_reset_cnt >= 16'd250 && mmcm_reset_cnt <= 16'd255) begin   
-      mmcm_reset <= 1'b1;
+      mmcm_reset <= 1'b0; //1'b1;Disabled for now
     end
     
     //MMCM Reset process is disabled
@@ -496,15 +496,15 @@ always @(posedge USER_CLK) begin
        qpll_reset_cnt <= qpll_reset_cnt + 1'b1;
     end    
 
-    //QPLL Reset process is enabled
+    //QPLL Reset process is enabled (Disabled and not used)
     if (qpll_reset_cnt >= 16'd250 && qpll_reset_cnt <= 16'd255) begin   
-      qpll_reset <= 1'b1;
+      qpll_reset <= 1'b0;
     end
     
     //QPLL Reset process is disabled
     if (qpll_reset_cnt >= 16'd256) begin   
       qpll_reset_cnt <= 16'd0;
-      qpll_reset <= 1'b0;
+      qpll_reset <= 1'b0; //1'b1; Disabled for now
       qpll_reset_cnt_en <= 1'b0;
     end       
 
