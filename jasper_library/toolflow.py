@@ -17,6 +17,7 @@ import helpers
 import yaml
 import glob
 import time
+import hashlib  # Added to calculate md5hash of .bin bitstream and add it to the .fpg header
 
 
 class Toolflow(object):
@@ -717,23 +718,39 @@ class ToolflowBackend(object):
             while line:
                 fh4.write(line)
                 line = fh3.readline()
-            fh4.write('?quit\n')
-            fh4.close()
+            # Need to close the 'header_file', calculate checksum on its contents, reopen file to write ?quit
+            fh4.close()     # Just closing for now, so we can calculate md5sum on fh4's contents
             fh1.close()
             fh2.close()
             fh3.close()
-            # Copy binary file from binary file location and rename to system.bin
-            mkfpg_cmd1 = 'cp %s %s/system.bin' % (filename_bin, self.compile_dir)
-            os.system(mkfpg_cmd1)
-            # Compress binary file in new location
-            mkfpg_cmd2 = 'gzip -c %s/system.bin > %s/system.bin.gz' % (self.compile_dir, self.compile_dir)
-            os.system(mkfpg_cmd2)
-            # Append the compressed binary file to the extended_info.kcpfpg file
-            mkfpg_cmd3 = 'cat %s/system.bin.gz >> %s/extended_info.kcpfpg' % (self.compile_dir, self.compile_dir)
-            os.system(mkfpg_cmd3)
-            # Copy extended_info.kcpfpg and rename to time stamped file and place in output directory with the bof file
-            mkfpg_cmd4 = 'cp %s/extended_info.kcpfpg %s/%s' % (self.compile_dir, self.output_dir, filename_fpg)
-            os.system(mkfpg_cmd4)
+
+        # Add the MD5 Checksums here - Paul ok'd adding it after git_info, as long as it has the correct 'tags'
+        # - Now adding a checksum on the fpg header itself (calculated without the actual checksum values)
+        # - Might as well keep it as a string value -> Write string to file
+        md5_header = hashlib.md5(open(extended_info,'r').read()).hexdigest()
+        md5_bitstream = hashlib.md5(open(filename_bin, 'rb').read()).hexdigest()
+
+        fh4 = open(extended_info, 'a')
+        # Line to write must follow general format, as per Paul
+        line = '77777\t77777\tmd5_header\t' + md5_header + '\n'
+        fh4.write("?meta\t" + line)
+        line = '77777\t77777\tmd5_bitstream\t' + md5_bitstream + '\n'
+        fh4.write("?meta\t" + line)
+        fh4.write('?quit\n')
+        fh4.close()            
+
+        # Copy binary file from binary file location and rename to system.bin
+        mkfpg_cmd1 = 'cp %s %s/system.bin' % (filename_bin, self.compile_dir)
+        os.system(mkfpg_cmd1)
+        # Compress binary file in new location
+        mkfpg_cmd2 = 'gzip -c %s/system.bin > %s/system.bin.gz' % (self.compile_dir, self.compile_dir)
+        os.system(mkfpg_cmd2)
+        # Append the compressed binary file to the extended_info.kcpfpg file
+        mkfpg_cmd3 = 'cat %s/system.bin.gz >> %s/extended_info.kcpfpg' % (self.compile_dir, self.compile_dir)
+        os.system(mkfpg_cmd3)
+        # Copy extended_info.kcpfpg and rename to time stamped file and place in output directory with the bof file
+        mkfpg_cmd4 = 'cp %s/extended_info.kcpfpg %s/%s' % (self.compile_dir, self.output_dir, filename_fpg)
+        os.system(mkfpg_cmd4)
 
 
 class SimulinkFrontend(ToolflowFrontend):
