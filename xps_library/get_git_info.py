@@ -5,6 +5,7 @@ Get the git info for an fpg file and the library with which it was built.
 import subprocess
 import os
 import argparse
+import sys
 
 parser = argparse.ArgumentParser(
     description='Get git info for a file/dir.',
@@ -17,11 +18,21 @@ parser.add_argument('--target', dest='target', type=str, action='store',
 parser.add_argument('--fpgstring', dest='fpgstring',
                     action='store_true', default=False,
                     help='return the result as lines of fpg meta')
+parser.add_argument('--katversion', dest='katversion',
+                    action='store_true', default=False,
+                    help='use katversion to produce the meta info')
 args = parser.parse_args()
 
 
 class GitInfoError(RuntimeError):
     pass
+
+if args.katversion:
+    try:
+        import katversion
+    except ImportError:
+        print('katversion does not seem to be available on this system.')
+        sys.exit(-3)
 
 
 def run_subproc(cmd):
@@ -97,12 +108,14 @@ def get_new_git_info(file_or_dir):
         gitstring = file_or_dir + ' - ' + str(e)
     return gitstring
 
-new_info = get_new_git_info(args.file_dir)
+if args.katversion:
+    new_info = args.file_dir + '\t' + katversion.get_version(args.file_dir)
+else:
+    new_info = get_new_git_info(args.file_dir)
 if args.target:
     try:
         fptr = open(args.target, 'a')
     except IOError:
-        import sys
         sys.exit(-2)
     fptr.write(new_info)
     fptr.close()
@@ -111,7 +124,6 @@ elif args.fpgstring:
 else:
     if not os.path.exists(args.file_dir):
         print ('ERROR no_such_file: ' + args.file_dir)
-        import sys
         sys.exit(-1)
     print(new_info)
 
