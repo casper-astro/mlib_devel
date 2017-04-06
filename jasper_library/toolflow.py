@@ -84,6 +84,7 @@ class Toolflow(object):
             self.logger.error('Unsupported toolflow frontent: %s' % frontend)
             raise Exception('Unsupported toolflow frontend: %s' % frontend)
 
+        self.backend = None
         # if backend == 'vivado':
         #    self.backend = VivadoBackend(compile_dir=self.compile_dir)
         # elif backend == 'ise':
@@ -181,6 +182,7 @@ class Toolflow(object):
         """
         Add tcl commands from the frontend
         """
+        raise DeprecationWarning
         for fname in self.tcl_sources:
             with open(fname, 'r') as fh:
                 self.backend.add_tcl_cmd(fh.read())
@@ -880,8 +882,10 @@ class SimulinkFrontend(ToolflowFrontend):
         # if open_system() and set_param() are not run then the peripheral
         # names will be incorrectly generated and the design will not compile.
         # Everything is run on a single matlab terminal line
-        ml_cmd = "%s('%s');sys=gcs;%s(sys,'SimulationCommand','update');%s('%s','%s');mssge.xps_path='%s';" \
-                 "%s(sys,mssge,'/');exit" % (script1, self.modelpath, script2, script3, self.compile_dir, fname,
+        ml_cmd = "%s('%s');sys=gcs;%s(sys,'SimulationCommand','update');" \
+                 "%s('%s','%s');mssge.xps_path='%s';" \
+                 "%s(sys,mssge,'/');exit" % (script1, self.modelpath, script2,
+                                             script3, self.compile_dir, fname,
                                              self.compile_dir, script4)
         # Complete command to run on terminal
         term_cmd = matlab_start_cmd + ' -nodesktop -nosplash -r "%s"' % ml_cmd
@@ -904,40 +908,6 @@ class SimulinkFrontend(ToolflowFrontend):
         fptr.write('?meta\t77777_git\trcs\t{}\n'.format(model_git))
         fptr.write('?meta\t77777_git\trcs\t{}\n'.format(mlib_git))
         fptr.close()
-
-        raise RuntimeError('When does this happen?')
-
-    def write_git_info_file_DEPRECATED(self, fname='git_info.tab'):
-        """
-        Generates the git info file. i.e., this function creates a file with 
-        the relevant git info.
-        The 'git_info.tab' file is used for the *.fpg file
-
-        :param fname: The full path and name to give the git info file.
-        :type fname: str
-        """
-        raise DeprecationWarning
-        self.logger.info('Generating git info description file : %s' % fname)
-        # The command to start matlab with appropriate libraries
-        matlab_start_cmd = os.getenv('SYSGEN_SCRIPT')
-
-        # The matlab script responsible for generating the git info file
-        # each script represents a matlab function
-        script1 = 'load_system'
-        script2 = 'fopen'
-        script3 = 'git_write_info'
-        script4 = 'fclose'
-        # The matlab syntax to call this script with appropriate args
-        # This scripts runs load_system(), fopen(), git_write_info()
-        # and flcose()
-        ml_cmd = "%s('%s');sys=gcs;gitinfo_id=%s(['%s/%s'], 'w');" \
-                 "%s(gitinfo_id, sys);%s(gitinfo_id);exit" % \
-                 (script1, self.modelpath, script2, self.compile_dir,
-                  fname, script3, script4)
-        # Complete command to run on terminal
-        term_cmd = matlab_start_cmd + " -nodesktop -nosplash -r '%s'" % ml_cmd
-        self.logger.info('Running terminal command: %s' % term_cmd)
-        os.system(term_cmd)
 
     def compile_user_ip(self, update=False):
         """
@@ -1179,8 +1149,8 @@ class VivadoBackend(ToolflowBackend):
                     tcl('write_cfgmem -force -format bin -interface bpix8 '
                         '-size 128 -loadbit "up 0x0 %s/%s/%s.runs/impl_1/'
                         'top.bit" -file %s' % (
-                        self.compile_dir, self.project_name,
-                        self.project_name, self.binary_loc))
+                            self.compile_dir, self.project_name,
+                            self.project_name, self.binary_loc))
             # just ignore if key is not present as only some platforms
             # will have the key.
             except KeyError as e:
@@ -1272,7 +1242,8 @@ class VivadoBackend(ToolflowBackend):
                 if plat.conf['bit_reversal']:
                     tcl('write_cfgmem -force -format bin -interface bpix8 '
                         '-size 128 -loadbit "up 0x0 %s/%s/top.bit" -file %s' % (
-                        self.compile_dir, self.project_name, self.binary_loc))
+                            self.compile_dir, self.project_name,
+                            self.binary_loc))
             # just ignore if key is not present as only some platforms
             # will have the key.
             except KeyError as e:
@@ -1456,7 +1427,8 @@ class VivadoBackend(ToolflowBackend):
         (with indexing if required)
         """
         return 'set_property %s %s [get_ports %s%s]\n' % (
-                attribute, val, port, '[%d]' % index if index else '')
+                attribute, val, port,
+                '[%d]' % index if index is not None else '')
 
     @staticmethod
     def format_cfg_const(attribute, val):
