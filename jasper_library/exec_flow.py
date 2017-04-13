@@ -2,8 +2,8 @@
 
 import os
 import logging
+from optparse import OptionParser
 import toolflow
-import time
 
 # A straight lift from StackOverflow...
 
@@ -11,36 +11,41 @@ import time
 def shell_source(script):
     """Sometime you want to emulate the action of "source" in bash,
     settings some environment variables. Here is a way to do it."""
-    import subprocess, os
-    pipe = subprocess.Popen(". %s > /dev/null; env" % script, stdout=subprocess.PIPE, shell=True)
+    import subprocess
+    import os
+    pipe = subprocess.Popen(". %s > /dev/null; env" % script,
+                            stdout=subprocess.PIPE, shell=True)
     output = pipe.communicate()[0]
     env = dict((line.split("=", 1) for line in output.splitlines()))
     os.environ.update(env)
 
-from optparse import OptionParser
 parser = OptionParser()
-parser.add_option("--perfile", dest="perfile", action='store_true', default=False,
-                  help="Run Frontend peripheral file generation")
-parser.add_option("--frontend", dest="frontend", action='store_true', default=False,
-                  help="Run Frontend IP compile")
-parser.add_option("--middleware", dest="middleware", action='store_true', default=False,
-                  help="Run Toolflow middle")
-parser.add_option("--backend", dest="backend", action='store_true', default=False,
-                  help="Run backend compilation")
-parser.add_option("--software", dest="software", action='store_true', default=False,
-                  help="Run software compilation")
+parser.add_option("--perfile", dest="perfile", action='store_true',
+                  default=False, help="Run Frontend peripheral file generation")
+parser.add_option("--frontend", dest="frontend", action='store_true',
+                  default=False, help="Run Frontend IP compile")
+parser.add_option("--middleware", dest="middleware", action='store_true',
+                  default=False, help="Run Toolflow middle")
+parser.add_option("--backend", dest="backend", action='store_true',
+                  default=False, help="Run backend compilation")
+parser.add_option("--software", dest="software", action='store_true',
+                  default=False, help="Run software compilation")
 parser.add_option("--be", dest="be", type='string', default='vivado',
                   help="Backend to use. Default: vivado")
 parser.add_option("--jobs", dest="jobs", type='int', default=4,
                   help="Number of cores to run compiles with. Default=4")
-parser.add_option("--nonprojectmode", dest="nonprojectmode", action='store_false', default=True,
-                  help="Project Mode is enabled by default/Non Project Mode is disabled by Default (NB: Vivado Only)")
+parser.add_option("--nonprojectmode", dest="nonprojectmode",
+                  action='store_false', default=True,
+                  help="Project Mode is enabled by default/Non Project Mode "
+                       "is disabled by Default (NB: Vivado Only)")
 parser.add_option("-m", "--model", dest="model", type='string',
-                  default='/tools/mlib_devel/jasper_library/test_models/test.slx',
+                  default='/tools/mlib_devel/jasper_library/test_models/'
+                          'test.slx',
                   help="model to compile")
 parser.add_option("-c", "--builddir", dest="builddir", type='string',
                   default='',
-                  help="build directory. Default: Use directory with same name as model")
+                  help="build directory. Default: Use directory with same "
+                       "name as model")
 
 (opts, args) = parser.parse_args()
 
@@ -55,7 +60,8 @@ logger.setLevel(logging.DEBUG)
 
 handler = logging.FileHandler('%s/jasper.log' % builddir, mode='w')
 handler.setLevel(logging.DEBUG)
-format = logging.Formatter('%(levelname)s - %(asctime)s - %(name)s - %(message)s')
+format = logging.Formatter('%(levelname)s - %(asctime)s - %(name)s - '
+                           '%(message)s')
 handler.setFormatter(format)
 
 logger.addHandler(handler)
@@ -74,7 +80,8 @@ if opts.be == 'ise':
     logger.debug('ISE compile has been executed')
 
 # initialise the toolflow
-tf = toolflow.Toolflow(frontend='simulink', compile_dir=builddir, frontend_target=opts.model, jobs=opts.jobs)
+tf = toolflow.Toolflow(frontend='simulink', compile_dir=builddir,
+                       frontend_target=opts.model, jobs=opts.jobs)
 
 if opts.perfile:
     tf.frontend.gen_periph_file(tf.periph_file)
@@ -101,9 +108,12 @@ if opts.backend or opts.software:
     # if vivado is selected to compile
     if opts.be == 'vivado':
         platform.backend_target = 'vivado'
-        # Project Mode assignment (True = Project Mode, False = Non-Project Mode)
+        # Project Mode assignment (True = Project Mode,
+        # False = Non-Project Mode)
         platform.project_mode = opts.nonprojectmode
-        backend = toolflow.VivadoBackend(plat=platform, compile_dir=tf.compile_dir, periph_objs=tf.periph_objs)
+        backend = toolflow.VivadoBackend(plat=platform,
+                                         compile_dir=tf.compile_dir,
+                                         periph_objs=tf.periph_objs)
         backend.import_from_castro(backend.compile_dir + '/castro.yml')
         # launch vivado via the generated .tcl file
         backend.compile(cores=opts.jobs, plat=platform)
@@ -111,7 +121,8 @@ if opts.backend or opts.software:
     # if ISE is selected to compile
     elif opts.be == 'ise':
         platform.backend_target = 'ise'
-        # Project Mode assignment (True = Project Mode, False = Non-Project Mode). Not used in ISE.
+        # Project Mode assignment (True = Project Mode,
+        # False = Non-Project Mode). Not used in ISE.
         platform.project_mode = opts.nonprojectmode
         backend = toolflow.ISEBackend(plat=platform, compile_dir=tf.compile_dir)
         backend.import_from_castro(backend.compile_dir + '/castro.yml')
@@ -120,9 +131,11 @@ if opts.backend or opts.software:
     # Default to vivado for compile
     else:
         platform.backend_target = 'vivado'
-        # Project Mode assignment (True = Project Mode, False = Non-Project Mode)
+        # Project Mode assignment (True = Project Mode,
+        # False = Non-Project Mode)
         platform.project_mode = opts.nonprojectmode
-        backend = toolflow.VivadoBackend(plat=platform, compile_dir=tf.compile_dir)
+        backend = toolflow.VivadoBackend(plat=platform,
+                                         compile_dir=tf.compile_dir)
         backend.import_from_castro(backend.compile_dir + '/castro.yml')
         # launch vivado via the generated .tcl file
         backend.compile(cores=opts.jobs, plat=platform)
@@ -134,12 +147,18 @@ if opts.backend or opts.software:
             tf.start_time.tm_hour, tf.start_time.tm_min)
 
         # generate bot bof and fpg files for all platforms
-        backend.output_bof = tf.frontend_target_base[:-4] + '_%d-%d-%d_%.2d%.2d.bof' % (
-                         tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
-                         tf.start_time.tm_hour, tf.start_time.tm_min)
+        backend.output_bof = tf.frontend_target_base[:-4]
+        backend.output_bof += '_%d-%d-%d_%.2d%.2d.bof' % (
+            tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
+            tf.start_time.tm_hour, tf.start_time.tm_min)
         os.system('cp %s %s/top.bin' % (binary, backend.compile_dir))
-        mkbof_cmd = '%s/jasper_library/mkbof_64 -o %s/%s -s %s/core_info.tab -t 3 %s/top.bin' % \
-            (os.getenv('MLIB_DEVEL_PATH'), backend.output_dir, backend.output_bof, backend.compile_dir,
-                backend.compile_dir)
+        mkbof_cmd = '%s/jasper_library/mkbof_64 -o %s/%s -s %s/core_info.tab ' \
+                    '-t 3 %s/top.bin' % (os.getenv('MLIB_DEVEL_PATH'),
+                                         backend.output_dir,
+                                         backend.output_bof,
+                                         backend.compile_dir,
+                                         backend.compile_dir)
         os.system(mkbof_cmd)
         backend.mkfpg(binary, output_fpg)
+
+# end
