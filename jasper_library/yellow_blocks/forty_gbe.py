@@ -197,14 +197,14 @@ class forty_gbe(YellowBlock):
 
         inst.add_port('EMCCLK_FIX', 'EMCCLK_FIX', parent_port=True, dir='out')
 
-        inst.add_port('forty_gbe_tx_valid',        self.fullname+'_tx_valid',        width=1,   dir='in')
+        inst.add_port('forty_gbe_tx_valid',        self.fullname+'_tx_valid',        width=4,   dir='in')
         inst.add_port('forty_gbe_tx_end_of_frame', self.fullname+'_tx_end_of_frame', width=1,   dir='in')
         inst.add_port('forty_gbe_tx_data',         self.fullname+'_tx_data',         width=256, dir='in')
         inst.add_port('forty_gbe_tx_dest_ip',      self.fullname+'_tx_dest_ip',      width=32,  dir='in')
         inst.add_port('forty_gbe_tx_dest_port',    self.fullname+'_tx_dest_port',    width=16,  dir='in')
         inst.add_port('forty_gbe_tx_overflow',     self.fullname+'_tx_overflow',     width=1,   dir='out')
         inst.add_port('forty_gbe_tx_afull',        self.fullname+'_tx_afull',        width=1,   dir='out')
-        inst.add_port('forty_gbe_rx_valid',        self.fullname+'_rx_valid',        width=1,   dir='out')
+        inst.add_port('forty_gbe_rx_valid',        self.fullname+'_rx_valid',        width=4,   dir='out')
         inst.add_port('forty_gbe_rx_end_of_frame', self.fullname+'_rx_end_of_frame', width=1,   dir='out')
         inst.add_port('forty_gbe_rx_data',         self.fullname+'_rx_data',         width=256, dir='out')
         inst.add_port('forty_gbe_rx_source_ip',    self.fullname+'_rx_source_ip',    width=32,  dir='out')
