@@ -929,9 +929,9 @@ class SimulinkFrontend(ToolflowFrontend):
         # matlab_start_cmd = os.getenv('MLIB_DEVEL_PATH') + '/startsg'
         matlab_start_cmd = os.getenv('SYSGEN_SCRIPT')
         # The matlab syntax to start a compile with appropriate args
-        ml_cmd = "start_sysgen_compile('%s', '%s', %d);exit" % (
+        ml_cmd = "start_sysgen_compile('%s','%s',%d);exit" % (
             self.modelpath, self.compile_dir, int(update))
-        term_cmd = matlab_start_cmd + " -nodesktop -nosplash -r '%s'" % ml_cmd
+        term_cmd = matlab_start_cmd + ' -nodesktop -nosplash -r "%s"' % ml_cmd
         self.logger.info('Running terminal command: %s' % term_cmd)
         os.system(term_cmd)
         # return the name of the top module of the user ip
