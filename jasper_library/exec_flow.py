@@ -32,6 +32,8 @@ parser.add_option("--software", dest="software", action='store_true',
                   default=False, help="Run software compilation")
 parser.add_option("--be", dest="be", type='string', default='vivado',
                   help="Backend to use. Default: vivado")
+parser.add_option("--sysgen", dest="sysgen", type='string', default='',
+                  help="Specify a specific sysgen startup script.")
 parser.add_option("--jobs", dest="jobs", type='int', default=4,
                   help="Number of cores to run compiles with. Default=4")
 parser.add_option("--nonprojectmode", dest="nonprojectmode",
@@ -60,9 +62,9 @@ logger.setLevel(logging.DEBUG)
 
 handler = logging.FileHandler('%s/jasper.log' % builddir, mode='w')
 handler.setLevel(logging.DEBUG)
-format = logging.Formatter('%(levelname)s - %(asctime)s - %(name)s - '
-                           '%(message)s')
-handler.setFormatter(format)
+logformat = logging.Formatter('%(levelname)s - %(asctime)s - %(name)s - '
+                              '%(message)s')
+handler.setFormatter(logformat)
 
 logger.addHandler(handler)
 ch = logging.StreamHandler()
@@ -72,12 +74,19 @@ logger.addHandler(ch)
 logger.info('Starting compile')
 
 if opts.be == 'vivado':
-    os.environ['SYSGEN_SCRIPT'] = os.environ['MLIB_DEVEL_PATH']+'/startsg'
-    logger.debug('Vivado compile has been executed')
+    os.environ['SYSGEN_SCRIPT'] = os.environ['MLIB_DEVEL_PATH'] + '/startsg'
+    logger.debug('Vivado compile will be executed.')
 
 if opts.be == 'ise':
-    os.environ['SYSGEN_SCRIPT'] = os.environ['MLIB_DEVEL_PATH']+'/startsg_ise'
-    logger.debug('ISE compile has been executed')
+    os.environ['SYSGEN_SCRIPT'] = os.environ['MLIB_DEVEL_PATH'] + '/startsg_ise'
+    logger.debug('ISE compile will be executed.')
+
+if opts.sysgen != '':
+    os.environ['SYSGEN_SCRIPT'] = opts.sysgen
+
+if not os.path.isfile(os.environ['SYSGEN_SCRIPT']):
+    raise RuntimeError('Could not find sysgen startup script: '
+                       '%s' % os.environ['SYSGEN_SCRIPT'])
 
 # initialise the toolflow
 tf = toolflow.Toolflow(frontend='simulink', compile_dir=builddir,
