@@ -1,0 +1,5 @@
+lib opb_ddr3_sniffer_v1_00_a opb_ddr3_sniffer     verilog
+lib opb_ddr3_sniffer_v1_00_a ddr3_ctrl_opb_attach verilog
+lib opb_ddr3_sniffer_v1_00_a ddr3_mem_opb_attach  verilog
+lib opb_ddr3_sniffer_v1_00_a ddr3_arbiter         verilog
+lib opb_ddr3_sniffer_v1_00_a read_history_fifo    verilog
