@@ -43,7 +43,12 @@ b = class(s,'xps_adc_mkid_4x',blk_obj);
 
 % ip name & version
 b = set(b,'ip_name','adc_mkid_4x_interface');
-b = set(b,'ip_version','1.00.a');
+switch s.hw_sys
+    case 'ROACH2'
+      b = set(b,'ip_version','2.00.a');
+    otherwise
+      b = set(b,'ip_version','1.00.a');
+end
 
 parameters.OUTPUT_CLK = '0';
 if strfind(s.clk_sys,'adc')

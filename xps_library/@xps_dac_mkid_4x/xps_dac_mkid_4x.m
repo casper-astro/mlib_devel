@@ -53,8 +53,14 @@ s.clk_sys = get(xsg_obj,'clk_src');
 
 
 b = class(s,'xps_dac_mkid_4x',blk_obj);
+% ip name & version
 b = set(b,'ip_name','dac_mkid_4x_interface');
-b = set(b, 'ip_version', '1.01.a');
+switch s.hw_sys
+    case 'ROACH2'
+      b = set(b,'ip_version','2.00.a');
+    otherwise
+      b = set(b,'ip_version','1.01.a');
+end
 
 parameters.OUTPUT_CLK = '0';
 if strfind(s.clk_sys,'dac')
