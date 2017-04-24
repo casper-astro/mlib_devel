@@ -407,32 +407,32 @@ assign rf_write_data_hmc = rf_write_data_hmc_init;
   assign dbg_ska_sa_top_phy_init_cont_set = phy_init_cont_set;
   assign dbg_ska_sa_top_HMC_IIC_INIT_DONE = HMC_IIC_INIT_DONE;
   
-  wire m_axis_rx_TREADY_ser;
-  wire m_axis_rx_TVALID_ser;
-  wire [DWIDTH-1:0] m_axis_rx_TDATA_ser;
-  wire [NUM_DATA_BYTES-1:0] m_axis_rx_TUSER_ser;
+//  wire m_axis_rx_TREADY_ser;
+//  wire m_axis_rx_TVALID_ser;
+//  wire [DWIDTH-1:0] m_axis_rx_TDATA_ser;
+//  wire [NUM_DATA_BYTES-1:0] m_axis_rx_TUSER_ser;
   
-openhmc_rx_pkt_serializer #(
-    //Define width of the datapath
-    .FPW(FPW),                //Legal Values: 2,4,6,8
-    .LOG_FPW(LOG_FPW),        //Legal Values: 1 for FPW=2 ,2 for FPW=4 ,3 for FPW=6/8
-    .DWIDTH(DWIDTH),          //Leave untouched
-    .NUM_DATA_BYTES(NUM_DATA_BYTES)   //Leave untouched
+//openhmc_rx_pkt_serializer #(
+//    //Define width of the datapath
+//    .FPW(FPW),                //Legal Values: 2,4,6,8
+//    .LOG_FPW(LOG_FPW),        //Legal Values: 1 for FPW=2 ,2 for FPW=4 ,3 for FPW=6/8
+//    .DWIDTH(DWIDTH),          //Leave untouched
+//    .NUM_DATA_BYTES(NUM_DATA_BYTES)   //Leave untouched
     
-) openhmc_rx_pkt_serializer_inst (
-    .clk(clk_user),
-    .res_n(res_n_user),
-    //To USER Logic
-    .out_TREADY(m_axis_rx_TREADY),
-    .out_TVALID(m_axis_rx_TVALID),
-    .out_TDATA(m_axis_rx_TDATA),
-    .out_TUSER(m_axis_rx_TUSER),
-    //From openHMC
-    .in_TREADY(m_axis_rx_TREADY_ser),
-    .in_TVALID(m_axis_rx_TVALID_ser),
-    .in_TDATA(m_axis_rx_TDATA_ser),
-    .in_TUSER(m_axis_rx_TUSER_ser)
-    );
+//) openhmc_rx_pkt_serializer_inst (
+//    .clk(clk_user),
+//    .res_n(res_n_user),
+//    //To USER Logic
+//    .out_TREADY(m_axis_rx_TREADY),
+//    .out_TVALID(m_axis_rx_TVALID),
+//    .out_TDATA(m_axis_rx_TDATA),
+//    .out_TUSER(m_axis_rx_TUSER),
+//    //From openHMC
+//    .in_TREADY(m_axis_rx_TREADY_ser),
+//    .in_TVALID(m_axis_rx_TVALID_ser),
+//    .in_TDATA(m_axis_rx_TDATA_ser),
+//    .in_TUSER(m_axis_rx_TUSER_ser)
+//    );
 
     
 
@@ -488,10 +488,16 @@ openhmc_top #(
     .s_axis_tx_TDATA(s_axis_tx_TDATA),
     .s_axis_tx_TUSER(s_axis_tx_TUSER),
     //From HMC Ctrl RX to AXI
-    .m_axis_rx_TVALID(m_axis_rx_TVALID_ser),
-    .m_axis_rx_TREADY(m_axis_rx_TREADY_ser),
-    .m_axis_rx_TDATA(m_axis_rx_TDATA_ser),
-    .m_axis_rx_TUSER(m_axis_rx_TUSER_ser),
+//    .m_axis_rx_TVALID(m_axis_rx_TVALID_ser),
+//    .m_axis_rx_TREADY(m_axis_rx_TREADY_ser),
+//    .m_axis_rx_TDATA(m_axis_rx_TDATA_ser),
+//    .m_axis_rx_TUSER(m_axis_rx_TUSER_ser),
+
+    .m_axis_rx_TVALID(m_axis_rx_TVALID),
+    .m_axis_rx_TREADY(m_axis_rx_TREADY),
+    .m_axis_rx_TDATA(m_axis_rx_TDATA),
+    .m_axis_rx_TUSER(m_axis_rx_TUSER),
+
 
     //----------------------------------
     //----Connect Transceiver
@@ -527,15 +533,15 @@ openhmc_top #(
 
 reg [15:0] rx_crc_err_cnt;
 
-  always @(posedge clk_hmc) begin   
-    if (res_n == 1'b0) begin
-      rx_crc_err_cnt <= 16'd0;
-    end begin
-      rx_crc_err_cnt <= rx_crc_err_cnt;
-    end  
-  end
+//  always @(posedge clk_hmc) begin   
+//    if (res_n == 1'b0) begin
+//      rx_crc_err_cnt <= 16'd0;
+//    end begin
+//      rx_crc_err_cnt <= rx_crc_err_cnt;
+//    end  
+//  end
 
-  assign RX_CRC_ERR_CNT = rx_crc_err_cnt;
+  assign RX_CRC_ERR_CNT = 16'd0;//rx_crc_err_cnt;
 
   assign P_RST_N = 1'b1; // As soon as the FPGA is configured the HMC must startup
 

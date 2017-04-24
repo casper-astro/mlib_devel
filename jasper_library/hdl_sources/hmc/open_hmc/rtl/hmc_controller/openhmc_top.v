@@ -287,7 +287,9 @@ generate
 
             //From AXI-4 TX IF
             .d_in({s_axis_tx_TUSER[(FPW*3)-1:0],s_axis_tx_TDATA}),
-            .shift_in(s_axis_tx_TVALID && s_axis_tx_TREADY),
+            //.shift_in(s_axis_tx_TVALID && s_axis_tx_TREADY),
+            //AI: Critical to only shift in using TVALID, otherwise packets will be lost
+            .shift_in(s_axis_tx_TVALID),
             // Mod Henno: Move TX ready to FIFO almost full - must accept last write
             .full(dbg_hmc_fifo_tx_full),//HK.full(s_axis_tx_TREADY_n),
             .almost_full4(s_axis_tx_TREADY_n), //.almost_full(),
@@ -312,7 +314,9 @@ generate
 
             //To RX LINK Logic
             .d_in({s_axis_tx_TUSER[(FPW*3)-1:0],s_axis_tx_TDATA}),
-            .shift_in(s_axis_tx_TVALID && s_axis_tx_TREADY),
+            //.shift_in(s_axis_tx_TVALID && s_axis_tx_TREADY),
+            //AI: Critical to only shift in using TVALID, otherwise packets will be lost
+            .shift_in(s_axis_tx_TVALID),            
             .full(s_axis_tx_TREADY_n),
             .almost_full(),
 
@@ -333,7 +337,9 @@ generate
 
             //To RX LINK Logic
             .d_in({s_axis_tx_TUSER[(FPW*3)-1:0],s_axis_tx_TDATA}),
-            .shift_in(s_axis_tx_TVALID && s_axis_tx_TREADY),
+            //.shift_in(s_axis_tx_TVALID && s_axis_tx_TREADY),
+            //AI: Critical to only shift in using TVALID, otherwise packets will be lost
+            .shift_in(s_axis_tx_TVALID),            
             .full(s_axis_tx_TREADY_n),
             .almost_full(),
 

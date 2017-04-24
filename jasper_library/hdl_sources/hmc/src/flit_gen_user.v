@@ -66,79 +66,85 @@ module flit_gen_user #(
   
   
   //Debug HMC Registers
-  //(* mark_debug = "true" *) wire dbg_flit_gen_post_done; //Virtual test probe for the logic analyser
-  //(* mark_debug = "true" *) wire dbg_flit_gen_s_tx_tvalid; //Virtual test probe for the logic analyser
-  //(* mark_debug = "true" *) wire dbg_flit_gen_s_tx_tready; //Virtual test probe for the logic analyser
-  //(* mark_debug = "true" *) wire [DWIDTH-1:0] dbg_flit_gen_s_tx_tdata; //Virtual test probe for the logic analyser
-  //(* mark_debug = "true" *) wire [NUM_DATA_BYTES-1:0] dbg_flit_gen_s_tx_tuser; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire dbg_flit_gen_post_done; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire dbg_flit_gen_s_tx_tvalid; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire dbg_flit_gen_s_tx_tready; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [DWIDTH-1:0] dbg_flit_gen_s_tx_tdata; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [NUM_DATA_BYTES-1:0] dbg_flit_gen_s_tx_tuser; //Virtual test probe for the logic analyser
   
-  //(* mark_debug = "true" *) wire dbg_flit_gen_m_rx_tvalid; //Virtual test probe for the logic analyser 
-  //(* mark_debug = "true" *) wire dbg_flit_gen_m_rx_tready; //Virtual test probe for the logic analyser
-  //(* mark_debug = "true" *) wire [DWIDTH-1:0] dbg_flit_gen_m_rx_tdata; //Virtual test probe for the logic analyser
-  //(* mark_debug = "true" *) wire [NUM_DATA_BYTES-1:0] dbg_flit_gen_m_rx_tuser; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire dbg_flit_gen_m_rx_tvalid; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire dbg_flit_gen_m_rx_tready; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [DWIDTH-1:0] dbg_flit_gen_m_rx_tdata; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [NUM_DATA_BYTES-1:0] dbg_flit_gen_m_rx_tuser; //Virtual test probe for the logic analyser
   
-  //(* mark_debug = "true" *) wire [26:0] dbg_flit_gen_wr_address; //Virtual test probe for the logic analyser 
-  //(* mark_debug = "true" *) wire dbg_flit_gen_wr_req; //Virtual test probe for the logic analyser
-  //(* mark_debug = "true" *) wire [255:0] dbg_flit_gen_data_in; //Virtual test probe for the logic analyser
-  //(* mark_debug = "true" *) wire dbg_flit_gen_wr_ready; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [26:0] dbg_flit_gen_wr_address; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire dbg_flit_gen_wr_req; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [255:0] dbg_flit_gen_data_in; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire dbg_flit_gen_wr_ready; //Virtual test probe for the logic analyser
   
-  //(* mark_debug = "true" *) wire [26:0] dbg_flit_gen_rd_address; //Virtual test probe for the logic analyser 
-  //(* mark_debug = "true" *) wire dbg_flit_gen_rd_req; //Virtual test probe for the logic analyser
-  //(* mark_debug = "true" *) wire [255:0] dbg_flit_gen_data_out; //Virtual test probe for the logic analyser
-  //(* mark_debug = "true" *) wire [8:0] dbg_flit_gen_tag_in; //Virtual test probe for the logic analyser
-  //(* mark_debug = "true" *) wire [8:0] dbg_flit_gen_tag_out; //Virtual test probe for the logic analyser
-  //(* mark_debug = "true" *) wire dbg_flit_gen_data_valid; //Virtual test probe for the logic analyser
-  //(* mark_debug = "true" *) wire dbg_flit_gen_rd_ready; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [26:0] dbg_flit_gen_rd_address; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire dbg_flit_gen_rd_req; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [255:0] dbg_flit_gen_data_out; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [8:0] dbg_flit_gen_tag_in; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [8:0] dbg_flit_gen_tag_out; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire dbg_flit_gen_data_valid; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire dbg_flit_gen_rd_ready; //Virtual test probe for the logic analyser
   
-  //(* mark_debug = "true" *) wire [3:0] dbg_flit_gen_rd_flit_state; //Virtual test probe for the logic analyser
-  //(* mark_debug = "true" *) wire [3:0] dbg_flit_gen_wr_flit_state; //Virtual test probe for the logic analyser
-  //(* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case3_second; //Virtual test probe for the logic analyser 
-  //(* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case3_third; //Virtual test probe for the logic analyser 
-  //(* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case4_second; //Virtual test probe for the logic analyser 
-  //(* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case4_third; //Virtual test probe for the logic analyser 
-  //(* mark_debug = "true" *) wire [63:0] data_valid_rx_valid_count; //Virtual test probe for the logic analyser    
-  //(* mark_debug = "true" *) wire [63:0] data_valid_rx_hmc_valid_count; //Virtual test probe for the logic analyser 
-  //(* mark_debug = "true" *) wire [63:0] dbg_flit_case1_first_count; //Virtual test probe for the logic analyser 
-  //(* mark_debug = "true" *) wire [63:0] dbg_flit_case2_first_count; //Virtual test probe for the logic analyser 
-  //(* mark_debug = "true" *) wire [63:0] dbg_flit_case3_first_count; //Virtual test probe for the logic analyser 
-  //(* mark_debug = "true" *) wire [63:0] dbg_flit_case4_first_count; //Virtual test probe for the logic analyser 
-  //(* mark_debug = "true" *) wire [63:0] dbg_flit_case3_second_count; //Virtual test probe for the logic analyser 
-  //(* mark_debug = "true" *) wire [63:0] dbg_flit_case4_second_count; //Virtual test probe for the logic analyser  
-  //(* mark_debug = "true" *) wire [63:0] dbg_flit_case3_second_spec_count; //Virtual test probe for the logic analyser
-  //(* mark_debug = "true" *) wire [3:0] dbg_flit_error_rsp; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [3:0] dbg_flit_gen_rd_flit_state; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [3:0] dbg_flit_gen_wr_flit_state; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case3_second; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case3_third; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case4_second; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case4_third; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire [63:0] data_valid_rx_valid_count; //Virtual test probe for the logic analyser    
+  (* mark_debug = "true" *) wire [63:0] data_valid_rx_hmc_valid_count; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire [63:0] dbg_flit_case1_first_count; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire [63:0] dbg_flit_case2_first_count; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire [63:0] dbg_flit_case3_first_count; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire [63:0] dbg_flit_case4_first_count; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire [63:0] dbg_flit_case3_second_count; //Virtual test probe for the logic analyser 
+  (* mark_debug = "true" *) wire [63:0] dbg_flit_case4_second_count; //Virtual test probe for the logic analyser  
+  (* mark_debug = "true" *) wire [63:0] dbg_flit_case3_second_spec_count; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [3:0] dbg_flit_error_rsp; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [63:0] dbg_wr_req_count; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire [63:0] dbg_rd_req_count; //Virtual test probe for the logic analyser
   
   
-  //assign dbg_flit_gen_post_done = POST_DONE;
-  //assign dbg_flit_gen_s_tx_tvalid = s_axis_tx_TVALID_i & s_axis_tx_TREADY;
-  //assign dbg_flit_gen_s_tx_tready = s_axis_tx_TREADY;
-  //assign dbg_flit_gen_s_tx_tdata = s_axis_tx_TDATA_i;
-  //assign dbg_flit_gen_s_tx_tuser = s_axis_tx_TUSER_i; 
+  assign dbg_flit_gen_post_done = POST_DONE;
+  assign dbg_flit_gen_s_tx_tvalid = s_axis_tx_TVALID_i; // & s_axis_tx_TREADY;
+  assign dbg_flit_gen_s_tx_tready = s_axis_tx_TREADY;
+  assign dbg_flit_gen_s_tx_tdata = s_axis_tx_TDATA_i;
+  assign dbg_flit_gen_s_tx_tuser = s_axis_tx_TUSER_i; 
   
-  //assign dbg_flit_gen_m_rx_tvalid = m_axis_rx_TVALID;  
-  //assign dbg_flit_gen_m_rx_tready = m_axis_rx_TREADY_i;  
-  //assign dbg_flit_gen_m_rx_tdata = m_axis_rx_TDATA;
-  //assign dbg_flit_gen_m_rx_tuser = m_axis_rx_TUSER;  
+  assign dbg_flit_gen_m_rx_tvalid = m_axis_rx_TVALID;  
+  assign dbg_flit_gen_m_rx_tready = m_axis_rx_TREADY_i;  
+  assign dbg_flit_gen_m_rx_tdata = m_axis_rx_TDATA;
+  assign dbg_flit_gen_m_rx_tuser = m_axis_rx_TUSER;  
   
-  //assign dbg_flit_gen_wr_address = WR_ADDRESS;  
-  //assign dbg_flit_gen_wr_req = WR_REQ;  
-  //assign dbg_flit_gen_data_in = DATA_IN;
-  //assign dbg_flit_gen_wr_ready = (req_rdy == 1'b1) ? s_axis_tx_TREADY : 1'b0; 
+  assign dbg_flit_gen_wr_address = WR_ADDRESS;  
+  assign dbg_flit_gen_wr_req = WR_REQ;  
+  assign dbg_flit_gen_data_in = DATA_IN;
+  assign dbg_flit_gen_wr_ready = req_rdy;//(req_rdy == 1'b1) ? s_axis_tx_TREADY : 1'b0; 
   
-  //assign dbg_flit_gen_rd_address = RD_ADDRESS;  
-  //assign dbg_flit_gen_rd_req = RD_REQ;  
-  //assign dbg_flit_gen_data_out = rd_data;
-  //assign dbg_flit_gen_tag_in = TAG_IN; 
-  //assign dbg_flit_gen_tag_out = rd_tag;  
-  //assign dbg_flit_gen_data_valid = rd_data_val;  
-  //assign dbg_flit_gen_rd_ready = (req_rdy == 1'b1) ? s_axis_tx_TREADY : 1'b0;
+  assign dbg_flit_gen_rd_address = RD_ADDRESS;  
+  assign dbg_flit_gen_rd_req = RD_REQ;  
+  assign dbg_flit_gen_data_out = rd_data;
+  assign dbg_flit_gen_tag_in = TAG_IN; 
+  assign dbg_flit_gen_tag_out = rd_tag;  
+  assign dbg_flit_gen_data_valid = rd_data_val;  
+  assign dbg_flit_gen_rd_ready = req_rdy;//(req_rdy == 1'b1) ? s_axis_tx_TREADY : 1'b0;
   
-  //assign dbg_flit_gen_rd_flit_state = rd_flit_state;
-  //assign dbg_flit_gen_wr_flit_state = wr_flit_state;
+  assign dbg_flit_gen_rd_flit_state = rd_flit_state;
+  assign dbg_flit_gen_wr_flit_state = wr_flit_state;
   
-  //assign dbg_flit_gen_next_flit_case3_second =  next_flit_case3_second;
-  //assign dbg_flit_gen_next_flit_case3_third = next_flit_case3_third;
-  //assign dbg_flit_gen_next_flit_case4_second =  next_flit_case4_second;
-  //assign dbg_flit_gen_next_flit_case4_third =  next_flit_case4_third;
+  assign dbg_flit_gen_next_flit_case3_second =  next_flit_case3_second;
+  assign dbg_flit_gen_next_flit_case3_third = next_flit_case3_third;
+  assign dbg_flit_gen_next_flit_case4_second =  next_flit_case4_second;
+  assign dbg_flit_gen_next_flit_case4_third =  next_flit_case4_third;
+  
+  assign dbg_wr_req_count = wr_req_count;
+  assign dbg_rd_req_count = rd_req_count;
+  
 
   
 // FLIT Layout
@@ -266,9 +272,14 @@ module flit_gen_user #(
   reg next_flit_case3_third;
   reg next_flit_case4_second;
   reg next_flit_case4_third;
+  reg tx_data_hold;
+  reg [63:0] wr_req_count;
+  reg [63:0] rd_req_count;
+  reg req_rdy;
+  
 
   // Assign external status ports
-  assign s_axis_tx_TVALID = s_axis_tx_TVALID_i & s_axis_tx_TREADY;
+  assign s_axis_tx_TVALID = s_axis_tx_TVALID_i; //& s_axis_tx_TREADY;
   assign s_axis_tx_TDATA = s_axis_tx_TDATA_i;
   assign s_axis_tx_TUSER = s_axis_tx_TUSER_i;
   assign m_axis_rx_TREADY = m_axis_rx_TREADY_i;
@@ -280,7 +291,7 @@ module flit_gen_user #(
   localparam STATE_WR_RD_DATA   = 4'd2; // Issue WR32 Request header + write data [255:0] or RD32 Requests
   localparam STATE_CHK_RD_DATA  = 4'd5; // Wait for RX AXI bus to present valid return data and then check it for errors
 
-  reg req_rdy;
+
 
   // ***************************************************************************************************************************************************************************************
   // Request State Machine: Issue either write or read request for 256bit (32byte) 
@@ -290,13 +301,16 @@ module flit_gen_user #(
   if (RST) begin
     wr_flit_state <= STATE_IDLE;
     //addr <= 27'd0; // request addr {2'b00,addr,4b000} [33:32] reserved = "00", 16byte addr, [3:0] reserved 0 (min 16 byte transactions) 
-    
+    s_axis_tx_TDATA_i  <= 512'd0;
     s_axis_tx_TVALID_i <= 1'b0; // Deassert all control logic until the HMC is properly initialized
     s_axis_tx_TUSER_i  <= {NUM_DATA_BYTES{1'b0}};
     tag <= 9'd1; // Tag is used to deal with out of order return sequences 
     wait_for_NULL_FLITS_to_complete_cnt <= 16'd0;
     req_rdy <= 1'b0;
-
+    tx_data_hold <= 1'b0;
+    wr_req_count <= 64'd0;
+    rd_req_count <= 64'd0;
+    
   end else begin
       s_axis_tx_TVALID_i <= 1'b0;
       s_axis_tx_TUSER_i  <= {NUM_DATA_BYTES{1'b0}};
@@ -312,8 +326,10 @@ module flit_gen_user #(
           if (wait_for_NULL_FLITS_to_complete_cnt[8] == 1'b1) begin
             wr_flit_state <= WAIT_AXI_TX_RDY; // OK waited long enough => bom it with FLITs
           end
+        req_rdy <= 1'b0;
         end
         WAIT_AXI_TX_RDY: begin
+          req_rdy <= 1'b0;
           wr_flit_state <= WAIT_AXI_TX_RDY; // Wait for TX AXI FIFO to become available
           if (s_axis_tx_TREADY == 1'b1) begin // Make sure AXI TX FIFO is not FULL  
             wr_flit_state <= STATE_WR_RD_DATA;
@@ -321,31 +337,52 @@ module flit_gen_user #(
         end
         // State: Request WR128 header, followed by write data (WR_REQ_DATA[447:0])
         STATE_WR_RD_DATA: begin
-          req_rdy <= 1'b1;
-          if (s_axis_tx_TREADY == 1'b1) begin // Make sure AXI TX FIFO is not FULL, with a WRITE32 command request ie (write 32bytes / 256bits from requested address)             
-            if (WR_REQ == 1'b1) begin // Write request uses FLITs 2..0       
-              s_axis_tx_TVALID_i <= 1'b1; // Issue a write to TX AXI FIFO                
-              s_axis_tx_TDATA_i[383:0]  <= {64'd0, DATA_IN,                  {3'd0,3'd0,{2'd0,WR_ADDRESS,5'd0},tag, 4'd3, 4'd3, 1'b0, 6'b011001}}; // posted write req 32 bytes
-              s_axis_tx_TUSER_i[2:0]  <= 3'b111; // all FLITS 2-0 valid  - Write Req 
-              s_axis_tx_TUSER_i[6:4]  <= 3'b001; // Header on FLIT0 - Write Req  
-              s_axis_tx_TUSER_i[10:8]  <= 3'b100; // Tail on FLIT2 - Write Req 
-            end
-            if (RD_REQ == 1'b1) begin  // Read request uses FLIT 3        
-              s_axis_tx_TVALID_i <= 1'b1; // Issue a write to TX AXI FIFO, with a READ32 command request ie (read 32bytes / 256bits from requested address)
-              s_axis_tx_TDATA_i[511:384]  <= {64'd0, {3'd0,3'd0,{2'd0,RD_ADDRESS,5'd0},TAG_IN, 4'd1, 4'd1, 1'b0, 6'b110001}}; // red req 32 bytes
-              s_axis_tx_TUSER_i[3]  <= 1'b1; // Valid on FLIT3 - Read Req   
-              s_axis_tx_TUSER_i[7]  <= 1'b1; // Header on FLIT3 - Read Req
-              s_axis_tx_TUSER_i[11]  <= 1'b1; // Tail on FLIT3 - Read Req  
-            end
-          end 
-        end
-     
+           
+          
+          wr_flit_state <= STATE_WR_RD_DATA;
+          //if write is enabled            
+          if (WR_REQ == 1'b1) begin // Write request uses FLITs 2..0       
+            //s_axis_tx_TVALID_i <= 1'b1; // Issue a write to TX AXI FIFO                
+            s_axis_tx_TDATA_i[383:0]  <= {64'd0, DATA_IN, {3'd0,3'd0,{2'd0,WR_ADDRESS,5'd0},tag, 4'd3, 4'd3, 1'b0, 6'b011001}}; // posted write req 32 bytes
+            s_axis_tx_TUSER_i[2:0]  <= 3'b111; // all FLITS 2-0 valid  - Write Req 
+            s_axis_tx_TUSER_i[6:4]  <= 3'b001; // Header on FLIT0 - Write Req  
+            s_axis_tx_TUSER_i[10:8]  <= 3'b100; // Tail on FLIT2 - Write Req 
+            wr_req_count <= wr_req_count + 1'b1;
+          end
+          //if read is enabled
+          if (RD_REQ == 1'b1) begin  // Read request uses FLIT 3        
+            //s_axis_tx_TVALID_i <= 1'b1; // Issue a write to TX AXI FIFO, with a READ32 command request ie (read 32bytes / 256bits from requested address)
+            s_axis_tx_TDATA_i[511:384]  <= {64'd0, {3'd0,3'd0,{2'd0,RD_ADDRESS,5'd0},TAG_IN, 4'd1, 4'd1, 1'b0, 6'b110001}}; // red req 32 bytes
+            s_axis_tx_TUSER_i[3]  <= 1'b1; // Valid on FLIT3 - Read Req   
+            s_axis_tx_TUSER_i[7]  <= 1'b1; // Header on FLIT3 - Read Req
+            s_axis_tx_TUSER_i[11]  <= 1'b1; // Tail on FLIT3 - Read Req  
+            rd_req_count <= rd_req_count + 1'b1;
+          end
+          //if read or write is enabled
+          if (WR_REQ == 1'b1 || RD_REQ == 1'b1) begin
+            s_axis_tx_TVALID_i <= 1'b1; // Issue a write to TX AXI FIFO
+          end else begin
+            s_axis_tx_TVALID_i <= 1'b0; // Disable a write to TX AXI FIFO
+            s_axis_tx_TUSER_i  <= {NUM_DATA_BYTES{1'b0}};
+            s_axis_tx_TDATA_i  <= 512'd0;
+            req_rdy <= 1'b0;      
+          end
+          //if AXI bus is not ready, then deassert write and read ready signals  
+          if(s_axis_tx_TREADY == 1'b1) begin
+            req_rdy <= 1'b1;
+          end else begin
+            req_rdy <= 1'b0;
+          end
+    end    
       endcase
     end    
   end
 
-  assign WR_READY = (req_rdy == 1'b1) ? s_axis_tx_TREADY : 1'b0;
-  assign RD_READY = (req_rdy == 1'b1) ? s_axis_tx_TREADY : 1'b0;
+  //assign WR_READY = (req_rdy == 1'b1) ? s_axis_tx_TREADY : 1'b0;
+  //assign RD_READY = (req_rdy == 1'b1) ? s_axis_tx_TREADY : 1'b0;
+ 
+ assign WR_READY = req_rdy;
+ assign RD_READY = req_rdy;
 
   // ***************************************************************************************************************************************************************************************
   // Read state machine 
@@ -394,7 +431,8 @@ module flit_gen_user #(
 
     rd_data_val <= 1'b0;
     rd_data_val_hold <= 1'b0;  // in the case were 2 valid responses falls on the same AXI transaction
-    
+    rd_data <= 256'd0;
+    rd_tag <= 9'd0;
     
     r_data_valid_rx_valid_count <= 64'b0;
     r_data_valid_rx_hmc_valid_count <= 64'b0;
@@ -444,7 +482,8 @@ module flit_gen_user #(
             end
             // State: Decode AXI bus and figure out what is data, overheads or NULL FLITs
             //        If there is HMC memory data returned, check this data with the data written to HMC memory in the write state machine 
-            STATE_CHK_RD_DATA: begin 
+            STATE_CHK_RD_DATA: begin
+              rd_flit_state <= STATE_CHK_RD_DATA; 
     
               // 4 FLITs per AXI Access [511:0]:
               //   FLIT0 axis bus [127:0]

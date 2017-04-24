@@ -799,7 +799,7 @@
 
     );
 
-assign gth_tx_rst =  (~qpll_lock0) || (~qpll_lock1) || SOFT_RESET_TX_IN; //AI: || SOFT_RESET_TX_IN;
+assign gth_tx_rst =  (~qpll_lock0) || (~qpll_lock1); //AI: || SOFT_RESET_TX_IN;
 assign gth_rx_rst =  (~qpll_lock0) || (~qpll_lock1) || SOFT_RESET_RX_IN;
 
 assign FABRIC_CLK = gt0_txusrclk2_i;
