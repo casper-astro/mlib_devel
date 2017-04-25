@@ -125,7 +125,11 @@ module hmc #(
     input  wire USER_CLK,
     input  wire USER_RST,
     output wire POST_OK,    
-    output wire INIT_DONE
+    output wire INIT_DONE,
+    
+    //System Clocks
+    input wire HMC_CLK,
+    input wire HMC_RST
     
     
 );
@@ -157,8 +161,11 @@ assign soft_reset_async = (soft_reset_link2_async == 1'b1 || soft_reset_link3_as
 wire open_hmc_done_link2_i,open_hmc_done_link3_i;
 (* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg open_hmc_done_link2R,open_hmc_done_link2RR,open_hmc_done_link2RRR,open_hmc_done_link2RRRR;
 (* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg open_hmc_done_link3R,open_hmc_done_link3RR,open_hmc_done_link3RRR,open_hmc_done_link3RRRR;
-
 (* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg soft_resetR,soft_resetRR,soft_resetRRR,soft_resetRRRR;
+
+//HMC_CLK domain sync's
+(* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg open_hmc_done_link2Rb,open_hmc_done_link2RRb,open_hmc_done_link2RRRb,open_hmc_done_link2RRRRb;
+(* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg open_hmc_done_link3Rb,open_hmc_done_link3RRb,open_hmc_done_link3RRRb,open_hmc_done_link3RRRRb;
 
 always @(posedge USER_CLK) begin 
    
@@ -192,7 +199,35 @@ always @(posedge USER_CLK) begin
   open_hmc_done_link3RRR  <= open_hmc_done_link3RR;
   open_hmc_done_link3RRRR <= open_hmc_done_link3RRR;
 
+  post_ok_latchR <= post_ok_latch;
+  post_ok_latchRR <= post_ok_latchR;
+  post_ok_latchRRR <= post_ok_latchRR;
+  post_ok_latchRRRR <= post_ok_latchRRR;
+  
+  init_done_latchR <= init_done_latch;
+  init_done_latchRR <= init_done_latchR;
+  init_done_latchRRR <= init_done_latchRR;
+  init_done_latchRRRR <= init_done_latchRRR;
+  
 end
+
+
+always @(posedge HMC_CLK) begin 
+   
+  open_hmc_done_link2Rb    <= open_hmc_done_link2_i;
+  open_hmc_done_link2RRb   <= open_hmc_done_link2Rb;
+  open_hmc_done_link2RRRb  <= open_hmc_done_link2RRb;
+  open_hmc_done_link2RRRRb <= open_hmc_done_link2RRRb;
+
+  open_hmc_done_link3Rb    <= open_hmc_done_link3_i;
+  open_hmc_done_link3RRb   <= open_hmc_done_link3Rb;
+  open_hmc_done_link3RRRb  <= open_hmc_done_link3RRb;
+  open_hmc_done_link3RRRRb <= open_hmc_done_link3RRRb;
+
+end
+
+
+
 
 assign user_rst = user_rstRRRR;
 assign soft_reset = soft_resetRRRR;
@@ -201,6 +236,10 @@ assign soft_reset_link3 = soft_reset_link3RRRR;
 
 assign open_hmc_done_link3 = open_hmc_done_link3RRRR;
 assign open_hmc_done_link2 = open_hmc_done_link2RRRR;
+
+assign open_hmc_done_link3b = open_hmc_done_link3RRRRb;
+assign open_hmc_done_link2b = open_hmc_done_link2RRRRb;
+
 
 assign MEZZ_CLK_SEL = 1'b0;
 //assign HMC_MEZZ_RESET = user_rst;//~P_RST_N;
@@ -279,7 +318,7 @@ wire                         rf_read_en_link2,rf_read_en_link3;
 wire                         rf_write_en_link2,rf_write_en_link3;
 wire  [HMC_RF_WWIDTH-1:0]    rf_write_data_link2,rf_write_data_link3;
 
-(* mark_debug = "true" *) wire open_hmc_done_link2,open_hmc_done_link3;
+(* mark_debug = "true" *) wire open_hmc_done_link2,open_hmc_done_link3, open_hmc_done_link2b,open_hmc_done_link3b;
 (* mark_debug = "true" *) wire [63:0] data_rx_flit_cnt_link2,data_rx_flit_cnt_link3;
 (* mark_debug = "true" *) wire [63:0] data_rx_err_flit_cnt_link2,data_rx_err_flit_cnt_link3;
 wire data_err_detect_link2,data_err_detect_link3;
@@ -398,6 +437,10 @@ reg qpll_reset;
 reg [15:0] qpll_reset_cnt;
 reg qpll_reset_cnt_en;
 
+(* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg post_ok_latchR,post_ok_latchRR,post_ok_latchRRR,post_ok_latchRRRR;
+(* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg init_done_latchR,init_done_latchRR,init_done_latchRRR,init_done_latchRRRR;
+
+
 (* mark_debug = "true" *) wire [15:0] dbg_reset_cnt;
 (* mark_debug = "true" *) wire [31:0] dbg_num_reset_cnt;
 (* mark_debug = "true" *) wire dbg_hmc_resetRRRR;
@@ -424,8 +467,11 @@ assign dbg_qpll_reset_cnt_en = qpll_reset_cnt_en;
 wire hmc_reset_i;
 (* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg hmc_resetR,hmc_resetRR,hmc_resetRRR,hmc_resetRRRR;
 
-always @(posedge USER_CLK) begin 
-  if (user_rst == 1'b1) begin
+
+//Process ensures initialisation is successful. If initialisation is not successful then reset is issued again.
+//Linked to HMC_CLK and HMC_RST, so the time duration does not change when the USER_CLK changes.
+always @(posedge HMC_CLK) begin 
+  if (HMC_RST == 1'b1) begin
     post_ok_latch <= 1'b0;
     init_done_latch <= 1'b0;
     post_okR <= 1'b0;
@@ -452,9 +498,9 @@ always @(posedge USER_CLK) begin
     
     
     //Issue a reset after every second until OpenHMC initialises
-    //156.25MHz clock = 2.56s and 225MHz clock = 1.78s (needs to be greater than 1.2s, which is the time
-    //for the initialisation procedure
-    if (time_out_cnt == 32'd400000000) begin      //time_out_cnt[27]
+    //156.25MHz clock = 1.78s (needs to be greater than 1.2s, which is the time
+    //for the initialisation procedure)
+    if (time_out_cnt == 32'd278125000) begin      //time_out_cnt[27]
       time_out_cnt_rst <= 1'b1;      
     end     
     
@@ -519,7 +565,7 @@ always @(posedge USER_CLK) begin
     end 
     
     //Once the OpenHMC and HMC has initialised then stop the reset process
-    if (open_hmc_done_link2 == 1'b1 && open_hmc_done_link3 == 1'b1) begin
+    if (open_hmc_done_link2b == 1'b1 && open_hmc_done_link3b == 1'b1) begin
       init_done_latch <= 1'b1;
       time_out_cnt <= 32'd0;
     end 
@@ -576,6 +622,13 @@ always @(posedge USER_CLK) begin
   post_done_latchRRR  <= post_done_latchRR;
   post_done_latchRRRR <= post_done_latchRRR;
 
+  //hmc_resetR    <= hmc_reset_i;
+  //hmc_resetRR   <= hmc_resetR;
+  //hmc_resetRRR  <= hmc_resetRR;
+  //hmc_resetRRRR <= hmc_resetRRR;
+end
+
+always @(posedge HMC_CLK) begin
   hmc_resetR    <= hmc_reset_i;
   hmc_resetRR   <= hmc_resetR;
   hmc_resetRRR  <= hmc_resetRR;
@@ -625,8 +678,8 @@ hmc_iic_init_inst (
   .SDA_IN(SDA_IN_sync)  
 );
 
-assign POST_OK = post_ok_latch;
-assign INIT_DONE = init_done_latch; //post_done_latch;
+assign POST_OK = post_ok_latchRRRR;
+assign INIT_DONE = init_done_latchRRRR; //post_done_latch;
 assign HMC_MEZZ_RESET = hmc_resetRRRR;//~P_RST_N; 
 
 // Instantiate core for HMC link2

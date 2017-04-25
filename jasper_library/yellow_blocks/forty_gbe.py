@@ -38,6 +38,8 @@ class forty_gbe(YellowBlock):
 
         inst.add_port('user_clk_o', 'sys_clk', dir='out')
         inst.add_port('user_rst_o', 'sys_rst', dir='out')
+        inst.add_port('hmc_clk_o', 'hmc_clk', dir='out')
+        inst.add_port('hmc_rst_o', 'hmc_rst', dir='out')
         inst.add_port('GND', 'GND', parent_port=True, dir='out', width=16)
 
         inst.add_port('FPGA_RESET_N',       'FPGA_RESET_N',       parent_port=True, dir='in')

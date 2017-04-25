@@ -46,6 +46,8 @@ entity forty_gbe is
     port(
         user_clk_o : out std_logic;
         user_rst_o : out std_logic;
+        hmc_rst_o : out std_logic;
+        hmc_clk_o : out std_logic;
 
         FPGA_RESET_N       : in std_logic;
         FPGA_REFCLK_BUF0_P : in std_logic;
@@ -1207,6 +1209,8 @@ begin
     user_clk_o <= user_clk;
     --AI: Sys reset is synchronised with the user clock.
     user_rst_o <= user_rst;
+    hmc_rst_o <= sys_rst;
+    hmc_clk_o <= refclk_0;
     
 ---------------------------------------------------------------------------
 -- RESETS

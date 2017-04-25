@@ -17,6 +17,8 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         #IPython.embed()
         hmcc.add_port('USER_CLK', 'sys_clk', dir='in')
         hmcc.add_port('USER_RST', 'sys_rst', dir='in')
+        hmcc.add_port('HMC_CLK', 'hmc_clk', dir='in')
+        hmcc.add_port('HMC_RST', 'hmc_rst', dir='in')
         hmcc.add_port('SDA_OUT', 'mez%s_sda_out' % self.mez, dir='out')
         hmcc.add_port('SCL_OUT', 'mez%s_scl_out' % self.mez, dir='out')
         hmcc.add_port('SDA_IN',  'mez%s_sda_in' % self.mez, dir='in')
