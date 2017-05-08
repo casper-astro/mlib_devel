@@ -400,6 +400,9 @@ module flit_gen #(
   always @(posedge CLK) begin : rd_flit
 
   reg [1023:0] rd_data, rd_data2;
+  reg [11:0] m_axis_rx_TUSER_R;
+  reg [DWIDTH-1:0] m_axis_rx_TDATA_R;
+  reg m_axis_rx_TVALID_R; 
   
   if (RST) begin
     // Deassert all control signals on reset
@@ -438,7 +441,12 @@ module flit_gen #(
 
       // reset FLIT status for each AXI access
       data_err_detect <= 4'd0; 
-      flit <= 4'd0; 
+      flit <= 4'd0;
+      
+      // Registered to meet timing closure
+      m_axis_rx_TUSER_R <= m_axis_rx_TUSER[11:0];
+      m_axis_rx_TVALID_R <= m_axis_rx_TVALID;
+      m_axis_rx_TDATA_R <= m_axis_rx_TDATA; 
             
       // Start state decoding
       case (rd_flit_state)
@@ -470,11 +478,11 @@ module flit_gen #(
           // This case follows the same sequence as the RD32 request issued by the write state machine
           // The read data returned will be in the same sequence
           // The RD32 tag that is returned in the FLIT header(m_axis_rx_TDATA[23:15]), must match the tag that was embedded in the data in the WR32 request
-          if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[10:8] == 3'b100 && m_axis_rx_TUSER[6:4] == 3'b001 && m_axis_rx_TUSER[2:0] == 3'b111) begin
+          if (m_axis_rx_TVALID_R == 1'b1 && m_axis_rx_TUSER_R[10:8] == 3'b100 && m_axis_rx_TUSER_R[6:4] == 3'b001 && m_axis_rx_TUSER_R[2:0] == 3'b111) begin
             flit[0] <= 1'b1; // Mark FLIT0 as a valid data FLIT, for the FLIT counters
-            rd_tag <= m_axis_rx_TDATA[23:15];
-            rd_data = wr_data_func(m_axis_rx_TDATA[23:15]);                
-            if (rd_data[255:0] != m_axis_rx_TDATA[255+64:64]) begin // Check for errors!
+            rd_tag <= m_axis_rx_TDATA_R[23:15];
+            rd_data = wr_data_func(m_axis_rx_TDATA_R[23:15]);                
+            if (rd_data[255:0] != m_axis_rx_TDATA_R[255+64:64]) begin // Check for errors!
               data_err_detect[0] <= 1'b1; // Mark this FLIT as having memory data errors, for the FLIT error counters                
             end
           end 
@@ -483,11 +491,11 @@ module flit_gen #(
           // ****************** First time around FLITs ******************
           // CASE 2 Start
           // Valid FLITSs 3,2,1
-          if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[11:9] == 3'b100 && m_axis_rx_TUSER[7:5] == 3'b001 && m_axis_rx_TUSER[3:1] == 3'b111) begin
+          if (m_axis_rx_TVALID_R == 1'b1 && m_axis_rx_TUSER_R[11:9] == 3'b100 && m_axis_rx_TUSER_R[7:5] == 3'b001 && m_axis_rx_TUSER_R[3:1] == 3'b111) begin
             flit[1] <= 1'b1;
-            rd_tag <= m_axis_rx_TDATA[23+128:15+128];
-            rd_data = wr_data_func(m_axis_rx_TDATA[23+128:15+128]);
-            if (rd_data[255:0] != m_axis_rx_TDATA[255+64+128:64+128]) begin // Check for errors!
+            rd_tag <= m_axis_rx_TDATA_R[23+128:15+128];
+            rd_data = wr_data_func(m_axis_rx_TDATA_R[23+128:15+128]);
+            if (rd_data[255:0] != m_axis_rx_TDATA_R[255+64+128:64+128]) begin // Check for errors!
               data_err_detect[1] <= 1'b1; // Mark this FLIT as having memory data errors, for the FLIT error counters                
             end                
           end 
@@ -495,13 +503,13 @@ module flit_gen #(
           // ****************** First time around FLITs ******************
           // CASE 3 Start
           // Valid FLITSs 3,2
-          if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[11:10] == 2'b00 && m_axis_rx_TUSER[7:6] == 2'b01 && m_axis_rx_TUSER[3:2] == 2'b11) begin
+          if (m_axis_rx_TVALID_R == 1'b1 && m_axis_rx_TUSER_R[11:10] == 2'b00 && m_axis_rx_TUSER_R[7:6] == 2'b01 && m_axis_rx_TUSER_R[3:2] == 2'b11) begin
             flit[2] <= 1'b1;
-            rd_tag <= m_axis_rx_TDATA[23+256:15+256];
+            rd_tag <= m_axis_rx_TDATA_R[23+256:15+256];
             //rd_tag_i <= m_axis_rx_TDATA[23+256:15+256];
             //rd_data_i[191:0] <= m_axis_rx_TDATA[191+64+256:64+256];
-            rd_data = wr_data_func(m_axis_rx_TDATA[23+256:15+256]);
-            if (rd_data[191:0] != m_axis_rx_TDATA[191+64+256:64+256]) begin // Check for errors!
+            rd_data = wr_data_func(m_axis_rx_TDATA_R[23+256:15+256]);
+            if (rd_data[191:0] != m_axis_rx_TDATA_R[191+64+256:64+256]) begin // Check for errors!
               data_err_detect[2] <= 1'b1; // Mark this FLIT as having memory data errors, for the FLIT error counters                
             end                                
             next_flit_case3_second <= 1'b1;  // AXI access 2 of 2 
@@ -510,13 +518,13 @@ module flit_gen #(
           // ****************** First time around FLITs ******************
           // CASE 4 Start
           // Valid FLITSs 3
-          if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[11] == 1'b0 && m_axis_rx_TUSER[7] == 1'b1 && m_axis_rx_TUSER[3] == 1'b1) begin
+          if (m_axis_rx_TVALID_R == 1'b1 && m_axis_rx_TUSER_R[11] == 1'b0 && m_axis_rx_TUSER_R[7] == 1'b1 && m_axis_rx_TUSER_R[3] == 1'b1) begin
             flit[3] <= 1'b1;
-            rd_tag <= m_axis_rx_TDATA[23+384:15+384];
+            rd_tag <= m_axis_rx_TDATA_R[23+384:15+384];
             //rd_tag_i <= m_axis_rx_TDATA[23+384:15+384];
             //rd_data_i[63:0] <= m_axis_rx_TDATA[63+64+384:64+384];
-            rd_data = wr_data_func(m_axis_rx_TDATA[23+384:15+384]);
-            if(rd_data[63:0] != m_axis_rx_TDATA[63+64+384:64+384]) begin //Check for errors!
+            rd_data = wr_data_func(m_axis_rx_TDATA_R[23+384:15+384]);
+            if(rd_data[63:0] != m_axis_rx_TDATA_R[63+64+384:64+384]) begin //Check for errors!
                data_err_detect[3] <= 1'b1; // Mark this FLIT as having memory data errors, for the FLIT error counters
             end   
             next_flit_case4_second <= 1'b1;  // AXI access 2 of 2 
@@ -525,33 +533,33 @@ module flit_gen #(
           // ****************** Second time around FLITs ******************
           // CASE 3 cont...
           // Valid FLITSs 0
-          if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[8] == 1'b1 && m_axis_rx_TUSER[4] == 1'b0 && m_axis_rx_TUSER[0] == 1'b1 && next_flit_case3_second == 1'b1) begin
+          if (m_axis_rx_TVALID_R == 1'b1 && m_axis_rx_TUSER_R[8] == 1'b1 && m_axis_rx_TUSER_R[4] == 1'b0 && m_axis_rx_TUSER_R[0] == 1'b1 && next_flit_case3_second == 1'b1) begin
             //rd_data [255:192] <= m_axis_rx_TDATA[63:0];
             //rd_data [191:0] <= rd_data_i[191:0];
             rd_data = wr_data_func(rd_tag);
-            if(rd_data[255:192] != m_axis_rx_TDATA[63:0]) begin //Check for errors!
+            if(rd_data[255:192] != m_axis_rx_TDATA_R[63:0]) begin //Check for errors!
                data_err_detect[2] <= 1'b1; // Mark this FLIT as having memory data errors, for the FLIT error counters
             end 
             next_flit_case3_second <= 1'b0;
           //do not clear if there are still case 3 responses coming on FLIT 2,3!
-            if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[11:10] == 2'b00 && m_axis_rx_TUSER[7:6] == 2'b01 && m_axis_rx_TUSER[3:2] == 2'b11) begin
+            if (m_axis_rx_TVALID_R == 1'b1 && m_axis_rx_TUSER_R[11:10] == 2'b00 && m_axis_rx_TUSER_R[7:6] == 2'b01 && m_axis_rx_TUSER_R[3:2] == 2'b11) begin
               next_flit_case3_second <= 1'b1;
             end 
           end
           
           // Special CASE 3 cont... There can also be 3 valid FLITS in this same cycle, producing a second valid! 
           // Valid FLITSs 0
-          if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[11:8] == 4'b1001 && m_axis_rx_TUSER[7:4] == 4'b0010 && m_axis_rx_TUSER[3:0] == 4'b1111 && next_flit_case3_second == 1'b1) begin
+          if (m_axis_rx_TVALID_R == 1'b1 && m_axis_rx_TUSER_R[11:8] == 4'b1001 && m_axis_rx_TUSER_R[7:4] == 4'b0010 && m_axis_rx_TUSER_R[3:0] == 4'b1111 && next_flit_case3_second == 1'b1) begin
             //rd_data [255:192] <= m_axis_rx_TDATA[63:0];
             //rd_data [191:0] <= rd_data_i[191:0];
             //rd_tag <= rd_tag_i;
             //rd_data_val <= 1'b1;
             rd_data = wr_data_func(rd_tag);
             // valid data from case 2
-            rd_tag2 <= m_axis_rx_TDATA[23+128:15+128];
+            rd_tag2 <= m_axis_rx_TDATA_R[23+128:15+128];
             //rd_data_2 [255:0] <= m_axis_rx_TDATA[255+64+128:64+128];
-            rd_data2 = wr_data_func(m_axis_rx_TDATA[23+128:15+128]);
-            if((rd_data[255:192] != m_axis_rx_TDATA[63:0]) || (rd_data2[255:0] != m_axis_rx_TDATA[255+64+128:64+128])) begin //Check for errors!
+            rd_data2 = wr_data_func(m_axis_rx_TDATA_R[23+128:15+128]);
+            if((rd_data[255:192] != m_axis_rx_TDATA_R[63:0]) || (rd_data2[255:0] != m_axis_rx_TDATA_R[255+64+128:64+128])) begin //Check for errors!
                data_err_detect[2] <= 1'b1; // Mark this FLIT as having memory data errors, for the FLIT error counters
             end                   
             next_flit_case3_second <= 1'b0;                         
@@ -559,16 +567,16 @@ module flit_gen #(
 
           // CASE 4 cont...
           // Valid FLITSs 1,0
-          if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[9:8] == 2'b10 && m_axis_rx_TUSER[5:4] == 4'b00 && m_axis_rx_TUSER[1:0] == 4'b11 && next_flit_case4_second == 1'b1) begin
+          if (m_axis_rx_TVALID_R == 1'b1 && m_axis_rx_TUSER_R[9:8] == 2'b10 && m_axis_rx_TUSER_R[5:4] == 4'b00 && m_axis_rx_TUSER_R[1:0] == 4'b11 && next_flit_case4_second == 1'b1) begin
             //rd_data [255:64] <= m_axis_rx_TDATA[191:0];
             //rd_data [63:0] <= rd_data_i[63:0];
             rd_data = wr_data_func(rd_tag);
-            if(rd_data[255:64] != m_axis_rx_TDATA[191:0]) begin //Check for errors!
+            if(rd_data[255:64] != m_axis_rx_TDATA_R[191:0]) begin //Check for errors!
                data_err_detect[3] <= 1'b1; // Mark this FLIT as having memory data errors, for the FLIT error counters
             end 
             next_flit_case4_second <= 1'b0;
             //do not clear if there are still case 4 responses coming on FLIT 3!
-            if (m_axis_rx_TVALID == 1'b1 && m_axis_rx_TUSER[11] == 1'b0 && m_axis_rx_TUSER[7] == 1'b1 && m_axis_rx_TUSER[3] == 1'b1) begin
+            if (m_axis_rx_TVALID_R == 1'b1 && m_axis_rx_TUSER_R[11] == 1'b0 && m_axis_rx_TUSER_R[7] == 1'b1 && m_axis_rx_TUSER_R[3] == 1'b1) begin
               next_flit_case4_second <= 1'b1;
             end                        
           end

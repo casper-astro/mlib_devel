@@ -92,7 +92,11 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
 
     def initialize(self):
 
-        self.add_source('hmc')
+        self.add_source('hmc/src/*.v')
+        self.add_source('hmc/src/*.vhd')
+        self.add_source('hmc/src/*.ngc')
+        self.add_source("hmc/src/hmc_user_axi_fifo/*.xci")
+        self.add_source('hmc/open_hmc')
 
     def modify_top(self,top):
 
