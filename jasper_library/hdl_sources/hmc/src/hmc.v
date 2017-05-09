@@ -679,7 +679,9 @@ hmc_iic_init_inst (
 );
 
 assign POST_OK = post_ok_latchRRRR;
-assign INIT_DONE = init_done_latchRRRR; //post_done_latch;
+//Important to AND init_done and the post_done_latch to ensure the I2C switch over happens after POST_DONE_LATCH is asserted. If not then POST_LED on HMC Card will not be illuminated when POST is done
+//and there will be no visual indication to the user that the HMC is ready for use 
+assign INIT_DONE = init_done_latchRRRR & post_done_latchRRRR; //post_done_latch
 assign HMC_MEZZ_RESET = hmc_resetRRRR;//~P_RST_N; 
 
 // Instantiate core for HMC link2
