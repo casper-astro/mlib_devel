@@ -391,7 +391,7 @@ pins:
     loc: J15
   lmx2581_muxout:
     iostd: LVCMOS33
-    loc: G16
+    loc: J19
   lmx2581_le:
     iostd: LVCMOS33
     loc: J16
