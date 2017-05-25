@@ -91,20 +91,8 @@ if strcmp(show_param, 'on')
   mask_visibilities{ismember(mask_names, 'fab_gate')} = 'on';
   mask_visibilities{ismember(mask_names, 'cpu_rx_en')} = 'on';
   mask_visibilities{ismember(mask_names, 'cpu_tx_en')} = 'on';
-
-  if strcmp(hw_sys, 'ROACH2:sx475t')
-    mask_visibilities{ismember(mask_names, 'pre_emph_r2')} = 'on';
-    mask_visibilities{ismember(mask_names, 'swing_r2')} = 'on';
-    mask_visibilities{ismember(mask_names, 'post_emph_r2')} = 'on';
-    mask_visibilities{ismember(mask_names, 'rxeqmix_r2')} = 'on';
-    mask_visibilities{ismember(mask_names, 'ttl')} = 'on';
-    mask_visibilities{ismember(mask_names, 'promisc_mode')} = 'on';
-  else
-    mask_visibilities{ismember(mask_names, 'pre_emph')} = 'on';
-    mask_visibilities{ismember(mask_names, 'swing')} = 'on';
-    mask_visibilities{ismember(mask_names, 'ttl')} = 'on';
-    mask_visibilities{ismember(mask_names, 'promisc_mode')} = 'on';
-  end
+  mask_visibilities{ismember(mask_names, 'ttl')} = 'on';
+  mask_visibilities{ismember(mask_names, 'promisc_mode')} = 'on';
 end
 
 % enable and make visible relevant parameters
