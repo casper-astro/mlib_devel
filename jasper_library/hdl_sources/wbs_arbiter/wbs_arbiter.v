@@ -37,46 +37,124 @@ module wbs_arbiter(
   input  [NUM_SLAVES - 1:0] wbs_ack_i;
   input  [NUM_SLAVES - 1:0] wbs_err_i;
 
-  reg        wbm_cyc_i_r;
-  reg        wbm_stb_i_r;
-  reg        wbm_we_i_r;
-  reg  [3:0] wbm_sel_i_r;
-  reg [31:0] wbm_adr_i_r;
-  reg [31:0] wbm_dat_i_r;
+  reg         wbm_cyc_i_r;
+  reg         wbm_stb_i_r;
+  reg         wbm_we_i_r;
+  reg   [3:0] wbm_sel_i_r;
+  reg  [31:0] wbm_adr_i_r;
+  reg  [31:0] wbm_dat_i_r;
   wire [31:0] wbm_dat_o_r;
-  wire       wbm_ack_o_r;
-  reg        wbm_err_o_r;
+  wire        wbm_ack_o_r;
+  reg         wbm_err_o_r;
 
-  wire                       wbs_we_o_r;
-  wire                 [3:0] wbs_sel_o_r;
-  wire                [31:0] wbs_adr_o_r;
-  wire                [31:0] wbs_dat_o_r;
-  reg     [NUM_SLAVES - 1:0] wbs_cyc_o_r;
-  wire    [NUM_SLAVES - 1:0] wbs_stb_o_r;
+  wire                      wbs_we_o_r;
+  wire                [3:0] wbs_sel_o_r;
+  wire               [31:0] wbs_adr_o_r;
+  wire               [31:0] wbs_dat_o_r;
+  reg    [NUM_SLAVES - 1:0] wbs_cyc_o_r;
+  wire   [NUM_SLAVES - 1:0] wbs_stb_o_r;
   reg    [NUM_SLAVES - 1:0] wbs_ack_i_r;
   reg    [NUM_SLAVES - 1:0] wbs_err_i_r;
   reg [NUM_SLAVES*32 - 1:0] wbs_dat_i_r;
+
+  reg         wbm_cyc_i_r1;
+  reg         wbm_stb_i_r1;
+  reg         wbm_we_i_r1;
+  reg   [3:0] wbm_sel_i_r1;
+  reg  [31:0] wbm_adr_i_r1;
+  reg  [31:0] wbm_dat_i_r1;
+  reg  [31:0] wbm_dat_o_r1;
+  reg         wbm_ack_o_r1;
+  reg         wbm_err_o_r1;
+
+  reg                       wbs_we_o_r1;
+  reg                 [3:0] wbs_sel_o_r1;
+  reg                [31:0] wbs_adr_o_r1;
+  reg                [31:0] wbs_dat_o_r1;
+  reg    [NUM_SLAVES - 1:0] wbs_cyc_o_r1;
+  reg    [NUM_SLAVES - 1:0] wbs_stb_o_r1;
+  reg    [NUM_SLAVES - 1:0] wbs_ack_i_r1;
+  reg    [NUM_SLAVES - 1:0] wbs_err_i_r1;
+  reg [NUM_SLAVES*32 - 1:0] wbs_dat_i_r1;
+
+  reg         wbm_cyc_i_r2;
+  reg         wbm_stb_i_r2;
+  reg         wbm_we_i_r2;
+  reg   [3:0] wbm_sel_i_r2;
+  reg  [31:0] wbm_adr_i_r2;
+  reg  [31:0] wbm_dat_i_r2;
+  reg  [31:0] wbm_dat_o_r2;
+  reg         wbm_ack_o_r2;
+  reg         wbm_err_o_r2;
+
+  reg                       wbs_we_o_r2;
+  reg                 [3:0] wbs_sel_o_r2;
+  reg                [31:0] wbs_adr_o_r2;
+  reg                [31:0] wbs_dat_o_r2;
+  reg    [NUM_SLAVES - 1:0] wbs_cyc_o_r2;
+  reg    [NUM_SLAVES - 1:0] wbs_stb_o_r2;
+  reg    [NUM_SLAVES - 1:0] wbs_ack_i_r2;
+  reg    [NUM_SLAVES - 1:0] wbs_err_i_r2;
+  reg [NUM_SLAVES*32 - 1:0] wbs_dat_i_r2;
   
   //Added for timing closure purposes
   always @(posedge wb_clk_i) begin
-    wbm_cyc_i_r <= wbm_cyc_i;
-    wbm_stb_i_r <= wbm_stb_i;
-    wbm_we_i_r  <= wbm_we_i;
-    wbm_sel_i_r <= wbm_sel_i;
-    wbm_adr_i_r <= wbm_adr_i;
-    wbm_dat_i_r <= wbm_dat_i;
-    wbm_dat_o   <= wbm_dat_o_r;
-    wbm_ack_o   <= wbm_ack_o_r;
-    wbm_err_o   <= wbm_err_o_r;
-    wbs_cyc_o   <= wbs_cyc_o_r;
-    wbs_stb_o   <= wbs_stb_o_r;
-    wbs_we_o    <= wbs_we_o_r;
-    wbs_sel_o   <= wbs_sel_o_r;
-    wbs_adr_o   <= wbs_adr_o_r;
-    wbs_dat_o   <= wbs_dat_o_r;
-    wbs_dat_i_r <= wbs_dat_i;
-    wbs_ack_i_r <= wbs_ack_i;
-    wbs_err_i_r <= wbs_err_i;
+    wbm_cyc_i_r2 <= wbm_cyc_i;
+    wbm_stb_i_r2 <= wbm_stb_i;
+    wbm_we_i_r2  <= wbm_we_i;
+    wbm_sel_i_r2 <= wbm_sel_i;
+    wbm_adr_i_r2 <= wbm_adr_i;
+    wbm_dat_i_r2 <= wbm_dat_i;
+    wbm_dat_o    <= wbm_dat_o_r2;
+    wbm_ack_o    <= wbm_ack_o_r2;
+    wbm_err_o    <= wbm_err_o_r2;
+    wbs_cyc_o    <= wbs_cyc_o_r2;
+    wbs_stb_o    <= wbs_stb_o_r2;
+    wbs_we_o     <= wbs_we_o_r2;
+    wbs_sel_o    <= wbs_sel_o_r2;
+    wbs_adr_o    <= wbs_adr_o_r2;
+    wbs_dat_o    <= wbs_dat_o_r2;
+    wbs_dat_i_r2 <= wbs_dat_i;
+    wbs_ack_i_r2 <= wbs_ack_i;
+    wbs_err_i_r2 <= wbs_err_i;
+
+    wbm_cyc_i_r1 <= wbm_cyc_i_r2;
+    wbm_stb_i_r1 <= wbm_stb_i_r2;
+    wbm_we_i_r1  <= wbm_we_i_r2 ;
+    wbm_sel_i_r1 <= wbm_sel_i_r2;
+    wbm_adr_i_r1 <= wbm_adr_i_r2;
+    wbm_dat_i_r1 <= wbm_dat_i_r2;
+    wbm_dat_o_r2 <= wbm_dat_o_r1;
+    wbm_ack_o_r2 <= wbm_ack_o_r1;
+    wbm_err_o_r2 <= wbm_err_o_r1;
+    wbs_cyc_o_r2 <= wbs_cyc_o_r1;
+    wbs_stb_o_r2 <= wbs_stb_o_r1;
+    wbs_we_o_r2  <= wbs_we_o_r1;
+    wbs_sel_o_r2 <= wbs_sel_o_r1;
+    wbs_adr_o_r2 <= wbs_adr_o_r1;
+    wbs_dat_o_r2 <= wbs_dat_o_r1;
+    wbs_dat_i_r1 <= wbs_dat_i_r2;
+    wbs_ack_i_r1 <= wbs_ack_i_r2;
+    wbs_err_i_r1 <= wbs_err_i_r2;
+
+    wbm_cyc_i_r  <= wbm_cyc_i_r1;
+    wbm_stb_i_r  <= wbm_stb_i_r1;
+    wbm_we_i_r   <= wbm_we_i_r1;
+    wbm_sel_i_r  <= wbm_sel_i_r1;
+    wbm_adr_i_r  <= wbm_adr_i_r1;
+    wbm_dat_i_r  <= wbm_dat_i_r1;
+    wbm_dat_o_r1 <= wbm_dat_o;
+    wbm_ack_o_r1 <= wbm_ack_o;
+    wbm_err_o_r1 <= wbm_err_o;
+    wbs_cyc_o_r1 <= wbs_cyc_o;
+    wbs_stb_o_r1 <= wbs_stb_o;
+    wbs_we_o_r1  <= wbs_we_o;
+    wbs_sel_o_r1 <= wbs_sel_o;
+    wbs_adr_o_r1 <= wbs_adr_o;
+    wbs_dat_o_r1 <= wbs_dat_o;
+    wbs_dat_i_r  <= wbs_dat_i_r1;
+    wbs_ack_i_r  <= wbs_ack_i_r1;
+    wbs_err_i_r  <= wbs_err_i_r1;
   end
 
 
@@ -245,3 +323,4 @@ module wbs_arbiter(
   end
 
 endmodule
+
