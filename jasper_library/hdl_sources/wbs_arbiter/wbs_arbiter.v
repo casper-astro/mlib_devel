@@ -99,62 +99,79 @@ module wbs_arbiter(
   
   //Added for timing closure purposes
   always @(posedge wb_clk_i) begin
-    wbm_cyc_i_r2 <= wbm_cyc_i;
-    wbm_stb_i_r2 <= wbm_stb_i;
-    wbm_we_i_r2  <= wbm_we_i;
-    wbm_sel_i_r2 <= wbm_sel_i;
-    wbm_adr_i_r2 <= wbm_adr_i;
-    wbm_dat_i_r2 <= wbm_dat_i;
-    wbm_dat_o    <= wbm_dat_o_r2;
-    wbm_ack_o    <= wbm_ack_o_r2;
-    wbm_err_o    <= wbm_err_o_r2;
-    wbs_cyc_o    <= wbs_cyc_o_r2;
-    wbs_stb_o    <= wbs_stb_o_r2;
-    wbs_we_o     <= wbs_we_o_r2;
-    wbs_sel_o    <= wbs_sel_o_r2;
-    wbs_adr_o    <= wbs_adr_o_r2;
-    wbs_dat_o    <= wbs_dat_o_r2;
-    wbs_dat_i_r2 <= wbs_dat_i;
-    wbs_ack_i_r2 <= wbs_ack_i;
-    wbs_err_i_r2 <= wbs_err_i;
+    wbm_cyc_i_r1 <= wbm_cyc_i;
+    wbm_cyc_i_r2 <= wbm_cyc_i_r1;
+    wbm_cyc_i_r  <= wbm_cyc_i_r2;
+    
+    wbm_stb_i_r1 <= wbm_stb_i;
+    wbm_stb_i_r2 <= wbm_stb_i_r1;
+    wbm_stb_i_r  <= wbm_stb_i_r2;
+    
+    wbm_we_i_r1  <= wbm_we_i;
+    wbm_we_i_r2  <= wbm_we_i_r1;
+    wbm_we_i_r   <= wbm_we_i_r2;
+    
+    wbm_sel_i_r1 <= wbm_sel_i;
+    wbm_sel_i_r2 <= wbm_sel_i_r1;
+    wbm_sel_i_r  <= wbm_sel_i_r2;
 
-    wbm_cyc_i_r1 <= wbm_cyc_i_r2;
-    wbm_stb_i_r1 <= wbm_stb_i_r2;
-    wbm_we_i_r1  <= wbm_we_i_r2 ;
-    wbm_sel_i_r1 <= wbm_sel_i_r2;
-    wbm_adr_i_r1 <= wbm_adr_i_r2;
-    wbm_dat_i_r1 <= wbm_dat_i_r2;
-    wbm_dat_o_r2 <= wbm_dat_o_r1;
+    wbm_adr_i_r1 <= wbm_adr_i;
+    wbm_adr_i_r2 <= wbm_adr_i_r1;
+    wbm_adr_i_r  <= wbm_adr_i_r2;
+
+    wbm_dat_i_r1 <= wbm_dat_i;
+    wbm_dat_i_r2 <= wbm_dat_i_r1;
+    wbm_dat_i_r  <= wbm_dat_i_r2;
+        
+    wbm_dat_o_r1 <= wbm_dat_o_r;
+    wbm_dat_o_r2 <= wbm_dat_o_r1; 
+    wbm_dat_o <= wbm_dat_o_r2
+    
+    wbm_ack_o_r1 <= wbm_ack_o_r; 
     wbm_ack_o_r2 <= wbm_ack_o_r1;
-    wbm_err_o_r2 <= wbm_err_o_r1;
-    wbs_cyc_o_r2 <= wbs_cyc_o_r1;
-    wbs_stb_o_r2 <= wbs_stb_o_r1;
-    wbs_we_o_r2  <= wbs_we_o_r1;
-    wbs_sel_o_r2 <= wbs_sel_o_r1;
-    wbs_adr_o_r2 <= wbs_adr_o_r1;
-    wbs_dat_o_r2 <= wbs_dat_o_r1;
-    wbs_dat_i_r1 <= wbs_dat_i_r2;
-    wbs_ack_i_r1 <= wbs_ack_i_r2;
-    wbs_err_i_r1 <= wbs_err_i_r2;
+    wbm_ack_o <= wbm_ack_o_r2;
 
-    wbm_cyc_i_r  <= wbm_cyc_i_r1;
-    wbm_stb_i_r  <= wbm_stb_i_r1;
-    wbm_we_i_r   <= wbm_we_i_r1;
-    wbm_sel_i_r  <= wbm_sel_i_r1;
-    wbm_adr_i_r  <= wbm_adr_i_r1;
-    wbm_dat_i_r  <= wbm_dat_i_r1;
-    wbm_dat_o_r1 <= wbm_dat_o;
-    wbm_ack_o_r1 <= wbm_ack_o;
-    wbm_err_o_r1 <= wbm_err_o;
-    wbs_cyc_o_r1 <= wbs_cyc_o;
-    wbs_stb_o_r1 <= wbs_stb_o;
-    wbs_we_o_r1  <= wbs_we_o;
-    wbs_sel_o_r1 <= wbs_sel_o;
-    wbs_adr_o_r1 <= wbs_adr_o;
-    wbs_dat_o_r1 <= wbs_dat_o;
-    wbs_dat_i_r  <= wbs_dat_i_r1;
-    wbs_ack_i_r  <= wbs_ack_i_r1;
-    wbs_err_i_r  <= wbs_err_i_r1;
+    wbm_err_o_r1 <= wbm_err_o_r;
+    wbm_err_o_r2 <= wbm_err_o_r1;
+    wbm_err_o <= wbm_err_o_r2;
+
+    wbs_cyc_o_r1 <= wbs_cyc_o_r;
+    wbs_cyc_o_r2 <= wbs_cyc_o_r1;
+    wbs_cyc_o <= wbs_cyc_o_r2;
+
+    wbs_stb_o_r1 <= wbs_stb_o_r;
+    wbs_stb_o_r2 <= wbs_stb_o_r1;
+    wbs_stb_o <= wbs_stb_o_r2;
+
+    wbs_we_o_r1  <= wbs_we_o_r;
+    wbs_we_o_r2  <= wbs_we_o_r1;
+    wbs_we_o  <= wbs_we_o_r2;
+
+    wbs_sel_o_r1 <= wbs_sel_o_r;
+    wbs_sel_o_r2 <= wbs_sel_o_r1;
+    wbs_sel_o <= wbs_sel_o_r2;
+
+    wbs_adr_o_r1 <= wbs_adr_o_r;
+    wbs_adr_o_r2 <= wbs_adr_o_r1;
+    wbs_adr_o <= wbs_adr_o_r2;
+    
+    wbs_dat_o_r1 <= wbs_dat_o_r;
+    wbs_dat_o_r2 <= wbs_dat_o_r1;
+    wbs_dat_o  <= wbs_dat_o_r2;
+    
+    wbs_dat_i_r1 <= wbs_dat_i;    
+    wbs_dat_i_r2 <= wbs_dat_i_r1;
+    wbs_dat_i_r <= wbs_dat_i_r2;
+    
+    wbs_ack_i_r1 <= wbs_ack_i;
+    wbs_ack_i_r2 <= wbs_ack_i_r1;
+    wbs_ack_i_r  <= wbs_ack_i_r2;
+    
+    wbs_err_i_r1 <= wbs_err_i;
+    wbs_err_i_r2 <= wbs_err_i_r1;
+    wbs_err_i_r  <= wbs_err_i_r2;    
+    
+
   end
 
 
