@@ -125,7 +125,7 @@ module wbs_arbiter(
         
     wbm_dat_o_r1 <= wbm_dat_o_r;
     wbm_dat_o_r2 <= wbm_dat_o_r1; 
-    wbm_dat_o <= wbm_dat_o_r2
+    wbm_dat_o <= wbm_dat_o_r2;
     
     wbm_ack_o_r1 <= wbm_ack_o_r; 
     wbm_ack_o_r2 <= wbm_ack_o_r1;
