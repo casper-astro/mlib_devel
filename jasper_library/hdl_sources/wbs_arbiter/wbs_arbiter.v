@@ -44,6 +44,7 @@ module wbs_arbiter(
   reg [31:0] wbm_adr_i_r;
   reg [31:0] wbm_dat_i_r;
   wire [31:0] wbm_dat_o_r;
+  reg [31:0] wbm_dat_o_r_reg;
   wire       wbm_ack_o_r;
   reg        wbm_err_o_r;
 
@@ -99,6 +100,7 @@ module wbs_arbiter(
   /************************** Common Signals ***************************/
 
   wire [NUM_SLAVES - 1:0] wbs_sel;
+  reg  [NUM_SLAVES - 1:0] wbs_sel_reg;
   reg  [NUM_SLAVES - 1:0] wbs_active;
 
   wire timeout_reset;
@@ -156,32 +158,67 @@ module wbs_arbiter(
  
 
   /* Generate wbs_sel from wbm_adr_i and SLAVE_ADDR & SLAVE_HIGH ie 001 -> slave 0 sel, 100 -> slave 2 sel*/
+//  genvar gen_i;
+//  generate for (gen_i=0; gen_i < NUM_SLAVES; gen_i=gen_i+1) begin : G0
+//    assign wbs_sel[gen_i] = wbm_adr_i_r[32 - 1:0] >= SLAVE_ADDR[32*(gen_i+1) - 1:32*(gen_i)] &&
+//                            wbm_adr_i_r[32 - 1:0] <= SLAVE_HIGH[32*(gen_i+1) - 1:32*(gen_i)];
+//  end endgenerate
+
+  //AI: Adding pipelining to the for loops
   genvar gen_i;
   generate for (gen_i=0; gen_i < NUM_SLAVES; gen_i=gen_i+1) begin : G0
-    assign wbs_sel[gen_i] = wbm_adr_i_r[32 - 1:0] >= SLAVE_ADDR[32*(gen_i+1) - 1:32*(gen_i)] &&
-                            wbm_adr_i_r[32 - 1:0] <= SLAVE_HIGH[32*(gen_i+1) - 1:32*(gen_i)];
+     always @ (posedge wb_clk_i) begin   
+        wbs_sel_reg[gen_i] = wbm_adr_i_r[32 - 1:0] >= SLAVE_ADDR[32*(gen_i+1) - 1:32*(gen_i)] &&
+                             wbm_adr_i_r[32 - 1:0] <= SLAVE_HIGH[32*(gen_i+1) - 1:32*(gen_i)];
+     end                          
   end endgenerate
+  
+  assign wbs_sel = wbs_sel_reg;
+
+
   wire [NUM_SLAVES-1:0] wbs_sel_enc = encode(wbs_sel); //this is the encoded value ie 10 -> 2, 100 -> 3 etc
 
   /* Generate wbs_adr_o from wbm_adr_i and wbs_sel */
   wire [31:0] wbs_adr_o_int;
   wire [31:0] wbs_adr_o_diff;
+  reg [31:0] wbs_adr_o_diff_reg;
 
   assign wbs_adr_o_int = wbm_adr_i_r - wbs_adr_o_diff;
 
+//  genvar gen_j;
+//  generate for (gen_j=0; gen_j < 32; gen_j=gen_j+1) begin : G1
+//    assign wbs_adr_o_diff[gen_j] = SLAVE_ADDR[32*wbs_sel_enc + gen_j];
+//  end endgenerate
+  
+  //AI: Adding pipelining to the for loops
   genvar gen_j;
   generate for (gen_j=0; gen_j < 32; gen_j=gen_j+1) begin : G1
-    assign wbs_adr_o_diff[gen_j] = SLAVE_ADDR[32*wbs_sel_enc + gen_j];
+     always @ (posedge wb_clk_i) begin   
+       wbs_adr_o_diff_reg[gen_j] = SLAVE_ADDR[32*wbs_sel_enc + gen_j];
+     end  
   end endgenerate
+  
+  assign wbs_adr_o_diff = wbs_adr_o_diff_reg;
+  
 
   reg  [31:0] wbs_adr_o_reg;
   assign wbs_adr_o_r = wbs_adr_o_reg;
 
   /* Generate wbm_dat_o from wbs_sel_enc */
+//  genvar gen_k;
+//  generate for (gen_k=0; gen_k < 32; gen_k=gen_k+1) begin : G2
+//    assign wbm_dat_o_r[gen_k] = wbs_dat_i_r[32*wbs_sel_enc + gen_k];
+//  end endgenerate
+  //AI: Adding pipelining to the for loops
   genvar gen_k;
   generate for (gen_k=0; gen_k < 32; gen_k=gen_k+1) begin : G2
-    assign wbm_dat_o_r[gen_k] = wbs_dat_i_r[32*wbs_sel_enc + gen_k];
+     always @ (posedge wb_clk_i) begin 
+       wbm_dat_o_r_reg[gen_k] = wbs_dat_i_r[32*wbs_sel_enc + gen_k]; 
+     end
   end endgenerate
+  
+  assign wbm_dat_o_r = wbm_dat_o_r_reg;    
+
   assign wbm_ack_o_r = (wbs_ack_i_r & wbs_active) != {NUM_SLAVES{1'b0}};
 
   assign wbs_we_o_r = wbm_we_i_r;
