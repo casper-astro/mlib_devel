@@ -28,6 +28,7 @@ class forty_gbe(YellowBlock):
         inst.add_parameter('FABRIC_MAC',     "48'h%x"%self.fab_mac)
         inst.add_parameter('FABRIC_IP',      "32'h%x"%self.fab_ip)
         inst.add_parameter('FABRIC_PORT',    "16'h%x"%self.fab_udp)
+        inst.add_parameter('FABRIC_NETMASK', "32'hFFFFFF00")
         inst.add_parameter('FABRIC_GATEWAY', " 8'h%x"%self.fab_gate)
         inst.add_parameter('FABRIC_ENABLE',  " 1'b%x"%self.fab_en)
         inst.add_parameter('LARGE_PACKETS',  " 1'b%x"%self.large_frames)

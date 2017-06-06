@@ -38,6 +38,7 @@ entity forty_gbe is
         FABRIC_MAC        : std_logic_vector(47 downto 0);
         FABRIC_IP         : std_logic_vector(31 downto 0);
         FABRIC_PORT       : std_logic_vector(15 downto 0);
+        FABRIC_NETMASK    : std_logic_vector(31 downto 0);
         FABRIC_GATEWAY    : std_logic_vector( 7 downto 0);
         FABRIC_ENABLE     : std_logic;
         TTL               : std_logic_vector( 7 downto 0);
@@ -600,6 +601,7 @@ architecture arch_forty_gbe of forty_gbe is
         FABRIC_MAC        : std_logic_vector(47 downto 0);
         FABRIC_IP         : std_logic_vector(31 downto 0);
         FABRIC_PORT       : std_logic_vector(15 downto 0);
+        FABRIC_NETMASK    : std_logic_vector(31 downto 0);
         FABRIC_GATEWAY    : std_logic_vector(7 downto 0);
         FABRIC_ENABLE     : std_logic;
         TTL               : std_logic_vector(7 downto 0);
@@ -2102,6 +2104,7 @@ begin
         FABRIC_MAC        => FABRIC_MAC,
         FABRIC_IP         => FABRIC_IP,
         FABRIC_PORT       => FABRIC_PORT,
+        FABRIC_NETMASK    => FABRIC_NETMASK,
         FABRIC_GATEWAY    => FABRIC_GATEWAY,
         FABRIC_ENABLE     => FABRIC_ENABLE,
         TTL               => TTL,

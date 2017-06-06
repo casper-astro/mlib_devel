@@ -30,6 +30,7 @@ entity wishbone_forty_gb_eth_attach is
         FABRIC_MAC     : std_logic_vector(47 downto 0);
         FABRIC_IP      : std_logic_vector(31 downto 0);
         FABRIC_PORT    : std_logic_vector(15 downto 0);
+        FABRIC_NETMASK : std_logic_vector(31 downto 0);
         FABRIC_GATEWAY : std_logic_vector(7 downto 0);
         FABRIC_ENABLE  : std_logic;
         MC_RECV_IP          : std_logic_vector(31 downto 0);
@@ -73,6 +74,7 @@ entity wishbone_forty_gb_eth_attach is
         local_mac       : out std_logic_vector(47 downto 0);
         local_ip        : out std_logic_vector(31 downto 0);
         local_port      : out std_logic_vector(15 downto 0);
+        local_netmask   : out std_logic_vector(31 downto 0);
         local_gateway   : out std_logic_vector(7 downto 0);
         local_mc_recv_ip        : out std_logic_vector(31 downto 0);
         local_mc_recv_ip_mask   : out std_logic_vector(31 downto 0);
@@ -95,6 +97,7 @@ architecture arch_wishbone_forty_gb_eth_attach of wishbone_forty_gb_eth_attach i
     constant REG_LOCAL_MAC_0 : std_logic_vector(3 downto 0) := X"1";
     constant REG_LOCAL_GATEWAY : std_logic_vector(3 downto 0) := X"3";
     constant REG_LOCAL_IPADDR : std_logic_vector(3 downto 0) := X"4";
+    constant REG_LOCAL_NETMASK : std_logic_vector(3 downto 0) := X"E";
     constant REG_BUFFER_SIZES : std_logic_vector(3 downto 0) := X"6";
     constant REG_VALID_PORTS : std_logic_vector(3 downto 0) := X"8";
     constant REG_XAUI_STATUS : std_logic_vector(3 downto 0) := X"9";
@@ -121,6 +124,7 @@ architecture arch_wishbone_forty_gb_eth_attach of wishbone_forty_gb_eth_attach i
     signal local_mac_reg : std_logic_vector(47 downto 0);
     signal local_ip_reg : std_logic_vector(31 downto 0);
     signal local_gateway_reg : std_logic_vector(7 downto 0);
+    signal local_netmask_reg : std_logic_vector(31 downto 0);
     signal local_port_reg : std_logic_vector(15 downto 0);
     signal local_enable_reg : std_logic;
     signal local_mc_recv_ip_reg : std_logic_vector(31 downto 0);
@@ -156,6 +160,7 @@ begin
     local_mac <= local_mac_reg;
     local_ip <= local_ip_reg;
     local_gateway <= local_gateway_reg;
+    local_netmask <= local_netmask_reg;
     local_port <= local_port_reg;
     local_enable <= local_enable_reg;
     soft_reset <= soft_reset_reg;
@@ -250,6 +255,7 @@ begin
     local_mac_reg(31 downto 0) when (reg_data_src = REG_LOCAL_MAC_0) else
     (X"000000" & local_gateway_reg) when (reg_data_src = REG_LOCAL_GATEWAY) else
     local_ip_reg(31 downto 0) when (reg_data_src = REG_LOCAL_IPADDR) else
+    local_netmask_reg(31 downto 0) when (reg_data_src = REG_LOCAL_NETMASK) else
     (X"00" & cpu_tx_size_reg & X"00" & cpu_rx_size_int) when (reg_data_src = REG_BUFFER_SIZES) else
     ("0000000" & soft_reset_reg & "0000000" & local_enable_reg & local_port_reg) when (reg_data_src = REG_VALID_PORTS) else
     ("0000" & mgt_txdiffctrl_reg & "0000" & mgt_txpreemphasis_reg & "000" & mgt_txpostemphasis_reg & "00000" & mgt_rxeqmix_reg) when (reg_data_src = REG_PHY_CONFIG) else
@@ -273,6 +279,7 @@ begin
             local_mac_reg <= FABRIC_MAC;
             local_ip_reg <= FABRIC_IP;
             local_gateway_reg <= FABRIC_GATEWAY;
+            local_netmask_reg <= FABRIC_NETMASK;
             local_port_reg <= FABRIC_PORT;
             local_enable_reg <= FABRIC_ENABLE;
             local_mc_recv_ip_reg <= MC_RECV_IP;
@@ -343,6 +350,20 @@ begin
                         end if;
                         if (SEL_I(3) = '1')then
                             local_ip_reg(31 downto 24) <= DAT_I(31 downto 24);
+                        end if;
+
+                        when REG_LOCAL_NETMASK =>
+                        if (SEL_I(0) = '1')then
+                            local_netmask_reg(7 downto 0) <= DAT_I(7 downto 0);
+                        end if;
+                        if (SEL_I(1) = '1')then
+                            local_netmask_reg(15 downto 8) <= DAT_I(15 downto 8);
+                        end if;
+                        if (SEL_I(2) = '1')then
+                            local_netmask_reg(23 downto 16) <= DAT_I(23 downto 16);
+                        end if;
+                        if (SEL_I(3) = '1')then
+                            local_netmask_reg(31 downto 24) <= DAT_I(31 downto 24);
                         end if;
 
                         when REG_BUFFER_SIZES =>
