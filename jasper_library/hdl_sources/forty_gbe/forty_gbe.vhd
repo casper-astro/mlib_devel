@@ -1145,8 +1145,15 @@ begin
     CPU_SYS_RESET_N <= '0';
 
     GND <= (others => '0');
-    fpga_reset <= not FPGA_RESET_N;
-    FAN_CONT_RST_N <= FPGA_RESET_N;
+    
+    --Pipeline the FPGA_RESET_N
+    pFpgaResetRegister: process(sys_clk)
+    begin     
+        if (rising_edge(sys_clk) ) then
+           fpga_reset <= not FPGA_RESET_N;
+           FAN_CONT_RST_N <= FPGA_RESET_N;
+        end if;
+    end process pFpgaResetRegister;    
 
 ---------------------------------------------------------------------------
 -- REFCLK CONNECTIONS
