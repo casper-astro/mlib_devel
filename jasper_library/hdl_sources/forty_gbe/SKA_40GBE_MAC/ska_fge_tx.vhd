@@ -33,6 +33,7 @@ entity ska_fge_tx is
     local_enable    : in std_logic;
     local_mac       : in std_logic_vector(47 downto 0);
     local_ip        : in std_logic_vector(31 downto 0);
+    local_netmask   : in std_logic_vector(31 downto 0);
     local_port      : in std_logic_vector(15 downto 0);
     local_gateway   : in std_logic_vector(7 downto 0);
     
@@ -263,6 +264,7 @@ architecture arch_ska_fge_tx of ska_fge_tx is
     signal local_mac_retimed : std_logic_vector(47 downto 0);
     signal local_ip_retimed : std_logic_vector(31 downto 0);
     signal local_port_retimed : std_logic_vector(15 downto 0);
+    signal local_netmask_retimed : std_logic_vector(31 downto 0);
     signal local_gateway_retimed : std_logic_vector(7 downto 0);
     
     signal payload0 : std_logic_vector(63 downto 0);
@@ -327,7 +329,7 @@ begin
             cpu_mac_cross_clock_count <= (others => '0');
         elsif (rising_edge(cpu_clk))then
             if (cpu_mac_cross_clock_fifo_wrreq = '1')then
-                if (cpu_mac_cross_clock_count = "0011")then
+                if (cpu_mac_cross_clock_count = "0100")then
                     cpu_mac_cross_clock_count <= (others => '0');
                 else
                     cpu_mac_cross_clock_count <= cpu_mac_cross_clock_count + "0001";
@@ -342,6 +344,7 @@ begin
     local_mac(31 downto 0) when (cpu_mac_cross_clock_count = "0000") else
     (local_port & local_mac(47 downto 32)) when (cpu_mac_cross_clock_count = "0001") else 
     local_ip when (cpu_mac_cross_clock_count = "0010") else
+    local_netmask when (cpu_mac_cross_clock_count = "0011") else
     ("00000000000000000000000" & local_enable & local_gateway);
     
     cross_clock_fifo_36x16_0 : cross_clock_fifo_36x16
@@ -376,6 +379,8 @@ begin
                     local_port_retimed <= cpu_mac_cross_clock_fifo_dout(31 downto 16);
                 elsif (cpu_mac_cross_clock_fifo_dout(35 downto 32) = "0010")then
                     local_ip_retimed <= cpu_mac_cross_clock_fifo_dout(31 downto 0);
+                elsif (cpu_mac_cross_clock_fifo_dout(35 downto 32) = "0011")then
+                    local_netmask_retimed <= cpu_mac_cross_clock_fifo_dout(31 downto 0);
                 else 
                     local_gateway_retimed <= cpu_mac_cross_clock_fifo_dout(7 downto 0);
                     local_enable_retimed <= cpu_mac_cross_clock_fifo_dout(8);   
@@ -633,9 +638,10 @@ begin
 --                packet_arp_cache_addr <= dest_ip(7 downto 0);
 --            end if;
 --        end if;
---    end process;    
-	
-	packet_arp_cache_addr <= local_gateway when (dest_ip(31 downto 8) /= local_ip(31 downto 8)) else dest_ip(7 downto 0);
+--    end process;
+
+    packet_arp_cache_addr <= local_gateway when ((dest_ip and local_netmask) /= (local_ip and local_netmask)) else dest_ip(7 downto 0);
+    --packet_arp_cache_addr <= local_gateway when (dest_ip(31 downto 8) /= local_ip(31 downto 8)) else dest_ip(7 downto 0);
 	
 -----------------------------------------------------------------------------------------
 -- CPU TX BUFFER

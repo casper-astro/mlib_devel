@@ -3,6 +3,8 @@ def clk_factors (clk_freq, target_freq):
     bestD  = 1
     bestDD = 1
     bestDiff = 1000
+    Period = 1
+    PeriodHalf = 1
 
     # the Multiply value is a even number because we need to divide by 1/2 of
     # it to get the 200MHz clock, which is used for the QDR.
@@ -30,10 +32,15 @@ def clk_factors (clk_freq, target_freq):
 
     closest_freq = clk_freq * bestM / bestD / bestDD;
     sys_clk_VCO = bestM * clk_freq / bestDD;
+    Periodns = (1/closest_freq)*1e3;
+    PeriodHalfns = Periodns/2;
+
 
     print closest_freq
     print sys_clk_VCO
+    print Period
+    print PeriodHalf
 
-    return float(bestM), float(bestD), bestDD
+    return float(bestM), float(bestD), bestDD, float(Periodns), float(PeriodHalfns)
 
 print clk_factors(200,161)

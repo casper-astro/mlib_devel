@@ -30,6 +30,7 @@ entity ska_forty_gb_eth is
         FABRIC_MAC     : std_logic_vector(47 downto 0);
         FABRIC_IP      : std_logic_vector(31 downto 0);
         FABRIC_PORT    : std_logic_vector(15 downto 0);
+        FABRIC_NETMASK : std_logic_vector(31 downto 0);
         FABRIC_GATEWAY : std_logic_vector(7 downto 0);
         FABRIC_ENABLE  : std_logic;
         TTL                 : std_logic_vector(7 downto 0);
@@ -91,6 +92,7 @@ entity ska_forty_gb_eth is
         src_mac_address     : out std_logic_vector(47 downto 0);
         src_enable          : out std_logic;
         src_port            : out std_logic_vector(15 downto 0);
+        src_netmask         : out std_logic_vector(31 downto 0);
         src_gateway         : out std_logic_vector(7 downto 0);
         src_local_mc_recv_ip        : out std_logic_vector(31 downto 0);
         src_local_mc_recv_ip_mask   : out std_logic_vector(31 downto 0);
@@ -119,6 +121,7 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
         FABRIC_MAC     : std_logic_vector(47 downto 0);
         FABRIC_IP      : std_logic_vector(31 downto 0);
         FABRIC_PORT    : std_logic_vector(15 downto 0);
+        FABRIC_NETMASK : std_logic_vector(31 downto 0);
         FABRIC_GATEWAY : std_logic_vector(7 downto 0);
         FABRIC_ENABLE  : std_logic;
         MC_RECV_IP          : std_logic_vector(31 downto 0);
@@ -153,6 +156,7 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
         local_mac       : out std_logic_vector(47 downto 0);
         local_ip        : out std_logic_vector(31 downto 0);
         local_port      : out std_logic_vector(15 downto 0);
+        local_netmask   : out std_logic_vector(31 downto 0);
         local_gateway   : out std_logic_vector(7 downto 0);
         local_mc_recv_ip        : out std_logic_vector(31 downto 0);
         local_mc_recv_ip_mask   : out std_logic_vector(31 downto 0);        
@@ -168,6 +172,7 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
         local_mac       : in std_logic_vector(47 downto 0);
         local_ip        : in std_logic_vector(31 downto 0);
         local_port      : in std_logic_vector(15 downto 0);
+        local_netmask   : in std_logic_vector(31 downto 0);
         local_gateway   : in std_logic_vector(7 downto 0);
         arp_cache_addr      : in std_logic_vector(7 downto 0);
         arp_cache_rd_data   : out std_logic_vector(47 downto 0);
@@ -313,6 +318,7 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
     signal local_mac : std_logic_vector(47 downto 0);
     signal local_ip : std_logic_vector(31 downto 0);
     signal local_port : std_logic_vector(15 downto 0);
+    signal local_netmask : std_logic_vector(31 downto 0);
     signal local_gateway : std_logic_vector(7 downto 0);
     signal soft_reset : std_logic;
     signal soft_reset_ack : std_logic;
@@ -407,6 +413,7 @@ begin
     src_mac_address <= local_mac;
     src_enable <= local_enable;
     src_port <= local_port;
+    -- src_netmask <= local_netmask;
     src_gateway <= local_gateway;
     src_local_mc_recv_ip <= local_mc_recv_ip;
     src_local_mc_recv_ip_mask <= local_mc_recv_ip_mask;
@@ -524,6 +531,7 @@ begin
         FABRIC_MAC     => FABRIC_MAC,
         FABRIC_IP      => FABRIC_IP,
         FABRIC_PORT    => FABRIC_PORT,
+        FABRIC_NETMASK => FABRIC_NETMASK,
         FABRIC_GATEWAY => FABRIC_GATEWAY,
         FABRIC_ENABLE  => FABRIC_ENABLE,
         MC_RECV_IP          => X"FFFFFFFF",
@@ -558,6 +566,7 @@ begin
         local_mac       => local_mac,
         local_ip        => local_ip,
         local_port      => local_port,
+        local_netmask   => local_netmask,
         local_gateway   => local_gateway,
         local_mc_recv_ip        => local_mc_recv_ip,
         local_mc_recv_ip_mask   => local_mc_recv_ip_mask,        
@@ -576,6 +585,7 @@ begin
         local_mac       => local_mac,
         local_ip        => local_ip,
         local_port      => local_port,
+        local_netmask   => local_netmask,
         local_gateway   => local_gateway,
         arp_cache_addr      => arp_cache_addr,
         arp_cache_rd_data   => arp_cache_rd_data,

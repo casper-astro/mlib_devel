@@ -15,18 +15,20 @@ class forty_gbe(YellowBlock):
         # Wishbone memory for status registers / ARP table
         #fgbe.add_wb_interface(self.unique_name, mode='rw', nbytes=0x4000) # as in matlab code
 
-        multiply, divide, divclk = clk_factors(156.25, self.platform.user_clk_rate)
+        #multiply, divide, divclk = clk_factors(156.25, self.platform.user_clk_rate)
+        clkparams = clk_factors(156.25, self.platform.user_clk_rate)
 
         inst = top.get_instance(name=self.fullname, entity='forty_gbe', comment=self.fullname)
         # mmcm specific parameters
-        inst.add_parameter('MULTIPLY', multiply)
-        inst.add_parameter('DIVIDE',   divide)
-        inst.add_parameter('DIVCLK',   divclk)
+        inst.add_parameter('MULTIPLY', clkparams[0])
+        inst.add_parameter('DIVIDE',   clkparams[1])
+        inst.add_parameter('DIVCLK',   clkparams[2])
 
         # forty gbe specific parameters
         inst.add_parameter('FABRIC_MAC',     "48'h%x"%self.fab_mac)
         inst.add_parameter('FABRIC_IP',      "32'h%x"%self.fab_ip)
         inst.add_parameter('FABRIC_PORT',    "16'h%x"%self.fab_udp)
+        inst.add_parameter('FABRIC_NETMASK', "32'hFFFFFF00")
         inst.add_parameter('FABRIC_GATEWAY', " 8'h%x"%self.fab_gate)
         inst.add_parameter('FABRIC_ENABLE',  " 1'b%x"%self.fab_en)
         inst.add_parameter('LARGE_PACKETS',  " 1'b%x"%self.large_frames)
@@ -310,6 +312,8 @@ class forty_gbe(YellowBlock):
         #cons.append(PortConstraint('AUX_SYNCI_P','AUX_SYNCI_P'))
         #cons.append(PortConstraint('AUX_SYNCO_N','AUX_SYNCO_N'))
         #cons.append(PortConstraint('AUX_SYNCI_N', 'AUX_SYNCI_N'))
+        #Need to extract the period and half period for creating the clock
+        periodparam = clk_factors(156.25, self.platform.user_clk_rate)
 
         #Port constraints
         cons.append(PortConstraint('MEZ3_PHY11_LANE_TX_P', 'MEZ3_PHY11_LANE_TX_P', port_index=range(4),  iogroup_index=range(4)))
@@ -432,6 +436,7 @@ class forty_gbe(YellowBlock):
         cons.append(ClockConstraint(name='VIRTUAL_clkout0', period=8.0, port_en=False, virtual_en=True, waveform_min=0.0, waveform_max=4.0))
         cons.append(ClockConstraint(name='VIRTUAL_clkout0_1', period=6.4, port_en=False, virtual_en=True, waveform_min=0.0, waveform_max=3.2))
         cons.append(ClockConstraint(name='virtual_clock', period=6.4, port_en=False, virtual_en=True, waveform_min=0.0, waveform_max=3.2))
+        cons.append(ClockConstraint(name='VIRTUAL_I', period=periodparam[3], port_en=False, virtual_en=True, waveform_min=0.0, waveform_max=periodparam[4]))
 
         #Generate Clock Constraints
         cons.append(GenClockConstraint(signal='%s/wishbone_flash_sdram_interface_0/icape_controller_0/icape_clk_count_reg[3]/Q' % self.fullname, name='%s/wishbone_flash_sdram_interface_0/icape_controller_0/CLK' % self.fullname, divide_by=16, clock_source='%s/wishbone_flash_sdram_interface_0/icape_controller_0/icape_clk_count_reg[3]/C' % self.fullname))
@@ -469,7 +474,18 @@ class forty_gbe(YellowBlock):
         cons.append(ClockGroupConstraint('FPGA_REFCLK_BUF0_P', 'virtual_clock', 'asynchronous'))
         cons.append(ClockGroupConstraint('MEZ3_REFCLK_0_P', 'virtual_clock', 'asynchronous'))
         cons.append(ClockGroupConstraint('VIRTUAL_clkout0', 'virtual_clock', 'asynchronous'))
-
+        cons.append(ClockGroupConstraint('VIRTUAL_I', 'virtual_clock', 'asynchronous'))
+        cons.append(ClockGroupConstraint('virtual_clock', 'VIRTUAL_I', 'asynchronous'))
+        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname,'VIRTUAL_I', 'asynchronous'))
+        cons.append(ClockGroupConstraint('VIRTUAL_I', '-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
+        cons.append(ClockGroupConstraint('VIRTUAL_I', 'FPGA_EMCCLK2', 'asynchronous'))
+        cons.append(ClockGroupConstraint('FPGA_EMCCLK2', 'VIRTUAL_I', 'asynchronous'))
+        cons.append(ClockGroupConstraint('VIRTUAL_I', 'FPGA_REFCLK_BUF0_P', 'asynchronous'))
+        cons.append(ClockGroupConstraint('FPGA_REFCLK_BUF0_P', 'VIRTUAL_I', 'asynchronous'))
+        cons.append(ClockGroupConstraint('-include_generated_clocks FPGA_REFCLK_BUF1_P', 'VIRTUAL_I', 'asynchronous'))
+        cons.append(ClockGroupConstraint('VIRTUAL_I', '-include_generated_clocks FPGA_REFCLK_BUF1_P', 'asynchronous'))
+        cons.append(ClockGroupConstraint('VIRTUAL_I', 'MEZ3_REFCLK_0_P', 'asynchronous'))
+        cons.append(ClockGroupConstraint('MEZ3_REFCLK_0_P', 'VIRTUAL_I','asynchronous'))
         #Input Constraints
         cons.append(InputDelayConstraint(clkname='FPGA_REFCLK_BUF0_P', consttype='min', constdelay_ns=3.0, add_delay_en=True, portname='FLASH_DQ[*]'))
         cons.append(InputDelayConstraint(clkname='FPGA_REFCLK_BUF0_P', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='FLASH_DQ[*]'))
@@ -573,6 +589,8 @@ class forty_gbe(YellowBlock):
         cons.append(InputDelayConstraint(clkname='virtual_clock', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='EMCCLK'))
         cons.append(InputDelayConstraint(clkname='virtual_clock', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='FPGA_RESET_N'))
         cons.append(InputDelayConstraint(clkname='virtual_clock', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='FPGA_RESET_N'))
+        cons.append(InputDelayConstraint(clkname='VIRTUAL_I', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='FPGA_RESET_N'))
+        cons.append(InputDelayConstraint(clkname='VIRTUAL_I', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='FPGA_RESET_N'))
 
         # Output Constraints
         cons.append(OutputDelayConstraint(clkname='FPGA_REFCLK_BUF0_P', consttype='min', constdelay_ns=-2.5, add_delay_en=True, portname='FLASH_A[*]'))
