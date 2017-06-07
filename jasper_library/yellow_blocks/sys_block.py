@@ -8,11 +8,11 @@ class sys_block(YellowBlock):
         self.add_source('sys_block')
         # the internal memory_map
         self.memory_map = [
-            Register('sys_board_id', mode='r', offset=0),
-            Register('sys_rev', mode='r', offset=0x4),
-            Register('sys_rev_rcs', mode='r', offset=0xc),
-            Register('sys_scratchpad', mode='r', offset=0x10),
-            Register('sys_clkcounter', mode='r', offset=0x14),
+            Register('sys_board_id',   mode='r',  offset=0),
+            Register('sys_rev',        mode='r',  offset=0x4),
+            Register('sys_rev_rcs',    mode='r',  offset=0xc),
+            Register('sys_scratchpad', mode='rw', offset=0x10),
+            Register('sys_clkcounter', mode='r',  offset=0x14),
         ]
     def modify_top(self,top):
         inst = top.get_instance('sys_block', 'sys_block_inst')
