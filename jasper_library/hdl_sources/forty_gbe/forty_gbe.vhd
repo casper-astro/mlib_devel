@@ -909,6 +909,8 @@ architecture arch_forty_gbe of forty_gbe is
     
     --AI start: Add fortygbe config interface 
     signal select_forty_gbe_data_sel : std_logic;
+    signal forty_gb_eth_clk : std_logic;
+    signal forty_gb_eth_rst : std_logic;
     signal fgbe_config_en : std_logic; 
     signal fgbe_link_status : std_logic;  --status of the 40GbE links for auto-sensing the configuration interface
     signal fgbe_reg_sel : std_logic;      --this is a register that can override the auto-sensing function if need be  
@@ -2097,6 +2099,17 @@ begin
     xlgmii_rx_overrun_ack <= xlgmii_rx_overrun_ack_flash_sdram_controller(0) when (select_forty_gbe_data_sel  = '0') else forty_gbe_rx_overrun_ack;
     xlgmii_rx_ack <= xlgmii_rx_ack_flash_sdram_controller(0) when (select_forty_gbe_data_sel  = '0') else forty_gbe_rx_ack;
     --AI End: Added fortygbe config interface
+    
+    --AI: Allows 40GbE configuration using the system clock and normal 40GbE data interfacing using the user clock
+    fpga_user_sysclk_bufgmux_ctrl : BUFGMUX_CTRL
+    port map (
+        I0 => sys_clk,
+        I1 => user_clk,
+        S  => select_forty_gbe_data_sel,
+        O  => forty_gb_eth_clk);  
+        
+    --AI: Allows 40GbE configuration using the system reset and normal 40GbE data interfacing using the user reset    
+    forty_gb_eth_rst <= sys_rst when (select_forty_gbe_data_sel  = '0') else user_rst; 
 
     -- WISHBONE SLAVE 10 - 40GBE MAC 0
     ska_forty_gb_eth_0 : ska_forty_gb_eth
@@ -2111,8 +2124,8 @@ begin
         PROMISC_MODE      => PROMISC_MODE,
         RX_CRC_CHK_ENABLE => RX_CRC_CHK_ENABLE)
     port map(
-        clk => user_clk,
-        rst => user_rst,
+        clk => forty_gb_eth_clk, --user_clk,
+        rst => forty_gb_eth_rst, --user_rst,
         tx_valid            => xlgmii_tx_valid,
         tx_end_of_frame     => xlgmii_tx_end_of_frame,
         tx_data             => xlgmii_tx_data,
