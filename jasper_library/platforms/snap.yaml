@@ -1,6 +1,7 @@
 name: snap
 manufacturer: Xilinx
 fpga: xc7k160tffg676-2
+#fpga: xc7k410tffg676-2
 backend_target: vivado
 sources: []
 constraints: []
@@ -497,6 +498,19 @@ pins:
       - 'H18'
       - '' # GND
       - 'H17'
+  spi_flash_data:
+    iostd: LVCMOS25
+    loc:
+      - B24
+      - A25
+      - B22
+      - A22
+  #spi_flash_clk:
+  #  iostd: LVCMOS25
+  #  loc: 
+  spi_flash_csn:
+    iostd: LVCMOS25
+    loc: C23
       
 
 
