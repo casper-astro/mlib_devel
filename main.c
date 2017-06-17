@@ -57,7 +57,6 @@
 #include "casper_devcsl.h"
 
 #define HEARTBEAT_MS 10000
-#define DEBUG_ETH_0_CORE
 
 int main()
 {
