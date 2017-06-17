@@ -61,15 +61,18 @@
 
 int main()
 {
-    int i, j;
+    int i;
+#ifdef PRINT_SPI_DETAILS
+    int j;
+#endif
 #ifdef DEBUG_ETH_0_CORE
     int rx_size;
 #endif
     int fpga_temp;
-    u8 buf[128];
-    u32 len;
     uint32_t next_ms = HEARTBEAT_MS;
     uint32_t curr_ms;
+    u32 len;
+    u8 buf[128];
 #ifdef JAM_TEST_TMRCTR
     u64 time0, time1;
     u32 tick0, tick1;
@@ -113,7 +116,9 @@ int main()
     for(i=1; i<len; i++) { // skip munged opcode byte
       xil_printf(" %02x", buf[i]);
     }
-    print("\n       ");
+    print("\n");
+#ifdef PRINT_SPI_DETAILS
+    print("       ");
     // Read rest of UID using length from last byte
     len = buf[--i];
     send_spi(buf, buf, len, 0);
@@ -174,6 +179,8 @@ int main()
       print("\n");
     }
     print("\n");
+#endif //  PRINT_SPI_DETAILS
+
 
     //ICAP initialization
     init_icap();
@@ -183,7 +190,7 @@ int main()
       u32 tic = *preg;
       sleep(1);
       u32 toc = *preg;
-      xil_printf("fabric clock running at %d Hz\n\n", toc-tic);
+      xil_printf("fabric clock: %d Hz\n\n", toc-tic);
     } else {
       print("sys_clkcounter not found\n");
     }
