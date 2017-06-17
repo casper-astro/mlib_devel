@@ -55,6 +55,7 @@
 #include "spi.h"
 #include "casper_eth.h"
 #include "casper_devcsl.h"
+#include "icap.h"
 
 #define HEARTBEAT_MS 10000
 
@@ -173,6 +174,9 @@ int main()
       print("\n");
     }
     print("\n");
+
+    //ICAP initialization
+    init_icap();
 
     // Look for sys_clkcounter register
     if((preg = casper_find_dev("sys_clkcounter", NULL))) {
