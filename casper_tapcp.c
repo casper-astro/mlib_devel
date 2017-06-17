@@ -63,8 +63,9 @@
 //     `NBYTES` is ignored on writes because the amount of data written is
 //     determined by the amount of data sent by the client.
 //
-//   - `/progdev[TBD]`  A future command will be added to allow uploading a new
-//     bitstream.  The exact details are under development.
+//   - `/progdev` [WO] Write a 32-bit address to this register to trigger a
+//      reprogramming of the FPGA from this address in flash memory.
+//      It is assumed that a valid boot image exists at this location. 
 //
 //   - `/flash[TBD]` A future command will be added to access the FLASH device
 //     attached to the FPGA.
@@ -91,7 +92,7 @@
 //     |-- fpga.*
 //     |-- help
 //     |-- listdev
-//     |-- progdev.TBD
+//     |-- progdev
 //     `-- temp
 //
 // ## Read Formats
@@ -173,6 +174,7 @@
 #include "casper_tapcp.h"
 #include "casper_devcsl.h"
 #include "csl.h"
+#include "icap.h"
 
 // FPGA memory space macros
 #define FPGA_BASEADDR XPAR_AXI_SLAVE_WISHBONE_CLASSIC_MASTER_0_BASEADDR
@@ -185,6 +187,7 @@ static char tapcp_help_msg[] =
 "  /help    - this message\n"
 "  /listdev - list FPGA device info\n"
 "  /temp    - get FPGA temperature\n"
+"  /progdev - Boot FPGA from flash.\n"
 "  [/dev/]DEVNAME[.OFFSET[.LENGTH]] - access DEVNAME\n"
 "  /fpga.OFFSET[.LENGTH] - access FPGA memory space\n"
 "  /cpu.OFFSET[.LENGTH]  - access CPU memory space\n"
@@ -702,6 +705,45 @@ casper_tapcp_write_fpga_words_binary(
   return tot_len;
 }
 
+// Reads 4 bytes from pbuf and interprets as a flash address
+// from which to reprogram the FPGA
+static
+int
+casper_tapcp_write_progdev(
+    struct tapcp_state *state, struct pbuf *pbuf)
+{
+
+  uint8_t *p;
+  int len = 0;
+  static uint32_t word;
+
+  if(!state->binary) {
+    return -1; // Ascii mode not implemented
+  }
+
+  if(!pbuf) {
+    return -1; // No pbuf!
+  }
+
+  if(pbuf->len != 4) {
+    return -1; // Error!
+  }
+
+  // Copy pbuf payload data
+  p = pbuf->payload;
+  for(len = 0; len < pbuf->len; len++) {
+    // Read byte into word
+    word <<= 8;
+    word |= *p++ & 0xff;
+  }
+
+  // Reboot the FPGA using the received value as the target address
+  xil_printf("Attempting to reprogram from address %d\n", word);
+  icap_reprog_from_flash(word);
+  // We'll never get here...
+  return len;
+}
+
 // Reads hex formatted text from pbuf and writes them to FPGA.
 // Writes to CPU memory are disallowed as too dangerous.
 static
@@ -847,6 +889,12 @@ casper_tapcp_open_listdev(struct tapcp_state *state)
     state->lidx = -1;
     set_tftp_read((tftp_read_f)casper_tapcp_read_listdev_ascii);
   }
+  return state;
+}
+
+void *
+casper_tapcp_open_progdev(struct tapcp_state *state) {
+  set_tftp_write((tftp_write_f)casper_tapcp_write_progdev);
   return state;
 }
 
