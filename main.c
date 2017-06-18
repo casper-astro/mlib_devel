@@ -181,10 +181,6 @@ int main()
     print("\n");
 #endif //  PRINT_SPI_DETAILS
 
-
-    //ICAP initialization
-    init_icap();
-
     // Look for sys_clkcounter register
     if((preg = casper_find_dev("sys_clkcounter", NULL))) {
       u32 tic = *preg;

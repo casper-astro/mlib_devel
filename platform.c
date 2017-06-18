@@ -36,6 +36,7 @@
 
 #include "tmrctr.h"
 #include "spi.h"
+#include "icap.h"
 
 #include "platform_config.h"
 
@@ -114,6 +115,7 @@ init_platform()
     init_uart();
     init_sysmon();
     init_spi();
+    init_icap();
 }
 
 void
