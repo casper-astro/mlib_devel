@@ -1136,7 +1136,9 @@ begin
     forty_gbe_tx_afull        <= xlgmii_tx_afull;
     forty_gbe_rx_valid        <= xlgmii_rx_valid;
     forty_gbe_rx_end_of_frame <= xlgmii_rx_end_of_frame;
-    forty_gbe_rx_data         <= xlgmii_rx_data;
+    --AI: Rx Data incorrectly mapped and needs to be mapped correctly such that forty_gbe_rx_data[255:0] maps correctly to 40GbE MAC rx data[255:0]
+    --forty_gbe_rx_data         <= xlgmii_rx_data;
+    forty_gbe_rx_data(255 downto 0) <= xlgmii_rx_data(63 downto 0) & xlgmii_rx_data(127 downto 64) & xlgmii_rx_data(191 downto 128) &  xlgmii_rx_data(255 downto 192);    
     forty_gbe_rx_source_ip    <= xlgmii_rx_source_ip;
     forty_gbe_rx_source_port  <= xlgmii_rx_source_port;
     forty_gbe_rx_bad_frame    <= xlgmii_rx_bad_frame;
