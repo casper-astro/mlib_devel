@@ -33,17 +33,17 @@ init_icap()
 {
     // First obtain the configuration structure pointer
     if (!(xicap_config = XHwIcap_LookupConfig(XPAR_AXI_HWICAP_0_DEVICE_ID))) {
-        xil_printf("ICAP lookup failed\n");
+        xil_printf("ICAP lookup FAIL\n");
     }
     // Now use this pointer to initialize the HWICAP device
     if (XHwIcap_CfgInitialize(&xicap, xicap_config, xicap_config->BaseAddress) != XST_SUCCESS) {
-        xil_printf("ICAP failed to initialize\n");
+        xil_printf("ICAP init FAIL\n");
     } else {
-        xil_printf("ICAP initialized OK\n");
+        xil_printf("ICAP initialized\n");
     }
 }
 
-uint32_t
+void
 icap_reprog_from_flash(uint32_t wbstar_addr)
 {
     uint32_t i=0;
@@ -56,5 +56,4 @@ icap_reprog_from_flash(uint32_t wbstar_addr)
     XHwIcap_WriteReg(xicap_config->BaseAddress, XHI_CR_OFFSET, XHI_CR_WRITE_MASK);
 
     // We should reprogram here, so never reach the following code
-    return XST_SUCCESS;
 }
