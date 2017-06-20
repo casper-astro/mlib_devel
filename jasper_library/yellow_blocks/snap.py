@@ -5,6 +5,12 @@ class snap(YellowBlock):
     def initialize(self):
         self.add_source('infrastructure')
         self.add_source('wbs_arbiter')
+        # 32-bit addressing => second half of 32 MByte memory. See UG470 v1.11 Table 7.2, Note 1
+        self.usermemaddr = 0x800000  >> 8 
+        if self.golden:
+            self.thismemaddr = 0
+        else:
+            self.thismemaddr = self.usermemaddr
 
     def modify_top(self,top):
         inst = top.get_instance('snap_infrastructure', 'snap_infrastructure_inst')
@@ -31,7 +37,7 @@ class snap(YellowBlock):
         return children
 
     def gen_constraints(self):
-        return [
+        cons =[
             PortConstraint('sys_clk_n', 'sys_clk_n'),
             PortConstraint('sys_clk_p', 'sys_clk_p'),
             ClockConstraint('sys_clk_p', period=5.0),
@@ -39,10 +45,22 @@ class snap(YellowBlock):
             RawConstraint('set_property CFGBVS VCCO [current_design]'),
             RawConstraint('set_property BITSTREAM.CONFIG.CONFIGRATE 33 [current_design]'),
             RawConstraint('set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]'),
+            RawConstraint('set_property BITSTREAM.CONFIG.SPI_32BIT_ADDR Yes [current_design]'),
+            RawConstraint('set_property BITSTREAM.CONFIG.TIMER_CFG 2000000 [current_design]'), # about 10 seconds
         ]
+        if self.golden:
+            #cons += [RawConstraint('set_property BITSTREAM.CONFIG.NEXT_CONFIG_ADDR 0x%.7x [current_design]' % self.usermemaddr),]
+            pass
+        else:
+            cons += [RawConstraint('set_property BITSTREAM.CONFIG.CONFIGFALLBACK ENABLE [current_design]'),]
+        return cons
 
     def gen_tcl_cmds(self):
         tcl_cmds = {}
         # After generating bitstream write PROM file
-        tcl_cmds['promgen'] = ['write_cfgmem  -format mcs -size 32 -interface SPIx4 -loadbit "up 0x00000000 ./myproj.runs/impl_1/top.bit " -checksum -file "./myproj.runs/impl_1/top.mcs"']
+        # Write both mcs and bin files. The latter are good for remote programming via microblaze. And makes sure the
+        # microblaze code makes it into top.bin, and hence top.bof
+        tcl_cmds['promgen'] = []
+        tcl_cmds['promgen'] += ['write_cfgmem  -format mcs -size 32 -interface SPIx4 -loadbit "up 0x%.7x ./myproj.runs/impl_1/top.bit " -checksum -file "./myproj.runs/impl_1/top.mcs" -force' % self.thismemaddr]
+        tcl_cmds['promgen'] += ['write_cfgmem  -format bin -size 32 -interface SPIx4 -loadbit "up 0x%.7x ./myproj.runs/impl_1/top.bit " -checksum -file "./myproj.runs/impl_1/top.bin" -force' % self.thismemaddr]
         return tcl_cmds
