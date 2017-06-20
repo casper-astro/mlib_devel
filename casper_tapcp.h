@@ -24,5 +24,6 @@ void * casper_tapcp_open_temp(struct tapcp_state *state);
 void * casper_tapcp_open_dev(struct tapcp_state *state, const char *fname);
 void * casper_tapcp_open_mem(struct tapcp_state *state, const char *fname);
 void * casper_tapcp_open_progdev(struct tapcp_state *state);
+void * casper_tapcp_open_flash(struct tapcp_state *state, const char *fname);
 
 #endif // _CASPER_TAPCP_H_

@@ -67,8 +67,10 @@
 //      reprogramming of the FPGA from this address in flash memory.
 //      It is assumed that a valid boot image exists at this location. 
 //
-//   - `/flash[TBD]` A future command will be added to access the FLASH device
-//     attached to the FPGA.
+//   - `/flash.WORD_ADDR[.NWORDS]` Accesses the on-board flash memory.
+//     `WORD_ADDR` (required) and `NWORDS` (optional) are given in
+//     hexadecimal, and are counted in 4-byte words. This probably should
+//     be changed to bytes.
 //
 // The `/help`, `/listdev`, `/temp`, and `/cpu` commands are read-only and can
 // only be used with "get" operations.  Trying to "put" to them will result in
@@ -175,6 +177,7 @@
 #include "casper_devcsl.h"
 #include "csl.h"
 #include "icap.h"
+#include "flash.h"
 #include "sleep.h"
 
 // FPGA memory space macros
@@ -184,14 +187,16 @@
 
 // Help message
 static char tapcp_help_msg[] =
-"Available TAPCP commands:\n"
-"  /help    - this message\n"
-"  /listdev - list FPGA device info\n"
-"  /temp    - get FPGA temperature\n"
-"  /progdev - Boot FPGA from flash.\n"
-"  [/dev/]DEVNAME[.OFFSET[.LENGTH]] - access DEVNAME\n"
-"  /fpga.OFFSET[.LENGTH] - access FPGA memory space\n"
-"  /cpu.OFFSET[.LENGTH]  - access CPU memory space\n"
+//"Available TAPCP commands:\n"
+//"  /help    - this message\n"
+//"  /listdev - list FPGA device info\n"
+//"  /temp    - get FPGA temperature\n"
+//"  /progdev - Boot FPGA from flash.\n"
+//"  /flash.OFFSET[.LENGTH] - access flash memory\n"
+//"  [/dev/]DEVNAME[.OFFSET[.LENGTH]] - access DEVNAME\n"
+//"  /fpga.OFFSET[.LENGTH] - access FPGA memory space\n"
+//"  /cpu.OFFSET[.LENGTH]  - access CPU memory space\n"
+""
 ;
 
 // Externally linked core_info data
@@ -309,36 +314,36 @@ casper_tapcp_read_temp(struct tapcp_state *state, void *buf, int bytes)
   }
 
   int len = 0;
-  float fpga_temp = get_fpga_temp();
-
-  if(state->binary) {
-    //*(uint32_t *)buf = mb_swapb(*(uint32_t *)&fpga_temp);
-    *(uint32_t *)buf = mb_swapb(fpga_temp);
-    len = 4;
-  } else {
-    char * bbuf = (char *)buf;
-    // t is integer temp in deci-degrees
-    int t = (int)(10 * fpga_temp);
-    // Hundreds place
-    if(t > 1000) {
-      *bbuf++ = '0' + (t/1000) % 10;
-      len++;
-    }
-    // Tens place
-    if(t > 100) {
-      *bbuf++ = '0' + (t/100) % 10;
-      len++;
-    }
-    // Ones place
-    *bbuf++ = '0' + (t/10) % 10;
-    // Decimal point
-    *bbuf++ = '.';
-    // Tenths place
-    *bbuf++ = '0' + t % 10;
-    // Newline
-    *bbuf++ = '\n';
-    len += 4;
-  }
+  //float fpga_temp = get_fpga_temp();
+  //
+  //if(state->binary) {
+  //  //*(uint32_t *)buf = mb_swapb(*(uint32_t *)&fpga_temp);
+  //  *(uint32_t *)buf = mb_swapb(fpga_temp);
+  //  len = 4;
+  //} else {
+  //  char * bbuf = (char *)buf;
+  //  // t is integer temp in deci-degrees
+  //  int t = (int)(10 * fpga_temp);
+  //  // Hundreds place
+  //  if(t > 1000) {
+  //    *bbuf++ = '0' + (t/1000) % 10;
+  //    len++;
+  //  }
+  //  // Tens place
+  //  if(t > 100) {
+  //    *bbuf++ = '0' + (t/100) % 10;
+  //    len++;
+  //  }
+  //  // Ones place
+  //  *bbuf++ = '0' + (t/10) % 10;
+  //  // Decimal point
+  //  *bbuf++ = '.';
+  //  // Tenths place
+  //  *bbuf++ = '0' + t % 10;
+  //  // Newline
+  //  *bbuf++ = '\n';
+  //  len += 4;
+  //}
 
 #ifdef VERBOSE_TAPCP_IMPL
   xil_printf("%s(%p, %p, %d) = %d\n", __FUNCTION__,
@@ -443,6 +448,31 @@ casper_tapcp_read_listdev_ascii(
       plb++;
     }
   }
+
+  return len;
+}
+
+// Reads bytes from flash address state->ptr
+// Either read len=bytes, or state->nleft, if this is less than bytes
+static
+int
+casper_tapcp_read_flash_bytes_binary(
+    struct tapcp_state *state, void *buf, int bytes)
+{
+  int len = 0;
+  len = state->nleft > bytes ? bytes : state->nleft;
+  // if len=0 then just return
+  if(!len){
+    return len;
+  }
+  len = flash_read((uint32_t)state->ptr, (uint8_t *)buf, len);
+  state->nleft -= len;
+  state->ptr += len*(sizeof(uint8_t));
+
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("%s(%p, %p, %d) = %d/%d\n", __FUNCTION__,
+      state, buf, bytes, len, state->nleft);
+#endif
 
   return len;
 }
@@ -647,6 +677,58 @@ casper_tapcp_read_fpga_words_ascii(
 }
 
 // Write helpers
+// Reads bytes from pbuf and writes them to Flash.
+// Flash sector erases are performed as needed as the write progresses
+// Writes are sent to the SPI chip in 4-byte chunks, and executed when
+// a full page of writes is complete.
+// It is assumed that the FLASH_SECTOR_SIZE is a multiple of FLASH_PAGE_SIZE
+static
+int
+casper_tapcp_write_flash_words_binary(
+    struct tapcp_state *state, struct pbuf *pbuf)
+{
+  // state->ptr is offset address in bytes of flash entry point
+  // state->u32 is number of bytes already written
+
+  uint8_t *p;
+  int len = 0;
+  int tot_len = 0;
+  uint8_t page[FLASH_PAGE_SIZE];
+
+  // While we have pbufs
+  while(pbuf) {
+    // Copy pbuf payload data
+    p = pbuf->payload;
+    for(len = 0; len < pbuf->len; len++) {
+      // If we are in a new flash sector, erase it
+      if ((((uint32_t)state->ptr) % FLASH_SECTOR_SIZE) == 0) {
+        flash_erase_sector((uint32_t)state->ptr);
+      }
+      // Read byte into word
+      page[state->u32 % FLASH_PAGE_SIZE] = *p++;
+      state->ptr += sizeof(uint8_t);
+      // If word is full, write it to flash
+      if((++state->u32 % FLASH_PAGE_SIZE) == 0) {
+        flash_write_page(((uint32_t)state->ptr) - FLASH_PAGE_SIZE, page, FLASH_PAGE_SIZE);
+      }
+    }
+
+    // If last pbuf in chain
+    if(pbuf->tot_len <= pbuf->len) {
+      break;
+    }
+
+    // Setup for next pbuf, if any
+    pbuf = pbuf->next;
+  }
+
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("%s(%p, %p, [%u/%u]) = %d\n", __FUNCTION__,
+      state, pbuf, pbuf->len, pbuf->tot_len, tot_len);
+#endif
+
+  return tot_len;
+}
 
 // Reads bytes from pbuf and writes them to FPGA.
 // Writes to CPU memory are disallowed as too dangerous.
@@ -739,7 +821,7 @@ casper_tapcp_write_progdev(
   }
 
   // Reboot the FPGA using the received value as the target address
-  xil_printf("Attempting to reprogram from address %d\n", word);
+  xil_printf("Reboot from addr: %08x\n", word);
   sleep(1); // Sleep here, or the print will never make it out the UART
   icap_reprog_from_flash(word);
   // We'll never get here...
@@ -897,6 +979,77 @@ casper_tapcp_open_listdev(struct tapcp_state *state)
 void *
 casper_tapcp_open_progdev(struct tapcp_state *state) {
   set_tftp_write((tftp_write_f)casper_tapcp_write_progdev);
+  return state;
+}
+
+void *
+casper_tapcp_open_flash(struct tapcp_state *state, const char *fname)
+{
+  uint8_t *p = NULL;
+  uint32_t cmd_off = 0; // From command line
+  uint32_t cmd_len = 0; // From command line
+
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("%s fname '%s'\n", __FUNCTION__, fname);
+#endif
+
+  // Only allow binary operations
+  if(!state->binary) {
+    return NULL;
+  }
+
+  // advance past leading "/flash."
+  // We must have already checked the string starts with "/flash." before calling
+  // this function
+  fname += strlen("/flash.");
+
+  // Parse "command line"
+
+  p = (uint8_t *)fname;
+  // Offset is required
+  if(!*p) {
+    return NULL;
+  }
+
+  // Read hex value into cmd_off
+  p = hex_to_u32(p, &cmd_off);
+  //xil_printf("offset: %d\n", cmd_off);
+  // If reading and not at end of string
+  // (ignore client supplied length on writes)
+  if(!state->write && *p) {
+    // Read length info cmd_len
+    p = hex_to_u32(++p, &cmd_len);
+    //xil_printf("len: %d\n", cmd_len);
+  }
+
+  // convert words to bytes
+  cmd_off = cmd_off << 2;
+  cmd_len = cmd_len << 2;
+
+  // If a write command, the offset should be at the start of a sector
+  if(state->write) {
+    if ((cmd_off % FLASH_SECTOR_SIZE) != 0) {
+      return NULL;
+    }
+  }
+
+  // Pointer value is offset in flash memory
+  state->ptr = (void *)cmd_off;
+  // nleft is a byte count
+  state->nleft = cmd_len;
+
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("ptr=%p nleft=%u\n", state->ptr, state->nleft);
+#endif
+
+  // Only allow binary transactions
+  if(!state->write) {
+    set_tftp_read((tftp_read_f)casper_tapcp_read_flash_bytes_binary);
+  } else {
+    state->u32 = 0; //used to track words written
+    set_tftp_write((tftp_write_f)casper_tapcp_write_flash_words_binary);
+  }
+
   return state;
 }
 
