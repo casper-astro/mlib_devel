@@ -61,9 +61,11 @@
 
 int main()
 {
-    int i;
 #ifdef PRINT_SPI_DETAILS
+    int i;
     int j;
+    u32 len;
+    u8 buf[128];
 #endif
 #ifdef DEBUG_ETH_0_CORE
     int rx_size;
@@ -71,17 +73,14 @@ int main()
     int fpga_temp;
     uint32_t next_ms = HEARTBEAT_MS;
     uint32_t curr_ms;
-    u32 len;
-    u8 buf[128];
 #ifdef JAM_TEST_TMRCTR
     u64 time0, time1;
     u32 tick0, tick1;
 #endif // JAM_TEST_TMRCTR
-    uint32_t *preg;
 
     init_platform();
 
-    print("\n# JAM starting\n\n");
+    xil_printf("\n# JAM starting\n\n");
 
     casper_lwip_init();
 
@@ -107,6 +106,7 @@ int main()
     print("\n");
 #endif // JAM_TEST_TMRCTR
 
+#ifdef PRINT_SPI_DETAILS
     print("## SPI Flash Info\n");
 
     buf[0] = 0x9e;
@@ -117,7 +117,6 @@ int main()
       xil_printf(" %02x", buf[i]);
     }
     print("\n");
-#ifdef PRINT_SPI_DETAILS
     print("       ");
     // Read rest of UID using length from last byte
     len = buf[--i];
@@ -181,6 +180,8 @@ int main()
     print("\n");
 #endif //  PRINT_SPI_DETAILS
 
+#if 0
+    uint32_t *preg;
     // Look for sys_clkcounter register
     if((preg = casper_find_dev("sys_clkcounter", NULL))) {
       u32 tic = *preg;
@@ -190,6 +191,7 @@ int main()
     } else {
       print("sys_clkcounter not found\n");
     }
+#endif
 
 #ifdef DEBUG_ETH_0_CORE
     // Make various pointers to eth0 memory
