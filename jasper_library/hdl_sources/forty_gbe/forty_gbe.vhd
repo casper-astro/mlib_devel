@@ -1123,7 +1123,7 @@ begin
 
     xlgmii_tx_valid        <= forty_gbe_tx_valid;
     xlgmii_tx_end_of_frame <= forty_gbe_tx_end_of_frame;
-    xlgmii_tx_data         <= forty_gbe_tx_data;
+    xlgmii_tx_data         <= forty_gbe_tx_data(63 downto 0) & forty_gbe_tx_data(127 downto 64) & forty_gbe_tx_data(191 downto 128) &  forty_gbe_tx_data(255 downto 192);
     xlgmii_tx_dest_ip      <= forty_gbe_tx_dest_ip;
     xlgmii_tx_dest_port    <= forty_gbe_tx_dest_port;
     --xlgmii_rx_overrun_ack  <= forty_gbe_rx_overrun_ack;
