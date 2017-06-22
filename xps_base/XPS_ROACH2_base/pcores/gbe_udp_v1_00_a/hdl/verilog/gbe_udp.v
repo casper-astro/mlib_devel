@@ -143,18 +143,6 @@ module gbe_udp #(
   assign app_app_clk_cnt = 0;
   assign app_mac_tx_ack = 0;
 
-generate if (DIS_CPU_RX || DIS_CPU_TX) begin : disable_cpu
-
-  assign local_enable = LOCAL_ENABLE;
-  assign local_mac = LOCAL_MAC;
-  assign local_ip = LOCAL_IP;
-  assign local_port = LOCAL_PORT;
-  assign local_gateway = LOCAL_GATEWAY;
-  assign cpu_promiscuous = 1'b1;
-  assign arp_tx_cache_rd_data = LOCAL_MAC;  
-
-end else begin : enable_cpu
-
 // Wishbone Bus
 /*
   gbe_cpu_attach #(
@@ -270,8 +258,6 @@ end else begin : enable_cpu
     .cpu_tx_ready          (cpu_tx_packet_ready),
     .cpu_tx_done           (cpu_tx_packet_ack)
   );
-
-end endgenerate
 
 /*** buffer size clock domain crossing ***/
 
