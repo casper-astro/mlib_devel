@@ -116,8 +116,12 @@ module hmc_ska_sa_top #(
     input  wire RX_PHY_RESET, //Flag to reset the GTH RX 
     input  wire MMCM_RESET_IN,
     input  wire QPLL0_RESET_IN,
-    input  wire QPLL1_RESET_IN,     
-    output wire [15:0] RX_CRC_ERR_CNT
+    input  wire QPLL1_RESET_IN,  
+    //AI: debugging and error monitoring   
+    output wire [15:0] RX_CRC_ERR_CNT,
+    output wire [7:0] FIFO_TX_FLAG_STATUS,
+    output wire [7:0] FIFO_RX_FLAG_STATUS
+    
 );
 
   // Not used
@@ -358,6 +362,18 @@ hmc_gth hmc_gth_inst(
 
 assign QPLL_LOCK = qpll_lock0 & qpll_lock1;
 
+//AI: debugging and memory error checking
+wire [63:0] rx_data_lane0;
+wire [63:0] rx_data_lane1;
+wire [63:0] rx_data_lane2;
+wire [63:0] rx_data_lane3;
+wire [63:0] rx_data_lane4;
+wire [63:0] rx_data_lane5;
+wire [63:0] rx_data_lane6;
+wire [63:0] rx_data_lane7;
+wire [63:0] rf_dbg_reg;
+wire [127:0] crc_out;
+
 // Instatiate openHMC register interface initialization sequence after the HMC IIC setup state machine completes
   openhmc_init openhmc_init_inst(
     .clk_hmc(clk_hmc),
@@ -528,20 +544,34 @@ openhmc_top #(
     .rf_access_complete(rf_access_complete_hmc),
     .rf_read_en(rf_read_en_hmc),
     .rf_write_en(rf_write_en_hmc),
-    .rf_write_data(rf_write_data_hmc)
+    .rf_write_data(rf_write_data_hmc),
+    
+    //AI:debugging and error checking
+    .rx_data_lane0(rx_data_lane0),
+    .rx_data_lane1(rx_data_lane1),
+    .rx_data_lane2(rx_data_lane2),
+    .rx_data_lane3(rx_data_lane3),
+    .rx_data_lane4(rx_data_lane4),
+    .rx_data_lane5(rx_data_lane5),
+    .rx_data_lane6(rx_data_lane6),
+    .rx_data_lane7(rx_data_lane7),
+    .rf_dbg_reg(rf_dbg_reg),
+    .crc_out(crc_out),
+    .fifo_tx_flag_status(FIFO_TX_FLAG_STATUS),
+    .fifo_rx_flag_status(FIFO_RX_FLAG_STATUS)        
     );
-
+    
 reg [15:0] rx_crc_err_cnt;
 
-//  always @(posedge clk_hmc) begin   
-//    if (res_n == 1'b0) begin
-//      rx_crc_err_cnt <= 16'd0;
-//    end begin
-//      rx_crc_err_cnt <= rx_crc_err_cnt;
-//    end  
-//  end
+  always @(posedge clk_hmc) begin   
+    if (res_n == 1'b0) begin
+      rx_crc_err_cnt <= 16'd0;
+    end begin
+      rx_crc_err_cnt <= rx_crc_err_cnt + rf_dbg_reg[3:0];
+    end  
+  end
 
-  assign RX_CRC_ERR_CNT = 16'd0;//rx_crc_err_cnt;
+  assign RX_CRC_ERR_CNT = rx_crc_err_cnt; //16'd0;
 
   assign P_RST_N = 1'b1; // As soon as the FPGA is configured the HMC must startup
 

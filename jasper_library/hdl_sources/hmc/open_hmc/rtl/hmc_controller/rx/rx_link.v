@@ -132,7 +132,19 @@ module rx_link #(
     output  wire                        rf_lane_reversal_detected,
     (* mark_debug="TRUE", keep="TRUE" *)
     output  reg   [NUM_LANES-1:0]       rf_descramblers_locked,
-    input   wire  [4:0]                 rf_irtry_received_threshold
+    input   wire  [4:0]                 rf_irtry_received_threshold,
+    //AI: Route out CRC per FLIT for debugging
+    output  wire [127:0]                crc_out,
+    //AI: Rout out error debug and lanes for debugging
+    output  wire [63:0]                 rf_dbg_reg,
+    output  wire [63:0]                 rx_data_lane0,
+    output  wire [63:0]                 rx_data_lane1,
+    output  wire [63:0]                 rx_data_lane2,
+    output  wire [63:0]                 rx_data_lane3,
+    output  wire [63:0]                 rx_data_lane4,
+    output  wire [63:0]                 rx_data_lane5,
+    output  wire [63:0]                 rx_data_lane6,
+    output  wire [63:0]                 rx_data_lane7   
 
 );
 `include "hmc_field_functions.h"
@@ -196,6 +208,16 @@ wire [128-1:0]              d_in_flit                   [FPW-1:0];
 //Valid FLIT sources. A FLIT is valid when it is not NULL
 wire [FPW-1:0]              valid_flit_src;         //bit0 = flit0, ...
 wire [FPW-1:0]              init_valid_flit_src;    //bit0 = flit0, ...
+
+//AI: debugging and memory error monitoring
+assign rx_data_lane0 = descrambled_data_per_lane[0];
+assign rx_data_lane1 = descrambled_data_per_lane[1];
+assign rx_data_lane2 = descrambled_data_per_lane[2];
+assign rx_data_lane3 = descrambled_data_per_lane[3];
+assign rx_data_lane4 = descrambled_data_per_lane[4];
+assign rx_data_lane5 = descrambled_data_per_lane[5];
+assign rx_data_lane6 = descrambled_data_per_lane[6];
+assign rx_data_lane7 = descrambled_data_per_lane[7];
 
 
 (* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_0; //Virtual test probe for the logic analyser  
@@ -338,6 +360,9 @@ wire [FPW-1:0]          crc_d_out_flit_is_error;
 wire [FPW-1:0]          crc_d_out_flit_is_poisoned;
 wire [FPW-1:0]          crc_d_out_flit_has_rtc;
 wire [FPW-1:0]          crc_d_out_flit_is_flow;
+
+//AI: Route out CRC error for error monitoring and debugging
+assign rf_dbg_reg[FPW-1:0] = crc_d_out_flit_is_error[FPW-1:0];
 
 generate
         for(f=0;f<FPW;f=f+1) begin : reorder_crc_output
@@ -492,6 +517,26 @@ reg            irtry_clear_trig;
 //========================================================================================================================================
 //------------------------------------------------------------------INIT
 //========================================================================================================================================
+
+//AI: Debugging and memory monitoring signals
+assign rf_dbg_reg[4] = !init_valid_flit_src;
+assign rf_dbg_reg[5] = all_descramblers_part_aligned;
+assign rf_dbg_reg[6] = rf_all_descramblers_aligned;
+assign rf_dbg_reg[7] = &rf_descramblers_locked;
+
+assign rf_dbg_reg[10:8] = rf_rx_init_status;
+
+assign rf_dbg_reg[12] = &init_valid_flit_src;
+assign rf_dbg_reg[13] = |init_valid_flit_src;
+
+assign rf_dbg_reg[16] = |init_d_in_flit[0][63:0];
+assign rf_dbg_reg[17] = |init_d_in_flit[0][127:64];
+assign rf_dbg_reg[18] = |init_d_in_flit[1][63:0];
+assign rf_dbg_reg[19] = |init_d_in_flit[1][127:64];
+assign rf_dbg_reg[20] = |init_d_in_flit[2][63:0];
+assign rf_dbg_reg[21] = |init_d_in_flit[2][127:64];
+assign rf_dbg_reg[22] = |init_d_in_flit[3][63:0];
+assign rf_dbg_reg[23] = |init_d_in_flit[3][127:64];
 
 generate
     if(CTRL_LANE_REVERSAL==1) begin : control_lane_reversal
@@ -1601,7 +1646,8 @@ rx_crc_compare
     .d_out_error(crc_d_out_flit_is_error),
     .d_out_poisoned(crc_d_out_flit_is_poisoned),
     .d_out_rtc(crc_d_out_flit_has_rtc),
-    .d_out_flow(crc_d_out_flit_is_flow)
+    .d_out_flow(crc_d_out_flit_is_flow),
+    .crc_out(crc_out)
 ); 
 
 generate

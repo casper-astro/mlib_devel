@@ -68,6 +68,9 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         hmcc.add_port('DATA_VALID_LINK2', '%s_data_valid_link2' % self.fullname, dir='out')
         hmcc.add_port('RD_READY_LINK2', '%s_rd_ready_link2' % self.fullname, dir='out')
         hmcc.add_port('WR_READY_LINK2', '%s_wr_ready_link2' % self.fullname, dir='out')
+        hmcc.add_port('RX_CRC_ERR_CNT_LINK2', '%s_rx_crc_err_cnt_link2' % self.fullname, dir='out', width=16)
+        hmcc.add_port('ERRSTAT_LINK2', '%s_errstat_link2' % self.fullname, dir='out', width=7)
+
 
         # Simulink ports Link3
 
@@ -82,6 +85,8 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         hmcc.add_port('DATA_VALID_LINK3', '%s_data_valid_link3' % self.fullname, dir='out')
         hmcc.add_port('RD_READY_LINK3', '%s_rd_ready_link3' % self.fullname, dir='out')
         hmcc.add_port('WR_READY_LINK3', '%s_wr_ready_link3' % self.fullname, dir='out')
+        hmcc.add_port('RX_CRC_ERR_CNT_LINK3', '%s_rx_crc_err_cnt_link3' % self.fullname, dir='out', width=16)
+        hmcc.add_port('ERRSTAT_LINK3', '%s_errstat_link3' % self.fullname, dir='out', width=7)
 
 
     #----------------------------------------------------------------------------------------------------

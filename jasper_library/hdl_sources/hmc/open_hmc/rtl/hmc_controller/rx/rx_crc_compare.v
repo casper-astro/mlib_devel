@@ -72,7 +72,9 @@ module rx_crc_compare #(
     output  reg  [FPW-1:0]      d_out_error,
     output  reg  [FPW-1:0]      d_out_poisoned,
     output  reg  [FPW-1:0]      d_out_rtc,
-    output  reg  [FPW-1:0]      d_out_flow
+    output  reg  [FPW-1:0]      d_out_flow,
+    //AI: Route out CRC per FLIT for debugging
+    output  wire [127:0] crc_out
 
 );
 
@@ -134,6 +136,9 @@ reg  [31:0]    crc_accu_in       [FPW-1:0];
 reg  [FPW-1:0] crc_accu_in_valid [FPW-1:0];
 reg  [FPW-1:0] crc_accu_in_tail  [FPW-1:0];
 wire [31:0]    crc_per_flit      [FPW-1:0];
+
+//AI: Route out CRC per FLIT for debugging
+assign crc_out = {crc_per_flit[3],crc_per_flit[2],crc_per_flit[1],crc_per_flit[0]};
 
 //------------------------------------------------------------------------------------Inter CRC stage
 reg  [3:0]              payload_remain    [FPW-1:0];

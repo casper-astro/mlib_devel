@@ -135,7 +135,21 @@ module openhmc_top #(
     output wire                         rf_access_complete,
     input  wire                         rf_read_en,
     input  wire                         rf_write_en,
-    input  wire  [HMC_RF_WWIDTH-1:0]    rf_write_data
+    input  wire  [HMC_RF_WWIDTH-1:0]    rf_write_data,
+    
+    //AI: debugging and error monitoring
+    output wire [63:0]                  rx_data_lane0,
+    output wire [63:0]                  rx_data_lane1,
+    output wire [63:0]                  rx_data_lane2,
+    output wire [63:0]                  rx_data_lane3,
+    output wire [63:0]                  rx_data_lane4,
+    output wire [63:0]                  rx_data_lane5,
+    output wire [63:0]                  rx_data_lane6,
+    output wire [63:0]                  rx_data_lane7,
+    output wire [63:0]                  rf_dbg_reg,
+    output wire [127:0]                 crc_out,
+    output wire [7:0]                   fifo_tx_flag_status,
+    output wire [7:0]                   fifo_rx_flag_status
 
     );
 
@@ -233,6 +247,20 @@ wire                        rf_run_length_enable;
 (* mark_debug = "true" *) wire dbg_hmc_fifo_tx_shift_out; //Virtual test probe for the logic analyser
 (* mark_debug = "true" *) wire dbg_hmc_fifo_tx_shift_in; //Virtual test probe for the logic analyser
 
+//AI: FIFO TX and RX status monitoring
+assign fifo_tx_flag_status[0] = dbg_hmc_fifo_tx_full;
+assign fifo_tx_flag_status[1] = s_axis_tx_TREADY_n;
+assign fifo_tx_flag_status[2] = dbg_hmc_fifo_tx_almost_full;
+assign fifo_tx_flag_status[3] = tx_empty;
+assign fifo_tx_flag_status[4] = tx_a_empty;
+assign fifo_tx_flag_status[7:5] = 3'd0;
+
+assign fifo_rx_flag_status[0] = dbg_hmc_fifo_rx_full;
+assign fifo_rx_flag_status[1] = rx_a_full;
+assign fifo_rx_flag_status[2] = rx_a_full;
+assign fifo_rx_flag_status[3] = m_axis_rx_TVALID_n;
+assign fifo_rx_flag_status[4] = dbg_hmc_fifo_rx_almost_empty;
+assign fifo_rx_flag_status[7:5] = 3'd0;
   
 assign dbg_hmc_fifo_tx_almost4_full = s_axis_tx_TREADY_n;
 assign dbg_hmc_fifo_tx_empty = tx_empty;  
@@ -439,6 +467,11 @@ tx_link #(
 //----------------------------------------------------------------------
 //-----RX-----RX-----RX-----RX-----RX-----RX-----RX-----RX-----RX-----RX
 //----------------------------------------------------------------------
+
+//AI: debugging and error monitoring
+wire [63:0] rf_dbg_reg_rx;
+assign rf_dbg_reg = rf_dbg_reg_rx;
+
 rx_link #(
     .LOG_FPW(LOG_FPW),
     .FPW(FPW),
@@ -509,7 +542,18 @@ rx_link #(
     .rf_lane_polarity(rf_lane_polarity),
     .rf_scrambler_disable(rf_scrambler_disable),
     .rf_lane_reversal_detected(rf_lane_reversal_detected),
-    .rf_irtry_received_threshold(rf_irtry_received_threshold)
+    .rf_irtry_received_threshold(rf_irtry_received_threshold),
+    //AI: debugging and error monitoring
+    .rf_dbg_reg(rf_dbg_reg_rx),
+    .rx_data_lane0(rx_data_lane0),
+    .rx_data_lane1(rx_data_lane1),
+    .rx_data_lane2(rx_data_lane2),
+    .rx_data_lane3(rx_data_lane3),
+    .rx_data_lane4(rx_data_lane4),
+    .rx_data_lane5(rx_data_lane5),
+    .rx_data_lane6(rx_data_lane6),
+    .rx_data_lane7(rx_data_lane7),
+    .crc_out(crc_out)    
 );
 
 generate
@@ -651,7 +695,17 @@ endgenerate
         .control_run_length_enable(rf_run_length_enable),
         .control_rx_token_count(rf_rx_buffer_rtc_temp),
         .control_irtry_received_threshold(rf_irtry_received_threshold),
-        .control_irtry_to_send(rf_irtry_to_send)
+        .control_irtry_to_send(rf_irtry_to_send),
+        //debugging and error checking
+        .rf_dbg_reg_rx(rf_dbg_reg_rx),
+        .rx_data_lane0(rx_data_lane0),
+        .rx_data_lane1(rx_data_lane1),
+        .rx_data_lane2(rx_data_lane2),
+        .rx_data_lane3(rx_data_lane3),
+        .rx_data_lane4(rx_data_lane4),
+        .rx_data_lane5(rx_data_lane5),
+        .rx_data_lane6(rx_data_lane6),
+        .rx_data_lane7(rx_data_lane7)        
     );
 
 endmodule

@@ -93,7 +93,17 @@ module openhmc_rf #(
     input wire tx_link_retries_count_countup,
     input wire errors_on_rx_count_countup,
     input wire run_length_bit_flip_count_countup,
-    input wire error_abort_not_cleared_count_countup
+    input wire error_abort_not_cleared_count_countup,
+    //AI: debugging and memory checking
+    input wire [63:0] rf_dbg_reg_rx,
+    input wire [63:0] rx_data_lane0,
+    input wire [63:0] rx_data_lane1,
+    input wire [63:0] rx_data_lane2,
+    input wire [63:0] rx_data_lane3,
+    input wire [63:0] rx_data_lane4,
+    input wire [63:0] rx_data_lane5,
+    input wire [63:0] rx_data_lane6,
+    input wire [63:0] rx_data_lane7    
 );
     reg status_general_link_up;
     reg status_general_link_training;
@@ -581,6 +591,70 @@ module openhmc_rf #(
                     invalid_address <= write_en;
                     access_complete <= read_en || write_en;
                 end
+                //AI: debugging and error checking
+                4'hd:
+                begin
+                    read_data       <= {HMC_RF_RWIDTH{1'b0}};
+                    read_data       <= rf_dbg_reg_rx;
+                    invalid_address <= write_en;
+                    access_complete <= read_en || write_en;
+                end  
+                4'he:
+                begin
+                    read_data       <= {HMC_RF_RWIDTH{1'b0}};
+                    read_data       <= rx_data_lane0;
+                    invalid_address <= write_en;
+                    access_complete <= read_en || write_en;
+                end   
+                4'hf:
+                begin
+                    read_data       <= {HMC_RF_RWIDTH{1'b0}};
+                    read_data       <= rx_data_lane1;
+                    invalid_address <= write_en;
+                    access_complete <= read_en || write_en;
+                end                                              
+                4'h10:
+                begin
+                    read_data       <= {HMC_RF_RWIDTH{1'b0}};
+                    read_data       <= rx_data_lane2;
+                    invalid_address <= write_en;
+                    access_complete <= read_en || write_en;
+                end                                              
+                4'h11:
+                begin
+                    read_data       <= {HMC_RF_RWIDTH{1'b0}};
+                    read_data       <= rx_data_lane3;
+                    invalid_address <= write_en;
+                    access_complete <= read_en || write_en;
+                end                                              
+                4'h12:
+                begin
+                    read_data       <= {HMC_RF_RWIDTH{1'b0}};
+                    read_data       <= rx_data_lane4;
+                    invalid_address <= write_en;
+                    access_complete <= read_en || write_en;
+                end                                              
+                4'h13:
+                begin
+                    read_data       <= {HMC_RF_RWIDTH{1'b0}};
+                    read_data       <= rx_data_lane5;
+                    invalid_address <= write_en;
+                    access_complete <= read_en || write_en;
+                end                                              
+                4'h14:
+                begin
+                    read_data       <= {HMC_RF_RWIDTH{1'b0}};
+                    read_data       <= rx_data_lane6;
+                    invalid_address <= write_en;
+                    access_complete <= read_en || write_en;
+                end                                              
+                4'h15:
+                begin
+                    read_data       <= {HMC_RF_RWIDTH{1'b0}};
+                    read_data       <= rx_data_lane7;
+                    invalid_address <= write_en;
+                    access_complete <= read_en || write_en;
+                end                                              
                 default:
                 begin
                     read_data       <= {HMC_RF_RWIDTH{1'b0}};

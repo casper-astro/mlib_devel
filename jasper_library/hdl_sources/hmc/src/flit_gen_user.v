@@ -58,7 +58,8 @@ module flit_gen_user #(
     input  wire [8:0] TAG_IN,   
     output wire [8:0] TAG_OUT,
     output wire DATA_VALID,
-    output wire RD_READY
+    output wire RD_READY,
+    output wire [6:0] FLIT_TAIL_ERRSTAT
     
 
 
@@ -398,6 +399,8 @@ module flit_gen_user #(
   // ***************************************************************************************************************************************************************************************
   reg [8:0] rd_tag,rd_tag_i, rd_tag_hold;
   reg [255:0] rd_data, rd_data_i, rd_data_hold;
+  reg [63:0] rd_tail, rd_tail_hold;
+  
   reg rd_data_val, rd_data_val_hold;
   reg [63:0] r_data_valid_rx_valid_count;
   reg [63:0] r_data_valid_rx_hmc_valid_count;
@@ -469,6 +472,8 @@ module flit_gen_user #(
     rd_data_val_hold <= 1'b0;  // in the case were 2 valid responses falls on the same AXI transaction
     rd_data <= 256'd0;
     rd_tag <= 9'd0;
+    rd_tail_hold <= 64'd0;
+    rd_tail <= 64'd0;
        
     r_data_valid_rx_valid_count <= 64'b0;
     r_data_valid_rx_hmc_valid_count <= 64'b0;
@@ -502,7 +507,8 @@ module flit_gen_user #(
       //if (rd_data_val_hold == 1'b1) begin
       if (rd_data_val_hold == 1'b1) begin     
         rd_tag <= rd_tag_hold;      
-        rd_data <= rd_data_hold;        
+        rd_data <= rd_data_hold;
+        rd_tail <= rd_tail_hold;        
         rd_data_val <= rd_data_val_hold;
         
       // do not decode next axi cycle, as it was put on hold  
@@ -538,6 +544,7 @@ module flit_gen_user #(
               if (m_axis_rx_TVALID_R == 1'b1 && m_axis_rx_TUSER_R[10:8] == 3'b100 && m_axis_rx_TUSER_R[6:4] == 3'b001 && m_axis_rx_TUSER_R[2:0] == 3'b111) begin
                 rd_tag <= m_axis_rx_TDATA_R[23:15];
                 rd_data [255:0] <= m_axis_rx_TDATA_R[255+64:64];
+                rd_tail [63:0] <= m_axis_rx_TDATA_R[255+64+64:255+64+1];
                 rd_data_val <= 1'b1;
                 r_flit_case1_first_count <= r_flit_case1_first_count + 1'b1;
               end 
@@ -548,6 +555,7 @@ module flit_gen_user #(
               if (m_axis_rx_TVALID_R == 1'b1 && m_axis_rx_TUSER_R[11:9] == 3'b100 && m_axis_rx_TUSER_R[7:5] == 3'b001 && m_axis_rx_TUSER_R[3:1] == 3'b111) begin
                 rd_tag <= m_axis_rx_TDATA_R[23+128:15+128];
                 rd_data [255:0] <= m_axis_rx_TDATA_R[255+64+128:64+128];
+                rd_tail [63:0] <= m_axis_rx_TDATA_R[255+64+128+64:255+64+128+1];
                 rd_data_val <= 1'b1;
                 r_flit_case2_first_count <= r_flit_case2_first_count + 1'b1;
               end 
@@ -558,6 +566,8 @@ module flit_gen_user #(
               if (m_axis_rx_TVALID_R == 1'b1 && m_axis_rx_TUSER_R[11:10] == 2'b00 && m_axis_rx_TUSER_R[7:6] == 2'b01 && m_axis_rx_TUSER_R[3:2] == 2'b11) begin
                 rd_tag_i <= m_axis_rx_TDATA_R[23+256:15+256];
                 rd_data_i[191:0] <= m_axis_rx_TDATA_R[191+64+256:64+256];
+                //No tail
+                rd_tail [63:0] <= 64'd0;
                 next_flit_case3_second <= 1'b1;  // AXI access 2 of 2 
                 r_flit_case3_first_count <= r_flit_case3_first_count + 1'b1;
               end 
@@ -568,6 +578,8 @@ module flit_gen_user #(
               if (m_axis_rx_TVALID_R == 1'b1 && m_axis_rx_TUSER_R[11] == 1'b0 && m_axis_rx_TUSER_R[7] == 1'b1 && m_axis_rx_TUSER_R[3] == 1'b1) begin
                 rd_tag_i <= m_axis_rx_TDATA_R[23+384:15+384];
                 rd_data_i[63:0] <= m_axis_rx_TDATA_R[63+64+384:64+384];
+                //No tail
+                rd_tail [63:0] <= 64'd0;
                 next_flit_case4_second <= 1'b1;  // AXI access 2 of 2 
                 r_flit_case4_first_count <= r_flit_case4_first_count + 1'b1;
               end 
@@ -579,6 +591,7 @@ module flit_gen_user #(
               if (m_axis_rx_TVALID_R == 1'b1 && m_axis_rx_TUSER_R[8] == 1'b1 && m_axis_rx_TUSER_R[4] == 1'b0 && m_axis_rx_TUSER_R[0] == 1'b1 && next_flit_case3_second == 1'b1) begin
                 rd_data [255:192] <= m_axis_rx_TDATA_R[63:0];
                 rd_data [191:0] <= rd_data_i[191:0];
+                rd_tail [63:0] <= m_axis_rx_TDATA_R[64+63:63+1];
                 rd_tag <= rd_tag_i;
                 rd_data_val <= 1'b1;
                 next_flit_case3_second <= 1'b0;
@@ -594,6 +607,7 @@ module flit_gen_user #(
               // Valid FLITSs 0
               if (m_axis_rx_TVALID_R == 1'b1 && m_axis_rx_TUSER_R[11:8] == 4'b1001 && m_axis_rx_TUSER_R[7:4] == 4'b0010 && m_axis_rx_TUSER_R[3:0] == 4'b1111 && next_flit_case3_second == 1'b1) begin
                 rd_data [255:192] <= m_axis_rx_TDATA_R[63:0];
+                rd_tail [63:0] <= m_axis_rx_TDATA_R[64+63:63+1];
                 rd_data [191:0] <= rd_data_i[191:0];
                 rd_tag <= rd_tag_i;
                 rd_data_val <= 1'b1;
@@ -602,6 +616,7 @@ module flit_gen_user #(
                 // valid data from case 2
                 rd_tag_hold <= m_axis_rx_TDATA_R[23+128:15+128];
                 rd_data_hold [255:0] <= m_axis_rx_TDATA_R[255+64+128:64+128];
+                rd_tail_hold [63:0] <= m_axis_rx_TDATA_R[255+64+128+64:255+64+128+1];
                 rd_data_val_hold <= 1'b1;
                 r_flit_case3_second_spec_count <= r_flit_case3_second_spec_count + 1'b1;
               end          
@@ -611,6 +626,7 @@ module flit_gen_user #(
               if (m_axis_rx_TVALID_R == 1'b1 && m_axis_rx_TUSER_R[9:8] == 2'b10 && m_axis_rx_TUSER_R[5:4] == 4'b00 && m_axis_rx_TUSER_R[1:0] == 4'b11 && next_flit_case4_second == 1'b1) begin
                 rd_data [255:64] <= m_axis_rx_TDATA_R[191:0];
                 rd_data [63:0] <= rd_data_i[63:0];
+                rd_tail [63:0] <= m_axis_rx_TDATA_R[191+64:192];
                 rd_tag <= rd_tag_i;
                 rd_data_val <= 1'b1;
                 next_flit_case4_second <= 1'b0;
@@ -630,5 +646,6 @@ module flit_gen_user #(
   assign TAG_OUT = rd_tag;
   assign DATA_VALID = rd_data_val;
   assign DATA_OUT = rd_data;
+  assign FLIT_TAIL_ERRSTAT = rd_tail[26:20]; //Assign ERRSTAT register of FLIT tail
 
 endmodule
