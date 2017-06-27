@@ -2,6 +2,7 @@ from yellow_block import YellowBlock
 from verilog import VerilogModule
 from constraints import PortConstraint, ClockConstraint, RawConstraint
 from yellow_block_typecodes import *
+import math
 
 class snap_adc(YellowBlock):
     def initialize(self):
@@ -13,7 +14,25 @@ class snap_adc(YellowBlock):
         self.zdok_rev = 2 # no frame clocks (see adc16)
         self.n_inputs = self.snap_inputs / 3 #number of inputs per chip
 
-        self.clock_freq = self.sample_rate
+	if self.adc_interleaving_mode == "1 channel mode":
+		self.adc_interleaving_mode = 1
+	elif self.adc_interleaving_mode == "2 channel mode":
+		self.adc_interleaving_mode = 2
+	elif self.adc_interleaving_mode == "4 channel mode":
+		self.adc_interleaving_mode = 4
+
+	# self.adc_resolution, possible values are 8, 10, 12, 14, 16
+	# Currently only 8, 12, 16 are supported
+	if self.adc_resolution <=8:
+		self.adc_data_width = 8
+	elif self.adc_resolution >8 and self.adc_resolution<=16:
+		self.adc_data_width = 16
+	else:
+		self.adc_data_width = 8
+	self.LOG_USER_WIDTH = int(math.log(self.adc_data_width*4,2))
+
+	# An HMCAD1511 has 8 ADC cores and DDR transmission 
+        self.line_clock_freq = self.sample_rate/(8.0/self.adc_interleaving_mode)*self.adc_resolution/2.0
 
         self.add_source('adc16_interface')
         self.add_source('wb_adc16_controller')
@@ -41,20 +60,22 @@ class snap_adc(YellowBlock):
         inst.add_parameter('G_NUM_CLOCKS', int(self.num_clocks))
         inst.add_parameter('G_ZDOK_REV', int(self.zdok_rev))
         inst.add_parameter('G_NUM_UNITS', int(self.num_units))
+        inst.add_parameter('ADC_RESOLUTION', int(self.adc_resolution))
+        inst.add_parameter('ADC_DATA_WIDTH', int(self.adc_data_width))
 
         # ports which go to simulink
-        inst.add_port('a1', self.fullname+'_a1', width=8)
-        inst.add_port('a2', self.fullname+'_a2', width=8)
-        inst.add_port('a3', self.fullname+'_a3', width=8)
-        inst.add_port('a4', self.fullname+'_a4', width=8)
-        inst.add_port('b1', self.fullname+'_b1', width=8)
-        inst.add_port('b2', self.fullname+'_b2', width=8)
-        inst.add_port('b3', self.fullname+'_b3', width=8)
-        inst.add_port('b4', self.fullname+'_b4', width=8)
-        inst.add_port('c1', self.fullname+'_c1', width=8)
-        inst.add_port('c2', self.fullname+'_c2', width=8)
-        inst.add_port('c3', self.fullname+'_c3', width=8)
-        inst.add_port('c4', self.fullname+'_c4', width=8)
+        inst.add_port('a1', self.fullname+'_a1', width=self.adc_data_width)
+        inst.add_port('a2', self.fullname+'_a2', width=self.adc_data_width)
+        inst.add_port('a3', self.fullname+'_a3', width=self.adc_data_width)
+        inst.add_port('a4', self.fullname+'_a4', width=self.adc_data_width)
+        inst.add_port('b1', self.fullname+'_b1', width=self.adc_data_width)
+        inst.add_port('b2', self.fullname+'_b2', width=self.adc_data_width)
+        inst.add_port('b3', self.fullname+'_b3', width=self.adc_data_width)
+        inst.add_port('b4', self.fullname+'_b4', width=self.adc_data_width)
+        inst.add_port('c1', self.fullname+'_c1', width=self.adc_data_width)
+        inst.add_port('c2', self.fullname+'_c2', width=self.adc_data_width)
+        inst.add_port('c3', self.fullname+'_c3', width=self.adc_data_width)
+        inst.add_port('c4', self.fullname+'_c4', width=self.adc_data_width)
 
         # ports which go to the wb controller. Any ports which don't go to top level need
         # corresponding signals to be added to top.v. **Not anymore, this is now default behaviour!**
@@ -143,11 +164,11 @@ class snap_adc(YellowBlock):
             # Embedded wb-RAM
             din = self.fullname+'_%s'%snap_chan[k]
             wbram = top.get_instance(entity='wb_bram', name='adc16_wb_ram%d'%k, comment='Embedded ADC16 bram')
-            wbram.add_parameter('LOG_USER_WIDTH','5')
+            wbram.add_parameter('LOG_USER_WIDTH',self.LOG_USER_WIDTH)
             wbram.add_parameter('USER_ADDR_BITS','10')
             wbram.add_parameter('N_REGISTERS','2')
-            wbram.add_wb_interface(regname='adc16_wb_ram%d'%k, mode='rw', nbytes=4*2**10, typecode=TYPECODE_SWREG)
-            wbram.add_port('user_clk','user_clk', parent_sig=False)
+            wbram.add_wb_interface(regname='adc16_wb_ram%d'%k, mode='rw', nbytes=(self.adc_data_width/8)*4*2**10, typecode=TYPECODE_SWREG)
+            wbram.add_port('user_clk','adc0_clk', parent_sig=False)
             wbram.add_port('user_addr','adc16_snap_addr', width=10)
             wbram.add_port('user_din','{%s1, %s2, %s3, %s4}'%(din,din,din,din), parent_sig=False)
             wbram.add_port('user_we','adc16_snap_we')
@@ -214,7 +235,7 @@ class snap_adc(YellowBlock):
         cons.append(PortConstraint('adc_pd', 'adc_pd', port_index=range(3), iogroup_index=range(3)))
         
         # clock constraint with variable period
-        clkconst = ClockConstraint('adc16_clk_line_p', name='adc_clk', freq=self.clock_freq*self.n_inputs/2.)
+        clkconst = ClockConstraint('adc16_clk_line_p', name='adc_clk', freq=self.line_clock_freq)
         cons.append(clkconst)
 
         cons.append(RawConstraint('set_clock_groups -name async_sysclk_adcclk -asynchronous -group [get_clocks -include_generated_clocks %s_CLK] -group [get_clocks -include_generated_clocks sys_clk0_dcm]' % clkconst.signal))

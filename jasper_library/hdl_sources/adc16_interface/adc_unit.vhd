@@ -8,7 +8,9 @@ use IEEE.numeric_std.all;
 -- entity declaraction
 entity  adc_unit  is
     generic (
-               G_SERIES     : string  := "7SERIES"
+               G_SERIES     : string  := "7SERIES";
+               ADC_RESOLUTION     : integer  := 8;
+               ADC_DATA_WIDTH     : integer  := 8
     );
     port (
                -- System
@@ -25,8 +27,7 @@ entity  adc_unit  is
 
                -- ISERDES Controller
                iserdes_bitslip  :  in  std_logic_vector(7 downto 0);
-               p_data           :  out std_logic_vector(31 downto 0);
-               absel            :  in std_logic;
+               p_data           :  out std_logic_vector(4*ADC_DATA_WIDTH-1 downto 0);
                demux_mode       :  in  std_logic_vector(1 downto 0);
 
                -- IODELAY Controller
@@ -79,11 +80,14 @@ architecture adc_unit_arc of adc_unit is
 
                -- Data (serial in, parallel out)
                s_data       :  in  std_logic;
-               p_data       :  out std_logic_vector(7 downto 0)
+               p_data       :  out std_logic_vector(ADC_RESOLUTION-1 downto 0)
       );
      end component;
 
-     component ADC_ISERDES_7series   port (
+     component ADC_ISERDES_7series generic (
+      ADC_RESOLUTION          : Integer
+      );
+     port (
                -- System
                reset        :  in  std_logic;
                bitslip      :  in  std_logic;
@@ -91,10 +95,11 @@ architecture adc_unit_arc of adc_unit is
                -- Clock inputs
                clkin        :  in  std_logic; -- line
                clkdiv       :  in  std_logic; -- frame/system
+               frame_clk    :  in  std_logic;
 
                -- Data (serial in, parallel out)
                s_data       :  in  std_logic;
-               p_data       :  out std_logic_vector(7 downto 0)
+               p_data       :  out std_logic_vector(ADC_RESOLUTION-1 downto 0)
       );
      end component;
 
@@ -110,11 +115,11 @@ architecture adc_unit_arc of adc_unit is
      end component;
 
      -- Signals
-     signal adc_iserdes_data_a : std_logic_vector(31 downto 0);
-     signal adc_iserdes_data_b : std_logic_vector(31 downto 0);
-     signal adc_iserdes_data_a_pipelined : std_logic_vector(31 downto 0);
-     signal adc_iserdes_data_b_pipelined : std_logic_vector(31 downto 0);
-     signal adc_iserdes_data : std_logic_vector(31 downto 0);
+     signal adc_iserdes_data_a : std_logic_vector(4*ADC_RESOLUTION-1 downto 0);
+     signal adc_iserdes_data_b : std_logic_vector(4*ADC_RESOLUTION-1 downto 0);
+     signal adc_iserdes_data_a_pipelined : std_logic_vector(4*ADC_RESOLUTION-1 downto 0);
+     signal adc_iserdes_data_b_pipelined : std_logic_vector(4*ADC_RESOLUTION-1 downto 0);
+     signal adc_iserdes_data : std_logic_vector(4*ADC_RESOLUTION-1 downto 0);
 
      signal ibuf_ser_a : std_logic_vector(3 downto 0);
      signal ibuf_ser_b : std_logic_vector(3 downto 0);
@@ -124,54 +129,67 @@ architecture adc_unit_arc of adc_unit is
 
      begin
 
-     process (frame_clk, adc_iserdes_data_a, adc_iserdes_data_b)
+     process (fabric_clk, reset)
      begin
-       -- Pipeline serdes outputs (using slower frame clock)
-       if frame_clk'event and frame_clk = '1' then
-         adc_iserdes_data_a_pipelined <= adc_iserdes_data_a;
-         adc_iserdes_data_b_pipelined <= adc_iserdes_data_b;
-       end if;
+             -- Pipeline serdes outputs
+             if reset = '1' then
+                     adc_iserdes_data_a_pipelined <= (others => '0');
+                     adc_iserdes_data_b_pipelined <= (others => '0');
+             elsif rising_edge(fabric_clk) then
+                     if frame_clk='1' then
+                             adc_iserdes_data_a_pipelined <= adc_iserdes_data_a;
+                             adc_iserdes_data_b_pipelined <= adc_iserdes_data_b;
+                     else
+                             adc_iserdes_data_a_pipelined <= adc_iserdes_data_a_pipelined;
+                             adc_iserdes_data_b_pipelined <= adc_iserdes_data_b_pipelined;
+                     end if;
+             end if;
      end process;
 
-     process (absel, adc_iserdes_data_a_pipelined, adc_iserdes_data_b_pipelined)
+     process (frame_clk, adc_iserdes_data_a_pipelined, adc_iserdes_data_b_pipelined)
      begin
-       -- Mux pipelined data based on absel signal
-       if absel = '0' then
+       -- Mux pipelined data based on frame_clk signal
+       if frame_clk = '1' then
          case demux_mode is
-           when "01" => adc_iserdes_data <= adc_iserdes_data_a_pipelined(31 downto 24)
-                                          & adc_iserdes_data_b_pipelined(31 downto 24)
-                                          & adc_iserdes_data_a_pipelined(15 downto  8)
-                                          & adc_iserdes_data_b_pipelined(15 downto  8);
+           when "01" => adc_iserdes_data <= adc_iserdes_data_a_pipelined(ADC_RESOLUTION*4-1 downto ADC_RESOLUTION*3)
+                                          & adc_iserdes_data_b_pipelined(ADC_RESOLUTION*4-1 downto ADC_RESOLUTION*3)
+                                          & adc_iserdes_data_a_pipelined(ADC_RESOLUTION*2-1 downto ADC_RESOLUTION*1)
+                                          & adc_iserdes_data_b_pipelined(ADC_RESOLUTION*2-1 downto ADC_RESOLUTION*1);
 
-           when "10" => adc_iserdes_data <= adc_iserdes_data_a_pipelined(31 downto 24)
-                                          & adc_iserdes_data_b_pipelined(31 downto 24)
-                                          & adc_iserdes_data_a_pipelined(23 downto 16)
-                                          & adc_iserdes_data_b_pipelined(23 downto 16);
+           when "10" => adc_iserdes_data <= adc_iserdes_data_a_pipelined(ADC_RESOLUTION*4-1 downto ADC_RESOLUTION*3)
+                                          & adc_iserdes_data_b_pipelined(ADC_RESOLUTION*4-1 downto ADC_RESOLUTION*3)
+                                          & adc_iserdes_data_a_pipelined(ADC_RESOLUTION*3-1 downto ADC_RESOLUTION*2)
+                                          & adc_iserdes_data_b_pipelined(ADC_RESOLUTION*3-1 downto ADC_RESOLUTION*2);
 
            when others => adc_iserdes_data <= adc_iserdes_data_a_pipelined;
          end case;
        else
          case demux_mode is
-           when "01" => adc_iserdes_data <= adc_iserdes_data_a_pipelined(23 downto 16)
-                                          & adc_iserdes_data_b_pipelined(23 downto 16)
-                                          & adc_iserdes_data_a_pipelined( 7 downto  0)
-                                          & adc_iserdes_data_b_pipelined( 7 downto  0);
+           when "01" => adc_iserdes_data <= adc_iserdes_data_a_pipelined(ADC_RESOLUTION*3-1 downto ADC_RESOLUTION*2)
+                                          & adc_iserdes_data_b_pipelined(ADC_RESOLUTION*3-1 downto ADC_RESOLUTION*2)
+                                          & adc_iserdes_data_a_pipelined(ADC_RESOLUTION*1-1 downto ADC_RESOLUTION*0)
+                                          & adc_iserdes_data_b_pipelined(ADC_RESOLUTION*1-1 downto ADC_RESOLUTION*0);
 
-           when "10" => adc_iserdes_data <= adc_iserdes_data_a_pipelined(15 downto  8)
-                                          & adc_iserdes_data_b_pipelined(15 downto  8)
-                                          & adc_iserdes_data_a_pipelined( 7 downto  0)
-                                          & adc_iserdes_data_b_pipelined( 7 downto  0);
+           when "10" => adc_iserdes_data <= adc_iserdes_data_a_pipelined(ADC_RESOLUTION*2-1 downto ADC_RESOLUTION*1)
+                                          & adc_iserdes_data_b_pipelined(ADC_RESOLUTION*2-1 downto ADC_RESOLUTION*1)
+                                          & adc_iserdes_data_a_pipelined(ADC_RESOLUTION*1-1 downto ADC_RESOLUTION*0)
+                                          & adc_iserdes_data_b_pipelined(ADC_RESOLUTION*1-1 downto ADC_RESOLUTION*0);
 
            when others => adc_iserdes_data <= adc_iserdes_data_b_pipelined;
          end case;
        end if;
      end process;
 
-     process (fabric_clk, adc_iserdes_data)
+     process (fabric_clk, reset)
      begin
-       -- Capture mux output on rising edge of fabric clock
-       if fabric_clk'event and fabric_clk = '1' then
-         p_data <= adc_iserdes_data;
+       if reset='1' then
+           p_data <= (others => '0');
+       -- Capture mux output on rising edge of fabric clock (or fssrame_clk_2x)
+       elsif rising_edge(fabric_clk) then
+           p_data(ADC_DATA_WIDTH*3+ADC_RESOLUTION-1 downto ADC_DATA_WIDTH*3) <= adc_iserdes_data(ADC_RESOLUTION*4-1 downto ADC_RESOLUTION*3);
+           p_data(ADC_DATA_WIDTH*2+ADC_RESOLUTION-1 downto ADC_DATA_WIDTH*2) <= adc_iserdes_data(ADC_RESOLUTION*3-1 downto ADC_RESOLUTION*2);
+           p_data(ADC_DATA_WIDTH*1+ADC_RESOLUTION-1 downto ADC_DATA_WIDTH*1) <= adc_iserdes_data(ADC_RESOLUTION*2-1 downto ADC_RESOLUTION*1);
+           p_data(ADC_DATA_WIDTH*0+ADC_RESOLUTION-1 downto ADC_DATA_WIDTH*0) <= adc_iserdes_data(ADC_RESOLUTION*1-1 downto ADC_RESOLUTION*0);
        end if;
      end process;
 
@@ -180,23 +198,27 @@ architecture adc_unit_arc of adc_unit is
      begin
        ADC_ISERDES_7_GEN : if G_SERIES = "7SERIES" generate
          adc_iserdes_a_inst : ADC_ISERDES_7series
+         GENERIC MAP (ADC_RESOLUTION => ADC_RESOLUTION)
          PORT MAP (
                    reset      => reset,
                    bitslip    => iserdes_bitslip(2*i),
                    clkin      => line_clk,
-                   clkdiv     => frame_clk,
+                   clkdiv     => fabric_clk,
+                   frame_clk  => frame_clk,
                    s_data     => delay_a_out(i),
-                   p_data     => adc_iserdes_data_a(8*(3-i)+7 downto 8*(3-i))
+                   p_data     => adc_iserdes_data_a(ADC_RESOLUTION*(4-i)-1 downto ADC_RESOLUTION*(3-i))
           );
 
          adc_iserdes_b_inst : ADC_ISERDES_7series
+         GENERIC MAP (ADC_RESOLUTION => ADC_RESOLUTION)
          PORT MAP (
                    reset      => reset,
                    bitslip    => iserdes_bitslip(2*i+1),
                    clkin      => line_clk,
-                   clkdiv     => frame_clk,
+                   clkdiv     => fabric_clk,
+                   frame_clk  => frame_clk,
                    s_data     => delay_b_out(i),
-                   p_data     => adc_iserdes_data_b(8*(3-i)+7 downto 8*(3-i))
+                   p_data     => adc_iserdes_data_b(ADC_RESOLUTION*(4-i)-1 downto ADC_RESOLUTION*(3-i))
           );
        end generate ADC_ISERDES_7_GEN;
 
@@ -208,7 +230,7 @@ architecture adc_unit_arc of adc_unit is
                    clkin      => line_clk,
                    clkdiv     => frame_clk,
                    s_data     => delay_a_out(i),
-                   p_data     => adc_iserdes_data_a(8*(3-i)+7 downto 8*(3-i))
+                   p_data     => adc_iserdes_data_a(ADC_RESOLUTION*(4-i)-1 downto ADC_RESOLUTION*(3-i))
           );
 
          adc_iserdes_b_inst : ADC_ISERDES_6series
@@ -218,7 +240,7 @@ architecture adc_unit_arc of adc_unit is
                    clkin      => line_clk,
                    clkdiv     => frame_clk,
                    s_data     => delay_b_out(i),
-                   p_data     => adc_iserdes_data_b(8*(3-i)+7 downto 8*(3-i))
+                   p_data     => adc_iserdes_data_b(ADC_RESOLUTION*(4-i)-1 downto ADC_RESOLUTION*(3-i))
           );
        end generate ADC_ISERDES_6_GEN;
 
