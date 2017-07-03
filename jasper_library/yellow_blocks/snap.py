@@ -7,10 +7,7 @@ class snap(YellowBlock):
         self.add_source('wbs_arbiter')
         # 32-bit addressing => second half of 32 MByte memory. See UG470 v1.11 Table 7.2, Note 1
         self.usermemaddr = 0x800000  >> 8 
-        if self.golden:
-            self.thismemaddr = 0
-        else:
-            self.thismemaddr = self.usermemaddr
+        self.golden = False
 
     def modify_top(self,top):
         inst = top.get_instance('snap_infrastructure', 'snap_infrastructure_inst')
@@ -61,6 +58,7 @@ class snap(YellowBlock):
         # Write both mcs and bin files. The latter are good for remote programming via microblaze. And makes sure the
         # microblaze code makes it into top.bin, and hence top.bof
         tcl_cmds['promgen'] = []
-        tcl_cmds['promgen'] += ['write_cfgmem  -format mcs -size 32 -interface SPIx4 -loadbit "up 0x%.7x ./myproj.runs/impl_1/top.bit " -checksum -file "./myproj.runs/impl_1/top.mcs" -force' % self.thismemaddr]
-        tcl_cmds['promgen'] += ['write_cfgmem  -format bin -size 32 -interface SPIx4 -loadbit "up 0x%.7x ./myproj.runs/impl_1/top.bit " -checksum -file "./myproj.runs/impl_1/top.bin" -force' % self.thismemaddr]
+        tcl_cmds['promgen'] += ['write_cfgmem  -format mcs -size 32 -interface SPIx4 -loadbit "up 0x0 ./myproj.runs/impl_1/top.bit " -checksum -file "./myproj.runs/impl_1/top.mcs" -force']
+        tcl_cmds['promgen'] += ['write_cfgmem  -format mcs -size 32 -interface SPIx4 -loadbit "up 0x%.7x ./myproj.runs/impl_1/top.bit " -checksum -file "./myproj.runs/impl_1/top_0x%x.mcs" -force' % (self.usermemaddr, self.usermemaddr)]
+        tcl_cmds['promgen'] += ['write_cfgmem  -format bin -size 32 -interface SPIx4 -loadbit "up 0x0 ./myproj.runs/impl_1/top.bit " -checksum -file "./myproj.runs/impl_1/top.bin" -force']
         return tcl_cmds
