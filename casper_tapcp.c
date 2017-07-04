@@ -187,16 +187,16 @@
 
 // Help message
 static char tapcp_help_msg[] =
-//"Available TAPCP commands:\n"
-//"  /help    - this message\n"
-//"  /listdev - list FPGA device info\n"
-//"  /temp    - get FPGA temperature\n"
-//"  /progdev - Boot FPGA from flash.\n"
-//"  /flash.OFFSET[.LENGTH] - access flash memory\n"
-//"  [/dev/]DEVNAME[.OFFSET[.LENGTH]] - access DEVNAME\n"
-//"  /fpga.OFFSET[.LENGTH] - access FPGA memory space\n"
-//"  /cpu.OFFSET[.LENGTH]  - access CPU memory space\n"
-""
+"Available TAPCP commands:\n"
+"  /help    - this message\n"
+"  /listdev - list FPGA device info\n"
+"  /temp    - get FPGA temperature\n"
+"  /progdev - Boot FPGA from flash.\n"
+"  /flash.OFFSET[.LENGTH] - access flash memory\n"
+"  [/dev/]DEVNAME[.OFFSET[.LENGTH]] - access DEVNAME\n"
+"  /fpga.OFFSET[.LENGTH] - access FPGA memory space\n"
+"  /cpu.OFFSET[.LENGTH]  - access CPU memory space\n"
+
 ;
 
 // Externally linked core_info data
@@ -314,36 +314,36 @@ casper_tapcp_read_temp(struct tapcp_state *state, void *buf, int bytes)
   }
 
   int len = 0;
-  //float fpga_temp = get_fpga_temp();
-  //
-  //if(state->binary) {
-  //  //*(uint32_t *)buf = mb_swapb(*(uint32_t *)&fpga_temp);
-  //  *(uint32_t *)buf = mb_swapb(fpga_temp);
-  //  len = 4;
-  //} else {
-  //  char * bbuf = (char *)buf;
-  //  // t is integer temp in deci-degrees
-  //  int t = (int)(10 * fpga_temp);
-  //  // Hundreds place
-  //  if(t > 1000) {
-  //    *bbuf++ = '0' + (t/1000) % 10;
-  //    len++;
-  //  }
-  //  // Tens place
-  //  if(t > 100) {
-  //    *bbuf++ = '0' + (t/100) % 10;
-  //    len++;
-  //  }
-  //  // Ones place
-  //  *bbuf++ = '0' + (t/10) % 10;
-  //  // Decimal point
-  //  *bbuf++ = '.';
-  //  // Tenths place
-  //  *bbuf++ = '0' + t % 10;
-  //  // Newline
-  //  *bbuf++ = '\n';
-  //  len += 4;
-  //}
+  float fpga_temp = get_fpga_temp();
+  
+  if(state->binary) {
+    //*(uint32_t *)buf = mb_swapb(*(uint32_t *)&fpga_temp);
+    *(uint32_t *)buf = mb_swapb(fpga_temp);
+    len = 4;
+  } else {
+    char * bbuf = (char *)buf;
+    // t is integer temp in deci-degrees
+    int t = (int)(10 * fpga_temp);
+    // Hundreds place
+    if(t > 1000) {
+      *bbuf++ = '0' + (t/1000) % 10;
+      len++;
+    }
+    // Tens place
+    if(t > 100) {
+      *bbuf++ = '0' + (t/100) % 10;
+      len++;
+    }
+    // Ones place
+    *bbuf++ = '0' + (t/10) % 10;
+    // Decimal point
+    *bbuf++ = '.';
+    // Tenths place
+    *bbuf++ = '0' + t % 10;
+    // Newline
+    *bbuf++ = '\n';
+    len += 4;
+  }
 
 #ifdef VERBOSE_TAPCP_IMPL
   xil_printf("%s(%p, %p, %d) = %d\n", __FUNCTION__,
