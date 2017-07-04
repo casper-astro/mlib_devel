@@ -79,4 +79,17 @@ pins:
   phy_rst_n:
     loc: AL19
     iostd: LVCMOS18
+  spi_flash_data:
+    iostd: LVCMOS18
+    loc:
+      - AJ9
+      - AH9
+      - AG10
+      - AG9
+  spi_flash_clk:
+    iostd: LVCMOS18
+    loc: AD10
+  spi_flash_csn:
+    iostd: LVCMOS18
+    loc: AF9
 
