@@ -178,7 +178,7 @@
 #include "csl.h"
 #include "icap.h"
 #include "flash.h"
-#include "sleep.h"
+#include "tmrctr.h"
 
 // FPGA memory space macros
 #define FPGA_BASEADDR XPAR_AXI_SLAVE_WISHBONE_CLASSIC_MASTER_0_BASEADDR
@@ -799,6 +799,7 @@ casper_tapcp_write_progdev(
   uint8_t *p;
   int len = 0;
   static uint32_t word;
+  uint32_t curr_ms, next_ms = 0;
 
   if(!state->binary) {
     return -1; // Ascii mode not implemented
@@ -822,7 +823,11 @@ casper_tapcp_write_progdev(
 
   // Reboot the FPGA using the received value as the target address
   xil_printf("Reboot from addr: %08x\n", word);
-  sleep(1); // Sleep here, or the print will never make it out the UART
+  // Sleep here, or the print will never make it out the UART
+  curr_ms = ms_tmrctr();
+  while(next_ms <= (curr_ms + 1000)) {
+      next_ms = ms_tmrctr();
+  }
   icap_reprog_from_flash(word);
   // We'll never get here...
   return len;
