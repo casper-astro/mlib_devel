@@ -97,3 +97,25 @@ flash_read(uint32_t addr, uint8_t *p, int len)
   // to make sure the erase actually worked
   return len;
 }
+
+int
+flash_read_id(uint8_t *p)
+{
+  uint8_t buf[5];
+  // Send the read command
+  // Leave the transaction open for the data
+  buf[0] = FLASH_READ_ID;
+  send_spi(buf, buf, 5, SEND_SPI_MORE);
+  // read the data
+  send_spi(p, p, buf[4], 0);
+  // wait for the read to complete
+  buf[0] = FLASH_READ_STATUS_REG;
+  send_spi(buf, buf, 2, 0);
+  while(buf[1] & 1) {
+    buf[0] = FLASH_READ_STATUS_REG;
+    send_spi(buf, buf, 2, 0);
+  }
+  // There should be some error checking here
+  // to make sure the command
+  return buf[4];
+}

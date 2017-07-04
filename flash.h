@@ -12,7 +12,7 @@
 #define FLASH_RESET_MEMORY 0x99
 // Identification Operations
 #define FLASH_READ_ID 0x9e
-#define FLASH_MULTIPLE_IO_REAL_ID 0xaf
+#define FLASH_MULTIPLE_IO_READ_ID 0xaf
 #define FLASH_READ_SERIAL_FLASH_DISCOVERY_PARAM 0x5a
 // Read Operations
 #define FLASH_READ 0x03
@@ -42,5 +42,6 @@
 int flash_erase_sector(uint32_t addr);
 int flash_write_page(uint32_t addr, uint8_t *p, int len);
 int flash_read(uint32_t addr, uint8_t *p, int len);
+int flash_read_id(uint8_t *p);
 
 #endif // _FLASH_H_

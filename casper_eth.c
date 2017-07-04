@@ -10,6 +10,7 @@
 #include "casper_devcsl.h"
 #include "casper_eth.h"
 #include "casper_tftp.h"
+#include "flash.h"
 #include "tmrctr.h"
 
 // Array of one (for now)
@@ -66,7 +67,7 @@ casper_netif_output_impl(struct netif *netif, struct pbuf *p)
   if(i == 1000) {
     // Core still busy sending previous packets.  Not sure this is the most
     // approprite error code to return, but at least it's not ERR_OK.
-    xil_printf("error: previous tx still in progress\n");
+    xil_printf("err: prev tx not done\n");
     LINK_STATS_INC(link.drop);
     return ERR_INPROGRESS;
   }
@@ -84,7 +85,7 @@ casper_netif_output_impl(struct netif *netif, struct pbuf *p)
     // software is buggy.
     len = p->len;
     if(p->len > p->tot_len) {
-      xil_printf("YIKES p->len > p->tot_len (%u > %u), using p->tot_len\n",
+      xil_printf("YIKES p->len > p->tot_len (%u > %u), using tot_len\n",
           p->len, p->tot_len);
       len = p->tot_len;
     }
@@ -170,7 +171,7 @@ casper_netif_output_impl(struct netif *netif, struct pbuf *p)
 
   if(i == 1000) {
     // Core still busy sending packet.
-    xil_printf("warning: packet tx is slow\n");
+    xil_printf("warn: packet tx is slow\n");
   }
 
   return ERR_OK;
@@ -289,8 +290,11 @@ casper_lwip_init()
   // TODO Get MAC address from somewhere (e.g. serial number stored in flash)
   // Needs to be stored in hardware core as:
   //     0x----0001 0x02030405
-  ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_1] = 0x00000203;
-  ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_0] = 0x04050607;
+  uint8_t buf[16];
+  flash_read_id(buf);
+  ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_1] = ((uint32_t *)buf)[2] & 0xffff;
+  ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_0] = ((uint32_t *)buf)[3];
+  xil_printf("MAC 0x%04x%08x\n", ((uint32_t *)buf)[2] & 0xffff, ((uint32_t *)buf)[3]);
 
 #ifdef DEBUG_ETH0_MEM
   print("## eth0 memory as uint32_t:\n");
