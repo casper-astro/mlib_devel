@@ -39,7 +39,7 @@ init_icap()
     if (XHwIcap_CfgInitialize(&xicap, xicap_config, xicap_config->BaseAddress) != XST_SUCCESS) {
         xil_printf("ICAP init FAIL\n");
     } else {
-        xil_printf("ICAP initialized\n");
+        xil_printf("ICAP init OK\n");
     }
 }
 
