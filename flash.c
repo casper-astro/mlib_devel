@@ -13,7 +13,7 @@ int
 flash_erase_sector(uint32_t addr)
 {
   uint8_t buf[4];
-  xil_printf("erase:%08x\n", addr);
+  xil_printf("erase: %08x\n", addr);
   buf[0] = FLASH_WRITE_ENABLE;
   send_spi(buf, buf, 1, 0);
   buf[0] = FLASH_SECTOR_ERASE;
@@ -76,7 +76,7 @@ int
 flash_read(uint32_t addr, uint8_t *p, int len)
 {
   uint8_t buf[4];
-  xil_printf("r %d B: %08x\n", len, addr);
+  //xil_printf("r %d B: %08x\n", len, addr);
   // Send the read command and address
   // Leave the transaction open for the data
   buf[0] = FLASH_READ;
