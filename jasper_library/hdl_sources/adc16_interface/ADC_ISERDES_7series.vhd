@@ -86,12 +86,15 @@ architecture ADC_ISERDES_arc of ADC_ISERDES_7series is
      signal iserdes_bitslip_d2 : std_logic;
      signal iserdes_bitslip_d3 : std_logic;
 
-     signal bitslip_swap       : std_logic;
+     signal bitslip_swap       : std_logic_vector( 1 downto 0);
+--     signal bitslip_swap       : std_logic;
      signal bitslip_count      : std_logic_vector( 3 downto 0);
      signal bitslip_delay      : std_logic_vector( 3 downto 0);
-     signal q_d0               : std_logic_vector( 7 downto 0);
+--     signal q_d0               : std_logic_vector( 7 downto 0);
+     signal q_d0               : std_logic_vector(15 downto 0);
      signal q_d1               : std_logic_vector(15 downto 0);
 
+     attribute mark_debug    : string;
 
      begin
 
@@ -125,61 +128,85 @@ architecture ADC_ISERDES_arc of ADC_ISERDES_7series is
                 -- happen
                 if reset = '1' then
                         bitslip_count <= (others => '0');
-                        bitslip_swap <= '0';
+                        bitslip_swap <= (others => '0');
                 elsif rising_edge(clkdiv) then
                         if bitslip_count < ADC_RESOLUTION/2 then
                                 bitslip_count <= bitslip_count + iserdes_bitslip;
                         else
                                 bitslip_count <= (others => '0');
-                                bitslip_swap <= not bitslip_swap;
+                                bitslip_swap <= bitslip_swap + 1;
                         end if;
                 end if;
         end process;
 
         ISERDES_OUTPUT_PROCESS: process ( clkdiv, reset, bitslip_swap, q_d1 )
+--        ISERDES_OUTPUT_PROCESS: process ( clkdiv, reset )
         begin
                 if reset = '1' then
                         q_d0 <= (others => '0');
                         q_d1 <= (others => '0');
                 elsif rising_edge(clkdiv) then
+                        -- Example 1 of receiving 0x5e, 0x5f and 0x60
+                        -- frame_clk    0>1 1>0 0>1 1>0 0>1 1>0
+                        -- q_d0         e       f       0
+                        -- q_d1             5       5       6
+                        -- p_data           5e      5f      60
+
+                        -- Example 2 of receiving 0x5e, 0x5f and 0x60
+                        -- frame_clk    0>1 1>0 0>1 1>0 0>1 1>0
+                        -- q_d0             5       5       6    
+                        -- q_d1         e       f       0    
+                        -- p_data           5e      5f      60
+          
                         if frame_clk = '0' then
-                                q_d0            <=      iserdes_q(0) &
-                                                        iserdes_q(1) &
-                                                        iserdes_q(2) &
-                                                        iserdes_q(3) &
-                                                        iserdes_q(4) &
-                                                        iserdes_q(5) &
-                                                        iserdes_q(6) &
-                                                        iserdes_q(7);
-                                q_d1            <=      q_d1;
+                            q_d0( 7 downto 0) <=    iserdes_q(0) &
+                                                    iserdes_q(1) &
+                                                    iserdes_q(2) &
+                                                    iserdes_q(3) &
+                                                    iserdes_q(4) &
+                                                    iserdes_q(5) &
+                                                    iserdes_q(6) &
+                                                    iserdes_q(7);
                         else
-                                q_d0            <=      q_d0;
-                                q_d1( 7 downto 0) <=    q_d0;
-                                q_d1(15 downto 8) <=    iserdes_q(0) &
-                                                        iserdes_q(1) &
-                                                        iserdes_q(2) &
-                                                        iserdes_q(3) &
-                                                        iserdes_q(4) &
-                                                        iserdes_q(5) &
-                                                        iserdes_q(6) &
-                                                        iserdes_q(7);
+                            q_d0(15 downto 8) <=    iserdes_q(0) &
+                                                    iserdes_q(1) &
+                                                    iserdes_q(2) &
+                                                    iserdes_q(3) &
+                                                    iserdes_q(4) &
+                                                    iserdes_q(5) &
+                                                    iserdes_q(6) &
+                                                    iserdes_q(7);
                         end if;
+
+                        if frame_clk='0' and bitslip_swap(1)='0' then
+                            q_d1( 7 downto 0) <= q_d0( 7 downto 0); 
+                            q_d1(15 downto 8) <= q_d0(15 downto 8);
+                        elsif frame_clk='1' and bitslip_swap(1)='1' then
+                            q_d1( 7 downto 0) <= q_d0(15 downto 8);
+                            q_d1(15 downto 8) <= q_d0( 7 downto 0);
+                        else
+                            q_d1 <= q_d1;
+                        end if; 
                 end if;
 
-                if bitslip_swap = '0' then
-                        p_data <=       q_d1(15 downto 16-ADC_RESOLUTION/2) &
-                                        q_d1( 7 downto  8-ADC_RESOLUTION/2);
+                if bitslip_swap(0) = '0' then
+                    p_data <=   q_d1(15 downto 16-ADC_RESOLUTION/2) &
+                                q_d1( 7 downto  8-ADC_RESOLUTION/2);
                 else
-                        p_data <=       q_d1( 7 downto  8-ADC_RESOLUTION/2) &
-                                        q_d1(15 downto 16-ADC_RESOLUTION/2);
+                    p_data <=   q_d1( 7 downto  8-ADC_RESOLUTION/2) &
+                                q_d1(15 downto 16-ADC_RESOLUTION/2);
+
                 end if;
+
         end process;
+
 
 
      -- ISERDESE1 Master
      iserdes_m_inst : ISERDESE2
      GENERIC MAP (
       DATA_RATE            => "DDR",
+--      DATA_WIDTH              => 8,
       DATA_WIDTH              => ADC_RESOLUTION/2,
       DYN_CLKDIV_INV_EN    => false,
       DYN_CLK_INV_EN       => false,

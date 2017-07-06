@@ -188,9 +188,8 @@ architecture adc16_interface_arc of adc16_interface is
      attribute s    of frame_clk_in : signal is "yes";
 
      signal line_clk     : std_logic;
-     -- frame clock from MMCM is not used at the moment
-     signal frame_clk_MMCM    : std_logic;
      signal frame_clk    : std_logic;
+     signal frame_clk_mmcm    : std_logic;
      signal fabric_clk_0 : std_logic;
      signal locked_0     : std_logic;
 
@@ -297,7 +296,8 @@ architecture adc16_interface_arc of adc16_interface is
 
      -- Internal routing
      line_clk       <= bufg_o(0);
-     frame_clk_MMCM <= bufg_o(1);
+     frame_clk_mmcm <= bufg_o(1);
+--     frame_clk      <= bufg_o(1);
      fabric_clk_0   <= bufg_o(2);
      fabric_clk     <= fabric_clk_0;
      fabric_clk_90  <= bufg_o(3);
@@ -473,11 +473,14 @@ architecture adc16_interface_arc of adc16_interface is
     begin
       if reset = '1' then
         s_snap_req <= (others=>'0');
+        frame_clk <= '0';
       elsif rising_edge(fabric_clk_0) then
-        if frame_clk = '0' then
+        frame_clk <= not frame_clk;
+
           -- snap_req shift register - Capture snap_req on rising edge
           -- of frame clock so that A/B will be even/odd consistent.
-          s_snap_req <= s_snap_req(0) & snap_req;
+        if frame_clk = '1' then
+          s_snap_req <= s_snap_req(0 downto 0) & snap_req;
         else
           s_snap_req <= s_snap_req;
         end if;
@@ -518,20 +521,10 @@ architecture adc16_interface_arc of adc16_interface is
           s_snap_counter <= s_snap_counter;
         end if;
       end if;
+      
     end process;
 
     snap_we <= not s_snap_counter(10);
     snap_addr <= s_snap_counter(9 downto 0);
-
-    process (fabric_clk_0, reset)
-    begin
-      -- Clock divide. The signal generated is called frame_clk, but It is used as
-      -- a combinational signal
-      if reset = '1' then
-        frame_clk <= '0';
-      elsif rising_edge(fabric_clk_0) then
-        frame_clk <= not frame_clk;
-      end if;
-    end process;
 
 end adc16_interface_arc;

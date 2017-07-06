@@ -114,6 +114,8 @@ architecture adc_unit_arc of adc_unit is
      );
      end component;
 
+     attribute mark_debug    : string;
+
      -- Signals
      signal adc_iserdes_data_a : std_logic_vector(4*ADC_RESOLUTION-1 downto 0);
      signal adc_iserdes_data_b : std_logic_vector(4*ADC_RESOLUTION-1 downto 0);
@@ -136,47 +138,51 @@ architecture adc_unit_arc of adc_unit is
                      adc_iserdes_data_a_pipelined <= (others => '0');
                      adc_iserdes_data_b_pipelined <= (others => '0');
              elsif rising_edge(fabric_clk) then
-                     if frame_clk='1' then
-                             adc_iserdes_data_a_pipelined <= adc_iserdes_data_a;
-                             adc_iserdes_data_b_pipelined <= adc_iserdes_data_b;
-                     else
-                             adc_iserdes_data_a_pipelined <= adc_iserdes_data_a_pipelined;
-                             adc_iserdes_data_b_pipelined <= adc_iserdes_data_b_pipelined;
-                     end if;
+               if frame_clk = '0' then
+                     adc_iserdes_data_a_pipelined <= adc_iserdes_data_a;
+                     adc_iserdes_data_b_pipelined <= adc_iserdes_data_b;
+                 else
+                     adc_iserdes_data_a_pipelined <= adc_iserdes_data_a_pipelined;
+                     adc_iserdes_data_b_pipelined <= adc_iserdes_data_b_pipelined;
+               end if;
              end if;
      end process;
 
-     process (frame_clk, adc_iserdes_data_a_pipelined, adc_iserdes_data_b_pipelined)
+     process (fabric_clk, reset)
      begin
        -- Mux pipelined data based on frame_clk signal
-       if frame_clk = '1' then
-         case demux_mode is
-           when "01" => adc_iserdes_data <= adc_iserdes_data_a_pipelined(ADC_RESOLUTION*4-1 downto ADC_RESOLUTION*3)
-                                          & adc_iserdes_data_b_pipelined(ADC_RESOLUTION*4-1 downto ADC_RESOLUTION*3)
-                                          & adc_iserdes_data_a_pipelined(ADC_RESOLUTION*2-1 downto ADC_RESOLUTION*1)
-                                          & adc_iserdes_data_b_pipelined(ADC_RESOLUTION*2-1 downto ADC_RESOLUTION*1);
+       if reset = '1' then
+         adc_iserdes_data <= (others => '0');
+       elsif rising_edge(fabric_clk) then
+         if frame_clk = '1' then
+           case demux_mode is
+             when "01" => adc_iserdes_data <= adc_iserdes_data_a_pipelined(ADC_RESOLUTION*4-1 downto ADC_RESOLUTION*3)
+                                            & adc_iserdes_data_b_pipelined(ADC_RESOLUTION*4-1 downto ADC_RESOLUTION*3)
+                                            & adc_iserdes_data_a_pipelined(ADC_RESOLUTION*2-1 downto ADC_RESOLUTION*1)
+                                            & adc_iserdes_data_b_pipelined(ADC_RESOLUTION*2-1 downto ADC_RESOLUTION*1);
 
-           when "10" => adc_iserdes_data <= adc_iserdes_data_a_pipelined(ADC_RESOLUTION*4-1 downto ADC_RESOLUTION*3)
-                                          & adc_iserdes_data_b_pipelined(ADC_RESOLUTION*4-1 downto ADC_RESOLUTION*3)
-                                          & adc_iserdes_data_a_pipelined(ADC_RESOLUTION*3-1 downto ADC_RESOLUTION*2)
-                                          & adc_iserdes_data_b_pipelined(ADC_RESOLUTION*3-1 downto ADC_RESOLUTION*2);
+             when "10" => adc_iserdes_data <= adc_iserdes_data_a_pipelined(ADC_RESOLUTION*4-1 downto ADC_RESOLUTION*3)
+                                            & adc_iserdes_data_b_pipelined(ADC_RESOLUTION*4-1 downto ADC_RESOLUTION*3)
+                                            & adc_iserdes_data_a_pipelined(ADC_RESOLUTION*3-1 downto ADC_RESOLUTION*2)
+                                            & adc_iserdes_data_b_pipelined(ADC_RESOLUTION*3-1 downto ADC_RESOLUTION*2);
 
-           when others => adc_iserdes_data <= adc_iserdes_data_a_pipelined;
-         end case;
-       else
-         case demux_mode is
-           when "01" => adc_iserdes_data <= adc_iserdes_data_a_pipelined(ADC_RESOLUTION*3-1 downto ADC_RESOLUTION*2)
-                                          & adc_iserdes_data_b_pipelined(ADC_RESOLUTION*3-1 downto ADC_RESOLUTION*2)
-                                          & adc_iserdes_data_a_pipelined(ADC_RESOLUTION*1-1 downto ADC_RESOLUTION*0)
-                                          & adc_iserdes_data_b_pipelined(ADC_RESOLUTION*1-1 downto ADC_RESOLUTION*0);
+             when others => adc_iserdes_data <= adc_iserdes_data_a_pipelined;
+           end case;
+         else
+           case demux_mode is
+             when "01" => adc_iserdes_data <= adc_iserdes_data_a_pipelined(ADC_RESOLUTION*3-1 downto ADC_RESOLUTION*2)
+                                            & adc_iserdes_data_b_pipelined(ADC_RESOLUTION*3-1 downto ADC_RESOLUTION*2)
+                                            & adc_iserdes_data_a_pipelined(ADC_RESOLUTION*1-1 downto ADC_RESOLUTION*0)
+                                            & adc_iserdes_data_b_pipelined(ADC_RESOLUTION*1-1 downto ADC_RESOLUTION*0);
 
-           when "10" => adc_iserdes_data <= adc_iserdes_data_a_pipelined(ADC_RESOLUTION*2-1 downto ADC_RESOLUTION*1)
-                                          & adc_iserdes_data_b_pipelined(ADC_RESOLUTION*2-1 downto ADC_RESOLUTION*1)
-                                          & adc_iserdes_data_a_pipelined(ADC_RESOLUTION*1-1 downto ADC_RESOLUTION*0)
-                                          & adc_iserdes_data_b_pipelined(ADC_RESOLUTION*1-1 downto ADC_RESOLUTION*0);
+             when "10" => adc_iserdes_data <= adc_iserdes_data_a_pipelined(ADC_RESOLUTION*2-1 downto ADC_RESOLUTION*1)
+                                            & adc_iserdes_data_b_pipelined(ADC_RESOLUTION*2-1 downto ADC_RESOLUTION*1)
+                                            & adc_iserdes_data_a_pipelined(ADC_RESOLUTION*1-1 downto ADC_RESOLUTION*0)
+                                            & adc_iserdes_data_b_pipelined(ADC_RESOLUTION*1-1 downto ADC_RESOLUTION*0);
 
-           when others => adc_iserdes_data <= adc_iserdes_data_b_pipelined;
-         end case;
+             when others => adc_iserdes_data <= adc_iserdes_data_b_pipelined;
+           end case;
+         end if;
        end if;
      end process;
 
