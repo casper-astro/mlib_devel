@@ -3,6 +3,7 @@ module kat_ten_gb_eth #(
     parameter FABRIC_MAC     = 48'hffff_ffff_ffff,
     parameter FABRIC_IP      = 32'hffff_ffff,
     parameter FABRIC_PORT    = 16'hffff,
+    parameter FABRIC_NETMASK = 32'hFFFF_FF00,
     parameter FABRIC_GATEWAY = 8'd0,
     parameter FABRIC_ENABLE  = 1'b0,
     parameter FABRIC_MC_RECV_IP      = 32'hffff_ffff,
@@ -181,6 +182,7 @@ module kat_ten_gb_eth #(
     .FABRIC_MAC      (FABRIC_MAC),
     .FABRIC_IP       (FABRIC_IP),
     .FABRIC_PORT     (FABRIC_PORT),
+    .FABRIC_NETMASK  (FABRIC_NETMASK),
     .FABRIC_GATEWAY  (FABRIC_GATEWAY),
     .FABRIC_ENABLE   (FABRIC_ENABLE),
     .MC_RECV_IP      (FABRIC_MC_RECV_IP),
@@ -225,8 +227,9 @@ module kat_ten_gb_eth #(
     .local_ip      (local_ip),
     .local_port    (local_port),
     .local_gateway (local_gateway),
+    .local_netmask         (local_netmask),
     .local_mc_recv_ip      (local_mc_recv_ip),
-    .local_mc_recv_ip_mask (local_mc_recv_ip_mask),    
+    .local_mc_recv_ip_mask (local_mc_recv_ip_mask),
     //software tge reset (app_reset only)
     .soft_reset     (soft_reset_cpu),
     .soft_reset_ack (soft_reset_ack_cpu),
@@ -249,7 +252,7 @@ module kat_ten_gb_eth #(
   tge_tx #(
     .CPU_ENABLE          (CPU_TX_ENABLE),
     .LARGE_PACKETS       (LARGE_PACKETS),
-    .TTL                 (TTL)    
+    .TTL                 (TTL)
   ) tge_tx_inst (
     // Local parameters
     .local_enable        (local_enable),
@@ -257,6 +260,7 @@ module kat_ten_gb_eth #(
     .local_ip            (local_ip),
     .local_port          (local_port),
     .local_gateway       (local_gateway),
+    .local_netmask       (local_netmask),
     // CPU Arp Cache signals;
     .arp_cache_addr      (arp_cache_addr),
     .arp_cache_rd_data   (arp_cache_rd_data),

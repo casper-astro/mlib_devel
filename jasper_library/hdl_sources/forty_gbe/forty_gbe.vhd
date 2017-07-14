@@ -459,6 +459,7 @@ architecture arch_forty_gbe of forty_gbe is
         FABRIC_MAC     : std_logic_vector(47 downto 0);
         FABRIC_IP      : std_logic_vector(31 downto 0);
         FABRIC_PORT    : std_logic_vector(15 downto 0);
+        FABRIC_NETMASK : std_logic_vector(31 downto 0);
         FABRIC_GATEWAY : std_logic_vector(7 downto 0);
         FABRIC_ENABLE  : std_logic;
         FABRIC_MC_RECV_IP      : std_logic_vector(31 downto 0);
@@ -1989,6 +1990,7 @@ begin
         FABRIC_MAC     => X"FFFFFFFFFFFF",
         FABRIC_IP      => X"FFFFFFFF",
         FABRIC_PORT    => X"FFFF",
+        FABRIC_NETMASK => X"FFFFFF00",
         FABRIC_GATEWAY => X"FF",
         FABRIC_ENABLE  => '0',
         FABRIC_MC_RECV_IP      => X"FFFFFFFF",

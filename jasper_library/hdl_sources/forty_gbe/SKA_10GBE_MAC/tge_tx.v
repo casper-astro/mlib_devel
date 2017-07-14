@@ -10,6 +10,7 @@ module tge_tx #(
     input  [31:0] local_ip,
     input  [15:0] local_port,
     input   [7:0] local_gateway,
+    input  [31:0] local_netmask,
     // CPU Arp Cache signals,
     input   [7:0] arp_cache_addr,
     output [47:0] arp_cache_rd_data,
@@ -577,6 +578,7 @@ end endgenerate
   assign mac_tx_data = mac_data;
 
   /* arp cache address decode */
-  assign packet_arp_cache_addr = packet_ctrl_ip[31:8] != local_ip[31:8] ? local_gateway : packet_ctrl_ip[7:0];
+  assign packet_arp_cache_addr = ((local_ip & local_netmask) == (packet_ctrl_ip & local_netmask)) ? packet_ctrl_ip[7:0] : local_gateway[7:0];
+  //assign packet_arp_cache_addr = packet_ctrl_ip[31:8] != local_ip[31:8] ? local_gateway : packet_ctrl_ip[7:0];
 
 endmodule
