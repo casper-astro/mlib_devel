@@ -168,8 +168,8 @@ function DoPostPropSetup(block)
     
     depth = pow2(block.DialogPrm(1).Data);
     latency = block.DialogPrm(2).Data;
-%     randomise = block.DialogPrm(3).Data;
-%     fprintf('depth(%i) latency(%i) randomise(%i)\n', depth, latency, randomise);
+    randomise = block.DialogPrm(3).Data;
+    %fprintf('depth(%i) latency(%i) randomise(%i)\n', depth, latency, randomise);
 
     % storage for data (to level 'depth')
     for ctr = 1 : 8
@@ -358,6 +358,8 @@ function do_read(block)
     end
     block.OutputPort(9).Data = boolean(block.Dwork(11).Data(fifo_ptr));
     block.OutputPort(10).Data = block.Dwork(10).Data(fifo_ptr);
+    block.Dwork(10).Data(fifo_ptr)
+    
     if block.Dwork(11).Data(fifo_ptr) == 1
         block.Dwork(21).Data = block.Dwork(21).Data - 1;
     end
