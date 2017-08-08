@@ -94,7 +94,7 @@ class ClockConstraint(object):
     signal, clock name, whether clock source is get_ports or get_pins, whether a virtual clock, waveform parameters for
     duty cycle and the corresponding clock freq and period.
     '''
-    def __init__(self, signal=None, name=None, freq=None, period=None, port_en=None, virtual_en=None, waveform_min=None, waveform_max=None):
+    def __init__(self, signal=None, name=None, freq=None, period=None, port_en=None, virtual_en=None, waveform_min=0., waveform_max=None):
         logger.debug('New clock constraint')
         logger.debug('clock signal: %s'%signal)
         logger.debug('name: %s'%name)
@@ -112,7 +112,10 @@ class ClockConstraint(object):
         self.period = float(period or 1000./freq)
         self.port_en = port_en
         self.waveform_min = float(waveform_min)
-        self.waveform_max = float(waveform_max)
+        if waveform_max is not None:
+            self.waveform_max = float(waveform_max)
+        else:
+            self.waveform_max = self.period / 2.
         self.virtual_en = virtual_en
 
 class GenClockConstraint(object):
