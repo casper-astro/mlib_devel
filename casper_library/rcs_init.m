@@ -243,32 +243,7 @@ function [result, revision, dirty] = get_revision_info(system_os, rev_sys, dir, 
         end
 
         % determine if dirty. If file, must not appear as being modified, if whole repository, must be clean
-        if isempty(file),
-	  search = 'grep "nothing to commit, working directory clean"';
-	  clog(['cd ',dir,'; git status | ', search], 'rcs_init_debug');
-          [s, r] = system(['cd ',dir,'; git status |', search]);
-          clog([num2str(s),' : ',r], 'rcs_init_debug');
-	  if s == 0 && ~isempty(r), 
-            dirty = 0;
-          end
-        elseif ~isempty(file),
-          search = ['grep ',file];
-	  clog(['cd ',dir,'; git status | ', search], 'rcs_init_debug');
-          [s, r] = system(['cd ',dir,'; git status |', search]);
-          clog([num2str(s),' : ',r], 'rcs_init_debug');
-          if s == 1,
-            disp(['rcs_init: sanity check for git status failed for ',file,'. This should not happen']);
-            result = 1;
-          else,
-            search = [search,' | grep modified'];
-	    clog(['cd ',dir,'; git status | ', search], 'rcs_init_debug');
-            [s, r] = system(['cd ',dir,'; git status |', search]);
-            clog([num2str(s),' : ',r], 'rcs_init_debug');
-            if s == 1 && isempty(r),
-              dirty = 0;
-            end
-          end 
-        end        
+        dirty = system(['git diff-index --quiet HEAD -- ', file]);
       else
         disp(['rcs_init: failure using ''cd ',dir,'; git log -n 1 --abbrev-commit ',file,' | grep commit'' in Linux']);
         clog(['rcs_init: failure using ''cd ',dir,'; git log -n 1 --abbrev-commit ',file,' | grep commit'' in Linux'], 'error');

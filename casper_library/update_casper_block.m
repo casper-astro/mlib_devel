@@ -88,8 +88,8 @@ function update_casper_block(oldblk)
     load_system(srcblk_bd);
   end
 
-  if strcmp(srcblk, 'xps_library/software_register'),
-      srcblk = 'xps_library/software register';
+  if strcmp(srcblk, 'xps_library/software register'),
+      srcblk = 'xps_library/software_register';
   end
   
   % Get old and new mask names
