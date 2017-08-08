@@ -473,7 +473,7 @@ class Toolflow(object):
         self.constraints = []
         peripherals = self.peripherals
         for obj in self.periph_objs:
-            c = obj.gen_constraints(peripherals)
+            c = obj.gen_constraints()
             if c is not None:
                 self.constraints += c
         self.logger.info('Generating physical constraints')

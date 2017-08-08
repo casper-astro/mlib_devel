@@ -171,7 +171,7 @@ class tengbe_v2_xilinx_v6(tengbe_v2):
         # XAUI CONF interface
         xp.add_port('xaui_status', 'xaui_status%d'%self.port, width=8)
 
-    def gen_constraints(self, peripherals=None):
+    def gen_constraints(self):
         cons = []
         cons.append(PortConstraint('xaui_refclk_p', 'xaui_refclk_p', port_index=range(3), iogroup_index=range(3)))
         cons.append(PortConstraint('xaui_refclk_n', 'xaui_refclk_n', port_index=range(3), iogroup_index=range(3)))
@@ -313,7 +313,7 @@ class tengbaser_xilinx_k7(tengbe_v2):
         phy.add_port('xgmii_rxc', 'xgmii_rxc%d'%self.port, width=8)
         phy.add_port('core_status', 'xaui_status%d'%self.port, width=8) #called xaui status for compatibility with kat-tge block
 
-    def gen_constraints(self, peripherals=None):
+    def gen_constraints(self):
         num = self.infrastructure_id
         cons = []
         cons.append(PortConstraint('ref_clk_p%d'%num, 'eth_clk_p'))

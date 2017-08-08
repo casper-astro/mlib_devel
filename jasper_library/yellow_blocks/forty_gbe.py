@@ -303,7 +303,7 @@ class forty_gbe(YellowBlock):
 
         self.instantiate_fgbe(top)
 
-    def gen_constraints(self, peripherals=None):
+    def gen_constraints(self):
         cons = []
         # leaving the aux constraints here so that we can support them at a later stage.
         #cons.append(PortConstraint('AUX_CLK_N','AUX_CLK_N'))
@@ -863,6 +863,9 @@ class forty_gbe(YellowBlock):
         cons.append(RawConstraint('resize_pblock [get_pblocks MEZ3_PHY11_QSFP] -add {CLOCKREGION_X1Y7:CLOCKREGION_X1Y7}'))
 
         #Raw Constraints
+
+        fortygbefullname = self.fullpath.replace('/', '_')
+        cons.append(RawConstraint('set_property LOC ICAP_X0Y1 [get_cells %s/wishbone_flash_sdram_interface_0/icape_controller_0/ICAPE2_0]' % fortygbefullname))
         cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports CONFIG_IO_0]'))
         cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports CONFIG_IO_1]'))
         cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports CONFIG_IO_10]'))

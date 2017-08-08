@@ -29,7 +29,7 @@ class spi_wb_bridge(YellowBlock):
         top.assign_signal('wb_clk_i', 'sys_clk')
         top.assign_signal('wb_rst_i', 'sys_rst')
 
-    def gen_constraints(self, peripherals=None):
+    def gen_constraints(self):
         return [
             PortConstraint('cs_n', 'cs_n'),
             PortConstraint('sclk', 'sclk'),

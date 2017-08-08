@@ -174,7 +174,7 @@ class snap_adc(YellowBlock):
             wbram.add_port('user_we','adc16_snap_we')
             wbram.add_port('user_dout','')
 
-    def gen_constraints(self, peripherals=None):
+    def gen_constraints(self):
         cons = []
         # ADC SPI interface
         cons.append(PortConstraint('adc0_adc3wire_csn1',   'adc_csn', iogroup_index=0))
