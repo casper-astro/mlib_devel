@@ -38,6 +38,11 @@ function update_casper_block(oldblk)
   elseif strcmp(link_status, 'resolved'),
     srcblk = get_param(oldblk, 'ReferenceBlock');
 
+  % Unresolved link (bad link) so get SourceBlock
+  elseif strcmp(link_status, 'unresolved'),
+    fprintf('%s has a broken library link and cannot be updated\n', oldblk);
+    return;
+
   % Else, not supported
   else
     fprintf('%s is not a linked library block\n', oldblk);
