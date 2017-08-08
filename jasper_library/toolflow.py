@@ -132,7 +132,7 @@ class Toolflow(object):
         self.write_core_info()
         self.write_core_jam_info()
         # print 'Initializing backend project'
-        # self.backend.initialise(self.plat)
+        # self.backend.initialize(self.plat)
         
         self.constraints_rule_check()
         
@@ -690,9 +690,9 @@ class ToolflowBackend(object):
         self.plat = plat
         self.castro = None
         if plat:
-            self.initialise(plat)
+            self.initialize(plat)
 
-    def initialise(self, plat):
+    def initialize(self, plat):
         """
         
         :param plat: 
