@@ -1,16 +1,125 @@
 #!/bin/bash
-##############################################
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd $DIR
-if [ -f vivado_config.local ];
+
+###########################################################################
+#                                                                         #
+# DO NOT PUT LOCAL CONFIGURATION INFORMATION IN THIS FILE!                #
+#                                                                         #
+###########################################################################
+#                                                                         #
+# This "startsg" script is used to start the CASPER XSG/VIVADO toolflow.  #
+#                                                                         #
+# Put local definitions in "startsg.local" in the same directory as this  #
+# file.  At a minimum, the "startsg.local" file should define MATLAB_PATH #
+# and XILINX_PATH environment variables that point to the base directory  #
+# of the respective installation directories.  You should define the      #
+# PLATFORM variable (probably as lin64) in that file as well.             #
+#                                                                         #
+###########################################################################
+
+# Find canonical ("real") directory of this script
+SCRIPT_DIR=$(dirname `readlink -e "$0"`)
+
+# Find basename of this script
+SCRIPT_BASE=$(basename "$0")
+
+# First look for local defs in current directory
+if [ -f "./${SCRIPT_BASE}.local" ]
 then
-    echo "Using configuration: $DIR/vivado_config.local"
-    source vivado_config.local
-else
-    echo "Using default configuration: $DIR/vivado_config.sh"
-    source vivado_config.sh
+  LOCALDEFS="./${SCRIPT_BASE}.local"
+
+# Next, look in directory where symlink points
+elif [ -f "${SCRIPT_DIR}/${SCRIPT_BASE}.local" ]
+then
+  LOCALDEFS="${SCRIPT_DIR}/${SCRIPT_BASE}.local"
+
+# Next, look for deprecated "local" name
+elif [ -f "${SCRIPT_DIR}/vivado_config.local" ]
+then
+  LOCALDEFS="${SCRIPT_DIR}/vivado_config.local"
+
+# Finally, look for deprecated "sh" name
+elif [ -f "${SCRIPT_DIR}/vivado_config.sh" ]
+then
+  LOCALDEFS="${SCRIPT_DIR}/vivado_config.sh"
 fi
-export PATH=${MATLAB_PATH}/bin:$PATH
-echo $PATH
-echo "EXECUTING: ${XILINX_PATH}/bin/sysgen $@"
-${XILINX_PATH}/bin/sysgen $@
+
+if [ -n "${LOCALDEFS}" ]
+then
+  echo "Reading local definitions from '${LOCALDEFS}'"
+  source "${LOCALDEFS}"
+else
+  echo "WARNING: Local environment file not found"
+fi
+
+# Verify that MATLAB_PATH and XILINX_PATH are reasonable
+if ! [ -n "${MATLAB_PATH}" ]
+then
+  echo "ERROR: MATLAB_PATH is not defined in the current environment."
+  exit 1
+elif ! [ -d "${MATLAB_PATH}" -a -r "${MATLAB_PATH}" ]
+then
+  echo "ERROR: MATLAB_PATH '${MATLAB_PATH}' is not a readable directory."
+  exit 1
+fi
+
+if ! [ -n "${XILINX_PATH}" ]
+then
+  echo "ERROR: XILINX_PATH is not defined in the current environment."
+  exit 1
+elif ! [ -d "${XILINX_PATH}" -a -r "${XILINX_PATH}" ]
+then
+  echo "ERROR: XILINX_PATH '${XILINX_PATH}' is not a readable directory."
+  exit 1
+fi
+
+if ! [ -n "${PLATFORM}" ]
+then
+  echo "WARNING: PLATFORM is not defined in the current environment, assuming 'lin64'."
+  export PLATFORM="lin64"
+fi
+
+# If not yet defined, set MLIB_DEVEL_PATH based on canonicalized directory of
+# this script.  This is probably what you want, so just don't define it
+# elsewhere.
+if ! [ -n "${MLIB_DEVEL_PATH}" ]
+then
+  export MLIB_DEVEL_PATH="${SCRIPT_DIR}"
+fi
+
+# Check that casper_library directory is writable
+# (required by downconverter and bus libraries).
+if ! [ -w "${MLIB_DEVEL_PATH}/casper_library" ]
+then
+  echo "ERROR: Directory ${MLIB_DEVEL_PATH}/casper_library is not writable by you."
+  exit 1
+fi
+
+# Show environment essentials
+echo "Using MATLAB_PATH=${MATLAB_PATH}"
+echo "Using XILINX_PATH=${XILINX_PATH}"
+echo "Using PLATFORM=${PLATFORM}"
+echo "Using MLIB_DEVEL_PATH=${MLIB_DEVEL_PATH}"
+
+# Finish environment setup
+export SYSGEN_SCRIPT="$MLIB_DEVEL_PATH/startsg"
+export XPS_BASE_PATH="$MLIB_DEVEL_PATH/xps_base"
+export MATLAB="$MATLAB_PATH"
+export CASPER_BASE_PATH="$MLIB_DEVEL_PATH"
+export HDL_ROOT="$CASPER_BASE_PATH/jasper_library/hdl_sources"
+
+source "${XILINX_PATH}/settings64.sh" > /dev/null
+
+export PATH="${MATLAB_PATH}/bin:${PATH}"
+
+# Set umask to allow group writes
+umask 002
+
+# Save start-up directory (if defined, startup.m will cd there)
+export CASPER_STARTUP_DIR=`pwd`
+
+# Change into the MLIB_DEVEL_PATH directory
+# (so MATLAB will find our startup.m file).
+cd "${MLIB_DEVEL_PATH}"
+
+# Start sysgen
+"${XILINX_PATH}/bin/sysgen"

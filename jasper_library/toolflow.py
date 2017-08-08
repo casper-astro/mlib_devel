@@ -130,6 +130,7 @@ class Toolflow(object):
         self.generate_consts()
         # Generate software cores file
         self.write_core_info()
+        self.write_core_jam_info()
         # print 'Initializing backend project'
         # self.backend.initialise(self.plat)
         
@@ -322,8 +323,6 @@ class Toolflow(object):
             self.logger.debug('Generating Yellow Block: %s' % pk)
             self.periph_objs.append(yellow_block.YellowBlock.make_block(
                 self.peripherals[pk], self.plat))
-        self.periph_objs.append(yellow_block.YellowBlock.make_block(
-            {'tag': 'xps:'+self.plat.name}, self.plat))
         self._expand_children(self.periph_objs)
         self._drc()
 
@@ -422,6 +421,35 @@ class Toolflow(object):
         self.logger.debug('Opening %s' % basefile)
         with open(newfile, 'w') as fh:
             fh.write(s)
+
+    def write_core_jam_info(self):
+        self.cores = self.top.wb_devices
+        basefile = '%s/%s/core_info.jam.tab' % (os.getenv('HDL_ROOT'), self.plat.name)
+        newfile = '%s/core_info.jam.tab' % self.compile_dir
+        self.logger.debug('Opening %s' % basefile)
+        modemap = {'rw': 3, 'r': 1, 'w': 2}
+        try:
+            with open(basefile, 'r') as fh:
+               s = fh.read()
+        # If there isn't a basefile, just plow on
+        except IOError:
+            s = ''
+        if len(self.cores) != 0:
+            longest_name = max([len(core.regname) for core in self.cores])
+            format_str = '{0:%d} {1:1} {2:<16x} {3:<16x} {4:<2x}\n' % longest_name
+        for core in self.cores:
+            self.logger.debug('Adding core_info.jam.tab entry for %s' % core.regname)
+            s += format_str.format(core.regname, modemap[core.mode], core.base_addr, core.nbytes, core.typecode)
+            # add aliases if the WB Devices have them
+            for reg in core.memory_map:
+                s += format_str.format(reg.name, modemap[reg.mode], core.base_addr + reg.offset, reg.nbytes, core.typecode)
+            # s += '%s\t%d\t%x\t%x\n'%(core.regname, modemap[core.mode], core.base_addr, core.nbytes)
+        self.logger.debug('Opening %s' % basefile)
+        with open(newfile, 'w') as fh:
+            fh.write(s)
+        # generate the binary and xilinx-style .mem versions of this table, using some Ruby(!) scripts.
+        os.system('ruby %s/jasper_library/cit2bin.rb %s > %s.bin' % (os.getenv('MLIB_DEVEL_PATH'), newfile, newfile))
+        os.system('ruby %s/jasper_library/cit2mem.rb %s > %s.mem' % (os.getenv('MLIB_DEVEL_PATH'), newfile, newfile))
 
     def regenerate_top(self):
         """
@@ -739,8 +767,8 @@ class ToolflowBackend(object):
                     raise Exception(errmsg)
                 self.add_const_file(source)
 
-        existing_ips = {}
         for ip in self.castro.ips:
+<<<<<<< HEAD
             library_loc = ip[0]
             ip_name = ip[1]
             if library_loc in existing_ips:
@@ -750,6 +778,11 @@ class ToolflowBackend(object):
                 existing_ips[library_loc] = [ip_name]
         for library, ips in existing_ips.iteritems():
             self.add_ips(library, ips)
+=======
+            self.add_library(ip['path'])
+            if ip.has_key('module_name'):
+                self.add_ip(ip)
+>>>>>>> jack-h/jasper_devel
        
         # elaborate pin constraints
         for const in self.castro.synthesis.pin_constraints:
@@ -959,6 +992,7 @@ class VivadoBackend(ToolflowBackend):
         self.src_file_block_diagram_ext = 'bd'
         self.src_file_elf_ext = 'elf'
         self.src_file_coe_ext = 'coe'
+        self.src_file_design_checkpoint_ext = 'dcp'
         self.manufacturer = 'xilinx'
         self.project_name = 'myproj'
         self.periph_objs = periph_objs
@@ -975,8 +1009,26 @@ class VivadoBackend(ToolflowBackend):
         self.npm_sources = []
         ToolflowBackend.__init__(self, plat=plat, compile_dir=compile_dir)
 
+<<<<<<< HEAD
     def initialise(self, plat):
         self.tcl_cmd = ''
+=======
+    def initialize(self, plat):
+        self.tcl_cmds = {
+            'init'        : '',
+            'pre_synth'   : '',
+            'synth'       : '',
+            'post_synth'  : '',
+            'pre_impl'    : '',
+            'impl'        : '',
+            'post_impl'   : '',
+            'pre_bitgen'  : '',
+            'bitgen'      : '',
+            'post_bitgen' : '',
+            'promgen'     : '',
+        }
+
+>>>>>>> jack-h/jasper_devel
         if plat.manufacturer != self.manufacturer:
             self.logger.error('Trying to compile a %s FPGA using %s %s' % (
                 plat.manufacturer, self.manufacturer, self.name))
@@ -997,10 +1049,11 @@ class VivadoBackend(ToolflowBackend):
         #  self.add_source(os.getenv('HDL_ROOT')+'/'+source)
         #  self.add_source(self.compile_dir+'/top.v')
 
-    def add_ips(self, library_path, ips):
+    def add_library(self, path):
         """
-        Add an ip core from a library at <library_path>/ip
+        Add a library at <path>
         """
+<<<<<<< HEAD
         # if self.plat.project_mode:
         self.add_tcl_cmd('set repos [get_property ip_repo_paths '
                          '[current_project]]')
@@ -1012,6 +1065,18 @@ class VivadoBackend(ToolflowBackend):
                              '-library SysGen -version 1.0 -module_name'
                              ' %s_ip' % (ip, ip))
         # else:
+=======
+        self.add_tcl_cmd('set repos [get_property ip_repo_paths [current_project]]')
+        self.add_tcl_cmd('set_property ip_repo_paths "$repos %s" [current_project]' % path)
+        self.add_tcl_cmd('update_ip_catalog')
+
+    def add_ip(self, ip):
+        """
+        Add an ip core from a library
+        """
+        self.add_tcl_cmd('create_ip -name %s -vendor %s -library %s -version %s -module_name %s' % (ip['name'], ip['vendor'], ip['library'], ip['version'], ip['module_name']))
+        #else:
+>>>>>>> jack-h/jasper_devel
         #    # TODO: validate for non-project mode flow
         #    pass
 
@@ -1048,7 +1113,7 @@ class VivadoBackend(ToolflowBackend):
                     self.add_tcl_cmd('read_vhdl %s/%s' % (
                         source, current_source))
                 # Verilog File
-                if ext == self.src_file_verilog_ext:
+                elif ext == self.src_file_verilog_ext:
                     # Only read from source when reading the top.v file
                     if os.path.basename(source) == 'top.v':
                         self.add_tcl_cmd('read_verilog %s' % source)
@@ -1056,6 +1121,7 @@ class VivadoBackend(ToolflowBackend):
                         self.add_tcl_cmd('read_verilog %s/%s' % (
                             source, current_source))
                 # System Verilog File
+<<<<<<< HEAD
                 if ext == self.src_file_sys_verilog_ext:
                     self.add_tcl_cmd('read_verilog -sv %s/%s' % (
                         source, current_source))
@@ -1073,6 +1139,27 @@ class VivadoBackend(ToolflowBackend):
                 if ext == self.src_file_coe_ext:
                     self.add_tcl_cmd('add_files %s/%s' % (
                         source, current_source))
+=======
+                elif ext == self.src_file_sys_verilog_ext:
+                    self.add_tcl_cmd('read_verilog -sv %s/%s' % (source,current_source))
+                # IP File
+                elif ext == self.src_file_ip_ext:
+                    self.add_tcl_cmd('read_ip %s/%s' % (source,current_source))
+                # Block Diagram File
+                elif ext == self.src_file_block_diagram_ext:
+                    self.add_tcl_cmd('read_bd %s/%s' % (source,current_source))
+                # ELF Microblaze File
+                elif ext == self.src_file_elf_ext:
+                    self.add_tcl_cmd('add_files %s/%s' % (source,current_source))
+                # Coefficient BRAM File
+                elif ext == self.src_file_coe_ext:
+                    self.add_tcl_cmd('add_files %s/%s' % (source,current_source))
+                # Design checkpoint files
+                elif ext == self.src_file_design_checkpoint_ext:
+                    self.add_tcl_cmd('add_files %s' % current_source)
+                else:
+                    self.logger.warning('unknown extension, ignoring source file %s' % current_source)
+>>>>>>> jack-h/jasper_devel
 
     def add_const_file(self, constfile):
         """
@@ -1096,14 +1183,33 @@ class VivadoBackend(ToolflowBackend):
             self.logger.debug('Ignore constraint file: %s, with wrong file '
                               'extension' % constfile)
 
+<<<<<<< HEAD
     def add_tcl_cmd(self, cmd):
+=======
+    def add_tcl_cmd(self, cmd, stage='pre_synth'):
+>>>>>>> jack-h/jasper_devel
         """
         Add a command to the tcl command list with
         a trailing newline.
         """
         self.logger.debug('Adding tcl command: %s' % cmd)
-        self.tcl_cmd += cmd
-        self.tcl_cmd += '\n'
+        self.tcl_cmds[stage] += cmd
+        self.tcl_cmds[stage] += '\n'
+
+    def eval_tcl(self):
+        s = ''
+        s += self.tcl_cmds['init']
+        s += self.tcl_cmds['pre_synth']
+        s += self.tcl_cmds['synth']
+        s += self.tcl_cmds['post_synth']
+        s += self.tcl_cmds['pre_impl']
+        s += self.tcl_cmds['impl']
+        s += self.tcl_cmds['post_impl']
+        s += self.tcl_cmds['pre_bitgen']
+        s += self.tcl_cmds['bitgen']
+        s += self.tcl_cmds['post_bitgen']
+        s += self.tcl_cmds['promgen']
+        return s
 
     def add_compile_cmds(self, cores=8, plat=None):
         """
@@ -1113,6 +1219,7 @@ class VivadoBackend(ToolflowBackend):
         tcl = self.add_tcl_cmd
         # Project Mode is enabled
         if plat.project_mode:
+<<<<<<< HEAD
             tcl('set_property top top [current_fileset]')
             self.gen_yellowblock_tcl_cmds()
             tcl('update_compile_order -fileset sources_1')
@@ -1196,6 +1303,95 @@ class VivadoBackend(ToolflowBackend):
             tcl('puts "No timing violations => Total Hold Slack: '
                 '[get_property STATS.THS [get_runs impl_1]] ns" ')
             tcl('}')
+=======
+            # Pre-Synthesis Commands
+            self.add_tcl_cmd('cd [get_property DIRECTORY [current_project]]', stage='pre_synth')
+            self.add_tcl_cmd('set_property top top [current_fileset]', stage='pre_synth')
+            self.add_tcl_cmd('update_compile_order -fileset sources_1', stage='pre_synth')
+            # Hack to get the System generator RAMs to see their coefficient files.
+            # Vivado (2016.1) doesn't seem to import the .coe and ram .xci files in the
+            # correct relative directories as configured by System Generator.
+            self.add_tcl_cmd('if {[llength [glob -nocomplain [get_property directory [current_project]]/myproj.srcs/sources_1/imports/*.coe]] > 0} {', stage='pre_synth')
+            self.add_tcl_cmd('file copy -force {*}[glob [get_property directory [current_project]]/myproj.srcs/sources_1/imports/*.coe] [get_property directory [current_project]]/myproj.srcs/sources_1/ip/', stage='pre_synth')
+            self.add_tcl_cmd('}', stage='pre_synth')
+            self.add_tcl_cmd('upgrade_ip -quiet [get_ips *]', stage='pre_synth')
+            # Add in if ILA is being used to prevent signal names from changing during synthesis
+            #self.add_tcl_cmd('set_property STEPS.SYNTH_DESIGN.ARGS.FLATTEN_HIERARCHY none [get_runs synth_1]')
+
+            # Synthesis Commands   
+            self.add_tcl_cmd('reset_run synth_1', stage='synth')
+            self.add_tcl_cmd('launch_runs synth_1 -jobs %d' % cores, stage='synth')
+            self.add_tcl_cmd('wait_on_run synth_1', stage='synth')
+
+            # Post-Synthesis Commands
+            self.add_tcl_cmd('open_run synth_1', stage='post_synth')
+
+            # Pre-Implementation Commands
+            self.add_tcl_cmd('set_property STEPS.WRITE_BITSTREAM.ARGS.BIN_FILE true [get_runs impl_1]', stage='pre_impl')
+            self.add_tcl_cmd('set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]', stage='pre_impl')
+
+            # Implementation Commands
+            self.add_tcl_cmd('launch_runs impl_1 -jobs %d' % cores, stage='impl')
+            self.add_tcl_cmd('wait_on_run impl_1', stage='impl')
+
+            # Post-Implementation Commands
+            self.add_tcl_cmd('open_run impl_1', stage='post_impl')
+
+            # Pre-Bitgen Commands
+
+            # Bitgen Commands
+            self.add_tcl_cmd('launch_runs impl_1 -to_step write_bitstream', stage='bitgen')
+            self.add_tcl_cmd('wait_on_run impl_1', stage='bitgen')
+
+            # Post-Bitgen Commands
+            # Generate a binary file for SKARAB where the bits are reversed per byte. This is used by casperfpga for
+            # configuring the FPGA
+            try:
+                if plat.conf['bit_reversal'] == True:
+                    self.add_tcl_cmd('write_cfgmem -force -format bin -interface bpix8 -size 128 -loadbit "up 0x0 '
+                                 '%s/%s/%s.runs/impl_1/top.bit" -file %s'
+                                 % (self.compile_dir, self.project_name, self.project_name, self.binary_loc), stage='post_bitgen')
+            # just ignore if key is not present as only some platforms will have the key.
+            except KeyError:
+                s = ""
+
+            # Determine if the design meets timing or not
+            # Look for Worst Negative Slack
+            self.add_tcl_cmd('if { [get_property STATS.WNS [get_runs impl_1] ] < 0 } {', stage='post_bitgen')
+            self.add_tcl_cmd('puts "Found timing violations => Worst Negative Slack:'
+                             ' [get_property STATS.WNS [get_runs impl_1]] ns" ', stage='post_bitgen')
+            self.add_tcl_cmd('} else {', stage='post_bitgen')
+            self.add_tcl_cmd('puts "No timing violations => Worst Negative Slack:'
+                             ' [get_property STATS.WNS [get_runs impl_1]] ns" ', stage='post_bitgen')
+            self.add_tcl_cmd('}', stage='post_bitgen')
+            # Look for Total Negative Slack
+            self.add_tcl_cmd('if { [get_property STATS.TNS [get_runs impl_1] ] < 0 } {', stage='post_bitgen')
+            self.add_tcl_cmd('puts "Found timing violations => Total Negative Slack:'
+                             ' [get_property STATS.TNS [get_runs impl_1]] ns" ', stage='post_bitgen')
+            self.add_tcl_cmd('} else {', stage='post_bitgen')
+            self.add_tcl_cmd('puts "No timing violations => Total Negative Slack:'
+                             ' [get_property STATS.TNS [get_runs impl_1]] ns" ', stage='post_bitgen')
+            self.add_tcl_cmd('}', stage='post_bitgen')
+            # Look for Worst Hold Slack
+            self.add_tcl_cmd('if { [get_property STATS.WHS [get_runs impl_1] ] < 0 } {', stage='post_bitgen')
+            self.add_tcl_cmd('puts "Found timing violations => Worst Hold Slack:'
+                             ' [get_property STATS.WHS [get_runs impl_1]] ns" ', stage='post_bitgen')
+            self.add_tcl_cmd('} else {', stage='post_bitgen')
+            self.add_tcl_cmd('puts "No timing violations => Worst Hold Slack:'
+                             ' [get_property STATS.WHS [get_runs impl_1]] ns" ', stage='post_bitgen')
+            self.add_tcl_cmd('}', stage='post_bitgen')
+            # Look for Total Hold Slack
+            self.add_tcl_cmd('if { [get_property STATS.THS [get_runs impl_1] ] < 0 } {', stage='post_bitgen')
+            self.add_tcl_cmd('puts "Found timing violations => Total Hold Slack:'
+                             ' [get_property STATS.THS [get_runs impl_1]] ns" ', stage='post_bitgen')
+            self.add_tcl_cmd('} else {', stage='post_bitgen')
+            self.add_tcl_cmd('puts "No timing violations => Total Hold Slack:'
+                             ' [get_property STATS.THS [get_runs impl_1]] ns" ', stage='post_bitgen')
+            self.add_tcl_cmd('}', stage='post_bitgen')
+
+            # Let Yellow Blocks add their own tcl commands
+            self.gen_yellowblock_tcl_cmds()
+>>>>>>> jack-h/jasper_devel
 
         # Non-Project mode is enabled
         # Options can be added to the *_design commands to change strategies
@@ -1290,10 +1486,16 @@ class VivadoBackend(ToolflowBackend):
         self.add_compile_cmds(cores=cores, plat=plat)
         # write tcl command to file
         tcl_file = self.compile_dir+'/gogogo.tcl'
+<<<<<<< HEAD
         helpers.write_file(tcl_file, self.tcl_cmd)
         rv = os.system('vivado -jou {cdir}/vivado.jou -log {cdir}/vivado.log '
                        '-mode batch -source '
                        '{cfile}'.format(cdir=self.compile_dir, cfile=tcl_file))
+=======
+        helpers.write_file(tcl_file, self.eval_tcl())
+        rv = os.system('vivado -jou %s/vivado.jou -log %s/vivado.log -mode batch -source %s'
+                       % (self.compile_dir, self.compile_dir, tcl_file))
+>>>>>>> jack-h/jasper_devel
         if rv:
             raise Exception('Vivado failed!')
 
@@ -1449,13 +1651,18 @@ class VivadoBackend(ToolflowBackend):
         Compose a list of tcl commands from each yellow block.
         To be added to the final tcl script.
         """
+<<<<<<< HEAD
         self.logger.info('Extracting yellow block tcl commands'
                          ' from peripherals')
+=======
+        self.logger.info('Extracting yellow block tcl commands from peripherals')
+>>>>>>> jack-h/jasper_devel
         for obj in self.periph_objs:
             c = obj.gen_tcl_cmds()
-            if c is not None:
-                for o in c:
-                    self.add_tcl_cmd(o)
+            for key, val in c.iteritems():
+                if val is not None:
+                    for v in val:
+                        self.add_tcl_cmd(v, stage=key)
 
     def gen_constraint_file(self, constraints):
         """

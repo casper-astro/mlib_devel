@@ -108,6 +108,7 @@ class YellowBlock(object):
         self.blk = blk
         self.platform = platform
         self.name = self.blk['tag'] + '%d'%self.inst_id #this can get overwritten by copy_attrs
+        self.typecode = 0xFF
         self.copy_attrs()
         try:
             self.fullname = self.fullpath.replace('/','_')
@@ -189,7 +190,7 @@ class YellowBlock(object):
         This method is designed to be overridden by subclasses. It should
         return a list of Strings.
         """
-        return []
+        return {}
 
     #def add_resource(self, thing):
     #    """

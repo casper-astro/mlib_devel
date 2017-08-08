@@ -50,6 +50,9 @@ module kat_ten_gb_eth #(
     input         wb_we_i,
     input         wb_cyc_i,
     input         wb_stb_i,
+    
+    // CPU interrupt (on wb clock domain)
+    output        cpu_int,
 
     output        led_up,
     output        led_rx,
@@ -173,7 +176,9 @@ module kat_ten_gb_eth #(
     .PREEMPHASIS     (PREEMPHASIS),
     .POSTEMPHASIS    (POSTEMPHASIS),
     .DIFFCTRL        (DIFFCTRL),
-    .RXEQMIX         (RXEQMIX)
+    .RXEQMIX         (RXEQMIX),
+    .CPU_TX_ENABLE   (CPU_TX_ENABLE),
+    .CPU_RX_ENABLE   (CPU_RX_ENABLE)
   ) wb_attach_inst (
     //wb attachment
     .wb_clk_i (wb_clk_i),
@@ -309,6 +314,7 @@ module kat_ten_gb_eth #(
     .cpu_rx_buffer_rd_data (cpu_rx_buffer_rd_data),
     .cpu_rx_size           (cpu_rx_size),
     .cpu_rx_ack            (cpu_rx_ack),
+    .cpu_int               (cpu_int),
     // MAC Interface
     .mac_clk           (mac_clk),
     .mac_rst           (mac_rst),

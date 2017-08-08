@@ -38,7 +38,8 @@ class ImmutableWithComments(object):
             raise Exception('Tried to change attribute %s of %s from %s to %s'%(x, self.name, self.__getattribute__(x), y))
 
 class WbDevice(object):
-    def __init__(self, regname, nbytes, mode, hdl_suffix='', hdl_candr_suffix='', memory_map=[]):
+    def __init__(self, regname, nbytes, mode, hdl_suffix='', hdl_candr_suffix='', memory_map=[], typecode=0xff):
+        self.typecode = typecode
         self.regname = regname
         self.nbytes = nbytes
         self.mode=mode
@@ -304,9 +305,16 @@ class VerilogModule(object):
         param 'comment': Use this to add a comment string which will end up in the generated verilog
         """
         name = name.rstrip(' ')
-        if signal == '':
+        # Catch cases where we don't want to infer either a parent port or signal declaration
+        if (signal == '') or (signal is None):
+            # port is not connected
             parent_port = False
             parent_sig = False
+        elif signal[0].isdigit():
+            # port is connected to a constant
+            parent_port = False
+            parent_sig = False
+            
         logger.debug('Attempting to add port "%s" (parent sig: %s, parent port: %s)'%(name,parent_sig,parent_port))
         if name not in self.ports.keys():
             logger.debug('  Port "%s" is new'%name)
@@ -705,7 +713,7 @@ class VerilogModule(object):
         s += '  );\n'
         return s
 
-    def add_wb_interface(self, regname, mode, nbytes=4, suffix='', candr_suffix='', memory_map=[]):
+    def add_wb_interface(self, regname, mode, nbytes=4, suffix='', candr_suffix='', memory_map=[], typecode=0xff):
         """
         Add the ports necessary for a wishbone slave interface.
         Wishbone ports that depend on the slave index are identified by a parameter
@@ -717,7 +725,7 @@ class VerilogModule(object):
         if regname in [wb_dev.regname for wb_dev in self.wb_devices]:
             return
         else:
-            wb_device = WbDevice(regname, nbytes=nbytes, mode=mode, hdl_suffix=suffix, hdl_candr_suffix=candr_suffix, memory_map=memory_map)
+            wb_device = WbDevice(regname, nbytes=nbytes, mode=mode, hdl_suffix=suffix, hdl_candr_suffix=candr_suffix, memory_map=memory_map, typecode=typecode)
             self.wb_devices += [wb_device]
             self.n_wb_interfaces += 1
             self.add_port('wb_clk_i'+candr_suffix, parent_sig=False)

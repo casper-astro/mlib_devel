@@ -1,6 +1,6 @@
 function [] = jasper(model)
 
-if nargin > 0    
+if nargin > 0
     load_system(model);
 end
 
@@ -18,7 +18,7 @@ if exist(builddir, 'dir') ~= 7
     mkdir(modeldir, modelname);
 end
 
-disp('Updating diagram'); 
+disp('Updating diagram');
 set_param(sys, 'SimulationCommand', 'update');
 
 % look for clashing HMC mezzanine settings
@@ -43,7 +43,7 @@ end
 disp('Generating peripherals file');
 gen_block_file(builddir, [builddir '/jasper.per'])
 
-% Generate the design_info.tab file, which is used to populate the fpg 
+% Generate the design_info.tab file, which is used to populate the fpg
 % header file
 mssge.xps_path = builddir;
 gen_xps_add_design_info(sys, mssge, '/');
@@ -66,7 +66,7 @@ jasper_python = [getenv('MLIB_DEVEL_PATH') '/jasper_library/exec_flow.py'];
 
 disp('Launching jasper flow middleware');
 % rv = system([jasper_python ' -m' modelpath ' -c' builddir ' --skipyb --skipfe --skipbe']);
-rv = system([jasper_python ' -m' modelpath ' -c' builddir '']);
+rv = system(['python ' jasper_python ' -m' modelpath ' -c' builddir '']);
 
 if rv ~= 0
     fprintf('ERROR: see %s/jasper.log for details\n', builddir);
@@ -82,7 +82,6 @@ disp('Complete');
 if getenv('USE_VIVADO_RUNTIME_FOR_MATLAB') == '1'
     fprintf('Run ''exec_flow.py -m %s --middleware --backend --software'' to finish flow\n', modelpath);
 else
-    fprintf('Run ''exec_flow.py -m %s --middleware --backend --software --be ise'' to finish flow\n', modelpath); 
+    fprintf('Run ''exec_flow.py -m %s --middleware --backend --software --be ise'' to finish flow\n', modelpath);
 end
-
 % end
