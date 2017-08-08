@@ -1156,7 +1156,6 @@ class VivadoBackend(ToolflowBackend):
         # Project Mode is enabled
         if plat.project_mode:
             # Pre-Synthesis Commands
-            self.add_tcl_cmd('cd [get_property DIRECTORY [current_project]]', stage='pre_synth')
             self.add_tcl_cmd('set_property top top [current_fileset]', stage='pre_synth')
             self.add_tcl_cmd('update_compile_order -fileset sources_1', stage='pre_synth')
             # Hack to get the System generator RAMs to see their coefficient files.
@@ -1165,7 +1164,13 @@ class VivadoBackend(ToolflowBackend):
             self.add_tcl_cmd('if {[llength [glob -nocomplain [get_property directory [current_project]]/myproj.srcs/sources_1/imports/*.coe]] > 0} {', stage='pre_synth')
             self.add_tcl_cmd('file copy -force {*}[glob [get_property directory [current_project]]/myproj.srcs/sources_1/imports/*.coe] [get_property directory [current_project]]/myproj.srcs/sources_1/ip/', stage='pre_synth')
             self.add_tcl_cmd('}', stage='pre_synth')
-            self.add_tcl_cmd('upgrade_ip -quiet [get_ips *]', stage='pre_synth')
+            
+            # add the upgrade_ip command to the tcl file if the yaml file requrests it, default to upgrading the IP
+            if "upgrade_ip" not in plat.conf.keys() or plat.conf['upgrade_ip'] == True:
+                self.add_tcl_cmd('upgrade_ip -quiet [get_ips *]', stage='pre_synth')
+                self.logger.debug('adding the upgrade_ip command to the tcl script')
+            else:             
+                self.logger.debug('The upgrade_ip command is not being added to the tcl script')
             # Add in if ILA is being used to prevent signal names from changing during synthesis
             #self.add_tcl_cmd('set_property STEPS.SYNTH_DESIGN.ARGS.FLATTEN_HIERARCHY none [get_runs synth_1]')
 
@@ -1180,6 +1185,7 @@ class VivadoBackend(ToolflowBackend):
             # Pre-Implementation Commands
             self.add_tcl_cmd('set_property STEPS.WRITE_BITSTREAM.ARGS.BIN_FILE true [get_runs impl_1]', stage='pre_impl')
             self.add_tcl_cmd('set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]', stage='pre_impl')
+            #self.add_tcl_cmd('cd [get_property DIRECTORY [current_project]]', stage='pre_impl')
 
             # Implementation Commands
             self.add_tcl_cmd('launch_runs impl_1 -jobs %d' % cores, stage='impl')
