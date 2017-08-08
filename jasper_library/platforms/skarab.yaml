@@ -15,7 +15,10 @@ constraints:
   - skarab.xdc
 provides:
   - sys_clk
-  - mezz_3
+  - mezz0
+  - mezz1
+  - mezz2
+  - mezz3
 pins:
   FLASH_A:
     iostd: LVCMOS18

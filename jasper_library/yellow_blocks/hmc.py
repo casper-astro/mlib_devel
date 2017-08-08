@@ -102,6 +102,8 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         self.add_source('hmc/src/*.ngc')
         self.add_source("hmc/src/hmc_user_axi_fifo/*.xci")
         self.add_source('hmc/open_hmc')
+        # This block takes a mezzanine site and should prevent other blocks from using it
+        self.exc_requires = ['mezz%d' % self.mez]
 
     def modify_top(self,top):
 

@@ -21,25 +21,6 @@ end
 disp('Updating diagram');
 set_param(sys, 'SimulationCommand', 'update');
 
-% look for clashing HMC mezzanine settings
-disp('Checking HMC block clashes');
-hmcs = find_system(gcs, 'SearchDepth', 10, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'xps:hmc');
-if length(hmcs) > 1
-    mezs = ones(1, length(hmcs)) * -1;
-    mezs(1) = str2double(get_param(hmcs{1}, 'mez'));
-    for ctr = 2 : length(hmcs)
-        new_mez = str2double(get_param(hmcs{ctr}, 'mez'));
-        if ~isempty(find(mezs == new_mez, 1))
-            for ctr2 = 1 : length(hmcs)
-                mez = str2double(get_param(hmcs{ctr2}, 'mez'));
-                fprintf('%s: slot %i\n', hmcs{ctr2}, mez);
-            end
-            error('Two or more HMC blocks are set to use the same mezzanine slot.');
-        end
-        mezs(ctr) = new_mez;
-    end
-end
-
 disp('Generating peripherals file');
 gen_block_file(builddir, [builddir '/jasper.per'])
 
