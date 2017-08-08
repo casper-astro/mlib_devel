@@ -31,39 +31,6 @@ data_width  = str2double(get_param(c_sys, 'data_width'));
 data_bin_pt = eval_param(c_sys, 'data_bin_pt');
 addr_width  = eval_param(c_sys, 'addr_width');
 
-% check parameters
-try
-    % This is in a try/end block in case we are inside a library or 
-    % other model without a system generator block.
-    xsg_blk = [strtok(gcs, '/') '/ System Generator'];
-    fpga_arch = xlgetparam(xsg_blk, 'xilinxfamily');
-catch
-    fpga_arch = '';
-end
-
-switch fpga_arch
-    case {'Virtex7', 'virtex7', 'virtex6', 'Virtex6', 'virtex5', 'Virtex5'}
-        % if addressing less than 32k bytes
-        if (addr_width + ceil(log2(data_width))) < 15
-            min_width = num2str(15-ceil(log2(data_width)));
-            errordlg(['Shared BRAM address width cannot be less than ', ...
-                min_width, ' when using a data width of ', ...
-                num2str(data_width),' on ', fpga_arch, ' boards']);
-        end
-    case 'virtex2p'
-        if addr_width < 11 
-            errordlg('Shared BRAM address width cannot be less than 11 on Virtex-II Pro boards');
-        end
-    otherwise
-        if addr_width < 11 
-            errordlg('Shared BRAM address width cannot be less than 11 on unknown board');
-        end
-end
-
-if addr_width > 16
-    errordlg('Shared BRAM address width cannot be greater than 16');
-end
-
 % set up address manipulation blocks
 
 try
