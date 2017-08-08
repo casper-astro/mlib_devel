@@ -739,12 +739,6 @@ class ToolflowBackend(object):
         """
         raise NotImplementedError
 
-    def add_ips(self, library_path, ips):
-        """
-        Add an ip core from a library at <library_path>/ip
-        """
-        raise NotImplementedError
-
     def import_from_castro(self, filename):
         import castro
         self.castro = castro.Castro.load(filename)
@@ -768,21 +762,9 @@ class ToolflowBackend(object):
                 self.add_const_file(source)
 
         for ip in self.castro.ips:
-<<<<<<< HEAD
-            library_loc = ip[0]
-            ip_name = ip[1]
-            if library_loc in existing_ips:
-                if ip_name not in existing_ips[library_loc]:
-                    existing_ips[library_loc] += [ip_name]
-            else:
-                existing_ips[library_loc] = [ip_name]
-        for library, ips in existing_ips.iteritems():
-            self.add_ips(library, ips)
-=======
             self.add_library(ip['path'])
             if ip.has_key('module_name'):
                 self.add_ip(ip)
->>>>>>> jack-h/jasper_devel
        
         # elaborate pin constraints
         for const in self.castro.synthesis.pin_constraints:
@@ -1009,10 +991,6 @@ class VivadoBackend(ToolflowBackend):
         self.npm_sources = []
         ToolflowBackend.__init__(self, plat=plat, compile_dir=compile_dir)
 
-<<<<<<< HEAD
-    def initialise(self, plat):
-        self.tcl_cmd = ''
-=======
     def initialize(self, plat):
         self.tcl_cmds = {
             'init'        : '',
@@ -1028,7 +1006,6 @@ class VivadoBackend(ToolflowBackend):
             'promgen'     : '',
         }
 
->>>>>>> jack-h/jasper_devel
         if plat.manufacturer != self.manufacturer:
             self.logger.error('Trying to compile a %s FPGA using %s %s' % (
                 plat.manufacturer, self.manufacturer, self.name))
@@ -1053,19 +1030,6 @@ class VivadoBackend(ToolflowBackend):
         """
         Add a library at <path>
         """
-<<<<<<< HEAD
-        # if self.plat.project_mode:
-        self.add_tcl_cmd('set repos [get_property ip_repo_paths '
-                         '[current_project]]')
-        self.add_tcl_cmd('set_property ip_repo_paths "$repos %s/ip" '
-                         '[current_project]' % library_path)
-        self.add_tcl_cmd('update_ip_catalog')
-        for ip in ips:
-            self.add_tcl_cmd('create_ip -name %s -vendor User_Company '
-                             '-library SysGen -version 1.0 -module_name'
-                             ' %s_ip' % (ip, ip))
-        # else:
-=======
         self.add_tcl_cmd('set repos [get_property ip_repo_paths [current_project]]')
         self.add_tcl_cmd('set_property ip_repo_paths "$repos %s" [current_project]' % path)
         self.add_tcl_cmd('update_ip_catalog')
@@ -1075,10 +1039,6 @@ class VivadoBackend(ToolflowBackend):
         Add an ip core from a library
         """
         self.add_tcl_cmd('create_ip -name %s -vendor %s -library %s -version %s -module_name %s' % (ip['name'], ip['vendor'], ip['library'], ip['version'], ip['module_name']))
-        #else:
->>>>>>> jack-h/jasper_devel
-        #    # TODO: validate for non-project mode flow
-        #    pass
 
     def add_source(self, source, plat):
         """
@@ -1121,25 +1081,6 @@ class VivadoBackend(ToolflowBackend):
                         self.add_tcl_cmd('read_verilog %s/%s' % (
                             source, current_source))
                 # System Verilog File
-<<<<<<< HEAD
-                if ext == self.src_file_sys_verilog_ext:
-                    self.add_tcl_cmd('read_verilog -sv %s/%s' % (
-                        source, current_source))
-                # IP File
-                if ext == self.src_file_ip_ext:
-                    self.add_tcl_cmd('read_ip %s/%s' % (source, current_source))
-                # Block Diagram File
-                if ext == self.src_file_block_diagram_ext:
-                    self.add_tcl_cmd('read_bd %s/%s' % (source, current_source))
-                # ELF Microblaze File
-                if ext == self.src_file_elf_ext:
-                    self.add_tcl_cmd('add_files %s/%s' % (
-                        source, current_source))
-                # Coefficient BRAM File
-                if ext == self.src_file_coe_ext:
-                    self.add_tcl_cmd('add_files %s/%s' % (
-                        source, current_source))
-=======
                 elif ext == self.src_file_sys_verilog_ext:
                     self.add_tcl_cmd('read_verilog -sv %s/%s' % (source,current_source))
                 # IP File
@@ -1159,7 +1100,6 @@ class VivadoBackend(ToolflowBackend):
                     self.add_tcl_cmd('add_files %s' % current_source)
                 else:
                     self.logger.warning('unknown extension, ignoring source file %s' % current_source)
->>>>>>> jack-h/jasper_devel
 
     def add_const_file(self, constfile):
         """
@@ -1183,11 +1123,7 @@ class VivadoBackend(ToolflowBackend):
             self.logger.debug('Ignore constraint file: %s, with wrong file '
                               'extension' % constfile)
 
-<<<<<<< HEAD
-    def add_tcl_cmd(self, cmd):
-=======
     def add_tcl_cmd(self, cmd, stage='pre_synth'):
->>>>>>> jack-h/jasper_devel
         """
         Add a command to the tcl command list with
         a trailing newline.
@@ -1219,91 +1155,6 @@ class VivadoBackend(ToolflowBackend):
         tcl = self.add_tcl_cmd
         # Project Mode is enabled
         if plat.project_mode:
-<<<<<<< HEAD
-            tcl('set_property top top [current_fileset]')
-            self.gen_yellowblock_tcl_cmds()
-            tcl('update_compile_order -fileset sources_1')
-            tcl('set_property STEPS.WRITE_BITSTREAM.ARGS.BIN_FILE true '
-                '[get_runs impl_1]')
-            tcl('set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true '
-                '[get_runs impl_1]')
-            # Hack to get the System generator RAMs to see their coefficient
-            # files. Vivado (2016.1) doesn\'t seem to import the .coe and
-            # ram .xci files in the correct relative directories as configured
-            # by System Generator.
-            tcl('if {[llength [glob -nocomplain [get_property directory '
-                '[current_project]]/myproj.srcs/sources_1/imports/*.coe]] > 0} '
-                '{')
-            tcl('file copy -force {*}[glob [get_property directory '
-                '[current_project]]/myproj.srcs/sources_1/imports/*.coe] '
-                '[get_property directory [current_project]]/myproj.srcs/'
-                'sources_1/ip/')
-            tcl('}')
-            # the upgrade command is removed as it isnt entirely needed.
-            # It does upgrade some skarab IP even though the IP is locked.
-            # tcl('upgrade_ip -quiet [get_ips *]')
-            # Add in if ILA is being used to prevent signal names from
-            # changing during synthesis
-            # tcl('set_property STEPS.SYNTH_DESIGN.ARGS.FLATTEN_HIERARCHY '
-            #     'none [get_runs synth_1]')
-            tcl('reset_run synth_1')
-            tcl('launch_runs synth_1 -jobs %d' % cores)
-            tcl('wait_on_run synth_1')
-            # tcl('open_run synth_1')
-            tcl('launch_runs impl_1 -jobs %d' % cores)
-            tcl('wait_on_run impl_1')
-            tcl('open_run impl_1')
-            tcl('launch_runs impl_1 -to_step write_bitstream')
-            tcl('wait_on_run impl_1')
-            # Generate a binary file for SKARAB where the bits are reversed
-            # per byte. This is used by casperfpga for
-            # configuring the FPGA
-            try:
-                if plat.conf['bit_reversal']:
-                    tcl('write_cfgmem -force -format bin -interface bpix8 '
-                        '-size 128 -loadbit "up 0x0 %s/%s/%s.runs/impl_1/'
-                        'top.bit" -file %s' % (
-                            self.compile_dir, self.project_name,
-                            self.project_name, self.binary_loc))
-            # just ignore if key is not present as only some platforms
-            # will have the key.
-            except KeyError as e:
-                raise KeyError(e.message)
-
-            # Determine if the design meets timing or not
-            # Look for Worst Negative Slack
-            tcl('if { [get_property STATS.WNS [get_runs impl_1] ] < 0 } {')
-            tcl('puts "Found timing violations => Worst Negative Slack: '
-                '[get_property STATS.WNS [get_runs impl_1]] ns" ')
-            tcl('} else {')
-            tcl('puts "No timing violations => Worst Negative Slack: '
-                '[get_property STATS.WNS [get_runs impl_1]] ns" ')
-            tcl('}')
-            # Look for Total Negative Slack
-            tcl('if { [get_property STATS.TNS [get_runs impl_1] ] < 0 } {')
-            tcl('puts "Found timing violations => Total Negative Slack: '
-                '[get_property STATS.TNS [get_runs impl_1]] ns" ')
-            tcl('} else {')
-            tcl('puts "No timing violations => Total Negative Slack: '
-                '[get_property STATS.TNS [get_runs impl_1]] ns" ')
-            tcl('}')
-            # Look for Worst Hold Slack
-            tcl('if { [get_property STATS.WHS [get_runs impl_1] ] < 0 } {')
-            tcl('puts "Found timing violations => Worst Hold Slack: '
-                '[get_property STATS.WHS [get_runs impl_1]] ns" ')
-            tcl('} else {')
-            tcl('puts "No timing violations => Worst Hold Slack: '
-                '[get_property STATS.WHS [get_runs impl_1]] ns" ')
-            tcl('}')
-            # Look for Total Hold Slack
-            tcl('if { [get_property STATS.THS [get_runs impl_1] ] < 0 } {')
-            tcl('puts "Found timing violations => Total Hold Slack: '
-                '[get_property STATS.THS [get_runs impl_1]] ns" ')
-            tcl('} else {')
-            tcl('puts "No timing violations => Total Hold Slack: '
-                '[get_property STATS.THS [get_runs impl_1]] ns" ')
-            tcl('}')
-=======
             # Pre-Synthesis Commands
             self.add_tcl_cmd('cd [get_property DIRECTORY [current_project]]', stage='pre_synth')
             self.add_tcl_cmd('set_property top top [current_fileset]', stage='pre_synth')
@@ -1391,7 +1242,6 @@ class VivadoBackend(ToolflowBackend):
 
             # Let Yellow Blocks add their own tcl commands
             self.gen_yellowblock_tcl_cmds()
->>>>>>> jack-h/jasper_devel
 
         # Non-Project mode is enabled
         # Options can be added to the *_design commands to change strategies
@@ -1486,16 +1336,10 @@ class VivadoBackend(ToolflowBackend):
         self.add_compile_cmds(cores=cores, plat=plat)
         # write tcl command to file
         tcl_file = self.compile_dir+'/gogogo.tcl'
-<<<<<<< HEAD
-        helpers.write_file(tcl_file, self.tcl_cmd)
+        helpers.write_file(tcl_file, self.eval_tcl())
         rv = os.system('vivado -jou {cdir}/vivado.jou -log {cdir}/vivado.log '
                        '-mode batch -source '
                        '{cfile}'.format(cdir=self.compile_dir, cfile=tcl_file))
-=======
-        helpers.write_file(tcl_file, self.eval_tcl())
-        rv = os.system('vivado -jou %s/vivado.jou -log %s/vivado.log -mode batch -source %s'
-                       % (self.compile_dir, self.compile_dir, tcl_file))
->>>>>>> jack-h/jasper_devel
         if rv:
             raise Exception('Vivado failed!')
 
@@ -1651,12 +1495,8 @@ class VivadoBackend(ToolflowBackend):
         Compose a list of tcl commands from each yellow block.
         To be added to the final tcl script.
         """
-<<<<<<< HEAD
         self.logger.info('Extracting yellow block tcl commands'
                          ' from peripherals')
-=======
-        self.logger.info('Extracting yellow block tcl commands from peripherals')
->>>>>>> jack-h/jasper_devel
         for obj in self.periph_objs:
             c = obj.gen_tcl_cmds()
             for key, val in c.iteritems():
