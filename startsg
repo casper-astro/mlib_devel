@@ -14,16 +14,25 @@
 # of the respective installation directories.  You should define the      #
 # PLATFORM variable (probably as lin64) in that file as well.             #
 #                                                                         #
+# See the `startsg.local.example` file for an example.                    #
+#                                                                         #
 ###########################################################################
 
 # Find canonical ("real") directory of this script
-SCRIPT_DIR=$(dirname `readlink -e "$0"`)
+SCRIPT_DIR=$(dirname `readlink -e "${BASH_SOURCE[0]}"`)
+#echo "SCRIPT_DIR=${SCRIPT_DIR}"
 
 # Find basename of this script
-SCRIPT_BASE=$(basename "$0")
+SCRIPT_BASE=$(basename "${BASH_SOURCE[0]}")
+#echo "SCRIPT_BASE=${SCRIPT_BASE}"
+
+# If local defs file passed on command line, use it
+if [ -n "${1}" ]
+then
+  LOCALDEFS="${1}"
 
 # First look for local defs in current directory
-if [ -f "./${SCRIPT_BASE}.local" ]
+elif [ -f "./${SCRIPT_BASE}.local" ]
 then
   LOCALDEFS="./${SCRIPT_BASE}.local"
 
@@ -31,45 +40,51 @@ then
 elif [ -f "${SCRIPT_DIR}/${SCRIPT_BASE}.local" ]
 then
   LOCALDEFS="${SCRIPT_DIR}/${SCRIPT_BASE}.local"
-
-# Next, look for deprecated "local" name
-elif [ -f "${SCRIPT_DIR}/vivado_config.local" ]
-then
-  LOCALDEFS="${SCRIPT_DIR}/vivado_config.local"
-
-# Finally, look for deprecated "sh" name
-elif [ -f "${SCRIPT_DIR}/vivado_config.sh" ]
-then
-  LOCALDEFS="${SCRIPT_DIR}/vivado_config.sh"
 fi
 
-if [ -n "${LOCALDEFS}" ]
+# Errors need to return if this file is being sourced,
+# but need to exit if this file is being executed.
+on_error=return
+if [ "$0" == "${BASH_SOURCE[0]}" ]
+then
+  on_error=exit
+fi
+
+if [ -n "${LOCALDEFS}" -a -f "${LOCALDEFS}" ]
 then
   echo "Reading local definitions from '${LOCALDEFS}'"
   source "${LOCALDEFS}"
 else
-  echo "WARNING: Local environment file not found"
+  # If local defs was passed on command line, this is an error.  Otherwise it
+  # is just a warning because the user may be settng up their own environment.
+  if [ -n "${1}" ]
+  then
+    echo "ERROR: Local environment file '${LOCALDEFS}' not found."
+    $on_error 1
+  else
+    echo "WARNING: Local environment file not found."
+  fi
 fi
 
 # Verify that MATLAB_PATH and XILINX_PATH are reasonable
 if ! [ -n "${MATLAB_PATH}" ]
 then
   echo "ERROR: MATLAB_PATH is not defined in the current environment."
-  exit 1
+  $on_error 1
 elif ! [ -d "${MATLAB_PATH}" -a -r "${MATLAB_PATH}" ]
 then
   echo "ERROR: MATLAB_PATH '${MATLAB_PATH}' is not a readable directory."
-  exit 1
+  $on_error 1
 fi
 
 if ! [ -n "${XILINX_PATH}" ]
 then
   echo "ERROR: XILINX_PATH is not defined in the current environment."
-  exit 1
+  $on_error 1
 elif ! [ -d "${XILINX_PATH}" -a -r "${XILINX_PATH}" ]
 then
   echo "ERROR: XILINX_PATH '${XILINX_PATH}' is not a readable directory."
-  exit 1
+  $on_error 1
 fi
 
 if ! [ -n "${PLATFORM}" ]
@@ -91,8 +106,14 @@ fi
 if ! [ -w "${MLIB_DEVEL_PATH}/casper_library" ]
 then
   echo "ERROR: Directory ${MLIB_DEVEL_PATH}/casper_library is not writable by you."
-  exit 1
+  $on_error 1
 fi
+
+# Make sure that these variables are exported
+export XILINX_PATH
+export MATLAB_PATH
+export PLATFORM
+export MLIB_DEVEL_PATH
 
 # Show environment essentials
 echo "Using MATLAB_PATH=${MATLAB_PATH}"
@@ -107,19 +128,28 @@ export MATLAB="$MATLAB_PATH"
 export CASPER_BASE_PATH="$MLIB_DEVEL_PATH"
 export HDL_ROOT="$CASPER_BASE_PATH/jasper_library/hdl_sources"
 
-source "${XILINX_PATH}/settings64.sh" > /dev/null
+if [ -f "${XILINX_PATH}/settings64.sh" ]
+then
+  source "${XILINX_PATH}/settings64.sh" > /dev/null
+else
+  echo "ERROR: Xilink settings script '${XILINX_PATH}/settings64.sh' not found."
+  $on_error 1
+fi
 
 export PATH="${MATLAB_PATH}/bin:${PATH}"
 
 # Set umask to allow group writes
 umask 002
 
-# Save start-up directory (if defined, startup.m will cd there)
-export CASPER_STARTUP_DIR=`pwd`
+if [ "$0" == "${BASH_SOURCE[0]}" ]
+then
+  # Save start-up directory (if defined, startup.m will cd there)
+  export CASPER_STARTUP_DIR=`pwd`
 
-# Change into the MLIB_DEVEL_PATH directory
-# (so MATLAB will find our startup.m file).
-cd "${MLIB_DEVEL_PATH}"
+  # Change into the MLIB_DEVEL_PATH directory
+  # (so MATLAB will find our startup.m file).
+  cd "${MLIB_DEVEL_PATH}"
 
-# Start sysgen
-"${XILINX_PATH}/bin/sysgen"
+  # Start sysgen
+  "${XILINX_PATH}/bin/sysgen"
+fi
