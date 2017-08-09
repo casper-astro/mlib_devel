@@ -1316,8 +1316,8 @@ casper_tapcp_open_flash(
     }
   }
   // Save CMD length (in binary bytes, not hex digits) to state->u32
-  // Note that this is strictly command/opcode plus address/dummy bytes; it
-  // does not include any of the optional 4 bytes for read length.
+  // Note that this is strictly command/opcode plus any address/dummy/data
+  // bytes; it does not include any of the optional 4 bytes for read length.
   state->u32 = strlen((char *)p) >> 1;
   // If reading
   if(!state->write) {
