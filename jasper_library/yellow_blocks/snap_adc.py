@@ -238,9 +238,9 @@ class snap_adc(YellowBlock):
         clkconst = ClockConstraint('adc16_clk_line_p', name='adc_clk', freq=self.line_clock_freq)
         cons.append(clkconst)
 
-        cons.append(RawConstraint('set_clock_groups -name async_sysclk_adcclk -asynchronous -group [get_clocks -include_generated_clocks %s_CLK] -group [get_clocks -include_generated_clocks sys_clk0_dcm]' % clkconst.signal))
-        cons.append(RawConstraint('set_multicycle_path -from [get_clocks -include_generated_clocks %s_CLK] -to [get_clocks -include_generated_clocks sys_clk0_dcm] 3' % clkconst.signal))
-        cons.append(RawConstraint('set_multicycle_path -from [get_clocks -include_generated_clocks %s_CLK] -to [get_clocks -include_generated_clocks sys_clk0_dcm] -hold 2' % clkconst.signal))
+        cons.append(RawConstraint('set_clock_groups -name async_sysclk_adcclk -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks sys_clk0_dcm]' % clkconst.name))
+        cons.append(RawConstraint('set_multicycle_path -from [get_clocks -include_generated_clocks %s] -to [get_clocks -include_generated_clocks sys_clk0_dcm] 3' % clkconst.name))
+        cons.append(RawConstraint('set_multicycle_path -from [get_clocks -include_generated_clocks %s] -to [get_clocks -include_generated_clocks sys_clk0_dcm] -hold 2' % clkconst.name))
 
         return cons
 

@@ -130,7 +130,7 @@ class adc(YellowBlock):
 
         clkconst = ClockConstraint(adcstr + 'adc_clk_p', adcstr + '_clk', freq = self.adc_clk_rate / 4.)
         cons.append(clkconst)
-        cons.append(RawConstraint('set_clock_groups -name async_sysclk_adcclk -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks sys_clk0_dcm]' % (clkconst.signal+'_CLK')))
+        cons.append(RawConstraint('set_clock_groups -name async_sysclk_adcclk -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks sys_clk0_dcm]' % (clkconst.name)))
 
         cons.append(RawConstraint('set_property DIFF_TERM TRUE [get_ports %sadc_clk_p]' % adcstr))
         cons.append(RawConstraint('set_property DIFF_TERM TRUE [get_ports %sadc_sync_p]' % adcstr))
