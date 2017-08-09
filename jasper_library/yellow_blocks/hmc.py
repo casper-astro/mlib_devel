@@ -221,7 +221,7 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
 
         #Cut clocks between HMC and forty_gbe clocks
         cons.append(ClockGroupConstraint('-of_objects [get_pins %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname, '-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]','asynchronous'))
-        cons.append(ClockGroupConstraint('-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0] -of_objects [get_pins %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
+        cons.append(ClockGroupConstraint('-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', '-of_objects [get_pins %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
 
         #Cut paths between HMC Link 2 and Link 3 clocks
         cons.append(ClockGroupConstraint('-of_objects [get_pins %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname, '-of_objects [get_pins %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
@@ -303,7 +303,7 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
 
         #Cut paths between HMC and forty_gbe clocks
         cons.append(ClockGroupConstraint('-of_objects [get_pins %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname, '-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]','asynchronous'))
-        cons.append(ClockGroupConstraint('-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0] -of_objects [get_pins %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
+        cons.append(ClockGroupConstraint('-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', '-of_objects [get_pins %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
 
         #Cut paths between HMC Link 3 and HMC Link 2 clocks
         cons.append(ClockGroupConstraint('-of_objects [get_pins %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname, '-of_objects [get_pins %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
