@@ -53,8 +53,9 @@ function update_casper_block(oldblk)
   % old name.
   srcblk = casper_library_forwarding_table(srcblk);
   
-  % Special handling for deprecated "edge" blocks
+  % Special case handling
   switch srcblk
+  % Special handling for deprecated "edge" blocks
   case {'casper_library_misc/edge', ...
         'casper_library_misc/negedge', ...
         'casper_library_misc/posedge'}
@@ -84,6 +85,17 @@ function update_casper_block(oldblk)
         params{:});
     % Done!
     return
+  case {'xps_library/XSG core config', ...
+        'xps_library/XSG_core_config'}
+    % Get hw_sys parameter to handle SNAP/SNAP2/VCU118 platforms
+    hw_sys = get_param(oldblk, 'hw_sys');
+    if startsWith(hw_sys, 'SNAP:')
+      srcblk = 'xps_library/Platforms/SNAP';
+    elseif startsWith(hw_sys, 'SNAP2:')
+      srcblk = 'xps_library/Platforms/SNAP2';
+    elseif startsWith(hw_sys, 'VCU118:')
+      srcblk = 'xps_library/Platforms/VCU118';
+    end
   end % special deprecated handling
 
   % Make sure srcblk's block diagram is loaded
