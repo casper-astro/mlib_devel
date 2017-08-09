@@ -87,17 +87,22 @@
 // Bit 8 is software reset (1 to reset, 0 to run)
 // Bit 0 is enable bit (1 to enable, 0 to disable)
 #define ETH_MAC_REG16_CTRL            (0x11)
-// Reset bit (8 byte access)
+// Reset bit (8 bit access)
 // Bit 0 is software reset (1 to reset, 0 to run)
 #define ETH_MAC_REG8_RESET            (0x23)
 // Enable bit (8 bit access)
 // Bit 0 is enable bit (1 to enable, 0 to disable)
 #define ETH_MAC_REG8_ENABLE           (0x22)
+// CPU RX enabled (8 bit access)
+// Bit 0 indicates status (1 is enabled, 0 is disabled)
+#define ETH_MAC_REG8_RX_ENABLE        (0x26)
+// CPU TX enabled (8 bit access)
+// Bit 0 indicates status (1 is enabled, 0 is disabled)
+#define ETH_MAC_REG8_TX_ENABLE        (0x27)
+// XAUI status (8 bit access)
+#define ETH_MAC_REG8_XAUI_STATUS      (0x24)
 // UDP port for fabric receive (16 bit access)
 #define ETH_MAC_REG16_PORT            (0x10)
-
-// XAUI status
-#define ETH_MAC_REG32_XAUI_STATUS     (0x09)
 
 // PHY config
 #define ETH_MAC_REG32_PHY_CONFIG      (0x0a)

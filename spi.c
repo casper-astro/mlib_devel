@@ -106,7 +106,7 @@ send_spi(u8 *src, u8 *dst, u32 len, u32 opt)
       // Uh-oh, print some details
       xil_printf("looped %d times waiting for spi tx fifo empty\n", i);
       // Show SPI registers
-      dump_spi();
+      //dump_spi();
       return len - bytes_remaining;
     }
 

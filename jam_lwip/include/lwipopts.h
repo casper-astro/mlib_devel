@@ -49,7 +49,7 @@
  * MEM_SIZE: the size of the heap memory. If the application will send
  * a lot of data that needs to be copied, this should be set high.
  */
-#define MEM_SIZE                        8192
+#define MEM_SIZE                        4096
 
 /**
  * MEM_USE_POOLS==1: Use an alternative to malloc() by allocating from a set
