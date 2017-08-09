@@ -257,7 +257,7 @@ module gbe_cpu_attach_wb #(
                 local_ip_reg[31:24] <= cpu_din[31:24];
             end
             REG_BUFFER_SIZES: begin
-              if (cpu_sel[0] && cpu_din[12:0] == 8'b0) begin
+              if (cpu_sel[0] && cpu_din[12:0] == 13'b0) begin
                 cpu_rx_size_reg <= 13'h0;
               end
               if (cpu_sel[2]) begin
