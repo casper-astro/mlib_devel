@@ -47,7 +47,7 @@ function update_casper_block(oldblk)
   % Map srcblk through casper_library_forwarding_table in case it's a really
   % old name.
   srcblk = casper_library_forwarding_table(srcblk);
-
+  
   % Special handling for deprecated "edge" blocks
   switch srcblk
   case {'casper_library_misc/edge', ...
@@ -88,6 +88,10 @@ function update_casper_block(oldblk)
     load_system(srcblk_bd);
   end
 
+  if strcmp(srcblk, 'xps_library/software_register'),
+      srcblk = 'xps_library/software register';
+  end
+  
   % Get old and new mask names
   oldblk_mask_names = get_param(oldblk, 'MaskNames');
   newblk_mask_names = get_param(srcblk, 'MaskNames');

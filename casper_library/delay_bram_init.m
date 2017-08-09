@@ -40,6 +40,7 @@ function delay_bram_init(blk, varargin)
   if (DelayLen <= bram_latency + 1)
     clog('delay value must be greater than BRAM Latency + 1',{'error', 'delay_bram_init_debug'});
     error('delay_bram_init: delay value must be greater than BRAM Latency + 1');
+    error('delay_bram_init: delay value(%i) must be greater than BRAM Latency(%i) + 1', DelayLen, bram_latency);
   end
   
   %input ports
@@ -52,7 +53,7 @@ function delay_bram_init(blk, varargin)
   if strcmp(async, 'on'),
     reuse_block(blk, 'en', 'built-in/inport', 'Port', '2', ...
         'Position', [40 73 70 87]);
-  else,
+  else
     reuse_block(blk, 'constant', 'xbsIndex_r4/Constant', ...
         'arith_type', 'Boolean', 'const', '1', ...
         'explicit_period', 'on', 'period', '1', ...

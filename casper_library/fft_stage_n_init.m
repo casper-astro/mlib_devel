@@ -140,6 +140,12 @@ if (2^(FFTSize-FFTStage) < bram_latency)
     delays_bram = 'off';
 end
 
+%calculate data path width so that mux latency can be increased if needed
+n_bits_dp = input_bit_width * n_inputs * 2;
+if n_bits_dp < 50, mux_latency = 1;
+else mux_latency = 2;
+end
+
 %%%%%%%%%%%%%%%
 % input ports %
 %%%%%%%%%%%%%%%
@@ -213,13 +219,13 @@ reuse_block(blk, 'slice1', 'xbsIndex_r4/Slice', 'Position', [385 115 415 135]);
 add_line(blk,'counter/1', 'slice1/1');
 
 reuse_block(blk, 'mux1', 'xbsIndex_r4/Mux', ...
-        'latency', '1', 'precision', 'Full', ...
+        'latency', num2str(mux_latency), 'precision', 'Full', ...
         'Position', [465 47 490 143]);
 
 add_line(blk,'slice1/1', 'mux1/1');
 
 reuse_block(blk, 'mux0', 'xbsIndex_r4/Mux', ...
-        'latency', '1', 'precision', 'Full', ...
+        'latency', num2str(mux_latency), 'precision', 'Full', ...
         'Position', [465 157 490 253]);
 add_line(blk, 'slice1/1', 'mux0/1');
 
@@ -231,10 +237,10 @@ reuse_block(blk, 'dmux0', 'xbsIndex_r4/Delay', 'latency', num2str(latency), ...
   'reg_retiming', 'on', 'Position', [670 195 700 215]);
 add_line(blk, 'mux0/1', 'dmux0/1');
 
-latency = 1;
+latency = mux_latency;
 if strcmp(async, 'off'), 
-  if strcmp(delays_bram, 'on'), latency = 1 + fan_latency + bram_latency;
-  else, latency = 1 + fan_latency;
+  if strcmp(delays_bram, 'on'), latency = mux_latency + fan_latency + bram_latency;
+  else, latency = mux_latency + fan_latency;
   end
 end
 reuse_block(blk, 'dsync1', 'xbsIndex_r4/Delay', ...
@@ -247,7 +253,7 @@ end
 
 if strcmp(async, 'on'),
   reuse_block(blk, 'en_replicate1', 'casper_library_bus/bus_replicate', ...
-    'replication', num2str(outputNum), 'latency', '1', 'misc', 'off', 'Position', [395 466 425 484]);
+    'replication', num2str(outputNum), 'latency', num2str(mux_latency), 'misc', 'off', 'Position', [395 466 425 484]);
   add_line(blk, 'bus_expand0/2', 'en_replicate1/1');
   reuse_block(blk, 'bus_expand1', 'casper_library_flow_control/bus_expand', ...
     'mode', 'divisions of equal size', 'outputNum', num2str(outputNum), ...
