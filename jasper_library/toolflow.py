@@ -1185,7 +1185,6 @@ class VivadoBackend(ToolflowBackend):
             # Pre-Implementation Commands
             self.add_tcl_cmd('set_property STEPS.WRITE_BITSTREAM.ARGS.BIN_FILE true [get_runs impl_1]', stage='pre_impl')
             self.add_tcl_cmd('set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]', stage='pre_impl')
-            #self.add_tcl_cmd('cd [get_property DIRECTORY [current_project]]', stage='pre_impl')
 
             # Implementation Commands
             self.add_tcl_cmd('launch_runs impl_1 -jobs %d' % cores, stage='impl')
@@ -1199,6 +1198,7 @@ class VivadoBackend(ToolflowBackend):
             # Bitgen Commands
             self.add_tcl_cmd('launch_runs impl_1 -to_step write_bitstream', stage='bitgen')
             self.add_tcl_cmd('wait_on_run impl_1', stage='bitgen')
+            self.add_tcl_cmd('cd [get_property DIRECTORY [current_project]]', stage='bitgen')
 
             # Post-Bitgen Commands
             # Generate a binary file for SKARAB where the bits are reversed per byte. This is used by casperfpga for
