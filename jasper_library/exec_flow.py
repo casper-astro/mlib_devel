@@ -51,6 +51,13 @@ parser.add_option("-c", "--builddir", dest="builddir", type='string',
 
 (opts, args) = parser.parse_args()
 
+# if we don't have the environment set up, source the default config file
+if 'XILINX_PATH' not in os.environ.keys():
+    this_file_path = os.path.realpath(__file__)
+    config_file_path = os.path.join(os.path.dirname(os.path.dirname(this_file_path)), 'vivado_config.local')
+    if os.path.exists(config_file_path):
+        shell_source(config_file_path)
+
 # get build directory
 # use user defined directory else use a directory with same name as model
 builddir = opts.builddir or opts.model[:-4]
