@@ -24,12 +24,6 @@ class snap_adc(YellowBlock):
 		self.adc_data_width = 8
 	self.LOG_USER_WIDTH = int(math.log(self.adc_data_width*4,2))
 
-	if self.sample_rate=="":
-		if self.adc_resolution==8:
-			self.sample_rate = 1000/self.n_inputs
-		elif self.adc_resolution==12:
-			self.sample_rate = 640/self.n_inputs
-
 	# An HMCAD1511 has 8 ADC cores and DDR transmission 
         self.line_clock_freq = self.sample_rate/(8.0/self.n_inputs)*self.adc_resolution/2.0
 
