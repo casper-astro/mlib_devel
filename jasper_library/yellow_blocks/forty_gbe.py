@@ -1,3 +1,4 @@
+import os
 from yellow_block import YellowBlock
 from constraints import PortConstraint, ClockConstraint, GenClockConstraint, ClockGroupConstraint, InputDelayConstraint,\
     OutputDelayConstraint, FalsePathConstraint, MultiCycleConstraint, RawConstraint
@@ -985,12 +986,12 @@ class forty_gbe(YellowBlock):
     def gen_tcl_cmds(self):
         tcl_cmds = []
 
-        tcl_cmds.append('import_files -force -fileset constrs_1 hdl_sources/forty_gbe/Constraints/gmii_to_sgmii.xdc')
-        tcl_cmds.append('import_files -force -fileset constrs_1 hdl_sources/forty_gbe/Constraints/soc_version.xdc')
-        tcl_cmds.append('import_files -force -fileset constrs_1 hdl_sources/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/constrs_1/new/IEEE802_3_XL_PCS.xdc')
-        tcl_cmds.append('import_files -force -fileset constrs_1 hdl_sources/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/constrs_1/new/DATA_FREQUENCY_DIVIDER.xdc')
-        tcl_cmds.append('import_files -force -fileset constrs_1 hdl_sources/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/constrs_1/new/DATA_FREQUENCY_MULTIPLIER.xdc')
-        tcl_cmds.append('import_files -force -fileset constrs_1 hdl_sources/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PHY/IEEE802_3_XL_PHY.srcs/constrs_1/new/IEEE802_3_XL_PHY.xdc')
+        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/Constraints/gmii_to_sgmii.xdc'%os.getenv('HDL_ROOT'))
+        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/Constraints/soc_version.xdc'%os.getenv('HDL_ROOT'))
+        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/constrs_1/new/IEEE802_3_XL_PCS.xdc'%os.getenv('HDL_ROOT'))
+        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/constrs_1/new/DATA_FREQUENCY_DIVIDER.xdc'%os.getenv('HDL_ROOT'))
+        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/constrs_1/new/DATA_FREQUENCY_MULTIPLIER.xdc'%os.getenv('HDL_ROOT'))
+        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PHY/IEEE802_3_XL_PHY.srcs/constrs_1/new/IEEE802_3_XL_PHY.xdc'%os.getenv('HDL_ROOT'))
 
         tcl_cmds.append('set_property is_locked true [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/cont_microblaze/cont_microblaze.bd]')
         tcl_cmds.append('set_property is_locked true [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/ip/gmii_to_sgmii/gmii_to_sgmii.xci]')
