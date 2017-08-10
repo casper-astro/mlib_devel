@@ -1,0 +1,17 @@
+*.d
+*.mem
+*.o
+
+/executable.elf
+core_info.tab
+core_info.bin
+
+/bsp/microblaze_0/include/*.h
+!/bsp/microblaze_0/include/xparameters.h
+
+/bsp/microblaze_0/lib/libxil.a
+/map
+/symbols
+/tags
+/test/csl_find_key_test
+/test/csl_find_by_payload_test
