@@ -34,15 +34,19 @@ variables are `MATLAB_PATH` and `XILINX_PATH`.  Another variable that can be
 defined is `PLATFORM`, which is used by the Xilinx tools to select suitable
 runtime binaries for your system.  If not specified, it will be defaulted to
 `lin64` which (as of this writing) is the most commonly used platform for
-CASPER development and a warning message will be issued.  Another variable that
-you may wish to define in `startsg.local` is `XILINXD_LICENSE_FILE` to point to
-your Xilinx software license if it exists in a non-standard location.
+CASPER development and a warning message will be issued.  Other variables that
+you may wish to define in `startsg.local` are `XILINXD_LICENSE_FILE` to point
+to your Xilinx software license if it exists in a non-standard location and
+`JASPER_BACKEND` to specify which Xilinx tools will be used to implement your
+design (currently supported options are `vivado` or `ise`, with `vivado` being
+the default).
 
 Here is a sample `startsg.local` file:
 
     export XILINX_PATH=/opt/Xilinx/Vivado/2016.4
     export MATLAB_PATH=/usr/local/MATLAB/R2016b
     export PLATFORM=lin64
+    export JASPER_BACKEND=vivado
 
 ## Other features
 
