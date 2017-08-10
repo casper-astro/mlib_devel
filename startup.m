@@ -4,18 +4,16 @@ warning off Simulink:Engine:SaveWithParameterizedLinks_Warning
 warning off Simulink:Engine:SaveWithDisabledLinks_Warning
 warning off Simulink:Commands:LoadMdlParameterizedLink
 
+jasper_backend = getenv('JASPER_BACKEND');
+
 %if vivado is to be used
-if getenv('JASPER_BACKEND') == 'vivado'
+if strcmp(jasper_backend, 'vivado') || isempty(jasper_backend)
   disp('Starting Vivado Sysgen')
-  %addpath([getenv('XILINX_PATH'), '/ISE/sysgen/util/']);
-  %addpath([getenv('XILINX_PATH'), '/ISE/sysgen/bin/lin64']);
   addpath([getenv('MLIB_DEVEL_PATH'), '/casper_library']);
   addpath([getenv('MLIB_DEVEL_PATH'), '/xps_library']);
   addpath([getenv('MLIB_DEVEL_PATH'), '/jasper_library']);
-  %xlAddSysgen([getenv('XILINX_PATH'), '/ISE'])
-  %sysgen_startup
 %if ISE is to be used  
-else
+elseif strcmp(jasper_backend, 'ise')
   disp('Starting ISE Sysgen')
   addpath([getenv('XILINX_PATH'), '/ISE/sysgen/util/']);
   addpath([getenv('XILINX_PATH'), '/ISE/sysgen/bin/lin64']);
@@ -24,6 +22,12 @@ else
   addpath([getenv('MLIB_DEVEL_PATH'), '/jasper_library']);
   xlAddSysgen([getenv('XILINX_PATH'), '/ISE'])
   sysgen_startup
+else
+  fprintf('Unknown JASPER_BACKEND ''%s''\n', jasper_library);
+  % Hopefully helpful in this case
+  addpath([getenv('MLIB_DEVEL_PATH'), '/casper_library']);
+  addpath([getenv('MLIB_DEVEL_PATH'), '/xps_library']);
+  addpath([getenv('MLIB_DEVEL_PATH'), '/jasper_library']);
 end
 
 load_system('casper_library');
@@ -38,3 +42,4 @@ if ~isempty(casper_startup_dir)
   end
 end
 clear casper_startup_dir;
+clear jasper_backend;
