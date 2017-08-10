@@ -6,14 +6,17 @@
 #                                                                         #
 ###########################################################################
 #                                                                         #
-# This "startsg" script is used to start the CASPER XSG/VIVADO toolflow.  #
+# This "startsg" script is used to start the CASPER XSG/FPGA toolflow.    #
 #                                                                         #
 # Put local definitions in "startsg.local" in the same directory as this  #
 # file.  At a minimum, the "startsg.local" file should define MATLAB_PATH #
 # and XILINX_PATH environment variables that point to the base directory  #
 # of the respective installation directories.  You should define the      #
-# PLATFORM variable (probably as lin64) in that file as well.             #
+# PLATFORM variable (probably as lin64) in that file as well. You should  #
+# define the JASPER_BACKEND variable (probably as vivado) in that file as #
+# well.                                                                   #                                                                 
 #                                                                         #
+#                                                                         # 
 # See the `startsg.local.example` file for an example.                    #
 #                                                                         #
 ###########################################################################
@@ -93,6 +96,13 @@ then
   export PLATFORM="lin64"
 fi
 
+if ! [ -n "${JASPER_BACKEND}" ]
+then
+  echo "WARNING: JASPER_BACKEND is not defined in the current environment, assuming 'vivado'."
+  export JASPER_BACKEND="vivado"
+fi
+
+
 # If not yet defined, set MLIB_DEVEL_PATH based on canonicalized directory of
 # this script.  This is probably what you want, so just don't define it
 # elsewhere.
@@ -114,12 +124,14 @@ export XILINX_PATH
 export MATLAB_PATH
 export PLATFORM
 export MLIB_DEVEL_PATH
+export JASPER_BACKEND
 
 # Show environment essentials
 echo "Using MATLAB_PATH=${MATLAB_PATH}"
 echo "Using XILINX_PATH=${XILINX_PATH}"
 echo "Using PLATFORM=${PLATFORM}"
 echo "Using MLIB_DEVEL_PATH=${MLIB_DEVEL_PATH}"
+echo "Using JASPER_BACKEND=${JASPER_BACKEND}"
 
 # Finish environment setup
 export SYSGEN_SCRIPT="$MLIB_DEVEL_PATH/startsg"

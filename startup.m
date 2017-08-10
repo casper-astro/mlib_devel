@@ -5,7 +5,7 @@ warning off Simulink:Engine:SaveWithDisabledLinks_Warning
 warning off Simulink:Commands:LoadMdlParameterizedLink
 
 %if vivado is to be used
-if getenv('USE_VIVADO_RUNTIME_FOR_MATLAB') == '1'
+if getenv('JASPER_BACKEND') == 'vivado'
   disp('Starting Vivado Sysgen')
   %addpath([getenv('XILINX_PATH'), '/ISE/sysgen/util/']);
   %addpath([getenv('XILINX_PATH'), '/ISE/sysgen/bin/lin64']);

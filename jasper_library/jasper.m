@@ -60,7 +60,7 @@ start_sysgen_compile(modelpath, builddir, update_model);
 
 disp('Complete');
 % if vivado is to be used
-if getenv('USE_VIVADO_RUNTIME_FOR_MATLAB') == '1'
+if getenv('JASPER_BACKEND') == 'vivado'
     fprintf('Run ''python %s -m %s --middleware --backend --software'' to finish flow\n', jasper_python, modelpath);
 else
     fprintf('Run ''python %s -m %s --middleware --backend --software --be ise'' to finish flow\n', jasper_python, modelpath);
