@@ -63,6 +63,8 @@ LIBS := bsp/microblaze_0/lib/libxil.a
 EXEC := executable.elf
 MEM = $(patsubst %.elf, %.mem, $(EXEC))
 
+INSTALL_FILE = ../../hdl_sources/microblaze_wb/executable.mem
+
 INCLUDEPATH := -Ibsp/microblaze_0/include -I. -Ijam_lwip/include -Ilwip/src/include
 LIBPATH := -Lbsp/microblaze_0/lib
 
@@ -115,6 +117,9 @@ core_info.bin: core_info.tab
 symbols: $(EXEC)
 	mb-readelf -s $< | sort -rnk3 > $@
 
+install: $(MEM)
+	sed '/Program header record #3, Size = 0x4, at 0x0001F000 to 0x0001F003/,$$d' $< > $(INSTALL_FILE)
+
 tags:
 	ctags -R
 
@@ -125,6 +130,6 @@ clean:
 	$(MAKE) -C bsp clean
 	rm -rf $(OBJS) $(LIBS) $(EXEC) *.o tags
 
-.PHONY: clean tags
+.PHONY: install tags clean
 
 -include $(DEPFILES)
