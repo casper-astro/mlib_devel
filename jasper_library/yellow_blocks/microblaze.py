@@ -86,10 +86,11 @@ class microblaze(YellowBlock):
     def gen_tcl_cmds(self):
         tcl_cmds = {}
         tcl_cmds['pre_synth'] = ['source %s/microblaze_wb/%s' % (env['HDL_ROOT'], self.blkdiagram)]
-        tcl_cmds['pre_synth'] += ['exec cat %s/microblaze_wb/%s ../core_info.jam.tab.mem > ../executable_core_info.mem' % (env['HDL_ROOT'], self.memfile)]
 
+        # Concatenate the executable and core_info file (post bitgen so relative paths will work)
+        tcl_cmds['post_bitgen'] = ['exec cat %s/microblaze_wb/%s ../core_info.jam.tab.mem > ../executable_core_info.mem' % (env['HDL_ROOT'], self.memfile)]
         # overwrite top.bit with version that includes microblaze code
         # ignorestderr because this command fails even though it appears to work.
         # Flags an awk error: see https://forums.xilinx.com/t5/Installation-and-Licensing/Vivado-2016-4-on-Ubuntu-16-04-LTS-quot-awk-symbol-lookup-error/m-p/747165
-        tcl_cmds['post_bitgen'] = ['exec -ignorestderr updatemem -bit ./myproj.runs/impl_1/top.bit -meminfo ./myproj.runs/impl_1/top.mmi -data ../executable_core_info.mem  -proc cont_microblaze_inst/microblaze_0 -out ./myproj.runs/impl_1/top.bit -force']
+        tcl_cmds['post_bitgen'] += ['exec -ignorestderr updatemem -bit ./myproj.runs/impl_1/top.bit -meminfo ./myproj.runs/impl_1/top.mmi -data ../executable_core_info.mem  -proc cont_microblaze_inst/microblaze_0 -out ./myproj.runs/impl_1/top.bit -force']
         return tcl_cmds
