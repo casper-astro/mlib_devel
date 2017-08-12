@@ -890,7 +890,6 @@ class SimulinkFrontend(ToolflowFrontend):
         self.logger.info('Generating yellow block description file: %s' % fname)
         # The command to start matlab with appropriate libraries
         matlab_start_cmd = os.path.join(os.getenv('XILINX_PATH'), 'bin', 'sysgen')
-
         # The matlab script responsible for generating the peripheral file
         # each script represents a matlab function
         script1 = 'open_system'
@@ -942,7 +941,8 @@ class SimulinkFrontend(ToolflowFrontend):
         self.logger.info('Compiling user IP to module: %s' % self.modelname)
         # The command to start matlab with appropriate libraries
         # matlab_start_cmd = os.getenv('MLIB_DEVEL_PATH') + '/startsg'
-        matlab_start_cmd = os.getenv('SYSGEN_SCRIPT')
+        # matlab_start_cmd = os.getenv('SYSGEN_SCRIPT')
+        matlab_start_cmd = os.path.join(os.getenv('XILINX_PATH'), 'bin', 'sysgen')
         # The matlab syntax to start a compile with appropriate args
         ml_cmd = "start_sysgen_compile('%s','%s',%d);exit" % (
             self.modelpath, self.compile_dir, int(update))
