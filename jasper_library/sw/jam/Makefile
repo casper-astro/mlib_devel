@@ -5,7 +5,7 @@ HEAP_SIZE = 0x6000
 
 CC := mb-gcc
 CC_FLAGS := -MMD -MP -mlittle-endian -mxl-soft-mul -mcpu=v10.0
-CFLAGS += -ffunction-sections -fdata-sections -O2
+override CFLAGS += -ffunction-sections -fdata-sections -O2
 CFLAGS_PEDANTIC := -Wall -Werror
 LN_FLAGS := -Wl,--start-group,-lxil,-lgcc,-lc,--end-group \
             -Wl,--gc-sections \
