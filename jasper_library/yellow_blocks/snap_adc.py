@@ -2,7 +2,7 @@ from yellow_block import YellowBlock
 from verilog import VerilogModule
 from constraints import PortConstraint, ClockConstraint, RawConstraint
 from yellow_block_typecodes import *
-import math
+import math, numpy as np
 
 class snap_adc(YellowBlock):
     def initialize(self):
@@ -13,13 +13,6 @@ class snap_adc(YellowBlock):
         self.num_clocks = 1
         self.zdok_rev = 2 # no frame clocks (see adc16)
         self.n_inputs = self.snap_inputs / 3 #number of inputs per chip
-
-	if self.adc_interleaving_mode == "1 channel mode":
-		self.adc_interleaving_mode = 1
-	elif self.adc_interleaving_mode == "2 channel mode":
-		self.adc_interleaving_mode = 2
-	elif self.adc_interleaving_mode == "4 channel mode":
-		self.adc_interleaving_mode = 4
 
 	# self.adc_resolution, possible values are 8, 10, 12, 14, 16
 	# Currently only 8, 12, 16 are supported
@@ -32,7 +25,7 @@ class snap_adc(YellowBlock):
 	self.LOG_USER_WIDTH = int(math.log(self.adc_data_width*4,2))
 
 	# An HMCAD1511 has 8 ADC cores and DDR transmission 
-        self.line_clock_freq = self.sample_rate/(8.0/self.adc_interleaving_mode)*self.adc_resolution/2.0
+        self.line_clock_freq = self.sample_rate/(8.0/self.n_inputs)*self.adc_resolution/2.0
 
         self.add_source('adc16_interface')
         self.add_source('wb_adc16_controller')
@@ -170,9 +163,32 @@ class snap_adc(YellowBlock):
             wbram.add_wb_interface(regname='adc16_wb_ram%d'%k, mode='rw', nbytes=(self.adc_data_width/8)*4*2**10, typecode=TYPECODE_SWREG)
             wbram.add_port('user_clk','adc0_clk', parent_sig=False)
             wbram.add_port('user_addr','adc16_snap_addr', width=10)
-            wbram.add_port('user_din','{%s1, %s2, %s3, %s4}'%(din,din,din,din), parent_sig=False)
+            #wbram.add_port('user_din','{%s1, %s2, %s3, %s4}'%(din,din,din,din), parent_sig=False)
+            wbram.add_port('user_din',self.reorder_ports([din+'1',din+'2',din+'3',din+'4']), parent_sig=False)
             wbram.add_port('user_we','adc16_snap_we')
             wbram.add_port('user_dout','')
+
+    def reorder_ports(self,port_list, wb_bitwidth=32):
+        """ Reorder output ports of ADCs to arrange sampling data in correct order in wb_bram
+
+            wb_bitwidth stands for the bit width of data in/out port of wishbone bus
+
+            E.g.
+            reorder_ports(['a1','a2','a3','a4'])
+            when self.adc_data_width == 8, return {a1,a2,a3,a4}
+            when self.adc_data_width == 16, return {a3,a4,a1,a2}
+            when self.adc_data_width == 32, return {a4,a3,a2,a1}
+        """
+
+        if not isinstance(port_list,list):
+            raise ValueError("Parameter error")
+        elif any([not isinstance(port,str) for port in port_list]):
+            raise ValueError("Parameter error")
+
+        r = wb_bitwidth / self.adc_data_width
+        port_list = np.array(port_list).reshape(-1, r)
+        port_list = port_list[::-1,:].reshape(-1).tolist()
+        return '{' + ','.join(port_list) + '}'
 
     def gen_constraints(self):
         cons = []
