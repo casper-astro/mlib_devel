@@ -63,7 +63,14 @@ mask_visibilities{ismember(mask_names, 'large_frames')} = 'on';
 mask_visibilities{ismember(mask_names, 'show_param')} = 'on';
 
 % debug counter checkboxes
-%mask_visibilities{ismember(mask_names, 'debug_ctr_width')} = 'on';
+try
+    mask_visibilities{ismember(mask_names, 'debug_ctr_width')} = 'on';
+catch e
+end
+try
+    mask_visibilities{ismember(mask_names, 'four_bit_valid')} = 'on';
+catch e
+end
 mask_visibilities{ismember(mask_names, 'txctr')} = 'on';
 mask_visibilities{ismember(mask_names, 'txerrctr')} = 'on';
 mask_visibilities{ismember(mask_names, 'txofctr')} = 'on';
