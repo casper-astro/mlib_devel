@@ -11,7 +11,9 @@ entity  adc16_interface  is
                G_ZDOK_REV   : integer := 1;
                G_NUM_CLOCKS : integer := 4;
                G_NUM_UNITS  : integer := 4; -- Typically 4 or 8
-               G_SERIES     : string  := "7SERIES"
+               G_SERIES     : string  := "7SERIES";
+               ADC_RESOLUTION     : integer  := 8;
+               ADC_DATA_WIDTH     : integer  := 8
     );
     port (
                -- System
@@ -36,38 +38,38 @@ entity  adc16_interface  is
                iserdes_bitslip  :  in  std_logic_vector(63 downto 0);
 
                -- Parallel outputs
-               a1  :  out std_logic_vector(7 downto 0);
-               a2  :  out std_logic_vector(7 downto 0);
-               a3  :  out std_logic_vector(7 downto 0);
-               a4  :  out std_logic_vector(7 downto 0);
-               b1  :  out std_logic_vector(7 downto 0);
-               b2  :  out std_logic_vector(7 downto 0);
-               b3  :  out std_logic_vector(7 downto 0);
-               b4  :  out std_logic_vector(7 downto 0);
-               c1  :  out std_logic_vector(7 downto 0);
-               c2  :  out std_logic_vector(7 downto 0);
-               c3  :  out std_logic_vector(7 downto 0);
-               c4  :  out std_logic_vector(7 downto 0);
-               d1  :  out std_logic_vector(7 downto 0);
-               d2  :  out std_logic_vector(7 downto 0);
-               d3  :  out std_logic_vector(7 downto 0);
-               d4  :  out std_logic_vector(7 downto 0);
-               e1  :  out std_logic_vector(7 downto 0);
-               e2  :  out std_logic_vector(7 downto 0);
-               e3  :  out std_logic_vector(7 downto 0);
-               e4  :  out std_logic_vector(7 downto 0);
-               f1  :  out std_logic_vector(7 downto 0);
-               f2  :  out std_logic_vector(7 downto 0);
-               f3  :  out std_logic_vector(7 downto 0);
-               f4  :  out std_logic_vector(7 downto 0);
-               g1  :  out std_logic_vector(7 downto 0);
-               g2  :  out std_logic_vector(7 downto 0);
-               g3  :  out std_logic_vector(7 downto 0);
-               g4  :  out std_logic_vector(7 downto 0);
-               h1  :  out std_logic_vector(7 downto 0);
-               h2  :  out std_logic_vector(7 downto 0);
-               h3  :  out std_logic_vector(7 downto 0);
-               h4  :  out std_logic_vector(7 downto 0);
+               a1  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               a2  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               a3  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               a4  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               b1  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               b2  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               b3  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               b4  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               c1  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               c2  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               c3  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               c4  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               d1  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               d2  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               d3  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               d4  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               e1  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               e2  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               e3  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               e4  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               f1  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               f2  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               f3  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               f4  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               g1  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               g2  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               g3  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               g4  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               h1  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               h2  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               h3  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
+               h4  :  out std_logic_vector(ADC_DATA_WIDTH-1 downto 0);
 
                -- Delay Controller (always 64 bits, even if G_NUM_UNITS=4)
                delay_rst        :  in  std_logic_vector(63 downto 0);
@@ -90,6 +92,8 @@ architecture adc16_interface_arc of adc16_interface is
      -- Components
 
      component adc_unit generic (
+               ADC_RESOLUTION     : integer;
+               ADC_DATA_WIDTH     : integer;
                G_SERIES      : string
      );
      port (
@@ -107,8 +111,7 @@ architecture adc16_interface_arc of adc16_interface is
 
                -- ISERDES Controller
                iserdes_bitslip  :  in  std_logic_vector(7 downto 0);
-               p_data           :  out std_logic_vector(31 downto 0);
-               absel            :  in std_logic;
+               p_data           :  out std_logic_vector(4*ADC_DATA_WIDTH-1 downto 0);
                demux_mode       :  in  std_logic_vector(1 downto 0);
 
                -- Delay Controller
@@ -118,7 +121,10 @@ architecture adc16_interface_arc of adc16_interface is
      );
      end component;
 
-     component ADC_MMCM   port (
+     component ADC_MMCM generic (
+               ADC_RESOLUTION : integer
+     );
+     port (
                -- System
                reset        :  in  std_logic;
                locked       :  out std_logic;
@@ -167,6 +173,7 @@ architecture adc16_interface_arc of adc16_interface is
      type  i4_v8  is array (0 to G_NUM_UNITS-1) of std_logic_vector(7 downto 0);
      type  i4_v20 is array (0 to G_NUM_UNITS-1) of std_logic_vector(19 downto 0);
      type  i4_v32 is array (0 to G_NUM_UNITS-1) of std_logic_vector(31 downto 0);
+     type  i4_data_path is array (0 to G_NUM_UNITS-1) of std_logic_vector(4*ADC_DATA_WIDTH-1 downto 0);
 
      -- Clocking (keep and s attributes retain unused clocks)
      signal line_clk_in_zdok0 : std_logic;
@@ -182,9 +189,8 @@ architecture adc16_interface_arc of adc16_interface is
 
      signal line_clk     : std_logic;
      signal frame_clk    : std_logic;
+     signal frame_clk_mmcm    : std_logic;
      signal fabric_clk_0 : std_logic;
-     signal absel        : std_logic;
-     signal absel_enable : std_logic;
      signal locked_0     : std_logic;
 
      -- MMCM BUFGs
@@ -199,8 +205,8 @@ architecture adc16_interface_arc of adc16_interface is
 
      -- ISERDES Controller
      signal s_iserdes_bitslip : i4_v8;
-     signal s_p_data : i4_v32;
-     signal s_p_data0 : i4_v32;
+     signal s_p_data : i4_data_path;
+     signal s_p_data0 : i4_data_path;
 
      -- Delay Controller
      signal s_delay_rst_a  : i4_v4;
@@ -237,6 +243,8 @@ architecture adc16_interface_arc of adc16_interface is
      locked(0) <= locked_0;
 
      adc_mmcm_0 : ADC_MMCM
+     GENERIC MAP ( ADC_RESOLUTION => ADC_RESOLUTION
+     )
      PORT MAP (
        reset        => reset,
        locked       => locked_0,
@@ -288,7 +296,8 @@ architecture adc16_interface_arc of adc16_interface is
 
      -- Internal routing
      line_clk       <= bufg_o(0);
-     frame_clk      <= bufg_o(1);
+     frame_clk_mmcm <= bufg_o(1);
+--     frame_clk      <= bufg_o(1);
      fabric_clk_0   <= bufg_o(2);
      fabric_clk     <= fabric_clk_0;
      fabric_clk_90  <= bufg_o(3);
@@ -297,64 +306,67 @@ architecture adc16_interface_arc of adc16_interface is
 
      -- Parallel data outputs
      DOUT0: if G_NUM_UNITS >= 1 generate
-       a1 <= s_p_data(0)(31 downto 24);
-       a2 <= s_p_data(0)(23 downto 16);
-       a3 <= s_p_data(0)(15 downto  8);
-       a4 <= s_p_data(0)( 7 downto  0);
+       a1 <= s_p_data(0)(ADC_DATA_WIDTH*4-1 downto ADC_DATA_WIDTH*3);
+       a2 <= s_p_data(0)(ADC_DATA_WIDTH*3-1 downto ADC_DATA_WIDTH*2);
+       a3 <= s_p_data(0)(ADC_DATA_WIDTH*2-1 downto ADC_DATA_WIDTH*1);
+       a4 <= s_p_data(0)(ADC_DATA_WIDTH*1-1 downto ADC_DATA_WIDTH*0);
      end generate;
 
      dummy_DOUT0: if G_NUM_UNITS < 1 generate
-       a1 <= "00000000";
-       a2 <= "00000000"; 
-       a3 <= "00000000"; 
-       a4 <= "00000000"; 
+       a1 <= (others => '0');
+       a2 <= (others => '0');
+       a3 <= (others => '0');
+       a4 <= (others => '0');
      end generate;
 
      DOUT1: if G_NUM_UNITS >= 2 generate
-       b1 <= s_p_data(1)(31 downto 24);
-       b2 <= s_p_data(1)(23 downto 16);
-       b3 <= s_p_data(1)(15 downto  8);
-       b4 <= s_p_data(1)( 7 downto  0);
+       b1 <= s_p_data(1)(ADC_DATA_WIDTH*4-1 downto ADC_DATA_WIDTH*3);
+       b2 <= s_p_data(1)(ADC_DATA_WIDTH*3-1 downto ADC_DATA_WIDTH*2);
+       b3 <= s_p_data(1)(ADC_DATA_WIDTH*2-1 downto ADC_DATA_WIDTH*1);
+       b4 <= s_p_data(1)(ADC_DATA_WIDTH*1-1 downto ADC_DATA_WIDTH*0);
      end generate;
      dummy_DOUT1: if G_NUM_UNITS < 2 generate
-       b1 <= "00000000"; 
-       b2 <= "00000000"; 
-       b3 <= "00000000"; 
-       b4 <= "00000000"; 
+       b1 <= (others => '0');
+       b2 <= (others => '0');
+       b3 <= (others => '0');
+       b4 <= (others => '0');
      end generate;
 
      DOUT2: if G_NUM_UNITS >= 3 generate
-       c1 <= s_p_data(2)(31 downto 24);
-       c2 <= s_p_data(2)(23 downto 16);
-       c3 <= s_p_data(2)(15 downto  8);
-       c4 <= s_p_data(2)( 7 downto  0);
+       c1 <= s_p_data(2)(ADC_DATA_WIDTH*4-1 downto ADC_DATA_WIDTH*3);
+       c2 <= s_p_data(2)(ADC_DATA_WIDTH*3-1 downto ADC_DATA_WIDTH*2);
+       c3 <= s_p_data(2)(ADC_DATA_WIDTH*2-1 downto ADC_DATA_WIDTH*1);
+       c4 <= s_p_data(2)(ADC_DATA_WIDTH*1-1 downto ADC_DATA_WIDTH*0);
      end generate;
      dummy_DOUT2: if G_NUM_UNITS < 3 generate
-       c1 <= "00000000";
-       c2 <= "00000000"; 
-       c3 <= "00000000"; 
-       c4 <= "00000000"; 
+       c1 <= (others => '0');
+       c2 <= (others => '0');
+       c3 <= (others => '0');
+       c4 <= (others => '0');
      end generate;
 
      DOUT3: if G_NUM_UNITS >= 4 generate
-       d1 <= s_p_data(3)(31 downto 24);
-       d2 <= s_p_data(3)(23 downto 16);
-       d3 <= s_p_data(3)(15 downto  8);
-       d4 <= s_p_data(3)( 7 downto  0);
+       d1 <= s_p_data(3)(ADC_DATA_WIDTH*4-1 downto ADC_DATA_WIDTH*3);
+       d2 <= s_p_data(3)(ADC_DATA_WIDTH*3-1 downto ADC_DATA_WIDTH*2);
+       d3 <= s_p_data(3)(ADC_DATA_WIDTH*2-1 downto ADC_DATA_WIDTH*1);
+       d4 <= s_p_data(3)(ADC_DATA_WIDTH*1-1 downto ADC_DATA_WIDTH*0);
      end generate;
      dummy_DOUT3: if G_NUM_UNITS < 4 generate
-       d1 <= "00000000";
-       d2 <= "00000000";
-       d3 <= "00000000";
-       d4 <= "00000000";
+       d1 <= (others => '0');
+       d2 <= (others => '0');
+       d3 <= (others => '0');
+       d4 <= (others => '0');
      end generate;
 
      DOUT4: if G_NUM_UNITS >= 5 generate
-       e1 <= s_p_data(4)(31 downto 24);
-       e2 <= s_p_data(4)(23 downto 16);
-       e3 <= s_p_data(4)(15 downto  8);
-       e4 <= s_p_data(4)( 7 downto  0);
+       e1 <= s_p_data(4)(ADC_DATA_WIDTH*4-1 downto ADC_DATA_WIDTH*3);
+       e2 <= s_p_data(4)(ADC_DATA_WIDTH*3-1 downto ADC_DATA_WIDTH*2);
+       e3 <= s_p_data(4)(ADC_DATA_WIDTH*2-1 downto ADC_DATA_WIDTH*1);
+       e4 <= s_p_data(4)(ADC_DATA_WIDTH*1-1 downto ADC_DATA_WIDTH*0);
        adc_mmcm_1 : ADC_MMCM
+       GENERIC MAP (
+         ADC_RESOLUTION         => ADC_RESOLUTION
+       )
        PORT MAP (
          reset        => reset,
          locked       => locked(1),
@@ -370,49 +382,49 @@ architecture adc16_interface_arc of adc16_interface is
        );
      end generate;
      dummy_DOUT4: if G_NUM_UNITS < 5 generate
-       e1 <= "00000000"; 
-       e2 <= "00000000"; 
-       e3 <= "00000000"; 
-       e4 <= "00000000"; 
+       e1 <= (others => '0');
+       e2 <= (others => '0');
+       e3 <= (others => '0');
+       e4 <= (others => '0');
      end generate;
 
      DOUT5: if G_NUM_UNITS >= 6 generate
-       f1 <= s_p_data(5)(31 downto 24);
-       f2 <= s_p_data(5)(23 downto 16);
-       f3 <= s_p_data(5)(15 downto  8);
-       f4 <= s_p_data(5)( 7 downto  0);
+       f1 <= s_p_data(5)(ADC_DATA_WIDTH*4-1 downto ADC_DATA_WIDTH*3);
+       f2 <= s_p_data(5)(ADC_DATA_WIDTH*3-1 downto ADC_DATA_WIDTH*2);
+       f3 <= s_p_data(5)(ADC_DATA_WIDTH*2-1 downto ADC_DATA_WIDTH*1);
+       f4 <= s_p_data(5)(ADC_DATA_WIDTH*1-1 downto ADC_DATA_WIDTH*0);
      end generate;
      dummy_DOUT5: if G_NUM_UNITS < 6 generate
-       f1 <= "00000000"; 
-       f2 <= "00000000"; 
-       f3 <= "00000000"; 
-       f4 <= "00000000"; 
+       f1 <= (others => '0');
+       f2 <= (others => '0');
+       f3 <= (others => '0');
+       f4 <= (others => '0');
      end generate;
 
      DOUT6: if G_NUM_UNITS >= 7 generate
-       g1 <= s_p_data(6)(31 downto 24);
-       g2 <= s_p_data(6)(23 downto 16);
-       g3 <= s_p_data(6)(15 downto  8);
-       g4 <= s_p_data(6)( 7 downto  0);
+       g1 <= s_p_data(6)(ADC_DATA_WIDTH*4-1 downto ADC_DATA_WIDTH*3);
+       g2 <= s_p_data(6)(ADC_DATA_WIDTH*3-1 downto ADC_DATA_WIDTH*2);
+       g3 <= s_p_data(6)(ADC_DATA_WIDTH*2-1 downto ADC_DATA_WIDTH*1);
+       g4 <= s_p_data(6)(ADC_DATA_WIDTH*1-1 downto ADC_DATA_WIDTH*0);
      end generate;
      dummy_DOUT6: if G_NUM_UNITS < 7 generate
-       g1 <= "00000000"; 
-       g2 <= "00000000"; 
-       g3 <= "00000000"; 
-       g4 <= "00000000"; 
+       g1 <= (others => '0');
+       g2 <= (others => '0');
+       g3 <= (others => '0');
+       g4 <= (others => '0');
      end generate;
 
      DOUT7: if G_NUM_UNITS >= 8 generate
-       h1 <= s_p_data(7)(31 downto 24);
-       h2 <= s_p_data(7)(23 downto 16);
-       h3 <= s_p_data(7)(15 downto  8);
-       h4 <= s_p_data(7)( 7 downto  0);
+       h1 <= s_p_data(7)(ADC_DATA_WIDTH*4-1 downto ADC_DATA_WIDTH*3);
+       h2 <= s_p_data(7)(ADC_DATA_WIDTH*3-1 downto ADC_DATA_WIDTH*2);
+       h3 <= s_p_data(7)(ADC_DATA_WIDTH*2-1 downto ADC_DATA_WIDTH*1);
+       h4 <= s_p_data(7)(ADC_DATA_WIDTH*1-1 downto ADC_DATA_WIDTH*0);
      end generate;
      dummy_DOUT7: if G_NUM_UNITS < 8 generate
-       h1 <= "00000000";
-       h2 <= "00000000";
-       h3 <= "00000000";
-       h4 <= "00000000";
+       h1 <= (others => '0');
+       h2 <= (others => '0');
+       h3 <= (others => '0');
+       h4 <= (others => '0');
      end generate;
 
      -- Generate adc_unit modules and associated wiring
@@ -433,7 +445,9 @@ architecture adc16_interface_arc of adc16_interface is
 
        adc_unit_inst: adc_unit
        generic map (
-                   G_SERIES => G_SERIES
+                   G_SERIES => G_SERIES,
+                   ADC_RESOLUTION => ADC_RESOLUTION,
+                   ADC_DATA_WIDTH => ADC_DATA_WIDTH
        ) port map (
                    fabric_clk => fabric_clk_0,
                    line_clk   => line_clk,
@@ -447,7 +461,6 @@ architecture adc16_interface_arc of adc16_interface is
 
                    iserdes_bitslip => s_iserdes_bitslip(i),
                    p_data => s_p_data0(i),
-                   absel => absel,
                    demux_mode => demux_mode,
 
                    delay_rst_a => s_delay_rst_a(i),
@@ -456,38 +469,35 @@ architecture adc16_interface_arc of adc16_interface is
        );
      end generate; -- for i in...
 
-    process(frame_clk)
+    process(fabric_clk_0, reset)
     begin
-      if rising_edge(frame_clk) then
-        -- snap_req shift register - Capture snap_req on rising edge
-        -- of frame clock so that A/B will be even/odd consistent.
-        s_snap_req <= s_snap_req(0) & snap_req;
+      if reset = '1' then
+        s_snap_req <= (others=>'0');
+        frame_clk <= '0';
+      elsif rising_edge(fabric_clk_0) then
+        frame_clk <= not frame_clk;
+
+          -- snap_req shift register - Capture snap_req on rising edge
+          -- of frame clock so that A/B will be even/odd consistent.
+        if frame_clk = '1' then
+          s_snap_req <= s_snap_req(0 downto 0) & snap_req;
+        else
+          s_snap_req <= s_snap_req;
+        end if;
       end if;
     end process;
 
-    process(frame_clk, locked_0)
+    process(fabric_clk_0, reset)
     begin
-      -- If MMCM is unlocked, reset absel_enable
-      if rising_edge(frame_clk) then
-        -- Rising edge of frame_clk enables absel toggling if MMCM locked
-        -- to ensure that absel has known phase relation to frame_clk.
-        absel_enable <= locked_0;
-      end if;
-    end process;
-
-    process(fabric_clk_0, absel_enable, locked_0)
-    begin
+      if reset = '1' then
+        s_p_data <= (others => (others => '0'));
+        delay_rst0 <= (others => '0');
+        delay_rst1 <= (others => '0');
+        delay_rst2 <= (others => '0');
+        delay_rst_edge <= (others => '0');
+        s_snap_counter  <= (others => '0');
       -- rising edge of fabric_clk_0
-      if rising_edge(fabric_clk_0) then
-        -- Toggle a/b lane selector
-        absel <= (not absel) and absel_enable;
-      end if;
-    end process;
-
-    process(fabric_clk_0)
-    begin
-      -- rising edge of fabric_clk_0
-      if rising_edge(fabric_clk_0) then
+      elsif rising_edge(fabric_clk_0) then
         -- s_p_data pipeline
         s_p_data <= s_p_data0;
 
@@ -501,14 +511,17 @@ architecture adc16_interface_arc of adc16_interface is
         delay_rst_edge <= (not delay_rst2) and (delay_rst1 or delay_rst0);
 
         -- '0' to '1' transition on snap_req
-        if s_snap_req(1) = '0' and s_snap_req(0) = '1' then
+        if s_snap_req = "10" then
           -- Reset snap counter
           s_snap_counter <= (others => '0');
         elsif s_snap_counter(10) = '0'  then
           -- Count until MSb is '1'
           s_snap_counter <= s_snap_counter + 1;
+        else
+          s_snap_counter <= s_snap_counter;
         end if;
       end if;
+      
     end process;
 
     snap_we <= not s_snap_counter(10);

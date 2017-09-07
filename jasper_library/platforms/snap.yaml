@@ -1,8 +1,7 @@
 name: snap
 manufacturer: Xilinx
 fpga: xc7k160tffg676-2
-config_voltage: 2.5
-cfgbvs: VCCO
+#fpga: xc7k410tffg676-2
 backend_target: vivado
 sources: []
 constraints: []
@@ -72,6 +71,9 @@ pins:
   sync_in_n:
     iostd: LVDS_25
     loc: AE25
+  sync_out:
+    iostd: LVCMOS25
+    loc: H9
   led:
     iostd: LVCMOS25
     loc:
@@ -151,7 +153,7 @@ pins:
       - G21
       - G22
       - F23
-      - E23
+      - AE23
       - AF23
       - AC23
       - AC24
@@ -166,7 +168,7 @@ pins:
       - N19
       - M20
       - J21
-      - D16
+      - H22
       - G24
       - F24
       - D23
@@ -214,7 +216,7 @@ pins:
       - K23
       - H21
       - G22
-      - E23
+      - AE23
       - AC23
       - W23
       - T22
@@ -264,7 +266,7 @@ pins:
       - P18
       - M19
       - M20
-      - D16
+      - H22
       - F24
       - D24
       - AF22
@@ -390,7 +392,7 @@ pins:
     loc: J15
   lmx2581_muxout:
     iostd: LVCMOS33
-    loc: G16
+    loc: J19
   lmx2581_le:
     iostd: LVCMOS33
     loc: J16
@@ -400,5 +402,115 @@ pins:
   lmx2581_be:
     iostd: LVCMOS33
     loc: F15
+  xadc_p:
+    loc: N12
+  xadc_n:
+    loc: P11
+  rpi_header:
+    iostd: LVCMOS33
+    loc:
+      - '' # 3V3
+      - '' # 5V0
+      - '' # PMBUS_DATA
+      - '' # 5V0
+      - '' # PMBUS_CLK
+      - '' # GND
+      - 'E18'
+      - 'B16'
+      - '' # GND
+      - 'C16'
+
+      - '' # PMBUS_CTRL
+      - '' # PMBUS_ALERT
+      - '' # JTAG TMS
+      - '' # GND
+      - '' # JTAG_TDI
+      - '' # JTAG_TDO
+      - '' # NC
+      - '' # JTAG_TCLK
+      - 'J20'
+      - '' # GND
+
+      - 'K20'
+      - '' # DONE3V3
+      - 'E17'
+      - 'G19'
+      - '' # GND
+      - '' # FPGA_PROG_B
+      - '' # NC
+      - '' # NC
+      - 'C17'
+      - '' # GND
+
+      - 'C18'
+      - 'C19'
+      - 'B19'
+      - '' # GND
+      - 'A17'
+      - 'B17'
+      - 'D20'
+      - 'H18'
+      - '' # GND
+      - 'H17'
+  i2c:
+    iostd: I2C
+    loc:
+      - '' # 3V3
+      - '' # 5V0
+      - '' # PMBUS_DATA
+      - '' # 5V0
+      - '' # PMBUS_CLK
+      - '' # GND
+      - 'E18'
+      - 'B16'
+      - '' # GND
+      - 'C16'
+
+      - '' # PMBUS_CTRL
+      - '' # PMBUS_ALERT
+      - '' # JTAG TMS
+      - '' # GND
+      - '' # JTAG_TDI
+      - '' # JTAG_TDO
+      - '' # NC
+      - '' # JTAG_TCLK
+      - 'J20'
+      - '' # GND
+
+      - 'K20'
+      - '' # DONE3V3
+      - 'E17'
+      - 'G19'
+      - '' # GND
+      - '' # FPGA_PROG_B
+      - '' # NC
+      - '' # NC
+      - 'C17'
+      - '' # GND
+
+      - 'C18'
+      - 'C19'
+      - 'B19'
+      - '' # GND
+      - 'A17'
+      - 'B17'
+      - 'D20'
+      - 'H18'
+      - '' # GND
+      - 'H17'
+  spi_flash_data:
+    iostd: LVCMOS25
+    loc:
+      - B24
+      - A25
+      - B22
+      - A22
+  #spi_flash_clk:
+  #  iostd: LVCMOS25
+  #  loc: 
+  spi_flash_csn:
+    iostd: LVCMOS25
+    loc: C23
+      
 
 

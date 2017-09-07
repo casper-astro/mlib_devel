@@ -1,3 +1,4 @@
+import os
 from yellow_block import YellowBlock
 from constraints import PortConstraint, ClockConstraint, GenClockConstraint, ClockGroupConstraint, InputDelayConstraint,\
     OutputDelayConstraint, FalsePathConstraint, MultiCycleConstraint, RawConstraint
@@ -303,7 +304,7 @@ class forty_gbe(YellowBlock):
 
         self.instantiate_fgbe(top)
 
-    def gen_constraints(self, peripherals=None):
+    def gen_constraints(self):
         cons = []
         # leaving the aux constraints here so that we can support them at a later stage.
         #cons.append(PortConstraint('AUX_CLK_N','AUX_CLK_N'))
@@ -863,6 +864,9 @@ class forty_gbe(YellowBlock):
         cons.append(RawConstraint('resize_pblock [get_pblocks MEZ3_PHY11_QSFP] -add {CLOCKREGION_X1Y7:CLOCKREGION_X1Y7}'))
 
         #Raw Constraints
+
+        fortygbefullname = self.fullpath.replace('/', '_')
+        cons.append(RawConstraint('set_property LOC ICAP_X0Y1 [get_cells %s/wishbone_flash_sdram_interface_0/icape_controller_0/ICAPE2_0]' % fortygbefullname))
         cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports CONFIG_IO_0]'))
         cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports CONFIG_IO_1]'))
         cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports CONFIG_IO_10]'))
@@ -982,12 +986,12 @@ class forty_gbe(YellowBlock):
     def gen_tcl_cmds(self):
         tcl_cmds = []
 
-        tcl_cmds.append('import_files -force -fileset constrs_1 hdl_sources/forty_gbe/Constraints/gmii_to_sgmii.xdc')
-        tcl_cmds.append('import_files -force -fileset constrs_1 hdl_sources/forty_gbe/Constraints/soc_version.xdc')
-        tcl_cmds.append('import_files -force -fileset constrs_1 hdl_sources/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/constrs_1/new/IEEE802_3_XL_PCS.xdc')
-        tcl_cmds.append('import_files -force -fileset constrs_1 hdl_sources/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/constrs_1/new/DATA_FREQUENCY_DIVIDER.xdc')
-        tcl_cmds.append('import_files -force -fileset constrs_1 hdl_sources/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/constrs_1/new/DATA_FREQUENCY_MULTIPLIER.xdc')
-        tcl_cmds.append('import_files -force -fileset constrs_1 hdl_sources/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PHY/IEEE802_3_XL_PHY.srcs/constrs_1/new/IEEE802_3_XL_PHY.xdc')
+        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/Constraints/gmii_to_sgmii.xdc'%os.getenv('HDL_ROOT'))
+        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/Constraints/soc_version.xdc'%os.getenv('HDL_ROOT'))
+        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/constrs_1/new/IEEE802_3_XL_PCS.xdc'%os.getenv('HDL_ROOT'))
+        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/constrs_1/new/DATA_FREQUENCY_DIVIDER.xdc'%os.getenv('HDL_ROOT'))
+        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/constrs_1/new/DATA_FREQUENCY_MULTIPLIER.xdc'%os.getenv('HDL_ROOT'))
+        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PHY/IEEE802_3_XL_PHY.srcs/constrs_1/new/IEEE802_3_XL_PHY.xdc'%os.getenv('HDL_ROOT'))
 
         tcl_cmds.append('set_property is_locked true [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/cont_microblaze/cont_microblaze.bd]')
         tcl_cmds.append('set_property is_locked true [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/ip/gmii_to_sgmii/gmii_to_sgmii.xci]')
@@ -1003,4 +1007,4 @@ class forty_gbe(YellowBlock):
         tcl_cmds.append('set_property SCOPED_TO_REF cont_microblaze [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/cont_microblaze/cont_microblaze.bmm]')
         tcl_cmds.append('set_property SCOPED_TO_CELLS microblaze_0 [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/imports/cont_microblaze/EMB123701U1R1.elf]')
 
-        return tcl_cmds
+        return {'pre_synth': tcl_cmds}

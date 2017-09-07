@@ -45,7 +45,7 @@ class adc20g(YellowBlock):
 
         inst.add_port('dout', signal=self.fullname+'_dout', width=328)
 
-    def gen_constraints(self, peripherals=None):
+    def gen_constraints(self):
         cons = []
         cons.append(PortConstraint('FLASH1', 'led', port_index=[0], iogroup_index=[6]))
         cons.append(PortConstraint('FLASH2', 'led', port_index=[0], iogroup_index=[7]))

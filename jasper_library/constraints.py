@@ -44,9 +44,9 @@ class PortConstraint(object):
          if type(loc) != list: loc = [loc]
          if type(iostd) != list: iostd = [iostd]
 
-         self.portname = portname
+         self.portname = portname.strip(' ') #clear out whitespace
          self.port_index = port_index
-         self.iogroup = iogroup 
+         self.iogroup = iogroup.strip(' ') 
          self.iogroup_index = iogroup_index
          self.loc = loc
          self.iostd = iostd
@@ -94,7 +94,7 @@ class ClockConstraint(object):
     signal, clock name, whether clock source is get_ports or get_pins, whether a virtual clock, waveform parameters for
     duty cycle and the corresponding clock freq and period.
     '''
-    def __init__(self, signal=None, name=None, freq=None, period=None, port_en=None, virtual_en=None, waveform_min=None, waveform_max=None):
+    def __init__(self, signal=None, name=None, freq=None, period=None, port_en=True, virtual_en=False, waveform_min=0., waveform_max=None):
         logger.debug('New clock constraint')
         logger.debug('clock signal: %s'%signal)
         logger.debug('name: %s'%name)
@@ -105,14 +105,17 @@ class ClockConstraint(object):
         logger.debug('waveform_max: %s'%waveform_max)
         logger.debug('virtual_en: %s' % virtual_en)
         self.signal = signal
-        self.name = name or signal
+        self.name = name or signal + '_CLK'
         if not (bool(freq) ^ bool(period)):
             raise ValueError('Enter one of either freq or period')
         self.freq = float(freq or 1000./period)
         self.period = float(period or 1000./freq)
         self.port_en = port_en
         self.waveform_min = float(waveform_min)
-        self.waveform_max = float(waveform_max)
+        if waveform_max is not None:
+            self.waveform_max = float(waveform_max)
+        else:
+            self.waveform_max = self.period / 2.
         self.virtual_en = virtual_en
 
 class GenClockConstraint(object):
@@ -127,7 +130,7 @@ class GenClockConstraint(object):
         logger.debug('divide_by: %s'%divide_by)
         logger.debug('clock source: %s'%clock_source)
         self.signal = signal
-        self.name = name or signal
+        self.name = name or signal + '_CLK'
         self.divide_by = int(divide_by)
         self.clock_source = clock_source
 

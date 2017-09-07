@@ -3,6 +3,12 @@ function casper_library_bus_init()
 	warning off Simulink:Engine:MdlFileShadowing;
 	mdl = new_system('casper_library_bus', 'Library');
 	blk = get(mdl,'Name');
+	% Set the EnableLBRepository property to on
+	try
+	  set_param(mdl, 'EnableLBRepository', 'on');
+	catch
+	  % ignore
+	end
 	warning on Simulink:Engine:MdlFileShadowing;
 
 	add_block('built-in/SubSystem', [blk,'/bus_addsub']);

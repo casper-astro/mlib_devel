@@ -17,13 +17,7 @@ class skarab(YellowBlock):
              #YellowBlock.make_block({'tag': 'xps:forty_gbe'}, self.platform)
             ]
 
-    def gen_constraints(self, peripherals=None):
-
-        for key in peripherals.keys():
-            if peripherals[key]['tag'] == 'xps:forty_gbe':
-                fortygbefullname = peripherals[key]['fullpath'].replace('/', '_')
-                print('bsp name %s' % fortygbefullname)
-
+    def gen_constraints(self):
         return [
             RawConstraint('set_property CONFIG_MODE BPI16 [current_design]'),
             RawConstraint('set_property BITSTREAM.CONFIG.EXTMASTERCCLK_EN DIV-2 [current_design]'),
@@ -31,7 +25,6 @@ class skarab(YellowBlock):
             RawConstraint('set_property CFGBVS %s [current_design]' % self.platform.conf['cfgbvs']),
             RawConstraint('set_property BITSTREAM.CONFIG.BPI_SYNC_MODE TYPE1 [current_design]'),
             RawConstraint('set_property BITSTREAM.STARTUP.STARTUPCLK CCLK [current_design]'),
-            RawConstraint('set_property LOC ICAP_X0Y1 [get_cells %s/wishbone_flash_sdram_interface_0/icape_controller_0/ICAPE2_0]' % fortygbefullname),
             RawConstraint('set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]'),
             RawConstraint('set_property BITSTREAM.CONFIG.CONFIGFALLBACK ENABLE [current_design]'),
             RawConstraint('set_property BITSTREAM.CONFIG.TIMER_CFG 0X00040000 [current_design]')

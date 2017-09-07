@@ -1,6 +1,7 @@
 from yellow_block import YellowBlock
 from constraints import PortConstraint, ClockConstraint, RawConstraint
 from itertools import count
+from yellow_block_typecodes import *
 
 class tengbe_v2(YellowBlock):
     @staticmethod
@@ -74,15 +75,19 @@ class tengbe_v2(YellowBlock):
         ktge.add_port('led_tx', '%s_led_tx'%self.fullname)
 
         # Wishbone memory for status registers / ARP table
-        ktge.add_wb_interface(self.unique_name, mode='rw', nbytes=0x4000) # as in matlab code
+        ktge.add_wb_interface(self.unique_name, mode='rw', nbytes=0x4000, typecode=self.typecode) # as in matlab code
 
 
 class tengbe_v2_xilinx_v6(tengbe_v2):
     def initialize(self):
+        self.typecode = TYPECODE_ETHCORE
         self.add_source('kat_ten_gb_eth')
         self.add_source('sfp_mdio_controller')
         self.add_source('xaui_infrastructure_v6')
         self.add_source('xaui_phy_v6')
+        self.provides = ['ethernet']
+        if self.cpu_rx_en and self.cpu_tx_en:
+            self.provides += ['cpu_ethernet']
 
         #roach2 mezzanine slot 0 has 4-7, roach2 mezzanine slot 1 has 0-3, so barrel shift
         if self.flavour == 'cx4':
@@ -166,7 +171,7 @@ class tengbe_v2_xilinx_v6(tengbe_v2):
         # XAUI CONF interface
         xp.add_port('xaui_status', 'xaui_status%d'%self.port, width=8)
 
-    def gen_constraints(self, peripherals=None):
+    def gen_constraints(self):
         cons = []
         cons.append(PortConstraint('xaui_refclk_p', 'xaui_refclk_p', port_index=range(3), iogroup_index=range(3)))
         cons.append(PortConstraint('xaui_refclk_n', 'xaui_refclk_n', port_index=range(3), iogroup_index=range(3)))
@@ -189,6 +194,7 @@ class tengbaser_xilinx_k7(tengbe_v2):
         self.use_gth = use_gth
         tengbe_v2.__init__(self, blk, plat, hdl_root)
     def initialize(self):
+        self.typecode = TYPECODE_ETHCORE
         self.exc_requirements = ['tge%d'%self.slot]
         self.add_source('kat_ten_gb_eth/*')
         self.add_source('tengbaser_phy/tengbaser_phy.v')
@@ -209,6 +215,10 @@ class tengbaser_xilinx_k7(tengbe_v2):
         #    self.port = self.port_r2_sfpp + 4*((self.slot+1)%2)
         self.port = self.port_r1
         self.infrastructure_id = self.port // 4
+
+        self.provides = ['ethernet']
+        if self.cpu_rx_en and self.cpu_tx_en:
+            self.provides += ['cpu_ethernet']
 
     def gen_children(self):
         """
@@ -303,7 +313,7 @@ class tengbaser_xilinx_k7(tengbe_v2):
         phy.add_port('xgmii_rxc', 'xgmii_rxc%d'%self.port, width=8)
         phy.add_port('core_status', 'xaui_status%d'%self.port, width=8) #called xaui status for compatibility with kat-tge block
 
-    def gen_constraints(self, peripherals=None):
+    def gen_constraints(self):
         num = self.infrastructure_id
         cons = []
         cons.append(PortConstraint('ref_clk_p%d'%num, 'eth_clk_p'))
@@ -318,17 +328,14 @@ class tengbaser_xilinx_k7(tengbe_v2):
         cons.append(ClockConstraint('ref_clk_p%d'%num, name='ethclk%d'%num, freq=156.25))
 
         cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d -asynchronous -group [get_clocks -include_generated_clocks sys_clk_p_CLK] -group [get_clocks -include_generated_clocks ref_clk_p%d_CLK]'%(num,num)))
-        #cons.append(RawConstraint('set_multicycle_path -from [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/reset_pulse_reg[0]/C}] -to [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/gttxreset_txusrclk2_sync_i/sync1_r_reg[*]/PRE}] 3'%(num,num)))
-        #cons.append(RawConstraint('set_multicycle_path -from [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/reset_pulse_reg[0]/C}] -to [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/gttxreset_txusrclk2_sync_i/sync1_r_reg[*]/PRE}] -hold 2'%(num,num)))
-        #cons.append(RawConstraint('set_false_path -from [get_pins %s/tge_rx_inst/app_overrun_ack_reg/C] -to [get_pins %s/tge_rx_inst/overrun_ackR_reg/D]'%(self.fullname, self.fullname)))
-        #cons.append(RawConstraint('set_false_path -from [get_pins %s/tge_tx_inst/tx_overflow_latch_reg/C] -to [get_pins %s/tge_tx_inst/app_overflowR_reg/D]'%(self.fullname, self.fullname)))
-        #cons.append(RawConstraint('set_false_path -from [get_pins {%s/tge_rx_inst/app_state_reg[0]/C}] -to [get_pins %s/tge_rx_inst/overrunR_reg/D]'%(self.fullname, self.fullname)))
-        #cons.append(RawConstraint('set_false_path -from [get_pins %s/macr_state_reg/C] -to [get_pins %s/app_rst_reg/D]'%(self.fullname, self.fullname)))
-        #cons.append(RawConstraint('set_false_path -from [get_pins {%s/tge_rx_inst/app_state_reg[1]/C}] -to [get_pins %s/tge_rx_inst/overrunR_reg/D]'%(self.fullname, self.fullname)))
-        #cons.append(RawConstraint('set_false_path -from [get_pins {%s/rx_stretch_reg[25]/C}] -to [get_pins %s/led_rx_reg_reg/D]'%(self.fullname, self.fullname)))
-        #cons.append(RawConstraint('set_false_path -from [get_pins %s/mac_resetRR_reg/C] -to [get_pins %s/app_rst_reg/D]'%(self.fullname, self.fullname)))
-        #cons.append(RawConstraint('set_false_path -from [get_pins {%s/tx_stretch_reg[25]/C}] -to [get_pins %s/led_tx_reg_reg/D]'%(self.fullname, self.fullname)))
-        #cons.append(RawConstraint('set_false_path -from [get_pins {%s/down_stretch_reg[25]/C}] -to [get_pins %s/led_up_reg_reg/D]'%(self.fullname, self.fullname)))
+
+        cons.append(RawConstraint('set_false_path -from [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/reset_pulse_reg[0]/C}] -to [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/gttxreset_txusrclk2_sync_i/sync1_r_reg*/PRE}]' % (num, num)))
+
+        # make the ethernet core clock async relative to whatever the user is using as user_clk
+        # Find the clock of *clk_counter* to determine what source user_clk comes from. This is fragile.
+        cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d_usr_clk -asynchronous -group [get_clocks -of_objects [get_cells -hierarchical -filter {name=~*clk_counter*}]] -group [get_clocks -include_generated_clocks ref_clk_p%d_CLK]' % (num, num)))
+
+
 
         return cons
         

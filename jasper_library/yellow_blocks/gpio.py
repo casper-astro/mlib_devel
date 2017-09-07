@@ -52,7 +52,7 @@ class gpio(YellowBlock):
         inst.add_parameter('DDR', '1' if self.use_ddr  else '0')
         inst.add_parameter('REG_IOB', '"true"' if self.reg_iob else '"false"')
 
-    def gen_constraints(self, peripherals=None):
+    def gen_constraints(self):
         if self.use_diffio:
             const = []
             const += [PortConstraint(self.fullname+'_ext_p', self.io_group + '_p', port_index=range(self.bitwidth), iogroup_index=to_int_list(self.bit_index))]
