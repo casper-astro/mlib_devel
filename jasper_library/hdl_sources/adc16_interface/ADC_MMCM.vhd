@@ -7,7 +7,9 @@ use IEEE.numeric_std.all;
 
 -- entity declaraction
 entity  ADC_MMCM  is
-
+    generic (
+               ADC_RESOLUTION     : integer  := 8
+    );
     port (
                -- System
                reset        :  in  std_logic;
@@ -66,7 +68,7 @@ architecture ADC_MMCM_arc of ADC_MMCM is
       CLKOUT3_PHASE        : real;
       CLKOUT3_DUTY_CYCLE   : real;
       CLKOUT3_USE_FINE_PS  : boolean;
-      CLKIN1_PERIOD        : real;
+      --CLKIN1_PERIOD        : real;
       REF_JITTER1          : real
       );
      port (
@@ -126,6 +128,12 @@ architecture ADC_MMCM_arc of ADC_MMCM is
      signal mmcm_locked     : std_logic;
      signal mmcm_reset      : std_logic;
 
+     constant CLK_MUL : REAL := 5.0;
+     constant CLK_DIV : Integer := 2;
+     constant CLK0_DIV : Real := CLK_MUL/Real(CLK_DIV);
+     constant CLK1_DIV : Integer := Integer(CLK0_DIV*(Real(ADC_RESOLUTION)/4.0)*2.0);
+     constant CLK2_DIV : Integer := Integer(CLK0_DIV*(Real(ADC_RESOLUTION)/4.0));
+
      begin
 
      -- Signal routing
@@ -153,19 +161,19 @@ architecture ADC_MMCM_arc of ADC_MMCM is
       CLOCK_HOLD           => false,
       COMPENSATION         => "ZHOLD",
       STARTUP_WAIT         => false,
-      DIVCLK_DIVIDE        => 2,     -- D = 2
-      CLKFBOUT_MULT_F      => 5.000, -- M = 5.000
+      DIVCLK_DIVIDE        => CLK_DIV,  -- D = 2
+      CLKFBOUT_MULT_F      => CLK_MUL,  -- M = 5.000
       CLKFBOUT_PHASE       => 0.000,
       CLKFBOUT_USE_FINE_PS => false,
-      CLKOUT0_DIVIDE_F     => 2.500, -- Fout = (M * Fin) / (D * 2.500) = Fin (when D=2, M=5)
+      CLKOUT0_DIVIDE_F     => CLK0_DIV, -- Fout = (M * Fin) / (D * 2.500) = Fin (when D=2, M=5)
       CLKOUT0_PHASE        => 0.000,
       CLKOUT0_DUTY_CYCLE   => 0.500,
       CLKOUT0_USE_FINE_PS  => false,
-      CLKOUT1_DIVIDE       => 10,    -- Fout = (M * Fin) / (D * 10) = Fin / 4 (when D=2, M=5)
+      CLKOUT1_DIVIDE       => CLK1_DIV, -- Fout = (M * Fin) / (D * 10) = Fin / 4 (when D=2, M=5)
       CLKOUT1_PHASE        => 0.000,
       CLKOUT1_DUTY_CYCLE   => 0.500,
       CLKOUT1_USE_FINE_PS  => false,
-      CLKOUT2_DIVIDE       => 5,     -- Fout = (M * Fin) / (D * 4) = Fin / 2 (when D=2, M=5)
+      CLKOUT2_DIVIDE       => CLK2_DIV, -- Fout = (M * Fin) / (D * 4) = Fin / 2 (when D=2, M=5)
       CLKOUT2_PHASE        => 0.000,
       CLKOUT2_DUTY_CYCLE   => 0.500,
       CLKOUT2_USE_FINE_PS  => false,
@@ -173,7 +181,7 @@ architecture ADC_MMCM_arc of ADC_MMCM is
       CLKOUT3_PHASE        => 90.000,
       CLKOUT3_DUTY_CYCLE   => 0.500,
       CLKOUT3_USE_FINE_PS  => false,
-      CLKIN1_PERIOD        => 2.500, -- 400 MHz (should be calculated from user input)
+      -- CLKIN1_PERIOD        => 2.500, -- 400 MHz (should be calculated from user input)
       REF_JITTER1          => 0.010
 
       --BANDWIDTH            => "OPTIMIZED",

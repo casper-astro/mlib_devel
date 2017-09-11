@@ -29,6 +29,7 @@ module tge_rx #(
     output [63:0] cpu_rx_buffer_rd_data,
     output  [7:0] cpu_rx_size,
     input         cpu_rx_ack,
+    output        cpu_int,
 
     // MAC Interface
     input         mac_clk,
@@ -366,6 +367,9 @@ end endgenerate
     cpu_sizeR  <= cpu_size;
     cpu_sizeRR <= cpu_sizeR;
   end
+
+  /* Trigger interrupt when CPU rx size is non-zero. A cpu-read (ack) resets this */
+  assign cpu_int = cpu_rx_size != 8'b0;
 
   /********** Application buffer Logic *************/
 

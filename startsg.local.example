@@ -1,0 +1,4 @@
+export XILINX_PATH=/opt/Xilinx/Vivado/2016.4
+export MATLAB_PATH=/usr/local/MATLAB/R2016b
+export PLATFORM=lin64
+export JASPER_BACKEND=vivado

@@ -102,21 +102,15 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         self.add_source('hmc/src/*.ngc')
         self.add_source("hmc/src/hmc_user_axi_fifo/*.xci")
         self.add_source('hmc/open_hmc')
+        # This block takes a mezzanine site and should prevent other blocks from using it
+        self.exc_requires = ['mezz%d' % self.mez]
 
     def modify_top(self,top):
 
         self.instantiate_hmcc(top)
         top.assign_signal('mez%s_init_done' % self.mez, '%s_init_done' % self.fullname)
 
-    def gen_constraints(self, peripherals=None):
-
-        for key in peripherals.keys():
-            if peripherals[key]['tag'] == 'xps:forty_gbe':
-                fortygbefullname = peripherals[key]['fullpath'].replace('/', '_')
-                print('bsp name %s' % fortygbefullname)
-        #import IPython
-        #IPython.embed()
-
+    def gen_constraints(self):
         cons = []
 
         cons.append(PortConstraint('MEZZANINE_%s_RESET' % self.mez,'MEZZANINE_%s_RESET' % self.mez))
@@ -226,8 +220,8 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         cons.append(ClockGroupConstraint('FPGA_REFCLK_BUF0_P', '-include_generated_clocks %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname, 'asynchronous'))
 
         #Cut clocks between HMC and forty_gbe clocks
-        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname, '-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]' % fortygbefullname,'asynchronous'))
-        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]' % fortygbefullname, '-of_objects [get_pins %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
+        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname, '-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]','asynchronous'))
+        cons.append(ClockGroupConstraint('-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', '-of_objects [get_pins %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
 
         #Cut paths between HMC Link 2 and Link 3 clocks
         cons.append(ClockGroupConstraint('-of_objects [get_pins %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname, '-of_objects [get_pins %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
@@ -308,22 +302,22 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         cons.append(ClockGroupConstraint('FPGA_REFCLK_BUF0_P', '-include_generated_clocks %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname, 'asynchronous'))
 
         #Cut paths between HMC and forty_gbe clocks
-        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname, '-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]' % fortygbefullname,'asynchronous'))
-        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]' % fortygbefullname, '-of_objects [get_pins %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
+        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname, '-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]','asynchronous'))
+        cons.append(ClockGroupConstraint('-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', '-of_objects [get_pins %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
 
         #Cut paths between HMC Link 3 and HMC Link 2 clocks
         cons.append(ClockGroupConstraint('-of_objects [get_pins %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname, '-of_objects [get_pins %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
 
         #Timing Constraints
         #Output Constraints
-        cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]' % fortygbefullname, consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
-        cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]' % fortygbefullname, consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
+        cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
+        cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
         cons.append(OutputDelayConstraint(clkname='FPGA_REFCLK_BUF0_P', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
         cons.append(OutputDelayConstraint(clkname='FPGA_REFCLK_BUF0_P', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
 
         #multi-cycle constraints
-        cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_clocks -of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]' % fortygbefullname, destpath='get_ports MEZZANINE_%s_RESET' % self.mez, multicycledelay=4))
-        cons.append(MultiCycleConstraint(multicycletype='hold',sourcepath='get_clocks -of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]' % fortygbefullname, destpath='get_ports MEZZANINE_%s_RESET' % self.mez, multicycledelay=3))
+        cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_clocks -of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', destpath='get_ports MEZZANINE_%s_RESET' % self.mez, multicycledelay=4))
+        cons.append(MultiCycleConstraint(multicycletype='hold',sourcepath='get_clocks -of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', destpath='get_ports MEZZANINE_%s_RESET' % self.mez, multicycledelay=3))
         cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_clocks FPGA_REFCLK_BUF0_P', destpath='get_ports MEZZANINE_%s_RESET' % self.mez, multicycledelay=4))
         cons.append(MultiCycleConstraint(multicycletype='hold',sourcepath='get_clocks FPGA_REFCLK_BUF0_P', destpath='get_ports MEZZANINE_%s_RESET' % self.mez, multicycledelay=3))
 

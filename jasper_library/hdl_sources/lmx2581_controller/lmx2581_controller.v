@@ -85,8 +85,8 @@ module lmx2581_controller #(
 
 
   reg [31:0] spi_bitout_reg = 0;
+  reg [31:0] spi_bitin_reg = 0;
   reg le_reg = 0;
-  reg ce_reg = 0;
   reg enable_clk = 0;
 
   always @(posedge wb_clk_i) begin
@@ -97,7 +97,9 @@ module lmx2581_controller #(
     end else begin
       case (state)
         START : begin
+          le_reg <= 1; 
           spi_bitout_reg <= wb_in_reg;
+          spi_bitin_reg <= 32'b0;
           spi_bit_ctr <= 0;
           if (spi_clk_negedge) begin
             state <= WRITE;
@@ -115,10 +117,12 @@ module lmx2581_controller #(
           end
           if (spi_clk_negedge) begin
             spi_bitout_reg <= {spi_bitout_reg[30:0], 1'b0};
+            spi_bitin_reg <= {spi_bitin_reg[30:0], lmx_muxout};
           end
         end
         LASTBIT : begin
           if (spi_clk_negedge) begin
+            spi_bitin_reg <= {spi_bitin_reg[30:0], lmx_muxout};
             le_reg <= 1;
             state <= END;
             enable_clk <= 0;
@@ -128,11 +132,11 @@ module lmx2581_controller #(
           if (spi_clk_posedge) begin
             le_reg <= 0;
             state <= IDLE;
+            lmx_in_reg <= spi_bitin_reg;
           end
         end
         IDLE : begin
           le_reg <= 0;
-          ce_reg <= 0;
           enable_clk <= 0;
         end
       endcase

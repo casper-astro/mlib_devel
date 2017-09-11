@@ -1,16 +1,167 @@
 #!/bin/bash
-##############################################
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd $DIR
-if [ -f vivado_config.local ];
+
+###########################################################################
+#                                                                         #
+# DO NOT PUT LOCAL CONFIGURATION INFORMATION IN THIS FILE!                #
+#                                                                         #
+###########################################################################
+#                                                                         #
+# This "startsg" script is used to start the CASPER XSG/FPGA toolflow.    #
+#                                                                         #
+# Put local definitions in "startsg.local" in the same directory as this  #
+# file.  At a minimum, the "startsg.local" file should define MATLAB_PATH #
+# and XILINX_PATH environment variables that point to the base directory  #
+# of the respective installation directories.  You should define the      #
+# PLATFORM variable (probably as lin64) in that file as well. You should  #
+# define the JASPER_BACKEND variable (probably as vivado) in that file as #
+# well.                                                                   #                                                                 
+#                                                                         #
+#                                                                         # 
+# See the `startsg.local.example` file for an example.                    #
+#                                                                         #
+###########################################################################
+
+# Find canonical ("real") directory of this script
+SCRIPT_DIR=$(dirname `readlink -e "${BASH_SOURCE[0]}"`)
+#echo "SCRIPT_DIR=${SCRIPT_DIR}"
+
+# Find basename of this script
+SCRIPT_BASE=$(basename "${BASH_SOURCE[0]}")
+#echo "SCRIPT_BASE=${SCRIPT_BASE}"
+
+# If local defs file passed on command line, use it
+if [ -n "${1}" ]
 then
-    echo "Using configuration: $DIR/vivado_config.local"
-    source vivado_config.local
-else
-    echo "Using default configuration: $DIR/vivado_config.sh"
-    source vivado_config.sh
+  LOCALDEFS="${1}"
+
+# First look for local defs in current directory
+elif [ -f "./${SCRIPT_BASE}.local" ]
+then
+  LOCALDEFS="./${SCRIPT_BASE}.local"
+
+# Next, look in directory where symlink points
+elif [ -f "${SCRIPT_DIR}/${SCRIPT_BASE}.local" ]
+then
+  LOCALDEFS="${SCRIPT_DIR}/${SCRIPT_BASE}.local"
 fi
-export PATH=${MATLAB_PATH}/bin:$PATH
-echo $PATH
-echo "EXECUTING: ${XILINX_PATH}/bin/sysgen $@"
-${XILINX_PATH}/bin/sysgen $@
+
+# Errors need to return if this file is being sourced,
+# but need to exit if this file is being executed.
+on_error=return
+if [ "$0" == "${BASH_SOURCE[0]}" ]
+then
+  on_error=exit
+fi
+
+if [ -n "${LOCALDEFS}" -a -f "${LOCALDEFS}" ]
+then
+  echo "Reading local definitions from '${LOCALDEFS}'"
+  source "${LOCALDEFS}"
+else
+  # If local defs was passed on command line, this is an error.  Otherwise it
+  # is just a warning because the user may be settng up their own environment.
+  if [ -n "${1}" ]
+  then
+    echo "ERROR: Local environment file '${LOCALDEFS}' not found."
+    $on_error 1
+  else
+    echo "WARNING: Local environment file not found."
+  fi
+fi
+
+# Verify that MATLAB_PATH and XILINX_PATH are reasonable
+if ! [ -n "${MATLAB_PATH}" ]
+then
+  echo "ERROR: MATLAB_PATH is not defined in the current environment."
+  $on_error 1
+elif ! [ -d "${MATLAB_PATH}" -a -r "${MATLAB_PATH}" ]
+then
+  echo "ERROR: MATLAB_PATH '${MATLAB_PATH}' is not a readable directory."
+  $on_error 1
+fi
+
+if ! [ -n "${XILINX_PATH}" ]
+then
+  echo "ERROR: XILINX_PATH is not defined in the current environment."
+  $on_error 1
+elif ! [ -d "${XILINX_PATH}" -a -r "${XILINX_PATH}" ]
+then
+  echo "ERROR: XILINX_PATH '${XILINX_PATH}' is not a readable directory."
+  $on_error 1
+fi
+
+if ! [ -n "${PLATFORM}" ]
+then
+  echo "WARNING: PLATFORM is not defined in the current environment, assuming 'lin64'."
+  export PLATFORM="lin64"
+fi
+
+if ! [ -n "${JASPER_BACKEND}" ]
+then
+  echo "WARNING: JASPER_BACKEND is not defined in the current environment, assuming 'vivado'."
+  export JASPER_BACKEND="vivado"
+fi
+
+
+# If not yet defined, set MLIB_DEVEL_PATH based on canonicalized directory of
+# this script.  This is probably what you want, so just don't define it
+# elsewhere.
+if ! [ -n "${MLIB_DEVEL_PATH}" ]
+then
+  export MLIB_DEVEL_PATH="${SCRIPT_DIR}"
+fi
+
+# Check that casper_library directory is writable
+# (required by downconverter and bus libraries).
+if ! [ -w "${MLIB_DEVEL_PATH}/casper_library" ]
+then
+  echo "ERROR: Directory ${MLIB_DEVEL_PATH}/casper_library is not writable by you."
+  $on_error 1
+fi
+
+# Make sure that these variables are exported
+export XILINX_PATH
+export MATLAB_PATH
+export PLATFORM
+export MLIB_DEVEL_PATH
+export JASPER_BACKEND
+
+# Show environment essentials
+echo "Using MATLAB_PATH=${MATLAB_PATH}"
+echo "Using XILINX_PATH=${XILINX_PATH}"
+echo "Using PLATFORM=${PLATFORM}"
+echo "Using MLIB_DEVEL_PATH=${MLIB_DEVEL_PATH}"
+echo "Using JASPER_BACKEND=${JASPER_BACKEND}"
+
+# Finish environment setup
+export SYSGEN_SCRIPT="$MLIB_DEVEL_PATH/startsg"
+export XPS_BASE_PATH="$MLIB_DEVEL_PATH/xps_base"
+export MATLAB="$MATLAB_PATH"
+export CASPER_BASE_PATH="$MLIB_DEVEL_PATH"
+export HDL_ROOT="$CASPER_BASE_PATH/jasper_library/hdl_sources"
+
+if [ -f "${XILINX_PATH}/settings64.sh" ]
+then
+  source "${XILINX_PATH}/settings64.sh" > /dev/null
+else
+  echo "ERROR: Xilink settings script '${XILINX_PATH}/settings64.sh' not found."
+  $on_error 1
+fi
+
+export PATH="${MATLAB_PATH}/bin:${PATH}"
+
+# Set umask to allow group writes
+umask 002
+
+if [ "$0" == "${BASH_SOURCE[0]}" ]
+then
+  # Save start-up directory (if defined, startup.m will cd there)
+  export CASPER_STARTUP_DIR=`pwd`
+
+  # Change into the MLIB_DEVEL_PATH directory
+  # (so MATLAB will find our startup.m file).
+  cd "${MLIB_DEVEL_PATH}"
+
+  # Start sysgen
+  "${XILINX_PATH}/bin/sysgen"
+fi
