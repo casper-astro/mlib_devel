@@ -54,15 +54,17 @@ if rv ~= 0
     return;
 end
 
-disp('Launching System Generator compile')
+disp('Launching System Generator compile');
 update_model = 0;
 start_sysgen_compile(modelpath, builddir, update_model);
+disp('Completed sysgen okay.');
 
-disp('Complete');
 % if vivado is to be used
-if getenv('JASPER_BACKEND') == 'vivado'
+build_cmd = '';
+if strcmp(getenv('JASPER_BACKEND'), 'vivado')
     build_cmd = ['python ' jasper_python ' -m ' modelpath ' --middleware --backend --software'];
-else
+elseif strcmp(getenv('JASPER_BACKEND'), 'ise')
     build_cmd = ['python ' jasper_python ' -m ' modelpath ' --middleware --backend --software --be ise'];
 end
+
 % end
