@@ -1129,9 +1129,9 @@ begin
     xlgmii_tx_dest_port    <= forty_gbe_tx_dest_port;
     --xlgmii_rx_overrun_ack  <= forty_gbe_rx_overrun_ack;
     --xlgmii_rx_ack          <= forty_gbe_rx_ack;
-    forty_gbe_led_rx <= led_rx;
-    forty_gbe_led_tx <= led_tx;
-    forty_gbe_led_up <= led_up;
+    forty_gbe_led_rx <= xlgmii_rxled(0)(1); -- xlgmii_rxled(0)(1) is activity, xlgmii_rxled(0)(0) is phy rx up
+    forty_gbe_led_tx <= xlgmii_txled(0)(1); -- xlgmii_txled(0)(1) is activity, xlgmii_txled(0)(0) is phy tx up
+    forty_gbe_led_up <= phy_rx_up(0);
 
     forty_gbe_tx_overflow     <= xlgmii_tx_overflow;
     forty_gbe_tx_afull        <= xlgmii_tx_afull;
@@ -2034,9 +2034,9 @@ begin
         SEL_I => WB_SLV_SEL_I(9),
         STB_I => WB_SLV_STB_I(9),
         WE_I  => WB_SLV_WE_I(9),
-        led_up => led_up,
-        led_rx => led_rx,
-        led_tx => led_tx,
+        --led_up => led_up,
+        --led_rx => led_rx,
+        --led_tx => led_tx,
         xaui_clk        => sys_clk,
         xaui_reset      => sys_rst,
         xaui_status     => gmii_xaui_status,
