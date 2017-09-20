@@ -471,7 +471,7 @@ if run_ip,
     cd(simulink_path);
     for n = 1:length(xps_pcore_blks),
         path_param = get_param(xps_pcore_blks(n), 'pcore_path');
-        pcore_path = clear_path(path_param{1});
+        pcore_path = clear_path(path_param{1},slash);
 
         destination_dir = [xps_path, slash, 'pcores', slash];
 
