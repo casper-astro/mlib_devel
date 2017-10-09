@@ -43,7 +43,7 @@ s.open_phy  = num2str(strcmp(get_param(blk_name, 'open_phy'), 'on'));
 b = class(s,'xps_xaui',blk_obj);
 
 % ip name
-b = set(b,'ip_name','XAUI_interface');
+b = set(b,'ip_name','xaui_interface');
 
 % misc ports
 misc_ports.app_clk     = {1 'in' get(xsg_obj,'clk_src')};

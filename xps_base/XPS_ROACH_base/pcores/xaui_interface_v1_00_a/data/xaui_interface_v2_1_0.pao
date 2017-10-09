@@ -13,5 +13,5 @@
 ## ***************************************************************************
 ##
 
-lib XAUI_interface_v1_00_a XAUI_interface vhdl
-lib XAUI_interface_v1_00_a opb_attach verilog
+lib xaui_interface_v1_00_a xaui_interface vhdl
+lib xaui_interface_v1_00_a opb_attach verilog

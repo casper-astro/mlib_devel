@@ -14,7 +14,7 @@
 -- created by Pierre-Yves Droz 2005
 
 ------------------------------------------------------------------------------
--- XAUI_interface.vhd
+-- xaui_interface.vhd
 ------------------------------------------------------------------------------
 
 library ieee;
@@ -25,7 +25,7 @@ use ieee.std_logic_unsigned.all;
 --library unisim;
 --use unisim.all;
 
-entity XAUI_interface is
+entity xaui_interface is
 	generic(
 		C_BASEADDR        : std_logic_vector	:= X"00000000";
 		C_HIGHADDR        : std_logic_vector	:= X"0000FFFF";
@@ -83,9 +83,9 @@ entity XAUI_interface is
 		OPB_select            : in	std_logic;
 		OPB_seqAddr           : in	std_logic
 	);
-end entity XAUI_interface;
+end entity xaui_interface;
 
-architecture XAUI_interface_arch of XAUI_interface is
+architecture xaui_interface_arch of xaui_interface is
 
 --                                   #    
 --                                   #    
@@ -725,4 +725,4 @@ opb_attach_inst : opb_attach
 xgmii_txd         <= xgmii_txd_int;
 xgmii_txc         <= xgmii_txc_int;
 
-end architecture XAUI_interface_arch;
+end architecture xaui_interface_arch;
