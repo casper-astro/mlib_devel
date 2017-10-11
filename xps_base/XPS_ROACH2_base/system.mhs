@@ -309,8 +309,8 @@
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  # #
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  # PARAMETER INSTANCE     = opb_adc5g_controller_0
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  # PARAMETER HW_VER       = 1.00.a
-#IF# (strcmp(get(b,'type'),'xps_adc5g'))  # PARAMETER C_BASEADDR   = 0x00020000
-#IF# (strcmp(get(b,'type'),'xps_adc5g'))  # PARAMETER C_HIGHADDR   = 0x0002ffff
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  # PARAMETER C_BASEADDR   = 0x00010000
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  # PARAMETER C_HIGHADDR   = 0x0001ffff
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  # BUS_INTERFACE SOPB = opb0
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b, 'use_adc0') && strcmp(get(b,'mode'), 'MODE_ACHAN_DMUX1')# PARAMETER INITIAL_CONFIG_MODE_0 = 0
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b, 'use_adc0') && strcmp(get(b,'mode'), 'MODE_ACHAN_DMUX2')# PARAMETER INITIAL_CONFIG_MODE_0 = 1
