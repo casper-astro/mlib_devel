@@ -19,7 +19,7 @@ end
 % should we make a sim in/out?
 simport = true;
 try
-    if strcmp(get_param(blk, 'sim_port'), 'off'),
+    if strcmp(get_param(blk, 'sim_port'), 'off')
         simport = false;
     end
 catch ex
@@ -54,7 +54,7 @@ y_pos =     100;
 %     end
 % end
 io_dir = get_param(blk, 'io_dir');
-if strcmp(io_dir, 'To Processor'),
+if strcmp(io_dir, 'To Processor')
     iodir = 'output';
     draw_to();
 else
@@ -67,16 +67,16 @@ clean_blocks(blk);
 
 % update format string so we know what's going on with this block
 show_format = get_param(blk, 'show_format');
-if numios == 1,
+if numios == 1
     display_string = strcat('1', ' ', iodir);
 else
     display_string = sprintf('%d %ss', numios, iodir);
 end
-if strcmp(show_format, 'on'),
+if strcmp(show_format, 'on')
     config_string = '';
     totalbits = 0;
-    for ctr = 1 : numios,
-        switch current_types(ctr),
+    for ctr = 1 : numios
+        switch current_types(ctr)
             case 1 
                 config_string = strcat(config_string, sprintf('f%i.%i,', current_widths(ctr), current_bins(ctr)));
             case 2
@@ -112,7 +112,7 @@ end
 
 function draw_to()
     y_pos_row = y_pos;
-    if numios > 1,
+    if numios > 1
         % concat block
         reuse_block(blk, 'concatenate', 'xbsIndex_r4/Concat', ...
           'Position', [x_start + (x_size * 2 * 2), y_pos_row, x_start + (x_size * 2 * 2) + (x_size/2), y_pos_row + (numios * y_size)], ...
@@ -131,21 +131,21 @@ function draw_to()
     reuse_block(blk, gwout_name, 'xbsIndex_r4/Gateway Out', ...
             'Position', [x_start + (x_size * 4 * 2), y_pos_row, x_start + (x_size * 4 * 2) + (x_size/2), y_pos_row + y_size], ...
             'hdl_port', 'on');
-    if simport,
+    if simport
         reuse_block(blk, 'sim_out', 'built-in/outport', 'Port', '1', ...
             'Position', [x_start + (x_size * 6 * 2), y_pos_row, x_start + (x_size * 6 * 2) + (x_size/2), y_pos_row + y_size]);
     else
         reuse_block(blk, 'sim_out', 'built-in/terminator', ...
             'Position', [x_start + (x_size * 6 * 2), y_pos_row, x_start + (x_size * 6 * 2) + (x_size/2), y_pos_row + y_size]);
     end
-    if numios > 1,
+    if numios > 1
         add_line(blk, 'concatenate/1', 'io_delay/1', 'autorouting', 'on');
     end
     add_line(blk, 'io_delay/1', 'cast_gw/1', 'autorouting', 'on');
     add_line(blk, 'cast_gw/1', [gwout_name, '/1'], 'autorouting', 'on');
     add_line(blk, [gwout_name, '/1'], 'sim_out/1', 'autorouting', 'on');
     % ports
-    for pindex = 1 : numios,
+    for pindex = 1 : numios
         in_name = sprintf('out_%s', current_names{pindex});
         assert_name = sprintf('assert_%s', current_names{pindex});
         reinterpret_name = sprintf('reint%i', pindex);
@@ -169,7 +169,7 @@ function draw_to()
             'force_bin_pt', 'on', 'bin_pt', '0');
         add_line(blk, [in_name, '/1'], [assert_name, '/1'], 'autorouting', 'on');
         add_line(blk, [assert_name, '/1'], [reinterpret_name, '/1'], 'autorouting', 'on');
-        if numios > 1,
+        if numios > 1
             add_line(blk, [reinterpret_name, '/1'], ['concatenate/', num2str(pindex)], 'autorouting', 'on');
         else
             add_line(blk, [reinterpret_name, '/1'], 'io_delay/1', 'autorouting', 'on');
@@ -187,9 +187,9 @@ function draw_from()
     reuse_block(blk, 'io_delay', 'xbsIndex_r4/Delay', 'latency', get_param(blk, 'io_delay'), 'reg_retiming', 'on', ...
             'Position', [x_start + (x_size * 4.5 * 2), y_pos_row, x_start + (x_size * 4.5 * 2) + (x_size/2), y_pos_row + y_size]);
     add_line(blk, [gwin_name, '/1'], 'io_delay/1', 'autorouting', 'on');
-    if numios > 1,
+    if numios > 1
         addstr = '';
-        for pindex = 1 : numios,
+        for pindex = 1 : numios
             addstr = [addstr, '+'];
         end
         reuse_block(blk, 'sim_add', 'simulink/Math Operations/Add', 'Inputs', addstr, 'OutDataTypeStr', 'uint32', ...
@@ -199,14 +199,14 @@ function draw_from()
     end
     % ports
     total_width = sum(current_widths);
-    for pindex = 1 : numios,
+    for pindex = 1 : numios
         io_arith_type = current_types(pindex);
-        if io_arith_type == 2,
+        if io_arith_type == 2
             sliceboolean = 'on';
         else
             sliceboolean = 'off';
         end
-        if strcmp(io_arith_type, 'Signed  (2''s comp)'),
+        if strcmp(io_arith_type, 'Signed  (2''s comp)')
             shorttype = 'sfix';
         else
             shorttype = 'ufix';
@@ -221,7 +221,7 @@ function draw_from()
         out_name = sprintf('in_%s', current_names{pindex});
         slice_name = sprintf('slice_%s', current_names{pindex});
         reinterpret_name = sprintf('reint%i', pindex);
-        if simport,
+        if simport
             reuse_block(blk, in_name, 'built-in/inport', 'Port', num2str(pindex), ...
                 'Position', [x_start, y_pos_row, x_start + (x_size/2), y_pos_row + y_size]);
         else
@@ -236,7 +236,7 @@ function draw_from()
             'Position', [x_start + (x_size * 1.5 * 2), y_pos_row, x_start + (x_size * 1.5 * 2) + (x_size/2), y_pos_row + y_size]);
         reuse_block(blk, gain_name, 'simulink/Commonly Used Blocks/Gain', 'Gain', num2str(pow2(total_width)), ...
             'Position', [x_start + (x_size * 2 * 2), y_pos_row, x_start + (x_size * 2 * 2) + (x_size/2), y_pos_row + y_size]);
-        if numios > 1,
+        if numios > 1
             add_line(blk, [in_name, '/1'], [convert_name1, '/1'], 'autorouting', 'on');
             add_line(blk, [convert_name1, '/1'], [convert_name2, '/1'], 'autorouting', 'on');
             add_line(blk, [convert_name2, '/1'], [gain_name, '/1'], 'autorouting', 'on');
@@ -247,7 +247,7 @@ function draw_from()
         reuse_block(blk, slice_name, 'xbsIndex_r4/Slice', ...
             'Position', [x_start + (x_size * 5 * 2), y_pos_row, x_start + (x_size * 5 * 2) + (x_size/2), y_pos_row + y_size], ...
             'nbits', num2str(io_bitwidth), 'boolean_output', sliceboolean, 'mode', 'Lower Bit Location + Width', 'bit0', num2str(total_width));
-        if strcmp(sliceboolean, 'off'),
+        if strcmp(sliceboolean, 'off')
             reuse_block(blk, reinterpret_name, 'xbsIndex_r4/Reinterpret', ...
                 'Position', [x_start + (x_size * 6 * 2), y_pos_row, x_start + (x_size * 6 * 2) + (x_size/2), y_pos_row + y_size], ...
                 'force_arith_type', 'on', 'arith_type', io_arith_type, ...
@@ -257,7 +257,7 @@ function draw_from()
             'Port', num2str(pindex), ...
             'Position', [x_start + (x_size * 7 * 2), y_pos_row, x_start + (x_size * 7 * 2) + (x_size/2), y_pos_row + y_size]);
         add_line(blk, 'io_delay/1', [slice_name, '/1'], 'autorouting', 'on');
-        if strcmp(sliceboolean, 'off'),
+        if strcmp(sliceboolean, 'off')
             add_line(blk, [slice_name, '/1'], [reinterpret_name, '/1'], 'autorouting', 'on');
             add_line(blk, [reinterpret_name, '/1'], [out_name, '/1'], 'autorouting', 'on');
         else

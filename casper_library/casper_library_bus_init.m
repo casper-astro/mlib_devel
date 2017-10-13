@@ -4,6 +4,12 @@ function casper_library_bus_init()
 	close_system('casper_library_bus', 0);
 	mdl = new_system('casper_library_bus', 'Library');
 	blk = get(mdl,'Name');
+	% Set the EnableLBRepository property to on
+	try
+	  set_param(mdl, 'EnableLBRepository', 'on');
+	catch
+	  % ignore
+	end
 	warning on Simulink:Engine:MdlFileShadowing;
 
 	add_block('built-in/SubSystem', [blk,'/bus_addsub']);
@@ -309,7 +315,7 @@ function casper_library_bus_init()
 		'Lock', sprintf('off'), ...
 		'PreSaveFcn', sprintf('mdl2m(gcs, ''library'', ''on'');'), ...
 		'SolverName', sprintf('ode45'), ...
-		'SolverMode', sprintf('Auto'), ...
+		'SolverMode', sprintf('MultiTasking'), ...
 		'StartTime', sprintf('0.0'), ...
 		'StopTime', sprintf('10.0'));
 	filename = save_system(mdl,[getenv('MLIB_DEVEL_PATH'), '/casper_library/', 'casper_library_bus', '.mdl']);

@@ -472,7 +472,7 @@ if run_ip,
     cd(simulink_path);
     for n = 1:length(xps_pcore_blks),
         path_param = get_param(xps_pcore_blks(n), 'pcore_path');
-        pcore_path = clear_path(path_param{1});
+        pcore_path = clear_path(path_param{1},slash);
 
         destination_dir = [xps_path, slash, 'pcores', slash];
 
@@ -539,7 +539,7 @@ if run_edkgen,
     end
 
     % shanly and mark's new format - generated from core_info and design_info
-    if strcmp(hw_sys, 'ROACH') || strcmp(hw_sys, 'ROACH2') || strcmp(hw_sys, 'MKDIG'),
+    if strcmp(hw_sys, 'ROACH') || strcmp(hw_sys, 'ROACH2') || strcmp(hw_sys, 'SKARAB'),
         kcpfpg_fid = fopen([xps_path, slash, 'extended_info.kcpfpg'], 'w');
         fprintf(kcpfpg_fid, '#!/bin/kcpfpg\n');
         fprintf(kcpfpg_fid, '?uploadbin\n');

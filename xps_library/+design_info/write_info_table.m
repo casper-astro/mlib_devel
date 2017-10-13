@@ -59,7 +59,12 @@ function write_info_table(filename, sysname, blks)
     end
     for b = 1 : numel(info_blocks),
         blk = info_blocks(b);
-        blkstr = blk.to_table_row();
+        try
+            blkstr = blk.to_table_row();
+        catch
+            fprintf('\nERROR: Could not get table row for block(%s), parent(%s) info(%s)\n', blk.block, blk.parent_block, blk.info)
+            error('');
+        end
         fprintf(fid, blkstr);
     end
     fprintf(fid, '');

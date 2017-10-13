@@ -1,0 +1,110 @@
+2014.3:
+ * Version 3.4
+ * Production updates to GTZ
+ * Added SATA template for GTX and GTP
+ * Removed logic to keep QPLL in powerdown till reference clock is available
+ * Removed PCIE template
+
+2014.2:
+ * Version 3.3
+ * Added support for rf900 package for defense-grade(XQ) Zynq 7045
+ * Added logic to keep CPLL/QPLL in powerdown till reference clock is available
+ * Fixed multiple reset issue for GTH/GTP.
+ * Modified constraint files for false paths(Design Advisory 60356)
+
+2014.1:
+ * Version 3.2
+ * Added support for Aartix35T, Aartix50T, Aartix75T
+ * Fixed simulation issue for GTX Bufferbypass AUTO mode
+ * Added support for XC7VH870T and XC7VH580T FLG package devices
+
+2013.4:
+ * Version 3.1
+ * Reset FSM updates- removed the posedge detection logic for plllock
+ * GTZ updates- added new line rate support and updated xdc file for the constraints
+ * Increased the number of optional transceiver control and status ports
+ * Added support for Artix35t and Artix50t devices
+
+2013.3:
+ * Version 3.0
+ * Updated GTH Attributes and QPLL range - Refer to AR 56332 and DS183
+ * Updated GTZ Attributes and Clocking
+ * Updated timing constraints (XDC) to resolve Critical Warnings and added support for out-of-context synthesis
+ * Updated timing constraints for recovered clocks in IP level.For details, refer to Migrating section of Product Guide - pg168-gtwizard.pdf
+ * Updated TX and RX FSM to fix MMCM lock synchronization and simulation issues (for all GTs)
+ * GTX TX buffer bypass is enabled in both Manual & Auto modes for single lane as per UG476.
+ * Added check in the GUI to disallow mixed encode/decode for TX and RX
+ * Added GUI option to include or exclude Vivado Lab tools support for debug
+ * Removed LPM and DFE Manual mode option from the GUI
+ * Added checks to limit DRP frequency selection
+ * Protocol templates updated for -- Display port, sRIO gen2, CEI6, Aurora 8B10b
+ * Reduced warnings in synthesis and simulation
+ * Enhanced Support for IP Integrator
+ * Added support for Cadence IES and Synopsys VCS simulators
+ * Updated clock synchronizers for clock domain crossing to reduce Mean Time Between Failures (MTBF) from met stability
+ * Added GUI option to include or exclude shareable logic resources. For details, refer to Upgrading in Vivado Design Suite section of Product Guide - pg168-gtwizard.pdf
+ * Added optional ports to enable transceiver core debug - Refer to pg168-gtwizard.pdf
+ * Updated line rate ranges for A7 Wire bond package from 5.4G to 6.25G
+ * Added support for XC7Z015 and XC7A75T
+ * Moved clock constraints for the recovered clocks to core level xdc file from example design level
+ * Added optional vivado (ILA and VIO) lab tools support for core debug in example design
+
+2013.2:
+ * Version 2.6
+ * New Protocol Templates added for GTH - Interlaken
+ * Updated Port and Attribute Settings to support GTX, GTH and GTP Production Silicon
+ * Increased line rate support for GTZ Transceivers
+ * Support for Asymmetrical data widths on TX and RX (core generation and implementation only, not supported in simulation)
+
+2013.1:
+ * Version 2.5
+ * Native Vivado release
+ * Support for Production Silicon for GTH and GTP.
+ * New Protocol Templates added for GTH - SRIO multi lane, JESD204
+ * New Protocol Templates added for GTP - JESD204
+
+(c) Copyright 2010 - 2014 Xilinx, Inc. All rights reserved.
+
+This file contains confidential and proprietary information
+of Xilinx, Inc. and is protected under U.S. and
+international copyright and other intellectual property
+laws.
+
+DISCLAIMER
+This disclaimer is not a license and does not grant any
+rights to the materials distributed herewith. Except as
+otherwise provided in a valid license issued to you by
+Xilinx, and to the maximum extent permitted by applicable
+law: (1) THESE MATERIALS ARE MADE AVAILABLE "AS IS" AND
+WITH ALL FAULTS, AND XILINX HEREBY DISCLAIMS ALL WARRANTIES
+AND CONDITIONS, EXPRESS, IMPLIED, OR STATUTORY, INCLUDING
+BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, NON-
+INFRINGEMENT, OR FITNESS FOR ANY PARTICULAR PURPOSE; and
+(2) Xilinx shall not be liable (whether in contract or tort,
+including negligence, or under any other theory of
+liability) for any loss or damage of any kind or nature
+related to, arising under or in connection with these
+materials, including for any direct, or any indirect,
+special, incidental, or consequential loss or damage
+(including loss of data, profits, goodwill, or any type of
+loss or damage suffered as a result of any action brought
+by a third party) even if such damage or loss was
+reasonably foreseeable or Xilinx had been advised of the
+possibility of the same.
+
+CRITICAL APPLICATIONS
+Xilinx products are not designed or intended to be fail-
+safe, or for use in any application requiring fail-safe
+performance, such as life-support or safety devices or
+systems, Class III medical devices, nuclear facilities,
+applications related to the deployment of airbags, or any
+other applications that could lead to death, personal
+injury, or severe property or environmental damage
+(individually and collectively, "Critical
+Applications"). Customer assumes the sole risk and
+liability of any use of Xilinx products in Critical
+Applications, subject only to applicable laws and
+regulations governing limitations on product liability.
+
+THIS COPYRIGHT NOTICE AND DISCLAIMER MUST BE RETAINED AS
+PART OF THIS FILE AT ALL TIMES.

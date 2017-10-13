@@ -28,10 +28,11 @@ else
 end
 
 [hw_sys, hw_subsys] = xps_get_hw_plat(get_param(gcb,'hw_sys'));
-clk_src = get_param(gcb, [hw_sys, '_clk_src']);
+clk_src = get_param(gcb, 'clk_src');
+%clk_src = get_param(gcb, [hw_sys, '_clk_src']);
 syn_tool = get_param(gcb, 'synthesis_tool');
 
-set_param(gcb, 'clk_src', clk_src);
+%set_param(gcb, 'clk_src', clk_src);
 
 ngc_config.include_clockwrapper = 1;
 ngc_config.include_cf = 0;
@@ -68,7 +69,7 @@ switch hw_sys
             % end case 'lx110t'
         end % switch hw_subsys
     % end case 'ROACH2'
-    
+
     case 'MKDIG'
         switch hw_subsys
             case 'sx475t'
@@ -80,17 +81,61 @@ switch hw_sys
             % end case 'lx110t'
         end % switch hw_subsys
     % end case 'MKDIG'
-    
+
+    case 'SNAP'
+        switch hw_subsys
+            case 'xc7k160t'
+                xlsetparam(xsg_blk,'xilinxfamily', 'Kintex7',...
+                    'part', 'xc7k160t',...
+                    'speed', '-2',...
+                    'testbench', 'off',...
+                    'package', 'ffg676');
+            % end case 'lx110t'
+        end % switch hw_subsys
+    % end case 'MKDIG'
+
+    case 'KC705'
+        switch hw_subsys
+            case 'xc7k325t'
+                xlsetparam(xsg_blk,'xilinxfamily', 'Kintex7',...
+                    'part', 'xc7k325t',...
+                    'speed', '-2',...
+                    'testbench', 'off',...
+                    'package', 'ffg900');
+            % end case 'lx110t'
+        end % switch hw_subsys
+    % end case 'MKDIG'
+
+    case 'MX175'
+        switch hw_subsys
+            case 'xc7vx690t'
+                xlsetparam(xsg_blk,'xilinxfamily', 'Virtex7',...
+                    'part', 'xc7vx690t',...
+                    'speed', '-2',...
+                    'testbench', 'off',...
+                    'package', 'ffg1930');
+            %
+        end % switch hw_subsys
+    % end case 'MX175'
+
+    case 'SKARAB'
+        switch hw_subsys
+            case 'xc7vx690t'
+                xlsetparam(xsg_blk,'xilinxfamily', 'Virtex7',...
+                    'part', 'xc7vx690t',...
+                    'speed', '-2',...
+                    'testbench', 'off',...
+                    'package', 'ffg1927');
+            % end case
+        end % switch hw_subsys
+    % end case 'SKARAB'
     otherwise
         errordlg(['Unsupported hardware system: ',hw_sys]);
     % end 'otherwise'
 end % switch hw_sys
 
 xlsetparam(xsg_blk,...
-    'directory', ['./',clear_name(get_param(gcb,'parent')),'/sysgen'],...
     'sysclk_period', num2str(1000/clk_rate),...
-    'compilation', 'NGC Netlist',...
-    'ngc_config',ngc_config,...
     'synthesis_language', 'VHDL');
 
 if strcmp(syn_tool, 'Leonardo Spectrum')
@@ -108,7 +153,7 @@ switch clk_src
             errordlg(['Invalid clock source ',clk_src,' for hardware platform: ',hw_sys]);
         end
     case {'aux_clk'}
-        if isempty(find(strcmp(hw_sys,{'ROACH2'})))
+        if (strcmp(hw_sys,{'ROACH', 'ROACH2', 'SKARAB'}))
             errordlg(['Invalid clock source ',clk_src,' for hardware platform: ',hw_sys]);
         end
     case {'aux0_clk' 'aux1_clk' 'aux0_clk2x' 'aux1_clk2x' 'arb_clk'}
@@ -116,7 +161,7 @@ switch clk_src
             errordlg(['Invalid clock source ',clk_src,' for hardware platform: ',hw_sys]);
         end
     case {'adc0_clk' 'adc1_clk' 'dac0_clk' 'dac1_clk'}
-        if isempty(find(strcmp(hw_sys,{'ROACH', 'ROACH2'})))
+        if isempty(find(strcmp(hw_sys,{'ROACH', 'ROACH2', 'SNAP', 'MX175', 'SKARAB'})))
             errordlg(['Invalid clock source ',clk_src,' for hardware platform: ',hw_sys]);
         end
     case {'adc_clk'}

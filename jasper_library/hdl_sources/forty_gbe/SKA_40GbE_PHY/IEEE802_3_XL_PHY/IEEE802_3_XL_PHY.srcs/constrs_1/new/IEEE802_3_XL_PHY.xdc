@@ -1,0 +1,1 @@
+set_false_path -from [get_pins RS_inst/RX_frame_started_reg/C] -to [get_pins {RS_inst/RX_frame_started_sr_reg[0]/D}]
