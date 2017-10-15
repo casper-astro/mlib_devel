@@ -31,15 +31,15 @@ function update_casper_block(oldblk)
   link_status = get_param(oldblk, 'StaticLinkStatus');
 
   % Inactive link (link disabled but not broken) so get AncestorBlock
-  if strcmp(link_status, 'inactive'),
+  if strcmp(link_status, 'inactive')
     srcblk = get_param(oldblk, 'AncestorBlock');
 
   % Resolved link (link in place) so get ReferenceBlock
-  elseif strcmp(link_status, 'resolved'),
+  elseif strcmp(link_status, 'resolved')
     srcblk = get_param(oldblk, 'ReferenceBlock');
 
   % Unresolved link (bad link) so get SourceBlock
-  elseif strcmp(link_status, 'unresolved'),
+  elseif strcmp(link_status, 'unresolved')
     fprintf('%s has a broken library link and cannot be updated\n', oldblk);
     return;
 
@@ -86,7 +86,8 @@ function update_casper_block(oldblk)
     % Done!
     return
   case {'xps_library/XSG core config', ...
-        'xps_library/XSG_core_config'}
+        'xps_library/XSG_core_config', ...
+        'xps_library/xsg_core_config'}
     % Get hw_sys parameter to handle SNAP/SNAP2/VCU118 platforms
     hw_sys = get_param(oldblk, 'hw_sys');
     if startsWith(hw_sys, 'SNAP:')
@@ -105,7 +106,7 @@ function update_casper_block(oldblk)
     load_system(srcblk_bd);
   end
 
-  if strcmp(srcblk, 'xps_library/software register'),
+  if strcmp(srcblk, 'xps_library/software register')
       srcblk = 'xps_library/software_register';
   end
   

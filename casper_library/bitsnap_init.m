@@ -33,6 +33,10 @@
 % 
 function bitsnap_init(blk)
 
+if strcmp(gcs, 'casper_library_scopes') == 1
+    return
+end
+
 % get values from the mask
 snap_storage =      get_param(blk, 'snap_storage');
 snap_dram_dimm =    eval(get_param(blk, 'snap_dram_dimm'));
