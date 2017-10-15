@@ -23,7 +23,7 @@
 cursys = gcb;
 
 [hw_sys,io_group] = xps_get_hw_info(get_param(gcb,'io_group'));
-if ~exist(hw_sys) | ~isstruct(hw_sys)
+if ~exist(hw_sys) || ~isstruct(hw_sys)
     load_hw_routes();
 end
 
@@ -43,7 +43,7 @@ else
 	real_bitwidth = bitwidth;
 end
 
-if ~isempty(find(bit_index>=length(pads)))
+if ~isempty(find(bit_index>=length(pads), 1))
     errordlg('Gateway bit index contain values that exceeds the bitwidth');
 end
 
@@ -97,8 +97,8 @@ switch get_param(cursys,'io_dir')
             'bin_pt', num2str(bin_pt),...
             'period','sample_period');
 
-        add_line(cursys,['sim_in/1'],[gw_name,'/1']);
-        add_line(cursys,[gw_name,'/1'],['gpio_in/1']);
+        add_line(cursys, 'sim_in/1', [gw_name, '/1']);
+        add_line(cursys, [gw_name,'/1'], 'gpio_in/1');
 
     case 'out'
         gw_name = [clear_name(gcb),'_gateway'];
@@ -109,9 +109,9 @@ switch get_param(cursys,'io_dir')
             'arith_type', get_param(cursys,'arith_type'),...
             'n_bits', num2str(bitwidth),...
             'bin_pt', num2str(bin_pt));
-        add_line(cursys,['gpio_out/1'],['convert/1']);
-        add_line(cursys,['convert/1'],[gw_name,'/1']);
-        add_line(cursys,[gw_name,'/1'],['sim_out/1']);
+        add_line(cursys, 'gpio_out/1', 'convert/1');
+        add_line(cursys, 'convert/1', [gw_name,'/1']);
+        add_line(cursys, [gw_name,'/1'], 'sim_out/1');
 
     otherwise
         errordlg(['Unsupported I/O direction: ',get_param(cursys,'io_dir')]);
