@@ -10,7 +10,9 @@ block_names = find_system(gcs, 'LookUnderMasks', 'all', 'SearchDepth', 1, 'Type'
 for ctr = 1 : length(block_names)
     blkname = block_names{ctr};
     if strcmp(blkname, gcs) == 0
-        blkpos = get_param(blkname, 'Position'); set_param(blkname, 'Position', sprintf('[%i %i %i %i]', blkpos(1), blkpos(2), blkpos(1) + block_size_x, blkpos(2) + block_size_y));
+        blkpos = get_param(blkname, 'Position');
+        new_pos = sprintf('[%i %i %i %i]', blkpos(1), blkpos(2), blkpos(1) + block_size_x, blkpos(2) + block_size_y);
+        set_param(blkname, 'Position', new_pos);
     end
 end
 
