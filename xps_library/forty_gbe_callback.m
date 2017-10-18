@@ -41,7 +41,7 @@ if length(xps_xsg_blks) ~= 1
   return;
 end
 
-%get the target board for the design
+% get the target board for the design
 hw_sys = get_param(xps_xsg_blks(1), 'hw_sys');
 % flavour = get_param(blk, 'flavour');
 show_param = get_param(blk, 'show_param');
@@ -55,12 +55,16 @@ for p = 1:length(mask_visibilities)
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
-%these are visible always
+% these are visible always
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 
 mask_visibilities{ismember(mask_names, 'rx_dist_ram')} = 'on';
 mask_visibilities{ismember(mask_names, 'large_frames')} = 'on';
 mask_visibilities{ismember(mask_names, 'show_param')} = 'on';
+try
+    mask_visibilities{ismember(mask_names, 'input_pipeline_delay')} = 'on';
+catch e
+end
 
 % debug counter checkboxes
 try
@@ -68,7 +72,8 @@ try
 catch e
 end
 try
-    mask_visibilities{ismember(mask_names, 'four_bit_valid')} = 'on';
+    mask_visibilities{ismember(mask_names, 'debug_dis_all')} = 'on';
+    mask_visibilities{ismember(mask_names, 'debug_en_all')} = 'on';
 catch e
 end
 mask_visibilities{ismember(mask_names, 'txctr')} = 'on';
@@ -86,11 +91,11 @@ mask_visibilities{ismember(mask_names, 'rxeofctr')} = 'on';
 mask_visibilities{ismember(mask_names, 'rxsnaplen')} = 'on';
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%these are visible if low level parameters enabled
+% these are visible if low level parameters enabled
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if strcmp(show_param, 'on')
-  %these are visible regardless of target hardware
+  % these are visible regardless of target hardware
   mask_visibilities{ismember(mask_names, 'fab_en')} = 'on';
   mask_visibilities{ismember(mask_names, 'fab_mac')} = 'on';
   mask_visibilities{ismember(mask_names, 'fab_ip')} = 'on';

@@ -29,8 +29,8 @@ set_param(cursys, 'LinkStatus', 'inactive');
 % rename gateways
 gateway_ins = find_system(cursys, 'searchdepth', 1, 'FollowLinks', ...
     'on', 'lookundermasks', 'all', 'masktype', 'Xilinx Gateway In Block');
-for i = 1 : length(gateway_ins)
-    gw = gateway_ins{i};
+for ctr = 1 : length(gateway_ins)
+    gw = gateway_ins{ctr};
     if regexp(get_param(gw, 'Name'), '_tx_afull$')
         set_param(gw, 'Name', clear_name([cursys, '_tx_afull']));
     elseif regexp(get_param(gw, 'Name'), '_tx_overflow$')
@@ -69,8 +69,8 @@ end
 gateway_outs = find_system(cursys, 'searchdepth', 1, ...
     'FollowLinks', 'on', 'lookundermasks', 'all', ...
     'masktype', 'Xilinx Gateway Out Block');
-for i = 1 : length(gateway_outs)
-    gw = gateway_outs{i};
+for ctr = 1 : length(gateway_outs)
+    gw = gateway_outs{ctr};
     if regexp(get_param(gw, 'Name'), '_rst$')
         set_param(gw, 'Name', clear_name([cursys, '_rst']));
     elseif regexp(get_param(gw, 'Name'), '_tx_valid$')
@@ -112,45 +112,15 @@ catch e
     debug_ctr_width = '16';
 end
 
-% cater for the 4-bit valid, if needed
+% is this a recent version of the 40gbe block, with pipeline delays?
 try
-    fbv = get_param(cursys, 'four_bit_valid');
-catch e
-    fbv = 'on';
+    test_name = [cursys, '/pipeline_led_up'];
+    get_param(test_name, 'Mask');
+    pipe_no_pipe = 'pipeline';
+catch
+    pipe_no_pipe = cursys;
 end
-if strcmp(fbv, 'on')
-    rx_valid_blk = clear_name([cursys, '_rx_valid']);
-    try delete_block_lines(rx_valid_blk); catch e, end
-    reuse_block(cursys, 'rx_dv_or_exp', ...
-        'casper_library_flow_control/bus_expand', ...
-        'mode', 'divisions of equal size', ...
-        'outputNum', '4', 'outputWidth', '1', 'outputBinaryPt', '0', ...
-        'outputArithmeticType', '2', 'show_format', 'off', ...
-        'outputToWorkspace', 'off', 'outputToModelAsWell', 'off', ...
-        'Position', [970 367 1020 443]);
-    reuse_block(cursys, 'rx_dv_or', 'xbsIndex_r4/Logical', ...
-            'logical_function', 'OR', ...
-            'latency', '1', ...
-            'inputs', '4', ...
-            'arith_type', 'Boolean', ...
-            'Position', [1065 367 1120 443]);
-    try
-        add_line(cursys, [rx_valid_blk, '/1'], 'rx_dv_or_exp/1');
-    catch e
-    end
-    for ctr = 1:4
-        try
-            add_line(cursys, ['rx_dv_or_exp/', num2str(ctr)], ...
-                ['rx_dv_or/', num2str(ctr)]);
-        catch e
-        end
-    end
-    valid_source = 'rx_dv_or';
-else
-    valid_source = clear_name([cursys, '_rx_valid']);
-    try delete_block_lines([cursys, '/rx_dv_or_exp']); catch e, end
-    try delete_block_lines([cursys, '/rx_dv_or']); catch e, end
-end
+valid_source = 'rx_dv_or';
 
 function draw_counter(sys, xpos, ypos, targetname, sourcename)
     ctr_name = [targetname, '_ctr'];
@@ -158,7 +128,19 @@ function draw_counter(sys, xpos, ypos, targetname, sourcename)
     try delete_block_lines([sys, '/', targetname]); catch e, end
     try delete_block_lines([sys, '/', ctr_name]); catch e, end
     try delete_block_lines([sys, '/', delay_name]); catch e, end
-    if strcmp(get_param(sys, targetname), 'on')
+    draw_block = false;
+    try
+        if ((strcmp(get_param(sys, targetname), 'on') == 1) || ...
+           (strcmp(get_param(sys, 'debug_en_all'), 'on') == 1)) && ...
+           (strcmp(get_param(sys, 'debug_dis_all'), 'on') == 0)
+            draw_block = true;
+        end
+    catch
+        if strcmp(get_param(sys, targetname), 'on') == 1
+            draw_block = true;
+        end
+    end
+    if draw_block
         reuse_block(sys, delay_name, 'xbsIndex_r4/Delay', ...
             'reg_retiming', 'on', 'latency', '1', ...
             'Position', [xpos ypos xpos+20 ypos+25]);
@@ -182,7 +164,7 @@ function draw_counter(sys, xpos, ypos, targetname, sourcename)
     end
 end
 
-function draw_errorcounter(sys, xpos, ypos, targetname, frame_len, sourceoef, sourcevalid)
+function draw_errorcounter(sys, xpos, ypos, targetname, frame_len, sourceeof, sourcevalid)
     ctr_name = [targetname, '_ctr'];
     nobad_name = [targetname, '_nobad'];
     errchk_name = [targetname, '_errchk'];
@@ -192,7 +174,19 @@ function draw_errorcounter(sys, xpos, ypos, targetname, frame_len, sourceoef, so
     try delete_block_lines([sys, '/', targetname]); catch e, end
     try delete_block_lines([sys, '/', ctr_name]); catch e, end
     try delete_block_lines([sys, '/', delay_name]); catch e, end
-    if strcmp(get_param(sys, targetname), 'on')
+    draw_block = false;
+    try
+        if ((strcmp(get_param(sys, targetname), 'on') == 1) || ...
+           (strcmp(get_param(sys, 'debug_en_all'), 'on') == 1)) && ...
+           (strcmp(get_param(sys, 'debug_dis_all'), 'on') == 0)
+            draw_block = true;
+        end
+    catch
+        if strcmp(get_param(sys, targetname), 'on') == 1
+            draw_block = true;
+        end
+    end
+    if draw_block
         reuse_block(sys, delay_name, 'xbsIndex_r4/Delay', ...
             'reg_retiming', 'on', 'latency', '1', ...
             'Position', [xpos ypos xpos+20 ypos+25]);
@@ -212,7 +206,7 @@ function draw_errorcounter(sys, xpos, ypos, targetname, frame_len, sourceoef, so
             'period', '1', 'use_behavioral_HDL', 'on', 'rst', 'on', 'en', 'on', ...
             'Position', [xpos+50 ypos xpos+100 ypos+45]);
         try add_line(sys, [sourcevalid, '/1'], [errchk_name, '/1']); catch e, end
-        try add_line(sys, [sourceoef, '/1'], [errchk_name, '/2']); catch e, end
+        try add_line(sys, [sourceeof, '/1'], [errchk_name, '/2']); catch e, end
         try add_line(sys, [nobad_name, '/1'], [errchk_name, '/3']); catch e, end
         try add_line(sys, 'debug_rst/1', [delay_name, '/1']); catch e, end
         try add_line(sys, [delay_name, '/1'], [ctr_name, '/1']); catch e, end
@@ -227,12 +221,24 @@ function draw_errorcounter(sys, xpos, ypos, targetname, frame_len, sourceoef, so
     end
 end
 
-function draw_rxcounter(sys, xpos, ypos, targetname, sourceoef, sourcevalid)
+function draw_rxcounter(sys, xpos, ypos, targetname, sourceeof, sourcevalid)
     ctr_name = [targetname, '_ctr'];
     and_name = [targetname, '_and'];
     ed_name = [targetname, '_ed'];
     delay_name = [targetname, '_del'];
-    if strcmp(get_param(sys, targetname), 'on')
+    draw_block = false;
+    try
+        if ((strcmp(get_param(sys, targetname), 'on') == 1) || ...
+           (strcmp(get_param(sys, 'debug_en_all'), 'on') == 1)) && ...
+           (strcmp(get_param(sys, 'debug_dis_all'), 'on') == 0)
+            draw_block = true;
+        end
+    catch
+        if strcmp(get_param(sys, targetname), 'on') == 1
+            draw_block = true;
+        end
+    end
+    if draw_block
         reuse_block(sys, delay_name, 'xbsIndex_r4/Delay', ...
             'reg_retiming', 'on', 'latency', '1', ...
             'Position', [xpos ypos xpos+20 ypos+25]);
@@ -250,7 +256,7 @@ function draw_rxcounter(sys, xpos, ypos, targetname, sourceoef, sourcevalid)
             'arith_type', 'Unsigned', 'n_bits', debug_ctr_width, 'explicit_period', 'on', ...
             'period', '1', 'use_behavioral_HDL', 'on', 'rst', 'on', 'en', 'on', ...
             'Position', [xpos+250 ypos xpos+300 ypos+45]);
-        try add_line(sys, [sourceoef, '/1'], [and_name, '/1']); catch e, end
+        try add_line(sys, [sourceeof, '/1'], [and_name, '/1']); catch e, end
         try add_line(sys, [sourcevalid, '/1'], [and_name, '/2']); catch e, end
         try add_line(sys, [and_name, '/1'], [ed_name, '/1']); catch e, end
         try add_line(sys, 'debug_rst/1', [delay_name, '/1']); catch e, end
@@ -281,11 +287,11 @@ draw_errorcounter(cursys, 400, starty, 'txerrctr', get_param(cursys, 'txerrctr_l
 
 % tx overflow counter
 starty = starty + 50;
-draw_counter(cursys, 400, starty, 'txofctr', clear_name([cursys, '_tx_overflow']));
+draw_counter(cursys, 400, starty, 'txofctr', clear_name([pipe_no_pipe, '_tx_overflow']));
 
 % tx full counter
 starty = starty + 50;
-draw_counter(cursys, 400, starty, 'txfullctr', clear_name([cursys, '_tx_afull']));
+draw_counter(cursys, 400, starty, 'txfullctr', clear_name([pipe_no_pipe, '_tx_afull']));
 
 % tx valid counter
 starty = starty + 50;
@@ -295,19 +301,23 @@ draw_counter(cursys, 400, starty, 'txvldctr', 'tx_valid')
 
 % rx counter
 starty = 130;
-draw_rxcounter(cursys, 1400, starty, 'rxctr', clear_name([cursys, '_rx_end_of_frame']), valid_source)
+% draw_rxcounter(cursys, 1400, starty, 'rxctr', clear_name([cursys, '_rx_end_of_frame']), valid_source)
+draw_rxcounter(cursys, 1400, starty, 'rxctr', clear_name([pipe_no_pipe, '_rx_end_of_frame']), valid_source)
 
 % rx error counter
 starty = starty + 50;
-draw_errorcounter(cursys, 1400, starty, 'rxerrctr', get_param(cursys, 'rxerrctr_len'), clear_name([cursys, '_rx_end_of_frame']), valid_source);
+% draw_errorcounter(cursys, 1400, starty, 'rxerrctr', get_param(cursys, 'rxerrctr_len'), clear_name([cursys, '_rx_end_of_frame']), valid_source);
+draw_errorcounter(cursys, 1400, starty, 'rxerrctr', get_param(cursys, 'rxerrctr_len'), clear_name([pipe_no_pipe, '_rx_end_of_frame']), valid_source);
 
 % rx overflow counter
 starty = starty + 50;
-draw_counter(cursys, 1400, starty, 'rxofctr', clear_name([cursys, '_rx_overrun']));
+% draw_counter(cursys, 1400, starty, 'rxofctr', clear_name([cursys, '_rx_overrun']));
+draw_counter(cursys, 1400, starty, 'rxofctr', clear_name([pipe_no_pipe, '_rx_overrun']));
 
 % rx bad frame counter
 starty = starty + 50;
-draw_counter(cursys, 1400, starty, 'rxbadctr', clear_name([cursys, '_rx_bad_frame']));
+% draw_counter(cursys, 1400, starty, 'rxbadctr', clear_name([cursys, '_rx_bad_frame']));
+draw_counter(cursys, 1400, starty, 'rxbadctr', clear_name([pipe_no_pipe, '_rx_bad_frame']));
 
 % rx valid counter
 starty = starty + 50;
@@ -315,7 +325,8 @@ draw_counter(cursys, 1400, starty, 'rxvldctr', valid_source);
 
 % rx eof counter
 starty = starty + 50;
-draw_counter(cursys, 1400, starty, 'rxeofctr', clear_name([cursys, '_rx_end_of_frame']));
+% draw_counter(cursys, 1400, starty, 'rxeofctr', clear_name([cursys, '_rx_end_of_frame']));
+draw_counter(cursys, 1400, starty, 'rxeofctr', clear_name([pipe_no_pipe, '_rx_end_of_frame']));
 
 % draw all the rx registers
 
@@ -341,7 +352,7 @@ if strcmp(snaplen, '0 - no snap') == 0
         'outputArithmeticType', '0', 'show_format', 'off', ...
         'outputToWorkspace', 'off', 'outputToModelAsWell', 'off', ...
         'Position', [1510        1617        1560        1693]);
-    try add_line(cursys, [clear_name([cursys, '_rx_data']), '/1'], ...
+    try add_line(cursys, [clear_name([pipe_no_pipe, '_rx_data']), '/1'], ...
             'rxs_exp/1'); catch e, end
     reuse_block(cursys, 'rxs1', 'casper_library_scopes/bitfield_snapshot', ...
         'Position', [1620        1581        1725        1809], ...
@@ -372,18 +383,18 @@ if strcmp(snaplen, '0 - no snap') == 0
     try set_param([cursys, '/rxs2'], 'snap_ext_arm', 'off'); catch e, end;
     reuse_block(cursys, 'rxsnap_and', 'xbsIndex_r4/Logical', ...
         'arith_type', 'Unsigned', 'logical_function', 'AND', ...
-        'inputs', '2', ...
+        'inputs', '2', 'latency', '0', ...
         'Position', [1510 1504 1560  1551]);
-    try add_line(cursys, [clear_name([cursys, '_led_up']), '/1'],           'rxs0/1'); catch e, end
-    try add_line(cursys, [clear_name([cursys, '_led_rx']), '/1'],           'rxs0/2'); catch e, end
+    try add_line(cursys, [clear_name([pipe_no_pipe, '_led_up']), '/1'],           'rxs0/1'); catch e, end
+    try add_line(cursys, [clear_name([pipe_no_pipe, '_led_rx']), '/1'],           'rxs0/2'); catch e, end
     try add_line(cursys, [valid_source, '/1'],                              'rxs0/3'); catch e, end
-    try add_line(cursys, [clear_name([cursys, '_rx_source_ip']), '/1'],     'rxs0/4'); catch e, end
-    try add_line(cursys, [clear_name([cursys, '_rx_end_of_frame']), '/1'],  'rxs0/5'); catch e, end
-    try add_line(cursys, [clear_name([cursys, '_rx_bad_frame']), '/1'],     'rxs0/6'); catch e, end
-    try add_line(cursys, [clear_name([cursys, '_rx_overrun']), '/1'],       'rxs0/7'); catch e, end
+    try add_line(cursys, [clear_name([pipe_no_pipe, '_rx_source_ip']), '/1'],     'rxs0/4'); catch e, end
+    try add_line(cursys, [clear_name([pipe_no_pipe, '_rx_end_of_frame']), '/1'],  'rxs0/5'); catch e, end
+    try add_line(cursys, [clear_name([pipe_no_pipe, '_rx_bad_frame']), '/1'],     'rxs0/6'); catch e, end
+    try add_line(cursys, [clear_name([pipe_no_pipe, '_rx_overrun']), '/1'],       'rxs0/7'); catch e, end
     try add_line(cursys, [valid_source, '/1'],                              'rxs0/8'); catch e, end
     try add_line(cursys, [valid_source, '/1'],                              'rxsnap_and/1'); catch e, end
-    try add_line(cursys, [clear_name([cursys, '_rx_end_of_frame']), '/1'],  'rxsnap_and/2'); catch e, end
+    try add_line(cursys, [clear_name([pipe_no_pipe, '_rx_end_of_frame']), '/1'],  'rxsnap_and/2'); catch e, end
     try add_line(cursys, 'rxsnap_and/1',                                    'rxs0/9'); catch e, end
     
     try add_line(cursys, 'rxs_exp/1', 'rxs1/1'); catch e, end
@@ -458,12 +469,13 @@ if strcmp(snaplen, '0 - no snap') == 0
     try set_param([cursys, '/txs1'], 'snap_ext_arm', 'off'); catch e, end;
     try set_param([cursys, '/txs2'], 'snap_ext_arm', 'off'); catch e, end;
     reuse_block(cursys, 'txsnap_and', 'xbsIndex_r4/Logical', ...
-        'arith_type', 'Unsigned', 'logical_function', 'AND', 'inputs', '2', ...
+        'arith_type', 'Unsigned', 'logical_function', 'AND', ...
+        'inputs', '2', 'latency', '0', ...
         'Position', [330 1479 380 1526]);
-    try add_line(cursys, [clear_name([cursys, '_led_up']), '/1'],           'txs0/1'); catch e, end
-    try add_line(cursys, [clear_name([cursys, '_led_tx']), '/1'],           'txs0/2'); catch e, end
-    try add_line(cursys, [clear_name([cursys, '_tx_afull']), '/1'],         'txs0/3'); catch e, end
-    try add_line(cursys, [clear_name([cursys, '_tx_overflow']), '/1'],      'txs0/4'); catch e, end
+    try add_line(cursys, [clear_name([pipe_no_pipe, '_led_up']), '/1'],           'txs0/1'); catch e, end
+    try add_line(cursys, [clear_name([pipe_no_pipe, '_led_tx']), '/1'],           'txs0/2'); catch e, end
+    try add_line(cursys, [clear_name([pipe_no_pipe, '_tx_afull']), '/1'],         'txs0/3'); catch e, end
+    try add_line(cursys, [clear_name([pipe_no_pipe, '_tx_overflow']), '/1'],      'txs0/4'); catch e, end
     try add_line(cursys, 'tx_valid/1',                                      'txs0/5'); catch e, end
     try add_line(cursys, 'tx_end_of_frame/1',                               'txs0/6'); catch e, end
     try add_line(cursys, 'tx_dest_ip/1',                                    'txs0/7'); catch e, end
@@ -494,6 +506,14 @@ end
 
 % remove unconnected blocks
 clean_blocks(cursys);
+
+try
+    incoming_latency = eval(get_param(cursys, 'input_pipeline_delay'));
+catch
+    incoming_latency = 0;
+end
+display_string = sprintf('incoming_latency=%i', incoming_latency);
+set_param(cursys, 'AttributesFormatString', display_string);
 
 end
 % end
