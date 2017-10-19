@@ -171,12 +171,24 @@ end
 
 ytick = 45;
 
+% If the number of inputs are equal to 1 using the unscrambler is unnecessary
+% since the "unscrambled" channel order is the same as the scrambled.
+
+if n_inputs==1
+    unscramble='off';
+end
+
 % validate input fields
 [temp, mult_spec] = multiplier_specification(mult_spec, FFTSize, blk);
 clear temp;
 
-if n_inputs < 2,
-    error_string = sprintf('REAL FFT: Number of inputs must be at least 4!');
+% Check the number of simultaneous serial ffts we need to do.
+% It needs to be a multiple of 4 since the underlying
+% FFT core can handle 2 complex ffts (= 4 real FFTs) at a time
+
+total_number_of_in_mod=mod((2^n_inputs)*n_streams,4);
+if total_number_of_in_mod ~=0,
+    error_string = sprintf('REAL FFT: Number of inputs multiplied by number of simultaneous streams must be at multiple of4!');
     clog(error_string, {'error', 'fft_wideband_real_init_debug'});
     error(error_string);
     return;
