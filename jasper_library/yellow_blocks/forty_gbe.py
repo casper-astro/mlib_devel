@@ -289,8 +289,7 @@ class forty_gbe(YellowBlock):
         self.add_source("forty_gbe/cpu_rx_packet_size/*.xci")
         self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/sources_1/ip/RS256_FIFO/*.xci")
         self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PHY/IEEE802_3_XL_PHY.srcs/sources_1/ip/IEEE802_3_XL_VIO/*.xci")
-
-
+        self.add_source("forty_gbe/xadc_measurement/*.xci")
 
         #self.add_raw_tcl_cmd("")
 

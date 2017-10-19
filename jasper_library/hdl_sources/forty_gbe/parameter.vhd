@@ -48,7 +48,9 @@ package parameter is
     constant C_RD_USB_STAT_ADDR         : integer := 5;
     constant C_RD_SOC_VERSION_ADDR      : integer := 6;
     constant C_RD_FPGA_DNA_LOW_ADDR     : integer := 7;    
-	constant C_RD_FPGA_DNA_HIGH_ADDR    : integer := 8;
+    constant C_RD_FPGA_DNA_HIGH_ADDR    : integer := 8;
+    constant C_RD_XADC_STATUS_ADDR        : integer := 9; 
+    constant C_RD_XADC_LATCHED_ADDR        : integer := 10; 	
     constant C_RD_THROUGHPUT_COUNTER_ADDR     : integer := 22;
     constant C_RD_NUM_PACKETS_CHECKED_0_ADDR     : integer := 23;
     constant C_RD_NUM_PACKETS_CHECKED_1_ADDR     : integer := 24;
@@ -66,6 +68,7 @@ package parameter is
     constant C_WR_MEZZANINE_CTL_ADDR		: integer := 4;
     constant C_WR_FRONT_PANEL_STAT_LED_ADDR : integer := 5;
     constant C_WR_BRD_CTL_STAT_1_ADDR       : integer := 6; 
+    constant C_WR_XADC_CONTROL_ADDR        : integer := 7;     
     constant C_WR_RAMP_SOURCE_DESTINATION_IP_3_ADDR     : integer := 22;
     constant C_WR_RAMP_CHECKER_SOURCE_IP_3_ADDR         : integer := 23;    
     constant C_WR_RAMP_SOURCE_DESTINATION_IP_2_ADDR     : integer := 24;

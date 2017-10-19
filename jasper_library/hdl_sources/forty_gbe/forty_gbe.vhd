@@ -704,6 +704,28 @@ architecture arch_forty_gbe of forty_gbe is
             FPGA_DNA_MATCH_O : out std_logic
         );
     end component FPGA_DNA_CHECKER;
+    
+    -- GT 29/03/2017 ADDED ACCESS TO XADC
+    component xadc_measurement
+        port (
+            daddr_in        : in std_logic_vector(6 downto 0);
+            den_in          : in std_logic;
+            di_in           : in std_logic_vector(15 downto 0);
+            dwe_in          : in std_logic;
+            do_out          : out std_logic_vector(15 downto 0);
+            drdy_out        : out std_logic;
+            dclk_in         : in std_logic;
+            reset_in        : in std_logic;
+            busy_out        : out std_logic;
+            channel_out     : out std_logic_vector(4 downto 0);
+            eoc_out         : out std_logic;
+            eos_out         : out std_logic;
+            ot_out          : out std_logic;
+            user_temp_alarm_out : out std_logic;
+            alarm_out       : out std_logic;
+            vp_in           : in std_logic;
+            vn_in           : in std_logic);
+    end component;    
 
     signal fpga_reset : std_logic;
     signal gmii_fpga_rst : std_logic;
@@ -770,10 +792,16 @@ architecture arch_forty_gbe of forty_gbe is
     signal gmii_rst_z3 : std_logic;
 
     signal gmii_reset_done : std_logic;
-    signal gmii_reset_done_z : std_logic;
-    signal gmii_reset_done_z2 : std_logic;
-    signal gmii_reset_done_z3 : std_logic;
-
+    
+    --signal gmii_reset_done_z : std_logic; -- GT 29/03/2017 CHANGE gmii_rst CONDITION
+    --signal gmii_reset_done_z2 : std_logic;
+    --signal gmii_reset_done_z3 : std_logic; 
+    
+    signal sgmii_link_up : std_logic;
+    signal sgmii_link_up_z : std_logic;
+    signal sgmii_link_up_z2 : std_logic;
+    signal sgmii_link_up_z3 : std_logic;     
+    
     signal enable_40gbe_packet_generation : std_logic_vector(3 downto 0);
     signal enable_40gbe_packet_generation_z1 : std_logic_vector(3 downto 0);
     signal enable_1gbe_packet_generation : std_logic;
@@ -1033,6 +1061,30 @@ architecture arch_forty_gbe of forty_gbe is
 
     signal qsfp_gtrefclk : std_logic;
     signal qsfp_gtrefclk_pb : std_logic;
+    
+    -- GT 29/03/2017 XADC SIGNALS
+    signal xadc_busy_out : std_logic;
+    signal xadc_channel_out :  std_logic_vector (4 downto 0);
+    signal xadc_eoc_out : std_logic;
+    signal xadc_eos_out : std_logic;
+    signal xadc_ot_out : std_logic;
+    signal xadc_user_temp_alarm_out : std_logic;
+    signal xadc_alarm_out : std_logic;
+    
+    signal xadc_daddr_in : std_logic_vector (6 downto 0);
+    signal xadc_den_in : std_logic;
+    signal xadc_di_in : std_logic_vector (15 downto 0);
+    signal xadc_dwe_in : std_logic;
+    signal xadc_do_out : std_logic_vector (15 downto 0);
+    signal xadc_drdy_out : std_logic;    
+    
+    -- GT 11/04/2017 ADD TIMEOUT TO SGMII CORE     
+    signal sgmii_timeout_count_low : std_logic_vector(15 downto 0);
+    signal sgmii_timeout_count_low_over : std_logic;
+    signal sgmii_timeout_count_high : std_logic_vector(10 downto 0);
+    signal sgmii_timeout : std_logic;
+    signal sgmii_reset_count : std_logic_vector(7 downto 0);
+    signal sgmii_timeout_reset : std_logic;        
 
     signal mezzanine_fault_override : std_logic;
 
@@ -1095,6 +1147,9 @@ architecture arch_forty_gbe of forty_gbe is
 
     -- MB 08/10/2015 ADDED SUPPORT FOR READING FPGA DNA
     signal fpga_dna : std_logic_vector(63 downto 0);
+    
+    -- GT 29/03/2017 NEED TO GENERATE FPGA RESET WHEN RECONFIGURES FROM SDRAM
+    signal fpga_reset_counter : std_logic_vector(23 downto 0) := X"000000";    
 
     signal select_one_gbe_data_sel  : std_logic;
 
@@ -1157,11 +1212,28 @@ begin
     pFpgaResetRegister: process(sys_clk)
     begin     
         if (rising_edge(sys_clk) ) then
-           fpga_reset <= not FPGA_RESET_N;
+           --fpga_reset <= not FPGA_RESET_N;
            FAN_CONT_RST_N <= FPGA_RESET_N;
         end if;
-    end process pFpgaResetRegister;    
-
+    end process pFpgaResetRegister; 
+    
+    -- GT 29/03/2017 NEED TO ENSURE FIRMWARE IS RESET AS FPGA BOOTS
+    -- FROM SDRAM RECONFIGURATION, WAS ONLY BEING RESET ON POWER UP
+    gen_fpga_reset_counter : process(FPGA_RESET_N, sys_clk)
+      begin
+          if (FPGA_RESET_N = '0')then
+              fpga_reset_counter <= (others => '0');
+              fpga_reset <= '1';
+          elsif (rising_edge(sys_clk))then
+              if (fpga_reset_counter = X"FFFFFF")then
+                  fpga_reset <= '0';
+              else
+                  fpga_reset <= '1';
+                  fpga_reset_counter <= fpga_reset_counter + X"000001";
+              end if;
+          end if;
+      end process;
+     
 ---------------------------------------------------------------------------
 -- REFCLK CONNECTIONS
 ---------------------------------------------------------------------------
@@ -1362,7 +1434,9 @@ begin
             gmii_rst_z2 <= '1';
             gmii_rst_z3 <= '1';
         elsif (rising_edge(gmii_clk))then
-            if ((gmii_reset_done_z3 = '1')and(host_reset_z3 = '0'))then
+            -- GT 29/03/2017 KEEP gmii_rst ASSERTED WHEN SGMII LINK IS DOWN
+            --if ((gmii_reset_done_z3 = '1')and(host_reset_z3 = '0'))then
+            if ((sgmii_link_up_z3 = '1')and(host_reset_z3 = '0'))then
                 gmii_rst_z <= '0';
                 gmii_rst_z2 <= gmii_rst_z;
                 gmii_rst_z3 <= gmii_rst_z2;
@@ -1472,7 +1546,8 @@ begin
     brd_user_read_regs(C_RD_LOOPBACK_ADDR) <= brd_user_write_regs(C_WR_LOOPBACK_ADDR);
 
     -- LINK UP STATUS
-    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(0) <= status_vector(0); -- 1GB ETH LINK UP
+    -- GT 29/03/2017 INCLUDE 1GBE PHY LINK UP STATUS
+    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(0) <= '1' when ((status_vector(0) = '1')and(ONE_GBE_LINK = '1')) else '0'; -- 1GB ETH LINK UP
     brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(1) <= phy_rx_up_cpu(0); -- 40GB ETH 0 LINK UP
     brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(2) <= phy_rx_up_cpu(1); -- 40GB ETH 1 LINK UP
     brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(3) <= phy_rx_up_cpu(2); -- 40GB ETH 2 LINK UP
@@ -2501,6 +2576,70 @@ begin
 -- 1GBE INTERFACE
 ----------------------------------------------------------------------------
 
+   -- GT 11/04/2017 ADDED A TIMEOUT TO SGMII CORE IF LINK DOESN'T COME UP
+    gen_sgmii_timeout_count_low : process(sys_rst, sys_clk)
+    begin
+        if (sys_rst = '1')then
+            sgmii_timeout_count_low <= (others => '0');
+            sgmii_timeout_count_low_over <= '0';
+        elsif (rising_edge(sys_clk))then
+            sgmii_timeout_count_low_over <= '0';
+
+            if ((gmii_reset_done = '1')and(sgmii_link_up = '1'))then
+                sgmii_timeout_count_low <= (others => '0');
+            else
+                if (sgmii_timeout_count_low = X"FFFF")then           
+                    sgmii_timeout_count_low_over <= '1';
+                    sgmii_timeout_count_low <= (others => '0');
+                else
+                    sgmii_timeout_count_low <= sgmii_timeout_count_low + X"0001";
+                end if;
+            end if;    
+        end if;
+    end process;
+
+    gen_sgmii_timeout_count_high : process(sys_rst, sys_clk)
+    begin
+        if (sys_rst = '1')then
+            sgmii_timeout_count_high <= (others => '0');
+            sgmii_timeout <= '0';
+        elsif (rising_edge(sys_clk))then
+            sgmii_timeout <= '0';
+
+            if ((gmii_reset_done = '1')and(sgmii_link_up = '1'))then
+                sgmii_timeout_count_high <= (others => '0');
+            else
+                if (sgmii_timeout_count_low_over = '1')then
+                    if (sgmii_timeout_count_high = "11111111111")then           
+                        sgmii_timeout <= '1';
+                        sgmii_timeout_count_high <= (others => '0');
+                    else
+                        sgmii_timeout_count_high <= sgmii_timeout_count_high + "00000000001";
+                    end if;
+                end if;
+            end if;    
+        end if;
+    end process;
+
+    gen_sgmii_reset_count : process(sys_rst, sys_clk)
+    begin
+        if (sys_rst = '1')then
+            sgmii_reset_count <= X"FF";
+        elsif (rising_edge(sys_clk))then
+            if (sgmii_timeout = '1')then   
+                sgmii_reset_count <= (others => '0');
+            else
+                if (sgmii_reset_count /= X"FF")then
+                    sgmii_reset_count <= sgmii_reset_count + X"01";
+                end if;
+            end if;
+        end if;
+    end process;
+
+    sgmii_timeout_reset <= '0' when (sgmii_reset_count = X"FF") else '1';
+
+    gmii_to_sgmii_reset <= fpga_reset or sgmii_timeout_reset;
+
     gmii_to_sgmii_0 : gmii_to_sgmii
     port map(
         gtrefclk_p           => gmii_to_sgmii_refclk_p,
@@ -2569,7 +2708,7 @@ begin
     --SGMII TO GMII
     ONE_GBE_RESET_N <= not fpga_reset;
     
-    gmii_to_sgmii_reset <= fpga_reset;
+    -- GT 11/04/2017 UPDATED SGMII CORE RESET TO ADD A TIMEOUT gmii_to_sgmii_reset <= fpga_reset;
     
     gmii_to_sgmii_refclk_p <= ONE_GBE_MGTREFCLK_P;
     gmii_to_sgmii_refclk_n <= ONE_GBE_MGTREFCLK_N;
@@ -2579,12 +2718,24 @@ begin
     gmii_to_sgmii_rxp <= ONE_GBE_SGMII_RX_P;
     gmii_to_sgmii_rxn <= ONE_GBE_SGMII_RX_N;
 
-    gen_gmii_reset_done_z : process (gmii_clk)
+    -- GT 29/03/2017 CHANGE gmii_rst TO STAY IN RESET WHILE SGMII LINK IS DOWN
+    --gen_gmii_reset_done_z : process (gmii_clk)
+    --begin
+    --    if (rising_edge(gmii_clk))then
+    --        gmii_reset_done_z <= gmii_reset_done;
+    --        gmii_reset_done_z2 <= gmii_reset_done_z;
+    --        gmii_reset_done_z3 <= gmii_reset_done_z2;
+    --    end if;
+    --end process; 
+    
+    sgmii_link_up <= status_vector(0);
+    
+    gen_sgmii_link_up_z : process (gmii_clk)
     begin
         if (rising_edge(gmii_clk))then
-            gmii_reset_done_z <= gmii_reset_done;
-            gmii_reset_done_z2 <= gmii_reset_done_z;
-            gmii_reset_done_z3 <= gmii_reset_done_z2;
+            sgmii_link_up_z <= sgmii_link_up;
+            sgmii_link_up_z2 <= sgmii_link_up_z;
+            sgmii_link_up_z3 <= sgmii_link_up_z2;
         end if;
     end process;
 
@@ -2794,6 +2945,53 @@ begin
             FPGA_DNA_O       => fpga_dna,
             FPGA_DNA_MATCH_O => open
         );
+        
+-------------------------------------------------------------------------
+-- XADC MEASUREMENT     
+------------------------------------------------------------------------- 
+    
+    xadc_measurement_0 : xadc_measurement
+    port map(
+        daddr_in        => xadc_daddr_in,
+        den_in          => xadc_den_in,
+        di_in           => xadc_di_in,
+        dwe_in          => xadc_dwe_in,
+        do_out          => xadc_do_out,
+        drdy_out        => xadc_drdy_out,
+        dclk_in         => sys_clk,
+        reset_in        => sys_rst,
+        busy_out        => xadc_busy_out,
+        channel_out     => xadc_channel_out,
+        eoc_out         => xadc_eoc_out,
+        eos_out         => xadc_eos_out,
+        ot_out          => xadc_ot_out,
+        user_temp_alarm_out => xadc_user_temp_alarm_out,
+        alarm_out       => xadc_alarm_out,
+        vp_in           => '0',
+        vn_in           => '0');
+
+    gen_xadc_latched : process(sys_rst, sys_clk)
+    begin
+        if (sys_rst = '1')then
+            brd_user_read_regs(C_RD_XADC_LATCHED_ADDR) <= (others => '0');
+        elsif (rising_edge(sys_clk))then
+            if (xadc_drdy_out = '1')then
+                brd_user_read_regs(C_RD_XADC_LATCHED_ADDR) <= X"0000" & xadc_do_out;
+            end if;   
+        end if;
+    end process;
+
+    brd_user_read_regs(C_RD_XADC_STATUS_ADDR)(15 downto 0) <= xadc_do_out;
+    brd_user_read_regs(C_RD_XADC_STATUS_ADDR)(16) <= xadc_drdy_out;
+    brd_user_read_regs(C_RD_XADC_STATUS_ADDR)(17) <= xadc_ot_out;
+    brd_user_read_regs(C_RD_XADC_STATUS_ADDR)(18) <= xadc_user_temp_alarm_out;
+    brd_user_read_regs(C_RD_XADC_STATUS_ADDR)(19) <= xadc_alarm_out;
+    brd_user_read_regs(C_RD_XADC_STATUS_ADDR)(31 downto 20) <= (others => '0');
+
+    xadc_di_in <= brd_user_write_regs(C_WR_XADC_CONTROL_ADDR)(15 downto 0);
+    xadc_daddr_in <= brd_user_write_regs(C_WR_XADC_CONTROL_ADDR)(22 downto 16);
+    xadc_den_in <= brd_user_write_regs(C_WR_XADC_CONTROL_ADDR)(23);
+    xadc_dwe_in <= brd_user_write_regs(C_WR_XADC_CONTROL_ADDR)(24);		        
         
 -------------------------------------------------------------------------
 -- Wishbone DSP Registers
