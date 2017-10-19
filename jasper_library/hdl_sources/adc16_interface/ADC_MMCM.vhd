@@ -128,8 +128,8 @@ architecture ADC_MMCM_arc of ADC_MMCM is
      signal mmcm_locked     : std_logic;
      signal mmcm_reset      : std_logic;
 
-     constant CLK_MUL : REAL := 5.0;
-     constant CLK_DIV : Integer := 2;
+     constant CLK_MUL : REAL := 8.0;
+     constant CLK_DIV : Integer := 4;
      constant CLK0_DIV : Real := CLK_MUL/Real(CLK_DIV);
      constant CLK1_DIV : Integer := Integer(CLK0_DIV*(Real(ADC_RESOLUTION)/4.0)*2.0);
      constant CLK2_DIV : Integer := Integer(CLK0_DIV*(Real(ADC_RESOLUTION)/4.0));
@@ -177,7 +177,7 @@ architecture ADC_MMCM_arc of ADC_MMCM is
       CLKOUT2_PHASE        => 0.000,
       CLKOUT2_DUTY_CYCLE   => 0.500,
       CLKOUT2_USE_FINE_PS  => false,
-      CLKOUT3_DIVIDE       => 5,     -- Fout = (M * Fin) / (D * 4) = Fin / 2 (when D=2, M=5)
+      CLKOUT3_DIVIDE       => CLK2_DIV, -- Fout = (M * Fin) / (D * 4) = Fin / 2 (when D=2, M=5)
       CLKOUT3_PHASE        => 90.000,
       CLKOUT3_DUTY_CYCLE   => 0.500,
       CLKOUT3_USE_FINE_PS  => false,
