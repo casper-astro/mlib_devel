@@ -197,10 +197,10 @@ architecture adc_unit_arc of adc_unit is
            p_data(ADC_DATA_WIDTH*1+ADC_RESOLUTION-2 downto ADC_DATA_WIDTH*1) <= adc_iserdes_data(ADC_RESOLUTION*2-2 downto ADC_RESOLUTION*1);
            p_data(ADC_DATA_WIDTH*0+ADC_RESOLUTION-2 downto ADC_DATA_WIDTH*0) <= adc_iserdes_data(ADC_RESOLUTION*1-2 downto ADC_RESOLUTION*0);
            -- Output signed number
-           p_data(ADC_DATA_WIDTH*4-1) <= not adc_iserdes_data(ADC_RESOLUTION*4-1);
-           p_data(ADC_DATA_WIDTH*3-1) <= not adc_iserdes_data(ADC_RESOLUTION*3-1);
-           p_data(ADC_DATA_WIDTH*2-1) <= not adc_iserdes_data(ADC_RESOLUTION*2-1);
-           p_data(ADC_DATA_WIDTH*1-1) <= not adc_iserdes_data(ADC_RESOLUTION*1-1);
+           p_data(ADC_DATA_WIDTH*4-1 downto ADC_DATA_WIDTH*3+ADC_RESOLUTION-1) <= (others => not adc_iserdes_data(ADC_RESOLUTION*4-1));
+           p_data(ADC_DATA_WIDTH*3-1 downto ADC_DATA_WIDTH*2+ADC_RESOLUTION-1) <= (others => not adc_iserdes_data(ADC_RESOLUTION*3-1));
+           p_data(ADC_DATA_WIDTH*2-1 downto ADC_DATA_WIDTH*1+ADC_RESOLUTION-1) <= (others => not adc_iserdes_data(ADC_RESOLUTION*2-1));
+           p_data(ADC_DATA_WIDTH*1-1 downto ADC_DATA_WIDTH*0+ADC_RESOLUTION-1) <= (others => not adc_iserdes_data(ADC_RESOLUTION*1-1));
        end if;
      end process;
 
