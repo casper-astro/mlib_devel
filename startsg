@@ -12,7 +12,7 @@
 # file.  At a minimum, the "startsg.local" file should define MATLAB_PATH #
 # and XILINX_PATH environment variables that point to the base directory  #
 # of the respective installation directories.  You should define the      #
-# XILINX_PLATFORM variable (probably as lin64) in that file as well. You should  #
+# PLATFORM variable (probably as lin64) in that file as well. You should  #
 # define the JASPER_BACKEND variable (probably as vivado) in that file as #
 # well.                                                                   #                                                                 
 #                                                                         #
@@ -33,7 +33,6 @@ SCRIPT_BASE=$(basename "${BASH_SOURCE[0]}")
 if [ -n "${1}" ]
 then
   LOCALDEFS="${1}"
-  shift
 
 # First look for local defs in current directory
 elif [ -f "./${SCRIPT_BASE}.local" ]
@@ -91,10 +90,10 @@ then
   $on_error 1
 fi
 
-if ! [ -n "${XILINX_PLATFORM}" ]
+if ! [ -n "${PLATFORM}" ]
 then
-  echo "WARNING: XILINX_PLATFORM is not defined in the current environment, assuming 'lin64'."
-  export XILINX_PLATFORM="lin64"
+  echo "WARNING: PLATFORM is not defined in the current environment, assuming 'lin64'."
+  export PLATFORM="lin64"
 fi
 
 if ! [ -n "${JASPER_BACKEND}" ]
@@ -123,24 +122,24 @@ fi
 # Make sure that these variables are exported
 export XILINX_PATH
 export MATLAB_PATH
-export XILINX_PLATFORM
+export PLATFORM
 export MLIB_DEVEL_PATH
+export JASPER_BACKEND
 
 # Show environment essentials
 echo "Using MATLAB_PATH=${MATLAB_PATH}"
 echo "Using XILINX_PATH=${XILINX_PATH}"
-echo "Using XILINX_PLATFORM=${XILINX_PLATFORM}"
+echo "Using PLATFORM=${PLATFORM}"
 echo "Using MLIB_DEVEL_PATH=${MLIB_DEVEL_PATH}"
+echo "Using JASPER_BACKEND=${JASPER_BACKEND}"
 
 # Finish environment setup
-export XILINX="$XILINX_PATH/ISE"
-#export PATH="${PATH}:${XILINX_PATH}/ISE/bin/${XILINX_PLATFORM}:${XILINX_PATH}/ISE/sysgen/bin/${XILINX_PLATFORM}"
 export SYSGEN_SCRIPT="$MLIB_DEVEL_PATH/startsg"
 export XPS_BASE_PATH="$MLIB_DEVEL_PATH/xps_base"
 export MATLAB="$MATLAB_PATH"
 export CASPER_BASE_PATH="$MLIB_DEVEL_PATH"
+export HDL_ROOT="$CASPER_BASE_PATH/jasper_library/hdl_sources"
 
-echo "${XILINX_PATH}/settings64.sh"
 if [ -f "${XILINX_PATH}/settings64.sh" ]
 then
   source "${XILINX_PATH}/settings64.sh" > /dev/null
@@ -164,5 +163,5 @@ then
   cd "${MLIB_DEVEL_PATH}"
 
   # Start sysgen
-  "${MATLAB}/bin/matlab"
+  "${XILINX_PATH}/bin/sysgen"
 fi

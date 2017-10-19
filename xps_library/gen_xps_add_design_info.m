@@ -10,6 +10,7 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
         'xps:sw_reg', ...
         'xps:tengbe', ...
         'xps:tengbe_v2', ...
+        'xps:forty_gbe', ...
         'xps:xsg', ...
         'casper:bitsnap', ...
         'casper:dec_fir', ...
@@ -31,7 +32,7 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
     %%%%%%%%%%%%%%%%%%%%%%%
     
     % exit if the right classes aren't found
-    if exist('design_info.Register', 'class') ~= 8,
+    if exist('design_info.Register', 'class') ~= 8
         error('no design_info class support found');
         %clog('exiting gen_xps_add_design_info - no design_info class support.', 'trace');
         %return
@@ -51,10 +52,10 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
     
     % find all objects in the tag list
     tagged_objects = {};
-    for ctr = 1 : numel(tag_list),
+    for ctr = 1 : numel(tag_list)
         tag = tag_list{ctr};
         blks = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', tag);
-        for b = 1 : numel(blks),
+        for b = 1 : numel(blks)
             tagged_objects = [tagged_objects, blks{b}];
         end
     end

@@ -1,0 +1,832 @@
+name: skarab
+manufacturer: Xilinx
+fpga: xc7vx690tffg1927-2
+config_voltage: 1.8
+cfgbvs: GND
+backend_target: vivado
+dsp_wb_base_address: 0x80070000
+dsp_wb_base_address_alignment: 4
+# the skarab platform expects a bin file with a particular ordering of the bits per byte.
+# each byte from the bit file is reversed. It is anyones guess why perallex designed it this way.
+# this flag tells the toolflow to add the bpix8 flag to the write_cfgmem tcl command
+bit_reversal: true
+upgrade_ip: false
+sources: []
+constraints:
+  - skarab.xdc
+provides:
+  - sys_clk
+  - mezz0
+  - mezz1
+  - mezz2
+  - mezz3
+pins:
+  FLASH_A:
+    iostd: LVCMOS18
+    loc:
+      - AL29
+      - AL28
+      - AK29
+      - AJ29
+      - AM28
+      - AM27
+      - AK28
+      - AN30
+      - AM30
+      - AN29
+      - AN28
+      - AR29
+      - AR28
+      - AP30
+      - AP29
+      - AT29
+      - AL26
+      - AK26
+      - AK24
+      - AM26
+      - AM25
+      - AM23
+      - AL23
+      - AP26
+      - AN25
+      - AP25
+      - AP24
+      - AU27
+      - AT26
+  FLASH_DQ:
+    iostd: LVCMOS18
+    loc:
+      - BC27
+      - BD27
+      - BD29
+      - BD30
+      - BB30
+      - BC30
+      - BC28
+      - BC29
+      - BA30
+      - AW29
+      - AY29
+      - AW27
+      - AY27
+      - BA31
+      - AY28
+      - BA28
+  FLASH_OE_N:
+    iostd: LVCMOS18
+    loc: AL24
+  FLASH_WE_N:
+    iostd: LVCMOS18
+    loc: AL25
+  FLASH_CS_N:
+    iostd: LVCMOS18
+    loc: BA29
+  FLASH_ADV_N:
+    iostd: LVCMOS18
+    loc: AN24
+  FLASH_WAIT:
+    iostd: LVCMOS18
+    loc: BD26
+  FLASH_RS1:
+    iostd: LVCMOS18
+    loc: AJ25
+  FLASH_RS0:
+    iostd: LVCMOS18
+    loc: AJ26
+  ONE_GBE_MGTREFCLK_P:
+    loc: A10
+  ONE_GBE_INT_N:
+    iostd: LVCMOS18
+    loc: BB12
+  ONE_GBE_SGMII_TX_P:
+    loc: B4
+  ONE_GBE_SGMII_TX_N:
+    loc: B3
+  ONE_GBE_SGMII_RX_P:
+    loc: A6
+  ONE_GBE_SGMII_RX_N:
+    loc: A5
+  ONE_GBE_MGTREFCLK_N:
+    loc: A9
+  ONE_GBE_LINK:
+    iostd: LVCMOS18
+    loc: BC12
+  ONE_GBE_RESET_N:
+    iostd: LVCMOS18
+    loc: BD12
+  PCIE_RST_N:
+    iostd: LVCMOS18
+    loc: C18
+  EMCCLK:
+    iostd: LVCMOS18
+    loc: BB28
+  EMCCLK_FIX:
+    iostd: LVCMOS18
+    loc: BB27
+  FPGA_RESET_N:
+    iostd: LVCMOS18
+    loc: BD35
+  FPGA_EMCCLK2:
+    iostd: LVCMOS18
+    loc: AV27
+  FPGA_REFCLK_BUF0_P:
+    iostd: LVDS
+    loc: AU15
+  FPGA_REFCLK_BUF0_N:
+    iostd: LVDS
+  FPGA_REFCLK_BUF1_P:
+    iostd: LVDS
+    loc: AT18
+  FPGA_REFCLK_BUF1_N:
+    iostd: LVDS
+  led:
+    iostd: LVCMOS18
+    loc:
+      - A29
+      - C29
+      - D29
+      - E29
+      - A28
+      - B28
+      - C28
+      - E28
+  gpio:
+    iostd: LVCMOS18
+    loc:
+      - BC35
+      - BB35
+      - BA34
+      - AY34
+      - AW34
+      - BB33
+      - BA33
+      - AY33
+  FPGA_ATX_PSU_KILL:
+    iostd: LVCMOS18
+    loc: BD10
+  ONE_WIRE_EEPROM:
+    iostd: LVCMOS18
+    loc: BD17
+  ONE_WIRE_EEPROM_STRONG_PULLUP_EN_N:
+    iostd: LVCMOS18
+    loc: BC17
+  MEZZANINE_0_CLK_SEL:
+    iostd: LVCMOS18
+    loc: A33 
+  MEZZANINE_0_RESET:
+    iostd: LVCMOS18
+    loc: C33  
+  MEZZANINE_0_ONE_WIRE:
+    iostd: LVCMOS18
+    loc: B32 
+  MEZZANINE_0_ONE_WIRE_STRONG_PULLUP_EN_N:
+    iostd: LVCMOS18
+    loc: C32 
+  MEZZANINE_0_SCL_FPGA:
+    iostd: LVCMOS18
+    loc: A31
+  MEZZANINE_0_SDA_FPGA:
+    iostd: LVCMOS18
+    loc: A30
+  MEZZANINE_0_INT_N:
+    iostd: LVCMOS18
+    loc: B31 
+  MEZZANINE_0_PRESENT_N:
+    iostd: LVCMOS18
+    loc: D32 
+  MEZZANINE_0_ENABLE_N:
+    iostd: LVCMOS18
+    loc: B33    
+  MEZZANINE_0_FAULT_N:
+    iostd: LVCMOS18
+    loc: BA14       
+  MEZZANINE_1_CLK_SEL:
+    iostd: LVCMOS18
+    loc: D17
+  MEZZANINE_1_RESET:
+    iostd: LVCMOS18
+    loc: C15  
+  MEZZANINE_1_ONE_WIRE:
+    iostd: LVCMOS18
+    loc: BC34
+  MEZZANINE_1_ONE_WIRE_STRONG_PULLUP_EN_N:
+    iostd: LVCMOS18
+    loc: BD34 
+  MEZZANINE_1_SCL_FPGA:
+    iostd: LVCMOS18
+    loc: BD32
+  MEZZANINE_1_SDA_FPGA:
+    iostd: LVCMOS18
+    loc: BD31  
+  MEZZANINE_1_INT_N:
+    iostd: LVCMOS18
+    loc: BC33
+  MEZZANINE_1_PRESENT_N:
+    iostd: LVCMOS18
+    loc: BA35
+  MEZZANINE_1_ENABLE_N:
+    iostd: LVCMOS18
+    loc: C17 
+  MEZZANINE_1_FAULT_N:
+    iostd: LVCMOS18
+    loc: AY14      
+  MEZZANINE_2_CLK_SEL:
+    iostd: LVCMOS18
+    loc: E16
+  MEZZANINE_2_RESET:
+    iostd: LVCMOS18
+    loc: D15    
+  MEZZANINE_2_ONE_WIRE:
+    iostd: LVCMOS18
+    loc: BB10
+  MEZZANINE_2_ONE_WIRE_STRONG_PULLUP_EN_N:
+    iostd: LVCMOS18
+    loc: BA10  
+  MEZZANINE_2_SCL_FPGA:
+    iostd: LVCMOS18
+    loc: BD14    
+  MEZZANINE_2_SDA_FPGA:
+    iostd: LVCMOS18
+    loc: BC14 
+  MEZZANINE_2_INT_N:
+    iostd: LVCMOS18
+    loc: BC13    
+  MEZZANINE_2_PRESENT_N:
+    iostd: LVCMOS18
+    loc: BA11
+  MEZZANINE_2_ENABLE_N:
+    iostd: LVCMOS18
+    loc: E17
+  MEZZANINE_2_FAULT_N:
+    iostd: LVCMOS18
+    loc: AW14  
+  MEZZANINE_3_CLK_SEL:
+    loc: B12
+    iostd: LVCMOS18
+  MEZZANINE_3_RESET:
+    iostd: LVCMOS18
+    loc: E12
+  MEZZANINE_3_ONE_WIRE:
+    iostd: LVCMOS18
+    loc: A13
+  MEZZANINE_3_ONE_WIRE_STRONG_PULLUP_EN_N:
+    iostd: LVCMOS18
+    loc: B13
+  MEZZANINE_3_SCL_FPGA:
+    iostd: LVCMOS18
+    loc: A14
+  MEZZANINE_3_SDA_FPGA:
+    iostd: LVCMOS18
+    loc: A15
+  MEZZANINE_3_INT_N:
+    iostd: LVCMOS18
+    loc: B15
+  MEZZANINE_3_PRESENT_N:
+    iostd: LVCMOS18
+    loc: C13
+  MEZZANINE_3_ENABLE_N:
+    loc: C12
+    iostd: LVCMOS18
+  MEZZANINE_3_FAULT_N:
+    iostd: LVCMOS18
+    loc: AV14
+  MEZZANINE_COMBINED_FAULT:
+    iostd: LVCMOS18
+    loc: BA20
+  MEZ0_REFCLK_0_P:
+    loc:
+      - AA35
+  MEZ0_REFCLK_0_N:
+    loc:
+      - AA36
+  MEZ0_PHY11_LANE_TX_P:
+    loc:
+      - AC43
+      - AD41
+      - AE43
+      - AF41
+  MEZ0_PHY11_LANE_TX_N:
+    loc:
+      - AC44
+      - AD42
+      - AE44
+      - AF42
+  MEZ0_PHY11_LANE_RX_P:
+    loc:
+      - Y37
+      - AA39
+      - AC39
+      - AD37
+  MEZ0_PHY11_LANE_RX_N:
+    loc:
+      - Y38
+      - AA40
+      - AC40
+      - AD38
+  MEZ0_REFCLK_1_P:
+    loc:
+      - U35
+  MEZ0_REFCLK_1_N:
+    loc:
+      - U36
+  MEZ0_PHY12_LANE_TX_P:
+    loc:
+      - W43
+      - Y41
+      - AA43
+      - AB41
+  MEZ0_PHY12_LANE_TX_N:
+    loc:
+      - W44
+      - Y42
+      - AA44
+      - AB42
+  MEZ0_PHY12_LANE_RX_P:
+    loc:
+      - T37
+      - U39
+      - V37
+      - W39
+  MEZ0_PHY12_LANE_RX_N:
+    loc:
+      - T38
+      - U40
+      - V38
+      - W40
+  MEZ0_REFCLK_2_P:
+    loc:
+      - N35
+  MEZ0_REFCLK_2_N:
+    loc:
+      - N36
+  MEZ0_PHY21_LANE_TX_P:
+    loc:
+      - R43
+      - T41
+      - U43
+      - V41
+  MEZ0_PHY21_LANE_TX_N:
+    loc:
+      - R44
+      - T42
+      - U44
+      - V42
+  MEZ0_PHY21_LANE_RX_P:
+    loc:
+      - M37
+      - N39
+      - P37
+      - R39
+  MEZ0_PHY21_LANE_RX_N:
+    loc:
+      - M38
+      - N40
+      - P38
+      - R40
+  MEZ0_REFCLK_3_P:
+    loc:
+      - J35
+  MEZ0_REFCLK_3_N:
+    loc:
+      - J36
+  MEZ0_PHY22_LANE_TX_P:
+    loc:
+      - L43
+      - M41
+      - N43
+      - P41
+  MEZ0_PHY22_LANE_TX_N:
+    loc:
+      - L44
+      - M42
+      - N44
+      - P42
+  MEZ0_PHY22_LANE_RX_P:
+    loc:
+      - H37
+      - J39
+      - K37
+      - L39
+  MEZ0_PHY22_LANE_RX_N:
+    loc:
+      - H38
+      - J40
+      - K38
+      - L40
+  MEZ1_REFCLK_0_P:
+    loc:
+      - AY37
+  MEZ1_REFCLK_0_N:
+    loc:
+      - AY38
+  MEZ1_PHY11_LANE_TX_P:
+    loc:
+      - AY41
+      - BA43
+      - BB41
+      - BD41
+  MEZ1_PHY11_LANE_TX_N:
+    loc:
+      - AY42
+      - BA44
+      - BB42
+      - BD42
+  MEZ1_PHY11_LANE_RX_P:
+    loc:
+      - AW39
+      - BA39
+      - BC39
+      - BD37
+  MEZ1_PHY11_LANE_RX_N:
+    loc:
+      - AW40
+      - BA40
+      - BC40
+      - BD38
+  MEZ1_REFCLK_1_P:
+    loc:
+      - AR35
+  MEZ1_REFCLK_1_N:
+    loc:
+      - AR36
+  MEZ1_PHY12_LANE_TX_P:
+    loc:
+      - AT41
+      - AU43
+      - AV41
+      - AW43
+  MEZ1_PHY12_LANE_TX_N:
+    loc:
+      - AT42
+      - AU44
+      - AV42
+      - AW44
+  MEZ1_PHY12_LANE_RX_P:
+    loc:
+      - AP37
+      - AR39
+      - AU39
+      - AV37
+  MEZ1_PHY12_LANE_RX_N:
+    loc:
+      - AP38
+      - AR40
+      - AU40
+      - AV38
+  MEZ1_REFCLK_2_P:
+    loc:
+      - AL35
+  MEZ1_REFCLK_2_N:
+    loc:
+      - AL36
+  MEZ1_PHY21_LANE_TX_P:
+    loc:
+      - AL43
+      - AN43
+      - AP41
+      - AR43
+  MEZ1_PHY21_LANE_TX_N:
+    loc:
+      - AL44
+      - AN44
+      - AP42
+      - AR44
+  MEZ1_PHY21_LANE_RX_P:
+    loc:
+      - AL39
+      - AM37
+      - AM41
+      - AN39
+  MEZ1_PHY21_LANE_RX_N:
+    loc:
+      - AL40
+      - AM38
+      - AM42
+      - AN40
+  MEZ1_REFCLK_3_P:
+    loc:
+      - AF37
+  MEZ1_REFCLK_3_N:
+    loc:
+      - AF38
+  MEZ1_PHY22_LANE_TX_P:
+    loc:
+      - AG43
+      - AH41
+      - AJ43
+      - AK41
+  MEZ1_PHY22_LANE_TX_N:
+    loc:
+      - AG44
+      - AH42
+      - AJ44
+      - AK42
+  MEZ1_PHY22_LANE_RX_P:
+    loc:
+      - AE39
+      - AG39
+      - AJ39
+      - AK37
+  MEZ1_PHY22_LANE_RX_N:
+    loc:
+      - AE40
+      - AG40
+      - AJ40
+      - AK38
+  MEZ2_REFCLK_0_P:
+    loc:
+      - AF8
+  MEZ2_REFCLK_0_N:
+    loc:
+      - AF7
+  MEZ2_PHY11_LANE_TX_P:
+    loc:
+      - AK4
+      - AJ2
+      - AH4
+      - AG2
+  MEZ2_PHY11_LANE_TX_N:
+    loc:
+      - AK3
+      - AJ1
+      - AH3
+      - AG1
+  MEZ2_PHY11_LANE_RX_P:
+    loc:
+      - AK8
+      - AJ6
+      - AG6
+      - AE6
+  MEZ2_PHY11_LANE_RX_N:
+    loc:
+      - AK7
+      - AJ5
+      - AG5
+      - AE5
+  MEZ2_REFCLK_1_P:
+    loc:
+      - AL10
+  MEZ2_REFCLK_1_N:
+    loc:
+      - AL9
+  MEZ2_PHY12_LANE_TX_P:
+    loc:
+      - AR2
+      - AP4
+      - AN2
+      - AL2
+  MEZ2_PHY12_LANE_TX_N:
+    loc:
+      - AR1
+      - AP3
+      - AN1
+      - AL1
+  MEZ2_PHY12_LANE_RX_P:
+    loc:
+      - AN6
+      - AM4
+      - AM8
+      - AL6
+  MEZ2_PHY12_LANE_RX_N:
+    loc:
+      - AN5
+      - AM3
+      - AM7
+      - AL5
+  MEZ2_REFCLK_2_P:
+    loc:
+      - AR10
+  MEZ2_REFCLK_2_N:
+    loc:
+      - AR9
+  MEZ2_PHY21_LANE_TX_P:
+    loc:
+      - AW2
+      - AV4
+      - AU2
+      - AT4
+  MEZ2_PHY21_LANE_TX_N:
+    loc:
+      - AW1
+      - AV3
+      - AU1
+      - AT3
+  MEZ2_PHY21_LANE_RX_P:
+    loc:
+      - AV8
+      - AU6
+      - AR6
+      - AP8
+  MEZ2_PHY21_LANE_RX_N:
+    loc:
+      - AV7
+      - AU5
+      - AR5
+      - AP7
+  MEZ2_REFCLK_3_P:
+    loc:
+      - AY8
+  MEZ2_REFCLK_3_N:
+    loc:
+      - AY7
+  MEZ2_PHY22_LANE_TX_P:
+    loc:
+      - BD4
+      - BB4
+      - BA2
+      - AY4
+  MEZ2_PHY22_LANE_TX_N:
+    loc:
+      - BD3
+      - BB3
+      - BA1
+      - AY3
+  MEZ2_PHY22_LANE_RX_P:
+    loc:
+      - BD8
+      - BC6
+      - BA6
+      - AW6
+  MEZ2_PHY22_LANE_RX_N:
+    loc:
+      - BD7
+      - BC5
+      - BA5
+      - AW5
+  MEZ3_REFCLK_0_P:
+    loc: J10
+  MEZ3_REFCLK_0_N:
+    loc: J9
+  MEZ3_PHY11_LANE_TX_N:
+    loc:
+      - P3
+      - N1
+      - M3
+      - L1
+  MEZ3_PHY11_LANE_RX_P:
+    loc:
+      - L6
+      - K8
+      - J6
+      - H8
+  MEZ3_PHY11_LANE_TX_P:
+    loc:
+      - P4
+      - N2
+      - M4
+      - L2
+  MEZ3_PHY11_LANE_RX_N:
+    loc:
+      - L5
+      - K7
+      - J5
+      - H7
+  I2C_RESET_FPGA:
+    iostd: LVCMOS18
+    loc: BC19
+  I2C_SCL_FPGA:
+    iostd: LVCMOS18
+    loc: BB18
+  I2C_SDA_FPGA:
+    iostd: LVCMOS18
+    loc: BC18
+  USB_I2C_CTRL:
+    iostd: LVCMOS18
+    loc: AY13
+  USB_UART_TXD:
+    iostd: LVCMOS18
+    loc: BA13
+  USB_UART_RXD:
+    iostd: LVCMOS18
+    loc: BB16
+  USB_FPGA:
+    iostd: LVCMOS18
+    loc:
+      - E14
+      - F14
+      - E13
+      - F13
+  SPI_CLK:
+    iostd: LVCMOS18
+    loc: BB21
+  SPI_MOSI:
+    iostd: LVCMOS18
+    loc: BC20
+  SPI_MISO:
+    iostd: LVCMOS18
+    loc: BB20
+  SPI_CSB:
+    iostd: LVCMOS18
+    loc: BD21
+  DEBUG_UART_TX:
+    iostd: LVCMOS18
+    loc: BD20
+  DEBUG_UART_RX:
+    iostd: LVCMOS18
+    loc: AV13
+  FAN_CONT_RST_N:
+    iostd: LVCMOS18
+    loc: BB22
+  FAN_CONT_FAULT_N:
+    iostd: LVCMOS18
+    loc: BC22
+  FAN_CONT_ALERT_N:
+    iostd: LVCMOS18
+    loc: BD22
+  CPU_SUS_S3_N:
+    iostd: LVCMOS18
+    loc: A19
+  CPU_SUS_STAT_N:
+    iostd: LVCMOS18
+    loc: B18
+  CPU_PWR_OK:
+    iostd: LVCMOS18
+    loc: A18
+  CPU_SUS_S4_N:
+    iostd: LVCMOS18
+    loc: B16
+  CPU_PWR_BTN_N:
+    iostd: LVCMOS18
+    loc: BD11
+  CPU_SYS_RESET_N:
+    iostd: LVCMOS18
+    loc: BC10
+  CPU_SUS_S5_N:
+    iostd: LVCMOS18
+    loc: B17
+  SPARTAN_CLK:
+    iostd: LVCMOS18
+    loc: BA26
+  AUX_CLK_P:
+    iostd: LVDS
+  AUX_CLK_N:
+    iostd: LVDS
+    loc: AV19
+  AUX_SYNCI_P:
+    iostd: LVDS
+  AUX_SYNCI_N:
+    iostd: LVDS
+    loc: AU21
+  AUX_SYNCO_P:
+    iostd: LVDS
+  AUX_SYNCO_N:
+    iostd: LVDS
+    loc: AY21
+  MONITOR_ALERT_N:
+    iostd: LVCMOS18
+    loc: BB13
+  CONFIG_IO_11:
+    iostd: LVCMOS18
+    loc: BC23
+  CONFIG_IO_10:
+    iostd: LVCMOS18
+    loc: BB23
+  CONFIG_IO_9:
+    iostd: LVCMOS18
+    loc: BA23
+  CONFIG_IO_8:
+    iostd: LVCMOS18
+    loc: AY23
+  CONFIG_IO_7:
+    iostd: LVCMOS18
+    loc: BD24
+  CONFIG_IO_6:
+    iostd: LVCMOS18
+    loc: BC24
+  CONFIG_IO_5:
+    iostd: LVCMOS18
+    loc: BA24
+  CONFIG_IO_4:
+    iostd: LVCMOS18
+    loc: AY24
+  CONFIG_IO_3:
+    iostd: LVCMOS18
+    loc: BD25
+  CONFIG_IO_2:
+    iostd: LVCMOS18
+    loc: BC25
+  CONFIG_IO_1:
+    iostd: LVCMOS18
+    loc: BB25
+  CONFIG_IO_0:
+    iostd: LVCMOS18
+    loc: BB26
+  GND:
+    iostd: LVCMOS18
+    loc:
+      - AY31
+      - AW30
+      - AW31
+      - AV28
+      - AV29
+      - AN27
+      - AP27
+      - AT28
+      - AK27
+      - AW26
+      - AY26
+      - AV25
+      - AW25
+      - AW24
+      - AT25
+      - AK23

@@ -1,0 +1,516 @@
+name: snap
+manufacturer: Xilinx
+fpga: xc7k160tffg676-2
+#fpga: xc7k410tffg676-2
+backend_target: vivado
+sources: []
+constraints: []
+provides:
+  - sfp0
+  - sfp1
+  - zdok0
+  - sys_clk
+  - sys_clk90
+  - sys_clk180
+  - sys_clk270
+  - HAD1511_0
+  - HAD1511_1
+  - HAD1511_2
+  - lmx2581
+pins:
+  sys_clk_p:
+    loc: E10
+    iostd: LVDS_25
+  sys_clk_n:
+    loc: D10
+    iostd: LVDS_25
+  eth_clk_125_p:
+    loc: H6
+  eth_clk_125_n:
+    loc: H5
+  miso:
+    loc: K20
+    iostd: LVCMOS33
+  mosi:
+    loc: J20
+    iostd: LVCMOS33
+  sclk:
+    loc: E17
+    iostd: LVCMOS33
+  cs_n:
+    loc: G19
+    iostd: LVCMOS33
+  gpio:
+    iostd: LVCMOS25
+    loc:
+      - B21
+      - C21
+      - B20
+      - A20
+      - H24
+      - H23
+      - B26
+      - R25
+      - L17
+      - K18
+  usb_tx:
+    iostd: LVCMOS25
+    loc: J8
+  usb_cts:
+    iostd: LVCMOS25
+    loc: F10
+  usb_rts:
+    iostd: LVCMOS25
+    loc: J13
+  usb_rx:
+    iostd: LVCMOS25
+    loc: H13
+  sync_in_p:
+    iostd: LVDS_25
+    loc: AD25
+  sync_in_n:
+    iostd: LVDS_25
+    loc: AE25
+  sync_out:
+    iostd: LVCMOS25
+    loc: H9
+  led:
+    iostd: LVCMOS25
+    loc:
+      - C13
+      - C14
+      - D13
+      - D14 
+      - E12
+      - E13
+  eth_clk_p:
+    loc:
+      - K6
+  eth_clk_n:
+    loc: 
+      - K5
+  mgt_tx_p:
+    loc: 
+      - P2
+      - K2
+  mgt_tx_n:
+    loc:
+      - P1
+      - K1
+  mgt_rx_p:
+    loc:
+      - R4
+      - L4
+  mgt_rx_n:
+    loc:
+      - R3
+      - L3
+  sfp_disable:
+    iostd: LVCMOS25
+    loc:
+      - U21
+      - N16
+  zdok0:
+    iostd: LVCMOS25
+    loc:
+      - AA23
+      - AB24
+      - Y25
+      - Y26
+      - U24
+      - U25
+      - U19
+      - U20
+      - T24
+      - T25
+      - M21
+      - M22
+      - M24
+      - L24
+      - L22
+      - K22
+      - J24
+      - J25
+      - G25
+      - G26
+      - Y22
+      - AA22
+      - Y23
+      - AA24
+      - V23
+      - V24
+      - R22
+      - R23
+      - R21
+      - P21
+      - P23
+      - N23
+      - K25
+      - K26
+      - K23
+      - J23
+      - H21
+      - G21
+      - G22
+      - F23
+      - AE23
+      - AF23
+      - AC23
+      - AC24
+      - W23
+      - W24
+      - T22
+      - T23
+      - R18
+      - P18
+      - N18
+      - M19
+      - N19
+      - M20
+      - J21
+      - H22
+      - G24
+      - F24
+      - D23
+      - D24
+      - AE22
+      - AF22
+      - AB26
+      - AC26
+      - V21
+      - W21
+      - U17
+      - T17
+      - R16
+      - R17
+      - P19
+      - P20
+      - P16
+      - N17
+      - J26
+      - H26
+      - E25
+      - D25
+      - F22
+      - E23
+  zdok0_p:
+    iostd: LVDS_25
+    loc:
+      - AA23
+      - Y25
+      - U24
+      - U19
+      - T24
+      - M21
+      - M24
+      - L22
+      - J24
+      - G25
+      - Y22
+      - Y23
+      - V23
+      - R22
+      - R21
+      - P23
+      - K25
+      - K23
+      - H21
+      - G22
+      - AE23
+      - AC23
+      - W23
+      - T22
+      - R18
+      - N18
+      - N19
+      - J21
+      - G24
+      - D23
+      - AE22
+      - AB26
+      - V21
+      - U17
+      - R16
+      - P19
+      - P16
+      - J26
+      - E25
+      - F22
+  zdok0_n:
+    iostd: LVDS_25
+    loc:
+      - AB24
+      - Y26
+      - U25
+      - U20
+      - T25
+      - M22
+      - L24
+      - K22
+      - J25
+      - G26
+      - AA22
+      - AA24
+      - V24
+      - R23
+      - P21
+      - N23
+      - K26
+      - J23
+      - G21
+      - F23
+      - AF23
+      - AC24
+      - W24
+      - T23
+      - P18
+      - M19
+      - M20
+      - H22
+      - F24
+      - D24
+      - AF22
+      - AC26
+      - W21
+      - T17
+      - R17
+      - P20
+      - N17
+      - H26
+      - D25
+      - E23
+  adc_csn:
+    iostd: LVCMOS18
+    loc:
+      - AF3
+      - AF10
+      - V14
+  adc_rst_n:
+    iostd: LVCMOS18
+    loc:
+      - AE5
+      - AF13
+      - V19
+  adc_pd:
+    iostd: LVCMOS18
+    loc:
+      - AE3
+      - AE8
+      - W15
+  adc_sdata:
+    iostd: LVCMOS18
+    loc:
+      - AF2
+      - AF9
+      - W14
+  adc_sclk:
+    iostd: LVCMOS33
+    loc:
+      - M17
+      - L18
+      - K16
+  adc_lclkp:
+    iostd: LVDS
+    loc:
+      - AA3
+  adc_lclkn:
+    iostd: LVDS
+    loc:
+      - AA2
+  # ADC data pins, named as per schematic.
+  # Even pins are _p, odd are _n.
+  adc0_out:
+    iostd: LVDS
+    loc:
+      - V2
+      - V1
+      - U2
+      - U1
+      - W6
+      - W5
+      - U7
+      - V6
+      - V3
+      - W3
+      - Y3
+      - Y2
+      - AD6
+      - AD5
+      - AD4
+      - AD3
+  adc1_out:
+    iostd: LVDS
+    loc:
+      - V8
+      - V7
+      - W10
+      - W9
+      - Y8
+      - Y7
+      - Y11
+      - Y10
+      - AB12
+      - AC12
+      - AA13
+      - AA12
+      - AA8
+      - AA7
+      - AC8
+      - AD8
+  adc2_out:
+    iostd: LVDS
+    loc:
+      - AF14
+      - AF15
+      - AD15
+      - AE15
+      - AE18
+      - AF18
+      - AF19
+      - AF20
+      - AA14
+      - AA15
+      - AC14
+      - AD14
+      - AB19
+      - AB20
+      - AA19
+      - AA20
+  clk_sel_a:
+    iostd: LVCMOS33
+    loc:
+      - A18
+  clk_sel_b:
+    iostd: LVCMOS33
+    loc:
+      - A19
+  lmx2581_clk:
+    iostd: LVCMOS33
+    loc: H16
+  lmx2581_data:
+    iostd: LVCMOS33
+    loc: J15
+  lmx2581_muxout:
+    iostd: LVCMOS33
+    loc: J19
+  lmx2581_le:
+    iostd: LVCMOS33
+    loc: J16
+  lmx2581_ce:
+    iostd: LVCMOS33
+    loc: G15
+  lmx2581_be:
+    iostd: LVCMOS33
+    loc: F15
+  xadc_p:
+    loc: N12
+  xadc_n:
+    loc: P11
+  rpi_header:
+    iostd: LVCMOS33
+    loc:
+      - '' # 3V3
+      - '' # 5V0
+      - '' # PMBUS_DATA
+      - '' # 5V0
+      - '' # PMBUS_CLK
+      - '' # GND
+      - 'E18'
+      - 'B16'
+      - '' # GND
+      - 'C16'
+
+      - '' # PMBUS_CTRL
+      - '' # PMBUS_ALERT
+      - '' # JTAG TMS
+      - '' # GND
+      - '' # JTAG_TDI
+      - '' # JTAG_TDO
+      - '' # NC
+      - '' # JTAG_TCLK
+      - 'J20'
+      - '' # GND
+
+      - 'K20'
+      - '' # DONE3V3
+      - 'E17'
+      - 'G19'
+      - '' # GND
+      - '' # FPGA_PROG_B
+      - '' # NC
+      - '' # NC
+      - 'C17'
+      - '' # GND
+
+      - 'C18'
+      - 'C19'
+      - 'B19'
+      - '' # GND
+      - 'A17'
+      - 'B17'
+      - 'D20'
+      - 'H18'
+      - '' # GND
+      - 'H17'
+  i2c:
+    iostd: I2C
+    loc:
+      - '' # 3V3
+      - '' # 5V0
+      - '' # PMBUS_DATA
+      - '' # 5V0
+      - '' # PMBUS_CLK
+      - '' # GND
+      - 'E18'
+      - 'B16'
+      - '' # GND
+      - 'C16'
+
+      - '' # PMBUS_CTRL
+      - '' # PMBUS_ALERT
+      - '' # JTAG TMS
+      - '' # GND
+      - '' # JTAG_TDI
+      - '' # JTAG_TDO
+      - '' # NC
+      - '' # JTAG_TCLK
+      - 'J20'
+      - '' # GND
+
+      - 'K20'
+      - '' # DONE3V3
+      - 'E17'
+      - 'G19'
+      - '' # GND
+      - '' # FPGA_PROG_B
+      - '' # NC
+      - '' # NC
+      - 'C17'
+      - '' # GND
+
+      - 'C18'
+      - 'C19'
+      - 'B19'
+      - '' # GND
+      - 'A17'
+      - 'B17'
+      - 'D20'
+      - 'H18'
+      - '' # GND
+      - 'H17'
+  spi_flash_data:
+    iostd: LVCMOS25
+    loc:
+      - B24
+      - A25
+      - B22
+      - A22
+  #spi_flash_clk:
+  #  iostd: LVCMOS25
+  #  loc: 
+  spi_flash_csn:
+    iostd: LVCMOS25
+    loc: C23
+      
+
+

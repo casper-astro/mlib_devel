@@ -1,0 +1,81 @@
+name: vcu118
+manufacturer: Xilinx
+fpga: xcvu9p-flga2104-2L-e-es1
+backend_target: vivado
+sources: []
+constraints: []
+provides:
+  - qsfp0
+  - qsfp1
+pins:
+  sys_clk_p:
+    loc: G31
+    iostd: DIFF_SSTL12
+  sys_clk_n:
+    loc: F31
+    iostd: DIFF_SSTL12
+  refclk125_p:
+    iostd: LVDS
+    loc: ??
+  refclk125_n:
+    iostd: LVDS
+    loc: ??
+  miso:
+    loc: B17
+    iostd: LVCMOS12
+  mosi:
+    loc: G16
+    iostd: LVCMOS12
+  sclk:
+    loc: J16
+    iostd: LVCMOS12
+  cs_n:
+    loc: D21
+    iostd: LVCMOS12
+  led:
+    iostd: LVCMOS12
+    loc:
+      - AT32
+      - AV34
+      - AY30
+      - BB32
+      - BF32
+      - AU37
+      - AV36
+      - BA37
+  gbe_phy_mdio:
+    iostd: LVCMOS18
+    loc: AR23
+  gbe_phy_mdc:
+    iostd: LVCMOS18
+    loc: AV23
+  gbe_phy_power_down_n:
+    iostd: LVCMOS18
+    loc: AR24
+  gbe_phy_sgmii_in_n:
+    iostd: DIFF_HSTL_I_18
+    loc: AV21
+  gbe_phy_sgmii_in_p:
+    iostd: DIFF_HSTL_I_18
+    loc: AU21
+  gbe_phy_sgmii_out_n:
+    iostd: DIFF_HSTL_I_18
+    loc: AV24
+  gbe_phy_sgmii_out_p:
+    iostd: DIFF_HSTL_I_18
+    loc: AU24
+  gbe_phy_sgmii_clk_n:
+    iostd: DIFF_HSTL_I_18
+    loc: AU22
+  gbe_phy_sgmii_clk_p:
+    iostd: DIFF_HSTL_I_18
+    loc: AT22
+  gbe_phy_rst_n:
+    iostd: LVCMOS18
+    loc: BA21
+  gbe_phy_gpio:
+    iostd: LVCMOS18
+    loc: AR22
+  gbe_phy_clk_out:
+    iostd: LVCMOS18
+    loc: AU23
