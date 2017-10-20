@@ -40,6 +40,11 @@ function snapshot_init(blk, varargin)
 clog('entering snapshot_init', 'trace');
 check_mask_type(blk, 'snapshot');
 
+if strcmp(gcs, 'casper_library_scopes') == 1
+    clog('snapshot_init: not editing library block', 'trace');
+    return
+end
+
 % quickly check debug goto tags
 unique_id = hashcode(blk);
 goto_tag_prefix = ['goto_', num2str(unique_id), '_we'];
@@ -52,16 +57,21 @@ for gotoctr = 1 : 4
         % pass
     end
 end
-% set attribute format string (block annotation)
-annotation = sprintf('debugID: %s', num2str(unique_id));
-set_param(blk,'AttributesFormatString', annotation);
+
+% does this block have the arm_out port?
+ports = get_param(blk, 'Ports');
+if ports(2) == 0
+    redraw = true;
+else
+    redraw = false;
+end
 
 munge_block(blk, varargin{:});
 defaults = {'storage', 'bram', 'dram_dimm', '1', 'dram_clock', '200', ...
   'nsamples', 10, 'data_width', '32',  'offset', 'on', ...
   'circap', 'on', 'value', 'off', 'ext_arm', 'off', ...
   'provide_outputs', 'off', 'use_dsp48', 'on'};
-if same_state(blk, 'defaults', defaults, varargin{:})
+if (same_state(blk, 'defaults', defaults, varargin{:})) && (redraw == false)
     return
 end
 clog('snapshot_init: post same_state', 'trace');
@@ -82,6 +92,10 @@ catch
     ext_arm = 'off';
     provide_outputs = 'off';
 end
+
+% set attribute format string (block annotation)
+annotation = sprintf('%i wide, %i deep\ndebugID: %s', data_width, 2^nsamples, num2str(unique_id));
+set_param(blk,'AttributesFormatString', annotation);
 
 % we double path width and decimate rate for DRAM
 if strcmp(storage, 'dram')
@@ -175,6 +189,9 @@ else
         'period', '1', 'Position', [250 327 280 343]);
 end
 add_line(blk, 'arm/1', 'arm_or/2');
+reuse_block(blk, 'arm_out', 'built-in/outport', ...
+    'Position', [335 528 365 542], 'Port', '1');
+add_line(blk, 'arm_or/1', 'arm_out/1');
 
 % ctrl reg
 reuse_block(blk, 'ctrl', 'xps_library/software_register', ...

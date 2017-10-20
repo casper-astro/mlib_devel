@@ -128,11 +128,6 @@ reuse_block(cursys, 'debug_rst', 'built-in/inport', 'Port', '9', ...
 reuse_block(cursys, 'term1', 'built-in/Terminator', ...
     'Position', [200   135   220   155]);
 add_line_s(cursys, 'debug_rst/1', 'term1/1');
-reuse_block(cursys, 'snap_arm', 'built-in/inport', 'Port', '10', ...
-    'Position', [120   160   150   176]);
-reuse_block(cursys, 'gotosnaparm', 'built-in/Goto', 'GotoTag', ...
-    'snaparm', 'Position', [200   165   280   185]);
-add_line_s(cursys, 'snap_arm/1', 'gotosnaparm/1');
 
 try
     debug_ctr_width = get_param(cursys, 'debug_ctr_width');
@@ -370,7 +365,8 @@ if strcmp(snaplen, '0 - no snap') == 0
         'snap_circap', 'off', 'snap_value', 'off', ...
         'snap_use_dsp48', 'on', 'snap_delay', '2', ...
         'extra_names', '[notused]', 'extra_widths', '[32]', ...
-        'extra_bps', '[0]', 'extra_types', '[0]');
+        'extra_bps', '[0]', 'extra_types', '[0]', ...
+        'snap_ext_arm', 'off');
     reuse_block(cursys, 'rxs_exp_del',  ...
             'xbsIndex_r4/Delay', 'reg_retiming', 'on', 'latency', '1', ...
             'Position', [1480 1610 1500 1630]);
@@ -392,7 +388,8 @@ if strcmp(snaplen, '0 - no snap') == 0
         'snap_circap', 'off', 'snap_value', 'off', ...
         'snap_use_dsp48', 'on', 'snap_delay', '2', ...
         'extra_names', '[notused]', 'extra_widths', '[32]', ...
-        'extra_bps', '[0]', 'extra_types', '[0]');
+        'extra_bps', '[0]', 'extra_types', '[0]', ...
+        'snap_ext_arm', 'on');
     reuse_block(cursys, 'rxs2', 'casper_library_scopes/bitfield_snapshot', ...
         'Position', [1620        1866        1725        2094], ...
         'io_names', '[data_lsw]', ...
@@ -404,10 +401,8 @@ if strcmp(snaplen, '0 - no snap') == 0
         'snap_circap', 'off', 'snap_value', 'off', ...
         'snap_use_dsp48', 'on', 'snap_delay', '2', ...
         'extra_names', '[notused]', 'extra_widths', '[32]', ...
-        'extra_bps', '[0]', 'extra_types', '[0]');
-    set_param([cursys, '/rxs0'], 'snap_ext_arm', 'on');
-    set_param([cursys, '/rxs1'], 'snap_ext_arm', 'on');
-    set_param([cursys, '/rxs2'], 'snap_ext_arm', 'on');
+        'extra_bps', '[0]', 'extra_types', '[0]', ...
+        'snap_ext_arm', 'on');
     ypos = 1310;
     for ctr = 1 : 8
         delname = ['rxs_', num2str(ctr),'_del'];
@@ -420,13 +415,6 @@ if strcmp(snaplen, '0 - no snap') == 0
     reuse_block(cursys, 'rxsnap_and', 'xbsIndex_r4/Logical', ...
         'arith_type', 'Unsigned', 'logical_function', 'AND', ...
         'inputs', '2', 'latency', '1', 'Position', [1500 1500 1550 1550]);
-    
-    reuse_block(cursys, 'rxsnaparm0', 'built-in/From', 'GotoTag', ...
-        'snaparm', 'Position', [1520 1500 1625 1520]);
-    reuse_block(cursys, 'rxsnaparm1', 'built-in/From', 'GotoTag', ...
-        'snaparm', 'Position', [1520 1780 1625 1800]);
-    reuse_block(cursys, 'rxsnaparm2', 'built-in/From', 'GotoTag', ...
-        'snaparm', 'Position', [1520 2070 1625 2090]);
 
     add_line_s(cursys, [clear_name([pipe_no_pipe, '_rx_data']), '/1'], ...
             'rxs_exp_del/1');
@@ -442,17 +430,16 @@ if strcmp(snaplen, '0 - no snap') == 0
     add_line_s(cursys, [valid_source, '/1'],                                    'rxsnap_and/1');
     add_line_s(cursys, [clear_name([pipe_no_pipe, '_rx_end_of_frame']), '/1'],  'rxsnap_and/2');
     add_line_s(cursys, 'rxsnap_and/1', 'rxs0/9');
-    add_line_s(cursys, 'rxsnaparm0/1', 'rxs0/10');
-        
+    
     add_line_s(cursys, 'rxs_exp/1',     'rxs1/1');
     add_line_s(cursys, 'rxs_8_del/1',   'rxs1/2');
     add_line_s(cursys, 'rxsnap_and/1',  'rxs1/3');
-    add_line_s(cursys, 'rxsnaparm1/1',  'rxs1/4');
+    add_line_s(cursys, 'rxs0/1',        'rxs1/4');
     
     add_line_s(cursys, 'rxs_exp/2',     'rxs2/1');
     add_line_s(cursys, 'rxs_8_del/1',   'rxs2/2');
     add_line_s(cursys, 'rxsnap_and/1',  'rxs2/3');
-    add_line_s(cursys, 'rxsnaparm2/1',  'rxs2/4');
+    add_line_s(cursys, 'rxs0/1',        'rxs2/4');
     
 else
     for ctr = 1 : 8
@@ -469,9 +456,6 @@ else
     delete_block_s([cursys, '/rxs2']);
     delete_block_s([cursys, '/rxs_exp']);
     delete_block_s([cursys, '/rxsnap_and']);
-    delete_block_s([cursys, '/rxsnaparm0']);
-    delete_block_s([cursys, '/rxsnaparm1']);
-    delete_block_s([cursys, '/rxsnaparm2']);
 end
 % tx snapshot
 snaplen = get_param(cursys, 'txsnaplen');
@@ -489,7 +473,7 @@ if strcmp(snaplen, '0 - no snap') == 0
         'snap_use_dsp48', 'on', 'snap_delay', '2', ...
         'extra_names', '[notused]', 'extra_widths', '[32]', ...
         'extra_bps', '[0]', 'extra_types', '[0]', ...
-        'snap_ext_arm', 'on');
+        'snap_ext_arm', 'off');
     reuse_block(cursys, 'txs_exp_del',  ...
             'xbsIndex_r4/Delay', 'reg_retiming', 'on', 'latency', '1', ...
             'Position', [300 1600 320 1620]);
@@ -527,7 +511,7 @@ if strcmp(snaplen, '0 - no snap') == 0
         'extra_bps', '[0]', 'extra_types', '[0]', ...
         'snap_ext_arm', 'on');
     ypos = 1300;
-    for ctr = 1 : 9
+    for ctr = 1 : 8
         delname = ['txs_', num2str(ctr),'_del'];
         reuse_block(cursys, delname,  ...
             'xbsIndex_r4/Delay', 'reg_retiming', 'on', 'latency', '1', ...
@@ -540,13 +524,6 @@ if strcmp(snaplen, '0 - no snap') == 0
         'inputs', '2', 'latency', '1', ...
         'Position', [330 1479 380 1526]);
     
-    reuse_block(cursys, 'txsnaparm0', 'built-in/From', 'GotoTag', ...
-        'snaparm', 'Position', [200 1500 300 1520]);
-    reuse_block(cursys, 'txsnaparm1', 'built-in/From', 'GotoTag', ...
-        'snaparm', 'Position', [200 1780 300 1800]);
-    reuse_block(cursys, 'txsnaparm2', 'built-in/From', 'GotoTag', ...
-        'snaparm', 'Position', [200 2070 300 2090]);
-    
     add_line_s(cursys, 'tx_data/1', 'txs_exp_del/1');
     add_line_s(cursys, 'txs_exp_del/1', 'txs_exp/1');
     add_line_s(cursys, [clear_name([pipe_no_pipe, '_led_up']), '/1'],           'txs_1_del/1');
@@ -557,20 +534,19 @@ if strcmp(snaplen, '0 - no snap') == 0
     add_line_s(cursys, 'tx_end_of_frame/1',                                     'txs_6_del/1');
     add_line_s(cursys, 'tx_dest_ip/1',                                          'txs_7_del/1');
     add_line_s(cursys, 'tx_valid/1',                                            'txs_8_del/1');
-    add_line_s(cursys, 'txsnap_and/1',                                          'txs_9_del/1');
     add_line_s(cursys, 'tx_valid/1',         'txsnap_and/1');
     add_line_s(cursys, 'tx_end_of_frame/1',  'txsnap_and/2');
-    add_line_s(cursys, 'txsnaparm0/1', 'txs0/10');
+    add_line_s(cursys, 'txsnap_and/1',                                          'txs0/9');
         
     add_line_s(cursys, 'txs_exp/1',             'txs1/1');
     add_line_s(cursys, 'txs_8_del/1',           'txs1/2');
-    add_line_s(cursys, 'txs_9_del/1',           'txs1/3');
-    add_line_s(cursys, 'txsnaparm1/1',          'txs1/4');
+    add_line_s(cursys, 'txsnap_and/1',          'txs1/3');
+    add_line_s(cursys, 'txs0/1',                'txs1/4');
     
     add_line_s(cursys, 'txs_exp/2',             'txs2/1');
     add_line_s(cursys, 'txs_8_del/1',           'txs2/2');
-    add_line_s(cursys, 'txs_9_del/1',           'txs2/3');
-    add_line_s(cursys, 'txsnaparm2/1',          'txs2/4');
+    add_line_s(cursys, 'txsnap_and/1',          'txs2/3');
+    add_line_s(cursys, 'txs0/1',                'txs2/4');
     
 else
     for ctr = 1 : 9
@@ -587,9 +563,6 @@ else
     delete_block_s([cursys, '/txs2']);
     delete_block_s([cursys, '/txs_exp']);
     delete_block_s([cursys, '/txsnap_and']);
-    delete_block_s([cursys, '/txsnaparm0']);
-    delete_block_s([cursys, '/txsnaparm1']);
-    delete_block_s([cursys, '/txsnaparm2']);
 end
 
 % remove unconnected blocks

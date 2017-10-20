@@ -51,7 +51,6 @@ snap_delay =        eval(get_param(blk, 'snap_delay'));
 try
     old_snaps = 0;
     snap_ext_arm =      get_param(blk, 'snap_ext_arm');
-    % snap_provide_outputs = get_param(blk, 'snap_provide_outputs');
     snap_provide_outputs = 'off';
 catch
     warning('Using old bitsnap %s, consider updating it from the library.', blk);
@@ -98,12 +97,17 @@ end
 % the snapshot block
 % force an update if it's an old snapblock
 try
-    get_param([gcb, '/ss'], 'ext_arm');
-    oldsnap = 0;
+    get_param([blk, '/ss'], 'ext_arm');
+    ssports = get_param([blk, '/ss'], 'Ports');
+    if ssports(2) == 0
+        oldsnap = 1;
+    else
+        oldsnap = 0;
+    end
 catch
     oldsnap = 1;
 end
-if oldsnap
+if oldsnap == 1
     try
         delete_block([blk, '/ss']);
     catch
@@ -121,7 +125,12 @@ reuse_block(blk, 'ss', 'casper_library_scopes/snapshot', ...
     'value', snap_value, ...
     'ext_arm', snap_ext_arm, ...
     'provide_outputs', snap_provide_outputs, ...
-    'use_dsp48', snap_use_dsp48);
+    'use_dsp48', snap_use_dsp48, ...
+    'Position', [700 71 790 239]);
+
+reuse_block(blk, 'arm_out', 'built-in/outport', ...
+    'Position', [850 147 880 163], 'Port', '1');
+add_line(blk, 'ss/1', 'arm_out/1');
 
 if snap_delay > 0
     add_line(blk, 'buscreate/1', 'io_delay/1');
@@ -283,8 +292,10 @@ if old_snaps == 0
             arm_port = arm_port + 1;
         end
         if snap_delay > 0
+            % arm_delay = snap_delay;
+            arm_delay = 0;
             reuse_block(blk, 'arm_delay', 'casper_library_delays/pipeline', ...
-                'latency', num2str(snap_delay), 'Position', [130 300 160 315]);
+                'latency', num2str(arm_delay), 'Position', [130 300 160 315]);
             add_line(blk, 'arm/1', 'arm_delay/1');
             add_line(blk, 'arm_delay/1', ['ss/', num2str(arm_port)]);
         else
@@ -353,8 +364,9 @@ end
 if ~isempty(display_string)
     display_string = strcat(display_string, '\n');
 end
+
 display_string = strcat(display_string, ...
-    sprintf('debugID: %s', num2str(hashcode([blk, '/ss']))));
+    sprintf('%i wide, %i deep\ndebugID: %s', snap_data_width, 2^snap_nsamples, num2str(hashcode([blk, '/ss']))));
 set_param(blk, 'AttributesFormatString', display_string);
 
 % when finished drawing blocks and lines, remove all unused blocks
