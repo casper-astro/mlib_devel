@@ -66,7 +66,7 @@ disregards      = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', '
 
 % parents of disregard blocks -- i.e., blocks we should ignore
 dummy_parents = {};
-for ctr = 1 : numel(disregards), 
+for ctr = 1 : numel(disregards)
     dummy_parents{ctr} = get_param(disregards{ctr}, 'Parent');
 end
 
@@ -140,9 +140,15 @@ for n = 1:length(xps_blks)
     fprintf(fid, '    %s: %s\n', 'fullpath', xps_blks{n});
     fprintf(fid, '    %s: %s\n', 'tag', get_param(xps_blks{n}, 'Tag'));
     for m = 1:length(fields)
-        val = eval_param(xps_blks{n}, fields{m});
+        try
+            val = eval_param(xps_blks{n}, fields{m});
+        catch exp
+            error('ERROR: %s\n\nblock(%s) param(%s) could not be evaluated.\n', exp, xps_blks{n}, fields{m});
+        end
         try
             val = num2str(val);
+        catch
+            % pass
         end
         fprintf(fid, '    %s: %s\n', fields{m}, yaml_sanitize(val));
     end
