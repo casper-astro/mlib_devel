@@ -314,7 +314,7 @@
 /**
  * TFTP timeout
  */
-#define TFTP_TIMEOUT_MSECS    10000
+#define TFTP_TIMEOUT_MSECS    4000
 
 /**
  * Max. number of retries when a file is read from server
