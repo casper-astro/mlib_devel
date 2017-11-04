@@ -298,13 +298,22 @@ recv(void *arg, struct udp_pcb *upcb, struct pbuf *p, const ip_addr_t *addr, u16
 
       blknum = lwip_ntohs(sbuf[1]);
       pbuf_header(p, -TFTP_HEADER_LENGTH);
-
-      ret = tftp_state.ctx->write(tftp_state.handle, p);
-      if (ret < 0) {
-        send_error(addr, port, TFTP_ERROR_ACCESS_VIOLATION, "error writing file");
-        close_handle();
-      } else {
+      
+      if (blknum == (tftp_state.blknum - 1)) {
+        // If the blknum of this packet is one fewer
+        // than expected, that means it's a duplicate
+        // packet which we have already written and ack'd.
+        // ack it again to get the sender to continue
         send_ack(blknum);
+      } else {
+        ret = tftp_state.ctx->write(tftp_state.handle, p);
+        if (ret < 0) {
+          send_error(addr, port, TFTP_ERROR_ACCESS_VIOLATION, "error writing file");
+          close_handle();
+        } else {
+          send_ack(blknum);
+          tftp_state.blknum = blknum + 1; // The block we expect next
+        }
       }
 
       if (p->tot_len < TFTP_MAX_PAYLOAD_SIZE) {
