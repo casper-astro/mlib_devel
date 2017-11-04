@@ -906,7 +906,7 @@ casper_tapcp_write_flash_words_binary(
       state->ptr += sizeof(uint8_t);
       // If word is full, write it to flash
       if((++state->u32 % FLASH_PAGE_SIZE) == 0) {
-        tot_len += flash_write_page(((uint32_t)state->ptr) - FLASH_PAGE_SIZE, page, FLASH_PAGE_SIZE);
+        flash_write_page(((uint32_t)state->ptr) - FLASH_PAGE_SIZE, page, FLASH_PAGE_SIZE);
       }
     }
 
@@ -924,7 +924,7 @@ casper_tapcp_write_flash_words_binary(
   // previous page.
   bytes_left = state->u32 % FLASH_PAGE_SIZE;
   if(bytes_left) {
-    tot_len += flash_write_page(((uint32_t)state->ptr) - bytes_left, page, FLASH_PAGE_SIZE);
+    flash_write_page(((uint32_t)state->ptr) - bytes_left, page, FLASH_PAGE_SIZE);
   }
 
 
