@@ -39,7 +39,7 @@ casper_tftp_read_error(void *handle, void *buf, int bytes)
 }
 
 // This is the default TFTP write function.  It always returns an error.
-// casper_tftp_open() sets the wriate function pointer in the tftp_context
+// casper_tftp_open() sets the write function pointer in the tftp_context
 // structure to this function, but various "open helpers" invoked by
 // casper_tftp_open() can point to a different function if writing is allowed.
 //
