@@ -887,10 +887,10 @@ casper_tapcp_write_flash_words_binary(
   // state->u32 is number of bytes already written
 
   uint8_t *p;
-  int len = 0;
-  int tot_len = 0;
+  int len = 0;     // index to iterate through a pbuf payload
+  int tot_len = 0; // bytes written
   uint8_t page[FLASH_PAGE_SIZE];
-  int words_left = 0;
+  int bytes_left = 0;
 
   // While we have pbufs
   while(pbuf) {
@@ -906,7 +906,7 @@ casper_tapcp_write_flash_words_binary(
       state->ptr += sizeof(uint8_t);
       // If word is full, write it to flash
       if((++state->u32 % FLASH_PAGE_SIZE) == 0) {
-        flash_write_page(((uint32_t)state->ptr) - FLASH_PAGE_SIZE, page, FLASH_PAGE_SIZE);
+        tot_len += flash_write_page(((uint32_t)state->ptr) - FLASH_PAGE_SIZE, page, FLASH_PAGE_SIZE);
       }
     }
 
@@ -922,9 +922,9 @@ casper_tapcp_write_flash_words_binary(
   // If we've done all the pbufs, but haven't ended on a complete page. Write what we have.
   // The remainder of that page will be garbage (or rather, will be a copy of the end of the
   // previous page.
-  words_left = state->u32 % FLASH_PAGE_SIZE;
-  if(words_left) {
-    flash_write_page(((uint32_t)state->ptr) - words_left, page, FLASH_PAGE_SIZE);
+  bytes_left = state->u32 % FLASH_PAGE_SIZE;
+  if(bytes_left) {
+    tot_len += flash_write_page(((uint32_t)state->ptr) - bytes_left, page, FLASH_PAGE_SIZE);
   }
 
 
