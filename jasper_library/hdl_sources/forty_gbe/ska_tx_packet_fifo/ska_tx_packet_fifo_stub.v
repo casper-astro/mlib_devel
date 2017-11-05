@@ -1,10 +1,10 @@
 // Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2016.2 (lin64) Build 1577090 Thu Jun  2 16:32:35 MDT 2016
-// Date        : Mon Nov  7 14:28:03 2016
+// Date        : Wed Nov  1 16:14:35 2017
 // Host        : adam-cm running 64-bit Ubuntu 14.04.5 LTS
 // Command     : write_verilog -force -mode synth_stub
-//               /home/aisaacson/work/git_work/ska_sa/projects/skarab_bsp_firmware/firmware/FRM123701U1R1/Vivado/IP/ska_tx_packet_fifo/ska_tx_packet_fifo_stub.v
+//               /home/aisaacson/work/git_work/ska_sa/projects/mlib_devel/jasper_library/test_models/s_c856m32k/myproj/myproj.srcs/sources_1/ip/ska_tx_packet_fifo/ska_tx_packet_fifo_stub.v
 // Design      : ska_tx_packet_fifo
 // Purpose     : Stub declaration of top-level module interface
 // Device      : xc7vx690tffg1927-2
@@ -15,14 +15,14 @@
 // Please paste the declaration into a Verilog source file or add the file as an additional source.
 (* x_core_info = "fifo_generator_v13_1_1,Vivado 2016.2" *)
 module ska_tx_packet_fifo(rst, wr_clk, rd_clk, din, wr_en, rd_en, dout, full, overflow, empty, prog_full)
-/* synthesis syn_black_box black_box_pad_pin="rst,wr_clk,rd_clk,din[259:0],wr_en,rd_en,dout[259:0],full,overflow,empty,prog_full" */;
+/* synthesis syn_black_box black_box_pad_pin="rst,wr_clk,rd_clk,din[263:0],wr_en,rd_en,dout[263:0],full,overflow,empty,prog_full" */;
   input rst;
   input wr_clk;
   input rd_clk;
-  input [259:0]din;
+  input [263:0]din;
   input wr_en;
   input rd_en;
-  output [259:0]dout;
+  output [263:0]dout;
   output full;
   output overflow;
   output empty;

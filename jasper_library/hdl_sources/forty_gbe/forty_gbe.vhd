@@ -2203,8 +2203,8 @@ begin
         PROMISC_MODE      => PROMISC_MODE,
         RX_CRC_CHK_ENABLE => RX_CRC_CHK_ENABLE)
     port map(
-        clk => forty_gb_eth_clk, --user_clk,
-        rst => forty_gb_eth_rst, --user_rst,
+        clk => user_clk, --forty_gb_eth_clk,
+        rst => user_rst, --forty_gb_eth_rst,
         tx_valid            => xlgmii_tx_valid,
         tx_end_of_frame     => xlgmii_tx_end_of_frame,
         tx_data             => xlgmii_tx_data,
