@@ -305,8 +305,11 @@ architecture arch_ska_fge_tx of ska_fge_tx is
     signal app_tx_data_wrreq_latched : std_logic;
     signal app_tx_end_of_frame_latched : std_logic;
     
-    signal app_rst_z1 : std_logic;
-    signal app_rst_z2 : std_logic;
+    signal read_eof_data_cnt : std_logic_vector(63 downto 0);
+    signal read_eof_data_ctrl_cnt : std_logic_vector(63 downto 0);
+    
+    signal write_eof_data_cnt : std_logic_vector(63 downto 0);
+    signal write_eof_data_ctrl_cnt : std_logic_vector(63 downto 0);
 
     signal eof_flag_activate : std_logic;     
 --    signal arp_cache_write_error_i : std_logic_vector(7 downto 0);
@@ -358,7 +361,12 @@ architecture arch_ska_fge_tx of ska_fge_tx is
     signal dbg_mac_tx_start_z1 : std_logic;  
     signal dbg_mac_tx_data_i : std_logic_vector(255 downto 0); 
     signal dbg_mac_tx_data_valid_i : std_logic_vector(31 downto 0); 
-    signal dbg_app_rst : std_logic;    
+    signal dbg_app_rst : std_logic; 
+    signal dbg_tx_size : std_logic_vector(10 downto 0);  
+    signal dbg_read_eof_data_cnt : std_logic_vector(63 downto 0); 
+    signal dbg_read_eof_data_ctrl_cnt : std_logic_vector(63 downto 0);
+    signal dbg_write_eof_data_cnt : std_logic_vector(63 downto 0);
+    signal dbg_write_eof_data_ctrl_cnt : std_logic_vector(63 downto 0);    
         
     -- Mark Debug ILA Testing
     
@@ -409,6 +417,11 @@ architecture arch_ska_fge_tx of ska_fge_tx is
     attribute MARK_DEBUG of dbg_mac_tx_data_i : signal is "TRUE"; 
     attribute MARK_DEBUG of dbg_mac_tx_data_valid_i : signal is "TRUE"; 
     attribute MARK_DEBUG of dbg_app_rst : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_tx_size : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_read_eof_data_cnt : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_read_eof_data_ctrl_cnt : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_write_eof_data_cnt : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_write_eof_data_ctrl_cnt : signal is "TRUE"; 
     
 begin
 
@@ -459,6 +472,11 @@ begin
     dbg_mac_tx_data_i <= mac_tx_data_i;
     dbg_mac_tx_data_valid_i <= mac_tx_data_valid_i;
     dbg_app_rst <= app_rst; 
+    dbg_tx_size <= tx_size;
+    dbg_read_eof_data_cnt <= read_eof_data_cnt;
+    dbg_read_eof_data_ctrl_cnt <= read_eof_data_ctrl_cnt;
+    dbg_write_eof_data_cnt <= write_eof_data_cnt;
+    dbg_write_eof_data_ctrl_cnt <= write_eof_data_ctrl_cnt;
     
     debug_out(0) <= app_tx_ctrl_wrreq_latched;
     debug_out(1) <= app_tx_data_wrreq_latched;
@@ -971,24 +989,54 @@ begin
     
     
 -----------------------------------------------------------------------------------------
--- Synchronise app_rst to mac_clk 
+-- Test read EOF Counters to mac_clk 
 -----------------------------------------------------------------------------------------
 
-    sync_app_reset : process(mac_clk)
+    read_eof_count : process(mac_rst, mac_clk, payload_end_of_frame)
     begin
-        if (rising_edge(mac_clk))then
-            app_rst_z1 <= app_rst;
-            app_rst_z2 <= app_rst_z1;
+        if (mac_rst = '1') then
+            read_eof_data_cnt <= (others => '0');
+        elsif (rising_edge(mac_clk))then
+            if(payload_end_of_frame = '1') then
+               read_eof_data_cnt <= read_eof_data_cnt + '1';
+            end if;
         end if;
     end process;
+    
+-----------------------------------------------------------------------------------------
+-- Test write EOF Counters to app_clk 
+-----------------------------------------------------------------------------------------
+    
+        write_eof_count : process(app_rst, app_clk, app_tx_end_of_frame_z1)
+        begin
+            if (app_rst = '1') then
+                write_eof_data_cnt <= (others => '0');
+            elsif (rising_edge(app_clk))then
+                if(app_tx_end_of_frame_z1 = '1') then
+                   write_eof_data_cnt <= write_eof_data_cnt + '1';
+                end if;
+            end if;
+        end process;    
+        
+        write_eof_ctrl_count : process(app_rst, app_clk, app_tx_ctrl_fifo_en)
+        begin
+            if (app_rst = '1') then
+                write_eof_data_ctrl_cnt <= (others => '0');
+            elsif (rising_edge(app_clk))then
+                if(app_tx_ctrl_fifo_en = '1') then
+                   write_eof_data_ctrl_cnt <= write_eof_data_ctrl_cnt + '1';
+                end if;
+            end if;
+        end process;         
+    
 
 -----------------------------------------------------------------------------------------
 -- STATE MACHINE TO CONSTRUCT UDP/IP PACKET
 -----------------------------------------------------------------------------------------
 
-    gen_current_tx_packet_state : process(mac_rst, app_rst_z2, mac_clk)
+    gen_current_tx_packet_state : process(mac_rst, mac_clk)
     begin
-        if (mac_rst = '1' or app_rst_z2 = '1')then
+        if (mac_rst = '1')then
             mac_cpu_ack <= '0';
             tx_size <= (others => '0');
             app_tx_data_rd <= '0';
@@ -996,7 +1044,8 @@ begin
             current_tx_packet_state_z1 <= IDLE;
             mac_cpu_addr <= (others => '0');
             tx_ip_ttl <= TTL;
-            eof_flag_activate <= '0';            
+            eof_flag_activate <= '0';
+            read_eof_data_ctrl_cnt <= (others => '0');           
         elsif (rising_edge(mac_clk))then
             current_tx_packet_state_z1 <= current_tx_packet_state;
 
@@ -1013,6 +1062,7 @@ begin
                 tx_ip_ttl <= TTL;                
                 
                 if ((app_tx_ctrl_empty = '0')and(local_enable_retimed = '1')and(app_overflow_retimed = '0'))then
+                    read_eof_data_ctrl_cnt <= read_eof_data_ctrl_cnt + '1';
                     current_tx_packet_state <= READ_CTRL_FIFO_DELAY_1;
                 end if;
                 
@@ -1071,8 +1121,20 @@ begin
 
                 when GEN_PAYLOAD =>
                 if (tx_size = "00000000011")then
+                    --AI: if tx_size is misaligned by 1 clock cycle from TX Data FIFO then assert TX Data Packet Read
+                    if (payload_end_of_frame = '1') then
+                      app_tx_data_rd <= '0';
+                    else
+                      app_tx_data_rd <= '1';
+                    end if;
                     current_tx_packet_state <= GEN_PAYLOAD_FINISH_3;
                 elsif (tx_size = "00000000100")then
+                    --AI: if tx_size is misaligned by 1 clock cycle from TX Data FIFO then assert TX Data Packet Read
+                    if (payload_end_of_frame = '1') then
+                      app_tx_data_rd <= '0';
+                    else
+                      app_tx_data_rd <= '1';
+                    end if;
                     current_tx_packet_state <= GEN_PAYLOAD_FINISH_4;
                 elsif (tx_size = "00000000101")then
                     app_tx_data_rd <= '1';
@@ -1130,7 +1192,8 @@ begin
                 current_tx_packet_state <= GEN_PAYLOAD_FINISH_4;
                 eof_flag_activate <= '1';
                 app_tx_data_rd <= '0';
-            end if;                
+            end if; 
+                         
         end if;
     end process;
 
