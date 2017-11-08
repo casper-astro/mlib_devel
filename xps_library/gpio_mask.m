@@ -27,42 +27,44 @@ if ~exist(hw_sys) | ~isstruct(hw_sys)
     load_hw_routes();
 end
 
-try
-    eval(['pads = ',hw_sys,'.',io_group,';']);
-catch
+if ~strcmp(io_group, 'custom')
     try
-        eval(['pads = ',hw_sys,'.',io_group,'_p;']);
+        eval(['pads = ',hw_sys,'.',io_group,';']);
     catch
-        errordlg(['Undefined routing table for hardware system: ',hw_sys,'(',io_group,')']);
+        try
+            eval(['pads = ',hw_sys,'.',io_group,'_p;']);
+        catch
+            errordlg(['Undefined routing table for hardware system: ',hw_sys,'(',io_group,')']);
+        end
     end
-end
-
-if arith_type==1
-	real_bitwidth = 1;
-else
-	real_bitwidth = bitwidth;
-end
-
-if ~isempty(find(bit_index>=length(pads)))
-    errordlg('Gateway bit index contain values that exceeds the bitwidth');
-end
-
-if use_ddr
-    if ~reg_iob
-        errordlg('When using DDR signaling mode, "Register at IOB" option must be on');
+    
+    if arith_type==1
+    	real_bitwidth = 1;
+    else
+    	real_bitwidth = bitwidth;
     end
-	if real_bitwidth/2 > length(pads)
-	    errordlg('Gateway bitwidth is larger than the number of available pads');
-	end
-    if length(bit_index) ~= real_bitwidth/2
-        errordlg('Gateway bit index does not have half the number of elements as the I/O bitwidth');
+    
+    if ~isempty(find(bit_index>=length(pads)))
+        errordlg('Gateway bit index contain values that exceeds the bitwidth');
     end
-else
-	if real_bitwidth > length(pads)
-	    errordlg('Gateway bitwidth is larger than the number of available pads');
-	end
-    if length(bit_index) ~= real_bitwidth
-        errordlg('Gateway bit index does not have the same number of elements as the I/O bitwidth. When using bitwidths greater than one, you should specify a vector of bit indices to use.');
+    
+    if use_ddr
+        if ~reg_iob
+            errordlg('When using DDR signaling mode, "Register at IOB" option must be on');
+        end
+    	if real_bitwidth/2 > length(pads)
+    	    errordlg('Gateway bitwidth is larger than the number of available pads');
+    	end
+        if length(bit_index) ~= real_bitwidth/2
+            errordlg('Gateway bit index does not have half the number of elements as the I/O bitwidth');
+        end
+    else
+    	if real_bitwidth > length(pads)
+    	    errordlg('Gateway bitwidth is larger than the number of available pads');
+    	end
+        if length(bit_index) ~= real_bitwidth
+            errordlg('Gateway bit index does not have the same number of elements as the I/O bitwidth. When using bitwidths greater than one, you should specify a vector of bit indices to use.');
+        end
     end
 end
 
