@@ -1,6 +1,11 @@
 import logging
 logger = logging.getLogger('jasper.toolflow.constraints')
 
+# Declaring Maximum packet size for upload_to_ram in casperfpga
+# - This is
+MAX_IMAGE_CHUNK_SIZE = 1988
+
+
 class PortConstraint(object):
      '''
      A class to facilitate constructing abstracted port constraints.
