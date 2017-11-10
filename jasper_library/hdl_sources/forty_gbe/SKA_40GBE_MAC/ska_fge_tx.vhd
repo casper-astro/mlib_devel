@@ -310,6 +310,9 @@ architecture arch_ska_fge_tx of ska_fge_tx is
     
     signal write_eof_data_cnt : std_logic_vector(63 downto 0);
     signal write_eof_data_ctrl_cnt : std_logic_vector(63 downto 0);
+    
+    signal misalign_cond1_count : std_logic_vector(63 downto 0);
+    signal misalign_cond2_count : std_logic_vector(63 downto 0);
 
     signal eof_flag_activate : std_logic;     
 --    signal arp_cache_write_error_i : std_logic_vector(7 downto 0);
@@ -366,7 +369,9 @@ architecture arch_ska_fge_tx of ska_fge_tx is
     signal dbg_read_eof_data_cnt : std_logic_vector(63 downto 0); 
     signal dbg_read_eof_data_ctrl_cnt : std_logic_vector(63 downto 0);
     signal dbg_write_eof_data_cnt : std_logic_vector(63 downto 0);
-    signal dbg_write_eof_data_ctrl_cnt : std_logic_vector(63 downto 0);    
+    signal dbg_write_eof_data_ctrl_cnt : std_logic_vector(63 downto 0);
+    signal dbg_misalign_cond1_count : std_logic_vector(63 downto 0); 
+    signal dbg_misalign_cond2_count : std_logic_vector(63 downto 0);   
         
     -- Mark Debug ILA Testing
     
@@ -422,6 +427,8 @@ architecture arch_ska_fge_tx of ska_fge_tx is
     attribute MARK_DEBUG of dbg_read_eof_data_ctrl_cnt : signal is "TRUE"; 
     attribute MARK_DEBUG of dbg_write_eof_data_cnt : signal is "TRUE"; 
     attribute MARK_DEBUG of dbg_write_eof_data_ctrl_cnt : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_misalign_cond1_count : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_misalign_cond2_count : signal is "TRUE";
     
 begin
 
@@ -476,7 +483,9 @@ begin
     dbg_read_eof_data_cnt <= read_eof_data_cnt;
     dbg_read_eof_data_ctrl_cnt <= read_eof_data_ctrl_cnt;
     dbg_write_eof_data_cnt <= write_eof_data_cnt;
-    dbg_write_eof_data_ctrl_cnt <= write_eof_data_ctrl_cnt;
+    dbg_write_eof_data_ctrl_cnt <= write_eof_data_ctrl_cnt;    
+    dbg_misalign_cond1_count <= misalign_cond1_count;
+    dbg_misalign_cond2_count <= misalign_cond2_count;
     
     debug_out(0) <= app_tx_ctrl_wrreq_latched;
     debug_out(1) <= app_tx_data_wrreq_latched;
@@ -988,20 +997,6 @@ begin
     ip_checksum_1 <= ('0' & ip_checksum_0(15 downto 0)) + ("000000000000000" & ip_checksum_0(17 downto 16));
     
     
------------------------------------------------------------------------------------------
--- Test read EOF Counters to mac_clk 
------------------------------------------------------------------------------------------
-
-    read_eof_count : process(mac_rst, mac_clk, payload_end_of_frame)
-    begin
-        if (mac_rst = '1') then
-            read_eof_data_cnt <= (others => '0');
-        elsif (rising_edge(mac_clk))then
-            if(payload_end_of_frame = '1') then
-               read_eof_data_cnt <= read_eof_data_cnt + '1';
-            end if;
-        end if;
-    end process;
     
 -----------------------------------------------------------------------------------------
 -- Test write EOF Counters to app_clk 
@@ -1045,7 +1040,10 @@ begin
             mac_cpu_addr <= (others => '0');
             tx_ip_ttl <= TTL;
             eof_flag_activate <= '0';
-            read_eof_data_ctrl_cnt <= (others => '0');           
+            read_eof_data_ctrl_cnt <= (others => '0'); 
+            read_eof_data_cnt <= (others => '0'); 
+            misalign_cond1_count <= (others => '0');
+            misalign_cond2_count <= (others => '0');         
         elsif (rising_edge(mac_clk))then
             current_tx_packet_state_z1 <= current_tx_packet_state;
 
@@ -1062,7 +1060,6 @@ begin
                 tx_ip_ttl <= TTL;                
                 
                 if ((app_tx_ctrl_empty = '0')and(local_enable_retimed = '1')and(app_overflow_retimed = '0'))then
-                    read_eof_data_ctrl_cnt <= read_eof_data_ctrl_cnt + '1';
                     current_tx_packet_state <= READ_CTRL_FIFO_DELAY_1;
                 end if;
                 
@@ -1116,7 +1113,7 @@ begin
                     tx_size <= tx_size - "00000000100"; 
                     current_tx_packet_state <= GEN_PAYLOAD;
                 end if;
-                
+                read_eof_data_ctrl_cnt <= read_eof_data_ctrl_cnt + '1';
                 eof_flag_activate <= '0';
 
                 when GEN_PAYLOAD =>
@@ -1125,6 +1122,7 @@ begin
                     if (payload_end_of_frame = '1') then
                       app_tx_data_rd <= '0';
                     else
+                      misalign_cond1_count <= misalign_cond1_count + '1';
                       app_tx_data_rd <= '1';
                     end if;
                     current_tx_packet_state <= GEN_PAYLOAD_FINISH_3;
@@ -1133,6 +1131,7 @@ begin
                     if (payload_end_of_frame = '1') then
                       app_tx_data_rd <= '0';
                     else
+                      misalign_cond2_count <= misalign_cond2_count + '1';
                       app_tx_data_rd <= '1';
                     end if;
                     current_tx_packet_state <= GEN_PAYLOAD_FINISH_4;
@@ -1192,7 +1191,8 @@ begin
                 current_tx_packet_state <= GEN_PAYLOAD_FINISH_4;
                 eof_flag_activate <= '1';
                 app_tx_data_rd <= '0';
-            end if; 
+                read_eof_data_cnt <= read_eof_data_cnt + '1';
+            end if;  
                          
         end if;
     end process;
