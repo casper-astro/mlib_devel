@@ -635,7 +635,8 @@ begin
     --app_tx_data_din <= app_tx_valid_z1 & app_tx_data_z1;
     app_tx_data_din <= app_tx_end_of_frame_z1 & "000" & app_tx_valid_z1 & app_tx_data_z1;
     
-    app_tx_data_wrreq <= app_tx_any_valid and (not app_tx_data_full);
+    --AI: Deassert write when FIFO full and reset asserted
+    app_tx_data_wrreq <= app_tx_any_valid and (not app_tx_data_full) and (not app_rst);
     
     gen_app_tx_data_wrreq_latched : process(app_rst, app_clk)
     begin
@@ -661,8 +662,9 @@ begin
         overflow    => app_tx_data_overflow,
         empty       => app_tx_data_empty,
         prog_full   => app_tx_data_afull);
-
-    app_tx_data_rdreq <= app_tx_data_rd and (not app_tx_data_empty);
+    
+    --AI: Deassert read when FIFO empty and reset asserted
+    app_tx_data_rdreq <= app_tx_data_rd and (not app_tx_data_empty) and (not app_rst);
     
     payload0 <= app_tx_data_dout(63 downto 0);
     payload1 <= app_tx_data_dout(127 downto 64);
@@ -684,7 +686,8 @@ begin
     end process;
 
     -- CONTROL FIFO TO MOVE IP, PORT AND PACKET COUNT TO MAC CLOCK DOMAIN
-    app_tx_ctrl_wrreq <= app_tx_ctrl_fifo_en and (not app_tx_ctrl_full);
+    -- AI: Deassert write when FIFO full and reset asserted
+    app_tx_ctrl_wrreq <= app_tx_ctrl_fifo_en and (not app_tx_ctrl_full) and (not app_rst);
     
     app_tx_ctrl_din(31 downto 0) <= app_tx_dest_ip_z1;
     app_tx_ctrl_din(47 downto 32) <= app_tx_dest_port_z1;
@@ -717,7 +720,8 @@ begin
         empty       => app_tx_ctrl_empty,
         prog_full   => app_tx_ctrl_afull);
    
-    app_tx_ctrl_rdreq <= app_tx_ctrl_rd and (not app_tx_ctrl_empty);
+   --AI: Deassert read when FIFO empty and reset asserted
+    app_tx_ctrl_rdreq <= app_tx_ctrl_rd and (not app_tx_ctrl_empty) and (not app_rst);
 	
 	gen_app_tx_afull : process(app_clk)
 	begin
@@ -1186,7 +1190,11 @@ begin
     
             end case;
            
-            --AI: 2/11/2017: Allows read state machine to synchronise with TX Data Packet FIFO 
+            --AI: 2/11/2017: Allows read state machine to synchronise with TX Data Packet FIFO
+            --Only providing for GEN_PAYLOAD_FINISH_4 now, SKA-SA will always send 256 bits per
+            --a transaction (4 x 64 bits words) and hence, tx_size will always end at 0x4. Provision
+            --has been made for 4 data valids, but in reality all 4 data valids will be asserted at once. This
+            --could of been coded with 1 data valid.
             if (payload_end_of_frame = '1' and  eof_flag_activate = '0') then
                 current_tx_packet_state <= GEN_PAYLOAD_FINISH_4;
                 eof_flag_activate <= '1';

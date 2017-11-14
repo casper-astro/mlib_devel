@@ -997,9 +997,10 @@ begin
     packet_fifo_wr_data(261) <= rx_bad;
     packet_fifo_wr_data(262) <= rx_over;
 
+    --AI: Alway deassert FIFO write when reset is asserted
     packet_fifo_wr_en <= '1' when
     ((app_dvld_z1  = '1')and
-    (current_app_state = APP_RUN)) else '0';
+    (current_app_state = APP_RUN) and (app_rst = '0')) else '0';
     
     ska_rx_packet_fifo_0 : ska_rx_packet_fifo
     port map(
@@ -1013,8 +1014,9 @@ begin
         full        => open,
         empty       => packet_fifo_empty,
         prog_full   => packet_fifo_almost_full);
-
-    packet_fifo_rd_en <= app_rx_ack;
+        
+    --AI: Alway deassert FIFO read when reset is asserted 
+    packet_fifo_rd_en <= app_rx_ack and (not app_rst);
     
     app_rx_valid        <= packet_fifo_rd_data(259 downto 256) when (packet_fifo_empty = '0') else (others => '0');
     app_rx_end_of_frame <= packet_fifo_rd_data(260);
@@ -1023,7 +1025,8 @@ begin
     app_rx_data         <= packet_fifo_rd_data(255 downto 0);
     
     ctrl_fifo_wr_data <= app_source_port & app_source_ip;
-    ctrl_fifo_wr_en   <= '1' when ((app_dvld = '1')and(first_word = '1')and(current_app_state = APP_RUN)) else '0';
+    --AI: Alway deassert FIFO write when reset is asserted
+    ctrl_fifo_wr_en   <= '1' when ((app_dvld = '1')and(first_word = '1')and(current_app_state = APP_RUN) and (app_rst = '0')) else '0';
     txctrl_fifo_wr_data <= destination_port & destination_ip;
     --txctrl_fifo_wr_en   <= '1' when ((app_dvld = '1')and(first_word = '1')and(current_app_state = APP_RUN)) else '0';
 
@@ -1039,8 +1042,9 @@ begin
         full        => open,
         empty       => ctrl_fifo_empty,
         prog_full   => ctrl_fifo_almost_full);
-    
-    ctrl_fifo_rd_en <= app_rx_ack and  packet_fifo_rd_data(260) and packet_fifo_rd_data(256);
+   
+    --AI: Alway deassert FIFO read when reset is asserted
+    ctrl_fifo_rd_en <= app_rx_ack and  packet_fifo_rd_data(260) and packet_fifo_rd_data(256) and (not app_rst);
     
     app_rx_source_ip   <= ctrl_fifo_rd_data(31 downto 0);
     app_rx_source_port <= ctrl_fifo_rd_data(47 downto 32);

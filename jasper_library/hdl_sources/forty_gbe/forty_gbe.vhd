@@ -48,7 +48,7 @@ entity forty_gbe is
         user_clk_o : out std_logic;
         user_rst_o : out std_logic;
         hmc_rst_o : out std_logic;
-        hmc_clk_o : out std_logic;
+        hmc_clk_o : out std_logic; 
 
         FPGA_RESET_N       : in std_logic;
         FPGA_REFCLK_BUF0_P : in std_logic;
@@ -224,7 +224,8 @@ entity forty_gbe is
 
         EMCCLK_FIX : out std_logic;
         GND        : out std_logic_vector(15 downto 0);
-
+        
+        forty_gbe_rst             : in  std_logic;
         forty_gbe_tx_valid        : in  std_logic_vector(3 downto 0);
         forty_gbe_tx_end_of_frame : in  std_logic;
         forty_gbe_tx_data         : in  std_logic_vector(255 downto 0);
@@ -774,6 +775,7 @@ architecture arch_forty_gbe of forty_gbe is
     attribute ASYNC_REG of sync_emcclk_fpga_rst3: signal is "TRUE";                
     signal user_rst : std_logic;
     signal user_fpga_rst : std_logic;
+    signal user_40gbe_rst : std_logic;
     signal sys_clk : std_logic;
     signal sys_rst : std_logic; 
     signal sys_rst_i : std_logic;
@@ -2180,15 +2182,18 @@ begin
     --AI End: Added fortygbe config interface
     
     --AI: Allows 40GbE configuration using the system clock and normal 40GbE data interfacing using the user clock
-    fpga_user_sysclk_bufgmux_ctrl : BUFGMUX_CTRL
-    port map (
-        I0 => sys_clk,
-        I1 => user_clk,
-        S  => select_forty_gbe_data_sel,
-        O  => forty_gb_eth_clk);  
+    --fpga_user_sysclk_bufgmux_ctrl : BUFGMUX_CTRL
+    --port map (
+    --    I0 => sys_clk,
+    --    I1 => user_clk,
+    --    S  => select_forty_gbe_data_sel,
+    --    O  => forty_gb_eth_clk);  
         
     --AI: Allows 40GbE configuration using the system reset and normal 40GbE data interfacing using the user reset    
-    forty_gb_eth_rst <= sys_rst when (select_forty_gbe_data_sel  = '0') else user_rst; 
+    --forty_gb_eth_rst <= sys_rst when (select_forty_gbe_data_sel  = '0') else user_rst; 
+    
+    --AI: 40GbE Yellow Block Reset  or'd with user_rst
+    user_40gbe_rst <= forty_gbe_rst or user_rst;
 
     -- WISHBONE SLAVE 10 - 40GBE MAC 0
     ska_forty_gb_eth_0 : ska_forty_gb_eth
@@ -2204,7 +2209,7 @@ begin
         RX_CRC_CHK_ENABLE => RX_CRC_CHK_ENABLE)
     port map(
         clk => user_clk, --forty_gb_eth_clk,
-        rst => user_rst, --forty_gb_eth_rst,
+        rst => user_40gbe_rst,--user_rst, --forty_gb_eth_rst,
         tx_valid            => xlgmii_tx_valid,
         tx_end_of_frame     => xlgmii_tx_end_of_frame,
         tx_data             => xlgmii_tx_data,
