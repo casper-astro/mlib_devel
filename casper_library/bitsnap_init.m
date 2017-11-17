@@ -288,11 +288,6 @@ end
 
 if old_snaps == 0
     if strcmp(snap_ext_arm, 'on')
-        try
-            delete_block([blk, '/circ']);
-        catch
-            % pass
-        end
         reuse_block(blk, 'arm', 'built-in/inport', ...
             'Position', [80 300 110 315]);
         %         'Port', num2str(arm_port), ...
@@ -328,6 +323,10 @@ if old_snaps == 0
         end
         reuse_block(blk, 'circ', 'built-in/inport', ...
             'Position', [80 367 110 383]);
+        % what is its port number going to be?
+        in_ports = get_param(blk, 'PortHandles');
+        num_ports = length(in_ports.Inport);
+        set_param([blk, '/circ'], 'Port', num2str(num_ports));
         if snap_delay > 0
             circ_delay = 0;
             reuse_block(blk, 'circ_delay', 'casper_library_delays/pipeline', ...
