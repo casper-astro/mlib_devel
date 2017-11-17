@@ -69,7 +69,7 @@ end
 munge_block(blk, varargin{:});
 defaults = {'storage', 'bram', 'dram_dimm', '1', 'dram_clock', '200', ...
   'nsamples', 10, 'data_width', '32',  'offset', 'on', ...
-  'circap', 'on', 'value', 'off', 'ext_arm', 'off', ...
+  'circap', 'on', 'value', 'off', 'ext_arm', 'off', 'ext_circ', 'off', ...
   'provide_outputs', 'off', 'use_dsp48', 'on'};
 if (same_state(blk, 'defaults', defaults, varargin{:})) && (redraw == false)
     return
@@ -92,6 +92,11 @@ catch
     ext_arm = 'off';
     provide_outputs = 'off';
 end
+try
+    ext_circ = get_var('ext_circ', 'defaults', defaults, varargin{:});
+catch
+    ext_circ = 'off';
+end
 
 % set attribute format string (block annotation)
 annotation = sprintf('%i wide, %i deep\ndebugID: %s', data_width, 2^nsamples, num2str(unique_id));
@@ -112,7 +117,11 @@ circular_capture = strcmp(circap, 'on');
 offset = strcmp(offset, 'on');
 extra_val = strcmp(value, 'on');
 ext_arm = strcmp(ext_arm, 'on');
+ext_circ = strcmp(ext_circ, 'on');
 provide_outputs = strcmp(provide_outputs, 'on');
+if (ext_circ == 1) && (circular_capture == 0)
+    circular_capture = 1;
+end
 
 delete_lines(blk);
 
@@ -182,25 +191,39 @@ end
 if ext_arm
     port_count = port_count + 1;
     reuse_block(blk, 'arm', 'built-in/inport', ...
-        'Position', [250 327 280 343], 'Port', num2str(port_count));
+        'Position', [110 627 140 643], 'Port', num2str(port_count));
 else
     reuse_block(blk, 'arm', 'xbsIndex_r4/Constant', ...
         'arith_type', 'Boolean', 'const', '0', 'explicit_period', 'on', ...
-        'period', '1', 'Position', [250 327 280 343]);
+        'period', '1', 'Position', [110 627 140 643]);
 end
 add_line(blk, 'arm/1', 'arm_or/2');
 reuse_block(blk, 'arm_out', 'built-in/outport', ...
-    'Position', [335 528 365 542], 'Port', '1');
+    'Position', [335 623 365 637], 'Port', '1');
 add_line(blk, 'arm_or/1', 'arm_out/1');
+
+if ext_circ
+    port_count = port_count + 1;
+    reuse_block(blk, 'circ', 'built-in/inport', ...
+        'Position', [110 567 140 583], 'Port', num2str(port_count));
+else
+    reuse_block(blk, 'circ', 'xbsIndex_r4/Constant', ...
+        'arith_type', 'Boolean', 'const', '0', 'explicit_period', 'on', ...
+        'period', '1', 'Position', [110 567 140 583]);
+end
+add_line(blk, 'circ/1', 'circ_or/2');
 
 % ctrl reg
 reuse_block(blk, 'ctrl', 'xps_library/software_register', ...
     'io_dir', 'From Processor', 'arith_types', '0', ...
-    'sim_port', 'off', 'Position', [115 235 215 265]);
+    'sim_port', 'off', 'Position', [-35 450 65 480]);
 add_line(blk, 'ctrl/1', 'ctrl_split/1');
 add_line(blk, 'ctrl_split/1', 'ctrl_combine/1');
-add_line(blk, 'ctrl_split/2', 'arm_or/1');
-add_line(blk, 'arm_or/1', 'ctrl_combine/2');
+add_line(blk, 'ctrl_split/2', 'circ_or/1');
+add_line(blk, 'ctrl_split/3', 'ctrl_combine/3');
+add_line(blk, 'ctrl_split/4', 'arm_or/1');
+add_line(blk, 'circ_or/1', 'ctrl_combine/2');
+add_line(blk, 'arm_or/1', 'ctrl_combine/4');
 
 % connecting lines from ports and registers
 
@@ -209,12 +232,12 @@ if offset
     clog('delay block', 'snapshot_init_detailed_trace');
 
     % offset register
-    reuse_block(blk, 'const1', 'built-in/Constant', 'Value', '10', ...
-        'Position', [180 320 200 340]);
+%     reuse_block(blk, 'const1', 'built-in/Constant', 'Value', '10', ...
+%         'Position', [180 320 200 340]);
     reuse_block(blk, 'trig_offset', 'xps_library/software_register', ...
         'io_dir', 'From Processor', 'arith_types', '0', ...
-        'Position', [215 314 315 346]);
-    add_line(blk, 'const1/1', 'trig_offset/1');
+        'sim_port', 'off', 'Position', [-35 314 65 346]);
+%     add_line(blk, 'const1/1', 'trig_offset/1');
 
     % block doing delay
     reuse_block(blk, 'delay', 'casper_library_scopes/snapshot/delay', ...
@@ -232,7 +255,7 @@ else
     % don't really have anything to do if no offset 
 end
 
-% stop_gen block
+% stop_gen blocktrig_offset
 
 reuse_block(blk, 'g_tr_en_cnt', 'built-in/Terminator', ...
     'Position', [1030 367 1045 383]);
@@ -257,7 +280,7 @@ if circular_capture == 1
     add_line(blk, [src,'/5'], 'stop_gen/5'); % stop
     add_line(blk, [src,'/6'], 'stop_gen/6'); % init
 
-    add_line(blk, 'ctrl_combine/1', 'stop_gen/7'); % circular_capture bit
+    add_line(blk, 'ctrl_combine/1', 'stop_gen/7'); % control reg
 
     % tr_en_cnt register 
     reuse_block(blk, 'tr_en_cnt', 'xps_library/software_register', ...
