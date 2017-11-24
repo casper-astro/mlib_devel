@@ -183,7 +183,8 @@ function draw_from()
     gwin_name = [strrep(blk, '/', '_'), '_user_data_out'];
     reuse_block(blk, gwin_name, 'xbsIndex_r4/Gateway In', ...
         'Position', [x_start + (x_size * 4 * 2), y_pos_row, x_start + (x_size * 4 * 2) + (x_size/2), y_pos_row + y_size], ...
-        'arith_type', 'Unsigned', 'n_bits', '32', 'bin_pt', '0', 'period', get_param(blk, 'sample_period'));
+        'arith_type', 'Unsigned', 'n_bits', '32', 'bin_pt', '0', 'period', get_param(blk, 'sample_period'), ...
+        'hdl_port', 'on');
     reuse_block(blk, 'io_delay', 'xbsIndex_r4/Delay', 'latency', get_param(blk, 'io_delay'), 'reg_retiming', 'on', ...
             'Position', [x_start + (x_size * 4.5 * 2), y_pos_row, x_start + (x_size * 4.5 * 2) + (x_size/2), y_pos_row + y_size]);
     add_line(blk, [gwin_name, '/1'], 'io_delay/1', 'autorouting', 'on');
@@ -242,7 +243,12 @@ function draw_from()
             add_line(blk, [convert_name2, '/1'], [gain_name, '/1'], 'autorouting', 'on');
             add_line(blk, [gain_name, '/1'], ['sim_add/', num2str(pindex)], 'autorouting', 'on');
         else
-            add_line(blk, [in_name, '/1'], [gwin_name, '/1'], 'autorouting', 'on');
+            % add_line(blk, [in_name, '/1'], [gwin_name, '/1'], 'autorouting', 'on');
+            add_line(blk, [in_name, '/1'], [convert_name1, '/1'], 'autorouting', 'on');
+            add_line(blk, [convert_name1, '/1'], [convert_name2, '/1'], 'autorouting', 'on');
+            add_line(blk, [convert_name2, '/1'], [gain_name, '/1'], 'autorouting', 'on');
+            add_line(blk, [gain_name, '/1'], [gwin_name, '/1'], 'autorouting', 'on');
+            
         end
         reuse_block(blk, slice_name, 'xbsIndex_r4/Slice', ...
             'Position', [x_start + (x_size * 5 * 2), y_pos_row, x_start + (x_size * 5 * 2) + (x_size/2), y_pos_row + y_size], ...
