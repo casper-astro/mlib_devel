@@ -12,13 +12,14 @@ import yellow_blocks.yellow_block as yellow_block
 import verilog
 from constraints import PortConstraint, ClockConstraint, GenClockConstraint, \
     ClockGroupConstraint, InputDelayConstraint, OutputDelayConstraint, \
-    FalsePathConstraint, MultiCycleConstraint, RawConstraint
+    FalsePathConstraint, MultiCycleConstraint, RawConstraint, MAX_IMAGE_CHUNK_SIZE
 import castro
 import helpers
 import yaml
 import glob
 import time
 import hashlib  # Added to calculate md5hash of .bin bitstream and add it to the .fpg header
+import struct
 
 try:
     from katversion import get_version as kat_get_version
@@ -833,13 +834,26 @@ class ToolflowBackend(object):
         with open(extended_info, 'r') as fh:
             md5_header = hashlib.md5(fh.read()).hexdigest()
         with open(filename_bin, 'rb') as fh:
-            md5_bitstream = hashlib.md5(fh.read()).hexdigest()
-        # add the md5sums and ?quit to the extended info file
+            bitstream = fh.read()
+            # 1) Calculate MD5 Checksum on binary data
+            md5_bitstream = hashlib.md5(bitstream).hexdigest()
+
+            # 2) Calculate 'FlashWriteChecksum' to be compared to
+            #    SpartanChecksum when upload_to_ram()
+            #   - Need to give it the chunk size being used in upload_to_ram
+            #   - This alters how the SPARTAN calculates the checksum
+            flash_write_checksum = self.calculate_checksum_using_bitstream(
+                bitstream, packet_size=MAX_IMAGE_CHUNK_SIZE)
+
+        # add the md5sums, checksum and ?quit to the extended info file
         with open(extended_info, 'a') as fh:
             # Line to write must follow general format, as per Paul
             line = '77777\t77777\tmd5_header\t' + md5_header + '\n'
             fh.write("?meta\t" + line)
             line = '77777\t77777\tmd5_bitstream\t' + md5_bitstream + '\n'
+            fh.write("?meta\t" + line)
+            line = '77777\t77777\tflash_write_checksum\t' + \
+                   str(flash_write_checksum) + '_' + str(MAX_IMAGE_CHUNK_SIZE) + '\n'
             fh.write("?meta\t" + line)
             fh.write('?quit\n')
 
@@ -860,6 +874,36 @@ class ToolflowBackend(object):
             self.compile_dir, self.output_dir, filename_fpg)
         os.system(mkfpg_cmd4)
 
+    @staticmethod
+    def calculate_checksum_using_bitstream(bitstream, packet_size=8192):
+        """
+        Summing up all the words in the input bitstream, and returning a
+        'Checksum' - Assuming that the bitstream HAS NOT been padded yet
+        :param bitstream: The actual bitstream of the file in question
+        :param packet_size: max size of image packets that we pad to
+        :return: checksum
+        """
+
+        size = len(bitstream)
+
+        flash_write_checksum = 0x00
+
+        for i in range(0, size, 2):
+            # This is just getting a substring, need to convert to hex
+            two_bytes = bitstream[i:i + 2]
+            one_word = struct.unpack('!H', two_bytes)[0]
+            flash_write_checksum += one_word
+
+        if (size % packet_size) != 0:
+            # padding required
+            num_padding_bytes = packet_size - (size % packet_size)
+            for i in range(num_padding_bytes / 2):
+                flash_write_checksum += 0xffff
+
+        # Last thing to do, make sure it is a 16-bit word
+        flash_write_checksum &= 0xffff
+
+        return flash_write_checksum
 
 class SimulinkFrontend(ToolflowFrontend):
     """

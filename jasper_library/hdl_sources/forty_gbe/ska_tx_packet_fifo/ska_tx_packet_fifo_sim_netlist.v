@@ -1,10 +1,10 @@
 // Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2016.2 (lin64) Build 1577090 Thu Jun  2 16:32:35 MDT 2016
-// Date        : Mon Nov  7 14:28:04 2016
+// Date        : Wed Nov  1 16:14:35 2017
 // Host        : adam-cm running 64-bit Ubuntu 14.04.5 LTS
 // Command     : write_verilog -force -mode funcsim
-//               /home/aisaacson/work/git_work/ska_sa/projects/skarab_bsp_firmware/firmware/FRM123701U1R1/Vivado/IP/ska_tx_packet_fifo/ska_tx_packet_fifo_sim_netlist.v
+//               /home/aisaacson/work/git_work/ska_sa/projects/mlib_devel/jasper_library/test_models/s_c856m32k/myproj/myproj.srcs/sources_1/ip/ska_tx_packet_fifo/ska_tx_packet_fifo_sim_netlist.v
 // Design      : ska_tx_packet_fifo
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -29,17 +29,17 @@ module ska_tx_packet_fifo
   input rst;
   (* x_interface_info = "xilinx.com:signal:clock:1.0 write_clk CLK" *) input wr_clk;
   (* x_interface_info = "xilinx.com:signal:clock:1.0 read_clk CLK" *) input rd_clk;
-  (* x_interface_info = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_DATA" *) input [259:0]din;
+  (* x_interface_info = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_DATA" *) input [263:0]din;
   (* x_interface_info = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_EN" *) input wr_en;
   (* x_interface_info = "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_EN" *) input rd_en;
-  (* x_interface_info = "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_DATA" *) output [259:0]dout;
+  (* x_interface_info = "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_DATA" *) output [263:0]dout;
   (* x_interface_info = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE FULL" *) output full;
   output overflow;
   (* x_interface_info = "xilinx.com:interface:fifo_read:1.0 FIFO_READ EMPTY" *) output empty;
   output prog_full;
 
-  wire [259:0]din;
-  wire [259:0]dout;
+  wire [263:0]din;
+  wire [263:0]dout;
   wire empty;
   wire full;
   wire overflow;
@@ -200,7 +200,7 @@ module ska_tx_packet_fifo
   (* C_COUNT_TYPE = "0" *) 
   (* C_DATA_COUNT_WIDTH = "9" *) 
   (* C_DEFAULT_VALUE = "BlankString" *) 
-  (* C_DIN_WIDTH = "260" *) 
+  (* C_DIN_WIDTH = "264" *) 
   (* C_DIN_WIDTH_AXIS = "1" *) 
   (* C_DIN_WIDTH_RACH = "32" *) 
   (* C_DIN_WIDTH_RDCH = "64" *) 
@@ -208,7 +208,7 @@ module ska_tx_packet_fifo
   (* C_DIN_WIDTH_WDCH = "64" *) 
   (* C_DIN_WIDTH_WRCH = "2" *) 
   (* C_DOUT_RST_VAL = "0" *) 
-  (* C_DOUT_WIDTH = "260" *) 
+  (* C_DOUT_WIDTH = "264" *) 
   (* C_ENABLE_RLOCS = "0" *) 
   (* C_ENABLE_RST_SYNC = "1" *) 
   (* C_EN_SAFETY_CKT = "0" *) 
@@ -306,14 +306,14 @@ module ska_tx_packet_fifo
   (* C_PROG_EMPTY_TYPE_WACH = "0" *) 
   (* C_PROG_EMPTY_TYPE_WDCH = "0" *) 
   (* C_PROG_EMPTY_TYPE_WRCH = "0" *) 
-  (* C_PROG_FULL_THRESH_ASSERT_VAL = "504" *) 
+  (* C_PROG_FULL_THRESH_ASSERT_VAL = "511" *) 
   (* C_PROG_FULL_THRESH_ASSERT_VAL_AXIS = "1023" *) 
   (* C_PROG_FULL_THRESH_ASSERT_VAL_RACH = "1023" *) 
   (* C_PROG_FULL_THRESH_ASSERT_VAL_RDCH = "1023" *) 
   (* C_PROG_FULL_THRESH_ASSERT_VAL_WACH = "1023" *) 
   (* C_PROG_FULL_THRESH_ASSERT_VAL_WDCH = "1023" *) 
   (* C_PROG_FULL_THRESH_ASSERT_VAL_WRCH = "1023" *) 
-  (* C_PROG_FULL_THRESH_NEGATE_VAL = "503" *) 
+  (* C_PROG_FULL_THRESH_NEGATE_VAL = "510" *) 
   (* C_PROG_FULL_TYPE = "1" *) 
   (* C_PROG_FULL_TYPE_AXIS = "0" *) 
   (* C_PROG_FULL_TYPE_RACH = "0" *) 
@@ -619,7 +619,7 @@ module ska_tx_packet_fifo_blk_mem_gen_generic_cstr
     \gc0.count_d1_reg[8] ,
     \gic0.gc0.count_d2_reg[8] ,
     din);
-  output [259:0]D;
+  output [263:0]D;
   input rd_clk;
   input wr_clk;
   input tmp_ram_rd_en;
@@ -627,12 +627,12 @@ module ska_tx_packet_fifo_blk_mem_gen_generic_cstr
   input [0:0]Q;
   input [8:0]\gc0.count_d1_reg[8] ;
   input [8:0]\gic0.gc0.count_d2_reg[8] ;
-  input [259:0]din;
+  input [263:0]din;
 
-  wire [259:0]D;
+  wire [263:0]D;
   wire [0:0]E;
   wire [0:0]Q;
-  wire [259:0]din;
+  wire [263:0]din;
   wire [8:0]\gc0.count_d1_reg[8] ;
   wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire rd_clk;
@@ -670,10 +670,10 @@ module ska_tx_packet_fifo_blk_mem_gen_generic_cstr
         .tmp_ram_rd_en(tmp_ram_rd_en),
         .wr_clk(wr_clk));
   ska_tx_packet_fifo_blk_mem_gen_prim_width__parameterized2 \ramloop[3].ram.r 
-       (.D(D[259:216]),
+       (.D(D[263:216]),
         .E(E),
         .Q(Q),
-        .din(din[259:216]),
+        .din(din[263:216]),
         .\gc0.count_d1_reg[8] (\gc0.count_d1_reg[8] ),
         .\gic0.gc0.count_d2_reg[8] (\gic0.gc0.count_d2_reg[8] ),
         .rd_clk(rd_clk),
@@ -821,7 +821,7 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_width__parameterized2
     \gc0.count_d1_reg[8] ,
     \gic0.gc0.count_d2_reg[8] ,
     din);
-  output [43:0]D;
+  output [47:0]D;
   input rd_clk;
   input wr_clk;
   input tmp_ram_rd_en;
@@ -829,12 +829,12 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_width__parameterized2
   input [0:0]Q;
   input [8:0]\gc0.count_d1_reg[8] ;
   input [8:0]\gic0.gc0.count_d2_reg[8] ;
-  input [43:0]din;
+  input [47:0]din;
 
-  wire [43:0]D;
+  wire [47:0]D;
   wire [0:0]E;
   wire [0:0]Q;
-  wire [43:0]din;
+  wire [47:0]din;
   wire [8:0]\gc0.count_d1_reg[8] ;
   wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire rd_clk;
@@ -1614,7 +1614,7 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized2
     \gc0.count_d1_reg[8] ,
     \gic0.gc0.count_d2_reg[8] ,
     din);
-  output [43:0]D;
+  output [47:0]D;
   input rd_clk;
   input wr_clk;
   input tmp_ram_rd_en;
@@ -1622,27 +1622,23 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized2
   input [0:0]Q;
   input [8:0]\gc0.count_d1_reg[8] ;
   input [8:0]\gic0.gc0.count_d2_reg[8] ;
-  input [43:0]din;
+  input [47:0]din;
 
-  wire [43:0]D;
+  wire [47:0]D;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_21 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_22 ;
-  wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_23 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_29 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_30 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_37 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_38 ;
-  wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_39 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_45 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_46 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_53 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_54 ;
-  wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_55 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_61 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_62 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_69 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_70 ;
-  wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_71 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_77 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_78 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_85 ;
@@ -1655,7 +1651,7 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized2
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_92 ;
   wire [0:0]E;
   wire [0:0]Q;
-  wire [43:0]din;
+  wire [47:0]din;
   wire [8:0]\gc0.count_d1_reg[8] ;
   wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire rd_clk;
@@ -1856,12 +1852,12 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized2
         .CLKARDCLK(rd_clk),
         .CLKBWRCLK(wr_clk),
         .DBITERR(\NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_DBITERR_UNCONNECTED ),
-        .DIADI({1'b0,1'b0,1'b0,din[21:17],1'b0,1'b0,din[16:11],1'b0,1'b0,1'b0,din[10:6],1'b0,1'b0,din[5:0]}),
-        .DIBDI({1'b0,1'b0,1'b0,din[43:39],1'b0,1'b0,din[38:33],1'b0,1'b0,1'b0,din[32:28],1'b0,1'b0,din[27:22]}),
+        .DIADI({1'b0,1'b0,din[23:18],1'b0,1'b0,din[17:12],1'b0,1'b0,din[11:6],1'b0,1'b0,din[5:0]}),
+        .DIBDI({1'b0,1'b0,din[47:42],1'b0,1'b0,din[41:36],1'b0,1'b0,din[35:30],1'b0,1'b0,din[29:24]}),
         .DIPADIP({1'b0,1'b0,1'b0,1'b0}),
         .DIPBDIP({1'b0,1'b0,1'b0,1'b0}),
-        .DOADO({\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_21 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_22 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_23 ,D[21:17],\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_29 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_30 ,D[16:11],\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_37 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_38 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_39 ,D[10:6],\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_45 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_46 ,D[5:0]}),
-        .DOBDO({\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_53 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_54 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_55 ,D[43:39],\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_61 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_62 ,D[38:33],\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_69 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_70 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_71 ,D[32:28],\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_77 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_78 ,D[27:22]}),
+        .DOADO({\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_21 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_22 ,D[23:18],\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_29 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_30 ,D[17:12],\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_37 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_38 ,D[11:6],\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_45 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_46 ,D[5:0]}),
+        .DOBDO({\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_53 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_54 ,D[47:42],\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_61 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_62 ,D[41:36],\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_69 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_70 ,D[35:30],\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_77 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_78 ,D[29:24]}),
         .DOPADOP({\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_85 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_86 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_87 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_88 }),
         .DOPBDOP({\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_89 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_90 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_91 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_92 }),
         .ECCPARITY(\NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_ECCPARITY_UNCONNECTED [7:0]),
@@ -1892,7 +1888,7 @@ module ska_tx_packet_fifo_blk_mem_gen_top
     \gc0.count_d1_reg[8] ,
     \gic0.gc0.count_d2_reg[8] ,
     din);
-  output [259:0]D;
+  output [263:0]D;
   input rd_clk;
   input wr_clk;
   input tmp_ram_rd_en;
@@ -1900,12 +1896,12 @@ module ska_tx_packet_fifo_blk_mem_gen_top
   input [0:0]Q;
   input [8:0]\gc0.count_d1_reg[8] ;
   input [8:0]\gic0.gc0.count_d2_reg[8] ;
-  input [259:0]din;
+  input [263:0]din;
 
-  wire [259:0]D;
+  wire [263:0]D;
   wire [0:0]E;
   wire [0:0]Q;
-  wire [259:0]din;
+  wire [263:0]din;
   wire [8:0]\gc0.count_d1_reg[8] ;
   wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire rd_clk;
@@ -1935,7 +1931,7 @@ module ska_tx_packet_fifo_blk_mem_gen_v8_3_3
     \gc0.count_d1_reg[8] ,
     \gic0.gc0.count_d2_reg[8] ,
     din);
-  output [259:0]D;
+  output [263:0]D;
   input rd_clk;
   input wr_clk;
   input tmp_ram_rd_en;
@@ -1943,12 +1939,12 @@ module ska_tx_packet_fifo_blk_mem_gen_v8_3_3
   input [0:0]Q;
   input [8:0]\gc0.count_d1_reg[8] ;
   input [8:0]\gic0.gc0.count_d2_reg[8] ;
-  input [259:0]din;
+  input [263:0]din;
 
-  wire [259:0]D;
+  wire [263:0]D;
   wire [0:0]E;
   wire [0:0]Q;
-  wire [259:0]din;
+  wire [263:0]din;
   wire [8:0]\gc0.count_d1_reg[8] ;
   wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire rd_clk;
@@ -1978,7 +1974,7 @@ module ska_tx_packet_fifo_blk_mem_gen_v8_3_3_synth
     \gc0.count_d1_reg[8] ,
     \gic0.gc0.count_d2_reg[8] ,
     din);
-  output [259:0]D;
+  output [263:0]D;
   input rd_clk;
   input wr_clk;
   input tmp_ram_rd_en;
@@ -1986,12 +1982,12 @@ module ska_tx_packet_fifo_blk_mem_gen_v8_3_3_synth
   input [0:0]Q;
   input [8:0]\gc0.count_d1_reg[8] ;
   input [8:0]\gic0.gc0.count_d2_reg[8] ;
-  input [259:0]din;
+  input [263:0]din;
 
-  wire [259:0]D;
+  wire [263:0]D;
   wire [0:0]E;
   wire [0:0]Q;
-  wire [259:0]din;
+  wire [263:0]din;
   wire [8:0]\gc0.count_d1_reg[8] ;
   wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire rd_clk;
@@ -2810,7 +2806,7 @@ module ska_tx_packet_fifo_fifo_generator_ramfifo
     din,
     rst,
     rd_en);
-  output [259:0]dout;
+  output [263:0]dout;
   output empty;
   output full;
   output overflow;
@@ -2818,15 +2814,15 @@ module ska_tx_packet_fifo_fifo_generator_ramfifo
   input wr_en;
   input rd_clk;
   input wr_clk;
-  input [259:0]din;
+  input [263:0]din;
   input rst;
   input rd_en;
 
   wire RD_RST;
   wire RST;
   wire WR_RST;
-  wire [259:0]din;
-  wire [259:0]dout;
+  wire [263:0]din;
+  wire [263:0]dout;
   wire empty;
   wire full;
   wire \gntv_or_sync_fifo.gcx.clkx_n_0 ;
@@ -2933,7 +2929,7 @@ module ska_tx_packet_fifo_fifo_generator_top
     din,
     rst,
     rd_en);
-  output [259:0]dout;
+  output [263:0]dout;
   output empty;
   output full;
   output overflow;
@@ -2941,12 +2937,12 @@ module ska_tx_packet_fifo_fifo_generator_top
   input wr_en;
   input rd_clk;
   input wr_clk;
-  input [259:0]din;
+  input [263:0]din;
   input rst;
   input rd_en;
 
-  wire [259:0]din;
-  wire [259:0]dout;
+  wire [263:0]din;
+  wire [263:0]dout;
   wire empty;
   wire full;
   wire overflow;
@@ -2980,10 +2976,10 @@ endmodule
 (* C_AXI_DATA_WIDTH = "64" *) (* C_AXI_ID_WIDTH = "1" *) (* C_AXI_LEN_WIDTH = "8" *) 
 (* C_AXI_LOCK_WIDTH = "1" *) (* C_AXI_RUSER_WIDTH = "1" *) (* C_AXI_TYPE = "1" *) 
 (* C_AXI_WUSER_WIDTH = "1" *) (* C_COMMON_CLOCK = "0" *) (* C_COUNT_TYPE = "0" *) 
-(* C_DATA_COUNT_WIDTH = "9" *) (* C_DEFAULT_VALUE = "BlankString" *) (* C_DIN_WIDTH = "260" *) 
+(* C_DATA_COUNT_WIDTH = "9" *) (* C_DEFAULT_VALUE = "BlankString" *) (* C_DIN_WIDTH = "264" *) 
 (* C_DIN_WIDTH_AXIS = "1" *) (* C_DIN_WIDTH_RACH = "32" *) (* C_DIN_WIDTH_RDCH = "64" *) 
 (* C_DIN_WIDTH_WACH = "1" *) (* C_DIN_WIDTH_WDCH = "64" *) (* C_DIN_WIDTH_WRCH = "2" *) 
-(* C_DOUT_RST_VAL = "0" *) (* C_DOUT_WIDTH = "260" *) (* C_ENABLE_RLOCS = "0" *) 
+(* C_DOUT_RST_VAL = "0" *) (* C_DOUT_WIDTH = "264" *) (* C_ENABLE_RLOCS = "0" *) 
 (* C_ENABLE_RST_SYNC = "1" *) (* C_EN_SAFETY_CKT = "0" *) (* C_ERROR_INJECTION_TYPE = "0" *) 
 (* C_ERROR_INJECTION_TYPE_AXIS = "0" *) (* C_ERROR_INJECTION_TYPE_RACH = "0" *) (* C_ERROR_INJECTION_TYPE_RDCH = "0" *) 
 (* C_ERROR_INJECTION_TYPE_WACH = "0" *) (* C_ERROR_INJECTION_TYPE_WDCH = "0" *) (* C_ERROR_INJECTION_TYPE_WRCH = "0" *) 
@@ -3016,9 +3012,9 @@ endmodule
 (* C_PROG_EMPTY_THRESH_ASSERT_VAL_WRCH = "1022" *) (* C_PROG_EMPTY_THRESH_NEGATE_VAL = "5" *) (* C_PROG_EMPTY_TYPE = "0" *) 
 (* C_PROG_EMPTY_TYPE_AXIS = "0" *) (* C_PROG_EMPTY_TYPE_RACH = "0" *) (* C_PROG_EMPTY_TYPE_RDCH = "0" *) 
 (* C_PROG_EMPTY_TYPE_WACH = "0" *) (* C_PROG_EMPTY_TYPE_WDCH = "0" *) (* C_PROG_EMPTY_TYPE_WRCH = "0" *) 
-(* C_PROG_FULL_THRESH_ASSERT_VAL = "504" *) (* C_PROG_FULL_THRESH_ASSERT_VAL_AXIS = "1023" *) (* C_PROG_FULL_THRESH_ASSERT_VAL_RACH = "1023" *) 
+(* C_PROG_FULL_THRESH_ASSERT_VAL = "511" *) (* C_PROG_FULL_THRESH_ASSERT_VAL_AXIS = "1023" *) (* C_PROG_FULL_THRESH_ASSERT_VAL_RACH = "1023" *) 
 (* C_PROG_FULL_THRESH_ASSERT_VAL_RDCH = "1023" *) (* C_PROG_FULL_THRESH_ASSERT_VAL_WACH = "1023" *) (* C_PROG_FULL_THRESH_ASSERT_VAL_WDCH = "1023" *) 
-(* C_PROG_FULL_THRESH_ASSERT_VAL_WRCH = "1023" *) (* C_PROG_FULL_THRESH_NEGATE_VAL = "503" *) (* C_PROG_FULL_TYPE = "1" *) 
+(* C_PROG_FULL_THRESH_ASSERT_VAL_WRCH = "1023" *) (* C_PROG_FULL_THRESH_NEGATE_VAL = "510" *) (* C_PROG_FULL_TYPE = "1" *) 
 (* C_PROG_FULL_TYPE_AXIS = "0" *) (* C_PROG_FULL_TYPE_RACH = "0" *) (* C_PROG_FULL_TYPE_RDCH = "0" *) 
 (* C_PROG_FULL_TYPE_WACH = "0" *) (* C_PROG_FULL_TYPE_WDCH = "0" *) (* C_PROG_FULL_TYPE_WRCH = "0" *) 
 (* C_RACH_TYPE = "0" *) (* C_RDCH_TYPE = "0" *) (* C_RD_DATA_COUNT_WIDTH = "9" *) 
@@ -3280,7 +3276,7 @@ module ska_tx_packet_fifo_fifo_generator_v13_1_1
   input wr_rst;
   input rd_clk;
   input rd_rst;
-  input [259:0]din;
+  input [263:0]din;
   input wr_en;
   input rd_en;
   input [8:0]prog_empty_thresh;
@@ -3293,7 +3289,7 @@ module ska_tx_packet_fifo_fifo_generator_v13_1_1
   input injectdbiterr;
   input injectsbiterr;
   input sleep;
-  output [259:0]dout;
+  output [263:0]dout;
   output full;
   output almost_full;
   output wr_ack;
@@ -3505,8 +3501,8 @@ module ska_tx_packet_fifo_fifo_generator_v13_1_1
 
   wire \<const0> ;
   wire \<const1> ;
-  wire [259:0]din;
-  wire [259:0]dout;
+  wire [263:0]din;
+  wire [263:0]dout;
   wire empty;
   wire full;
   wire overflow;
@@ -4068,7 +4064,7 @@ module ska_tx_packet_fifo_fifo_generator_v13_1_1_synth
     din,
     rst,
     rd_en);
-  output [259:0]dout;
+  output [263:0]dout;
   output empty;
   output full;
   output overflow;
@@ -4076,12 +4072,12 @@ module ska_tx_packet_fifo_fifo_generator_v13_1_1_synth
   input wr_en;
   input rd_clk;
   input wr_clk;
-  input [259:0]din;
+  input [263:0]din;
   input rst;
   input rd_en;
 
-  wire [259:0]din;
-  wire [259:0]dout;
+  wire [263:0]din;
+  wire [263:0]dout;
   wire empty;
   wire full;
   wire overflow;
@@ -4118,7 +4114,7 @@ module ska_tx_packet_fifo_memory
     \gic0.gc0.count_d2_reg[8] ,
     din,
     \gpregsm1.curr_fwft_state_reg[1] );
-  output [259:0]dout;
+  output [263:0]dout;
   input rd_clk;
   input wr_clk;
   input tmp_ram_rd_en;
@@ -4126,14 +4122,14 @@ module ska_tx_packet_fifo_memory
   input [0:0]Q;
   input [8:0]\gc0.count_d1_reg[8] ;
   input [8:0]\gic0.gc0.count_d2_reg[8] ;
-  input [259:0]din;
+  input [263:0]din;
   input [0:0]\gpregsm1.curr_fwft_state_reg[1] ;
 
   wire [0:0]E;
   wire [0:0]Q;
-  wire [259:0]din;
-  wire [259:0]dout;
-  wire [259:0]doutb;
+  wire [263:0]din;
+  wire [263:0]dout;
+  wire [263:0]doutb;
   wire [8:0]\gc0.count_d1_reg[8] ;
   wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire [0:0]\gpregsm1.curr_fwft_state_reg[1] ;
@@ -5577,6 +5573,38 @@ module ska_tx_packet_fifo_memory
         .R(Q));
   FDRE #(
     .INIT(1'b0)) 
+    \goreg_bm.dout_i_reg[260] 
+       (.C(rd_clk),
+        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .D(doutb[260]),
+        .Q(dout[260]),
+        .R(Q));
+  FDRE #(
+    .INIT(1'b0)) 
+    \goreg_bm.dout_i_reg[261] 
+       (.C(rd_clk),
+        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .D(doutb[261]),
+        .Q(dout[261]),
+        .R(Q));
+  FDRE #(
+    .INIT(1'b0)) 
+    \goreg_bm.dout_i_reg[262] 
+       (.C(rd_clk),
+        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .D(doutb[262]),
+        .Q(dout[262]),
+        .R(Q));
+  FDRE #(
+    .INIT(1'b0)) 
+    \goreg_bm.dout_i_reg[263] 
+       (.C(rd_clk),
+        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .D(doutb[263]),
+        .Q(dout[263]),
+        .R(Q));
+  FDRE #(
+    .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[26] 
        (.C(rd_clk),
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
@@ -6510,7 +6538,7 @@ module ska_tx_packet_fifo_rd_fwft
     \gpregsm1.curr_fwft_state_reg[1]_0 ,
     tmp_ram_rd_en,
     E,
-    \goreg_bm.dout_i_reg[259] ,
+    \goreg_bm.dout_i_reg[263] ,
     rd_clk,
     Q,
     rd_en,
@@ -6519,7 +6547,7 @@ module ska_tx_packet_fifo_rd_fwft
   output [1:0]\gpregsm1.curr_fwft_state_reg[1]_0 ;
   output tmp_ram_rd_en;
   output [0:0]E;
-  output [0:0]\goreg_bm.dout_i_reg[259] ;
+  output [0:0]\goreg_bm.dout_i_reg[263] ;
   input rd_clk;
   input [1:0]Q;
   input rd_en;
@@ -6530,7 +6558,7 @@ module ska_tx_packet_fifo_rd_fwft
   wire empty;
   wire empty_fwft_fb;
   wire empty_fwft_i0;
-  wire [0:0]\goreg_bm.dout_i_reg[259] ;
+  wire [0:0]\goreg_bm.dout_i_reg[263] ;
   wire [1:0]\gpregsm1.curr_fwft_state_reg[1]_0 ;
   wire [1:0]next_fwft_state;
   wire p_2_out;
@@ -6586,11 +6614,11 @@ module ska_tx_packet_fifo_rd_fwft
   (* SOFT_HLUTNM = "soft_lutpair9" *) 
   LUT3 #(
     .INIT(8'hA2)) 
-    \goreg_bm.dout_i[259]_i_1 
+    \goreg_bm.dout_i[263]_i_1 
        (.I0(\gpregsm1.curr_fwft_state_reg[1]_0 [1]),
         .I1(\gpregsm1.curr_fwft_state_reg[1]_0 [0]),
         .I2(rd_en),
-        .O(\goreg_bm.dout_i_reg[259] ));
+        .O(\goreg_bm.dout_i_reg[263] ));
   LUT3 #(
     .INIT(8'hBA)) 
     \gpregsm1.curr_fwft_state[0]_i_1 
@@ -6674,7 +6702,7 @@ module ska_tx_packet_fifo_rd_logic
        (.E(p_7_out),
         .Q(Q),
         .empty(empty),
-        .\goreg_bm.dout_i_reg[259] (E),
+        .\goreg_bm.dout_i_reg[263] (E),
         .\gpregsm1.curr_fwft_state_reg[1]_0 ({\gr1.gr1_int.rfwft_n_1 ,curr_fwft_state}),
         .p_2_out(p_2_out),
         .rd_clk(rd_clk),
@@ -8271,16 +8299,17 @@ module ska_tx_packet_fifo_wr_pf_as
   wire [0:0]E;
   wire [7:0]Q;
   wire [3:0]S;
-  wire [8:1]diff_pntr;
+  wire [8:0]diff_pntr;
   wire [3:0]\gic0.gc0.count_d1_reg[7] ;
   wire [0:0]\gic0.gc0.count_d1_reg[8] ;
   wire \gpf1.prog_full_i_i_1_n_0 ;
   wire \gpf1.prog_full_i_i_2_n_0 ;
+  wire \gpf1.prog_full_i_i_3_n_0 ;
   wire \grstd1.grst_full.grst_f.rst_d3_reg ;
   wire [0:0]\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[1] ;
   wire out;
   wire p_1_out;
-  wire [9:2]plusOp;
+  wire [9:1]plusOp;
   wire plusOp_carry__0_n_0;
   wire plusOp_carry__0_n_1;
   wire plusOp_carry__0_n_2;
@@ -8291,10 +8320,17 @@ module ska_tx_packet_fifo_wr_pf_as
   wire plusOp_carry_n_3;
   wire prog_full;
   wire wr_clk;
-  wire [0:0]NLW_plusOp_carry_O_UNCONNECTED;
   wire [3:0]NLW_plusOp_carry__1_CO_UNCONNECTED;
   wire [3:1]NLW_plusOp_carry__1_O_UNCONNECTED;
 
+  FDCE #(
+    .INIT(1'b0)) 
+    \gdiff.diff_pntr_pad_reg[1] 
+       (.C(wr_clk),
+        .CE(1'b1),
+        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[1] ),
+        .D(plusOp[1]),
+        .Q(diff_pntr[0]));
   FDCE #(
     .INIT(1'b0)) 
     \gdiff.diff_pntr_pad_reg[2] 
@@ -8359,26 +8395,32 @@ module ska_tx_packet_fifo_wr_pf_as
         .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[1] ),
         .D(plusOp[9]),
         .Q(diff_pntr[8]));
-  LUT6 #(
-    .INIT(64'h00FF000800000008)) 
+  LUT5 #(
+    .INIT(32'h0F010001)) 
     \gpf1.prog_full_i_i_1 
-       (.I0(diff_pntr[8]),
-        .I1(diff_pntr[7]),
-        .I2(\gpf1.prog_full_i_i_2_n_0 ),
-        .I3(\grstd1.grst_full.grst_f.rst_d3_reg ),
-        .I4(p_1_out),
-        .I5(prog_full),
+       (.I0(\gpf1.prog_full_i_i_2_n_0 ),
+        .I1(\gpf1.prog_full_i_i_3_n_0 ),
+        .I2(\grstd1.grst_full.grst_f.rst_d3_reg ),
+        .I3(p_1_out),
+        .I4(prog_full),
         .O(\gpf1.prog_full_i_i_1_n_0 ));
-  LUT6 #(
-    .INIT(64'h777F7F7FFFFFFFFF)) 
+  LUT5 #(
+    .INIT(32'h777FFFFF)) 
     \gpf1.prog_full_i_i_2 
-       (.I0(diff_pntr[4]),
-        .I1(diff_pntr[5]),
-        .I2(diff_pntr[3]),
-        .I3(diff_pntr[2]),
-        .I4(diff_pntr[1]),
-        .I5(diff_pntr[6]),
+       (.I0(diff_pntr[2]),
+        .I1(diff_pntr[3]),
+        .I2(diff_pntr[0]),
+        .I3(diff_pntr[1]),
+        .I4(diff_pntr[6]),
         .O(\gpf1.prog_full_i_i_2_n_0 ));
+  LUT4 #(
+    .INIT(16'h7FFF)) 
+    \gpf1.prog_full_i_i_3 
+       (.I0(diff_pntr[7]),
+        .I1(diff_pntr[8]),
+        .I2(diff_pntr[4]),
+        .I3(diff_pntr[5]),
+        .O(\gpf1.prog_full_i_i_3_n_0 ));
   FDPE #(
     .INIT(1'b1)) 
     \gpf1.prog_full_i_reg 
@@ -8392,7 +8434,7 @@ module ska_tx_packet_fifo_wr_pf_as
         .CO({plusOp_carry_n_0,plusOp_carry_n_1,plusOp_carry_n_2,plusOp_carry_n_3}),
         .CYINIT(E),
         .DI(Q[3:0]),
-        .O({plusOp[4:2],NLW_plusOp_carry_O_UNCONNECTED[0]}),
+        .O(plusOp[4:1]),
         .S(S));
   CARRY4 plusOp_carry__0
        (.CI(plusOp_carry_n_0),
