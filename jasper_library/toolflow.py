@@ -304,9 +304,9 @@ class Toolflow(object):
             self.const_files.append(os.getenv('HDL_ROOT') + '/%s/%s' % (
                 self.plat.name, source))
         if os.path.exists(self.topfile):
-            self.top = verilog.VerilogModule(name='top', topfile=self.topfile)
+            self.top = verilog.VerilogModule(name='top', topfile=self.topfile, compile_dir=self.compile_dir)
         else:
-            self.top = verilog.VerilogModule(name='top')
+            self.top = verilog.VerilogModule(name='top', compile_dir=self.compile_dir)
 
     def gen_periph_objs(self):
         """
@@ -1076,6 +1076,7 @@ class VivadoBackend(ToolflowBackend):
         # for source in plat.sources:
         #  self.add_source(os.getenv('HDL_ROOT')+'/'+source)
         #  self.add_source(self.compile_dir+'/top.v')
+        self.add_source(self.compile_dir+'/wbs_arbiter.v', self.plat)
 
     def add_library(self, path):
         """
