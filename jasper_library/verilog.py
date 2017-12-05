@@ -471,8 +471,8 @@ class VerilogModule(object):
         wbs_parent_arbiter += 'endmodule'
         
         fh_new = open("%s/wbs_arbiter.v" %self.compile_dir, 'w')
-        import IPython
-        IPython.embed()
+        #import IPython
+        #IPython.embed()
         fh_new.write(wbs_parent_arbiter)
         fh_new.close()
 

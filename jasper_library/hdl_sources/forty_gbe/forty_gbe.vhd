@@ -727,6 +727,28 @@ architecture arch_forty_gbe of forty_gbe is
             vp_in           : in std_logic;
             vn_in           : in std_logic);
     end component;    
+       
+    component cross_clock_fifo_wb_out_73x16
+    port (
+        rst             : in std_logic;
+        wr_clk          : in std_logic;
+        rd_clk          : in std_logic;
+        din             : in std_logic_vector(72 downto 0);
+        wr_en           : in std_logic;
+        rd_en           : in std_logic;
+        dout            : out std_logic_vector(72 downto 0);
+        full            : out std_logic;
+        empty           : out std_logic);
+    end component; 
+        
+   type T_WB_DSP_WR_STATE is (
+     WB_DSP_WR_IDLE,
+     WB_DSP_WR_STROBE_CHECK,
+     WB_DSP_WR_FIFO_WR_EN_1,
+     WB_DSP_WR_FIFO_WR_EN_2,
+     WB_DSP_WR_FIFO_WR_EN_3,
+     WB_DSP_WR_FIFO_WR_EN_4,     
+     WB_DSP_WR_FIFO_WR_DIS);   
 
     signal fpga_reset : std_logic;
     signal gmii_fpga_rst : std_logic;
@@ -741,6 +763,8 @@ architecture arch_forty_gbe of forty_gbe is
 
     signal user_clk : std_logic;
     signal user_clk_mmcm : std_logic;
+    signal wb_dsp_clk_mmcm : std_logic;
+    signal wb_dsp_clk : std_logic;
     --Reset Synchroniser and user reset signals
     signal sync_sys_fpga_rst : std_logic;
     signal sync_sys_fpga_rst2 : std_logic;
@@ -768,12 +792,19 @@ architecture arch_forty_gbe of forty_gbe is
     attribute ASYNC_REG of sync_qsfp_fpga_rst2: signal is "TRUE";
     attribute ASYNC_REG of sync_qsfp_fpga_rst3: signal is "TRUE";     
     signal sync_emcclk_fpga_rst : std_logic;
-    signal sync_emcclk_fpga_rst2 : std_logic;
+    signal sync_emcclk_fpga_rst2 : std_logic;       
     signal sync_emcclk_fpga_rst3 : std_logic;    
     attribute ASYNC_REG of sync_emcclk_fpga_rst: signal is "TRUE";
     attribute ASYNC_REG of sync_emcclk_fpga_rst2: signal is "TRUE";
-    attribute ASYNC_REG of sync_emcclk_fpga_rst3: signal is "TRUE";                
+    attribute ASYNC_REG of sync_emcclk_fpga_rst3: signal is "TRUE"; 
+    signal sync_wb_dsp_rst : std_logic;
+    signal sync_wb_dsp_rst2 : std_logic;
+    signal sync_wb_dsp_rst3 : std_logic;    
+    attribute ASYNC_REG of sync_wb_dsp_rst: signal is "TRUE";
+    attribute ASYNC_REG of sync_wb_dsp_rst2: signal is "TRUE";
+    attribute ASYNC_REG of sync_wb_dsp_rst3: signal is "TRUE";        
     signal user_rst : std_logic;
+    signal wb_dsp_rst : std_logic;
     signal user_fpga_rst : std_logic;
     signal user_40gbe_rst : std_logic;
     signal sys_clk : std_logic;
@@ -1175,6 +1206,28 @@ architecture arch_forty_gbe of forty_gbe is
     signal shmc_mezz2_scl_in : std_logic;
     signal shmc_mezz2_sda_in : std_logic;
     
+    --Wishbone DSP FIFO Signals
+    --Output to DSP
+    signal wb_cross_clock_out_din : std_logic_vector(72 downto 0);
+    signal wb_cross_clock_out_wrreq : std_logic;
+    signal wb_cross_clock_out_rdreq : std_logic;
+    signal wb_cross_clock_out_dout : std_logic_vector(72 downto 0);
+    signal wb_cross_clock_out_full : std_logic;
+    signal wb_cross_clock_out_empty : std_logic;
+    
+    --Input from DSP
+    signal wb_data_in : std_logic_vector(31 downto 0);
+    signal wb_ack_in : std_logic;
+    signal wb_ack_in_z1 : std_logic;
+    signal wb_ack_in_z2 : std_logic;
+    signal wb_sync_ack_in : std_logic;
+    signal wb_sync_data_in : std_logic_vector(31 downto 0);
+    signal wb_dsp_wait_count : std_logic_vector(7 downto 0);
+    
+    
+    --Wishbone Write State Machine
+    signal wb_dsp_wr_state : T_WB_DSP_WR_STATE;
+    
 begin
 
     EMCCLK_FIX <= EMCCLK;
@@ -1270,7 +1323,7 @@ begin
         -- CLKOUT0_DIVIDE - CLKOUT6_DIVIDE: Divide amount for each CLKOUT (1-128)
         CLKOUT0_DIVIDE_F => DIVIDE,      -- Divide amount for CLKOUT0 (1.000-128.000).
         CLKOUT1_DIVIDE   => 5,
-        CLKOUT2_DIVIDE   => 5,
+        CLKOUT2_DIVIDE   => 16,          -- AI: Try a clock frequency of 70.3125MHz (156.25MHz * 36/16/5),
         DIVCLK_DIVIDE    => DIVCLK,      -- Master division value (1-106)
         REF_JITTER1      => 0.0,         -- Reference input jitter in UI (0.000-0.999).
         STARTUP_WAIT     => FALSE        -- Delays DONE until MMCM is locked (FALSE, TRUE)
@@ -1278,7 +1331,7 @@ begin
     port map (
         CLKOUT0   => user_clk_mmcm,
         --CLKOUT1   => sys_clk_mmcm,
-        --CLKOUT2   => wb_clk_mmcm,
+        CLKOUT2   => wb_dsp_clk_mmcm,
         CLKFBOUT  => CLKFB,  -- Feedback clock output
         --LOCKED    => LOCKED,
         CLKIN1    => refclk_1, -- Main clock input
@@ -1292,6 +1345,12 @@ begin
         I => user_clk_mmcm, -- Clock input
         O => user_clk       -- Clock output
     );
+    
+    wb_dsp_clk_BUFG_inst : BUFG
+    port map (
+        I => wb_dsp_clk_mmcm, -- Clock input
+        O => wb_dsp_clk       -- Clock output
+    );    
 
     sys_clk    <= refclk_0;
     user_clk_o <= user_clk;
@@ -1347,7 +1406,16 @@ begin
             sync_emcclk_fpga_rst2 <= sync_emcclk_fpga_rst;
             sync_emcclk_fpga_rst <= fpga_reset;
         end if;
-    end process pFpgaResetEmcclkSynchroniser;    
+    end process pFpgaResetEmcclkSynchroniser;  
+    
+    pDspWishboneResetSynchroniser: process(wb_dsp_clk)
+    begin
+        if (rising_edge(wb_dsp_clk) ) then         
+            sync_wb_dsp_rst3 <= sync_wb_dsp_rst2;
+            sync_wb_dsp_rst2 <= sync_wb_dsp_rst;
+            sync_wb_dsp_rst <= fpga_reset;
+        end if;
+    end process pDspWishboneResetSynchroniser;    
      
     gen_sys_rst : process(sys_fpga_rst, sys_clk)
     begin
@@ -1426,7 +1494,9 @@ begin
     fpga_emcclk_rst_bufg : BUFG
         port map (
             I  => sync_emcclk_fpga_rst3,
-            O  => emcclk_fpga_rst);                                                          
+            O  => emcclk_fpga_rst); 
+                       
+    wb_dsp_rst <= sync_wb_dsp_rst3;         
 
     gen_gmii_rst : process(gmii_fpga_rst, gmii_clk)
     begin
@@ -3003,16 +3073,159 @@ begin
 -------------------------------------------------------------------------
                 
     -- WISHBONE SLAVE 14 - DSP Registers
-    WB_SLV_CLK_I_top <= sys_clk;
-    WB_SLV_RST_I_top <= sys_rst;
-    WB_SLV_DAT_I_top <= WB_SLV_DAT_I(14);
-    WB_SLV_DAT_O(14) <= WB_SLV_DAT_O_top;
-    WB_SLV_ACK_O(14) <= WB_SLV_ACK_O_top;
-    WB_SLV_ADR_I_top <= WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0);
-    WB_SLV_CYC_I_top <= WB_SLV_CYC_I(14);
-    WB_SLV_SEL_I_top <= WB_SLV_SEL_I(14);
-    WB_SLV_STB_I_top <= WB_SLV_STB_I(14);
-    WB_SLV_WE_I_top  <= WB_SLV_WE_I(14);    
+    WB_SLV_CLK_I_top <= wb_dsp_clk;--sys_clk;
+    WB_SLV_RST_I_top <= wb_dsp_rst;--sys_rst;
+    WB_SLV_DAT_I_top <= wb_cross_clock_out_dout(69 downto 38);--WB_SLV_DAT_I(14);
+    --WB_SLV_DAT_O(14) <= WB_SLV_DAT_O_top;
+    --WB_SLV_ACK_O(14) <= WB_SLV_ACK_O_top;
+    --Deconcatenate the signals from the FIFO to the wishbone interconnect
+    WB_SLV_DAT_O(14) <= wb_sync_data_in;--wb_cross_clock_in_dout(31 downto 0);
+    WB_SLV_ACK_O(14) <= wb_sync_ack_in;--wb_cross_clock_in_dout(32);    
+    WB_SLV_ADR_I_top <= wb_cross_clock_out_dout(37 downto 6);--WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0);
+    WB_SLV_CYC_I_top <= wb_cross_clock_out_dout(5);--WB_SLV_CYC_I(14);
+    WB_SLV_SEL_I_top <= wb_cross_clock_out_dout(4 downto 1);--WB_SLV_SEL_I(14);
+    WB_SLV_STB_I_top <= wb_cross_clock_out_dout(72);--WB_SLV_STB_I(14);
+    WB_SLV_WE_I_top  <= wb_cross_clock_out_dout(0);--WB_SLV_WE_I(14); 
+    
+    --Wishbone signals to the DSP
+    cross_clock_fifo_wb_out_73x16_dsp : cross_clock_fifo_wb_out_73x16
+    port map(
+        rst             => sys_rst,
+        wr_clk          => sys_clk,
+        rd_clk          => wb_dsp_clk, 
+        din             => wb_cross_clock_out_din,
+        wr_en           => wb_cross_clock_out_wrreq,
+        rd_en           => wb_cross_clock_out_rdreq,
+        dout            => wb_cross_clock_out_dout,
+        full            => wb_cross_clock_out_full,
+        empty           => wb_cross_clock_out_empty);  
+     
         
+   --WB FIFO Write State Machine (Wishbone to DSP Interface [156.25MHz to 70.3125MHz)
+   --The Strobe, Write Enable and Cyclic signals are asserted for a long duration and
+   -- so this state machine ensures that the arbiter will see three clock cycle write asserted 
+   --strobes and write enabled and one clock cycle read asserted strobes with write disabled.   
+    fifo_wb_write_to_dsp_state_machine : process(sys_rst, sys_clk)
+    begin
+        if (sys_rst = '1')then
+            wb_cross_clock_out_wrreq <= '0';
+            wb_dsp_wr_state <= WB_DSP_WR_IDLE;
+            wb_cross_clock_out_din <= (others => '0');
+            wb_dsp_wait_count <= (others => '0');
+        elsif (rising_edge(sys_clk))then
+            case wb_dsp_wr_state is    
+                when WB_DSP_WR_IDLE =>
+                  wb_dsp_wait_count <= (others => '0');
+                  wb_dsp_wr_state <= WB_DSP_WR_STROBE_CHECK;
+                  wb_cross_clock_out_wrreq <= '0';
+                  wb_cross_clock_out_din <= "000" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & '0' & WB_SLV_SEL_I(14) & '0';                                                 
+                when WB_DSP_WR_STROBE_CHECK =>
+                                    
+                  --Check for strobe and write enable (write operation)
+                  if (WB_SLV_STB_I(14) = '1' and WB_SLV_WE_I(14) = '1')then
+                      wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_EN_1;
+                      wb_cross_clock_out_din <= "100" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '1';   
+                      wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);
+                  --Check for strobe and write deasserted (read operation)    
+                  elsif (WB_SLV_STB_I(14) = '1' and  WB_SLV_WE_I(14) = '0') then
+                      wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_EN_3;
+                      wb_cross_clock_out_din <= "100" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '0';   
+                      wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);                  
+                  else
+                      wb_dsp_wr_state <= WB_DSP_WR_STROBE_CHECK;                  
+                      wb_cross_clock_out_din <= "000" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '0';
+                      wb_cross_clock_out_wrreq <= '0';
+                  end if;
+                --enable write for two clock cycles to ensure wishbone write is successful  
+                when WB_DSP_WR_FIFO_WR_EN_1 =>
+                  
+                  wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_EN_2;
+                  wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);
+                  wb_cross_clock_out_din <= "100" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '1';                           
+
+                --enable write for three clock cycles to ensure wishbone write is successful  
+                when WB_DSP_WR_FIFO_WR_EN_2 =>
+                  
+                  wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_EN_3;
+                  wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);
+                  wb_cross_clock_out_din <= "100" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '1';                           
+
+                --write in next cycle to ensure strobe and values have cleared, except cyc signal                
+                when WB_DSP_WR_FIFO_WR_EN_3 =>
+
+                  wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_EN_4;
+                  wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);
+                  wb_cross_clock_out_din <= "000" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '0';
+                --write in next cycle to ensure all strobe and values have cleared, including cyc signal                
+                when WB_DSP_WR_FIFO_WR_EN_4 =>
+                 
+                  wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_DIS;
+                  wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);
+                  wb_cross_clock_out_din <= "000" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & '0' & WB_SLV_SEL_I(14) & '0';
+
+                --stop writing and allow slower clock to read out
+                --wait a few clock cycles to allow Strobe to deassert               
+                when WB_DSP_WR_FIFO_WR_DIS =>
+                
+                  wb_dsp_wait_count <= wb_dsp_wait_count + '1';
+                  --Wait in this state until the strobe signal has deasserted (about 80 clock cycles should be fine)
+                  if (wb_dsp_wait_count >= x"50") then
+                     wb_dsp_wr_state <= WB_DSP_WR_STROBE_CHECK;
+                     wb_dsp_wait_count <= (others => '0');
+                  else
+                     wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_DIS;
+                  end if;   
+                  wb_cross_clock_out_wrreq <= '0';
+                  wb_cross_clock_out_din <= "000" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & '0' & WB_SLV_SEL_I(14) & '0';
+                  
+                when others =>
+                  wb_dsp_wr_state <= WB_DSP_WR_IDLE;
+            end case;
+        end if;
+    end process;   
+   
+    --Start reading out of the wishbone FIFO (wishbone to DSP interface [156.25MHz to 70.3125MHz]) when FIFO is not empty   
+    wb_cross_clock_out_rdreq <= '1' when (wb_cross_clock_out_empty = '0') else '0';
+    
+    --Wishbone signals from the DSP
+    
+    --This process only allows valid data to be latched through
+    --creates a static bus signal for the synchroniser function below
+    read_wb_dsp_data : process(wb_dsp_rst, wb_dsp_clk)
+    begin
+        if (wb_dsp_rst = '1')then
+            wb_data_in <= (others => '0');
+            wb_ack_in <= '0';
+        elsif (rising_edge(wb_dsp_clk))then
+            --if valid data
+            if (WB_SLV_ACK_O_top = '1')then
+                wb_data_in <= WB_SLV_DAT_O_top;
+                wb_ack_in <= '1';
+            else
+                wb_ack_in <= '0';                
+            end if;   
+        end if;
+    end process; 
+    
+    -- This function performs clock domain crossing synchronisation
+    -- on a static bus signal
+    wb_read_synchroniser: process(sys_clk, sys_rst, wb_ack_in)
+    begin
+        if ( sys_rst = '1' ) then
+            wb_ack_in_z1 <= '0';
+            wb_ack_in_z2 <= '0';
+            wb_sync_data_in <= (others => '0');
+            wb_sync_ack_in <= '0';
+        elsif ( rising_edge(sys_clk) ) then
+            wb_ack_in_z2 <= wb_ack_in_z1;
+            wb_ack_in_z1 <= wb_ack_in;
+            if (wb_ack_in_z2 = '1') then
+                wb_sync_data_in <= wb_data_in;
+                wb_sync_ack_in <= '1';
+            else
+                wb_sync_ack_in <= '0';                    
+            end if;    
+        end if;
+    end process;       
 
 end arch_forty_gbe;
