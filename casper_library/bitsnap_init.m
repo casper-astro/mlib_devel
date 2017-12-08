@@ -50,13 +50,18 @@ snap_use_dsp48 =    get_param(blk, 'snap_use_dsp48');
 snap_delay =        eval(get_param(blk, 'snap_delay'));
 try
     old_snaps = 0;
-    snap_ext_arm =      get_param(blk, 'snap_ext_arm');
+    snap_ext_arm = get_param(blk, 'snap_ext_arm');
+    snap_ext_circ = get_param(blk, 'snap_ext_circ');
     snap_provide_outputs = 'off';
 catch
     warning('Using old bitsnap %s, consider updating it from the library.', blk);
     old_snaps = 1;
     snap_ext_arm = 'off';
+    snap_ext_circ = 'off';
     snap_provide_outputs = 'off';
+end
+if strcmp(snap_ext_circ, 'on')
+    snap_circap = 'on';
 end
 
 blktype = 2;
@@ -98,6 +103,7 @@ end
 % force an update if it's an old snapblock
 try
     get_param([blk, '/ss'], 'ext_arm');
+    get_param([blk, '/ss'], 'ext_circ');
     ssports = get_param([blk, '/ss'], 'Ports');
     if ssports(2) == 0
         oldsnap = 1;
@@ -124,6 +130,7 @@ reuse_block(blk, 'ss', 'casper_library_scopes/snapshot', ...
     'circap', snap_circap, ...
     'value', snap_value, ...
     'ext_arm', snap_ext_arm, ...
+    'ext_circ', snap_ext_circ, ...
     'provide_outputs', snap_provide_outputs, ...
     'use_dsp48', snap_use_dsp48, ...
     'Position', [700 71 790 239]);
@@ -302,6 +309,35 @@ if old_snaps == 0
             add_line(blk, 'arm/1', ['ss/', num2str(arm_port)]);
         end
     end
+    
+    if strcmp(snap_ext_circ, 'on')
+        circ_port = 4;
+        if strcmp(snap_circap, 'on')
+            circ_port = circ_port + 1;
+        end
+        if strcmp(snap_value, 'on')
+            circ_port = circ_port + 1;
+        end
+        if strcmp(snap_ext_arm, 'on')
+            circ_port = circ_port + 1;
+        end
+        reuse_block(blk, 'circ', 'built-in/inport', ...
+            'Position', [80 367 110 383]);
+        % what is its port number going to be?
+        in_ports = get_param(blk, 'PortHandles');
+        num_ports = length(in_ports.Inport);
+        set_param([blk, '/circ'], 'Port', num2str(num_ports));
+        if snap_delay > 0
+            circ_delay = 0;
+            reuse_block(blk, 'circ_delay', 'casper_library_delays/pipeline', ...
+                'latency', num2str(circ_delay), 'Position', [130 367 160 383]);
+            add_line(blk, 'circ/1', 'circ_delay/1');
+            add_line(blk, 'circ_delay/1', ['ss/', num2str(circ_port)]);
+        else
+            add_line(blk, 'circ/1', ['ss/', num2str(circ_port)]);
+        end
+    end
+    
     if strcmp(snap_provide_outputs, 'on')
         reuse_block(blk, 'out_data', 'built-in/outport', ...
             'Port', '1', 'Position', [770 160 800 175]);

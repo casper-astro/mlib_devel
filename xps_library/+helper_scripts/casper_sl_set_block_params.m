@@ -25,5 +25,17 @@ end
 for ctr = 1 : length(masknames) - 1
     set_param(gcb, masknames{ctr}, maskvals{ctr});
 end
+
+% and set the size
+try
+    block_size_x = evalin('base', 'block_size_x');
+    block_size_y = evalin('base', 'block_size_y');
+    blkpos = get_param(gcb, 'Position');
+    new_pos = sprintf('[%i %i %i %i]', blkpos(1), blkpos(2), blkpos(1) + block_size_x, blkpos(2) + block_size_y);
+    set_param(gcb, 'Position', new_pos);
+catch
+    % error('block_size_x and block_size_y must exist before you call this function! Did you get_block_size?')
+end
+
 end
 % end
