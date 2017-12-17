@@ -63,8 +63,8 @@ function bus_dual_port_ram_init(blk, varargin)
   concat_w = 30; concat_d = 30;
 
   maxy = 2^15; %Simulink limit
-  maxa = 2^17; %Xilinx max bram size
-%  maxa = 2^8; %Xilinx max bram size
+  maxa = 2^17; %Xilinx max bram address width
+%  maxa = 2^8; %Xilinx max bram size - for simulation
 
   n_bits                    = get_var('n_bits', 'defaults', defaults, varargin{:});
   bin_pts                   = get_var('bin_pts', 'defaults', defaults, varargin{:});
