@@ -66,6 +66,12 @@ if (strcmp(xsg_hw_sys,'ROACH'))
   borph_info.mode = 3;
   b = set(b,'borph_info',borph_info);
 end
+if (strcmp(xsg_hw_sys,'ROACH2'))
+  borph_info.size = 2^20;
+  borph_info.mode = 3;
+  b = set(b,'borph_info',borph_info);
+  b = set(b, 'opb0_devices', 2); %sniffer and controller
+end
 
 
 % misc ports

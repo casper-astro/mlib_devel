@@ -242,21 +242,8 @@ function [result, revision, dirty] = get_revision_info(system_os, rev_sys, dir, 
           result = 0;
         end
 
-        % determine if dirty. If file, must not appear, if whole repository, must be clean
-        if isempty(file), search = 'grep "nothing to commit (working directory clean)"';
-        else, search = ['grep ',file,' | grep modified'];
-        end
-        dirty = 1;
-        [s, r] = system(['cd ',dir,'; git status |', search]);
-        clog(['cd ',dir,'; git status | ', search], 'rcs_init_debug');
-        clog([num2str(s),' : ',r], 'rcs_init_debug');
-        % failed to find modified string
-        if ~isempty(file) && s == 1 && isempty(r), 
-          dirty = 0;
-        % git succeeded and found nothing to commit
-        elseif isempty(file) && s == 0,
-          dirty = 0;
-        end        
+        % determine if dirty. If file, must not appear as being modified, if whole repository, must be clean
+        dirty = system(['git diff-index --quiet HEAD -- ', file]);
       else
         disp(['rcs_init: failure using ''cd ',dir,'; git log -n 1 --abbrev-commit ',file,' | grep commit'' in Linux']);
         clog(['rcs_init: failure using ''cd ',dir,'; git log -n 1 --abbrev-commit ',file,' | grep commit'' in Linux'], 'error');

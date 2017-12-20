@@ -1,0 +1,95 @@
+name: snap2
+manufacturer: Xilinx
+fpga: xcku115-flvf1924-2-e
+backend_target: vivado
+sources: []
+constraints: []
+provides:
+  - qsfp0
+  - qsfp1
+  - qsfp2
+  - qsfp3
+  - sys_clk
+  - sys_clk90
+  - sys_clk180
+  - sys_clk270
+pins:
+  sys_clk_p:
+    loc: AR21
+    #iostd: LVDS
+    iostd: DIFF_HSTL_I_18
+  sys_clk_n:
+    loc: AT20
+    iostd: LVDS
+  miso:
+    loc: AK26
+    iostd: LVCMOS18
+  mosi:
+    loc: AJ25
+    iostd: LVCMOS18
+  sclk:
+    loc: AK25
+    iostd: LVCMOS18
+  cs_n:
+    loc: AP25
+    iostd: LVCMOS18
+  led:
+    iostd: LVCMOS18
+    loc:
+      - AR25
+      - BA24
+      - BC26
+      - BC27
+  mgt_tx_p:
+    iostd: DIFF_HSTL_I_18
+    loc: 
+      - AW25
+  mgt_tx_n:
+    iostd: DIFF_HSTL_I_18
+    loc:
+      - AW26
+  mgt_rx_p:
+    iostd: DIFF_HSTL_I_18
+    loc:
+      - AU26
+  mgt_rx_n:
+    iostd: DIFF_HSTL_I_18
+    loc:
+      - AU27
+  eth_clk_125_p:
+    #iostd: DIFF_HSTL_I_18
+    iostd: LVDS_25
+    loc: AT25
+  eth_clk_125_n:
+    #iostd: DIFF_HSTL_I_18
+    iostd: LVDS_25
+    loc: AU25
+  usb_tx:
+    loc: AK26
+    iostd: LVCMOS18
+  usb_cts:
+    loc: AJ25
+    iostd: LVCMOS18
+  usb_rts:
+    loc: AK25
+    iostd: LVCMOS18
+  usb_rx:
+    loc: AP25
+    iostd: LVCMOS18
+  phy_rst_n:
+    loc: AL19
+    iostd: LVCMOS18
+  spi_flash_data:
+    iostd: LVCMOS18
+    loc:
+      - AJ9
+      - AH9
+      - AG10
+      - AG9
+  spi_flash_clk:
+    iostd: LVCMOS18
+    loc: AD10
+  spi_flash_csn:
+    iostd: LVCMOS18
+    loc: AF9
+

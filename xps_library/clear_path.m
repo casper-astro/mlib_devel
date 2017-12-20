@@ -20,7 +20,7 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function result = clear_path(str);
+function result = clear_path(str,os_slash);
 
 j = 1;
 result='';
@@ -31,8 +31,8 @@ for i = 1:length(str)
         result = result;
     elseif (c==34) | (c==42) | (c==60) | (c==62) |(c==63) | (c==124) % don't include invalid windows characters
         result = result;
-    elseif c == 47 % convert POSIX '/' to Windows '\'
-        result(j) = '\';
+    elseif c == 47 % convert POSIX '/' to Windows '\' if necessary
+        result(j) = os_slash;
         j = j + 1;
     else
         result(j) = str(i);

@@ -24,11 +24,11 @@ function tengbe_v2_mask(blk)
 
 cursys = blk;
 
-%set_param(cursys, 'LinkStatus', 'inactive');
+set_param(cursys, 'LinkStatus', 'inactive');
 
 % rename gateways
 gateway_ins = find_system(cursys, 'searchdepth', 1, 'FollowLinks', 'on', 'lookundermasks', 'all', 'masktype', 'Xilinx Gateway In Block');
-for i = 1 : length(gateway_ins),
+for i = 1 : length(gateway_ins)
     gw = gateway_ins{i};
     if regexp(get_param(gw, 'Name'), '_tx_afull$')
         set_param(gw, 'Name', clear_name([cursys, '_tx_afull']));
@@ -42,6 +42,10 @@ for i = 1 : length(gateway_ins),
         set_param(gw, 'Name', clear_name([cursys, '_rx_source_ip']));
     elseif regexp(get_param(gw, 'Name'), '_rx_source_port$')
         set_param(gw, 'Name', clear_name([cursys, '_rx_source_port']));
+    elseif regexp(get_param(gw, 'Name'), '_rx_dest_ip$')
+        set_param(gw, 'Name', clear_name([cursys, '_rx_dest_ip']));
+    elseif regexp(get_param(gw, 'Name'), '_rx_dest_port$')
+        set_param(gw, 'Name', clear_name([cursys, '_rx_dest_port']));
     elseif regexp(get_param(gw, 'Name'), '_rx_end_of_frame$')
         set_param(gw, 'Name', clear_name([cursys, '_rx_end_of_frame']));
     elseif regexp(get_param(gw, 'Name'), '_rx_bad_frame$')
@@ -61,7 +65,7 @@ for i = 1 : length(gateway_ins),
     end
 end
 gateway_outs = find_system(cursys, 'searchdepth', 1, 'FollowLinks', 'on', 'lookundermasks', 'all', 'masktype', 'Xilinx Gateway Out Block');
-for i = 1 : length(gateway_outs),
+for i = 1 : length(gateway_outs)
     gw = gateway_outs{i};
     if regexp(get_param(gw, 'Name'), '_rst$')
         set_param(gw, 'Name', clear_name([cursys, '_rst']));
@@ -97,7 +101,7 @@ if strcmp(get_param(blk, 'txctr'), 'on') || strcmp(get_param(blk, 'txerrctr'), '
         strcmp(get_param(blk, 'txvldctr'), 'on') || strcmp(get_param(blk, 'rxctr'), 'on') || ...
         strcmp(get_param(blk, 'rxerrctr'), 'on') || strcmp(get_param(blk, 'rxofctr'), 'on') || ...
         strcmp(get_param(blk, 'rxbadctr'), 'on') || strcmp(get_param(blk, 'rxvldctr'), 'on') || ...
-        strcmp(get_param(blk, 'rxeofctr'), 'on'),
+        strcmp(get_param(blk, 'rxeofctr'), 'on')
 	% make sure the terminator and port are there
     reuse_block(cursys, 'debug_rst', 'built-in/inport', 'Port', '9', 'Position', [120   137   150   153]);
     reuse_block(cursys, 'debug_rst_goto', 'built-in/goto', 'GotoTag', 'debug_rst', 'Position', [200   135   280   150]);
@@ -113,7 +117,8 @@ function draw_counter(sys, ypos, targetname, source_tag)
     fromdbg_name = [targetname, '_fromdbg'];
     fromsrc_name = [targetname, '_fromsrc'];
     ctr_name = [targetname, '_ctr'];
-    delay_name = [targetname, '_del'];
+    delay_name1 = [targetname, '_del1'];
+    delay_name2 = [targetname, '_del2'];
     if strcmp(get_param(sys, targetname), 'on')
         reuse_block(sys, fromdbg_name, 'built-in/from', ...
             'GotoTag', 'debug_rst', ...
@@ -121,30 +126,36 @@ function draw_counter(sys, ypos, targetname, source_tag)
         reuse_block(sys, fromsrc_name, 'built-in/from', ...
             'GotoTag', source_tag, ...
             'Position', [280 ypos+30 400 ypos+42]);
-        reuse_block(sys, delay_name, 'xbsIndex_r4/Delay', ...
-            'reg_retiming', 'on', 'latency', '1', ...
+        reuse_block(sys, delay_name1, 'xbsIndex_r4/Delay', ...
+            'reg_retiming', 'on', 'latency', '2', ...
             'Position', [430 ypos 450 ypos+25]);
         reuse_block(sys, ctr_name, 'xbsIndex_r4/Counter', ...
             'arith_type', 'Unsigned', 'n_bits', debug_ctr_width, 'explicit_period', 'on', ...
             'period', '1', 'use_behavioral_HDL', 'on', 'rst', 'on', 'en', 'on', ...
             'Position', [480 ypos 530 ypos+45]);
-        reuse_block(sys, targetname, 'xps_library/software register', ...
+        reuse_block(sys, delay_name2, 'xbsIndex_r4/Delay', ...
+            'reg_retiming', 'on', 'latency', '2', ...
+            'Position', [550 ypos 570 ypos+20]);
+        reuse_block(sys, targetname, 'xps_library/software_register', ...
             'io_dir', 'To Processor', 'arith_types', '0', 'io_delay', '1', ...
             'bitwidths', debug_ctr_width, ...
-            'sim_port', 'no', 'Position', [580 ypos 630 ypos+20]);
-        try add_line(sys, [fromdbg_name, '/1'], [delay_name, '/1']); catch e, end
-        try add_line(sys, [delay_name, '/1'], [ctr_name, '/1']); catch e, end
+            'sim_port', 'no', 'Position', [600 ypos 650 ypos+20]);
+        try add_line(sys, [fromdbg_name, '/1'], [delay_name1, '/1']); catch e, end
+        try add_line(sys, [delay_name1, '/1'], [ctr_name, '/1']); catch e, end
         try add_line(sys, [fromsrc_name, '/1'], [ctr_name, '/2']); catch e, end
-        try add_line(sys, [ctr_name, '/1'], [targetname, '/1']); catch e, end
+        try add_line(sys, [ctr_name, '/1'], [delay_name2, '/1']); catch e, end
+        try add_line(sys, [delay_name2, '/1'], [targetname, '/1']); catch e, end
     else
         try delete_block_lines([sys, '/', fromdbg_name], false); catch e, end
         try delete_block_lines([sys, '/', fromsrc_name], false); catch e, end
         try delete_block_lines([sys, '/', targetname], false); catch e, end
         try delete_block_lines([sys, '/', ctr_name], false); catch e, end
-        try delete_block_lines([sys, '/', delay_name], false); catch e, end
+        try delete_block_lines([sys, '/', delay_name1], false); catch e, end
+        try delete_block_lines([sys, '/', delay_name2], false); catch e, end
         try delete_block([sys, '/', fromdbg_name]); catch e, end
         try delete_block([sys, '/', fromsrc_name]); catch e, end
-        try delete_block([sys, '/', delay_name]); catch e, end
+        try delete_block([sys, '/', delay_name1]); catch e, end
+        try delete_block([sys, '/', delay_name2]); catch e, end
         try delete_block([sys, '/', targetname]); catch e, end
         try delete_block([sys, '/', ctr_name]); catch e, end
     end
@@ -157,7 +168,9 @@ function draw_errorcounter(sys, ypos, targetname, frame_len, eof_tag, source_tag
     ctr_name = [targetname, '_ctr'];
     nobad_name = [targetname, '_nobad'];
     errchk_name = [targetname, '_errchk'];
-    delay_name = [targetname, '_del'];
+    delay_name1 = [targetname, '_del1'];
+    delay_name2 = [targetname, '_del2'];
+    
     if strcmp(get_param(sys, targetname), 'on')
         reuse_block(sys, fromdbg_name, 'built-in/from', ...
             'GotoTag', 'debug_rst', ...
@@ -174,24 +187,28 @@ function draw_errorcounter(sys, ypos, targetname, frame_len, eof_tag, source_tag
         reuse_block(sys, errchk_name, 'casper_library_communications/frame_len_checker', ...
             'frame_len', frame_len, ...
             'Position', [330, ypos, 420, ypos+45]);
-        reuse_block(sys, delay_name, 'xbsIndex_r4/Delay', ...
-            'reg_retiming', 'on', 'latency', '1', ...
+        reuse_block(sys, delay_name1, 'xbsIndex_r4/Delay', ...
+            'reg_retiming', 'on', 'latency', '2', ...
             'Position', [430 ypos 450 ypos+25]);
         reuse_block(sys, ctr_name, 'xbsIndex_r4/Counter', ...
             'arith_type', 'Unsigned', 'n_bits', debug_ctr_width, 'explicit_period', 'on', ...
             'period', '1', 'use_behavioral_HDL', 'on', 'rst', 'on', 'en', 'on', ...
             'Position', [480 ypos 530 ypos+45]);
-        reuse_block(sys, targetname, 'xps_library/software register', ...
+        reuse_block(sys, delay_name2, 'xbsIndex_r4/Delay', ...
+            'reg_retiming', 'on', 'latency', '2', ...
+            'Position', [550 ypos 570 ypos+20]);
+        reuse_block(sys, targetname, 'xps_library/software_register', ...
             'io_dir', 'To Processor', 'arith_types', '0', 'io_delay', '1', ...
             'bitwidths', debug_ctr_width, ...
-            'sim_port', 'no', 'Position', [580 ypos 630 ypos+20]);
+            'sim_port', 'no', 'Position', [600 ypos 650 ypos+20]);
         try add_line(sys, [fromsrc_name, '/1'], [errchk_name, '/1']); catch e, end
         try add_line(sys, [fromeof_name, '/1'], [errchk_name, '/2']); catch e, end
         try add_line(sys, [nobad_name, '/1'], [errchk_name, '/3']); catch e, end
-        try add_line(sys, [fromdbg_name, '/1'], [delay_name, '/1']); catch e, end
-        try add_line(sys, [delay_name, '/1'], [ctr_name, '/1']); catch e, end
+        try add_line(sys, [fromdbg_name, '/1'], [delay_name1, '/1']); catch e, end
+        try add_line(sys, [delay_name1, '/1'], [ctr_name, '/1']); catch e, end
         try add_line(sys, [errchk_name, '/1'], [ctr_name, '/2']); catch e, end
-        try add_line(sys, [ctr_name, '/1'], [targetname, '/1']); catch e, end
+        try add_line(sys, [ctr_name, '/1'], [delay_name2, '/1']); catch e, end
+        try add_line(sys, [delay_name2, '/1'], [targetname, '/1']); catch e, end
     else
         try delete_block_lines([sys, '/', fromdbg_name], false); catch e, end
         try delete_block_lines([sys, '/', fromeof_name], false); catch e, end
@@ -200,11 +217,13 @@ function draw_errorcounter(sys, ypos, targetname, frame_len, eof_tag, source_tag
         try delete_block_lines([sys, '/', nobad_name], false); catch e, end
         try delete_block_lines([sys, '/', targetname], false); catch e, end
         try delete_block_lines([sys, '/', ctr_name], false); catch e, end
-        try delete_block_lines([sys, '/', delay_name], false); catch e, end
+        try delete_block_lines([sys, '/', delay_name1], false); catch e, end
+        try delete_block_lines([sys, '/', delay_name2], false); catch e, end
         try delete_block([sys, '/', fromdbg_name]); catch e, end
         try delete_block([sys, '/', fromeof_name]); catch e, end
         try delete_block([sys, '/', fromsrc_name]); catch e, end
-        try delete_block([sys, '/', delay_name]); catch e, end
+        try delete_block([sys, '/', delay_name1]); catch e, end
+        try delete_block([sys, '/', delay_name2]); catch e, end
         try delete_block([sys, '/', errchk_name]); catch e, end
         try delete_block([sys, '/', nobad_name]); catch e, end
         try delete_block([sys, '/', targetname]); catch e, end
@@ -219,7 +238,8 @@ function draw_rxcounter(sys, ypos, targetname, eof_tag, source_tag)
     ctr_name = [targetname, '_ctr'];
     and_name = [targetname, '_and'];
     ed_name = [targetname, '_ed'];
-    delay_name = [targetname, '_del'];
+    delay_name1 = [targetname, '_del1'];
+    delay_name2 = [targetname, '_del2'];
     if strcmp(get_param(sys, targetname), 'on')
         reuse_block(sys, fromdbg_name, 'built-in/from', ...
             'GotoTag', 'debug_rst', ...
@@ -230,7 +250,7 @@ function draw_rxcounter(sys, ypos, targetname, eof_tag, source_tag)
         reuse_block(sys, fromsrc_name, 'built-in/from', ...
             'GotoTag', source_tag, ...
             'Position', [280 ypos+30 400 ypos+42]);
-        reuse_block(sys, delay_name, 'xbsIndex_r4/Delay', ...
+        reuse_block(sys, delay_name1, 'xbsIndex_r4/Delay', ...
             'reg_retiming', 'on', 'latency', '1', ...
             'Position', [430 ypos 450 ypos+25]);
         reuse_block(sys, and_name, 'xbsIndex_r4/Logical', ...
@@ -243,17 +263,21 @@ function draw_rxcounter(sys, ypos, targetname, eof_tag, source_tag)
             'arith_type', 'Unsigned', 'n_bits', debug_ctr_width, 'explicit_period', 'on', ...
             'period', '1', 'use_behavioral_HDL', 'on', 'rst', 'on', 'en', 'on', ...
             'Position', [680 ypos 730 ypos+45]);
+        reuse_block(sys, delay_name2, 'xbsIndex_r4/Delay', ...
+            'reg_retiming', 'on', 'latency', '2', ...
+            'Position', [750 ypos 770 ypos+20]);
         reuse_block(sys, targetname, 'xps_library/software_register', ...
             'io_dir', 'To Processor', 'arith_types', '0', 'io_delay', '1', ...
             'bitwidths', debug_ctr_width, ...
-            'sim_port', 'no', 'Position', [780 ypos 830 ypos+20]);
+            'sim_port', 'no', 'Position', [820 ypos 870 ypos+20]);
         try add_line(sys, [fromeof_name, '/1'], [and_name, '/1']); catch e, end
         try add_line(sys, [fromsrc_name, '/1'], [and_name, '/2']); catch e, end
         try add_line(sys, [and_name, '/1'], [ed_name, '/1']); catch e, end
-        try add_line(sys, [fromdbg_name, '/1'], [delay_name, '/1']); catch e, end
-        try add_line(sys, [delay_name, '/1'], [ctr_name, '/1']); catch e, end
+        try add_line(sys, [fromdbg_name, '/1'], [delay_name1, '/1']); catch e, end
+        try add_line(sys, [delay_name1, '/1'], [ctr_name, '/1']); catch e, end
         try add_line(sys, [ed_name, '/1'], [ctr_name, '/2']); catch e, end
-        try add_line(sys, [ctr_name, '/1'], [targetname, '/1']); catch e, end
+        try add_line(sys, [ctr_name, '/1'], [delay_name2, '/1']); catch e, end
+        try add_line(sys, [delay_name2, '/1'], [targetname, '/1']); catch e, end
     else
         try delete_block_lines([sys, '/', fromdbg_name], false); catch e, end
         try delete_block_lines([sys, '/', fromeof_name], false); catch e, end
@@ -262,11 +286,11 @@ function draw_rxcounter(sys, ypos, targetname, eof_tag, source_tag)
         try delete_block_lines([sys, '/', ed_name], false); catch e, end
         try delete_block_lines([sys, '/', targetname], false); catch e, end
         try delete_block_lines([sys, '/', ctr_name], false); catch e, end
-        try delete_block_lines([sys, '/', delay_name], false); catch e, end
+        try delete_block_lines([sys, '/', delay_name1], false); catch e, end
         try delete_block([sys, '/', fromdbg_name]); catch e, end
         try delete_block([sys, '/', fromeof_name]); catch e, end
         try delete_block([sys, '/', fromsrc_name]); catch e, end
-        try delete_block([sys, '/', delay_name]); catch e, end
+        try delete_block([sys, '/', delay_name1]); catch e, end
         try delete_block([sys, '/', and_name]); catch e, end
         try delete_block([sys, '/', ed_name]); catch e, end
         try delete_block([sys, '/', targetname]); catch e, end
@@ -323,7 +347,7 @@ draw_counter(cursys, starty, 'rxeofctr', 'grx_eof');
 % rx snapshot
 snaplen = get_param(cursys, 'rxsnaplen');
 snapname = 'rxs';
-if strcmp(snaplen, '0 - no snap') == 0,
+if strcmp(snaplen, '0 - no snap') == 0
     ypos = 981;
     
     reuse_block(cursys, 'rxs_fr0',  'built-in/from', 'GotoTag', 'grx_led_up', 'Position',       [900 ypos 1000 ypos+12]); ypos = ypos + 15;
@@ -381,7 +405,7 @@ end
 % tx snapshot
 snaplen = get_param(cursys, 'txsnaplen');
 snapname = 'txs';
-if strcmp(snaplen, '0 - no snap') == 0,
+if strcmp(snaplen, '0 - no snap') == 0
     ypos = 1302;
     reuse_block(cursys, 'txs_fr0',  'built-in/from', 'GotoTag', 'grx_led_up', 'Position',      [900 ypos 1000 ypos+12]); ypos = ypos + 15;
     reuse_block(cursys, 'txs_fr1',  'built-in/from', 'GotoTag', 'grx_led_tx', 'Position',      [900 ypos 1000 ypos+12]); ypos = ypos + 15;

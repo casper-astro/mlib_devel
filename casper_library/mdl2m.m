@@ -121,6 +121,12 @@ function mdl2m(mdl, varargin)
     fprintf(fp,'\tclose_system(''%s'', 0);\n', name);  % close system if it's open
     fprintf(fp,'\tmdl = new_system(''%s'', ''%s'');\n', name, sys_type);  %create a new system    
     fprintf(fp,'\tblk = get(mdl,''Name'');\n');                           %get the name for future use
+    fprintf(fp,'\t%% Set the EnableLBRepository property to on\n');
+    fprintf(fp,'\ttry\n');
+    fprintf(fp,'\t  set_param(mdl, ''EnableLBRepository'', ''on'');\n');
+    fprintf(fp,'\tcatch\n');
+    fprintf(fp,'\t  %% ignore\n');
+    fprintf(fp,'\tend\n');
     fprintf(fp,'\twarning on Simulink:Engine:MdlFileShadowing;\n');        
     fprintf(fp,'\n');     
   else, 

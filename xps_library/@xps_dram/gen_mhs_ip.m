@@ -58,22 +58,22 @@ switch hw_sys
      str = [str, 'END\n'];
      str = [str, '\n'];
    case 'ROACH2'
-     str = [str, 'BEGIN ddr3_clk',                      	    			'\n'];
-     str = [str, ' PARAMETER INSTANCE = ddr3_clk_inst',             			'\n'];
-     str = [str, ' PARAMETER HW_VER = 1.00.a',                      			'\n'];
-     str = [str, ' PARAMETER DRAM_FREQUENCY = ',num2str(2*clk_freq),	        	'\n'];
-     str = [str, ' PARAMETER CLKFBOUT_MULT_F = ',num2str(M),	    			'\n'];
-     str = [str, ' PARAMETER DIVCLK_DIVIDE = ', num2str(D),  	    			'\n'];
-     str = [str, ' PARAMETER CLKOUT0_DIVIDE_F = ',num2str(O),        			'\n'];
-     str = [str, ' PARAMETER CLKOUT1_DIVIDE = ',num2str(O*2), 	  	    		'\n'];
-     str = [str, ' PARAMETER CLKOUT2_DIVIDE = ',num2str(O),   	    			'\n'];
-     str = [str, ' PARAMETER PERIOD = ',num2str(1000*(1/(100))),	   		'\n'];
-     str = [str, ' BUS_INTERFACE DDR3_CLK = ddr3_clk ',             			'\n'];
-     str = [str, ' PORT clk_100 = clk_100',	                    			'\n'];
-     str = [str, ' PORT iodelay_ctrl_rdy = idelay_rdy',             			'\n'];
-     str = [str, ' PORT clk_app = ddr3_clk_app',          		        	'\n'];
-     str = [str, 'END',                                             			'\n'];
-     str = [str,                                                    			'\n'];
+     str = [str, 'BEGIN ddr3_clk', '\n'];
+     str = [str, ' PARAMETER INSTANCE         = ddr3_clk_inst',            '\n'];
+     str = [str, ' PARAMETER HW_VER           = 1.00.a',                   '\n'];
+     str = [str, ' PARAMETER DRAM_FREQUENCY   = ',num2str(2*clk_freq),	   '\n'];
+     str = [str, ' PARAMETER CLKFBOUT_MULT_F  = ',num2str(M),	    	   '\n'];
+     str = [str, ' PARAMETER DIVCLK_DIVIDE    = ', num2str(D),  	       '\n'];
+     str = [str, ' PARAMETER CLKOUT0_DIVIDE_F = ',num2str(O),        	   '\n'];
+     str = [str, ' PARAMETER CLKOUT1_DIVIDE   = ',num2str(O*2), 	  	   '\n'];
+     str = [str, ' PARAMETER CLKOUT2_DIVIDE   = ',num2str(O),   	       '\n'];
+     str = [str, ' PARAMETER PERIOD           = ',num2str(1000*(1/(100))), '\n'];
+     str = [str, ' BUS_INTERFACE DDR3_CLK     = ddr3_clk ',                '\n'];
+     str = [str, ' PORT clk_100               = clk_100',	               '\n'];
+     str = [str, ' PORT iodelay_ctrl_rdy      = idelay_rdy',               '\n'];
+     str = [str, ' PORT clk_app               = ddr3_clk_app',             '\n'];
+     str = [str, 'END',                                             	   '\n'];
+     str = [str,                                                    	   '\n'];
   otherwise % case ROACH/ROACH2*
 end % switch hw_sys
 
@@ -121,46 +121,46 @@ switch hw_sys
      str = [str, 'PORT dram_reset_n = dram_reset_n, DIR = O',                '\n'];
      str = [str, '\n'];
    case 'ROACH2'
-     str = [str, 'BEGIN ddr3_controller',                              		   '\n'];
-     str = [str, ' PARAMETER INSTANCE = ddr3_controller_inst',         		   '\n'];
-     str = [str, ' PARAMETER HW_VER = 1.00.a',                         		   '\n'];
-     str = [str, ' PARAMETER tCK = ',num2str(floor(1000*1000*(1/(clk_freq*2)))),   '\n'];
-     str = [str, ' BUS_INTERFACE DDR3_CLK = ddr3_clk',                 		   '\n'];
-     str = [str, ' BUS_INTERFACE DDR3_APP = ddr3_ctrl',				   '\n'];
-     str = [str, ' PORT clk_div2 = ddr3_clk_app',	     	        	   '\n'];
-     str = [str, ' PORT ddr3_dq = ddr3_dq',                            		   '\n'];
-     str = [str, ' PORT ddr3_addr = ddr3_a',                           		   '\n'];
-     str = [str, ' PORT ddr3_ba = ddr3_ba',                            		   '\n'];
-     str = [str, ' PORT ddr3_ras_n = ddr3_rasn',                       		   '\n'];
-     str = [str, ' PORT ddr3_cas_n = ddr3_casn',                      		   '\n'];
-     str = [str, ' PORT ddr3_we_n = ddr3_wen',                 		           '\n'];
-     str = [str, ' PORT ddr3_reset_n = ddr3_resetn',              	           '\n'];
-     str = [str, ' PORT ddr3_cs_n = ddr3_sn_2',                     	           '\n'];
-     str = [str, ' PORT ddr3_odt = ddr3_odt',                         	           '\n'];
-     str = [str, ' PORT ddr3_cke = ddr3_cke',                                      '\n'];
-     str = [str, ' PORT ddr3_dm = ddr3_dm',                                        '\n'];
-     str = [str, ' PORT ddr3_dqs_p = ddr3_dqs_p',                                  '\n'];
-     str = [str, ' PORT ddr3_dqs_n = ddr3_dqs_n',                                  '\n'];
-     str = [str, ' PORT ddr3_ck_p = ddr3_ck_p',                                    '\n'];
-     str = [str, ' PORT ddr3_ck_n = ddr3_ck_n',                                    '\n'];
-     str = [str, ' PORT phy_rdy = ', inst_name, '_phy_ready',                      '\n'];
-     str = [str, 'END',						                   '\n'];
-     str = [str, 'PORT ddr3_dq = ddr3_dq, DIR = IO , VEC = [71:0]',     	   '\n'];
-     str = [str, 'PORT ddr3_a = ddr3_a,  DIR = O, VEC = [15:0]',        	   '\n'];
-     str = [str, 'PORT ddr3_ba = ddr3_ba, DIR = O, VEC = [2:0]',        	   '\n'];
-     str = [str, 'PORT ddr3_rasn = ddr3_rasn , DIR = O',                	   '\n'];
-     str = [str, 'PORT ddr3_casn = ddr3_casn, DIR = O',                 	   '\n'];
-     str = [str, 'PORT ddr3_wen = ddr3_wen, DIR = O',                   	   '\n'];
-     str = [str, 'PORT ddr3_resetn = ddr3_resetn, DIR = O',             	   '\n'];
-     str = [str, 'PORT ddr3_sn = 0b111 & ddr3_sn_2, DIR = O, VEC = [3:0]',	   '\n'];
-     str = [str, 'PORT ddr3_odt = ddr3_odt, DIR = O, VEC = [1:0]',		   '\n'];
-     str = [str, 'PORT ddr3_cke = ddr3_cke, DIR = O, VEC = [1:0]',		   '\n'];
-     str = [str, 'PORT ddr3_dm = ddr3_dm, DIR = O, VEC = [8:0]',  		   '\n'];
-     str = [str, 'PORT ddr3_dqs_p = ddr3_dqs_p, DIR = IO, VEC = [8:0]', 	   '\n'];
-     str = [str, 'PORT ddr3_dqs_n = ddr3_dqs_n, DIR = IO, VEC = [8:0]', 	   '\n'];
-     str = [str, 'PORT ddr3_ck_p = ddr3_ck_p, DIR = O', 			   '\n'];
-     str = [str, 'PORT ddr3_ck_n = ddr3_ck_n, DIR = O',                 	   '\n'];
-     str = [str,                                                        	   '\n'];
+     str = [str, 'BEGIN ddr3_controller', '\n'];
+     str = [str, ' PARAMETER INSTANCE     = ddr3_controller_inst',                        '\n'];
+     str = [str, ' PARAMETER HW_VER       = 1.00.a',                         		      '\n'];
+     str = [str, ' PARAMETER tCK          = ',num2str(floor(1000*1000*(1/(clk_freq*2)))), '\n'];
+     str = [str, ' BUS_INTERFACE DDR3_CLK = ddr3_clk',                 		              '\n'];
+     str = [str, ' BUS_INTERFACE DDR3_USER = ddr3_ctrl',				                      '\n'];
+     str = [str, ' PORT clk_div2          = ddr3_clk_app',	     	        	          '\n'];
+     str = [str, ' PORT ddr3_dq           = ddr3_dq',                            		  '\n'];
+     str = [str, ' PORT ddr3_addr         = ddr3_a',                                      '\n'];
+     str = [str, ' PORT ddr3_ba           = ddr3_ba',                            		  '\n'];
+     str = [str, ' PORT ddr3_ras_n        = ddr3_rasn',                       		      '\n'];
+     str = [str, ' PORT ddr3_cas_n        = ddr3_casn',                      		      '\n'];
+     str = [str, ' PORT ddr3_we_n         = ddr3_wen',                 		              '\n'];
+     str = [str, ' PORT ddr3_reset_n      = ddr3_resetn',              	                  '\n'];
+     str = [str, ' PORT ddr3_cs_n         = ddr3_sn_2',                     	          '\n'];
+     str = [str, ' PORT ddr3_odt          = ddr3_odt',                         	          '\n'];
+     str = [str, ' PORT ddr3_cke          = ddr3_cke',                                    '\n'];
+     str = [str, ' PORT ddr3_dm           = ddr3_dm',                                     '\n'];
+     str = [str, ' PORT ddr3_dqs_p        = ddr3_dqs_p',                                  '\n'];
+     str = [str, ' PORT ddr3_dqs_n        = ddr3_dqs_n',                                  '\n'];
+     str = [str, ' PORT ddr3_ck_p         = ddr3_ck_p',                                   '\n'];
+     str = [str, ' PORT ddr3_ck_n         = ddr3_ck_n',                                   '\n'];
+     str = [str, ' PORT phy_rdy           = ', inst_name, '_phy_ready',                   '\n'];
+     str = [str, 'END',					  '\n'];
+     str = [str, 'PORT ddr3_dq     = ddr3_dq,           DIR = IO , VEC = [71:0]', '\n'];
+     str = [str, 'PORT ddr3_a      = ddr3_a,            DIR = O,   VEC = [15:0]', '\n'];
+     str = [str, 'PORT ddr3_ba     = ddr3_ba,           DIR = O,   VEC = [2:0]',  '\n'];
+     str = [str, 'PORT ddr3_rasn   = ddr3_rasn ,        DIR = O',                 '\n'];
+     str = [str, 'PORT ddr3_casn   = ddr3_casn,         DIR = O',                 '\n'];
+     str = [str, 'PORT ddr3_wen    = ddr3_wen,          DIR = O',                 '\n'];
+     str = [str, 'PORT ddr3_resetn = ddr3_resetn,       DIR = O',             	  '\n'];
+     str = [str, 'PORT ddr3_sn     = 0b111 & ddr3_sn_2, DIR = O,   VEC = [3:0]',  '\n'];
+     str = [str, 'PORT ddr3_odt    = ddr3_odt,          DIR = O,   VEC = [1:0]',  '\n'];
+     str = [str, 'PORT ddr3_cke    = ddr3_cke,          DIR = O,   VEC = [1:0]',  '\n'];
+     str = [str, 'PORT ddr3_dm     = ddr3_dm,           DIR = O,   VEC = [8:0]',  '\n'];
+     str = [str, 'PORT ddr3_dqs_p  = ddr3_dqs_p,        DIR = IO,  VEC = [8:0]',  '\n'];
+     str = [str, 'PORT ddr3_dqs_n  = ddr3_dqs_n,        DIR = IO,  VEC = [8:0]',  '\n'];
+     str = [str, 'PORT ddr3_ck_p   = ddr3_ck_p,         DIR = O', 			      '\n'];
+     str = [str, 'PORT ddr3_ck_n   = ddr3_ck_n,         DIR = O',                 '\n'];
+     str = [str,                                                        	      '\n'];
 end % switch hw_sys
 
 % Generate 'sniffer' MHS entry
@@ -185,30 +185,31 @@ switch hw_sys
      str = [str, 'END',                                                      '\n'];
      str = [str,                                                             '\n'];
    case 'ROACH2'
-     str = [str, 'BEGIN opb_dram_sniffer',				     '\n'];
-     str = [str, ' PARAMETER INSTANCE = opb_dram_sniffer_inst',		     '\n'];
-     str = [str, ' PARAMETER HW_VER = 1.00.a',				     '\n'];
-     str = [str, ' PARAMETER CTRL_C_BASEADDR = 0x00050000',		     '\n'];
-     str = [str, ' PARAMETER CTRL_C_HIGHADDR = 0x0005FFFF',		     '\n'];
-     str = [str, ' PARAMETER MEM_C_BASEADDR  = 0x010B0000',		     '\n'];
-     str = [str, ' PARAMETER MEM_C_HIGHADDR  = 0x010BFFFF',		     '\n'];
-     str = [str, ' PARAMETER ENABLE          = 1',			     '\n'];
-     str = [str, ' BUS_INTERFACE SOPB_CTRL = opb0',			     '\n'];
-     str = [str, ' BUS_INTERFACE SOPB_MEM  = opb0',			     '\n'];
-     str = [str, ' BUS_INTERFACE DRAM_CTRL = ddr3_ctrl',		     '\n'];
-     str = [str, ' BUS_INTERFACE DRAM_APP  = ddr3_app',			     '\n'];
-     str = [str, ' PORT dram_clk  = ddr3_clk_app',			     '\n'];
-     str = [str, ' PORT dram_rst  = ', inst_name, '_Mem_Rst',    	     '\n'];
-     str = [str, ' PORT phy_ready = ', inst_name, '_phy_ready',	    	     '\n'];
-     str = [str, 'END',				    			     '\n'];
-     str = [str,							     '\n'];	
+     str = [str, 'BEGIN opb_ddr3_sniffer',                                   '\n'];
+     str = [str, ' PARAMETER INSTANCE = opb_ddr3_sniffer_inst',              '\n'];
+     str = [str, ' PARAMETER HW_VER = 1.00.a',                               '\n'];
+     str = [str, ' PARAMETER CTRL_C_BASEADDR = 0x00050000',                  '\n'];
+     str = [str, ' PARAMETER CTRL_C_HIGHADDR = 0x0005FFFF',                  '\n'];
+     str = [str, ' PARAMETER MEM_C_BASEADDR  = 0x04000000',                  '\n'];
+     str = [str, ' PARAMETER MEM_C_HIGHADDR  = 0x07FFFFFF',                  '\n'];
+     str = [str, ' PARAMETER ENABLE          = ', use_sniffer,               '\n'];
+     str = [str, ' BUS_INTERFACE SOPB_CTRL = opb0',                          '\n'];
+     str = [str, ' BUS_INTERFACE SOPB_MEM  = opb0',                          '\n'];
+     str = [str, ' BUS_INTERFACE DDR3_CTRL = ddr3_ctrl',                     '\n'];
+     str = [str, ' BUS_INTERFACE DDR3_APP  = ddr3_user',                     '\n'];
+     str = [str, ' PORT ddr3_clk  = ddr3_clk_app',                           '\n'];
+     str = [str, ' PORT ddr3_rst  = ddr3_reset',                             '\n'];
+     str = [str, ' PORT phy_ready = ', inst_name, '_phy_ready',              '\n'];
+     str = [str, 'END',                                                      '\n'];
+     str = [str,                                                             '\n'];
+
 end % switch hw_sys
 
 % Generate 'async_ddr' MHS entry
 
 switch hw_sys
    case 'ROACH'
-     str = [str, 'BEGIN async_dram\n'];
+     str = [str, 'BEGIN async_dram',                                          '\n'];
      str = [str, ' PARAMETER INSTANCE      = async_dram_', dimm,              '\n'];
      str = [str, ' PARAMETER HW_VER        = 1.00.a',                         '\n'];
      str = [str, ' PARAMETER C_WIDE_DATA   = ', wide_data,                    '\n'];
@@ -221,18 +222,19 @@ switch hw_sys
      str = [str, ' PORT Mem_Rst            = ', inst_name, '_Mem_Rst',        '\n'];
      str = [str, ' PORT dram_clk           = dram_user_clk',                  '\n'];
      str = [str, ' PORT dram_reset         = dram_user_reset',                '\n'];
-     str = [str, 'END\n'];
+     str = [str, 'END',                                                       '\n'];
      str = [str, '\n'];
    case 'ROACH2'
-     str = [str, 'BEGIN ddr3_async_fifo',                      	    			'\n'];
-     str = [str, ' PARAMETER INSTANCE = ddr3_async_fifo_inst',         			'\n'];
-     str = [str, ' PARAMETER HW_VER = 1.00.a',                      			'\n'];
-     str = [str, ' PORT ui_app_clk = ',get(xsg_obj, 'clk_src'),      	        	'\n'];
-     str = [str, ' PORT ddr3_app_clk = ddr3_clk_app',          		        	'\n'];
-     str = [str, ' PORT ui_rst = ', inst_name, '_Mem_Rst',            	                '\n'];
-     str = [str, ' BUS_INTERFACE DDR3_UI = ', inst_name, '_MEM_CMD'    			'\n'];
-     str = [str, ' BUS_INTERFACE DDR3_APP = ddr3_app',					'\n'];
-     str = [str, 'END',                                             			'\n'];
-     str = [str,                                                    			'\n'];
+     str = [str, 'BEGIN ddr3_async_fifo',                              '\n'];
+     str = [str, ' PARAMETER INSTANCE     = ddr3_async_fifo_inst',     '\n'];
+     str = [str, ' PARAMETER HW_VER       = 1.00.a',                   '\n'];
+     str = [str, ' PORT ui_app_clk        = ',get(xsg_obj, 'clk_src'), '\n'];
+     str = [str, ' PORT ddr3_app_clk      = ddr3_clk_app',             '\n'];
+     str = [str, ' PORT ddr3_reset        = ddr3_reset',               '\n'];
+     str = [str, ' PORT ui_rst            = ', inst_name, '_Mem_Rst',  '\n'];
+     str = [str, ' BUS_INTERFACE DDR3_UI  = ', inst_name, '_MEM_CMD'   '\n'];
+     str = [str, ' BUS_INTERFACE DDR3_USER = ddr3_user',				   '\n'];
+     str = [str, 'END',                                                '\n'];
+     str = [str, '\n'];
 end % switch hw_sys
 

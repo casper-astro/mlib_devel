@@ -64,6 +64,8 @@ BEGIN kat_ten_gb_eth
   PORT rx_data          = "", DIR = OUT, VEC = [63:0]
   PORT rx_source_ip     = "", DIR = OUT, VEC = [31:0]
   PORT rx_source_port   = "", DIR = OUT, VEC = [15:0]
+  PORT rx_dest_ip       = "", DIR = OUT, VEC = [31:0]
+  PORT rx_dest_port     = "", DIR = OUT, VEC = [15:0]
   PORT rx_bad_frame     = "", DIR = OUT
   PORT rx_overrun       = "", DIR = OUT
   PORT rx_overrun_ack   = "", DIR = IN

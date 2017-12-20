@@ -101,11 +101,11 @@ defaults = { ...
     'bin_pt_in', 17, ...
     'coeff_bit_width', 18,  ...
     'async', 'off', ...
-    'unscramble', 'off', ...
+    'unscramble', 'on', ...
     'add_latency', 1, ...
     'mult_latency', 2, ...
     'bram_latency', 2, ...
-    'conv_latency', 1, ...
+    'conv_latency', 2, ...
     'input_latency', 0, ...
     'biplex_direct_latency', 0, ...
     'quantization', 'Round  (unbiased: +/- Inf)', ...
@@ -171,12 +171,24 @@ end
 
 ytick = 45;
 
+% If the number of inputs are equal to 1 using the unscrambler is unnecessary
+% since the "unscrambled" channel order is the same as the scrambled.
+
+if n_inputs==1
+    unscramble='off';
+end
+
 % validate input fields
 [temp, mult_spec] = multiplier_specification(mult_spec, FFTSize, blk);
 clear temp;
 
-if n_inputs < 2,
-    error_string = sprintf('REAL FFT: Number of inputs must be at least 4!');
+% Check the number of simultaneous serial ffts we need to do.
+% It needs to be a multiple of 4 since the underlying
+% FFT core can handle 2 complex ffts (= 4 real FFTs) at a time
+
+total_number_of_in_mod=mod((2^n_inputs)*n_streams,4);
+if total_number_of_in_mod ~=0,
+    error_string = sprintf('REAL FFT: Number of inputs multiplied by number of simultaneous streams must be at multiple of4!');
     clog(error_string, {'error', 'fft_wideband_real_init_debug'});
     error(error_string);
     return;
@@ -216,7 +228,7 @@ delete_lines(blk);
 
 reuse_block(blk, 'sync', 'built-in/inport', 'Position', [15 102 45 117], 'Port', '1');
 reuse_block(blk, 'shift', 'built-in/inport', 'Position', [15 52 45 67], 'Port', '2');
-reuse_block(blk, 'sync_out', 'built-in/outport', 'Position', [805 72 835 88], 'Port', '1');
+reuse_block(blk, 'sync_out', 'built-in/outport', 'Position', [925 72 955 88], 'Port', '1');
 
 of_port_ypos = 160+(n_streams*ytick*2^n_inputs);
 reuse_block(blk, 'of', 'built-in/outport', ...
@@ -229,7 +241,7 @@ if strcmp(async, 'on'),
     'Port', num2str(n_streams*(2^n_inputs)+3));
     
   reuse_block(blk, 'dvalid', 'built-in/outport', ...
-    'Position', [805 127+(ytick*n_streams*2^(n_inputs-1)) 835 143+(ytick*n_streams*2^(n_inputs-1))], ...
+    'Position', [925 127+(ytick*n_streams*2^(n_inputs-1)) 955 143+(ytick*n_streams*2^(n_inputs-1))], ...
     'Port', num2str(n_streams*(2^(n_inputs-1))+3));
 end
 
@@ -238,7 +250,7 @@ for s=0:n_streams-1,
   off_base = s*(2^(n_inputs-1))*ytick;
   for n=0:2^(n_inputs-1)-1,
     reuse_block(blk, ['out',num2str(s),num2str(n)], 'built-in/outport', ...
-        'Position', [805 127+off_base+(ytick*n) 835 143+off_base+(ytick*n)], ...
+        'Position', [925 127+off_base+(ytick*n) 955 143+off_base+(ytick*n)], ...
         'Port', num2str(port_base+n+2));
   end %for s
 end %for n
@@ -352,8 +364,12 @@ else,
 end
 
 if strcmp(unscramble, 'on'),
+  %delay pipeline for sync
+  reuse_block(blk, 'fft_direct_sync_delay', 'casper_library_delays/pipeline', ...
+    'Position', [680 80 730 100], ...
+    'latency', num2str(biplex_direct_latency));
   reuse_block(blk, 'fft_unscrambler', 'casper_library_ffts/fft_unscrambler', ...
-    'Position', [655 60 775 60+((n_streams*2^(n_inputs-1)+1)*ytick)], ...
+    'Position', [775 60 895 60+((n_streams*2^(n_inputs-1)+1)*ytick)], ...
     'FFTSize', num2str(FFTSize-1), ...
     'n_inputs', num2str(n_inputs-1), ...
     'n_streams', num2str(n_streams), ...
@@ -361,13 +377,21 @@ if strcmp(unscramble, 'on'),
     'coeffs_bit_limit', num2str(coeffs_bit_limit), ...
     'async', async, ...
     'bram_latency', num2str(bram_latency));
-  add_line(blk, 'fft_direct/1', 'fft_unscrambler/1');
+  add_line(blk, 'fft_direct/1', 'fft_direct_sync_delay/1');
+  add_line(blk, 'fft_direct_sync_delay/1', 'fft_unscrambler/1');
   add_line(blk, 'fft_unscrambler/1', 'sync_out/1');
   for s = 0:n_streams-1,
-    base = s*2^n_inputs;
+    off_base = s*2^n_inputs*ytick;
+    port_base = s*2^n_inputs;
     for n=1:2^(n_inputs-1),
-      add_line(blk, ['fft_direct/', num2str(base+n+1)], ['fft_unscrambler/', num2str(base/2+n+1)]);
-      add_line(blk, ['fft_unscrambler/', num2str(base/2+n+1)], ['out', num2str(s),num2str(n-1), '/1']);
+      dir_delay = ['del_direct',num2str(port_base+n)];
+      %pipeline between fft_direct and fft_unscrambler
+      reuse_block(blk, dir_delay, 'casper_library_delays/pipeline', ...
+        'Position', [680 120+(off_base+n*ytick) 730 140+(off_base+n*ytick)], ...
+        'latency', num2str(biplex_direct_latency));
+      add_line(blk, ['fft_direct/', num2str(port_base+n+1)], [dir_delay,'/1']);
+      add_line(blk, [dir_delay,'/1'], ['fft_unscrambler/', num2str(port_base/2+n+1)]);
+      add_line(blk, ['fft_unscrambler/', num2str(port_base/2+n+1)], ['out', num2str(s),num2str(n-1), '/1']);
     end
   end %for s
 else
@@ -423,11 +447,13 @@ for s = 0:n_streams-1,
         'latency', num2str(biplex_direct_latency));
     add_line(blk, ['fft_biplex_real_4x/',num2str(port_base+2+n)], [out_delay,'/1']);
     add_line(blk, [out_delay,'/1'], ['fft_direct/',num2str(port_base+n+3)]);
+    
   end %for
 end %for s
 
 %
 % add asynchronous blocks
+%
 
 if strcmp(async, 'on'),
   reuse_block(blk, 'in_del_en_4x', 'casper_library_delays/pipeline', ...
@@ -443,7 +469,13 @@ if strcmp(async, 'on'),
   add_line(blk, 'out_del_en_4x/1', ['fft_direct/',num2str(n_streams*2^n_inputs+3)]);
 
   if strcmp(unscramble, 'on'), 
-    add_line(blk, ['fft_direct/',num2str(n_streams*2^n_inputs+3)], ['fft_unscrambler/',num2str(n_streams*2^(n_inputs-1)+2)]);
+    %delay pipeline for dvalid between fft_direct and fft_unscrambler
+    reuse_block(blk, 'fft_direct_dvalid_delay', 'casper_library_delays/pipeline', ...
+      'Position', [680 75+((n_streams*2^n_inputs+1)*ytick) 730 95+((n_streams*2^n_inputs+1)*ytick)], ...
+      'latency', num2str(biplex_direct_latency));
+    add_line(blk, ['fft_direct/',num2str(n_streams*2^n_inputs+3)], 'fft_direct_dvalid_delay/1');
+    add_line(blk, 'fft_direct_dvalid_delay/1', ['fft_unscrambler/',num2str(n_streams*2^(n_inputs-1)+2)]);
+    
     add_line(blk, ['fft_unscrambler/',num2str(n_streams*2^(n_inputs-1)+2)], ['dvalid/1']);
   else, 
     add_line(blk, ['fft_direct/', num2str((n_streams*(2^n_inputs))+3)], 'dvalid/1');

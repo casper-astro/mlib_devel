@@ -1,26 +1,3 @@
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                                                                             %
-%   SKA Africa                                                                %
-%   http://www.kat.ac.za                                                      %
-%   Copyright (C) 2013 Andrew Martens                                         %
-%                                                                             %
-%   This program is free software; you can redistribute it and/or modify      %
-%   it under the terms of the GNU General Public License as published by      %
-%   the Free Software Foundation; either version 2 of the License, or         %
-%   (at your option) any later version.                                       %
-%                                                                             %
-%   This program is distributed in the hope that it will be useful,           %
-%   but WITHOUT ANY WARRANTY; without even the implied warranty of            %
-%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             %
-%   GNU General Public License for more details.                              %
-%                                                                             %
-%   You should have received a copy of the GNU General Public License along   %
-%   with this program; if not, write to the Free Software Foundation, Inc.,   %
-%   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.               %
-%                                                                             %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   SKA Africa                                                                %
@@ -179,7 +156,7 @@ function pfb_fir_generic_init(blk, varargin)
           'outputWidth', num2str(outputWidth), ...
           'outputBinaryPt', num2str(outputBinaryPt), ...
           'outputArithmeticType', num2str(outputArithmeticType), ...
-          'Position', [1020 yoff-15 1100 yoff+((n_inputs_total-1)*yinc)+15]);
+          'Position', [1025 yoff-15 1075 yoff+((n_inputs_total-1)*yinc)+15]);
 
   % data ports
 
@@ -262,7 +239,7 @@ function pfb_fir_generic_init(blk, varargin)
   end
 
   reuse_block(blk, 'bus_scale', 'casper_library_bus/bus_scale', ...
-          'n_bits_in', mat2str(repmat(BitWidthIn+CoeffBitWidth+TotalTaps-1, 1, n_outputs_total)), ...
+          'n_bits_in', mat2str(repmat(BitWidthIn+CoeffBitWidth+ceil(log2(TotalTaps)), 1, n_outputs_total)), ...
           'bin_pt_in', num2str(BitWidthIn-1+CoeffBitWidth-1), ...
           'scale_factor', num2str(-bit_growth), ...
           'misc', 'off', 'Position', [825 101 865 129]);
@@ -274,7 +251,7 @@ function pfb_fir_generic_init(blk, varargin)
   end
 
   reuse_block(blk, 'bus_convert', 'casper_library_bus/bus_convert', ...
-          'n_bits_in', mat2str(repmat(BitWidthIn+CoeffBitWidth+TotalTaps-1, 1, n_outputs_total)), ...
+          'n_bits_in', mat2str(repmat(BitWidthIn+CoeffBitWidth+ceil(log2(TotalTaps)), 1, n_outputs_total)), ...
           'bin_pt_in', num2str(BitWidthIn-1+CoeffBitWidth-1+bit_growth), ...
           'n_bits_out', num2str(BitWidthOut), 'bin_pt_out', num2str(BitWidthOut-1), ...
           'quantization', num2str(quant), 'overflow', '0', ...\

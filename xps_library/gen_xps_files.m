@@ -47,6 +47,13 @@ if nargin == 2 && isstruct(flow_vec),
     run_elab     = flow_vec.elab    ;
     run_software = flow_vec.software;
     run_edk      = flow_vec.edk     ;
+    try
+        run_smartxplorer = flow_vec.smartxplorer;
+        num_smartxplorer = flow_vec.smartxplorer_num;
+    catch
+        run_smartxplorer = -1;
+        num_smartxplorer = 0;
+    end
 else
     run_update   = 1;
     run_drc      = 1;
@@ -57,6 +64,8 @@ else
     run_elab     = 1;
     run_software = 1;
     run_edk      = 1;
+    run_smartxplorer = 0;
+    num_smartxplorer = 0;
 end
 
 slash = '\';
@@ -463,7 +472,7 @@ if run_ip,
     cd(simulink_path);
     for n = 1:length(xps_pcore_blks),
         path_param = get_param(xps_pcore_blks(n), 'pcore_path');
-        pcore_path = clear_path(path_param{1});
+        pcore_path = clear_path(path_param{1},slash);
 
         destination_dir = [xps_path, slash, 'pcores', slash];
 
@@ -523,10 +532,14 @@ if run_edkgen,
     gen_xps_mod_ucf(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash);
 
     % add extra register and snapshot info from the design
-    gen_xps_add_design_info(sys, mssge_paths, slash);
+    try
+        gen_xps_add_design_info(sys, mssge_paths, slash);
+    catch
+        disp('WARNING WARNING PAIN SUFFERING ALARUM ALARUM - adding design info failed for some reason.');
+    end
 
     % shanly and mark's new format - generated from core_info and design_info
-    if strcmp(hw_sys, 'ROACH') || strcmp(hw_sys, 'ROACH2') || strcmp(hw_sys, 'MKDIG'),
+    if strcmp(hw_sys, 'ROACH') || strcmp(hw_sys, 'ROACH2') || strcmp(hw_sys, 'SKARAB'),
         kcpfpg_fid = fopen([xps_path, slash, 'extended_info.kcpfpg'], 'w');
         fprintf(kcpfpg_fid, '#!/bin/kcpfpg\n');
         fprintf(kcpfpg_fid, '?uploadbin\n');
@@ -546,11 +559,13 @@ if run_edkgen,
         while 1,
             tline = fgetl(fid);
             if ~ischar(tline), break, end
-            newline = ['?meta ', tline];
-            fprintf(kcpfpg_fid, '%s\n', newline);
+            fprintf(kcpfpg_fid, '?meta\t%s\n', tline);
         end
         clear newline tline;
         fclose(fid);
+        % add git info to the design
+        git_write_info(kcpfpg_fid, sys);
+        % close off the file
         fprintf(kcpfpg_fid, '?quit\n');
         fclose(kcpfpg_fid);
     end
@@ -670,7 +685,11 @@ if run_edk,
             fprintf(fid, 'run bits\n');
         % end case 'powerpc440_ext'
         case {'ROACH2', 'MKDIG'}
-            fprintf(fid, 'run bits\n');
+            if run_smartxplorer,
+                fprintf(fid, 'run netlist\n');
+            else
+                fprintf(fid, 'run bits\n');
+            end
         % end case 'powerpc440_ext'
         otherwise
             fprintf(fid, 'run init_bram\n');
@@ -678,30 +697,53 @@ if run_edk,
     end % switch hw_sys
     fprintf(fid, 'exit\n');
     fclose(fid);
+
     eval(['cd ', xps_path]);
     status = system('xps -nw -scr run_xps.tcl system.xmp');
     if status ~= 0,
+        if exist('implementation/system.twr', 'file') == 2,
+            edit 'implementation/system.twr';
+        end
         cd(simulink_path);
         error('XPS failed.');
-    else
+    end
+    
+    if run_smartxplorer,
+        href_path = [xps_path, slash, 'implementation', slash, 'smartxplorer', slash, 'smartxplorer.html'];
+        disp('################################################');
+        disp('## Running Smartxplorer - this can take LONG. ##');
+        disp(['## Updates can be found here: ', href_path,' ##']);
+        disp('################################################');
+        
         if (strcmp(slash, '\')),
             % Windows case
-            [status, ~] = dos('gen_prog_files.bat');
-            if status ~= 0,
-                cd(simulink_path);
-                error('Programation files generation failed, EDK compilation probably also failed.');
-            end % if dos('gen_prog_files.bat')
-        else
-            % Linux case
-            [~, ~] = unix('chmod +x gen_prog_files');
-            [status, message] = unix('./gen_prog_files');
-            if status ~= 0,
-                cd(simulink_path);
-                disp(message);
-                error('Programation files generation failed, EDK compilation probably also failed.');
-            end % if unix('gen_prog_files.bat')
-        end %if (strcmp(slash, '\'))
-    end % if(dos(['xps -nw -scr run_xps.tcl system.xmp']))
+            error('Cannot run this on Windows at the present. Sorry.');
+        end
+        
+        [status, message] = gen_xps_run_smartxplorer(num_smartxplorer, xps_path, slash);
+        if status ~= 0,
+            cd(simulink_path);
+            error(['Smartxplorer failed: ', num2str(status), ' - ', message]);
+        end % /run_smartxplorer
+    end
+    
+    if (strcmp(slash, '\')),
+        % Windows case
+        [status, ~] = dos('gen_prog_files.bat');
+        if status ~= 0,
+            cd(simulink_path);
+            error('Programation files generation failed, EDK compilation probably also failed.');
+        end % if dos('gen_prog_files.bat')
+    else
+        % Linux case
+        [~, ~] = unix('chmod +x gen_prog_files');
+        [status, message] = unix('./gen_prog_files');
+        if status ~= 0,
+            cd(simulink_path);
+            disp(message);
+            error('Programation files generation failed, EDK compilation probably also failed.');
+        end % if unix('gen_prog_files.bat')
+    end %if (strcmp(slash, '\'))
     cd(simulink_path);
 end % if run_edk
 time_edk = now - start_time;

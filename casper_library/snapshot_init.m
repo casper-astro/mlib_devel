@@ -56,7 +56,7 @@ circap = get_var('circap', 'defaults', defaults, varargin{:});
 offset = get_var('offset', 'defaults', defaults, varargin{:});
 value = get_var('value', 'defaults', defaults, varargin{:});
 
-%we double path width and decimate rate for DRAM
+% we double path width and decimate rate for DRAM
 if strcmp(storage,'dram'),
   nsamples = nsamples - 1;
   data_width = 128;
@@ -350,8 +350,9 @@ if strcmp(storage, 'dram'),
 
 else
   % shared BRAM
-  reuse_block(blk, 'bram', 'xps_library/Shared BRAM', ...
+  reuse_block(blk, 'bram', 'xps_library/Shared_BRAM', ...
     'data_width', num2str(data_width), 'addr_width', num2str(nsamples), ...
+    'init_vals', sprintf('[0:2^%i-1]', nsamples), ...
     'Position', [930 129 1005 291]);
   add_line(blk, 'add_del/1', 'bram/1');
   add_line(blk, 'dat_del/1', 'bram/2');

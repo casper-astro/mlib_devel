@@ -19,6 +19,8 @@ module tge_rx #(
     output [63:0] app_rx_data,
     output [31:0] app_rx_source_ip,
     output [15:0] app_rx_source_port,
+    output [31:0] app_rx_dest_ip,
+    output [15:0] app_rx_dest_port,
     output        app_rx_bad_frame,
     output        app_rx_overrun,
     input         app_rx_overrun_ack,
@@ -55,6 +57,8 @@ module tge_rx #(
   wire        app_goodframe;
   wire [31:0] app_source_ip;
   wire [15:0] app_source_port;
+  wire [31:0] app_dest_ip;
+  wire [15:0] app_dest_port;
 
   wire local_enable_retimed;
 
@@ -91,7 +95,7 @@ module tge_rx #(
   reg        mac_rx_good_frameR;
   reg        mac_rx_bad_frameR;
 
-  reg [47:0] rx_control_data;
+  reg [95:0] rx_control_data;
 
   /* Eady reading assignments */
   wire [47:0] destination_mac  = {mac_rx_data_z[ 7: 0], mac_rx_data_z[15: 8], 
@@ -120,9 +124,9 @@ endgenerate
     mac_rx_dataR       <= mac_rx_data_z;
     mac_rx_good_frameR <= mac_rx_good_frame_z;
     mac_rx_bad_frameR  <= mac_rx_bad_frame_z;
-
+            
     if (mac_rst) begin
-      rx_control_data <= 64'd0;
+      rx_control_data <= 96'd0;
       rx_state        <= RX_IDLE;
     end else begin
       case (rx_state)
@@ -183,12 +187,15 @@ endgenerate
           rx_state               <= RX_HDR_WORD_5;
         end
         RX_HDR_WORD_5: begin
+	  /* Store destination ip and port */
+          rx_control_data[79:48] <= destination_ip;
+          rx_control_data[95:80] <= destination_port;
           rx_state               <= RX_HDR_WORD_6;
 
           /* Store source port */
           rx_control_data[47:40] <= mac_rx_data_z[23:16];
           rx_control_data[39:32] <= mac_rx_data_z[31:24];
-          /* Check destiniation port */
+          /* Check destination port */
           if (destination_port != local_port) begin
 `ifdef DEBUG
             $display("tge_rx: port mismatch");
@@ -204,7 +211,9 @@ endgenerate
 `endif
             application_frame <= 1'b0;
             rx_state          <= RX_DATA;
+
           end
+          
         end
         RX_HDR_WORD_6: begin
           /* No UDP checksum */
@@ -254,6 +263,8 @@ endgenerate
   assign app_badframe    = application_frame && mac_rx_bad_frame_z;
   assign app_source_ip   = rx_control_data[31:0];
   assign app_source_port = rx_control_data[47:32];
+  assign app_dest_ip     = rx_control_data[79:48];
+  assign app_dest_port   = rx_control_data[95:80];
   /* TODO: need neater way to align eof/dvld for cpu+app */
 
   /********** CPU Interface Logic *************/
@@ -429,9 +440,12 @@ end endgenerate
 
 
   wire [47:0] ctrl_fifo_wr_data;
+  wire [47:0] txctrl_fifo_wr_data;
   wire        ctrl_fifo_wr_en;
   wire        ctrl_fifo_almost_full;
+  wire        txctrl_fifo_almost_full;
   wire [47:0] ctrl_fifo_rd_data;
+  wire [47:0] txctrl_fifo_rd_data;
   wire        ctrl_fifo_rd_en;
 
   rx_packet_ctrl_fifo rx_packet_ctrl_fifo_inst (
@@ -447,6 +461,20 @@ end endgenerate
     .prog_full (ctrl_fifo_almost_full)
   );
   //synthesis attribute box_type rx_packet_ctrl_fifo_inst "user_black_box"
+  
+  rx_packet_ctrl_fifo tx_packet_ctrl_fifo_inst (
+    .rd_clk    (app_clk),
+    .rd_en     (ctrl_fifo_rd_en),
+    .dout      (txctrl_fifo_rd_data),
+    .wr_clk    (mac_clk),
+    .wr_en     (ctrl_fifo_wr_en),
+    .din       (txctrl_fifo_wr_data),
+    .empty     (),
+    .full      (),
+    .rst       (app_rst),
+    .prog_full (txctrl_fifo_almost_full)
+  );
+  //synthesis attribute box_type rx_packet_ctrl_fifo_inst "user_black_box"
 
   assign app_rx_valid        = !packet_fifo_empty;
   assign app_rx_end_of_frame = packet_fifo_rd_data[64];
@@ -455,6 +483,8 @@ end endgenerate
   assign app_rx_data         = packet_fifo_rd_data[63:0];
   assign app_rx_source_ip    = ctrl_fifo_rd_data[31:0];
   assign app_rx_source_port  = ctrl_fifo_rd_data[47:32];
+  assign app_rx_dest_ip      = txctrl_fifo_rd_data[31:0];
+  assign app_rx_dest_port    = txctrl_fifo_rd_data[47:32];
 
   assign packet_fifo_rd_en = app_rx_ack;
   assign ctrl_fifo_rd_en   = app_rx_ack && app_rx_end_of_frame && app_rx_valid;
@@ -468,13 +498,14 @@ end endgenerate
 
   reg first_word;
 
-  wire rx_eof  = app_goodframe || app_badframe || (app_dvld && (packet_fifo_almost_full || ctrl_fifo_almost_full));
+  wire rx_eof  = app_goodframe || app_badframe || (app_dvld && (packet_fifo_almost_full || ctrl_fifo_almost_full || txctrl_fifo_almost_full));
   wire rx_bad  = app_badframe;
-  wire rx_over = packet_fifo_almost_full || ctrl_fifo_almost_full;
+  wire rx_over = packet_fifo_almost_full || ctrl_fifo_almost_full || txctrl_fifo_almost_full;
   assign packet_fifo_wr_data = {rx_over, rx_bad, rx_eof, app_data};
   assign packet_fifo_wr_en   = app_dvld && (app_state == APP_RUN);
   assign ctrl_fifo_wr_data   = {app_source_port, app_source_ip};
   assign ctrl_fifo_wr_en     = app_dvld && first_word && app_state == APP_RUN;
+  assign txctrl_fifo_wr_data  = {app_dest_port, app_dest_ip};
 
   wire overrun_ack;   
   (* shreg_extract = "NO" *) reg overrun_ackR;   
@@ -496,7 +527,7 @@ end endgenerate
           if (rx_eof) begin
             first_word <= 1'b1;
           end
-          if (app_dvld && (packet_fifo_almost_full || ctrl_fifo_almost_full)) begin
+          if (app_dvld && (packet_fifo_almost_full || ctrl_fifo_almost_full || txctrl_fifo_almost_full)) begin
             app_state <= APP_OVER;
           end
         end
