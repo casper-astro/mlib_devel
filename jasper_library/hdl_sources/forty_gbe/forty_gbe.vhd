@@ -1222,13 +1222,113 @@ architecture arch_forty_gbe of forty_gbe is
     signal wb_ack_in_z2 : std_logic;
     signal wb_sync_ack_in : std_logic;
     signal wb_sync_data_in : std_logic_vector(31 downto 0);
-    signal wb_dsp_wait_count : std_logic_vector(7 downto 0);
     
     
     --Wishbone Write State Machine
     signal wb_dsp_wr_state : T_WB_DSP_WR_STATE;
+    signal wb_slv_we_hist_i : std_logic;
+    
+    -- Mark Debug ILA Testing    
+--    signal dbg_wb_cross_clock_out_din : std_logic_vector(72 downto 0);
+--    signal dbg_wb_cross_clock_out_wrreq : std_logic;
+--    signal dbg_wb_cross_clock_out_rdreq : std_logic;
+--    signal dbg_wb_cross_clock_out_dout : std_logic_vector(72 downto 0);
+--    signal dbg_wb_cross_clock_out_full : std_logic;
+--    signal dbg_wb_cross_clock_out_empty : std_logic;
+    
+--    signal dbg_wb_data_in : std_logic_vector(31 downto 0);
+--    signal dbg_wb_ack_in : std_logic;
+--    signal dbg_wb_ack_in_z1 : std_logic;
+--    signal dbg_wb_ack_in_z2 : std_logic;
+--    signal dbg_wb_sync_ack_in : std_logic;
+--    signal dbg_wb_sync_data_in : std_logic_vector(31 downto 0);
+    
+--    signal dbg_wb_dsp_wr_state : T_WB_DSP_WR_STATE;   
+--    signal dbg_WB_SLV_ACK_O_top : std_logic;
+--    signal dbg_WB_SLV_DAT_O_top : std_logic_vector(31 downto 0);
+--    signal dbg_WB_SLV_RST_I_top : std_logic;    
+--    signal dbg_WB_SLV_DAT_O : std_logic_vector(31 downto 0);
+--    signal dbg_WB_SLV_ACK_O : std_logic;
+--    signal dbg_WB_SLV_SEL_I_top : std_logic_vector(3 downto 0);
+--    signal dbg_WB_SLV_STB_I_top : std_logic;
+--    signal dbg_WB_SLV_WE_I_top : std_logic;    
+    
+--    signal dbg_WB_SLV_ADR_I_top : std_logic_vector(31 downto 0);
+--    signal dbg_WB_SLV_CYC_I_top : std_logic;
+--    signal dbg_WB_SLV_DAT_I : std_logic_vector(31 downto 0);  
+--    signal dbg_WB_SLV_ADR_I : std_logic_vector(31 downto 0);  
+--    signal dbg_WB_SLV_CYC_I : std_logic;  
+--    signal dbg_WB_SLV_SEL_I : std_logic_vector(3 downto 0);  
+--    signal dbg_WB_SLV_WE_I : std_logic; 
+--    signal dbg_WB_SLV_STB_I : std_logic;
+    
+    
+                                    
+    -- Mark Debug ILA Testing
+    
+--    attribute MARK_DEBUG : string;
+--    attribute MARK_DEBUG of dbg_wb_cross_clock_out_din : signal is "TRUE";
+--    attribute MARK_DEBUG of dbg_wb_cross_clock_out_wrreq : signal is "TRUE";
+--    attribute MARK_DEBUG of dbg_wb_cross_clock_out_rdreq : signal is "TRUE";
+--    attribute MARK_DEBUG of dbg_wb_cross_clock_out_dout : signal is "TRUE";
+--    attribute MARK_DEBUG of dbg_wb_cross_clock_out_full : signal is "TRUE"; 
+--    attribute MARK_DEBUG of dbg_wb_cross_clock_out_empty : signal is "TRUE";    
+--    attribute MARK_DEBUG of dbg_wb_data_in : signal is "TRUE";    
+--    attribute MARK_DEBUG of dbg_wb_ack_in : signal is "TRUE";    
+--    attribute MARK_DEBUG of dbg_wb_ack_in_z1 : signal is "TRUE";    
+--    attribute MARK_DEBUG of dbg_wb_ack_in_z2 : signal is "TRUE";    
+--    attribute MARK_DEBUG of dbg_wb_sync_ack_in : signal is "TRUE";    
+--    attribute MARK_DEBUG of dbg_wb_sync_data_in : signal is "TRUE";    
+
+--    attribute MARK_DEBUG of dbg_wb_dsp_wr_state : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_ACK_O_top : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_DAT_O_top : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_DAT_O : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_ACK_O : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_SEL_I_top : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_STB_I_top : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_WE_I_top : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_ADR_I_top : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_CYC_I_top : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_DAT_I : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_ADR_I : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_CYC_I : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_SEL_I : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_WE_I : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_STB_I : signal is "TRUE";   
+    
     
 begin
+
+    --ILA Assignments
+--    dbg_wb_cross_clock_out_din <= wb_cross_clock_out_din;
+--    dbg_wb_cross_clock_out_wrreq <= wb_cross_clock_out_wrreq;
+--    dbg_wb_cross_clock_out_rdreq <= wb_cross_clock_out_rdreq;
+--    dbg_wb_cross_clock_out_dout <= wb_cross_clock_out_dout;
+--    dbg_wb_cross_clock_out_full <= wb_cross_clock_out_full;
+--    dbg_wb_cross_clock_out_empty <= wb_cross_clock_out_empty;
+--    dbg_wb_data_in <= wb_data_in;
+--    dbg_wb_ack_in <= wb_ack_in;
+--    dbg_wb_ack_in_z1 <= wb_ack_in_z1;
+--    dbg_wb_ack_in_z2 <= wb_ack_in_z2;
+--    dbg_wb_sync_ack_in <= wb_sync_ack_in;
+--    dbg_wb_sync_data_in <= wb_sync_data_in;
+--    dbg_wb_dsp_wr_state <= wb_dsp_wr_state;
+--    dbg_WB_SLV_ACK_O_top <= WB_SLV_ACK_O_top;
+--    dbg_WB_SLV_DAT_O_top <= WB_SLV_DAT_O_top;
+--    dbg_WB_SLV_DAT_O <= WB_SLV_DAT_O(14);
+--    dbg_WB_SLV_ACK_O <= WB_SLV_ACK_O(14);
+--    dbg_WB_SLV_SEL_I_top <= wb_cross_clock_out_dout(4 downto 1);
+--    dbg_WB_SLV_STB_I_top <= wb_cross_clock_out_dout(72);
+--    dbg_WB_SLV_WE_I_top <= wb_cross_clock_out_dout(0);
+--    dbg_WB_SLV_ADR_I_top <= wb_cross_clock_out_dout(37 downto 6);
+--    dbg_WB_SLV_CYC_I_top <= wb_cross_clock_out_dout(5);
+--    dbg_WB_SLV_DAT_I <= WB_SLV_DAT_I(14);
+--    dbg_WB_SLV_ADR_I <= WB_SLV_ADR_I(14);
+--    dbg_WB_SLV_CYC_I <= WB_SLV_CYC_I(14);
+--    dbg_WB_SLV_SEL_I <= WB_SLV_SEL_I(14);
+--    dbg_WB_SLV_WE_I <= WB_SLV_WE_I(14);
+--    dbg_WB_SLV_STB_I <= WB_SLV_STB_I(14);
 
     EMCCLK_FIX <= EMCCLK;
 
@@ -3111,11 +3211,11 @@ begin
             wb_cross_clock_out_wrreq <= '0';
             wb_dsp_wr_state <= WB_DSP_WR_IDLE;
             wb_cross_clock_out_din <= (others => '0');
-            wb_dsp_wait_count <= (others => '0');
+            wb_slv_we_hist_i <= '0';
         elsif (rising_edge(sys_clk))then
+            wb_slv_we_hist_i <= WB_SLV_WE_I(14);
             case wb_dsp_wr_state is    
                 when WB_DSP_WR_IDLE =>
-                  wb_dsp_wait_count <= (others => '0');
                   wb_dsp_wr_state <= WB_DSP_WR_STROBE_CHECK;
                   wb_cross_clock_out_wrreq <= '0';
                   wb_cross_clock_out_din <= "000" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & '0' & WB_SLV_SEL_I(14) & '0';                                                 
@@ -3166,12 +3266,10 @@ begin
                 --stop writing and allow slower clock to read out
                 --wait a few clock cycles to allow Strobe to deassert               
                 when WB_DSP_WR_FIFO_WR_DIS =>
-                
-                  wb_dsp_wait_count <= wb_dsp_wait_count + '1';
-                  --Wait in this state until the strobe signal has deasserted (about 80 clock cycles should be fine)
-                  if (wb_dsp_wait_count >= x"50") then
+        
+                  --Wait in this state until the write enable signal has deasserted (strobe will be completed too)
+                  if(wb_slv_we_hist_i = '1' and WB_SLV_WE_I(14) = '0' ) then  
                      wb_dsp_wr_state <= WB_DSP_WR_STROBE_CHECK;
-                     wb_dsp_wait_count <= (others => '0');
                   else
                      wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_DIS;
                   end if;   
