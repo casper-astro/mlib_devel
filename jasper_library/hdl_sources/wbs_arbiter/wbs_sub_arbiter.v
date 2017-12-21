@@ -52,49 +52,40 @@ module wbs_sub_arbiter(
   wire                 [3:0] wbs_sel_o_r;
   wire                [31:0] wbs_adr_o_r;
   wire                [31:0] wbs_dat_o_r;
-  reg     [N_SLAVES - 1:0] wbs_cyc_o_r;
+  reg     [N_SLAVES - 1:0] wbs_cyc_o_r; 
   wire    [N_SLAVES - 1:0] wbs_stb_o_r;
   reg    [N_SLAVES - 1:0] wbs_ack_i_r;
   reg    [N_SLAVES - 1:0] wbs_err_i_r;
   reg [N_SLAVES*32 - 1:0] wbs_dat_i_r;
   
+  
   //Added for timing closure purposes
   always @(posedge wb_clk_i) begin
-    wbm_cyc_i_r <= wbm_cyc_i;
-    wbm_stb_i_r <= wbm_stb_i;
-    wbm_we_i_r  <= wbm_we_i;
-    wbm_sel_i_r <= wbm_sel_i;
-    wbm_adr_i_r <= wbm_adr_i;
-    wbm_dat_i_r <= wbm_dat_i;
-    wbm_dat_o   <= wbm_dat_o_r;
-    wbm_ack_o   <= wbm_ack_o_r;
-    wbm_err_o   <= wbm_err_o_r;
-    wbs_cyc_o   <= wbs_cyc_o_r;
-    wbs_stb_o   <= wbs_stb_o_r;
-    wbs_we_o    <= wbs_we_o_r;
-    wbs_sel_o   <= wbs_sel_o_r;
-    wbs_adr_o   <= wbs_adr_o_r;
-    wbs_dat_o   <= wbs_dat_o_r;
-    wbs_dat_i_r <= wbs_dat_i;
-    wbs_ack_i_r <= wbs_ack_i;
-    wbs_err_i_r <= wbs_err_i;
+    wbm_cyc_i_r  <= wbm_cyc_i;
+    wbm_stb_i_r  <= wbm_stb_i;
+    wbm_we_i_r   <= wbm_we_i;
+    wbm_sel_i_r  <= wbm_sel_i;
+    wbm_adr_i_r  <= wbm_adr_i;
+    wbm_dat_i_r  <= wbm_dat_i;
+    wbm_dat_o    <= wbm_dat_o_r;
+    wbm_ack_o    <= wbm_ack_o_r;
+    wbm_err_o    <= wbm_err_o_r;
+    wbs_cyc_o_r1 <= wbs_cyc_o_r;
+    wbs_cyc_o_r2 <= wbs_cyc_o_r1;
+    wbs_cyc_o_r3 <= wbs_cyc_o_r2;
+    wbs_cyc_o    <= wbs_cyc_o_r3;    
+    wbs_stb_o_r1 <= wbs_stb_o_r;
+    wbs_stb_o_r2 <= wbs_stb_o_r1;
+    wbs_stb_o_r3 <= wbs_stb_o_r2;    
+    wbs_stb_o    <= wbs_stb_o_r3;
+    wbs_we_o     <= wbs_we_o_r;
+    wbs_sel_o    <= wbs_sel_o_r;
+    wbs_adr_o    <= wbs_adr_o_r;
+    wbs_dat_o    <= wbs_dat_o_r;
+    wbs_dat_i_r  <= wbs_dat_i;
+    wbs_ack_i_r  <= wbs_ack_i;
+    wbs_err_i_r  <= wbs_err_i;
   end
- 
-  /************************* Function Defines **************************/
-  function [N_SLAVES-1:0] encode;
-    input [N_SLAVES-1:0] in;
-
-    integer trans;
-    begin
-      encode = 0; //default condition
-      for (trans=0; trans < N_SLAVES; trans=trans+1) begin
-        if (in[trans]) begin
-          encode = trans;
-        end
-      end
-    end
-  endfunction
-
 
   /************************** Common Signals ***************************/
 
@@ -114,60 +105,16 @@ module wbs_sub_arbiter(
     .timeout(timeout)
   );
   
-    /************************ ILA Monitoring **************************/
- 
-  //wire [9:0] masterwbcntrl;
-  //wire [9:0] slavewb1;
-  //wire [31:0] wbm_dat_in;
-  //wire [31:0] wbm_dat_out;
-  //wire [31:0] wbm_add_in;
-  //wire [31:0] wbs_dat_in;
-  //wire [31:0] wbs_dat_out;
-  //wire [31:0] wbs_add_out;
-  //wire [31:0] slavewb2;
-  //wire [31:0] temp2;
- 
-  //ila_0 ila_0_inst(
-  //.clk(wb_clk_i),
-  //.probe0(masterwbcntrl), //10 bit input
-  //.probe1(wbm_dat_in), //32 bit input
-  //.probe2(wbm_dat_out), //32 bit input
-  //.probe3(wbm_add_in), //32 bit input
-  //.probe4(slavewb1), //10 bit input
-  //.probe5(wbs_dat_in), //32 bit input
-  //.probe6(wbs_dat_out), //32 bit input
-  //.probe7(wbs_add_out), //32 bit input
-  //.probe8(slavewb2), //32 bit input
-  //.probe9(temp2) //32 bit input 
-  //);
-  
-  //assign masterwbcntrl = {wbm_err_o, wbm_ack_o,wbm_sel_i[3:0], wbm_we_i, wbm_stb_i, wbm_cyc_i, wb_rst_i};
-  //assign slavewb1 = {4'b0, wbs_sel_o[3:0], wbs_we_o, wb_rst_i};
-  //assign wbm_dat_in = wbm_dat_i;
-  //assign wbm_dat_out = wbm_dat_o;
-  //assign wbm_add_in = wbm_adr_i;
-  //assign wbs_dat_in = wbs_dat_i[31:0];
-  //assign wbs_dat_out = wbs_dat_o;
-  //assign wbs_add_out = wbs_adr_o;
-  //assign slavewb2 = {8'b0 ,wbs_stb_o[12:0], wbs_cyc_o[12:0]};
-  //assign temp2 = wbs_adr_o_diff;
+
     
   /*********************** WB Slave Arbitration **************************/
   assign wbs_sel_o_r = wbm_sel_i_r2;
- 
-
-  /* Generate wbs_sel from wbm_adr_i and SLAVE_ADDR & SLAVE_HIGH ie 001 -> slave 0 sel, 100 -> slave 2 sel*/
-//  genvar gen_i;
-//  generate for (gen_i=0; gen_i < N_SLAVES; gen_i=gen_i+1) begin : G0
-//    assign wbs_sel[gen_i] = wbm_adr_i_r[32 - 1:0] >= SLAVE_ADDR[32*(gen_i+1) - 1:32*(gen_i)] &&
-//                            wbm_adr_i_r[32 - 1:0] <= SLAVE_HIGH[32*(gen_i+1) - 1:32*(gen_i)];
-//  end endgenerate
 
   //AI: Adding pipelining to the for loops
   genvar gen_i;
   generate for (gen_i=0; gen_i < N_SLAVES; gen_i=gen_i+1) begin : G0
      always @ (posedge wb_clk_i) begin   
-        wbs_sel_reg[gen_i] = wbm_adr_i_r[32 - 1:0] >= SLAVE_ADDR[32*(gen_i+1) - 1:32*(gen_i)] &&
+        wbs_sel_reg[gen_i] <= wbm_adr_i_r[32 - 1:0] >= SLAVE_ADDR[32*(gen_i+1) - 1:32*(gen_i)] &&
                              wbm_adr_i_r[32 - 1:0] <= SLAVE_HIGH[32*(gen_i+1) - 1:32*(gen_i)];
      end                          
   end endgenerate
@@ -178,6 +125,16 @@ module wbs_sub_arbiter(
   reg        wbm_stb_i_r2;
   reg        wbm_we_i_r1;
   reg        wbm_we_i_r2;
+  reg        wbm_we_i_r3;
+  reg        wbm_we_i_r4;
+  reg        wbm_we_i_r5;
+  reg     [N_SLAVES - 1:0] wbs_cyc_o_r1;
+  reg     [N_SLAVES - 1:0] wbs_cyc_o_r2;
+  reg     [N_SLAVES - 1:0] wbs_cyc_o_r3;  
+  reg     [N_SLAVES - 1:0] wbs_stb_o_r1;
+  reg     [N_SLAVES - 1:0] wbs_stb_o_r2;
+  reg     [N_SLAVES - 1:0] wbs_stb_o_r3;   
+  
   reg  [3:0] wbm_sel_i_r1;
   reg  [3:0] wbm_sel_i_r2;
   reg [31:0] wbm_adr_i_r1;
@@ -192,10 +149,27 @@ module wbs_sub_arbiter(
   reg [N_SLAVES - 1:0] wbs_err_i_r2; 
   reg [N_SLAVES - 1:0] wbs_sel_reg1;   
   
-  assign wbs_sel = wbs_sel_reg;
+ assign wbs_sel = wbs_sel_reg;
 
-  wire [N_SLAVES-1:0] wbs_sel_enc = encode(wbs_sel); //this is the encoded value ie 10 -> 2, 100 -> 3 etc
-    
+ reg [N_SLAVES-1:0] wbs_enc_reg;
+ wire [N_SLAVES-1:0] wbs_enc;
+ 
+ assign wbs_enc = wbs_enc_reg;
+ 
+  //this is the encoded value ie 10 -> 2, 100 -> 3 etc            
+    integer i;
+    always @ (posedge wb_clk_i) begin
+        if (wbs_sel != 0) begin
+          for (i=0; i < N_SLAVES; i=i+1) begin
+             if (wbs_sel[i]) begin
+               wbs_enc_reg <= i; 
+             end
+          end    
+        end else begin
+          wbs_enc_reg <= {N_SLAVES{1'b0}};
+        end
+    end     
+  
   //Adding in Data Alignment since I am pipelining the for loops to meet timing  
   always @(posedge wb_clk_i) begin
     wbm_cyc_i_r1 <= wbm_cyc_i_r;
@@ -206,7 +180,10 @@ module wbs_sub_arbiter(
     
     wbm_we_i_r1  <= wbm_we_i_r;
     wbm_we_i_r2  <= wbm_we_i_r1;
-        
+    wbm_we_i_r3  <= wbm_we_i_r2;
+    wbm_we_i_r4  <= wbm_we_i_r3;
+    wbm_we_i_r5  <= wbm_we_i_r4;
+            
     wbm_sel_i_r1 <= wbm_sel_i_r;
     wbm_sel_i_r2 <= wbm_sel_i_r1;
         
@@ -236,17 +213,12 @@ module wbs_sub_arbiter(
   reg [31:0] wbs_adr_o_diff_reg;  
 
   assign wbs_adr_o_int = wbm_adr_i_r2 - wbs_adr_o_diff;
-
-//  genvar gen_j;
-//  generate for (gen_j=0; gen_j < 32; gen_j=gen_j+1) begin : G1
-//    assign wbs_adr_o_diff[gen_j] = SLAVE_ADDR[32*wbs_sel_enc + gen_j];
-//  end endgenerate
   
   //AI: Adding pipelining to the for loops
   genvar gen_j;
   generate for (gen_j=0; gen_j < 32; gen_j=gen_j+1) begin : G1
      always @ (posedge wb_clk_i) begin   
-       wbs_adr_o_diff_reg[gen_j] = SLAVE_ADDR[32*wbs_sel_enc + gen_j];
+       wbs_adr_o_diff_reg[gen_j] <= SLAVE_ADDR[32*wbs_enc + gen_j];
      end  
   end endgenerate
   
@@ -257,23 +229,20 @@ module wbs_sub_arbiter(
   assign wbs_adr_o_r = wbs_adr_o_reg;
 
   /* Generate wbm_dat_o from wbs_sel_enc */
-//  genvar gen_k;
-//  generate for (gen_k=0; gen_k < 32; gen_k=gen_k+1) begin : G2
-//    assign wbm_dat_o_r[gen_k] = wbs_dat_i_r[32*wbs_sel_enc + gen_k];
-//  end endgenerate
   //AI: Adding pipelining to the for loops
   genvar gen_k;
   generate for (gen_k=0; gen_k < 32; gen_k=gen_k+1) begin : G2
      always @ (posedge wb_clk_i) begin 
-       wbm_dat_o_r_reg[gen_k] = wbs_dat_i_r1[32*wbs_sel_enc + gen_k]; 
+       wbm_dat_o_r_reg[gen_k] <= wbs_dat_i_r1[32*wbs_enc + gen_k]; 
      end
   end endgenerate
+    
   
   assign wbm_dat_o_r = wbm_dat_o_r_reg;    
 
   assign wbm_ack_o_r = (wbs_ack_i_r2 & wbs_active) != {N_SLAVES{1'b0}};
 
-  assign wbs_we_o_r = wbm_we_i_r2;
+  assign wbs_we_o_r = wbm_we_i_r5;
   assign wbs_dat_o_r = wbm_dat_i_r2;
 
   //reg wbm_err_o;
@@ -290,7 +259,7 @@ module wbs_sub_arbiter(
     /* strobes */
     wbs_cyc_o_r <= {N_SLAVES{1'b0}};
     wbm_err_o_r <= 1'b0;
-
+    wbs_adr_o_reg <= wbs_adr_o_int;
     if (wb_rst_i) begin
       state <= STATE_IDLE;
       wbs_active <= {N_SLAVES{1'b0}};
@@ -302,7 +271,7 @@ module wbs_sub_arbiter(
               wbm_err_o_r <= 1'b1;
             end else begin
               wbs_active <= wbs_sel_reg1;
-              wbs_adr_o_reg <= wbs_adr_o_int;
+              //wbs_adr_o_reg <= wbs_adr_o_int;
               wbs_cyc_o_r <= wbs_sel_reg1;
               state <= STATE_WAIT;
             end
