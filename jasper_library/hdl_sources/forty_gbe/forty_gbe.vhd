@@ -1226,7 +1226,7 @@ architecture arch_forty_gbe of forty_gbe is
     
     --Wishbone Write State Machine
     signal wb_dsp_wr_state : T_WB_DSP_WR_STATE;
-    signal wb_slv_we_hist_i : std_logic;
+    signal wb_slv_stb_hist_i : std_logic;
     
     -- Mark Debug ILA Testing    
 --    signal dbg_wb_cross_clock_out_din : std_logic_vector(72 downto 0);
@@ -1246,7 +1246,6 @@ architecture arch_forty_gbe of forty_gbe is
 --    signal dbg_wb_dsp_wr_state : T_WB_DSP_WR_STATE;   
 --    signal dbg_WB_SLV_ACK_O_top : std_logic;
 --    signal dbg_WB_SLV_DAT_O_top : std_logic_vector(31 downto 0);
---    signal dbg_WB_SLV_RST_I_top : std_logic;    
 --    signal dbg_WB_SLV_DAT_O : std_logic_vector(31 downto 0);
 --    signal dbg_WB_SLV_ACK_O : std_logic;
 --    signal dbg_WB_SLV_SEL_I_top : std_logic_vector(3 downto 0);
@@ -3211,9 +3210,9 @@ begin
             wb_cross_clock_out_wrreq <= '0';
             wb_dsp_wr_state <= WB_DSP_WR_IDLE;
             wb_cross_clock_out_din <= (others => '0');
-            wb_slv_we_hist_i <= '0';
+            wb_slv_stb_hist_i <= '0';
         elsif (rising_edge(sys_clk))then
-            wb_slv_we_hist_i <= WB_SLV_WE_I(14);
+            wb_slv_stb_hist_i <= WB_SLV_STB_I(14);
             case wb_dsp_wr_state is    
                 when WB_DSP_WR_IDLE =>
                   wb_dsp_wr_state <= WB_DSP_WR_STROBE_CHECK;
@@ -3222,12 +3221,12 @@ begin
                 when WB_DSP_WR_STROBE_CHECK =>
                                     
                   --Check for strobe and write enable (write operation)
-                  if (WB_SLV_STB_I(14) = '1' and WB_SLV_WE_I(14) = '1')then
+                  if (WB_SLV_STB_I(14) = '1' and wb_slv_stb_hist_i = '0' and WB_SLV_WE_I(14) = '1')then
                       wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_EN_1;
                       wb_cross_clock_out_din <= "100" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '1';   
                       wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);
                   --Check for strobe and write deasserted (read operation)    
-                  elsif (WB_SLV_STB_I(14) = '1' and  WB_SLV_WE_I(14) = '0') then
+                  elsif (WB_SLV_STB_I(14) = '1' and wb_slv_stb_hist_i = '0' and  WB_SLV_WE_I(14) = '0') then
                       wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_EN_3;
                       wb_cross_clock_out_din <= "100" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '0';   
                       wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);                  
@@ -3263,16 +3262,9 @@ begin
                   wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);
                   wb_cross_clock_out_din <= "000" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & '0' & WB_SLV_SEL_I(14) & '0';
 
-                --stop writing and allow slower clock to read out
-                --wait a few clock cycles to allow Strobe to deassert               
+                --stop writing and allow slower clock to read out              
                 when WB_DSP_WR_FIFO_WR_DIS =>
-        
-                  --Wait in this state until the write enable signal has deasserted (strobe will be completed too)
-                  if(wb_slv_we_hist_i = '1' and WB_SLV_WE_I(14) = '0' ) then  
-                     wb_dsp_wr_state <= WB_DSP_WR_STROBE_CHECK;
-                  else
-                     wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_DIS;
-                  end if;   
+                  wb_dsp_wr_state <= WB_DSP_WR_STROBE_CHECK;
                   wb_cross_clock_out_wrreq <= '0';
                   wb_cross_clock_out_din <= "000" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & '0' & WB_SLV_SEL_I(14) & '0';
                   
