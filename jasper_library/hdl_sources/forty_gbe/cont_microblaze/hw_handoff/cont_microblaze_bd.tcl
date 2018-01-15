@@ -187,6 +187,31 @@ CONFIG.use_bram_block {BRAM_Controller} \
   connect_bd_net -net microblaze_0_Clk [get_bd_pins LMB_Clk] [get_bd_pins dlmb_bram_if_cntlr/LMB_Clk] [get_bd_pins dlmb_v10/LMB_Clk] [get_bd_pins ilmb_bram_if_cntlr/LMB_Clk] [get_bd_pins ilmb_v10/LMB_Clk]
   connect_bd_net -net microblaze_0_LMB_Rst [get_bd_pins LMB_Rst] [get_bd_pins dlmb_bram_if_cntlr/LMB_Rst] [get_bd_pins dlmb_v10/SYS_Rst] [get_bd_pins ilmb_bram_if_cntlr/LMB_Rst] [get_bd_pins ilmb_v10/SYS_Rst]
 
+  # Perform GUI Layout
+  regenerate_bd_layout -hierarchy [get_bd_cells /microblaze_0_local_memory] -layout_string {
+   guistr: "# # String gsaved with Nlview 6.5.12  2016-01-29 bk=1.3547 VDI=39 GEI=35 GUI=JA:1.6
+#  -string -flagsOSRD
+preplace port LMB_Clk -pg 1 -y 60 -defaultsOSRD
+preplace port ILMB -pg 1 -y 190 -defaultsOSRD
+preplace port DLMB -pg 1 -y 40 -defaultsOSRD
+preplace portBus LMB_Rst -pg 1 -y 80 -defaultsOSRD
+preplace inst ilmb_bram_if_cntlr -pg 1 -lvl 2 -y 200 -defaultsOSRD
+preplace inst dlmb_bram_if_cntlr -pg 1 -lvl 2 -y 70 -defaultsOSRD
+preplace inst lmb_bram -pg 1 -lvl 3 -y 90 -defaultsOSRD
+preplace inst ilmb_v10 -pg 1 -lvl 1 -y 210 -defaultsOSRD
+preplace inst dlmb_v10 -pg 1 -lvl 1 -y 60 -defaultsOSRD
+preplace netloc microblaze_0_dlmb 1 0 1 NJ
+preplace netloc microblaze_0_ilmb_bus 1 1 1 -140
+preplace netloc microblaze_0_Clk 1 0 2 -360 130 -160
+preplace netloc microblaze_0_dlmb_cntlr 1 2 1 80
+preplace netloc microblaze_0_LMB_Rst 1 0 2 -370 140 -150
+preplace netloc microblaze_0_ilmb 1 0 1 NJ
+preplace netloc microblaze_0_ilmb_cntlr 1 2 1 80
+preplace netloc microblaze_0_dlmb_bus 1 1 1 -160
+levelinfo -pg 1 -390 -260 -30 200 310 -top -10 -bot 280
+",
+}
+
   # Restore current instance
   current_bd_instance $oldCurInst
 }
@@ -244,6 +269,10 @@ CONFIG.POLARITY {ACTIVE_HIGH} \
   set SEL_O [ create_bd_port -dir O -from 3 -to 0 SEL_O ]
   set STB_O [ create_bd_port -dir O STB_O ]
   set WE_O [ create_bd_port -dir O WE_O ]
+  set dcm_locked [ create_bd_port -dir I -type rst dcm_locked ]
+  set_property -dict [ list \
+CONFIG.POLARITY {ACTIVE_HIGH} \
+ ] $dcm_locked
 
   # Create instance: axi_slave_wishbone_classic_master_0, and set properties
   set axi_slave_wishbone_classic_master_0 [ create_bd_cell -type ip -vlnv peralex.com:user:axi_slave_wishbone_classic_master:1.0 axi_slave_wishbone_classic_master_0 ]
@@ -282,9 +311,21 @@ CONFIG.C_USE_UART {0} \
   set microblaze_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:9.6 microblaze_0 ]
   set_property -dict [ list \
 CONFIG.C_DEBUG_ENABLED {1} \
+CONFIG.C_DIV_ZERO_EXCEPTION {1} \
 CONFIG.C_D_AXI {1} \
 CONFIG.C_D_LMB {1} \
+CONFIG.C_FAULT_TOLERANT {1} \
+CONFIG.C_FPU_EXCEPTION {0} \
+CONFIG.C_FSL_EXCEPTION {0} \
+CONFIG.C_ILL_OPCODE_EXCEPTION {1} \
 CONFIG.C_I_LMB {1} \
+CONFIG.C_M_AXI_D_BUS_EXCEPTION {1} \
+CONFIG.C_M_AXI_I_BUS_EXCEPTION {1} \
+CONFIG.C_OPCODE_0x0_ILLEGAL {0} \
+CONFIG.C_UNALIGNED_EXCEPTIONS {1} \
+CONFIG.C_USE_DIV {1} \
+CONFIG.C_USE_STACK_PROTECTION {1} \
+CONFIG.G_USE_EXCEPTIONS {1} \
  ] $microblaze_0
 
   # Create instance: microblaze_0_axi_intc, and set properties
@@ -331,6 +372,7 @@ CONFIG.NUM_PORTS {2} \
   # Create port connections
   connect_bd_net -net ACK_I_1 [get_bd_ports ACK_I] [get_bd_pins axi_slave_wishbone_classic_master_0/ACK_I]
   connect_bd_net -net DAT_I_1 [get_bd_ports DAT_I] [get_bd_pins axi_slave_wishbone_classic_master_0/DAT_I]
+  connect_bd_net -net Reset1_1 [get_bd_ports dcm_locked] [get_bd_pins rst_Clk_100M/dcm_locked]
   connect_bd_net -net Reset_1 [get_bd_ports Reset] [get_bd_pins rst_Clk_100M/ext_reset_in]
   connect_bd_net -net axi_slave_wishbone_classic_master_0_ADR_O [get_bd_ports ADR_O] [get_bd_pins axi_slave_wishbone_classic_master_0/ADR_O]
   connect_bd_net -net axi_slave_wishbone_classic_master_0_CYC_O [get_bd_ports CYC_O] [get_bd_pins axi_slave_wishbone_classic_master_0/CYC_O]
@@ -355,8 +397,8 @@ CONFIG.NUM_PORTS {2} \
   create_bd_addr_seg -range 0x00010000 -offset 0x41A00000 [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_timebase_wdt_0/S_AXI/Reg] SEG_axi_timebase_wdt_0_Reg
   create_bd_addr_seg -range 0x00010000 -offset 0x41C00000 [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_timer_0/S_AXI/Reg] SEG_axi_timer_0_Reg
   create_bd_addr_seg -range 0x00010000 -offset 0x40600000 [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_uartlite_0/S_AXI/Reg] SEG_axi_uartlite_0_Reg
-  create_bd_addr_seg -range 0x00020000 -offset 0x00000000 [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs microblaze_0_local_memory/dlmb_bram_if_cntlr/SLMB/Mem] SEG_dlmb_bram_if_cntlr_Mem
-  create_bd_addr_seg -range 0x00020000 -offset 0x00000000 [get_bd_addr_spaces microblaze_0/Instruction] [get_bd_addr_segs microblaze_0_local_memory/ilmb_bram_if_cntlr/SLMB/Mem] SEG_ilmb_bram_if_cntlr_Mem
+  create_bd_addr_seg -range 0x00040000 -offset 0x00000000 [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs microblaze_0_local_memory/dlmb_bram_if_cntlr/SLMB/Mem] SEG_dlmb_bram_if_cntlr_Mem
+  create_bd_addr_seg -range 0x00040000 -offset 0x00000000 [get_bd_addr_spaces microblaze_0/Instruction] [get_bd_addr_segs microblaze_0_local_memory/ilmb_bram_if_cntlr/SLMB/Mem] SEG_ilmb_bram_if_cntlr_Mem
   create_bd_addr_seg -range 0x00010000 -offset 0x41200000 [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs microblaze_0_axi_intc/S_AXI/Reg] SEG_microblaze_0_axi_intc_Reg
 
   # Perform GUI Layout
@@ -369,6 +411,7 @@ preplace port Clk -pg 1 -y 60 -defaultsOSRD
 preplace port WE_O -pg 1 -y 870 -defaultsOSRD
 preplace port STB_O -pg 1 -y 850 -defaultsOSRD
 preplace port CYC_O -pg 1 -y 810 -defaultsOSRD
+preplace port dcm_locked -pg 1 -y 140 -defaultsOSRD
 preplace port Reset -pg 1 -y 80 -defaultsOSRD
 preplace port ACK_I -pg 1 -y 810 -defaultsOSRD
 preplace portBus DAT_O -pg 1 -y 770 -defaultsOSRD
@@ -376,48 +419,63 @@ preplace portBus ADR_O -pg 1 -y 790 -defaultsOSRD
 preplace portBus SEL_O -pg 1 -y 830 -defaultsOSRD
 preplace portBus DAT_I -pg 1 -y 790 -defaultsOSRD
 preplace inst axi_timebase_wdt_0 -pg 1 -lvl 5 -y 280 -defaultsOSRD
+preplace inst microblaze_0_local_memory|ilmb_v10 -pg 1 -lvl 1 -y 852 -defaultsOSRD
 preplace inst microblaze_0_axi_periph -pg 1 -lvl 4 -y 310 -defaultsOSRD
+preplace inst microblaze_0_local_memory|lmb_bram -pg 1 -lvl 3 -y 732 -defaultsOSRD
 preplace inst xlconcat_0 -pg 1 -lvl 1 -y 530 -defaultsOSRD
 preplace inst axi_timer_0 -pg 1 -lvl 5 -y 450 -defaultsOSRD
+preplace inst microblaze_0_local_memory|dlmb_bram_if_cntlr -pg 1 -lvl 2 -y 722 -defaultsOSRD
 preplace inst microblaze_0_axi_intc -pg 1 -lvl 2 -y 290 -defaultsOSRD
 preplace inst mdm_1 -pg 1 -lvl 2 -y 70 -defaultsOSRD
 preplace inst rst_Clk_100M -pg 1 -lvl 1 -y 100 -defaultsOSRD
 preplace inst microblaze_0 -pg 1 -lvl 3 -y 320 -defaultsOSRD
 preplace inst axi_uartlite_0 -pg 1 -lvl 5 -y 630 -defaultsOSRD
-preplace inst microblaze_0_local_memory -pg 1 -lvl 4 -y 690 -defaultsOSRD
+preplace inst microblaze_0_local_memory|dlmb_v10 -pg 1 -lvl 1 -y 702 -defaultsOSRD
+preplace inst microblaze_0_local_memory -pg 1 -lvl 4 -y 692 -defaultsOSRD
+preplace inst microblaze_0_local_memory|ilmb_bram_if_cntlr -pg 1 -lvl 2 -y 852 -defaultsOSRD
 preplace inst axi_slave_wishbone_classic_master_0 -pg 1 -lvl 5 -y 810 -defaultsOSRD
+preplace netloc microblaze_0_local_memory|microblaze_0_dlmb 1 0 1 N
+preplace netloc microblaze_0_local_memory|microblaze_0_dlmb_cntlr 1 2 1 N
 preplace netloc axi_slave_wishbone_classic_master_0_WE_O 1 5 1 N
-preplace netloc microblaze_0_axi_periph_M04_AXI 1 4 1 2110
-preplace netloc rst_Clk_100M_mb_reset 1 1 2 490 400 850
-preplace netloc axi_uartlite_0_interrupt 1 0 6 150 470 NJ 470 NJ 470 NJ 560 NJ 560 2710
+preplace netloc microblaze_0_axi_periph_M04_AXI 1 4 1 2550
+preplace netloc microblaze_0_local_memory|microblaze_0_ilmb_cntlr 1 2 1 2270
+preplace netloc microblaze_0_local_memory|microblaze_0_Clk 1 0 2 1820 772 2040
+preplace netloc Reset1_1 1 0 1 N
+preplace netloc rst_Clk_100M_mb_reset 1 1 2 450 400 770
+preplace netloc axi_uartlite_0_interrupt 1 0 6 110 470 NJ 470 NJ 470 NJ 560 NJ 560 3130
 preplace netloc axi_slave_wishbone_classic_master_0_SEL_O 1 5 1 N
-preplace netloc microblaze_0_Clk 1 0 5 140 10 510 390 840 240 1370 100 2130
+preplace netloc microblaze_0_Clk 1 0 5 100 10 470 390 760 240 1290 100 2570
 preplace netloc microblaze_0_interrupt 1 2 1 N
-preplace netloc microblaze_0_intc_axi 1 1 4 540 170 NJ 70 NJ 70 2080
-preplace netloc microblaze_0_axi_periph_M03_AXI 1 4 1 2080
-preplace netloc microblaze_0_ilmb_1 1 3 1 1330
-preplace netloc microblaze_0_axi_dp 1 3 1 1380
+preplace netloc microblaze_0_intc_axi 1 1 4 500 170 NJ 70 NJ 70 2520
+preplace netloc microblaze_0_axi_periph_M03_AXI 1 4 1 2520
+preplace netloc microblaze_0_ilmb_1 1 3 1 1250
+preplace netloc microblaze_0_local_memory|microblaze_0_dlmb_bus 1 1 1 N
+preplace netloc microblaze_0_axi_dp 1 3 1 1270
 preplace netloc axi_slave_wishbone_classic_master_0_DAT_O 1 5 1 N
-preplace netloc xlconcat_0_dout 1 1 1 530
-preplace netloc microblaze_0_axi_periph_M01_AXI 1 4 1 2120
+preplace netloc xlconcat_0_dout 1 1 1 490
+preplace netloc microblaze_0_axi_periph_M01_AXI 1 4 1 2560
 preplace netloc axi_slave_wishbone_classic_master_0_CYC_O 1 5 1 N
 preplace netloc axi_slave_wishbone_classic_master_0_ADR_O 1 5 1 N
+preplace netloc microblaze_0_local_memory|microblaze_0_ilmb_bus 1 1 1 2030
 preplace netloc axi_uartlite_0_UART 1 5 1 N
-preplace netloc axi_timebase_wdt_0_wdt_reset 1 0 6 140 190 NJ 190 NJ 90 NJ 90 NJ 90 2710
-preplace netloc microblaze_0_dlmb_1 1 3 1 1360
-preplace netloc microblaze_0_axi_periph_M02_AXI 1 4 1 2090
+preplace netloc axi_timebase_wdt_0_wdt_reset 1 0 6 100 190 NJ 190 NJ 90 NJ 90 NJ 90 3130
+preplace netloc microblaze_0_dlmb_1 1 3 1 1280
+preplace netloc microblaze_0_axi_periph_M02_AXI 1 4 1 2530
 preplace netloc axi_slave_wishbone_classic_master_0_STB_O 1 5 1 N
-preplace netloc microblaze_0_debug 1 2 1 830
-preplace netloc rst_Clk_100M_peripheral_aresetn 1 1 4 530 140 NJ 140 1400 110 2100
-preplace netloc rst_Clk_100M_interconnect_aresetn 1 1 3 NJ 130 NJ 130 1390
-preplace netloc rst_Clk_100M_bus_struct_reset 1 1 3 530 10 NJ 10 NJ
-preplace netloc mdm_1_debug_sys_rst 1 0 3 150 200 NJ 180 800
+preplace netloc microblaze_0_local_memory|microblaze_0_ilmb 1 0 1 N
+preplace netloc microblaze_0_debug 1 2 1 750
+preplace netloc rst_Clk_100M_peripheral_aresetn 1 1 4 490 140 NJ 140 1310 110 2540
+preplace netloc rst_Clk_100M_interconnect_aresetn 1 1 3 NJ 130 NJ 130 1300
+preplace netloc rst_Clk_100M_bus_struct_reset 1 1 3 490 10 NJ 10 NJ
+preplace netloc mdm_1_debug_sys_rst 1 0 3 110 200 NJ 180 720
 preplace netloc Reset_1 1 0 1 N
-preplace netloc ACK_I_1 1 0 5 NJ 810 NJ 810 NJ 810 NJ 810 N
-preplace netloc axi_timer_0_interrupt 1 0 6 140 460 NJ 460 NJ 460 NJ 550 NJ 550 2710
+preplace netloc ACK_I_1 1 0 5 NJ 810 NJ 810 NJ 810 NJ 984 2580
+preplace netloc microblaze_0_local_memory|microblaze_0_LMB_Rst 1 0 2 1830 782 2050
+preplace netloc axi_timer_0_interrupt 1 0 6 100 460 NJ 460 NJ 460 NJ 550 NJ 550 3130
 preplace netloc axi_slave_wishbone_classic_master_0_RST_O 1 5 1 N
-preplace netloc DAT_I_1 1 0 5 NJ 790 NJ 790 NJ 790 NJ 790 N
-levelinfo -pg 1 120 320 690 1090 1940 2563 2730 -top 0 -bot 920
+preplace netloc DAT_I_1 1 0 5 NJ 790 NJ 790 NJ 790 NJ 964 2560
+levelinfo -pg 1 80 280 610 1000 1850 2990 3150 -top 0 -bot 1000
+levelinfo -hier microblaze_0_local_memory * 1930 2160 2380 *
 ",
 }
 

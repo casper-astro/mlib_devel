@@ -1,7 +1,7 @@
 --Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2016.2 (lin64) Build 1577090 Thu Jun  2 16:32:35 MDT 2016
---Date        : Tue Nov  8 10:51:00 2016
+--Date        : Mon Jan 15 12:15:59 2018
 --Host        : adam-cm running 64-bit Ubuntu 14.04.5 LTS
 --Command     : generate_target cont_microblaze.bd
 --Design      : cont_microblaze
@@ -2350,7 +2350,8 @@ entity cont_microblaze is
     STB_O : out STD_LOGIC;
     UART_rxd : in STD_LOGIC;
     UART_txd : out STD_LOGIC;
-    WE_O : out STD_LOGIC
+    WE_O : out STD_LOGIC;
+    dcm_locked : in STD_LOGIC
   );
   attribute CORE_GENERATION_INFO : string;
   attribute CORE_GENERATION_INFO of cont_microblaze : entity is "cont_microblaze,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=cont_microblaze,x_ipVersion=1.00.a,x_ipLanguage=VHDL,numBlks=24,numReposBlks=16,numNonXlnxBlks=1,numHierBlks=8,maxHierDepth=1,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=0,numPkgbdBlks=0,bdsource=USER,synth_mode=Global}";
@@ -2621,6 +2622,7 @@ architecture STRUCTURE of cont_microblaze is
   end component cont_microblaze_xlconcat_0_0;
   signal ACK_I_1 : STD_LOGIC;
   signal DAT_I_1 : STD_LOGIC_VECTOR ( 31 downto 0 );
+  signal Reset1_1 : STD_LOGIC;
   signal Reset_1 : STD_LOGIC;
   signal axi_slave_wishbone_classic_master_0_ADR_O : STD_LOGIC_VECTOR ( 31 downto 0 );
   signal axi_slave_wishbone_classic_master_0_CYC_O : STD_LOGIC;
@@ -2814,6 +2816,7 @@ begin
   DAT_I_1(31 downto 0) <= DAT_I(31 downto 0);
   DAT_O(31 downto 0) <= axi_slave_wishbone_classic_master_0_DAT_O(31 downto 0);
   RST_O <= axi_slave_wishbone_classic_master_0_RST_O;
+  Reset1_1 <= dcm_locked;
   Reset_1 <= Reset;
   SEL_O(3 downto 0) <= axi_slave_wishbone_classic_master_0_SEL_O(3 downto 0);
   STB_O <= axi_slave_wishbone_classic_master_0_STB_O;
@@ -3252,7 +3255,7 @@ rst_Clk_100M: component cont_microblaze_rst_Clk_100M_0
      port map (
       aux_reset_in => axi_timebase_wdt_0_wdt_reset,
       bus_struct_reset(0) => rst_Clk_100M_bus_struct_reset(0),
-      dcm_locked => '1',
+      dcm_locked => Reset1_1,
       ext_reset_in => Reset_1,
       interconnect_aresetn(0) => rst_Clk_100M_interconnect_aresetn(0),
       mb_debug_sys_rst => mdm_1_debug_sys_rst,

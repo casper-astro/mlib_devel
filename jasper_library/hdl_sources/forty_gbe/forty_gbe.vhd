@@ -282,7 +282,8 @@ architecture arch_forty_gbe of forty_gbe is
         STB_O       : out std_logic;
         UART_rxd    : in std_logic;
         UART_txd    : out std_logic;
-        WE_O        : out std_logic);
+        WE_O        : out std_logic;
+        dcm_locked  : in std_logic);
     end component;
     
     component mezzanine_enable_delay
@@ -765,6 +766,7 @@ architecture arch_forty_gbe of forty_gbe is
     signal user_clk_mmcm : std_logic;
     signal wb_dsp_clk_mmcm : std_logic;
     signal wb_dsp_clk : std_logic;
+    signal dcm_locked : std_logic;
     --Reset Synchroniser and user reset signals
     signal sync_sys_fpga_rst : std_logic;
     signal sync_sys_fpga_rst2 : std_logic;
@@ -1432,7 +1434,7 @@ begin
         --CLKOUT1   => sys_clk_mmcm,
         CLKOUT2   => wb_dsp_clk_mmcm,
         CLKFBOUT  => CLKFB,  -- Feedback clock output
-        --LOCKED    => LOCKED,
+        LOCKED    => dcm_locked,
         CLKIN1    => refclk_1, -- Main clock input
         PWRDWN    => '0',
         RST       => '0',--fpga_reset,
@@ -1932,7 +1934,9 @@ begin
         STB_O       => WB_MST_STB_O,
         UART_rxd    => microblaze_uart_rxd,
         UART_txd    => microblaze_uart_txd,
-        WE_O        => WB_MST_WE_O);
+        WE_O        => WB_MST_WE_O,
+        dcm_locked  => dcm_locked);
+        
 
 
     microblaze_uart_rxd <= DEBUG_UART_RX;
