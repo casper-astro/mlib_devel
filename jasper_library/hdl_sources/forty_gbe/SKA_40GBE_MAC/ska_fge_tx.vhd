@@ -723,9 +723,11 @@ begin
    --AI: Deassert read when FIFO empty and reset asserted
     app_tx_ctrl_rdreq <= app_tx_ctrl_rd and (not app_tx_ctrl_empty) and (not app_rst);
 	
-	gen_app_tx_afull : process(app_clk)
+	gen_app_tx_afull : process(app_rst, app_clk)
 	begin
-        if (rising_edge(app_clk))then
+	if (app_rst = '1') then
+	    app_tx_afull <= '0';
+        elsif (rising_edge(app_clk))then
             app_tx_afull <= app_tx_data_afull or app_tx_ctrl_afull;	       
         end if;
 	end process;
