@@ -1375,7 +1375,7 @@ begin
     
     -- GT 29/03/2017 NEED TO ENSURE FIRMWARE IS RESET AS FPGA BOOTS
     -- FROM SDRAM RECONFIGURATION, WAS ONLY BEING RESET ON POWER UP
-    gen_fpga_reset_counter : process(FPGA_RESET_N, sys_clk)
+    gen_fpga_reset_counter : process(FPGA_RESET_N, dcm_locked, sys_clk)
       begin
           if (FPGA_RESET_N = '0' or dcm_locked = '0')then
               fpga_reset_counter <= (others => '0');
