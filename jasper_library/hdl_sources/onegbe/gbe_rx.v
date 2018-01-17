@@ -174,9 +174,13 @@ module gbe_rx #(
 
   reg [7:0] mac_data;
   reg       mac_dvld;
+  reg       mac_rx_goodframe_reg;
+  reg       mac_rx_badframe_reg;
   always @(posedge mac_clk) begin
     mac_data <= mac_rx_data;
     mac_dvld <= mac_rx_dvld;
+    mac_rx_goodframe_reg <= mac_rx_goodframe;
+    mac_rx_badframe_reg  <= mac_rx_badframe;
   end
 
   /*** Another delay to line up with frame ok's ***/
@@ -597,12 +601,12 @@ module gbe_rx #(
           end
         end
         CPU_VALIDATE: begin
-          if (mac_rx_goodframe) begin
+            if (mac_rx_goodframe_reg) begin
             cpu_state     <= CPU_HANDSHAKE;
             cpu_ready_reg <= 1'b1;
           end
 
-          if (mac_rx_badframe || cpu_invalidate) begin
+            if (mac_rx_badframe_reg || cpu_invalidate) begin
             cpu_state <= CPU_IDLE;
           end
         end
