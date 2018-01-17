@@ -1377,7 +1377,7 @@ begin
     -- FROM SDRAM RECONFIGURATION, WAS ONLY BEING RESET ON POWER UP
     gen_fpga_reset_counter : process(FPGA_RESET_N, sys_clk)
       begin
-          if (FPGA_RESET_N = '0')then
+          if (FPGA_RESET_N = '0' or dcm_locked = '0')then
               fpga_reset_counter <= (others => '0');
               fpga_reset <= '1';
           elsif (rising_edge(sys_clk))then
