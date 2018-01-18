@@ -160,7 +160,25 @@ pins:
       - AW34
       - BB33
       - BA33
-      - AY33
+      - AY33      
+  aux_clk_diff_p:
+    iostd: LVDS
+    loc: AU20
+  aux_clk_diff_n:
+    iostd: LVDS
+    loc: AV19
+  sync_in_p:
+    iostd: LVDS
+    loc: AT21
+  sync_in_n:
+    iostd: LVDS
+    loc: AU21
+  sync_out_p:
+    iostd: LVDS
+    loc: AW21
+  sync_out_n:
+    iostd: LVDS
+    loc: AY21
   FPGA_ATX_PSU_KILL:
     iostd: LVCMOS18
     loc: BD10
@@ -757,21 +775,6 @@ pins:
   SPARTAN_CLK:
     iostd: LVCMOS18
     loc: BA26
-  AUX_CLK_P:
-    iostd: LVDS
-  AUX_CLK_N:
-    iostd: LVDS
-    loc: AV19
-  AUX_SYNCI_P:
-    iostd: LVDS
-  AUX_SYNCI_N:
-    iostd: LVDS
-    loc: AU21
-  AUX_SYNCO_P:
-    iostd: LVDS
-  AUX_SYNCO_N:
-    iostd: LVDS
-    loc: AY21
   MONITOR_ALERT_N:
     iostd: LVCMOS18
     loc: BB13

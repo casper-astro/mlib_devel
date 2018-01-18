@@ -18,7 +18,7 @@ class gpio(YellowBlock):
             self.pad_bitwidth = self.bitwidth
 
         self.io_group = self.io_group.split(':')[-1] #iogroups have the form PLATFORM:GROUP (now would be a good time to change this!)
-        self.use_diffio = ((self.io_group in ['zdok0','zdok1','mdr','qsh','sync_in','sync_out']) and not self.use_single_ended)
+        self.use_diffio = ((self.io_group in ['zdok0','zdok1','mdr','qsh','sync_in','sync_out', 'aux_clk_diff']) and not self.use_single_ended)
 
         # Set the module we need to instantiate
         if self.use_diffio:
