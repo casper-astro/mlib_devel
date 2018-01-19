@@ -11,8 +11,8 @@ import platform
 import yellow_blocks.yellow_block as yellow_block
 import verilog
 from constraints import PortConstraint, ClockConstraint, GenClockConstraint, \
-    ClockGroupConstraint, InputDelayConstraint, OutputDelayConstraint, \
-    FalsePathConstraint, MultiCycleConstraint, RawConstraint, MAX_IMAGE_CHUNK_SIZE
+    ClockGroupConstraint, InputDelayConstraint, OutputDelayConstraint, MaxDelayConstraint, \
+    MinDelayConstraint, FalsePathConstraint, MultiCycleConstraint, RawConstraint, MAX_IMAGE_CHUNK_SIZE
 import castro
 import helpers
 import yaml
@@ -516,6 +516,8 @@ class Toolflow(object):
         clk_grp_constraints = []
         input_delay_constraints = []
         output_delay_constraints = []
+        max_delay_constraints = []
+        min_delay_constraints = []
         false_path_constraints = []
         multi_cycle_constraints = []
         raw_constraints = []
@@ -570,6 +572,18 @@ class Toolflow(object):
                     add_delay_en=const.add_delay_en, 
                     portname=const.portname
                 )]
+            elif isinstance(const, MaxDelayConstraint):
+                max_delay_constraints += [castro.MaxDelayConstraint(
+                    sourcepath=const.sourcepath,
+                    destpath=const.destpath,
+                    constdelay_ns=const.constdelay_ns
+                )]
+            elif isinstance(const, MinDelayConstraint):
+                min_delay_constraints += [castro.MinDelayConstraint(
+                    sourcepath=const.sourcepath,
+                    destpath=const.destpath,
+                    constdelay_ns=const.constdelay_ns
+                )]
             elif isinstance(const, FalsePathConstraint):
                 false_path_constraints += [castro.FalsePthConstraint(
                     sourcepath=const.sourcepath, 
@@ -593,6 +607,8 @@ class Toolflow(object):
         c.synthesis.clk_grp_constraints = clk_grp_constraints
         c.synthesis.input_delay_constraints = input_delay_constraints
         c.synthesis.output_delay_constraints = output_delay_constraints
+        c.synthesis.max_delay_constraints = max_delay_constraints
+        c.synthesis.min_delay_constraints = min_delay_constraints
         c.synthesis.false_path_constraints = false_path_constraints
         c.synthesis.multi_cycle_constraints = multi_cycle_constraints
         c.synthesis.raw_constraints = raw_constraints
@@ -783,6 +799,8 @@ class ToolflowBackend(object):
             self.castro.synthesis.clk_grp_constraints +
             self.castro.synthesis.input_delay_constraints +
             self.castro.synthesis.output_delay_constraints +
+            self.castro.synthesis.max_delay_constraints +
+            self.castro.synthesis.min_delay_constraints +
             self.castro.synthesis.false_path_constraints +
             self.castro.synthesis.multi_cycle_constraints +
             self.castro.synthesis.raw_constraints)
@@ -1451,6 +1469,14 @@ class VivadoBackend(ToolflowBackend):
             self.logger.debug('New Output delay constraint found')
             user_const += self.format_output_delay_const(const)
 
+        if isinstance(const, castro.MaxDelayConstraint):
+            self.logger.debug('New Max delay constraint found')
+            user_const += self.format_max_delay_const(const)
+
+        if isinstance(const, castro.MinDelayConstraint):
+            self.logger.debug('New Min delay constraint found')
+            user_const += self.format_min_delay_const(const)
+
         if isinstance(const, castro.FalsePthConstraint):
             self.logger.debug('New False Path constraint found')
             user_const += self.format_false_path_const(const)
@@ -1515,6 +1541,24 @@ class VivadoBackend(ToolflowBackend):
             return 'set_output_delay -clock [get_clocks %s] -%s %4.3f ' \
                    '[get_ports {%s}]\n' % (c.clkname, c.consttype,
                                            c.constdelay_ns, c.portname)
+
+    @staticmethod
+    def format_max_delay_const(c):
+        if c.sourcepath is None:
+             return 'set_max_delay %s -to %s\n' % (c.constdelay_ns, c.destpath)
+        elif c.destpath is None:
+             return 'set_max_delay %s -from %s\n' % (c.constdelay_ns, c.sourcepath)
+        else:
+             return 'set_max_delay %s -from %s -to %s\n' % (c.constdelay_ns, c.sourcepath, c.destpath)
+
+    @staticmethod
+    def format_min_delay_const(c):
+        if c.sourcepath is None:
+             return 'set_min_delay %s -to %s\n' % (c.constdelay_ns, c.destpath)
+        elif c.destpath is None:
+             return 'set_min_delay %s -from %s\n' % (c.constdelay_ns, c.sourcepath)
+        else:
+             return 'set_min_delay %s -from %s -to %s\n' % (c.constdelay_ns, c.sourcepath, c.destpath)
 
     @staticmethod
     def format_false_path_const(c):

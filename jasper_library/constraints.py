@@ -190,6 +190,34 @@ class OutputDelayConstraint(object):
         self.add_delay_en = add_delay_en
         self.portname = portname
 
+class MaxDelayConstraint(object):
+    '''
+    A set max delay constraint - simply holds the source, destination paths and the constraint
+    delay value (ns).
+    '''
+    def __init__(self, sourcepath=None, destpath=None , constdelay_ns=None):
+        logger.debug('New set max delay constraint')
+        logger.debug('source path: %s'%sourcepath)
+        logger.debug('destination path: %s'%destpath)
+        logger.debug('constraint delay: %s'%constdelay_ns)
+        self.sourcepath = sourcepath
+        self.destpath = destpath
+        self.constdelay_ns = constdelay_ns
+
+class MinDelayConstraint(object):
+    '''
+    A set min delay constraint - simply holds the source, destination paths and the constraint
+    delay value (ns).
+    '''
+    def __init__(self, sourcepath=None, destpath=None , constdelay_ns=None):
+        logger.debug('New set max delay constraint')
+        logger.debug('source path: %s'%sourcepath)
+        logger.debug('destination path: %s'%destpath)
+        logger.debug('constraint delay: %s'%constdelay_ns)
+        self.sourcepath = sourcepath
+        self.destpath = destpath
+        self.constdelay_ns = constdelay_ns
+
 class FalsePathConstraint(object):
     '''
     A false path constraint - simply holds the source and destination paths.

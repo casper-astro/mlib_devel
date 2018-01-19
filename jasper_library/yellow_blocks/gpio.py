@@ -1,5 +1,5 @@
 from yellow_block import YellowBlock
-from constraints import PortConstraint
+from constraints import PortConstraint, MaxDelayConstraint, MinDelayConstraint, FalsePathConstraint
 from helpers import to_int_list
 
 class gpio(YellowBlock):
@@ -57,6 +57,39 @@ class gpio(YellowBlock):
             const = []
             const += [PortConstraint(self.fullname+'_ext_p', self.io_group + '_p', port_index=range(self.bitwidth), iogroup_index=to_int_list(self.bit_index))]
             const += [PortConstraint(self.fullname+'_ext_n', self.io_group + '_n', port_index=range(self.bitwidth), iogroup_index=to_int_list(self.bit_index))]
+            #Constrain the I/O (it is assumed that this I/O is not timing critical and set_false_path is used)
+            #NB: The set_max_delay and set_min_delay is important as Vivado will report that these signals are not
+            #constrained without it
+            if self.io_dir == 'in':
+                const += [MaxDelayConstraint(sourcepath='[get_ports {%s_ext_p[*]}]' % self.fullname, constdelay_ns=1.0)]
+                const += [MaxDelayConstraint(sourcepath='[get_ports {%s_ext_n[*]}]' % self.fullname, constdelay_ns=1.0)]
+                const += [MinDelayConstraint(sourcepath='[get_ports {%s_ext_p[*]}]' % self.fullname, constdelay_ns=1.0)]
+                const += [MinDelayConstraint(sourcepath='[get_ports {%s_ext_n[*]}]' % self.fullname, constdelay_ns=1.0)]
+                const += [FalsePathConstraint(sourcepath='[get_ports {%s_ext_p[*]}]' % self.fullname)]
+                const += [FalsePathConstraint(sourcepath='[get_ports {%s_ext_n[*]}]' % self.fullname)]
+
+            elif self.io_dir == 'out':
+                const += [MaxDelayConstraint(destpath='[get_ports {%s_ext_p[*]}]' % self.fullname, constdelay_ns=1.0)]
+                const += [MaxDelayConstraint(destpath='[get_ports {%s_ext_n[*]}]' % self.fullname, constdelay_ns=1.0)]
+                const += [MinDelayConstraint(destpath='[get_ports {%s_ext_p[*]}]' % self.fullname, constdelay_ns=1.0)]
+                const += [MinDelayConstraint(destpath='[get_ports {%s_ext_n[*]}]' % self.fullname, constdelay_ns=1.0)]
+                const += [FalsePathConstraint(destpath='[get_ports {%s_ext_p[*]}]' % self.fullname)]
+                const += [FalsePathConstraint(destpath='[get_ports {%s_ext_n[*]}]' % self.fullname)]
             return const
         else:
-            return [PortConstraint(self.fullname+'_ext', self.io_group, port_index=range(self.bitwidth), iogroup_index=to_int_list(self.bit_index))]
+            const = []
+            const += [PortConstraint(self.fullname+'_ext', self.io_group, port_index=range(self.bitwidth), iogroup_index=to_int_list(self.bit_index))]
+            #Constrain the I/O (it is assumed that this I/O is not timing critical and set_false_path is used)
+            #NB: The set_max_delay and set_min_delay is important as Vivado will report that these signals are not
+            #constrained without it
+            if self.io_dir == 'in':
+                const += [MaxDelayConstraint(sourcepath='[get_ports {%s_ext[*]}]' % self.fullname, constdelay_ns=1.0)]
+                const += [MinDelayConstraint(sourcepath='[get_ports {%s_ext[*]}]' % self.fullname, constdelay_ns=1.0)]
+                const += [FalsePathConstraint(sourcepath='[get_ports {%s_ext[*]}]' % self.fullname)]
+            elif self.io_dir == 'out':
+                const += [MaxDelayConstraint(destpath='[get_ports {%s_ext[*]}]' % self.fullname, constdelay_ns=1.0)]
+                const += [MinDelayConstraint(destpath='[get_ports {%s_ext[*]}]' % self.fullname, constdelay_ns=1.0)]
+                const += [FalsePathConstraint(destpath='[get_ports {%s_ext[*]}]' % self.fullname)]
+            return const
+
+
