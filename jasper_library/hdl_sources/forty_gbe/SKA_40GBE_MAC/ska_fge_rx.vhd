@@ -665,11 +665,12 @@ begin
         end if;
     end process;
 
-    app_dvld <= payload0_val or payload1_val or payload2_val or payload3_val;
+    app_dvld <= (payload0_val or payload1_val or payload2_val or payload3_val) when (app_rst = '0') else '0';
     app_goodframe <= 
-    (application_frame and app_rx_good_frame_latched) when ((app_dvld = '0')and(app_dvld_z1 = '1')) else '0';
+    (application_frame and app_rx_good_frame_latched) when ((app_dvld = '0')and(app_dvld_z1 = '1')and(app_rst = '0')) else '0';
     app_badframe <= 
-    (application_frame and app_rx_bad_frame_latched) when ((app_dvld = '0')and(app_dvld_z1 = '1')) else '0';
+    (application_frame and app_rx_bad_frame_latched) when ((app_dvld = '0')and(app_dvld_z1 = '1')and(app_rst = '0')) else '0';
+
 
     gen_app_dvld_z1 : process(mac_clk)
     begin
@@ -982,11 +983,11 @@ begin
 ---------------------------------------------------------------------------------------------
 
     rx_eof <= '1' when
-    ((app_goodframe = '1')or
+    (((app_goodframe = '1')or
     (app_badframe = '1')or
-    ((app_dvld = '1')and((packet_fifo_almost_full = '1')or(ctrl_fifo_almost_full = '1')or(txctrl_fifo_almost_full = '1')))) else '0';
-    rx_bad <= app_badframe;
-    rx_over <= packet_fifo_almost_full or ctrl_fifo_almost_full or txctrl_fifo_almost_full;
+    ((app_dvld = '1')and((packet_fifo_almost_full = '1')or(ctrl_fifo_almost_full = '1')or(txctrl_fifo_almost_full = '1'))))and(app_rst = '0')) else '0';
+    rx_bad <= app_badframe when (app_rst = '0') else '0';
+    rx_over <= (packet_fifo_almost_full or ctrl_fifo_almost_full or txctrl_fifo_almost_full) when (app_rst = '0') else '0';
 
     packet_fifo_wr_data(255 downto 0) <= payload3_z1 & payload2_z1 & payload1_z1 & payload0_z1;
     packet_fifo_wr_data(256) <= payload0_val_z1;
@@ -1026,7 +1027,7 @@ begin
     
     ctrl_fifo_wr_data <= app_source_port & app_source_ip;
     --AI: Alway deassert FIFO write when reset is asserted
-    ctrl_fifo_wr_en   <= '1' when ((app_dvld = '1')and(first_word = '1')and(current_app_state = APP_RUN) and (app_rst = '0')) else '0';
+    ctrl_fifo_wr_en   <= '1' when ((app_dvld = '1')and(first_word = '1')and(current_app_state = APP_RUN)and(app_rst = '0')) else '0';
     txctrl_fifo_wr_data <= destination_port & destination_ip;
     --txctrl_fifo_wr_en   <= '1' when ((app_dvld = '1')and(first_word = '1')and(current_app_state = APP_RUN)) else '0';
 
@@ -1116,6 +1117,7 @@ begin
     begin
         if (app_rst = '1')then
             app_overrun_ack <= '1';
+            overrun_z1 <= '0';
         elsif (rising_edge(app_clk))then    
             if (current_app_state = APP_OVER)then
                 overrun_z1 <= '1';
