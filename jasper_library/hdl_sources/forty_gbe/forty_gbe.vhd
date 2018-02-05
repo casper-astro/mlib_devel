@@ -118,6 +118,9 @@ entity forty_gbe is
         HMC_MEZZ0_SCL_IN : in std_logic;
         HMC_MEZZ0_SDA_IN : in std_logic;
         HMC_MEZZ0_INIT_DONE : in std_logic;
+        HMC_MEZZ0_POST_OK : in std_logic;        
+        MEZZ0_ID : in std_logic_vector(2 downto 0);
+        MEZZ0_PRESENT : in std_logic;
 
         --HMC Mezzanine 1 Signals
         HMC_MEZZ1_SCL_OUT : out std_logic;
@@ -125,6 +128,9 @@ entity forty_gbe is
         HMC_MEZZ1_SCL_IN : in std_logic;
         HMC_MEZZ1_SDA_IN : in std_logic;
         HMC_MEZZ1_INIT_DONE : in std_logic;
+        HMC_MEZZ1_POST_OK : in std_logic;        
+        MEZZ1_ID : in std_logic_vector(2 downto 0);
+        MEZZ1_PRESENT : in std_logic;        
         
         --HMC Mezzanine 2 Signals
         HMC_MEZZ2_SCL_OUT : out std_logic;
@@ -132,6 +138,9 @@ entity forty_gbe is
         HMC_MEZZ2_SCL_IN : in std_logic;
         HMC_MEZZ2_SDA_IN : in std_logic;
         HMC_MEZZ2_INIT_DONE : in std_logic;
+        HMC_MEZZ2_POST_OK : in std_logic;                
+        MEZZ2_ID : in std_logic_vector(2 downto 0);
+        MEZZ2_PRESENT : in std_logic;        
         
         -- 1GBE SIGNALS
         ONE_GBE_SGMII_TX_P  : out std_logic;
@@ -159,7 +168,7 @@ entity forty_gbe is
         FAN_CONT_FAULT_N         : in    std_logic;
         MONITOR_ALERT_N          : in    std_logic;
         MEZZANINE_COMBINED_FAULT : out   std_logic;
-        FPGA_ATX_PSU_KILL        : out   std_logic;
+        FPGA_ATX_PSU_KILL        : out   std_logic;        
 
         -- USB INTERFACE
         USB_FPGA     : in  std_logic_vector(3 downto 0);
@@ -1219,6 +1228,10 @@ architecture arch_forty_gbe of forty_gbe is
     signal wb_dsp_wr_state : T_WB_DSP_WR_STATE;
     signal wb_slv_stb_hist_i : std_logic;
     
+    --Mezzanine 3 
+    signal MEZZ3_ID : std_logic_vector(2 downto 0);
+    signal MEZZ3_PRESENT : std_logic;
+    
     -- Mark Debug ILA Testing    
 --    signal dbg_wb_cross_clock_out_din : std_logic_vector(72 downto 0);
 --    signal dbg_wb_cross_clock_out_wrreq : std_logic;
@@ -1319,6 +1332,11 @@ begin
 --    dbg_WB_SLV_SEL_I <= WB_SLV_SEL_I(14);
 --    dbg_WB_SLV_WE_I <= WB_SLV_WE_I(14);
 --    dbg_WB_SLV_STB_I <= WB_SLV_STB_I(14);
+
+    --Mezzanine 3 ID and Present (this should be part of the 40GbE yellow block, but is part of the BSP for now)
+    --Mezzanine ID: "000" = spare, "001" = 40GbE, "010" = HMC, "011" = ADC, rest = spare
+    MEZZ3_ID <= "001";
+    MEZZ3_PRESENT <= '1';
 
     EMCCLK_FIX <= EMCCLK;
 
@@ -1713,33 +1731,63 @@ begin
 
 
 
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(0) <= not MEZZANINE_0_PRESENT_N;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(1) <= not MEZZANINE_1_PRESENT_N;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(2) <= not MEZZANINE_2_PRESENT_N;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(3) <= not MEZZANINE_3_PRESENT_N;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(7 downto 4) <= (others => '0');
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(0) <= not MEZZANINE_0_PRESENT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(1) <= not MEZZANINE_1_PRESENT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(2) <= not MEZZANINE_2_PRESENT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(3) <= not MEZZANINE_3_PRESENT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(7 downto 4) <= (others => '0');
 
     mezzanine_0_fault <= (not MEZZANINE_0_FAULT_N) when (mezzanine_0_fault_checking_enable = '1') else '0';
     mezzanine_1_fault <= (not MEZZANINE_1_FAULT_N) when (mezzanine_1_fault_checking_enable = '1') else '0';
     mezzanine_2_fault <= (not MEZZANINE_2_FAULT_N) when (mezzanine_2_fault_checking_enable = '1') else '0';
     mezzanine_3_fault <= (not MEZZANINE_3_FAULT_N) when (mezzanine_3_fault_checking_enable = '1') else '0';
 
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(8) <= mezzanine_0_fault;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(9) <= mezzanine_1_fault;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(10) <= mezzanine_2_fault;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(11) <= mezzanine_3_fault;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(15 downto 12) <= (others => '0');
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(8) <= mezzanine_0_fault;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(9) <= mezzanine_1_fault;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(10) <= mezzanine_2_fault;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(11) <= mezzanine_3_fault;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(15 downto 12) <= (others => '0');
 
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(16) <= not MEZZANINE_0_INT_N;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(17) <= not MEZZANINE_1_INT_N;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(18) <= not MEZZANINE_2_INT_N;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(19) <= not MEZZANINE_3_INT_N;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(31 downto 20) <= (others => '0');
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(16) <= not MEZZANINE_0_INT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(17) <= not MEZZANINE_1_INT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(18) <= not MEZZANINE_2_INT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(19) <= not MEZZANINE_3_INT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(31 downto 20) <= (others => '0');
 
     mezzanine_0_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(0);
     mezzanine_1_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(1);
     mezzanine_2_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(2);
     mezzanine_3_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(3);
+    
+    
+    --MEZZANINE STATUS 1 REGISTER (MEZZ0)
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(0) <= ((not MEZZANINE_0_PRESENT_N) and MEZZ0_PRESENT);
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(3 downto 1) <= MEZZ0_ID;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(4) <= HMC_MEZZ0_INIT_DONE;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(5) <= HMC_MEZZ0_POST_OK;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(7 downto 6) <= (others => '0');    
+    
+    --MEZZANINE STATUS 1 REGISTER (MEZZ1)
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(8) <= ((not MEZZANINE_1_PRESENT_N) and MEZZ1_PRESENT);
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(11 downto 9) <= MEZZ1_ID;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(12) <= HMC_MEZZ1_INIT_DONE;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(13) <= HMC_MEZZ1_POST_OK;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(15 downto 14) <= (others => '0');    
+    
+    --MEZZANINE STATUS 1 REGISTER (MEZZ2)
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(16) <= ((not MEZZANINE_2_PRESENT_N) and MEZZ2_PRESENT);
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(19 downto 17) <= MEZZ2_ID;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(20) <= HMC_MEZZ2_INIT_DONE;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(21) <= HMC_MEZZ2_POST_OK;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(23 downto 22) <= (others => '0');    
+
+    --MEZZANINE STATUS 1 REGISTER (MEZZ3)
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(24) <= ((not MEZZANINE_3_PRESENT_N) and MEZZ3_PRESENT);
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(27 downto 25) <= MEZZ3_ID;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(28) <= '0';
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(29) <= '0';
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(31 downto 30) <= (others => '0');  
+     
     
     mezzanine_enable_delay_0 : mezzanine_enable_delay
     port map(

@@ -25,6 +25,8 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         hmcc.add_port('SDA_IN',  'mez%s_sda_in' % self.mez, dir='in')
         hmcc.add_port('SCL_IN',  'mez%s_scl_in' % self.mez, dir='in')
         hmcc.add_port('INIT_DONE', '%s_init_done' % self.fullname, dir='out')
+        hmcc.add_port('MEZZ_ID', 'mez%s_id' % self.mez, dir='out', width=3)
+        hmcc.add_port('MEZZ_PRESENT', 'mez%s_present' % self.mez, dir='out')
         hmcc.add_port('POST_OK', '%s_post_ok' % self.fullname, dir='out')
 
         hmcc.add_port('HMC_MEZZ_RESET', 'MEZZANINE_%s_RESET' % self.mez, parent_port=True, dir='out')
@@ -109,6 +111,7 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
 
         self.instantiate_hmcc(top)
         top.assign_signal('mez%s_init_done' % self.mez, '%s_init_done' % self.fullname)
+        top.assign_signal('mez%s_post_ok' % self.mez, '%s_post_ok' % self.fullname)
 
     def gen_constraints(self):
         cons = []
