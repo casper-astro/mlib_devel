@@ -89,6 +89,11 @@ mask_visibilities{ismember(mask_names, 'rxbadctr')} = 'on';
 mask_visibilities{ismember(mask_names, 'rxvldctr')} = 'on';
 mask_visibilities{ismember(mask_names, 'rxeofctr')} = 'on';
 mask_visibilities{ismember(mask_names, 'rxsnaplen')} = 'on';
+try
+    mask_visibilities{ismember(mask_names, 'rxsrcip')} = 'on';
+    mask_visibilities{ismember(mask_names, 'rxdstip')} = 'on';
+catch e
+end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % these are visible if low level parameters enabled
