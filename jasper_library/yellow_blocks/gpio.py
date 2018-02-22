@@ -4,6 +4,9 @@ from helpers import to_int_list
 
 class gpio(YellowBlock):
     def initialize(self):
+
+        self.skarab_leds = False
+
         if self.arith_type == 'Boolean':
             # The yellow block will set a value for bitwidth,
             # override it here if the data type is boolean.
@@ -17,7 +20,12 @@ class gpio(YellowBlock):
         else:
             self.pad_bitwidth = self.bitwidth
 
+        if self.io_group == 'SKARAB:led':
+            # We have SKARAB LEDs - workflow needs to change
+            self.skarab_leds = True
+        
         self.io_group = self.io_group.split(':')[-1] #iogroups have the form PLATFORM:GROUP (now would be a good time to change this!)
+        
         self.use_diffio = ((self.io_group in ['zdok0','zdok1','mdr','qsh','sync_in','sync_out', 'aux_clk_diff']) and not self.use_single_ended)
 
         # Set the module we need to instantiate
@@ -29,7 +37,7 @@ class gpio(YellowBlock):
         else:
             if self.io_dir == 'in':
                 self.module = 'gpio_ext2simulink'
-            elif self.io_dir == 'out':
+            elif self.io_dir == 'out':                
                 self.module = 'gpio_simulink2ext'
         # add the source files, which have the same name as the module
         self.add_source(self.module)
@@ -46,11 +54,22 @@ class gpio(YellowBlock):
             inst.add_port('io_pad_p', signal=external_port_name + '_p', dir=self.io_dir, width=self.pad_bitwidth, parent_port=True)
             inst.add_port('io_pad_n', signal=external_port_name + '_n', dir=self.io_dir, width=self.pad_bitwidth, parent_port=True)
         else:
-            inst.add_port('io_pad', signal=external_port_name, dir=self.io_dir, width=self.pad_bitwidth, parent_port=True)
+            # import IPython
+            # IPython.embed()
+            if self.skarab_leds:
+                inst.add_port('io_pad', signal='dsp_leds_%s' % str(self.bit_index), dir=self.io_dir, width=self.pad_bitwidth, parent_port=False)
+            else:
+                inst.add_port('io_pad', signal=external_port_name, dir=self.io_dir, width=self.pad_bitwidth, parent_port=True)
         inst.add_parameter('CLK_PHASE', self.reg_clk_phase)
         inst.add_parameter('WIDTH', str(self.bitwidth))
         inst.add_parameter('DDR', '1' if self.use_ddr  else '0')
-        inst.add_parameter('REG_IOB', '"true"' if self.reg_iob else '"false"')
+        
+        if self.skarab_leds:
+            # Cannot/Should not register the output on the IO Pad
+            inst.add_parameter('SKARAB_LED', '1')
+            inst.add_parameter('REG_IOB', '"false"')
+        else:
+            inst.add_parameter('REG_IOB', '"true"' if self.reg_iob else '"false"')
 
     def gen_constraints(self):
         if self.use_diffio:
@@ -78,7 +97,16 @@ class gpio(YellowBlock):
             return const
         else:
             const = []
+            
+            if self.skarab_leds:
+                # Don't need to generate any constraints (?)
+                # - Just need to map the output of the gpio_simulink2ext to the input of the led_manager
+                return const
+            # else:
+            # import IPython
+            # IPython.embed()
             const += [PortConstraint(self.fullname+'_ext', self.io_group, port_index=range(self.bitwidth), iogroup_index=to_int_list(self.bit_index))]
+            
             #Constrain the I/O (it is assumed that this I/O is not timing critical and set_false_path is used)
             #NB: The set_max_delay and set_min_delay is important as Vivado will report that these signals are not
             #constrained without it

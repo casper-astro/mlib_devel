@@ -11,7 +11,8 @@ entity gpio_simulink2ext is
     		  WIDTH : integer := 4;
     		  DDR : integer := 0;
     		  CLK_PHASE : integer := 0;
-              REG_IOB : string := "true"
+              REG_IOB : string := "true";
+			  SKARAB_LED : integer := 0
 	);
 	 Port (
 		gateway   : in  std_logic_vector((WIDTH)-1         downto 0);
@@ -67,7 +68,7 @@ begin
 		end generate REG_DDR_GEN;
 	end generate DDR_GEN;
 	
-	SDR_GEN: if DDR = 0 generate
+	SDR_GEN: if DDR = 0 and SKARAB_LED = 0 generate
 		REG_SDR_GEN: for i in 0 to (WIDTH/(DDR+1)-1) generate
 			attribute IOB of Q_REG_SDR:label is REG_IOB;
 		begin
@@ -79,5 +80,9 @@ begin
 			);
 		end generate REG_SDR_GEN;
 	end generate SDR_GEN;
+
+	SKARAB_GEN: if DDR = 0 and SKARAB_LED = 1 generate
+		io_pad <= gateway;
+	end generate SKARAB_GEN;
 
 end Behavioral;

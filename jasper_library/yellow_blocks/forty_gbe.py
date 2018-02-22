@@ -1,7 +1,7 @@
 import os
 from yellow_block import YellowBlock
 from constraints import PortConstraint, ClockConstraint, GenClockConstraint, ClockGroupConstraint, InputDelayConstraint,\
-    OutputDelayConstraint, FalsePathConstraint, MultiCycleConstraint, RawConstraint
+    OutputDelayConstraint, MaxDelayConstraint, MinDelayConstraint, FalsePathConstraint, MultiCycleConstraint, RawConstraint
 from itertools import count
 from clk_factors import clk_factors
 
@@ -235,6 +235,24 @@ class forty_gbe(YellowBlock):
         inst.add_port('WB_SLV_STB_I_top', 'wbm_stb_o', width=0,  dir='out')
         inst.add_port('WB_SLV_WE_I_top',  'wbm_we_o',  width=0,  dir='out')
 
+        # Need to add ports to tie GPIO control
+        inst.add_port('dsp_leds_0',       'dsp_leds_0', width=1, dir='in')
+        inst.add_port('dsp_leds_1',       'dsp_leds_1', width=1, dir='in')
+        inst.add_port('dsp_leds_2',       'dsp_leds_2', width=1, dir='in')
+        inst.add_port('dsp_leds_3',       'dsp_leds_3', width=1, dir='in')
+        inst.add_port('dsp_leds_4',       'dsp_leds_4', width=1, dir='in')
+        inst.add_port('dsp_leds_5',       'dsp_leds_5', width=1, dir='in')
+        inst.add_port('dsp_leds_6',       'dsp_leds_6', width=1, dir='in')
+        inst.add_port('dsp_leds_7',       'dsp_leds_7', width=1, dir='in')
+        inst.add_port('fpga_leds_o',      'FPGA_LEDS', width=8, dir='out', parent_port=True)
+        # inst.add_port('fpga_led_o_1',     'fpga_led_o_1', width=1, dir='out')
+        # inst.add_port('fpga_led_o_1',     'fpga_led_o_1', width=1, dir='out')
+        # inst.add_port('fpga_led_o_1',     'fpga_led_o_1', width=1, dir='out')
+        # inst.add_port('fpga_led_o_1',     'fpga_led_o_1', width=1, dir='out')
+        # inst.add_port('fpga_led_o_1',     'fpga_led_o_1', width=1, dir='out')
+        # inst.add_port('fpga_led_o_1',     'fpga_led_o_1', width=1, dir='out')
+        # inst.add_port('fpga_led_o_1',     'fpga_led_o_1', width=1, dir='out')
+        # inst.add_port('fpga_led_o_1',     'fpga_led_o_1', width=1, dir='out')        
 
         #inst.add_port('fabric_clk_270', 'adc0_clk270')
         #top.add_signal('adc0_clk')
@@ -427,6 +445,12 @@ class forty_gbe(YellowBlock):
         cons.append(PortConstraint('CONFIG_IO_9','CONFIG_IO_9'))
         cons.append(PortConstraint('CONFIG_IO_10','CONFIG_IO_10'))
         cons.append(PortConstraint('CONFIG_IO_11','CONFIG_IO_11'))
+
+        # - Front Panel LED constraints
+        cons.append(PortConstraint(portname='FPGA_LEDS', iogroup='led', port_index=range(8), iogroup_index=range(8)))
+        cons.append(MaxDelayConstraint(destpath='[get_ports {FPGA_LEDS[*]}]', constdelay_ns=1.0))
+        cons.append(MinDelayConstraint(destpath='[get_ports {FPGA_LEDS[*]}]', constdelay_ns=1.0))
+        cons.append(FalsePathConstraint(destpath='[get_ports {FPGA_LEDS[*]}]'))
 
         #Clock Constraints
         #cons.append(RawConstraint('create_clock -period 2.800  -name AUX_CLK_P -waveform {0.000 1.400} [get_ports AUX_CLK_P]'))
@@ -983,6 +1007,16 @@ class forty_gbe(YellowBlock):
         cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports SPI_CLK]'))
         cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports SPI_CSB]'))
         cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports USB_UART_RXD]'))
+
+        # For the Front Panel LEDs
+        cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports FPGA_LEDS[0]]'))
+        cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports FPGA_LEDS[1]]'))
+        cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports FPGA_LEDS[2]]'))
+        cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports FPGA_LEDS[3]]'))
+        cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports FPGA_LEDS[4]]'))
+        cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports FPGA_LEDS[5]]'))
+        cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports FPGA_LEDS[6]]'))
+        cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports FPGA_LEDS[7]]'))        
 
         return cons
 

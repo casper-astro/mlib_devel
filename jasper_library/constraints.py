@@ -58,7 +58,7 @@ class PortConstraint(object):
          self.width = len(iogroup_index)
 
          if (port_index != []) and (len(port_index) != len(iogroup_index)):
-             raise ValueError("Tried to constrain a multidimensional signal with iogroup  with different dimensions!")
+             raise ValueError("Tried to constrain a multidimensional signal with iogroup with different dimensions!")
 
          if self.loc == [None]:
              self.loc *= self.width
