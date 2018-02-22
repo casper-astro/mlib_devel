@@ -47,8 +47,8 @@ entity forty_gbe is
     port(
         user_clk_o : out std_logic;
         user_rst_o : out std_logic;
-        hmc_rst_o : out std_logic;
-        hmc_clk_o : out std_logic; 
+        hmc_rst_o  : out std_logic;
+        hmc_clk_o  : out std_logic; 
 
         FPGA_RESET_N       : in std_logic;
         FPGA_REFCLK_BUF0_P : in std_logic;
@@ -168,7 +168,7 @@ entity forty_gbe is
         FAN_CONT_FAULT_N         : in    std_logic;
         MONITOR_ALERT_N          : in    std_logic;
         MEZZANINE_COMBINED_FAULT : out   std_logic;
-        FPGA_ATX_PSU_KILL        : out   std_logic;        
+        FPGA_ATX_PSU_KILL        : out   std_logic;
 
         -- USB INTERFACE
         USB_FPGA     : in  std_logic_vector(3 downto 0);
@@ -762,6 +762,7 @@ architecture arch_forty_gbe of forty_gbe is
 
 
     signal sys_clk : std_logic;
+    signal sys_clk_mmcm : std_logic;
     signal sys_rst : std_logic; 
     signal user_40gbe_rst : std_logic;
     signal gmii_clk : std_logic;
@@ -782,7 +783,9 @@ architecture arch_forty_gbe of forty_gbe is
 
     signal wb_dsp_clk : std_logic;
     signal wb_dsp_clk_mmcm : std_logic;
-    signal dcm_locked : std_logic;
+
+    signal sys_mmcm_locked : std_logic;
+    signal user_mmcm_locked : std_logic;
 
     signal gmii_rst_z : std_logic;
     signal gmii_rst_z2 : std_logic;
@@ -1186,7 +1189,8 @@ architecture arch_forty_gbe of forty_gbe is
     
     signal select_one_gbe_data_sel  : std_logic;
 
-    signal CLKFB : std_logic;
+    signal sys_clk_mmcm_fb : std_logic;
+    signal user_clk_mmcm_fb : std_logic;
     
     --HMC I2C Mezzanine 0 Signals
     signal shmc_mezz0_scl_out : std_logic;
@@ -1401,27 +1405,60 @@ begin
     SYS_CLK_MMCM_inst : MMCME2_BASE
     generic map (
         BANDWIDTH        => "OPTIMIZED", -- Jitter programming (OPTIMIZED, HIGH, LOW)
+        CLKFBOUT_MULT_F  => 6.0,         -- Multiply value for all CLKOUT (2.000-64.000).
+        CLKFBOUT_PHASE   => 0.0,         -- Phase offset in degrees of CLKFB (-360.000-360.000).
+        CLKIN1_PERIOD    => 6.4,         -- 156.25MHz Input clock period in ns to ps resolution (i.e. 33.333 is 30 MHz).
+        -- CLKOUT0_DIVIDE - CLKOUT6_DIVIDE: Divide amount for each CLKOUT (1-128)
+        CLKOUT0_DIVIDE_F => 6.0,         -- Divide amount for CLKOUT0 (1.000-128.000).
+        CLKOUT1_DIVIDE   => 24,          -- Divide amount for CLKOUT1 (1.000-128.000).
+        DIVCLK_DIVIDE    => 1,           -- Master division value (1-106)
+        REF_JITTER1      => 0.0,         -- Reference input jitter in UI (0.000-0.999).
+        STARTUP_WAIT     => FALSE        -- Delays DONE until MMCM is locked (FALSE, TRUE)
+    )
+    port map (
+        CLKOUT0   => sys_clk_mmcm,
+        CLKOUT1   => wb_dsp_clk_mmcm,
+        CLKFBOUT  => sys_clk_mmcm_fb,  -- Feedback clock output
+        LOCKED    => sys_mmcm_locked,
+        --LOCKED    => user_mmcm_locked,
+        CLKIN1    => refclk_0,         -- Main clock input
+        PWRDWN    => '0',
+        RST       => '0',              -- fpga_reset,
+        CLKFBIN   => sys_clk_mmcm_fb   -- Feedback clock input
+    );
+
+    sys_clk_BUFG_inst : BUFG
+    port map (
+        I => sys_clk_mmcm, -- Clock input
+        O => sys_clk       -- Clock output
+    );
+    
+    wb_dsp_clk_BUFG_inst : BUFG
+    port map (
+        I => wb_dsp_clk_mmcm, -- Clock input
+        O => wb_dsp_clk       -- Clock output
+    );
+
+    USER_CLK_MMCM_inst : MMCME2_BASE
+    generic map (
+        BANDWIDTH        => "OPTIMIZED", -- Jitter programming (OPTIMIZED, HIGH, LOW)
         CLKFBOUT_MULT_F  => MULTIPLY,    -- Multiply value for all CLKOUT (2.000-64.000).
         CLKFBOUT_PHASE   => 0.0,         -- Phase offset in degrees of CLKFB (-360.000-360.000).
         CLKIN1_PERIOD    => 6.4,         -- 156.25MHz Input clock period in ns to ps resolution (i.e. 33.333 is 30 MHz).
         -- CLKOUT0_DIVIDE - CLKOUT6_DIVIDE: Divide amount for each CLKOUT (1-128)
         CLKOUT0_DIVIDE_F => DIVIDE,      -- Divide amount for CLKOUT0 (1.000-128.000).
-        CLKOUT1_DIVIDE   => 5,
-        CLKOUT2_DIVIDE   => 16,          -- AI: Try a clock frequency of 70.3125MHz (156.25MHz * 36/16/5),
         DIVCLK_DIVIDE    => DIVCLK,      -- Master division value (1-106)
         REF_JITTER1      => 0.0,         -- Reference input jitter in UI (0.000-0.999).
         STARTUP_WAIT     => FALSE        -- Delays DONE until MMCM is locked (FALSE, TRUE)
     )
     port map (
         CLKOUT0   => user_clk_mmcm,
-        --CLKOUT1   => sys_clk_mmcm,
-        CLKOUT2   => wb_dsp_clk_mmcm,
-        CLKFBOUT  => CLKFB,  -- Feedback clock output
-        LOCKED    => dcm_locked,
-        CLKIN1    => refclk_1, -- Main clock input
+        CLKFBOUT  => user_clk_mmcm_fb,  -- Feedback clock output
+        LOCKED    => user_mmcm_locked,
+        CLKIN1    => sys_clk_mmcm,      -- Main clock input
         PWRDWN    => '0',
-        RST       => '0',--fpga_reset,
-        CLKFBIN   => CLKFB   -- Feedback clock input
+        RST       => not sys_mmcm_locked,   --fpga_reset,
+        CLKFBIN   => user_clk_mmcm_fb   -- Feedback clock input
     );
 
     user_clk_BUFG_inst : BUFG
@@ -1429,27 +1466,23 @@ begin
         I => user_clk_mmcm, -- Clock input
         O => user_clk       -- Clock output
     );
-    
-    wb_dsp_clk_BUFG_inst : BUFG
-    port map (
-        I => wb_dsp_clk_mmcm, -- Clock input
-        O => wb_dsp_clk       -- Clock output
-    );    
 
-    sys_clk    <= refclk_0;
+    --user_clk <= sys_clk;
+
+    --sys_clk    <= refclk_0;
     user_clk_o <= user_clk;
     --AI: Sys reset is synchronised with the user clock.
     user_rst_o <= user_fpga_rst;
     hmc_rst_o  <= sys_rst;
-    hmc_clk_o  <= refclk_0;
+    hmc_clk_o  <= sys_clk;
     
 ---------------------------------------------------------------------------
 -- RESETS
 ---------------------------------------------------------------------------
 
-    pSysResetSynchroniser : process(dcm_locked, FPGA_RESET_N, sys_clk)
+    pSysResetSynchroniser : process(user_mmcm_locked, FPGA_RESET_N, sys_clk)
     begin
-       if (dcm_locked = '0' or FPGA_RESET_N = '0')then
+       if (user_mmcm_locked = '0' or FPGA_RESET_N = '0')then
            sys_fpga_rst <= '1';
            sync_sys_fpga_rst <= '1';
        elsif (rising_edge(sys_clk))then
@@ -1463,9 +1496,9 @@ begin
        end if;
     end process;
 
-    pUserResetSynchroniser : process(dcm_locked, FPGA_RESET_N, user_clk)
+    pUserResetSynchroniser : process(user_mmcm_locked, FPGA_RESET_N, user_clk)
     begin
-       if (dcm_locked = '0' or FPGA_RESET_N = '0')then
+       if (user_mmcm_locked = '0' or FPGA_RESET_N = '0')then
            user_fpga_rst <= '1';
            sync_user_fpga_rst <= '1';
        elsif (rising_edge(user_clk))then
@@ -1479,9 +1512,9 @@ begin
        end if;
     end process;
 
-    --pFpgaResetSysSynchroniser : process(dcm_locked, FPGA_RESET_N, sys_clk)
+    --pFpgaResetSysSynchroniser : process(user_mmcm_locked, FPGA_RESET_N, sys_clk)
     --begin
-    --   if (dcm_locked = '0' or FPGA_RESET_N = '0' or host_reset = '1')then
+    --   if (user_mmcm_locked = '0' or FPGA_RESET_N = '0' or host_reset = '1')then
     --       fpga_reset <= '1';
     --       fpga_reset_D1 <= '1';
     --   elsif (rising_edge(sys_clk))then
@@ -1493,9 +1526,9 @@ begin
     sys_rst  <= sys_fpga_rst;
     --user_rst <= user_fpga_rst;
  
-    pFpgaResetAuxSynchroniser : process(dcm_locked, aux_clk, FPGA_RESET_N)
+    pFpgaResetAuxSynchroniser : process(user_mmcm_locked, aux_clk, FPGA_RESET_N)
     begin
-        if (dcm_locked = '0' or FPGA_RESET_N = '0')then
+        if (user_mmcm_locked = '0' or FPGA_RESET_N = '0')then
             sync_aux_fpga_rst <= '1';
             aux_fpga_rst <= '1';
         elsif (rising_edge(aux_clk))then
@@ -1504,9 +1537,9 @@ begin
         end if;
     end process; 
 
-    pFpgaResetGmiiSynchroniser : process(dcm_locked, gmii_clk, FPGA_RESET_N)
+    pFpgaResetGmiiSynchroniser : process(user_mmcm_locked, gmii_clk, FPGA_RESET_N)
     begin
-        if (dcm_locked = '0' or FPGA_RESET_N = '0')then
+        if (user_mmcm_locked = '0' or FPGA_RESET_N = '0')then
             sync_gmii_fpga_rst <= '1';
             gmii_fpga_rst <= '1';
         elsif (rising_edge(gmii_clk))then
@@ -1515,9 +1548,9 @@ begin
         end if;
     end process;
 
-    pFpgaResetQsfpSynchroniser : process(dcm_locked, qsfp_gtrefclk, FPGA_RESET_N)
+    pFpgaResetQsfpSynchroniser : process(user_mmcm_locked, qsfp_gtrefclk, FPGA_RESET_N)
     begin
-        if (dcm_locked = '0' or FPGA_RESET_N = '0')then
+        if (user_mmcm_locked = '0' or FPGA_RESET_N = '0')then
             sync_qsfp_fpga_rst <= '1';
             qsfp_fpga_rst <= '1';
         elsif (rising_edge(qsfp_gtrefclk))then
@@ -1526,9 +1559,9 @@ begin
         end if;
     end process; 
     
-    pFpgaResetEmcclkSynchroniser : process(dcm_locked, FPGA_EMCCLK2, FPGA_RESET_N)
+    pFpgaResetEmcclkSynchroniser : process(user_mmcm_locked, FPGA_EMCCLK2, FPGA_RESET_N)
     begin
-        if (dcm_locked = '0' or FPGA_RESET_N = '0')then
+        if (user_mmcm_locked = '0' or FPGA_RESET_N = '0')then
             sync_emcclk_fpga_rst <= '1';
             emcclk_fpga_rst <= '1';
         elsif (rising_edge(FPGA_EMCCLK2))then
@@ -1537,9 +1570,9 @@ begin
         end if;
     end process; 
     
-    pDspWishboneResetSynchroniser: process(dcm_locked, wb_dsp_clk, FPGA_RESET_N)
+    pDspWishboneResetSynchroniser: process(user_mmcm_locked, wb_dsp_clk, FPGA_RESET_N)
     begin
-        if (dcm_locked = '0' or FPGA_RESET_N = '0')then
+        if (user_mmcm_locked = '0' or FPGA_RESET_N = '0')then
             sync_wb_dsp_fpga_rst <= '1';
             wb_dsp_fpga_rst <= '1';
         elsif (rising_edge(wb_dsp_clk))then
@@ -1549,13 +1582,14 @@ begin
     end process pDspWishboneResetSynchroniser;      
     
     --Pipeline the FPGA_RESET_N
-    pFpgaResetRegister: process(sys_clk)
-    begin     
-        if (rising_edge(sys_clk) ) then
-           --fpga_reset <= not FPGA_RESET_N;
-           FAN_CONT_RST_N <= FPGA_RESET_N;
-        end if;
-    end process pFpgaResetRegister; 
+    --pFpgaResetRegister: process(sys_clk)
+    --begin
+    --    if (rising_edge(sys_clk) ) then
+    --       FAN_CONT_RST_N <= FPGA_RESET_N;
+    --    end if;
+    --end process pFpgaResetRegister; 
+
+    FAN_CONT_RST_N <= FPGA_RESET_N;
 
     gen_gmii_rst : process(gmii_fpga_rst, gmii_clk)
     begin
@@ -1588,9 +1622,9 @@ begin
         end if;
     end process;
 
-    gen_host_reset_count : process(dcm_locked, FPGA_RESET_N, sys_clk)
+    gen_host_reset_count : process(user_mmcm_locked, FPGA_RESET_N, sys_clk)
     begin
-        if (dcm_locked = '0' or FPGA_RESET_N = '0')then
+        if (user_mmcm_locked = '0' or FPGA_RESET_N = '0')then
             host_reset_count <= (others => '1');
         elsif (rising_edge(sys_clk))then
             if ((host_reset_req_z = '0')and(host_reset_req = '1'))then
@@ -1923,7 +1957,7 @@ begin
         UART_rxd    => microblaze_uart_rxd,
         UART_txd    => microblaze_uart_txd,
         WE_O        => WB_MST_WE_O,
-        dcm_locked  => dcm_locked);
+        dcm_locked  => user_mmcm_locked);
         
 
 
