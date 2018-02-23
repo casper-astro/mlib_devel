@@ -6,6 +6,7 @@ class gpio(YellowBlock):
     def initialize(self):
 
         self.skarab_leds = False
+        self.multiple_leds = False
 
         if self.arith_type == 'Boolean':
             # The yellow block will set a value for bitwidth,
@@ -13,6 +14,8 @@ class gpio(YellowBlock):
             self.bitwidth = 1
         else:
             self.bitwidth = int(self.bitwidth)
+            # There is error-checking behind this
+            self.multiple_leds = True
 
         # If we're DDRing, we only need half the number of pins...
         if self.use_ddr:
@@ -37,38 +40,66 @@ class gpio(YellowBlock):
         else:
             if self.io_dir == 'in':
                 self.module = 'gpio_ext2simulink'
-            elif self.io_dir == 'out':                
+            elif self.io_dir == 'out':
                 self.module = 'gpio_simulink2ext'
         # add the source files, which have the same name as the module
         self.add_source(self.module)
 
     def modify_top(self,top):
-        external_port_name = self.fullname + '_ext'
-        #top.add_port(external_port_name, self.io_dir, width=self.pad_bitwidth) 
+        if self.skarab_leds:
+            # Check if we're controlling LEDs first, because GPIOs can handle themselves
+            if self.multiple_leds:
+                # Need to give each led it's own gpio_simulink2ext instance
+                # - First, get the list of LEDs to be controlled
 
-        inst = top.get_instance(entity=self.module, name=self.fullname, comment=self.fullname)
-        inst.add_port('clk', signal='user_clk', parent_sig=False)
-        inst.add_port('clk90', signal='user_clk90', parent_sig=False)
-        inst.add_port('gateway', signal='%s_gateway'%self.fullname, width=self.bitwidth)
-        if self.use_diffio:
-            inst.add_port('io_pad_p', signal=external_port_name + '_p', dir=self.io_dir, width=self.pad_bitwidth, parent_port=True)
-            inst.add_port('io_pad_n', signal=external_port_name + '_n', dir=self.io_dir, width=self.pad_bitwidth, parent_port=True)
+                led_list = to_int_list(self.bit_index)
+                for led in led_list:
+                    instance_name = '{}_{}'.format(self.fullname, str(led))
+                    led_name = 'dsp_leds_%s' % str(led)
+                    inst = top.get_instance(entity=self.module, name=instance_name, comment=self.fullname)
+                    inst.add_port('clk', signal='user_clk', parent_sig=False)
+                    inst.add_port('clk90', signal='user_clk90', parent_sig=False)
+                    inst.add_port('gateway', signal='%s_gateway'%self.fullname, width=self.bitwidth)
+
+                    inst.add_port('io_pad', signal='dsp_leds_%s' % str(led), dir=self.io_dir, width=1, parent_port=False)
+                    inst.add_parameter('CLK_PHASE', self.reg_clk_phase)
+                    inst.add_parameter('WIDTH', '1')
+                    inst.add_parameter('DDR', '0')
+                    # Cannot/Should not register the output on the IO Pad
+                    inst.add_parameter('SKARAB_LED', '1')
+                    inst.add_parameter('REG_IOB', '"false"')
+            else:
+                # Only one LED to account for
+                inst = top.get_instance(entity=self.module, name=self.fullname, comment=self.fullname)
+                inst.add_port('clk', signal='user_clk', parent_sig=False)
+                inst.add_port('clk90', signal='user_clk90', parent_sig=False)
+                inst.add_port('gateway', signal='%s_gateway'%self.fullname, width=self.bitwidth)
+
+                inst.add_port('io_pad', signal='dsp_leds_%s' % str(self.bit_index), dir=self.io_dir,
+                                width=self.pad_bitwidth, parent_port=False)
+                
+                inst.add_parameter('CLK_PHASE', self.reg_clk_phase)
+                inst.add_parameter('WIDTH', '1')
+                inst.add_parameter('DDR', '0')
+                # Cannot/Should not register the output on the IO Pad
+                inst.add_parameter('SKARAB_LED', '1')
+                inst.add_parameter('REG_IOB', '"false"')
         else:
-            # import IPython
-            # IPython.embed()
-            if self.skarab_leds:
-                inst.add_port('io_pad', signal='dsp_leds_%s' % str(self.bit_index), dir=self.io_dir, width=self.pad_bitwidth, parent_port=False)
+            # Just dealing with normal GPIOs
+            external_port_name = self.fullname + '_ext'
+            
+            inst = top.get_instance(entity=self.module, name=self.fullname, comment=self.fullname)
+            inst.add_port('clk', signal='user_clk', parent_sig=False)
+            inst.add_port('clk90', signal='user_clk90', parent_sig=False)
+            inst.add_port('gateway', signal='%s_gateway'%self.fullname, width=self.bitwidth)
+            if self.use_diffio:
+                inst.add_port('io_pad_p', signal=external_port_name + '_p', dir=self.io_dir, width=self.pad_bitwidth, parent_port=True)
+                inst.add_port('io_pad_n', signal=external_port_name + '_n', dir=self.io_dir, width=self.pad_bitwidth, parent_port=True)
             else:
                 inst.add_port('io_pad', signal=external_port_name, dir=self.io_dir, width=self.pad_bitwidth, parent_port=True)
-        inst.add_parameter('CLK_PHASE', self.reg_clk_phase)
-        inst.add_parameter('WIDTH', str(self.bitwidth))
-        inst.add_parameter('DDR', '1' if self.use_ddr  else '0')
-        
-        if self.skarab_leds:
-            # Cannot/Should not register the output on the IO Pad
-            inst.add_parameter('SKARAB_LED', '1')
-            inst.add_parameter('REG_IOB', '"false"')
-        else:
+            inst.add_parameter('CLK_PHASE', self.reg_clk_phase)
+            inst.add_parameter('WIDTH', str(self.bitwidth))
+            inst.add_parameter('DDR', '1' if self.use_ddr  else '0')
             inst.add_parameter('REG_IOB', '"true"' if self.reg_iob else '"false"')
 
     def gen_constraints(self):

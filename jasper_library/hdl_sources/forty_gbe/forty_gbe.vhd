@@ -1155,7 +1155,7 @@ architecture arch_forty_gbe of forty_gbe is
     --	 -> firmware_version => C_VERSION (from parameter.vhd), or brd_user_read_regs(C_RD_VERSION_ADDR)
     --	 -> dsp_override_i and dsp_leds_in
     --	 -> leds_out => FPGA_LEDS(7 downto 0)
-
+    
     signal mezzanine_fault_override : std_logic;
 
     signal src_packets_sent : std_logic_vector(15 downto 0);
@@ -3310,7 +3310,7 @@ begin
             end if;
         end if;
     end process;
-
+    
 
     led_manager_0 : led_manager
     port map(
