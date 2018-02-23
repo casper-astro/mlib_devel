@@ -247,6 +247,8 @@ entity forty_gbe is
         forty_gbe_rx_data         : out std_logic_vector(255 downto 0);
         forty_gbe_rx_source_ip    : out std_logic_vector(31 downto 0);
         forty_gbe_rx_source_port  : out std_logic_vector(15 downto 0);
+        forty_gbe_rx_dest_ip      : out std_logic_vector(31 downto 0);
+        forty_gbe_rx_dest_port    : out std_logic_vector(15 downto 0);
         forty_gbe_rx_bad_frame    : out std_logic;
         forty_gbe_rx_overrun      : out std_logic;
         forty_gbe_rx_overrun_ack  : in  std_logic;
@@ -634,6 +636,8 @@ architecture arch_forty_gbe of forty_gbe is
         rx_data             : out std_logic_vector(255 downto 0);
         rx_source_ip        : out std_logic_vector(31 downto 0);
         rx_source_port      : out std_logic_vector(15 downto 0);
+        rx_dest_ip          : out std_logic_vector(31 downto 0);
+        rx_dest_port        : out std_logic_vector(15 downto 0);
         rx_bad_frame        : out std_logic;
         rx_overrun          : out std_logic;
         rx_overrun_ack      : in std_logic;
@@ -1041,6 +1045,8 @@ architecture arch_forty_gbe of forty_gbe is
     signal xlgmii_rx_data         : std_logic_vector(255 downto 0);
     signal xlgmii_rx_source_ip    : std_logic_vector(31 downto 0);
     signal xlgmii_rx_source_port  : std_logic_vector(15 downto 0);
+    signal xlgmii_rx_dest_ip      : std_logic_vector(31 downto 0);
+    signal xlgmii_rx_dest_port    : std_logic_vector(15 downto 0);
     signal xlgmii_rx_bad_frame    : std_logic;
     signal xlgmii_rx_overrun      : std_logic;
     signal xlgmii_rx_overrun_ack  : std_logic;
@@ -1364,6 +1370,8 @@ begin
     forty_gbe_rx_data(255 downto 0) <= xlgmii_rx_data(63 downto 0) & xlgmii_rx_data(127 downto 64) & xlgmii_rx_data(191 downto 128) &  xlgmii_rx_data(255 downto 192);    
     forty_gbe_rx_source_ip    <= xlgmii_rx_source_ip;
     forty_gbe_rx_source_port  <= xlgmii_rx_source_port;
+    forty_gbe_rx_dest_ip      <= xlgmii_rx_dest_ip;
+    forty_gbe_rx_dest_port    <= xlgmii_rx_dest_port;
     forty_gbe_rx_bad_frame    <= xlgmii_rx_bad_frame;
     forty_gbe_rx_overrun      <= xlgmii_rx_overrun;
 
@@ -2417,6 +2425,8 @@ begin
         rx_data             => xlgmii_rx_data,
         rx_source_ip        => xlgmii_rx_source_ip,
         rx_source_port      => xlgmii_rx_source_port,
+        rx_dest_ip          => xlgmii_rx_dest_ip,
+        rx_dest_port        => xlgmii_rx_dest_port,
         rx_bad_frame        => xlgmii_rx_bad_frame,
         rx_overrun          => xlgmii_rx_overrun,
         rx_overrun_ack      => xlgmii_rx_overrun_ack,
