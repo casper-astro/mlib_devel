@@ -13,7 +13,7 @@
         <spirit:configurableElementValue spirit:referenceId="BUSIFPARAM_VALUE.BRAM_PORT.MEM_SIZE">262144</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="BUSIFPARAM_VALUE.BRAM_PORT.MEM_WIDTH">32</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="BUSIFPARAM_VALUE.CLK.LMB_CLK.CLK_DOMAIN">cont_microblaze_Clk</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="BUSIFPARAM_VALUE.CLK.LMB_CLK.FREQ_HZ">156250000</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="BUSIFPARAM_VALUE.CLK.LMB_CLK.FREQ_HZ">39062500</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="BUSIFPARAM_VALUE.CLK.LMB_CLK.PHASE">0.000</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="BUSIFPARAM_VALUE.SLMB.ADDR_WIDTH">32</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="BUSIFPARAM_VALUE.SLMB.DATA_WIDTH">32</spirit:configurableElementValue>

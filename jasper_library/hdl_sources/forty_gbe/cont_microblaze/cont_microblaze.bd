@@ -68,7 +68,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>FREQ_HZ</spirit:name>
-            <spirit:value>156250000</spirit:value>
+            <spirit:value>39062500</spirit:value>
             <spirit:vendorExtensions>
               <bd:configElementInfos>
                 <bd:configElementInfo bd:valueSource="user"/>
@@ -305,6 +305,8 @@
         <spirit:configurableElementValues>
           <spirit:configurableElementValue spirit:referenceId="bd:xciName">cont_microblaze_microblaze_0_axi_intc_0</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="C_HAS_FAST">1</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="C_S_AXI_ACLK_FREQ_MHZ">39.0625</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="C_PROCESSOR_CLK_FREQ_MHZ">39.0625</spirit:configurableElementValue>
         </spirit:configurableElementValues>
       </spirit:componentInstance>
       <spirit:componentInstance>
@@ -2620,6 +2622,9 @@
             </spirit:fileSetRef>
             <spirit:fileSetRef>
               <spirit:localName>sources_1</spirit:localName>
+            </spirit:fileSetRef>
+            <spirit:fileSetRef>
+              <spirit:localName>sim_1</spirit:localName>
             </spirit:fileSetRef>
           </spirit:fileSetRefGroup>
         </spirit:executableImage>
