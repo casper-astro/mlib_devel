@@ -17,3 +17,6 @@ def write_file(fn,str):
     fh = open(fn,'w')
     fh.write(str)
     fh.close()
+
+class SkarabLedError(ValueError):
+    pass

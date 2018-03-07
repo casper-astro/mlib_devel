@@ -63,14 +63,15 @@ port(
     -- Needs to be controlled via a Wishbone Register @ Addr = hex(13 * 4)
     dsp_override_i    : in std_logic;
 	-- DSP LEDs in need to be CDC'd
-	dsp_led_0	: in std_logic;
-	dsp_led_1	: in std_logic;
-	dsp_led_2	: in std_logic;
-	dsp_led_3	: in std_logic;
-	dsp_led_4	: in std_logic;
-	dsp_led_5	: in std_logic;
-	dsp_led_6	: in std_logic;
-	dsp_led_7	: in std_logic;
+	dsp_leds_i	: in std_logic_vector(7 downto 0);
+	-- dsp_led_0	: in std_logic;
+	-- dsp_led_1	: in std_logic;
+	-- dsp_led_2	: in std_logic;
+	-- dsp_led_3	: in std_logic;
+	-- dsp_led_4	: in std_logic;
+	-- dsp_led_5	: in std_logic;
+	-- dsp_led_6	: in std_logic;
+	-- dsp_led_7	: in std_logic;
 
     -- Pass in/Associate the relevant FPGA_GPIOs here
     -- > REMEMBER: Active LOW - Signals are inverted upon assignment
@@ -314,14 +315,15 @@ begin
             dsp_leds_z2   <= (others => '0');
 			dsp_leds_z3   <= (others => '0');
         elsif (rising_edge(clk))then
-            dsp_leds_z(0) <= not dsp_led_0;
-            dsp_leds_z(1) <= not dsp_led_1;
-            dsp_leds_z(2) <= not dsp_led_2;
-            dsp_leds_z(3) <= not dsp_led_3;
-            dsp_leds_z(4) <= not dsp_led_4;
-            dsp_leds_z(5) <= not dsp_led_5;
-            dsp_leds_z(6) <= not dsp_led_6;
-            dsp_leds_z(7) <= not dsp_led_7;
+			dsp_leds_z    <= not dsp_leds_i;
+            -- dsp_leds_z(0) <= not dsp_led_i(0);
+            -- dsp_leds_z(1) <= not dsp_led_i(1);
+            -- dsp_leds_z(2) <= not dsp_led_i(2);
+            -- dsp_leds_z(3) <= not dsp_led_i(3);
+            -- dsp_leds_z(4) <= not dsp_led_i(4);
+            -- dsp_leds_z(5) <= not dsp_led_i(5);
+            -- dsp_leds_z(6) <= not dsp_led_i(6);
+            -- dsp_leds_z(7) <= not dsp_led_i(7);
 
             dsp_leds_z2   <= dsp_leds_z;
 

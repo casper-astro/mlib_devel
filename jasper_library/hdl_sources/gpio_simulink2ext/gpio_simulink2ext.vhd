@@ -12,10 +12,10 @@ entity gpio_simulink2ext is
     		  DDR : integer := 0;
     		  CLK_PHASE : integer := 0;
               REG_IOB : string := "true";
-			  SKARAB_LED : integer := 0
+			  SKARAB_LED  : integer := 0			  
 	);
 	 Port (
-		gateway   : in  std_logic_vector((WIDTH)-1         downto 0);
+		gateway   : in  std_logic_vector(((WIDTH)-1)       downto 0);
 		io_pad    : out std_logic_vector((WIDTH/(DDR+1)-1) downto 0);
 
 		clk       : in  std_logic;
@@ -29,6 +29,8 @@ architecture Behavioral of gpio_simulink2ext is
     attribute IOB: string;
 	signal one  : std_logic := '1';
 	signal zero : std_logic := '0';
+
+	signal integer_convert : std_logic_vector(0 downto 0);
 begin
 
 -- clock selection

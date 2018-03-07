@@ -1,6 +1,6 @@
 from yellow_block import YellowBlock
 from constraints import PortConstraint, MaxDelayConstraint, MinDelayConstraint, FalsePathConstraint
-from helpers import to_int_list
+from helpers import to_int_list, SkarabLedError
 
 class gpio(YellowBlock):
     def initialize(self):
@@ -46,49 +46,52 @@ class gpio(YellowBlock):
         self.add_source(self.module)
 
     def modify_top(self,top):
+        instance_name = self.fullname
+        gateway_name = '{}_gateway'.format(self.fullname)   # This is constant
+        
         if self.skarab_leds:
-            # Check if we're controlling LEDs first, because GPIOs can handle themselves
+        
+            inst = top.get_instance(entity=self.module, name=instance_name, comment=self.fullname)
+            inst.add_parameter('CLK_PHASE', self.reg_clk_phase)
+            inst.add_parameter('DDR', '0')
+            inst.add_parameter('SKARAB_LED', '1')
+            inst.add_parameter('REG_IOB', '"false"')
+
+            inst.add_port('clk', signal='user_clk', parent_sig=False)
+            inst.add_port('clk90', signal='user_clk90', parent_sig=False)
+            
+            inst.add_port('gateway', signal=gateway_name, width=self.bitwidth, parent_sig=True, parent_port=False)
+
+            led_width = 0
+            
             if self.multiple_leds:
-                # Need to give each led it's own gpio_simulink2ext instance
-                # - First, get the list of LEDs to be controlled
-
+                # First, get the list of LEDs to be controlled
                 led_list = to_int_list(self.bit_index)
-                for led in led_list:
-                    instance_name = '{}_{}'.format(self.fullname, str(led))
-                    led_name = 'dsp_leds_%s' % str(led)
-                    inst = top.get_instance(entity=self.module, name=instance_name, comment=self.fullname)
-                    inst.add_port('clk', signal='user_clk', parent_sig=False)
-                    inst.add_port('clk90', signal='user_clk90', parent_sig=False)
-                    inst.add_port('gateway', signal='%s_gateway'%self.fullname, width=self.bitwidth)
+                led_list.sort()     # Will sort indices from lowest to highest
 
-                    inst.add_port('io_pad', signal='dsp_leds_%s' % str(led), dir=self.io_dir, width=1, parent_port=False)
-                    inst.add_parameter('CLK_PHASE', self.reg_clk_phase)
-                    inst.add_parameter('WIDTH', '1')
-                    inst.add_parameter('DDR', '0')
-                    # Cannot/Should not register the output on the IO Pad
-                    inst.add_parameter('SKARAB_LED', '1')
-                    inst.add_parameter('REG_IOB', '"false"')
+                # Rudimentary check that we're controlling consecutive LEDs
+                for index in range(0, len(led_list)-1):
+                    difference = led_list[index + 1] - led_list[index]
+                    if (difference != 1):
+                        # Not controlling successive LEDs
+                        errmsg1 = 'It seems you are trying to control LEDs: %s' %str(led_list)
+                        errmsg2 = 'Toolflow can only control consecutive LEDs for SKARAB...'
+                        raise SkarabLedError('{} \n{}'.format(errmsg1, errmsg2))
+                
+                led_name = 'dsp_leds_i[{}:{}]'.format(str(led_list[-1]), str(led_list[0]))
+                led_width = self.bitwidth
             else:
                 # Only one LED to account for
-                inst = top.get_instance(entity=self.module, name=self.fullname, comment=self.fullname)
-                inst.add_port('clk', signal='user_clk', parent_sig=False)
-                inst.add_port('clk90', signal='user_clk90', parent_sig=False)
-                inst.add_port('gateway', signal='%s_gateway'%self.fullname, width=self.bitwidth)
+                led_name = 'dsp_leds_i[{}]'.format(str(self.bit_index))
+                led_width = 1
 
-                inst.add_port('io_pad', signal='dsp_leds_%s' % str(self.bit_index), dir=self.io_dir,
-                                width=self.pad_bitwidth, parent_port=False)
-                
-                inst.add_parameter('CLK_PHASE', self.reg_clk_phase)
-                inst.add_parameter('WIDTH', '1')
-                inst.add_parameter('DDR', '0')
-                # Cannot/Should not register the output on the IO Pad
-                inst.add_parameter('SKARAB_LED', '1')
-                inst.add_parameter('REG_IOB', '"false"')
+            inst.add_parameter('WIDTH', str(led_width))
+            inst.add_port('io_pad', signal=led_name, parent_sig=False, parent_port=False)
         else:
             # Just dealing with normal GPIOs
             external_port_name = self.fullname + '_ext'
             
-            inst = top.get_instance(entity=self.module, name=self.fullname, comment=self.fullname)
+            inst = top.get_instance(entity=self.module, name=instance_name, comment=self.fullname)
             inst.add_port('clk', signal='user_clk', parent_sig=False)
             inst.add_port('clk90', signal='user_clk90', parent_sig=False)
             inst.add_port('gateway', signal='%s_gateway'%self.fullname, width=self.bitwidth)
