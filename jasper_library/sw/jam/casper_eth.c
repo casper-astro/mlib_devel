@@ -13,6 +13,8 @@
 #include "flash.h"
 #include "tmrctr.h"
 
+#define VERBOSE_ETH_IMPL
+
 // Array of one (for now)
 static struct netif netif_en[1];
 
@@ -35,7 +37,7 @@ static
 err_t
 casper_netif_output_impl(struct netif *netif, struct pbuf *p)
 {
-  uint16_t i, len;
+  uint16_t i, len, word_size;
   uint16_t bytes_sent = 0;
   uint8_t *outbuf8;
   uint16_t words_sent = 0;
@@ -96,6 +98,9 @@ casper_netif_output_impl(struct netif *netif, struct pbuf *p)
         len, p->tot_len, p, p->payload, outbuf8);
 #endif // VERBOSE_ETH_IMPL
     memcpy(outbuf8, p->payload, len);
+#ifdef VERBOSE_ETH_IMPL
+    xil_printf("memcpy complete\n");
+#endif // VERBOSE_ETH_IMPL
     outbuf8 += len;
     bytes_sent += len;
 
@@ -160,12 +165,15 @@ casper_netif_output_impl(struct netif *netif, struct pbuf *p)
     outbuf16[2^1], outbuf16[6^1], outbuf16[17^1], outbuf16[19^1], outbuf16[21^1], ms_tmrctr());
 #endif
 
-  // Set TX buffer level to number of 8 byte words to send packet
-  *TX_BUF_SIZE_PTR16(ifstate.ptr) = (words_sent >> 1);
+  // Set TX buffer level to number of words to send packet
+  word_size = *TX_BUF_WORD_SIZE_PTR16(ifstate.ptr);
+  // Round up and set buffer size to send
+  *TX_BUF_SIZE_PTR16(ifstate.ptr) = ((bytes_sent + (word_size - 1))/word_size);
 
 #ifdef VERBOSE_ETH_IMPL
   xil_printf("sent pkt %u bytes as %u longwords [ms %u]\n",
       4*words_sent, (words_sent >> 1), ms_tmrctr());
+  xil_printf("Sent with word size: %d, %d words\n", word_size, ((bytes_sent + (word_size - 1))/word_size));
 #endif // VERBOSE_ETH_IMPL
   LINK_STATS_INC(link.xmit);
 
@@ -261,7 +269,7 @@ casper_netif_init(struct netif *netif)
 }
 
 #define get_link_state() \
-  (((uint8_t *)ifstate.ptr)[ETH_MAC_REG8_XAUI_STATUS] & 1)
+  (((uint8_t *)ifstate.ptr)[ETH_MAC_REG8_STATUS] & 1)
 
 err_t
 casper_lwip_init()
@@ -366,8 +374,8 @@ void
 casper_rx_packet()
 {
   int i;
-  uint16_t size64;
-  uint16_t size32;
+  uint16_t nwords;
+  uint16_t size, size32;
   uint16_t bytes_remaining;
   uint8_t *inbuf8;
   uint32_t *inbuf32;
@@ -375,24 +383,28 @@ casper_rx_packet()
   struct pbuf *p, *q;
 
   // Stay in this function so long as we still have received packets
-  while((size64 = *RX_BUF_SIZE_PTR16(ifstate.ptr))) {
-    // Work with words
-    size32 = size64 << 1;
+  while((nwords = *RX_BUF_SIZE_PTR16(ifstate.ptr))) {
+    // size in bytes
+    size = nwords * (*RX_BUF_WORD_SIZE_PTR16(ifstate.ptr));
+    // round up to 32-bits
+    size = 4*((size + 3) / 4);
+    // size in 32-bit words
+    size32 = size >> 2;
 
     // If packet too large
-    if(size32 > ETHERNET_MTU + SIZEOF_ETH_HDR) {
+    if(size > ETHERNET_MTU + SIZEOF_ETH_HDR) {
       // Ack packet so we'll receive more packets
       *RX_BUF_SIZE_PTR16(ifstate.ptr) = 0;
       LINK_STATS_INC(link.memerr);
       LINK_STATS_INC(link.drop);
-      xil_printf("pkt too big %u > %u words [ms %u]\n",
-          size32, ETHERNET_MTU + SIZEOF_ETH_HDR, ms_tmrctr());
+      xil_printf("pkt too big %u > %u bytes [ms %u]\n",
+          size, ETHERNET_MTU + SIZEOF_ETH_HDR, ms_tmrctr());
       // See if we have any more packets
       continue;
     }
 
     // Get pbuf from pool
-    p = pbuf_alloc(PBUF_RAW, (size32<<2), PBUF_POOL);
+    p = pbuf_alloc(PBUF_RAW, size, PBUF_POOL);
 
     // If we got NULL
     if(!p) {
@@ -401,17 +413,16 @@ casper_rx_packet()
       LINK_STATS_INC(link.memerr);
       LINK_STATS_INC(link.drop);
       xil_printf("bad pbuf for %d bytes [ms %u]\n",
-          (size32<<2), ms_tmrctr());
+          size, ms_tmrctr());
       // See if we have any more packets
       continue;
     }
 
     // OK, got one or more pbufs to hold our packet data
     LINK_STATS_INC(link.recv);
-    size32 = size64 << 1;
 #ifdef VERBOSE_ETH_IMPL
-    xil_printf("read %u bytes as %u longwords to addr %p [ms %u]\n",
-        (size32<<2), size64, p->payload, ms_tmrctr());
+    xil_printf("read %u bytes to addr %p [ms %u]\n",
+        size, p->payload, ms_tmrctr());
 #endif // VERBOSE_ETH_IMPL
 
 #if 1 // TODO
