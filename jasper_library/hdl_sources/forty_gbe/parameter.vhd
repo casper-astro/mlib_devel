@@ -29,7 +29,7 @@ use UNISIM.VCOMPONENTS.ALL;
 package parameter is
 
     -- GLOBAL CONSTANTS
-    constant C_VERSION : std_logic_vector(31 downto 0) := X"00020006";
+    constant C_VERSION : std_logic_vector(31 downto 0) := X"00020007";
 
     -- TYPE DEFINES
 	constant C_NUM_REGISTERS : integer := 32;
@@ -44,7 +44,7 @@ package parameter is
     constant C_RD_BRD_CTL_STAT_0_ADDR   : integer := 1;
     constant C_RD_LOOPBACK_ADDR         : integer := 2;
     constant C_RD_ETH_IF_LINK_UP_ADDR   : integer := 3;
-    constant C_RD_MEZZANINE_STAT_ADDR   : integer := 4;
+    constant C_RD_MEZZANINE_STAT_0_ADDR : integer := 4;
     constant C_RD_USB_STAT_ADDR         : integer := 5;
     constant C_RD_SOC_VERSION_ADDR      : integer := 6;
     constant C_RD_FPGA_DNA_LOW_ADDR     : integer := 7;
@@ -54,7 +54,6 @@ package parameter is
     -- > Assign register space to new register for LED Control
     -- -> Has to be the same integer value for the WR_ADDR
     constant C_RD_UBLAZE_ALIVE_ADDR         : integer := 11;
-
     constant C_RD_MEZZANINE_STAT_1_ADDR     : integer := 12;
     constant C_RD_DSP_OVERRIDE_ADDR         : integer := 13;
 

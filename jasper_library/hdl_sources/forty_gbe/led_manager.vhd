@@ -64,14 +64,6 @@ port(
     dsp_override_i    : in std_logic;
 	-- DSP LEDs in need to be CDC'd
 	dsp_leds_i	: in std_logic_vector(7 downto 0);
-	-- dsp_led_0	: in std_logic;
-	-- dsp_led_1	: in std_logic;
-	-- dsp_led_2	: in std_logic;
-	-- dsp_led_3	: in std_logic;
-	-- dsp_led_4	: in std_logic;
-	-- dsp_led_5	: in std_logic;
-	-- dsp_led_6	: in std_logic;
-	-- dsp_led_7	: in std_logic;
 
     -- Pass in/Associate the relevant FPGA_GPIOs here
     -- > REMEMBER: Active LOW - Signals are inverted upon assignment
@@ -92,9 +84,8 @@ architecture arch_led_manager of led_manager is
     constant C_MULTIBOOT_IMAGE    : std_logic_vector(3 downto 0)  := "0100";
     constant C_TOOLFLOW_IMAGE     : std_logic_vector(3 downto 0)  := "0000";
 
-	constant C_MAX_COUNT_27BIT    : std_logic_vector(26 downto 0) := "111111111111111111111111111";
-	constant C_MAX_COUNT_32BIT    : std_logic_vector(31 downto 0) := "11111111111111111111111111111111";
-	constant C_MAX_COUNT_33BIT    : std_logic_vector(32 downto 0) := "111111111111111111111111111111111";
+	constant C_MAX_COUNT_25BIT    : std_logic_vector(24 downto 0) := "1111111111111111111111111";
+	constant C_MAX_COUNT_31BIT    : std_logic_vector(30 downto 0) := "1111111111111111111111111111111";
 	
 	signal bsp_leds_out			: std_logic_vector(7 downto 0);
 	-- Need to cross clock domains for DSP LEDs (user_clk to sys_clk)
@@ -173,7 +164,7 @@ begin
 	-- -> Flashing GREEN:  Multiboot Image
 	-- -> Solid GREEN:     Toolflow Image
 
-	image_indicator : process(rst, clk)
+	image_indicator : process(rst, clk, firmware_version)
 	begin
 		if (rst = '1')then
 		    image_led_indicators <= (others => '0');
@@ -202,14 +193,15 @@ begin
 
     -- ---------------------------------------------------------------------------------------
 
-    flash_leds_counter : process(rst, clk)
+    flash_leds_counter : process(rst, clk, flash_counter)
     begin
 	    if (rst = '1')then
 	        flash_counter           <= (others => '0');
 	        flash_toggle_value      <= '0';
 	    elsif (rising_edge(clk))then
-	        -- Count indefinitely, don't wait for any ENABLE            
-	        if (flash_counter = C_MAX_COUNT_27BIT) then
+	        -- Count indefinitely, don't wait for any ENABLE
+	        -- Now adjusting count value for reduced sys_clk = 39.0625MHz
+	        if (flash_counter = C_MAX_COUNT_25BIT) then
 	            -- Overflow
 	            flash_counter       <= (others => '0');
 	            flash_toggle_value  <= not flash_toggle_value;
@@ -274,7 +266,7 @@ begin
 
 	-- ---------------------------------------------------------------------------------------
 
-	ublaze_count : process(rst, clk, ublaze_count_reset)
+	ublaze_count : process(rst, clk, ublaze_count_reset, ublaze_counter)
 	begin
 		if (rst = '1')then
 		    ublaze_counter   <= (others => '0');
@@ -283,14 +275,11 @@ begin
 		    if (ublaze_count_reset = '1')then
 		        ublaze_counter   <= (others => '0');
 		        ublaze_running   <= '1';
-		    --elsif (ublaze_counter = C_MAX_COUNT_27BIT)then
-		    --    -- uBlaze has not reset the counter yet
-		    --    -- and can be assumed to be dead
-		    --    ublaze_running   <= '0';
 		    else
 		        ublaze_counter   <= ublaze_counter + '1';
-		        -- ublaze_counter_z <= ublaze_counter;
-		        if (ublaze_counter = C_MAX_COUNT_33BIT)then
+
+		        -- Now adjusting count value for reduced sys_clk = 39.0625MHz
+		        if (ublaze_counter = C_MAX_COUNT_31BIT)then
 		            -- uBlaze has not reset the counter yet
 		            -- and can be assumed to be dead
 		            ublaze_running   <= '0';
@@ -316,24 +305,10 @@ begin
 			dsp_leds_z3   <= (others => '0');
         elsif (rising_edge(clk))then
 			dsp_leds_z    <= not dsp_leds_i;
-            -- dsp_leds_z(0) <= not dsp_led_i(0);
-            -- dsp_leds_z(1) <= not dsp_led_i(1);
-            -- dsp_leds_z(2) <= not dsp_led_i(2);
-            -- dsp_leds_z(3) <= not dsp_led_i(3);
-            -- dsp_leds_z(4) <= not dsp_led_i(4);
-            -- dsp_leds_z(5) <= not dsp_led_i(5);
-            -- dsp_leds_z(6) <= not dsp_led_i(6);
-            -- dsp_leds_z(7) <= not dsp_led_i(7);
-
             dsp_leds_z2   <= dsp_leds_z;
-
 			dsp_leds_z3   <= dsp_leds_z2;
         end if;
     end process;
-	-- Assigning DSP LEDs
-	-- dsp_leds_out <= (not dsp_led_7) & (not dsp_led_6) & (not dsp_led_5) & 
-	-- 				(not dsp_led_4) & (not dsp_led_3) & (not dsp_led_2) & 
-	-- 				(not dsp_led_1) & (not dsp_led_0);
 	
 	-- Make final assignment here
 	leds_out <= dsp_leds_z3 when (dsp_override_i = '1') else (bsp_leds_out);

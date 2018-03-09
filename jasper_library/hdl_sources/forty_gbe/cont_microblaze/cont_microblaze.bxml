@@ -2,9 +2,9 @@
 <Root MajorVersion="0" MinorVersion="33">
   <CompositeFile CompositeFileTopName="cont_microblaze" CanBeSetAsTop="true" CanDisplayChildGraph="true">
     <Description>Composite Fileset</Description>
-    <Generation Name="SYNTHESIS" State="GENERATED" Timestamp="1516011362"/>
-    <Generation Name="IMPLEMENTATION" State="GENERATED" Timestamp="1516011362"/>
-    <Generation Name="SIMULATION" State="GENERATED" Timestamp="1516011362"/>
+    <Generation Name="SYNTHESIS" State="GENERATED" Timestamp="1519037507"/>
+    <Generation Name="IMPLEMENTATION" State="GENERATED" Timestamp="1519037507"/>
+    <Generation Name="SIMULATION" State="GENERATED" Timestamp="1519037507"/>
     <FileCollection Name="SOURCES" Type="SOURCES">
       <File Name="ip/cont_microblaze_axi_slave_wishbone_classic_master_0_0/cont_microblaze_axi_slave_wishbone_classic_master_0_0.xci" Type="IP">
         <Instance HierarchyPath="axi_slave_wishbone_classic_master_0"/>
