@@ -10,6 +10,8 @@ class tengbe_v2(YellowBlock):
             return tengbaser_xilinx_k7(blk, plat, hdl_root)
         elif plat.fpga.startswith('xc7v'):
             return tengbaser_xilinx_k7(blk, plat, hdl_root, use_gth=plat.name=='mx175')
+        elif plat.fpga.startswith('xcvu'):
+            return tengbaser_xilinx_k7(blk, plat, hdl_root, use_gth=plat.name=='vcu118')
         else:
             return tengbe_v2_xilinx_v6(blk, plat, hdl_root)
 
@@ -298,7 +300,7 @@ class tengbaser_xilinx_k7(tengbe_v2):
         top.assign_signal('signal_detect%d'%self.port, "1'b1") #snap doesn't wire this to SFP(?)
         phy.add_port('tx_fault', 'tx_fault%d'%self.port)
         top.assign_signal('tx_fault%d'%self.port, "1'b0") #snap doesn't wire this to SFP(?)
-        phy.add_port('tx_disable', 'tx_disable%d'%self.port, parent_port=True, dir='out')
+        phy.add_port('tx_disable', '~tx_disable%d'%self.port, parent_port=True, dir='out')
 
         phy.add_port('resetdone', 'resetdone%d'%self.port)
         phy.add_port('status_vector', '', parent_sig=False)

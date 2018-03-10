@@ -5,7 +5,7 @@ from os import environ as env
 
 class microblaze(YellowBlock):
     def initialize(self):
-        if self.platform.name == 'snap2':
+        if self.platform.name == 'snap2' or self.platform.name == 'vcu118':
             self.memfile= 'executable_no_xadc.mem'
             self.blkdiagram = 'microblaze_wb_no_xadc.tcl'
         else:

@@ -30,6 +30,10 @@ pins:
     loc: W9
   qsfpclk156_n:
     loc: W8
+  usb_tx:
+    loc: AW25
+  usb_rx:
+    loc: BB21
   miso:
     loc: B17
     iostd: LVCMOS12
@@ -95,6 +99,9 @@ pins:
   eth_clk_n:
     loc: 
       - CLKOUT1_N    
+  sfp_disable:
+    loc:
+      - RESETL
   mgt_tx_p:
     loc:
       - TX1P
@@ -119,3 +126,16 @@ pins:
       - RX2N
       - RX3N
       - RX4N
+  spi_flash_csn:
+    iostd: LVCMOS18
+    loc: AJ11
+  spi_flash_clk:
+    iostd: LVCMOS18
+    loc: AF13
+  spi_flash_data:
+    iostd: LVCMOS18
+    loc: 
+      - AN11
+      - AM11
+      - AL11
+      - AJ11
