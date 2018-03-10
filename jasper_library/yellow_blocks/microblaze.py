@@ -26,7 +26,7 @@ class microblaze(YellowBlock):
         Instantiate a tri-state buffer, connected to inst's I,O, and T ports.
         Propagate the IO port to a port in top.
         """
-        ioinst = top.get_instance(entity='IOBUF', name=name, comment='Bidirectional buffer placed by microblaze yellow block')
+        ioinst = top.get_instance(entity='IOBUF', name=name+'_inst', comment='Bidirectional buffer placed by microblaze yellow block')
         ioinst.add_port('I',  '%s_o'  % name,  dir='in',    parent_port=False)
         ioinst.add_port('O',  '%s_i'  % name,  dir='out',   parent_port=False)
         ioinst.add_port('IO', '%s' % name,     dir='inout', parent_port=True)
