@@ -194,6 +194,7 @@ class tengbe_v2_xilinx_v6(tengbe_v2):
 class tengbaser_xilinx_k7(tengbe_v2):
     def __init__(self, blk, plat, hdl_root, use_gth=False):
         self.use_gth = use_gth
+        self.invert_sfp_disable = True
         tengbe_v2.__init__(self, blk, plat, hdl_root)
     def initialize(self):
         self.typecode = TYPECODE_ETHCORE
@@ -300,7 +301,12 @@ class tengbaser_xilinx_k7(tengbe_v2):
         top.assign_signal('signal_detect%d'%self.port, "1'b1") #snap doesn't wire this to SFP(?)
         phy.add_port('tx_fault', 'tx_fault%d'%self.port)
         top.assign_signal('tx_fault%d'%self.port, "1'b0") #snap doesn't wire this to SFP(?)
-        phy.add_port('tx_disable', '~tx_disable%d'%self.port, parent_port=True, dir='out')
+        phy.add_port('tx_disable', 'tx_disable%d_int'%self.port)
+        top.add_port('tx_disable%d'%self.port, '', dir='out', width=0)
+        if self.invert_sfp_disable:
+            top.assign_signal('tx_disable%d'%self.port, '~tx_disable%d_int'%self.port)
+        else:
+            top.assign_signal('tx_disable%d'%self.port, 'tx_disable%d_int'%self.port)
 
         phy.add_port('resetdone', 'resetdone%d'%self.port)
         phy.add_port('status_vector', '', parent_sig=False)
