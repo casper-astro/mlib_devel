@@ -42,15 +42,15 @@ port(
             
     -- Use fgbe_link_status from frm...u1r1.vhd
     -- > Checks if ANY of the 40GbE links are up (OR)
-    forty_gbe_link_status   : in std_logic;
+    forty_gbe_link_status : in std_logic;
     -- > Need a signal to confirm it has resolved to an IP
-    dhcp_resolved           : in std_logic;
+    dhcp_resolved : in std_logic;
 
     -- Need the VERSION (Constant) to dictate image_indicator
     -- Only need top-most nibble of 32-bit version number
     -- Need to clarify which image is running on FPGA
     -- > At the moment, I think that needs to come from parameters.vhd
-    firmware_version        : in std_logic_vector(3 downto 0);
+    firmware_version : in std_logic_vector(3 downto 0);
 
     -- But we actually need to accommodate for 40GbE AND 1GbE
     -- > Therefore, we need some kind of MUX/Indicator from uBlaze to tell us which link is up
@@ -58,16 +58,16 @@ port(
     
     -- To monitor the status of the Microblaze
     -- > Microblaze will toggle the 0th-bit at address 0x24: CONSULT FUM.pdf
-    ublaze_toggle_value     : in std_logic;
+    ublaze_toggle_value : in std_logic;
 
     -- Needs to be controlled via a Wishbone Register @ Addr = hex(13 * 4)
-    dsp_override_i    : in std_logic;
+    dsp_override_i : in std_logic;
 	-- DSP LEDs in need to be CDC'd
-	dsp_leds_i	: in std_logic_vector(7 downto 0);
+	dsp_leds_i : in std_logic_vector(7 downto 0);
 
     -- Pass in/Associate the relevant FPGA_GPIOs here
     -- > REMEMBER: Active LOW - Signals are inverted upon assignment
-    leds_out        : out std_logic_vector(7 downto 0)
+    leds_out : out std_logic_vector(7 downto 0)
 
     );
 end led_manager;
@@ -84,29 +84,28 @@ architecture arch_led_manager of led_manager is
     constant C_MULTIBOOT_IMAGE    : std_logic_vector(3 downto 0)  := "0100";
     constant C_TOOLFLOW_IMAGE     : std_logic_vector(3 downto 0)  := "0000";
 
-	constant C_MAX_COUNT_25BIT    : std_logic_vector(24 downto 0) := "1111111111111111111111111";
-	constant C_MAX_COUNT_31BIT    : std_logic_vector(30 downto 0) := "1111111111111111111111111111111";
+	constant C_MAX_COUNT_25BIT    : std_logic_vector(24 downto 0) := "1111111111111111111111111"; -- 16#1FFFFFF#;
+	constant C_MAX_COUNT_31BIT    : std_logic_vector(30 downto 0) := "1111111111111111111111111111111"; -- 16#7FFFFFFF#;
 	
-	signal bsp_leds_out			: std_logic_vector(7 downto 0);
+	signal bsp_leds_out : std_logic_vector(7 downto 0);
 	-- Need to cross clock domains for DSP LEDs (user_clk to sys_clk)
     signal dsp_leds_z  : std_logic_vector(7 downto 0);
     signal dsp_leds_z2 : std_logic_vector(7 downto 0);
 	signal dsp_leds_z3 : std_logic_vector(7 downto 0);
-	-- signal dsp_leds_out			: std_logic_vector(7 downto 0);
-
+	
     -- One counter to handle flashing for all cases of LED-flashing
-    signal flash_counter		: std_logic_vector(26 downto 0);
-    signal flash_toggle_value	: std_logic;
+    signal flash_counter	  : std_logic_vector(26 downto 0);
+    signal flash_toggle_value : std_logic;
 
 	-- > According to THREE possible states of Ethernet connection
 	--   -> 100: DHCP Success  |  010: Link UP, No DHCP  |  000: Link DOWN
-	signal eth_led_indicators	: std_logic_vector(2 downto 0);
-	signal flash_link_up		: std_logic;
+	signal eth_led_indicators  : std_logic_vector(2 downto 0);
+	signal flash_link_up	   : std_logic;
 	-- signal flash_link_up_counter    : std_logic_vector(26 downto 0);
 
 	--   -> 100: Toolflow Image  |  010: Multiboot Image  |  000: Golden Image
-	signal image_led_indicators		: std_logic_vector(2 downto 0);
-	signal flash_multiboot_image	: std_logic;
+	signal image_led_indicators  : std_logic_vector(2 downto 0);
+	signal flash_multiboot_image : std_logic;
 	-- signal flash_multiboot_image_counter    : std_logic_vector(26 downto 0);
 
 	-- The mere fact that this process is running
@@ -164,7 +163,7 @@ begin
 	-- -> Flashing GREEN:  Multiboot Image
 	-- -> Solid GREEN:     Toolflow Image
 
-	image_indicator : process(rst, clk, firmware_version)
+	image_indicator : process(rst, clk)--, firmware_version)
 	begin
 		if (rst = '1')then
 		    image_led_indicators <= (others => '0');
@@ -269,20 +268,20 @@ begin
 	ublaze_count : process(rst, clk, ublaze_count_reset, ublaze_counter)
 	begin
 		if (rst = '1')then
-		    ublaze_counter   <= (others => '0');
-		    -- ublaze_counter_z <= (others => '0');
+		    ublaze_counter <= (others => '0');
+		    ublaze_running <= '0';
 		elsif (rising_edge(clk))then
 		    if (ublaze_count_reset = '1')then
-		        ublaze_counter   <= (others => '0');
-		        ublaze_running   <= '1';
+		        ublaze_counter <= (others => '0');
+		        ublaze_running <= '1';
 		    else
-		        ublaze_counter   <= ublaze_counter + '1';
+		        ublaze_counter <= ublaze_counter + '1';
 
 		        -- Now adjusting count value for reduced sys_clk = 39.0625MHz
 		        if (ublaze_counter = C_MAX_COUNT_31BIT)then
 		            -- uBlaze has not reset the counter yet
 		            -- and can be assumed to be dead
-		            ublaze_running   <= '0';
+		            ublaze_running <= '0';
 		        end if;
 		    end if;
 		end if;

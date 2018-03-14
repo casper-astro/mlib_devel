@@ -47,64 +47,43 @@ class gpio(YellowBlock):
 
     def modify_top(self,top):
         instance_name = self.fullname
-        gateway_name = '{}_gateway'.format(self.fullname)   # This is constant
-        
+        gateway_name = '{}_gateway'.format(self.fullname)
+
+        inst = top.get_instance(entity=self.module, name=instance_name, comment=self.fullname)
+        inst.add_parameter('CLK_PHASE', self.reg_clk_phase)
+        inst.add_port('clk', signal='user_clk', parent_sig=False)
+        inst.add_port('clk90', signal='user_clk90', parent_sig=False)
+        inst.add_port('gateway', signal=gateway_name, width=self.bitwidth)
+        inst.add_parameter('WIDTH', str(self.bitwidth))
+        inst.add_parameter('DDR', '1' if self.use_ddr  else '0')
+        inst.add_parameter('REG_IOB', '"true"' if self.reg_iob else '"false"')
+
         if self.skarab_leds:
-        
-            inst = top.get_instance(entity=self.module, name=instance_name, comment=self.fullname)
-            inst.add_parameter('CLK_PHASE', self.reg_clk_phase)
-            inst.add_parameter('DDR', '0')
-            inst.add_parameter('SKARAB_LED', '1')
-            inst.add_parameter('REG_IOB', '"false"')
-
-            inst.add_port('clk', signal='user_clk', parent_sig=False)
-            inst.add_port('clk90', signal='user_clk90', parent_sig=False)
-            
-            inst.add_port('gateway', signal=gateway_name, width=self.bitwidth, parent_sig=True, parent_port=False)
-
-            led_width = 0
-            
             if self.multiple_leds:
-                # First, get the list of LEDs to be controlled
                 led_list = to_int_list(self.bit_index)
-                led_list.sort()     # Will sort indices from lowest to highest
+                led_list.sort()
+                led_list.reverse()
 
-                # Rudimentary check that we're controlling consecutive LEDs
-                for index in range(0, len(led_list)-1):
-                    difference = led_list[index + 1] - led_list[index]
-                    if (difference != 1):
-                        # Not controlling successive LEDs
-                        errmsg1 = 'It seems you are trying to control LEDs: %s' %str(led_list)
-                        errmsg2 = 'Toolflow can only control consecutive LEDs for SKARAB...'
-                        raise SkarabLedError('{} \n{}'.format(errmsg1, errmsg2))
-                
-                led_name = 'dsp_leds_i[{}:{}]'.format(str(led_list[-1]), str(led_list[0]))
-                led_width = self.bitwidth
+                led_name = '{'
+                for index in range(0,len(led_list)-1):
+                    led_name += 'dsp_leds_i[{}],'.format(str(led_list[index]))
+                led_name += 'dsp_leds_i[%s]}' % (str(led_list[-1]))
             else:
                 # Only one LED to account for
-                led_name = 'dsp_leds_i[{}]'.format(str(self.bit_index))
-                led_width = 1
-
-            inst.add_parameter('WIDTH', str(led_width))
-            inst.add_port('io_pad', signal=led_name, parent_sig=False, parent_port=False)
+                led_name = 'dsp_leds_i[%s]' % str(self.bit_index)
+            
+            inst.add_port('io_pad', signal=led_name, width=self.pad_bitwidth, parent_sig=False, parent_port=False)
+            inst.add_parameter('PORT_BYPASS', '1')
         else:
             # Just dealing with normal GPIOs
             external_port_name = self.fullname + '_ext'
             
-            inst = top.get_instance(entity=self.module, name=instance_name, comment=self.fullname)
-            inst.add_port('clk', signal='user_clk', parent_sig=False)
-            inst.add_port('clk90', signal='user_clk90', parent_sig=False)
-            inst.add_port('gateway', signal='%s_gateway'%self.fullname, width=self.bitwidth)
             if self.use_diffio:
                 inst.add_port('io_pad_p', signal=external_port_name + '_p', dir=self.io_dir, width=self.pad_bitwidth, parent_port=True)
                 inst.add_port('io_pad_n', signal=external_port_name + '_n', dir=self.io_dir, width=self.pad_bitwidth, parent_port=True)
             else:
                 inst.add_port('io_pad', signal=external_port_name, dir=self.io_dir, width=self.pad_bitwidth, parent_port=True)
-            inst.add_parameter('CLK_PHASE', self.reg_clk_phase)
-            inst.add_parameter('WIDTH', str(self.bitwidth))
-            inst.add_parameter('DDR', '1' if self.use_ddr  else '0')
-            inst.add_parameter('REG_IOB', '"true"' if self.reg_iob else '"false"')
-
+        
     def gen_constraints(self):
         if self.use_diffio:
             const = []
@@ -136,9 +115,7 @@ class gpio(YellowBlock):
                 # Don't need to generate any constraints (?)
                 # - Just need to map the output of the gpio_simulink2ext to the input of the led_manager
                 return const
-            # else:
-            # import IPython
-            # IPython.embed()
+            
             const += [PortConstraint(self.fullname+'_ext', self.io_group, port_index=range(self.bitwidth), iogroup_index=to_int_list(self.bit_index))]
             
             #Constrain the I/O (it is assumed that this I/O is not timing critical and set_false_path is used)

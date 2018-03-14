@@ -224,17 +224,8 @@ entity forty_gbe is
         DEBUG_UART_RX : in  std_logic;
 
         -- > Master LEDs that will be output (Front panel LEDs)
-        dsp_leds_i  : in std_logic_vector(7 downto 0);
-        -- dsp_leds_0  : in std_logic;
-        -- dsp_leds_1  : in std_logic;
-        -- dsp_leds_2  : in std_logic;
-        -- dsp_leds_3  : in std_logic;
-        -- dsp_leds_4  : in std_logic;
-        -- dsp_leds_5  : in std_logic;
-        -- dsp_leds_6  : in std_logic;
-        -- dsp_leds_7  : in std_logic;
-        dsp_override_i : in std_logic;
-        fpga_leds_o : out std_logic_vector(7 downto 0);
+        dsp_leds_i     : in std_logic_vector(7 downto 0);
+        fpga_leds_o    : out std_logic_vector(7 downto 0);
         
         -- AUX CONNECTIONS
         --AUX_CLK_P   : in  std_logic;
@@ -787,15 +778,7 @@ architecture arch_forty_gbe of forty_gbe is
     		ublaze_toggle_value		: in std_logic;
     		dsp_override_i   		: in std_logic;
     		dsp_leds_i 			    : in std_logic_vector(7 downto 0);
-            -- dsp_led_0 : std_logic;
-            -- dsp_led_1 : std_logic;
-            -- dsp_led_2 : std_logic;
-            -- dsp_led_3 : std_logic;
-            -- dsp_led_4 : std_logic;
-            -- dsp_led_5 : std_logic;
-            -- dsp_led_6 : std_logic;
-            -- dsp_led_7 : std_logic;
-    		leds_out  : out std_logic_vector(7 downto 0)
+            leds_out                : out std_logic_vector(7 downto 0)
     		);
     end component;
 
@@ -1170,14 +1153,10 @@ architecture arch_forty_gbe of forty_gbe is
     -- > Will use the following signals:
     --   -> clk => sys_clk and rst => sys_rst
     --   -> forty_gbe_link_status => fgbe_link_status
-    --	 -> dhcp_resolved => brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(1)
+    --	 -> dhcp_resolved => brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(0)
     --	 -> firmware_version => C_VERSION (from parameter.vhd), or brd_user_read_regs(C_RD_VERSION_ADDR)
     --	 -> dsp_override_i and dsp_leds_in
     --	 -> leds_out => FPGA_LEDS(7 downto 0)
-
-    -- Testing
-    signal test_vector_1 : std_logic_vector(0 downto 0);
-    signal test_signal_1 : std_logic;
     
     signal mezzanine_fault_override : std_logic;
 
@@ -3405,27 +3384,21 @@ begin
         end if;
     end process;
     
-    test_signal_1 <= test_vector_1(0);
+    -------------------------------------------------------------------------
+    -- LED Manager Instantiation
+    -------------------------------------------------------------------------
 
     led_manager_0 : led_manager
     port map(
-        clk     => sys_clk,
-        rst     => sys_rst,
-        forty_gbe_link_status   => phy_rx_up_cpu(0), -- forty_gbe_led_up,
-        dhcp_resolved           => brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(0),
-        firmware_version        => C_VERSION(31 downto 28), -- Could also brd_user_read_regs(C_RD_VERSION_ADDR)(31 downto 28)
-        ublaze_toggle_value     => brd_user_read_regs(C_RD_UBLAZE_ALIVE_ADDR)(0),
-        dsp_override_i          => brd_user_read_regs(C_RD_DSP_OVERRIDE_ADDR)(0),
-        dsp_leds_i  => dsp_leds_i,
-        -- dsp_led_0 => dsp_leds_0,
-        -- dsp_led_1 => dsp_leds_1,
-        -- dsp_led_2 => dsp_leds_2,
-        -- dsp_led_3 => dsp_leds_3,
-        -- dsp_led_4 => dsp_leds_4,
-        -- dsp_led_5 => dsp_leds_5,
-        -- dsp_led_6 => dsp_leds_6,
-        -- dsp_led_7 => dsp_leds_7,
-        leds_out  => fpga_leds_o
+        clk                   => sys_clk,
+        rst                   => sys_rst,
+        forty_gbe_link_status => phy_rx_up_cpu(0), -- Only using 40GbE_0
+        dhcp_resolved         => brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(0),
+        firmware_version      => C_VERSION(31 downto 28),
+        ublaze_toggle_value   => brd_user_read_regs(C_RD_UBLAZE_ALIVE_ADDR)(0),
+        dsp_override_i        => brd_user_read_regs(C_RD_DSP_OVERRIDE_ADDR)(0),
+        dsp_leds_i            => dsp_leds_i,
+        leds_out              => fpga_leds_o
     );
 
 end arch_forty_gbe;
