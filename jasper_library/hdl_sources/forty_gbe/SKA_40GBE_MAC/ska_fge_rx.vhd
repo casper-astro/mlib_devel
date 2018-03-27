@@ -668,8 +668,11 @@ begin
     app_dvld <= (payload0_val or payload1_val or payload2_val or payload3_val) when (app_rst = '0') else '0';
     app_goodframe <= 
     (application_frame and app_rx_good_frame_latched) when ((app_dvld = '0')and(app_dvld_z1 = '1')and(app_rst = '0')) else '0';
+    --app_badframe <= 
+    --(application_frame and app_rx_bad_frame_latched) when ((app_dvld = '0')and(app_dvld_z1 = '1')and(app_rst = '0')) else '0';
+    --AI: Allow bad frames to be routed through
     app_badframe <= 
-    (application_frame and app_rx_bad_frame_latched) when ((app_dvld = '0')and(app_dvld_z1 = '1')and(app_rst = '0')) else '0';
+    (app_rx_bad_frame_latched) when ((app_dvld = '0')and(app_dvld_z1 = '1')and(app_rst = '0')) else '0';
 
 
     gen_app_dvld_z1 : process(mac_clk)
