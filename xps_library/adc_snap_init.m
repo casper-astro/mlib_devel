@@ -25,8 +25,9 @@ function adc_snap_init(blk, varargin)
 
 try
   clog('adc_snap_init: pre same_state','trace');
-
+  adc_resolution = str2double(get_param(blk, 'adc_resolution'));
   defaults = { ...
+    'adc_resolution', adc_resolution, ...
     'block_name', blk, ...
   };
   if same_state(blk, 'defaults', defaults, varargin{:}), return, end
@@ -42,6 +43,15 @@ try
 
   x =  0;
   y = 20;
+
+  adc_resolution = str2double(get_param(blk, 'adc_resolution'));
+  if adc_resolution <= 8
+      outputwidth=8;
+      binarypoint=7;
+  else
+      outputwidth=16;
+      binarypoint=15;
+  end
 
   for chip=1:3
     for channel=1:4
@@ -61,8 +71,8 @@ try
 
       reuse_block(blk, gateway_name, 'xbsIndex_r4/Gateway In', ...
         'arith_type', 'Signed', ...
-        'n_bits', '8', ...
-        'bin_pt', '7', ...
+        'n_bits', num2str(outputwidth), ...
+        'bin_pt', num2str(binarypoint), ...
         'Position', gateway_pos);
 
       reuse_block(blk, outport_name, 'built-in/outport', ...
