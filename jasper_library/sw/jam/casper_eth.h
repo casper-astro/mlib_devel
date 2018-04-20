@@ -77,6 +77,9 @@
 // Size/length of data in CPU RX buffer (16 bit access)
 #define ETH_MAC_REG16_RX_BUFFER_SIZE  (0x0c)
 
+// Size/length of data in CPU RX buffer (16 bit access)
+#define ETH_MAC_REG16_ARP_CACHE_SIZE  (0x0e)
+
 // Control bits and UDP port for fabric receive
 // Bit 24 is software reset (1 to reset, 0 to run)
 // Bit 16 is enable bit (1 to enable, 0 to disable)
@@ -144,6 +147,18 @@
 // Can be used as pointer to TX buffer size (as uint16_t)
 #define TX_BUF_SIZE_PTR16(p) \
   (((volatile uint16_t *)p) + ETH_MAC_REG16_TX_BUFFER_SIZE)
+
+// Can be used as pointer to TX buffer itself (as uint8_t)
+#define ARP_BUF_PTR8(p) \
+  ((uint8_t *)(p + ETH_MAC_ARP_CACHE_OFFSET))
+
+// Can be used as pointer to TX buffer itself (as uint32_t)
+#define ARP_BUF_PTR32(p) \
+  ((uint32_t *)(p + ETH_MAC_ARP_CACHE_OFFSET))
+
+// Can be used as pointer to TX buffer size (as uint16_t)
+#define ARP_BUF_SIZE_PTR16(p) \
+  (((volatile uint16_t *)p) + ETH_MAC_REG16_ARP_CACHE_SIZE)
 
 // The data received in the RX buffer needs to be 4-byte byte-swapped into
 // another region of 4-byte aligned memory.  If the RX buffer were writable, we

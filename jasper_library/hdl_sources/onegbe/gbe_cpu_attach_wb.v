@@ -102,8 +102,9 @@ module gbe_cpu_attach_wb #(
   localparam REG_LOCAL_IPADDR  = 4'd4;
   localparam REG_BUFFER_SIZES  = 4'd6;
   localparam REG_VALID_PORTS   = 4'd8;
-  localparam REG_CPU_ENABLE    = 4'd9;
-  localparam REG_PHY_STATUS    = 4'd10;
+//  localparam REG_CPU_ENABLE    = 4'd9;
+//  localparam REG_PHY_STATUS    = 4'd10;
+  localparam REG_PHY_STATUS    = 4'd9;
   localparam REG_PHY_CONTROL   = 4'd11;
 
   reg [47:0] local_mac_reg;
@@ -356,8 +357,9 @@ module gbe_cpu_attach_wb #(
                              cpu_data_src == REG_LOCAL_IPADDR  ? local_ip[31:0] :
                              cpu_data_src == REG_BUFFER_SIZES  ? {4'b0, cpu_tx_size, {3'b0, cpu_rx_ack ? 13'b0 : cpu_rx_size_reg}} :
                              cpu_data_src == REG_VALID_PORTS   ? {7'b0, cpu_promiscuous_reg, 7'b0, local_enable, local_port} :
-                             cpu_data_src == REG_CPU_ENABLE    ? {7'b0, |CPU_TX_ENABLE, 7'b0, |CPU_RX_ENABLE, 16'b0} :
-                             cpu_data_src == REG_PHY_STATUS    ? phy_status :
+//                             cpu_data_src == REG_CPU_ENABLE    ? {7'b0, |CPU_TX_ENABLE, 7'b0, |CPU_RX_ENABLE, 16'b0} :
+//                             cpu_data_src == REG_PHY_STATUS    ? phy_status :
+                             cpu_data_src == REG_PHY_STATUS    ? {7'b0, |CPU_TX_ENABLE, 7'b0, |CPU_RX_ENABLE, 15'b0,phy_status[0]} :
                              cpu_data_src == REG_PHY_CONTROL   ? phy_control :
                                                                  32'b0;
   assign cpu_dout = use_arp_data ? arp_data_int :
