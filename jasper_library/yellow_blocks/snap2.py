@@ -35,14 +35,24 @@ class snap2(YellowBlock):
             PortConstraint('sys_clk_n', 'sys_clk_n'),
             PortConstraint('sys_clk_p', 'sys_clk_p'),
             ClockConstraint('sys_clk_p', period=8.0),
-            #RawConstraint('set_property CONFIG_VOLTAGE 2.5 [current_design]'),
-            #RawConstraint('set_property CFGBVS VCCO [current_design]'),
-            #RawConstraint('set_property BITSTREAM.CONFIG.CONFIGRATE 33 [current_design]'),
-            #RawConstraint('set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]'),
-        ]
+            RawConstraint('set_property CONFIG_VOLTAGE 1.8 [current_design]'),
+            RawConstraint('set_property CFGBVS GND [current_design]'),
+            RawConstraint('set_property BITSTREAM.CONFIG.CONFIGRATE 33 [current_design]'),
+            RawConstraint('set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]'),
+            RawConstraint('set_property BITSTREAM.CONFIG.SPI_32BIT_ADDR Yes [current_design]'),
+           # RawConstraint('set_property BITSTREAM.CONFIG.TIMER_CFG 2000000 [current_design]'), # about 10 seconds
+            RawConstraint('set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]'),
+            ]
+
 
     def gen_tcl_cmds(self):
         tcl_cmds = {}
         # After generating bitstream write PROM file
-        #tcl_cmds['promgen'] = ['write_cfgmem  -format mcs -size 32 -interface SPIx4 -loadbit "up 0x00000000 ./myproj.runs/impl_1/top.bit " -checksum -file "./myproj.runs/impl_1/top.mcs"']
+        # Write both mcs and bin files. The latter are good for remote programming via microblaze. And makes sure the
+        # microblaze code makes it into top.bin, and hence top.bof
+        tcl_cmds['promgen'] = []
+        #tcl_cmds['promgen'] += ['write_cfgmem  -format mcs -size 32 -interface SPIx4 -loadbit "up 0x0 ./myproj.runs/impl_1/top.bit " -checksum -file "./myproj.runs/impl_1/top.mcs" -force']
+        #tcl_cmds['promgen'] += ['write_cfgmem  -format mcs -size 32 -interface SPIx4 -loadbit "up 0x%.7x ./myproj.runs/impl_1/top.bit " -checksum -file "./myproj.runs/impl_1/top_0x%x.mcs" -force' % (self.usermemaddr, self.usermemaddr)]
+        tcl_cmds['promgen'] += ['write_cfgmem  -format bin -size 32 -interface SPIx4 -loadbit "up 0x0 ./myproj.runs/impl_1/top.bit " -checksum -file "./myproj.runs/impl_1/top.bin" -force']
         return tcl_cmds
+

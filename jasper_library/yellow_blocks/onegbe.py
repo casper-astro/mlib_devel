@@ -1,5 +1,5 @@
 from yellow_block import YellowBlock
-from constraints import PortConstraint, ClockConstraint
+from constraints import PortConstraint, ClockConstraint,RawConstraint
 from helpers import to_int_list
 from yellow_block_typecodes import *
 
@@ -61,6 +61,9 @@ class onegbe(YellowBlock):
         gbe_udp.add_port('mac_rx_badframe',  self.fullname + '_mac_rx_badframe')
         gbe_udp.add_port('mac_syncacquired', self.fullname + '_mac_syncacquired')
 
+       #connections to PHY
+        gbe_udp.add_port('phy_status', self.fullname + '_phy_status', width=16)
+
         gbe_udp.add_wb_interface(regname=self.unique_name, mode='rw', nbytes=65536, typecode=self.typecode)
     def _instantiate_mac(self, top):
         gbe_mac = top.get_instance(entity='gig_eth_mac', name=self.fullname+'_mac', comment=self.fullname)
@@ -77,8 +80,8 @@ class onegbe(YellowBlock):
         gbe_mac.add_port('conf_rx_en', '1', parent_sig=False),
         gbe_mac.add_port('conf_tx_no_gen_crc', '0', parent_sig=False),
         gbe_mac.add_port('conf_rx_no_chk_crc', '0', parent_sig=False),
-        gbe_mac.add_port('conf_tx_jumbo_en',   '0', parent_sig=False),
-        gbe_mac.add_port('conf_rx_jumbo_en',   '0', parent_sig=False),
+        gbe_mac.add_port('conf_tx_jumbo_en',   '1', parent_sig=False),
+        gbe_mac.add_port('conf_rx_jumbo_en',   '1', parent_sig=False),
 
         #top.add_signal('data_lb', width=8)
         #top.add_signal('dvld_lb')
@@ -189,7 +192,11 @@ class onegbe_vcu118(onegbe):
 
 class onegbe_snap(onegbe):
     def initialize(self):
-        self.typecode = TYPECODE_ETHCORE
+        if self.platform.name == 'snap2':
+            self.typecode = TYPECODE_1GBE_ETHCORE
+        else:
+            self.typecode = TYPECODE_ETHCORE
+    
         self.add_source('onegbe/*.v')
         self.add_source('onegbe/*.xci')
         self.add_source('onegbe/*.coe')
@@ -241,7 +248,7 @@ class onegbe_snap(onegbe):
            gbe_pcs.add_port('configuration_vector', '5\'b10000', parent_sig=False)
            gbe_pcs.add_port('speed_is_10_100', '0', parent_sig=False)
            gbe_pcs.add_port('speed_is_100', '0', parent_sig=False)
-           gbe_pcs.add_port('status_vector', '')
+           gbe_pcs.add_port('status_vector', self.fullname+'_phy_status', width=16)
            gbe_pcs.add_port('reset', 'sys_rst')
            gbe_pcs.add_port('signal_detect', '1', parent_sig=False)
 
@@ -303,6 +310,10 @@ class onegbe_snap(onegbe):
         consts += [PortConstraint(self.fullname+'_mgt_clk_p', 'eth_clk_125_p')]
         consts += [PortConstraint(self.fullname+'_mgt_clk_n', 'eth_clk_125_n')]
         consts += [ClockConstraint(self.fullname+'_mgt_clk_p', name='onegbe_clk', freq=self.refclk_freq)]
+        consts += [RawConstraint('create_clock -period 8.000 -name gbe_userclk2_out -waveform {0.000 4.000} [get_nets {gbe_userclk2_out}]')]
+        consts += [RawConstraint('set_clock_groups -name asyncclocks_onegbe -asynchronous -group [get_clocks -include_generated_clocks sys_clk_p_CLK] -group [get_clocks -include_generated_clocks gbe_userclk2_out]')]
+        consts += [RawConstraint('set_clock_groups -name asyncclocks_onegbe_usr_clk -asynchronous -group [get_clocks -of_objects [get_cells -hierarchical -filter {name=~*clk_counter*}]] -group [get_clocks -include_generated_clocks gbe_userclk2_out]')]
+
         if not self.use_lvds:
             consts += [PortConstraint(self.fullname+'_sfp_disable', 'sfp_disable')]
         else:
