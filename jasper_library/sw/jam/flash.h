@@ -38,6 +38,10 @@
 #define FLASH_ENTER_QUAD 0x35
 #define FLASH_EXIT_QUAD 0xf5
 
+//extended address register
+#define FLASH_WRITE_EXTENDED_ADDR_REG 0xc5
+#define FLASH_READ_EXTENDED_ADDR_REG 0xc8
+
 
 int flash_erase_sector(uint32_t addr);
 int flash_write_page(uint32_t addr, uint8_t *p, int len);

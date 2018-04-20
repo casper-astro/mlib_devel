@@ -56,8 +56,11 @@
 #include "casper_eth.h"
 #include "casper_devcsl.h"
 #include "icap.h"
+#include "flash.h"
 
 #define HEARTBEAT_MS 10000
+#define PRINT_SPI_DETAILS
+
 
 int main()
 {
@@ -66,13 +69,14 @@ int main()
     int j;
     u32 len;
     u8 buf[128];
+   // u32 addr;
 #endif
 #ifdef DEBUG_ETH_0_CORE
     int rx_size;
 #endif
-    int fpga_temp;
-    uint32_t next_ms = HEARTBEAT_MS;
-    uint32_t curr_ms;
+   // int fpga_temp;
+   // uint32_t next_ms = HEARTBEAT_MS;
+    //uint32_t curr_ms;
 #ifdef JAM_TEST_TMRCTR
     u64 time0, time1;
     u32 tick0, tick1;
@@ -178,6 +182,420 @@ int main()
       print("\n");
     }
     print("\n");
+
+    // test by lin shu
+
+/*
+    addr=0xf00;
+    len=256;
+    xil_printf("read: %08x\n", addr);
+    buf[0] = FLASH_READ;
+    buf[1] = (addr >> 16) & 0xff;
+    buf[2] = (addr >>  8) & 0xff;
+    buf[3] = (addr      ) & 0xff;
+    send_spi(buf, buf, 4, SEND_SPI_MORE);
+
+    // read the data
+    send_spi(buf, buf, len, 0);
+
+    print("data:");
+    for(i=0; i<len/16; i++) {
+      for(j=0; j<16; j++) {
+        xil_printf(" %02x", buf[16*i+j]);
+      }
+      print("\n");
+    }
+
+    // wait for the write to complete
+    buf[0] = FLASH_READ_STATUS_REG;
+    send_spi(buf, buf, 2, 0);
+    while(buf[1] & 1) {
+      buf[0] = FLASH_READ_STATUS_REG;
+      send_spi(buf, buf, 2, 0);
+    }
+
+
+    xil_printf("erase: %08x\n", addr);
+      buf[0] = FLASH_WRITE_ENABLE;
+      send_spi(buf, buf, 1, 0);
+      buf[0] = FLASH_SECTOR_ERASE;
+      buf[1] = (addr >> 16) & 0xff;
+      buf[2] = (addr >>  8) & 0xff;
+      buf[3] = (addr      ) & 0xff;
+      send_spi(buf, buf, 4, 0);
+      // get status reg
+      buf[0] = FLASH_READ_STATUS_REG;
+      send_spi(buf, buf, 2, 0);
+      while(buf[1] & 1) {
+        buf[0] = FLASH_READ_STATUS_REG;
+        send_spi(buf, buf, 2, 0);
+      }
+      buf[0] = FLASH_WRITE_DISABLE;
+      send_spi(buf, buf, 1, 0);
+
+      xil_printf("read: %08x\n", addr);
+      buf[0] = FLASH_READ;
+      buf[1] = (addr >> 16) & 0xff;
+      buf[2] = (addr >>  8) & 0xff;
+      buf[3] = (addr      ) & 0xff;
+      send_spi(buf, buf, 4, SEND_SPI_MORE);
+
+      // read the data
+      send_spi(buf, buf, len, 0);
+
+      print("data:");
+      for(i=0; i<len/16; i++) {
+        for(j=0; j<16; j++) {
+          xil_printf(" %02x", buf[16*i+j]);
+        }
+        print("\n");
+      }
+
+      // wait for the write to complete
+      buf[0] = FLASH_READ_STATUS_REG;
+      send_spi(buf, buf, 2, 0);
+      while(buf[1] & 1) {
+        buf[0] = FLASH_READ_STATUS_REG;
+        send_spi(buf, buf, 2, 0);
+      }
+
+      xil_printf("write: %08x\n", addr);
+      if(len != FLASH_PAGE_SIZE) {
+        xil_printf("Wrong size\n");
+        return 0;
+      }
+      // Turn on the write enable
+      buf[0] = FLASH_WRITE_ENABLE;
+      send_spi(buf, buf, 1, 0);
+      // Send the write command and address
+      // Leave the transaction open for the data
+      buf[0] = FLASH_PAGE_PROGRAM;
+      buf[1] = (addr >> 16) & 0xff;
+      buf[2] = (addr >>  8) & 0xff;
+      buf[3] = (addr      ) & 0xff;
+      send_spi(buf, buf, 4, SEND_SPI_MORE);
+
+      buf[0]=0;
+      for (i=1;i < len;i++){
+
+      buf[i]=buf[i-1]+1;
+
+      }
+      // send the data
+      send_spi(buf, buf, len, 0);
+      // wait for the write to complete
+      buf[0] = FLASH_READ_STATUS_REG;
+      send_spi(buf, buf, 2, 0);
+      while(buf[1] & 1) {
+        buf[0] = FLASH_READ_STATUS_REG;
+        send_spi(buf, buf, 2, 0);
+      }
+      buf[0] = FLASH_WRITE_DISABLE;
+      send_spi(buf, buf, 1, 0);
+
+
+      xil_printf("read: %08x\n", addr);
+      buf[0] = FLASH_READ;
+      buf[1] = (addr >> 16) & 0xff;
+      buf[2] = (addr >>  8) & 0xff;
+      buf[3] = (addr      ) & 0xff;
+      send_spi(buf, buf, 4, SEND_SPI_MORE);
+
+      // read the data
+      send_spi(buf, buf, len, 0);
+
+      print("data:");
+      for(i=0; i<len/16; i++) {
+        for(j=0; j<16; j++) {
+          xil_printf(" %02x", buf[16*i+j]);
+        }
+        print("\n");
+      }
+
+      // wait for the write to complete
+      buf[0] = FLASH_READ_STATUS_REG;
+      send_spi(buf, buf, 2, 0);
+      while(buf[1] & 1) {
+        buf[0] = FLASH_READ_STATUS_REG;
+        send_spi(buf, buf, 2, 0);
+      }
+
+      print("\n");*/
+
+
+/*
+        addr=0x1000000;
+        len=256;
+
+        xil_printf("read: %08x\n", addr&0xffffff);
+        buf[0] = FLASH_READ;
+        buf[1] = (addr >> 16) & 0xff;
+        buf[2] = (addr >>  8) & 0xff;
+        buf[3] = (addr      ) & 0xff;
+        send_spi(buf, buf, 4, SEND_SPI_MORE);
+
+        // read the data
+        send_spi(buf, buf, len, 0);
+
+        print("data:");
+        for(i=0; i<len/16; i++) {
+          for(j=0; j<16; j++) {
+            xil_printf(" %02x", buf[16*i+j]);
+          }
+          print("\n");
+        }
+
+        // wait for the write to complete
+        buf[0] = FLASH_READ_STATUS_REG;
+        send_spi(buf, buf, 2, 0);
+        while(buf[1] & 1) {
+          buf[0] = FLASH_READ_STATUS_REG;
+          send_spi(buf, buf, 2, 0);
+        }
+
+        // enter 4 bytes address mode
+        buf[0] = FLASH_ENTER_4B_MODE;
+        send_spi(buf, buf, 1, 0);
+
+        xil_printf("read: %08x\n", addr);
+        buf[0] = FLASH_READ;
+        buf[1] = (addr >> 24) & 0xff;
+        buf[2] = (addr >> 16) & 0xff;
+        buf[3] = (addr >>  8) & 0xff;
+        buf[4] = (addr      ) & 0xff;
+        send_spi(buf, buf, 5, SEND_SPI_MORE);
+
+        // read the data
+        send_spi(buf, buf, len, 0);
+
+        print("data:");
+        for(i=0; i<len/16; i++) {
+          for(j=0; j<16; j++) {
+            xil_printf(" %02x", buf[16*i+j]);
+          }
+          print("\n");
+        }
+
+        // wait for the write to complete
+        buf[0] = FLASH_READ_STATUS_REG;
+        send_spi(buf, buf, 2, 0);
+        while(buf[1] & 1) {
+          buf[0] = FLASH_READ_STATUS_REG;
+          send_spi(buf, buf, 2, 0);
+        }
+
+        //exit 4 bytes address mode
+        buf[0] = FLASH_EXIT_4B_MODE;
+       send_spi(buf, buf, 1, 0);
+
+
+        xil_printf("erase: %08x\n", addr);
+          buf[0] = FLASH_WRITE_ENABLE;
+          send_spi(buf, buf, 1, 0);
+
+          // enter 4 bytes address mode
+          buf[0] = FLASH_ENTER_4B_MODE;
+          send_spi(buf, buf, 1, 0);
+
+          //buf[0] = FLASH_READ_EXTENDED_ADDR_REG;
+          //send_spi(buf, buf, 4, 0);
+
+         // buf[0] = FLASH_WRITE_EXTENDED_ADDR_REG;
+          //buf[1] = (addr >> 24) & 0xff;
+         // send_spi(buf, buf, 2, 0);
+
+          buf[0] = FLASH_SECTOR_ERASE;
+          buf[1] = (addr >> 24) & 0xff;
+          buf[2] = (addr >> 16) & 0xff;
+          buf[3] = (addr >>  8) & 0xff;
+          buf[4] = (addr      ) & 0xff;
+          send_spi(buf, buf, 5, 0);
+          // get status reg
+          buf[0] = FLASH_READ_STATUS_REG;
+          send_spi(buf, buf, 2, 0);
+          while(buf[1] & 1) {
+            buf[0] = FLASH_READ_STATUS_REG;
+            send_spi(buf, buf, 2, 0);
+          }
+
+          //exit 4 bytes address mode
+          buf[0] = FLASH_EXIT_4B_MODE;
+          send_spi(buf, buf, 1, 0);
+
+          buf[0] = FLASH_WRITE_DISABLE;
+          send_spi(buf, buf, 1, 0);
+
+
+          xil_printf("read: %08x\n", addr&0xffffff);
+          buf[0] = FLASH_READ;
+          buf[1] = (addr >> 16) & 0xff;
+          buf[2] = (addr >>  8) & 0xff;
+          buf[3] = (addr      ) & 0xff;
+          send_spi(buf, buf, 4, SEND_SPI_MORE);
+
+          // read the data
+          send_spi(buf, buf, len, 0);
+
+          print("data:");
+          for(i=0; i<len/16; i++) {
+            for(j=0; j<16; j++) {
+              xil_printf(" %02x", buf[16*i+j]);
+            }
+            print("\n");
+          }
+
+          // wait for the write to complete
+          buf[0] = FLASH_READ_STATUS_REG;
+          send_spi(buf, buf, 2, 0);
+          while(buf[1] & 1) {
+            buf[0] = FLASH_READ_STATUS_REG;
+            send_spi(buf, buf, 2, 0);
+          }
+
+          xil_printf("read: %08x\n", addr);
+          // enter 4 bytes address mode
+          buf[0] = FLASH_ENTER_4B_MODE;
+          send_spi(buf, buf, 1, 0);
+
+          buf[0] = FLASH_READ;
+          buf[1] = (addr >> 24) & 0xff;
+          buf[2] = (addr >> 16) & 0xff;
+          buf[3] = (addr >>  8) & 0xff;
+          buf[4] = (addr      ) & 0xff;
+          send_spi(buf, buf, 5, SEND_SPI_MORE);
+
+          // read the data
+          send_spi(buf, buf, len, 0);
+
+          print("data:");
+          for(i=0; i<len/16; i++) {
+            for(j=0; j<16; j++) {
+              xil_printf(" %02x", buf[16*i+j]);
+            }
+            print("\n");
+          }
+
+          // wait for the write to complete
+          buf[0] = FLASH_READ_STATUS_REG;
+          send_spi(buf, buf, 2, 0);
+          while(buf[1] & 1) {
+            buf[0] = FLASH_READ_STATUS_REG;
+            send_spi(buf, buf, 2, 0);
+          }
+
+          //exit 4 bytes address mode
+          buf[0] = FLASH_EXIT_4B_MODE;
+          send_spi(buf, buf, 1, 0);
+
+
+          xil_printf("write: %08x\n", addr);
+          if(len != FLASH_PAGE_SIZE) {
+            xil_printf("Wrong size\n");
+            return 0;
+          }
+          // Turn on the write enable
+          buf[0] = FLASH_WRITE_ENABLE;
+          send_spi(buf, buf, 1, 0);
+
+          // enter 4 bytes address mode
+          buf[0] = FLASH_ENTER_4B_MODE;
+          send_spi(buf, buf, 1, 0);
+      // Send the write command and address
+      // Leave the transaction open for the data
+          buf[0] = FLASH_PAGE_PROGRAM;
+          buf[1] = (addr >> 24) & 0xff;
+          buf[2] = (addr >> 16) & 0xff;
+          buf[3] = (addr >>  8) & 0xff;
+          buf[4] = (addr      ) & 0xff;
+
+          send_spi(buf, buf, 5, SEND_SPI_MORE);
+
+          buf[0]=0;
+          for (i=1;i < len;i++){
+
+          buf[i]=buf[i-1]+1;
+
+          }
+          // send the data
+          send_spi(buf, buf, len, 0);
+          // wait for the write to complete
+          buf[0] = FLASH_READ_STATUS_REG;
+          send_spi(buf, buf, 2, 0);
+          while(buf[1] & 1) {
+            buf[0] = FLASH_READ_STATUS_REG;
+            send_spi(buf, buf, 2, 0);
+          }
+
+          //exit 4 bytes address mode
+          buf[0] = FLASH_EXIT_4B_MODE;
+          send_spi(buf, buf, 1, 0);
+
+          buf[0] = FLASH_WRITE_DISABLE;
+          send_spi(buf, buf, 1, 0);
+
+          xil_printf("read: %08x\n", addr&0xffffff);
+          buf[0] = FLASH_READ;
+          buf[1] = (addr >> 16) & 0xff;
+          buf[2] = (addr >>  8) & 0xff;
+          buf[3] = (addr      ) & 0xff;
+          send_spi(buf, buf, 4, SEND_SPI_MORE);
+
+          // read the data
+          send_spi(buf, buf, len, 0);
+
+          print("data:");
+          for(i=0; i<len/16; i++) {
+            for(j=0; j<16; j++) {
+              xil_printf(" %02x", buf[16*i+j]);
+            }
+            print("\n");
+          }
+
+          // wait for the write to complete
+          buf[0] = FLASH_READ_STATUS_REG;
+          send_spi(buf, buf, 2, 0);
+          while(buf[1] & 1) {
+            buf[0] = FLASH_READ_STATUS_REG;
+            send_spi(buf, buf, 2, 0);
+          }
+
+          xil_printf("read: %08x\n", addr);
+          // enter 4 bytes address mode
+          buf[0] = FLASH_ENTER_4B_MODE;
+          send_spi(buf, buf, 1, 0);
+          buf[0] = FLASH_READ;
+          buf[1] = (addr >> 24) & 0xff;
+          buf[2] = (addr >> 16) & 0xff;
+          buf[3] = (addr >>  8) & 0xff;
+          buf[4] = (addr      ) & 0xff;
+          send_spi(buf, buf, 5, SEND_SPI_MORE);
+
+          // read the data
+          send_spi(buf, buf, len, 0);
+
+          print("data:");
+          for(i=0; i<len/16; i++) {
+            for(j=0; j<16; j++) {
+              xil_printf(" %02x", buf[16*i+j]);
+            }
+            print("\n");
+          }
+
+          // wait for the write to complete
+          buf[0] = FLASH_READ_STATUS_REG;
+          send_spi(buf, buf, 2, 0);
+          while(buf[1] & 1) {
+            buf[0] = FLASH_READ_STATUS_REG;
+            send_spi(buf, buf, 2, 0);
+          }
+
+          //exit 4 bytes address mode
+          buf[0] = FLASH_EXIT_4B_MODE;
+          send_spi(buf, buf, 1, 0);
+
+          print("\n");*/
+
+
 #endif //  PRINT_SPI_DETAILS
 
 #if 0
@@ -300,6 +718,7 @@ int main()
     } // CPU core exists
 #endif
 
+
     while(1) {
       casper_lwip_handler();
 #ifdef DEBUG_ETH_0_CORE
@@ -323,7 +742,7 @@ int main()
         }
       }
 #endif
-
+/*
       curr_ms = ms_tmrctr();
       if(next_ms <= curr_ms) {
         next_ms = curr_ms + HEARTBEAT_MS;
@@ -331,7 +750,7 @@ int main()
         fpga_temp = (int)(10*get_fpga_temp());
         xil_printf("FPGA at %d.%d C [ms %d]\n",
             fpga_temp / 10, fpga_temp % 10, ms_tmrctr());
-      }
+      }*/
     }
 
     // Should "never" get here

@@ -226,6 +226,10 @@ casper_netif_status_callback(struct netif *netif)
       xil_printf("TAPCP server ready\n");
     }
   }
+
+ // ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_IPADDR] = mb_swapb(netif->ip_addr.addr);
+ // ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_GATEWAY] = mb_swapb(netif->gw.addr);
+
 #ifdef VERBOSE_ETH_IMPL
   else print("no ip address, NOT starting TAPCP\n");
 #endif // VERBOSE_ETH_IMPL
@@ -266,6 +270,8 @@ casper_netif_init(struct netif *netif)
 err_t
 casper_lwip_init()
 {
+//	uint32_t *outbuf32;
+//    int i;
   const uint8_t *core_name;
 #ifdef DEBUG_ETH0_MEM
   int i;
@@ -274,8 +280,14 @@ casper_lwip_init()
 
   // Init local ifstate
   ifstate.ptr = (void *)casper_find_dev_by_typecode(
-      CASPER_CORE_INFO_TYPECODE_ETHCORE, 1, NULL, &core_name);
+      CASPER_CORE_INFO_TYPECODE_1GBE_ETHCORE, 1, NULL, &core_name);
   ifstate.last_link_state = -1;
+
+  if(!ifstate.ptr) {
+     ifstate.ptr = (void *)casper_find_dev_by_typecode(
+      CASPER_CORE_INFO_TYPECODE_10GBE_ETHCORE, 1, NULL, &core_name);
+     ifstate.last_link_state = -1;
+  }
 
   if(!ifstate.ptr) {
     print("No ethernet cores found!\n");
@@ -305,6 +317,7 @@ casper_lwip_init()
   ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_1] = ((uint32_t *)buf)[2] & 0xffff;
   ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_0] = ((uint32_t *)buf)[3];
   xil_printf("MAC 0x%04x%08x\n", ((uint32_t *)buf)[2] & 0xffff, ((uint32_t *)buf)[3]);
+
 
 #ifdef DEBUG_ETH0_MEM
   print("## eth0 memory as uint32_t:\n");
@@ -337,6 +350,27 @@ casper_lwip_init()
   // Check links
   casper_monitor_links();
 
+/*
+  // ARP table
+  outbuf32 = ARP_BUF_PTR32(ifstate.ptr);
+  xil_printf("ARP buf %p:\n", outbuf32);
+  outbuf32[0]=0x000090e2;
+  outbuf32[1]=0xbaecab31;
+  outbuf32[2]=0x000090e2;
+  outbuf32[3]=0xbaecab32;
+
+ // *ARP_BUF_SIZE_PTR16(ifstate.ptr)=2;
+  for(i=0; i<1000; i++) {
+      // If length is zero, then ARP buffer is free
+      if(*ARP_BUF_SIZE_PTR16(ifstate.ptr) == 0)
+    	  {
+    	  xil_printf("ARP Table has been updated!\n");
+    	  break;
+    	  }
+    }
+  if(i == 1000) {
+      xil_printf("warn: wishbone bus is slow\n");
+    }*/
   return ERR_OK;
 }
 
