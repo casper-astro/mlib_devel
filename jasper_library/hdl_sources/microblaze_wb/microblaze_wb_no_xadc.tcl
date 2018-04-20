@@ -43,7 +43,7 @@ if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
 
 set list_projs [get_projects -quiet]
 if { $list_projs eq "" } {
-   create_project project_1 myproj -part xc7k160tffg676-2
+   create_project project_1 myproj -part xcku115-flvf1924-2-e
 }
 
 
@@ -270,8 +270,8 @@ CONFIG.C_INCLUDE_STARTUP {0} \
   # Create instance: axi_quad_spi_0, and set properties
   set axi_quad_spi_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_quad_spi_0 ]
   set_property -dict [ list \
+CONFIG.C_NUM_SS_BITS {1} \
 CONFIG.C_SCK_RATIO {2} \
-CONFIG.C_NUM_SS_BITS {2} \
 CONFIG.C_SHARED_STARTUP {0} \
 CONFIG.C_SPI_MEMORY {2} \
 CONFIG.C_SPI_MODE {2} \
@@ -280,9 +280,6 @@ CONFIG.C_USE_STARTUP {1} \
 CONFIG.C_USE_STARTUP_INT {1} \
 CONFIG.C_XIP_MODE {0} \
  ] $axi_quad_spi_0
-
-  set_property -dict [list CONFIG.C_NUM_SS_BITS {1} CONFIG.C_USE_STARTUP {0} CONFIG.C_USE_STARTUP_INT {0}] [get_bd_cells axi_quad_spi_0]
-
 
   # Create instance: axi_slave_wishbone_classic_master_0, and set properties
   set axi_slave_wishbone_classic_master_0 [ create_bd_cell -type ip -vlnv peralex.com:user:axi_slave_wishbone_classic_master:1.0 axi_slave_wishbone_classic_master_0 ]
@@ -348,7 +345,6 @@ CONFIG.NUM_PORTS {5} \
  ] $xlconcat_0
 
   # Create interface connections
-  connect_bd_intf_net -intf_net axi_quad_spi_0_SPI_0 [get_bd_intf_ports spi_rtl] [get_bd_intf_pins axi_quad_spi_0/SPI_0]
   connect_bd_intf_net -intf_net axi_uartlite_0_UART [get_bd_intf_ports UART] [get_bd_intf_pins axi_uartlite_0/UART]
   connect_bd_intf_net -intf_net microblaze_0_axi_dp [get_bd_intf_pins microblaze_0/M_AXI_DP] [get_bd_intf_pins microblaze_0_axi_periph/S00_AXI]
   connect_bd_intf_net -intf_net microblaze_0_axi_periph_M01_AXI [get_bd_intf_pins axi_uartlite_0/S_AXI] [get_bd_intf_pins microblaze_0_axi_periph/M01_AXI]
@@ -397,8 +393,8 @@ CONFIG.NUM_PORTS {5} \
   create_bd_addr_seg -range 0x00010000 -offset 0x41A00000 [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_timebase_wdt_0/S_AXI/Reg] SEG_axi_timebase_wdt_0_Reg
   create_bd_addr_seg -range 0x00010000 -offset 0x41C00000 [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_timer_0/S_AXI/Reg] SEG_axi_timer_0_Reg
   create_bd_addr_seg -range 0x00010000 -offset 0x40600000 [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_uartlite_0/S_AXI/Reg] SEG_axi_uartlite_0_Reg
-  create_bd_addr_seg -range 0x00020000 -offset 0x00000000 [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs microblaze_0_local_memory/dlmb_bram_if_cntlr/SLMB/Mem] SEG_dlmb_bram_if_cntlr_Mem
-  create_bd_addr_seg -range 0x00020000 -offset 0x00000000 [get_bd_addr_spaces microblaze_0/Instruction] [get_bd_addr_segs microblaze_0_local_memory/ilmb_bram_if_cntlr/SLMB/Mem] SEG_ilmb_bram_if_cntlr_Mem
+  create_bd_addr_seg -range 0x00040000 -offset 0x00000000 [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs microblaze_0_local_memory/dlmb_bram_if_cntlr/SLMB/Mem] SEG_dlmb_bram_if_cntlr_Mem
+  create_bd_addr_seg -range 0x00040000 -offset 0x00000000 [get_bd_addr_spaces microblaze_0/Instruction] [get_bd_addr_segs microblaze_0_local_memory/ilmb_bram_if_cntlr/SLMB/Mem] SEG_ilmb_bram_if_cntlr_Mem
   create_bd_addr_seg -range 0x00010000 -offset 0x41200000 [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs microblaze_0_axi_intc/S_AXI/Reg] SEG_microblaze_0_axi_intc_Reg
 
   # Perform GUI Layout
@@ -431,48 +427,47 @@ preplace inst microblaze_0 -pg 1 -lvl 2 -y 480 -defaultsOSRD
 preplace inst axi_uartlite_0 -pg 1 -lvl 4 -y 530 -defaultsOSRD
 preplace inst axi_hwicap_0 -pg 1 -lvl 1 -y 940 -defaultsOSRD
 preplace inst microblaze_0_local_memory -pg 1 -lvl 3 -y 530 -defaultsOSRD
-preplace inst axi_slave_wishbone_classic_master_0 -pg 1 -lvl 4 -y 1140 -defaultsOSRD
-preplace inst axi_quad_spi_0 -pg 1 -lvl 4 -y 940 -defaultsOSRD
-preplace netloc axi_quad_spi_0_SPI_0 1 4 2 NJ 910 2400J
-preplace netloc axi_slave_wishbone_classic_master_0_WE_O 1 4 2 N 1200 2450J
+preplace inst axi_slave_wishbone_classic_master_0 -pg 1 -lvl 4 -y 1300 -defaultsOSRD
+preplace inst axi_quad_spi_0 -pg 1 -lvl 4 -y 1020 -defaultsOSRD
+preplace netloc axi_slave_wishbone_classic_master_0_WE_O 1 4 2 NJ 1360 2460J
 preplace netloc microblaze_0_axi_periph_M04_AXI 1 3 1 1560
-preplace netloc rst_Clk_100M_mb_reset 1 0 6 70 560 440 560 970J 420 1600J 440 1960J 390 2400
-preplace netloc axi_uartlite_0_interrupt 1 4 1 1960
-preplace netloc axi_slave_wishbone_classic_master_0_SEL_O 1 4 2 N 1160 2430J
-preplace netloc microblaze_0_Clk 1 0 5 30 -100 440 -100 940 -100 1610 -100 2020J
-preplace netloc microblaze_0_interrupt 1 1 1 420
+preplace netloc rst_Clk_100M_mb_reset 1 0 6 70 400 430 400 970J 420 1590J 450 1960J 410 2400
+preplace netloc axi_uartlite_0_interrupt 1 4 1 1950
+preplace netloc axi_slave_wishbone_classic_master_0_SEL_O 1 4 2 NJ 1320 2440J
+preplace netloc microblaze_0_Clk 1 0 5 30 -100 460 -100 960 -100 1610 -100 2010J
+preplace netloc microblaze_0_interrupt 1 1 1 440
 preplace netloc microblaze_0_intc_axi 1 0 4 60J -130 NJ -130 NJ -130 1560
-preplace netloc microblaze_0_axi_periph_M03_AXI 1 3 1 1590
-preplace netloc dcm_locked_1 1 0 5 10J 610 NJ 610 NJ 610 NJ 610 2010J
+preplace netloc microblaze_0_axi_periph_M03_AXI 1 3 1 1600
+preplace netloc dcm_locked_1 1 0 5 10J 610 NJ 610 NJ 610 NJ 610 2000J
 preplace netloc microblaze_0_ilmb_1 1 2 1 930
 preplace netloc microblaze_0_axi_periph_M05_AXI 1 3 1 1580
-preplace netloc microblaze_0_axi_dp 1 2 1 950
-preplace netloc axi_slave_wishbone_classic_master_0_DAT_O 1 4 2 N 1100 2400J
-preplace netloc xlconcat_0_dout 1 0 6 80J 820 NJ 820 NJ 820 NJ 820 NJ 820 2390
+preplace netloc microblaze_0_axi_dp 1 2 1 940
+preplace netloc axi_slave_wishbone_classic_master_0_DAT_O 1 4 2 N 1260 2410J
+preplace netloc xlconcat_0_dout 1 0 6 80J 820 NJ 820 NJ 820 NJ 820 NJ 820 2400
 preplace netloc microblaze_0_axi_periph_M01_AXI 1 3 1 1630
-preplace netloc axi_slave_wishbone_classic_master_0_CYC_O 1 4 2 N 1140 2420J
-preplace netloc axi_slave_wishbone_classic_master_0_ADR_O 1 4 2 N 1120 2410J
-preplace netloc axi_quad_spi_0_eos 1 0 5 80 1030 NJ 1030 NJ 1030 NJ 1030 1950
-preplace netloc axi_uartlite_0_UART 1 4 2 1990 600 2400J
-preplace netloc axi_timebase_wdt_0_wdt_reset 1 4 1 2010
-preplace netloc microblaze_0_dlmb_1 1 2 1 960
+preplace netloc axi_slave_wishbone_classic_master_0_CYC_O 1 4 2 NJ 1300 2430J
+preplace netloc axi_slave_wishbone_classic_master_0_ADR_O 1 4 2 N 1280 2420J
+preplace netloc axi_quad_spi_0_eos 1 0 5 80 1100 NJ 1100 NJ 1100 NJ 1100 1940
+preplace netloc axi_uartlite_0_UART 1 4 2 1980 590 2410J
+preplace netloc axi_timebase_wdt_0_wdt_reset 1 4 1 2000
+preplace netloc microblaze_0_dlmb_1 1 2 1 950
 preplace netloc microblaze_0_axi_periph_M07_AXI 1 0 4 40 -150 NJ -150 NJ -150 1570
 preplace netloc microblaze_0_axi_periph_M02_AXI 1 3 1 1640
-preplace netloc axi_slave_wishbone_classic_master_0_STB_O 1 4 2 N 1180 2440J
-preplace netloc microblaze_0_debug 1 1 1 430
-preplace netloc axi_hwicap_0_ip2intc_irpt 1 1 4 430 710 NJ 710 NJ 710 NJ
-preplace netloc rst_Clk_100M_peripheral_aresetn 1 0 6 50J -120 NJ -120 970 -120 1620 -120 NJ -120 2420
-preplace netloc rst_Clk_100M_interconnect_aresetn 1 2 4 980J 430 NJ 430 1950J 380 2410
-preplace netloc rst_Clk_100M_bus_struct_reset 1 2 4 980J 440 1560J 450 1970J 410 2390
-preplace netloc mdm_1_debug_sys_rst 1 1 4 430 630 NJ 630 NJ 630 2020J
-preplace netloc axi_quad_spi_0_ip2intc_irpt 1 4 1 1980
-preplace netloc Reset_1 1 0 5 20J 620 NJ 620 NJ 620 NJ 620 2000J
-preplace netloc ACK_I_1 1 0 4 20J 1140 NJ 1140 NJ 1140 NJ
-preplace netloc ext_intr_1 1 0 5 10J 830 NJ 830 NJ 830 NJ 830 2010
-preplace netloc axi_timer_0_interrupt 1 4 1 1980
-preplace netloc axi_slave_wishbone_classic_master_0_RST_O 1 4 2 N 1080 2390J
-preplace netloc DAT_I_1 1 0 4 60J 1120 NJ 1120 NJ 1120 NJ
-levelinfo -pg 1 -10 310 700 1420 1810 2220 2470 -top -160 -bot 1510
+preplace netloc axi_slave_wishbone_classic_master_0_STB_O 1 4 2 NJ 1340 2450J
+preplace netloc microblaze_0_debug 1 1 1 450
+preplace netloc rst_Clk_100M_peripheral_aresetn 1 0 6 50J -120 NJ -120 970 -120 1620 -120 NJ -120 2460
+preplace netloc rst_Clk_100M_interconnect_aresetn 1 2 4 980J 430 NJ 430 1940J 380 2450
+preplace netloc rst_Clk_100M_bus_struct_reset 1 2 4 980J 440 NJ 440 1950J 400 2410
+preplace netloc mdm_1_debug_sys_rst 1 1 4 420 630 NJ 630 NJ 630 2010J
+preplace netloc axi_quad_spi_0_ip2intc_irpt 1 4 1 1960
+preplace netloc axi_hwicap_0_ip2intc_irpt 1 1 4 N 940 NJ 940 NJ 940 1980J
+preplace netloc Reset_1 1 0 5 20J 620 NJ 620 NJ 620 NJ 620 1990J
+preplace netloc ACK_I_1 1 0 4 30J 1300 NJ 1300 NJ 1300 NJ
+preplace netloc ext_intr_1 1 0 5 10J 830 NJ 830 NJ 830 NJ 830 2000
+preplace netloc axi_timer_0_interrupt 1 4 1 1970
+preplace netloc axi_slave_wishbone_classic_master_0_RST_O 1 4 2 N 1240 2400J
+preplace netloc DAT_I_1 1 0 4 60J 1280 NJ 1280 NJ 1280 NJ
+levelinfo -pg 1 -10 310 700 1420 1800 2230 2480 -top -160 -bot 1570
 ",
 }
 

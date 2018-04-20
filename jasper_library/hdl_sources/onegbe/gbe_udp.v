@@ -70,6 +70,7 @@ module gbe_udp #(
     input         mac_rx_goodframe,
     input         mac_rx_badframe,
     input         mac_syncacquired,
+    input [15:0] phy_status,
 
 // Wishbone Bus
   /**** CPU Bus Attachment ****/
@@ -211,7 +212,7 @@ end else begin : enable_cpu
     .cpu_tx_ready          (cpu_tx_packet_ready),
     .cpu_tx_done           (cpu_tx_packet_ack),
   // PHY Status/Control 
-    .phy_status   (phy_status),
+    .phy_status   ({16'h0,phy_status}),
     .phy_control  (phy_control)
   ); 
 
