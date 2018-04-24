@@ -5,9 +5,6 @@ from helpers import to_int_list, SkarabLedError
 class gpio(YellowBlock):
     def initialize(self):
 
-        self.skarab_leds = False
-        self.multiple_leds = False
-
         if self.arith_type == 'Boolean':
             # The yellow block will set a value for bitwidth,
             # override it here if the data type is boolean.
@@ -15,7 +12,6 @@ class gpio(YellowBlock):
         else:
             self.bitwidth = int(self.bitwidth)
             # There is error-checking behind this
-            self.multiple_leds = True
 
         # If we're DDRing, we only need half the number of pins...
         if self.use_ddr:
@@ -23,10 +19,6 @@ class gpio(YellowBlock):
         else:
             self.pad_bitwidth = self.bitwidth
 
-        if self.io_group == 'SKARAB:led':
-            # We have SKARAB LEDs - workflow needs to change
-            self.skarab_leds = True
-        
         self.io_group = self.io_group.split(':')[-1] #iogroups have the form PLATFORM:GROUP (now would be a good time to change this!)
         
         self.use_diffio = ((self.io_group in ['zdok0','zdok1','mdr','qsh','sync_in','sync_out', 'aux_clk_diff']) and not self.use_single_ended)
@@ -57,9 +49,14 @@ class gpio(YellowBlock):
         inst.add_parameter('WIDTH', str(self.bitwidth))
         inst.add_parameter('DDR', '1' if self.use_ddr  else '0')
         inst.add_parameter('REG_IOB', '"true"' if self.reg_iob else '"false"')
-
-        if self.skarab_leds:
-            if self.multiple_leds:
+        
+        # This compound if-statement has been added to allow for the case of 
+        # LEDs being managed by the platform's Board Support Package
+        # - i.e. LED signals are sent through some multiplexing logic
+        #        and NOT directly to an output pin
+        if self.io_group.find('gpio') < 0 and self.platform.conf.has_key('manage_leds')\
+            and self.platform.conf['manage_leds'] == True:
+            if self.bitwidth > 1:
                 led_list = to_int_list(self.bit_index)
                 led_list.sort()
                 led_list.reverse()
@@ -110,11 +107,12 @@ class gpio(YellowBlock):
             return const
         else:
             const = []
-            
-            if self.skarab_leds:
+
+            if self.io_group.find('gpio') < 0 and self.platform.conf.has_key('manage_leds')\
+            and self.platform.conf['manage_leds'] == True:
                 # Don't need to generate any constraints (?)
                 # - Just need to map the output of the gpio_simulink2ext to the input of the led_manager
-                return const
+                    return const
             
             const += [PortConstraint(self.fullname+'_ext', self.io_group, port_index=range(self.bitwidth), iogroup_index=to_int_list(self.bit_index))]
             

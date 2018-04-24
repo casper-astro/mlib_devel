@@ -85,7 +85,7 @@ begin
 
 	-- This generate statement is used when bypassing the Port Assignment for a GPIO yellow block
 	-- -> e.g. When a signal(s) need to be routed to the BSP and NOT to a physical PORT/Output
-	-- -> Needs an equivalent handling wire/port on the other end
+	-- -> Needs an equivalent handling wire/port on the other end, e.g. forty_gbe.vhd
 	PORT_BYPASS_GEN: if DDR = 0 and PORT_BYPASS = 1 generate
 		io_pad <= gateway;
 	end generate PORT_BYPASS_GEN;

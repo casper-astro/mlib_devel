@@ -10,6 +10,9 @@ dsp_wb_base_address_alignment: 4
 # each byte from the bit file is reversed. It is anyones guess why perallex designed it this way.
 # this flag tells the toolflow to add the bpix8 flag to the write_cfgmem tcl command
 bit_reversal: true
+# This parameter indicates SKARAB's ability to manage the front-panel LEDs
+# via the led_manager entity
+manage_leds: true
 upgrade_ip: false
 sources: []
 constraints:
