@@ -54,10 +54,18 @@ y_pos =     100;
 %     end
 % end
 io_dir = get_param(blk, 'io_dir');
+
+if strcmp(io_dir, 'From Processor')
+    s.init_val = ['0x', dec2hex(eval(get_param(blk, 'init_val')))  ];
+    parameters.INIT_VAL = s.init_val;
+end
+
 if strcmp(io_dir, 'To Processor')
     iodir = 'output';
     draw_to();
 else
+    s.init_val = ['0x', dec2hex(eval(get_param(blk, 'init_val')))  ];
+    parameters.INIT_VAL = s.init_val;
     iodir = 'input';
     draw_from();
 end
