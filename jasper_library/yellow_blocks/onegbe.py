@@ -1,5 +1,5 @@
 from yellow_block import YellowBlock
-from constraints import PortConstraint, ClockConstraint
+from constraints import PortConstraint, ClockConstraint, RawConstraint
 from helpers import to_int_list
 from yellow_block_typecodes import *
 
@@ -322,3 +322,8 @@ class onegbe_mx175(onegbe_snap):
         consts += [PortConstraint(self.fullname+'_mgt_clk_n', 'eth_clk_125_n')]
         consts += [ClockConstraint(self.fullname+'_mgt_clk_p', name='onegbe_clk', freq=self.refclk_freq)]
         consts += [PortConstraint(self.fullname+'_sfp_disable', 'gbe_rst_b')]
+        consts += [RawConstraint('create_clock -period 8.000 -name gbe_userclk2_out -waveform {0.000 4.000} [get_nets {gbe_userclk2_out}]')]
+        consts += [RawConstraint('set_clock_groups -name asyncclocks_onegbe -asynchronous -group [get_clocks -include_generated_clocks sys_clk_p_CLK] -group [get_clocks -include_generated_clocks gbe_userclk2_out]')]
+        consts += [RawConstraint('set_clock_groups -name asyncclocks_onegbe_usr_clk -asynchronous -group [get_clocks -of_objects [get_cells -hierarchical -filter {name=~*clk_counter*}]] -group [get_clocks -include_generated_clocks gbe_userclk2_out]')]
+        return consts
+
