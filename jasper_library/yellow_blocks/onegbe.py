@@ -8,6 +8,8 @@ class onegbe(YellowBlock):
     def factory(blk, plat, hdl_root=None):
         if plat.name in ['vcu118']:
             return onegbe_vcu118(blk, plat, hdl_root)
+        elif plat.name in ['mx175']:
+            return onegbe_mx175(blk, plat, hdl_root)
         else:
             return onegbe_snap(blk, plat, hdl_root)
 
@@ -308,3 +310,15 @@ class onegbe_snap(onegbe):
         else:
             consts += [PortConstraint('phy_rst_n', 'phy_rst_n')]
         return consts
+
+class onegbe_mx175(onegbe_snap):
+    def gen_constraints(self):
+        consts = []
+        consts += [PortConstraint(self.fullname+'_sfp_tx_p', 'gbe_tx_p')]
+        consts += [PortConstraint(self.fullname+'_sfp_tx_n', 'gbe_tx_n')]
+        consts += [PortConstraint(self.fullname+'_sfp_rx_p', 'gbe_rx_p')]
+        consts += [PortConstraint(self.fullname+'_sfp_rx_n', 'gbe_rx_n')]
+        consts += [PortConstraint(self.fullname+'_mgt_clk_p', 'eth_clk_125_p')]
+        consts += [PortConstraint(self.fullname+'_mgt_clk_n', 'eth_clk_125_n')]
+        consts += [ClockConstraint(self.fullname+'_mgt_clk_p', name='onegbe_clk', freq=self.refclk_freq)]
+        consts += [PortConstraint(self.fullname+'_sfp_disable', 'gbe_rst_b')]
