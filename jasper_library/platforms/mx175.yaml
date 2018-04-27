@@ -64,11 +64,11 @@ pins:
   #uart_rxd:
   usb_rx:
     iostd: LVCMOS18
-    loc: AV40
+    loc: AW40
   #uart_txd:
   usb_tx:
     iostd: LVCMOS18
-    loc: AW40
+    loc: AV40
   iic_scl_io:
     iostd: LVCMOS18
     loc: AW39
