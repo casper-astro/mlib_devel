@@ -55,6 +55,9 @@ begin
     DIFFBUF_GEN: for i in 0 to (WIDTH/(DDR+1)-1) generate
         begin
             DIFFBUF: IBUFDS
+            generic map (
+                DIFF_TERM => TRUE
+            )
             port map(
                 I   => io_pad_p(i),
                 IB  => io_pad_n(i),
