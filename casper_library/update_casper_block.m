@@ -55,47 +55,47 @@ function update_casper_block(oldblk)
   
   % Special case handling
   switch srcblk
-  % Special handling for deprecated "edge" blocks
-  case {'casper_library_misc/edge', ...
-        'casper_library_misc/negedge', ...
-        'casper_library_misc/posedge'}
-    % Get mask params for edge_detect block
-    switch srcblk
-    case 'casper_library_misc/edge'
-      params = {'edge', 'Both', 'polarity', 'Active High'};
-    case 'casper_library_misc/negedge'
-      params = {'edge', 'Falling', 'polarity', 'Active High'};
-    case 'casper_library_misc/posedge'
-      params = {'edge', 'Rising', 'polarity', 'Active High'};
-    end
-    % Make sure casper_library_misc block diagram is loaded
-    if ~bdIsLoaded('casper_library_misc')
-      fprintf('loading library casper_library_misc\n');
-      load_system('casper_library_misc');
-    end
-    % Get position and orientation of oldblk
-    p = get_param(oldblk, 'position');
-    o = get_param(oldblk, 'orientation');
-    % Delete oldblk
-    delete_block(oldblk);
-    % Add edge detect block using oldblk's name
-    add_block('casper_library_misc/edge_detect', oldblk, ...
-        'orientation', o, ...
-        'position', p, ...
-        params{:});
-    % Done!
-    return
-  case {'xps_library/XSG core config', ...
-        'xps_library/XSG_core_config'}
-    % Get hw_sys parameter to handle SNAP/SNAP2/VCU118 platforms
-    hw_sys = get_param(oldblk, 'hw_sys');
-    if startsWith(hw_sys, 'SNAP:')
-      srcblk = 'xps_library/Platforms/SNAP';
-    elseif startsWith(hw_sys, 'SNAP2:')
-      srcblk = 'xps_library/Platforms/SNAP2';
-    elseif startsWith(hw_sys, 'VCU118:')
-      srcblk = 'xps_library/Platforms/VCU118';
-    end
+      % Special handling for deprecated "edge" blocks
+      case {'casper_library_misc/edge', ...
+            'casper_library_misc/negedge', ...
+            'casper_library_misc/posedge'}
+        % Get mask params for edge_detect block
+        switch srcblk
+        case 'casper_library_misc/edge'
+          params = {'edge', 'Both', 'polarity', 'Active High'};
+        case 'casper_library_misc/negedge'
+          params = {'edge', 'Falling', 'polarity', 'Active High'};
+        case 'casper_library_misc/posedge'
+          params = {'edge', 'Rising', 'polarity', 'Active High'};
+        end
+        % Make sure casper_library_misc block diagram is loaded
+        if ~bdIsLoaded('casper_library_misc')
+          fprintf('loading library casper_library_misc\n');
+          load_system('casper_library_misc');
+        end
+        % Get position and orientation of oldblk
+        p = get_param(oldblk, 'position');
+        o = get_param(oldblk, 'orientation');
+        % Delete oldblk
+        delete_block(oldblk);
+        % Add edge detect block using oldblk's name
+        add_block('casper_library_misc/edge_detect', oldblk, ...
+            'orientation', o, ...
+            'position', p, ...
+            params{:});
+        % Done!
+        return
+      case {'xps_library/XSG core config', ...
+            'xps_library/XSG_core_config'}
+        % Get hw_sys parameter to handle SNAP/SNAP2/VCU118 platforms
+        hw_sys = get_param(oldblk, 'hw_sys');
+        if startsWith(hw_sys, 'SNAP:')
+          srcblk = 'xps_library/Platforms/SNAP';
+        elseif startsWith(hw_sys, 'SNAP2:')
+          srcblk = 'xps_library/Platforms/SNAP2';
+        elseif startsWith(hw_sys, 'VCU118:')
+          srcblk = 'xps_library/Platforms/VCU118';
+        end
   end % special deprecated handling
 
   % Make sure srcblk's block diagram is loaded

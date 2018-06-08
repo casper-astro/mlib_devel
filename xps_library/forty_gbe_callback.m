@@ -37,7 +37,7 @@ check_mask_type(blk, 'forty_gbe');
 %search for sysgen block and get target
 xps_xsg_blks = find_system(bdroot, 'SearchDepth', 1, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'xps:xsg');
 if length(xps_xsg_blks) ~= 1
-  errordlg('forty_gbe requires a single MSSGE (XSG core config) block to be instantiated at the top level');
+  warndlg('forty_gbe requires a single MSSGE (XSG core config) block to be instantiated at the top level');
   return;
 end
 

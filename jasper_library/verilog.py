@@ -632,7 +632,8 @@ class VerilogModule(object):
         declare signals
         """
         s = ''
-        for name, sig in self.signals.items():
+        # for name, sig in self.signals.items():
+        for name, sig in sorted(self.signals.iteritems()):
             logger.debug('Writing verilog for signal %s'%name)
             if sig.width == 0:
                 s += '  wire %s;'%(name)

@@ -1,7 +1,7 @@
 from yellow_block import YellowBlock
 from constraints import PortConstraint, RawConstraint
 
-class i2c(YellowBlock):
+class i2c_interface(YellowBlock):
     def initialize(self):
         '''
         This function is called by YellowBlocks __init__ method.
