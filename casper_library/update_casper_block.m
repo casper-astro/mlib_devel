@@ -104,7 +104,8 @@ function update_casper_block(oldblk)
     fprintf('loading library %s\n', srcblk_bd);
     load_system(srcblk_bd);
   end
-
+    
+  % handle remapping of names
   if strcmp(srcblk, 'xps_library/software register'),
       srcblk = 'xps_library/software_register';
   end

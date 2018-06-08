@@ -28,7 +28,6 @@
 % varargin is for experts only!  It can be used to specify extra options to
 % find_system.
 function update_casper_blocks(sys, varargin)
-
   % Clear last dumped exception to ensure that all exceptions are shown.
   dump_exception([]);
 
