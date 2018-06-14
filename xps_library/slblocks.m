@@ -14,7 +14,6 @@ blkStruct.MaskDisplay = ['disp(''CASPER XPS Blockset'')'];
 % Return the name of the library model and the name for it
 %
 Browser(1).Library = 'xps_library';
-% Browser(1).Library = 'xps_librarytest';
 Browser(1).Name    = 'CASPER XPS Blockset';
 
 blkStruct.Browser = Browser;

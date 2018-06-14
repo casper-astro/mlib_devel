@@ -360,6 +360,7 @@ class Toolflow(object):
         print 'top:', self.topfile
         for obj in self.periph_objs:
             self.logger.debug('modifying top for obj %s' % obj.name)
+            self.top.set_cur_blk(obj.fullname)
             obj.modify_top(self.top)
             self.sources += obj.sources
             self.ips += obj.ips
