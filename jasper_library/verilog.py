@@ -10,7 +10,6 @@ import re
 from math import ceil, floor
 import logging
 import inspect
-import pickle
 
 logger = logging.getLogger('jasper.verilog')
 
@@ -188,13 +187,10 @@ class VerilogModule(object):
         
         self.topfile = topfile
         self.ports = {}         # top-level ports
-        # self.parameters = []    # top-level parameters
         self.parameters = {}    # top-level parameters
-        # self.localparams = []   # top-level localparams
         self.localparams = {}   # top-level localparams
         self.signals = {}       # top-level wires
         self.instances = {}     # top-level instances
-        # self.assignments = []   # top-level assign statements
         self.assignments = {}   # top-level assign statements
         self.raw_str = ''       # the verilog text describing this module
         self.comment = comment
@@ -227,12 +223,14 @@ class VerilogModule(object):
         Initialize second-layer of dictionairies.
         """
         self.cur_blk = cur_blk
-        self.ports[cur_blk] = {}
-        self.parameters[cur_blk] = {}
-        self.localparams[cur_blk] = {}
-        self.signals[cur_blk] = {}
-        self.instances[cur_blk] = {}
-        self.assignments[cur_blk] = {}
+        if cur_blk not in self.ports.keys():
+            logger.debug('Initializing second-layer dictionary for: %s'%cur_blk)
+            self.ports[cur_blk] = {}
+            self.parameters[cur_blk] = {}
+            self.localparams[cur_blk] = {}
+            self.signals[cur_blk] = {}
+            self.instances[cur_blk] = {}
+            self.assignments[cur_blk] = {}
     
     def has_instance(self, name):
         """
@@ -258,9 +256,7 @@ class VerilogModule(object):
         '''
         # Now we have an instance name, we can assign the wb ports to
         # real signals
-        # for instname, inst in self.instances.items():
         for block in self.instances.keys():
-            # print stuff here
             for instname, inst in self.instances[block].items():
                 logger.debug("Looking for WB slaves for instance %s"%inst.name)
                 for n, wb_dev in enumerate(inst.wb_devices):
@@ -350,17 +346,8 @@ class VerilogModule(object):
             parent_sig = False
             
         logger.debug('Attempting to add port "%s" (parent sig: %s, parent port: %s)'%(name,parent_sig,parent_port))
-        # if name not in self.ports.keys():
-        #     logger.debug('  Port "%s" is new'%name)
-        #     self.ports[name] = Port(name, signal=signal, parent_port=parent_port, parent_sig=parent_sig, **kwargs)
-        # else:
-        #     logger.debug('  Port "%s" already exists'%name)
-        #     self.ports[name].update_attrs(name, signal=signal, parent_port=parent_port, parent_sig=parent_sig, **kwargs)
-
         # check every nested dictionary to see if name is in it
         key = self.search_dict_for_name(self.ports, name)
-        if name == 'txclk322':
-            pickle.dump(self.ports, open('/home/qwerty40/casper/mlib_devel/jasper_library/ports.pickle','wb'))
         if (key is None):
             logger.debug('  Port "%s" is new'%name)
             self.ports[self.cur_blk][name] = Port(name, signal=signal, parent_port=parent_port, parent_sig=parent_sig, **kwargs)
@@ -374,8 +361,6 @@ class VerilogModule(object):
         'value'.
         You may add a comment that will end up in the generated verilog.
         """
-        # self.parameters.append({'name':name, 'value':value, 'comment':comment})
-
         # check every nested dictionary to see if name is in it
         key = self.search_dict_for_name(self.parameters, name)
         if (key is None):
@@ -391,8 +376,6 @@ class VerilogModule(object):
         'value'.
         You may add a comment that will end up in the generated verilog.
         """
-        # self.localparams.append({'name':name, 'value':value, 'comment':comment})
-
         # check every nested dictionary to see if name is in it
         key = self.search_dict_for_name(self.localparams, name)
         if (key is None):
@@ -409,11 +392,6 @@ class VerilogModule(object):
         You may add a comment that will end up in the generated verilog.
         """
         name = name.rstrip(' ')
-        # if name not in self.signals.keys():
-        #     self.signals[name] = Signal(name, width=width, **kwargs)
-        # else:
-        #     self.signals[name].update_attrs(name, width=width, **kwargs)
-
         # check every nested dictionary to see if name is in it
         key = self.search_dict_for_name(self.signals, name)
         if (key is None):
@@ -432,7 +410,6 @@ class VerilogModule(object):
         names, and may include verilog-style indexing, eg '[15:8]'
         You may add a comment that will end up in the generated verilog.
         """
-        # self.assignments.append({'lhs':lhs, 'rhs':rhs, 'comment':comment})
         self.assignments[self.cur_blk][lhs] = {'lhs':lhs, 'rhs':rhs, 'comment':comment}
 
     def get_instance(self, entity, name, comment=None):
@@ -441,11 +418,7 @@ class VerilogModule(object):
         You may add a comment that will end up in the generated verilog.
         """
         new_inst = VerilogModule(name=entity, comment=comment)
-        # if name not in self.instances.keys():
-        #     self.instances[name] = new_inst
-        #     return new_inst
-        # else:
-        #     return self.instances[name]
+        # check every nested dictionary to see if name is in it
         key = self.search_dict_for_name(self.instances, name)
         if (key is None):
             self.instances[self.cur_blk][name] = new_inst
@@ -461,14 +434,8 @@ class VerilogModule(object):
         Add ports and signals associated with child instances
         """
         for block in self.instances.keys():
-            print('block: ', block)
-            pickle.dump(self.instances, open('/home/qwerty40/casper/mlib_devel/jasper_library/test.pickle','wb'))
-        # for instname, inst in self.instances.items():
-            # inst = instances[block][block] worked
             for instname, inst in self.instances[block].items():
-                pickle.dump(inst, open('/home/qwerty40/casper/mlib_devel/jasper_library/inst.pickle','wb'))
                 logger.debug('Instantiating child ports for %s'%instname)
-                # for pname, port in inst.ports.items():
                 for blk in inst.ports.keys():
                     for pname, port in inst.ports[blk].items():
                         if port.parent_sig:
@@ -575,11 +542,11 @@ class VerilogModule(object):
         s += param_dec
         s += '\n'
         s += localparam_dec
-        s += '\n'
+        s += self.gen_signals_ascii_art()
         s += sig_dec
-        s += '\n'
+        s += self.gen_instances_ascii_art()                                
         s += inst_dec
-        s += '\n'
+        s += self.gen_assignments_ascii_art()
         s += assignments
         s += '\n'
         s += self.raw_str
@@ -640,7 +607,7 @@ class VerilogModule(object):
         """
         s = ''
         for block in self.parameters.keys():
-            # for pn,parameter in enumerate(self.parameters):
+            s += self.gen_cur_blk_comment(block, self.parameters[block])
             for pn, parameter in self.parameters[block].items():
                 s += '  parameter %s = %s;'%(parameter.name,parameter.value)
                 if parameter.comment is not None:
@@ -655,6 +622,7 @@ class VerilogModule(object):
         """
         s = ''
         for block in self.localparams.keys():
+            s += self.gen_cur_blk_comment(block, self.localparams[block])
             for pn,parameter in self.localparams[block].items():
                 s += '  localparam %s = %s;'%(parameter.name,parameter.value)
                 if parameter.comment is not None:
@@ -669,12 +637,10 @@ class VerilogModule(object):
         """
         s = ''
         kwm = {'in':'input','out':'output','inout':'inout'}
-        # n_ports = len(self.ports.keys())
-        # for name, port in self.ports.items():
         for block in self.ports.keys():
             n_ports = len(self.ports[block].keys())
             i = 1
-            # print stuff here
+            s += self.gen_cur_blk_comment(block, self.ports[block])
             for name, port in self.ports[block].items():
                 logger.debug('Generating port %s'%port.name)
                 if port.width == 0:
@@ -697,10 +663,8 @@ class VerilogModule(object):
         # keyword map
         kwm = {'in':'input','out':'output','inout':'inout'}
         s = ''
-        # for pn,port in enumerate(self.ports):
         for block in self.ports.keys():
-            # print stuff here
-            # for pn, port in enumerate(self.ports):
+            s += self.gen_cur_blk_comment(block, self.ports[block])
             for pn, port in self.ports[block].items():
                 # set up indentation nicely
                 s += '  '
@@ -730,10 +694,8 @@ class VerilogModule(object):
         declare signals
         """
         s = ''
-        # for name, sig in self.signals.items():
-        # for name, sig in sorted(self.signals.iteritems()): # this was added to sort alphabetically
         for block in self.signals.keys():
-            # print stuff here
+            s += self.gen_cur_blk_comment(block, self.signals[block])
             for name, sig in self.signals[block].items():
                 logger.debug('Writing verilog for signal %s'%name)
                 if sig.width == 0:
@@ -751,14 +713,11 @@ class VerilogModule(object):
         to instantiate the instances in this 
         module
         """
-        # n_inst = len(self.instances)
         s = ''
-        # n = 0
-        # for instname, instance in self.instances.items():
         for block in self.instances.keys():
             n = 0
             n_inst = len(self.instances[block])
-            # print stuff here
+            s += self.gen_cur_blk_comment(block, self.instances[block])
             for instname, instance in self.instances[block].items():
                 s += instance.gen_instance_verilog(instname)
                 if n != (n_inst - 1):
@@ -773,9 +732,8 @@ class VerilogModule(object):
         signal
         """
         s = ''
-        # for n,assignment in enumerate(self.assignments):
         for block in self.assignments.keys():
-            # print stuff here
+            s += self.gen_cur_blk_comment(block, self.assignments[block])
             for n,assignment in self.assignments[block].items():
                 s += '  assign %s = %s;'%(assignment['lhs'], assignment['rhs'])
                 if hasattr(assignment, 'comment'):
@@ -784,7 +742,7 @@ class VerilogModule(object):
         return s
 
     def gen_endmod_str(self):
-        return 'endmodule\n'
+        return 'endmodule'
 
     def gen_default_nettype_str(self):
         return "`default_nettype wire\n"
@@ -797,13 +755,11 @@ class VerilogModule(object):
         s = ''
         if self.comment is not None:
             s += '  // %s\n'%self.comment
-        # n_params = len(self.parameters)
         for block in self.parameters.keys():
             n_params = len(self.parameters[block])
             if n_params > 0:
                 s += '  %s #(\n' %self.name
                 n = 0
-                # for n, parameter in enumerate(self.parameters):
                 for paramname, parameter in self.parameters[block].items():
                     s += '    .%s(%s)'%(parameter.name, parameter.value)
                     print('%s(%s)'%(parameter.name, parameter.value))
@@ -816,13 +772,11 @@ class VerilogModule(object):
                 s += '  ) %s (\n'%instname
             else:
                 s += '  %s  %s (\n'%(self.name, instname)
-        # n_ports = len(self.ports)
         for block in self.ports.keys():
             n_ports = len(self.ports[block])
             n = 0
-            # for portname, port in self.ports.items():
             for portname, port in self.ports[block].items():
-                s += '    .%s(%s)'%(port.name, port.signal)
+                s += '    .%s(%s)'%(port.name, port.signal.rstrip(' '))
                 if n != (n_ports - 1):
                     s += ',\n'
                 else:
@@ -892,3 +846,50 @@ class VerilogModule(object):
                 return top_dict_key
         # return key as None if not in any dictionary
         return None
+
+    def gen_cur_blk_comment(self, cur_blk, dict):
+        # is the dictionary empty?
+        if dict and cur_blk != 'default':
+            return '  // %s\n'%cur_blk
+        else:
+            return ''
+
+    def gen_signals_ascii_art(self):
+        s = ""
+        s += "\n/*\n"
+        s += "  _____ _                   _     \n"
+        s += " / ____(_)                 | |    \n"
+        s += "| (___  _  __ _ _ __   __ _| |___ \n"
+        s += " \___ \| |/ _` | '_ \ / _` | / __|\n"
+        s += " ____) | | (_| | | | | (_| | \__ \ \n"
+        s += "|_____/|_|\__, |_| |_|\__,_|_|___/\n"
+        s += "          __/ |                  \n"
+        s += "         |___/                   \n"
+        s += "*/\n"
+        return s
+
+    def gen_instances_ascii_art(self):
+        s = ""
+        s += "\n/*\n"
+        s += "  _____           _                            \n"
+        s += " |_   _|         | |                           \n"
+        s += "   | |  _ __  ___| |_ __ _ _ __   ___ ___  ___ \n"
+        s += "   | | | '_ \/ __| __/ _` | '_ \ / __/ _ \/ __|\n"
+        s += "  _| |_| | | \__ \ || (_| | | | | (_|  __/\__ \ \n"
+        s += " |_____|_| |_|___/\__\__,_|_| |_|\___\___||___/\n"
+        s += "*/\n"     
+        return s
+
+    def gen_assignments_ascii_art(self):
+        s = ""
+        s += "\n/*\n"
+        s += "                   _                                  _       \n"
+        s += "     /\           (_)                                | |      \n"
+        s += "    /  \   ___ ___ _  __ _ _ __  _ __ ___   ___ _ __ | |_ ___ \n"
+        s += "   / /\ \ / __/ __| |/ _` | '_ \| '_ ` _ \ / _ \ '_ \| __/ __|\n"
+        s += "  / ____ \\__ \__ \ | (_| | | | | | | | | |  __/ | | | |_\__ \ \n"
+        s += " /_/    \_\___/___/_|\__, |_| |_|_| |_| |_|\___|_| |_|\__|___/\n"
+        s += "                      __/ |                                   \n"
+        s += "                     |___/                                    \n"
+        s += "*/\n"
+        return s

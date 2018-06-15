@@ -14,7 +14,7 @@ class gpio_bidir(YellowBlock):
     def modify_top(self,top):
         external_port_name = self.fullname + '_ext'
 
-        inst = top.get_instance(entity=self.module, name=self.fullname, comment=self.fullname)
+        inst = top.get_instance(entity=self.module, name=self.fullname)
         inst.add_port('clk', signal='user_clk', parent_sig=False)
         inst.add_port('dio_buf', signal=external_port_name, dir='inout', width=self.bitwidth, parent_port=True)
         inst.add_port('din_i', signal='%s_din_i'%self.fullname, width=self.bitwidth)
