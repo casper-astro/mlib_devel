@@ -19,6 +19,7 @@ import yaml
 import glob
 import time
 import hashlib  # Added to calculate md5hash of .bin bitstream and add it to the .fpg header
+import pickle
 
 try:
     from katversion import get_version as kat_get_version
@@ -325,7 +326,7 @@ class Toolflow(object):
                 self.peripherals[pk], self.plat))
         self._expand_children(self.periph_objs)
         self._drc()
-
+        
     def _expand_children(self, population, parents=None, recursive=True):
         """
         population: a list of yellow blocks to which children will be added
@@ -470,6 +471,7 @@ class Toolflow(object):
         self.top.wb_compute(self.plat.dsp_wb_base_address,
                             self.plat.dsp_wb_base_address_alignment)
         print self.top.gen_module_file(filename=self.compile_dir+'/top.v')
+        pickle.dump(self.top, open('%s/top.pickle' % self.compile_dir,'wb'))
 
     def generate_consts(self):
         """

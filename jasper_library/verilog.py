@@ -10,6 +10,7 @@ import re
 from math import ceil, floor
 import logging
 import inspect
+import operator
 
 logger = logging.getLogger('jasper.verilog')
 
@@ -608,7 +609,7 @@ class VerilogModule(object):
         s = ''
         for block in self.parameters.keys():
             s += self.gen_cur_blk_comment(block, self.parameters[block])
-            for pn, parameter in self.parameters[block].items():
+            for pn, parameter in sorted(self.parameters[block].items()):
                 s += '  parameter %s = %s;'%(parameter.name,parameter.value)
                 if parameter.comment is not None:
                     s += ' // %s'%parameter.comment
@@ -623,7 +624,7 @@ class VerilogModule(object):
         s = ''
         for block in self.localparams.keys():
             s += self.gen_cur_blk_comment(block, self.localparams[block])
-            for pn,parameter in self.localparams[block].items():
+            for pn,parameter in sorted(self.localparams[block].items()):
                 s += '  localparam %s = %s;'%(parameter.name,parameter.value)
                 if parameter.comment is not None:
                     s += ' // %s'%parameter.comment
@@ -641,7 +642,7 @@ class VerilogModule(object):
             n_ports = len(self.ports[block].keys())
             i = 1
             s += self.gen_cur_blk_comment(block, self.ports[block])
-            for name, port in self.ports[block].items():
+            for name, port in sorted(self.ports[block].items(), key=operator.itemgetter(1)):
                 logger.debug('Generating port %s'%port.name)
                 if port.width == 0:
                     s += '    %s %s'%(kwm[port.dir],port.name)
@@ -665,7 +666,7 @@ class VerilogModule(object):
         s = ''
         for block in self.ports.keys():
             s += self.gen_cur_blk_comment(block, self.ports[block])
-            for pn, port in self.ports[block].items():
+            for pn, port in sorted(self.ports[block].items(), key=operator.itemgetter(1)):
                 # set up indentation nicely
                 s += '  '
                 # first write attributes
@@ -696,7 +697,7 @@ class VerilogModule(object):
         s = ''
         for block in self.signals.keys():
             s += self.gen_cur_blk_comment(block, self.signals[block])
-            for name, sig in self.signals[block].items():
+            for name, sig in sorted(self.signals[block].items()):
                 logger.debug('Writing verilog for signal %s'%name)
                 if sig.width == 0:
                     s += '  wire %s;'%(name)
@@ -718,7 +719,7 @@ class VerilogModule(object):
             n = 0
             n_inst = len(self.instances[block])
             s += self.gen_cur_blk_comment(block, self.instances[block])
-            for instname, instance in self.instances[block].items():
+            for instname, instance in sorted(self.instances[block].items()):
                 s += instance.gen_instance_verilog(instname)
                 if n != (n_inst - 1):
                     s += '\n'
@@ -734,7 +735,7 @@ class VerilogModule(object):
         s = ''
         for block in self.assignments.keys():
             s += self.gen_cur_blk_comment(block, self.assignments[block])
-            for n,assignment in self.assignments[block].items():
+            for n,assignment in sorted(self.assignments[block].items()):
                 s += '  assign %s = %s;'%(assignment['lhs'], assignment['rhs'])
                 if hasattr(assignment, 'comment'):
                     s += ' // %s'%assignment['comment']
@@ -760,7 +761,7 @@ class VerilogModule(object):
             if n_params > 0:
                 s += '  %s #(\n' %self.name
                 n = 0
-                for paramname, parameter in self.parameters[block].items():
+                for paramname, parameter in sorted(self.parameters[block].items()):
                     s += '    .%s(%s)'%(parameter.name, parameter.value)
                     print('%s(%s)'%(parameter.name, parameter.value))
                     print('n: %s\n n_params: %s'%(n,n_params))
@@ -775,7 +776,7 @@ class VerilogModule(object):
         for block in self.ports.keys():
             n_ports = len(self.ports[block])
             n = 0
-            for portname, port in self.ports[block].items():
+            for portname, port in sorted(self.ports[block].items()):
                 s += '    .%s(%s)'%(port.name, port.signal.rstrip(' '))
                 if n != (n_ports - 1):
                     s += ',\n'
