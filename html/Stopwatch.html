@@ -1,0 +1,55 @@
+<!-- start content -->
+			<p><b>Block:</b> Stopwatch (<code>stopwatch</code>)<br />
+<b>Block Author</b>: Jason Manley<br />
+<b>Document Author</b>: Jason Manley<br />
+</p>
+<table id="toc" class="toc"><tr><td><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Summary"><span class="tocnumber">1</span> <span class="toctext">Summary</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Mask_Parameters"><span class="tocnumber">2</span> <span class="toctext">Mask Parameters</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Ports"><span class="tocnumber">3</span> <span class="toctext">Ports</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Description"><span class="tocnumber">4</span> <span class="toctext">Description</span></a></li>
+</ul>
+</td></tr></table><script>if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+<h2> <span class="mw-headline" id="Summary"> Summary </span></h2>
+<p>Counts the number of clocks between a start and stop pulse.
+</p>
+<h2> <span class="mw-headline" id="Mask_Parameters"> Mask Parameters </span></h2>
+<p>None.
+</p>
+<h2> <span class="mw-headline" id="Ports"> Ports </span></h2>
+<table width="500" border="1" cellpadding="3">
+<tr>
+<th> Port
+</th><th> Dir
+</th><th> Data Type
+</th><th> Description
+</th></tr>
+<tr>
+<td> start
+</td><td> in
+</td><td> boolean
+</td><td> Start counting
+</td></tr>
+<tr>
+<td> stop
+</td><td> in
+</td><td> boolean
+</td><td> Stop counting and hold value until reset received
+</td></tr>
+<tr>
+<td> reset
+</td><td> in
+</td><td> boolean
+</td><td> Reset back to zero.
+</td></tr>
+<tr>
+<td> count_out
+</td><td> out
+</td><td> ufix_32_0
+</td><td> Number of clocks elapsed since start pulse received.
+</td></tr>
+</table>
+<h2> <span class="mw-headline" id="Description"> Description </span></h2>
+<p>This block counts the number of clocks between a start and stop pulse. This value is held until a reset is received. If another start pulse is received before the reset, counting resumes from where it left-off. If a reset is received mid-way through a count (ie before a stop pulse) then the stopwatch will be reset and await another start pulse before it restarts counting. Test Model: test_stopwatch.mdl
+</p>

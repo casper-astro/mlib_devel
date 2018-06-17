@@ -1,0 +1,97 @@
+<!-- start content -->
+			<p><b>Block:</b> FIR Column (<code>fir_col</code>)<br />
+<b>Block Author</b>: Aaron Parsons<br />
+<b>Document Author</b>: Ben Blackman<br />
+</p>
+<table id="toc" class="toc"><tr><td><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Summary"><span class="tocnumber">1</span> <span class="toctext">Summary</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Mask_Parameters"><span class="tocnumber">2</span> <span class="toctext">Mask Parameters</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Ports"><span class="tocnumber">3</span> <span class="toctext">Ports</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Description"><span class="tocnumber">4</span> <span class="toctext">Description</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Usage"><span class="tocnumber">4.1</span> <span class="toctext">Usage</span></a></li>
+</ul>
+</li>
+</ul>
+</td></tr></table><script>if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+<h2> <span class="mw-headline" id="Summary"> Summary </span></h2>
+<p>Takes in real and imaginary numbers to be multiplied by the coefficients and then the filter sums the real and imaginary parts separately. Then both sums are output as well as a delayed version of the unchanged inputs.
+</p>
+<h2> <span class="mw-headline" id="Mask_Parameters"> Mask Parameters </span></h2>
+<table width="500" border="1" cellpadding="3">
+<tr>
+<th> Parameter
+</th><th> Variable
+</th><th> Description
+</th></tr>
+<tr>
+<td> Inputs
+</td><td> n_inputs
+</td><td> The number of real inputs and the number of imaginary inputs.
+</td></tr>
+<tr>
+<td> Coefficients
+</td><td> coeff
+</td><td> A vector of coefficients of this FIR. Should be the same number of coefficients as inputs.
+</td></tr>
+<tr>
+<td> Add Latency
+</td><td> add_latency
+</td><td> The latency of the internal adders.
+</td></tr>
+<tr>
+<td> Mult Latency
+</td><td> mult_latency
+</td><td> The latency of the internal multipliers.
+</td></tr>
+</table>
+<h2> <span class="mw-headline" id="Ports"> Ports </span></h2>
+<table width="500" border="1" cellpadding="3">
+<tr>
+<th> Port
+</th><th> Dir
+</th><th> Data Type
+</th><th> Description
+</th></tr>
+<tr>
+<td> realX
+</td><td> IN
+</td><td> Inherited
+</td><td> This is real input X. Its data type is inherited from the previous block.
+</td></tr>
+<tr>
+<td> imagX
+</td><td> IN
+</td><td> Inherited
+</td><td> This is imaginary input X. Its data type is inherited from the previous block.
+</td></tr>
+<tr>
+<td> real_outX
+</td><td> OUT
+</td><td> Inherited
+</td><td> This output is <code>realX</code> delayed by 1 cycle.
+</td></tr>
+<tr>
+<td> imag_outX
+</td><td> OUT
+</td><td> Inherited
+</td><td> This output is <code>imagX</code> delayed by 1 cycle.
+</td></tr>
+<tr>
+<td> real_sum
+</td><td> OUT
+</td><td> Inherited
+</td><td> This is the sum of all the <code>realX</code> * coefficient X.
+</td></tr>
+<tr>
+<td> imag_sum
+</td><td> OUT
+</td><td> Inherited
+</td><td> This is the sum of all the <code>imagX</code> * coefficient X.
+</td></tr>
+</table>
+<h2> <span class="mw-headline" id="Description"> Description </span></h2>
+<h3> <span class="mw-headline" id="Usage"> Usage </span></h3>
+<p>This block takes in a number of inputs in parallel and outputs a delayed version of them and also multiplies the inputs by the coefficients. Then <code>real_sum</code> and <code>imag_sum</code> are computed and are delayed due to the latency in the adders which depends both on the <code>add_latency</code> and the number of inputs.
+</p>

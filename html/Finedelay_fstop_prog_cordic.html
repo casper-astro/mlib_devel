@@ -1,0 +1,138 @@
+<!-- start content -->
+			<p><b>Block:</b> Programmable fine delay with fringe stop using CORDIC block     <code>(finedelay_fstop_prog_cordic</code>)<br />
+<b>Block Author</b>: Mekhala Muley, GMRT, India.<br />
+<b>Document Author</b>: Mekhala Muley, GMRT, India.<br />
+</p><p><br />
+</p>
+<table id="toc" class="toc"><tr><td><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Summary"><span class="tocnumber">1</span> <span class="toctext">Summary</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Mask_Parameters"><span class="tocnumber">2</span> <span class="toctext">Mask Parameters</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Ports"><span class="tocnumber">3</span> <span class="toctext">Ports</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Description"><span class="tocnumber">4</span> <span class="toctext">Description</span></a></li>
+</ul>
+</td></tr></table><script>if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+<h2> <span class="mw-headline" id="Summary"> Summary </span></h2>
+<p>This block performs the fine delay correction along with the fringe stop. This block accepts the simultaneous stream of data from the FFT module and has a run time programmable fine delay correction along with the fringe stopping. This block uses CORDIC block which is compatible with Virtex 5 FPGA. Hence this block can be used for designs on Virtex5 FPGA of ROACH  board.
+</p><p><b>Note 1:</b>  This block is specifically compatible with the “fft_wideband_real” module. For other FFT modules changes will be required in this block depending upon the way in which the data is output from the FFT module.
+</p><p><br />
+<b>Note 2:</b>  This block requires System Generator Version 11.1 to make it compatible with Virtex 5.
+</p><p><br />
+</p><p><b>Note 3:</b>  Currently the block is able to correct delay for One clock or less than one clock. It does not correct delays which are more than one clock.
+</p>
+<h2> <span class="mw-headline" id="Mask_Parameters"> Mask Parameters </span></h2>
+<table width="500" border="1" cellpadding="3">
+<tr>
+<th> Parameter
+</th><th> Variable
+</th><th> Description
+</th></tr>
+<tr>
+<td>Number of simultaneous inputs
+</td><td>n_input
+</td><td>Number of simultaneous inputs (in frequency domain) from the FFT module.
+</td></tr>
+<tr>
+<td>Number of FFT channels
+</td><td>fft_len
+</td><td>Number of channels in the FFT
+</td></tr>
+<tr>
+<td>FFT input bitwidth
+</td><td>fft_bits
+</td><td>Number of bits in each real and imaginary samples obtained from the FFT module.
+</td></tr>
+<tr>
+<td>CORDIC Sine-Cos  input bitwidth
+</td><td>theta_bits
+</td><td>Input bitwidth required for the CORDIC SineCos block and hence decides the resolution of the phase.
+</td></tr>
+<tr>
+<td>CORDIC Sine-Cos input binary bitwidth
+</td><td>theta_binary_bits
+</td><td>Input binary bitwidth of the CORDIC sine cos block.
+</td></tr>
+<tr>
+<td>Maximum number of FFT cycles (Rate of change of fringe = 2^?)
+</td><td>fft_cycle_bits
+</td><td>Number of FFT cycles after which the rate of change of fringe needs to be applied. The number of FFT cycles are specified in terms of powers of 2.
+</td></tr>
+<tr>
+<td>Sync Period
+</td><td>sync_period
+</td><td>Duration of the sync pulse.
+</td></tr></table>
+<h2> <span class="mw-headline" id="Ports"> Ports </span></h2>
+<table width="500" border="1" cellpadding="3">
+<tr>
+<th> Port
+</th><th> Dir
+</th><th> Data Type
+</th><th> Description
+</th></tr>
+<tr>
+<td>sync
+</td><td>In
+</td><td>Boolean
+</td><td>Indicates the next clock cycle which contains  valid data.
+</td></tr>
+<tr>
+<td>theta_fract
+</td><td>In
+</td><td>Unsigned
+</td><td>Sets the integer number required for fine delay correction.The bitwidth is equal to the address width for SineCos LUT. The method of calculating the range of integer required for the fine delay correction is explained in Description.
+</td></tr>
+<tr>
+<td>theta_fs
+</td><td>In
+</td><td>Unsigned
+</td><td>Sets the integer value equivalent to the initial phase value  for fringe stop . The bitwidth is equal to the address width for SineCos LUT. Hence the possible range for initial phase varies from 0 to 2^theta_bits.
+</td></tr>
+<tr>
+<td>fft_fs
+</td><td>In
+</td><td>Unsigned
+</td><td>Sets the number of FFT cycles after which fringe update rate need to be applied.
+</td></tr>
+<tr>
+<td>en_theta_fs
+</td><td>In
+</td><td>Unsigned
+</td><td>This is the one bit control signal required to upload the new initial phase required for fringe stop. The new initial phase value gets loaded only at the posedge of this signal.
+</td></tr>
+<tr>
+<td>pol_in
+</td><td>In
+</td><td>Inherited
+</td><td>The frequency domain stream from the FFT module.
+</td></tr>
+<tr>
+<td>sync_out
+</td><td>Out
+</td><td>Boolean
+</td><td>Indicates that data out will be valid next clock cycle.
+</td></tr>
+<tr>
+<td>out
+</td><td>Out
+</td><td>Inherited
+</td><td>The fine delay and fringe stop corrected frequency channels.
+</td></tr></table>
+<h2> <span class="mw-headline" id="Description"> Description </span></h2>
+<p>This block performs the fine delay correction along with the fringe stop. This block accepts the simultaneous stream of data from the FFT module and has a run time programmable fine delay correction along with the fringe stopping.This block uses CORDIC block which is compatible with Virtex 5 FPGA. Hence this block can be used for designs on Virtex5 FPGA of ROACH  board.
+</p><p><b>Note:</b> This block is specifically compatible with the “fft_wideband_real” module. For other FFT modules changes will be required in this block depending upon the way in which the data is output from the FFT module.
+</p><p><br />
+</p><p><b>Fine Delay Correction&nbsp;:</b>
+</p><p>Masking parameters like theta_bits and theta_binary_bits decides the resolution of the phase required for fine delay and fringe stop. 
+</p><p>Resolution = (2^theta_bits * 2 * pi) / 8
+</p><p>For eg. theta_bits = 20 will generate a CORDIC SineCos block with a  resolution of 0.000437 degrees.
+</p><p>Let bandwidth = 300MHz and no. of FFT channels = fft_len = 1024 then the maximum integer value of theta_fract (i.e. max fine delay = 1 clk cycle)will be 
+</p><p>num = (2^theta_bits * pi) / 8
+</p><p>x = (num * 2)/(fft_len/2) = 1608
+</p><p>Thus 1/1608th of the clock cycle delay can be compensated with the above parameters.
+</p><p><br />
+</p><p><b>Fringe Stop&nbsp;:</b>
+</p><p>Masking parameter fft_cycle_bits determines the maximum number of FFT cycles after which the fringe phase will be incremented.
+</p><p>For eg. Let the sync period is of 2^27 clks and number of FFT points be 2^10 then the maximum number of FFT cycles for incrementing the fringe phase by amount of resolution set for the Sine-Cos LUT = 2^27 / 2^10 = 2^17
+</p><p>It means that minimum rate of incrementing fringe phase by 0.000437 degrees is after 2^17 FFT cycles.
+</p>

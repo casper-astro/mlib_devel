@@ -1,0 +1,71 @@
+<!-- start content -->
+			<p><b>Block:</b> XSG Core Config (<code>XSG core config</code>)<br />
+<b>Block Author</b>: Pierre-Yves Droz<br />
+<b>Document Author</b>: Henry Chen<br />
+</p>
+<table id="toc" class="toc"><tr><td><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Summary"><span class="tocnumber">1</span> <span class="toctext">Summary</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Mask_Parameters"><span class="tocnumber">2</span> <span class="toctext">Mask Parameters</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Ports"><span class="tocnumber">3</span> <span class="toctext">Ports</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Description"><span class="tocnumber">4</span> <span class="toctext">Description</span></a></li>
+</ul>
+</td></tr></table><script>if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+<h2> <span class="mw-headline" id="Summary"> Summary </span></h2>
+<p>The XSG Core Config block is used to configure the System Generator design for the <code>bee_xps</code> toolflow. Settings here are used to configure the Xilinx System Generator block parameters automatically, and control toolflow script  execution. It needs to be at the top level of all designs being compiled with the <code>bee_xps</code> toolflow.
+</p>
+<h2> <span class="mw-headline" id="Mask_Parameters"> Mask Parameters </span></h2>
+<table width="500" border="1" cellpadding="3">
+<tr>
+<th> Parameter
+</th><th> Variable
+</th><th> Description
+</th></tr>
+<tr>
+<td> Hardware Platform
+</td><td> hw_sys
+</td><td> Selects the board/chip to compile for.
+</td></tr>
+<tr>
+<td> Include Linux add-on board support
+</td><td> ibob_linux
+</td><td> Includes BORPH-capable Linux for IBOB.
+</td></tr>
+<tr>
+<td> User IP Clock source
+</td><td> clk_src
+</td><td> Selects the clock on which to run the System Generator circuit.
+</td></tr>
+<tr>
+<td> GPIO Clock Pin I/O group
+</td><td> gpio_clk_io_group
+</td><td> Selects GPIO type to use as clock input if using user clock on an IBOB.
+</td></tr>
+<tr>
+<td> GPIO Clock Pin bit index
+</td><td> gpio_clk_bit_index
+</td><td> Selects GPIO pin to use as clock input if using user clock on an IBOB.
+</td></tr>
+<tr>
+<td> User IP Clock rate (MHz)
+</td><td> clk_rate
+</td><td> Generates timing constraints for the design.
+</td></tr>
+<tr>
+<td> Sample Period
+</td><td> sample_period
+</td><td> Sample period for Simulink simulations.
+</td></tr>
+<tr>
+<td> Synthesis Tool
+</td><td> synthesis_tool
+</td><td> Selects the tool to use for synthesizing the design's netlist.
+</td></tr>
+</table>
+<h2> <span class="mw-headline" id="Ports"> Ports </span></h2>
+<p>None.
+</p>
+<h2> <span class="mw-headline" id="Description"> Description </span></h2>
+<p>The function of the XSG Core Config block is to set parameters for the toolflow scripts. It supercedes the use of the Xilinx System Generator block and has supplemental options for board-level parameters. Although a System Generator block is still needed in all designs, the XSG Core Config block automatically changes the System Generator block settings based on its own parameters.
+</p><p>The settings in the XSG Core Config block are used to determine the system-level conditions of the SysGen design. It sets which of the toolflow-supported boards the design is being compiled for, from which it determines what FPGA to target, as well as clocking options like clock source and timing constraints. The Sample Period and Synthesis Tool parameters are included in the block so that all system-level options available in the System Generator block could be handled by this single block.
+</p>

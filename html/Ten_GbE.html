@@ -1,0 +1,205 @@
+<!-- start content -->
+			<p><b>Block:</b> 10GbE Transceiver (<code>ten_GbE</code>)<br />
+<b>Block Author</b>: Pierre Yves Droz<br />
+<b>Document Author</b>: Jason Manley<br />
+</p>
+<table id="toc" class="toc"><tr><td><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Summary"><span class="tocnumber">1</span> <span class="toctext">Summary</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Mask_Parameters"><span class="tocnumber">2</span> <span class="toctext">Mask Parameters</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Ports"><span class="tocnumber">3</span> <span class="toctext">Ports</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Description"><span class="tocnumber">4</span> <span class="toctext">Description</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Configuration"><span class="tocnumber">4.1</span> <span class="toctext">Configuration</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Transmitting"><span class="tocnumber">4.2</span> <span class="toctext">Transmitting</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Receiving"><span class="tocnumber">4.3</span> <span class="toctext">Receiving</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Addressing"><span class="tocnumber">4.4</span> <span class="toctext">Addressing</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#LED_Outputs"><span class="tocnumber">4.5</span> <span class="toctext">LED Outputs</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Operation"><span class="tocnumber">4.6</span> <span class="toctext">Operation</span></a></li>
+</ul>
+</li>
+</ul>
+</td></tr></table><script>if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+<h2> <span class="mw-headline" id="Summary"> Summary </span></h2>
+<p>This block sends and receives UDP frames (packets). It accepts a 64 bit wide data stream with user-determined frame breaks. The data stream is wrapped in a UDP frame for transmission. Incoming UDP p
+ackets are unwrapped and the data presented as a 64 bit wide stream. Only tested for the BEE2 platform.
+</p>
+<h2> <span class="mw-headline" id="Mask_Parameters"> Mask Parameters </span></h2>
+<table width="500" border="1" cellpadding="3">
+<tr>
+<th> Parameter
+</th><th> Variable
+</th><th> Description
+</th></tr>
+<tr>
+<td> Port
+</td><td> port
+</td><td> Selects the physical CX4 port on the iBOB or BEE2. The iBOB has two ports; the BEE2 has two for the control FPGA and four for each of the user FPGAs. CORR is not used by CASPER.
+</td></tr>
+<tr>
+<td> Use lightweight MAC
+</td><td> mac_lite
+</td><td> Toggles the use of a lightweight MAC implementation, which does not perform checksum validation.
+</td></tr>
+<tr>
+<td> Pre-emphasis
+</td><td> pre_emph
+</td><td> Selects the pre-emaphasis to use over the physical link. Default: 3 (see Xilinx documentation)
+</td></tr>
+<tr>
+<td> Differential Swing
+</td><td> swing
+</td><td> Selects the size of the differential swing to use in mV. Default: 800 (see Xilinx documentation)
+</td></tr>
+</table>
+<h2> <span class="mw-headline" id="Ports"> Ports </span></h2>
+<table width="500" border="1" cellpadding="3">
+<tr>
+<th> Port
+</th><th> Dir
+</th><th> Data Type
+</th><th> Description
+</th></tr>
+<tr>
+<td> rst
+</td><td> in
+</td><td> boolean
+</td><td> Resets the transceiver when pulsed high
+</td></tr>
+<tr>
+<td> tx_data
+</td><td> in
+</td><td> UFix_64_0
+</td><td> Accepts the data stream to be transmitted
+</td></tr>
+<tr>
+<td> tx_valid
+</td><td> in
+</td><td> boolean
+</td><td> The core accept the data on <code>tx_data</code> into the buffer while this line is high
+</td></tr>
+<tr>
+<td> tx_dest_ip
+</td><td> in
+</td><td> UFix_32_0
+</td><td> Selects the IP address of the receiving device
+</td></tr>
+<tr>
+<td> tx_dest_port
+</td><td> in
+</td><td> UFix_16_0
+</td><td> Selects the listening port of the receiving device (UDP port)
+</td></tr>
+<tr>
+<td> tx_end_of_frame
+</td><td> in
+</td><td> boolean
+</td><td> Signals the transceiver to begin transmitting the buffered frame (ie signals end of the frame). tx_valid must also be high to send a packet.
+</td></tr>
+<tr>
+<td> tx_discard
+</td><td> in
+</td><td> boolean
+</td><td> Dumps the buffered packet and empties the FIFO buffer
+</td></tr>
+<tr>
+<td> rx_ack
+</td><td> in
+</td><td> boolean
+</td><td> Used to acknowledge reception of the data currently on rx_data and signals the transceiver to produce the next 64 bits from the receiver FIFO.
+</td></tr>
+<tr>
+<td> led_up
+</td><td> out
+</td><td> boolean
+</td><td> Indicates a link on the port
+</td></tr>
+<tr>
+<td> led_rx
+</td><td> out
+</td><td> boolean
+</td><td> Represents received traffic on the port
+</td></tr>
+<tr>
+<td> led_tx
+</td><td> out
+</td><td> boolean
+</td><td> Represents transmitted traffic on the port
+</td></tr>
+<tr>
+<td> tx_ack
+</td><td> out
+</td><td> boolean
+</td><td> Indicates that the data just clocked-in was accepted (will not acknowledge when buffer is full).
+</td></tr>
+<tr>
+<td> rx_data
+</td><td> out
+</td><td> UFix_64_0
+</td><td> Outputs the received data stream.
+</td></tr>
+<tr>
+<td> rx_valid
+</td><td> out
+</td><td> boolean
+</td><td> Indicates that the data on rx_data is valid (indicates a packet, or partial packet is in the RX buffer).
+</td></tr>
+<tr>
+<td> rx_source_ip
+</td><td> out
+</td><td> UFix_32_0
+</td><td> Represents the IP address of the sender of the current packet.
+</td></tr>
+<tr>
+<td> rx_source_port
+</td><td> out
+</td><td> UFix_16_0
+</td><td> Represents the sender's UDP port of the current packet.
+</td></tr>
+<tr>
+<td> rx_end_of_frame
+</td><td> out
+</td><td> boolean
+</td><td> Goes high to indicate the end of the received frame.
+</td></tr>
+<tr>
+<td> rx_size
+</td><td> out
+</td><td> UFix_16_0
+</td><td> Represents the total size of the packet currently in the RX buffer
+</td></tr>
+</table>
+<h2> <span class="mw-headline" id="Description"> Description </span></h2>
+<p>This document is a draft and requires verification.
+</p>
+<h3> <span class="mw-headline" id="Configuration"> Configuration </span></h3>
+<p>The transceiver is configured through BORPH. Each transceiver instance has an entry in BORPH's <code>/proc</code> filesystem. A simple way to modify configuration is to generate a text file and cat the contents into the <code>ten_GbE</code> block's <code>/proc</code> entry. The text file's contents should be as follows:
+</p>
+<div dir="ltr" style="text-align: left;"><div class="source-text" style="font-family: monospace;"><pre>mac = 10:10:10:10:10:10
+ip = 10.0.0.220
+gateway = 10.0.0.1
+port = 50000</pre></div></div>
+<p>To load this new configuration file:
+</p><p><code>cat /path/to/setup_ten_GbE.txt &gt; /proc/PID/hw/ioreg/ten_GbE</code>
+</p><p>Note that <code>ioreg_mode</code> must be in mode <code>1</code> for this to work.
+</p><p>Alternatively, the 10.1 toolflow includes the option to configure the core automatically. In the "Show Implementation Parameters" section, there are added options to "Enable fabric on startup". This allows you to set the core's MAC address, IP address, Gateway address and fabric port. When sending to any IP, the MAC address used is the broadcast address (unless you manually populate the ARP table with the correct MAC address. Not yet supported.)
+</p>
+<h3> <span class="mw-headline" id="Transmitting"> Transmitting </span></h3>
+<p>To transmit, data is clocked into a TX buffer through <code>tx_data</code> in 64 bit wide words using <code>tx_valid</code>. When ready to transmit, pulse the <code>tx_end_of_frame</code> line; the transceiver will add a UDP wrapper addressed to <code>tx_dest_ip:tx_dest_port</code> and begin transmission immediately. The <code>tx_end_of_frame</code> line must be brought high simultaneously with the last valid data word to be transmitted. Ie the <code>tx_valid</code> and <code>tx_end_of_frame</code> lines must be pulsed together to effect an end-of-frame.
+</p><p>If you do not wish to send the packet (and discard the data already clocked in), pulse <code>tx_discard</code> instead of <code>tx_end_of_frame</code>. The <code>tx_dest_ip</code> and <code>tx_dest_port</code> lines are ignored until a valid <code>tx_end_of_frame</code> is received.  The sending port field in the UDP packet contains the listen port address (see below for configuration). Bear in mind that if the board is running at much over 120MHz, you cannot clock data into the core on every clock cycle (maximum transmission rate is 10Gbps and there is additional UDP packetization and ARP overhead). Maximum packet size appears to be in the order of 1100 words (of 64 bits each).
+</p>
+<h3> <span class="mw-headline" id="Receiving"> Receiving </span></h3>
+<p>Upon receipt of a packet, <code>rx_valid</code> will go high and <code>rx_size</code> will indicate the length of the packet in 64 bit words. The received data is presented on <code>rx_data</code> in 64 bit wide words. You acknowledge receipt of this data using <code>rx_ack</code>, at which point the next data word will be presented. When the end of the packet is reached, <code>rx_end_of_frame</code> will go high.
+</p>
+<h3> <span class="mw-headline" id="Addressing"> Addressing </span></h3>
+<p>To transmit, the IPv4 address is represented as a 32 bit binary number (whereas it's usually represented as four 8 bit decimal numbers). For example, if you wanted to send all packets to <code>192.168.1.1</code>, you would enter  
+</p><p><img class="tex" alt="192\times2^{24} + 168\times2^{16} + 1\times2^8 + 1 = 3 232 235 777" src="images/math/a/8/b/a8b112b568f18c6898a2566faf26aa43.png" />
+</p><p>as the IP address. The port is represented by a 16 bit number, allowing full addressing of the UDP port range. Ports below 1024 are generally reserved for Linux kernel and Internet functions. Ports 1024 - 49151 are registered for specific applications and may not be used without IANA registration. To ensure inter-operability and compatibility, we recommend using dynamic (private) ports 49152 through 65535.
+</p><p>To receive, the MAC address, IP address and listen port of each transceiver can be configured through BORPH or TinySH. Transceivers may have different IP addresses and listen ports, however, it is only possible for any given transceiver to listen on one port at a time. This can be reconfigured while running.
+</p>
+<h3> <span class="mw-headline" id="LED_Outputs"> LED Outputs </span></h3>
+<p>The LED lines indicate port activity and can be connected to external GPIO LED interfaces. Bear in mind that even if no packets are being transmitted or received through the Simulink interface block, miscellaneous configuration packets are still sent and may be received by the microprocessor core. This activity will also be reflected on the activity LEDs.
+</p>
+<h3> <span class="mw-headline" id="Operation"> Operation </span></h3>
+<p>Apart from configuring the block, the processor is also used to map the routing tables. ARP requests and responses are handled by the microprocessor. All packets to the block's IP address that are not on the configured port are redirected to the processor running TinySH for management.
+</p>

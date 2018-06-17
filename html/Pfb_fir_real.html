@@ -1,0 +1,135 @@
+<!-- start content -->
+			<p><b>Block:</b> Polyphase Real FIR Filter (<code>pfb_fir_real</code>)<br />
+<b>Block Author</b>: Henry Chen<br />
+<b>Document Author</b>: Ben Blackman<br />
+</p>
+<table id="toc" class="toc"><tr><td><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Summary"><span class="tocnumber">1</span> <span class="toctext">Summary</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Mask_Parameters"><span class="tocnumber">2</span> <span class="toctext">Mask Parameters</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Ports"><span class="tocnumber">3</span> <span class="toctext">Ports</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Description"><span class="tocnumber">4</span> <span class="toctext">Description</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Usage"><span class="tocnumber">4.1</span> <span class="toctext">Usage</span></a></li>
+</ul>
+</li>
+</ul>
+</td></tr></table><script>if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+<h2> <span class="mw-headline" id="Summary"> Summary </span></h2>
+<p>This block, combined with an FFT, implements a real Polyphase Filter Bank which uses longer windows of data to improve the shape of channels within a spectrum.
+</p>
+<h2> <span class="mw-headline" id="Mask_Parameters"> Mask Parameters </span></h2>
+<table width="500" border="1" cellpadding="3">
+<tr>
+<th> Parameter
+</th><th> Variable
+</th><th> Description
+</th></tr>
+<tr>
+<td> Size of PFB (<span class="texhtml">2<sup>?</sup></span> pnts)
+</td><td> PFBSize
+</td><td> The number of channels in the PFB (this should also be the size of the FFT which follows).
+</td></tr>
+<tr>
+<td> Total Number of Taps
+</td><td> TotalTaps
+</td><td> The number of taps in the PFB FIR filter. Each tap uses 2 real multiplier cores and requires buffering the real and imaginary streams for <span class="texhtml">2<sup><i>P</i><i>F</i><i>B</i><i>S</i><i>i</i><i>z</i><i>e</i></sup></span> samples.
+</td></tr>
+<tr>
+<td> Windowing Function
+</td><td> WindowType
+</td><td> Which windowing function to use (this allows trading passband ripple for steepness of rolloff, etc).
+</td></tr>
+<tr>
+<td> Number of Simultaneous Inputs (<span class="texhtml">2<sup>?</sup></span>)
+</td><td> n_inputs
+</td><td> The number of parallel time samples which are presented to the FFT core each clock. The number of output ports are set to this same value.
+</td></tr>
+<tr>
+<td> Make Biplex
+</td><td> MakeBiplex
+</td><td> Double up the inputs to match with a biplex FFT.
+</td></tr>
+<tr>
+<td> Input Bitwidth
+</td><td> BitWidthIn
+</td><td> The number of bits in each real and imaginary sample input to the PFB.
+</td></tr>
+<tr>
+<td> Output Bitwidth
+</td><td> BitWidthOut
+</td><td> The number of bits in each real and imaginary sample output from the PFB. This should match the bit width in the FFT that follows.
+</td></tr>
+<tr>
+<td> Coefficient Bitwidth
+</td><td> CoeffBitWidth
+</td><td> The number of bits in each coefficient. This is usually chosen to match the input bit width.
+</td></tr>
+<tr>
+<td> Use Distributed Memory for Coeffs
+</td><td> CoeffDistMem
+</td><td> Store the FIR coefficients in distributed memory (if = 1). Otherwise, BRAMs are used to hold the coefficients.
+</td></tr>
+<tr>
+<td> Add Latency
+</td><td> add_latency
+</td><td> Latency through adders in the FFT.
+</td></tr>
+<tr>
+<td> Mult Latency
+</td><td> mult_latency
+</td><td> Latency through multipliers in the FFT.
+</td></tr>
+<tr>
+<td> BRAM Latency
+</td><td> bram_latency
+</td><td> Latency through BRAM in the FFT.
+</td></tr>
+<tr>
+<td> Quantization Behavior
+</td><td> quantization
+</td><td> Specifies the rounding behavior used at the end of each butterfly computation to return to the number of bits specified above.
+</td></tr>
+<tr>
+<td> Bin Width Scaling (normal=1)
+</td><td> fwidth
+</td><td> PFBs give enhanced control over the width of frequency channels. By adjusting this parameter, you can scale bins to be wider (for values <span class="texhtml"> &gt; 1</span>) or narrower (for values <span class="texhtml"> &lt; 1</span>).
+</td></tr>
+</table>
+<h2> <span class="mw-headline" id="Ports"> Ports </span></h2>
+<table width="500" border="1" cellpadding="3">
+<tr>
+<th> Port
+</th><th> Dir
+</th><th> Data Type
+</th><th> Description
+</th></tr>
+<tr>
+<td> sync
+</td><td> IN
+</td><td> Boolean
+</td><td> Indicates the next clock cycle contains valid data
+</td></tr>
+<tr>
+<td> pol_in
+</td><td> IN
+</td><td> Inherited
+</td><td> The (real) time-domain stream(s).
+</td></tr>
+<tr>
+<td> sync_out
+</td><td> OUT
+</td><td> Boolean
+</td><td> Indicates that data out will be valid next clock cycle.
+</td></tr>
+<tr>
+<td> pol_out
+</td><td> OUT
+</td><td> Inherited
+</td><td> The (real) PFB FIR output, which is still a time-domain signal.
+</td></tr>
+</table>
+<h2> <span class="mw-headline" id="Description"> Description </span></h2>
+<h3> <span class="mw-headline" id="Usage"> Usage </span></h3>
+<p>This block, combined with an FFT, implements a real Polyphase Filter Bank which uses longer windows of data to improve the shape of channels within a spectrum.
+</p>

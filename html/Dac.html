@@ -1,0 +1,79 @@
+<!-- start content -->
+			<p><b>Block:</b> DAC (<code>dac</code>)<br />
+<b>Block Author</b>: Henry Chen<br />
+<b>Document Author</b>: Ben Blackman<br />
+</p>
+<table id="toc" class="toc"><tr><td><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Summary"><span class="tocnumber">1</span> <span class="toctext">Summary</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Mask_Parameters"><span class="tocnumber">2</span> <span class="toctext">Mask Parameters</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Ports"><span class="tocnumber">3</span> <span class="toctext">Ports</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Description"><span class="tocnumber">4</span> <span class="toctext">Description</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Usage"><span class="tocnumber">4.1</span> <span class="toctext">Usage</span></a></li>
+</ul>
+</li>
+</ul>
+</td></tr></table><script>if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+<h2> <span class="mw-headline" id="Summary"> Summary </span></h2>
+<p>The DAC block converts 4 digital inputs to 1 analog output. The <code>dac</code> runs at 4x FPGA clock frequency, outputting analog converted samples 0 through 3 each FPGA clock cycle.
+</p>
+<h2> <span class="mw-headline" id="Mask_Parameters"> Mask Parameters </span></h2>
+<table width="500" border="1" cellpadding="3">
+<tr>
+<th> Parameter
+</th><th> Variable
+</th><th> Description
+</th></tr>
+<tr>
+<td> DAC board
+</td><td> dac_brd
+</td><td> Select which IBOB port to run this <code>dac</code>.
+</td></tr>
+<tr>
+<td> DAC clock rate (MHz)
+</td><td> dac_clk_rate
+</td><td> The clock rate to run the <code>dac</code>. Must be 4x FPGA clock rate.
+</td></tr>
+<tr>
+<td> Sample period
+</td><td> sample_period
+</td><td> Sets the period at which the <code>dac</code> outputs samples (ie 2 means every other cycle).
+</td></tr>
+<tr>
+<td> Show Implementation Parameters
+</td><td> show_param
+</td><td> Allows the user to set the implementation parameters.
+</td></tr>
+<tr>
+<td> Invert output clock phase
+</td><td> invert_clock
+</td><td> When unchecked, the <code>dac</code> samples the data aligned with the clock. When checked, the <code>dac</code> samples the data aligned with an inverted clock.
+</td></tr>
+</table>
+<h2> <span class="mw-headline" id="Ports"> Ports </span></h2>
+<table width="500" border="1" cellpadding="3">
+<tr>
+<th> Port
+</th><th> Dir
+</th><th> Data Type
+</th><th> Description
+</th></tr>
+<tr>
+<td> dataX
+</td><td> IN
+</td><td> Fix_9_8
+</td><td> One of 4 digital inputs to be converted to analog.
+</td></tr>
+<tr>
+<td> sim_out
+</td><td> OUT
+</td><td> double
+</td><td> Analog output of <code>dac</code>. Note: For simulation only.
+</td></tr>
+</table>
+<h2> <span class="mw-headline" id="Description"> Description </span></h2>
+<h3> <span class="mw-headline" id="Usage"> Usage </span></h3>
+<p>The <code>dac</code> takes 4 <code>Fix_9_8</code> inputs and outputs an analog stream. The <code>dac</code> runs at 4x the FPGA clock speed.
+</p><p>To be updated.
+</p>
