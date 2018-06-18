@@ -1,0 +1,1239 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>DRAM &mdash; CASPER Block Documentation 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="GPIO" href="GPIO.html" />
+    <link rel="prev" title="DAC" href="Dac.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CASPER Block Documentation
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Signal Processing Blocks</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Adder_tree.html">Adder Tree</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Adder_tree.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Adder_tree.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Adder_tree.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Adder_tree.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Barrel_switcher.html">Barrel Switcher</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Barrel_switcher.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Barrel_switcher.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Barrel_switcher.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Barrel_switcher.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Bit_reverse.html">Bit Reverser</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Bit_reverse.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Bit_reverse.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Bit_reverse.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Bit_reverse.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Cmult_4bit_br*.html">Conjugate Complex 4-bit Multiplier BRAM</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_br*.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_br*.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_br*.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_br*.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Cmult_4bit_br.html">Complex 4-bit Multiplier BRAM</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_br.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_br.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_br.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_br.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Cmult_4bit_em*.html">Conjugate Complex 4-bit Multiplier, Dedicated Multipliers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_em*.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_em*.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_em*.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_em*.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Cmult_4bit_em.html">Complex 4-bit Multiplier, Embedded Multipliers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_em.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_em.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_em.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_em.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Cmult_4bit_sl*.html">Conjugate Complex 4-bit Multiplier, Slices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_sl*.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_sl*.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_sl*.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_sl*.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Cmult_4bit_sl.html">Complex 4-bit Multiplier, Slices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_sl.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_sl.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_sl.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_sl.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Complex_addsub.html">Complex Adder/Subtractor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Complex_addsub.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Complex_addsub.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Complex_addsub.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Complex_addsub.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Complex_addsub.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="C_to_ri.html">Complex to Real-Imag</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="C_to_ri.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="C_to_ri.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="C_to_ri.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="C_to_ri.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Dds.html">DDS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Dds.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dds.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dds.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dds.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Dds.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Dec_fir.html">Decimating FIR Filter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Dec_fir.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dec_fir.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dec_fir.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dec_fir.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Dec_fir.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Delay_bram_en_plus.html">Enabled Delay in BRAM</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Delay_bram_en_plus.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_bram_en_plus.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_bram_en_plus.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_bram_en_plus.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Delay_bram_prog.html">Programmable Delay in BRAM</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Delay_bram_prog.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_bram_prog.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_bram_prog.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_bram_prog.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Delay_bram.html">Delay in BRAM</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Delay_bram.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_bram.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_bram.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_bram.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Delay_complex.html">Complex Delay</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Delay_complex.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_complex.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_complex.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_complex.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Delay_slr.html">Delay in Slices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Delay_slr.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_slr.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_slr.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_slr.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Delay_wideband_prog.html">Programmable Wideband Delay</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Delay_wideband_prog.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_wideband_prog.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_wideband_prog.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_wideband_prog.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Dram_vacc.html">DRAM Vector Accumulator</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Dram_vacc.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dram_vacc.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dram_vacc.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dram_vacc.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Dram_vacc_tvg.html">DRAM Vector Accumulator Test Vector Generator</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Dram_vacc_tvg.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dram_vacc_tvg.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dram_vacc_tvg.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dram_vacc_tvg.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Edge.html">Edge Detect</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Edge.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Edge.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Edge.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Edge.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Fft_biplex_real_2x.html">Real-sampled Biplex FFT (demuxed by 2)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Fft_biplex_real_2x.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fft_biplex_real_2x.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fft_biplex_real_2x.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fft_biplex_real_2x.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Fft_biplex_real_4x.html">Real-sampled Biplex FFT (demuxed by 4)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Fft_biplex_real_4x.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fft_biplex_real_4x.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fft_biplex_real_4x.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fft_biplex_real_4x.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Fft.html">FFT</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Fft.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fft.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fft.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fft.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Fft_wideband_real.html">Real-sampled Wideband FFT</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Fft_wideband_real.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fft_wideband_real.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fft_wideband_real.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fft_wideband_real.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Finedelay_fstop_prog.html">Programmable Fine Delay w/ Fringe stop</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Finedelay_fstop_prog.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Finedelay_fstop_prog.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Finedelay_fstop_prog.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Finedelay_fstop_prog.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Finedelay_fstop_prog_cordic.html">Programmable Fine Delay w/ Fringe stop, CORDIC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Finedelay_fstop_prog_cordic.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Finedelay_fstop_prog_cordic.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Finedelay_fstop_prog_cordic.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Finedelay_fstop_prog_cordic.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Fir_col.html">FIR Column</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Fir_col.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fir_col.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fir_col.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fir_col.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Fir_col.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Fir_dbl_col.html">FIR Double Column</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Fir_dbl_col.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fir_dbl_col.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fir_dbl_col.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fir_dbl_col.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Fir_dbl_col.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Fir_tap.html">FIR Tap</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Fir_tap.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fir_tap.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fir_tap.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fir_tap.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Fir_tap.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Freeze_cntr.html">Freeze Counter Block</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Freeze_cntr.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Freeze_cntr.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Freeze_cntr.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Freeze_cntr.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Lo_const.html">Local Oscillator Constant</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Lo_const.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Lo_const.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Lo_const.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Lo_const.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Lo_const.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Lo_osc.html">Local Oscillator</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Lo_osc.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Lo_osc.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Lo_osc.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Lo_osc.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Lo_osc.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Mixer.html">Mixer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Mixer.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Mixer.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Mixer.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Mixer.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Mixer.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Negedge.html">Negative Edge Detect</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Negedge.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Negedge.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Negedge.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Negedge.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Partial_delay.html">Partial Delay</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Partial_delay.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Partial_delay.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Partial_delay.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Partial_delay.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Pfb_fir_real.html">Polyphase Real FIR Filter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Pfb_fir_real.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Pfb_fir_real.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Pfb_fir_real.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Pfb_fir_real.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Pfb_fir_real.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Pfb_fir.html">Polyphase FIR Filter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Pfb_fir.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Pfb_fir.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Pfb_fir.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Pfb_fir.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Posedge.html">Positive Edge Detect</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Posedge.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Posedge.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Posedge.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Posedge.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Power.html">Power</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Power.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Power.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Power.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Power.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Power.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Pulse_ext.html">Pulse Extender</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Pulse_ext.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Pulse_ext.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Pulse_ext.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Pulse_ext.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Rcmult.html">RC Multiplier</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Rcmult.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Rcmult.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Rcmult.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Rcmult.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Rcmult.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Reorder.html">Reorder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Reorder.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Reorder.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Reorder.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Reorder.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Ri_to_c.html">Real-Imag to Complex</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Ri_to_c.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Ri_to_c.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Ri_to_c.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Ri_to_c.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Square_transposer.html">Square Transposer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Square_transposer.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Square_transposer.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Square_transposer.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Square_transposer.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Stopwatch.html">Stopwatch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Stopwatch.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Stopwatch.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Stopwatch.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Stopwatch.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Sync_delay_en.html">Enabled Sync Delay</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Sync_delay_en.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sync_delay_en.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sync_delay_en.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sync_delay_en.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Sync_delay_prog.html">Programmable Sync Delay</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Sync_delay_prog.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sync_delay_prog.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sync_delay_prog.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sync_delay_prog.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Sync_gen.html">Sync Pulse Generator</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Sync_gen.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sync_gen.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sync_gen.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sync_gen.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Win_x_engine.html">Windowed X-Engine</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Win_x_engine.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Win_x_engine.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Win_x_engine.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Win_x_engine.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Win_x_engine.html#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Win_x_engine.html#input-format">Input format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Win_x_engine.html#output-format">Output Format</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Xeng_tvg.html">X-Engine TVG</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Xeng_tvg.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Xeng_tvg.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Xeng_tvg.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Xeng_tvg.html#description">Description</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Communication Blocks</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Ten_GbE.html">10 GbE Transceiver</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Ten_GbE.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Ten_GbE.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Ten_GbE.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Ten_GbE.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Ten_GbE.html#configuration">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Ten_GbE.html#transmitting">Transmitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Ten_GbE.html#receiving">Receiving</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Ten_GbE.html#addressing">Addressing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Ten_GbE.html#led-outputs">LED Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Ten_GbE.html#operation">Operation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="XAUI.html">XAUI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="XAUI.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="XAUI.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="XAUI.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="XAUI.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="XAUI.html#demux">Demux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="XAUI.html#out-of-band-signals">Out of band signals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">System Blocks</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Adc.html">ADC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Adc.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Adc.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Adc.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Adc.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Adc.html#usage">Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Adc.html#connecting-the-hardware">Connecting the Hardware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Adc.html#adc-background-information">ADC Background Information</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="X64_adc.html">X64 ADC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="X64_adc.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="X64_adc.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="X64_adc.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="X64_adc.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="X64_adc.html#background">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="X64_adc.html#connecting-the-adc">Connecting the ADC</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="X64_adc.html#clock-selection">Clock Selection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="X64_adc.html#reset-signal">Reset signal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="X64_adc.html#spi-interface">SPI Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="X64_adc.html#usage">Usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="X64_adc.html#adc-synchronization">ADC Synchronization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="X64_adc.html#data-output">Data Output</a></li>
+<li class="toctree-l4"><a class="reference internal" href="X64_adc.html#data-input">Data Input</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="64ADCx64-12.html">64ADCx64-12</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Dac.html">DAC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Dac.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dac.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dac.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dac.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Dac.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">DRAM</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#bee2-specific-info">BEE2 Specific Info</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#addressing">Addressing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data-bus-width">Data bus width</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#roach-specific-info">ROACH Specific Info</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#interfacing-details">Interfacing Details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dram-cpu-interface">DRAM CPU interface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-models">Example models</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#performance-tips">Performance Tips</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="GPIO.html">GPIO</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="GPIO.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="GPIO.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="GPIO.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="GPIO.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="GPIO.html#roach-specific-information">ROACH Specific Information</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="GPIO.html#notes">Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Qdr.html">QDR</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Qdr.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Qdr.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Qdr.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Qdr.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Qdr.html#issuing-commands">Issuing Commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Qdr.html#bursting">Bursting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Qdr.html#addressing">Addressing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Qdr.html#ecc-bits">ECC Bits</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Snapshot.html">Snapshot</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Snapshot.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Snapshot.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Snapshot.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Snapshot.html#software-interface">Software interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Snapshot.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Snapshot.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Snap.html">Snapshot Capture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Snap.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Snap.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Snap.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Snap.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Snap.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Snap64.html">64 Bit Snapshot</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Snap64.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Snap64.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Snap64.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Snap64.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Snap64.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Software_register.html">Software Register</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Software_register.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Software_register.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Software_register.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Software_register.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Sram.html">SRAM</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Sram.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sram.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sram.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sram.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Sram.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="XSG_core_config.html">XSG Core Config</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="XSG_core_config.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="XSG_core_config.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="XSG_core_config.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="XSG_core_config.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Gaussian_Random_Number_Gen.html">Gaussian Random Number Generator</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Gaussian_Random_Number_Gen.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Gaussian_Random_Number_Gen.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Gaussian_Random_Number_Gen.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Gaussian_Random_Number_Gen.html#test-results">Test Results</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Correlation_Control_Block.html">Correlation Control Block</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Correlation_Control_Block.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Correlation_Control_Block.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Correlation_Control_Block.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Correlation_Control_Block.html#test-results">Test Results</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CASPER Block Documentation</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>DRAM</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/src/Dram.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="dram">
+<h1>DRAM<a class="headerlink" href="#dram" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Block:</strong> DRAM (<code class="docutils literal notranslate"><span class="pre">dram</span></code>)</div>
+<div class="line"><strong>Block Author</strong>: Pierre Yves Droz (BEE2), David George(ROACH)</div>
+<div class="line"><strong>Document Author</strong>: Jason Manley, Laura Spitler</div>
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><div class="first"><div id="toctitle"></div><p class="rubric" id="contents">Contents</p>
+</div><ul class="last simple">
+<li><a class="reference external" href="#summary">Summary</a></li>
+<li><a class="reference external" href="#mask-parameters">Mask Parameters</a></li>
+<li><a class="reference external" href="#ports">Ports</a></li>
+<li><a class="reference external" href="#description">Description</a><ul>
+<li><a class="reference external" href="#bee2-specific-info">BEE2 Specific Info</a><ul>
+<li><a class="reference external" href="#addressing">Addressing</a></li>
+<li><a class="reference external" href="#data-bus-width">Data bus width</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#roach-specific-info">ROACH Specific Info</a><ul>
+<li><a class="reference external" href="#interfacing-details">Interfacing Details</a></li>
+<li><a class="reference external" href="#dram-cpu-interface">DRAM CPU interface</a></li>
+<li><a class="reference external" href="#example-models">Example models</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#performance-tips">Performance Tips</a></li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>This block interfaces to the BEE2+ROACH’s 1GB DDR2 ECC DRAM modules.
+Commands that are clocked-in are executed with an unknown delay,
+however, execution order is maintained. The underlying controller for
+the BEE2 and the ROACH are different and not all features are supported
+across both platforms (see below for details).</p>
+</div>
+<div class="section" id="mask-parameters">
+<h2>Mask Parameters<a class="headerlink" href="#mask-parameters" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="5%" />
+<col width="84%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Variable</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>DIMM</td>
+<td>dimm</td>
+<td>Selects which physical DIMM to use (four per user FPGA).</td>
+</tr>
+<tr class="row-odd"><td>Data Type</td>
+<td>arith_type</td>
+<td>Inform Simulink how it should interpret the stored data.</td>
+</tr>
+<tr class="row-even"><td>Data binary point</td>
+<td>bin_pt</td>
+<td>Inform Simulink how it should interpret the stored data - specifically, the bit position in the word where it should place the binary point.</td>
+</tr>
+<tr class="row-odd"><td>Datapath clock rate (MHz)</td>
+<td>ip_clock</td>
+<td>Clock rate for DRAM. Default: 200MHz (400DDR).</td>
+</tr>
+<tr class="row-even"><td>Sample period</td>
+<td>sample_period</td>
+<td>Is significant for clocking the block. Default: 1</td>
+</tr>
+<tr class="row-odd"><td>Simulate DRAM using ModelSim</td>
+<td>use_sim</td>
+<td>Requires the addition of the ModelSim block at the top level of the design. Used to simulate DRAM block only.</td>
+</tr>
+<tr class="row-even"><td>Lesser Simulation Address Width</td>
+<td>???</td>
+<td>If the ModelSim simulation is disabled a very basic simulation using BRAMs will be performed. This parameter selects the address width to the bram memory and cannot exceed 20 (or so) bits.</td>
+</tr>
+<tr class="row-odd"><td>Enable bank management</td>
+<td>bank_mgt</td>
+<td><em>Advise leave off for BEE2.</em> Allows multiple banks to be open at the same time. <em>Always enabled on ROACH (setting ignored).</em></td>
+</tr>
+<tr class="row-even"><td>Use wide data bus (288 bits)</td>
+<td>wide_data</td>
+<td>Burst writes require 288 bits. If not selected, provide a 144 bit bus which needs to be supplied with data in consecutive clock cycles to form the 288 bits. 288 bit bus can make for challenging routing! <em>Not implemented on ROACH.</em></td>
+</tr>
+<tr class="row-odd"><td>Use half-burst</td>
+<td>half_burst</td>
+<td>Only store 144 bits per burst (wastes half capacity as the second 144 bits are unusable). If enabled, requires at least two clock cycles to store 144 bits. Second clock cycle’s data is forfeited. <em>Not implemented on ROACH.</em></td>
+</tr>
+<tr class="row-even"><td>Use BRAM FIFOs
+<em>(ROACH only)</em></td>
+<td>bram_fifos</td>
+<td>Use blockRAM FIFO’s in DRAM controller. This is required only if the application clock rate is less than the dram clock rate to avoid overflows on the read interface. By default distributed RAM will be used which exhibits better timing performance and reduces BRAM resources.</td>
+</tr>
+<tr class="row-odd"><td>Include CPU Interface
+<em>(ROACH only)</em></td>
+<td>use_sniffer</td>
+<td>Includes the CPU interface which allows direct DRAM access from software. Including this may introduce timing issues at very high DRAM controller frequencies.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="ports">
+<h2>Ports<a class="headerlink" href="#ports" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Port</th>
+<th class="head">Dir</th>
+<th class="head">Data Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>rst</td>
+<td>in</td>
+<td>boolean</td>
+<td>Resets the block
+when pulsed high</td>
+</tr>
+<tr class="row-odd"><td>address</td>
+<td>in</td>
+<td>UFix_32_0</td>
+<td>A signal which
+accepts the
+address. See below
+for details.</td>
+</tr>
+<tr class="row-even"><td>data_in</td>
+<td>in</td>
+<td>144 or 288 bit
+unsigned</td>
+<td>Accepts data to be
+saved to DRAM.</td>
+</tr>
+<tr class="row-odd"><td>wr_be</td>
+<td>in</td>
+<td>UFix_18_0 or
+UFix_36_0</td>
+<td>Selects bytes for
+writing (write
+byte enable). It
+is normally 18
+bits wide for a
+144 bit data bus,
+but if 288 bit
+data bus is
+selected, this
+becomes a 36 bit
+variable.</td>
+</tr>
+<tr class="row-even"><td>RWn</td>
+<td>in</td>
+<td>boolean</td>
+<td>Selects read or
+not-write. <code class="docutils literal notranslate"><span class="pre">1</span></code>
+for read, <code class="docutils literal notranslate"><span class="pre">0</span></code>
+for write.</td>
+</tr>
+<tr class="row-odd"><td>cmd_tag</td>
+<td>in</td>
+<td>UFix_32_0</td>
+<td>Accepts a
+user-defined tag
+for labelling
+entered commands.
+<em>Not implemented
+on ROACH.</em></td>
+</tr>
+<tr class="row-even"><td>cmd_valid</td>
+<td>in</td>
+<td>boolean</td>
+<td>Clocks data into
+the command
+buffer.</td>
+</tr>
+<tr class="row-odd"><td>rd_ack</td>
+<td>out</td>
+<td>boolean</td>
+<td>Used to
+acknowledge that
+the last
+<code class="docutils literal notranslate"><span class="pre">data_out</span></code> value
+has been read.</td>
+</tr>
+<tr class="row-even"><td>cmd_ack</td>
+<td>out</td>
+<td>boolean</td>
+<td>Acknowledges that
+the last command
+was accepted (when
+buffer is full,
+will not accept
+additional
+commands).
+ROACH: Pin HI
+unless an attempt
+to clock in a
+command failed</td>
+</tr>
+<tr class="row-odd"><td>data_out</td>
+<td>out</td>
+<td>UFix_144_0</td>
+<td>Outputs data from
+DRAM, 144 bits at
+a time. Reads are
+in groups of 288
+bits (ie, 2
+clocks).</td>
+</tr>
+<tr class="row-even"><td>rd_tag</td>
+<td>out</td>
+<td>UFix_32_0</td>
+<td>Outputs the
+identifier for the
+data on
+<code class="docutils literal notranslate"><span class="pre">data_out</span></code> (as
+submitted on
+<code class="docutils literal notranslate"><span class="pre">cmd_tag</span></code> when
+the command was
+issued). <em>Not
+implemented on
+ROACH.</em></td>
+</tr>
+<tr class="row-odd"><td>rd_valid</td>
+<td>out</td>
+<td>boolean</td>
+<td>Indicates that the
+data on
+<code class="docutils literal notranslate"><span class="pre">data_out</span></code> is
+valid.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="bee2-specific-info">
+<h3>BEE2 Specific Info<a class="headerlink" href="#bee2-specific-info" title="Permalink to this headline">¶</a></h3>
+<p>Core details about the BEE2 memory interface can be found at the
+(static) BEE2 wiki:</p>
+<p><a class="reference external" href="http://bee2.eecs.berkeley.edu/wiki/Bee2Memory.html">http://bee2.eecs.berkeley.edu/wiki/Bee2Memory.html</a></p>
+<div class="section" id="addressing">
+<h4>Addressing<a class="headerlink" href="#addressing" title="Permalink to this headline">¶</a></h4>
+<p>The 1GB storage DIMMs have 18 512Mbit chips each. They are arranged as
+64Mbit x 8 (bus width) x 9 (chips per side/rank) x 2 (sides/ranks). Two
+ranks (sides) per module with the 9 memory ICs connected in parallel,
+each holding 8 bits of the data bus width (72 bits). Each IC has four
+banks, with 13 bits of row addressing and 10 bits for column addressing.
+Normally, each address would hold 64 bits + parity (8 bits), however,
+the BEE2 uses the parity space as additional data storage giving a
+capacity of 1.125 GB per DIMM module.</p>
+<p>From Micron’s datasheet on the <em>MT47H64M8CD-37E</em> (as used by CASPER in
+its Crucial 1GB <em>CT12872AA53E</em> modules): The double data rate
+architecture is essentially a 4n-prefetch architecture, with an
+interface designed to transfer two data words per clock cycle at the I/O
+balls. A single read or write access effectively consists of a single
+4n-bit-wide, one-clock-cycle data transfer at the internal DRAM core and
+four corresponding n-bit-wide, one-half-clock-cycle data transfers at
+the I/O balls.</p>
+<p>Reads and writes must thus occur four-at-a-time. 4 x 72bits = 288 bits.
+Although the mapping of the logical to physical addressing is abstracted
+from the user, it is useful to know how the DRAM block’s address bus is
+derived, as it impacts performance:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="38%" />
+<col width="63%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Addressing</th>
+<th class="head">Assignment</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Column</td>
+<td>12 <img alt="rightarrow" class="tex" src="../_images/rightarrow.png" /> 3</td>
+</tr>
+<tr class="row-odd"><td>Rank</td>
+<td>13</td>
+</tr>
+<tr class="row-even"><td>Row</td>
+<td>27 <img alt="rightarrow" class="tex" src="../_images/rightarrow.png" /> 14</td>
+</tr>
+<tr class="row-odd"><td>Bank</td>
+<td>29 <img alt="rightarrow" class="tex" src="../_images/rightarrow.png" /> 28</td>
+</tr>
+<tr class="row-even"><td>not used</td>
+<td>31 <img alt="rightarrow" class="tex" src="../_images/rightarrow.png" /> 30</td>
+</tr>
+</tbody>
+</table>
+<p>Address bit assignments</p>
+<p>Each group of 8 addresses selects a 144 bit logical location (the lowest
+3 bits are ignored). For example, address <code class="docutils literal notranslate"><span class="pre">0x00</span></code> through <code class="docutils literal notranslate"><span class="pre">0x7</span></code> all
+address the same 144 bit location. To address consecutive locations,
+increment the address port by eight. There are thus a total of
+2<sup>27</sup> possible addresses. The block supports 2GB DIMMs
+(UNCONFIRMED) since 14 bits of addressing are reserved for row
+selection. The 1GB DIMMs using Micron 512Mb chips, however, only use 13
+bits for row selection which results in 2<sup>26</sup> possible address
+locations. Care should be taken when addressing the 1GB DIMMS as bit 27
+of the address range is not valid. However, bits 28 and 29 are mapped.
+Since bit 27 is ignored, it results in overlapping memory spaces.</p>
+</div>
+<div class="section" id="data-bus-width">
+<h4>Data bus width<a class="headerlink" href="#data-bus-width" title="Permalink to this headline">¶</a></h4>
+<p>The BEE2 uses ECC DRAM, however, the parity bits are used for data
+storage rather than parity storage. Thus, the data bus is 72 bits wide
+instead of the usual 64 bits.</p>
+<p>The memory module has a DDR interface requiring two reads or writes per
+RAM clock cycle (~200MHz), thus requiring the user to provide 144 bits
+per clock cycle. Furthermore, as outlined above, data has to be captured
+in batches of 288 bits. This can be done in one of two ways: in two
+consecutive blocks of 144 bits, or over a single 288 bit-wide bus. This
+is selectable as a mask parameter. If half-burst is selected, only a 144
+bit input is required. 288 bits are still written to DRAM, but the
+second 144 bits are not specified. Thus, half of the DRAM capacity is
+unusable.</p>
+</div>
+</div>
+<div class="section" id="roach-specific-info">
+<h3>ROACH Specific Info<a class="headerlink" href="#roach-specific-info" title="Permalink to this headline">¶</a></h3>
+<p>The ROACH DRAM infrastructure currently doesn’t support half burst and
+wide data modes. Bank management is always enabled. Tag buffers are not
+implemented. The DRAM controller clock rate can be one of the following:
+150, 200, 266, 300 or 333. If a frequency other than these is provided
+the default of 266 will be used. The dram controller has been known to
+work at 300MHz.</p>
+<div class="section" id="interfacing-details">
+<h4>Interfacing Details<a class="headerlink" href="#interfacing-details" title="Permalink to this headline">¶</a></h4>
+<p>To write data into the DRAM, ‘RWn’ is held low, ‘cmd_valid’ is held
+high for a minimum of two FPGA clocks, and the ‘address’ port is held
+constant for both clock cycles. For example, to write into addresses
+0x00 and 0x01, keep the address at 0x00 for both clocks. To read data
+out of the DRAM, hold ‘RWn’ high, keep the address constant for two FPGA
+clock cycles, and toggle the ‘cmd_valid’ pin every clock. Note that a
+new word will be available on the ‘data_out’ pin on every clock cycle.
+‘rd_valid’ will frame valid output data some indeterminate number of
+clock cycles after the read ‘cmd_valid’ toggles. ‘cmd_ack’ is high
+unless an attempt to write a command into the input FIFO failed, at
+which point it will go low synchronously with the issuing of the failed
+command.</p>
+<p>Many ROACHs have been shipped with 1 GB dual rank DIMMs by default. The
+current DRAM controller is not able to handle multiple ranks, so when a
+dual-rank DIMM is installed on the board, only half the memory is
+available. In order to use the full 1 GB, a single rank DIMM is needed,
+or in principle a dual rank 2 GB module.</p>
+<p>Note that on the ROACH all of the oddities of the DRAM addressing
+specified above for the BEE2 version are taken care of for you, so you
+can just directly address locations 0 to (2^30 / 16) = 2^26 in the
+hardware.</p>
+</div>
+<div class="section" id="dram-cpu-interface">
+<h4>DRAM CPU interface<a class="headerlink" href="#dram-cpu-interface" title="Permalink to this headline">¶</a></h4>
+<p>If the block mask was set to include the CPU interface, the DRAM can be
+accessed by bytes through BORPH through ‘dram_memory’. The width of the
+CPU interface is only 128 bits (16 bytes), which results in discrepancy
+between hardware and CPU address. After every 64 bits, there are 8 ECC
+bits not visible to the CPU. For example bytes 0x00-0x07 in the DRAM are
+seen as 0x00-0x07 in the CPU, byte 0x08 in the DRAM is not visible to
+the CPU, and byte 0x09 in the DRAM is seen as byte 0x08 in the CPU.</p>
+<p>Only 64MB of DRAM can be mapped into the ‘dram_memory’ register at any
+given time. You can select which 64MB segment is mapped into the
+‘dram_memory’ register though the first 32-bit word of the
+‘dram_controller’ register. For example, to access the first 64MB chunk
+of DRAM write 0x0 into this register and for the second 0x1.</p>
+<p>The DRAM is most easily accessed using the KATCP function “read_dram”.</p>
+<p>The second 32-bit word in the ‘dram_controller’ register indicates the
+DRAM controller ready flag. This value stores will be 0x1 if the
+controller is operational. If it is not your DRAM will not operate at
+all. Typical problems causing this would include using an unsupported
+RDIMM.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="example-models">
+<h4>Example models<a class="headerlink" href="#example-models" title="Permalink to this headline">¶</a></h4>
+<p>1) David George’s million channel ROACH spectrometer (“buf” block):
+<a class="reference external" href="../_static/rmspec.mdl">rmspec.mdl</a></p>
+<p>2) Laura Spitler’s simple design that reads and writes a counter into
+the DRAM: <a class="reference external" href="../_static/Dram_roach_rwramp.mdl">Dram roach
+rwramp.mdl</a></p>
+<p>3) Jason Manley’s DRAM counter example: <a class="reference external" href="../_static/Dram_counter_test_10_1.gz">Dram counter test 10
+1.gz</a></p>
+<p>4) Tim Madden’s DRAM streaming output design (April 2015)
+<a class="reference external" href="https://github.com/argonnexraydetector/RoachFirmPy">https://github.com/argonnexraydetector/RoachFirmPy</a></p>
+</div>
+</div>
+<div class="section" id="performance-tips">
+<h3>Performance Tips<a class="headerlink" href="#performance-tips" title="Permalink to this headline">¶</a></h3>
+<p>The performance of the DRAM block is dependent on the relative location
+of the addressed data and whether or not the mode (read/write) is
+changed. For example, consecutive column addresses can be written
+without delay, however, changing rows or banks incur delay penalties.
+See above for the address bit assignment.</p>
+<p>To obtain optimum performance, it is recommended that the least
+significant bits be changed first (ie address the memory from
+<code class="docutils literal notranslate"><span class="pre">0x0000000</span></code> through to address <code class="docutils literal notranslate"><span class="pre">0x20000000</span></code> on the BEE2). This will
+increment column addresses first, followed by rank change, both of which
+incur little delay. Changing rows or banks can take twice as long.
+Further information can be found in the DRAM module’s datasheet (Micron
+<em>MT47H64M8</em> on the BEE2).</p>
+<p>Changing the mode(read/write) results in large delays, so it is
+recommended that read and writes be done in bursts into consecutive
+addresses. For a fabric clock speed of 200 MHz and DRAM speed of 266
+MHz, a burst length of at least 32 words is recommended.</p>
+<p>Bank management allows for three banks to be open simultaneously,
+reducing the overhead when switching between these banks. This feature
+is always enabled on ROACH, but YMMV with the BEE2 controller.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="GPIO.html" class="btn btn-neutral float-right" title="GPIO" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Dac.html" class="btn btn-neutral" title="DAC" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Collaboration for Astronomy Signal Processing and Electronics Research.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

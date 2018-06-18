@@ -1,0 +1,978 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Programmable Fine Delay w/ Fringe stop &mdash; CASPER Block Documentation 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Programmable Fine Delay w/ Fringe stop, CORDIC" href="Finedelay_fstop_prog_cordic.html" />
+    <link rel="prev" title="Real-sampled Wideband FFT" href="Fft_wideband_real.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CASPER Block Documentation
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Signal Processing Blocks</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Adder_tree.html">Adder Tree</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Adder_tree.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Adder_tree.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Adder_tree.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Adder_tree.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Barrel_switcher.html">Barrel Switcher</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Barrel_switcher.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Barrel_switcher.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Barrel_switcher.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Barrel_switcher.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Bit_reverse.html">Bit Reverser</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Bit_reverse.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Bit_reverse.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Bit_reverse.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Bit_reverse.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Cmult_4bit_br*.html">Conjugate Complex 4-bit Multiplier BRAM</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_br*.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_br*.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_br*.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_br*.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Cmult_4bit_br.html">Complex 4-bit Multiplier BRAM</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_br.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_br.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_br.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_br.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Cmult_4bit_em*.html">Conjugate Complex 4-bit Multiplier, Dedicated Multipliers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_em*.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_em*.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_em*.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_em*.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Cmult_4bit_em.html">Complex 4-bit Multiplier, Embedded Multipliers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_em.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_em.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_em.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_em.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Cmult_4bit_sl*.html">Conjugate Complex 4-bit Multiplier, Slices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_sl*.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_sl*.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_sl*.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_sl*.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Cmult_4bit_sl.html">Complex 4-bit Multiplier, Slices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_sl.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_sl.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_sl.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Cmult_4bit_sl.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Complex_addsub.html">Complex Adder/Subtractor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Complex_addsub.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Complex_addsub.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Complex_addsub.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Complex_addsub.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Complex_addsub.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="C_to_ri.html">Complex to Real-Imag</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="C_to_ri.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="C_to_ri.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="C_to_ri.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="C_to_ri.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Dds.html">DDS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Dds.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dds.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dds.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dds.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Dds.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Dec_fir.html">Decimating FIR Filter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Dec_fir.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dec_fir.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dec_fir.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dec_fir.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Dec_fir.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Delay_bram_en_plus.html">Enabled Delay in BRAM</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Delay_bram_en_plus.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_bram_en_plus.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_bram_en_plus.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_bram_en_plus.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Delay_bram_prog.html">Programmable Delay in BRAM</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Delay_bram_prog.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_bram_prog.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_bram_prog.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_bram_prog.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Delay_bram.html">Delay in BRAM</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Delay_bram.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_bram.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_bram.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_bram.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Delay_complex.html">Complex Delay</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Delay_complex.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_complex.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_complex.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_complex.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Delay_slr.html">Delay in Slices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Delay_slr.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_slr.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_slr.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_slr.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Delay_wideband_prog.html">Programmable Wideband Delay</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Delay_wideband_prog.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_wideband_prog.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_wideband_prog.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delay_wideband_prog.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Dram_vacc.html">DRAM Vector Accumulator</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Dram_vacc.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dram_vacc.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dram_vacc.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dram_vacc.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Dram_vacc_tvg.html">DRAM Vector Accumulator Test Vector Generator</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Dram_vacc_tvg.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dram_vacc_tvg.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dram_vacc_tvg.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dram_vacc_tvg.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Edge.html">Edge Detect</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Edge.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Edge.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Edge.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Edge.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Fft_biplex_real_2x.html">Real-sampled Biplex FFT (demuxed by 2)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Fft_biplex_real_2x.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fft_biplex_real_2x.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fft_biplex_real_2x.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fft_biplex_real_2x.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Fft_biplex_real_4x.html">Real-sampled Biplex FFT (demuxed by 4)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Fft_biplex_real_4x.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fft_biplex_real_4x.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fft_biplex_real_4x.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fft_biplex_real_4x.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Fft.html">FFT</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Fft.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fft.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fft.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fft.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Fft_wideband_real.html">Real-sampled Wideband FFT</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Fft_wideband_real.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fft_wideband_real.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fft_wideband_real.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fft_wideband_real.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Programmable Fine Delay w/ Fringe stop</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Finedelay_fstop_prog_cordic.html">Programmable Fine Delay w/ Fringe stop, CORDIC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Finedelay_fstop_prog_cordic.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Finedelay_fstop_prog_cordic.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Finedelay_fstop_prog_cordic.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Finedelay_fstop_prog_cordic.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Fir_col.html">FIR Column</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Fir_col.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fir_col.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fir_col.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fir_col.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Fir_col.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Fir_dbl_col.html">FIR Double Column</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Fir_dbl_col.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fir_dbl_col.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fir_dbl_col.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fir_dbl_col.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Fir_dbl_col.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Fir_tap.html">FIR Tap</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Fir_tap.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fir_tap.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fir_tap.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fir_tap.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Fir_tap.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Freeze_cntr.html">Freeze Counter Block</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Freeze_cntr.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Freeze_cntr.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Freeze_cntr.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Freeze_cntr.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Lo_const.html">Local Oscillator Constant</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Lo_const.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Lo_const.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Lo_const.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Lo_const.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Lo_const.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Lo_osc.html">Local Oscillator</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Lo_osc.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Lo_osc.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Lo_osc.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Lo_osc.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Lo_osc.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Mixer.html">Mixer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Mixer.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Mixer.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Mixer.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Mixer.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Mixer.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Negedge.html">Negative Edge Detect</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Negedge.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Negedge.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Negedge.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Negedge.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Partial_delay.html">Partial Delay</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Partial_delay.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Partial_delay.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Partial_delay.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Partial_delay.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Pfb_fir_real.html">Polyphase Real FIR Filter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Pfb_fir_real.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Pfb_fir_real.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Pfb_fir_real.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Pfb_fir_real.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Pfb_fir_real.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Pfb_fir.html">Polyphase FIR Filter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Pfb_fir.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Pfb_fir.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Pfb_fir.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Pfb_fir.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Posedge.html">Positive Edge Detect</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Posedge.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Posedge.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Posedge.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Posedge.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Power.html">Power</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Power.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Power.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Power.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Power.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Power.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Pulse_ext.html">Pulse Extender</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Pulse_ext.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Pulse_ext.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Pulse_ext.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Pulse_ext.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Rcmult.html">RC Multiplier</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Rcmult.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Rcmult.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Rcmult.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Rcmult.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Rcmult.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Reorder.html">Reorder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Reorder.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Reorder.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Reorder.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Reorder.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Ri_to_c.html">Real-Imag to Complex</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Ri_to_c.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Ri_to_c.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Ri_to_c.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Ri_to_c.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Square_transposer.html">Square Transposer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Square_transposer.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Square_transposer.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Square_transposer.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Square_transposer.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Stopwatch.html">Stopwatch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Stopwatch.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Stopwatch.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Stopwatch.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Stopwatch.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Sync_delay_en.html">Enabled Sync Delay</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Sync_delay_en.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sync_delay_en.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sync_delay_en.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sync_delay_en.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Sync_delay_prog.html">Programmable Sync Delay</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Sync_delay_prog.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sync_delay_prog.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sync_delay_prog.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sync_delay_prog.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Sync_gen.html">Sync Pulse Generator</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Sync_gen.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sync_gen.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sync_gen.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sync_gen.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Win_x_engine.html">Windowed X-Engine</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Win_x_engine.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Win_x_engine.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Win_x_engine.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Win_x_engine.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Win_x_engine.html#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Win_x_engine.html#input-format">Input format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Win_x_engine.html#output-format">Output Format</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Xeng_tvg.html">X-Engine TVG</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Xeng_tvg.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Xeng_tvg.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Xeng_tvg.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Xeng_tvg.html#description">Description</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Communication Blocks</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Ten_GbE.html">10 GbE Transceiver</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Ten_GbE.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Ten_GbE.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Ten_GbE.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Ten_GbE.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Ten_GbE.html#configuration">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Ten_GbE.html#transmitting">Transmitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Ten_GbE.html#receiving">Receiving</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Ten_GbE.html#addressing">Addressing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Ten_GbE.html#led-outputs">LED Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Ten_GbE.html#operation">Operation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="XAUI.html">XAUI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="XAUI.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="XAUI.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="XAUI.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="XAUI.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="XAUI.html#demux">Demux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="XAUI.html#out-of-band-signals">Out of band signals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">System Blocks</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Adc.html">ADC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Adc.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Adc.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Adc.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Adc.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Adc.html#usage">Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Adc.html#connecting-the-hardware">Connecting the Hardware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Adc.html#adc-background-information">ADC Background Information</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="X64_adc.html">X64 ADC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="X64_adc.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="X64_adc.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="X64_adc.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="X64_adc.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="X64_adc.html#background">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="X64_adc.html#connecting-the-adc">Connecting the ADC</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="X64_adc.html#clock-selection">Clock Selection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="X64_adc.html#reset-signal">Reset signal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="X64_adc.html#spi-interface">SPI Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="X64_adc.html#usage">Usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="X64_adc.html#adc-synchronization">ADC Synchronization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="X64_adc.html#data-output">Data Output</a></li>
+<li class="toctree-l4"><a class="reference internal" href="X64_adc.html#data-input">Data Input</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="64ADCx64-12.html">64ADCx64-12</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Dac.html">DAC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Dac.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dac.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dac.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dac.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Dac.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Dram.html">DRAM</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Dram.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dram.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dram.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Dram.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Dram.html#bee2-specific-info">BEE2 Specific Info</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Dram.html#addressing">Addressing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Dram.html#data-bus-width">Data bus width</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Dram.html#roach-specific-info">ROACH Specific Info</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Dram.html#interfacing-details">Interfacing Details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Dram.html#dram-cpu-interface">DRAM CPU interface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Dram.html#example-models">Example models</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Dram.html#performance-tips">Performance Tips</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="GPIO.html">GPIO</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="GPIO.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="GPIO.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="GPIO.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="GPIO.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="GPIO.html#roach-specific-information">ROACH Specific Information</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="GPIO.html#notes">Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Qdr.html">QDR</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Qdr.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Qdr.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Qdr.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Qdr.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Qdr.html#issuing-commands">Issuing Commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Qdr.html#bursting">Bursting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Qdr.html#addressing">Addressing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Qdr.html#ecc-bits">ECC Bits</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Snapshot.html">Snapshot</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Snapshot.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Snapshot.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Snapshot.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Snapshot.html#software-interface">Software interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Snapshot.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Snapshot.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Snap.html">Snapshot Capture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Snap.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Snap.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Snap.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Snap.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Snap.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Snap64.html">64 Bit Snapshot</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Snap64.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Snap64.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Snap64.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Snap64.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Snap64.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Software_register.html">Software Register</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Software_register.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Software_register.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Software_register.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Software_register.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Sram.html">SRAM</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Sram.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sram.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sram.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sram.html#description">Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Sram.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="XSG_core_config.html">XSG Core Config</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="XSG_core_config.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="XSG_core_config.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="XSG_core_config.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="XSG_core_config.html#description">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Gaussian_Random_Number_Gen.html">Gaussian Random Number Generator</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Gaussian_Random_Number_Gen.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Gaussian_Random_Number_Gen.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Gaussian_Random_Number_Gen.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Gaussian_Random_Number_Gen.html#test-results">Test Results</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Correlation_Control_Block.html">Correlation Control Block</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Correlation_Control_Block.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Correlation_Control_Block.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Correlation_Control_Block.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Correlation_Control_Block.html#test-results">Test Results</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CASPER Block Documentation</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Programmable Fine Delay w/ Fringe stop</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/src/Finedelay_fstop_prog.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="programmable-fine-delay-w-fringe-stop">
+<h1>Programmable Fine Delay w/ Fringe stop<a class="headerlink" href="#programmable-fine-delay-w-fringe-stop" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Block:</strong> Programmable fine delay with fringe stop
+(<code class="docutils literal notranslate"><span class="pre">finedelay_fstop_prog</span></code>)</div>
+<div class="line"><strong>Block Author</strong>: Mekhala Muley, GMRT, India.</div>
+<div class="line"><strong>Document Author</strong>: Mekhala Muley, GMRT, India.</div>
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><div class="first"><div id="toctitle"></div><p class="rubric" id="contents">Contents</p>
+</div><ul class="last simple">
+<li><a class="reference external" href="#summary">Summary</a></li>
+<li><a class="reference external" href="#mask-parameters">Mask Parameters</a></li>
+<li><a class="reference external" href="#ports">Ports</a></li>
+<li><a class="reference external" href="#description">Description</a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>This block performs the fine delay correction along with the fringe
+stop. It accepts the simultaneous stream of data from the FFT module and
+has a run time programmable fine delay correction along with the fringe
+stopping.</p>
+<p><strong>Note:</strong> This block is specifically compatible with the
+“fft_wideband_real” module. For other FFT modules changes will be
+required in this block depending upon output of the FFT module used in
+the design.</p>
+</div>
+<div class="section" id="mask-parameters">
+<h2>Mask Parameters<a class="headerlink" href="#mask-parameters" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="8%" />
+<col width="64%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Variable</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Number of simultaneous inputs</td>
+<td>n_input</td>
+<td>Number of simultaneous inputs (in frequency domain) from the FFT module.</td>
+</tr>
+<tr class="row-odd"><td>Number of FFT channels</td>
+<td>fft_len</td>
+<td>Number of channels in the FFT</td>
+</tr>
+<tr class="row-even"><td>FFT input bitwidth</td>
+<td>fft_bits</td>
+<td>Number of bits in each real and imaginary samples obtained from the FFT module.</td>
+</tr>
+<tr class="row-odd"><td>Sine-Cos LUT input bitwidth</td>
+<td>theta_bits</td>
+<td>Address bitwidth required for the SineCos LUT and hence decides the resolution of the phase. Allowable bitwidth for Sine-Cos LUT ranges from 3- 16.</td>
+</tr>
+<tr class="row-even"><td>Sine-Cos LUT output data width</td>
+<td>sine_cos_bits</td>
+<td>Data width of the sine cos LUT.</td>
+</tr>
+<tr class="row-odd"><td>Maximum number of FFT cycles (Rate of change of fringe = 2^?)</td>
+<td>fft_cycle_bits</td>
+<td>Number of FFT cycles after which the rate of change of fringe needs to be applied. The number of FFT cycles are specified in terms of powers of 2.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="ports">
+<h2>Ports<a class="headerlink" href="#ports" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="6%" />
+<col width="3%" />
+<col width="5%" />
+<col width="86%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Port</th>
+<th class="head">Dir</th>
+<th class="head">Data Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>sync</td>
+<td>In</td>
+<td>Boolean</td>
+<td>Indicates the next clock cycle which contains valid data.</td>
+</tr>
+<tr class="row-odd"><td>theta_fract</td>
+<td>In</td>
+<td>Unsigned</td>
+<td>Sets the integer number required for fine delay correction.The bitwidth is equal to the address width for SineCos LUT. The method of calculating the range of integer required for the fine delay correction is explained in Description.</td>
+</tr>
+<tr class="row-even"><td>theta_fs</td>
+<td>In</td>
+<td>Unsigned</td>
+<td>Sets the integer value equivalent to the initial phase value for fringe stop . The bitwidth is equal to the address width for SineCos LUT. Hence the possible range for initial phase varies from 0 to 2^theta_bits.</td>
+</tr>
+<tr class="row-odd"><td>fft_fs</td>
+<td>In</td>
+<td>Unsigned</td>
+<td>Sets the number of FFT cycles after which fringe update rate need to be applied.</td>
+</tr>
+<tr class="row-even"><td>en_theta_fs</td>
+<td>In</td>
+<td>Unsigned</td>
+<td>This is the one bit control signal required to upload the new initial phase required for fringe stop. The new initial phase value gets loaded only at the posedge of this signal.</td>
+</tr>
+<tr class="row-odd"><td>pol_in</td>
+<td>In</td>
+<td>Inherited</td>
+<td>The frequency domain stream from the FFT module.</td>
+</tr>
+<tr class="row-even"><td>sync_out</td>
+<td>Out</td>
+<td>Boolean</td>
+<td>Indicates that data out will be valid next clock cycle.</td>
+</tr>
+<tr class="row-odd"><td>out</td>
+<td>Out</td>
+<td>Inherited</td>
+<td>The fine delay and fringe stop corrected frequency channels.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>This block performs the fine delay correction along with the fringe
+stop. This block accepts the simultaneous stream of data from the FFT
+module and has a run time programmable fine delay correction along with
+the fringe stopping.</p>
+<p><strong>Note:</strong> This block is specifically compatible with the
+“fft_wideband_real” module. For other FFT modules changes will be
+required in this block depending upon the way in which the data is
+output from the FFT module.</p>
+<p><strong>Fine Delay Correction:</strong></p>
+<p>Masking parameters like <em>theta_bits</em> and <em>sine_cos_bits</em> decides the
+resolution of the phase required for fine delay and fringe stop.</p>
+<p>For eg. theta_bits = 14 will generate a SineCos LUT with a depth of
+2^14=16K, hence the resolution is of 0.02197 degrees. Consider the
+correlator design with specifications like bandwidth = 300MHz and no. of
+FFT channels = fft_len = 1024, then the maximum integer value of
+theta_fract (i.e. max fine delay = 1 clk cycle)will be x = (2^
+theta_bits)/ (fft_len/2) = 32</p>
+<p>Thus 1/32th of the clock cycle delay can be compensated with the above
+parameters.</p>
+<p><strong>Fringe Stop:</strong></p>
+<p>Masking parameter <em>fft_cycle_bits</em> determines the maximum number of
+FFT cycles after which the fringe phase will be incremented.</p>
+<p>For eg. Let the sync period is of 2^27 clks and number of FFT points be
+2^10 then the maximum number of FFT cycles for incrementing the fringe
+phase by amount of resolution set for the Sine-Cos LUT = 2^27 / 2^10 =
+2^17</p>
+<p>It means that minimum rate of incrementing fringe phase by 0.02197
+degrees is after 2^17 FFT cycles.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Finedelay_fstop_prog_cordic.html" class="btn btn-neutral float-right" title="Programmable Fine Delay w/ Fringe stop, CORDIC" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Fft_wideband_real.html" class="btn btn-neutral" title="Real-sampled Wideband FFT" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Collaboration for Astronomy Signal Processing and Electronics Research.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
