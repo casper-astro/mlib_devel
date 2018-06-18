@@ -218,6 +218,8 @@ System Blocks
 
 :doc:`gpio <src/GPIO>`       (GPIO)
 
+:doc:`gpio_bidir <src/gpio_bidir>`      (Bi-directional GPIO)
+
 :doc:`qdr <src/Qdr>`     (QDR)
 
 :doc:`snapshot <src/Snapshot>`       (Snapshot Capture)
@@ -247,6 +249,7 @@ System Blocks
     src/Dac
     src/Dram
     src/GPIO
+    src/gpio_bidir
     src/Qdr
     src/Snapshot
     src/Snap

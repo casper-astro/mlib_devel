@@ -32,3 +32,4 @@ xps_base/XPS_ROACH2_base/system.xmp.updated
 vivado_pid*.str
 
 .Xil/
+docs/_build/
