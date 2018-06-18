@@ -642,7 +642,8 @@ class VerilogModule(object):
             n_ports = len(self.ports[block].keys())
             i = 1
             s += self.gen_cur_blk_comment(block, self.ports[block])
-            for name, port in sorted(self.ports[block].items(), key=operator.itemgetter(1)):
+            # sort by port type then alphabetically
+            for port in sorted(self.ports[block].values(), key=operator.attrgetter('dir', 'name')):
                 logger.debug('Generating port %s'%port.name)
                 if port.width == 0:
                     s += '    %s %s'%(kwm[port.dir],port.name)
@@ -666,7 +667,8 @@ class VerilogModule(object):
         s = ''
         for block in self.ports.keys():
             s += self.gen_cur_blk_comment(block, self.ports[block])
-            for pn, port in sorted(self.ports[block].items(), key=operator.itemgetter(1)):
+            # sort port type then alphabetically
+            for port in sorted(self.ports[block].values(), key=operator.attrgetter('dir', 'name')):
                 # set up indentation nicely
                 s += '  '
                 # first write attributes
@@ -776,7 +778,7 @@ class VerilogModule(object):
         for block in self.ports.keys():
             n_ports = len(self.ports[block])
             n = 0
-            for portname, port in sorted(self.ports[block].items()):
+            for port in sorted(self.ports[block].values()):
                 s += '    .%s(%s)'%(port.name, port.signal.rstrip(' '))
                 if n != (n_ports - 1):
                     s += ',\n'
