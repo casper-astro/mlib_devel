@@ -225,7 +225,7 @@ class VerilogModule(object):
         """
         self.cur_blk = cur_blk
         if cur_blk not in self.ports.keys():
-            logger.debug('Initializing second-layer dictionary for: %s'%cur_blk)
+            logger.debug('Initializing second-layer dictionairies for: %s'%cur_blk)
             self.ports[cur_blk] = {}
             self.parameters[cur_blk] = {}
             self.localparams[cur_blk] = {}
@@ -435,6 +435,7 @@ class VerilogModule(object):
         Add ports and signals associated with child instances
         """
         for block in self.instances.keys():
+            self.set_cur_blk(block)
             for instname, inst in self.instances[block].items():
                 logger.debug('Instantiating child ports for %s'%instname)
                 for blk in inst.ports.keys():
@@ -638,9 +639,13 @@ class VerilogModule(object):
         """
         s = ''
         kwm = {'in':'input','out':'output','inout':'inout'}
+        n_ports = 0
+        i = 1
+        # get total number of ports
         for block in self.ports.keys():
-            n_ports = len(self.ports[block].keys())
-            i = 1
+            n_ports += len(self.ports[block].keys())
+
+        for block in self.ports.keys():
             s += self.gen_cur_blk_comment(block, self.ports[block])
             # sort by port type then alphabetically
             for port in sorted(self.ports[block].values(), key=operator.attrgetter('dir', 'name')):
@@ -655,6 +660,7 @@ class VerilogModule(object):
                     s += ' // %s'%port.comment
                 s += '\n'
                 i += 1
+        logger.debug('i: %d n_ports: %d'%(i,n_ports))
         return s
 
     def gen_ports_dec_str(self):
@@ -778,7 +784,7 @@ class VerilogModule(object):
         for block in self.ports.keys():
             n_ports = len(self.ports[block])
             n = 0
-            for port in sorted(self.ports[block].values()):
+            for pn, port in sorted(self.ports[block].items()):
                 s += '    .%s(%s)'%(port.name, port.signal.rstrip(' '))
                 if n != (n_ports - 1):
                     s += ',\n'
@@ -851,6 +857,11 @@ class VerilogModule(object):
         return None
 
     def gen_cur_blk_comment(self, cur_blk, dict):
+        """
+        This helper function returns the current block string,
+        if the dictionary is not empty and the current block 
+        is not 'default'.
+        """
         # is the dictionary empty?
         if dict and cur_blk != 'default':
             return '  // %s\n'%cur_blk
