@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Stopwatch &mdash; CASPER Block Documentation 0.1 documentation</title>
+  <title>Bi-directional GPIO &mdash; CASPER Block Documentation 0.1 documentation</title>
   
 
   
@@ -28,8 +28,8 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Enabled Sync Delay" href="Sync_delay_en.html" />
-    <link rel="prev" title="Square Transposer" href="Square_transposer.html" /> 
+    <link rel="next" title="QDR" href="Qdr.html" />
+    <link rel="prev" title="GPIO" href="GPIO.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -79,7 +79,7 @@
             
             
               <p class="caption"><span class="caption-text">Signal Processing Blocks</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="Adder_tree.html">Adder Tree</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="Adder_tree.html#summary">Summary</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Adder_tree.html#mask-parameters">Mask Parameters</a></li>
@@ -438,11 +438,11 @@
 <li class="toctree-l2"><a class="reference internal" href="Square_transposer.html#description">Description</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Stopwatch</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#mask-parameters">Mask Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#ports">Ports</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Stopwatch.html">Stopwatch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Stopwatch.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Stopwatch.html#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Stopwatch.html#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Stopwatch.html#description">Description</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Sync_delay_en.html">Enabled Sync Delay</a><ul>
@@ -516,7 +516,7 @@
 </li>
 </ul>
 <p class="caption"><span class="caption-text">System Blocks</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Adc.html">ADC</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="Adc.html#summary">Summary</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Adc.html#mask-parameters">Mask Parameters</a></li>
@@ -594,11 +594,11 @@
 <li class="toctree-l2"><a class="reference internal" href="GPIO.html#notes">Notes</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="gpio_bidir.html">Bi-directional GPIO</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="gpio_bidir.html#summary">Summary</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gpio_bidir.html#mask-parameters">Mask Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gpio_bidir.html#ports">Ports</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gpio_bidir.html#notes">Notes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Bi-directional GPIO</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mask-parameters">Mask Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ports">Ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#notes">Notes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Qdr.html">QDR</a><ul>
@@ -728,13 +728,13 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Stopwatch</li>
+      <li>Bi-directional GPIO</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/src/Stopwatch.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/src/gpio_bidir.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -747,12 +747,12 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="stopwatch">
-<h1>Stopwatch<a class="headerlink" href="#stopwatch" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="bi-directional-gpio">
+<h1>Bi-directional GPIO<a class="headerlink" href="#bi-directional-gpio" title="Permalink to this headline">¶</a></h1>
 <div class="line-block">
-<div class="line"><strong>Block:</strong> Stopwatch (<code class="docutils literal notranslate"><span class="pre">stopwatch</span></code>)</div>
-<div class="line"><strong>Block Author</strong>: Jason Manley</div>
-<div class="line"><strong>Document Author</strong>: Jason Manley</div>
+<div class="line"><strong>Block:</strong> Bi-directional GPIO (<code class="docutils literal notranslate"><span class="pre">gpio_bidir</span></code>)</div>
+<div class="line"><strong>Block Author</strong>: Brian Bradford</div>
+<div class="line"><strong>Document Author</strong>: Brian Bradford</div>
 </div>
 <table border="1" class="docutils">
 <colgroup>
@@ -764,7 +764,7 @@
 <li><a class="reference external" href="#summary">Summary</a></li>
 <li><a class="reference external" href="#mask-parameters">Mask Parameters</a></li>
 <li><a class="reference external" href="#ports">Ports</a></li>
-<li><a class="reference external" href="#description">Description</a></li>
+<li><a class="reference external" href="#notes">Notes</a></li>
 </ul>
 </td>
 </tr>
@@ -772,20 +772,46 @@
 </table>
 <div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
-<p>Counts the number of clocks between a start and stop pulse.</p>
+<p>The gpio_bidir block provides an Bi-diectional GPIO interface.</p>
 </div>
 <div class="section" id="mask-parameters">
 <h2>Mask Parameters<a class="headerlink" href="#mask-parameters" title="Permalink to this headline">¶</a></h2>
-<p>None.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="16%" />
+<col width="61%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Variable</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>I/O group</td>
+<td>io_group</td>
+<td>Selects the GPIO header on the board.</td>
+</tr>
+<tr class="row-odd"><td>Data bitwidth</td>
+<td>bitwidth</td>
+<td>Specifies data bitwidth.</td>
+</tr>
+<tr class="row-even"><td>GPIO bit index</td>
+<td>bit_index</td>
+<td>Specifies the pin on the selected GPIO header.</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="ports">
 <h2>Ports<a class="headerlink" href="#ports" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="15%" />
-<col width="8%" />
-<col width="16%" />
-<col width="61%" />
+<col width="7%" />
+<col width="14%" />
+<col width="64%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Port</th>
@@ -795,37 +821,28 @@
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>start</td>
+<tr class="row-even"><td>din</td>
 <td>in</td>
-<td>boolean</td>
-<td>Start counting</td>
+<td>inherited</td>
+<td>Data input (size set by Data bitwidth parameter in bits)</td>
 </tr>
-<tr class="row-odd"><td>stop</td>
+<tr class="row-odd"><td>in_not_out</td>
 <td>in</td>
-<td>boolean</td>
-<td>Stop counting and hold value until reset received</td>
+<td>inherited</td>
+<td>The control signal, 1 for input and 0 for output.</td>
 </tr>
-<tr class="row-even"><td>reset</td>
-<td>in</td>
-<td>boolean</td>
-<td>Reset back to zero.</td>
-</tr>
-<tr class="row-odd"><td>count_out</td>
+<tr class="row-even"><td>dout</td>
 <td>out</td>
-<td>ufix_32_0</td>
-<td>Number of clocks elapsed since start pulse received.</td>
+<td>inherited</td>
+<td>The data output.</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="section" id="description">
-<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
-<p>This block counts the number of clocks between a start and stop pulse.
-This value is held until a reset is received. If another start pulse is
-received before the reset, counting resumes from where it left-off. If a
-reset is received mid-way through a count (ie before a stop pulse) then
-the stopwatch will be reset and await another start pulse before it
-restarts counting.</p>
+<div class="section" id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<p>When using bitwidths greater than one, you should specify a vector of bit indices to use. GPIO bit index should have the same number of elements as the I/O bitwidth.</p>
+<p>Example: If you set Data bitwidth to 4, you might want you use GPIO bit indices [0, 1, 2, 3].</p>
 </div>
 </div>
 
@@ -837,10 +854,10 @@ restarts counting.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="Sync_delay_en.html" class="btn btn-neutral float-right" title="Enabled Sync Delay" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="Qdr.html" class="btn btn-neutral float-right" title="QDR" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="Square_transposer.html" class="btn btn-neutral" title="Square Transposer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="GPIO.html" class="btn btn-neutral" title="GPIO" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

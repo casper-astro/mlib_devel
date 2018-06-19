@@ -33,3 +33,4 @@ vivado_pid*.str
 
 .Xil/
 docs/_build/
+!docs/_build/html/src
