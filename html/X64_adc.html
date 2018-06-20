@@ -1,0 +1,159 @@
+<!-- start content -->
+			<p><b>Block:</b> x64_adc (<code>x64_adc</code>)<br />
+<b>Block Author</b>: Jack Hickish, David George<br />
+<b>Document Author</b>: Jack Hickish<br />
+</p>
+<table id="toc" class="toc"><tr><td><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Summary"><span class="tocnumber">1</span> <span class="toctext">Summary</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Mask_Parameters"><span class="tocnumber">2</span> <span class="toctext">Mask Parameters</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Ports"><span class="tocnumber">3</span> <span class="toctext">Ports</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Description"><span class="tocnumber">4</span> <span class="toctext">Description</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Background"><span class="tocnumber">4.1</span> <span class="toctext">Background</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Connecting_the_ADC"><span class="tocnumber">4.2</span> <span class="toctext">Connecting the ADC</span></a>
+<ul>
+<li class="toclevel-3 tocsection-7"><a href="#Clock_Selection"><span class="tocnumber">4.2.1</span> <span class="toctext">Clock Selection</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#Reset_signal"><span class="tocnumber">4.2.2</span> <span class="toctext">Reset signal</span></a></li>
+<li class="toclevel-3 tocsection-9"><a href="#SPI_Interface"><span class="tocnumber">4.2.3</span> <span class="toctext">SPI Interface</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-10"><a href="#Usage"><span class="tocnumber">4.3</span> <span class="toctext">Usage</span></a>
+<ul>
+<li class="toclevel-3 tocsection-11"><a href="#ADC_Synchronization"><span class="tocnumber">4.3.1</span> <span class="toctext">ADC Synchronization</span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#Data_Output"><span class="tocnumber">4.3.2</span> <span class="toctext">Data Output</span></a></li>
+<li class="toclevel-3 tocsection-13"><a href="#Data_Input"><span class="tocnumber">4.3.3</span> <span class="toctext">Data Input</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</td></tr></table><script>if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+<h2> <span class="mw-headline" id="Summary"> Summary </span></h2>
+<p>The x64_ADC block converts 64 analog inputs to digital outputs. Every clock cycle, the inputs are sampled and digitized to 12 bit binary point numbers in the range of [-1, 1).
+</p>
+<h2> <span class="mw-headline" id="Mask_Parameters"> Mask Parameters </span></h2>
+<table width="500" border="1" cellpadding="3">
+<tr>
+<th> Parameter
+</th><th> Variable
+</th><th> Description
+</th></tr>
+<tr>
+<td> ADC clock rate (MHz)
+</td><td> adc_clk_rate
+</td><td> Sets the rate of the ADC sampling clock. The ROACH clock is derived from the ADC clock and should be 4x the clock rate entered here.
+</td></tr>
+<tr>
+<td> Include SPI interface?
+</td><td> spi
+</td><td> If checked, includes the ports and logic necessary to set the ADC control registers via SPI.
+</td></tr>
+<tr>
+<td> GPIO bank
+</td><td> ctrl_gpio
+</td><td> The ADC SPI and reset interfaces are not routed through the ZDOK connector. This parameter selects which of the ROACH GPIO banks to use to control them.
+</td></tr>
+</table>
+<h2> <span class="mw-headline" id="Ports"> Ports </span></h2>
+<table width="500" border="1" cellpadding="3">
+<tr>
+<th> Port
+</th><th> Dir
+</th><th> Data Type
+</th><th> Description
+</th></tr>
+<tr>
+<td> sim[0:15]
+</td><td> IN
+</td><td> double
+</td><td> sim&lt;n&gt; should be connected to analogue channels 4n:4n+3 to be digitized. Note: For simulation only.
+</td></tr>
+<tr>
+<td> sim_sync
+</td><td> IN
+</td><td> double
+</td><td> Input should be high when channel 4n is present on input sim&lt;n&gt;. Note: For simulation only.
+</td></tr>
+<tr>
+<td> adc_rst
+</td><td> IN
+</td><td> Bool
+</td><td> Active high reset signal, used to reset FIFOs and adc chip.
+</td></tr>
+<tr>
+<td> sdata
+</td><td> IN
+</td><td> UFix_8_0
+</td><td> Data to be written to the ADC registers over SPI. sdata[7:4] represents the register address, sdata[3:0] represents the new value to be written. Present only when SPI interface is enabled.
+</td></tr>
+<tr>
+<td> spi_strb
+</td><td> IN
+</td><td> Bool
+</td><td> SPI write strobe. When a positive edge is detected on this port an SPI write is initiated using the data and address presented on input sdata. Present only when SPI interface is enabled.
+</td></tr>
+<tr>
+<td> dout[0:15]
+</td><td> OUT
+</td><td> Fix_12_11
+</td><td> Four consecutive values of the signal represent a single time sample from four channels, with dout&lt;n&gt; representing channels 4n:4n+3.
+</td></tr>
+<tr>
+<td> chan_sync
+</td><td> OUT
+</td><td> UFix_8_0
+</td><td> A signal which goes high when a sample from channel 4n is present on output dout&lt;n&gt;. The 8 bits of the signal are used to sync the 8 individual ADC chips on the ADC card.
+</td></tr>
+</table>
+<h2> <span class="mw-headline" id="Description"> Description </span></h2>
+<h3> <span class="mw-headline" id="Background"> Background </span></h3>
+<p>The x64_adc block is an interface to the <a href="/wiki/64ADCx64-12" title="64ADCx64-12">64ADCx64-12</a> board developed by Rick Raffanti. The board is based around 8 <a href="http://www.ti.com/general/docs/lit/getliterature.tsp?baseLiteratureNumber=SBAS324&amp;track=no" class="external text" rel="nofollow">Texas Instruments ADS5272</a> chips, each digitizing 8 signals at 12 bits resolution and up to 65MSa/s. The ADCs can be clocked by an on-board 50MHz oscillator, or an external clock source.
+</p>
+<h3> <span class="mw-headline" id="Connecting_the_ADC">Connecting the ADC</span></h3>
+<p>The <a href="/wiki/64ADCx64-12" title="64ADCx64-12">64ADCx64-12</a> is a twin Z-DOK card. Only one can be connected to a ROACH board.
+</p>
+<h4> <span class="mw-headline" id="Clock_Selection">Clock Selection</span></h4>
+<p>The x64_adc card includes an on-board 50MHz oscillator, but can also be driven by an external clock.
+</p><p>Header J4 controls selection of the ADC clock source. Leave J4 open to use the on-board 50MHz oscillator, or jumper J4 to use an external clock applied across resistor R9 via pins 36 and 38 of header J13.
+</p>
+<h4> <span class="mw-headline" id="Reset_signal">Reset signal</span></h4>
+<p>The reset pin is located on pin 4 of J13. This signal is active low, and should be held high for normal operation. The yellow block interface is configured to drive the ADC reset pin via GPIO&lt;A|B&gt;_0, depending on the block parameter specified by the user. Note that the reset on the yellow block interface is active HIGH.
+When the ADC is held in reset, data output on the yellow block data lines will be the value -1 for all channels, in Fix_12_11 format.
+</p>
+<h4> <span class="mw-headline" id="SPI_Interface">SPI Interface</span></h4>
+<p>Various ADC features (including test patterns) can be activated by using a <a href="http://en.wikipedia.org/wiki/Serial_Peripheral_Interface_Bus" class="external text" rel="nofollow">Serial Peripheral Interface</a> to set the registers as defined in the <a href="http://www.ti.com/general/docs/lit/getliterature.tsp?baseLiteratureNumber=SBAS324&amp;track=no" class="external text" rel="nofollow">ADS5272 data sheet</a>. Physical connections are as follows:<br />
+<b>ADC pins</b>
+</p>
+<ul><li> SCLK: pin 36, J12
+</li><li> SDATA: pin 38, J12
+</li><li> nCS: (ADC chip <i>n</i>): pin (20 + 2<i>n</i>), J12
+</li></ul>
+<p><b>ROACH pins</b>
+</p>
+<ul><li> SCLK: GPIO&lt;A|B&gt;_2
+</li><li> SDATA: GPIO&lt;A|B&gt;_1
+</li><li> nCS: GPIO&lt;A|B&gt;_3
+</li></ul>
+<p>Where the GPIO port to use is determined by user-specified mask parameter.
+To write SPI registers, the "include SPI interface" option should be activated in the x64_adc yellow block parameters. This should expose the input ports "sdata" and "spi_strb" to the user. When a positive edge is detected on spi_strb, the data on sdata[3:0] is written to address sdata[7:4]. Currently, due to limited ROACH GPIO and lack of requirement, only one nCS signal is used by the yellow block. This can be connected to all ADC nCS pins, to write registers on all chips simultaneously.
+</p>
+<h3> <span class="mw-headline" id="Usage"> Usage </span></h3>
+<p>The x64_adc block can take 64 analog input streams. The inputs are digitized to <code>Fix_12_11</code> numbers between [-1, 1).
+</p>
+<h4> <span class="mw-headline" id="ADC_Synchronization">ADC Synchronization</span></h4>
+<p>The ADC card uses 8 separate chips, each providing its own clock over ZDOK to the FPGA. Rather than use all 8 clocks (some of which are not connected to clock enabled FPGA pins), a single clock is used, and the software calibration script <a href="/wiki/File:X64_adc_cal.txt" title="File:X64 adc cal.txt">File:X64 adc cal.txt</a> is run to ensure that data from all ADC chips is properly aligned.
+</p><p>Note: There may be a problem while running this script as is. In case there is a problem While running the version available in the repository and throws the following error: unknown'x64_adc_ctrl' variable, it can be fixed by adding the following line to the core_info.tab in the local repository (mlib_devel/blob/master/xps_base/XPS_ROACH_base/core_info.tab)
+</p>
+<ol><li>IF# strcmp(get(b,'type'),'xps_x64_adc')#x64_adc_ctrl 3 10000 100
+</li></ol>
+<p>Also, the following line of calibration script which is no longer supported by the 'corr' package can be removed (it seems this line was just meant for debugging).
+</p><p>fclk_sampled = self.bit_string((val0&amp;0x0fff),12)
+</p>
+<h4> <span class="mw-headline" id="Data_Output">Data Output</span></h4>
+<p>The 64 channels digitized by the ADC are presented to the user as 16 data output signals. Each signal will cycle through four multiplexed channels every four clock cycles. For example, in four consecutive clock cycles a sample from channels 0,1,2,3 will appear on output "dout0". In the following four clock cycles, the next time sample will appear. Output dout&lt;n&gt; is responsible for samples from channels 4<i>n</i>, 4<i>n</i>+1, 4<i>n</i>+2 and 4<i>n</i>+3. Physically, ADC chip <i>m</i> is responsible for channels 8<i>m</i>, 8<i>m</i>+1, ..., 8<i>m</i>+7.<br />
+It is possible to identify the channels presented on each output by observing the chan_sync output, which is high when sample 4<i>n</i> is present on output dout&lt;n&gt;. The 8 bits of chan_sync give the sync flag associated with each of the 8 ADC chips. Proper calibration should ensure that all chips are synchronized. In this case, the chan_sync output should output zero, with the value 255 appearing once every four clocks.
+</p>
+<h4> <span class="mw-headline" id="Data_Input">Data Input</span></h4>
+<p>Data can be input for simulation using the sim&lt;n&gt; and sim_sync inputs. These inputs are passed straight to the dout&lt;n&gt; and chan_sync outputs, and should be controlled accordingly, taking into account the data output details above.
+</p>

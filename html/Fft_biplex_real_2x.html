@@ -1,0 +1,237 @@
+<!-- start content -->
+			<p><b>Block:</b> Real-sampled Biplex FFT (with output demuxed by 2) (<code>fft_biplex_real_2x</code>)<br />
+<b>Block Author</b>: Aaron Parsons<br />
+<b>Block Maintainer</b>: Andrew Martens<br />
+<b>Document Author</b>: Aaron Parsons, Andrew Martens<br />
+</p>
+<table id="toc" class="toc"><tr><td><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Summary"><span class="tocnumber">1</span> <span class="toctext">Summary</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Mask_Parameters"><span class="tocnumber">2</span> <span class="toctext">Mask Parameters</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Ports"><span class="tocnumber">3</span> <span class="toctext">Ports</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Description"><span class="tocnumber">4</span> <span class="toctext">Description</span></a></li>
+</ul>
+</td></tr></table><script>if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+<h2> <span class="mw-headline" id="Summary"> Summary </span></h2>
+<p>Computes the real-sampled Fast Fourier Transform using the standard Hermitian conjugation trick to use a complex core to transform a two real streams.  Thus, a biplex core (which can do 2 complex FFTs) can transform 4 real streams. Twiddle factor, and other logic sharing, allows multiples of 4 input streams to be processed simultaneously with minimal resource increases. Only positive frequencies are output (negative frequencies are the mirror images of their positive counterparts).  Data is output in normal frequency order, meaning that channel 0 (corresponding to DC) is output first, followed by channel 1, on up to channel <span class="texhtml">2<sup><i>N</i> &minus; 1</sup> &minus; 1</span>.  Real inputs 0 and 2 share one output port (with the data for 0 coming first, then the data for 2), likewise for inputs 1 and 3, and so on.
+</p><p>Please note that this documentation refers to the latest version of this block and may not be valid for older versions, please look in the history for older versions of this documentation.
+</p>
+<h2> <span class="mw-headline" id="Mask_Parameters"> Mask Parameters </span></h2>
+<table width="1200" border="1" cellpadding="3">
+<tr>
+<th> Parameter
+</th><th> Variable
+</th><th> Description
+</th><th> Recommended Value
+</th></tr>
+<tr>
+<td> Number simultaneous inputs (4*?)
+</td><td> n_inputs
+</td><td> The number of inputs the FFT is to process as a multiple of 4.
+</td><td>
+</td></tr>
+<tr>
+<td> Size of FFT: (2^?)
+</td><td> FFTSize
+</td><td> The number of channels computed in the complex FFT core.  The number of channels output for each real stream is half of this.
+</td><td>
+</td></tr>
+<tr>
+<td> Input bit width
+</td><td> input_bit_width
+</td><td> The number of bits in each real and imaginary sample as they are input to the FFT.  If bit growth is not chosen, each FFT stage will round numbers back down to this number of bits after performing a butterfly computation. If bit growth is chosen, the number of bits will increase by one with every FFT stage up to the maximum specified.
+</td><td> To make optimal use of BRAMs =&gt; <br /> 18 <br />
+<p>For low FFT noise  =&gt; <br /> 25 <br />
+</p>
+</td></tr>
+<tr>
+<td> Input binary point
+</td><td> bin_pt
+</td><td> The position of the binary point in the input data
+</td><td>
+</td></tr>
+<tr>
+<td> Coefficient Bit Width
+</td><td> coeff_bit_width
+</td><td> The number of bits used in the real and imaginary part of the twiddle factors at each stage.
+</td><td> 18
+</td></tr>
+<tr>
+<td> Asynchronous operation
+</td><td> async
+</td><td> Whether valid data is input on every clock cycle or is flagged via the en input port.
+</td><td>
+</td></tr>
+<tr>
+<td> Quantization Behavior
+</td><td> quantization
+</td><td> Specifies the rounding behaviour used at the end of each twiddle and butterfly computation to return to the number of bits if bit growth is not enabled or to keep the number of bits at the maximum specified.
+</td><td> NOT Truncate.
+</td></tr>
+<tr>
+<td> Overflow Behavior
+</td><td> overflow
+</td><td> Indicates the behaviour of the FFT core when the value of a sample exceeds what can be expressed in the specified bit width.
+</td><td>
+</td></tr>
+<tr>
+<td> Add Latency
+</td><td> add_latency
+</td><td> Latency through adders in the FFT.
+</td><td> 1
+</td></tr>
+<tr>
+<td> Mult Latency
+</td><td> mult_latency
+</td><td> Latency through multipliers in the FFT.
+</td><td> 2
+</td></tr>
+<tr>
+<td> BRAM Latency
+</td><td> bram_latency
+</td><td> Latency through BRAM in the FFT.
+</td><td> 2 For designs aimed at &gt; 200MHz =&gt; 3
+</td></tr>
+<tr>
+<td> Convert Latency
+</td><td> conv_latency
+</td><td> Latency through blocks used to reduce bit widths after twiddle and butterfly stages.
+</td><td> 1 For designs aimed at &gt; 180Mhz =&gt; 2
+</td></tr>
+<tr>
+<td> Number bits above which to store stage's coefficients in BRAM (2^? bits)
+</td><td> coeffs_bit_limit
+</td><td> Determines the threshold at which the twiddle coefficients in a stage are stored in BRAM. Below this threshold distributed RAM is used.
+</td><td> 8 (ensures at least 2^8=256 bits out of 18432 bits of BRAM used)
+</td></tr>
+<tr>
+<td> Number bits above which to implement stage's delays in BRAM (2^? bits)
+</td><td> delays_bit_limit
+</td><td> Determines the threshold at which data delays in a stage are stored in BRAM. Below this threshold distributed RAM is used.
+</td><td> 8 (ensures at least 2^8=256 bits out of 18432 bits of BRAM used)
+</td></tr>
+<tr>
+<td> BRAM sharing in coeff storage
+</td><td> coeff_sharing
+</td><td> Real and imaginary components of twiddle factors can be generated from the same set of coefficients, reducing BRAM use at the cost of some logic.
+</td><td>
+</td></tr>
+<tr>
+<td> Store a fraction of coeff factors where useful
+</td><td> coeff_decimation
+</td><td> The full set of twiddle factors can be generated from a smaller set, reducing BRAM use at the cost of the some logic.
+</td><td>
+</td></tr>
+<tr>
+<td> Maximum fanout
+</td><td> max_fanout
+</td><td> The maximum fanout the twiddle factors are allowed to experience between where they are generated and when they are multiplied with the data stream. As the coefficients are shared, large fanout can occur which can affect maximum timing achievable. Decreasing the maximum fanout allowed should increase possible performance at the expense of some logic.
+</td><td>
+</td></tr>
+<tr>
+<td> Multiplier specification (0=core, 1=embedded, 2=behavioural) (left=1st stage)
+</td><td> mult_spec
+</td><td> Array of values allowing exact specification of how multipliers are implemented at each stage. A single value indicates all multipliers be implemented in the same way.
+</td><td> 2 (behavioral HDL) for each stage
+</td></tr>
+<tr>
+<td> Bit growth instead of shifting
+</td><td> bit_growth
+</td><td> Bit growth at every stage in the FFT can result in overflows which affect data quality. This can be prevented by dividing the data by two on the output of every stage, or by increasing the number of bits in the data stream by one bit. Shifting decreases the dynamic range and possible data quality whereas bit growth increases the resource requirements.
+</td><td>
+</td></tr>
+<tr>
+<td> Max bits to growth to
+</td><td> max_bits
+</td><td> The maximum number of bits to increase the data path to when the bit growth option is chosen. Shifting is used for FFT stages after this.
+</td><td>
+</td></tr>
+<tr>
+<td> Hardcode shift schedule
+</td><td> hardcode_shifts
+</td><td> When shifting to prevent overflow, use a fixed shifting schedule. This uses less logic and increases performance when compared to using a dynamic shift schedule.
+</td><td>
+</td></tr>
+<tr>
+<td> Shift schedule
+</td><td> shift_schedule
+</td><td> When using a fixed shift schedule, use the shift schedule specified. A '1' at position M in the array indicates a shift for the M'th FFT stage, a '0' indicates no shift.
+</td><td>
+</td></tr>
+<tr>
+<td> DSP48 adders in butterfly
+</td><td> dsp48_adders
+</td><td> The butterfly operation at each stage consists of two adders and two subtracters that can be implemented using DSP48 units instead of logic.
+</td><td> on (enabled) to reduce logic use.
+</td></tr>
+</table>
+<h2> <span class="mw-headline" id="Ports"> Ports </span></h2>
+<table width="1200" border="1" cellpadding="3">
+<tr>
+<th> Port
+</th><th> Dir
+</th><th> Data Type
+</th><th> Description
+</th><th> Recommended Use
+</th></tr>
+<tr>
+<td> sync
+</td><td> in
+</td><td> Boolean
+</td><td> sync is used to indicate the last data word of a frame of input data. When the block is in asynchronous operating mode an active signal is aligned with en being active. When the block is in synchronous operating mode, a an active pulse is aligned with the clock cycle before the first valid data of a new input frame.
+</td><td> Ensure the sync period complies with the memo describing correct use.
+</td></tr>
+<tr>
+<td> shift
+</td><td> in
+</td><td> Unsigned
+</td><td> Sets the shifting schedule through the FFT to prevent overflow.  Bit 0 specifies the behavior of stage 0, bit 1 of stage 1, and so on.
+<p>If a stage is set to shift (with bit = 1), then every sample is divided by 2 at the output of that stage.
+</p>
+</td><td>
+</td></tr>
+<tr>
+<td> pol
+</td><td> in
+</td><td> Signed consisting of one (Input Bit Width) width signals per input.
+</td><td> The time-domain stream(s) to be channelised.
+</td><td> Data amplitude should not exceed 0.5 (divide data by 2 pre-FFT)
+</td></tr>
+<tr>
+<td> en
+</td><td> in
+</td><td> Boolean
+</td><td> When asynchronous operation is chosen, this port indicates that valid input data is available on all input data ports.
+</td><td>
+</td></tr>
+<tr>
+<td> sync_out
+</td><td> out
+</td><td> Boolean
+</td><td> Indicates that data out will be valid next clock cycle when in synchronous mode, or when dvalid is next active.
+</td><td>
+</td></tr>
+<tr>
+<td> pol_out
+</td><td> out
+</td><td> Inherited
+</td><td> The frequency channels.
+</td><td>
+</td></tr>
+<tr>
+<td> of
+</td><td> out
+</td><td> Unsigned, one bit per 4 inputs
+</td><td> Indication of internal arithmetic overflow. Not time aligned with data. The most significant bit is the flag for pol0_in, pol1_in, pol2_in and pol3_in etc.
+</td><td>
+</td></tr>
+<tr>
+<td> dvalid
+</td><td> out
+</td><td> Boolean
+</td><td> Indicates that valid data is available on all output data ports.
+</td><td>
+</td></tr></table>
+<h2> <span class="mw-headline" id="Description"> Description </span></h2>
+<p>Computes the real-sampled Fast Fourier Transform using the standard Hermitian conjugation trick to use a complex core to transform a two real streams.  Thus, a biplex core (which can do 2 complex FFTs) can transform 4 real streams.  Twiddle factor, and other logic sharing, allows multiples of 4 input streams to be processed simultaneously with minimal resource increases.  Only positive frequencies are output (negative frequencies are the mirror images of their positive counterparts).  Data is output in normal frequency order, meaning that channel 0 (corresponding to DC) is output first, followed by channel 1, on up to channel <span class="texhtml">2<sup><i>N</i> &minus; 1</sup> &minus; 1</span>.  Real inputs 0 and 2 share one output port (with the data for 0 coming first, then the data for 2), likewise for inputs 1 and 3, and so on.
+</p>

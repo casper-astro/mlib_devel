@@ -1,0 +1,63 @@
+<!-- start content -->
+			<p><b>Block:</b> Local Oscillator Constant (<code>lo_const</code>)<br />
+<b>Block Author</b>: Aaron Parsons<br />
+<b>Document Author</b>: Ben Blackman<br />
+</p>
+<table id="toc" class="toc"><tr><td><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Summary"><span class="tocnumber">1</span> <span class="toctext">Summary</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Mask_Parameters"><span class="tocnumber">2</span> <span class="toctext">Mask Parameters</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Ports"><span class="tocnumber">3</span> <span class="toctext">Ports</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Description"><span class="tocnumber">4</span> <span class="toctext">Description</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Usage"><span class="tocnumber">4.1</span> <span class="toctext">Usage</span></a></li>
+</ul>
+</li>
+</ul>
+</td></tr></table><script>if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+<h2> <span class="mw-headline" id="Summary"> Summary </span></h2>
+<p>Gives the sine and cosine of a desired constant phase.
+</p>
+<h2> <span class="mw-headline" id="Mask_Parameters"> Mask Parameters </span></h2>
+<table width="500" border="1" cellpadding="3">
+<tr>
+<th> Parameter
+</th><th> Variable
+</th><th> Description
+</th></tr>
+<tr>
+<td> Output Bitwidth
+</td><td> n_bits
+</td><td> Bitwidth of the outputs.
+</td></tr>
+<tr>
+<td> Phase (0 to 2*pi)
+</td><td> phase
+</td><td> The phase value for which the sine and cosine are evaluated.
+</td></tr>
+</table>
+<h2> <span class="mw-headline" id="Ports"> Ports </span></h2>
+<table width="500" border="1" cellpadding="3">
+<tr>
+<th> Port
+</th><th> Dir
+</th><th> Data Type
+</th><th> Description
+</th></tr>
+<tr>
+<td> sin
+</td><td> OUT
+</td><td> Fix_(n_bits)_(n_bits-1)
+</td><td> The sine of the given phase value.
+</td></tr>
+<tr>
+<td> cos
+</td><td> OUT
+</td><td> Fix_(n_bits)_(n_bits-1)
+</td><td> The cosine of the given phase value.
+</td></tr>
+</table>
+<h2> <span class="mw-headline" id="Description"> Description </span></h2>
+<h3> <span class="mw-headline" id="Usage"> Usage </span></h3>
+<p>This block gives the sine and cosine of a user-specified, constant phase value with a user-specified bitwidth.
+</p>

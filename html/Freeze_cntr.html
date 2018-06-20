@@ -1,0 +1,71 @@
+<!-- start content -->
+			<p><b>Block:</b> Freeze Counter Block (<code>freeze_cntr</code>)<br />
+<b>Block Author</b>: Aaron Parsons<br />
+<b>Document Author</b>: Aaron Parsons<br />
+</p>
+<table id="toc" class="toc"><tr><td><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Summary"><span class="tocnumber">1</span> <span class="toctext">Summary</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Mask_Parameters"><span class="tocnumber">2</span> <span class="toctext">Mask Parameters</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Ports"><span class="tocnumber">3</span> <span class="toctext">Ports</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Description"><span class="tocnumber">4</span> <span class="toctext">Description</span></a></li>
+</ul>
+</td></tr></table><script>if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+<h2> <span class="mw-headline" id="Summary"> Summary </span></h2>
+<p>A freeze counter is an enabled counter which holds its final value (regardless of enables) until it is reset.
+</p>
+<h2> <span class="mw-headline" id="Mask_Parameters"> Mask Parameters </span></h2>
+<table width="500" border="1" cellpadding="3">
+<tr>
+<th> Parameter
+</th><th> Variable
+</th><th> Description
+</th></tr>
+<tr>
+<td> Counter Length (2<span class="texhtml"><sup>?</sup></span>)
+</td><td> CounterBits
+</td><td> Specifies the number of bits (and the final count output of <span class="texhtml">2<sup><i>b</i><i>i</i><i>t</i><i>s</i> &minus; 1</sup>)</span>.
+</td></tr>
+</table>
+<h2> <span class="mw-headline" id="Ports"> Ports </span></h2>
+<table width="500" border="1" cellpadding="3">
+<tr>
+<th> Port
+</th><th> Dir
+</th><th> Data Type
+</th><th> Description
+</th></tr>
+<tr>
+<td> en
+</td><td> in
+</td><td>&nbsp;???
+</td><td> Step the counter by 1 unless addr=<span class="texhtml">2<sup><i>b</i><i>i</i><i>t</i><i>s</i> &minus; 1</sup></span>.
+</td></tr>
+<tr>
+<td> rst
+</td><td> in
+</td><td>&nbsp;???
+</td><td> Reset counter to 0.
+</td></tr>
+<tr>
+<td> addr
+</td><td> out
+</td><td>&nbsp;???
+</td><td> Current output of the counter.
+</td></tr>
+<tr>
+<td> we
+</td><td> out
+</td><td> Boolean
+</td><td> Outputs boolean true just before addr is incremented.
+</td></tr>
+<tr>
+<td> done
+</td><td> out
+</td><td> Boolean
+</td><td> Outputs boolean true when a final en is asserted and addr=<span class="texhtml">2<sup><i>b</i><i>i</i><i>t</i><i>s</i> &minus; 1</sup></span>.
+</td></tr>
+</table>
+<h2> <span class="mw-headline" id="Description"> Description </span></h2>
+<p>A freeze counter is an enabled counter which holds its final value (regardless of enables) until it is reset. Thus, a <span class="texhtml">2<sup>5</sup></span> freeze counter will count from 0 to 31 on 31 enables, but will hold 31 thereafter until a reset occurs. This block is useful for writing data in a single pass to memory without looping.
+</p>

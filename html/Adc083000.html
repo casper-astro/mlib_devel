@@ -1,0 +1,45 @@
+<!-- start content -->
+			<table id="toc" class="toc"><tr><td><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Simulink_.28User.29_Outputs"><span class="tocnumber">1</span> <span class="toctext">Simulink (User) Outputs</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#DCM_Phase_Adjustment"><span class="tocnumber">2</span> <span class="toctext">DCM Phase Adjustment</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Pcore_Architecture"><span class="tocnumber">3</span> <span class="toctext">Pcore Architecture</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Future_Features_.28to_be_implemented.29"><span class="tocnumber">4</span> <span class="toctext">Future Features (to be implemented)</span></a></li>
+</ul>
+</td></tr></table><script>if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+<h2> <span class="mw-headline" id="Simulink_.28User.29_Outputs"> Simulink (User) Outputs </span></h2>
+<ul><li> 8 lanes of 8-bit data, of Simulink type Fix_8_7.
+</li><li> 4 "syncs" for each cycle of the clock signal output from the ADC board, each corresponding to a different cycle of the original undivided clock (which cycle is indicated by the signal index) original un-divided clock signal
+</li><li> 4 "out of range" signals to indicate either positive or negative value saturation (must examine data to determine which) in the same orientation as the sync signals
+</li><li> 1 data valid signal. Self explanatory name.
+</li></ul>
+<h2> <span class="mw-headline" id="DCM_Phase_Adjustment"> DCM Phase Adjustment </span></h2>
+<p>There have been reports of stability issues at higher ADC clock rates (&gt;350MHz). Adjusting the DCM phase seems to solve the problem.
+</p><p>The DCM phase can be manually tuned by changing two lines of Verilog.
+</p><p>In xps_lib, navigate to:
+</p>
+<pre>XPS_ROACH_base/pcores/adc083000x2_interface_v1_00_a/hdl/verilog
+</pre>
+<p>Open these three files:
+</p>
+<pre>adc083000_board_phy.v
+adc083000_board_phy_demux.v
+adc083000_demux_interface.v
+</pre>
+<p>Find these two lines in each file:
+</p>
+<pre>.CLKOUT_PHASE_SHIFT("NONE")
+.PHASE_SHIFT(0)
+</pre>
+<p>Change "NONE" to "FIXED", and set PHASE_SHIFT to 30.
+</p><p>The PHASE_SHIFT parameter can range from -255 to 255, but tests indicate that 30 is the optimal setting.
+</p>
+<h2> <span class="mw-headline" id="Pcore_Architecture"> Pcore Architecture </span></h2>
+<p>LVDS Data =&gt; IBUFDS =&gt; DDR Register =&gt; IORegister =&gt; IORegister =&gt; Asynchronous FIFO =&gt; Simulink
+</p><p>Hopefully a diagram will be soon to follow.
+</p>
+<h2> <span class="mw-headline" id="Future_Features_.28to_be_implemented.29"> Future Features (to be implemented) </span></h2>
+<ul><li> Serial interface
+<ul><li> The <a href="/wiki/ADC1x3000-8" title="ADC1x3000-8">main ADC chip</a> supports a serial interface to set phase/gains for the two sub-ADCs, which are interleaved together for the user to form
+</li></ul>
+</li></ul>

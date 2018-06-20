@@ -31,6 +31,5 @@ xps_base/XPS_ROACH2_base/system.xmp.updated
 *.local
 vivado_pid*.str
 
-.Xil/
+# ignore docs build directory
 docs/_build/
-!docs/_build/html/src
