@@ -216,6 +216,8 @@ System Blocks
 
 :doc:`dram <src/Dram>`       (DRAM)
 
+:doc:`gpio_bidir <src/gpio_bidir>` 	(Bi-directional GPIO)
+
 :doc:`gpio <src/GPIO>`       (GPIO)
 
 :doc:`qdr <src/Qdr>`     (QDR)
@@ -246,6 +248,7 @@ System Blocks
     src/64ADCx64-12
     src/Dac
     src/Dram
+    src/gpio_bidir
     src/GPIO
     src/Qdr
     src/Snapshot
