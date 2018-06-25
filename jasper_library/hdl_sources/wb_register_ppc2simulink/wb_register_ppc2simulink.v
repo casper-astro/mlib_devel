@@ -48,8 +48,6 @@ module wb_register_ppc2simulink #(
     if (wb_rst_i) begin
       register_ready <= 1'b0;
       reg_buffer <= INIT_VAL;
-      wb_dat_reg <= INIT_VAL;
-      user_data_out_reg <= INIT_VAL;
     end else if (wb_stb_i && wb_cyc_i && !wb_ack_reg) begin
       wb_ack_reg <= 1'b1;
       if (wb_we_i) begin
