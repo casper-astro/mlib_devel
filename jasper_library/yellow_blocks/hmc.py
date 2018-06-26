@@ -12,7 +12,7 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
 
     def instantiate_hmcc(self, top, num=None):
         
-        hmcc = top.get_instance(name=self.fullname, entity='hmc', comment=self.fullname)
+        hmcc = top.get_instance(name=self.fullname, entity='hmc')
 
         #import IPython
         #IPython.embed()

@@ -14,7 +14,7 @@ class ten_gbe(YellowBlock):
             return tengbe_v2_xilinx_v6(blk, plat, hdl_root)
 
     def instantiate_ktge(self, top, num=None):
-        ktge = top.get_instance(name=self.fullname, entity='kat_ten_gb_eth', comment=self.fullname)
+        ktge = top.get_instance(name=self.fullname, entity='kat_ten_gb_eth')
         ktge.add_parameter('FABRIC_MAC', "48'h%x"%self.fab_mac)
         ktge.add_parameter('FABRIC_IP', "32'h%x"%self.fab_ip)
         ktge.add_parameter('FABRIC_PORT', self.fab_udp)
@@ -265,7 +265,8 @@ class tengbaser_xilinx_k7(ten_gbe):
         infra.add_port('gtrxreset_out         ', 'gtrxreset_out%d         '%num)
         infra.add_port('txuserrdy_out         ', 'txuserrdy_out%d         '%num)
         infra.add_port('reset_counter_done_out', 'reset_counter_done_out%d'%num)
-        infra.add_port('txclk322', 'txclk322_%d'%self.port)
+        if self.i_am_the_first:
+            infra.add_port('txclk322', 'txclk322_%d'%self.port)
 
     def instantiate_phy(self, top, num):
 

@@ -39,7 +39,7 @@ set_param([blk, '/sync_period_const'], 'const', num2str(sim_sync_period-2));
 % % Update parameters
 % reuse_block( blk, 'sim_sync_period', 'xbsBasic_r4/Constant', 'Position', [385, 123, 510, 147], 'n_bits', num2str(32), 'bin_pt', num2str(0), 'const', num2str(sim_sync_period));
 % % disp('first addline done')
-% %reuse_block( blk, 'gen_sync_period_const', 'xps_library/software_register', 'Position', [385, 168, 510, 192]); %, 'io_dir', 'From Processor'
+% %reuse_block( blk, 'gen_sync_period_const', 'xps_library/Memory/software_register', 'Position', [385, 168, 510, 192]); %, 'io_dir', 'From Processor'
 % 
 % 
 % if use_soft_reg == 0
@@ -56,9 +56,9 @@ set_param([blk, '/sync_period_const'], 'const', num2str(sim_sync_period-2));
 % elseif use_soft_reg == 1,
 % %     disp('Using software reg, not constant')
 % %     delete_block( [blk, '/gen_sync_period']);
-% %     reuse_block( blk, 'gen_sync_period', 'xps_library/software_register', 'Position', [385, 168, 510, 192]); %, 'io_dir', 'From Processor'
+% %     reuse_block( blk, 'gen_sync_period', 'xps_library/Memory/software_register', 'Position', [385, 168, 510, 192]); %, 'io_dir', 'From Processor'
 %     reuse_block( blk, 'sim_input_dummy', 'built-in/Constant', 'Position', [330, 170, 360, 200]);
-%     reuse_block( blk, 'gen_sync_period_soft', 'xps_library/software_register', 'Position', [385, 168, 510, 192], 'io_dir', 'From Processor'); 
+%     reuse_block( blk, 'gen_sync_period_soft', 'xps_library/Memory/software_register', 'Position', [385, 168, 510, 192], 'io_dir', 'From Processor'); 
 %     add_line(blk, 'sim_input_dummy/1', 'gen_sync_period_soft/1', 'AUTOROUTING', 'ON');
 % 
 %     add_line(blk, 'gen_sync_period_soft/1', 'sim_mux/2', 'AUTOROUTING', 'ON');

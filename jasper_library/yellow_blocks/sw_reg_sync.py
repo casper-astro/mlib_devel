@@ -19,12 +19,12 @@ class sw_reg_sync(YellowBlock):
     def modify_top(self,top):
         if self.blk['io_dir'] == 'To Processor':
             module = 'wb_register_simulink2ppc_sync'
-            inst = top.get_instance(entity=module, name=self.fullname, comment=self.fullname)
+            inst = top.get_instance(entity=module, name=self.fullname)
             inst.add_wb_interface(regname=self.unique_name, mode='r', nbytes=4, typecode=self.typecode)
             inst.add_port('user_data_in', signal='%s_user_data_in'%self.fullname, width=32)
         elif self.blk['io_dir'] == 'From Processor':
             module = 'wb_register_ppc2simulink_sync'
-            inst = top.get_instance(entity=module, name=self.fullname, comment=self.fullname)
+            inst = top.get_instance(entity=module, name=self.fullname)
             inst.add_wb_interface(regname=self.unique_name, mode='rw', nbytes=4, typecode=self.typecode)
             inst.add_port('user_data_out', signal='%s_user_data_out'%self.fullname, width=32)
         

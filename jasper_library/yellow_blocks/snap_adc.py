@@ -49,7 +49,7 @@ class snap_adc(YellowBlock):
 
     def modify_top(self,top):
         module = 'adc16_interface'
-        inst = top.get_instance(entity=module, name=self.fullname, comment=self.fullname)
+        inst = top.get_instance(entity=module, name=self.fullname)
         inst.add_parameter('G_NUM_CLOCKS', int(self.num_clocks))
         inst.add_parameter('G_ZDOK_REV', int(self.zdok_rev))
         inst.add_parameter('G_NUM_UNITS', int(self.num_units))

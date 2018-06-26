@@ -107,7 +107,7 @@ function update_casper_block(oldblk)
     
   % handle remapping of names
   if strcmp(srcblk, 'xps_library/software register'),
-      srcblk = 'xps_library/software_register';
+      srcblk = 'xps_library/Memory/software_register';
   end
   
   % Get old and new mask names
