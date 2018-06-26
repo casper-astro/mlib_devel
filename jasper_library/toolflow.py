@@ -361,7 +361,10 @@ class Toolflow(object):
         print 'top:', self.topfile
         for obj in self.periph_objs:
             self.logger.debug('modifying top for obj %s' % obj.name)
-            self.top.set_cur_blk(obj.fullname)
+            # self.top.set_cur_blk(obj.fullname)
+            if '/' in obj.fullpath:
+                obj.fullpath = obj.fullpath.partition('/')[2]
+            self.top.set_cur_blk('%s: %s'%(obj.tag.split(':')[1], obj.fullpath))
             obj.modify_top(self.top)
             self.sources += obj.sources
             self.ips += obj.ips
@@ -373,6 +376,7 @@ class Toolflow(object):
         """
         for name, usermodule in self.user_modules.items():
             inst = self.top.get_instance(entity=name, name='%s_inst' % name)
+            self.top.set_cur_blk('usermodule: %s'%name)
             # internal = False --> we assume that other yellow
             # blocks have set up appropriate signals in top.v
             # (we can't add them here anyway, because we don't
