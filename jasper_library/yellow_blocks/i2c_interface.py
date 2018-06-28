@@ -1,7 +1,7 @@
 from yellow_block import YellowBlock
 from constraints import PortConstraint, RawConstraint
 
-class i2c(YellowBlock):
+class i2c_interface(YellowBlock):
     def initialize(self):
         '''
         This function is called by YellowBlocks __init__ method.
@@ -14,7 +14,7 @@ class i2c(YellowBlock):
 
     def modify_top(self, top):
         module = 'i2c_master_top'
-        inst = top.get_instance(entity=module, name=self.fullname, comment=self.fullname)
+        inst = top.get_instance(entity=module, name=self.fullname)
         inst.add_wb_interface(regname=self.unique_name, mode='rw', nbytes=4*16)
         inst.add_parameter('ARST_LVL', '1\'b1')
         inst.add_port('arst_i', signal='1\'b0')
@@ -29,7 +29,7 @@ class i2c(YellowBlock):
         # Infrastructure module, with IOBUFs
 
         module = 'i2c_infrastructure'
-        inst = top.get_instance(entity=module, name=self.fullname + '_infra', comment=self.fullname)
+        inst = top.get_instance(entity=module, name=self.fullname + '_infra')
         inst.add_port('scl_pad_i', self.fullname + '_scl_pad_o')
         inst.add_port('scl_pad_o', self.fullname + '_scl_pad_i')
         inst.add_port('scl_padoen_i', self.fullname + '_scl_padoen_o')

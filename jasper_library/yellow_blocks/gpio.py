@@ -16,9 +16,6 @@ class gpio(YellowBlock):
             self.pad_bitwidth = self.bitwidth / 2
         else:
             self.pad_bitwidth = self.bitwidth
-
-        if ':' in self.io_group:
-            self.io_group = self.io_group.split(':')[-1] #iogroups have the form PLATFORM:GROUP (now would be a good time to change this!)
         # provide an override if the user is using a custom IO bank name
         if self.io_group == 'custom':
             self.io_group = self.io_group_custom
@@ -42,7 +39,7 @@ class gpio(YellowBlock):
         external_port_name = self.fullname + '_ext'
         #top.add_port(external_port_name, self.io_dir, width=self.pad_bitwidth) 
 
-        inst = top.get_instance(entity=self.module, name=self.fullname, comment=self.fullname)
+        inst = top.get_instance(entity=self.module, name=self.fullname)
         inst.add_port('clk', signal='user_clk', parent_sig=False)
         inst.add_port('clk90', signal='user_clk90', parent_sig=False)
         inst.add_port('gateway', signal='%s_gateway'%self.fullname, width=self.bitwidth)
