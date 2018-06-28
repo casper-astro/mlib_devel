@@ -80,7 +80,9 @@ int main()
 
     init_platform();
 
-    xil_printf("\n# JAM starting\n\n");
+    xil_printf("\n# JAM starting\n");
+    xil_printf("Built %s %s@%s\n", BUILD_DATE, BUILD_USER, BUILD_HOST);
+    xil_printf("%s\n\n", GIT_VERSION);
 
     casper_lwip_init();
 

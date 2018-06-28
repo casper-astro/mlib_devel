@@ -1,5 +1,5 @@
 from yellow_block import YellowBlock
-from constraints import PortConstraint
+from constraints import PortConstraint, RawConstraint
 
 class i2c(YellowBlock):
     def initialize(self):
@@ -43,5 +43,7 @@ class i2c(YellowBlock):
         consts = []
         consts += [PortConstraint(self.fullname+ '_scl_io', self.scl_gpio, port_index=[0], iogroup_index=[self.scl_gpio_index])]
         consts += [PortConstraint(self.fullname+ '_sda_io', self.sda_gpio, port_index=[0], iogroup_index=[self.sda_gpio_index])]
+        consts += [RawConstraint('set_property SLEW SLOW [get_ports %s]' % (self.fullname+ '_sda_io'))]
+        consts += [RawConstraint('set_property SLEW SLOW [get_ports %s]' % (self.fullname+ '_scl_io'))]
         return consts
 

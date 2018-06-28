@@ -448,8 +448,16 @@ class Toolflow(object):
         with open(newfile, 'w') as fh:
             fh.write(s)
         # generate the binary and xilinx-style .mem versions of this table, using some Ruby(!) scripts.
-        os.system('ruby %s/jasper_library/cit2bin.rb %s > %s.bin' % (os.getenv('MLIB_DEVEL_PATH'), newfile, newfile))
-        os.system('ruby %s/jasper_library/cit2mem.rb %s > %s.mem' % (os.getenv('MLIB_DEVEL_PATH'), newfile, newfile))
+        ret = os.system('ruby %s/jasper_library/cit2bin.rb %s > %s.bin' % (os.getenv('MLIB_DEVEL_PATH'), newfile, newfile))
+        if ret != 0:
+            errmsg = 'Failed to generate binary file {}.bin, error code {}.'.format(newfile,ret)
+            self.logger.error(errmsg)
+            raise Exception(errmsg)
+        ret = os.system('ruby %s/jasper_library/cit2mem.rb %s > %s.mem' % (os.getenv('MLIB_DEVEL_PATH'), newfile, newfile))
+        if ret != 0:
+            errmsg = 'Failed to generate xilinx-style file {}.mem, error code {}.'.format(newfile,ret)
+            self.logger.error(msg)
+            raise Exception(errmsg)
 
     def regenerate_top(self):
         """
