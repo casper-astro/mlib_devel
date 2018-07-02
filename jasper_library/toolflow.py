@@ -34,21 +34,21 @@ class Toolflow(object):
     top-level verilog description of a project from a 'peripherals file'
     which encodes information about which IP a user wants instantiated.
 
-    The toolflow class can parse such a file, and use it to generate verilog, 
+    The toolflow class can parse such a file, and use it to generate verilog,
     a list of source files, and a list of constraints.
     These can be passed off to a toolflow backend to be turned into some
     vendor-specific platform and compiled. At least, that's the plan...
     """
-    
+
     def __init__(self, frontend='simulink', compile_dir='/tmp',
                  frontend_target='/tmp/test.slx', jobs=8):
         """
         Initialize the toolflow.
-         
-        :param frontend: Name of the toolflow frontend to use. 
+
+        :param frontend: Name of the toolflow frontend to use.
             Currently only 'simulink' is supported
         :type frontend: str
-        :param compile_dir: Compile directory where build files and logs 
+        :param compile_dir: Compile directory where build files and logs
             should go.
         """
         # Set up a logger (the logger named 'jasper' should already
@@ -103,11 +103,11 @@ class Toolflow(object):
     def exec_flow(self, gen_per=True, frontend_compile=True):
         """
         Execute a compile.
-        
-        :param gen_per: Have the toolflow frontend generate a fresh 
+
+        :param gen_per: Have the toolflow frontend generate a fresh
             peripherals file
         :type gen_per: bool
-        :param frontend_compile: Run the frontend compiler (eg. System 
+        :param frontend_compile: Run the frontend compiler (eg. System
             Generator)
         :type frontend_compile: bool
         """
@@ -134,12 +134,12 @@ class Toolflow(object):
         self.write_core_jam_info()
         # print 'Initializing backend project'
         # self.backend.initialize(self.plat)
-        
+
         self.constraints_rule_check()
-        
+
         if frontend_compile:
             # Run system generator (maybe flow-wise
-            # it would make sense to run this sooner, 
+            # it would make sense to run this sooner,
             # but since it's the longest single step
             # it's nice to run it at the end, so there's
             # an opportunity to catch toolflow errors
@@ -166,12 +166,12 @@ class Toolflow(object):
         have been set by other methods before proceeding. This is probably
         a symptom of the code being terribly structured. This method
         checks if an attribute exists and throws an error message if not.
-        In principle it could automatically run the necessary missing steps, 
+        In principle it could automatically run the necessary missing steps,
         but that seems pretty suspect.
 
         :param thing: Attribute to check.
         :type thing: str
-        :param generator: Method which can be used to set thing (used for 
+        :param generator: Method which can be used to set thing (used for
             error message only)
         :type generator: str
         """
@@ -196,7 +196,7 @@ class Toolflow(object):
         based on the peripherals file.
         Internally, calls:
         instantiate_periphs -- call each yellow block's mod_top method
-        instantiate_user_ip -- add ports to top module based on port entries 
+        instantiate_user_ip -- add ports to top module based on port entries
             in peripheral file
         regenerate_top -- rewrite top.v
         """
@@ -364,7 +364,7 @@ class Toolflow(object):
             obj.modify_top(self.top)
             self.sources += obj.sources
             self.ips += obj.ips
-    
+
     def _instantiate_user_ip(self):
         """
         Adds VerilogInstance and ports associated with user-ip to the class' top
@@ -525,51 +525,51 @@ class Toolflow(object):
         for const in self.constraints:
             if isinstance(const, PortConstraint):
                 pin_constraints += [castro.PinConstraint(
-                    portname=const.portname, 
-                    symbolic_name=const.iogroup, 
-                    portname_indices=const.port_index, 
-                    symbolic_indices=const.iogroup_index, 
-                    io_standard=const.iostd, 
+                    portname=const.portname,
+                    symbolic_name=const.iogroup,
+                    portname_indices=const.port_index,
+                    symbolic_indices=const.iogroup_index,
+                    io_standard=const.iostd,
                     location=const.loc
                     )]
             elif isinstance(const, ClockConstraint):
                 clk_constraints += [castro.ClkConstraint(
-                    portname=const.signal, 
-                    freq_mhz=const.freq, 
-                    period_ns=const.period, 
-                    clkname=const.name, 
-                    waveform_min_ns=const.waveform_min, 
-                    waveform_max_ns=const.waveform_max, 
-                    port_en=const.port_en, 
+                    portname=const.signal,
+                    freq_mhz=const.freq,
+                    period_ns=const.period,
+                    clkname=const.name,
+                    waveform_min_ns=const.waveform_min,
+                    waveform_max_ns=const.waveform_max,
+                    port_en=const.port_en,
                     virtual_en=const.virtual_en
                     )]
             elif isinstance(const, GenClockConstraint):
                 gen_clk_constraints += [castro.GenClkConstraint(
-                    pinname=const.signal, 
-                    clkname=const.name, 
-                    divide_by=const.divide_by, 
+                    pinname=const.signal,
+                    clkname=const.name,
+                    divide_by=const.divide_by,
                     clksource=const.clock_source
                     )]
             elif isinstance(const, ClockGroupConstraint):
                 clk_grp_constraints += [castro.ClkGrpConstraint(
-                    clknamegrp1=const.clock_name_group_1, 
-                    clknamegrp2=const.clock_name_group_2, 
+                    clknamegrp1=const.clock_name_group_1,
+                    clknamegrp2=const.clock_name_group_2,
                     clkdomaintype=const.clock_domain_relationship
                     )]
             elif isinstance(const, InputDelayConstraint):
                 input_delay_constraints += [castro.InDelayConstraint(
-                    clkname=const.clkname, 
-                    consttype=const.consttype, 
-                    constdelay_ns=const.constdelay_ns, 
-                    add_delay_en=const.add_delay_en, 
+                    clkname=const.clkname,
+                    consttype=const.consttype,
+                    constdelay_ns=const.constdelay_ns,
+                    add_delay_en=const.add_delay_en,
                     portname=const.portname
                 )]
             elif isinstance(const, OutputDelayConstraint):
                 output_delay_constraints += [castro.OutDelayConstraint(
-                    clkname=const.clkname, 
-                    consttype=const.consttype, 
-                    constdelay_ns=const.constdelay_ns, 
-                    add_delay_en=const.add_delay_en, 
+                    clkname=const.clkname,
+                    consttype=const.consttype,
+                    constdelay_ns=const.constdelay_ns,
+                    add_delay_en=const.add_delay_en,
                     portname=const.portname
                 )]
             elif isinstance(const, MaxDelayConstraint):
@@ -586,14 +586,14 @@ class Toolflow(object):
                 )]
             elif isinstance(const, FalsePathConstraint):
                 false_path_constraints += [castro.FalsePthConstraint(
-                    sourcepath=const.sourcepath, 
+                    sourcepath=const.sourcepath,
                     destpath=const.destpath
                 )]
             elif isinstance(const, MultiCycleConstraint):
                 multi_cycle_constraints += [castro.MultiCycConstraint(
-                    multicycletype=const.multicycletype, 
-                    sourcepath=const.sourcepath, 
-                    destpath=const.destpath, 
+                    multicycletype=const.multicycletype,
+                    sourcepath=const.sourcepath,
+                    destpath=const.destpath,
                     multicycledelay=const.multicycledelay
                 )]
             elif isinstance(const, RawConstraint):
@@ -629,22 +629,22 @@ class Toolflow(object):
                 mode = 1
             mm_slaves += [castro.mm_slave(dev.regname, mode, dev.base_addr,
                                           dev.nbytes)]
-            
+
         c.mm_slaves = mm_slaves
-        
+
         with open(filename, 'w') as fh:
             fh.write(yaml.dump(c))
 
 
 class ToolflowFrontend(object):
     """
-    
+
     """
     def __init__(self, compile_dir='/tmp', target='/tmp/test.slx'):
         """
-        
-        :param compile_dir: 
-        :param target: 
+
+        :param compile_dir:
+        :param target:
         """
         self.logger = logging.getLogger('jasper.toolflow.frontend')
         self.compile_dir = compile_dir
@@ -693,13 +693,13 @@ class ToolflowFrontend(object):
 
 class ToolflowBackend(object):
     """
-    
+
     """
     def __init__(self, plat=None, compile_dir='/tmp'):
         """
-        
-        :param plat: 
-        :param compile_dir: 
+
+        :param plat:
+        :param compile_dir:
         """
         self.logger = logging.getLogger('jasper.toolflow.backend')
         self.compile_dir = compile_dir
@@ -711,27 +711,27 @@ class ToolflowBackend(object):
 
     def initialize(self, plat):
         """
-        
-        :param plat: 
-        :return: 
+
+        :param plat:
+        :return:
         """
         raise NotImplementedError
 
     def compile(self, core, plat):
         """
-        
-        :param core: 
-        :param plat: 
-        :return: 
+
+        :param core:
+        :param plat:
+        :return:
         """
         raise NotImplementedError
 
     def add_source(self, source, plat):
         """
         Add a sourcefile to the project. Via a tcl incantation.
-        In non-project mode, it is important to note that copies are not made 
-        of files. The files are read from their source directory. Project mode 
-        copies files from their source directory and adds them to the a new 
+        In non-project mode, it is important to note that copies are not made
+        of files. The files are read from their source directory. Project mode
+        copies files from their source directory and adds them to the a new
         compile directory.
         """
         raise NotImplementedError
@@ -739,9 +739,9 @@ class ToolflowBackend(object):
     def add_const_file(self, constfile):
         """
         Add a constraint file to the project. via a tcl incantation.
-        In non-project mode, it is important to note that copies are not made 
-        of files. The files are read from their source directory. Project 
-        mode copies files from their source directory and adds them to the 
+        In non-project mode, it is important to note that copies are not made
+        of files. The files are read from their source directory. Project
+        mode copies files from their source directory and adds them to the
         a new compile directory.
         :param constfile
         """
@@ -782,7 +782,7 @@ class ToolflowBackend(object):
             self.add_library(ip['path'])
             if ip.has_key('module_name'):
                 self.add_ip(ip)
-       
+
         # elaborate pin constraints
         for const in self.castro.synthesis.pin_constraints:
             pins = self.plat.get_pins(const.symbolic_name,
@@ -807,12 +807,12 @@ class ToolflowBackend(object):
 
     def mkfpg(self, filename_bin, filename_fpg):
         """
-        This function makes the fpg file header and the final fpg file, which 
-        consists of the fpg file header (core_info.tab, design_info.tab and 
+        This function makes the fpg file header and the final fpg file, which
+        consists of the fpg file header (core_info.tab, design_info.tab and
         git_info.tab) and the compressed binary file. The fpg file is used
         to configure the ROACH, ROACH2, MKDIG and SKARAB boards.
 
-        :param filename_bin: This is the path and binary file (top.bin) that 
+        :param filename_bin: This is the path and binary file (top.bin) that
             contains the FPGA programming data.
         :type filename_bin: str
         :param filename_fpg: This is the output time stamped fpg file name
@@ -925,13 +925,13 @@ class ToolflowBackend(object):
 
 class SimulinkFrontend(ToolflowFrontend):
     """
-    
+
     """
     def __init__(self, compile_dir='/tmp', target='/tmp/test.slx'):
         """
-        
-        :param compile_dir: 
-        :param target: 
+
+        :param compile_dir:
+        :param target:
         """
         ToolflowFrontend.__init__(self, compile_dir=compile_dir, target=target)
         if target[-4:] not in ['.slx', '.mdl']:
@@ -982,8 +982,8 @@ class SimulinkFrontend(ToolflowFrontend):
     def write_git_info_file(self, fname='git_info.tab'):
         """
         Get the git info for mlib_devel and the model file.
-        :param fname: 
-        :return: 
+        :param fname:
+        :return:
         """
         fpath = '%s/%s' % (self.compile_dir, fname)
         fptr = open(fpath, 'w')
@@ -1023,14 +1023,14 @@ class SimulinkFrontend(ToolflowFrontend):
 
 class VivadoBackend(ToolflowBackend):
     """
-    
+
     """
     def __init__(self, plat=None, compile_dir='/tmp', periph_objs=None):
         """
-        
-        :param plat: 
-        :param compile_dir: 
-        :param periph_objs: 
+
+        :param plat:
+        :param compile_dir:
+        :param periph_objs:
         """
         self.logger = logging.getLogger('jasper.toolflow.backend')
         self.compile_dir = compile_dir
@@ -1113,9 +1113,9 @@ class VivadoBackend(ToolflowBackend):
     def add_source(self, source, plat):
         """
         Add a sourcefile to the project. Via a tcl incantation.
-        In non-project mode, it is important to note that copies are not made 
-        of files. The files are read from their source directory. Project mode 
-        copies files from their source directory and adds them to the a new 
+        In non-project mode, it is important to note that copies are not made
+        of files. The files are read from their source directory. Project mode
+        copies files from their source directory and adds them to the a new
         compile directory.
         """
         self.logger.debug('Adding source file: %s' % source)
@@ -1174,9 +1174,9 @@ class VivadoBackend(ToolflowBackend):
     def add_const_file(self, constfile):
         """
         Add a constraint file to the project. via a tcl incantation.
-        In non-project mode, it is important to note that copies are not made 
-        of files. The files are read from their source directory. Project 
-        mode copies files from their source directory and adds them to the 
+        In non-project mode, it is important to note that copies are not made
+        of files. The files are read from their source directory. Project
+        mode copies files from their source directory and adds them to the
         a new compile directory.
         :param constfile
         """
@@ -1234,17 +1234,17 @@ class VivadoBackend(ToolflowBackend):
             self.add_tcl_cmd('if {[llength [glob -nocomplain [get_property directory [current_project]]/myproj.srcs/sources_1/imports/*.coe]] > 0} {', stage='pre_synth')
             self.add_tcl_cmd('file copy -force {*}[glob [get_property directory [current_project]]/myproj.srcs/sources_1/imports/*.coe] [get_property directory [current_project]]/myproj.srcs/sources_1/ip/', stage='pre_synth')
             self.add_tcl_cmd('}', stage='pre_synth')
-            
+
             # add the upgrade_ip command to the tcl file if the yaml file requrests it, default to upgrading the IP
             if "upgrade_ip" not in plat.conf.keys() or plat.conf['upgrade_ip'] == True:
                 self.add_tcl_cmd('upgrade_ip -quiet [get_ips *]', stage='pre_synth')
                 self.logger.debug('adding the upgrade_ip command to the tcl script')
-            else:             
+            else:
                 self.logger.debug('The upgrade_ip command is not being added to the tcl script')
             # Add in if ILA is being used to prevent signal names from changing during synthesis
             #self.add_tcl_cmd('set_property STEPS.SYNTH_DESIGN.ARGS.FLATTEN_HIERARCHY none [get_runs synth_1]')
 
-            # Synthesis Commands   
+            # Synthesis Commands
             self.add_tcl_cmd('reset_run synth_1', stage='synth')
             self.add_tcl_cmd('launch_runs synth_1 -jobs %d' % cores, stage='synth')
             self.add_tcl_cmd('wait_on_run synth_1', stage='synth')
@@ -1255,6 +1255,7 @@ class VivadoBackend(ToolflowBackend):
             # Pre-Implementation Commands
             self.add_tcl_cmd('set_property STEPS.WRITE_BITSTREAM.ARGS.BIN_FILE true [get_runs impl_1]', stage='pre_impl')
             self.add_tcl_cmd('set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]', stage='pre_impl')
+            self.add_tcl_cmd('set_property STEPS.POST_ROUTE_PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]', stage='pre_impl')
 
             # Implementation Commands
             self.add_tcl_cmd('launch_runs impl_1 -jobs %d' % cores, stage='impl')
@@ -1262,6 +1263,7 @@ class VivadoBackend(ToolflowBackend):
 
             # Post-Implementation Commands
             self.add_tcl_cmd('open_run impl_1', stage='post_impl')
+
 
             # Pre-Bitgen Commands
 
@@ -1404,10 +1406,10 @@ class VivadoBackend(ToolflowBackend):
 
     def compile(self, cores, plat):
         """
-        
-        :param cores: 
-        :param plat: 
-        :return: 
+
+        :param cores:
+        :param plat:
+        :return:
         """
         self.add_compile_cmds(cores=cores, plat=plat)
         # write tcl command to file
@@ -1421,7 +1423,7 @@ class VivadoBackend(ToolflowBackend):
 
     def get_tcl_const(self, const):
         """
-        Pass a single toolflow-standard PortConstraint, 
+        Pass a single toolflow-standard PortConstraint,
         and get back a tcl command to add the constraint
         to a vivado project.
         """
@@ -1626,13 +1628,13 @@ class VivadoBackend(ToolflowBackend):
 
 class ISEBackend(VivadoBackend):
     """
-    
+
     """
     def __init__(self, plat=None, compile_dir='/tmp'):
         """
-        
-        :param plat: 
-        :param compile_dir: 
+
+        :param plat:
+        :param compile_dir:
         """
         self.logger = logging.getLogger('jasper.toolflow.backend')
         self.compile_dir = compile_dir
@@ -1678,8 +1680,8 @@ class ISEBackend(VivadoBackend):
 
     def compile(self, cores, plat):
         """
-        
-        :return: 
+
+        :return:
         """
         self.add_compile_cmds()
         # write tcl command to file
@@ -1721,7 +1723,7 @@ class ISEBackend(VivadoBackend):
 
     def get_ucf_const(self, const):
         """
-        Pass a single toolflow-standard PortConstraint, 
+        Pass a single toolflow-standard PortConstraint,
         and get back a tcl command to add the constraint
         to a vivado project.
         """
