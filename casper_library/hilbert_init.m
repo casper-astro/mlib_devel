@@ -29,6 +29,10 @@ function hilbert_init(blk, varargin)
     'n_inputs', 1, ...
     'BitWidth', 18, ...
     'bin_pt_in', 'BitWidth-1', ...
+    'floating_point', 'off', ...
+    'float_type', 'single', ...
+    'exp_width', 8, ...
+    'frac_width', 24, ...       
     'add_latency', 1, ...
     'conv_latency', 1, ...
     'misc', 'off', ...
@@ -39,15 +43,34 @@ function hilbert_init(blk, varargin)
   munge_block(blk, varargin{:});
 
   % Retrieve values from mask fields.
-  n_inputs = get_var('n_inputs', 'defaults', defaults, varargin{:});
-  BitWidth = get_var('BitWidth', 'defaults', defaults, varargin{:});
-  bin_pt_in = get_var('bin_pt_in', 'defaults', defaults, varargin{:});
-  add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
-  conv_latency = get_var('conv_latency', 'defaults', defaults, varargin{:});
-  misc = get_var('misc', 'defaults', defaults, varargin{:});
+  n_inputs          = get_var('n_inputs', 'defaults', defaults, varargin{:});
+  BitWidth          = get_var('BitWidth', 'defaults', defaults, varargin{:});
+  bin_pt_in         = get_var('bin_pt_in', 'defaults', defaults, varargin{:});
+  floating_point    = get_var('floating_point', 'defaults', defaults, varargin{:});
+  float_type        = get_var('float_type', 'defaults', defaults, varargin{:});
+  exp_width         = get_var('exp_width', 'defaults', defaults, varargin{:});
+  frac_width        = get_var('frac_width', 'defaults', defaults, varargin{:});  
+  add_latency       = get_var('add_latency', 'defaults', defaults, varargin{:});
+  conv_latency      = get_var('conv_latency', 'defaults', defaults, varargin{:});
+  misc              = get_var('misc', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
 
+  
+  if floating_point == 1
+    float_en = 'on';
+    BitWidth = exp_width + frac_width;
+    bin_pt_in = 0;
+  else
+    float_en = 'off';  
+  end
+
+  if float_type == 2
+    float_type_sel = 'custom';
+  else
+    float_type_sel = 'single';
+  end
+  
   %default setup for library
   if n_inputs == 0,
     clean_blocks(blk);
@@ -105,15 +128,22 @@ function hilbert_init(blk, varargin)
   reuse_block(blk, 'sub_even_imag', 'casper_library_bus/bus_addsub', 'opmode', '1', 'Position', [255 179 300 226]);
   reuse_block(blk, 'add_odd_real', 'casper_library_bus/bus_addsub', 'opmode', '0', 'Position', [255 254 300 301]);
 
+  
   for name = {'add_even_real', 'sub_odd_imag', 'sub_even_imag', 'add_odd_real'};
     set_param([blk,'/',name{1}], ...
           'n_bits_a', mat2str(repmat(BitWidth, 1, n_inputs)), 'bin_pt_a', num2str(bin_pt_in), 'type_a', '1', ...
           'n_bits_b', mat2str(repmat(BitWidth, 1, n_inputs)), 'bin_pt_b', num2str(bin_pt_in), 'type_b', '1', ...
+          'floating_point', float_en, ...
+          'float_type', float_type_sel, ...
+          'exp_width', num2str(exp_width), ...
+          'frac_width', num2str(frac_width), ...   
           'n_bits_out', mat2str(repmat(BitWidth+1, 1, n_inputs)), 'bin_pt_out', num2str(bin_pt_in), 'type_out', '1', ...
           'cmplx', 'off', 'misc', 'off', 'latency', 'add_latency', ...
           'quantization', '0', 'overflow', '0');
   end
 
+  
+  
   add_line(blk,'bus_expand_a/1','add_even_real/1');
   add_line(blk,'bus_expand_b/1','add_even_real/2');
   add_line(blk,'bus_expand_a/1','sub_odd_imag/2');
@@ -133,30 +163,47 @@ function hilbert_init(blk, varargin)
   add_line(blk,'sub_even_imag/1','Concat/3');
   add_line(blk,'add_odd_real/1','Concat/4');
 
-  reuse_block(blk, 'bus_scale', 'casper_library_bus/bus_scale', ...
-          'n_bits_in', mat2str(repmat(BitWidth+1, 1, n_inputs*4)), 'bin_pt_in', 'bin_pt_in', 'type_in', '1', ...
-          'scale_factor', '-1', 'misc', 'off', 'cmplx', 'off', ...
-          'Position', [380 156 420 184]);
-  add_line(blk,'Concat/1','bus_scale/1');
+  if floating_point
+      %
+      % separate components so can put in correct place
+      %
 
-  reuse_block(blk, 'bus_convert', 'casper_library_bus/bus_convert', ...
-          'n_bits_in', mat2str(repmat(BitWidth+1, 1, n_inputs*4)), 'bin_pt_in', 'bin_pt_in+1', ...
-          'n_bits_out', num2str(BitWidth), 'bin_pt_out', 'bin_pt_in', ...
-          'quantization', '2', 'overflow', '0', ... %TODO Wrap for overflow?  
-          'cmplx', 'off', 'of', 'off', 'latency', 'conv_latency', 'misc', 'off', ...
-          'Position', [440 156 480 184]);
-  add_line(blk,'bus_scale/1','bus_convert/1');
+      reuse_block(blk, 'bus_expand', 'casper_library_flow_control/bus_expand', ...
+              'mode', 'divisions of equal size', ...
+              'outputNum', '4', 'OutputWidth', num2str(BitWidth*n_inputs), ...
+              'outputBinaryPt', '0', 'outputArithmeticType', '0', ...
+              'Position', [505 107 555 233]);
+      add_line(blk,'Concat/1','bus_expand/1');
+      
+  else
+      reuse_block(blk, 'bus_scale', 'casper_library_bus/bus_scale', ...
+              'n_bits_in', mat2str(repmat(BitWidth+1, 1, n_inputs*4)), 'bin_pt_in', 'bin_pt_in', 'type_in', '1', ...
+              'scale_factor', '-1', 'misc', 'off', 'cmplx', 'off', ...
+              'Position', [380 156 420 184]);
+      add_line(blk,'Concat/1','bus_scale/1');
 
-  %
-  % separate components so can put in correct place
-  %
+      reuse_block(blk, 'bus_convert', 'casper_library_bus/bus_convert', ...
+              'n_bits_in', mat2str(repmat(BitWidth+1, 1, n_inputs*4)), 'bin_pt_in', 'bin_pt_in+1', ...
+              'n_bits_out', num2str(BitWidth), 'bin_pt_out', 'bin_pt_in', ...
+              'quantization', '2', 'overflow', '0', ... %TODO Wrap for overflow?  
+              'cmplx', 'off', 'of', 'off', 'latency', 'conv_latency', 'misc', 'off', ...
+              'Position', [440 156 480 184]);
+      add_line(blk,'bus_scale/1','bus_convert/1');      
 
-  reuse_block(blk, 'bus_expand', 'casper_library_flow_control/bus_expand', ...
-          'mode', 'divisions of equal size', ...
-          'outputNum', '4', 'OutputWidth', num2str(BitWidth*n_inputs), ...
-          'outputBinaryPt', '0', 'outputArithmeticType', '0', ...
-          'Position', [505 107 555 233]);
-  add_line(blk,'bus_convert/1','bus_expand/1');
+      %
+      % separate components so can put in correct place
+      %
+
+      reuse_block(blk, 'bus_expand', 'casper_library_flow_control/bus_expand', ...
+              'mode', 'divisions of equal size', ...
+              'outputNum', '4', 'OutputWidth', num2str(BitWidth*n_inputs), ...
+              'outputBinaryPt', '0', 'outputArithmeticType', '0', ...
+              'Position', [505 107 555 233]);
+      add_line(blk,'bus_convert/1','bus_expand/1');
+  end
+
+
+
 
   reuse_block(blk, 'ri_to_c', 'casper_library_misc/ri_to_c', 'Position', [605 114 645 156]);
   add_line(blk,'bus_expand/3','ri_to_c/2');
@@ -206,9 +253,15 @@ function hilbert_init(blk, varargin)
   if strcmp(misc, 'on'),
     reuse_block(blk, 'misci', 'built-in/Inport', 'Port', '3', 'Position', [25 348 55 362]);
 
-    reuse_block(blk, 'dmisc', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
-      'latency', 'add_latency+conv_latency', 'Position', [380 344 420 366]);
-    add_line(blk,'misci/1', 'dmisc/1');
+    if floating_point
+        reuse_block(blk, 'dmisc', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
+          'latency', 'add_latency', 'Position', [380 344 420 366]);
+        add_line(blk,'misci/1', 'dmisc/1');        
+    else
+        reuse_block(blk, 'dmisc', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
+          'latency', 'add_latency+conv_latency', 'Position', [380 344 420 366]);
+        add_line(blk,'misci/1', 'dmisc/1');        
+    end
     
     reuse_block(blk, 'misco', 'built-in/Outport', 'Port', '3', 'Position', [735 348 765 362]);
     add_line(blk,'dmisc/1', 'misco/1');

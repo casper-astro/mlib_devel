@@ -4,6 +4,10 @@ function bus_negate_init(blk, varargin)
   
   defaults = { ...
     'n_bits_in',  [8 8 8], 'bin_pt_in', 8 , 'cmplx', 'off', ...
+    'floating_point', 'off', ...
+    'float_type', 'single', ...
+    'exp_width', 8, ...
+    'frac_width', 24, ...    
     'overflow', 1 , 'misc', 'off', 'latency', 2, ...
   };  
   
@@ -21,14 +25,33 @@ function bus_negate_init(blk, varargin)
   neg_w = 50; neg_d = 60;
   del_w = 30; del_d = 20;
 
-  n_bits_in       = get_var('n_bits_in', 'defaults', defaults, varargin{:});
-  bin_pt_in       = get_var('bin_pt_in', 'defaults', defaults, varargin{:});
-  cmplx           = get_var('cmplx', 'defaults', defaults, varargin{:});
-  overflow        = get_var('overflow', 'defaults', defaults, varargin{:});
-  latency         = get_var('latency', 'defaults', defaults, varargin{:});
-  misc            = get_var('misc', 'defaults', defaults, varargin{:});
+  n_bits_in         = get_var('n_bits_in', 'defaults', defaults, varargin{:});
+  bin_pt_in         = get_var('bin_pt_in', 'defaults', defaults, varargin{:});
+  floating_point    = get_var('floating_point', 'defaults', defaults, varargin{:});
+  float_type        = get_var('float_type', 'defaults', defaults, varargin{:});
+  exp_width         = get_var('exp_width', 'defaults', defaults, varargin{:});
+  frac_width        = get_var('frac_width', 'defaults', defaults, varargin{:});    
+  cmplx             = get_var('cmplx', 'defaults', defaults, varargin{:});
+  overflow          = get_var('overflow', 'defaults', defaults, varargin{:});
+  latency           = get_var('latency', 'defaults', defaults, varargin{:});
+  misc              = get_var('misc', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
+  
+  if floating_point == 1
+    float_en = 'on';
+    n_bits_in = exp_width + frac_width;
+    bin_pt_in = 0;
+  else
+    float_en = 'off';  
+  end
+
+  if float_type == 2
+    float_type_sel = 'custom';
+  else
+    float_type_sel = 'single';
+  end
+  
   
  %default state, do nothing 
   if n_bits_in == 0,
@@ -157,12 +180,23 @@ function bus_negate_init(blk, varargin)
 
     position = [xpos-neg_w/2 ypos_tmp xpos+neg_w/2 ypos_tmp+neg_d-20];
 
-    reuse_block(blk, neg_name, 'xbsIndex_r4/Negate', ...
-      'precision', 'User Defined', ...
-      'n_bits', num2str(n_bits_in(index)), 'bin_pt', num2str(bin_pt_in(index)), ...
-      'arith_type', 'Signed', ...
-      'overflow', of, 'quantization', 'Truncate', 'latency', 'latency', ...  
-      'Position', position);
+    if floating_point
+        reuse_block(blk, neg_name, 'xbsIndex_r4/Negate', ...
+          'precision', 'Full', ...
+          'n_bits', num2str(n_bits_in(index)), 'bin_pt', num2str(bin_pt_in(index)), ...
+          'arith_type', 'Signed', ...
+          'overflow', of, 'quantization', 'Truncate', 'latency', 'latency', ...  
+          'Position', position);             
+    else
+        reuse_block(blk, neg_name, 'xbsIndex_r4/Negate', ...
+          'precision', 'User Defined', ...
+          'n_bits', num2str(n_bits_in(index)), 'bin_pt', num2str(bin_pt_in(index)), ...
+          'arith_type', 'Signed', ...
+          'overflow', of, 'quantization', 'Truncate', 'latency', 'latency', ...  
+          'Position', position);        
+    end
+    
+
 
     ypos_tmp = ypos_tmp + neg_d;
 

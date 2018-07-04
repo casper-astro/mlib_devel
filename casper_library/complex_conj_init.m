@@ -29,6 +29,10 @@ function complex_conj_init(blk, varargin)
     'n_inputs', 1, ...
     'n_bits', 18, ...
     'bin_pt', 17, ...
+    'floating_point', 'off', ...
+    'float_type', 'single', ...
+    'exp_width', 8, ...
+    'frac_width', 24, ...       
     'latency', 1, ...
     'overflow', 'Wrap', ...
   };
@@ -38,14 +42,33 @@ function complex_conj_init(blk, varargin)
   munge_block(blk, varargin{:});
 
   % Retrieve values from mask fields.
-  n_inputs = get_var('n_inputs', 'defaults', defaults, varargin{:});
-  n_bits = get_var('n_bits', 'defaults', defaults, varargin{:});
-  bin_pt = get_var('bin_pt', 'defaults', defaults, varargin{:});
-  latency = get_var('latency', 'defaults', defaults, varargin{:});
-  overflow = get_var('overflow', 'defaults', defaults, varargin{:});
+  n_inputs          = get_var('n_inputs', 'defaults', defaults, varargin{:});
+  n_bits            = get_var('n_bits', 'defaults', defaults, varargin{:});
+  bin_pt            = get_var('bin_pt', 'defaults', defaults, varargin{:});
+  floating_point    = get_var('floating_point', 'defaults', defaults, varargin{:});
+  float_type        = get_var('float_type', 'defaults', defaults, varargin{:});
+  exp_width         = get_var('exp_width', 'defaults', defaults, varargin{:});
+  frac_width        = get_var('frac_width', 'defaults', defaults, varargin{:});  
+  latency           = get_var('latency', 'defaults', defaults, varargin{:});
+  overflow          = get_var('overflow', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
 
+  if floating_point == 1
+    float_en = 'on';
+    n_bits = exp_width + frac_width;
+    bin_pt = 0;
+  else
+    float_en = 'off';  
+  end
+
+  if float_type == 2
+    float_type_sel = 'custom';
+  else
+    float_type_sel = 'single';
+  end
+  
+  
   %default setup for library
   if n_inputs == 0,
     clean_blocks(blk);

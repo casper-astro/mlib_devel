@@ -29,6 +29,9 @@ function bus_addsub_init(blk, varargin)
     'n_bits_a', [8] ,  'bin_pt_a',     [3],   'type_a',   1, ...
     'n_bits_b', [4 ]  ,  'bin_pt_b',     [3],   'type_b',   [1], ...
     'n_bits_out', 8 ,     'bin_pt_out',   [3],   'type_out', [1], ...
+    'pipeline_intfce_en', 'on', ...
+    'pipeline_latency', 2, ...
+    'floating_point', 'off', 'float_type', 'single', 'exp_width', 6, 'frac_width', 19, ...  
     'overflow', [1], 'quantization', [0], 'add_implementation', 'fabric core', ...
     'latency', 1, 'async', 'off', 'cmplx', 'on', 'misc', 'on'
   };  
@@ -57,18 +60,93 @@ function bus_addsub_init(blk, varargin)
   n_bits_out   = get_var('n_bits_out', 'defaults', defaults, varargin{:});
   bin_pt_out   = get_var('bin_pt_out', 'defaults', defaults, varargin{:});
   type_out     = get_var('type_out', 'defaults', defaults, varargin{:});
-  overflow     = get_var('overflow', 'defaults', defaults, varargin{:});
-  quantization = get_var('quantization', 'defaults', defaults, varargin{:});
-  add_implementation = get_var('add_implementation', 'defaults', defaults, varargin{:});
-  latency      = get_var('latency', 'defaults', defaults, varargin{:});
+  floating_point    = get_var('floating_point', 'defaults', defaults, varargin{:});
+  float_type        = get_var('float_type', 'defaults', defaults, varargin{:});
+  exp_width         = get_var('exp_width', 'defaults', defaults, varargin{:});
+  frac_width        = get_var('frac_width', 'defaults', defaults, varargin{:});   
+  overflow              = get_var('overflow', 'defaults', defaults, varargin{:});
+  quantization          = get_var('quantization', 'defaults', defaults, varargin{:});
+  add_implementation    = get_var('add_implementation', 'defaults', defaults, varargin{:});
+  latency               = get_var('latency', 'defaults', defaults, varargin{:});
+  pipeline_intfce_en    = get_var('pipeline_intfce_en', 'defaults', defaults, varargin{:});
+  pipeline_latency      = get_var('pipeline_latency', 'defaults', defaults, varargin{:});
   misc         = get_var('misc', 'defaults', defaults, varargin{:});
   cmplx        = get_var('cmplx', 'defaults', defaults, varargin{:});
   async        = get_var('async', 'defaults', defaults, varargin{:});
  
   delete_lines(blk);
+  
+  % sanity check for old block that has not been updated for floating point
+  if (strcmp(floating_point, 'on')|floating_point == 1)
+    floating_point = 1;
+  else
+    floating_point = 0;
+  end
+  
+  if (strcmp(pipeline_intfce_en, 'on'))|(pipeline_intfce_en == 1)
+    pipeline_intfce_en = 'on';
+  else
+    pipeline_intfce_en = 'off';
+  end
+  
+    % Check for floating point
+  if floating_point
+      float_en = 'on';
+      
+      if float_type == 2
+          float_type_sel = 'custom';
 
+      else
+          float_type_sel = 'single';
+      end
+  else
+      float_en = 'off';  
+      float_type_sel = 'single';
+      exp_width = 8;
+      frac_width = 24;
+  end
+  
+  
+  
+  
+  
+  % Check if floating point is selected. If so, set the bit widths
+  % accordingly. Note: A reinterpret block follows the 
+  if floating_point
+        preci_type = 'Full';
+        
+        switch float_type
+            case 1
+                % Set frac width and exp width for single precision
+                frac_width = 24;
+                exp_width = 8;
+                n_bits_a = repmat((frac_width + exp_width), 1, length(n_bits_a));
+                bin_pt_a = 0;
+                type_a = 0;
+                n_bits_b = repmat((frac_width + exp_width), 1, length(n_bits_b));
+                bin_pt_b = 0;
+                type_b = 0;
+                n_bits_out = repmat((frac_width + exp_width), 1, length(n_bits_out));
+                bin_pt_out = 0;
+                type_out = 0;
+            case 2
+                n_bits_a = repmat((frac_width + exp_width), 1, length(n_bits_a));
+                bin_pt_a = 0;
+                type_a = 0;
+                n_bits_b = repmat((frac_width + exp_width), 1, length(n_bits_b));
+                bin_pt_b = 0;
+                type_b = 0;
+                n_bits_out = repmat((frac_width + exp_width), 1, length(n_bits_out));
+                bin_pt_out = 0;
+                type_out = 0;
+        end
+
+  else
+        preci_type = 'User defined';
+  end  
+  
   %default state, do nothing 
-  if (n_bits_a == 0) | (n_bits_b == 0),
+  if ((n_bits_a == 0) | (n_bits_b == 0)) & (~floating_point)
     clean_blocks(blk);
     save_state(blk, 'defaults', defaults, varargin{:});  % Save and back-populate mask parameter values
     clog('exiting bus_add_init',{'trace', 'bus_addsub_init_debug'});
@@ -201,6 +279,7 @@ function bus_addsub_init(blk, varargin)
 
   clog(['making ',num2str(comp),' AddSubs'],{'bus_addsub_init_debug'});
 
+ 
   for index = 1:comp
     switch type_o(index),
       case 0,
@@ -251,16 +330,67 @@ function bus_addsub_init(blk, varargin)
     add_name = ['addsub',num2str(index)]; 
     reuse_block(blk, add_name, 'xbsIndex_r4/AddSub', ...
       'mode', m, 'latency', num2str(latency), ...
-      'en', async, 'precision', 'User Defined', ...
+      'en', async, 'precision', preci_type, ...
       'n_bits', num2str(n_bits_out(index)), 'bin_pt', num2str(bin_pt_out(index)), ...  
       'arith_type', arith_type, 'quantization', quant, 'overflow', of, ... 
       'pipelined', 'on', 'use_behavioral_HDL', use_behavioral_HDL, 'hw_selection', hw_selection, ... 
       'Position', [xpos-add_w/2 ypos_tmp xpos+add_w/2 ypos_tmp+add_d-20]);
     ypos_tmp = ypos_tmp + add_d;
   
-    add_line(blk, ['a_debus/',num2str(a_src(index))], [add_name,'/1']);
-    add_line(blk, ['b_debus/',num2str(b_src(index))], [add_name,'/2']);
+    reintp_a_name = ['reintp_a',num2str(index)]; 
+    reintp_b_name = ['reintp_b',num2str(index)]; 
+    
+    reuse_block(blk, reintp_a_name, 'xbsIndex_r4/Reinterpret', ...
+      'force_arith_type', 'on', ...
+      'arith_type', 'Floating-point', ...
+      'force_bin_pt', 'on', ...
+      'bin_pt',num2str(frac_width), ...
+      'Position', [xpos-add_w/2 ypos_tmp xpos+add_w/2 ypos_tmp+add_d-20]);
+  
+  
+    reuse_block(blk, reintp_b_name, 'xbsIndex_r4/Reinterpret', ...
+      'force_arith_type', 'on', ...
+      'arith_type', 'Floating-point', ...
+      'force_bin_pt', 'on', ...
+      'bin_pt',num2str(frac_width), ...
+      'Position', [xpos-add_w/2 ypos_tmp xpos+add_w/2 ypos_tmp+add_d-20]);
+    ypos_tmp = ypos_tmp + add_d;
+    
+    if floating_point
+        
+        add_line(blk, ['a_debus/',num2str(a_src(index))], [reintp_a_name,'/1']);
+        add_line(blk, ['b_debus/',num2str(b_src(index))], [reintp_b_name,'/1']);
+        
+        if (strcmp(pipeline_intfce_en, 'on'))
+            pipe_a_in_name = ['pipe_a_in',num2str(index)]; 
+            pipe_b_in_name = ['pipe_b_in',num2str(index)]; 
+            
+            reuse_block(blk, pipe_a_in_name, 'casper_library_delays/pipeline', ...
+            'Position', [95 115 145 135], ...
+            'ShowName', 'off', ...
+            'latency', num2str(pipeline_latency));
+            add_line(blk, [reintp_a_name,'/1'], [pipe_a_in_name,'/1']); 
+            add_line(blk, [pipe_a_in_name,'/1'], [add_name,'/1']);            
 
+            reuse_block(blk, pipe_b_in_name, 'casper_library_delays/pipeline', ...
+            'Position', [95 115 145 135], ...
+            'ShowName', 'off', ...
+            'latency', num2str(pipeline_latency));
+            add_line(blk, [reintp_b_name,'/1'], [pipe_b_in_name,'/1']);
+            add_line(blk, [pipe_b_in_name,'/1'], [add_name,'/2']);
+            
+        else
+            %add_line(blk, ['a_debus/',num2str(a_src(index))], [reintp_a_name,'/1']);
+            %add_line(blk, ['b_debus/',num2str(b_src(index))], [reintp_b_name,'/1']);   
+            add_line(blk, [reintp_a_name,'/1'], [add_name,'/1']);
+            add_line(blk, [reintp_b_name,'/1'], [add_name,'/2']);     
+        end
+        
+    else
+        add_line(blk, ['a_debus/',num2str(a_src(index))], [add_name,'/1']);
+        add_line(blk, ['b_debus/',num2str(b_src(index))], [add_name,'/2']);        
+    end
+    
     if strcmp(async, 'on')
       add_line(blk, 'en/1', [add_name,'/3']);
     end
@@ -271,7 +401,7 @@ function bus_addsub_init(blk, varargin)
   if strcmp(misc, 'on'),
     reuse_block(blk, 'dmisc', 'xbsIndex_r4/Delay', ...
       'latency', num2str(latency), ...
-      'Position', [xpos-del_w/2 ypos_tmp-del_d/2 xpos+del_w/2 ypos_tmp+del_d/2]);
+      'Position', [xpos-del_w/2 ypos_tmp-del_d/2 xpos+del_w/2 ypos_tmp+del_da_debus/2]);
     add_line(blk, 'misci/1', 'dmisc/1');
   end
   ypos_tmp = ypos_tmp + yinc;
@@ -292,9 +422,39 @@ function bus_addsub_init(blk, varargin)
     'inputNum', num2str(comp), ...
     'Position', [xpos-bus_create_w/2 ypos_tmp-add_d*comp/2 xpos+bus_create_w/2 ypos_tmp+add_d*comp/2]);
   
-  for index = 1:comp,
-    add_line(blk, ['addsub',num2str(index),'/1'], ['op_bussify/',num2str(index)]);
-  end
+    if floating_point
+      for idx = 1:comp,
+        reintp_out_name = ['reintp_out',num2str(idx)]; 
+        
+        reuse_block(blk, reintp_out_name, 'xbsIndex_r4/Reinterpret', ...
+          'force_arith_type', 'on', ...
+          'arith_type', 'Unsigned', ...
+          'force_bin_pt', 'on', ...
+          'bin_pt',num2str(0), ...
+          'Position', [xpos-add_w/2 ypos_tmp xpos+add_w/2 ypos_tmp+add_d-20]);
+        add_line(blk, ['addsub',num2str(idx),'/1'], [reintp_out_name,'/1']);  
+        
+        if (strcmp(pipeline_intfce_en, 'on'))
+            pipe_name = ['pipeline',num2str(idx)]; 
+            
+            reuse_block(blk, pipe_name, 'casper_library_delays/pipeline', ...
+            'Position', [95 115 145 135], ...
+            'ShowName', 'off', ...
+            'latency', num2str(pipeline_latency));
+            add_line(blk, [reintp_out_name,'/1'], [pipe_name,'/1']);  
+            add_line(blk, [pipe_name,'/1'], ['op_bussify/',num2str(idx)]);
+        else
+            add_line(blk, [reintp_out_name,'/1'], ['op_bussify/',num2str(idx)]);
+        end
+        
+        
+      end
+    else
+      for idx = 1:comp,
+        add_line(blk, ['addsub',num2str(idx),'/1'], ['op_bussify/',num2str(idx)]);
+      end
+    end
+    
 
   %output port/s
   ypos_tmp = ypos + add_d*comp/2;

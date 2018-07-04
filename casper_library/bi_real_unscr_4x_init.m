@@ -48,6 +48,10 @@ defaults = { ...
     'FFTSize', 3, ...
     'n_bits', 18, ...
     'bin_pt', 17, ...
+    'floating_point', 'off', ...
+    'float_type', 'single', ...
+    'exp_width', 8, ...
+    'frac_width', 24, ...         
     'add_latency', 1, ...
     'conv_latency', 1, ...
     'bram_latency', 2, ...
@@ -67,17 +71,21 @@ check_mask_type(blk, 'bi_real_unscr_4x');
 munge_block(blk, varargin{:});
 
 % Retrieve values from mask fields.
-n_inputs = get_var('n_inputs', 'defaults', defaults, varargin{:});
-FFTSize = get_var('FFTSize', 'defaults', defaults, varargin{:});
-n_bits = get_var('n_bits', 'defaults', defaults, varargin{:});
-bin_pt = get_var('bin_pt', 'defaults', defaults, varargin{:});
-add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
-conv_latency = get_var('conv_latency', 'defaults', defaults, varargin{:});
-bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
-bram_map = get_var('bram_map', 'defaults', defaults, varargin{:});
-bram_delays = get_var('bram_delays', 'defaults', defaults, varargin{:});
-dsp48_adders = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
-async = get_var('async', 'defaults', defaults, varargin{:});
+n_inputs        = get_var('n_inputs', 'defaults', defaults, varargin{:});
+FFTSize         = get_var('FFTSize', 'defaults', defaults, varargin{:});
+n_bits          = get_var('n_bits', 'defaults', defaults, varargin{:});
+bin_pt          = get_var('bin_pt', 'defaults', defaults, varargin{:});
+floating_point  = get_var('floating_point', 'defaults', defaults, varargin{:});
+float_type      = get_var('float_type', 'defaults', defaults, varargin{:});
+exp_width       = get_var('exp_width', 'defaults', defaults, varargin{:});
+frac_width      = get_var('frac_width', 'defaults', defaults, varargin{:});
+add_latency     = get_var('add_latency', 'defaults', defaults, varargin{:});
+conv_latency    = get_var('conv_latency', 'defaults', defaults, varargin{:});
+bram_latency    = get_var('bram_latency', 'defaults', defaults, varargin{:});
+bram_map        = get_var('bram_map', 'defaults', defaults, varargin{:});
+bram_delays     = get_var('bram_delays', 'defaults', defaults, varargin{:});
+dsp48_adders    = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
+async           = get_var('async', 'defaults', defaults, varargin{:});
 
 if FFTSize == 0 | n_inputs == 0,
   delete_lines(blk);
@@ -100,6 +108,21 @@ ms_negate_latency = 0;
 
 % Delete all lines.
 delete_lines(blk);
+
+if floating_point == 1
+  float_en = 'on';
+  n_bits = exp_width + frac_width;
+  bin_pt = 0;
+else
+  float_en = 'off';  
+end
+
+if float_type == 2
+  float_type_sel = 'custom';
+else
+  float_type_sel = 'single';
+end
+
 
 %
 % Add inputs and outputs.
@@ -193,6 +216,8 @@ reuse_block(blk, 'reorder_odd', 'casper_library_reorder/reorder', ...
     'bram_map', bram_map);
 add_line(blk, 'odd/1', 'reorder_odd/3');
 add_line(blk, 'sync/1', 'reorder_odd/1');
+
+
 
 reuse_block(blk, 't0', 'built-in/Terminator', ...
   'NamePlacement', 'alternate', 'Position', [195 310 215 330]);
