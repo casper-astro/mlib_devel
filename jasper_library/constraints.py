@@ -1,6 +1,11 @@
 import logging
 logger = logging.getLogger('jasper.toolflow.constraints')
 
+# Declaring Maximum packet size for upload_to_ram in casperfpga
+# - This is
+MAX_IMAGE_CHUNK_SIZE = 1988
+
+
 class PortConstraint(object):
      '''
      A class to facilitate constructing abstracted port constraints.
@@ -53,7 +58,7 @@ class PortConstraint(object):
          self.width = len(iogroup_index)
 
          if (port_index != []) and (len(port_index) != len(iogroup_index)):
-             raise ValueError("Tried to constrain a multidimensional signal with iogroup  with different dimensions!")
+             raise ValueError("Tried to constrain a multidimensional signal with iogroup with different dimensions!")
 
          if self.loc == [None]:
              self.loc *= self.width
@@ -184,6 +189,34 @@ class OutputDelayConstraint(object):
         self.constdelay_ns = constdelay_ns
         self.add_delay_en = add_delay_en
         self.portname = portname
+
+class MaxDelayConstraint(object):
+    '''
+    A set max delay constraint - simply holds the source, destination paths and the constraint
+    delay value (ns).
+    '''
+    def __init__(self, sourcepath=None, destpath=None , constdelay_ns=None):
+        logger.debug('New set max delay constraint')
+        logger.debug('source path: %s'%sourcepath)
+        logger.debug('destination path: %s'%destpath)
+        logger.debug('constraint delay: %s'%constdelay_ns)
+        self.sourcepath = sourcepath
+        self.destpath = destpath
+        self.constdelay_ns = constdelay_ns
+
+class MinDelayConstraint(object):
+    '''
+    A set min delay constraint - simply holds the source, destination paths and the constraint
+    delay value (ns).
+    '''
+    def __init__(self, sourcepath=None, destpath=None , constdelay_ns=None):
+        logger.debug('New set max delay constraint')
+        logger.debug('source path: %s'%sourcepath)
+        logger.debug('destination path: %s'%destpath)
+        logger.debug('constraint delay: %s'%constdelay_ns)
+        self.sourcepath = sourcepath
+        self.destpath = destpath
+        self.constdelay_ns = constdelay_ns
 
 class FalsePathConstraint(object):
     '''

@@ -170,7 +170,13 @@ architecture wrapper of gmii_to_sgmii_transceiver is
           );
    end component;
 
-
+   component gmii_to_sgmii_reset_wtd_timer
+   port (
+       clk         : in  std_logic;
+       data_valid  : in  std_logic;
+       reset       : out std_logic
+   );
+   end component;
 
    -----------------------------------------------------------------------------
    -- Component Declaration for the Receiver Elastic Buffer
@@ -367,8 +373,9 @@ architecture wrapper of gmii_to_sgmii_transceiver is
    -----------------------------------------------------------------------------
    -- Signal declarations
    -----------------------------------------------------------------------------
-   signal  data_valid_reg        : std_logic;
-   signal  data_valid_reg2       : std_logic;
+   signal data_valid_reg2        : std_logic;
+   signal wtd_rxpcsreset_in      : std_logic;
+   signal rxpcsreset_comb        : std_logic;
 
    signal cplllock               : std_logic;
    signal gt_reset_rx            : std_logic;
@@ -423,9 +430,31 @@ architecture wrapper of gmii_to_sgmii_transceiver is
    signal txpowerdown_double     : std_logic := '0';
    signal txpowerdown            : std_logic := '0';
    signal rxpowerdown_reg        : std_logic := '0';
+   signal gt0_rxprbssel_in_orded   : std_logic;
+   signal wtd_rxpcsreset_in_comb   : std_logic;
 
 begin
+   sync_block_data_valid : gmii_to_sgmii_sync_block
+   port map
+          (
+             clk             =>  independent_clock,
+             data_in         =>  data_valid,
+             data_out        =>  data_valid_reg2
+          );
+   reset_wtd_timer : gmii_to_sgmii_reset_wtd_timer
+   port map
+          (
+             clk             =>  independent_clock,
+             data_valid      =>  data_valid_reg2,
+             reset           =>  wtd_rxpcsreset_in
+          );
 
+   gt0_rxprbssel_in_orded <= gt0_rxprbssel_in(0) or gt0_rxprbssel_in(1) or gt0_rxprbssel_in(2);
+   wtd_rxpcsreset_in_comb <= '0' when gt0_rxprbssel_in_orded = '1' else 
+                             wtd_rxpcsreset_in;
+   rxpcsreset_comb        <= wtd_rxpcsreset_in_comb or gt0_rxpcsreset_in;
+
+   
    txpowerdown_int <= txpowerdown & txpowerdown;
    rxpowerdown_int <= rxpowerdown_reg & rxpowerdown_reg;
    -- rxpowerdown given on usrclk2 since since recclk stops at powerdown hence there will be an issue in clearing of powerdown
@@ -610,7 +639,7 @@ begin
         gt0_drpwe_in                    =>     gt0_drpwe_in   , 
         sysclk_in                       => independent_clock,
         soft_reset_in                   => pmareset,
-        dont_reset_on_data_error_in     =>     '1',
+        dont_reset_on_data_error_in     => gt0_rxprbssel_in_orded,
         gt0_tx_fsm_reset_done_out       => resetdone_tx,
         gt0_rx_fsm_reset_done_out       => resetdone_rx,
         gt0_data_valid_in               => data_valid_reg2,
@@ -679,7 +708,7 @@ begin
         gt0_txpmareset_in              =>    gt0_txpmareset_in        , 
         gt0_txpcsreset_in              =>    gt0_txpcsreset_in        , 
         gt0_rxpmareset_in              =>    gt0_rxpmareset_in        , 
-        gt0_rxpcsreset_in              =>    gt0_rxpcsreset_in        , 
+        gt0_rxpcsreset_in              =>    rxpcsreset_comb          , 
         gt0_rxpmaresetdone_out         =>    gt0_rxpmaresetdone_out   , 
         gt0_dmonitorout_out            =>    gt0_dmonitorout_out      ,        
 
@@ -763,26 +792,6 @@ begin
        txbuferr    <= txbufstatus_reg(1);
      end if;
    end process;
-  -----------------------------------------------------------------------------
-   -- The core works from a 125MHz clock source userclk2, the init statemachines 
-   -- work at 200 MHz. 
-   -----------------------------------------------------------------------------
-
-   -- Cross the clock domain
-   process (usrclk2)
-   begin
-      if usrclk2'event and usrclk2= '1' then
-          data_valid_reg    <= data_valid;
-      end if;
-   end process;
-
-
-   sync_block_data_valid : gmii_to_sgmii_sync_block
-   port map
-          (
-             clk             =>  independent_clock,
-             data_in         =>  data_valid_reg,
-             data_out        =>  data_valid_reg2
-          );
+ 
 
 end wrapper;

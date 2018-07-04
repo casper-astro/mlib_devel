@@ -2,7 +2,7 @@
 --   ____  ____
 --  /   /\/   /
 -- /___/  \  /    Vendor: Xilinx
--- \   \   \/     Version : 3.2
+-- \   \   \/     Version : 3.4
 --  \   \         Application : 7 Series FPGAs Transceivers Wizard 
 --  /   /         Filename : gmii_to_sgmii_gtwizard_init.vhd
 -- /___/   /\      
@@ -468,10 +468,6 @@ end component;
 end component;
 
 
-
-
-
-
   function get_cdrlock_time(is_sim : in integer) return integer is
     variable lock_time: integer;
   begin
@@ -545,7 +541,8 @@ begin
     tied_to_ground_i                             <= '0';
     tied_to_vcc_i                                <= '1';
     gt0_gttxreset_gt                             <= gt0_gttxreset_t or gt0_gttxreset_in; 
-    gt0_gtrxreset_gt                             <= gt0_gtrxreset_t or gt0_gtrxreset_in;
+    -- GT 11/04/2017 SEE AR 64835 gt0_gtrxreset_gt                             <= gt0_gtrxreset_t or gt0_gtrxreset_in;
+	gt0_gtrxreset_gt                             <= gt0_gtrxreset_t;
     gt0_rxpmaresetdone_out <= gt0_rxpmaresetdone_i;
     
     ----------------------------- The GT Wrapper -----------------------------

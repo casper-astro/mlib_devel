@@ -47,8 +47,8 @@ entity forty_gbe is
     port(
         user_clk_o : out std_logic;
         user_rst_o : out std_logic;
-        hmc_rst_o : out std_logic;
-        hmc_clk_o : out std_logic;
+        hmc_rst_o  : out std_logic;
+        hmc_clk_o  : out std_logic; 
 
         FPGA_RESET_N       : in std_logic;
         FPGA_REFCLK_BUF0_P : in std_logic;
@@ -118,6 +118,9 @@ entity forty_gbe is
         HMC_MEZZ0_SCL_IN : in std_logic;
         HMC_MEZZ0_SDA_IN : in std_logic;
         HMC_MEZZ0_INIT_DONE : in std_logic;
+        HMC_MEZZ0_POST_OK : in std_logic;        
+        MEZZ0_ID : in std_logic_vector(2 downto 0);
+        MEZZ0_PRESENT : in std_logic;
 
         --HMC Mezzanine 1 Signals
         HMC_MEZZ1_SCL_OUT : out std_logic;
@@ -125,6 +128,9 @@ entity forty_gbe is
         HMC_MEZZ1_SCL_IN : in std_logic;
         HMC_MEZZ1_SDA_IN : in std_logic;
         HMC_MEZZ1_INIT_DONE : in std_logic;
+        HMC_MEZZ1_POST_OK : in std_logic;        
+        MEZZ1_ID : in std_logic_vector(2 downto 0);
+        MEZZ1_PRESENT : in std_logic;        
         
         --HMC Mezzanine 2 Signals
         HMC_MEZZ2_SCL_OUT : out std_logic;
@@ -132,6 +138,9 @@ entity forty_gbe is
         HMC_MEZZ2_SCL_IN : in std_logic;
         HMC_MEZZ2_SDA_IN : in std_logic;
         HMC_MEZZ2_INIT_DONE : in std_logic;
+        HMC_MEZZ2_POST_OK : in std_logic;                
+        MEZZ2_ID : in std_logic_vector(2 downto 0);
+        MEZZ2_PRESENT : in std_logic;        
         
         -- 1GBE SIGNALS
         ONE_GBE_SGMII_TX_P  : out std_logic;
@@ -214,6 +223,10 @@ entity forty_gbe is
         DEBUG_UART_TX : out std_logic;
         DEBUG_UART_RX : in  std_logic;
 
+        -- > Master LEDs that will be output (Front panel LEDs)
+        dsp_leds_i     : in std_logic_vector(7 downto 0);
+        fpga_leds_o    : out std_logic_vector(7 downto 0);
+        
         -- AUX CONNECTIONS
         --AUX_CLK_P   : in  std_logic;
         --AUX_CLK_N   : in  std_logic;
@@ -224,7 +237,8 @@ entity forty_gbe is
 
         EMCCLK_FIX : out std_logic;
         GND        : out std_logic_vector(15 downto 0);
-
+        
+        forty_gbe_rst             : in  std_logic;
         forty_gbe_tx_valid        : in  std_logic_vector(3 downto 0);
         forty_gbe_tx_end_of_frame : in  std_logic;
         forty_gbe_tx_data         : in  std_logic_vector(255 downto 0);
@@ -237,6 +251,8 @@ entity forty_gbe is
         forty_gbe_rx_data         : out std_logic_vector(255 downto 0);
         forty_gbe_rx_source_ip    : out std_logic_vector(31 downto 0);
         forty_gbe_rx_source_port  : out std_logic_vector(15 downto 0);
+        forty_gbe_rx_dest_ip      : out std_logic_vector(31 downto 0);
+        forty_gbe_rx_dest_port    : out std_logic_vector(15 downto 0);
         forty_gbe_rx_bad_frame    : out std_logic;
         forty_gbe_rx_overrun      : out std_logic;
         forty_gbe_rx_overrun_ack  : in  std_logic;
@@ -281,7 +297,8 @@ architecture arch_forty_gbe of forty_gbe is
         STB_O       : out std_logic;
         UART_rxd    : in std_logic;
         UART_txd    : out std_logic;
-        WE_O        : out std_logic);
+        WE_O        : out std_logic;
+        dcm_locked  : in std_logic);
     end component;
     
     component mezzanine_enable_delay
@@ -623,6 +640,8 @@ architecture arch_forty_gbe of forty_gbe is
         rx_data             : out std_logic_vector(255 downto 0);
         rx_source_ip        : out std_logic_vector(31 downto 0);
         rx_source_port      : out std_logic_vector(15 downto 0);
+        rx_dest_ip          : out std_logic_vector(31 downto 0);
+        rx_dest_port        : out std_logic_vector(15 downto 0);
         rx_bad_frame        : out std_logic;
         rx_overrun          : out std_logic;
         rx_overrun_ack      : in std_logic;
@@ -704,12 +723,76 @@ architecture arch_forty_gbe of forty_gbe is
             FPGA_DNA_MATCH_O : out std_logic
         );
     end component FPGA_DNA_CHECKER;
+    
+    -- GT 29/03/2017 ADDED ACCESS TO XADC
+    component xadc_measurement
+        port (
+            daddr_in        : in std_logic_vector(6 downto 0);
+            den_in          : in std_logic;
+            di_in           : in std_logic_vector(15 downto 0);
+            dwe_in          : in std_logic;
+            do_out          : out std_logic_vector(15 downto 0);
+            drdy_out        : out std_logic;
+            dclk_in         : in std_logic;
+            reset_in        : in std_logic;
+            busy_out        : out std_logic;
+            channel_out     : out std_logic_vector(4 downto 0);
+            eoc_out         : out std_logic;
+            eos_out         : out std_logic;
+            ot_out          : out std_logic;
+            user_temp_alarm_out : out std_logic;
+            alarm_out       : out std_logic;
+            vp_in           : in std_logic;
+            vn_in           : in std_logic);
+    end component;    
+       
+    component cross_clock_fifo_wb_out_73x16
+    port (
+        rst             : in std_logic;
+        wr_clk          : in std_logic;
+        rd_clk          : in std_logic;
+        din             : in std_logic_vector(72 downto 0);
+        wr_en           : in std_logic;
+        rd_en           : in std_logic;
+        dout            : out std_logic_vector(72 downto 0);
+        full            : out std_logic;
+        empty           : out std_logic);
+    end component; 
+        
+   type T_WB_DSP_WR_STATE is (
+     WB_DSP_WR_IDLE,
+     WB_DSP_WR_STROBE_CHECK,
+     WB_DSP_WR_FIFO_WR_EN_1,
+     WB_DSP_WR_FIFO_WR_EN_2,
+     WB_DSP_WR_FIFO_WR_EN_3,
+     WB_DSP_WR_FIFO_WR_EN_4,     
+     WB_DSP_WR_FIFO_WR_DIS);   
 
-    signal fpga_reset : std_logic;
-    signal gmii_fpga_rst : std_logic;
-    signal qsfp_fpga_rst : std_logic;
-    signal sys_fpga_rst : std_logic;
-    signal emcclk_fpga_rst : std_logic;    
+    component led_manager
+    	port (
+    		clk 					: in std_logic;
+    		rst 					: in std_logic;
+    		forty_gbe_link_status 	: in std_logic;
+    		dhcp_resolved 			: in std_logic;
+    		firmware_version		: in std_logic_vector(3 downto 0);
+    		ublaze_toggle_value		: in std_logic;
+    		dsp_override_i   		: in std_logic;
+    		dsp_leds_i 			    : in std_logic_vector(7 downto 0);
+            leds_out                : out std_logic_vector(7 downto 0)
+    		);
+    end component;
+
+    signal sys_clk : std_logic;
+    signal sys_clk_mmcm : std_logic;
+    signal sys_rst : std_logic; 
+    signal bsp_rst : std_logic;
+    signal user_40gbe_rst : std_logic;
+    signal gmii_clk : std_logic;
+    signal gmii_rst : std_logic;
+
+
+    signal gmii_reset_done : std_logic;
+
     signal refclk_0 : std_logic;
     signal refclk_1 : std_logic;
     signal aux_clk : std_logic;
@@ -718,62 +801,65 @@ architecture arch_forty_gbe of forty_gbe is
 
     signal user_clk : std_logic;
     signal user_clk_mmcm : std_logic;
-    --Reset Synchroniser and user reset signals
-    signal sync_sys_fpga_rst : std_logic;
-    signal sync_sys_fpga_rst2 : std_logic;
-    signal sync_sys_fpga_rst3 : std_logic;
-    attribute ASYNC_REG : string;
-    attribute ASYNC_REG of sync_sys_fpga_rst: signal is "TRUE";
-    attribute ASYNC_REG of sync_sys_fpga_rst2: signal is "TRUE";
-    attribute ASYNC_REG of sync_sys_fpga_rst3: signal is "TRUE";      
-    signal sync_user_rst : std_logic;
-    signal sync_user_rst2 : std_logic;
-    signal sync_user_rst3 : std_logic;
-    attribute ASYNC_REG of sync_user_rst: signal is "TRUE";
-    attribute ASYNC_REG of sync_user_rst2: signal is "TRUE";
-    attribute ASYNC_REG of sync_user_rst3: signal is "TRUE";    
-    signal sync_gmii_fpga_rst : std_logic;
-    signal sync_gmii_fpga_rst2 : std_logic;
-    signal sync_gmii_fpga_rst3 : std_logic;    
-    attribute ASYNC_REG of sync_gmii_fpga_rst: signal is "TRUE";
-    attribute ASYNC_REG of sync_gmii_fpga_rst2: signal is "TRUE";
-    attribute ASYNC_REG of sync_gmii_fpga_rst3: signal is "TRUE";     
-    signal sync_qsfp_fpga_rst : std_logic;
-    signal sync_qsfp_fpga_rst2 : std_logic;
-    signal sync_qsfp_fpga_rst3 : std_logic;    
-    attribute ASYNC_REG of sync_qsfp_fpga_rst: signal is "TRUE";
-    attribute ASYNC_REG of sync_qsfp_fpga_rst2: signal is "TRUE";
-    attribute ASYNC_REG of sync_qsfp_fpga_rst3: signal is "TRUE";     
-    signal sync_emcclk_fpga_rst : std_logic;
-    signal sync_emcclk_fpga_rst2 : std_logic;
-    signal sync_emcclk_fpga_rst3 : std_logic;    
-    attribute ASYNC_REG of sync_emcclk_fpga_rst: signal is "TRUE";
-    attribute ASYNC_REG of sync_emcclk_fpga_rst2: signal is "TRUE";
-    attribute ASYNC_REG of sync_emcclk_fpga_rst3: signal is "TRUE";                
-    signal user_rst : std_logic;
-    signal user_fpga_rst : std_logic;
-    signal sys_clk : std_logic;
-    signal sys_rst : std_logic; 
-    signal sys_rst_i : std_logic;
-    signal sys_rst_z : std_logic;
-    signal sys_rst_z2 : std_logic;
-    signal sys_rst_z3 : std_logic;
-    signal user_rst_i : std_logic;
-    signal user_rst_z : std_logic;
-    signal user_rst_z2 : std_logic;
-    signal user_rst_z3 : std_logic;    
+    --signal user_rst : std_logic;
 
-    signal gmii_clk : std_logic;
-    signal gmii_rst : std_logic;
+    signal bsp_clk : std_logic;
+    signal bsp_clk_mmcm : std_logic;
+    
+    signal sys_mmcm_locked : std_logic;
+    signal user_mmcm_locked : std_logic;
+
     signal gmii_rst_z : std_logic;
     signal gmii_rst_z2 : std_logic;
     signal gmii_rst_z3 : std_logic;
 
-    signal gmii_reset_done : std_logic;
-    signal gmii_reset_done_z : std_logic;
-    signal gmii_reset_done_z2 : std_logic;
-    signal gmii_reset_done_z3 : std_logic;
+    --Reset Synchroniser and user reset signals
+    attribute ASYNC_REG : string;
 
+    signal sys_fpga_rst : std_logic;
+    signal sync_sys_fpga_rst : std_logic;
+    attribute ASYNC_REG of sys_fpga_rst: signal is "TRUE";
+    attribute ASYNC_REG of sync_sys_fpga_rst: signal is "TRUE";
+
+    signal aux_fpga_rst : std_logic;
+    signal sync_aux_fpga_rst : std_logic;
+    attribute ASYNC_REG of aux_fpga_rst: signal is "TRUE";
+    attribute ASYNC_REG of sync_aux_fpga_rst: signal is "TRUE";
+
+    signal user_fpga_rst : std_logic;
+    signal sync_user_fpga_rst : std_logic;
+    attribute ASYNC_REG of user_fpga_rst: signal is "TRUE";
+    attribute ASYNC_REG of sync_user_fpga_rst: signal is "TRUE";
+
+    signal bsp_fpga_rst : std_logic;
+    signal sync_bsp_fpga_rst : std_logic;
+    attribute ASYNC_REG of bsp_fpga_rst: signal is "TRUE";
+    attribute ASYNC_REG of sync_bsp_fpga_rst: signal is "TRUE";
+        
+    signal gmii_fpga_rst : std_logic;
+    signal sync_gmii_fpga_rst : std_logic;
+    attribute ASYNC_REG of gmii_fpga_rst: signal is "TRUE";
+    attribute ASYNC_REG of sync_gmii_fpga_rst: signal is "TRUE";
+
+    signal qsfp_fpga_rst : std_logic;
+    signal sync_qsfp_fpga_rst : std_logic;
+    attribute ASYNC_REG of qsfp_fpga_rst: signal is "TRUE";
+    attribute ASYNC_REG of sync_qsfp_fpga_rst: signal is "TRUE";
+
+    signal emcclk_fpga_rst : std_logic;
+    signal sync_emcclk_fpga_rst : std_logic;       
+    attribute ASYNC_REG of emcclk_fpga_rst: signal is "TRUE";
+    attribute ASYNC_REG of sync_emcclk_fpga_rst: signal is "TRUE";
+    
+    --signal gmii_reset_done_z : std_logic; -- GT 29/03/2017 CHANGE gmii_rst CONDITION
+    --signal gmii_reset_done_z2 : std_logic;
+    --signal gmii_reset_done_z3 : std_logic; 
+    
+    signal sgmii_link_up : std_logic;
+    signal sgmii_link_up_z : std_logic;
+    signal sgmii_link_up_z2 : std_logic;
+    signal sgmii_link_up_z3 : std_logic;     
+    
     signal enable_40gbe_packet_generation : std_logic_vector(3 downto 0);
     signal enable_40gbe_packet_generation_z1 : std_logic_vector(3 downto 0);
     signal enable_1gbe_packet_generation : std_logic;
@@ -960,7 +1046,10 @@ architecture arch_forty_gbe of forty_gbe is
     signal host_reset_z3 : std_logic;
     signal host_reset_u : std_logic;
     signal host_reset_u2 : std_logic;
-    signal host_reset_u3 : std_logic;    
+    signal host_reset_u3 : std_logic; 
+    signal host_reset_d : std_logic;
+    signal host_reset_d2 : std_logic;
+    signal host_reset_d3 : std_logic;     
 
     signal xlgmii_tx_valid        : std_logic_vector(3 downto 0);
     signal xlgmii_tx_end_of_frame : std_logic;
@@ -974,6 +1063,8 @@ architecture arch_forty_gbe of forty_gbe is
     signal xlgmii_rx_data         : std_logic_vector(255 downto 0);
     signal xlgmii_rx_source_ip    : std_logic_vector(31 downto 0);
     signal xlgmii_rx_source_port  : std_logic_vector(15 downto 0);
+    signal xlgmii_rx_dest_ip      : std_logic_vector(31 downto 0);
+    signal xlgmii_rx_dest_port    : std_logic_vector(15 downto 0);
     signal xlgmii_rx_bad_frame    : std_logic;
     signal xlgmii_rx_overrun      : std_logic;
     signal xlgmii_rx_overrun_ack  : std_logic;
@@ -1033,7 +1124,40 @@ architecture arch_forty_gbe of forty_gbe is
 
     signal qsfp_gtrefclk : std_logic;
     signal qsfp_gtrefclk_pb : std_logic;
+    
+    -- GT 29/03/2017 XADC SIGNALS
+    signal xadc_busy_out : std_logic;
+    signal xadc_channel_out :  std_logic_vector (4 downto 0);
+    signal xadc_eoc_out : std_logic;
+    signal xadc_eos_out : std_logic;
+    signal xadc_ot_out : std_logic;
+    signal xadc_user_temp_alarm_out : std_logic;
+    signal xadc_alarm_out : std_logic;
+    
+    signal xadc_daddr_in : std_logic_vector (6 downto 0);
+    signal xadc_den_in : std_logic;
+    signal xadc_di_in : std_logic_vector (15 downto 0);
+    signal xadc_dwe_in : std_logic;
+    signal xadc_do_out : std_logic_vector (15 downto 0);
+    signal xadc_drdy_out : std_logic;    
+    
+    -- GT 11/04/2017 ADD TIMEOUT TO SGMII CORE     
+    signal sgmii_timeout_count_low : std_logic_vector(15 downto 0);
+    signal sgmii_timeout_count_low_over : std_logic;
+    signal sgmii_timeout_count_high : std_logic_vector(10 downto 0);
+    signal sgmii_timeout : std_logic;
+    signal sgmii_reset_count : std_logic_vector(7 downto 0);
+    signal sgmii_timeout_reset : std_logic;
 
+	-- AP: LED Manager
+    -- > Will use the following signals:
+    --   -> clk => sys_clk and rst => sys_rst
+    --   -> forty_gbe_link_status => fgbe_link_status
+    --	 -> dhcp_resolved => brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(0)
+    --	 -> firmware_version => C_VERSION (from parameter.vhd), or brd_user_read_regs(C_RD_VERSION_ADDR)
+    --	 -> dsp_override_i and dsp_leds_in
+    --	 -> leds_out => FPGA_LEDS(7 downto 0)
+    
     signal mezzanine_fault_override : std_logic;
 
     signal src_packets_sent : std_logic_vector(15 downto 0);
@@ -1095,10 +1219,11 @@ architecture arch_forty_gbe of forty_gbe is
 
     -- MB 08/10/2015 ADDED SUPPORT FOR READING FPGA DNA
     signal fpga_dna : std_logic_vector(63 downto 0);
-
+    
     signal select_one_gbe_data_sel  : std_logic;
 
-    signal CLKFB : std_logic;
+    signal sys_clk_mmcm_fb : std_logic;
+    signal user_clk_mmcm_fb : std_logic;
     
     --HMC I2C Mezzanine 0 Signals
     signal shmc_mezz0_scl_out : std_logic;
@@ -1118,7 +1243,137 @@ architecture arch_forty_gbe of forty_gbe is
     signal shmc_mezz2_scl_in : std_logic;
     signal shmc_mezz2_sda_in : std_logic;
     
+    --Wishbone DSP FIFO Signals
+    --Output to DSP
+    signal wb_cross_clock_out_din : std_logic_vector(72 downto 0);
+    signal wb_cross_clock_out_wrreq : std_logic;
+    signal wb_cross_clock_out_rdreq : std_logic;
+    signal wb_cross_clock_out_dout : std_logic_vector(72 downto 0);
+    signal wb_cross_clock_out_full : std_logic;
+    signal wb_cross_clock_out_empty : std_logic;
+    
+    --Input from DSP
+    signal wb_data_in : std_logic_vector(31 downto 0);
+    signal wb_ack_in : std_logic;
+    signal wb_ack_in_z1 : std_logic;
+    signal wb_ack_in_z2 : std_logic;
+    signal wb_sync_ack_in : std_logic;
+    signal wb_sync_data_in : std_logic_vector(31 downto 0);
+    
+    
+    --Wishbone Write State Machine
+    signal wb_dsp_wr_state : T_WB_DSP_WR_STATE;
+    signal wb_slv_stb_hist_i : std_logic;
+    
+    --Mezzanine 3 
+    signal MEZZ3_ID : std_logic_vector(2 downto 0);
+    signal MEZZ3_PRESENT : std_logic;
+    
+    -- Mark Debug ILA Testing    
+--    signal dbg_wb_cross_clock_out_din : std_logic_vector(72 downto 0);
+--    signal dbg_wb_cross_clock_out_wrreq : std_logic;
+--    signal dbg_wb_cross_clock_out_rdreq : std_logic;
+--    signal dbg_wb_cross_clock_out_dout : std_logic_vector(72 downto 0);
+--    signal dbg_wb_cross_clock_out_full : std_logic;
+--    signal dbg_wb_cross_clock_out_empty : std_logic;
+    
+--    signal dbg_wb_data_in : std_logic_vector(31 downto 0);
+--    signal dbg_wb_ack_in : std_logic;
+--    signal dbg_wb_ack_in_z1 : std_logic;
+--    signal dbg_wb_ack_in_z2 : std_logic;
+--    signal dbg_wb_sync_ack_in : std_logic;
+--    signal dbg_wb_sync_data_in : std_logic_vector(31 downto 0);
+    
+--    signal dbg_wb_dsp_wr_state : T_WB_DSP_WR_STATE;   
+--    signal dbg_WB_SLV_ACK_O_top : std_logic;
+--    signal dbg_WB_SLV_DAT_O_top : std_logic_vector(31 downto 0);
+--    signal dbg_WB_SLV_DAT_O : std_logic_vector(31 downto 0);
+--    signal dbg_WB_SLV_ACK_O : std_logic;
+--    signal dbg_WB_SLV_SEL_I_top : std_logic_vector(3 downto 0);
+--    signal dbg_WB_SLV_STB_I_top : std_logic;
+--    signal dbg_WB_SLV_WE_I_top : std_logic;    
+    
+--    signal dbg_WB_SLV_ADR_I_top : std_logic_vector(31 downto 0);
+--    signal dbg_WB_SLV_CYC_I_top : std_logic;
+--    signal dbg_WB_SLV_DAT_I : std_logic_vector(31 downto 0);  
+--    signal dbg_WB_SLV_ADR_I : std_logic_vector(31 downto 0);  
+--    signal dbg_WB_SLV_CYC_I : std_logic;  
+--    signal dbg_WB_SLV_SEL_I : std_logic_vector(3 downto 0);  
+--    signal dbg_WB_SLV_WE_I : std_logic; 
+--    signal dbg_WB_SLV_STB_I : std_logic;
+    
+    
+                                    
+    -- Mark Debug ILA Testing
+    
+--    attribute MARK_DEBUG : string;
+--    attribute MARK_DEBUG of dbg_wb_cross_clock_out_din : signal is "TRUE";
+--    attribute MARK_DEBUG of dbg_wb_cross_clock_out_wrreq : signal is "TRUE";
+--    attribute MARK_DEBUG of dbg_wb_cross_clock_out_rdreq : signal is "TRUE";
+--    attribute MARK_DEBUG of dbg_wb_cross_clock_out_dout : signal is "TRUE";
+--    attribute MARK_DEBUG of dbg_wb_cross_clock_out_full : signal is "TRUE"; 
+--    attribute MARK_DEBUG of dbg_wb_cross_clock_out_empty : signal is "TRUE";    
+--    attribute MARK_DEBUG of dbg_wb_data_in : signal is "TRUE";    
+--    attribute MARK_DEBUG of dbg_wb_ack_in : signal is "TRUE";    
+--    attribute MARK_DEBUG of dbg_wb_ack_in_z1 : signal is "TRUE";    
+--    attribute MARK_DEBUG of dbg_wb_ack_in_z2 : signal is "TRUE";    
+--    attribute MARK_DEBUG of dbg_wb_sync_ack_in : signal is "TRUE";    
+--    attribute MARK_DEBUG of dbg_wb_sync_data_in : signal is "TRUE";    
+
+--    attribute MARK_DEBUG of dbg_wb_dsp_wr_state : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_ACK_O_top : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_DAT_O_top : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_DAT_O : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_ACK_O : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_SEL_I_top : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_STB_I_top : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_WE_I_top : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_ADR_I_top : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_CYC_I_top : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_DAT_I : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_ADR_I : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_CYC_I : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_SEL_I : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_WE_I : signal is "TRUE";   
+--    attribute MARK_DEBUG of dbg_WB_SLV_STB_I : signal is "TRUE";   
+    
+    
 begin
+
+    --ILA Assignments
+--    dbg_wb_cross_clock_out_din <= wb_cross_clock_out_din;
+--    dbg_wb_cross_clock_out_wrreq <= wb_cross_clock_out_wrreq;
+--    dbg_wb_cross_clock_out_rdreq <= wb_cross_clock_out_rdreq;
+--    dbg_wb_cross_clock_out_dout <= wb_cross_clock_out_dout;
+--    dbg_wb_cross_clock_out_full <= wb_cross_clock_out_full;
+--    dbg_wb_cross_clock_out_empty <= wb_cross_clock_out_empty;
+--    dbg_wb_data_in <= wb_data_in;
+--    dbg_wb_ack_in <= wb_ack_in;
+--    dbg_wb_ack_in_z1 <= wb_ack_in_z1;
+--    dbg_wb_ack_in_z2 <= wb_ack_in_z2;
+--    dbg_wb_sync_ack_in <= wb_sync_ack_in;
+--    dbg_wb_sync_data_in <= wb_sync_data_in;
+--    dbg_wb_dsp_wr_state <= wb_dsp_wr_state;
+--    dbg_WB_SLV_ACK_O_top <= WB_SLV_ACK_O_top;
+--    dbg_WB_SLV_DAT_O_top <= WB_SLV_DAT_O_top;
+--    dbg_WB_SLV_DAT_O <= WB_SLV_DAT_O(14);
+--    dbg_WB_SLV_ACK_O <= WB_SLV_ACK_O(14);
+--    dbg_WB_SLV_SEL_I_top <= wb_cross_clock_out_dout(4 downto 1);
+--    dbg_WB_SLV_STB_I_top <= wb_cross_clock_out_dout(72);
+--    dbg_WB_SLV_WE_I_top <= wb_cross_clock_out_dout(0);
+--    dbg_WB_SLV_ADR_I_top <= wb_cross_clock_out_dout(37 downto 6);
+--    dbg_WB_SLV_CYC_I_top <= wb_cross_clock_out_dout(5);
+--    dbg_WB_SLV_DAT_I <= WB_SLV_DAT_I(14);
+--    dbg_WB_SLV_ADR_I <= WB_SLV_ADR_I(14);
+--    dbg_WB_SLV_CYC_I <= WB_SLV_CYC_I(14);
+--    dbg_WB_SLV_SEL_I <= WB_SLV_SEL_I(14);
+--    dbg_WB_SLV_WE_I <= WB_SLV_WE_I(14);
+--    dbg_WB_SLV_STB_I <= WB_SLV_STB_I(14);
+
+    --Mezzanine 3 ID and Present (this should be part of the 40GbE yellow block, but is part of the BSP for now)
+    --Mezzanine ID: "000" = spare, "001" = 40GbE, "010" = HMC, "011" = ADC, rest = spare
+    MEZZ3_ID <= "001";
+    MEZZ3_PRESENT <= '1';
 
     EMCCLK_FIX <= EMCCLK;
 
@@ -1129,9 +1384,9 @@ begin
     xlgmii_tx_dest_port    <= forty_gbe_tx_dest_port;
     --xlgmii_rx_overrun_ack  <= forty_gbe_rx_overrun_ack;
     --xlgmii_rx_ack          <= forty_gbe_rx_ack;
-    forty_gbe_led_rx <= led_rx;
-    forty_gbe_led_tx <= led_tx;
-    forty_gbe_led_up <= led_up;
+    forty_gbe_led_rx <= xlgmii_rxled(0)(1); -- xlgmii_rxled(0)(1) is activity, xlgmii_rxled(0)(0) is phy rx up
+    forty_gbe_led_tx <= xlgmii_txled(0)(1); -- xlgmii_txled(0)(1) is activity, xlgmii_txled(0)(0) is phy tx up
+    forty_gbe_led_up <= phy_rx_up(0);
 
     forty_gbe_tx_overflow     <= xlgmii_tx_overflow;
     forty_gbe_tx_afull        <= xlgmii_tx_afull;
@@ -1142,6 +1397,8 @@ begin
     forty_gbe_rx_data(255 downto 0) <= xlgmii_rx_data(63 downto 0) & xlgmii_rx_data(127 downto 64) & xlgmii_rx_data(191 downto 128) &  xlgmii_rx_data(255 downto 192);    
     forty_gbe_rx_source_ip    <= xlgmii_rx_source_ip;
     forty_gbe_rx_source_port  <= xlgmii_rx_source_port;
+    forty_gbe_rx_dest_ip      <= xlgmii_rx_dest_ip;
+    forty_gbe_rx_dest_port    <= xlgmii_rx_dest_port;
     forty_gbe_rx_bad_frame    <= xlgmii_rx_bad_frame;
     forty_gbe_rx_overrun      <= xlgmii_rx_overrun;
 
@@ -1153,14 +1410,7 @@ begin
 
     GND <= (others => '0');
     
-    --Pipeline the FPGA_RESET_N
-    pFpgaResetRegister: process(sys_clk)
-    begin     
-        if (rising_edge(sys_clk) ) then
-           fpga_reset <= not FPGA_RESET_N;
-           FAN_CONT_RST_N <= FPGA_RESET_N;
-        end if;
-    end process pFpgaResetRegister;    
+
 
 ---------------------------------------------------------------------------
 -- REFCLK CONNECTIONS
@@ -1190,27 +1440,60 @@ begin
     SYS_CLK_MMCM_inst : MMCME2_BASE
     generic map (
         BANDWIDTH        => "OPTIMIZED", -- Jitter programming (OPTIMIZED, HIGH, LOW)
+        CLKFBOUT_MULT_F  => 6.0,         -- Multiply value for all CLKOUT (2.000-64.000).
+        CLKFBOUT_PHASE   => 0.0,         -- Phase offset in degrees of CLKFB (-360.000-360.000).
+        CLKIN1_PERIOD    => 6.4,         -- 156.25MHz Input clock period in ns to ps resolution (i.e. 33.333 is 30 MHz).
+        -- CLKOUT0_DIVIDE - CLKOUT6_DIVIDE: Divide amount for each CLKOUT (1-128)
+        CLKOUT0_DIVIDE_F => 6.0,         -- Divide amount for CLKOUT0 (1.000-128.000).
+        CLKOUT1_DIVIDE   => 24,          -- Divide amount for CLKOUT1 (1.000-128.000).
+        DIVCLK_DIVIDE    => 1,           -- Master division value (1-106)
+        REF_JITTER1      => 0.0,         -- Reference input jitter in UI (0.000-0.999).
+        STARTUP_WAIT     => FALSE        -- Delays DONE until MMCM is locked (FALSE, TRUE)
+    )
+    port map (
+        CLKOUT0   => sys_clk_mmcm,
+        CLKOUT1   => bsp_clk_mmcm,
+        CLKFBOUT  => sys_clk_mmcm_fb,  -- Feedback clock output
+        LOCKED    => sys_mmcm_locked,
+        --LOCKED    => user_mmcm_locked,
+        CLKIN1    => refclk_0,         -- Main clock input
+        PWRDWN    => '0',
+        RST       => '0',              -- fpga_reset,
+        CLKFBIN   => sys_clk_mmcm_fb   -- Feedback clock input
+    );
+
+    sys_clk_BUFG_inst : BUFG
+    port map (
+        I => sys_clk_mmcm, -- Clock input
+        O => sys_clk       -- Clock output
+    );
+    
+    bsp_clk_BUFG_inst : BUFG
+    port map (
+        I => bsp_clk_mmcm, -- Clock input
+        O => bsp_clk       -- Clock output
+    );
+
+    USER_CLK_MMCM_inst : MMCME2_BASE
+    generic map (
+        BANDWIDTH        => "OPTIMIZED", -- Jitter programming (OPTIMIZED, HIGH, LOW)
         CLKFBOUT_MULT_F  => MULTIPLY,    -- Multiply value for all CLKOUT (2.000-64.000).
         CLKFBOUT_PHASE   => 0.0,         -- Phase offset in degrees of CLKFB (-360.000-360.000).
         CLKIN1_PERIOD    => 6.4,         -- 156.25MHz Input clock period in ns to ps resolution (i.e. 33.333 is 30 MHz).
         -- CLKOUT0_DIVIDE - CLKOUT6_DIVIDE: Divide amount for each CLKOUT (1-128)
         CLKOUT0_DIVIDE_F => DIVIDE,      -- Divide amount for CLKOUT0 (1.000-128.000).
-        CLKOUT1_DIVIDE   => 5,
-        CLKOUT2_DIVIDE   => 5,
         DIVCLK_DIVIDE    => DIVCLK,      -- Master division value (1-106)
         REF_JITTER1      => 0.0,         -- Reference input jitter in UI (0.000-0.999).
         STARTUP_WAIT     => FALSE        -- Delays DONE until MMCM is locked (FALSE, TRUE)
     )
     port map (
         CLKOUT0   => user_clk_mmcm,
-        --CLKOUT1   => sys_clk_mmcm,
-        --CLKOUT2   => wb_clk_mmcm,
-        CLKFBOUT  => CLKFB,  -- Feedback clock output
-        --LOCKED    => LOCKED,
-        CLKIN1    => refclk_1, -- Main clock input
+        CLKFBOUT  => user_clk_mmcm_fb,  -- Feedback clock output
+        LOCKED    => user_mmcm_locked,
+        CLKIN1    => sys_clk_mmcm,      -- Main clock input
         PWRDWN    => '0',
-        RST       => '0',--fpga_reset,
-        CLKFBIN   => CLKFB   -- Feedback clock input
+        RST       => not sys_mmcm_locked,   --fpga_reset,
+        CLKFBIN   => user_clk_mmcm_fb   -- Feedback clock input
     );
 
     user_clk_BUFG_inst : BUFG
@@ -1219,140 +1502,116 @@ begin
         O => user_clk       -- Clock output
     );
 
-    sys_clk    <= refclk_0;
+    --user_clk <= sys_clk;
+
+    --sys_clk    <= refclk_0;
     user_clk_o <= user_clk;
     --AI: Sys reset is synchronised with the user clock.
-    user_rst_o <= user_rst;
-    hmc_rst_o <= sys_rst;
-    hmc_clk_o <= refclk_0;
+    user_rst_o <= user_fpga_rst;
+    hmc_rst_o  <= sys_rst;
+    hmc_clk_o  <= sys_clk;
     
 ---------------------------------------------------------------------------
 -- RESETS
 ---------------------------------------------------------------------------
 
-    pFpgaResetSysSynchroniser: process(sys_clk)
+    pSysResetSynchroniser : process(user_mmcm_locked, FPGA_RESET_N, sys_clk)
     begin
-        if (rising_edge(sys_clk) ) then
-            sync_sys_fpga_rst3 <= sync_sys_fpga_rst2;
-            sync_sys_fpga_rst2 <= sync_sys_fpga_rst;
-            sync_sys_fpga_rst <= fpga_reset;
-        end if;
-    end process pFpgaResetSysSynchroniser;  
+       if (user_mmcm_locked = '0' or FPGA_RESET_N = '0')then
+           sys_fpga_rst <= '1';
+           sync_sys_fpga_rst <= '1';
+       elsif (rising_edge(sys_clk))then
+          if (host_reset = '0') then
+            sync_sys_fpga_rst <= '0';
+            sys_fpga_rst <= sync_sys_fpga_rst;
+          else
+            sync_sys_fpga_rst <= '1';
+            sys_fpga_rst <= '1';
+          end if;  
+       end if;
+    end process;
 
-    pUserResetSynchroniser: process(user_clk)
+    pUserResetSynchroniser : process(user_mmcm_locked, FPGA_RESET_N, user_clk)
     begin
-        if (rising_edge(user_clk) ) then         
-            sync_user_rst3 <= sync_user_rst2;
-            sync_user_rst2 <= sync_user_rst;
-            sync_user_rst <= fpga_reset;
-        end if;
-    end process pUserResetSynchroniser;
-    
-    pFpgaResetGmiiSynchroniser: process(gmii_clk)
-    begin  
-        if (rising_edge(gmii_clk) ) then
-            sync_gmii_fpga_rst3 <= sync_gmii_fpga_rst2;
-            sync_gmii_fpga_rst2 <= sync_gmii_fpga_rst;
-            sync_gmii_fpga_rst <= fpga_reset;
-        end if;
-    end process pFpgaResetGmiiSynchroniser;
-    
-    pFpgaResetQsfpSynchroniser: process(qsfp_gtrefclk)
-    begin     
-        if (rising_edge(qsfp_gtrefclk) ) then
-            sync_qsfp_fpga_rst3 <= sync_qsfp_fpga_rst2;
-            sync_qsfp_fpga_rst2 <= sync_qsfp_fpga_rst;
-            sync_qsfp_fpga_rst <= fpga_reset;
-        end if;
-    end process pFpgaResetQsfpSynchroniser;
-    
-    pFpgaResetEmcclkSynchroniser: process(FPGA_EMCCLK2)
-    begin    
-        if (rising_edge(FPGA_EMCCLK2) ) then
-            sync_emcclk_fpga_rst3 <= sync_emcclk_fpga_rst2;
-            sync_emcclk_fpga_rst2 <= sync_emcclk_fpga_rst;
-            sync_emcclk_fpga_rst <= fpga_reset;
-        end if;
-    end process pFpgaResetEmcclkSynchroniser;    
-     
-    gen_sys_rst : process(sys_fpga_rst, sys_clk)
-    begin
-        if (sys_fpga_rst = '1')then
-            sys_rst_i <= '1';
-            sys_rst_z <= '1';
-            sys_rst_z2 <= '1';
-            sys_rst_z3 <= '1';
-        elsif (rising_edge(sys_clk))then
-            if (host_reset = '1')then
-                sys_rst_i <= '1';
-                sys_rst_z <= '1';
-                sys_rst_z2 <= '1';
-                sys_rst_z3 <= '1';
-            else
-                sys_rst_z <= '0';
-                sys_rst_z2 <= sys_rst_z;
-                sys_rst_z3 <= sys_rst_z2;
-                sys_rst_i <= sys_rst_z3;
-            end if;
-        end if;
+       if (user_mmcm_locked = '0' or FPGA_RESET_N = '0')then
+           user_fpga_rst <= '1';
+           sync_user_fpga_rst <= '1';
+       elsif (rising_edge(user_clk))then
+          if (host_reset_u3 = '0') then
+            sync_user_fpga_rst <= '0';
+            user_fpga_rst <= sync_user_fpga_rst;
+          else
+            sync_user_fpga_rst <= '1';
+            user_fpga_rst <= '1';
+          end if;  
+       end if;
     end process;
     
-    gen_user_rst : process(user_fpga_rst, user_clk)
+   pBspResetSynchroniser : process(user_mmcm_locked, FPGA_RESET_N, bsp_clk)
     begin
-        if (user_fpga_rst = '1')then
-            user_rst_i <= '1';
-            user_rst_z <= '1';
-            user_rst_z2 <= '1';
-            user_rst_z3 <= '1';
-        elsif (rising_edge(user_clk))then
-            if (host_reset_u3 = '1')then
-                user_rst_i <= '1';
-                user_rst_z <= '1';
-                user_rst_z2 <= '1';
-                user_rst_z3 <= '1';
-            else
-                user_rst_z <= '0';
-                user_rst_z2 <= user_rst_z;
-                user_rst_z3 <= user_rst_z2;
-                user_rst_i <= user_rst_z3;
-            end if;
+        if (user_mmcm_locked = '0' or FPGA_RESET_N = '0')then
+            bsp_fpga_rst <= '1';
+            sync_bsp_fpga_rst <= '1';
+        elsif (rising_edge(bsp_clk))then
+           if (host_reset_d3 = '0') then
+             sync_bsp_fpga_rst <= '0';
+             bsp_fpga_rst <= sync_bsp_fpga_rst;
+           else
+             sync_bsp_fpga_rst <= '1';
+             bsp_fpga_rst <= '1';
+           end if;  
         end if;
-    end process;    
+     end process;     
+     
+    sys_rst  <= sys_fpga_rst;
+    --user_rst <= user_fpga_rst;
+    bsp_rst <=  bsp_fpga_rst;
+ 
+    pFpgaResetAuxSynchroniser : process(user_mmcm_locked, aux_clk, FPGA_RESET_N)
+    begin
+        if (user_mmcm_locked = '0' or FPGA_RESET_N = '0')then
+            sync_aux_fpga_rst <= '1';
+            aux_fpga_rst <= '1';
+        elsif (rising_edge(aux_clk))then
+            sync_aux_fpga_rst <= '0';
+            aux_fpga_rst <= sync_aux_fpga_rst;
+        end if;
+    end process; 
+
+    pFpgaResetGmiiSynchroniser : process(user_mmcm_locked, gmii_clk, FPGA_RESET_N)
+    begin
+        if (user_mmcm_locked = '0' or FPGA_RESET_N = '0')then
+            sync_gmii_fpga_rst <= '1';
+            gmii_fpga_rst <= '1';
+        elsif (rising_edge(gmii_clk))then
+            sync_gmii_fpga_rst <= '0';
+            gmii_fpga_rst <= sync_gmii_fpga_rst;
+        end if;
+    end process;
+
+    pFpgaResetQsfpSynchroniser : process(user_mmcm_locked, qsfp_gtrefclk, FPGA_RESET_N)
+    begin
+        if (user_mmcm_locked = '0' or FPGA_RESET_N = '0')then
+            sync_qsfp_fpga_rst <= '1';
+            qsfp_fpga_rst <= '1';
+        elsif (rising_edge(qsfp_gtrefclk))then
+            sync_qsfp_fpga_rst <= '0';
+            qsfp_fpga_rst <= sync_qsfp_fpga_rst;
+        end if;
+    end process; 
     
-    sys_rst_bufg : BUFG
-    port map (
-        I  => sys_rst_i,
-        O  => sys_rst);
-        
-    user_rst_bufg : BUFG
-    port map (
-        I  => user_rst_i,
-        O  => user_rst);        
-        
-    fpga_sys_rst_bufg : BUFG
-     port map (
-        I  => sync_sys_fpga_rst3,
-        O  => sys_fpga_rst);         
-        
-    fpga_user_rst_bufg : BUFG
-    port map (
-        I  => sync_user_rst3,
-        O  => user_fpga_rst);
+    pFpgaResetEmcclkSynchroniser : process(user_mmcm_locked, FPGA_EMCCLK2, FPGA_RESET_N)
+    begin
+        if (user_mmcm_locked = '0' or FPGA_RESET_N = '0')then
+            sync_emcclk_fpga_rst <= '1';
+            emcclk_fpga_rst <= '1';
+        elsif (rising_edge(FPGA_EMCCLK2))then
+            sync_emcclk_fpga_rst <= '0';
+            emcclk_fpga_rst <= sync_emcclk_fpga_rst;
+        end if;
+    end process;     
 
-    fpga_gmii_rst_bufg : BUFG
-    port map (
-        I  => sync_gmii_fpga_rst3,
-        O  => gmii_fpga_rst); 
-
-    fpga_qsfp_rst_bufg : BUFG
-    port map (
-        I  => sync_qsfp_fpga_rst3,
-        O  => qsfp_fpga_rst);  
-        
-    fpga_emcclk_rst_bufg : BUFG
-        port map (
-            I  => sync_emcclk_fpga_rst3,
-            O  => emcclk_fpga_rst);                                                          
+    FAN_CONT_RST_N <= FPGA_RESET_N;
 
     gen_gmii_rst : process(gmii_fpga_rst, gmii_clk)
     begin
@@ -1362,7 +1621,9 @@ begin
             gmii_rst_z2 <= '1';
             gmii_rst_z3 <= '1';
         elsif (rising_edge(gmii_clk))then
-            if ((gmii_reset_done_z3 = '1')and(host_reset_z3 = '0'))then
+            -- GT 29/03/2017 KEEP gmii_rst ASSERTED WHEN SGMII LINK IS DOWN
+            --if ((gmii_reset_done_z3 = '1')and(host_reset_z3 = '0'))then
+            if ((sgmii_link_up_z3 = '1')and(host_reset_z3 = '0'))then
                 gmii_rst_z <= '0';
                 gmii_rst_z2 <= gmii_rst_z;
                 gmii_rst_z3 <= gmii_rst_z2;
@@ -1383,9 +1644,9 @@ begin
         end if;
     end process;
 
-    gen_host_reset_count : process(fpga_reset, sys_clk)
+    gen_host_reset_count : process(user_mmcm_locked, FPGA_RESET_N, sys_clk)
     begin
-        if (fpga_reset = '1')then
+        if (user_mmcm_locked = '0' or FPGA_RESET_N = '0')then
             host_reset_count <= (others => '1');
         elsif (rising_edge(sys_clk))then
             if ((host_reset_req_z = '0')and(host_reset_req = '1'))then
@@ -1409,7 +1670,7 @@ begin
             host_reset_z3 <= host_reset_z2;
         end if;
     end process;
-    
+
     --host reset synchronised to the user_clk
     gen_host_reset_u : process(user_clk)
     begin
@@ -1417,6 +1678,16 @@ begin
             host_reset_u <= host_reset;
             host_reset_u2 <= host_reset_u;
             host_reset_u3 <= host_reset_u2;
+        end if;
+    end process;
+    
+    --host reset synchronised to the bsp_clk
+    gen_host_reset_d : process(bsp_clk)
+    begin
+        if (rising_edge(bsp_clk))then
+            host_reset_d <= host_reset;
+            host_reset_d2 <= host_reset_d;
+            host_reset_d3 <= host_reset_d2;
         end if;
     end process;    
 
@@ -1472,7 +1743,8 @@ begin
     brd_user_read_regs(C_RD_LOOPBACK_ADDR) <= brd_user_write_regs(C_WR_LOOPBACK_ADDR);
 
     -- LINK UP STATUS
-    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(0) <= status_vector(0); -- 1GB ETH LINK UP
+    -- GT 29/03/2017 INCLUDE 1GBE PHY LINK UP STATUS
+    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(0) <= '1' when ((status_vector(0) = '1')and(ONE_GBE_LINK = '1')) else '0'; -- 1GB ETH LINK UP
     brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(1) <= phy_rx_up_cpu(0); -- 40GB ETH 0 LINK UP
     brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(2) <= phy_rx_up_cpu(1); -- 40GB ETH 1 LINK UP
     brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(3) <= phy_rx_up_cpu(2); -- 40GB ETH 2 LINK UP
@@ -1494,6 +1766,12 @@ begin
     qsfp_soft_reset(1) <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(2);
     qsfp_soft_reset(2) <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(3);
     qsfp_soft_reset(3) <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(4);
+
+    -- Microblaze Alive Signal
+    brd_user_read_regs(C_RD_UBLAZE_ALIVE_ADDR) <= brd_user_write_regs(C_WR_UBLAZE_ALIVE_ADDR);
+
+    -- -- DSP Override signal for Front Panel LEDs
+    brd_user_read_regs(C_RD_DSP_OVERRIDE_ADDR) <= brd_user_write_regs(C_WR_DSP_OVERRIDE_ADDR);
     
     --AI start: Add fortygbe config interface
     --fortygbe data select (1 = 40 GbE data select, 0 = 40 GbE configuration only)
@@ -1525,62 +1803,92 @@ begin
 
 
 
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(0) <= not MEZZANINE_0_PRESENT_N;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(1) <= not MEZZANINE_1_PRESENT_N;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(2) <= not MEZZANINE_2_PRESENT_N;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(3) <= not MEZZANINE_3_PRESENT_N;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(7 downto 4) <= (others => '0');
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(0) <= not MEZZANINE_0_PRESENT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(1) <= not MEZZANINE_1_PRESENT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(2) <= not MEZZANINE_2_PRESENT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(3) <= not MEZZANINE_3_PRESENT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(7 downto 4) <= (others => '0');
 
     mezzanine_0_fault <= (not MEZZANINE_0_FAULT_N) when (mezzanine_0_fault_checking_enable = '1') else '0';
     mezzanine_1_fault <= (not MEZZANINE_1_FAULT_N) when (mezzanine_1_fault_checking_enable = '1') else '0';
     mezzanine_2_fault <= (not MEZZANINE_2_FAULT_N) when (mezzanine_2_fault_checking_enable = '1') else '0';
     mezzanine_3_fault <= (not MEZZANINE_3_FAULT_N) when (mezzanine_3_fault_checking_enable = '1') else '0';
 
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(8) <= mezzanine_0_fault;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(9) <= mezzanine_1_fault;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(10) <= mezzanine_2_fault;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(11) <= mezzanine_3_fault;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(15 downto 12) <= (others => '0');
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(8) <= mezzanine_0_fault;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(9) <= mezzanine_1_fault;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(10) <= mezzanine_2_fault;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(11) <= mezzanine_3_fault;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(15 downto 12) <= (others => '0');
 
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(16) <= not MEZZANINE_0_INT_N;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(17) <= not MEZZANINE_1_INT_N;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(18) <= not MEZZANINE_2_INT_N;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(19) <= not MEZZANINE_3_INT_N;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(31 downto 20) <= (others => '0');
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(16) <= not MEZZANINE_0_INT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(17) <= not MEZZANINE_1_INT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(18) <= not MEZZANINE_2_INT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(19) <= not MEZZANINE_3_INT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(31 downto 20) <= (others => '0');
 
     mezzanine_0_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(0);
     mezzanine_1_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(1);
     mezzanine_2_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(2);
     mezzanine_3_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(3);
     
+    
+    --MEZZANINE STATUS 1 REGISTER (MEZZ0)
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(0) <= ((not MEZZANINE_0_PRESENT_N) and MEZZ0_PRESENT);
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(3 downto 1) <= MEZZ0_ID;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(4) <= HMC_MEZZ0_INIT_DONE;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(5) <= HMC_MEZZ0_POST_OK;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(7 downto 6) <= (others => '0');    
+    
+    --MEZZANINE STATUS 1 REGISTER (MEZZ1)
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(8) <= ((not MEZZANINE_1_PRESENT_N) and MEZZ1_PRESENT);
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(11 downto 9) <= MEZZ1_ID;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(12) <= HMC_MEZZ1_INIT_DONE;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(13) <= HMC_MEZZ1_POST_OK;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(15 downto 14) <= (others => '0');    
+    
+    --MEZZANINE STATUS 1 REGISTER (MEZZ2)
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(16) <= ((not MEZZANINE_2_PRESENT_N) and MEZZ2_PRESENT);
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(19 downto 17) <= MEZZ2_ID;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(20) <= HMC_MEZZ2_INIT_DONE;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(21) <= HMC_MEZZ2_POST_OK;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(23 downto 22) <= (others => '0');    
+
+    --MEZZANINE STATUS 1 REGISTER (MEZZ3)
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(24) <= ((not MEZZANINE_3_PRESENT_N) and MEZZ3_PRESENT);
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(27 downto 25) <= MEZZ3_ID;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(28) <= '0';
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(29) <= '0';
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(31 downto 30) <= (others => '0');  
+     
+    
     mezzanine_enable_delay_0 : mezzanine_enable_delay
     port map(
-        clk => sys_clk,
-        rst => sys_rst,
+        clk => bsp_clk,
+        rst => bsp_rst,
         second_toggle                    => second_toggle,
         mezzanine_enable                 => mezzanine_0_enable,
         mezzanine_fault_checking_enable  => mezzanine_0_fault_checking_enable);
 
     mezzanine_enable_delay_1 : mezzanine_enable_delay
     port map(
-        clk => sys_clk,
-        rst => sys_rst,
+        clk => bsp_clk,
+        rst => bsp_rst,
         second_toggle                    => second_toggle,
         mezzanine_enable                 => mezzanine_1_enable,
         mezzanine_fault_checking_enable  => mezzanine_1_fault_checking_enable);
 
     mezzanine_enable_delay_2 : mezzanine_enable_delay
     port map(
-        clk => sys_clk,
-        rst => sys_rst,
+        clk => bsp_clk,
+        rst => bsp_rst,
         second_toggle                    => second_toggle,
         mezzanine_enable                 => mezzanine_2_enable,
         mezzanine_fault_checking_enable  => mezzanine_2_fault_checking_enable);
 
     mezzanine_enable_delay_3 : mezzanine_enable_delay
     port map(
-        clk => sys_clk,
-        rst => sys_rst,
+        clk => bsp_clk,
+        rst => bsp_rst,
         second_toggle                    => second_toggle,
         mezzanine_enable                 => mezzanine_3_enable,
         mezzanine_fault_checking_enable  => mezzanine_3_fault_checking_enable);
@@ -1591,10 +1899,10 @@ begin
     MEZZANINE_3_ENABLE_N <= not mezzanine_3_enable;
 
     --MEZZANINE_3_ENABLE_N <= not mezzanine_3_enable;
-    --MEZZANINE_0_RESET <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(8) or sys_rst;
-    --MEZZANINE_1_RESET <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(9) or sys_rst;
-    --MEZZANINE_2_RESET <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(10) or sys_rst;    
-    MEZZANINE_3_RESET <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(11) or sys_rst;
+    --MEZZANINE_0_RESET <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(8) or bsp_rst;
+    --MEZZANINE_1_RESET <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(9) or bsp_rst;
+    --MEZZANINE_2_RESET <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(10) or bsp_rst;    
+    MEZZANINE_3_RESET <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(11) or bsp_rst;
 
     MEZZANINE_3_CLK_SEL <= not brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(19); -- DEFAULT '1' = MEZZANINE CLOCK
 
@@ -1677,16 +1985,18 @@ begin
         ACK_I       => WB_MST_ACK_I,
         ADR_O       => WB_MST_ADR_O,
         CYC_O       => WB_MST_CYC_O,
-        Clk         => sys_clk,
+        Clk         => bsp_clk,
         DAT_I       => WB_MST_DAT_I,
         DAT_O       => WB_MST_DAT_O,
         RST_O       => WB_MST_RST_O,
-        Reset       => sys_rst,
+        Reset       => bsp_rst,
         SEL_O       => WB_MST_SEL_O,
         STB_O       => WB_MST_STB_O,
         UART_rxd    => microblaze_uart_rxd,
         UART_txd    => microblaze_uart_txd,
-        WE_O        => WB_MST_WE_O);
+        WE_O        => WB_MST_WE_O,
+        dcm_locked  => user_mmcm_locked);
+        
 
 
     microblaze_uart_rxd <= DEBUG_UART_RX;
@@ -1698,8 +2008,8 @@ begin
 
     wishbone_interconnect_0 : wishbone_interconnect
     port map(
-        CLK_I => sys_clk,
-        RST_I => sys_rst,
+        CLK_I => bsp_clk,
+        RST_I => bsp_rst,
         MST_DAT_O => WB_MST_DAT_O,
         MST_DAT_I => WB_MST_DAT_I,
         MST_ACK_I => WB_MST_ACK_I,
@@ -1720,8 +2030,8 @@ begin
     -- WISHBONE SLAVE 0 - BOARD READ/WRITE REGISTERS 1
     wishbone_register_0 : wishbone_register
     port map(
-        CLK_I => sys_clk,
-        RST_I => sys_rst,
+        CLK_I => bsp_clk,
+        RST_I => bsp_rst,
         DAT_I => WB_SLV_DAT_I(0),
         DAT_O => WB_SLV_DAT_O(0),
         ACK_O => WB_SLV_ACK_O(0),
@@ -1756,8 +2066,8 @@ begin
 
     wishbone_flash_sdram_interface_0 : wishbone_flash_sdram_interface
     port map(
-        CLK_I => sys_clk,
-        RST_I => sys_rst,
+        CLK_I => bsp_clk,
+        RST_I => bsp_rst,
         DAT_I => WB_SLV_DAT_I(2),
         DAT_O => WB_SLV_DAT_O(2),
         ACK_O => WB_SLV_ACK_O(2),
@@ -1854,8 +2164,8 @@ begin
     generic map(
         NUM_ONE_WIRE_INTERFACES => 5)
     port map(
-        CLK_I => sys_clk,
-        RST_I => sys_rst,
+        CLK_I => bsp_clk,
+        RST_I => bsp_rst,
         DAT_I => WB_SLV_DAT_I(3),
         DAT_O => WB_SLV_DAT_O(3),
         ACK_O => WB_SLV_ACK_O(3),
@@ -1894,8 +2204,8 @@ begin
     generate_I2C_0_to_4 : for a in 0 to 4 generate
         wishbone_i2c_0_to_4 : wishbone_i2c
         port map(
-            CLK_I => sys_clk,
-            RST_I => sys_rst,
+            CLK_I => bsp_clk,
+            RST_I => bsp_rst,
             DAT_I => WB_SLV_DAT_I(4 + a),
             DAT_O => WB_SLV_DAT_O(4 + a),
             ACK_O => WB_SLV_ACK_O(4 + a),
@@ -1914,7 +2224,7 @@ begin
 
 
 
-    I2C_RESET_FPGA <= fpga_reset;
+    I2C_RESET_FPGA <= sys_fpga_rst;
 
     I2C_SCL_FPGA <= i2c_scl_pad_o(0) when (i2c_scl_padoen_o(0) = '0') else 'Z';
     I2C_SDA_FPGA <= i2c_sda_pad_o(0) when (i2c_sda_padoen_o(0) = '0') else 'Z';
@@ -2024,8 +2334,8 @@ begin
         rx_overrun          => gmii_rx_overrun,
         rx_overrun_ack      => gmii_rx_overrun_ack,
         rx_ack              => gmii_rx_ack,
-        CLK_I => sys_clk,
-        RST_I => sys_rst,
+        CLK_I => bsp_clk,
+        RST_I => bsp_rst,
         DAT_I => WB_SLV_DAT_I(9),
         DAT_O => WB_SLV_DAT_O(9),
         ACK_O => WB_SLV_ACK_O(9),
@@ -2034,9 +2344,9 @@ begin
         SEL_I => WB_SLV_SEL_I(9),
         STB_I => WB_SLV_STB_I(9),
         WE_I  => WB_SLV_WE_I(9),
-        led_up => led_up,
-        led_rx => led_rx,
-        led_tx => led_tx,
+        --led_up => led_up,
+        --led_rx => led_rx,
+        --led_tx => led_tx,
         xaui_clk        => sys_clk,
         xaui_reset      => sys_rst,
         xaui_status     => gmii_xaui_status,
@@ -2105,15 +2415,18 @@ begin
     --AI End: Added fortygbe config interface
     
     --AI: Allows 40GbE configuration using the system clock and normal 40GbE data interfacing using the user clock
-    fpga_user_sysclk_bufgmux_ctrl : BUFGMUX_CTRL
-    port map (
-        I0 => sys_clk,
-        I1 => user_clk,
-        S  => select_forty_gbe_data_sel,
-        O  => forty_gb_eth_clk);  
+    --fpga_user_sysclk_bufgmux_ctrl : BUFGMUX_CTRL
+    --port map (
+    --    I0 => sys_clk,
+    --    I1 => user_clk,
+    --    S  => select_forty_gbe_data_sel,
+    --    O  => forty_gb_eth_clk);  
         
     --AI: Allows 40GbE configuration using the system reset and normal 40GbE data interfacing using the user reset    
-    forty_gb_eth_rst <= sys_rst when (select_forty_gbe_data_sel  = '0') else user_rst; 
+    --forty_gb_eth_rst <= sys_rst when (select_forty_gbe_data_sel  = '0') else user_rst; 
+    
+    --AI: 40GbE Yellow Block Reset  or'd with user_rst
+    user_40gbe_rst <= forty_gbe_rst or user_fpga_rst;
 
     -- WISHBONE SLAVE 10 - 40GBE MAC 0
     ska_forty_gb_eth_0 : ska_forty_gb_eth
@@ -2128,8 +2441,8 @@ begin
         PROMISC_MODE      => PROMISC_MODE,
         RX_CRC_CHK_ENABLE => RX_CRC_CHK_ENABLE)
     port map(
-        clk => forty_gb_eth_clk, --user_clk,
-        rst => forty_gb_eth_rst, --user_rst,
+        clk => user_clk, --forty_gb_eth_clk,
+        rst => user_40gbe_rst,--user_rst, --forty_gb_eth_rst,
         tx_valid            => xlgmii_tx_valid,
         tx_end_of_frame     => xlgmii_tx_end_of_frame,
         tx_data             => xlgmii_tx_data,
@@ -2142,12 +2455,14 @@ begin
         rx_data             => xlgmii_rx_data,
         rx_source_ip        => xlgmii_rx_source_ip,
         rx_source_port      => xlgmii_rx_source_port,
+        rx_dest_ip          => xlgmii_rx_dest_ip,
+        rx_dest_port        => xlgmii_rx_dest_port,
         rx_bad_frame        => xlgmii_rx_bad_frame,
         rx_overrun          => xlgmii_rx_overrun,
         rx_overrun_ack      => xlgmii_rx_overrun_ack,
         rx_ack => xlgmii_rx_ack,
-        CLK_I => sys_clk,
-        RST_I => sys_rst,
+        CLK_I => bsp_clk,
+        RST_I => bsp_rst,
         DAT_I => WB_SLV_DAT_I(10),
         DAT_O => WB_SLV_DAT_O(10),
         ACK_O => WB_SLV_ACK_O(10),
@@ -2501,6 +2816,70 @@ begin
 -- 1GBE INTERFACE
 ----------------------------------------------------------------------------
 
+   -- GT 11/04/2017 ADDED A TIMEOUT TO SGMII CORE IF LINK DOESN'T COME UP
+    gen_sgmii_timeout_count_low : process(sys_rst, sys_clk)
+    begin
+        if (sys_rst = '1')then
+            sgmii_timeout_count_low <= (others => '0');
+            sgmii_timeout_count_low_over <= '0';
+        elsif (rising_edge(sys_clk))then
+            sgmii_timeout_count_low_over <= '0';
+
+            if ((gmii_reset_done = '1')and(sgmii_link_up = '1'))then
+                sgmii_timeout_count_low <= (others => '0');
+            else
+                if (sgmii_timeout_count_low = X"FFFF")then           
+                    sgmii_timeout_count_low_over <= '1';
+                    sgmii_timeout_count_low <= (others => '0');
+                else
+                    sgmii_timeout_count_low <= sgmii_timeout_count_low + X"0001";
+                end if;
+            end if;    
+        end if;
+    end process;
+
+    gen_sgmii_timeout_count_high : process(sys_rst, sys_clk)
+    begin
+        if (sys_rst = '1')then
+            sgmii_timeout_count_high <= (others => '0');
+            sgmii_timeout <= '0';
+        elsif (rising_edge(sys_clk))then
+            sgmii_timeout <= '0';
+
+            if ((gmii_reset_done = '1')and(sgmii_link_up = '1'))then
+                sgmii_timeout_count_high <= (others => '0');
+            else
+                if (sgmii_timeout_count_low_over = '1')then
+                    if (sgmii_timeout_count_high = "11111111111")then           
+                        sgmii_timeout <= '1';
+                        sgmii_timeout_count_high <= (others => '0');
+                    else
+                        sgmii_timeout_count_high <= sgmii_timeout_count_high + "00000000001";
+                    end if;
+                end if;
+            end if;    
+        end if;
+    end process;
+
+    gen_sgmii_reset_count : process(sys_rst, sys_clk)
+    begin
+        if (sys_rst = '1')then
+            sgmii_reset_count <= X"FF";
+        elsif (rising_edge(sys_clk))then
+            if (sgmii_timeout = '1')then   
+                sgmii_reset_count <= (others => '0');
+            else
+                if (sgmii_reset_count /= X"FF")then
+                    sgmii_reset_count <= sgmii_reset_count + X"01";
+                end if;
+            end if;
+        end if;
+    end process;
+
+    sgmii_timeout_reset <= '0' when (sgmii_reset_count = X"FF") else '1';
+
+    gmii_to_sgmii_reset <= sys_fpga_rst or sgmii_timeout_reset;
+
     gmii_to_sgmii_0 : gmii_to_sgmii
     port map(
         gtrefclk_p           => gmii_to_sgmii_refclk_p,
@@ -2567,9 +2946,9 @@ begin
 
 
     --SGMII TO GMII
-    ONE_GBE_RESET_N <= not fpga_reset;
+    ONE_GBE_RESET_N <= not sys_fpga_rst;
     
-    gmii_to_sgmii_reset <= fpga_reset;
+    -- GT 11/04/2017 UPDATED SGMII CORE RESET TO ADD A TIMEOUT gmii_to_sgmii_reset <= fpga_reset;
     
     gmii_to_sgmii_refclk_p <= ONE_GBE_MGTREFCLK_P;
     gmii_to_sgmii_refclk_n <= ONE_GBE_MGTREFCLK_N;
@@ -2579,12 +2958,24 @@ begin
     gmii_to_sgmii_rxp <= ONE_GBE_SGMII_RX_P;
     gmii_to_sgmii_rxn <= ONE_GBE_SGMII_RX_N;
 
-    gen_gmii_reset_done_z : process (gmii_clk)
+    -- GT 29/03/2017 CHANGE gmii_rst TO STAY IN RESET WHILE SGMII LINK IS DOWN
+    --gen_gmii_reset_done_z : process (gmii_clk)
+    --begin
+    --    if (rising_edge(gmii_clk))then
+    --        gmii_reset_done_z <= gmii_reset_done;
+    --        gmii_reset_done_z2 <= gmii_reset_done_z;
+    --        gmii_reset_done_z3 <= gmii_reset_done_z2;
+    --    end if;
+    --end process; 
+    
+    sgmii_link_up <= status_vector(0);
+    
+    gen_sgmii_link_up_z : process (gmii_clk)
     begin
         if (rising_edge(gmii_clk))then
-            gmii_reset_done_z <= gmii_reset_done;
-            gmii_reset_done_z2 <= gmii_reset_done_z;
-            gmii_reset_done_z3 <= gmii_reset_done_z2;
+            sgmii_link_up_z <= sgmii_link_up;
+            sgmii_link_up_z2 <= sgmii_link_up_z;
+            sgmii_link_up_z3 <= sgmii_link_up_z2;
         end if;
     end process;
 
@@ -2796,20 +3187,218 @@ begin
         );
         
 -------------------------------------------------------------------------
+-- XADC MEASUREMENT     
+------------------------------------------------------------------------- 
+    
+    xadc_measurement_0 : xadc_measurement
+    port map(
+        daddr_in        => xadc_daddr_in,
+        den_in          => xadc_den_in,
+        di_in           => xadc_di_in,
+        dwe_in          => xadc_dwe_in,
+        do_out          => xadc_do_out,
+        drdy_out        => xadc_drdy_out,
+        dclk_in         => sys_clk,
+        reset_in        => sys_rst,
+        busy_out        => xadc_busy_out,
+        channel_out     => xadc_channel_out,
+        eoc_out         => xadc_eoc_out,
+        eos_out         => xadc_eos_out,
+        ot_out          => xadc_ot_out,
+        user_temp_alarm_out => xadc_user_temp_alarm_out,
+        alarm_out       => xadc_alarm_out,
+        vp_in           => '0',
+        vn_in           => '0');
+
+    gen_xadc_latched : process(sys_rst, sys_clk)
+    begin
+        if (bsp_rst = '1')then
+            brd_user_read_regs(C_RD_XADC_LATCHED_ADDR) <= (others => '0');
+        elsif (rising_edge(bsp_clk))then
+            if (xadc_drdy_out = '1')then
+                brd_user_read_regs(C_RD_XADC_LATCHED_ADDR) <= X"0000" & xadc_do_out;
+            end if;   
+        end if;
+    end process;
+
+    brd_user_read_regs(C_RD_XADC_STATUS_ADDR)(15 downto 0) <= xadc_do_out;
+    brd_user_read_regs(C_RD_XADC_STATUS_ADDR)(16) <= xadc_drdy_out;
+    brd_user_read_regs(C_RD_XADC_STATUS_ADDR)(17) <= xadc_ot_out;
+    brd_user_read_regs(C_RD_XADC_STATUS_ADDR)(18) <= xadc_user_temp_alarm_out;
+    brd_user_read_regs(C_RD_XADC_STATUS_ADDR)(19) <= xadc_alarm_out;
+    brd_user_read_regs(C_RD_XADC_STATUS_ADDR)(31 downto 20) <= (others => '0');
+
+    xadc_di_in <= brd_user_write_regs(C_WR_XADC_CONTROL_ADDR)(15 downto 0);
+    xadc_daddr_in <= brd_user_write_regs(C_WR_XADC_CONTROL_ADDR)(22 downto 16);
+    xadc_den_in <= brd_user_write_regs(C_WR_XADC_CONTROL_ADDR)(23);
+    xadc_dwe_in <= brd_user_write_regs(C_WR_XADC_CONTROL_ADDR)(24);		        
+        
+-------------------------------------------------------------------------
 -- Wishbone DSP Registers
 -------------------------------------------------------------------------
                 
     -- WISHBONE SLAVE 14 - DSP Registers
-    WB_SLV_CLK_I_top <= sys_clk;
-    WB_SLV_RST_I_top <= sys_rst;
-    WB_SLV_DAT_I_top <= WB_SLV_DAT_I(14);
-    WB_SLV_DAT_O(14) <= WB_SLV_DAT_O_top;
-    WB_SLV_ACK_O(14) <= WB_SLV_ACK_O_top;
-    WB_SLV_ADR_I_top <= WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0);
-    WB_SLV_CYC_I_top <= WB_SLV_CYC_I(14);
-    WB_SLV_SEL_I_top <= WB_SLV_SEL_I(14);
-    WB_SLV_STB_I_top <= WB_SLV_STB_I(14);
-    WB_SLV_WE_I_top  <= WB_SLV_WE_I(14);    
+    WB_SLV_CLK_I_top <= bsp_clk;--sys_clk;
+    WB_SLV_RST_I_top <= bsp_rst;--sys_rst;
+    WB_SLV_DAT_I_top <= wb_cross_clock_out_dout(69 downto 38);--WB_SLV_DAT_I(14);
+    --WB_SLV_DAT_O(14) <= WB_SLV_DAT_O_top;
+    --WB_SLV_ACK_O(14) <= WB_SLV_ACK_O_top;
+    --Deconcatenate the signals from the FIFO to the wishbone interconnect
+    WB_SLV_DAT_O(14) <= wb_sync_data_in;--wb_cross_clock_in_dout(31 downto 0);
+    WB_SLV_ACK_O(14) <= wb_sync_ack_in;--wb_cross_clock_in_dout(32);    
+    WB_SLV_ADR_I_top <= wb_cross_clock_out_dout(37 downto 6);--WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0);
+    WB_SLV_CYC_I_top <= wb_cross_clock_out_dout(5);--WB_SLV_CYC_I(14);
+    WB_SLV_SEL_I_top <= wb_cross_clock_out_dout(4 downto 1);--WB_SLV_SEL_I(14);
+    WB_SLV_STB_I_top <= wb_cross_clock_out_dout(72);--WB_SLV_STB_I(14);
+    WB_SLV_WE_I_top  <= wb_cross_clock_out_dout(0);--WB_SLV_WE_I(14); 
+    
+    --Wishbone signals to the DSP
+    cross_clock_fifo_wb_out_73x16_dsp : cross_clock_fifo_wb_out_73x16
+    port map(
+        rst             => bsp_rst,
+        wr_clk          => bsp_clk,
+        rd_clk          => bsp_clk, 
+        din             => wb_cross_clock_out_din,
+        wr_en           => wb_cross_clock_out_wrreq,
+        rd_en           => wb_cross_clock_out_rdreq,
+        dout            => wb_cross_clock_out_dout,
+        full            => wb_cross_clock_out_full,
+        empty           => wb_cross_clock_out_empty);  
+     
         
+   --WB FIFO Write State Machine (Wishbone to DSP Interface [39.0625MHz to 39.0625MHz)
+   --The Strobe, Write Enable and Cyclic signals are asserted for a long duration and
+   -- so this state machine ensures that the arbiter will see three clock cycle write asserted 
+   --strobes and write enabled and one clock cycle read asserted strobes with write disabled.   
+    fifo_wb_write_to_dsp_state_machine : process(bsp_rst, bsp_clk)
+    begin
+        if (bsp_rst = '1')then
+            wb_cross_clock_out_wrreq <= '0';
+            wb_dsp_wr_state <= WB_DSP_WR_IDLE;
+            wb_cross_clock_out_din <= (others => '0');
+            wb_slv_stb_hist_i <= '0';
+        elsif (rising_edge(bsp_clk))then
+            wb_slv_stb_hist_i <= WB_SLV_STB_I(14);
+            case wb_dsp_wr_state is    
+                when WB_DSP_WR_IDLE =>
+                  wb_dsp_wr_state <= WB_DSP_WR_STROBE_CHECK;
+                  wb_cross_clock_out_wrreq <= '0';
+                  wb_cross_clock_out_din <= "000" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & '0' & WB_SLV_SEL_I(14) & '0';                                                 
+                when WB_DSP_WR_STROBE_CHECK =>
+                                    
+                  --Check for strobe and write enable (write operation)
+                  if (WB_SLV_STB_I(14) = '1' and wb_slv_stb_hist_i = '0' and WB_SLV_WE_I(14) = '1')then
+                      wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_EN_1;
+                      wb_cross_clock_out_din <= "100" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '1';   
+                      wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);
+                  --Check for strobe and write deasserted (read operation)    
+                  elsif (WB_SLV_STB_I(14) = '1' and wb_slv_stb_hist_i = '0' and  WB_SLV_WE_I(14) = '0') then
+                      wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_EN_3;
+                      wb_cross_clock_out_din <= "100" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '0';   
+                      wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);                  
+                  else
+                      wb_dsp_wr_state <= WB_DSP_WR_STROBE_CHECK;                  
+                      wb_cross_clock_out_din <= "000" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '0';
+                      wb_cross_clock_out_wrreq <= '0';
+                  end if;
+                --enable write for two clock cycles to ensure wishbone write is successful  
+                when WB_DSP_WR_FIFO_WR_EN_1 =>
+                  
+                  wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_EN_2;
+                  wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);
+                  wb_cross_clock_out_din <= "100" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '1';                           
+
+                --enable write for three clock cycles to ensure wishbone write is successful  
+                when WB_DSP_WR_FIFO_WR_EN_2 =>
+                  
+                  wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_EN_3;
+                  wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);
+                  wb_cross_clock_out_din <= "100" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '1';                           
+
+                --write in next cycle to ensure strobe and values have cleared, except cyc signal                
+                when WB_DSP_WR_FIFO_WR_EN_3 =>
+
+                  wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_EN_4;
+                  wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);
+                  wb_cross_clock_out_din <= "000" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '0';
+                --write in next cycle to ensure all strobe and values have cleared, including cyc signal                
+                when WB_DSP_WR_FIFO_WR_EN_4 =>
+                 
+                  wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_DIS;
+                  wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);
+                  wb_cross_clock_out_din <= "000" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & '0' & WB_SLV_SEL_I(14) & '0';
+
+                --stop writing and allow slower clock to read out              
+                when WB_DSP_WR_FIFO_WR_DIS =>
+                  wb_dsp_wr_state <= WB_DSP_WR_STROBE_CHECK;
+                  wb_cross_clock_out_wrreq <= '0';
+                  wb_cross_clock_out_din <= "000" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & '0' & WB_SLV_SEL_I(14) & '0';
+                  
+                when others =>
+                  wb_dsp_wr_state <= WB_DSP_WR_IDLE;
+            end case;
+        end if;
+    end process;   
+   
+    --Start reading out of the wishbone FIFO (wishbone to DSP interface [39.0625MHz to 39.0625MHz]) when FIFO is not empty   
+    wb_cross_clock_out_rdreq <= '1' when (wb_cross_clock_out_empty = '0') else '0';
+    
+    --Wishbone signals from the DSP
+    
+    --This process only allows valid data to be latched through
+    --creates a static bus signal for the synchroniser function below
+    read_wb_dsp_data : process(bsp_rst, bsp_clk)
+    begin
+        if (bsp_rst = '1')then
+            wb_data_in <= (others => '0');
+            wb_ack_in <= '0';
+        elsif (rising_edge(bsp_clk))then
+            --if valid data
+            if (WB_SLV_ACK_O_top = '1')then
+                wb_data_in <= WB_SLV_DAT_O_top;
+                wb_ack_in <= '1';
+            else
+                wb_ack_in <= '0';                
+            end if;   
+        end if;
+    end process; 
+    
+    -- This function performs clock domain crossing synchronisation
+    -- on a static bus signal
+    wb_read_synchroniser: process(bsp_rst, bsp_clk, wb_ack_in)
+    begin
+        if (bsp_rst = '1') then
+            wb_ack_in_z1 <= '0';
+            wb_ack_in_z2 <= '0';
+            wb_sync_data_in <= (others => '0');
+            wb_sync_ack_in <= '0';
+        elsif (rising_edge(bsp_clk)) then
+            wb_ack_in_z2 <= wb_ack_in_z1;
+            wb_ack_in_z1 <= wb_ack_in;
+            if (wb_ack_in_z2 = '1') then
+                wb_sync_data_in <= wb_data_in;
+                wb_sync_ack_in <= '1';
+            else
+                wb_sync_ack_in <= '0';
+            end if;
+        end if;
+    end process;
+    
+    -------------------------------------------------------------------------
+    -- LED Manager Instantiation
+    -------------------------------------------------------------------------
+
+    led_manager_0 : led_manager
+    port map(
+        clk                   => sys_clk,
+        rst                   => sys_rst,
+        forty_gbe_link_status => phy_rx_up_cpu(0), -- Only using 40GbE_0
+        dhcp_resolved         => brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(0),
+        firmware_version      => C_VERSION(31 downto 28),
+        ublaze_toggle_value   => brd_user_read_regs(C_RD_UBLAZE_ALIVE_ADDR)(0),
+        dsp_override_i        => brd_user_read_regs(C_RD_DSP_OVERRIDE_ADDR)(0),
+        dsp_leds_i            => dsp_leds_i,
+        leds_out              => fpga_leds_o
+    );
 
 end arch_forty_gbe;

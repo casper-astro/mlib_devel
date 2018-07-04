@@ -22,6 +22,8 @@
 
 cursys = gcb;
 
+warning('gpio yellow block I/O is unconstrained (set to false path).');
+
 if ~strcmp(io_group, 'custom')
     if arith_type==1
     	real_bitwidth = 1;

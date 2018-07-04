@@ -33,7 +33,7 @@ blk = gcb;
 check_mask_type(blk, 'ten_gbe');
 
 %search for sysgen block and get target
-xps_xsg_blks = find_system(bdroot,'SearchDepth',1,'FollowLinks','on','LookUnderMasks','all','Tag','xps:xsg');
+xps_xsg_blks = find_system(bdroot, 'SearchDepth', 1, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'xps:xsg');
 if length(xps_xsg_blks) ~= 1,
   warndlg('ten_Gbe_v2 requires a single MSSGE (XSG core config) block to be instantiated at the top level');
   return;
@@ -48,7 +48,7 @@ mask_visibilities = get_param(blk, 'MaskVisibilities');
 
 %turn everything off by default
 
-for p = 1:length(mask_visibilities), 
+for p = 1:length(mask_visibilities)
   mask_visibilities{p} = 'off';
 end
 
@@ -80,13 +80,13 @@ mask_visibilities{ismember(mask_names, 'rxsnaplen')} = 'on';
 %these are visible always depending on architecture
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-if strcmp(hw_sys,'ROACH2:sx475t'),
+if strcmp(hw_sys,'ROACH2:sx475t')
   mask_visibilities{ismember(mask_names, 'flavour')} = 'on';
   mask_visibilities{ismember(mask_names, 'slot')} = 'on';
 
-  if strcmp(flavour,'cx4'), %CX4 mezzanine card for ROACH2 has only 3 (external) ports
+  if strcmp(flavour,'cx4')  % CX4 mezzanine card for ROACH2 has only 3 (external) ports
     mask_visibilities{ismember(mask_names, 'port_r2_cx4')} = 'on';
-  elseif strcmp(flavour, 'sfp+'), %SFP+ mezzanine card 4 external ports 
+  elseif strcmp(flavour, 'sfp+')  % SFP+ mezzanine card 4 external ports 
     mask_visibilities{ismember(mask_names, 'port_r2_sfpp')} = 'on';
   end
 else
@@ -97,7 +97,7 @@ end
 %these are visible if low level parameters enabled
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-if strcmp(show_param, 'on'),
+if strcmp(show_param, 'on')
   %these are visible regardless of target hardware
   mask_visibilities{ismember(mask_names, 'fab_en')} = 'on';
   mask_visibilities{ismember(mask_names, 'fab_mac')} = 'on';
@@ -107,7 +107,7 @@ if strcmp(show_param, 'on'),
   mask_visibilities{ismember(mask_names, 'cpu_rx_en')} = 'on';
   mask_visibilities{ismember(mask_names, 'cpu_tx_en')} = 'on';
   
-  if strcmp(hw_sys,'ROACH2:sx475t'),
+  if strcmp(hw_sys,'ROACH2:sx475t')
     mask_visibilities{ismember(mask_names, 'pre_emph_r2')} = 'on';
     mask_visibilities{ismember(mask_names, 'swing_r2')} = 'on';
     mask_visibilities{ismember(mask_names, 'post_emph_r2')} = 'on';

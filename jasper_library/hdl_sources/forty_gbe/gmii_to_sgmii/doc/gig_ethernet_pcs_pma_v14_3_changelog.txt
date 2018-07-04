@@ -1,16 +1,24 @@
+2014.4:
+ * Version 14.3 (Rev. 1)
+ * Encrypted source files are concatenated together to reduce the number of files and to reduce simulator compile time
+ * Added support for 7-Series Defense-grade, Automotive, and Low Voltage parts.
+ * Corrected value of dont_reset_on_data_error input to 7-Series Transceiver FSMs to 0.
+ * Changed default value of RXPRBS_ERR_LOOPBACK to 0 for 7-Series Transceivers.
+ * Disabling Reset of GT FSMs in case of prbs selection for 7-Series Transceivers.
+
 2014.3:
  * Version 14.3
  * gtwizard_ultrascale upgraded to v1_4.
  * GT updates for Series-7 transceivers.
- * Fix done for high temperature callibration failure for sgmii over lvds in Series-7 CR
- * Added 3 seconds watchdog timer which resets rx path for sgmii over lvds modes and also in case of 7 series transceiver CR
- * Soft reset provision added for sgmii over lvds CR
- * Bugfix for AutoNegotiation resetting in case of resetdone deassertion instead of pausing CR
- * Included component library in vhdl block and block wrapperCR
- * Changed BUFG to BUFH on rxoutclk for Base-X and SGMII mode without fabric elastic buffer for Series-7 CR
- * Reduced timing DRCs and warnings CR
- * Changed size of gt0_dmonitor_width depending on type of transceiver CR
- * Corrected rxpmaresetdone port in cases where it was undriven CR
+ * Fix done for high temperature callibration failure for sgmii over lvds in Series-7
+ * Added 3 seconds watchdog timer which resets rx path for sgmii over lvds modes and also in case of 7 series transceiver
+ * Soft reset provision added for sgmii over lvds
+ * Bugfix for AutoNegotiation resetting in case of resetdone deassertion instead of pausing
+ * Included component library in vhdl block and block wrapper
+ * Changed BUFG to BUFH on rxoutclk for Base-X and SGMII mode without fabric elastic buffer for Series-7
+ * Reduced timing DRCs and warnings
+ * Changed size of gt0_dmonitor_width depending on type of transceiver
+ * Corrected rxpmaresetdone port in cases where it was undriven
 
 2014.2:
  * Version 14.2 (Rev. 1)
