@@ -319,7 +319,7 @@ function casper_library_bus_init()
 		'SolverMode', sprintf('MultiTasking'), ...
 		'StartTime', sprintf('0.0'), ...
 		'StopTime', sprintf('10.0'));
-	filename = save_system(mdl,[getenv('MLIB_DEVEL_PATH'), '/casper_library/', 'casper_library_bus', '.mdl']);
+	filename = save_system(mdl,[getenv('MLIB_DEVEL_PATH'), '/casper_library/', 'casper_library_bus', '.slx']);
 	if iscell(filename), filename = filename{1}; end;
 	fileattrib(filename, '+w');
 end % casper_library_bus_init
