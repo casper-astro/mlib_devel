@@ -1,3 +1,4 @@
+
 % Generate cos/sin
 %
 % cosin_init(blk, varargin)
@@ -31,7 +32,10 @@
 
 %TODO logic for where conditions don't allow optimization 
 
-function cosin_init(blk,varargin)
+function cosin_init_cfloat(blk,varargin)
+
+  float_on = true;
+  debug = true;
 
   clog('entering cosin_init',{'trace', 'cosin_init_debug'});
   check_mask_type(blk, 'cosin');
@@ -51,6 +55,8 @@ function cosin_init(blk,varargin)
     'mux_latency',  1, ... 
     'neg_latency',  1, ... 
     'conv_latency', 1, ...
+    'float_exp',    6, ...
+    'float_frac',   19, ...
     'pack',         'off', ...
     'bram',         'BRAM', ... %'BRAM' or 'distributed RAM'
     'misc',         'off', ...
@@ -74,7 +80,9 @@ function cosin_init(blk,varargin)
   conv_latency  = get_var('conv_latency', 'defaults', defaults, varargin{:});
   pack          = get_var('pack', 'defaults', defaults, varargin{:});
   bram          = get_var('bram', 'defaults', defaults, varargin{:});         
-  misc          = get_var('misc', 'defaults', defaults, varargin{:});         
+  misc          = get_var('misc', 'defaults', defaults, varargin{:});   
+  float_exp_width = get_var('float_exp', 'defaults', defaults, varargin{:});
+  float_frac_width = get_var('float_frac', 'defaults', defaults, varargin{:});
  
   delete_lines(blk);
 
@@ -243,10 +251,10 @@ function cosin_init(blk,varargin)
     set_param([blk,'/ROM'], 'initVector', mat2str(vals'));
 
     %extract real and imaginary parts of vector
+
     reuse_block(blk, 'c_to_ri', 'casper_library_misc/c_to_ri', ...
       'n_bits', 'n_bits', 'bin_pt', 'bin_pt', ...
       'Position', [510 204 550 246]);
-
     add_line(blk,'ROM/1','c_to_ri/1');
 
   elseif strcmp(pack, 'off'),
@@ -261,14 +269,26 @@ function cosin_init(blk,varargin)
     
     add_line(blk,'add_convert0/2','lookup/1');
     add_line(blk,'add_convert1/2','lookup/4');
-
-    %constant inputs to lookup table    
-    reuse_block(blk, 'Constant', 'xbsIndex_r4/Constant', ...
+    
+    if float_on
+        %constant inputs to lookup table    
+        reuse_block(blk, 'Constant', 'xbsIndex_r4/Constant', ...
+            'arith_type', 'Floating-point', ...
             'const', '0', ...
-            'n_bits', 'n_bits', ...
-            'bin_pt', 'bin_pt', ...
+            'preci_type', 'Single', ...
             'Position', [380 170 400 190]);
-    add_line(blk,'Constant/1','lookup/2');
+        add_line(blk,'Constant/1','lookup/2');
+    else
+        %constant inputs to lookup table    
+        reuse_block(blk, 'Constant', 'xbsIndex_r4/Constant', ...
+                'const', '0', ...
+                'arith_type', 'Signed', ...
+                'n_bits', 'n_bits', ...
+                'bin_pt', 'bin_pt', ...
+                'Position', [380 170 400 190]);
+        add_line(blk,'Constant/1','lookup/2');
+    end
+    
 
     reuse_block(blk, 'Constant2', 'xbsIndex_r4/Constant', ...
             'const', '0', ...
@@ -280,12 +300,23 @@ function cosin_init(blk,varargin)
 
     %add constants if using BRAM (ports don't exist when using distributed RAM)
     if strcmp(bram, 'BRAM')
-      reuse_block(blk, 'Constant1', 'xbsIndex_r4/Constant', ...
-              'const', '0', ...
-              'n_bits', 'n_bits', ...
-              'bin_pt', 'bin_pt', ...
-              'Position', [380 245 400 265]);
-      add_line(blk,'Constant1/1','lookup/5');
+            if float_on
+                 reuse_block(blk, 'Constant1', 'xbsIndex_r4/Constant', ...
+                'const', '0', ...
+                'arith_type', 'Floating-point', ...
+                'preci_type', 'Single', ...
+                'Position', [380 245 400 265]);
+                add_line(blk,'Constant1/1','lookup/5');               
+            else
+                reuse_block(blk, 'Constant1', 'xbsIndex_r4/Constant', ...
+                'const', '0', ...
+                'arith_type', 'Signed', ...
+                'n_bits', 'n_bits', ...
+                'bin_pt', 'bin_pt', ...
+                'Position', [380 245 400 265]);
+                add_line(blk,'Constant1/1','lookup/5');
+            end
+
 
       reuse_block(blk, 'Constant3', 'xbsIndex_r4/Constant', ...
               'const', '0', ...
@@ -309,6 +340,7 @@ function cosin_init(blk,varargin)
           'reg_retiming', 'on', ...
           'Position', [450 116 480 134]);
   add_line(blk,'add_convert1/1','Delay8/1');
+  
   reuse_block(blk, 'Delay10', 'xbsIndex_r4/Delay', ...
           'latency', 'bram_latency', ...
           'reg_retiming', 'on', ...
@@ -335,26 +367,124 @@ function cosin_init(blk,varargin)
           'Position', [770 122 785 138]);
 
   reuse_block(blk, 'invert0', 'built-in/SubSystem');
-  invert_gen([blk,'/invert0']);
+  invert_gen([blk,'/invert0'],float_on);
   set_param([blk,'/invert0'], ...
           'Position', [800 80 850 142]);
-  add_line(blk,'Delay10/1','invert0/1');
+      
+  if float_on
+        reuse_block(blk, 'Delay11', 'xbsIndex_r4/Delay', ...
+          'latency', 'conv_latency', ...
+          'reg_retiming', 'on', ...
+          'Position', [590 81 610 99]);   
+        add_line(blk,'Delay10/1','Delay11/1');
+        add_line(blk,'Delay11/1','invert0/1');
+        
+  else
+        add_line(blk,'Delay10/1','invert0/1');
+  end
+  
   add_line(blk,'Constant5/1','invert0/3');
-  add_line(blk, src0, 'invert0/2');
-
+  
+  if float_on
+        reuse_block(blk, 'convert0', 'xbsIndex_r4/Convert', ...
+          'arith_type', 'Floating-Point', ...
+          'float_type', 'Custom', ...
+          'exp_bits', num2str(float_exp_width), ...
+          'fraction_bits', num2str(float_frac_width), ...
+          'latency','conv_latency',...
+          'Position', [750 100 785 120]);
+      
+        add_line(blk, src0, 'convert0/1');
+        add_line(blk, 'convert0/1', 'invert0/2');
+  else
+      add_line(blk, src0, 'invert0/2');
+  end
+   
   reuse_block(blk, 'invert1', 'built-in/SubSystem');
-  invert_gen([blk,'/invert1']);
+  invert_gen([blk,'/invert1'],float_on);
   set_param([blk,'/invert1'], ...
           'Position', [800 160 850 222]);
-  add_line(blk,'Delay8/1','invert1/1');
-  add_line(blk,src1, 'invert1/2');
+      
+      
+  if float_on
+        reuse_block(blk, 'Delay9', 'xbsIndex_r4/Delay', ...
+          'latency', 'conv_latency', ...
+          'reg_retiming', 'on', ...
+          'Position', [590 116 610 134]);   
+        add_line(blk,'Delay8/1','Delay9/1');
+        add_line(blk,'Delay9/1','invert1/1');
+        
+  else
+        add_line(blk,'Delay8/1','invert1/1');
+  end
+      
 
+  if float_on
+        reuse_block(blk, 'convert1', 'xbsIndex_r4/Convert', ...
+          'arith_type', 'Floating-Point', ...
+          'exp_bits', num2str(float_exp_width), ...
+          'fraction_bits', num2str(float_frac_width), ...
+          'float_type', 'Custom', ...
+          'latency','conv_latency',...
+          'Position', [750 180 785 200]);
+      
+        add_line(blk, src1, 'convert1/1');
+        add_line(blk, 'convert1/1', 'invert1/2');
+  else
+      add_line(blk,src1, 'invert1/2');
+  end
+  
   reuse_block(blk, 'Terminator1', 'built-in/Terminator', ...
           'Position', [880 115 900 135]);
   add_line(blk,'invert0/2','Terminator1/1');
+  
+  if debug
+      reuse_block(blk, 'gwout0', 'xbsIndex_r4/Gateway Out');
+      set_param([blk,'/gwout0'], 'Position', [700 30 750 50]);
+      add_line(blk,'Delay8/1','gwout0/1');
 
-  %misc
-  add_line(blk,'Delay/1','invert1/3');
+
+      reuse_block(blk, 'ws0', 'built-in/ToWorkspace');
+      var_str_split = strsplit(blk,'/');
+      var_str_len = length(var_str_split);
+      var_str = '';
+
+      if var_str_len < 5
+        for i = 1:var_str_len
+            var_str = strcat(var_str,string(var_str_split(i)),'_');
+        end
+
+      else
+        var_str = strcat(string(var_str_split(var_str_len-4)),'_',string(var_str_split(var_str_len-3)),'_',string(var_str_split(var_str_len-2)),'_',string(var_str_split(var_str_len-1)),'_',string(var_str_split(var_str_len)));
+      end
+
+      set_param([blk,'/ws0'], 'Position', [800 30 850 50], 'VariableName',strcat(string(var_str), 'ws0'));
+      add_line(blk,'gwout0/1','ws0/1');
+
+      reuse_block(blk, 'gwout1', 'xbsIndex_r4/Gateway Out');
+      set_param([blk,'/gwout1'], 'Position', [700 0 750 20]);
+      add_line(blk,'Delay10/1','gwout1/1');
+
+      reuse_block(blk, 'ws1', 'built-in/ToWorkspace');
+      set_param([blk,'/ws1'], 'Position', [800 0 850 20], 'VariableName',strcat(string(var_str), 'ws1'));
+      add_line(blk,'gwout1/1','ws1/1');
+  end
+  
+
+  
+  if float_on
+        reuse_block(blk, 'Delay1', 'xbsIndex_r4/Delay', ...
+          'latency', 'conv_latency', ...
+          'reg_retiming', 'on', ...
+          'Position', [590 336 610 354]);   
+        add_line(blk,'Delay/1','Delay1/1');
+        add_line(blk,'Delay1/1','invert1/3');
+        
+  else
+        %misc
+        add_line(blk,'Delay/1','invert1/3');
+  end
+
   
   %%%%%%%%%%%%%%%%  
   % output ports %
@@ -705,10 +835,10 @@ function[vals] = gen_vals(func, phase, table_bits, subset, n_bits, bin_pt),
 
 end %gen_vals
 
-function invert_gen(blk)
+function invert_gen(blk,float_on)
 
 	invert_mask(blk);
-	invert_init(blk);
+	invert_init(blk,float_on);
 end % invert_gen
 
 function invert_mask(blk)
@@ -728,7 +858,7 @@ function invert_mask(blk)
 
 end % invert_mask
 
-function invert_init(blk)
+function invert_init(blk,float_on)
 
 	reuse_block(blk, 'negate', 'built-in/Inport', ...
 		'Port', '1', ...
@@ -752,14 +882,26 @@ function invert_init(blk)
                 'reg_retiming', 'on', ...
 		'Position', [110 81 140 99]);
 
-	reuse_block(blk, 'Negate', 'xbsIndex_r4/Negate', ...
-		'precision', 'User Defined', ...
-		'arith_type', 'Signed  (2''s comp)', ...
-		'n_bits', 'n_bits', ...
-		'bin_pt', 'bin_pt', ...
-		'latency', 'neg_latency', ...
-                'overflow', 'Saturate', ...
-		'Position', [100 119 155 141]);
+	if float_on
+        reuse_block(blk, 'Negate', 'xbsIndex_r4/Negate', ...
+            'precision', 'Full', ...
+            'arith_type', 'Signed  (2''s comp)', ...
+            'n_bits', 'n_bits', ...
+            'bin_pt', 'bin_pt', ...
+            'latency', 'neg_latency', ...
+                    'overflow', 'Saturate', ...
+            'Position', [100 119 155 141]);
+    else
+        reuse_block(blk, 'Negate', 'xbsIndex_r4/Negate', ...
+            'precision', 'User Defined', ...
+            'arith_type', 'Signed  (2''s comp)', ...
+            'n_bits', 'n_bits', ...
+            'bin_pt', 'bin_pt', ...
+            'latency', 'neg_latency', ...
+                    'overflow', 'Saturate', ...
+            'Position', [100 119 155 141]);
+    end
+    
 
 	reuse_block(blk, 'mux', 'xbsIndex_r4/Mux', ...
 		'latency', 'mux_latency', ...
