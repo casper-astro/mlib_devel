@@ -75,7 +75,7 @@ class ten_gbe(YellowBlock):
         ktge.add_port('led_tx', '%s_led_tx'%self.fullname)
 
         # Wishbone memory for status registers / ARP table
-        ktge.add_wb_interface(self.unique_name, mode='rw', nbytes=0x4000, typecode=self.typecode) # as in matlab code
+        ktge.add_wb_interface(self.unique_name, mode='rw', nbytes=0xF000, typecode=self.typecode) # as in matlab code
 
 class tengbe_v2_xilinx_v6(ten_gbe):
     def initialize(self):
