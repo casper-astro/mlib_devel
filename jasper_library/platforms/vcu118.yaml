@@ -20,6 +20,12 @@ pins:
   refclk125_n:
     iostd: LVDS
     loc: AY23
+  userclk570_p:
+    iostd: LVDS
+    loc: AW23
+  userclk570_n:
+    iostd: LVDS
+    loc: AW22
   userclk156_p:
     iostd: LVDS
     loc: H32
