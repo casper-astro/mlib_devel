@@ -90,6 +90,13 @@ function cosin_init(blk,varargin)
  
   delete_lines(blk);
   
+  % sanity check for old block that has not been updated for floating point
+  if (strcmp(floating_point, 'on')|floating_point == 1)
+    floating_point = 1;
+  else
+    floating_point = 0;
+  end
+  
    
   % Check for floating point
   if floating_point == 1
@@ -466,7 +473,7 @@ function cosin_init(blk,varargin)
   set_param([blk,'/invert0'], ...
           'Position', [800 80 850 142]);
       
-  if floating_point == 1
+  if floating_point
         reuse_block(blk, 'Delay11', 'xbsIndex_r4/Delay', ...
           'latency', 'conv_latency', ...
           'reg_retiming', 'on', ...
@@ -977,7 +984,7 @@ function invert_init(blk,floating_point)
                 'reg_retiming', 'on', ...
 		'Position', [110 81 140 99]);
 
-	if floating_point == 1
+	if floating_point
         reuse_block(blk, 'Negate', 'xbsIndex_r4/Negate', ...
             'precision', 'Full', ...
             'arith_type', 'Signed  (2''s comp)', ...

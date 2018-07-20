@@ -90,12 +90,15 @@ function coeff_gen_init(blk, varargin)
   if floating_point == 1
       if float_type == 2
           float_type_sel = 'custom';
+          coeff_bit_width = exp_width + frac_width;
       else
           float_type_sel = 'single';
           exp_width = 8;
           frac_width = 24;
+          coeff_bit_width = exp_width + frac_width;
       end
   else
+      float_type_sel = 'single';
       exp_width = 8;
       frac_width = 24;
   end

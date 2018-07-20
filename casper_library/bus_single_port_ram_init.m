@@ -75,7 +75,7 @@ function bus_single_port_ram_init(blk, varargin)
   en_implementation         = get_var('en_implementation', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
-
+ 
   %default state, do nothing 
   if (n_bits(1) == 0),
     clean_blocks(blk);

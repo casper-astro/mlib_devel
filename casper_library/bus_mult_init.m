@@ -103,7 +103,7 @@ function bus_mult_init(blk, varargin)
   end
   
   % Check for floating point
-  if floating_point == 1
+  if floating_point
       float_en = 'on';
       
       if float_type == 2
@@ -168,7 +168,7 @@ function bus_mult_init(blk, varargin)
   % check input lists for consistency %
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
-  if floating_point == 1
+  if floating_point
       lenba = length(n_bits_a); lenpa = length(0); lenta = length(0);
       a = [lenba, lenpa, lenta];  
       unique_a = unique(a);
@@ -428,7 +428,7 @@ function bus_mult_init(blk, varargin)
   xpos = xpos + xinc + mult_w/2;  
   ypos_tmp = ypos; %reset ypos 
 
-  if floating_point == 1
+  if floating_point
       % Floating Point
       %%%%%%%%%%%%%%%%
       for index = 1:compo,

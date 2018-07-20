@@ -69,11 +69,14 @@ function mirror_spectrum_init(blk, varargin)
   end
 
   if float_type == 2
-    float_type_sel = 'custom';
+      float_type_sel = 'custom';
   else
-    float_type_sel = 'single';
+      float_type_sel = 'single';
+      exp_width = 8;
+      frac_width = 24;
   end
-
+  
+  
   
   %default setup for library
   if n_inputs == 0 | FFTSize == 0,
@@ -145,6 +148,10 @@ function mirror_spectrum_init(blk, varargin)
     reuse_block(blk, ['complex_conj',num2str(index)], 'casper_library_misc/complex_conj', ...
       'n_inputs', num2str(n_inputs), 'n_bits', num2str(input_bitwidth), ...
       'bin_pt', num2str(bin_pt_in), 'latency', num2str(cc_latency), 'overflow', 'Wrap', ... %TODO Wrap really?
+      'floating_point', float_en, ...
+      'float_type', float_type_sel, ...
+      'exp_width', num2str(exp_width), ...
+      'frac_width', num2str(frac_width), ...     
       'Position', [105 343+(125*index) 140 363+(125*index)]);
     add_line(blk, ['reo_in',num2str(index),'/1'], ['complex_conj',num2str(index),'/1']);
 
