@@ -25,12 +25,43 @@ result = 0;
 msg = '';
 
 for i=1:length(xps_objs)
-	try
-		if strcmp(get(blk_obj,'port'),get(xps_objs{i},'port'))
-			if ~strcmp(get(blk_obj,'simulink_name'),get(xps_objs{i},'simulink_name'))
-				msg = ['XAUI ',get(blk_obj,'simulink_name'),' and XAUI ',get(xps_objs{i},'simulink_name'),' are located on the same port.'];
-				result = 1;
-			end
-		end
-	end
+  try
+    our_hw = get(blk_obj, 'hw_sys');
+
+    our_port = get(blk_obj, 'port');
+    their_port = get(xps_objs{i},'port');
+    our_name = get(blk_obj, 'simulink_name');
+    their_name = get(xps_objs{i},'simulink_name');
+
+    %check two blocks not assigned to same port
+    if strcmp(our_port, their_port),   %same port
+      if ~strcmp(our_name, their_name) % and name not the same
+        msg = ['10Ge port ', our_name,' and 10Ge port ', their_name,' are located on the same port.'];
+        result = 1;
+      end
+    end
+    
+    %check ports in the same slot are using the same mezzanine flavour
+    our_flavour = get(blk_obj,'flavour');    
+    their_flavour = get(xps_objs{i},'flavour');      
+    our_slot = get(blk_obj,'slot');    
+    their_slot = get(xps_objs{i},'slot');    
+    if strcmp(our_hw, 'ROACH2'),                %roach2
+      if strcmp(our_slot, their_slot),          % and card in the same slot
+        if ~strcmp(our_flavour, their_flavour), % and not the same mezzanine flavour
+          msg = ['10Ge ports ''', our_name,''' and ''', their_name,''' are both located in mezzanine slot ',our_slot,', but have different mezzanine flavours.'];
+          result = 1;
+        end
+      end
+    end
+    if strcmp(our_hw, 'MKDIG'),                 %mkdig
+      if strcmp(our_slot, their_slot),          % and card in the same slot
+        if ~strcmp(our_flavour, their_flavour), % and not the same mezzanine flavour
+          msg = ['10Ge ports ''', our_name,''' and ''', their_name,''' are both located in mezzanine slot ',our_slot,', but have different mezzanine flavours.'];
+          result = 1;
+        end
+      end
+    end
+
+  end %try
 end
