@@ -271,7 +271,6 @@ class VerilogModule(object):
                     logger.debug("Assigning interface %d (%s)"%(n, wb_dev.regname))
                     wb_dev.sub_arb_id = wb_device_num / self.max_devices_per_arb
                     wb_device_num += 1
-                    inst.assign_wb_interface(instname, id=n, suffix=wb_dev.hdl_suffix, candr_suffix=wb_dev.hdl_candr_suffix)
                     inst.assign_wb_interface(instname, id=n, suffix=wb_dev.hdl_suffix, candr_suffix=wb_dev.hdl_candr_suffix, sub_arb_id=wb_dev.sub_arb_id)
 
                 for n, wb_dev in enumerate(inst.wb_devices):
