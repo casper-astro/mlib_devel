@@ -94,6 +94,8 @@ switch io_group_string
         set_param(cursys, 'io_group_real', 'zdok0');
     case {'ROACH:zdok1', 'ROACH2:zdok1'}
         set_param(cursys, 'io_group_real', 'zdok1');
+    case {'ROACH:aux0_clk' 'ROACH:aux1_clk' 'ROACH2:aux_clk'}
+        set_param(cursys, 'io_group_real', 'aux_clk_diff');
     case 'custom:custom'
         set_param(cursys, 'io_group_real', 'custom');
     otherwise
