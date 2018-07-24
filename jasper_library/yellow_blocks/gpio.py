@@ -18,6 +18,8 @@ class gpio(YellowBlock):
             self.pad_bitwidth = self.bitwidth / 2
         else:
             self.pad_bitwidth = self.bitwidth
+        # hack for new gpio parameters that don't include platform name
+        self.io_group = self.io_group_real
         # provide an override if the user is using a custom IO bank name
         if self.io_group == 'custom':
             self.io_group = self.io_group_custom
