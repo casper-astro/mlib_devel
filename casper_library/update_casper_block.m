@@ -85,16 +85,12 @@ function update_casper_block(oldblk)
     % Done!
     return
   case {'xps_library/XSG core config', ...
+        'xps_library/XSG_core_config', ...
         'xps_library/xsg_core_config'}
     % Get hw_sys parameter to handle SNAP/SNAP2/VCU118 platforms
     hw_sys = get_param(oldblk, 'hw_sys');
-    if startsWith(hw_sys, 'SNAP:')
-      srcblk = 'xps_library/Platforms/SNAP';
-    elseif startsWith(hw_sys, 'SNAP2:')
-      srcblk = 'xps_library/Platforms/SNAP2';
-    elseif startsWith(hw_sys, 'VCU118:')
-      srcblk = 'xps_library/Platforms/VCU118';
-    end
+    platform = split(hw_sys, ':');
+    srcblk = ['xps_library/Platforms/' char(platform(1))];
   end % special deprecated handling
 
   % Make sure srcblk's block diagram is loaded
@@ -102,12 +98,6 @@ function update_casper_block(oldblk)
   if ~bdIsLoaded(srcblk_bd)
     fprintf('loading library %s\n', srcblk_bd);
     load_system(srcblk_bd);
-  end
-    
-  % handle remapping of names
-  if strcmp(srcblk, 'xps_library/software register'),
-      srcblk = 'xps_library/Memory/software_register';
-
   end
   
   % Get old and new mask names
