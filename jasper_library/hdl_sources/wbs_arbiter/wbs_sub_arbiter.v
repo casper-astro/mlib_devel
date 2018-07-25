@@ -70,14 +70,8 @@ module wbs_sub_arbiter(
     wbm_dat_o    <= wbm_dat_o_r;
     wbm_ack_o    <= wbm_ack_o_r;
     wbm_err_o    <= wbm_err_o_r;
-    wbs_cyc_o_r1 <= wbs_cyc_o_r;
-    wbs_cyc_o_r2 <= wbs_cyc_o_r1;
-    wbs_cyc_o_r3 <= wbs_cyc_o_r2;
-    wbs_cyc_o    <= wbs_cyc_o_r3;    
-    wbs_stb_o_r1 <= wbs_stb_o_r;
-    wbs_stb_o_r2 <= wbs_stb_o_r1;
-    wbs_stb_o_r3 <= wbs_stb_o_r2;    
-    wbs_stb_o    <= wbs_stb_o_r3;
+    wbs_cyc_o    <= wbs_cyc_o_r;    
+    wbs_stb_o    <= wbs_stb_o_r;
     wbs_we_o     <= wbs_we_o_r;
     wbs_sel_o    <= wbs_sel_o_r;
     wbs_adr_o    <= wbs_adr_o_r;
@@ -108,7 +102,7 @@ module wbs_sub_arbiter(
 
     
   /*********************** WB Slave Arbitration **************************/
-  assign wbs_sel_o_r = wbm_sel_i_r2;
+  assign wbs_sel_o_r = wbm_sel_i_r3;
 
   //AI: Adding pipelining to the for loops
   genvar gen_i;
@@ -128,19 +122,15 @@ module wbs_sub_arbiter(
   reg        wbm_we_i_r3;
   reg        wbm_we_i_r4;
   reg        wbm_we_i_r5;
-  reg     [N_SLAVES - 1:0] wbs_cyc_o_r1;
-  reg     [N_SLAVES - 1:0] wbs_cyc_o_r2;
-  reg     [N_SLAVES - 1:0] wbs_cyc_o_r3;  
-  reg     [N_SLAVES - 1:0] wbs_stb_o_r1;
-  reg     [N_SLAVES - 1:0] wbs_stb_o_r2;
-  reg     [N_SLAVES - 1:0] wbs_stb_o_r3;   
   
   reg  [3:0] wbm_sel_i_r1;
   reg  [3:0] wbm_sel_i_r2;
+  reg  [3:0] wbm_sel_i_r3;
   reg [31:0] wbm_adr_i_r1;
   reg [31:0] wbm_adr_i_r2;
   reg [31:0] wbm_dat_i_r1;
   reg [31:0] wbm_dat_i_r2;
+  reg [31:0] wbm_dat_i_r3;
   reg [N_SLAVES*32 - 1:0] wbs_dat_i_r1;
   reg [N_SLAVES*32 - 1:0] wbs_dat_i_r2;
   reg [N_SLAVES - 1:0] wbs_ack_i_r1;  
@@ -186,12 +176,14 @@ module wbs_sub_arbiter(
             
     wbm_sel_i_r1 <= wbm_sel_i_r;
     wbm_sel_i_r2 <= wbm_sel_i_r1;
+    wbm_sel_i_r3 <= wbm_sel_i_r2;
         
     wbm_adr_i_r1 <= wbm_adr_i_r;
     wbm_adr_i_r2 <= wbm_adr_i_r1;
 
     wbm_dat_i_r1 <= wbm_dat_i_r;
     wbm_dat_i_r2 <= wbm_dat_i_r1;
+    wbm_dat_i_r3 <= wbm_dat_i_r2;
         
     wbs_dat_i_r1 <= wbs_dat_i_r;
     wbs_dat_i_r2 <= wbs_dat_i_r1;
@@ -217,12 +209,8 @@ module wbs_sub_arbiter(
   //AI: Adding pipelining to the for loops
   genvar gen_j;
   generate for (gen_j=0; gen_j < 32; gen_j=gen_j+1) begin : G1
-     always @ (posedge wb_clk_i) begin   
-       wbs_adr_o_diff_reg[gen_j] <= SLAVE_ADDR[32*wbs_enc + gen_j];
-     end  
+     assign wbs_adr_o_diff[gen_j] = SLAVE_ADDR[32*wbs_enc + gen_j];
   end endgenerate
-  
-  assign wbs_adr_o_diff = wbs_adr_o_diff_reg;
   
 
   reg  [31:0] wbs_adr_o_reg;
@@ -242,8 +230,8 @@ module wbs_sub_arbiter(
 
   assign wbm_ack_o_r = (wbs_ack_i_r2 & wbs_active) != {N_SLAVES{1'b0}};
 
-  assign wbs_we_o_r = wbm_we_i_r5;
-  assign wbs_dat_o_r = wbm_dat_i_r2;
+  assign wbs_we_o_r = wbm_we_i_r3;
+  assign wbs_dat_o_r = wbm_dat_i_r3;
 
   //reg wbm_err_o;
 
