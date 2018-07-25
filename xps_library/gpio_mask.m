@@ -22,29 +22,6 @@
 
 cursys = gcb;
 
-warning('gpio yellow block I/O is unconstrained (set to false path).');
-
-if ~strcmp(io_group, 'custom')
-    if arith_type==1
-    	real_bitwidth = 1;
-    else
-    	real_bitwidth = bitwidth;
-    end
-    
-    if use_ddr
-        if ~reg_iob
-            errordlg('When using DDR signaling mode, "Register at IOB" option must be on');
-        end
-        if length(bit_index) ~= real_bitwidth/2
-            errordlg('Gateway bit index does not have half the number of elements as the I/O bitwidth');
-        end
-    else
-        if length(bit_index) ~= real_bitwidth
-            errordlg('Gateway bit index does not have the same number of elements as the I/O bitwidth. When using bitwidths greater than one, you should specify a vector of bit indices to use.');
-        end
-    end
-end
-
 pos = get_param(cursys,'Position');
 x= pos(1);
 y= pos(2);
@@ -97,3 +74,54 @@ switch get_param(cursys,'io_dir')
 end
 
 clean_ports(cursys,old_ports);
+
+% set the real io_group parameter, now named 'io_group_real'
+% this is a hack in order to deprecate the old io_group parameters that had
+% platform names in the parameter like ROACH:led, so that a user's model
+% will hold its parameter when updating to the new xps_library
+io_group_string = get_param(cursys, 'io_group');
+switch io_group_string
+    case {'ROACH:led', 'ROACH2:led'}
+        set_param(cursys, 'io_group_real', 'led');
+    case {'ROACH:gpioa', 'ROACH:gpioa_oe_n', 'ROACH:gpiob', ...
+          'ROACH:gpiob_oe_n', 'ROACH2:gpio'}
+        set_param(cursys, 'io_group_real', 'gpio');
+    case 'ROACH2:sync_in'
+        set_param(cursys, 'io_group_real', 'sync_in');
+    case 'ROACH2:sync_out'
+        set_param(cursys, 'io_group_real', 'sync_out');
+    case {'ROACH:zdok0', 'ROACH2:zdok0'}
+        set_param(cursys, 'io_group_real', 'zdok0');
+    case {'ROACH:zdok1', 'ROACH2:zdok1'}
+        set_param(cursys, 'io_group_real', 'zdok1');
+    case {'ROACH:aux0_clk' 'ROACH:aux1_clk' 'ROACH2:aux_clk'}
+        set_param(cursys, 'io_group_real', 'aux_clk_diff');
+    case 'custom:custom'
+        set_param(cursys, 'io_group_real', 'custom');
+    otherwise
+        % strip off parameter and insert to custom io_group param
+        set_param(cursys, 'io_group_real', 'custom');
+        customValue = strsplit(io_group_string, ':');
+        set_param(cursys, 'io_group_custom', char(customValue(2)));
+end
+
+if ~strcmp(io_group_real, 'custom')
+    if arith_type==1
+    	real_bitwidth = 1;
+    else
+    	real_bitwidth = bitwidth;
+    end
+    
+    if use_ddr
+        if ~reg_iob
+            errordlg('When using DDR signaling mode, "Register at IOB" option must be on');
+        end
+        if length(bit_index) ~= real_bitwidth/2
+            errordlg('Gateway bit index does not have half the number of elements as the I/O bitwidth');
+        end
+    else
+        if length(bit_index) ~= real_bitwidth
+            errordlg('Gateway bit index does not have the same number of elements as the I/O bitwidth. When using bitwidths greater than one, you should specify a vector of bit indices to use.');
+        end
+    end
+end

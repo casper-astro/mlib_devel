@@ -71,18 +71,17 @@ for ctr = 1 : numel(disregards)
 end
 
 
-% check for spaces in xps or casper block names
+% check for improper xps or casper block names
 for ctr = 1 : numel(xps_blks)
-    if numel(strfind(xps_blks{ctr}, ' ')) > 0
-        error('Block names may not have spaces - %s', xps_blks{ctr});
-    end 
+    if any(isstrprop(xps_blks{ctr}, 'wspace'))
+        error('Block name can not contain whitespace: space, tab, newline, or carriage return - %s', xps_blks{ctr});
+    end
 end
 for ctr = 1 : numel(casper_blks)
-    if numel(strfind(casper_blks{ctr}, ' ')) > 0
-        error('Block names may not have spaces - %s', casper_blks{ctr});
-    end 
+    if any(isstrprop(casper_blks{ctr}, 'wspace'))
+        error('Block name can not contain whitespace: space, tab, newline, or carriage return - %s', casper_blks{ctr});
+    end
 end
-
 
 if length(xps_xsg_blks) ~= 1
     error('There has to be exactly 1 XPS_XSG block on each chip level (sub)system (Is the current system the correct one ?)');
