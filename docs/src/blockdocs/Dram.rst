@@ -306,14 +306,14 @@ Example models
 ~~~~~~~~~~~~~~~~
 
 1) David George's million channel ROACH spectrometer ("buf" block):
-`rmspec.mdl <../_static/rmspec.mdl>`__
+`rmspec.mdl <../../_static/files/rmspec.mdl>`__
 
 2) Laura Spitler's simple design that reads and writes a counter into
 the DRAM: `Dram roach
-rwramp.mdl <../_static/Dram_roach_rwramp.mdl>`__
+rwramp.mdl <../../_static/files/Dram_roach_rwramp.mdl>`__
 
 3) Jason Manley's DRAM counter example: `Dram counter test 10
-1.gz <../_static/Dram_counter_test_10_1.gz>`__
+1.gz <../../_static/files/Dram_counter_test_10_1.gz>`__
 
 4) Tim Madden's DRAM streaming output design (April 2015)
 https://github.com/argonnexraydetector/RoachFirmPy
@@ -343,5 +343,5 @@ Bank management allows for three banks to be open simultaneously,
 reducing the overhead when switching between these banks. This feature
 is always enabled on ROACH, but YMMV with the BEE2 controller.
 
-.. |rightarrow| image:: ../_static/img/rightarrow.png
+.. |rightarrow| image:: ../../_static/img/rightarrow.png
    :class: tex

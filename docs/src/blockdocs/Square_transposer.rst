@@ -65,5 +65,5 @@ Description
 | In4   | d15   | d11   | d7   | d3   | |rightarrow| | d15   | d14   | d13   | d12   | Out4   |
 +-------+-------+-------+------+------+--------------+-------+-------+-------+-------+--------+
 
-.. |rightarrow| image:: ../_static/img/rightarrow.png
+.. |rightarrow| image:: ../../_static/img/rightarrow.png
    :class: tex

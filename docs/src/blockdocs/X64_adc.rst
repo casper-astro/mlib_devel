@@ -152,7 +152,7 @@ The ADC card uses 8 separate chips, each providing its own clock over
 ZDOK to the FPGA. Rather than use all 8 clocks (some of which are not
 connected to clock enabled FPGA pins), a single clock is used, and the
 software calibration script `File:X64 adc
-cal.txt <../_static/X64_ADC/X64_adc_cal.txt>`__ is run to ensure that data from
+cal.txt <../../_static/files/X64_ADC/X64_adc_cal.txt>`__ is run to ensure that data from
 all ADC chips is properly aligned.
 
 Note: There may be a problem while running this script as is. In case

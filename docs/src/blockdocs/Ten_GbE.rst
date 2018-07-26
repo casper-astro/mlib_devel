@@ -190,5 +190,5 @@ Operation
 Apart from configuring the block, the processor is also used to map the
 routing tables. ARP requests and responses are handled by the CPU.
 
-.. |address| image:: ../_static/img/a8b112b568f18c6898a2566faf26aa43.png
+.. |address| image:: ../../_static/img/a8b112b568f18c6898a2566faf26aa43.png
    :class: tex

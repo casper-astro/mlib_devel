@@ -1,5 +1,5 @@
 Bi-directional GPIO
-======
+======================
 | **Block:** Bi-directional GPIO (``gpio_bidir``)
 | **Block Author**: Brian Bradford
 | **Document Author**: Brian Bradford

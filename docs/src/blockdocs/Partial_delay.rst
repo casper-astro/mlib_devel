@@ -64,5 +64,5 @@ Ex.: Mapping of 4 parallel input samples to output for delay = 2.
 | ... | 7 | 3 | ... | |rightarrow| | ... | 5 | 1   | ... |
 +-----+---+---+-----+--------------+-----+---+-----+-----+
 
-.. |rightarrow| image:: ../_static/img/rightarrow.png
+.. |rightarrow| image:: ../../_static/img/rightarrow.png
    :class: tex

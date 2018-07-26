@@ -1,261 +1,75 @@
-.. CASPER Block Documentation master file, created by
-   sphinx-quickstart on Fri Jun 15 09:16:25 2018.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+CASPER Toolflow
+=================
 
-Welcome to CASPER Block Documentation!
-======================================================
+Getting Started
+----------------
+What is mlib_devel?
+^^^^^^^^^^^^^^^^^^^^
 
-+--------------------------------------------------------------------------+
-| .. raw:: html                                                            |
-|                                                                          |
-|    <div id="toctitle">                                                   |
-|                                                                          |
-| .. rubric:: Contents                                                     |
-|    :name: contents                                                       |
-|                                                                          |
-| .. raw:: html                                                            |
-|                                                                          |
-|    </div>                                                                |
-|                                                                          |
-| -  `Signal Processing Blocks <#signal-processing-blocks>`__              |
-| -  `Communication Blocks <#communication-blocks>`__                      |
-| -  `System Blocks <#system-blocks>`__                                    |
-+--------------------------------------------------------------------------+
+``mlib_devel`` is a set of DSP libraries and tools maintained by the `Collaboration for Astronomical Signal Processing and Electronics Research (CASPER) <http://casper-dsp.org/>`__. Within the collaboration, it is affectionately referred to as *The Toolflow.*
 
+``mlib_devel`` allows you to generate firmware designs which can run on supported Xilinx FPGA hardware platforms. It uses Xilinx ISE/Vivado to perform compiles of designs into FPGA bitcode, and MATLAB Simulink and Xilinx System Generator as a frontend to provide a graphical interface which makes it easy to design DSP pipelines. ``mlib_devel`` contains a suite of libraries providing common functionality needed by DSP systems used in radio astronomy -- for example: flexible FFTs, FIR filters, correlator modules, etc. Crucially, it also contains blocks providing high-level interfaces to board-level resources, such as memories, high-speed (Ethernet) IO, Analog-to-digital Converters (ADCs), and Digital-to-Analog Converters (DACs). ``mlib_devel`` is designed to be used with `casperfpga <https://github.com/casper-astro/casperfpga>`__, a software suite which makes it easy to interact with firmware while it is running on an FPGA.
 
-Signal Processing Blocks 
---------------------------
+The tools create an ISE/Vivado project which is compiled using a generated TCL script. The output bitstream contains more than just the bitstream and includes major design configuration and a memory map of the devices in the design accessible from software. 
 
-:doc:`adder_tree <src/Adder_tree>`       (Adder Tree)
+JASPER mlib_devel directory structure
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-:doc:`barrel_switcher <src/Barrel_switcher>`     (Barrel Switcher)
+- **jasper_library/hdl_sources**: HDL source files for all user IP (Ethernet cores, ADC interfaces, etc.)
 
-:doc:`bit_reverse <src/Bit_reverse>`     (Bit Reverser)
+- **jasper_library/yellow_blocks**: python classes for each yellow block in the simulink xps blockset. These classes contain the python code which tells the tool flow how each yellow block should modify the project's top-level HDL source file and vivado project.
 
-:doc:`cmult_4bit_br* <src/Cmult_4bit_br*>`       (Conjugating Complex 4-bit Multiplier Implemented in BlockRAM)
+- **jasper_library/platforms**: a yaml file specifying information about a specific hardware platform. Mostly this is used to  map pythonic constraints - i.e., "connect signal my_led to the board's led[4] pin" - to hardware  constraints - i.e. " my_led -> LOC XXX, my_led -> IOSTD XXX". This file also includes source files the platform requires to compile. The source files in jasper_library/hdl_sources/<platform_name>/ are automatically included. jasper_library/hdl_sources/<platform_name>/top.v is used as a starting point for HDL generation.
 
-:doc:`cmult_4bit_br <src/Cmult_4bit_br>`     (Complex 4-bit Multiplier Implemented in BlockRAM)
+There's a few matlab scripts in **jasper_library** which turn a simulink diagram into source/configuration files that the rest of the tool flow can understand.
 
-:doc:`cmult_4bit_em* <src/Cmult_4bit_em*>`       (Conjugating Complex 4-bit Multiplier Implemented in Dedicated Multipliers)
+Then there's the entire **mlib_devel/casper_library**, which is all the matlab/simulink files for the casper DSP (Digital Signal Processing) libraries.
 
-:doc:`cmult_4bit_em <src/Cmult_4bit_em>`     (Complex 4-bit Multiplier Implemented in Embedded Multipliers)
+Everything in **mlib_devel/xps_base** is obsolete. It contains the pcores, which the old casper tool set utilises. Jasper does not make use of this though.
 
-:doc:`cmult_4bit_sl* <src/Cmult_4bit_sl*>`       (Conjugating Complex 4-bit Multiplier Implemented in Slices)
+Then there is the entire **mlib_devel/xps_library**, which contains all the matlab/simulink yellow block files for the casper XPS (Xilinx Platform Studio) libraries.
 
-:doc:`cmult_4bit_sl <src/Cmult_4bit_sl>`     (Complex 4-bit Multiplier Implemented in Slices)
+Setup
+------
 
-:doc:`complex_addsub <src/Complex_addsub>`       (Complex Adder/Subtractor)
+Depending on the hardware you are designing for you will require a different combination of the tools. The older hardware (ROACHes) use the older Xilinx software (ISE) which forces the use of different tools.
 
-:doc:`c_to_ri <src/C_to_ri>`     (Complex to Real/Imaginary)
+The recommended OS is Ubuntu as it is what the majority of the collaboration are using. This makes it easier for us to support you. If you are so inclined, you could also use Red Hat, but we definitely do not support Windows. You are welcome to try but you will be on your own. You could always run Linux in a VM although this will increase your compile times.
 
-:doc:`DDS <src/Dds>`     (Direct Digital Synthesizer)
++-------------+--------------------+----------------+---------------+-------------------------------------------------------------------------+
+| Platform    | OS                 | Matlab Version | Xilinx Tools  | mlib_devel                                                              |
++=============+====================+================+===============+=========================================================================+
+| ROACH1 or 2 | Ubuntu 12.04/14.04 | R2013b         | ISE 14.7      | `ROACH HEAD <https://github.com/casper-astro/mlib_devel/tree/roach2>`__ |
++-------------+--------------------+----------------+---------------+-------------------------------------------------------------------------+
+| SNAP        | Ubuntu 14.04/16.04 | R2016b         | Vivado 2016.4 | `Master HEAD <https://github.com/casper-astro/mlib_devel>`__            |
++-------------+--------------------+----------------+---------------+-------------------------------------------------------------------------+
+| SKARAB      | Ubuntu 14.04/16.04 | R2016b         | Vivado 2016.2 | `Master HEAD <https://github.com/casper-astro/mlib_devel>`__            |
++-------------+--------------------+----------------+---------------+-------------------------------------------------------------------------+
 
-:doc:`dec_fir <src/Dec_fir>`     (Decimating FIR Filter)
-
-:doc:`delay_bram_en_plus <src/Delay_bram_en_plus>`       (Enabled Delay in BlockRAM))
-
-:doc:`delay_bram_prog <src/Delay_bram_prog>`     (Programmable Delay in BlockRAM)
-
-:doc:`delay_bram <src/Delay_bram>`       (Delay in BlockRAM)
-
-:doc:`delay_complex <src/Delay_complex>`     (Complex Delay)
-
-:doc:`delay_slr <src/Delay_slr>`     (Delay in SLRs)
-
-:doc:`delay_wideband_prog <src/Delay_wideband_prog>`     (Programmable Wideband Delay Implemented in BlockRAM)
-
-:doc:`dram_vacc <src/Dram_vacc>`     (DRAM Vector Accumulator)
-
-:doc:`dram_vacc_tvg <src/Dram_vacc_tvg>`     (DRAM Vector Accumulator Test Vector Generator)
-
-:doc:`edge <src/Edge>`       (Edge Detect Block)
-
-:doc:`fft_biplex_real_2x <src/Fft_biplex_real_2x>`       (Real-sampled Biplex FFT, with Output Demuxed by 2)
-
-:doc:`fft_biplex_real_4x <src/Fft_biplex_real_4x>`       (Real-sampled Biplex FFT, with Output Demuxed by 4)
-
-:doc:`fft <src/Fft>`     (Complex FFT)
-
-:doc:`fft_wideband_real <src/Fft_wideband_real>`     (Real-sampled Wideband FFT)
-
-:doc:`finedelay_fstop_prog <src/Finedelay_fstop_prog>`       (Programmable Fine delay along with Fringe Stop)
-
-:doc:`finedelay_fstop_prog_cordic <src/Finedelay_fstop_prog_cordic>`     (Programmable Fine delay with Fringe Stop using CORDIC block)
-
-:doc:`fir_col <src/Fir_col>`     (PFB FIR Column)
-
-:doc:`fir_dbl_col <src/Fir_dbl_col>`     (PFB FIR Double Column)
-
-:doc:`fir_tap <src/Fir_tap>`     (PFB FIR Tap)
-
-:doc:`freeze_cntr <src/Freeze_cntr>`     (Freeze Counter)
-
-:doc:`lo_const <src/Lo_const>`       (DC Local Oscillator)
-
-:doc:`lo_osc <src/Lo_osc>`       (Local Oscillator)
-
-:doc:`mixer <src/Mixer>`     (Mixer)
-
-:doc:`negedge <src/Negedge>`     (Negative Edge Detector)
-
-:doc:`partial_delay <src/Partial_delay>`     (Partial Delay)
-
-:doc:`pfb_fir_real <src/Pfb_fir_real>`       (Real-sampled Polyphase FIR Filter Frontend for PFB)
-
-:doc:`pfb_fir <src/Pfb_fir>`     (Polyphase FIR Filter Frontend for PFB)
-
-:doc:`posedge <src/Posedge>`     (Positive Edge Detector)
-
-:doc:`power <src/Power>`     (Complex Data Power Calculator)
-
-:doc:`pulse_ext <src/Pulse_ext>`     (Pulse Extender)
-
-:doc:`rcmult <src/Rcmult>`       (Real/Complex Multiplier)
-
-:doc:`reorder <src/Reorder>`     (Arbitrary Reorderer)
-
-:doc:`ri_to_c <src/Ri_to_c>`     (Real/Imaginary to Complex)
-
-:doc:`square_transposer <src/Square_transposer>`     (Square Transposer)
-
-:doc:`stopwatch <src/Stopwatch>`     (Stopwatch)
-
-:doc:`sync_delay_en <src/Sync_delay_en>`     (Enabled Sync Delay)
-
-:doc:`sync_delay_proc <src/Sync_delay_prog>`     (Programmable Sync Delay)
-
-:doc:`sync_gen <src/Sync_gen>`       (Parameterized Sync Generator)
-
-:doc:`win_x_engine <src/Win_x_engine>`       (Windowed X-Engine)
-
-:doc:`xeng_tvg <src/Xeng_tvg>`       (X-Engine Test Vector Generator)
+1. :doc:`Setting up the toolflow <src/Setting-up-the-tools>`
+2. :doc:`Installing Matlab <src/How-to-install-Matlab>`
+3. :doc:`Installing Xilinx Vivado <src/How-to-install-Xilinx-Vivado>` or :doc:`Installing Xilinx ISE (ROACH only) <src/How-to-install-Xilinx-ISE>`
 
 ..  toctree::
     :hidden:
     :maxdepth: 1
-    :caption: Signal Processing Blocks
+    :caption: Setup
 
-    src/Adder_tree
-    src/Barrel_switcher
-    src/Bit_reverse
-    src/Cmult_4bit_br*
-    src/Cmult_4bit_br
-    src/Cmult_4bit_em*
-    src/Cmult_4bit_em
-    src/Cmult_4bit_sl*
-    src/Cmult_4bit_sl
-    src/Complex_addsub
-    src/C_to_ri
-    src/Dds
-    src/Dec_fir
-    src/Delay_bram_en_plus
-    src/Delay_bram_prog
-    src/Delay_bram
-    src/Delay_complex
-    src/Delay_slr
-    src/Delay_wideband_prog
-    src/Dram_vacc
-    src/Dram_vacc_tvg
-    src/Edge
-    src/Fft_biplex_real_2x
-    src/Fft_biplex_real_4x
-    src/Fft
-    src/Fft_wideband_real
-    src/Finedelay_fstop_prog
-    src/Finedelay_fstop_prog_cordic
-    src/Fir_col
-    src/Fir_dbl_col
-    src/Fir_tap
-    src/Freeze_cntr
-    src/Lo_const
-    src/Lo_osc
-    src/Mixer
-    src/Negedge
-    src/Partial_delay
-    src/Pfb_fir_real
-    src/Pfb_fir
-    src/Posedge
-    src/Power
-    src/Pulse_ext
-    src/Rcmult
-    src/Reorder
-    src/Ri_to_c
-    src/Square_transposer
-    src/Stopwatch
-    src/Sync_delay_en
-    src/Sync_delay_prog
-    src/Sync_gen
-    src/Win_x_engine
-    src/Xeng_tvg
+    src/Setting-up-the-tools
+    src/How-to-install-Matlab
+    src/How-to-install-Xilinx-Vivado
+    src/How-to-install-Xilinx-ISE
 
-
-Communication Blocks 
-----------------------
-
-:doc:`ten_gbe <src/Ten_GbE>`        (10GbE Transceiver)
-
-:doc:`XAUI <src/XAUI>`      (XAUI Transceiver)
-
-..  toctree::
-    :hidden:
-    :maxdepth: 1
-    :caption: Communication Blocks
-
-    src/Ten_GbE
-    src/XAUI
-
-System Blocks 
+Documentation
 ---------------
 
-:doc:`adc <src/Adc>`     (ADC)
-
-:doc:`x64_adc <src/X64_adc>`     (64 Channel, 12 bit ADC: `64ADCx64-12 <src/64ADCx64-12.html>`__)
-
-:doc:`dac <src/Dac>` (DAC)
-
-:doc:`dram <src/Dram>`       (DRAM)
-
-:doc:`gpio_bidir <src/gpio_bidir>` 	(Bi-directional GPIO)
-
-:doc:`gpio <src/GPIO>`       (GPIO)
-
-:doc:`qdr <src/Qdr>`     (QDR)
-
-:doc:`snapshot <src/Snapshot>`       (Snapshot Capture)
-
-:doc:`snap <src/Snap>`       (Snapshot Capture)
-
-:doc:`snap64 <src/Snap64>`       (64-Bit Snapshot Capture)
-
-:doc:`software_register <src/Software_register>`     (Software Register)
-
-:doc:`sram <src/Sram>`       (SRAM)
-
-:doc:`XSG core config <src/XSG_core_config>`     (XSG Core Config)
-
-:doc:`Gaussian Random Number Generator <src/Gaussian_Random_Number_Gen>`     (Gaussian Random Number Generator)
-
-:doc:`Correlation Control Block <src/Correlation_Control_Block>`     (CCB)
+* `CASPER Tutorials <http://casper-tutorials.readthedocs.io/en/latest/>`__
+* :doc:`Block Documentation <blockdocumentation>`
 
 ..  toctree::
     :hidden:
     :maxdepth: 1
-    :caption: System Blocks
+    :caption: Documentation
 
-    src/Adc
-    src/X64_adc
-    src/64ADCx64-12
-    src/Dac
-    src/Dram
-    src/gpio_bidir
-    src/GPIO
-    src/Qdr
-    src/Snapshot
-    src/Snap
-    src/Snap64
-    src/Software_register
-    src/Sram
-    src/XSG_core_config
-    src/Gaussian_Random_Number_Gen
-    src/Correlation_Control_Block
+    CASPER Tutorials <http://casper-tutorials.readthedocs.io/en/latest/>
+    blockdocumentation

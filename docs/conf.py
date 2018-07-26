@@ -19,7 +19,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'CASPER Block Documentation'
+project = 'CASPER Toolflow'
 copyright = '2018, Collaboration for Astronomy Signal Processing and Electronics Research'
 author = 'Collaboration for Astronomy Signal Processing and Electronics Research'
 
@@ -40,12 +40,15 @@ release = '0.1'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'sphinx.ext.imgmath',
+    'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
+    'sphinx_markdown_tables',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -56,6 +59,11 @@ templates_path = ['_templates']
 #
 source_suffix = ['.rst', '.md']
 # source_suffix = '.rst'
+
+# Sphinx Markdown support
+source_parsers = {
+    '.md': 'recommonmark.parser.CommonMarkParser',
+}
 
 # The master toctree document.
 master_doc = 'index'
@@ -70,7 +78,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path .
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'README.md']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -97,6 +105,7 @@ html_theme_options = {
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+# html_style = 'css/casper_theme.css'
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -112,7 +121,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'CASPERBlockDocumentationdoc'
+htmlhelp_basename = 'CASPERToolflowdoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -139,7 +148,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'CASPERBlockDocumentation.tex', 'CASPER Block Documentation',
+    (master_doc, 'CASPERToolflow.tex', 'CASPER Toolflow',
      'Collaboration for Astronomy Signal Processing and Electronics Research', 'manual'),
 ]
 
@@ -149,7 +158,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'casperblockdocumentation', 'CASPER Block Documentation',
+    (master_doc, 'caspertoolflow', 'CASPER Toolflow',
      [author], 1)
 ]
 
@@ -160,8 +169,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'CASPERBlockDocumentation', 'CASPER Block Documentation',
-     author, 'CASPERBlockDocumentation', 'One line description of project.',
+    (master_doc, 'CASPERToolflow', 'CASPER Toolflow',
+     author, 'CASPERToolflow', 'One line description of project.',
      'Miscellaneous'),
 ]
 

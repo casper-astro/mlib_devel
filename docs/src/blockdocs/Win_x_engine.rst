@@ -116,6 +116,7 @@ X-engine would be 16 bits every clock cycle mapped as follows:
 +-----+---------------------+---------------------+---------------------+---------------------+---------------------+-----------------------------+
 | ... | *C*\ :sub:`2\ imag` | *B*\ :sub:`2\ imag` | *B*\ :sub:`2\ imag` | *A*\ :sub:`2\ imag` | *A*\ :sub:`2\ imag` | least\_sig 4b\ |rightarrow| |
 +-----+---------------------+---------------------+---------------------+---------------------+---------------------+-----------------------------+
+
 X-engine input with ``acc_len`` of 2.
 
 The ``window_valid`` line is expected to remain constant for the
@@ -154,6 +155,7 @@ rows as follows:
 +--------------+-------------+-------------+-----------------+-----------------+-----+--------------+
 | ...          | ...         | ...         | ...             | ...             | ... | |rightarrow| |
 +--------------+-------------+-------------+-----------------+-----------------+-----+--------------+
+
 Each table entry represents a valid output. Data is read out right to
 left, top to bottom. Bracketed values are from previous window.
 
@@ -170,6 +172,7 @@ As an example, consider the output for a 4 antenna system (with antennas numbere
 +-----+-------------+-------------+-------------+
 | 5th | next win BB | next win AB | **DB**      |
 +-----+-------------+-------------+-------------+
+
 Boldfaced type represents current valid window of data. Data is read out
 right to left, top to bottom. Non-boldfaced data is masked.
 
@@ -178,13 +181,13 @@ duplicates (observed in rows 5 and 6 above) are automatically removed.
 The output of a 4 antenna windowed X-engine is thus
 ``AA, AB, BB, AC, BC, CC, BD, CD, DD, DA``.
 
-.. |times| image:: ../_static/img/9eedd61e32f7a8e70e171028a7e5dc08.png
+.. |times| image:: ../../_static/img/9eedd61e32f7a8e70e171028a7e5dc08.png
    :class: tex
-.. |rightarrow| image:: ../_static/img/rightarrow.png
+.. |rightarrow| image:: ../../_static/img/rightarrow.png
    :class: tex
-.. |num_baselines1| image:: ../_static/img/e6a9c3a9cb7fd7d3aba5a8fa1162cd8b.png
+.. |num_baselines1| image:: ../../_static/img/e6a9c3a9cb7fd7d3aba5a8fa1162cd8b.png
    :class: tex
-.. |num_baselines2| image:: ../_static/img/d07f2e115b966b9e0f53e61366aa1f24.png
+.. |num_baselines2| image:: ../../_static/img/d07f2e115b966b9e0f53e61366aa1f24.png
    :class: tex
-.. |tfrac| image:: ../_static/img/d5bd5f3304d3f314d8e71517b106cdb0.png
+.. |tfrac| image:: ../../_static/img/d5bd5f3304d3f314d8e71517b106cdb0.png
    :class: tex

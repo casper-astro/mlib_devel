@@ -113,7 +113,7 @@ Old mapping: 3 2 1 0 7 6 5 4
 New mapping: 0 1 2 3 4 5 6 7
 
 
-.. |image| image:: ../_static/img/FPGA_GPIO_Header.JPG
+.. |image| image:: ../../_static/img/FPGA_GPIO_Header.JPG
    :class: thumbimage
    :width: 180px
    :height: 68px
