@@ -6,6 +6,9 @@ cfgbvs: GND
 backend_target: vivado
 dsp_wb_base_address: 0x80070000
 dsp_wb_base_address_alignment: 4
+# For SKARAB, use a hierarchical wishbone arbiter, which
+# should help meet timing
+max_devices_per_arbiter: 32
 # the skarab platform expects a bin file with a particular ordering of the bits per byte.
 # each byte from the bit file is reversed. It is anyones guess why perallex designed it this way.
 # this flag tells the toolflow to add the bpix8 flag to the write_cfgmem tcl command

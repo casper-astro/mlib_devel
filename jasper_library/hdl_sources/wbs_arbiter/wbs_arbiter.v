@@ -1,4 +1,4 @@
-module wbs_sub_arbiter(
+module wbs_arbiter(
     /*generic wb signals*/
     wb_clk_i, wb_rst_i,
     /*wbm signals*/

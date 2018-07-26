@@ -305,9 +305,9 @@ class Toolflow(object):
             self.const_files.append(os.getenv('HDL_ROOT') + '/%s/%s' % (
                 self.plat.name, source))
         if os.path.exists(self.topfile):
-            self.top = verilog.VerilogModule(name='top', topfile=self.topfile, compile_dir=self.compile_dir)
+            self.top = verilog.VerilogModule(name='top', topfile=self.topfile)
         else:
-            self.top = verilog.VerilogModule(name='top', compile_dir=self.compile_dir)
+            self.top = verilog.VerilogModule(name='top')
 
     def gen_periph_objs(self):
         """
@@ -473,9 +473,22 @@ class Toolflow(object):
         interconnect / addressing and generating new
         code for yellow block instances.
         """
+        # Decide if we're going to use a hierarchical arbiter.
+        self.logger.debug("Looking for a max_devices_per_arbiter spec")
+        if self.plat.conf.has_key('max_devices_per_arbiter'):
+            self.top.max_devices_per_arb = self.plat.conf['max_devices_per_arbiter']
+            self.logger.debug("Found max_devices_per_arbiter: %s" % self.top.max_devices_per_arb)
         self.top.wb_compute(self.plat.dsp_wb_base_address,
                             self.plat.dsp_wb_base_address_alignment)
         print self.top.gen_module_file(filename=self.compile_dir+'/top.v')
+        # Write any submodule files required for the compile. This is probably
+        # only the hierarchical WB arbiter, or nothing at all
+        for key, val in self.top.generated_sub_modules.iteritems():
+            self.logger.info("Writing sub module file %s.v" % key)
+            with open(self.compile_dir+'/%s.v'%key, 'w') as fh:
+                fh.write(val)
+                self.sources.append(fh.name)
+        self.logger.info("Dumping pickle of top-level Verilog module")
         pickle.dump(self.top, open('%s/top.pickle' % self.compile_dir,'wb'))
 
     def generate_consts(self):
@@ -1105,11 +1118,6 @@ class VivadoBackend(ToolflowBackend):
             self.add_tcl_cmd('file mkdir %s/%s' % (self.compile_dir,
                                                    self.project_name))
             self.add_tcl_cmd('set_part %s' % plat.fpga)
-
-        # for source in plat.sources:
-        #  self.add_source(os.getenv('HDL_ROOT')+'/'+source)
-        #  self.add_source(self.compile_dir+'/top.v')
-        self.add_source(self.compile_dir+'/wbs_arbiter.v', self.plat)
 
     def add_library(self, path):
         """
