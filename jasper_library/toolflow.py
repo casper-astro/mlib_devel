@@ -12,7 +12,7 @@ import yellow_blocks.yellow_block as yellow_block
 import verilog
 from constraints import PortConstraint, ClockConstraint, GenClockConstraint, \
     ClockGroupConstraint, InputDelayConstraint, OutputDelayConstraint, MaxDelayConstraint, \
-    MinDelayConstraint, FalsePathConstraint, MultiCycleConstraint, RawConstraint, MAX_IMAGE_CHUNK_SIZE
+    MinDelayConstraint, FalsePathConstraint, MultiCycleConstraint, RawConstraint
 import castro
 import helpers
 import yaml
@@ -21,6 +21,9 @@ import time
 import hashlib  # Added to calculate md5hash of .bin bitstream and add it to the .fpg header
 import pickle   # Used to dump the pickle of the generated VerilogModule to the build directory for debugging
 import struct   # Used to append a binary checksum to a bitstream
+
+#JH: I don't know what this is, but I suspect here is a better place for it than constraints.py
+MAX_IMAGE_CHUNK_SIZE = 1988
 
 try:
     from katversion import get_version as kat_get_version
