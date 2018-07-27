@@ -55,25 +55,30 @@ The recommended OS is Ubuntu as it is what the majority of the collaboration are
 | SKARAB      | Ubuntu 14.04/16.04 | R2016b         | Vivado 2016.2 | `Master HEAD <https://github.com/casper-astro/mlib_devel>`__            |
 +-------------+--------------------+----------------+---------------+-------------------------------------------------------------------------+
 
-1. :doc:`Setting up the toolflow <src/Setting-up-the-tools>`
+1. :doc:`Setting up the Toolflow <src/Setting-up-the-Toolflow>`
 2. :doc:`Installing Matlab <src/How-to-install-Matlab>`
 3. :doc:`Installing Xilinx Vivado <src/How-to-install-Xilinx-Vivado>` or :doc:`Installing Xilinx ISE (ROACH only) <src/How-to-install-Xilinx-ISE>`
+4. :doc:`Configuring the Toolflow <src/Configuring-the-Toolflow>`
+5. :doc:`Running the Toolflow <src/Running-the-Toolflow>`
 
 ..  toctree::
     :hidden:
     :maxdepth: 1
     :caption: Setup
 
-    src/Setting-up-the-tools
+    src/Setting-up-the-Toolflow
     src/How-to-install-Matlab
     src/How-to-install-Xilinx-Vivado
     src/How-to-install-Xilinx-ISE
+    src/Configuring-the-Toolflow
+    src/Running-the-Toolflow
 
 Documentation
 ---------------
 
 * `CASPER Tutorials <http://casper-tutorials.readthedocs.io/en/latest/>`__
 * :doc:`Block Documentation <blockdocumentation>`
+* :doc:`JASPER Toolflow <src/jasper_library_modules/modules>`
 
 ..  toctree::
     :hidden:
@@ -82,3 +87,4 @@ Documentation
 
     CASPER Tutorials <http://casper-tutorials.readthedocs.io/en/latest/>
     blockdocumentation
+    src/jasper_library_modules/modules

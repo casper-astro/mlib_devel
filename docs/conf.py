@@ -12,10 +12,21 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import os
+import sys
+from sphinx.apidoc import main as sphinx_apidoc_main
+# add jasper_library directory to sys.path so autodoc can document its modules.
+jasper_library_path = os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(__file__))), 'jasper_library')
+sys.path.insert(0, jasper_library_path)
+# use sphinx-apidoc to automatically document modules, classes, functions, etc.
+# Code found here: https://github.com/rtfd/readthedocs.org/issues/1139
+def run_apidoc(_):
+    build_modules_dir = os.path.join(os.path.dirname(__file__), 'src', 'jasper_library_modules')
+    ignore_file  = 'conf.py'
+    sphinx_apidoc_main(['-e', '-o',  build_modules_dir, jasper_library_path, ignore_file, '--force'])
 
+def setup(app):
+    app.connect('builder-inited', run_apidoc)
 
 # -- Project information -----------------------------------------------------
 
