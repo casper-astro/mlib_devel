@@ -10,6 +10,24 @@ The ``mlib_devel`` repository contains a set of FPGA DSP libraries and programmi
 
 The CASPER toolflow allows you to generate signal processing designs using MATLAB's graphical programming tool ``Simulink``. These designs can be turned into FPGA bitstreams and loaded onto a variety of supported hardware platforms to perform real-time digital signal processing systems. CASPER also provides a Python software library for interacting with running designs:  `casperfpga <https://github.com/casper-astro/casperfpga>`__.
 
+Using mlib_devel
+^^^^^^^^^^^^^^^^
+
+For more information about installing and using the CASPER Toolflow, see the project's `documentation <https://casper-toolflow.readthedocs.io>`__.
+
+CASPER also maintain a set of `tutorials <https://casper-tutorials.readthedocs.io>`__, designed to introduce new users to the toolflow.
+
+Updating an Existing Toolflow Installation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+You can always update your installation of `mlib_devel` by pulling updated code from this repository. If you do this, chances are you'll need to update your Simulink models to match your new `mlib_devel` libraries. A script is provided to automate this process. With your model open and active, in your MATLAB prompt, run
+.. code-block:: matlab
+
+   update_casper_blocks(bdroot)
+
+This script will resynchronize every CASPER block in your design with its latest library version. Depending on the size of your model, it may take many minutes to complete!
+
+As always, back up your designs before attempting such a major operation. And, if you experience problems, please riase Github issues!
+
 
 `mlib_devel` directory structure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
