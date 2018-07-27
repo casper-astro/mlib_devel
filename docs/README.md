@@ -3,6 +3,7 @@
 ## Getting Started:
 - Create a fork of the tutorials_devel repository
 - `git clone` the forked repository
+- Install markdown first: `pip install markdown`
 - Install the required tools using `pip install -r requirements.txt`
 
 ## Information:
