@@ -141,8 +141,8 @@ class Parameter(ImmutableWithComments):
         :type value: Varies
         :param comment: User-assisting comment string to attach to this parameter.
         :type comment: String
-        """
         Update the attributes of this block.
+        """
         self.name = name.rstrip(' ')
         self.value = value
         if type(comment) is str:
