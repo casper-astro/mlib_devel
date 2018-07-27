@@ -11,9 +11,9 @@ The CASPER toolflow allows you to generate signal processing designs using MATLA
 
 ## Using mlib_devel
 
-For more information about installing and using the CASPER Toolflow, see the project's [documentation](https://casper-toolflow.readthedocs.io).[![Documentation Status](https://readthedocs.org/projects/casper-toolflow/badge/?version=latest)](https://casper-toolflow.readthedocs.io/en/latest/?badge=latest)
+For more information about installing and using the CASPER Toolflow, see the project's [documentation](https://casper-toolflow.readthedocs.io).
 
-CASPER also maintain a set of [tutorials](https://casper-tutorials.readthedocs.io), designed to introduce new users to the toolflow.[![Documentation Status](https://readthedocs.org/projects/casper-tutorials/badge/?version=latest)](https://casper-tutorials.readthedocs.io/en/latest/?badge=latest)
+CASPER also maintain a set of [tutorials](https://casper-tutorials.readthedocs.io), designed to introduce new users to the toolflow.
 
 > ***Updating an Existing Toolflow Installation***
 >
