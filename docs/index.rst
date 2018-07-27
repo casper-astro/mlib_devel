@@ -1,13 +1,14 @@
 CASPER Toolflow
 =================
 
+Welcome to the CASPER Toolflow repository, ``mlib_devel``!
 
 What is mlib_devel?
 ^^^^^^^^^^^^^^^^^^^
 
-``mlib_devel`` is a set of FPGA DSP libraries and programming tools maintained by the `Collaboration for Astronomical Signal Processing and Electronics Research (CASPER) <http://casper.berkeley.edu/>`__. Within the collaboration, it is affectionately referred to as *The Toolflow.*
+The ``mlib_devel`` repository contains a set of FPGA DSP libraries and programming tools developed and maintained by the  `Collaboration for Astronomical Signal Processing and Electronics Research (CASPER) <http://casper.berkeley.edu/>`__. Within the collaboration, this collection of software is affectionately referred to as *The Toolflow*.
 
-``mlib_devel`` allows you to generate signal processing designs using MATLAB's graphical programming tool `Simulink`. These designs can be turned into FPGA bitstreams and loaded onto a variety of supported hardware platforms to perform real-time digital signal processing systems. CASPER also provides a Python software library for interacting with running designs: `casperfpga <https://github.com/casper-astro/casperfpga>`__.
+The CASPER toolflow allows you to generate signal processing designs using MATLAB's graphical programming tool ``Simulink``. These designs can be turned into FPGA bitstreams and loaded onto a variety of supported hardware platforms to perform real-time digital signal processing systems. CASPER also provides a Python software library for interacting with running designs:  `casperfpga <https://github.com/casper-astro/casperfpga>`__.
 
 
 `mlib_devel` directory structure
