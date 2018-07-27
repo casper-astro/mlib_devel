@@ -1,7 +1,7 @@
 CASPER Toolflow
 =================
 
-Welcome to the CASPER Toolflow repository, ``mlib_devel``!
+Welcome to the documentation for ``mlib_devel``, the CASPER Toolflow!
 
 What is mlib_devel?
 ^^^^^^^^^^^^^^^^^^^
