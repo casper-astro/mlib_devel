@@ -159,7 +159,7 @@ if opts.backend or opts.software:
 
     if opts.software:
         binary = backend.binary_loc
-        output_fpg = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d.fpg' % (
+        backend.output_fpg = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d.fpg' % (
             tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
             tf.start_time.tm_hour, tf.start_time.tm_min)
 
@@ -177,6 +177,7 @@ if opts.backend or opts.software:
                                          backend.compile_dir)
         os.system(mkbof_cmd)
         print 'Created %s/%s' % (backend.output_dir, backend.output_bof)
-        backend.mkfpg(binary, output_fpg)
+        backend.mkfpg(binary, backend.output_fpg)
+        print 'Created %s/%s' % (backend.output_dir, backend.output_fpg)
 
 # end
