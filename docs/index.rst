@@ -78,7 +78,7 @@ Documentation
 
 * `CASPER Tutorials <http://casper-tutorials.readthedocs.io/en/latest/>`__
 * :doc:`Block Documentation <blockdocumentation>`
-* :doc:`JASPER Toolflow <src/jasper_library_modules/modules>`
+* :doc:`Toolflow Documentation <src/jasper_library_modules/modules>`
 
 ..  toctree::
     :hidden:
@@ -87,4 +87,4 @@ Documentation
 
     CASPER Tutorials <http://casper-tutorials.readthedocs.io/en/latest/>
     blockdocumentation
-    src/jasper_library_modules/modules
+    Toolflow Documentation <src/jasper_library_modules/modules>
