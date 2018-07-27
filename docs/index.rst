@@ -19,14 +19,13 @@ CASPER also maintain a set of `tutorials <https://casper-tutorials.readthedocs.i
 
 Updating an Existing Toolflow Installation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   You can always update your installation of `mlib_devel` by pulling updated code from this repository. If you do this,      chances are you'll need to update your Simulink models to match your new `mlib_devel` libraries. A script is provided to automate this process. With your model open and active, in your MATLAB prompt, run
+You can always update your installation of `mlib_devel` by pulling updated code from this repository. If you do this,      chances are you'll need to update your Simulink models to match your new `mlib_devel` libraries. A script is provided to automate this process. With your model open and active, in your MATLAB prompt, run
 
-   .. code-block:: matlab
+.. code-block:: matlab
 
-      update_casper_blocks(bdroot)
+   update_casper_blocks(bdroot)
 
-   This script will resynchronize every CASPER block in your design with its latest library version. Depending on the size of your model, it may take many minutes to complete!
-   As always, back up your designs before attempting such a major operation. And, if you experience problems, please raise Github issues!
+This script will resynchronize every CASPER block in your design with its latest library version. Depending on the size of your model, it may take many minutes to complete! As always, back up your designs before attempting such a major operation. And, if you experience problems, please raise Github issues!
 
 
 `mlib_devel` directory structure
