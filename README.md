@@ -1,4 +1,5 @@
-# The CASPER Toolflow
+# The CASPER Toolflow [![Documentation Status](https://readthedocs.org/projects/casper-toolflow/badge/?version=latest)](https://casper-toolflow.readthedocs.io/en/latest/?badge=latest)
+
 
 Welcome to the CASPER Toolflow repository, `mlib_devel`!
 
