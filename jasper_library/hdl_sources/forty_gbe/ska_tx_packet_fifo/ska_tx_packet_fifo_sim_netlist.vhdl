@@ -1,10 +1,10 @@
 -- Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2016.2 (lin64) Build 1577090 Thu Jun  2 16:32:35 MDT 2016
--- Date        : Mon Nov  7 14:28:04 2016
+-- Date        : Wed Nov  1 16:14:35 2017
 -- Host        : adam-cm running 64-bit Ubuntu 14.04.5 LTS
 -- Command     : write_vhdl -force -mode funcsim
---               /home/aisaacson/work/git_work/ska_sa/projects/skarab_bsp_firmware/firmware/FRM123701U1R1/Vivado/IP/ska_tx_packet_fifo/ska_tx_packet_fifo_sim_netlist.vhdl
+--               /home/aisaacson/work/git_work/ska_sa/projects/mlib_devel/jasper_library/test_models/s_c856m32k/myproj/myproj.srcs/sources_1/ip/ska_tx_packet_fifo/ska_tx_packet_fifo_sim_netlist.vhdl
 -- Design      : ska_tx_packet_fifo
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -856,7 +856,7 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity \ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized2\ is
   port (
-    D : out STD_LOGIC_VECTOR ( 43 downto 0 );
+    D : out STD_LOGIC_VECTOR ( 47 downto 0 );
     rd_clk : in STD_LOGIC;
     wr_clk : in STD_LOGIC;
     tmp_ram_rd_en : in STD_LOGIC;
@@ -864,7 +864,7 @@ entity \ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized2\ is
     Q : in STD_LOGIC_VECTOR ( 0 to 0 );
     \gc0.count_d1_reg[8]\ : in STD_LOGIC_VECTOR ( 8 downto 0 );
     \gic0.gc0.count_d2_reg[8]\ : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    din : in STD_LOGIC_VECTOR ( 43 downto 0 )
+    din : in STD_LOGIC_VECTOR ( 47 downto 0 )
   );
   attribute ORIG_REF_NAME : string;
   attribute ORIG_REF_NAME of \ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized2\ : entity is "blk_mem_gen_prim_wrapper";
@@ -873,22 +873,18 @@ end \ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized2\;
 architecture STRUCTURE of \ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized2\ is
   signal \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_21\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_22\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_23\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_29\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_30\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_37\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_38\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_39\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_45\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_46\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_53\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_54\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_55\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_61\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_62\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_69\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_70\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_71\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_77\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_78\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_85\ : STD_LOGIC;
@@ -1102,52 +1098,48 @@ begin
       CLKARDCLK => rd_clk,
       CLKBWRCLK => wr_clk,
       DBITERR => \NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_DBITERR_UNCONNECTED\,
-      DIADI(31 downto 29) => B"000",
-      DIADI(28 downto 24) => din(21 downto 17),
+      DIADI(31 downto 30) => B"00",
+      DIADI(29 downto 24) => din(23 downto 18),
       DIADI(23 downto 22) => B"00",
-      DIADI(21 downto 16) => din(16 downto 11),
-      DIADI(15 downto 13) => B"000",
-      DIADI(12 downto 8) => din(10 downto 6),
+      DIADI(21 downto 16) => din(17 downto 12),
+      DIADI(15 downto 14) => B"00",
+      DIADI(13 downto 8) => din(11 downto 6),
       DIADI(7 downto 6) => B"00",
       DIADI(5 downto 0) => din(5 downto 0),
-      DIBDI(31 downto 29) => B"000",
-      DIBDI(28 downto 24) => din(43 downto 39),
+      DIBDI(31 downto 30) => B"00",
+      DIBDI(29 downto 24) => din(47 downto 42),
       DIBDI(23 downto 22) => B"00",
-      DIBDI(21 downto 16) => din(38 downto 33),
-      DIBDI(15 downto 13) => B"000",
-      DIBDI(12 downto 8) => din(32 downto 28),
+      DIBDI(21 downto 16) => din(41 downto 36),
+      DIBDI(15 downto 14) => B"00",
+      DIBDI(13 downto 8) => din(35 downto 30),
       DIBDI(7 downto 6) => B"00",
-      DIBDI(5 downto 0) => din(27 downto 22),
+      DIBDI(5 downto 0) => din(29 downto 24),
       DIPADIP(3 downto 0) => B"0000",
       DIPBDIP(3 downto 0) => B"0000",
       DOADO(31) => \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_21\,
       DOADO(30) => \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_22\,
-      DOADO(29) => \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_23\,
-      DOADO(28 downto 24) => D(21 downto 17),
+      DOADO(29 downto 24) => D(23 downto 18),
       DOADO(23) => \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_29\,
       DOADO(22) => \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_30\,
-      DOADO(21 downto 16) => D(16 downto 11),
+      DOADO(21 downto 16) => D(17 downto 12),
       DOADO(15) => \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_37\,
       DOADO(14) => \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_38\,
-      DOADO(13) => \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_39\,
-      DOADO(12 downto 8) => D(10 downto 6),
+      DOADO(13 downto 8) => D(11 downto 6),
       DOADO(7) => \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_45\,
       DOADO(6) => \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_46\,
       DOADO(5 downto 0) => D(5 downto 0),
       DOBDO(31) => \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_53\,
       DOBDO(30) => \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_54\,
-      DOBDO(29) => \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_55\,
-      DOBDO(28 downto 24) => D(43 downto 39),
+      DOBDO(29 downto 24) => D(47 downto 42),
       DOBDO(23) => \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_61\,
       DOBDO(22) => \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_62\,
-      DOBDO(21 downto 16) => D(38 downto 33),
+      DOBDO(21 downto 16) => D(41 downto 36),
       DOBDO(15) => \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_69\,
       DOBDO(14) => \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_70\,
-      DOBDO(13) => \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_71\,
-      DOBDO(12 downto 8) => D(32 downto 28),
+      DOBDO(13 downto 8) => D(35 downto 30),
       DOBDO(7) => \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_77\,
       DOBDO(6) => \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_78\,
-      DOBDO(5 downto 0) => D(27 downto 22),
+      DOBDO(5 downto 0) => D(29 downto 24),
       DOPADOP(3) => \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_85\,
       DOPADOP(2) => \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_86\,
       DOPADOP(1) => \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_87\,
@@ -1807,7 +1799,7 @@ entity ska_tx_packet_fifo_rd_fwft is
     \gpregsm1.curr_fwft_state_reg[1]_0\ : out STD_LOGIC_VECTOR ( 1 downto 0 );
     tmp_ram_rd_en : out STD_LOGIC;
     E : out STD_LOGIC_VECTOR ( 0 to 0 );
-    \goreg_bm.dout_i_reg[259]\ : out STD_LOGIC_VECTOR ( 0 to 0 );
+    \goreg_bm.dout_i_reg[263]\ : out STD_LOGIC_VECTOR ( 0 to 0 );
     rd_clk : in STD_LOGIC;
     Q : in STD_LOGIC_VECTOR ( 1 downto 0 );
     rd_en : in STD_LOGIC;
@@ -1828,7 +1820,7 @@ architecture STRUCTURE of ska_tx_packet_fifo_rd_fwft is
   attribute SOFT_HLUTNM of empty_fwft_i_i_1 : label is "soft_lutpair9";
   attribute equivalent_register_removal of empty_fwft_i_reg : label is "no";
   attribute SOFT_HLUTNM of \gc0.count_d1[8]_i_1\ : label is "soft_lutpair8";
-  attribute SOFT_HLUTNM of \goreg_bm.dout_i[259]_i_1\ : label is "soft_lutpair9";
+  attribute SOFT_HLUTNM of \goreg_bm.dout_i[263]_i_1\ : label is "soft_lutpair9";
   attribute SOFT_HLUTNM of \gpregsm1.curr_fwft_state[1]_i_1\ : label is "soft_lutpair8";
   attribute equivalent_register_removal of \gpregsm1.curr_fwft_state_reg[0]\ : label is "no";
   attribute equivalent_register_removal of \gpregsm1.curr_fwft_state_reg[1]\ : label is "no";
@@ -1890,7 +1882,7 @@ empty_fwft_i_reg: unisim.vcomponents.FDPE
       I3 => p_2_out,
       O => E(0)
     );
-\goreg_bm.dout_i[259]_i_1\: unisim.vcomponents.LUT3
+\goreg_bm.dout_i[263]_i_1\: unisim.vcomponents.LUT3
     generic map(
       INIT => X"A2"
     )
@@ -1898,7 +1890,7 @@ empty_fwft_i_reg: unisim.vcomponents.FDPE
       I0 => \^gpregsm1.curr_fwft_state_reg[1]_0\(1),
       I1 => \^gpregsm1.curr_fwft_state_reg[1]_0\(0),
       I2 => rd_en,
-      O => \goreg_bm.dout_i_reg[259]\(0)
+      O => \goreg_bm.dout_i_reg[263]\(0)
     );
 \gpregsm1.curr_fwft_state[0]_i_1\: unisim.vcomponents.LUT3
     generic map(
@@ -3778,10 +3770,11 @@ entity ska_tx_packet_fifo_wr_pf_as is
 end ska_tx_packet_fifo_wr_pf_as;
 
 architecture STRUCTURE of ska_tx_packet_fifo_wr_pf_as is
-  signal diff_pntr : STD_LOGIC_VECTOR ( 8 downto 1 );
+  signal diff_pntr : STD_LOGIC_VECTOR ( 8 downto 0 );
   signal \gpf1.prog_full_i_i_1_n_0\ : STD_LOGIC;
   signal \gpf1.prog_full_i_i_2_n_0\ : STD_LOGIC;
-  signal plusOp : STD_LOGIC_VECTOR ( 9 downto 2 );
+  signal \gpf1.prog_full_i_i_3_n_0\ : STD_LOGIC;
+  signal plusOp : STD_LOGIC_VECTOR ( 9 downto 1 );
   signal \plusOp_carry__0_n_0\ : STD_LOGIC;
   signal \plusOp_carry__0_n_1\ : STD_LOGIC;
   signal \plusOp_carry__0_n_2\ : STD_LOGIC;
@@ -3791,11 +3784,21 @@ architecture STRUCTURE of ska_tx_packet_fifo_wr_pf_as is
   signal plusOp_carry_n_2 : STD_LOGIC;
   signal plusOp_carry_n_3 : STD_LOGIC;
   signal \^prog_full\ : STD_LOGIC;
-  signal NLW_plusOp_carry_O_UNCONNECTED : STD_LOGIC_VECTOR ( 0 to 0 );
   signal \NLW_plusOp_carry__1_CO_UNCONNECTED\ : STD_LOGIC_VECTOR ( 3 downto 0 );
   signal \NLW_plusOp_carry__1_O_UNCONNECTED\ : STD_LOGIC_VECTOR ( 3 downto 1 );
 begin
   prog_full <= \^prog_full\;
+\gdiff.diff_pntr_pad_reg[1]\: unisim.vcomponents.FDCE
+    generic map(
+      INIT => '0'
+    )
+        port map (
+      C => wr_clk,
+      CE => '1',
+      CLR => \ngwrdrst.grst.g7serrst.wr_rst_reg_reg[1]\(0),
+      D => plusOp(1),
+      Q => diff_pntr(0)
+    );
 \gdiff.diff_pntr_pad_reg[2]\: unisim.vcomponents.FDCE
     generic map(
       INIT => '0'
@@ -3884,31 +3887,40 @@ begin
       D => plusOp(9),
       Q => diff_pntr(8)
     );
-\gpf1.prog_full_i_i_1\: unisim.vcomponents.LUT6
+\gpf1.prog_full_i_i_1\: unisim.vcomponents.LUT5
     generic map(
-      INIT => X"00FF000800000008"
+      INIT => X"0F010001"
     )
         port map (
-      I0 => diff_pntr(8),
-      I1 => diff_pntr(7),
-      I2 => \gpf1.prog_full_i_i_2_n_0\,
-      I3 => \grstd1.grst_full.grst_f.rst_d3_reg\,
-      I4 => p_1_out,
-      I5 => \^prog_full\,
+      I0 => \gpf1.prog_full_i_i_2_n_0\,
+      I1 => \gpf1.prog_full_i_i_3_n_0\,
+      I2 => \grstd1.grst_full.grst_f.rst_d3_reg\,
+      I3 => p_1_out,
+      I4 => \^prog_full\,
       O => \gpf1.prog_full_i_i_1_n_0\
     );
-\gpf1.prog_full_i_i_2\: unisim.vcomponents.LUT6
+\gpf1.prog_full_i_i_2\: unisim.vcomponents.LUT5
     generic map(
-      INIT => X"777F7F7FFFFFFFFF"
+      INIT => X"777FFFFF"
     )
         port map (
-      I0 => diff_pntr(4),
-      I1 => diff_pntr(5),
-      I2 => diff_pntr(3),
-      I3 => diff_pntr(2),
-      I4 => diff_pntr(1),
-      I5 => diff_pntr(6),
+      I0 => diff_pntr(2),
+      I1 => diff_pntr(3),
+      I2 => diff_pntr(0),
+      I3 => diff_pntr(1),
+      I4 => diff_pntr(6),
       O => \gpf1.prog_full_i_i_2_n_0\
+    );
+\gpf1.prog_full_i_i_3\: unisim.vcomponents.LUT4
+    generic map(
+      INIT => X"7FFF"
+    )
+        port map (
+      I0 => diff_pntr(7),
+      I1 => diff_pntr(8),
+      I2 => diff_pntr(4),
+      I3 => diff_pntr(5),
+      O => \gpf1.prog_full_i_i_3_n_0\
     );
 \gpf1.prog_full_i_reg\: unisim.vcomponents.FDPE
     generic map(
@@ -3930,8 +3942,7 @@ plusOp_carry: unisim.vcomponents.CARRY4
       CO(0) => plusOp_carry_n_3,
       CYINIT => E(0),
       DI(3 downto 0) => Q(3 downto 0),
-      O(3 downto 1) => plusOp(4 downto 2),
-      O(0) => NLW_plusOp_carry_O_UNCONNECTED(0),
+      O(3 downto 0) => plusOp(4 downto 1),
       S(3 downto 0) => S(3 downto 0)
     );
 \plusOp_carry__0\: unisim.vcomponents.CARRY4
@@ -4069,7 +4080,7 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity \ska_tx_packet_fifo_blk_mem_gen_prim_width__parameterized2\ is
   port (
-    D : out STD_LOGIC_VECTOR ( 43 downto 0 );
+    D : out STD_LOGIC_VECTOR ( 47 downto 0 );
     rd_clk : in STD_LOGIC;
     wr_clk : in STD_LOGIC;
     tmp_ram_rd_en : in STD_LOGIC;
@@ -4077,7 +4088,7 @@ entity \ska_tx_packet_fifo_blk_mem_gen_prim_width__parameterized2\ is
     Q : in STD_LOGIC_VECTOR ( 0 to 0 );
     \gc0.count_d1_reg[8]\ : in STD_LOGIC_VECTOR ( 8 downto 0 );
     \gic0.gc0.count_d2_reg[8]\ : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    din : in STD_LOGIC_VECTOR ( 43 downto 0 )
+    din : in STD_LOGIC_VECTOR ( 47 downto 0 )
   );
   attribute ORIG_REF_NAME : string;
   attribute ORIG_REF_NAME of \ska_tx_packet_fifo_blk_mem_gen_prim_width__parameterized2\ : entity is "blk_mem_gen_prim_width";
@@ -4087,10 +4098,10 @@ architecture STRUCTURE of \ska_tx_packet_fifo_blk_mem_gen_prim_width__parameteri
 begin
 \prim_noinit.ram\: entity work.\ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized2\
      port map (
-      D(43 downto 0) => D(43 downto 0),
+      D(47 downto 0) => D(47 downto 0),
       E(0) => E(0),
       Q(0) => Q(0),
-      din(43 downto 0) => din(43 downto 0),
+      din(47 downto 0) => din(47 downto 0),
       \gc0.count_d1_reg[8]\(8 downto 0) => \gc0.count_d1_reg[8]\(8 downto 0),
       \gic0.gc0.count_d2_reg[8]\(8 downto 0) => \gic0.gc0.count_d2_reg[8]\(8 downto 0),
       rd_clk => rd_clk,
@@ -5005,7 +5016,7 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity ska_tx_packet_fifo_blk_mem_gen_generic_cstr is
   port (
-    D : out STD_LOGIC_VECTOR ( 259 downto 0 );
+    D : out STD_LOGIC_VECTOR ( 263 downto 0 );
     rd_clk : in STD_LOGIC;
     wr_clk : in STD_LOGIC;
     tmp_ram_rd_en : in STD_LOGIC;
@@ -5013,7 +5024,7 @@ entity ska_tx_packet_fifo_blk_mem_gen_generic_cstr is
     Q : in STD_LOGIC_VECTOR ( 0 to 0 );
     \gc0.count_d1_reg[8]\ : in STD_LOGIC_VECTOR ( 8 downto 0 );
     \gic0.gc0.count_d2_reg[8]\ : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    din : in STD_LOGIC_VECTOR ( 259 downto 0 )
+    din : in STD_LOGIC_VECTOR ( 263 downto 0 )
   );
   attribute ORIG_REF_NAME : string;
   attribute ORIG_REF_NAME of ska_tx_packet_fifo_blk_mem_gen_generic_cstr : entity is "blk_mem_gen_generic_cstr";
@@ -5059,10 +5070,10 @@ begin
     );
 \ramloop[3].ram.r\: entity work.\ska_tx_packet_fifo_blk_mem_gen_prim_width__parameterized2\
      port map (
-      D(43 downto 0) => D(259 downto 216),
+      D(47 downto 0) => D(263 downto 216),
       E(0) => E(0),
       Q(0) => Q(0),
-      din(43 downto 0) => din(259 downto 216),
+      din(47 downto 0) => din(263 downto 216),
       \gc0.count_d1_reg[8]\(8 downto 0) => \gc0.count_d1_reg[8]\(8 downto 0),
       \gic0.gc0.count_d2_reg[8]\(8 downto 0) => \gic0.gc0.count_d2_reg[8]\(8 downto 0),
       rd_clk => rd_clk,
@@ -5105,7 +5116,7 @@ begin
       E(0) => p_7_out,
       Q(1 downto 0) => Q(1 downto 0),
       empty => empty,
-      \goreg_bm.dout_i_reg[259]\(0) => E(0),
+      \goreg_bm.dout_i_reg[263]\(0) => E(0),
       \gpregsm1.curr_fwft_state_reg[1]_0\(1) => \gr1.gr1_int.rfwft_n_1\,
       \gpregsm1.curr_fwft_state_reg[1]_0\(0) => curr_fwft_state(0),
       p_2_out => p_2_out,
@@ -5252,7 +5263,7 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity ska_tx_packet_fifo_blk_mem_gen_top is
   port (
-    D : out STD_LOGIC_VECTOR ( 259 downto 0 );
+    D : out STD_LOGIC_VECTOR ( 263 downto 0 );
     rd_clk : in STD_LOGIC;
     wr_clk : in STD_LOGIC;
     tmp_ram_rd_en : in STD_LOGIC;
@@ -5260,7 +5271,7 @@ entity ska_tx_packet_fifo_blk_mem_gen_top is
     Q : in STD_LOGIC_VECTOR ( 0 to 0 );
     \gc0.count_d1_reg[8]\ : in STD_LOGIC_VECTOR ( 8 downto 0 );
     \gic0.gc0.count_d2_reg[8]\ : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    din : in STD_LOGIC_VECTOR ( 259 downto 0 )
+    din : in STD_LOGIC_VECTOR ( 263 downto 0 )
   );
   attribute ORIG_REF_NAME : string;
   attribute ORIG_REF_NAME of ska_tx_packet_fifo_blk_mem_gen_top : entity is "blk_mem_gen_top";
@@ -5270,10 +5281,10 @@ architecture STRUCTURE of ska_tx_packet_fifo_blk_mem_gen_top is
 begin
 \valid.cstr\: entity work.ska_tx_packet_fifo_blk_mem_gen_generic_cstr
      port map (
-      D(259 downto 0) => D(259 downto 0),
+      D(263 downto 0) => D(263 downto 0),
       E(0) => E(0),
       Q(0) => Q(0),
-      din(259 downto 0) => din(259 downto 0),
+      din(263 downto 0) => din(263 downto 0),
       \gc0.count_d1_reg[8]\(8 downto 0) => \gc0.count_d1_reg[8]\(8 downto 0),
       \gic0.gc0.count_d2_reg[8]\(8 downto 0) => \gic0.gc0.count_d2_reg[8]\(8 downto 0),
       rd_clk => rd_clk,
@@ -5287,7 +5298,7 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity ska_tx_packet_fifo_blk_mem_gen_v8_3_3_synth is
   port (
-    D : out STD_LOGIC_VECTOR ( 259 downto 0 );
+    D : out STD_LOGIC_VECTOR ( 263 downto 0 );
     rd_clk : in STD_LOGIC;
     wr_clk : in STD_LOGIC;
     tmp_ram_rd_en : in STD_LOGIC;
@@ -5295,7 +5306,7 @@ entity ska_tx_packet_fifo_blk_mem_gen_v8_3_3_synth is
     Q : in STD_LOGIC_VECTOR ( 0 to 0 );
     \gc0.count_d1_reg[8]\ : in STD_LOGIC_VECTOR ( 8 downto 0 );
     \gic0.gc0.count_d2_reg[8]\ : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    din : in STD_LOGIC_VECTOR ( 259 downto 0 )
+    din : in STD_LOGIC_VECTOR ( 263 downto 0 )
   );
   attribute ORIG_REF_NAME : string;
   attribute ORIG_REF_NAME of ska_tx_packet_fifo_blk_mem_gen_v8_3_3_synth : entity is "blk_mem_gen_v8_3_3_synth";
@@ -5305,10 +5316,10 @@ architecture STRUCTURE of ska_tx_packet_fifo_blk_mem_gen_v8_3_3_synth is
 begin
 \gnbram.gnativebmg.native_blk_mem_gen\: entity work.ska_tx_packet_fifo_blk_mem_gen_top
      port map (
-      D(259 downto 0) => D(259 downto 0),
+      D(263 downto 0) => D(263 downto 0),
       E(0) => E(0),
       Q(0) => Q(0),
-      din(259 downto 0) => din(259 downto 0),
+      din(263 downto 0) => din(263 downto 0),
       \gc0.count_d1_reg[8]\(8 downto 0) => \gc0.count_d1_reg[8]\(8 downto 0),
       \gic0.gc0.count_d2_reg[8]\(8 downto 0) => \gic0.gc0.count_d2_reg[8]\(8 downto 0),
       rd_clk => rd_clk,
@@ -5322,7 +5333,7 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity ska_tx_packet_fifo_blk_mem_gen_v8_3_3 is
   port (
-    D : out STD_LOGIC_VECTOR ( 259 downto 0 );
+    D : out STD_LOGIC_VECTOR ( 263 downto 0 );
     rd_clk : in STD_LOGIC;
     wr_clk : in STD_LOGIC;
     tmp_ram_rd_en : in STD_LOGIC;
@@ -5330,7 +5341,7 @@ entity ska_tx_packet_fifo_blk_mem_gen_v8_3_3 is
     Q : in STD_LOGIC_VECTOR ( 0 to 0 );
     \gc0.count_d1_reg[8]\ : in STD_LOGIC_VECTOR ( 8 downto 0 );
     \gic0.gc0.count_d2_reg[8]\ : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    din : in STD_LOGIC_VECTOR ( 259 downto 0 )
+    din : in STD_LOGIC_VECTOR ( 263 downto 0 )
   );
   attribute ORIG_REF_NAME : string;
   attribute ORIG_REF_NAME of ska_tx_packet_fifo_blk_mem_gen_v8_3_3 : entity is "blk_mem_gen_v8_3_3";
@@ -5340,10 +5351,10 @@ architecture STRUCTURE of ska_tx_packet_fifo_blk_mem_gen_v8_3_3 is
 begin
 inst_blk_mem_gen: entity work.ska_tx_packet_fifo_blk_mem_gen_v8_3_3_synth
      port map (
-      D(259 downto 0) => D(259 downto 0),
+      D(263 downto 0) => D(263 downto 0),
       E(0) => E(0),
       Q(0) => Q(0),
-      din(259 downto 0) => din(259 downto 0),
+      din(263 downto 0) => din(263 downto 0),
       \gc0.count_d1_reg[8]\(8 downto 0) => \gc0.count_d1_reg[8]\(8 downto 0),
       \gic0.gc0.count_d2_reg[8]\(8 downto 0) => \gic0.gc0.count_d2_reg[8]\(8 downto 0),
       rd_clk => rd_clk,
@@ -5357,7 +5368,7 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity ska_tx_packet_fifo_memory is
   port (
-    dout : out STD_LOGIC_VECTOR ( 259 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 263 downto 0 );
     rd_clk : in STD_LOGIC;
     wr_clk : in STD_LOGIC;
     tmp_ram_rd_en : in STD_LOGIC;
@@ -5365,7 +5376,7 @@ entity ska_tx_packet_fifo_memory is
     Q : in STD_LOGIC_VECTOR ( 0 to 0 );
     \gc0.count_d1_reg[8]\ : in STD_LOGIC_VECTOR ( 8 downto 0 );
     \gic0.gc0.count_d2_reg[8]\ : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    din : in STD_LOGIC_VECTOR ( 259 downto 0 );
+    din : in STD_LOGIC_VECTOR ( 263 downto 0 );
     \gpregsm1.curr_fwft_state_reg[1]\ : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
   attribute ORIG_REF_NAME : string;
@@ -5373,14 +5384,14 @@ entity ska_tx_packet_fifo_memory is
 end ska_tx_packet_fifo_memory;
 
 architecture STRUCTURE of ska_tx_packet_fifo_memory is
-  signal doutb : STD_LOGIC_VECTOR ( 259 downto 0 );
+  signal doutb : STD_LOGIC_VECTOR ( 263 downto 0 );
 begin
 \gbm.gbmg.gbmga.ngecc.bmg\: entity work.ska_tx_packet_fifo_blk_mem_gen_v8_3_3
      port map (
-      D(259 downto 0) => doutb(259 downto 0),
+      D(263 downto 0) => doutb(263 downto 0),
       E(0) => E(0),
       Q(0) => Q(0),
-      din(259 downto 0) => din(259 downto 0),
+      din(263 downto 0) => din(263 downto 0),
       \gc0.count_d1_reg[8]\(8 downto 0) => \gc0.count_d1_reg[8]\(8 downto 0),
       \gic0.gc0.count_d2_reg[8]\(8 downto 0) => \gic0.gc0.count_d2_reg[8]\(8 downto 0),
       rd_clk => rd_clk,
@@ -7345,6 +7356,50 @@ begin
       Q => dout(25),
       R => Q(0)
     );
+\goreg_bm.dout_i_reg[260]\: unisim.vcomponents.FDRE
+    generic map(
+      INIT => '0'
+    )
+        port map (
+      C => rd_clk,
+      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      D => doutb(260),
+      Q => dout(260),
+      R => Q(0)
+    );
+\goreg_bm.dout_i_reg[261]\: unisim.vcomponents.FDRE
+    generic map(
+      INIT => '0'
+    )
+        port map (
+      C => rd_clk,
+      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      D => doutb(261),
+      Q => dout(261),
+      R => Q(0)
+    );
+\goreg_bm.dout_i_reg[262]\: unisim.vcomponents.FDRE
+    generic map(
+      INIT => '0'
+    )
+        port map (
+      C => rd_clk,
+      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      D => doutb(262),
+      Q => dout(262),
+      R => Q(0)
+    );
+\goreg_bm.dout_i_reg[263]\: unisim.vcomponents.FDRE
+    generic map(
+      INIT => '0'
+    )
+        port map (
+      C => rd_clk,
+      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      D => doutb(263),
+      Q => dout(263),
+      R => Q(0)
+    );
 \goreg_bm.dout_i_reg[26]\: unisim.vcomponents.FDRE
     generic map(
       INIT => '0'
@@ -8254,7 +8309,7 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity ska_tx_packet_fifo_fifo_generator_ramfifo is
   port (
-    dout : out STD_LOGIC_VECTOR ( 259 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 263 downto 0 );
     empty : out STD_LOGIC;
     full : out STD_LOGIC;
     overflow : out STD_LOGIC;
@@ -8262,7 +8317,7 @@ entity ska_tx_packet_fifo_fifo_generator_ramfifo is
     wr_en : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
     wr_clk : in STD_LOGIC;
-    din : in STD_LOGIC_VECTOR ( 259 downto 0 );
+    din : in STD_LOGIC_VECTOR ( 263 downto 0 );
     rst : in STD_LOGIC;
     rd_en : in STD_LOGIC
   );
@@ -8349,8 +8404,8 @@ begin
      port map (
       E(0) => \gntv_or_sync_fifo.gl0.wr_n_4\,
       Q(0) => rd_rst_i(0),
-      din(259 downto 0) => din(259 downto 0),
-      dout(259 downto 0) => dout(259 downto 0),
+      din(263 downto 0) => din(263 downto 0),
+      dout(263 downto 0) => dout(263 downto 0),
       \gc0.count_d1_reg[8]\(8 downto 0) => p_0_out(8 downto 0),
       \gic0.gc0.count_d2_reg[8]\(8 downto 0) => p_12_out(8 downto 0),
       \gpregsm1.curr_fwft_state_reg[1]\(0) => p_5_out,
@@ -8378,7 +8433,7 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity ska_tx_packet_fifo_fifo_generator_top is
   port (
-    dout : out STD_LOGIC_VECTOR ( 259 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 263 downto 0 );
     empty : out STD_LOGIC;
     full : out STD_LOGIC;
     overflow : out STD_LOGIC;
@@ -8386,7 +8441,7 @@ entity ska_tx_packet_fifo_fifo_generator_top is
     wr_en : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
     wr_clk : in STD_LOGIC;
-    din : in STD_LOGIC_VECTOR ( 259 downto 0 );
+    din : in STD_LOGIC_VECTOR ( 263 downto 0 );
     rst : in STD_LOGIC;
     rd_en : in STD_LOGIC
   );
@@ -8398,8 +8453,8 @@ architecture STRUCTURE of ska_tx_packet_fifo_fifo_generator_top is
 begin
 \grf.rf\: entity work.ska_tx_packet_fifo_fifo_generator_ramfifo
      port map (
-      din(259 downto 0) => din(259 downto 0),
-      dout(259 downto 0) => dout(259 downto 0),
+      din(263 downto 0) => din(263 downto 0),
+      dout(263 downto 0) => dout(263 downto 0),
       empty => empty,
       full => full,
       overflow => overflow,
@@ -8417,7 +8472,7 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity ska_tx_packet_fifo_fifo_generator_v13_1_1_synth is
   port (
-    dout : out STD_LOGIC_VECTOR ( 259 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 263 downto 0 );
     empty : out STD_LOGIC;
     full : out STD_LOGIC;
     overflow : out STD_LOGIC;
@@ -8425,7 +8480,7 @@ entity ska_tx_packet_fifo_fifo_generator_v13_1_1_synth is
     wr_en : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
     wr_clk : in STD_LOGIC;
-    din : in STD_LOGIC_VECTOR ( 259 downto 0 );
+    din : in STD_LOGIC_VECTOR ( 263 downto 0 );
     rst : in STD_LOGIC;
     rd_en : in STD_LOGIC
   );
@@ -8437,8 +8492,8 @@ architecture STRUCTURE of ska_tx_packet_fifo_fifo_generator_v13_1_1_synth is
 begin
 \gconvfifo.rf\: entity work.ska_tx_packet_fifo_fifo_generator_top
      port map (
-      din(259 downto 0) => din(259 downto 0),
-      dout(259 downto 0) => dout(259 downto 0),
+      din(263 downto 0) => din(263 downto 0),
+      dout(263 downto 0) => dout(263 downto 0),
       empty => empty,
       full => full,
       overflow => overflow,
@@ -8465,7 +8520,7 @@ entity ska_tx_packet_fifo_fifo_generator_v13_1_1 is
     wr_rst : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
     rd_rst : in STD_LOGIC;
-    din : in STD_LOGIC_VECTOR ( 259 downto 0 );
+    din : in STD_LOGIC_VECTOR ( 263 downto 0 );
     wr_en : in STD_LOGIC;
     rd_en : in STD_LOGIC;
     prog_empty_thresh : in STD_LOGIC_VECTOR ( 8 downto 0 );
@@ -8478,7 +8533,7 @@ entity ska_tx_packet_fifo_fifo_generator_v13_1_1 is
     injectdbiterr : in STD_LOGIC;
     injectsbiterr : in STD_LOGIC;
     sleep : in STD_LOGIC;
-    dout : out STD_LOGIC_VECTOR ( 259 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 263 downto 0 );
     full : out STD_LOGIC;
     almost_full : out STD_LOGIC;
     wr_ack : out STD_LOGIC;
@@ -8747,7 +8802,7 @@ entity ska_tx_packet_fifo_fifo_generator_v13_1_1 is
   attribute C_DEFAULT_VALUE : string;
   attribute C_DEFAULT_VALUE of ska_tx_packet_fifo_fifo_generator_v13_1_1 : entity is "BlankString";
   attribute C_DIN_WIDTH : integer;
-  attribute C_DIN_WIDTH of ska_tx_packet_fifo_fifo_generator_v13_1_1 : entity is 260;
+  attribute C_DIN_WIDTH of ska_tx_packet_fifo_fifo_generator_v13_1_1 : entity is 264;
   attribute C_DIN_WIDTH_AXIS : integer;
   attribute C_DIN_WIDTH_AXIS of ska_tx_packet_fifo_fifo_generator_v13_1_1 : entity is 1;
   attribute C_DIN_WIDTH_RACH : integer;
@@ -8763,7 +8818,7 @@ entity ska_tx_packet_fifo_fifo_generator_v13_1_1 is
   attribute C_DOUT_RST_VAL : string;
   attribute C_DOUT_RST_VAL of ska_tx_packet_fifo_fifo_generator_v13_1_1 : entity is "0";
   attribute C_DOUT_WIDTH : integer;
-  attribute C_DOUT_WIDTH of ska_tx_packet_fifo_fifo_generator_v13_1_1 : entity is 260;
+  attribute C_DOUT_WIDTH of ska_tx_packet_fifo_fifo_generator_v13_1_1 : entity is 264;
   attribute C_ENABLE_RLOCS : integer;
   attribute C_ENABLE_RLOCS of ska_tx_packet_fifo_fifo_generator_v13_1_1 : entity is 0;
   attribute C_ENABLE_RST_SYNC : integer;
@@ -8959,7 +9014,7 @@ entity ska_tx_packet_fifo_fifo_generator_v13_1_1 is
   attribute C_PROG_EMPTY_TYPE_WRCH : integer;
   attribute C_PROG_EMPTY_TYPE_WRCH of ska_tx_packet_fifo_fifo_generator_v13_1_1 : entity is 0;
   attribute C_PROG_FULL_THRESH_ASSERT_VAL : integer;
-  attribute C_PROG_FULL_THRESH_ASSERT_VAL of ska_tx_packet_fifo_fifo_generator_v13_1_1 : entity is 504;
+  attribute C_PROG_FULL_THRESH_ASSERT_VAL of ska_tx_packet_fifo_fifo_generator_v13_1_1 : entity is 511;
   attribute C_PROG_FULL_THRESH_ASSERT_VAL_AXIS : integer;
   attribute C_PROG_FULL_THRESH_ASSERT_VAL_AXIS of ska_tx_packet_fifo_fifo_generator_v13_1_1 : entity is 1023;
   attribute C_PROG_FULL_THRESH_ASSERT_VAL_RACH : integer;
@@ -8973,7 +9028,7 @@ entity ska_tx_packet_fifo_fifo_generator_v13_1_1 is
   attribute C_PROG_FULL_THRESH_ASSERT_VAL_WRCH : integer;
   attribute C_PROG_FULL_THRESH_ASSERT_VAL_WRCH of ska_tx_packet_fifo_fifo_generator_v13_1_1 : entity is 1023;
   attribute C_PROG_FULL_THRESH_NEGATE_VAL : integer;
-  attribute C_PROG_FULL_THRESH_NEGATE_VAL of ska_tx_packet_fifo_fifo_generator_v13_1_1 : entity is 503;
+  attribute C_PROG_FULL_THRESH_NEGATE_VAL of ska_tx_packet_fifo_fifo_generator_v13_1_1 : entity is 510;
   attribute C_PROG_FULL_TYPE : integer;
   attribute C_PROG_FULL_TYPE of ska_tx_packet_fifo_fifo_generator_v13_1_1 : entity is 1;
   attribute C_PROG_FULL_TYPE_AXIS : integer;
@@ -9630,8 +9685,8 @@ VCC: unisim.vcomponents.VCC
     );
 inst_fifo_gen: entity work.ska_tx_packet_fifo_fifo_generator_v13_1_1_synth
      port map (
-      din(259 downto 0) => din(259 downto 0),
-      dout(259 downto 0) => dout(259 downto 0),
+      din(263 downto 0) => din(263 downto 0),
+      dout(263 downto 0) => dout(263 downto 0),
       empty => empty,
       full => full,
       overflow => overflow,
@@ -9652,10 +9707,10 @@ entity ska_tx_packet_fifo is
     rst : in STD_LOGIC;
     wr_clk : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
-    din : in STD_LOGIC_VECTOR ( 259 downto 0 );
+    din : in STD_LOGIC_VECTOR ( 263 downto 0 );
     wr_en : in STD_LOGIC;
     rd_en : in STD_LOGIC;
-    dout : out STD_LOGIC_VECTOR ( 259 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 263 downto 0 );
     full : out STD_LOGIC;
     overflow : out STD_LOGIC;
     empty : out STD_LOGIC;
@@ -9852,7 +9907,7 @@ architecture STRUCTURE of ska_tx_packet_fifo is
   attribute C_DEFAULT_VALUE : string;
   attribute C_DEFAULT_VALUE of U0 : label is "BlankString";
   attribute C_DIN_WIDTH : integer;
-  attribute C_DIN_WIDTH of U0 : label is 260;
+  attribute C_DIN_WIDTH of U0 : label is 264;
   attribute C_DIN_WIDTH_AXIS : integer;
   attribute C_DIN_WIDTH_AXIS of U0 : label is 1;
   attribute C_DIN_WIDTH_RACH : integer;
@@ -9868,7 +9923,7 @@ architecture STRUCTURE of ska_tx_packet_fifo is
   attribute C_DOUT_RST_VAL : string;
   attribute C_DOUT_RST_VAL of U0 : label is "0";
   attribute C_DOUT_WIDTH : integer;
-  attribute C_DOUT_WIDTH of U0 : label is 260;
+  attribute C_DOUT_WIDTH of U0 : label is 264;
   attribute C_ENABLE_RLOCS : integer;
   attribute C_ENABLE_RLOCS of U0 : label is 0;
   attribute C_ENABLE_RST_SYNC : integer;
@@ -10064,7 +10119,7 @@ architecture STRUCTURE of ska_tx_packet_fifo is
   attribute C_PROG_EMPTY_TYPE_WRCH : integer;
   attribute C_PROG_EMPTY_TYPE_WRCH of U0 : label is 0;
   attribute C_PROG_FULL_THRESH_ASSERT_VAL : integer;
-  attribute C_PROG_FULL_THRESH_ASSERT_VAL of U0 : label is 504;
+  attribute C_PROG_FULL_THRESH_ASSERT_VAL of U0 : label is 511;
   attribute C_PROG_FULL_THRESH_ASSERT_VAL_AXIS : integer;
   attribute C_PROG_FULL_THRESH_ASSERT_VAL_AXIS of U0 : label is 1023;
   attribute C_PROG_FULL_THRESH_ASSERT_VAL_RACH : integer;
@@ -10078,7 +10133,7 @@ architecture STRUCTURE of ska_tx_packet_fifo is
   attribute C_PROG_FULL_THRESH_ASSERT_VAL_WRCH : integer;
   attribute C_PROG_FULL_THRESH_ASSERT_VAL_WRCH of U0 : label is 1023;
   attribute C_PROG_FULL_THRESH_NEGATE_VAL : integer;
-  attribute C_PROG_FULL_THRESH_NEGATE_VAL of U0 : label is 503;
+  attribute C_PROG_FULL_THRESH_NEGATE_VAL of U0 : label is 510;
   attribute C_PROG_FULL_TYPE : integer;
   attribute C_PROG_FULL_TYPE of U0 : label is 1;
   attribute C_PROG_FULL_TYPE_AXIS : integer;
@@ -10287,8 +10342,8 @@ U0: entity work.ska_tx_packet_fifo_fifo_generator_v13_1_1
       clk => '0',
       data_count(8 downto 0) => NLW_U0_data_count_UNCONNECTED(8 downto 0),
       dbiterr => NLW_U0_dbiterr_UNCONNECTED,
-      din(259 downto 0) => din(259 downto 0),
-      dout(259 downto 0) => dout(259 downto 0),
+      din(263 downto 0) => din(263 downto 0),
+      dout(263 downto 0) => dout(263 downto 0),
       empty => empty,
       full => full,
       injectdbiterr => '0',

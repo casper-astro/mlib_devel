@@ -3,7 +3,7 @@
 --   ____  ____
 --  /   /\/   /
 -- /___/  \  /    Vendor: Xilinx
--- \   \   \/     Version : 3.2
+-- \   \   \/     Version : 3.4
 --  \   \         Application : 7 Series FPGAs Transceivers Wizard
 --  /   /         Filename : gmii_to_sgmii_gtwizard_gt.vhd
 -- /___/   /\     
@@ -306,7 +306,73 @@ end component;
     signal txdata_i                         :   std_logic_vector(63 downto 0);
     signal txkerr_float_i                   :   std_logic_vector(5 downto 0);
     signal txrundisp_float_i                :   std_logic_vector(5 downto 0);
-       
+attribute equivalent_register_removal: string; 
+signal cpllpd_wait    :   std_logic_vector(95 downto 0)  := x"FFFFFFFFFFFFFFFFFFFFFFFF";
+signal cpllreset_wait :   std_logic_vector(127 downto 0) := x"000000000000000000000000000000FF";
+attribute equivalent_register_removal of cpllpd_wait : signal is "no";
+attribute equivalent_register_removal of cpllreset_wait : signal is "no";      
+signal    cpllpd_ovrd_i    :std_logic ;
+signal    cpllreset_ovrd_i :std_logic ;
+signal    cpll_reset_i     :std_logic ;
+signal    cpllreset_sync  :std_logic ; 
+signal    cpll_pd_i     :std_logic ;
+signal    cpllpd_sync  :std_logic ;
+signal    ack_i : std_logic;
+signal    flag : std_logic := '0';
+signal    flag2 : std_logic := '0';
+signal    ack_flag : std_logic := '0';
+  -- Internal Signals
+  signal data_sync1 : std_logic;
+  signal data_sync2 : std_logic;
+  signal data_sync3 : std_logic;
+  signal data_sync4 : std_logic;
+  signal data_sync5 : std_logic;
+  signal data_sync6 : std_logic;
+
+  signal ack_sync1 : std_logic;
+  signal ack_sync2 : std_logic;
+  signal ack_sync3 : std_logic;
+  signal ack_sync4 : std_logic;
+  signal ack_sync5 : std_logic;
+  signal ack_sync6 : std_logic;
+
+  signal gtrefclk0_in_bufg : std_logic;
+
+  -- These attributes will stop timing errors being reported in back annotated
+  -- SDF simulation.
+  attribute ASYNC_REG                       : string;
+  attribute ASYNC_REG of data_sync_reg1    : label is "true";
+  attribute ASYNC_REG of data_sync_reg2    : label is "true";
+  attribute ASYNC_REG of data_sync_reg3    : label is "true";
+  attribute ASYNC_REG of data_sync_reg4    : label is "true";
+  attribute ASYNC_REG of data_sync_reg5    : label is "true";
+  attribute ASYNC_REG of data_sync_reg6    : label is "true";
+
+  -- These attributes will stop XST translating the desired flip-flops into an
+  -- SRL based shift register.
+  attribute shreg_extract                   : string;
+  attribute shreg_extract of data_sync_reg1 : label is "no";
+  attribute shreg_extract of data_sync_reg2 : label is "no";
+  attribute shreg_extract of data_sync_reg3 : label is "no";
+  attribute shreg_extract of data_sync_reg4 : label is "no";
+  attribute shreg_extract of data_sync_reg5 : label is "no";
+  attribute shreg_extract of data_sync_reg6 : label is "no";
+
+  attribute ASYNC_REG of ack_sync_reg1    : label is "true";
+  attribute ASYNC_REG of ack_sync_reg2    : label is "true";
+  attribute ASYNC_REG of ack_sync_reg3    : label is "true";
+  attribute ASYNC_REG of ack_sync_reg4    : label is "true";
+  attribute ASYNC_REG of ack_sync_reg5    : label is "true";
+  attribute ASYNC_REG of ack_sync_reg6    : label is "true";
+
+  -- These attributes will stop XST translating the desired flip-flops into an
+  -- SRL based shift register.
+  attribute shreg_extract of ack_sync_reg1 : label is "no";
+  attribute shreg_extract of ack_sync_reg2 : label is "no";
+  attribute shreg_extract of ack_sync_reg3 : label is "no";
+  attribute shreg_extract of ack_sync_reg4 : label is "no";
+  attribute shreg_extract of ack_sync_reg5 : label is "no";
+  attribute shreg_extract of ack_sync_reg6 : label is "no"; 
  
 --******************************** Main Body of Code***************************
                        
@@ -491,7 +557,7 @@ RXPMARESETDONE <= rxpmaresetdone_t;
         GEARBOX_MODE                            =>     ("000"),
 
        -------------------------PRBS Detection Attribute-----------------------
-        RXPRBS_ERR_LOOPBACK                     =>     ('1'),
+        RXPRBS_ERR_LOOPBACK                     =>     ('0'),
 
        -------------Power-Down Attributes----------
         PD_TRANS_TIME_FROM_P2                   =>     (x"03c"),
@@ -501,7 +567,7 @@ RXPMARESETDONE <= rxpmaresetdone_t;
        -------------RX OOB Signaling Attributes----------
         SAS_MAX_COM                             =>     (64),
         SAS_MIN_COM                             =>     (36),
-        SATA_BURST_SEQ_LEN                      =>     ("1111"),
+        SATA_BURST_SEQ_LEN                      =>     ("0101"),
         SATA_BURST_VAL                          =>     ("100"),
         SATA_EIDLE_VAL                          =>     ("100"),
         SATA_MAX_BURST                          =>     (8),
@@ -688,10 +754,10 @@ RXPMARESETDONE <= rxpmaresetdone_t;
         CPLLLOCK                        =>      cplllock_out,
         CPLLLOCKDETCLK                  =>      cplllockdetclk_in,
         CPLLLOCKEN                      =>      tied_to_vcc_i,
-        CPLLPD                          =>      tied_to_ground_i,
+        CPLLPD                          =>      cpll_pd_i,
         CPLLREFCLKLOST                  =>      cpllrefclklost_out,
         CPLLREFCLKSEL                   =>      "001",
-        CPLLRESET                       =>      cpllreset_in,
+        CPLLRESET                       =>      cpll_reset_i,
         GTRSVD                          =>      "0000000000000000",
         PCSRSVDIN                       =>      "0000000000000000",
         PCSRSVDIN2                      =>      "00000",
@@ -1149,6 +1215,176 @@ RXPMARESETDONE <= rxpmaresetdone_t;
         DRPDI                           =>      drpdi_pma_t,
         DRPRDY                          =>      drprdy_pma_t
             ); 
+
+  bufg_gtrefclk0_in : BUFG
+   port map (
+      I     => gtrefclk0_in,
+      O     => gtrefclk0_in_bufg
+   );
+
+
+    process( gtrefclk0_in_bufg )
+    begin
+        if(gtrefclk0_in_bufg'event and gtrefclk0_in_bufg = '1') then 
+           cpllpd_wait <= cpllpd_wait(94 downto 0) & '0';
+           cpllreset_wait <= cpllreset_wait(126 downto 0) & '0';
+         end if;
+    end process;
+
+cpllpd_ovrd_i <= cpllpd_wait(95);
+cpllreset_ovrd_i <= cpllreset_wait(127);
+
+ cpll_pd_i <= cpllpd_ovrd_i;
+
+process (cplllockdetclk_in)
+begin
+if(cplllockdetclk_in'event and cplllockdetclk_in = '1') then 
+  if(cpllreset_in = '1' and ack_flag = '0') then
+    flag <= not flag;
+    flag2 <= '1';
+  else
+    flag <= flag; 
+    flag2 <= '0';
+end if;
+end if;
+end process;
+
+
+process (cplllockdetclk_in)
+begin
+if(cplllockdetclk_in'event and cplllockdetclk_in = '1') then 
+  if(flag2 = '1') then
+   ack_flag <= '1';
+ elsif(ack_i = '1') then
+   ack_flag <= '0';
+ end if;
+end if;
+end process;
+
+
+  data_sync_reg1 : FD
+  generic map (
+    INIT => '0'
+  )
+  port map (
+    C    => gtrefclk0_in_bufg,
+    D    => flag,
+    Q    => data_sync1
+  );
+
+ data_sync_reg2 : FD
+  generic map (
+    INIT => '0'
+  )
+  port map (
+    C    => gtrefclk0_in_bufg,
+    D    => data_sync1,
+    Q    => data_sync2
+  );
+
+ data_sync_reg3 : FD
+  generic map (
+    INIT => '0'
+  )
+  port map (
+    C    => gtrefclk0_in_bufg,
+    D    => data_sync2,
+    Q    => data_sync3
+  );
+
+ data_sync_reg4 : FD
+  generic map (
+    INIT => '0'
+  )
+  port map (
+    C    => gtrefclk0_in_bufg,
+    D    => data_sync3,
+    Q    => data_sync4
+  );
+
+ data_sync_reg5 : FD
+  generic map (
+    INIT => '0'
+  )
+  port map (
+    C    => gtrefclk0_in_bufg,
+    D    => data_sync4,
+    Q    => data_sync5
+  );  
+
+  data_sync_reg6 : FD
+  generic map (
+    INIT => '0'
+  )
+  port map (
+    C    => gtrefclk0_in_bufg,
+    D    => data_sync5,
+    Q    => data_sync6
+  );
+cpllreset_sync <= data_sync6 xor data_sync5;
+
+  ack_sync_reg1 : FD
+  generic map (
+    INIT => '0'
+  )
+  port map (
+    C    => cplllockdetclk_in,
+    D    => data_sync6,
+    Q    => ack_sync1
+  );
+
+ ack_sync_reg2 : FD
+  generic map (
+    INIT => '0'
+  )
+  port map (
+    C    => cplllockdetclk_in,
+    D    => ack_sync1,
+    Q    => ack_sync2
+  );
+
+ ack_sync_reg3 : FD
+  generic map (
+    INIT => '0'
+  )
+  port map (
+    C    => cplllockdetclk_in,
+    D    => ack_sync2,
+    Q    => ack_sync3
+  );
+
+ ack_sync_reg4 : FD
+  generic map (
+    INIT => '0'
+  )
+  port map (
+    C    => cplllockdetclk_in,
+    D    => ack_sync3,
+    Q    => ack_sync4
+  );
+
+ ack_sync_reg5 : FD
+  generic map (
+    INIT => '0'
+  )
+  port map (
+    C    => cplllockdetclk_in,
+    D    => ack_sync4,
+    Q    => ack_sync5
+  );  
+
+  ack_sync_reg6 : FD
+  generic map (
+    INIT => '0'
+  )
+  port map (
+    C    => cplllockdetclk_in,
+    D    => ack_sync5,
+    Q    => ack_sync6
+  );
+
+ack_i <= ack_sync5 xor ack_sync6;
+cpll_reset_i <= cpllreset_sync or cpllreset_ovrd_i;
  end RTL;
 
 

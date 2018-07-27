@@ -72,9 +72,6 @@ entity gmii_to_sgmii_reset_sync is
     reset_out   : out std_logic           -- "Synchronised" reset signal
     );
 
- attribute dont_touch : string;
- attribute dont_touch    of   gmii_to_sgmii_reset_sync : entity is "yes";
-
 end gmii_to_sgmii_reset_sync;
 
 

@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2018 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -149,7 +149,7 @@ BEGIN
   U0 : axi_uartlite
     GENERIC MAP (
       C_FAMILY => "virtex7",
-      C_S_AXI_ACLK_FREQ_HZ => 156250000,
+      C_S_AXI_ACLK_FREQ_HZ => 39062500,
       C_S_AXI_ADDR_WIDTH => 4,
       C_S_AXI_DATA_WIDTH => 32,
       C_BAUDRATE => 115200,

@@ -30,7 +30,7 @@
           <spirit:name>FREQ_HZ</spirit:name>
           <spirit:displayName>Slowest Sync clock frequency</spirit:displayName>
           <spirit:description>Slowest Synchronous clock frequency</spirit:description>
-          <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="BUSIFPARAM_VALUE.CLOCK.FREQ_HZ">156250000</spirit:value>
+          <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="BUSIFPARAM_VALUE.CLOCK.FREQ_HZ">39062500</spirit:value>
         </spirit:parameter>
         <spirit:parameter>
           <spirit:name>PHASE</spirit:name>
@@ -278,11 +278,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Tue Nov 08 08:51:06 UTC 2016</spirit:value>
+            <spirit:value>Mon Feb 19 10:51:46 UTC 2018</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>boundaryCRC</spirit:name>
-            <spirit:value>7eb9335e</spirit:value>
+            <spirit:value>60dbec77</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>boundaryCRCversion</spirit:name>
@@ -308,11 +308,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Tue Nov 08 08:51:06 UTC 2016</spirit:value>
+            <spirit:value>Mon Feb 19 10:51:46 UTC 2018</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>boundaryCRC</spirit:name>
-            <spirit:value>7eb9335e</spirit:value>
+            <spirit:value>60dbec77</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>boundaryCRCversion</spirit:name>
@@ -339,11 +339,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Tue Nov 08 08:51:06 UTC 2016</spirit:value>
+            <spirit:value>Mon Feb 19 10:51:46 UTC 2018</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>boundaryCRC</spirit:name>
-            <spirit:value>7eb9335e</spirit:value>
+            <spirit:value>60dbec77</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>boundaryCRCversion</spirit:name>
@@ -373,11 +373,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Tue Nov 08 08:51:06 UTC 2016</spirit:value>
+            <spirit:value>Tue Feb 06 08:42:22 UTC 2018</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>boundaryCRC</spirit:name>
-            <spirit:value>7eb9335e</spirit:value>
+            <spirit:value>60dbec77</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>boundaryCRCversion</spirit:name>
@@ -404,11 +404,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Tue Nov 08 08:51:06 UTC 2016</spirit:value>
+            <spirit:value>Mon Feb 19 10:51:46 UTC 2018</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>boundaryCRC</spirit:name>
-            <spirit:value>7eb9335e</spirit:value>
+            <spirit:value>60dbec77</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>boundaryCRCversion</spirit:name>
@@ -434,11 +434,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Tue Nov 08 08:51:06 UTC 2016</spirit:value>
+            <spirit:value>Mon Feb 19 10:51:46 UTC 2018</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>boundaryCRC</spirit:name>
-            <spirit:value>7eb9335e</spirit:value>
+            <spirit:value>60dbec77</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>boundaryCRCversion</spirit:name>
