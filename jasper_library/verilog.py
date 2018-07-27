@@ -1,8 +1,8 @@
-'''
+"""
 Lots of code in this file could be shared between methods
 and the VerilogInstance/Module classes. Maybe distill
 at some point.
-'''
+"""
 
 
 import os
@@ -15,14 +15,14 @@ import operator
 logger = logging.getLogger('jasper.verilog')
 
 class ImmutableWithComments(object):
-    '''
+    """
     A class which you can add attributes to, but
     you can't change them once they're set. You are allowed
     to try and set them to the same value again.
     The 'comment' attribute is special. Each time you
     try to set it, the comment string is appended to the
     existing comment attribute.
-    '''
+    """
     def __init__(self):
         self.name = 'default_name'
     def __setattr__(self, x, y):
@@ -39,26 +39,74 @@ class ImmutableWithComments(object):
             raise Exception('Tried to change attribute %s of %s from %s to %s'%(x, self.name, self.__getattribute__(x), y))
 
 class WbDevice(object):
+    """
+    A class to encapsulate the parameters (name, size, etc.) of a wishbone slave device.
+    """
     def __init__(self, regname, nbytes, mode, hdl_suffix='', hdl_candr_suffix='', memory_map=[], typecode=0xff):
+        """
+        Class constructor.
+        :param regname: Name of register (this name is the string used to access the register from software)
+        :type: String
+        :param nbytes: Number of bytes in this slave's memory space.
+        :type nbytes: Integer
+        :param mode: Permissions ('r': readable, 'w': writable, 'rw': read/writeable)
+        :type mode: String
+        :param hdl_suffix: Suffix given to wishbone port names. Eg. if `hdl_suffix = foo`, ports have the form `wbs_dat_i_foo`
+        :type hdl_suffix: String
+        :param hdl_candr_suffix: Suffix given to wishbone clock and reset port names. Eg. if `hdl_suffix = foo`, ports have the form `wbs_clk_i_foo`
+        :type hdl_candr_suffix: String
+        :param memory_map: A list or `Register` instances defining the contents of sub-blocks of this device's memory.
+        :type memory_map: list
+        :param typecode: Typecode number (0-255) identifying the type of this block. See `yellow_block_typecodes.py`
+        :type typecode: Integer
+        """
         self.typecode = typecode
         self.regname = regname
         self.nbytes = nbytes
         self.mode=mode
+        #: Start (lowest) address of the memory space used by this device, in bytes.
         self.base_addr = None
+        #: End (highest) address of the memory space used by this device, in bytes.
         self.high_addr = None
         self.hdl_suffix = hdl_suffix
         self.hdl_candr_suffix = hdl_candr_suffix
         self.memory_map = memory_map
+        #: If using multiple bus arbiters, which arbiter should this slave attach to?
         self.sub_arb_id = 0
 
 class Port(ImmutableWithComments):
     """
-    A simple class to hold port attributes.
+    A simple class to hold port attributes. It is immutable, and will throw an error if
+    multiple manipulation attempts are incompatible.
     """
     def __init__(self, name, signal=None, parent_port=False, parent_sig=True, **kwargs):
+        """
+        Create a `Port` instance.
+        :param name: Name of the port
+        :type port: String
+        :param signal: Signal to which this port is attached
+        :type signal: String
+        :param parent_port: When module `A` instantiates the module to which this port is attached, should this port be connected to a similar port on `A`.
+        :type parent_port: Boolean
+        :param parent_sig: When module `A` instantiates the module to which this port is attached, should `A` also instantiate a signal matching the one connected to this port.
+        :type parent_sig: Boolean
+        :param **kwargs: Other keywords which should become attributes of this instance.
+        """
         self.update_attrs(name, signal=signal, parent_port=parent_port, parent_sig=parent_sig, **kwargs)
 
     def update_attrs(self, name, signal=None, parent_port=False, parent_sig=True, **kwargs):
+        """
+        Update the attributes of this block.
+        :param name: Name of the port
+        :type port: String
+        :param signal: Signal to which this port is attached
+        :type signal: String
+        :param parent_port: When module `A` instantiates the module to which this port is attached, should this port be connected to a similar port on `A`.
+        :type parent_port: Boolean
+        :param parent_sig: When module `A` instantiates the module to which this port is attached, should `A` also instantiate a signal matching the one connected to this port.
+        :type parent_sig: Boolean
+        :param **kwargs: Other keywords which should become attributes of this instance.
+        """
         self.name = name.rstrip(' ')
         self.parent_sig = parent_sig and not parent_port
         self.parent_port = parent_port
@@ -70,12 +118,31 @@ class Port(ImmutableWithComments):
 
 class Parameter(ImmutableWithComments):
     """
-    A simple class to hold parameter attributes.
+    A simple class to hold parameter attributes. It is immutable, and will throw an error if
+    its attributes are changed after being set.
     """
     def __init__(self, name, value, comment=None):
+        """
+        Crete a `Parameter` instance.
+        :param name: Name of this parameter
+        :type name: String
+        :param value: Value this parameter should be set to.
+        :type value: Varies
+        :param comment: User-assisting comment string to attach to this parameter.
+        :type comment: String
+        """
         self.update_attrs(name, value=value, comment=comment)
 
     def update_attrs(self, name, value, comment=None):
+        """
+        :param name: Name of this parameter
+        :type name: String
+        :param value: Value this parameter should be set to.
+        :type value: Varies
+        :param comment: User-assisting comment string to attach to this parameter.
+        :type comment: String
+        """
+        Update the attributes of this block.
         self.name = name.rstrip(' ')
         self.value = value
         if type(comment) is str:
@@ -84,9 +151,20 @@ class Parameter(ImmutableWithComments):
 
 class Signal(ImmutableWithComments):
     """
-    A simple class to hold parameter attributes.
+    A simple class to hold signal attributes. It is immutable, and will throw an error if
+    its attributes are changed after being set.
     """
     def __init__(self, name, signal='', width=0, **kwargs):
+        """
+        Create a `Signal` instance.
+        :param name: Name of this signal
+        :type name: String
+        :param signal: Name of this signal
+        :type signal: String
+        :param width: Bitwidth of this signal
+        :type signal: Integer
+        :param **kwargs: Other keywords which should become attributes of this instance.
+        """
         self.update_attrs(name, width=width, **kwargs)
 
     def update_attrs(self, name, width=0, **kwargs):
@@ -296,6 +374,16 @@ def gen_wbs_master_arbiter(arbiters, max_devices_per_arb=32):
     return wbs_parent_arbiter
 
 def instantiate_wb_arb_module(module, n_slaves, n_sub_arbs=None):
+    """
+    Instantiate a Wishbone Arbiter into a module.
+    :param module: Module into which the arbiter should be instantiated.
+    :type module: VerilogModule instance
+    :param n_slaves: Number of slaves this arbiter is connected to.
+    :type n_slaves: Integer
+    :param n_sub_arbs: Number of sub-arbiters beneath the arbiter being instantiated here.
+                       If None, a non-hierarchical arbiter will be used.
+    :type n_sub_arbs: Integer or None
+    """
     if n_sub_arbs is not None:
         inst = module.get_instance('wbs_master_arbiter', 'wbs_arbiter_inst')
         inst.add_parameter('N_SUB_ARBS', 'N_SUB_ARBS')
@@ -328,6 +416,9 @@ def instantiate_wb_arb_module(module, n_slaves, n_sub_arbs=None):
 
 
 class VerilogModule(object):
+    """
+    A Python object which knows how to represent itself in Verilog.
+    """
     def __init__(self, name='', topfile=None, comment=''):
         """
         Construct a new module, named 'name'.
@@ -385,7 +476,14 @@ class VerilogModule(object):
 
         localparam SLAVE_BASE = {32'h00000000};
 
+        :param name: Name of this module
+        :type name: String
+        :param topfile: The filename of an existing verilog file, if any, to which this module should add.
+        :type topfile: String or None
+        :param comment: A user-friendly comment to be inserted in Verilog where this module is instantiated.
+        :type comment: String
         """
+
         if len(name) != 0:
             self.name = name
         else:
@@ -433,7 +531,11 @@ class VerilogModule(object):
 
     def set_cur_blk(self, cur_blk):
         """
-        Initialize second-layer of dictionairies.
+        Set the name of the block currently driving code generation. This is useful
+        for grouping and commenting the ports / instances / signals associated with
+        particular instances, so that the output Verilog is prettier.
+        :param cur_blk: The name of the current block driving code generation.
+        :type cur_blk: String.
         """
         self.cur_blk = cur_blk
         if cur_blk not in self.ports.keys():
@@ -452,7 +554,7 @@ class VerilogModule(object):
         return name in self.instances.keys()
 
     def wb_compute(self, base_addr=0x10000, alignment=4):
-        '''
+        """
         Compute the appropriate wishbone address limits,
         based on the current wishbone-using instances
         instantiated in the module.
@@ -466,7 +568,7 @@ class VerilogModule(object):
         :type base_addr: int
         :param alignment: Alignment required by all memory start addresses.
         :type alignment: int
-        '''
+        """
         # Now we have an instance name, we can assign the wb ports to
         # real signals
         wb_device_num = 0
@@ -531,13 +633,13 @@ class VerilogModule(object):
 
 
     def get_base_wb_slaves(self):
-        '''
+        """
         Look for the pattern 'localparam N_WB_SLAVES'
-        in this modules topfile, and use it to extract the
+        in this module's topfile, and use it to extract the
         number of wishbone slaves in the module.
         Update the base_wb_slaves attribute accordingly.
         Also extract the addresses. Names are auto-generated
-        '''
+        """
         fh = open('%s'%self.topfile, 'r')
         while(True):
             line = fh.readline()
@@ -564,13 +666,13 @@ class VerilogModule(object):
         instantiated module need not have a width or direction specified, but if you want to instantiate the module
         and propagate the port to the parent, the parent won't know what to do unless these port parameters are specified.
 
-        param 'name': name of the port
-        param 'signal': name of the signal to connect port to. Can include bit indexing, e.g. 'my_signal[15:8]'
-        param 'dir': direction of signal
-        param 'width': width of signal
-        param 'parent_port': When instantiating this module, promote this port to a port of the parent
-        param 'parent_sig': When instantiating this module, add a signal named 'signal' to the parent
-        param 'comment': Use this to add a comment string which will end up in the generated verilog
+        :param 'name': name of the port
+        :param 'signal': name of the signal to connect port to. Can include bit indexing, e.g. 'my_signal[15:8]'
+        :param 'dir': direction of signal
+        :param 'width': width of signal
+        :param 'parent_port': When instantiating this module, promote this port to a port of the parent
+        :param 'parent_sig': When instantiating this module, add a signal named 'signal' to the parent
+        :param 'comment': Use this to add a comment string which will end up in the generated verilog
         """
         name = name.rstrip(' ')
         # Catch cases where we don't want to infer either a parent port or signal declaration
@@ -700,13 +802,13 @@ class VerilogModule(object):
             return self.rewrite_module_file(filename=filename)
 
     def rewrite_module_file(self, filename=None):
-        '''
+        """
         Rewrite the intially supplied verilog file to
         include instance, signals, ports, assignments and
         wishbone interfaces added programmatically.
         The initial verilog file is backed up with a '.base'
         extension.
-        '''
+        """
         os.system('cp %s %s.base'%(self.topfile,self.topfile))
         fh_base = open('%s.base'%self.topfile,'r')
         fh_new = open('%s'%(filename or self.topfile), 'w')
@@ -745,7 +847,7 @@ class VerilogModule(object):
         fh_base.close()
 
     def write_new_module_file(self, filename=None):
-        '''
+        """
         Write a verilog file from scratch, based on the
         programmatic additions of instances / signals / etc.
         to the VerilogModule instance.
@@ -753,7 +855,7 @@ class VerilogModule(object):
         The jasper toolflow has been using rewrite_module_file()
         rather than this method, so it may or may not still
         work correctly. It used to, at least...
-        '''
+        """
         default_nettype = self.gen_default_nettype_str()
         mod_dec        = self.gen_mod_dec_str()
         # declare inputs/outputs with the module dec
@@ -994,10 +1096,10 @@ class VerilogModule(object):
         return "`default_nettype wire\n"
 
     def gen_instance_verilog(self, instname):
-        '''
+        """
         Generate a string corresponding to the instantiation of this instance,
         with instance name 'instname'
-        '''
+        """
         s = ''
         if self.comment is not None:
             s += '  // %s\n'%self.comment
@@ -1083,10 +1185,10 @@ class VerilogModule(object):
         self.add_port('wb_err_o'+suffix, signal='wbs_err_i[%s]'%wb_id,parent_sig=False)
 
     def search_dict_for_name(self, dict, name):
-        '''
+        """
         This helper function searches each top level dictionary
         to see if it contains 'name' and returns the key that does.
-        '''
+        """
         for top_dict_key, top_dict_value in dict.items():
             # does the second level dict keys contain name?
             if name in top_dict_value.keys():
@@ -1107,6 +1209,9 @@ class VerilogModule(object):
             return ''
 
     def gen_signals_ascii_art(self):
+        """
+        :return: Pretty ascii art "Signals" string.
+        """
         s = ""
         s += "\n/*\n"
         s += "  _____ _                   _     \n"
@@ -1121,6 +1226,9 @@ class VerilogModule(object):
         return s
 
     def gen_instances_ascii_art(self):
+        """
+        :return: Pretty ascii art "Instances" string.
+        """
         s = ""
         s += "\n/*\n"
         s += "  _____           _                            \n"
@@ -1133,6 +1241,9 @@ class VerilogModule(object):
         return s
 
     def gen_assignments_ascii_art(self):
+        """
+        :return: Pretty ascii art "Assignments" string.
+        """
         s = ""
         s += "\n/*\n"
         s += "                   _                                  _       \n"
