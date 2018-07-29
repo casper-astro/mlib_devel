@@ -95,7 +95,8 @@ Documentation
 
 * `CASPER Tutorials <http://casper-tutorials.readthedocs.io/en/latest/>`__
 * :doc:`Block Documentation <blockdocumentation>`
-* :doc:`Toolflow Documentation <src/jasper_library_modules/modules>`
+* :doc:`Toolflow Documentation <jasper_documentation>`
+* :doc:`Toolflow Sourcecode <src/jasper_library_modules/modules>`
 
 ..  toctree::
     :hidden:
@@ -104,4 +105,5 @@ Documentation
 
     CASPER Tutorials <http://casper-tutorials.readthedocs.io/en/latest/>
     blockdocumentation
-    Toolflow Documentation <src/jasper_library_modules/modules>
+    jasper_documentation
+    Toolflow Sourcecode <src/jasper_library_modules/modules>
