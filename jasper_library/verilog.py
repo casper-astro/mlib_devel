@@ -45,8 +45,9 @@ class WbDevice(object):
     def __init__(self, regname, nbytes, mode, hdl_suffix='', hdl_candr_suffix='', memory_map=[], typecode=0xff):
         """
         Class constructor.
+
         :param regname: Name of register (this name is the string used to access the register from software)
-        :type: String
+        :type regname: String
         :param nbytes: Number of bytes in this slave's memory space.
         :type nbytes: Integer
         :param mode: Permissions ('r': readable, 'w': writable, 'rw': read/writeable)
@@ -81,29 +82,32 @@ class Port(ImmutableWithComments):
     """
     def __init__(self, name, signal=None, parent_port=False, parent_sig=True, **kwargs):
         """
-        Create a `Port` instance.
+        Create a 'Port' instance.
+
         :param name: Name of the port
         :type port: String
         :param signal: Signal to which this port is attached
         :type signal: String
-        :param parent_port: When module `A` instantiates the module to which this port is attached, should this port be connected to a similar port on `A`.
+        :param parent_port: When module 'A' instantiates the module to which this port is attached, should this port be connected to a similar port on 'A'.
         :type parent_port: Boolean
-        :param parent_sig: When module `A` instantiates the module to which this port is attached, should `A` also instantiate a signal matching the one connected to this port.
+        :param parent_sig: When module 'A' instantiates the module to which this port is attached, should 'A' also instantiate a signal matching the one connected to this port.
         :type parent_sig: Boolean
         :param **kwargs: Other keywords which should become attributes of this instance.
+
         """
         self.update_attrs(name, signal=signal, parent_port=parent_port, parent_sig=parent_sig, **kwargs)
 
     def update_attrs(self, name, signal=None, parent_port=False, parent_sig=True, **kwargs):
         """
         Update the attributes of this block.
+
         :param name: Name of the port
         :type port: String
         :param signal: Signal to which this port is attached
         :type signal: String
-        :param parent_port: When module `A` instantiates the module to which this port is attached, should this port be connected to a similar port on `A`.
+        :param parent_port: When module 'A' instantiates the module to which this port is attached, should this port be connected to a similar port on 'A'.
         :type parent_port: Boolean
-        :param parent_sig: When module `A` instantiates the module to which this port is attached, should `A` also instantiate a signal matching the one connected to this port.
+        :param parent_sig: When module 'A' instantiates the module to which this port is attached, should 'A' also instantiate a signal matching the one connected to this port.
         :type parent_sig: Boolean
         :param **kwargs: Other keywords which should become attributes of this instance.
         """
@@ -123,7 +127,8 @@ class Parameter(ImmutableWithComments):
     """
     def __init__(self, name, value, comment=None):
         """
-        Crete a `Parameter` instance.
+        Create a 'Parameter' instance.
+
         :param name: Name of this parameter
         :type name: String
         :param value: Value this parameter should be set to.
@@ -135,13 +140,14 @@ class Parameter(ImmutableWithComments):
 
     def update_attrs(self, name, value, comment=None):
         """
+        Update the attributes of this block.
+
         :param name: Name of this parameter
         :type name: String
         :param value: Value this parameter should be set to.
         :type value: Varies
         :param comment: User-assisting comment string to attach to this parameter.
         :type comment: String
-        Update the attributes of this block.
         """
         self.name = name.rstrip(' ')
         self.value = value
@@ -156,7 +162,8 @@ class Signal(ImmutableWithComments):
     """
     def __init__(self, name, signal='', width=0, **kwargs):
         """
-        Create a `Signal` instance.
+        Create a 'Signal' instance.
+
         :param name: Name of this signal
         :type name: String
         :param signal: Name of this signal
@@ -376,6 +383,7 @@ def gen_wbs_master_arbiter(arbiters, max_devices_per_arb=32):
 def instantiate_wb_arb_module(module, n_slaves, n_sub_arbs=None):
     """
     Instantiate a Wishbone Arbiter into a module.
+
     :param module: Module into which the arbiter should be instantiated.
     :type module: VerilogModule instance
     :param n_slaves: Number of slaves this arbiter is connected to.
@@ -436,45 +444,47 @@ class VerilogModule(object):
 
         Eg:
 
-        localparam N_WB_SLAVES = 2;
+        .. code-block:: verilog
 
-        localparam SLAVE_BASE = {
-          32'h00010000, // slave_1
-          32'h00000000  // slave_0
-        };
-      
-        localparam SLAVE_HIGH = {
-          32'h00010003, // slave_1
-          32'hFFFFFFFF  // slave_0
-        };
+            localparam N_WB_SLAVES = 2;
 
-        This module will only tolerate
-        i/o declarations like:
+            localparam SLAVE_BASE = {
+            32'h00010000, // slave_1
+            32'h00000000  // slave_0
+            };
         
-        module top (
-            input sysclk_n,
-            input sysclk_p,
-            ...
-            );
+            localparam SLAVE_HIGH = {
+            32'h00010003, // slave_1
+            32'hFFFFFFFF  // slave_0
+            };
 
-        I.e, NOT
+            // This module will only tolerate
+            // i/o declarations like:
+            
+            module top (
+                input sysclk_n,
+                input sysclk_p,
+                ...
+                );
 
-        module top(
-            sysclk_n,
-            sysclk_p,
-            ...
-            );
-            input sysclk_n;
-            input sysclk_p;
-            ...
+            // I.e, NOT
 
-        YMMV if your topfile doesn't use linebreaks as
-        shown above. I.e., for best chance of success don't do
+            module top(
+                sysclk_n,
+                sysclk_p,
+                ...
+                );
+                input sysclk_n;
+                input sysclk_p;
+                ...
 
-        module top( sysclk_n,
-           sysclk_p);
+            // YMMV if your topfile doesn't use linebreaks as
+            // shown above. I.e., for best chance of success don't do
 
-        localparam SLAVE_BASE = {32'h00000000};
+            module top( sysclk_n,
+            sysclk_p);
+
+            localparam SLAVE_BASE = {32'h00000000};
 
         :param name: Name of this module
         :type name: String
@@ -534,6 +544,7 @@ class VerilogModule(object):
         Set the name of the block currently driving code generation. This is useful
         for grouping and commenting the ports / instances / signals associated with
         particular instances, so that the output Verilog is prettier.
+
         :param cur_blk: The name of the current block driving code generation.
         :type cur_blk: String.
         """
@@ -562,9 +573,7 @@ class VerilogModule(object):
         Will NOT take into account wishbone memory space
         used by the template verilog file (but see base_addr, below)
 
-        :param base_addr: The address from which indexing of instance wishbone
-        interfaces will begin. Any memory space required by the template
-        verilog file should be below this address.
+        :param base_addr: The address from which indexing of instance wishbone interfaces will begin. Any memory space required by the template verilog file should be below this address.
         :type base_addr: int
         :param alignment: Alignment required by all memory start addresses.
         :type alignment: int
@@ -666,13 +675,13 @@ class VerilogModule(object):
         instantiated module need not have a width or direction specified, but if you want to instantiate the module
         and propagate the port to the parent, the parent won't know what to do unless these port parameters are specified.
 
-        :param 'name': name of the port
-        :param 'signal': name of the signal to connect port to. Can include bit indexing, e.g. 'my_signal[15:8]'
-        :param 'dir': direction of signal
-        :param 'width': width of signal
-        :param 'parent_port': When instantiating this module, promote this port to a port of the parent
-        :param 'parent_sig': When instantiating this module, add a signal named 'signal' to the parent
-        :param 'comment': Use this to add a comment string which will end up in the generated verilog
+        :param name: name of the port
+        :param signal: name of the signal to connect port to. Can include bit indexing, e.g. `my_signal[15:8]`
+        :param dir: direction of signal
+        :param width: width of signal
+        :param parent_port: When instantiating this module, promote this port to a port of the parent
+        :param parent_sig: When instantiating this module, add a signal named 'signal' to the parent
+        :param comment: Use this to add a comment string which will end up in the generated verilog
         """
         name = name.rstrip(' ')
         # Catch cases where we don't want to infer either a parent port or signal declaration
@@ -748,6 +757,7 @@ class VerilogModule(object):
         assign lhs = rhs;
         'lhs' and 'rhs' are strings that can represent port or signal
         names, and may include verilog-style indexing, eg '[15:8]'
+
         You may add a comment that will end up in the generated verilog.
         """
         self.assignments[self.cur_blk][lhs] = {'lhs':lhs, 'rhs':rhs, 'comment':comment}
@@ -806,8 +816,7 @@ class VerilogModule(object):
         Rewrite the intially supplied verilog file to
         include instance, signals, ports, assignments and
         wishbone interfaces added programmatically.
-        The initial verilog file is backed up with a '.base'
-        extension.
+        The initial verilog file is backed up with a '.base' extension.
         """
         os.system('cp %s %s.base'%(self.topfile,self.topfile))
         fh_base = open('%s.base'%self.topfile,'r')
@@ -1139,6 +1148,7 @@ class VerilogModule(object):
         Wishbone ports that depend on the slave index are identified by a parameter
         that matches the instance name. This parameter must be given a value in a higher level
         of the verilog code!
+
         This function returns the WbDevice object, so the caller can mess with it's memory map
         if they so desire.
         """
