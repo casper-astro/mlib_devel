@@ -2,8 +2,17 @@
 % This script must be ran from xps_library folder
 % input: source_dir = char array, source directory where models are stored
 % input: lib_name = char array, name of new library
+% With no arguments:
+% source_dir defaults to $MLIB_DEVEL_PATH/xps_library/xps_models
+% lib_name defaults to xps_library
+% i.e., by default update this repository's library with this repository's
+% blocks.
 function xps_build_new_library(source_dir,lib_name)
     warning('off','all');
+    if nargin == 0
+        source_dir = fullfile(getenv('MLIB_DEVEL_PATH'), 'xps_library', 'xps_models');
+        lib_name = 'xps_library';
+    end;
     % always ignore first two elements of struct below
     source_struct = dir(source_dir);
     % find sub directories

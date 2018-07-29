@@ -23,28 +23,37 @@
 function [str,opb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj,opb_addr_start,opb_name)
 
 xaui_port   = get(blk_obj, 'port');
-open_phy    = get(blk_obj, 'open_phy');
 hw_sys      = get(blk_obj, 'hw_sys');
 
 [str,opb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj.xps_block, opb_addr_start, opb_name);
 str = [str, '\n'];
 
 switch hw_sys
-    case 'ROACH'
+    case {'ROACH'}
 
-        mgt_clk_num = num2str(floor(str2num(xaui_port)/2));
+        mgt_clk_num = num2str(floor(str2num(xaui_port)/2)); 
 
         str = [str, 'BEGIN xaui_phy',                                   '\n'];
         str = [str, '  PARAMETER INSTANCE = xaui_phy_', xaui_port,      '\n'];
         str = [str, '  PARAMETER HW_VER = 1.00.a',                      '\n'];
-        str = [str, '  PARAMETER USE_KAT_XAUI = ', open_phy,            '\n'];
+        str = [str, '  PARAMETER USE_KAT_XAUI = 0',                     '\n'];
         str = [str, '  BUS_INTERFACE XAUI_SYS = xaui_sys', xaui_port,   '\n'];
         str = [str, '  BUS_INTERFACE XGMII    = xgmii', xaui_port,      '\n'];
         str = [str, '  PORT reset   = sys_reset'            ,           '\n'];
         str = [str, '  PORT mgt_clk = mgt_clk_', mgt_clk_num,           '\n'];
         str = [str, 'END',                                              '\n'];
-    % end case 'ROACH'
-
+    % end case {'ROACH'}
+    case {'ROACH2','MKDIG'}
+        str = [str, 'BEGIN xaui_phy',                                   '\n'];
+        str = [str, '  PARAMETER INSTANCE = xaui_phy_', xaui_port,      '\n'];
+        str = [str, '  PARAMETER HW_VER = 1.00.a',                      '\n'];
+        str = [str, '  BUS_INTERFACE XAUI_SYS = xaui_sys', xaui_port,   '\n']; 
+        str = [str, '  BUS_INTERFACE XAUI_CONF = xaui_conf', xaui_port, '\n']; 
+        str = [str, '  BUS_INTERFACE XGMII    = xgmii', xaui_port,      '\n']; 
+        str = [str, '  PORT reset   = sys_reset'            ,           '\n'];
+        str = [str, '  PORT xaui_clk = xaui_clk',                       '\n']; %from xaui_infrastructure
+        str = [str, 'END',                                              '\n'];
+    % end case {'ROACH'}
     otherwise
     % end otherwise
 end % switch hw_sys

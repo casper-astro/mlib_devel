@@ -201,14 +201,14 @@ function bus_mult_init(blk, varargin)
 
   fa = compo/compa; fb = compo/compb;
   if strcmp(cmplx_a, 'on'), 
-    fa = fa*2;
+%    fa = fa*2;
     %if complex, fanout can only be a multiple of 2 (on the conservative side)
     max_fanouta = max(1, floor(max_fanout/2)*2); 
   else,
     max_fanouta = max_fanout; 
   end
   if strcmp(cmplx_b, 'on'), 
-    fb = fb*2; 
+%    fb = fb*2; 
     %if complex, fanout can only be a multiple of 2 (on the conservative side)
     max_fanoutb = max(1, floor(max_fanout/2)*2); 
   else

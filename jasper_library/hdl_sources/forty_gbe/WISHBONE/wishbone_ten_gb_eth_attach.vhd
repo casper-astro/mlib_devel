@@ -89,7 +89,7 @@ entity wishbone_ten_gb_eth_attach is
         xaui_status : in std_logic_vector(7 downto 0);
         
         -- PMA CONFIG
-        mgt_status          : in std_logic_vector(15 downto 0);
+        --mgt_status          : in std_logic_vector(15 downto 0);
         mgt_rxeqmix         : out std_logic_vector(2 downto 0);
         mgt_txpreemphasis   : out std_logic_vector(3 downto 0);
         mgt_txpostemphasis  : out std_logic_vector(4 downto 0);
