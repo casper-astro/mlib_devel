@@ -428,7 +428,7 @@ function bus_mult_init(blk, varargin)
   xpos = xpos + xinc + mult_w/2;  
   ypos_tmp = ypos; %reset ypos 
 
-  if floating_point
+  if floating_point == 1
       % Floating Point
       %%%%%%%%%%%%%%%%
       for index = 1:compo,
@@ -462,6 +462,9 @@ function bus_mult_init(blk, varargin)
           num2str(bin_pt_out(index)),') ', arith_type,' ',quant,' ', of], log_group); 
 
         mult_name = ['mult',num2str(index)]; 
+        reint_name_a = ['reinta',num2str(index)];
+        reint_name_b = ['reintb',num2str(index)];
+        
         clog(['drawing ',mult_name], log_group);
 
         if strcmp(cmplx_a, 'on') && strcmp(cmplx_b, 'on'), %need complex multiplication
@@ -483,6 +486,10 @@ function bus_mult_init(blk, varargin)
             'in_latency', num2str(in_latency), 'mult_latency', num2str(mult_latency), ... 
             'add_latency', num2str(add_latency), 'conv_latency', num2str(conv_latency), ...
             'Position', [xpos-mult_w/2 ypos_tmp xpos+mult_w/2 ypos_tmp+mult_d-20] );
+           
+            add_line(blk, ['a_debus/',num2str(a_src(index))], [mult_name,'/1']);
+            add_line(blk, ['b_debus/',num2str(b_src(index))], [mult_name,'/2']);
+        
         else,  
           %standard multiplication 
           if strcmp(multiplier_implementation, 'behavioral HDL'),
@@ -497,18 +504,41 @@ function bus_mult_init(blk, varargin)
             else,
             end
           end
+          
+          % Insert reinterpret block and connect to mult rere
+          reuse_block(blk, reint_name_a, 'xbsIndex_r4/Reinterpret', ...
+          'force_arith_type', 'on', ...
+          'arith_type', 'Floating-point', ...
+          'force_bin_pt', 'on', ...
+          'bin_pt',num2str(frac_width), ...
+          'Position', [100 200 120 220]);
+          add_line(blk, ['a_debus/',num2str(a_src(index))], [reint_name_a,'/1']);
+          
+          % Insert reinterpret block and connect to mult rere
+          reuse_block(blk, reint_name_b, 'xbsIndex_r4/Reinterpret', ...
+          'force_arith_type', 'on', ...
+          'arith_type', 'Floating-point', ...
+          'force_bin_pt', 'on', ...
+          'bin_pt',num2str(frac_width), ...
+          'Position', [100 200 120 220]);
+          add_line(blk, ['b_debus/',num2str(b_src(index))], [reint_name_b,'/1']);
+          
           reuse_block(blk, mult_name, 'xbsIndex_r4/Mult', ...
             'latency', 'mult_latency', 'precision', 'Full', ...
             'n_bits', num2str(n_bits_out(index)), 'bin_pt', num2str(bin_pt_out(index)), ...  
             'arith_type', arith_type, 'quantization', quant, 'overflow', of, ... 
             'use_behavioral_HDL', use_behavioral_HDL, 'use_embedded', use_embedded, ...          
             'Position', [xpos-mult_w/2 ypos_tmp xpos+mult_w/2 ypos_tmp+mult_d-20]);
+        
+            add_line(blk,[reint_name_a,'/1'], [mult_name,'/1']);
+            add_line(blk,[reint_name_b,'/1'], [mult_name,'/2']);
         end
         ypos_tmp = ypos_tmp + mult_d;
         clog(['done'], 'bus_mult_init_debug');
 
-        add_line(blk, ['a_debus/',num2str(a_src(index))], [mult_name,'/1']);
-        add_line(blk, ['b_debus/',num2str(b_src(index))], [mult_name,'/2']);
+        % Orig
+        %add_line(blk, ['a_debus/',num2str(a_src(index))], [mult_name,'/1']);
+        %add_line(blk, ['b_debus/',num2str(b_src(index))], [mult_name,'/2']);
       end %for
 
       ypos_tmp = ypos + mult_d*(compb+compa) + 2*yinc;
@@ -670,9 +700,28 @@ function bus_mult_init(blk, varargin)
     'inputNum', num2str(compo), ...
     'Position', [xpos-bus_create_w/2 ypos_tmp-mult_d*compo/2 xpos+bus_create_w/2 ypos_tmp+mult_d*compo/2]);
   
-  for index = 1:compo
-      add_line(blk, ['mult',num2str(index),'/1'], ['a*b_bussify/',num2str(index)]); 
+  if floating_point == 1
+      for index = 1:compo
+
+          reint_name_out = ['reint_out',num2str(index)];
+                  
+          % Insert reinterpret block 
+          reuse_block(blk, reint_name_out, 'xbsIndex_r4/Reinterpret', ...
+          'force_arith_type', 'on', ...
+          'arith_type', 'Unsigned', ...
+          'force_bin_pt', 'on', ...
+          'bin_pt',num2str(0), ...
+          'Position', [100 200 120 220]);
+          add_line(blk, ['mult',num2str(index),'/1'], [reint_name_out,'/1']);
+          
+          add_line(blk, [reint_name_out,'/1'], ['a*b_bussify/',num2str(index)]); 
+      end     
+  else
+      for index = 1:compo
+          add_line(blk, ['mult',num2str(index),'/1'], ['a*b_bussify/',num2str(index)]); 
+      end
   end
+
 
   %%%%%%%%%%%%%%%%%
   % output port/s %
