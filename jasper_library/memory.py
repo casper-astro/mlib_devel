@@ -7,6 +7,8 @@ class Register(object):
 
         For example (see sys_block.py):
 
+        .. code-block:: python
+
             class sys_block(YellowBlock):
                 def initialize(self):
                     self.typecode = TYPECODE_SYSBLOCK
@@ -27,7 +29,6 @@ class Register(object):
                     inst.add_parameter('REV_RCS', self.rev_rcs)
                     inst.add_port('user_clk', 'user_clk')
                     inst.add_wb_interface('sys_block', mode='r', nbytes=64, memory_map=self.memory_map, typecode=self.typecode)
-
         
         :param name: The name of this register
         :type name: String
