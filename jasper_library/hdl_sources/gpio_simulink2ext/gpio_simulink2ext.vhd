@@ -10,11 +10,12 @@ entity gpio_simulink2ext is
     Generic (
     		  WIDTH : integer := 4;
     		  DDR : integer := 0;
-    		  CLK_PHASE : integer := 0;
-              REG_IOB : string := "true"
+    		  CLK_PHASE  : integer := 0;
+              REG_IOB 	 : string := "true";
+			  PORT_BYPASS : integer := 0
 	);
 	 Port (
-		gateway   : in  std_logic_vector((WIDTH)-1         downto 0);
+		gateway   : in  std_logic_vector(((WIDTH)-1)       downto 0);
 		io_pad    : out std_logic_vector((WIDTH/(DDR+1)-1) downto 0);
 
 		clk       : in  std_logic;
@@ -28,6 +29,8 @@ architecture Behavioral of gpio_simulink2ext is
     attribute IOB: string;
 	signal one  : std_logic := '1';
 	signal zero : std_logic := '0';
+
+	signal integer_convert : std_logic_vector(0 downto 0);
 begin
 
 -- clock selection
@@ -67,7 +70,7 @@ begin
 		end generate REG_DDR_GEN;
 	end generate DDR_GEN;
 	
-	SDR_GEN: if DDR = 0 generate
+	SDR_GEN: if DDR = 0 and PORT_BYPASS = 0 generate
 		REG_SDR_GEN: for i in 0 to (WIDTH/(DDR+1)-1) generate
 			attribute IOB of Q_REG_SDR:label is REG_IOB;
 		begin
@@ -79,5 +82,12 @@ begin
 			);
 		end generate REG_SDR_GEN;
 	end generate SDR_GEN;
+
+	-- This generate statement is used when bypassing the Port Assignment for a GPIO yellow block
+	-- -> e.g. When a signal(s) need to be routed to the BSP and NOT to a physical PORT/Output
+	-- -> Needs an equivalent handling wire/port on the other end, e.g. forty_gbe.vhd
+	PORT_BYPASS_GEN: if DDR = 0 and PORT_BYPASS = 1 generate
+		io_pad <= gateway;
+	end generate PORT_BYPASS_GEN;
 
 end Behavioral;

@@ -82,7 +82,7 @@ function bus_maddsub_init(blk, varargin)
   delete_lines(blk);
 
   %default state, do nothing 
-  if (~isempty(find([n_bits_a, n_bits_b, n_bits_c] == 0))),
+  if (~isempty(find([n_bits_a, n_bits_b, n_bits_c] == 0, 1)))
     clean_blocks(blk);
     save_state(blk, 'defaults', defaults, varargin{:});  % Save and back-populate mask parameter values
     clog('exiting bus_maddsub_init', {'trace', log_group});
@@ -93,7 +93,7 @@ function bus_maddsub_init(blk, varargin)
   % parameter checking %
   %%%%%%%%%%%%%%%%%%%%%%
 
-  if max_fanout < 1,
+  if max_fanout < 1
     clog('Maximum fanout must be 1 or greater', {'error', log_group});
     error('Maximum fanout must be 1 or greater');
   end
@@ -125,30 +125,30 @@ function bus_maddsub_init(blk, varargin)
 
   too_many_a = length(unique_a) > 2;
   conflict_a = (length(unique_a) == 2) && (unique_a(1) ~= 1);
-  if too_many_a | conflict_a,
-    error('conflicting component number for bus a');
+  if too_many_a || conflict_a
     clog('conflicting component number for bus a', {'error', log_group});
+    error('conflicting component number for bus a');
   end
 
   too_many_b = length(unique_b) > 2;
   conflict_b = (length(unique_b) == 2) && (unique_b(1) ~= 1);
-  if too_many_b | conflict_b,
-    error('conflicting component number for bus b');
+  if too_many_b || conflict_b
     clog('conflicting component number for bus b', {'error', log_group});
+    error('conflicting component number for bus b');
   end
 
   too_many_c = length(unique_c) > 2;
   conflict_c = (length(unique_c) == 2) && (unique_c(1) ~= 1);
-  if too_many_c | conflict_c,
-    error('conflicting component number for bus c');
+  if too_many_c || conflict_c
     clog('conflicting component number for bus c', {'error', log_group});
+    error('conflicting component number for bus c');
   end
 
   too_many_o = length(unique_o) > 2;
   conflict_o = (length(unique_o) == 2) && (unique_o(1) ~= 1);
-  if too_many_o | conflict_o,
-    error('conflicting component number for output bus');
+  if too_many_o || conflict_o
     clog('conflicting component number for output bus', {'error', log_group});
+    error('conflicting component number for output bus');
   end
   
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -196,10 +196,10 @@ function bus_maddsub_init(blk, varargin)
   dupb = ceil(fb/max_fanoutb);
   compb = compb*dupb; type_b = repmat(type_b, 1, dupb) ;
   n_bits_b = repmat(n_bits_b, 1, dupb); bin_pt_b = repmat(bin_pt_b, 1, dupb); 
-  if strcmp(cmplx_a, 'on'),
-    b_src = repmat(reshape([[1:compb];[1:compb]], 1, compb*2), 1, ceil(compo/(compb*2)));
-  else,  
-    b_src = repmat([1:compb], 1, ceil(compo/compb));
+  if strcmp(cmplx_a, 'on')
+    b_src = repmat(reshape([1:compb; 1:compb], 1, compb*2), 1, ceil(compo/(compb*2)));
+  else
+    b_src = repmat(1:compb, 1, ceil(compo/compb));
   end  
 
   fc = compo/compc;
@@ -248,9 +248,8 @@ function bus_maddsub_init(blk, varargin)
   ypos_tmp = ypos_tmp + yinc + mult_d*(compc/2);
 
   port_offset = 4;
-  if strcmp(async_add, 'on'),
+  if strcmp(async_add, 'on')
     ypos_tmp = ypos_tmp + yinc + mult_d*fanout;
-
     reuse_block(blk, 'en', 'built-in/inport', ...
       'Port', num2str(port_offset), 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
     ypos_tmp = ypos_tmp + yinc;
@@ -267,7 +266,7 @@ function bus_maddsub_init(blk, varargin)
 
   %replicate busses
 
-  if strcmp(replicate_ab, 'on'),
+  if strcmp(replicate_ab, 'on')
     reuse_block(blk, 'repa', 'casper_library_bus/bus_replicate', ...
       'replication', num2str(dupa), 'latency', '1', 'misc', 'off', ... 
       'Position', [xpos-rep_w/2 ypos_tmp-rep_d/2 xpos+rep_w/2 ypos_tmp+rep_d/2]);
@@ -276,7 +275,7 @@ function bus_maddsub_init(blk, varargin)
 
   ypos_tmp = ypos_tmp + yinc + mult_d*(compa/2 + compb/2);
   
-  if strcmp(replicate_ab, 'on'),
+  if strcmp(replicate_ab, 'on')
     reuse_block(blk, 'repb', 'casper_library_bus/bus_replicate', ...
       'replication', num2str(dupb), 'latency', '1', 'misc', 'off', ...
       'Position', [xpos-rep_w/2 ypos_tmp-rep_d/2 xpos+rep_w/2 ypos_tmp+rep_d/2]);
@@ -343,51 +342,50 @@ function bus_maddsub_init(blk, varargin)
   else, latency = mult_latency;
   end
 
-  for index = 1:compo,
+  for index = 1:compo
     clog([num2str(index),': type = ', num2str(type_out(index)), ...
     ' quantization = ', num2str(quantization(index)), ...
-    ' overflow = ',num2str(overflow(index))], log_group);
-    switch type_out(index),
-      case 0,
+    ' overflow = ', num2str(overflow(index))], log_group);
+    switch type_out(index)
+      case 0
         arith_type = 'Unsigned';
-      case 1,
+      case 1
         arith_type = 'Signed';
-      otherwise,
-        clog(['unknown arithmetic type ',num2str(arith_type)], {'error', log_group});
-        error(['bus_mult_init: unknown arithmetic type ',num2str(arith_type)]);
+      otherwise
+        clog(['unknown arithmetic type ', num2str(arith_type)], {'error', log_group});
+        error(['bus_mult_init: unknown arithmetic type ', num2str(arith_type)]);
     end
-    switch quantization(index),
-      case 0,
+    switch quantization(index)
+      case 0
         quant = 'Truncate';
-      case 1,
+      case 1
         quant = 'Round  (unbiased: +/- Inf)';
     end  
-    switch overflow(index),
-      case 0,
+    switch overflow(index)
+      case 0
         of = 'Wrap';
-      case 1,
+      case 1
         of = 'Saturate';
-      case 2,
+      case 2
         of = 'Flag as error';
     end  
-    clog(['output ',num2str(index),': (',num2str(n_bits_out(index)), ' ', ...
-      num2str(bin_pt_out(index)),') ', arith_type,' ',quant,' ', of], ...
+    clog(['output ', num2str(index),': (', num2str(n_bits_out(index)), ' ', ...
+      num2str(bin_pt_out(index)),') ', arith_type,' ', quant,' ', of], ...
       log_group); 
 
-    mult_name = ['mult',num2str(index)]; 
+    mult_name = ['mult', num2str(index)]; 
     clog(['drawing ',mult_name], log_group);
    
                                           %standard multiplication 
-    if strcmp(multiplier_implementation, 'behavioral HDL'),
+    if strcmp(multiplier_implementation, 'behavioral HDL')
       use_behavioral_HDL = 'on';
       use_embedded = 'off';
     else
       use_behavioral_HDL = 'off';
-      if strcmp(multiplier_implementation, 'embedded multiplier core'),
+      if strcmp(multiplier_implementation, 'embedded multiplier core')
         use_embedded = 'on';
-      elseif strcmp(multiplier_implementation, 'standard core'),
+      elseif strcmp(multiplier_implementation, 'standard core')
         use_embedded = 'off';
-      else,
       end
     end
 
@@ -397,7 +395,7 @@ function bus_maddsub_init(blk, varargin)
       'Position', [xpos-mult_w/2 ypos_tmp xpos+mult_w/2 ypos_tmp+mult_d-20]);
     
     ypos_tmp = ypos_tmp + mult_d;
-    clog(['done'], log_group);
+    clog('done', log_group);
  
     add_line(blk, ['a_debus/', num2str(a_src(index))], [mult_name, '/1']);
     add_line(blk, ['b_debus/', num2str(b_src(index))], [mult_name, '/2']);
@@ -405,7 +403,7 @@ function bus_maddsub_init(blk, varargin)
 
   ypos_tmp = ypos + mult_d*(compb+compa+compc+fanout) + 4*yinc;
   
-  if strcmp(async_add, 'on'),
+  if strcmp(async_add, 'on')
     %en 
     reuse_block(blk, 'den0', 'xbsIndex_r4/Delay', ...
       'latency', num2str(mult_latency-1), 'reg_retiming', 'on', ...
@@ -421,7 +419,7 @@ function bus_maddsub_init(blk, varargin)
   
   ypos_tmp = ypos + yinc*2 + mult_d*(compa+compb+compc/2);
 
-  if strcmp(replicate_c, 'on'),
+  if strcmp(replicate_c, 'on')
     latency = 1;
     reuse_block(blk, 'repc', 'casper_library_bus/bus_replicate', ...
       'replication', num2str(dupc), 'latency', '1', 'misc', 'off', ...
@@ -431,7 +429,7 @@ function bus_maddsub_init(blk, varargin)
 
   ypos_tmp = ypos_tmp + yinc + mult_d*compc/2;
   
-  if strcmp(async_add, 'on'),
+  if strcmp(async_add, 'on')
     ypos_tmp = ypos_tmp + mult_d*fanout/2;
 
     reuse_block(blk, 'repen1', 'casper_library_bus/bus_replicate', ...
@@ -474,7 +472,7 @@ function bus_maddsub_init(blk, varargin)
   
   ypos_tmp = ypos_tmp + mult_d*compc/2 + yinc;
 
-  if strcmp(async_add, 'on'),
+  if strcmp(async_add, 'on')
     ypos_tmp = ypos_tmp + mult_d*fanout/2;
 
     reuse_block(blk, 'en_debus1', 'casper_library_flow_control/bus_expand', ...
@@ -497,52 +495,52 @@ function bus_maddsub_init(blk, varargin)
   %addsub
   ypos_tmp = ypos; %reset ypos 
 
-  clog(['making ',num2str(compo),' AddSubs'], log_group);
+  clog(['making ', num2str(compo),' AddSubs'], log_group);
 
   for index = 1:compo
-    switch type_out(index),
-      case 0,
+    switch type_out(index)
+      case 0
         arith_type = 'Unsigned';
-      case 1,
+      case 1
         arith_type = 'Signed';
     end
-    switch quantization(index),
-      case 0,
+    switch quantization(index)
+      case 0
         quant = 'Truncate';
-      case 1,
+      case 1
         quant = 'Round  (unbiased: +/- Inf)';
     end  
-    switch overflow(index),
-      case 0,
+    switch overflow(index)
+      case 0
         of = 'Wrap';
-      case 1,
+      case 1
         of = 'Saturate';
-      case 2,
+      case 2
         of = 'Flag as error';
     end  
-    if strcmp(opmode, 'Addition'),
+    if strcmp(opmode, 'Addition')
       symbol = '+';
-    else,
+    else
       symbol = '-';
     end  
         
-    clog(['output ',num2str(index),': ', ... 
-      ' a[',num2str(a_src(index)),'] ',symbol,' b[',num2str(b_src(index)),'] = ', ...
-      '(',num2str(n_bits_out(index)), ' ', num2str(bin_pt_out(index)),') ' ...
-      ,arith_type,' ',quant,' ', of], log_group); 
+    clog(['output ', num2str(index),': ', ... 
+      ' a[', num2str(a_src(index)),'] ',symbol,' b[', num2str(b_src(index)),'] = ', ...
+      '(', num2str(n_bits_out(index)), ' ', num2str(bin_pt_out(index)),') ' ...
+      ,arith_type,' ', quant,' ', of], log_group); 
 
-    if strcmp(add_implementation, 'behavioral HDL'),
+    if strcmp(add_implementation, 'behavioral HDL')
       use_behavioral_HDL = 'on';
       hw_selection = 'Fabric';
-    elseif strcmp(add_implementation, 'fabric core'),
+    elseif strcmp(add_implementation, 'fabric core')
       use_behavioral_HDL = 'off';
       hw_selection = 'Fabric';
-    elseif strcmp(add_implementation, 'DSP48 core'),
+    elseif strcmp(add_implementation, 'DSP48 core')
       use_behavioral_HDL = 'off';
       hw_selection = 'DSP48';
     end
 
-    add_name = ['addsub',num2str(index)]; 
+    add_name = ['addsub', num2str(index)]; 
     
     reuse_block(blk, add_name, 'xbsIndex_r4/AddSub', ...
       'mode', opmode, 'latency', num2str(add_latency), ...
@@ -553,9 +551,9 @@ function bus_maddsub_init(blk, varargin)
       'Position', [xpos-add_w/2 ypos_tmp xpos+add_w/2 ypos_tmp+add_d-20]);
     ypos_tmp = ypos_tmp + add_d;
   
-    mult_name = ['mult',num2str(index)]; 
+    mult_name = ['mult', num2str(index)]; 
     add_line(blk, [mult_name, '/1'], [add_name,'/1']);
-    add_line(blk, ['c_debus/',num2str(c_src(index))], [add_name,'/2']);
+    add_line(blk, ['c_debus/', num2str(c_src(index))], [add_name,'/2']);
 
     if strcmp(async_add, 'on')
       add_line(blk, ['en_debus1/', num2str(floor((index-1)/max_fanout)+1)], [add_name,'/3']);
@@ -565,7 +563,7 @@ function bus_maddsub_init(blk, varargin)
 
   ypos_tmp = ypos + mult_d*(compa+compb+compc+fanout) + yinc*4;
 
-  if strcmp(async_add, 'on'),
+  if strcmp(async_add, 'on')
     %en 
     reuse_block(blk, 'den2', 'xbsIndex_r4/Delay', ...
       'latency', num2str(add_latency), 'reg_retiming', 'on', ...
@@ -589,7 +587,7 @@ function bus_maddsub_init(blk, varargin)
     'inputNum', num2str(compo), ...
     'Position', [xpos-bus_create_w/2 ypos_tmp-mult_d*compo/2 xpos+bus_create_w/2 ypos_tmp+mult_d*compo/2]);
   
-  for index = 1:compo, add_line(blk, ['addsub',num2str(index),'/1'], ['a*b', op, 'c_bussify/',num2str(index)]); end
+  for index = 1:compo, add_line(blk, ['addsub', num2str(index),'/1'], ['a*b', op, 'c_bussify/', num2str(index)]); end
 
   xpos = xpos + xinc + bus_create_w/2 + port_w/2;
 
@@ -604,7 +602,7 @@ function bus_maddsub_init(blk, varargin)
 
   ypos_tmp = ypos + mult_d*(compb+compa+compc+fanout) + 4*yinc;
 
-  if strcmp(async_add, 'on'),
+  if strcmp(async_add, 'on')
     reuse_block(blk, 'dvalid', 'built-in/outport', ...
       'Port', '2', 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
     add_line(blk, 'den2/1', 'dvalid/1');

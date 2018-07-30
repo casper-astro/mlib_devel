@@ -51,7 +51,7 @@ try
   if is_library_block(blk), return, end
   
   % Disable link
-  set_param(blk,'LinkStatus', 'inactive');
+  set_param(blk, 'LinkStatus', 'inactive');
   
   % Take appropriate munge action
   switch get_var('munge', varargin{:})

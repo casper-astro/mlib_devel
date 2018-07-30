@@ -26,6 +26,7 @@ class sw_reg(YellowBlock):
         elif self.blk['io_dir'] == 'From Processor':
             module = 'wb_register_ppc2simulink'
             inst = top.get_instance(entity=module, name=self.fullname)
+            inst.add_parameter('INIT_VAL', "32'h%x"%self.init_val)
             inst.add_wb_interface(regname=self.unique_name, mode='rw', nbytes=4, typecode=self.typecode)
             inst.add_port('user_clk', signal='user_clk', parent_sig=False)
             inst.add_port('user_data_out', signal='%s_user_data_out'%self.fullname, width=32)

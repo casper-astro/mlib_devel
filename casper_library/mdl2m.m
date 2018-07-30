@@ -190,7 +190,7 @@ function mdl2m(mdl, varargin)
 
   %if a library, must be saved somewhere before can be used
   if strcmp(library, 'on'),
-      fprintf(fp, '\tfilename = save_system(mdl,[%s, ''.mdl'']);\n', mdl_name);
+      fprintf(fp, '\tfilename = save_system(mdl,[%s, ''.slx'']);\n', mdl_name);
       % Make sure other's can overwrite so we can share mlib_devel working copy
       % between users.
       fprintf(fp, '\tif iscell(filename), filename = filename{1}; end;\n');

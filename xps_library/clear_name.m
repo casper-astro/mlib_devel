@@ -20,10 +20,10 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function result = clear_name(str);
+function result = clear_name(str)
 for i = 1:length(str)
     c = str(i);
-    if c<48 | (c>57 & c<65) | (c>90 & c<95) | c==96 | c>122
+    if c<48 || (c>57 && c<65) || (c>90 && c<95) || c==96 || c>122
         result(i) = '_';
     else
         result(i) = str(i);
@@ -34,11 +34,11 @@ while ~isempty(findstr(result, '__'))
     result = strrep(result,'__','_');
 end
 %remove tail '_'
-if strcmp(result(length(result)),'_');
+if strcmp(result(length(result)),'_')
     result = result(1:length(result)-1);
 end
 %remove head '_'
-if strcmp(result(1),'_');
+if strcmp(result(1),'_')
     result = result(2:length(result));
 end
 return;

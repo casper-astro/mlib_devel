@@ -1,7 +1,7 @@
 --Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2016.2 (lin64) Build 1577090 Thu Jun  2 16:32:35 MDT 2016
---Date        : Tue Nov  8 10:51:00 2016
+--Date        : Mon Feb 19 12:51:44 2018
 --Host        : adam-cm running 64-bit Ubuntu 14.04.5 LTS
 --Command     : generate_target cont_microblaze.bd
 --Design      : cont_microblaze
@@ -926,10 +926,10 @@ architecture STRUCTURE of microblaze_0_local_memory_imp_18JXXNV is
   signal microblaze_0_ilmb_cntlr_WE : STD_LOGIC_VECTOR ( 0 to 3 );
   signal NLW_dlmb_v10_LMB_Rst_UNCONNECTED : STD_LOGIC;
   signal NLW_ilmb_v10_LMB_Rst_UNCONNECTED : STD_LOGIC;
-  attribute BMM_INFO_ADDRESS_SPACE : string;
-  attribute BMM_INFO_ADDRESS_SPACE of dlmb_bram_if_cntlr : label is "byte  0x00000000 32 > cont_microblaze microblaze_0_local_memory/lmb_bram";
   attribute KEEP_HIERARCHY : string;
   attribute KEEP_HIERARCHY of dlmb_bram_if_cntlr : label is "yes";
+  attribute bmm_info_address_space : string;
+  attribute bmm_info_address_space of dlmb_bram_if_cntlr : label is "byte  0x00000000 32 > cont_microblaze microblaze_0_local_memory/lmb_bram";
 begin
   DLMB_ce <= microblaze_0_dlmb_CE;
   DLMB_readdbus(0 to 31) <= microblaze_0_dlmb_READDBUS(0 to 31);
@@ -2350,12 +2350,13 @@ entity cont_microblaze is
     STB_O : out STD_LOGIC;
     UART_rxd : in STD_LOGIC;
     UART_txd : out STD_LOGIC;
-    WE_O : out STD_LOGIC
+    WE_O : out STD_LOGIC;
+    dcm_locked : in STD_LOGIC
   );
-  attribute CORE_GENERATION_INFO : string;
-  attribute CORE_GENERATION_INFO of cont_microblaze : entity is "cont_microblaze,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=cont_microblaze,x_ipVersion=1.00.a,x_ipLanguage=VHDL,numBlks=24,numReposBlks=16,numNonXlnxBlks=1,numHierBlks=8,maxHierDepth=1,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=0,numPkgbdBlks=0,bdsource=USER,synth_mode=Global}";
-  attribute HW_HANDOFF : string;
-  attribute HW_HANDOFF of cont_microblaze : entity is "cont_microblaze.hwdef";
+  attribute core_generation_info : string;
+  attribute core_generation_info of cont_microblaze : entity is "cont_microblaze,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=cont_microblaze,x_ipVersion=1.00.a,x_ipLanguage=VHDL,numBlks=24,numReposBlks=16,numNonXlnxBlks=1,numHierBlks=8,maxHierDepth=1,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=0,numPkgbdBlks=0,bdsource=USER,synth_mode=Global}";
+  attribute hw_handoff : string;
+  attribute hw_handoff of cont_microblaze : entity is "cont_microblaze.hwdef";
 end cont_microblaze;
 
 architecture STRUCTURE of cont_microblaze is
@@ -2621,6 +2622,7 @@ architecture STRUCTURE of cont_microblaze is
   end component cont_microblaze_xlconcat_0_0;
   signal ACK_I_1 : STD_LOGIC;
   signal DAT_I_1 : STD_LOGIC_VECTOR ( 31 downto 0 );
+  signal Reset1_1 : STD_LOGIC;
   signal Reset_1 : STD_LOGIC;
   signal axi_slave_wishbone_classic_master_0_ADR_O : STD_LOGIC_VECTOR ( 31 downto 0 );
   signal axi_slave_wishbone_classic_master_0_CYC_O : STD_LOGIC;
@@ -2803,10 +2805,10 @@ architecture STRUCTURE of cont_microblaze is
   signal NLW_axi_timer_0_generateout1_UNCONNECTED : STD_LOGIC;
   signal NLW_axi_timer_0_pwm0_UNCONNECTED : STD_LOGIC;
   signal NLW_rst_Clk_100M_peripheral_reset_UNCONNECTED : STD_LOGIC_VECTOR ( 0 to 0 );
-  attribute BMM_INFO_PROCESSOR : string;
-  attribute BMM_INFO_PROCESSOR of microblaze_0 : label is "microblaze-le > cont_microblaze microblaze_0_local_memory/dlmb_bram_if_cntlr";
   attribute KEEP_HIERARCHY : string;
   attribute KEEP_HIERARCHY of microblaze_0 : label is "yes";
+  attribute bmm_info_processor : string;
+  attribute bmm_info_processor of microblaze_0 : label is "microblaze-le > cont_microblaze microblaze_0_local_memory/dlmb_bram_if_cntlr";
 begin
   ACK_I_1 <= ACK_I;
   ADR_O(31 downto 0) <= axi_slave_wishbone_classic_master_0_ADR_O(31 downto 0);
@@ -2814,6 +2816,7 @@ begin
   DAT_I_1(31 downto 0) <= DAT_I(31 downto 0);
   DAT_O(31 downto 0) <= axi_slave_wishbone_classic_master_0_DAT_O(31 downto 0);
   RST_O <= axi_slave_wishbone_classic_master_0_RST_O;
+  Reset1_1 <= dcm_locked;
   Reset_1 <= Reset;
   SEL_O(3 downto 0) <= axi_slave_wishbone_classic_master_0_SEL_O(3 downto 0);
   STB_O <= axi_slave_wishbone_classic_master_0_STB_O;
@@ -3252,7 +3255,7 @@ rst_Clk_100M: component cont_microblaze_rst_Clk_100M_0
      port map (
       aux_reset_in => axi_timebase_wdt_0_wdt_reset,
       bus_struct_reset(0) => rst_Clk_100M_bus_struct_reset(0),
-      dcm_locked => '1',
+      dcm_locked => Reset1_1,
       ext_reset_in => Reset_1,
       interconnect_aresetn(0) => rst_Clk_100M_interconnect_aresetn(0),
       mb_debug_sys_rst => mdm_1_debug_sys_rst,

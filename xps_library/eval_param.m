@@ -20,9 +20,9 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function result = eval_param(blk,param_name)
+function result = eval_param(blk, param_name)
 
-param_str = get_param(blk,param_name);
+param_str = get_param(blk, param_name);
 result = param_str;
 
 % If param_str is empty, we're done!
@@ -45,46 +45,56 @@ end
 %
 % Parse mask variable index from matched portion of MaskVariables.
 % (Is there a better way to do this?)
-mv_idx = str2num(regexp(mv_match, '\d+', 'match', 'once'));
+mv_idx = str2double(regexp(mv_match, '\d+', 'match', 'once'));
 % Get cell array of all mask styles
 mask_styles = get_param(blk, 'MaskStyles');
 if ~strcmp(mask_styles{mv_idx}, 'edit')
   return;
 end
 
+% can we eval the string?
 try
     result = eval(param_str);
-catch
-
-	parents = {};
-	parent = blk;
-	while ~isempty(parent)
-		parents = [{parent},parents];
-		parent = get_param(parent,'parent');
-	end
-
-	for i=1:length(parents)
-		parent = parents{i};
-		if strcmp(get_param(parent,'type'),'block_diagram')
-			ws = get_param(parent,'ModelWorkSpace');
-			if ismethod(ws, 'whos')
-				ws_arry = ws.whos;
-				for i=1:length(ws_arry)
-					ws_var = ws_arry(i);
-						val = ws.evalin(ws_var.name);
-					eval([ws_var.name,' = val;']);
-				end
-			end
-		elseif strcmp(get_param(parent,'type'),'block')
-			ws_arry = get_param(parent,'MaskWSVariables');
-			for i=1:length(ws_arry)
-			    eval([ws_arry(i).Name,' = ws_arry(i).Value;']);
-			end
-		else
-			error('Unsupported block type');
-		end
-	end
-
-	result = eval(param_str);
-
+    return;
 end
+
+% look in parents
+parents = {};
+parent = blk;
+while ~isempty(parent)
+    parents = [{parent}, parents];
+    parent = get_param(parent, 'parent');
+end
+for parent_ctr = 1:length(parents)
+    parent = parents{parent_ctr};
+    if strcmp(get_param(parent,'type'),'block_diagram')
+        ws = get_param(parent,'ModelWorkSpace');
+        if ismethod(ws, 'whos')
+            ws_arry = ws.whos;
+            for ctr = 1:length(ws_arry)
+                ws_var = ws_arry(ctr);
+                val = ws.evalin(ws_var.name);
+                eval([ws_var.name, ' = val;']);
+            end
+        end
+    elseif strcmp(get_param(parent,'type'),'block')
+        ws_arry = get_param(parent,'MaskWSVariables');
+        for ctr = 1:length(ws_arry)
+            eval([ws_arry(ctr).Name,' = ws_arry(ctr).Value;']);
+        end
+    else
+        error('Unsupported block type');
+    end
+end
+try
+    result = eval(param_str);
+    return;
+end
+
+% as a last attempt, look in the base workspace for the variable
+try
+    result = evalin('base', param_str);
+    return;
+end
+
+error('Could not evaluate parameter %s, value "%s", for block %s.', param_name, param_str, blk);

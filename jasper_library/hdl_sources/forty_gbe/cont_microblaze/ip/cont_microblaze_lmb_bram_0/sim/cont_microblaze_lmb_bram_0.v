@@ -1,4 +1,4 @@
-// (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
+// (c) Copyright 1995-2018 Xilinx, Inc. All rights reserved.
 // 
 // This file contains confidential and proprietary information
 // of Xilinx, Inc. and is protected under U.S. and
@@ -131,8 +131,8 @@ output wire [31 : 0] doutb;
     .C_WRITE_MODE_A("WRITE_FIRST"),
     .C_WRITE_WIDTH_A(32),
     .C_READ_WIDTH_A(32),
-    .C_WRITE_DEPTH_A(32768),
-    .C_READ_DEPTH_A(32768),
+    .C_WRITE_DEPTH_A(65536),
+    .C_READ_DEPTH_A(65536),
     .C_ADDRA_WIDTH(32),
     .C_HAS_RSTB(1),
     .C_RST_PRIORITY_B("CE"),
@@ -145,8 +145,8 @@ output wire [31 : 0] doutb;
     .C_WRITE_MODE_B("WRITE_FIRST"),
     .C_WRITE_WIDTH_B(32),
     .C_READ_WIDTH_B(32),
-    .C_WRITE_DEPTH_B(32768),
-    .C_READ_DEPTH_B(32768),
+    .C_WRITE_DEPTH_B(65536),
+    .C_READ_DEPTH_B(65536),
     .C_ADDRB_WIDTH(32),
     .C_HAS_MEM_OUTPUT_REGS_A(0),
     .C_HAS_MEM_OUTPUT_REGS_B(0),
@@ -170,9 +170,9 @@ output wire [31 : 0] doutb;
     .C_EN_SHUTDOWN_PIN(0),
     .C_EN_SAFETY_CKT(0),
     .C_DISABLE_WARN_BHV_RANGE(0),
-    .C_COUNT_36K_BRAM("32"),
+    .C_COUNT_36K_BRAM("64"),
     .C_COUNT_18K_BRAM("0"),
-    .C_EST_POWER_SUMMARY("Estimated Power for IP     :     20.388 mW")
+    .C_EST_POWER_SUMMARY("Estimated Power for IP     :     20.388004 mW")
   ) inst (
     .clka(clka),
     .rsta(rsta),

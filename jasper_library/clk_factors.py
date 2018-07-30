@@ -36,11 +36,11 @@ def clk_factors (clk_freq, target_freq):
     PeriodHalfns = Periodns/2;
 
 
-    print closest_freq
-    print sys_clk_VCO
-    print Period
-    print PeriodHalf
+    #print closest_freq
+    #print sys_clk_VCO
+    #print Period
+    #print PeriodHalf
 
     return float(bestM), float(bestD), bestDD, float(Periodns), float(PeriodHalfns)
 
-print clk_factors(200,161)
+#print clk_factors(200,161)

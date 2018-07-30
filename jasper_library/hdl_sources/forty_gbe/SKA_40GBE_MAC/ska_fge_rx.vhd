@@ -665,11 +665,15 @@ begin
         end if;
     end process;
 
-    app_dvld <= payload0_val or payload1_val or payload2_val or payload3_val;
+    app_dvld <= (payload0_val or payload1_val or payload2_val or payload3_val) when (app_rst = '0') else '0';
     app_goodframe <= 
-    (application_frame and app_rx_good_frame_latched) when ((app_dvld = '0')and(app_dvld_z1 = '1')) else '0';
+    (application_frame and app_rx_good_frame_latched) when ((app_dvld = '0')and(app_dvld_z1 = '1')and(app_rst = '0')) else '0';
+    --app_badframe <= 
+    --(application_frame and app_rx_bad_frame_latched) when ((app_dvld = '0')and(app_dvld_z1 = '1')and(app_rst = '0')) else '0';
+    --AI: Allow bad frames to be routed through
     app_badframe <= 
-    (application_frame and app_rx_bad_frame_latched) when ((app_dvld = '0')and(app_dvld_z1 = '1')) else '0';
+    (app_rx_bad_frame_latched) when ((app_dvld = '0')and(app_dvld_z1 = '1')and(app_rst = '0')) else '0';
+
 
     gen_app_dvld_z1 : process(mac_clk)
     begin
@@ -982,11 +986,11 @@ begin
 ---------------------------------------------------------------------------------------------
 
     rx_eof <= '1' when
-    ((app_goodframe = '1')or
+    (((app_goodframe = '1')or
     (app_badframe = '1')or
-    ((app_dvld = '1')and((packet_fifo_almost_full = '1')or(ctrl_fifo_almost_full = '1')or(txctrl_fifo_almost_full = '1')))) else '0';
-    rx_bad <= app_badframe;
-    rx_over <= packet_fifo_almost_full or ctrl_fifo_almost_full or txctrl_fifo_almost_full;
+    ((app_dvld = '1')and((packet_fifo_almost_full = '1')or(ctrl_fifo_almost_full = '1')or(txctrl_fifo_almost_full = '1'))))and(app_rst = '0')) else '0';
+    rx_bad <= app_badframe when (app_rst = '0') else '0';
+    rx_over <= (packet_fifo_almost_full or ctrl_fifo_almost_full or txctrl_fifo_almost_full) when (app_rst = '0') else '0';
 
     packet_fifo_wr_data(255 downto 0) <= payload3_z1 & payload2_z1 & payload1_z1 & payload0_z1;
     packet_fifo_wr_data(256) <= payload0_val_z1;
@@ -997,9 +1001,10 @@ begin
     packet_fifo_wr_data(261) <= rx_bad;
     packet_fifo_wr_data(262) <= rx_over;
 
+    --AI: Alway deassert FIFO write when reset is asserted
     packet_fifo_wr_en <= '1' when
     ((app_dvld_z1  = '1')and
-    (current_app_state = APP_RUN)) else '0';
+    (current_app_state = APP_RUN) and (app_rst = '0')) else '0';
     
     ska_rx_packet_fifo_0 : ska_rx_packet_fifo
     port map(
@@ -1013,8 +1018,9 @@ begin
         full        => open,
         empty       => packet_fifo_empty,
         prog_full   => packet_fifo_almost_full);
-
-    packet_fifo_rd_en <= app_rx_ack;
+        
+    --AI: Alway deassert FIFO read when reset is asserted 
+    packet_fifo_rd_en <= app_rx_ack and (not app_rst);
     
     app_rx_valid        <= packet_fifo_rd_data(259 downto 256) when (packet_fifo_empty = '0') else (others => '0');
     app_rx_end_of_frame <= packet_fifo_rd_data(260);
@@ -1023,7 +1029,8 @@ begin
     app_rx_data         <= packet_fifo_rd_data(255 downto 0);
     
     ctrl_fifo_wr_data <= app_source_port & app_source_ip;
-    ctrl_fifo_wr_en   <= '1' when ((app_dvld = '1')and(first_word = '1')and(current_app_state = APP_RUN)) else '0';
+    --AI: Alway deassert FIFO write when reset is asserted
+    ctrl_fifo_wr_en   <= '1' when ((app_dvld = '1')and(first_word = '1')and(current_app_state = APP_RUN)and(app_rst = '0')) else '0';
     txctrl_fifo_wr_data <= destination_port & destination_ip;
     --txctrl_fifo_wr_en   <= '1' when ((app_dvld = '1')and(first_word = '1')and(current_app_state = APP_RUN)) else '0';
 
@@ -1039,8 +1046,9 @@ begin
         full        => open,
         empty       => ctrl_fifo_empty,
         prog_full   => ctrl_fifo_almost_full);
-    
-    ctrl_fifo_rd_en <= app_rx_ack and  packet_fifo_rd_data(260) and packet_fifo_rd_data(256);
+   
+    --AI: Alway deassert FIFO read when reset is asserted
+    ctrl_fifo_rd_en <= app_rx_ack and  packet_fifo_rd_data(260) and packet_fifo_rd_data(256) and (not app_rst);
     
     app_rx_source_ip   <= ctrl_fifo_rd_data(31 downto 0);
     app_rx_source_port <= ctrl_fifo_rd_data(47 downto 32);
@@ -1112,6 +1120,7 @@ begin
     begin
         if (app_rst = '1')then
             app_overrun_ack <= '1';
+            overrun_z1 <= '0';
         elsif (rising_edge(app_clk))then    
             if (current_app_state = APP_OVER)then
                 overrun_z1 <= '1';
