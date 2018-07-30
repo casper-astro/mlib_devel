@@ -127,8 +127,6 @@ function xps_build_new_library(source_dir,lib_name)
         add_block('built-in/Note',[lib_name,'/GNUlicense'],'Position',lic_position,'Text',lic_text);
     end
     disp('Finished build, saving library...')
-    % lock the library
-    set_param(lib_name,'Lock','on');
     % Finished, so save the new library
     cd ..
     save_system(lib_name);
