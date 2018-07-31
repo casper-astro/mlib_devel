@@ -1,7 +1,0 @@
-lib qdr_controller_v1_00_a qdr_controller.v       verilog
-lib qdr_controller_v1_00_a qdrc_infrastructure.v  verilog
-lib qdr_controller_v1_00_a qdrc_rd.v              verilog
-lib qdr_controller_v1_00_a qdrc_wr.v              verilog
-lib qdr_controller_v1_00_a rt_var_delay.v         verilog
-lib qdr_controller_v1_00_a chipscope_icon.v       verilog
-lib qdr_controller_v1_00_a chipscope_ila.v        verilog
