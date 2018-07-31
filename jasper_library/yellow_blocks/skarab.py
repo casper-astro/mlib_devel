@@ -5,7 +5,7 @@ from constraints import ClockConstraint, PortConstraint, RawConstraint
 class skarab(YellowBlock):
     def initialize(self):
         self.add_source('infrastructure')
-        self.add_source('wbs_arbiter')
+        self.add_source('wbs_arbiter_skarab')
         pass
 
     def modify_top(self,top):
