@@ -90,7 +90,7 @@ function bus_addsub_init(blk, varargin)
   end
   
     % Check for floating point
-  if floating_point
+  if floating_point == 1
       float_en = 'on';
       
       if float_type == 2
@@ -112,7 +112,7 @@ function bus_addsub_init(blk, varargin)
   
   % Check if floating point is selected. If so, set the bit widths
   % accordingly. Note: A reinterpret block follows the 
-  if floating_point
+  if floating_point == 1
         preci_type = 'Full';
         
         switch float_type
