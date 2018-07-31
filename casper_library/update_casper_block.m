@@ -91,6 +91,43 @@ function update_casper_block(oldblk)
     hw_sys = get_param(oldblk, 'hw_sys');
     platform = split(hw_sys, ':');
     srcblk = ['xps_library/Platforms/' char(platform(1))];
+
+  case 'xps_library/IO/gpio'
+    % set the real io_group parameter, now named 'io_group_real'
+    % this is a hack in order to deprecate the old io_group parameters that had
+    % platform names in the parameter like ROACH:led, so that a user's model
+    % will hold its parameter when updating to the new xps_library
+    cursys = oldblk;
+    % check to see if the io_group params have already been forwarded
+    if (strcmp(get_param(cursys, 'io_group_params_forwarded'), 'off'))
+      io_group_string = get_param(cursys, 'io_group');
+      switch io_group_string
+        case {'ROACH:led', 'ROACH2:led'}
+            set_param(cursys, 'io_group_real', 'led');
+        case {'ROACH:gpioa', 'ROACH:gpioa_oe_n', 'ROACH:gpiob', ...
+              'ROACH:gpiob_oe_n', 'ROACH2:gpio'}
+            set_param(cursys, 'io_group_real', 'gpio');
+        case 'ROACH2:sync_in'
+            set_param(cursys, 'io_group_real', 'sync_in');
+        case 'ROACH2:sync_out'
+            set_param(cursys, 'io_group_real', 'sync_out');
+        case {'ROACH:zdok0', 'ROACH2:zdok0'}
+            set_param(cursys, 'io_group_real', 'zdok0');
+        case {'ROACH:zdok1', 'ROACH2:zdok1'}
+            set_param(cursys, 'io_group_real', 'zdok1');
+        case {'ROACH:aux0_clk' 'ROACH:aux1_clk' 'ROACH2:aux_clk'}
+            set_param(cursys, 'io_group_real', 'aux_clk_diff');
+        case 'custom:custom'
+            set_param(cursys, 'io_group_real', 'custom');
+        otherwise
+            % strip off parameter and insert to custom io_group param
+            set_param(cursys, 'io_group_real', 'custom');
+            customValue = strsplit(io_group_string, ':');
+            set_param(cursys, 'io_group_custom', char(customValue(2)));
+      end
+      % update hidden checkbox to indicate the io_group_params have now been forwarded
+      set_param(cursys, 'io_group_params_forwarded', 'on');
+    end
   end % special deprecated handling
 
   % Make sure srcblk's block diagram is loaded
