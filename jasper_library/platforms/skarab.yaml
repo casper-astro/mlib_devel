@@ -705,6 +705,90 @@ pins:
       - K7
       - J5
       - H7
+  MEZ3_REFCLK_1_P:
+    loc: N10
+  MEZ3_REFCLK_1_N:
+    loc: N9
+  MEZ3_PHY12_LANE_TX_N:
+    loc:
+      - V3
+      - U1
+      - T3
+      - R1
+  MEZ3_PHY12_LANE_RX_P:
+    loc:
+      - R6
+      - P8
+      - N6
+      - M8
+  MEZ3_PHY12_LANE_TX_P:
+    loc:
+      - V4
+      - U2
+      - T4
+      - R2
+  MEZ3_PHY12_LANE_RX_N:
+    loc:
+      - R5
+      - P7
+      - M5
+      - M7
+  MEZ3_REFCLK_2_P:
+    loc: U10
+  MEZ3_REFCLK_2_N:
+    loc: U9
+  MEZ3_PHY21_LANE_TX_N:
+    loc:
+      - AB3
+      - AA1
+      - Y3
+      - W1
+  MEZ3_PHY21_LANE_RX_P:
+    loc:
+      - W6
+      - V8
+      - U6
+      - T8
+  MEZ3_PHY21_LANE_TX_P:
+    loc:
+      - AB4
+      - AA2
+      - Y4
+      - W2
+  MEZ3_PHY21_LANE_RX_N:
+    loc:
+      - W5
+      - V7
+      - U5
+      - T7
+  MEZ3_REFCLK_3_P:
+    loc: AA10
+  MEZ3_REFCLK_3_N:
+    loc: AA9
+  MEZ3_PHY22_LANE_TX_N:
+    loc:
+      - AF3
+      - AE1
+      - AD3
+      - AC1
+  MEZ3_PHY22_LANE_RX_P:
+    loc:
+      - AD8 #TODO
+      - AC6 #TODO
+      - AA6
+      - Y8
+  MEZ3_PHY22_LANE_TX_P:
+    loc:
+      - AF4
+      - AE2
+      - AD4
+      - AC2
+  MEZ3_PHY22_LANE_RX_N:
+    loc:
+      - AD7 #TODO
+      - AC5 #TODO
+      - AA5
+      - Y7
   I2C_RESET_FPGA:
     iostd: LVCMOS18
     loc: BC19
