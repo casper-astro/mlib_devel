@@ -34,6 +34,7 @@ class forty_gbe(YellowBlock):
         inst.add_parameter('FABRIC_ENABLE',  " 1'b%x"%self.fab_en)
         inst.add_parameter('TTL',            " 8'h%x"%self.ttl)
         inst.add_parameter('PROMISC_MODE',   " 1'b%x"%self.promisc_mode)
+        inst.add_parameter('PORT',           " 2'h%x"%self.port)
 
         inst.add_port('user_clk_o', 'sys_clk', dir='out')
         inst.add_port('user_rst_o', 'sys_rst', dir='out')
