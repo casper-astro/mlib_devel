@@ -97,7 +97,7 @@ function update_casper_block(oldblk)
     % this is a hack in order to deprecate the old io_group parameters that had
     % platform names in the parameter like ROACH:led, so that a user's model
     % will hold its parameter when updating to the new xps_library
-    cursys = gcb;
+    cursys = oldblk;
     % check to see if the io_group params have already been forwarded
     if (strcmp(get_param(cursys, 'io_group_params_forwarded'), 'off'))
       io_group_string = get_param(cursys, 'io_group');
