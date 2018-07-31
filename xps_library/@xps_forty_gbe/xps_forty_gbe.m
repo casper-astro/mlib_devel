@@ -51,7 +51,7 @@ s.ttl            = ['0x', dec2hex(eval(get_param(blk_name, 'ttl')))   ];
 %convert (more intuitive) mask values to defines to be passed on if using ROACH2
 switch s.hw_sys
   case {'SKARAB'},
-    s.port = get_param(blk_name, 'port_r1');
+    s.port = get_param(blk_name, 'port');
 end
 
 b = class(s,'xps_forty_gbe',blk_obj);
@@ -78,6 +78,7 @@ parameters.RX_DIST_RAM    = s.rx_dist_ram;
 parameters.CPU_RX_ENABLE  = s.cpu_rx_enable;
 parameters.CPU_TX_ENABLE  = s.cpu_tx_enable;
 parameters.TTL            = s.ttl;
+parameters.PORT           = s.port;
 
 b = set(b,'parameters',parameters);
 
