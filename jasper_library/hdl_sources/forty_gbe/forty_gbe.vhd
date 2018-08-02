@@ -42,6 +42,7 @@ entity forty_gbe is
         FABRIC_GATEWAY    : std_logic_vector( 7 downto 0);
         FABRIC_ENABLE     : std_logic;
         TTL               : std_logic_vector( 7 downto 0);
+        PORT              : std_logic_vector( 1 downto 0);
         PROMISC_MODE      : integer;
         RX_CRC_CHK_ENABLE : integer := 0);
     port(
@@ -63,6 +64,30 @@ entity forty_gbe is
         MEZ3_PHY11_LANE_RX_N : in  std_logic_vector(3 downto 0);
         MEZ3_PHY11_LANE_TX_P : out std_logic_vector(3 downto 0);
         MEZ3_PHY11_LANE_TX_N : out std_logic_vector(3 downto 0);
+
+
+        MEZ3_REFCLK_1_P      : in  std_logic;
+        MEZ3_REFCLK_1_N      : in  std_logic;
+        MEZ3_PHY12_LANE_RX_P : in  std_logic_vector(3 downto 0);
+        MEZ3_PHY12_LANE_RX_N : in  std_logic_vector(3 downto 0);
+        MEZ3_PHY12_LANE_TX_P : out std_logic_vector(3 downto 0);
+        MEZ3_PHY12_LANE_TX_N : out std_logic_vector(3 downto 0);
+
+
+        MEZ3_REFCLK_2_P      : in  std_logic;
+        MEZ3_REFCLK_2_N      : in  std_logic;
+        MEZ3_PHY21_LANE_RX_P : in  std_logic_vector(3 downto 0);
+        MEZ3_PHY21_LANE_RX_N : in  std_logic_vector(3 downto 0);
+        MEZ3_PHY21_LANE_TX_P : out std_logic_vector(3 downto 0);
+        MEZ3_PHY21_LANE_TX_N : out std_logic_vector(3 downto 0);
+
+
+        MEZ3_REFCLK_3_P      : in  std_logic;
+        MEZ3_REFCLK_3_N      : in  std_logic;
+        MEZ3_PHY22_LANE_RX_P : in  std_logic_vector(3 downto 0);
+        MEZ3_PHY22_LANE_RX_N : in  std_logic_vector(3 downto 0);
+        MEZ3_PHY22_LANE_TX_P : out std_logic_vector(3 downto 0);
+        MEZ3_PHY22_LANE_TX_N : out std_logic_vector(3 downto 0);
         
 		-- MEZZANINE 0 SIDEBAND SIGNALS
         MEZZANINE_0_PRESENT_N : in std_logic;
@@ -1268,6 +1293,11 @@ architecture arch_forty_gbe of forty_gbe is
     --Mezzanine 3 
     signal MEZZ3_ID : std_logic_vector(2 downto 0);
     signal MEZZ3_PRESENT : std_logic;
+
+    signal FABRIC_MAC_0        : std_logic_vector(47 downto 0);
+    signal FABRIC_MAC_1        : std_logic_vector(47 downto 0);
+    signal FABRIC_MAC_2        : std_logic_vector(47 downto 0);
+    signal FABRIC_MAC_3        : std_logic_vector(47 downto 0);
     
     -- Mark Debug ILA Testing    
 --    signal dbg_wb_cross_clock_out_din : std_logic_vector(72 downto 0);
@@ -1377,6 +1407,7 @@ begin
 
     EMCCLK_FIX <= EMCCLK;
 
+    -- Switch based on PORT ?
     xlgmii_tx_valid        <= forty_gbe_tx_valid;
     xlgmii_tx_end_of_frame <= forty_gbe_tx_end_of_frame;
     xlgmii_tx_data         <= forty_gbe_tx_data(63 downto 0) & forty_gbe_tx_data(127 downto 64) & forty_gbe_tx_data(191 downto 128) &  forty_gbe_tx_data(255 downto 192);
@@ -1386,6 +1417,8 @@ begin
     --xlgmii_rx_ack          <= forty_gbe_rx_ack;
     forty_gbe_led_rx <= xlgmii_rxled(0)(1); -- xlgmii_rxled(0)(1) is activity, xlgmii_rxled(0)(0) is phy rx up
     forty_gbe_led_tx <= xlgmii_txled(0)(1); -- xlgmii_txled(0)(1) is activity, xlgmii_txled(0)(0) is phy tx up
+
+    -- Switch based on PORT
     forty_gbe_led_up <= phy_rx_up(0);
 
     forty_gbe_tx_overflow     <= xlgmii_tx_overflow;
@@ -2471,7 +2504,7 @@ begin
         SEL_I => WB_SLV_SEL_I(10),
         STB_I => WB_SLV_STB_I(10),
         WE_I  => WB_SLV_WE_I(10),
-        xlgmii_txclk    => sys_clk,
+        xlgmii_txclk    => sys_clk,cpu
         xlgmii_txrst    => sys_rst,
         xlgmii_txd      => xlgmii_txd(0),
         xlgmii_txc      => xlgmii_txc(0),
