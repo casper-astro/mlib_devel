@@ -20,6 +20,10 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Create yellow block(s) supporting upto 4x 40GbE links.
+% Amit Bansod, abansod@bansod.org
+
+
 function forty_gbe_mask(blk)
 
     function add_line_s(sys, srcprt, dstprt)
@@ -46,88 +50,138 @@ function forty_gbe_mask(blk)
         end
     end
 
+clog('entering forge_gbe', 'trace');
+
 cursys = blk;
 set_param(cursys, 'LinkStatus', 'inactive');
 
+try
+    num_qsfp_ports = str2num(get_param(cursys, 'port'));
+catch
+    num_qsfp_ports = 1;
+end
+
+% Delete all wires.
+delete_lines(blk);
+
 % rename gateways
-gateway_ins = find_system(cursys, 'searchdepth', 1, 'FollowLinks', ...
-    'on', 'lookundermasks', 'all', 'masktype', 'Xilinx Gateway In Block');
-for ctr = 1 : length(gateway_ins)
-    gw = gateway_ins{ctr};
-    if regexp(get_param(gw, 'Name'), '_tx_afull$')
-        set_param(gw, 'Name', clear_name([cursys, '_tx_afull']));
-    elseif regexp(get_param(gw, 'Name'), '_tx_overflow$')
-        set_param(gw, 'Name', clear_name([cursys, '_tx_overflow']));
-    elseif regexp(get_param(gw, 'Name'), '_rx_valid$')
-        set_param(gw, 'Name', clear_name([cursys, '_rx_valid']));
-    elseif regexp(get_param(gw, 'Name'), '_rx_data$')
-        set_param(gw, 'Name', clear_name([cursys, '_rx_data']));
-    elseif regexp(get_param(gw, 'Name'), '_rx_source_ip$')
-        set_param(gw, 'Name', clear_name([cursys, '_rx_source_ip']));
-    elseif regexp(get_param(gw, 'Name'), '_rx_source_port$')
-        set_param(gw, 'Name', clear_name([cursys, '_rx_source_port']));
-    elseif regexp(get_param(gw, 'Name'), '_rx_dest_ip$')
-        set_param(gw, 'Name', clear_name([cursys, '_rx_dest_ip']));
-    elseif regexp(get_param(gw, 'Name'), '_rx_dest_port$')
-        set_param(gw, 'Name', clear_name([cursys, '_rx_dest_port']));
-    elseif regexp(get_param(gw, 'Name'), '_rx_end_of_frame$')
-        set_param(gw, 'Name', clear_name([cursys, '_rx_end_of_frame']));
-    elseif regexp(get_param(gw, 'Name'), '_rx_bad_frame$')
-        set_param(gw, 'Name', clear_name([cursys, '_rx_bad_frame']));
-    elseif regexp(get_param(gw, 'Name'), '_rx_overrun$')
-        set_param(gw, 'Name', clear_name([cursys, '_rx_overrun']));
-    elseif regexp(get_param(gw, 'Name'), '_led_up$')
-        set_param(gw, 'Name', clear_name([cursys, '_led_up']));
-    elseif regexp(get_param(gw, 'Name'), '_led_rx$')
-        set_param(gw, 'Name', clear_name([cursys, '_led_rx']));
-    elseif regexp(get_param(gw, 'Name'), '_led_tx$')
-        set_param(gw, 'Name', clear_name([cursys, '_led_tx']));
-    elseif regexp(get_param(gw, 'Name'), '_rx_size$')
-        set_param(gw, 'Name', clear_name([cursys, '_rx_size']));
-    else
-        errordlg(['Unknown gateway: ', get_param(gw, 'Parent'), '/', ...
-            get_param(gw, 'Name')]);
-    end
-end
-gateway_outs = find_system(cursys, 'searchdepth', 1, ...
-    'FollowLinks', 'on', 'lookundermasks', 'all', ...
-    'masktype', 'Xilinx Gateway Out Block');
-for ctr = 1 : length(gateway_outs)
-    gw = gateway_outs{ctr};
-    if regexp(get_param(gw, 'Name'), '_rst$')
-        set_param(gw, 'Name', clear_name([cursys, '_rst']));
-    elseif regexp(get_param(gw, 'Name'), '_tx_valid$')
-        set_param(gw, 'Name', clear_name([cursys, '_tx_valid']));
-    elseif regexp(get_param(gw, 'Name'), '_tx_end_of_frame$')
-        set_param(gw, 'Name', clear_name([cursys, '_tx_end_of_frame']));
-    elseif regexp(get_param(gw, 'Name'), '_tx_discard$')
-        set_param(gw, 'Name', clear_name([cursys, '_tx_discard']));
-    elseif regexp(get_param(gw, 'Name'), '_tx_data$')
-        set_param(gw, 'Name', clear_name([cursys, '_tx_data']));
-    elseif regexp(get_param(gw, 'Name'), '_tx_dest_ip$')
-        set_param(gw, 'Name', clear_name([cursys, '_tx_dest_ip']));
-    elseif regexp(get_param(gw, 'Name'), '_tx_dest_port$')
-        set_param(gw, 'Name', clear_name([cursys, '_tx_dest_port']));
-    elseif regexp(get_param(gw, 'Name'), '_rx_ack$')
-        set_param(gw, 'Name', clear_name([cursys, '_rx_ack']));
-    elseif regexp(get_param(gw, 'Name'), '_rx_overrun_ack$')
-        set_param(gw, 'Name', clear_name([cursys, '_rx_overrun_ack']));
-    else
-        errordlg(['Unknown gateway: ', get_param(gw, 'Parent'), '/', ...
-            get_param(gw, 'Name')]);
-    end
-end
+% gateway_ins = find_system(cursys, 'searchdepth', 1, 'FollowLinks', ...
+%     'on', 'lookundermasks', 'all', 'masktype', 'Xilinx Gateway In Block');
+
+
+% initialize gateways based on number of QSFP Ports
+gateway_ins = { {clear_name([cursys, '_tx_afull']);'Boolean';'1'}; ...
+                {clear_name([cursys, '_tx_overflow']);'Boolean';'1'}; ...
+                {clear_name([cursys, '_rx_valid']);'Unsigned';'4'}; ...
+                {clear_name([cursys, '_rx_data']);'Unsigned';'256'}; ...
+                {clear_name([cursys, '_rx_source_ip']);'Unsigned';'32'}; ...
+                {clear_name([cursys, '_rx_source_port']);'Unsigned';'16'}; ...
+                {clear_name([cursys, '_rx_dest_ip']);'Unsigned';'32'}; ...
+                {clear_name([cursys, '_rx_dest_port']);'Unsigned';'16'}; ...
+                {clear_name([cursys, '_rx_end_of_frame']);'Boolean';'1'}; 
+                {clear_name([cursys, '_rx_bad_frame']);'Boolean';'1'}; ...
+                {clear_name([cursys, '_rx_overrun']);'Boolean';'1'}; ...
+                {clear_name([cursys, '_led_up']);'Boolean';'1'}; ...
+                {clear_name([cursys, '_led_rx']);'Boolean';'1'}; ...
+                {clear_name([cursys, '_led_tx']);'Boolean';'1'}; ...
+                };
+
+for s=1:num_qsfp_ports
+  for ctr = 1 : length(gateway_ins) 
+      gw = gateway_ins{ctr}{1};
+       type = gateway_ins{ctr}{2};
+       bits = gateway_ins{ctr}{3};
+        reuse_block(cursys, strcat(gw,num2str(s)), 'xbsBasic_r4/Gateway In', ...
+            'arith_type', type, 'n_bits', bits, 'bin_pt', '0', ...
+            'quantization', 'Truncate', 'overflow', 'Wrap', ...
+            'Position', [900 (s*800)+127+(ctr*50) 1000 157+(s*800)+(ctr*50)]);
+        reuse_block(cursys, strcat(gw((length(cursys)+2):length(gw) ),num2str(s),'_const'), 'simulink/Commonly Used Blocks/Constant', ...
+            'Position', [850 (s*800)+127+(ctr*50) 875 157+(s*800)+(ctr*50)]);
+         reuse_block(cursys, strcat(gw((length(cursys)+2):length(gw) ),num2str(s),'_pipe'), 'casper_library_delays/pipeline', ...
+            'latency', '3', 'Position', [1100 (s*800)+127+(ctr*50) 1150 157+(s*800)+(ctr*50)]);
+         reuse_block(cursys, strcat(gw((length(cursys)+2):length(gw)),num2str(s)), 'built-in/outport', 'Port', num2str(s*length(gateway_ins)), ...
+            'Position', [1450 (s*800)+127+(ctr*50) 1500 157+(s*800)+(ctr*50)]);
+        add_line(cursys,strcat(gw((length(cursys)+2):length(gw) ),num2str(s),'_const/1'),strcat(gw,num2str(s),'/1'));
+        add_line(cursys,strcat(gw,num2str(s),'/1'), strcat(gw((length(cursys)+2):length(gw) ),num2str(s),'_pipe/1'));
+        add_line(cursys,strcat(gw((length(cursys)+2):length(gw) ),num2str(s),'_pipe/1'),strcat(gw((length(cursys)+2):length(gw)),num2str(s),'/1'));
+  end %for ctr
+  reuse_block(cursys, strcat('rx_vld_bus',num2str(s)), 'casper_library_flow_control/bus_expand', ...
+            'mode', 'divisions of equal size', 'outputNum', '4', 'outputWidth', '1', 'outputBinaryPt', '0', ...
+            'outputArithmeticType', '2', ...
+            'Position', [1650 (s*800)+127+50 1700 157+(s*800)+50]);
+   reuse_block(cursys, strcat('rx_vld_or',num2str(s)), 'xbsIndex_r4/Logical', ...
+            'logical_function', 'OR', ...
+            'inputs', '4', 'Position', [1720 (s*800)+127 1730 157+(s*800)]);
+   reuse_block(cursys, strcat('rx_vld_or_out_',num2str(s),'_pipe'), 'casper_library_delays/pipeline', ...
+            'latency', '2', 'Position', [1750 (s*800)+127 1800 157+(s*800)]);
+   reuse_block(cursys, strcat('rx_eof',num2str(s),'_pipe'), 'casper_library_delays/pipeline', ...
+            'latency', '2', 'Position', [1750 (s*800)+177 1800 197+(s*800)]);
+  add_line(cursys,strcat('rx_valid',num2str(s),'_pipe/1'),strcat('rx_vld_bus',num2str(s),'/1'));
+  add_line(cursys,strcat('rx_vld_bus',num2str(s),'/1'),strcat('rx_vld_or',num2str(s),'/1'));
+  add_line(cursys,strcat('rx_vld_bus',num2str(s),'/2'),strcat('rx_vld_or',num2str(s),'/2'));
+  add_line(cursys,strcat('rx_vld_bus',num2str(s),'/3'),strcat('rx_vld_or',num2str(s),'/3'));
+  add_line(cursys,strcat('rx_vld_bus',num2str(s),'/4'),strcat('rx_vld_or',num2str(s),'/4'));
+  add_line(cursys,strcat('rx_vld_or',num2str(s),'/1'),strcat('rx_vld_or_out_',num2str(s),'_pipe/1'));
+  add_line(cursys,strcat('rx_end_of_frame',num2str(s),'_pipe/1'),strcat('rx_eof',num2str(s),'_pipe/1'));
+  
+end %for s
+
+
+% gateway_outs = find_system(cursys, 'searchdepth', 1, ...
+%     'FollowLinks', 'on', 'lookundermasks', 'all', ...
+%     'masktype', 'Xilinx Gateway Out Block');
+
+% initialize gateways based on number of QSFP Ports
+gateway_outs = { {clear_name([cursys, '_tx_valid']);'Boolean';'1'}; ...
+                {clear_name([cursys, '_tx_end_of_frame']);'Boolean';'1'}; ...
+                {clear_name([cursys, '_tx_discard']);'Boolean';'1'}; ...
+                {clear_name([cursys, '_tx_data']);'Unsigned';'256'}; ...
+                {clear_name([cursys, '_tx_dest_ip']);'Unsigned';'32'}; ...
+                {clear_name([cursys, '_tx_dest_port']);'Unsigned';'16'}; ...
+                {clear_name([cursys, '_rx_ack']);'Boolean';'1'}; ...
+                {clear_name([cursys, '_rx_overrun_ack']);'Boolean';'1'}; ...
+                };
+
+            
+for s=1:num_qsfp_ports
+   for ctr = 1 : length(gateway_outs) 
+       gw = gateway_outs{ctr}{1};
+       type = gateway_outs{ctr}{2};
+       bits = gateway_outs{ctr}{3};
+          reuse_block(cursys, strcat(gw((length(cursys)+2):length(gw) ),num2str(s)), 'built-in/inport', 'Port', num2str(s*length(gateway_outs)), ...
+             'Position', [50 (s*800)+127+(ctr*50) 100 157+(s*800)+(ctr*50)]);
+          reuse_block(cursys, strcat(gw((length(cursys)+2):length(gw) ),num2str(s),'_apipe'), 'casper_library_delays/pipeline', ...
+             'latency', '3', 'Position', [120 (s*800)+127+(ctr*50) 150 157+(s*800)+(ctr*50)]);
+          reuse_block(cursys, strcat(gw((length(cursys)+2):length(gw) ),num2str(s),'_assert'), 'xbsBasic_r4/Assert', ...
+               'assert_type', 'on', 'type_source', 'Explicitly', 'arith_type', type, 'n_bits', bits, 'bin_pt', '0', ...
+              'assert_rate', 'on', 'rate_source', 'Explicitly', 'period', '1', 'output_port', 'on', ...
+              'Position', [170 (s*800)+127+(ctr*50) 200 157+(s*800)+(ctr*50)]);
+          reuse_block(cursys, strcat(gw((length(cursys)+2):length(gw) ),num2str(s),'_pipe'), 'casper_library_delays/pipeline', ...
+             'latency', '3', 'Position', [220 (s*800)+127+(ctr*50) 250 157+(s*800)+(ctr*50)]);
+          reuse_block(cursys, strcat(gw,num2str(s)), 'xbsBasic_r4/Gateway Out', ...
+              'Position', [400 (s*800)+127+(ctr*50) 500 157+(s*800)+(ctr*50)]);
+          reuse_block(cursys, strcat(num2str((s-1)*length(gateway_outs)+ctr),'_term'), 'built-in/Terminator', ...
+             'Position', [520 (s*800)+132+(ctr*50) 535 162+(s*900)+(ctr*50)]);
+          add_line(cursys,strcat(gw((length(cursys)+2):length(gw)),num2str(s),'/1'),strcat(gw((length(cursys)+2):length(gw) ),num2str(s),'_apipe/1'));
+          add_line(cursys,strcat(gw((length(cursys)+2):length(gw) ),num2str(s),'_apipe/1'),strcat(gw((length(cursys)+2):length(gw) ),num2str(s),'_assert/1'));
+          add_line(cursys,strcat(gw((length(cursys)+2):length(gw) ),num2str(s),'_assert/1'),strcat(gw((length(cursys)+2):length(gw) ),num2str(s),'_pipe/1'));
+          add_line(cursys,strcat(gw((length(cursys)+2):length(gw) ),num2str(s),'_pipe/1'),strcat(gw,num2str(s),'/1'));
+          add_line(cursys,strcat(gw,num2str(s),'/1'),strcat(num2str((s-1)*length(gateway_outs)+ctr),'_term/1'));         
+   end %for ctr
+ end %for s
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % do debug counters and supporting logic
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % make sure the terminator and port are there
-reuse_block(cursys, 'debug_rst', 'built-in/inport', 'Port', '9', ...
-    'Position', [120   130   150   146]);
-reuse_block(cursys, 'term1', 'built-in/Terminator', ...
-    'Position', [200   135   220   155]);
-add_line_s(cursys, 'debug_rst/1', 'term1/1');
+ reuse_block(cursys, 'debug_rst', 'built-in/inport', 'Port', num2str((num_qsfp_ports*length(gateway_outs))+1), ...
+     'Position', [120   730   150   746]);
+ reuse_block(cursys, 'term1', 'built-in/Terminator', ...
+     'Position', [200   735   220   755]);
+ add_line_s(cursys, 'debug_rst/1', 'term1/1');
 
 try
     debug_ctr_width = get_param(cursys, 'debug_ctr_width');
@@ -137,13 +191,15 @@ end
 
 % is this a recent version of the 40gbe block, with pipeline delays?
 try
-    test_name = [cursys, '/pipeline_led_up'];
+    test_name = [cursys, '/pipeline_led_up1_pipe'];
     get_param(test_name, 'Mask');
     pipe_no_pipe = 'pipeline';
 catch
     pipe_no_pipe = cursys;
 end
-valid_source = 'rx_dv_or';
+
+valid_source = 'rx_vld_bus_out';
+
 
 function draw_counter(sys, xpos, ypos, targetname, sourcename)
     ctr_name = [targetname, '_ctr'];
@@ -153,8 +209,7 @@ function draw_counter(sys, xpos, ypos, targetname, sourcename)
     delete_block_lines_s([sys, '/', delay_name]);
     draw_block = false;
     try
-        if ((strcmp(get_param(sys, targetname), 'on') == 1) || ...
-           (strcmp(get_param(sys, 'debug_en_all'), 'on') == 1)) && ...
+        if ((strcmp(get_param(sys, 'debug_en_all'), 'on') == 1)) && ...
            (strcmp(get_param(sys, 'debug_dis_all'), 'on') == 0)
             draw_block = true;
         end
@@ -192,22 +247,31 @@ function draw_errorcounter(sys, xpos, ypos, targetname, frame_len, sourceeof, so
     nobad_name = [targetname, '_nobad'];
     errchk_name = [targetname, '_errchk'];
     delay_name = [targetname, '_del'];
+    rst_pipe = [targetname,'_r_pipe'];
+    ctr_pipe = [targetname,'_c_pipe'];
+    vld_pipe = [targetname,'_v_pipe'];
+    eof_pipe = [targetname,'_e_pipe'];
+    bad_pipe = [targetname,'_b_pipe'];
     delete_block_lines_s([sys, '/', errchk_name]);
     delete_block_lines_s([sys, '/', nobad_name]);
     delete_block_lines_s([sys, '/', targetname]);
     delete_block_lines_s([sys, '/', ctr_name]);
     delete_block_lines_s([sys, '/', delay_name]);
+    delete_block_lines_s([sys, '/', rst_pipe]);
+    delete_block_lines_s([sys, '/', ctr_pipe]);
+    delete_block_lines_s([sys, '/', vld_pipe]);
+    delete_block_lines_s([sys, '/', eof_pipe]);
+    delete_block_lines_s([sys, '/', bad_pipe]);
     draw_block = false;
     try
-        if ((strcmp(get_param(sys, targetname), 'on') == 1) || ...
-           (strcmp(get_param(sys, 'debug_en_all'), 'on') == 1)) && ...
+        if ((strcmp(get_param(sys, 'debug_en_all'), 'on') == 1)) && ...
            (strcmp(get_param(sys, 'debug_dis_all'), 'on') == 0)
             draw_block = true;
         end
     catch
-        if strcmp(get_param(sys, targetname), 'on') == 1
-            draw_block = true;
-        end
+%         if strcmp(get_param(sys, targetname), 'on') == 1
+%             draw_block = true;
+%         end
     end
     if draw_block
         reuse_block(sys, delay_name, 'xbsIndex_r4/Delay', ...
@@ -220,27 +284,50 @@ function draw_errorcounter(sys, xpos, ypos, targetname, frame_len, sourceeof, so
         reuse_block(sys, errchk_name, 'casper_library_communications/frame_len_checker', ...
             'frame_len', frame_len, ...
             'Position', [xpos-100, ypos, xpos, ypos+45]);
+          reuse_block(sys, errchk_name_pipe, 'casper_library_delays/pipeline', ...
+             'latency', '3', 'Position', [xpos+10 ypos xpos+30 ypos+45]);
         set_param([sys, '/', errchk_name], 'LinkStatus', 'inactive');
         reuse_block(sys, nobad_name, 'xbsIndex_r4/Constant', ...
-            'arith_type', 'Boolean', 'const', '0', 'explicit_period', 'on', 'period', '1', ...
+            'arith_type', 'boolean', 'const', '0', 'explicit_period', 'on', 'period', '1', ...
             'Position', [xpos-150 ypos+30 xpos-130 ypos+45]);
         reuse_block(sys, ctr_name, 'xbsIndex_r4/Counter', ...
             'arith_type', 'Unsigned', 'n_bits', debug_ctr_width, 'explicit_period', 'on', ...
             'period', '1', 'use_behavioral_HDL', 'on', 'rst', 'on', 'en', 'on', ...
             'Position', [xpos+50 ypos xpos+100 ypos+45]);
-        add_line_s(sys, [sourcevalid, '/1'], [errchk_name, '/1']);
-        add_line_s(sys, [sourceeof, '/1'], [errchk_name, '/2']);
-        add_line_s(sys, [nobad_name, '/1'], [errchk_name, '/3']);
+         reuse_block(sys, ctr_pipe, 'casper_library_delays/pipeline', ...
+             'latency', '3', 'Position', [xpos+70 ypos xpos+130 ypos+45]);
+        reuse_block(sys, vld_pipe, 'casper_library_delays/pipeline', ...
+             'latency', '3', 'Position', [xpos+30 ypos xpos+40 ypos+45]);
+         reuse_block(sys, eof_pipe, 'casper_library_delays/pipeline', ...
+             'latency', '3', 'Position', [xpos+30 ypos+5 xpos+40 ypos+45+5]);
+          reuse_block(sys, rst_pipe, 'casper_library_delays/pipeline', ...
+             'latency', '3', 'Position', [xpos+10 ypos+5 xpos+20 ypos+40]);
+          reuse_block(sys, bad_pipe, 'casper_library_delays/pipeline', ...
+             'latency', '3', 'Position', [xpos+100 ypos+5 xpos+120 ypos+40]);
+        add_line_s(sys, [sourcevalid, '/1'], [vld_pipe, '/1']);
+        add_line_s(sys, [vld_pipe, '/1'], [errchk_name, '/1']);
+        add_line_s(sys, [sourceeof, '/1'], [eof_pipe, '/1']);
+         add_line_s(sys, [eof_pipe, '/1'], [errchk_name, '/2']);
+        add_line_s(sys, [nobad_name, '/1'], [bad_pipe, '/1']);
+        add_line_s(sys, [bad_pipe, '/1'], [errchk_name, '/3']);
         add_line_s(sys, 'debug_rst/1', [delay_name, '/1']);
-        add_line_s(sys, [delay_name, '/1'], [ctr_name, '/1']);
-        add_line_s(sys, [errchk_name, '/1'], [ctr_name, '/2']);
-        add_line_s(sys, [ctr_name, '/1'], [targetname, '/1']);
+        add_line_s(sys, [delay_name, '/1'], [rst_pipe, '/1']);
+        add_line_s(sys, [rst_pipe, '/1'], [ctr_name, '/1']);
+        add_line_s(sys, [errchk_name, '/1'], [errchk_name_pipe, '/1']);
+        add_line_s(sys, [errchk_name_pipe, '/1'], [ctr_name, '/2']);
+        add_line_s(sys, [ctr_name, '/1'], [ctr_pipe, '/1']);
+        add_line_s(sys, [ctr_pipe, '/1'], [targetname, '/1']);
     else
         delete_block_s([sys, '/', delay_name]);
         delete_block_s([sys, '/', errchk_name]);
         delete_block_s([sys, '/', nobad_name]);
         delete_block_s([sys, '/', targetname]);
         delete_block_s([sys, '/', ctr_name]);
+        delete_block_s([sys, '/', rst_pipe]);
+        delete_block_s([sys, '/', ctr_pipe]);
+        delete_block_s([sys, '/', vld_pipe]);
+        delete_block_s([sys, '/', eof_pipe]);
+        delete_block_s([sys, '/', bad_pipe]);
     end
 end
 
@@ -249,17 +336,20 @@ function draw_rxcounter(sys, xpos, ypos, targetname, sourceeof, sourcevalid)
     and_name = [targetname, '_and'];
     ed_name = [targetname, '_ed'];
     delay_name = [targetname, '_del'];
+    rst_pipe = [targetname,'_r_pipe'];
+    ctr_pipe = [targetname,'_c_pipe'];
+    vld_pipe = [targetname,'_v_pipe'];
+    eof_pipe = [targetname,'_e_pipe'];
     draw_block = false;
     try
-        if ((strcmp(get_param(sys, targetname), 'on') == 1) || ...
-           (strcmp(get_param(sys, 'debug_en_all'), 'on') == 1)) && ...
+        if ((strcmp(get_param(sys, 'debug_en_all'), 'on') == 1)) && ...
            (strcmp(get_param(sys, 'debug_dis_all'), 'on') == 0)
             draw_block = true;
         end
     catch
-        if strcmp(get_param(sys, targetname), 'on') == 1
-            draw_block = true;
-        end
+%         if strcmp(get_param(sys, targetname), 'on') == 1
+%             draw_block = true;
+%         end
     end
     if draw_block
         reuse_block(sys, delay_name, 'xbsIndex_r4/Delay', ...
@@ -269,6 +359,12 @@ function draw_rxcounter(sys, xpos, ypos, targetname, sourceeof, sourcevalid)
             'io_dir', 'To Processor', 'arith_types', '0', ...
             'io_delay', '1', 'bitwidths', debug_ctr_width, ...
             'sim_port', 'no', 'Position', [xpos+350 ypos xpos+400 ypos+20]);
+        reuse_block(sys, vld_pipe, 'casper_library_delays/pipeline', ...
+             'latency', '3', 'Position', [xpos+30 ypos xpos+40 ypos+45]);
+         reuse_block(sys, eof_pipe, 'casper_library_delays/pipeline', ...
+             'latency', '3', 'Position', [xpos+30 ypos+5 xpos+40 ypos+45+5]);
+          reuse_block(sys, rst_pipe, 'casper_library_delays/pipeline', ...
+             'latency', '3', 'Position', [xpos+10 ypos+5 xpos+20 ypos+40]);
         reuse_block(sys, and_name, 'xbsIndex_r4/Logical', ...
             'arith_type', 'Unsigned', 'logical_function', 'AND', 'inputs', '2', ...
             'latency', '1', 'Position', [xpos+50 ypos xpos+100 ypos+45]);
@@ -279,13 +375,19 @@ function draw_rxcounter(sys, xpos, ypos, targetname, sourceeof, sourcevalid)
             'arith_type', 'Unsigned', 'n_bits', debug_ctr_width, 'explicit_period', 'on', ...
             'period', '1', 'use_behavioral_HDL', 'on', 'rst', 'on', 'en', 'on', ...
             'Position', [xpos+250 ypos xpos+300 ypos+45]);
-        add_line_s(sys, [sourceeof, '/1'], [and_name, '/1']);
-        add_line_s(sys, [sourcevalid, '/1'], [and_name, '/2']);
+         reuse_block(sys, ctr_pipe, 'casper_library_delays/pipeline', ...
+             'latency', '3', 'Position', [xpos+320 ypos xpos+340 ypos+45]);
+        add_line_s(sys, [sourceeof, '/1'], [vld_pipe, '/1']);
+        add_line_s(sys, [vld_pipe, '/1'], [and_name, '/1']);
+        add_line_s(sys, [sourcevalid, '/1'], [eof_pipe, '/1']);
+        add_line_s(sys, [eof_pipe, '/1'], [and_name, '/2']);
         add_line_s(sys, [and_name, '/1'], [ed_name, '/1']);
         add_line_s(sys, 'debug_rst/1', [delay_name, '/1']);
-        add_line_s(sys, [delay_name, '/1'], [ctr_name, '/1']);
+        add_line_s(sys, [delay_name, '/1'], [rst_pipe, '/1']);
+        add_line_s(sys, [rst_pipe, '/1'], [ctr_name, '/1']);
         add_line_s(sys, [ed_name, '/1'], [ctr_name, '/2']);
-        add_line_s(sys, [ctr_name, '/1'], [targetname, '/1']);
+        add_line_s(sys, [ctr_name, '/1'], [ctr_pipe, '/1']);
+        add_line_s(sys, [ctr_pipe, '/1'], [targetname, '/1']);
     else
         delete_block_lines_s([sys, '/', and_name]);
         delete_block_lines_s([sys, '/', ed_name]);
@@ -297,76 +399,84 @@ function draw_rxcounter(sys, xpos, ypos, targetname, sourceeof, sourcevalid)
         delete_block_s([sys, '/', ed_name]);
         delete_block_s([sys, '/', targetname]);
         delete_block_s([sys, '/', ctr_name]);
+        delete_block_s([sys, '/', rst_pipe]);
+        delete_block_s([sys, '/', ctr_pipe]);
+        delete_block_s([sys, '/', vld_pipe]);
+        delete_block_s([sys, '/', eof_pipe]);
     end
 end
+% 
+ for s=1:num_qsfp_ports
+ 
+     % tx counter
+     starty = 450 + s*460;
+     draw_rxcounter(cursys, 400, starty, strcat('txctr',num2str(s)), strcat('tx_end_of_frame',num2str(s)), strcat('tx_valid',num2str(s)));
 
-% tx counter
-starty = 850;
-draw_rxcounter(cursys, 400, starty, 'txctr', 'tx_end_of_frame', 'tx_valid');
+    % tx error counter
+    starty = starty + 50;
+    draw_errorcounter(cursys, 400, starty, strcat('txerrctr',num2str(s)), get_param(cursys, 'txerrctr_len'), strcat('tx_end_of_frame',num2str(s)), strcat('tx_valid',num2str(s)));
+% 
+%     % tx overflow counter
+%     starty = starty + 50;
+%     draw_counter(cursys, 400, starty, 'txofctr', clear_name([pipe_no_pipe, '_tx_overflow']));
+% 
+%     % tx full counter
+%     starty = starty + 50;
+%     draw_counter(cursys, 400, starty, 'txfullctr', clear_name([pipe_no_pipe, '_tx_afull']));
+% 
+%     % tx valid counter
+%     starty = starty + 50;
+%     draw_counter(cursys, 400, starty, 'txvldctr', 'tx_valid')
+% 
+%     % draw all the tx registers
+% 
+    % rx counter
+    starty = 130 + s*600;
+    % draw_rxcounter(cursys, 1400, starty, 'rxctr', clear_name([cursys, '_rx_end_of_frame']), valid_source)
+    draw_rxcounter(cursys, 1600, starty, strcat('rxctr',num2str(s)), strcat('rx_eof',num2str(s),'_pipe'), strcat('rx_vld_or_out_',num2str(s),'_pipe'))
+% 
+%     % rx error counter
+%     starty = starty + 50;
+%     % draw_errorcounter(cursys, 1400, starty, 'rxerrctr', get_param(cursys, 'rxerrctr_len'), clear_name([cursys, '_rx_end_of_frame']), valid_source);
+%     draw_errorcounter(cursys, 1400, starty, 'rxerrctr', get_param(cursys, 'rxerrctr_len'), clear_name([pipe_no_pipe, '_rx_end_of_frame']), valid_source);
+% 
+%     % rx overflow counter
+%     starty = starty + 50;
+%     % draw_counter(cursys, 1400, starty, 'rxofctr', clear_name([cursys, '_rx_overrun']));
+%     draw_counter(cursys, 1400, starty, 'rxofctr', clear_name([pipe_no_pipe, '_rx_overrun']));
+% 
+%     % rx bad frame counter
+%     starty = starty + 50;
+%     % draw_counter(cursys, 1400, starty, 'rxbadctr', clear_name([cursys, '_rx_bad_frame']));
+%     draw_counter(cursys, 1400, starty, 'rxbadctr', clear_name([pipe_no_pipe, '_rx_bad_frame']));
+% 
+%     % rx valid counter
+%     starty = starty + 50;
+%     draw_counter(cursys, 1400, starty, 'rxvldctr', valid_source);
+% 
+%     % rx eof counter
+%     starty = starty + 50;
+%     % draw_counter(cursys, 1400, starty, 'rxeofctr', clear_name([cursys, '_rx_end_of_frame']));
+%     draw_counter(cursys, 1400, starty, 'rxeofctr', clear_name([pipe_no_pipe, '_rx_end_of_frame']));
+% 
+%     % rx snapshot
+%     forty_gbe_mask_draw_rxsnap(cursys, pipe_no_pipe);
+% 
+%     % tx snapshot
+%     forty_gbe_mask_draw_txsnap(cursys, pipe_no_pipe);
+end
 
-% tx error counter
-starty = starty + 50;
-draw_errorcounter(cursys, 400, starty, 'txerrctr', get_param(cursys, 'txerrctr_len'), 'tx_end_of_frame', 'tx_valid');
-
-% tx overflow counter
-starty = starty + 50;
-draw_counter(cursys, 400, starty, 'txofctr', clear_name([pipe_no_pipe, '_tx_overflow']));
-
-% tx full counter
-starty = starty + 50;
-draw_counter(cursys, 400, starty, 'txfullctr', clear_name([pipe_no_pipe, '_tx_afull']));
-
-% tx valid counter
-starty = starty + 50;
-draw_counter(cursys, 400, starty, 'txvldctr', 'tx_valid')
-
-% draw all the tx registers
-
-% rx counter
-starty = 130;
-% draw_rxcounter(cursys, 1400, starty, 'rxctr', clear_name([cursys, '_rx_end_of_frame']), valid_source)
-draw_rxcounter(cursys, 1400, starty, 'rxctr', clear_name([pipe_no_pipe, '_rx_end_of_frame']), valid_source)
-
-% rx error counter
-starty = starty + 50;
-% draw_errorcounter(cursys, 1400, starty, 'rxerrctr', get_param(cursys, 'rxerrctr_len'), clear_name([cursys, '_rx_end_of_frame']), valid_source);
-draw_errorcounter(cursys, 1400, starty, 'rxerrctr', get_param(cursys, 'rxerrctr_len'), clear_name([pipe_no_pipe, '_rx_end_of_frame']), valid_source);
-
-% rx overflow counter
-starty = starty + 50;
-% draw_counter(cursys, 1400, starty, 'rxofctr', clear_name([cursys, '_rx_overrun']));
-draw_counter(cursys, 1400, starty, 'rxofctr', clear_name([pipe_no_pipe, '_rx_overrun']));
-
-% rx bad frame counter
-starty = starty + 50;
-% draw_counter(cursys, 1400, starty, 'rxbadctr', clear_name([cursys, '_rx_bad_frame']));
-draw_counter(cursys, 1400, starty, 'rxbadctr', clear_name([pipe_no_pipe, '_rx_bad_frame']));
-
-% rx valid counter
-starty = starty + 50;
-draw_counter(cursys, 1400, starty, 'rxvldctr', valid_source);
-
-% rx eof counter
-starty = starty + 50;
-% draw_counter(cursys, 1400, starty, 'rxeofctr', clear_name([cursys, '_rx_end_of_frame']));
-draw_counter(cursys, 1400, starty, 'rxeofctr', clear_name([pipe_no_pipe, '_rx_end_of_frame']));
-
-% rx snapshot
-forty_gbe_mask_draw_rxsnap(cursys, pipe_no_pipe);
-
-% tx snapshot
-forty_gbe_mask_draw_txsnap(cursys, pipe_no_pipe);
 
 % remove unconnected blocks
 clean_blocks(cursys);
-
-try
-    incoming_latency = eval(get_param(cursys, 'input_pipeline_delay'));
-catch
-    incoming_latency = 0;
-end
-display_string = sprintf('incoming_latency=%i', incoming_latency);
-set_param(cursys, 'AttributesFormatString', display_string);
-
-end
+ 
+ try
+     incoming_latency = eval(get_param(cursys, 'input_pipeline_delay'));
+ catch
+     incoming_latency = 0;
+ end
+ display_string = sprintf('incoming_latency=%i', incoming_latency);
+ set_param(cursys, 'AttributesFormatString', display_string);
+% 
 % end
+end
