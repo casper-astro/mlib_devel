@@ -232,7 +232,7 @@ class forty_gbe(YellowBlock):
         #Add fortygbe ports depending upon number of ports initialized in yellow block
         inst.add_port('forty_gbe_rst',             self.fullname+'_rst',             width=1,   dir='in')
         for i in range(self.port):
-            cur_port = i+1
+            cur_port = str(i+1)
             inst.add_port('forty_gbe_tx_valid'+cur_port,        self.fullname+'_tx_valid'+cur_port,        width=4,   dir='in')
             inst.add_port('forty_gbe_tx_end_of_frame'+cur_port, self.fullname+'_tx_end_of_frame'+cur_port, width=1,   dir='in')
             inst.add_port('forty_gbe_tx_data'+cur_port,         self.fullname+'_tx_data'+cur_port,         width=256, dir='in')
