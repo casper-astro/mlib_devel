@@ -61,6 +61,7 @@ end
 mask_visibilities{ismember(mask_names, 'rx_dist_ram')} = 'on';
 mask_visibilities{ismember(mask_names, 'large_frames')} = 'on';
 mask_visibilities{ismember(mask_names, 'show_param')} = 'on';
+mask_visibilities{ismember(mask_names, 'port')} = 'on';
 try
     mask_visibilities{ismember(mask_names, 'input_pipeline_delay')} = 'on';
 catch e
