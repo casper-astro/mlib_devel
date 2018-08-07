@@ -18,7 +18,7 @@ if exist(builddir, 'dir') ~= 7
     mkdir(modeldir, modelname);
 end
 
-disp('Checking HMC block sites');
+disp('Checking Mezzanine block sites');
 hmc_blks = find_system(gcs, 'SearchDepth', 10, 'LookUnderMasks', 'all', 'Tag', 'xps:hmc');
 mez_sites = get_param(hmc_blks, 'mez');
 if length(mez_sites) ~= length(unique(mez_sites))
@@ -26,7 +26,7 @@ if length(mez_sites) ~= length(unique(mez_sites))
     for ctr = 1 : length(mez_sites)
         sitestr = sprintf('%s\n\t%s - %s', sitestr, hmc_blks{ctr}, mez_sites{ctr});
     end
-    error('ERROR: HMC blocks set to use same sites:\n%s', sitestr);
+    error('ERROR: Mezzanine blocks set to use same sites:\n%s', sitestr);
 end
 
 disp('Updating diagram');

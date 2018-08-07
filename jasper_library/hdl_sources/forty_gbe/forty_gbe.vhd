@@ -112,33 +112,33 @@ entity forty_gbe is
         MEZZANINE_3_SDA_FPGA  : inout std_logic;
         MEZZANINE_3_INT_N     : in    std_logic;
         
-        --HMC Mezzanine 0 Signals
-        HMC_MEZZ0_SCL_OUT : out std_logic;
-        HMC_MEZZ0_SDA_OUT : out std_logic;
-        HMC_MEZZ0_SCL_IN : in std_logic;
-        HMC_MEZZ0_SDA_IN : in std_logic;
-        HMC_MEZZ0_INIT_DONE : in std_logic;
-        HMC_MEZZ0_POST_OK : in std_logic;        
+        --Mezzanine 0 Signals
+        MEZZ0_SCL_OUT : out std_logic;
+        MEZZ0_SDA_OUT : out std_logic;
+        MEZZ0_SCL_IN : in std_logic;
+        MEZZ0_SDA_IN : in std_logic;
+        MEZZ0_INIT_DONE : in std_logic;
+        MEZZ0_POST_OK : in std_logic;        
         MEZZ0_ID : in std_logic_vector(2 downto 0);
         MEZZ0_PRESENT : in std_logic;
 
-        --HMC Mezzanine 1 Signals
-        HMC_MEZZ1_SCL_OUT : out std_logic;
-        HMC_MEZZ1_SDA_OUT : out std_logic;
-        HMC_MEZZ1_SCL_IN : in std_logic;
-        HMC_MEZZ1_SDA_IN : in std_logic;
-        HMC_MEZZ1_INIT_DONE : in std_logic;
-        HMC_MEZZ1_POST_OK : in std_logic;        
+        --Mezzanine 1 Signals
+        MEZZ1_SCL_OUT : out std_logic;
+        MEZZ1_SDA_OUT : out std_logic;
+        MEZZ1_SCL_IN : in std_logic;
+        MEZZ1_SDA_IN : in std_logic;
+        MEZZ1_INIT_DONE : in std_logic;
+        MEZZ1_POST_OK : in std_logic;        
         MEZZ1_ID : in std_logic_vector(2 downto 0);
         MEZZ1_PRESENT : in std_logic;        
         
-        --HMC Mezzanine 2 Signals
-        HMC_MEZZ2_SCL_OUT : out std_logic;
-        HMC_MEZZ2_SDA_OUT : out std_logic;
-        HMC_MEZZ2_SCL_IN : in std_logic;
-        HMC_MEZZ2_SDA_IN : in std_logic;
-        HMC_MEZZ2_INIT_DONE : in std_logic;
-        HMC_MEZZ2_POST_OK : in std_logic;                
+        --Mezzanine 2 Signals
+        MEZZ2_SCL_OUT : out std_logic;
+        MEZZ2_SDA_OUT : out std_logic;
+        MEZZ2_SCL_IN : in std_logic;
+        MEZZ2_SDA_IN : in std_logic;
+        MEZZ2_INIT_DONE : in std_logic;
+        MEZZ2_POST_OK : in std_logic;                
         MEZZ2_ID : in std_logic_vector(2 downto 0);
         MEZZ2_PRESENT : in std_logic;        
         
@@ -1225,23 +1225,23 @@ architecture arch_forty_gbe of forty_gbe is
     signal sys_clk_mmcm_fb : std_logic;
     signal user_clk_mmcm_fb : std_logic;
     
-    --HMC I2C Mezzanine 0 Signals
-    signal shmc_mezz0_scl_out : std_logic;
-    signal shmc_mezz0_sda_out : std_logic;
-    signal shmc_mezz0_scl_in : std_logic;
-    signal shmc_mezz0_sda_in : std_logic;
+    --I2C Mezzanine 0 Signals
+    signal smezz0_scl_out : std_logic;
+    signal smezz0_sda_out : std_logic;
+    signal smezz0_scl_in : std_logic;
+    signal smezz0_sda_in : std_logic;
 
-    --HMC I2C Mezzanine 1 Signals
-    signal shmc_mezz1_scl_out : std_logic;
-    signal shmc_mezz1_sda_out : std_logic;
-    signal shmc_mezz1_scl_in : std_logic;
-    signal shmc_mezz1_sda_in : std_logic;
+    --I2C Mezzanine 1 Signals
+    signal smezz1_scl_out : std_logic;
+    signal smezz1_sda_out : std_logic;
+    signal smezz1_scl_in : std_logic;
+    signal smezz1_sda_in : std_logic;
     
-    --HMC I2C Mezzanine 2 Signals
-    signal shmc_mezz2_scl_out : std_logic;
-    signal shmc_mezz2_sda_out : std_logic;
-    signal shmc_mezz2_scl_in : std_logic;
-    signal shmc_mezz2_sda_in : std_logic;
+    --I2C Mezzanine 2 Signals
+    signal smezz2_scl_out : std_logic;
+    signal smezz2_sda_out : std_logic;
+    signal smezz2_scl_in : std_logic;
+    signal smezz2_sda_in : std_logic;
     
     --Wishbone DSP FIFO Signals
     --Output to DSP
@@ -1835,22 +1835,22 @@ begin
     --MEZZANINE STATUS 1 REGISTER (MEZZ0)
     brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(0) <= ((not MEZZANINE_0_PRESENT_N) and MEZZ0_PRESENT);
     brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(3 downto 1) <= MEZZ0_ID;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(4) <= HMC_MEZZ0_INIT_DONE;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(5) <= HMC_MEZZ0_POST_OK;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(4) <= MEZZ0_INIT_DONE;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(5) <= MEZZ0_POST_OK;
     brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(7 downto 6) <= (others => '0');    
     
     --MEZZANINE STATUS 1 REGISTER (MEZZ1)
     brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(8) <= ((not MEZZANINE_1_PRESENT_N) and MEZZ1_PRESENT);
     brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(11 downto 9) <= MEZZ1_ID;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(12) <= HMC_MEZZ1_INIT_DONE;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(13) <= HMC_MEZZ1_POST_OK;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(12) <= MEZZ1_INIT_DONE;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(13) <= MEZZ1_POST_OK;
     brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(15 downto 14) <= (others => '0');    
     
     --MEZZANINE STATUS 1 REGISTER (MEZZ2)
     brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(16) <= ((not MEZZANINE_2_PRESENT_N) and MEZZ2_PRESENT);
     brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(19 downto 17) <= MEZZ2_ID;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(20) <= HMC_MEZZ2_INIT_DONE;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(21) <= HMC_MEZZ2_POST_OK;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(20) <= MEZZ2_INIT_DONE;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(21) <= MEZZ2_POST_OK;
     brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(23 downto 22) <= (others => '0');    
 
     --MEZZANINE STATUS 1 REGISTER (MEZZ3)
@@ -2253,46 +2253,46 @@ begin
     i2c_scl_pad_i(4) <= MEZZANINE_3_SCL_FPGA;
     i2c_sda_pad_i(4) <= MEZZANINE_3_SDA_FPGA;
     
-    -- HMC IIC MUX
-    MEZZANINE_0_SCL_FPGA <= shmc_mezz0_scl_out when (HMC_MEZZ0_INIT_DONE = '0') else i2c_scl_pad_o(1) when (i2c_scl_padoen_o(1) = '0') else 'Z';
-    MEZZANINE_0_SDA_FPGA <= shmc_mezz0_sda_out when (HMC_MEZZ0_INIT_DONE = '0') else i2c_sda_pad_o(1) when (i2c_sda_padoen_o(1) = '0') else 'Z';
+    --IIC MUX
+    MEZZANINE_0_SCL_FPGA <= smezz0_scl_out when (MEZZ0_INIT_DONE = '0' and MEZZ0_ID = "010") else i2c_scl_pad_o(1) when (i2c_scl_padoen_o(1) = '0') else 'Z';
+    MEZZANINE_0_SDA_FPGA <= smezz0_sda_out when (MEZZ0_INIT_DONE = '0' and MEZZ0_ID = "010") else i2c_sda_pad_o(1) when (i2c_sda_padoen_o(1) = '0') else 'Z';
     i2c_scl_pad_i(1) <= MEZZANINE_0_SCL_FPGA;
     i2c_sda_pad_i(1) <= MEZZANINE_0_SDA_FPGA;
-    shmc_mezz0_scl_in <= MEZZANINE_0_SCL_FPGA;
-    shmc_mezz0_sda_in <= MEZZANINE_0_SDA_FPGA; 
+    smezz0_scl_in <= MEZZANINE_0_SCL_FPGA;
+    smezz0_sda_in <= MEZZANINE_0_SDA_FPGA; 
 
-    MEZZANINE_1_SCL_FPGA <= shmc_mezz1_scl_out when (HMC_MEZZ1_INIT_DONE = '0') else i2c_scl_pad_o(2) when (i2c_scl_padoen_o(2) = '0') else 'Z';
-    MEZZANINE_1_SDA_FPGA <= shmc_mezz1_sda_out when (HMC_MEZZ1_INIT_DONE = '0') else i2c_sda_pad_o(2) when (i2c_sda_padoen_o(2) = '0') else 'Z';
+    MEZZANINE_1_SCL_FPGA <= smezz1_scl_out when (MEZZ1_INIT_DONE = '0' and MEZZ1_ID = "010") else i2c_scl_pad_o(2) when (i2c_scl_padoen_o(2) = '0') else 'Z';
+    MEZZANINE_1_SDA_FPGA <= smezz1_sda_out when (MEZZ1_INIT_DONE = '0' and MEZZ1_ID = "010") else i2c_sda_pad_o(2) when (i2c_sda_padoen_o(2) = '0') else 'Z';
     i2c_scl_pad_i(2) <= MEZZANINE_1_SCL_FPGA;
     i2c_sda_pad_i(2) <= MEZZANINE_1_SDA_FPGA;
-    shmc_mezz1_scl_in <= MEZZANINE_1_SCL_FPGA;
-    shmc_mezz1_sda_in <= MEZZANINE_1_SDA_FPGA; 
+    smezz1_scl_in <= MEZZANINE_1_SCL_FPGA;
+    smezz1_sda_in <= MEZZANINE_1_SDA_FPGA; 
 
-    MEZZANINE_2_SCL_FPGA <= shmc_mezz2_scl_out when (HMC_MEZZ2_INIT_DONE = '0') else  i2c_scl_pad_o(3) when (i2c_scl_padoen_o(3) = '0') else 'Z';
-    MEZZANINE_2_SDA_FPGA <= shmc_mezz2_sda_out when (HMC_MEZZ2_INIT_DONE = '0') else  i2c_sda_pad_o(3) when (i2c_sda_padoen_o(3) = '0') else 'Z';
+    MEZZANINE_2_SCL_FPGA <= smezz2_scl_out when (MEZZ2_INIT_DONE = '0' and MEZZ2_ID = "010") else  i2c_scl_pad_o(3) when (i2c_scl_padoen_o(3) = '0') else 'Z';
+    MEZZANINE_2_SDA_FPGA <= smezz2_sda_out when (MEZZ2_INIT_DONE = '0' and MEZZ2_ID = "010") else  i2c_sda_pad_o(3) when (i2c_sda_padoen_o(3) = '0') else 'Z';
     i2c_scl_pad_i(3) <= MEZZANINE_2_SCL_FPGA;
     i2c_sda_pad_i(3) <= MEZZANINE_2_SDA_FPGA;
-    shmc_mezz2_scl_in <= MEZZANINE_2_SCL_FPGA;
-    shmc_mezz2_sda_in <= MEZZANINE_2_SDA_FPGA; 
+    smezz2_scl_in <= MEZZANINE_2_SCL_FPGA;
+    smezz2_sda_in <= MEZZANINE_2_SDA_FPGA; 
     
-    --HMC Mezzanine 0 signal assignments 
-    shmc_mezz0_scl_out <= HMC_MEZZ0_SCL_IN;
-    shmc_mezz0_sda_out <= HMC_MEZZ0_SDA_IN;
-    HMC_MEZZ0_SCL_OUT <= shmc_mezz0_scl_in; 
-    HMC_MEZZ0_SDA_OUT <= shmc_mezz0_sda_in; 
+    --Mezzanine 0 signal assignments 
+    smezz0_scl_out <= MEZZ0_SCL_IN;
+    smezz0_sda_out <= MEZZ0_SDA_IN;
+    MEZZ0_SCL_OUT <= smezz0_scl_in; 
+    MEZZ0_SDA_OUT <= smezz0_sda_in; 
       
-    --HMC Mezzanine 1 signal assignments
+    --Mezzanine 1 signal assignments
     
-    shmc_mezz1_scl_out <= HMC_MEZZ1_SCL_IN;
-    shmc_mezz1_sda_out <= HMC_MEZZ1_SDA_IN;
-    HMC_MEZZ1_SCL_OUT <= shmc_mezz1_scl_in; 
-    HMC_MEZZ1_SDA_OUT <= shmc_mezz1_sda_in;     
+    smezz1_scl_out <= MEZZ1_SCL_IN;
+    smezz1_sda_out <= MEZZ1_SDA_IN;
+    MEZZ1_SCL_OUT <= smezz1_scl_in; 
+    MEZZ1_SDA_OUT <= smezz1_sda_in;     
     
-    --HMC Mezzanine 2 signal assignments
-    shmc_mezz2_scl_out <= HMC_MEZZ2_SCL_IN;
-    shmc_mezz2_sda_out <= HMC_MEZZ2_SDA_IN;
-    HMC_MEZZ2_SCL_OUT <= shmc_mezz2_scl_in; 
-    HMC_MEZZ2_SDA_OUT <= shmc_mezz2_sda_in; 
+    --Mezzanine 2 signal assignments
+    smezz2_scl_out <= MEZZ2_SCL_IN;
+    smezz2_sda_out <= MEZZ2_SDA_IN;
+    MEZZ2_SCL_OUT <= smezz2_scl_in; 
+    MEZZ2_SDA_OUT <= smezz2_sda_in; 
 
     -- WISHBONE SLAVE 9 - 1GBE MAC
     kat_ten_gb_eth_0 : kat_ten_gb_eth
