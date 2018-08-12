@@ -6,15 +6,15 @@ class YellowBlock(object):
     """
     A yellow block object encodes all the information necessary
     to instantiate a piece of IP in an existing HDL base package.
-    -- which verilog modules need to be instantiated.
-    -- which instances need to be connected by signals
-    -- which ports of the instance need to be promoted to top-level
-    -- what is the type of these ports (for the constraints file)
-    -- is the device a slave on a CPU bus
-    -- if so, how much address space does it need?
-    -- what features does this block provide the rest of the system,
-       e.g. clock sources
-    -- what fixed resources does this block use (e.g. QDR chip / ZDOK interface)
+
+    * which verilog modules need to be instantiated.
+    * which instances need to be connected by signals
+    * which ports of the instance need to be promoted to top-level
+    * what is the type of these ports (for the constraints file)
+    * is the device a slave on a CPU bus
+    * if so, how much address space does it need?
+    * what features does this block provide the rest of the system, e.g. clock sources
+    * what fixed resources does this block use (e.g. QDR chip / ZDOK interface)
 
     All the HDL related stuff is dealt with by the verilog module class, so we just need
     to add bus / memory space requirements and define what resources the block uses and
@@ -27,7 +27,8 @@ class YellowBlock(object):
         """
         Get an auto-incrementing ID number for a yellow block of a particular
         class type.
-        :param cls: `YellowBlock` class, e.g. `gpio`
+
+        :param cls: ``YellowBlock`` class, e.g. ``gpio``
         :return: Number of instances of this class currently constructed.
         """
         cls._count += 1
@@ -36,7 +37,7 @@ class YellowBlock(object):
     @staticmethod
     def make_block(blk, platform, hdl_root=None):
         """
-        A builder function to return an instance of the correct `YellowBlock` subclass for a given type
+        A builder function to return an instance of the correct ``YellowBlock`` subclass for a given type
         of block and target platform.
 
         
@@ -68,20 +69,19 @@ class YellowBlock(object):
     def __init__(self, blk, platform, hdl_root=None):
         """
         Class constructor.
-        Set up the initial values for block attributes, by copying key/val pairs from the `blk`
-        dictionary. Call the class's `initialize()` method, where the user should set compile parameters and override
+        Set up the initial values for block attributes, by copying key/val pairs from the ``blk``
+        dictionary. Call the class's ``initialize()`` method, where the user should set compile parameters and override
         this class's default attributes.
-        Finally, call the class's `check_support()` method, to verify that the block and platform chosen are compatible.
+        Finally, call the class's ``check_support()`` method, to verify that the block and platform chosen are compatible.
         
-
-        Arguments:
         :param blk: A jasper-standard dictionary containing block information. Key/value pairs in this
                     dictionary are copied to attributes of this instance.
         :param platform: A Platform object representing the platform type.
-        :optional keyword param hdl_root: The path to a directory containing all hdl code necessary
+        :param hdl_root: The path to a directory containing all hdl code necessary
                   to instantiate this block. This root directory is used as a base from which block's
                   source files are defined. If None (default), will default to the system's `HDL_ROOT`
                   environment variable.
+        :type hdl_root: Optional
         """
 
         self.logger = logging.getLogger('jasper.yellowblock') #: The `jasper.yellowblock` logger
@@ -161,6 +161,7 @@ class YellowBlock(object):
         other blocks themselves, by calling this method.
         Override it in your subclass if you need to use this
         functionality.
+
         :return: A list of child YellowBlock instances
         """
         return []
@@ -168,9 +169,10 @@ class YellowBlock(object):
     def check_support(self):
         """
         Check the platform being used is supported by this block.
-        Relies on subclasses to set the `platform_support` attribute
-        appropriately in their `initialize()` methods. The default
-        of the YellowBlock class is platform_support = 'all'.
+        Relies on subclasses to set the ``platform_support`` attribute
+        appropriately in their ``initialize()`` methods. The default
+        of the YellowBlock class is ``platform_support = 'all'``.
+
         Throw an error if the platform appears unsupported.
         """
         if self.platform_support == 'all':
@@ -180,11 +182,13 @@ class YellowBlock(object):
 
     def initialize(self):
         """
-        This function is called by the `__init__()` method. It
+        This function is called by the ``__init__()`` method. It
         is meant to be overridden by subclasses.
+
         It should over-ride instance attributes to configure the block.
+
         Common attributes which might be manipulated are:
-        `requires`, `exc_requires`, `provides`, `ips`, `sources`, `platform_supports`
+        ``requires``, ``exc_requires``, ``provides``, ``ips``, ``sources``, ``platform_supports``
         """
         pass
 
@@ -199,6 +203,7 @@ class YellowBlock(object):
         """ 
         Modify the VerilogModule instance top (so as to instantiate this module's HDL)
         This method should be overridden by subclasses implementing their custom HDL requirements.
+
         :param top: A VerilogModule instance, defining the top-level
                     of an HDL design into which this block should instantiate itself.
         """
@@ -208,7 +213,8 @@ class YellowBlock(object):
         """
         Generate a list of Constraint objects, appropriate for this block.
         This method should be over-ridden by sub-classes to return a list of constraints
-        as defined in `constraints.py`
+        as defined in ``constraints.py``
+        
         :return: A list of Constraint instances. Default is []
         """
         return []
@@ -216,15 +222,18 @@ class YellowBlock(object):
     def gen_tcl_cmds(self):
         """
         Generate a dictionary of tcl command lists, to be executed at compile time.
-        Allowed keys are: `init`, `pre_synth`, `synth`, `post_synth`, `pre_impl`, `impl`, 
-        `post_impl`, `pre_bitgen`, `bitgen`, `post_bitgen`, `prom_gem`. The key used determines
+        Allowed keys are: ``init``, ``pre_synth``, ``synth``, ``post_synth``, ``pre_impl``, ``impl``, 
+        ``post_impl``, ``pre_bitgen``, ``bitgen``, ``post_bitgen``, ``prom_gem``. The key used determines
         at what stage the tcl commands will be run.
 
         Eg.:
-        {
-            'pre_synth': ["first pre-synthesis tcl command", "second pre-synthesis tcl command"],
-            'prom_gen' : ["A tcl command to generate a prom file after bit gen"],
-        }
+
+        .. code-block:: python
+
+            {
+                'pre_synth': ["first pre-synthesis tcl command", "second pre-synthesis tcl command"],
+                'prom_gen' : ["A tcl command to generate a prom file after bit gen"],
+            }
 
         :return: Dictionary of tcl command lists. Default {}
         """
@@ -269,8 +278,9 @@ class YellowBlock(object):
         """
         Add a source file to the list of files required
         to compile this yellow block. The path given should
-        be relative to the root directory `hdl_root`.
+        be relative to the root directory ``hdl_root``.
         Globbing is supported.
+
         :param path: Path of file required for compilation. Eg "/some/source/file.v" or "/some/files*.v"
         """
         if path.startswith('/'):

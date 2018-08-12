@@ -19,7 +19,7 @@ class ImmutableWithComments(object):
     A class which you can add attributes to, but
     you can't change them once they're set. You are allowed
     to try and set them to the same value again.
-    The 'comment' attribute is special. Each time you
+    The ``comment`` attribute is special. Each time you
     try to set it, the comment string is appended to the
     existing comment attribute.
     """
@@ -47,19 +47,19 @@ class WbDevice(object):
         Class constructor.
 
         :param regname: Name of register (this name is the string used to access the register from software)
-        :type regname: String
+        :type regname: str
         :param nbytes: Number of bytes in this slave's memory space.
-        :type nbytes: Integer
+        :type nbytes: int
         :param mode: Permissions ('r': readable, 'w': writable, 'rw': read/writeable)
-        :type mode: String
-        :param hdl_suffix: Suffix given to wishbone port names. Eg. if `hdl_suffix = foo`, ports have the form `wbs_dat_i_foo`
-        :type hdl_suffix: String
-        :param hdl_candr_suffix: Suffix given to wishbone clock and reset port names. Eg. if `hdl_suffix = foo`, ports have the form `wbs_clk_i_foo`
-        :type hdl_candr_suffix: String
-        :param memory_map: A list or `Register` instances defining the contents of sub-blocks of this device's memory.
+        :type mode: str
+        :param hdl_suffix: Suffix given to wishbone port names. Eg. if ``hdl_suffix = foo``, ports have the form ``wbs_dat_i_foo``
+        :type hdl_suffix: str
+        :param hdl_candr_suffix: Suffix given to wishbone clock and reset port names. Eg. if ``hdl_suffix = foo``, ports have the form ``wbs_clk_i_foo``
+        :type hdl_candr_suffix: str
+        :param memory_map: A list or ``Register`` instances defining the contents of sub-blocks of this device's memory.
         :type memory_map: list
-        :param typecode: Typecode number (0-255) identifying the type of this block. See `yellow_block_typecodes.py`
-        :type typecode: Integer
+        :param typecode: Typecode number (0-255) identifying the type of this block. See ``yellow_block_typecodes.py``
+        :type typecode: int
         """
         self.typecode = typecode
         self.regname = regname
@@ -82,18 +82,17 @@ class Port(ImmutableWithComments):
     """
     def __init__(self, name, signal=None, parent_port=False, parent_sig=True, **kwargs):
         """
-        Create a 'Port' instance.
+        Create a ``Port`` instance.
 
         :param name: Name of the port
-        :type port: String
+        :type port: str
         :param signal: Signal to which this port is attached
-        :type signal: String
+        :type signal: str
         :param parent_port: When module 'A' instantiates the module to which this port is attached, should this port be connected to a similar port on 'A'.
-        :type parent_port: Boolean
+        :type parent_port: bool
         :param parent_sig: When module 'A' instantiates the module to which this port is attached, should 'A' also instantiate a signal matching the one connected to this port.
-        :type parent_sig: Boolean
-        :param **kwargs: Other keywords which should become attributes of this instance.
-
+        :type parent_sig: bool
+        :param kwargs: Other keywords which should become attributes of this instance.
         """
         self.update_attrs(name, signal=signal, parent_port=parent_port, parent_sig=parent_sig, **kwargs)
 
@@ -102,14 +101,14 @@ class Port(ImmutableWithComments):
         Update the attributes of this block.
 
         :param name: Name of the port
-        :type port: String
+        :type port: str
         :param signal: Signal to which this port is attached
-        :type signal: String
+        :type signal: str
         :param parent_port: When module 'A' instantiates the module to which this port is attached, should this port be connected to a similar port on 'A'.
-        :type parent_port: Boolean
+        :type parent_port: bool
         :param parent_sig: When module 'A' instantiates the module to which this port is attached, should 'A' also instantiate a signal matching the one connected to this port.
-        :type parent_sig: Boolean
-        :param **kwargs: Other keywords which should become attributes of this instance.
+        :type parent_sig: bool
+        :param kwargs: Other keywords which should become attributes of this instance.
         """
         self.name = name.rstrip(' ')
         self.parent_sig = parent_sig and not parent_port
@@ -127,14 +126,14 @@ class Parameter(ImmutableWithComments):
     """
     def __init__(self, name, value, comment=None):
         """
-        Create a 'Parameter' instance.
+        Create a ``Parameter`` instance.
 
         :param name: Name of this parameter
-        :type name: String
+        :type name: str
         :param value: Value this parameter should be set to.
         :type value: Varies
         :param comment: User-assisting comment string to attach to this parameter.
-        :type comment: String
+        :type comment: str
         """
         self.update_attrs(name, value=value, comment=comment)
 
@@ -143,11 +142,11 @@ class Parameter(ImmutableWithComments):
         Update the attributes of this block.
 
         :param name: Name of this parameter
-        :type name: String
+        :type name: str
         :param value: Value this parameter should be set to.
         :type value: Varies
         :param comment: User-assisting comment string to attach to this parameter.
-        :type comment: String
+        :type comment: str
         """
         self.name = name.rstrip(' ')
         self.value = value
@@ -165,12 +164,12 @@ class Signal(ImmutableWithComments):
         Create a 'Signal' instance.
 
         :param name: Name of this signal
-        :type name: String
+        :type name: str
         :param signal: Name of this signal
-        :type signal: String
+        :type signal: str
         :param width: Bitwidth of this signal
-        :type signal: Integer
-        :param **kwargs: Other keywords which should become attributes of this instance.
+        :type signal: int
+        :param kwargs: Other keywords which should become attributes of this instance.
         """
         self.update_attrs(name, width=width, **kwargs)
 
@@ -387,10 +386,10 @@ def instantiate_wb_arb_module(module, n_slaves, n_sub_arbs=None):
     :param module: Module into which the arbiter should be instantiated.
     :type module: VerilogModule instance
     :param n_slaves: Number of slaves this arbiter is connected to.
-    :type n_slaves: Integer
+    :type n_slaves: int
     :param n_sub_arbs: Number of sub-arbiters beneath the arbiter being instantiated here.
                        If None, a non-hierarchical arbiter will be used.
-    :type n_sub_arbs: Integer or None
+    :type n_sub_arbs: int or None
     """
     if n_sub_arbs is not None:
         inst = module.get_instance('wbs_master_arbiter', 'wbs_arbiter_inst')
@@ -429,17 +428,17 @@ class VerilogModule(object):
     """
     def __init__(self, name='', topfile=None, comment=''):
         """
-        Construct a new module, named 'name'.
+        Construct a new module, named ``name``.
         You can either start with an empty module
         and add ports/signals/instances to it,
         or you can specify an existing top-level file
         topfile, which will be modified.
         If doing the latter, the construction of
         wishbone interconnect demands that the
-        topfile has a localparam N_WB_SLAVES,
+        topfile has a ``localparam N_WB_SLAVES``,
         which specifies the number of wishbone
         slaves in the un-modified topfile. And 
-        SLAVE_BASE and SLAVE_HIGH localparams
+        ``SLAVE_BASE`` and ``SLAVE_HIGH`` localparams
         definiting the slave addresses.
 
         Eg:
@@ -487,11 +486,11 @@ class VerilogModule(object):
             localparam SLAVE_BASE = {32'h00000000};
 
         :param name: Name of this module
-        :type name: String
+        :type name: str
         :param topfile: The filename of an existing verilog file, if any, to which this module should add.
-        :type topfile: String or None
+        :type topfile: str or None
         :param comment: A user-friendly comment to be inserted in Verilog where this module is instantiated.
-        :type comment: String
+        :type comment: str
         """
 
         if len(name) != 0:
@@ -546,7 +545,7 @@ class VerilogModule(object):
         particular instances, so that the output Verilog is prettier.
 
         :param cur_blk: The name of the current block driving code generation.
-        :type cur_blk: String.
+        :type cur_blk: str
         """
         self.cur_blk = cur_blk
         if cur_blk not in self.ports.keys():
@@ -643,7 +642,7 @@ class VerilogModule(object):
 
     def get_base_wb_slaves(self):
         """
-        Look for the pattern 'localparam N_WB_SLAVES'
+        Look for the pattern ``localparam N_WB_SLAVES``
         in this module's topfile, and use it to extract the
         number of wishbone slaves in the module.
         Update the base_wb_slaves attribute accordingly.
@@ -669,18 +668,21 @@ class VerilogModule(object):
 
     def add_port(self, name, signal=None, parent_port=False, parent_sig=True, **kwargs):
         """
-        Add a port to the module. Only the parameter 'name' is compulsory. Others may be required when instantiating
-        this module in another. E.g., an instance of this module needs all ports to have a defined 'signal' value.
+        Add a port to the module. Only the parameter ``name`` is compulsory. Others may be required when instantiating
+        this module in another.
+        
+        E.g., an instance of this module needs all ports to have a defined ``signal`` value.
+
         However, if this module is at the top level, this isn't necessary. Similarly, a port featuring in an
         instantiated module need not have a width or direction specified, but if you want to instantiate the module
         and propagate the port to the parent, the parent won't know what to do unless these port parameters are specified.
 
         :param name: name of the port
-        :param signal: name of the signal to connect port to. Can include bit indexing, e.g. `my_signal[15:8]`
+        :param signal: name of the signal to connect port to. Can include bit indexing, e.g. ``my_signal[15:8]``
         :param dir: direction of signal
         :param width: width of signal
         :param parent_port: When instantiating this module, promote this port to a port of the parent
-        :param parent_sig: When instantiating this module, add a signal named 'signal' to the parent
+        :param parent_sig: When instantiating this module, add a signal named ``signal`` to the parent
         :param comment: Use this to add a comment string which will end up in the generated verilog
         """
         name = name.rstrip(' ')
@@ -706,8 +708,9 @@ class VerilogModule(object):
 
     def add_parameter(self, name, value, comment=None):
         """
-        Add a parameter to the entity, with name 'parameter' and value
-        'value'.
+        Add a parameter to the entity, with name ``parameter`` and value
+        ``value``.
+        
         You may add a comment that will end up in the generated verilog.
         """
         # check every nested dictionary to see if name is in it
@@ -721,8 +724,9 @@ class VerilogModule(object):
 
     def add_localparam(self, name, value, comment=None):
         """
-        Add a parameter to the entity, with name 'parameter' and value
-        'value'.
+        Add a parameter to the entity, with name ``parameter`` and value
+        ``value``.
+        
         You may add a comment that will end up in the generated verilog.
         """
         # check every nested dictionary to see if name is in it
@@ -736,8 +740,9 @@ class VerilogModule(object):
 
     def add_signal(self, name, width=0, **kwargs):
         """
-        Add an internal signal to the entity, with name 'signal'
-        and width 'width'.
+        Add an internal signal to the entity, with name ``signal``
+        and width ``width``.
+
         You may add a comment that will end up in the generated verilog.
         """
         name = name.rstrip(' ')
@@ -753,10 +758,11 @@ class VerilogModule(object):
     def assign_signal(self, lhs, rhs, comment=None):
         """
         Assign one signal to another, or one signal to a port.
-        i.e., generate lines of verilog like:
-        assign lhs = rhs;
-        'lhs' and 'rhs' are strings that can represent port or signal
-        names, and may include verilog-style indexing, eg '[15:8]'
+
+        i.e., generate lines of verilog like: ``assign lhs = rhs;``
+
+        ``lhs`` and ``rhs`` are strings that can represent port or signal
+        names, and may include verilog-style indexing, eg ``[15:8]``
 
         You may add a comment that will end up in the generated verilog.
         """
@@ -764,7 +770,8 @@ class VerilogModule(object):
 
     def get_instance(self, entity, name, comment=None):
         """
-        Instantiate and return a new instance of entity 'entity', with instance name 'name'.
+        Instantiate and return a new instance of entity ``entity``, with instance name ``name``.
+
         You may add a comment that will end up in the generated verilog.
         """
         new_inst = VerilogModule(name=entity, comment=comment)
@@ -816,6 +823,7 @@ class VerilogModule(object):
         Rewrite the intially supplied verilog file to
         include instance, signals, ports, assignments and
         wishbone interfaces added programmatically.
+
         The initial verilog file is backed up with a '.base' extension.
         """
         os.system('cp %s %s.base'%(self.topfile,self.topfile))
@@ -861,7 +869,7 @@ class VerilogModule(object):
         programmatic additions of instances / signals / etc.
         to the VerilogModule instance.
 
-        The jasper toolflow has been using rewrite_module_file()
+        The jasper toolflow has been using ``rewrite_module_file()``
         rather than this method, so it may or may not still
         work correctly. It used to, at least...
         """
@@ -910,8 +918,9 @@ class VerilogModule(object):
     def gen_top_mod(self):
         """
         Return the code that needs to go in a top level verilog file
-        to incorporate this module. I.e., everything except the module
-        port declaration headers and endmodule lines.
+        to incorporate this module. 
+        
+        I.e., everything except the module port declaration headers and endmodule lines.
 
         TODO: This is almost identical to write_new_module_file(). Combine?
         """        
@@ -1107,7 +1116,7 @@ class VerilogModule(object):
     def gen_instance_verilog(self, instname):
         """
         Generate a string corresponding to the instantiation of this instance,
-        with instance name 'instname'
+        with instance name ``instname``
         """
         s = ''
         if self.comment is not None:
@@ -1197,7 +1206,7 @@ class VerilogModule(object):
     def search_dict_for_name(self, dict, name):
         """
         This helper function searches each top level dictionary
-        to see if it contains 'name' and returns the key that does.
+        to see if it contains ``name`` and returns the key that does.
         """
         for top_dict_key, top_dict_value in dict.items():
             # does the second level dict keys contain name?
@@ -1210,7 +1219,7 @@ class VerilogModule(object):
         """
         This helper function returns the current block string,
         if the dictionary is not empty and the current block 
-        is not 'default'.
+        is not ``default``.
         """
         # is the dictionary empty?
         if dict and cur_blk != 'default':

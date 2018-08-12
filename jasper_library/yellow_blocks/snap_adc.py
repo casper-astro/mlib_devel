@@ -173,11 +173,12 @@ class snap_adc(YellowBlock):
 
             wb_bitwidth stands for the bit width of data in/out port of wishbone bus
 
-            E.g.
-            reorder_ports(['a1','a2','a3','a4'])
-            when self.adc_data_width == 8, return {a1,a2,a3,a4}
-            when self.adc_data_width == 16, return {a3,a4,a1,a2}
-            when self.adc_data_width == 32, return {a4,a3,a2,a1}
+            .. code-block:: python
+
+                reorder_ports(['a1','a2','a3','a4'])
+                when self.adc_data_width == 8, return {a1,a2,a3,a4}
+                when self.adc_data_width == 16, return {a3,a4,a1,a2}
+                when self.adc_data_width == 32, return {a4,a3,a2,a1}
         """
 
         if not isinstance(port_list,list):
