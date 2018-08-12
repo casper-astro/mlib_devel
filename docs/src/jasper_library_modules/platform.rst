@@ -1,7 +1,6 @@
-platform module
-===============
+platform
+=========
 
 .. automodule:: platform
-    :members:
+    :members: 
     :undoc-members:
-    :show-inheritance:

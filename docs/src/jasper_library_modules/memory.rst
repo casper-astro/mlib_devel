@@ -1,7 +1,6 @@
-memory module
-=============
+memory
+=======
 
 .. automodule:: memory
     :members:
     :undoc-members:
-    :show-inheritance:

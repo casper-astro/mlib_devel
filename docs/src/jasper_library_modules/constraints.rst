@@ -1,7 +1,6 @@
-constraints module
-==================
+constraints
+===========
 
 .. automodule:: constraints
     :members:
     :undoc-members:
-    :show-inheritance:
