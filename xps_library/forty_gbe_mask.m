@@ -21,7 +21,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Create yellow block(s) supporting upto 4x 40GbE links.
-% Amit Bansod, abansod@bansod.org
+% Amit Bansod, amit@bansod.org
 
 
 function forty_gbe_mask(blk)
@@ -86,7 +86,7 @@ gateway_ins = { {clear_name([cursys, '_led_up']);'Boolean';'1'}; ...
                 {clear_name([cursys, '_rx_overrun']);'Boolean';'1'}; ...
                 };
 
-for s=1:num_qsfp_ports
+for s=0:(num_qsfp_ports-1)
   for ctr = 1 : length(gateway_ins) 
       gw = gateway_ins{ctr}{1};
        type = gateway_ins{ctr}{2};
@@ -99,7 +99,7 @@ for s=1:num_qsfp_ports
             'Position', [850 (s*800)+127+(ctr*50) 875 157+(s*800)+(ctr*50)]);
          reuse_block(cursys, strcat(gw((length(cursys)+2):length(gw) ),num2str(s),'_pipe'), 'casper_library_delays/pipeline', ...
             'latency', '3', 'Position', [1100 (s*800)+127+(ctr*50) 1150 157+(s*800)+(ctr*50)]);
-         reuse_block(cursys, strcat(gw((length(cursys)+2):length(gw)),num2str(s)), 'built-in/outport', 'Port', num2str(s*length(gateway_ins)), ...
+         reuse_block(cursys, strcat(gw((length(cursys)+2):length(gw)),num2str(s)), 'built-in/outport', 'Port', num2str((s+1)*length(gateway_ins)), ...
             'Position', [1450 (s*800)+127+(ctr*50) 1500 157+(s*800)+(ctr*50)]);
         add_line(cursys,strcat(gw((length(cursys)+2):length(gw) ),num2str(s),'_const/1'),strcat(gw,num2str(s),'/1'));
         add_line(cursys,strcat(gw,num2str(s),'/1'), strcat(gw((length(cursys)+2):length(gw) ),num2str(s),'_pipe/1'));
@@ -142,12 +142,12 @@ gateway_outs = { {clear_name([cursys, '_tx_valid']);'Boolean';'1'}; ...
                 };
 
             
-for s=1:num_qsfp_ports
+for s=0:(num_qsfp_ports-1)
    for ctr = 1 : length(gateway_outs) 
        gw = gateway_outs{ctr}{1};
        type = gateway_outs{ctr}{2};
        bits = gateway_outs{ctr}{3};
-          reuse_block(cursys, strcat(gw((length(cursys)+2):length(gw) ),num2str(s)), 'built-in/inport', 'Port', num2str(s*length(gateway_outs)), ...
+          reuse_block(cursys, strcat(gw((length(cursys)+2):length(gw) ),num2str(s)), 'built-in/inport', 'Port', num2str((s+1)*length(gateway_outs)), ...
              'Position', [50 (s*800)+127+(ctr*50) 100 157+(s*800)+(ctr*50)]);
           reuse_block(cursys, strcat(gw((length(cursys)+2):length(gw) ),num2str(s),'_apipe'), 'casper_library_delays/pipeline', ...
              'latency', '3', 'Position', [120 (s*800)+127+(ctr*50) 150 157+(s*800)+(ctr*50)]);
@@ -420,7 +420,7 @@ function draw_rxcounter(sys, xpos, ypos, targetname, sourceeof, sourcevalid)
     end
 end
 % 
- for s=1:num_qsfp_ports
+ for s=0:(num_qsfp_ports-1)
  
      % tx counter
      starty = 450 + s*460;
