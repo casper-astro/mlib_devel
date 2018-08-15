@@ -5,7 +5,6 @@ jasper_library
    :maxdepth: 4
 
    castro
-   clk_factors
    constraints
    exec_flow
    helpers

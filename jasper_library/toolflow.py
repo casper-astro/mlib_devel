@@ -50,7 +50,7 @@ class Toolflow(object):
         Initialize the toolflow.
 
         :param frontend: Name of the toolflow frontend to use.
-            Currently only 'simulink' is supported
+            Currently only ``simulink`` is supported
         :type frontend: str
         :param compile_dir: Compile directory where build files and logs
             should go.
@@ -198,11 +198,12 @@ class Toolflow(object):
         """
         Generates a top file for the target platform
         based on the peripherals file.
+
         Internally, calls:
-        instantiate_periphs -- call each yellow block's mod_top method
-        instantiate_user_ip -- add ports to top module based on port entries
-            in peripheral file
-        regenerate_top -- rewrite top.v
+
+        * ``instantiate_periphs``: call each yellow block's mod_top method
+        * ``instantiate_user_ip``: add ports to top module based on port entries in peripheral file
+        * ``regenerate_top``: rewrite top.v
         """
         self.logger.info('instantiating user peripherals')
         self._instantiate_periphs()
@@ -315,9 +316,12 @@ class Toolflow(object):
     def gen_periph_objs(self):
         """
         Generate a list of yellow blocks from the current peripheral file.
+
         Internally, calls:
-        _parse_periph_file - parses .per file
-        _extract_plat_info - instantiates platform instance
+
+        * ``_parse_periph_file``: parses .per file
+        * ``_extract_plat_info``: instantiates platform instance
+
         Then calls each yellow block's constructor.
         Runs a system-wide drc before returning.
         """
@@ -333,14 +337,17 @@ class Toolflow(object):
         
     def _expand_children(self, population, parents=None, recursive=True):
         """
-        population: a list of yellow blocks to which children will be added
-        parents: a list of yellow blocks which will be invited to procreate.
-                 If parents = None, the population will be used as the initial
-                 parents argument
-        recursive: if True, this method is called recursively, with children
-                   passed as the new parents argument. The population list
-                   will continue to grow until no child yellow blocks wish
-                   to procreate any further.
+        :param population: yellow blocks to which children will be added
+        :type population: list
+        :param parents: yellow blocks which will be invited to procreate.
+            If parents = None, the population will be used as the initial
+            parents argument
+        :type parents: list
+        :param recursive: if True, this method is called recursively, with children
+            passed as the new parents argument. The population list
+            will continue to grow until no child yellow blocks wish
+            to procreate any further.
+        :type recursive: bool
         """
         parents = parents or population
         children = []
@@ -690,11 +697,13 @@ class ToolflowFrontend(object):
         Call upon the frontend to generate a
         jasper-standard file defining peripherals
         (yellow blocks) present in a model.
+
         This method should be overridden by the
         specific frontend of choice, and should
         return the full path to the
         peripheral file.
-        Use skip = True to just return the name of
+
+        Use ``skip = True`` to just return the name of
         the file, without bothering to regenerate it
         (useful for debugging, and future use cases
         where a user only wants to run certain
@@ -714,11 +723,11 @@ class ToolflowFrontend(object):
 
     def compile_user_ip(self):
         """
-        Compile the user IP to a single
-        HDL module. Return the name of
-        this module.
-        Should be overridden by each FrontEnd
-        subclass.
+        Compile the user IP to a single HDL module. 
+        
+        Return the name of this module.
+
+        Should be overridden by each FrontEnd subclass.
         """
         raise NotImplementedError()
 
@@ -745,7 +754,6 @@ class ToolflowBackend(object):
         """
 
         :param plat:
-        :return:
         """
         raise NotImplementedError
 
@@ -754,7 +762,6 @@ class ToolflowBackend(object):
 
         :param core:
         :param plat:
-        :return:
         """
         raise NotImplementedError
 
@@ -775,7 +782,8 @@ class ToolflowBackend(object):
         of files. The files are read from their source directory. Project
         mode copies files from their source directory and adds them to the
         a new compile directory.
-        :param constfile
+
+        :param constfile:
         """
         raise NotImplementedError
 
@@ -928,7 +936,8 @@ class ToolflowBackend(object):
     def calculate_checksum_using_bitstream(bitstream, packet_size=8192):
         """
         Summing up all the words in the input bitstream, and returning a
-        'Checksum' - Assuming that the bitstream HAS NOT been padded yet
+        ``Checksum`` - Assuming that the bitstream HAS NOT been padded yet
+
         :param bitstream: The actual bitstream of the file in question
         :param packet_size: max size of image packets that we pad to
         :return: checksum
@@ -974,9 +983,11 @@ class SimulinkFrontend(ToolflowFrontend):
 
     def gen_periph_file(self, fname='jasper.per'):
         """
-        generate the peripheral file. i.e., the list of yellow blocks
-        and their parameters. It also generates the design_info.tab file
-        which is used to populate the fpg file header
+        generate the peripheral file. 
+        
+        i.e., the list of yellow blocks and their parameters. 
+        
+        It also generates the ``design_info.tab`` file which is used to populate the fpg file header
 
         :param fname: The full path and name to give the peripheral file.
         :type fname: str
@@ -1205,7 +1216,8 @@ class VivadoBackend(ToolflowBackend):
         of files. The files are read from their source directory. Project
         mode copies files from their source directory and adds them to the
         a new compile directory.
-        :param constfile
+
+        :param constfile:
         """
         if constfile.split('.')[-1] == self.const_file_ext:
             self.logger.debug('Adding constraint file: %s' % constfile)
@@ -1436,7 +1448,6 @@ class VivadoBackend(ToolflowBackend):
 
         :param cores:
         :param plat:
-        :return:
         """
         self.add_compile_cmds(cores=cores, plat=plat)
         # write tcl command to file
@@ -1708,7 +1719,6 @@ class ISEBackend(VivadoBackend):
     def compile(self, cores, plat):
         """
 
-        :return:
         """
         self.add_compile_cmds()
         # write tcl command to file
