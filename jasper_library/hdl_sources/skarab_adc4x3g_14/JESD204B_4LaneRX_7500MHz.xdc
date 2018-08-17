@@ -72,7 +72,8 @@
 create_clock -period 5.333 [get_pins -hier -filter {name=~*gt0_JESD204B_4LaneRX_7500MHz_i*gthe2_i*TXOUTCLK}]
 create_clock -period 5.333 [get_pins -hier -filter {name=~*gt0_JESD204B_4LaneRX_7500MHz_i*gthe2_i*TXOUTCLKFABRIC}]
 create_clock -period 5.333 [get_pins -hier -filter {name=~*gt0_JESD204B_4LaneRX_7500MHz_i*gthe2_i*RXOUTCLKFABRIC}]
-create_clock -period 5.333 [get_pins -hier -filter {name=~*gt0_JESD204B_4LaneRX_7500MHz_i*gthe2_i*RXOUTCLK}]
+#This clock is created in the toolflow via the python script
+#create_clock -period 5.333 [get_pins -hier -filter {name=~*gt0_JESD204B_4LaneRX_7500MHz_i*gthe2_i*RXOUTCLK}]
 #set_false_path -from [get_clocks -include_generated_clocks -of_objects [get_ports SYSCLK_IN]] -to [get_clocks -include_generated_clocks -of_objects [get_pins -hier -filter {name=~*gt0_JESD204B_4LaneRX_7500MHz_i*gthe2_i*TXOUTCLK}]]
 #set_false_path -from [get_clocks -include_generated_clocks -of_objects [get_pins -hier -filter {name=~*gt0_JESD204B_4LaneRX_7500MHz_i*gthe2_i*TXOUTCLK}]] -to [get_clocks -include_generated_clocks -of_objects [get_ports SYSCLK_IN]]
 
