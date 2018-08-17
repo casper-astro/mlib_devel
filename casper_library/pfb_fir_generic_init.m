@@ -110,6 +110,7 @@ function pfb_fir_generic_init(blk, varargin)
       float_type_sel = 'single';
       exp_width = 8;
       frac_width = 24;
+      fixed_float_latency = 0; % Disable if floating point not selected
   end
   
   
