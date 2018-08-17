@@ -37,7 +37,8 @@ function pfb_fir_taps_init(blk, varargin)
     'floating_point', 'off', ...
     'float_type', 'single', ...
     'exp_width', 8, ...
-    'frac_width', 24, ...      
+    'frac_width', 24, ...  
+    'fixed_float_latency', 0, ...
     'async', 'on', ...
     'mult_latency', 3, ...
     'add_latency', 2, ...
@@ -63,7 +64,8 @@ function pfb_fir_taps_init(blk, varargin)
   floating_point              = get_var('floating_point', 'defaults', defaults, varargin{:});
   float_type                  = get_var('float_type', 'defaults', defaults, varargin{:});
   exp_width                   = get_var('exp_width', 'defaults', defaults, varargin{:});
-  frac_width                  = get_var('frac_width', 'defaults', defaults, varargin{:});     
+  frac_width                  = get_var('frac_width', 'defaults', defaults, varargin{:});  
+  fixed_float_latency      = get_var('fixed_float_latency', 'defaults', defaults, varargin{:});  
   async                       = get_var('async', 'defaults', defaults, varargin{:});
   mult_latency                = get_var('mult_latency', 'defaults', defaults, varargin{:});
   add_latency                 = get_var('add_latency', 'defaults', defaults, varargin{:});
@@ -124,10 +126,23 @@ function pfb_fir_taps_init(blk, varargin)
   reuse_block(blk, 'dsync0', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
     'latency', num2str(fan_latency+bram_latency), 'Position', [415 40 450 60]);
   
-  reuse_block(blk, 'dsync1', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
-    'latency', num2str(mult_latency), 'Position', [695 40 730 60]);
-  add_line(blk, 'dsync0/1', 'dsync1/1');
 
+
+  if (fixed_float_latency > 0)
+    reuse_block(blk, 'dsync_ffl', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
+        'latency', num2str(fixed_float_latency), 'Position', [695 40 730 60]);
+        add_line(blk, 'dsync0/1', 'dsync_ffl/1');
+
+        reuse_block(blk, 'dsync1', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
+        'latency', num2str(mult_latency), 'Position', [695 40 730 60]);
+        add_line(blk, 'dsync_ffl/1', 'dsync1/1');
+  else
+        reuse_block(blk, 'dsync1', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
+        'latency', num2str(mult_latency), 'Position', [695 40 730 60]);
+        add_line(blk, 'dsync0/1', 'dsync1/1'); 
+  end
+  
+  
   reuse_block(blk, 'dsync2', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
     'latency', num2str(ceil(log2(n_taps))*add_latency), 'Position', [925 40 960 60]);
   add_line(blk, 'dsync1/1', 'dsync2/1');
@@ -160,9 +175,23 @@ function pfb_fir_taps_init(blk, varargin)
       'latency', num2str(fan_latency+bram_latency), 'Position', [415 95 450 115]);
     add_line(blk, 'en/1', 'den0/1');
     
-    reuse_block(blk, 'den1', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
-      'latency', num2str(mult_latency), 'Position', [695 95 730 115]);
-    add_line(blk, 'den0/1', 'den1/1');
+    
+    if (fixed_float_latency > 0)
+        reuse_block(blk, 'den_ffl', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
+          'latency', num2str(fixed_float_latency), 'Position', [695 95 730 115]);
+        add_line(blk, 'den0/1', 'den_ffl/1'); 
+        
+        reuse_block(blk, 'den1', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
+          'latency', num2str(mult_latency), 'Position', [695 95 730 115]);
+        add_line(blk, 'den_ffl/1', 'den1/1'); 
+        
+    else
+        reuse_block(blk, 'den1', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
+          'latency', num2str(mult_latency), 'Position', [695 95 730 115]);
+        add_line(blk, 'den0/1', 'den1/1');        
+    end
+       
+
     
     reuse_block(blk, 'den2', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
       'latency', num2str(ceil(log2(n_taps))*add_latency), 'Position', [925 95 960 115]);
@@ -279,7 +308,16 @@ function pfb_fir_taps_init(blk, varargin)
         'max_fanout', '1', 'fan_latency', '0', ...
         'multiplier_implementation', 'behavioral HDL', 'misc', 'off', ...
         'Position', [685 457 740 528]);
-      add_line(blk, 'mult_din/1', 'bus_mult/1');
+    if (fixed_float_latency > 0)
+        reuse_block(blk, 'mult_del_ffl', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
+        'latency', num2str(fixed_float_latency), 'Position', [695 95 730 115]);
+        add_line(blk, 'mult_din/1', 'mult_del_ffl/1'); 
+        add_line(blk, 'mult_del_ffl/1', 'bus_mult/1');          
+        
+    else
+        add_line(blk, 'mult_din/1', 'bus_mult/1');        
+    end
+
       
 
       reuse_block(blk, 'coeff_float_conv', 'casper_library_misc/fixed_to_float', ...
@@ -287,7 +325,7 @@ function pfb_fir_taps_init(blk, varargin)
         'n_bits_in', num2str(n_bits_coeff), ...
         'bin_pt', num2str(bin_pt_coeff), ...
         'num_vec', num2str(n_taps*2^(n_inputs)*n_streams), ...
-        'latency', num2str(0), ...
+        'latency', num2str(fixed_float_latency), ...
         'Position', [800 455 850 455+(n_taps*20)]);
       add_line(blk, 'dcoeffs/1', 'coeff_float_conv/1'); 
       add_line(blk, 'coeff_float_conv/1', 'bus_mult/2');           
