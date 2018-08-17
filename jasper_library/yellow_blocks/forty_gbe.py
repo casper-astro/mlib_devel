@@ -918,8 +918,8 @@ class forty_gbe(YellowBlock):
 
         #Raw Constraints
 
-        fortygbefullname = self.fullpath.replace('/', '_')
-        cons.append(RawConstraint('set_property LOC ICAP_X0Y1 [get_cells %s/wishbone_flash_sdram_interface_0/icape_controller_0/ICAPE2_0]' % fortygbefullname))
+        #fortygbefullname = self.fullpath.replace('/', '_')
+        cons.append(RawConstraint('set_property LOC ICAP_X0Y1 [get_cells '+self.fullname+'/wishbone_flash_sdram_interface_0/icape_controller_0/ICAPE2_0]'))
         cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports CONFIG_IO_0]'))
         cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports CONFIG_IO_1]'))
         cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports CONFIG_IO_10]'))
