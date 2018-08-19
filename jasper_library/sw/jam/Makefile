@@ -119,7 +119,7 @@ core_info.o: core_info.bin
 		$< $@
 
 core_info.bin: core_info.tab
-	ruby ./util/cit2bin.rb $< > $@
+	python ./util/cit2csl.py -b $< > $@
 
 symbols: $(EXEC)
 	mb-readelf -s $< | sort -rnk3 > $@
