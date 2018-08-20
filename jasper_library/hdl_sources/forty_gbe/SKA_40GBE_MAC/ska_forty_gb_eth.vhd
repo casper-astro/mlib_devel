@@ -1,23 +1,23 @@
 ----------------------------------------------------------------------------------
 -- Company: Peralex Electronics
 -- Engineer: Gavin Teague
--- 
+--
 -- Create Date: 05.09.2014 10:19:29
--- Design Name: 
+-- Design Name:
 -- Module Name: ska_forty_gb_eth - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
+-- Project Name:
+-- Target Devices:
+-- Tool Versions:
+-- Description:
+--
 -- SKA 40GBE (includes IP encapsulation and MAC)
 --
--- Dependencies: 
--- 
+-- Dependencies:
+--
 -- Revision:
 -- Revision 0.01 - File Created
 -- Additional Comments:
--- 
+--
 ----------------------------------------------------------------------------------
 
 library ieee;
@@ -35,7 +35,7 @@ entity ska_forty_gb_eth is
         FABRIC_ENABLE  : std_logic;
         TTL                 : std_logic_vector(7 downto 0);
         PROMISC_MODE        : integer;
-        RX_CRC_CHK_ENABLE   : integer);     
+        RX_CRC_CHK_ENABLE   : integer);
     port (
         clk : in std_logic;
         rst : in std_logic;
@@ -47,7 +47,7 @@ entity ska_forty_gb_eth is
         tx_dest_port        : in std_logic_vector(15 downto 0);
         tx_overflow         : out std_logic;
         tx_afull            : out std_logic;
-        
+
         --RECEIVE FABRIC INTERFACE
         rx_valid            : out std_logic_vector(3 downto 0);
         rx_end_of_frame     : out std_logic;
@@ -60,7 +60,7 @@ entity ska_forty_gb_eth is
         rx_overrun          : out std_logic;
         rx_overrun_ack      : in std_logic;
         rx_ack : in std_logic;
-        
+
         -- WISHBONE SLAVE INTERFACE
         CLK_I : in std_logic;
         RST_I : in std_logic;
@@ -72,7 +72,7 @@ entity ska_forty_gb_eth is
         SEL_I : in std_logic_vector(3 downto 0);
         STB_I : in std_logic;
         WE_I  : in std_logic;
-        
+
         -- XLGMII INTERFACE
         xlgmii_txclk    : in std_logic;
         xlgmii_txrst    : in std_logic;
@@ -86,7 +86,7 @@ entity ska_forty_gb_eth is
         xlgmii_rxled    : out std_logic_vector(1 downto 0);
         phy_tx_rst      : in std_logic;
         phy_rx_up       : in std_logic;
-       
+
         -- LOCAL CONFIG
         src_ip_address      : out std_logic_vector(31 downto 0);
         src_mac_address     : out std_logic_vector(47 downto 0);
@@ -96,7 +96,7 @@ entity ska_forty_gb_eth is
         src_gateway         : out std_logic_vector(7 downto 0);
         src_local_mc_recv_ip        : out std_logic_vector(31 downto 0);
         src_local_mc_recv_ip_mask   : out std_logic_vector(31 downto 0);
-        
+
         debug_out   : out std_logic_vector(7 downto 0);
         debug_led   : out std_logic_vector(7 downto 0));
 end ska_forty_gb_eth;
@@ -107,11 +107,11 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
     CPU_RESET_IDLE,
     CPU_RESET_WAIT_FOR_MAC_START,
     CPU_RESET_WAIT_FOR_MAC_FINISH);
-    
+
     type T_MAC_RESET_STATE is (
     MAC_RESET_IDLE,
     MAC_DO_RESET);
-    
+
     type T_MAC_RX_STATE is (
     WAIT_FOR_END_CHANNEL_1,
     WAIT_FOR_END_CHANNEL_2);
@@ -125,18 +125,18 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
         FABRIC_GATEWAY : std_logic_vector(7 downto 0);
         FABRIC_ENABLE  : std_logic;
         MC_RECV_IP          : std_logic_vector(31 downto 0);
-        MC_RECV_IP_MASK     : std_logic_vector(31 downto 0));     
-	port (
-		CLK_I : in std_logic;
-		RST_I : in std_logic;
-		DAT_I : in std_logic_vector(31 downto 0);
-		DAT_O : out std_logic_vector(31 downto 0);
-		ACK_O : out std_logic;
-		ADR_I : in std_logic_vector(13 downto 0);
-		CYC_I : in std_logic;
-		SEL_I : in std_logic_vector(3 downto 0);
-		STB_I : in std_logic;
-		WE_I  : in std_logic;
+        MC_RECV_IP_MASK     : std_logic_vector(31 downto 0));
+    port (
+        CLK_I : in std_logic;
+        RST_I : in std_logic;
+        DAT_I : in std_logic_vector(31 downto 0);
+        DAT_O : out std_logic_vector(31 downto 0);
+        ACK_O : out std_logic;
+        ADR_I : in std_logic_vector(13 downto 0);
+        CYC_I : in std_logic;
+        SEL_I : in std_logic_vector(3 downto 0);
+        STB_I : in std_logic;
+        WE_I  : in std_logic;
         cpu_tx_buffer_addr      : out std_logic_vector(7 downto 0);
         cpu_tx_buffer_rd_data   : in std_logic_vector(63 downto 0);
         cpu_tx_buffer_wr_data   : out std_logic_vector(63 downto 0);
@@ -159,11 +159,11 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
         local_netmask   : out std_logic_vector(31 downto 0);
         local_gateway   : out std_logic_vector(7 downto 0);
         local_mc_recv_ip        : out std_logic_vector(31 downto 0);
-        local_mc_recv_ip_mask   : out std_logic_vector(31 downto 0);        
+        local_mc_recv_ip_mask   : out std_logic_vector(31 downto 0);
         soft_reset      : out std_logic;
         soft_reset_ack  : in std_logic);
     end component;
-  
+
     component ska_fge_tx
     generic (
         TTL             : std_logic_vector(7 downto 0));
@@ -198,18 +198,18 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
         cpu_tx_done             : out std_logic;
         mac_clk             : in std_logic;
         mac_rst             : in std_logic;
-        mac_tx_data         : out std_logic_vector(255 downto 0); 
+        mac_tx_data         : out std_logic_vector(255 downto 0);
         mac_tx_data_valid   : out std_logic_vector(31 downto 0);
         mac_tx_start        : out std_logic;
         mac_tx_ready        : in std_logic;
         debug_out           : out std_logic_vector(7 downto 0));
     end component;
-  
+
     component ska_mac_tx
     port (
         mac_clk             : in std_logic;
         mac_rst             : in std_logic;
-        mac_tx_data         : in std_logic_vector(255 downto 0); 
+        mac_tx_data         : in std_logic_vector(255 downto 0);
         mac_tx_data_valid   : in std_logic_vector(31 downto 0);
         mac_tx_start        : in std_logic;
         mac_tx_ready        : out std_logic;
@@ -218,7 +218,7 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
         xlgmii_txc      : out std_logic_vector(31 downto 0);
         xlgmii_txled    : out std_logic_vector(1 downto 0));
     end component;
-  
+
     component ska_runt_filt_rx
     port (
         mac_clk             : in std_logic;
@@ -229,11 +229,11 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
         xlgmii_rxc_out     : out std_logic_vector(31 downto 0);
         phy_rx_up          : in std_logic;
         xlgmii_rxled       : out std_logic_vector(1 downto 0));
-    end component;  
-  
+    end component;
+
     component ska_mac_rx
     generic (
-        RX_CRC_CHK_ENABLE   : integer); 
+        RX_CRC_CHK_ENABLE   : integer);
     port (
         xlgmii_rxd      : in std_logic_vector(255 downto 0);
         xlgmii_rxc      : in std_logic_vector(31 downto 0);
@@ -241,12 +241,12 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
         mac_rst             : in std_logic;
         mac_rx_enable       : in std_logic;
         mac_rx_busy         : out std_logic;
-        mac_rx_data         : out std_logic_vector(255 downto 0); 
+        mac_rx_data         : out std_logic_vector(255 downto 0);
         mac_rx_data_valid   : out std_logic_vector(31 downto 0);
         mac_rx_good_frame   : out std_logic;
         mac_rx_bad_frame    : out std_logic);
     end component;
-  
+
     component overlap_buffer
     port (
         clk     : in std_logic;
@@ -258,7 +258,7 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
         full    : out std_logic;
         empty   : out std_logic);
     end component;
-  
+
     component ska_fge_rx
     generic (
         PROMISC_MODE    : integer);
@@ -269,7 +269,7 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
         local_port      : in std_logic_vector(15 downto 0);
         local_gateway   : in std_logic_vector(7 downto 0);
         local_mc_recv_ip        : in std_logic_vector(31 downto 0);
-        local_mc_recv_ip_mask   : in std_logic_vector(31 downto 0);        
+        local_mc_recv_ip_mask   : in std_logic_vector(31 downto 0);
         app_clk                 : in std_logic;
         app_rst                 : in std_logic;
         app_rx_valid            : out std_logic_vector(3 downto 0);
@@ -298,7 +298,7 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
         phy_rx_up           : in std_logic;
         debug_port : out std_logic_vector(7 downto 0));
     end component;
-  
+
     signal cpu_tx_buffer_addr : std_logic_vector(7 downto 0);
     signal cpu_tx_buffer_rd_data : std_logic_vector(63 downto 0);
     signal cpu_tx_buffer_wr_data : std_logic_vector(63 downto 0);
@@ -322,10 +322,10 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
     signal local_gateway : std_logic_vector(7 downto 0);
     signal soft_reset : std_logic;
     signal soft_reset_ack : std_logic;
-  
+
     signal app_rst : std_logic;
     signal usr_rst : std_logic;
-  
+
     signal current_cpu_reset_state : T_CPU_RESET_STATE;
     signal mac_rst_ack : std_logic;
     signal mac_rst_ack_z1 : std_logic;
@@ -334,38 +334,38 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
     signal mac_rst_req_z1 : std_logic;
     signal mac_rst_req_z2 : std_logic;
     signal current_mac_reset_state : T_MAC_RESET_STATE;
-     
-    signal mac_tx_data : std_logic_vector(255 downto 0); 
+
+    signal mac_tx_data : std_logic_vector(255 downto 0);
     signal mac_tx_data_valid : std_logic_vector(31 downto 0);
     signal mac_tx_start : std_logic;
     signal mac_tx_ready : std_logic;
-     
+
     signal mac_rx_channel : std_logic;
-     
+
     signal mac_rx_enable_1 : std_logic;
     signal mac_rx_busy_out_1 : std_logic;
 
     signal mac_rx_enable_2 : std_logic;
     signal mac_rx_busy_out_2 : std_logic;
 
-    signal mac_rx_data_1 : std_logic_vector(255 downto 0); 
+    signal mac_rx_data_1 : std_logic_vector(255 downto 0);
     signal mac_rx_data_valid_1 : std_logic_vector(31 downto 0);
     signal mac_rx_good_frame_1 : std_logic;
     signal mac_rx_bad_frame_1 : std_logic;
 
-    signal mac_rx_data_2 : std_logic_vector(255 downto 0); 
+    signal mac_rx_data_2 : std_logic_vector(255 downto 0);
     signal mac_rx_data_valid_2 : std_logic_vector(31 downto 0);
     signal mac_rx_good_frame_2 : std_logic;
     signal mac_rx_bad_frame_2 : std_logic;
-    
-    signal mac_rx_data : std_logic_vector(255 downto 0); 
+
+    signal mac_rx_data : std_logic_vector(255 downto 0);
     signal mac_rx_data_valid : std_logic_vector(31 downto 0);
     signal mac_rx_good_frame : std_logic;
     signal mac_rx_bad_frame : std_logic;
-     
+
     signal local_mc_recv_ip : std_logic_vector(31 downto 0);
     signal local_mc_recv_ip_mask : std_logic_vector(31 downto 0);
-        
+
     signal overlap_buffer_din_1 : std_logic_vector(289 downto 0);
     signal overlap_buffer_wrreq_1 : std_logic;
     signal overlap_buffer_rdreq_1 : std_logic;
@@ -379,16 +379,16 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
     signal overlap_buffer_dout_2 : std_logic_vector(289 downto 0);
     signal overlap_buffer_full_2 : std_logic;
     signal overlap_buffer_empty_2 : std_logic;
-      
+
     signal current_mac_rx_state : T_MAC_RX_STATE;
-    
+
     signal xlgmii_rxd_filtered : std_logic_vector(255 downto 0);
     signal xlgmii_rxc_filtered : std_logic_vector(31 downto 0);
-    
+
 --    signal rx_start_count_filtered_i : std_logic_vector(7 downto 0);
 --    signal rx_count_good_i : std_logic_vector(7 downto 0);
 --    signal rx_count_bad_i : std_logic_vector(7 downto 0);
-    
+
 begin
 
 --    debug_out(0) <= '0';
@@ -420,7 +420,7 @@ begin
 
     --mac_rst <= xlgmii_rst;
     --mac_clk <= xlgmii_clk;
-    
+
 ----------------------------------------------------------------------------------------
 -- MOVE RESET FROM CPU TO MAC CLOCK DOMAIN
 ----------------------------------------------------------------------------------------
@@ -440,9 +440,9 @@ begin
 --    -- SAME AS 10GBE CORE
 --    gen_app_rst : process(clk)
 --    begin
---        if (rising_edge(clk))then 
+--        if (rising_edge(clk))then
 --            app_rst <= rst or usr_rst;
---        end if; 
+--        end if;
 --    end process;
 
     gen_current_cpu_reset_state :  process(rst, clk)
@@ -450,78 +450,78 @@ begin
         if (rst = '1')then
             soft_reset_ack <= '0';
             mac_rst_ack_z1 <= '0';
-            mac_rst_ack_z2 <= '0';           
+            mac_rst_ack_z2 <= '0';
             current_cpu_reset_state <= CPU_RESET_IDLE;
         elsif (rising_edge(clk))then
             soft_reset_ack <= '0';
             mac_rst_ack_z1 <= mac_rst_ack;
-            mac_rst_ack_z2 <= mac_rst_ack_z1;           
+            mac_rst_ack_z2 <= mac_rst_ack_z1;
 
             case current_cpu_reset_state is
                 when CPU_RESET_IDLE =>
                 current_cpu_reset_state <= CPU_RESET_IDLE;
-                
+
                 if (soft_reset = '1')then
                     current_cpu_reset_state <= CPU_RESET_WAIT_FOR_MAC_START;
                 end if;
-                
+
                 when CPU_RESET_WAIT_FOR_MAC_START =>
                 current_cpu_reset_state <= CPU_RESET_WAIT_FOR_MAC_START;
 
                 if (mac_rst_ack_z2 = '1')then
                     current_cpu_reset_state <= CPU_RESET_WAIT_FOR_MAC_FINISH;
-                end if;                
-                
+                end if;
+
                 when CPU_RESET_WAIT_FOR_MAC_FINISH =>
                 current_cpu_reset_state <= CPU_RESET_WAIT_FOR_MAC_FINISH;
-                
+
                 if (mac_rst_ack_z2 = '0')then
                     soft_reset_ack <= '1';
                     current_cpu_reset_state <= CPU_RESET_IDLE;
                 end if;
-    
+
             end case;
         end if;
     end process;
-    
+
     mac_rst_req <= '1' when (current_cpu_reset_state = CPU_RESET_WAIT_FOR_MAC_START) else '0';
-    
+
     gen_current_mac_reset_state : process(xlgmii_txrst, xlgmii_txclk)
     begin
         if (xlgmii_txrst = '1')then
             mac_rst_req_z1 <= '0';
-            mac_rst_req_z2 <= '0';       
+            mac_rst_req_z2 <= '0';
             current_mac_reset_state <= MAC_RESET_IDLE;
         elsif (rising_edge(xlgmii_txclk))then
             mac_rst_req_z1 <= mac_rst_req;
-            mac_rst_req_z2 <= mac_rst_req_z1;       
+            mac_rst_req_z2 <= mac_rst_req_z1;
 
             case current_mac_reset_state is
                 when MAC_RESET_IDLE =>
                 current_mac_reset_state <= MAC_RESET_IDLE;
-                
+
                 if (mac_rst_req_z2 = '1')then
                     current_mac_reset_state <= MAC_DO_RESET;
                 end if;
-                
+
                 when MAC_DO_RESET =>
                 current_mac_reset_state <= MAC_DO_RESET;
-                
+
                 if (mac_rst_req_z2 = '0')then
                     current_mac_reset_state <= MAC_RESET_IDLE;
                 end if;
-                
+
             end case;
         end if;
     end process;
-    
+
     mac_rst_ack <= '1' when (current_mac_reset_state = MAC_DO_RESET) else '0';
-    
+
     usr_rst <= '1' when ((current_mac_reset_state = MAC_DO_RESET)and(mac_rst_req_z2 = '0'))else '0';
-    
+
     -- SHOULD THERE NOT BE A RESET OF MAC (XLGMII) WHEN GET A SOFT RESET?
     -- MAY NEED TO REPLICATE ABOVE FOR xlgmii_rxrst, xlgmii_rxclk
-    
+
 ----------------------------------------------------------------------------------------
 -- WISHBONE SLAVE
 ----------------------------------------------------------------------------------------
@@ -536,17 +536,17 @@ begin
         FABRIC_ENABLE  => FABRIC_ENABLE,
         MC_RECV_IP          => X"FFFFFFFF",
         MC_RECV_IP_MASK     => X"FFFFFFFF")
-	port map(
-		CLK_I => CLK_I,
-		RST_I => RST_I,
-		DAT_I => DAT_I,
-		DAT_O => DAT_O,
-		ACK_O => ACK_O,
-		ADR_I => ADR_I,
-		CYC_I => CYC_I,
-		SEL_I => SEL_I,
-		STB_I => STB_I,
-		WE_I  => WE_I,
+    port map(
+        CLK_I => CLK_I,
+        RST_I => RST_I,
+        DAT_I => DAT_I,
+        DAT_O => DAT_O,
+        ACK_O => ACK_O,
+        ADR_I => ADR_I,
+        CYC_I => CYC_I,
+        SEL_I => SEL_I,
+        STB_I => STB_I,
+        WE_I  => WE_I,
         cpu_tx_buffer_addr      => cpu_tx_buffer_addr,
         cpu_tx_buffer_rd_data   => cpu_tx_buffer_rd_data,
         cpu_tx_buffer_wr_data   => cpu_tx_buffer_wr_data,
@@ -569,9 +569,9 @@ begin
         local_netmask   => local_netmask,
         local_gateway   => local_gateway,
         local_mc_recv_ip        => local_mc_recv_ip,
-        local_mc_recv_ip_mask   => local_mc_recv_ip_mask,        
+        local_mc_recv_ip_mask   => local_mc_recv_ip_mask,
         soft_reset      => soft_reset,
-        soft_reset_ack  => soft_reset_ack); 
+        soft_reset_ack  => soft_reset_ack);
 
 ----------------------------------------------------------------------------------------
 -- TRANSMIT DATA PATH
@@ -611,7 +611,7 @@ begin
         cpu_tx_done             => cpu_tx_done,
         mac_clk             => xlgmii_txclk,
         mac_rst             => xlgmii_txrst,
-        mac_tx_data         => mac_tx_data, 
+        mac_tx_data         => mac_tx_data,
         mac_tx_data_valid   => mac_tx_data_valid,
         mac_tx_start        => mac_tx_start,
         mac_tx_ready        => mac_tx_ready,
@@ -625,7 +625,7 @@ begin
     port map(
         mac_clk             => xlgmii_txclk,
         mac_rst             => xlgmii_txrst,
-        mac_tx_data         => mac_tx_data, 
+        mac_tx_data         => mac_tx_data,
         mac_tx_data_valid   => mac_tx_data_valid,
         mac_tx_start        => mac_tx_start,
         mac_tx_ready        => mac_tx_ready,
@@ -674,10 +674,10 @@ begin
 
     -- TWO MAC RX DATA PATHS OPERATE IN PARALLEL IN ORDER TO BE
     -- ABLE TO SATISFY MINIMUM IFG
-	
+
     ska_mac_rx_0 : ska_mac_rx
     generic map(
-        RX_CRC_CHK_ENABLE   => RX_CRC_CHK_ENABLE) 
+        RX_CRC_CHK_ENABLE   => RX_CRC_CHK_ENABLE)
     port map(
         xlgmii_rxd      => xlgmii_rxd_filtered,
         xlgmii_rxc      => xlgmii_rxc_filtered,
@@ -685,14 +685,14 @@ begin
         mac_rst             => xlgmii_rxrst,
         mac_rx_enable       => mac_rx_enable_1,
         mac_rx_busy         => mac_rx_busy_out_1,
-        mac_rx_data         => mac_rx_data_1, 
+        mac_rx_data         => mac_rx_data_1,
         mac_rx_data_valid   => mac_rx_data_valid_1,
         mac_rx_good_frame   => mac_rx_good_frame_1,
         mac_rx_bad_frame    => mac_rx_bad_frame_1);
 
     ska_mac_rx_1 : ska_mac_rx
     generic map(
-        RX_CRC_CHK_ENABLE   => RX_CRC_CHK_ENABLE) 
+        RX_CRC_CHK_ENABLE   => RX_CRC_CHK_ENABLE)
     port map(
         xlgmii_rxd      => xlgmii_rxd_filtered,
         xlgmii_rxc      => xlgmii_rxc_filtered,
@@ -700,7 +700,7 @@ begin
         mac_rst             => xlgmii_rxrst,
         mac_rx_enable       => mac_rx_enable_2,
         mac_rx_busy         => mac_rx_busy_out_2,
-        mac_rx_data         => mac_rx_data_2, 
+        mac_rx_data         => mac_rx_data_2,
         mac_rx_data_valid   => mac_rx_data_valid_2,
         mac_rx_good_frame   => mac_rx_good_frame_2,
         mac_rx_bad_frame    => mac_rx_bad_frame_2);
@@ -720,19 +720,19 @@ begin
             else
                 if ((mac_rx_busy_out_2 = '1')and(mac_rx_busy_out_1 = '0'))then
                     mac_rx_channel <= '0';
-                end if;    
+                end if;
             end if;
         end if;
     end process;
 
     -- IN A SPECIFIC SCENARIO, IT IS POSSIBLE FOR THE START OF THE OUTPUT OF
     -- THE SECOND MAC RX DATA CHANNEL TO OVERLAP THE END OF THE OUTPUT OF THE FIRST
-    -- MAC RX DATA CHANNEL	
+    -- MAC RX DATA CHANNEL
     overlap_buffer_din_1(255 downto 0) <= mac_rx_data_1;
     overlap_buffer_din_1(287 downto 256) <= mac_rx_data_valid_1;
     overlap_buffer_din_1(288) <= mac_rx_good_frame_1;
     overlap_buffer_din_1(289) <= mac_rx_bad_frame_1;
-    
+
     overlap_buffer_wrreq_1 <= '1' when ((mac_rx_data_valid_1 /= X"00000000")and(overlap_buffer_full_1 = '0')) else '0';
 
     overlap_buffer_0 : overlap_buffer
@@ -752,7 +752,7 @@ begin
     overlap_buffer_din_2(287 downto 256) <= mac_rx_data_valid_2;
     overlap_buffer_din_2(288) <= mac_rx_good_frame_2;
     overlap_buffer_din_2(289) <= mac_rx_bad_frame_2;
-    
+
     overlap_buffer_wrreq_2 <= '1' when ((mac_rx_data_valid_2 /= X"00000000")and(overlap_buffer_full_2 = '0')) else '0';
 
     overlap_buffer_1 : overlap_buffer
@@ -776,38 +776,38 @@ begin
             case current_mac_rx_state is
                 when WAIT_FOR_END_CHANNEL_1 =>
                 current_mac_rx_state <= WAIT_FOR_END_CHANNEL_1;
-                
+
                 if ((overlap_buffer_empty_1 = '0')and(overlap_buffer_dout_1(287 downto 256) /= X"00000000")and
                 (overlap_buffer_dout_1(289 downto 288) /= "00"))then
                     current_mac_rx_state <= WAIT_FOR_END_CHANNEL_2;
                 end if;
-                
+
                 when WAIT_FOR_END_CHANNEL_2 =>
                 current_mac_rx_state <= WAIT_FOR_END_CHANNEL_2;
-                
+
                 if ((overlap_buffer_empty_2 = '0')and(overlap_buffer_dout_2(287 downto 256) /= X"00000000")and
                 (overlap_buffer_dout_2(289 downto 288) /= "00"))then
                     current_mac_rx_state <= WAIT_FOR_END_CHANNEL_1;
                 end if;
-    
+
             end case;
         end if;
-    end process;	
-	
-	mac_rx_data <= overlap_buffer_dout_1(255 downto 0) when (current_mac_rx_state = WAIT_FOR_END_CHANNEL_1) else
-	   overlap_buffer_dout_2(255 downto 0);
-	
-	mac_rx_data_valid <= 
-	    overlap_buffer_dout_1(287 downto 256) when ((current_mac_rx_state = WAIT_FOR_END_CHANNEL_1)and(overlap_buffer_empty_1 = '0')) else
+    end process;
+
+    mac_rx_data <= overlap_buffer_dout_1(255 downto 0) when (current_mac_rx_state = WAIT_FOR_END_CHANNEL_1) else
+       overlap_buffer_dout_2(255 downto 0);
+
+    mac_rx_data_valid <=
+        overlap_buffer_dout_1(287 downto 256) when ((current_mac_rx_state = WAIT_FOR_END_CHANNEL_1)and(overlap_buffer_empty_1 = '0')) else
         overlap_buffer_dout_2(287 downto 256) when ((current_mac_rx_state = WAIT_FOR_END_CHANNEL_2)and(overlap_buffer_empty_2 = '0')) else
         (others => '0');
-        
+
     mac_rx_good_frame <= overlap_buffer_dout_1(288) when (current_mac_rx_state = WAIT_FOR_END_CHANNEL_1) else
-        overlap_buffer_dout_2(288);   
+        overlap_buffer_dout_2(288);
 
     mac_rx_bad_frame <= overlap_buffer_dout_1(289) when (current_mac_rx_state = WAIT_FOR_END_CHANNEL_1) else
-        overlap_buffer_dout_2(289);   
-   
+        overlap_buffer_dout_2(289);
+
 --    gen_rx_count_good : process(xlgmii_rxrst, xlgmii_rxclk)
 --    begin
 --        if (xlgmii_rxrst = '1')then
@@ -837,7 +837,7 @@ begin
 ----------------------------------------------------------------------------------------
 -- RECEIVE DATA PATH
 ----------------------------------------------------------------------------------------
-    
+
     ska_fge_rx_0 : ska_fge_rx
     generic map(
         PROMISC_MODE    => PROMISC_MODE)
@@ -848,7 +848,7 @@ begin
         local_port      => local_port,
         local_gateway   => local_gateway,
         local_mc_recv_ip        => local_mc_recv_ip,
-        local_mc_recv_ip_mask   => local_mc_recv_ip_mask,        
+        local_mc_recv_ip_mask   => local_mc_recv_ip_mask,
         app_clk                 => clk,
         app_rst                 => app_rst,
         app_rx_valid            => rx_valid,
@@ -873,7 +873,7 @@ begin
         mac_rx_data         => mac_rx_data,
         mac_rx_data_valid   => mac_rx_data_valid,
         mac_rx_good_frame   => mac_rx_good_frame,
-        mac_rx_bad_frame    => mac_rx_bad_frame, 
+        mac_rx_bad_frame    => mac_rx_bad_frame,
         phy_rx_up           => phy_rx_up,
         debug_port => debug_out);
 

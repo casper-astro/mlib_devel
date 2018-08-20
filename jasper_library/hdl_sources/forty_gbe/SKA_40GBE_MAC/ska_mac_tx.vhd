@@ -1,23 +1,23 @@
 ----------------------------------------------------------------------------------
 -- Company: Peralex Electronics
 -- Engineer: Gavin Teague
--- 
+--
 -- Create Date: 05.09.2014 10:19:29
--- Design Name: 
+-- Design Name:
 -- Module Name: ska_mac_tx - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
+-- Project Name:
+-- Target Devices:
+-- Tool Versions:
+-- Description:
+--
 -- SKA 40GBE TX path - MAC
 --
--- Dependencies: 
--- 
+-- Dependencies:
+--
 -- Revision:
 -- Revision 0.01 - File Created
 -- Additional Comments:
--- 
+--
 ----------------------------------------------------------------------------------
 
 library ieee;
@@ -30,12 +30,12 @@ entity ska_mac_tx is
     -- MAC
     mac_clk             : in std_logic;
     mac_rst             : in std_logic;
-    mac_tx_data         : in std_logic_vector(255 downto 0); 
+    mac_tx_data         : in std_logic_vector(255 downto 0);
     mac_tx_data_valid   : in std_logic_vector(31 downto 0);
     mac_tx_start        : in std_logic;
     mac_tx_ready        : out std_logic;
     phy_tx_rst          : in std_logic;
-    
+
     -- XLGMII
     xlgmii_txd      : out std_logic_vector(255 downto 0);
     xlgmii_txc      : out std_logic_vector(31 downto 0);
@@ -48,7 +48,7 @@ architecture arch_ska_mac_tx of ska_mac_tx is
     constant C_IDLE_TXC : std_logic_vector(31 downto 0) := "11111111111111111111111111111111";
     constant C_PREAMBLE_IFG_TXD : std_logic_vector(127 downto 0) := X"D5555555555555FB0707070707070707";
     constant C_PREAMBLE_IFG_TXC : std_logic_vector(15 downto 0) := "0000000111111111";
-    
+
     constant C_IDLE_BYTE : std_logic_vector(7 downto 0) := X"07";
     constant C_TERMINATE_BYTE : std_logic_vector(7 downto 0) := X"FD";
 
@@ -67,8 +67,8 @@ architecture arch_ska_mac_tx of ska_mac_tx is
     GEN_END_ALIGNED_144_PART2,
     GEN_END_ALIGNED_192_PART1,
     GEN_END_ALIGNED_192_PART2,
-    GEN_END_ALIGNED_208_PART1, 
-    GEN_END_ALIGNED_208_PART2); 
+    GEN_END_ALIGNED_208_PART1,
+    GEN_END_ALIGNED_208_PART2);
 
     component ska_mac_tx_crc
     port (
@@ -79,16 +79,16 @@ architecture arch_ska_mac_tx of ska_mac_tx is
         data_in_val     : in std_logic_vector(31 downto 0);
         crc_out         : out std_logic_vector(31 downto 0));
     end component;
-    
+
     signal current_mac_state : T_MAC_STATE;
 
-    signal mac_tx_data_z1 : std_logic_vector(255 downto 0); 
+    signal mac_tx_data_z1 : std_logic_vector(255 downto 0);
     signal mac_tx_data_valid_z1 : std_logic_vector(31 downto 0);
-    signal mac_tx_data_z2 : std_logic_vector(255 downto 0); 
+    signal mac_tx_data_z2 : std_logic_vector(255 downto 0);
     signal mac_tx_data_valid_z2 : std_logic_vector(31 downto 0);
-    signal mac_tx_data_z3 : std_logic_vector(255 downto 0); 
+    signal mac_tx_data_z3 : std_logic_vector(255 downto 0);
     signal mac_tx_data_valid_z3 : std_logic_vector(31 downto 0);
-    signal mac_tx_data_z4 : std_logic_vector(255 downto 0); 
+    signal mac_tx_data_z4 : std_logic_vector(255 downto 0);
     signal mac_tx_data_valid_z4 : std_logic_vector(31 downto 0);
 
     signal crc_reset : std_logic;
@@ -98,16 +98,16 @@ architecture arch_ska_mac_tx of ska_mac_tx is
     signal crc_out_z1 : std_logic_vector(31 downto 0);
     signal crc_first_128bits_data_in : std_logic_vector(255 downto 0);
     signal crc_first_128bits_data_in_val : std_logic_vector(31 downto 0);
-     
+
     signal xlgmii_txd_i : std_logic_vector(255 downto 0);
-    signal xlgmii_txc_i : std_logic_vector(31 downto 0); 
-      
+    signal xlgmii_txc_i : std_logic_vector(31 downto 0);
+
     signal crc_payload : std_logic_vector(255 downto 0);
     signal crc_payload_val : std_logic_vector(31 downto 0);
-    
+
     signal payload_txd : std_logic_vector(255 downto 0);
     signal payload_txc : std_logic_vector(31 downto 0);
-    
+
     signal end_aligned_0_txd : std_logic_vector(255 downto 0);
     signal end_aligned_0_txc : std_logic_vector(31 downto 0);
     signal end_aligned_16_txd : std_logic_vector(255 downto 0);
@@ -132,16 +132,16 @@ architecture arch_ska_mac_tx of ska_mac_tx is
     signal end_aligned_208_txc_part1 : std_logic_vector(31 downto 0);
     signal end_aligned_208_txd_part2 : std_logic_vector(255 downto 0);
     signal end_aligned_208_txc_part2 : std_logic_vector(31 downto 0);
-    
+
     signal tx_activity_timeout_low : std_logic_vector(15 downto 0);
     signal tx_activity_timeout_low_over : std_logic;
     signal tx_activity_timeout_high : std_logic_vector(11 downto 0);
     signal tx_activity_timeout : std_logic;
-           
+
 begin
 
 -----------------------------------------------------------------------------------
--- REGISTER TO HANDLE LATENCY THROUGH CRC    
+-- REGISTER TO HANDLE LATENCY THROUGH CRC
 -----------------------------------------------------------------------------------
 
     gen_mac_tx_data_z : process(mac_clk)
@@ -159,32 +159,32 @@ begin
     end process;
 
 -----------------------------------------------------------------------------------
--- STATE MACHINE TO CONSTRUCT ETHERNET FRAME    
+-- STATE MACHINE TO CONSTRUCT ETHERNET FRAME
 -----------------------------------------------------------------------------------
-    
+
     gen_current_mac_state : process(mac_rst, mac_clk)
     begin
         if (mac_rst = '1')then
             current_mac_state <= IDLE;
-        
+
         elsif (rising_edge(mac_clk))then
             case current_mac_state is
                 when IDLE =>
                 current_mac_state <= IDLE;
-                
+
                 if (mac_tx_start = '1')then
                     current_mac_state <= START_CRC;
                 end if;
-                
+
                 when START_CRC =>
                 current_mac_state <= GEN_IFG_PREAMBLE_START_PAYLOAD;
-                
+
                 when GEN_IFG_PREAMBLE_START_PAYLOAD =>
                 current_mac_state <= GEN_PAYLOAD;
-                
+
                 when GEN_PAYLOAD =>
                 current_mac_state <= GEN_PAYLOAD;
-                
+
                 if (mac_tx_data_valid = X"00000000")then
                     current_mac_state <= GEN_END_ALIGNED_0;
                 elsif (mac_tx_data_valid = X"00000003")then
@@ -204,60 +204,60 @@ begin
                 else
                     current_mac_state <= GEN_PAYLOAD;
                 end if;
-                
+
                 when GEN_END_ALIGNED_0 =>
                 current_mac_state <= IDLE;
-                
+
                 when GEN_END_ALIGNED_16 =>
                 current_mac_state <= IDLE;
-                
+
                 when GEN_END_ALIGNED_64 =>
                 current_mac_state <= IDLE;
-                
+
                 when GEN_END_ALIGNED_80 =>
                 current_mac_state <= IDLE;
-                
+
                 when GEN_END_ALIGNED_128_PART1 =>
                 current_mac_state <= GEN_END_ALIGNED_128_PART2;
-                
+
                 when GEN_END_ALIGNED_128_PART2 =>
                 current_mac_state <= IDLE;
-                
+
                 when GEN_END_ALIGNED_144_PART1 =>
                 current_mac_state <= GEN_END_ALIGNED_144_PART2;
-                
+
                 when GEN_END_ALIGNED_144_PART2 =>
                 current_mac_state <= IDLE;
-                
+
                 when GEN_END_ALIGNED_192_PART1 =>
                 current_mac_state <= GEN_END_ALIGNED_192_PART2;
-                
+
                 when GEN_END_ALIGNED_192_PART2 =>
                 current_mac_state <= IDLE;
-                
+
                 when GEN_END_ALIGNED_208_PART1 =>
                 current_mac_state <= GEN_END_ALIGNED_208_PART2;
-                
-                when GEN_END_ALIGNED_208_PART2 => 
+
+                when GEN_END_ALIGNED_208_PART2 =>
                 current_mac_state <= IDLE;
 
             end case;
         end if;
     end process;
-    
+
     mac_tx_ready <= '1' when (current_mac_state = IDLE) else '0';
- 
+
 -----------------------------------------------------------------------------------
--- GENERATE ALL DIFFERENT END ALIGNMENT OPTIONS    
+-- GENERATE ALL DIFFERENT END ALIGNMENT OPTIONS
 -----------------------------------------------------------------------------------
- 
+
     -- ALIGNED 0
     end_aligned_0_txd(127 downto 0) <= mac_tx_data_z2(255 downto 128);
     end_aligned_0_txd(159 downto 128) <= crc_out;
     end_aligned_0_txd(167 downto 160) <= C_TERMINATE_BYTE;
     end_aligned_0_txd(255 downto 168) <= X"0707070707070707070707";
     end_aligned_0_txc <= "11111111111100000000000000000000";
-    
+
     -- ALIGNED 16
     end_aligned_16_txd(127 downto 0) <= mac_tx_data_z2(255 downto 128);
     end_aligned_16_txd(143 downto 128) <= mac_tx_data_z1(15 downto 0);
@@ -265,7 +265,7 @@ begin
     end_aligned_16_txd(183 downto 176) <= C_TERMINATE_BYTE;
     end_aligned_16_txd(255 downto 184) <= X"070707070707070707";
     end_aligned_16_txc <= "11111111110000000000000000000000";
-    
+
     -- ALIGNED 64
     end_aligned_64_txd(127 downto 0) <= mac_tx_data_z2(255 downto 128);
     end_aligned_64_txd(191 downto 128) <= mac_tx_data_z1(63 downto 0);
@@ -273,7 +273,7 @@ begin
     end_aligned_64_txd(231 downto 224) <= C_TERMINATE_BYTE;
     end_aligned_64_txd(255 downto 232) <= X"070707";
     end_aligned_64_txc <= "11110000000000000000000000000000";
-    
+
     -- ALIGNED 80
     end_aligned_80_txd(127 downto 0) <= mac_tx_data_z2(255 downto 128);
     end_aligned_80_txd(207 downto 128) <= mac_tx_data_z1(79 downto 0);
@@ -281,52 +281,52 @@ begin
     end_aligned_80_txd(247 downto 240) <= C_TERMINATE_BYTE;
     end_aligned_80_txd(255 downto 248) <= X"07";
     end_aligned_80_txc <= "11000000000000000000000000000000";
-    
+
     -- ALIGNED 128
     end_aligned_128_txd_part1(127 downto 0) <= mac_tx_data_z2(255 downto 128);
     end_aligned_128_txd_part1(255 downto 128) <= mac_tx_data_z1(127 downto 0);
     end_aligned_128_txc_part1 <= (others => '0');
-    
+
     end_aligned_128_txd_part2(31 downto 0) <= crc_out_z1;
     end_aligned_128_txd_part2(39 downto 32) <= C_TERMINATE_BYTE;
     end_aligned_128_txd_part2(255 downto 40) <= X"070707070707070707070707070707070707070707070707070707";
     end_aligned_128_txc_part2 <= "11111111111111111111111111110000";
-    
+
     -- ALIGNED 144
     end_aligned_144_txd_part1(127 downto 0) <= mac_tx_data_z2(255 downto 128);
     end_aligned_144_txd_part1(255 downto 128) <= mac_tx_data_z1(127 downto 0);
     end_aligned_144_txc_part1 <= (others => '0');
-    
+
     end_aligned_144_txd_part2(15 downto 0) <= mac_tx_data_z2(143 downto 128);
     end_aligned_144_txd_part2(47 downto 16) <= crc_out;
     end_aligned_144_txd_part2(55 downto 48) <= C_TERMINATE_BYTE;
     end_aligned_144_txd_part2(255 downto 56) <= X"07070707070707070707070707070707070707070707070707";
     end_aligned_144_txc_part2 <= "11111111111111111111111111000000";
-    
+
     -- ALIGNED 192
     end_aligned_192_txd_part1(127 downto 0) <= mac_tx_data_z2(255 downto 128);
     end_aligned_192_txd_part1(255 downto 128) <= mac_tx_data_z1(127 downto 0);
     end_aligned_192_txc_part1 <= (others => '0');
- 
+
     end_aligned_192_txd_part2(63 downto 0) <= mac_tx_data_z2(191 downto 128);
     end_aligned_192_txd_part2(95 downto 64) <= crc_out;
     end_aligned_192_txd_part2(103 downto 96) <= C_TERMINATE_BYTE;
     end_aligned_192_txd_part2(255 downto 104) <= X"07070707070707070707070707070707070707";
     end_aligned_192_txc_part2 <= "11111111111111111111000000000000";
-    
+
     -- ALIGNED 208
     end_aligned_208_txd_part1(127 downto 0) <= mac_tx_data_z2(255 downto 128);
     end_aligned_208_txd_part1(255 downto 128) <= mac_tx_data_z1(127 downto 0);
     end_aligned_208_txc_part1 <= (others => '0');
-    
+
     end_aligned_208_txd_part2(79 downto 0) <= mac_tx_data_z2(207 downto 128);
     end_aligned_208_txd_part2(111 downto 80) <= crc_out;
     end_aligned_208_txd_part2(119 downto 112) <= C_TERMINATE_BYTE;
     end_aligned_208_txd_part2(255 downto 120) <= X"0707070707070707070707070707070707";
     end_aligned_208_txc_part2 <= "11111111111111111100000000000000";
-   
+
 -----------------------------------------------------------------------------------
--- DECODE STATES    
+-- DECODE STATES
 -----------------------------------------------------------------------------------
 
     payload_txd <= mac_tx_data_z1(127 downto 0) & mac_tx_data_z2(255 downto 128);
@@ -348,7 +348,7 @@ begin
     end_aligned_208_txd_part1 when (current_mac_state = GEN_END_ALIGNED_208_PART1) else
     end_aligned_208_txd_part2 when (current_mac_state = GEN_END_ALIGNED_208_PART2) else
     C_IDLE_TXD;
-    
+
     xlgmii_txc_i <=
     (X"0000" & C_PREAMBLE_IFG_TXC) when (current_mac_state = GEN_IFG_PREAMBLE_START_PAYLOAD) else
     payload_txc when (current_mac_state = GEN_PAYLOAD) else
@@ -365,16 +365,16 @@ begin
     end_aligned_208_txc_part1 when (current_mac_state = GEN_END_ALIGNED_208_PART1) else
     end_aligned_208_txc_part2 when (current_mac_state = GEN_END_ALIGNED_208_PART2) else
     C_IDLE_TXC;
-     
+
 -----------------------------------------------------------------------------------
--- CRC    
+-- CRC
 -----------------------------------------------------------------------------------
 
     crc_reset <= '1' when (current_mac_state = START_CRC) else '0';
-    
+
     crc_payload(127 downto 0) <= mac_tx_data_z1(255 downto 128);
     crc_payload(255 downto 128) <= mac_tx_data(127 downto 0);
-    
+
     crc_payload_val(15 downto 0) <= mac_tx_data_valid_z1(31 downto 16);
     crc_payload_val(31 downto 16) <= mac_tx_data_valid(15 downto 0);
 
@@ -397,7 +397,7 @@ begin
         crc_init        => (others => '1'),
         data_in         => crc_data_in,
         data_in_val     => crc_data_in_val,
-        crc_out         => crc_out); 
+        crc_out         => crc_out);
 
     gen_crc_out_z1 : process(mac_clk)
     begin
@@ -407,7 +407,7 @@ begin
     end process;
 
 -----------------------------------------------------------------------------------
--- REGISTER OUTPUT    
+-- REGISTER OUTPUT
 -----------------------------------------------------------------------------------
 
     gen_xlgmii_txd : process(mac_clk)
@@ -416,10 +416,10 @@ begin
             xlgmii_txd <= xlgmii_txd_i;
             xlgmii_txc <= xlgmii_txc_i;
         end if;
-    end process;    
- 
+    end process;
+
 -----------------------------------------------------------------------------------
--- LED CONTROL    
+-- LED CONTROL
 -----------------------------------------------------------------------------------
 
     gen_xlgmii_txled : process(mac_rst, mac_clk)
@@ -439,7 +439,7 @@ begin
                 elsif (mac_tx_start = '1')then
                     xlgmii_txled(1) <= '1';
                 end if;
-            end if;            
+            end if;
         end if;
     end process;
 
@@ -482,10 +482,10 @@ begin
                         tx_activity_timeout_high <= (others => '0');
                         tx_activity_timeout <= '1';
                     else
-                        tx_activity_timeout_high <= tx_activity_timeout_high + X"001";                         
+                        tx_activity_timeout_high <= tx_activity_timeout_high + X"001";
                     end if;
                 end if;
-            end if;    
+            end if;
         end if;
     end process;
 

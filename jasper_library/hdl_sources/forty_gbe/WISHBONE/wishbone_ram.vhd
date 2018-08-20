@@ -1,23 +1,23 @@
 ----------------------------------------------------------------------------------
 -- Company: Peralex Electronics
 -- Engineer: Gavin Teague
--- 
+--
 -- Create Date: 05.09.2014 10:19:29
--- Design Name: 
+-- Design Name:
 -- Module Name: wishbone_ram - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
+-- Project Name:
+-- Target Devices:
+-- Tool Versions:
+-- Description:
+--
 -- Wishbone Classic slave, 32kB RAM
 --
--- Dependencies: 
--- 
+-- Dependencies:
+--
 -- Revision:
 -- Revision 0.01 - File Created
 -- Additional Comments:
--- 
+--
 ----------------------------------------------------------------------------------
 
 library ieee;
@@ -26,18 +26,18 @@ use ieee.std_logic_unsigned.all;
 use ieee.numeric_std.all;
 
 entity wishbone_ram is
-	port (
-		-- WISHBONE CLASSIC SIGNALS
-		CLK_I : in std_logic;
-		RST_I : in std_logic;
-		DAT_I : in std_logic_vector(31 downto 0);
-		DAT_O : out std_logic_vector(31 downto 0);
-		ACK_O : out std_logic;
-		ADR_I : in std_logic_vector(14 downto 0);
-		CYC_I : in std_logic;
-		SEL_I : in std_logic_vector(3 downto 0);
-		STB_I : in std_logic;
-		WE_I  : in std_logic);
+    port (
+        -- WISHBONE CLASSIC SIGNALS
+        CLK_I : in std_logic;
+        RST_I : in std_logic;
+        DAT_I : in std_logic_vector(31 downto 0);
+        DAT_O : out std_logic_vector(31 downto 0);
+        ACK_O : out std_logic;
+        ADR_I : in std_logic_vector(14 downto 0);
+        CYC_I : in std_logic;
+        SEL_I : in std_logic_vector(3 downto 0);
+        STB_I : in std_logic;
+        WE_I  : in std_logic);
 end wishbone_ram;
 
 architecture arch_wishbone_ram of wishbone_ram is
@@ -58,7 +58,7 @@ architecture arch_wishbone_ram of wishbone_ram is
 begin
 
     addra <= ADR_I(11 downto 2);
-   
+
     gen_wea : process(RST_I, CLK_I)
     begin
         if (RST_I = '1')then
@@ -90,9 +90,9 @@ begin
         elsif (rising_edge(CLK_I))then
             if ((STB_I_z = '1')and(STB_I_z2 = '0'))then
                 ACK_O <= '1';
-            else    
+            else
                 ACK_O <= '0';
-            end if;    
+            end if;
         end if;
     end process;
 
