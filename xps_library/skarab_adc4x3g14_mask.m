@@ -52,6 +52,9 @@ for i =1:length(gateway_ins)
     elseif regexp(get_param(gw, 'Name'), '(adc_sync_complete_out)$')
         toks = regexp(get_param(gw, 'Name'), '(adc_sync_complete_out)$', 'tokens');
         set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+    elseif regexp(get_param(gw, 'Name'), '(adc_trigger_out)$')
+        toks = regexp(get_param(gw, 'Name'), '(adc_trigger_out)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));        
     else
         error(['Unknown gateway name: ', gw]);
     end

@@ -33,6 +33,7 @@ entity SKARAB_ADC4x3G_14 is
 	   	
         MEZZANINE_RESET : out std_logic;
         MEZZANINE_CLK_SEL : out std_logic;
+        MEZZANINE_FAULT_N : in std_logic;
 		
         ADC_MEZ_REFCLK_0_P : in std_logic;
         ADC_MEZ_REFCLK_0_N : in std_logic;       
@@ -68,6 +69,7 @@ entity SKARAB_ADC4x3G_14 is
 
         ADC_SYNC_START_IN : in std_logic;
         ADC_SYNC_COMPLETE_OUT : out std_logic;
+        ADC_TRIGGER_OUT : out std_logic;
         PLL_SYNC_START_IN : in std_logic;
         PLL_SYNC_COMPLETE_OUT : out std_logic;
         
@@ -187,6 +189,9 @@ begin
    
 	MEZZANINE_CLK_SEL <= '1'; -- DEFAULT '1' = MEZZANINE CLOCK
 	MEZZANINE_RESET <= '0'; -- NO EXTRA RESET REQUIRED
+	
+	--Fault line is now the ADC trigger line
+	ADC_TRIGGER_OUT <= MEZZANINE_FAULT_N;
 	
 ---------------------------------------------------------------------------------------------------------
 -- CORRECT FOR SWAP IN YAML FILE, SAME FOR ALL MEZZANINE SITES
