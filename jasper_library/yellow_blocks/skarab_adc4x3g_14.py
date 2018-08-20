@@ -5,6 +5,14 @@ from constraints import PortConstraint, ClockConstraint, ClockGroupConstraint, M
 from helpers import to_int_list
 
 class skarab_adc4x3g_14(YellowBlock):
+    """
+    Class for SKARAB ADC4x3G-14 mezzanine module.
+
+    For detailed instructions on how to install the mezzanine module into a SKARAB, how to control the mezzanine module
+    and how to use the Simulink ports, see the Getting Started Guide, available at:
+    https://github.com/ska-sa/skarab_docs/raw/master/adc/PN-SKARAB%20ADC4x3G_14%20GSG.pdf
+    """
+	
     def initialize(self):
         # Set bitwidth of block (this is determined by the 'Data bitwidth' parameter in the Simulink mask)
         # self.bitwidth = int(self.bitwidth)
@@ -14,13 +22,6 @@ class skarab_adc4x3g_14(YellowBlock):
         self.add_source('skarab_adc4x3g_14/JESD204B_4LaneRX_7500MHz.xdc')
         self.add_source('skarab_adc4x3g_14/adc_data_sync_fifo/*.xci')
         self.add_source('skarab_adc4x3g_14/ADC_AXIS_ASYNC_FIFO/*.xci')
-
-
-
-
-
-
-
 
     def modify_top(self,top):
     
@@ -116,8 +117,6 @@ class skarab_adc4x3g_14(YellowBlock):
         cons.append(PortConstraint('sync_in_n','sync_in_n'))       #AUX_SYNCI_N : in std_logic;   AU21
         cons.append(PortConstraint('sync_out_p','sync_out_p'))     #AUX_SYNCO_P : out std_logic;  AW21
         cons.append(PortConstraint('sync_out_n','sync_out_n'))     #AUX_SYNCO_N : out std_logic); AY21
-
-        
         
         # Output Constraints
         #set_output_delay -clock [get_clocks FPGA_REFCLK_BUF0_P] -min -add_delay -3.000 [get_ports AUX_SYNCO_P]

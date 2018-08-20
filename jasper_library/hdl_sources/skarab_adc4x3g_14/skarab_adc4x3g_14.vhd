@@ -191,7 +191,7 @@ begin
 	MEZZANINE_RESET <= '0'; -- NO EXTRA RESET REQUIRED
 	
 	--Fault line is now the ADC trigger line
-	ADC_TRIGGER_OUT <= MEZZANINE_FAULT_N;
+	ADC_TRIGGER_OUT <= not(MEZZANINE_FAULT_N);
 	
 ---------------------------------------------------------------------------------------------------------
 -- CORRECT FOR SWAP IN YAML FILE, SAME FOR ALL MEZZANINE SITES
