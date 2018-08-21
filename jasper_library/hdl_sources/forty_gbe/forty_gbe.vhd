@@ -1842,10 +1842,13 @@ begin
     brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(3) <= not MEZZANINE_3_PRESENT_N;
     brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(7 downto 4) <= (others => '0');
 
-    mezzanine_0_fault <= (not MEZZANINE_0_FAULT_N) when (mezzanine_0_fault_checking_enable = '1') else '0';
-    mezzanine_1_fault <= (not MEZZANINE_1_FAULT_N) when (mezzanine_1_fault_checking_enable = '1') else '0';
-    mezzanine_2_fault <= (not MEZZANINE_2_FAULT_N) when (mezzanine_2_fault_checking_enable = '1') else '0';
-    mezzanine_3_fault <= (not MEZZANINE_3_FAULT_N) when (mezzanine_3_fault_checking_enable = '1') else '0';
+    --Only do fault checking when fault checking is enabled and mezzanine ID is not a SKARAB ADC. The SKARAB ADC uses the
+    --MEZZANINE_X_FAULT_N line as a trigger out signal due to no other GPIO being available on the mezzanine card 
+    --and it will be reported as a MEZZANINE_COMBINED_FAULT if this is not disabled. 
+    mezzanine_0_fault <= (not MEZZANINE_0_FAULT_N) when (mezzanine_0_fault_checking_enable = '1' and MEZZ0_ID /= "011") else '0';
+    mezzanine_1_fault <= (not MEZZANINE_1_FAULT_N) when (mezzanine_1_fault_checking_enable = '1' and MEZZ1_ID /= "011") else '0';
+    mezzanine_2_fault <= (not MEZZANINE_2_FAULT_N) when (mezzanine_2_fault_checking_enable = '1' and MEZZ2_ID /= "011") else '0';
+    mezzanine_3_fault <= (not MEZZANINE_3_FAULT_N) when (mezzanine_3_fault_checking_enable = '1' and MEZZ3_ID /= "011") else '0';
 
     brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(8) <= mezzanine_0_fault;
     brd_user_read_regs(C_RD_MEZZANINE_STAT_0_ADDR)(9) <= mezzanine_1_fault;

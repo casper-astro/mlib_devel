@@ -5,6 +5,14 @@ from constraints import PortConstraint, ClockConstraint, ClockGroupConstraint, M
 from helpers import to_int_list
 
 class skarab_adc4x3g_14(YellowBlock):
+    """
+    Class for SKARAB ADC4x3G-14 mezzanine module.
+
+    For detailed instructions on how to install the mezzanine module into a SKARAB, how to control the mezzanine module
+    and how to use the Simulink ports, see the Getting Started Guide, available at:
+    https://github.com/ska-sa/skarab_docs/raw/master/adc/PN-SKARAB%20ADC4x3G_14%20GSG.pdf
+    """
+	
     def initialize(self):
         # Set bitwidth of block (this is determined by the 'Data bitwidth' parameter in the Simulink mask)
         # self.bitwidth = int(self.bitwidth)
@@ -15,13 +23,6 @@ class skarab_adc4x3g_14(YellowBlock):
         self.add_source('skarab_adc4x3g_14/adc_data_sync_fifo/*.xci')
         self.add_source('skarab_adc4x3g_14/ADC_AXIS_ASYNC_FIFO/*.xci')
 
-
-
-
-
-
-
-
     def modify_top(self,top):
     
         # port name to be used for 'dio_buf'
@@ -29,6 +30,8 @@ class skarab_adc4x3g_14(YellowBlock):
         
         # get this instance from 'top.v' or create if not instantiated yet
         inst = top.get_instance(entity=self.module, name=self.fullname, comment=self.fullname)
+        
+        top.assign_signal('mez%s_fault_n' % self.mez, 'MEZZANINE_%s_FAULT_N' % self.mez)        
         
         inst.add_port('FREE_RUN_156M25HZ_CLK_IN', signal='hmc_clk',                  dir='in') 
         
@@ -50,7 +53,9 @@ class skarab_adc4x3g_14(YellowBlock):
         inst.add_port('ADC_MEZ_PHY22_LANE_RX_N',  'MEZ%s_PHY22_LANE_RX_N' % self.mez, parent_port=True, dir='in', width=4)
 
         inst.add_port('MEZZANINE_RESET',          'MEZZANINE_%s_RESET' % self.mez,   parent_port=True,  dir='out')
-        inst.add_port('MEZZANINE_CLK_SEL',        'MEZZANINE_%s_CLK_SEL' % self.mez, parent_port=True,  dir='out')    
+        inst.add_port('MEZZANINE_CLK_SEL',        'MEZZANINE_%s_CLK_SEL' % self.mez, parent_port=True,  dir='out')
+        inst.add_port('MEZZANINE_FAULT_N',        'mez%s_fault_n' % self.mez,  dir='in')
+        
         
         inst.add_port('DSP_CLK_IN',               signal='sys_clk',                  dir='in' ) 
         inst.add_port('DSP_RST_IN',               signal='sys_rst',                  dir='in' )
@@ -64,8 +69,10 @@ class skarab_adc4x3g_14(YellowBlock):
         inst.add_port('ADC3_DATA_OUT',            signal='%s_adc3_data_out' % self.fullname,               dir='out' ,width=128) 
         inst.add_port('ADC_SYNC_START_IN',        signal='%s_adc_sync_start_in' % self.fullname,           dir='in' ) 
         inst.add_port('ADC_SYNC_COMPLETE_OUT',    signal='%s_adc_sync_complete_out' % self.fullname,       dir='out') 
+        inst.add_port('ADC_TRIGGER_OUT',          signal='%s_adc_trigger_out' % self.fullname,             dir='out')
         inst.add_port('PLL_SYNC_START_IN',        signal='%s_pll_sync_start_in' % self.fullname,           dir='in' ) 
-        inst.add_port('PLL_SYNC_COMPLETE_OUT',    signal='%s_pll_sync_complete_out' % self.fullname,       dir='out')
+        inst.add_port('PLL_SYNC_COMPLETE_OUT',    signal='%s_pll_sync_complete_out' % self.fullname,       dir='out')        
+
         
         inst.add_port('MEZZ_ID', 'mez%s_id' % self.mez, dir='out', width=3)
         inst.add_port('MEZZ_PRESENT', 'mez%s_present' % self.mez, dir='out')        
@@ -76,6 +83,7 @@ class skarab_adc4x3g_14(YellowBlock):
         inst.add_port('AUX_SYNCI_N',              signal='sync_in_n',                  parent_port=True, dir='in' ) 
         inst.add_port('AUX_SYNCO_P',              signal='sync_out_p',                 parent_port=True, dir='out') 
         inst.add_port('AUX_SYNCO_N',              signal='sync_out_n',                 parent_port=True, dir='out')
+        
 
     def gen_constraints(self):
     
@@ -109,8 +117,6 @@ class skarab_adc4x3g_14(YellowBlock):
         cons.append(PortConstraint('sync_in_n','sync_in_n'))       #AUX_SYNCI_N : in std_logic;   AU21
         cons.append(PortConstraint('sync_out_p','sync_out_p'))     #AUX_SYNCO_P : out std_logic;  AW21
         cons.append(PortConstraint('sync_out_n','sync_out_n'))     #AUX_SYNCO_N : out std_logic); AY21
-
-        
         
         # Output Constraints
         #set_output_delay -clock [get_clocks FPGA_REFCLK_BUF0_P] -min -add_delay -3.000 [get_ports AUX_SYNCO_P]

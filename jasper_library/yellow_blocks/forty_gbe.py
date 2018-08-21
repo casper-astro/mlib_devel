@@ -270,7 +270,7 @@ class forty_gbe(YellowBlock):
         # Need to add ports to tie GPIO control for SKARAB FrontPanelStatus LEDs
         inst.add_port('dsp_leds_i',       'dsp_leds_i', width=8, dir='in', parent_sig=True)
         inst.add_port('fpga_leds_o',      'FPGA_LEDS', width=8, dir='out', parent_port=True)
-        
+
         #inst.add_port('fabric_clk_270', 'adc0_clk270')
         #top.add_signal('adc0_clk')
 
@@ -500,7 +500,7 @@ class forty_gbe(YellowBlock):
         cons.append(ClockConstraint(name='VIRTUAL_clkout0', period=8.0, port_en=False, virtual_en=True, waveform_min=0.0, waveform_max=4.0))
         cons.append(ClockConstraint(name='VIRTUAL_clkout0_1', period=6.4, port_en=False, virtual_en=True, waveform_min=0.0, waveform_max=3.2))
         cons.append(ClockConstraint(name='virtual_clock', period=6.4, port_en=False, virtual_en=True, waveform_min=0.0, waveform_max=3.2))
-        cons.append(ClockConstraint(name='VIRTUAL_I', period=periodparam[3], port_en=False, virtual_en=True, waveform_min=0.0, waveform_max=periodparam[4]))     
+        cons.append(ClockConstraint(name='VIRTUAL_I', period=periodparam[3], port_en=False, virtual_en=True, waveform_min=0.0, waveform_max=periodparam[4]))
 
         #Generate Clock Constraints
         cons.append(GenClockConstraint(signal='%s/wishbone_flash_sdram_interface_0/icape_controller_0/icape_clk_count_reg[3]/Q' % self.fullname, name='%s/wishbone_flash_sdram_interface_0/icape_controller_0/CLK' % self.fullname, divide_by=16, clock_source='%s/wishbone_flash_sdram_interface_0/icape_controller_0/icape_clk_count_reg[3]/C' % self.fullname))
@@ -1156,7 +1156,7 @@ class forty_gbe(YellowBlock):
         cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports FPGA_LEDS[4]]'))
         cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports FPGA_LEDS[5]]'))
         cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports FPGA_LEDS[6]]'))
-        cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports FPGA_LEDS[7]]'))        
+        cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports FPGA_LEDS[7]]'))
 
         return cons
 
