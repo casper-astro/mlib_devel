@@ -1,7 +1,7 @@
 -- Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2016.2 (lin64) Build 1577090 Thu Jun  2 16:32:35 MDT 2016
--- Date        : Mon Nov  7 14:25:06 2016
+-- Date        : Tue Feb 27 10:21:10 2018
 -- Host        : adam-cm running 64-bit Ubuntu 14.04.5 LTS
 -- Command     : write_vhdl -force -mode funcsim
 --               /home/aisaacson/work/git_work/ska_sa/projects/skarab_bsp_firmware/firmware/FRM123701U1R1/Vivado/FRM123701U1R1.srcs/sources_1/ip/cpu_rx_packet_size/cpu_rx_packet_size_sim_netlist.vhdl
@@ -16,10 +16,10 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity cpu_rx_packet_size_dmem is
   port (
-    dout : out STD_LOGIC_VECTOR ( 7 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 10 downto 0 );
     wr_clk : in STD_LOGIC;
     RAM_WR_EN : in STD_LOGIC;
-    din : in STD_LOGIC_VECTOR ( 7 downto 0 );
+    din : in STD_LOGIC_VECTOR ( 10 downto 0 );
     \gc0.count_d1_reg[3]\ : in STD_LOGIC_VECTOR ( 3 downto 0 );
     count_d2 : in STD_LOGIC_VECTOR ( 3 downto 0 );
     E : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -31,14 +31,13 @@ entity cpu_rx_packet_size_dmem is
 end cpu_rx_packet_size_dmem;
 
 architecture STRUCTURE of cpu_rx_packet_size_dmem is
-  signal p_0_out : STD_LOGIC_VECTOR ( 7 downto 0 );
+  signal p_0_out : STD_LOGIC_VECTOR ( 10 downto 0 );
   signal NLW_RAM_reg_0_15_0_5_DOD_UNCONNECTED : STD_LOGIC_VECTOR ( 1 downto 0 );
-  signal NLW_RAM_reg_0_15_6_7_DOB_UNCONNECTED : STD_LOGIC_VECTOR ( 1 downto 0 );
-  signal NLW_RAM_reg_0_15_6_7_DOC_UNCONNECTED : STD_LOGIC_VECTOR ( 1 downto 0 );
-  signal NLW_RAM_reg_0_15_6_7_DOD_UNCONNECTED : STD_LOGIC_VECTOR ( 1 downto 0 );
+  signal NLW_RAM_reg_0_15_6_10_DOC_UNCONNECTED : STD_LOGIC_VECTOR ( 1 to 1 );
+  signal NLW_RAM_reg_0_15_6_10_DOD_UNCONNECTED : STD_LOGIC_VECTOR ( 1 downto 0 );
   attribute METHODOLOGY_DRC_VIOS : string;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_0_5 : label is "";
-  attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_6_7 : label is "";
+  attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_6_10 : label is "";
 begin
 RAM_reg_0_15_0_5: unisim.vcomponents.RAM32M
      port map (
@@ -61,7 +60,7 @@ RAM_reg_0_15_0_5: unisim.vcomponents.RAM32M
       WCLK => wr_clk,
       WE => RAM_WR_EN
     );
-RAM_reg_0_15_6_7: unisim.vcomponents.RAM32M
+RAM_reg_0_15_6_10: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
       ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
@@ -72,13 +71,15 @@ RAM_reg_0_15_6_7: unisim.vcomponents.RAM32M
       ADDRD(4) => '0',
       ADDRD(3 downto 0) => count_d2(3 downto 0),
       DIA(1 downto 0) => din(7 downto 6),
-      DIB(1 downto 0) => B"00",
-      DIC(1 downto 0) => B"00",
+      DIB(1 downto 0) => din(9 downto 8),
+      DIC(1) => '0',
+      DIC(0) => din(10),
       DID(1 downto 0) => B"00",
       DOA(1 downto 0) => p_0_out(7 downto 6),
-      DOB(1 downto 0) => NLW_RAM_reg_0_15_6_7_DOB_UNCONNECTED(1 downto 0),
-      DOC(1 downto 0) => NLW_RAM_reg_0_15_6_7_DOC_UNCONNECTED(1 downto 0),
-      DOD(1 downto 0) => NLW_RAM_reg_0_15_6_7_DOD_UNCONNECTED(1 downto 0),
+      DOB(1 downto 0) => p_0_out(9 downto 8),
+      DOC(1) => NLW_RAM_reg_0_15_6_10_DOC_UNCONNECTED(1),
+      DOC(0) => p_0_out(10),
+      DOD(1 downto 0) => NLW_RAM_reg_0_15_6_10_DOD_UNCONNECTED(1 downto 0),
       WCLK => wr_clk,
       WE => RAM_WR_EN
     );
@@ -92,6 +93,17 @@ RAM_reg_0_15_6_7: unisim.vcomponents.RAM32M
       CLR => Q(0),
       D => p_0_out(0),
       Q => dout(0)
+    );
+\gpr1.dout_i_reg[10]\: unisim.vcomponents.FDCE
+    generic map(
+      INIT => '0'
+    )
+        port map (
+      C => rd_clk,
+      CE => E(0),
+      CLR => Q(0),
+      D => p_0_out(10),
+      Q => dout(10)
     );
 \gpr1.dout_i_reg[1]\: unisim.vcomponents.FDCE
     generic map(
@@ -169,6 +181,28 @@ RAM_reg_0_15_6_7: unisim.vcomponents.RAM32M
       CLR => Q(0),
       D => p_0_out(7),
       Q => dout(7)
+    );
+\gpr1.dout_i_reg[8]\: unisim.vcomponents.FDCE
+    generic map(
+      INIT => '0'
+    )
+        port map (
+      C => rd_clk,
+      CE => E(0),
+      CLR => Q(0),
+      D => p_0_out(8),
+      Q => dout(8)
+    );
+\gpr1.dout_i_reg[9]\: unisim.vcomponents.FDCE
+    generic map(
+      INIT => '0'
+    )
+        port map (
+      C => rd_clk,
+      CE => E(0),
+      CLR => Q(0),
+      D => p_0_out(9),
+      Q => dout(9)
     );
 end STRUCTURE;
 library IEEE;
@@ -379,7 +413,7 @@ architecture STRUCTURE of cpu_rx_packet_size_rd_status_flags_as is
   attribute equivalent_register_removal of ram_empty_i_reg : label is "no";
 begin
   p_2_out <= \^p_2_out\;
-\gpr1.dout_i[7]_i_1\: unisim.vcomponents.LUT2
+\gpr1.dout_i[10]_i_1\: unisim.vcomponents.LUT2
     generic map(
       INIT => X"2"
     )
@@ -1917,10 +1951,10 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity cpu_rx_packet_size_memory is
   port (
-    dout : out STD_LOGIC_VECTOR ( 7 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 10 downto 0 );
     wr_clk : in STD_LOGIC;
     RAM_WR_EN : in STD_LOGIC;
-    din : in STD_LOGIC_VECTOR ( 7 downto 0 );
+    din : in STD_LOGIC_VECTOR ( 10 downto 0 );
     \gc0.count_d1_reg[3]\ : in STD_LOGIC_VECTOR ( 3 downto 0 );
     count_d2 : in STD_LOGIC_VECTOR ( 3 downto 0 );
     E : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -1939,8 +1973,8 @@ begin
       Q(0) => Q(0),
       RAM_WR_EN => RAM_WR_EN,
       count_d2(3 downto 0) => count_d2(3 downto 0),
-      din(7 downto 0) => din(7 downto 0),
-      dout(7 downto 0) => dout(7 downto 0),
+      din(10 downto 0) => din(10 downto 0),
+      dout(10 downto 0) => dout(10 downto 0),
       \gc0.count_d1_reg[3]\(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
       rd_clk => rd_clk,
       wr_clk => wr_clk
@@ -2069,13 +2103,13 @@ entity cpu_rx_packet_size_fifo_generator_ramfifo is
   port (
     empty : out STD_LOGIC;
     full : out STD_LOGIC;
-    dout : out STD_LOGIC_VECTOR ( 7 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 10 downto 0 );
     wr_data_count : out STD_LOGIC_VECTOR ( 3 downto 0 );
     rd_en : in STD_LOGIC;
     wr_clk : in STD_LOGIC;
     rst : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
-    din : in STD_LOGIC_VECTOR ( 7 downto 0 );
+    din : in STD_LOGIC_VECTOR ( 10 downto 0 );
     wr_en : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
@@ -2168,8 +2202,8 @@ begin
       Q(0) => clear,
       RAM_WR_EN => p_18_out,
       count_d2(3 downto 0) => p_12_out(3 downto 0),
-      din(7 downto 0) => din(7 downto 0),
-      dout(7 downto 0) => dout(7 downto 0),
+      din(10 downto 0) => din(10 downto 0),
+      dout(10 downto 0) => dout(10 downto 0),
       \gc0.count_d1_reg[3]\(3 downto 0) => p_0_out_0(3 downto 0),
       rd_clk => rd_clk,
       wr_clk => wr_clk
@@ -2197,13 +2231,13 @@ entity cpu_rx_packet_size_fifo_generator_top is
   port (
     empty : out STD_LOGIC;
     full : out STD_LOGIC;
-    dout : out STD_LOGIC_VECTOR ( 7 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 10 downto 0 );
     wr_data_count : out STD_LOGIC_VECTOR ( 3 downto 0 );
     rd_en : in STD_LOGIC;
     wr_clk : in STD_LOGIC;
     rst : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
-    din : in STD_LOGIC_VECTOR ( 7 downto 0 );
+    din : in STD_LOGIC_VECTOR ( 10 downto 0 );
     wr_en : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
@@ -2214,8 +2248,8 @@ architecture STRUCTURE of cpu_rx_packet_size_fifo_generator_top is
 begin
 \grf.rf\: entity work.cpu_rx_packet_size_fifo_generator_ramfifo
      port map (
-      din(7 downto 0) => din(7 downto 0),
-      dout(7 downto 0) => dout(7 downto 0),
+      din(10 downto 0) => din(10 downto 0),
+      dout(10 downto 0) => dout(10 downto 0),
       empty => empty,
       full => full,
       rd_clk => rd_clk,
@@ -2234,13 +2268,13 @@ entity cpu_rx_packet_size_fifo_generator_v13_1_1_synth is
   port (
     empty : out STD_LOGIC;
     full : out STD_LOGIC;
-    dout : out STD_LOGIC_VECTOR ( 7 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 10 downto 0 );
     wr_data_count : out STD_LOGIC_VECTOR ( 3 downto 0 );
     rd_en : in STD_LOGIC;
     wr_clk : in STD_LOGIC;
     rst : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
-    din : in STD_LOGIC_VECTOR ( 7 downto 0 );
+    din : in STD_LOGIC_VECTOR ( 10 downto 0 );
     wr_en : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
@@ -2251,8 +2285,8 @@ architecture STRUCTURE of cpu_rx_packet_size_fifo_generator_v13_1_1_synth is
 begin
 \gconvfifo.rf\: entity work.cpu_rx_packet_size_fifo_generator_top
      port map (
-      din(7 downto 0) => din(7 downto 0),
-      dout(7 downto 0) => dout(7 downto 0),
+      din(10 downto 0) => din(10 downto 0),
+      dout(10 downto 0) => dout(10 downto 0),
       empty => empty,
       full => full,
       rd_clk => rd_clk,
@@ -2278,7 +2312,7 @@ entity cpu_rx_packet_size_fifo_generator_v13_1_1 is
     wr_rst : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
     rd_rst : in STD_LOGIC;
-    din : in STD_LOGIC_VECTOR ( 7 downto 0 );
+    din : in STD_LOGIC_VECTOR ( 10 downto 0 );
     wr_en : in STD_LOGIC;
     rd_en : in STD_LOGIC;
     prog_empty_thresh : in STD_LOGIC_VECTOR ( 3 downto 0 );
@@ -2291,7 +2325,7 @@ entity cpu_rx_packet_size_fifo_generator_v13_1_1 is
     injectdbiterr : in STD_LOGIC;
     injectsbiterr : in STD_LOGIC;
     sleep : in STD_LOGIC;
-    dout : out STD_LOGIC_VECTOR ( 7 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 10 downto 0 );
     full : out STD_LOGIC;
     almost_full : out STD_LOGIC;
     wr_ack : out STD_LOGIC;
@@ -2560,7 +2594,7 @@ entity cpu_rx_packet_size_fifo_generator_v13_1_1 is
   attribute C_DEFAULT_VALUE : string;
   attribute C_DEFAULT_VALUE of cpu_rx_packet_size_fifo_generator_v13_1_1 : entity is "BlankString";
   attribute C_DIN_WIDTH : integer;
-  attribute C_DIN_WIDTH of cpu_rx_packet_size_fifo_generator_v13_1_1 : entity is 8;
+  attribute C_DIN_WIDTH of cpu_rx_packet_size_fifo_generator_v13_1_1 : entity is 11;
   attribute C_DIN_WIDTH_AXIS : integer;
   attribute C_DIN_WIDTH_AXIS of cpu_rx_packet_size_fifo_generator_v13_1_1 : entity is 1;
   attribute C_DIN_WIDTH_RACH : integer;
@@ -2576,7 +2610,7 @@ entity cpu_rx_packet_size_fifo_generator_v13_1_1 is
   attribute C_DOUT_RST_VAL : string;
   attribute C_DOUT_RST_VAL of cpu_rx_packet_size_fifo_generator_v13_1_1 : entity is "0";
   attribute C_DOUT_WIDTH : integer;
-  attribute C_DOUT_WIDTH of cpu_rx_packet_size_fifo_generator_v13_1_1 : entity is 8;
+  attribute C_DOUT_WIDTH of cpu_rx_packet_size_fifo_generator_v13_1_1 : entity is 11;
   attribute C_ENABLE_RLOCS : integer;
   attribute C_ENABLE_RLOCS of cpu_rx_packet_size_fifo_generator_v13_1_1 : entity is 0;
   attribute C_ENABLE_RST_SYNC : integer;
@@ -3426,8 +3460,8 @@ VCC: unisim.vcomponents.VCC
     );
 inst_fifo_gen: entity work.cpu_rx_packet_size_fifo_generator_v13_1_1_synth
      port map (
-      din(7 downto 0) => din(7 downto 0),
-      dout(7 downto 0) => dout(7 downto 0),
+      din(10 downto 0) => din(10 downto 0),
+      dout(10 downto 0) => dout(10 downto 0),
       empty => empty,
       full => full,
       rd_clk => rd_clk,
@@ -3447,10 +3481,10 @@ entity cpu_rx_packet_size is
     rst : in STD_LOGIC;
     wr_clk : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
-    din : in STD_LOGIC_VECTOR ( 7 downto 0 );
+    din : in STD_LOGIC_VECTOR ( 10 downto 0 );
     wr_en : in STD_LOGIC;
     rd_en : in STD_LOGIC;
-    dout : out STD_LOGIC_VECTOR ( 7 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 10 downto 0 );
     full : out STD_LOGIC;
     empty : out STD_LOGIC;
     wr_data_count : out STD_LOGIC_VECTOR ( 3 downto 0 )
@@ -3647,7 +3681,7 @@ architecture STRUCTURE of cpu_rx_packet_size is
   attribute C_DEFAULT_VALUE : string;
   attribute C_DEFAULT_VALUE of U0 : label is "BlankString";
   attribute C_DIN_WIDTH : integer;
-  attribute C_DIN_WIDTH of U0 : label is 8;
+  attribute C_DIN_WIDTH of U0 : label is 11;
   attribute C_DIN_WIDTH_AXIS : integer;
   attribute C_DIN_WIDTH_AXIS of U0 : label is 1;
   attribute C_DIN_WIDTH_RACH : integer;
@@ -3663,7 +3697,7 @@ architecture STRUCTURE of cpu_rx_packet_size is
   attribute C_DOUT_RST_VAL : string;
   attribute C_DOUT_RST_VAL of U0 : label is "0";
   attribute C_DOUT_WIDTH : integer;
-  attribute C_DOUT_WIDTH of U0 : label is 8;
+  attribute C_DOUT_WIDTH of U0 : label is 11;
   attribute C_ENABLE_RLOCS : integer;
   attribute C_ENABLE_RLOCS of U0 : label is 0;
   attribute C_ENABLE_RST_SYNC : integer;
@@ -4082,8 +4116,8 @@ U0: entity work.cpu_rx_packet_size_fifo_generator_v13_1_1
       clk => '0',
       data_count(3 downto 0) => NLW_U0_data_count_UNCONNECTED(3 downto 0),
       dbiterr => NLW_U0_dbiterr_UNCONNECTED,
-      din(7 downto 0) => din(7 downto 0),
-      dout(7 downto 0) => dout(7 downto 0),
+      din(10 downto 0) => din(10 downto 0),
+      dout(10 downto 0) => dout(10 downto 0),
       empty => empty,
       full => full,
       injectdbiterr => '0',

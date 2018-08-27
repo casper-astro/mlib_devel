@@ -57,9 +57,9 @@ entity ska_fge_rx is
     -- CPU Interface
     cpu_clk                 : in std_logic;
     cpu_rst                 : in std_logic;
-    cpu_rx_buffer_addr      : in std_logic_vector(7 downto 0);
+    cpu_rx_buffer_addr      : in std_logic_vector(10 downto 0);
     cpu_rx_buffer_rd_data   : out std_logic_vector(63 downto 0);
-    cpu_rx_size             : out std_logic_vector(7 downto 0);
+    cpu_rx_size             : out std_logic_vector(10 downto 0);
     cpu_rx_ack              : in std_logic;
 
     -- MAC Interface
@@ -157,10 +157,10 @@ architecture arch_ska_fge_rx of ska_fge_rx is
         rst             : in std_logic;
         wr_clk          : in std_logic;
         rd_clk          : in std_logic;
-        din             : in std_logic_vector(7 downto 0);
+        din             : in std_logic_vector(10 downto 0);
         wr_en           : in std_logic;
         rd_en           : in std_logic;
-        dout            : out std_logic_vector(7 downto 0);
+        dout            : out std_logic_vector(10 downto 0);
         full            : out std_logic;
         empty           : out std_logic;
         wr_data_count   : out std_logic_vector(3 downto 0));
@@ -293,7 +293,7 @@ architecture arch_ska_fge_rx of ska_fge_rx is
     signal frame_bypass : std_logic;
     signal cpu_buffer_write_sel : std_logic_vector(2 downto 0);
     signal cpu_buffer_read_sel : std_logic_vector(2 downto 0);
-    signal cpu_buffer_addr : std_logic_vector(5 downto 0);
+    signal cpu_buffer_addr : std_logic_vector(7 downto 0);
     signal cpu_buffer_addra : std_logic_vector(8 downto 0);
     signal cpu_buffer_douta : std_logic_vector(259 downto 0);
     signal cpu_buffer_web : std_logic_vector(0 downto 0);
@@ -301,11 +301,11 @@ architecture arch_ska_fge_rx of ska_fge_rx is
     signal cpu_buffer_dinb : std_logic_vector(259 downto 0);
     --signal cpu_count : std_logic_vector(7 downto 0);
     --signal reset_cpu_count : std_logic;
-
-    signal cpu_size : std_logic_vector(7 downto 0);
-    signal cpu_size_z1 : std_logic_vector(7 downto 0);
-    signal cpu_size_z2 : std_logic_vector(7 downto 0);
-
+     
+    signal cpu_size : std_logic_vector(10 downto 0);
+    signal cpu_size_z1 : std_logic_vector(10 downto 0);
+    signal cpu_size_z2 : std_logic_vector(10 downto 0);
+    
     signal cpu_ack_z1 : std_logic;
     signal cpu_ack_z2 : std_logic;
 
@@ -314,10 +314,10 @@ architecture arch_ska_fge_rx of ska_fge_rx is
 
     signal app_dvld_z1 : std_logic;
 
-    signal cpu_rx_packet_size_din : std_logic_vector(7 downto 0);
+    signal cpu_rx_packet_size_din : std_logic_vector(10 downto 0);
     signal cpu_rx_packet_size_wrreq : std_logic;
     signal cpu_rx_packet_size_rdreq : std_logic;
-    signal cpu_rx_packet_size_dout : std_logic_vector(7 downto 0);
+    signal cpu_rx_packet_size_dout : std_logic_vector(10 downto 0);
     signal cpu_rx_packet_size_empty : std_logic;
     signal cpu_rx_packet_size_wrcount : std_logic_vector(3 downto 0);
 
@@ -758,11 +758,15 @@ begin
     debug_port(4) <= cpu_rx_packet_size_wrreq;
     debug_port(5) <= cpu_rx_packet_size_rdreq;
     debug_port(6) <= cpu_rx_ack;
-    debug_port(7) <= '1' when (cpu_size /= X"00") else '0';
+    debug_port(7) <= '1' when (cpu_size /= ("000" & X"00")) else '0';
 
     -- CONVERT 256 bits TO 64 bit READS BY DROPPING LAST 2 bits OF ADDRESS
-    cpu_buffer_addra(8 downto 6) <= cpu_buffer_read_sel;
-    cpu_buffer_addra(5 downto 0) <= cpu_rx_buffer_addr(7 downto 2);
+    --cpu_buffer_addra(8 downto 6) <= cpu_buffer_read_sel;
+    --cpu_buffer_addra(5 downto 0) <= cpu_rx_buffer_addr(7 downto 2);
+
+    cpu_buffer_addra(8) <= cpu_buffer_read_sel(0);
+    cpu_buffer_addra(7 downto 0) <= cpu_rx_buffer_addr(9 downto 2);
+
 
     cpu_rx_buffer_rd_data <=
     cpu_buffer_douta(63 downto 0) when (cpu_rx_buffer_addr(1 downto 0) = "00") else
@@ -791,11 +795,11 @@ begin
     cpu_buffer_dinb(258) <= cpu_payload2_val;
     cpu_buffer_dinb(259) <= cpu_payload3_val;
 
-    cpu_buffer_addrb(8 downto 6) <= cpu_buffer_write_sel;
-    cpu_buffer_addrb(5 downto 0) <= cpu_buffer_addr;
+    cpu_buffer_addrb(8) <= cpu_buffer_write_sel(0);
+    cpu_buffer_addrb(7 downto 0) <= cpu_buffer_addr;
 
     gen_current_cpu_state : process(mac_rst, mac_clk)
-    variable cpu_count : std_logic_vector(7 downto 0);
+    variable cpu_count : std_logic_vector(10 downto 0);
     begin
         if (mac_rst = '1')then
             cpu_buffer_addr <= (others => '0');
@@ -813,20 +817,20 @@ begin
                 current_cpu_state <= CPU_BUFFERING;
 
                 if (cpu_dvld = '1')then
-                    if (cpu_buffer_addr = "111111")then
+                    if (cpu_buffer_addr = "11111111")then
                         frame_bypass <= '1';
                     else
-                        cpu_buffer_addr <= cpu_buffer_addr + "000001";
+                        cpu_buffer_addr <= cpu_buffer_addr + "00000001";
                     end if;
 
                     if (cpu_payload3_val = '1')then
-                        cpu_count := cpu_count + "00000100";
+                        cpu_count := cpu_count + "00000000100";
                     elsif (cpu_payload2_val = '1')then
-                        cpu_count := cpu_count + "00000011";
+                        cpu_count := cpu_count + "00000000011";
                     elsif (cpu_payload1_val = '1')then
-                        cpu_count := cpu_count + "00000010";
+                        cpu_count := cpu_count + "00000000010";
                     else
-                        cpu_count := cpu_count + "00000001";
+                        cpu_count := cpu_count + "00000000001";
                     end if;
 
                 end if;

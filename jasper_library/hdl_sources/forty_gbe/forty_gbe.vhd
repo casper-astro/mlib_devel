@@ -651,7 +651,7 @@ architecture arch_forty_gbe of forty_gbe is
         DAT_I : in std_logic_vector(31 downto 0);
         DAT_O : out std_logic_vector(31 downto 0);
         ACK_O : out std_logic;
-        ADR_I : in std_logic_vector(13 downto 0);
+        ADR_I : in std_logic_vector(15 downto 0);
         CYC_I : in std_logic;
         SEL_I : in std_logic_vector(3 downto 0);
         STB_I : in std_logic;
@@ -2466,7 +2466,7 @@ begin
         DAT_I => WB_SLV_DAT_I(10),
         DAT_O => WB_SLV_DAT_O(10),
         ACK_O => WB_SLV_ACK_O(10),
-        ADR_I => WB_SLV_ADR_I(10)(13 downto 0),
+        ADR_I => WB_SLV_ADR_I(10)(15 downto 0),
         CYC_I => WB_SLV_CYC_I(10),
         SEL_I => WB_SLV_SEL_I(10),
         STB_I => WB_SLV_STB_I(10),
