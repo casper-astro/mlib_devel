@@ -71,12 +71,14 @@ entity gmii_to_sgmii_clocking is
       txoutclk                : in  std_logic;                -- txoutclk from GT transceiver.
       rxoutclk                : in  std_logic;                -- rxoutclk from GT transceiver.
       mmcm_reset              : in  std_logic;                -- MMCM Reset
+      
       gtrefclk                : out std_logic;                -- gtrefclk routed through an IBUFG.
+      gtrefclk_bufg           : out std_logic;                -- gtrefclk routed through a BUFG for driving logic.     
       mmcm_locked             : out std_logic;                -- MMCM locked
       userclk                 : out std_logic;                -- for GT PMA reference clock
       userclk2                : out std_logic;                 -- 125MHz clock for core reference clock.
-      rxuserclk                 : out std_logic;                -- for GT PMA reference clock
-      rxuserclk2                : out std_logic                 -- 125MHz clock for core reference clock.
+      rxuserclk               : out std_logic;                -- for GT PMA reference clock
+      rxuserclk2              : out std_logic                 -- 125MHz clock for core reference clock.
    );
 end gmii_to_sgmii_clocking;
 
@@ -90,9 +92,14 @@ architecture top_level of gmii_to_sgmii_clocking is
    signal  clkout0                : std_logic;   -- MMCM output clock
    signal  clkout1                : std_logic;   -- MMCM output clock
    signal  clkfbout               : std_logic;   -- MMCM Feeback clock
-  signal txoutclk_bufg         : std_logic;                    -- txoutclk from GT transceiver routed onto global routing.
+  signal txoutclk_bufg         : std_logic;      -- txoutclk from GT transceiver routed onto global routing.
 
   signal userclk_i : std_logic;
+
+   signal rxoutclk_buf   : std_logic;
+
+   signal gtrefclk_i     : std_logic;
+
 begin
 
 
@@ -107,11 +114,18 @@ begin
       I     => gtrefclk_p,
       IB    => gtrefclk_n,
       CEB   => '0',
-      O     => gtrefclk,
+      O     => gtrefclk_i,
       ODIV2 => open
    );
-
    
+   gtrefclk <= gtrefclk_i;
+
+   -- Route gtrefclk through a BUFG
+   bufg_gtrefclk : BUFG
+   port map (
+      I         => gtrefclk_i,
+      O         => gtrefclk_bufg
+   );
    -- Route txoutclk input through a BUFG
    bufg_txoutclk : BUFG
    port map (
@@ -130,18 +144,19 @@ begin
     COMPENSATION         => "ZHOLD",
     STARTUP_WAIT         => FALSE,
     DIVCLK_DIVIDE        => 1,
-    CLKFBOUT_MULT_F      => 16.000,
     CLKFBOUT_PHASE       => 0.000,
     CLKFBOUT_USE_FINE_PS => FALSE,
-    CLKOUT0_DIVIDE_F     => 8.000,
     CLKOUT0_PHASE        => 0.000,
     CLKOUT0_DUTY_CYCLE   => 0.5,
     CLKOUT0_USE_FINE_PS  => FALSE,
-    CLKOUT1_DIVIDE       => 16,
     CLKOUT1_PHASE        => 0.000,
     CLKOUT1_DUTY_CYCLE   => 0.5,
     CLKOUT1_USE_FINE_PS  => FALSE,
     CLKIN1_PERIOD        => 16.0,
+    CLKFBOUT_MULT_F      => 16.000,
+    CLKOUT0_DIVIDE_F     => 8.000,
+    CLKOUT1_DIVIDE       => 16,
+            
     REF_JITTER1          => 0.010)
   port map
     -- Output clocks
@@ -206,7 +221,18 @@ begin
 
 userclk <= userclk_i;
 
-rxuserclk2 <= rxoutclk;
-rxuserclk  <= rxoutclk;
 
+   -- Place the Rx recovered clock on a Global Clock Buffer (it may be possible
+   -- to switch this for a BUFHCE/BUR and BUFMR combination)
+   rxrecclkbufg : BUFG port map (
+     I   => rxoutclk,
+     O   => rxoutclk_buf
+   );     
+
+     rxuserclk2 <= rxoutclk_buf;
+     rxuserclk  <= rxoutclk_buf;
+
+
+
+   
 end top_level;

@@ -1,7 +1,7 @@
--- Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+-- Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
--- Tool Version: Vivado v.2016.2 (lin64) Build 1577090 Thu Jun  2 16:32:35 MDT 2016
--- Date        : Mon Nov  7 14:29:19 2016
+-- Tool Version: Vivado v.2018.2 (lin64) Build 2258646 Thu Jun 14 20:02:38 MDT 2018
+-- Date        : Thu Aug 23 13:48:48 2018
 -- Host        : adam-cm running 64-bit Ubuntu 14.04.5 LTS
 -- Command     : write_vhdl -force -mode funcsim
 --               /home/aisaacson/work/git_work/ska_sa/projects/skarab_bsp_firmware/firmware/FRM123701U1R1/Vivado/IP/cpu_buffer/cpu_buffer_sim_netlist.vhdl
@@ -38,8 +38,6 @@ architecture STRUCTURE of cpu_buffer_blk_mem_gen_prim_wrapper is
   signal \NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_SBITERR_UNCONNECTED\ : STD_LOGIC;
   signal \NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_ECCPARITY_UNCONNECTED\ : STD_LOGIC_VECTOR ( 7 downto 0 );
   signal \NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_RDADDRECC_UNCONNECTED\ : STD_LOGIC_VECTOR ( 8 downto 0 );
-  attribute CLOCK_DOMAINS : string;
-  attribute CLOCK_DOMAINS of \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram\ : label is "INDEPENDENT";
   attribute box_type : string;
   attribute box_type of \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram\ : label is "PRIMITIVE";
 begin
@@ -313,30 +311,28 @@ entity \cpu_buffer_blk_mem_gen_prim_wrapper__parameterized0\ is
 end \cpu_buffer_blk_mem_gen_prim_wrapper__parameterized0\;
 
 architecture STRUCTURE of \cpu_buffer_blk_mem_gen_prim_wrapper__parameterized0\ is
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_21\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_29\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_37\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_45\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_53\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_61\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_12\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_20\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_28\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_36\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_4\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_44\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_52\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_60\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_68\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_69\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_77\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_85\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_86\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_87\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_88\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_89\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_90\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_91\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_92\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_70\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_71\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_72\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_73\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_74\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_75\ : STD_LOGIC;
   signal \NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_CASCADEOUTA_UNCONNECTED\ : STD_LOGIC;
   signal \NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_CASCADEOUTB_UNCONNECTED\ : STD_LOGIC;
   signal \NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_DBITERR_UNCONNECTED\ : STD_LOGIC;
   signal \NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_SBITERR_UNCONNECTED\ : STD_LOGIC;
   signal \NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_ECCPARITY_UNCONNECTED\ : STD_LOGIC_VECTOR ( 7 downto 0 );
   signal \NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_RDADDRECC_UNCONNECTED\ : STD_LOGIC_VECTOR ( 8 downto 0 );
-  attribute CLOCK_DOMAINS : string;
-  attribute CLOCK_DOMAINS of \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram\ : label is "INDEPENDENT";
   attribute box_type : string;
   attribute box_type of \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram\ : label is "PRIMITIVE";
 begin
@@ -550,30 +546,30 @@ begin
       DIBDI(6 downto 0) => dinb(6 downto 0),
       DIPADIP(3 downto 0) => B"0000",
       DIPBDIP(3 downto 0) => B"0000",
-      DOADO(31) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_21\,
+      DOADO(31) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_4\,
       DOADO(30 downto 24) => douta(27 downto 21),
-      DOADO(23) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_29\,
+      DOADO(23) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_12\,
       DOADO(22 downto 16) => douta(20 downto 14),
-      DOADO(15) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_37\,
+      DOADO(15) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_20\,
       DOADO(14 downto 8) => douta(13 downto 7),
-      DOADO(7) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_45\,
+      DOADO(7) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_28\,
       DOADO(6 downto 0) => douta(6 downto 0),
-      DOBDO(31) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_53\,
+      DOBDO(31) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_36\,
       DOBDO(30 downto 24) => doutb(27 downto 21),
-      DOBDO(23) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_61\,
+      DOBDO(23) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_44\,
       DOBDO(22 downto 16) => doutb(20 downto 14),
-      DOBDO(15) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_69\,
+      DOBDO(15) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_52\,
       DOBDO(14 downto 8) => doutb(13 downto 7),
-      DOBDO(7) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_77\,
+      DOBDO(7) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_60\,
       DOBDO(6 downto 0) => doutb(6 downto 0),
-      DOPADOP(3) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_85\,
-      DOPADOP(2) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_86\,
-      DOPADOP(1) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_87\,
-      DOPADOP(0) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_88\,
-      DOPBDOP(3) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_89\,
-      DOPBDOP(2) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_90\,
-      DOPBDOP(1) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_91\,
-      DOPBDOP(0) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_92\,
+      DOPADOP(3) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_68\,
+      DOPADOP(2) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_69\,
+      DOPADOP(1) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_70\,
+      DOPADOP(0) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_71\,
+      DOPBDOP(3) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_72\,
+      DOPBDOP(2) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_73\,
+      DOPBDOP(1) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_74\,
+      DOPBDOP(0) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_75\,
       ECCPARITY(7 downto 0) => \NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_ECCPARITY_UNCONNECTED\(7 downto 0),
       ENARDEN => '1',
       ENBWREN => '1',
@@ -763,7 +759,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity cpu_buffer_blk_mem_gen_v8_3_3_synth is
+entity cpu_buffer_blk_mem_gen_v8_4_1_synth is
   port (
     douta : out STD_LOGIC_VECTOR ( 63 downto 0 );
     doutb : out STD_LOGIC_VECTOR ( 63 downto 0 );
@@ -777,10 +773,10 @@ entity cpu_buffer_blk_mem_gen_v8_3_3_synth is
     web : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of cpu_buffer_blk_mem_gen_v8_3_3_synth : entity is "blk_mem_gen_v8_3_3_synth";
-end cpu_buffer_blk_mem_gen_v8_3_3_synth;
+  attribute ORIG_REF_NAME of cpu_buffer_blk_mem_gen_v8_4_1_synth : entity is "blk_mem_gen_v8_4_1_synth";
+end cpu_buffer_blk_mem_gen_v8_4_1_synth;
 
-architecture STRUCTURE of cpu_buffer_blk_mem_gen_v8_3_3_synth is
+architecture STRUCTURE of cpu_buffer_blk_mem_gen_v8_4_1_synth is
 begin
 \gnbram.gnativebmg.native_blk_mem_gen\: entity work.cpu_buffer_blk_mem_gen_top
      port map (
@@ -800,7 +796,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity cpu_buffer_blk_mem_gen_v8_3_3 is
+entity cpu_buffer_blk_mem_gen_v8_4_1 is
   port (
     clka : in STD_LOGIC;
     rsta : in STD_LOGIC;
@@ -867,158 +863,158 @@ entity cpu_buffer_blk_mem_gen_v8_3_3 is
     s_axi_rdaddrecc : out STD_LOGIC_VECTOR ( 8 downto 0 )
   );
   attribute C_ADDRA_WIDTH : integer;
-  attribute C_ADDRA_WIDTH of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 9;
+  attribute C_ADDRA_WIDTH of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 9;
   attribute C_ADDRB_WIDTH : integer;
-  attribute C_ADDRB_WIDTH of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 9;
+  attribute C_ADDRB_WIDTH of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 9;
   attribute C_ALGORITHM : integer;
-  attribute C_ALGORITHM of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 1;
+  attribute C_ALGORITHM of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 1;
   attribute C_AXI_ID_WIDTH : integer;
-  attribute C_AXI_ID_WIDTH of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 4;
+  attribute C_AXI_ID_WIDTH of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 4;
   attribute C_AXI_SLAVE_TYPE : integer;
-  attribute C_AXI_SLAVE_TYPE of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_AXI_SLAVE_TYPE of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_AXI_TYPE : integer;
-  attribute C_AXI_TYPE of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 1;
+  attribute C_AXI_TYPE of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 1;
   attribute C_BYTE_SIZE : integer;
-  attribute C_BYTE_SIZE of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 9;
+  attribute C_BYTE_SIZE of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 9;
   attribute C_COMMON_CLK : integer;
-  attribute C_COMMON_CLK of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_COMMON_CLK of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_COUNT_18K_BRAM : string;
-  attribute C_COUNT_18K_BRAM of cpu_buffer_blk_mem_gen_v8_3_3 : entity is "0";
+  attribute C_COUNT_18K_BRAM of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "0";
   attribute C_COUNT_36K_BRAM : string;
-  attribute C_COUNT_36K_BRAM of cpu_buffer_blk_mem_gen_v8_3_3 : entity is "2";
+  attribute C_COUNT_36K_BRAM of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "2";
   attribute C_CTRL_ECC_ALGO : string;
-  attribute C_CTRL_ECC_ALGO of cpu_buffer_blk_mem_gen_v8_3_3 : entity is "NONE";
+  attribute C_CTRL_ECC_ALGO of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "NONE";
   attribute C_DEFAULT_DATA : string;
-  attribute C_DEFAULT_DATA of cpu_buffer_blk_mem_gen_v8_3_3 : entity is "0";
+  attribute C_DEFAULT_DATA of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "0";
   attribute C_DISABLE_WARN_BHV_COLL : integer;
-  attribute C_DISABLE_WARN_BHV_COLL of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_DISABLE_WARN_BHV_COLL of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_DISABLE_WARN_BHV_RANGE : integer;
-  attribute C_DISABLE_WARN_BHV_RANGE of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_DISABLE_WARN_BHV_RANGE of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_ELABORATION_DIR : string;
-  attribute C_ELABORATION_DIR of cpu_buffer_blk_mem_gen_v8_3_3 : entity is "./";
+  attribute C_ELABORATION_DIR of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "./";
   attribute C_ENABLE_32BIT_ADDRESS : integer;
-  attribute C_ENABLE_32BIT_ADDRESS of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_ENABLE_32BIT_ADDRESS of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_EN_DEEPSLEEP_PIN : integer;
-  attribute C_EN_DEEPSLEEP_PIN of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_EN_DEEPSLEEP_PIN of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_EN_ECC_PIPE : integer;
-  attribute C_EN_ECC_PIPE of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_EN_ECC_PIPE of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_EN_RDADDRA_CHG : integer;
-  attribute C_EN_RDADDRA_CHG of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_EN_RDADDRA_CHG of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_EN_RDADDRB_CHG : integer;
-  attribute C_EN_RDADDRB_CHG of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_EN_RDADDRB_CHG of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_EN_SAFETY_CKT : integer;
-  attribute C_EN_SAFETY_CKT of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_EN_SAFETY_CKT of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_EN_SHUTDOWN_PIN : integer;
-  attribute C_EN_SHUTDOWN_PIN of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_EN_SHUTDOWN_PIN of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_EN_SLEEP_PIN : integer;
-  attribute C_EN_SLEEP_PIN of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_EN_SLEEP_PIN of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_EST_POWER_SUMMARY : string;
-  attribute C_EST_POWER_SUMMARY of cpu_buffer_blk_mem_gen_v8_3_3 : entity is "Estimated Power for IP     :     11.8086 mW";
+  attribute C_EST_POWER_SUMMARY of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "Estimated Power for IP     :     11.8086 mW";
   attribute C_FAMILY : string;
-  attribute C_FAMILY of cpu_buffer_blk_mem_gen_v8_3_3 : entity is "virtex7";
+  attribute C_FAMILY of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "virtex7";
   attribute C_HAS_AXI_ID : integer;
-  attribute C_HAS_AXI_ID of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_HAS_AXI_ID of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_HAS_ENA : integer;
-  attribute C_HAS_ENA of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_HAS_ENA of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_HAS_ENB : integer;
-  attribute C_HAS_ENB of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_HAS_ENB of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_HAS_INJECTERR : integer;
-  attribute C_HAS_INJECTERR of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_HAS_INJECTERR of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_HAS_MEM_OUTPUT_REGS_A : integer;
-  attribute C_HAS_MEM_OUTPUT_REGS_A of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_HAS_MEM_OUTPUT_REGS_A of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_HAS_MEM_OUTPUT_REGS_B : integer;
-  attribute C_HAS_MEM_OUTPUT_REGS_B of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_HAS_MEM_OUTPUT_REGS_B of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_HAS_MUX_OUTPUT_REGS_A : integer;
-  attribute C_HAS_MUX_OUTPUT_REGS_A of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_HAS_MUX_OUTPUT_REGS_A of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_HAS_MUX_OUTPUT_REGS_B : integer;
-  attribute C_HAS_MUX_OUTPUT_REGS_B of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_HAS_MUX_OUTPUT_REGS_B of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_HAS_REGCEA : integer;
-  attribute C_HAS_REGCEA of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_HAS_REGCEA of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_HAS_REGCEB : integer;
-  attribute C_HAS_REGCEB of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_HAS_REGCEB of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_HAS_RSTA : integer;
-  attribute C_HAS_RSTA of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_HAS_RSTA of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_HAS_RSTB : integer;
-  attribute C_HAS_RSTB of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_HAS_RSTB of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_HAS_SOFTECC_INPUT_REGS_A : integer;
-  attribute C_HAS_SOFTECC_INPUT_REGS_A of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_HAS_SOFTECC_INPUT_REGS_A of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_HAS_SOFTECC_OUTPUT_REGS_B : integer;
-  attribute C_HAS_SOFTECC_OUTPUT_REGS_B of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_HAS_SOFTECC_OUTPUT_REGS_B of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_INITA_VAL : string;
-  attribute C_INITA_VAL of cpu_buffer_blk_mem_gen_v8_3_3 : entity is "0";
+  attribute C_INITA_VAL of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "0";
   attribute C_INITB_VAL : string;
-  attribute C_INITB_VAL of cpu_buffer_blk_mem_gen_v8_3_3 : entity is "0";
+  attribute C_INITB_VAL of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "0";
   attribute C_INIT_FILE : string;
-  attribute C_INIT_FILE of cpu_buffer_blk_mem_gen_v8_3_3 : entity is "cpu_buffer.mem";
+  attribute C_INIT_FILE of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "cpu_buffer.mem";
   attribute C_INIT_FILE_NAME : string;
-  attribute C_INIT_FILE_NAME of cpu_buffer_blk_mem_gen_v8_3_3 : entity is "no_coe_file_loaded";
+  attribute C_INIT_FILE_NAME of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "no_coe_file_loaded";
   attribute C_INTERFACE_TYPE : integer;
-  attribute C_INTERFACE_TYPE of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_INTERFACE_TYPE of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_LOAD_INIT_FILE : integer;
-  attribute C_LOAD_INIT_FILE of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_LOAD_INIT_FILE of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_MEM_TYPE : integer;
-  attribute C_MEM_TYPE of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 2;
+  attribute C_MEM_TYPE of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 2;
   attribute C_MUX_PIPELINE_STAGES : integer;
-  attribute C_MUX_PIPELINE_STAGES of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_MUX_PIPELINE_STAGES of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_PRIM_TYPE : integer;
-  attribute C_PRIM_TYPE of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 1;
+  attribute C_PRIM_TYPE of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 1;
   attribute C_READ_DEPTH_A : integer;
-  attribute C_READ_DEPTH_A of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 512;
+  attribute C_READ_DEPTH_A of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 512;
   attribute C_READ_DEPTH_B : integer;
-  attribute C_READ_DEPTH_B of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 512;
+  attribute C_READ_DEPTH_B of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 512;
   attribute C_READ_WIDTH_A : integer;
-  attribute C_READ_WIDTH_A of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 64;
+  attribute C_READ_WIDTH_A of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 64;
   attribute C_READ_WIDTH_B : integer;
-  attribute C_READ_WIDTH_B of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 64;
+  attribute C_READ_WIDTH_B of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 64;
   attribute C_RSTRAM_A : integer;
-  attribute C_RSTRAM_A of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_RSTRAM_A of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_RSTRAM_B : integer;
-  attribute C_RSTRAM_B of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_RSTRAM_B of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_RST_PRIORITY_A : string;
-  attribute C_RST_PRIORITY_A of cpu_buffer_blk_mem_gen_v8_3_3 : entity is "CE";
+  attribute C_RST_PRIORITY_A of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "CE";
   attribute C_RST_PRIORITY_B : string;
-  attribute C_RST_PRIORITY_B of cpu_buffer_blk_mem_gen_v8_3_3 : entity is "CE";
+  attribute C_RST_PRIORITY_B of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "CE";
   attribute C_SIM_COLLISION_CHECK : string;
-  attribute C_SIM_COLLISION_CHECK of cpu_buffer_blk_mem_gen_v8_3_3 : entity is "ALL";
+  attribute C_SIM_COLLISION_CHECK of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "ALL";
   attribute C_USE_BRAM_BLOCK : integer;
-  attribute C_USE_BRAM_BLOCK of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_USE_BRAM_BLOCK of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_USE_BYTE_WEA : integer;
-  attribute C_USE_BYTE_WEA of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_USE_BYTE_WEA of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_USE_BYTE_WEB : integer;
-  attribute C_USE_BYTE_WEB of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_USE_BYTE_WEB of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_USE_DEFAULT_DATA : integer;
-  attribute C_USE_DEFAULT_DATA of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_USE_DEFAULT_DATA of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_USE_ECC : integer;
-  attribute C_USE_ECC of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_USE_ECC of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_USE_SOFTECC : integer;
-  attribute C_USE_SOFTECC of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_USE_SOFTECC of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_USE_URAM : integer;
-  attribute C_USE_URAM of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 0;
+  attribute C_USE_URAM of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_WEA_WIDTH : integer;
-  attribute C_WEA_WIDTH of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 1;
+  attribute C_WEA_WIDTH of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 1;
   attribute C_WEB_WIDTH : integer;
-  attribute C_WEB_WIDTH of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 1;
+  attribute C_WEB_WIDTH of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 1;
   attribute C_WRITE_DEPTH_A : integer;
-  attribute C_WRITE_DEPTH_A of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 512;
+  attribute C_WRITE_DEPTH_A of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 512;
   attribute C_WRITE_DEPTH_B : integer;
-  attribute C_WRITE_DEPTH_B of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 512;
+  attribute C_WRITE_DEPTH_B of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 512;
   attribute C_WRITE_MODE_A : string;
-  attribute C_WRITE_MODE_A of cpu_buffer_blk_mem_gen_v8_3_3 : entity is "WRITE_FIRST";
+  attribute C_WRITE_MODE_A of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "WRITE_FIRST";
   attribute C_WRITE_MODE_B : string;
-  attribute C_WRITE_MODE_B of cpu_buffer_blk_mem_gen_v8_3_3 : entity is "WRITE_FIRST";
+  attribute C_WRITE_MODE_B of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "WRITE_FIRST";
   attribute C_WRITE_WIDTH_A : integer;
-  attribute C_WRITE_WIDTH_A of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 64;
+  attribute C_WRITE_WIDTH_A of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 64;
   attribute C_WRITE_WIDTH_B : integer;
-  attribute C_WRITE_WIDTH_B of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 64;
+  attribute C_WRITE_WIDTH_B of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 64;
   attribute C_XDEVICEFAMILY : string;
-  attribute C_XDEVICEFAMILY of cpu_buffer_blk_mem_gen_v8_3_3 : entity is "virtex7";
+  attribute C_XDEVICEFAMILY of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "virtex7";
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of cpu_buffer_blk_mem_gen_v8_3_3 : entity is "blk_mem_gen_v8_3_3";
+  attribute ORIG_REF_NAME of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "blk_mem_gen_v8_4_1";
   attribute downgradeipidentifiedwarnings : string;
-  attribute downgradeipidentifiedwarnings of cpu_buffer_blk_mem_gen_v8_3_3 : entity is "yes";
-end cpu_buffer_blk_mem_gen_v8_3_3;
+  attribute downgradeipidentifiedwarnings of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "yes";
+end cpu_buffer_blk_mem_gen_v8_4_1;
 
-architecture STRUCTURE of cpu_buffer_blk_mem_gen_v8_3_3 is
+architecture STRUCTURE of cpu_buffer_blk_mem_gen_v8_4_1 is
   signal \<const0>\ : STD_LOGIC;
 begin
   dbiterr <= \<const0>\;
@@ -1131,7 +1127,7 @@ GND: unisim.vcomponents.GND
      port map (
       G => \<const0>\
     );
-inst_blk_mem_gen: entity work.cpu_buffer_blk_mem_gen_v8_3_3_synth
+inst_blk_mem_gen: entity work.cpu_buffer_blk_mem_gen_v8_4_1_synth
      port map (
       addra(8 downto 0) => addra(8 downto 0),
       addrb(8 downto 0) => addrb(8 downto 0),
@@ -1165,11 +1161,11 @@ entity cpu_buffer is
   attribute NotValidForBitStream : boolean;
   attribute NotValidForBitStream of cpu_buffer : entity is true;
   attribute CHECK_LICENSE_TYPE : string;
-  attribute CHECK_LICENSE_TYPE of cpu_buffer : entity is "cpu_buffer,blk_mem_gen_v8_3_3,{}";
+  attribute CHECK_LICENSE_TYPE of cpu_buffer : entity is "cpu_buffer,blk_mem_gen_v8_4_1,{}";
   attribute downgradeipidentifiedwarnings : string;
   attribute downgradeipidentifiedwarnings of cpu_buffer : entity is "yes";
   attribute x_core_info : string;
-  attribute x_core_info of cpu_buffer : entity is "blk_mem_gen_v8_3_3,Vivado 2016.2";
+  attribute x_core_info of cpu_buffer : entity is "blk_mem_gen_v8_4_1,Vivado 2018.1";
 end cpu_buffer;
 
 architecture STRUCTURE of cpu_buffer is
@@ -1338,11 +1334,23 @@ architecture STRUCTURE of cpu_buffer is
   attribute C_WRITE_WIDTH_B of U0 : label is 64;
   attribute C_XDEVICEFAMILY : string;
   attribute C_XDEVICEFAMILY of U0 : label is "virtex7";
-  attribute KEEP_HIERARCHY : string;
-  attribute KEEP_HIERARCHY of U0 : label is "true";
   attribute downgradeipidentifiedwarnings of U0 : label is "yes";
+  attribute x_interface_info : string;
+  attribute x_interface_info of clka : signal is "xilinx.com:interface:bram:1.0 BRAM_PORTA CLK";
+  attribute x_interface_parameter : string;
+  attribute x_interface_parameter of clka : signal is "XIL_INTERFACENAME BRAM_PORTA, MEM_SIZE 8192, MEM_WIDTH 32, MEM_ECC NONE, MASTER_TYPE OTHER";
+  attribute x_interface_info of clkb : signal is "xilinx.com:interface:bram:1.0 BRAM_PORTB CLK";
+  attribute x_interface_parameter of clkb : signal is "XIL_INTERFACENAME BRAM_PORTB, MEM_SIZE 8192, MEM_WIDTH 32, MEM_ECC NONE, MASTER_TYPE OTHER";
+  attribute x_interface_info of addra : signal is "xilinx.com:interface:bram:1.0 BRAM_PORTA ADDR";
+  attribute x_interface_info of addrb : signal is "xilinx.com:interface:bram:1.0 BRAM_PORTB ADDR";
+  attribute x_interface_info of dina : signal is "xilinx.com:interface:bram:1.0 BRAM_PORTA DIN";
+  attribute x_interface_info of dinb : signal is "xilinx.com:interface:bram:1.0 BRAM_PORTB DIN";
+  attribute x_interface_info of douta : signal is "xilinx.com:interface:bram:1.0 BRAM_PORTA DOUT";
+  attribute x_interface_info of doutb : signal is "xilinx.com:interface:bram:1.0 BRAM_PORTB DOUT";
+  attribute x_interface_info of wea : signal is "xilinx.com:interface:bram:1.0 BRAM_PORTA WE";
+  attribute x_interface_info of web : signal is "xilinx.com:interface:bram:1.0 BRAM_PORTB WE";
 begin
-U0: entity work.cpu_buffer_blk_mem_gen_v8_3_3
+U0: entity work.cpu_buffer_blk_mem_gen_v8_4_1
      port map (
       addra(8 downto 0) => addra(8 downto 0),
       addrb(8 downto 0) => addrb(8 downto 0),

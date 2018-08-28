@@ -98,50 +98,55 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-library gig_ethernet_pcs_pma_v14_3;
-use gig_ethernet_pcs_pma_v14_3.all;
+library gig_ethernet_pcs_pma_v16_1_4;
+use gig_ethernet_pcs_pma_v16_1_4.all;
 --------------------------------------------------------------------------------
 -- The entity declaration for the Core Block wrapper.
 --------------------------------------------------------------------------------
 
 entity gmii_to_sgmii_block is
-
+      generic
+      (
+       EXAMPLE_SIMULATION                      : integer   := 0          
+      );
       port(
       -- Transceiver Interface
       ---------------------
 
  
-      gtrefclk             : in std_logic;                     -- Very high quality 125MHz clock for GT transceiver.
+      gtrefclk             : in std_logic;                  
+      gtrefclk_bufg        : in std_logic; 
       txp                  : out std_logic;                    -- Differential +ve of serial transmission from PMA to PMD.
       txn                  : out std_logic;                    -- Differential -ve of serial transmission from PMA to PMD.
       rxp                  : in std_logic;                     -- Differential +ve for serial reception from PMD to PMA.
       rxn                  : in std_logic;                     -- Differential -ve for serial reception from PMD to PMA.
 
-      txoutclk             : out std_logic;                    -- txoutclk from GT transceiver (62.5MHz)
-      rxoutclk             : out std_logic;                    -- txoutclk from GT transceiver (62.5MHz)
+      txoutclk             : out std_logic;                    
+      rxoutclk             : out std_logic;                    
       resetdone            : out std_logic;                    -- The GT transceiver has completed its reset cycle
-      cplllock            : out std_logic;                    -- The GT transceiver has completed its reset cycle
+      cplllock             : out std_logic;                    -- The GT transceiver has completed its reset cycle
+      mmcm_reset           : out std_logic;
       mmcm_locked          : in std_logic;                     -- Locked indication from MMCM
-      userclk              : in std_logic;                     -- 62.5MHz global clock.
-      userclk2             : in std_logic;                     -- 125MHz global clock.
-      rxuserclk              : in std_logic;                     -- 62.5MHz global clock.
-      rxuserclk2             : in std_logic;                     -- 125MHz global clock.
-      independent_clock_bufg : in std_logic;                   -- 200MHz independent cloc,
-      pma_reset            : in std_logic;                     -- transceiver PMA reset signal
-
+      userclk              : in std_logic;                   
+      userclk2             : in std_logic;                   
+      rxuserclk              : in std_logic;                 
+      rxuserclk2             : in std_logic;                 
+      independent_clock_bufg : in std_logic;                 
+      pma_reset              : in std_logic;                   -- transceiver PMA reset signal
+ 
       -- GMII Interface
       -----------------
-      sgmii_clk_r            : out std_logic;                    -- Clock for client MAC (125Mhz, 12.5MHz or 1.25MHz).
-      sgmii_clk_f            : out std_logic;                    -- Clock for client MAC (125Mhz, 12.5MHz or 1.25MHz).
-      sgmii_clk_en         : out std_logic;                    -- Clock enable for client MAC
+      sgmii_clk_r            : out std_logic;                  -- Clock for client MAC
+      sgmii_clk_f            : out std_logic;                  -- Clock for client MAC
+      sgmii_clk_en           : out std_logic;                    -- Clock enable for client MAC
 
-      gmii_txd             : in std_logic_vector(7 downto 0);  -- Transmit data from client MAC.
-      gmii_tx_en           : in std_logic;                     -- Transmit control signal from client MAC.
-      gmii_tx_er           : in std_logic;                     -- Transmit control signal from client MAC.
-      gmii_rxd             : out std_logic_vector(7 downto 0); -- Received Data to client MAC.
-      gmii_rx_dv           : out std_logic;                    -- Received control signal to client MAC.
-      gmii_rx_er           : out std_logic;                    -- Received control signal to client MAC.
-      gmii_isolate         : out std_logic;                    -- Tristate control to electrically isolate GMII.
+      gmii_txd               : in std_logic_vector(7 downto 0);  -- Transmit data from client MAC.
+      gmii_tx_en             : in std_logic;                     -- Transmit control signal from client MAC.
+      gmii_tx_er             : in std_logic;                     -- Transmit control signal from client MAC.
+      gmii_rxd               : out std_logic_vector(7 downto 0); -- Received Data to client MAC.
+      gmii_rx_dv             : out std_logic;                    -- Received control signal to client MAC.
+      gmii_rx_er             : out std_logic;                    -- Received control signal to client MAC.
+      gmii_isolate           : out std_logic;                    -- Tristate control to electrically isolate GMII.
 
       -- Management: Alternative to MDIO Interface
       --------------------------------------------
@@ -162,7 +167,6 @@ entity gmii_to_sgmii_block is
       ---------------
       status_vector        : out std_logic_vector(15 downto 0); -- Core status.
       reset                : in std_logic;                     -- Asynchronous reset for entire core.
-
       
       
       signal_detect        : in std_logic;                      -- Input from PMD to indicate presence of optical input.
@@ -190,11 +194,11 @@ architecture block_level of gmii_to_sgmii_block is
       -- Clock derivation
       -------------------
 
-      clk125m              : in std_logic;                     -- Reference 125MHz clock.
-      sgmii_clk_r          : out std_logic;                    -- Clock to client MAC (125MHz, 12.5MHz or 1.25MHz) (to rising edge DDR).
-      sgmii_clk_f          : out std_logic;                    -- Clock to client MAC (125MHz, 12.5MHz or 1.25MHz) (to falling edge DDR).
+      clk125m              : in std_logic;                    
+      sgmii_clk_r          : out std_logic;                    -- Clock to client MAC  (to rising edge DDR).
+      sgmii_clk_f          : out std_logic;                    -- Clock to client MAC  (to falling edge DDR).
 
-      sgmii_clk_en         : out std_logic;                    -- Clock enable to client MAC (125MHz, 12.5MHz or 1.25MHz).
+      sgmii_clk_en         : out std_logic;                    -- Clock enable to client MAC .
 
       -- GMII Tx
       ----------
@@ -259,6 +263,8 @@ architecture block_level of gmii_to_sgmii_block is
       rxbuferr            : out   std_logic;
       txbuferr            : out   std_logic;
       plllkdet            : out   std_logic;
+      mmcm_reset          : out   std_logic;
+      recclk_mmcm_reset   : out   std_logic;
       txoutclk            : out   std_logic;
       rxoutclk            : out   std_logic;
       txn                 : out   std_logic;
@@ -266,6 +272,7 @@ architecture block_level of gmii_to_sgmii_block is
       rxn                 : in    std_logic;
       rxp                 : in    std_logic;
       gtrefclk            : in    std_logic;
+      gtrefclk_bufg       : in    std_logic;
       pmareset            : in    std_logic;
       mmcm_locked         : in    std_logic;
 
@@ -292,6 +299,7 @@ architecture block_level of gmii_to_sgmii_block is
         gt0_rxcommadet_out        : out std_logic;
         gt0_txpolarity_in         : in  std_logic;
         gt0_txdiffctrl_in         : in  std_logic_vector(3 downto 0);
+        gt0_txinhibit_in          : in  std_logic;
         gt0_txpostcursor_in       : in  std_logic_vector(4 downto 0);
         gt0_txprecursor_in        : in  std_logic_vector(4 downto 0);
         gt0_rxpolarity_in         : in  std_logic;
@@ -322,10 +330,11 @@ architecture block_level of gmii_to_sgmii_block is
    -----------------------------------------------------------------------------
    -- Component Declaration for the 1000BASE-X PCS/PMA sublayer core.
    -----------------------------------------------------------------------------
-   component gig_ethernet_pcs_pma_v14_3
+   component gig_ethernet_pcs_pma_v16_1_4
       generic (
          C_ELABORATION_TRANSIENT_DIR : string := "";
          C_COMPONENT_NAME            : string := "";
+         C_RX_GMII_CLK               : string  := "TXOUTCLK";          
          C_FAMILY                    : string := "virtex2";
          C_IS_SGMII                  : boolean := false;
          C_USE_TRANSCEIVER           : boolean := true;
@@ -336,68 +345,100 @@ architecture block_level of gmii_to_sgmii_block is
          C_HAS_MDIO                  : boolean := true;
          C_SGMII_PHY_MODE            : boolean := false;
          C_DYNAMIC_SWITCHING         : boolean := false;
-         C_TRANSCEIVER_MODE          : string := "a";
          C_SGMII_FABRIC_BUFFER       : boolean := false;
+         C_2_5G                      : boolean := false;
          C_1588                      : integer := 0;
-         B_SHIFTER_ADDR              : std_logic_vector(7 downto 0) := x"4E";
-         RX_GT_NOMINAL_LATENCY       : std_logic_vector(15 downto 0) := "0000000011001000";
+         B_SHIFTER_ADDR              : std_logic_vector(9 downto 0) := "0101001110";
          GT_RX_BYTE_WIDTH            : integer := 1
       );
       port(
-      -- Core <=> Transceiver Interface
-      ------------------------------
+    reset : in std_logic := '0';
+    signal_detect : in std_logic := '0';
+    link_timer_value : in std_logic_vector(9 downto 0) := (others => '0');
+    link_timer_basex : in std_logic_vector(9 downto 0) := (others => '0');
+    link_timer_sgmii : in std_logic_vector(9 downto 0) := (others => '0');
+    rx_gt_nominal_latency : in std_logic_vector(15 downto 0) := "0000000011001000";
+    speed_is_10_100       : in std_logic := '0';                 
+    speed_is_100          : in std_logic := '0'; 
+    mgt_rx_reset : out std_logic;
+    mgt_tx_reset : out std_logic;
+    userclk : in std_logic := '0';
+    userclk2 : in std_logic := '0';
+    dcm_locked : in std_logic := '0';
+    rxbufstatus : in std_logic_vector(1 downto 0) := (others => '0');
+    rxchariscomma : in std_logic_vector(1-1 downto 0) := (others => '0');
+    rxcharisk     : in std_logic_vector(1-1 downto 0) := (others => '0');
+    rxclkcorcnt : in std_logic_vector(2 downto 0) := (others => '0');
+    rxdata        : in std_logic_vector((1*8)-1 downto 0) := (others => '0');
+    rxdisperr     : in std_logic_vector(1-1 downto 0) := (others => '0');
+    rxnotintable  : in std_logic_vector(1-1 downto 0) := (others => '0');
+    rxrundisp     : in std_logic_vector(1-1 downto 0) := (others => '0');
+    txbuferr : in std_logic := '0';
+    powerdown : out std_logic;
+    txchardispmode : out std_logic;
+    txchardispval : out std_logic;
+    txcharisk : out std_logic;
+    txdata : out std_logic_vector(7 downto 0);
+    enablealign : out std_logic;
+    gtx_clk : in std_logic := '0';
+    tx_code_group : out std_logic_vector(9 downto 0);
+    loc_ref : out std_logic;
+    ewrap : out std_logic;
+    rx_code_group0 : in std_logic_vector(9 downto 0) := (others => '0');
+    rx_code_group1 : in std_logic_vector(9 downto 0) := (others => '0');
+    pma_rx_clk0 : in std_logic := '0';
+    pma_rx_clk1 : in std_logic := '0';
+    en_cdet : out std_logic;
+    gmii_txd : in std_logic_vector(7 downto 0) := (others => '0');
+    gmii_tx_en : in std_logic := '0';
+    gmii_tx_er : in std_logic := '0';
+    gmii_rxd : out std_logic_vector(7 downto 0);
+    gmii_rx_dv : out std_logic;
+    gmii_rx_er : out std_logic;
+    gmii_isolate : out std_logic;
+    an_interrupt : out std_logic;
+    an_enable : out std_logic;
+    speed_selection : out std_logic_vector(1 downto 0);
+    phyad : in std_logic_vector(4 downto 0) := (others => '0');
+    mdc : in std_logic := '0';
+    mdio_in : in std_logic := '0';
+    mdio_out : out std_logic;
+    mdio_tri : out std_logic;
+    an_adv_config_vector : in std_logic_vector ( 15 downto 0) := (others => '0');
+    an_adv_config_val : in std_logic := '0';
+    an_restart_config : in std_logic := '0';  
+    configuration_vector : in std_logic_vector(4 downto 0) := (others => '0');
+    configuration_valid : in std_logic := '0';
+    status_vector : out std_logic_vector(15 downto 0);
+    basex_or_sgmii : in std_logic := '0';
 
-      mgt_rx_reset         : out std_logic;                    -- Transceiver connection: reset for the receiver half of the Transceiver
-      mgt_tx_reset         : out std_logic;                    -- Transceiver connection: reset for the transmitter half of the Transceiver
-      userclk              : in std_logic;                     -- Routed to TXUSERCLK and RXUSERCLK of Transceiver.
-      userclk2             : in std_logic;                     -- Routed to TXUSERCLK2 and RXUSERCLK2 of Transceiver.
-      dcm_locked           : in std_logic;                     -- LOCKED signal from DCM.
+    -----------------------
+    -- I/O for 1588 support
+    -----------------------
+    -- Transceiver DRP
+    drp_dclk                    : in  std_logic := '0';
+    drp_req                     : out std_logic;
+    drp_gnt                     : in  std_logic := '0';
+    drp_den                     : out std_logic;
+    drp_dwe                     : out std_logic;
+    drp_drdy                    : in  std_logic := '0';
+    drp_daddr                   : out std_logic_vector( 9 downto 0);
+    drp_di                      : out std_logic_vector(15 downto 0);
+    drp_do                      : in  std_logic_vector(15 downto 0) := (others => '0');
+    
+    -- 1588 Timer input
+    systemtimer_s_field     : in std_logic_vector(47 downto 0) := (others => '0');
+    systemtimer_ns_field    : in std_logic_vector(31 downto 0) := (others => '0');
+    correction_timer        : in std_logic_vector(63 downto 0) := (others => '0');
+    -- Rx CDR recovered clock from GT transcevier
+    rxrecclk                : in  std_logic := '0';
 
-      rxbufstatus          : in std_logic_vector (1 downto 0); -- Transceiver connection: Elastic Buffer Status.
-      rxchariscomma        : in std_logic_vector (0 downto 0); -- Transceiver connection: Comma detected in RXDATA.
-      rxcharisk            : in std_logic_vector (0 downto 0); -- Transceiver connection: K character received (or extra data bit) in RXDATA.
-      rxclkcorcnt          : in std_logic_vector (2 downto 0); -- Transceiver connection: Indicates clock correction.
-      rxdata               : in std_logic_vector (7 downto 0); -- Transceiver connection: Data after 8B/10B decoding.
-      rxdisperr            : in std_logic_vector (0 downto 0); -- Transceiver connection: Disparity-error in RXDATA.
-      rxnotintable         : in std_logic_vector (0 downto 0); -- Transceiver connection: Non-existent 8B/10 code indicated.
-      rxrundisp            : in std_logic_vector (0 downto 0); -- Transceiver connection: Running Disparity of RXDATA (or extra data bit).
-      txbuferr             : in std_logic;                     -- Transceiver connection: TX Buffer error (overflow or underflow).
-
-      powerdown            : out std_logic;                    -- Transceiver connection: Powerdown the Transceiver
-      txchardispmode       : out std_logic;                    -- Transceiver connection: Set running disparity for current byte.
-      txchardispval        : out std_logic;                    -- Transceiver connection: Set running disparity value.
-      txcharisk            : out std_logic;                    -- Transceiver connection: K character transmitted in TXDATA.
-      txdata               : out std_logic_vector(7 downto 0); -- Transceiver connection: Data for 8B/10B encoding.
-      enablealign          : out std_logic;                    -- Allow the transceivers to serially realign to a comma character.
-
-      -- GMII Interface
-      -----------------
-
-      gmii_txd             : in std_logic_vector(7 downto 0);  -- Transmit data from client MAC.
-      gmii_tx_en           : in std_logic;                     -- Transmit control signal from client MAC.
-      gmii_tx_er           : in std_logic;                     -- Transmit control signal from client MAC.
-      gmii_rxd             : out std_logic_vector(7 downto 0); -- Received Data to client MAC.
-      gmii_rx_dv           : out std_logic;                    -- Received control signal to client MAC.
-      gmii_rx_er           : out std_logic;                    -- Received control signal to client MAC.
-      gmii_isolate         : out std_logic;                    -- Tristate control to electrically isolate GMII.
-
-      -- Management: Alternative to MDIO Interface
-      --------------------------------------------
-
-      configuration_vector : in std_logic_vector(4 downto 0);  -- Alternative to MDIO interface.
-
-      an_interrupt         : out std_logic;                    -- Interrupt to processor to signal that Auto-Negotiation has completed
-      an_adv_config_vector : in std_logic_vector(15 downto 0); -- Alternate interface to program REG4 (AN ADV)
-      an_restart_config    : in std_logic;                     -- Alternate signal to modify AN restart bit in REG0
-      link_timer_value     : in std_logic_vector(8 downto 0);  -- Programmable Auto-Negotiation Link Timer Control
-
-      -- General IO's
-      ---------------
-      status_vector        : out std_logic_vector(15 downto 0); -- Core status.
-      reset                : in std_logic;                     -- Asynchronous reset for entire core.
-      signal_detect        : in std_logic;                      -- Input from PMD to indicate presence of optical input.
-      reset_done           : in std_logic 
-
+    -- Rx 1588 Timer PHY Correction Ports
+    rxphy_s_field           : out  std_logic_vector(47 downto 0) := (others => '0');
+    rxphy_ns_field          : out  std_logic_vector(31 downto 0) := (others => '0');
+    rxphy_correction_timer  : out  std_logic_vector(63 downto 0) := (others => '0');
+    --resetdone indication from gt.
+    reset_done            : in std_logic
       );
 
    end component;
@@ -447,34 +488,34 @@ architecture block_level of gmii_to_sgmii_block is
   -- clock generation signals for SGMII clock
   signal status_vector_i   : std_logic_vector(15 downto 0);    -- Internal status vector signal.
 
-constant EXAMPLE_SIMULATION    : integer := 0 ;
 
-  signal phyaddress : std_logic_vector(4 downto 0);
-  signal link_timer_value     : std_logic_vector(8 downto 0);  -- Programmable Auto-Negotiation Link Timer Control
+  signal link_timer_value     : std_logic_vector(9 downto 0);  -- Programmable Auto-Negotiation Link Timer Control
 
 signal sgmii_clk_r_i :std_logic;
 signal sgmii_clk_f_i :std_logic;
 
-signal rxoutclk_i : std_logic;
-signal rxoutclk_buf : std_logic;
-signal rxoutclk_bufmr : std_logic;
-
 signal gt0_txresetdone_out_i : std_logic;
 signal gt0_rxresetdone_out_i : std_logic;
 signal resetdone_i : std_logic;
-signal reset_done : std_logic;
+signal tx_reset_done_i : std_logic;
+signal rx_reset_done_i : std_logic;
 signal reset_done_i : std_logic;
 signal mdio_o_int : std_logic;
 signal mdio_t_int : std_logic;
 
+signal rx_gt_nominal_latency : std_logic_vector(15 downto 0);
+
 begin
+rx_gt_nominal_latency <=  std_logic_vector(to_unsigned(280, 16));
+     
+
+
 
 sgmii_clk_r <= sgmii_clk_r_i;
 sgmii_clk_f <= sgmii_clk_f_i;
 
 
-phyaddress <= std_logic_vector(to_unsigned(1, phyaddress'length));
-  link_timer_value <= "000000100" when EXAMPLE_SIMULATION =1 else "000110010" ;
+  link_timer_value <= "0000000100" when EXAMPLE_SIMULATION =1 else "0000110010" ;
 
   ------------------------------------------------------------------------------
   -- Component Instantiation for the SGMII adaptation module
@@ -495,26 +536,26 @@ phyaddress <= std_logic_vector(to_unsigned(1, phyaddress'length));
      gmii_rxd_in          => gmii_rxd_int,
      gmii_rx_dv_in        => gmii_rx_dv_int,
      gmii_rx_er_in        => gmii_rx_er_int,
-     gmii_txd_out         => gmii_txd_int,
-     gmii_tx_en_out       => gmii_tx_en_int,
-     gmii_tx_er_out       => gmii_tx_er_int,
      gmii_rxd_out         => gmii_rxd,
      gmii_rx_dv_out       => gmii_rx_dv,
      gmii_rx_er_out       => gmii_rx_er,
+     gmii_txd_out         => gmii_txd_int,
+     gmii_tx_en_out       => gmii_tx_en_int,
+     gmii_tx_er_out       => gmii_tx_er_int,
      speed_is_10_100      => speed_is_10_100,
      speed_is_100         => speed_is_100
      );
-
 
 
   ------------------------------------------------------------------------------
   -- Instantiate the core
   ------------------------------------------------------------------------------
 
-  gmii_to_sgmii_core : gig_ethernet_pcs_pma_v14_3
+  gmii_to_sgmii_core : gig_ethernet_pcs_pma_v16_1_4
     generic map (
       C_ELABORATION_TRANSIENT_DIR => "BlankString",
       C_COMPONENT_NAME            => "gmii_to_sgmii",
+      C_RX_GMII_CLK               => "TXOUTCLK",
       C_FAMILY                    => "virtex7",
       C_IS_SGMII                  => true,
       C_USE_TRANSCEIVER           => true,
@@ -525,11 +566,10 @@ phyaddress <= std_logic_vector(to_unsigned(1, phyaddress'length));
       C_HAS_MDIO                  => false,
       C_SGMII_PHY_MODE            => false,
       C_DYNAMIC_SWITCHING         => false,
-      C_TRANSCEIVER_MODE          => "A",
       C_SGMII_FABRIC_BUFFER       => true,
       C_1588                      => 0,
-      B_SHIFTER_ADDR              => x"50",
-      RX_GT_NOMINAL_LATENCY       => "0000000011010010",
+      B_SHIFTER_ADDR              => "0101010000",
+      C_2_5G                      => false,
       GT_RX_BYTE_WIDTH            => 1
     )
     port map (
@@ -537,6 +577,11 @@ phyaddress <= std_logic_vector(to_unsigned(1, phyaddress'length));
       mgt_tx_reset         => mgt_tx_reset,
       userclk              => userclk2,
       userclk2             => userclk2,
+      rx_gt_nominal_latency => rx_gt_nominal_latency, 
+      speed_is_10_100      => speed_is_10_100,
+      speed_is_100         => speed_is_100,
+      
+ 
       dcm_locked           => mmcm_locked,
       rxbufstatus          => rxbufstatus,
       rxchariscomma        => rxchariscomma,
@@ -553,6 +598,7 @@ phyaddress <= std_logic_vector(to_unsigned(1, phyaddress'length));
       txcharisk            => txcharisk,
       txdata               => txdata,
       enablealign          => enablealign,
+      rxrecclk             => rxuserclk2,
       gmii_txd             => gmii_txd_int,
       gmii_tx_en           => gmii_tx_en_int,
       gmii_tx_er           => gmii_tx_er_int,
@@ -561,13 +607,51 @@ phyaddress <= std_logic_vector(to_unsigned(1, phyaddress'length));
       gmii_rx_er           => gmii_rx_er_int,
       gmii_isolate         => gmii_isolate,
       configuration_vector => configuration_vector,
+      mdc                  => '0',
+      mdio_in              => '0',
+      phyad                => (others => '0'),
+      configuration_valid  => '0',
+      mdio_out             => open,
+      mdio_tri             => open,
       an_interrupt         => an_interrupt,
       an_adv_config_vector => an_adv_config_vector,
+      an_adv_config_val    => '0',
       an_restart_config    => an_restart_config,
+      basex_or_sgmii       => '0',
       link_timer_value     => link_timer_value,
+      link_timer_basex     => (others => '0'),
+      link_timer_sgmii     => (others => '0'),
       status_vector        => status_vector_i,
+      an_enable            => open,
+      speed_selection      => open,
       reset                => reset,
       signal_detect        => signal_detect,
+      -- drp interface used in 1588 mode
+      drp_dclk             => '0',        
+      drp_gnt              => '0',        
+      drp_drdy             => '0',        
+      drp_do               => (others => '0'),
+      drp_req              => open, 
+      drp_den              => open,
+      drp_dwe              => open,
+      drp_daddr            => open,
+      drp_di               => open,
+      -- 1588 Timer input
+      systemtimer_s_field  => (others => '0'),
+      systemtimer_ns_field => (others => '0'),
+      correction_timer     => (others => '0'),
+      rxphy_s_field          => open,
+      rxphy_ns_field         => open,
+      rxphy_correction_timer => open,
+      gtx_clk              => '0',
+      rx_code_group0       => (others => '0'),
+      rx_code_group1       => (others => '0'),
+      pma_rx_clk0          => '0',
+      pma_rx_clk1          => '0',
+      tx_code_group        => open,
+      loc_ref              => open,
+      ewrap                => open,
+      en_cdet              => open,
       reset_done           => reset_done_i
 
    );
@@ -610,14 +694,17 @@ phyaddress <= std_logic_vector(to_unsigned(1, phyaddress'length));
       rxbuferr                     => rxbufstatus(1),
       txbuferr                     => txbuferr,
       plllkdet                     => cplllock,
+      mmcm_reset                   => mmcm_reset,
+      recclk_mmcm_reset            => open,
       txoutclk                     => txoutclk,
-      rxoutclk                     => rxoutclk_i,
+      rxoutclk                     => rxoutclk,
       txn                          => txn,
       txp                          => txp,
       rxn                          => rxn,
       rxp                          => rxp,
 
       gtrefclk                     => gtrefclk,
+      gtrefclk_bufg                => gtrefclk_bufg,
       pmareset                     => pma_reset,
       mmcm_locked                  => mmcm_locked,
       gt0_txpmareset_in         => '0',
@@ -629,7 +716,9 @@ phyaddress <= std_logic_vector(to_unsigned(1, phyaddress'length));
       gt0_rxbufstatus_out       => open,
       gt0_txbufstatus_out       => open,
       gt0_drpaddr_in            => (others=>'0'),
-      gt0_drpclk_in             => userclk2,
+      
+      gt0_drpclk_in                => gtrefclk_bufg,
+
       gt0_drpdi_in              => (others=>'0'),
       gt0_drpdo_out             => open,
       gt0_drpen_in              => '0',
@@ -642,12 +731,14 @@ phyaddress <= std_logic_vector(to_unsigned(1, phyaddress'length));
       gt0_rxmonitorsel_in       => (others=>'0'),
       gt0_rxcommadet_out        => open,
       gt0_txpolarity_in         => '0',
-      gt0_txdiffctrl_in         => "1000", -- GT 11/04/2017
+      gt0_txdiffctrl_in         => "1000",
+      
+      gt0_txinhibit_in          => '0',
       gt0_txpostcursor_in       => (others=>'0'),
       gt0_txprecursor_in        => (others=>'0'),
       gt0_rxpolarity_in         => '0',
       gt0_rxdfelpmreset_in      => '0',
-      gt0_rxlpmen_in            => '0',
+      gt0_rxlpmen_in            => '1',
       gt0_txprbssel_in          => (others=>'0'),
       gt0_txprbsforceerr_in     => '0',
       gt0_rxprbscntreset_in     => '0',
@@ -667,39 +758,29 @@ phyaddress <= std_logic_vector(to_unsigned(1, phyaddress'length));
      gt0_qplloutrefclk          => gt0_qplloutrefclk_in
    );
 
- reset_done <= gt0_txresetdone_out_i and gt0_rxresetdone_out_i;
-
- resetdone  <= reset_done_i;
-
-   sync_block_reset_done : gmii_to_sgmii_sync_block
+   sync_block_tx_reset_done : gmii_to_sgmii_sync_block
    port map
         (
            clk             => userclk2 ,
-           data_in         => reset_done,
-           data_out        => reset_done_i
+           data_in         => gt0_txresetdone_out_i,
+           data_out        => tx_reset_done_i
         );
+   sync_block_rx_reset_done : gmii_to_sgmii_sync_block
+   port map
+        (
+           clk             => userclk2 ,
+           data_in         => gt0_rxresetdone_out_i,
+           data_out        => rx_reset_done_i
+        );   
+ reset_done_i <= tx_reset_done_i and rx_reset_done_i;
+
+ resetdone  <= reset_done_i;
+
+
 
 
    -- Unused
   rxbufstatus(0)           <= '0';
-
-
-   -- GT output cannot drive a BUFR directly so connecting to it through a BUFMR
-   rxrecclkbufmr : BUFMR port map (
-     I   => rxoutclk_i,
-     O   => rxoutclk_bufmr
-   );
-
-   -- Place the Rx recovered clock on a Regional Clock Buffer
-   rxrecclkbufr : BUFR port map (
-     I   => rxoutclk_bufmr,
-     O   => rxoutclk_buf,
-     CE  => '1',
-     CLR => '0'
-   );
-
-   rxoutclk <= rxoutclk_buf ;
-
 
 end block_level;
 

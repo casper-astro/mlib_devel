@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2018 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -47,14 +47,14 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: xilinx.com:ip:mdm:3.2
--- IP Revision: 6
+-- IP Revision: 14
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-LIBRARY mdm_v3_2_6;
-USE mdm_v3_2_6.MDM;
+LIBRARY mdm_v3_2_14;
+USE mdm_v3_2_14.MDM;
 
 ENTITY cont_microblaze_mdm_1_0 IS
   PORT (
@@ -66,7 +66,8 @@ ENTITY cont_microblaze_mdm_1_0 IS
     Dbg_Capture_0 : OUT STD_LOGIC;
     Dbg_Shift_0 : OUT STD_LOGIC;
     Dbg_Update_0 : OUT STD_LOGIC;
-    Dbg_Rst_0 : OUT STD_LOGIC
+    Dbg_Rst_0 : OUT STD_LOGIC;
+    Dbg_Disable_0 : OUT STD_LOGIC
   );
 END cont_microblaze_mdm_1_0;
 
@@ -78,17 +79,24 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       C_FAMILY : STRING;
       C_JTAG_CHAIN : INTEGER;
       C_USE_BSCAN : INTEGER;
+      C_BSCANID : INTEGER;
+      C_DEBUG_INTERFACE : INTEGER;
       C_USE_CONFIG_RESET : INTEGER;
+      C_AVOID_PRIMITIVES : INTEGER;
       C_INTERCONNECT : INTEGER;
       C_MB_DBG_PORTS : INTEGER;
       C_USE_UART : INTEGER;
       C_DBG_REG_ACCESS : INTEGER;
       C_DBG_MEM_ACCESS : INTEGER;
       C_USE_CROSS_TRIGGER : INTEGER;
+      C_EXT_TRIG_RESET_VALUE : STD_LOGIC_VECTOR;
       C_TRACE_OUTPUT : INTEGER;
       C_TRACE_DATA_WIDTH : INTEGER;
       C_TRACE_CLK_FREQ_HZ : INTEGER;
       C_TRACE_CLK_OUT_PHASE : INTEGER;
+      C_TRACE_ASYNC_RESET : INTEGER;
+      C_TRACE_PROTOCOL : INTEGER;
+      C_TRACE_ID : INTEGER;
       C_S_AXI_ADDR_WIDTH : INTEGER;
       C_S_AXI_DATA_WIDTH : INTEGER;
       C_S_AXI_ACLK_FREQ_HZ : INTEGER;
@@ -103,6 +111,7 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Config_Reset : IN STD_LOGIC;
       Scan_Reset : IN STD_LOGIC;
       Scan_Reset_Sel : IN STD_LOGIC;
+      Scan_En : IN STD_LOGIC;
       S_AXI_ACLK : IN STD_LOGIC;
       S_AXI_ARESETN : IN STD_LOGIC;
       M_AXI_ACLK : IN STD_LOGIC;
@@ -129,7 +138,7 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Trig_Ack_In_3 : OUT STD_LOGIC;
       Trig_Out_3 : OUT STD_LOGIC;
       Trig_Ack_Out_3 : IN STD_LOGIC;
-      S_AXI_AWADDR : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      S_AXI_AWADDR : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
       S_AXI_AWVALID : IN STD_LOGIC;
       S_AXI_AWREADY : OUT STD_LOGIC;
       S_AXI_WDATA : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -139,7 +148,7 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       S_AXI_BRESP : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
       S_AXI_BVALID : OUT STD_LOGIC;
       S_AXI_BREADY : IN STD_LOGIC;
-      S_AXI_ARADDR : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      S_AXI_ARADDR : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
       S_AXI_ARVALID : IN STD_LOGIC;
       S_AXI_ARREADY : OUT STD_LOGIC;
       S_AXI_RDATA : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -559,6 +568,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_0 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_0 : OUT STD_LOGIC;
       Dbg_TrValid_0 : IN STD_LOGIC;
+      Dbg_Disable_0 : OUT STD_LOGIC;
+      Dbg_AWADDR_0 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_0 : OUT STD_LOGIC;
+      Dbg_AWREADY_0 : IN STD_LOGIC;
+      Dbg_WDATA_0 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_0 : OUT STD_LOGIC;
+      Dbg_WREADY_0 : IN STD_LOGIC;
+      Dbg_BRESP_0 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_0 : IN STD_LOGIC;
+      Dbg_BREADY_0 : OUT STD_LOGIC;
+      Dbg_ARADDR_0 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_0 : OUT STD_LOGIC;
+      Dbg_ARREADY_0 : IN STD_LOGIC;
+      Dbg_RDATA_0 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_0 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_0 : IN STD_LOGIC;
+      Dbg_RREADY_0 : OUT STD_LOGIC;
       Dbg_Clk_1 : OUT STD_LOGIC;
       Dbg_TDI_1 : OUT STD_LOGIC;
       Dbg_TDO_1 : IN STD_LOGIC;
@@ -575,6 +601,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_1 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_1 : OUT STD_LOGIC;
       Dbg_TrValid_1 : IN STD_LOGIC;
+      Dbg_Disable_1 : OUT STD_LOGIC;
+      Dbg_AWADDR_1 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_1 : OUT STD_LOGIC;
+      Dbg_AWREADY_1 : IN STD_LOGIC;
+      Dbg_WDATA_1 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_1 : OUT STD_LOGIC;
+      Dbg_WREADY_1 : IN STD_LOGIC;
+      Dbg_BRESP_1 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_1 : IN STD_LOGIC;
+      Dbg_BREADY_1 : OUT STD_LOGIC;
+      Dbg_ARADDR_1 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_1 : OUT STD_LOGIC;
+      Dbg_ARREADY_1 : IN STD_LOGIC;
+      Dbg_RDATA_1 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_1 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_1 : IN STD_LOGIC;
+      Dbg_RREADY_1 : OUT STD_LOGIC;
       Dbg_Clk_2 : OUT STD_LOGIC;
       Dbg_TDI_2 : OUT STD_LOGIC;
       Dbg_TDO_2 : IN STD_LOGIC;
@@ -591,6 +634,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_2 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_2 : OUT STD_LOGIC;
       Dbg_TrValid_2 : IN STD_LOGIC;
+      Dbg_Disable_2 : OUT STD_LOGIC;
+      Dbg_AWADDR_2 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_2 : OUT STD_LOGIC;
+      Dbg_AWREADY_2 : IN STD_LOGIC;
+      Dbg_WDATA_2 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_2 : OUT STD_LOGIC;
+      Dbg_WREADY_2 : IN STD_LOGIC;
+      Dbg_BRESP_2 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_2 : IN STD_LOGIC;
+      Dbg_BREADY_2 : OUT STD_LOGIC;
+      Dbg_ARADDR_2 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_2 : OUT STD_LOGIC;
+      Dbg_ARREADY_2 : IN STD_LOGIC;
+      Dbg_RDATA_2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_2 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_2 : IN STD_LOGIC;
+      Dbg_RREADY_2 : OUT STD_LOGIC;
       Dbg_Clk_3 : OUT STD_LOGIC;
       Dbg_TDI_3 : OUT STD_LOGIC;
       Dbg_TDO_3 : IN STD_LOGIC;
@@ -607,6 +667,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_3 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_3 : OUT STD_LOGIC;
       Dbg_TrValid_3 : IN STD_LOGIC;
+      Dbg_Disable_3 : OUT STD_LOGIC;
+      Dbg_AWADDR_3 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_3 : OUT STD_LOGIC;
+      Dbg_AWREADY_3 : IN STD_LOGIC;
+      Dbg_WDATA_3 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_3 : OUT STD_LOGIC;
+      Dbg_WREADY_3 : IN STD_LOGIC;
+      Dbg_BRESP_3 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_3 : IN STD_LOGIC;
+      Dbg_BREADY_3 : OUT STD_LOGIC;
+      Dbg_ARADDR_3 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_3 : OUT STD_LOGIC;
+      Dbg_ARREADY_3 : IN STD_LOGIC;
+      Dbg_RDATA_3 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_3 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_3 : IN STD_LOGIC;
+      Dbg_RREADY_3 : OUT STD_LOGIC;
       Dbg_Clk_4 : OUT STD_LOGIC;
       Dbg_TDI_4 : OUT STD_LOGIC;
       Dbg_TDO_4 : IN STD_LOGIC;
@@ -623,6 +700,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_4 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_4 : OUT STD_LOGIC;
       Dbg_TrValid_4 : IN STD_LOGIC;
+      Dbg_Disable_4 : OUT STD_LOGIC;
+      Dbg_AWADDR_4 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_4 : OUT STD_LOGIC;
+      Dbg_AWREADY_4 : IN STD_LOGIC;
+      Dbg_WDATA_4 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_4 : OUT STD_LOGIC;
+      Dbg_WREADY_4 : IN STD_LOGIC;
+      Dbg_BRESP_4 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_4 : IN STD_LOGIC;
+      Dbg_BREADY_4 : OUT STD_LOGIC;
+      Dbg_ARADDR_4 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_4 : OUT STD_LOGIC;
+      Dbg_ARREADY_4 : IN STD_LOGIC;
+      Dbg_RDATA_4 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_4 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_4 : IN STD_LOGIC;
+      Dbg_RREADY_4 : OUT STD_LOGIC;
       Dbg_Clk_5 : OUT STD_LOGIC;
       Dbg_TDI_5 : OUT STD_LOGIC;
       Dbg_TDO_5 : IN STD_LOGIC;
@@ -639,6 +733,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_5 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_5 : OUT STD_LOGIC;
       Dbg_TrValid_5 : IN STD_LOGIC;
+      Dbg_Disable_5 : OUT STD_LOGIC;
+      Dbg_AWADDR_5 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_5 : OUT STD_LOGIC;
+      Dbg_AWREADY_5 : IN STD_LOGIC;
+      Dbg_WDATA_5 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_5 : OUT STD_LOGIC;
+      Dbg_WREADY_5 : IN STD_LOGIC;
+      Dbg_BRESP_5 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_5 : IN STD_LOGIC;
+      Dbg_BREADY_5 : OUT STD_LOGIC;
+      Dbg_ARADDR_5 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_5 : OUT STD_LOGIC;
+      Dbg_ARREADY_5 : IN STD_LOGIC;
+      Dbg_RDATA_5 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_5 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_5 : IN STD_LOGIC;
+      Dbg_RREADY_5 : OUT STD_LOGIC;
       Dbg_Clk_6 : OUT STD_LOGIC;
       Dbg_TDI_6 : OUT STD_LOGIC;
       Dbg_TDO_6 : IN STD_LOGIC;
@@ -655,6 +766,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_6 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_6 : OUT STD_LOGIC;
       Dbg_TrValid_6 : IN STD_LOGIC;
+      Dbg_Disable_6 : OUT STD_LOGIC;
+      Dbg_AWADDR_6 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_6 : OUT STD_LOGIC;
+      Dbg_AWREADY_6 : IN STD_LOGIC;
+      Dbg_WDATA_6 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_6 : OUT STD_LOGIC;
+      Dbg_WREADY_6 : IN STD_LOGIC;
+      Dbg_BRESP_6 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_6 : IN STD_LOGIC;
+      Dbg_BREADY_6 : OUT STD_LOGIC;
+      Dbg_ARADDR_6 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_6 : OUT STD_LOGIC;
+      Dbg_ARREADY_6 : IN STD_LOGIC;
+      Dbg_RDATA_6 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_6 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_6 : IN STD_LOGIC;
+      Dbg_RREADY_6 : OUT STD_LOGIC;
       Dbg_Clk_7 : OUT STD_LOGIC;
       Dbg_TDI_7 : OUT STD_LOGIC;
       Dbg_TDO_7 : IN STD_LOGIC;
@@ -671,6 +799,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_7 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_7 : OUT STD_LOGIC;
       Dbg_TrValid_7 : IN STD_LOGIC;
+      Dbg_Disable_7 : OUT STD_LOGIC;
+      Dbg_AWADDR_7 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_7 : OUT STD_LOGIC;
+      Dbg_AWREADY_7 : IN STD_LOGIC;
+      Dbg_WDATA_7 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_7 : OUT STD_LOGIC;
+      Dbg_WREADY_7 : IN STD_LOGIC;
+      Dbg_BRESP_7 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_7 : IN STD_LOGIC;
+      Dbg_BREADY_7 : OUT STD_LOGIC;
+      Dbg_ARADDR_7 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_7 : OUT STD_LOGIC;
+      Dbg_ARREADY_7 : IN STD_LOGIC;
+      Dbg_RDATA_7 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_7 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_7 : IN STD_LOGIC;
+      Dbg_RREADY_7 : OUT STD_LOGIC;
       Dbg_Clk_8 : OUT STD_LOGIC;
       Dbg_TDI_8 : OUT STD_LOGIC;
       Dbg_TDO_8 : IN STD_LOGIC;
@@ -687,6 +832,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_8 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_8 : OUT STD_LOGIC;
       Dbg_TrValid_8 : IN STD_LOGIC;
+      Dbg_Disable_8 : OUT STD_LOGIC;
+      Dbg_AWADDR_8 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_8 : OUT STD_LOGIC;
+      Dbg_AWREADY_8 : IN STD_LOGIC;
+      Dbg_WDATA_8 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_8 : OUT STD_LOGIC;
+      Dbg_WREADY_8 : IN STD_LOGIC;
+      Dbg_BRESP_8 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_8 : IN STD_LOGIC;
+      Dbg_BREADY_8 : OUT STD_LOGIC;
+      Dbg_ARADDR_8 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_8 : OUT STD_LOGIC;
+      Dbg_ARREADY_8 : IN STD_LOGIC;
+      Dbg_RDATA_8 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_8 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_8 : IN STD_LOGIC;
+      Dbg_RREADY_8 : OUT STD_LOGIC;
       Dbg_Clk_9 : OUT STD_LOGIC;
       Dbg_TDI_9 : OUT STD_LOGIC;
       Dbg_TDO_9 : IN STD_LOGIC;
@@ -703,6 +865,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_9 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_9 : OUT STD_LOGIC;
       Dbg_TrValid_9 : IN STD_LOGIC;
+      Dbg_Disable_9 : OUT STD_LOGIC;
+      Dbg_AWADDR_9 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_9 : OUT STD_LOGIC;
+      Dbg_AWREADY_9 : IN STD_LOGIC;
+      Dbg_WDATA_9 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_9 : OUT STD_LOGIC;
+      Dbg_WREADY_9 : IN STD_LOGIC;
+      Dbg_BRESP_9 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_9 : IN STD_LOGIC;
+      Dbg_BREADY_9 : OUT STD_LOGIC;
+      Dbg_ARADDR_9 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_9 : OUT STD_LOGIC;
+      Dbg_ARREADY_9 : IN STD_LOGIC;
+      Dbg_RDATA_9 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_9 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_9 : IN STD_LOGIC;
+      Dbg_RREADY_9 : OUT STD_LOGIC;
       Dbg_Clk_10 : OUT STD_LOGIC;
       Dbg_TDI_10 : OUT STD_LOGIC;
       Dbg_TDO_10 : IN STD_LOGIC;
@@ -719,6 +898,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_10 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_10 : OUT STD_LOGIC;
       Dbg_TrValid_10 : IN STD_LOGIC;
+      Dbg_Disable_10 : OUT STD_LOGIC;
+      Dbg_AWADDR_10 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_10 : OUT STD_LOGIC;
+      Dbg_AWREADY_10 : IN STD_LOGIC;
+      Dbg_WDATA_10 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_10 : OUT STD_LOGIC;
+      Dbg_WREADY_10 : IN STD_LOGIC;
+      Dbg_BRESP_10 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_10 : IN STD_LOGIC;
+      Dbg_BREADY_10 : OUT STD_LOGIC;
+      Dbg_ARADDR_10 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_10 : OUT STD_LOGIC;
+      Dbg_ARREADY_10 : IN STD_LOGIC;
+      Dbg_RDATA_10 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_10 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_10 : IN STD_LOGIC;
+      Dbg_RREADY_10 : OUT STD_LOGIC;
       Dbg_Clk_11 : OUT STD_LOGIC;
       Dbg_TDI_11 : OUT STD_LOGIC;
       Dbg_TDO_11 : IN STD_LOGIC;
@@ -735,6 +931,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_11 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_11 : OUT STD_LOGIC;
       Dbg_TrValid_11 : IN STD_LOGIC;
+      Dbg_Disable_11 : OUT STD_LOGIC;
+      Dbg_AWADDR_11 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_11 : OUT STD_LOGIC;
+      Dbg_AWREADY_11 : IN STD_LOGIC;
+      Dbg_WDATA_11 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_11 : OUT STD_LOGIC;
+      Dbg_WREADY_11 : IN STD_LOGIC;
+      Dbg_BRESP_11 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_11 : IN STD_LOGIC;
+      Dbg_BREADY_11 : OUT STD_LOGIC;
+      Dbg_ARADDR_11 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_11 : OUT STD_LOGIC;
+      Dbg_ARREADY_11 : IN STD_LOGIC;
+      Dbg_RDATA_11 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_11 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_11 : IN STD_LOGIC;
+      Dbg_RREADY_11 : OUT STD_LOGIC;
       Dbg_Clk_12 : OUT STD_LOGIC;
       Dbg_TDI_12 : OUT STD_LOGIC;
       Dbg_TDO_12 : IN STD_LOGIC;
@@ -751,6 +964,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_12 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_12 : OUT STD_LOGIC;
       Dbg_TrValid_12 : IN STD_LOGIC;
+      Dbg_Disable_12 : OUT STD_LOGIC;
+      Dbg_AWADDR_12 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_12 : OUT STD_LOGIC;
+      Dbg_AWREADY_12 : IN STD_LOGIC;
+      Dbg_WDATA_12 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_12 : OUT STD_LOGIC;
+      Dbg_WREADY_12 : IN STD_LOGIC;
+      Dbg_BRESP_12 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_12 : IN STD_LOGIC;
+      Dbg_BREADY_12 : OUT STD_LOGIC;
+      Dbg_ARADDR_12 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_12 : OUT STD_LOGIC;
+      Dbg_ARREADY_12 : IN STD_LOGIC;
+      Dbg_RDATA_12 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_12 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_12 : IN STD_LOGIC;
+      Dbg_RREADY_12 : OUT STD_LOGIC;
       Dbg_Clk_13 : OUT STD_LOGIC;
       Dbg_TDI_13 : OUT STD_LOGIC;
       Dbg_TDO_13 : IN STD_LOGIC;
@@ -767,6 +997,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_13 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_13 : OUT STD_LOGIC;
       Dbg_TrValid_13 : IN STD_LOGIC;
+      Dbg_Disable_13 : OUT STD_LOGIC;
+      Dbg_AWADDR_13 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_13 : OUT STD_LOGIC;
+      Dbg_AWREADY_13 : IN STD_LOGIC;
+      Dbg_WDATA_13 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_13 : OUT STD_LOGIC;
+      Dbg_WREADY_13 : IN STD_LOGIC;
+      Dbg_BRESP_13 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_13 : IN STD_LOGIC;
+      Dbg_BREADY_13 : OUT STD_LOGIC;
+      Dbg_ARADDR_13 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_13 : OUT STD_LOGIC;
+      Dbg_ARREADY_13 : IN STD_LOGIC;
+      Dbg_RDATA_13 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_13 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_13 : IN STD_LOGIC;
+      Dbg_RREADY_13 : OUT STD_LOGIC;
       Dbg_Clk_14 : OUT STD_LOGIC;
       Dbg_TDI_14 : OUT STD_LOGIC;
       Dbg_TDO_14 : IN STD_LOGIC;
@@ -783,6 +1030,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_14 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_14 : OUT STD_LOGIC;
       Dbg_TrValid_14 : IN STD_LOGIC;
+      Dbg_Disable_14 : OUT STD_LOGIC;
+      Dbg_AWADDR_14 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_14 : OUT STD_LOGIC;
+      Dbg_AWREADY_14 : IN STD_LOGIC;
+      Dbg_WDATA_14 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_14 : OUT STD_LOGIC;
+      Dbg_WREADY_14 : IN STD_LOGIC;
+      Dbg_BRESP_14 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_14 : IN STD_LOGIC;
+      Dbg_BREADY_14 : OUT STD_LOGIC;
+      Dbg_ARADDR_14 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_14 : OUT STD_LOGIC;
+      Dbg_ARREADY_14 : IN STD_LOGIC;
+      Dbg_RDATA_14 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_14 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_14 : IN STD_LOGIC;
+      Dbg_RREADY_14 : OUT STD_LOGIC;
       Dbg_Clk_15 : OUT STD_LOGIC;
       Dbg_TDI_15 : OUT STD_LOGIC;
       Dbg_TDO_15 : IN STD_LOGIC;
@@ -799,6 +1063,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_15 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_15 : OUT STD_LOGIC;
       Dbg_TrValid_15 : IN STD_LOGIC;
+      Dbg_Disable_15 : OUT STD_LOGIC;
+      Dbg_AWADDR_15 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_15 : OUT STD_LOGIC;
+      Dbg_AWREADY_15 : IN STD_LOGIC;
+      Dbg_WDATA_15 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_15 : OUT STD_LOGIC;
+      Dbg_WREADY_15 : IN STD_LOGIC;
+      Dbg_BRESP_15 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_15 : IN STD_LOGIC;
+      Dbg_BREADY_15 : OUT STD_LOGIC;
+      Dbg_ARADDR_15 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_15 : OUT STD_LOGIC;
+      Dbg_ARREADY_15 : IN STD_LOGIC;
+      Dbg_RDATA_15 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_15 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_15 : IN STD_LOGIC;
+      Dbg_RREADY_15 : OUT STD_LOGIC;
       Dbg_Clk_16 : OUT STD_LOGIC;
       Dbg_TDI_16 : OUT STD_LOGIC;
       Dbg_TDO_16 : IN STD_LOGIC;
@@ -815,6 +1096,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_16 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_16 : OUT STD_LOGIC;
       Dbg_TrValid_16 : IN STD_LOGIC;
+      Dbg_Disable_16 : OUT STD_LOGIC;
+      Dbg_AWADDR_16 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_16 : OUT STD_LOGIC;
+      Dbg_AWREADY_16 : IN STD_LOGIC;
+      Dbg_WDATA_16 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_16 : OUT STD_LOGIC;
+      Dbg_WREADY_16 : IN STD_LOGIC;
+      Dbg_BRESP_16 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_16 : IN STD_LOGIC;
+      Dbg_BREADY_16 : OUT STD_LOGIC;
+      Dbg_ARADDR_16 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_16 : OUT STD_LOGIC;
+      Dbg_ARREADY_16 : IN STD_LOGIC;
+      Dbg_RDATA_16 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_16 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_16 : IN STD_LOGIC;
+      Dbg_RREADY_16 : OUT STD_LOGIC;
       Dbg_Clk_17 : OUT STD_LOGIC;
       Dbg_TDI_17 : OUT STD_LOGIC;
       Dbg_TDO_17 : IN STD_LOGIC;
@@ -831,6 +1129,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_17 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_17 : OUT STD_LOGIC;
       Dbg_TrValid_17 : IN STD_LOGIC;
+      Dbg_Disable_17 : OUT STD_LOGIC;
+      Dbg_AWADDR_17 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_17 : OUT STD_LOGIC;
+      Dbg_AWREADY_17 : IN STD_LOGIC;
+      Dbg_WDATA_17 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_17 : OUT STD_LOGIC;
+      Dbg_WREADY_17 : IN STD_LOGIC;
+      Dbg_BRESP_17 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_17 : IN STD_LOGIC;
+      Dbg_BREADY_17 : OUT STD_LOGIC;
+      Dbg_ARADDR_17 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_17 : OUT STD_LOGIC;
+      Dbg_ARREADY_17 : IN STD_LOGIC;
+      Dbg_RDATA_17 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_17 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_17 : IN STD_LOGIC;
+      Dbg_RREADY_17 : OUT STD_LOGIC;
       Dbg_Clk_18 : OUT STD_LOGIC;
       Dbg_TDI_18 : OUT STD_LOGIC;
       Dbg_TDO_18 : IN STD_LOGIC;
@@ -847,6 +1162,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_18 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_18 : OUT STD_LOGIC;
       Dbg_TrValid_18 : IN STD_LOGIC;
+      Dbg_Disable_18 : OUT STD_LOGIC;
+      Dbg_AWADDR_18 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_18 : OUT STD_LOGIC;
+      Dbg_AWREADY_18 : IN STD_LOGIC;
+      Dbg_WDATA_18 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_18 : OUT STD_LOGIC;
+      Dbg_WREADY_18 : IN STD_LOGIC;
+      Dbg_BRESP_18 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_18 : IN STD_LOGIC;
+      Dbg_BREADY_18 : OUT STD_LOGIC;
+      Dbg_ARADDR_18 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_18 : OUT STD_LOGIC;
+      Dbg_ARREADY_18 : IN STD_LOGIC;
+      Dbg_RDATA_18 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_18 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_18 : IN STD_LOGIC;
+      Dbg_RREADY_18 : OUT STD_LOGIC;
       Dbg_Clk_19 : OUT STD_LOGIC;
       Dbg_TDI_19 : OUT STD_LOGIC;
       Dbg_TDO_19 : IN STD_LOGIC;
@@ -863,6 +1195,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_19 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_19 : OUT STD_LOGIC;
       Dbg_TrValid_19 : IN STD_LOGIC;
+      Dbg_Disable_19 : OUT STD_LOGIC;
+      Dbg_AWADDR_19 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_19 : OUT STD_LOGIC;
+      Dbg_AWREADY_19 : IN STD_LOGIC;
+      Dbg_WDATA_19 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_19 : OUT STD_LOGIC;
+      Dbg_WREADY_19 : IN STD_LOGIC;
+      Dbg_BRESP_19 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_19 : IN STD_LOGIC;
+      Dbg_BREADY_19 : OUT STD_LOGIC;
+      Dbg_ARADDR_19 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_19 : OUT STD_LOGIC;
+      Dbg_ARREADY_19 : IN STD_LOGIC;
+      Dbg_RDATA_19 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_19 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_19 : IN STD_LOGIC;
+      Dbg_RREADY_19 : OUT STD_LOGIC;
       Dbg_Clk_20 : OUT STD_LOGIC;
       Dbg_TDI_20 : OUT STD_LOGIC;
       Dbg_TDO_20 : IN STD_LOGIC;
@@ -879,6 +1228,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_20 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_20 : OUT STD_LOGIC;
       Dbg_TrValid_20 : IN STD_LOGIC;
+      Dbg_Disable_20 : OUT STD_LOGIC;
+      Dbg_AWADDR_20 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_20 : OUT STD_LOGIC;
+      Dbg_AWREADY_20 : IN STD_LOGIC;
+      Dbg_WDATA_20 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_20 : OUT STD_LOGIC;
+      Dbg_WREADY_20 : IN STD_LOGIC;
+      Dbg_BRESP_20 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_20 : IN STD_LOGIC;
+      Dbg_BREADY_20 : OUT STD_LOGIC;
+      Dbg_ARADDR_20 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_20 : OUT STD_LOGIC;
+      Dbg_ARREADY_20 : IN STD_LOGIC;
+      Dbg_RDATA_20 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_20 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_20 : IN STD_LOGIC;
+      Dbg_RREADY_20 : OUT STD_LOGIC;
       Dbg_Clk_21 : OUT STD_LOGIC;
       Dbg_TDI_21 : OUT STD_LOGIC;
       Dbg_TDO_21 : IN STD_LOGIC;
@@ -895,6 +1261,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_21 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_21 : OUT STD_LOGIC;
       Dbg_TrValid_21 : IN STD_LOGIC;
+      Dbg_Disable_21 : OUT STD_LOGIC;
+      Dbg_AWADDR_21 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_21 : OUT STD_LOGIC;
+      Dbg_AWREADY_21 : IN STD_LOGIC;
+      Dbg_WDATA_21 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_21 : OUT STD_LOGIC;
+      Dbg_WREADY_21 : IN STD_LOGIC;
+      Dbg_BRESP_21 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_21 : IN STD_LOGIC;
+      Dbg_BREADY_21 : OUT STD_LOGIC;
+      Dbg_ARADDR_21 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_21 : OUT STD_LOGIC;
+      Dbg_ARREADY_21 : IN STD_LOGIC;
+      Dbg_RDATA_21 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_21 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_21 : IN STD_LOGIC;
+      Dbg_RREADY_21 : OUT STD_LOGIC;
       Dbg_Clk_22 : OUT STD_LOGIC;
       Dbg_TDI_22 : OUT STD_LOGIC;
       Dbg_TDO_22 : IN STD_LOGIC;
@@ -911,6 +1294,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_22 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_22 : OUT STD_LOGIC;
       Dbg_TrValid_22 : IN STD_LOGIC;
+      Dbg_Disable_22 : OUT STD_LOGIC;
+      Dbg_AWADDR_22 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_22 : OUT STD_LOGIC;
+      Dbg_AWREADY_22 : IN STD_LOGIC;
+      Dbg_WDATA_22 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_22 : OUT STD_LOGIC;
+      Dbg_WREADY_22 : IN STD_LOGIC;
+      Dbg_BRESP_22 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_22 : IN STD_LOGIC;
+      Dbg_BREADY_22 : OUT STD_LOGIC;
+      Dbg_ARADDR_22 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_22 : OUT STD_LOGIC;
+      Dbg_ARREADY_22 : IN STD_LOGIC;
+      Dbg_RDATA_22 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_22 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_22 : IN STD_LOGIC;
+      Dbg_RREADY_22 : OUT STD_LOGIC;
       Dbg_Clk_23 : OUT STD_LOGIC;
       Dbg_TDI_23 : OUT STD_LOGIC;
       Dbg_TDO_23 : IN STD_LOGIC;
@@ -927,6 +1327,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_23 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_23 : OUT STD_LOGIC;
       Dbg_TrValid_23 : IN STD_LOGIC;
+      Dbg_Disable_23 : OUT STD_LOGIC;
+      Dbg_AWADDR_23 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_23 : OUT STD_LOGIC;
+      Dbg_AWREADY_23 : IN STD_LOGIC;
+      Dbg_WDATA_23 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_23 : OUT STD_LOGIC;
+      Dbg_WREADY_23 : IN STD_LOGIC;
+      Dbg_BRESP_23 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_23 : IN STD_LOGIC;
+      Dbg_BREADY_23 : OUT STD_LOGIC;
+      Dbg_ARADDR_23 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_23 : OUT STD_LOGIC;
+      Dbg_ARREADY_23 : IN STD_LOGIC;
+      Dbg_RDATA_23 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_23 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_23 : IN STD_LOGIC;
+      Dbg_RREADY_23 : OUT STD_LOGIC;
       Dbg_Clk_24 : OUT STD_LOGIC;
       Dbg_TDI_24 : OUT STD_LOGIC;
       Dbg_TDO_24 : IN STD_LOGIC;
@@ -943,6 +1360,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_24 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_24 : OUT STD_LOGIC;
       Dbg_TrValid_24 : IN STD_LOGIC;
+      Dbg_Disable_24 : OUT STD_LOGIC;
+      Dbg_AWADDR_24 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_24 : OUT STD_LOGIC;
+      Dbg_AWREADY_24 : IN STD_LOGIC;
+      Dbg_WDATA_24 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_24 : OUT STD_LOGIC;
+      Dbg_WREADY_24 : IN STD_LOGIC;
+      Dbg_BRESP_24 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_24 : IN STD_LOGIC;
+      Dbg_BREADY_24 : OUT STD_LOGIC;
+      Dbg_ARADDR_24 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_24 : OUT STD_LOGIC;
+      Dbg_ARREADY_24 : IN STD_LOGIC;
+      Dbg_RDATA_24 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_24 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_24 : IN STD_LOGIC;
+      Dbg_RREADY_24 : OUT STD_LOGIC;
       Dbg_Clk_25 : OUT STD_LOGIC;
       Dbg_TDI_25 : OUT STD_LOGIC;
       Dbg_TDO_25 : IN STD_LOGIC;
@@ -959,6 +1393,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_25 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_25 : OUT STD_LOGIC;
       Dbg_TrValid_25 : IN STD_LOGIC;
+      Dbg_Disable_25 : OUT STD_LOGIC;
+      Dbg_AWADDR_25 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_25 : OUT STD_LOGIC;
+      Dbg_AWREADY_25 : IN STD_LOGIC;
+      Dbg_WDATA_25 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_25 : OUT STD_LOGIC;
+      Dbg_WREADY_25 : IN STD_LOGIC;
+      Dbg_BRESP_25 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_25 : IN STD_LOGIC;
+      Dbg_BREADY_25 : OUT STD_LOGIC;
+      Dbg_ARADDR_25 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_25 : OUT STD_LOGIC;
+      Dbg_ARREADY_25 : IN STD_LOGIC;
+      Dbg_RDATA_25 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_25 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_25 : IN STD_LOGIC;
+      Dbg_RREADY_25 : OUT STD_LOGIC;
       Dbg_Clk_26 : OUT STD_LOGIC;
       Dbg_TDI_26 : OUT STD_LOGIC;
       Dbg_TDO_26 : IN STD_LOGIC;
@@ -975,6 +1426,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_26 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_26 : OUT STD_LOGIC;
       Dbg_TrValid_26 : IN STD_LOGIC;
+      Dbg_Disable_26 : OUT STD_LOGIC;
+      Dbg_AWADDR_26 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_26 : OUT STD_LOGIC;
+      Dbg_AWREADY_26 : IN STD_LOGIC;
+      Dbg_WDATA_26 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_26 : OUT STD_LOGIC;
+      Dbg_WREADY_26 : IN STD_LOGIC;
+      Dbg_BRESP_26 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_26 : IN STD_LOGIC;
+      Dbg_BREADY_26 : OUT STD_LOGIC;
+      Dbg_ARADDR_26 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_26 : OUT STD_LOGIC;
+      Dbg_ARREADY_26 : IN STD_LOGIC;
+      Dbg_RDATA_26 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_26 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_26 : IN STD_LOGIC;
+      Dbg_RREADY_26 : OUT STD_LOGIC;
       Dbg_Clk_27 : OUT STD_LOGIC;
       Dbg_TDI_27 : OUT STD_LOGIC;
       Dbg_TDO_27 : IN STD_LOGIC;
@@ -991,6 +1459,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_27 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_27 : OUT STD_LOGIC;
       Dbg_TrValid_27 : IN STD_LOGIC;
+      Dbg_Disable_27 : OUT STD_LOGIC;
+      Dbg_AWADDR_27 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_27 : OUT STD_LOGIC;
+      Dbg_AWREADY_27 : IN STD_LOGIC;
+      Dbg_WDATA_27 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_27 : OUT STD_LOGIC;
+      Dbg_WREADY_27 : IN STD_LOGIC;
+      Dbg_BRESP_27 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_27 : IN STD_LOGIC;
+      Dbg_BREADY_27 : OUT STD_LOGIC;
+      Dbg_ARADDR_27 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_27 : OUT STD_LOGIC;
+      Dbg_ARREADY_27 : IN STD_LOGIC;
+      Dbg_RDATA_27 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_27 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_27 : IN STD_LOGIC;
+      Dbg_RREADY_27 : OUT STD_LOGIC;
       Dbg_Clk_28 : OUT STD_LOGIC;
       Dbg_TDI_28 : OUT STD_LOGIC;
       Dbg_TDO_28 : IN STD_LOGIC;
@@ -1007,6 +1492,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_28 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_28 : OUT STD_LOGIC;
       Dbg_TrValid_28 : IN STD_LOGIC;
+      Dbg_Disable_28 : OUT STD_LOGIC;
+      Dbg_AWADDR_28 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_28 : OUT STD_LOGIC;
+      Dbg_AWREADY_28 : IN STD_LOGIC;
+      Dbg_WDATA_28 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_28 : OUT STD_LOGIC;
+      Dbg_WREADY_28 : IN STD_LOGIC;
+      Dbg_BRESP_28 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_28 : IN STD_LOGIC;
+      Dbg_BREADY_28 : OUT STD_LOGIC;
+      Dbg_ARADDR_28 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_28 : OUT STD_LOGIC;
+      Dbg_ARREADY_28 : IN STD_LOGIC;
+      Dbg_RDATA_28 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_28 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_28 : IN STD_LOGIC;
+      Dbg_RREADY_28 : OUT STD_LOGIC;
       Dbg_Clk_29 : OUT STD_LOGIC;
       Dbg_TDI_29 : OUT STD_LOGIC;
       Dbg_TDO_29 : IN STD_LOGIC;
@@ -1023,6 +1525,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_29 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_29 : OUT STD_LOGIC;
       Dbg_TrValid_29 : IN STD_LOGIC;
+      Dbg_Disable_29 : OUT STD_LOGIC;
+      Dbg_AWADDR_29 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_29 : OUT STD_LOGIC;
+      Dbg_AWREADY_29 : IN STD_LOGIC;
+      Dbg_WDATA_29 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_29 : OUT STD_LOGIC;
+      Dbg_WREADY_29 : IN STD_LOGIC;
+      Dbg_BRESP_29 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_29 : IN STD_LOGIC;
+      Dbg_BREADY_29 : OUT STD_LOGIC;
+      Dbg_ARADDR_29 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_29 : OUT STD_LOGIC;
+      Dbg_ARREADY_29 : IN STD_LOGIC;
+      Dbg_RDATA_29 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_29 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_29 : IN STD_LOGIC;
+      Dbg_RREADY_29 : OUT STD_LOGIC;
       Dbg_Clk_30 : OUT STD_LOGIC;
       Dbg_TDI_30 : OUT STD_LOGIC;
       Dbg_TDO_30 : IN STD_LOGIC;
@@ -1039,6 +1558,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_30 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_30 : OUT STD_LOGIC;
       Dbg_TrValid_30 : IN STD_LOGIC;
+      Dbg_Disable_30 : OUT STD_LOGIC;
+      Dbg_AWADDR_30 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_30 : OUT STD_LOGIC;
+      Dbg_AWREADY_30 : IN STD_LOGIC;
+      Dbg_WDATA_30 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_30 : OUT STD_LOGIC;
+      Dbg_WREADY_30 : IN STD_LOGIC;
+      Dbg_BRESP_30 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_30 : IN STD_LOGIC;
+      Dbg_BREADY_30 : OUT STD_LOGIC;
+      Dbg_ARADDR_30 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_30 : OUT STD_LOGIC;
+      Dbg_ARREADY_30 : IN STD_LOGIC;
+      Dbg_RDATA_30 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_30 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_30 : IN STD_LOGIC;
+      Dbg_RREADY_30 : OUT STD_LOGIC;
       Dbg_Clk_31 : OUT STD_LOGIC;
       Dbg_TDI_31 : OUT STD_LOGIC;
       Dbg_TDO_31 : IN STD_LOGIC;
@@ -1055,6 +1591,23 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       Dbg_TrData_31 : IN STD_LOGIC_VECTOR(0 TO 35);
       Dbg_TrReady_31 : OUT STD_LOGIC;
       Dbg_TrValid_31 : IN STD_LOGIC;
+      Dbg_Disable_31 : OUT STD_LOGIC;
+      Dbg_AWADDR_31 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_AWVALID_31 : OUT STD_LOGIC;
+      Dbg_AWREADY_31 : IN STD_LOGIC;
+      Dbg_WDATA_31 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_WVALID_31 : OUT STD_LOGIC;
+      Dbg_WREADY_31 : IN STD_LOGIC;
+      Dbg_BRESP_31 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_BVALID_31 : IN STD_LOGIC;
+      Dbg_BREADY_31 : OUT STD_LOGIC;
+      Dbg_ARADDR_31 : OUT STD_LOGIC_VECTOR(14 DOWNTO 2);
+      Dbg_ARVALID_31 : OUT STD_LOGIC;
+      Dbg_ARREADY_31 : IN STD_LOGIC;
+      Dbg_RDATA_31 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      Dbg_RRESP_31 : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      Dbg_RVALID_31 : IN STD_LOGIC;
+      Dbg_RREADY_31 : OUT STD_LOGIC;
       bscan_ext_tdi : IN STD_LOGIC;
       bscan_ext_reset : IN STD_LOGIC;
       bscan_ext_shift : IN STD_LOGIC;
@@ -1063,6 +1616,8 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       bscan_ext_sel : IN STD_LOGIC;
       bscan_ext_drck : IN STD_LOGIC;
       bscan_ext_tdo : OUT STD_LOGIC;
+      bscan_ext_tck : IN STD_LOGIC;
+      bscan_ext_bscanid_en : IN STD_LOGIC;
       Ext_JTAG_DRCK : OUT STD_LOGIC;
       Ext_JTAG_RESET : OUT STD_LOGIC;
       Ext_JTAG_SEL : OUT STD_LOGIC;
@@ -1074,33 +1629,43 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
     );
   END COMPONENT MDM;
   ATTRIBUTE X_INTERFACE_INFO : STRING;
-  ATTRIBUTE X_INTERFACE_INFO OF Debug_SYS_Rst: SIGNAL IS "xilinx.com:signal:reset:1.0 RST.Debug_SYS_Rst RST";
-  ATTRIBUTE X_INTERFACE_INFO OF Dbg_Clk_0: SIGNAL IS "xilinx.com:interface:mbdebug:3.0 MBDEBUG_0 CLK";
-  ATTRIBUTE X_INTERFACE_INFO OF Dbg_TDI_0: SIGNAL IS "xilinx.com:interface:mbdebug:3.0 MBDEBUG_0 TDI";
-  ATTRIBUTE X_INTERFACE_INFO OF Dbg_TDO_0: SIGNAL IS "xilinx.com:interface:mbdebug:3.0 MBDEBUG_0 TDO";
-  ATTRIBUTE X_INTERFACE_INFO OF Dbg_Reg_En_0: SIGNAL IS "xilinx.com:interface:mbdebug:3.0 MBDEBUG_0 REG_EN";
-  ATTRIBUTE X_INTERFACE_INFO OF Dbg_Capture_0: SIGNAL IS "xilinx.com:interface:mbdebug:3.0 MBDEBUG_0 CAPTURE";
-  ATTRIBUTE X_INTERFACE_INFO OF Dbg_Shift_0: SIGNAL IS "xilinx.com:interface:mbdebug:3.0 MBDEBUG_0 SHIFT";
-  ATTRIBUTE X_INTERFACE_INFO OF Dbg_Update_0: SIGNAL IS "xilinx.com:interface:mbdebug:3.0 MBDEBUG_0 UPDATE";
+  ATTRIBUTE X_INTERFACE_PARAMETER : STRING;
+  ATTRIBUTE X_INTERFACE_INFO OF Dbg_Disable_0: SIGNAL IS "xilinx.com:interface:mbdebug:3.0 MBDEBUG_0 DISABLE";
   ATTRIBUTE X_INTERFACE_INFO OF Dbg_Rst_0: SIGNAL IS "xilinx.com:interface:mbdebug:3.0 MBDEBUG_0 RST";
+  ATTRIBUTE X_INTERFACE_INFO OF Dbg_Update_0: SIGNAL IS "xilinx.com:interface:mbdebug:3.0 MBDEBUG_0 UPDATE";
+  ATTRIBUTE X_INTERFACE_INFO OF Dbg_Shift_0: SIGNAL IS "xilinx.com:interface:mbdebug:3.0 MBDEBUG_0 SHIFT";
+  ATTRIBUTE X_INTERFACE_INFO OF Dbg_Capture_0: SIGNAL IS "xilinx.com:interface:mbdebug:3.0 MBDEBUG_0 CAPTURE";
+  ATTRIBUTE X_INTERFACE_INFO OF Dbg_Reg_En_0: SIGNAL IS "xilinx.com:interface:mbdebug:3.0 MBDEBUG_0 REG_EN";
+  ATTRIBUTE X_INTERFACE_INFO OF Dbg_TDO_0: SIGNAL IS "xilinx.com:interface:mbdebug:3.0 MBDEBUG_0 TDO";
+  ATTRIBUTE X_INTERFACE_INFO OF Dbg_TDI_0: SIGNAL IS "xilinx.com:interface:mbdebug:3.0 MBDEBUG_0 TDI";
+  ATTRIBUTE X_INTERFACE_INFO OF Dbg_Clk_0: SIGNAL IS "xilinx.com:interface:mbdebug:3.0 MBDEBUG_0 CLK";
+  ATTRIBUTE X_INTERFACE_PARAMETER OF Debug_SYS_Rst: SIGNAL IS "XIL_INTERFACENAME RST.Debug_SYS_Rst, POLARITY ACTIVE_HIGH";
+  ATTRIBUTE X_INTERFACE_INFO OF Debug_SYS_Rst: SIGNAL IS "xilinx.com:signal:reset:1.0 RST.Debug_SYS_Rst RST";
 BEGIN
   U0 : MDM
     GENERIC MAP (
       C_FAMILY => "virtex7",
       C_JTAG_CHAIN => 2,
       C_USE_BSCAN => 0,
+      C_BSCANID => 76547328,
+      C_DEBUG_INTERFACE => 0,
       C_USE_CONFIG_RESET => 0,
+      C_AVOID_PRIMITIVES => 0,
       C_INTERCONNECT => 2,
       C_MB_DBG_PORTS => 1,
       C_USE_UART => 0,
       C_DBG_REG_ACCESS => 0,
       C_DBG_MEM_ACCESS => 0,
       C_USE_CROSS_TRIGGER => 0,
+      C_EXT_TRIG_RESET_VALUE => X"F1234",
       C_TRACE_OUTPUT => 0,
       C_TRACE_DATA_WIDTH => 32,
       C_TRACE_CLK_FREQ_HZ => 200000000,
       C_TRACE_CLK_OUT_PHASE => 90,
-      C_S_AXI_ADDR_WIDTH => 32,
+      C_TRACE_ASYNC_RESET => 0,
+      C_TRACE_PROTOCOL => 1,
+      C_TRACE_ID => 110,
+      C_S_AXI_ADDR_WIDTH => 4,
       C_S_AXI_DATA_WIDTH => 32,
       C_S_AXI_ACLK_FREQ_HZ => 100000000,
       C_M_AXI_ADDR_WIDTH => 32,
@@ -1114,6 +1679,7 @@ BEGIN
       Config_Reset => '0',
       Scan_Reset => '0',
       Scan_Reset_Sel => '0',
+      Scan_En => '0',
       S_AXI_ACLK => '0',
       S_AXI_ARESETN => '0',
       M_AXI_ACLK => '0',
@@ -1129,13 +1695,13 @@ BEGIN
       Trig_Ack_Out_2 => '0',
       Trig_In_3 => '0',
       Trig_Ack_Out_3 => '0',
-      S_AXI_AWADDR => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      S_AXI_AWADDR => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 4)),
       S_AXI_AWVALID => '0',
       S_AXI_WDATA => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
       S_AXI_WSTRB => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 4)),
       S_AXI_WVALID => '0',
       S_AXI_BREADY => '0',
-      S_AXI_ARADDR => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      S_AXI_ARADDR => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 4)),
       S_AXI_ARVALID => '0',
       S_AXI_RREADY => '0',
       M_AXI_AWREADY => '0',
@@ -1323,161 +1889,418 @@ BEGIN
       Dbg_Trig_Ack_Out_0 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_0 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_0 => '0',
+      Dbg_Disable_0 => Dbg_Disable_0,
+      Dbg_AWREADY_0 => '0',
+      Dbg_WREADY_0 => '0',
+      Dbg_BRESP_0 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_0 => '0',
+      Dbg_ARREADY_0 => '0',
+      Dbg_RDATA_0 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_0 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_0 => '0',
       Dbg_TDO_1 => '0',
       Dbg_Trig_In_1 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_1 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_1 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_1 => '0',
+      Dbg_AWREADY_1 => '0',
+      Dbg_WREADY_1 => '0',
+      Dbg_BRESP_1 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_1 => '0',
+      Dbg_ARREADY_1 => '0',
+      Dbg_RDATA_1 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_1 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_1 => '0',
       Dbg_TDO_2 => '0',
       Dbg_Trig_In_2 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_2 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_2 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_2 => '0',
+      Dbg_AWREADY_2 => '0',
+      Dbg_WREADY_2 => '0',
+      Dbg_BRESP_2 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_2 => '0',
+      Dbg_ARREADY_2 => '0',
+      Dbg_RDATA_2 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_2 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_2 => '0',
       Dbg_TDO_3 => '0',
       Dbg_Trig_In_3 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_3 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_3 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_3 => '0',
+      Dbg_AWREADY_3 => '0',
+      Dbg_WREADY_3 => '0',
+      Dbg_BRESP_3 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_3 => '0',
+      Dbg_ARREADY_3 => '0',
+      Dbg_RDATA_3 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_3 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_3 => '0',
       Dbg_TDO_4 => '0',
       Dbg_Trig_In_4 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_4 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_4 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_4 => '0',
+      Dbg_AWREADY_4 => '0',
+      Dbg_WREADY_4 => '0',
+      Dbg_BRESP_4 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_4 => '0',
+      Dbg_ARREADY_4 => '0',
+      Dbg_RDATA_4 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_4 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_4 => '0',
       Dbg_TDO_5 => '0',
       Dbg_Trig_In_5 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_5 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_5 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_5 => '0',
+      Dbg_AWREADY_5 => '0',
+      Dbg_WREADY_5 => '0',
+      Dbg_BRESP_5 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_5 => '0',
+      Dbg_ARREADY_5 => '0',
+      Dbg_RDATA_5 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_5 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_5 => '0',
       Dbg_TDO_6 => '0',
       Dbg_Trig_In_6 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_6 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_6 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_6 => '0',
+      Dbg_AWREADY_6 => '0',
+      Dbg_WREADY_6 => '0',
+      Dbg_BRESP_6 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_6 => '0',
+      Dbg_ARREADY_6 => '0',
+      Dbg_RDATA_6 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_6 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_6 => '0',
       Dbg_TDO_7 => '0',
       Dbg_Trig_In_7 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_7 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_7 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_7 => '0',
+      Dbg_AWREADY_7 => '0',
+      Dbg_WREADY_7 => '0',
+      Dbg_BRESP_7 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_7 => '0',
+      Dbg_ARREADY_7 => '0',
+      Dbg_RDATA_7 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_7 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_7 => '0',
       Dbg_TDO_8 => '0',
       Dbg_Trig_In_8 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_8 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_8 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_8 => '0',
+      Dbg_AWREADY_8 => '0',
+      Dbg_WREADY_8 => '0',
+      Dbg_BRESP_8 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_8 => '0',
+      Dbg_ARREADY_8 => '0',
+      Dbg_RDATA_8 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_8 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_8 => '0',
       Dbg_TDO_9 => '0',
       Dbg_Trig_In_9 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_9 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_9 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_9 => '0',
+      Dbg_AWREADY_9 => '0',
+      Dbg_WREADY_9 => '0',
+      Dbg_BRESP_9 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_9 => '0',
+      Dbg_ARREADY_9 => '0',
+      Dbg_RDATA_9 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_9 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_9 => '0',
       Dbg_TDO_10 => '0',
       Dbg_Trig_In_10 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_10 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_10 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_10 => '0',
+      Dbg_AWREADY_10 => '0',
+      Dbg_WREADY_10 => '0',
+      Dbg_BRESP_10 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_10 => '0',
+      Dbg_ARREADY_10 => '0',
+      Dbg_RDATA_10 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_10 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_10 => '0',
       Dbg_TDO_11 => '0',
       Dbg_Trig_In_11 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_11 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_11 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_11 => '0',
+      Dbg_AWREADY_11 => '0',
+      Dbg_WREADY_11 => '0',
+      Dbg_BRESP_11 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_11 => '0',
+      Dbg_ARREADY_11 => '0',
+      Dbg_RDATA_11 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_11 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_11 => '0',
       Dbg_TDO_12 => '0',
       Dbg_Trig_In_12 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_12 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_12 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_12 => '0',
+      Dbg_AWREADY_12 => '0',
+      Dbg_WREADY_12 => '0',
+      Dbg_BRESP_12 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_12 => '0',
+      Dbg_ARREADY_12 => '0',
+      Dbg_RDATA_12 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_12 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_12 => '0',
       Dbg_TDO_13 => '0',
       Dbg_Trig_In_13 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_13 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_13 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_13 => '0',
+      Dbg_AWREADY_13 => '0',
+      Dbg_WREADY_13 => '0',
+      Dbg_BRESP_13 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_13 => '0',
+      Dbg_ARREADY_13 => '0',
+      Dbg_RDATA_13 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_13 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_13 => '0',
       Dbg_TDO_14 => '0',
       Dbg_Trig_In_14 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_14 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_14 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_14 => '0',
+      Dbg_AWREADY_14 => '0',
+      Dbg_WREADY_14 => '0',
+      Dbg_BRESP_14 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_14 => '0',
+      Dbg_ARREADY_14 => '0',
+      Dbg_RDATA_14 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_14 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_14 => '0',
       Dbg_TDO_15 => '0',
       Dbg_Trig_In_15 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_15 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_15 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_15 => '0',
+      Dbg_AWREADY_15 => '0',
+      Dbg_WREADY_15 => '0',
+      Dbg_BRESP_15 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_15 => '0',
+      Dbg_ARREADY_15 => '0',
+      Dbg_RDATA_15 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_15 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_15 => '0',
       Dbg_TDO_16 => '0',
       Dbg_Trig_In_16 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_16 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_16 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_16 => '0',
+      Dbg_AWREADY_16 => '0',
+      Dbg_WREADY_16 => '0',
+      Dbg_BRESP_16 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_16 => '0',
+      Dbg_ARREADY_16 => '0',
+      Dbg_RDATA_16 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_16 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_16 => '0',
       Dbg_TDO_17 => '0',
       Dbg_Trig_In_17 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_17 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_17 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_17 => '0',
+      Dbg_AWREADY_17 => '0',
+      Dbg_WREADY_17 => '0',
+      Dbg_BRESP_17 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_17 => '0',
+      Dbg_ARREADY_17 => '0',
+      Dbg_RDATA_17 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_17 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_17 => '0',
       Dbg_TDO_18 => '0',
       Dbg_Trig_In_18 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_18 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_18 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_18 => '0',
+      Dbg_AWREADY_18 => '0',
+      Dbg_WREADY_18 => '0',
+      Dbg_BRESP_18 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_18 => '0',
+      Dbg_ARREADY_18 => '0',
+      Dbg_RDATA_18 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_18 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_18 => '0',
       Dbg_TDO_19 => '0',
       Dbg_Trig_In_19 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_19 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_19 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_19 => '0',
+      Dbg_AWREADY_19 => '0',
+      Dbg_WREADY_19 => '0',
+      Dbg_BRESP_19 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_19 => '0',
+      Dbg_ARREADY_19 => '0',
+      Dbg_RDATA_19 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_19 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_19 => '0',
       Dbg_TDO_20 => '0',
       Dbg_Trig_In_20 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_20 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_20 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_20 => '0',
+      Dbg_AWREADY_20 => '0',
+      Dbg_WREADY_20 => '0',
+      Dbg_BRESP_20 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_20 => '0',
+      Dbg_ARREADY_20 => '0',
+      Dbg_RDATA_20 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_20 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_20 => '0',
       Dbg_TDO_21 => '0',
       Dbg_Trig_In_21 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_21 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_21 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_21 => '0',
+      Dbg_AWREADY_21 => '0',
+      Dbg_WREADY_21 => '0',
+      Dbg_BRESP_21 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_21 => '0',
+      Dbg_ARREADY_21 => '0',
+      Dbg_RDATA_21 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_21 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_21 => '0',
       Dbg_TDO_22 => '0',
       Dbg_Trig_In_22 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_22 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_22 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_22 => '0',
+      Dbg_AWREADY_22 => '0',
+      Dbg_WREADY_22 => '0',
+      Dbg_BRESP_22 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_22 => '0',
+      Dbg_ARREADY_22 => '0',
+      Dbg_RDATA_22 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_22 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_22 => '0',
       Dbg_TDO_23 => '0',
       Dbg_Trig_In_23 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_23 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_23 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_23 => '0',
+      Dbg_AWREADY_23 => '0',
+      Dbg_WREADY_23 => '0',
+      Dbg_BRESP_23 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_23 => '0',
+      Dbg_ARREADY_23 => '0',
+      Dbg_RDATA_23 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_23 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_23 => '0',
       Dbg_TDO_24 => '0',
       Dbg_Trig_In_24 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_24 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_24 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_24 => '0',
+      Dbg_AWREADY_24 => '0',
+      Dbg_WREADY_24 => '0',
+      Dbg_BRESP_24 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_24 => '0',
+      Dbg_ARREADY_24 => '0',
+      Dbg_RDATA_24 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_24 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_24 => '0',
       Dbg_TDO_25 => '0',
       Dbg_Trig_In_25 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_25 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_25 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_25 => '0',
+      Dbg_AWREADY_25 => '0',
+      Dbg_WREADY_25 => '0',
+      Dbg_BRESP_25 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_25 => '0',
+      Dbg_ARREADY_25 => '0',
+      Dbg_RDATA_25 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_25 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_25 => '0',
       Dbg_TDO_26 => '0',
       Dbg_Trig_In_26 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_26 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_26 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_26 => '0',
+      Dbg_AWREADY_26 => '0',
+      Dbg_WREADY_26 => '0',
+      Dbg_BRESP_26 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_26 => '0',
+      Dbg_ARREADY_26 => '0',
+      Dbg_RDATA_26 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_26 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_26 => '0',
       Dbg_TDO_27 => '0',
       Dbg_Trig_In_27 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_27 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_27 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_27 => '0',
+      Dbg_AWREADY_27 => '0',
+      Dbg_WREADY_27 => '0',
+      Dbg_BRESP_27 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_27 => '0',
+      Dbg_ARREADY_27 => '0',
+      Dbg_RDATA_27 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_27 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_27 => '0',
       Dbg_TDO_28 => '0',
       Dbg_Trig_In_28 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_28 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_28 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_28 => '0',
+      Dbg_AWREADY_28 => '0',
+      Dbg_WREADY_28 => '0',
+      Dbg_BRESP_28 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_28 => '0',
+      Dbg_ARREADY_28 => '0',
+      Dbg_RDATA_28 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_28 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_28 => '0',
       Dbg_TDO_29 => '0',
       Dbg_Trig_In_29 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_29 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_29 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_29 => '0',
+      Dbg_AWREADY_29 => '0',
+      Dbg_WREADY_29 => '0',
+      Dbg_BRESP_29 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_29 => '0',
+      Dbg_ARREADY_29 => '0',
+      Dbg_RDATA_29 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_29 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_29 => '0',
       Dbg_TDO_30 => '0',
       Dbg_Trig_In_30 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_30 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_30 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_30 => '0',
+      Dbg_AWREADY_30 => '0',
+      Dbg_WREADY_30 => '0',
+      Dbg_BRESP_30 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_30 => '0',
+      Dbg_ARREADY_30 => '0',
+      Dbg_RDATA_30 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_30 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_30 => '0',
       Dbg_TDO_31 => '0',
       Dbg_Trig_In_31 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_31 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_TrData_31 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
       Dbg_TrValid_31 => '0',
+      Dbg_AWREADY_31 => '0',
+      Dbg_WREADY_31 => '0',
+      Dbg_BRESP_31 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_BVALID_31 => '0',
+      Dbg_ARREADY_31 => '0',
+      Dbg_RDATA_31 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
+      Dbg_RRESP_31 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 2)),
+      Dbg_RVALID_31 => '0',
       bscan_ext_tdi => '0',
       bscan_ext_reset => '0',
       bscan_ext_shift => '0',
@@ -1485,6 +2308,8 @@ BEGIN
       bscan_ext_capture => '0',
       bscan_ext_sel => '0',
       bscan_ext_drck => '0',
+      bscan_ext_tck => '0',
+      bscan_ext_bscanid_en => '0',
       Ext_JTAG_TDO => '0'
     );
 END cont_microblaze_mdm_1_0_arch;

@@ -1,7 +1,7 @@
-// Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+// Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
-// Tool Version: Vivado v.2016.2 (lin64) Build 1577090 Thu Jun  2 16:32:35 MDT 2016
-// Date        : Mon Nov  7 14:31:23 2016
+// Tool Version: Vivado v.2018.2 (lin64) Build 2258646 Thu Jun 14 20:02:38 MDT 2018
+// Date        : Thu Aug 23 13:53:59 2018
 // Host        : adam-cm running 64-bit Ubuntu 14.04.5 LTS
 // Command     : write_verilog -force -mode funcsim
 //               /home/aisaacson/work/git_work/ska_sa/projects/skarab_bsp_firmware/firmware/FRM123701U1R1/Vivado/IP/tx_packet_fifo/tx_packet_fifo_sim_netlist.v
@@ -12,7 +12,7 @@
 // --------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CHECK_LICENSE_TYPE = "tx_packet_fifo,fifo_generator_v13_1_1,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "fifo_generator_v13_1_1,Vivado 2016.2" *) 
+(* CHECK_LICENSE_TYPE = "tx_packet_fifo,fifo_generator_v13_2_2,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "fifo_generator_v13_2_2,Vivado 2018.1" *) 
 (* NotValidForBitStream *)
 module tx_packet_fifo
    (rst,
@@ -27,8 +27,8 @@ module tx_packet_fifo
     empty,
     prog_full);
   input rst;
-  (* x_interface_info = "xilinx.com:signal:clock:1.0 write_clk CLK" *) input wr_clk;
-  (* x_interface_info = "xilinx.com:signal:clock:1.0 read_clk CLK" *) input rd_clk;
+  (* x_interface_info = "xilinx.com:signal:clock:1.0 write_clk CLK" *) (* x_interface_parameter = "XIL_INTERFACENAME write_clk, FREQ_HZ 100000000, PHASE 0.000" *) input wr_clk;
+  (* x_interface_info = "xilinx.com:signal:clock:1.0 read_clk CLK" *) (* x_interface_parameter = "XIL_INTERFACENAME read_clk, FREQ_HZ 100000000, PHASE 0.000" *) input rd_clk;
   (* x_interface_info = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_DATA" *) input [63:0]din;
   (* x_interface_info = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_EN" *) input wr_en;
   (* x_interface_info = "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_EN" *) input rd_en;
@@ -373,8 +373,7 @@ module tx_packet_fifo
   (* C_WR_PNTR_WIDTH_WDCH = "10" *) 
   (* C_WR_PNTR_WIDTH_WRCH = "4" *) 
   (* C_WR_RESPONSE_LATENCY = "1" *) 
-  (* KEEP_HIERARCHY = "true" *) 
-  tx_packet_fifo_fifo_generator_v13_1_1 U0
+  tx_packet_fifo_fifo_generator_v13_2_2 U0
        (.almost_empty(NLW_U0_almost_empty_UNCONNECTED),
         .almost_full(NLW_U0_almost_full_UNCONNECTED),
         .axi_ar_data_count(NLW_U0_axi_ar_data_count_UNCONNECTED[4:0]),
@@ -608,6 +607,1114 @@ module tx_packet_fifo
         .wr_rst_busy(NLW_U0_wr_rst_busy_UNCONNECTED));
 endmodule
 
+(* DEF_VAL = "1'b0" *) (* DEST_SYNC_FF = "2" *) (* INIT_SYNC_FF = "0" *) 
+(* INV_DEF_VAL = "1'b1" *) (* ORIG_REF_NAME = "xpm_cdc_async_rst" *) (* RST_ACTIVE_HIGH = "1" *) 
+(* VERSION = "0" *) (* XPM_MODULE = "TRUE" *) (* xpm_cdc = "ASYNC_RST" *) 
+module tx_packet_fifo_xpm_cdc_async_rst
+   (src_arst,
+    dest_clk,
+    dest_arst);
+  input src_arst;
+  input dest_clk;
+  output dest_arst;
+
+  (* RTL_KEEP = "true" *) (* async_reg = "true" *) (* xpm_cdc = "ASYNC_RST" *) wire [1:0]arststages_ff;
+  wire dest_clk;
+  wire src_arst;
+
+  assign dest_arst = arststages_ff[1];
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "ASYNC_RST" *) 
+  FDPE #(
+    .INIT(1'b0)) 
+    \arststages_ff_reg[0] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(1'b0),
+        .PRE(src_arst),
+        .Q(arststages_ff[0]));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "ASYNC_RST" *) 
+  FDPE #(
+    .INIT(1'b0)) 
+    \arststages_ff_reg[1] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(arststages_ff[0]),
+        .PRE(src_arst),
+        .Q(arststages_ff[1]));
+endmodule
+
+(* DEF_VAL = "1'b0" *) (* DEST_SYNC_FF = "2" *) (* INIT_SYNC_FF = "0" *) 
+(* INV_DEF_VAL = "1'b1" *) (* ORIG_REF_NAME = "xpm_cdc_async_rst" *) (* RST_ACTIVE_HIGH = "1" *) 
+(* VERSION = "0" *) (* XPM_MODULE = "TRUE" *) (* xpm_cdc = "ASYNC_RST" *) 
+module tx_packet_fifo_xpm_cdc_async_rst__1
+   (src_arst,
+    dest_clk,
+    dest_arst);
+  input src_arst;
+  input dest_clk;
+  output dest_arst;
+
+  (* RTL_KEEP = "true" *) (* async_reg = "true" *) (* xpm_cdc = "ASYNC_RST" *) wire [1:0]arststages_ff;
+  wire dest_clk;
+  wire src_arst;
+
+  assign dest_arst = arststages_ff[1];
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "ASYNC_RST" *) 
+  FDPE #(
+    .INIT(1'b0)) 
+    \arststages_ff_reg[0] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(1'b0),
+        .PRE(src_arst),
+        .Q(arststages_ff[0]));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "ASYNC_RST" *) 
+  FDPE #(
+    .INIT(1'b0)) 
+    \arststages_ff_reg[1] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(arststages_ff[0]),
+        .PRE(src_arst),
+        .Q(arststages_ff[1]));
+endmodule
+
+(* DEST_SYNC_FF = "2" *) (* INIT_SYNC_FF = "0" *) (* ORIG_REF_NAME = "xpm_cdc_gray" *) 
+(* REG_OUTPUT = "1" *) (* SIM_ASSERT_CHK = "0" *) (* SIM_LOSSLESS_GRAY_CHK = "0" *) 
+(* VERSION = "0" *) (* WIDTH = "10" *) (* XPM_MODULE = "TRUE" *) 
+(* xpm_cdc = "GRAY" *) 
+module tx_packet_fifo_xpm_cdc_gray
+   (src_clk,
+    src_in_bin,
+    dest_clk,
+    dest_out_bin);
+  input src_clk;
+  input [9:0]src_in_bin;
+  input dest_clk;
+  output [9:0]dest_out_bin;
+
+  wire [9:0]async_path;
+  wire [8:0]binval;
+  wire dest_clk;
+  (* RTL_KEEP = "true" *) (* async_reg = "true" *) (* xpm_cdc = "GRAY" *) wire [9:0]\dest_graysync_ff[0] ;
+  (* RTL_KEEP = "true" *) (* async_reg = "true" *) (* xpm_cdc = "GRAY" *) wire [9:0]\dest_graysync_ff[1] ;
+  wire [9:0]dest_out_bin;
+  wire [8:0]gray_enc;
+  wire src_clk;
+  wire [9:0]src_in_bin;
+
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[0][0] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(async_path[0]),
+        .Q(\dest_graysync_ff[0] [0]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[0][1] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(async_path[1]),
+        .Q(\dest_graysync_ff[0] [1]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[0][2] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(async_path[2]),
+        .Q(\dest_graysync_ff[0] [2]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[0][3] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(async_path[3]),
+        .Q(\dest_graysync_ff[0] [3]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[0][4] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(async_path[4]),
+        .Q(\dest_graysync_ff[0] [4]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[0][5] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(async_path[5]),
+        .Q(\dest_graysync_ff[0] [5]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[0][6] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(async_path[6]),
+        .Q(\dest_graysync_ff[0] [6]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[0][7] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(async_path[7]),
+        .Q(\dest_graysync_ff[0] [7]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[0][8] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(async_path[8]),
+        .Q(\dest_graysync_ff[0] [8]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[0][9] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(async_path[9]),
+        .Q(\dest_graysync_ff[0] [9]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[1][0] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(\dest_graysync_ff[0] [0]),
+        .Q(\dest_graysync_ff[1] [0]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[1][1] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(\dest_graysync_ff[0] [1]),
+        .Q(\dest_graysync_ff[1] [1]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[1][2] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(\dest_graysync_ff[0] [2]),
+        .Q(\dest_graysync_ff[1] [2]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[1][3] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(\dest_graysync_ff[0] [3]),
+        .Q(\dest_graysync_ff[1] [3]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[1][4] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(\dest_graysync_ff[0] [4]),
+        .Q(\dest_graysync_ff[1] [4]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[1][5] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(\dest_graysync_ff[0] [5]),
+        .Q(\dest_graysync_ff[1] [5]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[1][6] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(\dest_graysync_ff[0] [6]),
+        .Q(\dest_graysync_ff[1] [6]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[1][7] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(\dest_graysync_ff[0] [7]),
+        .Q(\dest_graysync_ff[1] [7]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[1][8] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(\dest_graysync_ff[0] [8]),
+        .Q(\dest_graysync_ff[1] [8]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[1][9] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(\dest_graysync_ff[0] [9]),
+        .Q(\dest_graysync_ff[1] [9]),
+        .R(1'b0));
+  LUT5 #(
+    .INIT(32'h96696996)) 
+    \dest_out_bin_ff[0]_i_1 
+       (.I0(\dest_graysync_ff[1] [0]),
+        .I1(\dest_graysync_ff[1] [2]),
+        .I2(binval[4]),
+        .I3(\dest_graysync_ff[1] [3]),
+        .I4(\dest_graysync_ff[1] [1]),
+        .O(binval[0]));
+  LUT4 #(
+    .INIT(16'h6996)) 
+    \dest_out_bin_ff[1]_i_1 
+       (.I0(\dest_graysync_ff[1] [1]),
+        .I1(\dest_graysync_ff[1] [3]),
+        .I2(binval[4]),
+        .I3(\dest_graysync_ff[1] [2]),
+        .O(binval[1]));
+  LUT3 #(
+    .INIT(8'h96)) 
+    \dest_out_bin_ff[2]_i_1 
+       (.I0(\dest_graysync_ff[1] [2]),
+        .I1(binval[4]),
+        .I2(\dest_graysync_ff[1] [3]),
+        .O(binval[2]));
+  LUT2 #(
+    .INIT(4'h6)) 
+    \dest_out_bin_ff[3]_i_1 
+       (.I0(\dest_graysync_ff[1] [3]),
+        .I1(binval[4]),
+        .O(binval[3]));
+  LUT6 #(
+    .INIT(64'h6996966996696996)) 
+    \dest_out_bin_ff[4]_i_1 
+       (.I0(\dest_graysync_ff[1] [4]),
+        .I1(\dest_graysync_ff[1] [6]),
+        .I2(\dest_graysync_ff[1] [8]),
+        .I3(\dest_graysync_ff[1] [9]),
+        .I4(\dest_graysync_ff[1] [7]),
+        .I5(\dest_graysync_ff[1] [5]),
+        .O(binval[4]));
+  LUT5 #(
+    .INIT(32'h96696996)) 
+    \dest_out_bin_ff[5]_i_1 
+       (.I0(\dest_graysync_ff[1] [5]),
+        .I1(\dest_graysync_ff[1] [7]),
+        .I2(\dest_graysync_ff[1] [9]),
+        .I3(\dest_graysync_ff[1] [8]),
+        .I4(\dest_graysync_ff[1] [6]),
+        .O(binval[5]));
+  LUT4 #(
+    .INIT(16'h6996)) 
+    \dest_out_bin_ff[6]_i_1 
+       (.I0(\dest_graysync_ff[1] [6]),
+        .I1(\dest_graysync_ff[1] [8]),
+        .I2(\dest_graysync_ff[1] [9]),
+        .I3(\dest_graysync_ff[1] [7]),
+        .O(binval[6]));
+  LUT3 #(
+    .INIT(8'h96)) 
+    \dest_out_bin_ff[7]_i_1 
+       (.I0(\dest_graysync_ff[1] [7]),
+        .I1(\dest_graysync_ff[1] [9]),
+        .I2(\dest_graysync_ff[1] [8]),
+        .O(binval[7]));
+  LUT2 #(
+    .INIT(4'h6)) 
+    \dest_out_bin_ff[8]_i_1 
+       (.I0(\dest_graysync_ff[1] [8]),
+        .I1(\dest_graysync_ff[1] [9]),
+        .O(binval[8]));
+  FDRE \dest_out_bin_ff_reg[0] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(binval[0]),
+        .Q(dest_out_bin[0]),
+        .R(1'b0));
+  FDRE \dest_out_bin_ff_reg[1] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(binval[1]),
+        .Q(dest_out_bin[1]),
+        .R(1'b0));
+  FDRE \dest_out_bin_ff_reg[2] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(binval[2]),
+        .Q(dest_out_bin[2]),
+        .R(1'b0));
+  FDRE \dest_out_bin_ff_reg[3] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(binval[3]),
+        .Q(dest_out_bin[3]),
+        .R(1'b0));
+  FDRE \dest_out_bin_ff_reg[4] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(binval[4]),
+        .Q(dest_out_bin[4]),
+        .R(1'b0));
+  FDRE \dest_out_bin_ff_reg[5] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(binval[5]),
+        .Q(dest_out_bin[5]),
+        .R(1'b0));
+  FDRE \dest_out_bin_ff_reg[6] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(binval[6]),
+        .Q(dest_out_bin[6]),
+        .R(1'b0));
+  FDRE \dest_out_bin_ff_reg[7] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(binval[7]),
+        .Q(dest_out_bin[7]),
+        .R(1'b0));
+  FDRE \dest_out_bin_ff_reg[8] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(binval[8]),
+        .Q(dest_out_bin[8]),
+        .R(1'b0));
+  FDRE \dest_out_bin_ff_reg[9] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(\dest_graysync_ff[1] [9]),
+        .Q(dest_out_bin[9]),
+        .R(1'b0));
+  (* SOFT_HLUTNM = "soft_lutpair4" *) 
+  LUT2 #(
+    .INIT(4'h6)) 
+    \src_gray_ff[0]_i_1 
+       (.I0(src_in_bin[1]),
+        .I1(src_in_bin[0]),
+        .O(gray_enc[0]));
+  (* SOFT_HLUTNM = "soft_lutpair4" *) 
+  LUT2 #(
+    .INIT(4'h6)) 
+    \src_gray_ff[1]_i_1 
+       (.I0(src_in_bin[2]),
+        .I1(src_in_bin[1]),
+        .O(gray_enc[1]));
+  (* SOFT_HLUTNM = "soft_lutpair5" *) 
+  LUT2 #(
+    .INIT(4'h6)) 
+    \src_gray_ff[2]_i_1 
+       (.I0(src_in_bin[3]),
+        .I1(src_in_bin[2]),
+        .O(gray_enc[2]));
+  (* SOFT_HLUTNM = "soft_lutpair5" *) 
+  LUT2 #(
+    .INIT(4'h6)) 
+    \src_gray_ff[3]_i_1 
+       (.I0(src_in_bin[4]),
+        .I1(src_in_bin[3]),
+        .O(gray_enc[3]));
+  (* SOFT_HLUTNM = "soft_lutpair6" *) 
+  LUT2 #(
+    .INIT(4'h6)) 
+    \src_gray_ff[4]_i_1 
+       (.I0(src_in_bin[5]),
+        .I1(src_in_bin[4]),
+        .O(gray_enc[4]));
+  (* SOFT_HLUTNM = "soft_lutpair6" *) 
+  LUT2 #(
+    .INIT(4'h6)) 
+    \src_gray_ff[5]_i_1 
+       (.I0(src_in_bin[6]),
+        .I1(src_in_bin[5]),
+        .O(gray_enc[5]));
+  (* SOFT_HLUTNM = "soft_lutpair7" *) 
+  LUT2 #(
+    .INIT(4'h6)) 
+    \src_gray_ff[6]_i_1 
+       (.I0(src_in_bin[7]),
+        .I1(src_in_bin[6]),
+        .O(gray_enc[6]));
+  (* SOFT_HLUTNM = "soft_lutpair7" *) 
+  LUT2 #(
+    .INIT(4'h6)) 
+    \src_gray_ff[7]_i_1 
+       (.I0(src_in_bin[8]),
+        .I1(src_in_bin[7]),
+        .O(gray_enc[7]));
+  LUT2 #(
+    .INIT(4'h6)) 
+    \src_gray_ff[8]_i_1 
+       (.I0(src_in_bin[9]),
+        .I1(src_in_bin[8]),
+        .O(gray_enc[8]));
+  FDRE \src_gray_ff_reg[0] 
+       (.C(src_clk),
+        .CE(1'b1),
+        .D(gray_enc[0]),
+        .Q(async_path[0]),
+        .R(1'b0));
+  FDRE \src_gray_ff_reg[1] 
+       (.C(src_clk),
+        .CE(1'b1),
+        .D(gray_enc[1]),
+        .Q(async_path[1]),
+        .R(1'b0));
+  FDRE \src_gray_ff_reg[2] 
+       (.C(src_clk),
+        .CE(1'b1),
+        .D(gray_enc[2]),
+        .Q(async_path[2]),
+        .R(1'b0));
+  FDRE \src_gray_ff_reg[3] 
+       (.C(src_clk),
+        .CE(1'b1),
+        .D(gray_enc[3]),
+        .Q(async_path[3]),
+        .R(1'b0));
+  FDRE \src_gray_ff_reg[4] 
+       (.C(src_clk),
+        .CE(1'b1),
+        .D(gray_enc[4]),
+        .Q(async_path[4]),
+        .R(1'b0));
+  FDRE \src_gray_ff_reg[5] 
+       (.C(src_clk),
+        .CE(1'b1),
+        .D(gray_enc[5]),
+        .Q(async_path[5]),
+        .R(1'b0));
+  FDRE \src_gray_ff_reg[6] 
+       (.C(src_clk),
+        .CE(1'b1),
+        .D(gray_enc[6]),
+        .Q(async_path[6]),
+        .R(1'b0));
+  FDRE \src_gray_ff_reg[7] 
+       (.C(src_clk),
+        .CE(1'b1),
+        .D(gray_enc[7]),
+        .Q(async_path[7]),
+        .R(1'b0));
+  FDRE \src_gray_ff_reg[8] 
+       (.C(src_clk),
+        .CE(1'b1),
+        .D(gray_enc[8]),
+        .Q(async_path[8]),
+        .R(1'b0));
+  FDRE \src_gray_ff_reg[9] 
+       (.C(src_clk),
+        .CE(1'b1),
+        .D(src_in_bin[9]),
+        .Q(async_path[9]),
+        .R(1'b0));
+endmodule
+
+(* DEST_SYNC_FF = "2" *) (* INIT_SYNC_FF = "0" *) (* ORIG_REF_NAME = "xpm_cdc_gray" *) 
+(* REG_OUTPUT = "1" *) (* SIM_ASSERT_CHK = "0" *) (* SIM_LOSSLESS_GRAY_CHK = "0" *) 
+(* VERSION = "0" *) (* WIDTH = "10" *) (* XPM_MODULE = "TRUE" *) 
+(* xpm_cdc = "GRAY" *) 
+module tx_packet_fifo_xpm_cdc_gray__1
+   (src_clk,
+    src_in_bin,
+    dest_clk,
+    dest_out_bin);
+  input src_clk;
+  input [9:0]src_in_bin;
+  input dest_clk;
+  output [9:0]dest_out_bin;
+
+  wire [9:0]async_path;
+  wire [8:0]binval;
+  wire dest_clk;
+  (* RTL_KEEP = "true" *) (* async_reg = "true" *) (* xpm_cdc = "GRAY" *) wire [9:0]\dest_graysync_ff[0] ;
+  (* RTL_KEEP = "true" *) (* async_reg = "true" *) (* xpm_cdc = "GRAY" *) wire [9:0]\dest_graysync_ff[1] ;
+  wire [9:0]dest_out_bin;
+  wire [8:0]gray_enc;
+  wire src_clk;
+  wire [9:0]src_in_bin;
+
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[0][0] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(async_path[0]),
+        .Q(\dest_graysync_ff[0] [0]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[0][1] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(async_path[1]),
+        .Q(\dest_graysync_ff[0] [1]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[0][2] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(async_path[2]),
+        .Q(\dest_graysync_ff[0] [2]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[0][3] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(async_path[3]),
+        .Q(\dest_graysync_ff[0] [3]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[0][4] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(async_path[4]),
+        .Q(\dest_graysync_ff[0] [4]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[0][5] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(async_path[5]),
+        .Q(\dest_graysync_ff[0] [5]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[0][6] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(async_path[6]),
+        .Q(\dest_graysync_ff[0] [6]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[0][7] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(async_path[7]),
+        .Q(\dest_graysync_ff[0] [7]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[0][8] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(async_path[8]),
+        .Q(\dest_graysync_ff[0] [8]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[0][9] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(async_path[9]),
+        .Q(\dest_graysync_ff[0] [9]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[1][0] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(\dest_graysync_ff[0] [0]),
+        .Q(\dest_graysync_ff[1] [0]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[1][1] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(\dest_graysync_ff[0] [1]),
+        .Q(\dest_graysync_ff[1] [1]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[1][2] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(\dest_graysync_ff[0] [2]),
+        .Q(\dest_graysync_ff[1] [2]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[1][3] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(\dest_graysync_ff[0] [3]),
+        .Q(\dest_graysync_ff[1] [3]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[1][4] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(\dest_graysync_ff[0] [4]),
+        .Q(\dest_graysync_ff[1] [4]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[1][5] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(\dest_graysync_ff[0] [5]),
+        .Q(\dest_graysync_ff[1] [5]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[1][6] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(\dest_graysync_ff[0] [6]),
+        .Q(\dest_graysync_ff[1] [6]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[1][7] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(\dest_graysync_ff[0] [7]),
+        .Q(\dest_graysync_ff[1] [7]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[1][8] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(\dest_graysync_ff[0] [8]),
+        .Q(\dest_graysync_ff[1] [8]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "GRAY" *) 
+  FDRE \dest_graysync_ff_reg[1][9] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(\dest_graysync_ff[0] [9]),
+        .Q(\dest_graysync_ff[1] [9]),
+        .R(1'b0));
+  LUT5 #(
+    .INIT(32'h96696996)) 
+    \dest_out_bin_ff[0]_i_1 
+       (.I0(\dest_graysync_ff[1] [0]),
+        .I1(\dest_graysync_ff[1] [2]),
+        .I2(binval[4]),
+        .I3(\dest_graysync_ff[1] [3]),
+        .I4(\dest_graysync_ff[1] [1]),
+        .O(binval[0]));
+  LUT4 #(
+    .INIT(16'h6996)) 
+    \dest_out_bin_ff[1]_i_1 
+       (.I0(\dest_graysync_ff[1] [1]),
+        .I1(\dest_graysync_ff[1] [3]),
+        .I2(binval[4]),
+        .I3(\dest_graysync_ff[1] [2]),
+        .O(binval[1]));
+  LUT3 #(
+    .INIT(8'h96)) 
+    \dest_out_bin_ff[2]_i_1 
+       (.I0(\dest_graysync_ff[1] [2]),
+        .I1(binval[4]),
+        .I2(\dest_graysync_ff[1] [3]),
+        .O(binval[2]));
+  LUT2 #(
+    .INIT(4'h6)) 
+    \dest_out_bin_ff[3]_i_1 
+       (.I0(\dest_graysync_ff[1] [3]),
+        .I1(binval[4]),
+        .O(binval[3]));
+  LUT6 #(
+    .INIT(64'h6996966996696996)) 
+    \dest_out_bin_ff[4]_i_1 
+       (.I0(\dest_graysync_ff[1] [4]),
+        .I1(\dest_graysync_ff[1] [6]),
+        .I2(\dest_graysync_ff[1] [8]),
+        .I3(\dest_graysync_ff[1] [9]),
+        .I4(\dest_graysync_ff[1] [7]),
+        .I5(\dest_graysync_ff[1] [5]),
+        .O(binval[4]));
+  LUT5 #(
+    .INIT(32'h96696996)) 
+    \dest_out_bin_ff[5]_i_1 
+       (.I0(\dest_graysync_ff[1] [5]),
+        .I1(\dest_graysync_ff[1] [7]),
+        .I2(\dest_graysync_ff[1] [9]),
+        .I3(\dest_graysync_ff[1] [8]),
+        .I4(\dest_graysync_ff[1] [6]),
+        .O(binval[5]));
+  LUT4 #(
+    .INIT(16'h6996)) 
+    \dest_out_bin_ff[6]_i_1 
+       (.I0(\dest_graysync_ff[1] [6]),
+        .I1(\dest_graysync_ff[1] [8]),
+        .I2(\dest_graysync_ff[1] [9]),
+        .I3(\dest_graysync_ff[1] [7]),
+        .O(binval[6]));
+  LUT3 #(
+    .INIT(8'h96)) 
+    \dest_out_bin_ff[7]_i_1 
+       (.I0(\dest_graysync_ff[1] [7]),
+        .I1(\dest_graysync_ff[1] [9]),
+        .I2(\dest_graysync_ff[1] [8]),
+        .O(binval[7]));
+  LUT2 #(
+    .INIT(4'h6)) 
+    \dest_out_bin_ff[8]_i_1 
+       (.I0(\dest_graysync_ff[1] [8]),
+        .I1(\dest_graysync_ff[1] [9]),
+        .O(binval[8]));
+  FDRE \dest_out_bin_ff_reg[0] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(binval[0]),
+        .Q(dest_out_bin[0]),
+        .R(1'b0));
+  FDRE \dest_out_bin_ff_reg[1] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(binval[1]),
+        .Q(dest_out_bin[1]),
+        .R(1'b0));
+  FDRE \dest_out_bin_ff_reg[2] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(binval[2]),
+        .Q(dest_out_bin[2]),
+        .R(1'b0));
+  FDRE \dest_out_bin_ff_reg[3] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(binval[3]),
+        .Q(dest_out_bin[3]),
+        .R(1'b0));
+  FDRE \dest_out_bin_ff_reg[4] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(binval[4]),
+        .Q(dest_out_bin[4]),
+        .R(1'b0));
+  FDRE \dest_out_bin_ff_reg[5] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(binval[5]),
+        .Q(dest_out_bin[5]),
+        .R(1'b0));
+  FDRE \dest_out_bin_ff_reg[6] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(binval[6]),
+        .Q(dest_out_bin[6]),
+        .R(1'b0));
+  FDRE \dest_out_bin_ff_reg[7] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(binval[7]),
+        .Q(dest_out_bin[7]),
+        .R(1'b0));
+  FDRE \dest_out_bin_ff_reg[8] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(binval[8]),
+        .Q(dest_out_bin[8]),
+        .R(1'b0));
+  FDRE \dest_out_bin_ff_reg[9] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(\dest_graysync_ff[1] [9]),
+        .Q(dest_out_bin[9]),
+        .R(1'b0));
+  (* SOFT_HLUTNM = "soft_lutpair0" *) 
+  LUT2 #(
+    .INIT(4'h6)) 
+    \src_gray_ff[0]_i_1 
+       (.I0(src_in_bin[1]),
+        .I1(src_in_bin[0]),
+        .O(gray_enc[0]));
+  (* SOFT_HLUTNM = "soft_lutpair0" *) 
+  LUT2 #(
+    .INIT(4'h6)) 
+    \src_gray_ff[1]_i_1 
+       (.I0(src_in_bin[2]),
+        .I1(src_in_bin[1]),
+        .O(gray_enc[1]));
+  (* SOFT_HLUTNM = "soft_lutpair1" *) 
+  LUT2 #(
+    .INIT(4'h6)) 
+    \src_gray_ff[2]_i_1 
+       (.I0(src_in_bin[3]),
+        .I1(src_in_bin[2]),
+        .O(gray_enc[2]));
+  (* SOFT_HLUTNM = "soft_lutpair1" *) 
+  LUT2 #(
+    .INIT(4'h6)) 
+    \src_gray_ff[3]_i_1 
+       (.I0(src_in_bin[4]),
+        .I1(src_in_bin[3]),
+        .O(gray_enc[3]));
+  (* SOFT_HLUTNM = "soft_lutpair2" *) 
+  LUT2 #(
+    .INIT(4'h6)) 
+    \src_gray_ff[4]_i_1 
+       (.I0(src_in_bin[5]),
+        .I1(src_in_bin[4]),
+        .O(gray_enc[4]));
+  (* SOFT_HLUTNM = "soft_lutpair2" *) 
+  LUT2 #(
+    .INIT(4'h6)) 
+    \src_gray_ff[5]_i_1 
+       (.I0(src_in_bin[6]),
+        .I1(src_in_bin[5]),
+        .O(gray_enc[5]));
+  (* SOFT_HLUTNM = "soft_lutpair3" *) 
+  LUT2 #(
+    .INIT(4'h6)) 
+    \src_gray_ff[6]_i_1 
+       (.I0(src_in_bin[7]),
+        .I1(src_in_bin[6]),
+        .O(gray_enc[6]));
+  (* SOFT_HLUTNM = "soft_lutpair3" *) 
+  LUT2 #(
+    .INIT(4'h6)) 
+    \src_gray_ff[7]_i_1 
+       (.I0(src_in_bin[8]),
+        .I1(src_in_bin[7]),
+        .O(gray_enc[7]));
+  LUT2 #(
+    .INIT(4'h6)) 
+    \src_gray_ff[8]_i_1 
+       (.I0(src_in_bin[9]),
+        .I1(src_in_bin[8]),
+        .O(gray_enc[8]));
+  FDRE \src_gray_ff_reg[0] 
+       (.C(src_clk),
+        .CE(1'b1),
+        .D(gray_enc[0]),
+        .Q(async_path[0]),
+        .R(1'b0));
+  FDRE \src_gray_ff_reg[1] 
+       (.C(src_clk),
+        .CE(1'b1),
+        .D(gray_enc[1]),
+        .Q(async_path[1]),
+        .R(1'b0));
+  FDRE \src_gray_ff_reg[2] 
+       (.C(src_clk),
+        .CE(1'b1),
+        .D(gray_enc[2]),
+        .Q(async_path[2]),
+        .R(1'b0));
+  FDRE \src_gray_ff_reg[3] 
+       (.C(src_clk),
+        .CE(1'b1),
+        .D(gray_enc[3]),
+        .Q(async_path[3]),
+        .R(1'b0));
+  FDRE \src_gray_ff_reg[4] 
+       (.C(src_clk),
+        .CE(1'b1),
+        .D(gray_enc[4]),
+        .Q(async_path[4]),
+        .R(1'b0));
+  FDRE \src_gray_ff_reg[5] 
+       (.C(src_clk),
+        .CE(1'b1),
+        .D(gray_enc[5]),
+        .Q(async_path[5]),
+        .R(1'b0));
+  FDRE \src_gray_ff_reg[6] 
+       (.C(src_clk),
+        .CE(1'b1),
+        .D(gray_enc[6]),
+        .Q(async_path[6]),
+        .R(1'b0));
+  FDRE \src_gray_ff_reg[7] 
+       (.C(src_clk),
+        .CE(1'b1),
+        .D(gray_enc[7]),
+        .Q(async_path[7]),
+        .R(1'b0));
+  FDRE \src_gray_ff_reg[8] 
+       (.C(src_clk),
+        .CE(1'b1),
+        .D(gray_enc[8]),
+        .Q(async_path[8]),
+        .R(1'b0));
+  FDRE \src_gray_ff_reg[9] 
+       (.C(src_clk),
+        .CE(1'b1),
+        .D(src_in_bin[9]),
+        .Q(async_path[9]),
+        .R(1'b0));
+endmodule
+
+(* DEST_SYNC_FF = "4" *) (* INIT_SYNC_FF = "0" *) (* ORIG_REF_NAME = "xpm_cdc_single" *) 
+(* SIM_ASSERT_CHK = "0" *) (* SRC_INPUT_REG = "0" *) (* VERSION = "0" *) 
+(* XPM_MODULE = "TRUE" *) (* xpm_cdc = "SINGLE" *) 
+module tx_packet_fifo_xpm_cdc_single
+   (src_clk,
+    src_in,
+    dest_clk,
+    dest_out);
+  input src_clk;
+  input src_in;
+  input dest_clk;
+  output dest_out;
+
+  wire dest_clk;
+  wire src_in;
+  (* RTL_KEEP = "true" *) (* async_reg = "true" *) (* xpm_cdc = "SINGLE" *) wire [3:0]syncstages_ff;
+
+  assign dest_out = syncstages_ff[3];
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "SINGLE" *) 
+  FDRE \syncstages_ff_reg[0] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(src_in),
+        .Q(syncstages_ff[0]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "SINGLE" *) 
+  FDRE \syncstages_ff_reg[1] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(syncstages_ff[0]),
+        .Q(syncstages_ff[1]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "SINGLE" *) 
+  FDRE \syncstages_ff_reg[2] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(syncstages_ff[1]),
+        .Q(syncstages_ff[2]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "SINGLE" *) 
+  FDRE \syncstages_ff_reg[3] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(syncstages_ff[2]),
+        .Q(syncstages_ff[3]),
+        .R(1'b0));
+endmodule
+
+(* DEST_SYNC_FF = "4" *) (* INIT_SYNC_FF = "0" *) (* ORIG_REF_NAME = "xpm_cdc_single" *) 
+(* SIM_ASSERT_CHK = "0" *) (* SRC_INPUT_REG = "0" *) (* VERSION = "0" *) 
+(* XPM_MODULE = "TRUE" *) (* xpm_cdc = "SINGLE" *) 
+module tx_packet_fifo_xpm_cdc_single__1
+   (src_clk,
+    src_in,
+    dest_clk,
+    dest_out);
+  input src_clk;
+  input src_in;
+  input dest_clk;
+  output dest_out;
+
+  wire dest_clk;
+  wire src_in;
+  (* RTL_KEEP = "true" *) (* async_reg = "true" *) (* xpm_cdc = "SINGLE" *) wire [3:0]syncstages_ff;
+
+  assign dest_out = syncstages_ff[3];
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "SINGLE" *) 
+  FDRE \syncstages_ff_reg[0] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(src_in),
+        .Q(syncstages_ff[0]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "SINGLE" *) 
+  FDRE \syncstages_ff_reg[1] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(syncstages_ff[0]),
+        .Q(syncstages_ff[1]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "SINGLE" *) 
+  FDRE \syncstages_ff_reg[2] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(syncstages_ff[1]),
+        .Q(syncstages_ff[2]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  (* KEEP = "true" *) 
+  (* XPM_CDC = "SINGLE" *) 
+  FDRE \syncstages_ff_reg[3] 
+       (.C(dest_clk),
+        .CE(1'b1),
+        .D(syncstages_ff[2]),
+        .Q(syncstages_ff[3]),
+        .R(1'b0));
+endmodule
+
 (* ORIG_REF_NAME = "blk_mem_gen_generic_cstr" *) 
 module tx_packet_fifo_blk_mem_gen_generic_cstr
    (D,
@@ -615,46 +1722,46 @@ module tx_packet_fifo_blk_mem_gen_generic_cstr
     rd_clk,
     E,
     tmp_ram_rd_en,
-    Q,
+    AS,
     \gic0.gc0.count_d2_reg[9] ,
-    \gc0.count_d1_reg[9] ,
+    Q,
     din);
   output [63:0]D;
   input wr_clk;
   input rd_clk;
   input [0:0]E;
   input tmp_ram_rd_en;
-  input [0:0]Q;
+  input [0:0]AS;
   input [9:0]\gic0.gc0.count_d2_reg[9] ;
-  input [9:0]\gc0.count_d1_reg[9] ;
+  input [9:0]Q;
   input [63:0]din;
 
+  wire [0:0]AS;
   wire [63:0]D;
   wire [0:0]E;
-  wire [0:0]Q;
+  wire [9:0]Q;
   wire [63:0]din;
-  wire [9:0]\gc0.count_d1_reg[9] ;
   wire [9:0]\gic0.gc0.count_d2_reg[9] ;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
 
   tx_packet_fifo_blk_mem_gen_prim_width \ramloop[0].ram.r 
-       (.D(D[35:0]),
+       (.AS(AS),
+        .D(D[35:0]),
         .E(E),
         .Q(Q),
         .din(din[35:0]),
-        .\gc0.count_d1_reg[9] (\gc0.count_d1_reg[9] ),
         .\gic0.gc0.count_d2_reg[9] (\gic0.gc0.count_d2_reg[9] ),
         .rd_clk(rd_clk),
         .tmp_ram_rd_en(tmp_ram_rd_en),
         .wr_clk(wr_clk));
   tx_packet_fifo_blk_mem_gen_prim_width__parameterized0 \ramloop[1].ram.r 
-       (.D(D[63:36]),
+       (.AS(AS),
+        .D(D[63:36]),
         .E(E),
         .Q(Q),
         .din(din[63:36]),
-        .\gc0.count_d1_reg[9] (\gc0.count_d1_reg[9] ),
         .\gic0.gc0.count_d2_reg[9] (\gic0.gc0.count_d2_reg[9] ),
         .rd_clk(rd_clk),
         .tmp_ram_rd_en(tmp_ram_rd_en),
@@ -668,36 +1775,36 @@ module tx_packet_fifo_blk_mem_gen_prim_width
     rd_clk,
     E,
     tmp_ram_rd_en,
-    Q,
+    AS,
     \gic0.gc0.count_d2_reg[9] ,
-    \gc0.count_d1_reg[9] ,
+    Q,
     din);
   output [35:0]D;
   input wr_clk;
   input rd_clk;
   input [0:0]E;
   input tmp_ram_rd_en;
-  input [0:0]Q;
+  input [0:0]AS;
   input [9:0]\gic0.gc0.count_d2_reg[9] ;
-  input [9:0]\gc0.count_d1_reg[9] ;
+  input [9:0]Q;
   input [35:0]din;
 
+  wire [0:0]AS;
   wire [35:0]D;
   wire [0:0]E;
-  wire [0:0]Q;
+  wire [9:0]Q;
   wire [35:0]din;
-  wire [9:0]\gc0.count_d1_reg[9] ;
   wire [9:0]\gic0.gc0.count_d2_reg[9] ;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
 
   tx_packet_fifo_blk_mem_gen_prim_wrapper \prim_noinit.ram 
-       (.D(D),
+       (.AS(AS),
+        .D(D),
         .E(E),
         .Q(Q),
         .din(din),
-        .\gc0.count_d1_reg[9] (\gc0.count_d1_reg[9] ),
         .\gic0.gc0.count_d2_reg[9] (\gic0.gc0.count_d2_reg[9] ),
         .rd_clk(rd_clk),
         .tmp_ram_rd_en(tmp_ram_rd_en),
@@ -711,36 +1818,36 @@ module tx_packet_fifo_blk_mem_gen_prim_width__parameterized0
     rd_clk,
     E,
     tmp_ram_rd_en,
-    Q,
+    AS,
     \gic0.gc0.count_d2_reg[9] ,
-    \gc0.count_d1_reg[9] ,
+    Q,
     din);
   output [27:0]D;
   input wr_clk;
   input rd_clk;
   input [0:0]E;
   input tmp_ram_rd_en;
-  input [0:0]Q;
+  input [0:0]AS;
   input [9:0]\gic0.gc0.count_d2_reg[9] ;
-  input [9:0]\gc0.count_d1_reg[9] ;
+  input [9:0]Q;
   input [27:0]din;
 
+  wire [0:0]AS;
   wire [27:0]D;
   wire [0:0]E;
-  wire [0:0]Q;
+  wire [9:0]Q;
   wire [27:0]din;
-  wire [9:0]\gc0.count_d1_reg[9] ;
   wire [9:0]\gic0.gc0.count_d2_reg[9] ;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
 
   tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized0 \prim_noinit.ram 
-       (.D(D),
+       (.AS(AS),
+        .D(D),
         .E(E),
         .Q(Q),
         .din(din),
-        .\gc0.count_d1_reg[9] (\gc0.count_d1_reg[9] ),
         .\gic0.gc0.count_d2_reg[9] (\gic0.gc0.count_d2_reg[9] ),
         .rd_clk(rd_clk),
         .tmp_ram_rd_en(tmp_ram_rd_en),
@@ -754,25 +1861,25 @@ module tx_packet_fifo_blk_mem_gen_prim_wrapper
     rd_clk,
     E,
     tmp_ram_rd_en,
-    Q,
+    AS,
     \gic0.gc0.count_d2_reg[9] ,
-    \gc0.count_d1_reg[9] ,
+    Q,
     din);
   output [35:0]D;
   input wr_clk;
   input rd_clk;
   input [0:0]E;
   input tmp_ram_rd_en;
-  input [0:0]Q;
+  input [0:0]AS;
   input [9:0]\gic0.gc0.count_d2_reg[9] ;
-  input [9:0]\gc0.count_d1_reg[9] ;
+  input [9:0]Q;
   input [35:0]din;
 
+  wire [0:0]AS;
   wire [35:0]D;
   wire [0:0]E;
-  wire [0:0]Q;
+  wire [9:0]Q;
   wire [35:0]din;
-  wire [9:0]\gc0.count_d1_reg[9] ;
   wire [9:0]\gic0.gc0.count_d2_reg[9] ;
   wire rd_clk;
   wire tmp_ram_rd_en;
@@ -786,7 +1893,6 @@ module tx_packet_fifo_blk_mem_gen_prim_wrapper
   wire [7:0]\NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_ECCPARITY_UNCONNECTED ;
   wire [8:0]\NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_RDADDRECC_UNCONNECTED ;
 
-  (* CLOCK_DOMAINS = "INDEPENDENT" *) 
   (* box_type = "PRIMITIVE" *) 
   RAMB36E1 #(
     .DOA_REG(0),
@@ -966,7 +2072,7 @@ module tx_packet_fifo_blk_mem_gen_prim_wrapper
     .WRITE_WIDTH_B(36)) 
     \DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram 
        (.ADDRARDADDR({1'b1,\gic0.gc0.count_d2_reg[9] ,1'b1,1'b1,1'b1,1'b1,1'b1}),
-        .ADDRBWRADDR({1'b1,\gc0.count_d1_reg[9] ,1'b1,1'b1,1'b1,1'b1,1'b1}),
+        .ADDRBWRADDR({1'b1,Q,1'b1,1'b1,1'b1,1'b1,1'b1}),
         .CASCADEINA(1'b0),
         .CASCADEINB(1'b0),
         .CASCADEOUTA(\NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_CASCADEOUTA_UNCONNECTED ),
@@ -991,7 +2097,7 @@ module tx_packet_fifo_blk_mem_gen_prim_wrapper
         .REGCEAREGCE(1'b0),
         .REGCEB(1'b0),
         .RSTRAMARSTRAM(1'b0),
-        .RSTRAMB(Q),
+        .RSTRAMB(AS),
         .RSTREGARSTREG(1'b0),
         .RSTREGB(1'b0),
         .SBITERR(\NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_SBITERR_UNCONNECTED ),
@@ -1006,33 +2112,33 @@ module tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized0
     rd_clk,
     E,
     tmp_ram_rd_en,
-    Q,
+    AS,
     \gic0.gc0.count_d2_reg[9] ,
-    \gc0.count_d1_reg[9] ,
+    Q,
     din);
   output [27:0]D;
   input wr_clk;
   input rd_clk;
   input [0:0]E;
   input tmp_ram_rd_en;
-  input [0:0]Q;
+  input [0:0]AS;
   input [9:0]\gic0.gc0.count_d2_reg[9] ;
-  input [9:0]\gc0.count_d1_reg[9] ;
+  input [9:0]Q;
   input [27:0]din;
 
+  wire [0:0]AS;
   wire [27:0]D;
-  wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_53 ;
-  wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_61 ;
-  wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_69 ;
-  wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_77 ;
-  wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_89 ;
-  wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_90 ;
-  wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_91 ;
-  wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_92 ;
+  wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_36 ;
+  wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_44 ;
+  wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_52 ;
+  wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_60 ;
+  wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_72 ;
+  wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_73 ;
+  wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_74 ;
+  wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_75 ;
   wire [0:0]E;
-  wire [0:0]Q;
+  wire [9:0]Q;
   wire [27:0]din;
-  wire [9:0]\gc0.count_d1_reg[9] ;
   wire [9:0]\gic0.gc0.count_d2_reg[9] ;
   wire rd_clk;
   wire tmp_ram_rd_en;
@@ -1046,7 +2152,6 @@ module tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized0
   wire [7:0]\NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_ECCPARITY_UNCONNECTED ;
   wire [8:0]\NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_RDADDRECC_UNCONNECTED ;
 
-  (* CLOCK_DOMAINS = "INDEPENDENT" *) 
   (* box_type = "PRIMITIVE" *) 
   RAMB36E1 #(
     .DOA_REG(0),
@@ -1226,7 +2331,7 @@ module tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized0
     .WRITE_WIDTH_B(36)) 
     \DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram 
        (.ADDRARDADDR({1'b1,\gic0.gc0.count_d2_reg[9] ,1'b1,1'b1,1'b1,1'b1,1'b1}),
-        .ADDRBWRADDR({1'b1,\gc0.count_d1_reg[9] ,1'b1,1'b1,1'b1,1'b1,1'b1}),
+        .ADDRBWRADDR({1'b1,Q,1'b1,1'b1,1'b1,1'b1,1'b1}),
         .CASCADEINA(1'b0),
         .CASCADEINB(1'b0),
         .CASCADEOUTA(\NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_CASCADEOUTA_UNCONNECTED ),
@@ -1239,9 +2344,9 @@ module tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized0
         .DIPADIP({1'b0,1'b0,1'b0,1'b0}),
         .DIPBDIP({1'b0,1'b0,1'b0,1'b0}),
         .DOADO(\NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_DOADO_UNCONNECTED [31:0]),
-        .DOBDO({\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_53 ,D[27:21],\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_61 ,D[20:14],\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_69 ,D[13:7],\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_77 ,D[6:0]}),
+        .DOBDO({\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_36 ,D[27:21],\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_44 ,D[20:14],\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_52 ,D[13:7],\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_60 ,D[6:0]}),
         .DOPADOP(\NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_DOPADOP_UNCONNECTED [3:0]),
-        .DOPBDOP({\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_89 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_90 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_91 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_92 }),
+        .DOPBDOP({\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_72 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_73 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_74 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_n_75 }),
         .ECCPARITY(\NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_ECCPARITY_UNCONNECTED [7:0]),
         .ENARDEN(E),
         .ENBWREN(tmp_ram_rd_en),
@@ -1251,7 +2356,7 @@ module tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized0
         .REGCEAREGCE(1'b0),
         .REGCEB(1'b0),
         .RSTRAMARSTRAM(1'b0),
-        .RSTRAMB(Q),
+        .RSTRAMB(AS),
         .RSTREGARSTREG(1'b0),
         .RSTREGB(1'b0),
         .SBITERR(\NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_SBITERR_UNCONNECTED ),
@@ -1266,122 +2371,122 @@ module tx_packet_fifo_blk_mem_gen_top
     rd_clk,
     E,
     tmp_ram_rd_en,
-    Q,
+    AS,
     \gic0.gc0.count_d2_reg[9] ,
-    \gc0.count_d1_reg[9] ,
+    Q,
     din);
   output [63:0]D;
   input wr_clk;
   input rd_clk;
   input [0:0]E;
   input tmp_ram_rd_en;
-  input [0:0]Q;
+  input [0:0]AS;
   input [9:0]\gic0.gc0.count_d2_reg[9] ;
-  input [9:0]\gc0.count_d1_reg[9] ;
+  input [9:0]Q;
   input [63:0]din;
 
+  wire [0:0]AS;
   wire [63:0]D;
   wire [0:0]E;
-  wire [0:0]Q;
+  wire [9:0]Q;
   wire [63:0]din;
-  wire [9:0]\gc0.count_d1_reg[9] ;
   wire [9:0]\gic0.gc0.count_d2_reg[9] ;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
 
   tx_packet_fifo_blk_mem_gen_generic_cstr \valid.cstr 
-       (.D(D),
+       (.AS(AS),
+        .D(D),
         .E(E),
         .Q(Q),
         .din(din),
-        .\gc0.count_d1_reg[9] (\gc0.count_d1_reg[9] ),
         .\gic0.gc0.count_d2_reg[9] (\gic0.gc0.count_d2_reg[9] ),
         .rd_clk(rd_clk),
         .tmp_ram_rd_en(tmp_ram_rd_en),
         .wr_clk(wr_clk));
 endmodule
 
-(* ORIG_REF_NAME = "blk_mem_gen_v8_3_3" *) 
-module tx_packet_fifo_blk_mem_gen_v8_3_3
+(* ORIG_REF_NAME = "blk_mem_gen_v8_4_1" *) 
+module tx_packet_fifo_blk_mem_gen_v8_4_1
    (D,
     wr_clk,
     rd_clk,
     E,
     tmp_ram_rd_en,
-    Q,
+    AS,
     \gic0.gc0.count_d2_reg[9] ,
-    \gc0.count_d1_reg[9] ,
+    Q,
     din);
   output [63:0]D;
   input wr_clk;
   input rd_clk;
   input [0:0]E;
   input tmp_ram_rd_en;
-  input [0:0]Q;
+  input [0:0]AS;
   input [9:0]\gic0.gc0.count_d2_reg[9] ;
-  input [9:0]\gc0.count_d1_reg[9] ;
+  input [9:0]Q;
   input [63:0]din;
 
+  wire [0:0]AS;
   wire [63:0]D;
   wire [0:0]E;
-  wire [0:0]Q;
+  wire [9:0]Q;
   wire [63:0]din;
-  wire [9:0]\gc0.count_d1_reg[9] ;
   wire [9:0]\gic0.gc0.count_d2_reg[9] ;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
 
-  tx_packet_fifo_blk_mem_gen_v8_3_3_synth inst_blk_mem_gen
-       (.D(D),
+  tx_packet_fifo_blk_mem_gen_v8_4_1_synth inst_blk_mem_gen
+       (.AS(AS),
+        .D(D),
         .E(E),
         .Q(Q),
         .din(din),
-        .\gc0.count_d1_reg[9] (\gc0.count_d1_reg[9] ),
         .\gic0.gc0.count_d2_reg[9] (\gic0.gc0.count_d2_reg[9] ),
         .rd_clk(rd_clk),
         .tmp_ram_rd_en(tmp_ram_rd_en),
         .wr_clk(wr_clk));
 endmodule
 
-(* ORIG_REF_NAME = "blk_mem_gen_v8_3_3_synth" *) 
-module tx_packet_fifo_blk_mem_gen_v8_3_3_synth
+(* ORIG_REF_NAME = "blk_mem_gen_v8_4_1_synth" *) 
+module tx_packet_fifo_blk_mem_gen_v8_4_1_synth
    (D,
     wr_clk,
     rd_clk,
     E,
     tmp_ram_rd_en,
-    Q,
+    AS,
     \gic0.gc0.count_d2_reg[9] ,
-    \gc0.count_d1_reg[9] ,
+    Q,
     din);
   output [63:0]D;
   input wr_clk;
   input rd_clk;
   input [0:0]E;
   input tmp_ram_rd_en;
-  input [0:0]Q;
+  input [0:0]AS;
   input [9:0]\gic0.gc0.count_d2_reg[9] ;
-  input [9:0]\gc0.count_d1_reg[9] ;
+  input [9:0]Q;
   input [63:0]din;
 
+  wire [0:0]AS;
   wire [63:0]D;
   wire [0:0]E;
-  wire [0:0]Q;
+  wire [9:0]Q;
   wire [63:0]din;
-  wire [9:0]\gc0.count_d1_reg[9] ;
   wire [9:0]\gic0.gc0.count_d2_reg[9] ;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
 
   tx_packet_fifo_blk_mem_gen_top \gnbram.gnativebmg.native_blk_mem_gen 
-       (.D(D),
+       (.AS(AS),
+        .D(D),
         .E(E),
         .Q(Q),
         .din(din),
-        .\gc0.count_d1_reg[9] (\gc0.count_d1_reg[9] ),
         .\gic0.gc0.count_d2_reg[9] (\gic0.gc0.count_d2_reg[9] ),
         .rd_clk(rd_clk),
         .tmp_ram_rd_en(tmp_ram_rd_en),
@@ -1390,650 +2495,279 @@ endmodule
 
 (* ORIG_REF_NAME = "clk_x_pntrs" *) 
 module tx_packet_fifo_clk_x_pntrs
-   (v1_reg,
+   (S,
+    \gdiff.diff_pntr_pad_reg[8] ,
+    \gdiff.diff_pntr_pad_reg[10] ,
+    v1_reg,
     v1_reg_0,
-    RD_PNTR_WR,
+    WR_PNTR_RD,
     Q,
-    \gc0.count_reg[9] ,
-    \gic0.gc0.count_d2_reg[9] ,
+    \gic0.gc0.count_reg[9] ,
     wr_clk,
-    \ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ,
+    \gic0.gc0.count_d2_reg[9] ,
     rd_clk,
-    \ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] );
+    \gc0.count_d1_reg[9] );
+  output [3:0]S;
+  output [3:0]\gdiff.diff_pntr_pad_reg[8] ;
+  output [1:0]\gdiff.diff_pntr_pad_reg[10] ;
   output [4:0]v1_reg;
   output [4:0]v1_reg_0;
-  output [9:0]RD_PNTR_WR;
+  output [9:0]WR_PNTR_RD;
   input [9:0]Q;
-  input [9:0]\gc0.count_reg[9] ;
-  input [9:0]\gic0.gc0.count_d2_reg[9] ;
+  input [9:0]\gic0.gc0.count_reg[9] ;
   input wr_clk;
-  input [0:0]\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ;
+  input [9:0]\gic0.gc0.count_d2_reg[9] ;
   input rd_clk;
-  input [0:0]\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ;
+  input [9:0]\gc0.count_d1_reg[9] ;
 
   wire [9:0]Q;
-  wire [9:0]RD_PNTR_WR;
-  wire [9:0]\gc0.count_reg[9] ;
+  wire [3:0]S;
+  wire [9:0]WR_PNTR_RD;
+  wire [9:0]\gc0.count_d1_reg[9] ;
+  wire [1:0]\gdiff.diff_pntr_pad_reg[10] ;
+  wire [3:0]\gdiff.diff_pntr_pad_reg[8] ;
   wire [9:0]\gic0.gc0.count_d2_reg[9] ;
-  wire \gsync_stage[2].wr_stg_inst_n_1 ;
-  wire \gsync_stage[2].wr_stg_inst_n_2 ;
-  wire \gsync_stage[2].wr_stg_inst_n_3 ;
-  wire \gsync_stage[2].wr_stg_inst_n_4 ;
-  wire \gsync_stage[2].wr_stg_inst_n_5 ;
-  wire \gsync_stage[2].wr_stg_inst_n_6 ;
-  wire \gsync_stage[2].wr_stg_inst_n_7 ;
-  wire \gsync_stage[2].wr_stg_inst_n_8 ;
-  wire \gsync_stage[2].wr_stg_inst_n_9 ;
-  wire [0:0]\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ;
-  wire [0:0]\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ;
-  wire [8:0]p_0_in;
-  wire [8:0]p_0_in8_out;
-  wire [9:9]p_0_out;
-  wire [9:9]p_1_out;
-  wire [9:0]p_22_out;
-  wire [9:0]p_2_out;
-  wire [9:0]p_3_out;
+  wire [9:0]\gic0.gc0.count_reg[9] ;
+  wire [9:0]p_25_out;
   wire rd_clk;
-  wire [9:0]rd_pntr_gc;
-  wire \rd_pntr_gc[0]_i_1_n_0 ;
-  wire \rd_pntr_gc[1]_i_1_n_0 ;
-  wire \rd_pntr_gc[2]_i_1_n_0 ;
-  wire \rd_pntr_gc[3]_i_1_n_0 ;
-  wire \rd_pntr_gc[4]_i_1_n_0 ;
-  wire \rd_pntr_gc[5]_i_1_n_0 ;
-  wire \rd_pntr_gc[6]_i_1_n_0 ;
-  wire \rd_pntr_gc[7]_i_1_n_0 ;
-  wire \rd_pntr_gc[8]_i_1_n_0 ;
   wire [4:0]v1_reg;
   wire [4:0]v1_reg_0;
   wire wr_clk;
-  wire [9:0]wr_pntr_gc;
 
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[0].gm1.m1_i_1 
-       (.I0(p_22_out[0]),
+       (.I0(p_25_out[0]),
         .I1(Q[0]),
-        .I2(p_22_out[1]),
+        .I2(p_25_out[1]),
         .I3(Q[1]),
         .O(v1_reg[0]));
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[0].gm1.m1_i_1__0 
-       (.I0(p_22_out[0]),
-        .I1(\gc0.count_reg[9] [0]),
-        .I2(p_22_out[1]),
-        .I3(\gc0.count_reg[9] [1]),
+       (.I0(p_25_out[0]),
+        .I1(\gic0.gc0.count_reg[9] [0]),
+        .I2(p_25_out[1]),
+        .I3(\gic0.gc0.count_reg[9] [1]),
         .O(v1_reg_0[0]));
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[1].gms.ms_i_1 
-       (.I0(p_22_out[2]),
+       (.I0(p_25_out[2]),
         .I1(Q[2]),
-        .I2(p_22_out[3]),
+        .I2(p_25_out[3]),
         .I3(Q[3]),
         .O(v1_reg[1]));
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[1].gms.ms_i_1__0 
-       (.I0(p_22_out[2]),
-        .I1(\gc0.count_reg[9] [2]),
-        .I2(p_22_out[3]),
-        .I3(\gc0.count_reg[9] [3]),
+       (.I0(p_25_out[2]),
+        .I1(\gic0.gc0.count_reg[9] [2]),
+        .I2(p_25_out[3]),
+        .I3(\gic0.gc0.count_reg[9] [3]),
         .O(v1_reg_0[1]));
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[2].gms.ms_i_1 
-       (.I0(p_22_out[4]),
+       (.I0(p_25_out[4]),
         .I1(Q[4]),
-        .I2(p_22_out[5]),
+        .I2(p_25_out[5]),
         .I3(Q[5]),
         .O(v1_reg[2]));
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[2].gms.ms_i_1__0 
-       (.I0(p_22_out[4]),
-        .I1(\gc0.count_reg[9] [4]),
-        .I2(p_22_out[5]),
-        .I3(\gc0.count_reg[9] [5]),
+       (.I0(p_25_out[4]),
+        .I1(\gic0.gc0.count_reg[9] [4]),
+        .I2(p_25_out[5]),
+        .I3(\gic0.gc0.count_reg[9] [5]),
         .O(v1_reg_0[2]));
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[3].gms.ms_i_1 
-       (.I0(p_22_out[6]),
+       (.I0(p_25_out[6]),
         .I1(Q[6]),
-        .I2(p_22_out[7]),
+        .I2(p_25_out[7]),
         .I3(Q[7]),
         .O(v1_reg[3]));
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[3].gms.ms_i_1__0 
-       (.I0(p_22_out[6]),
-        .I1(\gc0.count_reg[9] [6]),
-        .I2(p_22_out[7]),
-        .I3(\gc0.count_reg[9] [7]),
+       (.I0(p_25_out[6]),
+        .I1(\gic0.gc0.count_reg[9] [6]),
+        .I2(p_25_out[7]),
+        .I3(\gic0.gc0.count_reg[9] [7]),
         .O(v1_reg_0[3]));
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[4].gms.ms_i_1 
-       (.I0(p_22_out[8]),
+       (.I0(p_25_out[8]),
         .I1(Q[8]),
-        .I2(p_22_out[9]),
+        .I2(p_25_out[9]),
         .I3(Q[9]),
         .O(v1_reg[4]));
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[4].gms.ms_i_1__0 
-       (.I0(p_22_out[8]),
-        .I1(\gc0.count_reg[9] [8]),
-        .I2(p_22_out[9]),
-        .I3(\gc0.count_reg[9] [9]),
+       (.I0(p_25_out[8]),
+        .I1(\gic0.gc0.count_reg[9] [8]),
+        .I2(p_25_out[9]),
+        .I3(\gic0.gc0.count_reg[9] [9]),
         .O(v1_reg_0[4]));
-  tx_packet_fifo_synchronizer_ff \gsync_stage[1].rd_stg_inst 
-       (.D(p_3_out),
-        .Q(wr_pntr_gc),
-        .\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] (\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .rd_clk(rd_clk));
-  tx_packet_fifo_synchronizer_ff_3 \gsync_stage[1].wr_stg_inst 
-       (.D(p_2_out),
-        .Q(rd_pntr_gc),
-        .\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] (\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .wr_clk(wr_clk));
-  tx_packet_fifo_synchronizer_ff_4 \gsync_stage[2].rd_stg_inst 
-       (.D(p_3_out),
-        .\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] (\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .out(p_1_out),
-        .rd_clk(rd_clk),
-        .\wr_pntr_bin_reg[8] (p_0_in));
-  tx_packet_fifo_synchronizer_ff_5 \gsync_stage[2].wr_stg_inst 
-       (.D(p_2_out),
-        .\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] (\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .out(p_0_out),
-        .\rd_pntr_bin_reg[8] ({\gsync_stage[2].wr_stg_inst_n_1 ,\gsync_stage[2].wr_stg_inst_n_2 ,\gsync_stage[2].wr_stg_inst_n_3 ,\gsync_stage[2].wr_stg_inst_n_4 ,\gsync_stage[2].wr_stg_inst_n_5 ,\gsync_stage[2].wr_stg_inst_n_6 ,\gsync_stage[2].wr_stg_inst_n_7 ,\gsync_stage[2].wr_stg_inst_n_8 ,\gsync_stage[2].wr_stg_inst_n_9 }),
-        .wr_clk(wr_clk));
-  FDCE #(
-    .INIT(1'b0)) 
-    \rd_pntr_bin_reg[0] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(\gsync_stage[2].wr_stg_inst_n_9 ),
-        .Q(RD_PNTR_WR[0]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \rd_pntr_bin_reg[1] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(\gsync_stage[2].wr_stg_inst_n_8 ),
-        .Q(RD_PNTR_WR[1]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \rd_pntr_bin_reg[2] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(\gsync_stage[2].wr_stg_inst_n_7 ),
-        .Q(RD_PNTR_WR[2]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \rd_pntr_bin_reg[3] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(\gsync_stage[2].wr_stg_inst_n_6 ),
-        .Q(RD_PNTR_WR[3]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \rd_pntr_bin_reg[4] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(\gsync_stage[2].wr_stg_inst_n_5 ),
-        .Q(RD_PNTR_WR[4]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \rd_pntr_bin_reg[5] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(\gsync_stage[2].wr_stg_inst_n_4 ),
-        .Q(RD_PNTR_WR[5]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \rd_pntr_bin_reg[6] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(\gsync_stage[2].wr_stg_inst_n_3 ),
-        .Q(RD_PNTR_WR[6]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \rd_pntr_bin_reg[7] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(\gsync_stage[2].wr_stg_inst_n_2 ),
-        .Q(RD_PNTR_WR[7]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \rd_pntr_bin_reg[8] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(\gsync_stage[2].wr_stg_inst_n_1 ),
-        .Q(RD_PNTR_WR[8]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \rd_pntr_bin_reg[9] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(p_0_out),
-        .Q(RD_PNTR_WR[9]));
-  (* SOFT_HLUTNM = "soft_lutpair4" *) 
   LUT2 #(
-    .INIT(4'h6)) 
-    \rd_pntr_gc[0]_i_1 
-       (.I0(Q[0]),
-        .I1(Q[1]),
-        .O(\rd_pntr_gc[0]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair4" *) 
-  LUT2 #(
-    .INIT(4'h6)) 
-    \rd_pntr_gc[1]_i_1 
-       (.I0(Q[1]),
-        .I1(Q[2]),
-        .O(\rd_pntr_gc[1]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair5" *) 
-  LUT2 #(
-    .INIT(4'h6)) 
-    \rd_pntr_gc[2]_i_1 
-       (.I0(Q[2]),
-        .I1(Q[3]),
-        .O(\rd_pntr_gc[2]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair5" *) 
-  LUT2 #(
-    .INIT(4'h6)) 
-    \rd_pntr_gc[3]_i_1 
-       (.I0(Q[3]),
-        .I1(Q[4]),
-        .O(\rd_pntr_gc[3]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair6" *) 
-  LUT2 #(
-    .INIT(4'h6)) 
-    \rd_pntr_gc[4]_i_1 
-       (.I0(Q[4]),
-        .I1(Q[5]),
-        .O(\rd_pntr_gc[4]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair6" *) 
-  LUT2 #(
-    .INIT(4'h6)) 
-    \rd_pntr_gc[5]_i_1 
-       (.I0(Q[5]),
-        .I1(Q[6]),
-        .O(\rd_pntr_gc[5]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair7" *) 
-  LUT2 #(
-    .INIT(4'h6)) 
-    \rd_pntr_gc[6]_i_1 
-       (.I0(Q[6]),
+    .INIT(4'h9)) 
+    plusOp_carry__0_i_1
+       (.I0(p_25_out[7]),
         .I1(Q[7]),
-        .O(\rd_pntr_gc[6]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair7" *) 
+        .O(\gdiff.diff_pntr_pad_reg[8] [3]));
   LUT2 #(
-    .INIT(4'h6)) 
-    \rd_pntr_gc[7]_i_1 
-       (.I0(Q[7]),
-        .I1(Q[8]),
-        .O(\rd_pntr_gc[7]_i_1_n_0 ));
+    .INIT(4'h9)) 
+    plusOp_carry__0_i_2
+       (.I0(p_25_out[6]),
+        .I1(Q[6]),
+        .O(\gdiff.diff_pntr_pad_reg[8] [2]));
   LUT2 #(
-    .INIT(4'h6)) 
-    \rd_pntr_gc[8]_i_1 
-       (.I0(Q[8]),
+    .INIT(4'h9)) 
+    plusOp_carry__0_i_3
+       (.I0(p_25_out[5]),
+        .I1(Q[5]),
+        .O(\gdiff.diff_pntr_pad_reg[8] [1]));
+  LUT2 #(
+    .INIT(4'h9)) 
+    plusOp_carry__0_i_4
+       (.I0(p_25_out[4]),
+        .I1(Q[4]),
+        .O(\gdiff.diff_pntr_pad_reg[8] [0]));
+  LUT2 #(
+    .INIT(4'h9)) 
+    plusOp_carry__1_i_1
+       (.I0(p_25_out[9]),
         .I1(Q[9]),
-        .O(\rd_pntr_gc[8]_i_1_n_0 ));
-  FDCE #(
-    .INIT(1'b0)) 
-    \rd_pntr_gc_reg[0] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(\rd_pntr_gc[0]_i_1_n_0 ),
-        .Q(rd_pntr_gc[0]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \rd_pntr_gc_reg[1] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(\rd_pntr_gc[1]_i_1_n_0 ),
-        .Q(rd_pntr_gc[1]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \rd_pntr_gc_reg[2] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(\rd_pntr_gc[2]_i_1_n_0 ),
-        .Q(rd_pntr_gc[2]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \rd_pntr_gc_reg[3] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(\rd_pntr_gc[3]_i_1_n_0 ),
-        .Q(rd_pntr_gc[3]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \rd_pntr_gc_reg[4] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(\rd_pntr_gc[4]_i_1_n_0 ),
-        .Q(rd_pntr_gc[4]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \rd_pntr_gc_reg[5] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(\rd_pntr_gc[5]_i_1_n_0 ),
-        .Q(rd_pntr_gc[5]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \rd_pntr_gc_reg[6] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(\rd_pntr_gc[6]_i_1_n_0 ),
-        .Q(rd_pntr_gc[6]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \rd_pntr_gc_reg[7] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(\rd_pntr_gc[7]_i_1_n_0 ),
-        .Q(rd_pntr_gc[7]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \rd_pntr_gc_reg[8] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(\rd_pntr_gc[8]_i_1_n_0 ),
-        .Q(rd_pntr_gc[8]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \rd_pntr_gc_reg[9] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(Q[9]),
-        .Q(rd_pntr_gc[9]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \wr_pntr_bin_reg[0] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(p_0_in[0]),
-        .Q(p_22_out[0]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \wr_pntr_bin_reg[1] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(p_0_in[1]),
-        .Q(p_22_out[1]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \wr_pntr_bin_reg[2] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(p_0_in[2]),
-        .Q(p_22_out[2]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \wr_pntr_bin_reg[3] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(p_0_in[3]),
-        .Q(p_22_out[3]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \wr_pntr_bin_reg[4] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(p_0_in[4]),
-        .Q(p_22_out[4]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \wr_pntr_bin_reg[5] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(p_0_in[5]),
-        .Q(p_22_out[5]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \wr_pntr_bin_reg[6] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(p_0_in[6]),
-        .Q(p_22_out[6]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \wr_pntr_bin_reg[7] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(p_0_in[7]),
-        .Q(p_22_out[7]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \wr_pntr_bin_reg[8] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(p_0_in[8]),
-        .Q(p_22_out[8]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \wr_pntr_bin_reg[9] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(p_1_out),
-        .Q(p_22_out[9]));
-  (* SOFT_HLUTNM = "soft_lutpair0" *) 
+        .O(\gdiff.diff_pntr_pad_reg[10] [1]));
   LUT2 #(
-    .INIT(4'h6)) 
-    \wr_pntr_gc[0]_i_1 
-       (.I0(\gic0.gc0.count_d2_reg[9] [0]),
-        .I1(\gic0.gc0.count_d2_reg[9] [1]),
-        .O(p_0_in8_out[0]));
-  (* SOFT_HLUTNM = "soft_lutpair0" *) 
+    .INIT(4'h9)) 
+    plusOp_carry__1_i_2
+       (.I0(p_25_out[8]),
+        .I1(Q[8]),
+        .O(\gdiff.diff_pntr_pad_reg[10] [0]));
   LUT2 #(
-    .INIT(4'h6)) 
-    \wr_pntr_gc[1]_i_1 
-       (.I0(\gic0.gc0.count_d2_reg[9] [1]),
-        .I1(\gic0.gc0.count_d2_reg[9] [2]),
-        .O(p_0_in8_out[1]));
-  (* SOFT_HLUTNM = "soft_lutpair1" *) 
+    .INIT(4'h9)) 
+    plusOp_carry_i_1
+       (.I0(p_25_out[3]),
+        .I1(Q[3]),
+        .O(S[3]));
   LUT2 #(
-    .INIT(4'h6)) 
-    \wr_pntr_gc[2]_i_1 
-       (.I0(\gic0.gc0.count_d2_reg[9] [2]),
-        .I1(\gic0.gc0.count_d2_reg[9] [3]),
-        .O(p_0_in8_out[2]));
-  (* SOFT_HLUTNM = "soft_lutpair1" *) 
+    .INIT(4'h9)) 
+    plusOp_carry_i_2
+       (.I0(p_25_out[2]),
+        .I1(Q[2]),
+        .O(S[2]));
   LUT2 #(
-    .INIT(4'h6)) 
-    \wr_pntr_gc[3]_i_1 
-       (.I0(\gic0.gc0.count_d2_reg[9] [3]),
-        .I1(\gic0.gc0.count_d2_reg[9] [4]),
-        .O(p_0_in8_out[3]));
-  (* SOFT_HLUTNM = "soft_lutpair2" *) 
+    .INIT(4'h9)) 
+    plusOp_carry_i_3
+       (.I0(p_25_out[1]),
+        .I1(Q[1]),
+        .O(S[1]));
   LUT2 #(
-    .INIT(4'h6)) 
-    \wr_pntr_gc[4]_i_1 
-       (.I0(\gic0.gc0.count_d2_reg[9] [4]),
-        .I1(\gic0.gc0.count_d2_reg[9] [5]),
-        .O(p_0_in8_out[4]));
-  (* SOFT_HLUTNM = "soft_lutpair2" *) 
-  LUT2 #(
-    .INIT(4'h6)) 
-    \wr_pntr_gc[5]_i_1 
-       (.I0(\gic0.gc0.count_d2_reg[9] [5]),
-        .I1(\gic0.gc0.count_d2_reg[9] [6]),
-        .O(p_0_in8_out[5]));
-  (* SOFT_HLUTNM = "soft_lutpair3" *) 
-  LUT2 #(
-    .INIT(4'h6)) 
-    \wr_pntr_gc[6]_i_1 
-       (.I0(\gic0.gc0.count_d2_reg[9] [6]),
-        .I1(\gic0.gc0.count_d2_reg[9] [7]),
-        .O(p_0_in8_out[6]));
-  (* SOFT_HLUTNM = "soft_lutpair3" *) 
-  LUT2 #(
-    .INIT(4'h6)) 
-    \wr_pntr_gc[7]_i_1 
-       (.I0(\gic0.gc0.count_d2_reg[9] [7]),
-        .I1(\gic0.gc0.count_d2_reg[9] [8]),
-        .O(p_0_in8_out[7]));
-  LUT2 #(
-    .INIT(4'h6)) 
-    \wr_pntr_gc[8]_i_1 
-       (.I0(\gic0.gc0.count_d2_reg[9] [8]),
-        .I1(\gic0.gc0.count_d2_reg[9] [9]),
-        .O(p_0_in8_out[8]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \wr_pntr_gc_reg[0] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(p_0_in8_out[0]),
-        .Q(wr_pntr_gc[0]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \wr_pntr_gc_reg[1] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(p_0_in8_out[1]),
-        .Q(wr_pntr_gc[1]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \wr_pntr_gc_reg[2] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(p_0_in8_out[2]),
-        .Q(wr_pntr_gc[2]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \wr_pntr_gc_reg[3] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(p_0_in8_out[3]),
-        .Q(wr_pntr_gc[3]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \wr_pntr_gc_reg[4] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(p_0_in8_out[4]),
-        .Q(wr_pntr_gc[4]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \wr_pntr_gc_reg[5] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(p_0_in8_out[5]),
-        .Q(wr_pntr_gc[5]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \wr_pntr_gc_reg[6] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(p_0_in8_out[6]),
-        .Q(wr_pntr_gc[6]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \wr_pntr_gc_reg[7] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(p_0_in8_out[7]),
-        .Q(wr_pntr_gc[7]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \wr_pntr_gc_reg[8] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(p_0_in8_out[8]),
-        .Q(wr_pntr_gc[8]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \wr_pntr_gc_reg[9] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(\gic0.gc0.count_d2_reg[9] [9]),
-        .Q(wr_pntr_gc[9]));
+    .INIT(4'h9)) 
+    plusOp_carry_i_4
+       (.I0(p_25_out[0]),
+        .I1(Q[0]),
+        .O(S[0]));
+  (* DEST_SYNC_FF = "2" *) 
+  (* INIT_SYNC_FF = "0" *) 
+  (* REG_OUTPUT = "1" *) 
+  (* SIM_ASSERT_CHK = "0" *) 
+  (* SIM_LOSSLESS_GRAY_CHK = "0" *) 
+  (* VERSION = "0" *) 
+  (* WIDTH = "10" *) 
+  (* XPM_CDC = "GRAY" *) 
+  (* XPM_MODULE = "TRUE" *) 
+  tx_packet_fifo_xpm_cdc_gray rd_pntr_cdc_inst
+       (.dest_clk(wr_clk),
+        .dest_out_bin(p_25_out),
+        .src_clk(rd_clk),
+        .src_in_bin(\gc0.count_d1_reg[9] ));
+  (* DEST_SYNC_FF = "2" *) 
+  (* INIT_SYNC_FF = "0" *) 
+  (* REG_OUTPUT = "1" *) 
+  (* SIM_ASSERT_CHK = "0" *) 
+  (* SIM_LOSSLESS_GRAY_CHK = "0" *) 
+  (* VERSION = "0" *) 
+  (* WIDTH = "10" *) 
+  (* XPM_CDC = "GRAY" *) 
+  (* XPM_MODULE = "TRUE" *) 
+  tx_packet_fifo_xpm_cdc_gray__1 wr_pntr_cdc_inst
+       (.dest_clk(rd_clk),
+        .dest_out_bin(WR_PNTR_RD),
+        .src_clk(wr_clk),
+        .src_in_bin(\gic0.gc0.count_d2_reg[9] ));
 endmodule
 
 (* ORIG_REF_NAME = "compare" *) 
 module tx_packet_fifo_compare
-   (ram_full_i,
-    \gic0.gc0.count_d1_reg[1] ,
-    \gic0.gc0.count_d1_reg[3] ,
-    \gic0.gc0.count_d1_reg[5] ,
-    \gic0.gc0.count_d1_reg[7] ,
-    \gic0.gc0.count_d1_reg[8] ,
+   (comp1,
+    v1_reg);
+  output comp1;
+  input [4:0]v1_reg;
+
+  wire carrynet_0;
+  wire carrynet_1;
+  wire carrynet_2;
+  wire carrynet_3;
+  wire comp1;
+  wire [4:0]v1_reg;
+  wire [3:0]\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED ;
+  wire [3:1]\NLW_gmux.gm[4].gms.ms_CARRY4_CO_UNCONNECTED ;
+  wire [3:1]\NLW_gmux.gm[4].gms.ms_CARRY4_DI_UNCONNECTED ;
+  wire [3:0]\NLW_gmux.gm[4].gms.ms_CARRY4_O_UNCONNECTED ;
+  wire [3:1]\NLW_gmux.gm[4].gms.ms_CARRY4_S_UNCONNECTED ;
+
+  (* XILINX_LEGACY_PRIM = "(MUXCY,XORCY)" *) 
+  (* box_type = "PRIMITIVE" *) 
+  CARRY4 \gmux.gm[0].gm1.m1_CARRY4 
+       (.CI(1'b0),
+        .CO({carrynet_3,carrynet_2,carrynet_1,carrynet_0}),
+        .CYINIT(1'b1),
+        .DI({1'b0,1'b0,1'b0,1'b0}),
+        .O(\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED [3:0]),
+        .S(v1_reg[3:0]));
+  (* XILINX_LEGACY_PRIM = "(MUXCY,XORCY)" *) 
+  (* box_type = "PRIMITIVE" *) 
+  CARRY4 \gmux.gm[4].gms.ms_CARRY4 
+       (.CI(carrynet_3),
+        .CO({\NLW_gmux.gm[4].gms.ms_CARRY4_CO_UNCONNECTED [3:1],comp1}),
+        .CYINIT(1'b0),
+        .DI({\NLW_gmux.gm[4].gms.ms_CARRY4_DI_UNCONNECTED [3:1],1'b0}),
+        .O(\NLW_gmux.gm[4].gms.ms_CARRY4_O_UNCONNECTED [3:0]),
+        .S({\NLW_gmux.gm[4].gms.ms_CARRY4_S_UNCONNECTED [3:1],v1_reg[4]}));
+endmodule
+
+(* ORIG_REF_NAME = "compare" *) 
+module tx_packet_fifo_compare_0
+   (ram_full_fb_i_reg,
+    v1_reg_0,
+    out,
     wr_en,
-    ram_full_fb_i_reg,
-    comp2,
+    comp1,
     \grstd1.grst_full.grst_f.rst_d3_reg );
-  output ram_full_i;
-  input \gic0.gc0.count_d1_reg[1] ;
-  input \gic0.gc0.count_d1_reg[3] ;
-  input \gic0.gc0.count_d1_reg[5] ;
-  input \gic0.gc0.count_d1_reg[7] ;
-  input \gic0.gc0.count_d1_reg[8] ;
+  output ram_full_fb_i_reg;
+  input [4:0]v1_reg_0;
+  input out;
   input wr_en;
-  input ram_full_fb_i_reg;
-  input comp2;
+  input comp1;
   input \grstd1.grst_full.grst_f.rst_d3_reg ;
 
-  wire CI;
+  wire carrynet_0;
+  wire carrynet_1;
+  wire carrynet_2;
+  wire carrynet_3;
   wire comp1;
   wire comp2;
-  wire \gic0.gc0.count_d1_reg[1] ;
-  wire \gic0.gc0.count_d1_reg[3] ;
-  wire \gic0.gc0.count_d1_reg[5] ;
-  wire \gic0.gc0.count_d1_reg[7] ;
-  wire \gic0.gc0.count_d1_reg[8] ;
-  wire \gmux.gm[1].gms.ms_n_0 ;
-  wire \gmux.gm[2].gms.ms_n_0 ;
-  wire \gmux.gm[3].gms.ms_n_0 ;
   wire \grstd1.grst_full.grst_f.rst_d3_reg ;
+  wire out;
   wire ram_full_fb_i_reg;
-  wire ram_full_i;
+  wire [4:0]v1_reg_0;
   wire wr_en;
   wire [3:0]\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED ;
   wire [3:1]\NLW_gmux.gm[4].gms.ms_CARRY4_CO_UNCONNECTED ;
@@ -2045,105 +2779,54 @@ module tx_packet_fifo_compare
   (* box_type = "PRIMITIVE" *) 
   CARRY4 \gmux.gm[0].gm1.m1_CARRY4 
        (.CI(1'b0),
-        .CO({\gmux.gm[3].gms.ms_n_0 ,\gmux.gm[2].gms.ms_n_0 ,\gmux.gm[1].gms.ms_n_0 ,CI}),
+        .CO({carrynet_3,carrynet_2,carrynet_1,carrynet_0}),
         .CYINIT(1'b1),
         .DI({1'b0,1'b0,1'b0,1'b0}),
         .O(\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED [3:0]),
-        .S({\gic0.gc0.count_d1_reg[7] ,\gic0.gc0.count_d1_reg[5] ,\gic0.gc0.count_d1_reg[3] ,\gic0.gc0.count_d1_reg[1] }));
+        .S(v1_reg_0[3:0]));
   (* XILINX_LEGACY_PRIM = "(MUXCY,XORCY)" *) 
   (* box_type = "PRIMITIVE" *) 
   CARRY4 \gmux.gm[4].gms.ms_CARRY4 
-       (.CI(\gmux.gm[3].gms.ms_n_0 ),
-        .CO({\NLW_gmux.gm[4].gms.ms_CARRY4_CO_UNCONNECTED [3:1],comp1}),
-        .CYINIT(1'b0),
-        .DI({\NLW_gmux.gm[4].gms.ms_CARRY4_DI_UNCONNECTED [3:1],1'b0}),
-        .O(\NLW_gmux.gm[4].gms.ms_CARRY4_O_UNCONNECTED [3:0]),
-        .S({\NLW_gmux.gm[4].gms.ms_CARRY4_S_UNCONNECTED [3:1],\gic0.gc0.count_d1_reg[8] }));
-  LUT5 #(
-    .INIT(32'h0000AEAA)) 
-    ram_full_i_i_1
-       (.I0(comp1),
-        .I1(wr_en),
-        .I2(ram_full_fb_i_reg),
-        .I3(comp2),
-        .I4(\grstd1.grst_full.grst_f.rst_d3_reg ),
-        .O(ram_full_i));
-endmodule
-
-(* ORIG_REF_NAME = "compare" *) 
-module tx_packet_fifo_compare_0
-   (comp2,
-    \gic0.gc0.count_reg[1] ,
-    \gic0.gc0.count_reg[2] ,
-    \gic0.gc0.count_reg[4] ,
-    \gic0.gc0.count_reg[6] ,
-    \gic0.gc0.count_reg[8] );
-  output comp2;
-  input \gic0.gc0.count_reg[1] ;
-  input \gic0.gc0.count_reg[2] ;
-  input \gic0.gc0.count_reg[4] ;
-  input \gic0.gc0.count_reg[6] ;
-  input \gic0.gc0.count_reg[8] ;
-
-  wire CI;
-  wire comp2;
-  wire \gic0.gc0.count_reg[1] ;
-  wire \gic0.gc0.count_reg[2] ;
-  wire \gic0.gc0.count_reg[4] ;
-  wire \gic0.gc0.count_reg[6] ;
-  wire \gic0.gc0.count_reg[8] ;
-  wire \gmux.gm[1].gms.ms_n_0 ;
-  wire \gmux.gm[2].gms.ms_n_0 ;
-  wire \gmux.gm[3].gms.ms_n_0 ;
-  wire [3:0]\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED ;
-  wire [3:1]\NLW_gmux.gm[4].gms.ms_CARRY4_CO_UNCONNECTED ;
-  wire [3:1]\NLW_gmux.gm[4].gms.ms_CARRY4_DI_UNCONNECTED ;
-  wire [3:0]\NLW_gmux.gm[4].gms.ms_CARRY4_O_UNCONNECTED ;
-  wire [3:1]\NLW_gmux.gm[4].gms.ms_CARRY4_S_UNCONNECTED ;
-
-  (* XILINX_LEGACY_PRIM = "(MUXCY,XORCY)" *) 
-  (* box_type = "PRIMITIVE" *) 
-  CARRY4 \gmux.gm[0].gm1.m1_CARRY4 
-       (.CI(1'b0),
-        .CO({\gmux.gm[3].gms.ms_n_0 ,\gmux.gm[2].gms.ms_n_0 ,\gmux.gm[1].gms.ms_n_0 ,CI}),
-        .CYINIT(1'b1),
-        .DI({1'b0,1'b0,1'b0,1'b0}),
-        .O(\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED [3:0]),
-        .S({\gic0.gc0.count_reg[6] ,\gic0.gc0.count_reg[4] ,\gic0.gc0.count_reg[2] ,\gic0.gc0.count_reg[1] }));
-  (* XILINX_LEGACY_PRIM = "(MUXCY,XORCY)" *) 
-  (* box_type = "PRIMITIVE" *) 
-  CARRY4 \gmux.gm[4].gms.ms_CARRY4 
-       (.CI(\gmux.gm[3].gms.ms_n_0 ),
+       (.CI(carrynet_3),
         .CO({\NLW_gmux.gm[4].gms.ms_CARRY4_CO_UNCONNECTED [3:1],comp2}),
         .CYINIT(1'b0),
         .DI({\NLW_gmux.gm[4].gms.ms_CARRY4_DI_UNCONNECTED [3:1],1'b0}),
         .O(\NLW_gmux.gm[4].gms.ms_CARRY4_O_UNCONNECTED [3:0]),
-        .S({\NLW_gmux.gm[4].gms.ms_CARRY4_S_UNCONNECTED [3:1],\gic0.gc0.count_reg[8] }));
+        .S({\NLW_gmux.gm[4].gms.ms_CARRY4_S_UNCONNECTED [3:1],v1_reg_0[4]}));
+  LUT5 #(
+    .INIT(32'h0000FF20)) 
+    ram_full_i_i_1
+       (.I0(comp2),
+        .I1(out),
+        .I2(wr_en),
+        .I3(comp1),
+        .I4(\grstd1.grst_full.grst_f.rst_d3_reg ),
+        .O(ram_full_fb_i_reg));
 endmodule
 
 (* ORIG_REF_NAME = "compare" *) 
 module tx_packet_fifo_compare_1
    (ram_empty_fb_i_reg,
     v1_reg,
+    out,
     rd_en,
     \gpregsm1.curr_fwft_state_reg[1] ,
-    p_2_out,
     comp1);
   output ram_empty_fb_i_reg;
   input [4:0]v1_reg;
+  input out;
   input rd_en;
   input [1:0]\gpregsm1.curr_fwft_state_reg[1] ;
-  input p_2_out;
   input comp1;
 
-  wire CI;
+  wire carrynet_0;
+  wire carrynet_1;
+  wire carrynet_2;
+  wire carrynet_3;
   wire comp0;
   wire comp1;
-  wire \gmux.gm[1].gms.ms_n_0 ;
-  wire \gmux.gm[2].gms.ms_n_0 ;
-  wire \gmux.gm[3].gms.ms_n_0 ;
   wire [1:0]\gpregsm1.curr_fwft_state_reg[1] ;
-  wire p_2_out;
+  wire out;
   wire ram_empty_fb_i_reg;
   wire rd_en;
   wire [4:0]v1_reg;
@@ -2157,7 +2840,7 @@ module tx_packet_fifo_compare_1
   (* box_type = "PRIMITIVE" *) 
   CARRY4 \gmux.gm[0].gm1.m1_CARRY4 
        (.CI(1'b0),
-        .CO({\gmux.gm[3].gms.ms_n_0 ,\gmux.gm[2].gms.ms_n_0 ,\gmux.gm[1].gms.ms_n_0 ,CI}),
+        .CO({carrynet_3,carrynet_2,carrynet_1,carrynet_0}),
         .CYINIT(1'b1),
         .DI({1'b0,1'b0,1'b0,1'b0}),
         .O(\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED [3:0]),
@@ -2165,20 +2848,20 @@ module tx_packet_fifo_compare_1
   (* XILINX_LEGACY_PRIM = "(MUXCY,XORCY)" *) 
   (* box_type = "PRIMITIVE" *) 
   CARRY4 \gmux.gm[4].gms.ms_CARRY4 
-       (.CI(\gmux.gm[3].gms.ms_n_0 ),
+       (.CI(carrynet_3),
         .CO({\NLW_gmux.gm[4].gms.ms_CARRY4_CO_UNCONNECTED [3:1],comp0}),
         .CYINIT(1'b0),
         .DI({\NLW_gmux.gm[4].gms.ms_CARRY4_DI_UNCONNECTED [3:1],1'b0}),
         .O(\NLW_gmux.gm[4].gms.ms_CARRY4_O_UNCONNECTED [3:0]),
         .S({\NLW_gmux.gm[4].gms.ms_CARRY4_S_UNCONNECTED [3:1],v1_reg[4]}));
   LUT6 #(
-    .INIT(64'hAAAAEFFFAAAAAAAA)) 
-    ram_empty_fb_i_i_1
+    .INIT(64'hBABBBBBBAAAAAAAA)) 
+    ram_empty_i_i_1
        (.I0(comp0),
-        .I1(rd_en),
-        .I2(\gpregsm1.curr_fwft_state_reg[1] [0]),
+        .I1(out),
+        .I2(rd_en),
         .I3(\gpregsm1.curr_fwft_state_reg[1] [1]),
-        .I4(p_2_out),
+        .I4(\gpregsm1.curr_fwft_state_reg[1] [0]),
         .I5(comp1),
         .O(ram_empty_fb_i_reg));
 endmodule
@@ -2190,11 +2873,11 @@ module tx_packet_fifo_compare_2
   output comp1;
   input [4:0]v1_reg_0;
 
-  wire CI;
+  wire carrynet_0;
+  wire carrynet_1;
+  wire carrynet_2;
+  wire carrynet_3;
   wire comp1;
-  wire \gmux.gm[1].gms.ms_n_0 ;
-  wire \gmux.gm[2].gms.ms_n_0 ;
-  wire \gmux.gm[3].gms.ms_n_0 ;
   wire [4:0]v1_reg_0;
   wire [3:0]\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED ;
   wire [3:1]\NLW_gmux.gm[4].gms.ms_CARRY4_CO_UNCONNECTED ;
@@ -2206,7 +2889,7 @@ module tx_packet_fifo_compare_2
   (* box_type = "PRIMITIVE" *) 
   CARRY4 \gmux.gm[0].gm1.m1_CARRY4 
        (.CI(1'b0),
-        .CO({\gmux.gm[3].gms.ms_n_0 ,\gmux.gm[2].gms.ms_n_0 ,\gmux.gm[1].gms.ms_n_0 ,CI}),
+        .CO({carrynet_3,carrynet_2,carrynet_1,carrynet_0}),
         .CYINIT(1'b1),
         .DI({1'b0,1'b0,1'b0,1'b0}),
         .O(\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED [3:0]),
@@ -2214,7 +2897,7 @@ module tx_packet_fifo_compare_2
   (* XILINX_LEGACY_PRIM = "(MUXCY,XORCY)" *) 
   (* box_type = "PRIMITIVE" *) 
   CARRY4 \gmux.gm[4].gms.ms_CARRY4 
-       (.CI(\gmux.gm[3].gms.ms_n_0 ),
+       (.CI(carrynet_3),
         .CO({\NLW_gmux.gm[4].gms.ms_CARRY4_CO_UNCONNECTED [3:1],comp1}),
         .CYINIT(1'b0),
         .DI({\NLW_gmux.gm[4].gms.ms_CARRY4_DI_UNCONNECTED [3:1],1'b0}),
@@ -2224,106 +2907,127 @@ endmodule
 
 (* ORIG_REF_NAME = "fifo_generator_ramfifo" *) 
 module tx_packet_fifo_fifo_generator_ramfifo
-   (dout,
+   (\grstd1.grst_full.grst_f.rst_d1_reg ,
+    AR,
     empty,
     full,
+    dout,
     overflow,
     prog_full,
+    rst,
     wr_clk,
     rd_clk,
     din,
-    rst,
-    rd_en,
-    wr_en);
-  output [63:0]dout;
+    wr_en,
+    rd_en);
+  output \grstd1.grst_full.grst_f.rst_d1_reg ;
+  output [0:0]AR;
   output empty;
   output full;
+  output [63:0]dout;
   output overflow;
   output prog_full;
+  input rst;
   input wr_clk;
   input rd_clk;
   input [63:0]din;
-  input rst;
-  input rd_en;
   input wr_en;
+  input rd_en;
 
-  wire RD_RST;
-  wire RST;
-  wire WR_RST;
+  wire [0:0]AR;
   wire [63:0]din;
   wire [63:0]dout;
   wire empty;
   wire full;
-  wire [4:0]\gras.rsts/c0/v1_reg ;
-  wire [4:0]\gras.rsts/c1/v1_reg ;
+  wire \gntv_or_sync_fifo.gcx.clkx_n_0 ;
+  wire \gntv_or_sync_fifo.gcx.clkx_n_1 ;
+  wire \gntv_or_sync_fifo.gcx.clkx_n_2 ;
+  wire \gntv_or_sync_fifo.gcx.clkx_n_3 ;
+  wire \gntv_or_sync_fifo.gcx.clkx_n_4 ;
+  wire \gntv_or_sync_fifo.gcx.clkx_n_5 ;
+  wire \gntv_or_sync_fifo.gcx.clkx_n_6 ;
+  wire \gntv_or_sync_fifo.gcx.clkx_n_7 ;
+  wire \gntv_or_sync_fifo.gcx.clkx_n_8 ;
+  wire \gntv_or_sync_fifo.gcx.clkx_n_9 ;
+  wire \grstd1.grst_full.grst_f.rst_d1_reg ;
+  wire [4:0]\gwas.wsts/c1/v1_reg ;
+  wire [4:0]\gwas.wsts/c2/v1_reg ;
   wire overflow;
   wire [9:0]p_0_out;
-  wire [9:0]p_12_out;
-  wire p_18_out;
-  wire [9:0]p_23_out;
-  wire p_5_out;
+  wire [9:0]p_13_out;
+  wire [9:0]p_14_out;
+  wire p_20_out;
+  wire [9:0]p_24_out;
+  wire p_6_out;
   wire prog_full;
   wire rd_clk;
   wire rd_en;
-  wire [9:0]rd_pntr_plus1;
-  wire [1:0]rd_rst_i;
   wire rst;
   wire rst_full_ff_i;
   wire rst_full_gen_i;
+  wire rstblk_n_0;
   wire tmp_ram_rd_en;
   wire wr_clk;
   wire wr_en;
-  wire [0:0]wr_rst_i;
+  wire [9:0]wr_pntr_plus2;
 
   tx_packet_fifo_clk_x_pntrs \gntv_or_sync_fifo.gcx.clkx 
-       (.Q(p_0_out),
-        .RD_PNTR_WR(p_23_out),
-        .\gc0.count_reg[9] (rd_pntr_plus1),
-        .\gic0.gc0.count_d2_reg[9] (p_12_out),
-        .\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] (rd_rst_i[1]),
-        .\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] (wr_rst_i),
+       (.Q(p_14_out),
+        .S({\gntv_or_sync_fifo.gcx.clkx_n_0 ,\gntv_or_sync_fifo.gcx.clkx_n_1 ,\gntv_or_sync_fifo.gcx.clkx_n_2 ,\gntv_or_sync_fifo.gcx.clkx_n_3 }),
+        .WR_PNTR_RD(p_24_out),
+        .\gc0.count_d1_reg[9] (p_0_out),
+        .\gdiff.diff_pntr_pad_reg[10] ({\gntv_or_sync_fifo.gcx.clkx_n_8 ,\gntv_or_sync_fifo.gcx.clkx_n_9 }),
+        .\gdiff.diff_pntr_pad_reg[8] ({\gntv_or_sync_fifo.gcx.clkx_n_4 ,\gntv_or_sync_fifo.gcx.clkx_n_5 ,\gntv_or_sync_fifo.gcx.clkx_n_6 ,\gntv_or_sync_fifo.gcx.clkx_n_7 }),
+        .\gic0.gc0.count_d2_reg[9] (p_13_out),
+        .\gic0.gc0.count_reg[9] (wr_pntr_plus2),
         .rd_clk(rd_clk),
-        .v1_reg(\gras.rsts/c0/v1_reg ),
-        .v1_reg_0(\gras.rsts/c1/v1_reg ),
+        .v1_reg(\gwas.wsts/c1/v1_reg ),
+        .v1_reg_0(\gwas.wsts/c2/v1_reg ),
         .wr_clk(wr_clk));
   tx_packet_fifo_rd_logic \gntv_or_sync_fifo.gl0.rd 
-       (.\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram (p_0_out),
-        .E(p_5_out),
-        .Q({RD_RST,rd_rst_i[0]}),
+       (.AS(AR),
+        .E(p_6_out),
+        .Q(p_0_out),
+        .WR_PNTR_RD(p_24_out),
         .empty(empty),
-        .\gc0.count_d1_reg[9] (rd_pntr_plus1),
         .rd_clk(rd_clk),
         .rd_en(rd_en),
-        .tmp_ram_rd_en(tmp_ram_rd_en),
-        .v1_reg(\gras.rsts/c0/v1_reg ),
-        .v1_reg_0(\gras.rsts/c1/v1_reg ));
+        .tmp_ram_rd_en(tmp_ram_rd_en));
   tx_packet_fifo_wr_logic \gntv_or_sync_fifo.gl0.wr 
-       (.\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram (p_12_out),
-        .E(p_18_out),
-        .Q({RST,WR_RST}),
-        .RD_PNTR_WR(p_23_out),
+       (.AR(rstblk_n_0),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram (p_13_out),
+        .E(p_20_out),
+        .Q(p_14_out),
+        .S({\gntv_or_sync_fifo.gcx.clkx_n_0 ,\gntv_or_sync_fifo.gcx.clkx_n_1 ,\gntv_or_sync_fifo.gcx.clkx_n_2 ,\gntv_or_sync_fifo.gcx.clkx_n_3 }),
+        .\dest_out_bin_ff_reg[7] ({\gntv_or_sync_fifo.gcx.clkx_n_4 ,\gntv_or_sync_fifo.gcx.clkx_n_5 ,\gntv_or_sync_fifo.gcx.clkx_n_6 ,\gntv_or_sync_fifo.gcx.clkx_n_7 }),
+        .\dest_out_bin_ff_reg[9] ({\gntv_or_sync_fifo.gcx.clkx_n_8 ,\gntv_or_sync_fifo.gcx.clkx_n_9 }),
         .full(full),
+        .\gic0.gc0.count_d1_reg[9] (wr_pntr_plus2),
         .\grstd1.grst_full.grst_f.rst_d3_reg (rst_full_gen_i),
+        .\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg (\grstd1.grst_full.grst_f.rst_d1_reg ),
         .out(rst_full_ff_i),
         .overflow(overflow),
         .prog_full(prog_full),
+        .v1_reg(\gwas.wsts/c1/v1_reg ),
+        .v1_reg_0(\gwas.wsts/c2/v1_reg ),
         .wr_clk(wr_clk),
         .wr_en(wr_en));
   tx_packet_fifo_memory \gntv_or_sync_fifo.mem 
-       (.E(p_18_out),
-        .Q(rd_rst_i[0]),
+       (.AS(AR),
+        .E(p_20_out),
+        .Q(p_0_out),
         .din(din),
         .dout(dout),
-        .\gc0.count_d1_reg[9] (p_0_out),
-        .\gic0.gc0.count_d2_reg[9] (p_12_out),
-        .\gpregsm1.curr_fwft_state_reg[1] (p_5_out),
+        .\gic0.gc0.count_d2_reg[9] (p_13_out),
+        .\gpregsm1.curr_fwft_state_reg[1] (p_6_out),
         .rd_clk(rd_clk),
         .tmp_ram_rd_en(tmp_ram_rd_en),
         .wr_clk(wr_clk));
   tx_packet_fifo_reset_blk_ramfifo rstblk
-       (.Q({RST,WR_RST,wr_rst_i}),
+       (.AR(rstblk_n_0),
+        .AS(AR),
+        .\grstd1.grst_full.grst_f.rst_d1_reg_0 (\grstd1.grst_full.grst_f.rst_d1_reg ),
         .out(rst_full_ff_i),
-        .ram_empty_fb_i_reg({RD_RST,rd_rst_i}),
         .ram_full_fb_i_reg(rst_full_gen_i),
         .rd_clk(rd_clk),
         .rst(rst),
@@ -2332,33 +3036,39 @@ endmodule
 
 (* ORIG_REF_NAME = "fifo_generator_top" *) 
 module tx_packet_fifo_fifo_generator_top
-   (dout,
+   (\grstd1.grst_full.grst_f.rst_d1_reg ,
+    AS,
     empty,
     full,
+    dout,
     overflow,
     prog_full,
+    rst,
     wr_clk,
     rd_clk,
     din,
-    rst,
-    rd_en,
-    wr_en);
-  output [63:0]dout;
+    wr_en,
+    rd_en);
+  output \grstd1.grst_full.grst_f.rst_d1_reg ;
+  output [0:0]AS;
   output empty;
   output full;
+  output [63:0]dout;
   output overflow;
   output prog_full;
+  input rst;
   input wr_clk;
   input rd_clk;
   input [63:0]din;
-  input rst;
-  input rd_en;
   input wr_en;
+  input rd_en;
 
+  wire [0:0]AS;
   wire [63:0]din;
   wire [63:0]dout;
   wire empty;
   wire full;
+  wire \grstd1.grst_full.grst_f.rst_d1_reg ;
   wire overflow;
   wire prog_full;
   wire rd_clk;
@@ -2368,10 +3078,12 @@ module tx_packet_fifo_fifo_generator_top
   wire wr_en;
 
   tx_packet_fifo_fifo_generator_ramfifo \grf.rf 
-       (.din(din),
+       (.AR(AS),
+        .din(din),
         .dout(dout),
         .empty(empty),
         .full(full),
+        .\grstd1.grst_full.grst_f.rst_d1_reg (\grstd1.grst_full.grst_f.rst_d1_reg ),
         .overflow(overflow),
         .prog_full(prog_full),
         .rd_clk(rd_clk),
@@ -2448,8 +3160,8 @@ endmodule
 (* C_WR_DEPTH_WRCH = "16" *) (* C_WR_FREQ = "1" *) (* C_WR_PNTR_WIDTH = "10" *) 
 (* C_WR_PNTR_WIDTH_AXIS = "10" *) (* C_WR_PNTR_WIDTH_RACH = "4" *) (* C_WR_PNTR_WIDTH_RDCH = "10" *) 
 (* C_WR_PNTR_WIDTH_WACH = "4" *) (* C_WR_PNTR_WIDTH_WDCH = "10" *) (* C_WR_PNTR_WIDTH_WRCH = "4" *) 
-(* C_WR_RESPONSE_LATENCY = "1" *) (* ORIG_REF_NAME = "fifo_generator_v13_1_1" *) 
-module tx_packet_fifo_fifo_generator_v13_1_1
+(* C_WR_RESPONSE_LATENCY = "1" *) (* ORIG_REF_NAME = "fifo_generator_v13_2_2" *) 
+module tx_packet_fifo_fifo_generator_v13_2_2
    (backup,
     backup_marker,
     clk,
@@ -2923,9 +3635,11 @@ module tx_packet_fifo_fifo_generator_v13_1_1
   wire prog_full;
   wire rd_clk;
   wire rd_en;
+  wire rd_rst_busy;
   wire rst;
   wire wr_clk;
   wire wr_en;
+  wire wr_rst_busy;
 
   assign almost_empty = \<const0> ;
   assign almost_full = \<const0> ;
@@ -3355,7 +4069,6 @@ module tx_packet_fifo_fifo_generator_v13_1_1
   assign rd_data_count[2] = \<const0> ;
   assign rd_data_count[1] = \<const0> ;
   assign rd_data_count[0] = \<const0> ;
-  assign rd_rst_busy = \<const0> ;
   assign s_axi_arready = \<const0> ;
   assign s_axi_awready = \<const0> ;
   assign s_axi_bid[0] = \<const0> ;
@@ -3449,16 +4162,17 @@ module tx_packet_fifo_fifo_generator_v13_1_1
   assign wr_data_count[2] = \<const0> ;
   assign wr_data_count[1] = \<const0> ;
   assign wr_data_count[0] = \<const0> ;
-  assign wr_rst_busy = \<const0> ;
   GND GND
        (.G(\<const0> ));
   VCC VCC
        (.P(\<const1> ));
-  tx_packet_fifo_fifo_generator_v13_1_1_synth inst_fifo_gen
-       (.din(din),
+  tx_packet_fifo_fifo_generator_v13_2_2_synth inst_fifo_gen
+       (.AR(rd_rst_busy),
+        .din(din),
         .dout(dout),
         .empty(empty),
         .full(full),
+        .\grstd1.grst_full.grst_f.rst_d1_reg (wr_rst_busy),
         .overflow(overflow),
         .prog_full(prog_full),
         .rd_clk(rd_clk),
@@ -3468,35 +4182,41 @@ module tx_packet_fifo_fifo_generator_v13_1_1
         .wr_en(wr_en));
 endmodule
 
-(* ORIG_REF_NAME = "fifo_generator_v13_1_1_synth" *) 
-module tx_packet_fifo_fifo_generator_v13_1_1_synth
-   (dout,
+(* ORIG_REF_NAME = "fifo_generator_v13_2_2_synth" *) 
+module tx_packet_fifo_fifo_generator_v13_2_2_synth
+   (\grstd1.grst_full.grst_f.rst_d1_reg ,
+    AR,
     empty,
     full,
+    dout,
     overflow,
     prog_full,
+    rst,
     wr_clk,
     rd_clk,
     din,
-    rst,
-    rd_en,
-    wr_en);
-  output [63:0]dout;
+    wr_en,
+    rd_en);
+  output \grstd1.grst_full.grst_f.rst_d1_reg ;
+  output [0:0]AR;
   output empty;
   output full;
+  output [63:0]dout;
   output overflow;
   output prog_full;
+  input rst;
   input wr_clk;
   input rd_clk;
   input [63:0]din;
-  input rst;
-  input rd_en;
   input wr_en;
+  input rd_en;
 
+  wire [0:0]AR;
   wire [63:0]din;
   wire [63:0]dout;
   wire empty;
   wire full;
+  wire \grstd1.grst_full.grst_f.rst_d1_reg ;
   wire overflow;
   wire prog_full;
   wire rd_clk;
@@ -3506,10 +4226,12 @@ module tx_packet_fifo_fifo_generator_v13_1_1_synth
   wire wr_en;
 
   tx_packet_fifo_fifo_generator_top \gconvfifo.rf 
-       (.din(din),
+       (.AS(AR),
+        .din(din),
         .dout(dout),
         .empty(empty),
         .full(full),
+        .\grstd1.grst_full.grst_f.rst_d1_reg (\grstd1.grst_full.grst_f.rst_d1_reg ),
         .overflow(overflow),
         .prog_full(prog_full),
         .rd_clk(rd_clk),
@@ -3526,9 +4248,9 @@ module tx_packet_fifo_memory
     rd_clk,
     E,
     tmp_ram_rd_en,
-    Q,
+    AS,
     \gic0.gc0.count_d2_reg[9] ,
-    \gc0.count_d1_reg[9] ,
+    Q,
     din,
     \gpregsm1.curr_fwft_state_reg[1] );
   output [63:0]dout;
@@ -3536,30 +4258,30 @@ module tx_packet_fifo_memory
   input rd_clk;
   input [0:0]E;
   input tmp_ram_rd_en;
-  input [0:0]Q;
+  input [0:0]AS;
   input [9:0]\gic0.gc0.count_d2_reg[9] ;
-  input [9:0]\gc0.count_d1_reg[9] ;
+  input [9:0]Q;
   input [63:0]din;
   input [0:0]\gpregsm1.curr_fwft_state_reg[1] ;
 
+  wire [0:0]AS;
   wire [0:0]E;
-  wire [0:0]Q;
+  wire [9:0]Q;
   wire [63:0]din;
   wire [63:0]dout;
   wire [63:0]doutb;
-  wire [9:0]\gc0.count_d1_reg[9] ;
   wire [9:0]\gic0.gc0.count_d2_reg[9] ;
   wire [0:0]\gpregsm1.curr_fwft_state_reg[1] ;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
 
-  tx_packet_fifo_blk_mem_gen_v8_3_3 \gbm.gbmg.gbmga.ngecc.bmg 
-       (.D(doutb),
+  tx_packet_fifo_blk_mem_gen_v8_4_1 \gbm.gbmg.gbmga.ngecc.bmg 
+       (.AS(AS),
+        .D(doutb),
         .E(E),
         .Q(Q),
         .din(din),
-        .\gc0.count_d1_reg[9] (\gc0.count_d1_reg[9] ),
         .\gic0.gc0.count_d2_reg[9] (\gic0.gc0.count_d2_reg[9] ),
         .rd_clk(rd_clk),
         .tmp_ram_rd_en(tmp_ram_rd_en),
@@ -3571,7 +4293,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[0]),
         .Q(dout[0]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[10] 
@@ -3579,7 +4301,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[10]),
         .Q(dout[10]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[11] 
@@ -3587,7 +4309,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[11]),
         .Q(dout[11]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[12] 
@@ -3595,7 +4317,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[12]),
         .Q(dout[12]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[13] 
@@ -3603,7 +4325,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[13]),
         .Q(dout[13]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[14] 
@@ -3611,7 +4333,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[14]),
         .Q(dout[14]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[15] 
@@ -3619,7 +4341,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[15]),
         .Q(dout[15]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[16] 
@@ -3627,7 +4349,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[16]),
         .Q(dout[16]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[17] 
@@ -3635,7 +4357,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[17]),
         .Q(dout[17]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[18] 
@@ -3643,7 +4365,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[18]),
         .Q(dout[18]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[19] 
@@ -3651,7 +4373,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[19]),
         .Q(dout[19]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[1] 
@@ -3659,7 +4381,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[1]),
         .Q(dout[1]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[20] 
@@ -3667,7 +4389,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[20]),
         .Q(dout[20]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[21] 
@@ -3675,7 +4397,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[21]),
         .Q(dout[21]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[22] 
@@ -3683,7 +4405,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[22]),
         .Q(dout[22]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[23] 
@@ -3691,7 +4413,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[23]),
         .Q(dout[23]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[24] 
@@ -3699,7 +4421,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[24]),
         .Q(dout[24]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[25] 
@@ -3707,7 +4429,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[25]),
         .Q(dout[25]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[26] 
@@ -3715,7 +4437,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[26]),
         .Q(dout[26]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[27] 
@@ -3723,7 +4445,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[27]),
         .Q(dout[27]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[28] 
@@ -3731,7 +4453,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[28]),
         .Q(dout[28]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[29] 
@@ -3739,7 +4461,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[29]),
         .Q(dout[29]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[2] 
@@ -3747,7 +4469,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[2]),
         .Q(dout[2]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[30] 
@@ -3755,7 +4477,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[30]),
         .Q(dout[30]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[31] 
@@ -3763,7 +4485,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[31]),
         .Q(dout[31]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[32] 
@@ -3771,7 +4493,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[32]),
         .Q(dout[32]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[33] 
@@ -3779,7 +4501,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[33]),
         .Q(dout[33]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[34] 
@@ -3787,7 +4509,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[34]),
         .Q(dout[34]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[35] 
@@ -3795,7 +4517,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[35]),
         .Q(dout[35]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[36] 
@@ -3803,7 +4525,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[36]),
         .Q(dout[36]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[37] 
@@ -3811,7 +4533,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[37]),
         .Q(dout[37]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[38] 
@@ -3819,7 +4541,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[38]),
         .Q(dout[38]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[39] 
@@ -3827,7 +4549,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[39]),
         .Q(dout[39]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[3] 
@@ -3835,7 +4557,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[3]),
         .Q(dout[3]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[40] 
@@ -3843,7 +4565,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[40]),
         .Q(dout[40]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[41] 
@@ -3851,7 +4573,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[41]),
         .Q(dout[41]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[42] 
@@ -3859,7 +4581,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[42]),
         .Q(dout[42]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[43] 
@@ -3867,7 +4589,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[43]),
         .Q(dout[43]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[44] 
@@ -3875,7 +4597,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[44]),
         .Q(dout[44]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[45] 
@@ -3883,7 +4605,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[45]),
         .Q(dout[45]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[46] 
@@ -3891,7 +4613,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[46]),
         .Q(dout[46]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[47] 
@@ -3899,7 +4621,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[47]),
         .Q(dout[47]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[48] 
@@ -3907,7 +4629,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[48]),
         .Q(dout[48]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[49] 
@@ -3915,7 +4637,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[49]),
         .Q(dout[49]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[4] 
@@ -3923,7 +4645,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[4]),
         .Q(dout[4]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[50] 
@@ -3931,7 +4653,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[50]),
         .Q(dout[50]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[51] 
@@ -3939,7 +4661,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[51]),
         .Q(dout[51]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[52] 
@@ -3947,7 +4669,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[52]),
         .Q(dout[52]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[53] 
@@ -3955,7 +4677,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[53]),
         .Q(dout[53]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[54] 
@@ -3963,7 +4685,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[54]),
         .Q(dout[54]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[55] 
@@ -3971,7 +4693,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[55]),
         .Q(dout[55]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[56] 
@@ -3979,7 +4701,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[56]),
         .Q(dout[56]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[57] 
@@ -3987,7 +4709,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[57]),
         .Q(dout[57]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[58] 
@@ -3995,7 +4717,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[58]),
         .Q(dout[58]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[59] 
@@ -4003,7 +4725,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[59]),
         .Q(dout[59]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[5] 
@@ -4011,7 +4733,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[5]),
         .Q(dout[5]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[60] 
@@ -4019,7 +4741,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[60]),
         .Q(dout[60]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[61] 
@@ -4027,7 +4749,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[61]),
         .Q(dout[61]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[62] 
@@ -4035,7 +4757,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[62]),
         .Q(dout[62]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[63] 
@@ -4043,7 +4765,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[63]),
         .Q(dout[63]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[6] 
@@ -4051,7 +4773,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[6]),
         .Q(dout[6]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[7] 
@@ -4059,7 +4781,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[7]),
         .Q(dout[7]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[8] 
@@ -4067,7 +4789,7 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[8]),
         .Q(dout[8]),
-        .R(Q));
+        .R(AS));
   FDRE #(
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[9] 
@@ -4075,346 +4797,494 @@ module tx_packet_fifo_memory
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
         .D(doutb[9]),
         .Q(dout[9]),
-        .R(Q));
+        .R(AS));
 endmodule
 
 (* ORIG_REF_NAME = "rd_bin_cntr" *) 
 module tx_packet_fifo_rd_bin_cntr
-   (Q,
-    \DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram ,
+   (v1_reg,
+    Q,
+    v1_reg_0,
+    WR_PNTR_RD,
     E,
     rd_clk,
-    \ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] );
+    AS);
+  output [4:0]v1_reg;
   output [9:0]Q;
-  output [9:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram ;
+  output [4:0]v1_reg_0;
+  input [9:0]WR_PNTR_RD;
   input [0:0]E;
   input rd_clk;
-  input [0:0]\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] ;
+  input [0:0]AS;
 
-  wire [9:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram ;
+  wire [0:0]AS;
   wire [0:0]E;
   wire [9:0]Q;
+  wire [9:0]WR_PNTR_RD;
   wire \gc0.count[9]_i_2_n_0 ;
-  wire [0:0]\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] ;
-  wire [9:0]plusOp__0;
+  wire [9:0]plusOp__1;
   wire rd_clk;
+  wire [9:0]rd_pntr_plus1;
+  wire [4:0]v1_reg;
+  wire [4:0]v1_reg_0;
 
   LUT1 #(
     .INIT(2'h1)) 
     \gc0.count[0]_i_1 
-       (.I0(Q[0]),
-        .O(plusOp__0[0]));
-  (* SOFT_HLUTNM = "soft_lutpair13" *) 
+       (.I0(rd_pntr_plus1[0]),
+        .O(plusOp__1[0]));
+  (* SOFT_HLUTNM = "soft_lutpair11" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \gc0.count[1]_i_1 
-       (.I0(Q[0]),
-        .I1(Q[1]),
-        .O(plusOp__0[1]));
-  (* SOFT_HLUTNM = "soft_lutpair13" *) 
+       (.I0(rd_pntr_plus1[0]),
+        .I1(rd_pntr_plus1[1]),
+        .O(plusOp__1[1]));
+  (* SOFT_HLUTNM = "soft_lutpair11" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \gc0.count[2]_i_1 
-       (.I0(Q[0]),
-        .I1(Q[1]),
-        .I2(Q[2]),
-        .O(plusOp__0[2]));
-  (* SOFT_HLUTNM = "soft_lutpair11" *) 
+       (.I0(rd_pntr_plus1[0]),
+        .I1(rd_pntr_plus1[1]),
+        .I2(rd_pntr_plus1[2]),
+        .O(plusOp__1[2]));
+  (* SOFT_HLUTNM = "soft_lutpair9" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \gc0.count[3]_i_1 
-       (.I0(Q[1]),
-        .I1(Q[0]),
-        .I2(Q[2]),
-        .I3(Q[3]),
-        .O(plusOp__0[3]));
-  (* SOFT_HLUTNM = "soft_lutpair11" *) 
+       (.I0(rd_pntr_plus1[1]),
+        .I1(rd_pntr_plus1[0]),
+        .I2(rd_pntr_plus1[2]),
+        .I3(rd_pntr_plus1[3]),
+        .O(plusOp__1[3]));
+  (* SOFT_HLUTNM = "soft_lutpair9" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \gc0.count[4]_i_1 
-       (.I0(Q[2]),
-        .I1(Q[0]),
-        .I2(Q[1]),
-        .I3(Q[3]),
-        .I4(Q[4]),
-        .O(plusOp__0[4]));
+       (.I0(rd_pntr_plus1[2]),
+        .I1(rd_pntr_plus1[0]),
+        .I2(rd_pntr_plus1[1]),
+        .I3(rd_pntr_plus1[3]),
+        .I4(rd_pntr_plus1[4]),
+        .O(plusOp__1[4]));
   LUT6 #(
     .INIT(64'h7FFFFFFF80000000)) 
     \gc0.count[5]_i_1 
-       (.I0(Q[3]),
-        .I1(Q[1]),
-        .I2(Q[0]),
-        .I3(Q[2]),
-        .I4(Q[4]),
-        .I5(Q[5]),
-        .O(plusOp__0[5]));
-  (* SOFT_HLUTNM = "soft_lutpair12" *) 
+       (.I0(rd_pntr_plus1[3]),
+        .I1(rd_pntr_plus1[1]),
+        .I2(rd_pntr_plus1[0]),
+        .I3(rd_pntr_plus1[2]),
+        .I4(rd_pntr_plus1[4]),
+        .I5(rd_pntr_plus1[5]),
+        .O(plusOp__1[5]));
+  (* SOFT_HLUTNM = "soft_lutpair10" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \gc0.count[6]_i_1 
        (.I0(\gc0.count[9]_i_2_n_0 ),
-        .I1(Q[6]),
-        .O(plusOp__0[6]));
-  (* SOFT_HLUTNM = "soft_lutpair12" *) 
+        .I1(rd_pntr_plus1[6]),
+        .O(plusOp__1[6]));
+  (* SOFT_HLUTNM = "soft_lutpair10" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \gc0.count[7]_i_1 
        (.I0(\gc0.count[9]_i_2_n_0 ),
-        .I1(Q[6]),
-        .I2(Q[7]),
-        .O(plusOp__0[7]));
-  (* SOFT_HLUTNM = "soft_lutpair10" *) 
+        .I1(rd_pntr_plus1[6]),
+        .I2(rd_pntr_plus1[7]),
+        .O(plusOp__1[7]));
+  (* SOFT_HLUTNM = "soft_lutpair8" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \gc0.count[8]_i_1 
-       (.I0(Q[6]),
+       (.I0(rd_pntr_plus1[6]),
         .I1(\gc0.count[9]_i_2_n_0 ),
-        .I2(Q[7]),
-        .I3(Q[8]),
-        .O(plusOp__0[8]));
-  (* SOFT_HLUTNM = "soft_lutpair10" *) 
+        .I2(rd_pntr_plus1[7]),
+        .I3(rd_pntr_plus1[8]),
+        .O(plusOp__1[8]));
+  (* SOFT_HLUTNM = "soft_lutpair8" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \gc0.count[9]_i_1 
-       (.I0(Q[7]),
+       (.I0(rd_pntr_plus1[7]),
         .I1(\gc0.count[9]_i_2_n_0 ),
-        .I2(Q[6]),
-        .I3(Q[8]),
-        .I4(Q[9]),
-        .O(plusOp__0[9]));
+        .I2(rd_pntr_plus1[6]),
+        .I3(rd_pntr_plus1[8]),
+        .I4(rd_pntr_plus1[9]),
+        .O(plusOp__1[9]));
   LUT6 #(
     .INIT(64'h8000000000000000)) 
     \gc0.count[9]_i_2 
-       (.I0(Q[5]),
-        .I1(Q[3]),
-        .I2(Q[1]),
-        .I3(Q[0]),
-        .I4(Q[2]),
-        .I5(Q[4]),
+       (.I0(rd_pntr_plus1[5]),
+        .I1(rd_pntr_plus1[3]),
+        .I2(rd_pntr_plus1[1]),
+        .I3(rd_pntr_plus1[0]),
+        .I4(rd_pntr_plus1[2]),
+        .I5(rd_pntr_plus1[4]),
         .O(\gc0.count[9]_i_2_n_0 ));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[0] 
        (.C(rd_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] ),
-        .D(Q[0]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram [0]));
+        .CLR(AS),
+        .D(rd_pntr_plus1[0]),
+        .Q(Q[0]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[1] 
        (.C(rd_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] ),
-        .D(Q[1]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram [1]));
+        .CLR(AS),
+        .D(rd_pntr_plus1[1]),
+        .Q(Q[1]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[2] 
        (.C(rd_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] ),
-        .D(Q[2]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram [2]));
+        .CLR(AS),
+        .D(rd_pntr_plus1[2]),
+        .Q(Q[2]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[3] 
        (.C(rd_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] ),
-        .D(Q[3]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram [3]));
+        .CLR(AS),
+        .D(rd_pntr_plus1[3]),
+        .Q(Q[3]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[4] 
        (.C(rd_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] ),
-        .D(Q[4]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram [4]));
+        .CLR(AS),
+        .D(rd_pntr_plus1[4]),
+        .Q(Q[4]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[5] 
        (.C(rd_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] ),
-        .D(Q[5]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram [5]));
+        .CLR(AS),
+        .D(rd_pntr_plus1[5]),
+        .Q(Q[5]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[6] 
        (.C(rd_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] ),
-        .D(Q[6]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram [6]));
+        .CLR(AS),
+        .D(rd_pntr_plus1[6]),
+        .Q(Q[6]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[7] 
        (.C(rd_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] ),
-        .D(Q[7]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram [7]));
+        .CLR(AS),
+        .D(rd_pntr_plus1[7]),
+        .Q(Q[7]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[8] 
        (.C(rd_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] ),
-        .D(Q[8]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram [8]));
+        .CLR(AS),
+        .D(rd_pntr_plus1[8]),
+        .Q(Q[8]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[9] 
        (.C(rd_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] ),
-        .D(Q[9]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram [9]));
+        .CLR(AS),
+        .D(rd_pntr_plus1[9]),
+        .Q(Q[9]));
   FDPE #(
     .INIT(1'b1)) 
     \gc0.count_reg[0] 
        (.C(rd_clk),
         .CE(E),
-        .D(plusOp__0[0]),
-        .PRE(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] ),
-        .Q(Q[0]));
+        .D(plusOp__1[0]),
+        .PRE(AS),
+        .Q(rd_pntr_plus1[0]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_reg[1] 
        (.C(rd_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] ),
-        .D(plusOp__0[1]),
-        .Q(Q[1]));
+        .CLR(AS),
+        .D(plusOp__1[1]),
+        .Q(rd_pntr_plus1[1]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_reg[2] 
        (.C(rd_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] ),
-        .D(plusOp__0[2]),
-        .Q(Q[2]));
+        .CLR(AS),
+        .D(plusOp__1[2]),
+        .Q(rd_pntr_plus1[2]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_reg[3] 
        (.C(rd_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] ),
-        .D(plusOp__0[3]),
-        .Q(Q[3]));
+        .CLR(AS),
+        .D(plusOp__1[3]),
+        .Q(rd_pntr_plus1[3]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_reg[4] 
        (.C(rd_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] ),
-        .D(plusOp__0[4]),
-        .Q(Q[4]));
+        .CLR(AS),
+        .D(plusOp__1[4]),
+        .Q(rd_pntr_plus1[4]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_reg[5] 
        (.C(rd_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] ),
-        .D(plusOp__0[5]),
-        .Q(Q[5]));
+        .CLR(AS),
+        .D(plusOp__1[5]),
+        .Q(rd_pntr_plus1[5]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_reg[6] 
        (.C(rd_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] ),
-        .D(plusOp__0[6]),
-        .Q(Q[6]));
+        .CLR(AS),
+        .D(plusOp__1[6]),
+        .Q(rd_pntr_plus1[6]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_reg[7] 
        (.C(rd_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] ),
-        .D(plusOp__0[7]),
-        .Q(Q[7]));
+        .CLR(AS),
+        .D(plusOp__1[7]),
+        .Q(rd_pntr_plus1[7]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_reg[8] 
        (.C(rd_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] ),
-        .D(plusOp__0[8]),
-        .Q(Q[8]));
+        .CLR(AS),
+        .D(plusOp__1[8]),
+        .Q(rd_pntr_plus1[8]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_reg[9] 
        (.C(rd_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] ),
-        .D(plusOp__0[9]),
-        .Q(Q[9]));
+        .CLR(AS),
+        .D(plusOp__1[9]),
+        .Q(rd_pntr_plus1[9]));
+  LUT4 #(
+    .INIT(16'h9009)) 
+    \gmux.gm[0].gm1.m1_i_1__1 
+       (.I0(Q[0]),
+        .I1(WR_PNTR_RD[0]),
+        .I2(Q[1]),
+        .I3(WR_PNTR_RD[1]),
+        .O(v1_reg[0]));
+  LUT4 #(
+    .INIT(16'h9009)) 
+    \gmux.gm[0].gm1.m1_i_1__2 
+       (.I0(rd_pntr_plus1[0]),
+        .I1(WR_PNTR_RD[0]),
+        .I2(rd_pntr_plus1[1]),
+        .I3(WR_PNTR_RD[1]),
+        .O(v1_reg_0[0]));
+  LUT4 #(
+    .INIT(16'h9009)) 
+    \gmux.gm[1].gms.ms_i_1__1 
+       (.I0(Q[2]),
+        .I1(WR_PNTR_RD[2]),
+        .I2(Q[3]),
+        .I3(WR_PNTR_RD[3]),
+        .O(v1_reg[1]));
+  LUT4 #(
+    .INIT(16'h9009)) 
+    \gmux.gm[1].gms.ms_i_1__2 
+       (.I0(rd_pntr_plus1[2]),
+        .I1(WR_PNTR_RD[2]),
+        .I2(rd_pntr_plus1[3]),
+        .I3(WR_PNTR_RD[3]),
+        .O(v1_reg_0[1]));
+  LUT4 #(
+    .INIT(16'h9009)) 
+    \gmux.gm[2].gms.ms_i_1__1 
+       (.I0(Q[4]),
+        .I1(WR_PNTR_RD[4]),
+        .I2(Q[5]),
+        .I3(WR_PNTR_RD[5]),
+        .O(v1_reg[2]));
+  LUT4 #(
+    .INIT(16'h9009)) 
+    \gmux.gm[2].gms.ms_i_1__2 
+       (.I0(rd_pntr_plus1[4]),
+        .I1(WR_PNTR_RD[4]),
+        .I2(rd_pntr_plus1[5]),
+        .I3(WR_PNTR_RD[5]),
+        .O(v1_reg_0[2]));
+  LUT4 #(
+    .INIT(16'h9009)) 
+    \gmux.gm[3].gms.ms_i_1__1 
+       (.I0(Q[6]),
+        .I1(WR_PNTR_RD[6]),
+        .I2(Q[7]),
+        .I3(WR_PNTR_RD[7]),
+        .O(v1_reg[3]));
+  LUT4 #(
+    .INIT(16'h9009)) 
+    \gmux.gm[3].gms.ms_i_1__2 
+       (.I0(rd_pntr_plus1[6]),
+        .I1(WR_PNTR_RD[6]),
+        .I2(rd_pntr_plus1[7]),
+        .I3(WR_PNTR_RD[7]),
+        .O(v1_reg_0[3]));
+  LUT4 #(
+    .INIT(16'h9009)) 
+    \gmux.gm[4].gms.ms_i_1__1 
+       (.I0(Q[8]),
+        .I1(WR_PNTR_RD[8]),
+        .I2(Q[9]),
+        .I3(WR_PNTR_RD[9]),
+        .O(v1_reg[4]));
+  LUT4 #(
+    .INIT(16'h9009)) 
+    \gmux.gm[4].gms.ms_i_1__2 
+       (.I0(rd_pntr_plus1[8]),
+        .I1(WR_PNTR_RD[8]),
+        .I2(rd_pntr_plus1[9]),
+        .I3(WR_PNTR_RD[9]),
+        .O(v1_reg_0[4]));
 endmodule
 
 (* ORIG_REF_NAME = "rd_fwft" *) 
 module tx_packet_fifo_rd_fwft
-   (empty,
-    \gpregsm1.curr_fwft_state_reg[1]_0 ,
+   (out,
+    empty,
     tmp_ram_rd_en,
     E,
-    \goreg_bm.dout_i_reg[63] ,
+    \gc0.count_d1_reg[9] ,
     rd_clk,
-    Q,
+    AS,
     rd_en,
-    p_2_out);
+    ram_empty_fb_i_reg);
+  output [1:0]out;
   output empty;
-  output [1:0]\gpregsm1.curr_fwft_state_reg[1]_0 ;
   output tmp_ram_rd_en;
   output [0:0]E;
-  output [0:0]\goreg_bm.dout_i_reg[63] ;
+  output [0:0]\gc0.count_d1_reg[9] ;
   input rd_clk;
-  input [1:0]Q;
+  input [0:0]AS;
   input rd_en;
-  input p_2_out;
+  input ram_empty_fb_i_reg;
 
+  wire [0:0]AS;
   wire [0:0]E;
-  wire [1:0]Q;
-  wire empty;
-  wire empty_fwft_fb;
+  (* DONT_TOUCH *) wire aempty_fwft_fb_i;
+  (* DONT_TOUCH *) wire aempty_fwft_i;
+  wire aempty_fwft_i0;
+  (* DONT_TOUCH *) wire [1:0]curr_fwft_state;
+  (* DONT_TOUCH *) wire empty_fwft_fb_i;
+  (* DONT_TOUCH *) wire empty_fwft_fb_o_i;
+  wire empty_fwft_fb_o_i0;
+  (* DONT_TOUCH *) wire empty_fwft_i;
   wire empty_fwft_i0;
-  wire [0:0]\goreg_bm.dout_i_reg[63] ;
-  wire [1:0]\gpregsm1.curr_fwft_state_reg[1]_0 ;
+  wire [0:0]\gc0.count_d1_reg[9] ;
   wire [1:0]next_fwft_state;
-  wire p_2_out;
+  wire ram_empty_fb_i_reg;
   wire rd_clk;
   wire rd_en;
   wire tmp_ram_rd_en;
+  (* DONT_TOUCH *) wire user_valid;
 
+  assign empty = empty_fwft_i;
+  assign out[1:0] = curr_fwft_state;
   LUT5 #(
-    .INIT(32'hBABBBBBB)) 
+    .INIT(32'hFFFF4555)) 
     \DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_i_2 
-       (.I0(Q[0]),
-        .I1(p_2_out),
-        .I2(rd_en),
-        .I3(\gpregsm1.curr_fwft_state_reg[1]_0 [0]),
-        .I4(\gpregsm1.curr_fwft_state_reg[1]_0 [1]),
+       (.I0(ram_empty_fb_i_reg),
+        .I1(rd_en),
+        .I2(curr_fwft_state[1]),
+        .I3(curr_fwft_state[0]),
+        .I4(AS),
         .O(tmp_ram_rd_en));
+  LUT5 #(
+    .INIT(32'hFFCB8000)) 
+    aempty_fwft_fb_i_i_1
+       (.I0(rd_en),
+        .I1(curr_fwft_state[0]),
+        .I2(curr_fwft_state[1]),
+        .I3(ram_empty_fb_i_reg),
+        .I4(aempty_fwft_fb_i),
+        .O(aempty_fwft_i0));
+  (* DONT_TOUCH *) 
+  (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
   FDPE #(
     .INIT(1'b1)) 
-    empty_fwft_fb_reg
+    aempty_fwft_fb_i_reg
+       (.C(rd_clk),
+        .CE(1'b1),
+        .D(aempty_fwft_i0),
+        .PRE(AS),
+        .Q(aempty_fwft_fb_i));
+  (* DONT_TOUCH *) 
+  (* KEEP = "yes" *) 
+  (* equivalent_register_removal = "no" *) 
+  FDPE #(
+    .INIT(1'b1)) 
+    aempty_fwft_i_reg
+       (.C(rd_clk),
+        .CE(1'b1),
+        .D(aempty_fwft_i0),
+        .PRE(AS),
+        .Q(aempty_fwft_i));
+  LUT4 #(
+    .INIT(16'hF320)) 
+    empty_fwft_fb_i_i_1
+       (.I0(rd_en),
+        .I1(curr_fwft_state[1]),
+        .I2(curr_fwft_state[0]),
+        .I3(empty_fwft_fb_i),
+        .O(empty_fwft_i0));
+  (* DONT_TOUCH *) 
+  (* KEEP = "yes" *) 
+  (* equivalent_register_removal = "no" *) 
+  FDPE #(
+    .INIT(1'b1)) 
+    empty_fwft_fb_i_reg
        (.C(rd_clk),
         .CE(1'b1),
         .D(empty_fwft_i0),
-        .PRE(Q[1]),
-        .Q(empty_fwft_fb));
-  (* SOFT_HLUTNM = "soft_lutpair9" *) 
+        .PRE(AS),
+        .Q(empty_fwft_fb_i));
   LUT4 #(
-    .INIT(16'hBA22)) 
-    empty_fwft_i_i_1
-       (.I0(empty_fwft_fb),
-        .I1(\gpregsm1.curr_fwft_state_reg[1]_0 [1]),
-        .I2(rd_en),
-        .I3(\gpregsm1.curr_fwft_state_reg[1]_0 [0]),
-        .O(empty_fwft_i0));
+    .INIT(16'hF320)) 
+    empty_fwft_fb_o_i_i_1
+       (.I0(rd_en),
+        .I1(curr_fwft_state[1]),
+        .I2(curr_fwft_state[0]),
+        .I3(empty_fwft_fb_o_i),
+        .O(empty_fwft_fb_o_i0));
+  (* DONT_TOUCH *) 
+  (* KEEP = "yes" *) 
+  (* equivalent_register_removal = "no" *) 
+  FDPE #(
+    .INIT(1'b1)) 
+    empty_fwft_fb_o_i_reg
+       (.C(rd_clk),
+        .CE(1'b1),
+        .D(empty_fwft_fb_o_i0),
+        .PRE(AS),
+        .Q(empty_fwft_fb_o_i));
+  (* DONT_TOUCH *) 
+  (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
   FDPE #(
     .INIT(1'b1)) 
@@ -4422,162 +5292,176 @@ module tx_packet_fifo_rd_fwft
        (.C(rd_clk),
         .CE(1'b1),
         .D(empty_fwft_i0),
-        .PRE(Q[1]),
-        .Q(empty));
-  (* SOFT_HLUTNM = "soft_lutpair8" *) 
+        .PRE(AS),
+        .Q(empty_fwft_i));
   LUT4 #(
-    .INIT(16'h00BF)) 
+    .INIT(16'h4555)) 
     \gc0.count_d1[9]_i_1 
-       (.I0(rd_en),
-        .I1(\gpregsm1.curr_fwft_state_reg[1]_0 [0]),
-        .I2(\gpregsm1.curr_fwft_state_reg[1]_0 [1]),
-        .I3(p_2_out),
-        .O(E));
-  (* SOFT_HLUTNM = "soft_lutpair9" *) 
+       (.I0(ram_empty_fb_i_reg),
+        .I1(rd_en),
+        .I2(curr_fwft_state[1]),
+        .I3(curr_fwft_state[0]),
+        .O(\gc0.count_d1_reg[9] ));
   LUT3 #(
     .INIT(8'hA2)) 
     \goreg_bm.dout_i[63]_i_1 
-       (.I0(\gpregsm1.curr_fwft_state_reg[1]_0 [1]),
-        .I1(\gpregsm1.curr_fwft_state_reg[1]_0 [0]),
+       (.I0(curr_fwft_state[1]),
+        .I1(curr_fwft_state[0]),
         .I2(rd_en),
-        .O(\goreg_bm.dout_i_reg[63] ));
+        .O(E));
   LUT3 #(
     .INIT(8'hBA)) 
     \gpregsm1.curr_fwft_state[0]_i_1 
-       (.I0(\gpregsm1.curr_fwft_state_reg[1]_0 [1]),
+       (.I0(curr_fwft_state[1]),
         .I1(rd_en),
-        .I2(\gpregsm1.curr_fwft_state_reg[1]_0 [0]),
+        .I2(curr_fwft_state[0]),
         .O(next_fwft_state[0]));
-  (* SOFT_HLUTNM = "soft_lutpair8" *) 
   LUT4 #(
     .INIT(16'h20FF)) 
     \gpregsm1.curr_fwft_state[1]_i_1 
-       (.I0(\gpregsm1.curr_fwft_state_reg[1]_0 [1]),
+       (.I0(curr_fwft_state[1]),
         .I1(rd_en),
-        .I2(\gpregsm1.curr_fwft_state_reg[1]_0 [0]),
-        .I3(p_2_out),
+        .I2(curr_fwft_state[0]),
+        .I3(ram_empty_fb_i_reg),
         .O(next_fwft_state[1]));
+  (* DONT_TOUCH *) 
+  (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
   FDCE #(
     .INIT(1'b0)) 
     \gpregsm1.curr_fwft_state_reg[0] 
        (.C(rd_clk),
         .CE(1'b1),
-        .CLR(Q[1]),
+        .CLR(AS),
         .D(next_fwft_state[0]),
-        .Q(\gpregsm1.curr_fwft_state_reg[1]_0 [0]));
+        .Q(curr_fwft_state[0]));
+  (* DONT_TOUCH *) 
+  (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
   FDCE #(
     .INIT(1'b0)) 
     \gpregsm1.curr_fwft_state_reg[1] 
        (.C(rd_clk),
         .CE(1'b1),
-        .CLR(Q[1]),
+        .CLR(AS),
         .D(next_fwft_state[1]),
-        .Q(\gpregsm1.curr_fwft_state_reg[1]_0 [1]));
+        .Q(curr_fwft_state[1]));
+  (* DONT_TOUCH *) 
+  (* KEEP = "yes" *) 
+  (* equivalent_register_removal = "no" *) 
+  FDCE #(
+    .INIT(1'b0)) 
+    \gpregsm1.user_valid_reg 
+       (.C(rd_clk),
+        .CE(1'b1),
+        .CLR(AS),
+        .D(next_fwft_state[0]),
+        .Q(user_valid));
 endmodule
 
 (* ORIG_REF_NAME = "rd_logic" *) 
 module tx_packet_fifo_rd_logic
    (empty,
-    tmp_ram_rd_en,
-    \gc0.count_d1_reg[9] ,
-    E,
-    \DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram ,
-    v1_reg,
-    v1_reg_0,
-    rd_clk,
     Q,
-    rd_en);
+    tmp_ram_rd_en,
+    E,
+    rd_clk,
+    AS,
+    rd_en,
+    WR_PNTR_RD);
   output empty;
+  output [9:0]Q;
   output tmp_ram_rd_en;
-  output [9:0]\gc0.count_d1_reg[9] ;
   output [0:0]E;
-  output [9:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram ;
-  input [4:0]v1_reg;
-  input [4:0]v1_reg_0;
   input rd_clk;
-  input [1:0]Q;
+  input [0:0]AS;
   input rd_en;
+  input [9:0]WR_PNTR_RD;
 
-  wire [9:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram ;
+  wire [0:0]AS;
   wire [0:0]E;
-  wire [1:0]Q;
-  wire [0:0]curr_fwft_state;
+  wire [9:0]Q;
+  wire [9:0]WR_PNTR_RD;
+  wire [4:0]\c0/v1_reg ;
+  wire [4:0]\c1/v1_reg ;
   wire empty;
-  wire [9:0]\gc0.count_d1_reg[9] ;
-  wire \gr1.gr1_int.rfwft_n_1 ;
+  wire \gr1.gr1_int.rfwft_n_0 ;
+  wire [0:0]p_0_in;
   wire p_2_out;
-  wire p_7_out;
+  wire p_8_out;
   wire rd_clk;
   wire rd_en;
   wire tmp_ram_rd_en;
-  wire [4:0]v1_reg;
-  wire [4:0]v1_reg_0;
 
   tx_packet_fifo_rd_fwft \gr1.gr1_int.rfwft 
-       (.E(p_7_out),
-        .Q(Q),
+       (.AS(AS),
+        .E(E),
         .empty(empty),
-        .\goreg_bm.dout_i_reg[63] (E),
-        .\gpregsm1.curr_fwft_state_reg[1]_0 ({\gr1.gr1_int.rfwft_n_1 ,curr_fwft_state}),
-        .p_2_out(p_2_out),
+        .\gc0.count_d1_reg[9] (p_8_out),
+        .out({\gr1.gr1_int.rfwft_n_0 ,p_0_in}),
+        .ram_empty_fb_i_reg(p_2_out),
         .rd_clk(rd_clk),
         .rd_en(rd_en),
         .tmp_ram_rd_en(tmp_ram_rd_en));
   tx_packet_fifo_rd_status_flags_as \gras.rsts 
-       (.Q(Q[1]),
-        .\gpregsm1.curr_fwft_state_reg[1] ({\gr1.gr1_int.rfwft_n_1 ,curr_fwft_state}),
-        .p_2_out(p_2_out),
+       (.AS(AS),
+        .\gpregsm1.curr_fwft_state_reg[1] ({\gr1.gr1_int.rfwft_n_0 ,p_0_in}),
+        .out(p_2_out),
         .rd_clk(rd_clk),
         .rd_en(rd_en),
-        .v1_reg(v1_reg),
-        .v1_reg_0(v1_reg_0));
+        .v1_reg(\c0/v1_reg ),
+        .v1_reg_0(\c1/v1_reg ));
   tx_packet_fifo_rd_bin_cntr rpntr
-       (.\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram (\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram ),
-        .E(p_7_out),
-        .Q(\gc0.count_d1_reg[9] ),
-        .\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] (Q[0]),
-        .rd_clk(rd_clk));
+       (.AS(AS),
+        .E(p_8_out),
+        .Q(Q),
+        .WR_PNTR_RD(WR_PNTR_RD),
+        .rd_clk(rd_clk),
+        .v1_reg(\c0/v1_reg ),
+        .v1_reg_0(\c1/v1_reg ));
 endmodule
 
 (* ORIG_REF_NAME = "rd_status_flags_as" *) 
 module tx_packet_fifo_rd_status_flags_as
-   (p_2_out,
+   (out,
     v1_reg,
     v1_reg_0,
     rd_clk,
-    Q,
+    AS,
     rd_en,
     \gpregsm1.curr_fwft_state_reg[1] );
-  output p_2_out;
+  output out;
   input [4:0]v1_reg;
   input [4:0]v1_reg_0;
   input rd_clk;
-  input [0:0]Q;
+  input [0:0]AS;
   input rd_en;
   input [1:0]\gpregsm1.curr_fwft_state_reg[1] ;
 
-  wire [0:0]Q;
+  wire [0:0]AS;
   wire c0_n_0;
   wire comp1;
   wire [1:0]\gpregsm1.curr_fwft_state_reg[1] ;
-  wire p_2_out;
+  (* DONT_TOUCH *) wire ram_empty_fb_i;
+  (* DONT_TOUCH *) wire ram_empty_i;
   wire rd_clk;
   wire rd_en;
   wire [4:0]v1_reg;
   wire [4:0]v1_reg_0;
 
+  assign out = ram_empty_fb_i;
   tx_packet_fifo_compare_1 c0
        (.comp1(comp1),
         .\gpregsm1.curr_fwft_state_reg[1] (\gpregsm1.curr_fwft_state_reg[1] ),
-        .p_2_out(p_2_out),
+        .out(ram_empty_fb_i),
         .ram_empty_fb_i_reg(c0_n_0),
         .rd_en(rd_en),
         .v1_reg(v1_reg));
   tx_packet_fifo_compare_2 c1
        (.comp1(comp1),
         .v1_reg_0(v1_reg_0));
+  (* DONT_TOUCH *) 
+  (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
   FDPE #(
     .INIT(1'b1)) 
@@ -4585,49 +5469,59 @@ module tx_packet_fifo_rd_status_flags_as
        (.C(rd_clk),
         .CE(1'b1),
         .D(c0_n_0),
-        .PRE(Q),
-        .Q(p_2_out));
+        .PRE(AS),
+        .Q(ram_empty_fb_i));
+  (* DONT_TOUCH *) 
+  (* KEEP = "yes" *) 
+  (* equivalent_register_removal = "no" *) 
+  FDPE #(
+    .INIT(1'b1)) 
+    ram_empty_i_reg
+       (.C(rd_clk),
+        .CE(1'b1),
+        .D(c0_n_0),
+        .PRE(AS),
+        .Q(ram_empty_i));
 endmodule
 
 (* ORIG_REF_NAME = "reset_blk_ramfifo" *) 
 module tx_packet_fifo_reset_blk_ramfifo
-   (out,
+   (AR,
+    AS,
+    out,
     ram_full_fb_i_reg,
-    Q,
-    ram_empty_fb_i_reg,
-    wr_clk,
+    \grstd1.grst_full.grst_f.rst_d1_reg_0 ,
     rst,
+    wr_clk,
     rd_clk);
+  output [0:0]AR;
+  output [0:0]AS;
   output out;
   output ram_full_fb_i_reg;
-  output [2:0]Q;
-  output [2:0]ram_empty_fb_i_reg;
-  input wr_clk;
+  output \grstd1.grst_full.grst_f.rst_d1_reg_0 ;
   input rst;
+  input wr_clk;
   input rd_clk;
 
-  wire [2:0]Q;
-  wire \ngwrdrst.grst.g7serrst.rd_rst_asreg_i_1_n_0 ;
-  wire \ngwrdrst.grst.g7serrst.rd_rst_reg[2]_i_1_n_0 ;
-  wire \ngwrdrst.grst.g7serrst.wr_rst_asreg_i_1_n_0 ;
-  wire \ngwrdrst.grst.g7serrst.wr_rst_reg[2]_i_1_n_0 ;
-  wire [2:0]ram_empty_fb_i_reg;
+  wire [0:0]AR;
+  wire [0:0]AS;
+  wire dest_out;
+  wire \grstd1.grst_full.grst_f.rst_d1_reg_0 ;
+  wire \grstd1.grst_full.grst_f.rst_d3_i_1_n_0 ;
+  wire \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_i_1_n_0 ;
+  wire \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_wr_rst_ic_i_1_n_0 ;
+  wire \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_i_1_n_0 ;
   wire rd_clk;
-  wire rd_rst_asreg;
-  wire rd_rst_asreg_d1;
-  wire rd_rst_asreg_d2;
+  wire [3:0]rd_rst_wr_ext;
   wire rst;
   (* async_reg = "true" *) (* msgon = "true" *) wire rst_d1;
   (* async_reg = "true" *) (* msgon = "true" *) wire rst_d2;
   (* async_reg = "true" *) (* msgon = "true" *) wire rst_d3;
-  (* async_reg = "true" *) (* msgon = "true" *) wire rst_rd_reg1;
   (* async_reg = "true" *) (* msgon = "true" *) wire rst_rd_reg2;
-  (* async_reg = "true" *) (* msgon = "true" *) wire rst_wr_reg1;
   (* async_reg = "true" *) (* msgon = "true" *) wire rst_wr_reg2;
+  wire sckt_rd_rst_wr;
   wire wr_clk;
-  wire wr_rst_asreg;
-  wire wr_rst_asreg_d1;
-  wire wr_rst_asreg_d2;
+  wire [1:0]wr_rst_rd_ext;
 
   assign out = rst_d2;
   assign ram_full_fb_i_reg = rst_d3;
@@ -4639,8 +5533,8 @@ module tx_packet_fifo_reset_blk_ramfifo
     \grstd1.grst_full.grst_f.rst_d1_reg 
        (.C(wr_clk),
         .CE(1'b1),
-        .D(1'b0),
-        .PRE(rst),
+        .D(\grstd1.grst_full.grst_f.rst_d1_reg_0 ),
+        .PRE(rst_wr_reg2),
         .Q(rst_d1));
   (* ASYNC_REG *) 
   (* KEEP = "yes" *) 
@@ -4651,8 +5545,14 @@ module tx_packet_fifo_reset_blk_ramfifo
        (.C(wr_clk),
         .CE(1'b1),
         .D(rst_d1),
-        .PRE(rst),
+        .PRE(rst_wr_reg2),
         .Q(rst_d2));
+  LUT2 #(
+    .INIT(4'hE)) 
+    \grstd1.grst_full.grst_f.rst_d3_i_1 
+       (.I0(rst_d2),
+        .I1(AR),
+        .O(\grstd1.grst_full.grst_f.rst_d3_i_1_n_0 ));
   (* ASYNC_REG *) 
   (* KEEP = "yes" *) 
   (* msgon = "true" *) 
@@ -4661,1445 +5561,510 @@ module tx_packet_fifo_reset_blk_ramfifo
     \grstd1.grst_full.grst_f.rst_d3_reg 
        (.C(wr_clk),
         .CE(1'b1),
-        .D(rst_d2),
-        .PRE(rst),
-        .Q(rst_d3));
-  FDRE #(
-    .INIT(1'b0)) 
-    \ngwrdrst.grst.g7serrst.rd_rst_asreg_d1_reg 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .D(rd_rst_asreg),
-        .Q(rd_rst_asreg_d1),
-        .R(1'b0));
-  FDRE #(
-    .INIT(1'b0)) 
-    \ngwrdrst.grst.g7serrst.rd_rst_asreg_d2_reg 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .D(rd_rst_asreg_d1),
-        .Q(rd_rst_asreg_d2),
-        .R(1'b0));
-  LUT2 #(
-    .INIT(4'h2)) 
-    \ngwrdrst.grst.g7serrst.rd_rst_asreg_i_1 
-       (.I0(rd_rst_asreg),
-        .I1(rd_rst_asreg_d1),
-        .O(\ngwrdrst.grst.g7serrst.rd_rst_asreg_i_1_n_0 ));
-  FDPE #(
-    .INIT(1'b1)) 
-    \ngwrdrst.grst.g7serrst.rd_rst_asreg_reg 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .D(\ngwrdrst.grst.g7serrst.rd_rst_asreg_i_1_n_0 ),
-        .PRE(rst_rd_reg2),
-        .Q(rd_rst_asreg));
-  LUT2 #(
-    .INIT(4'h2)) 
-    \ngwrdrst.grst.g7serrst.rd_rst_reg[2]_i_1 
-       (.I0(rd_rst_asreg),
-        .I1(rd_rst_asreg_d2),
-        .O(\ngwrdrst.grst.g7serrst.rd_rst_reg[2]_i_1_n_0 ));
-  (* equivalent_register_removal = "no" *) 
-  FDPE #(
-    .INIT(1'b1)) 
-    \ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .D(1'b0),
-        .PRE(\ngwrdrst.grst.g7serrst.rd_rst_reg[2]_i_1_n_0 ),
-        .Q(ram_empty_fb_i_reg[0]));
-  (* equivalent_register_removal = "no" *) 
-  FDPE #(
-    .INIT(1'b1)) 
-    \ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .D(1'b0),
-        .PRE(\ngwrdrst.grst.g7serrst.rd_rst_reg[2]_i_1_n_0 ),
-        .Q(ram_empty_fb_i_reg[1]));
-  (* equivalent_register_removal = "no" *) 
-  FDPE #(
-    .INIT(1'b1)) 
-    \ngwrdrst.grst.g7serrst.rd_rst_reg_reg[2] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .D(1'b0),
-        .PRE(\ngwrdrst.grst.g7serrst.rd_rst_reg[2]_i_1_n_0 ),
-        .Q(ram_empty_fb_i_reg[2]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDPE #(
-    .INIT(1'b0)) 
-    \ngwrdrst.grst.g7serrst.rst_rd_reg1_reg 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .D(1'b0),
-        .PRE(rst),
-        .Q(rst_rd_reg1));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDPE #(
-    .INIT(1'b0)) 
-    \ngwrdrst.grst.g7serrst.rst_rd_reg2_reg 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .D(rst_rd_reg1),
-        .PRE(rst),
-        .Q(rst_rd_reg2));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDPE #(
-    .INIT(1'b0)) 
-    \ngwrdrst.grst.g7serrst.rst_wr_reg1_reg 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .D(1'b0),
-        .PRE(rst),
-        .Q(rst_wr_reg1));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDPE #(
-    .INIT(1'b0)) 
-    \ngwrdrst.grst.g7serrst.rst_wr_reg2_reg 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .D(rst_wr_reg1),
-        .PRE(rst),
-        .Q(rst_wr_reg2));
-  FDRE #(
-    .INIT(1'b0)) 
-    \ngwrdrst.grst.g7serrst.wr_rst_asreg_d1_reg 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .D(wr_rst_asreg),
-        .Q(wr_rst_asreg_d1),
-        .R(1'b0));
-  FDRE #(
-    .INIT(1'b0)) 
-    \ngwrdrst.grst.g7serrst.wr_rst_asreg_d2_reg 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .D(wr_rst_asreg_d1),
-        .Q(wr_rst_asreg_d2),
-        .R(1'b0));
-  LUT2 #(
-    .INIT(4'h2)) 
-    \ngwrdrst.grst.g7serrst.wr_rst_asreg_i_1 
-       (.I0(wr_rst_asreg),
-        .I1(wr_rst_asreg_d1),
-        .O(\ngwrdrst.grst.g7serrst.wr_rst_asreg_i_1_n_0 ));
-  FDPE #(
-    .INIT(1'b1)) 
-    \ngwrdrst.grst.g7serrst.wr_rst_asreg_reg 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .D(\ngwrdrst.grst.g7serrst.wr_rst_asreg_i_1_n_0 ),
+        .D(\grstd1.grst_full.grst_f.rst_d3_i_1_n_0 ),
         .PRE(rst_wr_reg2),
-        .Q(wr_rst_asreg));
+        .Q(rst_d3));
+  FDCE #(
+    .INIT(1'b0)) 
+    \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.rd_rst_wr_ext_reg[0] 
+       (.C(wr_clk),
+        .CE(1'b1),
+        .CLR(rst_wr_reg2),
+        .D(sckt_rd_rst_wr),
+        .Q(rd_rst_wr_ext[0]));
+  FDCE #(
+    .INIT(1'b0)) 
+    \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.rd_rst_wr_ext_reg[1] 
+       (.C(wr_clk),
+        .CE(1'b1),
+        .CLR(rst_wr_reg2),
+        .D(rd_rst_wr_ext[0]),
+        .Q(rd_rst_wr_ext[1]));
+  FDCE #(
+    .INIT(1'b0)) 
+    \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.rd_rst_wr_ext_reg[2] 
+       (.C(wr_clk),
+        .CE(1'b1),
+        .CLR(rst_wr_reg2),
+        .D(rd_rst_wr_ext[1]),
+        .Q(rd_rst_wr_ext[2]));
+  FDCE #(
+    .INIT(1'b0)) 
+    \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.rd_rst_wr_ext_reg[3] 
+       (.C(wr_clk),
+        .CE(1'b1),
+        .CLR(rst_wr_reg2),
+        .D(rd_rst_wr_ext[2]),
+        .Q(rd_rst_wr_ext[3]));
+  (* DEF_VAL = "1'b0" *) 
+  (* DEST_SYNC_FF = "2" *) 
+  (* INIT_SYNC_FF = "0" *) 
+  (* INV_DEF_VAL = "1'b1" *) 
+  (* RST_ACTIVE_HIGH = "1" *) 
+  (* VERSION = "0" *) 
+  (* XPM_CDC = "ASYNC_RST" *) 
+  (* XPM_MODULE = "TRUE" *) 
+  tx_packet_fifo_xpm_cdc_async_rst \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.rst_rd_reg2_inst 
+       (.dest_arst(rst_rd_reg2),
+        .dest_clk(rd_clk),
+        .src_arst(rst));
   LUT2 #(
     .INIT(4'h2)) 
-    \ngwrdrst.grst.g7serrst.wr_rst_reg[2]_i_1 
-       (.I0(wr_rst_asreg),
-        .I1(wr_rst_asreg_d2),
-        .O(\ngwrdrst.grst.g7serrst.wr_rst_reg[2]_i_1_n_0 ));
-  (* equivalent_register_removal = "no" *) 
+    \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_i_1 
+       (.I0(AS),
+        .I1(wr_rst_rd_ext[1]),
+        .O(\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_i_1_n_0 ));
   FDPE #(
-    .INIT(1'b1)) 
-    \ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] 
-       (.C(wr_clk),
+    .INIT(1'b0)) 
+    \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_reg 
+       (.C(rd_clk),
         .CE(1'b1),
-        .D(1'b0),
-        .PRE(\ngwrdrst.grst.g7serrst.wr_rst_reg[2]_i_1_n_0 ),
-        .Q(Q[0]));
-  (* equivalent_register_removal = "no" *) 
+        .D(\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_i_1_n_0 ),
+        .PRE(rst_rd_reg2),
+        .Q(AS));
+  LUT3 #(
+    .INIT(8'h8A)) 
+    \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_wr_rst_ic_i_1 
+       (.I0(AR),
+        .I1(rd_rst_wr_ext[0]),
+        .I2(rd_rst_wr_ext[1]),
+        .O(\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_wr_rst_ic_i_1_n_0 ));
   FDPE #(
-    .INIT(1'b1)) 
-    \ngwrdrst.grst.g7serrst.wr_rst_reg_reg[1] 
+    .INIT(1'b0)) 
+    \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_wr_rst_ic_reg 
        (.C(wr_clk),
         .CE(1'b1),
-        .D(1'b0),
-        .PRE(\ngwrdrst.grst.g7serrst.wr_rst_reg[2]_i_1_n_0 ),
-        .Q(Q[1]));
-  (* equivalent_register_removal = "no" *) 
+        .D(\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_wr_rst_ic_i_1_n_0 ),
+        .PRE(rst_wr_reg2),
+        .Q(AR));
+  LUT5 #(
+    .INIT(32'hAAAA08AA)) 
+    \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_i_1 
+       (.I0(\grstd1.grst_full.grst_f.rst_d1_reg_0 ),
+        .I1(rd_rst_wr_ext[1]),
+        .I2(rd_rst_wr_ext[0]),
+        .I3(rd_rst_wr_ext[3]),
+        .I4(rd_rst_wr_ext[2]),
+        .O(\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_i_1_n_0 ));
   FDPE #(
-    .INIT(1'b1)) 
-    \ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] 
+    .INIT(1'b0)) 
+    \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg 
        (.C(wr_clk),
         .CE(1'b1),
-        .D(1'b0),
-        .PRE(\ngwrdrst.grst.g7serrst.wr_rst_reg[2]_i_1_n_0 ),
-        .Q(Q[2]));
-endmodule
-
-(* ORIG_REF_NAME = "synchronizer_ff" *) 
-module tx_packet_fifo_synchronizer_ff
-   (D,
-    Q,
-    rd_clk,
-    \ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] );
-  output [9:0]D;
-  input [9:0]Q;
-  input rd_clk;
-  input [0:0]\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ;
-
-  wire [9:0]Q;
-  (* async_reg = "true" *) (* msgon = "true" *) wire [9:0]Q_reg;
-  wire [0:0]\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ;
-  wire rd_clk;
-
-  assign D[9:0] = Q_reg;
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
+        .D(\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_i_1_n_0 ),
+        .PRE(rst_wr_reg2),
+        .Q(\grstd1.grst_full.grst_f.rst_d1_reg_0 ));
   FDCE #(
     .INIT(1'b0)) 
-    \Q_reg_reg[0] 
+    \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_rd_ext_reg[0] 
        (.C(rd_clk),
         .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(Q[0]),
-        .Q(Q_reg[0]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
+        .CLR(rst_rd_reg2),
+        .D(dest_out),
+        .Q(wr_rst_rd_ext[0]));
   FDCE #(
     .INIT(1'b0)) 
-    \Q_reg_reg[1] 
+    \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_rd_ext_reg[1] 
        (.C(rd_clk),
         .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(Q[1]),
-        .Q(Q_reg[1]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[2] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(Q[2]),
-        .Q(Q_reg[2]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[3] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(Q[3]),
-        .Q(Q_reg[3]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[4] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(Q[4]),
-        .Q(Q_reg[4]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[5] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(Q[5]),
-        .Q(Q_reg[5]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[6] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(Q[6]),
-        .Q(Q_reg[6]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[7] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(Q[7]),
-        .Q(Q_reg[7]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[8] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(Q[8]),
-        .Q(Q_reg[8]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[9] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(Q[9]),
-        .Q(Q_reg[9]));
-endmodule
-
-(* ORIG_REF_NAME = "synchronizer_ff" *) 
-module tx_packet_fifo_synchronizer_ff_3
-   (D,
-    Q,
-    wr_clk,
-    \ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] );
-  output [9:0]D;
-  input [9:0]Q;
-  input wr_clk;
-  input [0:0]\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ;
-
-  wire [9:0]Q;
-  (* async_reg = "true" *) (* msgon = "true" *) wire [9:0]Q_reg;
-  wire [0:0]\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ;
-  wire wr_clk;
-
-  assign D[9:0] = Q_reg;
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[0] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(Q[0]),
-        .Q(Q_reg[0]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[1] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(Q[1]),
-        .Q(Q_reg[1]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[2] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(Q[2]),
-        .Q(Q_reg[2]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[3] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(Q[3]),
-        .Q(Q_reg[3]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[4] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(Q[4]),
-        .Q(Q_reg[4]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[5] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(Q[5]),
-        .Q(Q_reg[5]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[6] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(Q[6]),
-        .Q(Q_reg[6]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[7] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(Q[7]),
-        .Q(Q_reg[7]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[8] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(Q[8]),
-        .Q(Q_reg[8]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[9] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(Q[9]),
-        .Q(Q_reg[9]));
-endmodule
-
-(* ORIG_REF_NAME = "synchronizer_ff" *) 
-module tx_packet_fifo_synchronizer_ff_4
-   (out,
-    \wr_pntr_bin_reg[8] ,
-    D,
-    rd_clk,
-    \ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] );
-  output [0:0]out;
-  output [8:0]\wr_pntr_bin_reg[8] ;
-  input [9:0]D;
-  input rd_clk;
-  input [0:0]\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ;
-
-  wire [9:0]D;
-  (* async_reg = "true" *) (* msgon = "true" *) wire [9:0]Q_reg;
-  wire [0:0]\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ;
-  wire rd_clk;
-  wire \wr_pntr_bin[0]_i_2_n_0 ;
-  wire \wr_pntr_bin[2]_i_2_n_0 ;
-  wire \wr_pntr_bin[3]_i_2_n_0 ;
-  wire [8:0]\wr_pntr_bin_reg[8] ;
-
-  assign out[0] = Q_reg[9];
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[0] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(D[0]),
-        .Q(Q_reg[0]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[1] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(D[1]),
-        .Q(Q_reg[1]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[2] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(D[2]),
-        .Q(Q_reg[2]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[3] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(D[3]),
-        .Q(Q_reg[3]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[4] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(D[4]),
-        .Q(Q_reg[4]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[5] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(D[5]),
-        .Q(Q_reg[5]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[6] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(D[6]),
-        .Q(Q_reg[6]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[7] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(D[7]),
-        .Q(Q_reg[7]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[8] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(D[8]),
-        .Q(Q_reg[8]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[9] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] ),
-        .D(D[9]),
-        .Q(Q_reg[9]));
-  LUT5 #(
-    .INIT(32'h96696996)) 
-    \wr_pntr_bin[0]_i_1 
-       (.I0(Q_reg[1]),
-        .I1(Q_reg[0]),
-        .I2(Q_reg[2]),
-        .I3(\wr_pntr_bin[0]_i_2_n_0 ),
-        .I4(\wr_pntr_bin[2]_i_2_n_0 ),
-        .O(\wr_pntr_bin_reg[8] [0]));
-  LUT3 #(
-    .INIT(8'h96)) 
-    \wr_pntr_bin[0]_i_2 
-       (.I0(Q_reg[4]),
-        .I1(Q_reg[3]),
-        .I2(Q_reg[9]),
-        .O(\wr_pntr_bin[0]_i_2_n_0 ));
-  LUT6 #(
-    .INIT(64'h6996966996696996)) 
-    \wr_pntr_bin[1]_i_1 
-       (.I0(Q_reg[2]),
-        .I1(Q_reg[9]),
-        .I2(Q_reg[3]),
-        .I3(Q_reg[4]),
-        .I4(\wr_pntr_bin[2]_i_2_n_0 ),
-        .I5(Q_reg[1]),
-        .O(\wr_pntr_bin_reg[8] [1]));
-  LUT5 #(
-    .INIT(32'h96696996)) 
-    \wr_pntr_bin[2]_i_1 
-       (.I0(\wr_pntr_bin[2]_i_2_n_0 ),
-        .I1(Q_reg[4]),
-        .I2(Q_reg[3]),
-        .I3(Q_reg[9]),
-        .I4(Q_reg[2]),
-        .O(\wr_pntr_bin_reg[8] [2]));
-  LUT4 #(
-    .INIT(16'h6996)) 
-    \wr_pntr_bin[2]_i_2 
-       (.I0(Q_reg[8]),
-        .I1(Q_reg[7]),
-        .I2(Q_reg[6]),
-        .I3(Q_reg[5]),
-        .O(\wr_pntr_bin[2]_i_2_n_0 ));
-  LUT6 #(
-    .INIT(64'h6996966996696996)) 
-    \wr_pntr_bin[3]_i_1 
-       (.I0(Q_reg[9]),
-        .I1(Q_reg[3]),
-        .I2(Q_reg[4]),
-        .I3(\wr_pntr_bin[3]_i_2_n_0 ),
-        .I4(Q_reg[7]),
-        .I5(Q_reg[8]),
-        .O(\wr_pntr_bin_reg[8] [3]));
-  LUT2 #(
-    .INIT(4'h6)) 
-    \wr_pntr_bin[3]_i_2 
-       (.I0(Q_reg[5]),
-        .I1(Q_reg[6]),
-        .O(\wr_pntr_bin[3]_i_2_n_0 ));
-  LUT6 #(
-    .INIT(64'h6996966996696996)) 
-    \wr_pntr_bin[4]_i_1 
-       (.I0(Q_reg[6]),
-        .I1(Q_reg[4]),
-        .I2(Q_reg[5]),
-        .I3(Q_reg[9]),
-        .I4(Q_reg[7]),
-        .I5(Q_reg[8]),
-        .O(\wr_pntr_bin_reg[8] [4]));
-  LUT5 #(
-    .INIT(32'h96696996)) 
-    \wr_pntr_bin[5]_i_1 
-       (.I0(Q_reg[7]),
-        .I1(Q_reg[5]),
-        .I2(Q_reg[6]),
-        .I3(Q_reg[9]),
-        .I4(Q_reg[8]),
-        .O(\wr_pntr_bin_reg[8] [5]));
-  LUT4 #(
-    .INIT(16'h6996)) 
-    \wr_pntr_bin[6]_i_1 
-       (.I0(Q_reg[7]),
-        .I1(Q_reg[6]),
-        .I2(Q_reg[9]),
-        .I3(Q_reg[8]),
-        .O(\wr_pntr_bin_reg[8] [6]));
-  LUT3 #(
-    .INIT(8'h96)) 
-    \wr_pntr_bin[7]_i_1 
-       (.I0(Q_reg[8]),
-        .I1(Q_reg[7]),
-        .I2(Q_reg[9]),
-        .O(\wr_pntr_bin_reg[8] [7]));
-  LUT2 #(
-    .INIT(4'h6)) 
-    \wr_pntr_bin[8]_i_1 
-       (.I0(Q_reg[8]),
-        .I1(Q_reg[9]),
-        .O(\wr_pntr_bin_reg[8] [8]));
-endmodule
-
-(* ORIG_REF_NAME = "synchronizer_ff" *) 
-module tx_packet_fifo_synchronizer_ff_5
-   (out,
-    \rd_pntr_bin_reg[8] ,
-    D,
-    wr_clk,
-    \ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] );
-  output [0:0]out;
-  output [8:0]\rd_pntr_bin_reg[8] ;
-  input [9:0]D;
-  input wr_clk;
-  input [0:0]\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ;
-
-  wire [9:0]D;
-  (* async_reg = "true" *) (* msgon = "true" *) wire [9:0]Q_reg;
-  wire [0:0]\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ;
-  wire \rd_pntr_bin[0]_i_2_n_0 ;
-  wire \rd_pntr_bin[2]_i_2_n_0 ;
-  wire \rd_pntr_bin[3]_i_2_n_0 ;
-  wire [8:0]\rd_pntr_bin_reg[8] ;
-  wire wr_clk;
-
-  assign out[0] = Q_reg[9];
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[0] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(D[0]),
-        .Q(Q_reg[0]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[1] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(D[1]),
-        .Q(Q_reg[1]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[2] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(D[2]),
-        .Q(Q_reg[2]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[3] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(D[3]),
-        .Q(Q_reg[3]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[4] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(D[4]),
-        .Q(Q_reg[4]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[5] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(D[5]),
-        .Q(Q_reg[5]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[6] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(D[6]),
-        .Q(Q_reg[6]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[7] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(D[7]),
-        .Q(Q_reg[7]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[8] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(D[8]),
-        .Q(Q_reg[8]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDCE #(
-    .INIT(1'b0)) 
-    \Q_reg_reg[9] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] ),
-        .D(D[9]),
-        .Q(Q_reg[9]));
-  LUT5 #(
-    .INIT(32'h96696996)) 
-    \rd_pntr_bin[0]_i_1 
-       (.I0(Q_reg[1]),
-        .I1(Q_reg[0]),
-        .I2(Q_reg[2]),
-        .I3(\rd_pntr_bin[0]_i_2_n_0 ),
-        .I4(\rd_pntr_bin[2]_i_2_n_0 ),
-        .O(\rd_pntr_bin_reg[8] [0]));
-  LUT3 #(
-    .INIT(8'h96)) 
-    \rd_pntr_bin[0]_i_2 
-       (.I0(Q_reg[4]),
-        .I1(Q_reg[3]),
-        .I2(Q_reg[9]),
-        .O(\rd_pntr_bin[0]_i_2_n_0 ));
-  LUT6 #(
-    .INIT(64'h6996966996696996)) 
-    \rd_pntr_bin[1]_i_1 
-       (.I0(Q_reg[2]),
-        .I1(Q_reg[9]),
-        .I2(Q_reg[3]),
-        .I3(Q_reg[4]),
-        .I4(\rd_pntr_bin[2]_i_2_n_0 ),
-        .I5(Q_reg[1]),
-        .O(\rd_pntr_bin_reg[8] [1]));
-  LUT5 #(
-    .INIT(32'h96696996)) 
-    \rd_pntr_bin[2]_i_1 
-       (.I0(\rd_pntr_bin[2]_i_2_n_0 ),
-        .I1(Q_reg[4]),
-        .I2(Q_reg[3]),
-        .I3(Q_reg[9]),
-        .I4(Q_reg[2]),
-        .O(\rd_pntr_bin_reg[8] [2]));
-  LUT4 #(
-    .INIT(16'h6996)) 
-    \rd_pntr_bin[2]_i_2 
-       (.I0(Q_reg[8]),
-        .I1(Q_reg[7]),
-        .I2(Q_reg[6]),
-        .I3(Q_reg[5]),
-        .O(\rd_pntr_bin[2]_i_2_n_0 ));
-  LUT6 #(
-    .INIT(64'h6996966996696996)) 
-    \rd_pntr_bin[3]_i_1 
-       (.I0(Q_reg[9]),
-        .I1(Q_reg[3]),
-        .I2(Q_reg[4]),
-        .I3(\rd_pntr_bin[3]_i_2_n_0 ),
-        .I4(Q_reg[7]),
-        .I5(Q_reg[8]),
-        .O(\rd_pntr_bin_reg[8] [3]));
-  LUT2 #(
-    .INIT(4'h6)) 
-    \rd_pntr_bin[3]_i_2 
-       (.I0(Q_reg[5]),
-        .I1(Q_reg[6]),
-        .O(\rd_pntr_bin[3]_i_2_n_0 ));
-  LUT6 #(
-    .INIT(64'h6996966996696996)) 
-    \rd_pntr_bin[4]_i_1 
-       (.I0(Q_reg[6]),
-        .I1(Q_reg[4]),
-        .I2(Q_reg[5]),
-        .I3(Q_reg[9]),
-        .I4(Q_reg[7]),
-        .I5(Q_reg[8]),
-        .O(\rd_pntr_bin_reg[8] [4]));
-  LUT5 #(
-    .INIT(32'h96696996)) 
-    \rd_pntr_bin[5]_i_1 
-       (.I0(Q_reg[7]),
-        .I1(Q_reg[5]),
-        .I2(Q_reg[6]),
-        .I3(Q_reg[9]),
-        .I4(Q_reg[8]),
-        .O(\rd_pntr_bin_reg[8] [5]));
-  LUT4 #(
-    .INIT(16'h6996)) 
-    \rd_pntr_bin[6]_i_1 
-       (.I0(Q_reg[7]),
-        .I1(Q_reg[6]),
-        .I2(Q_reg[9]),
-        .I3(Q_reg[8]),
-        .O(\rd_pntr_bin_reg[8] [6]));
-  LUT3 #(
-    .INIT(8'h96)) 
-    \rd_pntr_bin[7]_i_1 
-       (.I0(Q_reg[8]),
-        .I1(Q_reg[7]),
-        .I2(Q_reg[9]),
-        .O(\rd_pntr_bin_reg[8] [7]));
-  LUT2 #(
-    .INIT(4'h6)) 
-    \rd_pntr_bin[8]_i_1 
-       (.I0(Q_reg[8]),
-        .I1(Q_reg[9]),
-        .O(\rd_pntr_bin_reg[8] [8]));
+        .CLR(rst_rd_reg2),
+        .D(wr_rst_rd_ext[0]),
+        .Q(wr_rst_rd_ext[1]));
+  (* DEST_SYNC_FF = "4" *) 
+  (* INIT_SYNC_FF = "0" *) 
+  (* SIM_ASSERT_CHK = "0" *) 
+  (* SRC_INPUT_REG = "0" *) 
+  (* VERSION = "0" *) 
+  (* XPM_CDC = "SINGLE" *) 
+  (* XPM_MODULE = "TRUE" *) 
+  tx_packet_fifo_xpm_cdc_single \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.xpm_cdc_single_inst_rrst_wr 
+       (.dest_clk(wr_clk),
+        .dest_out(sckt_rd_rst_wr),
+        .src_clk(rd_clk),
+        .src_in(AS));
+  (* DEST_SYNC_FF = "4" *) 
+  (* INIT_SYNC_FF = "0" *) 
+  (* SIM_ASSERT_CHK = "0" *) 
+  (* SRC_INPUT_REG = "0" *) 
+  (* VERSION = "0" *) 
+  (* XPM_CDC = "SINGLE" *) 
+  (* XPM_MODULE = "TRUE" *) 
+  tx_packet_fifo_xpm_cdc_single__1 \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.xpm_cdc_single_inst_wrst_rd 
+       (.dest_clk(rd_clk),
+        .dest_out(dest_out),
+        .src_clk(wr_clk),
+        .src_in(AR));
+  (* DEF_VAL = "1'b0" *) 
+  (* DEST_SYNC_FF = "2" *) 
+  (* INIT_SYNC_FF = "0" *) 
+  (* INV_DEF_VAL = "1'b1" *) 
+  (* RST_ACTIVE_HIGH = "1" *) 
+  (* VERSION = "0" *) 
+  (* XPM_CDC = "ASYNC_RST" *) 
+  (* XPM_MODULE = "TRUE" *) 
+  tx_packet_fifo_xpm_cdc_async_rst__1 \ngwrdrst.grst.g7serrst.gnsckt_wrst.rst_wr_reg2_inst 
+       (.dest_arst(rst_wr_reg2),
+        .dest_clk(wr_clk),
+        .src_arst(rst));
 endmodule
 
 (* ORIG_REF_NAME = "wr_bin_cntr" *) 
 module tx_packet_fifo_wr_bin_cntr
-   (\gdiff.diff_pntr_pad_reg[10] ,
-    Q,
-    ram_full_fb_i_reg,
-    \gdiff.diff_pntr_pad_reg[8] ,
-    ram_full_fb_i_reg_0,
-    ram_full_fb_i_reg_1,
-    S,
-    ram_full_fb_i_reg_2,
-    ram_full_fb_i_reg_3,
-    ram_full_fb_i_reg_4,
-    ram_full_fb_i_reg_5,
-    ram_full_fb_i_reg_6,
-    ram_full_fb_i_reg_7,
-    ram_full_fb_i_reg_8,
+   (Q,
+    \gic0.gc0.count_d2_reg[9]_0 ,
     \DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram ,
-    RD_PNTR_WR,
     E,
     wr_clk,
-    \ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] );
-  output [1:0]\gdiff.diff_pntr_pad_reg[10] ;
-  output [8:0]Q;
-  output ram_full_fb_i_reg;
-  output [3:0]\gdiff.diff_pntr_pad_reg[8] ;
-  output ram_full_fb_i_reg_0;
-  output ram_full_fb_i_reg_1;
-  output [3:0]S;
-  output ram_full_fb_i_reg_2;
-  output ram_full_fb_i_reg_3;
-  output ram_full_fb_i_reg_4;
-  output ram_full_fb_i_reg_5;
-  output ram_full_fb_i_reg_6;
-  output ram_full_fb_i_reg_7;
-  output ram_full_fb_i_reg_8;
+    AR);
+  output [9:0]Q;
+  output [9:0]\gic0.gc0.count_d2_reg[9]_0 ;
   output [9:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram ;
-  input [9:0]RD_PNTR_WR;
   input [0:0]E;
   input wr_clk;
-  input [0:0]\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ;
+  input [0:0]AR;
 
+  wire [0:0]AR;
   wire [9:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram ;
   wire [0:0]E;
-  wire [8:0]Q;
-  wire [9:0]RD_PNTR_WR;
-  wire [3:0]S;
-  wire [1:0]\gdiff.diff_pntr_pad_reg[10] ;
-  wire [3:0]\gdiff.diff_pntr_pad_reg[8] ;
+  wire [9:0]Q;
   wire \gic0.gc0.count[9]_i_2_n_0 ;
-  wire [0:0]\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ;
-  wire [9:9]p_13_out;
-  wire [9:0]plusOp__1;
-  wire ram_full_fb_i_reg;
-  wire ram_full_fb_i_reg_0;
-  wire ram_full_fb_i_reg_1;
-  wire ram_full_fb_i_reg_2;
-  wire ram_full_fb_i_reg_3;
-  wire ram_full_fb_i_reg_4;
-  wire ram_full_fb_i_reg_5;
-  wire ram_full_fb_i_reg_6;
-  wire ram_full_fb_i_reg_7;
-  wire ram_full_fb_i_reg_8;
+  wire [9:0]\gic0.gc0.count_d2_reg[9]_0 ;
+  wire [9:0]plusOp__0;
   wire wr_clk;
-  wire [9:0]wr_pntr_plus2;
 
-  (* SOFT_HLUTNM = "soft_lutpair17" *) 
+  (* SOFT_HLUTNM = "soft_lutpair15" *) 
   LUT1 #(
     .INIT(2'h1)) 
     \gic0.gc0.count[0]_i_1 
-       (.I0(wr_pntr_plus2[0]),
-        .O(plusOp__1[0]));
+       (.I0(Q[0]),
+        .O(plusOp__0[0]));
   LUT2 #(
     .INIT(4'h6)) 
     \gic0.gc0.count[1]_i_1 
-       (.I0(wr_pntr_plus2[0]),
-        .I1(wr_pntr_plus2[1]),
-        .O(plusOp__1[1]));
-  (* SOFT_HLUTNM = "soft_lutpair17" *) 
+       (.I0(Q[0]),
+        .I1(Q[1]),
+        .O(plusOp__0[1]));
+  (* SOFT_HLUTNM = "soft_lutpair15" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \gic0.gc0.count[2]_i_1 
-       (.I0(wr_pntr_plus2[1]),
-        .I1(wr_pntr_plus2[0]),
-        .I2(wr_pntr_plus2[2]),
-        .O(plusOp__1[2]));
-  (* SOFT_HLUTNM = "soft_lutpair15" *) 
+       (.I0(Q[0]),
+        .I1(Q[1]),
+        .I2(Q[2]),
+        .O(plusOp__0[2]));
+  (* SOFT_HLUTNM = "soft_lutpair13" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \gic0.gc0.count[3]_i_1 
-       (.I0(wr_pntr_plus2[2]),
-        .I1(wr_pntr_plus2[0]),
-        .I2(wr_pntr_plus2[1]),
-        .I3(wr_pntr_plus2[3]),
-        .O(plusOp__1[3]));
-  (* SOFT_HLUTNM = "soft_lutpair15" *) 
+       (.I0(Q[1]),
+        .I1(Q[0]),
+        .I2(Q[2]),
+        .I3(Q[3]),
+        .O(plusOp__0[3]));
+  (* SOFT_HLUTNM = "soft_lutpair13" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \gic0.gc0.count[4]_i_1 
-       (.I0(wr_pntr_plus2[3]),
-        .I1(wr_pntr_plus2[1]),
-        .I2(wr_pntr_plus2[0]),
-        .I3(wr_pntr_plus2[2]),
-        .I4(wr_pntr_plus2[4]),
-        .O(plusOp__1[4]));
+       (.I0(Q[2]),
+        .I1(Q[0]),
+        .I2(Q[1]),
+        .I3(Q[3]),
+        .I4(Q[4]),
+        .O(plusOp__0[4]));
   LUT6 #(
     .INIT(64'h7FFFFFFF80000000)) 
     \gic0.gc0.count[5]_i_1 
-       (.I0(wr_pntr_plus2[4]),
-        .I1(wr_pntr_plus2[2]),
-        .I2(wr_pntr_plus2[0]),
-        .I3(wr_pntr_plus2[1]),
-        .I4(wr_pntr_plus2[3]),
-        .I5(wr_pntr_plus2[5]),
-        .O(plusOp__1[5]));
-  (* SOFT_HLUTNM = "soft_lutpair16" *) 
+       (.I0(Q[3]),
+        .I1(Q[1]),
+        .I2(Q[0]),
+        .I3(Q[2]),
+        .I4(Q[4]),
+        .I5(Q[5]),
+        .O(plusOp__0[5]));
+  (* SOFT_HLUTNM = "soft_lutpair14" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \gic0.gc0.count[6]_i_1 
        (.I0(\gic0.gc0.count[9]_i_2_n_0 ),
-        .I1(wr_pntr_plus2[6]),
-        .O(plusOp__1[6]));
-  (* SOFT_HLUTNM = "soft_lutpair16" *) 
+        .I1(Q[6]),
+        .O(plusOp__0[6]));
+  (* SOFT_HLUTNM = "soft_lutpair14" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \gic0.gc0.count[7]_i_1 
-       (.I0(wr_pntr_plus2[6]),
-        .I1(\gic0.gc0.count[9]_i_2_n_0 ),
-        .I2(wr_pntr_plus2[7]),
-        .O(plusOp__1[7]));
-  (* SOFT_HLUTNM = "soft_lutpair14" *) 
+       (.I0(\gic0.gc0.count[9]_i_2_n_0 ),
+        .I1(Q[6]),
+        .I2(Q[7]),
+        .O(plusOp__0[7]));
+  (* SOFT_HLUTNM = "soft_lutpair12" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \gic0.gc0.count[8]_i_1 
-       (.I0(\gic0.gc0.count[9]_i_2_n_0 ),
-        .I1(wr_pntr_plus2[6]),
-        .I2(wr_pntr_plus2[7]),
-        .I3(wr_pntr_plus2[8]),
-        .O(plusOp__1[8]));
-  (* SOFT_HLUTNM = "soft_lutpair14" *) 
+       (.I0(Q[6]),
+        .I1(\gic0.gc0.count[9]_i_2_n_0 ),
+        .I2(Q[7]),
+        .I3(Q[8]),
+        .O(plusOp__0[8]));
+  (* SOFT_HLUTNM = "soft_lutpair12" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \gic0.gc0.count[9]_i_1 
-       (.I0(\gic0.gc0.count[9]_i_2_n_0 ),
-        .I1(wr_pntr_plus2[8]),
-        .I2(wr_pntr_plus2[7]),
-        .I3(wr_pntr_plus2[6]),
-        .I4(wr_pntr_plus2[9]),
-        .O(plusOp__1[9]));
+       (.I0(Q[7]),
+        .I1(\gic0.gc0.count[9]_i_2_n_0 ),
+        .I2(Q[6]),
+        .I3(Q[8]),
+        .I4(Q[9]),
+        .O(plusOp__0[9]));
   LUT6 #(
     .INIT(64'h8000000000000000)) 
     \gic0.gc0.count[9]_i_2 
-       (.I0(wr_pntr_plus2[4]),
-        .I1(wr_pntr_plus2[2]),
-        .I2(wr_pntr_plus2[0]),
-        .I3(wr_pntr_plus2[1]),
-        .I4(wr_pntr_plus2[3]),
-        .I5(wr_pntr_plus2[5]),
+       (.I0(Q[5]),
+        .I1(Q[3]),
+        .I2(Q[1]),
+        .I3(Q[0]),
+        .I4(Q[2]),
+        .I5(Q[4]),
         .O(\gic0.gc0.count[9]_i_2_n_0 ));
   FDPE #(
     .INIT(1'b1)) 
     \gic0.gc0.count_d1_reg[0] 
        (.C(wr_clk),
         .CE(E),
-        .D(wr_pntr_plus2[0]),
-        .PRE(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .Q(Q[0]));
+        .D(Q[0]),
+        .PRE(AR),
+        .Q(\gic0.gc0.count_d2_reg[9]_0 [0]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d1_reg[1] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(wr_pntr_plus2[1]),
-        .Q(Q[1]));
+        .CLR(AR),
+        .D(Q[1]),
+        .Q(\gic0.gc0.count_d2_reg[9]_0 [1]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d1_reg[2] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(wr_pntr_plus2[2]),
-        .Q(Q[2]));
+        .CLR(AR),
+        .D(Q[2]),
+        .Q(\gic0.gc0.count_d2_reg[9]_0 [2]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d1_reg[3] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(wr_pntr_plus2[3]),
-        .Q(Q[3]));
+        .CLR(AR),
+        .D(Q[3]),
+        .Q(\gic0.gc0.count_d2_reg[9]_0 [3]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d1_reg[4] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(wr_pntr_plus2[4]),
-        .Q(Q[4]));
+        .CLR(AR),
+        .D(Q[4]),
+        .Q(\gic0.gc0.count_d2_reg[9]_0 [4]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d1_reg[5] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(wr_pntr_plus2[5]),
-        .Q(Q[5]));
+        .CLR(AR),
+        .D(Q[5]),
+        .Q(\gic0.gc0.count_d2_reg[9]_0 [5]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d1_reg[6] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(wr_pntr_plus2[6]),
-        .Q(Q[6]));
+        .CLR(AR),
+        .D(Q[6]),
+        .Q(\gic0.gc0.count_d2_reg[9]_0 [6]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d1_reg[7] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(wr_pntr_plus2[7]),
-        .Q(Q[7]));
+        .CLR(AR),
+        .D(Q[7]),
+        .Q(\gic0.gc0.count_d2_reg[9]_0 [7]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d1_reg[8] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(wr_pntr_plus2[8]),
-        .Q(Q[8]));
+        .CLR(AR),
+        .D(Q[8]),
+        .Q(\gic0.gc0.count_d2_reg[9]_0 [8]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d1_reg[9] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(wr_pntr_plus2[9]),
-        .Q(p_13_out));
+        .CLR(AR),
+        .D(Q[9]),
+        .Q(\gic0.gc0.count_d2_reg[9]_0 [9]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[0] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(Q[0]),
+        .CLR(AR),
+        .D(\gic0.gc0.count_d2_reg[9]_0 [0]),
         .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram [0]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[1] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(Q[1]),
+        .CLR(AR),
+        .D(\gic0.gc0.count_d2_reg[9]_0 [1]),
         .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram [1]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[2] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(Q[2]),
+        .CLR(AR),
+        .D(\gic0.gc0.count_d2_reg[9]_0 [2]),
         .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram [2]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[3] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(Q[3]),
+        .CLR(AR),
+        .D(\gic0.gc0.count_d2_reg[9]_0 [3]),
         .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram [3]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[4] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(Q[4]),
+        .CLR(AR),
+        .D(\gic0.gc0.count_d2_reg[9]_0 [4]),
         .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram [4]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[5] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(Q[5]),
+        .CLR(AR),
+        .D(\gic0.gc0.count_d2_reg[9]_0 [5]),
         .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram [5]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[6] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(Q[6]),
+        .CLR(AR),
+        .D(\gic0.gc0.count_d2_reg[9]_0 [6]),
         .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram [6]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[7] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(Q[7]),
+        .CLR(AR),
+        .D(\gic0.gc0.count_d2_reg[9]_0 [7]),
         .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram [7]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[8] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(Q[8]),
+        .CLR(AR),
+        .D(\gic0.gc0.count_d2_reg[9]_0 [8]),
         .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram [8]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[9] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(p_13_out),
+        .CLR(AR),
+        .D(\gic0.gc0.count_d2_reg[9]_0 [9]),
         .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram [9]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_reg[0] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(plusOp__1[0]),
-        .Q(wr_pntr_plus2[0]));
+        .CLR(AR),
+        .D(plusOp__0[0]),
+        .Q(Q[0]));
   FDPE #(
     .INIT(1'b1)) 
     \gic0.gc0.count_reg[1] 
        (.C(wr_clk),
         .CE(E),
-        .D(plusOp__1[1]),
-        .PRE(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .Q(wr_pntr_plus2[1]));
+        .D(plusOp__0[1]),
+        .PRE(AR),
+        .Q(Q[1]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_reg[2] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(plusOp__1[2]),
-        .Q(wr_pntr_plus2[2]));
+        .CLR(AR),
+        .D(plusOp__0[2]),
+        .Q(Q[2]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_reg[3] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(plusOp__1[3]),
-        .Q(wr_pntr_plus2[3]));
+        .CLR(AR),
+        .D(plusOp__0[3]),
+        .Q(Q[3]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_reg[4] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(plusOp__1[4]),
-        .Q(wr_pntr_plus2[4]));
+        .CLR(AR),
+        .D(plusOp__0[4]),
+        .Q(Q[4]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_reg[5] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(plusOp__1[5]),
-        .Q(wr_pntr_plus2[5]));
+        .CLR(AR),
+        .D(plusOp__0[5]),
+        .Q(Q[5]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_reg[6] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(plusOp__1[6]),
-        .Q(wr_pntr_plus2[6]));
+        .CLR(AR),
+        .D(plusOp__0[6]),
+        .Q(Q[6]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_reg[7] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(plusOp__1[7]),
-        .Q(wr_pntr_plus2[7]));
+        .CLR(AR),
+        .D(plusOp__0[7]),
+        .Q(Q[7]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_reg[8] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(plusOp__1[8]),
-        .Q(wr_pntr_plus2[8]));
+        .CLR(AR),
+        .D(plusOp__0[8]),
+        .Q(Q[8]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_reg[9] 
        (.C(wr_clk),
         .CE(E),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] ),
-        .D(plusOp__1[9]),
-        .Q(wr_pntr_plus2[9]));
-  LUT4 #(
-    .INIT(16'h9009)) 
-    \gmux.gm[0].gm1.m1_i_1__1 
-       (.I0(Q[1]),
-        .I1(RD_PNTR_WR[1]),
-        .I2(Q[0]),
-        .I3(RD_PNTR_WR[0]),
-        .O(ram_full_fb_i_reg_3));
-  LUT4 #(
-    .INIT(16'h9009)) 
-    \gmux.gm[0].gm1.m1_i_1__2 
-       (.I0(wr_pntr_plus2[1]),
-        .I1(RD_PNTR_WR[1]),
-        .I2(wr_pntr_plus2[0]),
-        .I3(RD_PNTR_WR[0]),
-        .O(ram_full_fb_i_reg_8));
-  LUT4 #(
-    .INIT(16'h9009)) 
-    \gmux.gm[1].gms.ms_i_1__1 
-       (.I0(Q[3]),
-        .I1(RD_PNTR_WR[3]),
-        .I2(Q[2]),
-        .I3(RD_PNTR_WR[2]),
-        .O(ram_full_fb_i_reg_2));
-  LUT4 #(
-    .INIT(16'h9009)) 
-    \gmux.gm[1].gms.ms_i_1__2 
-       (.I0(wr_pntr_plus2[2]),
-        .I1(RD_PNTR_WR[2]),
-        .I2(wr_pntr_plus2[3]),
-        .I3(RD_PNTR_WR[3]),
-        .O(ram_full_fb_i_reg_7));
-  LUT4 #(
-    .INIT(16'h9009)) 
-    \gmux.gm[2].gms.ms_i_1__1 
-       (.I0(Q[5]),
-        .I1(RD_PNTR_WR[5]),
-        .I2(Q[4]),
-        .I3(RD_PNTR_WR[4]),
-        .O(ram_full_fb_i_reg_1));
-  LUT4 #(
-    .INIT(16'h9009)) 
-    \gmux.gm[2].gms.ms_i_1__2 
-       (.I0(wr_pntr_plus2[4]),
-        .I1(RD_PNTR_WR[4]),
-        .I2(wr_pntr_plus2[5]),
-        .I3(RD_PNTR_WR[5]),
-        .O(ram_full_fb_i_reg_6));
-  LUT4 #(
-    .INIT(16'h9009)) 
-    \gmux.gm[3].gms.ms_i_1__1 
-       (.I0(Q[7]),
-        .I1(RD_PNTR_WR[7]),
-        .I2(Q[6]),
-        .I3(RD_PNTR_WR[6]),
-        .O(ram_full_fb_i_reg_0));
-  LUT4 #(
-    .INIT(16'h9009)) 
-    \gmux.gm[3].gms.ms_i_1__2 
-       (.I0(wr_pntr_plus2[6]),
-        .I1(RD_PNTR_WR[6]),
-        .I2(wr_pntr_plus2[7]),
-        .I3(RD_PNTR_WR[7]),
-        .O(ram_full_fb_i_reg_5));
-  LUT4 #(
-    .INIT(16'h9009)) 
-    \gmux.gm[4].gms.ms_i_1__1 
-       (.I0(Q[8]),
-        .I1(RD_PNTR_WR[8]),
-        .I2(p_13_out),
-        .I3(RD_PNTR_WR[9]),
-        .O(ram_full_fb_i_reg));
-  LUT4 #(
-    .INIT(16'h9009)) 
-    \gmux.gm[4].gms.ms_i_1__2 
-       (.I0(wr_pntr_plus2[8]),
-        .I1(RD_PNTR_WR[8]),
-        .I2(wr_pntr_plus2[9]),
-        .I3(RD_PNTR_WR[9]),
-        .O(ram_full_fb_i_reg_4));
-  LUT2 #(
-    .INIT(4'h9)) 
-    plusOp_carry__0_i_1
-       (.I0(Q[7]),
-        .I1(RD_PNTR_WR[7]),
-        .O(\gdiff.diff_pntr_pad_reg[8] [3]));
-  LUT2 #(
-    .INIT(4'h9)) 
-    plusOp_carry__0_i_2
-       (.I0(Q[6]),
-        .I1(RD_PNTR_WR[6]),
-        .O(\gdiff.diff_pntr_pad_reg[8] [2]));
-  LUT2 #(
-    .INIT(4'h9)) 
-    plusOp_carry__0_i_3
-       (.I0(Q[5]),
-        .I1(RD_PNTR_WR[5]),
-        .O(\gdiff.diff_pntr_pad_reg[8] [1]));
-  LUT2 #(
-    .INIT(4'h9)) 
-    plusOp_carry__0_i_4
-       (.I0(Q[4]),
-        .I1(RD_PNTR_WR[4]),
-        .O(\gdiff.diff_pntr_pad_reg[8] [0]));
-  LUT2 #(
-    .INIT(4'h9)) 
-    plusOp_carry__1_i_1
-       (.I0(p_13_out),
-        .I1(RD_PNTR_WR[9]),
-        .O(\gdiff.diff_pntr_pad_reg[10] [1]));
-  LUT2 #(
-    .INIT(4'h9)) 
-    plusOp_carry__1_i_2
-       (.I0(Q[8]),
-        .I1(RD_PNTR_WR[8]),
-        .O(\gdiff.diff_pntr_pad_reg[10] [0]));
-  LUT2 #(
-    .INIT(4'h9)) 
-    plusOp_carry_i_1
-       (.I0(Q[3]),
-        .I1(RD_PNTR_WR[3]),
-        .O(S[3]));
-  LUT2 #(
-    .INIT(4'h9)) 
-    plusOp_carry_i_2
-       (.I0(Q[2]),
-        .I1(RD_PNTR_WR[2]),
-        .O(S[2]));
-  LUT2 #(
-    .INIT(4'h9)) 
-    plusOp_carry_i_3
-       (.I0(Q[1]),
-        .I1(RD_PNTR_WR[1]),
-        .O(S[1]));
-  LUT2 #(
-    .INIT(4'h9)) 
-    plusOp_carry_i_4
-       (.I0(Q[0]),
-        .I1(RD_PNTR_WR[0]),
-        .O(S[0]));
+        .CLR(AR),
+        .D(plusOp__0[9]),
+        .Q(Q[9]));
 endmodule
 
 (* ORIG_REF_NAME = "wr_handshaking_flags" *) 
@@ -6129,157 +6094,136 @@ endmodule
 module tx_packet_fifo_wr_logic
    (full,
     overflow,
-    prog_full,
     E,
+    Q,
+    prog_full,
+    \gic0.gc0.count_d1_reg[9] ,
     \DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram ,
+    v1_reg,
+    v1_reg_0,
     wr_clk,
     out,
-    RD_PNTR_WR,
+    S,
+    \dest_out_bin_ff_reg[7] ,
+    \dest_out_bin_ff_reg[9] ,
+    wr_en,
     \grstd1.grst_full.grst_f.rst_d3_reg ,
-    Q,
-    wr_en);
+    \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ,
+    AR);
   output full;
   output overflow;
-  output prog_full;
   output [0:0]E;
+  output [9:0]Q;
+  output prog_full;
+  output [9:0]\gic0.gc0.count_d1_reg[9] ;
   output [9:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram ;
+  input [4:0]v1_reg;
+  input [4:0]v1_reg_0;
   input wr_clk;
   input out;
-  input [9:0]RD_PNTR_WR;
-  input \grstd1.grst_full.grst_f.rst_d3_reg ;
-  input [1:0]Q;
+  input [3:0]S;
+  input [3:0]\dest_out_bin_ff_reg[7] ;
+  input [1:0]\dest_out_bin_ff_reg[9] ;
   input wr_en;
+  input \grstd1.grst_full.grst_f.rst_d3_reg ;
+  input \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ;
+  input [0:0]AR;
 
+  wire [0:0]AR;
   wire [9:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram ;
   wire [0:0]E;
-  wire [1:0]Q;
-  wire [9:0]RD_PNTR_WR;
+  wire [9:0]Q;
+  wire [3:0]S;
+  wire [3:0]\dest_out_bin_ff_reg[7] ;
+  wire [1:0]\dest_out_bin_ff_reg[9] ;
   wire full;
+  wire [9:0]\gic0.gc0.count_d1_reg[9] ;
   wire \grstd1.grst_full.grst_f.rst_d3_reg ;
-  wire \gwas.wsts_n_2 ;
+  wire \gwas.wsts_n_1 ;
+  wire \gwas.wsts_n_3 ;
+  wire \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ;
   wire out;
   wire overflow;
-  wire [8:0]p_13_out;
-  wire p_1_out;
   wire prog_full;
-  wire wpntr_n_0;
-  wire wpntr_n_1;
-  wire wpntr_n_11;
-  wire wpntr_n_12;
-  wire wpntr_n_13;
-  wire wpntr_n_14;
-  wire wpntr_n_15;
-  wire wpntr_n_16;
-  wire wpntr_n_17;
-  wire wpntr_n_18;
-  wire wpntr_n_19;
-  wire wpntr_n_20;
-  wire wpntr_n_21;
-  wire wpntr_n_22;
-  wire wpntr_n_23;
-  wire wpntr_n_24;
-  wire wpntr_n_25;
-  wire wpntr_n_26;
-  wire wpntr_n_27;
-  wire wpntr_n_28;
+  wire [4:0]v1_reg;
+  wire [4:0]v1_reg_0;
   wire wr_clk;
   wire wr_en;
 
   tx_packet_fifo_wr_pf_as \gwas.gpf.wrpf 
-       (.E(E),
-        .Q(p_13_out),
-        .S({wpntr_n_18,wpntr_n_19,wpntr_n_20,wpntr_n_21}),
-        .\gic0.gc0.count_d1_reg[7] ({wpntr_n_12,wpntr_n_13,wpntr_n_14,wpntr_n_15}),
-        .\gic0.gc0.count_d1_reg[9] ({wpntr_n_0,wpntr_n_1}),
+       (.AR(AR),
+        .E(E),
+        .Q(Q[8:0]),
+        .S(S),
+        .\dest_out_bin_ff_reg[7] (\dest_out_bin_ff_reg[7] ),
+        .\dest_out_bin_ff_reg[9] (\dest_out_bin_ff_reg[9] ),
         .\grstd1.grst_full.grst_f.rst_d3_reg (\grstd1.grst_full.grst_f.rst_d3_reg ),
-        .\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[1] (Q[0]),
         .out(out),
-        .p_1_out(p_1_out),
         .prog_full(prog_full),
+        .ram_full_fb_i_reg(\gwas.wsts_n_1 ),
         .wr_clk(wr_clk));
   tx_packet_fifo_wr_status_flags_as \gwas.wsts 
        (.E(E),
         .full(full),
-        .\gic0.gc0.count_d1_reg[1] (wpntr_n_23),
-        .\gic0.gc0.count_d1_reg[3] (wpntr_n_22),
-        .\gic0.gc0.count_d1_reg[5] (wpntr_n_17),
-        .\gic0.gc0.count_d1_reg[7] (wpntr_n_16),
-        .\gic0.gc0.count_d1_reg[8] (wpntr_n_11),
-        .\gic0.gc0.count_reg[1] (wpntr_n_28),
-        .\gic0.gc0.count_reg[2] (wpntr_n_27),
-        .\gic0.gc0.count_reg[4] (wpntr_n_26),
-        .\gic0.gc0.count_reg[6] (wpntr_n_25),
-        .\gic0.gc0.count_reg[8] (wpntr_n_24),
-        .\gof.gof1.overflow_i_reg (\gwas.wsts_n_2 ),
+        .\gof.gof1.overflow_i_reg (\gwas.wsts_n_3 ),
+        .\grstd1.grst_full.grst_f.rst_d2_reg (out),
         .\grstd1.grst_full.grst_f.rst_d3_reg (\grstd1.grst_full.grst_f.rst_d3_reg ),
-        .out(out),
-        .p_1_out(p_1_out),
+        .\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg (\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ),
+        .out(\gwas.wsts_n_1 ),
+        .v1_reg(v1_reg),
+        .v1_reg_0(v1_reg_0),
         .wr_clk(wr_clk),
         .wr_en(wr_en));
   tx_packet_fifo_wr_handshaking_flags \gwhf.whf 
        (.overflow(overflow),
-        .ram_full_fb_i_reg(\gwas.wsts_n_2 ),
+        .ram_full_fb_i_reg(\gwas.wsts_n_3 ),
         .wr_clk(wr_clk));
   tx_packet_fifo_wr_bin_cntr wpntr
-       (.\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram (\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram ),
+       (.AR(AR),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram (\DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram ),
         .E(E),
-        .Q(p_13_out),
-        .RD_PNTR_WR(RD_PNTR_WR),
-        .S({wpntr_n_18,wpntr_n_19,wpntr_n_20,wpntr_n_21}),
-        .\gdiff.diff_pntr_pad_reg[10] ({wpntr_n_0,wpntr_n_1}),
-        .\gdiff.diff_pntr_pad_reg[8] ({wpntr_n_12,wpntr_n_13,wpntr_n_14,wpntr_n_15}),
-        .\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] (Q[1]),
-        .ram_full_fb_i_reg(wpntr_n_11),
-        .ram_full_fb_i_reg_0(wpntr_n_16),
-        .ram_full_fb_i_reg_1(wpntr_n_17),
-        .ram_full_fb_i_reg_2(wpntr_n_22),
-        .ram_full_fb_i_reg_3(wpntr_n_23),
-        .ram_full_fb_i_reg_4(wpntr_n_24),
-        .ram_full_fb_i_reg_5(wpntr_n_25),
-        .ram_full_fb_i_reg_6(wpntr_n_26),
-        .ram_full_fb_i_reg_7(wpntr_n_27),
-        .ram_full_fb_i_reg_8(wpntr_n_28),
+        .Q(\gic0.gc0.count_d1_reg[9] ),
+        .\gic0.gc0.count_d2_reg[9]_0 (Q),
         .wr_clk(wr_clk));
 endmodule
 
 (* ORIG_REF_NAME = "wr_pf_as" *) 
 module tx_packet_fifo_wr_pf_as
    (prog_full,
-    wr_clk,
-    out,
     E,
     Q,
     S,
-    \gic0.gc0.count_d1_reg[7] ,
-    \gic0.gc0.count_d1_reg[9] ,
+    \dest_out_bin_ff_reg[7] ,
+    \dest_out_bin_ff_reg[9] ,
+    wr_clk,
+    out,
     \grstd1.grst_full.grst_f.rst_d3_reg ,
-    p_1_out,
-    \ngwrdrst.grst.g7serrst.wr_rst_reg_reg[1] );
+    ram_full_fb_i_reg,
+    AR);
   output prog_full;
-  input wr_clk;
-  input out;
   input [0:0]E;
   input [8:0]Q;
   input [3:0]S;
-  input [3:0]\gic0.gc0.count_d1_reg[7] ;
-  input [1:0]\gic0.gc0.count_d1_reg[9] ;
+  input [3:0]\dest_out_bin_ff_reg[7] ;
+  input [1:0]\dest_out_bin_ff_reg[9] ;
+  input wr_clk;
+  input out;
   input \grstd1.grst_full.grst_f.rst_d3_reg ;
-  input p_1_out;
-  input [0:0]\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[1] ;
+  input ram_full_fb_i_reg;
+  input [0:0]AR;
 
+  wire [0:0]AR;
   wire [0:0]E;
   wire [8:0]Q;
   wire [3:0]S;
+  wire [3:0]\dest_out_bin_ff_reg[7] ;
+  wire [1:0]\dest_out_bin_ff_reg[9] ;
   wire [9:0]diff_pntr;
-  wire [3:0]\gic0.gc0.count_d1_reg[7] ;
-  wire [1:0]\gic0.gc0.count_d1_reg[9] ;
   wire \gpf1.prog_full_i_i_1_n_0 ;
   wire \gpf1.prog_full_i_i_2_n_0 ;
   wire \gpf1.prog_full_i_i_3_n_0 ;
   wire \grstd1.grst_full.grst_f.rst_d3_reg ;
-  wire [0:0]\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[1] ;
   wire out;
-  wire p_1_out;
   wire [10:1]plusOp;
   wire plusOp_carry__0_n_0;
   wire plusOp_carry__0_n_1;
@@ -6291,6 +6235,7 @@ module tx_packet_fifo_wr_pf_as
   wire plusOp_carry_n_2;
   wire plusOp_carry_n_3;
   wire prog_full;
+  wire ram_full_fb_i_reg;
   wire wr_clk;
   wire [3:1]NLW_plusOp_carry__1_CO_UNCONNECTED;
   wire [3:2]NLW_plusOp_carry__1_O_UNCONNECTED;
@@ -6300,7 +6245,7 @@ module tx_packet_fifo_wr_pf_as
     \gdiff.diff_pntr_pad_reg[10] 
        (.C(wr_clk),
         .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[1] ),
+        .CLR(AR),
         .D(plusOp[10]),
         .Q(diff_pntr[9]));
   FDCE #(
@@ -6308,7 +6253,7 @@ module tx_packet_fifo_wr_pf_as
     \gdiff.diff_pntr_pad_reg[1] 
        (.C(wr_clk),
         .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[1] ),
+        .CLR(AR),
         .D(plusOp[1]),
         .Q(diff_pntr[0]));
   FDCE #(
@@ -6316,7 +6261,7 @@ module tx_packet_fifo_wr_pf_as
     \gdiff.diff_pntr_pad_reg[2] 
        (.C(wr_clk),
         .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[1] ),
+        .CLR(AR),
         .D(plusOp[2]),
         .Q(diff_pntr[1]));
   FDCE #(
@@ -6324,7 +6269,7 @@ module tx_packet_fifo_wr_pf_as
     \gdiff.diff_pntr_pad_reg[3] 
        (.C(wr_clk),
         .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[1] ),
+        .CLR(AR),
         .D(plusOp[3]),
         .Q(diff_pntr[2]));
   FDCE #(
@@ -6332,7 +6277,7 @@ module tx_packet_fifo_wr_pf_as
     \gdiff.diff_pntr_pad_reg[4] 
        (.C(wr_clk),
         .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[1] ),
+        .CLR(AR),
         .D(plusOp[4]),
         .Q(diff_pntr[3]));
   FDCE #(
@@ -6340,7 +6285,7 @@ module tx_packet_fifo_wr_pf_as
     \gdiff.diff_pntr_pad_reg[5] 
        (.C(wr_clk),
         .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[1] ),
+        .CLR(AR),
         .D(plusOp[5]),
         .Q(diff_pntr[4]));
   FDCE #(
@@ -6348,7 +6293,7 @@ module tx_packet_fifo_wr_pf_as
     \gdiff.diff_pntr_pad_reg[6] 
        (.C(wr_clk),
         .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[1] ),
+        .CLR(AR),
         .D(plusOp[6]),
         .Q(diff_pntr[5]));
   FDCE #(
@@ -6356,7 +6301,7 @@ module tx_packet_fifo_wr_pf_as
     \gdiff.diff_pntr_pad_reg[7] 
        (.C(wr_clk),
         .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[1] ),
+        .CLR(AR),
         .D(plusOp[7]),
         .Q(diff_pntr[6]));
   FDCE #(
@@ -6364,7 +6309,7 @@ module tx_packet_fifo_wr_pf_as
     \gdiff.diff_pntr_pad_reg[8] 
        (.C(wr_clk),
         .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[1] ),
+        .CLR(AR),
         .D(plusOp[8]),
         .Q(diff_pntr[7]));
   FDCE #(
@@ -6372,36 +6317,35 @@ module tx_packet_fifo_wr_pf_as
     \gdiff.diff_pntr_pad_reg[9] 
        (.C(wr_clk),
         .CE(1'b1),
-        .CLR(\ngwrdrst.grst.g7serrst.wr_rst_reg_reg[1] ),
+        .CLR(AR),
         .D(plusOp[9]),
         .Q(diff_pntr[8]));
   LUT5 #(
-    .INIT(32'h8F888088)) 
+    .INIT(32'h0F080008)) 
     \gpf1.prog_full_i_i_1 
        (.I0(\gpf1.prog_full_i_i_2_n_0 ),
         .I1(\gpf1.prog_full_i_i_3_n_0 ),
         .I2(\grstd1.grst_full.grst_f.rst_d3_reg ),
-        .I3(p_1_out),
+        .I3(ram_full_fb_i_reg),
         .I4(prog_full),
         .O(\gpf1.prog_full_i_i_1_n_0 ));
-  LUT5 #(
-    .INIT(32'hFEEE0000)) 
-    \gpf1.prog_full_i_i_2 
-       (.I0(diff_pntr[2]),
-        .I1(diff_pntr[3]),
-        .I2(diff_pntr[0]),
-        .I3(diff_pntr[1]),
-        .I4(diff_pntr[4]),
-        .O(\gpf1.prog_full_i_i_2_n_0 ));
   LUT6 #(
-    .INIT(64'h0000800000000000)) 
-    \gpf1.prog_full_i_i_3 
-       (.I0(diff_pntr[7]),
+    .INIT(64'h8000000000000000)) 
+    \gpf1.prog_full_i_i_2 
+       (.I0(diff_pntr[9]),
         .I1(diff_pntr[8]),
         .I2(diff_pntr[5]),
-        .I3(diff_pntr[6]),
-        .I4(\grstd1.grst_full.grst_f.rst_d3_reg ),
-        .I5(diff_pntr[9]),
+        .I3(diff_pntr[4]),
+        .I4(diff_pntr[7]),
+        .I5(diff_pntr[6]),
+        .O(\gpf1.prog_full_i_i_2_n_0 ));
+  LUT4 #(
+    .INIT(16'hFFEA)) 
+    \gpf1.prog_full_i_i_3 
+       (.I0(diff_pntr[3]),
+        .I1(diff_pntr[0]),
+        .I2(diff_pntr[1]),
+        .I3(diff_pntr[2]),
         .O(\gpf1.prog_full_i_i_3_n_0 ));
   FDPE #(
     .INIT(1'b1)) 
@@ -6424,124 +6368,102 @@ module tx_packet_fifo_wr_pf_as
         .CYINIT(1'b0),
         .DI(Q[7:4]),
         .O(plusOp[8:5]),
-        .S(\gic0.gc0.count_d1_reg[7] ));
+        .S(\dest_out_bin_ff_reg[7] ));
   CARRY4 plusOp_carry__1
        (.CI(plusOp_carry__0_n_0),
         .CO({NLW_plusOp_carry__1_CO_UNCONNECTED[3:1],plusOp_carry__1_n_3}),
         .CYINIT(1'b0),
         .DI({1'b0,1'b0,1'b0,Q[8]}),
         .O({NLW_plusOp_carry__1_O_UNCONNECTED[3:2],plusOp[10:9]}),
-        .S({1'b0,1'b0,\gic0.gc0.count_d1_reg[9] }));
+        .S({1'b0,1'b0,\dest_out_bin_ff_reg[9] }));
 endmodule
 
 (* ORIG_REF_NAME = "wr_status_flags_as" *) 
 module tx_packet_fifo_wr_status_flags_as
    (full,
-    p_1_out,
-    \gof.gof1.overflow_i_reg ,
-    E,
-    \gic0.gc0.count_d1_reg[1] ,
-    \gic0.gc0.count_d1_reg[3] ,
-    \gic0.gc0.count_d1_reg[5] ,
-    \gic0.gc0.count_d1_reg[7] ,
-    \gic0.gc0.count_d1_reg[8] ,
-    \gic0.gc0.count_reg[1] ,
-    \gic0.gc0.count_reg[2] ,
-    \gic0.gc0.count_reg[4] ,
-    \gic0.gc0.count_reg[6] ,
-    \gic0.gc0.count_reg[8] ,
-    wr_clk,
     out,
+    E,
+    \gof.gof1.overflow_i_reg ,
+    v1_reg,
+    v1_reg_0,
+    wr_clk,
+    \grstd1.grst_full.grst_f.rst_d2_reg ,
     wr_en,
-    \grstd1.grst_full.grst_f.rst_d3_reg );
+    \grstd1.grst_full.grst_f.rst_d3_reg ,
+    \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg );
   output full;
-  output p_1_out;
-  output \gof.gof1.overflow_i_reg ;
+  output out;
   output [0:0]E;
-  input \gic0.gc0.count_d1_reg[1] ;
-  input \gic0.gc0.count_d1_reg[3] ;
-  input \gic0.gc0.count_d1_reg[5] ;
-  input \gic0.gc0.count_d1_reg[7] ;
-  input \gic0.gc0.count_d1_reg[8] ;
-  input \gic0.gc0.count_reg[1] ;
-  input \gic0.gc0.count_reg[2] ;
-  input \gic0.gc0.count_reg[4] ;
-  input \gic0.gc0.count_reg[6] ;
-  input \gic0.gc0.count_reg[8] ;
+  output \gof.gof1.overflow_i_reg ;
+  input [4:0]v1_reg;
+  input [4:0]v1_reg_0;
   input wr_clk;
-  input out;
+  input \grstd1.grst_full.grst_f.rst_d2_reg ;
   input wr_en;
   input \grstd1.grst_full.grst_f.rst_d3_reg ;
+  input \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ;
 
   wire [0:0]E;
-  wire comp2;
-  wire full;
-  wire \gic0.gc0.count_d1_reg[1] ;
-  wire \gic0.gc0.count_d1_reg[3] ;
-  wire \gic0.gc0.count_d1_reg[5] ;
-  wire \gic0.gc0.count_d1_reg[7] ;
-  wire \gic0.gc0.count_d1_reg[8] ;
-  wire \gic0.gc0.count_reg[1] ;
-  wire \gic0.gc0.count_reg[2] ;
-  wire \gic0.gc0.count_reg[4] ;
-  wire \gic0.gc0.count_reg[6] ;
-  wire \gic0.gc0.count_reg[8] ;
+  wire c2_n_0;
+  wire comp1;
   wire \gof.gof1.overflow_i_reg ;
+  wire \grstd1.grst_full.grst_f.rst_d2_reg ;
   wire \grstd1.grst_full.grst_f.rst_d3_reg ;
-  wire out;
-  wire p_1_out;
-  wire ram_full_i;
+  wire \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ;
+  (* DONT_TOUCH *) wire ram_full_fb_i;
+  (* DONT_TOUCH *) wire ram_full_i;
+  wire [4:0]v1_reg;
+  wire [4:0]v1_reg_0;
   wire wr_clk;
   wire wr_en;
 
+  assign full = ram_full_i;
+  assign out = ram_full_fb_i;
   LUT2 #(
     .INIT(4'h2)) 
     \DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram_i_1 
        (.I0(wr_en),
-        .I1(p_1_out),
+        .I1(ram_full_fb_i),
         .O(E));
   tx_packet_fifo_compare c1
-       (.comp2(comp2),
-        .\gic0.gc0.count_d1_reg[1] (\gic0.gc0.count_d1_reg[1] ),
-        .\gic0.gc0.count_d1_reg[3] (\gic0.gc0.count_d1_reg[3] ),
-        .\gic0.gc0.count_d1_reg[5] (\gic0.gc0.count_d1_reg[5] ),
-        .\gic0.gc0.count_d1_reg[7] (\gic0.gc0.count_d1_reg[7] ),
-        .\gic0.gc0.count_d1_reg[8] (\gic0.gc0.count_d1_reg[8] ),
-        .\grstd1.grst_full.grst_f.rst_d3_reg (\grstd1.grst_full.grst_f.rst_d3_reg ),
-        .ram_full_fb_i_reg(p_1_out),
-        .ram_full_i(ram_full_i),
-        .wr_en(wr_en));
+       (.comp1(comp1),
+        .v1_reg(v1_reg));
   tx_packet_fifo_compare_0 c2
-       (.comp2(comp2),
-        .\gic0.gc0.count_reg[1] (\gic0.gc0.count_reg[1] ),
-        .\gic0.gc0.count_reg[2] (\gic0.gc0.count_reg[2] ),
-        .\gic0.gc0.count_reg[4] (\gic0.gc0.count_reg[4] ),
-        .\gic0.gc0.count_reg[6] (\gic0.gc0.count_reg[6] ),
-        .\gic0.gc0.count_reg[8] (\gic0.gc0.count_reg[8] ));
-  LUT2 #(
-    .INIT(4'h8)) 
+       (.comp1(comp1),
+        .\grstd1.grst_full.grst_f.rst_d3_reg (\grstd1.grst_full.grst_f.rst_d3_reg ),
+        .out(ram_full_fb_i),
+        .ram_full_fb_i_reg(c2_n_0),
+        .v1_reg_0(v1_reg_0),
+        .wr_en(wr_en));
+  LUT3 #(
+    .INIT(8'hE0)) 
     \gof.gof1.overflow_i_i_1 
-       (.I0(wr_en),
-        .I1(p_1_out),
+       (.I0(ram_full_fb_i),
+        .I1(\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ),
+        .I2(wr_en),
         .O(\gof.gof1.overflow_i_reg ));
+  (* DONT_TOUCH *) 
+  (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
   FDPE #(
     .INIT(1'b1)) 
     ram_full_fb_i_reg
        (.C(wr_clk),
         .CE(1'b1),
-        .D(ram_full_i),
-        .PRE(out),
-        .Q(p_1_out));
+        .D(c2_n_0),
+        .PRE(\grstd1.grst_full.grst_f.rst_d2_reg ),
+        .Q(ram_full_fb_i));
+  (* DONT_TOUCH *) 
+  (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
   FDPE #(
     .INIT(1'b1)) 
     ram_full_i_reg
        (.C(wr_clk),
         .CE(1'b1),
-        .D(ram_full_i),
-        .PRE(out),
-        .Q(full));
+        .D(c2_n_0),
+        .PRE(\grstd1.grst_full.grst_f.rst_d2_reg ),
+        .Q(ram_full_i));
 endmodule
 `ifndef GLBL
 `define GLBL
@@ -6593,8 +6515,8 @@ module glbl ();
     reg JTAG_USER_TDO3_GLBL = 1'bz;
     reg JTAG_USER_TDO4_GLBL = 1'bz;
 
-    assign (weak1, weak0) GSR = GSR_int;
-    assign (weak1, weak0) GTS = GTS_int;
+    assign (strong1, weak0) GSR = GSR_int;
+    assign (strong1, weak0) GTS = GTS_int;
     assign (weak1, weak0) PRLD = PRLD_int;
 
     initial begin

@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2017 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2018 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -46,8 +46,8 @@
 -- 
 -- DO NOT MODIFY THIS FILE.
 
--- IP VLNV: xilinx.com:ip:fifo_generator:13.1
--- IP Revision: 1
+-- IP VLNV: xilinx.com:ip:fifo_generator:13.2
+-- IP Revision: 2
 
 -- The following code must appear in the VHDL architecture header.
 
@@ -57,10 +57,10 @@ COMPONENT ska_tx_packet_fifo
     rst : IN STD_LOGIC;
     wr_clk : IN STD_LOGIC;
     rd_clk : IN STD_LOGIC;
-    din : IN STD_LOGIC_VECTOR(263 DOWNTO 0);
+    din : IN STD_LOGIC_VECTOR(259 DOWNTO 0);
     wr_en : IN STD_LOGIC;
     rd_en : IN STD_LOGIC;
-    dout : OUT STD_LOGIC_VECTOR(263 DOWNTO 0);
+    dout : OUT STD_LOGIC_VECTOR(259 DOWNTO 0);
     full : OUT STD_LOGIC;
     overflow : OUT STD_LOGIC;
     empty : OUT STD_LOGIC;
