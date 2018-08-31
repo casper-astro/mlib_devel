@@ -53,22 +53,22 @@ entity wishbone_ten_gb_eth_attach is
         WE_I  : in  std_logic;
 
         -- CPU TX BUFFER
-        cpu_tx_buffer_addr    : out std_logic_vector( 7 downto 0);
+        cpu_tx_buffer_addr    : out std_logic_vector(10 downto 0);
         cpu_tx_buffer_rd_data : in  std_logic_vector(63 downto 0);
         cpu_tx_buffer_wr_data : out std_logic_vector(63 downto 0);
         cpu_tx_buffer_wr_en   : out std_logic;
-        cpu_tx_size           : out std_logic_vector( 7 downto 0);
+        cpu_tx_size           : out std_logic_vector(10 downto 0);
         cpu_tx_ready          : out std_logic;
         cpu_tx_done           : in  std_logic;
 
         -- CPU RX BUFFER
-        cpu_rx_buffer_addr    : out std_logic_vector( 7 downto 0);
+        cpu_rx_buffer_addr    : out std_logic_vector(10 downto 0);
         cpu_rx_buffer_rd_data : in  std_logic_vector(63 downto 0);
-        cpu_rx_size           : in  std_logic_vector( 7 downto 0);
+        cpu_rx_size           : in  std_logic_vector(10 downto 0);
         cpu_rx_ack            : out std_logic;
 
         -- ARP CACHE
-        arp_cache_addr    : out std_logic_vector( 7 downto 0);
+        arp_cache_addr    : out std_logic_vector(10 downto 0);
         arp_cache_rd_data : in  std_logic_vector(47 downto 0);
         arp_cache_wr_data : out std_logic_vector(47 downto 0);
         arp_cache_wr_en   : out std_logic;
@@ -98,28 +98,30 @@ end wishbone_ten_gb_eth_attach;
 
 architecture arch_wishbone_ten_gb_eth_attach of wishbone_ten_gb_eth_attach is
 
-    constant REGISTERS_OFFSET : std_logic_vector(13 downto 0) := "00000000000000";
-    constant REGISTERS_HIGH   : std_logic_vector(13 downto 0) := "00011111111111";
-    constant TX_BUFFER_OFFSET : std_logic_vector(13 downto 0) := "01000000000000";
-    constant TX_BUFFER_HIGH   : std_logic_vector(13 downto 0) := "01011111111111";
-    constant RX_BUFFER_OFFSET : std_logic_vector(13 downto 0) := "10000000000000";
-    constant RX_BUFFER_HIGH   : std_logic_vector(13 downto 0) := "10011111111111";
-    constant ARP_CACHE_OFFSET : std_logic_vector(13 downto 0) := "11000000000000";
-    constant ARP_CACHE_HIGH   : std_logic_vector(13 downto 0) := "11011111111111";
+    constant REGISTERS_OFFSET : std_logic_vector(15 downto 0) := X"0000";
+    constant REGISTERS_HIGH   : std_logic_vector(15 downto 0) := X"0FFF";
+    constant ARP_CACHE_OFFSET : std_logic_vector(15 downto 0) := X"1000";
+    constant ARP_CACHE_HIGH   : std_logic_vector(15 downto 0) := X"3FFF";
+    constant TX_BUFFER_OFFSET : std_logic_vector(15 downto 0) := X"4000";
+    constant TX_BUFFER_HIGH   : std_logic_vector(15 downto 0) := X"7FFF";
+    constant RX_BUFFER_OFFSET : std_logic_vector(15 downto 0) := X"8000";
+    constant RX_BUFFER_HIGH   : std_logic_vector(15 downto 0) := X"BFFF";
 
-    constant REG_LOCAL_MAC_1     : std_logic_vector(7 downto 0) := X"00";
-    constant REG_LOCAL_MAC_0     : std_logic_vector(7 downto 0) := X"01";
-    constant REG_LOCAL_GATEWAY   : std_logic_vector(7 downto 0) := X"03";
-    constant REG_LOCAL_IPADDR    : std_logic_vector(7 downto 0) := X"04";
-    constant REG_LOCAL_NETMASK   : std_logic_vector(7 downto 0) := X"0E";
-    constant REG_BUFFER_SIZES    : std_logic_vector(7 downto 0) := X"06";
-    constant REG_VALID_PORTS     : std_logic_vector(7 downto 0) := X"08";
-    constant REG_MC_RECV_IP      : std_logic_vector(7 downto 0) := X"0C";
-    constant REG_MC_RECV_IP_MASK : std_logic_vector(7 downto 0) := X"0D";
-    constant REG_XAUI_STATUS     : std_logic_vector(7 downto 0) := X"09";
-    constant REG_PHY_CONFIG      : std_logic_vector(7 downto 0) := X"0A";
-    constant REG_XAUI_CONFIG     : std_logic_vector(7 downto 0) := X"0B";
+    constant REG_XAUI_STATUS     : std_logic_vector(7 downto 0) := X"10";  -- these can probably be removed
+    constant REG_PHY_CONFIG      : std_logic_vector(7 downto 0) := X"1A";
+    constant REG_XAUI_CONFIG     : std_logic_vector(7 downto 0) := X"1B";
 
+    constant REG_CORE_TYPE       : std_logic_vector(7 downto 0) := X"00";
+    constant REG_BUFFER_SIZES    : std_logic_vector(7 downto 0) := X"01"; -- This needs to be X"09", will change this later
+    constant REG_WORD_LENS       : std_logic_vector(7 downto 0) := X"02";
+    constant REG_LOCAL_MAC_1     : std_logic_vector(7 downto 0) := X"03";
+    constant REG_LOCAL_MAC_0     : std_logic_vector(7 downto 0) := X"04";
+    constant REG_LOCAL_IPADDR    : std_logic_vector(7 downto 0) := X"05";
+    constant REG_LOCAL_GATEWAY   : std_logic_vector(7 downto 0) := X"06";
+    constant REG_MC_RECV_IP      : std_logic_vector(7 downto 0) := X"07";
+    constant REG_MC_RECV_IP_MASK : std_logic_vector(7 downto 0) := X"08";
+    constant REG_LOCAL_NETMASK   : std_logic_vector(7 downto 0) := X"09";  -- Swap this with the REG_VALID_PORTS once the elf file is updated
+    constant REG_VALID_PORTS     : std_logic_vector(7 downto 0) := X"0B";
 
     signal STB_I_z  : std_logic;
     signal STB_I_z2 : std_logic;
@@ -129,12 +131,12 @@ architecture arch_wishbone_ten_gb_eth_attach of wishbone_ten_gb_eth_attach is
     signal rxbuf_sel    : std_logic;
     signal txbuf_sel    : std_logic;
     signal arp_sel      : std_logic;
-    signal reg_data_src : std_logic_vector(3 downto 0);
+    signal reg_data_src : std_logic_vector(7 downto 0);
 
-    signal reg_addr   : std_logic_vector(13 downto 0);
-    signal rxbuf_addr : std_logic_vector(13 downto 0);
-    signal txbuf_addr : std_logic_vector(13 downto 0);
-    signal arp_addr   : std_logic_vector(13 downto 0);
+    signal reg_addr   : std_logic_vector(15 downto 0);
+    signal rxbuf_addr : std_logic_vector(15 downto 0);
+    signal txbuf_addr : std_logic_vector(15 downto 0);
+    signal arp_addr   : std_logic_vector(15 downto 0);
 
     signal local_mac_reg : std_logic_vector(47 downto 0);
     signal local_ip_reg : std_logic_vector(31 downto 0);
@@ -153,7 +155,7 @@ architecture arch_wishbone_ten_gb_eth_attach of wishbone_ten_gb_eth_attach is
     signal xaui_rst_rx_link_status_reg : std_logic;
     signal xaui_test_select_reg : std_logic_vector(1 downto 0);
 
-    signal cpu_tx_size_reg  : std_logic_vector(7 downto 0);
+    signal cpu_tx_size_reg  : std_logic_vector(10 downto 0);
     signal cpu_tx_ready_reg : std_logic;
     signal cpu_rx_ack_reg   : std_logic;
 
@@ -161,7 +163,7 @@ architecture arch_wishbone_ten_gb_eth_attach of wishbone_ten_gb_eth_attach is
     signal tx_buffer_we : std_logic;
     signal write_data   : std_logic_vector(63 downto 0);
 
-    signal cpu_rx_size_int : std_logic_vector(7 downto 0);
+    signal cpu_rx_size_int : std_logic_vector(10 downto 0);
 
     signal arp_data_int : std_logic_vector(31 downto 0);
     signal tx_data_int  : std_logic_vector(31 downto 0);
@@ -197,7 +199,7 @@ begin
     cpu_tx_buffer_wr_data <= write_data;
     cpu_tx_buffer_wr_en   <= tx_buffer_we;
 
-    cpu_rx_buffer_addr <= rxbuf_addr(10 downto 3);
+    cpu_rx_buffer_addr <= rxbuf_addr(13 downto 3);
 
 --------------------------------------------------------------------------------
 -- WISHBONE ACK GENERATION
@@ -267,20 +269,20 @@ begin
     (cpu_rx_buffer_rd_data(15 downto 0) & cpu_rx_buffer_rd_data(31 downto 16)) when (rxbuf_addr(2) = '1') else
     (cpu_rx_buffer_rd_data(47 downto 32) & cpu_rx_buffer_rd_data(63 downto 48));
 
-    cpu_rx_size_int <= X"00" when (cpu_rx_ack_reg = '1') else cpu_rx_size;
+    cpu_rx_size_int <= ("000" & X"00") when (cpu_rx_ack_reg = '1') else cpu_rx_size;
 
     reg_data_int <=
-    (X"0000" & local_mac_reg(47 downto 32)) when (reg_data_src = REG_LOCAL_MAC_1) else
-    local_mac_reg(31 downto 0) when (reg_data_src = REG_LOCAL_MAC_0) else
-    (X"000000" & local_gateway_reg) when (reg_data_src = REG_LOCAL_GATEWAY) else
-    local_ip_reg(31 downto 0) when (reg_data_src = REG_LOCAL_IPADDR) else
-    local_netmask_reg(31 downto 0) when (reg_data_src = REG_LOCAL_NETMASK) else
-    (X"00" & cpu_tx_size_reg & X"00" & cpu_rx_size_int) when (reg_data_src = REG_BUFFER_SIZES) else
-    ("0000000" & soft_reset_reg & "0000000" & local_enable_reg & local_port_reg) when (reg_data_src = REG_VALID_PORTS) else
-    (X"000000" & xaui_status) when (reg_data_src = REG_XAUI_STATUS) else
+    (X"0000" & local_mac_reg(47 downto 32))                                      when (reg_data_src = REG_LOCAL_MAC_1)    else
+    local_mac_reg(31 downto 0)                                                   when (reg_data_src = REG_LOCAL_MAC_0)    else
+    (X"000000" & local_gateway_reg)                                              when (reg_data_src = REG_LOCAL_GATEWAY)  else
+    local_ip_reg(31 downto 0)                                                    when (reg_data_src = REG_LOCAL_IPADDR)   else
+    local_netmask_reg(31 downto 0)                                               when (reg_data_src = REG_LOCAL_NETMASK)  else
+    ("00000" & cpu_tx_size_reg & "00000" & cpu_rx_size_int)                      when (reg_data_src = REG_BUFFER_SIZES)   else
+    ("0000000" & soft_reset_reg & "0000000" & local_enable_reg & local_port_reg) when (reg_data_src = REG_VALID_PORTS)    else
+    (X"000000" & xaui_status)                                                    when (reg_data_src = REG_XAUI_STATUS)    else
     ("0000" & mgt_txdiffctrl_reg & "0000" & mgt_txpreemphasis_reg & "000" & mgt_txpostemphasis_reg & "00000" & mgt_rxeqmix_reg) when (reg_data_src = REG_PHY_CONFIG) else
-    local_mc_recv_ip_reg(31 downto 0) when (reg_data_src = REG_MC_RECV_IP) else
-    local_mc_recv_ip_mask_reg(31 downto 0) when (reg_data_src = REG_MC_RECV_IP_MASK) else
+    local_mc_recv_ip_reg(31 downto 0)                                            when (reg_data_src = REG_MC_RECV_IP)     else
+    local_mc_recv_ip_mask_reg(31 downto 0)                                       when (reg_data_src = REG_MC_RECV_IP_MASK) else
     (others => '0');
 
     DAT_O <=
@@ -312,7 +314,7 @@ begin
             mgt_txpostemphasis_reg <= POSTEMPHASIS;
             mgt_txdiffctrl_reg <= DIFFCTRL;
             soft_reset_reg <= '0';
-            reg_data_src <= "0000";
+            reg_data_src <= "00000000";
         elsif (rising_edge(CLK_I))then
 
             if (cpu_tx_done = '1')then
@@ -329,9 +331,9 @@ begin
             end if;
 
             if ((reg_sel = '1')and(reg_sel_z1 = '0'))then
-                reg_data_src <= reg_addr(5 downto 2);
+                reg_data_src <= reg_addr(9 downto 2);
                 if (WE_I = '1')then
-                    case (reg_addr(5 downto 2))is
+                    case (reg_addr(9 downto 2))is
                         when REG_LOCAL_MAC_1 =>
                         if (SEL_I(0) = '1')then
                             local_mac_reg(39 downto 32) <= DAT_I(7 downto 0);
@@ -388,11 +390,11 @@ begin
                         end if;
 
                         when REG_BUFFER_SIZES =>
-                        if ((SEL_I(0) = '1')and(DAT_I(7 downto 0) = X"00"))then
+                        if ((SEL_I(0) = '1')and(DAT_I(10 downto 0) = ("000" & X"00")))then
                             cpu_rx_ack_reg <= '1';
                         end if;
                         if (SEL_I(2) = '1')then
-                            cpu_tx_size_reg <= DAT_I(23 downto 16);
+                            cpu_tx_size_reg <= DAT_I(26 downto 16);
                             cpu_tx_ready_reg <= '1';
                         end if;
 
@@ -480,11 +482,11 @@ begin
     gen_write_data : process(CLK_I)
     begin
         if (rising_edge(CLK_I))then
-            cpu_tx_buffer_addr <= txbuf_addr(10 downto 3);
-            arp_cache_addr <= arp_addr(10 downto 3);
-
             arp_cache_we <= '0';
             tx_buffer_we <= '0';
+
+            cpu_tx_buffer_addr <= txbuf_addr(13 downto 3);
+            arp_cache_addr     <= arp_addr(13 downto 3);
 
             if (arp_sel = '1')then
                 if (arp_addr(2) = '0')then
@@ -500,7 +502,6 @@ begin
                     else
                         write_data(47 downto 40) <= arp_cache_rd_data(47 downto 40);
                     end if;
-
                 else
                     -- LOWER 32 BITS WRITTEN SECOND
                     arp_cache_we <= '1';

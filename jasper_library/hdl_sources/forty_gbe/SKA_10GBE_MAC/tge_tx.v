@@ -12,7 +12,7 @@ module tge_tx #(
     input   [7:0] local_gateway,
     input  [31:0] local_netmask,
     // CPU Arp Cache signals,
-    input   [7:0] arp_cache_addr,
+    input  [10:0] arp_cache_addr,
     output [47:0] arp_cache_rd_data,
     input  [47:0] arp_cache_wr_data,
     input         arp_cache_wr_en,
@@ -29,12 +29,12 @@ module tge_tx #(
     // CPU Interface
     input         cpu_clk,
     input         cpu_rst,
-    input   [7:0] cpu_tx_buffer_addr,
+    input  [10:0] cpu_tx_buffer_addr,
     output [63:0] cpu_tx_buffer_rd_data,
     input  [63:0] cpu_tx_buffer_wr_data,
     input         cpu_tx_buffer_wr_en,
 
-    input   [7:0] cpu_tx_size,
+    input  [10:0] cpu_tx_size,
     input         cpu_tx_ready,
     output        cpu_tx_done,
     // MAC
@@ -70,7 +70,7 @@ module tge_tx #(
   /* CPU interface signals */
   wire mac_cpu_ack;
   wire mac_cpu_pending;
-  wire  [7:0] mac_cpu_size;
+  wire [10:0] mac_cpu_size;
   wire [63:0] mac_cpu_data;
   wire  [7:0] mac_cpu_addr;
 

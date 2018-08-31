@@ -124,7 +124,7 @@ begin
                MST_ADR_O - x"80060000" when (MST_ADR_O >= x"80060000" and MST_ADR_O < x"8006C000") else --11 (40GbE Port 1)
                MST_ADR_O - x"8006C000" when (MST_ADR_O >= x"8006C000" and MST_ADR_O < x"80078000") else --12 (40GbE Port 2)                     
                MST_ADR_O - x"80078000" when (MST_ADR_O >= x"80078000" and MST_ADR_O < x"80084000") else --13 (40GbE Port 3)
-               "00000";        
+               MST_ADR_O;
         SLV_CYC_I(a) <= MST_CYC_O;
         SLV_SEL_I(a) <= MST_SEL_O;
         SLV_WE_I(a) <= MST_WE_O;

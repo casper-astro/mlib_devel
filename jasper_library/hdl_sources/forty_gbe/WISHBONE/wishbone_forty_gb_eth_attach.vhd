@@ -110,7 +110,7 @@ architecture arch_wishbone_forty_gb_eth_attach of wishbone_forty_gb_eth_attach i
     constant RX_BUFFER_HIGH   : std_logic_vector(15 downto 0) := X"BFFF";
 
     constant REG_CORE_TYPE       : std_logic_vector(7 downto 0) := X"00";
-    constant REG_BUFFER_SIZES    : std_logic_vector(7 downto 0) := X"01";
+    constant REG_BUFFER_SIZES    : std_logic_vector(7 downto 0) := X"01"; -- This needs to be X"09", will change this later
     constant REG_WORD_LENS       : std_logic_vector(7 downto 0) := X"02";
     constant REG_LOCAL_MAC_1     : std_logic_vector(7 downto 0) := X"03";
     constant REG_LOCAL_MAC_0     : std_logic_vector(7 downto 0) := X"04";
