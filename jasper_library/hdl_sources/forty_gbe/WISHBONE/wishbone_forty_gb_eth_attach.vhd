@@ -191,6 +191,7 @@ architecture arch_wishbone_forty_gb_eth_attach of wishbone_forty_gb_eth_attach i
     signal reg_data_int : std_logic_vector(31 downto 0);
 
     signal reg_sel_z1 : std_logic;
+
 begin
 
     local_mac             <= local_mac_reg;
@@ -245,7 +246,7 @@ begin
             STB_I_z  <= '0';
             STB_I_z2 <= '0';
         elsif (rising_edge(CLK_I))then
-            STB_I_z <= STB_I;
+            STB_I_z  <= STB_I;
             STB_I_z2 <= STB_I_z;
         end if;
     end process;
@@ -269,10 +270,10 @@ begin
 
     wishbone_sel <= CYC_I and STB_I;
 
-    reg_sel   <= wishbone_sel when ((ADR_I >= REGISTERS_OFFSET)and(ADR_I <= REGISTERS_HIGH)) else '0';
-    txbuf_sel <= wishbone_sel when ((ADR_I >= TX_BUFFER_OFFSET)and(ADR_I <= TX_BUFFER_HIGH)) else '0';
-    rxbuf_sel <= wishbone_sel when ((ADR_I >= RX_BUFFER_OFFSET)and(ADR_I <= RX_BUFFER_HIGH)) else '0';
-    arp_sel   <= wishbone_sel when ((ADR_I >= ARP_CACHE_OFFSET)and(ADR_I <= ARP_CACHE_HIGH)) else '0';
+    reg_sel   <= wishbone_sel when ((ADR_I >= REGISTERS_OFFSET) and (ADR_I <= REGISTERS_HIGH)) else '0';
+    txbuf_sel <= wishbone_sel when ((ADR_I >= TX_BUFFER_OFFSET) and (ADR_I <= TX_BUFFER_HIGH)) else '0';
+    rxbuf_sel <= wishbone_sel when ((ADR_I >= RX_BUFFER_OFFSET) and (ADR_I <= RX_BUFFER_HIGH)) else '0';
+    arp_sel   <= wishbone_sel when ((ADR_I >= ARP_CACHE_OFFSET) and (ADR_I <= ARP_CACHE_HIGH)) else '0';
 
     reg_addr   <= ADR_I - REGISTERS_OFFSET;
     rxbuf_addr <= ADR_I - RX_BUFFER_OFFSET;
@@ -296,7 +297,7 @@ begin
     (cpu_rx_buffer_rd_data(15 downto  0) & cpu_rx_buffer_rd_data(31 downto 16)) when (rxbuf_addr(2) = '1') else
     (cpu_rx_buffer_rd_data(47 downto 32) & cpu_rx_buffer_rd_data(63 downto 48));
 
-    cpu_rx_size_int <= ("000" & X"00") when (cpu_rx_ack_reg = '1') else cpu_rx_size; 
+    cpu_rx_size_int <= ("000" & X"00") when (cpu_rx_ack_reg = '1') else cpu_rx_size;
 
     reg_data_int <=
     (X"0000" & local_mac_reg(47 downto 32))                                      when (reg_data_src = REG_LOCAL_MAC_1)      else

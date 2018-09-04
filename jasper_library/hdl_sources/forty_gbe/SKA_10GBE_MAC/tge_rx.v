@@ -26,9 +26,9 @@ module tge_rx #(
     // CPU Interface
     input         cpu_clk,
     input         cpu_rst,
-    input  [10:0] cpu_rx_buffer_addr,
+    input   [7:0] cpu_rx_buffer_addr,
     output [63:0] cpu_rx_buffer_rd_data,
-    output [10:0] cpu_rx_size,
+    output  [7:0] cpu_rx_size,
     input         cpu_rx_ack,
 
     // MAC Interface

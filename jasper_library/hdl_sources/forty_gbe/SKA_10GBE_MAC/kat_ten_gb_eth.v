@@ -262,7 +262,7 @@ module kat_ten_gb_eth #(
     .local_gateway       (local_gateway),
     .local_netmask       (local_netmask),
     // CPU Arp Cache signals;
-    .arp_cache_addr      (arp_cache_addr),
+    .arp_cache_addr      (arp_cache_addr[7:0]),
     .arp_cache_rd_data   (arp_cache_rd_data),
     .arp_cache_wr_data   (arp_cache_wr_data),
     .arp_cache_wr_en     (arp_cache_wr_en),
@@ -279,11 +279,11 @@ module kat_ten_gb_eth #(
     // CPU Interface
     .cpu_clk               (cpu_clk),
     .cpu_rst               (cpu_rst),
-    .cpu_tx_buffer_addr    (cpu_tx_buffer_addr),
+    .cpu_tx_buffer_addr    (cpu_tx_buffer_addr[7:0]),
     .cpu_tx_buffer_rd_data (cpu_tx_buffer_rd_data),
     .cpu_tx_buffer_wr_data (cpu_tx_buffer_wr_data),
     .cpu_tx_buffer_wr_en   (cpu_tx_buffer_wr_en),
-    .cpu_tx_size           (cpu_tx_size),
+    .cpu_tx_size           (cpu_tx_size[7:0]),
     .cpu_tx_ready          (cpu_tx_ready),
     .cpu_tx_done           (cpu_tx_done),
     // Mac
@@ -324,9 +324,9 @@ module kat_ten_gb_eth #(
     // CPU Interface
     .cpu_clk               (cpu_clk),
     .cpu_rst               (cpu_rst),
-    .cpu_rx_buffer_addr    (cpu_rx_buffer_addr),
+    .cpu_rx_buffer_addr    (cpu_rx_buffer_addr[7:0]),
     .cpu_rx_buffer_rd_data (cpu_rx_buffer_rd_data),
-    .cpu_rx_size           (cpu_rx_size),
+    .cpu_rx_size           (cpu_rx_size[7:0]),
     .cpu_rx_ack            (cpu_rx_ack),
     // MAC Interface
     .mac_clk           (mac_clk),
