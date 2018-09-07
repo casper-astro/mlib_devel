@@ -1122,6 +1122,8 @@ class VivadoBackend(ToolflowBackend):
             self.add_tcl_cmd('file mkdir %s/%s' % (self.compile_dir,
                                                    self.project_name))
             self.add_tcl_cmd('set_part %s' % plat.fpga)
+        # Set the project to default to vhdl    
+        self.add_tcl_cmd('set_property target_language VHDL [current_project]')    
 
     def add_library(self, path):
         """

@@ -1,10 +1,10 @@
 // Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2018.2 (lin64) Build 2258646 Thu Jun 14 20:02:38 MDT 2018
-// Date        : Thu Aug 23 13:45:57 2018
-// Host        : adam-cm running 64-bit Ubuntu 14.04.5 LTS
+// Date        : Tue Sep  4 15:57:17 2018
+// Host        : adam-cm running 64-bit Ubuntu 16.04.5 LTS
 // Command     : write_verilog -force -mode funcsim
-//               /home/aisaacson/work/git_work/ska_sa/projects/skarab_bsp_firmware/firmware/FRM123701U1R1/Vivado/IP/ska_tx_packet_fifo/ska_tx_packet_fifo_sim_netlist.v
+//               /home/aisaacson/work/git_work/ska_sa/projects/mlib_devel/jasper_library/test_models/r2018a_test2/myproj/myproj.srcs/sources_1/ip/ska_tx_packet_fifo/ska_tx_packet_fifo_sim_netlist.v
 // Design      : ska_tx_packet_fifo
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -12,7 +12,7 @@
 // --------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CHECK_LICENSE_TYPE = "ska_tx_packet_fifo,fifo_generator_v13_2_2,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "fifo_generator_v13_2_2,Vivado 2018.1" *) 
+(* CHECK_LICENSE_TYPE = "ska_tx_packet_fifo,fifo_generator_v13_2_2,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "fifo_generator_v13_2_2,Vivado 2018.2" *) 
 (* NotValidForBitStream *)
 module ska_tx_packet_fifo
    (rst,
@@ -29,17 +29,17 @@ module ska_tx_packet_fifo
   input rst;
   (* x_interface_info = "xilinx.com:signal:clock:1.0 write_clk CLK" *) (* x_interface_parameter = "XIL_INTERFACENAME write_clk, FREQ_HZ 100000000, PHASE 0.000" *) input wr_clk;
   (* x_interface_info = "xilinx.com:signal:clock:1.0 read_clk CLK" *) (* x_interface_parameter = "XIL_INTERFACENAME read_clk, FREQ_HZ 100000000, PHASE 0.000" *) input rd_clk;
-  (* x_interface_info = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_DATA" *) input [259:0]din;
+  (* x_interface_info = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_DATA" *) input [263:0]din;
   (* x_interface_info = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_EN" *) input wr_en;
   (* x_interface_info = "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_EN" *) input rd_en;
-  (* x_interface_info = "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_DATA" *) output [259:0]dout;
+  (* x_interface_info = "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_DATA" *) output [263:0]dout;
   (* x_interface_info = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE FULL" *) output full;
   output overflow;
   (* x_interface_info = "xilinx.com:interface:fifo_read:1.0 FIFO_READ EMPTY" *) output empty;
   output prog_full;
 
-  wire [259:0]din;
-  wire [259:0]dout;
+  wire [263:0]din;
+  wire [263:0]dout;
   wire empty;
   wire full;
   wire overflow;
@@ -200,7 +200,7 @@ module ska_tx_packet_fifo
   (* C_COUNT_TYPE = "0" *) 
   (* C_DATA_COUNT_WIDTH = "9" *) 
   (* C_DEFAULT_VALUE = "BlankString" *) 
-  (* C_DIN_WIDTH = "260" *) 
+  (* C_DIN_WIDTH = "264" *) 
   (* C_DIN_WIDTH_AXIS = "1" *) 
   (* C_DIN_WIDTH_RACH = "32" *) 
   (* C_DIN_WIDTH_RDCH = "64" *) 
@@ -208,7 +208,7 @@ module ska_tx_packet_fifo
   (* C_DIN_WIDTH_WDCH = "64" *) 
   (* C_DIN_WIDTH_WRCH = "2" *) 
   (* C_DOUT_RST_VAL = "0" *) 
-  (* C_DOUT_WIDTH = "260" *) 
+  (* C_DOUT_WIDTH = "264" *) 
   (* C_ENABLE_RLOCS = "0" *) 
   (* C_ENABLE_RST_SYNC = "1" *) 
   (* C_EN_SAFETY_CKT = "0" *) 
@@ -1636,7 +1636,7 @@ module ska_tx_packet_fifo_blk_mem_gen_generic_cstr
     \gc0.count_d1_reg[8] ,
     \gic0.gc0.count_d2_reg[8] ,
     din);
-  output [259:0]D;
+  output [263:0]D;
   input rd_clk;
   input wr_clk;
   input tmp_ram_rd_en;
@@ -1644,12 +1644,12 @@ module ska_tx_packet_fifo_blk_mem_gen_generic_cstr
   input [0:0]AS;
   input [8:0]\gc0.count_d1_reg[8] ;
   input [8:0]\gic0.gc0.count_d2_reg[8] ;
-  input [259:0]din;
+  input [263:0]din;
 
   wire [0:0]AS;
-  wire [259:0]D;
+  wire [263:0]D;
   wire [0:0]E;
-  wire [259:0]din;
+  wire [263:0]din;
   wire [8:0]\gc0.count_d1_reg[8] ;
   wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire rd_clk;
@@ -1688,9 +1688,9 @@ module ska_tx_packet_fifo_blk_mem_gen_generic_cstr
         .wr_clk(wr_clk));
   ska_tx_packet_fifo_blk_mem_gen_prim_width__parameterized2 \ramloop[3].ram.r 
        (.AS(AS),
-        .D(D[259:216]),
+        .D(D[263:216]),
         .E(E),
-        .din(din[259:216]),
+        .din(din[263:216]),
         .\gc0.count_d1_reg[8] (\gc0.count_d1_reg[8] ),
         .\gic0.gc0.count_d2_reg[8] (\gic0.gc0.count_d2_reg[8] ),
         .rd_clk(rd_clk),
@@ -1838,7 +1838,7 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_width__parameterized2
     \gc0.count_d1_reg[8] ,
     \gic0.gc0.count_d2_reg[8] ,
     din);
-  output [43:0]D;
+  output [47:0]D;
   input rd_clk;
   input wr_clk;
   input tmp_ram_rd_en;
@@ -1846,12 +1846,12 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_width__parameterized2
   input [0:0]AS;
   input [8:0]\gc0.count_d1_reg[8] ;
   input [8:0]\gic0.gc0.count_d2_reg[8] ;
-  input [43:0]din;
+  input [47:0]din;
 
   wire [0:0]AS;
-  wire [43:0]D;
+  wire [47:0]D;
   wire [0:0]E;
-  wire [43:0]din;
+  wire [47:0]din;
   wire [8:0]\gc0.count_d1_reg[8] ;
   wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire rd_clk;
@@ -2628,7 +2628,7 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized2
     \gc0.count_d1_reg[8] ,
     \gic0.gc0.count_d2_reg[8] ,
     din);
-  output [43:0]D;
+  output [47:0]D;
   input rd_clk;
   input wr_clk;
   input tmp_ram_rd_en;
@@ -2636,28 +2636,24 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized2
   input [0:0]AS;
   input [8:0]\gc0.count_d1_reg[8] ;
   input [8:0]\gic0.gc0.count_d2_reg[8] ;
-  input [43:0]din;
+  input [47:0]din;
 
   wire [0:0]AS;
-  wire [43:0]D;
+  wire [47:0]D;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_12 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_13 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_20 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_21 ;
-  wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_22 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_28 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_29 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_36 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_37 ;
-  wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_38 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_4 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_44 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_45 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_5 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_52 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_53 ;
-  wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_54 ;
-  wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_6 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_60 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_61 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_68 ;
@@ -2669,7 +2665,7 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized2
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_74 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_75 ;
   wire [0:0]E;
-  wire [43:0]din;
+  wire [47:0]din;
   wire [8:0]\gc0.count_d1_reg[8] ;
   wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire rd_clk;
@@ -2869,12 +2865,12 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized2
         .CLKARDCLK(rd_clk),
         .CLKBWRCLK(wr_clk),
         .DBITERR(\NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_DBITERR_UNCONNECTED ),
-        .DIADI({1'b0,1'b0,1'b0,din[21:17],1'b0,1'b0,din[16:11],1'b0,1'b0,1'b0,din[10:6],1'b0,1'b0,din[5:0]}),
-        .DIBDI({1'b0,1'b0,1'b0,din[43:39],1'b0,1'b0,din[38:33],1'b0,1'b0,1'b0,din[32:28],1'b0,1'b0,din[27:22]}),
+        .DIADI({1'b0,1'b0,din[23:18],1'b0,1'b0,din[17:12],1'b0,1'b0,din[11:6],1'b0,1'b0,din[5:0]}),
+        .DIBDI({1'b0,1'b0,din[47:42],1'b0,1'b0,din[41:36],1'b0,1'b0,din[35:30],1'b0,1'b0,din[29:24]}),
         .DIPADIP({1'b0,1'b0,1'b0,1'b0}),
         .DIPBDIP({1'b0,1'b0,1'b0,1'b0}),
-        .DOADO({\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_4 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_5 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_6 ,D[21:17],\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_12 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_13 ,D[16:11],\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_20 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_21 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_22 ,D[10:6],\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_28 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_29 ,D[5:0]}),
-        .DOBDO({\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_36 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_37 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_38 ,D[43:39],\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_44 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_45 ,D[38:33],\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_52 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_53 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_54 ,D[32:28],\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_60 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_61 ,D[27:22]}),
+        .DOADO({\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_4 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_5 ,D[23:18],\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_12 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_13 ,D[17:12],\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_20 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_21 ,D[11:6],\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_28 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_29 ,D[5:0]}),
+        .DOBDO({\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_36 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_37 ,D[47:42],\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_44 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_45 ,D[41:36],\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_52 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_53 ,D[35:30],\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_60 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_61 ,D[29:24]}),
         .DOPADOP({\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_68 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_69 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_70 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_71 }),
         .DOPBDOP({\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_72 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_73 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_74 ,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_75 }),
         .ECCPARITY(\NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_ECCPARITY_UNCONNECTED [7:0]),
@@ -2905,7 +2901,7 @@ module ska_tx_packet_fifo_blk_mem_gen_top
     \gc0.count_d1_reg[8] ,
     \gic0.gc0.count_d2_reg[8] ,
     din);
-  output [259:0]D;
+  output [263:0]D;
   input rd_clk;
   input wr_clk;
   input tmp_ram_rd_en;
@@ -2913,12 +2909,12 @@ module ska_tx_packet_fifo_blk_mem_gen_top
   input [0:0]AS;
   input [8:0]\gc0.count_d1_reg[8] ;
   input [8:0]\gic0.gc0.count_d2_reg[8] ;
-  input [259:0]din;
+  input [263:0]din;
 
   wire [0:0]AS;
-  wire [259:0]D;
+  wire [263:0]D;
   wire [0:0]E;
-  wire [259:0]din;
+  wire [263:0]din;
   wire [8:0]\gc0.count_d1_reg[8] ;
   wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire rd_clk;
@@ -2948,7 +2944,7 @@ module ska_tx_packet_fifo_blk_mem_gen_v8_4_1
     \gc0.count_d1_reg[8] ,
     \gic0.gc0.count_d2_reg[8] ,
     din);
-  output [259:0]D;
+  output [263:0]D;
   input rd_clk;
   input wr_clk;
   input tmp_ram_rd_en;
@@ -2956,12 +2952,12 @@ module ska_tx_packet_fifo_blk_mem_gen_v8_4_1
   input [0:0]AS;
   input [8:0]\gc0.count_d1_reg[8] ;
   input [8:0]\gic0.gc0.count_d2_reg[8] ;
-  input [259:0]din;
+  input [263:0]din;
 
   wire [0:0]AS;
-  wire [259:0]D;
+  wire [263:0]D;
   wire [0:0]E;
-  wire [259:0]din;
+  wire [263:0]din;
   wire [8:0]\gc0.count_d1_reg[8] ;
   wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire rd_clk;
@@ -2991,7 +2987,7 @@ module ska_tx_packet_fifo_blk_mem_gen_v8_4_1_synth
     \gc0.count_d1_reg[8] ,
     \gic0.gc0.count_d2_reg[8] ,
     din);
-  output [259:0]D;
+  output [263:0]D;
   input rd_clk;
   input wr_clk;
   input tmp_ram_rd_en;
@@ -2999,12 +2995,12 @@ module ska_tx_packet_fifo_blk_mem_gen_v8_4_1_synth
   input [0:0]AS;
   input [8:0]\gc0.count_d1_reg[8] ;
   input [8:0]\gic0.gc0.count_d2_reg[8] ;
-  input [259:0]din;
+  input [263:0]din;
 
   wire [0:0]AS;
-  wire [259:0]D;
+  wire [263:0]D;
   wire [0:0]E;
-  wire [259:0]din;
+  wire [263:0]din;
   wire [8:0]\gc0.count_d1_reg[8] ;
   wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire rd_clk;
@@ -3460,19 +3456,19 @@ module ska_tx_packet_fifo_fifo_generator_ramfifo
   output [0:0]AR;
   output empty;
   output full;
-  output [259:0]dout;
+  output [263:0]dout;
   output overflow;
   output prog_full;
   input rst;
   input wr_clk;
   input rd_clk;
-  input [259:0]din;
+  input [263:0]din;
   input wr_en;
   input rd_en;
 
   wire [0:0]AR;
-  wire [259:0]din;
-  wire [259:0]dout;
+  wire [263:0]din;
+  wire [263:0]dout;
   wire empty;
   wire full;
   wire \gntv_or_sync_fifo.gcx.clkx_n_0 ;
@@ -3597,19 +3593,19 @@ module ska_tx_packet_fifo_fifo_generator_top
   output [0:0]AS;
   output empty;
   output full;
-  output [259:0]dout;
+  output [263:0]dout;
   output overflow;
   output prog_full;
   input rst;
   input wr_clk;
   input rd_clk;
-  input [259:0]din;
+  input [263:0]din;
   input wr_en;
   input rd_en;
 
   wire [0:0]AS;
-  wire [259:0]din;
-  wire [259:0]dout;
+  wire [263:0]din;
+  wire [263:0]dout;
   wire empty;
   wire full;
   wire \grstd1.grst_full.grst_f.rst_d1_reg ;
@@ -3646,10 +3642,10 @@ endmodule
 (* C_AXI_DATA_WIDTH = "64" *) (* C_AXI_ID_WIDTH = "1" *) (* C_AXI_LEN_WIDTH = "8" *) 
 (* C_AXI_LOCK_WIDTH = "1" *) (* C_AXI_RUSER_WIDTH = "1" *) (* C_AXI_TYPE = "1" *) 
 (* C_AXI_WUSER_WIDTH = "1" *) (* C_COMMON_CLOCK = "0" *) (* C_COUNT_TYPE = "0" *) 
-(* C_DATA_COUNT_WIDTH = "9" *) (* C_DEFAULT_VALUE = "BlankString" *) (* C_DIN_WIDTH = "260" *) 
+(* C_DATA_COUNT_WIDTH = "9" *) (* C_DEFAULT_VALUE = "BlankString" *) (* C_DIN_WIDTH = "264" *) 
 (* C_DIN_WIDTH_AXIS = "1" *) (* C_DIN_WIDTH_RACH = "32" *) (* C_DIN_WIDTH_RDCH = "64" *) 
 (* C_DIN_WIDTH_WACH = "1" *) (* C_DIN_WIDTH_WDCH = "64" *) (* C_DIN_WIDTH_WRCH = "2" *) 
-(* C_DOUT_RST_VAL = "0" *) (* C_DOUT_WIDTH = "260" *) (* C_ENABLE_RLOCS = "0" *) 
+(* C_DOUT_RST_VAL = "0" *) (* C_DOUT_WIDTH = "264" *) (* C_ENABLE_RLOCS = "0" *) 
 (* C_ENABLE_RST_SYNC = "1" *) (* C_EN_SAFETY_CKT = "0" *) (* C_ERROR_INJECTION_TYPE = "0" *) 
 (* C_ERROR_INJECTION_TYPE_AXIS = "0" *) (* C_ERROR_INJECTION_TYPE_RACH = "0" *) (* C_ERROR_INJECTION_TYPE_RDCH = "0" *) 
 (* C_ERROR_INJECTION_TYPE_WACH = "0" *) (* C_ERROR_INJECTION_TYPE_WDCH = "0" *) (* C_ERROR_INJECTION_TYPE_WRCH = "0" *) 
@@ -3946,7 +3942,7 @@ module ska_tx_packet_fifo_fifo_generator_v13_2_2
   input wr_rst;
   input rd_clk;
   input rd_rst;
-  input [259:0]din;
+  input [263:0]din;
   input wr_en;
   input rd_en;
   input [8:0]prog_empty_thresh;
@@ -3959,7 +3955,7 @@ module ska_tx_packet_fifo_fifo_generator_v13_2_2
   input injectdbiterr;
   input injectsbiterr;
   input sleep;
-  output [259:0]dout;
+  output [263:0]dout;
   output full;
   output almost_full;
   output wr_ack;
@@ -4171,8 +4167,8 @@ module ska_tx_packet_fifo_fifo_generator_v13_2_2
 
   wire \<const0> ;
   wire \<const1> ;
-  wire [259:0]din;
-  wire [259:0]dout;
+  wire [263:0]din;
+  wire [263:0]dout;
   wire empty;
   wire full;
   wire overflow;
@@ -4742,19 +4738,19 @@ module ska_tx_packet_fifo_fifo_generator_v13_2_2_synth
   output [0:0]AR;
   output empty;
   output full;
-  output [259:0]dout;
+  output [263:0]dout;
   output overflow;
   output prog_full;
   input rst;
   input wr_clk;
   input rd_clk;
-  input [259:0]din;
+  input [263:0]din;
   input wr_en;
   input rd_en;
 
   wire [0:0]AR;
-  wire [259:0]din;
-  wire [259:0]dout;
+  wire [263:0]din;
+  wire [263:0]dout;
   wire empty;
   wire full;
   wire \grstd1.grst_full.grst_f.rst_d1_reg ;
@@ -4794,7 +4790,7 @@ module ska_tx_packet_fifo_memory
     \gic0.gc0.count_d2_reg[8] ,
     din,
     \gpregsm1.curr_fwft_state_reg[1] );
-  output [259:0]dout;
+  output [263:0]dout;
   input rd_clk;
   input wr_clk;
   input tmp_ram_rd_en;
@@ -4802,14 +4798,14 @@ module ska_tx_packet_fifo_memory
   input [0:0]AS;
   input [8:0]\gc0.count_d1_reg[8] ;
   input [8:0]\gic0.gc0.count_d2_reg[8] ;
-  input [259:0]din;
+  input [263:0]din;
   input [0:0]\gpregsm1.curr_fwft_state_reg[1] ;
 
   wire [0:0]AS;
   wire [0:0]E;
-  wire [259:0]din;
-  wire [259:0]dout;
-  wire [259:0]doutb;
+  wire [263:0]din;
+  wire [263:0]dout;
+  wire [263:0]doutb;
   wire [8:0]\gc0.count_d1_reg[8] ;
   wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire [0:0]\gpregsm1.curr_fwft_state_reg[1] ;
@@ -6253,6 +6249,38 @@ module ska_tx_packet_fifo_memory
         .R(AS));
   FDRE #(
     .INIT(1'b0)) 
+    \goreg_bm.dout_i_reg[260] 
+       (.C(rd_clk),
+        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .D(doutb[260]),
+        .Q(dout[260]),
+        .R(AS));
+  FDRE #(
+    .INIT(1'b0)) 
+    \goreg_bm.dout_i_reg[261] 
+       (.C(rd_clk),
+        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .D(doutb[261]),
+        .Q(dout[261]),
+        .R(AS));
+  FDRE #(
+    .INIT(1'b0)) 
+    \goreg_bm.dout_i_reg[262] 
+       (.C(rd_clk),
+        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .D(doutb[262]),
+        .Q(dout[262]),
+        .R(AS));
+  FDRE #(
+    .INIT(1'b0)) 
+    \goreg_bm.dout_i_reg[263] 
+       (.C(rd_clk),
+        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .D(doutb[263]),
+        .Q(dout[263]),
+        .R(AS));
+  FDRE #(
+    .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[26] 
        (.C(rd_clk),
         .CE(\gpregsm1.curr_fwft_state_reg[1] ),
@@ -7373,7 +7401,7 @@ module ska_tx_packet_fifo_rd_fwft
         .O(\gc0.count_d1_reg[8] ));
   LUT3 #(
     .INIT(8'hA2)) 
-    \goreg_bm.dout_i[259]_i_1 
+    \goreg_bm.dout_i[263]_i_1 
        (.I0(curr_fwft_state[1]),
         .I1(curr_fwft_state[0]),
         .I2(rd_en),

@@ -1,10 +1,10 @@
 -- Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2018.2 (lin64) Build 2258646 Thu Jun 14 20:02:38 MDT 2018
--- Date        : Thu Aug 23 13:45:57 2018
--- Host        : adam-cm running 64-bit Ubuntu 14.04.5 LTS
+-- Date        : Tue Sep  4 15:57:17 2018
+-- Host        : adam-cm running 64-bit Ubuntu 16.04.5 LTS
 -- Command     : write_vhdl -force -mode synth_stub
---               /home/aisaacson/work/git_work/ska_sa/projects/skarab_bsp_firmware/firmware/FRM123701U1R1/Vivado/IP/ska_tx_packet_fifo/ska_tx_packet_fifo_stub.vhdl
+--               /home/aisaacson/work/git_work/ska_sa/projects/mlib_devel/jasper_library/test_models/r2018a_test2/myproj/myproj.srcs/sources_1/ip/ska_tx_packet_fifo/ska_tx_packet_fifo_stub.vhdl
 -- Design      : ska_tx_packet_fifo
 -- Purpose     : Stub declaration of top-level module interface
 -- Device      : xc7vx690tffg1927-2
@@ -17,10 +17,10 @@ entity ska_tx_packet_fifo is
     rst : in STD_LOGIC;
     wr_clk : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
-    din : in STD_LOGIC_VECTOR ( 259 downto 0 );
+    din : in STD_LOGIC_VECTOR ( 263 downto 0 );
     wr_en : in STD_LOGIC;
     rd_en : in STD_LOGIC;
-    dout : out STD_LOGIC_VECTOR ( 259 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 263 downto 0 );
     full : out STD_LOGIC;
     overflow : out STD_LOGIC;
     empty : out STD_LOGIC;
@@ -33,8 +33,8 @@ architecture stub of ska_tx_packet_fifo is
 attribute syn_black_box : boolean;
 attribute black_box_pad_pin : string;
 attribute syn_black_box of stub : architecture is true;
-attribute black_box_pad_pin of stub : architecture is "rst,wr_clk,rd_clk,din[259:0],wr_en,rd_en,dout[259:0],full,overflow,empty,prog_full";
+attribute black_box_pad_pin of stub : architecture is "rst,wr_clk,rd_clk,din[263:0],wr_en,rd_en,dout[263:0],full,overflow,empty,prog_full";
 attribute x_core_info : string;
-attribute x_core_info of stub : architecture is "fifo_generator_v13_2_2,Vivado 2018.1";
+attribute x_core_info of stub : architecture is "fifo_generator_v13_2_2,Vivado 2018.2";
 begin
 end;
