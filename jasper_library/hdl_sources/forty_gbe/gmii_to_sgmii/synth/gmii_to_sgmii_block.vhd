@@ -98,8 +98,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-library gig_ethernet_pcs_pma_v14_2;
-use gig_ethernet_pcs_pma_v14_2.all;
+library gig_ethernet_pcs_pma_v14_3;
+use gig_ethernet_pcs_pma_v14_3.all;
 --------------------------------------------------------------------------------
 -- The entity declaration for the Core Block wrapper.
 --------------------------------------------------------------------------------
@@ -309,7 +309,7 @@ architecture block_level of gmii_to_sgmii_block is
         gt0_eyescandataerror_out  : out std_logic;
         gt0_eyescantrigger_in     : in  std_logic;
         gt0_rxcdrhold_in          : in  std_logic;
-      gt0_dmonitorout_out       : out std_logic_vector(14 downto 0);        
+        gt0_dmonitorout_out       : out std_logic_vector(14 downto 0);        
       resetdone           : out   std_logic;
      
     gt0_qplloutclk                          : in   std_logic;
@@ -322,7 +322,7 @@ architecture block_level of gmii_to_sgmii_block is
    -----------------------------------------------------------------------------
    -- Component Declaration for the 1000BASE-X PCS/PMA sublayer core.
    -----------------------------------------------------------------------------
-   component gig_ethernet_pcs_pma_v14_2
+   component gig_ethernet_pcs_pma_v14_3
       generic (
          C_ELABORATION_TRANSIENT_DIR : string := "";
          C_COMPONENT_NAME            : string := "";
@@ -511,7 +511,7 @@ phyaddress <= std_logic_vector(to_unsigned(1, phyaddress'length));
   -- Instantiate the core
   ------------------------------------------------------------------------------
 
-  gmii_to_sgmii_core : gig_ethernet_pcs_pma_v14_2
+  gmii_to_sgmii_core : gig_ethernet_pcs_pma_v14_3
     generic map (
       C_ELABORATION_TRANSIENT_DIR => "BlankString",
       C_COMPONENT_NAME            => "gmii_to_sgmii",
@@ -529,7 +529,7 @@ phyaddress <= std_logic_vector(to_unsigned(1, phyaddress'length));
       C_SGMII_FABRIC_BUFFER       => true,
       C_1588                      => 0,
       B_SHIFTER_ADDR              => x"50",
-      RX_GT_NOMINAL_LATENCY => "0000000011010010",
+      RX_GT_NOMINAL_LATENCY       => "0000000011010010",
       GT_RX_BYTE_WIDTH            => 1
     )
     port map (
@@ -586,40 +586,40 @@ phyaddress <= std_logic_vector(to_unsigned(1, phyaddress'length));
    
    port map (
 
-      encommaalign         => enablealign,
-      powerdown            => powerdown,
-      usrclk               => userclk,
-      usrclk2              => userclk2,
-      rxusrclk               => rxuserclk,
-      rxusrclk2              => rxuserclk2,
-      independent_clock    => independent_clock_bufg,
-      data_valid           => status_vector_i(1),
-      txreset              => mgt_tx_reset,
-      txchardispmode       => txchardispmode,
-      txchardispval        => txchardispval,
-      txcharisk            => txcharisk,
-      txdata               => txdata,
-      rxreset              => mgt_rx_reset,
-      rxchariscomma        => rxchariscomma(0),
-      rxcharisk            => rxcharisk(0),
-      rxclkcorcnt          => rxclkcorcnt,
-      rxdata               => rxdata,
-      rxdisperr            => rxdisperr(0),
-      rxnotintable         => rxnotintable(0),
-      rxrundisp            => rxrundisp(0),
-      rxbuferr             => rxbufstatus(1),
-      txbuferr             => txbuferr,
-      plllkdet             => cplllock,
-      txoutclk             => txoutclk,
-      rxoutclk             => rxoutclk_i,
-      txn                  => txn,
-      txp                  => txp,
-      rxn                  => rxn,
-      rxp                  => rxp,
+      encommaalign                 => enablealign,
+      powerdown                    => powerdown,
+      usrclk                       => userclk,
+      usrclk2                      => userclk2,
+      rxusrclk                     => rxuserclk,
+      rxusrclk2                    => rxuserclk2,
+      independent_clock            => independent_clock_bufg,
+      data_valid                   => status_vector_i(1),
+      txreset                      => mgt_tx_reset,
+      txchardispmode               => txchardispmode,
+      txchardispval                => txchardispval,
+      txcharisk                    => txcharisk,
+      txdata                       => txdata,
+      rxreset                      => mgt_rx_reset,
+      rxchariscomma                => rxchariscomma(0),
+      rxcharisk                    => rxcharisk(0),
+      rxclkcorcnt                  => rxclkcorcnt,
+      rxdata                       => rxdata,
+      rxdisperr                    => rxdisperr(0),
+      rxnotintable                 => rxnotintable(0),
+      rxrundisp                    => rxrundisp(0),
+      rxbuferr                     => rxbufstatus(1),
+      txbuferr                     => txbuferr,
+      plllkdet                     => cplllock,
+      txoutclk                     => txoutclk,
+      rxoutclk                     => rxoutclk_i,
+      txn                          => txn,
+      txp                          => txp,
+      rxn                          => rxn,
+      rxp                          => rxp,
 
-      gtrefclk             => gtrefclk,
-      pmareset             => pma_reset,
-      mmcm_locked          => mmcm_locked,
+      gtrefclk                     => gtrefclk,
+      pmareset                     => pma_reset,
+      mmcm_locked                  => mmcm_locked,
       gt0_txpmareset_in         => '0',
       gt0_txpcsreset_in         => '0',
       gt0_rxpmareset_in         => '0',
@@ -642,7 +642,7 @@ phyaddress <= std_logic_vector(to_unsigned(1, phyaddress'length));
       gt0_rxmonitorsel_in       => (others=>'0'),
       gt0_rxcommadet_out        => open,
       gt0_txpolarity_in         => '0',
-      gt0_txdiffctrl_in         => (others=>'0'),
+      gt0_txdiffctrl_in         => "1000", -- GT 11/04/2017
       gt0_txpostcursor_in       => (others=>'0'),
       gt0_txprecursor_in        => (others=>'0'),
       gt0_rxpolarity_in         => '0',
@@ -662,13 +662,14 @@ phyaddress <= std_logic_vector(to_unsigned(1, phyaddress'length));
       gt0_rxcdrhold_in          => '0',
       gt0_dmonitorout_out       => open ,       
       
-      resetdone            => open,
-    gt0_qplloutclk                      => gt0_qplloutclk_in,
-    gt0_qplloutrefclk                   => gt0_qplloutrefclk_in
+      resetdone                 => open,
+     gt0_qplloutclk             => gt0_qplloutclk_in,
+     gt0_qplloutrefclk          => gt0_qplloutrefclk_in
    );
 
- resetdone <= gt0_txresetdone_out_i and gt0_rxresetdone_out_i;
  reset_done <= gt0_txresetdone_out_i and gt0_rxresetdone_out_i;
+
+ resetdone  <= reset_done_i;
 
    sync_block_reset_done : gmii_to_sgmii_sync_block
    port map
@@ -679,9 +680,8 @@ phyaddress <= std_logic_vector(to_unsigned(1, phyaddress'length));
         );
 
 
-
    -- Unused
-   rxbufstatus(0) <= '0';
+  rxbufstatus(0)           <= '0';
 
 
    -- GT output cannot drive a BUFR directly so connecting to it through a BUFMR

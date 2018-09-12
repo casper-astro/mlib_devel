@@ -136,7 +136,8 @@ module hmc #(
     input  wire USER_RST,
     output wire POST_OK,    
     output wire INIT_DONE,
-    
+    output wire [2:0] MEZZ_ID,
+    output wire MEZZ_PRESENT,
     //System Clocks
     input wire HMC_CLK,
     input wire HMC_RST
@@ -172,6 +173,11 @@ assign dbg_FIFO_RX_FLAG_STATUS_LINK2 = FIFO_RX_FLAG_STATUS_LINK2;
 assign dbg_FIFO_TX_FLAG_STATUS_LINK3 = FIFO_TX_FLAG_STATUS_LINK3;
 assign dbg_FIFO_RX_FLAG_STATUS_LINK3 = FIFO_RX_FLAG_STATUS_LINK3;
 
+
+//Assign HMC ID = 010 (uBlaze needs to know this is an HMC card)
+assign MEZZ_ID = {1'b0, 1'b1, 1'b0};
+//Assign MEZZ_PRESENT = 1'b1 (if Mezzanine is present then this will be high always)
+assign MEZZ_PRESENT = 1'b1;
 
 //AI: Monitor the QPLL lock Status
 assign QPLL_LOCK_ERR_LINK2 = ~qpll_lock_link2RRRR;

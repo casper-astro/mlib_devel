@@ -14,7 +14,7 @@ class adc(YellowBlock):
 
     def modify_top(self,top):
         module = 'adc_interface'
-        inst = top.get_instance(entity=module, name=self.fullname, comment=self.fullname)
+        inst = top.get_instance(entity=module, name=self.fullname)
         
         # External ports
         inst.add_port('adc_clk_p',  self.fullname+'_adc_clk_p', dir='in', parent_port=True)
@@ -79,7 +79,7 @@ class adc(YellowBlock):
 
         # Now the ADC controller
         module = 'wb_adccontroller'
-        inst = top.get_instance(entity=module, name='adc%d_wb_controller' % self.adc_brd, comment=self.fullname)
+        inst = top.get_instance(entity=module, name='adc%d_wb_controller' % self.adc_brd)
         inst.add_wb_interface(regname='iadc%d_controller' % self.adc_brd, nbytes=0x10, mode='rw')
         inst.add_port('adc3wire_clk   ', self.fullname+'_adc3wire_clk   ', dir='out', parent_port=True)
         inst.add_port('adc3wire_data  ', self.fullname+'_adc3wire_data  ', dir='out', parent_port=True)

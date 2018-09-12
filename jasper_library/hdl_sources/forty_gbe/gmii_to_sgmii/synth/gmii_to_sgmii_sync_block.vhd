@@ -74,9 +74,6 @@ entity gmii_to_sgmii_sync_block is
     data_out    : out std_logic           -- synced data
     );
 
- attribute dont_touch : string;
- attribute dont_touch    of   gmii_to_sgmii_sync_block : entity is "yes";
-
 end gmii_to_sgmii_sync_block;
 
 

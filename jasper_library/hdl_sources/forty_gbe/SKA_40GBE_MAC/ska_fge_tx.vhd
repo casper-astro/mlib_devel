@@ -112,10 +112,10 @@ architecture arch_ska_fge_tx of ska_fge_tx is
         rst         : in std_logic;
         wr_clk      : in std_logic;
         rd_clk      : in std_logic;
-        din         : in std_logic_vector(259 downto 0);
+        din         : in std_logic_vector(263 downto 0);--std_logic_vector(259 downto 0);
         wr_en       : in std_logic;
         rd_en       : in std_logic;
-        dout        : out std_logic_vector(259 downto 0);
+        dout        : out std_logic_vector(263 downto 0);--std_logic_vector(259 downto 0);
         full        : out std_logic;
         overflow    : out std_logic;
         empty       : out std_logic;
@@ -170,10 +170,10 @@ architecture arch_ska_fge_tx of ska_fge_tx is
     signal app_tx_data_z1 : std_logic_vector(255 downto 0);
     signal app_tx_dest_ip_z1 : std_logic_vector(31 downto 0);
     signal app_tx_dest_port_z1 : std_logic_vector(15 downto 0);
-    signal app_tx_data_din : std_logic_vector(259 downto 0);
+    signal app_tx_data_din : std_logic_vector(263 downto 0);--std_logic_vector(259 downto 0);
     signal app_tx_data_wrreq : std_logic;
     signal app_tx_data_rdreq : std_logic;
-    signal app_tx_data_dout : std_logic_vector(259 downto 0);
+    signal app_tx_data_dout : std_logic_vector(263 downto 0);--std_logic_vector(259 downto 0);
     signal app_tx_data_full : std_logic;
     signal app_tx_data_empty : std_logic; 
     signal app_tx_data_overflow : std_logic;
@@ -272,12 +272,14 @@ architecture arch_ska_fge_tx of ska_fge_tx is
     signal payload2 : std_logic_vector(63 downto 0);
     signal payload3 : std_logic_vector(63 downto 0);
     signal payload_valid : std_logic_vector(3 downto 0);
+    signal payload_end_of_frame : std_logic;
 
     signal payload0_z1 : std_logic_vector(63 downto 0);
     signal payload1_z1 : std_logic_vector(63 downto 0);
     signal payload2_z1 : std_logic_vector(63 downto 0);
     signal payload3_z1 : std_logic_vector(63 downto 0);
     signal payload_valid_z1 : std_logic_vector(3 downto 0);
+    signal payload_end_of_frame_z1 : std_logic;
        
     signal ip_checksum_0 : std_logic_vector(17 downto 0);
     signal ip_checksum_1 : std_logic_vector(16 downto 0);
@@ -303,11 +305,188 @@ architecture arch_ska_fge_tx of ska_fge_tx is
     signal app_tx_data_wrreq_latched : std_logic;
     signal app_tx_end_of_frame_latched : std_logic;
     
+    signal read_eof_data_cnt : std_logic_vector(63 downto 0);
+    signal read_eof_data_ctrl_cnt : std_logic_vector(63 downto 0);
+    
+    signal write_eof_data_cnt : std_logic_vector(63 downto 0);
+    signal write_eof_data_ctrl_cnt : std_logic_vector(63 downto 0);
+    
+    signal misalign_cond1_count : std_logic_vector(63 downto 0);
+    signal misalign_cond2_count : std_logic_vector(63 downto 0);
+
+    signal eof_flag_activate : std_logic;     
 --    signal arp_cache_write_error_i : std_logic_vector(7 downto 0);
 --    signal arp_cache_read_error_i : std_logic_vector(7 downto 0);
+
+-- Mark Debug ILA Testing    
+    signal dbg_app_tx_valid_z1 : std_logic_vector(3 downto 0);
+    signal dbg_app_tx_any_valid : std_logic;
+    signal dbg_app_tx_data_z1 : std_logic_vector(255 downto 0);
+    signal dbg_app_tx_dest_ip_z1 : std_logic_vector(31 downto 0);
+    signal dbg_app_tx_dest_port_z1 : std_logic_vector(15 downto 0);
+    signal dbg_app_tx_data_din : std_logic_vector(263 downto 0);
+    signal dbg_app_tx_data_wrreq : std_logic;
+    signal dbg_app_tx_data_rdreq : std_logic;
+    signal dbg_app_tx_data_dout : std_logic_vector(263 downto 0);
+    signal dbg_app_tx_data_full : std_logic;
+    signal dbg_app_tx_data_empty : std_logic; 
+    signal dbg_app_tx_data_overflow : std_logic;
+    signal dbg_app_tx_data_rd : std_logic;   
+    signal dbg_app_tx_data_afull : std_logic;
+    signal dbg_app_tx_end_of_frame_z1 : std_logic; 
+    signal dbg_payload0 :std_logic_vector(63 downto 0);
+    signal dbg_payload1 :std_logic_vector(63 downto 0);
+    signal dbg_payload2 :std_logic_vector(63 downto 0);
+    signal dbg_payload3 :std_logic_vector(63 downto 0);
+    signal dbg_payload_valid :std_logic_vector(3 downto 0); 
+    signal dbg_payload_end_of_frame : std_logic;
+    signal dbg_app_tx_ctrl_din :std_logic_vector(63 downto 0); 
+    signal dbg_app_tx_ctrl_wrreq :std_logic; 
+    signal dbg_app_tx_ctrl_rdreq :std_logic; 
+    signal dbg_app_tx_ctrl_dout :std_logic_vector(63 downto 0); 
+    signal dbg_app_tx_ctrl_full :std_logic; 
+    signal dbg_app_tx_ctrl_overflow :std_logic; 
+    signal dbg_app_tx_ctrl_empty :std_logic; 
+    signal dbg_app_tx_ctrl_afull :std_logic; 
+    signal dbg_app_tx_ctrl_wrreq_latched : std_logic;
+    signal dbg_app_tx_data_wrreq_latched : std_logic;
+    signal dbg_app_tx_end_of_frame_latched : std_logic;
+    signal dbg_app_tx_ctrl_fifo_en : std_logic;
+    signal dbg_data_count : std_logic_vector(10 downto 0);
+    signal dbg_app_tx_ctrl_rd : std_logic;
+    signal dbg_current_tx_packet_state : T_TX_PACKET_STATE;
+    signal dbg_mac_tx_start_i : std_logic;
+    signal dbg_payload_finish_state : std_logic;
+    signal dbg_dest_mac : std_logic_vector(47 downto 0);
+    signal dbg_dest_ip : std_logic_vector(31 downto 0);
+    signal dbg_dest_port : std_logic_vector(15 downto 0);
+    signal dbg_tx_total_size : std_logic_vector(10 downto 0); 
+    signal dbg_mac_tx_start_z1 : std_logic;  
+    signal dbg_mac_tx_data_i : std_logic_vector(255 downto 0); 
+    signal dbg_mac_tx_data_valid_i : std_logic_vector(31 downto 0); 
+    signal dbg_app_rst : std_logic; 
+    signal dbg_tx_size : std_logic_vector(10 downto 0);  
+    signal dbg_read_eof_data_cnt : std_logic_vector(63 downto 0); 
+    signal dbg_read_eof_data_ctrl_cnt : std_logic_vector(63 downto 0);
+    signal dbg_write_eof_data_cnt : std_logic_vector(63 downto 0);
+    signal dbg_write_eof_data_ctrl_cnt : std_logic_vector(63 downto 0);
+    signal dbg_misalign_cond1_count : std_logic_vector(63 downto 0); 
+    signal dbg_misalign_cond2_count : std_logic_vector(63 downto 0);   
+        
+    -- Mark Debug ILA Testing
+    
+    attribute MARK_DEBUG : string;
+    attribute MARK_DEBUG of dbg_app_tx_valid_z1 : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_app_tx_any_valid : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_app_tx_data_z1 : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_app_tx_dest_ip_z1 : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_app_tx_dest_port_z1 : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_app_tx_data_din : signal is "TRUE";    
+    attribute MARK_DEBUG of dbg_app_tx_data_wrreq : signal is "TRUE";   
+    attribute MARK_DEBUG of dbg_app_tx_data_rdreq : signal is "TRUE";   
+    attribute MARK_DEBUG of dbg_app_tx_data_dout : signal is "TRUE";   
+    attribute MARK_DEBUG of dbg_app_tx_data_full : signal is "TRUE";   
+    attribute MARK_DEBUG of dbg_app_tx_data_empty : signal is "TRUE";   
+    attribute MARK_DEBUG of dbg_app_tx_data_overflow : signal is "TRUE";   
+    attribute MARK_DEBUG of dbg_app_tx_data_rd : signal is "TRUE";   
+    attribute MARK_DEBUG of dbg_app_tx_data_afull : signal is "TRUE";   
+    attribute MARK_DEBUG of dbg_app_tx_end_of_frame_z1 : signal is "TRUE";   
+    attribute MARK_DEBUG of dbg_payload0 : signal is "TRUE";   
+    attribute MARK_DEBUG of dbg_payload1 : signal is "TRUE";   
+    attribute MARK_DEBUG of dbg_payload2 : signal is "TRUE";   
+    attribute MARK_DEBUG of dbg_payload3 : signal is "TRUE";   
+    attribute MARK_DEBUG of dbg_payload_valid : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_payload_end_of_frame : signal is "TRUE";       
+    attribute MARK_DEBUG of dbg_app_tx_ctrl_din : signal is "TRUE";   
+    attribute MARK_DEBUG of dbg_app_tx_ctrl_wrreq : signal is "TRUE";   
+    attribute MARK_DEBUG of dbg_app_tx_ctrl_rdreq : signal is "TRUE";   
+    attribute MARK_DEBUG of dbg_app_tx_ctrl_dout : signal is "TRUE";   
+    attribute MARK_DEBUG of dbg_app_tx_ctrl_full : signal is "TRUE";   
+    attribute MARK_DEBUG of dbg_app_tx_ctrl_overflow : signal is "TRUE";   
+    attribute MARK_DEBUG of dbg_app_tx_ctrl_empty : signal is "TRUE";   
+    attribute MARK_DEBUG of dbg_app_tx_ctrl_afull : signal is "TRUE";   
+    attribute MARK_DEBUG of dbg_app_tx_ctrl_wrreq_latched : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_app_tx_data_wrreq_latched : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_app_tx_end_of_frame_latched : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_app_tx_ctrl_fifo_en : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_data_count : signal is "TRUE";             
+    attribute MARK_DEBUG of dbg_app_tx_ctrl_rd : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_current_tx_packet_state : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_mac_tx_start_i : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_dest_mac : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_dest_ip : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_dest_port : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_tx_total_size : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_payload_finish_state : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_mac_tx_start_z1 : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_mac_tx_data_i : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_mac_tx_data_valid_i : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_app_rst : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_tx_size : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_read_eof_data_cnt : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_read_eof_data_ctrl_cnt : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_write_eof_data_cnt : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_write_eof_data_ctrl_cnt : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_misalign_cond1_count : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_misalign_cond2_count : signal is "TRUE";
     
 begin
 
+    -- ILA Debug Signals
+    dbg_app_tx_valid_z1 <= app_tx_valid_z1;
+    dbg_app_tx_any_valid <= app_tx_any_valid;
+    dbg_app_tx_data_z1 <= app_tx_data_z1;
+    dbg_app_tx_dest_ip_z1 <= app_tx_dest_ip_z1;
+    dbg_app_tx_dest_port_z1 <= app_tx_dest_port_z1;
+    dbg_app_tx_data_din <= app_tx_data_din;
+    dbg_app_tx_data_wrreq <= app_tx_data_wrreq;
+    dbg_app_tx_data_rdreq <= app_tx_data_rdreq;
+    dbg_app_tx_data_dout <= app_tx_data_dout;
+    dbg_app_tx_data_full <= app_tx_data_full;
+    dbg_app_tx_data_empty <= app_tx_data_empty; 
+    dbg_app_tx_data_overflow <= app_tx_data_overflow;
+    dbg_app_tx_data_rd <= app_tx_data_rd;   
+    dbg_app_tx_data_afull <= app_tx_data_afull;
+    dbg_app_tx_end_of_frame_z1 <= app_tx_end_of_frame_z1; 
+    dbg_payload0 <= payload0;
+    dbg_payload1 <= payload1;
+    dbg_payload2 <= payload2;
+    dbg_payload3 <= payload3;
+    dbg_payload_valid <= payload_valid;
+    dbg_payload_end_of_frame <= payload_end_of_frame;
+    dbg_app_tx_ctrl_din <= app_tx_ctrl_din;
+    dbg_app_tx_ctrl_wrreq <= app_tx_ctrl_wrreq;
+    dbg_app_tx_ctrl_rdreq <= app_tx_ctrl_rdreq;
+    dbg_app_tx_ctrl_dout <= app_tx_ctrl_dout;
+    dbg_app_tx_ctrl_full <= app_tx_ctrl_full;
+    dbg_app_tx_ctrl_overflow <= app_tx_ctrl_overflow;
+    dbg_app_tx_ctrl_empty <= app_tx_ctrl_empty;
+    dbg_app_tx_ctrl_afull <= app_tx_ctrl_afull;
+    dbg_app_tx_ctrl_wrreq_latched <= app_tx_ctrl_wrreq_latched;
+    dbg_app_tx_data_wrreq_latched <= app_tx_data_wrreq_latched;
+    dbg_app_tx_end_of_frame_latched <= app_tx_end_of_frame_latched; 
+    dbg_app_tx_ctrl_fifo_en <= app_tx_ctrl_fifo_en;
+    dbg_data_count <= data_count;
+    dbg_app_tx_ctrl_rd <= app_tx_ctrl_rd;
+    dbg_current_tx_packet_state <= current_tx_packet_state;
+    dbg_mac_tx_start_i <= mac_tx_start_i;
+    dbg_payload_finish_state <= payload_finish_state;
+    dbg_dest_mac <= dest_mac;
+    dbg_dest_ip <= dest_ip;
+    dbg_dest_port <= dest_port;
+    dbg_tx_total_size <= tx_total_size;
+    dbg_mac_tx_start_z1 <= mac_tx_start_z1;
+    dbg_mac_tx_data_i <= mac_tx_data_i;
+    dbg_mac_tx_data_valid_i <= mac_tx_data_valid_i;
+    dbg_app_rst <= app_rst; 
+    dbg_tx_size <= tx_size;
+    dbg_read_eof_data_cnt <= read_eof_data_cnt;
+    dbg_read_eof_data_ctrl_cnt <= read_eof_data_ctrl_cnt;
+    dbg_write_eof_data_cnt <= write_eof_data_cnt;
+    dbg_write_eof_data_ctrl_cnt <= write_eof_data_ctrl_cnt;    
+    dbg_misalign_cond1_count <= misalign_cond1_count;
+    dbg_misalign_cond2_count <= misalign_cond2_count;
+    
     debug_out(0) <= app_tx_ctrl_wrreq_latched;
     debug_out(1) <= app_tx_data_wrreq_latched;
     debug_out(2) <= local_enable_retimed;
@@ -453,9 +632,11 @@ begin
     end process;
 
     -- SINGLE FIFO, JUMBO FIFO SUPPORT ALWAYS ENABLED
-    app_tx_data_din <= app_tx_valid_z1 & app_tx_data_z1;
+    --app_tx_data_din <= app_tx_valid_z1 & app_tx_data_z1;
+    app_tx_data_din <= app_tx_end_of_frame_z1 & "000" & app_tx_valid_z1 & app_tx_data_z1;
     
-    app_tx_data_wrreq <= app_tx_any_valid and (not app_tx_data_full);
+    --AI: Deassert write when FIFO full and reset asserted
+    app_tx_data_wrreq <= app_tx_any_valid and (not app_tx_data_full) and (not app_rst);
     
     gen_app_tx_data_wrreq_latched : process(app_rst, app_clk)
     begin
@@ -481,14 +662,16 @@ begin
         overflow    => app_tx_data_overflow,
         empty       => app_tx_data_empty,
         prog_full   => app_tx_data_afull);
-
-    app_tx_data_rdreq <= app_tx_data_rd and (not app_tx_data_empty);
+    
+    --AI: Deassert read when FIFO empty and reset asserted
+    app_tx_data_rdreq <= app_tx_data_rd and (not app_tx_data_empty) and (not app_rst);
     
     payload0 <= app_tx_data_dout(63 downto 0);
     payload1 <= app_tx_data_dout(127 downto 64);
     payload2 <= app_tx_data_dout(191 downto 128);
     payload3 <= app_tx_data_dout(255 downto 192);
     payload_valid <= app_tx_data_dout(259 downto 256);
+    payload_end_of_frame <= app_tx_data_dout(263);
     
     gen_payload_z1 : process(mac_clk)
     begin
@@ -498,11 +681,13 @@ begin
             payload2_z1 <= payload2;
             payload3_z1 <= payload3;
             payload_valid_z1 <= payload_valid;
+            payload_end_of_frame_z1 <= payload_end_of_frame;  
         end if;
     end process;
 
     -- CONTROL FIFO TO MOVE IP, PORT AND PACKET COUNT TO MAC CLOCK DOMAIN
-    app_tx_ctrl_wrreq <= app_tx_ctrl_fifo_en and (not app_tx_ctrl_full);
+    -- AI: Deassert write when FIFO full and reset asserted
+    app_tx_ctrl_wrreq <= app_tx_ctrl_fifo_en and (not app_tx_ctrl_full) and (not app_rst);
     
     app_tx_ctrl_din(31 downto 0) <= app_tx_dest_ip_z1;
     app_tx_ctrl_din(47 downto 32) <= app_tx_dest_port_z1;
@@ -535,11 +720,14 @@ begin
         empty       => app_tx_ctrl_empty,
         prog_full   => app_tx_ctrl_afull);
    
-    app_tx_ctrl_rdreq <= app_tx_ctrl_rd and (not app_tx_ctrl_empty);
+   --AI: Deassert read when FIFO empty and reset asserted
+    app_tx_ctrl_rdreq <= app_tx_ctrl_rd and (not app_tx_ctrl_empty) and (not app_rst);
 	
-	gen_app_tx_afull : process(app_clk)
+	gen_app_tx_afull : process(app_rst, app_clk)
 	begin
-        if (rising_edge(app_clk))then
+	if (app_rst = '1') then
+	    app_tx_afull <= '0';
+        elsif (rising_edge(app_clk))then
             app_tx_afull <= app_tx_data_afull or app_tx_ctrl_afull;	       
         end if;
 	end process;
@@ -813,6 +1001,35 @@ begin
 
     -- PUT OUTSIDE REGISTERING TO SAVE 1 CLOCK CYCLE
     ip_checksum_1 <= ('0' & ip_checksum_0(15 downto 0)) + ("000000000000000" & ip_checksum_0(17 downto 16));
+    
+    
+    
+-----------------------------------------------------------------------------------------
+-- Test write EOF Counters to app_clk 
+-----------------------------------------------------------------------------------------
+    
+        write_eof_count : process(app_rst, app_clk, app_tx_end_of_frame_z1)
+        begin
+            if (app_rst = '1') then
+                write_eof_data_cnt <= (others => '0');
+            elsif (rising_edge(app_clk))then
+                if(app_tx_end_of_frame_z1 = '1') then
+                   write_eof_data_cnt <= write_eof_data_cnt + '1';
+                end if;
+            end if;
+        end process;    
+        
+        write_eof_ctrl_count : process(app_rst, app_clk, app_tx_ctrl_fifo_en)
+        begin
+            if (app_rst = '1') then
+                write_eof_data_ctrl_cnt <= (others => '0');
+            elsif (rising_edge(app_clk))then
+                if(app_tx_ctrl_fifo_en = '1') then
+                   write_eof_data_ctrl_cnt <= write_eof_data_ctrl_cnt + '1';
+                end if;
+            end if;
+        end process;         
+    
 
 -----------------------------------------------------------------------------------------
 -- STATE MACHINE TO CONSTRUCT UDP/IP PACKET
@@ -827,7 +1044,12 @@ begin
             current_tx_packet_state <= IDLE;
             current_tx_packet_state_z1 <= IDLE;
             mac_cpu_addr <= (others => '0');
-            tx_ip_ttl <= TTL;            
+            tx_ip_ttl <= TTL;
+            eof_flag_activate <= '0';
+            read_eof_data_ctrl_cnt <= (others => '0'); 
+            read_eof_data_cnt <= (others => '0'); 
+            misalign_cond1_count <= (others => '0');
+            misalign_cond2_count <= (others => '0');         
         elsif (rising_edge(mac_clk))then
             current_tx_packet_state_z1 <= current_tx_packet_state;
 
@@ -870,6 +1092,7 @@ begin
                 end if;
                 
                 when GEN_HEADER_1 =>
+                
                 app_tx_data_rd <= '1';
                                 
                 current_tx_packet_state <= GEN_HEADER_2_PAYLOAD_START;
@@ -896,11 +1119,27 @@ begin
                     tx_size <= tx_size - "00000000100"; 
                     current_tx_packet_state <= GEN_PAYLOAD;
                 end if;
-                
+                read_eof_data_ctrl_cnt <= read_eof_data_ctrl_cnt + '1';
+                eof_flag_activate <= '0';
+
                 when GEN_PAYLOAD =>
                 if (tx_size = "00000000011")then
+                    --AI: if tx_size is misaligned by 1 clock cycle from TX Data FIFO then assert TX Data Packet Read
+                    if (payload_end_of_frame = '1') then
+                      app_tx_data_rd <= '0';
+                    else
+                      misalign_cond1_count <= misalign_cond1_count + '1';
+                      app_tx_data_rd <= '1';
+                    end if;
                     current_tx_packet_state <= GEN_PAYLOAD_FINISH_3;
                 elsif (tx_size = "00000000100")then
+                    --AI: if tx_size is misaligned by 1 clock cycle from TX Data FIFO then assert TX Data Packet Read
+                    if (payload_end_of_frame = '1') then
+                      app_tx_data_rd <= '0';
+                    else
+                      misalign_cond2_count <= misalign_cond2_count + '1';
+                      app_tx_data_rd <= '1';
+                    end if;
                     current_tx_packet_state <= GEN_PAYLOAD_FINISH_4;
                 elsif (tx_size = "00000000101")then
                     app_tx_data_rd <= '1';
@@ -951,7 +1190,20 @@ begin
                 
                 current_tx_packet_state <= IDLE;            
     
-            end case;    
+            end case;
+           
+            --AI: 2/11/2017: Allows read state machine to synchronise with TX Data Packet FIFO
+            --Only providing for GEN_PAYLOAD_FINISH_4 now, SKA-SA will always send 256 bits per
+            --a transaction (4 x 64 bits words) and hence, tx_size will always end at 0x4. Provision
+            --has been made for 4 data valids, but in reality all 4 data valids will be asserted at once. This
+            --could of been coded with 1 data valid.
+            if (payload_end_of_frame = '1' and  eof_flag_activate = '0') then
+                current_tx_packet_state <= GEN_PAYLOAD_FINISH_4;
+                eof_flag_activate <= '1';
+                app_tx_data_rd <= '0';
+                read_eof_data_cnt <= read_eof_data_cnt + '1';
+            end if;  
+                         
         end if;
     end process;
 

@@ -49,7 +49,7 @@ class snap_adc(YellowBlock):
 
     def modify_top(self,top):
         module = 'adc16_interface'
-        inst = top.get_instance(entity=module, name=self.fullname, comment=self.fullname)
+        inst = top.get_instance(entity=module, name=self.fullname)
         inst.add_parameter('G_NUM_CLOCKS', int(self.num_clocks))
         inst.add_parameter('G_ZDOK_REV', int(self.zdok_rev))
         inst.add_parameter('G_NUM_UNITS', int(self.num_units))
@@ -173,11 +173,12 @@ class snap_adc(YellowBlock):
 
             wb_bitwidth stands for the bit width of data in/out port of wishbone bus
 
-            E.g.
-            reorder_ports(['a1','a2','a3','a4'])
-            when self.adc_data_width == 8, return {a1,a2,a3,a4}
-            when self.adc_data_width == 16, return {a3,a4,a1,a2}
-            when self.adc_data_width == 32, return {a4,a3,a2,a1}
+            .. code-block:: python
+
+                reorder_ports(['a1','a2','a3','a4'])
+                when self.adc_data_width == 8, return {a1,a2,a3,a4}
+                when self.adc_data_width == 16, return {a3,a4,a1,a2}
+                when self.adc_data_width == 32, return {a4,a3,a2,a1}
         """
 
         if not isinstance(port_list,list):

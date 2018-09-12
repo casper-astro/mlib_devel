@@ -99,7 +99,7 @@ class adc5g(YellowBlock):
 
     def modify_top(self,top):
         module = 'adc5g_dmux1_interface'
-        inst = top.get_instance(entity=module, name=self.fullname, comment=self.fullname)
+        inst = top.get_instance(entity=module, name=self.fullname)
         inst.add_parameter('adc_bit_width', '8')
         inst.add_parameter('clkin_period ', '%.3f' % self.bitclk_period)
         inst.add_parameter('mode         ', self.chan_mode)
@@ -167,7 +167,7 @@ class adc5g(YellowBlock):
 
         # ADC software controller
         # static name -- multiple ADCs on different ZDOK ports should pick up the same instance
-        inst = top.get_instance(entity='wb_adc5g_controller', name='wb_adc5g_controller', comment=self.fullname)
+        inst = top.get_instance(entity='wb_adc5g_controller', name='wb_adc5g_controller')
         inst.add_wb_interface(nbytes=512, regname='adc5g_controller', mode='rw')
 
         inst.add_parameter('INITIAL_CONFIG_MODE_%d' % self.zdok_num, '%d' % self.ctrl_mode)

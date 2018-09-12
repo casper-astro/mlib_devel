@@ -74,58 +74,57 @@ entity gmii_to_sgmii_support is
       gtrefclk_p               : in  std_logic;                           -- 125 MHz differential clock
       gtrefclk_n               : in  std_logic;                           -- 125 MHz differential clock
 
-
       gtrefclk_out             : out std_logic;                           -- Very high quality 125MHz clock for GT transceiver.
-      txp                  : out std_logic;                    -- Differential +ve of serial transmission from PMA to PMD.
-      txn                  : out std_logic;                    -- Differential -ve of serial transmission from PMA to PMD.
-      rxp                  : in std_logic;                     -- Differential +ve for serial reception from PMD to PMA.
-      rxn                  : in std_logic;                     -- Differential -ve for serial reception from PMD to PMA.
+      txp                      : out std_logic;                    -- Differential +ve of serial transmission from PMA to PMD.
+      txn                      : out std_logic;                    -- Differential -ve of serial transmission from PMA to PMD.
+      rxp                      : in std_logic;                     -- Differential +ve for serial reception from PMD to PMA.
+      rxn                      : in std_logic;                     -- Differential -ve for serial reception from PMD to PMA.
       userclk_out              : out std_logic;                           -- 125MHz global clock.
       userclk2_out             : out std_logic;                           -- 125MHz global clock.
-      rxuserclk_out              : out std_logic;                           -- 125MHz global clock.
-      rxuserclk2_out             : out std_logic;                           -- 125MHz global clock.
+      rxuserclk_out            : out std_logic;                           -- 125MHz global clock.
+      rxuserclk2_out           : out std_logic;                           -- 125MHz global clock.
       pma_reset_out            : out std_logic;                           -- transceiver PMA reset signal
       mmcm_locked_out          : out std_logic;                           -- MMCM Locked
       resetdone                : out std_logic;
 
-      independent_clock_bufg : in std_logic;                   -- 200MHz independent cloc,
+      independent_clock_bufg   : in std_logic;                   -- 200MHz independent cloc,
 
       -- GMII Interface
       -----------------
-      sgmii_clk_r            : out std_logic;                    -- Clock for client MAC (125Mhz, 12.5MHz or 1.25MHz).
-      sgmii_clk_f            : out std_logic;                    -- Clock for client MAC (125Mhz, 12.5MHz or 1.25MHz).
-      sgmii_clk_en         : out std_logic;                    -- Clock enable for client MAC
-      gmii_txd             : in std_logic_vector(7 downto 0);  -- Transmit data from client MAC.
-      gmii_tx_en           : in std_logic;                     -- Transmit control signal from client MAC.
-      gmii_tx_er           : in std_logic;                     -- Transmit control signal from client MAC.
-      gmii_rxd             : out std_logic_vector(7 downto 0); -- Received Data to client MAC.
-      gmii_rx_dv           : out std_logic;                    -- Received control signal to client MAC.
-      gmii_rx_er           : out std_logic;                    -- Received control signal to client MAC.
-      gmii_isolate         : out std_logic;                    -- Tristate control to electrically isolate GMII.
+      sgmii_clk_r              : out std_logic;                    -- Clock for client MAC (125Mhz, 12.5MHz or 1.25MHz).
+      sgmii_clk_f              : out std_logic;                    -- Clock for client MAC (125Mhz, 12.5MHz or 1.25MHz).
+      sgmii_clk_en             : out std_logic;                    -- Clock enable for client MAC
+      gmii_txd                 : in std_logic_vector(7 downto 0);  -- Transmit data from client MAC.
+      gmii_tx_en               : in std_logic;                     -- Transmit control signal from client MAC.
+      gmii_tx_er               : in std_logic;                     -- Transmit control signal from client MAC.
+      gmii_rxd                 : out std_logic_vector(7 downto 0); -- Received Data to client MAC.
+      gmii_rx_dv               : out std_logic;                    -- Received control signal to client MAC.
+      gmii_rx_er               : out std_logic;                    -- Received control signal to client MAC.
+      gmii_isolate             : out std_logic;                    -- Tristate control to electrically isolate GMII.
 
       -- Management: Alternative to MDIO Interface
       --------------------------------------------
 
-      configuration_vector : in std_logic_vector(4 downto 0);  -- Alternative to MDIO interface.
+      configuration_vector     : in std_logic_vector(4 downto 0);  -- Alternative to MDIO interface.
 
-      an_interrupt         : out std_logic;                    -- Interrupt to processor to signal that Auto-Negotiation has completed
-      an_adv_config_vector : in std_logic_vector(15 downto 0); -- Alternate interface to program REG4 (AN ADV)
-      an_restart_config    : in std_logic;                     -- Alternate signal to modify AN restart bit in REG0
+      an_interrupt             : out std_logic;                    -- Interrupt to processor to signal that Auto-Negotiation has completed
+      an_adv_config_vector     : in std_logic_vector(15 downto 0); -- Alternate interface to program REG4 (AN ADV)
+      an_restart_config        : in std_logic;                     -- Alternate signal to modify AN restart bit in REG0
 
       -- Speed Control
       ----------------
-      speed_is_10_100      : in std_logic;                     -- Core should operate at either 10Mbps or 100Mbps speeds
-      speed_is_100         : in std_logic;                      -- Core should operate at 100Mbps speed
+      speed_is_10_100          : in std_logic;                     -- Core should operate at either 10Mbps or 100Mbps speeds
+      speed_is_100             : in std_logic;                      -- Core should operate at 100Mbps speed
 
       -- General IO's
       ---------------
-      status_vector        : out std_logic_vector(15 downto 0); -- Core status.
-      reset                : in std_logic;                     -- Asynchronous reset for entire core.
+      status_vector            : out std_logic_vector(15 downto 0); -- Core status.
+      reset                    : in std_logic;                     -- Asynchronous reset for entire core.
 
       
-      signal_detect        : in std_logic;                      -- Input from PMD to indicate presence of optical input.
-      gt0_qplloutclk_out     : out std_logic;
-      gt0_qplloutrefclk_out  : out std_logic
+      signal_detect            : in std_logic;                      -- Input from PMD to indicate presence of optical input.
+      gt0_qplloutclk_out       : out std_logic;
+      gt0_qplloutrefclk_out    : out std_logic
 
    );
 end gmii_to_sgmii_support;
@@ -139,8 +138,6 @@ architecture wrapper of gmii_to_sgmii_support is
    port (
       -- Transceiver Interface
       ---------------------
-
- 
       gtrefclk             : in std_logic;                     -- Very high quality 125MHz clock for GT transceiver.
       txp                  : out std_logic;                    -- Differential +ve of serial transmission from PMA to PMD.
       txn                  : out std_logic;                    -- Differential -ve of serial transmission from PMA to PMD.
@@ -150,7 +147,7 @@ architecture wrapper of gmii_to_sgmii_support is
       txoutclk             : out std_logic;                    -- txoutclk from GT transceiver (62.5MHz)
       rxoutclk             : out std_logic;                    -- txoutclk from GT transceiver (62.5MHz)
       resetdone            : out std_logic;                    -- The GT transceiver has completed its reset cycle
-      cplllock            : out std_logic;                    
+      cplllock             : out std_logic;                    
       mmcm_locked          : in std_logic;                     -- Locked indication from MMCM
       userclk              : in std_logic;                     -- 62.5MHz global clock.
       userclk2             : in std_logic;                     -- 125MHz global clock.
@@ -162,7 +159,7 @@ architecture wrapper of gmii_to_sgmii_support is
       -----------------
       sgmii_clk_r            : out std_logic;                    -- Clock for client MAC (125Mhz, 12.5MHz or 1.25MHz).
       sgmii_clk_f            : out std_logic;                    -- Clock for client MAC (125Mhz, 12.5MHz or 1.25MHz).
-      sgmii_clk_en         : out std_logic;                    -- Clock enable for client MAC
+      sgmii_clk_en           : out std_logic;                    -- Clock enable for client MAC
 
       gmii_txd             : in std_logic_vector(7 downto 0);  -- Transmit data from client MAC.
       gmii_tx_en           : in std_logic;                     -- Transmit control signal from client MAC.
@@ -212,8 +209,8 @@ component gmii_to_sgmii_clocking
       mmcm_locked             : out std_logic;                -- MMCM locked
       userclk                 : out std_logic;                -- for GT PMA reference clock
       userclk2                : out std_logic;                 -- 125MHz clock for core reference clock.
-      rxuserclk                 : out std_logic;                -- for GT PMA reference clock
-      rxuserclk2                : out std_logic                 -- 125MHz clock for core reference clock.
+      rxuserclk               : out std_logic;                -- for GT PMA reference clock
+      rxuserclk2              : out std_logic                 -- 125MHz clock for core reference clock.
    );
 end component;
 
@@ -231,13 +228,13 @@ end component;
 
 component gmii_to_sgmii_gt_common
   port(
-    gt0_gtrefclk0_common_in                 : in   std_logic;
-    gt0_qplloutclk                              : out  std_logic;
-    gt0_qplloutrefclk                           : out  std_logic;
-    gt0_qplllock_out                        : out  std_logic;
-    gt0_qplllockdetclk_in                   : in   std_logic;
-    gt0_qpllrefclklost_out                  : out  std_logic;
-    gt0_qpllreset_in                        : in   std_logic
+    GTREFCLK0_IN         : in std_logic;
+    QPLLLOCK_OUT         : out std_logic;
+    QPLLLOCKDETCLK_IN    : in std_logic;
+    QPLLOUTCLK_OUT       : out std_logic;
+    QPLLOUTREFCLK_OUT    : out std_logic;
+    QPLLREFCLKLOST_OUT   : out std_logic;    
+    QPLLRESET_IN         : in std_logic
   );
 end component;
 
@@ -254,8 +251,8 @@ end component;
    SIGNAL mmcm_locked           : std_logic;
    SIGNAL userclk               : std_logic;
    SIGNAL userclk2              : std_logic;
-   SIGNAL rxuserclk               : std_logic;
-   SIGNAL rxuserclk2              : std_logic;
+   SIGNAL rxuserclk             : std_logic;
+   SIGNAL rxuserclk2            : std_logic;
    SIGNAL pma_reset             : std_logic;
 begin
 
@@ -319,13 +316,13 @@ begin
 
       -- General IO's
       ---------------
-      status_vector    =>  status_vector   ,  
-      reset            =>  reset           , 
+      status_vector          =>  status_vector   ,  
+      reset                  =>  pma_reset           , 
       
-      signal_detect    =>  signal_detect   , 
+      signal_detect       =>  signal_detect   , 
 
-    gt0_qplloutclk_in    => gt0_qplloutclk,
-    gt0_qplloutrefclk_in => gt0_qplloutrefclk
+    gt0_qplloutclk_in     => gt0_qplloutclk,
+    gt0_qplloutrefclk_in  => gt0_qplloutrefclk
 
    );
 
@@ -349,9 +346,9 @@ begin
    userclk_out    <= userclk;
    userclk2_out   <= userclk2;
 
-   rxuserclk_out    <= rxuserclk;
-   rxuserclk2_out   <= rxuserclk2;
-   pma_reset_out    <= pma_reset;
+   rxuserclk_out  <= rxuserclk;
+   rxuserclk2_out <= rxuserclk2;
+   pma_reset_out  <= pma_reset;
    
    core_resets_i : gmii_to_sgmii_resets
    port map (
@@ -365,13 +362,13 @@ begin
 
   core_gt_common_i : gmii_to_sgmii_gt_common
   port map(
-    gt0_gtrefclk0_common_in     =>   gtrefclk,
-    gt0_qplloutclk                  => gt0_qplloutclk,
-    gt0_qplloutrefclk               =>   gt0_qplloutrefclk,
-    gt0_qplllock_out            =>   open,
-    gt0_qplllockdetclk_in       =>   independent_clock_bufg,
-    gt0_qpllrefclklost_out      =>   open,
-    gt0_qpllreset_in            =>   pma_reset
+    GTREFCLK0_IN                => gtrefclk ,
+    QPLLLOCK_OUT                => open,
+    QPLLLOCKDETCLK_IN           => independent_clock_bufg,
+    QPLLOUTCLK_OUT              => gt0_qplloutclk,
+    QPLLOUTREFCLK_OUT           => gt0_qplloutrefclk,
+    QPLLREFCLKLOST_OUT          => open,    
+    QPLLRESET_IN                => pma_reset 
   );
 
    gt0_qplloutclk_out        <=  gt0_qplloutclk;

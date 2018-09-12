@@ -134,8 +134,20 @@ architecture arch_wishbone_flash_sdram_interface of wishbone_flash_sdram_interfa
     SDRAM_READ_LOW_1,
     SDRAM_READ_HIGH_1,
     SDRAM_READ_ACK);
+    
+    component common_clock_fifo_32x16
+    port (
+       clk              : in std_logic;
+       rst              : in std_logic;
+       din              : in std_logic_vector(31 downto 0);
+       wr_en            : in std_logic;
+       rd_en            : in std_logic;
+       dout             : out std_logic_vector(31 downto 0);
+       full             : out std_logic;
+       almost_full      : out std_logic;
+       empty            : out std_logic);
+    end component;    
         
-
     component cross_clock_fifo_67x16
     port (
         rst             : in std_logic;
@@ -205,6 +217,10 @@ architecture arch_wishbone_flash_sdram_interface of wishbone_flash_sdram_interfa
     constant C_ISP_SPI_ADDRESS_REG : std_logic_vector(3 downto 0) := X"6";
     constant C_ISP_SPI_DATA_CTRL_REG : std_logic_vector(3 downto 0) := X"7";
     constant C_CONTINUITY_TEST_OUTPUT_REG : std_logic_vector(3 downto 0) := X"8";
+    constant C_SDRAM_WB_PROGRAM_EN_REG : std_logic_vector(3 downto 0) := X"9";
+    constant C_SDRAM_WB_PROGRAM_DATA_WR_REG : std_logic_vector(3 downto 0) := X"A";
+    constant C_SDRAM_WB_PROGRAM_CTL_REG : std_logic_vector(3 downto 0) := X"B";
+    
 
     constant C_FLASH_MODE : std_logic_vector(1 downto 0) := "00";
     constant C_SDRAM_PROGRAM_MODE : std_logic_vector(1 downto 0) := "01";
@@ -309,7 +325,20 @@ architecture arch_wishbone_flash_sdram_interface of wishbone_flash_sdram_interfa
     signal fgbe_cross_clock_almost_full : std_logic;
     signal fgbe_cross_clock_empty : std_logic;
     signal fgbe_cross_clock_full : std_logic;
-    --AI End: Add fortygbe interface for configuration    
+    --AI End: Add fortygbe interface for configuration  
+    
+    signal wb_comm_clock_din : std_logic_vector(31 downto 0);
+    signal wb_comm_clock_wrreq : std_logic;
+    signal wb_comm_clock_rdreq : std_logic;
+    signal wb_comm_clock_rdreq_z1 : std_logic;   
+    signal wb_comm_clock_rdreq_z2 : std_logic;      
+    signal wb_comm_clock_rdreq_z3 : std_logic;
+    signal wb_comm_clock_rdreq_z4 : std_logic;
+    signal wb_comm_clock_rdreq_z5 : std_logic;                  
+    signal wb_comm_clock_dout : std_logic_vector(31 downto 0);
+    signal wb_comm_clock_almost_full : std_logic;
+    signal wb_comm_clock_empty : std_logic;
+    signal wb_comm_clock_full : std_logic;
 
     
     signal spartan_clk_i : std_logic;
@@ -318,7 +347,8 @@ architecture arch_wishbone_flash_sdram_interface of wishbone_flash_sdram_interfa
     signal gbe_sdram_dq_count : std_logic_vector(2 downto 0); --AI: Provision for 1GbE interface
     --AI Start: Add fortygbe interface for configuration            
     signal fgbe_sdram_dq_count : std_logic_vector(4 downto 0); --AI: Provision for 40GbE interface
-    --AI End: Add fortygbe interface for configuration    
+    --AI End: Add fortygbe interface for configuration 
+    signal wb_sdram_dq_count : std_logic_vector(1 downto 0); --AI: Provision for wishbone configuration interface
 
     
     signal current_sdram_read_state : T_SDRAM_READ_STATE;
@@ -344,15 +374,26 @@ architecture arch_wishbone_flash_sdram_interface of wishbone_flash_sdram_interfa
     signal icape_transaction_complete : std_logic;
     
     signal sdram_program_header : std_logic;
+    signal sdram_program_valid : std_logic;
+    signal sdram_program_valid_a : std_logic;
     signal valid_sdram_program_packet : std_logic;
     signal sdram_dq_out_i : std_logic_vector(15 downto 0);
     signal config_io_1_i : std_logic;
+    
     signal sequence_number : std_logic_vector(15 downto 0);
     
     signal continuity_test_output : std_logic_vector(31 downto 0);
     signal continuity_test_mode : std_logic;
     signal continuity_test_low : std_logic;
     signal continuity_test_high : std_logic;
+    
+    signal sdram_wb_program_en : std_logic;
+    signal sdram_wb_program_data_wr : std_logic_vector(31 downto 0);
+    signal sdram_wb_program_ctl : std_logic_vector(31 downto 0);
+    signal sdram_wb_program_rx_valid : std_logic;
+    signal sdram_wb_program_rx_valid_z1 : std_logic;
+    signal sdram_wb_program_rx_valid_pulse : std_logic;     
+    signal sdram_wb_program_ack : std_logic;
     
     --Debug ILA Nets that won't be optimised 
     signal fgbe_rx_eof : std_logic;
@@ -506,13 +547,27 @@ begin
             continuity_test_low <= '0';
             continuity_test_high <= '0';
             
+            sdram_wb_program_en <= '0';
+            sdram_wb_program_data_wr <= (others => '0');
+            sdram_wb_program_ctl <= (others => '0');       
+            sdram_wb_program_rx_valid <= '0'; 
+            sdram_wb_program_rx_valid_pulse <= '0';
+            sdram_wb_program_rx_valid_z1 <= '0';          
+            
         elsif (rising_edge(CLK_I))then
             gbe_clear_count <= '0';
             --AI Start: Add fortygbe interface for configuration 
             fgbe_clear_count <= '0';
             --AI End: Add fortygbe interface for configuration 
-
-        
+            sdram_wb_program_rx_valid <= '0';  
+            sdram_wb_program_rx_valid_z1 <= sdram_wb_program_rx_valid;
+            --generate a write pulse valid for a single CLK_I cycle to ensure data is only written into
+            --FIFO once         
+            if(sdram_wb_program_rx_valid_z1 = '0' and sdram_wb_program_rx_valid = '1') then
+              sdram_wb_program_rx_valid_pulse <= '1'; 
+            else
+              sdram_wb_program_rx_valid_pulse <= '0';             
+            end if;           
             if ((reg_select = '1')and(WE_I = '1'))then
                 case addra(3 downto 0) is
                     when C_OUTPUT_MODE_REG =>
@@ -617,6 +672,36 @@ begin
                         continuity_test_output(31 downto 24) <= DAT_I(31 downto 24);
                     end if;
                     
+                    --AI: Add in additional registers for FPGA reconfiguration via the uBlaze and not the fabric
+                    when C_SDRAM_WB_PROGRAM_EN_REG =>
+                    if (SEL_I(0) = '1') then
+                        sdram_wb_program_en <= DAT_I(0);  --write: '1' = enable wishbone SDRAM programming, '0' = disable wishbone SDRAM programming (default)
+                    end if;    
+
+                    when C_SDRAM_WB_PROGRAM_DATA_WR_REG =>   --write: SDRAM wishbone write data for programming
+                    if (SEL_I(0) = '1')then
+                        sdram_wb_program_data_wr(7 downto 0) <= DAT_I(7 downto 0); 
+                    end if;
+                    if (SEL_I(1) = '1')then
+                        sdram_wb_program_data_wr(15 downto 8) <= DAT_I(15 downto 8);
+                    end if;
+                    if (SEL_I(2) = '1')then
+                        sdram_wb_program_data_wr(23 downto 16) <= DAT_I(23 downto 16);
+                    end if;
+                    if (SEL_I(3) = '1')then
+                        sdram_wb_program_data_wr(31 downto 24) <= DAT_I(31 downto 24);
+                        sdram_wb_program_rx_valid <= '1';
+                        sdram_wb_program_ctl(0) <= '1'; --set acknowledge when data arrives from microblaze
+                    end if;
+                              
+                    when C_SDRAM_WB_PROGRAM_CTL_REG => -- SDRAM wishbone program control bits
+                    if (SEL_I(0) = '1')then
+                        sdram_wb_program_ctl(0) <= DAT_I(0);  -- write: '0' = clear acknowledge (set by uBlaze)
+                        sdram_wb_program_ctl(1) <= DAT_I(1);  -- write: '1' = start SDRAM program indicator (set by uBlaze)
+                        sdram_wb_program_ctl(2) <= DAT_I(2);  -- write: '1' = finish SDRAM program indicator (set by uBlaze)
+                        sdram_wb_program_ctl(31 downto 3) <= (others => '0');  -- Unused set to zero 
+                    end if;
+                    
                     when others =>
                      
                 end case;
@@ -634,6 +719,9 @@ begin
     (isp_num_bytes & isp_address) when (addra(3 downto 0) = C_ISP_SPI_ADDRESS_REG) else
     ("00000000000000000000000" & isp_transaction_complete & isp_read_data) when (addra(3 downto 0) = C_ISP_SPI_DATA_CTRL_REG) else
     ("0000000000000000" & flash_dq_in) when (addra(3 downto 0) = C_CONTINUITY_TEST_OUTPUT_REG) else
+    ("0000000000000000000000000000000" & sdram_wb_program_en) when (addra(3 downto 0) = C_SDRAM_WB_PROGRAM_EN_REG) else 
+    (sdram_wb_program_data_wr) when (addra(3 downto 0) = C_SDRAM_WB_PROGRAM_DATA_WR_REG) else 
+    ("00000000000000000000000000000" & sdram_wb_program_ctl(2) & sdram_wb_program_ctl(1) & sdram_wb_program_ack) when (addra(3 downto 0) = C_SDRAM_WB_PROGRAM_CTL_REG) else   
     (others => '0');
    
     --AI Start: Add fortygbe interface for configuration 
@@ -647,6 +735,9 @@ begin
     (isp_num_bytes & isp_address) when (addra(3 downto 0) = C_ISP_SPI_ADDRESS_REG) else
     ("00000000000000000000000" & isp_transaction_complete & isp_read_data) when (addra(3 downto 0) = C_ISP_SPI_DATA_CTRL_REG) else
     ("0000000000000000" & flash_dq_in) when (addra(3 downto 0) = C_CONTINUITY_TEST_OUTPUT_REG) else
+    ("0000000000000000000000000000000" & sdram_wb_program_en) when (addra(3 downto 0) = C_SDRAM_WB_PROGRAM_EN_REG) else  
+    (sdram_wb_program_data_wr) when (addra(3 downto 0) = C_SDRAM_WB_PROGRAM_DATA_WR_REG) else 
+    ("00000000000000000000000000000" & sdram_wb_program_ctl(2) & sdram_wb_program_ctl(1) & sdram_wb_program_ack) when (addra(3 downto 0) = C_SDRAM_WB_PROGRAM_CTL_REG) else
     (others => '0');
     --AI End: Add fortygbe interface for configuration    
 
@@ -670,7 +761,26 @@ begin
             end if;
         end if;
     end process;
-
+    
+-----------------------------------------------------------------------
+-- SDRAM PROGRAMMING UBLAZE INTERFACE FIFO VIA WISHBONE CLOCK DOMAIN
+-----------------------------------------------------------------------
+    wb_comm_clock_din <= sdram_wb_program_data_wr when ((sdram_wb_program_rx_valid_pulse = '1') and (wb_comm_clock_almost_full = '0')) else X"00000000";
+    wb_comm_clock_wrreq <= '1' when ((sdram_wb_program_rx_valid_pulse = '1') and (wb_comm_clock_almost_full = '0')) else '0'; 
+    sdram_wb_program_ack <= '1' when ((sdram_wb_program_ctl(0) = '1') and (wb_comm_clock_almost_full = '0')) else '0';
+    
+    common_clock_fifo_32x16_0 : common_clock_fifo_32x16
+    port map(
+        rst             => RST_I,
+        clk             => CLK_I,
+        din             => wb_comm_clock_din,
+        wr_en           => wb_comm_clock_wrreq,
+        rd_en           => wb_comm_clock_rdreq,
+        dout            => wb_comm_clock_dout,
+        full            => wb_comm_clock_full,
+        almost_full     => wb_comm_clock_almost_full,
+        empty           => wb_comm_clock_empty);
+                         
 -----------------------------------------------------------------------
 -- MOVE 1GBE ETHERNET HIGH BANDWIDTH TO WISHBONE CLOCK DOMAIN
 -----------------------------------------------------------------------
@@ -760,8 +870,14 @@ begin
     (fgbe_cross_clock_empty = '0')and
     (write_to_sdram_stall = '0')and
     (fgbe_sdram_dq_count >= "01111")) else '0';
-
+    
 --AI End: Add fortygbe interface for configuration      
+
+    wb_comm_clock_rdreq <= '1' when
+    ((spartan_clk_rising_edge_enable = '1')and
+    (wb_comm_clock_empty = '0')and
+    (write_to_sdram_stall = '0')and
+    (wb_sdram_dq_count >= "01")) else '0';    
 
     gen_gbe_sdram_dq_count : process(RST_I, CLK_I)
     begin
@@ -795,6 +911,21 @@ begin
    end process;   
    --AI End: Add fortygbe interface for configuration 
    
+    gen_wb_sdram_dq_count : process(RST_I, CLK_I)
+    begin
+        if (RST_I = '1')then
+            wb_sdram_dq_count <= "11";
+        elsif (rising_edge(CLK_I))then
+            if (wb_comm_clock_rdreq = '1')then
+                wb_sdram_dq_count <= "00";
+            else
+                if ((wb_sdram_dq_count /= "11")and(spartan_clk_rising_edge_enable = '1'))then
+                    wb_sdram_dq_count <= wb_sdram_dq_count + "01";
+                end if;
+            end if;
+        end if;
+    end process;   
+   
 
     gen_gbe_cross_clock_rdreq_z1 : process(CLK_I)
     begin
@@ -810,22 +941,54 @@ begin
             fgbe_cross_clock_rdreq_z1 <= fgbe_cross_clock_rdreq;
         end if;
     end process;
-   --AI End: Add fortygbe interface for configuration   
+   --AI End: Add fortygbe interface for configuration 
+   
+    gen_wb_comm_clock_rdreq_z1 : process(CLK_I)
+    begin
+       if (rising_edge(CLK_I))then
+           wb_comm_clock_rdreq_z1 <= wb_comm_clock_rdreq;
+           wb_comm_clock_rdreq_z2 <= wb_comm_clock_rdreq_z1;
+           wb_comm_clock_rdreq_z3 <= wb_comm_clock_rdreq_z2;  
+           wb_comm_clock_rdreq_z4 <= wb_comm_clock_rdreq_z3;
+           wb_comm_clock_rdreq_z5 <= wb_comm_clock_rdreq_z4;                        
+       end if;
+    end process;   
     
-
    --AI Start: Add fortygbe interface for configuration
    --Modified to handle fortygbe interface for configuration as well       
 
-    gen_sdram_dq_out_i : process(RST_I, CLK_I, fgbe_config_en)
+    gen_sdram_dq_out_i : process(RST_I, CLK_I, fgbe_config_en, sdram_wb_program_en, sdram_wb_program_ctl)
     begin
         if (RST_I = '1')then
             sdram_program_header <= '1';
+            sdram_program_valid_a <= '0';          
             sdram_dq_out_i <= (others => '0');
             config_io_1_i <= '0';
         elsif (rising_edge(CLK_I))then
-            if (spartan_clk_falling_edge_enable = '1')then
+            if (spartan_clk_falling_edge_enable = '1')then           
+                --Wishbone Configuration Only
+                if(sdram_wb_program_en = '1') then
+                    sdram_program_header <= '0';
+                    --if the SDRAM is starting to be programmed then set the valid to '1'
+                    if (sdram_wb_program_ctl(1) = '1' and sdram_wb_program_ctl(2) = '0' ) then
+                        sdram_program_valid_a <= '1';
+                    --if the SDRAM is finishing the programming the set the valid to '0'    
+                    elsif(sdram_wb_program_ctl(1) = '0' and sdram_wb_program_ctl(2) = '1') then
+                        sdram_program_valid_a <= '0';
+                    end if;
+                    if (wb_sdram_dq_count = "00")then    
+                        sdram_dq_out_i <= wb_comm_clock_dout(31 downto 16);
+                        config_io_1_i <= '1';
+                    elsif (wb_sdram_dq_count = "01")then 
+                        sdram_dq_out_i <= wb_comm_clock_dout(15 downto 0);
+                        config_io_1_i <= '1';
+                    else
+                        sdram_dq_out_i <= (others => '0');
+                        config_io_1_i <= '0';
+                    end if;                         
                 --1GbE Configuration Only
-                if(fgbe_config_en = '0') then
+                elsif(fgbe_config_en = '0') then
+                    sdram_program_valid_a <= '0';                 
                     if (gbe_sdram_dq_count = "000")then    
                         config_io_1_i <= not sdram_program_header;
                         sdram_dq_out_i <= gbe_cross_clock_dout(63 downto 48);
@@ -851,6 +1014,7 @@ begin
                     end if; 
                 --40GbE Configuration Only
                 else
+                    sdram_program_valid_a <= '0';                  
                     if (fgbe_sdram_dq_count = "00000")then    
                         config_io_1_i <= not sdram_program_header;
                         sdram_dq_out_i <= fgbe_cross_clock_dout(255 downto 240);
@@ -927,7 +1091,7 @@ begin
             debug_sdram_program_header <= (others => '0');
             sequence_number <= (others => '0');
         elsif (rising_edge(CLK_I))then
-          --1GbE Configuration Only
+          --1GbE Configuration Only          
           if (fgbe_config_en = '0') then
             if (sdram_program_header = '1')and(gbe_cross_clock_rdreq_z1 = '1')then
                 if (gbe_cross_clock_dout(63 downto 48) = C_SDRAM_PROGRAM_PACKET_TYPE)then
@@ -978,22 +1142,24 @@ begin
     end process;
     --AI End: Add fortygbe interface for configuration
 
+    --gate the delayed rd request signal with the sdram program data valid
+    sdram_program_valid <= sdram_program_valid_a and (wb_comm_clock_rdreq_z3 or wb_comm_clock_rdreq_z5);
 
 
-    gen_sdram_dq_out : process(RST_I, CLK_I)
+    gen_sdram_dq_out : process(RST_I, CLK_I, valid_sdram_program_packet, sdram_program_valid)
     begin
         if (RST_I = '1')then
             sdram_dq_out <= (others => '0');
             config_io_1 <= '0';
         elsif (rising_edge(CLK_I))then
             if (spartan_clk_falling_edge_enable = '1')then
-                if (valid_sdram_program_packet = '1')then
-                    sdram_dq_out <= sdram_dq_out_i;
-                    config_io_1 <= config_io_1_i;
-                else
-                    sdram_dq_out <= (others => '0');
-                    config_io_1 <= '0';
-                end if;
+                  if (valid_sdram_program_packet = '1' or sdram_program_valid = '1')then
+                      sdram_dq_out <= sdram_dq_out_i;
+                      config_io_1 <= config_io_1_i;
+                  else
+                      sdram_dq_out <= (others => '0');
+                      config_io_1 <= '0';
+                  end if;
             end if;
         end if;
     end process;

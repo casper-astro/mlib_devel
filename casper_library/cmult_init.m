@@ -90,18 +90,18 @@ function cmult_init(blk, varargin)
 
   delete_lines(blk);
 
-  if n_bits_a == 0 || n_bits_b == 0,
+  if n_bits_a == 0 || n_bits_b == 0
     clean_blocks(blk);
     set_param(blk,'AttributesFormatString','');
     save_state(blk, 'defaults', defaults, varargin{:});
     return;
   end
 
-  if (n_bits_a < bin_pt_a),
+  if (n_bits_a < bin_pt_a)
       errordlg('Number of bits for a input must be greater than binary point position.'); return; end
-  if (n_bits_b < bin_pt_b),
+  if (n_bits_b < bin_pt_b)
       errordlg('Number of bits for b input must be greater than binary point position.'); return; end
-  if (n_bits_ab < bin_pt_ab),
+  if (n_bits_ab < bin_pt_ab)
       errordlg('Number of bits for ab input must be greater than binary point position.'); return; end
 
   %ports
@@ -109,7 +109,7 @@ function cmult_init(blk, varargin)
   reuse_block(blk, 'a', 'built-in/Inport', 'Port', '1', 'Position', [5 148 35 162]);
   reuse_block(blk, 'b', 'built-in/Inport', 'Port', '2', 'Position', [5 333 35 347]);
  
-  if strcmp(async, 'on'),
+  if strcmp(async, 'on')
     reuse_block(blk, 'en', 'built-in/Inport', 'Port', '3', 'Position', [5 478 35 492]);
   end 
  
@@ -129,7 +129,7 @@ function cmult_init(blk, varargin)
       'Position', [90 328 125 352]);
   add_line(blk, 'b/1', 'b_replicate/1'); 
 
-  if strcmp(async, 'on'),
+  if strcmp(async, 'on')
     reuse_block(blk, 'en_replicate0', 'casper_library_bus/bus_replicate', ...
         'replication', '5', 'latency', num2str(latency), 'misc', 'off', ...
         'Position', [90 473 125 497]);
@@ -163,16 +163,16 @@ function cmult_init(blk, varargin)
   
   %multipliers
 
-  if strcmp(multiplier_implementation, 'behavioral HDL'),
+  if strcmp(multiplier_implementation, 'behavioral HDL')
     use_behavioral_HDL = 'on';
     use_embedded = 'off';
   else
     use_behavioral_HDL = 'off';
-    if strcmp(multiplier_implementation, 'embedded multiplier core'),
+    if strcmp(multiplier_implementation, 'embedded multiplier core')
       use_embedded = 'on';
-    elseif strcmp(multiplier_implementation, 'standard core'),
+    elseif strcmp(multiplier_implementation, 'standard core')
       use_embedded = 'off';
-    else,
+    else
     end
   end
 
@@ -204,7 +204,7 @@ function cmult_init(blk, varargin)
   add_line(blk, 'a_expand/3', 'reim/1');
   add_line(blk, 'b_expand/4', 'reim/2');
 
-  if strcmp(async, 'on'),
+  if strcmp(async, 'on')
     add_line(blk, 'en_expand0/1', 'rere/3');
     add_line(blk, 'en_expand0/2', 'imim/3');
     add_line(blk, 'en_expand0/3', 'imre/3');
@@ -243,22 +243,22 @@ function cmult_init(blk, varargin)
   add_line(blk, 'reim/1', 'addsub_im/2');
 
   % Set conjugation mode.
-  if strcmp(conjugated, 'on'),
+  if strcmp(conjugated, 'on')
     set_param([blk, '/addsub_re'], 'mode', 'Addition');
     set_param([blk, '/addsub_im'], 'mode', 'Subtraction');
-  else,
+  else
     set_param([blk, '/addsub_re'], 'mode', 'Subtraction');
     set_param([blk, '/addsub_im'], 'mode', 'Addition');
   end
   
-  if strcmp(async, 'on'),
+  if strcmp(async, 'on')
     add_line(blk, 'en_expand1/1', 'addsub_re/3');
     add_line(blk, 'en_expand1/2', 'addsub_im/3');
 
-    if strcmp(pipelined_enable, 'on'), 
+    if strcmp(pipelined_enable, 'on')
       latency = add_latency;
       replication = 3;
-    else, 
+    else
       latency = 0;
       replication = 2;
     end
@@ -312,25 +312,26 @@ function cmult_init(blk, varargin)
      'latency', num2str(conv_latency), 'Position', [595 317 640 348]);
   add_line(blk,'addsub_im/1','convert_im/1');
 
-  if strcmp(async, 'on'),
+  if strcmp(async, 'on')
     add_line(blk, 'en_expand2/1', 'convert_re/2');
     add_line(blk, 'en_expand2/2', 'convert_im/2');
     
-    if strcmp(pipelined_enable, 'on'), 
+    if strcmp(pipelined_enable, 'on')
       reuse_block(blk, 'den', 'xbsIndex_r4/Delay', ...
         'latency', num2str(latency), 'reg_retiming', 'on', ...
         'Position', [600 574 635 596]);
       add_line(blk, 'en_expand2/3', 'den/1');
       latency = conv_latency;
-    else, 
+    else
       latency = mult_latency + add_latency + conv_latency;
     end
   end
 
-  %output ports
+  % output ports
 
   reuse_block(blk, 'ri_to_c', 'casper_library_misc/ri_to_c', ...
           'Position', [660 229 700 271]);
+  set_param([blk, '/ri_to_c'], 'LinkStatus', 'inactive');
   add_line(blk,'convert_re/1','ri_to_c/1');
   add_line(blk,'convert_im/1','ri_to_c/2');
 
@@ -339,7 +340,7 @@ function cmult_init(blk, varargin)
           'Position', [745 243 775 257]);
   add_line(blk,'ri_to_c/1','ab/1');
 
-  if strcmp(async, 'on') && strcmp(pipelined_enable, 'on'),
+  if strcmp(async, 'on') && strcmp(pipelined_enable, 'on')
     reuse_block(blk, 'dvalid', 'built-in/Outport', ...
       'Port', '2', ...
       'Position', [745 438 775 452]);

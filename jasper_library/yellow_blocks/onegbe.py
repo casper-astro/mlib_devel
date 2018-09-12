@@ -12,7 +12,7 @@ class onegbe(YellowBlock):
             return onegbe_snap(blk, plat, hdl_root)
 
     def _instantiate_udp(self, top):
-        gbe_udp = top.get_instance(entity='gbe_udp', name=self.fullname, comment=self.fullname)
+        gbe_udp = top.get_instance(entity='gbe_udp', name=self.fullname)
         gbe_udp.add_parameter('LOCAL_ENABLE',   '%d' % int(self.local_en))
         gbe_udp.add_parameter('LOCAL_MAC',      '48\'d%d' % self.local_mac)
         gbe_udp.add_parameter('LOCAL_IP',       '32\'d%d' % self.local_ip)
@@ -63,7 +63,7 @@ class onegbe(YellowBlock):
 
         gbe_udp.add_wb_interface(regname=self.unique_name, mode='rw', nbytes=65536, typecode=self.typecode)
     def _instantiate_mac(self, top):
-        gbe_mac = top.get_instance(entity='gig_eth_mac', name=self.fullname+'_mac', comment=self.fullname)
+        gbe_mac = top.get_instance(entity='gig_eth_mac', name=self.fullname+'_mac')
         gbe_mac.add_parameter('MAX_FRAME_SIZE_STANDARD', 1522)
         gbe_mac.add_parameter('MAX_FRAME_SIZE_JUMBO', 9022)
         
