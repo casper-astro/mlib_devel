@@ -384,6 +384,8 @@ if strcmp(snaplen, '0 - no snap') == 0
     reuse_block(cursys, 'rxsnap_and', 'xbsIndex_r4/Logical', ...
         'arith_type', 'Unsigned', 'logical_function', 'AND', 'inputs', '2', ...
         'Position', [1070        1194        1120        1241]);
+    try delete_block_lines([cursys, '/', snapname], false); catch e, end
+    try delete_block_lines([cursys, '/rxsnap_and'], false); catch e, end
     try add_line(cursys, 'rxs_fr0/1',	[snapname, '/1']); catch e, end
     try add_line(cursys, 'rxs_fr1/1',   [snapname, '/2']); catch e, end
     try add_line(cursys, 'rxs_fr2/1',   [snapname, '/3']); catch e, end
@@ -441,6 +443,8 @@ if strcmp(snaplen, '0 - no snap') == 0
     reuse_block(cursys, 'txsnap_and', 'xbsIndex_r4/Logical', ...
         'arith_type', 'Unsigned', 'logical_function', 'AND', 'inputs', '2', ...
         'Position', [1060        1479        1110        1526]);
+    try delete_block_lines([cursys, '/', snapname], false); catch e, end
+    try delete_block_lines([cursys, '/txsnap_and'], false); catch e, end
     try add_line(cursys, 'txs_fr0/1',	[snapname, '/1']); catch e, end
     try add_line(cursys, 'txs_fr1/1',   [snapname, '/2']); catch e, end
     try add_line(cursys, 'txs_fr2/1',   [snapname, '/3']); catch e, end
