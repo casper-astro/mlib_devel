@@ -1,7 +1,6 @@
-toolflow module
-===============
+toolflow
+=========
 
 .. automodule:: toolflow
     :members:
     :undoc-members:
-    :show-inheritance:

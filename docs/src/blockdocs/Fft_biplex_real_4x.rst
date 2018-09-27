@@ -60,9 +60,9 @@ Mask Parameters
 | Input bit width    | input\_bit\_width  | The number of bits | To make optimal    |
 |                    |                    | in each real and   | use of BRAMs =>    |
 |                    |                    | imaginary sample   | 18                 |
-|                    |                    | as they are input  | | For low FFT      |
-|                    |                    | to the FFT. If bit |   noise =>         |
-|                    |                    | growth is not      | | 25               |
+|                    |                    | as they are input  | For low FFT        |
+|                    |                    | to the FFT. If bit | noise => 25        |
+|                    |                    | growth is not      |                    |
 |                    |                    | chosen, each FFT   |                    |
 |                    |                    | stage will round   |                    |
 |                    |                    | numbers back down  |                    |
