@@ -109,3 +109,8 @@ Documentation
     jasper_documentation
     Toolflow Sourcecode <src/jasper_library_modules/modules>
     casperfpga Sourcecode <https://casper-toolflow.readthedocs.io/projects/casperfpga/en/latest/>
+
+
+Get Involved
+--------------
+If you are a CASPER collaborator, or you’re just interested in what we’re up to, feel free to join our mailing list by sending a blank email `here. <casper+subscribe@lists.berkeley.edu>`_
