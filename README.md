@@ -52,3 +52,6 @@ CASPER also maintain a set of [tutorials](https://casper-tutorials.readthedocs.i
     </dl>
   </dd>
 </dl>
+
+## Get Involved
+If you are a CASPER collaborator, or you’re just interested in what we’re up to, feel free to join our mailing list by sending a blank email [here.](casper+subscribe@lists.berkeley.edu)
