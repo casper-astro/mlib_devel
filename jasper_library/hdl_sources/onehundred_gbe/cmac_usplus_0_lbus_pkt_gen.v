@@ -52,9 +52,6 @@
 (* DowngradeIPIdentifiedWarnings="yes" *)
 
 module cmac_usplus_0_lbus_pkt_gen
-   #(
-       parameter PKT_SIZE     = 64      //// 64 to 16383 (Each Packet Size)
-   )
    (
     input  wire            clk,
     input  wire            reset,
@@ -483,7 +480,7 @@ module cmac_usplus_0_lbus_pkt_gen
                                          tx_fsm_en              <= 1'b0;
                                          number_pkt_tx          <= 16'd0;
                                          //lbus_number___pkt_proc   <= PKT_NUM - 16'd1;
-                                         lbus_pkt_size_proc     <= PKT_SIZE;
+                                         lbus_pkt_size_proc     <= 64;
                                          segment0_eop           <= 1'b0;
                                          segment1_eop           <= 1'b0;
                                          segment2_eop           <= 1'b0;
@@ -540,11 +537,7 @@ module cmac_usplus_0_lbus_pkt_gen
                                              first_pkt      <= 1'b0;
                                              pkt_size_64    <= 1'd1;
                                          end
-                                         else
-                                         begin
-                                             first_pkt      <= 1'b1;
-                                             pkt_size_64    <= 1'd0;
-                                         end
+                                    
 
                                          //// State transition
                                          if  (stat_rx_aligned_1d == 1'b0) 

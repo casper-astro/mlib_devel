@@ -81,9 +81,9 @@ module cmac_usplus_0_exdes
     input wire[47:0]Dest_Mac,
     input wire[47:0]Source_Mac,
     input wire[31:0]Source_Ip
+    //input           init_clk
 );
 
-  parameter PKT_NUM      = 100;    //// 1 to 65535 (Number of packets)
   parameter PKT_SIZE     = 64;     //// 64 to 16383 (Each Packet Size)
 
   wire [11 :0]    gt_loopback_in;
@@ -926,11 +926,7 @@ cmac_usplus_0_core_support i_cmac_usplus_0_core_support
     .drp_we                               (1'b0)
 );
 
-cmac_usplus_0_pkt_gen_mon
-#(
-    .PKT_NUM                              (PKT_NUM),
-    .PKT_SIZE                             (PKT_SIZE)
-) i_cmac_usplus_0_pkt_gen_mon  
+cmac_usplus_0_pkt_gen_mon i_cmac_usplus_0_pkt_gen_mon  
 (
     .gen_mon_clk                          (txusrclk2),
     .usr_tx_reset                         (usr_tx_reset),

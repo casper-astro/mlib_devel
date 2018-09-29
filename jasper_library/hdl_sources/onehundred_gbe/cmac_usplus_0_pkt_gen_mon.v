@@ -50,16 +50,13 @@
 (* DowngradeIPIdentifiedWarnings="yes" *)
 ////module lbus_if
 module cmac_usplus_0_pkt_gen_mon
-   #(
-    parameter PKT_NUM      = 1000,    //// 1 to 65535 (Number of packets)
-    parameter PKT_SIZE     = 512      //// 64 to 16383 (Each Packet Size)
-   )
+
    (
     input                      gen_mon_clk,
     input                      usr_tx_reset,
     input                      usr_rx_reset,
     input                      sys_reset,
-    input                      send_continuous_pkts,
+
     //// User Interface signals
     input                      lbus_tx_rx_restart_in,
     //// LBUS Tx Signals
@@ -440,10 +437,7 @@ module cmac_usplus_0_pkt_gen_mon
 
 
 cmac_usplus_0_lbus_pkt_gen
-#(
-.PKT_NUM                               (PKT_NUM),
-.PKT_SIZE                              (PKT_SIZE)
-) i_cmac_usplus_0_lbus_pkt_gen  
+i_cmac_usplus_0_lbus_pkt_gen  
 (
 .clk                                   (gen_mon_clk),
 .reset                                 (usr_tx_reset),
@@ -541,9 +535,8 @@ cmac_usplus_0_lbus_pkt_gen
 );
 
 cmac_usplus_0_lbus_pkt_mon
-#(
-.PKT_NUM                               (PKT_NUM)
-) i_cmac_usplus_0_lbus_pkt_mon  
+
+ i_cmac_usplus_0_lbus_pkt_mon  
 (
 .clk                                   (gen_mon_clk),
 .reset                                 (usr_rx_reset),

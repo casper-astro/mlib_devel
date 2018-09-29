@@ -38,7 +38,7 @@
 ###  injury, or severe property or environmental damage
 ###  (individually and collectively, "Critical
 ###  Applications"). Customer assumes the sole risk and
-###  liability of any use of Xilinx products in Critical
+###  liability of any use of Xilinx products                                                                             in Critical
 ###  Applications, subject only to applicable laws and
 ###  regulations governing limitations on product liability.
 ###

@@ -52,9 +52,6 @@
 (* DowngradeIPIdentifiedWarnings="yes" *)
 
 module cmac_usplus_0_lbus_pkt_mon
-   #(
-    parameter PKT_NUM      = 1000     //// 1 to 65535 (Number of packets)
-   )
    (
     input  wire            clk,
     input  wire            reset,
@@ -324,7 +321,6 @@ module cmac_usplus_0_lbus_pkt_mon
     reg            rx_data0_chk_fail, rx_data1_chk_fail, rx_data2_chk_fail, rx_data3_chk_fail, byte_cmp_fail;
     reg  [15:0]    number_pkt_rx;
 
-    reg  [15:0]    lbus_number_pkt_proc;
     reg            stat_rx_aligned_1d, reset_done;
     reg            ctl_rx_enable_r, ctl_rx_force_resync_r, ctl_rx_test_pattern_r; 
     reg            ctl_rsfec_ieee_error_indication_mode_r;
@@ -536,7 +532,6 @@ module cmac_usplus_0_lbus_pkt_mon
             check_seg3             <= 1'b0;
             invalid_lsb_bytes      <= 4'd0;
             number_pkt_rx          <= 16'd0;
-            lbus_number_pkt_proc   <= 16'd0;
             rx_payload_1           <= 8'd0;
             rx_payload_2           <= 8'd0;
             rx_payload_new         <= 8'd0;
@@ -571,7 +566,6 @@ module cmac_usplus_0_lbus_pkt_mon
                                              exp_datain2            <= 128'd0;
                                              exp_datain3            <= 128'd0;
                                              number_pkt_rx          <= 16'd0;
-                                             lbus_number_pkt_proc   <= 16'd0;
                                              check_seg0             <= 1'b0;
                                              check_seg1             <= 1'b0;
                                              check_seg2             <= 1'b0;
@@ -642,14 +636,13 @@ module cmac_usplus_0_lbus_pkt_mon
                                              exp_datain2           <= 128'd0;
                                              exp_datain3           <= 128'd0;
                                              number_pkt_rx         <= 16'd0;
-                                             lbus_number_pkt_proc  <= PKT_NUM;
                                              rx_payload_1          <= 8'd6;
                                              rx_payload_2          <= rx_payload_1 + 8'd1;
                                              rx_payload_new        <= rx_payload_1 + 8'd2;
                                              rx_payload_16byte     <= {rx_payload_1, rx_payload_1, rx_payload_1, rx_payload_1,
                                                                        rx_payload_1, rx_payload_1, rx_payload_1, rx_payload_1,
                                                                        rx_payload_1, rx_payload_1, rx_payload_1, rx_payload_1,
-                                                                       rx_payload_1, rx_payload_1, rx_payload_1, rx_payload_1 };
+                                                                       rx_payload_1, rx_payload_1, rx_payload_1, rx_payload_1};
                                              rx_payload_16byte_new <= {rx_payload_2, rx_payload_2, rx_payload_2, rx_payload_2,
                                                                        rx_payload_2, rx_payload_2, rx_payload_2, rx_payload_2,
                                                                        rx_payload_2, rx_payload_2, rx_payload_2, rx_payload_2,
@@ -889,7 +882,6 @@ module cmac_usplus_0_lbus_pkt_mon
                                              check_seg2             <= 1'b0;
                                              check_seg3             <= 1'b0;
                                              number_pkt_rx          <= 16'd0;
-                                             lbus_number_pkt_proc   <= 16'd0;
                                              rx_payload_1           <= 8'd0;
                                              rx_payload_2           <= 8'd0;
                                              rx_payload_new         <= 8'd0;
@@ -980,7 +972,7 @@ module cmac_usplus_0_lbus_pkt_mon
         else
             if  ( ((rx_restart_rise_edge == 1'b1) && (wait_to_restart == 1'b1)) || (stat_rx_aligned_1d == 1'b0) )
                 rx_done_reg <= 1'b0;    
-            else if  ((number_pkt_rx == lbus_number_pkt_proc) && (rx_fsm_en == 1'b1))
+            else if  ( (rx_fsm_en == 1'b1))
                 rx_done_reg <= 1'b1;
     end
     
