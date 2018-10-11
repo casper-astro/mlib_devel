@@ -1,4 +1,4 @@
-module snap2_infrastructure(
+module snap2_v2_infrastructure(
     input  sys_clk_buf_n,
     input  sys_clk_buf_p,
     //input  ext_sys_rst_n,
