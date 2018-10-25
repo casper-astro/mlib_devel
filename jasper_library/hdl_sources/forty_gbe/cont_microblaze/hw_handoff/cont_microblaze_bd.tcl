@@ -250,7 +250,7 @@ proc create_root_design { parentCell } {
   set CYC_O [ create_bd_port -dir O CYC_O ]
   set Clk [ create_bd_port -dir I -type clk Clk ]
   set_property -dict [ list \
-   CONFIG.FREQ_HZ {156250000} \
+   CONFIG.FREQ_HZ {39062500} \
  ] $Clk
   set DAT_I [ create_bd_port -dir I -from 31 -to 0 DAT_I ]
   set DAT_O [ create_bd_port -dir O -from 31 -to 0 DAT_O ]
@@ -286,7 +286,8 @@ proc create_root_design { parentCell } {
   set axi_uartlite_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_uartlite:2.0 axi_uartlite_0 ]
   set_property -dict [ list \
    CONFIG.C_BAUDRATE {115200} \
-   CONFIG.C_S_AXI_ACLK_FREQ_HZ {156250000} \
+   CONFIG.C_S_AXI_ACLK_FREQ_HZ {39062500} \
+   CONFIG.C_S_AXI_ACLK_FREQ_HZ_d {39.0625} \
  ] $axi_uartlite_0
 
   # Create instance: mdm_1, and set properties
@@ -322,6 +323,8 @@ proc create_root_design { parentCell } {
   set microblaze_0_axi_intc [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_intc:4.1 microblaze_0_axi_intc ]
   set_property -dict [ list \
    CONFIG.C_HAS_FAST {1} \
+   CONFIG.C_PROCESSOR_CLK_FREQ_MHZ {39.0625} \
+   CONFIG.C_S_AXI_ACLK_FREQ_MHZ {39.0625} \
  ] $microblaze_0_axi_intc
 
   # Create instance: microblaze_0_axi_periph, and set properties

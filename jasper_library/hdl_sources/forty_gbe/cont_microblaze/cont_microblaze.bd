@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<bd:repository xmlns:bd="http://www.xilinx.com/bd" bd:BoundaryCRC="0xD0D13BDF620A1F9C" bd:device="xc7vx690tffg1927-2" bd:isValidated="true" bd:synthFlowMode="None" bd:tool_version="2018.2" bd:top="cont_microblaze" bd:version="1.00.a">
+<bd:repository xmlns:bd="http://www.xilinx.com/bd" bd:BoundaryCRC="0xD0D13BDFEDE6CC97" bd:device="xc7vx690tffg1927-2" bd:isValidated="true" bd:synthFlowMode="None" bd:tool_version="2018.2" bd:top="cont_microblaze" bd:version="1.00.a">
 
   <spirit:component xmlns:spirit="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1685-2009">
     <spirit:vendor>xilinx.com</spirit:vendor>
@@ -68,7 +68,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>FREQ_HZ</spirit:name>
-            <spirit:value>156250000</spirit:value>
+            <spirit:value>39062500</spirit:value>
             <spirit:vendorExtensions>
               <bd:configElementInfos>
                 <bd:configElementInfo bd:valueSource="user"/>
@@ -282,7 +282,8 @@
         <spirit:configurableElementValues>
           <spirit:configurableElementValue spirit:referenceId="bd:xciName">cont_microblaze_axi_uartlite_0_0</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="C_BAUDRATE">115200</spirit:configurableElementValue>
-          <spirit:configurableElementValue spirit:referenceId="C_S_AXI_ACLK_FREQ_HZ">156250000</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="C_S_AXI_ACLK_FREQ_HZ">39062500</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="C_S_AXI_ACLK_FREQ_HZ_d">39.0625</spirit:configurableElementValue>
         </spirit:configurableElementValues>
       </spirit:componentInstance>
       <spirit:componentInstance>
@@ -321,6 +322,8 @@
         <spirit:configurableElementValues>
           <spirit:configurableElementValue spirit:referenceId="bd:xciName">cont_microblaze_microblaze_0_axi_intc_0</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="C_HAS_FAST">1</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="C_S_AXI_ACLK_FREQ_MHZ">39.0625</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="C_PROCESSOR_CLK_FREQ_MHZ">39.0625</spirit:configurableElementValue>
         </spirit:configurableElementValues>
       </spirit:componentInstance>
       <spirit:componentInstance>
@@ -462,13 +465,13 @@
         <spirit:externalPortReference spirit:portRef="Clk"/>
         <spirit:internalPortReference spirit:componentRef="axi_slave_wishbone_classic_master_0" spirit:portRef="S_AXI_ACLK"/>
         <spirit:internalPortReference spirit:componentRef="rst_Clk_100M" spirit:portRef="slowest_sync_clk"/>
-        <spirit:internalPortReference spirit:componentRef="microblaze_0_local_memory" spirit:portRef="LMB_Clk"/>
         <spirit:internalPortReference spirit:componentRef="axi_timebase_wdt_0" spirit:portRef="s_axi_aclk"/>
         <spirit:internalPortReference spirit:componentRef="axi_timer_0" spirit:portRef="s_axi_aclk"/>
         <spirit:internalPortReference spirit:componentRef="axi_uartlite_0" spirit:portRef="s_axi_aclk"/>
         <spirit:internalPortReference spirit:componentRef="microblaze_0" spirit:portRef="Clk"/>
         <spirit:internalPortReference spirit:componentRef="microblaze_0_axi_intc" spirit:portRef="s_axi_aclk"/>
         <spirit:internalPortReference spirit:componentRef="microblaze_0_axi_intc" spirit:portRef="processor_clk"/>
+        <spirit:internalPortReference spirit:componentRef="microblaze_0_local_memory" spirit:portRef="LMB_Clk"/>
         <spirit:internalPortReference spirit:componentRef="microblaze_0_axi_periph" spirit:portRef="ACLK"/>
         <spirit:internalPortReference spirit:componentRef="microblaze_0_axi_periph" spirit:portRef="S00_ACLK"/>
         <spirit:internalPortReference spirit:componentRef="microblaze_0_axi_periph" spirit:portRef="M00_ACLK"/>

@@ -1,8 +1,8 @@
 --Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2018.2 (lin64) Build 2258646 Thu Jun 14 20:02:38 MDT 2018
---Date        : Fri Aug 24 11:09:40 2018
---Host        : adam-cm running 64-bit Ubuntu 14.04.5 LTS
+--Date        : Wed Oct 24 14:56:57 2018
+--Host        : adam-cm running 64-bit Ubuntu 16.04.5 LTS
 --Command     : generate_target cont_microblaze.bd
 --Design      : cont_microblaze
 --Purpose     : IP block netlist
@@ -2815,7 +2815,7 @@ architecture STRUCTURE of cont_microblaze is
   attribute X_INTERFACE_INFO : string;
   attribute X_INTERFACE_INFO of Clk : signal is "xilinx.com:signal:clock:1.0 CLK.CLK CLK";
   attribute X_INTERFACE_PARAMETER : string;
-  attribute X_INTERFACE_PARAMETER of Clk : signal is "XIL_INTERFACENAME CLK.CLK, CLK_DOMAIN cont_microblaze_Clk, FREQ_HZ 156250000, PHASE 0.000";
+  attribute X_INTERFACE_PARAMETER of Clk : signal is "XIL_INTERFACENAME CLK.CLK, CLK_DOMAIN cont_microblaze_Clk, FREQ_HZ 39062500, PHASE 0.000";
   attribute X_INTERFACE_INFO of Reset : signal is "xilinx.com:signal:reset:1.0 RST.RESET RST";
   attribute X_INTERFACE_PARAMETER of Reset : signal is "XIL_INTERFACENAME RST.RESET, POLARITY ACTIVE_HIGH";
   attribute X_INTERFACE_INFO of UART_rxd : signal is "xilinx.com:interface:uart:1.0 UART RxD";

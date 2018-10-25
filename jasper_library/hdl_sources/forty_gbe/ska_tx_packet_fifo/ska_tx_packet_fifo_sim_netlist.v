@@ -1,7 +1,7 @@
 // Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2018.2 (lin64) Build 2258646 Thu Jun 14 20:02:38 MDT 2018
-// Date        : Tue Sep  4 15:57:17 2018
+// Date        : Wed Oct 24 09:25:36 2018
 // Host        : adam-cm running 64-bit Ubuntu 16.04.5 LTS
 // Command     : write_verilog -force -mode funcsim
 //               /home/aisaacson/work/git_work/ska_sa/projects/mlib_devel/jasper_library/test_models/r2018a_test2/myproj/myproj.srcs/sources_1/ip/ska_tx_packet_fifo/ska_tx_packet_fifo_sim_netlist.v
@@ -306,14 +306,14 @@ module ska_tx_packet_fifo
   (* C_PROG_EMPTY_TYPE_WACH = "0" *) 
   (* C_PROG_EMPTY_TYPE_WDCH = "0" *) 
   (* C_PROG_EMPTY_TYPE_WRCH = "0" *) 
-  (* C_PROG_FULL_THRESH_ASSERT_VAL = "504" *) 
+  (* C_PROG_FULL_THRESH_ASSERT_VAL = "511" *) 
   (* C_PROG_FULL_THRESH_ASSERT_VAL_AXIS = "1023" *) 
   (* C_PROG_FULL_THRESH_ASSERT_VAL_RACH = "1023" *) 
   (* C_PROG_FULL_THRESH_ASSERT_VAL_RDCH = "1023" *) 
   (* C_PROG_FULL_THRESH_ASSERT_VAL_WACH = "1023" *) 
   (* C_PROG_FULL_THRESH_ASSERT_VAL_WDCH = "1023" *) 
   (* C_PROG_FULL_THRESH_ASSERT_VAL_WRCH = "1023" *) 
-  (* C_PROG_FULL_THRESH_NEGATE_VAL = "503" *) 
+  (* C_PROG_FULL_THRESH_NEGATE_VAL = "510" *) 
   (* C_PROG_FULL_TYPE = "1" *) 
   (* C_PROG_FULL_TYPE_AXIS = "0" *) 
   (* C_PROG_FULL_TYPE_RACH = "0" *) 
@@ -3678,9 +3678,9 @@ endmodule
 (* C_PROG_EMPTY_THRESH_ASSERT_VAL_WRCH = "1022" *) (* C_PROG_EMPTY_THRESH_NEGATE_VAL = "5" *) (* C_PROG_EMPTY_TYPE = "0" *) 
 (* C_PROG_EMPTY_TYPE_AXIS = "0" *) (* C_PROG_EMPTY_TYPE_RACH = "0" *) (* C_PROG_EMPTY_TYPE_RDCH = "0" *) 
 (* C_PROG_EMPTY_TYPE_WACH = "0" *) (* C_PROG_EMPTY_TYPE_WDCH = "0" *) (* C_PROG_EMPTY_TYPE_WRCH = "0" *) 
-(* C_PROG_FULL_THRESH_ASSERT_VAL = "504" *) (* C_PROG_FULL_THRESH_ASSERT_VAL_AXIS = "1023" *) (* C_PROG_FULL_THRESH_ASSERT_VAL_RACH = "1023" *) 
+(* C_PROG_FULL_THRESH_ASSERT_VAL = "511" *) (* C_PROG_FULL_THRESH_ASSERT_VAL_AXIS = "1023" *) (* C_PROG_FULL_THRESH_ASSERT_VAL_RACH = "1023" *) 
 (* C_PROG_FULL_THRESH_ASSERT_VAL_RDCH = "1023" *) (* C_PROG_FULL_THRESH_ASSERT_VAL_WACH = "1023" *) (* C_PROG_FULL_THRESH_ASSERT_VAL_WDCH = "1023" *) 
-(* C_PROG_FULL_THRESH_ASSERT_VAL_WRCH = "1023" *) (* C_PROG_FULL_THRESH_NEGATE_VAL = "503" *) (* C_PROG_FULL_TYPE = "1" *) 
+(* C_PROG_FULL_THRESH_ASSERT_VAL_WRCH = "1023" *) (* C_PROG_FULL_THRESH_NEGATE_VAL = "510" *) (* C_PROG_FULL_TYPE = "1" *) 
 (* C_PROG_FULL_TYPE_AXIS = "0" *) (* C_PROG_FULL_TYPE_RACH = "0" *) (* C_PROG_FULL_TYPE_RDCH = "0" *) 
 (* C_PROG_FULL_TYPE_WACH = "0" *) (* C_PROG_FULL_TYPE_WDCH = "0" *) (* C_PROG_FULL_TYPE_WRCH = "0" *) 
 (* C_RACH_TYPE = "0" *) (* C_RDCH_TYPE = "0" *) (* C_RD_DATA_COUNT_WIDTH = "9" *) 
@@ -8340,13 +8340,14 @@ module ska_tx_packet_fifo_wr_pf_as
   wire [7:0]Q;
   wire [3:0]S;
   wire [3:0]\dest_out_bin_ff_reg[7] ;
-  wire [8:1]diff_pntr;
+  wire [8:0]diff_pntr;
   wire [0:0]\gic0.gc0.count_d1_reg[8] ;
   wire \gpf1.prog_full_i_i_1_n_0 ;
   wire \gpf1.prog_full_i_i_2_n_0 ;
+  wire \gpf1.prog_full_i_i_3_n_0 ;
   wire \grstd1.grst_full.grst_f.rst_d3_reg ;
   wire out;
-  wire [9:2]plusOp;
+  wire [9:1]plusOp;
   wire plusOp_carry__0_n_0;
   wire plusOp_carry__0_n_1;
   wire plusOp_carry__0_n_2;
@@ -8358,10 +8359,17 @@ module ska_tx_packet_fifo_wr_pf_as
   wire prog_full;
   wire ram_full_fb_i_reg;
   wire wr_clk;
-  wire [0:0]NLW_plusOp_carry_O_UNCONNECTED;
   wire [3:0]NLW_plusOp_carry__1_CO_UNCONNECTED;
   wire [3:1]NLW_plusOp_carry__1_O_UNCONNECTED;
 
+  FDCE #(
+    .INIT(1'b0)) 
+    \gdiff.diff_pntr_pad_reg[1] 
+       (.C(wr_clk),
+        .CE(1'b1),
+        .CLR(AR),
+        .D(plusOp[1]),
+        .Q(diff_pntr[0]));
   FDCE #(
     .INIT(1'b0)) 
     \gdiff.diff_pntr_pad_reg[2] 
@@ -8426,26 +8434,32 @@ module ska_tx_packet_fifo_wr_pf_as
         .CLR(AR),
         .D(plusOp[9]),
         .Q(diff_pntr[8]));
-  LUT6 #(
-    .INIT(64'h00FF004000000040)) 
+  LUT5 #(
+    .INIT(32'h0F010001)) 
     \gpf1.prog_full_i_i_1 
        (.I0(\gpf1.prog_full_i_i_2_n_0 ),
-        .I1(diff_pntr[8]),
-        .I2(diff_pntr[7]),
-        .I3(\grstd1.grst_full.grst_f.rst_d3_reg ),
-        .I4(ram_full_fb_i_reg),
-        .I5(prog_full),
+        .I1(\gpf1.prog_full_i_i_3_n_0 ),
+        .I2(\grstd1.grst_full.grst_f.rst_d3_reg ),
+        .I3(ram_full_fb_i_reg),
+        .I4(prog_full),
         .O(\gpf1.prog_full_i_i_1_n_0 ));
-  LUT6 #(
-    .INIT(64'h777F7F7FFFFFFFFF)) 
+  LUT5 #(
+    .INIT(32'h777FFFFF)) 
     \gpf1.prog_full_i_i_2 
-       (.I0(diff_pntr[5]),
-        .I1(diff_pntr[6]),
-        .I2(diff_pntr[3]),
-        .I3(diff_pntr[2]),
-        .I4(diff_pntr[1]),
-        .I5(diff_pntr[4]),
+       (.I0(diff_pntr[3]),
+        .I1(diff_pntr[4]),
+        .I2(diff_pntr[0]),
+        .I3(diff_pntr[1]),
+        .I4(diff_pntr[2]),
         .O(\gpf1.prog_full_i_i_2_n_0 ));
+  LUT4 #(
+    .INIT(16'h7FFF)) 
+    \gpf1.prog_full_i_i_3 
+       (.I0(diff_pntr[7]),
+        .I1(diff_pntr[8]),
+        .I2(diff_pntr[5]),
+        .I3(diff_pntr[6]),
+        .O(\gpf1.prog_full_i_i_3_n_0 ));
   FDPE #(
     .INIT(1'b1)) 
     \gpf1.prog_full_i_reg 
@@ -8459,7 +8473,7 @@ module ska_tx_packet_fifo_wr_pf_as
         .CO({plusOp_carry_n_0,plusOp_carry_n_1,plusOp_carry_n_2,plusOp_carry_n_3}),
         .CYINIT(E),
         .DI(Q[3:0]),
-        .O({plusOp[4:2],NLW_plusOp_carry_O_UNCONNECTED[0]}),
+        .O(plusOp[4:1]),
         .S(S));
   CARRY4 plusOp_carry__0
        (.CI(plusOp_carry_n_0),
