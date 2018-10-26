@@ -95,7 +95,7 @@ reuse_block(blk, 'buscreate', 'casper_library_flow_control/bus_create', ...
     'inputNum', num2str(io_numios));
 
 if snap_delay > 0
-    reuse_block(blk, 'io_delay', 'casper_library_delays/pipeline', 'latency', num2str(snap_delay), ...
+    reuse_block(blk, 'io_delay', 'casper_library_delays/pipeline', 'csp_latency', num2str(snap_delay), ...
         'Position', [x_start + (x_size * 3.5), y_pos - (y_size * 0.5), x_start + (x_size * 3.5) + x_size, y_pos + (y_size * 0.5)]);
 end
     
@@ -196,7 +196,7 @@ reuse_block(blk, 'we', 'built-in/inport', ...
     'Port', num2str(portnum), ...
     'Position', [485, y1, 535, y1+y_size]);
 if snap_delay > 0
-    reuse_block(blk, 'we_delay', 'casper_library_delays/pipeline', 'latency', num2str(snap_delay), ...
+    reuse_block(blk, 'we_delay', 'casper_library_delays/pipeline', 'csp_latency', num2str(snap_delay), ...
         'Position', [545, y1, 595, y1+y_size]);
     add_line(blk, 'we/1', 'we_delay/1');
     add_line(blk, 'we_delay/1', ['ss/', num2str(snapport)]);
@@ -210,7 +210,7 @@ reuse_block(blk, 'trig', 'built-in/inport', ...
     'Port', num2str(portnum), ...
     'Position', [485, y1, 535, y1+y_size]);
 if snap_delay > 0
-    reuse_block(blk, 'trig_delay', 'casper_library_delays/pipeline', 'latency', num2str(snap_delay), ...
+    reuse_block(blk, 'trig_delay', 'casper_library_delays/pipeline', 'csp_latency', num2str(snap_delay), ...
         'Position', [545, y1, 595, y1+y_size]);
     add_line(blk, 'trig/1', 'trig_delay/1');
     add_line(blk, 'trig_delay/1', ['ss/', num2str(snapport)]);
@@ -225,7 +225,7 @@ if strcmp(snap_circap, 'on')
         'Port', num2str(portnum), ...
         'Position', [485, y1, 535, y1+y_size]);
     if snap_delay > 0
-        reuse_block(blk, 'stop_delay', 'casper_library_delays/pipeline', 'latency', num2str(snap_delay), ...
+        reuse_block(blk, 'stop_delay', 'casper_library_delays/pipeline', 'csp_latency', num2str(snap_delay), ...
             'Position', [545, y1, 595, y1+y_size]);
         add_line(blk, 'stop/1', 'stop_delay/1');
         add_line(blk, 'stop_delay/1', ['ss/', num2str(snapport)]);
@@ -242,7 +242,7 @@ if strcmp(snap_value, 'on')
         'inputNum', num2str(extra_numios));
     % delay
     if snap_delay > 0
-        reuse_block(blk, 'extra_delay', 'casper_library_delays/pipeline', 'latency', num2str(snap_delay), ...
+        reuse_block(blk, 'extra_delay', 'casper_library_delays/pipeline', 'csp_latency', num2str(snap_delay), ...
             'Position', [x_start + (x_size * 3.5), y_pos + 500 - (y_size * 0.5), x_start + (x_size * 3.5) + x_size, y_pos + 500 + (y_size * 0.5)]);
     end
     % cast the output of the buscreate to 32-bits for the snap extra val
@@ -302,7 +302,7 @@ if old_snaps == 0
             % arm_delay = snap_delay;
             arm_delay = 0;
             reuse_block(blk, 'arm_delay', 'casper_library_delays/pipeline', ...
-                'latency', num2str(arm_delay), 'Position', [130 300 160 315]);
+                'csp_latency', num2str(arm_delay), 'Position', [130 300 160 315]);
             add_line(blk, 'arm/1', 'arm_delay/1');
             add_line(blk, 'arm_delay/1', ['ss/', num2str(arm_port)]);
         else
@@ -330,7 +330,7 @@ if old_snaps == 0
         if snap_delay > 0
             circ_delay = 0;
             reuse_block(blk, 'circ_delay', 'casper_library_delays/pipeline', ...
-                'latency', num2str(circ_delay), 'Position', [130 367 160 383]);
+                'csp_latency', num2str(circ_delay), 'Position', [130 367 160 383]);
             add_line(blk, 'circ/1', 'circ_delay/1');
             add_line(blk, 'circ_delay/1', ['ss/', num2str(circ_port)]);
         else

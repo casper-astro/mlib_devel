@@ -36,15 +36,16 @@ function adder_tree_init(blk,varargin)
 clog('entering adder_tree_init', 'trace');
 check_mask_type(blk, 'adder_tree');
 
-defaults = {'n_inputs', 3, 'latency', 1, 'first_stage_hdl', 'off', 'adder_imp', 'Fabric'};
+defaults = {'n_inputs', 3, 'csp_latency', 1, 'first_stage_hdl', 'off', 'adder_imp', 'Fabric'};
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 clog('adder_tree_init: post same_state', 'trace');
 munge_block(blk, varargin{:});
 
 n_inputs = get_var('n_inputs', 'defaults', defaults, varargin{:});
-latency = get_var('latency', 'defaults', defaults, varargin{:});
+latency = get_var('csp_latency', 'defaults', defaults, varargin{:});
 first_stage_hdl = get_var('first_stage_hdl', 'defaults', defaults, varargin{:});
 adder_imp = get_var('adder_imp', 'defaults', defaults, varargin{:});
+
 
 hw_selection = adder_imp;
 

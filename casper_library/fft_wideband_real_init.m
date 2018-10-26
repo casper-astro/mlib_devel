@@ -259,7 +259,7 @@ end %for n
 reuse_block(blk, 'in_del_sync_4x', 'casper_library_delays/pipeline', ...
     'Position', [95 115 145 135], ...
     'ShowName', 'off', ...
-    'latency', num2str(input_latency));
+    'csp_latency', num2str(input_latency));
 add_line(blk, 'sync/1', 'in_del_sync_4x/1');
 
 %add biplex_real_4x block
@@ -298,7 +298,7 @@ add_line(blk, 'in_del_sync_4x/1', 'fft_biplex_real_4x/1');
 reuse_block(blk, 'del_sync_4x', 'casper_library_delays/pipeline', ...
     'Position', [315 115 365 135], ...
     'ShowName', 'off', ...
-    'latency', num2str(biplex_direct_latency));
+    'csp_latency', num2str(biplex_direct_latency));
 add_line(blk, 'fft_biplex_real_4x/1', 'del_sync_4x/1');
 
 %
@@ -367,7 +367,7 @@ if strcmp(unscramble, 'on'),
   %delay pipeline for sync
   reuse_block(blk, 'fft_direct_sync_delay', 'casper_library_delays/pipeline', ...
     'Position', [680 80 730 100], ...
-    'latency', num2str(biplex_direct_latency));
+    'csp_latency', num2str(biplex_direct_latency));
   reuse_block(blk, 'fft_unscrambler', 'casper_library_ffts/fft_unscrambler', ...
     'Position', [775 60 895 60+((n_streams*2^(n_inputs-1)+1)*ytick)], ...
     'FFTSize', num2str(FFTSize-1), ...
@@ -388,7 +388,7 @@ if strcmp(unscramble, 'on'),
       %pipeline between fft_direct and fft_unscrambler
       reuse_block(blk, dir_delay, 'casper_library_delays/pipeline', ...
         'Position', [680 120+(off_base+n*ytick) 730 140+(off_base+n*ytick)], ...
-        'latency', num2str(biplex_direct_latency));
+        'csp_latency', num2str(biplex_direct_latency));
       add_line(blk, ['fft_direct/', num2str(port_base+n+1)], [dir_delay,'/1']);
       add_line(blk, [dir_delay,'/1'], ['fft_unscrambler/', num2str(port_base/2+n+1)]);
       add_line(blk, ['fft_unscrambler/', num2str(port_base/2+n+1)], ['out', num2str(s),num2str(n-1), '/1']);
@@ -436,7 +436,7 @@ for s = 0:n_streams-1,
     in_delay = ['in_del_4x_pol',num2str(port_base+n)];
     reuse_block(blk, in_delay , 'casper_library_delays/pipeline', ...
         'Position', [95 205+(off_base+n*ytick) 145 225+(off_base+n*ytick)], 'ShowName', 'on', ...
-        'latency', num2str(input_latency));
+        'csp_latency', num2str(input_latency));
     add_line(blk, [in,'/1'], [in_delay,'/1']); 
     add_line(blk, [in_delay,'/1'], ['fft_biplex_real_4x/',num2str(port_base+3+n)]);
 
@@ -444,7 +444,7 @@ for s = 0:n_streams-1,
     out_delay = ['del_4x_pol',num2str(port_base+n)];
     reuse_block(blk, out_delay, 'casper_library_delays/pipeline', ...
         'Position', [315 160+(off_base+n*ytick) 365 180+(off_base+n*ytick)], ...
-        'latency', num2str(biplex_direct_latency));
+        'csp_latency', num2str(biplex_direct_latency));
     add_line(blk, ['fft_biplex_real_4x/',num2str(port_base+2+n)], [out_delay,'/1']);
     add_line(blk, [out_delay,'/1'], ['fft_direct/',num2str(port_base+n+3)]);
     
@@ -458,13 +458,13 @@ end %for s
 if strcmp(async, 'on'),
   reuse_block(blk, 'in_del_en_4x', 'casper_library_delays/pipeline', ...
     'Position', [95 205+(n_streams*2^n_inputs*ytick) 145 225+(ytick*n_streams*2^n_inputs)], ...
-    'latency', num2str(input_latency));
+    'csp_latency', num2str(input_latency));
   add_line(blk, 'en/1', 'in_del_en_4x/1');
   add_line(blk, 'in_del_en_4x/1', ['fft_biplex_real_4x/',num2str(n_streams*2^n_inputs+3)]);
   
   reuse_block(blk, 'out_del_en_4x', 'casper_library_delays/pipeline', ...
       'Position', [315 160+((n_streams*2^n_inputs+1)*ytick) 365 180+((n_streams*2^n_inputs+1)*ytick)], ...
-      'latency', num2str(biplex_direct_latency));
+      'csp_latency', num2str(biplex_direct_latency));
   add_line(blk, ['fft_biplex_real_4x/',num2str(n_streams*2^n_inputs+3)], 'out_del_en_4x/1');
   add_line(blk, 'out_del_en_4x/1', ['fft_direct/',num2str(n_streams*2^n_inputs+3)]);
 
@@ -472,7 +472,7 @@ if strcmp(async, 'on'),
     %delay pipeline for dvalid between fft_direct and fft_unscrambler
     reuse_block(blk, 'fft_direct_dvalid_delay', 'casper_library_delays/pipeline', ...
       'Position', [680 75+((n_streams*2^n_inputs+1)*ytick) 730 95+((n_streams*2^n_inputs+1)*ytick)], ...
-      'latency', num2str(biplex_direct_latency));
+      'csp_latency', num2str(biplex_direct_latency));
     add_line(blk, ['fft_direct/',num2str(n_streams*2^n_inputs+3)], 'fft_direct_dvalid_delay/1');
     add_line(blk, 'fft_direct_dvalid_delay/1', ['fft_unscrambler/',num2str(n_streams*2^(n_inputs-1)+2)]);
     

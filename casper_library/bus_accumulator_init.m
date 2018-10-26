@@ -217,10 +217,13 @@ function bus_accumulator_init(blk, varargin)
     switch overflow(index),
       case 0,
         of = 'Wrap';
+        disp(of)
       case 1,
         of = 'Saturate';
+        disp(of)
       case 2,
         of = 'Flag as error';
+        disp(of)
     end  
 
     acc_name = ['acc',num2str(index)];

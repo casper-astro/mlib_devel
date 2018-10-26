@@ -30,7 +30,7 @@ function bus_addsub_init(blk, varargin)
     'n_bits_b', [4 ]  ,  'bin_pt_b',     [3],   'type_b',   [1], ...
     'n_bits_out', 8 ,     'bin_pt_out',   [3],   'type_out', [1], ...
     'overflow', [1], 'quantization', [0], 'add_implementation', 'fabric core', ...
-    'latency', 1, 'async', 'off', 'cmplx', 'on', 'misc', 'on'
+    'csp_latency', 1, 'async', 'off', 'cmplx', 'on', 'misc', 'on'
   };  
   
   check_mask_type(blk, 'bus_addsub');
@@ -60,7 +60,7 @@ function bus_addsub_init(blk, varargin)
   overflow     = get_var('overflow', 'defaults', defaults, varargin{:});
   quantization = get_var('quantization', 'defaults', defaults, varargin{:});
   add_implementation = get_var('add_implementation', 'defaults', defaults, varargin{:});
-  latency      = get_var('latency', 'defaults', defaults, varargin{:});
+  latency      = get_var('csp_latency', 'defaults', defaults, varargin{:});
   misc         = get_var('misc', 'defaults', defaults, varargin{:});
   cmplx        = get_var('cmplx', 'defaults', defaults, varargin{:});
   async        = get_var('async', 'defaults', defaults, varargin{:});

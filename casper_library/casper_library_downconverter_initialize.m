@@ -1,4 +1,4 @@
-function casper_library_downconverter_init()
+function casper_library_downconverter_initialize()
 
 	warning off Simulink:Engine:MdlFileShadowing;
 	close_system('casper_library_downconverter', 0);
@@ -105,7 +105,7 @@ function casper_library_downconverter_init()
 		'counter_step', sprintf('3'), ...
 		'counter_start', sprintf('4'), ...
 		'counter_width', sprintf('4'), ...
-		'latency', sprintf('2'), ...
+		'csp_latency', sprintf('2'), ...
 		'Position', sprintf('[248 26 288 81]'), ...
 		'Tag', sprintf(''));
 
@@ -113,7 +113,7 @@ function casper_library_downconverter_init()
 	fir_tap_gen([blk,'/fir_tap']);
 	set_param([blk,'/fir_tap'], ...
 		'factor', sprintf('1'), ...
-		'latency', sprintf('2'), ...
+		'csp_latency', sprintf('2'), ...
 		'coeff_bit_width', sprintf('0'), ...
 		'coeff_bin_pt', sprintf('24'), ...
 		'Position', sprintf('[100 215 150 282]'), ...
@@ -159,7 +159,7 @@ function casper_library_downconverter_init()
 		'freq', sprintf('1'), ...
 		'num_lo', sprintf('0'), ...
 		'n_bits', sprintf('8'), ...
-		'latency', sprintf('2'), ...
+		'csp_latency', sprintf('2'), ...
 		'Position', sprintf('[364 25 404 80]'), ...
 		'Tag', sprintf(''));
 
@@ -180,7 +180,7 @@ function casper_library_downconverter_init()
 	add_block('built-in/SubSystem', [blk,'/rcmult']);
 	rcmult_gen([blk,'/rcmult']);
 	set_param([blk,'/rcmult'], ...
-		'latency', sprintf('0'), ...
+		'mult_latency', sprintf('0'), ...
 		'Position', sprintf('[422 26 462 81]'), ...
 		'Tag', sprintf(''));
 
@@ -253,12 +253,12 @@ function casper_library_downconverter_init()
 	filename = save_system(mdl,[getenv('MLIB_DEVEL_PATH'), '/casper_library/', 'casper_library_downconverter', '.slx']);
 	if iscell(filename), filename = filename{1}; end;
 	fileattrib(filename, '+w');
-end % casper_library_downconverter_init
+end % casper_library_downconverter_initialize
 
 function mixer_gen(blk)
 
 	mixer_mask(blk);
-	mixer_init(blk);
+	mixer_initialize(blk);
 	set_param(blk, ...
 		'MaskInitialization', sprintf('mixer_init(gcb, ...\n    ''freq_div'', freq_div, ...\n    ''freq'', freq, ...\n    ''nstreams'', nstreams, ...\n    ''n_bits'', n_bits, ...\n    ''bram_latency'', bram_latency, ...\n    ''mult_latency'', mult_latency);\n'));
 
@@ -284,14 +284,14 @@ function mixer_mask(blk)
 
 end % mixer_mask
 
-function mixer_init(blk)
+function mixer_initialize(blk)
 
-end % mixer_init
+end % mixer_initialize
 
 function sincos_gen(blk)
 
 	sincos_mask(blk);
-	sincos_init(blk);
+	sincos_initialize(blk);
 	set_param(blk, ...
 		'MaskInitialization', sprintf('sincos_init(gcb, ...\n    ''func'', func, ...\n    ''neg_sin'', neg_sin, ...\n    ''neg_cos'', neg_cos, ...\n    ''symmetric'', symmetric, ...\n    ''handle_sync'', handle_sync, ...\n    ''depth_bits'', depth_bits, ...\n    ''bit_width'', bit_width, ...\n    ''bram_latency'', bram_latency);'));
 
@@ -316,14 +316,14 @@ function sincos_mask(blk)
 
 end % sincos_mask
 
-function sincos_init(blk)
+function sincos_initialize(blk)
 
-end % sincos_init
+end % sincos_initialize
 
 function feedback_osc_gen(blk)
 
 	feedback_osc_mask(blk);
-	feedback_osc_init(blk);
+	feedback_osc_initialize(blk);
 	set_param(blk, ...
 		'MaskInitialization', sprintf('feedback_osc_init(gcb, ...\n    ''n_bits'', n_bits, ...           \n    ''n_bits_rotation'', n_bits_rotation, ...  \n    ''phase_initial'', phase_initial, ...\n    ''phase_step_bits'', phase_step_bits, ...\n    ''phase_steps_bits'', phase_steps_bits, ...\n    ''ref_values_bits'', ref_values_bits, ...\n    ''bram_latency'', bram_latency, ...\n    ''mult_latency'', mult_latency, ...\n    ''add_latency'', add_latency, ...\n    ''conv_latency'', conv_latency, ...\n    ''bram'', bram, ...\n    ''quantization'', quantization);\n'));
 
@@ -350,14 +350,14 @@ function feedback_osc_mask(blk)
 
 end % feedback_osc_mask
 
-function feedback_osc_init(blk)
+function feedback_osc_initialize(blk)
 
-end % feedback_osc_init
+end % feedback_osc_initialize
 
 function cosin_gen(blk)
 
 	cosin_mask(blk);
-	cosin_init(blk);
+	cosin_initialize(blk);
 	set_param(blk, ...
 		'MaskInitialization', sprintf('cosin_init(gcb, ...\n    ''output0'', output0, ...    \n    ''output1'', output1, ...\n    ''indep_theta'', indep_theta, ...\n    ''phase'', phase, ...\n    ''fraction'', fraction, ...\n    ''table_bits'', table_bits, ...  \n    ''n_bits'', n_bits, ...      \n    ''bin_pt'', bin_pt, ...     \n    ''bram_latency'', bram_latency, ...\n    ''add_latency'', add_latency, ...\n    ''mux_latency'', mux_latency, ...\n    ''neg_latency'', neg_latency, ...\n    ''conv_latency'', conv_latency, ...\n    ''store'', store, ...\n    ''pack'', pack, ...\n    ''bram'', bram, ...\n    ''misc'', misc);\n'));
 
@@ -384,14 +384,14 @@ function cosin_mask(blk)
 
 end % cosin_mask
 
-function cosin_init(blk)
+function cosin_initialize(blk)
 
-end % cosin_init
+end % cosin_initialize
 
 function dec_fir_gen(blk)
 
 	dec_fir_mask(blk);
-	dec_fir_init(blk);
+	dec_fir_initialize(blk);
 	set_param(blk, ...
 		'MaskInitialization', sprintf('dec_fir_init(gcb, ...\n    ''n_inputs'', n_inputs, ...\n    ''coeff'', coeff, ...\n    ''n_bits'', n_bits, ...\n    ''n_bits_bp'', n_bits_bp, ...\n    ''quantization'', quantization, ...\n    ''add_latency'', add_latency, ...\n    ''mult_latency'', mult_latency, ...\n    ''conv_latency'', conv_latency, ...\n    ''coeff_bit_width'', coeff_bit_width, ...\n    ''coeff_bin_pt'', coeff_bin_pt, ...\n    ''absorb_adders'', absorb_adders, ...\n    ''adder_imp'', adder_imp, ...\n    ''lshift'', lshift);'));
 
@@ -417,16 +417,16 @@ function dec_fir_mask(blk)
 
 end % dec_fir_mask
 
-function dec_fir_init(blk)
+function dec_fir_initialize(blk)
 
-end % dec_fir_init
+end % dec_fir_initialize
 
 function lo_osc_gen(blk)
 
 	lo_osc_mask(blk);
-	lo_osc_init(blk);
+	lo_osc_initialize(blk);
 	set_param(blk, ...
-		'MaskInitialization', sprintf('lo_osc_init(gcb, ...\n    ''n_bits'', n_bits, ...\n    ''counter_step'', counter_step, ...\n    ''counter_start'', counter_start, ...\n    ''counter_width'', counter_width, ...\n    ''latency'', latency);'));
+		'MaskInitialization', sprintf('lo_osc_init(gcb, ...\n    ''n_bits'', n_bits, ...\n    ''counter_step'', counter_step, ...\n    ''counter_start'', counter_start, ...\n    ''counter_width'', counter_width, ...\n    ''csp_latency'', csp_latency);'));
 
 end % lo_osc_gen
 
@@ -444,22 +444,22 @@ function lo_osc_mask(blk)
 		'MaskEnableString', sprintf('on,on,on,on,on'), ...
 		'MaskVisibilityString', sprintf('on,on,on,on,on'), ...
 		'MaskToolTipString', sprintf('on,on,on,on,on'), ...
-		'MaskVariables', sprintf('n_bits=@1;counter_step=@2;counter_start=@3;counter_width=@4;latency=@5;'), ...
+		'MaskVariables', sprintf('n_bits=@1;counter_step=@2;counter_start=@3;counter_width=@4;csp_latency=@5;'), ...
 		'MaskValueString', sprintf('0|3|4|4|2'), ...
 		'BackgroundColor', sprintf('gray'));
 
 end % lo_osc_mask
 
-function lo_osc_init(blk)
+function lo_osc_initialize(blk)
 
-end % lo_osc_init
+end % lo_osc_initialize
 
 function fir_tap_gen(blk)
 
 	fir_tap_mask(blk);
-	fir_tap_init(blk);
+	fir_tap_initialize(blk);
 	set_param(blk, ...
-		'MaskInitialization', sprintf('fir_tap_init(gcb, ...\n    ''factor'', factor, ...\n    ''latency'', latency, ...\n    ''coeff_bit_width'', coeff_bit_width, ...\n    ''coeff_bin_pt'', coeff_bin_pt);'));
+		'MaskInitialization', sprintf('fir_tap_init(gcb, ...\n    ''factor'', factor, ...\n    ''csp_latency'', csp_latency, ...\n    ''coeff_bit_width'', coeff_bit_width, ...\n    ''coeff_bin_pt'', coeff_bin_pt);'));
 
 end % fir_tap_gen
 
@@ -477,20 +477,20 @@ function fir_tap_mask(blk)
 		'MaskEnableString', sprintf('on,on,on,on'), ...
 		'MaskVisibilityString', sprintf('on,on,on,on'), ...
 		'MaskToolTipString', sprintf('on,on,on,on'), ...
-		'MaskVariables', sprintf('factor=@1;latency=@2;coeff_bit_width=@3;coeff_bin_pt=@4;'), ...
+		'MaskVariables', sprintf('factor=@1;csp_latency=@2;coeff_bit_width=@3;coeff_bin_pt=@4;'), ...
 		'MaskValueString', sprintf('1|2|0|24'), ...
 		'BackgroundColor', sprintf('gray'));
 
 end % fir_tap_mask
 
-function fir_tap_init(blk)
+function fir_tap_initialize(blk)
 
-end % fir_tap_init
+end % fir_tap_initialize
 
 function fir_dbl_tap_gen(blk)
 
 	fir_dbl_tap_mask(blk);
-	fir_dbl_tap_init(blk);
+	fir_dbl_tap_initialize(blk);
 	set_param(blk, ...
 		'MaskInitialization', sprintf('fir_dbl_tap_init(gcb, ...\n    ''factor'', factor, ...\n    ''add_latency'', add_latency, ...\n    ''mult_latency'', mult_latency, ...\n    ''coeff_bit_width'', coeff_bit_width, ...\n    ''coeff_bin_pt'', coeff_bin_pt);'));
 
@@ -515,14 +515,14 @@ function fir_dbl_tap_mask(blk)
 
 end % fir_dbl_tap_mask
 
-function fir_dbl_tap_init(blk)
+function fir_dbl_tap_initialize(blk)
 
-end % fir_dbl_tap_init
+end % fir_dbl_tap_initialize
 
 function lo_const_gen(blk)
 
 	lo_const_mask(blk);
-	lo_const_init(blk);
+	lo_const_initialize(blk);
 	set_param(blk, ...
 		'MaskInitialization', sprintf('lo_const_init(gcb, ...\n    ''n_bits'', n_bits, ...\n    ''phase'', phase);'));
 
@@ -548,14 +548,14 @@ function lo_const_mask(blk)
 
 end % lo_const_mask
 
-function lo_const_init(blk)
+function lo_const_initialize(blk)
 
-end % lo_const_init
+end % lo_const_initialize
 
 function fir_dbl_col_gen(blk)
 
 	fir_dbl_col_mask(blk);
-	fir_dbl_col_init(blk);
+	fir_dbl_col_initialize(blk);
 	set_param(blk, ...
 		'MaskInitialization', sprintf('fir_dbl_col_init(gcb, ...\n    ''n_inputs'', n_inputs, ...\n    ''coeff'', coeff, ...\n    ''mult_latency'', mult_latency, ...\n    ''add_latency'', add_latency, ...\n    ''coeff_bit_width'', coeff_bit_width, ...\n    ''coeff_bin_pt'', coeff_bin_pt,  ...\n    ''first_stage_hdl'', first_stage_hdl, ...\n    ''adder_imp'', adder_imp);'));
 
@@ -580,16 +580,16 @@ function fir_dbl_col_mask(blk)
 
 end % fir_dbl_col_mask
 
-function fir_dbl_col_init(blk)
+function fir_dbl_col_initialize(blk)
 
-end % fir_dbl_col_init
+end % fir_dbl_col_initialize
 
 function dds_gen(blk)
 
 	dds_mask(blk);
-	dds_init(blk);
+	dds_initialize(blk);
 	set_param(blk, ...
-		'MaskInitialization', sprintf('dds_init(gcb, ...\n    ''freq_div'', freq_div, ...\n    ''freq'', freq, ...\n    ''num_lo'', num_lo, ...\n    ''n_bits'', n_bits, ...\n    ''latency'', latency);'));
+		'MaskInitialization', sprintf('dds_init(gcb, ...\n    ''freq_div'', freq_div, ...\n    ''freq'', freq, ...\n    ''num_lo'', num_lo, ...\n    ''n_bits'', n_bits, ...\n    ''csp_latency'', csp_latency);'));
 
 end % dds_gen
 
@@ -607,20 +607,20 @@ function dds_mask(blk)
 		'MaskEnableString', sprintf('on,on,on,on,on'), ...
 		'MaskVisibilityString', sprintf('on,on,on,on,on'), ...
 		'MaskToolTipString', sprintf('on,on,on,on,on'), ...
-		'MaskVariables', sprintf('freq_div=@1;freq=@2;num_lo=@3;n_bits=@4;latency=@5;'), ...
+		'MaskVariables', sprintf('freq_div=@1;freq=@2;num_lo=@3;n_bits=@4;csp_latency=@5;'), ...
 		'MaskValueString', sprintf('4|1|0|8|2'), ...
 		'BackgroundColor', sprintf('gray'));
 
 end % dds_mask
 
-function dds_init(blk)
+function dds_initialize(blk)
 
-end % dds_init
+end % dds_initialize
 
 function fir_col_gen(blk)
 
 	fir_col_mask(blk);
-	fir_col_init(blk);
+	fir_col_initialize(blk);
 	set_param(blk, ...
 		'MaskInitialization', sprintf('fir_col_init(gcb, ...\n    ''n_inputs'', n_inputs,...\n    ''coeff'', coeff, ...\n    ''mult_latency'', mult_latency, ...\n    ''add_latency'', add_latency, ...\n    ''coeff_bit_width'', coeff_bit_width, ...\n    ''coeff_bin_pt'', coeff_bin_pt, ...\n    ''first_stage_hdl'', first_stage_hdl, ...\n    ''adder_imp'', adder_imp);'));
 
@@ -645,16 +645,16 @@ function fir_col_mask(blk)
 
 end % fir_col_mask
 
-function fir_col_init(blk)
+function fir_col_initialize(blk)
 
-end % fir_col_init
+end % fir_col_initialize
 
 function rcmult_gen(blk)
 
 	rcmult_mask(blk);
-	rcmult_init(blk);
+	rcmult_initialize(blk);
 	set_param(blk, ...
-		'MaskInitialization', sprintf('rcmult_init(gcb, ...\n    ''latency'', latency);'));
+		'MaskInitialization', sprintf('rcmult_init(gcb, ...\n    ''mult_latency'', mult_latency);'));
 
 end % rcmult_gen
 
@@ -671,20 +671,20 @@ function rcmult_mask(blk)
 		'MaskEnableString', sprintf('on'), ...
 		'MaskVisibilityString', sprintf('on'), ...
 		'MaskToolTipString', sprintf('on'), ...
-		'MaskVariables', sprintf('latency=@1;'), ...
+		'MaskVariables', sprintf('mult_latency=@1;'), ...
 		'MaskValueString', sprintf('0'), ...
 		'BackgroundColor', sprintf('gray'));
 
 end % rcmult_mask
 
-function rcmult_init(blk)
+function rcmult_initialize(blk)
 
-end % rcmult_init
+end % rcmult_initialize
 
 function dec_fir_async_gen(blk)
 
 	dec_fir_async_mask(blk);
-	dec_fir_async_init(blk);
+	dec_fir_async_initialize(blk);
 	set_param(blk, ...
 		'MaskInitialization', sprintf('dec_fir_async_init(gcb);'));
 
@@ -710,14 +710,14 @@ function dec_fir_async_mask(blk)
 
 end % dec_fir_async_mask
 
-function dec_fir_async_init(blk)
+function dec_fir_async_initialize(blk)
 
-end % dec_fir_async_init
+end % dec_fir_async_initialize
 
 function fir_tap_async_gen(blk)
 
 	fir_tap_async_mask(blk);
-	fir_tap_async_init(blk);
+	fir_tap_async_initialize(blk);
 	set_param(blk, ...
 		'MaskInitialization', sprintf('fir_tap_async_init(gcb);'));
 
@@ -743,14 +743,14 @@ function fir_tap_async_mask(blk)
 
 end % fir_tap_async_mask
 
-function fir_tap_async_init(blk)
+function fir_tap_async_initialize(blk)
 
-end % fir_tap_async_init
+end % fir_tap_async_initialize
 
 function fir_col_async_gen(blk)
 
 	fir_col_async_mask(blk);
-	fir_col_async_init(blk);
+	fir_col_async_initialize(blk);
 	set_param(blk, ...
 		'MaskInitialization', sprintf('fir_col_async_init(gcb);'));
 
@@ -775,7 +775,7 @@ function fir_col_async_mask(blk)
 
 end % fir_col_async_mask
 
-function fir_col_async_init(blk)
+function fir_col_async_initialize(blk)
 
-end % fir_col_async_init
+end % fir_col_async_initialize
 

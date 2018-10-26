@@ -1,4 +1,4 @@
-function casper_library_bus_init()
+function casper_library_bus_initialize()
 
 	warning off Simulink:Engine:MdlFileShadowing;
 	close_system('casper_library_bus', 0);
@@ -31,7 +31,7 @@ function casper_library_bus_init()
 		'quantization', sprintf('0'), ...
 		'overflow', sprintf('1'), ...
 		'add_implementation', sprintf('fabric core'), ...
-		'latency', sprintf('1'), ...
+		'csp_latency', sprintf('1'), ...
 		'Position', sprintf('[20 17 95 93]'), ...
 		'Tag', sprintf(''));
 
@@ -87,7 +87,7 @@ function casper_library_bus_init()
 	bus_replicate_gen([blk,'/bus_replicate']);
 	set_param([blk,'/bus_replicate'], ...
 		'replication', sprintf('0'), ...
-		'latency', sprintf('0'), ...
+		'csp_latency', sprintf('0'), ...
 		'misc', sprintf('on'), ...
 		'implementation', sprintf('core'), ...
 		'Position', sprintf('[220 17 295 93]'), ...
@@ -98,7 +98,7 @@ function casper_library_bus_init()
 	set_param([blk,'/bus_logical'], ...
 		'logical_function', sprintf('AND'), ...
 		'align_bp', sprintf('on'), ...
-		'latency', sprintf('1'), ...
+		'csp_latency', sprintf('1'), ...
 		'n_bits_a', sprintf('[]'), ...
 		'bin_pt_a', sprintf('3'), ...
 		'type_a', sprintf('1'), ...
@@ -124,7 +124,7 @@ function casper_library_bus_init()
 		'bin_pt_out', sprintf('4'), ...
 		'quantization', sprintf('1'), ...
 		'overflow', sprintf('1'), ...
-		'latency', sprintf('2'), ...
+		'csp_latency', sprintf('2'), ...
 		'of', sprintf('on'), ...
 		'misc', sprintf('on'), ...
 		'Position', sprintf('[220 132 295 208]'), ...
@@ -137,7 +137,7 @@ function casper_library_bus_init()
 		'bin_pt_in', sprintf('8'), ...
 		'cmplx', sprintf('off'), ...
 		'overflow', sprintf('1'), ...
-		'latency', sprintf('2'), ...
+		'csp_latency', sprintf('2'), ...
 		'misc', sprintf('off'), ...
 		'Position', sprintf('[120 252 195 328]'), ...
 		'Tag', sprintf(''));
@@ -169,7 +169,7 @@ function casper_library_bus_init()
 		'en', sprintf('off'), ...
 		'misc', sprintf('off'), ...
 		'mode', sprintf('a=b'), ...
-		'latency', sprintf('1'), ...
+		'csp_latency', sprintf('1'), ...
 		'Position', sprintf('[220 252 295 328]'), ...
 		'Tag', sprintf(''));
 
@@ -278,7 +278,7 @@ function casper_library_bus_init()
 	bus_delay_gen([blk,'/bus_delay']);
 	set_param([blk,'/bus_delay'], ...
 		'n_bits', sprintf('8'), ...
-		'latency', sprintf('-1'), ...
+		'csp_latency', sprintf('-1'), ...
 		'cmplx', sprintf('off'), ...
 		'enable', sprintf('off'), ...
 		'reg_retiming', sprintf('on'), ...
@@ -322,14 +322,14 @@ function casper_library_bus_init()
 	filename = save_system(mdl,[getenv('MLIB_DEVEL_PATH'), '/casper_library/', 'casper_library_bus', '.slx']);
 	if iscell(filename), filename = filename{1}; end;
 	fileattrib(filename, '+w');
-end % casper_library_bus_init
+end % casper_library_bus_initialize
 
 function bus_addsub_gen(blk)
 
 	bus_addsub_mask(blk);
-	bus_addsub_init(blk);
+	bus_addsub_initialize(blk);
 	set_param(blk, ...
-		'MaskInitialization', sprintf('bus_addsub_init(gcb, ...\n    ''opmode'', opmode, ...\n    ''n_bits_a'', n_bits_a, ...\n    ''bin_pt_a'', bin_pt_a, ...\n    ''type_a'', type_a, ...\n    ''n_bits_b'', n_bits_b, ...\n    ''bin_pt_b'', bin_pt_b, ...\n    ''type_b'', type_b, ...\n    ''n_bits_out'', n_bits_out, ...\n    ''bin_pt_out'', bin_pt_out, ...\n    ''type_out'', type_out, ...\n    ''overflow'', overflow, ...        \n    ''quantization'', quantization, ...\n    ''add_implementation'', add_implementation, ...\n    ''latency'', latency, ...\n    ''cmplx'', cmplx, ...\n    ''misc'', misc, ...\n    ''async'', async);'));
+		'MaskInitialization', sprintf('bus_addsub_init(gcb, ...\n    ''opmode'', opmode, ...\n    ''n_bits_a'', n_bits_a, ...\n    ''bin_pt_a'', bin_pt_a, ...\n    ''type_a'', type_a, ...\n    ''n_bits_b'', n_bits_b, ...\n    ''bin_pt_b'', bin_pt_b, ...\n    ''type_b'', type_b, ...\n    ''n_bits_out'', n_bits_out, ...\n    ''bin_pt_out'', bin_pt_out, ...\n    ''type_out'', type_out, ...\n    ''overflow'', overflow, ...        \n    ''quantization'', quantization, ...\n    ''add_implementation'', add_implementation, ...\n    ''csp_latency'', csp_latency, ...\n    ''cmplx'', cmplx, ...\n    ''misc'', misc, ...\n    ''async'', async);'));
 
 end % bus_addsub_gen
 
@@ -342,25 +342,25 @@ function bus_addsub_mask(blk)
 		'MaskDescription', sprintf('Add/subtract components of two busses'), ...
 		'MaskPromptString', sprintf('mode (Addition=0, Subtraction=1)|a input bit widths|a input binary points |a input type (Unsigned=0, Signed=1)|b input bit widths|b input binary points|b input type (Unsigned=0, Signed=1)|complex|misc support|asynchronous operation|output bit widths|output binary points|output type (Unsigned=0, Signed=1)|quantization strategy (Truncate=0, Round  (unbiased: +/- Inf)=1)|overflow strategy (Wrap=0, Saturate=1, Flag as error=2)|adder implementation|latency'), ...
 		'MaskStyleString', sprintf('edit,edit,edit,edit,edit,edit,edit,checkbox,checkbox,checkbox,edit,edit,edit,edit,edit,popup(behavioral HDL|fabric core|DSP48 core),edit'), ...
-		'MaskTabNameString', sprintf('input,input,input,input,input,input,input,input,input,input,output,output,output,implementation,implementation,implementation,latency'), ...
+		'MaskTabNameString', sprintf('input,input,input,input,input,input,input,input,input,input,output,output,output,implementation,implementation,implementation,csp_latency'), ...
 		'MaskCallbackString', sprintf('||||||||||||||||'), ...
 		'MaskEnableString', sprintf('on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on'), ...
 		'MaskVisibilityString', sprintf('on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on'), ...
 		'MaskToolTipString', sprintf('on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on'), ...
-		'MaskVariables', sprintf('opmode=@1;n_bits_a=@2;bin_pt_a=@3;type_a=@4;n_bits_b=@5;bin_pt_b=@6;type_b=@7;cmplx=&8;misc=&9;async=&10;n_bits_out=@11;bin_pt_out=@12;type_out=@13;quantization=@14;overflow=@15;add_implementation=&16;latency=@17;'), ...
+		'MaskVariables', sprintf('opmode=@1;n_bits_a=@2;bin_pt_a=@3;type_a=@4;n_bits_b=@5;bin_pt_b=@6;type_b=@7;cmplx=&8;misc=&9;async=&10;n_bits_out=@11;bin_pt_out=@12;type_out=@13;quantization=@14;overflow=@15;add_implementation=&16;csp_latency=@17;'), ...
 		'MaskValueString', sprintf('0|0|3|1|4|3|1|on|on|off|8|3|1|0|1|fabric core|1'), ...
 		'BackgroundColor', sprintf('[0.501961, 1.000000, 0.501961]'));
 
 end % bus_addsub_mask
 
-function bus_addsub_init(blk)
+function bus_addsub_initialize(blk)
 
-end % bus_addsub_init
+end % bus_addsub_initialize
 
 function bus_register_gen(blk)
 
 	bus_register_mask(blk);
-	bus_register_init(blk);
+	bus_register_initialize(blk);
 	set_param(blk, ...
 		'MaskInitialization', sprintf('bus_register_init(gcb, ...\n    ''reset'', reset, ...\n    ''enable'', enable, ...\n    ''cmplx'', cmplx, ...\n    ''n_bits'', n_bits, ...\n    ''misc'', misc);'));
 
@@ -385,14 +385,14 @@ function bus_register_mask(blk)
 
 end % bus_register_mask
 
-function bus_register_init(blk)
+function bus_register_initialize(blk)
 
-end % bus_register_init
+end % bus_register_initialize
 
 function bus_mux_gen(blk)
 
 	bus_mux_mask(blk);
-	bus_mux_init(blk);
+	bus_mux_initialize(blk);
 	set_param(blk, ...
 		'MaskInitialization', sprintf('bus_mux_init(gcb, ...\n    ''n_inputs'', n_inputs, ...\n    ''n_bits'', n_bits, ...\n    ''cmplx'', cmplx, ...\n    ''misc'', misc, ...\n    ''mux_latency'', mux_latency);'));
 
@@ -407,7 +407,7 @@ function bus_mux_mask(blk)
 		'MaskDescription', sprintf('Mux components of bus'), ...
 		'MaskPromptString', sprintf('number of inputs|input bit widths|mux latency|complex data|misc support'), ...
 		'MaskStyleString', sprintf('edit,edit,edit,checkbox,checkbox'), ...
-		'MaskTabNameString', sprintf('input,input,latency,input,input'), ...
+		'MaskTabNameString', sprintf('input,input,csp_latency,input,input'), ...
 		'MaskCallbackString', sprintf('||||'), ...
 		'MaskEnableString', sprintf('on,on,on,on,on'), ...
 		'MaskVisibilityString', sprintf('on,on,on,on,on'), ...
@@ -418,14 +418,14 @@ function bus_mux_mask(blk)
 
 end % bus_mux_mask
 
-function bus_mux_init(blk)
+function bus_mux_initialize(blk)
 
-end % bus_mux_init
+end % bus_mux_initialize
 
 function bus_mult_gen(blk)
 
 	bus_mult_mask(blk);
-	bus_mult_init(blk);
+	bus_mult_initialize(blk);
 	set_param(blk, ...
 		'MaskInitialization', sprintf('bus_mult_init(gcb, ...\n    ''n_bits_a'', n_bits_a, ...\n    ''bin_pt_a'', bin_pt_a, ...\n    ''type_a'', type_a, ...\n    ''cmplx_a'', cmplx_a, ...\n    ''n_bits_b'', n_bits_b, ...\n    ''bin_pt_b'', bin_pt_b, ...\n    ''type_b'', type_b, ...\n    ''cmplx_b'', cmplx_b, ...\n    ''n_bits_out'', n_bits_out, ...\n    ''bin_pt_out'', bin_pt_out, ...\n    ''type_out'', type_out, ...\n    ''quantization'', quantization, ...\n    ''overflow'', overflow, ...\n    ''mult_latency'', mult_latency, ...\n    ''add_latency'', add_latency, ...\n    ''conv_latency'', conv_latency, ...\n    ''max_fanout'', max_fanout, ...\n    ''fan_latency'', fan_latency, ...\n    ''multiplier_implementation'', multiplier_implementation, ...\n    ''misc'', misc);'));
 
@@ -451,16 +451,16 @@ function bus_mult_mask(blk)
 
 end % bus_mult_mask
 
-function bus_mult_init(blk)
+function bus_mult_initialize(blk)
 
-end % bus_mult_init
+end % bus_mult_initialize
 
 function bus_replicate_gen(blk)
 
 	bus_replicate_mask(blk);
-	bus_replicate_init(blk);
+	bus_replicate_initialize(blk);
 	set_param(blk, ...
-		'MaskInitialization', sprintf('bus_replicate_init(gcb, ...\n    ''replication'', replication, ...\n    ''latency'', latency, ...\n    ''implementation'', implementation, ...\n    ''misc'', misc);'));
+		'MaskInitialization', sprintf('bus_replicate_init(gcb, ...\n    ''replication'', replication, ...\n    ''csp_latency'', csp_latency, ...\n    ''implementation'', implementation, ...\n    ''misc'', misc);'));
 
 end % bus_replicate_gen
 
@@ -477,22 +477,22 @@ function bus_replicate_mask(blk)
 		'MaskEnableString', sprintf('on,on,on,on'), ...
 		'MaskVisibilityString', sprintf('on,on,on,on'), ...
 		'MaskToolTipString', sprintf('on,on,on,on'), ...
-		'MaskVariables', sprintf('replication=@1;latency=@2;misc=&3;implementation=&4;'), ...
+		'MaskVariables', sprintf('replication=@1;csp_latency=@2;misc=&3;implementation=&4;'), ...
 		'MaskValueString', sprintf('0|0|on|core'), ...
 		'BackgroundColor', sprintf('[0.501961, 1.000000, 0.501961]'));
 
 end % bus_replicate_mask
 
-function bus_replicate_init(blk)
+function bus_replicate_initialize(blk)
 
-end % bus_replicate_init
+end % bus_replicate_initialize
 
 function bus_logical_gen(blk)
 
 	bus_logical_mask(blk);
-	bus_logical_init(blk);
+	bus_logical_initialize(blk);
 	set_param(blk, ...
-		'MaskInitialization', sprintf('bus_logical_init(gcb, ...\n    ''logical_function'', logical_function, ...\n    ''en'', en, ...\n    ''n_bits_a'', n_bits_a, ...\n    ''bin_pt_a'', bin_pt_a, ...\n    ''type_a'', type_a, ...\n    ''n_bits_b'', n_bits_b, ...\n    ''bin_pt_b'', bin_pt_b, ...\n    ''type_b'', type_b, ...\n    ''n_bits_out'', n_bits_out, ...\n    ''bin_pt_out'', bin_pt_out, ...\n    ''type_out'', type_out, ...\n    ''latency'', latency, ...\n    ''cmplx'', cmplx, ...\n    ''align_bp'', align_bp, ...\n    ''misc'', misc);'));
+		'MaskInitialization', sprintf('bus_logical_init(gcb, ...\n    ''logical_function'', logical_function, ...\n    ''en'', en, ...\n    ''n_bits_a'', n_bits_a, ...\n    ''bin_pt_a'', bin_pt_a, ...\n    ''type_a'', type_a, ...\n    ''n_bits_b'', n_bits_b, ...\n    ''bin_pt_b'', bin_pt_b, ...\n    ''type_b'', type_b, ...\n    ''n_bits_out'', n_bits_out, ...\n    ''bin_pt_out'', bin_pt_out, ...\n    ''type_out'', type_out, ...\n    ''csp_latency'', csp_latency, ...\n    ''cmplx'', cmplx, ...\n    ''align_bp'', align_bp, ...\n    ''misc'', misc);'));
 
 end % bus_logical_gen
 
@@ -510,22 +510,22 @@ function bus_logical_mask(blk)
 		'MaskEnableString', sprintf('on,on,on,on,on,on,on,on,on,on,on,on,on,on,on'), ...
 		'MaskVisibilityString', sprintf('on,on,on,on,on,on,on,on,on,on,on,on,on,on,on'), ...
 		'MaskToolTipString', sprintf('on,on,on,on,on,on,on,on,on,on,on,on,on,on,on'), ...
-		'MaskVariables', sprintf('logical_function=&1;align_bp=&2;latency=@3;n_bits_a=@4;bin_pt_a=@5;type_a=@6;n_bits_b=@7;bin_pt_b=@8;type_b=@9;cmplx=&10;en=&11;misc=&12;n_bits_out=@13;bin_pt_out=@14;type_out=@15;'), ...
+		'MaskVariables', sprintf('logical_function=&1;align_bp=&2;csp_latency=@3;n_bits_a=@4;bin_pt_a=@5;type_a=@6;n_bits_b=@7;bin_pt_b=@8;type_b=@9;cmplx=&10;en=&11;misc=&12;n_bits_out=@13;bin_pt_out=@14;type_out=@15;'), ...
 		'MaskValueString', sprintf('AND|on|1|[]|3|1|4|3|1|on|on|on|8|3|1'), ...
 		'BackgroundColor', sprintf('[0.501961, 1.000000, 0.501961]'));
 
 end % bus_logical_mask
 
-function bus_logical_init(blk)
+function bus_logical_initialize(blk)
 
-end % bus_logical_init
+end % bus_logical_initialize
 
 function bus_convert_gen(blk)
 
 	bus_convert_mask(blk);
-	bus_convert_init(blk);
+	bus_convert_initialize(blk);
 	set_param(blk, ...
-		'MaskInitialization', sprintf('bus_convert_init(gcb, ...\n    ''n_bits_in'', n_bits_in, ...\n    ''bin_pt_in'', bin_pt_in, ...\n    ''cmplx'', cmplx, ...\n    ''n_bits_out'', n_bits_out, ...\n    ''bin_pt_out'', bin_pt_out, ...\n    ''quantization'', quantization, ...\n    ''overflow'', overflow, ...\n    ''latency'', latency, ...\n    ''misc'', misc, ...\n    ''of'', of);'));
+		'MaskInitialization', sprintf('bus_convert_init(gcb, ...\n    ''n_bits_in'', n_bits_in, ...\n    ''bin_pt_in'', bin_pt_in, ...\n    ''cmplx'', cmplx, ...\n    ''n_bits_out'', n_bits_out, ...\n    ''bin_pt_out'', bin_pt_out, ...\n    ''quantization'', quantization, ...\n    ''overflow'', overflow, ...\n    ''csp_latency'', csp_latency, ...\n    ''misc'', misc, ...\n    ''of'', of);'));
 
 end % bus_convert_gen
 
@@ -543,22 +543,22 @@ function bus_convert_mask(blk)
 		'MaskEnableString', sprintf('on,on,on,on,on,on,on,on,on,on'), ...
 		'MaskVisibilityString', sprintf('on,on,on,on,on,on,on,on,on,on'), ...
 		'MaskToolTipString', sprintf('on,on,on,on,on,on,on,on,on,on'), ...
-		'MaskVariables', sprintf('n_bits_in=@1;bin_pt_in=@2;cmplx=&3;n_bits_out=@4;bin_pt_out=@5;quantization=@6;overflow=@7;latency=@8;of=&9;misc=&10;'), ...
+		'MaskVariables', sprintf('n_bits_in=@1;bin_pt_in=@2;cmplx=&3;n_bits_out=@4;bin_pt_out=@5;quantization=@6;overflow=@7;csp_latency=@8;of=&9;misc=&10;'), ...
 		'MaskValueString', sprintf('[]|8|off|8|4|1|1|2|on|on'), ...
 		'BackgroundColor', sprintf('[0.501961, 1.000000, 0.501961]'));
 
 end % bus_convert_mask
 
-function bus_convert_init(blk)
+function bus_convert_initialize(blk)
 
-end % bus_convert_init
+end % bus_convert_initialize
 
 function bus_negate_gen(blk)
 
 	bus_negate_mask(blk);
-	bus_negate_init(blk);
+	bus_negate_initialize(blk);
 	set_param(blk, ...
-		'MaskInitialization', sprintf('bus_negate_init(gcb, ...\n    ''n_bits_in'', n_bits_in, ...\n    ''bin_pt_in'', bin_pt_in, ...\n    ''cmplx'', cmplx, ...\n    ''overflow'', overflow, ...\n    ''latency'', latency, ...\n    ''misc'', misc);'));
+		'MaskInitialization', sprintf('bus_negate_init(gcb, ...\n    ''n_bits_in'', n_bits_in, ...\n    ''bin_pt_in'', bin_pt_in, ...\n    ''cmplx'', cmplx, ...\n    ''overflow'', overflow, ...\n    ''csp_latency'', csp_latency, ...\n    ''misc'', misc);'));
 
 end % bus_negate_gen
 
@@ -576,20 +576,20 @@ function bus_negate_mask(blk)
 		'MaskEnableString', sprintf('on,on,on,on,on,on'), ...
 		'MaskVisibilityString', sprintf('on,on,on,on,on,on'), ...
 		'MaskToolTipString', sprintf('on,on,on,on,on,on'), ...
-		'MaskVariables', sprintf('n_bits_in=@1;bin_pt_in=@2;cmplx=&3;overflow=@4;latency=@5;misc=&6;'), ...
+		'MaskVariables', sprintf('n_bits_in=@1;bin_pt_in=@2;cmplx=&3;overflow=@4;csp_latency=@5;misc=&6;'), ...
 		'MaskValueString', sprintf('0|8|off|1|2|off'), ...
 		'BackgroundColor', sprintf('[0.501961, 1.000000, 0.501961]'));
 
 end % bus_negate_mask
 
-function bus_negate_init(blk)
+function bus_negate_initialize(blk)
 
-end % bus_negate_init
+end % bus_negate_initialize
 
 function bus_accumulator_gen(blk)
 
 	bus_accumulator_mask(blk);
-	bus_accumulator_init(blk);
+	bus_accumulator_initialize(blk);
 	set_param(blk, ...
 		'MaskInitialization', sprintf('bus_accumulator_init(gcb, ...\n    ''reset'', reset, ...\n    ''enable'', enable, ...\n    ''n_bits_in'', n_bits_in, ...\n    ''bin_pt_in'', bin_pt_in, ...\n    ''type_in'', type_in, ...\n    ''cmplx'', cmplx, ...\n    ''n_bits_out'', n_bits_out, ...\n    ''overflow'', overflow, ...\n    ''misc'', misc);'));
 
@@ -614,16 +614,16 @@ function bus_accumulator_mask(blk)
 
 end % bus_accumulator_mask
 
-function bus_accumulator_init(blk)
+function bus_accumulator_initialize(blk)
 
-end % bus_accumulator_init
+end % bus_accumulator_initialize
 
 function bus_relational_gen(blk)
 
 	bus_relational_mask(blk);
-	bus_relational_init(blk);
+	bus_relational_initialize(blk);
 	set_param(blk, ...
-		'MaskInitialization', sprintf('bus_relational_init(gcb, ...\n    ''n_bits_a'', n_bits_a, ...\n    ''bin_pt_a'', bin_pt_a, ...\n    ''type_a'', type_a, ...\n    ''n_bits_b'', n_bits_b, ...\n    ''bin_pt_b'', bin_pt_b, ...\n    ''type_b'', type_b, ...\n    ''en'', en, ...\n    ''misc'', misc, ...\n    ''mode'', mode, ...\n    ''latency'', latency);'));
+		'MaskInitialization', sprintf('bus_relational_init(gcb, ...\n    ''n_bits_a'', n_bits_a, ...\n    ''bin_pt_a'', bin_pt_a, ...\n    ''type_a'', type_a, ...\n    ''n_bits_b'', n_bits_b, ...\n    ''bin_pt_b'', bin_pt_b, ...\n    ''type_b'', type_b, ...\n    ''en'', en, ...\n    ''misc'', misc, ...\n    ''mode'', mode, ...\n    ''csp_latency'', csp_latency);'));
 
 end % bus_relational_gen
 
@@ -641,20 +641,20 @@ function bus_relational_mask(blk)
 		'MaskEnableString', sprintf('on,on,on,on,on,on,on,on,on,on'), ...
 		'MaskVisibilityString', sprintf('on,on,on,on,on,on,on,on,on,on'), ...
 		'MaskToolTipString', sprintf('on,on,on,on,on,on,on,on,on,on'), ...
-		'MaskVariables', sprintf('n_bits_a=@1;bin_pt_a=@2;type_a=@3;n_bits_b=@4;bin_pt_b=@5;type_b=@6;en=&7;misc=&8;mode=&9;latency=@10;'), ...
+		'MaskVariables', sprintf('n_bits_a=@1;bin_pt_a=@2;type_a=@3;n_bits_b=@4;bin_pt_b=@5;type_b=@6;en=&7;misc=&8;mode=&9;csp_latency=@10;'), ...
 		'MaskValueString', sprintf('0|0|1|8|0|1|off|off|a=b|1'), ...
 		'BackgroundColor', sprintf('[0.501961, 1.000000, 0.501961]'));
 
 end % bus_relational_mask
 
-function bus_relational_init(blk)
+function bus_relational_initialize(blk)
 
-end % bus_relational_init
+end % bus_relational_initialize
 
 function bus_scale_gen(blk)
 
 	bus_scale_mask(blk);
-	bus_scale_init(blk);
+	bus_scale_initialize(blk);
 	set_param(blk, ...
 		'MaskInitialization', sprintf('bus_scale_init(gcb, ...\n    ''n_bits_in'', n_bits_in, ...\n    ''bin_pt_in'', bin_pt_in, ...\n    ''type_in'', type_in, ...\n    ''cmplx'', cmplx, ...\n    ''scale_factor'', scale_factor, ...\n    ''misc'', misc);'));
 
@@ -680,14 +680,14 @@ function bus_scale_mask(blk)
 
 end % bus_scale_mask
 
-function bus_scale_init(blk)
+function bus_scale_initialize(blk)
 
-end % bus_scale_init
+end % bus_scale_initialize
 
 function bus_single_port_ram_gen(blk)
 
 	bus_single_port_ram_mask(blk);
-	bus_single_port_ram_init(blk);
+	bus_single_port_ram_initialize(blk);
 	set_param(blk, ...
 		'MaskInitialization', sprintf('bus_single_port_ram_init(gcb, ...\n    ''n_bits'', n_bits, ...\n    ''bin_pts'', bin_pts, ...\n    ''init_vector'', init_vector, ...\n    ''max_fanout'', max_fanout, ...\n    ''mem_type'', mem_type, ...\n    ''bram_optimization'', bram_optimization, ...\n    ''async'', async, ...\n    ''misc'', misc, ...\n    ''bram_latency'', bram_latency, ...\n    ''fan_latency'', fan_latency, ...\n    ''addr_register'', addr_register, ...\n    ''addr_implementation'', addr_implementation, ...\n    ''din_register'', din_register, ...\n    ''din_implementation'', din_implementation, ...\n    ''we_register'', we_register, ...\n    ''we_implementation'', we_implementation, ...\n    ''en_register'', en_register, ...\n    ''en_implementation'', en_implementation);'));
 
@@ -713,14 +713,14 @@ function bus_single_port_ram_mask(blk)
 
 end % bus_single_port_ram_mask
 
-function bus_single_port_ram_init(blk)
+function bus_single_port_ram_initialize(blk)
 
-end % bus_single_port_ram_init
+end % bus_single_port_ram_initialize
 
 function bus_maddsub_gen(blk)
 
 	bus_maddsub_mask(blk);
-	bus_maddsub_init(blk);
+	bus_maddsub_initialize(blk);
 	set_param(blk, ...
 		'MaskInitialization', sprintf('bus_maddsub_init(gcb, ...\n    ''n_bits_a'', n_bits_a, ...\n    ''bin_pt_a'', bin_pt_a, ...\n    ''type_a'', type_a, ...\n    ''cmplx_a'', cmplx_a, ...\n    ''n_bits_b'', n_bits_b, ...\n    ''bin_pt_b'', bin_pt_b, ...\n    ''type_b'', type_b, ...\n    ''mult_latency'', mult_latency, ...\n    ''multiplier_implementation'', multiplier_implementation, ...\n    ''replication_ab'', replication_ab, ...\n    ''opmode'', opmode, ...\n    ''n_bits_c'', n_bits_c, ...\n    ''bin_pt_c'', bin_pt_c, ...\n    ''type_c'', type_c, ...\n    ''add_implementation'', add_implementation, ...\n    ''add_latency'', add_latency, ...\n    ''async_add'', async_add, ...\n    ''align_c'', align_c, ...\n    ''replication_c'', replication_c, ...\n    ''n_bits_out'', n_bits_out, ...\n    ''bin_pt_out'', bin_pt_out, ...\n    ''type_out'', type_out, ...\n    ''quantization'', quantization, ...\n    ''overflow'', overflow, ...\n    ''max_fanout'', max_fanout);'));
 
@@ -746,14 +746,14 @@ function bus_maddsub_mask(blk)
 
 end % bus_maddsub_mask
 
-function bus_maddsub_init(blk)
+function bus_maddsub_initialize(blk)
 
-end % bus_maddsub_init
+end % bus_maddsub_initialize
 
 function bus_dual_port_ram_gen(blk)
 
 	bus_dual_port_ram_mask(blk);
-	bus_dual_port_ram_init(blk);
+	bus_dual_port_ram_initialize(blk);
 	set_param(blk, ...
 		'MaskInitialization', sprintf('bus_dual_port_ram_init(gcb, ...\n    ''n_bits'', n_bits, ...\n    ''bin_pts'', bin_pts, ...\n    ''init_vector'', init_vector, ...\n    ''max_fanout'', max_fanout, ...\n    ''mem_type'', mem_type, ...\n    ''bram_optimization'', bram_optimization, ...\n    ''async_a'', async_a, ...\n    ''async_b'', async_b, ...\n    ''b_to_a_ratio_bits'', b_to_a_ratio_bits, ...\n    ''misc'', misc, ...\n    ''bram_latency'', bram_latency, ...\n    ''fan_latency'', fan_latency, ...\n    ''addra_register'', addra_register, ...\n    ''addra_implementation'', addra_implementation, ...\n    ''dina_register'', dina_register, ...\n    ''dina_implementation'', dina_implementation, ...\n    ''wea_register'', wea_register, ...\n    ''wea_implementation'', wea_implementation, ...\n    ''ena_register'', ena_register, ...\n    ''ena_implementation'', ena_implementation, ...\n    ''addrb_register'', addrb_register, ...\n    ''addrb_implementation'', addrb_implementation, ...\n    ''dinb_register'', dinb_register, ...\n    ''dinb_implementation'', dinb_implementation, ...\n    ''web_register'', web_register, ...\n    ''web_implementation'', web_implementation, ...\n    ''enb_register'', enb_register, ...\n    ''enb_implementation'', enb_implementation);'));
 
@@ -779,16 +779,16 @@ function bus_dual_port_ram_mask(blk)
 
 end % bus_dual_port_ram_mask
 
-function bus_dual_port_ram_init(blk)
+function bus_dual_port_ram_initialize(blk)
 
-end % bus_dual_port_ram_init
+end % bus_dual_port_ram_initialize
 
 function bus_delay_gen(blk)
 
 	bus_delay_mask(blk);
-	bus_delay_init(blk);
+	bus_delay_initialize(blk);
 	set_param(blk, ...
-		'MaskInitialization', sprintf('bus_delay_init(gcb, ...\n    ''enable'', enable, ...\n    ''cmplx'', cmplx, ...\n    ''n_bits'', n_bits, ...\n    ''latency'', latency, ...\n    ''reg_retiming'', reg_retiming, ...\n    ''misc'', misc);'));
+		'MaskInitialization', sprintf('bus_delay_init(gcb, ...\n    ''enable'', enable, ...\n    ''cmplx'', cmplx, ...\n    ''n_bits'', n_bits, ...\n    ''csp_latency'', csp_latency, ...\n    ''reg_retiming'', reg_retiming, ...\n    ''misc'', misc);'));
 
 end % bus_delay_gen
 
@@ -805,20 +805,20 @@ function bus_delay_mask(blk)
 		'MaskEnableString', sprintf('on,on,on,on,on,on'), ...
 		'MaskVisibilityString', sprintf('on,on,on,on,on,on'), ...
 		'MaskToolTipString', sprintf('on,on,on,on,on,on'), ...
-		'MaskVariables', sprintf('n_bits=@1;latency=@2;cmplx=&3;enable=&4;reg_retiming=&5;misc=&6;'), ...
+		'MaskVariables', sprintf('n_bits=@1;csp_latency=@2;cmplx=&3;enable=&4;reg_retiming=&5;misc=&6;'), ...
 		'MaskValueString', sprintf('8|-1|off|off|on|off'), ...
 		'BackgroundColor', sprintf('[0.501961, 1.000000, 0.501961]'));
 
 end % bus_delay_mask
 
-function bus_delay_init(blk)
+function bus_delay_initialize(blk)
 
-end % bus_delay_init
+end % bus_delay_initialize
 
 function bus_adder_tree_gen(blk)
 
 	bus_adder_tree_mask(blk);
-	bus_adder_tree_init(blk);
+	bus_adder_tree_initialize(blk);
 	set_param(blk, ...
 		'MaskInitialization', sprintf('bus_adder_tree_init(gcb, ...\n    ''n_busses'', n_busses, ...\n    ''n_bits'', n_bits, ...\n    ''bin_pts'', bin_pts, ...\n    ''dtypes'', dtypes, ...\n    ''add_latency'', add_latency, ...\n    ''first_stage_hdl'', first_stage_hdl, ...\n    ''adder_imp'', adder_imp, ...\n    ''misc'', misc);'));
 
@@ -844,14 +844,14 @@ function bus_adder_tree_mask(blk)
 
 end % bus_adder_tree_mask
 
-function bus_adder_tree_init(blk)
+function bus_adder_tree_initialize(blk)
 
-end % bus_adder_tree_init
+end % bus_adder_tree_initialize
 
 function bus_constant_gen(blk)
 
 	bus_constant_mask(blk);
-	bus_constant_init(blk);
+	bus_constant_initialize(blk);
 	set_param(blk, ...
 		'MaskInitialization', sprintf('bus_constant_init(gcb, ...\n    ''values'', values, ...\n    ''n_bits'', n_bits, ...\n    ''bin_pts'', bin_pts, ...\n    ''types'', types);'));
 
@@ -876,7 +876,7 @@ function bus_constant_mask(blk)
 
 end % bus_constant_mask
 
-function bus_constant_init(blk)
+function bus_constant_initialize(blk)
 
-end % bus_constant_init
+end % bus_constant_initialize
 
