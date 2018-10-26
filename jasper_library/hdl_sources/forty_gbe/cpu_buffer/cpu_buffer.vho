@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2018 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -56,12 +56,12 @@ COMPONENT cpu_buffer
   PORT (
     clka : IN STD_LOGIC;
     wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-    addra : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
+    addra : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
     dina : IN STD_LOGIC_VECTOR(63 DOWNTO 0);
     douta : OUT STD_LOGIC_VECTOR(63 DOWNTO 0);
     clkb : IN STD_LOGIC;
     web : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-    addrb : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
+    addrb : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
     dinb : IN STD_LOGIC_VECTOR(63 DOWNTO 0);
     doutb : OUT STD_LOGIC_VECTOR(63 DOWNTO 0)
   );

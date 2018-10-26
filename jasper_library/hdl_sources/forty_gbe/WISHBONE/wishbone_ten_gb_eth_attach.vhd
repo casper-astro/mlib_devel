@@ -68,10 +68,10 @@ entity wishbone_ten_gb_eth_attach is
         cpu_rx_ack            : out std_logic;
 
         -- ARP CACHE
-        arp_cache_addr      : out std_logic_vector(10 downto 0);
-        arp_cache_rd_data   : in  std_logic_vector(47 downto 0);
-        arp_cache_wr_data   : out std_logic_vector(47 downto 0);
-        arp_cache_wr_en     : out std_logic;
+        arp_cache_addr    : out std_logic_vector(10 downto 0);
+        arp_cache_rd_data : in  std_logic_vector(47 downto 0);
+        arp_cache_wr_data : out std_logic_vector(47 downto 0);
+        arp_cache_wr_en   : out std_logic;
 
         -- LOCAL REGISTERS
         local_enable          : out std_logic;
@@ -108,16 +108,18 @@ architecture arch_wishbone_ten_gb_eth_attach of wishbone_ten_gb_eth_attach is
     constant RX_BUFFER_HIGH   : std_logic_vector(15 downto 0) := X"BFFF";
 
     constant REG_CORE_TYPE       : std_logic_vector(7 downto 0) := X"00";
-    constant REG_BUFFER_SIZES    : std_logic_vector(7 downto 0) := X"01"; -- This needs to be X"09", will change this later
+    constant REG_MAX_BUF_SIZE    : std_logic_vector(7 downto 0) := X"01";
     constant REG_WORD_LENS       : std_logic_vector(7 downto 0) := X"02";
     constant REG_LOCAL_MAC_1     : std_logic_vector(7 downto 0) := X"03";
     constant REG_LOCAL_MAC_0     : std_logic_vector(7 downto 0) := X"04";
     constant REG_LOCAL_IPADDR    : std_logic_vector(7 downto 0) := X"05";
     constant REG_LOCAL_GATEWAY   : std_logic_vector(7 downto 0) := X"06";
-    constant REG_MC_RECV_IP      : std_logic_vector(7 downto 0) := X"07";
-    constant REG_MC_RECV_IP_MASK : std_logic_vector(7 downto 0) := X"08";
-    constant REG_LOCAL_NETMASK   : std_logic_vector(7 downto 0) := X"09";  -- Swap this with the REG_VALID_PORTS once the elf file is updated
-    constant REG_VALID_PORTS     : std_logic_vector(7 downto 0) := X"0B";
+    constant REG_LOCAL_NETMASK   : std_logic_vector(7 downto 0) := X"07";
+    constant REG_MC_RECV_IP      : std_logic_vector(7 downto 0) := X"08";
+    constant REG_MC_RECV_IP_MASK : std_logic_vector(7 downto 0) := X"09";
+    constant REG_BUFFER_SIZES    : std_logic_vector(7 downto 0) := X"0A";
+    constant REG_PROMISC_RST_EN  : std_logic_vector(7 downto 0) := X"0B";
+    constant REG_VALID_PORTS     : std_logic_vector(7 downto 0) := X"0C";
     constant REG_XAUI_STATUS     : std_logic_vector(7 downto 0) := X"11";
     constant REG_PHY_CONFIG      : std_logic_vector(7 downto 0) := X"12";
     constant REG_XAUI_CONFIG     : std_logic_vector(7 downto 0) := X"13";
@@ -145,11 +147,12 @@ architecture arch_wishbone_ten_gb_eth_attach of wishbone_ten_gb_eth_attach is
     signal local_enable_reg          : std_logic;
     signal local_mc_recv_ip_reg      : std_logic_vector(31 downto 0);
     signal local_mc_recv_ip_mask_reg : std_logic_vector(31 downto 0);
+    signal soft_reset_reg            : std_logic;
     signal mgt_rxeqmix_reg : std_logic_vector(2 downto 0);
     signal mgt_txpreemphasis_reg : std_logic_vector(3 downto 0);
     signal mgt_txpostemphasis_reg : std_logic_vector(4 downto 0);
     signal mgt_txdiffctrl_reg : std_logic_vector(3 downto 0);
-    signal soft_reset_reg : std_logic;
+
     signal xaui_rst_local_fault_reg : std_logic;
     signal xaui_rst_rx_link_status_reg : std_logic;
     signal xaui_test_select_reg : std_logic_vector(1 downto 0);
@@ -179,15 +182,13 @@ begin
     local_netmask         <= local_netmask_reg;
     local_port            <= local_port_reg;
     local_enable          <= local_enable_reg;
-    local_mc_recv_ip <= local_mc_recv_ip_reg;
+    soft_reset            <= soft_reset_reg;
+    local_mc_recv_ip      <= local_mc_recv_ip_reg;
     local_mc_recv_ip_mask <= local_mc_recv_ip_mask_reg;
     mgt_rxeqmix <= mgt_rxeqmix_reg;
     mgt_txpreemphasis <= mgt_txpreemphasis_reg;
     mgt_txpostemphasis <= mgt_txpostemphasis_reg;
     mgt_txdiffctrl <= mgt_txdiffctrl_reg;
-    soft_reset <= soft_reset_reg;
-
-
 
     cpu_tx_size  <= cpu_tx_size_reg;
     cpu_tx_ready <= cpu_tx_ready_reg;
@@ -271,13 +272,19 @@ begin
     cpu_rx_size_int <= ("000" & X"00") when (cpu_rx_ack_reg = '1') else cpu_rx_size;
 
     reg_data_int <=
+    (X"00000000")                                                                when (reg_data_src = REG_CORE_TYPE)        else
+    (X"00000000")                                                                when (reg_data_src = REG_MAX_BUF_SIZE)     else
+    (X"00000000")                                                                when (reg_data_src = REG_WORD_LENS)        else
     (X"0000" & local_mac_reg(47 downto 32))                                      when (reg_data_src = REG_LOCAL_MAC_1)      else
     local_mac_reg(31 downto 0)                                                   when (reg_data_src = REG_LOCAL_MAC_0)      else
-    (X"000000" & local_gateway_reg)                                              when (reg_data_src = REG_LOCAL_GATEWAY)    else
     local_ip_reg(31 downto 0)                                                    when (reg_data_src = REG_LOCAL_IPADDR)     else
+    (X"000000" & local_gateway_reg)                                              when (reg_data_src = REG_LOCAL_GATEWAY)    else
     local_netmask_reg(31 downto 0)                                               when (reg_data_src = REG_LOCAL_NETMASK)    else
+    local_mc_recv_ip_reg(31 downto 0)                                            when (reg_data_src = REG_MC_RECV_IP)       else
+    local_mc_recv_ip_mask_reg(31 downto 0)                                       when (reg_data_src = REG_MC_RECV_IP_MASK)  else
     ("00000" & cpu_tx_size_reg & "00000" & cpu_rx_size_int)                      when (reg_data_src = REG_BUFFER_SIZES)     else
-    ("0000000" & soft_reset_reg & "0000000" & local_enable_reg & local_port_reg) when (reg_data_src = REG_VALID_PORTS)      else
+    (X"00" & "0000000" & soft_reset_reg & X"00" & "0000000" & local_enable_reg)  when (reg_data_src = REG_PROMISC_RST_EN)   else
+    (X"0000" & local_port_reg)                                                   when (reg_data_src = REG_VALID_PORTS)      else
     (X"000000" & xaui_status) when (reg_data_src = REG_XAUI_STATUS) else
     ("0000" & mgt_txdiffctrl_reg & "0000" & mgt_txpreemphasis_reg & "000" & mgt_txpostemphasis_reg & "00000" & mgt_rxeqmix_reg) when (reg_data_src = REG_PHY_CONFIG) else
     local_mc_recv_ip_reg(31 downto 0) when (reg_data_src = REG_MC_RECV_IP) else
@@ -355,11 +362,6 @@ begin
                             local_mac_reg(31 downto 24) <= DAT_I(31 downto 24);
                         end if;
 
-                        when REG_LOCAL_GATEWAY =>
-                        if (SEL_I(0) = '1')then
-                            local_gateway_reg(7 downto 0) <= DAT_I(7 downto 0);
-                        end if;
-
                         when REG_LOCAL_IPADDR =>
                         if (SEL_I(0) = '1')then
                             local_ip_reg(7 downto 0) <= DAT_I(7 downto 0);
@@ -374,6 +376,11 @@ begin
                             local_ip_reg(31 downto 24) <= DAT_I(31 downto 24);
                         end if;
 
+                        when REG_LOCAL_GATEWAY =>
+                        if (SEL_I(0) = '1')then
+                            local_gateway_reg(7 downto 0) <= DAT_I(7 downto 0);
+                        end if;
+
                         when REG_LOCAL_NETMASK =>
                         if (SEL_I(0) = '1')then
                             local_netmask_reg(7 downto 0) <= DAT_I(7 downto 0);
@@ -386,56 +393,6 @@ begin
                         end if;
                         if (SEL_I(3) = '1')then
                             local_netmask_reg(31 downto 24) <= DAT_I(31 downto 24);
-                        end if;
-
-                        when REG_BUFFER_SIZES =>
-                        if ((SEL_I(0) = '1')and(DAT_I(10 downto 0) = ("000" & X"00")))then
-                            cpu_rx_ack_reg <= '1';
-                        end if;
-                        if (SEL_I(2) = '1')then
-                            cpu_tx_size_reg <= DAT_I(26 downto 16);
-                            cpu_tx_ready_reg <= '1';
-                        end if;
-
-                        when REG_VALID_PORTS =>
-                        if (SEL_I(0) = '1')then
-                            local_port_reg(7 downto 0) <= DAT_I(7 downto 0);
-                        end if;
-                        if (SEL_I(1) = '1')then
-                            local_port_reg(15 downto 8) <= DAT_I(15 downto 8);
-                        end if;
-                        if (SEL_I(2) = '1')then
-                            local_enable_reg <= DAT_I(16);
-                        end if;
-                        if ((SEL_I(3) = '1')and(DAT_I(24) = '1'))then
-                            soft_reset_reg <= '1';
-                        end if;
-
-                        when REG_XAUI_STATUS =>
-
-                        when REG_PHY_CONFIG =>
-                        if (SEL_I(0) = '1')then
-                            mgt_rxeqmix_reg <= DAT_I(2 downto 0);
-                        end if;
-                        if (SEL_I(1) = '1')then
-                            mgt_txpostemphasis_reg <= DAT_I(12 downto 8);
-                        end if;
-                        if (SEL_I(2) = '1')then
-                            mgt_txpreemphasis_reg <= DAT_I(19 downto 16);
-                        end if;
-                        if (SEL_I(3) = '1')then
-                            mgt_txdiffctrl_reg <= DAT_I(27 downto 24);
-                        end if;
-
-                        when REG_XAUI_CONFIG =>
-                        if (SEL_I(0) = '1')then
-                            xaui_test_select_reg <= DAT_I(1 downto 0);
-                        end if;
-                        if (SEL_I(1) = '1')then
-                            xaui_rst_local_fault_reg <= DAT_I(8);
-                        end if;
-                        if (SEL_I(2) = '1')then
-                            xaui_rst_rx_link_status_reg <= DAT_I(16);
                         end if;
 
                         when REG_MC_RECV_IP =>
@@ -464,6 +421,58 @@ begin
                         end if;
                         if (SEL_I(3) = '1')then
                             local_mc_recv_ip_mask_reg(31 downto 24) <= DAT_I(31 downto 24);
+                        end if;
+
+                        when REG_BUFFER_SIZES =>
+                        if ((SEL_I(0) = '1')and(DAT_I(10 downto 0) = ("000" & X"00")))then
+                            cpu_rx_ack_reg <= '1';
+                        end if;
+                        if (SEL_I(2) = '1')then
+                            cpu_tx_size_reg <= DAT_I(26 downto 16);
+                            cpu_tx_ready_reg <= '1';
+                        end if;
+
+                        when REG_PROMISC_RST_EN =>
+                        if (SEL_I(0) = '1')then
+                            local_enable_reg <= DAT_I(0);
+                        end if;
+                        if ((SEL_I(2) = '1')and(DAT_I(24) = '1'))then
+                            soft_reset_reg <= '1';
+                        end if;
+
+                        when REG_VALID_PORTS =>
+                        if (SEL_I(0) = '1')then
+                            local_port_reg(7 downto 0) <= DAT_I(7 downto 0);
+                        end if;
+                        if (SEL_I(1) = '1')then
+                            local_port_reg(15 downto 8) <= DAT_I(15 downto 8);
+                        end if;
+
+                        when REG_XAUI_STATUS =>
+
+                        when REG_PHY_CONFIG =>
+                        if (SEL_I(0) = '1')then
+                            mgt_rxeqmix_reg <= DAT_I(2 downto 0);
+                        end if;
+                        if (SEL_I(1) = '1')then
+                            mgt_txpostemphasis_reg <= DAT_I(12 downto 8);
+                        end if;
+                        if (SEL_I(2) = '1')then
+                            mgt_txpreemphasis_reg <= DAT_I(19 downto 16);
+                        end if;
+                        if (SEL_I(3) = '1')then
+                            mgt_txdiffctrl_reg <= DAT_I(27 downto 24);
+                        end if;
+
+                        when REG_XAUI_CONFIG =>
+                        if (SEL_I(0) = '1')then
+                            xaui_test_select_reg <= DAT_I(1 downto 0);
+                        end if;
+                        if (SEL_I(1) = '1')then
+                            xaui_rst_local_fault_reg <= DAT_I(8);
+                        end if;
+                        if (SEL_I(2) = '1')then
+                            xaui_rst_rx_link_status_reg <= DAT_I(16);
                         end if;
 
                         when others =>
@@ -501,9 +510,8 @@ begin
                     else
                         write_data(47 downto 40) <= arp_cache_rd_data(47 downto 40);
                     end if;
-
                 else
-                    -- LOWER 32 BITS WRITTEN SECOND
+                    -- WRITE LOWER 32 BITS AFTER THE UPPER 16 BITS
                     arp_cache_we <= '1';
 
                     if (SEL_I(0) = '1')then

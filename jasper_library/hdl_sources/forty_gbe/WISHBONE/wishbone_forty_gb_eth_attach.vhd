@@ -110,16 +110,18 @@ architecture arch_wishbone_forty_gb_eth_attach of wishbone_forty_gb_eth_attach i
     constant RX_BUFFER_HIGH   : std_logic_vector(15 downto 0) := X"BFFF";
 
     constant REG_CORE_TYPE       : std_logic_vector(7 downto 0) := X"00";
-    constant REG_BUFFER_SIZES    : std_logic_vector(7 downto 0) := X"01"; -- This needs to be X"09", will change this later
+    constant REG_MAX_BUF_SIZE    : std_logic_vector(7 downto 0) := X"01";
     constant REG_WORD_LENS       : std_logic_vector(7 downto 0) := X"02";
     constant REG_LOCAL_MAC_1     : std_logic_vector(7 downto 0) := X"03";
     constant REG_LOCAL_MAC_0     : std_logic_vector(7 downto 0) := X"04";
     constant REG_LOCAL_IPADDR    : std_logic_vector(7 downto 0) := X"05";
     constant REG_LOCAL_GATEWAY   : std_logic_vector(7 downto 0) := X"06";
-    constant REG_MC_RECV_IP      : std_logic_vector(7 downto 0) := X"07";
-    constant REG_MC_RECV_IP_MASK : std_logic_vector(7 downto 0) := X"08";
-    constant REG_LOCAL_NETMASK   : std_logic_vector(7 downto 0) := X"09";  -- Swap this with the REG_VALID_PORTS once the elf file is updated
-    constant REG_VALID_PORTS     : std_logic_vector(7 downto 0) := X"0B";
+    constant REG_LOCAL_NETMASK   : std_logic_vector(7 downto 0) := X"07";
+    constant REG_MC_RECV_IP      : std_logic_vector(7 downto 0) := X"08";
+    constant REG_MC_RECV_IP_MASK : std_logic_vector(7 downto 0) := X"09";
+    constant REG_BUFFER_SIZES    : std_logic_vector(7 downto 0) := X"0A";
+    constant REG_PROMISC_RST_EN  : std_logic_vector(7 downto 0) := X"0B";
+    constant REG_VALID_PORTS     : std_logic_vector(7 downto 0) := X"0C";
 
     -- COUNTER REGISTERS (read only)
     constant REG_TX_PKT_RATE      : std_logic_vector(7 downto 0) := X"0E";
@@ -161,19 +163,20 @@ architecture arch_wishbone_forty_gb_eth_attach of wishbone_forty_gb_eth_attach i
     signal local_mc_recv_ip_mask_reg : std_logic_vector(31 downto 0);
     signal soft_reset_reg            : std_logic;
 
-    signal tx_pkt_rate_reg      : std_logic_vector(31 downto 0);
-    signal tx_pkt_cnt_reg       : std_logic_vector(31 downto 0);
-    signal tx_valid_rate_reg    : std_logic_vector(31 downto 0);
-    signal tx_valid_cnt_reg     : std_logic_vector(31 downto 0);
-    signal tx_overflow_cnt_reg  : std_logic_vector(31 downto 0);
-    signal tx_afull_cnt_reg     : std_logic_vector(31 downto 0);
-    signal rx_pkt_rate_reg      : std_logic_vector(31 downto 0);
-    signal rx_pkt_cnt_reg       : std_logic_vector(31 downto 0);
-    signal rx_valid_cnt_reg     : std_logic_vector(31 downto 0);
-    signal rx_valid_rate_reg    : std_logic_vector(31 downto 0);
-    signal rx_overflow_cnt_reg  : std_logic_vector(31 downto 0);
-    signal rx_bad_frame_cnt_reg : std_logic_vector(31 downto 0);
-    signal cnt_reset_reg        : std_logic_vector(31 downto 0);
+    signal tx_pkt_rate_reg       : std_logic_vector(31 downto 0);
+    signal tx_pkt_cnt_reg        : std_logic_vector(31 downto 0);
+    signal tx_valid_rate_reg     : std_logic_vector(31 downto 0);
+    signal tx_valid_cnt_reg      : std_logic_vector(31 downto 0);
+    signal tx_overflow_cnt_reg   : std_logic_vector(31 downto 0);
+    signal tx_afull_cnt_reg      : std_logic_vector(31 downto 0);
+    signal rx_pkt_rate_reg       : std_logic_vector(31 downto 0);
+    signal rx_pkt_cnt_reg        : std_logic_vector(31 downto 0);
+    signal rx_valid_rate_cnt_reg : std_logic_vector(31 downto 0);
+    signal rx_valid_cnt_reg      : std_logic_vector(31 downto 0);
+    signal rx_valid_rate_reg     : std_logic_vector(31 downto 0);
+    signal rx_overflow_cnt_reg   : std_logic_vector(31 downto 0);
+    signal rx_bad_frame_cnt_reg  : std_logic_vector(31 downto 0);
+    signal cnt_reset_reg         : std_logic_vector(31 downto 0);
 
     signal cpu_tx_size_reg  : std_logic_vector(10 downto 0);
     signal cpu_tx_ready_reg : std_logic;
@@ -208,15 +211,15 @@ begin
     tx_pkt_cnt_reg        <= tx_pkt_cnt;
     tx_valid_rate_reg     <= tx_valid_rate;
     tx_valid_cnt_reg      <= tx_valid_cnt;
-    --tx_overflow_cnt       <= tx_overflow_cnt_reg;
-    --tx_afull_cnt          <= tx_afull_cnt_reg;
-    --rx_pkt_rate           <= rx_pkt_rate_reg;
-    --rx_pkt_cnt            <= rx_pkt_cnt_reg;
-    --rx_valid_rate_cnt     <= rx_valid_rate_reg;
-    --rx_valid_cnt          <= rx_valid_cnt_reg;
-    --rx_overflow_cnt       <= rx_overflow_cnt_reg;
-    --rx_bad_frame_cnt      <= rx_bad_frame_cnt_reg;
-    --cnt_reset             <= cnt_reset_reg;
+    tx_overflow_cnt_reg   <= tx_overflow_cnt;
+    tx_afull_cnt_reg      <= tx_afull_cnt;
+    rx_pkt_rate_reg       <= rx_pkt_rate;
+    rx_pkt_cnt_reg        <= rx_pkt_cnt;
+    rx_valid_rate_cnt_reg <= rx_valid_rate;
+    rx_valid_cnt_reg      <= rx_valid_cnt;
+    rx_overflow_cnt_reg   <= rx_overflow_cnt;
+    rx_bad_frame_cnt_reg  <= rx_bad_frame_cnt;
+    cnt_reset             <= cnt_reset_reg;
 
     cpu_tx_size  <= cpu_tx_size_reg;
     cpu_tx_ready <= cpu_tx_ready_reg;
@@ -228,13 +231,6 @@ begin
     cpu_tx_buffer_wr_data <= write_data;
     cpu_tx_buffer_wr_en   <= tx_buffer_we;
     cpu_rx_buffer_addr    <= rxbuf_addr(13 downto 3);
-
-    gen_reg_sel_z1 : process(CLK_I)
-    begin
-        if (rising_edge(CLK_I))then
-            reg_sel_z1 <= reg_sel;
-        end if;
-    end process;
 
 --------------------------------------------------------------------------------
 -- WISHBONE ACK GENERATION
@@ -280,6 +276,13 @@ begin
     txbuf_addr <= ADR_I - TX_BUFFER_OFFSET;
     arp_addr   <= ADR_I - ARP_CACHE_OFFSET;
 
+    gen_reg_sel_z1 : process(CLK_I)
+    begin
+        if (rising_edge(CLK_I))then
+            reg_sel_z1 <= reg_sel;
+        end if;
+    end process;
+
 --------------------------------------------------------------------------------
 -- DECODE WHAT DATA TO PUT ON BUS
 --------------------------------------------------------------------------------
@@ -300,15 +303,20 @@ begin
     cpu_rx_size_int <= ("000" & X"00") when (cpu_rx_ack_reg = '1') else cpu_rx_size;
 
     reg_data_int <=
+    (X"00000000")                                                                when (reg_data_src = REG_CORE_TYPE)        else
+    (X"00000000")                                                                when (reg_data_src = REG_MAX_BUF_SIZE)     else
+    (X"00000000")                                                                when (reg_data_src = REG_WORD_LENS)        else
     (X"0000" & local_mac_reg(47 downto 32))                                      when (reg_data_src = REG_LOCAL_MAC_1)      else
     local_mac_reg(31 downto 0)                                                   when (reg_data_src = REG_LOCAL_MAC_0)      else
-    (X"000000" & local_gateway_reg)                                              when (reg_data_src = REG_LOCAL_GATEWAY)    else
     local_ip_reg(31 downto 0)                                                    when (reg_data_src = REG_LOCAL_IPADDR)     else
+    (X"000000" & local_gateway_reg)                                              when (reg_data_src = REG_LOCAL_GATEWAY)    else
     local_netmask_reg(31 downto 0)                                               when (reg_data_src = REG_LOCAL_NETMASK)    else
-    ("00000" & cpu_tx_size_reg & "00000" & cpu_rx_size_int)                      when (reg_data_src = REG_BUFFER_SIZES)     else
-    ("0000000" & soft_reset_reg & "0000000" & local_enable_reg & local_port_reg) when (reg_data_src = REG_VALID_PORTS)      else
     local_mc_recv_ip_reg(31 downto 0)                                            when (reg_data_src = REG_MC_RECV_IP)       else
     local_mc_recv_ip_mask_reg(31 downto 0)                                       when (reg_data_src = REG_MC_RECV_IP_MASK)  else
+    ("00000" & cpu_tx_size_reg & "00000" & cpu_rx_size_int)                      when (reg_data_src = REG_BUFFER_SIZES)     else
+    (X"00" & "0000000" & soft_reset_reg & X"00" & "0000000" & local_enable_reg)  when (reg_data_src = REG_PROMISC_RST_EN)   else
+    (X"0000" & local_port_reg)                                                   when (reg_data_src = REG_VALID_PORTS)      else
+
     tx_pkt_rate_reg                                                              when (reg_data_src = REG_TX_PKT_RATE)      else
     tx_pkt_cnt_reg                                                               when (reg_data_src = REG_TX_PKT_CNT)       else
     tx_valid_rate_reg                                                            when (reg_data_src = REG_TX_VALID_RATE)    else
@@ -390,11 +398,6 @@ begin
                             local_mac_reg(31 downto 24) <= DAT_I(31 downto 24);
                         end if;
 
-                        when REG_LOCAL_GATEWAY =>
-                        if (SEL_I(0) = '1')then
-                            local_gateway_reg(7 downto 0) <= DAT_I(7 downto 0);
-                        end if;
-
                         when REG_LOCAL_IPADDR =>
                         if (SEL_I(0) = '1')then
                             local_ip_reg(7 downto 0) <= DAT_I(7 downto 0);
@@ -409,6 +412,11 @@ begin
                             local_ip_reg(31 downto 24) <= DAT_I(31 downto 24);
                         end if;
 
+                        when REG_LOCAL_GATEWAY =>
+                        if (SEL_I(0) = '1')then
+                            local_gateway_reg(7 downto 0) <= DAT_I(7 downto 0);
+                        end if;
+
                         when REG_LOCAL_NETMASK =>
                         if (SEL_I(0) = '1')then
                             local_netmask_reg(7 downto 0) <= DAT_I(7 downto 0);
@@ -421,29 +429,6 @@ begin
                         end if;
                         if (SEL_I(3) = '1')then
                             local_netmask_reg(31 downto 24) <= DAT_I(31 downto 24);
-                        end if;
-
-                        when REG_BUFFER_SIZES =>
-                        if ((SEL_I(0) = '1')and(DAT_I(10 downto 0) = ("000" & X"00")))then
-                            cpu_rx_ack_reg <= '1';
-                        end if;
-                        if (SEL_I(2) = '1')then
-                            cpu_tx_size_reg <= DAT_I(26 downto 16);
-                            cpu_tx_ready_reg <= '1';
-                        end if;
-
-                        when REG_VALID_PORTS =>
-                        if (SEL_I(0) = '1')then
-                            local_port_reg(7 downto 0) <= DAT_I(7 downto 0);
-                        end if;
-                        if (SEL_I(1) = '1')then
-                            local_port_reg(15 downto 8) <= DAT_I(15 downto 8);
-                        end if;
-                        if (SEL_I(2) = '1')then
-                            local_enable_reg <= DAT_I(16);
-                        end if;
-                        if ((SEL_I(3) = '1')and(DAT_I(24) = '1'))then
-                            soft_reset_reg <= '1';
                         end if;
 
                         when REG_MC_RECV_IP =>
@@ -472,6 +457,31 @@ begin
                         end if;
                         if (SEL_I(3) = '1')then
                             local_mc_recv_ip_mask_reg(31 downto 24) <= DAT_I(31 downto 24);
+                        end if;
+
+                        when REG_BUFFER_SIZES =>
+                        if ((SEL_I(0) = '1')and(DAT_I(10 downto 0) = ("000" & X"00")))then
+                            cpu_rx_ack_reg <= '1';
+                        end if;
+                        if (SEL_I(2) = '1')then
+                            cpu_tx_size_reg <= DAT_I(26 downto 16);
+                            cpu_tx_ready_reg <= '1';
+                        end if;
+
+                        when REG_PROMISC_RST_EN =>
+                        if (SEL_I(0) = '1')then
+                            local_enable_reg <= DAT_I(0);
+                        end if;
+                        if ((SEL_I(2) = '1')and(DAT_I(24) = '1'))then
+                            soft_reset_reg <= '1';
+                        end if;
+
+                        when REG_VALID_PORTS =>
+                        if (SEL_I(0) = '1')then
+                            local_port_reg(7 downto 0) <= DAT_I(7 downto 0);
+                        end if;
+                        if (SEL_I(1) = '1')then
+                            local_port_reg(15 downto 8) <= DAT_I(15 downto 8);
                         end if;
 
                         when others =>

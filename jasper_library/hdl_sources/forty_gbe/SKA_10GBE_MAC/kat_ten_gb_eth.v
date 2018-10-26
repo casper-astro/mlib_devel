@@ -324,9 +324,9 @@ module kat_ten_gb_eth #(
     // CPU Interface
     .cpu_clk               (cpu_clk),
     .cpu_rst               (cpu_rst),
-    .cpu_rx_buffer_addr    (cpu_rx_buffer_addr[7:0]),
+    .cpu_rx_buffer_addr    (cpu_rx_buffer_addr),
     .cpu_rx_buffer_rd_data (cpu_rx_buffer_rd_data),
-    .cpu_rx_size           (cpu_rx_size[7:0]),
+    .cpu_rx_size           (cpu_rx_size),
     .cpu_rx_ack            (cpu_rx_ack),
     // MAC Interface
     .mac_clk           (mac_clk),
