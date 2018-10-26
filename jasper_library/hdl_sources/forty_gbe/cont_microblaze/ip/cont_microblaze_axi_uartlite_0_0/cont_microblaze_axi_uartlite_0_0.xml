@@ -170,7 +170,7 @@
         </spirit:parameter>
         <spirit:parameter>
           <spirit:name>FREQ_HZ</spirit:name>
-          <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.S_AXI.FREQ_HZ">156250000</spirit:value>
+          <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.S_AXI.FREQ_HZ">39062500</spirit:value>
           <spirit:vendorExtensions>
             <xilinx:parameterInfo>
               <xilinx:parameterUsage>none</xilinx:parameterUsage>
@@ -449,7 +449,7 @@
         </spirit:parameter>
         <spirit:parameter>
           <spirit:name>FREQ_HZ</spirit:name>
-          <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.ACLK.FREQ_HZ">156250000</spirit:value>
+          <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.ACLK.FREQ_HZ">39062500</spirit:value>
           <spirit:vendorExtensions>
             <xilinx:parameterInfo>
               <xilinx:parameterUsage>none</xilinx:parameterUsage>
@@ -874,11 +874,11 @@ Writing a 1 to this bit position clears the receive FIFO
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Thu Aug 23 12:37:59 UTC 2018</spirit:value>
+            <spirit:value>Wed Oct 24 12:56:57 UTC 2018</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>8:2c0aa346</spirit:value>
+            <spirit:value>8:f7b2b5f6</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -894,11 +894,11 @@ Writing a 1 to this bit position clears the receive FIFO
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Thu Aug 23 13:27:01 UTC 2018</spirit:value>
+            <spirit:value>Wed Oct 24 12:56:57 UTC 2018</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>8:2c0aa346</spirit:value>
+            <spirit:value>8:f7b2b5f6</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -926,11 +926,11 @@ Writing a 1 to this bit position clears the receive FIFO
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Thu Aug 23 12:37:59 UTC 2018</spirit:value>
+            <spirit:value>Wed Oct 24 12:56:57 UTC 2018</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>8:932073c4</spirit:value>
+            <spirit:value>8:8525b6c4</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -946,11 +946,11 @@ Writing a 1 to this bit position clears the receive FIFO
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Thu Aug 23 13:27:01 UTC 2018</spirit:value>
+            <spirit:value>Wed Oct 24 12:56:57 UTC 2018</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>8:932073c4</spirit:value>
+            <spirit:value>8:8525b6c4</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -964,11 +964,11 @@ Writing a 1 to this bit position clears the receive FIFO
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Thu Aug 23 13:27:01 UTC 2018</spirit:value>
+            <spirit:value>Wed Oct 24 12:56:58 UTC 2018</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>8:2c0aa346</spirit:value>
+            <spirit:value>8:f7b2b5f6</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1333,7 +1333,7 @@ Writing a 1 to this bit position clears the receive FIFO
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_S_AXI_ACLK_FREQ_HZ</spirit:name>
         <spirit:displayName>AXI CLK Frequency</spirit:displayName>
-        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_S_AXI_ACLK_FREQ_HZ">156250000</spirit:value>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_S_AXI_ACLK_FREQ_HZ">39062500</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_S_AXI_ADDR_WIDTH</spirit:name>
@@ -1369,7 +1369,13 @@ Writing a 1 to this bit position clears the receive FIFO
   </spirit:model>
   <spirit:choices>
     <spirit:choice>
-      <spirit:name>choice_list_056edb85</spirit:name>
+      <spirit:name>choice_list_3bbfa9f1</spirit:name>
+      <spirit:enumeration>No_Parity</spirit:enumeration>
+      <spirit:enumeration>Odd</spirit:enumeration>
+      <spirit:enumeration>Even</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_list_41db1905</spirit:name>
       <spirit:enumeration>110</spirit:enumeration>
       <spirit:enumeration>300</spirit:enumeration>
       <spirit:enumeration>1200</spirit:enumeration>
@@ -1381,14 +1387,6 @@ Writing a 1 to this bit position clears the receive FIFO
       <spirit:enumeration>57600</spirit:enumeration>
       <spirit:enumeration>115200</spirit:enumeration>
       <spirit:enumeration>128000</spirit:enumeration>
-      <spirit:enumeration>230400</spirit:enumeration>
-      <spirit:enumeration>460800</spirit:enumeration>
-    </spirit:choice>
-    <spirit:choice>
-      <spirit:name>choice_list_3bbfa9f1</spirit:name>
-      <spirit:enumeration>No_Parity</spirit:enumeration>
-      <spirit:enumeration>Odd</spirit:enumeration>
-      <spirit:enumeration>Even</spirit:enumeration>
     </spirit:choice>
     <spirit:choice>
       <spirit:name>choice_list_ac75ef1e</spirit:name>
@@ -1587,19 +1585,19 @@ Writing a 1 to this bit position clears the receive FIFO
       <spirit:name>C_BAUDRATE</spirit:name>
       <spirit:displayName>Baudrate</spirit:displayName>
       <spirit:description>Baud rate of the AXI UART Lite in bits per second.</spirit:description>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C_BAUDRATE" spirit:choiceRef="choice_list_056edb85" spirit:order="1300">115200</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C_BAUDRATE" spirit:choiceRef="choice_list_41db1905" spirit:order="1300">115200</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C_S_AXI_ACLK_FREQ_HZ</spirit:name>
       <spirit:displayName>AXI CLK Frequency</spirit:displayName>
       <spirit:description>AXI4-Lite clock frequency range should be in between 10 to 300MHz.</spirit:description>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C_S_AXI_ACLK_FREQ_HZ" spirit:order="1201">156250000</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C_S_AXI_ACLK_FREQ_HZ" spirit:order="1201">39062500</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C_S_AXI_ACLK_FREQ_HZ_d</spirit:name>
       <spirit:displayName>AXI CLK Frequency</spirit:displayName>
       <spirit:description>AXI4-Lite clock frequency range should be in between 10 to 300MHz.</spirit:description>
-      <spirit:value spirit:format="float" spirit:resolve="user" spirit:id="PARAM_VALUE.C_S_AXI_ACLK_FREQ_HZ_d" spirit:order="1200">156.25</spirit:value>
+      <spirit:value spirit:format="float" spirit:resolve="user" spirit:id="PARAM_VALUE.C_S_AXI_ACLK_FREQ_HZ_d" spirit:order="1200">39.0625</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Component_Name</spirit:name>
@@ -1668,7 +1666,7 @@ Writing a 1 to this bit position clears the receive FIFO
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.S_AXI.WUSER_WIDTH" xilinx:valueSource="constant" xilinx:valuePermission="bd"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.C_BAUDRATE" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.C_S_AXI_ACLK_FREQ_HZ" xilinx:valueSource="user"/>
-        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.C_S_AXI_ACLK_FREQ_HZ_d" xilinx:valueSource="propagated"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.C_S_AXI_ACLK_FREQ_HZ_d" xilinx:valueSource="user" xilinx:valuePermission="bd_and_user"/>
       </xilinx:configElementInfos>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
