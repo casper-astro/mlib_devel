@@ -1,7 +1,7 @@
 from yellow_block import YellowBlock
 from constraints import ClockConstraint, PortConstraint, RawConstraint
 
-class snap2(YellowBlock):
+class snap2_v2(YellowBlock):
     def initialize(self):
         self.add_source('infrastructure')
         self.add_source('wbs_arbiter')
@@ -44,8 +44,8 @@ class snap2(YellowBlock):
             PortConstraint('sys_clk_p', 'sys_clk_p'),
             ClockConstraint('sys_clk_p', period=8.0),
             #PortConstraint('ext_sys_rst_n', 'ext_sys_rst_n'),
-            RawConstraint('set_property CONFIG_VOLTAGE 1.8 [current_design]'),
-            RawConstraint('set_property CFGBVS GND [current_design]'),
+            RawConstraint('set_property CONFIG_VOLTAGE 2.5 [current_design]'),
+            RawConstraint('set_property CFGBVS VCCO [current_design]'),
             RawConstraint('set_property BITSTREAM.CONFIG.CONFIGRATE 33 [current_design]'),
             RawConstraint('set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]'),
             RawConstraint('set_property BITSTREAM.CONFIG.SPI_32BIT_ADDR Yes [current_design]'),
