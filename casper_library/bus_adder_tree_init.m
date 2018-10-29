@@ -73,15 +73,15 @@ function bus_adder_tree_init(blk, varargin)
 
   delete_lines(blk);
 
-   % sanity check for old block that has not been updated for floating point
-  if (strcmp(floating_point, 'on')|floating_point == 1)
+  % sanity check for old block that has not been updated for floating point
+  if (strcmp(floating_point, 'on')) || (floating_point == 1)
     floating_point = 1;
   else
     floating_point = 0;
   end
   
   % Check for floating point
-  if floating_point == 1
+  if (floating_point == 1)
       float_en = 'on';
       
       if float_type == 2
@@ -207,7 +207,7 @@ function bus_adder_tree_init(blk, varargin)
 
   for n = 0:ncomps-1,
       
-    if floating_point == 1
+    if (floating_point == 1)
     
        reuse_block(blk, ['add_tree', num2str(n)], 'casper_library/Misc/adder_tree', ...
       'n_inputs', num2str(n_busses), 'latency', num2str(add_latency), ...

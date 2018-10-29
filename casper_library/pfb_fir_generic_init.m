@@ -87,7 +87,7 @@ function pfb_fir_generic_init(blk, varargin)
   
   
   % sanity check for old block that has not been updated for floating point
-  if (strcmp(floating_point, 'on')|floating_point == 1)
+  if (strcmp(floating_point, 'on')) || (floating_point == 1)
     floating_point = 1;
   else
     floating_point = 0;
@@ -186,7 +186,7 @@ function pfb_fir_generic_init(blk, varargin)
           'inputNum', num2str(n_inputs_total), 'Position', [80 yoff-15 140 yoff+((n_inputs_total-1)*yinc)+15]);
 
   
-  if floating_point == 1
+  if (floating_point == 1)
       reuse_block(blk, 'bus_expand', 'casper_library_flow_control/bus_expand', ...
               'mode', 'divisions of equal size', ...
               'outputNum', num2str(n_inputs_total), ...
@@ -269,7 +269,7 @@ function pfb_fir_generic_init(blk, varargin)
   add_line(blk, 'pfb_fir_coeff_gen/3', 'coeff_munge/1');
 
   
-  if floating_point == 1
+  if (floating_point == 1)
       BitWidthIn = exp_width + frac_width;
   end
   
@@ -295,6 +295,7 @@ function pfb_fir_generic_init(blk, varargin)
           'multiplier_implementation', 'behavioral HDL', ...
           'bram_optimization', delays_bram_optimization, ...
           'Position', [675 32 765 198]);
+      
   add_line(blk, 'pfb_fir_coeff_gen/2', 'pfb_fir_taps/2');
   add_line(blk, 'coeff_munge/1', 'pfb_fir_taps/3');
 
@@ -304,7 +305,7 @@ function pfb_fir_generic_init(blk, varargin)
   end
 
   
-  if floating_point == 1
+  if (floating_point == 1)
       % If floating point enabaled, no bus scale or bus convert required.
       add_line(blk, 'pfb_fir_taps/2', 'bus_expand/1');
       
