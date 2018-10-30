@@ -44,6 +44,11 @@ function bus_adder_tree_init(blk, varargin)
   defaults = {
     'n_busses', 5, ...
     'n_bits', [8 7 3 4], 'bin_pts', [6 6 2 2], 'dtypes', [0 1 0 1], ...
+    'floating_point', 'off', ...
+    'float_type', 'single', ...
+    'exp_width', 8, ...
+    'frac_width', 24, ...  
+    'num_float_vec', 1, ...
     'add_latency', 1, 'first_stage_hdl', 'off', 'adder_imp', 'Fabric', ...
     'misc', 'on'};
   
@@ -56,6 +61,11 @@ function bus_adder_tree_init(blk, varargin)
   n_bits          = get_var('n_bits', 'defaults', defaults, varargin{:});
   bin_pts         = get_var('bin_pts', 'defaults', defaults, varargin{:});
   dtypes          = get_var('dtypes', 'defaults', defaults, varargin{:});
+  floating_point  = get_var('floating_point', 'defaults', defaults, varargin{:});
+  float_type      = get_var('float_type', 'defaults', defaults, varargin{:});
+  exp_width       = get_var('exp_width', 'defaults', defaults, varargin{:});
+  frac_width      = get_var('frac_width', 'defaults', defaults, varargin{:});   
+  num_float_vec   = get_var('num_float_vec', 'defaults', defaults, varargin{:});   
   add_latency     = get_var('add_latency', 'defaults', defaults, varargin{:});
   first_stage_hdl = get_var('first_stage_hdl', 'defaults', defaults, varargin{:});
   adder_imp       = get_var('adder_imp', 'defaults', defaults, varargin{:});
@@ -63,6 +73,38 @@ function bus_adder_tree_init(blk, varargin)
 
   delete_lines(blk);
 
+  % sanity check for old block that has not been updated for floating point
+  if (strcmp(floating_point, 'on')) || (floating_point == 1)
+    floating_point = 1;
+  else
+    floating_point = 0;
+  end
+  
+  % Check for floating point
+  if (floating_point == 1)
+      float_en = 'on';
+      
+      if float_type == 2
+          float_type_sel = 'custom';
+          
+          n_bits = repmat((frac_width + exp_width), 1, num_float_vec);
+
+      else
+          float_type_sel = 'single';
+          exp_width = 8;
+          frac_width = 24;
+          n_bits = repmat((frac_width + exp_width), 1, num_float_vec);
+      end
+  else
+      float_en = 'off';  
+      float_type_sel = 'single';
+      exp_width = 8;
+      frac_width = 24;
+  end
+  
+  
+ 
+  
   %default state, do nothing 
   if n_busses == 0 | n_busses == 1,
     clean_blocks(blk);
@@ -164,10 +206,30 @@ function bus_adder_tree_init(blk, varargin)
   ypos_tmp = ypos + addt_d/2;
 
   for n = 0:ncomps-1,
-    reuse_block(blk, ['add_tree', num2str(n)], 'casper_library/Misc/adder_tree', ...
+      
+    if (floating_point == 1)
+    
+       reuse_block(blk, ['add_tree', num2str(n)], 'casper_library/Misc/adder_tree', ...
       'n_inputs', num2str(n_busses), 'latency', num2str(add_latency), ...
+      'floating_point', float_en, ...
+      'float_type', float_type_sel, ...
+      'exp_width', num2str(exp_width), ...
+      'frac_width', num2str(frac_width), ...
       'adder_imp', adder_imp, 'first_stage_hdl', first_stage_hdl, ...
       'Position', [xpos-addt_w/2 ypos_tmp-addt_d/2 xpos+addt_w/2 ypos_tmp+addt_d/2]);
+
+    else
+      reuse_block(blk, ['add_tree', num2str(n)], 'casper_library/Misc/adder_tree', ...
+      'n_inputs', num2str(n_busses), 'latency', num2str(add_latency), ...
+      'adder_imp', adder_imp, 'first_stage_hdl', first_stage_hdl, ... 
+      'Position', [xpos-addt_w/2 ypos_tmp-addt_d/2 xpos+addt_w/2 ypos_tmp+addt_d/2]);
+    end
+
+%     reuse_block(blk, ['add_tree', num2str(n)], 'casper_library/Misc/adder_tree', ...
+%       'n_inputs', num2str(n_busses), 'latency', num2str(add_latency), ...
+%       'adder_imp', adder_imp, 'first_stage_hdl', first_stage_hdl, ...
+%      
+%       'Position', [xpos-addt_w/2 ypos_tmp-addt_d/2 xpos+addt_w/2 ypos_tmp+addt_d/2]);
   
     add_line(blk, 'constant/1', ['add_tree', num2str(n), '/1']);
 

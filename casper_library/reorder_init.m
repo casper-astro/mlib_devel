@@ -76,6 +76,7 @@ mux_latency     = 1;
 yinc = 20;
 
 delete_lines(blk);
+
 if isempty(map),
   clean_blocks(blk);
   set_param(blk, 'AttributesFormatString', '');
@@ -241,46 +242,48 @@ if order == 1,
         add_line(blk, ['we_expand/',num2str(cnt)], ['delay_din_bram', num2str(cnt-1),'/2']);
     end %for
 % Case for order != 1, single-buffered
+
 elseif double_buffer == 0,
 
   % Add Dynamic Blocks and wires
   for cnt=1:n_inputs,
-      % BRAMS
-      bram_name = ['buf', num2str(cnt-1)];
-      % if we dont specify a valid bit width, use generic BRAMs
-      if n_bits == 0,
-        reuse_block(blk, bram_name, 'xbsIndex_r4/Single Port RAM', ...
-            'depth', num2str(2^map_bits), 'optimize', 'Speed', ...
-            'write_mode', 'Read Before Write', 'latency', num2str(bram_latency+fanout_latency), ...
-            'Position', [845    base+80*(cnt-1)-17+40   910   base+80*(cnt-1)+77]);
-      else, %otherwise use brams that help reduce fanout
-        m = floor(n_bits/64);
-        n_bits_in = ['[repmat(64, 1, ', num2str(m),')]'];
+          
+          % BRAMS
+          bram_name = ['buf', num2str(cnt-1)];
+          % if we dont specify a valid bit width, use generic BRAMs
+          if n_bits == 0,
+            reuse_block(blk, bram_name, 'xbsIndex_r4/Single Port RAM', ...
+                'depth', num2str(2^map_bits), 'optimize', 'Speed', ...
+                'write_mode', 'Read Before Write', 'latency', num2str(bram_latency+fanout_latency), ...
+                'Position', [845    base+80*(cnt-1)-17+40   910   base+80*(cnt-1)+77]);
+          else, %otherwise use brams that help reduce fanout
+            m = floor(n_bits/64);
+            n_bits_in = ['[repmat(64, 1, ', num2str(m),')]'];
 
-        if m ~= (n_bits/64), 
-          n = m+1;
-          n_bits_in = ['[', n_bits_in, ', ', num2str(n_bits - (m*64)),']'];
-        else,
-          n = m;
-        end
-        bin_pts = ['[zeros(1, ', num2str(n),')]'];
-        init_vector = ['[zeros(', num2str(2^map_bits), ',', num2str(n), ')]'];
+            if m ~= (n_bits/64), 
+              n = m+1;
+              n_bits_in = ['[', n_bits_in, ', ', num2str(n_bits - (m*64)),']'];
+            else,
+              n = m;
+            end
+            bin_pts = ['[zeros(1, ', num2str(n),')]'];
+            init_vector = ['[zeros(', num2str(2^map_bits), ',', num2str(n), ')]'];
 
-        reuse_block(blk, bram_name, 'casper_library_bus/bus_single_port_ram', ...
-          'n_bits', n_bits_in, 'bin_pts', bin_pts, 'init_vector', init_vector, ...
-          'max_fanout', '1', 'mem_type', 'Block RAM', 'bram_optimization', 'Speed', ...
-          'async', 'off', 'misc', 'off', ...
-          'bram_latency', num2str(bram_latency), 'fan_latency', num2str(fanout_latency), ...
-          'addr_register', 'on', 'addr_implementation', 'core', ...
-          'din_register', 'on', 'din_implementation', 'behavioral', ...
-          'we_register', 'on', 'we_implementation', 'core', ...
-          'en_register', 'off', 'en_implementation', 'behavioral', ...
-          'Position', [845    base+80*(cnt-1)-17+40   910   base+80*(cnt-1)+77]);
-      end
-      add_line(blk, ['we_expand/',num2str(cnt)], [bram_name,'/3']);
-      add_line(blk, ['addr_expand/',num2str(cnt)], [bram_name,'/1']);
-      add_line(blk, ['delay_din',num2str(cnt-1),'/1'], [bram_name,'/2']);
-      add_line(blk, [bram_name,'/1'], ['dout',num2str(cnt-1),'/1']);
+            reuse_block(blk, bram_name, 'casper_library_bus/bus_single_port_ram', ...
+              'n_bits', n_bits_in, 'bin_pts', bin_pts, 'init_vector', init_vector, ...
+              'max_fanout', '1', 'mem_type', 'Block RAM', 'bram_optimization', 'Speed', ...
+              'async', 'off', 'misc', 'off', ...
+              'bram_latency', num2str(bram_latency), 'fan_latency', num2str(fanout_latency), ...
+              'addr_register', 'on', 'addr_implementation', 'core', ...
+              'din_register', 'on', 'din_implementation', 'behavioral', ...
+              'we_register', 'on', 'we_implementation', 'core', ...
+              'en_register', 'off', 'en_implementation', 'behavioral', ...
+              'Position', [845    base+80*(cnt-1)-17+40   910   base+80*(cnt-1)+77]);
+          end
+          add_line(blk, ['we_expand/',num2str(cnt)], [bram_name,'/3']);
+          add_line(blk, ['addr_expand/',num2str(cnt)], [bram_name,'/1']);
+          add_line(blk, ['delay_din',num2str(cnt-1),'/1'], [bram_name,'/2']);
+          add_line(blk, [bram_name,'/1'], ['dout',num2str(cnt-1),'/1']);
   end
 
   %special case for order of 2 
