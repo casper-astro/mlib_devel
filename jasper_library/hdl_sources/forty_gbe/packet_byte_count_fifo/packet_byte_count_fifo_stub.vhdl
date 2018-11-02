@@ -1,8 +1,8 @@
 -- Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2018.2 (lin64) Build 2258646 Thu Jun 14 20:02:38 MDT 2018
--- Date        : Thu Aug 23 13:45:54 2018
--- Host        : adam-cm running 64-bit Ubuntu 14.04.5 LTS
+-- Date        : Tue Oct 30 16:45:13 2018
+-- Host        : adam-cm running 64-bit Ubuntu 16.04.5 LTS
 -- Command     : write_vhdl -force -mode synth_stub
 --               /home/aisaacson/work/git_work/ska_sa/projects/skarab_bsp_firmware/firmware/FRM123701U1R1/Vivado/IP/packet_byte_count_fifo/packet_byte_count_fifo_stub.vhdl
 -- Design      : packet_byte_count_fifo
@@ -33,6 +33,6 @@ attribute black_box_pad_pin : string;
 attribute syn_black_box of stub : architecture is true;
 attribute black_box_pad_pin of stub : architecture is "rst,wr_clk,rd_clk,din[15:0],wr_en,rd_en,dout[15:0],full,empty";
 attribute x_core_info : string;
-attribute x_core_info of stub : architecture is "fifo_generator_v13_2_2,Vivado 2018.1";
+attribute x_core_info of stub : architecture is "fifo_generator_v13_1_1,Vivado 2016.2";
 begin
 end;
