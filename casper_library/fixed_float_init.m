@@ -32,7 +32,7 @@ function fixed_float_init(blk, varargin)
     'bin_pt', 17, ...
     'num_vec', 1, ...
     'cmplx', 'off', ...
-    'latency', 0, ...
+    'csp_latency', 0, ...
   };
   
   check_mask_type(blk, 'fixed_to_float');
@@ -57,7 +57,7 @@ function fixed_float_init(blk, varargin)
   bin_pt         = get_var('bin_pt', 'defaults', defaults, varargin{:});
   num_vec        = get_var('num_vec', 'defaults', defaults, varargin{:});
   cmplx          = get_var('cmplx', 'defaults', defaults, varargin{:});
-  latency          = get_var('latency', 'defaults', defaults, varargin{:});
+  latency          = get_var('csp_latency', 'defaults', defaults, varargin{:});
   
   delete_lines(blk);
  
