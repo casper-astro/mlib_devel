@@ -34,6 +34,11 @@ function pfb_fir_generic_init(blk, varargin)
     'CoeffBitWidth', 12, ...
     'complex', 'on', ...
     'async', 'on', ...
+    'floating_point', 'off', ...
+    'float_type', 'single', ...
+    'exp_width', 8, ...
+    'frac_width', 24, ...  
+    'fixed_float_latency', 0, ...
     'mult_latency', 2, ...
     'add_latency', 1, ...
     'bram_latency', 2, ...
@@ -62,6 +67,11 @@ function pfb_fir_generic_init(blk, varargin)
   CoeffBitWidth               = get_var('CoeffBitWidth', 'defaults', defaults, varargin{:});
   complex                     = get_var('complex', 'defaults', defaults, varargin{:});
   async                       = get_var('async', 'defaults', defaults, varargin{:});
+  floating_point              = get_var('floating_point', 'defaults', defaults, varargin{:});
+  float_type                  = get_var('float_type', 'defaults', defaults, varargin{:});
+  exp_width                   = get_var('exp_width', 'defaults', defaults, varargin{:});
+  frac_width                  = get_var('frac_width', 'defaults', defaults, varargin{:});   
+  fixed_float_latency      = get_var('fixed_float_latency', 'defaults', defaults, varargin{:});   
   mult_latency                = get_var('mult_latency', 'defaults', defaults, varargin{:});
   add_latency                 = get_var('add_latency', 'defaults', defaults, varargin{:});
   bram_latency                = get_var('bram_latency', 'defaults', defaults, varargin{:});
@@ -74,7 +84,37 @@ function pfb_fir_generic_init(blk, varargin)
   delays_bram_optimization    = get_var('delays_bram_optimization', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
+  
+  
+  % sanity check for old block that has not been updated for floating point
+  if (strcmp(floating_point, 'on')) || (floating_point == 1)
+    floating_point = 1;
+  else
+    floating_point = 0;
+  end
 
+  % Check for floating point
+  if floating_point == 1
+      float_en = 'on';
+      
+      if float_type == 2
+          float_type_sel = 'custom';
+
+      else
+          float_type_sel = 'single';
+          exp_width = 8;
+          frac_width = 24;
+      end
+  else
+      float_en = 'off';  
+      float_type_sel = 'single';
+      exp_width = 8;
+      frac_width = 24;
+      fixed_float_latency = 0; % Disable if floating point not selected
+  end
+  
+  
+  
   % default empty block for storage in library
   if TotalTaps == 0,
     clean_blocks(blk);
@@ -145,18 +185,33 @@ function pfb_fir_generic_init(blk, varargin)
   reuse_block(blk, 'bus_create', 'casper_library_flow_control/bus_create', ...
           'inputNum', num2str(n_inputs_total), 'Position', [80 yoff-15 140 yoff+((n_inputs_total-1)*yinc)+15]);
 
-  if strcmp(complex, 'on'),
-    outputWidth = BitWidthOut*2; outputBinaryPt = 0; outputArithmeticType = 0;
+  
+  if (floating_point == 1)
+      reuse_block(blk, 'bus_expand', 'casper_library_flow_control/bus_expand', ...
+              'mode', 'divisions of equal size', ...
+              'outputNum', num2str(n_inputs_total), ...
+              'outputWidth', num2str(exp_width + frac_width), ...
+              'outputBinaryPt', num2str(0), ...
+              'outputArithmeticType', num2str(0), ...
+              'Position', [1025 yoff-15 1075 yoff+((n_inputs_total-1)*yinc)+15]);
+      
   else
-    outputWidth = BitWidthOut; outputBinaryPt = BitWidthOut-1; outputArithmeticType = 1;
+      if strcmp(complex, 'on'),
+        outputWidth = BitWidthOut*2; outputBinaryPt = 0; outputArithmeticType = 0;
+      else
+        outputWidth = BitWidthOut; outputBinaryPt = BitWidthOut-1; outputArithmeticType = 1;
+      end
+      reuse_block(blk, 'bus_expand', 'casper_library_flow_control/bus_expand', ...
+              'mode', 'divisions of equal size', ...
+              'outputNum', num2str(n_inputs_total), ...
+              'outputWidth', num2str(outputWidth), ...
+              'outputBinaryPt', num2str(outputBinaryPt), ...
+              'outputArithmeticType', num2str(outputArithmeticType), ...
+              'Position', [1025 yoff-15 1075 yoff+((n_inputs_total-1)*yinc)+15]);
   end
-  reuse_block(blk, 'bus_expand', 'casper_library_flow_control/bus_expand', ...
-          'mode', 'divisions of equal size', ...
-          'outputNum', num2str(n_inputs_total), ...
-          'outputWidth', num2str(outputWidth), ...
-          'outputBinaryPt', num2str(outputBinaryPt), ...
-          'outputArithmeticType', num2str(outputArithmeticType), ...
-          'Position', [1025 yoff-15 1075 yoff+((n_inputs_total-1)*yinc)+15]);
+  
+      
+      
 
   % data ports
 
@@ -213,6 +268,11 @@ function pfb_fir_generic_init(blk, varargin)
           'Position', [500 199 550 231]);
   add_line(blk, 'pfb_fir_coeff_gen/3', 'coeff_munge/1');
 
+  
+  if (floating_point == 1)
+      BitWidthIn = exp_width + frac_width;
+  end
+  
   reuse_block(blk, 'pfb_fir_taps', 'casper_library_pfbs/pfb_fir_taps', ...
           'n_streams', num2str(n_streams), ...
           'n_inputs', num2str(n_inputs), ...
@@ -221,6 +281,11 @@ function pfb_fir_generic_init(blk, varargin)
           'n_bits_data', num2str(BitWidthIn), ...
           'n_bits_coeff', num2str(CoeffBitWidth), ...
           'bin_pt_coeff', num2str(CoeffBitWidth-1), ...
+          'floating_point', float_en, ...
+          'float_type', float_type_sel, ...
+          'exp_width', num2str(exp_width), ...
+          'frac_width', num2str(frac_width), ...
+          'fixed_float_latency', num2str(fixed_float_latency), ...
           'complex', complex, ...
           'async', async, ...
           'mult_latency', num2str(mult_latency), ...
@@ -230,6 +295,7 @@ function pfb_fir_generic_init(blk, varargin)
           'multiplier_implementation', 'behavioral HDL', ...
           'bram_optimization', delays_bram_optimization, ...
           'Position', [675 32 765 198]);
+      
   add_line(blk, 'pfb_fir_coeff_gen/2', 'pfb_fir_taps/2');
   add_line(blk, 'coeff_munge/1', 'pfb_fir_taps/3');
 
@@ -238,39 +304,55 @@ function pfb_fir_generic_init(blk, varargin)
     n_outputs_total = n_outputs_total*2;
   end
 
-  reuse_block(blk, 'bus_scale', 'casper_library_bus/bus_scale', ...
-          'n_bits_in', mat2str(repmat(BitWidthIn+CoeffBitWidth+ceil(log2(TotalTaps)), 1, n_outputs_total)), ...
-          'bin_pt_in', num2str(BitWidthIn-1+CoeffBitWidth-1), ...
-          'scale_factor', num2str(-bit_growth), ...
-          'misc', 'off', 'Position', [825 101 865 129]);
-  add_line(blk, 'pfb_fir_taps/2', 'bus_scale/1');
+  
+  if (floating_point == 1)
+      % If floating point enabaled, no bus scale or bus convert required.
+      add_line(blk, 'pfb_fir_taps/2', 'bus_expand/1');
+      
+  else
+      reuse_block(blk, 'bus_scale', 'casper_library_bus/bus_scale', ...
+              'n_bits_in', mat2str(repmat(BitWidthIn+CoeffBitWidth+ceil(log2(TotalTaps)), 1, n_outputs_total)), ...
+              'bin_pt_in', num2str(BitWidthIn-1+CoeffBitWidth-1), ...
+              'scale_factor', num2str(-bit_growth), ...
+              'misc', 'off', 'Position', [825 101 865 129]);
+      add_line(blk, 'pfb_fir_taps/2', 'bus_scale/1');      
 
-  if strcmp(quantization, 'Truncate'), quant = 0;
-  elseif strcmp(quantization, 'Round  (unbiased: +/- Inf)'), quant = 1;
-  else quant = 2;
+      if strcmp(quantization, 'Truncate'), quant = 0;
+      elseif strcmp(quantization, 'Round  (unbiased: +/- Inf)'), quant = 1;
+      else quant = 2;
+      end
+
+      reuse_block(blk, 'bus_convert', 'casper_library_bus/bus_convert', ...
+              'n_bits_in', mat2str(repmat(BitWidthIn+CoeffBitWidth+ceil(log2(TotalTaps)), 1, n_outputs_total)), ...
+              'bin_pt_in', num2str(BitWidthIn-1+CoeffBitWidth-1+bit_growth), ...
+              'n_bits_out', num2str(BitWidthOut), 'bin_pt_out', num2str(BitWidthOut-1), ...
+              'quantization', num2str(quant), 'overflow', '0', ...\
+              'latency', num2str(conv_latency), 'of', 'off', 'misc', 'off', ...
+              'Position', [920 101 960 129]);
+      add_line(blk, 'bus_scale/1', 'bus_convert/1');
+      add_line(blk, 'bus_convert/1', 'bus_expand/1');
+  
   end
-
-  reuse_block(blk, 'bus_convert', 'casper_library_bus/bus_convert', ...
-          'n_bits_in', mat2str(repmat(BitWidthIn+CoeffBitWidth+ceil(log2(TotalTaps)), 1, n_outputs_total)), ...
-          'bin_pt_in', num2str(BitWidthIn-1+CoeffBitWidth-1+bit_growth), ...
-          'n_bits_out', num2str(BitWidthOut), 'bin_pt_out', num2str(BitWidthOut-1), ...
-          'quantization', num2str(quant), 'overflow', '0', ...\
-          'csp_latency', num2str(conv_latency), 'of', 'off', 'misc', 'off', ...
-          'Position', [920 101 960 129]);
-  add_line(blk, 'bus_scale/1', 'bus_convert/1');
-  add_line(blk, 'bus_convert/1', 'bus_expand/1');
-
   % sync chain  
 
   reuse_block(blk, 'sync', 'built-in/Inport', 'Port', '1', 'Position', [0 52 30 68]);
   add_line(blk, 'sync/1', 'pfb_fir_coeff_gen/1');
   add_line(blk, 'pfb_fir_coeff_gen/1', 'pfb_fir_taps/1');
 
-  reuse_block(blk, 'sync_delay','xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
-    'latency', 'conv_latency', 'Position', [925 52 955 68]);
-  add_line(blk, 'pfb_fir_taps/1', 'sync_delay/1');
-  reuse_block(blk, 'sync_out', 'built-in/Outport', 'Port', '1', 'Position', [1155 52 1185 68]);
-  add_line(blk, 'sync_delay/1', 'sync_out/1');
+  if floating_point ==1
+      reuse_block(blk, 'sync_out', 'built-in/Outport', 'Port', '1', 'Position', [1155 52 1185 68]);
+      add_line(blk, 'pfb_fir_taps/1',  'sync_out/1'); 
+  else
+      reuse_block(blk, 'sync_delay','xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
+        'latency', 'conv_latency', 'Position', [925 52 955 68]);
+      add_line(blk, 'pfb_fir_taps/1', 'sync_delay/1');      
+      
+      reuse_block(blk, 'sync_out', 'built-in/Outport', 'Port', '1', 'Position', [1155 52 1185 68]);
+      add_line(blk, 'sync_delay/1', 'sync_out/1');
+  end
+
+  
+
 
   % asynchronous infrastructure
 
@@ -280,12 +362,22 @@ function pfb_fir_generic_init(blk, varargin)
       'Position', [95 yoff+(n_inputs_total*yinc)-8 125 yoff+(n_inputs_total*yinc)+8]);
     add_line(blk, 'en/1', 'pfb_fir_coeff_gen/3');
     add_line(blk, 'pfb_fir_coeff_gen/4', 'pfb_fir_taps/4');
-    reuse_block(blk, 'den', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
-      'latency', 'conv_latency', 'Position', [925 162 955 178]);
-    add_line(blk, 'pfb_fir_taps/3', 'den/1');
-    reuse_block(blk, 'dvalid', 'built-in/Outport', 'Port', num2str(2+n_inputs_total), ...
-      'Position', [1035 yoff+(n_inputs_total*yinc)-8 1065 yoff+(n_inputs_total*yinc)+8]);
-    add_line(blk, 'den/1', 'dvalid/1');
+    
+    
+    if floating_point ==1
+        reuse_block(blk, 'dvalid', 'built-in/Outport', 'Port', num2str(2+n_inputs_total), ...
+        'Position', [1035 yoff+(n_inputs_total*yinc)-8 1065 yoff+(n_inputs_total*yinc)+8]);
+        add_line(blk, 'pfb_fir_taps/3', 'dvalid/1');
+    else
+        reuse_block(blk, 'den', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
+          'latency', 'conv_latency', 'Position', [925 162 955 178]);
+        add_line(blk, 'pfb_fir_taps/3', 'den/1');      
+
+        reuse_block(blk, 'dvalid', 'built-in/Outport', 'Port', num2str(2+n_inputs_total), ...
+        'Position', [1035 yoff+(n_inputs_total*yinc)-8 1065 yoff+(n_inputs_total*yinc)+8]);
+        add_line(blk, 'den/1', 'dvalid/1');
+    end
+
   end %if async
 
   clean_blocks(blk);
