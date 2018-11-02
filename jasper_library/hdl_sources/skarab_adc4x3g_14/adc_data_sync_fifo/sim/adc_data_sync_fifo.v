@@ -47,8 +47,8 @@
 // DO NOT MODIFY THIS FILE.
 
 
-// IP VLNV: xilinx.com:ip:fifo_generator:13.1
-// IP Revision: 1
+// IP VLNV: xilinx.com:ip:fifo_generator:13.2
+// IP Revision: 2
 
 `timescale 1ns/1ps
 
@@ -64,6 +64,7 @@ module adc_data_sync_fifo (
   empty
 );
 
+(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME core_clk, FREQ_HZ 100000000, PHASE 0.000" *)
 (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 core_clk CLK" *)
 input wire clk;
 input wire srst;
@@ -80,7 +81,7 @@ output wire full;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_read:1.0 FIFO_READ EMPTY" *)
 output wire empty;
 
-  fifo_generator_v13_1_1 #(
+  fifo_generator_v13_2_2 #(
     .C_COMMON_CLOCK(1),
     .C_SELECT_XPM(0),
     .C_COUNT_TYPE(0),

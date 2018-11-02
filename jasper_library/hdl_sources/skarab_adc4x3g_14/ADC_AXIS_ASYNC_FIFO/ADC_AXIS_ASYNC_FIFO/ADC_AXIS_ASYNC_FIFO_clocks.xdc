@@ -50,18 +50,23 @@ set fg_root {gen_fifo_generator.fifo_generator_inst}
 #------------------------------------------------------------------------------#
 #                             AXI FIFO Constraints                             #
 #------------------------------------------------------------------------------#
-set wr_clock          [get_clocks -of_objects [get_ports s_axis_aclk]]
-set rd_clock          [get_clocks -of_objects [get_ports m_axis_aclk]]
+#set wr_clock          [get_clocks -of_objects [get_ports s_aclk]]
+#set rd_clock          [get_clocks -of_objects [get_ports m_aclk]]
+#set wr_clk_period     [get_property PERIOD $wr_clock]
+#set rd_clk_period     [get_property PERIOD $rd_clock]
+#set skew_value [expr {(($wr_clk_period < $rd_clk_period) ? $wr_clk_period : $rd_clk_period)} ]
 
 # Ignore paths from the write clock to the read data registers for Distributed RAM based FIFO
-set_false_path -from [filter [all_fanout -from [get_ports s_axis_aclk] -flat -endpoints_only] {IS_LEAF}] -to [get_cells -hierarchical -filter {NAME =~ *mem*/*dout_i_reg*}]
+set_false_path -from [filter [all_fanout -from [get_ports s_axis_aclk] -flat -endpoints_only] {IS_LEAF}] -to [get_cells -hierarchical -filter {NAME =~ *gdm.dm_gen.dm*/gpr1.dout_i_reg*}]
 
 
 # This example is using the Set Max Delay constrains for the cross clock domain pointers for AXI4-Stream FIFO
 
-set_max_delay -from [get_cells ${fg_root}/inst_fifo_gen/gaxis_fifo.gaxisf.axisf/grf.rf/gntv_or_sync_fifo.gcx.clkx/rd_pntr_gc_reg[*]] -to [get_cells ${fg_root}/inst_fifo_gen/gaxis_fifo.gaxisf.axisf/grf.rf/gntv_or_sync_fifo.gcx.clkx/gsync_stage[*].wr_stg_inst/Q_reg_reg[*]] -datapath_only [get_property -min PERIOD $rd_clock]
+## set_max_delay -from [get_cells ${fg_root}/gaxis_fifo.gaxisf.axisf/grf.rf/gntv_or_sync_fifo.gcx.clkx/*rd_pntr_gc_reg[*]] -to [get_cells ${fg_root}/gaxis_fifo.gaxisf.axisf/grf.rf/gntv_or_sync_fifo.gcx.clkx/*gsync_stage[1].wr_stg_inst/Q_reg_reg[*]] -datapath_only [get_property -min PERIOD $rd_clock]
+## set_bus_skew -from [get_cells ${fg_root}/gaxis_fifo.gaxisf.axisf/grf.rf/gntv_or_sync_fifo.gcx.clkx/*rd_pntr_gc_reg[*]] -to [get_cells ${fg_root}/gaxis_fifo.gaxisf.axisf/grf.rf/gntv_or_sync_fifo.gcx.clkx/*gsync_stage[1].wr_stg_inst/Q_reg_reg[*]] $skew_value 
 
-set_max_delay -from [get_cells ${fg_root}/inst_fifo_gen/gaxis_fifo.gaxisf.axisf/grf.rf/gntv_or_sync_fifo.gcx.clkx/wr_pntr_gc_reg[*]] -to [get_cells ${fg_root}/inst_fifo_gen/gaxis_fifo.gaxisf.axisf/grf.rf/gntv_or_sync_fifo.gcx.clkx/gsync_stage[*].rd_stg_inst/Q_reg_reg[*]] -datapath_only [get_property -min PERIOD $wr_clock]
+## set_max_delay -from [get_cells ${fg_root}/gaxis_fifo.gaxisf.axisf/grf.rf/gntv_or_sync_fifo.gcx.clkx/*wr_pntr_gc_reg[*]] -to [get_cells ${fg_root}/gaxis_fifo.gaxisf.axisf/grf.rf/gntv_or_sync_fifo.gcx.clkx/*gsync_stage[1].rd_stg_inst/Q_reg_reg[*]] -datapath_only [get_property -min PERIOD $wr_clock]
+## set_bus_skew -from [get_cells ${fg_root}/gaxis_fifo.gaxisf.axisf/grf.rf/gntv_or_sync_fifo.gcx.clkx/*wr_pntr_gc_reg[*]] -to [get_cells ${fg_root}/gaxis_fifo.gaxisf.axisf/grf.rf/gntv_or_sync_fifo.gcx.clkx/*gsync_stage[1].rd_stg_inst/Q_reg_reg[*]] $skew_value 
 
 
 
