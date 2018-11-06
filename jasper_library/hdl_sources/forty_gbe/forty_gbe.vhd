@@ -264,7 +264,7 @@ entity forty_gbe is
 
         --DSP Wishbone Arbiter Interface
         WB_SLV_CLK_I_top : out std_logic;
-        WB_SLV_RST_I_top:  out std_logic;
+        WB_SLV_RST_I_top : out std_logic;
         WB_SLV_DAT_I_top : out std_logic_vector(31 downto 0);--ST_WB_DATA;
         WB_SLV_DAT_O_top : in  std_logic_vector(31 downto 0);--ST_WB_DATA;
         WB_SLV_ACK_O_top : in  std_logic;
@@ -515,7 +515,7 @@ architecture arch_forty_gbe of forty_gbe is
         DAT_I : in std_logic_vector(31 downto 0);
         DAT_O : out std_logic_vector(31 downto 0);
         ACK_O : out std_logic;
-        ADR_I : in std_logic_vector(13 downto 0);
+        ADR_I : in std_logic_vector(15 downto 0);
         CYC_I : in std_logic;
         SEL_I : in std_logic_vector(3 downto 0);
         STB_I : in std_logic;
@@ -651,7 +651,7 @@ architecture arch_forty_gbe of forty_gbe is
         DAT_I : in std_logic_vector(31 downto 0);
         DAT_O : out std_logic_vector(31 downto 0);
         ACK_O : out std_logic;
-        ADR_I : in std_logic_vector(13 downto 0);
+        ADR_I : in std_logic_vector(15 downto 0);
         CYC_I : in std_logic;
         SEL_I : in std_logic_vector(3 downto 0);
         STB_I : in std_logic;
@@ -1270,105 +1270,105 @@ architecture arch_forty_gbe of forty_gbe is
     signal MEZZ3_PRESENT : std_logic;
     
     -- Mark Debug ILA Testing    
---    signal dbg_wb_cross_clock_out_din : std_logic_vector(72 downto 0);
---    signal dbg_wb_cross_clock_out_wrreq : std_logic;
---    signal dbg_wb_cross_clock_out_rdreq : std_logic;
---    signal dbg_wb_cross_clock_out_dout : std_logic_vector(72 downto 0);
---    signal dbg_wb_cross_clock_out_full : std_logic;
---    signal dbg_wb_cross_clock_out_empty : std_logic;
-    
---    signal dbg_wb_data_in : std_logic_vector(31 downto 0);
---    signal dbg_wb_ack_in : std_logic;
---    signal dbg_wb_ack_in_z1 : std_logic;
---    signal dbg_wb_ack_in_z2 : std_logic;
---    signal dbg_wb_sync_ack_in : std_logic;
---    signal dbg_wb_sync_data_in : std_logic_vector(31 downto 0);
-    
---    signal dbg_wb_dsp_wr_state : T_WB_DSP_WR_STATE;   
---    signal dbg_WB_SLV_ACK_O_top : std_logic;
---    signal dbg_WB_SLV_DAT_O_top : std_logic_vector(31 downto 0);
---    signal dbg_WB_SLV_DAT_O : std_logic_vector(31 downto 0);
---    signal dbg_WB_SLV_ACK_O : std_logic;
---    signal dbg_WB_SLV_SEL_I_top : std_logic_vector(3 downto 0);
---    signal dbg_WB_SLV_STB_I_top : std_logic;
---    signal dbg_WB_SLV_WE_I_top : std_logic;    
-    
---    signal dbg_WB_SLV_ADR_I_top : std_logic_vector(31 downto 0);
---    signal dbg_WB_SLV_CYC_I_top : std_logic;
---    signal dbg_WB_SLV_DAT_I : std_logic_vector(31 downto 0);  
---    signal dbg_WB_SLV_ADR_I : std_logic_vector(31 downto 0);  
---    signal dbg_WB_SLV_CYC_I : std_logic;  
---    signal dbg_WB_SLV_SEL_I : std_logic_vector(3 downto 0);  
---    signal dbg_WB_SLV_WE_I : std_logic; 
---    signal dbg_WB_SLV_STB_I : std_logic;
+    --signal dbg_wb_cross_clock_out_din : std_logic_vector(72 downto 0);
+    --signal dbg_wb_cross_clock_out_wrreq : std_logic;
+    --signal dbg_wb_cross_clock_out_rdreq : std_logic;
+    --signal dbg_wb_cross_clock_out_dout : std_logic_vector(72 downto 0);
+    --signal dbg_wb_cross_clock_out_full : std_logic;
+    --signal dbg_wb_cross_clock_out_empty : std_logic;
+  --
+    --signal dbg_wb_data_in : std_logic_vector(31 downto 0);
+    --signal dbg_wb_ack_in : std_logic;
+    --signal dbg_wb_ack_in_z1 : std_logic;
+    --signal dbg_wb_ack_in_z2 : std_logic;
+    --signal dbg_wb_sync_ack_in : std_logic;
+    --signal dbg_wb_sync_data_in : std_logic_vector(31 downto 0);
+  --
+    --signal dbg_wb_dsp_wr_state : T_WB_DSP_WR_STATE;   
+    --signal dbg_WB_SLV_ACK_O_top : std_logic;
+    --signal dbg_WB_SLV_DAT_O_top : std_logic_vector(31 downto 0);
+    --signal dbg_WB_SLV_DAT_O : std_logic_vector(31 downto 0);
+    --signal dbg_WB_SLV_ACK_O : std_logic;
+    --signal dbg_WB_SLV_SEL_I_top : std_logic_vector(3 downto 0);
+    --signal dbg_WB_SLV_STB_I_top : std_logic;
+    --signal dbg_WB_SLV_WE_I_top : std_logic;    
+  --
+    --signal dbg_WB_SLV_ADR_I_top : std_logic_vector(31 downto 0);
+    --signal dbg_WB_SLV_CYC_I_top : std_logic;
+    --signal dbg_WB_SLV_DAT_I : std_logic_vector(31 downto 0);  
+    --signal dbg_WB_SLV_ADR_I : std_logic_vector(31 downto 0);  
+    --signal dbg_WB_SLV_CYC_I : std_logic;  
+    --signal dbg_WB_SLV_SEL_I : std_logic_vector(3 downto 0);  
+    --signal dbg_WB_SLV_WE_I : std_logic; 
+    --signal dbg_WB_SLV_STB_I : std_logic;
     
     
                                     
     -- Mark Debug ILA Testing
     
---    attribute MARK_DEBUG : string;
---    attribute MARK_DEBUG of dbg_wb_cross_clock_out_din : signal is "TRUE";
---    attribute MARK_DEBUG of dbg_wb_cross_clock_out_wrreq : signal is "TRUE";
---    attribute MARK_DEBUG of dbg_wb_cross_clock_out_rdreq : signal is "TRUE";
---    attribute MARK_DEBUG of dbg_wb_cross_clock_out_dout : signal is "TRUE";
---    attribute MARK_DEBUG of dbg_wb_cross_clock_out_full : signal is "TRUE"; 
---    attribute MARK_DEBUG of dbg_wb_cross_clock_out_empty : signal is "TRUE";    
---    attribute MARK_DEBUG of dbg_wb_data_in : signal is "TRUE";    
---    attribute MARK_DEBUG of dbg_wb_ack_in : signal is "TRUE";    
---    attribute MARK_DEBUG of dbg_wb_ack_in_z1 : signal is "TRUE";    
---    attribute MARK_DEBUG of dbg_wb_ack_in_z2 : signal is "TRUE";    
---    attribute MARK_DEBUG of dbg_wb_sync_ack_in : signal is "TRUE";    
---    attribute MARK_DEBUG of dbg_wb_sync_data_in : signal is "TRUE";    
-
---    attribute MARK_DEBUG of dbg_wb_dsp_wr_state : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_ACK_O_top : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_DAT_O_top : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_DAT_O : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_ACK_O : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_SEL_I_top : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_STB_I_top : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_WE_I_top : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_ADR_I_top : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_CYC_I_top : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_DAT_I : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_ADR_I : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_CYC_I : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_SEL_I : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_WE_I : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_STB_I : signal is "TRUE";   
+    --attribute MARK_DEBUG : string;
+    --attribute MARK_DEBUG of dbg_wb_cross_clock_out_din : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_wb_cross_clock_out_wrreq : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_wb_cross_clock_out_rdreq : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_wb_cross_clock_out_dout : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_wb_cross_clock_out_full : signal is "TRUE"; 
+    --attribute MARK_DEBUG of dbg_wb_cross_clock_out_empty : signal is "TRUE";    
+    --attribute MARK_DEBUG of dbg_wb_data_in : signal is "TRUE";    
+    --attribute MARK_DEBUG of dbg_wb_ack_in : signal is "TRUE";    
+    --attribute MARK_DEBUG of dbg_wb_ack_in_z1 : signal is "TRUE";    
+    --attribute MARK_DEBUG of dbg_wb_ack_in_z2 : signal is "TRUE";    
+    --attribute MARK_DEBUG of dbg_wb_sync_ack_in : signal is "TRUE";    
+    --attribute MARK_DEBUG of dbg_wb_sync_data_in : signal is "TRUE";    
+--
+    --attribute MARK_DEBUG of dbg_wb_dsp_wr_state : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_ACK_O_top : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_DAT_O_top : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_DAT_O : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_ACK_O : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_SEL_I_top : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_STB_I_top : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_WE_I_top : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_ADR_I_top : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_CYC_I_top : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_DAT_I : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_ADR_I : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_CYC_I : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_SEL_I : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_WE_I : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_STB_I : signal is "TRUE";   
     
     
 begin
 
     --ILA Assignments
---    dbg_wb_cross_clock_out_din <= wb_cross_clock_out_din;
---    dbg_wb_cross_clock_out_wrreq <= wb_cross_clock_out_wrreq;
---    dbg_wb_cross_clock_out_rdreq <= wb_cross_clock_out_rdreq;
---    dbg_wb_cross_clock_out_dout <= wb_cross_clock_out_dout;
---    dbg_wb_cross_clock_out_full <= wb_cross_clock_out_full;
---    dbg_wb_cross_clock_out_empty <= wb_cross_clock_out_empty;
---    dbg_wb_data_in <= wb_data_in;
---    dbg_wb_ack_in <= wb_ack_in;
---    dbg_wb_ack_in_z1 <= wb_ack_in_z1;
---    dbg_wb_ack_in_z2 <= wb_ack_in_z2;
---    dbg_wb_sync_ack_in <= wb_sync_ack_in;
---    dbg_wb_sync_data_in <= wb_sync_data_in;
---    dbg_wb_dsp_wr_state <= wb_dsp_wr_state;
---    dbg_WB_SLV_ACK_O_top <= WB_SLV_ACK_O_top;
---    dbg_WB_SLV_DAT_O_top <= WB_SLV_DAT_O_top;
---    dbg_WB_SLV_DAT_O <= WB_SLV_DAT_O(14);
---    dbg_WB_SLV_ACK_O <= WB_SLV_ACK_O(14);
---    dbg_WB_SLV_SEL_I_top <= wb_cross_clock_out_dout(4 downto 1);
---    dbg_WB_SLV_STB_I_top <= wb_cross_clock_out_dout(72);
---    dbg_WB_SLV_WE_I_top <= wb_cross_clock_out_dout(0);
---    dbg_WB_SLV_ADR_I_top <= wb_cross_clock_out_dout(37 downto 6);
---    dbg_WB_SLV_CYC_I_top <= wb_cross_clock_out_dout(5);
---    dbg_WB_SLV_DAT_I <= WB_SLV_DAT_I(14);
---    dbg_WB_SLV_ADR_I <= WB_SLV_ADR_I(14);
---    dbg_WB_SLV_CYC_I <= WB_SLV_CYC_I(14);
---    dbg_WB_SLV_SEL_I <= WB_SLV_SEL_I(14);
---    dbg_WB_SLV_WE_I <= WB_SLV_WE_I(14);
---    dbg_WB_SLV_STB_I <= WB_SLV_STB_I(14);
+    --dbg_wb_cross_clock_out_din <= wb_cross_clock_out_din;
+    --dbg_wb_cross_clock_out_wrreq <= wb_cross_clock_out_wrreq;
+    --dbg_wb_cross_clock_out_rdreq <= wb_cross_clock_out_rdreq;
+    --dbg_wb_cross_clock_out_dout <= wb_cross_clock_out_dout;
+    --dbg_wb_cross_clock_out_full <= wb_cross_clock_out_full;
+    --dbg_wb_cross_clock_out_empty <= wb_cross_clock_out_empty;
+    --dbg_wb_data_in <= wb_data_in;
+    --dbg_wb_ack_in <= wb_ack_in;
+    --dbg_wb_ack_in_z1 <= wb_ack_in_z1;
+    --dbg_wb_ack_in_z2 <= wb_ack_in_z2;
+    --dbg_wb_sync_ack_in <= wb_sync_ack_in;
+    --dbg_wb_sync_data_in <= wb_sync_data_in;
+    --dbg_wb_dsp_wr_state <= wb_dsp_wr_state;
+    --dbg_WB_SLV_ACK_O_top <= WB_SLV_ACK_O_top;
+    --dbg_WB_SLV_DAT_O_top <= WB_SLV_DAT_O_top;
+    --dbg_WB_SLV_DAT_O <= WB_SLV_DAT_O(14);
+    --dbg_WB_SLV_ACK_O <= WB_SLV_ACK_O(14);
+    --dbg_WB_SLV_SEL_I_top <= wb_cross_clock_out_dout(4 downto 1);
+    --dbg_WB_SLV_STB_I_top <= wb_cross_clock_out_dout(72);
+    --dbg_WB_SLV_WE_I_top <= wb_cross_clock_out_dout(0);
+    --dbg_WB_SLV_ADR_I_top <= wb_cross_clock_out_dout(37 downto 6);
+    --dbg_WB_SLV_CYC_I_top <= wb_cross_clock_out_dout(5);
+    --dbg_WB_SLV_DAT_I <= WB_SLV_DAT_I(14);
+    --dbg_WB_SLV_ADR_I <= WB_SLV_ADR_I(14);
+    --dbg_WB_SLV_CYC_I <= WB_SLV_CYC_I(14);
+    --dbg_WB_SLV_SEL_I <= WB_SLV_SEL_I(14);
+    --dbg_WB_SLV_WE_I <= WB_SLV_WE_I(14);
+    --dbg_WB_SLV_STB_I <= WB_SLV_STB_I(14);
 
     --Mezzanine 3 ID and Present (this should be part of the 40GbE yellow block, but is part of the BSP for now)
     --Mezzanine ID: "000" = spare, "001" = 40GbE, "010" = HMC, "011" = ADC, rest = spare
@@ -2342,7 +2342,7 @@ begin
         DAT_I => WB_SLV_DAT_I(9),
         DAT_O => WB_SLV_DAT_O(9),
         ACK_O => WB_SLV_ACK_O(9),
-        ADR_I => WB_SLV_ADR_I(9)(13 downto 0),
+        ADR_I => WB_SLV_ADR_I(9)(15 downto 0),
         CYC_I => WB_SLV_CYC_I(9),
         SEL_I => WB_SLV_SEL_I(9),
         STB_I => WB_SLV_STB_I(9),
@@ -2469,7 +2469,7 @@ begin
         DAT_I => WB_SLV_DAT_I(10),
         DAT_O => WB_SLV_DAT_O(10),
         ACK_O => WB_SLV_ACK_O(10),
-        ADR_I => WB_SLV_ADR_I(10)(13 downto 0),
+        ADR_I => WB_SLV_ADR_I(10)(15 downto 0),
         CYC_I => WB_SLV_CYC_I(10),
         SEL_I => WB_SLV_SEL_I(10),
         STB_I => WB_SLV_STB_I(10),

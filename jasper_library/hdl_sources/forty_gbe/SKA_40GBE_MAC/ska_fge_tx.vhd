@@ -57,11 +57,11 @@ entity ska_fge_tx is
     -- CPU Interface
     cpu_clk                 : in std_logic;
     cpu_rst                 : in std_logic;
-    cpu_tx_buffer_addr      : in std_logic_vector(7 downto 0);
+    cpu_tx_buffer_addr      : in std_logic_vector(10 downto 0);
     cpu_tx_buffer_rd_data   : out std_logic_vector(63 downto 0);
     cpu_tx_buffer_wr_data   : in std_logic_vector(63 downto 0);
     cpu_tx_buffer_wr_en     : in std_logic;
-    cpu_tx_size             : in std_logic_vector(7 downto 0);
+    cpu_tx_size             : in std_logic_vector(10 downto 0);
     cpu_tx_ready            : in std_logic;
     cpu_tx_done             : out std_logic;
 
@@ -155,12 +155,12 @@ architecture arch_ska_fge_tx of ska_fge_tx is
     port (
         clka    : in std_logic;
         wea     : in std_logic_vector(0 downto 0);
-        addra   : in std_logic_vector(8 downto 0);
+        addra   : in std_logic_vector(9 downto 0);
         dina    : in std_logic_vector(259 downto 0);
         douta   : out std_logic_vector(259 downto 0);
         clkb    : in std_logic;
         web     : in std_logic_vector(0 downto 0);
-        addrb   : in std_logic_vector(8 downto 0);
+        addrb   : in std_logic_vector(9 downto 0);
         dinb    : in std_logic_vector(259 downto 0);
         doutb   : out std_logic_vector(259 downto 0));
     end component;
@@ -201,22 +201,21 @@ architecture arch_ska_fge_tx of ska_fge_tx is
 
     signal cpu_tx_buffer_wr_en_z1 : std_logic;
     signal cpu_tx_buffer_wea : std_logic_vector(0 downto 0);
-    signal cpu_tx_buffer_addra : std_logic_vector(8 downto 0);
+    signal cpu_tx_buffer_addra : std_logic_vector(9 downto 0);
     signal cpu_tx_buffer_dina : std_logic_vector(259 downto 0);
     signal cpu_tx_buffer_douta : std_logic_vector(259 downto 0);
-    signal cpu_tx_buffer_addrb : std_logic_vector(8 downto 0);
+    signal cpu_tx_buffer_addrb : std_logic_vector(9 downto 0);
     signal cpu_tx_buffer_doutb : std_logic_vector(259 downto 0);
 
     signal mac_pending : std_logic;
     signal mac_pending_z1 : std_logic;
     signal mac_pending_z2 : std_logic;
     signal ack_low_wait : std_logic;
-    signal cpu_tx_size_reg : std_logic_vector(7 downto 0);
+    signal cpu_tx_size_reg : std_logic_vector(10 downto 0);
     signal mac_cpu_ack : std_logic;
     signal mac_cpu_ack_z1 : std_logic;
     signal mac_cpu_ack_z2 : std_logic;
-
-    signal mac_cpu_size : std_logic_vector(7 downto 0);
+    signal mac_cpu_size : std_logic_vector(10 downto 0);
     signal mac_cpu_pending : std_logic;
 
     signal tx_overflow_latch : std_logic;
@@ -291,7 +290,7 @@ architecture arch_ska_fge_tx of ska_fge_tx is
     signal cpu_payload3 : std_logic_vector(63 downto 0);
     signal cpu_payload_valid : std_logic_vector(3 downto 0);
 
-    signal mac_cpu_addr : std_logic_vector(5 downto 0);
+    signal mac_cpu_addr : std_logic_vector(7 downto 0);
 
     signal ip_length : std_logic_vector(15 downto 0);
     signal udp_length : std_logic_vector(15 downto 0);
@@ -854,13 +853,15 @@ begin
             cpu_first_word <= '1';
             cpu_outstanding <= '0';
         elsif (rising_edge(cpu_clk))then
-            cpu_tx_buffer_addra(8 downto 7) <= (others => '0');
-            cpu_tx_buffer_addra(6) <= cpu_buf_select;
-
+            --cpu_tx_buffer_addra(8 downto 7) <= (others => '0');
+            --cpu_tx_buffer_addra(6) <= cpu_buf_select;
+            cpu_tx_buffer_addra(9) <= '0';
+            cpu_tx_buffer_addra(8) <= cpu_buf_select;
             cpu_tx_buffer_wea(0) <= '0';
             if ((cpu_tx_buffer_wr_en = '1')and(cpu_tx_buffer_wr_en_z1 = '0'))then
                 if (cpu_tx_buffer_addr(1 downto 0) = "00")then
-                    cpu_tx_buffer_addra(5 downto 0) <= cpu_tx_buffer_addr(7 downto 2);
+                    --cpu_tx_buffer_addra(5 downto 0) <= cpu_tx_buffer_addr(7 downto 2);
+                    cpu_tx_buffer_addra(7 downto 0) <= cpu_tx_buffer_addr(9 downto 2);
                     cpu_tx_buffer_dina(63 downto 0) <= cpu_tx_buffer_wr_data;
                     cpu_tx_buffer_dina(256) <= '1';
                     cpu_outstanding <= '1';
@@ -910,9 +911,11 @@ begin
         dinb    => (others => '0'),
         doutb   => cpu_tx_buffer_doutb);
 
-    cpu_tx_buffer_addrb(8 downto 7) <= (others => '0');
-    cpu_tx_buffer_addrb(6) <= not cpu_buf_select;
-    cpu_tx_buffer_addrb(5 downto 0) <= mac_cpu_addr;
+    --cpu_tx_buffer_addrb(8 downto 7) <= (others => '0');
+    --cpu_tx_buffer_addrb(6) <= not cpu_buf_select;
+    cpu_tx_buffer_addrb(9) <= '0';
+    cpu_tx_buffer_addrb(8) <= not cpu_buf_select;
+    cpu_tx_buffer_addrb(7 downto 0) <= mac_cpu_addr;
 
     cpu_payload0 <= cpu_tx_buffer_doutb(63 downto 0);
     cpu_payload1 <= cpu_tx_buffer_doutb(127 downto 64);
@@ -1071,7 +1074,8 @@ begin
 
                 if ((mac_cpu_pending = '1')and(mac_cpu_ack = '0')and(mac_tx_ready = '1'))then
                     mac_cpu_addr <= (others => '0');
-                    tx_size <= "000" & mac_cpu_size;
+                    --tx_size <= "000" & mac_cpu_size;
+                    tx_size <= mac_cpu_size;
                     current_tx_packet_state <= CPU_TX_START;
                 end if;
 
@@ -1166,7 +1170,7 @@ begin
                 current_tx_packet_state <= IDLE;
 
                 when CPU_TX_START =>
-                mac_cpu_addr <= mac_cpu_addr + "000001";
+                mac_cpu_addr <= mac_cpu_addr + "00000001";
 
                 if (tx_size > "00000000100")then
                     tx_size <= tx_size - "00000000100";
@@ -1176,7 +1180,7 @@ begin
                 end if;
 
                 when CPU_TX_PAYLOAD =>
-                mac_cpu_addr <= mac_cpu_addr + "000001";
+                mac_cpu_addr <= mac_cpu_addr + "00000001";
 
                 if (tx_size > "00000000100")then
                     tx_size <= tx_size - "00000000100";

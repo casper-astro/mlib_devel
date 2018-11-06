@@ -26,9 +26,9 @@ module tge_rx #(
     // CPU Interface
     input         cpu_clk,
     input         cpu_rst,
-    input   [7:0] cpu_rx_buffer_addr,
+    input  [10:0] cpu_rx_buffer_addr,
     output [63:0] cpu_rx_buffer_rd_data,
-    output  [7:0] cpu_rx_size,
+    output [10:0] cpu_rx_size,
     input         cpu_rx_ack,
 
     // MAC Interface
@@ -263,20 +263,20 @@ endgenerate
   wire        cpu_buffer_sel;
   wire        cpu_buffer_we;
   wire [63:0] cpu_buffer_data;
-  wire  [7:0] cpu_buffer_addr;
+  wire [10:0] cpu_buffer_addr;
 
 generate if (CPU_ENABLE) begin : rx_cpu_enabled
 
-  cpu_buffer cpu_rx_buffer(   
+  cpu_buffer cpu_rx_buffer(
     .clka      (cpu_clk),
     .dina      (64'h0),
-    .addra     ({cpu_buffer_sel, cpu_rx_buffer_addr}),
+    .addra     ({cpu_buffer_sel, cpu_rx_buffer_addr[9:0]}),
     .wea       (1'b0), //no writing from cpu side
     .douta     (cpu_rx_buffer_rd_data),
 
     .clkb      (mac_clk),
     .dinb      (cpu_buffer_data),
-    .addrb     ({!cpu_buffer_sel, cpu_buffer_addr}),
+    .addrb     ({!cpu_buffer_sel, cpu_buffer_addr[9:0]}),
     .web       (cpu_buffer_we),
     .doutb     () //no reading on mac side
   );
@@ -294,7 +294,7 @@ end endgenerate
   assign cpu_buffer_sel = cpu_buffer_sel_reg;
   /* TODO: ^^^^^^^ this might be dodge (addr msb on wrong clock domain)... */
 
-  reg [7:0] cpu_addr;
+  reg [10:0] cpu_addr;
   reg frame_bypass;
 
   wire cpu_buffer_free;
@@ -305,7 +305,7 @@ end endgenerate
 
   always @(posedge mac_clk) begin
     if (mac_rst) begin
-      cpu_addr           <= 8'd0;
+      cpu_addr           <= 11'd0;
       cpu_buffer_sel_reg <= 1'b0;
       frame_bypass       <= 1'b0;
       cpu_state          <= CPU_BUFFERING;
@@ -314,14 +314,14 @@ end endgenerate
         /* Buffer data from tge interface */
         CPU_BUFFERING: begin
           if (cpu_dvld) begin
-            if (cpu_addr == {8{1'b1}}) begin
+            if (cpu_addr == {11{1'b1}}) begin
               frame_bypass <= 1'b1;
             end else begin
-              cpu_addr <= cpu_addr + 8'd1;
+              cpu_addr <= cpu_addr + 11'd1;
             end
           end
           if (cpu_frame_invalid || cpu_frame_valid && frame_bypass) begin
-            cpu_addr  <= 8'd0;
+            cpu_addr  <= 11'd0;
             cpu_state <= CPU_BUFFERING;
            // $display("tge_rx_cpu: got unsuitable frame, rolling back...");
           end
@@ -334,7 +334,7 @@ end endgenerate
         CPU_WAIT: begin
           if (cpu_buffer_free) begin
             cpu_buffer_sel_reg <= ~cpu_buffer_sel_reg;
-            cpu_addr  <= 8'd0;
+            cpu_addr  <= 11'd0;
             cpu_state <= CPU_BUFFERING;
             $display("tge_rx_cpu: buffer free, swapping now");
           end
@@ -352,20 +352,20 @@ end endgenerate
 
   /* CPU Handshaking */
 
-  reg [7:0] cpu_size;
+  reg [10:0] cpu_size;
   (* shreg_extract = "NO" *) reg cpu_ackR;
   (* shreg_extract = "NO" *) reg cpu_ackRR;
-  assign cpu_buffer_free = cpu_size == 8'd0 && !cpu_ackRR;
+  assign cpu_buffer_free = cpu_size == 11'd0 && !cpu_ackRR;
 
   always @(posedge mac_clk) begin
     cpu_ackR  <= cpu_rx_ack;
     cpu_ackRR <= cpu_ackR;
 
     if (mac_rst) begin
-      cpu_size <= 8'd0;
+      cpu_size <= 11'd0;
     end else begin
       if (cpu_ackRR) begin
-        cpu_size <= 8'd0;
+        cpu_size <= 11'd0;
       end
       if (cpu_state == CPU_WAIT && cpu_buffer_free) begin
         cpu_size <= cpu_addr;
@@ -374,8 +374,8 @@ end endgenerate
   end
 
   /* FIXME: this is pretty dumb (registering on size), should add handshake signal */
-  (* shreg_extract = "NO" *) reg [7:0] cpu_sizeR;
-  (* shreg_extract = "NO" *) reg [7:0] cpu_sizeRR;
+  (* shreg_extract = "NO" *) reg [10:0] cpu_sizeR;
+  (* shreg_extract = "NO" *) reg [10:0] cpu_sizeRR;
   assign cpu_rx_size = cpu_sizeRR;
 
   always @(posedge cpu_clk) begin
