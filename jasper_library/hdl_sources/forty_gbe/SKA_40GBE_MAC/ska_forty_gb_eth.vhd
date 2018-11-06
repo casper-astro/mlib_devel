@@ -148,7 +148,7 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
         cpu_rx_buffer_rd_data : in  std_logic_vector(63 downto 0);
         cpu_rx_size           : in  std_logic_vector(10 downto 0);
         cpu_rx_ack            : out std_logic;
-        arp_cache_addr        : out std_logic_vector(10 downto 0);
+        arp_cache_addr        : out std_logic_vector(7 downto 0);
         arp_cache_rd_data     : in  std_logic_vector(47 downto 0);
         arp_cache_wr_data     : out std_logic_vector(47 downto 0);
         arp_cache_wr_en       : out std_logic;
@@ -188,7 +188,7 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
         local_port            : in  std_logic_vector(15 downto 0);
         local_netmask         : in  std_logic_vector(31 downto 0);
         local_gateway         : in  std_logic_vector(7 downto 0);
-        arp_cache_addr        : in  std_logic_vector(10 downto 0);
+        arp_cache_addr        : in  std_logic_vector(7 downto 0);
         arp_cache_rd_data     : out std_logic_vector(47 downto 0);
         arp_cache_wr_data     : in  std_logic_vector(47 downto 0);
         arp_cache_wr_en       : in  std_logic;
@@ -345,7 +345,7 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
     signal cpu_rx_buffer_rd_data : std_logic_vector(63 downto 0);
     signal cpu_rx_size           : std_logic_vector(10 downto 0);
     signal cpu_rx_ack            : std_logic;
-    signal arp_cache_addr        : std_logic_vector(10 downto 0);
+    signal arp_cache_addr        : std_logic_vector(7 downto 0);
     signal arp_cache_rd_data     : std_logic_vector(47 downto 0);
     signal arp_cache_wr_data     : std_logic_vector(47 downto 0);
     signal arp_cache_wr_en       : std_logic;

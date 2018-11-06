@@ -1,10 +1,10 @@
 -- Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2016.2 (lin64) Build 1577090 Thu Jun  2 16:32:35 MDT 2016
--- Date        : Mon Nov  7 14:27:11 2016
--- Host        : adam-cm running 64-bit Ubuntu 14.04.5 LTS
+-- Date        : Thu Nov  1 10:17:09 2018
+-- Host        : fiona running 64-bit Ubuntu 14.04.5 LTS
 -- Command     : write_vhdl -force -mode funcsim
---               /home/aisaacson/work/git_work/ska_sa/projects/skarab_bsp_firmware/firmware/FRM123701U1R1/Vivado/IP/ska_cpu_buffer/ska_cpu_buffer_sim_netlist.vhdl
+--               /data/casper/mlib_devel_eth_map/jasper_library/test_models/skarab_fgbe/myproj/myproj.srcs/sources_1/ip/ska_cpu_buffer/ska_cpu_buffer_sim_netlist.vhdl
 -- Design      : ska_cpu_buffer
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -20,8 +20,8 @@ entity ska_cpu_buffer_blk_mem_gen_prim_wrapper is
     doutb : out STD_LOGIC_VECTOR ( 17 downto 0 );
     clka : in STD_LOGIC;
     clkb : in STD_LOGIC;
-    addra : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    addrb : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    addra : in STD_LOGIC_VECTOR ( 9 downto 0 );
+    addrb : in STD_LOGIC_VECTOR ( 9 downto 0 );
     dina : in STD_LOGIC_VECTOR ( 17 downto 0 );
     dinb : in STD_LOGIC_VECTOR ( 17 downto 0 );
     wea : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -140,11 +140,9 @@ begin
       WRITE_WIDTH_B => 18
     )
         port map (
-      ADDRARDADDR(13) => '0',
-      ADDRARDADDR(12 downto 4) => addra(8 downto 0),
+      ADDRARDADDR(13 downto 4) => addra(9 downto 0),
       ADDRARDADDR(3 downto 0) => B"0000",
-      ADDRBWRADDR(13) => '0',
-      ADDRBWRADDR(12 downto 4) => addrb(8 downto 0),
+      ADDRBWRADDR(13 downto 4) => addrb(9 downto 0),
       ADDRBWRADDR(3 downto 0) => B"0000",
       CLKARDCLK => clka,
       CLKBWRCLK => clkb,
@@ -189,8 +187,8 @@ entity \ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized0\ is
     doutb : out STD_LOGIC_VECTOR ( 35 downto 0 );
     clka : in STD_LOGIC;
     clkb : in STD_LOGIC;
-    addra : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    addrb : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    addra : in STD_LOGIC_VECTOR ( 9 downto 0 );
+    addrb : in STD_LOGIC_VECTOR ( 9 downto 0 );
     dina : in STD_LOGIC_VECTOR ( 35 downto 0 );
     dinb : in STD_LOGIC_VECTOR ( 35 downto 0 );
     wea : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -391,11 +389,11 @@ begin
       WRITE_WIDTH_B => 36
     )
         port map (
-      ADDRARDADDR(15 downto 14) => B"10",
-      ADDRARDADDR(13 downto 5) => addra(8 downto 0),
+      ADDRARDADDR(15) => '1',
+      ADDRARDADDR(14 downto 5) => addra(9 downto 0),
       ADDRARDADDR(4 downto 0) => B"11111",
-      ADDRBWRADDR(15 downto 14) => B"10",
-      ADDRBWRADDR(13 downto 5) => addrb(8 downto 0),
+      ADDRBWRADDR(15) => '1',
+      ADDRBWRADDR(14 downto 5) => addrb(9 downto 0),
       ADDRBWRADDR(4 downto 0) => B"11111",
       CASCADEINA => '0',
       CASCADEINB => '0',
@@ -470,8 +468,8 @@ entity \ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized1\ is
     doutb : out STD_LOGIC_VECTOR ( 35 downto 0 );
     clka : in STD_LOGIC;
     clkb : in STD_LOGIC;
-    addra : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    addrb : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    addra : in STD_LOGIC_VECTOR ( 9 downto 0 );
+    addrb : in STD_LOGIC_VECTOR ( 9 downto 0 );
     dina : in STD_LOGIC_VECTOR ( 35 downto 0 );
     dinb : in STD_LOGIC_VECTOR ( 35 downto 0 );
     wea : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -672,11 +670,11 @@ begin
       WRITE_WIDTH_B => 36
     )
         port map (
-      ADDRARDADDR(15 downto 14) => B"10",
-      ADDRARDADDR(13 downto 5) => addra(8 downto 0),
+      ADDRARDADDR(15) => '1',
+      ADDRARDADDR(14 downto 5) => addra(9 downto 0),
       ADDRARDADDR(4 downto 0) => B"11111",
-      ADDRBWRADDR(15 downto 14) => B"10",
-      ADDRBWRADDR(13 downto 5) => addrb(8 downto 0),
+      ADDRBWRADDR(15) => '1',
+      ADDRBWRADDR(14 downto 5) => addrb(9 downto 0),
       ADDRBWRADDR(4 downto 0) => B"11111",
       CASCADEINA => '0',
       CASCADEINB => '0',
@@ -751,8 +749,8 @@ entity \ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized2\ is
     doutb : out STD_LOGIC_VECTOR ( 35 downto 0 );
     clka : in STD_LOGIC;
     clkb : in STD_LOGIC;
-    addra : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    addrb : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    addra : in STD_LOGIC_VECTOR ( 9 downto 0 );
+    addrb : in STD_LOGIC_VECTOR ( 9 downto 0 );
     dina : in STD_LOGIC_VECTOR ( 35 downto 0 );
     dinb : in STD_LOGIC_VECTOR ( 35 downto 0 );
     wea : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -953,11 +951,11 @@ begin
       WRITE_WIDTH_B => 36
     )
         port map (
-      ADDRARDADDR(15 downto 14) => B"10",
-      ADDRARDADDR(13 downto 5) => addra(8 downto 0),
+      ADDRARDADDR(15) => '1',
+      ADDRARDADDR(14 downto 5) => addra(9 downto 0),
       ADDRARDADDR(4 downto 0) => B"11111",
-      ADDRBWRADDR(15 downto 14) => B"10",
-      ADDRBWRADDR(13 downto 5) => addrb(8 downto 0),
+      ADDRBWRADDR(15) => '1',
+      ADDRBWRADDR(14 downto 5) => addrb(9 downto 0),
       ADDRBWRADDR(4 downto 0) => B"11111",
       CASCADEINA => '0',
       CASCADEINB => '0',
@@ -1032,8 +1030,8 @@ entity \ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized3\ is
     doutb : out STD_LOGIC_VECTOR ( 35 downto 0 );
     clka : in STD_LOGIC;
     clkb : in STD_LOGIC;
-    addra : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    addrb : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    addra : in STD_LOGIC_VECTOR ( 9 downto 0 );
+    addrb : in STD_LOGIC_VECTOR ( 9 downto 0 );
     dina : in STD_LOGIC_VECTOR ( 35 downto 0 );
     dinb : in STD_LOGIC_VECTOR ( 35 downto 0 );
     wea : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -1234,11 +1232,11 @@ begin
       WRITE_WIDTH_B => 36
     )
         port map (
-      ADDRARDADDR(15 downto 14) => B"10",
-      ADDRARDADDR(13 downto 5) => addra(8 downto 0),
+      ADDRARDADDR(15) => '1',
+      ADDRARDADDR(14 downto 5) => addra(9 downto 0),
       ADDRARDADDR(4 downto 0) => B"11111",
-      ADDRBWRADDR(15 downto 14) => B"10",
-      ADDRBWRADDR(13 downto 5) => addrb(8 downto 0),
+      ADDRBWRADDR(15) => '1',
+      ADDRBWRADDR(14 downto 5) => addrb(9 downto 0),
       ADDRBWRADDR(4 downto 0) => B"11111",
       CASCADEINA => '0',
       CASCADEINB => '0',
@@ -1313,8 +1311,8 @@ entity \ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized4\ is
     doutb : out STD_LOGIC_VECTOR ( 35 downto 0 );
     clka : in STD_LOGIC;
     clkb : in STD_LOGIC;
-    addra : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    addrb : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    addra : in STD_LOGIC_VECTOR ( 9 downto 0 );
+    addrb : in STD_LOGIC_VECTOR ( 9 downto 0 );
     dina : in STD_LOGIC_VECTOR ( 35 downto 0 );
     dinb : in STD_LOGIC_VECTOR ( 35 downto 0 );
     wea : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -1515,11 +1513,11 @@ begin
       WRITE_WIDTH_B => 36
     )
         port map (
-      ADDRARDADDR(15 downto 14) => B"10",
-      ADDRARDADDR(13 downto 5) => addra(8 downto 0),
+      ADDRARDADDR(15) => '1',
+      ADDRARDADDR(14 downto 5) => addra(9 downto 0),
       ADDRARDADDR(4 downto 0) => B"11111",
-      ADDRBWRADDR(15 downto 14) => B"10",
-      ADDRBWRADDR(13 downto 5) => addrb(8 downto 0),
+      ADDRBWRADDR(15) => '1',
+      ADDRBWRADDR(14 downto 5) => addrb(9 downto 0),
       ADDRBWRADDR(4 downto 0) => B"11111",
       CASCADEINA => '0',
       CASCADEINB => '0',
@@ -1594,8 +1592,8 @@ entity \ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized5\ is
     doutb : out STD_LOGIC_VECTOR ( 35 downto 0 );
     clka : in STD_LOGIC;
     clkb : in STD_LOGIC;
-    addra : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    addrb : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    addra : in STD_LOGIC_VECTOR ( 9 downto 0 );
+    addrb : in STD_LOGIC_VECTOR ( 9 downto 0 );
     dina : in STD_LOGIC_VECTOR ( 35 downto 0 );
     dinb : in STD_LOGIC_VECTOR ( 35 downto 0 );
     wea : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -1796,11 +1794,11 @@ begin
       WRITE_WIDTH_B => 36
     )
         port map (
-      ADDRARDADDR(15 downto 14) => B"10",
-      ADDRARDADDR(13 downto 5) => addra(8 downto 0),
+      ADDRARDADDR(15) => '1',
+      ADDRARDADDR(14 downto 5) => addra(9 downto 0),
       ADDRARDADDR(4 downto 0) => B"11111",
-      ADDRBWRADDR(15 downto 14) => B"10",
-      ADDRBWRADDR(13 downto 5) => addrb(8 downto 0),
+      ADDRBWRADDR(15) => '1',
+      ADDRBWRADDR(14 downto 5) => addrb(9 downto 0),
       ADDRBWRADDR(4 downto 0) => B"11111",
       CASCADEINA => '0',
       CASCADEINB => '0',
@@ -1875,8 +1873,8 @@ entity \ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized6\ is
     doutb : out STD_LOGIC_VECTOR ( 25 downto 0 );
     clka : in STD_LOGIC;
     clkb : in STD_LOGIC;
-    addra : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    addrb : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    addra : in STD_LOGIC_VECTOR ( 9 downto 0 );
+    addrb : in STD_LOGIC_VECTOR ( 9 downto 0 );
     dina : in STD_LOGIC_VECTOR ( 25 downto 0 );
     dinb : in STD_LOGIC_VECTOR ( 25 downto 0 );
     wea : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -2097,11 +2095,11 @@ begin
       WRITE_WIDTH_B => 36
     )
         port map (
-      ADDRARDADDR(15 downto 14) => B"10",
-      ADDRARDADDR(13 downto 5) => addra(8 downto 0),
+      ADDRARDADDR(15) => '1',
+      ADDRARDADDR(14 downto 5) => addra(9 downto 0),
       ADDRARDADDR(4 downto 0) => B"11111",
-      ADDRBWRADDR(15 downto 14) => B"10",
-      ADDRBWRADDR(13 downto 5) => addrb(8 downto 0),
+      ADDRBWRADDR(15) => '1',
+      ADDRBWRADDR(14 downto 5) => addrb(9 downto 0),
       ADDRBWRADDR(4 downto 0) => B"11111",
       CASCADEINA => '0',
       CASCADEINB => '0',
@@ -2190,8 +2188,8 @@ entity ska_cpu_buffer_blk_mem_gen_prim_width is
     doutb : out STD_LOGIC_VECTOR ( 17 downto 0 );
     clka : in STD_LOGIC;
     clkb : in STD_LOGIC;
-    addra : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    addrb : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    addra : in STD_LOGIC_VECTOR ( 9 downto 0 );
+    addrb : in STD_LOGIC_VECTOR ( 9 downto 0 );
     dina : in STD_LOGIC_VECTOR ( 17 downto 0 );
     dinb : in STD_LOGIC_VECTOR ( 17 downto 0 );
     wea : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -2205,8 +2203,8 @@ architecture STRUCTURE of ska_cpu_buffer_blk_mem_gen_prim_width is
 begin
 \prim_noinit.ram\: entity work.ska_cpu_buffer_blk_mem_gen_prim_wrapper
      port map (
-      addra(8 downto 0) => addra(8 downto 0),
-      addrb(8 downto 0) => addrb(8 downto 0),
+      addra(9 downto 0) => addra(9 downto 0),
+      addrb(9 downto 0) => addrb(9 downto 0),
       clka => clka,
       clkb => clkb,
       dina(17 downto 0) => dina(17 downto 0),
@@ -2227,8 +2225,8 @@ entity \ska_cpu_buffer_blk_mem_gen_prim_width__parameterized0\ is
     doutb : out STD_LOGIC_VECTOR ( 35 downto 0 );
     clka : in STD_LOGIC;
     clkb : in STD_LOGIC;
-    addra : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    addrb : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    addra : in STD_LOGIC_VECTOR ( 9 downto 0 );
+    addrb : in STD_LOGIC_VECTOR ( 9 downto 0 );
     dina : in STD_LOGIC_VECTOR ( 35 downto 0 );
     dinb : in STD_LOGIC_VECTOR ( 35 downto 0 );
     wea : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -2242,8 +2240,8 @@ architecture STRUCTURE of \ska_cpu_buffer_blk_mem_gen_prim_width__parameterized0
 begin
 \prim_noinit.ram\: entity work.\ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized0\
      port map (
-      addra(8 downto 0) => addra(8 downto 0),
-      addrb(8 downto 0) => addrb(8 downto 0),
+      addra(9 downto 0) => addra(9 downto 0),
+      addrb(9 downto 0) => addrb(9 downto 0),
       clka => clka,
       clkb => clkb,
       dina(35 downto 0) => dina(35 downto 0),
@@ -2264,8 +2262,8 @@ entity \ska_cpu_buffer_blk_mem_gen_prim_width__parameterized1\ is
     doutb : out STD_LOGIC_VECTOR ( 35 downto 0 );
     clka : in STD_LOGIC;
     clkb : in STD_LOGIC;
-    addra : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    addrb : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    addra : in STD_LOGIC_VECTOR ( 9 downto 0 );
+    addrb : in STD_LOGIC_VECTOR ( 9 downto 0 );
     dina : in STD_LOGIC_VECTOR ( 35 downto 0 );
     dinb : in STD_LOGIC_VECTOR ( 35 downto 0 );
     wea : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -2279,8 +2277,8 @@ architecture STRUCTURE of \ska_cpu_buffer_blk_mem_gen_prim_width__parameterized1
 begin
 \prim_noinit.ram\: entity work.\ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized1\
      port map (
-      addra(8 downto 0) => addra(8 downto 0),
-      addrb(8 downto 0) => addrb(8 downto 0),
+      addra(9 downto 0) => addra(9 downto 0),
+      addrb(9 downto 0) => addrb(9 downto 0),
       clka => clka,
       clkb => clkb,
       dina(35 downto 0) => dina(35 downto 0),
@@ -2301,8 +2299,8 @@ entity \ska_cpu_buffer_blk_mem_gen_prim_width__parameterized2\ is
     doutb : out STD_LOGIC_VECTOR ( 35 downto 0 );
     clka : in STD_LOGIC;
     clkb : in STD_LOGIC;
-    addra : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    addrb : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    addra : in STD_LOGIC_VECTOR ( 9 downto 0 );
+    addrb : in STD_LOGIC_VECTOR ( 9 downto 0 );
     dina : in STD_LOGIC_VECTOR ( 35 downto 0 );
     dinb : in STD_LOGIC_VECTOR ( 35 downto 0 );
     wea : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -2316,8 +2314,8 @@ architecture STRUCTURE of \ska_cpu_buffer_blk_mem_gen_prim_width__parameterized2
 begin
 \prim_noinit.ram\: entity work.\ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized2\
      port map (
-      addra(8 downto 0) => addra(8 downto 0),
-      addrb(8 downto 0) => addrb(8 downto 0),
+      addra(9 downto 0) => addra(9 downto 0),
+      addrb(9 downto 0) => addrb(9 downto 0),
       clka => clka,
       clkb => clkb,
       dina(35 downto 0) => dina(35 downto 0),
@@ -2338,8 +2336,8 @@ entity \ska_cpu_buffer_blk_mem_gen_prim_width__parameterized3\ is
     doutb : out STD_LOGIC_VECTOR ( 35 downto 0 );
     clka : in STD_LOGIC;
     clkb : in STD_LOGIC;
-    addra : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    addrb : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    addra : in STD_LOGIC_VECTOR ( 9 downto 0 );
+    addrb : in STD_LOGIC_VECTOR ( 9 downto 0 );
     dina : in STD_LOGIC_VECTOR ( 35 downto 0 );
     dinb : in STD_LOGIC_VECTOR ( 35 downto 0 );
     wea : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -2353,8 +2351,8 @@ architecture STRUCTURE of \ska_cpu_buffer_blk_mem_gen_prim_width__parameterized3
 begin
 \prim_noinit.ram\: entity work.\ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized3\
      port map (
-      addra(8 downto 0) => addra(8 downto 0),
-      addrb(8 downto 0) => addrb(8 downto 0),
+      addra(9 downto 0) => addra(9 downto 0),
+      addrb(9 downto 0) => addrb(9 downto 0),
       clka => clka,
       clkb => clkb,
       dina(35 downto 0) => dina(35 downto 0),
@@ -2375,8 +2373,8 @@ entity \ska_cpu_buffer_blk_mem_gen_prim_width__parameterized4\ is
     doutb : out STD_LOGIC_VECTOR ( 35 downto 0 );
     clka : in STD_LOGIC;
     clkb : in STD_LOGIC;
-    addra : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    addrb : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    addra : in STD_LOGIC_VECTOR ( 9 downto 0 );
+    addrb : in STD_LOGIC_VECTOR ( 9 downto 0 );
     dina : in STD_LOGIC_VECTOR ( 35 downto 0 );
     dinb : in STD_LOGIC_VECTOR ( 35 downto 0 );
     wea : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -2390,8 +2388,8 @@ architecture STRUCTURE of \ska_cpu_buffer_blk_mem_gen_prim_width__parameterized4
 begin
 \prim_noinit.ram\: entity work.\ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized4\
      port map (
-      addra(8 downto 0) => addra(8 downto 0),
-      addrb(8 downto 0) => addrb(8 downto 0),
+      addra(9 downto 0) => addra(9 downto 0),
+      addrb(9 downto 0) => addrb(9 downto 0),
       clka => clka,
       clkb => clkb,
       dina(35 downto 0) => dina(35 downto 0),
@@ -2412,8 +2410,8 @@ entity \ska_cpu_buffer_blk_mem_gen_prim_width__parameterized5\ is
     doutb : out STD_LOGIC_VECTOR ( 35 downto 0 );
     clka : in STD_LOGIC;
     clkb : in STD_LOGIC;
-    addra : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    addrb : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    addra : in STD_LOGIC_VECTOR ( 9 downto 0 );
+    addrb : in STD_LOGIC_VECTOR ( 9 downto 0 );
     dina : in STD_LOGIC_VECTOR ( 35 downto 0 );
     dinb : in STD_LOGIC_VECTOR ( 35 downto 0 );
     wea : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -2427,8 +2425,8 @@ architecture STRUCTURE of \ska_cpu_buffer_blk_mem_gen_prim_width__parameterized5
 begin
 \prim_noinit.ram\: entity work.\ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized5\
      port map (
-      addra(8 downto 0) => addra(8 downto 0),
-      addrb(8 downto 0) => addrb(8 downto 0),
+      addra(9 downto 0) => addra(9 downto 0),
+      addrb(9 downto 0) => addrb(9 downto 0),
       clka => clka,
       clkb => clkb,
       dina(35 downto 0) => dina(35 downto 0),
@@ -2449,8 +2447,8 @@ entity \ska_cpu_buffer_blk_mem_gen_prim_width__parameterized6\ is
     doutb : out STD_LOGIC_VECTOR ( 25 downto 0 );
     clka : in STD_LOGIC;
     clkb : in STD_LOGIC;
-    addra : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    addrb : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    addra : in STD_LOGIC_VECTOR ( 9 downto 0 );
+    addrb : in STD_LOGIC_VECTOR ( 9 downto 0 );
     dina : in STD_LOGIC_VECTOR ( 25 downto 0 );
     dinb : in STD_LOGIC_VECTOR ( 25 downto 0 );
     wea : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -2464,8 +2462,8 @@ architecture STRUCTURE of \ska_cpu_buffer_blk_mem_gen_prim_width__parameterized6
 begin
 \prim_noinit.ram\: entity work.\ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized6\
      port map (
-      addra(8 downto 0) => addra(8 downto 0),
-      addrb(8 downto 0) => addrb(8 downto 0),
+      addra(9 downto 0) => addra(9 downto 0),
+      addrb(9 downto 0) => addrb(9 downto 0),
       clka => clka,
       clkb => clkb,
       dina(25 downto 0) => dina(25 downto 0),
@@ -2486,8 +2484,8 @@ entity ska_cpu_buffer_blk_mem_gen_generic_cstr is
     doutb : out STD_LOGIC_VECTOR ( 259 downto 0 );
     clka : in STD_LOGIC;
     clkb : in STD_LOGIC;
-    addra : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    addrb : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    addra : in STD_LOGIC_VECTOR ( 9 downto 0 );
+    addrb : in STD_LOGIC_VECTOR ( 9 downto 0 );
     dina : in STD_LOGIC_VECTOR ( 259 downto 0 );
     dinb : in STD_LOGIC_VECTOR ( 259 downto 0 );
     wea : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -2501,8 +2499,8 @@ architecture STRUCTURE of ska_cpu_buffer_blk_mem_gen_generic_cstr is
 begin
 \ramloop[0].ram.r\: entity work.ska_cpu_buffer_blk_mem_gen_prim_width
      port map (
-      addra(8 downto 0) => addra(8 downto 0),
-      addrb(8 downto 0) => addrb(8 downto 0),
+      addra(9 downto 0) => addra(9 downto 0),
+      addrb(9 downto 0) => addrb(9 downto 0),
       clka => clka,
       clkb => clkb,
       dina(17 downto 0) => dina(17 downto 0),
@@ -2514,8 +2512,8 @@ begin
     );
 \ramloop[1].ram.r\: entity work.\ska_cpu_buffer_blk_mem_gen_prim_width__parameterized0\
      port map (
-      addra(8 downto 0) => addra(8 downto 0),
-      addrb(8 downto 0) => addrb(8 downto 0),
+      addra(9 downto 0) => addra(9 downto 0),
+      addrb(9 downto 0) => addrb(9 downto 0),
       clka => clka,
       clkb => clkb,
       dina(35 downto 0) => dina(53 downto 18),
@@ -2527,8 +2525,8 @@ begin
     );
 \ramloop[2].ram.r\: entity work.\ska_cpu_buffer_blk_mem_gen_prim_width__parameterized1\
      port map (
-      addra(8 downto 0) => addra(8 downto 0),
-      addrb(8 downto 0) => addrb(8 downto 0),
+      addra(9 downto 0) => addra(9 downto 0),
+      addrb(9 downto 0) => addrb(9 downto 0),
       clka => clka,
       clkb => clkb,
       dina(35 downto 0) => dina(89 downto 54),
@@ -2540,8 +2538,8 @@ begin
     );
 \ramloop[3].ram.r\: entity work.\ska_cpu_buffer_blk_mem_gen_prim_width__parameterized2\
      port map (
-      addra(8 downto 0) => addra(8 downto 0),
-      addrb(8 downto 0) => addrb(8 downto 0),
+      addra(9 downto 0) => addra(9 downto 0),
+      addrb(9 downto 0) => addrb(9 downto 0),
       clka => clka,
       clkb => clkb,
       dina(35 downto 0) => dina(125 downto 90),
@@ -2553,8 +2551,8 @@ begin
     );
 \ramloop[4].ram.r\: entity work.\ska_cpu_buffer_blk_mem_gen_prim_width__parameterized3\
      port map (
-      addra(8 downto 0) => addra(8 downto 0),
-      addrb(8 downto 0) => addrb(8 downto 0),
+      addra(9 downto 0) => addra(9 downto 0),
+      addrb(9 downto 0) => addrb(9 downto 0),
       clka => clka,
       clkb => clkb,
       dina(35 downto 0) => dina(161 downto 126),
@@ -2566,8 +2564,8 @@ begin
     );
 \ramloop[5].ram.r\: entity work.\ska_cpu_buffer_blk_mem_gen_prim_width__parameterized4\
      port map (
-      addra(8 downto 0) => addra(8 downto 0),
-      addrb(8 downto 0) => addrb(8 downto 0),
+      addra(9 downto 0) => addra(9 downto 0),
+      addrb(9 downto 0) => addrb(9 downto 0),
       clka => clka,
       clkb => clkb,
       dina(35 downto 0) => dina(197 downto 162),
@@ -2579,8 +2577,8 @@ begin
     );
 \ramloop[6].ram.r\: entity work.\ska_cpu_buffer_blk_mem_gen_prim_width__parameterized5\
      port map (
-      addra(8 downto 0) => addra(8 downto 0),
-      addrb(8 downto 0) => addrb(8 downto 0),
+      addra(9 downto 0) => addra(9 downto 0),
+      addrb(9 downto 0) => addrb(9 downto 0),
       clka => clka,
       clkb => clkb,
       dina(35 downto 0) => dina(233 downto 198),
@@ -2592,8 +2590,8 @@ begin
     );
 \ramloop[7].ram.r\: entity work.\ska_cpu_buffer_blk_mem_gen_prim_width__parameterized6\
      port map (
-      addra(8 downto 0) => addra(8 downto 0),
-      addrb(8 downto 0) => addrb(8 downto 0),
+      addra(9 downto 0) => addra(9 downto 0),
+      addrb(9 downto 0) => addrb(9 downto 0),
       clka => clka,
       clkb => clkb,
       dina(25 downto 0) => dina(259 downto 234),
@@ -2614,8 +2612,8 @@ entity ska_cpu_buffer_blk_mem_gen_top is
     doutb : out STD_LOGIC_VECTOR ( 259 downto 0 );
     clka : in STD_LOGIC;
     clkb : in STD_LOGIC;
-    addra : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    addrb : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    addra : in STD_LOGIC_VECTOR ( 9 downto 0 );
+    addrb : in STD_LOGIC_VECTOR ( 9 downto 0 );
     dina : in STD_LOGIC_VECTOR ( 259 downto 0 );
     dinb : in STD_LOGIC_VECTOR ( 259 downto 0 );
     wea : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -2629,8 +2627,8 @@ architecture STRUCTURE of ska_cpu_buffer_blk_mem_gen_top is
 begin
 \valid.cstr\: entity work.ska_cpu_buffer_blk_mem_gen_generic_cstr
      port map (
-      addra(8 downto 0) => addra(8 downto 0),
-      addrb(8 downto 0) => addrb(8 downto 0),
+      addra(9 downto 0) => addra(9 downto 0),
+      addrb(9 downto 0) => addrb(9 downto 0),
       clka => clka,
       clkb => clkb,
       dina(259 downto 0) => dina(259 downto 0),
@@ -2651,8 +2649,8 @@ entity ska_cpu_buffer_blk_mem_gen_v8_3_3_synth is
     doutb : out STD_LOGIC_VECTOR ( 259 downto 0 );
     clka : in STD_LOGIC;
     clkb : in STD_LOGIC;
-    addra : in STD_LOGIC_VECTOR ( 8 downto 0 );
-    addrb : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    addra : in STD_LOGIC_VECTOR ( 9 downto 0 );
+    addrb : in STD_LOGIC_VECTOR ( 9 downto 0 );
     dina : in STD_LOGIC_VECTOR ( 259 downto 0 );
     dinb : in STD_LOGIC_VECTOR ( 259 downto 0 );
     wea : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -2666,8 +2664,8 @@ architecture STRUCTURE of ska_cpu_buffer_blk_mem_gen_v8_3_3_synth is
 begin
 \gnbram.gnativebmg.native_blk_mem_gen\: entity work.ska_cpu_buffer_blk_mem_gen_top
      port map (
-      addra(8 downto 0) => addra(8 downto 0),
-      addrb(8 downto 0) => addrb(8 downto 0),
+      addra(9 downto 0) => addra(9 downto 0),
+      addrb(9 downto 0) => addrb(9 downto 0),
       clka => clka,
       clkb => clkb,
       dina(259 downto 0) => dina(259 downto 0),
@@ -2689,7 +2687,7 @@ entity ska_cpu_buffer_blk_mem_gen_v8_3_3 is
     ena : in STD_LOGIC;
     regcea : in STD_LOGIC;
     wea : in STD_LOGIC_VECTOR ( 0 to 0 );
-    addra : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    addra : in STD_LOGIC_VECTOR ( 9 downto 0 );
     dina : in STD_LOGIC_VECTOR ( 259 downto 0 );
     douta : out STD_LOGIC_VECTOR ( 259 downto 0 );
     clkb : in STD_LOGIC;
@@ -2697,7 +2695,7 @@ entity ska_cpu_buffer_blk_mem_gen_v8_3_3 is
     enb : in STD_LOGIC;
     regceb : in STD_LOGIC;
     web : in STD_LOGIC_VECTOR ( 0 to 0 );
-    addrb : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    addrb : in STD_LOGIC_VECTOR ( 9 downto 0 );
     dinb : in STD_LOGIC_VECTOR ( 259 downto 0 );
     doutb : out STD_LOGIC_VECTOR ( 259 downto 0 );
     injectsbiterr : in STD_LOGIC;
@@ -2705,7 +2703,7 @@ entity ska_cpu_buffer_blk_mem_gen_v8_3_3 is
     eccpipece : in STD_LOGIC;
     sbiterr : out STD_LOGIC;
     dbiterr : out STD_LOGIC;
-    rdaddrecc : out STD_LOGIC_VECTOR ( 8 downto 0 );
+    rdaddrecc : out STD_LOGIC_VECTOR ( 9 downto 0 );
     sleep : in STD_LOGIC;
     deepsleep : in STD_LOGIC;
     shutdown : in STD_LOGIC;
@@ -2746,12 +2744,12 @@ entity ska_cpu_buffer_blk_mem_gen_v8_3_3 is
     s_axi_injectdbiterr : in STD_LOGIC;
     s_axi_sbiterr : out STD_LOGIC;
     s_axi_dbiterr : out STD_LOGIC;
-    s_axi_rdaddrecc : out STD_LOGIC_VECTOR ( 8 downto 0 )
+    s_axi_rdaddrecc : out STD_LOGIC_VECTOR ( 9 downto 0 )
   );
   attribute C_ADDRA_WIDTH : integer;
-  attribute C_ADDRA_WIDTH of ska_cpu_buffer_blk_mem_gen_v8_3_3 : entity is 9;
+  attribute C_ADDRA_WIDTH of ska_cpu_buffer_blk_mem_gen_v8_3_3 : entity is 10;
   attribute C_ADDRB_WIDTH : integer;
-  attribute C_ADDRB_WIDTH of ska_cpu_buffer_blk_mem_gen_v8_3_3 : entity is 9;
+  attribute C_ADDRB_WIDTH of ska_cpu_buffer_blk_mem_gen_v8_3_3 : entity is 10;
   attribute C_ALGORITHM : integer;
   attribute C_ALGORITHM of ska_cpu_buffer_blk_mem_gen_v8_3_3 : entity is 1;
   attribute C_AXI_ID_WIDTH : integer;
@@ -2845,9 +2843,9 @@ entity ska_cpu_buffer_blk_mem_gen_v8_3_3 is
   attribute C_PRIM_TYPE : integer;
   attribute C_PRIM_TYPE of ska_cpu_buffer_blk_mem_gen_v8_3_3 : entity is 1;
   attribute C_READ_DEPTH_A : integer;
-  attribute C_READ_DEPTH_A of ska_cpu_buffer_blk_mem_gen_v8_3_3 : entity is 512;
+  attribute C_READ_DEPTH_A of ska_cpu_buffer_blk_mem_gen_v8_3_3 : entity is 1024;
   attribute C_READ_DEPTH_B : integer;
-  attribute C_READ_DEPTH_B of ska_cpu_buffer_blk_mem_gen_v8_3_3 : entity is 512;
+  attribute C_READ_DEPTH_B of ska_cpu_buffer_blk_mem_gen_v8_3_3 : entity is 1024;
   attribute C_READ_WIDTH_A : integer;
   attribute C_READ_WIDTH_A of ska_cpu_buffer_blk_mem_gen_v8_3_3 : entity is 260;
   attribute C_READ_WIDTH_B : integer;
@@ -2881,9 +2879,9 @@ entity ska_cpu_buffer_blk_mem_gen_v8_3_3 is
   attribute C_WEB_WIDTH : integer;
   attribute C_WEB_WIDTH of ska_cpu_buffer_blk_mem_gen_v8_3_3 : entity is 1;
   attribute C_WRITE_DEPTH_A : integer;
-  attribute C_WRITE_DEPTH_A of ska_cpu_buffer_blk_mem_gen_v8_3_3 : entity is 512;
+  attribute C_WRITE_DEPTH_A of ska_cpu_buffer_blk_mem_gen_v8_3_3 : entity is 1024;
   attribute C_WRITE_DEPTH_B : integer;
-  attribute C_WRITE_DEPTH_B of ska_cpu_buffer_blk_mem_gen_v8_3_3 : entity is 512;
+  attribute C_WRITE_DEPTH_B of ska_cpu_buffer_blk_mem_gen_v8_3_3 : entity is 1024;
   attribute C_WRITE_MODE_A : string;
   attribute C_WRITE_MODE_A of ska_cpu_buffer_blk_mem_gen_v8_3_3 : entity is "WRITE_FIRST";
   attribute C_WRITE_MODE_B : string;
@@ -2904,6 +2902,7 @@ architecture STRUCTURE of ska_cpu_buffer_blk_mem_gen_v8_3_3 is
   signal \<const0>\ : STD_LOGIC;
 begin
   dbiterr <= \<const0>\;
+  rdaddrecc(9) <= \<const0>\;
   rdaddrecc(8) <= \<const0>\;
   rdaddrecc(7) <= \<const0>\;
   rdaddrecc(6) <= \<const0>\;
@@ -2925,6 +2924,7 @@ begin
   s_axi_bresp(0) <= \<const0>\;
   s_axi_bvalid <= \<const0>\;
   s_axi_dbiterr <= \<const0>\;
+  s_axi_rdaddrecc(9) <= \<const0>\;
   s_axi_rdaddrecc(8) <= \<const0>\;
   s_axi_rdaddrecc(7) <= \<const0>\;
   s_axi_rdaddrecc(6) <= \<const0>\;
@@ -3211,8 +3211,8 @@ GND: unisim.vcomponents.GND
     );
 inst_blk_mem_gen: entity work.ska_cpu_buffer_blk_mem_gen_v8_3_3_synth
      port map (
-      addra(8 downto 0) => addra(8 downto 0),
-      addrb(8 downto 0) => addrb(8 downto 0),
+      addra(9 downto 0) => addra(9 downto 0),
+      addrb(9 downto 0) => addrb(9 downto 0),
       clka => clka,
       clkb => clkb,
       dina(259 downto 0) => dina(259 downto 0),
@@ -3231,12 +3231,12 @@ entity ska_cpu_buffer is
   port (
     clka : in STD_LOGIC;
     wea : in STD_LOGIC_VECTOR ( 0 to 0 );
-    addra : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    addra : in STD_LOGIC_VECTOR ( 9 downto 0 );
     dina : in STD_LOGIC_VECTOR ( 259 downto 0 );
     douta : out STD_LOGIC_VECTOR ( 259 downto 0 );
     clkb : in STD_LOGIC;
     web : in STD_LOGIC_VECTOR ( 0 to 0 );
-    addrb : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    addrb : in STD_LOGIC_VECTOR ( 9 downto 0 );
     dinb : in STD_LOGIC_VECTOR ( 259 downto 0 );
     doutb : out STD_LOGIC_VECTOR ( 259 downto 0 )
   );
@@ -3263,17 +3263,17 @@ architecture STRUCTURE of ska_cpu_buffer is
   signal NLW_U0_s_axi_sbiterr_UNCONNECTED : STD_LOGIC;
   signal NLW_U0_s_axi_wready_UNCONNECTED : STD_LOGIC;
   signal NLW_U0_sbiterr_UNCONNECTED : STD_LOGIC;
-  signal NLW_U0_rdaddrecc_UNCONNECTED : STD_LOGIC_VECTOR ( 8 downto 0 );
+  signal NLW_U0_rdaddrecc_UNCONNECTED : STD_LOGIC_VECTOR ( 9 downto 0 );
   signal NLW_U0_s_axi_bid_UNCONNECTED : STD_LOGIC_VECTOR ( 3 downto 0 );
   signal NLW_U0_s_axi_bresp_UNCONNECTED : STD_LOGIC_VECTOR ( 1 downto 0 );
-  signal NLW_U0_s_axi_rdaddrecc_UNCONNECTED : STD_LOGIC_VECTOR ( 8 downto 0 );
+  signal NLW_U0_s_axi_rdaddrecc_UNCONNECTED : STD_LOGIC_VECTOR ( 9 downto 0 );
   signal NLW_U0_s_axi_rdata_UNCONNECTED : STD_LOGIC_VECTOR ( 259 downto 0 );
   signal NLW_U0_s_axi_rid_UNCONNECTED : STD_LOGIC_VECTOR ( 3 downto 0 );
   signal NLW_U0_s_axi_rresp_UNCONNECTED : STD_LOGIC_VECTOR ( 1 downto 0 );
   attribute C_ADDRA_WIDTH : integer;
-  attribute C_ADDRA_WIDTH of U0 : label is 9;
+  attribute C_ADDRA_WIDTH of U0 : label is 10;
   attribute C_ADDRB_WIDTH : integer;
-  attribute C_ADDRB_WIDTH of U0 : label is 9;
+  attribute C_ADDRB_WIDTH of U0 : label is 10;
   attribute C_ALGORITHM : integer;
   attribute C_ALGORITHM of U0 : label is 1;
   attribute C_AXI_ID_WIDTH : integer;
@@ -3367,9 +3367,9 @@ architecture STRUCTURE of ska_cpu_buffer is
   attribute C_PRIM_TYPE : integer;
   attribute C_PRIM_TYPE of U0 : label is 1;
   attribute C_READ_DEPTH_A : integer;
-  attribute C_READ_DEPTH_A of U0 : label is 512;
+  attribute C_READ_DEPTH_A of U0 : label is 1024;
   attribute C_READ_DEPTH_B : integer;
-  attribute C_READ_DEPTH_B of U0 : label is 512;
+  attribute C_READ_DEPTH_B of U0 : label is 1024;
   attribute C_READ_WIDTH_A : integer;
   attribute C_READ_WIDTH_A of U0 : label is 260;
   attribute C_READ_WIDTH_B : integer;
@@ -3403,9 +3403,9 @@ architecture STRUCTURE of ska_cpu_buffer is
   attribute C_WEB_WIDTH : integer;
   attribute C_WEB_WIDTH of U0 : label is 1;
   attribute C_WRITE_DEPTH_A : integer;
-  attribute C_WRITE_DEPTH_A of U0 : label is 512;
+  attribute C_WRITE_DEPTH_A of U0 : label is 1024;
   attribute C_WRITE_DEPTH_B : integer;
-  attribute C_WRITE_DEPTH_B of U0 : label is 512;
+  attribute C_WRITE_DEPTH_B of U0 : label is 1024;
   attribute C_WRITE_MODE_A : string;
   attribute C_WRITE_MODE_A of U0 : label is "WRITE_FIRST";
   attribute C_WRITE_MODE_B : string;
@@ -3422,8 +3422,8 @@ architecture STRUCTURE of ska_cpu_buffer is
 begin
 U0: entity work.ska_cpu_buffer_blk_mem_gen_v8_3_3
      port map (
-      addra(8 downto 0) => addra(8 downto 0),
-      addrb(8 downto 0) => addrb(8 downto 0),
+      addra(9 downto 0) => addra(9 downto 0),
+      addrb(9 downto 0) => addrb(9 downto 0),
       clka => clka,
       clkb => clkb,
       dbiterr => NLW_U0_dbiterr_UNCONNECTED,
@@ -3437,7 +3437,7 @@ U0: entity work.ska_cpu_buffer_blk_mem_gen_v8_3_3
       enb => '0',
       injectdbiterr => '0',
       injectsbiterr => '0',
-      rdaddrecc(8 downto 0) => NLW_U0_rdaddrecc_UNCONNECTED(8 downto 0),
+      rdaddrecc(9 downto 0) => NLW_U0_rdaddrecc_UNCONNECTED(9 downto 0),
       regcea => '0',
       regceb => '0',
       rsta => '0',
@@ -3467,7 +3467,7 @@ U0: entity work.ska_cpu_buffer_blk_mem_gen_v8_3_3
       s_axi_dbiterr => NLW_U0_s_axi_dbiterr_UNCONNECTED,
       s_axi_injectdbiterr => '0',
       s_axi_injectsbiterr => '0',
-      s_axi_rdaddrecc(8 downto 0) => NLW_U0_s_axi_rdaddrecc_UNCONNECTED(8 downto 0),
+      s_axi_rdaddrecc(9 downto 0) => NLW_U0_s_axi_rdaddrecc_UNCONNECTED(9 downto 0),
       s_axi_rdata(259 downto 0) => NLW_U0_s_axi_rdata_UNCONNECTED(259 downto 0),
       s_axi_rid(3 downto 0) => NLW_U0_s_axi_rid_UNCONNECTED(3 downto 0),
       s_axi_rlast => NLW_U0_s_axi_rlast_UNCONNECTED,

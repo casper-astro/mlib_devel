@@ -1,4 +1,4 @@
-// (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
+// (c) Copyright 1995-2018 Xilinx, Inc. All rights reserved.
 // 
 // This file contains confidential and proprietary information
 // of Xilinx, Inc. and is protected under U.S. and
@@ -57,12 +57,12 @@
 ska_cpu_buffer your_instance_name (
   .clka(clka),    // input wire clka
   .wea(wea),      // input wire [0 : 0] wea
-  .addra(addra),  // input wire [8 : 0] addra
+  .addra(addra),  // input wire [9 : 0] addra
   .dina(dina),    // input wire [259 : 0] dina
   .douta(douta),  // output wire [259 : 0] douta
   .clkb(clkb),    // input wire clkb
   .web(web),      // input wire [0 : 0] web
-  .addrb(addrb),  // input wire [8 : 0] addrb
+  .addrb(addrb),  // input wire [9 : 0] addrb
   .dinb(dinb),    // input wire [259 : 0] dinb
   .doutb(doutb)  // output wire [259 : 0] doutb
 );

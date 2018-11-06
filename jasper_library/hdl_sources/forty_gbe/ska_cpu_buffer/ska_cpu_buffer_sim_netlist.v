@@ -1,10 +1,10 @@
 // Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2016.2 (lin64) Build 1577090 Thu Jun  2 16:32:35 MDT 2016
-// Date        : Mon Nov  7 14:27:11 2016
-// Host        : adam-cm running 64-bit Ubuntu 14.04.5 LTS
+// Date        : Thu Nov  1 10:17:09 2018
+// Host        : fiona running 64-bit Ubuntu 14.04.5 LTS
 // Command     : write_verilog -force -mode funcsim
-//               /home/aisaacson/work/git_work/ska_sa/projects/skarab_bsp_firmware/firmware/FRM123701U1R1/Vivado/IP/ska_cpu_buffer/ska_cpu_buffer_sim_netlist.v
+//               /data/casper/mlib_devel_eth_map/jasper_library/test_models/skarab_fgbe/myproj/myproj.srcs/sources_1/ip/ska_cpu_buffer/ska_cpu_buffer_sim_netlist.v
 // Design      : ska_cpu_buffer
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -27,17 +27,17 @@ module ska_cpu_buffer
     doutb);
   (* x_interface_info = "xilinx.com:interface:bram:1.0 BRAM_PORTA CLK" *) input clka;
   (* x_interface_info = "xilinx.com:interface:bram:1.0 BRAM_PORTA WE" *) input [0:0]wea;
-  (* x_interface_info = "xilinx.com:interface:bram:1.0 BRAM_PORTA ADDR" *) input [8:0]addra;
+  (* x_interface_info = "xilinx.com:interface:bram:1.0 BRAM_PORTA ADDR" *) input [9:0]addra;
   (* x_interface_info = "xilinx.com:interface:bram:1.0 BRAM_PORTA DIN" *) input [259:0]dina;
   (* x_interface_info = "xilinx.com:interface:bram:1.0 BRAM_PORTA DOUT" *) output [259:0]douta;
   (* x_interface_info = "xilinx.com:interface:bram:1.0 BRAM_PORTB CLK" *) input clkb;
   (* x_interface_info = "xilinx.com:interface:bram:1.0 BRAM_PORTB WE" *) input [0:0]web;
-  (* x_interface_info = "xilinx.com:interface:bram:1.0 BRAM_PORTB ADDR" *) input [8:0]addrb;
+  (* x_interface_info = "xilinx.com:interface:bram:1.0 BRAM_PORTB ADDR" *) input [9:0]addrb;
   (* x_interface_info = "xilinx.com:interface:bram:1.0 BRAM_PORTB DIN" *) input [259:0]dinb;
   (* x_interface_info = "xilinx.com:interface:bram:1.0 BRAM_PORTB DOUT" *) output [259:0]doutb;
 
-  wire [8:0]addra;
-  wire [8:0]addrb;
+  wire [9:0]addra;
+  wire [9:0]addrb;
   wire clka;
   wire clkb;
   wire [259:0]dina;
@@ -58,16 +58,16 @@ module ska_cpu_buffer
   wire NLW_U0_s_axi_sbiterr_UNCONNECTED;
   wire NLW_U0_s_axi_wready_UNCONNECTED;
   wire NLW_U0_sbiterr_UNCONNECTED;
-  wire [8:0]NLW_U0_rdaddrecc_UNCONNECTED;
+  wire [9:0]NLW_U0_rdaddrecc_UNCONNECTED;
   wire [3:0]NLW_U0_s_axi_bid_UNCONNECTED;
   wire [1:0]NLW_U0_s_axi_bresp_UNCONNECTED;
-  wire [8:0]NLW_U0_s_axi_rdaddrecc_UNCONNECTED;
+  wire [9:0]NLW_U0_s_axi_rdaddrecc_UNCONNECTED;
   wire [259:0]NLW_U0_s_axi_rdata_UNCONNECTED;
   wire [3:0]NLW_U0_s_axi_rid_UNCONNECTED;
   wire [1:0]NLW_U0_s_axi_rresp_UNCONNECTED;
 
-  (* C_ADDRA_WIDTH = "9" *) 
-  (* C_ADDRB_WIDTH = "9" *) 
+  (* C_ADDRA_WIDTH = "10" *) 
+  (* C_ADDRB_WIDTH = "10" *) 
   (* C_ALGORITHM = "1" *) 
   (* C_AXI_ID_WIDTH = "4" *) 
   (* C_AXI_SLAVE_TYPE = "0" *) 
@@ -114,8 +114,8 @@ module ska_cpu_buffer
   (* C_MEM_TYPE = "2" *) 
   (* C_MUX_PIPELINE_STAGES = "0" *) 
   (* C_PRIM_TYPE = "1" *) 
-  (* C_READ_DEPTH_A = "512" *) 
-  (* C_READ_DEPTH_B = "512" *) 
+  (* C_READ_DEPTH_A = "1024" *) 
+  (* C_READ_DEPTH_B = "1024" *) 
   (* C_READ_WIDTH_A = "260" *) 
   (* C_READ_WIDTH_B = "260" *) 
   (* C_RSTRAM_A = "0" *) 
@@ -132,8 +132,8 @@ module ska_cpu_buffer
   (* C_USE_URAM = "0" *) 
   (* C_WEA_WIDTH = "1" *) 
   (* C_WEB_WIDTH = "1" *) 
-  (* C_WRITE_DEPTH_A = "512" *) 
-  (* C_WRITE_DEPTH_B = "512" *) 
+  (* C_WRITE_DEPTH_A = "1024" *) 
+  (* C_WRITE_DEPTH_B = "1024" *) 
   (* C_WRITE_MODE_A = "WRITE_FIRST" *) 
   (* C_WRITE_MODE_B = "WRITE_FIRST" *) 
   (* C_WRITE_WIDTH_A = "260" *) 
@@ -157,7 +157,7 @@ module ska_cpu_buffer
         .enb(1'b0),
         .injectdbiterr(1'b0),
         .injectsbiterr(1'b0),
-        .rdaddrecc(NLW_U0_rdaddrecc_UNCONNECTED[8:0]),
+        .rdaddrecc(NLW_U0_rdaddrecc_UNCONNECTED[9:0]),
         .regcea(1'b0),
         .regceb(1'b0),
         .rsta(1'b0),
@@ -187,7 +187,7 @@ module ska_cpu_buffer
         .s_axi_dbiterr(NLW_U0_s_axi_dbiterr_UNCONNECTED),
         .s_axi_injectdbiterr(1'b0),
         .s_axi_injectsbiterr(1'b0),
-        .s_axi_rdaddrecc(NLW_U0_s_axi_rdaddrecc_UNCONNECTED[8:0]),
+        .s_axi_rdaddrecc(NLW_U0_s_axi_rdaddrecc_UNCONNECTED[9:0]),
         .s_axi_rdata(NLW_U0_s_axi_rdata_UNCONNECTED[259:0]),
         .s_axi_rid(NLW_U0_s_axi_rid_UNCONNECTED[3:0]),
         .s_axi_rlast(NLW_U0_s_axi_rlast_UNCONNECTED),
@@ -223,15 +223,15 @@ module ska_cpu_buffer_blk_mem_gen_generic_cstr
   output [259:0]doutb;
   input clka;
   input clkb;
-  input [8:0]addra;
-  input [8:0]addrb;
+  input [9:0]addra;
+  input [9:0]addrb;
   input [259:0]dina;
   input [259:0]dinb;
   input [0:0]wea;
   input [0:0]web;
 
-  wire [8:0]addra;
-  wire [8:0]addrb;
+  wire [9:0]addra;
+  wire [9:0]addrb;
   wire clka;
   wire clkb;
   wire [259:0]dina;
@@ -347,15 +347,15 @@ module ska_cpu_buffer_blk_mem_gen_prim_width
   output [17:0]doutb;
   input clka;
   input clkb;
-  input [8:0]addra;
-  input [8:0]addrb;
+  input [9:0]addra;
+  input [9:0]addrb;
   input [17:0]dina;
   input [17:0]dinb;
   input [0:0]wea;
   input [0:0]web;
 
-  wire [8:0]addra;
-  wire [8:0]addrb;
+  wire [9:0]addra;
+  wire [9:0]addrb;
   wire clka;
   wire clkb;
   wire [17:0]dina;
@@ -394,15 +394,15 @@ module ska_cpu_buffer_blk_mem_gen_prim_width__parameterized0
   output [35:0]doutb;
   input clka;
   input clkb;
-  input [8:0]addra;
-  input [8:0]addrb;
+  input [9:0]addra;
+  input [9:0]addrb;
   input [35:0]dina;
   input [35:0]dinb;
   input [0:0]wea;
   input [0:0]web;
 
-  wire [8:0]addra;
-  wire [8:0]addrb;
+  wire [9:0]addra;
+  wire [9:0]addrb;
   wire clka;
   wire clkb;
   wire [35:0]dina;
@@ -441,15 +441,15 @@ module ska_cpu_buffer_blk_mem_gen_prim_width__parameterized1
   output [35:0]doutb;
   input clka;
   input clkb;
-  input [8:0]addra;
-  input [8:0]addrb;
+  input [9:0]addra;
+  input [9:0]addrb;
   input [35:0]dina;
   input [35:0]dinb;
   input [0:0]wea;
   input [0:0]web;
 
-  wire [8:0]addra;
-  wire [8:0]addrb;
+  wire [9:0]addra;
+  wire [9:0]addrb;
   wire clka;
   wire clkb;
   wire [35:0]dina;
@@ -488,15 +488,15 @@ module ska_cpu_buffer_blk_mem_gen_prim_width__parameterized2
   output [35:0]doutb;
   input clka;
   input clkb;
-  input [8:0]addra;
-  input [8:0]addrb;
+  input [9:0]addra;
+  input [9:0]addrb;
   input [35:0]dina;
   input [35:0]dinb;
   input [0:0]wea;
   input [0:0]web;
 
-  wire [8:0]addra;
-  wire [8:0]addrb;
+  wire [9:0]addra;
+  wire [9:0]addrb;
   wire clka;
   wire clkb;
   wire [35:0]dina;
@@ -535,15 +535,15 @@ module ska_cpu_buffer_blk_mem_gen_prim_width__parameterized3
   output [35:0]doutb;
   input clka;
   input clkb;
-  input [8:0]addra;
-  input [8:0]addrb;
+  input [9:0]addra;
+  input [9:0]addrb;
   input [35:0]dina;
   input [35:0]dinb;
   input [0:0]wea;
   input [0:0]web;
 
-  wire [8:0]addra;
-  wire [8:0]addrb;
+  wire [9:0]addra;
+  wire [9:0]addrb;
   wire clka;
   wire clkb;
   wire [35:0]dina;
@@ -582,15 +582,15 @@ module ska_cpu_buffer_blk_mem_gen_prim_width__parameterized4
   output [35:0]doutb;
   input clka;
   input clkb;
-  input [8:0]addra;
-  input [8:0]addrb;
+  input [9:0]addra;
+  input [9:0]addrb;
   input [35:0]dina;
   input [35:0]dinb;
   input [0:0]wea;
   input [0:0]web;
 
-  wire [8:0]addra;
-  wire [8:0]addrb;
+  wire [9:0]addra;
+  wire [9:0]addrb;
   wire clka;
   wire clkb;
   wire [35:0]dina;
@@ -629,15 +629,15 @@ module ska_cpu_buffer_blk_mem_gen_prim_width__parameterized5
   output [35:0]doutb;
   input clka;
   input clkb;
-  input [8:0]addra;
-  input [8:0]addrb;
+  input [9:0]addra;
+  input [9:0]addrb;
   input [35:0]dina;
   input [35:0]dinb;
   input [0:0]wea;
   input [0:0]web;
 
-  wire [8:0]addra;
-  wire [8:0]addrb;
+  wire [9:0]addra;
+  wire [9:0]addrb;
   wire clka;
   wire clkb;
   wire [35:0]dina;
@@ -676,15 +676,15 @@ module ska_cpu_buffer_blk_mem_gen_prim_width__parameterized6
   output [25:0]doutb;
   input clka;
   input clkb;
-  input [8:0]addra;
-  input [8:0]addrb;
+  input [9:0]addra;
+  input [9:0]addrb;
   input [25:0]dina;
   input [25:0]dinb;
   input [0:0]wea;
   input [0:0]web;
 
-  wire [8:0]addra;
-  wire [8:0]addrb;
+  wire [9:0]addra;
+  wire [9:0]addrb;
   wire clka;
   wire clkb;
   wire [25:0]dina;
@@ -723,15 +723,15 @@ module ska_cpu_buffer_blk_mem_gen_prim_wrapper
   output [17:0]doutb;
   input clka;
   input clkb;
-  input [8:0]addra;
-  input [8:0]addrb;
+  input [9:0]addra;
+  input [9:0]addrb;
   input [17:0]dina;
   input [17:0]dinb;
   input [0:0]wea;
   input [0:0]web;
 
-  wire [8:0]addra;
-  wire [8:0]addrb;
+  wire [9:0]addra;
+  wire [9:0]addrb;
   wire clka;
   wire clkb;
   wire [17:0]dina;
@@ -844,8 +844,8 @@ module ska_cpu_buffer_blk_mem_gen_prim_wrapper
     .WRITE_WIDTH_A(18),
     .WRITE_WIDTH_B(18)) 
     \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM18.ram 
-       (.ADDRARDADDR({1'b0,addra,1'b0,1'b0,1'b0,1'b0}),
-        .ADDRBWRADDR({1'b0,addrb,1'b0,1'b0,1'b0,1'b0}),
+       (.ADDRARDADDR({addra,1'b0,1'b0,1'b0,1'b0}),
+        .ADDRBWRADDR({addrb,1'b0,1'b0,1'b0,1'b0}),
         .CLKARDCLK(clka),
         .CLKBWRCLK(clkb),
         .DIADI({dina[16:9],dina[7:0]}),
@@ -884,15 +884,15 @@ module ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized0
   output [35:0]doutb;
   input clka;
   input clkb;
-  input [8:0]addra;
-  input [8:0]addrb;
+  input [9:0]addra;
+  input [9:0]addrb;
   input [35:0]dina;
   input [35:0]dinb;
   input [0:0]wea;
   input [0:0]web;
 
-  wire [8:0]addra;
-  wire [8:0]addrb;
+  wire [9:0]addra;
+  wire [9:0]addrb;
   wire clka;
   wire clkb;
   wire [35:0]dina;
@@ -1087,8 +1087,8 @@ module ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized0
     .WRITE_WIDTH_A(36),
     .WRITE_WIDTH_B(36)) 
     \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram 
-       (.ADDRARDADDR({1'b1,1'b0,addra,1'b1,1'b1,1'b1,1'b1,1'b1}),
-        .ADDRBWRADDR({1'b1,1'b0,addrb,1'b1,1'b1,1'b1,1'b1,1'b1}),
+       (.ADDRARDADDR({1'b1,addra,1'b1,1'b1,1'b1,1'b1,1'b1}),
+        .ADDRBWRADDR({1'b1,addrb,1'b1,1'b1,1'b1,1'b1,1'b1}),
         .CASCADEINA(1'b0),
         .CASCADEINB(1'b0),
         .CASCADEOUTA(\NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_CASCADEOUTA_UNCONNECTED ),
@@ -1137,15 +1137,15 @@ module ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized1
   output [35:0]doutb;
   input clka;
   input clkb;
-  input [8:0]addra;
-  input [8:0]addrb;
+  input [9:0]addra;
+  input [9:0]addrb;
   input [35:0]dina;
   input [35:0]dinb;
   input [0:0]wea;
   input [0:0]web;
 
-  wire [8:0]addra;
-  wire [8:0]addrb;
+  wire [9:0]addra;
+  wire [9:0]addrb;
   wire clka;
   wire clkb;
   wire [35:0]dina;
@@ -1340,8 +1340,8 @@ module ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized1
     .WRITE_WIDTH_A(36),
     .WRITE_WIDTH_B(36)) 
     \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram 
-       (.ADDRARDADDR({1'b1,1'b0,addra,1'b1,1'b1,1'b1,1'b1,1'b1}),
-        .ADDRBWRADDR({1'b1,1'b0,addrb,1'b1,1'b1,1'b1,1'b1,1'b1}),
+       (.ADDRARDADDR({1'b1,addra,1'b1,1'b1,1'b1,1'b1,1'b1}),
+        .ADDRBWRADDR({1'b1,addrb,1'b1,1'b1,1'b1,1'b1,1'b1}),
         .CASCADEINA(1'b0),
         .CASCADEINB(1'b0),
         .CASCADEOUTA(\NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_CASCADEOUTA_UNCONNECTED ),
@@ -1390,15 +1390,15 @@ module ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized2
   output [35:0]doutb;
   input clka;
   input clkb;
-  input [8:0]addra;
-  input [8:0]addrb;
+  input [9:0]addra;
+  input [9:0]addrb;
   input [35:0]dina;
   input [35:0]dinb;
   input [0:0]wea;
   input [0:0]web;
 
-  wire [8:0]addra;
-  wire [8:0]addrb;
+  wire [9:0]addra;
+  wire [9:0]addrb;
   wire clka;
   wire clkb;
   wire [35:0]dina;
@@ -1593,8 +1593,8 @@ module ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized2
     .WRITE_WIDTH_A(36),
     .WRITE_WIDTH_B(36)) 
     \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram 
-       (.ADDRARDADDR({1'b1,1'b0,addra,1'b1,1'b1,1'b1,1'b1,1'b1}),
-        .ADDRBWRADDR({1'b1,1'b0,addrb,1'b1,1'b1,1'b1,1'b1,1'b1}),
+       (.ADDRARDADDR({1'b1,addra,1'b1,1'b1,1'b1,1'b1,1'b1}),
+        .ADDRBWRADDR({1'b1,addrb,1'b1,1'b1,1'b1,1'b1,1'b1}),
         .CASCADEINA(1'b0),
         .CASCADEINB(1'b0),
         .CASCADEOUTA(\NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_CASCADEOUTA_UNCONNECTED ),
@@ -1643,15 +1643,15 @@ module ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized3
   output [35:0]doutb;
   input clka;
   input clkb;
-  input [8:0]addra;
-  input [8:0]addrb;
+  input [9:0]addra;
+  input [9:0]addrb;
   input [35:0]dina;
   input [35:0]dinb;
   input [0:0]wea;
   input [0:0]web;
 
-  wire [8:0]addra;
-  wire [8:0]addrb;
+  wire [9:0]addra;
+  wire [9:0]addrb;
   wire clka;
   wire clkb;
   wire [35:0]dina;
@@ -1846,8 +1846,8 @@ module ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized3
     .WRITE_WIDTH_A(36),
     .WRITE_WIDTH_B(36)) 
     \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram 
-       (.ADDRARDADDR({1'b1,1'b0,addra,1'b1,1'b1,1'b1,1'b1,1'b1}),
-        .ADDRBWRADDR({1'b1,1'b0,addrb,1'b1,1'b1,1'b1,1'b1,1'b1}),
+       (.ADDRARDADDR({1'b1,addra,1'b1,1'b1,1'b1,1'b1,1'b1}),
+        .ADDRBWRADDR({1'b1,addrb,1'b1,1'b1,1'b1,1'b1,1'b1}),
         .CASCADEINA(1'b0),
         .CASCADEINB(1'b0),
         .CASCADEOUTA(\NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_CASCADEOUTA_UNCONNECTED ),
@@ -1896,15 +1896,15 @@ module ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized4
   output [35:0]doutb;
   input clka;
   input clkb;
-  input [8:0]addra;
-  input [8:0]addrb;
+  input [9:0]addra;
+  input [9:0]addrb;
   input [35:0]dina;
   input [35:0]dinb;
   input [0:0]wea;
   input [0:0]web;
 
-  wire [8:0]addra;
-  wire [8:0]addrb;
+  wire [9:0]addra;
+  wire [9:0]addrb;
   wire clka;
   wire clkb;
   wire [35:0]dina;
@@ -2099,8 +2099,8 @@ module ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized4
     .WRITE_WIDTH_A(36),
     .WRITE_WIDTH_B(36)) 
     \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram 
-       (.ADDRARDADDR({1'b1,1'b0,addra,1'b1,1'b1,1'b1,1'b1,1'b1}),
-        .ADDRBWRADDR({1'b1,1'b0,addrb,1'b1,1'b1,1'b1,1'b1,1'b1}),
+       (.ADDRARDADDR({1'b1,addra,1'b1,1'b1,1'b1,1'b1,1'b1}),
+        .ADDRBWRADDR({1'b1,addrb,1'b1,1'b1,1'b1,1'b1,1'b1}),
         .CASCADEINA(1'b0),
         .CASCADEINB(1'b0),
         .CASCADEOUTA(\NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_CASCADEOUTA_UNCONNECTED ),
@@ -2149,15 +2149,15 @@ module ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized5
   output [35:0]doutb;
   input clka;
   input clkb;
-  input [8:0]addra;
-  input [8:0]addrb;
+  input [9:0]addra;
+  input [9:0]addrb;
   input [35:0]dina;
   input [35:0]dinb;
   input [0:0]wea;
   input [0:0]web;
 
-  wire [8:0]addra;
-  wire [8:0]addrb;
+  wire [9:0]addra;
+  wire [9:0]addrb;
   wire clka;
   wire clkb;
   wire [35:0]dina;
@@ -2352,8 +2352,8 @@ module ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized5
     .WRITE_WIDTH_A(36),
     .WRITE_WIDTH_B(36)) 
     \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram 
-       (.ADDRARDADDR({1'b1,1'b0,addra,1'b1,1'b1,1'b1,1'b1,1'b1}),
-        .ADDRBWRADDR({1'b1,1'b0,addrb,1'b1,1'b1,1'b1,1'b1,1'b1}),
+       (.ADDRARDADDR({1'b1,addra,1'b1,1'b1,1'b1,1'b1,1'b1}),
+        .ADDRBWRADDR({1'b1,addrb,1'b1,1'b1,1'b1,1'b1,1'b1}),
         .CASCADEINA(1'b0),
         .CASCADEINB(1'b0),
         .CASCADEOUTA(\NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_CASCADEOUTA_UNCONNECTED ),
@@ -2402,8 +2402,8 @@ module ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized6
   output [25:0]doutb;
   input clka;
   input clkb;
-  input [8:0]addra;
-  input [8:0]addrb;
+  input [9:0]addra;
+  input [9:0]addrb;
   input [25:0]dina;
   input [25:0]dinb;
   input [0:0]wea;
@@ -2429,8 +2429,8 @@ module ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized6
   wire \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_90 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_91 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_92 ;
-  wire [8:0]addra;
-  wire [8:0]addrb;
+  wire [9:0]addra;
+  wire [9:0]addrb;
   wire clka;
   wire clkb;
   wire [25:0]dina;
@@ -2625,8 +2625,8 @@ module ska_cpu_buffer_blk_mem_gen_prim_wrapper__parameterized6
     .WRITE_WIDTH_A(36),
     .WRITE_WIDTH_B(36)) 
     \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram 
-       (.ADDRARDADDR({1'b1,1'b0,addra,1'b1,1'b1,1'b1,1'b1,1'b1}),
-        .ADDRBWRADDR({1'b1,1'b0,addrb,1'b1,1'b1,1'b1,1'b1,1'b1}),
+       (.ADDRARDADDR({1'b1,addra,1'b1,1'b1,1'b1,1'b1,1'b1}),
+        .ADDRBWRADDR({1'b1,addrb,1'b1,1'b1,1'b1,1'b1,1'b1}),
         .CASCADEINA(1'b0),
         .CASCADEINB(1'b0),
         .CASCADEOUTA(\NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_CASCADEOUTA_UNCONNECTED ),
@@ -2675,15 +2675,15 @@ module ska_cpu_buffer_blk_mem_gen_top
   output [259:0]doutb;
   input clka;
   input clkb;
-  input [8:0]addra;
-  input [8:0]addrb;
+  input [9:0]addra;
+  input [9:0]addrb;
   input [259:0]dina;
   input [259:0]dinb;
   input [0:0]wea;
   input [0:0]web;
 
-  wire [8:0]addra;
-  wire [8:0]addrb;
+  wire [9:0]addra;
+  wire [9:0]addrb;
   wire clka;
   wire clkb;
   wire [259:0]dina;
@@ -2706,7 +2706,7 @@ module ska_cpu_buffer_blk_mem_gen_top
         .web(web));
 endmodule
 
-(* C_ADDRA_WIDTH = "9" *) (* C_ADDRB_WIDTH = "9" *) (* C_ALGORITHM = "1" *) 
+(* C_ADDRA_WIDTH = "10" *) (* C_ADDRB_WIDTH = "10" *) (* C_ALGORITHM = "1" *) 
 (* C_AXI_ID_WIDTH = "4" *) (* C_AXI_SLAVE_TYPE = "0" *) (* C_AXI_TYPE = "1" *) 
 (* C_BYTE_SIZE = "9" *) (* C_COMMON_CLK = "0" *) (* C_COUNT_18K_BRAM = "1" *) 
 (* C_COUNT_36K_BRAM = "7" *) (* C_CTRL_ECC_ALGO = "NONE" *) (* C_DEFAULT_DATA = "0" *) 
@@ -2722,13 +2722,13 @@ endmodule
 (* C_INITA_VAL = "0" *) (* C_INITB_VAL = "0" *) (* C_INIT_FILE = "ska_cpu_buffer.mem" *) 
 (* C_INIT_FILE_NAME = "no_coe_file_loaded" *) (* C_INTERFACE_TYPE = "0" *) (* C_LOAD_INIT_FILE = "0" *) 
 (* C_MEM_TYPE = "2" *) (* C_MUX_PIPELINE_STAGES = "0" *) (* C_PRIM_TYPE = "1" *) 
-(* C_READ_DEPTH_A = "512" *) (* C_READ_DEPTH_B = "512" *) (* C_READ_WIDTH_A = "260" *) 
+(* C_READ_DEPTH_A = "1024" *) (* C_READ_DEPTH_B = "1024" *) (* C_READ_WIDTH_A = "260" *) 
 (* C_READ_WIDTH_B = "260" *) (* C_RSTRAM_A = "0" *) (* C_RSTRAM_B = "0" *) 
 (* C_RST_PRIORITY_A = "CE" *) (* C_RST_PRIORITY_B = "CE" *) (* C_SIM_COLLISION_CHECK = "ALL" *) 
 (* C_USE_BRAM_BLOCK = "0" *) (* C_USE_BYTE_WEA = "0" *) (* C_USE_BYTE_WEB = "0" *) 
 (* C_USE_DEFAULT_DATA = "0" *) (* C_USE_ECC = "0" *) (* C_USE_SOFTECC = "0" *) 
 (* C_USE_URAM = "0" *) (* C_WEA_WIDTH = "1" *) (* C_WEB_WIDTH = "1" *) 
-(* C_WRITE_DEPTH_A = "512" *) (* C_WRITE_DEPTH_B = "512" *) (* C_WRITE_MODE_A = "WRITE_FIRST" *) 
+(* C_WRITE_DEPTH_A = "1024" *) (* C_WRITE_DEPTH_B = "1024" *) (* C_WRITE_MODE_A = "WRITE_FIRST" *) 
 (* C_WRITE_MODE_B = "WRITE_FIRST" *) (* C_WRITE_WIDTH_A = "260" *) (* C_WRITE_WIDTH_B = "260" *) 
 (* C_XDEVICEFAMILY = "virtex7" *) (* ORIG_REF_NAME = "blk_mem_gen_v8_3_3" *) (* downgradeipidentifiedwarnings = "yes" *) 
 module ska_cpu_buffer_blk_mem_gen_v8_3_3
@@ -2800,7 +2800,7 @@ module ska_cpu_buffer_blk_mem_gen_v8_3_3
   input ena;
   input regcea;
   input [0:0]wea;
-  input [8:0]addra;
+  input [9:0]addra;
   input [259:0]dina;
   output [259:0]douta;
   input clkb;
@@ -2808,7 +2808,7 @@ module ska_cpu_buffer_blk_mem_gen_v8_3_3
   input enb;
   input regceb;
   input [0:0]web;
-  input [8:0]addrb;
+  input [9:0]addrb;
   input [259:0]dinb;
   output [259:0]doutb;
   input injectsbiterr;
@@ -2816,7 +2816,7 @@ module ska_cpu_buffer_blk_mem_gen_v8_3_3
   input eccpipece;
   output sbiterr;
   output dbiterr;
-  output [8:0]rdaddrecc;
+  output [9:0]rdaddrecc;
   input sleep;
   input deepsleep;
   input shutdown;
@@ -2857,11 +2857,11 @@ module ska_cpu_buffer_blk_mem_gen_v8_3_3
   input s_axi_injectdbiterr;
   output s_axi_sbiterr;
   output s_axi_dbiterr;
-  output [8:0]s_axi_rdaddrecc;
+  output [9:0]s_axi_rdaddrecc;
 
   wire \<const0> ;
-  wire [8:0]addra;
-  wire [8:0]addrb;
+  wire [9:0]addra;
+  wire [9:0]addrb;
   wire clka;
   wire clkb;
   wire [259:0]dina;
@@ -2872,6 +2872,7 @@ module ska_cpu_buffer_blk_mem_gen_v8_3_3
   wire [0:0]web;
 
   assign dbiterr = \<const0> ;
+  assign rdaddrecc[9] = \<const0> ;
   assign rdaddrecc[8] = \<const0> ;
   assign rdaddrecc[7] = \<const0> ;
   assign rdaddrecc[6] = \<const0> ;
@@ -2893,6 +2894,7 @@ module ska_cpu_buffer_blk_mem_gen_v8_3_3
   assign s_axi_bresp[0] = \<const0> ;
   assign s_axi_bvalid = \<const0> ;
   assign s_axi_dbiterr = \<const0> ;
+  assign s_axi_rdaddrecc[9] = \<const0> ;
   assign s_axi_rdaddrecc[8] = \<const0> ;
   assign s_axi_rdaddrecc[7] = \<const0> ;
   assign s_axi_rdaddrecc[6] = \<const0> ;
@@ -3204,15 +3206,15 @@ module ska_cpu_buffer_blk_mem_gen_v8_3_3_synth
   output [259:0]doutb;
   input clka;
   input clkb;
-  input [8:0]addra;
-  input [8:0]addrb;
+  input [9:0]addra;
+  input [9:0]addrb;
   input [259:0]dina;
   input [259:0]dinb;
   input [0:0]wea;
   input [0:0]web;
 
-  wire [8:0]addra;
-  wire [8:0]addrb;
+  wire [9:0]addra;
+  wire [9:0]addrb;
   wire clka;
   wire clkb;
   wire [259:0]dina;

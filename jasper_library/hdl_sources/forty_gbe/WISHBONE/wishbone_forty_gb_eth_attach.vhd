@@ -64,7 +64,7 @@ entity wishbone_forty_gb_eth_attach is
         cpu_rx_ack            : out std_logic;
 
         -- ARP CACHE
-        arp_cache_addr    : out std_logic_vector(10 downto 0);
+        arp_cache_addr    : out std_logic_vector(7 downto 0);
         arp_cache_rd_data : in  std_logic_vector(47 downto 0);
         arp_cache_wr_data : out std_logic_vector(47 downto 0);
         arp_cache_wr_en   : out std_logic;
@@ -317,7 +317,8 @@ begin
     (X"00" & "0000000" & soft_reset_reg & X"00" & "0000000" & local_enable_reg)  when (reg_data_src = REG_PROMISC_RST_EN)   else
     (X"0000" & local_port_reg)                                                   when (reg_data_src = REG_VALID_PORTS)      else
 
-    tx_pkt_rate_reg                                                              when (reg_data_src = REG_TX_PKT_RATE)      else
+    X"12345678"                                                              when (reg_data_src = REG_TX_PKT_RATE)      else
+    --tx_pkt_rate_reg                                                              when (reg_data_src = REG_TX_PKT_RATE)      else
     tx_pkt_cnt_reg                                                               when (reg_data_src = REG_TX_PKT_CNT)       else
     tx_valid_rate_reg                                                            when (reg_data_src = REG_TX_VALID_RATE)    else
     tx_valid_cnt_reg                                                             when (reg_data_src = REG_TX_VALID_CNT)     else
@@ -328,7 +329,8 @@ begin
     rx_valid_rate_reg                                                            when (reg_data_src = REG_RX_VALID_RATE)    else
     rx_valid_cnt_reg                                                             when (reg_data_src = REG_RX_VALID_CNT)     else
     rx_overflow_cnt_reg                                                          when (reg_data_src = REG_RX_OVERFLOW_CNT)  else
-    rx_bad_frame_cnt_reg                                                         when (reg_data_src = REG_RX_BAD_FRAME_CNT) else
+    X"87654321"                                                         when (reg_data_src = REG_RX_BAD_FRAME_CNT) else
+    --rx_bad_frame_cnt_reg                                                         when (reg_data_src = REG_RX_BAD_FRAME_CNT) else
     cnt_reset_reg                                                                when (reg_data_src = REG_CNT_RESET)        else
     (others => '0');
 
@@ -503,7 +505,7 @@ begin
             tx_buffer_we <= '0';
 
             cpu_tx_buffer_addr <= txbuf_addr(13 downto 3);
-            arp_cache_addr     <= arp_addr(13 downto 3);
+            arp_cache_addr     <= arp_addr(10 downto 3);
 
             if (arp_sel = '1')then
                 if (arp_addr(2) = '0')then

@@ -114,12 +114,12 @@ architecture arch_ska_fge_rx of ska_fge_rx is
     port (
         clka    : in std_logic;
         wea     : in std_logic_vector(0 downto 0);
-        addra   : in std_logic_vector(8 downto 0);
+        addra   : in std_logic_vector(9 downto 0);
         dina    : in std_logic_vector(259 downto 0);
         douta   : out std_logic_vector(259 downto 0);
         clkb    : in std_logic;
         web     : in std_logic_vector(0 downto 0);
-        addrb   : in std_logic_vector(8 downto 0);
+        addrb   : in std_logic_vector(9 downto 0);
         dinb    : in std_logic_vector(259 downto 0);
         doutb   : out std_logic_vector(259 downto 0));
     end component;
@@ -291,21 +291,21 @@ architecture arch_ska_fge_rx of ska_fge_rx is
     signal current_cpu_state : T_CPU_STATE;
     signal cpu_buffer_free : std_logic;
     signal frame_bypass : std_logic;
-    signal cpu_buffer_write_sel : std_logic_vector(2 downto 0);
-    signal cpu_buffer_read_sel : std_logic_vector(2 downto 0);
+    signal cpu_buffer_write_sel : std_logic_vector(1 downto 0);
+    signal cpu_buffer_read_sel : std_logic_vector(1 downto 0);
     signal cpu_buffer_addr : std_logic_vector(7 downto 0);
-    signal cpu_buffer_addra : std_logic_vector(8 downto 0);
+    signal cpu_buffer_addra : std_logic_vector(9 downto 0);
     signal cpu_buffer_douta : std_logic_vector(259 downto 0);
     signal cpu_buffer_web : std_logic_vector(0 downto 0);
-    signal cpu_buffer_addrb : std_logic_vector(8 downto 0);
+    signal cpu_buffer_addrb : std_logic_vector(9 downto 0);
     signal cpu_buffer_dinb : std_logic_vector(259 downto 0);
     --signal cpu_count : std_logic_vector(7 downto 0);
     --signal reset_cpu_count : std_logic;
-     
+
     signal cpu_size : std_logic_vector(10 downto 0);
     signal cpu_size_z1 : std_logic_vector(10 downto 0);
     signal cpu_size_z2 : std_logic_vector(10 downto 0);
-    
+
     signal cpu_ack_z1 : std_logic;
     signal cpu_ack_z2 : std_logic;
 
@@ -341,9 +341,9 @@ architecture arch_ska_fge_rx of ska_fge_rx is
 
 begin
 
------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- REGISTER MAC INPUTS TO IMPROVE TIMING
------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
     gen_mac_rx_data_i : process(mac_clk)
     begin
@@ -761,10 +761,7 @@ begin
     debug_port(7) <= '1' when (cpu_size /= ("000" & X"00")) else '0';
 
     -- CONVERT 256 bits TO 64 bit READS BY DROPPING LAST 2 bits OF ADDRESS
-    --cpu_buffer_addra(8 downto 6) <= cpu_buffer_read_sel;
-    --cpu_buffer_addra(5 downto 0) <= cpu_rx_buffer_addr(7 downto 2);
-
-    cpu_buffer_addra(8) <= cpu_buffer_read_sel(0);
+    cpu_buffer_addra(9 downto 8) <= cpu_buffer_read_sel;
     cpu_buffer_addra(7 downto 0) <= cpu_rx_buffer_addr(9 downto 2);
 
 
@@ -795,16 +792,16 @@ begin
     cpu_buffer_dinb(258) <= cpu_payload2_val;
     cpu_buffer_dinb(259) <= cpu_payload3_val;
 
-    cpu_buffer_addrb(8) <= cpu_buffer_write_sel(0);
+    cpu_buffer_addrb(9 downto 8) <= cpu_buffer_write_sel;
     cpu_buffer_addrb(7 downto 0) <= cpu_buffer_addr;
 
     gen_current_cpu_state : process(mac_rst, mac_clk)
     variable cpu_count : std_logic_vector(10 downto 0);
     begin
-        if (mac_rst = '1')then
+      if (mac_rst = '1')then
             cpu_buffer_addr <= (others => '0');
             frame_bypass <= '0';
-            cpu_buffer_write_sel <= "000";
+            cpu_buffer_write_sel <= "00";
             cpu_rx_packet_size_wrreq <= '0';
             cpu_count := (others => '0');
             cpu_rx_packet_size_din <= (others => '0');
@@ -845,11 +842,11 @@ begin
                 -- DIFFERENT TO 10GBE MAC
                 if ((cpu_frame_valid = '1')and(frame_bypass = '0'))then
                     -- IF SPACE AVAILABLE, WRITE IMMEDIATELY AND STAY IN THIS STATE
-                    if (cpu_rx_packet_size_wrcount(3) = '0')then
-                        if (cpu_buffer_write_sel = "111")then
-                            cpu_buffer_write_sel <= "000";
+                    if (cpu_rx_packet_size_wrcount(2) = '0')then
+                        if (cpu_buffer_write_sel = "11")then
+                            cpu_buffer_write_sel <= "00";
                         else
-                            cpu_buffer_write_sel <= cpu_buffer_write_sel + "001";
+                            cpu_buffer_write_sel <= cpu_buffer_write_sel + "01";
                         end if;
 
                         cpu_rx_packet_size_wrreq <= '1';
@@ -867,12 +864,12 @@ begin
                 when CPU_WAIT =>
                 current_cpu_state <= CPU_WAIT;
 
-                -- LESS THAN 8 FRAMES
-                if (cpu_rx_packet_size_wrcount(3) = '0')then
-                    if (cpu_buffer_write_sel = "111")then
-                        cpu_buffer_write_sel <= "000";
+                -- LESS THAN 4 FRAMES
+                if (cpu_rx_packet_size_wrcount(2) = '0')then
+                    if (cpu_buffer_write_sel = "11")then
+                        cpu_buffer_write_sel <= "00";
                     else
-                        cpu_buffer_write_sel <= cpu_buffer_write_sel + "001";
+                        cpu_buffer_write_sel <= cpu_buffer_write_sel + "01";
                     end if;
 
                     cpu_rx_packet_size_wrreq <= '1';
@@ -913,7 +910,7 @@ begin
             cpu_size <= (others => '0');
             -- START READING AT PREVIOUS ADDRESS SPACE SO THAT NOT READING
             -- WHILE WRITING
-            cpu_buffer_read_sel <= "111";
+            cpu_buffer_read_sel <= "11";
             current_cpu_read_state <= CPU_READ_WAITING_FOR_PACKET;
         elsif (rising_edge(cpu_clk))then
 
@@ -924,10 +921,11 @@ begin
                 cpu_size <= (others => '0');
 
                 if (cpu_rx_packet_size_empty = '0')then
-                    if (cpu_buffer_read_sel = "111")then
-                        cpu_buffer_read_sel <= "000";
+
+                    if (cpu_buffer_read_sel = "11")then
+                        cpu_buffer_read_sel <= "00";
                     else
-                        cpu_buffer_read_sel <= cpu_buffer_read_sel + "001";
+                        cpu_buffer_read_sel <= cpu_buffer_read_sel + "01";
                     end if;
                     current_cpu_read_state <= CPU_READ_LATENCY;
                 end if;
