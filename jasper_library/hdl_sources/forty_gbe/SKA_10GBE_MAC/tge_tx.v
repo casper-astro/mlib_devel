@@ -243,13 +243,13 @@ generate if (CPU_ENABLE) begin : tx_cpu_enabled
   cpu_buffer cpu_tx_buffer(   
     .clka      (cpu_clk),
     .dina      (cpu_tx_buffer_wr_data),
-    .addra     ({cpu_buffer_sel, cpu_tx_buffer_addr}),
+    .addra     ({2'b00, cpu_buffer_sel, cpu_tx_buffer_addr}),
     .wea       (cpu_tx_buffer_wr_en),
     .douta     (cpu_tx_buffer_rd_data),
 
     .clkb      (mac_clk),
     .dinb      (64'h0),
-    .addrb     ({!cpu_buffer_sel, mac_cpu_addr}),
+    .addrb     ({2'b00, !cpu_buffer_sel, mac_cpu_addr}),
     .web       (1'b0),
     .doutb     (mac_cpu_data)
   );

@@ -1,10 +1,10 @@
 -- Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
--- Tool Version: Vivado v.2016.2 (lin64) Build 1577090 Thu Jun  2 16:32:35 MDT 2016
--- Date        : Tue Oct 23 13:40:15 2018
--- Host        : fiona running 64-bit Ubuntu 14.04.5 LTS
+-- Tool Version: Vivado v.2018.2 (lin64) Build 2258646 Thu Jun 14 20:02:38 MDT 2018
+-- Date        : Wed Nov  7 10:55:20 2018
+-- Host        : adam-cm running 64-bit Ubuntu 16.04.5 LTS
 -- Command     : write_vhdl -force -mode funcsim
---               /data/casper/mlib_devel_eth_map/jasper_library/test_models/skarab_fgbe/myproj/myproj.srcs/sources_1/ip/cpu_buffer/cpu_buffer_sim_netlist.vhdl
+--               /home/aisaacson/work/git_work/ska_sa/projects/mlib_devel/jasper_library/test_models/skarab_fgbe/myproj/myproj.srcs/sources_1/ip/cpu_buffer/cpu_buffer_sim_netlist.vhdl
 -- Design      : cpu_buffer
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -317,8 +317,6 @@ architecture STRUCTURE of \cpu_buffer_blk_mem_gen_prim_wrapper__parameterized0\ 
   signal \NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_DOPBDOP_UNCONNECTED\ : STD_LOGIC_VECTOR ( 3 downto 2 );
   signal \NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_ECCPARITY_UNCONNECTED\ : STD_LOGIC_VECTOR ( 7 downto 0 );
   signal \NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_RDADDRECC_UNCONNECTED\ : STD_LOGIC_VECTOR ( 8 downto 0 );
-  attribute CLOCK_DOMAINS : string;
-  attribute CLOCK_DOMAINS of \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram\ : label is "INDEPENDENT";
   attribute box_type : string;
   attribute box_type of \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram\ : label is "PRIMITIVE";
 begin
@@ -594,8 +592,6 @@ architecture STRUCTURE of \cpu_buffer_blk_mem_gen_prim_wrapper__parameterized1\ 
   signal \NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_DOPBDOP_UNCONNECTED\ : STD_LOGIC_VECTOR ( 3 downto 2 );
   signal \NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_ECCPARITY_UNCONNECTED\ : STD_LOGIC_VECTOR ( 7 downto 0 );
   signal \NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_RDADDRECC_UNCONNECTED\ : STD_LOGIC_VECTOR ( 8 downto 0 );
-  attribute CLOCK_DOMAINS : string;
-  attribute CLOCK_DOMAINS of \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram\ : label is "INDEPENDENT";
   attribute box_type : string;
   attribute box_type of \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram\ : label is "PRIMITIVE";
 begin
@@ -861,22 +857,22 @@ entity \cpu_buffer_blk_mem_gen_prim_wrapper__parameterized2\ is
 end \cpu_buffer_blk_mem_gen_prim_wrapper__parameterized2\;
 
 architecture STRUCTURE of \cpu_buffer_blk_mem_gen_prim_wrapper__parameterized2\ is
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_37\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_38\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_39\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_45\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_46\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_47\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_69\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_20\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_21\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_22\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_28\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_29\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_30\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_52\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_53\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_54\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_60\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_61\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_62\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_70\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_71\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_77\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_78\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_79\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_87\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_88\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_91\ : STD_LOGIC;
-  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_92\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_74\ : STD_LOGIC;
+  signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_75\ : STD_LOGIC;
   signal \NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_CASCADEOUTA_UNCONNECTED\ : STD_LOGIC;
   signal \NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_CASCADEOUTB_UNCONNECTED\ : STD_LOGIC;
   signal \NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_DBITERR_UNCONNECTED\ : STD_LOGIC;
@@ -1093,29 +1089,29 @@ begin
       DIPADIP(3 downto 0) => B"0000",
       DIPBDIP(3 downto 0) => B"0000",
       DOADO(31 downto 16) => \NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_DOADO_UNCONNECTED\(31 downto 16),
-      DOADO(15) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_37\,
-      DOADO(14) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_38\,
-      DOADO(13) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_39\,
+      DOADO(15) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_20\,
+      DOADO(14) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_21\,
+      DOADO(13) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_22\,
       DOADO(12 downto 8) => douta(9 downto 5),
-      DOADO(7) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_45\,
-      DOADO(6) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_46\,
-      DOADO(5) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_47\,
+      DOADO(7) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_28\,
+      DOADO(6) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_29\,
+      DOADO(5) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_30\,
       DOADO(4 downto 0) => douta(4 downto 0),
       DOBDO(31 downto 16) => \NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_DOBDO_UNCONNECTED\(31 downto 16),
-      DOBDO(15) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_69\,
-      DOBDO(14) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_70\,
-      DOBDO(13) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_71\,
+      DOBDO(15) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_52\,
+      DOBDO(14) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_53\,
+      DOBDO(13) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_54\,
       DOBDO(12 downto 8) => doutb(9 downto 5),
-      DOBDO(7) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_77\,
-      DOBDO(6) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_78\,
-      DOBDO(5) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_79\,
+      DOBDO(7) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_60\,
+      DOBDO(6) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_61\,
+      DOBDO(5) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_62\,
       DOBDO(4 downto 0) => doutb(4 downto 0),
       DOPADOP(3 downto 2) => \NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_DOPADOP_UNCONNECTED\(3 downto 2),
-      DOPADOP(1) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_87\,
-      DOPADOP(0) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_88\,
+      DOPADOP(1) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_70\,
+      DOPADOP(0) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_71\,
       DOPBDOP(3 downto 2) => \NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_DOPBDOP_UNCONNECTED\(3 downto 2),
-      DOPBDOP(1) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_91\,
-      DOPBDOP(0) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_92\,
+      DOPBDOP(1) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_74\,
+      DOPBDOP(0) => \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_n_75\,
       ECCPARITY(7 downto 0) => \NLW_DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.ram_ECCPARITY_UNCONNECTED\(7 downto 0),
       ENARDEN => '1',
       ENBWREN => '1',
@@ -1509,9 +1505,9 @@ entity cpu_buffer_blk_mem_gen_v8_4_1 is
     s_axi_rdaddrecc : out STD_LOGIC_VECTOR ( 10 downto 0 )
   );
   attribute C_ADDRA_WIDTH : integer;
-  attribute C_ADDRA_WIDTH of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 11;
+  attribute C_ADDRA_WIDTH of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 11;
   attribute C_ADDRB_WIDTH : integer;
-  attribute C_ADDRB_WIDTH of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 11;
+  attribute C_ADDRB_WIDTH of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 11;
   attribute C_ALGORITHM : integer;
   attribute C_ALGORITHM of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 1;
   attribute C_AXI_ID_WIDTH : integer;
@@ -1527,7 +1523,7 @@ entity cpu_buffer_blk_mem_gen_v8_4_1 is
   attribute C_COUNT_18K_BRAM : string;
   attribute C_COUNT_18K_BRAM of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "0";
   attribute C_COUNT_36K_BRAM : string;
-  attribute C_COUNT_36K_BRAM of cpu_buffer_blk_mem_gen_v8_3_3 : entity is "4";
+  attribute C_COUNT_36K_BRAM of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "4";
   attribute C_CTRL_ECC_ALGO : string;
   attribute C_CTRL_ECC_ALGO of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "NONE";
   attribute C_DEFAULT_DATA : string;
@@ -1555,7 +1551,7 @@ entity cpu_buffer_blk_mem_gen_v8_4_1 is
   attribute C_EN_SLEEP_PIN : integer;
   attribute C_EN_SLEEP_PIN of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
   attribute C_EST_POWER_SUMMARY : string;
-  attribute C_EST_POWER_SUMMARY of cpu_buffer_blk_mem_gen_v8_3_3 : entity is "Estimated Power for IP     :     21.396002 mW";
+  attribute C_EST_POWER_SUMMARY of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "Estimated Power for IP     :     21.396002 mW";
   attribute C_FAMILY : string;
   attribute C_FAMILY of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "virtex7";
   attribute C_HAS_AXI_ID : integer;
@@ -1605,9 +1601,9 @@ entity cpu_buffer_blk_mem_gen_v8_4_1 is
   attribute C_PRIM_TYPE : integer;
   attribute C_PRIM_TYPE of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 1;
   attribute C_READ_DEPTH_A : integer;
-  attribute C_READ_DEPTH_A of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 2048;
+  attribute C_READ_DEPTH_A of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 2048;
   attribute C_READ_DEPTH_B : integer;
-  attribute C_READ_DEPTH_B of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 2048;
+  attribute C_READ_DEPTH_B of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 2048;
   attribute C_READ_WIDTH_A : integer;
   attribute C_READ_WIDTH_A of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 64;
   attribute C_READ_WIDTH_B : integer;
@@ -1641,9 +1637,9 @@ entity cpu_buffer_blk_mem_gen_v8_4_1 is
   attribute C_WEB_WIDTH : integer;
   attribute C_WEB_WIDTH of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 1;
   attribute C_WRITE_DEPTH_A : integer;
-  attribute C_WRITE_DEPTH_A of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 2048;
+  attribute C_WRITE_DEPTH_A of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 2048;
   attribute C_WRITE_DEPTH_B : integer;
-  attribute C_WRITE_DEPTH_B of cpu_buffer_blk_mem_gen_v8_3_3 : entity is 2048;
+  attribute C_WRITE_DEPTH_B of cpu_buffer_blk_mem_gen_v8_4_1 : entity is 2048;
   attribute C_WRITE_MODE_A : string;
   attribute C_WRITE_MODE_A of cpu_buffer_blk_mem_gen_v8_4_1 : entity is "WRITE_FIRST";
   attribute C_WRITE_MODE_B : string;
@@ -1815,7 +1811,7 @@ entity cpu_buffer is
   attribute downgradeipidentifiedwarnings : string;
   attribute downgradeipidentifiedwarnings of cpu_buffer : entity is "yes";
   attribute x_core_info : string;
-  attribute x_core_info of cpu_buffer : entity is "blk_mem_gen_v8_4_1,Vivado 2018.1";
+  attribute x_core_info of cpu_buffer : entity is "blk_mem_gen_v8_4_1,Vivado 2018.2";
 end cpu_buffer;
 
 architecture STRUCTURE of cpu_buffer is

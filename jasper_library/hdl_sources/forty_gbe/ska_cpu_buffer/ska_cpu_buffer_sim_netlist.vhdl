@@ -1,10 +1,10 @@
 -- Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
--- Tool Version: Vivado v.2016.2 (lin64) Build 1577090 Thu Jun  2 16:32:35 MDT 2016
--- Date        : Thu Nov  1 10:17:09 2018
--- Host        : fiona running 64-bit Ubuntu 14.04.5 LTS
+-- Tool Version: Vivado v.2018.2 (lin64) Build 2258646 Thu Jun 14 20:02:38 MDT 2018
+-- Date        : Wed Nov  7 10:55:23 2018
+-- Host        : adam-cm running 64-bit Ubuntu 16.04.5 LTS
 -- Command     : write_vhdl -force -mode funcsim
---               /data/casper/mlib_devel_eth_map/jasper_library/test_models/skarab_fgbe/myproj/myproj.srcs/sources_1/ip/ska_cpu_buffer/ska_cpu_buffer_sim_netlist.vhdl
+--               /home/aisaacson/work/git_work/ska_sa/projects/mlib_devel/jasper_library/test_models/skarab_fgbe/myproj/myproj.srcs/sources_1/ip/ska_cpu_buffer/ska_cpu_buffer_sim_netlist.vhdl
 -- Design      : ska_cpu_buffer
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -2731,9 +2731,9 @@ entity ska_cpu_buffer_blk_mem_gen_v8_4_1 is
     s_axi_rdaddrecc : out STD_LOGIC_VECTOR ( 9 downto 0 )
   );
   attribute C_ADDRA_WIDTH : integer;
-  attribute C_ADDRA_WIDTH of ska_cpu_buffer_blk_mem_gen_v8_3_3 : entity is 10;
+  attribute C_ADDRA_WIDTH of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 10;
   attribute C_ADDRB_WIDTH : integer;
-  attribute C_ADDRB_WIDTH of ska_cpu_buffer_blk_mem_gen_v8_3_3 : entity is 10;
+  attribute C_ADDRB_WIDTH of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 10;
   attribute C_ALGORITHM : integer;
   attribute C_ALGORITHM of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 1;
   attribute C_AXI_ID_WIDTH : integer;
@@ -2827,9 +2827,9 @@ entity ska_cpu_buffer_blk_mem_gen_v8_4_1 is
   attribute C_PRIM_TYPE : integer;
   attribute C_PRIM_TYPE of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 1;
   attribute C_READ_DEPTH_A : integer;
-  attribute C_READ_DEPTH_A of ska_cpu_buffer_blk_mem_gen_v8_3_3 : entity is 1024;
+  attribute C_READ_DEPTH_A of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 1024;
   attribute C_READ_DEPTH_B : integer;
-  attribute C_READ_DEPTH_B of ska_cpu_buffer_blk_mem_gen_v8_3_3 : entity is 1024;
+  attribute C_READ_DEPTH_B of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 1024;
   attribute C_READ_WIDTH_A : integer;
   attribute C_READ_WIDTH_A of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 260;
   attribute C_READ_WIDTH_B : integer;
@@ -2863,9 +2863,9 @@ entity ska_cpu_buffer_blk_mem_gen_v8_4_1 is
   attribute C_WEB_WIDTH : integer;
   attribute C_WEB_WIDTH of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 1;
   attribute C_WRITE_DEPTH_A : integer;
-  attribute C_WRITE_DEPTH_A of ska_cpu_buffer_blk_mem_gen_v8_3_3 : entity is 1024;
+  attribute C_WRITE_DEPTH_A of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 1024;
   attribute C_WRITE_DEPTH_B : integer;
-  attribute C_WRITE_DEPTH_B of ska_cpu_buffer_blk_mem_gen_v8_3_3 : entity is 1024;
+  attribute C_WRITE_DEPTH_B of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 1024;
   attribute C_WRITE_MODE_A : string;
   attribute C_WRITE_MODE_A of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is "WRITE_FIRST";
   attribute C_WRITE_MODE_B : string;
@@ -3231,7 +3231,7 @@ entity ska_cpu_buffer is
   attribute downgradeipidentifiedwarnings : string;
   attribute downgradeipidentifiedwarnings of ska_cpu_buffer : entity is "yes";
   attribute x_core_info : string;
-  attribute x_core_info of ska_cpu_buffer : entity is "blk_mem_gen_v8_4_1,Vivado 2018.1";
+  attribute x_core_info of ska_cpu_buffer : entity is "blk_mem_gen_v8_4_1,Vivado 2018.2";
 end ska_cpu_buffer;
 
 architecture STRUCTURE of ska_cpu_buffer is

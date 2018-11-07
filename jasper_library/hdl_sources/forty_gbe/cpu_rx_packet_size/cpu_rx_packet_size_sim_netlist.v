@@ -1,10 +1,10 @@
 // Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
-// Tool Version: Vivado v.2016.2 (lin64) Build 1577090 Thu Jun  2 16:32:35 MDT 2016
-// Date        : Tue Feb 27 10:21:10 2018
-// Host        : adam-cm running 64-bit Ubuntu 14.04.5 LTS
+// Tool Version: Vivado v.2018.2 (lin64) Build 2258646 Thu Jun 14 20:02:38 MDT 2018
+// Date        : Wed Nov  7 10:54:43 2018
+// Host        : adam-cm running 64-bit Ubuntu 16.04.5 LTS
 // Command     : write_verilog -force -mode funcsim
-//               /home/aisaacson/work/git_work/ska_sa/projects/skarab_bsp_firmware/firmware/FRM123701U1R1/Vivado/FRM123701U1R1.srcs/sources_1/ip/cpu_rx_packet_size/cpu_rx_packet_size_sim_netlist.v
+//               /home/aisaacson/work/git_work/ska_sa/projects/mlib_devel/jasper_library/test_models/skarab_fgbe/myproj/myproj.srcs/sources_1/ip/cpu_rx_packet_size/cpu_rx_packet_size_sim_netlist.v
 // Design      : cpu_rx_packet_size
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -12,7 +12,7 @@
 // --------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CHECK_LICENSE_TYPE = "cpu_rx_packet_size,fifo_generator_v13_2_2,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "fifo_generator_v13_2_2,Vivado 2018.1" *) 
+(* CHECK_LICENSE_TYPE = "cpu_rx_packet_size,fifo_generator_v13_2_2,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "fifo_generator_v13_2_2,Vivado 2018.2" *) 
 (* NotValidForBitStream *)
 module cpu_rx_packet_size
    (rst,
@@ -26,8 +26,8 @@ module cpu_rx_packet_size
     empty,
     wr_data_count);
   input rst;
-  (* x_interface_info = "xilinx.com:signal:clock:1.0 write_clk CLK" *) input wr_clk;
-  (* x_interface_info = "xilinx.com:signal:clock:1.0 read_clk CLK" *) input rd_clk;
+  (* x_interface_info = "xilinx.com:signal:clock:1.0 write_clk CLK" *) (* x_interface_parameter = "XIL_INTERFACENAME write_clk, FREQ_HZ 100000000, PHASE 0.000" *) input wr_clk;
+  (* x_interface_info = "xilinx.com:signal:clock:1.0 read_clk CLK" *) (* x_interface_parameter = "XIL_INTERFACENAME read_clk, FREQ_HZ 100000000, PHASE 0.000" *) input rd_clk;
   (* x_interface_info = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_DATA" *) input [10:0]din;
   (* x_interface_info = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_EN" *) input wr_en;
   (* x_interface_info = "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_EN" *) input rd_en;
@@ -1289,12 +1289,12 @@ module cpu_rx_packet_size_dmem
     count_d2,
     E,
     rd_clk,
-    Q);
+    AR);
   output [10:0]dout;
   input wr_clk;
-  input RAM_WR_EN;
+  input EN;
   input [10:0]din;
-  input [3:0]\gc0.count_d1_reg[3] ;
+  input [3:0]Q;
   input [3:0]count_d2;
   input [0:0]E;
   input rd_clk;
@@ -1307,7 +1307,6 @@ module cpu_rx_packet_size_dmem
   wire [3:0]count_d2;
   wire [10:0]din;
   wire [10:0]dout;
-  wire [3:0]\gc0.count_d1_reg[3] ;
   wire [10:0]p_0_out;
   wire rd_clk;
   wire wr_clk;
@@ -1333,9 +1332,9 @@ module cpu_rx_packet_size_dmem
         .WE(EN));
   (* METHODOLOGY_DRC_VIOS = "" *) 
   RAM32M RAM_reg_0_15_6_10
-       (.ADDRA({1'b0,\gc0.count_d1_reg[3] }),
-        .ADDRB({1'b0,\gc0.count_d1_reg[3] }),
-        .ADDRC({1'b0,\gc0.count_d1_reg[3] }),
+       (.ADDRA({1'b0,Q}),
+        .ADDRB({1'b0,Q}),
+        .ADDRC({1'b0,Q}),
         .ADDRD({1'b0,count_d2}),
         .DIA(din[7:6]),
         .DIB(din[9:8]),
@@ -1360,7 +1359,7 @@ module cpu_rx_packet_size_dmem
     \gpr1.dout_i_reg[10] 
        (.C(rd_clk),
         .CE(E),
-        .CLR(Q),
+        .CLR(AR),
         .D(p_0_out[10]),
         .Q(dout[10]));
   FDCE #(
@@ -1424,7 +1423,7 @@ module cpu_rx_packet_size_dmem
     \gpr1.dout_i_reg[8] 
        (.C(rd_clk),
         .CE(E),
-        .CLR(Q),
+        .CLR(AR),
         .D(p_0_out[8]),
         .Q(dout[8]));
   FDCE #(
@@ -1432,7 +1431,7 @@ module cpu_rx_packet_size_dmem
     \gpr1.dout_i_reg[9] 
        (.C(rd_clk),
         .CE(E),
-        .CLR(Q),
+        .CLR(AR),
         .D(p_0_out[9]),
         .Q(dout[9]));
 endmodule
@@ -1464,10 +1463,7 @@ module cpu_rx_packet_size_fifo_generator_ramfifo
   input wr_en;
   input rd_en;
 
-  wire RD_RST;
-  wire RST;
-  wire WR_RST;
-  wire clear;
+  wire [0:0]AR;
   wire [10:0]din;
   wire [10:0]dout;
   wire empty;
@@ -1578,6 +1574,7 @@ module cpu_rx_packet_size_fifo_generator_top
   input wr_en;
   input rd_en;
 
+  wire [0:0]AR;
   wire [10:0]din;
   wire [10:0]dout;
   wire empty;
@@ -2699,6 +2696,7 @@ module cpu_rx_packet_size_fifo_generator_v13_2_2_synth
   input wr_en;
   input rd_en;
 
+  wire [0:0]AR;
   wire [10:0]din;
   wire [10:0]dout;
   wire empty;
@@ -2736,12 +2734,12 @@ module cpu_rx_packet_size_memory
     count_d2,
     E,
     rd_clk,
-    Q);
+    AR);
   output [10:0]dout;
   input wr_clk;
-  input RAM_WR_EN;
+  input EN;
   input [10:0]din;
-  input [3:0]\gc0.count_d1_reg[3] ;
+  input [3:0]Q;
   input [3:0]count_d2;
   input [0:0]E;
   input rd_clk;
@@ -2754,7 +2752,6 @@ module cpu_rx_packet_size_memory
   wire [3:0]count_d2;
   wire [10:0]din;
   wire [10:0]dout;
-  wire [3:0]\gc0.count_d1_reg[3] ;
   wire rd_clk;
   wire wr_clk;
 
@@ -2978,310 +2975,14 @@ module cpu_rx_packet_size_rd_logic
         .rd_clk(rd_clk),
         .rd_en(rd_en));
   cpu_rx_packet_size_rd_bin_cntr rpntr
-       (.E(E),
-        .Q(\gc0.count_d1_reg[3] ),
-        .\ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] (Q[0]),
+       (.AR(AR),
+        .E(E),
+        .Q(Q),
+        .WR_PNTR_RD(WR_PNTR_RD),
+        .out(p_2_out),
+        .ram_empty_i_reg(rpntr_n_0),
         .rd_clk(rd_clk),
-        .\rd_pntr_gc_reg[2] (\rd_pntr_gc_reg[2] ),
-        .\rd_pntr_gc_reg[3] (\rd_pntr_gc_reg[3] ));
-endmodule
-
-(* ORIG_REF_NAME = "rd_status_flags_as" *) 
-module cpu_rx_packet_size_rd_status_flags_as
-   (empty,
-    p_2_out,
-    E,
-    ram_empty_fb_i_reg_0,
-    rd_clk,
-    Q,
-    rd_en);
-  output empty;
-  output p_2_out;
-  output [0:0]E;
-  input ram_empty_fb_i_reg_0;
-  input rd_clk;
-  input [0:0]Q;
-  input rd_en;
-
-  wire [0:0]E;
-  wire [0:0]Q;
-  wire empty;
-  wire p_2_out;
-  wire ram_empty_fb_i_reg_0;
-  wire rd_clk;
-  wire rd_en;
-
-  LUT2 #(
-    .INIT(4'h2)) 
-    \gpr1.dout_i[10]_i_1 
-       (.I0(rd_en),
-        .I1(p_2_out),
-        .O(E));
-  (* equivalent_register_removal = "no" *) 
-  FDPE #(
-    .INIT(1'b1)) 
-    ram_empty_fb_i_reg
-       (.C(rd_clk),
-        .CE(1'b1),
-        .D(ram_empty_fb_i_reg_0),
-        .PRE(Q),
-        .Q(p_2_out));
-  (* equivalent_register_removal = "no" *) 
-  FDPE #(
-    .INIT(1'b1)) 
-    ram_empty_i_reg
-       (.C(rd_clk),
-        .CE(1'b1),
-        .D(ram_empty_fb_i_reg_0),
-        .PRE(Q),
-        .Q(empty));
-endmodule
-
-(* ORIG_REF_NAME = "reset_blk_ramfifo" *) 
-module cpu_rx_packet_size_reset_blk_ramfifo
-   (out,
-    ram_full_i_reg,
-    Q,
-    \gic0.gc0.count_reg[0] ,
-    wr_clk,
-    rst,
-    rd_clk);
-  output out;
-  output ram_full_i_reg;
-  output [2:0]Q;
-  output [2:0]\gic0.gc0.count_reg[0] ;
-  input wr_clk;
-  input rst;
-  input rd_clk;
-
-  wire [2:0]Q;
-  wire [2:0]\gic0.gc0.count_reg[0] ;
-  wire \ngwrdrst.grst.g7serrst.rd_rst_asreg_i_1_n_0 ;
-  wire \ngwrdrst.grst.g7serrst.rd_rst_reg[2]_i_1_n_0 ;
-  wire \ngwrdrst.grst.g7serrst.wr_rst_asreg_i_1_n_0 ;
-  wire \ngwrdrst.grst.g7serrst.wr_rst_reg[2]_i_1_n_0 ;
-  wire rd_clk;
-  wire rd_rst_asreg;
-  wire rd_rst_asreg_d1;
-  wire rd_rst_asreg_d2;
-  wire rst;
-  (* async_reg = "true" *) (* msgon = "true" *) wire rst_d1;
-  (* async_reg = "true" *) (* msgon = "true" *) wire rst_d2;
-  (* async_reg = "true" *) (* msgon = "true" *) wire rst_d3;
-  (* async_reg = "true" *) (* msgon = "true" *) wire rst_rd_reg1;
-  (* async_reg = "true" *) (* msgon = "true" *) wire rst_rd_reg2;
-  (* async_reg = "true" *) (* msgon = "true" *) wire rst_wr_reg1;
-  (* async_reg = "true" *) (* msgon = "true" *) wire rst_wr_reg2;
-  wire wr_clk;
-  wire wr_rst_asreg;
-  wire wr_rst_asreg_d1;
-  wire wr_rst_asreg_d2;
-
-  assign out = rst_d2;
-  assign ram_full_i_reg = rst_d3;
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDPE #(
-    .INIT(1'b1)) 
-    \grstd1.grst_full.grst_f.rst_d1_reg 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .D(1'b0),
-        .PRE(rst),
-        .Q(rst_d1));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDPE #(
-    .INIT(1'b1)) 
-    \grstd1.grst_full.grst_f.rst_d2_reg 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .D(rst_d1),
-        .PRE(rst),
-        .Q(rst_d2));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDPE #(
-    .INIT(1'b1)) 
-    \grstd1.grst_full.grst_f.rst_d3_reg 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .D(rst_d2),
-        .PRE(rst),
-        .Q(rst_d3));
-  FDRE #(
-    .INIT(1'b0)) 
-    \ngwrdrst.grst.g7serrst.rd_rst_asreg_d1_reg 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .D(rd_rst_asreg),
-        .Q(rd_rst_asreg_d1),
-        .R(1'b0));
-  FDRE #(
-    .INIT(1'b0)) 
-    \ngwrdrst.grst.g7serrst.rd_rst_asreg_d2_reg 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .D(rd_rst_asreg_d1),
-        .Q(rd_rst_asreg_d2),
-        .R(1'b0));
-  LUT2 #(
-    .INIT(4'h2)) 
-    \ngwrdrst.grst.g7serrst.rd_rst_asreg_i_1 
-       (.I0(rd_rst_asreg),
-        .I1(rd_rst_asreg_d1),
-        .O(\ngwrdrst.grst.g7serrst.rd_rst_asreg_i_1_n_0 ));
-  FDPE #(
-    .INIT(1'b1)) 
-    \ngwrdrst.grst.g7serrst.rd_rst_asreg_reg 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .D(\ngwrdrst.grst.g7serrst.rd_rst_asreg_i_1_n_0 ),
-        .PRE(rst_rd_reg2),
-        .Q(rd_rst_asreg));
-  LUT2 #(
-    .INIT(4'h2)) 
-    \ngwrdrst.grst.g7serrst.rd_rst_reg[2]_i_1 
-       (.I0(rd_rst_asreg),
-        .I1(rd_rst_asreg_d2),
-        .O(\ngwrdrst.grst.g7serrst.rd_rst_reg[2]_i_1_n_0 ));
-  (* equivalent_register_removal = "no" *) 
-  FDPE #(
-    .INIT(1'b1)) 
-    \ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .D(1'b0),
-        .PRE(\ngwrdrst.grst.g7serrst.rd_rst_reg[2]_i_1_n_0 ),
-        .Q(Q[0]));
-  (* equivalent_register_removal = "no" *) 
-  FDPE #(
-    .INIT(1'b1)) 
-    \ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .D(1'b0),
-        .PRE(\ngwrdrst.grst.g7serrst.rd_rst_reg[2]_i_1_n_0 ),
-        .Q(Q[1]));
-  (* equivalent_register_removal = "no" *) 
-  FDPE #(
-    .INIT(1'b1)) 
-    \ngwrdrst.grst.g7serrst.rd_rst_reg_reg[2] 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .D(1'b0),
-        .PRE(\ngwrdrst.grst.g7serrst.rd_rst_reg[2]_i_1_n_0 ),
-        .Q(Q[2]));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDPE #(
-    .INIT(1'b0)) 
-    \ngwrdrst.grst.g7serrst.rst_rd_reg1_reg 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .D(1'b0),
-        .PRE(rst),
-        .Q(rst_rd_reg1));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDPE #(
-    .INIT(1'b0)) 
-    \ngwrdrst.grst.g7serrst.rst_rd_reg2_reg 
-       (.C(rd_clk),
-        .CE(1'b1),
-        .D(rst_rd_reg1),
-        .PRE(rst),
-        .Q(rst_rd_reg2));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDPE #(
-    .INIT(1'b0)) 
-    \ngwrdrst.grst.g7serrst.rst_wr_reg1_reg 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .D(1'b0),
-        .PRE(rst),
-        .Q(rst_wr_reg1));
-  (* ASYNC_REG *) 
-  (* KEEP = "yes" *) 
-  (* msgon = "true" *) 
-  FDPE #(
-    .INIT(1'b0)) 
-    \ngwrdrst.grst.g7serrst.rst_wr_reg2_reg 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .D(rst_wr_reg1),
-        .PRE(rst),
-        .Q(rst_wr_reg2));
-  FDRE #(
-    .INIT(1'b0)) 
-    \ngwrdrst.grst.g7serrst.wr_rst_asreg_d1_reg 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .D(wr_rst_asreg),
-        .Q(wr_rst_asreg_d1),
-        .R(1'b0));
-  FDRE #(
-    .INIT(1'b0)) 
-    \ngwrdrst.grst.g7serrst.wr_rst_asreg_d2_reg 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .D(wr_rst_asreg_d1),
-        .Q(wr_rst_asreg_d2),
-        .R(1'b0));
-  LUT2 #(
-    .INIT(4'h2)) 
-    \ngwrdrst.grst.g7serrst.wr_rst_asreg_i_1 
-       (.I0(wr_rst_asreg),
-        .I1(wr_rst_asreg_d1),
-        .O(\ngwrdrst.grst.g7serrst.wr_rst_asreg_i_1_n_0 ));
-  FDPE #(
-    .INIT(1'b1)) 
-    \ngwrdrst.grst.g7serrst.wr_rst_asreg_reg 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .D(\ngwrdrst.grst.g7serrst.wr_rst_asreg_i_1_n_0 ),
-        .PRE(rst_wr_reg2),
-        .Q(wr_rst_asreg));
-  LUT2 #(
-    .INIT(4'h2)) 
-    \ngwrdrst.grst.g7serrst.wr_rst_reg[2]_i_1 
-       (.I0(wr_rst_asreg),
-        .I1(wr_rst_asreg_d2),
-        .O(\ngwrdrst.grst.g7serrst.wr_rst_reg[2]_i_1_n_0 ));
-  (* equivalent_register_removal = "no" *) 
-  FDPE #(
-    .INIT(1'b1)) 
-    \ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .D(1'b0),
-        .PRE(\ngwrdrst.grst.g7serrst.wr_rst_reg[2]_i_1_n_0 ),
-        .Q(\gic0.gc0.count_reg[0] [0]));
-  (* equivalent_register_removal = "no" *) 
-  FDPE #(
-    .INIT(1'b1)) 
-    \ngwrdrst.grst.g7serrst.wr_rst_reg_reg[1] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .D(1'b0),
-        .PRE(\ngwrdrst.grst.g7serrst.wr_rst_reg[2]_i_1_n_0 ),
-        .Q(\gic0.gc0.count_reg[0] [1]));
-  (* equivalent_register_removal = "no" *) 
-  FDPE #(
-    .INIT(1'b1)) 
-    \ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2] 
-       (.C(wr_clk),
-        .CE(1'b1),
-        .D(1'b0),
-        .PRE(\ngwrdrst.grst.g7serrst.wr_rst_reg[2]_i_1_n_0 ),
-        .Q(\gic0.gc0.count_reg[0] [2]));
+        .rd_en(rd_en));
 endmodule
 
 (* ORIG_REF_NAME = "rd_status_flags_as" *) 
@@ -3313,7 +3014,7 @@ module cpu_rx_packet_size_rd_status_flags_as
   assign out = ram_empty_fb_i;
   LUT2 #(
     .INIT(4'h2)) 
-    \gpr1.dout_i[7]_i_1 
+    \gpr1.dout_i[10]_i_1 
        (.I0(rd_en),
         .I1(ram_empty_fb_i),
         .O(E));
