@@ -171,9 +171,8 @@ architecture arch_wishbone_forty_gb_eth_attach of wishbone_forty_gb_eth_attach i
     signal tx_afull_cnt_reg      : std_logic_vector(31 downto 0);
     signal rx_pkt_rate_reg       : std_logic_vector(31 downto 0);
     signal rx_pkt_cnt_reg        : std_logic_vector(31 downto 0);
-    signal rx_valid_rate_cnt_reg : std_logic_vector(31 downto 0);
-    signal rx_valid_cnt_reg      : std_logic_vector(31 downto 0);
     signal rx_valid_rate_reg     : std_logic_vector(31 downto 0);
+    signal rx_valid_cnt_reg      : std_logic_vector(31 downto 0);
     signal rx_overflow_cnt_reg   : std_logic_vector(31 downto 0);
     signal rx_bad_frame_cnt_reg  : std_logic_vector(31 downto 0);
     signal cnt_reset_reg         : std_logic_vector(31 downto 0);
@@ -215,7 +214,7 @@ begin
     tx_afull_cnt_reg      <= tx_afull_cnt;
     rx_pkt_rate_reg       <= rx_pkt_rate;
     rx_pkt_cnt_reg        <= rx_pkt_cnt;
-    rx_valid_rate_cnt_reg <= rx_valid_rate;
+    rx_valid_rate_reg     <= rx_valid_rate;
     rx_valid_cnt_reg      <= rx_valid_cnt;
     rx_overflow_cnt_reg   <= rx_overflow_cnt;
     rx_bad_frame_cnt_reg  <= rx_bad_frame_cnt;
@@ -317,8 +316,8 @@ begin
     (X"00" & "0000000" & soft_reset_reg & X"00" & "0000000" & local_enable_reg)  when (reg_data_src = REG_PROMISC_RST_EN)   else
     (X"0000" & local_port_reg)                                                   when (reg_data_src = REG_VALID_PORTS)      else
 
-    X"12345678"                                                              when (reg_data_src = REG_TX_PKT_RATE)      else
-    --tx_pkt_rate_reg                                                              when (reg_data_src = REG_TX_PKT_RATE)      else
+    --X"12345678"                                                              when (reg_data_src = REG_TX_PKT_RATE)      else
+    tx_pkt_rate_reg                                                              when (reg_data_src = REG_TX_PKT_RATE)      else
     tx_pkt_cnt_reg                                                               when (reg_data_src = REG_TX_PKT_CNT)       else
     tx_valid_rate_reg                                                            when (reg_data_src = REG_TX_VALID_RATE)    else
     tx_valid_cnt_reg                                                             when (reg_data_src = REG_TX_VALID_CNT)     else
@@ -329,8 +328,8 @@ begin
     rx_valid_rate_reg                                                            when (reg_data_src = REG_RX_VALID_RATE)    else
     rx_valid_cnt_reg                                                             when (reg_data_src = REG_RX_VALID_CNT)     else
     rx_overflow_cnt_reg                                                          when (reg_data_src = REG_RX_OVERFLOW_CNT)  else
-    X"87654321"                                                         when (reg_data_src = REG_RX_BAD_FRAME_CNT) else
-    --rx_bad_frame_cnt_reg                                                         when (reg_data_src = REG_RX_BAD_FRAME_CNT) else
+    --X"87654321"                                                         when (reg_data_src = REG_RX_BAD_FRAME_CNT) else
+    rx_bad_frame_cnt_reg                                                         when (reg_data_src = REG_RX_BAD_FRAME_CNT) else
     cnt_reset_reg                                                                when (reg_data_src = REG_CNT_RESET)        else
     (others => '0');
 
@@ -484,6 +483,20 @@ begin
                         end if;
                         if (SEL_I(1) = '1')then
                             local_port_reg(15 downto 8) <= DAT_I(15 downto 8);
+                        end if;
+                        
+                        when REG_CNT_RESET =>
+                        if (SEL_I(0) = '1')then
+                            cnt_reset_reg(7 downto 0) <= DAT_I(7 downto 0);
+                        end if;
+                        if (SEL_I(1) = '1')then
+                            cnt_reset_reg(15 downto 8) <= DAT_I(15 downto 8);
+                        end if;
+                        if (SEL_I(2) = '1')then
+                            cnt_reset_reg(23 downto 16) <= DAT_I(23 downto 16);
+                        end if;
+                        if (SEL_I(3) = '1')then
+                            cnt_reset_reg(31 downto 24) <= DAT_I(31 downto 24);
                         end if;
 
                         when others =>
