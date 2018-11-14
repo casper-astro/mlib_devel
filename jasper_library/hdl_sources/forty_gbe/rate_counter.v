@@ -38,7 +38,7 @@ module rate_counter #(
    counter #(
       .DATA_WIDTH   (DATA_WIDTH),
       .COUNT_FROM   (0),
-      .COUNT_TO     (CLK_RATE),
+      .COUNT_TO     (4294967295),
       .STEP         (1)
    ) valid_cntr (
       .clk   (clk),
