@@ -35,7 +35,7 @@
 function cosin_init(blk,varargin)
 
   %floating_point = true;
-  debug = true;
+  debug = false;
 
   clog('entering cosin_init',{'trace', 'cosin_init_debug'});
   check_mask_type(blk, 'cosin');
