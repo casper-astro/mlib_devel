@@ -77,6 +77,7 @@ class Toolflow(object):
         self.frontend_target = frontend_target
         self.frontend_target_base = os.path.basename(frontend_target)
 
+
         self.cores = None
         self.topfile = None
         self.top = None
@@ -296,6 +297,11 @@ class Toolflow(object):
         Constructs an associated VerilogModule instance ready to be
         modified.
         """
+        # generate multiboot, golden or tooflow image based on yaml file
+        self.hdl_filename = '%s/infrastructure/%s_parameters.vhd' % (os.getenv('HDL_ROOT'), self.plat.name)
+        # check to see if parameter file exists. Some platforms may not use this.
+        if os.path.isfile(self.hdl_filename):
+            self._gen_hdl_version(filename_hdl=self.hdl_filename)
         self.topfile = self.compile_dir+'/top.v'
         # delete top.v file if it exists, otherwise synthesis will fail
         if os.path.exists(self.topfile):
@@ -311,6 +317,7 @@ class Toolflow(object):
             self.top = verilog.VerilogModule(name='top', topfile=self.topfile)
         else:
             self.top = verilog.VerilogModule(name='top')
+
 
     def gen_periph_objs(self):
         """
@@ -667,6 +674,47 @@ class Toolflow(object):
         with open(filename, 'w') as fh:
             fh.write(yaml.dump(c))
 
+    def _gen_hdl_version(self, filename_hdl):
+        """
+        This function reads the existing version information from the HDL file and rewrites the version information and
+        appends it with an "8" (golden), "4" (multiboot) or "0" (toolflow)
+
+        :param filename_hdl: This is the path and hdl file that
+            contains the original FPGA version information. This file is overwritten with new multiboot, toolflow or
+             golden image info before being imported to the compile directory
+            directory
+        :type filename_bin: str
+        """
+
+        stringToMatch = 'constant C_VERSION'
+        lines = []
+        self.logger.debug('Opening Original hdl file %s' % filename_hdl)
+        # read version info from original file and write appended version info to a new list that will be
+        # written into a new file
+        with open(filename_hdl, 'r') as fh1:
+            for line in fh1:
+                if stringToMatch in line:
+                    if self.plat.boot_image == 'golden':
+                        linesub = line[:line.find('X')+2] +'8'+ line[line.find('X')+3:]
+                        lines.append(linesub)
+                    elif self.plat.boot_image == 'multiboot':
+                        linesub = line[:line.find('X')+2] +'4'+ line[line.find('X')+3:]
+                        lines.append(linesub)
+                    else:
+                        linesub = line[:line.find('X')+2] +'0'+ line[line.find('X')+3:]
+                        lines.append(linesub)
+                else:
+                    lines.append(line)
+            #print (lines)
+        fh1.close()
+
+        # write new version info to the same file that will be imported to the correct folder
+        with open(filename_hdl, 'w') as fh2:
+                fh2.writelines(lines)
+        fh2.close()
+
+        #import IPython
+        #IPython.embed()
 
 class ToolflowFrontend(object):
     """
@@ -1084,10 +1132,16 @@ class VivadoBackend(ToolflowBackend):
         if plat.project_mode:
             self.binary_loc = '%s/%s/%s.runs/impl_1/top.bin' % (
                 self.compile_dir, self.project_name, self.project_name)
+            self.hex_loc = '%s/%s/%s.runs/impl_1/top.hex' % (
+                self.compile_dir, self.project_name, self.project_name)
+
         # if non-project mode is enabled
         else:
             self.binary_loc = '%s/%s/top.bin' % (
                 self.compile_dir, self.project_name)
+            self.hex_loc = '%s/%s/top.hex' % (
+                self.compile_dir, self.project_name)
+
         self.name = 'vivado'
         self.npm_sources = []
         ToolflowBackend.__init__(self, plat=plat, compile_dir=compile_dir)
@@ -1312,6 +1366,16 @@ class VivadoBackend(ToolflowBackend):
             # just ignore if key is not present as only some platforms will have the key.
             except KeyError:
                 s = ""
+            # Generate a hex file for SKARAB for the multiboot or golden image. This is used by casperfpga for
+            # configuring the FPGA
+            try:
+                if plat.conf['boot_image'] == 'golden' or plat.conf['boot_image'] == 'multiboot':
+                    self.add_tcl_cmd('write_cfgmem -force -format hex -interface bpix16 -size 128 -loadbit "up 0x0 '
+                                 '%s/%s/%s.runs/impl_1/top.bit" -file %s'
+                                 % (self.compile_dir, self.project_name, self.project_name, self.hex_loc), stage='post_bitgen')
+            # just ignore if key is not present as only some platforms will have the key.
+            except KeyError:
+                s = ""
 
             # Determine if the design meets timing or not
             # Look for Worst Negative Slack
@@ -1408,6 +1472,20 @@ class VivadoBackend(ToolflowBackend):
             # will have the key.
             except KeyError as e:
                 raise KeyError(e.message)
+
+            # Generate a hex file for SKARAB for the multiboot or golden
+            # images. This is used by casperfpga for configuring the FPGA
+            try:
+                if plat.conf['boot_image'] == 'golden' or plat.conf['boot_image'] == 'multiboot':
+                    tcl('write_cfgmem -force -format hex -interface bpix16 '
+                        '-size 128 -loadbit "up 0x0 %s/%s/top.bit" -file %s' % (
+                            self.compile_dir, self.project_name,
+                            self.hex_loc))
+            # just ignore if key is not present as only some platforms
+            # will have the key.
+            except KeyError as e:
+                raise KeyError(e.message)
+
 
             # Determine if the design meets timing or not
             # Check for setup timing violations
@@ -1653,7 +1731,6 @@ class VivadoBackend(ToolflowBackend):
         helpers.write_file(constfile, user_const)
         print 'written constraint file', constfile
         self.add_const_file(constfile)
-
 
 class ISEBackend(VivadoBackend):
     """
