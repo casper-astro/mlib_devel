@@ -162,18 +162,32 @@ if __name__ == '__main__':
         if opts.software:
             binary = backend.binary_loc
             hex_file = backend.hex_loc
+            mcs_file = backend.mcs_loc
+            prm_file = backend.prm_loc
 
             backend.output_fpg = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d.fpg' % (
                 tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
                 tf.start_time.tm_hour, tf.start_time.tm_min)
 
-            #Generate the timestamp for the golden and multiboot images, if selected
+            #Generate the hex timestamp for the golden and multiboot images, if selected
             if platform.boot_image == 'golden':
                 backend.output_hex = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d_golden.hex' % (
                 tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
                 tf.start_time.tm_hour, tf.start_time.tm_min)
+                backend.output_mcs = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d_golden.mcs' % (
+                tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
+                tf.start_time.tm_hour, tf.start_time.tm_min)
+                backend.output_prm = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d_golden.prm' % (
+                tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
+                tf.start_time.tm_hour, tf.start_time.tm_min)
             elif platform.boot_image == 'multiboot':
                 backend.output_hex = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d_multiboot.hex' % (
+                tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
+                tf.start_time.tm_hour, tf.start_time.tm_min)
+                backend.output_mcs = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d_multiboot.mcs' % (
+                tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
+                tf.start_time.tm_hour, tf.start_time.tm_min)
+                backend.output_prm = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d_multiboot.prm' % (
                 tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
                 tf.start_time.tm_hour, tf.start_time.tm_min)
 
@@ -196,10 +210,16 @@ if __name__ == '__main__':
                 backend.mkfpg(binary, backend.output_fpg)
                 print 'Created %s/%s' % (backend.output_dir, backend.output_fpg)
 
-            # Only generate the hex files if a golden image or multiboot image
+            # Only generate the hex and mcs files if a golden image or multiboot image
             if platform.boot_image == 'golden' or platform.boot_image == 'multiboot':
                 os.system('cp %s %s/%s' % (
                     hex_file, backend.output_dir, backend.output_hex))
-                print 'Created %s/%s' % (backend.output_dir, backend.output_hex)
+                os.system('cp %s %s/%s' % (
+                    mcs_file, backend.output_dir, backend.output_mcs))
+                os.system('cp %s %s/%s' % (
+                    prm_file, backend.output_dir, backend.output_prm))
+                print 'Created hex file: %s/%s' % (backend.output_dir, backend.output_hex)
+                print 'Created mcs file: %s/%s' % (backend.output_dir, backend.output_mcs)
+                print 'Created prm file: %s/%s' % (backend.output_dir, backend.output_prm)
 
     # end
