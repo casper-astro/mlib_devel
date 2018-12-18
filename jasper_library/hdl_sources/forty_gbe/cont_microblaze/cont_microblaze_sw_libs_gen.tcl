@@ -18,6 +18,9 @@
 #Set path where the SDK drivers, BSP and libraries are stored - normally <install_path>/Xilinx/SDK/2018.2/data/embeddedsw
 set sdk_lib_path "/media/aisaacson/HD1TB/Xilinx/SDK/2018.2/data/embeddedsw"
 
+#Set path to where mb-ar executable is in order to generate software BSP
+set ::env(PATH) "$::env(PATH):/media/aisaacson/HD1TB/Xilinx/SDK/2018.2/gnu/microblaze/lin/bin"
+
 #Software design name
 set swdesign "microblaze_sw"
 
@@ -46,6 +49,9 @@ set outputDir $origin_dir/../../../test_models/project_flow/${_xil_proj_name_}
 #Need to load the hardware software interface (hsi) feature in Vivado to get access to all the hsi commands
 load_features hsi
 
+#Open the existing hdf (hardware design file) file for SDK
+#hsi::open_hw_design $origin_dir/../../../test_models/project_flow/skarabublazeproj/skarabublazeproj.sdk/cont_microblaze_wrapper.hdf
+
 #Close existing hardware design
 #hsi::close_hw_design $origin_dir/../../../test_models/project_flow/skarabublazeproj/skarabublazeproj.sdk/cont_microblaze_wrapper.hdf
 
@@ -53,7 +59,7 @@ load_features hsi
 hsi::set_repo_path $sdk_lib_path
 
 #Open the existing hdf (hardware design file) file for SDK
-#hsi::open_hw_design $origin_dir/../../../test_models/project_flow/skarabublazeproj/skarabublazeproj.sdk/cont_microblaze_wrapper.hdf
+hsi::open_hw_design $origin_dir/../../../test_models/project_flow/skarabublazeproj/skarabublazeproj.sdk/cont_microblaze_wrapper.hdf
 
 #Determine the name of the processor design (should be microblaze_0 in this case)
 set proc_name [hsi::get_cells -filter {IP_TYPE==PROCESSOR}]
