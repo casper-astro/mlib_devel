@@ -3,7 +3,7 @@ from constraints import PortConstraint, ClockConstraint, RawConstraint
 from itertools import count
 from yellow_block_typecodes import *
 
-class tengbe_v2(YellowBlock):
+class ten_gbe(YellowBlock):
     @staticmethod
     def factory(blk, plat, hdl_root=None):
         if plat.fpga.startswith('xc7k'):
@@ -16,7 +16,7 @@ class tengbe_v2(YellowBlock):
             return tengbe_v2_xilinx_v6(blk, plat, hdl_root)
 
     def instantiate_ktge(self, top, num=None):
-        ktge = top.get_instance(name=self.fullname, entity='kat_ten_gb_eth', comment=self.fullname)
+        ktge = top.get_instance(name=self.fullname, entity='kat_ten_gb_eth')
         ktge.add_parameter('FABRIC_MAC', "48'h%x"%self.fab_mac)
         ktge.add_parameter('FABRIC_IP', "32'h%x"%self.fab_ip)
         ktge.add_parameter('FABRIC_PORT', self.fab_udp)
@@ -79,8 +79,7 @@ class tengbe_v2(YellowBlock):
         # Wishbone memory for status registers / ARP table
         ktge.add_wb_interface(self.unique_name, mode='rw', nbytes=0xF000, typecode=self.typecode) # as in matlab code
 
-
-class tengbe_v2_xilinx_v6(tengbe_v2):
+class tengbe_v2_xilinx_v6(ten_gbe):
     def initialize(self):
         self.typecode = TYPECODE_ETHCORE
         self.add_source('kat_ten_gb_eth')
@@ -191,11 +190,11 @@ class tengbe_v2_xilinx_v6(tengbe_v2):
         cons.append(ClockConstraint('xaui_infrastructure_inst/xaui_infrastructure_inst/xaui_infrastructure_low_inst/gtx_refclk_bufr<*>', name='xaui_infra_clk', freq=156.25))
         return cons
 
-class tengbaser_xilinx_k7(tengbe_v2):
+class tengbaser_xilinx_k7(ten_gbe):
     def __init__(self, blk, plat, hdl_root, use_gth=False):
         self.use_gth = use_gth
         self.invert_sfp_disable = True
-        tengbe_v2.__init__(self, blk, plat, hdl_root)
+        ten_gbe.__init__(self, blk, plat, hdl_root)
     def initialize(self):
         self.typecode = TYPECODE_ETHCORE
         self.exc_requirements = ['tge%d'%self.slot]
@@ -269,7 +268,8 @@ class tengbaser_xilinx_k7(tengbe_v2):
         infra.add_port('gtrxreset_out         ', 'gtrxreset_out%d         '%num)
         infra.add_port('txuserrdy_out         ', 'txuserrdy_out%d         '%num)
         infra.add_port('reset_counter_done_out', 'reset_counter_done_out%d'%num)
-        infra.add_port('txclk322', 'txclk322_%d'%self.port)
+        if self.i_am_the_first:
+            infra.add_port('txclk322', 'txclk322_%d'%self.port)
 
     def instantiate_phy(self, top, num):
 

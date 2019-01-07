@@ -587,7 +587,7 @@
  * that returns 1 to accept a packet or 0 to drop a packet.
  */
 #if !defined ETHARP_SUPPORT_VLAN || defined __DOXYGEN__
-#define ETHARP_SUPPORT_VLAN             0
+#define ETHARP_SUPPORT_VLAN             1
 #endif
 
 /** LWIP_ETHERNET==1: enable ethernet support even though ARP might be disabled

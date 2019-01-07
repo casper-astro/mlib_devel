@@ -13,8 +13,6 @@
 #include "flash.h"
 #include "tmrctr.h"
 
-#define VERBOSE_ETH_IMPL
-
 // Array of one (for now)
 static struct netif netif_en[1];
 
