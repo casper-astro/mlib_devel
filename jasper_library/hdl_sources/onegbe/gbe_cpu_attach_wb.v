@@ -76,7 +76,7 @@ module gbe_cpu_attach_wb #(
   /************* Hard coded parameters ************/
 
   localparam CORE_TYPE       = 8'b1; // 1GbE
-  localparam CORE_REVISION   = 8'h1;
+  localparam CORE_REVISION   = 8'h2;
   localparam TX_BUF_MAX      = 16'd2048; // Size of TX buffer in bytes
   localparam RX_BUF_MAX      = 16'd2048; // Size of RX buffer in bytes
   localparam RX_WORD_SIZE    = 16'd4;    // The core counts RX data in 4-byte words
@@ -113,16 +113,17 @@ module gbe_cpu_attach_wb #(
   localparam REG_LOCAL_MAC_0          = 8'd4;
   localparam REG_LOCAL_IP             = 8'd5;
   localparam REG_LOCAL_GATEWAY        = 8'd6;
-  localparam REG_LOCAL_MULTICAST_IP   = 8'd7;
-  localparam REG_LOCAL_MULTICAST_MASK = 8'd8;
-  localparam REG_BUFFER_OCC           = 8'd9; // Number of bytes occupied in rx/tx buffers
-  localparam REG_LOCAL_ENABLE         = 8'd10;
-  localparam REG_LOCAL_PORT           = 8'd11;
-  localparam REG_PHY_STATUS_1         = 8'd12;
-  localparam REG_PHY_STATUS_0         = 8'd13;
-  localparam REG_PHY_CONTROL_1        = 8'd14;
-  localparam REG_PHY_CONTROL_0        = 8'd15;
-  localparam REG_ARP_SIZE             = 8'd16;
+  localparam REG_LOCAL_NETMASK        = 8'd7;
+  localparam REG_LOCAL_MULTICAST_IP   = 8'd8;
+  localparam REG_LOCAL_MULTICAST_MASK = 8'd9;
+  localparam REG_BUFFER_OCC           = 8'd10; // Number of bytes occupied in rx/tx buffers
+  localparam REG_LOCAL_ENABLE         = 8'd11;
+  localparam REG_LOCAL_PORT           = 8'd12;
+  localparam REG_PHY_STATUS_1         = 8'd13;
+  localparam REG_PHY_STATUS_0         = 8'd14;
+  localparam REG_PHY_CONTROL_1        = 8'd15;
+  localparam REG_PHY_CONTROL_0        = 8'd16;
+  localparam REG_ARP_SIZE             = 8'd17;
 
 
   reg [47:0] local_mac_reg = 0;
