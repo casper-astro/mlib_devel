@@ -443,7 +443,7 @@ function bus_addsub_init(blk, varargin)
   if strcmp(misc, 'on'),
     reuse_block(blk, 'dmisc', 'xbsIndex_r4/Delay', ...
       'latency', num2str(latency), ...
-      'Position', [xpos-del_w/2 ypos_tmp-del_d/2 xpos+del_w/2 ypos_tmp+del_da_debus/2]);
+      'Position', [xpos-del_w/2 ypos_tmp-del_d/2 xpos+del_w/2 ypos_tmp+del_d/2]);
     add_line(blk, 'misci/1', 'dmisc/1');
   end
   ypos_tmp = ypos_tmp + yinc;
