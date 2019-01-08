@@ -117,6 +117,7 @@ if __name__ == '__main__':
         tf.constraints_rule_check()
         tf.dump_castro(tf.compile_dir+'/castro.yml')
 
+
     if opts.backend or opts.software:
         try:
             platform = tf.plat
@@ -133,9 +134,9 @@ if __name__ == '__main__':
                                             compile_dir=tf.compile_dir,
                                             periph_objs=tf.periph_objs)
             backend.import_from_castro(backend.compile_dir + '/castro.yml')
+
             # launch vivado via the generated .tcl file
             backend.compile(cores=opts.jobs, plat=platform)
-
         # if ISE is selected to compile
         elif opts.be == 'ise':
             platform.backend_target = 'ise'
@@ -160,25 +161,65 @@ if __name__ == '__main__':
 
         if opts.software:
             binary = backend.binary_loc
+            hex_file = backend.hex_loc
+            mcs_file = backend.mcs_loc
+            prm_file = backend.prm_loc
+
             backend.output_fpg = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d.fpg' % (
                 tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
                 tf.start_time.tm_hour, tf.start_time.tm_min)
 
-            # generate bot bof and fpg files for all platforms
-            backend.output_bof = tf.frontend_target_base[:-4]
-            backend.output_bof += '_%d-%02d-%02d_%02d%02d.bof' % (
+            #Generate the hex timestamp for the golden and multiboot images, if selected
+            if platform.boot_image == 'golden':
+                backend.output_hex = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d_golden.hex' % (
                 tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
                 tf.start_time.tm_hour, tf.start_time.tm_min)
-            os.system('cp %s %s/top.bin' % (binary, backend.compile_dir))
-            mkbof_cmd = '%s/jasper_library/mkbof_64 -o %s/%s -s %s/core_info.tab ' \
-                        '-t 3 %s/top.bin' % (os.getenv('MLIB_DEVEL_PATH'),
+                backend.output_mcs = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d_golden.mcs' % (
+                tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
+                tf.start_time.tm_hour, tf.start_time.tm_min)
+                backend.output_prm = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d_golden.prm' % (
+                tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
+                tf.start_time.tm_hour, tf.start_time.tm_min)
+            elif platform.boot_image == 'multiboot':
+                backend.output_hex = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d_multiboot.hex' % (
+                tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
+                tf.start_time.tm_hour, tf.start_time.tm_min)
+                backend.output_mcs = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d_multiboot.mcs' % (
+                tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
+                tf.start_time.tm_hour, tf.start_time.tm_min)
+                backend.output_prm = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d_multiboot.prm' % (
+                tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
+                tf.start_time.tm_hour, tf.start_time.tm_min)
+
+            #Only generate the bof and fpg files if a toolflow image
+            if platform.boot_image == 'toolflow':
+                # generate bot bof and fpg files for all platforms
+                backend.output_bof = tf.frontend_target_base[:-4]
+                backend.output_bof += '_%d-%02d-%02d_%02d%02d.bof' % (
+                    tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
+                    tf.start_time.tm_hour, tf.start_time.tm_min)
+                os.system('cp %s %s/top.bin' % (binary, backend.compile_dir))
+                mkbof_cmd = '%s/jasper_library/mkbof_64 -o %s/%s -s %s/core_info.tab ' \
+                            '-t 3 %s/top.bin' % (os.getenv('MLIB_DEVEL_PATH'),
                                             backend.output_dir,
                                             backend.output_bof,
                                             backend.compile_dir,
                                             backend.compile_dir)
-            os.system(mkbof_cmd)
-            print 'Created %s/%s' % (backend.output_dir, backend.output_bof)
-            backend.mkfpg(binary, backend.output_fpg)
-            print 'Created %s/%s' % (backend.output_dir, backend.output_fpg)
+                os.system(mkbof_cmd)
+                print 'Created %s/%s' % (backend.output_dir, backend.output_bof)
+                backend.mkfpg(binary, backend.output_fpg)
+                print 'Created %s/%s' % (backend.output_dir, backend.output_fpg)
+
+            # Only generate the hex and mcs files if a golden image or multiboot image
+            if platform.boot_image == 'golden' or platform.boot_image == 'multiboot':
+                os.system('cp %s %s/%s' % (
+                    hex_file, backend.output_dir, backend.output_hex))
+                os.system('cp %s %s/%s' % (
+                    mcs_file, backend.output_dir, backend.output_mcs))
+                os.system('cp %s %s/%s' % (
+                    prm_file, backend.output_dir, backend.output_prm))
+                print 'Created hex file: %s/%s' % (backend.output_dir, backend.output_hex)
+                print 'Created mcs file: %s/%s' % (backend.output_dir, backend.output_mcs)
+                print 'Created prm file: %s/%s' % (backend.output_dir, backend.output_prm)
 
     # end

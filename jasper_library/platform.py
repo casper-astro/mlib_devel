@@ -46,6 +46,11 @@ class Platform(object):
         self.fpga = self.conf['fpga']
         #: backend target -- used to decide what compiler to use
         self.backend_target = self.conf['backend_target']
+        #: boot image --used to determine whether a toolflow, multiboot or golden image
+        try:
+            self.boot_image = self.conf['boot_image']
+        except KeyError:
+            self.boot_image = 'toolflow'
         self.user_clk_rate = 100
         self.user_clk = 'user_clk'
         #: project mode -- used to decide what Vivado compiler project

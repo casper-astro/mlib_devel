@@ -69,3 +69,4 @@ update_ip_catalog
 file mkdir $origin_dir/../../../test_models/project_flow/skarabublazeproj/skarabublazeproj.sdk
 write_hwdef -force  -file $origin_dir/../../../test_models/project_flow/skarabublazeproj/skarabublazeproj.sdk/cont_microblaze_wrapper.hdf
 
+
