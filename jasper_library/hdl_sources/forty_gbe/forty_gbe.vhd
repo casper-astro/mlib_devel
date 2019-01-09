@@ -1761,13 +1761,11 @@ begin
     brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(29 downto 28) <= xlgmii_txled(3); -- 40GBE ETH 3 TX
     brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(31 downto 30) <= xlgmii_rxled(3); -- 40GBE ETH 3 RX
 
-    --The 40GbE MAC and PHY microblaze reset needs to be OR'ed with hard reset in
-    --order to make the reset deterministic. This will prevent the Rx Link from not
-    --functioning properly
-    qsfp_soft_reset(0) <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(1) or sys_rst;
-    qsfp_soft_reset(1) <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(2) or sys_rst;
-    qsfp_soft_reset(2) <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(3) or sys_rst;
-    qsfp_soft_reset(3) <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(4) or sys_rst;
+
+    qsfp_soft_reset(0) <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(1);
+    qsfp_soft_reset(1) <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(2);
+    qsfp_soft_reset(2) <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(3);
+    qsfp_soft_reset(3) <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(4);
 
     -- Microblaze Alive Signal
     brd_user_read_regs(C_RD_UBLAZE_ALIVE_ADDR) <= brd_user_write_regs(C_WR_UBLAZE_ALIVE_ADDR);
@@ -3346,7 +3344,7 @@ begin
     end process;   
    
     --Start reading out of the wishbone FIFO (wishbone to DSP interface [39.0625MHz to 39.0625MHz]) when FIFO is not empty   
-    wb_cross_clock_out_rdreq <= '1' when (wb_cross_clock_out_empty = '0') else '0';
+    wb_cross_clock_out_rdreq <= '1' when ((wb_cross_clock_out_empty = '0') and (bsp_rst = '0')) else '0';
     
     --Wishbone signals from the DSP
     

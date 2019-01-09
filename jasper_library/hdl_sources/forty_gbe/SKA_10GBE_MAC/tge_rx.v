@@ -391,19 +391,20 @@ end endgenerate
   wire [66:0] packet_fifo_rd_data;
   wire        packet_fifo_rd_en;
   wire        packet_fifo_empty;
+  wire        packet_fifo_full;
 
 
 generate if (USE_DISTRIBUTED_RAM == 0) begin : use_bram
 
   rx_packet_fifo_bram rx_packet_fifo_bram_inst (
     .rd_clk    (app_clk),
-    .rd_en     (packet_fifo_rd_en),
+    .rd_en     (packet_fifo_rd_en && !app_rst && !packet_fifo_empty),
     .dout      (packet_fifo_rd_data),
     .wr_clk    (mac_clk),
-    .wr_en     (packet_fifo_wr_en),
+    .wr_en     (packet_fifo_wr_en && !app_rst && !packet_fifo_full),
     .din       (packet_fifo_wr_data),
     .empty     (packet_fifo_empty),
-    .full      (),
+    .full      (packet_fifo_full),
     .rst       (app_rst),
     .prog_full (packet_fifo_almost_full)
   );
@@ -413,13 +414,13 @@ end else begin : usr_dram
 
   rx_packet_fifo_dist rx_packet_fifo_dist_inst (
     .rd_clk    (app_clk),
-    .rd_en     (packet_fifo_rd_en),
+    .rd_en     (packet_fifo_rd_en && !app_rst && !packet_fifo_empty),
     .dout      (packet_fifo_rd_data),
     .wr_clk    (mac_clk),
-    .wr_en     (packet_fifo_wr_en),
+    .wr_en     (packet_fifo_wr_en && !app_rst && !packet_fifo_full),
     .din       (packet_fifo_wr_data),
     .empty     (packet_fifo_empty),
-    .full      (),
+    .full      (packet_fifo_full),
     .rst       (app_rst),
     .prog_full (packet_fifo_almost_full)
   );
@@ -433,16 +434,18 @@ end endgenerate
   wire        ctrl_fifo_almost_full;
   wire [47:0] ctrl_fifo_rd_data;
   wire        ctrl_fifo_rd_en;
+  wire        ctrl_fifo_full;
+  wire        ctrl_fifo_empty;
 
   rx_packet_ctrl_fifo rx_packet_ctrl_fifo_inst (
     .rd_clk    (app_clk),
-    .rd_en     (ctrl_fifo_rd_en),
+    .rd_en     (ctrl_fifo_rd_en && !app_rst && !ctrl_fifo_empty),
     .dout      (ctrl_fifo_rd_data),
     .wr_clk    (mac_clk),
-    .wr_en     (ctrl_fifo_wr_en),
+    .wr_en     (ctrl_fifo_wr_en && !app_rst && !ctrl_fifo_full),
     .din       (ctrl_fifo_wr_data),
-    .empty     (),
-    .full      (),
+    .empty     (ctrl_fifo_empty),
+    .full      (ctrl_fifo_full),
     .rst       (app_rst),
     .prog_full (ctrl_fifo_almost_full)
   );

@@ -259,6 +259,7 @@ architecture arch_ska_fge_rx of ska_fge_rx is
     signal packet_fifo_rd_data : std_logic_vector(262 downto 0);
     signal packet_fifo_rd_en : std_logic;
     signal packet_fifo_empty : std_logic;
+    signal packet_fifo_full : std_logic;
 
     signal app_dvld : std_logic;
     signal app_goodframe : std_logic;
@@ -274,6 +275,7 @@ architecture arch_ska_fge_rx of ska_fge_rx is
     signal ctrl_fifo_rd_data : std_logic_vector(47 downto 0);
     signal ctrl_fifo_rd_en : std_logic;
     signal ctrl_fifo_empty : std_logic;
+    signal ctrl_fifo_full : std_logic;
     signal txctrl_fifo_wr_data : std_logic_vector(47 downto 0);
     signal txctrl_fifo_almost_full : std_logic;
     signal txctrl_fifo_rd_data : std_logic_vector(47 downto 0);
@@ -316,9 +318,12 @@ architecture arch_ska_fge_rx of ska_fge_rx is
 
     signal cpu_rx_packet_size_din : std_logic_vector(10 downto 0);
     signal cpu_rx_packet_size_wrreq : std_logic;
+    signal cpu_rx_packet_size_wrreq_1 : std_logic;    
     signal cpu_rx_packet_size_rdreq : std_logic;
+    signal cpu_rx_packet_size_rdreq_1 : std_logic;
     signal cpu_rx_packet_size_dout : std_logic_vector(10 downto 0);
     signal cpu_rx_packet_size_empty : std_logic;
+    signal cpu_rx_packet_size_full : std_logic;    
     signal cpu_rx_packet_size_wrcount : std_logic_vector(3 downto 0);
 
     signal current_cpu_read_state : T_CPU_READ_STATE;
@@ -388,7 +393,7 @@ begin
 -- MOVE LOCAL PARAMETERS FROM CPU CLOCK DOMAIN TO MAC CLOCK DOMAIN
 -----------------------------------------------------------------------------------------
 
-    cpu_mac_cross_clock_fifo_wrreq <= not cpu_mac_cross_clock_fifo_full;
+    cpu_mac_cross_clock_fifo_wrreq <= (not cpu_mac_cross_clock_fifo_full) and (not cpu_rst);
 
     gen_cpu_mac_cross_clock_count : process(cpu_rst, cpu_clk)
     begin
@@ -427,7 +432,7 @@ begin
         full    => cpu_mac_cross_clock_fifo_full,
         empty   => cpu_mac_cross_clock_fifo_empty);
 
-    cpu_mac_cross_clock_fifo_rdreq <= not cpu_mac_cross_clock_fifo_empty;
+    cpu_mac_cross_clock_fifo_rdreq <= (not cpu_mac_cross_clock_fifo_empty) and (not cpu_rst);
 
     gen_cpu_mac_cross_clock_fifo_rdreq_z : process(mac_clk)
     begin
@@ -750,13 +755,15 @@ begin
 ---------------------------------------------------------------------------------------------
 -- CPU RECEIVE BUFFER
 ---------------------------------------------------------------------------------------------
-
+    
+    cpu_rx_packet_size_wrreq_1 <= cpu_rx_packet_size_wrreq and (not mac_rst) and (not cpu_rx_packet_size_full);
+    
     debug_port(0) <= cpu_dvld;
     debug_port(1) <= cpu_frame_invalid;
     debug_port(2) <= cpu_frame_valid;
     debug_port(3) <= frame_bypass;
-    debug_port(4) <= cpu_rx_packet_size_wrreq;
-    debug_port(5) <= cpu_rx_packet_size_rdreq;
+    debug_port(4) <= cpu_rx_packet_size_wrreq_1;
+    debug_port(5) <= cpu_rx_packet_size_rdreq_1;
     debug_port(6) <= cpu_rx_ack;
     debug_port(7) <= '1' when (cpu_size /= ("000" & X"00")) else '0';
 
@@ -896,10 +903,10 @@ begin
         wr_clk          => mac_clk,
         rd_clk          => cpu_clk,
         din             => cpu_rx_packet_size_din,
-        wr_en           => cpu_rx_packet_size_wrreq,
-        rd_en           => cpu_rx_packet_size_rdreq,
+        wr_en           => cpu_rx_packet_size_wrreq_1,
+        rd_en           => cpu_rx_packet_size_rdreq_1,
         dout            => cpu_rx_packet_size_dout,
-        full            => open,
+        full            => cpu_rx_packet_size_full,
         empty           => cpu_rx_packet_size_empty,
         wr_data_count   => cpu_rx_packet_size_wrcount);
 
@@ -948,6 +955,8 @@ begin
     end process;
 
     cpu_rx_packet_size_rdreq <= '1' when (current_cpu_read_state = CPU_READ_LATENCY) else '0';
+    cpu_rx_packet_size_rdreq_1 <= cpu_rx_packet_size_rdreq and (not mac_rst) and (not cpu_rx_packet_size_empty);
+
 
     cpu_rx_size <= cpu_size;
 
@@ -1006,7 +1015,7 @@ begin
     --AI: Alway deassert FIFO write when reset is asserted
     packet_fifo_wr_en <= '1' when
     ((app_dvld_z1  = '1')and
-    (current_app_state = APP_RUN) and (app_rst = '0')) else '0';
+    (current_app_state = APP_RUN) and (app_rst = '0') and (packet_fifo_full = '0')) else '0';
 
     ska_rx_packet_fifo_0 : ska_rx_packet_fifo
     port map(
@@ -1017,12 +1026,12 @@ begin
         wr_en       => packet_fifo_wr_en,
         rd_en       => packet_fifo_rd_en,
         dout        => packet_fifo_rd_data,
-        full        => open,
+        full        => packet_fifo_full,
         empty       => packet_fifo_empty,
         prog_full   => packet_fifo_almost_full);
 
     --AI: Alway deassert FIFO read when reset is asserted
-    packet_fifo_rd_en <= app_rx_ack and (not app_rst);
+    packet_fifo_rd_en <= app_rx_ack and (not app_rst) and (not packet_fifo_empty);
 
     app_rx_valid        <= packet_fifo_rd_data(259 downto 256) when (packet_fifo_empty = '0') else (others => '0');
     app_rx_end_of_frame <= packet_fifo_rd_data(260);
@@ -1032,7 +1041,7 @@ begin
 
     ctrl_fifo_wr_data <= app_source_port & app_source_ip;
     --AI: Alway deassert FIFO write when reset is asserted
-    ctrl_fifo_wr_en   <= '1' when ((app_dvld = '1')and(first_word = '1')and(current_app_state = APP_RUN)and(app_rst = '0')) else '0';
+    ctrl_fifo_wr_en   <= '1' when ((app_dvld = '1')and(first_word = '1')and(current_app_state = APP_RUN)and(app_rst = '0')and(ctrl_fifo_full = '0')) else '0';
     txctrl_fifo_wr_data <= destination_port & destination_ip;
     --txctrl_fifo_wr_en   <= '1' when ((app_dvld = '1')and(first_word = '1')and(current_app_state = APP_RUN)) else '0';
 
@@ -1045,12 +1054,12 @@ begin
         wr_en       => ctrl_fifo_wr_en,
         rd_en       => ctrl_fifo_rd_en,
         dout        => ctrl_fifo_rd_data,
-        full        => open,
+        full        => ctrl_fifo_full,
         empty       => ctrl_fifo_empty,
         prog_full   => ctrl_fifo_almost_full);
 
     --AI: Alway deassert FIFO read when reset is asserted
-    ctrl_fifo_rd_en <= app_rx_ack and  packet_fifo_rd_data(260) and packet_fifo_rd_data(256) and (not app_rst);
+    ctrl_fifo_rd_en <= app_rx_ack and  packet_fifo_rd_data(260) and packet_fifo_rd_data(256) and (not app_rst) and (not ctrl_fifo_empty) ;
 
     app_rx_source_ip   <= ctrl_fifo_rd_data(31 downto 0);
     app_rx_source_port <= ctrl_fifo_rd_data(47 downto 32);

@@ -156,7 +156,7 @@ begin
     end process;
 
     xaui_full <= xaui_fifo_full;
-    xaui_fifo_wrreq <= xaui_fifo_write when (xaui_fifo_full = '0') else '0';
+    xaui_fifo_wrreq <= xaui_fifo_write when (xaui_fifo_full = '0' and gmii_rst = '0') else '0';
 
     xaui_to_gmii_fifo_0 : xaui_to_gmii_fifo
     port map(
@@ -178,7 +178,7 @@ begin
 
     -- ONLY READ OUT IF LINK IS UP
     xaui_fifo_rdreq <= '1' when
-    ((xaui_fifo_empty = '0')and(gmii_link_up = '1')and(ifg_counter = "1111")and(ifg_counter_reset = '0')and(gmii_clk_en = '1'))else '0';
+    ((xaui_fifo_empty = '0')and(gmii_link_up = '1')and(ifg_counter = "1111")and(ifg_counter_reset = '0')and(gmii_clk_en = '1')and(gmii_rst = '0'))else '0';
  	
     gen_xaui_fifo_rdreq_z : process(gmii_rst, gmii_clk)
     begin

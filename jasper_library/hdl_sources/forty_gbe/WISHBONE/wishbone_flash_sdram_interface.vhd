@@ -766,7 +766,7 @@ begin
 -- SDRAM PROGRAMMING UBLAZE INTERFACE FIFO VIA WISHBONE CLOCK DOMAIN
 -----------------------------------------------------------------------
     wb_comm_clock_din <= sdram_wb_program_data_wr when ((sdram_wb_program_rx_valid_pulse = '1') and (wb_comm_clock_almost_full = '0')) else X"00000000";
-    wb_comm_clock_wrreq <= '1' when ((sdram_wb_program_rx_valid_pulse = '1') and (wb_comm_clock_almost_full = '0')) else '0';
+    wb_comm_clock_wrreq <= '1' when ((sdram_wb_program_rx_valid_pulse = '1') and (wb_comm_clock_almost_full = '0') and (RST_I = '0')) else '0';
     sdram_wb_program_ack <= '1' when ((sdram_wb_program_ctl(0) = '1') and (wb_comm_clock_almost_full = '0')) else '0';
 
     common_clock_fifo_32x16_0 : common_clock_fifo_32x16
@@ -791,7 +791,7 @@ begin
     gbe_cross_clock_din(66) <= gbe_rx_overrun;
 
     gbe_rx_ack <= '1' when ((gbe_rx_valid = '1')and(gbe_cross_clock_almost_full = '0')) else '0';
-    gbe_cross_clock_wrreq <= '1' when ((gbe_rx_valid = '1')and(gbe_cross_clock_almost_full = '0')) else '0';
+    gbe_cross_clock_wrreq <= '1' when ((gbe_rx_valid = '1') and (gbe_cross_clock_almost_full = '0') and (RST_I = '0')) else '0';
 
     cross_clock_fifo_67x16_0 : cross_clock_fifo_67x16
     port map(
@@ -821,7 +821,7 @@ begin
     fgbe_cross_clock_din(258) <= fgbe_rx_overrun;
 
     fgbe_rx_ack <= '1' when ((fgbe_rx_valid /= "0000")and(fgbe_cross_clock_almost_full = '0')) else '0';
-    fgbe_cross_clock_wrreq <= '1' when ((fgbe_rx_valid /= "0000")and(fgbe_cross_clock_almost_full = '0')) else '0';
+    fgbe_cross_clock_wrreq <= '1' when ((fgbe_rx_valid /= "0000")and(fgbe_cross_clock_almost_full = '0')and(RST_I = '0')) else '0';
 
     cross_clock_fifo_259x16_0 : cross_clock_fifo_259x16
     port map(
@@ -861,6 +861,7 @@ begin
     ((spartan_clk_rising_edge_enable = '1')and
     (gbe_cross_clock_empty = '0')and
     (write_to_sdram_stall = '0')and
+    (RST_I = '0')and
     (gbe_sdram_dq_count >= "011")) else '0';
 
 --AI Start: Add fortygbe interface for configuration
@@ -869,6 +870,7 @@ begin
     ((spartan_clk_rising_edge_enable = '1')and
     (fgbe_cross_clock_empty = '0')and
     (write_to_sdram_stall = '0')and
+    (RST_I = '0')and
     (fgbe_sdram_dq_count >= "01111")) else '0';
 
 --AI End: Add fortygbe interface for configuration
@@ -877,6 +879,7 @@ begin
     ((spartan_clk_rising_edge_enable = '1')and
     (wb_comm_clock_empty = '0')and
     (write_to_sdram_stall = '0')and
+    (RST_I = '0') and
     (wb_sdram_dq_count >= "01")) else '0';
 
     gen_gbe_sdram_dq_count : process(RST_I, CLK_I)

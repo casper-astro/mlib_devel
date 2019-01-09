@@ -838,7 +838,7 @@ begin
     overlap_buffer_din_1(288)            <= mac_rx_good_frame_1;
     overlap_buffer_din_1(289)            <= mac_rx_bad_frame_1;
 
-    overlap_buffer_wrreq_1 <= '1' when ((mac_rx_data_valid_1 /= X"00000000")and(overlap_buffer_full_1 = '0')) else '0';
+    overlap_buffer_wrreq_1 <= '1' when ((mac_rx_data_valid_1 /= X"00000000")and(overlap_buffer_full_1 = '0')and(xlgmii_rxrst = '0')) else '0';
 
     overlap_buffer_0 : overlap_buffer
     port map(
@@ -851,14 +851,14 @@ begin
         full  => overlap_buffer_full_1,
         empty => overlap_buffer_empty_1);
 
-    overlap_buffer_rdreq_1 <= not overlap_buffer_empty_1 when (current_mac_rx_state = WAIT_FOR_END_CHANNEL_1) else '0';
+    overlap_buffer_rdreq_1 <= not overlap_buffer_empty_1 when ((current_mac_rx_state = WAIT_FOR_END_CHANNEL_1) and (xlgmii_rxrst = '0')) else '0';
 
     overlap_buffer_din_2(255 downto 0) <= mac_rx_data_2;
     overlap_buffer_din_2(287 downto 256) <= mac_rx_data_valid_2;
     overlap_buffer_din_2(288) <= mac_rx_good_frame_2;
     overlap_buffer_din_2(289) <= mac_rx_bad_frame_2;
 
-    overlap_buffer_wrreq_2 <= '1' when ((mac_rx_data_valid_2 /= X"00000000")and(overlap_buffer_full_2 = '0')) else '0';
+    overlap_buffer_wrreq_2 <= '1' when ((mac_rx_data_valid_2 /= X"00000000")and(overlap_buffer_full_2 = '0')and(xlgmii_rxrst = '0')) else '0';
 
     overlap_buffer_1 : overlap_buffer
     port map(
@@ -871,7 +871,7 @@ begin
         full  => overlap_buffer_full_2,
         empty => overlap_buffer_empty_2);
 
-    overlap_buffer_rdreq_2 <= not overlap_buffer_empty_2 when (current_mac_rx_state = WAIT_FOR_END_CHANNEL_2) else '0';
+    overlap_buffer_rdreq_2 <= not overlap_buffer_empty_2 when ((current_mac_rx_state = WAIT_FOR_END_CHANNEL_2) and (xlgmii_rxrst = '0')) else '0';
 
     gen_current_mac_rx_state : process(xlgmii_rxrst, xlgmii_rxclk)
     begin

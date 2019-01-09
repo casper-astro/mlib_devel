@@ -499,7 +499,7 @@ begin
 -- MOVE LOCAL PARAMETERS FROM CPU CLOCK DOMAIN TO MAC CLOCK DOMAIN
 -----------------------------------------------------------------------------------------
 
-    cpu_mac_cross_clock_fifo_wrreq <= not cpu_mac_cross_clock_fifo_full;
+    cpu_mac_cross_clock_fifo_wrreq <= (not cpu_mac_cross_clock_fifo_full) and (not cpu_rst);
 
     gen_cpu_mac_cross_clock_count : process(cpu_rst, cpu_clk)
     begin
@@ -537,7 +537,7 @@ begin
         full    => cpu_mac_cross_clock_fifo_full,
         empty   => cpu_mac_cross_clock_fifo_empty);
 
-    cpu_mac_cross_clock_fifo_rdreq <= not cpu_mac_cross_clock_fifo_empty;
+    cpu_mac_cross_clock_fifo_rdreq <= (not cpu_mac_cross_clock_fifo_empty) and (not cpu_rst);
 
     gen_cpu_mac_cross_clock_fifo_rdreq_z : process(mac_clk)
     begin
