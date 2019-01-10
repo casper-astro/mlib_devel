@@ -499,17 +499,26 @@ begin
     --mac_rst <= xlgmii_rst;
     --mac_clk <= xlgmii_clk;
 
-
-    assign_sigs : process(clk)
-    begin
-        if (rising_edge(clk)) then
-            tx_afull        <= tx_afull_sig;
-            rx_bad_frame    <= rx_bad_frame_sig;
-            rx_overrun      <= rx_overflow_sig;
-            rx_end_of_frame <= rx_end_of_frame_sig;
-            rx_valid        <= rx_valid_sig;
-        end if;
-    end process;
+    --These signals cannot be registered as the valid signal and end of frame signals need
+    --to be aligned with the data. If these signals are registered then it causes the data to be 
+    --duplicated in the 40GbE test platform
+    tx_afull        <= tx_afull_sig;
+    rx_bad_frame    <= rx_bad_frame_sig;
+    rx_overrun      <= rx_overflow_sig;
+    rx_end_of_frame <= rx_end_of_frame_sig;
+    rx_valid        <= rx_valid_sig;
+    
+    
+    --assign_sigs : process(clk)
+    --begin
+    --    if (rising_edge(clk)) then
+    --        tx_afull        <= tx_afull_sig;
+    --        rx_bad_frame    <= rx_bad_frame_sig;
+    --        rx_overrun      <= rx_overflow_sig;
+    --        rx_end_of_frame <= rx_end_of_frame_sig;
+    --        rx_valid        <= rx_valid_sig;
+    --    end if;
+    --end process;
 
 ----------------------------------------------------------------------------------------
 -- MOVE RESET FROM CPU TO MAC CLOCK DOMAIN
