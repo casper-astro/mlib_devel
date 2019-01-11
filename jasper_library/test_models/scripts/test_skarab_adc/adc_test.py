@@ -262,7 +262,7 @@ else:
 	gain_channel = ADC_GAIN_CHANNEL_3
 
 skarab = casperfpga.CasperFpga('192.168.14.97')
-skarab.upload_to_ram_and_program('tut1_2018-08-03_1309.fpg')
+skarab.upload_to_ram_and_program('tut1_2018-08-03_1309.fpg', legacy_reg_map=False)
 #skarab.get_system_information('tut1_2018-08-03_1309.fpg')
 skarab.listdev()
 skarab.write_int('pll_sync_start_in', 0)
