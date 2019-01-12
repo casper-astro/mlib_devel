@@ -587,6 +587,7 @@ module gbe_rx #(
 
           if (mac_dvld)
             cpu_state <= CPU_DATA;
+            cpu_counter <= 11'b1;
         end
         CPU_DATA: begin
           if (!mac_dvld) begin
