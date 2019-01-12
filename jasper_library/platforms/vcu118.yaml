@@ -1,6 +1,6 @@
 name: vcu118
 manufacturer: Xilinx
-fpga: xcvu9p-flga2104-2L-e-es1
+fpga: xcvu9p-flga2104-2L-e
 backend_target: vivado
 sources: []
 constraints: []
@@ -31,8 +31,10 @@ pins:
   qsfpclk156_n:
     loc: W8
   usb_tx:
+    iostd: LVCMOS18
     loc: AW25
   usb_rx:
+    iostd: LVCMOS18
     loc: BB21
   miso:
     loc: B17
@@ -135,7 +137,7 @@ pins:
   spi_flash_data:
     iostd: LVCMOS18
     loc: 
+      - AP11
       - AN11
       - AM11
       - AL11
-      - AJ11
