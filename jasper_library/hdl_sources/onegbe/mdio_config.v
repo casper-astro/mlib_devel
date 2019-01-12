@@ -33,7 +33,8 @@ module mdio_config (
     input sys_clk,
     input sys_clk_rst_sync,
     output mdc,
-    inout mdio
+    inout mdio,
+    output done
 );
 
 reg [19:0] delay_reg = 20'hfffff;
@@ -46,6 +47,8 @@ reg mdio_cmd_valid = 1'b0;
 wire mdio_cmd_ready;
 
 reg [3:0] state_reg = 0;
+reg done_reg = 1'b0;
+assign done = done_reg;
 
 always @(posedge sys_clk) begin
     if (sys_clk_rst_sync) begin
@@ -54,6 +57,7 @@ always @(posedge sys_clk) begin
         mdio_cmd_reg_addr <= 5'h00;
         mdio_cmd_data <= 16'd0;
         mdio_cmd_valid <= 1'b0;
+        done_reg <= 1'b0;
     end else begin
         mdio_cmd_valid <= mdio_cmd_valid & !mdio_cmd_ready;
         if (delay_reg > 0) begin
@@ -157,6 +161,7 @@ always @(posedge sys_clk) begin
                 4'd12: begin
                     // done
                     state_reg <= 4'd12;
+                    done_reg <= 1'b1;
                 end
             endcase
         end

@@ -114,15 +114,13 @@ class onegbe(YellowBlock):
         self._instantiate_udp(top)
         self._instantiate_mac(top)
         self._instantiate_phy(top)
-        if self.platform.name == 'vcu118':
-            self._instantiate_mdio(top)
 
 class onegbe_vcu118(onegbe):
     def initialize(self):
         self.typecode = TYPECODE_ETHCORE
         self.add_source('onegbe/*.v')
-        self.add_source('onegbe/*.xci')
-        self.add_source('onegbe/*.coe')
+        #self.add_source('onegbe/*.xci')
+        #self.add_source('onegbe/*.coe')
         self.add_source('onegbe/virtexuplus/*.v')
         self.add_source('onegbe/virtexuplus/*.xci')
         self.add_source('onegbe/virtexuplus/*.coe')
@@ -132,6 +130,12 @@ class onegbe_vcu118(onegbe):
             self.provides += ['cpu_ethernet']
 
         self.refclk_freq = 625.0
+
+    def modify_top(self,top):
+        self._instantiate_udp(top)
+        self._instantiate_mac(top)
+        self._instantiate_phy(top)
+        self._instantiate_mdio(top)
 
     def _instantiate_udp(self, top):
         gbe_udp = top.get_instance(entity='gbe_udp', name=self.fullname)
@@ -252,7 +256,7 @@ class onegbe_vcu118(onegbe):
         gbe_pcs.add_port('configuration_vector_0', '5\'b10000', parent_sig=False)
         gbe_pcs.add_port('speed_is_10_100_0', '1\'b0', parent_sig=False)
         gbe_pcs.add_port('speed_is_100_0', '1\'b0', parent_sig=False)
-        gbe_pcs.add_port('reset', 'sys_rst')
+        gbe_pcs.add_port('reset', 'sys_rst | ~mdio_done', parent_sig=False) # don't make a signal called "sys_rst | ~mdio_done"!
         gbe_pcs.add_port('signal_detect_0', '1\'b1', parent_sig=False)
 
         gbe_pcs.add_port('an_adv_config_vector_0', '16\'b1101100000000001', parent_sig=False)
@@ -267,6 +271,19 @@ class onegbe_vcu118(onegbe):
         gbe_pcs.add_port('riu_valid_3', '1\'b0')
         gbe_pcs.add_port('riu_prsnt_3', '1\'b0')
 
+        gbe_pcs.add_port('tx_dly_rdy_1', '1\'b1')
+        gbe_pcs.add_port('tx_dly_rdy_2', '1\'b1')
+        gbe_pcs.add_port('tx_dly_rdy_3', '1\'b1')
+        gbe_pcs.add_port('rx_dly_rdy_1', '1\'b1')
+        gbe_pcs.add_port('rx_dly_rdy_2', '1\'b1')
+        gbe_pcs.add_port('rx_dly_rdy_3', '1\'b1')
+        gbe_pcs.add_port('tx_vtc_rdy_1', '1\'b1')
+        gbe_pcs.add_port('tx_vtc_rdy_2', '1\'b1')
+        gbe_pcs.add_port('tx_vtc_rdy_3', '1\'b1')
+        gbe_pcs.add_port('rx_vtc_rdy_1', '1\'b1')
+        gbe_pcs.add_port('rx_vtc_rdy_2', '1\'b1')
+        gbe_pcs.add_port('rx_vtc_rdy_3', '1\'b1')
+
         top.add_port('phy_rst_n', dir='out', width=0)
         top.assign_signal('phy_rst_n', '~sys_rst')
         top.add_port('phy_pdown_n', dir='out', width=0)
@@ -278,6 +295,7 @@ class onegbe_vcu118(onegbe):
         gbe_mdio.add_port('sys_clk_rst_sync', 'sys_clk_rst_sync')
         gbe_mdio.add_port('mdc', 'phy_mdc', dir='out', parent_port=True)
         gbe_mdio.add_port('mdio', 'phy_mdio', dir='inout', parent_port=True)
+        gbe_mdio.add_port('done', 'mdio_done')
 
     def gen_constraints(self):
         consts = []
@@ -291,7 +309,8 @@ class onegbe_vcu118(onegbe):
         consts += [PortConstraint('phy_mdc', 'gbe_phy_mdc')]
         consts += [PortConstraint(self.fullname+'_refclk625_p', 'gbe_phy_sgmii_clk_p')]
         consts += [PortConstraint(self.fullname+'_refclk625_n', 'gbe_phy_sgmii_clk_n')]
-        consts += [ClockConstraint(self.fullname+'_refclk625_p', name='onegbe_clk', freq=self.refclk_freq)]
+        # Clock is defined automatically by the PCS/PMA IP
+        #consts += [ClockConstraint(self.fullname+'_refclk625_p', name='onegbe_clk', freq=self.refclk_freq)]
         consts += [FalsePathConstraint('[get_clocks -of_objects [get_pins vcu118_infrastructure_inst/MMCM_BASE_inst/CLKOUT1]]', '[get_clocks -of_objects [get_pins %s_pcs_pma/inst/clock_reset_i/Clk_Rst_I_Plle3_Tx/CLKOUT1]]'%self.fullname)]
         consts += [FalsePathConstraint('[get_clocks -of_objects [get_pins %s_pcs_pma/inst/clock_reset_i/Clk_Rst_I_Plle3_Tx/CLKOUT1]]'%self.fullname, '[get_clocks -of_objects [get_pins vcu118_infrastructure_inst/MMCM_BASE_inst/CLKOUT1]]')]
         return consts
