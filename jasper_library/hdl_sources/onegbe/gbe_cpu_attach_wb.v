@@ -181,13 +181,17 @@ module gbe_cpu_attach_wb #(
       cpu_tx_ready_reg <= 1'b0;
     end
 
-    /* The size will be set to zero when the double buffer is swapped */
-    cpu_rx_ack_reg <= 1'b0; // reset strobe
+    // If CPU is ready and we have written size to zero then send ack
     if (cpu_rx_size_reg == 16'h0 && cpu_rx_ready) begin
       cpu_rx_ack_reg  <= 1'b1;
     end
+    // If CPU has released ready and we have written size to zero then
+    // release ACK. This will put the receiver back into its IDLE state
+    if (cpu_rx_size_reg == 16'h0 && ~cpu_rx_ready) begin
+      cpu_rx_ack_reg  <= 1'b0;
+    end
 
-    if (cpu_rx_ready) begin
+    if (cpu_rx_ready && ~cpu_rx_ack_reg) begin
       cpu_rx_size_reg <= cpu_rx_size;
     end
 
