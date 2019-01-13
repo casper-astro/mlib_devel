@@ -308,7 +308,7 @@ casper_lwip_init()
   //     0x----0001 0x02030405
   uint32_t buf[4] = {0, 0, 0x00000203, 0x04050118};
 #ifdef USE_SPI
-  flash_read_id(buf);
+  flash_read_id((uint8_t *)buf);
 #endif
   ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_1] = buf[2] & 0xffff;
   ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_0] = buf[3];
