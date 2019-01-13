@@ -10,7 +10,7 @@ class microblaze(YellowBlock):
             self.memfile= 'executable_no_xadc.mem'
             self.blkdiagram = 'microblaze_wb_no_xadc.tcl'
         elif self.platform.name in ['vcu118']:
-            self.memfile = 'executable.mem'
+            self.memfile = 'executable_us_plus.mem'
             self.blkdiagram = 'microblaze_wb_us_plus.tcl'
             self.include_spi_ports = False
         else:
