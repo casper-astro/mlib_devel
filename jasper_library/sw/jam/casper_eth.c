@@ -306,11 +306,13 @@ casper_lwip_init()
   // TODO Get MAC address from somewhere (e.g. serial number stored in flash)
   // Needs to be stored in hardware core as:
   //     0x----0001 0x02030405
-  uint8_t buf[16];
+  uint32_t buf[4] = {0, 0, 0x00000203, 0x04050118};
+#ifdef USE_SPI
   flash_read_id(buf);
-  ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_1] = ((uint32_t *)buf)[2] & 0xffff;
-  ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_0] = ((uint32_t *)buf)[3];
-  xil_printf("MAC 0x%04x%08x\n", ((uint32_t *)buf)[2] & 0xffff, ((uint32_t *)buf)[3]);
+#endif
+  ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_1] = buf[2] & 0xffff;
+  ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_0] = buf[3];
+  xil_printf("MAC 0x%04x%08x\n", buf[2] & 0xffff, buf[3]);
 
 #ifdef DEBUG_ETH0_MEM
   print("## eth0 memory as uint32_t:\n");
@@ -379,6 +381,7 @@ casper_rx_packet()
   uint32_t *inbuf32;
   uint32_t *nibuf32; // byte swapped buffer ("ni" is byte swapped "in" :))
   struct pbuf *p, *q;
+  err_t st; // Return value for LWIP input call
 
   // Stay in this function so long as we still have received packets
   while((nwords = *RX_BUF_SIZE_PTR16(ifstate.ptr))) {
@@ -498,8 +501,8 @@ casper_rx_packet()
     *RX_BUF_SIZE_PTR16(ifstate.ptr) = 0;
 
 #ifdef DEBUG_PKT_RX
-    // Print first 32 bytes of first pbuf
-    for(i=0; i<32; i++) {
+    // Print pbuf contents
+    for(i=0; i<p->len; i++) {
       if((i & 15) == 0) xil_printf("%04x:", (i<<2));
       xil_printf(" %02x", ((uint8_t *)p->payload)[i]);
       if((i & 15) == 15) print("\n");
@@ -509,14 +512,16 @@ casper_rx_packet()
 #endif // DEBUG_PKT_RX
 
     // Pass PBUF to input function
-    if(netif_en[0].input(p, &netif_en[0]) != ERR_OK) {
+    st = netif_en[0].input(p, &netif_en[0]);
+    if(st != ERR_OK) {
+      xil_printf("LWIP input function returned %d\n", (int) st);
       pbuf_free(p);
     }
   }
 }
 
 #ifndef JAM_LWIP_CHECK_TIMEOUTS_INTERVAL_MS
-#define JAM_LWIP_CHECK_TIMEOUTS_INTERVAL_MS 10
+#define JAM_LWIP_CHECK_TIMEOUTS_INTERVAL_MS 1
 #endif
 
 void
@@ -531,7 +536,7 @@ casper_lwip_handler()
   // Receive newly arrive packet, if any
   casper_rx_packet();
 
-  // Only call timeout check every so often (10 ms by default).
+  // Only call timeout check every so often (1 ms by default).
   curr_ms = ms_tmrctr();
   if(next_timeout_check_ms <= curr_ms) {
     next_timeout_check_ms = curr_ms + JAM_LWIP_CHECK_TIMEOUTS_INTERVAL_MS;
