@@ -71,11 +71,11 @@
 
 // Upper 16 bits are size/length of data in the CPU TX buffer
 // Lower 16 bits are size/length of data in the CPU RX buffer
-#define ETH_MAC_REG32_BUFFER_SIZES    (0x09)
+#define ETH_MAC_REG32_BUFFER_SIZES    (0x0a)
 // Size/length of data in CPU TX buffer (16 bit access)
-#define ETH_MAC_REG16_TX_BUFFER_SIZE  (0x13)
+#define ETH_MAC_REG16_TX_BUFFER_SIZE  (0x15)
 // Size/length of data in CPU RX buffer (16 bit access)
-#define ETH_MAC_REG16_RX_BUFFER_SIZE  (0x12)
+#define ETH_MAC_REG16_RX_BUFFER_SIZE  (0x14)
 
 // Upper 16 bits is length in bytes of a word in the tx buffer.
 // I.e., number of bytes to be sent is
@@ -90,24 +90,24 @@
 #define ETH_MAC_REG16_RX_WORD_SIZE    (0x04)
 
 // UDP port for fabric receive
-#define ETH_MAC_REG32_PORT            (0x0b)
+#define ETH_MAC_REG32_PORT            (0x0c)
 // UDP port for fabric receive (16 bit access)
-#define ETH_MAC_REG16_PORT            (0x16)
+#define ETH_MAC_REG16_PORT            (0x18)
 // UDP port mask (for subscribing an FPGA to multiple consecutive ports)
-#define ETH_MAC_REG16_PORT_MASK       (0x17)
+#define ETH_MAC_REG16_PORT_MASK       (0x19)
 
 
 // Control bits
 // Bit 16 is enable bit (1 to enable, 0 to disable)
 // Lower 16 bits are the UDP port for fabric receive.
 // Note: In Verilog this is called `..._VALID_PORTS`.
-#define ETH_MAC_REG32_CTRL            (0x0a)
-#define ETH_MAC_REG16_CTRL            (0x14)
+#define ETH_MAC_REG32_CTRL            (0x0b)
+#define ETH_MAC_REG16_CTRL            (0x16)
 // Enable bit (8 bit access)
 // Bit 0 is enable bit (1 to enable, 0 to disable)
-#define ETH_MAC_REG8_ENABLE           (0x28)
+#define ETH_MAC_REG8_ENABLE           (0x2c)
 // Bit 8 is promiscuousness enable bit (1 to enable, 0 to disable)
-#define ETH_MAC_REG8_PROMISC_ENABLE   (0x29)
+#define ETH_MAC_REG8_PROMISC_ENABLE   (0x30)
 
 // Core config bits
 // Read-only bits which give information about the core
@@ -125,14 +125,14 @@
 #define ETH_MAC_REG32_CONTROL         (0x0f)
 
 // PHY status
-#define ETH_MAC_REG32_STATUS          (0x0d)
-#define ETH_MAC_REG8_STATUS           (0x34)
+#define ETH_MAC_REG32_STATUS          (0x0e)
+#define ETH_MAC_REG8_STATUS           (0x38)
 
 // CPU Multicast IP address
-#define ETH_MAC_REG32_MC_RECV_IP      (0x07)
+#define ETH_MAC_REG32_MC_RECV_IP      (0x08)
 
 // CPU Multicast mask
-#define ETH_MAC_REG32_MC_RECV_IP_MASK (0x08)
+#define ETH_MAC_REG32_MC_RECV_IP_MASK (0x09)
 
 //
 // Macros to get pointers to various TX/RX parts of the core whose base address
