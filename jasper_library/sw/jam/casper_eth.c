@@ -35,15 +35,15 @@ static
 err_t
 casper_netif_output_impl(struct netif *netif, struct pbuf *p)
 {
-  uint16_t i, len, word_size;
+  uint16_t i, len, core_word_size;
   uint16_t bytes_sent = 0;
   uint8_t *outbuf8;
-  uint16_t words_sent = 0;
+  uint16_t words_sent32 = 0;
   uint32_t *outbuf32;
 
 #ifdef VERBOSE_ETH_IMPL
-  xil_printf("send %u bytes as %u longwords from addr %p [ms %u]\n",
-      p->tot_len, ((p->tot_len+7)>>3), p->payload, ms_tmrctr());
+  xil_printf("send %u bytes from addr %p [ms %u]\n",
+      p->tot_len, p->payload, ms_tmrctr());
 #endif // VERBOSE_ETH_IMPL
 
 #ifdef DEBUG_PKT_TX
@@ -119,26 +119,28 @@ casper_netif_output_impl(struct netif *netif, struct pbuf *p)
   }
 
   // Work with words from here onward
-  words_sent = bytes_sent >> 2;
+  words_sent32 = bytes_sent >> 2; // words are 32-bits here (may not be the case in the eth core)
 
   // Need to byte swap 32 bit words in TX buffer
   // due to how AXI/Wishbone interface orders bytes
   outbuf32 = TX_BUF_PTR32(ifstate.ptr);
-  for(i=0; i<words_sent; i++) {
+  for(i=0; i<words_sent32; i++) {
     *outbuf32 = mb_swapb(*outbuf32);
     outbuf32++;
   }
 
   // Ensure we meet minimum packet size (avoid runt frames)
-  while(words_sent < 16) {
+  while(words_sent32 < 16) {
     *outbuf32++ = 0;
-    words_sent++;
+    words_sent32++;
   }
 
-  // Need to send a multiple of 8 bytes (due to gateware implementation)
-  if(words_sent & 1) {
+  // Figure out how many bytes per word in the core.
+  core_word_size = *TX_BUF_WORD_SIZE_PTR16(ifstate.ptr); // Core word size
+  // We have to send a multiple of this many bytes. Pad here
+  if(words_sent32 & ((core_word_size / 4) - 1)) {
     *outbuf32++ = 0;
-    words_sent++;
+    words_sent32++;
   }
 
 #ifdef DEBUG_PKT_TX
@@ -163,15 +165,12 @@ casper_netif_output_impl(struct netif *netif, struct pbuf *p)
     outbuf16[2^1], outbuf16[6^1], outbuf16[17^1], outbuf16[19^1], outbuf16[21^1], ms_tmrctr());
 #endif
 
-  // Set TX buffer level to number of words to send packet
-  word_size = *TX_BUF_WORD_SIZE_PTR16(ifstate.ptr);
-  // Round up and set buffer size to send
-  *TX_BUF_SIZE_PTR16(ifstate.ptr) = ((bytes_sent + (word_size - 1))/word_size);
+  // Set buffer size to send. Unit of transmission is `core_word_size` bytes.
+  *TX_BUF_SIZE_PTR16(ifstate.ptr) = (4 * words_sent32) / core_word_size;
 
 #ifdef VERBOSE_ETH_IMPL
-  xil_printf("sent pkt %u bytes as %u longwords [ms %u]\n",
-      4*words_sent, (words_sent >> 1), ms_tmrctr());
-  xil_printf("Sent with word size: %d, %d words\n", word_size, ((bytes_sent + (word_size - 1))/word_size));
+  xil_printf("sent pkt %u bytes as %u %d-byte words[ms %u]\n",
+      4*words_sent32, (4 * words_sent32) / core_word_size, core_word_size, ms_tmrctr());
 #endif // VERBOSE_ETH_IMPL
   LINK_STATS_INC(link.xmit);
 
@@ -521,7 +520,7 @@ casper_rx_packet()
 }
 
 #ifndef JAM_LWIP_CHECK_TIMEOUTS_INTERVAL_MS
-#define JAM_LWIP_CHECK_TIMEOUTS_INTERVAL_MS 1
+#define JAM_LWIP_CHECK_TIMEOUTS_INTERVAL_MS 10
 #endif
 
 void
@@ -536,7 +535,7 @@ casper_lwip_handler()
   // Receive newly arrive packet, if any
   casper_rx_packet();
 
-  // Only call timeout check every so often (1 ms by default).
+  // Only call timeout check every so often (10 ms by default).
   curr_ms = ms_tmrctr();
   if(next_timeout_check_ms <= curr_ms) {
     next_timeout_check_ms = curr_ms + JAM_LWIP_CHECK_TIMEOUTS_INTERVAL_MS;
