@@ -93,15 +93,15 @@ function bus_mult_init(blk, varargin)
   multiplier_implementation  = get_var('multiplier_implementation', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
-
+  
   % sanity check for old block that has not been updated for floating point
-  if (strcmp(floating_point, 'on')) || (floating_point == 1)
+  if ((strcmp(floating_point, 'on')))
     floating_point = 1;
   else
     floating_point = 0;
   end
       
-  if (strcmp(pipeline_cmult_en, 'on')) || (pipeline_cmult_en == 1)
+  if (strcmp(pipeline_cmult_en, 'on'))
     pipeline_cmult_en = 'on';
   else
     pipeline_cmult_en = 'off'; 
