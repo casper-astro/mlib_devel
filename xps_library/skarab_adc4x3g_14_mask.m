@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function skarab_adc4x3g14_byp_mask(blk)
+function skarab_adc4x3g_14_mask(blk)
 
 myname = blk;
 % get hardware platform from XSG block
@@ -54,7 +54,7 @@ for i =1:length(gateway_ins)
         set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
     elseif regexp(get_param(gw, 'Name'), '(adc_trigger_out)$')
         toks = regexp(get_param(gw, 'Name'), '(adc_trigger_out)$', 'tokens');
-        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));        
     else
         error(['Unknown gateway name: ', gw]);
     end
