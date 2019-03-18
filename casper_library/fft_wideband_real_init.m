@@ -289,6 +289,17 @@ for s=0:n_streams-1,
 end %for n
 
 % Add a sync delay.
+
+try
+    get_param([blk,'/in_del_sync_4x'],'csp_latency');
+catch ME
+    try
+      update_casper_block([blk,'/in_del_sync_4x'])
+      disp([ME.identifier,' ','Old 2016b pipeline block, upgrading to new toolflow'])
+    catch ME
+    end
+end
+
 reuse_block(blk, 'in_del_sync_4x', 'casper_library_delays/pipeline', ...
     'Position', [95 115 145 135], ...
     'ShowName', 'off', ...
@@ -349,6 +360,15 @@ add_line(blk, 'shift/1', 'fft_biplex_real_4x/2');
 add_line(blk, 'in_del_sync_4x/1', 'fft_biplex_real_4x/1'); 
 
 % Add a sync_out delay for the first biplex block only.
+try
+    get_param([blk,'/del_sync_4x'],'csp_latency');
+catch ME
+    try
+      update_casper_block([blk,'/del_sync_4x'])
+      disp([ME.identifier,' ','Old 2016b pipeline block, upgrading to new toolflow'])
+    catch ME
+    end
+end
 reuse_block(blk, 'del_sync_4x', 'casper_library_delays/pipeline', ...
     'Position', [315 115 365 135], ...
     'ShowName', 'off', ...
@@ -425,6 +445,15 @@ end
 
 if strcmp(unscramble, 'on'),
   %delay pipeline for sync
+  try
+        get_param([blk,'/fft_direct_sync_delay'],'csp_latency');
+  catch ME
+      try
+          update_casper_block([blk,'/fft_direct_sync_delay'])
+          disp([ME.identifier,' ','Old 2016b pipeline block, upgrading to new toolflow'])
+     catch ME
+     end
+  end
   reuse_block(blk, 'fft_direct_sync_delay', 'casper_library_delays/pipeline', ...
     'Position', [680 80 730 100], ...
     'csp_latency', num2str(biplex_direct_latency));
@@ -450,6 +479,15 @@ if strcmp(unscramble, 'on'),
     for n=1:2^(n_inputs-1),
       dir_delay = ['del_direct',num2str(port_base+n)];
       %pipeline between fft_direct and fft_unscrambler
+      try
+            get_param([blk,'/',dir_delay],'csp_latency');
+      catch ME
+          try
+              update_casper_block([blk,'/',dir_delay])
+              disp([ME.identifier,' ','Old 2016b pipeline block, upgrading to new toolflow'])
+         catch ME
+         end
+      end
       reuse_block(blk, dir_delay, 'casper_library_delays/pipeline', ...
         'Position', [680 120+(off_base+n*ytick) 730 140+(off_base+n*ytick)], ...
         'csp_latency', num2str(biplex_direct_latency));
@@ -498,6 +536,15 @@ for s = 0:n_streams-1,
       'Port', num2str(port_base+n+3));
     % input delay
     in_delay = ['in_del_4x_pol',num2str(port_base+n)];
+    try
+          get_param([blk,'/',in_delay],'csp_latency');
+    catch ME
+        try
+            update_casper_block([blk,'/',in_delay])
+            disp([ME.identifier,' ','Old 2016b pipeline block, upgrading to new toolflow'])
+       catch ME
+       end
+    end
     reuse_block(blk, in_delay , 'casper_library_delays/pipeline', ...
         'Position', [95 205+(off_base+n*ytick) 145 225+(off_base+n*ytick)], 'ShowName', 'on', ...
         'csp_latency', num2str(input_latency));
@@ -506,6 +553,15 @@ for s = 0:n_streams-1,
 
     % Add biplex-to-direct delay
     out_delay = ['del_4x_pol',num2str(port_base+n)];
+    try
+          get_param([blk,'/',out_delay],'csp_latency');
+    catch ME
+        try
+            update_casper_block([blk,'/',out_delay])
+            disp([ME.identifier,' ','Old 2016b pipeline block, upgrading to new toolflow'])
+       catch ME
+       end
+    end
     reuse_block(blk, out_delay, 'casper_library_delays/pipeline', ...
         'Position', [315 160+(off_base+n*ytick) 365 180+(off_base+n*ytick)], ...
         'csp_latency', num2str(biplex_direct_latency));
@@ -520,12 +576,31 @@ end %for s
 %
 
 if strcmp(async, 'on'),
+  try
+        get_param([blk,'/in_del_en_4x'],'csp_latency');
+  catch ME
+      try
+          update_casper_block([blk,'/in_del_en_4x'])
+          disp([ME.identifier,' ','Old 2016b pipeline block, upgrading to new toolflow'])
+     catch ME
+     end
+  end
   reuse_block(blk, 'in_del_en_4x', 'casper_library_delays/pipeline', ...
     'Position', [95 205+(n_streams*2^n_inputs*ytick) 145 225+(ytick*n_streams*2^n_inputs)], ...
     'csp_latency', num2str(input_latency));
   add_line(blk, 'en/1', 'in_del_en_4x/1');
   add_line(blk, 'in_del_en_4x/1', ['fft_biplex_real_4x/',num2str(n_streams*2^n_inputs+3)]);
   
+
+  try
+        get_param([blk,'/out_del_en_4x'],'csp_latency');
+  catch ME
+      try
+          update_casper_block([blk,'/out_del_en_4x'])
+          disp([ME.identifier,' ','Old 2016b pipeline block, upgrading to new toolflow'])
+     catch ME
+     end
+  end
   reuse_block(blk, 'out_del_en_4x', 'casper_library_delays/pipeline', ...
       'Position', [315 160+((n_streams*2^n_inputs+1)*ytick) 365 180+((n_streams*2^n_inputs+1)*ytick)], ...
       'csp_latency', num2str(biplex_direct_latency));
@@ -534,6 +609,15 @@ if strcmp(async, 'on'),
 
   if strcmp(unscramble, 'on'), 
     %delay pipeline for dvalid between fft_direct and fft_unscrambler
+    try
+          get_param([blk,'/fft_direct_dvalid_delay'],'csp_latency');
+    catch ME
+        try
+            update_casper_block([blk,'/fft_direct_dvalid_delay'])
+            disp([ME.identifier,' ','Old 2016b pipeline block, upgrading to new toolflow'])
+       catch ME
+       end
+    end
     reuse_block(blk, 'fft_direct_dvalid_delay', 'casper_library_delays/pipeline', ...
       'Position', [680 75+((n_streams*2^n_inputs+1)*ytick) 730 95+((n_streams*2^n_inputs+1)*ytick)], ...
       'csp_latency', num2str(biplex_direct_latency));

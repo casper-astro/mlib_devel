@@ -35,7 +35,7 @@
 function dds_init(blk,varargin)
 
 % Declare any default values for arguments you might like.
-defaults = {'num_lo', 1, 'n_bits', 8, 'latency', 2};
+defaults = {'num_lo', 1, 'n_bits', 8, 'csp_latency', 2};
 check_mask_type(blk, 'dds');
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 munge_block(blk, varargin{:});
@@ -44,7 +44,7 @@ freq_div = get_var('freq_div','defaults', defaults, varargin{:});
 freq = get_var('freq','defaults', defaults, varargin{:});
 num_lo = get_var('num_lo','defaults', defaults, varargin{:});
 n_bits = get_var('n_bits','defaults', defaults, varargin{:});
-latency = get_var('latency','defaults', defaults, varargin{:});
+latency = get_var('csp_latency','defaults', defaults, varargin{:});
 
 delete_lines(blk);
 

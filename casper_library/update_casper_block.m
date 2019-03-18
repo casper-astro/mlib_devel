@@ -238,10 +238,11 @@ function update_casper_block(oldblk)
   % Restore parent's mask init setting
 
   if ~isempty(parent_mask_init)
-    if(strcmp(srcblk,'casper_library_bus/bus_mult') || strcmp(srcblk,'casper_library_bus/bus_addsub'))
-        parent_mask_init = strrep(parent_mask_init,'''latency'',','''csp_latency'',');
-    end
-    if(~strcmp(srcblk,'casper_library_bus/bus_mult') && ~strcmp(srcblk,'casper_library_bus/bus_convert'))
+    %if(strcmp(srcblk,'casper_library_bus/bus_addsub'))
+    %    parent_mask_init = strrep(parent_mask_init,'''latency'',','''csp_latency'',');
+    %    set_param(parent, 'MaskInitialization', parent_mask_init);
+    %end
+    if(~strcmp(srcblk,'casper_library_bus/bus_convert') && ~strcmp(srcblk,'casper_library_bus/bus_addsub'))
         set_param(parent, 'MaskInitialization', parent_mask_init);
     end
   end

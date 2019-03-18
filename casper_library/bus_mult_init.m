@@ -363,12 +363,33 @@ function bus_mult_init(blk, varargin)
   ypos_tmp = ypos + mult_d*compa/2;
 
   %replicate busses
+  
+  try
+      get_param([blk,'/','repa'],'csp_latency');
+  catch ME
+      try
+          update_casper_block([blk,'/','repa'])
+          disp([ME.identifier,' ','Old 2016b bus_replicate block, upgrading to new toolflow'])
+      catch ME
+      end
+  end
+  
   reuse_block(blk, 'repa', 'casper_library_bus/bus_replicate', ...
     'replication', num2str(dupa), 'csp_latency', num2str(max(0, dup_latency)), 'misc', 'off', ... 
     'Position', [xpos-rep_w/2 ypos_tmp-rep_d/2 xpos+rep_w/2 ypos_tmp+rep_d/2]);
   add_line(blk, 'a/1', 'repa/1'); 
 
   ypos_tmp = ypos_tmp + yinc + mult_d*(compa/2 + compb/2);
+  
+  try
+      get_param([blk,'/','repb'],'csp_latency');
+  catch ME
+      try
+          update_casper_block([blk,'/','repb'])
+          disp([ME.identifier,' ','Old 2016b bus_replicate block, upgrading to new toolflow'])
+      catch ME
+      end
+  end
   
   reuse_block(blk, 'repb', 'casper_library_bus/bus_replicate', ...
     'replication', num2str(dupb), 'csp_latency', num2str(max(0, dup_latency)), 'misc', 'off', ...

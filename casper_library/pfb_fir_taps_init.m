@@ -84,10 +84,12 @@ function pfb_fir_taps_init(blk, varargin)
   
   
   % sanity check for old block that has not been updated for floating point
-  if (strcmp(floating_point, 'on')) || (floating_point == 1)
+  if (strcmp(floating_point, 'on'))  
     floating_point = 1;
   else
-    floating_point = 0;
+    if(floating_point ~= 1)
+        floating_point = 0;
+    end
   end
 
   % Check for floating point

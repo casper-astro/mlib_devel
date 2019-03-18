@@ -87,10 +87,12 @@ function pfb_fir_generic_init(blk, varargin)
   
   
   % sanity check for old block that has not been updated for floating point
-  if (strcmp(floating_point, 'on')) || (floating_point == 1)
+  if (strcmp(floating_point, 'on'))  
     floating_point = 1;
   else
-    floating_point = 0;
+    if(floating_point ~= 1)
+        floating_point = 0;
+    end
   end
 
   % Check for floating point
@@ -320,6 +322,16 @@ function pfb_fir_generic_init(blk, varargin)
       if strcmp(quantization, 'Truncate'), quant = 0;
       elseif strcmp(quantization, 'Round  (unbiased: +/- Inf)'), quant = 1;
       else quant = 2;
+      end
+      
+      try
+          get_param([blk,'/bus_convert'],'csp_latency');
+      catch ME
+          try
+              update_casper_block([blk,'/bus_convert'])
+              disp([ME.identifier,' ','Old 2016b bus_convert block, upgrading to new toolflow'])
+         catch ME
+         end
       end
 
       reuse_block(blk, 'bus_convert', 'casper_library_bus/bus_convert', ...

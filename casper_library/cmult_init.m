@@ -178,17 +178,45 @@ function cmult_init(blk, varargin)
   else, latency = 0;
   end
  
+  %csp_latency_present = true;
+  %try
+  %    get_param(blk,'csp_latency');
+  %catch ME
+  %    csp_latency_present = false;
+  %end
+  
+  
+  try
+      get_param([blk,'/a_replicate'],'csp_latency');
+  catch ME
+      try
+          update_casper_block([blk,'/a_replicate'])
+          disp([ME.identifier,' ','Old 2016b bus_replicate block, upgrading to new toolflow'])
+      catch ME
+      end
+  end
+  
   reuse_block(blk, 'a_replicate', 'casper_library_bus/bus_replicate', ...
       'replication', '2', 'csp_latency', num2str(latency), 'misc', 'off', ...
       'Position', [90 143 125 167]);
   add_line(blk, 'a/1', 'a_replicate/1'); 
-
   
+  try
+      get_param([blk,'/b_replicate'],'csp_latency');
+  catch ME
+      try
+          update_casper_block([blk,'/b_replicate'])
+          disp([ME.identifier,' ','Old 2016b bus_replicate block, upgrading to new toolflow'])
+      catch ME
+      end
+  end
+
   reuse_block(blk, 'b_replicate', 'casper_library_bus/bus_replicate', ...
       'replication', '2', 'csp_latency', num2str(latency), 'misc', 'off', ...
       'Position', [90 328 125 352]);
   add_line(blk, 'b/1', 'b_replicate/1'); 
 
+      
   if strcmp(async, 'on')
     reuse_block(blk, 'en_replicate0', 'casper_library_bus/bus_replicate', ...
         'replication', '5', 'csp_latency', num2str(latency), 'misc', 'off', ...

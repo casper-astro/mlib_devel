@@ -74,7 +74,7 @@ function bus_adder_tree_init(blk, varargin)
   delete_lines(blk);
 
   % sanity check for old block that has not been updated for floating point
-  if (strcmp(floating_point, 'on')) || (floating_point == 1)
+  if (strcmp(floating_point, 'on') || all(floating_point == 1))
     floating_point = 1;
   else
     floating_point = 0;
@@ -219,6 +219,15 @@ function bus_adder_tree_init(blk, varargin)
       'Position', [xpos-addt_w/2 ypos_tmp-addt_d/2 xpos+addt_w/2 ypos_tmp+addt_d/2]);
 
     else
+      try
+          get_param([blk,'/','add_tree', num2str(n)],'csp_latency');
+      catch ME
+          try
+              update_casper_block([blk,'/','add_tree', num2str(n)])
+              disp([ME.identifier,' ','Old 2016b bus_convert block, upgrading to new toolflow'])
+         catch ME
+         end
+      end
       reuse_block(blk, ['add_tree', num2str(n)], 'casper_library/Misc/adder_tree', ...
       'n_inputs', num2str(n_busses), 'csp_latency', num2str(add_latency), ...
       'adder_imp', adder_imp, 'first_stage_hdl', first_stage_hdl, ... 

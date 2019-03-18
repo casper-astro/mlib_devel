@@ -148,7 +148,16 @@ function mirror_spectrum_init(blk, varargin)
     else, cc_latency = negate_latency;
     end
     
-    
+    try
+        get_param([blk,'/','complex_conj',num2str(index)],'csp_latency');
+    catch ME
+        try
+            update_casper_block([blk,'/','complex_conj',num2str(index)])
+            disp([ME.identifier,' ','Old 2016b complex_conj block, upgrading to new toolflow'])
+        catch ME
+        end
+    end
+
     reuse_block(blk, ['complex_conj',num2str(index)], 'casper_library_misc/complex_conj', ...
       'n_inputs', num2str(n_inputs), 'n_bits', num2str(input_bitwidth), ...
       'bin_pt', num2str(bin_pt_in), 'csp_latency', num2str(cc_latency), 'overflow', 'Wrap', ... %TODO Wrap really?
@@ -159,6 +168,15 @@ function mirror_spectrum_init(blk, varargin)
       'Position', [105 343+(125*index) 140 363+(125*index)]);
     add_line(blk, ['reo_in',num2str(index),'/1'], ['complex_conj',num2str(index),'/1']);
 
+    try
+        get_param([blk,'/','sel_replicate',num2str(index)],'csp_latency');
+    catch ME
+        try
+            update_casper_block([blk,'/','complex_conj',num2str(index)])
+            disp([ME.identifier,' ','Old 2016b complex_conj block, upgrading to new toolflow'])
+        catch ME
+        end
+    end
     
     reuse_block(blk, ['sel_replicate',num2str(index)], 'casper_library_bus/bus_replicate', ...
       'replication', 'n_inputs', 'csp_latency', 'ceil(log2(n_inputs))', 'misc', 'off', 'implementation', 'core', ...
