@@ -171,6 +171,9 @@ if __name__ == '__main__':
 
             #Generate the hex timestamp for the golden and multiboot images, if selected
             if platform.boot_image == 'golden':
+                backend.output_bin = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d_golden.bin' % (
+                tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
+                tf.start_time.tm_hour, tf.start_time.tm_min)
                 backend.output_hex = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d_golden.hex' % (
                 tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
                 tf.start_time.tm_hour, tf.start_time.tm_min)
@@ -181,6 +184,9 @@ if __name__ == '__main__':
                 tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
                 tf.start_time.tm_hour, tf.start_time.tm_min)
             elif platform.boot_image == 'multiboot':
+                backend.output_bin = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d_multiboot.bin' % (
+                tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
+                tf.start_time.tm_hour, tf.start_time.tm_min)
                 backend.output_hex = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d_multiboot.hex' % (
                 tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
                 tf.start_time.tm_hour, tf.start_time.tm_min)
@@ -213,11 +219,14 @@ if __name__ == '__main__':
             # Only generate the hex and mcs files if a golden image or multiboot image
             if platform.boot_image == 'golden' or platform.boot_image == 'multiboot':
                 os.system('cp %s %s/%s' % (
+                    binary, backend.output_dir, backend.output_bin))
+                os.system('cp %s %s/%s' % (
                     hex_file, backend.output_dir, backend.output_hex))
                 os.system('cp %s %s/%s' % (
                     mcs_file, backend.output_dir, backend.output_mcs))
                 os.system('cp %s %s/%s' % (
                     prm_file, backend.output_dir, backend.output_prm))
+                print 'Created bin file: %s/%s' % (backend.output_dir, backend.output_bin)
                 print 'Created hex file: %s/%s' % (backend.output_dir, backend.output_hex)
                 print 'Created mcs file: %s/%s' % (backend.output_dir, backend.output_mcs)
                 print 'Created prm file: %s/%s' % (backend.output_dir, backend.output_prm)
