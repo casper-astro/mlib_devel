@@ -68,8 +68,6 @@ print "hmc out cnt:",f.registers.hmc_out_cnt.read_uint()
 print "hmc wr err:",f.registers.hmc_wr_err.read_uint()
 print "hmc rd err:",f.registers.hmc_rd_err.read_uint()
 print "hmc status:",f.registers.hmc_status.read_uint()
-print "rx crc err cnt:",f.registers.rx_crc_err_cnt_link3.read_uint()
-print "hmc error status:",f.registers.errstat_link3.read_uint()
 
 print 'done'
 #read back the snapshot captured data
