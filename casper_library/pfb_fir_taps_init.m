@@ -157,7 +157,7 @@ function pfb_fir_taps_init(blk, varargin)
   
   reuse_block(blk, 'din', 'built-in/Inport', 'Port', '2', 'Position', [70 448 100 462]);
   
-  reuse_block(blk, 'ddin', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
+  reuse_block(blk, 'ddin', 'xbsIndex_r4/Delay', 'reg_retiming', 'off', ...
     'latency', num2str(fan_latency+bram_latency), 'Position', [415 445 450 465]);
   add_line(blk, 'din/1', 'ddin/1');
   
