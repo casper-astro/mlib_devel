@@ -75,6 +75,41 @@ class WbDevice(object):
         #: If using multiple bus arbiters, which arbiter should this slave attach to?
         self.sub_arb_id = 0
 
+class AXI4LiteDevice(object):
+    """
+    A class to encapsulate the parameters (name, size, etc.) of a AXI4-Lite slave device.
+    """
+    def __init__(self, regname, nbytes, mode, hdl_suffix='', hdl_candr_suffix='', memory_map=[], typecode=0xff):
+        """
+        Class constructor.
+
+        :param regname: Name of register (this name is the string used to access the register from software)
+        :type regname: String
+        :param nbytes: Number of bytes in this slave's memory space.
+        :type nbytes: Integer
+        :param mode: Permissions ('r': readable, 'w': writable, 'rw': read/writeable)
+        :type mode: String
+        :param hdl_suffix: Suffix given to wishbone port names. Eg. if `hdl_suffix = foo`, ports have the form `wbs_dat_i_foo`
+        :type hdl_suffix: String
+        :param hdl_candr_suffix: Suffix given to wishbone clock and reset port names. Eg. if `hdl_suffix = foo`, ports have the form `wbs_clk_i_foo`
+        :type hdl_candr_suffix: String
+        :param memory_map: A list or `Register` instances defining the contents of sub-blocks of this device's memory.
+        :type memory_map: list
+        :param typecode: Typecode number (0-255) identifying the type of this block. See `yellow_block_typecodes.py`
+        :type typecode: Integer
+        """
+        self.typecode = typecode
+        self.regname = regname
+        self.nbytes = nbytes
+        self.mode=mode
+        #: Start (lowest) address of the memory space used by this device, in bytes.
+        self.base_addr = None
+        #: End (highest) address of the memory space used by this device, in bytes.
+        self.high_addr = None
+        self.hdl_suffix = hdl_suffix
+        self.hdl_candr_suffix = hdl_candr_suffix
+        self.memory_map = memory_map
+
 class Port(ImmutableWithComments):
     """
     A simple class to hold port attributes. It is immutable, and will throw an error if
@@ -532,6 +567,11 @@ class VerilogModule(object):
         self.wb_base = []
         self.wb_high = []
         self.wb_name = []
+        # AXI4-Lite stuff
+        self.n_axi4lite_slaves = 0 # axi4lite slaves added to this module programmatically
+        self.axi4lite_devices = []
+        self.n_axi4lite_interfaces = 0 # axi4lite interfaces to this module
+        self.axi4lite_ids = []
         # sourcefiles required by the module (this is currently NOT
         # how the jasper toolflow implements source management)
         self.sourcefiles = []
@@ -1193,6 +1233,35 @@ class VerilogModule(object):
         self.add_port('wb_dat_o'+suffix, signal='wbs_dat_i[(%s+1)*32-1:(%s)*32]'%(wb_id,wb_id), width=32, parent_sig=False)
         self.add_port('wb_ack_o'+suffix, signal='wbs_ack_i[%s]'%wb_id,parent_sig=False)
         self.add_port('wb_err_o'+suffix, signal='wbs_err_i[%s]'%wb_id,parent_sig=False)
+
+    def add_axi4lite_interface(self, regname, mode, nbytes=4, suffix='', candr_suffix='', memory_map=[], typecode=0xff):
+        """
+        Add the ports necessary for a AXI4-Lite slave interface.
+
+        This function returns the AXI4LiteDevice object, so the caller can mess with it's memory map
+        if they so desire.
+        """
+        if regname in [axi_dev.regname for axi_dev in self.axi4lite_devices]:
+            return
+        else:
+            axi4lite_device = AXI4LiteDevice(regname, nbytes=nbytes, mode=mode, hdl_suffix=suffix, hdl_candr_suffix=candr_suffix, memory_map=memory_map, typecode=typecode)
+            self.axi4lite_devices += [axi4lite_device]
+            self.n_axi4lite_interfaces += 1
+            # TODO: add relevant AXI4-Lite interface code
+            
+            # self.add_port('wb_clk_i'+candr_suffix, parent_sig=False)
+            # self.add_port('wb_rst_i'+candr_suffix, parent_sig=False)
+            # self.add_port('wb_cyc_i'+suffix, parent_sig=False)
+            # self.add_port('wb_stb_i'+suffix, parent_sig=False)
+            # self.add_port('wb_we_i'+suffix,  width=1, parent_sig=False)
+            # self.add_port('wb_sel_i'+suffix, width=4, parent_sig=False)
+            # self.add_port('wb_adr_i'+suffix, width=32, parent_sig=False)
+            # self.add_port('wb_dat_i'+suffix, width=32, parent_sig=False)
+            # self.add_port('wb_dat_o'+suffix, width=32, parent_sig=False)
+            # self.add_port('wb_ack_o'+suffix, parent_sig=False)
+            # self.add_port('wb_err_o'+suffix, parent_sig=False)
+            return axi4lite_device
+
 
     def search_dict_for_name(self, dict, name):
         """

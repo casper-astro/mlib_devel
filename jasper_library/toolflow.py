@@ -409,7 +409,10 @@ class Toolflow(object):
             #        self.tcl_sources += glob.glob(source)
 
     def write_core_info(self):
-        self.cores = self.top.wb_devices
+        if self.plat.conf['interface_architecture'] == 'AXI4-Lite':
+            self.cores = self.top.axi4lite_devices
+        else:
+            self.cores = self.top.wb_devices
         basefile = '%s/%s/core_info.tab' % (os.getenv('HDL_ROOT'),
                                             self.plat.name)
         newfile = '%s/core_info.tab' % self.compile_dir
@@ -440,7 +443,10 @@ class Toolflow(object):
             fh.write(s)
 
     def write_core_jam_info(self):
-        self.cores = self.top.wb_devices
+        if self.plat.conf['interface_architecture'] == 'AXI4-Lite':
+            self.cores = self.top.axi4lite_devices
+        else:
+            self.cores = self.top.wb_devices
         basefile = '%s/%s/core_info.jam.tab' % (os.getenv('HDL_ROOT'), self.plat.name)
         newfile = '%s/core_info.jam.tab' % self.compile_dir
         self.logger.debug('Opening %s' % basefile)
@@ -657,17 +663,30 @@ class Toolflow(object):
         c.synthesis.pin_map = self.plat._pins
 
         mm_slaves = []
-        for dev in self.top.wb_devices:
-            if dev.mode == 'rw':
-                mode = 3
-            elif dev.mode == 'r':
-                mode = 1
-            elif dev.mode == 'w':
-                mode = 2
-            else:
-                mode = 1
-            mm_slaves += [castro.mm_slave(dev.regname, mode, dev.base_addr,
-                                          dev.nbytes)]
+        if self.plat.conf['interface_architecture'] == 'AXI4-Lite':
+            for dev in self.top.axi4lite_devices:
+                if dev.mode == 'rw':
+                    mode = 3
+                elif dev.mode == 'r':
+                    mode = 1
+                elif dev.mode == 'w':
+                    mode = 2
+                else:
+                    mode = 1
+                mm_slaves += [castro.mm_slave(dev.regname, mode, dev.base_addr,
+                                            dev.nbytes)]
+        else:
+            for dev in self.top.wb_devices:
+                if dev.mode == 'rw':
+                    mode = 3
+                elif dev.mode == 'r':
+                    mode = 1
+                elif dev.mode == 'w':
+                    mode = 2
+                else:
+                    mode = 1
+                mm_slaves += [castro.mm_slave(dev.regname, mode, dev.base_addr,
+                                            dev.nbytes)]
 
         c.mm_slaves = mm_slaves
 
