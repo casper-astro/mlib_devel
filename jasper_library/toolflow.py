@@ -21,6 +21,7 @@ import time
 import hashlib  # Added to calculate md5hash of .bin bitstream and add it to the .fpg header
 import pickle   # Used to dump the pickle of the generated VerilogModule to the build directory for debugging
 import struct   # Used to append a binary checksum to a bitstream
+import pdb
 
 #JH: I don't know what this is, but I suspect here is a better place for it than constraints.py
 MAX_IMAGE_CHUNK_SIZE = 1988
@@ -409,7 +410,7 @@ class Toolflow(object):
             #        self.tcl_sources += glob.glob(source)
 
     def write_core_info(self):
-        if self.plat.conf['interface_architecture'] == 'AXI4-Lite':
+        if self.plat.mmbus_architecture == 'AXI4-Lite':
             self.cores = self.top.axi4lite_devices
         else:
             self.cores = self.top.wb_devices
@@ -443,7 +444,7 @@ class Toolflow(object):
             fh.write(s)
 
     def write_core_jam_info(self):
-        if self.plat.conf['interface_architecture'] == 'AXI4-Lite':
+        if self.plat.mmbus_architecture == 'AXI4-Lite':
             self.cores = self.top.axi4lite_devices
         else:
             self.cores = self.top.wb_devices
@@ -495,7 +496,11 @@ class Toolflow(object):
         if self.plat.conf.has_key('max_devices_per_arbiter'):
             self.top.max_devices_per_arb = self.plat.conf['max_devices_per_arbiter']
             self.logger.debug("Found max_devices_per_arbiter: %s" % self.top.max_devices_per_arb)
-        self.top.wb_compute(self.plat.dsp_wb_base_address,
+        # Check for memory map bus architecture, added to support AXI4-Lite
+        if self.plat.mmbus_architecture == 'AXI4-Lite':
+            self.top.axi4lite_compute(self.plat.mmbus_base_address, self.plat.mmbus_address_alignment)
+        else:
+            self.top.wb_compute(self.plat.dsp_wb_base_address,
                             self.plat.dsp_wb_base_address_alignment)
         print self.top.gen_module_file(filename=self.compile_dir+'/top.v')
         # Write any submodule files required for the compile. This is probably
@@ -663,7 +668,7 @@ class Toolflow(object):
         c.synthesis.pin_map = self.plat._pins
 
         mm_slaves = []
-        if self.plat.conf['interface_architecture'] == 'AXI4-Lite':
+        if self.plat.mmbus_architecture == 'AXI4-Lite':
             for dev in self.top.axi4lite_devices:
                 if dev.mode == 'rw':
                     mode = 3

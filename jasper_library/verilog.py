@@ -11,6 +11,7 @@ from math import ceil, floor
 import logging
 import inspect
 import operator
+import pdb
 
 logger = logging.getLogger('jasper.verilog')
 
@@ -680,6 +681,25 @@ class VerilogModule(object):
             self.add_localparam('SLAVE_ADDR', base_addrs)
             self.add_localparam('SLAVE_HIGH', high_addrs)
 
+    def axi4lite_compute(self, base_addr=0x10000, alignment=4):
+        """
+        :param base_addr: The address from which indexing of instance axi4lite interfaces will begin. Any memory space required by the template verilog file should be below this address.
+        :type base_addr: int
+        :param alignment: Alignment required by all memory start addresses.
+        :type alignment: int
+        """
+        for block in self.instances.keys():
+            for instname, inst in self.instances[block].items():
+                logger.debug("Looking for AXI slaves for instance %s"%inst.name)
+                for n, axi_dev in enumerate(inst.axi4lite_devices):
+                    logger.debug("Found new AXI slave for instance %s"%inst.name)
+                    inst.assign_axi4lite_interface(instname, id=n, suffix=axi_dev.hdl_suffix, candr_suffix=axi_dev.hdl_candr_suffix)
+                    axi_dev.base_addr = base_addr
+                    axi_dev.high_addr = base_addr + (alignment*int(ceil(axi_dev.nbytes/float(alignment)))) - 1
+                    base_addr = axi_dev.high_addr + 1
+                    self.n_axi4lite_slaves += 1
+                    self.axi4lite_devices += [axi_dev]
+
 
     def get_base_wb_slaves(self):
         """
@@ -1247,21 +1267,42 @@ class VerilogModule(object):
             axi4lite_device = AXI4LiteDevice(regname, nbytes=nbytes, mode=mode, hdl_suffix=suffix, hdl_candr_suffix=candr_suffix, memory_map=memory_map, typecode=typecode)
             self.axi4lite_devices += [axi4lite_device]
             self.n_axi4lite_interfaces += 1
-            # TODO: add relevant AXI4-Lite interface code
-            
-            # self.add_port('wb_clk_i'+candr_suffix, parent_sig=False)
-            # self.add_port('wb_rst_i'+candr_suffix, parent_sig=False)
-            # self.add_port('wb_cyc_i'+suffix, parent_sig=False)
-            # self.add_port('wb_stb_i'+suffix, parent_sig=False)
-            # self.add_port('wb_we_i'+suffix,  width=1, parent_sig=False)
-            # self.add_port('wb_sel_i'+suffix, width=4, parent_sig=False)
-            # self.add_port('wb_adr_i'+suffix, width=32, parent_sig=False)
-            # self.add_port('wb_dat_i'+suffix, width=32, parent_sig=False)
-            # self.add_port('wb_dat_o'+suffix, width=32, parent_sig=False)
-            # self.add_port('wb_ack_o'+suffix, parent_sig=False)
-            # self.add_port('wb_err_o'+suffix, parent_sig=False)
             return axi4lite_device
 
+    def assign_axi4lite_interface(self, name, id=0, suffix='', candr_suffix=''):
+        """
+        Add the ports necessary for a AXI4-Lite slave interface.
+        AXI4-Lite ports that depend on the slave index are identified by a parameter
+        that matches the instance name. This parameter must be given a value in a higher level
+        of the verilog code!
+        """
+        axi_id = name.upper() + '_AXI_ID%d'%(id)
+        self.axi4lite_ids += [axi_id]
+        self.add_parameter('C_S_AXI_DATA_WIDTH', 32)
+        # TODO: update the addr_width parameter
+        self.add_parameter('C_S_AXI_ADDR_WIDTH', 31)
+        # TODO: check ACLK and ARESETN signals
+        self.add_port('S_AXI_ACLK', signal='axi_clk', parent_sig=False)
+        self.add_port('S_AXI_ARESETN', signal='peripheral_areset_n', parent_sig=False)
+        self.add_port('S_AXI_AWADDR', signal='M_%s_AXI_awaddr'%axi_id, parent_sig=False)
+        self.add_port('S_AXI_AWPROT', signal='M_%s_AXI_awprot'%axi_id, parent_sig=False)
+        self.add_port('S_AXI_AWVALID', signal='M_%s_AXI_awvalid'%axi_id, parent_sig=False)
+        self.add_port('S_AXI_AWREADY', signal='M_%s_AXI_awready'%axi_id, parent_sig=False)
+        self.add_port('S_AXI_WDATA', signal='M_%s_AXI_wdata'%axi_id, parent_sig=False)
+        self.add_port('S_AXI_WSTRB', signal='M_%s_AXI_wstrb'%axi_id, parent_sig=False)
+        self.add_port('S_AXI_WVALID', signal='M_%s_AXI_wvalid'%axi_id, parent_sig=False)
+        self.add_port('S_AXI_WREADY', signal='M_%s_AXI_wready'%axi_id, parent_sig=False)
+        self.add_port('S_AXI_BRESP', signal='M_%s_AXI_bresp'%axi_id, parent_sig=False)
+        self.add_port('S_AXI_BVALID', signal='M_%s_AXI_bvalid'%axi_id, parent_sig=False)
+        self.add_port('S_AXI_BREADY', signal='M_%s_AXI_bready'%axi_id, parent_sig=False)
+        self.add_port('S_AXI_ARADDR', signal='M_%s_AXI_araddr'%axi_id, parent_sig=False)
+        self.add_port('S_AXI_ARPROT', signal='M_%s_AXI_arprot'%axi_id, parent_sig=False)
+        self.add_port('S_AXI_ARVALID', signal='M_%s_AXI_arvalid'%axi_id, parent_sig=False)
+        self.add_port('S_AXI_ARREADY', signal='M_%s_AXI_arready'%axi_id, parent_sig=False)
+        self.add_port('S_AXI_RDATA', signal='M_%s_AXI_rdata'%axi_id, parent_sig=False)
+        self.add_port('S_AXI_RRESP', signal='M_%s_AXI_rresp'%axi_id, parent_sig=False)
+        self.add_port('S_AXI_RVALID', signal='M_%s_AXI_rvalid'%axi_id, parent_sig=False)
+        self.add_port('S_AXI_RREADY', signal='M_%s_AXI_rready'%axi_id, parent_sig=False)
 
     def search_dict_for_name(self, dict, name):
         """

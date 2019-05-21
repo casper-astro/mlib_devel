@@ -9,28 +9,30 @@ class red_pitaya(YellowBlock):
 
     def modify_top(self,top):
         inst = top.get_instance('red_pitaya_wrapper', 'red_pitaya_wrapper_inst')
-        inst.add_port('sys_clk', 'sys_clk')
+        inst.add_port('sys_clk', 'axi_clk')
+        inst.add_port('peripheral_areset_n', 'peripheral_areset_n')
 
-        # Need this for each interface exposed... will put in loop later
-        inst.add_port('M00_AXI_0_araddr', 'M00_AXI_0_araddr', width=31)
-        inst.add_port('M00_AXI_0_arprot', 'M00_AXI_0_arprot', width=3)
-        inst.add_port('M00_AXI_0_arready', 'M00_AXI_0_arready')
-        inst.add_port('M00_AXI_0_arvalid', 'M00_AXI_0_arvalid')
-        inst.add_port('M00_AXI_0_awaddr', 'M00_AXI_0_awaddr', width=31)
-        inst.add_port('M00_AXI_0_awprot', 'M00_AXI_0_awprot', width=3)
-        inst.add_port('M00_AXI_0_awready', 'M00_AXI_0_awready')
-        inst.add_port('M00_AXI_0_awvalid', 'M00_AXI_0_awvalid')
-        inst.add_port('M00_AXI_0_bready', 'M00_AXI_0_bready')
-        inst.add_port('M00_AXI_0_bresp', 'M00_AXI_0_bresp', width=2)
-        inst.add_port('M00_AXI_0_bvalid', 'M00_AXI_0_bvalid')
-        inst.add_port('M00_AXI_0_rdata', 'M00_AXI_0_rdata', width=32)
-        inst.add_port('M00_AXI_0_rready', 'M00_AXI_0_rready')
-        inst.add_port('M00_AXI_0_rresp', 'M00_AXI_0_rresp', width=2)
-        inst.add_port('M00_AXI_0_rvalid', 'M00_AXI_0_rvalid')
-        inst.add_port('M00_AXI_0_wdata', 'M00_AXI_0_wdata', width=32)
-        inst.add_port('M00_AXI_0_wready', 'M00_AXI_0_wready')
-        inst.add_port('M00_AXI_0_wstrb', 'M00_AXI_0_wstrb', width=4)
-        inst.add_port('M00_AXI_0_wvalid', 'M00_AXI_0_wvalid')
+        # for i in range(top.n_axi4lite_interfaces):
+        for i in range(1):
+            inst.add_port('M_%s_AXI_araddr'%i, 'M_%s_AXI_araddr'%i, width=31)
+            inst.add_port('M_%s_AXI_arprot'%i, 'M_%s_AXI_arprot'%i, width=3)
+            inst.add_port('M_%s_AXI_arready'%i, 'M_%s_AXI_arready'%i)
+            inst.add_port('M_%s_AXI_arvalid'%i, 'M_%s_AXI_arvalid'%i)
+            inst.add_port('M_%s_AXI_awaddr'%i, 'M_%s_AXI_awaddr'%i, width=31)
+            inst.add_port('M_%s_AXI_awprot'%i, 'M_%s_AXI_awprot'%i, width=3)
+            inst.add_port('M_%s_AXI_awready'%i, 'M_%s_AXI_awready'%i)
+            inst.add_port('M_%s_AXI_awvalid'%i, 'M_%s_AXI_awvalid'%i)
+            inst.add_port('M_%s_AXI_bready'%i, 'M_%s_AXI_bready'%i)
+            inst.add_port('M_%s_AXI_bresp'%i, 'M_%s_AXI_bresp'%i, width=2)
+            inst.add_port('M_%s_AXI_bvalid'%i, 'M_%s_AXI_bvalid'%i)
+            inst.add_port('M_%s_AXI_rdata'%i, 'M_%s_AXI_rdata'%i, width=32)
+            inst.add_port('M_%s_AXI_rready'%i, 'M_%s_AXI_rready'%i)
+            inst.add_port('M_%s_AXI_rresp'%i, 'M_%s_AXI_rresp'%i, width=2)
+            inst.add_port('M_%s_AXI_rvalid'%i, 'M_%s_AXI_rvalid'%i)
+            inst.add_port('M_%s_AXI_wdata'%i, 'M_%s_AXI_wdata'%i, width=32)
+            inst.add_port('M_%s_AXI_wready'%i, 'M_%s_AXI_wready'%i)
+            inst.add_port('M_%s_AXI_wstrb'%i, 'M_%s_AXI_wstrb'%i, width=4)
+            inst.add_port('M_%s_AXI_wvalid'%i, 'M_%s_AXI_wvalid'%i)
 
     def gen_children(self):
         return [YellowBlock.make_block({'tag': 'xps:sys_block', 'board_id': '3', 'rev_maj': '2', 'rev_min': '0', 'rev_rcs': '1'}, self.platform)]
