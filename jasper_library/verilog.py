@@ -11,6 +11,7 @@ from math import ceil, floor
 import logging
 import inspect
 import operator
+from memory import Register
 import pdb
 
 logger = logging.getLogger('jasper.verilog')
@@ -1264,6 +1265,9 @@ class VerilogModule(object):
         if regname in [axi_dev.regname for axi_dev in self.axi4lite_devices]:
             return
         else:
+            # Make single register in memory_map if a memory_map is empty
+            if not memory_map:
+                memory_map = [Register(regname, mode=mode, offset=0)]
             axi4lite_device = AXI4LiteDevice(regname, nbytes=nbytes, mode=mode, hdl_suffix=suffix, hdl_candr_suffix=candr_suffix, memory_map=memory_map, typecode=typecode)
             self.axi4lite_devices += [axi4lite_device]
             self.n_axi4lite_interfaces += 1
@@ -1278,31 +1282,6 @@ class VerilogModule(object):
         """
         axi_id = name.upper() + '_AXI_ID%d'%(id)
         self.axi4lite_ids += [axi_id]
-        self.add_parameter('C_S_AXI_DATA_WIDTH', 32)
-        # TODO: update the addr_width parameter
-        self.add_parameter('C_S_AXI_ADDR_WIDTH', 31)
-        # TODO: check ACLK and ARESETN signals
-        self.add_port('S_AXI_ACLK', signal='axi_clk', parent_sig=False)
-        self.add_port('S_AXI_ARESETN', signal='peripheral_areset_n', parent_sig=False)
-        self.add_port('S_AXI_AWADDR', signal='M_%s_AXI_awaddr'%axi_id, parent_sig=False)
-        self.add_port('S_AXI_AWPROT', signal='M_%s_AXI_awprot'%axi_id, parent_sig=False)
-        self.add_port('S_AXI_AWVALID', signal='M_%s_AXI_awvalid'%axi_id, parent_sig=False)
-        self.add_port('S_AXI_AWREADY', signal='M_%s_AXI_awready'%axi_id, parent_sig=False)
-        self.add_port('S_AXI_WDATA', signal='M_%s_AXI_wdata'%axi_id, parent_sig=False)
-        self.add_port('S_AXI_WSTRB', signal='M_%s_AXI_wstrb'%axi_id, parent_sig=False)
-        self.add_port('S_AXI_WVALID', signal='M_%s_AXI_wvalid'%axi_id, parent_sig=False)
-        self.add_port('S_AXI_WREADY', signal='M_%s_AXI_wready'%axi_id, parent_sig=False)
-        self.add_port('S_AXI_BRESP', signal='M_%s_AXI_bresp'%axi_id, parent_sig=False)
-        self.add_port('S_AXI_BVALID', signal='M_%s_AXI_bvalid'%axi_id, parent_sig=False)
-        self.add_port('S_AXI_BREADY', signal='M_%s_AXI_bready'%axi_id, parent_sig=False)
-        self.add_port('S_AXI_ARADDR', signal='M_%s_AXI_araddr'%axi_id, parent_sig=False)
-        self.add_port('S_AXI_ARPROT', signal='M_%s_AXI_arprot'%axi_id, parent_sig=False)
-        self.add_port('S_AXI_ARVALID', signal='M_%s_AXI_arvalid'%axi_id, parent_sig=False)
-        self.add_port('S_AXI_ARREADY', signal='M_%s_AXI_arready'%axi_id, parent_sig=False)
-        self.add_port('S_AXI_RDATA', signal='M_%s_AXI_rdata'%axi_id, parent_sig=False)
-        self.add_port('S_AXI_RRESP', signal='M_%s_AXI_rresp'%axi_id, parent_sig=False)
-        self.add_port('S_AXI_RVALID', signal='M_%s_AXI_rvalid'%axi_id, parent_sig=False)
-        self.add_port('S_AXI_RREADY', signal='M_%s_AXI_rready'%axi_id, parent_sig=False)
 
     def search_dict_for_name(self, dict, name):
         """
