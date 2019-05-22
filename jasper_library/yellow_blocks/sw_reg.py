@@ -25,15 +25,6 @@ class sw_reg(YellowBlock):
                 inst = top.get_instance(entity=module, name=self.fullname)
                 # the minimum supported address range for an AXI4-lite interface in Vivado is 4KB
                 inst.add_axi4lite_interface(regname=self.unique_name, mode='r', nbytes=4096, typecode=self.typecode)
-                # # Only add one interface for all software registers, create a memory map from this register space.
-                # if self.i_am_the_first:
-                #     inst.add_axi4lite_interface(regname='sw_reg', mode='r', nbytes=range, memory_map=self.memory_map, typecode=self.typecode)
-                #     # Add this as the first register in our memory map
-                #     self.memory_map += [Register(self.unique_name, nbytes=4, offset=0, mode='r')]
-                # else:
-                #     # Determine new offset based from last register added
-                #     last_offset = self.memory_map[-1].offset
-                #     self.memory_map += [Register(self.unique_name, nbytes=4, offset=last_offset+4, mode='r')]
             else:
                 module = 'wb_register_simulink2ppc'
                 inst = top.get_instance(entity=module, name=self.fullname)
@@ -47,15 +38,6 @@ class sw_reg(YellowBlock):
                 inst = top.get_instance(entity=module, name=self.fullname)
                 # the minimum supported address range for an AXI4-lite interface in Vivado is 4KB
                 inst.add_axi4lite_interface(regname=self.unique_name, mode='rw', nbytes=4096, typecode=self.typecode)
-                # Only add one interface for all software registers, create a memory map from this register space.
-                # if self.i_am_the_first:
-                #     # inst.add_axi4lite_interface(regname='sw_reg', mode='rw', nbytes=range, memory_map=self.memory_map, typecode=self.typecode)
-                #     # Add this as the first register in our memory map
-                #     self.memory_map += [Register(self.unique_name, nbytes=4, offset=0, mode='rw')]
-                # else:
-                #     # Determine new offset based from last register added
-                #     last_offset = self.memory_map[-1].offset
-                #     self.memory_map += [Register(self.unique_name, nbytes=4, offset=last_offset+4, mode='rw')]
             else:
                 module = 'wb_register_ppc2simulink'
                 inst = top.get_instance(entity=module, name=self.fullname)
