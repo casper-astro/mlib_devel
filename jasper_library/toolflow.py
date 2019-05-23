@@ -391,7 +391,8 @@ class Toolflow(object):
         if self.plat.mmbus_architecture == 'AXI4-Lite':
             # Make an AXI4-Lite interconnect yellow block and let it modify top
             axi4lite_interconnect = yellow_block.YellowBlock.make_block(
-                {'tag': 'xps:axi4lite_interconnect', 'name': 'axi4lite_interconnect'}, self.plat)
+                {'tag': 'xps:axi4lite_interconnect', 'name': 'axi4lite_interconnect', 
+                'fullpath': self.user_modules.keys()[0] +'/axi4lite_interconnect'}, self.plat)
             axi4lite_interconnect.modify_top(self.top)
             # Generate xml2vhdl
             self.xml2vhdl()
@@ -804,7 +805,7 @@ class Toolflow(object):
         """
         # loop over interfaces, sort by addresse, make interconnect
         xml_root = ET.Element('node')
-        xml_root.set('id', 'axi4lite')
+        xml_root.set('id', 'axi4lite_top')
         xml_root.set('address', hex(self.plat.mmbus_base_address))
         xml_root.set('hw_type', 'ic')
         for interface in memory_map.keys():

@@ -710,6 +710,8 @@ class VerilogModule(object):
                     interface = self.memory_map['sw_reg'] = {}
                     interface['size'] = dev.nbytes
                     interface['memory_map'] = dev.memory_map
+                    # erase dev.memory_map so that core_info doesn't add sw_regs twice
+                    dev.memory_map = []
                     interface['axi4lite_devices'] = [dev]
                 else:
                     # add another sw_reg to this interface dict
@@ -720,6 +722,8 @@ class VerilogModule(object):
                     interface['size'] += dev.nbytes
                     # append device memory_map
                     interface['memory_map'] += dev.memory_map
+                    # # erase dev.memory_map so that core_info doesn't add sw_regs twice
+                    dev.memory_map = []
                     interface['axi4lite_devices'] += [dev]
             else:
                 # add all other yellow blocks to their own interface and make xml memory map
@@ -734,9 +738,18 @@ class VerilogModule(object):
         for key,val in self.memory_map.items():
             val['absolute_address'] = hex(absolute_address)
             val['relative_address'] = hex(relative_address)
-            # set same 'base_addr' for each device in interface (for core_info output later)
-            for dev in val['axi4lite_devices']:
-                dev.base_addr = absolute_address
+            # this is really gross, but didn't want to rewrite anything in core_info... Sorry.
+            if key == 'sw_reg':
+                # loop over registers and axi4lite_devices, assign correct dev.base_addr for core_info
+                # There could be a better python one-liner to do this but idk...
+                for reg in val['memory_map']:
+                    for dev in val['axi4lite_devices']:
+                        # if names match, set base_addr from interface's absolute address + register offset
+                        if reg.name == dev.regname:
+                            dev.base_addr = absolute_address + reg.offset
+            else:
+                # 'base_addr' for interface (for core_info to reference laters)
+                val['axi4lite_devices'][0].base_addr = absolute_address
             # adjust addresses for next loop
             relative_address = relative_address + (alignment*int(ceil(val['size']/float(alignment))))
             absolute_address = absolute_address + relative_address
