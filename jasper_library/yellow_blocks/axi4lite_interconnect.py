@@ -1,7 +1,7 @@
 from yellow_block import YellowBlock
 from yellow_block_typecodes import *
 
-class AXI4LiteInterconnect(YellowBlock):
+class axi4lite_interconnect(YellowBlock):
     """
     Yellow block class to incorporate Oxford's python code to generate 
     AXI4-Lite VHDL register interfaces from a XML memory map specification.
@@ -17,20 +17,12 @@ class AXI4LiteInterconnect(YellowBlock):
         self.add_source('axi4_lite')
 
     def modify_top(self,top):
-        top.axi4lite_compute(self.plat.mmbus_base_address, self.plat.mmbus_address_alignment)
-
-        self.axi4lite_devices = top.axi4lite_devices
-        self.n_axi4lite_slaves = top.n_axi4lite_slaves
-        self.n_axi4lite_interfaces = top.n_axi4lite_interfaces
-        self.axi4lite_ids = top.axi4lite_ids
+        # Make a memory map for all axi4lite interfaces/slaves
+        top.axi4lite_memory_map(self.platform.mmbus_base_address, self.platform.mmbus_address_alignment)
+        self.memory_map = top.memory_map
 
         # instantiate wrapper and add relevant ports
         # expose AXI4-Lite interface to connected to processor
-
-        for dev in self.axi4lite_devices:
-            # add all software registers to one memory mapped AXI4-Lite interface
-            if dev.typecode == TYPECODE_SWREG:
-                print(dev.regname)
 
     def gen_tcl_cmds(self):
         tcl_cmds = {}

@@ -23,7 +23,7 @@ class sys_block(YellowBlock):
         inst.add_port('user_clk', 'user_clk')
         # check for mmbus_architecture (added to bus arch. support for AXI4-Lite)
         if self.platform.mmbus_architecture == 'AXI4-Lite':
-            inst.add_axi4lite_interface('sys_block', mode='r', nbytes=4096, memory_map=self.memory_map, typecode=self.typecode)
+            top.add_axi4lite_interface('sys_block', mode='r', nbytes=4096, memory_map=self.memory_map, typecode=self.typecode)
         else:
             inst.add_wb_interface('sys_block', mode='r', nbytes=64, memory_map=self.memory_map, typecode=self.typecode)
         

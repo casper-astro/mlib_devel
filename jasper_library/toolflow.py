@@ -21,7 +21,9 @@ import time
 import hashlib  # Added to calculate md5hash of .bin bitstream and add it to the .fpg header
 import pickle   # Used to dump the pickle of the generated VerilogModule to the build directory for debugging
 import struct   # Used to append a binary checksum to a bitstream
-import pdb
+# For xml2vhdl generation from Oxford
+import xml.dom.minidom
+import xml.etree.ElementTree as ET
 
 #JH: I don't know what this is, but I suspect here is a better place for it than constraints.py
 MAX_IMAGE_CHUNK_SIZE = 1988
@@ -105,6 +107,11 @@ class Toolflow(object):
         self.ips = []
         self.tcl_sources = []
         self.const_files = []
+
+        # compile directories for xml2vhdl
+        self.xml_source_dir = self.compile_dir + '/xml2vhdl_source'
+        self.xml_output_dir = self.compile_dir + '/xml2vhdl_xml_output'
+        self.hdl_output_dir = self.compile_dir + '/xml2vhdl_hdl_output'
 
     def exec_flow(self, gen_per=True, frontend_compile=True):
         """
@@ -380,6 +387,14 @@ class Toolflow(object):
             obj.modify_top(self.top)
             self.sources += obj.sources
             self.ips += obj.ips
+        # add AXI4-Lite architecture specfic stuff, which must be called after all yellow blocks have modified top.
+        if self.plat.mmbus_architecture == 'AXI4-Lite':
+            # Make an AXI4-Lite interconnect yellow block and let it modify top
+            axi4lite_interconnect = yellow_block.YellowBlock.make_block(
+                {'tag': 'xps:axi4lite_interconnect', 'name': 'axi4lite_interconnect'}, self.plat)
+            axi4lite_interconnect.modify_top(self.top)
+            # Generate xml2vhdl
+            self.xml2vhdl()
 
     def _instantiate_user_ip(self):
         """
@@ -411,7 +426,10 @@ class Toolflow(object):
 
     def write_core_info(self):
         if self.plat.mmbus_architecture == 'AXI4-Lite':
-            self.cores = self.top.axi4lite_devices
+            # get list of all axi4lite_devices in self.top.memory_map dict
+            self.cores = []
+            for val in self.top.memory_map.values():
+                self.cores += val['axi4lite_devices']
         else:
             self.cores = self.top.wb_devices
         basefile = '%s/%s/core_info.tab' % (os.getenv('HDL_ROOT'),
@@ -445,7 +463,10 @@ class Toolflow(object):
 
     def write_core_jam_info(self):
         if self.plat.mmbus_architecture == 'AXI4-Lite':
-            self.cores = self.top.axi4lite_devices
+            # get list of all axi4lite_devices in self.top.memory_map dict
+            self.cores = []
+            for val in self.top.memory_map.values():
+                self.cores += val['axi4lite_devices']
         else:
             self.cores = self.top.wb_devices
         basefile = '%s/%s/core_info.jam.tab' % (os.getenv('HDL_ROOT'), self.plat.name)
@@ -498,7 +519,7 @@ class Toolflow(object):
             self.logger.debug("Found max_devices_per_arbiter: %s" % self.top.max_devices_per_arb)
         # Check for memory map bus architecture, added to support AXI4-Lite
         if self.plat.mmbus_architecture == 'AXI4-Lite':
-            self.top.axi4lite_compute(self.plat.mmbus_base_address, self.plat.mmbus_address_alignment)
+            pass
         else:
             self.top.wb_compute(self.plat.dsp_wb_base_address,
                             self.plat.dsp_wb_base_address_alignment)
@@ -739,6 +760,90 @@ class Toolflow(object):
 
         #import IPython
         #IPython.embed()
+
+    def generate_xml_memory_map(self, memory_map):
+        """
+        Generate xml memory map files that represent each AXI4-Lite interface for Oxford's xml2vhdl.
+        """
+        # Generate memory map xml file for each interface in memory_map
+        for interface in memory_map.keys():
+            xml_root = ET.Element('node')
+            xml_root.set('id', interface)
+            # fill xml node with slave info from memory map
+            for reg in memory_map[interface]['memory_map']:
+                # add a child to parent node
+                node = ET.SubElement(xml_root, 'node')
+                node.set('id', reg.name)
+                node.set('address', "%s" % hex(reg.offset))
+                # toolflow only currently supports 32-bit registers
+                node.set('mask', hex(0xFFFFFFFF))
+                # node.set('size', str(reg.nbytes))
+                node.set('permission', reg.mode)
+                # Toolflow doesn't currently support?
+                # TODO: add hw_rst support from sw_reg yellow block init val
+                node.set('hw_rst', str(0))
+                # Best we can currently do for a description...? haha
+                node.set('description', str(interface + "_" + reg.name))
+
+            # output xml file describing memory map as input for xml2vhdl
+            myxml = xml.dom.minidom.parseString(ET.tostring(xml_root))
+            xml_base_name = interface + "_memory_map.xml"
+            xml_file_name = os.path.join(self.xml_source_dir, xml_base_name)
+            xml_file = open(xml_file_name, "w")
+            xml_text = myxml.toprettyxml()
+            xml_text += "<!-- This file has been automatically generated by generate_xml_memory_map function." + " /!-->\n"
+            xml_file.write(xml_text)
+            xml_file.close()
+
+    def generate_xml_ic(self, memory_map):
+        """
+        Generate xml interconnect file that represent top-level AXI4-Lite interconnect for Oxford's xml2vhdl.
+        """
+        # loop over interfaces, sort by addresse, make interconnect
+        xml_root = ET.Element('node')
+        xml_root.set('id', 'axi4lite')
+        xml_root.set('address', hex(self.plat.mmbus_base_address))
+        xml_root.set('hw_type', 'ic')
+        for interface in memory_map.keys():
+            # add a child to parent node
+            node = ET.SubElement(xml_root, 'node')
+            node.set('id', interface)
+            node.set('address', "%s" % memory_map[interface]['relative_address'])
+            node.set('link', "%s" % interface + "_memory_map_output.xml")
+
+        # output xml file describing interconnect as input for xml2vhdl
+        myxml = xml.dom.minidom.parseString(ET.tostring(xml_root))
+        xml_base_name = "axi4lite_top_ic_memory_map.xml"
+        xml_file_name = os.path.join(self.xml_source_dir, xml_base_name)
+        xml_file = open(xml_file_name, "w")
+        xml_text = myxml.toprettyxml()
+        xml_text += "<!-- This file has been automatically generated by generate_xml_memory_map function." + " /!-->\n"
+        xml_file.write(xml_text)
+        xml_file.close()
+
+    def xml2vhdl(self):
+        """
+        Function to call Oxford's python code to generate AXI4-Lite VHDL register 
+        interfaces from a XML memory map specification.
+
+        Obtained from: https://bitbucket.org/ricch/xml2vhdl/src/master/
+        """
+        # make input and output directories
+        if not os.path.exists(self.xml_source_dir):
+            os.makedirs(self.xml_source_dir)
+        if not os.path.exists(self.xml_output_dir):
+            os.makedirs(self.xml_output_dir)
+        if not os.path.exists(self.hdl_output_dir):
+            os.makedirs(self.hdl_output_dir)
+        # get path to generator
+        self.xml2vhdl_path = os.getenv('XML2VHDL_PATH')
+        # generate xml memory maps for input
+        self.generate_xml_memory_map(self.top.memory_map)
+        # generate xml interconnect for input
+        self.generate_xml_ic(self.top.memory_map)
+        # execute xml2vhdl script
+        os.system('python %s/xml2vhdl.py -d %s -x %s -v %s' % (self.xml2vhdl_path, self.xml_source_dir, self.xml_output_dir, self.hdl_output_dir))
+
 
 class ToolflowFrontend(object):
     """

@@ -20,11 +20,7 @@ class sw_reg(YellowBlock):
     def modify_top(self,top):
         if self.blk['io_dir'] == 'To Processor':
             if self.platform.mmbus_architecture == 'AXI4-Lite':
-                # TODO: change name of AXI interconnect module
-                module = 'wb_register_simulink2ppc'
-                inst = top.get_instance(entity=module, name=self.fullname)
-                # the minimum supported address range for an AXI4-lite interface in Vivado is 4KB
-                inst.add_axi4lite_interface(regname=self.unique_name, mode='r', nbytes=4096, typecode=self.typecode)
+                top.add_axi4lite_interface(regname=self.unique_name, mode='r', nbytes=4, typecode=self.typecode)
             else:
                 module = 'wb_register_simulink2ppc'
                 inst = top.get_instance(entity=module, name=self.fullname)
@@ -33,11 +29,7 @@ class sw_reg(YellowBlock):
                 inst.add_port('user_data_in', signal='%s_user_data_in'%self.fullname, width=32)
         elif self.blk['io_dir'] == 'From Processor':
             if self.platform.mmbus_architecture == 'AXI4-Lite':
-                # TODO: add name of AXI interconnect module
-                module = 'axil_if_gen'
-                inst = top.get_instance(entity=module, name=self.fullname)
-                # the minimum supported address range for an AXI4-lite interface in Vivado is 4KB
-                inst.add_axi4lite_interface(regname=self.unique_name, mode='rw', nbytes=4096, typecode=self.typecode)
+                top.add_axi4lite_interface(regname=self.unique_name, mode='rw', nbytes=4, typecode=self.typecode)
             else:
                 module = 'wb_register_ppc2simulink'
                 inst = top.get_instance(entity=module, name=self.fullname)

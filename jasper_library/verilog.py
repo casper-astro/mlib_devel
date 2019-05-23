@@ -573,7 +573,7 @@ class VerilogModule(object):
         self.n_axi4lite_slaves = 0 # axi4lite slaves added to this module programmatically
         self.axi4lite_devices = []
         self.n_axi4lite_interfaces = 0 # axi4lite interfaces to this module
-        self.axi4lite_ids = []
+        self.memory_map = {}
         # sourcefiles required by the module (this is currently NOT
         # how the jasper toolflow implements source management)
         self.sourcefiles = []
@@ -682,24 +682,63 @@ class VerilogModule(object):
             self.add_localparam('SLAVE_ADDR', base_addrs)
             self.add_localparam('SLAVE_HIGH', high_addrs)
 
-    def axi4lite_compute(self, base_addr=0x10000, alignment=4):
+    def axi4lite_memory_map(self, base_addr=0x10000, alignment=4):
         """
+        This function is only to be called by the 'top' verilog module after all other yellow blocks have called 'modify_top', but
+        before the axi4lite_interconnect yellow block class has called 'modify_top' as that class requires the memory map this creates.
+
         :param base_addr: The address from which indexing of instance axi4lite interfaces will begin. Any memory space required by the template verilog file should be below this address.
         :type base_addr: int
         :param alignment: Alignment required by all memory start addresses.
         :type alignment: int
+
+        memory map: 
+        keys: name of AXI4-Lite interfaces.
+        values: 
+         - 'memory_map': internal memory map for this interface
+         - 'size': size of internal memory map in bytes
+         - 'absolute_address': actual address in memory determined by base_addr
+         - 'relative_address': address relative to base_addr
+         - 'axi4lite_devices': List of AXI4LiteDevice objects for core_info backwards compatibility
         """
-        for block in self.instances.keys():
-            for instname, inst in self.instances[block].items():
-                logger.debug("Looking for AXI slaves for instance %s"%inst.name)
-                for n, axi_dev in enumerate(inst.axi4lite_devices):
-                    logger.debug("Found new AXI slave for instance %s"%inst.name)
-                    inst.assign_axi4lite_interface(instname, id=n, suffix=axi_dev.hdl_suffix, candr_suffix=axi_dev.hdl_candr_suffix)
-                    axi_dev.base_addr = base_addr
-                    axi_dev.high_addr = base_addr + (alignment*int(ceil(axi_dev.nbytes/float(alignment)))) - 1
-                    base_addr = axi_dev.high_addr + 1
-                    self.n_axi4lite_slaves += 1
-                    self.axi4lite_devices += [axi_dev]
+        for dev in self.axi4lite_devices:
+            # add all software registers to one memory mapped AXI4-Lite interface
+            if dev.typecode == 0:
+                # check to see if this is the first sw_reg in the memory_map dict
+                if 'sw_reg' not in self.memory_map:
+                    # Make new interface dict for software registers
+                    interface = self.memory_map['sw_reg'] = {}
+                    interface['size'] = dev.nbytes
+                    interface['memory_map'] = dev.memory_map
+                    interface['axi4lite_devices'] = [dev]
+                else:
+                    # add another sw_reg to this interface dict
+                    interface = self.memory_map['sw_reg']
+                    # adjust offset of register
+                    dev.memory_map[0].offset = interface['size']
+                    # grow size of interface
+                    interface['size'] += dev.nbytes
+                    # append device memory_map
+                    interface['memory_map'] += dev.memory_map
+                    interface['axi4lite_devices'] += [dev]
+            else:
+                # add all other yellow blocks to their own interface and make xml memory map
+                interface = self.memory_map[dev.regname] = {}
+                interface['size'] = dev.nbytes
+                interface['memory_map'] = dev.memory_map
+                interface['axi4lite_devices'] = [dev]
+
+        relative_address = 0
+        absolute_address = base_addr
+        # Now loop over interfaces in memory_map to determine addresses
+        for key,val in self.memory_map.items():
+            val['absolute_address'] = hex(absolute_address)
+            val['relative_address'] = hex(relative_address)
+            relative_address = relative_address + (alignment*int(ceil(val['size']/float(alignment))))
+            absolute_address = absolute_address + relative_address
+            # set same 'base_addr' for each device in interface (for core_info output later)
+            for dev in val['axi4lite_devices']:
+                dev.base_addr = absolute_address
 
 
     def get_base_wb_slaves(self):
@@ -1272,16 +1311,6 @@ class VerilogModule(object):
             self.axi4lite_devices += [axi4lite_device]
             self.n_axi4lite_interfaces += 1
             return axi4lite_device
-
-    def assign_axi4lite_interface(self, name, id=0, suffix='', candr_suffix=''):
-        """
-        Add the ports necessary for a AXI4-Lite slave interface.
-        AXI4-Lite ports that depend on the slave index are identified by a parameter
-        that matches the instance name. This parameter must be given a value in a higher level
-        of the verilog code!
-        """
-        axi_id = name.upper() + '_AXI_ID%d'%(id)
-        self.axi4lite_ids += [axi_id]
 
     def search_dict_for_name(self, dict, name):
         """
