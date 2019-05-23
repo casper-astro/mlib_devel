@@ -1,5 +1,5 @@
 class Register(object):
-    def __init__(self, name, nbytes=4, offset=0, mode='r'):
+    def __init__(self, name, nbytes=4, offset=0, mode='r', default_val=0):
         """
         A class to encapsulate a register's parameters. This is used when
         instantiating a device with a large address space, but it is desirable
@@ -38,8 +38,11 @@ class Register(object):
         :type offset: Integer
         :param mode: Read/write permission for this register. 'r' (readable), 'w' (writable), 'rw' (read/writable)
         :type mode: String
+        :param default_val: Default value for register to be reset to and initialized.
+        :type default_val: Integer
         """
         self.name = name
         self.nbytes = nbytes
         self.offset = offset
         self.mode = mode
+        self.default_val = default_val

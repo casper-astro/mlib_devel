@@ -779,9 +779,12 @@ class Toolflow(object):
                 node.set('mask', hex(0xFFFFFFFF))
                 # node.set('size', str(reg.nbytes))
                 node.set('permission', reg.mode)
-                # Toolflow doesn't currently support?
-                # TODO: add hw_rst support from sw_reg yellow block init val
-                node.set('hw_rst', str(0))
+                if reg.mode == 'r':
+                    # Basically a To Processor register (status)
+                    node.set('hw_permission', 'w')
+                else:
+                    # Only for a From Processor register (control)
+                    node.set('hw_rst', str(reg.default_val))
                 # Best we can currently do for a description...? haha
                 node.set('description', str(interface + "_" + reg.name))
 
@@ -837,12 +840,16 @@ class Toolflow(object):
             os.makedirs(self.hdl_output_dir)
         # get path to generator
         self.xml2vhdl_path = os.getenv('XML2VHDL_PATH')
+        # Throw error to user that 'XML2VHDL_PATH' is not in their env
+        if self.xml2vhdl_path is None:
+            self.logger.error('XML2VHDL_PATH environment variable does not exist!')
+            raise Exception('XML2VHDL_PATH environment variable does not exist! Please set path to xml2vhdl.py.')
         # generate xml memory maps for input
         self.generate_xml_memory_map(self.top.memory_map)
         # generate xml interconnect for input
         self.generate_xml_ic(self.top.memory_map)
         # execute xml2vhdl script
-        os.system('python %s/xml2vhdl.py -d %s -x %s -v %s' % (self.xml2vhdl_path, self.xml_source_dir, self.xml_output_dir, self.hdl_output_dir))
+        os.system('python %sxml2vhdl.py -d %s -x %s -v %s' % (self.xml2vhdl_path, self.xml_source_dir, self.xml_output_dir, self.hdl_output_dir))
 
 
 class ToolflowFrontend(object):

@@ -20,7 +20,8 @@ class sw_reg(YellowBlock):
     def modify_top(self,top):
         if self.blk['io_dir'] == 'To Processor':
             if self.platform.mmbus_architecture == 'AXI4-Lite':
-                top.add_axi4lite_interface(regname=self.unique_name, mode='r', nbytes=4, typecode=self.typecode)
+                # TODO: add module inst. that sits on clock crossing boundary
+                top.add_axi4lite_interface(regname=self.unique_name, mode='r', nbytes=4, default_val=self.init_val, typecode=self.typecode)
             else:
                 module = 'wb_register_simulink2ppc'
                 inst = top.get_instance(entity=module, name=self.fullname)
@@ -29,7 +30,8 @@ class sw_reg(YellowBlock):
                 inst.add_port('user_data_in', signal='%s_user_data_in'%self.fullname, width=32)
         elif self.blk['io_dir'] == 'From Processor':
             if self.platform.mmbus_architecture == 'AXI4-Lite':
-                top.add_axi4lite_interface(regname=self.unique_name, mode='rw', nbytes=4, typecode=self.typecode)
+                # TODO: add module inst. that sits on clock crossing boundary
+                top.add_axi4lite_interface(regname=self.unique_name, mode='rw', nbytes=4, default_val=self.init_val, typecode=self.typecode)
             else:
                 module = 'wb_register_ppc2simulink'
                 inst = top.get_instance(entity=module, name=self.fullname)

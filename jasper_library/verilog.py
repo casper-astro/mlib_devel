@@ -734,11 +734,12 @@ class VerilogModule(object):
         for key,val in self.memory_map.items():
             val['absolute_address'] = hex(absolute_address)
             val['relative_address'] = hex(relative_address)
-            relative_address = relative_address + (alignment*int(ceil(val['size']/float(alignment))))
-            absolute_address = absolute_address + relative_address
             # set same 'base_addr' for each device in interface (for core_info output later)
             for dev in val['axi4lite_devices']:
                 dev.base_addr = absolute_address
+            # adjust addresses for next loop
+            relative_address = relative_address + (alignment*int(ceil(val['size']/float(alignment))))
+            absolute_address = absolute_address + relative_address
 
 
     def get_base_wb_slaves(self):
@@ -1294,7 +1295,7 @@ class VerilogModule(object):
         self.add_port('wb_ack_o'+suffix, signal='wbs_ack_i[%s]'%wb_id,parent_sig=False)
         self.add_port('wb_err_o'+suffix, signal='wbs_err_i[%s]'%wb_id,parent_sig=False)
 
-    def add_axi4lite_interface(self, regname, mode, nbytes=4, suffix='', candr_suffix='', memory_map=[], typecode=0xff):
+    def add_axi4lite_interface(self, regname, mode, nbytes=4, default_val=0, suffix='', candr_suffix='', memory_map=[], typecode=0xff):
         """
         Add the ports necessary for a AXI4-Lite slave interface.
 
@@ -1304,9 +1305,9 @@ class VerilogModule(object):
         if regname in [axi_dev.regname for axi_dev in self.axi4lite_devices]:
             return
         else:
-            # Make single register in memory_map if a memory_map is empty
+            # Make single register in memory_map if memory_map is empty
             if not memory_map:
-                memory_map = [Register(regname, mode=mode, offset=0)]
+                memory_map = [Register(regname, nbytes=nbytes, offset=0, mode=mode, default_val=default_val)]
             axi4lite_device = AXI4LiteDevice(regname, nbytes=nbytes, mode=mode, hdl_suffix=suffix, hdl_candr_suffix=candr_suffix, memory_map=memory_map, typecode=typecode)
             self.axi4lite_devices += [axi4lite_device]
             self.n_axi4lite_interfaces += 1
