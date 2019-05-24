@@ -29,7 +29,7 @@ use UNISIM.VCOMPONENTS.ALL;
 package parameter is
 
     -- GLOBAL CONSTANTS
-    constant C_VERSION : std_logic_vector(31 downto 0) := X"00020007";
+    constant C_VERSION : std_logic_vector(31 downto 0) := X"00020008";
 
     -- TYPE DEFINES
 	constant C_NUM_REGISTERS : integer := 32;

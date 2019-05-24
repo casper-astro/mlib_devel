@@ -1369,15 +1369,22 @@ class VivadoBackend(ToolflowBackend):
             try:
                 if plat.conf['bit_reversal'] == True:
                     self.add_tcl_cmd('write_cfgmem -force -format bin -interface bpix8 -size 128 -loadbit "up 0x0 '
-                                 '%s/%s/%s.runs/impl_1/top.bit" -file %s'
-                                 % (self.compile_dir, self.project_name, self.project_name, self.binary_loc), stage='post_bitgen')
+                                  '%s/%s/%s.runs/impl_1/top.bit" -file %s'
+                                   % (self.compile_dir, self.project_name, self.project_name, self.binary_loc), stage='post_bitgen')
             # just ignore if key is not present as only some platforms will have the key.
             except KeyError:
                 s = ""
             # Generate a hex and mcs file for SKARAB for the multiboot or golden image. This is used by
             # casperfpga and JTAG for configuring the FPGA
             try:
-                if plat.conf['boot_image'] == 'golden' or plat.conf['boot_image'] == 'multiboot':
+                if plat.conf['boot_image'] == 'multiboot':
+                    self.add_tcl_cmd('write_cfgmem -force -format hex -interface bpix16 -size 128 -loadbit "up 0x0 '
+                                 '%s/%s/%s.runs/impl_1/top.bit" -file %s'
+                                 % (self.compile_dir, self.project_name, self.project_name, self.hex_loc), stage='post_bitgen')
+                    self.add_tcl_cmd('write_cfgmem -force -format mcs -interface bpix16 -size 128 -loadbit "up 0x03000000 '
+                                 '%s/%s/%s.runs/impl_1/top.bit" -file %s'
+                                 % (self.compile_dir, self.project_name, self.project_name, self.mcs_loc), stage='post_bitgen')
+                if plat.conf['boot_image'] == 'golden':
                     self.add_tcl_cmd('write_cfgmem -force -format hex -interface bpix16 -size 128 -loadbit "up 0x0 '
                                  '%s/%s/%s.runs/impl_1/top.bit" -file %s'
                                  % (self.compile_dir, self.project_name, self.project_name, self.hex_loc), stage='post_bitgen')
@@ -1488,7 +1495,16 @@ class VivadoBackend(ToolflowBackend):
             # Generate a hex and mcs file for SKARAB for the multiboot or golden
             # images. This is used by casperfpga and JTAG for configuring the FPGA
             try:
-                if plat.conf['boot_image'] == 'golden' or plat.conf['boot_image'] == 'multiboot':
+                if plat.conf['boot_image'] == 'multiboot':
+                    tcl('write_cfgmem -force -format hex -interface bpix16 '
+                        '-size 128 -loadbit "up 0x0 %s/%s/top.bit" -file %s' % (
+                            self.compile_dir, self.project_name,
+                            self.hex_loc))
+                    tcl('write_cfgmem -force -format mcs -interface bpix16 '
+                        '-size 128 -loadbit "up 0x03000000 %s/%s/top.bit" -file %s' % (
+                            self.compile_dir, self.project_name,
+                            self.mcs_loc))
+                if plat.conf['boot_image'] == 'golden':
                     tcl('write_cfgmem -force -format hex -interface bpix16 '
                         '-size 128 -loadbit "up 0x0 %s/%s/top.bit" -file %s' % (
                             self.compile_dir, self.project_name,
