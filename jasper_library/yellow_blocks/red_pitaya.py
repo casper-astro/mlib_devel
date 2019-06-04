@@ -8,7 +8,7 @@ class red_pitaya(YellowBlock):
         self.add_source('red_pitaya')
 
     def modify_top(self,top):
-        inst = top.get_instance('red_pitaya_wrapper', 'red_pitaya_wrapper_inst')
+        inst = top.get_instance('red_pitaya', 'red_pitaya_inst')
         inst.add_port('sys_clk', 'axi_clk')
         inst.add_port('peripheral_areset_n', 'peripheral_areset_n')
 

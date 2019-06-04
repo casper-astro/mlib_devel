@@ -230,6 +230,21 @@ class YellowBlock(object):
         """
         return {}
 
+    def gen_custom_hdl(self):
+        """
+        Generate a dictionary of custom hdl, to be saved as a file and added to the sources of
+        the generated project.
+        The key is the file name and the value is a string of HDL code to save in to that file.
+        Eg.:
+        {
+            'my_hdl.vhdl': ["<HDL code>"],
+            'my_2nd_hdl.vhdl' : ["<More HDL code>"],
+        }
+
+        :return: Dictionary of hdl files. Default {}
+        """
+        return {}
+
     #def add_resource(self, thing):
     #    """
     #    Use this method in a block's initialize() method to add

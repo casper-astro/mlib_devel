@@ -10,6 +10,7 @@ import os
 import platform
 import yellow_blocks.yellow_block as yellow_block
 import verilog
+import IPython
 from constraints import PortConstraint, ClockConstraint, GenClockConstraint, \
     ClockGroupConstraint, InputDelayConstraint, OutputDelayConstraint, MaxDelayConstraint, \
     MinDelayConstraint, FalsePathConstraint, MultiCycleConstraint, RawConstraint
@@ -396,6 +397,8 @@ class Toolflow(object):
             axi4lite_interconnect.modify_top(self.top)
             # Generate xml2vhdl
             self.xml2vhdl()
+            #TODO: add the AXI4lite yellowblock to the peripherals
+            #self.periph_objs.append(axi4lite_interconnect)
 
     def _instantiate_user_ip(self):
         """
@@ -689,6 +692,7 @@ class Toolflow(object):
         c.synthesis.fpga_model = self.plat.fpga
         c.synthesis.pin_map = self.plat._pins
 
+        #IPython.embed()
         mm_slaves = []
         if self.plat.mmbus_architecture == 'AXI4-Lite':
             for dev in self.top.axi4lite_devices:
@@ -1867,6 +1871,18 @@ class VivadoBackend(ToolflowBackend):
                 if val is not None:
                     for v in val:
                         self.add_tcl_cmd(v, stage=key)
+
+    def gen_yellowblock_custom_hdl(self):
+        """
+        Create each yellowblock's custom hdl files and add them to the projects sources
+        """
+        self.logger.info('Generating yellow block custom hdl files')
+        for obj in self.periph_objs:
+            c = obj.gen_custom_hdl()
+            for key, val in c.iteritems():
+                pass
+                #TODO: add source to a file in the project directory and add a 
+                # tcl command to add it as a source to the project.
 
     def gen_constraint_file(self, constraints):
         """
