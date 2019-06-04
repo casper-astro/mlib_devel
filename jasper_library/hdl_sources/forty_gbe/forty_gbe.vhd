@@ -1923,6 +1923,7 @@ begin
 
     USB_UART_RXD <= microblaze_uart_txd;
     -- USB SERIAL CURRENTLY NOT USED FOR RECEIVING
+    microblaze_uart_rxd <= USB_UART_TXD;
     --USB_UART_TXD
 
     --brd_user_read_regs(C_RD_AUX_CLK_FREQ_ADDR) <= aux_clk_frequency;
@@ -2004,7 +2005,7 @@ begin
         
 
 
-    microblaze_uart_rxd <= DEBUG_UART_RX;
+    --microblaze_uart_rxd <= DEBUG_UART_RX;
     DEBUG_UART_TX <= microblaze_uart_txd;
 
 ----------------------------------------------------------------------------
