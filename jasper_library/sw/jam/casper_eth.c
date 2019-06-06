@@ -35,15 +35,15 @@ static
 err_t
 casper_netif_output_impl(struct netif *netif, struct pbuf *p)
 {
-  uint16_t i, len, word_size;
+  uint16_t i, len, core_word_size;
   uint16_t bytes_sent = 0;
   uint8_t *outbuf8;
-  uint16_t words_sent = 0;
+  uint16_t words_sent32 = 0;
   uint32_t *outbuf32;
 
 #ifdef VERBOSE_ETH_IMPL
-  xil_printf("send %u bytes as %u longwords from addr %p [ms %u]\n",
-      p->tot_len, ((p->tot_len+7)>>3), p->payload, ms_tmrctr());
+  xil_printf("send %u bytes from addr %p [ms %u]\n",
+      p->tot_len, p->payload, ms_tmrctr());
 #endif // VERBOSE_ETH_IMPL
 
 #ifdef DEBUG_PKT_TX
@@ -119,26 +119,28 @@ casper_netif_output_impl(struct netif *netif, struct pbuf *p)
   }
 
   // Work with words from here onward
-  words_sent = bytes_sent >> 2;
+  words_sent32 = bytes_sent >> 2; // words are 32-bits here (may not be the case in the eth core)
 
   // Need to byte swap 32 bit words in TX buffer
   // due to how AXI/Wishbone interface orders bytes
   outbuf32 = TX_BUF_PTR32(ifstate.ptr);
-  for(i=0; i<words_sent; i++) {
+  for(i=0; i<words_sent32; i++) {
     *outbuf32 = mb_swapb(*outbuf32);
     outbuf32++;
   }
 
   // Ensure we meet minimum packet size (avoid runt frames)
-  while(words_sent < 16) {
+  while(words_sent32 < 16) {
     *outbuf32++ = 0;
-    words_sent++;
+    words_sent32++;
   }
 
-  // Need to send a multiple of 8 bytes (due to gateware implementation)
-  if(words_sent & 1) {
+  // Figure out how many bytes per word in the core.
+  core_word_size = *TX_BUF_WORD_SIZE_PTR16(ifstate.ptr); // Core word size
+  // We have to send a multiple of this many bytes. Pad here
+  if(words_sent32 & ((core_word_size / 4) - 1)) {
     *outbuf32++ = 0;
-    words_sent++;
+    words_sent32++;
   }
 
 #ifdef DEBUG_PKT_TX
@@ -163,15 +165,12 @@ casper_netif_output_impl(struct netif *netif, struct pbuf *p)
     outbuf16[2^1], outbuf16[6^1], outbuf16[17^1], outbuf16[19^1], outbuf16[21^1], ms_tmrctr());
 #endif
 
-  // Set TX buffer level to number of words to send packet
-  word_size = *TX_BUF_WORD_SIZE_PTR16(ifstate.ptr);
-  // Round up and set buffer size to send
-  *TX_BUF_SIZE_PTR16(ifstate.ptr) = ((bytes_sent + (word_size - 1))/word_size);
+  // Set buffer size to send. Unit of transmission is `core_word_size` bytes.
+  *TX_BUF_SIZE_PTR16(ifstate.ptr) = (4 * words_sent32) / core_word_size;
 
 #ifdef VERBOSE_ETH_IMPL
-  xil_printf("sent pkt %u bytes as %u longwords [ms %u]\n",
-      4*words_sent, (words_sent >> 1), ms_tmrctr());
-  xil_printf("Sent with word size: %d, %d words\n", word_size, ((bytes_sent + (word_size - 1))/word_size));
+  xil_printf("sent pkt %u bytes as %u %d-byte words[ms %u]\n",
+      4*words_sent32, (4 * words_sent32) / core_word_size, core_word_size, ms_tmrctr());
 #endif // VERBOSE_ETH_IMPL
   LINK_STATS_INC(link.xmit);
 
@@ -306,11 +305,13 @@ casper_lwip_init()
   // TODO Get MAC address from somewhere (e.g. serial number stored in flash)
   // Needs to be stored in hardware core as:
   //     0x----0001 0x02030405
-  uint8_t buf[16];
-  flash_read_id(buf);
-  ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_1] = ((uint32_t *)buf)[2] & 0xffff;
-  ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_0] = ((uint32_t *)buf)[3];
-  xil_printf("MAC 0x%04x%08x\n", ((uint32_t *)buf)[2] & 0xffff, ((uint32_t *)buf)[3]);
+  uint32_t buf[4] = {0, 0, 0x00000203, 0x04050118};
+#ifdef USE_SPI
+  flash_read_id((uint8_t *)buf);
+#endif
+  ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_1] = buf[2] & 0xffff;
+  ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_0] = buf[3];
+  xil_printf("MAC 0x%04x%08x\n", buf[2] & 0xffff, buf[3]);
 
 #ifdef DEBUG_ETH0_MEM
   print("## eth0 memory as uint32_t:\n");
@@ -379,6 +380,7 @@ casper_rx_packet()
   uint32_t *inbuf32;
   uint32_t *nibuf32; // byte swapped buffer ("ni" is byte swapped "in" :))
   struct pbuf *p, *q;
+  err_t st; // Return value for LWIP input call
 
   // Stay in this function so long as we still have received packets
   while((nwords = *RX_BUF_SIZE_PTR16(ifstate.ptr))) {
@@ -498,8 +500,8 @@ casper_rx_packet()
     *RX_BUF_SIZE_PTR16(ifstate.ptr) = 0;
 
 #ifdef DEBUG_PKT_RX
-    // Print first 32 bytes of first pbuf
-    for(i=0; i<32; i++) {
+    // Print pbuf contents
+    for(i=0; i<p->len; i++) {
       if((i & 15) == 0) xil_printf("%04x:", (i<<2));
       xil_printf(" %02x", ((uint8_t *)p->payload)[i]);
       if((i & 15) == 15) print("\n");
@@ -509,7 +511,9 @@ casper_rx_packet()
 #endif // DEBUG_PKT_RX
 
     // Pass PBUF to input function
-    if(netif_en[0].input(p, &netif_en[0]) != ERR_OK) {
+    st = netif_en[0].input(p, &netif_en[0]);
+    if(st != ERR_OK) {
+      xil_printf("LWIP input function returned %d\n", (int) st);
       pbuf_free(p);
     }
   }

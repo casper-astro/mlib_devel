@@ -79,7 +79,7 @@ module gbe_cpu_attach_wb #(
   localparam CORE_REVISION   = 8'h2;
   localparam TX_BUF_MAX      = 16'd2048; // Size of TX buffer in bytes
   localparam RX_BUF_MAX      = 16'd2048; // Size of RX buffer in bytes
-  localparam RX_WORD_SIZE    = 16'd4;    // The core counts RX data in 4-byte words
+  localparam RX_WORD_SIZE    = 16'd1;    // The core counts RX data in 4-byte words (see gbe_rx.v)
   localparam TX_WORD_SIZE    = 16'd8;    // The core counts TX data in 8-byte words (see gbe_tx.v)
   localparam ARP_SIZE        = 32'd256;  // This core supports an ARP table with 256 entries
 
@@ -181,14 +181,18 @@ module gbe_cpu_attach_wb #(
       cpu_tx_ready_reg <= 1'b0;
     end
 
-    /* The size will be set to zero when the double buffer is swapped */
+    // If CPU is ready and we have written size to zero then send ack
     if (cpu_rx_size_reg == 16'h0 && cpu_rx_ready) begin
       cpu_rx_ack_reg  <= 1'b1;
     end
-
-    if (cpu_rx_ready && cpu_rx_ack_reg) begin
-      cpu_rx_size_reg <= cpu_rx_size + 1;
+    // If CPU has released ready and we have written size to zero then
+    // release ACK. This will put the receiver back into its IDLE state
+    if (cpu_rx_size_reg == 16'h0 && ~cpu_rx_ready) begin
       cpu_rx_ack_reg  <= 1'b0;
+    end
+
+    if (cpu_rx_ready && ~cpu_rx_ack_reg) begin
+      cpu_rx_size_reg <= cpu_rx_size;
     end
 
     if (cpu_rst) begin

@@ -9,7 +9,7 @@ module vcu118_infrastructure(
     output clk_200,
 
     output sys_rst,
-
+    output sys_clk_rst_sync,
     output idelay_rdy
   );
 
@@ -120,10 +120,31 @@ module vcu118_infrastructure(
 
   /* io delay reset */
 
-  IDELAYCTRL idelayctrl_inst(
+  IDELAYCTRL #(
+    .SIM_DEVICE("ULTRASCALE")
+  ) idelayctrl_inst(
     .REFCLK(clk_200),
     .RST(sys_rst),
     .RDY(idelay_rdy)
   );
+  
+  /*
+   * Synchronizes an active-high asynchronous reset signal to a given clock by
+   * using a pipeline of N registers.
+   * Copyright (c) 2014-2018 Alex Forencich
+   */
+  reg [3:0] sync_reg = {4{1'b1}};
+  assign sys_clk_rst_sync = sync_reg[3];
+  wire sync_clk;
+  wire sync_rst;
+  assign sync_clk = sys_clk0;
+  assign sync_rst = ~pll_lock; 
+ 
+  always @(posedge sync_clk or posedge sync_rst) begin
+      if (sync_rst)
+          sync_reg <= {4{1'b1}};
+      else
+          sync_reg <= {sync_reg[2:0], 1'b0};
+  end
 
 endmodule

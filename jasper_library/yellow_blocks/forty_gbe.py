@@ -19,7 +19,7 @@ class forty_gbe(YellowBlock):
         #multiply, divide, divclk = clk_factors(156.25, self.platform.user_clk_rate)
         clkparams = clk_factors(156.25, self.platform.user_clk_rate)
 
-        inst = top.get_instance(name=self.fullname, entity='forty_gbe', comment=self.fullname)
+        inst = top.get_instance(name=self.fullname, entity='forty_gbe')
         # mmcm specific parameters
         inst.add_parameter('MULTIPLY', clkparams[0])
         inst.add_parameter('DIVIDE',   clkparams[1])

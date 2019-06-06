@@ -565,6 +565,8 @@ module gbe_rx #(
   reg cpu_invalidate;
 
   reg [10:0] cpu_counter;
+  reg [10:0] cpu_size_reg;
+  assign cpu_size    = cpu_size_reg;
 
   reg cpu_ready_reg;
   assign cpu_ready = cpu_ready_reg;
@@ -574,6 +576,7 @@ module gbe_rx #(
     if (mac_rst) begin
       cpu_state          <= CPU_IDLE;
       cpu_buffer_sel_reg <= 1'b0;
+      cpu_size_reg       <= 11'b0;
       cpu_counter        <= 11'b0;
       cpu_invalidate     <= 1'b0;
       cpu_ready_reg      <= 1'b0;
@@ -581,16 +584,19 @@ module gbe_rx #(
 
       case (cpu_state)
         CPU_IDLE: begin
+          cpu_size_reg   <= 11'b0;
           cpu_invalidate <= 1'b0;
           cpu_counter    <= 11'b0;
           cpu_ready_reg  <= 1'b0;
 
-          if (mac_dvld)
+          if (mac_dvld) begin
             cpu_state <= CPU_DATA;
+          end
         end
         CPU_DATA: begin
           if (!mac_dvld) begin
             cpu_state <= CPU_VALIDATE;
+            cpu_size_reg <= cpu_counter + 1'b1; // 1 valid sample occurs in the CPU_IDLE state
           end else begin
             if (cpu_counter == {11{1'b1}}) begin
               cpu_invalidate <= 1'b1;
@@ -613,6 +619,7 @@ module gbe_rx #(
         CPU_HANDSHAKE: begin
           if (cpu_ack && cpu_ready_reg) begin
             cpu_ready_reg      <= 1'b0;
+            cpu_size_reg       <= 11'b0;
             cpu_buffer_sel_reg <= !cpu_buffer_sel_reg;
           end
           if (!cpu_ready && !cpu_ack) begin
@@ -635,7 +642,5 @@ module gbe_rx #(
   assign cpu_wr_en   = cpu_state == CPU_DATA;
   assign cpu_addr    = cpu_counter;
   assign cpu_wr_data = mac_data_aligned;
-
-  assign cpu_size    = cpu_counter;
 
 endmodule //

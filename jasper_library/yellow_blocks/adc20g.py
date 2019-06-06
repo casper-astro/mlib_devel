@@ -14,7 +14,7 @@ class adc20g(YellowBlock):
 
     def modify_top(self, top):
         module = 'design_1_wrapper' #name kept from RR
-        inst = top.get_instance(entity=module, name=self.fullname, comment='ADC20g monstrous Black Box')
+        inst = top.get_instance(entity=module, name=self.fullname)
         inst.add_port('FLASH1', signal='FLASH1', parent_port=True, dir='out', width=1)
         inst.add_port('FLASH2', signal='FLASH2', parent_port=True, dir='out', width=1)
         inst.add_port('Q8_CLK1_GTREFCLK_PAD_N_IN', signal='Q8_CLK1_GTREFCLK_PAD_N_IN', parent_port=True, dir='in', width=1)
