@@ -300,7 +300,10 @@ class tengbaser_xilinx_k7(ten_gbe):
         top.assign_signal('signal_detect%d'%self.port, "1'b1") #snap doesn't wire this to SFP(?)
         phy.add_port('tx_fault', 'tx_fault%d'%self.port)
         top.assign_signal('tx_fault%d'%self.port, "1'b0") #snap doesn't wire this to SFP(?)
-        phy.add_port('tx_disable', 'tx_disable%d'%self.port, parent_port=True, dir='out')
+        if self.platform.name == 'snap':
+           phy.add_port('tx_disable', 'tx_disable%d'%self.port, parent_port=True, dir='out')
+        else:
+           phy.add_port('tx_disable', 'tx_disable%d'%self.port)
 
         phy.add_port('resetdone', 'resetdone%d'%self.port)
         phy.add_port('status_vector', '', parent_sig=False)
@@ -318,27 +321,28 @@ class tengbaser_xilinx_k7(ten_gbe):
     def gen_constraints(self):
         num = self.infrastructure_id
         cons = []
-        cons.append(PortConstraint('ref_clk_p%d'%num, 'eth_clk_p'))
-        cons.append(PortConstraint('ref_clk_n%d'%num, 'eth_clk_n'))
+        cons.append(PortConstraint('ref_clk_p%d'%num, 'eth_clk_p',iogroup_index=num))
+        cons.append(PortConstraint('ref_clk_n%d'%num, 'eth_clk_n',iogroup_index=num))
         cons.append(PortConstraint('mgt_tx_p%d'%self.port, 'mgt_tx_p', iogroup_index=self.port))
         cons.append(PortConstraint('mgt_tx_n%d'%self.port, 'mgt_tx_n', iogroup_index=self.port))
         cons.append(PortConstraint('mgt_rx_p%d'%self.port, 'mgt_rx_p', iogroup_index=self.port))
         cons.append(PortConstraint('mgt_rx_n%d'%self.port, 'mgt_rx_n', iogroup_index=self.port))
 
-        cons.append(PortConstraint('tx_disable%d'%self.port, 'sfp_disable', iogroup_index=self.port))
-
         cons.append(ClockConstraint('ref_clk_p%d'%num, name='ethclk%d'%num, freq=156.25))
 
-        cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d -asynchronous -group [get_clocks -include_generated_clocks sys_clk_p_CLK] -group [get_clocks -include_generated_clocks ref_clk_p%d_CLK]'%(num,num)))
 
         cons.append(RawConstraint('set_false_path -from [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/reset_pulse_reg[0]/C}] -to [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/gttxreset_txusrclk2_sync_i/sync1_r_reg*/PRE}]' % (num, num)))
 
         # make the ethernet core clock async relative to whatever the user is using as user_clk
         # Find the clock of *clk_counter* to determine what source user_clk comes from. This is fragile.
-        cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d_usr_clk -asynchronous -group [get_clocks -of_objects [get_cells -hierarchical -filter {name=~*clk_counter*}]] -group [get_clocks -include_generated_clocks ref_clk_p%d_CLK]' % (num, num)))
-
-
-
+        
+        if self.platform.name == 'snap':
+           cons.append(PortConstraint('tx_disable%d'%self.port, 'sfp_disable', iogroup_index=self.port))
+           cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d -asynchronous -group [get_clocks -include_generated_clocks sys_clk_p_CLK] -group [get_clocks -include_generated_clocks ref_clk_p%d_CLK]'%(num,num)))
+           cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d_usr_clk -asynchronous -group [get_clocks -of_objects [get_cells -hierarchical -filter {name=~*clk_counter*}]] -group [get_clocks -include_generated_clocks ref_clk_p%d_CLK]' % (num, num)))
+        else:
+           cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d -asynchronous -group [get_clocks -include_generated_clocks sys_clk_in_CLK] -group [get_clocks -include_generated_clocks ethclk%d]'%(num,num)))
+           cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d_usr_clk -asynchronous -group [get_clocks -of_objects [get_cells -hierarchical -filter {name=~*clk_counter*}]] -group [get_clocks -include_generated_clocks ethclk%d]' % (num, num)))        
         return cons
 
 class tengbaser_xilinx_ku7(tengbe_v2):
@@ -469,8 +473,8 @@ class tengbaser_xilinx_ku7(tengbe_v2):
     def gen_constraints(self):
         num = self.infrastructure_id
         cons = []
-        cons.append(PortConstraint('ref_clk_p%d'%num, 'gth_clk_p'))
-        cons.append(PortConstraint('ref_clk_n%d'%num, 'gth_clk_n'))
+        cons.append(PortConstraint('ref_clk_p%d'%num, 'gth_clk_p',iogroup_index=num))
+        cons.append(PortConstraint('ref_clk_n%d'%num, 'gth_clk_n',iogroup_index=num))
         cons.append(PortConstraint('mgt_tx_p%d'%self.port, 'gth_tx_p', iogroup_index=self.port))
         cons.append(PortConstraint('mgt_tx_n%d'%self.port, 'gth_tx_n', iogroup_index=self.port))
         cons.append(PortConstraint('mgt_rx_p%d'%self.port, 'gth_rx_p', iogroup_index=self.port))

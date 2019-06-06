@@ -16,6 +16,18 @@ class microblaze(YellowBlock):
             self.memfile= 'executable_no_xadc.mem'
            # self.memfile = 'executable.mem'
             self.blkdiagram = 'microblaze_wb_no_xadc.tcl'
+        elif self.platform.name == 'snap2_v2':
+            self.memfile= 'executable_no_xadc.mem'
+           # self.memfile = 'executable.mem'
+            self.blkdiagram = 'microblaze_wb_no_xadc.tcl'
+        elif self.platform.name == 'casia_k7':
+            self.memfile= 'executable_casia_k7.mem'
+           # self.memfile = 'executable.mem'
+            self.blkdiagram = 'microblaze_wb_casia_k7.tcl'
+        elif self.platform.name == 'casia_k7_21cma':
+            self.memfile= 'executable_casia_k7.mem'
+           # self.memfile = 'executable.mem'
+            self.blkdiagram = 'microblaze_wb_casia_k7.tcl'
         else:
             self.memfile = 'executable.mem'
             self.blkdiagram = 'microblaze_wb.tcl'

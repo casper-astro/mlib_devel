@@ -1,26 +1,22 @@
-module snap2_infrastructure(
-    input  sys_clk_buf_n,
-    input  sys_clk_buf_p,
-    //input  ext_sys_rst_n,
-
+module casia_k7_21cma_infrastructure(
+    input  sys_clk_in,
     output sys_clk0,
     output sys_clk180,
     output sys_clk270,
 
     output clk_200,
+    output clk_125,
     output clk_250MHz,
     output clk_250MHz270,
-    output clk_10MHz,
 
     output sys_rst,
-
-    output pll_lock
+    output pll_lock,
+    output idelay_rdy
   );
 
   wire sys_clk_ds;
-  IBUFGDS ibufgds_sys_clk (
-    .I (sys_clk_buf_p),
-    .IB(sys_clk_buf_n),
+  IBUFG ibufgds_sys_clk (
+    .I (sys_clk_in),
     .O (sys_clk_ds)
   );
 
@@ -30,9 +26,9 @@ module snap2_infrastructure(
   wire sys_clk180_dcm;
   wire sys_clk270_dcm;
   wire clk_200_dcm;
+  wire clk_125_dcm;
   wire clk_250MHz_dcm;
   wire clk_250MHz270_dcm;
-  wire clk_10_dcm;
 
   wire clk_fb;
 
@@ -40,9 +36,9 @@ module snap2_infrastructure(
 
   MMCM_BASE #(
    .BANDWIDTH          ("OPTIMIZED"), // Jitter programming ("HIGH","LOW","OPTIMIZED")
-   .CLKFBOUT_MULT_F    (8), // Multiply value for all CLKOUT (5.0-64.0).
+   .CLKFBOUT_MULT_F    (20), // Multiply value for all CLKOUT (5.0-64.0).
    .CLKFBOUT_PHASE     (0.0),
-   .CLKIN1_PERIOD      (8.0), // SNAP2 clock is 125 MHz
+   .CLKIN1_PERIOD      (20.0), // CASIA_K7_21CMA clock is 50 MHz
    .CLKOUT0_DIVIDE_F   (1.0), // Divide amount for CLKOUT0 (1.000-128.000).
    .CLKOUT0_DUTY_CYCLE (0.5),
    .CLKOUT1_DUTY_CYCLE (0.5),
@@ -56,14 +52,14 @@ module snap2_infrastructure(
    .CLKOUT2_PHASE      (270),
    .CLKOUT3_PHASE      (0.0),
    .CLKOUT4_PHASE      (0.0),
-   .CLKOUT5_PHASE      (270),
-   .CLKOUT6_PHASE      (0.0),
+   .CLKOUT5_PHASE      (0.0),
+   .CLKOUT6_PHASE      (270),
    .CLKOUT1_DIVIDE     (10),
    .CLKOUT2_DIVIDE     (10),
    .CLKOUT3_DIVIDE     (5),
-   .CLKOUT4_DIVIDE     (4),
+   .CLKOUT4_DIVIDE     (8),
    .CLKOUT5_DIVIDE     (4),
-   .CLKOUT6_DIVIDE     (100),
+   .CLKOUT6_DIVIDE     (4),
    .CLKOUT4_CASCADE    ("FALSE"),
    .CLOCK_HOLD         ("FALSE"),
    .DIVCLK_DIVIDE      (1), // Master division value (1-80)
@@ -84,9 +80,9 @@ module snap2_infrastructure(
    .CLKOUT2B (),
    .CLKOUT3  (clk_200_dcm),
    .CLKOUT3B (),
-   .CLKOUT4  (clk_250MHz_dcm),
-   .CLKOUT5  (clk_250MHz270_dcm),
-   .CLKOUT6  (clk_10_dcm),
+   .CLKOUT4  (clk_125_dcm),
+   .CLKOUT5  (clk_250MHz_dcm),
+   .CLKOUT6  (clk_250MHz270_dcm),
    .LOCKED   (pll_lock),
 
    .PWRDWN   (1'b0),
@@ -95,9 +91,9 @@ module snap2_infrastructure(
   );
 
 
-  BUFG bufg_sysclk[6:0](
-    .I({sys_clk0_dcm, sys_clk180_dcm, sys_clk270_dcm, clk_200_dcm, clk_250MHz_dcm, clk_250MHz270_dcm, clk_10_dcm}),
-    .O({sys_clk0,     sys_clk180,     sys_clk270,     clk_200,     clk_250MHz,     clk_250MHz270, clk_10MHz})
+  BUFG bufg_sysclk[4:0](
+    .I({sys_clk0_dcm, sys_clk180_dcm, sys_clk270_dcm, clk_200_dcm,clk_125_dcm, clk_250MHz_dcm, clk_250MHz270_dcm}),
+    .O({sys_clk0,     sys_clk180,     sys_clk270,     clk_200,clk_125,         clk_250MHz,     clk_250MHz270})
   );
   
   /* reset gen */
