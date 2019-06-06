@@ -39,12 +39,12 @@ function [headers, sources] = gen_xps_tinysh_get_src(xsg_obj, xps_objs, mssge_pr
                 file = files(k).name;
                 if regexp(file,'\w*\.[h]')
                     filepath = [src_path,'\',file];
-                    if isempty(find(strcmp(headers,filepath)))
+                    if isempty(find(strcmp(headers,filepath), 1))
                         headers = [headers {filepath}];
                     end
                 elseif regexp(file,'\w*\.[c]')
                     filepath = [src_path,'\',file];
-                    if isempty(find(strcmp(sources,filepath)))
+                    if isempty(find(strcmp(sources,filepath), 1))
                         sources = [sources {filepath}];
                     end
                 else
@@ -62,12 +62,12 @@ function [headers, sources] = gen_xps_tinysh_get_src(xsg_obj, xps_objs, mssge_pr
             file = files(n).name;
             if regexp(file,'\w*\.[h]')
                 filepath = [src_path,'\',file];
-                if isempty(find(strcmp(headers,filepath)))
+                if isempty(find(strcmp(headers,filepath), 1))
                     headers = [headers {filepath}];
                 end % isempty(find(strcmp(headers,filepath)))
             elseif regexp(file,'\w*\.[c]')
                 filepath = [src_path,'\',file];
-                if isempty(find(strcmp(sources,filepath)))
+                if isempty(find(strcmp(sources,filepath), 1))
                     sources = [sources {filepath}];
                 end % isempty(find(strcmp(sources,filepath)))
             else

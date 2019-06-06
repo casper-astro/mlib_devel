@@ -1,0 +1,24 @@
+{
+   guistr: "# # String gsaved with Nlview 6.5.12  2016-01-29 bk=1.3547 VDI=39 GEI=35 GUI=JA:1.6
+#  -string -flagsOSRD
+preplace port LMB_Clk -pg 1 -y 60 -defaultsOSRD
+preplace port ILMB -pg 1 -y 190 -defaultsOSRD
+preplace port DLMB -pg 1 -y 40 -defaultsOSRD
+preplace portBus LMB_Rst -pg 1 -y 80 -defaultsOSRD
+preplace inst ilmb_bram_if_cntlr -pg 1 -lvl 2 -y 200 -defaultsOSRD
+preplace inst dlmb_bram_if_cntlr -pg 1 -lvl 2 -y 70 -defaultsOSRD
+preplace inst lmb_bram -pg 1 -lvl 3 -y 90 -defaultsOSRD
+preplace inst ilmb_v10 -pg 1 -lvl 1 -y 210 -defaultsOSRD
+preplace inst dlmb_v10 -pg 1 -lvl 1 -y 60 -defaultsOSRD
+preplace netloc microblaze_0_dlmb 1 0 1 NJ
+preplace netloc microblaze_0_ilmb_bus 1 1 1 -140
+preplace netloc microblaze_0_Clk 1 0 2 -360 130 -160
+preplace netloc microblaze_0_dlmb_cntlr 1 2 1 80
+preplace netloc microblaze_0_LMB_Rst 1 0 2 -370 140 -150
+preplace netloc microblaze_0_ilmb 1 0 1 NJ
+preplace netloc microblaze_0_ilmb_cntlr 1 2 1 80
+preplace netloc microblaze_0_dlmb_bus 1 1 1 -160
+levelinfo -pg 1 -390 -260 -30 200 310 -top -10 -bot 280
+",
+}
+0

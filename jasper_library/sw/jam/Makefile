@@ -3,8 +3,15 @@
 # Set size of heap
 HEAP_SIZE = 0x6000
 
+BUILD_USER := $(shell whoami)
+BUILD_HOST := $(shell hostname)
+BUILD_DATE := $(shell date +%Y/%m/%d-%H:%M%z)
+GIT_VERSION := $(shell git describe --abbrev=10 --dirty --always --tags)
+
 CC := mb-gcc
-CC_FLAGS := -MMD -MP -mlittle-endian -mxl-soft-mul -mcpu=v10.0
+CC_FLAGS := -MMD -MP -mlittle-endian -mxl-soft-mul -mcpu=v10.0 \
+            -DGIT_VERSION=\"$(GIT_VERSION)\" -DBUILD_USER=\"$(BUILD_USER)\" \
+            -DBUILD_HOST=\"$(BUILD_HOST)\" -DBUILD_DATE=\"$(BUILD_DATE)\"
 override CFLAGS += -ffunction-sections -fdata-sections -O2
 CFLAGS_PEDANTIC := -Wall -Werror
 LN_FLAGS := -Wl,--start-group,-lxil,-lgcc,-lc,--end-group \
@@ -112,7 +119,7 @@ core_info.o: core_info.bin
 		$< $@
 
 core_info.bin: core_info.tab
-	ruby ./util/cit2bin.rb $< > $@
+	python ./util/cit2csl.py -b $< > $@
 
 symbols: $(EXEC)
 	mb-readelf -s $< | sort -rnk3 > $@

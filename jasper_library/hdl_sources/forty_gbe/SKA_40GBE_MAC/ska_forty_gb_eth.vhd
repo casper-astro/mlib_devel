@@ -92,7 +92,7 @@ entity ska_forty_gb_eth is
         src_mac_address     : out std_logic_vector(47 downto 0);
         src_enable          : out std_logic;
         src_port            : out std_logic_vector(15 downto 0);
-        src_netmask         : out std_logic_vector(31 downto 0);
+        --src_netmask         : out std_logic_vector(31 downto 0);
         src_gateway         : out std_logic_vector(7 downto 0);
         src_local_mc_recv_ip        : out std_logic_vector(31 downto 0);
         src_local_mc_recv_ip_mask   : out std_logic_vector(31 downto 0);

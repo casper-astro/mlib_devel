@@ -1,6 +1,6 @@
 def to_int_list(s):
     '''
-    take a string like '[0,1,2,3]'
+    take a string like ``[0,1,2,3]``
     and return a list of integers
     '''
     s = str(s)
@@ -12,7 +12,7 @@ def to_int_list(s):
 
 def write_file(fn,str):
     '''
-    write string 'str' to filename 'fn'
+    write string ``str`` to filename ``fn``
     '''
     fh = open(fn,'w')
     fh.write(str)
