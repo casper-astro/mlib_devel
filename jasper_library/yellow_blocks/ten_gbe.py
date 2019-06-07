@@ -350,10 +350,10 @@ class tengbaser_xilinx_k7(ten_gbe):
            cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d_usr_clk -asynchronous -group [get_clocks -of_objects [get_cells -hierarchical -filter {name=~*clk_counter*}]] -group [get_clocks -include_generated_clocks ethclk%d]' % (num, num)))        
         return cons
 
-class tengbaser_xilinx_ku7(tengbe_v2):
+class tengbaser_xilinx_ku7(tengbe):
     def __init__(self, blk, plat, hdl_root, use_gth=False):
         self.use_gth = use_gth
-        tengbe_v2.__init__(self, blk, plat, hdl_root)
+        tengbe.__init__(self, blk, plat, hdl_root)
     def initialize(self):
         self.typecode = TYPECODE_ETHCORE
         self.exc_requirements = ['tge%d'%self.slot]
