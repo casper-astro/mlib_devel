@@ -31,17 +31,16 @@ function update_casper_block(oldblk)
   link_status = get_param(oldblk, 'StaticLinkStatus');
 
   % Inactive link (link disabled but not broken) so get AncestorBlock
-  if strcmp(link_status, 'inactive'),
+  if strcmp(link_status, 'inactive')
     srcblk = get_param(oldblk, 'AncestorBlock');
 
   % Resolved link (link in place) so get ReferenceBlock
-  elseif strcmp(link_status, 'resolved'),
+  elseif strcmp(link_status, 'resolved')
     srcblk = get_param(oldblk, 'ReferenceBlock');
 
   % Unresolved link (bad link) so get SourceBlock
-  elseif strcmp(link_status, 'unresolved'),
-    fprintf('%s has a broken library link and cannot be updated\n', oldblk);
-    return;
+  elseif strcmp(link_status, 'unresolved')
+    srcblk = get_param(oldblk, 'SourceBlock');
 
   % Else, not supported
   else
@@ -55,47 +54,80 @@ function update_casper_block(oldblk)
   
   % Special case handling
   switch srcblk
-      % Special handling for deprecated "edge" blocks
-      case {'casper_library_misc/edge', ...
-            'casper_library_misc/negedge', ...
-            'casper_library_misc/posedge'}
-        % Get mask params for edge_detect block
-        switch srcblk
-        case 'casper_library_misc/edge'
-          params = {'edge', 'Both', 'polarity', 'Active High'};
-        case 'casper_library_misc/negedge'
-          params = {'edge', 'Falling', 'polarity', 'Active High'};
-        case 'casper_library_misc/posedge'
-          params = {'edge', 'Rising', 'polarity', 'Active High'};
-        end
-        % Make sure casper_library_misc block diagram is loaded
-        if ~bdIsLoaded('casper_library_misc')
-          fprintf('loading library casper_library_misc\n');
-          load_system('casper_library_misc');
-        end
-        % Get position and orientation of oldblk
-        p = get_param(oldblk, 'position');
-        o = get_param(oldblk, 'orientation');
-        % Delete oldblk
-        delete_block(oldblk);
-        % Add edge detect block using oldblk's name
-        add_block('casper_library_misc/edge_detect', oldblk, ...
-            'orientation', o, ...
-            'position', p, ...
-            params{:});
-        % Done!
-        return
-      case {'xps_library/XSG core config', ...
-            'xps_library/XSG_core_config'}
-        % Get hw_sys parameter to handle SNAP/SNAP2/VCU118 platforms
-        hw_sys = get_param(oldblk, 'hw_sys');
-        if startsWith(hw_sys, 'SNAP:')
-          srcblk = 'xps_library/Platforms/SNAP';
-        elseif startsWith(hw_sys, 'SNAP2:')
-          srcblk = 'xps_library/Platforms/SNAP2';
-        elseif startsWith(hw_sys, 'VCU118:')
-          srcblk = 'xps_library/Platforms/VCU118';
-        end
+  % Special handling for deprecated "edge" blocks
+  case {'casper_library_misc/edge', ...
+        'casper_library_misc/negedge', ...
+        'casper_library_misc/posedge'}
+    % Get mask params for edge_detect block
+    switch srcblk
+    case 'casper_library_misc/edge'
+      params = {'edge', 'Both', 'polarity', 'Active High'};
+    case 'casper_library_misc/negedge'
+      params = {'edge', 'Falling', 'polarity', 'Active High'};
+    case 'casper_library_misc/posedge'
+      params = {'edge', 'Rising', 'polarity', 'Active High'};
+    end
+    % Make sure casper_library_misc block diagram is loaded
+    if ~bdIsLoaded('casper_library_misc')
+      fprintf('loading library casper_library_misc\n');
+      load_system('casper_library_misc');
+    end
+    % Get position and orientation of oldblk
+    p = get_param(oldblk, 'position');
+    o = get_param(oldblk, 'orientation');
+    % Delete oldblk
+    delete_block(oldblk);
+    % Add edge detect block using oldblk's name
+    add_block('casper_library_misc/edge_detect', oldblk, ...
+        'orientation', o, ...
+        'position', p, ...
+        params{:});
+    % Done!
+    return
+  case {'xps_library/XSG core config', ...
+        'xps_library/XSG_core_config', ...
+        'xps_library/xsg_core_config'}
+    % Get hw_sys parameter to handle SNAP/SNAP2/VCU118 platforms
+    hw_sys = get_param(oldblk, 'hw_sys');
+    platform = split(hw_sys, ':');
+    srcblk = ['xps_library/Platforms/' char(platform(1))];
+
+  case 'xps_library/IO/gpio'
+    % set the real io_group parameter, now named 'io_group_real'
+    % this is a hack in order to deprecate the old io_group parameters that had
+    % platform names in the parameter like ROACH:led, so that a user's model
+    % will hold its parameter when updating to the new xps_library
+    cursys = oldblk;
+    % check to see if the io_group params have already been forwarded
+    if (strcmp(get_param(cursys, 'io_group_params_forwarded'), 'off'))
+      io_group_string = get_param(cursys, 'io_group');
+      switch io_group_string
+        case {'ROACH:led', 'ROACH2:led'}
+            set_param(cursys, 'io_group_real', 'led');
+        case {'ROACH:gpioa', 'ROACH:gpioa_oe_n', 'ROACH:gpiob', ...
+              'ROACH:gpiob_oe_n', 'ROACH2:gpio'}
+            set_param(cursys, 'io_group_real', 'gpio');
+        case 'ROACH2:sync_in'
+            set_param(cursys, 'io_group_real', 'sync_in');
+        case 'ROACH2:sync_out'
+            set_param(cursys, 'io_group_real', 'sync_out');
+        case {'ROACH:zdok0', 'ROACH2:zdok0'}
+            set_param(cursys, 'io_group_real', 'zdok0');
+        case {'ROACH:zdok1', 'ROACH2:zdok1'}
+            set_param(cursys, 'io_group_real', 'zdok1');
+        case {'ROACH:aux0_clk' 'ROACH:aux1_clk' 'ROACH2:aux_clk'}
+            set_param(cursys, 'io_group_real', 'aux_clk_diff');
+        case 'custom:custom'
+            set_param(cursys, 'io_group_real', 'custom');
+        otherwise
+            % strip off parameter and insert to custom io_group param
+            set_param(cursys, 'io_group_real', 'custom');
+            customValue = strsplit(io_group_string, ':');
+            set_param(cursys, 'io_group_custom', char(customValue(2)));
+      end
+      % update hidden checkbox to indicate the io_group_params have now been forwarded
+      set_param(cursys, 'io_group_params_forwarded', 'on');
+    end
   end % special deprecated handling
 
   % Make sure srcblk's block diagram is loaded
@@ -103,11 +135,6 @@ function update_casper_block(oldblk)
   if ~bdIsLoaded(srcblk_bd)
     fprintf('loading library %s\n', srcblk_bd);
     load_system(srcblk_bd);
-  end
-    
-  % handle remapping of names
-  if strcmp(srcblk, 'xps_library/software register'),
-      srcblk = 'xps_library/Memory/software_register';
   end
   
   % Get old and new mask names

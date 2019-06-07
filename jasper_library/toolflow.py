@@ -11,15 +11,19 @@ import platform
 import yellow_blocks.yellow_block as yellow_block
 import verilog
 from constraints import PortConstraint, ClockConstraint, GenClockConstraint, \
-    ClockGroupConstraint, InputDelayConstraint, OutputDelayConstraint, \
-    FalsePathConstraint, MultiCycleConstraint, RawConstraint
+    ClockGroupConstraint, InputDelayConstraint, OutputDelayConstraint, MaxDelayConstraint, \
+    MinDelayConstraint, FalsePathConstraint, MultiCycleConstraint, RawConstraint
 import castro
 import helpers
 import yaml
 import glob
 import time
 import hashlib  # Added to calculate md5hash of .bin bitstream and add it to the .fpg header
-import pickle
+import pickle   # Used to dump the pickle of the generated VerilogModule to the build directory for debugging
+import struct   # Used to append a binary checksum to a bitstream
+
+#JH: I don't know what this is, but I suspect here is a better place for it than constraints.py
+MAX_IMAGE_CHUNK_SIZE = 1988
 
 try:
     from katversion import get_version as kat_get_version
@@ -34,21 +38,21 @@ class Toolflow(object):
     top-level verilog description of a project from a 'peripherals file'
     which encodes information about which IP a user wants instantiated.
 
-    The toolflow class can parse such a file, and use it to generate verilog, 
+    The toolflow class can parse such a file, and use it to generate verilog,
     a list of source files, and a list of constraints.
     These can be passed off to a toolflow backend to be turned into some
     vendor-specific platform and compiled. At least, that's the plan...
     """
-    
+
     def __init__(self, frontend='simulink', compile_dir='/tmp',
                  frontend_target='/tmp/test.slx', jobs=8):
         """
         Initialize the toolflow.
-         
-        :param frontend: Name of the toolflow frontend to use. 
-            Currently only 'simulink' is supported
+
+        :param frontend: Name of the toolflow frontend to use.
+            Currently only ``simulink`` is supported
         :type frontend: str
-        :param compile_dir: Compile directory where build files and logs 
+        :param compile_dir: Compile directory where build files and logs
             should go.
         """
         # Set up a logger (the logger named 'jasper' should already
@@ -103,11 +107,11 @@ class Toolflow(object):
     def exec_flow(self, gen_per=True, frontend_compile=True):
         """
         Execute a compile.
-        
-        :param gen_per: Have the toolflow frontend generate a fresh 
+
+        :param gen_per: Have the toolflow frontend generate a fresh
             peripherals file
         :type gen_per: bool
-        :param frontend_compile: Run the frontend compiler (eg. System 
+        :param frontend_compile: Run the frontend compiler (eg. System
             Generator)
         :type frontend_compile: bool
         """
@@ -134,12 +138,12 @@ class Toolflow(object):
         self.write_core_jam_info()
         # print 'Initializing backend project'
         # self.backend.initialize(self.plat)
-        
+
         self.constraints_rule_check()
-        
+
         if frontend_compile:
             # Run system generator (maybe flow-wise
-            # it would make sense to run this sooner, 
+            # it would make sense to run this sooner,
             # but since it's the longest single step
             # it's nice to run it at the end, so there's
             # an opportunity to catch toolflow errors
@@ -166,12 +170,12 @@ class Toolflow(object):
         have been set by other methods before proceeding. This is probably
         a symptom of the code being terribly structured. This method
         checks if an attribute exists and throws an error message if not.
-        In principle it could automatically run the necessary missing steps, 
+        In principle it could automatically run the necessary missing steps,
         but that seems pretty suspect.
 
         :param thing: Attribute to check.
         :type thing: str
-        :param generator: Method which can be used to set thing (used for 
+        :param generator: Method which can be used to set thing (used for
             error message only)
         :type generator: str
         """
@@ -194,11 +198,12 @@ class Toolflow(object):
         """
         Generates a top file for the target platform
         based on the peripherals file.
+
         Internally, calls:
-        instantiate_periphs -- call each yellow block's mod_top method
-        instantiate_user_ip -- add ports to top module based on port entries 
-            in peripheral file
-        regenerate_top -- rewrite top.v
+
+        * ``instantiate_periphs``: call each yellow block's mod_top method
+        * ``instantiate_user_ip``: add ports to top module based on port entries in peripheral file
+        * ``regenerate_top``: rewrite top.v
         """
         self.logger.info('instantiating user peripherals')
         self._instantiate_periphs()
@@ -311,9 +316,12 @@ class Toolflow(object):
     def gen_periph_objs(self):
         """
         Generate a list of yellow blocks from the current peripheral file.
+
         Internally, calls:
-        _parse_periph_file - parses .per file
-        _extract_plat_info - instantiates platform instance
+
+        * ``_parse_periph_file``: parses .per file
+        * ``_extract_plat_info``: instantiates platform instance
+
         Then calls each yellow block's constructor.
         Runs a system-wide drc before returning.
         """
@@ -329,14 +337,17 @@ class Toolflow(object):
         
     def _expand_children(self, population, parents=None, recursive=True):
         """
-        population: a list of yellow blocks to which children will be added
-        parents: a list of yellow blocks which will be invited to procreate.
-                 If parents = None, the population will be used as the initial
-                 parents argument
-        recursive: if True, this method is called recursively, with children
-                   passed as the new parents argument. The population list
-                   will continue to grow until no child yellow blocks wish
-                   to procreate any further.
+        :param population: yellow blocks to which children will be added
+        :type population: list
+        :param parents: yellow blocks which will be invited to procreate.
+            If parents = None, the population will be used as the initial
+            parents argument
+        :type parents: list
+        :param recursive: if True, this method is called recursively, with children
+            passed as the new parents argument. The population list
+            will continue to grow until no child yellow blocks wish
+            to procreate any further.
+        :type recursive: bool
         """
         parents = parents or population
         children = []
@@ -368,7 +379,7 @@ class Toolflow(object):
             obj.modify_top(self.top)
             self.sources += obj.sources
             self.ips += obj.ips
-    
+
     def _instantiate_user_ip(self):
         """
         Adds VerilogInstance and ports associated with user-ip to the class' top
@@ -453,13 +464,14 @@ class Toolflow(object):
         self.logger.debug('Opening %s' % basefile)
         with open(newfile, 'w') as fh:
             fh.write(s)
-        # generate the binary and xilinx-style .mem versions of this table, using some Ruby(!) scripts.
-        ret = os.system('ruby %s/jasper_library/cit2bin.rb %s > %s.bin' % (os.getenv('MLIB_DEVEL_PATH'), newfile, newfile))
+        # generate the binary and xilinx-style .mem versions of this table,
+        # using Python script [TODO convert to a callable function?].
+        ret = os.system('python %s/jasper_library/cit2csl.py -b %s > %s.bin' % (os.getenv('MLIB_DEVEL_PATH'), newfile, newfile))
         if ret != 0:
             errmsg = 'Failed to generate binary file {}.bin, error code {}.'.format(newfile,ret)
             self.logger.error(errmsg)
             raise Exception(errmsg)
-        ret = os.system('ruby %s/jasper_library/cit2mem.rb %s > %s.mem' % (os.getenv('MLIB_DEVEL_PATH'), newfile, newfile))
+        ret = os.system('python %s/jasper_library/cit2csl.py %s > %s.mem' % (os.getenv('MLIB_DEVEL_PATH'), newfile, newfile))
         if ret != 0:
             errmsg = 'Failed to generate xilinx-style file {}.mem, error code {}.'.format(newfile,ret)
             self.logger.error(msg)
@@ -472,9 +484,22 @@ class Toolflow(object):
         interconnect / addressing and generating new
         code for yellow block instances.
         """
+        # Decide if we're going to use a hierarchical arbiter.
+        self.logger.debug("Looking for a max_devices_per_arbiter spec")
+        if self.plat.conf.has_key('max_devices_per_arbiter'):
+            self.top.max_devices_per_arb = self.plat.conf['max_devices_per_arbiter']
+            self.logger.debug("Found max_devices_per_arbiter: %s" % self.top.max_devices_per_arb)
         self.top.wb_compute(self.plat.dsp_wb_base_address,
                             self.plat.dsp_wb_base_address_alignment)
         print self.top.gen_module_file(filename=self.compile_dir+'/top.v')
+        # Write any submodule files required for the compile. This is probably
+        # only the hierarchical WB arbiter, or nothing at all
+        for key, val in self.top.generated_sub_modules.iteritems():
+            self.logger.info("Writing sub module file %s.v" % key)
+            with open(self.compile_dir+'/%s.v'%key, 'w') as fh:
+                fh.write(val)
+                self.sources.append(fh.name)
+        self.logger.info("Dumping pickle of top-level Verilog module")
         pickle.dump(self.top, open('%s/top.pickle' % self.compile_dir,'wb'))
 
     def generate_consts(self):
@@ -530,6 +555,8 @@ class Toolflow(object):
         clk_grp_constraints = []
         input_delay_constraints = []
         output_delay_constraints = []
+        max_delay_constraints = []
+        min_delay_constraints = []
         false_path_constraints = []
         multi_cycle_constraints = []
         raw_constraints = []
@@ -537,63 +564,75 @@ class Toolflow(object):
         for const in self.constraints:
             if isinstance(const, PortConstraint):
                 pin_constraints += [castro.PinConstraint(
-                    portname=const.portname, 
-                    symbolic_name=const.iogroup, 
-                    portname_indices=const.port_index, 
-                    symbolic_indices=const.iogroup_index, 
-                    io_standard=const.iostd, 
+                    portname=const.portname,
+                    symbolic_name=const.iogroup,
+                    portname_indices=const.port_index,
+                    symbolic_indices=const.iogroup_index,
+                    io_standard=const.iostd,
                     location=const.loc
                     )]
             elif isinstance(const, ClockConstraint):
                 clk_constraints += [castro.ClkConstraint(
-                    portname=const.signal, 
-                    freq_mhz=const.freq, 
-                    period_ns=const.period, 
-                    clkname=const.name, 
-                    waveform_min_ns=const.waveform_min, 
-                    waveform_max_ns=const.waveform_max, 
-                    port_en=const.port_en, 
+                    portname=const.signal,
+                    freq_mhz=const.freq,
+                    period_ns=const.period,
+                    clkname=const.name,
+                    waveform_min_ns=const.waveform_min,
+                    waveform_max_ns=const.waveform_max,
+                    port_en=const.port_en,
                     virtual_en=const.virtual_en
                     )]
             elif isinstance(const, GenClockConstraint):
                 gen_clk_constraints += [castro.GenClkConstraint(
-                    pinname=const.signal, 
-                    clkname=const.name, 
-                    divide_by=const.divide_by, 
+                    pinname=const.signal,
+                    clkname=const.name,
+                    divide_by=const.divide_by,
                     clksource=const.clock_source
                     )]
             elif isinstance(const, ClockGroupConstraint):
                 clk_grp_constraints += [castro.ClkGrpConstraint(
-                    clknamegrp1=const.clock_name_group_1, 
-                    clknamegrp2=const.clock_name_group_2, 
+                    clknamegrp1=const.clock_name_group_1,
+                    clknamegrp2=const.clock_name_group_2,
                     clkdomaintype=const.clock_domain_relationship
                     )]
             elif isinstance(const, InputDelayConstraint):
                 input_delay_constraints += [castro.InDelayConstraint(
-                    clkname=const.clkname, 
-                    consttype=const.consttype, 
-                    constdelay_ns=const.constdelay_ns, 
-                    add_delay_en=const.add_delay_en, 
+                    clkname=const.clkname,
+                    consttype=const.consttype,
+                    constdelay_ns=const.constdelay_ns,
+                    add_delay_en=const.add_delay_en,
                     portname=const.portname
                 )]
             elif isinstance(const, OutputDelayConstraint):
                 output_delay_constraints += [castro.OutDelayConstraint(
-                    clkname=const.clkname, 
-                    consttype=const.consttype, 
-                    constdelay_ns=const.constdelay_ns, 
-                    add_delay_en=const.add_delay_en, 
+                    clkname=const.clkname,
+                    consttype=const.consttype,
+                    constdelay_ns=const.constdelay_ns,
+                    add_delay_en=const.add_delay_en,
                     portname=const.portname
+                )]
+            elif isinstance(const, MaxDelayConstraint):
+                max_delay_constraints += [castro.MaxDelayConstraint(
+                    sourcepath=const.sourcepath,
+                    destpath=const.destpath,
+                    constdelay_ns=const.constdelay_ns
+                )]
+            elif isinstance(const, MinDelayConstraint):
+                min_delay_constraints += [castro.MinDelayConstraint(
+                    sourcepath=const.sourcepath,
+                    destpath=const.destpath,
+                    constdelay_ns=const.constdelay_ns
                 )]
             elif isinstance(const, FalsePathConstraint):
                 false_path_constraints += [castro.FalsePthConstraint(
-                    sourcepath=const.sourcepath, 
+                    sourcepath=const.sourcepath,
                     destpath=const.destpath
                 )]
             elif isinstance(const, MultiCycleConstraint):
                 multi_cycle_constraints += [castro.MultiCycConstraint(
-                    multicycletype=const.multicycletype, 
-                    sourcepath=const.sourcepath, 
-                    destpath=const.destpath, 
+                    multicycletype=const.multicycletype,
+                    sourcepath=const.sourcepath,
+                    destpath=const.destpath,
                     multicycledelay=const.multicycledelay
                 )]
             elif isinstance(const, RawConstraint):
@@ -607,6 +646,8 @@ class Toolflow(object):
         c.synthesis.clk_grp_constraints = clk_grp_constraints
         c.synthesis.input_delay_constraints = input_delay_constraints
         c.synthesis.output_delay_constraints = output_delay_constraints
+        c.synthesis.max_delay_constraints = max_delay_constraints
+        c.synthesis.min_delay_constraints = min_delay_constraints
         c.synthesis.false_path_constraints = false_path_constraints
         c.synthesis.multi_cycle_constraints = multi_cycle_constraints
         c.synthesis.raw_constraints = raw_constraints
@@ -627,22 +668,22 @@ class Toolflow(object):
                 mode = 1
             mm_slaves += [castro.mm_slave(dev.regname, mode, dev.base_addr,
                                           dev.nbytes)]
-            
+
         c.mm_slaves = mm_slaves
-        
+
         with open(filename, 'w') as fh:
             fh.write(yaml.dump(c))
 
 
 class ToolflowFrontend(object):
     """
-    
+
     """
     def __init__(self, compile_dir='/tmp', target='/tmp/test.slx'):
         """
-        
-        :param compile_dir: 
-        :param target: 
+
+        :param compile_dir:
+        :param target:
         """
         self.logger = logging.getLogger('jasper.toolflow.frontend')
         self.compile_dir = compile_dir
@@ -656,11 +697,13 @@ class ToolflowFrontend(object):
         Call upon the frontend to generate a
         jasper-standard file defining peripherals
         (yellow blocks) present in a model.
+
         This method should be overridden by the
         specific frontend of choice, and should
         return the full path to the
         peripheral file.
-        Use skip = True to just return the name of
+
+        Use ``skip = True`` to just return the name of
         the file, without bothering to regenerate it
         (useful for debugging, and future use cases
         where a user only wants to run certain
@@ -680,24 +723,24 @@ class ToolflowFrontend(object):
 
     def compile_user_ip(self):
         """
-        Compile the user IP to a single
-        HDL module. Return the name of
-        this module.
-        Should be overridden by each FrontEnd
-        subclass.
+        Compile the user IP to a single HDL module. 
+        
+        Return the name of this module.
+
+        Should be overridden by each FrontEnd subclass.
         """
         raise NotImplementedError()
 
 
 class ToolflowBackend(object):
     """
-    
+
     """
     def __init__(self, plat=None, compile_dir='/tmp'):
         """
-        
-        :param plat: 
-        :param compile_dir: 
+
+        :param plat:
+        :param compile_dir:
         """
         self.logger = logging.getLogger('jasper.toolflow.backend')
         self.compile_dir = compile_dir
@@ -709,27 +752,25 @@ class ToolflowBackend(object):
 
     def initialize(self, plat):
         """
-        
-        :param plat: 
-        :return: 
+
+        :param plat:
         """
         raise NotImplementedError
 
     def compile(self, core, plat):
         """
-        
-        :param core: 
-        :param plat: 
-        :return: 
+
+        :param core:
+        :param plat:
         """
         raise NotImplementedError
 
     def add_source(self, source, plat):
         """
         Add a sourcefile to the project. Via a tcl incantation.
-        In non-project mode, it is important to note that copies are not made 
-        of files. The files are read from their source directory. Project mode 
-        copies files from their source directory and adds them to the a new 
+        In non-project mode, it is important to note that copies are not made
+        of files. The files are read from their source directory. Project mode
+        copies files from their source directory and adds them to the a new
         compile directory.
         """
         raise NotImplementedError
@@ -737,11 +778,12 @@ class ToolflowBackend(object):
     def add_const_file(self, constfile):
         """
         Add a constraint file to the project. via a tcl incantation.
-        In non-project mode, it is important to note that copies are not made 
-        of files. The files are read from their source directory. Project 
-        mode copies files from their source directory and adds them to the 
+        In non-project mode, it is important to note that copies are not made
+        of files. The files are read from their source directory. Project
+        mode copies files from their source directory and adds them to the
         a new compile directory.
-        :param constfile
+
+        :param constfile:
         """
         raise NotImplementedError
 
@@ -780,7 +822,7 @@ class ToolflowBackend(object):
             self.add_library(ip['path'])
             if ip.has_key('module_name'):
                 self.add_ip(ip)
-       
+
         # elaborate pin constraints
         for const in self.castro.synthesis.pin_constraints:
             pins = self.plat.get_pins(const.symbolic_name,
@@ -797,18 +839,20 @@ class ToolflowBackend(object):
             self.castro.synthesis.clk_grp_constraints +
             self.castro.synthesis.input_delay_constraints +
             self.castro.synthesis.output_delay_constraints +
+            self.castro.synthesis.max_delay_constraints +
+            self.castro.synthesis.min_delay_constraints +
             self.castro.synthesis.false_path_constraints +
             self.castro.synthesis.multi_cycle_constraints +
             self.castro.synthesis.raw_constraints)
 
     def mkfpg(self, filename_bin, filename_fpg):
         """
-        This function makes the fpg file header and the final fpg file, which 
-        consists of the fpg file header (core_info.tab, design_info.tab and 
+        This function makes the fpg file header and the final fpg file, which
+        consists of the fpg file header (core_info.tab, design_info.tab and
         git_info.tab) and the compressed binary file. The fpg file is used
         to configure the ROACH, ROACH2, MKDIG and SKARAB boards.
 
-        :param filename_bin: This is the path and binary file (top.bin) that 
+        :param filename_bin: This is the path and binary file (top.bin) that
             contains the FPGA programming data.
         :type filename_bin: str
         :param filename_fpg: This is the output time stamped fpg file name
@@ -848,13 +892,26 @@ class ToolflowBackend(object):
         with open(extended_info, 'r') as fh:
             md5_header = hashlib.md5(fh.read()).hexdigest()
         with open(filename_bin, 'rb') as fh:
-            md5_bitstream = hashlib.md5(fh.read()).hexdigest()
-        # add the md5sums and ?quit to the extended info file
+            bitstream = fh.read()
+            # 1) Calculate MD5 Checksum on binary data
+            md5_bitstream = hashlib.md5(bitstream).hexdigest()
+
+            # 2) Calculate 'FlashWriteChecksum' to be compared to
+            #    SpartanChecksum when upload_to_ram()
+            #   - Need to give it the chunk size being used in upload_to_ram
+            #   - This alters how the SPARTAN calculates the checksum
+            flash_write_checksum = self.calculate_checksum_using_bitstream(
+                bitstream, packet_size=MAX_IMAGE_CHUNK_SIZE)
+
+        # add the md5sums, checksum and ?quit to the extended info file
         with open(extended_info, 'a') as fh:
             # Line to write must follow general format, as per Paul
             line = '77777\t77777\tmd5_header\t' + md5_header + '\n'
             fh.write("?meta\t" + line)
             line = '77777\t77777\tmd5_bitstream\t' + md5_bitstream + '\n'
+            fh.write("?meta\t" + line)
+            line = '77777\t77777\tflash_write_checksum\t' + \
+                   str(flash_write_checksum) + '_' + str(MAX_IMAGE_CHUNK_SIZE) + '\n'
             fh.write("?meta\t" + line)
             fh.write('?quit\n')
 
@@ -875,16 +932,47 @@ class ToolflowBackend(object):
             self.compile_dir, self.output_dir, filename_fpg)
         os.system(mkfpg_cmd4)
 
+    @staticmethod
+    def calculate_checksum_using_bitstream(bitstream, packet_size=8192):
+        """
+        Summing up all the words in the input bitstream, and returning a
+        ``Checksum`` - Assuming that the bitstream HAS NOT been padded yet
+
+        :param bitstream: The actual bitstream of the file in question
+        :param packet_size: max size of image packets that we pad to
+        :return: checksum
+        """
+
+        size = len(bitstream)
+
+        flash_write_checksum = 0x00
+
+        for i in range(0, size, 2):
+            # This is just getting a substring, need to convert to hex
+            two_bytes = bitstream[i:i + 2]
+            one_word = struct.unpack('!H', two_bytes)[0]
+            flash_write_checksum += one_word
+
+        if (size % packet_size) != 0:
+            # padding required
+            num_padding_bytes = packet_size - (size % packet_size)
+            for i in range(num_padding_bytes / 2):
+                flash_write_checksum += 0xffff
+
+        # Last thing to do, make sure it is a 16-bit word
+        flash_write_checksum &= 0xffff
+
+        return flash_write_checksum
 
 class SimulinkFrontend(ToolflowFrontend):
     """
-    
+
     """
     def __init__(self, compile_dir='/tmp', target='/tmp/test.slx'):
         """
-        
-        :param compile_dir: 
-        :param target: 
+
+        :param compile_dir:
+        :param target:
         """
         ToolflowFrontend.__init__(self, compile_dir=compile_dir, target=target)
         if target[-4:] not in ['.slx', '.mdl']:
@@ -895,9 +983,11 @@ class SimulinkFrontend(ToolflowFrontend):
 
     def gen_periph_file(self, fname='jasper.per'):
         """
-        generate the peripheral file. i.e., the list of yellow blocks
-        and their parameters. It also generates the design_info.tab file
-        which is used to populate the fpg file header
+        generate the peripheral file. 
+        
+        i.e., the list of yellow blocks and their parameters. 
+        
+        It also generates the ``design_info.tab`` file which is used to populate the fpg file header
 
         :param fname: The full path and name to give the peripheral file.
         :type fname: str
@@ -935,8 +1025,8 @@ class SimulinkFrontend(ToolflowFrontend):
     def write_git_info_file(self, fname='git_info.tab'):
         """
         Get the git info for mlib_devel and the model file.
-        :param fname: 
-        :return: 
+        :param fname:
+        :return:
         """
         fpath = '%s/%s' % (self.compile_dir, fname)
         fptr = open(fpath, 'w')
@@ -976,14 +1066,14 @@ class SimulinkFrontend(ToolflowFrontend):
 
 class VivadoBackend(ToolflowBackend):
     """
-    
+
     """
     def __init__(self, plat=None, compile_dir='/tmp', periph_objs=None):
         """
-        
-        :param plat: 
-        :param compile_dir: 
-        :param periph_objs: 
+
+        :param plat:
+        :param compile_dir:
+        :param periph_objs:
         """
         self.logger = logging.getLogger('jasper.toolflow.backend')
         self.compile_dir = compile_dir
@@ -1044,10 +1134,6 @@ class VivadoBackend(ToolflowBackend):
                                                    self.project_name))
             self.add_tcl_cmd('set_part %s' % plat.fpga)
 
-        # for source in plat.sources:
-        #  self.add_source(os.getenv('HDL_ROOT')+'/'+source)
-        #  self.add_source(self.compile_dir+'/top.v')
-
     def add_library(self, path):
         """
         Add a library at <path>
@@ -1065,9 +1151,9 @@ class VivadoBackend(ToolflowBackend):
     def add_source(self, source, plat):
         """
         Add a sourcefile to the project. Via a tcl incantation.
-        In non-project mode, it is important to note that copies are not made 
-        of files. The files are read from their source directory. Project mode 
-        copies files from their source directory and adds them to the a new 
+        In non-project mode, it is important to note that copies are not made
+        of files. The files are read from their source directory. Project mode
+        copies files from their source directory and adds them to the a new
         compile directory.
         """
         self.logger.debug('Adding source file: %s' % source)
@@ -1126,11 +1212,12 @@ class VivadoBackend(ToolflowBackend):
     def add_const_file(self, constfile):
         """
         Add a constraint file to the project. via a tcl incantation.
-        In non-project mode, it is important to note that copies are not made 
-        of files. The files are read from their source directory. Project 
-        mode copies files from their source directory and adds them to the 
+        In non-project mode, it is important to note that copies are not made
+        of files. The files are read from their source directory. Project
+        mode copies files from their source directory and adds them to the
         a new compile directory.
-        :param constfile
+
+        :param constfile:
         """
         if constfile.split('.')[-1] == self.const_file_ext:
             self.logger.debug('Adding constraint file: %s' % constfile)
@@ -1186,17 +1273,17 @@ class VivadoBackend(ToolflowBackend):
             self.add_tcl_cmd('if {[llength [glob -nocomplain [get_property directory [current_project]]/myproj.srcs/sources_1/imports/*.coe]] > 0} {', stage='pre_synth')
             self.add_tcl_cmd('file copy -force {*}[glob [get_property directory [current_project]]/myproj.srcs/sources_1/imports/*.coe] [get_property directory [current_project]]/myproj.srcs/sources_1/ip/', stage='pre_synth')
             self.add_tcl_cmd('}', stage='pre_synth')
-            
+
             # add the upgrade_ip command to the tcl file if the yaml file requrests it, default to upgrading the IP
             if "upgrade_ip" not in plat.conf.keys() or plat.conf['upgrade_ip'] == True:
                 self.add_tcl_cmd('upgrade_ip -quiet [get_ips *]', stage='pre_synth')
                 self.logger.debug('adding the upgrade_ip command to the tcl script')
-            else:             
+            else:
                 self.logger.debug('The upgrade_ip command is not being added to the tcl script')
             # Add in if ILA is being used to prevent signal names from changing during synthesis
             #self.add_tcl_cmd('set_property STEPS.SYNTH_DESIGN.ARGS.FLATTEN_HIERARCHY none [get_runs synth_1]')
 
-            # Synthesis Commands   
+            # Synthesis Commands
             self.add_tcl_cmd('reset_run synth_1', stage='synth')
             self.add_tcl_cmd('launch_runs synth_1 -jobs %d' % cores, stage='synth')
             self.add_tcl_cmd('wait_on_run synth_1', stage='synth')
@@ -1207,6 +1294,7 @@ class VivadoBackend(ToolflowBackend):
             # Pre-Implementation Commands
             self.add_tcl_cmd('set_property STEPS.WRITE_BITSTREAM.ARGS.BIN_FILE true [get_runs impl_1]', stage='pre_impl')
             self.add_tcl_cmd('set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]', stage='pre_impl')
+            self.add_tcl_cmd('set_property STEPS.POST_ROUTE_PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]', stage='pre_impl')
 
             # Implementation Commands
             self.add_tcl_cmd('launch_runs impl_1 -jobs %d' % cores, stage='impl')
@@ -1214,6 +1302,7 @@ class VivadoBackend(ToolflowBackend):
 
             # Post-Implementation Commands
             self.add_tcl_cmd('open_run impl_1', stage='post_impl')
+
 
             # Pre-Bitgen Commands
 
@@ -1356,10 +1445,9 @@ class VivadoBackend(ToolflowBackend):
 
     def compile(self, cores, plat):
         """
-        
-        :param cores: 
-        :param plat: 
-        :return: 
+
+        :param cores:
+        :param plat:
         """
         self.add_compile_cmds(cores=cores, plat=plat)
         # write tcl command to file
@@ -1373,7 +1461,7 @@ class VivadoBackend(ToolflowBackend):
 
     def get_tcl_const(self, const):
         """
-        Pass a single toolflow-standard PortConstraint, 
+        Pass a single toolflow-standard PortConstraint,
         and get back a tcl command to add the constraint
         to a vivado project.
         """
@@ -1420,6 +1508,14 @@ class VivadoBackend(ToolflowBackend):
         if isinstance(const, castro.OutDelayConstraint):
             self.logger.debug('New Output delay constraint found')
             user_const += self.format_output_delay_const(const)
+
+        if isinstance(const, castro.MaxDelayConstraint):
+            self.logger.debug('New Max delay constraint found')
+            user_const += self.format_max_delay_const(const)
+
+        if isinstance(const, castro.MinDelayConstraint):
+            self.logger.debug('New Min delay constraint found')
+            user_const += self.format_min_delay_const(const)
 
         if isinstance(const, castro.FalsePthConstraint):
             self.logger.debug('New False Path constraint found')
@@ -1487,6 +1583,24 @@ class VivadoBackend(ToolflowBackend):
                                            c.constdelay_ns, c.portname)
 
     @staticmethod
+    def format_max_delay_const(c):
+        if c.sourcepath is None:
+             return 'set_max_delay %s -to %s\n' % (c.constdelay_ns, c.destpath)
+        elif c.destpath is None:
+             return 'set_max_delay %s -from %s\n' % (c.constdelay_ns, c.sourcepath)
+        else:
+             return 'set_max_delay %s -from %s -to %s\n' % (c.constdelay_ns, c.sourcepath, c.destpath)
+
+    @staticmethod
+    def format_min_delay_const(c):
+        if c.sourcepath is None:
+             return 'set_min_delay %s -to %s\n' % (c.constdelay_ns, c.destpath)
+        elif c.destpath is None:
+             return 'set_min_delay %s -from %s\n' % (c.constdelay_ns, c.sourcepath)
+        else:
+             return 'set_min_delay %s -from %s -to %s\n' % (c.constdelay_ns, c.sourcepath, c.destpath)
+
+    @staticmethod
     def format_false_path_const(c):
         if c.sourcepath is None:
             return 'set_false_path -to %s\n' % c.destpath
@@ -1552,13 +1666,13 @@ class VivadoBackend(ToolflowBackend):
 
 class ISEBackend(VivadoBackend):
     """
-    
+
     """
     def __init__(self, plat=None, compile_dir='/tmp'):
         """
-        
-        :param plat: 
-        :param compile_dir: 
+
+        :param plat:
+        :param compile_dir:
         """
         self.logger = logging.getLogger('jasper.toolflow.backend')
         self.compile_dir = compile_dir
@@ -1604,8 +1718,7 @@ class ISEBackend(VivadoBackend):
 
     def compile(self, cores, plat):
         """
-        
-        :return: 
+
         """
         self.add_compile_cmds()
         # write tcl command to file
@@ -1647,7 +1760,7 @@ class ISEBackend(VivadoBackend):
 
     def get_ucf_const(self, const):
         """
-        Pass a single toolflow-standard PortConstraint, 
+        Pass a single toolflow-standard PortConstraint,
         and get back a tcl command to add the constraint
         to a vivado project.
         """

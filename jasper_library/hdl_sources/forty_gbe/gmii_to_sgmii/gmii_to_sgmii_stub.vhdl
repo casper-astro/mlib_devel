@@ -1,10 +1,10 @@
 -- Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
--- Tool Version: Vivado v.2014.3.1 (lin64) Build 1056140 Thu Oct 30 16:30:39 MDT 2014
--- Date        : Thu Mar 24 13:42:24 2016
--- Host        : adam-cm running 64-bit Ubuntu 14.04.4 LTS
+-- Tool Version: Vivado v.2014.4 (win64) Build 1071353 Tue Nov 18 18:24:04 MST 2014
+-- Date        : Tue Apr 11 10:01:08 2017
+-- Host        : hwdev2 running 64-bit Service Pack 1  (build 7601)
 -- Command     : write_vhdl -force -mode synth_stub
---               /home/aisaacson/work/git_work/ska_sa/projects/skarab_bsp_firmware/firmware/FRM123701U1R1/Vivado/IP/gmii_to_sgmii/gmii_to_sgmii_stub.vhdl
+--               W:/Gavin/Vivado/Vivado2014_4/Vivado2014_4.srcs/sources_1/ip/gmii_to_sgmii/gmii_to_sgmii_stub.vhdl
 -- Design      : gmii_to_sgmii
 -- Purpose     : Stub declaration of top-level module interface
 -- Device      : xc7vx690tffg1927-2
@@ -60,6 +60,6 @@ attribute black_box_pad_pin : string;
 attribute syn_black_box of stub : architecture is true;
 attribute black_box_pad_pin of stub : architecture is "gtrefclk_p,gtrefclk_n,gtrefclk_out,txp,txn,rxp,rxn,resetdone,userclk_out,userclk2_out,rxuserclk_out,rxuserclk2_out,pma_reset_out,mmcm_locked_out,independent_clock_bufg,sgmii_clk_r,sgmii_clk_f,sgmii_clk_en,gmii_txd[7:0],gmii_tx_en,gmii_tx_er,gmii_rxd[7:0],gmii_rx_dv,gmii_rx_er,gmii_isolate,configuration_vector[4:0],an_interrupt,an_adv_config_vector[15:0],an_restart_config,speed_is_10_100,speed_is_100,status_vector[15:0],reset,signal_detect,gt0_qplloutclk_out,gt0_qplloutrefclk_out";
 attribute x_core_info : string;
-attribute x_core_info of stub : architecture is "gig_ethernet_pcs_pma_v14_2,Vivado 2014.2";
+attribute x_core_info of stub : architecture is "gig_ethernet_pcs_pma_v14_3,Vivado 2014.4";
 begin
 end;

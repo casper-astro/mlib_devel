@@ -87,7 +87,8 @@ end % name/value pair loop
 
 % Determine whether the state has changed
 try
-    match = getfield(get_param(blk, 'UserData'), 'state') == hashcell(varargin);
+    state = getfield(get_param(blk, 'UserData'), 'state');
+    match = ~isempty(state) && (state == hashcell(varargin));
 catch
     match = 0;
 end

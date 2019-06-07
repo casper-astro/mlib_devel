@@ -22,27 +22,6 @@
 
 cursys = gcb;
 
-if ~strcmp(io_group, 'custom')
-    if arith_type==1
-    	real_bitwidth = 1;
-    else
-    	real_bitwidth = bitwidth;
-    end
-    
-    if use_ddr
-        if ~reg_iob
-            errordlg('When using DDR signaling mode, "Register at IOB" option must be on');
-        end
-        if length(bit_index) ~= real_bitwidth/2
-            errordlg('Gateway bit index does not have half the number of elements as the I/O bitwidth');
-        end
-    else
-        if length(bit_index) ~= real_bitwidth
-            errordlg('Gateway bit index does not have the same number of elements as the I/O bitwidth. When using bitwidths greater than one, you should specify a vector of bit indices to use.');
-        end
-    end
-end
-
 pos = get_param(cursys,'Position');
 x= pos(1);
 y= pos(2);
@@ -95,3 +74,24 @@ switch get_param(cursys,'io_dir')
 end
 
 clean_ports(cursys,old_ports);
+
+if ~strcmp(io_group_real, 'custom')
+    if arith_type==1
+    	real_bitwidth = 1;
+    else
+    	real_bitwidth = bitwidth;
+    end
+    
+    if use_ddr
+        if ~reg_iob
+            errordlg('When using DDR signaling mode, "Register at IOB" option must be on');
+        end
+        if length(bit_index) ~= real_bitwidth/2
+            errordlg('Gateway bit index does not have half the number of elements as the I/O bitwidth');
+        end
+    else
+        if length(bit_index) ~= real_bitwidth
+            errordlg('Gateway bit index does not have the same number of elements as the I/O bitwidth. When using bitwidths greater than one, you should specify a vector of bit indices to use.');
+        end
+    end
+end

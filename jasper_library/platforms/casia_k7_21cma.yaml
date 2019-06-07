@@ -1,0 +1,165 @@
+name: casia_k7_21cma
+manufacturer: Xilinx
+fpga: xc7k325tffg900-2
+#fpga: xc7k410tffg676-2
+backend_target: vivado
+sources: []
+constraints: []
+provides:
+  - qsfp0
+  - qsfp1
+  - sys_clk
+  - sys_clk90
+  - sys_clk180
+  - sys_clk270
+  - clk_250MHz
+  - clk_250MHz90
+  - clk_250MHz180
+  - clk_250MHz270
+pins:
+  sys_clk_in:
+    loc: AB27
+    iostd: LVCMOS33
+  #sys_clk_p:
+    #loc: E10
+    #iostd: LVDS_25
+  #sys_clk_n:
+    #loc: D10
+    #iostd: LVDS_25
+  miso:
+    loc: K19
+    iostd: LVCMOS25
+  mosi:
+    loc: A16
+    iostd: LVCMOS15
+  sclk:
+    loc: A17
+    iostd: LVCMOS15
+  cs_n:
+    loc: A18
+    iostd: LVCMOS15
+  gpio:
+    iostd: LVCMOS15
+    loc:
+      - K19
+      - A16
+      - A17
+      - A18
+  usb_tx:
+    iostd: LVCMOS15
+    loc: K19
+  usb_cts:
+    iostd: LVCMOS15
+    loc: A16
+  usb_rts:
+    iostd: LVCMOS15
+    loc: A17
+  usb_rx:
+    iostd: LVCMOS15
+    loc: A18
+  led:
+    iostd: LVCMOS15
+    loc:
+      - B18
+      - L18
+      - L17
+      - K20 
+  phy_rst_n:
+    loc: L23
+    iostd: LVCMOS25
+  mdc:
+    iostd: LVCMOS25
+    loc: M22
+  mdio:
+    iostd: LVCMOS25
+    loc: L21
+  rgmii_rxd:
+    iostd: LVCMOS25
+    loc:
+      - N21
+      - P22
+      - P21
+      - N22
+  rgmii_txd:
+    iostd: LVCMOS25
+    loc:
+      - K23
+      - J22
+      - K21
+      - J21
+  rgmii_tx_ctl:
+    iostd: LVCMOS25
+    loc: M20
+  rgmii_txc:
+    iostd: LVCMOS25
+    loc: L27
+  rgmii_rx_ctl:
+    iostd: LVCMOS25
+    loc: N20
+  rgmii_rxc:
+    iostd: LVCMOS25
+    loc: L26  
+  eth_clk_p:
+    loc:
+      - J8
+      - E8
+  eth_clk_n:
+    loc: 
+      - J7
+      - E7
+  mgt_tx_p:
+    loc: 
+      - K2
+      - J4
+      - H2
+      - F2
+      - D2
+      - C4
+      - B2
+      - A4
+  mgt_tx_n:
+    loc:
+      - K1
+      - J3
+      - H1
+      - F1
+      - D1
+      - C3
+      - B1
+      - A3
+  mgt_rx_p:
+    loc:
+      - K6
+      - H6
+      - G4
+      - F6
+      - E4
+      - D6
+      - B6
+      - A8
+  mgt_rx_n:
+    loc:
+      - K5
+      - H5
+      - G3
+      - F5
+      - E3
+      - D5
+      - B5
+      - A7
+  spi_flash_data:
+    iostd: LVCMOS25
+    loc:
+      - P24
+      - R25
+      - R20
+      - R21
+  #spi_flash_clk:
+  #  iostd: LVCMOS25
+  #  loc: 
+  spi_flash_csn:
+    iostd: LVCMOS25
+    loc: U19
+      
+
+

@@ -2,7 +2,7 @@
 --   ____  ____ 
 --  /   /\/   /
 -- /___/  \  /    Vendor: Xilinx
--- \   \   \/     Version : 3.2
+-- \   \   \/     Version : 3.4
 --  \   \         Application : 7 Series FPGAs Transceivers Wizard
 --  /   /         Filename : gmii_to_sgmii_gtwizard_gtrxreset_seq.vhd
 -- /___/   /\     
@@ -128,8 +128,10 @@ ARCHITECTURE Behavioral of gmii_to_sgmii_gtwizard_gtrxreset_seq is
   signal  rst_sync            : std_logic;
   signal  rd_data             : std_logic_vector(15 downto 0);
   signal  next_rd_data        : std_logic_vector(15 downto 0);
+  signal  original_rd_data        : std_logic_vector(15 downto 0);
   signal  pmarstdone_fall_edge:std_logic;
   signal  gtrxreset_i         :std_logic;
+  signal  flag                :std_logic := '0';
   signal  gtrxreset_o         :std_logic;
   signal  drpen_o             :std_logic;
   signal  drpwe_o             :std_logic;
@@ -265,7 +267,7 @@ BEGIN
   END PROCESS;
 
 -- drives DRP interface and GTRXRESET_OUT
-  PROCESS(DRPRDY,state,rd_data,DRPDO,gtrxreset_ss)
+  PROCESS(DRPRDY,state,rd_data,DRPDO,gtrxreset_ss,flag,original_rd_data)
   BEGIN
 -- assert gtrxreset_out until wr to 16-bit is complete
 -- RX_DATA_WIDTH is located at addr x"0011", [13 downto 11]
@@ -291,8 +293,10 @@ BEGIN
       --assert reset and wait to load rd data
       WHEN wait_rd_data =>  
         gtrxreset_i <= '1';
-          IF (DRPRDY='1') THEN
+          IF (DRPRDY='1' and flag = '0') THEN
             next_rd_data <= DRPDO;
+          ELSIF (DRPRDY='1' and flag = '1') THEN
+            next_rd_data <= original_rd_data;
           ELSE
             next_rd_data <= rd_data;
           END IF;
@@ -321,8 +325,7 @@ BEGIN
       WHEN wr_20 =>  
         drpen_o <='1';
         drpwe_o <= '1';
---        drpdi_o <= rd_data(15 downto 0); --restore user setting per prev read
-        drpdi_o <= rd_data(15 downto 12) & '1' & rd_data(10 downto 0); 
+        drpdi_o <= rd_data(15 downto 0); --restore user setting per prev read
 
       --wait to complete write to 20-bit mode
       WHEN wait_wr_done2 => null; 
@@ -332,6 +335,33 @@ BEGIN
      END CASE;
   END PROCESS;
 
+  process (DRPCLK)
+  begin
+    if (DRPCLK'event and DRPCLK='1') then
+
+if( state = wr_16 or state = wait_pmareset or state = wr_20 or state = wait_wr_done1) then
+
+flag <= '1';
+
+elsif(state = wait_wr_done2) then
+
+flag <= '0';
+end if; 
+end if;
+
+end process;
+
+  process (DRPCLK)
+  begin
+    if (DRPCLK'event and DRPCLK='1') then
+
+if( state = wait_rd_data and DRPRDY ='1' and flag = '0') then
+
+original_rd_data <= DRPDO;
+
+end if; 
+end if; 
+end process;
 END Behavioral;
 
 

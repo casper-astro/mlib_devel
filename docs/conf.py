@@ -12,14 +12,25 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import os
+import sys
+from sphinx.apidoc import main as sphinx_apidoc_main
+# add jasper_library directory to sys.path so autodoc can document its modules.
+jasper_library_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'jasper_library'))
+sys.path.insert(0, jasper_library_path)
+# Workaround to include __init__'s with sphinx-apidoc generated documnentation.
+# Code found here: https://stackoverflow.com/questions/5599254/how-to-use-sphinxs-autodoc-to-document-a-classs-init-self-method
+def skip(app, what, name, obj, skip, options):
+    if name == "__init__":
+        return False
+    return skip    
 
+def setup(app):
+    app.connect("autodoc-skip-member", skip)
 
 # -- Project information -----------------------------------------------------
 
-project = 'CASPER Block Documentation'
+project = 'CASPER Toolflow'
 copyright = '2018, Collaboration for Astronomy Signal Processing and Electronics Research'
 author = 'Collaboration for Astronomy Signal Processing and Electronics Research'
 
@@ -40,12 +51,14 @@ release = '0.1'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'sphinx.ext.imgmath',
+    'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
-    'sphinx.ext.githubpages',
+    'sphinx.ext.githubpages'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -56,6 +69,11 @@ templates_path = ['_templates']
 #
 source_suffix = ['.rst', '.md']
 # source_suffix = '.rst'
+
+# Sphinx Markdown support
+source_parsers = {
+    '.md': 'recommonmark.parser.CommonMarkParser',
+}
 
 # The master toctree document.
 master_doc = 'index'
@@ -70,7 +88,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path .
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'README.md']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -97,6 +115,7 @@ html_theme_options = {
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+# html_style = 'css/casper_theme.css'
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -112,7 +131,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'CASPERBlockDocumentationdoc'
+htmlhelp_basename = 'CASPERToolflowdoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -139,7 +158,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'CASPERBlockDocumentation.tex', 'CASPER Block Documentation',
+    (master_doc, 'CASPERToolflow.tex', 'CASPER Toolflow',
      'Collaboration for Astronomy Signal Processing and Electronics Research', 'manual'),
 ]
 
@@ -149,7 +168,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'casperblockdocumentation', 'CASPER Block Documentation',
+    (master_doc, 'caspertoolflow', 'CASPER Toolflow',
      [author], 1)
 ]
 
@@ -160,8 +179,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'CASPERBlockDocumentation', 'CASPER Block Documentation',
-     author, 'CASPERBlockDocumentation', 'One line description of project.',
+    (master_doc, 'CASPERToolflow', 'CASPER Toolflow',
+     author, 'CASPERToolflow', 'One line description of project.',
      'Miscellaneous'),
 ]
 
@@ -171,7 +190,7 @@ texinfo_documents = [
 # -- Options for intersphinx extension ---------------------------------------
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'https://docs.python.org/': None}
+intersphinx_mapping = {'casperfpga': ('https://casper-toolflow.readthedocs.io/projects/casperfpga/en/latest/', None)} 
 
 # -- Options for todo extension ----------------------------------------------
 

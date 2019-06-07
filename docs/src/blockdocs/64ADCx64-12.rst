@@ -1,0 +1,13 @@
+64ADCx64-12
+============
+`ADC64 Block Diagram <../../_static/files/X64_ADC/ADC64x12_block.pdf>`__
+
+`PXS Test Jig <../../_static/files/X64_ADC/ADC64x12_PXS_testjig.pdf>`__
+
+`PXSADC Top Level <../../_static/files/X64_ADC/ADC64x12_PXSADC_Top_Level.pdf>`__
+
+`PXS Spreadsheet <../../_static/files/X64_ADC/ADC64x12_PXSADC_PL_20080110.xls>`__
+
+The 64 input 12 bit ADC board was developed by Rick Raffanti. the board
+has been tested at 65 Msps using Rick's verilog interface, but the
+simulink yellow block has only been tested at 50 Msps so far.

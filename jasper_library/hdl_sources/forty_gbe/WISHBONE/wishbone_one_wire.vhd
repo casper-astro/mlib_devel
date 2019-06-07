@@ -102,8 +102,8 @@ begin
         OWN     => NUM_ONE_WIRE_INTERFACES,
         BTP_N   => "6.0", -- 156.25 DOESN'T DIVIDE EXACTLY SO USE RANGE
         BTP_O   => "0.5", -- 156.25 DOESN'T DIVIDE EXACTLY SO USE RANGE
-        CDR_N   => 1054, -- NORMAL BASE TIME PERIOD = 6.752 us
-        CDR_O   => 89) -- OVERDRIVE BASE TIME PERIOD = 0.576us 
+        CDR_N   => 263, --NORMAL BASE TIME PERIOD = 6.758 us --1054, -- NORMAL BASE TIME PERIOD = 6.752 us
+        CDR_O   => 19)  --OVERDRIVE BASE TIME PERIOD = 0.512us --89) -- OVERDRIVE BASE TIME PERIOD = 0.576us 
     port map(
         clk     => CLK_I,
         rst     => RST_I,
