@@ -198,30 +198,38 @@ pins:
     #iostd: LVCMOS18
   eth_clk_n:
     loc: AT7
-  mgt_rx_n:
-    loc: 
-      - BA5
-      - AY3
-      - BC5
-      - BD7
   mgt_rx_p:
-    loc:
-      - BA6
-      - AY4
-      - BC6
-      - BD8
-  mgt_tx_n:
-    loc: 
-      - BA1
-      - AW1
-      - BB3
-      - BD3
+    loc: BD8
+  mgt_rx_n:
+    loc: BD7
   mgt_tx_p:
-    loc: 
-      - BA2
-      - AW2
-      - BB4
-      - BD4
+    loc: BD4
+  mgt_tx_n:
+    loc: BD3
+  #mgt_rx_n:
+  #  loc: 
+  #    - BA5
+  #    - AY3
+  #    - BC5
+  #    - BD7
+  #mgt_rx_p:
+  #  loc:
+  #    - BA6
+  #    - AY4
+  #    - BC6
+  #    - BD8
+  #mgt_tx_n:
+  #  loc: 
+  #    - BA1
+  #    - AW1
+  #    - BB3
+  #    - BD3
+  #mgt_tx_p:
+  #  loc: 
+  #    - BA2
+  #    - AW2
+  #    - BB4
+  #    - BD4
   sfp_disable:
     iostd: LVCMOS18
     loc: 
