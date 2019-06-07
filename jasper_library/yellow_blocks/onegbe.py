@@ -360,7 +360,7 @@ class onegbe_snap(onegbe):
         else:
             self.use_lvds = False
 
-        if self.platform.name in ['snap2_v2']:
+        if self.platform.name in ['snap2_v2', 'mx175']:
             self.use_autonegotiation = True
         else:
             self.use_autonegotiation = False
