@@ -49,7 +49,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 library axi4_lib;
-use axi4_lib.axi4lite_pkg.all;
+use work.axi4lite_pkg.all;
      
 entity axi4lite_slave_logic is
    port(

@@ -397,8 +397,8 @@ class Toolflow(object):
             axi4lite_interconnect.modify_top(self.top)
             # Generate xml2vhdl
             self.xml2vhdl()
-            #TODO: add the AXI4lite yellowblock to the peripherals
-            #self.periph_objs.append(axi4lite_interconnect)
+            # add the AXI4lite yellowblock to the peripherals manually
+            self.periph_objs.append(axi4lite_interconnect)
 
     def _instantiate_user_ip(self):
         """
@@ -1566,6 +1566,8 @@ class VivadoBackend(ToolflowBackend):
 
             # Let Yellow Blocks add their own tcl commands
             self.gen_yellowblock_tcl_cmds()
+            # Let Yellow Blocks add their own HDL files
+            self.gen_yellowblock_custom_hdl()
 
         # Non-Project mode is enabled
         # Options can be added to the *_design commands to change strategies
@@ -1880,9 +1882,12 @@ class VivadoBackend(ToolflowBackend):
         for obj in self.periph_objs:
             c = obj.gen_custom_hdl()
             for key, val in c.iteritems():
-                pass
-                #TODO: add source to a file in the project directory and add a 
-                # tcl command to add it as a source to the project.
+                # create file and write the source string to it
+                f = open('%s/%s' %(self.compile_dir, key),"w")
+                f.write(val)
+                f.close()
+                # add the tcl command to add the source to the project
+                self.add_source('%s/%s' %(self.compile_dir, key), self.plat)
 
     def gen_constraint_file(self, constraints):
         """

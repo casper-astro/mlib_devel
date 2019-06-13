@@ -6,7 +6,7 @@ class xsg(YellowBlock):
         Things the toolflow has to know. eg, clocks needed/provided
         '''
         self.platform.user_clk_rate = self.clk_rate
-        if self.platform.name == 'skarab':
+        if self.platform.name == 'skarab' or self.platform.name == 'red_pitaya' :
             self.requires.append(self.clk_src)  # we need something to provide the clock we plan to use
             self.provides.append('user_clk')
         else:
@@ -26,7 +26,7 @@ class xsg(YellowBlock):
         return [YellowBlock.make_block(this_block_params, self.platform)]
 
     def modify_top(self,top):
-        if self.platform.name == 'skarab':
+        if self.platform.name == 'skarab' or self.platform.name == 'red_pitaya' :
             top.add_signal('user_clk')
             top.assign_signal('user_clk', self.clk_src)
         else:
