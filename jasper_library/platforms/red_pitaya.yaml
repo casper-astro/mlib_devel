@@ -14,12 +14,102 @@ constraints:
 provides:
   - sys_clk
 pins:
-  MEZZANINE_0_INT_N:
+  ADC_DATA_IN1:
     iostd: LVCMOS18
-    loc: B31 
-  MEZ0_PHY11_LANE_TX_N:
     loc:
-      - AC44
-      - AD42
-      - AE44
-      - AF42
+       - W14
+       - Y14
+       - W13
+       - V12
+       - V13
+       - T14
+       - T15
+       - V15
+       - T16
+       - V16
+  ADC_DATA_IN2:
+    iostd: LVCMOS18
+    loc:
+       - R19
+       - T20
+       - T19
+       - U20
+       - V20
+       - W20
+       - W19
+       - Y19
+       - W18
+       - Y18
+  ADC_CLK_IN_P:
+    iostd: LVCMOS18
+    loc: U18
+  ADC_CLK_IN_N:
+    iostd: LVCMOS18
+    loc: U19
+  ADC_CLK_STB_OUT:
+    iostd: LVCMOS18
+    loc: V18
+  FCLK_P:
+    iostd: LVCMOS18
+    loc: N20
+  FCLK_N:
+    iostd: LVCMOS18
+    loc: P20
+  led:
+    iostd: LVCMOS33
+    loc:
+       - F16
+       - F17
+       - G15
+       - H15
+       - K14
+       - G14
+       - J15
+       - J14
+  gpio:
+    iostd: LVCMOS33
+    loc:
+       - G17
+       - G18
+       - H16
+       - H17
+       - J18
+       - H18
+       - K17
+       - K18
+       - L14
+       - L15
+       - L16
+       - L17
+       - K16
+       - J16
+  DAC_DATA_OUT:
+    iostd: LVCMOS33
+    loc:
+       - K19
+       - J19
+       - J20
+       - H20
+       - G19
+       - G20
+       - F19
+       - F20
+       - D20
+       - D19
+  DAC_IQWRT:
+    iostd: LVCMOS33
+    loc: M17
+  DAC_IQSEL:
+    iostd: LVCMOS33
+    loc: N16
+  DAC_IQCLK:
+    iostd: LVCMOS33
+    loc: M18
+  DAC_IQRESET:
+    iostd: LVCMOS33
+    loc: N15
+
+
+
+
+
