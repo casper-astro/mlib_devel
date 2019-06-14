@@ -34,12 +34,16 @@ class red_pitaya_adc(YellowBlock):
 
         #Populate Generics with ADC yellow block parameters
         inst.add_parameter('NUM_OF_BITS', self.bits)
-        inst.add_parameter('MODE', self.mode)
+        #Mode selection at compile time
+        if self.mode =='IQ':
+            inst.add_parameter('MODE', 0)
+        else:
+            inst.add_parameter('MODE', 1)
         inst.add_parameter('DECIMATE_FACTOR', self.decimate)
 
         #FPGA port interfaces to ADC firmware module
-        inst.add_port('ADC_DATA_IN1', 'ADC_IN1', parent_port=True, dir='in', width=self.bits)
-        inst.add_port('ADC_DATA_IN2', 'ADC_IN2', parent_port=True,  dir='in', width=self.bits)
+        inst.add_port('ADC_DATA_IN1', 'ADC_DATA_IN1', parent_port=True, dir='in', width=self.bits)
+        inst.add_port('ADC_DATA_IN2', 'ADC_DATA_IN2', parent_port=True,  dir='in', width=self.bits)
         inst.add_port('ADC_CLK_IN', signal='adc_clk', parent_port=True, dir='in')
         #ADC Clock duty cycle stabilizer
         inst.add_port('ADC_CLK_STB_OUT', signal='ADC_CLK_STB_OUT', parent_port=True, dir='out')
