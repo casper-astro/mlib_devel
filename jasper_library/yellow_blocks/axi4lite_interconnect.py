@@ -55,12 +55,11 @@ class axi4lite_interconnect(YellowBlock):
         for key, val in self.memory_map.items():
             for reg in val["memory_map"]:
                 if (reg.mode == "r"):
-                    inst.add_port(key + '_' + reg.name,         self.design_name + '_' + reg.name + '_user_data_in',  dir='out', width=32, parent_sig=True)
-                    inst.add_port(key + '_' + reg.name + '_we', self.design_name + '_' + reg.name + '_we',            dir='out', width=1)
+                    inst.add_port('axi4lite_%s_%s_in'     %(key, reg.name), '%s_%s_in'     %(self.design_name, reg.name), dir='out', width=32, parent_sig=True)
+                    inst.add_port('axi4lite_%s_%s_in_we'  %(key, reg.name), '%s_%s_in_we'  %(self.design_name, reg.name), dir='out', width=1)
                 if (reg.mode == "rw"):
-                    inst.add_port(key + '_' + reg.name,         self.design_name + '_' + reg.name + '_user_data_out', dir='out', width=32, parent_sig=True)
-                    inst.add_port(key + '_' + reg.name + '_re', self.design_name + '_' + reg.name + '_re',            dir='in' , width=1)
-
+                    inst.add_port('axi4lite_%s_%s_out'    %(key, reg.name), '%s_%s_out'    %(self.design_name, reg.name), dir='in', width=32, parent_sig=True)
+                    inst.add_port('axi4lite_%s_%s_out_we' %(key, reg.name), '%s_%s_out_we' %(self.design_name, reg.name), dir='in', width=1)
 
     def gen_tcl_cmds(self):
         print('axi4lite gen_tcl_cmds')
@@ -70,10 +69,13 @@ class axi4lite_interconnect(YellowBlock):
         tcl_cmds = {}
         tcl_cmds['pre_synth'] = []
         tcl_cmds['pre_synth'] += ['add_files {%s/axi4_lite/axi4lite_slave_logic.vhd /home/wnew/casper/mlib_devel_rp/jasper_library/hdl_sources/axi4_lite/axi4lite_pkg.vhd}' %self.hdl_root]
-        tcl_cmds['pre_synth'] += ['set_property library work [get_files  {%s/axi4_lite/axi4lite_slave_logic.vhd /home/wnew/casper/mlib_devel_rp/jasper_library/hdl_sources/axi4_lite/axi4lite_pkg.vhd}]' %self.hdl_root]
-        tcl_cmds['pre_synth'] += ['add_files {%s/utils/cdc_synchroniser.vhd}' %self.hdl_root]
+        #tcl_cmds['pre_synth'] += ['set_property library work [get_files  {%s/axi4_lite/axi4lite_slave_logic.vhd /home/wnew/casper/mlib_devel_rp/jasper_library/hdl_sources/axi4_lite/axi4lite_pkg.vhd}]' %self.hdl_root]
+        #tcl_cmds['pre_synth'] += ['add_files {%s/utils/cdc_synchroniser.vhd}' %self.hdl_root]
         tcl_cmds['pre_synth'] += ['update_compile_order -fileset sources_1']
         return tcl_cmds
+
+    def add_build_dir_source(self):
+        return [{'files':'xml2vhdl_hdl_output/', 'library':'work'}]
 
 
     # create axi4lite_wrapper vhdl module
@@ -88,7 +90,7 @@ class axi4lite_interconnect(YellowBlock):
             libs.append('axi4lite_%s_pkg'%key)
 
         axi4lite_wrapper.add_library('ieee', ['std_logic_1164'])
-        axi4lite_wrapper.add_library('work', libs)
+        axi4lite_wrapper.add_library('xil_defaultlib', libs)
         axi4lite_wrapper.gen_file()
         
         # axi4lite clock and reset signals
@@ -121,18 +123,18 @@ class axi4lite_interconnect(YellowBlock):
             for reg in val["memory_map"]:
                 if (reg.mode == "rw"):
                     # add ports
-                    axi4lite_wrapper.add_port('axi4lite_%s_out_%s'      %(key, reg.name), '%s_out_%s_user_data_in'    %(self.design_name, reg.name), dir='out', width=32, parent_sig=True)
-                    axi4lite_wrapper.add_port('axi4lite_%s_out_we_%s'   %(key, reg.name), '%s_out_we_%s'              %(self.design_name, reg.name), dir='out',   width=1)
+                    axi4lite_wrapper.add_port('axi4lite_%s_%s_out'      %(key, reg.name), '%s_out_%s_user_data_in'    %(self.design_name, reg.name), dir='out', width=32, parent_sig=True)
+                    axi4lite_wrapper.add_port('axi4lite_%s_%s_out_we'   %(key, reg.name), '%s_out_we_%s'              %(self.design_name, reg.name), dir='out',   width=1)
                     # add signals
-                    axi4lite_wrapper.add_assign('axi4lite_%s_out_%s'    %(key, reg.name), 'axi4lite_%s_out.%s'    %(key, reg.name))
-                    axi4lite_wrapper.add_assign('axi4lite_%s_out_we_%s' %(key, reg.name), 'axi4lite_%s_out_we.%s' %(key, reg.name))
+                    axi4lite_wrapper.add_assign('axi4lite_%s_%s_out'    %(key, reg.name), 'axi4lite_%s_out.%s'    %(key, reg.name))
+                    axi4lite_wrapper.add_assign('axi4lite_%s_%s_out_we' %(key, reg.name), 'axi4lite_%s_out_we.%s' %(key, reg.name))
                 if (reg.mode == "r"):
                     # add ports
-                    axi4lite_wrapper.add_port('axi4lite_%s_in_%s'       %(key, reg.name), '%s_in_%s_user_data_in'    %(self.design_name, reg.name), dir='in', width=32, parent_sig=True)
-                    axi4lite_wrapper.add_port('axi4lite_%s_in_we_%s'    %(key, reg.name), '%s_in_we_%s'              %(self.design_name, reg.name), dir='in',  width=1)
+                    axi4lite_wrapper.add_port('axi4lite_%s_%s_in'       %(key, reg.name), '%s_in_%s_user_data_in'    %(self.design_name, reg.name), dir='in', width=32, parent_sig=True)
+                    axi4lite_wrapper.add_port('axi4lite_%s_%s_in_we'    %(key, reg.name), '%s_in_we_%s'              %(self.design_name, reg.name), dir='in',  width=1)
                     # add signals
-                    axi4lite_wrapper.add_assign('axi4lite_%s_in.%s'     %(key, reg.name), 'axi4lite_%s_in_%s'     %(key, reg.name))
-                    axi4lite_wrapper.add_assign('axi4lite_%s_in_we.%s'  %(key, reg.name), 'axi4lite_%s_in_we_%s'  %(key, reg.name))
+                    axi4lite_wrapper.add_assign('axi4lite_%s_in.%s'     %(key, reg.name), 'axi4lite_%s_%s_in'     %(key, reg.name))
+                    axi4lite_wrapper.add_assign('axi4lite_%s_in_we.%s'  %(key, reg.name), 'axi4lite_%s_%s_in_we'  %(key, reg.name))
 
         # add signals for the axi4lite interfaces
         axi4lite_wrapper.add_signal('axi4lite_mosi_arr', 't_axi4lite_mosi_arr(0 to c_axi4lite_mmap_nof_slave-1)')
@@ -220,9 +222,9 @@ class vhdlModule(object):
         self.complete_text = ''
 
     def add_library(self, library, packages=[]):
-        self.library_text += "library %s ;\n" %library
+        self.library_text += "library %s;\n" %library
         for pkg in packages:
-            self.library_text += "use %s.%s.all; \n" %(library, pkg)
+            self.library_text += "use %s.%s.all;\n" %(library, pkg)
         self.library_text += '\n'
 
     def add_port(self, name, signal=None, dir='out', parent_port=False, parent_sig=True, comment=None, **kwargs):

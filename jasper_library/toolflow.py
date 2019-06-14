@@ -854,7 +854,7 @@ class Toolflow(object):
         # generate xml interconnect for input
         self.generate_xml_ic(self.top.memory_map)
         # execute xml2vhdl script
-        os.system('python %sxml2vhdl.py -d %s -x %s -v %s' % (self.xml2vhdl_path, self.xml_source_dir, self.xml_output_dir, self.hdl_output_dir))
+        os.system('python %sxml2vhdl.py -d %s -x %s -v %s -s %s -b %s' % (self.xml2vhdl_path, self.xml_source_dir, self.xml_output_dir, self.hdl_output_dir, 'xil_defaultlib', 'xil_defaultlib'))
 
 
 class ToolflowFrontend(object):
@@ -1568,6 +1568,8 @@ class VivadoBackend(ToolflowBackend):
             self.gen_yellowblock_tcl_cmds()
             # Let Yellow Blocks add their own HDL files
             self.gen_yellowblock_custom_hdl()
+            # add source files to the project from the compile directory
+            self.gen_add_compile_dir_source_tcl_cmds()
 
         # Non-Project mode is enabled
         # Options can be added to the *_design commands to change strategies
@@ -1888,6 +1890,21 @@ class VivadoBackend(ToolflowBackend):
                 f.close()
                 # add the tcl command to add the source to the project
                 self.add_source('%s/%s' %(self.compile_dir, key), self.plat)
+
+    def gen_add_compile_dir_source_tcl_cmds(self):
+        """
+        Run each blocks add_compile_dir_source functions and add them to the projects sources
+        """
+        self.logger.info('Generating yellow block custom hdl files')
+        for obj in self.periph_objs:
+            c = obj.add_build_dir_source()
+            for d in c:
+                #self.add_source('%s/%s' %(self.compile_dir, d['files']), self.plat)
+                self.add_tcl_cmd('add_files %s/%s' %(self.compile_dir, d['files']), stage='pre_synth')
+                #if d['library'] != '':
+                    # add the source to a library if the library key exists
+                #    self.add_tcl_cmd('set_property library %s [get_files  {%s/%s%s}]' %(d['library'], self.compile_dir, d['files'], '*' if d['files'][-1]=='/' else ''), stage='pre_synth')
+        self.add_tcl_cmd('update_compile_order -fileset sources_1')
 
     def gen_constraint_file(self, constraints):
         """

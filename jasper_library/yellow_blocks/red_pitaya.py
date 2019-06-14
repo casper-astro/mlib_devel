@@ -5,18 +5,19 @@ from constraints import ClockConstraint, PortConstraint, RawConstraint
 class red_pitaya(YellowBlock):
     def initialize(self):
         self.add_source('infrastructure/red_pitaya.v')
+        self.add_source('utils/cdc_synchroniser.vhd')
         self.add_source('red_pitaya')
 
     def modify_top(self,top):
         inst = top.get_instance('red_pitaya', 'red_pitaya_inst')
         inst.add_port('sys_clk', 'axi_clk')
-        inst.add_port('peripheral_areset_n', 'peripheral_areset_n')
+        inst.add_port('peripheral_aresetn', 'peripheral_aresetn')
 
-        inst.add_port('M_AXI_araddr', 'M_AXI_araddr', width=31)
+        inst.add_port('M_AXI_araddr', 'M_AXI_araddr', width=32)
         inst.add_port('M_AXI_arprot', 'M_AXI_arprot', width=3)
         inst.add_port('M_AXI_arready', 'M_AXI_arready')
         inst.add_port('M_AXI_arvalid', 'M_AXI_arvalid')
-        inst.add_port('M_AXI_awaddr', 'M_AXI_awaddr', width=31)
+        inst.add_port('M_AXI_awaddr', 'M_AXI_awaddr', width=32)
         inst.add_port('M_AXI_awprot', 'M_AXI_awprot', width=3)
         inst.add_port('M_AXI_awready', 'M_AXI_awready')
         inst.add_port('M_AXI_awvalid', 'M_AXI_awvalid')
