@@ -24,8 +24,8 @@ class red_pitaya_adc(YellowBlock):
         # self.bitwidth = int(self.bitwidth)
         # add the source files, which have the same name as the module (this is the verilog module created above)
         self.module = 'red_pitaya_adc'
-        self.add_source('red_pitaya/*.v')
-        self.add_source('red_pitaya/adc_data_fifo/*.xci')
+        self.add_source('red_pitaya_adc/*.v')
+        self.add_source('red_pitaya_adc/adc_data_fifo/*.xci')
 
     def modify_top(self,top):
         
@@ -34,12 +34,6 @@ class red_pitaya_adc(YellowBlock):
 
         #Populate Generics with ADC yellow block parameters
         inst.add_parameter('NUM_OF_BITS', self.bits)
-        #Mode selection at compile time
-        if self.mode =='IQ':
-            inst.add_parameter('MODE', 0)
-        else:
-            inst.add_parameter('MODE', 1)
-        inst.add_parameter('DECIMATE_FACTOR', self.decimate)
 
         #FPGA port interfaces to ADC firmware module
         inst.add_port('ADC_DATA_IN1', 'ADC_DATA_IN1', parent_port=True, dir='in', width=self.bits)
@@ -53,11 +47,8 @@ class red_pitaya_adc(YellowBlock):
 
         # Simulink interface to/from yellow block to ADC firmware module
         inst.add_port('ADC_RST_IN', signal='%s_adc_reset_in' % self.fullname, dir='in')
-        inst.add_port('ADC0_DATA_VAL_OUT', signal='%s_adc0_data_val_out' % self.fullname, dir='out')
+        inst.add_port('ADC_DATA_VAL_OUT', signal='%s_adc0_data_val_out' % self.fullname, dir='out')
         inst.add_port('ADC0_DATA_I_OUT', signal='%s_adc0_data_i_out' % self.fullname, dir='out',width=self.bits)
-        inst.add_port('ADC0_DATA_Q_OUT', signal='%s_adc0_data_q_out' % self.fullname, dir='out',width=self.bits)
-        inst.add_port('ADC1_DATA_VAL_OUT', signal='%s_adc1_data_val_out' % self.fullname, dir='out')
-        inst.add_port('ADC1_DATA_I_OUT', signal='%s_adc1_data_i_out' % self.fullname, dir='out',width=self.bits)
         inst.add_port('ADC1_DATA_Q_OUT', signal='%s_adc1_data_q_out' % self.fullname, dir='out',width=self.bits)
 
 
