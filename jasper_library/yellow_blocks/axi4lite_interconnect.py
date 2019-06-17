@@ -26,7 +26,7 @@ class axi4lite_interconnect(YellowBlock):
         # instantiate axi4lite wrapper
         # clk and rst signals
         inst.add_port('axi4lite_aclk',    'sys_clk',              dir='out')
-        inst.add_port('axi4lite_aresetn', 'peripheral_aresetn_0', dir='out')
+        inst.add_port('axi4lite_aresetn', 'peripheral_aresetn', dir='out')
 
         # axi4l miso signals
         inst.add_port('s_axi4lite_awready', 'M_AXI_awready', dir='out', width=1,  parent_sig=False)

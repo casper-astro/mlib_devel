@@ -15,6 +15,7 @@ module red_pitaya_infrastructure #(
         output adc_rst,
         output dac_clk_250,
         output dac_rst,
+        output dac_clk_250_315,
 
         output adc_mmcm_locked
     );
@@ -24,6 +25,7 @@ module red_pitaya_infrastructure #(
     wire usr_clk_mmcm;
     wire adc_clk_mmcm;
     wire dac_clk_mmcm;
+    wire dac_clk_250_315_mmcm;
     wire usr_mmcm_lock;
     wire adc_mmcm_lock;
     
@@ -101,7 +103,7 @@ module red_pitaya_infrastructure #(
         .CLKOUT0_PHASE      (0.0),
         .CLKOUT1_PHASE      (0.0),
         .CLKOUT2_PHASE      (0.0),
-        .CLKOUT3_PHASE      (0.0),
+        .CLKOUT3_PHASE      (-45.0),
         .CLKOUT4_PHASE      (0.0),
         .CLKOUT5_PHASE      (0.0),
         .CLKOUT6_PHASE      (0.0),
@@ -127,19 +129,19 @@ module red_pitaya_infrastructure #(
         .CLKOUT1B (),
         .CLKOUT2  (dac_clk_250_mmcm),
         .CLKOUT2B (),
-        .CLKOUT3  (),
+        .CLKOUT3  (dac_clk_250_315_mmcm),
         .CLKOUT3B (),
         .CLKOUT4  (),
         .CLKOUT5  (),
         .CLKOUT6  (),
-        .LOCKED   (adc_mmcm_lock),
+        .LOCKED   (adc_mmcm_locked),
         .PWRDWN   (1'b0),
         .RST      (1'b0)
     );
     
-    BUFG bufg_sysclk[2:0](
-      .I({usr_clk_mmcm, adc_clk_125_mmcm, dac_clk_250_mmcm}),
-      .O({usr_clk,      adc_clk_125,      dac_clk_250     })
+    BUFG bufg_sysclk[3:0](
+      .I({usr_clk_mmcm, adc_clk_125_mmcm, dac_clk_250_mmcm, dac_clk_250_315_mmcm}),
+      .O({usr_clk,      adc_clk_125,      dac_clk_250     , dac_clk_250_315})
     );
     
     // TODO: Check this logic and look a the resets
