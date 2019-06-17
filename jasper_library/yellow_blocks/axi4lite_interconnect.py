@@ -68,9 +68,7 @@ class axi4lite_interconnect(YellowBlock):
         #IPython.embed()
         tcl_cmds = {}
         tcl_cmds['pre_synth'] = []
-        tcl_cmds['pre_synth'] += ['add_files {%s/axi4_lite/axi4lite_slave_logic.vhd /home/wnew/casper/mlib_devel_rp/jasper_library/hdl_sources/axi4_lite/axi4lite_pkg.vhd}' %self.hdl_root]
-        #tcl_cmds['pre_synth'] += ['set_property library work [get_files  {%s/axi4_lite/axi4lite_slave_logic.vhd /home/wnew/casper/mlib_devel_rp/jasper_library/hdl_sources/axi4_lite/axi4lite_pkg.vhd}]' %self.hdl_root]
-        #tcl_cmds['pre_synth'] += ['add_files {%s/utils/cdc_synchroniser.vhd}' %self.hdl_root]
+        tcl_cmds['pre_synth'] += ['add_files {%s/axi4_lite/axi4lite_slave_logic.vhd %s/axi4_lite/axi4lite_pkg.vhd}' %(self.hdl_root, self.hdl_root)]
         tcl_cmds['pre_synth'] += ['update_compile_order -fileset sources_1']
         return tcl_cmds
 

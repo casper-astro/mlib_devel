@@ -205,6 +205,7 @@ proc create_root_design { parentCell } {
 
   # Create ports
   set peripheral_aresetn [ create_bd_port -dir O -from 0 -to 0 -type rst peripheral_aresetn ]
+  set ps_rst [ create_bd_port -dir O ps_rst ]
   set sys_clk [ create_bd_port -dir O -type clk sys_clk ]
   set_property -dict [ list \
    CONFIG.ASSOCIATED_BUSIF {M_AXI} \
@@ -296,7 +297,7 @@ proc create_root_design { parentCell } {
 
   # Create port connections
   connect_bd_net -net processing_system7_0_FCLK_CLK0 [get_bd_ports sys_clk] [get_bd_pins axi_protocol_convert_0/aclk] [get_bd_pins processing_system7_0/FCLK_CLK0] [get_bd_pins processing_system7_0/M_AXI_GP0_ACLK] [get_bd_pins rst_ps7_0_50M/slowest_sync_clk]
-  connect_bd_net -net processing_system7_0_FCLK_RESET0_N [get_bd_pins processing_system7_0/FCLK_RESET0_N] [get_bd_pins rst_ps7_0_50M/ext_reset_in]
+  connect_bd_net -net processing_system7_0_FCLK_RESET0_N [get_bd_ports ps_rst] [get_bd_pins processing_system7_0/FCLK_RESET0_N] [get_bd_pins rst_ps7_0_50M/ext_reset_in]
   connect_bd_net -net rst_ps7_0_50M_interconnect_aresetn [get_bd_pins axi_protocol_convert_0/aresetn] [get_bd_pins rst_ps7_0_50M/interconnect_aresetn]
   connect_bd_net -net rst_ps7_0_50M_peripheral_aresetn [get_bd_ports peripheral_aresetn] [get_bd_pins rst_ps7_0_50M/peripheral_aresetn]
 

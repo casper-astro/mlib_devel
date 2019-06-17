@@ -146,5 +146,7 @@ module red_pitaya_infrastructure #(
     
     // TODO: Check this logic and look a the resets
     assign usr_rst = !(adc_mmcm_lock & usr_mmcm_lock);
+    assign adc_rst = !(adc_mmcm_lock & usr_mmcm_lock);
+    assign dac_rst = !(adc_mmcm_lock & usr_mmcm_lock);
 
 endmodule
