@@ -13,6 +13,7 @@ constraints:
   - red_pitaya.xdc
 provides:
   - sys_clk
+  - adc_clk
 pins:
   ADC_DATA_IN1:
     iostd: LVCMOS18

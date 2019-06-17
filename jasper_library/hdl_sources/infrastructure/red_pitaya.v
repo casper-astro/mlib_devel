@@ -1,7 +1,7 @@
 module red_pitaya_infrastructure #(
-        parameter MULTIPLY = 1;
-        parameter DIVIDE   = 1;
-        parameter DIVCLK   = 1;
+        parameter MULTIPLY = 1,
+        parameter DIVIDE   = 1,
+        parameter DIVCLK   = 1
     ) (
         //input  sys_clk_buf_n,
         //input  sys_clk_buf_p,
@@ -12,7 +12,7 @@ module red_pitaya_infrastructure #(
         output usr_rst,
 
         output adc_clk_125,
-        output adr_rst,
+        output adc_rst,
         output dac_clk_250,
         output dac_rst,
 
@@ -24,10 +24,11 @@ module red_pitaya_infrastructure #(
     wire usr_clk_mmcm;
     wire adc_clk_mmcm;
     wire dac_clk_mmcm;
-    wire mmcm_lock;
+    wire usr_mmcm_lock;
+    wire adc_mmcm_lock;
     
     // single clock input
-    IBUF adc_clk_ibuf (.I (adc_clk_in, .O (adc_clk_ibuf));  // differential clock input
+    IBUF adc_clk_ibuf_inst (.I (adc_clk_in), .O (adc_clk_ibuf));  // differential clock input
     
     // diferential clock input
     // IBUFDS i_clk (.I (adc_clk_i[1]), .IB (adc_clk_i[0]), .O (adc_clk_ibufds));  // differential clock input
@@ -65,8 +66,8 @@ module red_pitaya_infrastructure #(
         .STARTUP_WAIT       ("FALSE")
     ) usr_clk_mmcm_inst (
         .CLKIN1   (adc_clk_ibuf),
-        .CLKFBIN  (clk_fb),
-        .CLKFBOUT  (clk_fb),
+        .CLKFBIN  (usr_clk_mmcm_fb),
+        .CLKFBOUT  (usr_clk_mmcm_fb),
         .CLKFBOUTB (),
         .CLKOUT0  (usr_clk_mmcm),
         .CLKOUT0B (),
@@ -79,7 +80,7 @@ module red_pitaya_infrastructure #(
         .CLKOUT4  (),
         .CLKOUT5  (),
         .CLKOUT6  (),
-        .LOCKED   (mmcm_lock),
+        .LOCKED   (usr_mmcm_lock),
         .PWRDWN   (1'b0),
         .RST      (1'b0)
     );
@@ -117,8 +118,8 @@ module red_pitaya_infrastructure #(
         .STARTUP_WAIT       ("FALSE")
     ) adc_clk_mmcm_inst (
         .CLKIN1   (adc_clk_ibuf),
-        .CLKFBIN  (clk_fb),
-        .CLKFBOUT  (clk_fb),
+        .CLKFBIN  (adc_clk_mmcm_fb),
+        .CLKFBOUT  (adc_clk_mmcm_fb),
         .CLKFBOUTB (),
         .CLKOUT0  (),
         .CLKOUT0B (),
@@ -131,7 +132,7 @@ module red_pitaya_infrastructure #(
         .CLKOUT4  (),
         .CLKOUT5  (),
         .CLKOUT6  (),
-        .LOCKED   (mmcm_lock),
+        .LOCKED   (adc_mmcm_lock),
         .PWRDWN   (1'b0),
         .RST      (1'b0)
     );
@@ -141,6 +142,7 @@ module red_pitaya_infrastructure #(
       .O({usr_clk,      adc_clk_125,      dac_clk_250     })
     );
     
-    assign usr_rst = mmcm_lock;
+    // TODO: Check this logic and look a the resets
+    assign usr_rst = !(adc_mmcm_lock & usr_mmcm_lock);
 
 endmodule

@@ -1,4 +1,5 @@
 from yellow_block import YellowBlock
+from clk_factors import clk_factors
 from constraints import ClockConstraint, PortConstraint, RawConstraint
 
 
@@ -10,7 +11,7 @@ class red_pitaya(YellowBlock):
 
     def modify_top(self,top):
         inst = top.get_instance('red_pitaya', 'red_pitaya_inst')
-        inst.add_port('sys_clk', 'axi_clk')
+        inst.add_port('sys_clk', 'sys_clk')
         inst.add_port('peripheral_aresetn', 'peripheral_aresetn')
 
         inst.add_port('M_AXI_araddr', 'M_AXI_araddr', width=32)
@@ -32,6 +33,21 @@ class red_pitaya(YellowBlock):
         inst.add_port('M_AXI_wready', 'M_AXI_wready')
         inst.add_port('M_AXI_wstrb', 'M_AXI_wstrb', width=4)
         inst.add_port('M_AXI_wvalid', 'M_AXI_wvalid')
+        
+        clk_factors
+        clkparams = clk_factors(125, self.platform.user_clk_rate)
+
+        inst_infr = top.get_instance('red_pitaya_infrastructure', 'red_pitaya_infr_inst')
+        inst_infr.add_parameter('MULTIPLY', clkparams[0])
+        inst_infr.add_parameter('DIVIDE',   clkparams[1])
+        inst_infr.add_parameter('DIVCLK',   clkparams[2])
+        inst_infr.add_port('adc_clk_in',  "ADC_CLK_IN_P", dir='in',  width=1, parent_port=True)
+        inst_infr.add_port('usr_clk',     "usr_clk",      dir='out', width=1)
+        inst_infr.add_port('usr_rst',     "usr_rst",      dir='out', width=1)
+        inst_infr.add_port('adc_clk_125', "adc_clk",      dir='out', width=1)
+        inst_infr.add_port('adc_rst',     "adc_rst",      dir='out', width=1)
+        inst_infr.add_port('dac_clk_250', "dac_clk",      dir='out', width=1)
+        inst_infr.add_port('dac_rst',     "dac_rst ",     dir='out', width=1)
 
     def gen_children(self):
         return [YellowBlock.make_block({'tag': 'xps:sys_block', 'board_id': '3', 'rev_maj': '2', 'rev_min': '0', 'rev_rcs': '1'}, self.platform)]
