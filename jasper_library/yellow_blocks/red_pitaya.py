@@ -59,6 +59,7 @@ class red_pitaya(YellowBlock):
 
     def gen_constraints(self):
         cons = []
+        cons.append(PortConstraint('ADC_CLK_IN_P', 'ADC_CLK_IN_P'))
         cons.append(ClockConstraint('ADC_CLK_IN_P','ADC_CLK_IN_P', period=8.0, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=4.0))
 
         return cons

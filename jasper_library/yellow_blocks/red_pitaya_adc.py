@@ -1,7 +1,7 @@
 import os
 from yellow_block import YellowBlock
 from constraints import PortConstraint, ClockConstraint, ClockGroupConstraint, MultiCycleConstraint, \
-    OutputDelayConstraint, RawConstraint, FalsePathConstraint
+    OutputDelayConstraint, InputDelayConstraint, RawConstraint, FalsePathConstraint
 from helpers import to_int_list
 
 class red_pitaya_adc(YellowBlock):
@@ -38,16 +38,17 @@ class red_pitaya_adc(YellowBlock):
         #FPGA port interfaces to ADC firmware module
         inst.add_port('ADC_DATA_IN1', 'ADC_DATA_IN1', parent_port=True, dir='in', width=self.bits)
         inst.add_port('ADC_DATA_IN2', 'ADC_DATA_IN2', parent_port=True,  dir='in', width=self.bits)
-        inst.add_port('ADC_CLK_IN', signal='adc_clk', parent_port=True, dir='in')
         #ADC Clock duty cycle stabilizer
         inst.add_port('ADC_CLK_STB_OUT', signal='ADC_CLK_STB_OUT', parent_port=True, dir='out')
 
-        inst.add_port('DSP_CLK_IN', signal='dsp_clk', dir='in')
-        inst.add_port('DSP_RST_IN', signal='dsp_rst', dir='in')
+        inst.add_port('DSP_CLK_IN', signal='usr_clk', parent_sig=False, dir='in')
+        inst.add_port('DSP_RST_IN', signal='usr_rst', parent_sig=False, dir='in')
+        inst.add_port('ADC_RST_IN2', signal='adc_rst', parent_sig=False, dir='in')
+        inst.add_port('ADC_CLK_IN', signal='adc_clk', parent_sig=False, dir='in')
 
         # Simulink interface to/from yellow block to ADC firmware module
         inst.add_port('ADC_RST_IN', signal='%s_adc_reset_in' % self.fullname, dir='in')
-        inst.add_port('ADC_DATA_VAL_OUT', signal='%s_adc0_data_val_out' % self.fullname, dir='out')
+        inst.add_port('ADC_DATA_VAL_OUT', signal='%s_adc_data_val_out' % self.fullname, dir='out')
         inst.add_port('ADC0_DATA_I_OUT', signal='%s_adc0_data_i_out' % self.fullname, dir='out',width=self.bits)
         inst.add_port('ADC1_DATA_Q_OUT', signal='%s_adc1_data_q_out' % self.fullname, dir='out',width=self.bits)
 
@@ -72,6 +73,10 @@ class red_pitaya_adc(YellowBlock):
         #cons.append(ClockGroupConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', '%s/ADC32RF45_RX_3/ADC_PHY_inst/ADC_GT_SUPPPORT_inst/JESD204B_4LaneRX_7500MHz_init_i/U0/JESD204B_4LaneRX_7500MHz_i/gt0_JESD204B_4LaneRX_7500MHz_i/gthe2_i/RXOUTCLK'% self.fullname, 'asynchronous'))
 
         #input constraints
+        cons.append(InputDelayConstraint(clkname='ADC_CLK_IN_P', consttype='min', constdelay_ns=3.4, add_delay_en=True, portname='ADC_DATA_IN1'))
+        cons.append(InputDelayConstraint(clkname='ADC_CLK_IN_P', consttype='max', constdelay_ns=3.4, add_delay_en=True, portname='ADC_DATA_IN1'))
+        cons.append(InputDelayConstraint(clkname='ADC_CLK_IN_P', consttype='min', constdelay_ns=3.4, add_delay_en=True, portname='ADC_DATA_IN2'))
+        cons.append(InputDelayConstraint(clkname='ADC_CLK_IN_P', consttype='max', constdelay_ns=3.4, add_delay_en=True, portname='ADC_DATA_IN2'))
 
 
         # Output Constraints

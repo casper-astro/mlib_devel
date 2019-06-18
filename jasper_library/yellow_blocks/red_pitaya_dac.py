@@ -43,9 +43,10 @@ class red_pitaya_dac(YellowBlock):
         inst.add_port('DAC_IQCLK', signal='DAC_IQCLK', parent_port=True, dir='out')
         inst.add_port('DAC_IQRESET', signal='DAC_IQRESET', parent_port=True, dir='out')
 
-        inst.add_port('ADC_CLK_IN', signal='adc_clk', dir='in')
-        inst.add_port('DAC_CLK_IN', signal='dac_clk', dir='in')
-        inst.add_port('DAC_CLK_P_IN', signal='dac_clk_p', dir='in')
+        inst.add_port('ADC_CLK_IN', signal='adc_clk', parent_sig=False, dir='in')
+        inst.add_port('DAC_CLK_IN', signal='dac_clk', parent_sig=False,  dir='in')
+        inst.add_port('DAC_CLK_P_IN', signal='dac_clk_p', parent_sig=False, dir='in')
+        inst.add_port('DAC_RST_IN2', signal='dac_rst', parent_sig=False, dir='in')
 
         # Simulink interface to/from yellow block to DAC firmware module
         inst.add_port('DAC_RST_IN', signal='%s_dac_reset_in' % self.fullname, dir='in')
