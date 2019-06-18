@@ -73,7 +73,7 @@ class axi4lite_interconnect(YellowBlock):
         return tcl_cmds
 
     def add_build_dir_source(self):
-        return [{'files':'xml2vhdl_hdl_output/', 'library':'work'}]
+        return [{'files':'xml2vhdl_hdl_output/', 'library':'xil_defaultlib'}]
 
 
     # create axi4lite_wrapper vhdl module
@@ -83,7 +83,7 @@ class axi4lite_interconnect(YellowBlock):
 
         axi4lite_wrapper = vhdlModule("axi4lite_ic_wrapper")
 
-        libs = ['axi4lite_pkg', 'axi4lite_axi4lite_ic_pkg', 'axi4lite_axi4lite_mmap_pkg']
+        libs = ['axi4lite_pkg', 'axi4lite_axi4lite_top_ic_pkg', 'axi4lite_axi4lite_top_mmap_pkg']
         for key, val in self.memory_map.items():
             libs.append('axi4lite_%s_pkg'%key)
 
@@ -155,7 +155,7 @@ class axi4lite_interconnect(YellowBlock):
         self.ic_ports.append(Port('axi4lite_miso', 'axi4lite_miso'))
         self.ic_ports.append(Port('axi4lite_miso_arr', 'axi4lite_miso_arr'))
         # add interconnect instance
-        axi4lite_wrapper.add_instance('axi4lite_axi4lite_ic_inst', 'entity work.axi4lite_axi4lite_ic', self.ic_ports)
+        axi4lite_wrapper.add_instance('axi4lite_axi4lite_ic_inst', 'entity xil_defaultlib.axi4lite_axi4lite_top_ic', self.ic_ports)
 
 
         # ports for devices
@@ -171,7 +171,7 @@ class axi4lite_interconnect(YellowBlock):
             self.ic_ports.append(Port('axi4lite_%s_out'%key,    'axi4lite_%s_out'%key))
 
             # add interconnect instance
-            axi4lite_wrapper.add_instance('axi4lite_%s_inst'%key, 'entity work.axi4lite_%s'%key, self.ic_ports)
+            axi4lite_wrapper.add_instance('axi4lite_%s_inst'%key, 'entity xil_defaultlib.axi4lite_%s'%key, self.ic_ports)
 
         # TODO: only generate signals for in or out not both 
         # This should depend on the r/wr values of the registers
