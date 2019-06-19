@@ -37,7 +37,7 @@ class red_pitaya_dac(YellowBlock):
         inst.add_parameter('NUM_OF_BITS', self.bits)
 
         #FPGA port interfaces to DAC firmware module
-        inst.add_port('DAC_DATA_OUT', 'DAC_DATA_OUT', parent_port=True, dir='in', width=self.bits)
+        inst.add_port('DAC_DATA_OUT', 'DAC_DATA_OUT', parent_port=True, dir='out', width=self.bits)
         inst.add_port('DAC_IQWRT', signal='DAC_IQWRT', parent_port=True, dir='out')
         inst.add_port('DAC_IQSEL', signal='DAC_IQSEL', parent_port=True, dir='out')
         inst.add_port('DAC_IQCLK', signal='DAC_IQCLK', parent_port=True, dir='out')
@@ -80,20 +80,25 @@ class red_pitaya_dac(YellowBlock):
         #input constraints
 
 
-        # Output Constraints
-        #cons.append(OutputDelayConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', consttype='min', constdelay_ns=-3.0, add_delay_en=True, portname='sync_out_p'))
-        #cons.append(OutputDelayConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', consttype='max', constdelay_ns=-3.0, add_delay_en=True, portname='sync_out_p'))
+        # Output Constraints (setting to false path, so initial value made large)
+        #cons.append(OutputDelayConstraint('adc_clk_125_mmcm', consttype='min', constdelay_ns=0, add_delay_en=True, portname='DAC_DATA_OUT[*]'))
+        #cons.append(OutputDelayConstraint('adc_clk_125_mmcm', consttype='max', constdelay_ns=100, add_delay_en=True, portname='DAC_DATA_OUT[*]'))
+        #cons.append(OutputDelayConstraint('dac_clk_250_mmcm', consttype='min', constdelay_ns=0, add_delay_en=True, portname='DAC_IQWRT'))
+        #cons.append(OutputDelayConstraint('dac_clk_250_mmcm', consttype='max', constdelay_ns=100, add_delay_en=True, portname='DAC_IQWRT'))
+        #cons.append(OutputDelayConstraint('dac_clk_250_315_mmcm', consttype='min', constdelay_ns=0, add_delay_en=True, portname='DAC_IQCLK'))
+        #cons.append(OutputDelayConstraint('dac_clk_250_315_mmcm', consttype='max', constdelay_ns=100, add_delay_en=True, portname='DAC_IQCLK'))
+        #cons.append(OutputDelayConstraint('adc_clk_125_mmcm', consttype='min', constdelay_ns=0, add_delay_en=True, portname='DAC_IQRESET'))
+        #cons.append(OutputDelayConstraint('adc_clk_125_mmcm', consttype='max', constdelay_ns=100, add_delay_en=True, portname='DAC_IQRESET'))
+        #cons.append(OutputDelayConstraint('adc_clk_125_mmcm', consttype='min', constdelay_ns=0, add_delay_en=True, portname='DAC_IQSEL'))
+        #cons.append(OutputDelayConstraint('adc_clk_125_mmcm', consttype='max', constdelay_ns=100, add_delay_en=True, portname='DAC_IQSEL'))
 
         #False Path Constraints
-        #cons.append(FalsePathConstraint(destpath='[get_pins {%s/ADC32RF45_RX_0/ADC_RX_PHY_soft_reset_SR_reg[*]/PRE}]' % self.fullname))
-        #cons.append(FalsePathConstraint(destpath='[get_pins {%s/ADC32RF45_RX_0/reset_RX_SYNC_SR_reg[*]/PRE}]' % self.fullname))
-        #cons.append(FalsePathConstraint(destpath='[get_pins {%s/ADC32RF45_RX_1/ADC_RX_PHY_soft_reset_SR_reg[*]/PRE}]' % self.fullname))
-        #cons.append(FalsePathConstraint(destpath='[get_pins {%s/ADC32RF45_RX_1/reset_RX_SYNC_SR_reg[*]/PRE}]' % self.fullname))
-        #cons.append(FalsePathConstraint(destpath='[get_pins {%s/ADC32RF45_RX_2/ADC_RX_PHY_soft_reset_SR_reg[*]/PRE}]' % self.fullname))
-        #cons.append(FalsePathConstraint(destpath='[get_pins {%s/ADC32RF45_RX_2/reset_RX_SYNC_SR_reg[*]/PRE}]' % self.fullname))
-        #cons.append(FalsePathConstraint(destpath='[get_pins {%s/ADC32RF45_RX_3/ADC_RX_PHY_soft_reset_SR_reg[*]/PRE}]' % self.fullname))
-        #cons.append(FalsePathConstraint(destpath='[get_pins {%s/ADC32RF45_RX_3/reset_RX_SYNC_SR_reg[*]/PRE}]' % self.fullname))
-        
+        cons.append(FalsePathConstraint(destpath='[get_ports {DAC_DATA_OUT[*]}]'))
+        cons.append(FalsePathConstraint(destpath='[get_ports {DAC_IQWRT}]'))
+        cons.append(FalsePathConstraint(destpath='[get_ports {DAC_IQCLK}]'))
+        cons.append(FalsePathConstraint(destpath='[get_ports {DAC_IQRESET}]'))
+        cons.append(FalsePathConstraint(destpath='[get_ports {DAC_IQSEL}]'))
+
         #Raw Constraints
 
         return cons

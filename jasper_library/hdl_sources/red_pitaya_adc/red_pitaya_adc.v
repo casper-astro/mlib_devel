@@ -33,7 +33,7 @@ module red_pitaya_adc #(
 reg [NUM_OF_BITS-1:0] sAdc0DataIIn;
 reg [NUM_OF_BITS-1:0] sAdc1DataQIn;
 reg sAdcDataValidIn;
-reg [3:0] sAdcClkCount;
+reg [4:0] sAdcClkCount;
 
 wire Reset;
 

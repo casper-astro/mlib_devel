@@ -73,10 +73,10 @@ class red_pitaya_adc(YellowBlock):
         #cons.append(ClockGroupConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', '%s/ADC32RF45_RX_3/ADC_PHY_inst/ADC_GT_SUPPPORT_inst/JESD204B_4LaneRX_7500MHz_init_i/U0/JESD204B_4LaneRX_7500MHz_i/gt0_JESD204B_4LaneRX_7500MHz_i/gthe2_i/RXOUTCLK'% self.fullname, 'asynchronous'))
 
         #input constraints
-        cons.append(InputDelayConstraint(clkname='ADC_CLK_IN_P', consttype='min', constdelay_ns=3.4, add_delay_en=True, portname='ADC_DATA_IN1'))
-        cons.append(InputDelayConstraint(clkname='ADC_CLK_IN_P', consttype='max', constdelay_ns=3.4, add_delay_en=True, portname='ADC_DATA_IN1'))
-        cons.append(InputDelayConstraint(clkname='ADC_CLK_IN_P', consttype='min', constdelay_ns=3.4, add_delay_en=True, portname='ADC_DATA_IN2'))
-        cons.append(InputDelayConstraint(clkname='ADC_CLK_IN_P', consttype='max', constdelay_ns=3.4, add_delay_en=True, portname='ADC_DATA_IN2'))
+        cons.append(InputDelayConstraint(clkname='ADC_CLK_IN_P', consttype='min', constdelay_ns=3.4, add_delay_en=True, portname='ADC_DATA_IN1[*]'))
+        cons.append(InputDelayConstraint(clkname='ADC_CLK_IN_P', consttype='max', constdelay_ns=3.4, add_delay_en=True, portname='ADC_DATA_IN1[*]'))
+        cons.append(InputDelayConstraint(clkname='ADC_CLK_IN_P', consttype='min', constdelay_ns=3.4, add_delay_en=True, portname='ADC_DATA_IN2[*]'))
+        cons.append(InputDelayConstraint(clkname='ADC_CLK_IN_P', consttype='max', constdelay_ns=3.4, add_delay_en=True, portname='ADC_DATA_IN2[*]'))
 
 
         # Output Constraints

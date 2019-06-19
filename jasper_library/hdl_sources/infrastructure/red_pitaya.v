@@ -15,9 +15,8 @@ module red_pitaya_infrastructure #(
         output adc_rst,
         output dac_clk_250,
         output dac_rst,
-        output dac_clk_250_315,
+        output dac_clk_250_315
 
-        output adc_mmcm_locked
     );
 
     wire clk_fb;
@@ -39,7 +38,7 @@ module red_pitaya_infrastructure #(
         .BANDWIDTH          ("OPTIMIZED"), // Jitter programming ("HIGH","LOW","OPTIMIZED")
         .CLKFBOUT_MULT_F    (MULTIPLY), // Multiply value for all CLKOUT (5.0-64.0).
         .CLKFBOUT_PHASE     (0.0),
-        .CLKIN1_PERIOD      (5.0), // SNAP clock is 200 MHz
+        .CLKIN1_PERIOD      (8.0), // Red Pitaya clock is 125 MHz
         .CLKOUT0_DIVIDE_F   (DIVIDE),   // Divide amount for CLKOUT0 (1.000-128.000).
         .CLKOUT0_DUTY_CYCLE (0.5),
         .CLKOUT1_DUTY_CYCLE (0.5),
@@ -89,9 +88,9 @@ module red_pitaya_infrastructure #(
     
     MMCM_BASE #(
         .BANDWIDTH          ("OPTIMIZED"), // Jitter programming ("HIGH","LOW","OPTIMIZED")
-        .CLKFBOUT_MULT_F    (12), // Multiply value for all CLKOUT (5.0-64.0).
+        .CLKFBOUT_MULT_F    (8), // Multiply value for all CLKOUT (5.0-64.0).
         .CLKFBOUT_PHASE     (0.0),
-        .CLKIN1_PERIOD      (5.0), // SNAP clock is 200 MHz
+        .CLKIN1_PERIOD      (8.0), // Red Pitaya clock is 125 MHz
         .CLKOUT0_DIVIDE_F   (1),   // Divide amount for CLKOUT0 (1.000-128.000).
         .CLKOUT0_DUTY_CYCLE (0.5),
         .CLKOUT1_DUTY_CYCLE (0.5),
@@ -107,9 +106,9 @@ module red_pitaya_infrastructure #(
         .CLKOUT4_PHASE      (0.0),
         .CLKOUT5_PHASE      (0.0),
         .CLKOUT6_PHASE      (0.0),
-        .CLKOUT1_DIVIDE     (12),
-        .CLKOUT2_DIVIDE     (6),
-        .CLKOUT3_DIVIDE     (6),
+        .CLKOUT1_DIVIDE     (8),
+        .CLKOUT2_DIVIDE     (4),
+        .CLKOUT3_DIVIDE     (4),
         .CLKOUT4_DIVIDE     (1),
         .CLKOUT5_DIVIDE     (1),
         .CLKOUT6_DIVIDE     (1),
@@ -134,7 +133,7 @@ module red_pitaya_infrastructure #(
         .CLKOUT4  (),
         .CLKOUT5  (),
         .CLKOUT6  (),
-        .LOCKED   (adc_mmcm_locked),
+        .LOCKED   (adc_mmcm_lock),
         .PWRDWN   (1'b0),
         .RST      (1'b0)
     );
