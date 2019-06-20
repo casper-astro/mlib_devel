@@ -27,6 +27,7 @@ class red_pitaya_dac(YellowBlock):
         # add the source files, which have the same name as the module (this is the verilog module created above)
         self.module = 'red_pitaya_dac'
         self.add_source('red_pitaya_dac/*.v')
+        self.add_source('red_pitaya_dac/dac_data_fifo/*.xci')
 
     def modify_top(self,top):
         
@@ -47,6 +48,8 @@ class red_pitaya_dac(YellowBlock):
         inst.add_port('DAC_CLK_IN', signal='dac_clk', parent_sig=False,  dir='in')
         inst.add_port('DAC_CLK_P_IN', signal='dac_clk_p', parent_sig=False, dir='in')
         inst.add_port('DAC_RST_IN2', signal='dac_rst', parent_sig=False, dir='in')
+        inst.add_port('DSP_CLK_IN', signal='usr_clk', parent_sig=False, dir='in')
+        inst.add_port('DSP_RST_IN', signal='usr_rst', parent_sig=False, dir='in')
 
         # Simulink interface to/from yellow block to DAC firmware module
         inst.add_port('DAC_RST_IN', signal='%s_dac_reset_in' % self.fullname, dir='in')
@@ -70,6 +73,8 @@ class red_pitaya_dac(YellowBlock):
         #To do: add timing constraints
 
         #Clock Group Constraints
+        cons.append(ClockGroupConstraint('usr_clk_mmcm', 'adc_clk_125_mmcm', 'asynchronous'))
+        cons.append(ClockGroupConstraint('adc_clk_125_mmcm', 'usr_clk_mmcm', 'asynchronous'))
         #cons.append(ClockGroupConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', 'aux_clk_diff_p', 'asynchronous'))
         #cons.append(ClockGroupConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', 'sync_in_p', 'asynchronous'))
         #cons.append(ClockGroupConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', '%s/ADC32RF45_RX_0/ADC_PHY_inst/ADC_GT_SUPPPORT_inst/JESD204B_4LaneRX_7500MHz_init_i/U0/JESD204B_4LaneRX_7500MHz_i/gt0_JESD204B_4LaneRX_7500MHz_i/gthe2_i/RXOUTCLK'% self.fullname, 'asynchronous'))
