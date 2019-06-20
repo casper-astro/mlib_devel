@@ -32,8 +32,8 @@ module red_pitaya_adc #(
 );
 
 //Registered ADC data
-reg [NUM_OF_BITS-1:0] sAdc0DataIIn;
-reg [NUM_OF_BITS-1:0] sAdc1DataQIn;
+reg [15:0] sAdc0DataIIn;
+reg [15:0] sAdc1DataQIn;
 reg sAdcDataValidIn;
 reg [4:0] sAdcClkCount;
 
@@ -49,8 +49,8 @@ assign ADC_LA_CLK = DSP_CLK_IN;
 //twos complement (inverts MSB)
 always @(posedge ADC_CLK_IN or posedge Reset) begin
   if (Reset == 1'b1) begin
-    sAdc0DataIIn[NUM_OF_BITS-1:0] <= {NUM_OF_BITS{1'b0}};
-    sAdc1DataQIn[NUM_OF_BITS-1:0] <= {NUM_OF_BITS{1'b0}};
+    sAdc0DataIIn[15:0] <= 16'b0;
+    sAdc1DataQIn[15:0] <= 16'b0;
     sAdcDataValidIn <= 1'b0;
     sAdcClkCount <= 5'b0;
   end else begin 
@@ -124,7 +124,7 @@ end
 //Assign ADC Yellow block outputs
 assign ADC_DATA_VAL_OUT = FifoRdEnD1;
 assign ADC0_DATA_I_OUT = FifoDataOut[NUM_OF_BITS-1:0];
-assign ADC1_DATA_Q_OUT = FifoDataOut[NUM_OF_BITS-1+16:16];
+assign ADC1_DATA_Q_OUT = FifoDataOut[NUM_OF_BITS+15:16];
 //Always Enable ADC clock Stabilizer
 assign ADC_CLK_STB_OUT = 1'b1;
 

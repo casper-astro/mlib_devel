@@ -40,8 +40,8 @@ wire Reset;
 assign Reset = DAC_RST_IN  || DAC_RST_IN2 || DSP_RST_IN;
 
 //Registered DAC data
-reg [NUM_OF_BITS-1:0] sDac0DataIIn;
-reg [NUM_OF_BITS-1:0] sDac1DataQIn;
+reg [15:0] sDac0DataIIn;
+reg [15:0] sDac1DataQIn;
 reg sDacDataValidIn;
 
 
@@ -49,8 +49,8 @@ reg sDacDataValidIn;
 //unsigned
 always @(posedge DSP_CLK_IN or posedge Reset) begin
   if (Reset == 1'b1) begin
-    sDac0DataIIn[NUM_OF_BITS-1:0] <= {NUM_OF_BITS{1'b0}};
-    sDac1DataQIn[NUM_OF_BITS-1:0] <= {NUM_OF_BITS{1'b0}};
+    sDac0DataIIn[15:0] <= 16'b0;
+    sDac1DataQIn[15:0] <= 16'b0;
     sDacDataValidIn <= 1'b0;
   end else begin
     sDacDataValidIn <= DAC_DATA_VAL_IN;
@@ -123,7 +123,8 @@ ODDR oddr_dac_clk          (.Q(DAC_IQCLK), .D1(1'b0), .D2(1'b1), .C(DAC_CLK_P_IN
 ODDR oddr_dac_wrt          (.Q(DAC_IQWRT), .D1(1'b0), .D2(1'b1), .C(DAC_CLK_IN), .CE(1'b1), .R(1'b0), .S(1'b0));
 ODDR oddr_dac_sel          (.Q(DAC_IQSEL), .D1(1'b0), .D2(1'b1), .C(ADC_CLK_IN), .CE(1'b1), .R(Reset), .S(1'b0));
 ODDR oddr_dac_rst          (.Q(DAC_IQRESET), .D1(Reset), .D2(Reset), .C(ADC_CLK_IN), .CE(1'b1), .R(1'b0), .S(1'b0));
-ODDR oddr_dac_dat [NUM_OF_BITS-1:0] (.Q(DAC_DATA_OUT), .D1(FifoDataOut[NUM_OF_BITS-1:0]), .D2(FifoDataOut[NUM_OF_BITS-1+16:16]), .C(ADC_CLK_IN), .CE(1'b1), .R(Reset), .S(1'b0));
+ODDR oddr_dac_dat [NUM_OF_BITS-1:0] (.Q(DAC_DATA_OUT), .D1(FifoDataOut[NUM_OF_BITS-1:0]), .D2(FifoDataOut[NUM_OF_BITS+15:16]), .C(ADC_CLK_IN), .CE(1'b1), .R(Reset), .S(1'b0));
+//ODDR oddr_dac_dat [NUM_OF_BITS-1:0] (.Q(DAC_DATA_OUT), .D1(FifoDataOut[NUM_OF_BITS-1:0]), .D2(FifoDataOut[NUM_OF_BITS-1:0]), .C(ADC_CLK_IN), .CE(1'b1), .R(Reset), .S(1'b0));
 
 endmodule
 
