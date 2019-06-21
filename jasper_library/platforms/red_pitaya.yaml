@@ -83,9 +83,10 @@ pins:
        - L16
        - L17
        - K16
-  ADC_LA_CLK:
-     iostd: LVCMOS33
-     loc: J16
+       - J16
+#  ADC_LA_CLK:
+#     iostd: LVCMOS33
+#     loc: J16
   DAC_DATA_OUT:
     iostd: LVCMOS33
     loc:

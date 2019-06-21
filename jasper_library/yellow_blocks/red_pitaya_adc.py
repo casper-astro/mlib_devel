@@ -40,7 +40,7 @@ class red_pitaya_adc(YellowBlock):
         inst.add_port('ADC_DATA_IN2', 'ADC_DATA_IN2', parent_port=True,  dir='in', width=self.bits)
         #ADC Clock duty cycle stabilizer
         inst.add_port('ADC_CLK_STB_OUT', signal='ADC_CLK_STB_OUT', parent_port=True, dir='out')
-        inst.add_port('ADC_LA_CLK', signal='ADC_LA_CLK', parent_port=True, dir='out')
+        #inst.add_port('ADC_LA_CLK', signal='ADC_LA_CLK', parent_port=True, dir='out')
 
 
         inst.add_port('DSP_CLK_IN', signal='usr_clk', parent_sig=False, dir='in')
@@ -64,7 +64,7 @@ class red_pitaya_adc(YellowBlock):
         cons.append(PortConstraint('ADC_DATA_IN1', 'ADC_DATA_IN1', port_index=range(self.bits), iogroup_index=range(self.bits)))
         cons.append(PortConstraint('ADC_DATA_IN2', 'ADC_DATA_IN2', port_index=range(self.bits), iogroup_index=range(self.bits)))
         cons.append(PortConstraint('ADC_CLK_STB_OUT', 'ADC_CLK_STB_OUT'))
-        cons.append(PortConstraint('ADC_LA_CLK', 'ADC_LA_CLK'))
+        #cons.append(PortConstraint('ADC_LA_CLK', 'ADC_LA_CLK'))
 
         #To do: add timing constraints
 

@@ -25,8 +25,8 @@ module red_pitaya_adc #(
     output wire ADC_DATA_VAL_OUT,   
     output wire  [NUM_OF_BITS-1:0]   ADC0_DATA_I_OUT,  
     output wire  [NUM_OF_BITS-1:0]   ADC1_DATA_Q_OUT,    
-    output wire ADC_CLK_STB_OUT,
-    output wire ADC_LA_CLK
+    output wire ADC_CLK_STB_OUT
+    //output wire ADC_LA_CLK
     
       
 );
@@ -41,7 +41,7 @@ wire Reset;
 
 assign Reset = ADC_RST_IN  || ADC_RST_IN2;
 //Just for debugging on external logic analyser
-assign ADC_LA_CLK = DSP_CLK_IN;
+//assign ADC_LA_CLK = DSP_CLK_IN;
 
 //Register in ADC Data for both channels and wait for
 //a pipeline of 16 clock cycles before asserting data

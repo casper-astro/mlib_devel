@@ -114,7 +114,7 @@ module red_pitaya_infrastructure #(
         .CLKOUT6_DIVIDE     (1),
         .CLKOUT4_CASCADE    ("FALSE"),
         .CLOCK_HOLD         ("FALSE"),
-        .DIVCLK_DIVIDE      (DIVCLK), // Master division value (1-80)
+        .DIVCLK_DIVIDE      (1), // Master division value (1-80)
         .REF_JITTER1        (0.0),
         .STARTUP_WAIT       ("FALSE")
     ) adc_clk_mmcm_inst (
