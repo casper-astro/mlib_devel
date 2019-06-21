@@ -17,6 +17,8 @@ class axi4lite_interconnect(YellowBlock):
         self.platform_support = 'all'
         self.add_source('axi4_lite')
 
+
+
     def modify_top(self,top):
         # Make a memory map for all axi4lite interfaces/slaves
         top.axi4lite_memory_map(self.platform.mmbus_base_address, self.platform.mmbus_address_alignment)
@@ -50,7 +52,8 @@ class axi4lite_interconnect(YellowBlock):
         inst.add_port('s_axi4lite_bready',  'M_AXI_bready',  dir='out', width=1,  parent_sig=False)
 
         #self.design_name = self.fullname[:-1].strip(self.name)
-        self.design_name = "test_red_pitaya"
+        self.design_name = self.fullname.replace("_axi4lite_interconnect","")
+        #self.design_name = "test_red_pitaya"
 
         for key, val in self.memory_map.items():
             for reg in val["memory_map"]:
