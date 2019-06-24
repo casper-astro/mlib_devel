@@ -26,19 +26,22 @@ module red_pitaya_adc #(
     output wire  [NUM_OF_BITS-1:0]   ADC0_DATA_I_OUT,  
     output wire  [NUM_OF_BITS-1:0]   ADC1_DATA_Q_OUT,    
     output wire ADC_CLK_STB_OUT
+    //output wire ADC_LA_CLK
+    
       
 );
 
 //Registered ADC data
-reg [NUM_OF_BITS-1:0] sAdc0DataIIn;
-reg [NUM_OF_BITS-1:0] sAdc1DataQIn;
+reg [15:0] sAdc0DataIIn;
+reg [15:0] sAdc1DataQIn;
 reg sAdcDataValidIn;
-reg [3:0] sAdcClkCount;
+reg [4:0] sAdcClkCount;
 
 wire Reset;
 
 assign Reset = ADC_RST_IN  || ADC_RST_IN2;
-
+//Just for debugging on external logic analyser
+//assign ADC_LA_CLK = DSP_CLK_IN;
 
 //Register in ADC Data for both channels and wait for
 //a pipeline of 16 clock cycles before asserting data
@@ -46,8 +49,8 @@ assign Reset = ADC_RST_IN  || ADC_RST_IN2;
 //twos complement (inverts MSB)
 always @(posedge ADC_CLK_IN or posedge Reset) begin
   if (Reset == 1'b1) begin
-    sAdc0DataIIn[NUM_OF_BITS-1:0] <= {NUM_OF_BITS{1'b0}};
-    sAdc1DataQIn[NUM_OF_BITS-1:0] <= {NUM_OF_BITS{1'b0}};
+    sAdc0DataIIn[15:0] <= 16'b0;
+    sAdc1DataQIn[15:0] <= 16'b0;
     sAdcDataValidIn <= 1'b0;
     sAdcClkCount <= 5'b0;
   end else begin 
@@ -60,11 +63,11 @@ always @(posedge ADC_CLK_IN or posedge Reset) begin
     //Convert ADC data from offset binary to twos complement
     //If 16 bit data then the bus is 32 bits, but if less then zero pad
     if (NUM_OF_BITS == 16) begin
-      sAdc0DataIIn <= {~ADC_DATA_IN1[NUM_OF_BITS-1], ADC_DATA_IN1[NUM_OF_BITS-2:0]}; 
-      sAdc1DataQIn <= {~ADC_DATA_IN2[NUM_OF_BITS-1], ADC_DATA_IN2[NUM_OF_BITS-2:0]};
+      sAdc0DataIIn <= {ADC_DATA_IN1[NUM_OF_BITS-1], ~ADC_DATA_IN1[NUM_OF_BITS-2:0]}; 
+      sAdc1DataQIn <= {ADC_DATA_IN2[NUM_OF_BITS-1], ~ADC_DATA_IN2[NUM_OF_BITS-2:0]};
     end else begin
-      sAdc0DataIIn <= {{{16-NUM_OF_BITS}{1'b0}},~ADC_DATA_IN1[NUM_OF_BITS-1], ADC_DATA_IN1[NUM_OF_BITS-2:0]}; 
-      sAdc1DataQIn <= {{{16-NUM_OF_BITS}{1'b0}},~ADC_DATA_IN2[NUM_OF_BITS-1], ADC_DATA_IN2[NUM_OF_BITS-2:0]};    
+      sAdc0DataIIn <= {{{16-NUM_OF_BITS}{1'b0}},ADC_DATA_IN1[NUM_OF_BITS-1], ~ADC_DATA_IN1[NUM_OF_BITS-2:0]}; 
+      sAdc1DataQIn <= {{{16-NUM_OF_BITS}{1'b0}},ADC_DATA_IN2[NUM_OF_BITS-1], ~ADC_DATA_IN2[NUM_OF_BITS-2:0]};    
     end
   end  
 end
@@ -121,7 +124,7 @@ end
 //Assign ADC Yellow block outputs
 assign ADC_DATA_VAL_OUT = FifoRdEnD1;
 assign ADC0_DATA_I_OUT = FifoDataOut[NUM_OF_BITS-1:0];
-assign ADC1_DATA_Q_OUT = FifoDataOut[NUM_OF_BITS-1+16:16];
+assign ADC1_DATA_Q_OUT = FifoDataOut[NUM_OF_BITS+15:16];
 //Always Enable ADC clock Stabilizer
 assign ADC_CLK_STB_OUT = 1'b1;
 

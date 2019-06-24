@@ -40,11 +40,14 @@ class red_pitaya_adc(YellowBlock):
         inst.add_port('ADC_DATA_IN2', 'ADC_DATA_IN2', parent_port=True,  dir='in', width=self.bits)
         #ADC Clock duty cycle stabilizer
         inst.add_port('ADC_CLK_STB_OUT', signal='ADC_CLK_STB_OUT', parent_port=True, dir='out')
+        #inst.add_port('ADC_LA_CLK', signal='ADC_LA_CLK', parent_port=True, dir='out')
+
 
         inst.add_port('DSP_CLK_IN', signal='usr_clk', parent_sig=False, dir='in')
         inst.add_port('DSP_RST_IN', signal='usr_rst', parent_sig=False, dir='in')
         inst.add_port('ADC_RST_IN2', signal='adc_rst', parent_sig=False, dir='in')
         inst.add_port('ADC_CLK_IN', signal='adc_clk', parent_sig=False, dir='in')
+
 
         # Simulink interface to/from yellow block to ADC firmware module
         inst.add_port('ADC_RST_IN', signal='%s_adc_reset_in' % self.fullname, dir='in')
@@ -61,6 +64,7 @@ class red_pitaya_adc(YellowBlock):
         cons.append(PortConstraint('ADC_DATA_IN1', 'ADC_DATA_IN1', port_index=range(self.bits), iogroup_index=range(self.bits)))
         cons.append(PortConstraint('ADC_DATA_IN2', 'ADC_DATA_IN2', port_index=range(self.bits), iogroup_index=range(self.bits)))
         cons.append(PortConstraint('ADC_CLK_STB_OUT', 'ADC_CLK_STB_OUT'))
+        #cons.append(PortConstraint('ADC_LA_CLK', 'ADC_LA_CLK'))
 
         #To do: add timing constraints
 
@@ -73,10 +77,10 @@ class red_pitaya_adc(YellowBlock):
         #cons.append(ClockGroupConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', '%s/ADC32RF45_RX_3/ADC_PHY_inst/ADC_GT_SUPPPORT_inst/JESD204B_4LaneRX_7500MHz_init_i/U0/JESD204B_4LaneRX_7500MHz_i/gt0_JESD204B_4LaneRX_7500MHz_i/gthe2_i/RXOUTCLK'% self.fullname, 'asynchronous'))
 
         #input constraints
-        cons.append(InputDelayConstraint(clkname='ADC_CLK_IN_P', consttype='min', constdelay_ns=3.4, add_delay_en=True, portname='ADC_DATA_IN1'))
-        cons.append(InputDelayConstraint(clkname='ADC_CLK_IN_P', consttype='max', constdelay_ns=3.4, add_delay_en=True, portname='ADC_DATA_IN1'))
-        cons.append(InputDelayConstraint(clkname='ADC_CLK_IN_P', consttype='min', constdelay_ns=3.4, add_delay_en=True, portname='ADC_DATA_IN2'))
-        cons.append(InputDelayConstraint(clkname='ADC_CLK_IN_P', consttype='max', constdelay_ns=3.4, add_delay_en=True, portname='ADC_DATA_IN2'))
+        cons.append(InputDelayConstraint(clkname='ADC_CLK_IN_P', consttype='min', constdelay_ns=3.4, add_delay_en=True, portname='ADC_DATA_IN1[*]'))
+        cons.append(InputDelayConstraint(clkname='ADC_CLK_IN_P', consttype='max', constdelay_ns=3.4, add_delay_en=True, portname='ADC_DATA_IN1[*]'))
+        cons.append(InputDelayConstraint(clkname='ADC_CLK_IN_P', consttype='min', constdelay_ns=3.4, add_delay_en=True, portname='ADC_DATA_IN2[*]'))
+        cons.append(InputDelayConstraint(clkname='ADC_CLK_IN_P', consttype='max', constdelay_ns=3.4, add_delay_en=True, portname='ADC_DATA_IN2[*]'))
 
 
         # Output Constraints
