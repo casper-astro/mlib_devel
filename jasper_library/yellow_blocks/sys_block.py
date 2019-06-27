@@ -24,6 +24,6 @@ class sys_block(YellowBlock):
             inst.add_parameter('REV_MAJ', self.rev_maj)
             inst.add_parameter('REV_MIN', self.rev_min)
             inst.add_parameter('REV_RCS', self.rev_rcs)
-            inst.add_port('user_clk', 'user_clk')
+            inst.add_port('user_clk', 'user_clk', parent_port=False, parent_sig=False)
             inst.add_wb_interface('sys_block', mode='r', nbytes=64, memory_map=self.memory_map, typecode=self.typecode)
         

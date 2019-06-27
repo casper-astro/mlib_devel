@@ -13,6 +13,7 @@ import inspect
 import operator
 from memory import Register
 import pdb
+import IPython
 
 logger = logging.getLogger('jasper.verilog')
 
@@ -725,6 +726,12 @@ class VerilogModule(object):
                     # # erase dev.memory_map so that core_info doesn't add sw_regs twice
                     dev.memory_map = []
                     interface['axi4lite_devices'] += [dev]
+            elif dev.typecode == 4:
+                # tell the axi_ic to generate a bram
+                interface = self.memory_map[dev.regname] = {}
+                interface['size'] = dev.nbytes*4 # seems brams need to be sized in bytes not words!?!?! Go figure me timer.
+                interface['memory_map'] = dev.memory_map
+                interface['axi4lite_devices'] = [dev]
             else:
                 # add all other yellow blocks to their own interface and make xml memory map
                 interface = self.memory_map[dev.regname] = {}
@@ -1320,7 +1327,7 @@ class VerilogModule(object):
         else:
             # Make single register in memory_map if memory_map is empty
             if not memory_map:
-                memory_map = [Register(regname, nbytes=nbytes, offset=0, mode=mode, default_val=default_val)]
+                memory_map = [Register(regname, nbytes=nbytes, offset=0, mode=mode, default_val=default_val, ram_size=nbytes if typecode==4 else -1, ram=True if typecode==4 else False)]
             axi4lite_device = AXI4LiteDevice(regname, nbytes=nbytes, mode=mode, hdl_suffix=suffix, hdl_candr_suffix=candr_suffix, memory_map=memory_map, typecode=typecode)
             self.axi4lite_devices += [axi4lite_device]
             self.n_axi4lite_interfaces += 1

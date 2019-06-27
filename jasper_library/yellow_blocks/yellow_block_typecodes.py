@@ -1,7 +1,7 @@
 """
 Here lie device typecode definitions.
-These codes get baked into toolflow-generate firmware are can bei used
-by embedded software to determine what types of devices are present on
+These codes get baked into toolflow-generate firmware can be used by
+embedded software to determine what types of devices are present on
 the CPU bus at different memory locations.
 
 For example, a typical use case would be:
@@ -18,3 +18,4 @@ TYPECODE_SWREG     = 0
 TYPECODE_ETHCORE   = 1
 TYPECODE_ADC16CTRL = 2
 TYPECODE_SYSBLOCK  = 3
+TYPECODE_BRAM      = 4

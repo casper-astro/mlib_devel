@@ -43,8 +43,8 @@ class red_pitaya_adc(YellowBlock):
         #inst.add_port('ADC_LA_CLK', signal='ADC_LA_CLK', parent_port=True, dir='out')
 
 
-        inst.add_port('DSP_CLK_IN', signal='usr_clk', parent_sig=False, dir='in')
-        inst.add_port('DSP_RST_IN', signal='usr_rst', parent_sig=False, dir='in')
+        inst.add_port('DSP_CLK_IN', signal='user_clk', parent_sig=False, dir='in')
+        inst.add_port('DSP_RST_IN', signal='user_rst', parent_sig=False, dir='in')
         inst.add_port('ADC_RST_IN2', signal='adc_rst', parent_sig=False, dir='in')
         inst.add_port('ADC_CLK_IN', signal='adc_clk', parent_sig=False, dir='in')
 

@@ -204,12 +204,12 @@ proc create_root_design { parentCell } {
    ] $M_AXI
 
   # Create ports
-  set peripheral_aresetn [ create_bd_port -dir O -from 0 -to 0 -type rst peripheral_aresetn ]
-  set ps_rst [ create_bd_port -dir O ps_rst ]
-  set sys_clk [ create_bd_port -dir O -type clk sys_clk ]
+  set axil_clk [ create_bd_port -dir O -type clk axil_clk ]
   set_property -dict [ list \
    CONFIG.ASSOCIATED_BUSIF {M_AXI} \
- ] $sys_clk
+ ] $axil_clk
+  set axil_rst [ create_bd_port -dir O -from 0 -to 0 axil_rst ]
+  set axil_rst_n [ create_bd_port -dir O -from 0 -to 0 -type rst axil_rst_n ]
 
   # Create instance: axi_protocol_convert_0, and set properties
   set axi_protocol_convert_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_protocol_converter:2.1 axi_protocol_convert_0 ]
@@ -296,10 +296,11 @@ proc create_root_design { parentCell } {
   connect_bd_intf_net -intf_net processing_system7_0_M_AXI_GP0 [get_bd_intf_pins axi_protocol_convert_0/S_AXI] [get_bd_intf_pins processing_system7_0/M_AXI_GP0]
 
   # Create port connections
-  connect_bd_net -net processing_system7_0_FCLK_CLK0 [get_bd_ports sys_clk] [get_bd_pins axi_protocol_convert_0/aclk] [get_bd_pins processing_system7_0/FCLK_CLK0] [get_bd_pins processing_system7_0/M_AXI_GP0_ACLK] [get_bd_pins rst_ps7_0_50M/slowest_sync_clk]
-  connect_bd_net -net processing_system7_0_FCLK_RESET0_N [get_bd_ports ps_rst] [get_bd_pins processing_system7_0/FCLK_RESET0_N] [get_bd_pins rst_ps7_0_50M/ext_reset_in]
+  connect_bd_net -net processing_system7_0_FCLK_CLK0 [get_bd_ports axil_clk] [get_bd_pins axi_protocol_convert_0/aclk] [get_bd_pins processing_system7_0/FCLK_CLK0] [get_bd_pins processing_system7_0/M_AXI_GP0_ACLK] [get_bd_pins rst_ps7_0_50M/slowest_sync_clk]
+  connect_bd_net -net processing_system7_0_FCLK_RESET0_N [get_bd_pins processing_system7_0/FCLK_RESET0_N] [get_bd_pins rst_ps7_0_50M/ext_reset_in]
   connect_bd_net -net rst_ps7_0_50M_interconnect_aresetn [get_bd_pins axi_protocol_convert_0/aresetn] [get_bd_pins rst_ps7_0_50M/interconnect_aresetn]
-  connect_bd_net -net rst_ps7_0_50M_peripheral_aresetn [get_bd_ports peripheral_aresetn] [get_bd_pins rst_ps7_0_50M/peripheral_aresetn]
+  connect_bd_net -net rst_ps7_0_50M_peripheral_aresetn [get_bd_ports axil_rst_n] [get_bd_pins rst_ps7_0_50M/peripheral_aresetn]
+  connect_bd_net -net rst_ps7_0_50M_peripheral_reset [get_bd_ports axil_rst] [get_bd_pins rst_ps7_0_50M/peripheral_reset]
 
   # Create address segments
   create_bd_addr_seg -range 0x00010000 -offset 0x40000000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs M_AXI/Reg] SEG_M00_AXI_0_Reg

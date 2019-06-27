@@ -8,24 +8,23 @@ module red_pitaya_infrastructure #(
 
         input adc_clk_in,
 
-        output usr_clk,
-        output usr_rst,
+        output user_clk,
+        output user_rst,
 
         output adc_clk_125,
         output adc_rst,
         output dac_clk_250,
         output dac_rst,
         output dac_clk_250_315
-
     );
 
     wire clk_fb;
     wire adc_clk_ibuf;
-    wire usr_clk_mmcm;
+    wire user_clk_mmcm;
     wire adc_clk_mmcm;
     wire dac_clk_mmcm;
     wire dac_clk_250_315_mmcm;
-    wire usr_mmcm_lock;
+    wire user_mmcm_lock;
     wire adc_mmcm_lock;
     
     // single clock input
@@ -65,12 +64,12 @@ module red_pitaya_infrastructure #(
         .DIVCLK_DIVIDE      (DIVCLK), // Master division value (1-80)
         .REF_JITTER1        (0.0),
         .STARTUP_WAIT       ("FALSE")
-    ) usr_clk_mmcm_inst (
+    ) user_clk_mmcm_inst (
         .CLKIN1   (adc_clk_ibuf),
-        .CLKFBIN  (usr_clk_mmcm_fb),
-        .CLKFBOUT  (usr_clk_mmcm_fb),
+        .CLKFBIN  (user_clk_mmcm_fb),
+        .CLKFBOUT  (user_clk_mmcm_fb),
         .CLKFBOUTB (),
-        .CLKOUT0  (usr_clk_mmcm),
+        .CLKOUT0  (user_clk_mmcm),
         .CLKOUT0B (),
         .CLKOUT1  (),
         .CLKOUT1B (),
@@ -81,7 +80,7 @@ module red_pitaya_infrastructure #(
         .CLKOUT4  (),
         .CLKOUT5  (),
         .CLKOUT6  (),
-        .LOCKED   (usr_mmcm_lock),
+        .LOCKED   (user_mmcm_lock),
         .PWRDWN   (1'b0),
         .RST      (1'b0)
     );
@@ -139,13 +138,13 @@ module red_pitaya_infrastructure #(
     );
     
     BUFG bufg_sysclk[3:0](
-      .I({usr_clk_mmcm, adc_clk_125_mmcm, dac_clk_250_mmcm, dac_clk_250_315_mmcm}),
-      .O({usr_clk,      adc_clk_125,      dac_clk_250     , dac_clk_250_315})
+      .I({user_clk_mmcm, adc_clk_125_mmcm, dac_clk_250_mmcm, dac_clk_250_315_mmcm}),
+      .O({user_clk,      adc_clk_125,      dac_clk_250     , dac_clk_250_315})
     );
     
     // TODO: Check this logic and look a the resets
-    assign usr_rst = !(adc_mmcm_lock & usr_mmcm_lock);
-    assign adc_rst = !(adc_mmcm_lock & usr_mmcm_lock);
-    assign dac_rst = !(adc_mmcm_lock & usr_mmcm_lock);
+    assign user_rst = !(adc_mmcm_lock & user_mmcm_lock);
+    assign adc_rst  = !(adc_mmcm_lock & user_mmcm_lock);
+    assign dac_rst  = !(adc_mmcm_lock & user_mmcm_lock);
 
 endmodule

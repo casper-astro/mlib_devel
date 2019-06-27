@@ -11,9 +11,9 @@ class red_pitaya(YellowBlock):
 
     def modify_top(self,top):
         inst = top.get_instance('red_pitaya', 'red_pitaya_inst')
-        inst.add_port('sys_clk', 'sys_clk')
-        inst.add_port('ps_rst',  'ps_rst')
-        inst.add_port('peripheral_aresetn', 'peripheral_aresetn')
+        inst.add_port('axil_clk',   'axil_clk')
+        inst.add_port('axil_rst',   'axil_rst')
+        inst.add_port('axil_rst_n', 'axil_rst_n')
 
         inst.add_port('M_AXI_araddr', 'M_AXI_araddr', width=32)
         inst.add_port('M_AXI_arprot', 'M_AXI_arprot', width=3)
@@ -43,8 +43,8 @@ class red_pitaya(YellowBlock):
         inst_infr.add_parameter('DIVIDE',   clkparams[1])
         inst_infr.add_parameter('DIVCLK',   clkparams[2])
         inst_infr.add_port('adc_clk_in',      "ADC_CLK_IN_P", dir='in',  width=1, parent_port=True)
-        inst_infr.add_port('usr_clk',         "usr_clk",      dir='out', width=1)
-        inst_infr.add_port('usr_rst',         "usr_rst",      dir='out', width=1)
+        inst_infr.add_port('user_clk',        "user_clk",     dir='out', width=1, parent_sig=False)
+        inst_infr.add_port('user_rst',        "user_rst",     dir='out', width=1)
         inst_infr.add_port('adc_clk_125',     "adc_clk",      dir='out', width=1)
         inst_infr.add_port('adc_rst',         "adc_rst",      dir='out', width=1)
         inst_infr.add_port('dac_clk_250',     "dac_clk",      dir='out', width=1)
@@ -61,8 +61,8 @@ class red_pitaya(YellowBlock):
         cons = []
         cons.append(PortConstraint('ADC_CLK_IN_P', 'ADC_CLK_IN_P'))
         cons.append(ClockConstraint('ADC_CLK_IN_P','ADC_CLK_IN_P', period=8.0, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=4.0))
-        cons.append(ClockGroupConstraint('usr_clk_mmcm', 'clk_fpga_0', 'asynchronous'))
-        cons.append(ClockGroupConstraint('clk_fpga_0', 'usr_clk_mmcm', 'asynchronous'))
+        cons.append(ClockGroupConstraint('user_clk_mmcm', 'clk_fpga_0', 'asynchronous'))
+        cons.append(ClockGroupConstraint('clk_fpga_0', 'user_clk_mmcm', 'asynchronous'))
 
 
 

@@ -692,7 +692,6 @@ class Toolflow(object):
         c.synthesis.fpga_model = self.plat.fpga
         c.synthesis.pin_map = self.plat._pins
 
-        #IPython.embed()
         mm_slaves = []
         if self.plat.mmbus_architecture == 'AXI4-Lite':
             for dev in self.top.axi4lite_devices:
@@ -763,9 +762,7 @@ class Toolflow(object):
                 fh2.writelines(lines)
         fh2.close()
 
-        #import IPython
-        #IPython.embed()
-
+    
     def generate_xml_memory_map(self, memory_map):
         """
         Generate xml memory map files that represent each AXI4-Lite interface for Oxford's xml2vhdl.
@@ -792,6 +789,11 @@ class Toolflow(object):
                     node.set('hw_rst', str(reg.default_val))
                 # Best we can currently do for a description...? haha
                 node.set('description', str(interface + "_" + reg.name))
+                # set bram size and 
+                if hasattr(reg, 'ram') and reg.ram==True:
+                    node.set('hw_dp_ram', 'yes')
+                    node.set('size', str(reg.nbytes))
+
 
             # output xml file describing memory map as input for xml2vhdl
             myxml = xml.dom.minidom.parseString(ET.tostring(xml_root))
@@ -807,7 +809,7 @@ class Toolflow(object):
         """
         Generate xml interconnect file that represent top-level AXI4-Lite interconnect for Oxford's xml2vhdl.
         """
-        # loop over interfaces, sort by addresse, make interconnect
+        # loop over interfaces, sort by address, make interconnect
         xml_root = ET.Element('node')
         xml_root.set('id', 'axi4lite_top')
         xml_root.set('address', hex(self.plat.mmbus_base_address))
