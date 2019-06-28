@@ -729,9 +729,12 @@ class VerilogModule(object):
             elif dev.typecode == 4:
                 # tell the axi_ic to generate a bram
                 interface = self.memory_map[dev.regname] = {}
-                interface['size'] = dev.nbytes*4 # seems brams need to be sized in bytes not words!?!?! Go figure me timer.
+                interface['size'] = dev.nbytes # seems brams need to be sized in bytes not words
                 interface['memory_map'] = dev.memory_map
                 interface['axi4lite_devices'] = [dev]
+                # erase dev.memory_map so that core_info doesn't add brams twice
+                # only a mad man would attempt to debug this shit!
+                dev.memory_map = []
             else:
                 # add all other yellow blocks to their own interface and make xml memory map
                 interface = self.memory_map[dev.regname] = {}
@@ -740,10 +743,8 @@ class VerilogModule(object):
                 interface['axi4lite_devices'] = [dev]
 
         relative_address = 0
-        absolute_address = base_addr
         # Now loop over interfaces in memory_map to determine addresses
         for key,val in self.memory_map.items():
-            val['absolute_address'] = hex(absolute_address)
             val['relative_address'] = hex(relative_address)
             # this is really gross, but didn't want to rewrite anything in core_info... Sorry.
             if key == 'sw_reg':
@@ -751,15 +752,15 @@ class VerilogModule(object):
                 # There could be a better python one-liner to do this but idk...
                 for reg in val['memory_map']:
                     for dev in val['axi4lite_devices']:
-                        # if names match, set base_addr from interface's absolute address + register offset
+                        # if names match, set base_addr from interface's base_addr + core addr + register offset
                         if reg.name == dev.regname:
-                            dev.base_addr = absolute_address + reg.offset
+                            dev.base_addr = base_addr + relative_address + reg.offset
             else:
-                # 'base_addr' for interface (for core_info to reference laters)
-                val['axi4lite_devices'][0].base_addr = absolute_address
+                # 'base_addr' for interface (for core_info to reference later)
+                val['axi4lite_devices'][0].base_addr = base_addr + relative_address
             # adjust addresses for next loop
             relative_address = relative_address + (alignment*int(ceil(val['size']/float(alignment))))
-            absolute_address = absolute_address + relative_address
+
 
 
     def get_base_wb_slaves(self):
@@ -1332,6 +1333,7 @@ class VerilogModule(object):
             self.axi4lite_devices += [axi4lite_device]
             self.n_axi4lite_interfaces += 1
             return axi4lite_device
+
 
     def search_dict_for_name(self, dict, name):
         """
