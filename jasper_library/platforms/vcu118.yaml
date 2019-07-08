@@ -1,6 +1,6 @@
 name: vcu118
 manufacturer: Xilinx
-fpga: xcvu9p-flga2104-2L-e-es1
+fpga: xcvu9p-flga2104-2L-e
 backend_target: vivado
 sources: []
 constraints: []
@@ -16,10 +16,26 @@ pins:
     iostd: DIFF_SSTL12
   refclk125_p:
     iostd: LVDS
-    loc: ??
+    loc:  AY24
   refclk125_n:
     iostd: LVDS
-    loc: ??
+    loc: AY23
+  userclk156_p:
+    iostd: LVDS
+    loc: H32
+  userclk156_n:
+    iostd: LVDS
+    loc: G32
+  qsfpclk156_p:
+    loc: W9
+  qsfpclk156_n:
+    loc: W8
+  usb_tx:
+    iostd: LVCMOS18
+    loc: AW25
+  usb_rx:
+    iostd: LVCMOS18
+    loc: BB21
   miso:
     loc: B17
     iostd: LVCMOS12
@@ -79,3 +95,49 @@ pins:
   gbe_phy_clk_out:
     iostd: LVCMOS18
     loc: AU23
+  eth_clk_p: 
+    loc: 
+      - CLKOUT1_P
+  eth_clk_n:
+    loc: 
+      - CLKOUT1_N    
+  sfp_disable:
+    loc:
+      - RESETL
+  mgt_tx_p:
+    loc:
+      - TX1P
+      - TX2P
+      - TX3P
+      - TX4P
+  mgt_tx_n:
+    loc:
+      - TX1N
+      - TX2N
+      - TX3N
+      - TX4N
+  mgt_rx_p:
+    loc:
+      - RX1P
+      - RX2P
+      - RX3P
+      - RX4P
+  mgt_rx_n:
+    loc:
+      - RX1N
+      - RX2N
+      - RX3N
+      - RX4N
+  spi_flash_csn:
+    iostd: LVCMOS18
+    loc: AJ11
+  spi_flash_clk:
+    iostd: LVCMOS18
+    loc: AF13
+  spi_flash_data:
+    iostd: LVCMOS18
+    loc: 
+      - AP11
+      - AN11
+      - AM11
+      - AL11

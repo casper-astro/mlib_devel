@@ -10,6 +10,8 @@ class ten_gbe(YellowBlock):
             return tengbaser_xilinx_k7(blk, plat, hdl_root)
         elif plat.fpga.startswith('xc7v'):
             return tengbaser_xilinx_k7(blk, plat, hdl_root, use_gth=plat.name=='mx175')
+        elif plat.fpga.startswith('xcvu'):
+            return tengbaser_xilinx_k7(blk, plat, hdl_root, use_gth=plat.name=='vcu118')
         else:
             return tengbe_v2_xilinx_v6(blk, plat, hdl_root)
 
@@ -75,7 +77,7 @@ class ten_gbe(YellowBlock):
         ktge.add_port('led_tx', '%s_led_tx'%self.fullname)
 
         # Wishbone memory for status registers / ARP table
-        ktge.add_wb_interface(self.unique_name, mode='rw', nbytes=0x4000, typecode=self.typecode) # as in matlab code
+        ktge.add_wb_interface(self.unique_name, mode='rw', nbytes=0xF000, typecode=self.typecode) # as in matlab code
 
 class tengbe_v2_xilinx_v6(ten_gbe):
     def initialize(self):
@@ -191,6 +193,7 @@ class tengbe_v2_xilinx_v6(ten_gbe):
 class tengbaser_xilinx_k7(ten_gbe):
     def __init__(self, blk, plat, hdl_root, use_gth=False):
         self.use_gth = use_gth
+        self.invert_sfp_disable = True
         ten_gbe.__init__(self, blk, plat, hdl_root)
     def initialize(self):
         self.typecode = TYPECODE_ETHCORE
@@ -298,7 +301,12 @@ class tengbaser_xilinx_k7(ten_gbe):
         top.assign_signal('signal_detect%d'%self.port, "1'b1") #snap doesn't wire this to SFP(?)
         phy.add_port('tx_fault', 'tx_fault%d'%self.port)
         top.assign_signal('tx_fault%d'%self.port, "1'b0") #snap doesn't wire this to SFP(?)
-        phy.add_port('tx_disable', 'tx_disable%d'%self.port, parent_port=True, dir='out')
+        phy.add_port('tx_disable', 'tx_disable%d_int'%self.port)
+        top.add_port('tx_disable%d'%self.port, '', dir='out', width=0)
+        if self.invert_sfp_disable:
+            top.assign_signal('tx_disable%d'%self.port, '~tx_disable%d_int'%self.port)
+        else:
+            top.assign_signal('tx_disable%d'%self.port, 'tx_disable%d_int'%self.port)
 
         phy.add_port('resetdone', 'resetdone%d'%self.port)
         phy.add_port('status_vector', '', parent_sig=False)

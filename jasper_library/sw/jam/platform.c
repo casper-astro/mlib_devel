@@ -113,9 +113,15 @@ init_platform()
     enable_caches();
     init_tmrctr();
     init_uart();
+#ifdef USE_XADC
     init_sysmon();
+#endif
+#ifdef USE_SPI
     init_spi();
+#endif
+#ifdef USE_ICAP
     init_icap();
+#endif
 }
 
 void
