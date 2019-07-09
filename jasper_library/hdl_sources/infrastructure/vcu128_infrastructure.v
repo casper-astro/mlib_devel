@@ -36,7 +36,7 @@ module vcu128_infrastructure(
 
   MMCM_BASE #(
    .BANDWIDTH          ("OPTIMIZED"), // Jitter programming ("HIGH","LOW","OPTIMIZED")
-   .CLKFBOUT_MULT_F    (4), // Multiply value for all CLKOUT (5.0-64.0).
+   .CLKFBOUT_MULT_F    (1), // Multiply value for all CLKOUT (5.0-64.0).
    .CLKFBOUT_PHASE     (0.0),
    .CLKIN1_PERIOD      (1), // VCU128 clock is 100 MHz
    .CLKOUT0_DIVIDE_F   (1.0), // Divide amount for CLKOUT0 (1.000-128.000).
@@ -54,12 +54,12 @@ module vcu128_infrastructure(
    .CLKOUT4_PHASE      (0.0),
    .CLKOUT5_PHASE      (0.0),
    .CLKOUT6_PHASE      (0.0),
-   .CLKOUT1_DIVIDE     (12),
-   .CLKOUT2_DIVIDE     (12),
-   .CLKOUT3_DIVIDE     (6),
-   .CLKOUT4_DIVIDE     (1),
-   .CLKOUT5_DIVIDE     (1),
-   .CLKOUT6_DIVIDE     (1),
+   .CLKOUT1_DIVIDE     (1),
+   .CLKOUT2_DIVIDE     (1),
+   .CLKOUT3_DIVIDE     (2),
+   .CLKOUT4_DIVIDE     (3),
+   .CLKOUT5_DIVIDE     (3),
+   .CLKOUT6_DIVIDE     (3),
    .CLKOUT4_CASCADE    ("FALSE"),
    .CLOCK_HOLD         ("FALSE"),
    .DIVCLK_DIVIDE      (1), // Master division value (1-80)

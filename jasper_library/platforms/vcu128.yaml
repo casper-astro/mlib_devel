@@ -1,6 +1,6 @@
 name: vcu128
 manufacturer: Xilinx
-fpga: XCVU37P-L2FSVH2892-EES9837 #xcvu9p-flga2104-2L-e
+fpga: xcvu37p-fsvh2892-2L-e-esl #xcvu9p-flga2104-2L-e
 backend_target: vivado
 sources: []
 constraints: []
