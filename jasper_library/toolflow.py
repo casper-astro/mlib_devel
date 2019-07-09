@@ -10,7 +10,6 @@ import os
 import platform
 import yellow_blocks.yellow_block as yellow_block
 import verilog
-import IPython
 from constraints import PortConstraint, ClockConstraint, GenClockConstraint, \
     ClockGroupConstraint, InputDelayConstraint, OutputDelayConstraint, MaxDelayConstraint, \
     MinDelayConstraint, FalsePathConstraint, MultiCycleConstraint, RawConstraint

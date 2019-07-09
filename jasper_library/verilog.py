@@ -13,7 +13,6 @@ import inspect
 import operator
 from memory import Register
 import pdb
-import IPython
 
 logger = logging.getLogger('jasper.verilog')
 

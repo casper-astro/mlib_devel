@@ -14,8 +14,6 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         
         hmcc = top.get_instance(name=self.fullname, entity='hmc')
 
-        #import IPython
-        #IPython.embed()
         hmcc.add_port('USER_CLK', 'sys_clk', dir='in')
         hmcc.add_port('USER_RST', 'sys_rst', dir='in')
         hmcc.add_port('HMC_CLK', 'hmc_clk', dir='in')

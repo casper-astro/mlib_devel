@@ -1,4 +1,3 @@
-import IPython
 import math
 from yellow_block import YellowBlock
 from yellow_block_typecodes import *
@@ -77,8 +76,6 @@ class axi4lite_interconnect(YellowBlock):
     def gen_tcl_cmds(self):
         print('axi4lite gen_tcl_cmds')
         print('=====================')
-        #import IPython
-        #IPython.embed()
         tcl_cmds = {}
         tcl_cmds['pre_synth'] = []
         tcl_cmds['pre_synth'] += ['add_files {%s/axi4_lite/axi4lite_slave_logic.vhd %s/axi4_lite/axi4lite_pkg.vhd}' %(self.hdl_root, self.hdl_root)]
