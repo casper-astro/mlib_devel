@@ -42,6 +42,7 @@ entity forty_gbe is
         FABRIC_GATEWAY    : std_logic_vector( 7 downto 0);
         FABRIC_ENABLE     : std_logic;
         TTL               : std_logic_vector( 7 downto 0);
+        MEZZ_PORT         : std_logic_vector( 1 downto 0);
         PROMISC_MODE      : integer;
         RX_CRC_CHK_ENABLE : integer := 0);
     port(
@@ -623,6 +624,7 @@ architecture arch_forty_gbe of forty_gbe is
         FABRIC_GATEWAY    : std_logic_vector(7 downto 0);
         FABRIC_ENABLE     : std_logic;
         TTL               : std_logic_vector(7 downto 0);
+        MEZZ_PORT         : std_logic_vector( 1 downto 0);
         PROMISC_MODE      : integer;
         RX_CRC_CHK_ENABLE : integer);
     port (
@@ -2444,6 +2446,7 @@ begin
         FABRIC_GATEWAY    => FABRIC_GATEWAY,
         FABRIC_ENABLE     => FABRIC_ENABLE,
         TTL               => TTL,
+        MEZZ_PORT         => MEZZ_PORT,
         PROMISC_MODE      => PROMISC_MODE,
         RX_CRC_CHK_ENABLE => RX_CRC_CHK_ENABLE)
     port map(
@@ -3408,3 +3411,4 @@ begin
     );
 
 end arch_forty_gbe;
+

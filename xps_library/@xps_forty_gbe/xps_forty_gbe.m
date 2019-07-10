@@ -50,8 +50,8 @@ s.ttl            = ['0x', dec2hex(eval(get_param(blk_name, 'ttl')))   ];
 
 %convert (more intuitive) mask values to defines to be passed on if using ROACH2
 switch s.hw_sys
-  case {'SKARAB'},
-    s.port = get_param(blk_name, 'port_r1');
+  case {'SKARAB'}
+    s.port = get_param(blk_name, 'port');
 end
 
 b = class(s,'xps_forty_gbe',blk_obj);
@@ -60,7 +60,7 @@ b = class(s,'xps_forty_gbe',blk_obj);
 b = set(b,'ip_name','forty_gbe');
 
 switch s.hw_sys
-  case {'SKARAB'},
+  case {'SKARAB'}
     b = set(b,'ip_version','1.00.a');
   otherwise
     error(['40GbE not supported for platform ', s.hw_sys]);
@@ -78,6 +78,10 @@ parameters.RX_DIST_RAM    = s.rx_dist_ram;
 parameters.CPU_RX_ENABLE  = s.cpu_rx_enable;
 parameters.CPU_TX_ENABLE  = s.cpu_tx_enable;
 parameters.TTL            = s.ttl;
+switch s.hw_sys
+  case {'SKARAB'}
+    parameters.MEZZ_PORT      = s.port;
+end
 
 b = set(b,'parameters',parameters);
 
@@ -87,3 +91,4 @@ ext_ports = {};
 
 b = set(b,'misc_ports',misc_ports);
 b = set(b,'ext_ports',ext_ports);
+
