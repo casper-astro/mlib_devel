@@ -1,0 +1,8 @@
+rst       3 10000            4                0 
+gbe       3 10004            10000            1 
+sys_block 1 20004            40               3 
+sys_board_id 1 20004            4                3 
+sys_rev   1 20008            4                3 
+sys_rev_rcs 1 20010            4                3 
+sys_scratchpad 3 20014            4                3 
+sys_clkcounter 1 20018            4                3 

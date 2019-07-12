@@ -1,0 +1,131 @@
+#-----------------------------------------------------------
+# Vivado v2018.2_AR71540 (64-bit)
+# SW Build 2258646 on Thu Jun 14 20:02:38 MDT 2018
+# IP Build 2256618 on Thu Jun 14 22:10:49 MDT 2018
+# Start of session at: Fri Jul 12 17:40:21 2019
+# Process ID: 9032
+# Current directory: /home/pulsar/casperlibs/ska_sa/mlib_devel
+# Command line: vivado -jou /home/pulsar/casperlibs/ska_sa/mlib_devel/test_vcu128/vivado.jou -log /home/pulsar/casperlibs/ska_sa/mlib_devel/test_vcu128/vivado.log -mode batch -source /home/pulsar/casperlibs/ska_sa/mlib_devel/test_vcu128/gogogo.tcl
+# Log file: /home/pulsar/casperlibs/ska_sa/mlib_devel/test_vcu128/vivado.log
+# Journal file: /home/pulsar/casperlibs/ska_sa/mlib_devel/test_vcu128/vivado.jou
+#-----------------------------------------------------------
+source /home/pulsar/casperlibs/ska_sa/mlib_devel/test_vcu128/gogogo.tcl
+# puts "Starting tcl script"
+Starting tcl script
+# create_project -f myproj /home/pulsar/casperlibs/ska_sa/mlib_devel/test_vcu128/myproj -part xcvu37p-fsvh2892-2L-e-es1
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/test_vcu128/top.v
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/gbe_udp.v
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/gig_eth_mac.v
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/mdio_master.v
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/mdio_config.v
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/gbe_tx.v
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/gbe_rx.v
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/gig_eth_mac_tx.v
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/CRC_chk.v
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/gbe_cpu_attach_wb.v
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/gig_eth_mac_rx.v
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/CRC_gen.v
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/virtexuplus/gig_ethernet_pcs_pma_sgmii_lvds.xci
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/opt/Xilinx/Vivado/2018.2/data/ip'.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip'.
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_l_ethernet:gt_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/l_ethernet_v2_3/interfaces/gt_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/l_ethernet_v2_3/interfaces/gt_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_l_ethernet:shared_logic_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/l_ethernet_v2_3/interfaces/shared_logic_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/l_ethernet_v2_3/interfaces/shared_logic_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_l_ethernet:drp_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/l_ethernet_v2_3/interfaces/drp_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/l_ethernet_v2_3/interfaces/drp_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_l_ethernet:statistics_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/l_ethernet_v2_3/interfaces/statistics_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/l_ethernet_v2_3/interfaces/statistics_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_l_ethernet:ctrl_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/l_ethernet_v2_3/interfaces/ctrl_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/l_ethernet_v2_3/interfaces/ctrl_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_l_ethernet:flowctrl_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/l_ethernet_v2_3/interfaces/flowctrl_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/l_ethernet_v2_3/interfaces/flowctrl_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_l_ethernet:user_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/l_ethernet_v2_3/interfaces/user_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/l_ethernet_v2_3/interfaces/user_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_l_ethernet:an_lt_fec_ctrl_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/l_ethernet_v2_3/interfaces/an_lt_fec_ctrl_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/l_ethernet_v2_3/interfaces/an_lt_fec_ctrl_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_xxv_ethernet:gt_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/gt_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/gt_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_xxv_ethernet:shared_logic_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/shared_logic_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/shared_logic_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_xxv_ethernet:drp_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/drp_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/drp_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_xxv_ethernet:statistics_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/statistics_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/statistics_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_xxv_ethernet:ctrl_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/ctrl_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/ctrl_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_xxv_ethernet:flowctrl_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/flowctrl_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/flowctrl_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_xxv_ethernet:user_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/user_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/user_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_xxv_ethernet:an_lt_fec_ctrl_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/an_lt_fec_ctrl_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/an_lt_fec_ctrl_ports_int.xml'
+WARNING: [IP_Flow 19-2162] IP 'gig_ethernet_pcs_pma_sgmii_lvds' is locked:
+* IP definition '1G/2.5G Ethernet PCS/PMA or SGMII (16.0)' for IP 'gig_ethernet_pcs_pma_sgmii_lvds' (customized with software release 2016.4) has a newer minor version in the IP Catalog.
+* Current project part 'xcvu37p-fsvh2892-2L-e-es1' and the part 'xcvu9p-flga2104-2L-e-es1' used to customize the IP 'gig_ethernet_pcs_pma_sgmii_lvds' do not match.
+Please select 'Report IP Status' from the 'Tools/Report' menu or run Tcl command 'report_ip_status' for more information.
+import_files: Time (s): cpu = 00:00:05 ; elapsed = 00:00:08 . Memory (MB): peak = 1226.367 ; gain = 47.922 ; free physical = 142 ; free virtual = 285
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/virtexuplus/gbe_rx_ctrl_fifo.xci
+WARNING: [IP_Flow 19-2162] IP 'gbe_rx_ctrl_fifo' is locked:
+* IP definition 'FIFO Generator (13.1)' for IP 'gbe_rx_ctrl_fifo' (customized with software release 2016.4) has a newer minor version in the IP Catalog.
+* IP definition 'FIFO Generator (13.1)' for IP 'gbe_rx_ctrl_fifo' (customized with software release 2016.4) has a different revision in the IP Catalog.
+* Current project part 'xcvu37p-fsvh2892-2L-e-es1' and the part 'xcvu9p-flga2104-2L-e-es1' used to customize the IP 'gbe_rx_ctrl_fifo' do not match.
+Please select 'Report IP Status' from the 'Tools/Report' menu or run Tcl command 'report_ip_status' for more information.
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/virtexuplus/gbe_ctrl_fifo.xci
+WARNING: [IP_Flow 19-2162] IP 'gbe_ctrl_fifo' is locked:
+* IP definition 'FIFO Generator (13.1)' for IP 'gbe_ctrl_fifo' (customized with software release 2016.4) has a newer minor version in the IP Catalog.
+* IP definition 'FIFO Generator (13.1)' for IP 'gbe_ctrl_fifo' (customized with software release 2016.4) has a different revision in the IP Catalog.
+* Current project part 'xcvu37p-fsvh2892-2L-e-es1' and the part 'xcvu9p-flga2104-2L-e-es1' used to customize the IP 'gbe_ctrl_fifo' do not match.
+Please select 'Report IP Status' from the 'Tools/Report' menu or run Tcl command 'report_ip_status' for more information.
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/virtexuplus/gbe_tx_packet_fifo.xci
+WARNING: [IP_Flow 19-2162] IP 'gbe_tx_packet_fifo' is locked:
+* IP definition 'FIFO Generator (13.1)' for IP 'gbe_tx_packet_fifo' (customized with software release 2016.4) has a newer minor version in the IP Catalog.
+* IP definition 'FIFO Generator (13.1)' for IP 'gbe_tx_packet_fifo' (customized with software release 2016.4) has a different revision in the IP Catalog.
+* Current project part 'xcvu37p-fsvh2892-2L-e-es1' and the part 'xcvu9p-flga2104-2L-e-es1' used to customize the IP 'gbe_tx_packet_fifo' do not match.
+Please select 'Report IP Status' from the 'Tools/Report' menu or run Tcl command 'report_ip_status' for more information.
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/virtexuplus/gbe_cpu_buffer.xci
+WARNING: [IP_Flow 19-2162] IP 'gbe_cpu_buffer' is locked:
+* IP definition 'Block Memory Generator (8.3)' for IP 'gbe_cpu_buffer' (customized with software release 2016.4) has a newer minor version in the IP Catalog.
+* IP definition 'Block Memory Generator (8.3)' for IP 'gbe_cpu_buffer' (customized with software release 2016.4) has a different revision in the IP Catalog.
+* Current project part 'xcvu37p-fsvh2892-2L-e-es1' and the part 'xcvu9p-flga2104-2L-e-es1' used to customize the IP 'gbe_cpu_buffer' do not match.
+Please select 'Report IP Status' from the 'Tools/Report' menu or run Tcl command 'report_ip_status' for more information.
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/virtexuplus/gbe_rx_packet_fifo.xci
+WARNING: [IP_Flow 19-2162] IP 'gbe_rx_packet_fifo' is locked:
+* IP definition 'FIFO Generator (13.1)' for IP 'gbe_rx_packet_fifo' (customized with software release 2016.4) has a newer minor version in the IP Catalog.
+* IP definition 'FIFO Generator (13.1)' for IP 'gbe_rx_packet_fifo' (customized with software release 2016.4) has a different revision in the IP Catalog.
+* Current project part 'xcvu37p-fsvh2892-2L-e-es1' and the part 'xcvu9p-flga2104-2L-e-es1' used to customize the IP 'gbe_rx_packet_fifo' do not match.
+Please select 'Report IP Status' from the 'Tools/Report' menu or run Tcl command 'report_ip_status' for more information.
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/virtexuplus/gbe_arp_cache.xci
+WARNING: [IP_Flow 19-2162] IP 'gbe_arp_cache' is locked:
+* IP definition 'Block Memory Generator (8.3)' for IP 'gbe_arp_cache' (customized with software release 2016.4) has a newer minor version in the IP Catalog.
+* IP definition 'Block Memory Generator (8.3)' for IP 'gbe_arp_cache' (customized with software release 2016.4) has a different revision in the IP Catalog.
+* Current project part 'xcvu37p-fsvh2892-2L-e-es1' and the part 'xcvu9p-flga2104-2L-e-es1' used to customize the IP 'gbe_arp_cache' do not match.
+Please select 'Report IP Status' from the 'Tools/Report' menu or run Tcl command 'report_ip_status' for more information.
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/wb_register_ppc2simulink
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/gpio_simulink2ext
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/infrastructure/vcu128_infrastructure.v
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/wbs_arbiter
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/sys_block
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/test_vcu128/sysgen/hdl_netlist/test_vcu128.srcs/sources_1/imports/sysgen
+# import_files -force /home/pulsar/casperlibs/ska_sa/mlib_devel/test_vcu128/sysgen/hdl_netlist/test_vcu128.srcs/sources_1/ip/test_vcu128_c_counter_binary_v12_0_i0/test_vcu128_c_counter_binary_v12_0_i0.xci
+# set repos [get_property ip_repo_paths [current_project]]
+# set_property ip_repo_paths "$repos /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/axi_wb_bridge/ip_repo" [current_project]
+# update_ip_catalog
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/axi_wb_bridge/ip_repo'.
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_l_ethernet:gt_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/l_ethernet_v2_3/interfaces/gt_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/l_ethernet_v2_3/interfaces/gt_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_l_ethernet:shared_logic_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/l_ethernet_v2_3/interfaces/shared_logic_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/l_ethernet_v2_3/interfaces/shared_logic_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_l_ethernet:drp_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/l_ethernet_v2_3/interfaces/drp_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/l_ethernet_v2_3/interfaces/drp_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_l_ethernet:statistics_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/l_ethernet_v2_3/interfaces/statistics_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/l_ethernet_v2_3/interfaces/statistics_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_l_ethernet:ctrl_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/l_ethernet_v2_3/interfaces/ctrl_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/l_ethernet_v2_3/interfaces/ctrl_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_l_ethernet:flowctrl_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/l_ethernet_v2_3/interfaces/flowctrl_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/l_ethernet_v2_3/interfaces/flowctrl_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_l_ethernet:user_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/l_ethernet_v2_3/interfaces/user_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/l_ethernet_v2_3/interfaces/user_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_l_ethernet:an_lt_fec_ctrl_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/l_ethernet_v2_3/interfaces/an_lt_fec_ctrl_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/l_ethernet_v2_3/interfaces/an_lt_fec_ctrl_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_xxv_ethernet:gt_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/gt_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/gt_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_xxv_ethernet:shared_logic_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/shared_logic_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/shared_logic_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_xxv_ethernet:drp_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/drp_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/drp_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_xxv_ethernet:statistics_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/statistics_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/statistics_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_xxv_ethernet:ctrl_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/ctrl_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/ctrl_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_xxv_ethernet:flowctrl_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/flowctrl_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/flowctrl_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_xxv_ethernet:user_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/user_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/user_ports_int.xml'
+WARNING: [IP_Flow 19-4830] Duplicate Interface found for 'xilinx.com:display_xxv_ethernet:an_lt_fec_ctrl_ports_int:2.0'. The one found in location '/opt/Xilinx/Vivado/2018.2/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/an_lt_fec_ctrl_ports_int.xml' will take precedence over the same Interface in location '/opt/Xilinx/Vivado/2018.2/patches/AR71540_Vivado_2018_2_preliminary_rev1/vivado/data/ip/xilinx/xxv_ethernet_v2_4/interfaces/an_lt_fec_ctrl_ports_int.xml'
+# import_files -force -fileset constrs_1 /home/pulsar/casperlibs/ska_sa/mlib_devel/test_vcu128/user_const.xdc
+# set_property top top [current_fileset]
+# update_compile_order -fileset sources_1
+ERROR: [Common 17-179] Fork failed: Cannot allocate memory
+CRITICAL WARNING: [filemgmt 20-742] The top module "top" specified for this project can not be validated. The current project is using automatic hierarchy update mode, and hence a new suitable replacement top will be automatically selected. If this is not desired, please change the hierarchy update mode to one of the manual compile order modes first, and then set top to any desired value.
+Resolution: To switch to manual update order go to the Sources view, right-click on any node in the hierarchy and in the context menu select: 'Hierarchy Update' option 'No Update' or run the following Tcl Command: set_property source_mgmt_mode None [current_project] (which is the Manual Compile Order mode).
+CRITICAL WARNING: [filemgmt 20-730] Could not find a top module in the fileset sources_1.
+Resolution: With the gui up, review the source files in the Sources window. Use Add Sources to add any needed sources. If the files are disabled, enable them. You can also select the file and choose Set Used In from the pop-up menu. Review if they are being used at the proper points of the flow.
+ERROR: [Common 17-39] 'update_compile_order' failed due to earlier errors.
+
+    while executing
+"update_compile_order -fileset sources_1"
+    (file "/home/pulsar/casperlibs/ska_sa/mlib_devel/test_vcu128/gogogo.tcl" line 34)
+INFO: [Common 17-206] Exiting Vivado at Fri Jul 12 17:40:47 2019...
