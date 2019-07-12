@@ -6,7 +6,7 @@ from yellow_block_typecodes import *
 class onegbe(YellowBlock):
     @staticmethod
     def factory(blk, plat, hdl_root=None):
-        if plat.name in ['vcu118']:
+        if plat.name in ['vcu118','vcu128']:
             return onegbe_vcu118(blk, plat, hdl_root)
         else:
             return onegbe_snap(blk, plat, hdl_root)

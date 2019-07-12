@@ -1,6 +1,6 @@
 name: vcu128
 manufacturer: Xilinx
-fpga: xcvu37p-fsvh2892-2L-e-esl #xcvu9p-flga2104-2L-e
+fpga: xcvu37p-fsvh2892-2L-e-es1 #xcvu9p-flga2104-2L-e
 backend_target: vivado
 sources: []
 constraints: []
@@ -32,12 +32,12 @@ pins:
     loc: AB42
   qsfp4_clk156_n:
     loc: AB43
-  #usb_tx:
-  #  iostd: LVCMOS18
-  #  loc: AW25
-  #usb_rx:
-  #  iostd: LVCMOS18
-  #  loc: BB21
+  usb_tx:
+    iostd: LVCMOS18
+    loc: AW25
+  usb_rx:
+    iostd: LVCMOS18
+    loc: BB21
   led: 
     iostd: LVCMOS18
     loc:
