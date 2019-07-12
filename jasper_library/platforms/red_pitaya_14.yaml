@@ -1,3 +1,7 @@
+# The name in Simulink for the 14-bit red pitaya is RED_PITAYA_14 whilst the 10-bit red pitaya is RED_PITAYA_10. 
+# Therefore, the instantiated .yaml file needs to match the Red Pitaya instance name (RED_PITAYA_14 or RED_PITAYA_10).
+# However, the undelying Python YellowBlock class instantiated is the same for both instances.
+# As a result, the name field in both .yaml files (red_pitaya_10.yaml and red_pitaya_14.yaml) is the same (red_pitaya - pointing to red_pitaya.py).
 name: red_pitaya
 manufacturer: Xilinx
 fpga: xc7z010clg400-1
@@ -18,6 +22,10 @@ pins:
   ADC_DATA_IN1:
     iostd: LVCMOS18
     loc:
+       - Y17
+       - W16
+       - Y16
+       - W15
        - W14
        - Y14
        - W13
@@ -31,6 +39,10 @@ pins:
   ADC_DATA_IN2:
     iostd: LVCMOS18
     loc:
+       - R18
+       - P16
+       - P18
+       - N17
        - R19
        - T20
        - T19
@@ -67,6 +79,8 @@ pins:
        - G14
        - J15
        - J14
+       - E6
+       - D8
   gpio:
     iostd: LVCMOS33
     loc:
@@ -84,12 +98,18 @@ pins:
        - L17
        - K16
        - J16
+       - M14
+       - M15
 #  ADC_LA_CLK:
 #     iostd: LVCMOS33
 #     loc: J16
   DAC_DATA_OUT:
     iostd: LVCMOS33
     loc:
+       - M19
+       - M20
+       - L19
+       - L20
        - K19
        - J19
        - J20
