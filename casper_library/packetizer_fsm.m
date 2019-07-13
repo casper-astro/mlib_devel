@@ -1,4 +1,4 @@
-function [ fifo_re, bram_addr_en, bram_we, serializer_shift, serializer_ld, shift_count_en, shift_count_rst, bram_addr_rst, data_count_en, data_count_rst, done] = pseudo_packetizer_fsm( fifo_empty, shift_count, data_per_word, data_count, n_words, sync_reset )
+function [ fifo_re, bram_addr_en, bram_we, serializer_shift, serializer_ld, shift_count_en, shift_count_rst, bram_addr_rst, data_count_en, data_count_rst, done] = pseudo_packetizer_fsm( fifo_empty, shift_count, data_per_word, data_count, n_words, reset )
 
 persistent state,
 state=xl_state(0,{xlUnsigned,3,0});
@@ -24,10 +24,13 @@ switch double(state)
         data_count_en = false;
         data_count_rst = false;
         done = false;
+        
         if data_count >= n_words
             state = state_done;
         elseif ~fifo_empty
             state = state_read;
+        elseif reset
+            state = state_done;
         end
             
     case state_read
@@ -41,10 +44,14 @@ switch double(state)
         bram_addr_rst = false;
         data_count_en = false;
         data_count_rst = false;        
-                done = false;
+        done = false;
                 
-        state = state_load_sr;
-        
+         if reset
+            state = state_done;
+         else   
+            state = state_load_sr;
+         end
+         
     case state_load_sr
         fifo_re = false;
         bram_addr_en = false;
@@ -56,9 +63,13 @@ switch double(state)
         bram_addr_rst = false;
         data_count_en = false;
         data_count_rst = false;
-                done = false;
+        done = false;
                 
-        state = state_serialize;
+        if reset
+            state = state_done;
+        else        
+            state = state_serialize;
+        end
         
     case state_serialize
         fifo_re = false;
@@ -71,10 +82,12 @@ switch double(state)
         bram_addr_rst = false;
         data_count_en = true;
         data_count_rst = false;
-                done = false;
+        done = false;
         
         if (shift_count == data_per_word)
             state = state_idle;
+        elseif reset
+            state = state_done;
         end
         
     case state_done
@@ -88,9 +101,11 @@ switch double(state)
         bram_addr_rst = true;
         data_count_en = false;
         data_count_rst = true;  
-                done = true;
+        done = true;
         
-        if sync_reset
+        if reset
+            state = state_done;
+        else    
             state = state_init;
         end
         
@@ -105,9 +120,12 @@ switch double(state)
         bram_addr_rst = false;
         data_count_en = false;
         data_count_rst = false;
-        done = false;        
+        done = false;
+        
         if ~fifo_empty
             state = state_idle;
+        elseif reset
+            state = state_done;
         else
             state = state_init;
         end
@@ -123,11 +141,7 @@ switch double(state)
         bram_addr_rst = false;
         data_count_en = false;
         data_count_rst = false;
-                done = false;
+        done = false;
         
-        state = state_done;
-        
-        
-        
-                
+        state = state_done;             
 end
