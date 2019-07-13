@@ -4,7 +4,9 @@ fpga: xc7vx690tffg1927-2
 config_voltage: 1.8
 cfgbvs: GND
 backend_target: vivado
-dsp_wb_base_address: 0x80070000
+# boot image options: toolflow (default), multiboot and golden
+boot_image: toolflow
+dsp_wb_base_address: 0x80084000
 dsp_wb_base_address_alignment: 4
 # For SKARAB, use a hierarchical wishbone arbiter, which
 # should help meet timing

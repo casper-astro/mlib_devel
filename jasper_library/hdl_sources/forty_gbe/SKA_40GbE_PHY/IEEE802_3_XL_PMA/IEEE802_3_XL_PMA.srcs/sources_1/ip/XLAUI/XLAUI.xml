@@ -201,7 +201,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Nov 07 12:25:03 UTC 2016</spirit:value>
+            <spirit:value>Tue Aug 28 11:04:39 UTC 2018</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>StaleAtRelink</spirit:name>
@@ -222,6 +222,10 @@
           <spirit:parameter>
             <spirit:name>customizationCRCversion</spirit:name>
             <spirit:value>6</spirit:value>
+          </spirit:parameter>
+          <spirit:parameter>
+            <spirit:name>outputProductCRC</spirit:name>
+            <spirit:value>8:b3462ec3</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -5559,213 +5563,8 @@
   </spirit:parameters>
   <spirit:vendorExtensions>
     <xilinx:coreExtensions>
-      <xilinx:supportedFamilies>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">aartix7{xa7a35tcpg236-1I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">aartix7{xa7a35tcpg236-1Q}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">aartix7{xa7a35tcpg236-2I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">aartix7{xa7a35tcsg325-1I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">aartix7{xa7a35tcsg325-1Q}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">aartix7{xa7a35tcsg325-2I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">aartix7{xa7a50tcpg236-1I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">aartix7{xa7a50tcpg236-1Q}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">aartix7{xa7a50tcpg236-2I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">aartix7{xa7a50tcsg325-1I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">aartix7{xa7a50tcsg325-1Q}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">aartix7{xa7a50tcsg325-2I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">aartix7{xa7a75tfgg484-1I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">aartix7{xa7a75tfgg484-1Q}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">aartix7{xa7a75tfgg484-2I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">aartix7{xa7a100tfgg484-1I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">aartix7{xa7a100tfgg484-1Q}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">aartix7{xa7a100tfgg484-2I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">aartix7{xa7a100tfgg676-1I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">aartix7{xa7a100tfgg676-1Q}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">aartix7{xa7a100tfgg676-2I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7l{xc7a35tlcpg236-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7l{xc7a35tlcsg325-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7l{xc7a35tlfgg484-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7l{xc7a50tlcpg236-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7l{xc7a50tlcsg325-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7l{xc7a50tlfgg484-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7l{xc7a75tlfgg484-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7l{xc7a75tlfgg676-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7l{xc7a100tlfgg484-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7l{xc7a100tlfgg676-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7l{xc7a200tlfbg484-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7l{xc7a200tlfbg676-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7l{xc7a200tlffg1156-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7l{xc7a200tlsbg484-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7l{xc7a350tlfbg484-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7l{xc7a350tlfbg676-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7l{xc7a350tlffg1156-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a35tcpg236-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a35tcpg236-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a35tcpg236-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a35tcpg236-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a35tcsg325-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a35tcsg325-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a35tcsg325-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a35tcsg325-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a35tfgg484-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a35tfgg484-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a35tfgg484-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a35tfgg484-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a50tcpg236-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a50tcpg236-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a50tcpg236-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a50tcpg236-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a50tcsg325-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a50tcsg325-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a50tcsg325-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a50tcsg325-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a50tfgg484-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a50tfgg484-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a50tfgg484-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a50tfgg484-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a75tfgg484-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a75tfgg484-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a75tfgg484-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a75tfgg484-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a75tfgg676-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a75tfgg676-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a75tfgg676-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a75tfgg676-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a100tfgg484-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a100tfgg484-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a100tfgg484-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a100tfgg484-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a100tfgg676-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a100tfgg676-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a100tfgg676-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a100tfgg676-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a200tfbg484-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a200tfbg484-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a200tfbg484-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a200tfbg484-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a200tfbg676-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a200tfbg676-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a200tfbg676-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a200tfbg676-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a200tffg1156-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a200tffg1156-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a200tffg1156-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a200tffg1156-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a200tsbg484-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a200tsbg484-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a200tsbg484-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a200tsbg484-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a350tfbg484-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a350tfbg484-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a350tfbg484-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a350tfbg484-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a350tfbg676-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a350tfbg676-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a350tfbg676-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a350tfbg676-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a350tffg1156-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a350tffg1156-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a350tffg1156-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">artix7{xc7a350tffg1156-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">azynq{xa7z030fbg484-1I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">azynq{xa7z030fbg484-1Q}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">kintex7l{(.*)(tl)(.*)}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">kintex7{(.*)(t)(.*)}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a50tcs325-1I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a50tcs325-1M}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a50tcs325-2I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a50tfg484-1I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a50tfg484-1M}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a50tfg484-2I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a100tfg484-1I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a100tfg484-1M}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a100tfg484-2I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a100tfg484-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a200trb484-1I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a200trb484-1M}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a200trb484-2I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a200trb484-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a200trb676-1I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a200trb676-1M}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a200trb676-2I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a200trb676-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a200trs484-1I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a200trs484-1M}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a200trs484-2I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a200trs484-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a350tfb484-1I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a350tfb484-1M}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a350tfb484-2I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a350tfb484-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a350tfb676-1I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a350tfb676-1M}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a350tfb676-2I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qartix7{xq7a350tfb676-2L}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qkintex7l{xq7k(325|410)(tl)(.*)}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qkintex7{xq7k(325|410)(t)(.*)}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qvirtex7{xq7v(585)(t)(.*)}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">qvirtex7{xq7vx(330|485|690|980)(t)(.*)}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">qzynq{xq7z030rb484-1I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">qzynq{xq7z030rb484-1Q}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">qzynq{xq7z030rb484-2I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">qzynq{xq7z030rf676-1I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">qzynq{xq7z030rf676-1Q}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">qzynq{xq7z030rf676-2I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">qzynq{xq7z045fb484-1I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">qzynq{xq7z045fb484-1Q}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">qzynq{xq7z045fb484-2I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">qzynq{xq7z045rf676-1I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">qzynq{xq7z045rf676-1Q}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">qzynq{xq7z045rf676-2I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">qzynq{xq7z045rf900-1I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">qzynq{xq7z045rf900-1Q}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">qzynq{xq7z045rf900-2I}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">virtex7{xc7v(585|1500|2000)(t)(.*)}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Pre-Production">virtex7{xc7vh(290|580|870)(t)(.*)}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">virtex7{xc7vx(330|415|550|690|980|1140)(t)(.*)}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">virtex7{xc7vx(485)(t)(.*)}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z015clg485-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z015clg485-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z015clg485-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z030fbg484-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z030fbg484-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z030fbg484-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z030fbg676-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z030fbg676-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z030fbg676-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z030ffg676-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z030ffg676-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z030ffg676-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z030sbg485-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z030sbg485-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z030sbg485-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z045fbg676-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z045fbg676-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z045fbg676-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z045ffg676-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z045ffg676-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z045ffg676-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z045ffg900-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z045ffg900-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z045ffg900-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z100ffg900-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z100ffg900-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z100ffg900-3}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z100ffg1156-1}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z100ffg1156-2}</xilinx:family>
-        <xilinx:family xilinx:lifeCycle="Production">zynq{xc7z100ffg1156-3}</xilinx:family>
-      </xilinx:supportedFamilies>
-      <xilinx:taxonomies>
-        <xilinx:taxonomy>/FPGA_Features_and_Design/IO_Interfaces</xilinx:taxonomy>
-      </xilinx:taxonomies>
       <xilinx:displayName>7 Series FPGAs Transceivers Wizard</xilinx:displayName>
       <xilinx:coreRevision>0</xilinx:coreRevision>
-      <xilinx:upgrades>
-        <xilinx:canUpgradeFrom>xilinx.com:ip:gtwizard:2.6</xilinx:canUpgradeFrom>
-        <xilinx:canUpgradeFrom>xilinx.com:ip:gtwizard:3.0</xilinx:canUpgradeFrom>
-        <xilinx:canUpgradeFrom>xilinx.com:ip:gtwizard:3.1</xilinx:canUpgradeFrom>
-        <xilinx:canUpgradeFrom>xilinx.com:ip:gtwizard:3.2</xilinx:canUpgradeFrom>
-        <xilinx:canUpgradeFrom>xilinx.com:ip:gtwizard:3.3</xilinx:canUpgradeFrom>
-      </xilinx:upgrades>
       <xilinx:coreCreationDateTime>2014-09-26T23:27:30Z</xilinx:coreCreationDateTime>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>

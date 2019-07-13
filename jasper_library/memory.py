@@ -1,5 +1,5 @@
 class Register(object):
-    def __init__(self, name, nbytes=4, offset=0, mode='r'):
+    def __init__(self, name, nbytes=4, offset=0, mode='r', default_val=0, ram=False, ram_size=-1):
         """
         A class to encapsulate a register's parameters. This is used when
         instantiating a device with a large address space, but it is desirable
@@ -31,15 +31,20 @@ class Register(object):
                     inst.add_wb_interface('sys_block', mode='r', nbytes=64, memory_map=self.memory_map, typecode=self.typecode)
         
         :param name: The name of this register
-        :type name: str
+        :type name: String
         :param nbytes: Number of bytes this register occupies
-        :type nbytes: int
+        :type nbytes: Integer
         :param offset: Location, in bytes, where this register resides in memory, relative to the base address of the device.
-        :type offset: int
-        :param mode: Read/write permission for this register. ``r`` (readable), ``w`` (writable), ``rw`` (read/writable)
-        :type mode: str
+        :type offset: Integer
+        :param mode: Read/write permission for this register. 'r' (readable), 'w' (writable), 'rw' (read/writable)
+        :type mode: String
+        :param default_val: Default value for register to be reset to and initialized.
+        :type default_val: Integer
         """
         self.name = name
         self.nbytes = nbytes
         self.offset = offset
         self.mode = mode
+        self.ram = ram
+        #self.ram_size = ram_size
+        self.default_val = default_val

@@ -1,5 +1,6 @@
 {
-   guistr: "# # String gsaved with Nlview 6.5.12  2016-01-29 bk=1.3547 VDI=39 GEI=35 GUI=JA:1.6
+   ExpandedHierarchyInLayout: "",
+   guistr: "# # String gsaved with Nlview 6.8.5  2018-01-30 bk=1.4354 VDI=40 GEI=35 GUI=JA:1.6 TLS
 #  -string -flagsOSRD
 preplace port RST_O -pg 1 -y 750 -defaultsOSRD
 preplace port UART -pg 1 -y 620 -defaultsOSRD
@@ -14,104 +15,50 @@ preplace portBus DAT_O -pg 1 -y 770 -defaultsOSRD
 preplace portBus ADR_O -pg 1 -y 790 -defaultsOSRD
 preplace portBus SEL_O -pg 1 -y 830 -defaultsOSRD
 preplace portBus DAT_I -pg 1 -y 790 -defaultsOSRD
-preplace inst axi_timebase_wdt_0 -pg 1 -lvl 5 -y 280 -defaultsOSRD
-preplace inst microblaze_0_local_memory|ilmb_v10 -pg 1 -lvl 1 -y 1380 -defaultsOSRD
-preplace inst microblaze_0_axi_periph|s00_couplers -pg 1 -lvl 1 -y 502 -defaultsOSRD
-preplace inst microblaze_0_axi_periph|m03_couplers -pg 1 -lvl 3 -y 782 -defaultsOSRD
-preplace inst microblaze_0_axi_periph|m03_couplers|auto_pc -pg 1 -lvl 1 -y 782 -defaultsOSRD
-preplace inst microblaze_0_axi_periph -pg 1 -lvl 4 -y 312 -defaultsOSRD
-preplace inst microblaze_0_local_memory|lmb_bram -pg 1 -lvl 3 -y 1260 -defaultsOSRD
+preplace inst axi_timebase_wdt_0 -pg 1 -lvl 5 -y 250 -defaultsOSRD
+preplace inst microblaze_0_axi_periph -pg 1 -lvl 4 -y 310 -defaultsOSRD
+preplace inst axi_timer_0 -pg 1 -lvl 5 -y 430 -defaultsOSRD
 preplace inst xlconcat_0 -pg 1 -lvl 1 -y 530 -defaultsOSRD
-preplace inst axi_timer_0 -pg 1 -lvl 5 -y 450 -defaultsOSRD
-preplace inst microblaze_0_axi_periph|m04_couplers -pg 1 -lvl 3 -y 952 -defaultsOSRD
-preplace inst microblaze_0_local_memory|dlmb_bram_if_cntlr -pg 1 -lvl 2 -y 1250 -defaultsOSRD
 preplace inst microblaze_0_axi_intc -pg 1 -lvl 2 -y 290 -defaultsOSRD
 preplace inst mdm_1 -pg 1 -lvl 2 -y 70 -defaultsOSRD
-preplace inst microblaze_0_axi_periph|m01_couplers -pg 1 -lvl 3 -y 402 -defaultsOSRD
 preplace inst rst_Clk_100M -pg 1 -lvl 1 -y 100 -defaultsOSRD
 preplace inst microblaze_0 -pg 1 -lvl 3 -y 320 -defaultsOSRD
 preplace inst axi_uartlite_0 -pg 1 -lvl 5 -y 630 -defaultsOSRD
-preplace inst microblaze_0_local_memory|dlmb_v10 -pg 1 -lvl 1 -y 1230 -defaultsOSRD
-preplace inst microblaze_0_axi_periph|xbar -pg 1 -lvl 2 -y 532 -defaultsOSRD
-preplace inst microblaze_0_local_memory -pg 1 -lvl 4 -y 1220 -defaultsOSRD
-preplace inst microblaze_0_axi_periph|m02_couplers -pg 1 -lvl 3 -y 572 -defaultsOSRD
-preplace inst microblaze_0_axi_periph|m00_couplers -pg 1 -lvl 3 -y 232 -defaultsOSRD
-preplace inst microblaze_0_local_memory|ilmb_bram_if_cntlr -pg 1 -lvl 2 -y 1380 -defaultsOSRD
+preplace inst microblaze_0_local_memory -pg 1 -lvl 4 -y 692 -defaultsOSRD
 preplace inst axi_slave_wishbone_classic_master_0 -pg 1 -lvl 5 -y 810 -defaultsOSRD
-preplace netloc microblaze_0_axi_periph|m04_couplers_to_microblaze_0_axi_periph 1 3 1 N
-preplace netloc microblaze_0_axi_periph|xbar_to_m00_couplers 1 2 1 2360
-preplace netloc microblaze_0_axi_periph_M02_AXI 1 4 1 3080
-preplace netloc microblaze_0_axi_periph|S00_ACLK_1 1 0 1 N
-preplace netloc microblaze_0_local_memory|microblaze_0_dlmb_bus 1 1 1 N
-preplace netloc axi_timer_0_interrupt 1 0 6 100 210 NJ 160 NJ 70 NJ 70 NJ 70 4680
-preplace netloc microblaze_0_axi_periph|M02_ARESETN_1 1 0 3 NJ 402 NJ 402 2370
-preplace netloc microblaze_0_axi_periph|m03_couplers|S_ARESETN_1 1 0 1 N
-preplace netloc microblaze_0_axi_periph_M03_AXI 1 4 1 3130
-preplace netloc microblaze_0_axi_periph|M00_ARESETN_1 1 0 3 NJ 232 NJ 232 N
-preplace netloc microblaze_0_axi_periph_M01_AXI 1 4 1 3100
-preplace netloc microblaze_0_axi_periph|s00_couplers_to_xbar 1 1 1 2040
-preplace netloc microblaze_0_local_memory|microblaze_0_ilmb 1 0 1 N
-preplace netloc microblaze_0_axi_periph|m01_couplers_to_microblaze_0_axi_periph 1 3 1 N
-preplace netloc DAT_I_1 1 0 5 NJ 410 NJ 410 NJ 30 NJ 30 3140
-preplace netloc microblaze_0_dlmb_1 1 3 1 1300
-preplace netloc microblaze_0_intc_axi 1 1 4 530 130 NJ 110 NJ 110 3060
-preplace netloc rst_Clk_100M_bus_struct_reset 1 1 3 520 140 NJ 140 NJ
-preplace netloc xlconcat_0_dout 1 1 1 530
-preplace netloc rst_Clk_100M_mb_reset 1 1 2 510 390 800
-preplace netloc microblaze_0_local_memory|microblaze_0_dlmb_cntlr 1 2 1 N
-preplace netloc microblaze_0_axi_periph|M02_ACLK_1 1 0 3 NJ 392 NJ 392 2400
-preplace netloc microblaze_0_local_memory|microblaze_0_Clk 1 0 2 1820 1300 2040
-preplace netloc microblaze_0_axi_periph|m00_couplers_to_microblaze_0_axi_periph 1 3 1 N
-preplace netloc microblaze_0_axi_periph|m03_couplers|m03_couplers_to_auto_pc 1 0 1 2580
-preplace netloc microblaze_0_axi_periph|xbar_to_m03_couplers 1 2 1 2360
-preplace netloc rst_Clk_100M_interconnect_aresetn 1 1 3 NJ 500 NJ 500 1290
-preplace netloc microblaze_0_local_memory|microblaze_0_ilmb_bus 1 1 1 2030
-preplace netloc microblaze_0_ilmb_1 1 3 1 1270
-preplace netloc axi_slave_wishbone_classic_master_0_SEL_O 1 5 1 N
-preplace netloc microblaze_0_interrupt 1 2 1 N
-preplace netloc mdm_1_debug_sys_rst 1 0 3 110 190 NJ 180 750
-preplace netloc microblaze_0_axi_periph|xbar_to_m02_couplers 1 2 1 N
-preplace netloc axi_timebase_wdt_0_wdt_reset 1 0 6 110 10 NJ 10 NJ 10 NJ 10 NJ 10 4690
-preplace netloc microblaze_0_axi_periph|M01_ACLK_1 1 0 3 NJ 372 NJ 372 2420
-preplace netloc axi_uartlite_0_UART 1 5 1 N
-preplace netloc axi_slave_wishbone_classic_master_0_DAT_O 1 5 1 N
-preplace netloc microblaze_0_axi_periph|xbar_to_m04_couplers 1 2 1 2350
-preplace netloc microblaze_0_Clk 1 0 5 70 260 520 400 810 400 1310 80 3090
-preplace netloc rst_Clk_100M_peripheral_aresetn 1 1 4 480 150 NJ 150 1330 90 3070
-preplace netloc microblaze_0_axi_periph|M01_ARESETN_1 1 0 3 NJ 382 NJ 382 2410
-preplace netloc Reset_1 1 0 1 N
-preplace netloc microblaze_0_axi_periph|S00_ARESETN_1 1 0 1 N
-preplace netloc microblaze_0_axi_periph|M03_ARESETN_1 1 0 3 NJ 752 NJ 752 N
-preplace netloc microblaze_0_local_memory|microblaze_0_dlmb 1 0 1 N
-preplace netloc microblaze_0_axi_periph|m03_couplers|auto_pc_to_m03_couplers 1 1 1 N
-preplace netloc microblaze_0_axi_periph|m03_couplers_to_microblaze_0_axi_periph 1 3 1 N
-preplace netloc microblaze_0_local_memory|microblaze_0_ilmb_cntlr 1 2 1 2270
 preplace netloc axi_slave_wishbone_classic_master_0_WE_O 1 5 1 N
-preplace netloc microblaze_0_debug 1 2 1 800
-preplace netloc microblaze_0_axi_periph|M03_ACLK_1 1 0 3 NJ 732 NJ 732 N
-preplace netloc microblaze_0_axi_periph|M04_ACLK_1 1 0 3 NJ 892 NJ 892 2340
-preplace netloc microblaze_0_axi_dp 1 3 1 1320
-preplace netloc ACK_I_1 1 0 5 NJ 200 NJ 190 NJ 60 NJ 60 3110
-preplace netloc microblaze_0_axi_periph|xbar_to_m01_couplers 1 2 1 2390
-preplace netloc axi_slave_wishbone_classic_master_0_CYC_O 1 5 1 N
+preplace netloc microblaze_0_axi_periph_M04_AXI 1 4 1 2020
 preplace netloc Reset1_1 1 0 1 N
-preplace netloc axi_uartlite_0_interrupt 1 0 6 110 220 NJ 170 NJ 40 NJ 40 NJ 40 4700
-preplace netloc microblaze_0_axi_periph_M04_AXI 1 4 1 3120
-preplace netloc microblaze_0_axi_periph|m03_couplers|S_ACLK_1 1 0 1 N
-preplace netloc microblaze_0_local_memory|microblaze_0_LMB_Rst 1 0 2 1830 1310 2050
+preplace netloc rst_Clk_100M_mb_reset 1 1 2 510 400 810
+preplace netloc axi_uartlite_0_interrupt 1 0 6 100 600 490J 550 NJ 550 NJ 550 NJ 550 3140
+preplace netloc axi_slave_wishbone_classic_master_0_SEL_O 1 5 1 N
+preplace netloc microblaze_0_Clk 1 0 5 90 0 470 410 790 410 1330 90 2040
+preplace netloc microblaze_0_interrupt 1 2 1 N
+preplace netloc microblaze_0_intc_axi 1 1 4 520 170 820J 100 NJ 100 2000
+preplace netloc microblaze_0_axi_periph_M03_AXI 1 4 1 2000
+preplace netloc microblaze_0_ilmb_1 1 3 1 1300
+preplace netloc microblaze_0_axi_dp 1 3 1 1340
+preplace netloc axi_slave_wishbone_classic_master_0_DAT_O 1 5 1 N
+preplace netloc xlconcat_0_dout 1 1 1 520
+preplace netloc microblaze_0_axi_periph_M01_AXI 1 4 1 2030
+preplace netloc axi_slave_wishbone_classic_master_0_CYC_O 1 5 1 N
 preplace netloc axi_slave_wishbone_classic_master_0_ADR_O 1 5 1 N
+preplace netloc axi_uartlite_0_UART 1 5 1 N
+preplace netloc axi_timebase_wdt_0_wdt_reset 1 0 6 90 200 480J 150 790J 70 NJ 70 NJ 70 3150
+preplace netloc microblaze_0_dlmb_1 1 3 1 1320
+preplace netloc microblaze_0_axi_periph_M02_AXI 1 4 1 2020
 preplace netloc axi_slave_wishbone_classic_master_0_STB_O 1 5 1 N
-preplace netloc microblaze_0_axi_periph|microblaze_0_axi_periph_ACLK_net 1 0 3 1760 342 2050 412 2380
-preplace netloc microblaze_0_axi_periph|microblaze_0_axi_periph_to_s00_couplers 1 0 1 N
-preplace netloc microblaze_0_axi_periph|M04_ARESETN_1 1 0 3 NJ 912 NJ 912 2320
+preplace netloc microblaze_0_debug 1 2 1 810
+preplace netloc rst_Clk_100M_peripheral_aresetn 1 1 4 460 420 NJ 420 1360 110 2010
+preplace netloc rst_Clk_100M_interconnect_aresetn 1 1 3 480J 140 NJ 140 1350
+preplace netloc rst_Clk_100M_bus_struct_reset 1 1 3 480 0 NJ 0 1310J
+preplace netloc mdm_1_debug_sys_rst 1 0 3 100 210 500J 180 780
+preplace netloc Reset_1 1 0 1 N
+preplace netloc ACK_I_1 1 0 5 NJ 810 NJ 810 NJ 810 NJ 810 N
+preplace netloc axi_timer_0_interrupt 1 0 6 90 220 490J 160 800J 80 NJ 80 NJ 80 3140
 preplace netloc axi_slave_wishbone_classic_master_0_RST_O 1 5 1 N
-preplace netloc microblaze_0_axi_periph|M00_ACLK_1 1 0 3 NJ 212 NJ 212 N
-preplace netloc microblaze_0_axi_periph|m02_couplers_to_microblaze_0_axi_periph 1 3 1 N
-preplace netloc microblaze_0_axi_periph|microblaze_0_axi_periph_ARESETN_net 1 0 3 1780 352 2030 422 2330
-levelinfo -pg 1 50 280 640 1040 1850 4534 4720 -top 0 -bot 1670
-levelinfo -hier microblaze_0_local_memory * 1930 2160 2380 *
-levelinfo -hier microblaze_0_axi_periph * 1910 2190 2640 *
-levelinfo -hier microblaze_0_axi_periph|m03_couplers * 2720 *
+preplace netloc DAT_I_1 1 0 5 NJ 790 NJ 790 NJ 790 NJ 790 N
+levelinfo -pg 1 70 280 650 1060 1850 2990 3170 -top -10 -bot 1000
 ",
 }
 0

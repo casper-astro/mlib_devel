@@ -13,6 +13,7 @@ function xps_build_new_library(source_dir,lib_name)
         source_dir = fullfile(getenv('MLIB_DEVEL_PATH'), 'xps_library', 'xps_models');
         lib_name = 'xps_library';
     end;
+    disp(source_dir)
     % always ignore first two elements of struct below
     source_struct = dir(source_dir);
     % find sub directories
@@ -58,6 +59,7 @@ function xps_build_new_library(source_dir,lib_name)
     width = 50;
     height = 50;
     % Iterate over models that are not grouped
+      
     for i = 1:length(files_not_dirs)
         cur_model = files_not_dirs(i).name;
         % remove the .slx appended to the end of the model
@@ -71,6 +73,7 @@ function xps_build_new_library(source_dir,lib_name)
         % increment position for next block placing
         left = left + (width*2);
     end
+    
     disp('Adding grouped models')
     % Iterate over subdirectories, ignoring hidden
     for i = 1:length(subDirs)
@@ -93,12 +96,24 @@ function xps_build_new_library(source_dir,lib_name)
             % only get models in the sub directory
             subdir_models = cur_dir_struct(~[cur_dir_struct.isdir]);
             cd(cur_dir);
+            if(strcmp(cur_dir,'ADCs'))
+                cur_model = 'conv';
+                % remove .slx appended to the end of the model
+                cur_model = erase(cur_model,'.slx');
+                disp(['Adding block: ',cur_model])
+                % add block to grouping
+                add_block([cur_model, '/', cur_model],[lib_name, '/', cur_dir, '/', cur_model]);
+                set_param([lib_name, '/', cur_dir, '/', cur_model],'MaskSelfModifiable','on');
+            end
             % iterate over models in subdir and add to new grouping
             for j = 1:length(subdir_models)
                 cur_model = subdir_models(j).name;
-                % remove .slx appended to the end of the model
                 cur_model = erase(cur_model,'.slx');
-                % disp(['Adding block: ',cur_model])
+                if(strcmp(cur_model,"conv"))
+                   continue
+                end
+                % remove .slx appended to the end of the model
+                disp(['Adding block: ',cur_model])
                 % add block to grouping
                 add_block([cur_model, '/', cur_model],[lib_name, '/', cur_dir, '/', cur_model]);
                 set_param([lib_name, '/', cur_dir, '/', cur_model],'MaskSelfModifiable','on');

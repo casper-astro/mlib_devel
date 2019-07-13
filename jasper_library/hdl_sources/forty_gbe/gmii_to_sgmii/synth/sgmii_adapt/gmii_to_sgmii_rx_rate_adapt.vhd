@@ -88,9 +88,9 @@ entity gmii_to_sgmii_rx_rate_adapt is
     gmii_rxd_in         : in std_logic_vector(7 downto 0);  -- Receive data from client MAC.
     gmii_rx_dv_in       : in std_logic;                     -- Receive data valid signal from client MAC.
     gmii_rx_er_in       : in std_logic;                     -- Receive error signal from client MAC.
-    gmii_rxd_out        : out std_logic_vector(7 downto 0); -- Receive data from client MAC.
-    gmii_rx_dv_out      : out std_logic;                    -- Receive data valid signal from client MAC.
-    gmii_rx_er_out      : out std_logic                     -- Receive error signal from client MAC.
+    gmii_rxd_out        : out std_logic_vector(7 downto 0) := (others => '0'); -- Receive data from client MAC.
+    gmii_rx_dv_out      : out std_logic := '0';                    -- Receive data valid signal from client MAC.
+    gmii_rx_er_out      : out std_logic := '0'                     -- Receive error signal from client MAC.
     );
 
 end gmii_to_sgmii_rx_rate_adapt;

@@ -59,7 +59,8 @@ module flit_gen_user #(
     output wire [8:0] TAG_OUT,
     output wire DATA_VALID,
     output wire RD_READY,
-    output wire [6:0] FLIT_TAIL_ERRSTAT
+    output wire [6:0] FLIT_TAIL_ERRSTAT,
+    output wire [3:0] FLIT_ERROR_RESP
     
 
 
@@ -423,6 +424,10 @@ module flit_gen_user #(
   
   assign data_valid_rx_valid_count = r_data_valid_rx_valid_count;
   assign data_valid_rx_hmc_valid_count = r_data_valid_rx_hmc_valid_count;
+  //This flag represents the FLIT error response. If any of the FLITS has an error in the response packet (e.g. CRC error) then
+  //this value will be non-zero
+  assign FLIT_ERROR_RESP = r_flit_error_rsp;  
+  
   assign dbg_flit_case1_first_count = r_flit_case1_first_count;
   assign dbg_flit_case2_first_count = r_flit_case2_first_count;
   assign dbg_flit_case3_first_count = r_flit_case3_first_count;
@@ -431,6 +436,7 @@ module flit_gen_user #(
   assign dbg_flit_case4_second_count = r_flit_case4_second_count;
   assign dbg_flit_case3_second_spec_count = r_flit_case3_second_spec_count;
   assign dbg_flit_error_rsp = r_flit_error_rsp;
+  
   
   
   //AXI Stream FIFO Added to meet timing closure, as the data needs to be registered to meet

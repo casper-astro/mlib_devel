@@ -73,6 +73,10 @@ defaults = { ...
     'FFTSize', 15, ...
     'n_inputs', 2, ...
     'n_bits_in', 18, ...
+    'floating_point', 'off', ...
+    'float_type', 'single', ...
+    'exp_width', 8, ...
+    'frac_width', 24, ...    
     'bram_latency', 2, ...
     'coeffs_bit_limit', 8, ...
     'async', 'on', ...
@@ -87,6 +91,10 @@ n_streams           = get_var('n_streams', 'defaults', defaults, varargin{:});
 FFTSize             = get_var('FFTSize', 'defaults', defaults, varargin{:});
 n_inputs            = get_var('n_inputs', 'defaults', defaults, varargin{:});
 n_bits_in           = get_var('n_bits_in', 'defaults', defaults, varargin{:});
+floating_point      = get_var('floating_point', 'defaults', defaults, varargin{:});
+float_type          = get_var('float_type', 'defaults', defaults, varargin{:});
+exp_width           = get_var('exp_width', 'defaults', defaults, varargin{:});
+frac_width          = get_var('frac_width', 'defaults', defaults, varargin{:});
 bram_latency        = get_var('bram_latency', 'defaults', defaults, varargin{:});
 coeffs_bit_limit    = get_var('coeffs_bit_limit', 'defaults', defaults, varargin{:});
 async               = get_var('async', 'defaults', defaults, varargin{:});
@@ -119,6 +127,20 @@ end
 map_str = mat2str(map_mat);
 
 delete_lines(blk);
+
+% Check for floating point
+if floating_point == 1
+    if float_type == 2
+        n_bits_in = frac_width + exp_width;
+    else
+        exp_width = 8;
+        frac_width = 24;
+        n_bits_in = frac_width + exp_width;
+    end
+else
+    exp_width = 8;
+    frac_width = 24;
+end
 
 % Add ports
 reuse_block(blk, 'sync', 'built-in/inport', 'Position', [30 43 60 57], 'Port', '1');

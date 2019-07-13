@@ -1,4 +1,4 @@
-// (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
+// (c) Copyright 1995-2018 Xilinx, Inc. All rights reserved.
 // 
 // This file contains confidential and proprietary information
 // of Xilinx, Inc. and is protected under U.S. and
@@ -46,8 +46,8 @@
 // 
 // DO NOT MODIFY THIS FILE.
 
-// IP VLNV: xilinx.com:ip:fifo_generator:13.1
-// IP Revision: 1
+// IP VLNV: xilinx.com:ip:fifo_generator:13.2
+// IP Revision: 2
 
 // The following must be inserted into your Verilog file for this
 // core to be instantiated. Change the instance name and port connections
@@ -58,10 +58,10 @@ cpu_rx_packet_size your_instance_name (
   .rst(rst),                      // input wire rst
   .wr_clk(wr_clk),                // input wire wr_clk
   .rd_clk(rd_clk),                // input wire rd_clk
-  .din(din),                      // input wire [7 : 0] din
+  .din(din),                      // input wire [10 : 0] din
   .wr_en(wr_en),                  // input wire wr_en
   .rd_en(rd_en),                  // input wire rd_en
-  .dout(dout),                    // output wire [7 : 0] dout
+  .dout(dout),                    // output wire [10 : 0] dout
   .full(full),                    // output wire full
   .empty(empty),                  // output wire empty
   .wr_data_count(wr_data_count)  // output wire [3 : 0] wr_data_count

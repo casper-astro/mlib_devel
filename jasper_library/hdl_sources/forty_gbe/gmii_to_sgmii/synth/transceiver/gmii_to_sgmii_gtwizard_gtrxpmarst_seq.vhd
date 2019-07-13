@@ -2,7 +2,7 @@
 --   ____  ____ 
 --  /   /\/   /
 -- /___/  \  /    Vendor: Xilinx
--- \   \   \/     Version : 3.4
+-- \   \   \/     Version : 3.6
 --  \   \         Application : 7 Series FPGAs Transceivers Wizard
 --  /   /         Filename : gmii_to_sgmii_gtwizard_rxpmarst_seq.vhd
 -- /___/   /\     

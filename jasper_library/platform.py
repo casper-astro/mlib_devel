@@ -46,6 +46,11 @@ class Platform(object):
         self.fpga = self.conf['fpga']
         #: backend target -- used to decide what compiler to use
         self.backend_target = self.conf['backend_target']
+        #: boot image --used to determine whether a toolflow, multiboot or golden image
+        try:
+            self.boot_image = self.conf['boot_image']
+        except KeyError:
+            self.boot_image = 'toolflow'
         self.user_clk_rate = 100
         self.user_clk = 'user_clk'
         #: project mode -- used to decide what Vivado compiler project
@@ -66,6 +71,19 @@ class Platform(object):
                 self.conf['dsp_wb_base_address_alignment']
         except KeyError:
             self.dsp_wb_base_address_alignment = 4
+        # Add respective memory map bus architecture attributes to support AXI4-lite
+        try:
+            self.mmbus_architecture = self.conf['mmbus_architecture']
+        except KeyError:
+            self.mmbus_architecture = 'wishbone'
+        try:
+            self.mmbus_base_address = self.conf['mmbus_base_address']
+        except KeyError:
+            self.mmbus_base_address = 0x40000000
+        try:
+            self.mmbus_address_alignment = self.conf['mmbus_address_alignment']
+        except KeyError:
+            self.mmbus_address_alignment = 4
 
     def add_pins(self, name, iostd, loc):
         """

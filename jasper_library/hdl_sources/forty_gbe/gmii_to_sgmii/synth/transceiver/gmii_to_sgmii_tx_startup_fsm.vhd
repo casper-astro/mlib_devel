@@ -4,7 +4,7 @@
 --   ____  ____ 
 --  /   /\/   / 
 -- /___/  \  /    Vendor: Xilinx 
--- \   \   \/     Version : 3.4
+-- \   \   \/     Version : 3.6
 --  \   \         Application : 7 Series FPGAs Transceivers Wizard 
 --//  /   /         Filename : gmii_to_sgmii_tx_startup_fsm.vhd
 -- /___/   /\     
@@ -72,6 +72,8 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
+library unisim;
+use unisim.vcomponents.all;
 
 entity gmii_to_sgmii_TX_STARTUP_FSM is
   Generic( 
@@ -141,13 +143,24 @@ architecture RTL of gmii_to_sgmii_TX_STARTUP_FSM is
     RESET_FSM_DONE);
     
   signal tx_state : tx_rst_fsm_type := INIT;
-
-  constant MMCM_LOCK_CNT_MAX    : integer := 1024;
+  function get_WAIT_TIMEOUT_3ms (is_sim : in integer) return integer is
+    variable wait_time: integer;
+  begin
+    if (is_sim = 1) then
+      wait_time := 1000;
+    else
+      wait_time := 3000000 / 5;
+    end if;
+    return wait_time;
+  end function;
+  constant MMCM_LOCK_CNT_MAX    : integer := 256;
   constant STARTUP_DELAY        : integer := 500;--AR43482: Transceiver needs to wait for 500 ns after configuration
   constant WAIT_CYCLES          : integer := STARTUP_DELAY / STABLE_CLOCK_PERIOD; -- Number of Clock-Cycles to wait after configuration
   constant WAIT_MAX             : integer := WAIT_CYCLES + 10;                    -- 500 ns plus some additional margin
     
   constant WAIT_TIMEOUT_2ms     : integer := 2000000 / STABLE_CLOCK_PERIOD;--  2 ms time-out
+  constant WAIT_TIMEOUT_3ms     : integer := get_WAIT_TIMEOUT_3ms(EXAMPLE_SIMULATION);
+
   constant WAIT_TLOCK_MAX       : integer :=  100000 / STABLE_CLOCK_PERIOD;--100 us time-out
   constant WAIT_TIMEOUT_500us   : integer :=  500000 / STABLE_CLOCK_PERIOD;--100 us time-out
   constant WAIT_1us_cycles      : integer :=  1000 / STABLE_CLOCK_PERIOD;--1 us time-out
@@ -156,6 +169,8 @@ architecture RTL of gmii_to_sgmii_TX_STARTUP_FSM is
   signal init_wait_count        : integer range 0 to WAIT_MAX:=0;
   signal init_wait_done         : std_logic := '0';
   signal pll_reset_asserted     : std_logic := '0';
+  signal refclk_stable : std_logic := '0';
+  signal refclk_stable_count : integer :=0;
 
   signal tx_fsm_reset_done_int     : std_logic := '0';
   signal tx_fsm_reset_done_int_s2  : std_logic := '0';
@@ -177,7 +192,6 @@ architecture RTL of gmii_to_sgmii_TX_STARTUP_FSM is
   signal mmcm_lock_int          : std_logic := '0';
   signal mmcm_lock_i            : std_logic := '0';
   signal mmcm_lock_reclocked    : std_logic := '0';
---  signal cpllrefclklost_sync    : std_logic;
     
   signal run_phase_alignment_int    : std_logic := '0';
   signal run_phase_alignment_int_s2 : std_logic := '0';
@@ -191,8 +205,10 @@ architecture RTL of gmii_to_sgmii_TX_STARTUP_FSM is
   signal time_out_wait_bypass_s2   : std_logic := '0';
   signal time_out_wait_bypass_s3   : std_logic := '0';
   signal txuserrdy_i   : std_logic := '0';
---  signal refclk_lost            : std_logic;
+  signal refclk_lost            : std_logic;
   signal gttxreset_i            : std_logic := '0';
+  signal txpmaresetdone_i            : std_logic := '0';
+  signal txpmaresetdone_sync            : std_logic ;
 
   signal      cplllock_sync: std_logic := '0';
   signal      cplllock_prev: std_logic := '0';
@@ -206,7 +222,7 @@ begin
   --Alias section, signals used within this module mapped to output ports:
   RETRY_COUNTER     <= STD_LOGIC_VECTOR(TO_UNSIGNED(retry_counter_int,RETRY_COUNTER_BITWIDTH));
   RUN_PHALIGNMENT   <= run_phase_alignment_int;
-  TX_FSM_RESET_DONE <= tx_fsm_reset_done_int;    
+  TX_FSM_RESET_DONE <= tx_fsm_reset_done_int and PHALIGNMENT_DONE;    
   GTTXRESET <= gttxreset_i;
 
   process(STABLE_CLOCK,SOFT_RESET)
@@ -393,8 +409,19 @@ begin
     end if;
   end process;
 
---    refclk_lost <= '1' when ((TX_QPLL_USED and QPLLREFCLKLOST='1') or (not TX_QPLL_USED and cpllrefclklost_sync='1')) else '0';
+   refclk_lost <= '1' when ((TX_QPLL_USED and QPLLREFCLKLOST='1') or (not TX_QPLL_USED and CPLLREFCLKLOST='1')) else '0';
 
+  process(STABLE_CLOCK)
+  begin
+    if rising_edge(STABLE_CLOCK) then
+        if (refclk_stable_count = WAIT_TIMEOUT_3ms)  then
+          refclk_stable <= '1';
+        else
+          refclk_stable <= '0';
+          refclk_stable_count <= refclk_stable_count + 1;
+        end if;
+    end if;
+  end process;
 
   timeout_max:process(STABLE_CLOCK)
   begin
@@ -464,14 +491,14 @@ begin
             --will still continue its best and rerun until the FPGA is turned off
             --or the transceivers come up correctly.
             if TX_QPLL_USED then
-              if pll_reset_asserted = '0' then
+              if (pll_reset_asserted = '0' and refclk_lost = '0')  or refclk_stable = '0'  then
                 QPLL_RESET          <= '1';
                 pll_reset_asserted  <= '1';
               else
                 QPLL_RESET          <= '0';
               end if;
             else
-              if pll_reset_asserted = '0' then
+              if (pll_reset_asserted = '0' and refclk_lost = '0')  or refclk_stable = '0'  then
                 CPLL_RESET <= '1';
                 pll_reset_asserted  <= '1';
               else
@@ -481,12 +508,12 @@ begin
             TXUSERRDY               <= '0';
             gttxreset_i               <= '1';
             MMCM_RESET              <= '1';
-            reset_time_out          <= '0';
+            reset_time_out          <= '1';
             run_phase_alignment_int <= '0';     
             RESET_PHALIGNMENT       <= '1';
 
-            if (TX_QPLL_USED  and (QPLLLOCK = '0') and pll_reset_asserted = '1') or
-               (not TX_QPLL_USED  and (cplllock_sync = '0') and pll_reset_asserted = '1') then
+            if (TX_QPLL_USED  and (QPLLLOCK = '0') and pll_reset_asserted = '1'   and refclk_stable = '1') or
+               (not TX_QPLL_USED  and (cplllock_sync = '0') and pll_reset_asserted = '1'   and refclk_stable = '1') then
               tx_state  <= WAIT_FOR_PLL_LOCK;
            end if;    
        

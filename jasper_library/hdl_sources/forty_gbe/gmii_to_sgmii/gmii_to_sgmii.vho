@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2017 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2018 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -46,8 +46,8 @@
 -- 
 -- DO NOT MODIFY THIS FILE.
 
--- IP VLNV: xilinx.com:ip:gig_ethernet_pcs_pma:14.3
--- IP Revision: 1
+-- IP VLNV: xilinx.com:ip:gig_ethernet_pcs_pma:16.1
+-- IP Revision: 4
 
 -- The following code must appear in the VHDL architecture header.
 
@@ -57,6 +57,7 @@ COMPONENT gmii_to_sgmii
     gtrefclk_p : IN STD_LOGIC;
     gtrefclk_n : IN STD_LOGIC;
     gtrefclk_out : OUT STD_LOGIC;
+    gtrefclk_bufg_out : OUT STD_LOGIC;
     txn : OUT STD_LOGIC;
     txp : OUT STD_LOGIC;
     rxn : IN STD_LOGIC;
@@ -103,6 +104,7 @@ your_instance_name : gmii_to_sgmii
     gtrefclk_p => gtrefclk_p,
     gtrefclk_n => gtrefclk_n,
     gtrefclk_out => gtrefclk_out,
+    gtrefclk_bufg_out => gtrefclk_bufg_out,
     txn => txn,
     txp => txp,
     rxn => rxn,

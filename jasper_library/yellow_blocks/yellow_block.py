@@ -239,6 +239,39 @@ class YellowBlock(object):
         """
         return {}
 
+    def add_build_dir_source(self):
+        """
+        This function is neccessary as yellow blocks dont have access to the build directory
+        when they want to add a source file that is not in hdl_lib this function can be used.
+        Generate a list of dictionaries containing files/directories relative to the build_dir,
+        which will be added to the sources of the project.
+        to the project.
+
+        Eg.:
+        []
+            {'files': 'xml2vhdl_hdl_output/',    -- this can be a directory or a file
+            'library' : 'work'}                  -- this is only used if the file needs to be included under a library (vhdl only) for verilog use ''
+        ]
+
+        :return: Dictionary of tcl command lists. Default {}
+        """
+        return []
+
+    def gen_custom_hdl(self):
+        """
+        Generate a dictionary of custom hdl, to be saved as a file and added to the sources of
+        the generated project.
+        The key is the file name and the value is a string of HDL code to save in to that file.
+        Eg.:
+        {
+            'my_hdl.vhdl': ["<HDL code>"],
+            'my_2nd_hdl.vhdl' : ["<More HDL code>"],
+        }
+
+        :return: Dictionary of hdl files. Default {}
+        """
+        return {}
+
     #def add_resource(self, thing):
     #    """
     #    Use this method in a block's initialize() method to add

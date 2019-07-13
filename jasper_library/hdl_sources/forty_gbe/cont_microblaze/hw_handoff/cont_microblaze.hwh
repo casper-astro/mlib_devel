@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Mon Feb 19 12:51:46 2018" VIVADOVERSION="2016.2">
+<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Wed Oct 24 14:58:25 2018" VIVADOVERSION="2018.2">
 
   <SYSTEMINFO ARCH="virtex7" DEVICE="7vx690t" NAME="cont_microblaze" PACKAGE="ffg1927" SPEEDGRADE="-2"/>
 
@@ -59,17 +59,17 @@
     <PORT CLKFREQUENCY="39062500" DIR="I" NAME="Clk" SIGIS="clk" SIGNAME="External_Ports_Clk">
       <CONNECTIONS>
         <CONNECTION INSTANCE="axi_slave_wishbone_classic_master_0" PORT="S_AXI_ACLK"/>
+        <CONNECTION INSTANCE="rst_Clk_100M" PORT="slowest_sync_clk"/>
         <CONNECTION INSTANCE="axi_timebase_wdt_0" PORT="s_axi_aclk"/>
         <CONNECTION INSTANCE="axi_timer_0" PORT="s_axi_aclk"/>
         <CONNECTION INSTANCE="axi_uartlite_0" PORT="s_axi_aclk"/>
         <CONNECTION INSTANCE="microblaze_0" PORT="Clk"/>
         <CONNECTION INSTANCE="microblaze_0_axi_intc" PORT="s_axi_aclk"/>
         <CONNECTION INSTANCE="microblaze_0_axi_intc" PORT="processor_clk"/>
-        <CONNECTION INSTANCE="rst_Clk_100M" PORT="slowest_sync_clk"/>
-        <CONNECTION INSTANCE="microblaze_0_local_memory_dlmb_bram_if_cntlr" PORT="LMB_Clk"/>
         <CONNECTION INSTANCE="microblaze_0_local_memory_dlmb_v10" PORT="LMB_Clk"/>
-        <CONNECTION INSTANCE="microblaze_0_local_memory_ilmb_bram_if_cntlr" PORT="LMB_Clk"/>
         <CONNECTION INSTANCE="microblaze_0_local_memory_ilmb_v10" PORT="LMB_Clk"/>
+        <CONNECTION INSTANCE="microblaze_0_local_memory_dlmb_bram_if_cntlr" PORT="LMB_Clk"/>
+        <CONNECTION INSTANCE="microblaze_0_local_memory_ilmb_bram_if_cntlr" PORT="LMB_Clk"/>
         <CONNECTION INSTANCE="microblaze_0_axi_periph" PORT="ACLK"/>
         <CONNECTION INSTANCE="microblaze_0_axi_periph" PORT="S00_ACLK"/>
         <CONNECTION INSTANCE="microblaze_0_axi_periph" PORT="M00_ACLK"/>
@@ -420,6 +420,10 @@
           <PARAMETER NAME="MAX_BURST_LENGTH" VALUE="256"/>
           <PARAMETER NAME="PHASE" VALUE="0.000"/>
           <PARAMETER NAME="CLK_DOMAIN" VALUE="cont_microblaze_Clk"/>
+          <PARAMETER NAME="NUM_READ_THREADS" VALUE="1"/>
+          <PARAMETER NAME="NUM_WRITE_THREADS" VALUE="1"/>
+          <PARAMETER NAME="RUSER_BITS_PER_BYTE" VALUE="0"/>
+          <PARAMETER NAME="WUSER_BITS_PER_BYTE" VALUE="0"/>
           <PORTMAPS>
             <PORTMAP LOGICAL="AWID" PHYSICAL="S_AXI_AWID"/>
             <PORTMAP LOGICAL="AWADDR" PHYSICAL="S_AXI_AWADDR"/>
@@ -473,6 +477,402 @@
       <DOCUMENTS>
         <DOCUMENT SOURCE="http://www.xilinx.com/cgi-bin/docs/ipdoc?c=axi_timebase_wdt;v=v3_0;d=pg128-axi-timebase-wdt.pdf"/>
       </DOCUMENTS>
+      <ADDRESSBLOCKS>
+        <ADDRESSBLOCK ACCESS="read-write" INTERFACE="S_AXI" NAME="Reg" RANGE="2048" USAGE="register">
+          <REGISTERS>
+            <REGISTER NAME="TWCSR0">
+              <PROPERTY NAME="DESCRIPTION" VALUE="Control/Status Register 0"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x00"/>
+              <PROPERTY NAME="SIZE" VALUE="32"/>
+              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="EWDT2">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Enable Watchdog Timer (Enable 2)&#xA;This bit is read-only and is the only place to read back a value written to Bit[0] of TWCSR1.&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-only"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+                <FIELD NAME="EWDT1">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Enable Watchdog Timer (Enable 1)&#xA;This bit must be used in conjunction with the EWDT2 bit in the TWCSR1 register. Both bits must be 0 to disable the WDT.   0 - Disable WDT function if EWDT2 also equals 0   1 - Enable WDT function&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="1"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="1"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+                <FIELD NAME="WDS">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Watchdog Timer State&#xA;Indicates the WDT period has expired. The wdt_reset signal is asserted if the WDT period expires again before this bit is cleared by software.&#xA;Writing a 1 to this bit clears the watchdog timer state.&#xA;Writing a 0 to this bit has no effect.   0 - WDT period has not expired   1 - WDT period has expired, reset occurs on next expiration&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="2"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="2"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+                <FIELD NAME="WRS">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Watchdog Reset Status&#xA;Indicates the WDT reset signal was asserted. This bit is not cleared by a system reset so that it can be read after a system reset to determine if the reset was caused by a watchdog timeout.&#xA;This bit can be cleared by applying reset to the IP (asserting the s_axi_aresetn) followed by writing 1 to this bit. Writing a 0 to this bit has no effect.   0 - WDT reset has not occurred   1 - WDT reset has occurred&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="3"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="3"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+                <FIELD NAME="TBR">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Timebase Register (Most significant 28 bits)&#xA;This read-only field contains the most significant 28 bits of the timebase register. The timebase register is mirrored here so that a single read can be used to obtain the count value and the watchdog timer state if the upper 28 bits of the timebase provide sufficient timing resolution.&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="4"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-only"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="4"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="28"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+            <REGISTER NAME="TWCSR1">
+              <PROPERTY NAME="DESCRIPTION" VALUE="Control/Status Register 1"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x04"/>
+              <PROPERTY NAME="SIZE" VALUE="32"/>
+              <PROPERTY NAME="ACCESS" VALUE="write-only"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="EWDT2">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Enable Watchdog Timer (Enable 2)&#xA;This bit must be used in conjunction with the EWDT1 bit in the TWCSR0 register to disable the WDT. Both bits must be 0 to disable the WDT.&#xA;The value of EWDT2 can be read back only in TWCSR0.   0 - Disable WDT function if EWDT1 also equals 0   1 - Enable WDT function&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="ACCESS" VALUE="write-only"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+            <REGISTER NAME="TBR">
+              <PROPERTY NAME="DESCRIPTION" VALUE="Timebase Register"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x08"/>
+              <PROPERTY NAME="SIZE" VALUE="32"/>
+              <PROPERTY NAME="ACCESS" VALUE="read-only"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="TBR">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Timebase Register&#xA;This register indicates the free-running incrementing counter value&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-only"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="32"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+            <REGISTER NAME="MWR">
+              <PROPERTY NAME="DESCRIPTION" VALUE="Master Write Control Register"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x0C"/>
+              <PROPERTY NAME="SIZE" VALUE="32"/>
+              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="Width_of_Watchdog_Timer">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Width of Watchdog Timer&#xA;Program the register to change the width of watchdog timer.&#xA;Valid values are 8-31. Programming any other value can result in undefined behavior&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="5"/>
+                </FIELD>
+                <FIELD NAME="MWC">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Master write access control bit for the Window Watchdog.   0 - Window WDT register space is read only   1 - Window WDT register space is writable In basic WWDT mode, this bit auto clears when WEN is changed from 0 to 1.&#xA;This bit controls the write access to the complete register space.&#xA;When this bit is 0, writes to any register are ignored by all means (that is, it does not lead to good or bad event generation).&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+                <FIELD NAME="AEN">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="WWDT Always Enable&#xA;This bit provides extra safeguard (if needed) against unintentional clear of WEN bit.   0 - WEN bit can be cleared, depending on WDP value   1 - WEN bit cannot be cleared After this is set, this bit can be cleared only by applying reset. If required, this bit should be set before Window WDT is enabled.&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="1"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="1"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+            <REGISTER NAME="ESR">
+              <PROPERTY NAME="DESCRIPTION" VALUE="Enable and Status Register"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x10"/>
+              <PROPERTY NAME="SIZE" VALUE="32"/>
+              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="WEN">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Window WDT Enable&#xA;This bit is the enable bit for Window WDT.   0 = Window WDT is disabled   1 = Window WDT is enabled Disabling watchdog in first window duration is considered a bad event and disablement is not honored. Watchdog can be disabled only in the second window duration (If fail counter is enabled, watchdog can be disabled only when fail counter is 0. If fail counter is not enabled, it can be cleared any time in second window.),&#xA;If WEN clear and WSW clear events happen at same time, then the core considers only WEN.&#xA;If wrong configuration is detected or wdt_reset is generated, this bit auto clears (irrespective of WDP settings).&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+                <FIELD NAME="WCFG">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Wrong Configuration&#xA;This is a status bit that indicates wrong configuration as follows.&#xA;This bit gets set if second window count is set as 0 (when WEN bit is made 1).&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="1"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE="oneToClear"/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="1"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+                <FIELD NAME="WSW">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Window WDT in Second Window&#xA;This bit is a status bit and tracks when Window WDT is in second window.   0 = Window WDT is not in Second Window   1 = Window WDT is in Second Window This bit is RW1C and is used by software to provide restart kick to Window WDT (that is, when this bit is 1, Software writes 1 to clear it and it is considered as restart kick).&#xA;If software writes 1 on this bit when this bit is 0, it is considered a bad event (value of WSW does not change).&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="8"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE="oneToClear"/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="8"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+                <FIELD NAME="WINT">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Watchdog Interrupt&#xA;This status bit asserts High in the next clock cycle, after watchdog reaches to the interrupt programmed point in second window.&#xA;Restart of timer automatically clears WINT bit.&#xA;It is a Write 1 to Clear bit. When this bit is cleared, wdt_interrupt deasserts.&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="16"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE="oneToClear"/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="16"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+                <FIELD NAME="WRP">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Watchdog Reset Pending&#xA;This status bit asserts High when SST counter starts.&#xA;It is a Write 1 to Clear bit. When this bit is cleared, wdt_reset_pending deasserts.&#xA;This bit and the output wdt_reset_pending is provided to indicate that wdt_reset is asserted when SST count rolls over and can be used as an another independent interrupt from the core.&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="17"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE="oneToClear"/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="17"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+                <FIELD NAME="FCV">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Fail Counter Value&#xA;Watchdog fail counter value (initialized to 5).&#xA;A good event decrements FCV by 1 unless it is 0. A bad event increments FCV unless it is 7. If the FCV = 7 and another bad event happens, wdt_reset is generated (either immediately or after SST count rolls over).&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="20"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-only"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="20"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="3"/>
+                </FIELD>
+                <FIELD NAME="LBE">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Last Bad Event&#xA;This status field provides the scratch bit functionality.&#xA;This bit is not cleared by a system reset so that it can be read after a system reset to determine the reason for the reset generation.&#xA;Until wdt_reset is not asserted, these bits can be cleared by writing 111.&#xA;After wdt_reset is asserted by the core, this bit can be cleared only by applying reset to the IP (asserting AXI reset) followed by writing 111 to this field. Writing any other pattern has no effect.&#xA;Basic Mode   000 - No bad event   001 - Restart kick in first window or disable attempt in first window   010 - TSR mismatch or disable attempt in second window when FC is enabled and its value is non-zero   011 - Second window overflow&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="24"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE="oneToClear"/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="24"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="3"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+            <REGISTER NAME="FCR">
+              <PROPERTY NAME="DESCRIPTION" VALUE="Function Control Register"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x14"/>
+              <PROPERTY NAME="SIZE" VALUE="32"/>
+              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="WDP">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="WWDT Disable Protection&#xA;This bit provides extra safeguard (if needed) against unintentional clear of WEN bit).   0 - WEN bit can be cleared   1 - WEN bit cannot be cleared If required, this bit should be set before Window WDT is enabled.&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+                <FIELD NAME="FCE">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Fail Counter Enable&#xA;This bit provides option to disable the fail counter in basic WWDT mode.   0 - Fail counter disabled   1 - Fail counter enabled When disabled, one bad event triggers wdt_reset generation (either immediately when SSTE is disabled or after SC count delay when SSTE is enabled).&#xA;When fail counter is enabled, wdt_reset is generated when fail counter is 7 and another bad event happens.&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="2"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="2"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+                <FIELD NAME="PSME">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Program Sequence Monitor Enable&#xA;This bit enables Task Signature register comparison in basic WWDT mode.   0 - PSM disable   1 - PSM enabled When this function is enabled, the core checks and compares the contents of TSR0 and TSR1 registers at the restart kick/disablement of Window WDT in second window. If they match, no effect. If they do not match, wdt_reset is generated (either immediately when SSTE is disabled or after SC count delay when SSTE is enabled).&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="3"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="3"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+                <FIELD NAME="SSTE">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Second Sequence Timer Enable&#xA;This bit enables second sequence timer function.   0 - SST disabled   1 - SST enabled This option provides additional time to software by delaying the inevitable wdt_reset assertion/generation by SC count delay. SC count delay time in the STR register is controlled through GUI option.&#xA;This is an independent function and can be enabled in any WWDT mode with/without other options).&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="4"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="4"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+                <FIELD NAME="BSS">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Byte Segment Selection (of Second Window Count)&#xA;This field (along with SBC[7:0]) is used to determine the interrupt assertion point in the second window configuration.&#xA;BSS[1:0] provides Byte Segment selection in Second Window Count as:   00 - SW Byte0 selected (that is, SBC[7:0] are compared with SW[7:0])   01 - SW Byte1 selected (that is, SBC[7:0] are compared with SW[15:8])   10 - SW Byte2 selected (that is, SBC[7:0] are compared with SW[23:16])   11 - SW Byte3 selected (that is, SBC[7:0] are compared with SW[31:24]) For example:   If BSS = 00 and SWC = 0xAA then WDT asserts interrupt when second window reaches 0x000000AA that is when SW[7:0] == SBC[7:0] and other bits are zeros   If BSS = 01 and SWC = 0xAA then WDT asserts interrupt when second window reaches 0x0000AA00 that is when SW[15:8] == SBC[7:0] and other bits are zeros&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="6"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="6"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="2"/>
+                </FIELD>
+                <FIELD NAME="SBC">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Selected Byte Count&#xA;This field (along with BSS[1:0]) is used to determine the interrupt assertion point in the second window configuration.&#xA;SBC[7:0] provides the count value of selected byte segment.&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="8"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="8"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="8"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+            <REGISTER NAME="FWR">
+              <PROPERTY NAME="DESCRIPTION" VALUE="First Window Configuration Register"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x18"/>
+              <PROPERTY NAME="SIZE" VALUE="32"/>
+              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="FW">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="First Window Count&#xA;This field provides the count value for the first window and is valid for both WWDT modes.&#xA;FW[31:0] = First Window Count value&#xA;FW Counter is a down counter and it starts from the programmed FWR value and ends at 0.&#xA;First window continue. When completed, it is followed by the second window.&#xA;This field can be set as 0. In this case, it achieves close window absent case.&#xA;Xilinx recommends that the minimum non-zero value should be 15 or more.&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="32"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+            <REGISTER NAME="SWR">
+              <PROPERTY NAME="DESCRIPTION" VALUE="Second Window Configuration Register"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x1C"/>
+              <PROPERTY NAME="SIZE" VALUE="32"/>
+              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="SW">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Second Window Count&#xA;This field provides the count value for the second window and is valid for both WWDT modes.&#xA;SW[31:0] = Second Window Count value&#xA;SW Counter is a down counter and it starts with the programmed SWR value and ends at 0.&#xA;SW[31:0] is used to place the interrupt assertion with the help of BSS[1:0] and SBC[7:0].&#xA;Any good or bad event ends the second window.&#xA;Absence of a good or bad event allows the second window timeout. This is considered a bad event.&#xA;This field cannot be set as 0. Setting this field as 0 causes Wrong Config status bit set which disables WWDT (by clearing WEN bit irrespective of WDP settings).&#xA;Xilinx recommends that the minimum value should be sufficiently large to complete the required AXI4-Lite write transactions at system-level.&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="32"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+            <REGISTER NAME="TSR0">
+              <PROPERTY NAME="DESCRIPTION" VALUE="Task Signature Register"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x20"/>
+              <PROPERTY NAME="SIZE" VALUE="32"/>
+              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="TSR0">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Task Signature 0&#xA;This register function is controlled through the PSME bit.&#xA;Software writes a signature into this register. The core makes comparison with TSR1 at watchdog restart kick point.&#xA;If TSR1 != TSR0 at restart point, this is considered a bad event.&#xA;If TSR1 = TSR0 at restart point, this is considered a good event.&#xA;The core does not track writes to this register and it makes comparison at restart time.&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="32"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+            <REGISTER NAME="TSR1">
+              <PROPERTY NAME="DESCRIPTION" VALUE="Task Signature Register"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x24"/>
+              <PROPERTY NAME="SIZE" VALUE="32"/>
+              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="TSR1">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Task Signature 1&#xA;This register function is controlled through the PSME bit.&#xA;Software writes a signature into this register. The core makes comparison with TSR0 at watchdog restart kick point.&#xA;If TSR1 != TSR0 at restart point, this is considered a bad event.&#xA;If TSR1 = TSR0 at restart point, this is considered a good event.&#xA;The core does not track writes to this register and it makes comparison at restart time.&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="32"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+            <REGISTER NAME="STR">
+              <PROPERTY NAME="DESCRIPTION" VALUE="Second Sequence Timer Register"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x28"/>
+              <PROPERTY NAME="SIZE" VALUE="32"/>
+              <PROPERTY NAME="ACCESS" VALUE="read-only"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="SC">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="SST Count&#xA;This is free running down counter starts from 2^(SST_WIDTH  1).&#xA;Function of this counter is to provide extra delay before inevitable wdt_reset is generated.&#xA;Width of the counter is provided as a GUI option from 8 to 31.&#xA;This counter runs only if SSTE = 1.&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-only"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="8"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+          </REGISTERS>
+        </ADDRESSBLOCK>
+      </ADDRESSBLOCKS>
       <PARAMETERS>
         <PARAMETER NAME="C_FAMILY" VALUE="virtex7"/>
         <PARAMETER NAME="C_WDT_INTERVAL" VALUE="29"/>
@@ -624,6 +1024,10 @@
           <PARAMETER NAME="MAX_BURST_LENGTH" VALUE="1"/>
           <PARAMETER NAME="PHASE" VALUE="0.000"/>
           <PARAMETER NAME="CLK_DOMAIN" VALUE="cont_microblaze_Clk"/>
+          <PARAMETER NAME="NUM_READ_THREADS" VALUE="1"/>
+          <PARAMETER NAME="NUM_WRITE_THREADS" VALUE="1"/>
+          <PARAMETER NAME="RUSER_BITS_PER_BYTE" VALUE="0"/>
+          <PARAMETER NAME="WUSER_BITS_PER_BYTE" VALUE="0"/>
           <PORTMAPS>
             <PORTMAP LOGICAL="ARADDR" PHYSICAL="s_axi_araddr"/>
             <PORTMAP LOGICAL="ARREADY" PHYSICAL="s_axi_arready"/>
@@ -1144,6 +1548,10 @@
           <PARAMETER NAME="MAX_BURST_LENGTH" VALUE="1"/>
           <PARAMETER NAME="PHASE" VALUE="0.000"/>
           <PARAMETER NAME="CLK_DOMAIN" VALUE="cont_microblaze_Clk"/>
+          <PARAMETER NAME="NUM_READ_THREADS" VALUE="1"/>
+          <PARAMETER NAME="NUM_WRITE_THREADS" VALUE="1"/>
+          <PARAMETER NAME="RUSER_BITS_PER_BYTE" VALUE="0"/>
+          <PARAMETER NAME="WUSER_BITS_PER_BYTE" VALUE="0"/>
           <PORTMAPS>
             <PORTMAP LOGICAL="ARADDR" PHYSICAL="s_axi_araddr"/>
             <PORTMAP LOGICAL="ARREADY" PHYSICAL="s_axi_arready"/>
@@ -1496,6 +1904,10 @@
           <PARAMETER NAME="MAX_BURST_LENGTH" VALUE="1"/>
           <PARAMETER NAME="PHASE" VALUE="0.000"/>
           <PARAMETER NAME="CLK_DOMAIN" VALUE="cont_microblaze_Clk"/>
+          <PARAMETER NAME="NUM_READ_THREADS" VALUE="1"/>
+          <PARAMETER NAME="NUM_WRITE_THREADS" VALUE="1"/>
+          <PARAMETER NAME="RUSER_BITS_PER_BYTE" VALUE="0"/>
+          <PARAMETER NAME="WUSER_BITS_PER_BYTE" VALUE="0"/>
           <PORTMAPS>
             <PORTMAP LOGICAL="ARADDR" PHYSICAL="s_axi_araddr"/>
             <PORTMAP LOGICAL="ARREADY" PHYSICAL="s_axi_arready"/>
@@ -1532,18 +1944,25 @@
         <PARAMETER NAME="C_FAMILY" VALUE="virtex7"/>
         <PARAMETER NAME="C_JTAG_CHAIN" VALUE="2"/>
         <PARAMETER NAME="C_USE_BSCAN" VALUE="0"/>
+        <PARAMETER NAME="C_BSCANID" VALUE="76547328"/>
+        <PARAMETER NAME="C_DEBUG_INTERFACE" VALUE="0"/>
         <PARAMETER NAME="C_USE_CONFIG_RESET" VALUE="0"/>
+        <PARAMETER NAME="C_AVOID_PRIMITIVES" VALUE="0"/>
         <PARAMETER NAME="C_INTERCONNECT" VALUE="2"/>
         <PARAMETER NAME="C_MB_DBG_PORTS" VALUE="1"/>
         <PARAMETER NAME="C_USE_UART" VALUE="0"/>
         <PARAMETER NAME="C_DBG_REG_ACCESS" VALUE="0"/>
         <PARAMETER NAME="C_DBG_MEM_ACCESS" VALUE="0"/>
         <PARAMETER NAME="C_USE_CROSS_TRIGGER" VALUE="0"/>
+        <PARAMETER NAME="C_EXT_TRIG_RESET_VALUE" VALUE="0xF1234"/>
         <PARAMETER NAME="C_TRACE_OUTPUT" VALUE="0"/>
         <PARAMETER NAME="C_TRACE_DATA_WIDTH" VALUE="32"/>
         <PARAMETER NAME="C_TRACE_CLK_FREQ_HZ" VALUE="200000000"/>
         <PARAMETER NAME="C_TRACE_CLK_OUT_PHASE" VALUE="90"/>
-        <PARAMETER NAME="C_S_AXI_ADDR_WIDTH" VALUE="32"/>
+        <PARAMETER NAME="C_TRACE_ASYNC_RESET" VALUE="0"/>
+        <PARAMETER NAME="C_TRACE_PROTOCOL" VALUE="1"/>
+        <PARAMETER NAME="C_TRACE_ID" VALUE="110"/>
+        <PARAMETER NAME="C_S_AXI_ADDR_WIDTH" VALUE="4"/>
         <PARAMETER NAME="C_S_AXI_DATA_WIDTH" VALUE="32"/>
         <PARAMETER NAME="C_S_AXI_ACLK_FREQ_HZ" VALUE="100000000"/>
         <PARAMETER NAME="C_M_AXI_ADDR_WIDTH" VALUE="32"/>
@@ -1565,7 +1984,7 @@
             <CONNECTION INSTANCE="rst_Clk_100M" PORT="mb_debug_sys_rst"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" NAME="Dbg_Clk_0" SIGIS="undef" SIGNAME="mdm_1_Dbg_Clk_0">
+        <PORT DIR="O" NAME="Dbg_Clk_0" SIGIS="clk" SIGNAME="mdm_1_Dbg_Clk_0">
           <CONNECTIONS>
             <CONNECTION INSTANCE="microblaze_0" PORT="Dbg_Clk"/>
           </CONNECTIONS>
@@ -1600,9 +2019,14 @@
             <CONNECTION INSTANCE="microblaze_0" PORT="Dbg_Update"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" NAME="Dbg_Rst_0" SIGIS="undef" SIGNAME="mdm_1_Dbg_Rst_0">
+        <PORT DIR="O" NAME="Dbg_Rst_0" SIGIS="rst" SIGNAME="mdm_1_Dbg_Rst_0">
           <CONNECTIONS>
             <CONNECTION INSTANCE="microblaze_0" PORT="Debug_Rst"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="Dbg_Disable_0" SIGIS="undef" SIGNAME="mdm_1_Dbg_Disable_0">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="microblaze_0" PORT="Dbg_Disable"/>
           </CONNECTIONS>
         </PORT>
       </PORTS>
@@ -1611,6 +2035,7 @@
           <PORTMAPS>
             <PORTMAP LOGICAL="CAPTURE" PHYSICAL="Dbg_Capture_0"/>
             <PORTMAP LOGICAL="CLK" PHYSICAL="Dbg_Clk_0"/>
+            <PORTMAP LOGICAL="DISABLE" PHYSICAL="Dbg_Disable_0"/>
             <PORTMAP LOGICAL="REG_EN" PHYSICAL="Dbg_Reg_En_0"/>
             <PORTMAP LOGICAL="RST" PHYSICAL="Dbg_Rst_0"/>
             <PORTMAP LOGICAL="SHIFT" PHYSICAL="Dbg_Shift_0"/>
@@ -1625,9 +2050,9 @@
         <PERIPHERAL INSTANCE="microblaze_0"/>
       </PERIPHERALS>
     </MODULE>
-    <MODULE FULLNAME="/microblaze_0" HWVERSION="9.6" INSTANCE="microblaze_0" IPTYPE="PROCESSOR" IS_ENABLE="1" MODCLASS="PROCESSOR" MODTYPE="microblaze" PROCTYPE="microblaze" VLNV="xilinx.com:ip:microblaze:9.6">
+    <MODULE FULLNAME="/microblaze_0" HWVERSION="10.0" INSTANCE="microblaze_0" IPTYPE="PROCESSOR" IS_ENABLE="1" MODCLASS="PROCESSOR" MODTYPE="microblaze" PROCTYPE="microblaze" VLNV="xilinx.com:ip:microblaze:10.0">
       <DOCUMENTS>
-        <DOCUMENT SOURCE="http://www.xilinx.com/cgi-bin/docs/rdoc?v=2016.1;d=ug984-vivado-microblaze-ref.pdf"/>
+        <DOCUMENT SOURCE="http://www.xilinx.com/cgi-bin/docs/rdoc?v=2018.1;d=ug984-vivado-microblaze-ref.pdf"/>
       </DOCUMENTS>
       <PARAMETERS>
         <PARAMETER NAME="C_SCO" VALUE="0"/>
@@ -1637,13 +2062,16 @@
         <PARAMETER NAME="C_NUM_SYNC_FF_CLK_IRQ" VALUE="1"/>
         <PARAMETER NAME="C_NUM_SYNC_FF_CLK_DEBUG" VALUE="2"/>
         <PARAMETER NAME="C_NUM_SYNC_FF_DBG_CLK" VALUE="1"/>
+        <PARAMETER NAME="C_NUM_SYNC_FF_DBG_TRACE_CLK" VALUE="2"/>
         <PARAMETER NAME="C_FAULT_TOLERANT" VALUE="1"/>
         <PARAMETER NAME="C_ECC_USE_CE_EXCEPTION" VALUE="0"/>
         <PARAMETER NAME="C_LOCKSTEP_SLAVE" VALUE="0"/>
+        <PARAMETER NAME="C_LOCKSTEP_MASTER" VALUE="0"/>
         <PARAMETER NAME="C_FAMILY" VALUE="virtex7"/>
         <PARAMETER NAME="C_DATA_SIZE" VALUE="32"/>
         <PARAMETER NAME="C_INSTR_SIZE" VALUE="32"/>
         <PARAMETER NAME="C_IADDR_SIZE" VALUE="32"/>
+        <PARAMETER NAME="C_PIADDR_SIZE" VALUE="32"/>
         <PARAMETER NAME="C_DADDR_SIZE" VALUE="32"/>
         <PARAMETER NAME="C_INSTANCE" VALUE="cont_microblaze_microblaze_0_0"/>
         <PARAMETER NAME="C_AVOID_PRIMITIVES" VALUE="0"/>
@@ -1700,6 +2128,7 @@
         <PARAMETER NAME="C_RESET_MSR" VALUE="0x00000000"/>
         <PARAMETER NAME="C_OPCODE_0x0_ILLEGAL" VALUE="0"/>
         <PARAMETER NAME="C_DEBUG_ENABLED" VALUE="1"/>
+        <PARAMETER NAME="C_DEBUG_INTERFACE" VALUE="0"/>
         <PARAMETER NAME="C_NUMBER_OF_PC_BRK" VALUE="1"/>
         <PARAMETER NAME="C_NUMBER_OF_RD_ADDR_BRK" VALUE="0"/>
         <PARAMETER NAME="C_NUMBER_OF_WR_ADDR_BRK" VALUE="0"/>
@@ -1708,6 +2137,7 @@
         <PARAMETER NAME="C_DEBUG_COUNTER_WIDTH" VALUE="32"/>
         <PARAMETER NAME="C_DEBUG_TRACE_SIZE" VALUE="8192"/>
         <PARAMETER NAME="C_DEBUG_EXTERNAL_TRACE" VALUE="0"/>
+        <PARAMETER NAME="C_DEBUG_TRACE_ASYNC_RESET" VALUE="0"/>
         <PARAMETER NAME="C_DEBUG_PROFILE_SIZE" VALUE="0"/>
         <PARAMETER NAME="C_INTERRUPT_IS_EDGE" VALUE="0"/>
         <PARAMETER NAME="C_EDGE_IS_POSITIVE" VALUE="1"/>
@@ -1749,7 +2179,7 @@
         <PARAMETER NAME="C_ICACHE_HIGHADDR" VALUE="0x000000003FFFFFFF"/>
         <PARAMETER NAME="C_USE_ICACHE" VALUE="0"/>
         <PARAMETER NAME="C_ALLOW_ICACHE_WR" VALUE="1"/>
-        <PARAMETER NAME="C_ADDR_TAG_BITS" VALUE="0"/>
+        <PARAMETER NAME="C_ADDR_TAG_BITS" VALUE="17"/>
         <PARAMETER NAME="C_CACHE_BYTE_SIZE" VALUE="8192"/>
         <PARAMETER NAME="C_ICACHE_LINE_LEN" VALUE="4"/>
         <PARAMETER NAME="C_ICACHE_ALWAYS_USED" VALUE="0"/>
@@ -1767,10 +2197,10 @@
         <PARAMETER NAME="C_M_AXI_IC_RUSER_WIDTH" VALUE="1"/>
         <PARAMETER NAME="C_M_AXI_IC_BUSER_WIDTH" VALUE="1"/>
         <PARAMETER NAME="C_DCACHE_BASEADDR" VALUE="0x0000000000000000"/>
-        <PARAMETER NAME="C_DCACHE_HIGHADDR" VALUE="0x000000003fffffff"/>
+        <PARAMETER NAME="C_DCACHE_HIGHADDR" VALUE="0x000000003FFFFFFF"/>
         <PARAMETER NAME="C_USE_DCACHE" VALUE="0"/>
         <PARAMETER NAME="C_ALLOW_DCACHE_WR" VALUE="1"/>
-        <PARAMETER NAME="C_DCACHE_ADDR_TAG" VALUE="0"/>
+        <PARAMETER NAME="C_DCACHE_ADDR_TAG" VALUE="17"/>
         <PARAMETER NAME="C_DCACHE_BYTE_SIZE" VALUE="8192"/>
         <PARAMETER NAME="C_DCACHE_LINE_LEN" VALUE="4"/>
         <PARAMETER NAME="C_DCACHE_ALWAYS_USED" VALUE="0"/>
@@ -1802,6 +2232,12 @@
         <PARAMETER NAME="C_M_AXI_IC_USER_SIGNALS" VALUE="0"/>
         <PARAMETER NAME="G_TEMPLATE_LIST" VALUE="0"/>
         <PARAMETER NAME="G_USE_EXCEPTIONS" VALUE="1"/>
+        <PARAMETER NAME="C_RESET_MSR_IE" VALUE="0"/>
+        <PARAMETER NAME="C_RESET_MSR_BIP" VALUE="0"/>
+        <PARAMETER NAME="C_RESET_MSR_ICE" VALUE="0"/>
+        <PARAMETER NAME="C_RESET_MSR_DCE" VALUE="0"/>
+        <PARAMETER NAME="C_RESET_MSR_EE" VALUE="0"/>
+        <PARAMETER NAME="C_RESET_MSR_EIP" VALUE="0"/>
         <PARAMETER NAME="C_M0_AXIS_PROTOCOL" VALUE="GENERIC"/>
         <PARAMETER NAME="C_S0_AXIS_PROTOCOL" VALUE="GENERIC"/>
         <PARAMETER NAME="C_M1_AXIS_PROTOCOL" VALUE="GENERIC"/>
@@ -2056,7 +2492,7 @@
             <CONNECTION INSTANCE="microblaze_0_axi_periph" PORT="S00_AXI_rready"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="Dbg_Clk" SIGIS="undef" SIGNAME="mdm_1_Dbg_Clk_0">
+        <PORT DIR="I" NAME="Dbg_Clk" SIGIS="clk" SIGNAME="mdm_1_Dbg_Clk_0">
           <CONNECTIONS>
             <CONNECTION INSTANCE="mdm_1" PORT="Dbg_Clk_0"/>
           </CONNECTIONS>
@@ -2091,9 +2527,14 @@
             <CONNECTION INSTANCE="mdm_1" PORT="Dbg_Update_0"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="Debug_Rst" SIGIS="undef" SIGNAME="mdm_1_Dbg_Rst_0">
+        <PORT DIR="I" NAME="Debug_Rst" SIGIS="rst" SIGNAME="mdm_1_Dbg_Rst_0">
           <CONNECTIONS>
             <CONNECTION INSTANCE="mdm_1" PORT="Dbg_Rst_0"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="Dbg_Disable" SIGIS="undef" SIGNAME="mdm_1_Dbg_Disable_0">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="mdm_1" PORT="Dbg_Disable_0"/>
           </CONNECTIONS>
         </PORT>
       </PORTS>
@@ -2149,6 +2590,8 @@
           <PARAMETER NAME="ADDR_WIDTH" VALUE="32"/>
           <PARAMETER NAME="NUM_READ_OUTSTANDING" VALUE="1"/>
           <PARAMETER NAME="NUM_WRITE_OUTSTANDING" VALUE="1"/>
+          <PARAMETER NAME="NUM_READ_THREADS" VALUE="1"/>
+          <PARAMETER NAME="NUM_WRITE_THREADS" VALUE="1"/>
           <PARAMETER NAME="MAX_BURST_LENGTH" VALUE="1"/>
           <PARAMETER NAME="PROTOCOL" VALUE="AXI4LITE"/>
           <PARAMETER NAME="FREQ_HZ" VALUE="39062500"/>
@@ -2167,6 +2610,8 @@
           <PARAMETER NAME="HAS_RRESP" VALUE="1"/>
           <PARAMETER NAME="PHASE" VALUE="0.000"/>
           <PARAMETER NAME="CLK_DOMAIN" VALUE="cont_microblaze_Clk"/>
+          <PARAMETER NAME="RUSER_BITS_PER_BYTE" VALUE="0"/>
+          <PARAMETER NAME="WUSER_BITS_PER_BYTE" VALUE="0"/>
           <PORTMAPS>
             <PORTMAP LOGICAL="ARADDR" PHYSICAL="M_AXI_DP_ARADDR"/>
             <PORTMAP LOGICAL="ARPROT" PHYSICAL="M_AXI_DP_ARPROT"/>
@@ -2193,6 +2638,7 @@
           <PORTMAPS>
             <PORTMAP LOGICAL="CAPTURE" PHYSICAL="Dbg_Capture"/>
             <PORTMAP LOGICAL="CLK" PHYSICAL="Dbg_Clk"/>
+            <PORTMAP LOGICAL="DISABLE" PHYSICAL="Dbg_Disable"/>
             <PORTMAP LOGICAL="REG_EN" PHYSICAL="Dbg_Reg_En"/>
             <PORTMAP LOGICAL="RST" PHYSICAL="Debug_Rst"/>
             <PORTMAP LOGICAL="SHIFT" PHYSICAL="Dbg_Shift"/>
@@ -2444,7 +2890,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 0 with highest priority.&#xA;"/>
@@ -2464,7 +2910,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 1 with highest priority.&#xA;"/>
@@ -2484,7 +2930,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 2 with highest priority.&#xA;"/>
@@ -2504,7 +2950,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 3 with highest priority.&#xA;"/>
@@ -2524,7 +2970,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 4 with highest priority.&#xA;"/>
@@ -2544,7 +2990,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 5 with highest priority.&#xA;"/>
@@ -2564,7 +3010,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 6 with highest priority.&#xA;"/>
@@ -2584,7 +3030,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 7 with highest priority.&#xA;"/>
@@ -2604,7 +3050,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 8 with highest priority.&#xA;"/>
@@ -2624,7 +3070,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 9 with highest priority.&#xA;"/>
@@ -2644,7 +3090,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 10 with highest priority.&#xA;"/>
@@ -2664,7 +3110,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 11 with highest priority.&#xA;"/>
@@ -2684,7 +3130,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 12 with highest priority.&#xA;"/>
@@ -2704,7 +3150,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 13 with highest priority.&#xA;"/>
@@ -2724,7 +3170,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 14 with highest priority.&#xA;"/>
@@ -2744,7 +3190,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 15 with highest priority.&#xA;"/>
@@ -2764,7 +3210,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 16 with highest priority.&#xA;"/>
@@ -2784,7 +3230,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 17 with highest priority.&#xA;"/>
@@ -2804,7 +3250,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 18 with highest priority.&#xA;"/>
@@ -2824,7 +3270,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 19 with highest priority.&#xA;"/>
@@ -2844,7 +3290,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 20 with highest priority.&#xA;"/>
@@ -2864,7 +3310,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 21 with highest priority.&#xA;"/>
@@ -2884,7 +3330,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 22 with highest priority.&#xA;"/>
@@ -2904,7 +3350,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 23 with highest priority.&#xA;"/>
@@ -2924,7 +3370,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 24 with highest priority.&#xA;"/>
@@ -2944,7 +3390,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 25 with highest priority.&#xA;"/>
@@ -2964,7 +3410,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 26 with highest priority.&#xA;"/>
@@ -2984,7 +3430,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 27 with highest priority.&#xA;"/>
@@ -3004,7 +3450,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 28 with highest priority.&#xA;"/>
@@ -3024,7 +3470,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 29 with highest priority.&#xA;"/>
@@ -3044,7 +3490,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 30 with highest priority.&#xA;"/>
@@ -3064,7 +3510,7 @@
               <PROPERTY NAME="SIZE" VALUE="32"/>
               <PROPERTY NAME="ACCESS" VALUE="read-write"/>
               <PROPERTY NAME="IS_ENABLED" VALUE="false"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x00000010"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="16"/>
               <FIELDS>
                 <FIELD NAME="IVA">
                   <PROPERTY NAME="DESCRIPTION" VALUE="Interrupt vector address of active interrupt 31 with highest priority.&#xA;"/>
@@ -3083,14 +3529,14 @@
       </ADDRESSBLOCKS>
       <PARAMETERS>
         <PARAMETER NAME="C_FAMILY" VALUE="virtex7"/>
-        <PARAMETER NAME="C_INSTANCE" VALUE="axi_intc_inst"/>
+        <PARAMETER NAME="C_INSTANCE" VALUE="cont_microblaze_microblaze_0_axi_intc_0"/>
         <PARAMETER NAME="C_S_AXI_ADDR_WIDTH" VALUE="9"/>
         <PARAMETER NAME="C_S_AXI_DATA_WIDTH" VALUE="32"/>
         <PARAMETER NAME="C_NUM_INTR_INPUTS" VALUE="2"/>
         <PARAMETER NAME="C_NUM_SW_INTR" VALUE="0"/>
         <PARAMETER NAME="C_KIND_OF_INTR" VALUE="0xfffffffd"/>
-        <PARAMETER NAME="C_KIND_OF_EDGE" VALUE="0xffffffff"/>
-        <PARAMETER NAME="C_KIND_OF_LVL" VALUE="0xffffffff"/>
+        <PARAMETER NAME="C_KIND_OF_EDGE" VALUE="0xFFFFFFFF"/>
+        <PARAMETER NAME="C_KIND_OF_LVL" VALUE="0xFFFFFFFF"/>
         <PARAMETER NAME="C_ASYNC_INTR" VALUE="0xFFFFFFFC"/>
         <PARAMETER NAME="C_NUM_SYNC_FF" VALUE="2"/>
         <PARAMETER NAME="C_IVAR_RESET_VALUE" VALUE="0x00000010"/>
@@ -3102,7 +3548,7 @@
         <PARAMETER NAME="C_HAS_ILR" VALUE="0"/>
         <PARAMETER NAME="C_IRQ_IS_LEVEL" VALUE="1"/>
         <PARAMETER NAME="C_IRQ_ACTIVE" VALUE="0x1"/>
-        <PARAMETER NAME="C_DISABLE_SYNCHRONIZERS" VALUE="1"/>
+        <PARAMETER NAME="C_DISABLE_SYNCHRONIZERS" VALUE="0"/>
         <PARAMETER NAME="C_MB_CLK_NOT_CONNECTED" VALUE="1"/>
         <PARAMETER NAME="C_HAS_FAST" VALUE="1"/>
         <PARAMETER NAME="C_EN_CASCADE_MODE" VALUE="0"/>
@@ -3273,6 +3719,10 @@
           <PARAMETER NAME="MAX_BURST_LENGTH" VALUE="1"/>
           <PARAMETER NAME="PHASE" VALUE="0.000"/>
           <PARAMETER NAME="CLK_DOMAIN" VALUE="cont_microblaze_Clk"/>
+          <PARAMETER NAME="NUM_READ_THREADS" VALUE="1"/>
+          <PARAMETER NAME="NUM_WRITE_THREADS" VALUE="1"/>
+          <PARAMETER NAME="RUSER_BITS_PER_BYTE" VALUE="0"/>
+          <PARAMETER NAME="WUSER_BITS_PER_BYTE" VALUE="0"/>
           <PORTMAPS>
             <PORTMAP LOGICAL="ARADDR" PHYSICAL="s_axi_araddr"/>
             <PORTMAP LOGICAL="ARREADY" PHYSICAL="s_axi_arready"/>
@@ -3632,7 +4082,7 @@
             <CONNECTION INSTANCE="External_Ports" PORT="Clk"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="0" NAME="ARESETN" RIGHT="0" SIGIS="rst" SIGNAME="rst_Clk_100M_interconnect_aresetn">
+        <PORT DIR="I" NAME="ARESETN" SIGIS="rst" SIGNAME="rst_Clk_100M_interconnect_aresetn">
           <CONNECTIONS>
             <CONNECTION INSTANCE="rst_Clk_100M" PORT="interconnect_aresetn"/>
           </CONNECTIONS>
@@ -3642,7 +4092,7 @@
             <CONNECTION INSTANCE="External_Ports" PORT="Clk"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="0" NAME="S00_ARESETN" RIGHT="0" SIGIS="rst" SIGNAME="rst_Clk_100M_peripheral_aresetn">
+        <PORT DIR="I" NAME="S00_ARESETN" SIGIS="rst" SIGNAME="rst_Clk_100M_peripheral_aresetn">
           <CONNECTIONS>
             <CONNECTION INSTANCE="rst_Clk_100M" PORT="peripheral_aresetn"/>
           </CONNECTIONS>
@@ -3652,7 +4102,7 @@
             <CONNECTION INSTANCE="External_Ports" PORT="Clk"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="0" NAME="M00_ARESETN" RIGHT="0" SIGIS="rst" SIGNAME="rst_Clk_100M_peripheral_aresetn">
+        <PORT DIR="I" NAME="M00_ARESETN" SIGIS="rst" SIGNAME="rst_Clk_100M_peripheral_aresetn">
           <CONNECTIONS>
             <CONNECTION INSTANCE="rst_Clk_100M" PORT="peripheral_aresetn"/>
           </CONNECTIONS>
@@ -3662,7 +4112,7 @@
             <CONNECTION INSTANCE="External_Ports" PORT="Clk"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="0" NAME="M01_ARESETN" RIGHT="0" SIGIS="rst" SIGNAME="rst_Clk_100M_peripheral_aresetn">
+        <PORT DIR="I" NAME="M01_ARESETN" SIGIS="rst" SIGNAME="rst_Clk_100M_peripheral_aresetn">
           <CONNECTIONS>
             <CONNECTION INSTANCE="rst_Clk_100M" PORT="peripheral_aresetn"/>
           </CONNECTIONS>
@@ -3672,7 +4122,7 @@
             <CONNECTION INSTANCE="External_Ports" PORT="Clk"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="0" NAME="M02_ARESETN" RIGHT="0" SIGIS="rst" SIGNAME="rst_Clk_100M_peripheral_aresetn">
+        <PORT DIR="I" NAME="M02_ARESETN" SIGIS="rst" SIGNAME="rst_Clk_100M_peripheral_aresetn">
           <CONNECTIONS>
             <CONNECTION INSTANCE="rst_Clk_100M" PORT="peripheral_aresetn"/>
           </CONNECTIONS>
@@ -3682,7 +4132,7 @@
             <CONNECTION INSTANCE="External_Ports" PORT="Clk"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="0" NAME="M03_ARESETN" RIGHT="0" SIGIS="rst" SIGNAME="rst_Clk_100M_peripheral_aresetn">
+        <PORT DIR="I" NAME="M03_ARESETN" SIGIS="rst" SIGNAME="rst_Clk_100M_peripheral_aresetn">
           <CONNECTIONS>
             <CONNECTION INSTANCE="rst_Clk_100M" PORT="peripheral_aresetn"/>
           </CONNECTIONS>
@@ -3692,7 +4142,7 @@
             <CONNECTION INSTANCE="External_Ports" PORT="Clk"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="0" NAME="M04_ARESETN" RIGHT="0" SIGIS="rst" SIGNAME="rst_Clk_100M_peripheral_aresetn">
+        <PORT DIR="I" NAME="M04_ARESETN" SIGIS="rst" SIGNAME="rst_Clk_100M_peripheral_aresetn">
           <CONNECTIONS>
             <CONNECTION INSTANCE="rst_Clk_100M" PORT="peripheral_aresetn"/>
           </CONNECTIONS>
@@ -4614,12 +5064,12 @@
             <CONNECTION INSTANCE="microblaze_0_local_memory_dlmb_v10" PORT="Sl_CE"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" NAME="BRAM_Rst_A" SIGIS="undef" SIGNAME="microblaze_0_local_memory_dlmb_bram_if_cntlr_BRAM_Rst_A">
+        <PORT DIR="O" NAME="BRAM_Rst_A" SIGIS="rst" SIGNAME="microblaze_0_local_memory_dlmb_bram_if_cntlr_BRAM_Rst_A">
           <CONNECTIONS>
             <CONNECTION INSTANCE="microblaze_0_local_memory_lmb_bram" PORT="rsta"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" NAME="BRAM_Clk_A" SIGIS="undef" SIGNAME="microblaze_0_local_memory_dlmb_bram_if_cntlr_BRAM_Clk_A">
+        <PORT DIR="O" NAME="BRAM_Clk_A" SIGIS="clk" SIGNAME="microblaze_0_local_memory_dlmb_bram_if_cntlr_BRAM_Clk_A">
           <CONNECTIONS>
             <CONNECTION INSTANCE="microblaze_0_local_memory_lmb_bram" PORT="clka"/>
           </CONNECTIONS>
@@ -4674,6 +5124,7 @@
           <PARAMETER NAME="MASTER_TYPE" VALUE="BRAM_CTRL"/>
           <PARAMETER NAME="MEM_WIDTH" VALUE="32"/>
           <PARAMETER NAME="MEM_ECC" VALUE="NONE"/>
+          <PARAMETER NAME="READ_WRITE_MODE"/>
           <PORTMAPS>
             <PORTMAP LOGICAL="ADDR" PHYSICAL="BRAM_Addr_A"/>
             <PORTMAP LOGICAL="CLK" PHYSICAL="BRAM_Clk_A"/>
@@ -4709,7 +5160,7 @@
             <CONNECTION INSTANCE="rst_Clk_100M" PORT="bus_struct_reset"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" NAME="LMB_Rst" SIGIS="undef"/>
+        <PORT DIR="O" NAME="LMB_Rst" SIGIS="rst"/>
         <PORT DIR="I" LEFT="0" NAME="M_ABus" RIGHT="31" SIGIS="undef" SIGNAME="microblaze_0_Data_Addr">
           <CONNECTIONS>
             <CONNECTION INSTANCE="microblaze_0" PORT="Data_Addr"/>
@@ -4962,12 +5413,12 @@
             <CONNECTION INSTANCE="microblaze_0_local_memory_ilmb_v10" PORT="Sl_CE"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" NAME="BRAM_Rst_A" SIGIS="undef" SIGNAME="microblaze_0_local_memory_ilmb_bram_if_cntlr_BRAM_Rst_A">
+        <PORT DIR="O" NAME="BRAM_Rst_A" SIGIS="rst" SIGNAME="microblaze_0_local_memory_ilmb_bram_if_cntlr_BRAM_Rst_A">
           <CONNECTIONS>
             <CONNECTION INSTANCE="microblaze_0_local_memory_lmb_bram" PORT="rstb"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" NAME="BRAM_Clk_A" SIGIS="undef" SIGNAME="microblaze_0_local_memory_ilmb_bram_if_cntlr_BRAM_Clk_A">
+        <PORT DIR="O" NAME="BRAM_Clk_A" SIGIS="clk" SIGNAME="microblaze_0_local_memory_ilmb_bram_if_cntlr_BRAM_Clk_A">
           <CONNECTIONS>
             <CONNECTION INSTANCE="microblaze_0_local_memory_lmb_bram" PORT="clkb"/>
           </CONNECTIONS>
@@ -5022,6 +5473,7 @@
           <PARAMETER NAME="MASTER_TYPE" VALUE="BRAM_CTRL"/>
           <PARAMETER NAME="MEM_WIDTH" VALUE="32"/>
           <PARAMETER NAME="MEM_ECC" VALUE="NONE"/>
+          <PARAMETER NAME="READ_WRITE_MODE"/>
           <PORTMAPS>
             <PORTMAP LOGICAL="ADDR" PHYSICAL="BRAM_Addr_A"/>
             <PORTMAP LOGICAL="CLK" PHYSICAL="BRAM_Clk_A"/>
@@ -5057,7 +5509,7 @@
             <CONNECTION INSTANCE="rst_Clk_100M" PORT="bus_struct_reset"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" NAME="LMB_Rst" SIGIS="undef"/>
+        <PORT DIR="O" NAME="LMB_Rst" SIGIS="rst"/>
         <PORT DIR="I" LEFT="0" NAME="M_ABus" RIGHT="31" SIGIS="undef" SIGNAME="microblaze_0_Instr_Addr">
           <CONNECTIONS>
             <CONNECTION INSTANCE="microblaze_0" PORT="Instr_Addr"/>
@@ -5198,9 +5650,9 @@
         </BUSINTERFACE>
       </BUSINTERFACES>
     </MODULE>
-    <MODULE FULLNAME="/microblaze_0_local_memory/lmb_bram" HWVERSION="8.3" INSTANCE="microblaze_0_local_memory_lmb_bram" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="MEMORY" MODTYPE="blk_mem_gen" VLNV="xilinx.com:ip:blk_mem_gen:8.3">
+    <MODULE FULLNAME="/microblaze_0_local_memory/lmb_bram" HWVERSION="8.4" INSTANCE="microblaze_0_local_memory_lmb_bram" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="MEMORY" MODTYPE="blk_mem_gen" VLNV="xilinx.com:ip:blk_mem_gen:8.4">
       <DOCUMENTS>
-        <DOCUMENT SOURCE="http://www.xilinx.com/cgi-bin/docs/ipdoc?c=blk_mem_gen;v=v8_3;d=pg058-blk-mem-gen.pdf"/>
+        <DOCUMENT SOURCE="http://www.xilinx.com/cgi-bin/docs/ipdoc?c=blk_mem_gen;v=v8_4;d=pg058-blk-mem-gen.pdf"/>
       </DOCUMENTS>
       <PARAMETERS>
         <PARAMETER NAME="C_FAMILY" VALUE="virtex7"/>
@@ -5349,12 +5801,12 @@
         <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
       </PARAMETERS>
       <PORTS>
-        <PORT DIR="I" NAME="clka" SIGIS="undef" SIGNAME="microblaze_0_local_memory_dlmb_bram_if_cntlr_BRAM_Clk_A">
+        <PORT DIR="I" NAME="clka" SIGIS="clk" SIGNAME="microblaze_0_local_memory_dlmb_bram_if_cntlr_BRAM_Clk_A">
           <CONNECTIONS>
             <CONNECTION INSTANCE="microblaze_0_local_memory_dlmb_bram_if_cntlr" PORT="BRAM_Clk_A"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="rsta" SIGIS="undef" SIGNAME="microblaze_0_local_memory_dlmb_bram_if_cntlr_BRAM_Rst_A">
+        <PORT DIR="I" NAME="rsta" SIGIS="rst" SIGNAME="microblaze_0_local_memory_dlmb_bram_if_cntlr_BRAM_Rst_A">
           <CONNECTIONS>
             <CONNECTION INSTANCE="microblaze_0_local_memory_dlmb_bram_if_cntlr" PORT="BRAM_Rst_A"/>
           </CONNECTIONS>
@@ -5384,12 +5836,12 @@
             <CONNECTION INSTANCE="microblaze_0_local_memory_dlmb_bram_if_cntlr" PORT="BRAM_Din_A"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="clkb" SIGIS="undef" SIGNAME="microblaze_0_local_memory_ilmb_bram_if_cntlr_BRAM_Clk_A">
+        <PORT DIR="I" NAME="clkb" SIGIS="clk" SIGNAME="microblaze_0_local_memory_ilmb_bram_if_cntlr_BRAM_Clk_A">
           <CONNECTIONS>
             <CONNECTION INSTANCE="microblaze_0_local_memory_ilmb_bram_if_cntlr" PORT="BRAM_Clk_A"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="rstb" SIGIS="undef" SIGNAME="microblaze_0_local_memory_ilmb_bram_if_cntlr_BRAM_Rst_A">
+        <PORT DIR="I" NAME="rstb" SIGIS="rst" SIGNAME="microblaze_0_local_memory_ilmb_bram_if_cntlr_BRAM_Rst_A">
           <CONNECTIONS>
             <CONNECTION INSTANCE="microblaze_0_local_memory_ilmb_bram_if_cntlr" PORT="BRAM_Rst_A"/>
           </CONNECTIONS>
@@ -5426,6 +5878,7 @@
           <PARAMETER NAME="MEM_WIDTH" VALUE="32"/>
           <PARAMETER NAME="MEM_ECC" VALUE="NONE"/>
           <PARAMETER NAME="MASTER_TYPE" VALUE="BRAM_CTRL"/>
+          <PARAMETER NAME="READ_WRITE_MODE" VALUE="READ_WRITE"/>
           <PORTMAPS>
             <PORTMAP LOGICAL="ADDR" PHYSICAL="addra"/>
             <PORTMAP LOGICAL="CLK" PHYSICAL="clka"/>
@@ -5441,6 +5894,7 @@
           <PARAMETER NAME="MEM_WIDTH" VALUE="32"/>
           <PARAMETER NAME="MEM_ECC" VALUE="NONE"/>
           <PARAMETER NAME="MASTER_TYPE" VALUE="BRAM_CTRL"/>
+          <PARAMETER NAME="READ_WRITE_MODE" VALUE="READ_WRITE"/>
           <PORTMAPS>
             <PORTMAP LOGICAL="ADDR" PHYSICAL="addrb"/>
             <PORTMAP LOGICAL="CLK" PHYSICAL="clkb"/>
@@ -5506,10 +5960,10 @@
         </PORT>
         <PORT DIR="O" LEFT="0" NAME="bus_struct_reset" RIGHT="0" SIGIS="rst" SIGNAME="rst_Clk_100M_bus_struct_reset">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="microblaze_0_local_memory_dlmb_bram_if_cntlr" PORT="LMB_Rst"/>
             <CONNECTION INSTANCE="microblaze_0_local_memory_dlmb_v10" PORT="SYS_Rst"/>
-            <CONNECTION INSTANCE="microblaze_0_local_memory_ilmb_bram_if_cntlr" PORT="LMB_Rst"/>
             <CONNECTION INSTANCE="microblaze_0_local_memory_ilmb_v10" PORT="SYS_Rst"/>
+            <CONNECTION INSTANCE="microblaze_0_local_memory_dlmb_bram_if_cntlr" PORT="LMB_Rst"/>
+            <CONNECTION INSTANCE="microblaze_0_local_memory_ilmb_bram_if_cntlr" PORT="LMB_Rst"/>
           </CONNECTIONS>
         </PORT>
         <PORT DIR="O" LEFT="0" NAME="peripheral_reset" RIGHT="0" SIGIS="rst"/>

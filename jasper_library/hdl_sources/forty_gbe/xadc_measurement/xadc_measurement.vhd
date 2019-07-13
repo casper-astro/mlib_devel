@@ -1,3 +1,4 @@
+
 -- file: xadc_measurement.vhd
 -- (c) Copyright 2009 - 2013 Xilinx, Inc. All rights reserved.
 -- 
@@ -77,7 +78,7 @@ end xadc_measurement;
 architecture xilinx of xadc_measurement is
 
   attribute CORE_GENERATION_INFO : string;
-  attribute CORE_GENERATION_INFO of xilinx : architecture is "xadc_measurement,xadc_wiz_v3_3_0,{component_name=xadc_measurement,enable_axi=false,enable_axi4stream=false,dclk_frequency=156,enable_busy=true,enable_convst=false,enable_convstclk=false,enable_dclk=true,enable_drp=true,enable_eoc=true,enable_eos=true,enable_vbram_alaram=false,enable_vccddro_alaram=false,enable_Vccint_Alaram=false,enable_Vccaux_alaram=falseenable_vccpaux_alaram=false,enable_vccpint_alaram=false,ot_alaram=true,user_temp_alaram=true,timing_mode=continuous,channel_averaging=16,sequencer_mode=on,startup_channel_selection=contineous_sequence}";
+  attribute CORE_GENERATION_INFO of xilinx : architecture is "xadc_measurement,xadc_wiz_v3_3_5,{component_name=xadc_measurement,enable_axi=false,enable_axi4stream=false,dclk_frequency=156,enable_busy=true,enable_convst=false,enable_convstclk=false,enable_dclk=true,enable_drp=true,enable_eoc=true,enable_eos=true,enable_vbram_alaram=false,enable_vccddro_alaram=false,enable_Vccint_Alaram=false,enable_Vccaux_alaram=falseenable_vccpaux_alaram=false,enable_vccpint_alaram=false,ot_alaram=true,user_temp_alaram=true,timing_mode=continuous,channel_averaging=16,sequencer_mode=on,startup_channel_selection=contineous_sequence}";
 
 
   signal FLOAT_VCCAUX_ALARM : std_logic;

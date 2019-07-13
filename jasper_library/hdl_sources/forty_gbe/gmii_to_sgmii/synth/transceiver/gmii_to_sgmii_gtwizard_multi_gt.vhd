@@ -2,7 +2,7 @@
 --   ____  ____
 --  /   /\/   /
 -- /___/  \  /    Vendor: Xilinx
--- \   \   \/     Version : 3.4
+-- \   \   \/     Version : 3.6
 --  \   \         Application : 7 Series FPGAs Transceivers Wizard
 --  /   /         Filename : gmii_to_sgmii_gtwizard_multi_gt.vhd
 -- /___/   /\     
@@ -94,6 +94,7 @@ port
     gt0_cpllreset_in                        : in   std_logic;
     -------------------------- Channel - Clocking Ports ------------------------
     gt0_gtrefclk0_in                        : in   std_logic;
+    gt0_gtrefclk0_bufg_in                   : in   std_logic;
     ---------------------------- Channel - DRP Ports  --------------------------
     gt0_drpaddr_in                          : in   std_logic_vector(8 downto 0);
     gt0_drpclk_in                           : in   std_logic;
@@ -102,7 +103,6 @@ port
     gt0_drpen_in                            : in   std_logic;
     gt0_drprdy_out                          : out  std_logic;
     gt0_drpwe_in                            : in   std_logic;
-    gt0_dmonitorout_out                         : out  std_logic_vector(14 downto 0);
     ------------------------------- Loopback Ports -----------------------------
     gt0_loopback_in                         : in   std_logic_vector(2 downto 0);
     ------------------------------ Power-Down Ports ----------------------------
@@ -116,6 +116,8 @@ port
     gt0_eyescantrigger_in                   : in   std_logic;
     ------------------------- Receive Ports - CDR Ports ------------------------
     gt0_rxcdrhold_in                        : in   std_logic;
+    ------------------- Receive Ports - Digital Monitor Ports ------------------
+    gt0_dmonitorout_out                     : out  std_logic_vector(14 downto 0);
     ------------------ Receive Ports - FPGA RX Interface Ports -----------------
     gt0_rxusrclk_in                         : in   std_logic;
     gt0_rxusrclk2_in                        : in   std_logic;
@@ -140,10 +142,11 @@ port
     gt0_rxcommadet_out                      : out  std_logic;
     gt0_rxmcommaalignen_in                  : in   std_logic;
     gt0_rxpcommaalignen_in                  : in   std_logic;
+    -------------------- Receive Ports - RX Equailizer Ports -------------------
+    gt0_rxlpmhfhold_in                      : in   std_logic;
+    gt0_rxlpmlfhold_in                      : in   std_logic;
     --------------------- Receive Ports - RX Equalizer Ports -------------------
-    gt0_rxdfeagchold_in                     : in   std_logic;
     gt0_rxdfeagcovrden_in                   : in   std_logic;
-    gt0_rxdfelfhold_in                      : in   std_logic;
     gt0_rxdfelpmreset_in                    : in   std_logic;
     gt0_rxmonitorout_out                    : out  std_logic_vector(6 downto 0);
     gt0_rxmonitorsel_in                     : in   std_logic_vector(1 downto 0);
@@ -184,6 +187,7 @@ port
     gt0_txbufstatus_out                     : out  std_logic_vector(1 downto 0);
     --------------- Transmit Ports - TX Configurable Driver Ports --------------
     gt0_txdiffctrl_in                       : in   std_logic_vector(3 downto 0);
+    gt0_txinhibit_in                        : in   std_logic; 
     ------------------ Transmit Ports - TX Data Path interface -----------------
     gt0_txdata_in                           : in   std_logic_vector(15 downto 0);
     ---------------- Transmit Ports - TX Driver and OOB signaling --------------
@@ -231,13 +235,13 @@ signal  tied_to_vcc_i                   :   std_logic;
 signal   gt0_qplloutclk_i         :   std_logic;
 signal   gt0_qplloutrefclk_i      :   std_logic;
   
-    signal  gt0_mgtrefclktx_i           :   std_logic_vector(1 downto 0);
-    signal  gt0_mgtrefclkrx_i           :   std_logic_vector(1 downto 0);
- 
-
     signal   gt0_qpllclk_i            :   std_logic;
     signal   gt0_qpllrefclk_i         :   std_logic;
     signal    gt0_rst_i                       : std_logic;
+    signal   gt0_cpllreset_i            :   std_logic;
+    signal   gt0_cpllpd_i         :   std_logic;
+    signal   cpll_reset0_i            :   std_logic;
+    signal   cpll_pd0_i         :   std_logic;
 
 
 --*************************** Component Declarations **************************
@@ -256,6 +260,7 @@ port
     DRP_BUSY_OUT                            : out  std_logic;
  RXPMARESETDONE  : out  std_logic;
  TXPMARESETDONE  : out  std_logic;
+     cpllpd_in : in std_logic;
     --------------------------------- CPLL Ports -------------------------------
     cpllfbclklost_out                       : out  std_logic;
     cplllock_out                            : out  std_logic;
@@ -272,7 +277,6 @@ port
     drpen_in                                : in   std_logic;
     drprdy_out                              : out  std_logic;
     drpwe_in                                : in   std_logic;
-    dmonitorout_out                         : out  std_logic_vector(14 downto 0);
     ------------------------------- Clocking Ports -----------------------------
     qpllclk_in                              : in   std_logic;
     qpllrefclk_in                           : in   std_logic;
@@ -289,6 +293,8 @@ port
     eyescantrigger_in                       : in   std_logic;
     ------------------------- Receive Ports - CDR Ports ------------------------
     rxcdrhold_in                            : in   std_logic;
+    ------------------- Receive Ports - Digital Monitor Ports ------------------
+    dmonitorout_out                         : out  std_logic_vector(14 downto 0);
     ------------------ Receive Ports - FPGA RX Interface Ports -----------------
     rxusrclk_in                             : in   std_logic;
     rxusrclk2_in                            : in   std_logic;
@@ -313,10 +319,11 @@ port
     rxcommadet_out                          : out  std_logic;
     rxmcommaalignen_in                      : in   std_logic;
     rxpcommaalignen_in                      : in   std_logic;
+    -------------------- Receive Ports - RX Equailizer Ports -------------------
+    rxlpmhfhold_in                          : in   std_logic;
+    rxlpmlfhold_in                          : in   std_logic;
     --------------------- Receive Ports - RX Equalizer Ports -------------------
-    rxdfeagchold_in                         : in   std_logic;
     rxdfeagcovrden_in                       : in   std_logic;
-    rxdfelfhold_in                          : in   std_logic;
     rxdfelpmreset_in                        : in   std_logic;
     rxmonitorout_out                        : out  std_logic_vector(6 downto 0);
     rxmonitorsel_in                         : in   std_logic_vector(1 downto 0);
@@ -357,6 +364,7 @@ port
     txbufstatus_out                         : out  std_logic_vector(1 downto 0);
     --------------- Transmit Ports - TX Configurable Driver Ports --------------
     txdiffctrl_in                           : in   std_logic_vector(3 downto 0);
+    txinhibit_in                            : in   std_logic;
     ------------------ Transmit Ports - TX Data Path interface -----------------
     txdata_in                               : in   std_logic_vector(15 downto 0);
     ---------------- Transmit Ports - TX Driver and OOB signaling --------------
@@ -381,6 +389,17 @@ port
 );
 end component;
 
+component gmii_to_sgmii_cpll_railing
+port 
+(   
+        cpll_reset_out : out std_logic;
+         cpll_pd_out : out std_logic;
+         refclk_out : out std_logic;
+        
+         refclk_in : in std_logic
+
+);
+end component;
 
 --********************************* Main Body of Code**************************
 
@@ -412,12 +431,13 @@ begin
         RXPMARESETDONE                  =>      GT0_RXPMARESETDONE_OUT,
         TXPMARESETDONE                  =>      GT0_TXPMARESETDONE_OUT,
 
+        cpllpd_in => gt0_cpllpd_i,
         --------------------------------- CPLL Ports -------------------------------
         cpllfbclklost_out               =>      gt0_cpllfbclklost_out,
         cplllock_out                    =>      gt0_cplllock_out,
         cplllockdetclk_in               =>      gt0_cplllockdetclk_in,
         cpllrefclklost_out              =>      gt0_cpllrefclklost_out,
-        cpllreset_in                    =>      gt0_cpllreset_in,
+        cpllreset_in                    =>      gt0_cpllreset_i,
         -------------------------- Channel - Clocking Ports ------------------------
         gtrefclk0_in                    =>      gt0_gtrefclk0_in,
         ---------------------------- Channel - DRP Ports  --------------------------
@@ -428,7 +448,6 @@ begin
         drpen_in                        =>      gt0_drpen_in,
         drprdy_out                      =>      gt0_drprdy_out,
         drpwe_in                        =>      gt0_drpwe_in,
-        dmonitorout_out                 =>      gt0_dmonitorout_out,
         ------------------------------- Clocking Ports -----------------------------
         qpllclk_in                      =>      gt0_qpllclk_i,
         qpllrefclk_in                   =>      gt0_qpllrefclk_i,
@@ -445,6 +464,8 @@ begin
         eyescantrigger_in               =>      gt0_eyescantrigger_in,
         ------------------------- Receive Ports - CDR Ports ------------------------
         rxcdrhold_in                    =>      gt0_rxcdrhold_in,
+        ------------------- Receive Ports - Digital Monitor Ports ------------------
+        dmonitorout_out                 =>      gt0_dmonitorout_out,
         ------------------ Receive Ports - FPGA RX Interface Ports -----------------
         rxusrclk_in                     =>      gt0_rxusrclk_in,
         rxusrclk2_in                    =>      gt0_rxusrclk2_in,
@@ -469,10 +490,11 @@ begin
         rxcommadet_out                  =>      gt0_rxcommadet_out,
         rxmcommaalignen_in              =>      gt0_rxmcommaalignen_in,
         rxpcommaalignen_in              =>      gt0_rxpcommaalignen_in,
+        -------------------- Receive Ports - RX Equailizer Ports -------------------
+        rxlpmhfhold_in                  =>      gt0_rxlpmhfhold_in,
+        rxlpmlfhold_in                  =>      gt0_rxlpmlfhold_in,
         --------------------- Receive Ports - RX Equalizer Ports -------------------
-        rxdfeagchold_in                 =>      gt0_rxdfeagchold_in,
         rxdfeagcovrden_in               =>      gt0_rxdfeagcovrden_in,
-        rxdfelfhold_in                  =>      gt0_rxdfelfhold_in,
         rxdfelpmreset_in                =>      gt0_rxdfelpmreset_in,
         rxmonitorout_out                =>      gt0_rxmonitorout_out,
         rxmonitorsel_in                 =>      gt0_rxmonitorsel_in,
@@ -513,6 +535,7 @@ begin
         txbufstatus_out                 =>      gt0_txbufstatus_out,
         --------------- Transmit Ports - TX Configurable Driver Ports --------------
         txdiffctrl_in                   =>      gt0_txdiffctrl_in,
+        txinhibit_in                    =>      gt0_txinhibit_in,
         ------------------ Transmit Ports - TX Data Path interface -----------------
         txdata_in                       =>      gt0_txdata_in,
         ---------------- Transmit Ports - TX Driver and OOB signaling --------------
@@ -536,5 +559,16 @@ begin
     );
 
 
-     
+   cpll_railing0_i : gmii_to_sgmii_cpll_railing 
+   port map
+   (
+        cpll_reset_out => cpll_reset0_i,
+        cpll_pd_out => cpll_pd0_i,
+        refclk_out => open,
+        refclk_in => gt0_gtrefclk0_bufg_in
+);
+
+
+gt0_cpllreset_i <= cpll_reset0_i or gt0_cpllreset_in; 
+gt0_cpllpd_i <= cpll_pd0_i ; 
 end RTL;

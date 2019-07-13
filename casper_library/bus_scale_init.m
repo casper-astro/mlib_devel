@@ -1,15 +1,12 @@
 
 function bus_scale_init(blk, varargin)
-
   clog('entering bus_scale_init', 'trace');
-  
   defaults = { ...
     'n_bits_in',  [9 9 9 9],  'bin_pt_in',       8 , 'type_in', 1,  'cmplx', 'off', ...
     'scale_factor', -1, 'misc', 'on', ...
   };  
   
   check_mask_type(blk, 'bus_scale');
-
   if same_state(blk, 'defaults', defaults, varargin{:}), return, end
   munge_block(blk, varargin{:});
 
@@ -21,7 +18,6 @@ function bus_scale_init(blk, varargin)
   bus_create_w = 50;
   scale_w = 50; scale_d = 60;
   del_w = 30; del_d = 20;
-
   n_bits_in       = get_var('n_bits_in', 'defaults', defaults, varargin{:});
   bin_pt_in       = get_var('bin_pt_in', 'defaults', defaults, varargin{:});
   type_in         = get_var('type_in', 'defaults', defaults, varargin{:});
@@ -30,20 +26,18 @@ function bus_scale_init(blk, varargin)
   misc            = get_var('misc', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
-  
  %default state, do nothing 
   if isempty(n_bits_in),
     clean_blocks(blk);
     save_state(blk, 'defaults', defaults, varargin{:});  % Save and back-populate mask parameter values
     clog('exiting bus_scale_init','trace');
-    error('exiting bus_scale_init');
+    %error('exiting bus_scale_init');
     return;
   end
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % check input lists for consistency %
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
- 
   lenbi = length(n_bits_in); lenpi = length(bin_pt_in); lenti = length(type_in); lensf = length(scale_factor);
   i = [lenbi, lenpi, lenti, lensf];  
   unique_i = unique(i);

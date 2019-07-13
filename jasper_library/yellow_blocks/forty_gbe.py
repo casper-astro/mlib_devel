@@ -47,30 +47,30 @@ class forty_gbe(YellowBlock):
         #inst.add_port('FPGA_REFCLK_BUF1_P', 'FPGA_REFCLK_BUF1_P', parent_port=True, dir='in')
         #inst.add_port('FPGA_REFCLK_BUF1_N', 'FPGA_REFCLK_BUF1_N', parent_port=True, dir='in')
 
-        inst.add_port('HMC_MEZZ0_SDA_IN', 'mez0_sda_out', dir='in')
-        inst.add_port('HMC_MEZZ0_SDA_OUT', 'mez0_sda_in', dir='out')
-        inst.add_port('HMC_MEZZ0_SCL_IN', 'mez0_scl_out', dir='in')
-        inst.add_port('HMC_MEZZ0_SCL_OUT', 'mez0_scl_in', dir='out')
-        inst.add_port('HMC_MEZZ0_INIT_DONE', 'mez0_init_done', dir='in')
-        inst.add_port('HMC_MEZZ0_POST_OK', 'mez0_post_ok', dir='in')
+        inst.add_port('MEZZ0_SDA_IN', 'mez0_sda_out', dir='in')
+        inst.add_port('MEZZ0_SDA_OUT', 'mez0_sda_in', dir='out')
+        inst.add_port('MEZZ0_SCL_IN', 'mez0_scl_out', dir='in')
+        inst.add_port('MEZZ0_SCL_OUT', 'mez0_scl_in', dir='out')
+        inst.add_port('MEZZ0_INIT_DONE', 'mez0_init_done', dir='in')
+        inst.add_port('MEZZ0_POST_OK', 'mez0_post_ok', dir='in')
         inst.add_port('MEZZ0_ID', 'mez0_id', dir='in', width=3)
         inst.add_port('MEZZ0_PRESENT', 'mez0_present', dir='in')
 
-        inst.add_port('HMC_MEZZ1_SDA_IN', 'mez1_sda_out', dir='in')
-        inst.add_port('HMC_MEZZ1_SDA_OUT', 'mez1_sda_in', dir='out')
-        inst.add_port('HMC_MEZZ1_SCL_IN', 'mez1_scl_out', dir='in')
-        inst.add_port('HMC_MEZZ1_SCL_OUT', 'mez1_scl_in', dir='out')
-        inst.add_port('HMC_MEZZ1_INIT_DONE', 'mez1_init_done', dir='in')
-        inst.add_port('HMC_MEZZ1_POST_OK', 'mez1_post_ok', dir='in')
+        inst.add_port('MEZZ1_SDA_IN', 'mez1_sda_out', dir='in')
+        inst.add_port('MEZZ1_SDA_OUT', 'mez1_sda_in', dir='out')
+        inst.add_port('MEZZ1_SCL_IN', 'mez1_scl_out', dir='in')
+        inst.add_port('MEZZ1_SCL_OUT', 'mez1_scl_in', dir='out')
+        inst.add_port('MEZZ1_INIT_DONE', 'mez1_init_done', dir='in')
+        inst.add_port('MEZZ1_POST_OK', 'mez1_post_ok', dir='in')
         inst.add_port('MEZZ1_ID', 'mez1_id', dir='in', width=3)
         inst.add_port('MEZZ1_PRESENT', 'mez1_present', dir='in')
 
-        inst.add_port('HMC_MEZZ2_SDA_IN', 'mez2_sda_out', dir='in')
-        inst.add_port('HMC_MEZZ2_SDA_OUT', 'mez2_sda_in', dir='out')
-        inst.add_port('HMC_MEZZ2_SCL_IN', 'mez2_scl_out', dir='in')
-        inst.add_port('HMC_MEZZ2_SCL_OUT', 'mez2_scl_in', dir='out')
-        inst.add_port('HMC_MEZZ2_INIT_DONE', 'mez2_init_done', dir='in')
-        inst.add_port('HMC_MEZZ2_POST_OK', 'mez2_post_ok', dir='in')
+        inst.add_port('MEZZ2_SDA_IN', 'mez2_sda_out', dir='in')
+        inst.add_port('MEZZ2_SDA_OUT', 'mez2_sda_in', dir='out')
+        inst.add_port('MEZZ2_SCL_IN', 'mez2_scl_out', dir='in')
+        inst.add_port('MEZZ2_SCL_OUT', 'mez2_scl_in', dir='out')
+        inst.add_port('MEZZ2_INIT_DONE', 'mez2_init_done', dir='in')
+        inst.add_port('MEZZ2_POST_OK', 'mez2_post_ok', dir='in')
         inst.add_port('MEZZ2_ID', 'mez2_id', dir='in', width=3)
         inst.add_port('MEZZ2_PRESENT', 'mez2_present', dir='in')
 
@@ -245,7 +245,7 @@ class forty_gbe(YellowBlock):
         # Need to add ports to tie GPIO control for SKARAB FrontPanelStatus LEDs
         inst.add_port('dsp_leds_i',       'dsp_leds_i', width=8, dir='in', parent_sig=True)
         inst.add_port('fpga_leds_o',      'FPGA_LEDS', width=8, dir='out', parent_port=True)
-        
+
         #inst.add_port('fabric_clk_270', 'adc0_clk270')
         #top.add_signal('adc0_clk')
 
@@ -264,12 +264,12 @@ class forty_gbe(YellowBlock):
         self.add_source('forty_gbe/WISHBONE')
         self.add_source('forty_gbe/*.vhd')
         self.add_source('forty_gbe/*.sv')
+        self.add_source('forty_gbe/*.v')
         self.add_source("forty_gbe/cont_microblaze/cont_microblaze.bd")
         self.add_source("forty_gbe/cont_microblaze/hdl/cont_microblaze_wrapper.vhd")
         self.add_source("forty_gbe/cont_microblaze/EMB123701U1R1.elf")
         self.add_source("forty_gbe/arp_cache/arp_cache.coe")
-        self.add_source("forty_gbe/cont_microblaze/ip/cont_microblaze_axi_slave_wishbone_classic_master_0_0/cont_microblaze_axi_slave_wishbone_classic_master_0_0.upgrade_log")
-
+        #self.add_source("forty_gbe/cont_microblaze/ip/cont_microblaze_axi_slave_wishbone_classic_master_0_0/cont_microblaze_axi_slave_wishbone_classic_master_0_0.upgrade_log")
         self.add_source("forty_gbe/gmii_to_sgmii/*.xci")
         self.add_source("forty_gbe/isp_spi_buffer/*.xci")
         self.add_source("forty_gbe/cross_clock_fifo_67x16/*.xci")
@@ -918,8 +918,8 @@ class forty_gbe(YellowBlock):
 
         #Raw Constraints
 
-        fortygbefullname = self.fullpath.replace('/', '_')
-        cons.append(RawConstraint('set_property LOC ICAP_X0Y1 [get_cells %s/wishbone_flash_sdram_interface_0/icape_controller_0/ICAPE2_0]' % fortygbefullname))
+        #fortygbefullname = self.fullpath.replace('/', '_')
+        cons.append(RawConstraint('set_property LOC ICAP_X0Y1 [get_cells '+self.fullname+'/wishbone_flash_sdram_interface_0/icape_controller_0/ICAPE2_0]'))
         cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports CONFIG_IO_0]'))
         cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports CONFIG_IO_1]'))
         cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports CONFIG_IO_10]'))
@@ -1042,22 +1042,21 @@ class forty_gbe(YellowBlock):
         cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports FPGA_LEDS[4]]'))
         cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports FPGA_LEDS[5]]'))
         cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports FPGA_LEDS[6]]'))
-        cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports FPGA_LEDS[7]]'))        
+        cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports FPGA_LEDS[7]]'))
 
         return cons
 
     def gen_tcl_cmds(self):
         tcl_cmds = []
 
-        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/Constraints/gmii_to_sgmii.xdc'%os.getenv('HDL_ROOT'))
+        #tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/Constraints/gmii_to_sgmii.xdc'%os.getenv('HDL_ROOT'))
         tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/Constraints/soc_version.xdc'%os.getenv('HDL_ROOT'))
         tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/constrs_1/new/IEEE802_3_XL_PCS.xdc'%os.getenv('HDL_ROOT'))
         tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/constrs_1/new/DATA_FREQUENCY_DIVIDER.xdc'%os.getenv('HDL_ROOT'))
         tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/constrs_1/new/DATA_FREQUENCY_MULTIPLIER.xdc'%os.getenv('HDL_ROOT'))
         tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PHY/IEEE802_3_XL_PHY.srcs/constrs_1/new/IEEE802_3_XL_PHY.xdc'%os.getenv('HDL_ROOT'))
-
-        tcl_cmds.append('set_property is_locked true [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/cont_microblaze/cont_microblaze.bd]')
-        tcl_cmds.append('set_property is_locked true [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/ip/gmii_to_sgmii/gmii_to_sgmii.xci]')
+        #tcl_cmds.append('set_property is_locked true [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/cont_microblaze/cont_microblaze.bd]')
+        #tcl_cmds.append('set_property is_locked true [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/ip/gmii_to_sgmii/gmii_to_sgmii.xci]')
         tcl_cmds.append('set_property SCOPED_TO_REF IEEE802_3_XL_PCS [get_files [get_property directory [current_project]]/myproj.srcs/constrs_1/imports/new/IEEE802_3_XL_PCS.xdc]')
         tcl_cmds.append('set_property processing_order LATE [get_files [get_property directory [current_project]]/myproj.srcs/constrs_1/imports/new/IEEE802_3_XL_PCS.xdc]')
         tcl_cmds.append('set_property SCOPED_TO_REF DATA_FREQUENCY_DIVIDER [get_files [get_property directory [current_project]]/myproj.srcs/constrs_1/imports/new/DATA_FREQUENCY_DIVIDER.xdc]')
@@ -1069,5 +1068,8 @@ class forty_gbe(YellowBlock):
         tcl_cmds.append('set_property SCOPED_TO_REF cont_microblaze [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/imports/cont_microblaze/EMB123701U1R1.elf]')
         tcl_cmds.append('set_property SCOPED_TO_REF cont_microblaze [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/cont_microblaze/cont_microblaze.bmm]')
         tcl_cmds.append('set_property SCOPED_TO_CELLS microblaze_0 [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/imports/cont_microblaze/EMB123701U1R1.elf]')
+        #Allows the microblaze to be edited
+        tcl_cmds.append('set_property ip_repo_paths %s/forty_gbe/cont_microblaze/ipshared/peralex.com/ [current_project]'%os.getenv('HDL_ROOT'))
+        #tcl_cmds.append('update_ip_catalog')
 
         return {'pre_synth': tcl_cmds}
