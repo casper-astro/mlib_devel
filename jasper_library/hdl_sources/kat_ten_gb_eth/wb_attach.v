@@ -57,6 +57,7 @@ module wb_attach #(
     output [47:0] local_mac,
     output [31:0] local_ip,
     output [15:0] local_port,
+    //output [15:0] local_port_mask, // TODO support port mask
     output  [7:0] local_gateway,
     output [31:0] local_mc_recv_ip,
     output [31:0] local_mc_recv_ip_mask,
@@ -73,6 +74,13 @@ module wb_attach #(
     output  [3:0] mgt_txdiffctrl
   );
 
+  /**************** Hard coded core parameters ************/
+  localparam CORE_REV     = 8'd1;
+  localparam CORE_TYPE    = 8'd2; // 10GbE core
+  localparam TX_WORD_SIZE = 16'd8;
+  localparam RX_WORD_SIZE = 16'd8;
+  localparam TX_MAX_SIZE  = 16'd2048;
+  localparam RX_MAX_SIZE  = 16'd2048;
   /************* OPB Address Decoding *************/
 
   wire opb_sel = wb_stb_i;
@@ -80,13 +88,13 @@ module wb_attach #(
   wire [31:0] local_addr = wb_adr_i;
 
   localparam REGISTERS_OFFSET = 32'h0000;
-  localparam REGISTERS_HIGH   = 32'h07FF;
-  localparam TX_BUFFER_OFFSET = 32'h1000;
-  localparam TX_BUFFER_HIGH   = 32'h17FF;
-  localparam RX_BUFFER_OFFSET = 32'h2000;
-  localparam RX_BUFFER_HIGH   = 32'h27FF;
-  localparam ARP_CACHE_OFFSET = 32'h3000;
-  localparam ARP_CACHE_HIGH   = 32'h37FF;
+  localparam REGISTERS_HIGH   = 32'h0FFF;
+  localparam ARP_CACHE_OFFSET = 32'h1000;
+  localparam ARP_CACHE_HIGH   = 32'h3FFF;
+  localparam TX_BUFFER_OFFSET = 32'h4000;
+  localparam TX_BUFFER_HIGH   = 32'h7FFF;
+  localparam RX_BUFFER_OFFSET = 32'h8000;
+  localparam RX_BUFFER_HIGH   = 32'hBFFF;
 
   reg opb_ack;
   wire opb_trans = wb_cyc_i && wb_stb_i && !opb_ack;
@@ -103,21 +111,34 @@ module wb_attach #(
 
   /************** Registers ****************/
   
-  localparam REG_LOCAL_MAC_1     = 4'd0;
-  localparam REG_LOCAL_MAC_0     = 4'd1;
-  localparam REG_LOCAL_GATEWAY   = 4'd3;
-  localparam REG_LOCAL_IPADDR    = 4'd4;
-  localparam REG_BUFFER_SIZES    = 4'd6;
-  localparam REG_VALID_PORTS     = 4'd8;
-  localparam REG_XAUI_STATUS     = 4'd9;
-  localparam REG_PHY_CONFIG      = 4'd10;
-  localparam REG_XAUI_CONFIG     = 4'd11;
-  localparam REG_MC_RECV_IP      = 4'd12;
-  localparam REG_MC_RECV_IP_MASK = 4'd13;
+ // localparam REG_VALID_PORTS     = 4'd8; // soft_reset, local_enable, local_port, set to phy control_0
+ // localparam REG_XAUI_STATUS     = 4'd9; // cpu tx/rx enable put in REG_CORE_TYPE. xaui_status put in PHY_STATUS
+ // localparam REG_PHY_CONFIG      = 4'd10; // set to phy_control_1
+
+  localparam REG_CORE_TYPE       = 8'd0;
+  localparam REG_TX_RX_MAX_BUF   = 8'd1;
+  localparam REG_WORD_LENGTHS    = 8'd2;
+  localparam REG_MAC_ADDR_1      = 8'd3;
+  localparam REG_MAC_ADDR_0      = 8'd4;
+  localparam REG_IP_ADDR         = 8'd5;
+  localparam REG_GATEWAY_ADDR    = 8'd6;
+  localparam REG_MC_RECV_IP      = 8'd7;
+  localparam REG_MC_RECV_IP_MASK = 8'd8;
+  localparam REG_TX_RX_BUF       = 8'd9;
+  localparam REG_PROMIS_EN       = 8'd10;
+  localparam REG_PMASK_PORT      = 8'd11;
+  localparam REG_PHY_STATUS_1    = 8'd12;
+  localparam REG_PHY_STATUS_0    = 8'd13;
+  localparam REG_PHY_CONTROL_1   = 8'd14;
+  localparam REG_PHY_CONTROL_0   = 8'd15;
+  localparam REG_ARP_SIZE        = 8'd16;
+
+ 
 
   reg [47:0] local_mac_reg;
   reg [31:0] local_ip_reg;
-  reg  [7:0] local_gateway_reg;
+  reg [31:0] local_gateway_reg = 0;
+  reg [15:0] local_port_mask_reg;
   reg [15:0] local_port_reg;
   reg        local_enable_reg;
   reg [31:0] local_mc_recv_ip_reg;
@@ -127,14 +148,12 @@ module wb_attach #(
   reg  [4:0] mgt_txpostemphasis_reg;
   reg  [3:0] mgt_txdiffctrl_reg;
   reg        soft_reset_reg;
-  reg        xaui_rst_local_fault_reg;
-  reg        xaui_rst_rx_link_status_reg;
-  reg  [1:0] xaui_test_select_reg;
 
   assign local_mac         = local_mac_reg;
   assign local_ip          = local_ip_reg;
   assign local_gateway     = local_gateway_reg;
   assign local_port        = local_port_reg;
+  //assign local_port_mask   = local_port_mask_reg;
   assign local_enable      = local_enable_reg;
   assign mgt_rxeqmix       = mgt_rxeqmix_reg;
   assign mgt_txpreemphasis = mgt_txpreemphasis_reg;
@@ -149,7 +168,7 @@ module wb_attach #(
 
   reg use_arp_data, use_tx_data, use_rx_data;
 
-  reg [3:0] opb_data_src;
+  reg [7:0] opb_data_src;
 
   /* RX/TX Buffer Control regs */
 
@@ -185,7 +204,7 @@ module wb_attach #(
     end
 
     if (wb_rst_i) begin
-      opb_data_src      <= 4'b0;
+      opb_data_src      <= 8'b0;
 
       local_mac_reg     <= FABRIC_MAC;
       local_ip_reg      <= FABRIC_IP;
@@ -254,16 +273,22 @@ module wb_attach #(
 
       // registers
       if (reg_sel) begin
-        opb_data_src <= reg_addr[5:2];
+        opb_data_src <= reg_addr[9:2];
         if (wb_we_i) begin
-          case (reg_addr[5:2])
-            REG_LOCAL_MAC_1: begin
+          case (reg_addr[9:2])
+            REG_CORE_TYPE: begin
+            end
+            REG_TX_RX_MAX_BUF: begin
+            end
+            REG_WORD_LENGTHS: begin
+            end
+            REG_MAC_ADDR_1: begin
               if (wb_sel_i[0])
                 local_mac_reg[39:32] <= wb_dat_i[7:0];
               if (wb_sel_i[1])
                 local_mac_reg[47:40] <= wb_dat_i[15:8];
             end
-            REG_LOCAL_MAC_0: begin
+            REG_MAC_ADDR_0: begin
               if (wb_sel_i[0])
                 local_mac_reg[7:0]   <= wb_dat_i[7:0];
               if (wb_sel_i[1])
@@ -273,11 +298,7 @@ module wb_attach #(
               if (wb_sel_i[3])
                 local_mac_reg[31:24] <= wb_dat_i[31:24];
             end
-            REG_LOCAL_GATEWAY: begin
-              if (wb_sel_i[0])
-                local_gateway_reg[7:0] <= wb_dat_i[7:0];
-            end
-            REG_LOCAL_IPADDR: begin
+            REG_IP_ADDR: begin
               if (wb_sel_i[0])
                 local_ip_reg[7:0]   <= wb_dat_i[7:0];
               if (wb_sel_i[1])
@@ -287,44 +308,10 @@ module wb_attach #(
               if (wb_sel_i[3])
                 local_ip_reg[31:24] <= wb_dat_i[31:24];
             end
-            REG_BUFFER_SIZES: begin
-              if (wb_sel_i[0] && wb_dat_i[7:0] == 8'b0) begin
-                cpu_rx_ack_reg <= 1'b1;
-              end
-              if (wb_sel_i[2]) begin
-                cpu_tx_size_reg  <= wb_dat_i[23:16];
-                cpu_tx_ready_reg <= 1'b1;
-              end
-            end
-            REG_VALID_PORTS: begin
+            REG_GATEWAY_ADDR: begin
+              // This core only writes the first bytes of the gateway
               if (wb_sel_i[0])
-                local_port_reg[7:0]  <= wb_dat_i[7:0];
-              if (wb_sel_i[1])
-                local_port_reg[15:8] <= wb_dat_i[15:8];
-              if (wb_sel_i[2])
-                local_enable_reg     <= wb_dat_i[16];
-              if (wb_sel_i[3] && wb_dat_i[24])
-                soft_reset_reg       <= 1'b1;
-            end
-            REG_XAUI_STATUS: begin
-            end
-            REG_PHY_CONFIG: begin
-              if (wb_sel_i[0])
-                mgt_rxeqmix_reg       <= wb_dat_i[2:0];
-              if (wb_sel_i[1])
-                mgt_txpostemphasis_reg <= wb_dat_i[12:8];
-              if (wb_sel_i[2])
-                mgt_txpreemphasis_reg <= wb_dat_i[19:16];
-              if (wb_sel_i[3])
-                mgt_txdiffctrl_reg    <= wb_dat_i[27:24];
-            end
-            REG_XAUI_CONFIG: begin
-              if (wb_sel_i[0])
-                xaui_test_select_reg        <= wb_dat_i[1:0];
-              if (wb_sel_i[1])
-                xaui_rst_local_fault_reg    <= wb_dat_i[8];
-              if (wb_sel_i[2])
-                xaui_rst_rx_link_status_reg <= wb_dat_i[16];
+                local_gateway_reg[7:0] <= wb_dat_i[7:0];
             end
             REG_MC_RECV_IP: begin
               if (wb_sel_i[0])
@@ -345,6 +332,54 @@ module wb_attach #(
                 local_mc_recv_ip_mask_reg[23:16] <= wb_dat_i[23:16];
               if (wb_sel_i[3])
                 local_mc_recv_ip_mask_reg[31:24] <= wb_dat_i[31:24];
+            end
+            REG_TX_RX_BUF: begin
+              if (wb_sel_i[0] && wb_dat_i[7:0] == 8'b0) begin
+                cpu_rx_ack_reg <= 1'b1;
+              end
+              if (wb_sel_i[2]) begin
+                cpu_tx_size_reg  <= wb_dat_i[23:16];
+                cpu_tx_ready_reg <= 1'b1;
+              end
+            end
+            REG_PROMIS_EN: begin
+            end
+            REG_PMASK_PORT: begin
+              if (wb_sel_i[0])
+                local_port_reg[7:0] <= wb_dat_i[7:0];
+              if (wb_sel_i[1])
+                local_port_reg[15:8] <= wb_dat_i[15:8];
+              // TODO Support core mask
+              //if (wb_sel_i[2])
+              //  local_port_mask_reg[7:0] <= wb_dat_i[23:16];
+              //if (wb_sel_i[3])
+              //  local_port_mask_reg[15:8] <= wb_dat_i[31:24];
+            end
+            REG_PHY_STATUS_0: begin
+            end
+            REG_PHY_STATUS_1: begin
+            end
+            REG_PHY_CONTROL_0: begin
+              if (wb_sel_i[0])
+                local_port_reg[7:0]  <= wb_dat_i[7:0];
+              if (wb_sel_i[1])
+                local_port_reg[15:8] <= wb_dat_i[15:8];
+              if (wb_sel_i[2])
+                local_enable_reg     <= wb_dat_i[16];
+              if (wb_sel_i[3] && wb_dat_i[24])
+                soft_reset_reg       <= 1'b1;
+            end
+            REG_PHY_CONTROL_1: begin
+              if (wb_sel_i[0])
+                mgt_rxeqmix_reg       <= wb_dat_i[2:0];
+              if (wb_sel_i[1])
+                mgt_txpostemphasis_reg <= wb_dat_i[12:8];
+              if (wb_sel_i[2])
+                mgt_txpreemphasis_reg <= wb_dat_i[19:16];
+              if (wb_sel_i[3])
+                mgt_txdiffctrl_reg    <= wb_dat_i[27:24];
+            end
+            REG_ARP_SIZE: begin
             end
             default: begin
             end
@@ -410,25 +445,33 @@ module wb_attach #(
   wire [31:0] tx_data_int  = txbuf_addr[2] == 1'b1 ? cpu_tx_buffer_rd_data[31:0] : cpu_tx_buffer_rd_data[63:32];
   wire [31:0] rx_data_int  = rxbuf_addr[2] == 1'b1 ? cpu_rx_buffer_rd_data[31:0] : cpu_rx_buffer_rd_data[63:32];
 
-  wire [31:0] opb_data_int = opb_data_src == REG_LOCAL_MAC_1   ? {16'b0, local_mac_reg[47:32]} :
-                             opb_data_src == REG_LOCAL_MAC_0   ? local_mac_reg[31:0] :
-                             opb_data_src == REG_LOCAL_GATEWAY ? {24'b0, local_gateway_reg} :
-                             opb_data_src == REG_LOCAL_IPADDR  ? local_ip_reg[31:0] :
-                             opb_data_src == REG_BUFFER_SIZES  ? {8'b0, cpu_tx_size_reg, 8'b0, cpu_rx_ack_reg ? 8'b0 : cpu_rx_size} :
-                             opb_data_src == REG_VALID_PORTS   ? {7'b0, soft_reset_reg, 7'b0, local_enable_reg, local_port_reg} :
-                             opb_data_src == REG_XAUI_STATUS   ? {7'b0, |CPU_TX_ENABLE, 7'b0, |CPU_RX_ENABLE, 8'b0, xaui_status} :
-                             opb_data_src == REG_PHY_CONFIG    ? {4'b0, mgt_txdiffctrl_reg, 
+  wire [31:0] opb_data_int = opb_data_src == REG_CORE_TYPE ? {7'b0, |CPU_TX_ENABLE, 7'b0, |CPU_RX_ENABLE, CORE_REV, CORE_TYPE} :
+                             opb_data_src == REG_TX_RX_MAX_BUF ? {TX_MAX_SIZE, RX_MAX_SIZE} :
+                             opb_data_src == REG_WORD_LENGTHS ? {TX_WORD_SIZE, RX_WORD_SIZE} :
+                             opb_data_src == REG_MAC_ADDR_1   ? {16'b0,local_mac_reg[47:32]} :
+                             opb_data_src == REG_MAC_ADDR_0   ? {local_mac_reg[31:0]} :
+                             opb_data_src == REG_IP_ADDR      ? {local_ip_reg[31:0]} :
+                             opb_data_src == REG_GATEWAY_ADDR ? local_gateway_reg :
+                             opb_data_src == REG_MC_RECV_IP   ? {local_mc_recv_ip_reg[31:0]} :
+                             opb_data_src == REG_MC_RECV_IP_MASK ? {local_mc_recv_ip_mask_reg[31:0]} :
+                             opb_data_src == REG_TX_RX_BUF ? {8'b0, cpu_tx_size_reg, 8'b0, cpu_rx_ack_reg ? 8'b0 : cpu_rx_size} :
+                             opb_data_src == REG_PROMIS_EN ? {32'b0} :
+                             opb_data_src == REG_PMASK_PORT ? {local_port_mask_reg, local_port_reg} :
+                             opb_data_src == REG_PHY_STATUS_1 ? {32'b0} :
+                             opb_data_src == REG_PHY_STATUS_0 ? {24'b0,xaui_status} :
+                             opb_data_src == REG_PHY_CONTROL_1 ? {4'b0, mgt_txdiffctrl_reg,
                                                                   4'b0, mgt_txpreemphasis_reg,
-                                                                  3'b0, mgt_txpostemphasis_reg, 
+                                                                  3'b0, mgt_txpostemphasis_reg,
                                                                   4'b0, 1'b0, mgt_rxeqmix_reg} :
-                             opb_data_src == REG_MC_RECV_IP      ? local_mc_recv_ip_reg[31:0]      :
-                             opb_data_src == REG_MC_RECV_IP_MASK ? local_mc_recv_ip_mask_reg[31:0] :
-                                                                  32'd0;
+                             opb_data_src == REG_PHY_CONTROL_0 ? {7'b0, soft_reset_reg,7'b0,local_enable_reg,local_port_reg} :
+                             opb_data_src == REG_ARP_SIZE ? {32'b0} : 32'b0;
+
+
   wire [31:0] wb_dat_o_int;
   assign wb_dat_o_int = use_arp_data ? arp_data_int :
-                       use_tx_data  ? tx_data_int  :
-                       use_rx_data  ? rx_data_int  :
-                                      opb_data_int;
+                        use_tx_data  ? tx_data_int  :
+                        use_rx_data  ? rx_data_int  :
+                        opb_data_int;
 
   assign wb_dat_o = wb_ack_o ? wb_dat_o_int : 32'b0;
 

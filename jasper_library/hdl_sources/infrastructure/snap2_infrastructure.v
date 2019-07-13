@@ -1,16 +1,20 @@
 module snap2_infrastructure(
     input  sys_clk_buf_n,
     input  sys_clk_buf_p,
+    //input  ext_sys_rst_n,
 
     output sys_clk0,
     output sys_clk180,
     output sys_clk270,
 
     output clk_200,
+    output clk_250MHz,
+    output clk_250MHz270,
+    output clk_10MHz,
 
     output sys_rst,
 
-    output idelay_rdy
+    output pll_lock
   );
 
   wire sys_clk_ds;
@@ -26,10 +30,13 @@ module snap2_infrastructure(
   wire sys_clk180_dcm;
   wire sys_clk270_dcm;
   wire clk_200_dcm;
+  wire clk_250MHz_dcm;
+  wire clk_250MHz270_dcm;
+  wire clk_10_dcm;
 
   wire clk_fb;
 
-  wire pll_lock;
+  //wire pll_lock;
 
   MMCM_BASE #(
    .BANDWIDTH          ("OPTIMIZED"), // Jitter programming ("HIGH","LOW","OPTIMIZED")
@@ -49,14 +56,14 @@ module snap2_infrastructure(
    .CLKOUT2_PHASE      (270),
    .CLKOUT3_PHASE      (0.0),
    .CLKOUT4_PHASE      (0.0),
-   .CLKOUT5_PHASE      (0.0),
+   .CLKOUT5_PHASE      (270),
    .CLKOUT6_PHASE      (0.0),
    .CLKOUT1_DIVIDE     (10),
    .CLKOUT2_DIVIDE     (10),
    .CLKOUT3_DIVIDE     (5),
-   .CLKOUT4_DIVIDE     (1),
-   .CLKOUT5_DIVIDE     (1),
-   .CLKOUT6_DIVIDE     (1),
+   .CLKOUT4_DIVIDE     (4),
+   .CLKOUT5_DIVIDE     (4),
+   .CLKOUT6_DIVIDE     (100),
    .CLKOUT4_CASCADE    ("FALSE"),
    .CLOCK_HOLD         ("FALSE"),
    .DIVCLK_DIVIDE      (1), // Master division value (1-80)
@@ -77,9 +84,9 @@ module snap2_infrastructure(
    .CLKOUT2B (),
    .CLKOUT3  (clk_200_dcm),
    .CLKOUT3B (),
-   .CLKOUT4  (),
-   .CLKOUT5  (),
-   .CLKOUT6  (),
+   .CLKOUT4  (clk_250MHz_dcm),
+   .CLKOUT5  (clk_250MHz270_dcm),
+   .CLKOUT6  (clk_10_dcm),
    .LOCKED   (pll_lock),
 
    .PWRDWN   (1'b0),
@@ -88,9 +95,9 @@ module snap2_infrastructure(
   );
 
 
-  BUFG bufg_sysclk[3:0](
-    .I({sys_clk0_dcm, sys_clk180_dcm, sys_clk270_dcm, clk_200_dcm}),
-    .O({sys_clk0,     sys_clk180,     sys_clk270,     clk_200})
+  BUFG bufg_sysclk[6:0](
+    .I({sys_clk0_dcm, sys_clk180_dcm, sys_clk270_dcm, clk_200_dcm, clk_250MHz_dcm, clk_250MHz270_dcm, clk_10_dcm}),
+    .O({sys_clk0,     sys_clk180,     sys_clk270,     clk_200,     clk_250MHz,     clk_250MHz270, clk_10MHz})
   );
   
   /* reset gen */

@@ -13,6 +13,10 @@ provides:
   - sys_clk90
   - sys_clk180
   - sys_clk270
+  - clk_250MHz
+  - clk_250MHz90
+  - clk_250MHz180
+  - clk_250MHz270
 pins:
   sys_clk_p:
     loc: AR21
@@ -20,19 +24,36 @@ pins:
     iostd: DIFF_HSTL_I_18
   sys_clk_n:
     loc: AT20
-    iostd: LVDS
+    iostd: DIFF_HSTL_I_18
+  ext_sys_rst_n:
+    loc: G17
+    iostd: LVCMOS18
   miso:
-    loc: AK26
+    #loc: AK26
+    loc: BD24
     iostd: LVCMOS18
   mosi:
-    loc: AJ25
+    #loc: AJ25
+    loc: BC24
     iostd: LVCMOS18
   sclk:
-    loc: AK25
+    #loc: AK25
+    loc: AV26
     iostd: LVCMOS18
   cs_n:
-    loc: AP25
+    #loc: AP25
+    loc: AV27
     iostd: LVCMOS18
+  sync_in_p:
+    iostd: DIFF_HSTL_I_18
+    loc: AT14
+  sync_in_n:
+    iostd: DIFF_HSTL_I_18
+    loc: AT13
+  #gpio:
+    #iostd: LVCMOS33
+    #loc:
+      #-
   led:
     iostd: LVCMOS18
     loc:
@@ -64,6 +85,100 @@ pins:
     #iostd: DIFF_HSTL_I_18
     iostd: LVDS_25
     loc: AU25
+  gth_clk_p:
+    #iostd: DIFF_HSTL_I_18
+    loc:
+      - M8
+      - K8
+      - T8
+      - P8
+  gth_clk_n:
+    #iostd: DIFF_HSTL_I_18
+    loc:
+      - M7
+      - K7
+      - T7
+      - P7
+  gth_tx_p:
+    #iostd: DIFF_HSTL_I_18
+    loc:
+      - E6
+      - D8
+      - C6
+      - B8
+      - F12
+      - D12
+      - C14
+      - A10
+      - T4
+      - P4
+      - M4
+      - K4
+      - J6
+      - H8
+      - G6
+      - F8
+  gth_tx_n:
+    #iostd: DIFF_HSTL_I_18
+    loc:
+      - E5
+      - D7
+      - C5
+      - B7
+      - F11
+      - D11
+      - C13
+      - A9
+      - T3
+      - P3
+      - M3
+      - K3
+      - J5
+      - H7
+      - G5
+      - F7
+  gth_rx_p:
+    #iostd: DIFF_HSTL_I_18
+    loc:
+      - E2
+      - D4
+      - C2
+      - B4
+      - E10
+      - C10
+      - B12
+      - A6
+      - U2
+      - R2
+      - N2
+      - L2
+      - J2
+      - H4
+      - G2
+      - F4
+  gth_rx_n:
+    #iostd: DIFF_HSTL_I_18
+    loc:
+      - E1
+      - D3
+      - C1
+      - B3
+      - E9
+      - C9
+      - B11
+      - A5
+      - U1
+      - R1
+      - N1
+      - L1
+      - J1
+      - H3
+      - G1
+      - F3
+  #sfp_disable:
+    #iostd: LVCMOS25
+    #loc:
+      #- AU20
   usb_tx:
     loc: AK26
     iostd: LVCMOS18
@@ -79,17 +194,200 @@ pins:
   phy_rst_n:
     loc: AL19
     iostd: LVCMOS18
-  spi_flash_data:
-    iostd: LVCMOS18
+#  spi_flash_data:
+#    iostd: LVCMOS18
+#    loc:
+#      - AJ9
+#      - AH9
+#      - AG10
+#      - AG9
+#  spi_flash_clk:
+#    iostd: LVCMOS18
+#    loc: AD10
+#  spi_flash_csn:
+#    iostd: LVCMOS18
+#    loc: AF9
+  adc_5g_chip1_a_p:
+    iostd: lvds
     loc:
-      - AJ9
-      - AH9
-      - AG10
-      - AG9
-  spi_flash_clk:
-    iostd: LVCMOS18
-    loc: AD10
-  spi_flash_csn:
-    iostd: LVCMOS18
-    loc: AF9
+      - D39
+      - D38
+      - E35
+      - B37
+      - D34
+      - D36
+      - B35
+      - F37
+      - A33
+      - D33
+  adc_5g_chip1_b_p:
+    iostd: lvds
+    loc:
+      - E31
+      - F28
+      - B32
+      - F32
+      - H32
+      - N27
+      - L28
+      - G29
+      - N29
+      - J28
+  adc_5g_chip1_c_p:
+    iostd: lvds
+    loc:
+      - H38
+      - J35
+      - F38
+      - F34
+      - H37
+      - L38
+      - K38
+      - J39
+      - J33
+      - H33
+  adc_5g_chip1_d_p:
+    iostd: lvds
+    loc:
+      - U30
+      - U35
+      - N33
+      - W33
+      - U29
+      - T33
+      - M35
+      - L32
+      - R33
+      - N37
+  adc_5g_chip1_adr_p:
+    iostd: lvds
+    loc: E36
+  adc_5g_chip1_aor_p:
+    iostd: lvds
+    loc: B34
+  adc_5g_chip1_bor_p:
+    iostd: lvds
+    loc: K31
+  adc_5g_chip1_cor_p:
+    iostd: lvds
+    loc: K36
+  adc_5g_chip1_dor_p:
+    iostd: lvds
+    loc: U31
+  adc_5g_chip1_miso:
+    iostd: lvcmos18
+    loc: N23 
+  adc_5g_chip1_mosi:
+    iostd: lvcmos18
+    loc: M34
+  adc_5g_chip1_rst:
+    iostd: lvcmos18
+    loc: M24
+  adc_5g_chip1_sclk:
+    iostd: lvcmos18
+    loc: Y35
+  adc_5g_chip1_sen:
+    iostd: lvcmos18
+    loc: L34
+  adc_5g_chip1_sync:
+    iostd: lvcmos18
+    loc: R30
+  adc_5g_chip1_sync_dir:
+    iostd: lvcmos18
+    loc: P30       
+#5g ADC2
+  adc_5g_chip2_a_p:
+    iostd: lvds
+    loc:
+      - BD35
+      - BA34
+      - BC34
+      - BC38
+      - BC33
+      - BC39
+      - BB36
+      - AY37
+      - BA33
+      - BA38
+  adc_5g_chip2_b_p:
+    iostd: lvds
+    loc:
+      - AJ34
+      - AF32
+      - AK35
+      - AH33
+      - AF34
+      - AE35
+      - AJ29
+      - AH31
+      - AE33
+      - AJ28
+  adc_5g_chip2_c_p:
+    iostd: lvds
+    loc:
+      - AV37
+      - AR37
+      - AT37
+      - AY35
+      - AW34
+      - AW38
+      - AU34
+      - AR39
+      - AU36
+      - AU39
+  adc_5g_chip2_d_p:
+    iostd: lvds
+    loc:
+      - AN31
+      - AR28
+      - AW29
+      - AL29
+      - AV33
+      - AM29
+      - AR30
+      - AY30
+      - AT29
+      - AP28
+  adc_5g_chip2_adr_p:
+    iostd: lvds
+    loc: BA37
+  adc_5g_chip2_aor_p:
+    iostd: lvds
+    loc: BB35
+  adc_5g_chip2_bor_p:
+    iostd: lvds
+    loc: AG29
+  adc_5g_chip2_cor_p:
+    iostd: lvds
+    loc: AT34
+  adc_5g_chip2_dor_p:
+    iostd: lvds
+    loc: AM30
+  adc_5g_chip2_miso:
+    iostd: lvcmos18
+    loc: BB17 
+  adc_5g_chip2_mosi:
+    iostd: lvcmos18
+    loc: BC31
+  adc_5g_chip2_rst:
+    iostd: lvcmos18
+    loc: BC17
+  adc_5g_chip2_sclk:
+    iostd: lvcmos18
+    loc: BA32
+  adc_5g_chip2_sen:
+    iostd: lvcmos18
+    loc: BD31
+  adc_5g_chip2_sync:
+    iostd: lvcmos18
+    loc: AR32
+  adc_5g_chip2_sync_dir:
+    iostd: lvcmos18
+    loc: AR33 
 
+  adc_5g_chip2_trig_dir:
+    iostd: lvcmos18
+    loc: BA20
+  adc_5g_chip2_trig_ext:
+    iostd: lvcmos18
+    loc: AU20       
