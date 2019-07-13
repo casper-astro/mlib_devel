@@ -21,6 +21,9 @@ import time
 import hashlib  # Added to calculate md5hash of .bin bitstream and add it to the .fpg header
 import pickle   # Used to dump the pickle of the generated VerilogModule to the build directory for debugging
 import struct   # Used to append a binary checksum to a bitstream
+# For xml2vhdl generation from Oxford
+import xml.dom.minidom
+import xml.etree.ElementTree as ET
 
 #JH: I don't know what this is, but I suspect here is a better place for it than constraints.py
 MAX_IMAGE_CHUNK_SIZE = 1988
@@ -105,6 +108,11 @@ class Toolflow(object):
         self.ips = []
         self.tcl_sources = []
         self.const_files = []
+
+        # compile directories for xml2vhdl
+        self.xml_source_dir = self.compile_dir + '/xml2vhdl_source'
+        self.xml_output_dir = self.compile_dir + '/xml2vhdl_xml_output'
+        self.hdl_output_dir = self.compile_dir + '/xml2vhdl_hdl_output'
 
     def exec_flow(self, gen_per=True, frontend_compile=True):
         """
@@ -396,6 +404,17 @@ class Toolflow(object):
             obj.modify_top(self.top)
             self.sources += obj.sources
             self.ips += obj.ips
+        # add AXI4-Lite architecture specfic stuff, which must be called after all yellow blocks have modified top.
+        if self.plat.mmbus_architecture == 'AXI4-Lite':
+            # Make an AXI4-Lite interconnect yellow block and let it modify top
+            axi4lite_interconnect = yellow_block.YellowBlock.make_block(
+                {'tag': 'xps:axi4lite_interconnect', 'name': 'axi4lite_interconnect', 
+                'fullpath': self.user_modules.keys()[0] +'/axi4lite_interconnect'}, self.plat)
+            axi4lite_interconnect.modify_top(self.top)
+            # Generate xml2vhdl
+            self.xml2vhdl()
+            # add the AXI4lite yellowblock to the peripherals manually
+            self.periph_objs.append(axi4lite_interconnect)
 
     def _instantiate_user_ip(self):
         """
@@ -426,7 +445,13 @@ class Toolflow(object):
             #        self.tcl_sources += glob.glob(source)
 
     def write_core_info(self):
-        self.cores = self.top.wb_devices
+        if self.plat.mmbus_architecture == 'AXI4-Lite':
+            # get list of all axi4lite_devices in self.top.memory_map dict
+            self.cores = []
+            for val in self.top.memory_map.values():
+                self.cores += val['axi4lite_devices']
+        else:
+            self.cores = self.top.wb_devices
         basefile = '%s/%s/core_info.tab' % (os.getenv('HDL_ROOT'),
                                             self.plat.name)
         newfile = '%s/core_info.tab' % self.compile_dir
@@ -457,7 +482,13 @@ class Toolflow(object):
             fh.write(s)
 
     def write_core_jam_info(self):
-        self.cores = self.top.wb_devices
+        if self.plat.mmbus_architecture == 'AXI4-Lite':
+            # get list of all axi4lite_devices in self.top.memory_map dict
+            self.cores = []
+            for val in self.top.memory_map.values():
+                self.cores += val['axi4lite_devices']
+        else:
+            self.cores = self.top.wb_devices
         basefile = '%s/%s/core_info.jam.tab' % (os.getenv('HDL_ROOT'), self.plat.name)
         newfile = '%s/core_info.jam.tab' % self.compile_dir
         self.logger.debug('Opening %s' % basefile)
@@ -506,7 +537,11 @@ class Toolflow(object):
         if self.plat.conf.has_key('max_devices_per_arbiter'):
             self.top.max_devices_per_arb = self.plat.conf['max_devices_per_arbiter']
             self.logger.debug("Found max_devices_per_arbiter: %s" % self.top.max_devices_per_arb)
-        self.top.wb_compute(self.plat.dsp_wb_base_address,
+        # Check for memory map bus architecture, added to support AXI4-Lite
+        if self.plat.mmbus_architecture == 'AXI4-Lite':
+            pass
+        else:
+            self.top.wb_compute(self.plat.dsp_wb_base_address,
                             self.plat.dsp_wb_base_address_alignment)
         print self.top.gen_module_file(filename=self.compile_dir+'/top.v')
         # Write any submodule files required for the compile. This is probably
@@ -674,17 +709,30 @@ class Toolflow(object):
         c.synthesis.pin_map = self.plat._pins
 
         mm_slaves = []
-        for dev in self.top.wb_devices:
-            if dev.mode == 'rw':
-                mode = 3
-            elif dev.mode == 'r':
-                mode = 1
-            elif dev.mode == 'w':
-                mode = 2
-            else:
-                mode = 1
-            mm_slaves += [castro.mm_slave(dev.regname, mode, dev.base_addr,
-                                          dev.nbytes)]
+        if self.plat.mmbus_architecture == 'AXI4-Lite':
+            for dev in self.top.axi4lite_devices:
+                if dev.mode == 'rw':
+                    mode = 3
+                elif dev.mode == 'r':
+                    mode = 1
+                elif dev.mode == 'w':
+                    mode = 2
+                else:
+                    mode = 1
+                mm_slaves += [castro.mm_slave(dev.regname, mode, dev.base_addr,
+                                            dev.nbytes)]
+        else:
+            for dev in self.top.wb_devices:
+                if dev.mode == 'rw':
+                    mode = 3
+                elif dev.mode == 'r':
+                    mode = 1
+                elif dev.mode == 'w':
+                    mode = 2
+                else:
+                    mode = 1
+                mm_slaves += [castro.mm_slave(dev.regname, mode, dev.base_addr,
+                                            dev.nbytes)]
 
         c.mm_slaves = mm_slaves
 
@@ -730,8 +778,102 @@ class Toolflow(object):
                 fh2.writelines(lines)
         fh2.close()
 
-        #import IPython
-        #IPython.embed()
+    
+    def generate_xml_memory_map(self, memory_map):
+        """
+        Generate xml memory map files that represent each AXI4-Lite interface for Oxford's xml2vhdl.
+        """
+        # Generate memory map xml file for each interface in memory_map
+        for interface in memory_map.keys():
+            xml_root = ET.Element('node')
+            xml_root.set('id', interface)
+            # fill xml node with slave info from memory map
+            for reg in memory_map[interface]['memory_map']:
+                # add a child to parent node
+                node = ET.SubElement(xml_root, 'node')
+                node.set('id', reg.name)
+                node.set('address', "%s" % hex(reg.offset))
+                # toolflow only currently supports 32-bit registers
+                node.set('mask', hex(0xFFFFFFFF))
+                # node.set('size', str(reg.nbytes))
+                node.set('permission', reg.mode)
+                if reg.mode == 'r':
+                    # Basically a To Processor register (status)
+                    node.set('hw_permission', 'w')
+                else:
+                    # Only for a From Processor register (control)
+                    node.set('hw_rst', str(reg.default_val))
+                # Best we can currently do for a description...? haha
+                node.set('description', str(interface + "_" + reg.name))
+                # set bram size and 
+                if hasattr(reg, 'ram') and reg.ram==True:
+                    node.set('hw_dp_ram', 'yes')
+                    node.set('size', str(reg.nbytes/4)) # this needs to be in words not bytes!!! Dammit Janet
+
+
+            # output xml file describing memory map as input for xml2vhdl
+            myxml = xml.dom.minidom.parseString(ET.tostring(xml_root))
+            xml_base_name = interface + "_memory_map.xml"
+            xml_file_name = os.path.join(self.xml_source_dir, xml_base_name)
+            xml_file = open(xml_file_name, "w")
+            xml_text = myxml.toprettyxml()
+            xml_text += "<!-- This file has been automatically generated by generate_xml_memory_map function." + " /!-->\n"
+            xml_file.write(xml_text)
+            xml_file.close()
+
+    def generate_xml_ic(self, memory_map):
+        """
+        Generate xml interconnect file that represent top-level AXI4-Lite interconnect for Oxford's xml2vhdl.
+        """
+        # loop over interfaces, sort by address, make interconnect
+        xml_root = ET.Element('node')
+        xml_root.set('id', 'axi4lite_top')
+        xml_root.set('address', hex(self.plat.mmbus_base_address))
+        xml_root.set('hw_type', 'ic')
+        for interface in memory_map.keys():
+            # add a child to parent node
+            node = ET.SubElement(xml_root, 'node')
+            node.set('id', interface)
+            node.set('address', "%s" % memory_map[interface]['relative_address'])
+            node.set('link', "%s" % interface + "_memory_map_output.xml")
+
+        # output xml file describing interconnect as input for xml2vhdl
+        myxml = xml.dom.minidom.parseString(ET.tostring(xml_root))
+        xml_base_name = "axi4lite_top_ic_memory_map.xml"
+        xml_file_name = os.path.join(self.xml_source_dir, xml_base_name)
+        xml_file = open(xml_file_name, "w")
+        xml_text = myxml.toprettyxml()
+        xml_text += "<!-- This file has been automatically generated by generate_xml_memory_map function." + " /!-->\n"
+        xml_file.write(xml_text)
+        xml_file.close()
+
+    def xml2vhdl(self):
+        """
+        Function to call Oxford's python code to generate AXI4-Lite VHDL register 
+        interfaces from a XML memory map specification.
+
+        Obtained from: https://bitbucket.org/ricch/xml2vhdl/src/master/
+        """
+        # make input and output directories
+        if not os.path.exists(self.xml_source_dir):
+            os.makedirs(self.xml_source_dir)
+        if not os.path.exists(self.xml_output_dir):
+            os.makedirs(self.xml_output_dir)
+        if not os.path.exists(self.hdl_output_dir):
+            os.makedirs(self.hdl_output_dir)
+        # get path to generator
+        self.xml2vhdl_path = os.getenv('XML2VHDL_PATH')
+        # Throw error to user that 'XML2VHDL_PATH' is not in their env
+        if self.xml2vhdl_path is None:
+            self.logger.error('XML2VHDL_PATH environment variable does not exist!')
+            raise Exception('XML2VHDL_PATH environment variable does not exist! Please set path to xml2vhdl.py.')
+        # generate xml memory maps for input
+        self.generate_xml_memory_map(self.top.memory_map)
+        # generate xml interconnect for input
+        self.generate_xml_ic(self.top.memory_map)
+        # execute xml2vhdl script
+        os.system('python %sxml2vhdl.py -d %s -x %s -v %s -s %s -b %s' % (self.xml2vhdl_path, self.xml_source_dir, self.xml_output_dir, self.hdl_output_dir, 'xil_defaultlib', 'xil_defaultlib'))
+
 
     def _gen_hdl_simulink(self, hdl_sysgen_filename):
         """
@@ -1513,6 +1655,10 @@ class VivadoBackend(ToolflowBackend):
 
             # Let Yellow Blocks add their own tcl commands
             self.gen_yellowblock_tcl_cmds()
+            # Let Yellow Blocks add their own HDL files
+            self.gen_yellowblock_custom_hdl()
+            # add source files to the project from the compile directory
+            self.gen_add_compile_dir_source_tcl_cmds()
 
         # Non-Project mode is enabled
         # Options can be added to the *_design commands to change strategies
@@ -1827,6 +1973,36 @@ class VivadoBackend(ToolflowBackend):
                 if val is not None:
                     for v in val:
                         self.add_tcl_cmd(v, stage=key)
+
+    def gen_yellowblock_custom_hdl(self):
+        """
+        Create each yellowblock's custom hdl files and add them to the projects sources
+        """
+        self.logger.info('Generating yellow block custom hdl files')
+        for obj in self.periph_objs:
+            c = obj.gen_custom_hdl()
+            for key, val in c.iteritems():
+                # create file and write the source string to it
+                f = open('%s/%s' %(self.compile_dir, key),"w")
+                f.write(val)
+                f.close()
+                # add the tcl command to add the source to the project
+                self.add_source('%s/%s' %(self.compile_dir, key), self.plat)
+
+    def gen_add_compile_dir_source_tcl_cmds(self):
+        """
+        Run each blocks add_compile_dir_source functions and add them to the projects sources
+        """
+        self.logger.info('Generating yellow block custom hdl files')
+        for obj in self.periph_objs:
+            c = obj.add_build_dir_source()
+            for d in c:
+                #self.add_source('%s/%s' %(self.compile_dir, d['files']), self.plat)
+                self.add_tcl_cmd('add_files %s/%s' %(self.compile_dir, d['files']), stage='pre_synth')
+                #if d['library'] != '':
+                    # add the source to a library if the library key exists
+                #    self.add_tcl_cmd('set_property library %s [get_files  {%s/%s%s}]' %(d['library'], self.compile_dir, d['files'], '*' if d['files'][-1]=='/' else ''), stage='pre_synth')
+        self.add_tcl_cmd('update_compile_order -fileset sources_1')
 
     def gen_constraint_file(self, constraints):
         """
