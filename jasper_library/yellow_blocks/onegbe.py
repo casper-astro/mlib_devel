@@ -123,9 +123,9 @@ class onegbe_vcu128(onegbe):
             self.add_source('onegbe/*.v')
             #self.add_source('onegbe/*.xci')
             #self.add_source('onegbe/*.coe')
-            self.add_source('onegbe/virtexuplus/*.v')
-            self.add_source('onegbe/virtexuplus/*.xci')
-            self.add_source('onegbe/virtexuplus/*.coe')
+            self.add_source('onegbe/virtexuplushbm/*.v')
+            self.add_source('onegbe/virtexuplushbm/*.xci')
+            self.add_source('onegbe/virtexuplushbm/*.coe')
     
             self.provides = ['ethernet']
             if (not self.dis_cpu_tx) and (not self.dis_cpu_tx):
