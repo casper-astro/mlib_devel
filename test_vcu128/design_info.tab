@@ -22,5 +22,6 @@ VCU128	xps:xsg	sample_period	1
 VCU128	xps:xsg	synthesis_tool	XST
 77777	77777	tags	xps:sw_reg,xps:xsg
 77777	77777	system	test_vcu128
-77777	77777	builddate	12-Jul-2019\_17:27:30
-77777	77777	xlSgRoot	/opt/Xilinx/Vivado/2018.2/lib/lnx64.o/matlab/sysgen.mexa64
+77777	77777	builddate	14-Jul-2019\_20:47:19
+77777	77777	ans	python\_/home/hpw1/amit/mlib_devel/jasper_library/exec_flow.py\_-m\_/home/hpw1/amit/mlib_devel/test_vcu128.slx\_--middleware\_--backend\_--software
+77777	77777	xlSgRoot	/home/hpw1/amit/Xilinx/Xilinx/Vivado/2018.2/lib/lnx64.o/matlab/sysgen.mexa64

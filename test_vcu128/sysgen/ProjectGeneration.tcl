@@ -13,7 +13,7 @@ namespace eval ::xilinx::dsp::planaheaddriver {
 	set FPGAClockPeriod 10
 	set GenerateTestBench 0
 	set HDLLanguage {vhdl}
-	set IPOOCCacheRootPath {/home/pulsar/.Xilinx/Sysgen/SysgenVivado/lnx64.o/ip}
+	set IPOOCCacheRootPath {/home/hpw1/.Xilinx/Sysgen/SysgenVivado/lnx64.o/ip}
 	set ImplStrategyName {Vivado Implementation Defaults}
 	set Project {test_vcu128}
 	set ProjectFiles {
@@ -36,7 +36,7 @@ namespace eval ::xilinx::dsp::planaheaddriver {
 	set SimulationTime {310.00000000 ns}
 	set SynthStrategyName {Vivado Synthesis Defaults}
 	set SynthesisTool {Vivado}
-	set TargetDir {/home/pulsar/casperlibs/ska_sa/mlib_devel/test_vcu128/sysgen}
+	set TargetDir {/home/hpw1/amit/mlib_devel/test_vcu128/sysgen}
 	set TopLevelModule {test_vcu128}
 	set TopLevelSimulinkHandle 17496
 	set VHDLLib {xil_defaultlib}

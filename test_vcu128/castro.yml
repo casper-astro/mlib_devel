@@ -1,82 +1,122 @@
 !!python/object:castro.Castro
 design_name: top
 ips:
-- {library: user, name: axi_slave_wishbone_classic_master, path: /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/axi_wb_bridge/ip_repo,
-  vendor: peralex.com, version: '1.0'}
+- library: user
+  name: axi_slave_wishbone_classic_master
+  path: /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/axi_wb_bridge/ip_repo
+  vendor: peralex.com
+  version: '1.0'
 mm_slaves:
-- !!python/object:castro.mm_slave {base_address: 65536, high_address: 65540, mode: 3,
-  name: rst, span: 4}
-- !!python/object:castro.mm_slave {base_address: 65540, high_address: 131076, mode: 3,
-  name: gbe, span: 65536}
-- !!python/object:castro.mm_slave {base_address: 131076, high_address: 131140, mode: 1,
-  name: sys_block, span: 64}
-src_files: [/home/pulsar/casperlibs/ska_sa/mlib_devel/test_vcu128/top.v, /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/gbe_udp.v,
-  /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/gig_eth_mac.v,
-  /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/mdio_master.v,
-  /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/mdio_config.v,
-  /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/gbe_tx.v,
-  /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/gbe_rx.v,
-  /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/gig_eth_mac_tx.v,
-  /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/CRC_chk.v,
-  /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/gbe_cpu_attach_wb.v,
-  /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/gig_eth_mac_rx.v,
-  /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/CRC_gen.v,
-  /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/virtexuplus/gig_ethernet_pcs_pma_sgmii_lvds.xci,
-  /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/virtexuplus/gbe_rx_ctrl_fifo.xci,
-  /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/virtexuplus/gbe_ctrl_fifo.xci,
-  /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/virtexuplus/gbe_tx_packet_fifo.xci,
-  /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/virtexuplus/gbe_cpu_buffer.xci,
-  /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/virtexuplus/gbe_rx_packet_fifo.xci,
-  /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/onegbe/virtexuplus/gbe_arp_cache.xci,
-  /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/wb_register_ppc2simulink,
-  /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/gpio_simulink2ext,
-  /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/infrastructure/vcu128_infrastructure.v,
-  /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/wbs_arbiter,
-  /home/pulsar/casperlibs/ska_sa/mlib_devel/jasper_library/hdl_sources/sys_block,
-  /home/pulsar/casperlibs/ska_sa/mlib_devel/test_vcu128/sysgen/hdl_netlist/test_vcu128.srcs/sources_1/imports/sysgen,
-  /home/pulsar/casperlibs/ska_sa/mlib_devel/test_vcu128/sysgen/hdl_netlist/test_vcu128.srcs/sources_1/ip/test_vcu128_c_counter_binary_v12_0_i0/test_vcu128_c_counter_binary_v12_0_i0.xci]
+- !!python/object:castro.mm_slave
+  base_address: 65536
+  high_address: 65540
+  mode: 3
+  name: rst
+  span: 4
+- !!python/object:castro.mm_slave
+  base_address: 65540
+  high_address: 131076
+  mode: 3
+  name: gbe
+  span: 65536
+- !!python/object:castro.mm_slave
+  base_address: 131076
+  high_address: 131140
+  mode: 1
+  name: sys_block
+  span: 64
+src_files:
+- /home/hpw1/amit/mlib_devel/test_vcu128/top.v
+- /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/onegbe/CRC_gen.v
+- /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/onegbe/gbe_cpu_attach_wb.v
+- /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/onegbe/gbe_udp.v
+- /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/onegbe/gig_eth_mac_rx.v
+- /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/onegbe/gbe_rx.v
+- /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/onegbe/mdio_config.v
+- /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/onegbe/gbe_tx.v
+- /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/onegbe/CRC_chk.v
+- /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/onegbe/mdio_master.v
+- /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/onegbe/gig_eth_mac.v
+- /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/onegbe/gig_eth_mac_tx.v
+- /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/onegbe/virtexuplus/gig_ethernet_pcs_pma_sgmii_lvds.xci
+- /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/onegbe/virtexuplus/gbe_tx_packet_fifo.xci
+- /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/onegbe/virtexuplus/gig_ethernet_pcs_pma_sgmii.xci
+- /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/onegbe/virtexuplus/gbe_ctrl_fifo.xci
+- /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/onegbe/virtexuplus/gbe_rx_packet_fifo.xci
+- /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/onegbe/virtexuplus/gbe_cpu_buffer.xci
+- /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/onegbe/virtexuplus/gbe_rx_ctrl_fifo.xci
+- /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/onegbe/virtexuplus/gbe_arp_cache.xci
+- /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/wb_register_ppc2simulink
+- /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/gpio_simulink2ext
+- /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/infrastructure/vcu128_infrastructure.v
+- /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/wbs_arbiter
+- /home/hpw1/amit/mlib_devel/jasper_library/hdl_sources/sys_block
+- /home/hpw1/amit/mlib_devel/test_vcu128/sysgen/hdl_netlist/test_vcu128.srcs/sources_1/imports/sysgen
+- /home/hpw1/amit/mlib_devel/test_vcu128/sysgen/hdl_netlist/test_vcu128.srcs/sources_1/ip/test_vcu128_c_counter_binary_v12_0_i0/test_vcu128_c_counter_binary_v12_0_i0.xci
 synthesis: !!python/object:castro.Synthesis
   clk_constraints:
-  - !!python/object:castro.ClkConstraint {clkname: sys_clk_p_CLK, freq_mhz: 100.0,
-    period_ns: 10.0, port_en: true, portname: sys_clk_p, virtual_en: false, waveform_max_ns: 5.0,
-    waveform_min_ns: 0.0}
+  - !!python/object:castro.ClkConstraint
+    clkname: sys_clk_p_CLK
+    freq_mhz: 100.0
+    period_ns: 10.0
+    port_en: true
+    portname: sys_clk_p
+    virtual_en: false
+    waveform_max_ns: 5.0
+    waveform_min_ns: 0.0
   clk_grp_constraints: []
   false_path_constraints:
-  - !!python/object:castro.FalsePthConstraint {destpath: '[get_clocks -of_objects
-      [get_pins test_vcu128_gbe_pcs_pma/inst/clock_reset_i/Clk_Rst_I_Plle3_Tx/CLKOUT1]]',
-    sourcepath: '[get_clocks -of_objects [get_pins vcu118_infrastructure_inst/MMCM_BASE_inst/CLKOUT1]]'}
-  - !!python/object:castro.FalsePthConstraint {destpath: '[get_clocks -of_objects
-      [get_pins vcu118_infrastructure_inst/MMCM_BASE_inst/CLKOUT1]]', sourcepath: '[get_clocks
-      -of_objects [get_pins test_vcu128_gbe_pcs_pma/inst/clock_reset_i/Clk_Rst_I_Plle3_Tx/CLKOUT1]]'}
-  - !!python/object:castro.FalsePthConstraint {destpath: '[get_ports {test_vcu128_led_ext[*]}]',
-    sourcepath: null}
+  - !!python/object:castro.FalsePthConstraint
+    destpath: '[get_clocks -of_objects [get_pins test_vcu128_gbe_pcs_pma/inst/clock_reset_i/Clk_Rst_I_Plle3_Tx/CLKOUT1]]'
+    sourcepath: '[get_clocks -of_objects [get_pins vcu128_infrastructure_inst/MMCM_BASE_inst/CLKOUT1]]'
+  - !!python/object:castro.FalsePthConstraint
+    destpath: '[get_clocks -of_objects [get_pins vcu128_infrastructure_inst/MMCM_BASE_inst/CLKOUT1]]'
+    sourcepath: '[get_clocks -of_objects [get_pins test_vcu128_gbe_pcs_pma/inst/clock_reset_i/Clk_Rst_I_Plle3_Tx/CLKOUT1]]'
+  - !!python/object:castro.FalsePthConstraint
+    destpath: '[get_clocks -of_objects [get_pins test_vcu128_gbe_pcs_pma/inst/clock_reset_i/Clk_Rst_I_Plle3_Tx/CLKOUT1]]'
+    sourcepath: '[get_clocks -of_objects [get_pins vcu128_infrastructure_inst/MMCM_BASE_inst/CLKOUT1]]'
+  - !!python/object:castro.FalsePthConstraint
+    destpath: '[get_clocks -of_objects [get_pins vcu128_infrastructure_inst/MMCM_BASE_inst/CLKOUT1]]'
+    sourcepath: '[get_clocks -of_objects [get_pins test_vcu128_gbe_pcs_pma/inst/clock_reset_i/Clk_Rst_I_Plle3_Tx/CLKOUT1]]'
+  - !!python/object:castro.FalsePthConstraint
+    destpath: '[get_ports {test_vcu128_led_ext[*]}]'
+    sourcepath: null
   fpga_manufacturer: Xilinx
   fpga_model: xcvu37p-fsvh2892-2L-e-es1
   gen_clk_constraints: []
   input_delay_constraints: []
   max_delay_constraints:
-  - !!python/object:castro.MaxDelayConstraint {constdelay_ns: 1.0, destpath: '[get_ports
-      {test_vcu128_led_ext[*]}]', sourcepath: null}
+  - !!python/object:castro.MaxDelayConstraint
+    constdelay_ns: 1.0
+    destpath: '[get_ports {test_vcu128_led_ext[*]}]'
+    sourcepath: null
   min_delay_constraints:
-  - !!python/object:castro.MinDelayConstraint {constdelay_ns: 1.0, destpath: '[get_ports
-      {test_vcu128_led_ext[*]}]', sourcepath: null}
+  - !!python/object:castro.MinDelayConstraint
+    constdelay_ns: 1.0
+    destpath: '[get_ports {test_vcu128_led_ext[*]}]'
+    sourcepath: null
   multi_cycle_constraints: []
   output_delay_constraints: []
   pin_constraints:
   - !!python/object:castro.PinConstraint
     drive_strength: 0
-    io_standard: [DIFF_HSTL_I_18]
-    location: [BG22]
+    io_standard:
+    - DIFF_HSTL_I_18
+    location:
+    - BG22
     portname: test_vcu128_gbe_tx_p
     portname_indices: &id001 []
     slew_rate: 0
-    symbolic_indices: &id002 [0]
+    symbolic_indices: &id002
+    - 0
     symbolic_name: gbe_phy_sgmii_in_p
     termination: ''
   - !!python/object:castro.PinConstraint
     drive_strength: 0
-    io_standard: [DIFF_HSTL_I_18]
-    location: [BH22]
+    io_standard:
+    - DIFF_HSTL_I_18
+    location:
+    - BH22
     portname: test_vcu128_gbe_tx_n
     portname_indices: *id001
     slew_rate: 0
@@ -85,8 +125,10 @@ synthesis: !!python/object:castro.Synthesis
     termination: ''
   - !!python/object:castro.PinConstraint
     drive_strength: 0
-    io_standard: [DIFF_HSTL_I_18]
-    location: [BH21]
+    io_standard:
+    - DIFF_HSTL_I_18
+    location:
+    - BH21
     portname: test_vcu128_gbe_rx_p
     portname_indices: *id001
     slew_rate: 0
@@ -95,8 +137,10 @@ synthesis: !!python/object:castro.Synthesis
     termination: ''
   - !!python/object:castro.PinConstraint
     drive_strength: 0
-    io_standard: [DIFF_HSTL_I_18]
-    location: [BJ21]
+    io_standard:
+    - DIFF_HSTL_I_18
+    location:
+    - BJ21
     portname: test_vcu128_gbe_rx_n
     portname_indices: *id001
     slew_rate: 0
@@ -105,8 +149,10 @@ synthesis: !!python/object:castro.Synthesis
     termination: ''
   - !!python/object:castro.PinConstraint
     drive_strength: 0
-    io_standard: [LVCMOS18]
-    location: [U65.19]
+    io_standard:
+    - LVCMOS18
+    location:
+    - U65.19
     portname: phy_rst_n
     portname_indices: *id001
     slew_rate: 0
@@ -115,8 +161,10 @@ synthesis: !!python/object:castro.Synthesis
     termination: ''
   - !!python/object:castro.PinConstraint
     drive_strength: 0
-    io_standard: [LVCMOS18]
-    location: [BF22]
+    io_standard:
+    - LVCMOS18
+    location:
+    - BF22
     portname: phy_pdown_n
     portname_indices: *id001
     slew_rate: 0
@@ -125,8 +173,10 @@ synthesis: !!python/object:castro.Synthesis
     termination: ''
   - !!python/object:castro.PinConstraint
     drive_strength: 0
-    io_standard: [LVCMOS18]
-    location: [BG23]
+    io_standard:
+    - LVCMOS18
+    location:
+    - BG23
     portname: phy_mdio
     portname_indices: *id001
     slew_rate: 0
@@ -135,8 +185,10 @@ synthesis: !!python/object:castro.Synthesis
     termination: ''
   - !!python/object:castro.PinConstraint
     drive_strength: 0
-    io_standard: [LVCMOS18]
-    location: [BN27]
+    io_standard:
+    - LVCMOS18
+    location:
+    - BN27
     portname: phy_mdc
     portname_indices: *id001
     slew_rate: 0
@@ -145,8 +197,10 @@ synthesis: !!python/object:castro.Synthesis
     termination: ''
   - !!python/object:castro.PinConstraint
     drive_strength: 0
-    io_standard: [DIFF_HSTL_I_18]
-    location: [BK23]
+    io_standard:
+    - DIFF_HSTL_I_18
+    location:
+    - BK23
     portname: test_vcu128_gbe_refclk625_p
     portname_indices: *id001
     slew_rate: 0
@@ -155,8 +209,10 @@ synthesis: !!python/object:castro.Synthesis
     termination: ''
   - !!python/object:castro.PinConstraint
     drive_strength: 0
-    io_standard: [DIFF_HSTL_I_18]
-    location: [BK22]
+    io_standard:
+    - DIFF_HSTL_I_18
+    location:
+    - BK22
     portname: test_vcu128_gbe_refclk625_n
     portname_indices: *id001
     slew_rate: 0
@@ -165,18 +221,24 @@ synthesis: !!python/object:castro.Synthesis
     termination: ''
   - !!python/object:castro.PinConstraint
     drive_strength: 0
-    io_standard: [LVCMOS18]
-    location: [BH24]
+    io_standard:
+    - LVCMOS18
+    location:
+    - BH24
     portname: test_vcu128_led_ext
-    portname_indices: [0]
+    portname_indices:
+    - 0
     slew_rate: 0
-    symbolic_indices: [0]
+    symbolic_indices:
+    - 0
     symbolic_name: led
     termination: ''
   - !!python/object:castro.PinConstraint
     drive_strength: 0
-    io_standard: [DIFF_SSTL12]
-    location: [F36]
+    io_standard:
+    - DIFF_SSTL12
+    location:
+    - F36
     portname: sys_clk_n
     portname_indices: *id001
     slew_rate: 0
@@ -185,8 +247,10 @@ synthesis: !!python/object:castro.Synthesis
     termination: ''
   - !!python/object:castro.PinConstraint
     drive_strength: 0
-    io_standard: [DIFF_SSTL12]
-    location: [F35]
+    io_standard:
+    - DIFF_SSTL12
+    location:
+    - F35
     portname: sys_clk_p
     portname_indices: *id001
     slew_rate: 0
@@ -195,8 +259,10 @@ synthesis: !!python/object:castro.Synthesis
     termination: ''
   - !!python/object:castro.PinConstraint
     drive_strength: 0
-    io_standard: [LVCMOS18]
-    location: [AW25]
+    io_standard:
+    - LVCMOS18
+    location:
+    - AW25
     portname: UART_rxd
     portname_indices: *id001
     slew_rate: 0
@@ -205,162 +271,229 @@ synthesis: !!python/object:castro.Synthesis
     termination: ''
   - !!python/object:castro.PinConstraint
     drive_strength: 0
-    io_standard: [LVCMOS18]
-    location: [BB21]
+    io_standard:
+    - LVCMOS18
+    location:
+    - BB21
     portname: UART_txd
     portname_indices: *id001
     slew_rate: 0
     symbolic_indices: *id002
     symbolic_name: usb_rx
     termination: ''
-  - !!python/object:castro.PinConstraint
-    drive_strength: 0
-    io_standard: [LVCMOS18]
-    location: [AW15]
-    portname: spi_rtl_io0
-    portname_indices: *id001
-    slew_rate: 0
-    symbolic_indices: [0]
-    symbolic_name: spi_flash_data
-    termination: ''
-  - !!python/object:castro.PinConstraint
-    drive_strength: 0
-    io_standard: [LVCMOS18]
-    location: [AY15]
-    portname: spi_rtl_io1
-    portname_indices: *id001
-    slew_rate: 0
-    symbolic_indices: [1]
-    symbolic_name: spi_flash_data
-    termination: ''
-  - !!python/object:castro.PinConstraint
-    drive_strength: 0
-    io_standard: [LVCMOS18]
-    location: [AY14]
-    portname: spi_rtl_io2
-    portname_indices: *id001
-    slew_rate: 0
-    symbolic_indices: [2]
-    symbolic_name: spi_flash_data
-    termination: ''
-  - !!python/object:castro.PinConstraint
-    drive_strength: 0
-    io_standard: [LVCMOS18]
-    location: [AY13]
-    portname: spi_rtl_io3
-    portname_indices: *id001
-    slew_rate: 0
-    symbolic_indices: [3]
-    symbolic_name: spi_flash_data
-    termination: ''
-  - !!python/object:castro.PinConstraint
-    drive_strength: 0
-    io_standard: [LVCMOS18]
-    location: [BC15]
-    portname: spi_rtl_ss
-    portname_indices: *id001
-    slew_rate: 0
-    symbolic_indices: *id002
-    symbolic_name: spi_flash_csn
-    termination: ''
   pin_map:
     eth_clk_n:
-    - !!python/object:platform.Pin {iostd: null, loc: CLKOUT1_N}
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: CLKOUT1_N
     eth_clk_p:
-    - !!python/object:platform.Pin {iostd: null, loc: CLKOUT1_P}
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: CLKOUT1_P
     gbe_phy_clk_out:
-    - !!python/object:platform.Pin {iostd: LVCMOS18, loc: BJ23}
+    - !!python/object:platform.Pin
+      iostd: LVCMOS18
+      loc: BJ23
     gbe_phy_gpio:
-    - !!python/object:platform.Pin {iostd: LVCMOS18, loc: BP27}
+    - !!python/object:platform.Pin
+      iostd: LVCMOS18
+      loc: BP27
     gbe_phy_mdc:
-    - !!python/object:platform.Pin {iostd: LVCMOS18, loc: BN27}
+    - !!python/object:platform.Pin
+      iostd: LVCMOS18
+      loc: BN27
     gbe_phy_mdio:
-    - !!python/object:platform.Pin {iostd: LVCMOS18, loc: BG23}
+    - !!python/object:platform.Pin
+      iostd: LVCMOS18
+      loc: BG23
     gbe_phy_power_down_n:
-    - !!python/object:platform.Pin {iostd: LVCMOS18, loc: BF22}
+    - !!python/object:platform.Pin
+      iostd: LVCMOS18
+      loc: BF22
     gbe_phy_rst_n:
-    - !!python/object:platform.Pin {iostd: LVCMOS18, loc: U65.19}
+    - !!python/object:platform.Pin
+      iostd: LVCMOS18
+      loc: U65.19
     gbe_phy_sgmii_clk_n:
-    - !!python/object:platform.Pin {iostd: DIFF_HSTL_I_18, loc: BK22}
+    - !!python/object:platform.Pin
+      iostd: DIFF_HSTL_I_18
+      loc: BK22
     gbe_phy_sgmii_clk_p:
-    - !!python/object:platform.Pin {iostd: DIFF_HSTL_I_18, loc: BK23}
+    - !!python/object:platform.Pin
+      iostd: DIFF_HSTL_I_18
+      loc: BK23
     gbe_phy_sgmii_in_n:
-    - !!python/object:platform.Pin {iostd: DIFF_HSTL_I_18, loc: BH22}
+    - !!python/object:platform.Pin
+      iostd: DIFF_HSTL_I_18
+      loc: BH22
     gbe_phy_sgmii_in_p:
-    - !!python/object:platform.Pin {iostd: DIFF_HSTL_I_18, loc: BG22}
+    - !!python/object:platform.Pin
+      iostd: DIFF_HSTL_I_18
+      loc: BG22
     gbe_phy_sgmii_out_n:
-    - !!python/object:platform.Pin {iostd: DIFF_HSTL_I_18, loc: BJ21}
+    - !!python/object:platform.Pin
+      iostd: DIFF_HSTL_I_18
+      loc: BJ21
     gbe_phy_sgmii_out_p:
-    - !!python/object:platform.Pin {iostd: DIFF_HSTL_I_18, loc: BH21}
+    - !!python/object:platform.Pin
+      iostd: DIFF_HSTL_I_18
+      loc: BH21
     led:
-    - !!python/object:platform.Pin {iostd: LVCMOS18, loc: BH24}
-    - !!python/object:platform.Pin {iostd: LVCMOS18, loc: BG24}
-    - !!python/object:platform.Pin {iostd: LVCMOS18, loc: BG25}
-    - !!python/object:platform.Pin {iostd: LVCMOS18, loc: BF25}
-    - !!python/object:platform.Pin {iostd: LVCMOS18, loc: BF26}
-    - !!python/object:platform.Pin {iostd: LVCMOS18, loc: BF27}
-    - !!python/object:platform.Pin {iostd: LVCMOS18, loc: BG27}
-    - !!python/object:platform.Pin {iostd: LVCMOS18, loc: BG28}
+    - !!python/object:platform.Pin
+      iostd: LVCMOS18
+      loc: BH24
+    - !!python/object:platform.Pin
+      iostd: LVCMOS18
+      loc: BG24
+    - !!python/object:platform.Pin
+      iostd: LVCMOS18
+      loc: BG25
+    - !!python/object:platform.Pin
+      iostd: LVCMOS18
+      loc: BF25
+    - !!python/object:platform.Pin
+      iostd: LVCMOS18
+      loc: BF26
+    - !!python/object:platform.Pin
+      iostd: LVCMOS18
+      loc: BF27
+    - !!python/object:platform.Pin
+      iostd: LVCMOS18
+      loc: BG27
+    - !!python/object:platform.Pin
+      iostd: LVCMOS18
+      loc: BG28
     mgt_rx_n:
-    - !!python/object:platform.Pin {iostd: null, loc: RX1N}
-    - !!python/object:platform.Pin {iostd: null, loc: RX2N}
-    - !!python/object:platform.Pin {iostd: null, loc: RX3N}
-    - !!python/object:platform.Pin {iostd: null, loc: RX4N}
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: RX1N
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: RX2N
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: RX3N
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: RX4N
     mgt_rx_p:
-    - !!python/object:platform.Pin {iostd: null, loc: RX1P}
-    - !!python/object:platform.Pin {iostd: null, loc: RX2P}
-    - !!python/object:platform.Pin {iostd: null, loc: RX3P}
-    - !!python/object:platform.Pin {iostd: null, loc: RX4P}
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: RX1P
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: RX2P
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: RX3P
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: RX4P
     mgt_tx_n:
-    - !!python/object:platform.Pin {iostd: null, loc: TX1N}
-    - !!python/object:platform.Pin {iostd: null, loc: TX2N}
-    - !!python/object:platform.Pin {iostd: null, loc: TX3N}
-    - !!python/object:platform.Pin {iostd: null, loc: TX4N}
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: TX1N
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: TX2N
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: TX3N
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: TX4N
     mgt_tx_p:
-    - !!python/object:platform.Pin {iostd: null, loc: TX1P}
-    - !!python/object:platform.Pin {iostd: null, loc: TX2P}
-    - !!python/object:platform.Pin {iostd: null, loc: TX3P}
-    - !!python/object:platform.Pin {iostd: null, loc: TX4P}
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: TX1P
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: TX2P
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: TX3P
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: TX4P
     qsfp1_clk156_n:
-    - !!python/object:platform.Pin {iostd: null, loc: P43}
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: P43
     qsfp1_clk156_p:
-    - !!python/object:platform.Pin {iostd: null, loc: P42}
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: P42
     qsfp2_clk156_n:
-    - !!python/object:platform.Pin {iostd: null, loc: T43}
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: T43
     qsfp2_clk156_p:
-    - !!python/object:platform.Pin {iostd: null, loc: T42}
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: T42
     qsfp3_clk156_n:
-    - !!python/object:platform.Pin {iostd: null, loc: Y43}
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: Y43
     qsfp3_clk156_p:
-    - !!python/object:platform.Pin {iostd: null, loc: Y42}
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: Y42
     qsfp4_clk156_n:
-    - !!python/object:platform.Pin {iostd: null, loc: AB43}
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: AB43
     qsfp4_clk156_p:
-    - !!python/object:platform.Pin {iostd: null, loc: AB42}
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: AB42
     sfp_disable:
-    - !!python/object:platform.Pin {iostd: null, loc: RESETL}
+    - !!python/object:platform.Pin
+      iostd: null
+      loc: RESETL
     spi_flash_clk:
-    - !!python/object:platform.Pin {iostd: LVCMOS18, loc: BD14}
+    - !!python/object:platform.Pin
+      iostd: LVCMOS18
+      loc: BD14
     spi_flash_csn:
-    - !!python/object:platform.Pin {iostd: LVCMOS18, loc: BC15}
+    - !!python/object:platform.Pin
+      iostd: LVCMOS18
+      loc: BC15
     spi_flash_data:
-    - !!python/object:platform.Pin {iostd: LVCMOS18, loc: AW15}
-    - !!python/object:platform.Pin {iostd: LVCMOS18, loc: AY15}
-    - !!python/object:platform.Pin {iostd: LVCMOS18, loc: AY14}
-    - !!python/object:platform.Pin {iostd: LVCMOS18, loc: AY13}
+    - !!python/object:platform.Pin
+      iostd: LVCMOS18
+      loc: AW15
+    - !!python/object:platform.Pin
+      iostd: LVCMOS18
+      loc: AY15
+    - !!python/object:platform.Pin
+      iostd: LVCMOS18
+      loc: AY14
+    - !!python/object:platform.Pin
+      iostd: LVCMOS18
+      loc: AY13
     sys_clk_n:
-    - !!python/object:platform.Pin {iostd: DIFF_SSTL12, loc: F36}
+    - !!python/object:platform.Pin
+      iostd: DIFF_SSTL12
+      loc: F36
     sys_clk_p:
-    - !!python/object:platform.Pin {iostd: DIFF_SSTL12, loc: F35}
+    - !!python/object:platform.Pin
+      iostd: DIFF_SSTL12
+      loc: F35
     usb_rx:
-    - !!python/object:platform.Pin {iostd: LVCMOS18, loc: BB21}
+    - !!python/object:platform.Pin
+      iostd: LVCMOS18
+      loc: BB21
     usb_tx:
-    - !!python/object:platform.Pin {iostd: LVCMOS18, loc: AW25}
+    - !!python/object:platform.Pin
+      iostd: LVCMOS18
+      loc: AW25
   platform_name: vcu128
   raw_constraints:
-  - !!python/object:castro.RawConstraint {raw: 'set_property CONFIG_VOLTAGE 1.8 [current_design]
+  - !!python/object:castro.RawConstraint
+    raw: 'set_property CONFIG_VOLTAGE 1.8 [current_design]
 
-      '}
+      '
   synth_tool: ''
   temp_fpga_model: ''
   temp_quartus_qsf_files: []
