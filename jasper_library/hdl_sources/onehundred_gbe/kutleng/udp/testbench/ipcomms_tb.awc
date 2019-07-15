@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="awc" version="2">
+	<waveform>
+		<datasets>
+			<dataset alias="sim" file="../../../rivieraws/rivieraws/gmac/dataset.asdb" id="0" uniqueid="1527830257"/>
+		</datasets>
+		<browser type="bookmarks"/>
+		<view active="true">
+			<cursors>
+				<cursor name="Default cursor" id="-1" time="0fs+0" lock="0" tip="1"/>
+				<active name="Default cursor" time="0fs+0"/>
+			</cursors>
+			<signalspart>
+				<viewmode value="namedrow"/>
+				<expand value="1"/>
+				<group name="/ipcomms_tb">
+					<viewmode value=""/>
+					<expand value=""/>
+					<signal name="/ipcomms_tb/axis_clk" aliasid="0"/>
+					<signal name="/ipcomms_tb/axis_reset" aliasid="0"/>
+					<signal name="/ipcomms_tb/axis_tx_tready" aliasid="0"/>
+					<signal name="/ipcomms_tb/axis_tx_tdata" aliasid="0"/>
+					<signal name="/ipcomms_tb/axis_tx_tvalid" aliasid="0"/>
+					<signal name="/ipcomms_tb/axis_tx_tkeep" aliasid="0"/>
+					<signal name="/ipcomms_tb/axis_tx_tlast" aliasid="0"/>
+					<signal name="/ipcomms_tb/axis_tx_tuser" aliasid="0"/>
+					<signal name="/ipcomms_tb/axis_rx_tdata" aliasid="0"/>
+					<signal name="/ipcomms_tb/axis_rx_tvalid" aliasid="0"/>
+					<signal name="/ipcomms_tb/axis_rx_tuser" aliasid="0"/>
+					<signal name="/ipcomms_tb/axis_rx_tkeep" aliasid="0"/>
+					<signal name="/ipcomms_tb/axis_rx_tlast" aliasid="0"/>
+					<signal name="/ipcomms_tb/C_DATA_WIDTH" aliasid="0"/>
+					<signal name="/ipcomms_tb/C_EMAC_ADDR" aliasid="0"/>
+					<signal name="/ipcomms_tb/C_IP_ADDR" aliasid="0"/>
+					<signal name="/ipcomms_tb/C_UDP_SERVER_PORT" aliasid="0"/>
+					<signal name="/ipcomms_tb/C_PR_SERVER_PORT" aliasid="0"/>
+					<signal name="/ipcomms_tb/C_CLK_PERIOD" aliasid="0"/>
+				</group>
+				<viewmode value="namedrow"/>
+				<group name="/ipcomms_tb/UUT_i">
+					<viewmode value=""/>
+					<signal name="/ipcomms_tb/UUT_i/axis_clk" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_reset" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_tx_tdata" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_tx_tvalid" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_tx_tready" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_tx_tkeep" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_tx_tlast" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_tx_tuser" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_rx_tdata" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_rx_tvalid" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_rx_tuser" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_rx_tkeep" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_rx_tlast" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_tx_tpriority_1_arp" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_tx_tdata_1_arp" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_tx_tvalid_1_arp" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_tx_tkeep_1_arp" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_tx_tlast_1_arp" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_tx_tready_1_arp" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_tx_tpriority_1_udp" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_tx_tdata_1_udp" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_tx_tvalid_1_udp" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_tx_tkeep_1_udp" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_tx_tlast_1_udp" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_tx_tready_1_udp" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_tx_tpriority_1_pr" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_tx_tdata_1_pr" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_tx_tvalid_1_pr" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_tx_tkeep_1_pr" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_tx_tlast_1_pr" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/axis_tx_tready_1_pr" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPRingBufferSlotID" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPRingBufferSlotClear" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPRingBufferSlotStatus" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPRingBufferSlotTypeStatus" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPRingBufferSlotsFilled" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPRingBufferDataRead" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPRingBufferDataEnable" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPRingBufferData" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPRingBufferAddress" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/PRRingBufferSlotID" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/PRRingBufferSlotClear" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/PRRingBufferSlotStatus" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/PRRingBufferSlotTypeStatus" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/PRRingBufferSlotsFilled" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/PRRingBufferDataRead" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/PRRingBufferDataEnable" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/PRRingBufferData" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/PRRingBufferAddress" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/G_DATA_WIDTH" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/G_EMAC_ADDR" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/G_UDP_SERVER_PORT" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/G_PR_SERVER_PORT" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/G_IP_ADDR" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/C_MAX_PACKET_BLOCKS_SIZE" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/C_PRIORITY_WIDTH" aliasid="0"/>
+				</group>
+				<viewmode value="namedrow"/>
+				<group name="/ipcomms_tb/UUT_i/ARP1_i">
+					<viewmode value=""/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/axis_clk" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/axis_reset" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/ARPMACAddress" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/ARPIPAddress" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/axis_rx_tdata" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/axis_rx_tvalid" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/axis_rx_tuser" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/axis_rx_tlast" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/axis_tx_tpriority" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/axis_tx_tdata" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/axis_tx_tvalid" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/axis_tx_tready" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/axis_tx_tkeep" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/axis_tx_tlast" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/StateVariable" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/lRingBufferSlotID" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/lRingBufferSlotClear" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/lRingBufferSlotStatus" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/lRingBufferSlotTypeStatus" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/lRingBufferDataRead" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/lRingBufferDataEnable" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/lRingBufferDataOut" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/lRingBufferAddress" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/G_SLOT_WIDTH" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/ARP1_i/axis_rx_tkeep" aliasid="0"/>
+				</group>
+				<viewmode value="namedrow"/>
+				<group name="/ipcomms_tb/UUT_i/AXISMUX_i">
+					<viewmode value=""/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_clk" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_reset" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_tx_tdata" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_tx_tvalid" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_tx_tready" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_tx_tkeep" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_tx_tlast" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_tx_tuser" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_rx_tpriority_1" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_rx_tdata_1" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_rx_tvalid_1" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_rx_tready_1" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_rx_tkeep_1" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_rx_tlast_1" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_rx_tpriority_2" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_rx_tdata_2" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_rx_tvalid_2" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_rx_tready_2" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_rx_tkeep_2" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_rx_tlast_2" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_rx_tpriority_3" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_rx_tdata_3" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_rx_tvalid_3" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_rx_tready_3" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_rx_tkeep_3" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/axis_rx_tlast_3" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/laxis_rx_tpriority" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/laxis_rx_tdata" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/laxis_rx_tvalid" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/laxis_rx_tready" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/laxis_rx_tkeep" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/laxis_rx_tlast" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/G_MAX_PACKET_BLOCKS_SIZE" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/G_PRIORITY_WIDTH" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/G_DATA_WIDTH" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/C_MUX_PORTS" aliasid="0"/>
+				</group>
+				<viewmode value="namedrow"/>
+				<group name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i">
+					<viewmode value=""/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/axis_clk" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/axis_reset" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/axis_tx_tdata" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/axis_tx_tvalid" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/axis_tx_tready" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/axis_tx_tkeep" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/axis_tx_tlast" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/axis_tx_tuser" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/axis_rx_tpriority" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/axis_rx_tdata" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/axis_rx_tvalid" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/axis_rx_tready" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/axis_rx_tkeep" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/axis_rx_tlast" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/StateVariable" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/axis_rx_tdata_array" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/axis_rx_tkeep_array" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/axis_rx_tpriority_array" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/rx_tlast" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/rx_tvalid" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/SlotCounterMaximumReached" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/HighestPrioritySlot" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/CurrentHighestPriorityValue" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/HighestPriorityValue" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/CurrentHighestPrioritySlot" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/CurrentActiveSlot" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/SlotCounter" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/ExtractCurrentSlotPriority" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/DataPacketBlockCounter" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/TransferClockCount" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/G_MAX_PACKET_BLOCKS_SIZE" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/G_MUX_PORTS" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/G_PRIORITY_WIDTH" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/G_DATA_WIDTH" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/C_MUX_PORT_MAX" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/AXISMUX_i/AXISMUX_i/C_MAXIMUM_CLOCKS_PER_TRANSFER" aliasid="0"/>
+				</group>
+				<viewmode value="namedrow"/>
+				<group name="/ipcomms_tb/UUT_i/UDPDATAApp_i">
+					<viewmode value=""/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/axis_clk" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/axis_reset" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/ServerMACAddress" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/ServerIPAddress" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/RecvRingBufferSlotID" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/RecvRingBufferSlotClear" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/RecvRingBufferSlotStatus" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/RecvRingBufferSlotTypeStatus" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/RecvRingBufferSlotsFilled" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/RecvRingBufferDataRead" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/RecvRingBufferDataEnable" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/RecvRingBufferDataOut" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/RecvRingBufferAddress" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/SenderRingBufferSlotID" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/SenderRingBufferSlotClear" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/SenderRingBufferSlotStatus" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/SenderRingBufferSlotTypeStatus" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/SenderRingBufferSlotsFilled" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/SenderRingBufferDataRead" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/SenderRingBufferDataEnable" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/SenderRingBufferDataIn" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/SenderRingBufferAddress" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/axis_tx_tpriority" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/axis_tx_tdata" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/axis_tx_tvalid" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/axis_tx_tready" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/axis_tx_tkeep" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/axis_tx_tlast" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/axis_rx_tdata" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/axis_rx_tvalid" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/axis_rx_tuser" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/axis_rx_tkeep" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/axis_rx_tlast" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/G_SLOT_WIDTH" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/G_UDP_SERVER_PORT" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/G_ADDR_WIDTH" aliasid="0"/>
+				</group>
+				<viewmode value="namedrow"/>
+				<group name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPSender_i">
+					<viewmode value=""/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPSender_i/axis_clk" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPSender_i/axis_reset" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPSender_i/RingBufferSlotID" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPSender_i/RingBufferSlotClear" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPSender_i/RingBufferSlotStatus" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPSender_i/RingBufferSlotTypeStatus" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPSender_i/RingBufferSlotsFilled" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPSender_i/RingBufferDataRead" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPSender_i/RingBufferDataEnable" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPSender_i/RingBufferDataIn" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPSender_i/RingBufferAddress" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPSender_i/axis_tx_tpriority" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPSender_i/axis_tx_tdata" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPSender_i/axis_tx_tvalid" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPSender_i/ltvalid" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPSender_i/StateVariable" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPSender_i/axis_tx_tready" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPSender_i/axis_tx_tkeep" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPSender_i/axis_tx_tlast" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPSender_i/lRingBufferSlotID" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPSender_i/lRingBufferAddress" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPSender_i/G_SLOT_WIDTH" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPSender_i/G_ADDR_WIDTH" aliasid="0"/>
+				</group>
+				<viewmode value="namedrow"/>
+				<group name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i">
+					<viewmode value=""/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/axis_clk" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/axis_reset" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/ReceiverMACAddress" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/ReceiverIPAddress" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/RingBufferSlotID" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/RingBufferSlotClear" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/RingBufferSlotStatus" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/RingBufferSlotTypeStatus" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/RingBufferSlotsFilled" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/RingBufferDataRead" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/RingBufferDataEnable" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/RingBufferDataOut" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/RingBufferAddress" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/axis_rx_tdata" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/axis_rx_tvalid" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/axis_rx_tuser" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/axis_rx_tkeep" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/axis_rx_tlast" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/StateVariable" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lPacketByteEnable" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lPacketDataWrite" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lPacketData" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lPacketAddressCounter" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lPacketAddress" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lPacketSlotSet" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lPacketSlotType" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lPacketSlotID" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lInPacket" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lDestinationMACAddress" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lSourceMACAddress" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lEtherType" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lIPVIHL" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lDSCPECN" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lTotalLength" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lIdentification" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lFlagsOffset" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lTimeToLeave" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lProtocol" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lHeaderChecksum" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lSourceIPAddress" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lDestinationIPAddress" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lSourceUDPPort" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lDestinationUDPPort" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lUDPDataStreamLength" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lUDPCheckSum" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/lFilledSlots" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/G_SLOT_WIDTH" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/G_UDP_SERVER_PORT" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/G_ADDR_WIDTH" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/C_IPV4_TYPE" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/C_IPV_IHL" aliasid="0"/>
+					<signal name="/ipcomms_tb/UUT_i/UDPDATAApp_i/UDPReceiver_i/C_UDP_PROTOCOL" aliasid="0"/>
+				</group>
+			</signalspart>
+			<firstvisiblesignal number="0"/>
+			<timesynchronization value="1"/>
+			<cursorssynchronization value="1"/>
+			<time beginvisible="0fs" endvisible="0fs"/>
+		</view>
+		<bookmarks>
+			<bookmark name="Bookmark1" time="454900ps" from="438837ps" to="481493ps"/>
+			<bookmark name="Bookmark2" time="540ns" from="480ns" to="698300ps"/>
+		</bookmarks>
+		<time beginvisible="1487450ps" endvisible="1705750ps"/>
+		<timeunit name="auto"/>
+		<cursors>
+			<cursor name="Default cursor" id="-1" time="1509ns" lock="0" tip="1"/>
+			<active name="Default cursor" time="1509ns"/>
+		</cursors>
+		<hierarchy_depth value="0"/>
+	</waveform>
+</document>
