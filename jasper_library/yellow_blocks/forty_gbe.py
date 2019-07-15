@@ -929,6 +929,7 @@ class forty_gbe(YellowBlock):
 
         #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks AUX_CLK_P] -group [get_clocks FPGA_REFCLK_BUF0_P]'))
         #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks FPGA_REFCLK_BUF0_P] -group [get_clocks AUX_CLK_P]'))
+<<<<<<< HEAD
         cons.append(RawConstraint('create_pblock MEZ3_'+self.mez3_phy+'_QSFP'))
         cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ3_'+self.mez3_phy+'_QSFP] [get_cells -quiet [list '+self.fullname+'/IEEE802_3_XL_PHY_'+str(self.port)+'/PHY_inst/RX_CLK_RCC]]'))
         cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ3_'+self.mez3_phy+'_QSFP] [get_cells -quiet [list '+self.fullname+'/IEEE802_3_XL_PHY_'+str(self.port)+'/PHY_inst/TX_CLK_RCC]]'))
