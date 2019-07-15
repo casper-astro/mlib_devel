@@ -9,11 +9,11 @@ class adc_5g_e2v(YellowBlock):
     def initialize(self):
         self.provides = ['adc_clk','adc_clk90', 'adc_clk180', 'adc_clk270']
         if self.chips_num ==1:
-            self.add_source('adc_5g_e2v/adc5g_1chip/*.v')
-            self.add_source('adc_5g_e2v/adc5g_1chip/*.xci')
+            self.add_source('adc_5g_e2v/1chip/*.v')
+            self.add_source('adc_5g_e2v/1chip/*.xci')
         else:
-            self.add_source('adc_5g_e2v/adc5g_2chips/*.v')
-            self.add_source('adc_5g_e2v/adc5g_2chips/*.xci')
+            self.add_source('adc_5g_e2v/2chips/*.v')
+            self.add_source('adc_5g_e2v/2chips/*.xci')
         self.work_mode=1
         self.fmc_port=1
         if self.adc_mode=='1-Channel':
@@ -31,11 +31,17 @@ class adc_5g_e2v(YellowBlock):
         module ='ad_top'
         inst = top.get_instance(entity=module, name=self.fullname, comment=self.fullname)
         if self.work_mode==1:
-            inst.add_parameter('ADCMODE', "4'b0000   ")
+            inst.add_parameter('a_adcmode', "4'b0000   ")
         elif self.work_mode==2:
-            inst.add_parameter('ADCMODE', "4'b0100   ")
+            inst.add_parameter('a_adcmode', "4'b0100   ")
         else:
-            inst.add_parameter('ADCMODE', "4'b1000   ")
+            inst.add_parameter('a_adcmode', "4'b1000   ")
+
+        if self.output_mode == 'test mode' :
+            inst.add_parameter('a_outmode',  "1'b1   ")
+        else:
+            inst.add_parameter('a_outmode',  "1'b0   ")
+
         inst.add_parameter('a_offset_A', "16'h01FB   ")
         inst.add_parameter('a_offset_B', "16'h01CD   ")
         inst.add_parameter('a_offset_C', "16'h022C   ")
