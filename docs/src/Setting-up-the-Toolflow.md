@@ -3,7 +3,7 @@
 This page explains how to install the CASPER tools and what supporting software is required to run them.
 
 ## Obtaining the Toolflow
-* The CASPER toolflow the [mlib_devel](https://github.com/casper-astro/mlib_devel) git repository. You can download a copy of it to your local machine with the command `git clone https://github.com/casper-astro/mlib_devel.git`; this will leave you on the master branch.
+* The CASPER toolflow resides in the [mlib_devel](https://github.com/casper-astro/mlib_devel) git repository. You can download a copy of it to your local machine with the command `git clone https://github.com/casper-astro/mlib_devel.git`; this will leave you on the master branch.
 * If you wish to select another branch (for example, the `roach2` branch) you can do this by first navigating into the newly-cloned repository (`cd mlib_devel`) and then switching branches with `git checkout -b roach2 origin/roach2`.
 * You can always see the local and remote branches are available (i.e. which branches are in the casper-astro github repository) by running `git branch -a` in your local `mlib_devel` folder.
 * Using the terminal, type `git status` in the `mlib_devel` folder. This should indicate that the master branch has been selected.
