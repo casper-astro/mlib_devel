@@ -288,47 +288,9 @@ class onegbe_vcu128(onegbe):
 
             #top.add_port('phy_rst_n', dir='out', width=0)
             #top.assign_signal('phy_rst_n', '~sys_rst')
-            #top.add_port('phy_pdown_n', dir='out', width=0)
-            #top.assign_signal('phy_pdown_n', '1\'b1')
- 
-        '''def _instantiate_phy(self, top):
-            
-            gbe_pcs = top.get_instance(entity='gig_ethernet_pcs_pma_sgmii', name=self.fullname+'_pcs_pma')
-           
-            gbe_pcs.add_port('gtrefclk_p', self.fullname+'_mgt_clk_p', dir='in', parent_port=True)
-            gbe_pcs.add_port('gtrefclk_n', self.fullname+'_mgt_clk_n', dir='in', parent_port=True)
-            gbe_pcs.add_port('gtrefclk_out', 'gbe_mgt_clk')
-            gbe_pcs.add_port('txn', self.fullname+'_tx_n', dir='out', parent_port=True)
-            gbe_pcs.add_port('txp', self.fullname+'_tx_p', dir='out', parent_port=True)
-            gbe_pcs.add_port('rxn', self.fullname+'_rx_n', dir='in', parent_port=True)
-            gbe_pcs.add_port('rxp', self.fullname+'_rx_p', dir='in', parent_port=True)
-            gbe_pcs.add_port('independent_clock_bufg', 'clk_200')
-            gbe_pcs.add_port('userclk_out',   'gbe_userclk_out')    # first instance only (shared logic lives in first core)
-            gbe_pcs.add_port('userclk2_out',  'gbe_userclk2_out')   # first instance only (shared logic lives in first core)
-            gbe_pcs.add_port('rxuserclk_out', 'gbe_rxuserclk_out')  # first instance only (shared logic lives in first core)
-            gbe_pcs.add_port('rxuserclk2_out','gbe_rxuserclk2_out') # first instance only (shared logic lives in first core)
-            gbe_pcs.add_port('resetdone', self.fullname+'_reset_done')
-            gbe_pcs.add_port('pma_reset_out', '')
-            gbe_pcs.add_port('mmcm_locked_out', 'gbe_mmcm_locked_out')
-            gbe_pcs.add_port('sgmii_clk_r', '')
-            gbe_pcs.add_port('sgmii_clk_f', '')
-            gbe_pcs.add_port('sgmii_clk_en', '')
-            gbe_pcs.add_port('gmii_txd',   self.fullname+'_mac_gmii_tx_data', width=8)
-            gbe_pcs.add_port('gmii_tx_en', self.fullname+'_mac_gmii_tx_en')
-            gbe_pcs.add_port('gmii_tx_er', self.fullname+'_mac_gmii_tx_er')
-            gbe_pcs.add_port('gmii_rxd',   self.fullname+'_mac_gmii_rx_data', width=8)
-            gbe_pcs.add_port('gmii_rx_dv', self.fullname+'_mac_gmii_rx_dvld')
-            gbe_pcs.add_port('gmii_rx_er', self.fullname+'_mac_gmii_rx_er')
-            gbe_pcs.add_port('gmii_isolate', '')
-            gbe_pcs.add_port('configuration_vector', '5\'b0', parent_sig=False)
-            gbe_pcs.add_port('speed_is_10_100', '0', parent_sig=False)
-            gbe_pcs.add_port('speed_is_100', '0', parent_sig=False)
-            gbe_pcs.add_port('status_vector', '')
-            gbe_pcs.add_port('reset', 'sys_rst')
-            gbe_pcs.add_port('signal_detect', '1', parent_sig=False)
-            gbe_pcs.add_port('an_adv_config_vector', '16\'b1000100000000001', parent_sig=False)
-            gbe_pcs.add_port('an_restart_config', '1\'b0', parent_sig=False)
-        '''
+            top.add_port('phy_pdown_n', dir='out', width=0)
+            top.assign_signal('phy_pdown_n', '1\'b1')
+        
         def _instantiate_mdio(self, top):
             gbe_mdio = top.get_instance(entity='mdio_config', name=self.fullname+'_mdio_config_inst')
             gbe_mdio.add_port('sys_clk', 'sys_clk')
@@ -352,10 +314,10 @@ class onegbe_vcu128(onegbe):
             consts += [PortConstraint(self.fullname+'_refclk625_n', 'gbe_phy_sgmii_clk_n')]
             # Clock is defined automatically by the PCS/PMA IP
             #consts += [ClockConstraint(self.fullname+'_refclk625_p', name='onegbe_clk', freq=self.refclk_freq)]
-            consts += [FalsePathConstraint('[get_clocks -of_objects [get_pins vcu128_infrastructure_inst/MMCM_BASE_inst/CLKOUT1]]', '[get_clocks -of_objects [get_pins %s_pcs_pma/inst/clock_reset_i/Clk_Rst_I_Plle3_Tx/CLKOUT1]]'%self.fullname)]
-            consts += [FalsePathConstraint('[get_clocks -of_objects [get_pins %s_pcs_pma/inst/clock_reset_i/Clk_Rst_I_Plle3_Tx/CLKOUT1]]'%self.fullname, '[get_clocks -of_objects [get_pins vcu128_infrastructure_inst/MMCM_BASE_inst/CLKOUT1]]')]
-            consts += [FalsePathConstraint('[get_clocks -of_objects [get_pins vcu128_infrastructure_inst/MMCM_BASE_inst/CLKOUT1]]', '[get_clocks -of_objects [get_pins %s_pcs_pma/inst/clock_reset_i/Clk_Rst_I_Plle3_Tx/CLKOUT1]]'%self.fullname)]
-            consts += [FalsePathConstraint('[get_clocks -of_objects [get_pins %s_pcs_pma/inst/clock_reset_i/Clk_Rst_I_Plle3_Tx/CLKOUT1]]'%self.fullname, '[get_clocks -of_objects [get_pins vcu128_infrastructure_inst/MMCM_BASE_inst/CLKOUT1]]')]
+            consts += [FalsePathConstraint('[get_clocks -of_objects [get_pins vcu128_infrastructure_inst/MMCM_BASE_inst/CKOUT1]]', '[get_clocks -of_objects [get_pins %s_pcs_pma/inst/clock_reset_i/Clk_Rst_I_Plle3_Tx/CKOUT1]]'%self.fullname)]
+            consts += [FalsePathConstraint('[get_clocks -of_objects [get_pins %s_pcs_pma/inst/clock_reset_i/Clk_Rst_I_Plle3_Tx/CKOUT1]]'%self.fullname, '[get_clocks -of_objects [get_pins vcu128_infrastructure_inst/MMCM_BASE_inst/CKOUT1]]')]
+            consts += [FalsePathConstraint('[get_clocks -of_objects [get_pins vcu128_infrastructure_inst/MMCM_BASE_inst/CKOUT1]]', '[get_clocks -of_objects [get_pins %s_pcs_pma/inst/clock_reset_i/Clk_Rst_I_Plle3_Tx/CKOUT1]]'%self.fullname)]
+            consts += [FalsePathConstraint('[get_clocks -of_objects [get_pins %s_pcs_pma/inst/clock_reset_i/Clk_Rst_I_Plle3_Tx/CKOUT1]]'%self.fullname, '[get_clocks -of_objects [get_pins vcu128_infrastructure_inst/MMCM_BASE_inst/CKOUT1]]')]
    
             return consts
 
