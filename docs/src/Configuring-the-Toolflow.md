@@ -1,12 +1,12 @@
 # Configuring the Toolflow
 
-It is now time to setup the Xilinx, Matlab and work paths to suit your directory setup. This tells the toolflow where you have installed MATLAB and Xilinx tools, so that it can find and run them. The configuration will depend on the options you selected when you installed these tools.
+It is now time to setup the Xilinx, Matlab and work paths to suit your directory setup. This tells the toolflow where you have installed MATLAB and Xilinx tools so that it can find and run them. The configuration will depend on the options you selected when you installed these tools.
 
-The design entry portion of the CASPER tool flow consists of MATLAB, Simulink,and System Generator.  The build portion of the CASPER tool flow is done using Xilinx Platform Studio (XPS) or Vivado, depending on the target hardware.  All of these tools require various environment variables to be set.  The `startsg` script will handle all the requisite setup details.
+The design entry portion of the CASPER tool flow consists of MATLAB, Simulink,and System Generator.  The build portion of the CASPER toolflow is done using Xilinx Platform Studio (XPS) or Vivado, depending on the target hardware. All of these tools require various environment variables to be set. The `startsg` script will handle all the requisite setup details.
 
 ## The `startsg` script
 
-The `startsg` script operates in two different modes, depending on how it is invoked.  When executed as a script it will setup the environment suitably and then launch Matlab (for design entry).  When "sourced" using the bash `source` command, it will setup the environment of the current shell to allow command line use of the Xilinx tools and various CASPER scripts.
+The `startsg` script operates in two different modes depending on how it is invoked. When executed as a script it will setup the environment suitably and then launch Matlab (for design entry). When "sourced" using the bash `source` command, it will setup the environment of the current shell to allow command line use of the Xilinx tools and various CASPER scripts.
 
 ```bash
     # Running startsg to start Matlab
