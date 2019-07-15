@@ -13,7 +13,7 @@ module vcu128_infrastructure(
     output idelay_rdy
   );
 
-  // Sys clk is 300MHz on the VCU118
+  // Sys clk is 100MHz on the VCU128
   wire sys_clk_ds;
   IBUFGDS #(
     .IOSTANDARD("DIFF_SSTL12")
@@ -121,7 +121,7 @@ module vcu128_infrastructure(
   /* io delay reset */
 
   IDELAYCTRL #(
-    .SIM_DEVICE("ULTRASCALE")
+    .SIM_DEVICE("ULTRASCALE_PLUS_ES1")
   ) idelayctrl_inst(
     .REFCLK(clk_200),
     .RST(sys_rst),
