@@ -9,9 +9,13 @@ class microblaze(YellowBlock):
         if self.platform.name in ['snap2']:
             self.memfile= 'executable_no_xadc.mem'
             self.blkdiagram = 'microblaze_wb_no_xadc.tcl'
-        elif self.platform.name in ['vcu118','vcu128']:
+        elif self.platform.name in ['vcu118']:
             self.memfile = 'executable_us_plus.mem'
             self.blkdiagram = 'microblaze_wb_us_plus.tcl'
+            self.include_spi_ports = False
+        elif self.platform.name in ['vcu128']:
+            self.memfile = 'executable_us_plus.mem'
+            self.blkdiagram = 'microblaze_wb_us_plus_hbm.tcl'
             self.include_spi_ports = False
         else:
             self.memfile = 'executable.mem'

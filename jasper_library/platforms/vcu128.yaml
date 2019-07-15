@@ -66,19 +66,19 @@ pins:
     loc: BG22
   gbe_phy_sgmii_out_n:
     iostd: DIFF_HSTL_I_18
-    loc: BJ21
+    loc: BK21
   gbe_phy_sgmii_out_p:
     iostd: DIFF_HSTL_I_18
-    loc: BH21
+    loc: BJ22
   gbe_phy_sgmii_clk_n:
     iostd: DIFF_HSTL_I_18
     loc: BJ27
   gbe_phy_sgmii_clk_p:
     iostd: DIFF_HSTL_I_18
     loc: BH27
-  #gbe_phy_rst_n:
-  #  iostd: LVCMOS18
-  #  loc: U65.19 #TODO
+  gbe_phy_rst_n:
+    iostd: LVCMOS18
+    loc: U65.19 #TODO
   gbe_phy_gpio:
     iostd: LVCMOS18
     loc: BP27
@@ -87,10 +87,10 @@ pins:
     loc: BJ23
   eth_clk_p: 
     loc: 
-      - CLKOUT1_P
+      - CKOUT1_P
   eth_clk_n:
     loc: 
-      - CLKOUT1_N    
+      - CKOUT1_N    
   sfp_disable:
     loc:
       - RESETL
