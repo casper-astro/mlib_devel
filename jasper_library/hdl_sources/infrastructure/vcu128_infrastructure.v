@@ -121,7 +121,7 @@ module vcu128_infrastructure(
   /* io delay reset */
 
   IDELAYCTRL #(
-    .SIM_DEVICE("ULTRASCALE_PLUS_ES1")
+    .SIM_DEVICE("ULTRASCALE")
   ) idelayctrl_inst(
     .REFCLK(clk_200),
     .RST(sys_rst),
