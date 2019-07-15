@@ -35,7 +35,7 @@ cd /opt/Matlab/R2013b/bin/
     navigator is set to run the script.
 
 23. Run the script and the Matlab IDE will launch. You can now select the required Matlab m files (*.m) and continue.
-24. In order to run Matlab with the Casper tools please look at the CASPER wiki page: https://casper.berkeley.edu/wiki/MSSGE_Setup_with_Xilinx_14.x_and_Matlab_2012b
+24. In order to run the ISE-flow of the CASPER tools, please see [here](https://casper.berkeley.edu/wiki/MSSGE_Setup_with_Xilinx_14.x_and_Matlab_2012b)
 
 ## How To Install R2016b
 

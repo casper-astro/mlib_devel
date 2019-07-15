@@ -52,17 +52,17 @@ This command will execute the middleware, which calls the yellow block construct
 
     This will run the whole process, except will not generate a fpg and bof file for programming.
     ```bash 
-    python …/exec_flow.py -m /home/<username>/work/git_work/mlib_devel/jasper_library/test_models/test_snap.slx --perfile --frontend --middleware --backend
+    python .../exec_flow.py -m /home/<username>/mlib_devel/jasper_library/test_models/test_snap.slx --perfile --frontend --middleware --backend
     ```
 
     This will run the whole process. 
     ```bash
-    python .../exec_flow.py -m /home/<username>/work/git_work/mlib_devel/jasper_library/test_models/test_snap.slx --perfile --frontend --middleware --backend --software
+    python .../exec_flow.py -m /home/<username>/mlib_devel/jasper_library/test_models/test_snap.slx --perfile --frontend --middleware --backend --software
     ```
 
     This will run the front end peripheral file generation and IP compile process using the Vivado system generator. 
     ```bash
-    python .../exec_flow.py -m /home/<username>/work/git_work/mlib_devel/jasper_library/test_models/test_snap.slx --perfile --frontend
+    python .../exec_flow.py -m /home/<username>/mlib_devel/jasper_library/test_models/test_snap.slx --perfile --frontend
     ```
 
 13) **Python method:** Open a new terminal <CTRL+ALT+T>, and source the following files from the “mlib_devel” directory:
@@ -71,7 +71,7 @@ This is an important step, because the Xilinx and Matlab paths will not be speci
 
 14) **Python method:** Using the terminal, run the complete “exec_flow” command:
     ```bash
-    python .../exec_flow.py -m /home/<username>/work/git_work/mlib_devel/jasper_library/test_models/test_snap.slx --perfile --frontend --middleware --backend --software
+    python .../exec_flow.py -m /home/<username>/mlib_devel/jasper_library/test_models/test_snap.slx --perfile --frontend --middleware --backend --software
     ``` 
     Feel free to add or remove arguments as you wish or need. The design should run through the whole tool flow generation process and when complete the Vivado compile will of completed without any errors and with a little luck there will be no timing issues. The Vivado compile will determine if timing is met or not and display this to the screen. The user will need to monitor the slack time variable to see whether the compile has met timing or not. If the slack time is negative then timing is not met and if the slack time is positive for both setup and hold timing then the design has met the timing requirements.
 
