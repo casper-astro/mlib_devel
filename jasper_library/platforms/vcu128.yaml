@@ -72,13 +72,13 @@ pins:
     loc: BH21
   gbe_phy_sgmii_clk_n:
     iostd: DIFF_HSTL_I_18
-    loc: BK22
+    loc: BJ27
   gbe_phy_sgmii_clk_p:
     iostd: DIFF_HSTL_I_18
-    loc: BK23
-  gbe_phy_rst_n:
-    iostd: LVCMOS18
-    loc: U65.19 #TODO
+    loc: BH27
+  #gbe_phy_rst_n:
+  #  iostd: LVCMOS18
+  #  loc: U65.19 #TODO
   gbe_phy_gpio:
     iostd: LVCMOS18
     loc: BP27
