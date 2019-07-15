@@ -1,10 +1,10 @@
-// Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
+// Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
-// Tool Version: Vivado v.2018.2 (lin64) Build 2258646 Thu Jun 14 20:02:38 MDT 2018
-// Date        : Thu Aug 23 13:53:50 2018
-// Host        : adam-cm running 64-bit Ubuntu 14.04.5 LTS
+// Tool Version: Vivado v.2019.1.1 (lin64) Build 2580384 Sat Jun 29 08:04:45 MDT 2019
+// Date        : Mon Jul 15 17:28:25 2019
+// Host        : casper1 running 64-bit Ubuntu 16.04.6 LTS
 // Command     : write_verilog -force -mode funcsim
-//               /home/aisaacson/work/git_work/ska_sa/projects/skarab_bsp_firmware/firmware/FRM123701U1R1/Vivado/IP/isp_spi_buffer/isp_spi_buffer_sim_netlist.v
+//               /home/hpw1/work/tutorials_devel/vivado_2018/skarab/tut_intro/skarab_tut_intro/myproj/myproj.srcs/sources_1/ip/isp_spi_buffer/isp_spi_buffer_sim_netlist.v
 // Design      : isp_spi_buffer
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -12,7 +12,7 @@
 // --------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CHECK_LICENSE_TYPE = "isp_spi_buffer,fifo_generator_v13_2_2,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "fifo_generator_v13_2_2,Vivado 2018.1" *) 
+(* CHECK_LICENSE_TYPE = "isp_spi_buffer,fifo_generator_v13_2_4,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "fifo_generator_v13_2_4,Vivado 2019.1.1" *) 
 (* NotValidForBitStream *)
 module isp_spi_buffer
    (clk,
@@ -23,7 +23,7 @@ module isp_spi_buffer
     dout,
     full,
     empty);
-  (* x_interface_info = "xilinx.com:signal:clock:1.0 core_clk CLK" *) (* x_interface_parameter = "XIL_INTERFACENAME core_clk, FREQ_HZ 100000000, PHASE 0.000" *) input clk;
+  (* x_interface_info = "xilinx.com:signal:clock:1.0 core_clk CLK" *) (* x_interface_parameter = "XIL_INTERFACENAME core_clk, FREQ_HZ 100000000, PHASE 0.000, INSERT_VIP 0" *) input clk;
   input rst;
   (* x_interface_info = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_DATA" *) input [7:0]din;
   (* x_interface_info = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_EN" *) input wr_en;
@@ -366,7 +366,7 @@ module isp_spi_buffer
   (* C_WR_PNTR_WIDTH_WDCH = "10" *) 
   (* C_WR_PNTR_WIDTH_WRCH = "4" *) 
   (* C_WR_RESPONSE_LATENCY = "1" *) 
-  isp_spi_buffer_fifo_generator_v13_2_2 U0
+  isp_spi_buffer_fifo_generator_v13_2_4 U0
        (.almost_empty(NLW_U0_almost_empty_UNCONNECTED),
         .almost_full(NLW_U0_almost_full_UNCONNECTED),
         .axi_ar_data_count(NLW_U0_axi_ar_data_count_UNCONNECTED[4:0]),
@@ -643,10 +643,10 @@ endmodule
 (* ORIG_REF_NAME = "compare" *) 
 module isp_spi_buffer_compare
    (comp0,
-    \gc0.count_d1_reg[6] ,
+    \gmux.gm[4].gms.ms_0 ,
     v1_reg);
   output comp0;
-  input [3:0]\gc0.count_d1_reg[6] ;
+  input [3:0]\gmux.gm[4].gms.ms_0 ;
   input [0:0]v1_reg;
 
   wire carrynet_0;
@@ -654,7 +654,7 @@ module isp_spi_buffer_compare
   wire carrynet_2;
   wire carrynet_3;
   wire comp0;
-  wire [3:0]\gc0.count_d1_reg[6] ;
+  wire [3:0]\gmux.gm[4].gms.ms_0 ;
   wire [0:0]v1_reg;
   wire [3:0]\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED ;
   wire [3:1]\NLW_gmux.gm[4].gms.ms_CARRY4_CO_UNCONNECTED ;
@@ -662,6 +662,7 @@ module isp_spi_buffer_compare
   wire [3:0]\NLW_gmux.gm[4].gms.ms_CARRY4_O_UNCONNECTED ;
   wire [3:1]\NLW_gmux.gm[4].gms.ms_CARRY4_S_UNCONNECTED ;
 
+  (* OPT_MODIFIED = "MLO" *) 
   (* XILINX_LEGACY_PRIM = "(MUXCY,XORCY)" *) 
   (* box_type = "PRIMITIVE" *) 
   CARRY4 \gmux.gm[0].gm1.m1_CARRY4 
@@ -670,7 +671,8 @@ module isp_spi_buffer_compare
         .CYINIT(1'b1),
         .DI({1'b0,1'b0,1'b0,1'b0}),
         .O(\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED [3:0]),
-        .S(\gc0.count_d1_reg[6] ));
+        .S(\gmux.gm[4].gms.ms_0 ));
+  (* OPT_MODIFIED = "MLO" *) 
   (* XILINX_LEGACY_PRIM = "(MUXCY,XORCY)" *) 
   (* box_type = "PRIMITIVE" *) 
   CARRY4 \gmux.gm[4].gms.ms_CARRY4 
@@ -685,20 +687,20 @@ endmodule
 (* ORIG_REF_NAME = "compare" *) 
 module isp_spi_buffer_compare_0
    (ram_full_comb,
-    \gc0.count_d1_reg[6] ,
+    \gmux.gm[4].gms.ms_0 ,
     v1_reg_0,
     wr_en,
     E,
     comp0,
-    \grstd1.grst_full.grst_f.rst_d3_reg ,
+    ram_full_i_reg,
     out);
   output ram_full_comb;
-  input [3:0]\gc0.count_d1_reg[6] ;
+  input [3:0]\gmux.gm[4].gms.ms_0 ;
   input [0:0]v1_reg_0;
   input wr_en;
   input [0:0]E;
   input comp0;
-  input \grstd1.grst_full.grst_f.rst_d3_reg ;
+  input ram_full_i_reg;
   input out;
 
   wire [0:0]E;
@@ -708,10 +710,10 @@ module isp_spi_buffer_compare_0
   wire carrynet_3;
   wire comp0;
   wire comp1;
-  wire [3:0]\gc0.count_d1_reg[6] ;
-  wire \grstd1.grst_full.grst_f.rst_d3_reg ;
+  wire [3:0]\gmux.gm[4].gms.ms_0 ;
   wire out;
   wire ram_full_comb;
+  wire ram_full_i_reg;
   wire [0:0]v1_reg_0;
   wire wr_en;
   wire [3:0]\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED ;
@@ -720,6 +722,7 @@ module isp_spi_buffer_compare_0
   wire [3:0]\NLW_gmux.gm[4].gms.ms_CARRY4_O_UNCONNECTED ;
   wire [3:1]\NLW_gmux.gm[4].gms.ms_CARRY4_S_UNCONNECTED ;
 
+  (* OPT_MODIFIED = "MLO" *) 
   (* XILINX_LEGACY_PRIM = "(MUXCY,XORCY)" *) 
   (* box_type = "PRIMITIVE" *) 
   CARRY4 \gmux.gm[0].gm1.m1_CARRY4 
@@ -728,7 +731,8 @@ module isp_spi_buffer_compare_0
         .CYINIT(1'b1),
         .DI({1'b0,1'b0,1'b0,1'b0}),
         .O(\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED [3:0]),
-        .S(\gc0.count_d1_reg[6] ));
+        .S(\gmux.gm[4].gms.ms_0 ));
+  (* OPT_MODIFIED = "MLO" *) 
   (* XILINX_LEGACY_PRIM = "(MUXCY,XORCY)" *) 
   (* box_type = "PRIMITIVE" *) 
   CARRY4 \gmux.gm[4].gms.ms_CARRY4 
@@ -745,7 +749,7 @@ module isp_spi_buffer_compare_0
         .I1(comp1),
         .I2(E),
         .I3(comp0),
-        .I4(\grstd1.grst_full.grst_f.rst_d3_reg ),
+        .I4(ram_full_i_reg),
         .I5(out),
         .O(ram_full_comb));
 endmodule
@@ -753,34 +757,35 @@ endmodule
 (* ORIG_REF_NAME = "compare" *) 
 module isp_spi_buffer_compare_1
    (comp0,
-    \gc0.count_d1_reg[0] ,
-    \gc0.count_d1_reg[2] ,
-    \gc0.count_d1_reg[4] ,
-    \gc0.count_d1_reg[6] ,
-    \gcc0.gc0.count_d1_reg[8] );
+    \gmux.gm[1].gms.ms_0 ,
+    \gmux.gm[2].gms.ms_0 ,
+    \gmux.gm[3].gms.ms_0 ,
+    \gmux.gm[4].gms.ms_0 ,
+    ram_empty_i_reg);
   output comp0;
-  input \gc0.count_d1_reg[0] ;
-  input \gc0.count_d1_reg[2] ;
-  input \gc0.count_d1_reg[4] ;
-  input \gc0.count_d1_reg[6] ;
-  input \gcc0.gc0.count_d1_reg[8] ;
+  input \gmux.gm[1].gms.ms_0 ;
+  input \gmux.gm[2].gms.ms_0 ;
+  input \gmux.gm[3].gms.ms_0 ;
+  input \gmux.gm[4].gms.ms_0 ;
+  input ram_empty_i_reg;
 
   wire carrynet_0;
   wire carrynet_1;
   wire carrynet_2;
   wire carrynet_3;
   wire comp0;
-  wire \gc0.count_d1_reg[0] ;
-  wire \gc0.count_d1_reg[2] ;
-  wire \gc0.count_d1_reg[4] ;
-  wire \gc0.count_d1_reg[6] ;
-  wire \gcc0.gc0.count_d1_reg[8] ;
+  wire \gmux.gm[1].gms.ms_0 ;
+  wire \gmux.gm[2].gms.ms_0 ;
+  wire \gmux.gm[3].gms.ms_0 ;
+  wire \gmux.gm[4].gms.ms_0 ;
+  wire ram_empty_i_reg;
   wire [3:0]\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED ;
   wire [3:1]\NLW_gmux.gm[4].gms.ms_CARRY4_CO_UNCONNECTED ;
   wire [3:1]\NLW_gmux.gm[4].gms.ms_CARRY4_DI_UNCONNECTED ;
   wire [3:0]\NLW_gmux.gm[4].gms.ms_CARRY4_O_UNCONNECTED ;
   wire [3:1]\NLW_gmux.gm[4].gms.ms_CARRY4_S_UNCONNECTED ;
 
+  (* OPT_MODIFIED = "MLO" *) 
   (* XILINX_LEGACY_PRIM = "(MUXCY,XORCY)" *) 
   (* box_type = "PRIMITIVE" *) 
   CARRY4 \gmux.gm[0].gm1.m1_CARRY4 
@@ -789,7 +794,8 @@ module isp_spi_buffer_compare_1
         .CYINIT(1'b1),
         .DI({1'b0,1'b0,1'b0,1'b0}),
         .O(\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED [3:0]),
-        .S({\gc0.count_d1_reg[6] ,\gc0.count_d1_reg[4] ,\gc0.count_d1_reg[2] ,\gc0.count_d1_reg[0] }));
+        .S({\gmux.gm[4].gms.ms_0 ,\gmux.gm[3].gms.ms_0 ,\gmux.gm[2].gms.ms_0 ,\gmux.gm[1].gms.ms_0 }));
+  (* OPT_MODIFIED = "MLO" *) 
   (* XILINX_LEGACY_PRIM = "(MUXCY,XORCY)" *) 
   (* box_type = "PRIMITIVE" *) 
   CARRY4 \gmux.gm[4].gms.ms_CARRY4 
@@ -798,22 +804,22 @@ module isp_spi_buffer_compare_1
         .CYINIT(1'b0),
         .DI({\NLW_gmux.gm[4].gms.ms_CARRY4_DI_UNCONNECTED [3:1],1'b0}),
         .O(\NLW_gmux.gm[4].gms.ms_CARRY4_O_UNCONNECTED [3:0]),
-        .S({\NLW_gmux.gm[4].gms.ms_CARRY4_S_UNCONNECTED [3:1],\gcc0.gc0.count_d1_reg[8] }));
+        .S({\NLW_gmux.gm[4].gms.ms_CARRY4_S_UNCONNECTED [3:1],ram_empty_i_reg}));
 endmodule
 
 (* ORIG_REF_NAME = "compare" *) 
 module isp_spi_buffer_compare_2
-   (ram_empty_i_reg,
+   (rd_en_0,
     v1_reg,
-    \gcc0.gc0.count_d1_reg[8] ,
+    ram_empty_i_reg,
     rd_en,
     comp0,
     FULL_FB,
     wr_en,
     out);
-  output ram_empty_i_reg;
+  output rd_en_0;
   input [3:0]v1_reg;
-  input [0:0]\gcc0.gc0.count_d1_reg[8] ;
+  input [0:0]ram_empty_i_reg;
   input rd_en;
   input comp0;
   input FULL_FB;
@@ -827,10 +833,10 @@ module isp_spi_buffer_compare_2
   wire carrynet_3;
   wire comp0;
   wire comp1;
-  wire [0:0]\gcc0.gc0.count_d1_reg[8] ;
   wire out;
-  wire ram_empty_i_reg;
+  wire [0:0]ram_empty_i_reg;
   wire rd_en;
+  wire rd_en_0;
   wire [3:0]v1_reg;
   wire wr_en;
   wire [3:0]\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED ;
@@ -839,6 +845,7 @@ module isp_spi_buffer_compare_2
   wire [3:0]\NLW_gmux.gm[4].gms.ms_CARRY4_O_UNCONNECTED ;
   wire [3:1]\NLW_gmux.gm[4].gms.ms_CARRY4_S_UNCONNECTED ;
 
+  (* OPT_MODIFIED = "MLO" *) 
   (* XILINX_LEGACY_PRIM = "(MUXCY,XORCY)" *) 
   (* box_type = "PRIMITIVE" *) 
   CARRY4 \gmux.gm[0].gm1.m1_CARRY4 
@@ -848,6 +855,7 @@ module isp_spi_buffer_compare_2
         .DI({1'b0,1'b0,1'b0,1'b0}),
         .O(\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED [3:0]),
         .S(v1_reg));
+  (* OPT_MODIFIED = "MLO" *) 
   (* XILINX_LEGACY_PRIM = "(MUXCY,XORCY)" *) 
   (* box_type = "PRIMITIVE" *) 
   CARRY4 \gmux.gm[4].gms.ms_CARRY4 
@@ -856,7 +864,7 @@ module isp_spi_buffer_compare_2
         .CYINIT(1'b0),
         .DI({\NLW_gmux.gm[4].gms.ms_CARRY4_DI_UNCONNECTED [3:1],1'b0}),
         .O(\NLW_gmux.gm[4].gms.ms_CARRY4_O_UNCONNECTED [3:0]),
-        .S({\NLW_gmux.gm[4].gms.ms_CARRY4_S_UNCONNECTED [3:1],\gcc0.gc0.count_d1_reg[8] }));
+        .S({\NLW_gmux.gm[4].gms.ms_CARRY4_S_UNCONNECTED [3:1],ram_empty_i_reg}));
   LUT6 #(
     .INIT(64'hFF0FFFFF88008888)) 
     ram_empty_fb_i_i_1
@@ -866,7 +874,7 @@ module isp_spi_buffer_compare_2
         .I3(FULL_FB),
         .I4(wr_en),
         .I5(out),
-        .O(ram_empty_i_reg));
+        .O(rd_en_0));
 endmodule
 
 (* ORIG_REF_NAME = "dmem" *) 
@@ -874,31 +882,31 @@ module isp_spi_buffer_dmem
    (dout,
     clk,
     din,
-    ram_full_fb_i_reg,
-    \gc0.count_d1_reg[8] ,
+    \gpr1.dout_i[6]_i_2_0 ,
+    \gpr1.dout_i_reg[7]_0 ,
     Q,
-    \gcc0.gc0.count_d1_reg[7] ,
-    \gcc0.gc0.count_d1_reg[6] ,
-    ram_full_fb_i_reg_0,
-    \gcc0.gc0.count_d1_reg[6]_0 ,
-    ram_full_fb_i_reg_1,
-    ram_full_fb_i_reg_2,
-    \gcc0.gc0.count_d1_reg[8] ,
+    \gpr1.dout_i[6]_i_2_1 ,
+    \gpr1.dout_i[6]_i_2_2 ,
+    \gpr1.dout_i[6]_i_2_3 ,
+    \gpr1.dout_i[6]_i_3_0 ,
+    \gpr1.dout_i[6]_i_3_1 ,
+    \gpr1.dout_i[6]_i_3_2 ,
+    \gpr1.dout_i[6]_i_3_3 ,
     E,
     AR);
   output [7:0]dout;
   input clk;
   input [7:0]din;
-  input ram_full_fb_i_reg;
-  input [8:0]\gc0.count_d1_reg[8] ;
+  input \gpr1.dout_i[6]_i_2_0 ;
+  input [8:0]\gpr1.dout_i_reg[7]_0 ;
   input [5:0]Q;
-  input \gcc0.gc0.count_d1_reg[7] ;
-  input \gcc0.gc0.count_d1_reg[6] ;
-  input ram_full_fb_i_reg_0;
-  input \gcc0.gc0.count_d1_reg[6]_0 ;
-  input ram_full_fb_i_reg_1;
-  input ram_full_fb_i_reg_2;
-  input \gcc0.gc0.count_d1_reg[8] ;
+  input \gpr1.dout_i[6]_i_2_1 ;
+  input \gpr1.dout_i[6]_i_2_2 ;
+  input \gpr1.dout_i[6]_i_2_3 ;
+  input \gpr1.dout_i[6]_i_3_0 ;
+  input \gpr1.dout_i[6]_i_3_1 ;
+  input \gpr1.dout_i[6]_i_3_2 ;
+  input \gpr1.dout_i[6]_i_3_3 ;
   input [0:0]E;
   input [0:0]AR;
 
@@ -972,11 +980,6 @@ module isp_spi_buffer_dmem
   wire clk;
   wire [7:0]din;
   wire [7:0]dout;
-  wire [8:0]\gc0.count_d1_reg[8] ;
-  wire \gcc0.gc0.count_d1_reg[6] ;
-  wire \gcc0.gc0.count_d1_reg[6]_0 ;
-  wire \gcc0.gc0.count_d1_reg[7] ;
-  wire \gcc0.gc0.count_d1_reg[8] ;
   wire \gpr1.dout_i[0]_i_2_n_0 ;
   wire \gpr1.dout_i[0]_i_3_n_0 ;
   wire \gpr1.dout_i[1]_i_2_n_0 ;
@@ -989,15 +992,20 @@ module isp_spi_buffer_dmem
   wire \gpr1.dout_i[4]_i_3_n_0 ;
   wire \gpr1.dout_i[5]_i_2_n_0 ;
   wire \gpr1.dout_i[5]_i_3_n_0 ;
+  wire \gpr1.dout_i[6]_i_2_0 ;
+  wire \gpr1.dout_i[6]_i_2_1 ;
+  wire \gpr1.dout_i[6]_i_2_2 ;
+  wire \gpr1.dout_i[6]_i_2_3 ;
   wire \gpr1.dout_i[6]_i_2_n_0 ;
+  wire \gpr1.dout_i[6]_i_3_0 ;
+  wire \gpr1.dout_i[6]_i_3_1 ;
+  wire \gpr1.dout_i[6]_i_3_2 ;
+  wire \gpr1.dout_i[6]_i_3_3 ;
   wire \gpr1.dout_i[6]_i_3_n_0 ;
   wire \gpr1.dout_i[7]_i_4_n_0 ;
   wire \gpr1.dout_i[7]_i_5_n_0 ;
+  wire [8:0]\gpr1.dout_i_reg[7]_0 ;
   wire [7:0]p_0_out;
-  wire ram_full_fb_i_reg;
-  wire ram_full_fb_i_reg_0;
-  wire ram_full_fb_i_reg_1;
-  wire ram_full_fb_i_reg_2;
   wire NLW_RAM_reg_0_63_0_2_DOD_UNCONNECTED;
   wire NLW_RAM_reg_0_63_3_5_DOD_UNCONNECTED;
   wire NLW_RAM_reg_0_63_6_6_SPO_UNCONNECTED;
@@ -1032,10 +1040,17 @@ module isp_spi_buffer_dmem
   wire NLW_RAM_reg_64_127_7_7_SPO_UNCONNECTED;
 
   (* METHODOLOGY_DRC_VIOS = "" *) 
+  (* RTL_RAM_BITS = "4096" *) 
+  (* RTL_RAM_NAME = "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM" *) 
+  (* ram_addr_begin = "0" *) 
+  (* ram_addr_end = "63" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "0" *) 
+  (* ram_slice_end = "2" *) 
   RAM64M RAM_reg_0_63_0_2
-       (.ADDRA(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRB(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRC(\gc0.count_d1_reg[8] [5:0]),
+       (.ADDRA(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRB(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRC(\gpr1.dout_i_reg[7]_0 [5:0]),
         .ADDRD(Q),
         .DIA(din[0]),
         .DIB(din[1]),
@@ -1046,12 +1061,19 @@ module isp_spi_buffer_dmem
         .DOC(RAM_reg_0_63_0_2_n_2),
         .DOD(NLW_RAM_reg_0_63_0_2_DOD_UNCONNECTED),
         .WCLK(clk),
-        .WE(ram_full_fb_i_reg));
+        .WE(\gpr1.dout_i[6]_i_2_0 ));
   (* METHODOLOGY_DRC_VIOS = "" *) 
+  (* RTL_RAM_BITS = "4096" *) 
+  (* RTL_RAM_NAME = "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM" *) 
+  (* ram_addr_begin = "0" *) 
+  (* ram_addr_end = "63" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "3" *) 
+  (* ram_slice_end = "5" *) 
   RAM64M RAM_reg_0_63_3_5
-       (.ADDRA(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRB(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRC(\gc0.count_d1_reg[8] [5:0]),
+       (.ADDRA(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRB(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRC(\gpr1.dout_i_reg[7]_0 [5:0]),
         .ADDRD(Q),
         .DIA(din[3]),
         .DIB(din[4]),
@@ -1062,7 +1084,12 @@ module isp_spi_buffer_dmem
         .DOC(RAM_reg_0_63_3_5_n_2),
         .DOD(NLW_RAM_reg_0_63_3_5_DOD_UNCONNECTED),
         .WCLK(clk),
-        .WE(ram_full_fb_i_reg));
+        .WE(\gpr1.dout_i[6]_i_2_0 ));
+  (* ram_addr_begin = "0" *) 
+  (* ram_addr_end = "63" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "6" *) 
+  (* ram_slice_end = "6" *) 
   RAM64X1D RAM_reg_0_63_6_6
        (.A0(Q[0]),
         .A1(Q[1]),
@@ -1072,15 +1099,20 @@ module isp_spi_buffer_dmem
         .A5(Q[5]),
         .D(din[6]),
         .DPO(RAM_reg_0_63_6_6_n_0),
-        .DPRA0(\gc0.count_d1_reg[8] [0]),
-        .DPRA1(\gc0.count_d1_reg[8] [1]),
-        .DPRA2(\gc0.count_d1_reg[8] [2]),
-        .DPRA3(\gc0.count_d1_reg[8] [3]),
-        .DPRA4(\gc0.count_d1_reg[8] [4]),
-        .DPRA5(\gc0.count_d1_reg[8] [5]),
+        .DPRA0(\gpr1.dout_i_reg[7]_0 [0]),
+        .DPRA1(\gpr1.dout_i_reg[7]_0 [1]),
+        .DPRA2(\gpr1.dout_i_reg[7]_0 [2]),
+        .DPRA3(\gpr1.dout_i_reg[7]_0 [3]),
+        .DPRA4(\gpr1.dout_i_reg[7]_0 [4]),
+        .DPRA5(\gpr1.dout_i_reg[7]_0 [5]),
         .SPO(NLW_RAM_reg_0_63_6_6_SPO_UNCONNECTED),
         .WCLK(clk),
-        .WE(ram_full_fb_i_reg));
+        .WE(\gpr1.dout_i[6]_i_2_0 ));
+  (* ram_addr_begin = "0" *) 
+  (* ram_addr_end = "63" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "7" *) 
+  (* ram_slice_end = "7" *) 
   RAM64X1D RAM_reg_0_63_7_7
        (.A0(Q[0]),
         .A1(Q[1]),
@@ -1090,20 +1122,27 @@ module isp_spi_buffer_dmem
         .A5(Q[5]),
         .D(din[7]),
         .DPO(RAM_reg_0_63_7_7_n_0),
-        .DPRA0(\gc0.count_d1_reg[8] [0]),
-        .DPRA1(\gc0.count_d1_reg[8] [1]),
-        .DPRA2(\gc0.count_d1_reg[8] [2]),
-        .DPRA3(\gc0.count_d1_reg[8] [3]),
-        .DPRA4(\gc0.count_d1_reg[8] [4]),
-        .DPRA5(\gc0.count_d1_reg[8] [5]),
+        .DPRA0(\gpr1.dout_i_reg[7]_0 [0]),
+        .DPRA1(\gpr1.dout_i_reg[7]_0 [1]),
+        .DPRA2(\gpr1.dout_i_reg[7]_0 [2]),
+        .DPRA3(\gpr1.dout_i_reg[7]_0 [3]),
+        .DPRA4(\gpr1.dout_i_reg[7]_0 [4]),
+        .DPRA5(\gpr1.dout_i_reg[7]_0 [5]),
         .SPO(NLW_RAM_reg_0_63_7_7_SPO_UNCONNECTED),
         .WCLK(clk),
-        .WE(ram_full_fb_i_reg));
+        .WE(\gpr1.dout_i[6]_i_2_0 ));
   (* METHODOLOGY_DRC_VIOS = "" *) 
+  (* RTL_RAM_BITS = "4096" *) 
+  (* RTL_RAM_NAME = "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM" *) 
+  (* ram_addr_begin = "128" *) 
+  (* ram_addr_end = "191" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "0" *) 
+  (* ram_slice_end = "2" *) 
   RAM64M RAM_reg_128_191_0_2
-       (.ADDRA(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRB(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRC(\gc0.count_d1_reg[8] [5:0]),
+       (.ADDRA(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRB(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRC(\gpr1.dout_i_reg[7]_0 [5:0]),
         .ADDRD(Q),
         .DIA(din[0]),
         .DIB(din[1]),
@@ -1114,12 +1153,19 @@ module isp_spi_buffer_dmem
         .DOC(RAM_reg_128_191_0_2_n_2),
         .DOD(NLW_RAM_reg_128_191_0_2_DOD_UNCONNECTED),
         .WCLK(clk),
-        .WE(\gcc0.gc0.count_d1_reg[6] ));
+        .WE(\gpr1.dout_i[6]_i_2_2 ));
   (* METHODOLOGY_DRC_VIOS = "" *) 
+  (* RTL_RAM_BITS = "4096" *) 
+  (* RTL_RAM_NAME = "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM" *) 
+  (* ram_addr_begin = "128" *) 
+  (* ram_addr_end = "191" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "3" *) 
+  (* ram_slice_end = "5" *) 
   RAM64M RAM_reg_128_191_3_5
-       (.ADDRA(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRB(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRC(\gc0.count_d1_reg[8] [5:0]),
+       (.ADDRA(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRB(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRC(\gpr1.dout_i_reg[7]_0 [5:0]),
         .ADDRD(Q),
         .DIA(din[3]),
         .DIB(din[4]),
@@ -1130,7 +1176,12 @@ module isp_spi_buffer_dmem
         .DOC(RAM_reg_128_191_3_5_n_2),
         .DOD(NLW_RAM_reg_128_191_3_5_DOD_UNCONNECTED),
         .WCLK(clk),
-        .WE(\gcc0.gc0.count_d1_reg[6] ));
+        .WE(\gpr1.dout_i[6]_i_2_2 ));
+  (* ram_addr_begin = "128" *) 
+  (* ram_addr_end = "191" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "6" *) 
+  (* ram_slice_end = "6" *) 
   RAM64X1D RAM_reg_128_191_6_6
        (.A0(Q[0]),
         .A1(Q[1]),
@@ -1140,15 +1191,20 @@ module isp_spi_buffer_dmem
         .A5(Q[5]),
         .D(din[6]),
         .DPO(RAM_reg_128_191_6_6_n_0),
-        .DPRA0(\gc0.count_d1_reg[8] [0]),
-        .DPRA1(\gc0.count_d1_reg[8] [1]),
-        .DPRA2(\gc0.count_d1_reg[8] [2]),
-        .DPRA3(\gc0.count_d1_reg[8] [3]),
-        .DPRA4(\gc0.count_d1_reg[8] [4]),
-        .DPRA5(\gc0.count_d1_reg[8] [5]),
+        .DPRA0(\gpr1.dout_i_reg[7]_0 [0]),
+        .DPRA1(\gpr1.dout_i_reg[7]_0 [1]),
+        .DPRA2(\gpr1.dout_i_reg[7]_0 [2]),
+        .DPRA3(\gpr1.dout_i_reg[7]_0 [3]),
+        .DPRA4(\gpr1.dout_i_reg[7]_0 [4]),
+        .DPRA5(\gpr1.dout_i_reg[7]_0 [5]),
         .SPO(NLW_RAM_reg_128_191_6_6_SPO_UNCONNECTED),
         .WCLK(clk),
-        .WE(\gcc0.gc0.count_d1_reg[6] ));
+        .WE(\gpr1.dout_i[6]_i_2_2 ));
+  (* ram_addr_begin = "128" *) 
+  (* ram_addr_end = "191" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "7" *) 
+  (* ram_slice_end = "7" *) 
   RAM64X1D RAM_reg_128_191_7_7
        (.A0(Q[0]),
         .A1(Q[1]),
@@ -1158,20 +1214,27 @@ module isp_spi_buffer_dmem
         .A5(Q[5]),
         .D(din[7]),
         .DPO(RAM_reg_128_191_7_7_n_0),
-        .DPRA0(\gc0.count_d1_reg[8] [0]),
-        .DPRA1(\gc0.count_d1_reg[8] [1]),
-        .DPRA2(\gc0.count_d1_reg[8] [2]),
-        .DPRA3(\gc0.count_d1_reg[8] [3]),
-        .DPRA4(\gc0.count_d1_reg[8] [4]),
-        .DPRA5(\gc0.count_d1_reg[8] [5]),
+        .DPRA0(\gpr1.dout_i_reg[7]_0 [0]),
+        .DPRA1(\gpr1.dout_i_reg[7]_0 [1]),
+        .DPRA2(\gpr1.dout_i_reg[7]_0 [2]),
+        .DPRA3(\gpr1.dout_i_reg[7]_0 [3]),
+        .DPRA4(\gpr1.dout_i_reg[7]_0 [4]),
+        .DPRA5(\gpr1.dout_i_reg[7]_0 [5]),
         .SPO(NLW_RAM_reg_128_191_7_7_SPO_UNCONNECTED),
         .WCLK(clk),
-        .WE(\gcc0.gc0.count_d1_reg[6] ));
+        .WE(\gpr1.dout_i[6]_i_2_2 ));
   (* METHODOLOGY_DRC_VIOS = "" *) 
+  (* RTL_RAM_BITS = "4096" *) 
+  (* RTL_RAM_NAME = "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM" *) 
+  (* ram_addr_begin = "192" *) 
+  (* ram_addr_end = "255" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "0" *) 
+  (* ram_slice_end = "2" *) 
   RAM64M RAM_reg_192_255_0_2
-       (.ADDRA(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRB(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRC(\gc0.count_d1_reg[8] [5:0]),
+       (.ADDRA(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRB(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRC(\gpr1.dout_i_reg[7]_0 [5:0]),
         .ADDRD(Q),
         .DIA(din[0]),
         .DIB(din[1]),
@@ -1182,12 +1245,19 @@ module isp_spi_buffer_dmem
         .DOC(RAM_reg_192_255_0_2_n_2),
         .DOD(NLW_RAM_reg_192_255_0_2_DOD_UNCONNECTED),
         .WCLK(clk),
-        .WE(ram_full_fb_i_reg_0));
+        .WE(\gpr1.dout_i[6]_i_2_3 ));
   (* METHODOLOGY_DRC_VIOS = "" *) 
+  (* RTL_RAM_BITS = "4096" *) 
+  (* RTL_RAM_NAME = "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM" *) 
+  (* ram_addr_begin = "192" *) 
+  (* ram_addr_end = "255" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "3" *) 
+  (* ram_slice_end = "5" *) 
   RAM64M RAM_reg_192_255_3_5
-       (.ADDRA(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRB(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRC(\gc0.count_d1_reg[8] [5:0]),
+       (.ADDRA(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRB(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRC(\gpr1.dout_i_reg[7]_0 [5:0]),
         .ADDRD(Q),
         .DIA(din[3]),
         .DIB(din[4]),
@@ -1198,7 +1268,12 @@ module isp_spi_buffer_dmem
         .DOC(RAM_reg_192_255_3_5_n_2),
         .DOD(NLW_RAM_reg_192_255_3_5_DOD_UNCONNECTED),
         .WCLK(clk),
-        .WE(ram_full_fb_i_reg_0));
+        .WE(\gpr1.dout_i[6]_i_2_3 ));
+  (* ram_addr_begin = "192" *) 
+  (* ram_addr_end = "255" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "6" *) 
+  (* ram_slice_end = "6" *) 
   RAM64X1D RAM_reg_192_255_6_6
        (.A0(Q[0]),
         .A1(Q[1]),
@@ -1208,15 +1283,20 @@ module isp_spi_buffer_dmem
         .A5(Q[5]),
         .D(din[6]),
         .DPO(RAM_reg_192_255_6_6_n_0),
-        .DPRA0(\gc0.count_d1_reg[8] [0]),
-        .DPRA1(\gc0.count_d1_reg[8] [1]),
-        .DPRA2(\gc0.count_d1_reg[8] [2]),
-        .DPRA3(\gc0.count_d1_reg[8] [3]),
-        .DPRA4(\gc0.count_d1_reg[8] [4]),
-        .DPRA5(\gc0.count_d1_reg[8] [5]),
+        .DPRA0(\gpr1.dout_i_reg[7]_0 [0]),
+        .DPRA1(\gpr1.dout_i_reg[7]_0 [1]),
+        .DPRA2(\gpr1.dout_i_reg[7]_0 [2]),
+        .DPRA3(\gpr1.dout_i_reg[7]_0 [3]),
+        .DPRA4(\gpr1.dout_i_reg[7]_0 [4]),
+        .DPRA5(\gpr1.dout_i_reg[7]_0 [5]),
         .SPO(NLW_RAM_reg_192_255_6_6_SPO_UNCONNECTED),
         .WCLK(clk),
-        .WE(ram_full_fb_i_reg_0));
+        .WE(\gpr1.dout_i[6]_i_2_3 ));
+  (* ram_addr_begin = "192" *) 
+  (* ram_addr_end = "255" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "7" *) 
+  (* ram_slice_end = "7" *) 
   RAM64X1D RAM_reg_192_255_7_7
        (.A0(Q[0]),
         .A1(Q[1]),
@@ -1226,20 +1306,27 @@ module isp_spi_buffer_dmem
         .A5(Q[5]),
         .D(din[7]),
         .DPO(RAM_reg_192_255_7_7_n_0),
-        .DPRA0(\gc0.count_d1_reg[8] [0]),
-        .DPRA1(\gc0.count_d1_reg[8] [1]),
-        .DPRA2(\gc0.count_d1_reg[8] [2]),
-        .DPRA3(\gc0.count_d1_reg[8] [3]),
-        .DPRA4(\gc0.count_d1_reg[8] [4]),
-        .DPRA5(\gc0.count_d1_reg[8] [5]),
+        .DPRA0(\gpr1.dout_i_reg[7]_0 [0]),
+        .DPRA1(\gpr1.dout_i_reg[7]_0 [1]),
+        .DPRA2(\gpr1.dout_i_reg[7]_0 [2]),
+        .DPRA3(\gpr1.dout_i_reg[7]_0 [3]),
+        .DPRA4(\gpr1.dout_i_reg[7]_0 [4]),
+        .DPRA5(\gpr1.dout_i_reg[7]_0 [5]),
         .SPO(NLW_RAM_reg_192_255_7_7_SPO_UNCONNECTED),
         .WCLK(clk),
-        .WE(ram_full_fb_i_reg_0));
+        .WE(\gpr1.dout_i[6]_i_2_3 ));
   (* METHODOLOGY_DRC_VIOS = "" *) 
+  (* RTL_RAM_BITS = "4096" *) 
+  (* RTL_RAM_NAME = "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM" *) 
+  (* ram_addr_begin = "256" *) 
+  (* ram_addr_end = "319" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "0" *) 
+  (* ram_slice_end = "2" *) 
   RAM64M RAM_reg_256_319_0_2
-       (.ADDRA(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRB(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRC(\gc0.count_d1_reg[8] [5:0]),
+       (.ADDRA(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRB(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRC(\gpr1.dout_i_reg[7]_0 [5:0]),
         .ADDRD(Q),
         .DIA(din[0]),
         .DIB(din[1]),
@@ -1250,12 +1337,19 @@ module isp_spi_buffer_dmem
         .DOC(RAM_reg_256_319_0_2_n_2),
         .DOD(NLW_RAM_reg_256_319_0_2_DOD_UNCONNECTED),
         .WCLK(clk),
-        .WE(\gcc0.gc0.count_d1_reg[6]_0 ));
+        .WE(\gpr1.dout_i[6]_i_3_0 ));
   (* METHODOLOGY_DRC_VIOS = "" *) 
+  (* RTL_RAM_BITS = "4096" *) 
+  (* RTL_RAM_NAME = "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM" *) 
+  (* ram_addr_begin = "256" *) 
+  (* ram_addr_end = "319" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "3" *) 
+  (* ram_slice_end = "5" *) 
   RAM64M RAM_reg_256_319_3_5
-       (.ADDRA(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRB(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRC(\gc0.count_d1_reg[8] [5:0]),
+       (.ADDRA(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRB(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRC(\gpr1.dout_i_reg[7]_0 [5:0]),
         .ADDRD(Q),
         .DIA(din[3]),
         .DIB(din[4]),
@@ -1266,7 +1360,12 @@ module isp_spi_buffer_dmem
         .DOC(RAM_reg_256_319_3_5_n_2),
         .DOD(NLW_RAM_reg_256_319_3_5_DOD_UNCONNECTED),
         .WCLK(clk),
-        .WE(\gcc0.gc0.count_d1_reg[6]_0 ));
+        .WE(\gpr1.dout_i[6]_i_3_0 ));
+  (* ram_addr_begin = "256" *) 
+  (* ram_addr_end = "319" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "6" *) 
+  (* ram_slice_end = "6" *) 
   RAM64X1D RAM_reg_256_319_6_6
        (.A0(Q[0]),
         .A1(Q[1]),
@@ -1276,15 +1375,20 @@ module isp_spi_buffer_dmem
         .A5(Q[5]),
         .D(din[6]),
         .DPO(RAM_reg_256_319_6_6_n_0),
-        .DPRA0(\gc0.count_d1_reg[8] [0]),
-        .DPRA1(\gc0.count_d1_reg[8] [1]),
-        .DPRA2(\gc0.count_d1_reg[8] [2]),
-        .DPRA3(\gc0.count_d1_reg[8] [3]),
-        .DPRA4(\gc0.count_d1_reg[8] [4]),
-        .DPRA5(\gc0.count_d1_reg[8] [5]),
+        .DPRA0(\gpr1.dout_i_reg[7]_0 [0]),
+        .DPRA1(\gpr1.dout_i_reg[7]_0 [1]),
+        .DPRA2(\gpr1.dout_i_reg[7]_0 [2]),
+        .DPRA3(\gpr1.dout_i_reg[7]_0 [3]),
+        .DPRA4(\gpr1.dout_i_reg[7]_0 [4]),
+        .DPRA5(\gpr1.dout_i_reg[7]_0 [5]),
         .SPO(NLW_RAM_reg_256_319_6_6_SPO_UNCONNECTED),
         .WCLK(clk),
-        .WE(\gcc0.gc0.count_d1_reg[6]_0 ));
+        .WE(\gpr1.dout_i[6]_i_3_0 ));
+  (* ram_addr_begin = "256" *) 
+  (* ram_addr_end = "319" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "7" *) 
+  (* ram_slice_end = "7" *) 
   RAM64X1D RAM_reg_256_319_7_7
        (.A0(Q[0]),
         .A1(Q[1]),
@@ -1294,20 +1398,27 @@ module isp_spi_buffer_dmem
         .A5(Q[5]),
         .D(din[7]),
         .DPO(RAM_reg_256_319_7_7_n_0),
-        .DPRA0(\gc0.count_d1_reg[8] [0]),
-        .DPRA1(\gc0.count_d1_reg[8] [1]),
-        .DPRA2(\gc0.count_d1_reg[8] [2]),
-        .DPRA3(\gc0.count_d1_reg[8] [3]),
-        .DPRA4(\gc0.count_d1_reg[8] [4]),
-        .DPRA5(\gc0.count_d1_reg[8] [5]),
+        .DPRA0(\gpr1.dout_i_reg[7]_0 [0]),
+        .DPRA1(\gpr1.dout_i_reg[7]_0 [1]),
+        .DPRA2(\gpr1.dout_i_reg[7]_0 [2]),
+        .DPRA3(\gpr1.dout_i_reg[7]_0 [3]),
+        .DPRA4(\gpr1.dout_i_reg[7]_0 [4]),
+        .DPRA5(\gpr1.dout_i_reg[7]_0 [5]),
         .SPO(NLW_RAM_reg_256_319_7_7_SPO_UNCONNECTED),
         .WCLK(clk),
-        .WE(\gcc0.gc0.count_d1_reg[6]_0 ));
+        .WE(\gpr1.dout_i[6]_i_3_0 ));
   (* METHODOLOGY_DRC_VIOS = "" *) 
+  (* RTL_RAM_BITS = "4096" *) 
+  (* RTL_RAM_NAME = "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM" *) 
+  (* ram_addr_begin = "320" *) 
+  (* ram_addr_end = "383" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "0" *) 
+  (* ram_slice_end = "2" *) 
   RAM64M RAM_reg_320_383_0_2
-       (.ADDRA(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRB(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRC(\gc0.count_d1_reg[8] [5:0]),
+       (.ADDRA(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRB(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRC(\gpr1.dout_i_reg[7]_0 [5:0]),
         .ADDRD(Q),
         .DIA(din[0]),
         .DIB(din[1]),
@@ -1318,12 +1429,19 @@ module isp_spi_buffer_dmem
         .DOC(RAM_reg_320_383_0_2_n_2),
         .DOD(NLW_RAM_reg_320_383_0_2_DOD_UNCONNECTED),
         .WCLK(clk),
-        .WE(ram_full_fb_i_reg_1));
+        .WE(\gpr1.dout_i[6]_i_3_1 ));
   (* METHODOLOGY_DRC_VIOS = "" *) 
+  (* RTL_RAM_BITS = "4096" *) 
+  (* RTL_RAM_NAME = "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM" *) 
+  (* ram_addr_begin = "320" *) 
+  (* ram_addr_end = "383" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "3" *) 
+  (* ram_slice_end = "5" *) 
   RAM64M RAM_reg_320_383_3_5
-       (.ADDRA(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRB(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRC(\gc0.count_d1_reg[8] [5:0]),
+       (.ADDRA(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRB(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRC(\gpr1.dout_i_reg[7]_0 [5:0]),
         .ADDRD(Q),
         .DIA(din[3]),
         .DIB(din[4]),
@@ -1334,7 +1452,12 @@ module isp_spi_buffer_dmem
         .DOC(RAM_reg_320_383_3_5_n_2),
         .DOD(NLW_RAM_reg_320_383_3_5_DOD_UNCONNECTED),
         .WCLK(clk),
-        .WE(ram_full_fb_i_reg_1));
+        .WE(\gpr1.dout_i[6]_i_3_1 ));
+  (* ram_addr_begin = "320" *) 
+  (* ram_addr_end = "383" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "6" *) 
+  (* ram_slice_end = "6" *) 
   RAM64X1D RAM_reg_320_383_6_6
        (.A0(Q[0]),
         .A1(Q[1]),
@@ -1344,15 +1467,20 @@ module isp_spi_buffer_dmem
         .A5(Q[5]),
         .D(din[6]),
         .DPO(RAM_reg_320_383_6_6_n_0),
-        .DPRA0(\gc0.count_d1_reg[8] [0]),
-        .DPRA1(\gc0.count_d1_reg[8] [1]),
-        .DPRA2(\gc0.count_d1_reg[8] [2]),
-        .DPRA3(\gc0.count_d1_reg[8] [3]),
-        .DPRA4(\gc0.count_d1_reg[8] [4]),
-        .DPRA5(\gc0.count_d1_reg[8] [5]),
+        .DPRA0(\gpr1.dout_i_reg[7]_0 [0]),
+        .DPRA1(\gpr1.dout_i_reg[7]_0 [1]),
+        .DPRA2(\gpr1.dout_i_reg[7]_0 [2]),
+        .DPRA3(\gpr1.dout_i_reg[7]_0 [3]),
+        .DPRA4(\gpr1.dout_i_reg[7]_0 [4]),
+        .DPRA5(\gpr1.dout_i_reg[7]_0 [5]),
         .SPO(NLW_RAM_reg_320_383_6_6_SPO_UNCONNECTED),
         .WCLK(clk),
-        .WE(ram_full_fb_i_reg_1));
+        .WE(\gpr1.dout_i[6]_i_3_1 ));
+  (* ram_addr_begin = "320" *) 
+  (* ram_addr_end = "383" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "7" *) 
+  (* ram_slice_end = "7" *) 
   RAM64X1D RAM_reg_320_383_7_7
        (.A0(Q[0]),
         .A1(Q[1]),
@@ -1362,20 +1490,27 @@ module isp_spi_buffer_dmem
         .A5(Q[5]),
         .D(din[7]),
         .DPO(RAM_reg_320_383_7_7_n_0),
-        .DPRA0(\gc0.count_d1_reg[8] [0]),
-        .DPRA1(\gc0.count_d1_reg[8] [1]),
-        .DPRA2(\gc0.count_d1_reg[8] [2]),
-        .DPRA3(\gc0.count_d1_reg[8] [3]),
-        .DPRA4(\gc0.count_d1_reg[8] [4]),
-        .DPRA5(\gc0.count_d1_reg[8] [5]),
+        .DPRA0(\gpr1.dout_i_reg[7]_0 [0]),
+        .DPRA1(\gpr1.dout_i_reg[7]_0 [1]),
+        .DPRA2(\gpr1.dout_i_reg[7]_0 [2]),
+        .DPRA3(\gpr1.dout_i_reg[7]_0 [3]),
+        .DPRA4(\gpr1.dout_i_reg[7]_0 [4]),
+        .DPRA5(\gpr1.dout_i_reg[7]_0 [5]),
         .SPO(NLW_RAM_reg_320_383_7_7_SPO_UNCONNECTED),
         .WCLK(clk),
-        .WE(ram_full_fb_i_reg_1));
+        .WE(\gpr1.dout_i[6]_i_3_1 ));
   (* METHODOLOGY_DRC_VIOS = "" *) 
+  (* RTL_RAM_BITS = "4096" *) 
+  (* RTL_RAM_NAME = "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM" *) 
+  (* ram_addr_begin = "384" *) 
+  (* ram_addr_end = "447" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "0" *) 
+  (* ram_slice_end = "2" *) 
   RAM64M RAM_reg_384_447_0_2
-       (.ADDRA(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRB(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRC(\gc0.count_d1_reg[8] [5:0]),
+       (.ADDRA(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRB(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRC(\gpr1.dout_i_reg[7]_0 [5:0]),
         .ADDRD(Q),
         .DIA(din[0]),
         .DIB(din[1]),
@@ -1386,12 +1521,19 @@ module isp_spi_buffer_dmem
         .DOC(RAM_reg_384_447_0_2_n_2),
         .DOD(NLW_RAM_reg_384_447_0_2_DOD_UNCONNECTED),
         .WCLK(clk),
-        .WE(ram_full_fb_i_reg_2));
+        .WE(\gpr1.dout_i[6]_i_3_2 ));
   (* METHODOLOGY_DRC_VIOS = "" *) 
+  (* RTL_RAM_BITS = "4096" *) 
+  (* RTL_RAM_NAME = "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM" *) 
+  (* ram_addr_begin = "384" *) 
+  (* ram_addr_end = "447" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "3" *) 
+  (* ram_slice_end = "5" *) 
   RAM64M RAM_reg_384_447_3_5
-       (.ADDRA(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRB(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRC(\gc0.count_d1_reg[8] [5:0]),
+       (.ADDRA(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRB(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRC(\gpr1.dout_i_reg[7]_0 [5:0]),
         .ADDRD(Q),
         .DIA(din[3]),
         .DIB(din[4]),
@@ -1402,7 +1544,12 @@ module isp_spi_buffer_dmem
         .DOC(RAM_reg_384_447_3_5_n_2),
         .DOD(NLW_RAM_reg_384_447_3_5_DOD_UNCONNECTED),
         .WCLK(clk),
-        .WE(ram_full_fb_i_reg_2));
+        .WE(\gpr1.dout_i[6]_i_3_2 ));
+  (* ram_addr_begin = "384" *) 
+  (* ram_addr_end = "447" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "6" *) 
+  (* ram_slice_end = "6" *) 
   RAM64X1D RAM_reg_384_447_6_6
        (.A0(Q[0]),
         .A1(Q[1]),
@@ -1412,15 +1559,20 @@ module isp_spi_buffer_dmem
         .A5(Q[5]),
         .D(din[6]),
         .DPO(RAM_reg_384_447_6_6_n_0),
-        .DPRA0(\gc0.count_d1_reg[8] [0]),
-        .DPRA1(\gc0.count_d1_reg[8] [1]),
-        .DPRA2(\gc0.count_d1_reg[8] [2]),
-        .DPRA3(\gc0.count_d1_reg[8] [3]),
-        .DPRA4(\gc0.count_d1_reg[8] [4]),
-        .DPRA5(\gc0.count_d1_reg[8] [5]),
+        .DPRA0(\gpr1.dout_i_reg[7]_0 [0]),
+        .DPRA1(\gpr1.dout_i_reg[7]_0 [1]),
+        .DPRA2(\gpr1.dout_i_reg[7]_0 [2]),
+        .DPRA3(\gpr1.dout_i_reg[7]_0 [3]),
+        .DPRA4(\gpr1.dout_i_reg[7]_0 [4]),
+        .DPRA5(\gpr1.dout_i_reg[7]_0 [5]),
         .SPO(NLW_RAM_reg_384_447_6_6_SPO_UNCONNECTED),
         .WCLK(clk),
-        .WE(ram_full_fb_i_reg_2));
+        .WE(\gpr1.dout_i[6]_i_3_2 ));
+  (* ram_addr_begin = "384" *) 
+  (* ram_addr_end = "447" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "7" *) 
+  (* ram_slice_end = "7" *) 
   RAM64X1D RAM_reg_384_447_7_7
        (.A0(Q[0]),
         .A1(Q[1]),
@@ -1430,20 +1582,27 @@ module isp_spi_buffer_dmem
         .A5(Q[5]),
         .D(din[7]),
         .DPO(RAM_reg_384_447_7_7_n_0),
-        .DPRA0(\gc0.count_d1_reg[8] [0]),
-        .DPRA1(\gc0.count_d1_reg[8] [1]),
-        .DPRA2(\gc0.count_d1_reg[8] [2]),
-        .DPRA3(\gc0.count_d1_reg[8] [3]),
-        .DPRA4(\gc0.count_d1_reg[8] [4]),
-        .DPRA5(\gc0.count_d1_reg[8] [5]),
+        .DPRA0(\gpr1.dout_i_reg[7]_0 [0]),
+        .DPRA1(\gpr1.dout_i_reg[7]_0 [1]),
+        .DPRA2(\gpr1.dout_i_reg[7]_0 [2]),
+        .DPRA3(\gpr1.dout_i_reg[7]_0 [3]),
+        .DPRA4(\gpr1.dout_i_reg[7]_0 [4]),
+        .DPRA5(\gpr1.dout_i_reg[7]_0 [5]),
         .SPO(NLW_RAM_reg_384_447_7_7_SPO_UNCONNECTED),
         .WCLK(clk),
-        .WE(ram_full_fb_i_reg_2));
+        .WE(\gpr1.dout_i[6]_i_3_2 ));
   (* METHODOLOGY_DRC_VIOS = "" *) 
+  (* RTL_RAM_BITS = "4096" *) 
+  (* RTL_RAM_NAME = "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM" *) 
+  (* ram_addr_begin = "448" *) 
+  (* ram_addr_end = "511" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "0" *) 
+  (* ram_slice_end = "2" *) 
   RAM64M RAM_reg_448_511_0_2
-       (.ADDRA(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRB(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRC(\gc0.count_d1_reg[8] [5:0]),
+       (.ADDRA(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRB(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRC(\gpr1.dout_i_reg[7]_0 [5:0]),
         .ADDRD(Q),
         .DIA(din[0]),
         .DIB(din[1]),
@@ -1454,12 +1613,19 @@ module isp_spi_buffer_dmem
         .DOC(RAM_reg_448_511_0_2_n_2),
         .DOD(NLW_RAM_reg_448_511_0_2_DOD_UNCONNECTED),
         .WCLK(clk),
-        .WE(\gcc0.gc0.count_d1_reg[8] ));
+        .WE(\gpr1.dout_i[6]_i_3_3 ));
   (* METHODOLOGY_DRC_VIOS = "" *) 
+  (* RTL_RAM_BITS = "4096" *) 
+  (* RTL_RAM_NAME = "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM" *) 
+  (* ram_addr_begin = "448" *) 
+  (* ram_addr_end = "511" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "3" *) 
+  (* ram_slice_end = "5" *) 
   RAM64M RAM_reg_448_511_3_5
-       (.ADDRA(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRB(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRC(\gc0.count_d1_reg[8] [5:0]),
+       (.ADDRA(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRB(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRC(\gpr1.dout_i_reg[7]_0 [5:0]),
         .ADDRD(Q),
         .DIA(din[3]),
         .DIB(din[4]),
@@ -1470,7 +1636,12 @@ module isp_spi_buffer_dmem
         .DOC(RAM_reg_448_511_3_5_n_2),
         .DOD(NLW_RAM_reg_448_511_3_5_DOD_UNCONNECTED),
         .WCLK(clk),
-        .WE(\gcc0.gc0.count_d1_reg[8] ));
+        .WE(\gpr1.dout_i[6]_i_3_3 ));
+  (* ram_addr_begin = "448" *) 
+  (* ram_addr_end = "511" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "6" *) 
+  (* ram_slice_end = "6" *) 
   RAM64X1D RAM_reg_448_511_6_6
        (.A0(Q[0]),
         .A1(Q[1]),
@@ -1480,15 +1651,20 @@ module isp_spi_buffer_dmem
         .A5(Q[5]),
         .D(din[6]),
         .DPO(RAM_reg_448_511_6_6_n_0),
-        .DPRA0(\gc0.count_d1_reg[8] [0]),
-        .DPRA1(\gc0.count_d1_reg[8] [1]),
-        .DPRA2(\gc0.count_d1_reg[8] [2]),
-        .DPRA3(\gc0.count_d1_reg[8] [3]),
-        .DPRA4(\gc0.count_d1_reg[8] [4]),
-        .DPRA5(\gc0.count_d1_reg[8] [5]),
+        .DPRA0(\gpr1.dout_i_reg[7]_0 [0]),
+        .DPRA1(\gpr1.dout_i_reg[7]_0 [1]),
+        .DPRA2(\gpr1.dout_i_reg[7]_0 [2]),
+        .DPRA3(\gpr1.dout_i_reg[7]_0 [3]),
+        .DPRA4(\gpr1.dout_i_reg[7]_0 [4]),
+        .DPRA5(\gpr1.dout_i_reg[7]_0 [5]),
         .SPO(NLW_RAM_reg_448_511_6_6_SPO_UNCONNECTED),
         .WCLK(clk),
-        .WE(\gcc0.gc0.count_d1_reg[8] ));
+        .WE(\gpr1.dout_i[6]_i_3_3 ));
+  (* ram_addr_begin = "448" *) 
+  (* ram_addr_end = "511" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "7" *) 
+  (* ram_slice_end = "7" *) 
   RAM64X1D RAM_reg_448_511_7_7
        (.A0(Q[0]),
         .A1(Q[1]),
@@ -1498,20 +1674,27 @@ module isp_spi_buffer_dmem
         .A5(Q[5]),
         .D(din[7]),
         .DPO(RAM_reg_448_511_7_7_n_0),
-        .DPRA0(\gc0.count_d1_reg[8] [0]),
-        .DPRA1(\gc0.count_d1_reg[8] [1]),
-        .DPRA2(\gc0.count_d1_reg[8] [2]),
-        .DPRA3(\gc0.count_d1_reg[8] [3]),
-        .DPRA4(\gc0.count_d1_reg[8] [4]),
-        .DPRA5(\gc0.count_d1_reg[8] [5]),
+        .DPRA0(\gpr1.dout_i_reg[7]_0 [0]),
+        .DPRA1(\gpr1.dout_i_reg[7]_0 [1]),
+        .DPRA2(\gpr1.dout_i_reg[7]_0 [2]),
+        .DPRA3(\gpr1.dout_i_reg[7]_0 [3]),
+        .DPRA4(\gpr1.dout_i_reg[7]_0 [4]),
+        .DPRA5(\gpr1.dout_i_reg[7]_0 [5]),
         .SPO(NLW_RAM_reg_448_511_7_7_SPO_UNCONNECTED),
         .WCLK(clk),
-        .WE(\gcc0.gc0.count_d1_reg[8] ));
+        .WE(\gpr1.dout_i[6]_i_3_3 ));
   (* METHODOLOGY_DRC_VIOS = "" *) 
+  (* RTL_RAM_BITS = "4096" *) 
+  (* RTL_RAM_NAME = "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM" *) 
+  (* ram_addr_begin = "64" *) 
+  (* ram_addr_end = "127" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "0" *) 
+  (* ram_slice_end = "2" *) 
   RAM64M RAM_reg_64_127_0_2
-       (.ADDRA(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRB(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRC(\gc0.count_d1_reg[8] [5:0]),
+       (.ADDRA(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRB(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRC(\gpr1.dout_i_reg[7]_0 [5:0]),
         .ADDRD(Q),
         .DIA(din[0]),
         .DIB(din[1]),
@@ -1522,12 +1705,19 @@ module isp_spi_buffer_dmem
         .DOC(RAM_reg_64_127_0_2_n_2),
         .DOD(NLW_RAM_reg_64_127_0_2_DOD_UNCONNECTED),
         .WCLK(clk),
-        .WE(\gcc0.gc0.count_d1_reg[7] ));
+        .WE(\gpr1.dout_i[6]_i_2_1 ));
   (* METHODOLOGY_DRC_VIOS = "" *) 
+  (* RTL_RAM_BITS = "4096" *) 
+  (* RTL_RAM_NAME = "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM" *) 
+  (* ram_addr_begin = "64" *) 
+  (* ram_addr_end = "127" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "3" *) 
+  (* ram_slice_end = "5" *) 
   RAM64M RAM_reg_64_127_3_5
-       (.ADDRA(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRB(\gc0.count_d1_reg[8] [5:0]),
-        .ADDRC(\gc0.count_d1_reg[8] [5:0]),
+       (.ADDRA(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRB(\gpr1.dout_i_reg[7]_0 [5:0]),
+        .ADDRC(\gpr1.dout_i_reg[7]_0 [5:0]),
         .ADDRD(Q),
         .DIA(din[3]),
         .DIB(din[4]),
@@ -1538,7 +1728,12 @@ module isp_spi_buffer_dmem
         .DOC(RAM_reg_64_127_3_5_n_2),
         .DOD(NLW_RAM_reg_64_127_3_5_DOD_UNCONNECTED),
         .WCLK(clk),
-        .WE(\gcc0.gc0.count_d1_reg[7] ));
+        .WE(\gpr1.dout_i[6]_i_2_1 ));
+  (* ram_addr_begin = "64" *) 
+  (* ram_addr_end = "127" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "6" *) 
+  (* ram_slice_end = "6" *) 
   RAM64X1D RAM_reg_64_127_6_6
        (.A0(Q[0]),
         .A1(Q[1]),
@@ -1548,15 +1743,20 @@ module isp_spi_buffer_dmem
         .A5(Q[5]),
         .D(din[6]),
         .DPO(RAM_reg_64_127_6_6_n_0),
-        .DPRA0(\gc0.count_d1_reg[8] [0]),
-        .DPRA1(\gc0.count_d1_reg[8] [1]),
-        .DPRA2(\gc0.count_d1_reg[8] [2]),
-        .DPRA3(\gc0.count_d1_reg[8] [3]),
-        .DPRA4(\gc0.count_d1_reg[8] [4]),
-        .DPRA5(\gc0.count_d1_reg[8] [5]),
+        .DPRA0(\gpr1.dout_i_reg[7]_0 [0]),
+        .DPRA1(\gpr1.dout_i_reg[7]_0 [1]),
+        .DPRA2(\gpr1.dout_i_reg[7]_0 [2]),
+        .DPRA3(\gpr1.dout_i_reg[7]_0 [3]),
+        .DPRA4(\gpr1.dout_i_reg[7]_0 [4]),
+        .DPRA5(\gpr1.dout_i_reg[7]_0 [5]),
         .SPO(NLW_RAM_reg_64_127_6_6_SPO_UNCONNECTED),
         .WCLK(clk),
-        .WE(\gcc0.gc0.count_d1_reg[7] ));
+        .WE(\gpr1.dout_i[6]_i_2_1 ));
+  (* ram_addr_begin = "64" *) 
+  (* ram_addr_end = "127" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "7" *) 
+  (* ram_slice_end = "7" *) 
   RAM64X1D RAM_reg_64_127_7_7
        (.A0(Q[0]),
         .A1(Q[1]),
@@ -1566,23 +1766,23 @@ module isp_spi_buffer_dmem
         .A5(Q[5]),
         .D(din[7]),
         .DPO(RAM_reg_64_127_7_7_n_0),
-        .DPRA0(\gc0.count_d1_reg[8] [0]),
-        .DPRA1(\gc0.count_d1_reg[8] [1]),
-        .DPRA2(\gc0.count_d1_reg[8] [2]),
-        .DPRA3(\gc0.count_d1_reg[8] [3]),
-        .DPRA4(\gc0.count_d1_reg[8] [4]),
-        .DPRA5(\gc0.count_d1_reg[8] [5]),
+        .DPRA0(\gpr1.dout_i_reg[7]_0 [0]),
+        .DPRA1(\gpr1.dout_i_reg[7]_0 [1]),
+        .DPRA2(\gpr1.dout_i_reg[7]_0 [2]),
+        .DPRA3(\gpr1.dout_i_reg[7]_0 [3]),
+        .DPRA4(\gpr1.dout_i_reg[7]_0 [4]),
+        .DPRA5(\gpr1.dout_i_reg[7]_0 [5]),
         .SPO(NLW_RAM_reg_64_127_7_7_SPO_UNCONNECTED),
         .WCLK(clk),
-        .WE(\gcc0.gc0.count_d1_reg[7] ));
+        .WE(\gpr1.dout_i[6]_i_2_1 ));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
     \gpr1.dout_i[0]_i_2 
        (.I0(RAM_reg_192_255_0_2_n_0),
         .I1(RAM_reg_128_191_0_2_n_0),
-        .I2(\gc0.count_d1_reg[8] [7]),
+        .I2(\gpr1.dout_i_reg[7]_0 [7]),
         .I3(RAM_reg_64_127_0_2_n_0),
-        .I4(\gc0.count_d1_reg[8] [6]),
+        .I4(\gpr1.dout_i_reg[7]_0 [6]),
         .I5(RAM_reg_0_63_0_2_n_0),
         .O(\gpr1.dout_i[0]_i_2_n_0 ));
   LUT6 #(
@@ -1590,9 +1790,9 @@ module isp_spi_buffer_dmem
     \gpr1.dout_i[0]_i_3 
        (.I0(RAM_reg_448_511_0_2_n_0),
         .I1(RAM_reg_384_447_0_2_n_0),
-        .I2(\gc0.count_d1_reg[8] [7]),
+        .I2(\gpr1.dout_i_reg[7]_0 [7]),
         .I3(RAM_reg_320_383_0_2_n_0),
-        .I4(\gc0.count_d1_reg[8] [6]),
+        .I4(\gpr1.dout_i_reg[7]_0 [6]),
         .I5(RAM_reg_256_319_0_2_n_0),
         .O(\gpr1.dout_i[0]_i_3_n_0 ));
   LUT6 #(
@@ -1600,9 +1800,9 @@ module isp_spi_buffer_dmem
     \gpr1.dout_i[1]_i_2 
        (.I0(RAM_reg_192_255_0_2_n_1),
         .I1(RAM_reg_128_191_0_2_n_1),
-        .I2(\gc0.count_d1_reg[8] [7]),
+        .I2(\gpr1.dout_i_reg[7]_0 [7]),
         .I3(RAM_reg_64_127_0_2_n_1),
-        .I4(\gc0.count_d1_reg[8] [6]),
+        .I4(\gpr1.dout_i_reg[7]_0 [6]),
         .I5(RAM_reg_0_63_0_2_n_1),
         .O(\gpr1.dout_i[1]_i_2_n_0 ));
   LUT6 #(
@@ -1610,9 +1810,9 @@ module isp_spi_buffer_dmem
     \gpr1.dout_i[1]_i_3 
        (.I0(RAM_reg_448_511_0_2_n_1),
         .I1(RAM_reg_384_447_0_2_n_1),
-        .I2(\gc0.count_d1_reg[8] [7]),
+        .I2(\gpr1.dout_i_reg[7]_0 [7]),
         .I3(RAM_reg_320_383_0_2_n_1),
-        .I4(\gc0.count_d1_reg[8] [6]),
+        .I4(\gpr1.dout_i_reg[7]_0 [6]),
         .I5(RAM_reg_256_319_0_2_n_1),
         .O(\gpr1.dout_i[1]_i_3_n_0 ));
   LUT6 #(
@@ -1620,9 +1820,9 @@ module isp_spi_buffer_dmem
     \gpr1.dout_i[2]_i_2 
        (.I0(RAM_reg_192_255_0_2_n_2),
         .I1(RAM_reg_128_191_0_2_n_2),
-        .I2(\gc0.count_d1_reg[8] [7]),
+        .I2(\gpr1.dout_i_reg[7]_0 [7]),
         .I3(RAM_reg_64_127_0_2_n_2),
-        .I4(\gc0.count_d1_reg[8] [6]),
+        .I4(\gpr1.dout_i_reg[7]_0 [6]),
         .I5(RAM_reg_0_63_0_2_n_2),
         .O(\gpr1.dout_i[2]_i_2_n_0 ));
   LUT6 #(
@@ -1630,9 +1830,9 @@ module isp_spi_buffer_dmem
     \gpr1.dout_i[2]_i_3 
        (.I0(RAM_reg_448_511_0_2_n_2),
         .I1(RAM_reg_384_447_0_2_n_2),
-        .I2(\gc0.count_d1_reg[8] [7]),
+        .I2(\gpr1.dout_i_reg[7]_0 [7]),
         .I3(RAM_reg_320_383_0_2_n_2),
-        .I4(\gc0.count_d1_reg[8] [6]),
+        .I4(\gpr1.dout_i_reg[7]_0 [6]),
         .I5(RAM_reg_256_319_0_2_n_2),
         .O(\gpr1.dout_i[2]_i_3_n_0 ));
   LUT6 #(
@@ -1640,9 +1840,9 @@ module isp_spi_buffer_dmem
     \gpr1.dout_i[3]_i_2 
        (.I0(RAM_reg_192_255_3_5_n_0),
         .I1(RAM_reg_128_191_3_5_n_0),
-        .I2(\gc0.count_d1_reg[8] [7]),
+        .I2(\gpr1.dout_i_reg[7]_0 [7]),
         .I3(RAM_reg_64_127_3_5_n_0),
-        .I4(\gc0.count_d1_reg[8] [6]),
+        .I4(\gpr1.dout_i_reg[7]_0 [6]),
         .I5(RAM_reg_0_63_3_5_n_0),
         .O(\gpr1.dout_i[3]_i_2_n_0 ));
   LUT6 #(
@@ -1650,9 +1850,9 @@ module isp_spi_buffer_dmem
     \gpr1.dout_i[3]_i_3 
        (.I0(RAM_reg_448_511_3_5_n_0),
         .I1(RAM_reg_384_447_3_5_n_0),
-        .I2(\gc0.count_d1_reg[8] [7]),
+        .I2(\gpr1.dout_i_reg[7]_0 [7]),
         .I3(RAM_reg_320_383_3_5_n_0),
-        .I4(\gc0.count_d1_reg[8] [6]),
+        .I4(\gpr1.dout_i_reg[7]_0 [6]),
         .I5(RAM_reg_256_319_3_5_n_0),
         .O(\gpr1.dout_i[3]_i_3_n_0 ));
   LUT6 #(
@@ -1660,9 +1860,9 @@ module isp_spi_buffer_dmem
     \gpr1.dout_i[4]_i_2 
        (.I0(RAM_reg_192_255_3_5_n_1),
         .I1(RAM_reg_128_191_3_5_n_1),
-        .I2(\gc0.count_d1_reg[8] [7]),
+        .I2(\gpr1.dout_i_reg[7]_0 [7]),
         .I3(RAM_reg_64_127_3_5_n_1),
-        .I4(\gc0.count_d1_reg[8] [6]),
+        .I4(\gpr1.dout_i_reg[7]_0 [6]),
         .I5(RAM_reg_0_63_3_5_n_1),
         .O(\gpr1.dout_i[4]_i_2_n_0 ));
   LUT6 #(
@@ -1670,9 +1870,9 @@ module isp_spi_buffer_dmem
     \gpr1.dout_i[4]_i_3 
        (.I0(RAM_reg_448_511_3_5_n_1),
         .I1(RAM_reg_384_447_3_5_n_1),
-        .I2(\gc0.count_d1_reg[8] [7]),
+        .I2(\gpr1.dout_i_reg[7]_0 [7]),
         .I3(RAM_reg_320_383_3_5_n_1),
-        .I4(\gc0.count_d1_reg[8] [6]),
+        .I4(\gpr1.dout_i_reg[7]_0 [6]),
         .I5(RAM_reg_256_319_3_5_n_1),
         .O(\gpr1.dout_i[4]_i_3_n_0 ));
   LUT6 #(
@@ -1680,9 +1880,9 @@ module isp_spi_buffer_dmem
     \gpr1.dout_i[5]_i_2 
        (.I0(RAM_reg_192_255_3_5_n_2),
         .I1(RAM_reg_128_191_3_5_n_2),
-        .I2(\gc0.count_d1_reg[8] [7]),
+        .I2(\gpr1.dout_i_reg[7]_0 [7]),
         .I3(RAM_reg_64_127_3_5_n_2),
-        .I4(\gc0.count_d1_reg[8] [6]),
+        .I4(\gpr1.dout_i_reg[7]_0 [6]),
         .I5(RAM_reg_0_63_3_5_n_2),
         .O(\gpr1.dout_i[5]_i_2_n_0 ));
   LUT6 #(
@@ -1690,9 +1890,9 @@ module isp_spi_buffer_dmem
     \gpr1.dout_i[5]_i_3 
        (.I0(RAM_reg_448_511_3_5_n_2),
         .I1(RAM_reg_384_447_3_5_n_2),
-        .I2(\gc0.count_d1_reg[8] [7]),
+        .I2(\gpr1.dout_i_reg[7]_0 [7]),
         .I3(RAM_reg_320_383_3_5_n_2),
-        .I4(\gc0.count_d1_reg[8] [6]),
+        .I4(\gpr1.dout_i_reg[7]_0 [6]),
         .I5(RAM_reg_256_319_3_5_n_2),
         .O(\gpr1.dout_i[5]_i_3_n_0 ));
   LUT6 #(
@@ -1700,9 +1900,9 @@ module isp_spi_buffer_dmem
     \gpr1.dout_i[6]_i_2 
        (.I0(RAM_reg_192_255_6_6_n_0),
         .I1(RAM_reg_128_191_6_6_n_0),
-        .I2(\gc0.count_d1_reg[8] [7]),
+        .I2(\gpr1.dout_i_reg[7]_0 [7]),
         .I3(RAM_reg_64_127_6_6_n_0),
-        .I4(\gc0.count_d1_reg[8] [6]),
+        .I4(\gpr1.dout_i_reg[7]_0 [6]),
         .I5(RAM_reg_0_63_6_6_n_0),
         .O(\gpr1.dout_i[6]_i_2_n_0 ));
   LUT6 #(
@@ -1710,9 +1910,9 @@ module isp_spi_buffer_dmem
     \gpr1.dout_i[6]_i_3 
        (.I0(RAM_reg_448_511_6_6_n_0),
         .I1(RAM_reg_384_447_6_6_n_0),
-        .I2(\gc0.count_d1_reg[8] [7]),
+        .I2(\gpr1.dout_i_reg[7]_0 [7]),
         .I3(RAM_reg_320_383_6_6_n_0),
-        .I4(\gc0.count_d1_reg[8] [6]),
+        .I4(\gpr1.dout_i_reg[7]_0 [6]),
         .I5(RAM_reg_256_319_6_6_n_0),
         .O(\gpr1.dout_i[6]_i_3_n_0 ));
   LUT6 #(
@@ -1720,9 +1920,9 @@ module isp_spi_buffer_dmem
     \gpr1.dout_i[7]_i_4 
        (.I0(RAM_reg_192_255_7_7_n_0),
         .I1(RAM_reg_128_191_7_7_n_0),
-        .I2(\gc0.count_d1_reg[8] [7]),
+        .I2(\gpr1.dout_i_reg[7]_0 [7]),
         .I3(RAM_reg_64_127_7_7_n_0),
-        .I4(\gc0.count_d1_reg[8] [6]),
+        .I4(\gpr1.dout_i_reg[7]_0 [6]),
         .I5(RAM_reg_0_63_7_7_n_0),
         .O(\gpr1.dout_i[7]_i_4_n_0 ));
   LUT6 #(
@@ -1730,9 +1930,9 @@ module isp_spi_buffer_dmem
     \gpr1.dout_i[7]_i_5 
        (.I0(RAM_reg_448_511_7_7_n_0),
         .I1(RAM_reg_384_447_7_7_n_0),
-        .I2(\gc0.count_d1_reg[8] [7]),
+        .I2(\gpr1.dout_i_reg[7]_0 [7]),
         .I3(RAM_reg_320_383_7_7_n_0),
-        .I4(\gc0.count_d1_reg[8] [6]),
+        .I4(\gpr1.dout_i_reg[7]_0 [6]),
         .I5(RAM_reg_256_319_7_7_n_0),
         .O(\gpr1.dout_i[7]_i_5_n_0 ));
   FDCE #(
@@ -1747,7 +1947,7 @@ module isp_spi_buffer_dmem
        (.I0(\gpr1.dout_i[0]_i_2_n_0 ),
         .I1(\gpr1.dout_i[0]_i_3_n_0 ),
         .O(p_0_out[0]),
-        .S(\gc0.count_d1_reg[8] [8]));
+        .S(\gpr1.dout_i_reg[7]_0 [8]));
   FDCE #(
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[1] 
@@ -1760,7 +1960,7 @@ module isp_spi_buffer_dmem
        (.I0(\gpr1.dout_i[1]_i_2_n_0 ),
         .I1(\gpr1.dout_i[1]_i_3_n_0 ),
         .O(p_0_out[1]),
-        .S(\gc0.count_d1_reg[8] [8]));
+        .S(\gpr1.dout_i_reg[7]_0 [8]));
   FDCE #(
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[2] 
@@ -1773,7 +1973,7 @@ module isp_spi_buffer_dmem
        (.I0(\gpr1.dout_i[2]_i_2_n_0 ),
         .I1(\gpr1.dout_i[2]_i_3_n_0 ),
         .O(p_0_out[2]),
-        .S(\gc0.count_d1_reg[8] [8]));
+        .S(\gpr1.dout_i_reg[7]_0 [8]));
   FDCE #(
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[3] 
@@ -1786,7 +1986,7 @@ module isp_spi_buffer_dmem
        (.I0(\gpr1.dout_i[3]_i_2_n_0 ),
         .I1(\gpr1.dout_i[3]_i_3_n_0 ),
         .O(p_0_out[3]),
-        .S(\gc0.count_d1_reg[8] [8]));
+        .S(\gpr1.dout_i_reg[7]_0 [8]));
   FDCE #(
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[4] 
@@ -1799,7 +1999,7 @@ module isp_spi_buffer_dmem
        (.I0(\gpr1.dout_i[4]_i_2_n_0 ),
         .I1(\gpr1.dout_i[4]_i_3_n_0 ),
         .O(p_0_out[4]),
-        .S(\gc0.count_d1_reg[8] [8]));
+        .S(\gpr1.dout_i_reg[7]_0 [8]));
   FDCE #(
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[5] 
@@ -1812,7 +2012,7 @@ module isp_spi_buffer_dmem
        (.I0(\gpr1.dout_i[5]_i_2_n_0 ),
         .I1(\gpr1.dout_i[5]_i_3_n_0 ),
         .O(p_0_out[5]),
-        .S(\gc0.count_d1_reg[8] [8]));
+        .S(\gpr1.dout_i_reg[7]_0 [8]));
   FDCE #(
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[6] 
@@ -1825,7 +2025,7 @@ module isp_spi_buffer_dmem
        (.I0(\gpr1.dout_i[6]_i_2_n_0 ),
         .I1(\gpr1.dout_i[6]_i_3_n_0 ),
         .O(p_0_out[6]),
-        .S(\gc0.count_d1_reg[8] [8]));
+        .S(\gpr1.dout_i_reg[7]_0 [8]));
   FDCE #(
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[7] 
@@ -1838,7 +2038,7 @@ module isp_spi_buffer_dmem
        (.I0(\gpr1.dout_i[7]_i_4_n_0 ),
         .I1(\gpr1.dout_i[7]_i_5_n_0 ),
         .O(p_0_out[7]),
-        .S(\gc0.count_d1_reg[8] [8]));
+        .S(\gpr1.dout_i_reg[7]_0 [8]));
 endmodule
 
 (* ORIG_REF_NAME = "fifo_generator_ramfifo" *) 
@@ -1900,11 +2100,11 @@ module isp_spi_buffer_fifo_generator_ramfifo
         .Q(rd_pntr_plus1),
         .clk(clk),
         .empty(empty),
-        .\gcc0.gc0.count_d1_reg[7] (p_12_out),
-        .\gcc0.gc0.count_d1_reg[8] (\gntv_or_sync_fifo.gl0.wr_n_27 ),
-        .\gcc0.gc0.count_d1_reg[8]_0 (\grss.rsts/c2/v1_reg ),
-        .\gcc0.gc0.count_reg[7] (p_13_out),
-        .\gpr1.dout_i_reg[7] (p_0_out_0),
+        .\gc0.count_d1_reg[8] (p_0_out_0),
+        .\gmux.gm[3].gms.ms (p_12_out),
+        .\gmux.gm[3].gms.ms_0 (p_13_out),
+        .ram_empty_i_reg(\gntv_or_sync_fifo.gl0.wr_n_27 ),
+        .ram_empty_i_reg_0(\grss.rsts/c2/v1_reg ),
         .rd_en(rd_en),
         .v1_reg(\gwss.wsts/c0/v1_reg ),
         .v1_reg_0(\gwss.wsts/c1/v1_reg ),
@@ -1916,24 +2116,24 @@ module isp_spi_buffer_fifo_generator_ramfifo
         .Q(p_12_out),
         .clk(clk),
         .full(full),
-        .\gc0.count_d1_reg[6] (\gwss.wsts/c0/v1_reg ),
-        .\gc0.count_d1_reg[6]_0 (\gwss.wsts/c1/v1_reg ),
-        .\gc0.count_d1_reg[8] (p_0_out_0[8]),
-        .\gc0.count_reg[8] (rd_pntr_plus1),
-        .\gcc0.gc0.count_d1_reg[7] (p_13_out),
-        .\gpr1.dout_i_reg[7] (\gntv_or_sync_fifo.gl0.wr_n_2 ),
-        .\gpr1.dout_i_reg[7]_0 (\gntv_or_sync_fifo.gl0.wr_n_11 ),
-        .\gpr1.dout_i_reg[7]_1 (\gntv_or_sync_fifo.gl0.wr_n_12 ),
-        .\gpr1.dout_i_reg[7]_2 (\gntv_or_sync_fifo.gl0.wr_n_13 ),
-        .\gpr1.dout_i_reg[7]_3 (\gntv_or_sync_fifo.gl0.wr_n_14 ),
-        .\gpr1.dout_i_reg[7]_4 (\gntv_or_sync_fifo.gl0.wr_n_15 ),
-        .\gpr1.dout_i_reg[7]_5 (\gntv_or_sync_fifo.gl0.wr_n_16 ),
-        .\gpr1.dout_i_reg[7]_6 (\gntv_or_sync_fifo.gl0.wr_n_17 ),
-        .\grstd1.grst_full.grst_f.rst_d3_reg (rst_full_gen_i),
+        .\gcc0.gc0.count_d1_reg[6] (\gntv_or_sync_fifo.gl0.wr_n_12 ),
+        .\gcc0.gc0.count_d1_reg[6]_0 (\gntv_or_sync_fifo.gl0.wr_n_15 ),
+        .\gcc0.gc0.count_d1_reg[7] (\gntv_or_sync_fifo.gl0.wr_n_11 ),
+        .\gcc0.gc0.count_d1_reg[8] (\gntv_or_sync_fifo.gl0.wr_n_13 ),
+        .\gcc0.gc0.count_d1_reg[8]_0 (\grss.rsts/c2/v1_reg ),
+        .\gcc0.gc0.count_d1_reg[8]_1 (\gntv_or_sync_fifo.gl0.wr_n_27 ),
+        .\gcc0.gc0.count_reg[7] (p_13_out),
+        .\gmux.gm[4].gms.ms (\gwss.wsts/c0/v1_reg ),
+        .\gmux.gm[4].gms.ms_0 (\gwss.wsts/c1/v1_reg ),
+        .\gmux.gm[4].gms.ms_1 (p_0_out_0[8]),
+        .\gmux.gm[4].gms.ms_2 (rd_pntr_plus1),
         .out(rst_full_ff_i),
-        .ram_empty_i_reg(\grss.rsts/c2/v1_reg ),
-        .ram_empty_i_reg_0(\gntv_or_sync_fifo.gl0.wr_n_27 ),
-        .wr_en(wr_en));
+        .ram_full_i_reg(rst_full_gen_i),
+        .wr_en(wr_en),
+        .wr_en_0(\gntv_or_sync_fifo.gl0.wr_n_2 ),
+        .wr_en_1(\gntv_or_sync_fifo.gl0.wr_n_14 ),
+        .wr_en_2(\gntv_or_sync_fifo.gl0.wr_n_16 ),
+        .wr_en_3(\gntv_or_sync_fifo.gl0.wr_n_17 ));
   isp_spi_buffer_memory \gntv_or_sync_fifo.mem 
        (.AR(rstblk_n_3),
         .E(ram_rd_en_i),
@@ -1941,20 +2141,20 @@ module isp_spi_buffer_fifo_generator_ramfifo
         .clk(clk),
         .din(din),
         .dout(dout),
-        .\gc0.count_d1_reg[8] (p_0_out_0),
-        .\gcc0.gc0.count_d1_reg[6] (\gntv_or_sync_fifo.gl0.wr_n_12 ),
-        .\gcc0.gc0.count_d1_reg[6]_0 (\gntv_or_sync_fifo.gl0.wr_n_15 ),
-        .\gcc0.gc0.count_d1_reg[7] (\gntv_or_sync_fifo.gl0.wr_n_11 ),
-        .\gcc0.gc0.count_d1_reg[8] (\gntv_or_sync_fifo.gl0.wr_n_13 ),
-        .ram_full_fb_i_reg(\gntv_or_sync_fifo.gl0.wr_n_2 ),
-        .ram_full_fb_i_reg_0(\gntv_or_sync_fifo.gl0.wr_n_14 ),
-        .ram_full_fb_i_reg_1(\gntv_or_sync_fifo.gl0.wr_n_16 ),
-        .ram_full_fb_i_reg_2(\gntv_or_sync_fifo.gl0.wr_n_17 ));
+        .\gpr1.dout_i[6]_i_2 (\gntv_or_sync_fifo.gl0.wr_n_2 ),
+        .\gpr1.dout_i[6]_i_2_0 (\gntv_or_sync_fifo.gl0.wr_n_11 ),
+        .\gpr1.dout_i[6]_i_2_1 (\gntv_or_sync_fifo.gl0.wr_n_12 ),
+        .\gpr1.dout_i[6]_i_2_2 (\gntv_or_sync_fifo.gl0.wr_n_14 ),
+        .\gpr1.dout_i[6]_i_3 (\gntv_or_sync_fifo.gl0.wr_n_15 ),
+        .\gpr1.dout_i[6]_i_3_0 (\gntv_or_sync_fifo.gl0.wr_n_16 ),
+        .\gpr1.dout_i[6]_i_3_1 (\gntv_or_sync_fifo.gl0.wr_n_17 ),
+        .\gpr1.dout_i[6]_i_3_2 (\gntv_or_sync_fifo.gl0.wr_n_13 ),
+        .\gpr1.dout_i_reg[7] (p_0_out_0));
   isp_spi_buffer_reset_blk_ramfifo rstblk
        (.AR(rstblk_n_3),
         .clk(clk),
+        .\grstd1.grst_full.grst_f.rst_d3_reg_0 (rst_full_gen_i),
         .out(rst_full_ff_i),
-        .ram_full_i_reg(rst_full_gen_i),
         .rst(rst),
         .wr_rst_busy(wr_rst_busy));
 endmodule
@@ -2069,8 +2269,8 @@ endmodule
 (* C_WR_DEPTH_WRCH = "16" *) (* C_WR_FREQ = "1" *) (* C_WR_PNTR_WIDTH = "9" *) 
 (* C_WR_PNTR_WIDTH_AXIS = "10" *) (* C_WR_PNTR_WIDTH_RACH = "4" *) (* C_WR_PNTR_WIDTH_RDCH = "10" *) 
 (* C_WR_PNTR_WIDTH_WACH = "4" *) (* C_WR_PNTR_WIDTH_WDCH = "10" *) (* C_WR_PNTR_WIDTH_WRCH = "4" *) 
-(* C_WR_RESPONSE_LATENCY = "1" *) (* ORIG_REF_NAME = "fifo_generator_v13_2_2" *) 
-module isp_spi_buffer_fifo_generator_v13_2_2
+(* C_WR_RESPONSE_LATENCY = "1" *) (* ORIG_REF_NAME = "fifo_generator_v13_2_4" *) 
+module isp_spi_buffer_fifo_generator_v13_2_4
    (backup,
     backup_marker,
     clk,
@@ -3071,7 +3271,7 @@ module isp_spi_buffer_fifo_generator_v13_2_2
        (.G(\<const0> ));
   VCC VCC
        (.P(\<const1> ));
-  isp_spi_buffer_fifo_generator_v13_2_2_synth inst_fifo_gen
+  isp_spi_buffer_fifo_generator_v13_2_4_synth inst_fifo_gen
        (.clk(clk),
         .din(din),
         .dout(dout),
@@ -3083,8 +3283,8 @@ module isp_spi_buffer_fifo_generator_v13_2_2
         .wr_rst_busy(wr_rst_busy));
 endmodule
 
-(* ORIG_REF_NAME = "fifo_generator_v13_2_2_synth" *) 
-module isp_spi_buffer_fifo_generator_v13_2_2_synth
+(* ORIG_REF_NAME = "fifo_generator_v13_2_4_synth" *) 
+module isp_spi_buffer_fifo_generator_v13_2_4_synth
    (empty,
     full,
     wr_rst_busy,
@@ -3131,31 +3331,31 @@ module isp_spi_buffer_memory
    (dout,
     clk,
     din,
-    ram_full_fb_i_reg,
-    \gc0.count_d1_reg[8] ,
+    \gpr1.dout_i[6]_i_2 ,
+    \gpr1.dout_i_reg[7] ,
     Q,
-    \gcc0.gc0.count_d1_reg[7] ,
-    \gcc0.gc0.count_d1_reg[6] ,
-    ram_full_fb_i_reg_0,
-    \gcc0.gc0.count_d1_reg[6]_0 ,
-    ram_full_fb_i_reg_1,
-    ram_full_fb_i_reg_2,
-    \gcc0.gc0.count_d1_reg[8] ,
+    \gpr1.dout_i[6]_i_2_0 ,
+    \gpr1.dout_i[6]_i_2_1 ,
+    \gpr1.dout_i[6]_i_2_2 ,
+    \gpr1.dout_i[6]_i_3 ,
+    \gpr1.dout_i[6]_i_3_0 ,
+    \gpr1.dout_i[6]_i_3_1 ,
+    \gpr1.dout_i[6]_i_3_2 ,
     E,
     AR);
   output [7:0]dout;
   input clk;
   input [7:0]din;
-  input ram_full_fb_i_reg;
-  input [8:0]\gc0.count_d1_reg[8] ;
+  input \gpr1.dout_i[6]_i_2 ;
+  input [8:0]\gpr1.dout_i_reg[7] ;
   input [5:0]Q;
-  input \gcc0.gc0.count_d1_reg[7] ;
-  input \gcc0.gc0.count_d1_reg[6] ;
-  input ram_full_fb_i_reg_0;
-  input \gcc0.gc0.count_d1_reg[6]_0 ;
-  input ram_full_fb_i_reg_1;
-  input ram_full_fb_i_reg_2;
-  input \gcc0.gc0.count_d1_reg[8] ;
+  input \gpr1.dout_i[6]_i_2_0 ;
+  input \gpr1.dout_i[6]_i_2_1 ;
+  input \gpr1.dout_i[6]_i_2_2 ;
+  input \gpr1.dout_i[6]_i_3 ;
+  input \gpr1.dout_i[6]_i_3_0 ;
+  input \gpr1.dout_i[6]_i_3_1 ;
+  input \gpr1.dout_i[6]_i_3_2 ;
   input [0:0]E;
   input [0:0]AR;
 
@@ -3165,15 +3365,15 @@ module isp_spi_buffer_memory
   wire clk;
   wire [7:0]din;
   wire [7:0]dout;
-  wire [8:0]\gc0.count_d1_reg[8] ;
-  wire \gcc0.gc0.count_d1_reg[6] ;
-  wire \gcc0.gc0.count_d1_reg[6]_0 ;
-  wire \gcc0.gc0.count_d1_reg[7] ;
-  wire \gcc0.gc0.count_d1_reg[8] ;
-  wire ram_full_fb_i_reg;
-  wire ram_full_fb_i_reg_0;
-  wire ram_full_fb_i_reg_1;
-  wire ram_full_fb_i_reg_2;
+  wire \gpr1.dout_i[6]_i_2 ;
+  wire \gpr1.dout_i[6]_i_2_0 ;
+  wire \gpr1.dout_i[6]_i_2_1 ;
+  wire \gpr1.dout_i[6]_i_2_2 ;
+  wire \gpr1.dout_i[6]_i_3 ;
+  wire \gpr1.dout_i[6]_i_3_0 ;
+  wire \gpr1.dout_i[6]_i_3_1 ;
+  wire \gpr1.dout_i[6]_i_3_2 ;
+  wire [8:0]\gpr1.dout_i_reg[7] ;
 
   isp_spi_buffer_dmem \gdm.dm_gen.dm 
        (.AR(AR),
@@ -3182,44 +3382,44 @@ module isp_spi_buffer_memory
         .clk(clk),
         .din(din),
         .dout(dout),
-        .\gc0.count_d1_reg[8] (\gc0.count_d1_reg[8] ),
-        .\gcc0.gc0.count_d1_reg[6] (\gcc0.gc0.count_d1_reg[6] ),
-        .\gcc0.gc0.count_d1_reg[6]_0 (\gcc0.gc0.count_d1_reg[6]_0 ),
-        .\gcc0.gc0.count_d1_reg[7] (\gcc0.gc0.count_d1_reg[7] ),
-        .\gcc0.gc0.count_d1_reg[8] (\gcc0.gc0.count_d1_reg[8] ),
-        .ram_full_fb_i_reg(ram_full_fb_i_reg),
-        .ram_full_fb_i_reg_0(ram_full_fb_i_reg_0),
-        .ram_full_fb_i_reg_1(ram_full_fb_i_reg_1),
-        .ram_full_fb_i_reg_2(ram_full_fb_i_reg_2));
+        .\gpr1.dout_i[6]_i_2_0 (\gpr1.dout_i[6]_i_2 ),
+        .\gpr1.dout_i[6]_i_2_1 (\gpr1.dout_i[6]_i_2_0 ),
+        .\gpr1.dout_i[6]_i_2_2 (\gpr1.dout_i[6]_i_2_1 ),
+        .\gpr1.dout_i[6]_i_2_3 (\gpr1.dout_i[6]_i_2_2 ),
+        .\gpr1.dout_i[6]_i_3_0 (\gpr1.dout_i[6]_i_3 ),
+        .\gpr1.dout_i[6]_i_3_1 (\gpr1.dout_i[6]_i_3_0 ),
+        .\gpr1.dout_i[6]_i_3_2 (\gpr1.dout_i[6]_i_3_1 ),
+        .\gpr1.dout_i[6]_i_3_3 (\gpr1.dout_i[6]_i_3_2 ),
+        .\gpr1.dout_i_reg[7]_0 (\gpr1.dout_i_reg[7] ));
 endmodule
 
 (* ORIG_REF_NAME = "rd_bin_cntr" *) 
 module isp_spi_buffer_rd_bin_cntr
    (Q,
     v1_reg,
-    \gpr1.dout_i_reg[7] ,
+    \gc0.count_d1_reg[8]_0 ,
     v1_reg_1,
     v1_reg_0,
-    ram_empty_i_reg,
-    ram_empty_i_reg_0,
-    ram_empty_i_reg_1,
-    ram_empty_i_reg_2,
-    \gcc0.gc0.count_d1_reg[7] ,
-    \gcc0.gc0.count_reg[7] ,
+    \gc0.count_d1_reg[0]_0 ,
+    \gc0.count_d1_reg[2]_0 ,
+    \gc0.count_d1_reg[4]_0 ,
+    \gc0.count_d1_reg[6]_0 ,
+    \gmux.gm[3].gms.ms ,
+    \gmux.gm[3].gms.ms_0 ,
     E,
     clk,
     AR);
   output [0:0]Q;
   output [3:0]v1_reg;
-  output [8:0]\gpr1.dout_i_reg[7] ;
+  output [8:0]\gc0.count_d1_reg[8]_0 ;
   output [3:0]v1_reg_1;
   output [3:0]v1_reg_0;
-  output ram_empty_i_reg;
-  output ram_empty_i_reg_0;
-  output ram_empty_i_reg_1;
-  output ram_empty_i_reg_2;
-  input [7:0]\gcc0.gc0.count_d1_reg[7] ;
-  input [7:0]\gcc0.gc0.count_reg[7] ;
+  output \gc0.count_d1_reg[0]_0 ;
+  output \gc0.count_d1_reg[2]_0 ;
+  output \gc0.count_d1_reg[4]_0 ;
+  output \gc0.count_d1_reg[6]_0 ;
+  input [7:0]\gmux.gm[3].gms.ms ;
+  input [7:0]\gmux.gm[3].gms.ms_0 ;
   input [0:0]E;
   input clk;
   input [0:0]AR;
@@ -3229,14 +3429,14 @@ module isp_spi_buffer_rd_bin_cntr
   wire [0:0]Q;
   wire clk;
   wire \gc0.count[8]_i_2_n_0 ;
-  wire [7:0]\gcc0.gc0.count_d1_reg[7] ;
-  wire [7:0]\gcc0.gc0.count_reg[7] ;
-  wire [8:0]\gpr1.dout_i_reg[7] ;
+  wire \gc0.count_d1_reg[0]_0 ;
+  wire \gc0.count_d1_reg[2]_0 ;
+  wire \gc0.count_d1_reg[4]_0 ;
+  wire \gc0.count_d1_reg[6]_0 ;
+  wire [8:0]\gc0.count_d1_reg[8]_0 ;
+  wire [7:0]\gmux.gm[3].gms.ms ;
+  wire [7:0]\gmux.gm[3].gms.ms_0 ;
   wire [8:0]plusOp;
-  wire ram_empty_i_reg;
-  wire ram_empty_i_reg_0;
-  wire ram_empty_i_reg_1;
-  wire ram_empty_i_reg_2;
   wire [7:0]rd_pntr_plus1;
   wire [3:0]v1_reg;
   wire [3:0]v1_reg_0;
@@ -3331,7 +3531,7 @@ module isp_spi_buffer_rd_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(rd_pntr_plus1[0]),
-        .Q(\gpr1.dout_i_reg[7] [0]));
+        .Q(\gc0.count_d1_reg[8]_0 [0]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[1] 
@@ -3339,7 +3539,7 @@ module isp_spi_buffer_rd_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(rd_pntr_plus1[1]),
-        .Q(\gpr1.dout_i_reg[7] [1]));
+        .Q(\gc0.count_d1_reg[8]_0 [1]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[2] 
@@ -3347,7 +3547,7 @@ module isp_spi_buffer_rd_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(rd_pntr_plus1[2]),
-        .Q(\gpr1.dout_i_reg[7] [2]));
+        .Q(\gc0.count_d1_reg[8]_0 [2]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[3] 
@@ -3355,7 +3555,7 @@ module isp_spi_buffer_rd_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(rd_pntr_plus1[3]),
-        .Q(\gpr1.dout_i_reg[7] [3]));
+        .Q(\gc0.count_d1_reg[8]_0 [3]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[4] 
@@ -3363,7 +3563,7 @@ module isp_spi_buffer_rd_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(rd_pntr_plus1[4]),
-        .Q(\gpr1.dout_i_reg[7] [4]));
+        .Q(\gc0.count_d1_reg[8]_0 [4]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[5] 
@@ -3371,7 +3571,7 @@ module isp_spi_buffer_rd_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(rd_pntr_plus1[5]),
-        .Q(\gpr1.dout_i_reg[7] [5]));
+        .Q(\gc0.count_d1_reg[8]_0 [5]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[6] 
@@ -3379,7 +3579,7 @@ module isp_spi_buffer_rd_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(rd_pntr_plus1[6]),
-        .Q(\gpr1.dout_i_reg[7] [6]));
+        .Q(\gc0.count_d1_reg[8]_0 [6]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[7] 
@@ -3387,7 +3587,7 @@ module isp_spi_buffer_rd_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(rd_pntr_plus1[7]),
-        .Q(\gpr1.dout_i_reg[7] [7]));
+        .Q(\gc0.count_d1_reg[8]_0 [7]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[8] 
@@ -3395,7 +3595,7 @@ module isp_spi_buffer_rd_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(Q),
-        .Q(\gpr1.dout_i_reg[7] [8]));
+        .Q(\gc0.count_d1_reg[8]_0 [8]));
   FDPE #(
     .INIT(1'b1)) 
     \gc0.count_reg[0] 
@@ -3471,131 +3671,131 @@ module isp_spi_buffer_rd_bin_cntr
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[0].gm1.m1_i_1 
-       (.I0(\gpr1.dout_i_reg[7] [0]),
-        .I1(\gcc0.gc0.count_d1_reg[7] [0]),
-        .I2(\gpr1.dout_i_reg[7] [1]),
-        .I3(\gcc0.gc0.count_d1_reg[7] [1]),
+       (.I0(\gc0.count_d1_reg[8]_0 [0]),
+        .I1(\gmux.gm[3].gms.ms [0]),
+        .I2(\gc0.count_d1_reg[8]_0 [1]),
+        .I3(\gmux.gm[3].gms.ms [1]),
         .O(v1_reg[0]));
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[0].gm1.m1_i_1__0 
        (.I0(rd_pntr_plus1[0]),
-        .I1(\gcc0.gc0.count_d1_reg[7] [0]),
+        .I1(\gmux.gm[3].gms.ms [0]),
         .I2(rd_pntr_plus1[1]),
-        .I3(\gcc0.gc0.count_d1_reg[7] [1]),
+        .I3(\gmux.gm[3].gms.ms [1]),
         .O(v1_reg_1[0]));
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[0].gm1.m1_i_1__1 
-       (.I0(\gpr1.dout_i_reg[7] [0]),
-        .I1(\gcc0.gc0.count_reg[7] [0]),
-        .I2(\gpr1.dout_i_reg[7] [1]),
-        .I3(\gcc0.gc0.count_reg[7] [1]),
+       (.I0(\gc0.count_d1_reg[8]_0 [0]),
+        .I1(\gmux.gm[3].gms.ms_0 [0]),
+        .I2(\gc0.count_d1_reg[8]_0 [1]),
+        .I3(\gmux.gm[3].gms.ms_0 [1]),
         .O(v1_reg_0[0]));
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[0].gm1.m1_i_1__2 
-       (.I0(\gpr1.dout_i_reg[7] [0]),
-        .I1(\gcc0.gc0.count_d1_reg[7] [0]),
-        .I2(\gpr1.dout_i_reg[7] [1]),
-        .I3(\gcc0.gc0.count_d1_reg[7] [1]),
-        .O(ram_empty_i_reg));
+       (.I0(\gc0.count_d1_reg[8]_0 [0]),
+        .I1(\gmux.gm[3].gms.ms [0]),
+        .I2(\gc0.count_d1_reg[8]_0 [1]),
+        .I3(\gmux.gm[3].gms.ms [1]),
+        .O(\gc0.count_d1_reg[0]_0 ));
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[1].gms.ms_i_1 
-       (.I0(\gpr1.dout_i_reg[7] [2]),
-        .I1(\gcc0.gc0.count_d1_reg[7] [2]),
-        .I2(\gpr1.dout_i_reg[7] [3]),
-        .I3(\gcc0.gc0.count_d1_reg[7] [3]),
+       (.I0(\gc0.count_d1_reg[8]_0 [2]),
+        .I1(\gmux.gm[3].gms.ms [2]),
+        .I2(\gc0.count_d1_reg[8]_0 [3]),
+        .I3(\gmux.gm[3].gms.ms [3]),
         .O(v1_reg[1]));
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[1].gms.ms_i_1__0 
        (.I0(rd_pntr_plus1[2]),
-        .I1(\gcc0.gc0.count_d1_reg[7] [2]),
+        .I1(\gmux.gm[3].gms.ms [2]),
         .I2(rd_pntr_plus1[3]),
-        .I3(\gcc0.gc0.count_d1_reg[7] [3]),
+        .I3(\gmux.gm[3].gms.ms [3]),
         .O(v1_reg_1[1]));
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[1].gms.ms_i_1__1 
-       (.I0(\gpr1.dout_i_reg[7] [2]),
-        .I1(\gcc0.gc0.count_reg[7] [2]),
-        .I2(\gpr1.dout_i_reg[7] [3]),
-        .I3(\gcc0.gc0.count_reg[7] [3]),
+       (.I0(\gc0.count_d1_reg[8]_0 [2]),
+        .I1(\gmux.gm[3].gms.ms_0 [2]),
+        .I2(\gc0.count_d1_reg[8]_0 [3]),
+        .I3(\gmux.gm[3].gms.ms_0 [3]),
         .O(v1_reg_0[1]));
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[1].gms.ms_i_1__2 
-       (.I0(\gpr1.dout_i_reg[7] [2]),
-        .I1(\gcc0.gc0.count_d1_reg[7] [2]),
-        .I2(\gpr1.dout_i_reg[7] [3]),
-        .I3(\gcc0.gc0.count_d1_reg[7] [3]),
-        .O(ram_empty_i_reg_0));
+       (.I0(\gc0.count_d1_reg[8]_0 [2]),
+        .I1(\gmux.gm[3].gms.ms [2]),
+        .I2(\gc0.count_d1_reg[8]_0 [3]),
+        .I3(\gmux.gm[3].gms.ms [3]),
+        .O(\gc0.count_d1_reg[2]_0 ));
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[2].gms.ms_i_1 
-       (.I0(\gpr1.dout_i_reg[7] [4]),
-        .I1(\gcc0.gc0.count_d1_reg[7] [4]),
-        .I2(\gpr1.dout_i_reg[7] [5]),
-        .I3(\gcc0.gc0.count_d1_reg[7] [5]),
+       (.I0(\gc0.count_d1_reg[8]_0 [4]),
+        .I1(\gmux.gm[3].gms.ms [4]),
+        .I2(\gc0.count_d1_reg[8]_0 [5]),
+        .I3(\gmux.gm[3].gms.ms [5]),
         .O(v1_reg[2]));
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[2].gms.ms_i_1__0 
        (.I0(rd_pntr_plus1[4]),
-        .I1(\gcc0.gc0.count_d1_reg[7] [4]),
+        .I1(\gmux.gm[3].gms.ms [4]),
         .I2(rd_pntr_plus1[5]),
-        .I3(\gcc0.gc0.count_d1_reg[7] [5]),
+        .I3(\gmux.gm[3].gms.ms [5]),
         .O(v1_reg_1[2]));
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[2].gms.ms_i_1__1 
-       (.I0(\gpr1.dout_i_reg[7] [4]),
-        .I1(\gcc0.gc0.count_reg[7] [4]),
-        .I2(\gpr1.dout_i_reg[7] [5]),
-        .I3(\gcc0.gc0.count_reg[7] [5]),
+       (.I0(\gc0.count_d1_reg[8]_0 [4]),
+        .I1(\gmux.gm[3].gms.ms_0 [4]),
+        .I2(\gc0.count_d1_reg[8]_0 [5]),
+        .I3(\gmux.gm[3].gms.ms_0 [5]),
         .O(v1_reg_0[2]));
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[2].gms.ms_i_1__2 
-       (.I0(\gpr1.dout_i_reg[7] [4]),
-        .I1(\gcc0.gc0.count_d1_reg[7] [4]),
-        .I2(\gpr1.dout_i_reg[7] [5]),
-        .I3(\gcc0.gc0.count_d1_reg[7] [5]),
-        .O(ram_empty_i_reg_1));
+       (.I0(\gc0.count_d1_reg[8]_0 [4]),
+        .I1(\gmux.gm[3].gms.ms [4]),
+        .I2(\gc0.count_d1_reg[8]_0 [5]),
+        .I3(\gmux.gm[3].gms.ms [5]),
+        .O(\gc0.count_d1_reg[4]_0 ));
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[3].gms.ms_i_1 
-       (.I0(\gpr1.dout_i_reg[7] [6]),
-        .I1(\gcc0.gc0.count_d1_reg[7] [6]),
-        .I2(\gpr1.dout_i_reg[7] [7]),
-        .I3(\gcc0.gc0.count_d1_reg[7] [7]),
+       (.I0(\gc0.count_d1_reg[8]_0 [6]),
+        .I1(\gmux.gm[3].gms.ms [6]),
+        .I2(\gc0.count_d1_reg[8]_0 [7]),
+        .I3(\gmux.gm[3].gms.ms [7]),
         .O(v1_reg[3]));
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[3].gms.ms_i_1__0 
        (.I0(rd_pntr_plus1[6]),
-        .I1(\gcc0.gc0.count_d1_reg[7] [6]),
+        .I1(\gmux.gm[3].gms.ms [6]),
         .I2(rd_pntr_plus1[7]),
-        .I3(\gcc0.gc0.count_d1_reg[7] [7]),
+        .I3(\gmux.gm[3].gms.ms [7]),
         .O(v1_reg_1[3]));
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[3].gms.ms_i_1__1 
-       (.I0(\gpr1.dout_i_reg[7] [6]),
-        .I1(\gcc0.gc0.count_reg[7] [6]),
-        .I2(\gpr1.dout_i_reg[7] [7]),
-        .I3(\gcc0.gc0.count_reg[7] [7]),
+       (.I0(\gc0.count_d1_reg[8]_0 [6]),
+        .I1(\gmux.gm[3].gms.ms_0 [6]),
+        .I2(\gc0.count_d1_reg[8]_0 [7]),
+        .I3(\gmux.gm[3].gms.ms_0 [7]),
         .O(v1_reg_0[3]));
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[3].gms.ms_i_1__2 
-       (.I0(\gpr1.dout_i_reg[7] [6]),
-        .I1(\gcc0.gc0.count_d1_reg[7] [6]),
-        .I2(\gpr1.dout_i_reg[7] [7]),
-        .I3(\gcc0.gc0.count_d1_reg[7] [7]),
-        .O(ram_empty_i_reg_2));
+       (.I0(\gc0.count_d1_reg[8]_0 [6]),
+        .I1(\gmux.gm[3].gms.ms [6]),
+        .I2(\gc0.count_d1_reg[8]_0 [7]),
+        .I3(\gmux.gm[3].gms.ms [7]),
+        .O(\gc0.count_d1_reg[6]_0 ));
 endmodule
 
 (* ORIG_REF_NAME = "rd_logic" *) 
@@ -3604,32 +3804,32 @@ module isp_spi_buffer_rd_logic
     E,
     Q,
     v1_reg,
-    \gpr1.dout_i_reg[7] ,
+    \gc0.count_d1_reg[8] ,
     v1_reg_0,
-    \gcc0.gc0.count_d1_reg[8] ,
-    \gcc0.gc0.count_d1_reg[8]_0 ,
+    ram_empty_i_reg,
+    ram_empty_i_reg_0,
     clk,
     AR,
     rd_en,
     FULL_FB,
     wr_en,
-    \gcc0.gc0.count_d1_reg[7] ,
-    \gcc0.gc0.count_reg[7] );
+    \gmux.gm[3].gms.ms ,
+    \gmux.gm[3].gms.ms_0 );
   output empty;
   output [0:0]E;
   output [0:0]Q;
   output [3:0]v1_reg;
-  output [8:0]\gpr1.dout_i_reg[7] ;
+  output [8:0]\gc0.count_d1_reg[8] ;
   output [3:0]v1_reg_0;
-  input \gcc0.gc0.count_d1_reg[8] ;
-  input [0:0]\gcc0.gc0.count_d1_reg[8]_0 ;
+  input ram_empty_i_reg;
+  input [0:0]ram_empty_i_reg_0;
   input clk;
   input [0:0]AR;
   input rd_en;
   input FULL_FB;
   input wr_en;
-  input [7:0]\gcc0.gc0.count_d1_reg[7] ;
-  input [7:0]\gcc0.gc0.count_reg[7] ;
+  input [7:0]\gmux.gm[3].gms.ms ;
+  input [7:0]\gmux.gm[3].gms.ms_0 ;
 
   wire [0:0]AR;
   wire [0:0]E;
@@ -3638,11 +3838,11 @@ module isp_spi_buffer_rd_logic
   wire [3:0]\c2/v1_reg ;
   wire clk;
   wire empty;
-  wire [7:0]\gcc0.gc0.count_d1_reg[7] ;
-  wire \gcc0.gc0.count_d1_reg[8] ;
-  wire [0:0]\gcc0.gc0.count_d1_reg[8]_0 ;
-  wire [7:0]\gcc0.gc0.count_reg[7] ;
-  wire [8:0]\gpr1.dout_i_reg[7] ;
+  wire [8:0]\gc0.count_d1_reg[8] ;
+  wire [7:0]\gmux.gm[3].gms.ms ;
+  wire [7:0]\gmux.gm[3].gms.ms_0 ;
+  wire ram_empty_i_reg;
+  wire [0:0]ram_empty_i_reg_0;
   wire rd_en;
   wire rpntr_n_22;
   wire rpntr_n_23;
@@ -3658,12 +3858,12 @@ module isp_spi_buffer_rd_logic
         .FULL_FB(FULL_FB),
         .clk(clk),
         .empty(empty),
-        .\gc0.count_d1_reg[0] (rpntr_n_22),
-        .\gc0.count_d1_reg[2] (rpntr_n_23),
-        .\gc0.count_d1_reg[4] (rpntr_n_24),
-        .\gc0.count_d1_reg[6] (rpntr_n_25),
-        .\gcc0.gc0.count_d1_reg[8] (\gcc0.gc0.count_d1_reg[8] ),
-        .\gcc0.gc0.count_d1_reg[8]_0 (\gcc0.gc0.count_d1_reg[8]_0 ),
+        .\gmux.gm[1].gms.ms (rpntr_n_22),
+        .\gmux.gm[2].gms.ms (rpntr_n_23),
+        .\gmux.gm[3].gms.ms (rpntr_n_24),
+        .\gmux.gm[4].gms.ms (rpntr_n_25),
+        .ram_empty_i_reg_0(ram_empty_i_reg),
+        .ram_empty_i_reg_1(ram_empty_i_reg_0),
         .rd_en(rd_en),
         .v1_reg(\c2/v1_reg ),
         .wr_en(wr_en));
@@ -3672,13 +3872,13 @@ module isp_spi_buffer_rd_logic
         .E(E),
         .Q(Q),
         .clk(clk),
-        .\gcc0.gc0.count_d1_reg[7] (\gcc0.gc0.count_d1_reg[7] ),
-        .\gcc0.gc0.count_reg[7] (\gcc0.gc0.count_reg[7] ),
-        .\gpr1.dout_i_reg[7] (\gpr1.dout_i_reg[7] ),
-        .ram_empty_i_reg(rpntr_n_22),
-        .ram_empty_i_reg_0(rpntr_n_23),
-        .ram_empty_i_reg_1(rpntr_n_24),
-        .ram_empty_i_reg_2(rpntr_n_25),
+        .\gc0.count_d1_reg[0]_0 (rpntr_n_22),
+        .\gc0.count_d1_reg[2]_0 (rpntr_n_23),
+        .\gc0.count_d1_reg[4]_0 (rpntr_n_24),
+        .\gc0.count_d1_reg[6]_0 (rpntr_n_25),
+        .\gc0.count_d1_reg[8]_0 (\gc0.count_d1_reg[8] ),
+        .\gmux.gm[3].gms.ms (\gmux.gm[3].gms.ms ),
+        .\gmux.gm[3].gms.ms_0 (\gmux.gm[3].gms.ms_0 ),
         .v1_reg(v1_reg),
         .v1_reg_0(v1_reg_0),
         .v1_reg_1(\c2/v1_reg ));
@@ -3688,13 +3888,13 @@ endmodule
 module isp_spi_buffer_rd_status_flags_ss
    (empty,
     E,
-    \gc0.count_d1_reg[0] ,
-    \gc0.count_d1_reg[2] ,
-    \gc0.count_d1_reg[4] ,
-    \gc0.count_d1_reg[6] ,
-    \gcc0.gc0.count_d1_reg[8] ,
+    \gmux.gm[1].gms.ms ,
+    \gmux.gm[2].gms.ms ,
+    \gmux.gm[3].gms.ms ,
+    \gmux.gm[4].gms.ms ,
+    ram_empty_i_reg_0,
     v1_reg,
-    \gcc0.gc0.count_d1_reg[8]_0 ,
+    ram_empty_i_reg_1,
     clk,
     AR,
     rd_en,
@@ -3702,13 +3902,13 @@ module isp_spi_buffer_rd_status_flags_ss
     wr_en);
   output empty;
   output [0:0]E;
-  input \gc0.count_d1_reg[0] ;
-  input \gc0.count_d1_reg[2] ;
-  input \gc0.count_d1_reg[4] ;
-  input \gc0.count_d1_reg[6] ;
-  input \gcc0.gc0.count_d1_reg[8] ;
+  input \gmux.gm[1].gms.ms ;
+  input \gmux.gm[2].gms.ms ;
+  input \gmux.gm[3].gms.ms ;
+  input \gmux.gm[4].gms.ms ;
+  input ram_empty_i_reg_0;
   input [3:0]v1_reg;
-  input [0:0]\gcc0.gc0.count_d1_reg[8]_0 ;
+  input [0:0]ram_empty_i_reg_1;
   input clk;
   input [0:0]AR;
   input rd_en;
@@ -3721,14 +3921,14 @@ module isp_spi_buffer_rd_status_flags_ss
   wire c2_n_0;
   wire clk;
   wire comp0;
-  wire \gc0.count_d1_reg[0] ;
-  wire \gc0.count_d1_reg[2] ;
-  wire \gc0.count_d1_reg[4] ;
-  wire \gc0.count_d1_reg[6] ;
-  wire \gcc0.gc0.count_d1_reg[8] ;
-  wire [0:0]\gcc0.gc0.count_d1_reg[8]_0 ;
+  wire \gmux.gm[1].gms.ms ;
+  wire \gmux.gm[2].gms.ms ;
+  wire \gmux.gm[3].gms.ms ;
+  wire \gmux.gm[4].gms.ms ;
   (* DONT_TOUCH *) wire ram_empty_fb_i;
   (* DONT_TOUCH *) wire ram_empty_i;
+  wire ram_empty_i_reg_0;
+  wire [0:0]ram_empty_i_reg_1;
   wire rd_en;
   wire [3:0]v1_reg;
   wire wr_en;
@@ -3736,18 +3936,18 @@ module isp_spi_buffer_rd_status_flags_ss
   assign empty = ram_empty_i;
   isp_spi_buffer_compare_1 c1
        (.comp0(comp0),
-        .\gc0.count_d1_reg[0] (\gc0.count_d1_reg[0] ),
-        .\gc0.count_d1_reg[2] (\gc0.count_d1_reg[2] ),
-        .\gc0.count_d1_reg[4] (\gc0.count_d1_reg[4] ),
-        .\gc0.count_d1_reg[6] (\gc0.count_d1_reg[6] ),
-        .\gcc0.gc0.count_d1_reg[8] (\gcc0.gc0.count_d1_reg[8] ));
+        .\gmux.gm[1].gms.ms_0 (\gmux.gm[1].gms.ms ),
+        .\gmux.gm[2].gms.ms_0 (\gmux.gm[2].gms.ms ),
+        .\gmux.gm[3].gms.ms_0 (\gmux.gm[3].gms.ms ),
+        .\gmux.gm[4].gms.ms_0 (\gmux.gm[4].gms.ms ),
+        .ram_empty_i_reg(ram_empty_i_reg_0));
   isp_spi_buffer_compare_2 c2
        (.FULL_FB(FULL_FB),
         .comp0(comp0),
-        .\gcc0.gc0.count_d1_reg[8] (\gcc0.gc0.count_d1_reg[8]_0 ),
         .out(ram_empty_fb_i),
-        .ram_empty_i_reg(c2_n_0),
+        .ram_empty_i_reg(ram_empty_i_reg_1),
         .rd_en(rd_en),
+        .rd_en_0(c2_n_0),
         .v1_reg(v1_reg),
         .wr_en(wr_en));
   LUT2 #(
@@ -3783,13 +3983,13 @@ endmodule
 (* ORIG_REF_NAME = "reset_blk_ramfifo" *) 
 module isp_spi_buffer_reset_blk_ramfifo
    (out,
-    ram_full_i_reg,
+    \grstd1.grst_full.grst_f.rst_d3_reg_0 ,
     wr_rst_busy,
     AR,
     rst,
     clk);
   output out;
-  output ram_full_i_reg;
+  output \grstd1.grst_full.grst_f.rst_d3_reg_0 ;
   output wr_rst_busy;
   output [0:0]AR;
   input rst;
@@ -3797,22 +3997,23 @@ module isp_spi_buffer_reset_blk_ramfifo
 
   wire [0:0]AR;
   wire clk;
+  wire \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg_n_0_[3] ;
+  wire [3:1]p_0_in;
   wire p_2_out;
   wire rst;
   (* async_reg = "true" *) (* msgon = "true" *) wire rst_d1;
   (* async_reg = "true" *) (* msgon = "true" *) wire rst_d2;
   (* async_reg = "true" *) (* msgon = "true" *) wire rst_d3;
   (* async_reg = "true" *) (* msgon = "true" *) wire rst_wr_reg2;
-  wire [3:0]sckt_wr_rst_cc;
   wire wr_rst_busy;
 
+  assign \grstd1.grst_full.grst_f.rst_d3_reg_0  = rst_d3;
   assign out = rst_d2;
-  assign ram_full_i_reg = rst_d3;
   LUT3 #(
     .INIT(8'hFE)) 
     \gpr1.dout_i[7]_i_3 
-       (.I0(sckt_wr_rst_cc[1]),
-        .I1(sckt_wr_rst_cc[0]),
+       (.I0(p_0_in[2]),
+        .I1(p_0_in[1]),
         .I2(rst_wr_reg2),
         .O(AR));
   (* ASYNC_REG *) 
@@ -3842,8 +4043,8 @@ module isp_spi_buffer_reset_blk_ramfifo
     \grstd1.grst_full.grst_f.rst_d3_i_1 
        (.I0(rst_d2),
         .I1(rst_wr_reg2),
-        .I2(sckt_wr_rst_cc[0]),
-        .I3(sckt_wr_rst_cc[1]),
+        .I2(p_0_in[1]),
+        .I3(p_0_in[2]),
         .O(p_2_out));
   (* ASYNC_REG *) 
   (* KEEP = "yes" *) 
@@ -3862,31 +4063,31 @@ module isp_spi_buffer_reset_blk_ramfifo
        (.C(clk),
         .CE(1'b1),
         .D(rst_wr_reg2),
-        .Q(sckt_wr_rst_cc[0]),
+        .Q(p_0_in[1]),
         .R(1'b0));
   FDRE #(
     .INIT(1'b0)) 
     \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1] 
        (.C(clk),
         .CE(1'b1),
-        .D(sckt_wr_rst_cc[0]),
-        .Q(sckt_wr_rst_cc[1]),
+        .D(p_0_in[1]),
+        .Q(p_0_in[2]),
         .R(1'b0));
   FDRE #(
     .INIT(1'b0)) 
     \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[2] 
        (.C(clk),
         .CE(1'b1),
-        .D(sckt_wr_rst_cc[1]),
-        .Q(sckt_wr_rst_cc[2]),
+        .D(p_0_in[2]),
+        .Q(p_0_in[3]),
         .R(1'b0));
   FDRE #(
     .INIT(1'b0)) 
     \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[3] 
        (.C(clk),
         .CE(1'b1),
-        .D(sckt_wr_rst_cc[2]),
-        .Q(sckt_wr_rst_cc[3]),
+        .D(p_0_in[3]),
+        .Q(\ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg_n_0_[3] ),
         .R(1'b0));
   (* DEF_VAL = "1'b0" *) 
   (* DEST_SYNC_FF = "2" *) 
@@ -3903,55 +4104,55 @@ module isp_spi_buffer_reset_blk_ramfifo
   LUT5 #(
     .INIT(32'hFFFFFFFE)) 
     rd_rst_busy_INST_0
-       (.I0(sckt_wr_rst_cc[2]),
-        .I1(sckt_wr_rst_cc[3]),
-        .I2(sckt_wr_rst_cc[0]),
-        .I3(sckt_wr_rst_cc[1]),
+       (.I0(p_0_in[3]),
+        .I1(\ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg_n_0_[3] ),
+        .I2(p_0_in[1]),
+        .I3(p_0_in[2]),
         .I4(rst_wr_reg2),
         .O(wr_rst_busy));
 endmodule
 
 (* ORIG_REF_NAME = "wr_bin_cntr" *) 
 module isp_spi_buffer_wr_bin_cntr
-   (\gpr1.dout_i_reg[7] ,
+   (wr_en_0,
     Q,
-    \gpr1.dout_i_reg[7]_0 ,
-    \gpr1.dout_i_reg[7]_1 ,
-    \gpr1.dout_i_reg[7]_2 ,
-    \gpr1.dout_i_reg[7]_3 ,
-    \gpr1.dout_i_reg[7]_4 ,
-    \gpr1.dout_i_reg[7]_5 ,
-    \gpr1.dout_i_reg[7]_6 ,
     \gcc0.gc0.count_d1_reg[7]_0 ,
+    \gcc0.gc0.count_d1_reg[6]_0 ,
+    \gcc0.gc0.count_d1_reg[8]_0 ,
+    wr_en_1,
+    \gcc0.gc0.count_d1_reg[6]_1 ,
+    wr_en_2,
+    wr_en_3,
+    \gcc0.gc0.count_reg[7]_0 ,
     v1_reg,
-    ram_empty_i_reg,
+    \gcc0.gc0.count_d1_reg[8]_1 ,
     v1_reg_0,
-    ram_empty_i_reg_0,
+    \gcc0.gc0.count_d1_reg[8]_2 ,
     wr_en,
     out,
-    \gc0.count_d1_reg[8] ,
-    \gc0.count_reg[8] ,
+    \gmux.gm[4].gms.ms ,
+    \gmux.gm[4].gms.ms_0 ,
     E,
     clk,
     AR);
-  output \gpr1.dout_i_reg[7] ;
+  output wr_en_0;
   output [7:0]Q;
-  output \gpr1.dout_i_reg[7]_0 ;
-  output \gpr1.dout_i_reg[7]_1 ;
-  output \gpr1.dout_i_reg[7]_2 ;
-  output \gpr1.dout_i_reg[7]_3 ;
-  output \gpr1.dout_i_reg[7]_4 ;
-  output \gpr1.dout_i_reg[7]_5 ;
-  output \gpr1.dout_i_reg[7]_6 ;
-  output [7:0]\gcc0.gc0.count_d1_reg[7]_0 ;
+  output \gcc0.gc0.count_d1_reg[7]_0 ;
+  output \gcc0.gc0.count_d1_reg[6]_0 ;
+  output \gcc0.gc0.count_d1_reg[8]_0 ;
+  output wr_en_1;
+  output \gcc0.gc0.count_d1_reg[6]_1 ;
+  output wr_en_2;
+  output wr_en_3;
+  output [7:0]\gcc0.gc0.count_reg[7]_0 ;
   output [0:0]v1_reg;
-  output [0:0]ram_empty_i_reg;
+  output [0:0]\gcc0.gc0.count_d1_reg[8]_1 ;
   output [0:0]v1_reg_0;
-  output ram_empty_i_reg_0;
+  output \gcc0.gc0.count_d1_reg[8]_2 ;
   input wr_en;
   input out;
-  input [0:0]\gc0.count_d1_reg[8] ;
-  input [0:0]\gc0.count_reg[8] ;
+  input [0:0]\gmux.gm[4].gms.ms ;
+  input [0:0]\gmux.gm[4].gms.ms_0 ;
   input [0:0]E;
   input clk;
   input [0:0]AR;
@@ -3960,27 +4161,27 @@ module isp_spi_buffer_wr_bin_cntr
   wire [0:0]E;
   wire [7:0]Q;
   wire clk;
-  wire [0:0]\gc0.count_d1_reg[8] ;
-  wire [0:0]\gc0.count_reg[8] ;
   wire \gcc0.gc0.count[8]_i_2_n_0 ;
-  wire [7:0]\gcc0.gc0.count_d1_reg[7]_0 ;
-  wire \gpr1.dout_i_reg[7] ;
-  wire \gpr1.dout_i_reg[7]_0 ;
-  wire \gpr1.dout_i_reg[7]_1 ;
-  wire \gpr1.dout_i_reg[7]_2 ;
-  wire \gpr1.dout_i_reg[7]_3 ;
-  wire \gpr1.dout_i_reg[7]_4 ;
-  wire \gpr1.dout_i_reg[7]_5 ;
-  wire \gpr1.dout_i_reg[7]_6 ;
+  wire \gcc0.gc0.count_d1_reg[6]_0 ;
+  wire \gcc0.gc0.count_d1_reg[6]_1 ;
+  wire \gcc0.gc0.count_d1_reg[7]_0 ;
+  wire \gcc0.gc0.count_d1_reg[8]_0 ;
+  wire [0:0]\gcc0.gc0.count_d1_reg[8]_1 ;
+  wire \gcc0.gc0.count_d1_reg[8]_2 ;
+  wire [7:0]\gcc0.gc0.count_reg[7]_0 ;
+  wire [0:0]\gmux.gm[4].gms.ms ;
+  wire [0:0]\gmux.gm[4].gms.ms_0 ;
   wire out;
   wire [8:8]p_12_out;
   wire [8:8]p_13_out;
   wire [8:0]plusOp__0;
-  wire [0:0]ram_empty_i_reg;
-  wire ram_empty_i_reg_0;
   wire [0:0]v1_reg;
   wire [0:0]v1_reg_0;
   wire wr_en;
+  wire wr_en_0;
+  wire wr_en_1;
+  wire wr_en_2;
+  wire wr_en_3;
 
   LUT5 #(
     .INIT(32'h00000002)) 
@@ -3990,7 +4191,7 @@ module isp_spi_buffer_wr_bin_cntr
         .I2(p_12_out),
         .I3(Q[6]),
         .I4(Q[7]),
-        .O(\gpr1.dout_i_reg[7] ));
+        .O(wr_en_0));
   LUT5 #(
     .INIT(32'h00001000)) 
     RAM_reg_128_191_0_2_i_1
@@ -3999,7 +4200,7 @@ module isp_spi_buffer_wr_bin_cntr
         .I2(Q[7]),
         .I3(wr_en),
         .I4(out),
-        .O(\gpr1.dout_i_reg[7]_1 ));
+        .O(\gcc0.gc0.count_d1_reg[6]_0 ));
   LUT5 #(
     .INIT(32'h02000000)) 
     RAM_reg_192_255_0_2_i_1
@@ -4008,7 +4209,7 @@ module isp_spi_buffer_wr_bin_cntr
         .I2(p_12_out),
         .I3(Q[6]),
         .I4(Q[7]),
-        .O(\gpr1.dout_i_reg[7]_3 ));
+        .O(wr_en_1));
   LUT5 #(
     .INIT(32'h00001000)) 
     RAM_reg_256_319_0_2_i_1
@@ -4017,7 +4218,7 @@ module isp_spi_buffer_wr_bin_cntr
         .I2(p_12_out),
         .I3(wr_en),
         .I4(out),
-        .O(\gpr1.dout_i_reg[7]_4 ));
+        .O(\gcc0.gc0.count_d1_reg[6]_1 ));
   LUT5 #(
     .INIT(32'h02000000)) 
     RAM_reg_320_383_0_2_i_1
@@ -4026,7 +4227,7 @@ module isp_spi_buffer_wr_bin_cntr
         .I2(Q[7]),
         .I3(Q[6]),
         .I4(p_12_out),
-        .O(\gpr1.dout_i_reg[7]_5 ));
+        .O(wr_en_2));
   LUT5 #(
     .INIT(32'h02000000)) 
     RAM_reg_384_447_0_2_i_1
@@ -4035,7 +4236,7 @@ module isp_spi_buffer_wr_bin_cntr
         .I2(Q[6]),
         .I3(Q[7]),
         .I4(p_12_out),
-        .O(\gpr1.dout_i_reg[7]_6 ));
+        .O(wr_en_3));
   LUT5 #(
     .INIT(32'h08000000)) 
     RAM_reg_448_511_0_2_i_1
@@ -4044,7 +4245,7 @@ module isp_spi_buffer_wr_bin_cntr
         .I2(out),
         .I3(Q[6]),
         .I4(Q[7]),
-        .O(\gpr1.dout_i_reg[7]_2 ));
+        .O(\gcc0.gc0.count_d1_reg[8]_0 ));
   LUT5 #(
     .INIT(32'h00001000)) 
     RAM_reg_64_127_0_2_i_1
@@ -4053,88 +4254,88 @@ module isp_spi_buffer_wr_bin_cntr
         .I2(Q[6]),
         .I3(wr_en),
         .I4(out),
-        .O(\gpr1.dout_i_reg[7]_0 ));
+        .O(\gcc0.gc0.count_d1_reg[7]_0 ));
   LUT1 #(
     .INIT(2'h1)) 
     \gcc0.gc0.count[0]_i_1 
-       (.I0(\gcc0.gc0.count_d1_reg[7]_0 [0]),
+       (.I0(\gcc0.gc0.count_reg[7]_0 [0]),
         .O(plusOp__0[0]));
   (* SOFT_HLUTNM = "soft_lutpair5" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \gcc0.gc0.count[1]_i_1 
-       (.I0(\gcc0.gc0.count_d1_reg[7]_0 [0]),
-        .I1(\gcc0.gc0.count_d1_reg[7]_0 [1]),
+       (.I0(\gcc0.gc0.count_reg[7]_0 [0]),
+        .I1(\gcc0.gc0.count_reg[7]_0 [1]),
         .O(plusOp__0[1]));
   (* SOFT_HLUTNM = "soft_lutpair5" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \gcc0.gc0.count[2]_i_1 
-       (.I0(\gcc0.gc0.count_d1_reg[7]_0 [0]),
-        .I1(\gcc0.gc0.count_d1_reg[7]_0 [1]),
-        .I2(\gcc0.gc0.count_d1_reg[7]_0 [2]),
+       (.I0(\gcc0.gc0.count_reg[7]_0 [0]),
+        .I1(\gcc0.gc0.count_reg[7]_0 [1]),
+        .I2(\gcc0.gc0.count_reg[7]_0 [2]),
         .O(plusOp__0[2]));
   (* SOFT_HLUTNM = "soft_lutpair3" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \gcc0.gc0.count[3]_i_1 
-       (.I0(\gcc0.gc0.count_d1_reg[7]_0 [1]),
-        .I1(\gcc0.gc0.count_d1_reg[7]_0 [0]),
-        .I2(\gcc0.gc0.count_d1_reg[7]_0 [2]),
-        .I3(\gcc0.gc0.count_d1_reg[7]_0 [3]),
+       (.I0(\gcc0.gc0.count_reg[7]_0 [1]),
+        .I1(\gcc0.gc0.count_reg[7]_0 [0]),
+        .I2(\gcc0.gc0.count_reg[7]_0 [2]),
+        .I3(\gcc0.gc0.count_reg[7]_0 [3]),
         .O(plusOp__0[3]));
   (* SOFT_HLUTNM = "soft_lutpair3" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \gcc0.gc0.count[4]_i_1 
-       (.I0(\gcc0.gc0.count_d1_reg[7]_0 [2]),
-        .I1(\gcc0.gc0.count_d1_reg[7]_0 [0]),
-        .I2(\gcc0.gc0.count_d1_reg[7]_0 [1]),
-        .I3(\gcc0.gc0.count_d1_reg[7]_0 [3]),
-        .I4(\gcc0.gc0.count_d1_reg[7]_0 [4]),
+       (.I0(\gcc0.gc0.count_reg[7]_0 [2]),
+        .I1(\gcc0.gc0.count_reg[7]_0 [0]),
+        .I2(\gcc0.gc0.count_reg[7]_0 [1]),
+        .I3(\gcc0.gc0.count_reg[7]_0 [3]),
+        .I4(\gcc0.gc0.count_reg[7]_0 [4]),
         .O(plusOp__0[4]));
   LUT6 #(
     .INIT(64'h7FFFFFFF80000000)) 
     \gcc0.gc0.count[5]_i_1 
-       (.I0(\gcc0.gc0.count_d1_reg[7]_0 [3]),
-        .I1(\gcc0.gc0.count_d1_reg[7]_0 [1]),
-        .I2(\gcc0.gc0.count_d1_reg[7]_0 [0]),
-        .I3(\gcc0.gc0.count_d1_reg[7]_0 [2]),
-        .I4(\gcc0.gc0.count_d1_reg[7]_0 [4]),
-        .I5(\gcc0.gc0.count_d1_reg[7]_0 [5]),
+       (.I0(\gcc0.gc0.count_reg[7]_0 [3]),
+        .I1(\gcc0.gc0.count_reg[7]_0 [1]),
+        .I2(\gcc0.gc0.count_reg[7]_0 [0]),
+        .I3(\gcc0.gc0.count_reg[7]_0 [2]),
+        .I4(\gcc0.gc0.count_reg[7]_0 [4]),
+        .I5(\gcc0.gc0.count_reg[7]_0 [5]),
         .O(plusOp__0[5]));
   LUT2 #(
     .INIT(4'h6)) 
     \gcc0.gc0.count[6]_i_1 
        (.I0(\gcc0.gc0.count[8]_i_2_n_0 ),
-        .I1(\gcc0.gc0.count_d1_reg[7]_0 [6]),
+        .I1(\gcc0.gc0.count_reg[7]_0 [6]),
         .O(plusOp__0[6]));
   (* SOFT_HLUTNM = "soft_lutpair4" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \gcc0.gc0.count[7]_i_1 
        (.I0(\gcc0.gc0.count[8]_i_2_n_0 ),
-        .I1(\gcc0.gc0.count_d1_reg[7]_0 [6]),
-        .I2(\gcc0.gc0.count_d1_reg[7]_0 [7]),
+        .I1(\gcc0.gc0.count_reg[7]_0 [6]),
+        .I2(\gcc0.gc0.count_reg[7]_0 [7]),
         .O(plusOp__0[7]));
   (* SOFT_HLUTNM = "soft_lutpair4" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \gcc0.gc0.count[8]_i_1 
-       (.I0(\gcc0.gc0.count_d1_reg[7]_0 [6]),
+       (.I0(\gcc0.gc0.count_reg[7]_0 [6]),
         .I1(\gcc0.gc0.count[8]_i_2_n_0 ),
-        .I2(\gcc0.gc0.count_d1_reg[7]_0 [7]),
+        .I2(\gcc0.gc0.count_reg[7]_0 [7]),
         .I3(p_13_out),
         .O(plusOp__0[8]));
   LUT6 #(
     .INIT(64'h8000000000000000)) 
     \gcc0.gc0.count[8]_i_2 
-       (.I0(\gcc0.gc0.count_d1_reg[7]_0 [5]),
-        .I1(\gcc0.gc0.count_d1_reg[7]_0 [3]),
-        .I2(\gcc0.gc0.count_d1_reg[7]_0 [1]),
-        .I3(\gcc0.gc0.count_d1_reg[7]_0 [0]),
-        .I4(\gcc0.gc0.count_d1_reg[7]_0 [2]),
-        .I5(\gcc0.gc0.count_d1_reg[7]_0 [4]),
+       (.I0(\gcc0.gc0.count_reg[7]_0 [5]),
+        .I1(\gcc0.gc0.count_reg[7]_0 [3]),
+        .I2(\gcc0.gc0.count_reg[7]_0 [1]),
+        .I3(\gcc0.gc0.count_reg[7]_0 [0]),
+        .I4(\gcc0.gc0.count_reg[7]_0 [2]),
+        .I5(\gcc0.gc0.count_reg[7]_0 [4]),
         .O(\gcc0.gc0.count[8]_i_2_n_0 ));
   FDCE #(
     .INIT(1'b0)) 
@@ -4142,7 +4343,7 @@ module isp_spi_buffer_wr_bin_cntr
        (.C(clk),
         .CE(E),
         .CLR(AR),
-        .D(\gcc0.gc0.count_d1_reg[7]_0 [0]),
+        .D(\gcc0.gc0.count_reg[7]_0 [0]),
         .Q(Q[0]));
   FDCE #(
     .INIT(1'b0)) 
@@ -4150,7 +4351,7 @@ module isp_spi_buffer_wr_bin_cntr
        (.C(clk),
         .CE(E),
         .CLR(AR),
-        .D(\gcc0.gc0.count_d1_reg[7]_0 [1]),
+        .D(\gcc0.gc0.count_reg[7]_0 [1]),
         .Q(Q[1]));
   FDCE #(
     .INIT(1'b0)) 
@@ -4158,7 +4359,7 @@ module isp_spi_buffer_wr_bin_cntr
        (.C(clk),
         .CE(E),
         .CLR(AR),
-        .D(\gcc0.gc0.count_d1_reg[7]_0 [2]),
+        .D(\gcc0.gc0.count_reg[7]_0 [2]),
         .Q(Q[2]));
   FDCE #(
     .INIT(1'b0)) 
@@ -4166,7 +4367,7 @@ module isp_spi_buffer_wr_bin_cntr
        (.C(clk),
         .CE(E),
         .CLR(AR),
-        .D(\gcc0.gc0.count_d1_reg[7]_0 [3]),
+        .D(\gcc0.gc0.count_reg[7]_0 [3]),
         .Q(Q[3]));
   FDCE #(
     .INIT(1'b0)) 
@@ -4174,7 +4375,7 @@ module isp_spi_buffer_wr_bin_cntr
        (.C(clk),
         .CE(E),
         .CLR(AR),
-        .D(\gcc0.gc0.count_d1_reg[7]_0 [4]),
+        .D(\gcc0.gc0.count_reg[7]_0 [4]),
         .Q(Q[4]));
   FDCE #(
     .INIT(1'b0)) 
@@ -4182,7 +4383,7 @@ module isp_spi_buffer_wr_bin_cntr
        (.C(clk),
         .CE(E),
         .CLR(AR),
-        .D(\gcc0.gc0.count_d1_reg[7]_0 [5]),
+        .D(\gcc0.gc0.count_reg[7]_0 [5]),
         .Q(Q[5]));
   FDCE #(
     .INIT(1'b0)) 
@@ -4190,7 +4391,7 @@ module isp_spi_buffer_wr_bin_cntr
        (.C(clk),
         .CE(E),
         .CLR(AR),
-        .D(\gcc0.gc0.count_d1_reg[7]_0 [6]),
+        .D(\gcc0.gc0.count_reg[7]_0 [6]),
         .Q(Q[6]));
   FDCE #(
     .INIT(1'b0)) 
@@ -4198,7 +4399,7 @@ module isp_spi_buffer_wr_bin_cntr
        (.C(clk),
         .CE(E),
         .CLR(AR),
-        .D(\gcc0.gc0.count_d1_reg[7]_0 [7]),
+        .D(\gcc0.gc0.count_reg[7]_0 [7]),
         .Q(Q[7]));
   FDCE #(
     .INIT(1'b0)) 
@@ -4215,7 +4416,7 @@ module isp_spi_buffer_wr_bin_cntr
         .CE(E),
         .D(plusOp__0[0]),
         .PRE(AR),
-        .Q(\gcc0.gc0.count_d1_reg[7]_0 [0]));
+        .Q(\gcc0.gc0.count_reg[7]_0 [0]));
   FDCE #(
     .INIT(1'b0)) 
     \gcc0.gc0.count_reg[1] 
@@ -4223,7 +4424,7 @@ module isp_spi_buffer_wr_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(plusOp__0[1]),
-        .Q(\gcc0.gc0.count_d1_reg[7]_0 [1]));
+        .Q(\gcc0.gc0.count_reg[7]_0 [1]));
   FDCE #(
     .INIT(1'b0)) 
     \gcc0.gc0.count_reg[2] 
@@ -4231,7 +4432,7 @@ module isp_spi_buffer_wr_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(plusOp__0[2]),
-        .Q(\gcc0.gc0.count_d1_reg[7]_0 [2]));
+        .Q(\gcc0.gc0.count_reg[7]_0 [2]));
   FDCE #(
     .INIT(1'b0)) 
     \gcc0.gc0.count_reg[3] 
@@ -4239,7 +4440,7 @@ module isp_spi_buffer_wr_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(plusOp__0[3]),
-        .Q(\gcc0.gc0.count_d1_reg[7]_0 [3]));
+        .Q(\gcc0.gc0.count_reg[7]_0 [3]));
   FDCE #(
     .INIT(1'b0)) 
     \gcc0.gc0.count_reg[4] 
@@ -4247,7 +4448,7 @@ module isp_spi_buffer_wr_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(plusOp__0[4]),
-        .Q(\gcc0.gc0.count_d1_reg[7]_0 [4]));
+        .Q(\gcc0.gc0.count_reg[7]_0 [4]));
   FDCE #(
     .INIT(1'b0)) 
     \gcc0.gc0.count_reg[5] 
@@ -4255,7 +4456,7 @@ module isp_spi_buffer_wr_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(plusOp__0[5]),
-        .Q(\gcc0.gc0.count_d1_reg[7]_0 [5]));
+        .Q(\gcc0.gc0.count_reg[7]_0 [5]));
   FDCE #(
     .INIT(1'b0)) 
     \gcc0.gc0.count_reg[6] 
@@ -4263,7 +4464,7 @@ module isp_spi_buffer_wr_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(plusOp__0[6]),
-        .Q(\gcc0.gc0.count_d1_reg[7]_0 [6]));
+        .Q(\gcc0.gc0.count_reg[7]_0 [6]));
   FDCE #(
     .INIT(1'b0)) 
     \gcc0.gc0.count_reg[7] 
@@ -4271,7 +4472,7 @@ module isp_spi_buffer_wr_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(plusOp__0[7]),
-        .Q(\gcc0.gc0.count_d1_reg[7]_0 [7]));
+        .Q(\gcc0.gc0.count_reg[7]_0 [7]));
   FDCE #(
     .INIT(1'b0)) 
     \gcc0.gc0.count_reg[8] 
@@ -4284,77 +4485,77 @@ module isp_spi_buffer_wr_bin_cntr
     .INIT(4'h9)) 
     \gmux.gm[4].gms.ms_i_1 
        (.I0(p_12_out),
-        .I1(\gc0.count_d1_reg[8] ),
+        .I1(\gmux.gm[4].gms.ms ),
         .O(v1_reg));
   LUT2 #(
     .INIT(4'h9)) 
     \gmux.gm[4].gms.ms_i_1__0 
        (.I0(p_12_out),
-        .I1(\gc0.count_reg[8] ),
-        .O(ram_empty_i_reg));
+        .I1(\gmux.gm[4].gms.ms_0 ),
+        .O(\gcc0.gc0.count_d1_reg[8]_1 ));
   LUT2 #(
     .INIT(4'h9)) 
     \gmux.gm[4].gms.ms_i_1__1 
        (.I0(p_13_out),
-        .I1(\gc0.count_d1_reg[8] ),
+        .I1(\gmux.gm[4].gms.ms ),
         .O(v1_reg_0));
   LUT2 #(
     .INIT(4'h9)) 
     \gmux.gm[4].gms.ms_i_1__2 
        (.I0(p_12_out),
-        .I1(\gc0.count_d1_reg[8] ),
-        .O(ram_empty_i_reg_0));
+        .I1(\gmux.gm[4].gms.ms ),
+        .O(\gcc0.gc0.count_d1_reg[8]_2 ));
 endmodule
 
 (* ORIG_REF_NAME = "wr_logic" *) 
 module isp_spi_buffer_wr_logic
    (FULL_FB,
     full,
-    \gpr1.dout_i_reg[7] ,
+    wr_en_0,
     Q,
-    \gpr1.dout_i_reg[7]_0 ,
-    \gpr1.dout_i_reg[7]_1 ,
-    \gpr1.dout_i_reg[7]_2 ,
-    \gpr1.dout_i_reg[7]_3 ,
-    \gpr1.dout_i_reg[7]_4 ,
-    \gpr1.dout_i_reg[7]_5 ,
-    \gpr1.dout_i_reg[7]_6 ,
     \gcc0.gc0.count_d1_reg[7] ,
-    ram_empty_i_reg,
-    ram_empty_i_reg_0,
-    \gc0.count_d1_reg[6] ,
-    \gc0.count_d1_reg[6]_0 ,
+    \gcc0.gc0.count_d1_reg[6] ,
+    \gcc0.gc0.count_d1_reg[8] ,
+    wr_en_1,
+    \gcc0.gc0.count_d1_reg[6]_0 ,
+    wr_en_2,
+    wr_en_3,
+    \gcc0.gc0.count_reg[7] ,
+    \gcc0.gc0.count_d1_reg[8]_0 ,
+    \gcc0.gc0.count_d1_reg[8]_1 ,
+    \gmux.gm[4].gms.ms ,
+    \gmux.gm[4].gms.ms_0 ,
     clk,
     out,
     wr_en,
     E,
-    \grstd1.grst_full.grst_f.rst_d3_reg ,
-    \gc0.count_d1_reg[8] ,
-    \gc0.count_reg[8] ,
+    ram_full_i_reg,
+    \gmux.gm[4].gms.ms_1 ,
+    \gmux.gm[4].gms.ms_2 ,
     AR);
   output FULL_FB;
   output full;
-  output \gpr1.dout_i_reg[7] ;
+  output wr_en_0;
   output [7:0]Q;
-  output \gpr1.dout_i_reg[7]_0 ;
-  output \gpr1.dout_i_reg[7]_1 ;
-  output \gpr1.dout_i_reg[7]_2 ;
-  output \gpr1.dout_i_reg[7]_3 ;
-  output \gpr1.dout_i_reg[7]_4 ;
-  output \gpr1.dout_i_reg[7]_5 ;
-  output \gpr1.dout_i_reg[7]_6 ;
-  output [7:0]\gcc0.gc0.count_d1_reg[7] ;
-  output [0:0]ram_empty_i_reg;
-  output ram_empty_i_reg_0;
-  input [3:0]\gc0.count_d1_reg[6] ;
-  input [3:0]\gc0.count_d1_reg[6]_0 ;
+  output \gcc0.gc0.count_d1_reg[7] ;
+  output \gcc0.gc0.count_d1_reg[6] ;
+  output \gcc0.gc0.count_d1_reg[8] ;
+  output wr_en_1;
+  output \gcc0.gc0.count_d1_reg[6]_0 ;
+  output wr_en_2;
+  output wr_en_3;
+  output [7:0]\gcc0.gc0.count_reg[7] ;
+  output [0:0]\gcc0.gc0.count_d1_reg[8]_0 ;
+  output \gcc0.gc0.count_d1_reg[8]_1 ;
+  input [3:0]\gmux.gm[4].gms.ms ;
+  input [3:0]\gmux.gm[4].gms.ms_0 ;
   input clk;
   input out;
   input wr_en;
   input [0:0]E;
-  input \grstd1.grst_full.grst_f.rst_d3_reg ;
-  input [0:0]\gc0.count_d1_reg[8] ;
-  input [0:0]\gc0.count_reg[8] ;
+  input ram_full_i_reg;
+  input [0:0]\gmux.gm[4].gms.ms_1 ;
+  input [0:0]\gmux.gm[4].gms.ms_2 ;
   input [0:0]AR;
 
   wire [0:0]AR;
@@ -4365,120 +4566,120 @@ module isp_spi_buffer_wr_logic
   wire [4:4]\c1/v1_reg ;
   wire clk;
   wire full;
-  wire [3:0]\gc0.count_d1_reg[6] ;
-  wire [3:0]\gc0.count_d1_reg[6]_0 ;
-  wire [0:0]\gc0.count_d1_reg[8] ;
-  wire [0:0]\gc0.count_reg[8] ;
-  wire [7:0]\gcc0.gc0.count_d1_reg[7] ;
-  wire \gpr1.dout_i_reg[7] ;
-  wire \gpr1.dout_i_reg[7]_0 ;
-  wire \gpr1.dout_i_reg[7]_1 ;
-  wire \gpr1.dout_i_reg[7]_2 ;
-  wire \gpr1.dout_i_reg[7]_3 ;
-  wire \gpr1.dout_i_reg[7]_4 ;
-  wire \gpr1.dout_i_reg[7]_5 ;
-  wire \gpr1.dout_i_reg[7]_6 ;
-  wire \grstd1.grst_full.grst_f.rst_d3_reg ;
+  wire \gcc0.gc0.count_d1_reg[6] ;
+  wire \gcc0.gc0.count_d1_reg[6]_0 ;
+  wire \gcc0.gc0.count_d1_reg[7] ;
+  wire \gcc0.gc0.count_d1_reg[8] ;
+  wire [0:0]\gcc0.gc0.count_d1_reg[8]_0 ;
+  wire \gcc0.gc0.count_d1_reg[8]_1 ;
+  wire [7:0]\gcc0.gc0.count_reg[7] ;
+  wire [3:0]\gmux.gm[4].gms.ms ;
+  wire [3:0]\gmux.gm[4].gms.ms_0 ;
+  wire [0:0]\gmux.gm[4].gms.ms_1 ;
+  wire [0:0]\gmux.gm[4].gms.ms_2 ;
   wire out;
   wire p_19_out;
-  wire [0:0]ram_empty_i_reg;
-  wire ram_empty_i_reg_0;
+  wire ram_full_i_reg;
   wire wr_en;
+  wire wr_en_0;
+  wire wr_en_1;
+  wire wr_en_2;
+  wire wr_en_3;
 
   isp_spi_buffer_wr_status_flags_ss \gwss.wsts 
        (.E(E),
         .clk(clk),
         .full(full),
-        .\gc0.count_d1_reg[6] (\gc0.count_d1_reg[6] ),
-        .\gc0.count_d1_reg[6]_0 (\gc0.count_d1_reg[6]_0 ),
-        .\gcc0.gc0.count_d1_reg[8] (p_19_out),
-        .\grstd1.grst_full.grst_f.rst_d2_reg (out),
-        .\grstd1.grst_full.grst_f.rst_d3_reg (\grstd1.grst_full.grst_f.rst_d3_reg ),
+        .\gmux.gm[4].gms.ms (\gmux.gm[4].gms.ms ),
+        .\gmux.gm[4].gms.ms_0 (\gmux.gm[4].gms.ms_0 ),
         .out(FULL_FB),
+        .ram_full_i_reg_0(out),
+        .ram_full_i_reg_1(ram_full_i_reg),
         .v1_reg(\c0/v1_reg ),
         .v1_reg_0(\c1/v1_reg ),
-        .wr_en(wr_en));
+        .wr_en(wr_en),
+        .wr_en_0(p_19_out));
   isp_spi_buffer_wr_bin_cntr wpntr
        (.AR(AR),
         .E(p_19_out),
         .Q(Q),
         .clk(clk),
-        .\gc0.count_d1_reg[8] (\gc0.count_d1_reg[8] ),
-        .\gc0.count_reg[8] (\gc0.count_reg[8] ),
+        .\gcc0.gc0.count_d1_reg[6]_0 (\gcc0.gc0.count_d1_reg[6] ),
+        .\gcc0.gc0.count_d1_reg[6]_1 (\gcc0.gc0.count_d1_reg[6]_0 ),
         .\gcc0.gc0.count_d1_reg[7]_0 (\gcc0.gc0.count_d1_reg[7] ),
-        .\gpr1.dout_i_reg[7] (\gpr1.dout_i_reg[7] ),
-        .\gpr1.dout_i_reg[7]_0 (\gpr1.dout_i_reg[7]_0 ),
-        .\gpr1.dout_i_reg[7]_1 (\gpr1.dout_i_reg[7]_1 ),
-        .\gpr1.dout_i_reg[7]_2 (\gpr1.dout_i_reg[7]_2 ),
-        .\gpr1.dout_i_reg[7]_3 (\gpr1.dout_i_reg[7]_3 ),
-        .\gpr1.dout_i_reg[7]_4 (\gpr1.dout_i_reg[7]_4 ),
-        .\gpr1.dout_i_reg[7]_5 (\gpr1.dout_i_reg[7]_5 ),
-        .\gpr1.dout_i_reg[7]_6 (\gpr1.dout_i_reg[7]_6 ),
+        .\gcc0.gc0.count_d1_reg[8]_0 (\gcc0.gc0.count_d1_reg[8] ),
+        .\gcc0.gc0.count_d1_reg[8]_1 (\gcc0.gc0.count_d1_reg[8]_0 ),
+        .\gcc0.gc0.count_d1_reg[8]_2 (\gcc0.gc0.count_d1_reg[8]_1 ),
+        .\gcc0.gc0.count_reg[7]_0 (\gcc0.gc0.count_reg[7] ),
+        .\gmux.gm[4].gms.ms (\gmux.gm[4].gms.ms_1 ),
+        .\gmux.gm[4].gms.ms_0 (\gmux.gm[4].gms.ms_2 ),
         .out(FULL_FB),
-        .ram_empty_i_reg(ram_empty_i_reg),
-        .ram_empty_i_reg_0(ram_empty_i_reg_0),
         .v1_reg(\c0/v1_reg ),
         .v1_reg_0(\c1/v1_reg ),
-        .wr_en(wr_en));
+        .wr_en(wr_en),
+        .wr_en_0(wr_en_0),
+        .wr_en_1(wr_en_1),
+        .wr_en_2(wr_en_2),
+        .wr_en_3(wr_en_3));
 endmodule
 
 (* ORIG_REF_NAME = "wr_status_flags_ss" *) 
 module isp_spi_buffer_wr_status_flags_ss
    (out,
     full,
-    \gcc0.gc0.count_d1_reg[8] ,
-    \gc0.count_d1_reg[6] ,
+    wr_en_0,
+    \gmux.gm[4].gms.ms ,
     v1_reg,
-    \gc0.count_d1_reg[6]_0 ,
+    \gmux.gm[4].gms.ms_0 ,
     v1_reg_0,
     clk,
-    \grstd1.grst_full.grst_f.rst_d2_reg ,
+    ram_full_i_reg_0,
     wr_en,
     E,
-    \grstd1.grst_full.grst_f.rst_d3_reg );
+    ram_full_i_reg_1);
   output out;
   output full;
-  output [0:0]\gcc0.gc0.count_d1_reg[8] ;
-  input [3:0]\gc0.count_d1_reg[6] ;
+  output [0:0]wr_en_0;
+  input [3:0]\gmux.gm[4].gms.ms ;
   input [0:0]v1_reg;
-  input [3:0]\gc0.count_d1_reg[6]_0 ;
+  input [3:0]\gmux.gm[4].gms.ms_0 ;
   input [0:0]v1_reg_0;
   input clk;
-  input \grstd1.grst_full.grst_f.rst_d2_reg ;
+  input ram_full_i_reg_0;
   input wr_en;
   input [0:0]E;
-  input \grstd1.grst_full.grst_f.rst_d3_reg ;
+  input ram_full_i_reg_1;
 
   wire [0:0]E;
   wire clk;
   wire comp0;
-  wire [3:0]\gc0.count_d1_reg[6] ;
-  wire [3:0]\gc0.count_d1_reg[6]_0 ;
-  wire [0:0]\gcc0.gc0.count_d1_reg[8] ;
-  wire \grstd1.grst_full.grst_f.rst_d2_reg ;
-  wire \grstd1.grst_full.grst_f.rst_d3_reg ;
+  wire [3:0]\gmux.gm[4].gms.ms ;
+  wire [3:0]\gmux.gm[4].gms.ms_0 ;
   (* DONT_TOUCH *) wire ram_afull_fb;
   (* DONT_TOUCH *) wire ram_afull_i;
   wire ram_full_comb;
   (* DONT_TOUCH *) wire ram_full_fb_i;
   (* DONT_TOUCH *) wire ram_full_i;
+  wire ram_full_i_reg_0;
+  wire ram_full_i_reg_1;
   wire [0:0]v1_reg;
   wire [0:0]v1_reg_0;
   wire wr_en;
+  wire [0:0]wr_en_0;
 
   assign full = ram_full_i;
   assign out = ram_full_fb_i;
   isp_spi_buffer_compare c0
        (.comp0(comp0),
-        .\gc0.count_d1_reg[6] (\gc0.count_d1_reg[6] ),
+        .\gmux.gm[4].gms.ms_0 (\gmux.gm[4].gms.ms ),
         .v1_reg(v1_reg));
   isp_spi_buffer_compare_0 c1
        (.E(E),
         .comp0(comp0),
-        .\gc0.count_d1_reg[6] (\gc0.count_d1_reg[6]_0 ),
-        .\grstd1.grst_full.grst_f.rst_d3_reg (\grstd1.grst_full.grst_f.rst_d3_reg ),
+        .\gmux.gm[4].gms.ms_0 (\gmux.gm[4].gms.ms_0 ),
         .out(ram_full_fb_i),
         .ram_full_comb(ram_full_comb),
+        .ram_full_i_reg(ram_full_i_reg_1),
         .v1_reg_0(v1_reg_0),
         .wr_en(wr_en));
   LUT2 #(
@@ -4486,7 +4687,7 @@ module isp_spi_buffer_wr_status_flags_ss
     \gcc0.gc0.count_d1[8]_i_1 
        (.I0(wr_en),
         .I1(ram_full_fb_i),
-        .O(\gcc0.gc0.count_d1_reg[8] ));
+        .O(wr_en_0));
   LUT1 #(
     .INIT(2'h2)) 
     i_0
@@ -4506,7 +4707,7 @@ module isp_spi_buffer_wr_status_flags_ss
        (.C(clk),
         .CE(1'b1),
         .D(ram_full_comb),
-        .PRE(\grstd1.grst_full.grst_f.rst_d2_reg ),
+        .PRE(ram_full_i_reg_0),
         .Q(ram_full_fb_i));
   (* DONT_TOUCH *) 
   (* KEEP = "yes" *) 
@@ -4517,7 +4718,7 @@ module isp_spi_buffer_wr_status_flags_ss
        (.C(clk),
         .CE(1'b1),
         .D(ram_full_comb),
-        .PRE(\grstd1.grst_full.grst_f.rst_d2_reg ),
+        .PRE(ram_full_i_reg_0),
         .Q(ram_full_i));
 endmodule
 `ifndef GLBL

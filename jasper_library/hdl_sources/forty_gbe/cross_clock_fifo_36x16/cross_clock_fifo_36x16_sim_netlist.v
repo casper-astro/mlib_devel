@@ -1,10 +1,10 @@
-// Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
+// Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
-// Tool Version: Vivado v.2018.2 (lin64) Build 2258646 Thu Jun 14 20:02:38 MDT 2018
-// Date        : Thu Aug 23 13:42:58 2018
-// Host        : adam-cm running 64-bit Ubuntu 14.04.5 LTS
+// Tool Version: Vivado v.2019.1.1 (lin64) Build 2580384 Sat Jun 29 08:04:45 MDT 2019
+// Date        : Mon Jul 15 17:22:22 2019
+// Host        : casper1 running 64-bit Ubuntu 16.04.6 LTS
 // Command     : write_verilog -force -mode funcsim
-//               /home/aisaacson/work/git_work/ska_sa/projects/skarab_bsp_firmware/firmware/FRM123701U1R1/Vivado/IP/cross_clock_fifo_36x16/cross_clock_fifo_36x16_sim_netlist.v
+//               /home/hpw1/work/tutorials_devel/vivado_2018/skarab/tut_intro/skarab_tut_intro/myproj/myproj.srcs/sources_1/ip/cross_clock_fifo_36x16/cross_clock_fifo_36x16_sim_netlist.v
 // Design      : cross_clock_fifo_36x16
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -12,7 +12,7 @@
 // --------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CHECK_LICENSE_TYPE = "cross_clock_fifo_36x16,fifo_generator_v13_2_2,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "fifo_generator_v13_2_2,Vivado 2018.1" *) 
+(* CHECK_LICENSE_TYPE = "cross_clock_fifo_36x16,fifo_generator_v13_2_4,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "fifo_generator_v13_2_4,Vivado 2019.1.1" *) 
 (* NotValidForBitStream *)
 module cross_clock_fifo_36x16
    (rst,
@@ -25,8 +25,8 @@ module cross_clock_fifo_36x16
     full,
     empty);
   input rst;
-  (* x_interface_info = "xilinx.com:signal:clock:1.0 write_clk CLK" *) (* x_interface_parameter = "XIL_INTERFACENAME write_clk, FREQ_HZ 100000000, PHASE 0.000" *) input wr_clk;
-  (* x_interface_info = "xilinx.com:signal:clock:1.0 read_clk CLK" *) (* x_interface_parameter = "XIL_INTERFACENAME read_clk, FREQ_HZ 100000000, PHASE 0.000" *) input rd_clk;
+  (* x_interface_info = "xilinx.com:signal:clock:1.0 write_clk CLK" *) (* x_interface_parameter = "XIL_INTERFACENAME write_clk, FREQ_HZ 100000000, PHASE 0.000, INSERT_VIP 0" *) input wr_clk;
+  (* x_interface_info = "xilinx.com:signal:clock:1.0 read_clk CLK" *) (* x_interface_parameter = "XIL_INTERFACENAME read_clk, FREQ_HZ 100000000, PHASE 0.000, INSERT_VIP 0" *) input rd_clk;
   (* x_interface_info = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_DATA" *) input [35:0]din;
   (* x_interface_info = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_EN" *) input wr_en;
   (* x_interface_info = "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_EN" *) input rd_en;
@@ -369,7 +369,7 @@ module cross_clock_fifo_36x16
   (* C_WR_PNTR_WIDTH_WDCH = "10" *) 
   (* C_WR_PNTR_WIDTH_WRCH = "4" *) 
   (* C_WR_RESPONSE_LATENCY = "1" *) 
-  cross_clock_fifo_36x16_fifo_generator_v13_2_2 U0
+  cross_clock_fifo_36x16_fifo_generator_v13_2_4 U0
        (.almost_empty(NLW_U0_almost_empty_UNCONNECTED),
         .almost_full(NLW_U0_almost_full_UNCONNECTED),
         .axi_ar_data_count(NLW_U0_axi_ar_data_count_UNCONNECTED[4:0]),
@@ -646,7 +646,7 @@ endmodule
 (* DEF_VAL = "1'b0" *) (* DEST_SYNC_FF = "2" *) (* INIT_SYNC_FF = "0" *) 
 (* INV_DEF_VAL = "1'b1" *) (* ORIG_REF_NAME = "xpm_cdc_async_rst" *) (* RST_ACTIVE_HIGH = "1" *) 
 (* VERSION = "0" *) (* XPM_MODULE = "TRUE" *) (* xpm_cdc = "ASYNC_RST" *) 
-module cross_clock_fifo_36x16_xpm_cdc_async_rst__1
+module cross_clock_fifo_36x16_xpm_cdc_async_rst__2
    (src_arst,
     dest_clk,
     dest_arst);
@@ -874,7 +874,7 @@ endmodule
 (* REG_OUTPUT = "1" *) (* SIM_ASSERT_CHK = "0" *) (* SIM_LOSSLESS_GRAY_CHK = "0" *) 
 (* VERSION = "0" *) (* WIDTH = "4" *) (* XPM_MODULE = "TRUE" *) 
 (* xpm_cdc = "GRAY" *) 
-module cross_clock_fifo_36x16_xpm_cdc_gray__1
+module cross_clock_fifo_36x16_xpm_cdc_gray__2
    (src_clk,
     src_in_bin,
     dest_clk,
@@ -1116,7 +1116,7 @@ endmodule
 (* DEST_SYNC_FF = "4" *) (* INIT_SYNC_FF = "0" *) (* ORIG_REF_NAME = "xpm_cdc_single" *) 
 (* SIM_ASSERT_CHK = "0" *) (* SRC_INPUT_REG = "0" *) (* VERSION = "0" *) 
 (* XPM_MODULE = "TRUE" *) (* xpm_cdc = "SINGLE" *) 
-module cross_clock_fifo_36x16_xpm_cdc_single__1
+module cross_clock_fifo_36x16_xpm_cdc_single__2
    (src_clk,
     src_in,
     dest_clk,
@@ -1171,30 +1171,30 @@ endmodule
 
 (* ORIG_REF_NAME = "clk_x_pntrs" *) 
 module cross_clock_fifo_36x16_clk_x_pntrs
-   (ram_full_i_reg,
+   (\dest_out_bin_ff_reg[2] ,
     RD_PNTR_WR,
     WR_PNTR_RD,
     Q,
     wr_clk,
-    \gic0.gc0.count_d2_reg[3] ,
+    \src_gray_ff_reg[3] ,
     rd_clk,
-    \gc0.count_d1_reg[3] );
-  output ram_full_i_reg;
+    \src_gray_ff_reg[3]_0 );
+  output \dest_out_bin_ff_reg[2] ;
   output [3:0]RD_PNTR_WR;
   output [3:0]WR_PNTR_RD;
   input [2:0]Q;
   input wr_clk;
-  input [3:0]\gic0.gc0.count_d2_reg[3] ;
+  input [3:0]\src_gray_ff_reg[3] ;
   input rd_clk;
-  input [3:0]\gc0.count_d1_reg[3] ;
+  input [3:0]\src_gray_ff_reg[3]_0 ;
 
   wire [2:0]Q;
   wire [3:0]RD_PNTR_WR;
   wire [3:0]WR_PNTR_RD;
-  wire [3:0]\gc0.count_d1_reg[3] ;
-  wire [3:0]\gic0.gc0.count_d2_reg[3] ;
-  wire ram_full_i_reg;
+  wire \dest_out_bin_ff_reg[2] ;
   wire rd_clk;
+  wire [3:0]\src_gray_ff_reg[3] ;
+  wire [3:0]\src_gray_ff_reg[3]_0 ;
   wire wr_clk;
 
   LUT6 #(
@@ -1206,7 +1206,7 @@ module cross_clock_fifo_36x16_clk_x_pntrs
         .I3(Q[1]),
         .I4(Q[0]),
         .I5(RD_PNTR_WR[0]),
-        .O(ram_full_i_reg));
+        .O(\dest_out_bin_ff_reg[2] ));
   (* DEST_SYNC_FF = "2" *) 
   (* INIT_SYNC_FF = "0" *) 
   (* REG_OUTPUT = "1" *) 
@@ -1220,7 +1220,7 @@ module cross_clock_fifo_36x16_clk_x_pntrs
        (.dest_clk(wr_clk),
         .dest_out_bin(RD_PNTR_WR),
         .src_clk(rd_clk),
-        .src_in_bin(\gc0.count_d1_reg[3] ));
+        .src_in_bin(\src_gray_ff_reg[3]_0 ));
   (* DEST_SYNC_FF = "2" *) 
   (* INIT_SYNC_FF = "0" *) 
   (* REG_OUTPUT = "1" *) 
@@ -1230,11 +1230,11 @@ module cross_clock_fifo_36x16_clk_x_pntrs
   (* WIDTH = "4" *) 
   (* XPM_CDC = "GRAY" *) 
   (* XPM_MODULE = "TRUE" *) 
-  cross_clock_fifo_36x16_xpm_cdc_gray__1 wr_pntr_cdc_inst
+  cross_clock_fifo_36x16_xpm_cdc_gray__2 wr_pntr_cdc_inst
        (.dest_clk(rd_clk),
         .dest_out_bin(WR_PNTR_RD),
         .src_clk(wr_clk),
-        .src_in_bin(\gic0.gc0.count_d2_reg[3] ));
+        .src_in_bin(\src_gray_ff_reg[3] ));
 endmodule
 
 (* ORIG_REF_NAME = "dmem" *) 
@@ -1244,8 +1244,8 @@ module cross_clock_fifo_36x16_dmem
     E,
     din,
     Q,
-    \gic0.gc0.count_d2_reg[3] ,
-    ram_empty_fb_i_reg,
+    \gpr1.dout_i_reg[1]_0 ,
+    \gpr1.dout_i_reg[0]_0 ,
     rd_clk,
     AR);
   output [35:0]dout;
@@ -1253,8 +1253,8 @@ module cross_clock_fifo_36x16_dmem
   input [0:0]E;
   input [35:0]din;
   input [3:0]Q;
-  input [3:0]\gic0.gc0.count_d2_reg[3] ;
-  input [0:0]ram_empty_fb_i_reg;
+  input [3:0]\gpr1.dout_i_reg[1]_0 ;
+  input [0:0]\gpr1.dout_i_reg[0]_0 ;
   input rd_clk;
   input [0:0]AR;
 
@@ -1263,9 +1263,9 @@ module cross_clock_fifo_36x16_dmem
   wire [3:0]Q;
   wire [35:0]din;
   wire [35:0]dout;
-  wire [3:0]\gic0.gc0.count_d2_reg[3] ;
+  wire [0:0]\gpr1.dout_i_reg[0]_0 ;
+  wire [3:0]\gpr1.dout_i_reg[1]_0 ;
   wire [35:0]p_0_out;
-  wire [0:0]ram_empty_fb_i_reg;
   wire rd_clk;
   wire wr_clk;
   wire [1:0]NLW_RAM_reg_0_15_0_5_DOD_UNCONNECTED;
@@ -1276,11 +1276,18 @@ module cross_clock_fifo_36x16_dmem
   wire [1:0]NLW_RAM_reg_0_15_6_11_DOD_UNCONNECTED;
 
   (* METHODOLOGY_DRC_VIOS = "" *) 
+  (* RTL_RAM_BITS = "576" *) 
+  (* RTL_RAM_NAME = "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM" *) 
+  (* ram_addr_begin = "0" *) 
+  (* ram_addr_end = "15" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "0" *) 
+  (* ram_slice_end = "5" *) 
   RAM32M RAM_reg_0_15_0_5
        (.ADDRA({1'b0,Q}),
         .ADDRB({1'b0,Q}),
         .ADDRC({1'b0,Q}),
-        .ADDRD({1'b0,\gic0.gc0.count_d2_reg[3] }),
+        .ADDRD({1'b0,\gpr1.dout_i_reg[1]_0 }),
         .DIA(din[1:0]),
         .DIB(din[3:2]),
         .DIC(din[5:4]),
@@ -1292,11 +1299,18 @@ module cross_clock_fifo_36x16_dmem
         .WCLK(wr_clk),
         .WE(E));
   (* METHODOLOGY_DRC_VIOS = "" *) 
+  (* RTL_RAM_BITS = "576" *) 
+  (* RTL_RAM_NAME = "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM" *) 
+  (* ram_addr_begin = "0" *) 
+  (* ram_addr_end = "15" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "12" *) 
+  (* ram_slice_end = "17" *) 
   RAM32M RAM_reg_0_15_12_17
        (.ADDRA({1'b0,Q}),
         .ADDRB({1'b0,Q}),
         .ADDRC({1'b0,Q}),
-        .ADDRD({1'b0,\gic0.gc0.count_d2_reg[3] }),
+        .ADDRD({1'b0,\gpr1.dout_i_reg[1]_0 }),
         .DIA(din[13:12]),
         .DIB(din[15:14]),
         .DIC(din[17:16]),
@@ -1308,11 +1322,18 @@ module cross_clock_fifo_36x16_dmem
         .WCLK(wr_clk),
         .WE(E));
   (* METHODOLOGY_DRC_VIOS = "" *) 
+  (* RTL_RAM_BITS = "576" *) 
+  (* RTL_RAM_NAME = "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM" *) 
+  (* ram_addr_begin = "0" *) 
+  (* ram_addr_end = "15" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "18" *) 
+  (* ram_slice_end = "23" *) 
   RAM32M RAM_reg_0_15_18_23
        (.ADDRA({1'b0,Q}),
         .ADDRB({1'b0,Q}),
         .ADDRC({1'b0,Q}),
-        .ADDRD({1'b0,\gic0.gc0.count_d2_reg[3] }),
+        .ADDRD({1'b0,\gpr1.dout_i_reg[1]_0 }),
         .DIA(din[19:18]),
         .DIB(din[21:20]),
         .DIC(din[23:22]),
@@ -1324,11 +1345,18 @@ module cross_clock_fifo_36x16_dmem
         .WCLK(wr_clk),
         .WE(E));
   (* METHODOLOGY_DRC_VIOS = "" *) 
+  (* RTL_RAM_BITS = "576" *) 
+  (* RTL_RAM_NAME = "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM" *) 
+  (* ram_addr_begin = "0" *) 
+  (* ram_addr_end = "15" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "24" *) 
+  (* ram_slice_end = "29" *) 
   RAM32M RAM_reg_0_15_24_29
        (.ADDRA({1'b0,Q}),
         .ADDRB({1'b0,Q}),
         .ADDRC({1'b0,Q}),
-        .ADDRD({1'b0,\gic0.gc0.count_d2_reg[3] }),
+        .ADDRD({1'b0,\gpr1.dout_i_reg[1]_0 }),
         .DIA(din[25:24]),
         .DIB(din[27:26]),
         .DIC(din[29:28]),
@@ -1340,11 +1368,18 @@ module cross_clock_fifo_36x16_dmem
         .WCLK(wr_clk),
         .WE(E));
   (* METHODOLOGY_DRC_VIOS = "" *) 
+  (* RTL_RAM_BITS = "576" *) 
+  (* RTL_RAM_NAME = "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM" *) 
+  (* ram_addr_begin = "0" *) 
+  (* ram_addr_end = "15" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "30" *) 
+  (* ram_slice_end = "35" *) 
   RAM32M RAM_reg_0_15_30_35
        (.ADDRA({1'b0,Q}),
         .ADDRB({1'b0,Q}),
         .ADDRC({1'b0,Q}),
-        .ADDRD({1'b0,\gic0.gc0.count_d2_reg[3] }),
+        .ADDRD({1'b0,\gpr1.dout_i_reg[1]_0 }),
         .DIA(din[31:30]),
         .DIB(din[33:32]),
         .DIC(din[35:34]),
@@ -1356,11 +1391,18 @@ module cross_clock_fifo_36x16_dmem
         .WCLK(wr_clk),
         .WE(E));
   (* METHODOLOGY_DRC_VIOS = "" *) 
+  (* RTL_RAM_BITS = "576" *) 
+  (* RTL_RAM_NAME = "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM" *) 
+  (* ram_addr_begin = "0" *) 
+  (* ram_addr_end = "15" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "6" *) 
+  (* ram_slice_end = "11" *) 
   RAM32M RAM_reg_0_15_6_11
        (.ADDRA({1'b0,Q}),
         .ADDRB({1'b0,Q}),
         .ADDRC({1'b0,Q}),
-        .ADDRD({1'b0,\gic0.gc0.count_d2_reg[3] }),
+        .ADDRD({1'b0,\gpr1.dout_i_reg[1]_0 }),
         .DIA(din[7:6]),
         .DIB(din[9:8]),
         .DIC(din[11:10]),
@@ -1375,7 +1417,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[0] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[0]),
         .Q(dout[0]));
@@ -1383,7 +1425,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[10] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[10]),
         .Q(dout[10]));
@@ -1391,7 +1433,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[11] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[11]),
         .Q(dout[11]));
@@ -1399,7 +1441,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[12] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[12]),
         .Q(dout[12]));
@@ -1407,7 +1449,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[13] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[13]),
         .Q(dout[13]));
@@ -1415,7 +1457,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[14] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[14]),
         .Q(dout[14]));
@@ -1423,7 +1465,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[15] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[15]),
         .Q(dout[15]));
@@ -1431,7 +1473,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[16] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[16]),
         .Q(dout[16]));
@@ -1439,7 +1481,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[17] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[17]),
         .Q(dout[17]));
@@ -1447,7 +1489,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[18] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[18]),
         .Q(dout[18]));
@@ -1455,7 +1497,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[19] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[19]),
         .Q(dout[19]));
@@ -1463,7 +1505,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[1] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[1]),
         .Q(dout[1]));
@@ -1471,7 +1513,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[20] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[20]),
         .Q(dout[20]));
@@ -1479,7 +1521,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[21] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[21]),
         .Q(dout[21]));
@@ -1487,7 +1529,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[22] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[22]),
         .Q(dout[22]));
@@ -1495,7 +1537,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[23] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[23]),
         .Q(dout[23]));
@@ -1503,7 +1545,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[24] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[24]),
         .Q(dout[24]));
@@ -1511,7 +1553,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[25] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[25]),
         .Q(dout[25]));
@@ -1519,7 +1561,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[26] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[26]),
         .Q(dout[26]));
@@ -1527,7 +1569,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[27] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[27]),
         .Q(dout[27]));
@@ -1535,7 +1577,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[28] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[28]),
         .Q(dout[28]));
@@ -1543,7 +1585,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[29] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[29]),
         .Q(dout[29]));
@@ -1551,7 +1593,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[2] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[2]),
         .Q(dout[2]));
@@ -1559,7 +1601,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[30] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[30]),
         .Q(dout[30]));
@@ -1567,7 +1609,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[31] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[31]),
         .Q(dout[31]));
@@ -1575,7 +1617,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[32] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[32]),
         .Q(dout[32]));
@@ -1583,7 +1625,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[33] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[33]),
         .Q(dout[33]));
@@ -1591,7 +1633,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[34] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[34]),
         .Q(dout[34]));
@@ -1599,7 +1641,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[35] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[35]),
         .Q(dout[35]));
@@ -1607,7 +1649,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[3] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[3]),
         .Q(dout[3]));
@@ -1615,7 +1657,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[4] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[4]),
         .Q(dout[4]));
@@ -1623,7 +1665,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[5] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[5]),
         .Q(dout[5]));
@@ -1631,7 +1673,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[6] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[6]),
         .Q(dout[6]));
@@ -1639,7 +1681,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[7] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[7]),
         .Q(dout[7]));
@@ -1647,7 +1689,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[8] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[8]),
         .Q(dout[8]));
@@ -1655,7 +1697,7 @@ module cross_clock_fifo_36x16_dmem
     .INIT(1'b0)) 
     \gpr1.dout_i_reg[9] 
        (.C(rd_clk),
-        .CE(ram_empty_fb_i_reg),
+        .CE(\gpr1.dout_i_reg[0]_0 ),
         .CLR(AR),
         .D(p_0_out[9]),
         .Q(dout[9]));
@@ -1713,10 +1755,10 @@ module cross_clock_fifo_36x16_fifo_generator_ramfifo
        (.Q(wr_pntr_plus2),
         .RD_PNTR_WR(p_25_out),
         .WR_PNTR_RD(p_24_out),
-        .\gc0.count_d1_reg[3] (p_0_out_0),
-        .\gic0.gc0.count_d2_reg[3] (p_13_out),
-        .ram_full_i_reg(\gntv_or_sync_fifo.gcx.clkx_n_0 ),
+        .\dest_out_bin_ff_reg[2] (\gntv_or_sync_fifo.gcx.clkx_n_0 ),
         .rd_clk(rd_clk),
+        .\src_gray_ff_reg[3] (p_13_out),
+        .\src_gray_ff_reg[3]_0 (p_0_out_0),
         .wr_clk(wr_clk));
   cross_clock_fifo_36x16_rd_logic \gntv_or_sync_fifo.gl0.rd 
        (.AR(AR),
@@ -1731,11 +1773,11 @@ module cross_clock_fifo_36x16_fifo_generator_ramfifo
         .E(p_20_out),
         .Q(wr_pntr_plus2),
         .RD_PNTR_WR(p_25_out),
-        .\dest_out_bin_ff_reg[2] (\gntv_or_sync_fifo.gcx.clkx_n_0 ),
         .full(full),
-        .\grstd1.grst_full.grst_f.rst_d3_reg (rst_full_gen_i),
+        .\gic0.gc0.count_d2_reg[3] (p_13_out),
         .out(rst_full_ff_i),
-        .\src_gray_ff_reg[3] (p_13_out),
+        .ram_full_i_reg(\gntv_or_sync_fifo.gcx.clkx_n_0 ),
+        .ram_full_i_reg_0(rst_full_gen_i),
         .wr_clk(wr_clk),
         .wr_en(wr_en));
   cross_clock_fifo_36x16_memory \gntv_or_sync_fifo.mem 
@@ -1744,17 +1786,17 @@ module cross_clock_fifo_36x16_fifo_generator_ramfifo
         .Q(p_0_out_0),
         .din(din),
         .dout(dout),
-        .\gic0.gc0.count_d2_reg[3] (p_13_out),
-        .ram_empty_fb_i_reg(ram_rd_en_i),
+        .\gpr1.dout_i_reg[0] (ram_rd_en_i),
+        .\gpr1.dout_i_reg[1] (p_13_out),
         .rd_clk(rd_clk),
         .wr_clk(wr_clk));
   cross_clock_fifo_36x16_reset_blk_ramfifo rstblk
        (.AR(rstblk_n_0),
+        .\grstd1.grst_full.grst_f.rst_d3_reg_0 (rst_full_gen_i),
+        .\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_reg_0 (AR),
         .out(rst_full_ff_i),
-        .ram_full_i_reg(rst_full_gen_i),
         .rd_clk(rd_clk),
         .rst(rst),
-        .\syncstages_ff_reg[0] (AR),
         .wr_clk(wr_clk),
         .wr_rst_busy(wr_rst_busy));
 endmodule
@@ -1877,8 +1919,8 @@ endmodule
 (* C_WR_DEPTH_WRCH = "16" *) (* C_WR_FREQ = "1" *) (* C_WR_PNTR_WIDTH = "4" *) 
 (* C_WR_PNTR_WIDTH_AXIS = "10" *) (* C_WR_PNTR_WIDTH_RACH = "4" *) (* C_WR_PNTR_WIDTH_RDCH = "10" *) 
 (* C_WR_PNTR_WIDTH_WACH = "4" *) (* C_WR_PNTR_WIDTH_WDCH = "10" *) (* C_WR_PNTR_WIDTH_WRCH = "4" *) 
-(* C_WR_RESPONSE_LATENCY = "1" *) (* ORIG_REF_NAME = "fifo_generator_v13_2_2" *) 
-module cross_clock_fifo_36x16_fifo_generator_v13_2_2
+(* C_WR_RESPONSE_LATENCY = "1" *) (* ORIG_REF_NAME = "fifo_generator_v13_2_4" *) 
+module cross_clock_fifo_36x16_fifo_generator_v13_2_4
    (backup,
     backup_marker,
     clk,
@@ -2865,7 +2907,7 @@ module cross_clock_fifo_36x16_fifo_generator_v13_2_2
        (.G(\<const0> ));
   VCC VCC
        (.P(\<const1> ));
-  cross_clock_fifo_36x16_fifo_generator_v13_2_2_synth inst_fifo_gen
+  cross_clock_fifo_36x16_fifo_generator_v13_2_4_synth inst_fifo_gen
        (.AR(rd_rst_busy),
         .din(din),
         .dout(dout),
@@ -2879,8 +2921,8 @@ module cross_clock_fifo_36x16_fifo_generator_v13_2_2
         .wr_rst_busy(wr_rst_busy));
 endmodule
 
-(* ORIG_REF_NAME = "fifo_generator_v13_2_2_synth" *) 
-module cross_clock_fifo_36x16_fifo_generator_v13_2_2_synth
+(* ORIG_REF_NAME = "fifo_generator_v13_2_4_synth" *) 
+module cross_clock_fifo_36x16_fifo_generator_v13_2_4_synth
    (wr_rst_busy,
     AR,
     empty,
@@ -2937,8 +2979,8 @@ module cross_clock_fifo_36x16_memory
     E,
     din,
     Q,
-    \gic0.gc0.count_d2_reg[3] ,
-    ram_empty_fb_i_reg,
+    \gpr1.dout_i_reg[1] ,
+    \gpr1.dout_i_reg[0] ,
     rd_clk,
     AR);
   output [35:0]dout;
@@ -2946,8 +2988,8 @@ module cross_clock_fifo_36x16_memory
   input [0:0]E;
   input [35:0]din;
   input [3:0]Q;
-  input [3:0]\gic0.gc0.count_d2_reg[3] ;
-  input [0:0]ram_empty_fb_i_reg;
+  input [3:0]\gpr1.dout_i_reg[1] ;
+  input [0:0]\gpr1.dout_i_reg[0] ;
   input rd_clk;
   input [0:0]AR;
 
@@ -2956,8 +2998,8 @@ module cross_clock_fifo_36x16_memory
   wire [3:0]Q;
   wire [35:0]din;
   wire [35:0]dout;
-  wire [3:0]\gic0.gc0.count_d2_reg[3] ;
-  wire [0:0]ram_empty_fb_i_reg;
+  wire [0:0]\gpr1.dout_i_reg[0] ;
+  wire [3:0]\gpr1.dout_i_reg[1] ;
   wire rd_clk;
   wire wr_clk;
 
@@ -2967,15 +3009,15 @@ module cross_clock_fifo_36x16_memory
         .Q(Q),
         .din(din),
         .dout(dout),
-        .\gic0.gc0.count_d2_reg[3] (\gic0.gc0.count_d2_reg[3] ),
-        .ram_empty_fb_i_reg(ram_empty_fb_i_reg),
+        .\gpr1.dout_i_reg[0]_0 (\gpr1.dout_i_reg[0] ),
+        .\gpr1.dout_i_reg[1]_0 (\gpr1.dout_i_reg[1] ),
         .rd_clk(rd_clk),
         .wr_clk(wr_clk));
 endmodule
 
 (* ORIG_REF_NAME = "rd_bin_cntr" *) 
 module cross_clock_fifo_36x16_rd_bin_cntr
-   (ram_empty_i_reg,
+   (rd_en_0,
     Q,
     rd_en,
     out,
@@ -2983,7 +3025,7 @@ module cross_clock_fifo_36x16_rd_bin_cntr
     E,
     rd_clk,
     AR);
-  output ram_empty_i_reg;
+  output rd_en_0;
   output [3:0]Q;
   input rd_en;
   input out;
@@ -3002,9 +3044,9 @@ module cross_clock_fifo_36x16_rd_bin_cntr
   wire ram_empty_i_i_3_n_0;
   wire ram_empty_i_i_4_n_0;
   wire ram_empty_i_i_5_n_0;
-  wire ram_empty_i_reg;
   wire rd_clk;
   wire rd_en;
+  wire rd_en_0;
   wire [3:0]rd_pntr_plus1;
 
   LUT1 #(
@@ -3109,7 +3151,7 @@ module cross_clock_fifo_36x16_rd_bin_cntr
         .I3(out),
         .I4(ram_empty_i_i_4_n_0),
         .I5(ram_empty_i_i_5_n_0),
-        .O(ram_empty_i_reg));
+        .O(rd_en_0));
   LUT4 #(
     .INIT(16'h9009)) 
     ram_empty_i_i_2
@@ -3177,7 +3219,7 @@ module cross_clock_fifo_36x16_rd_logic
         .E(E),
         .empty(empty),
         .out(p_2_out),
-        .ram_empty_fb_i_reg_0(rpntr_n_0),
+        .ram_empty_i_reg_0(rpntr_n_0),
         .rd_clk(rd_clk),
         .rd_en(rd_en));
   cross_clock_fifo_36x16_rd_bin_cntr rpntr
@@ -3186,9 +3228,9 @@ module cross_clock_fifo_36x16_rd_logic
         .Q(Q),
         .WR_PNTR_RD(WR_PNTR_RD),
         .out(p_2_out),
-        .ram_empty_i_reg(rpntr_n_0),
         .rd_clk(rd_clk),
-        .rd_en(rd_en));
+        .rd_en(rd_en),
+        .rd_en_0(rpntr_n_0));
 endmodule
 
 (* ORIG_REF_NAME = "rd_status_flags_as" *) 
@@ -3196,14 +3238,14 @@ module cross_clock_fifo_36x16_rd_status_flags_as
    (empty,
     out,
     E,
-    ram_empty_fb_i_reg_0,
+    ram_empty_i_reg_0,
     rd_clk,
     AR,
     rd_en);
   output empty;
   output out;
   output [0:0]E;
-  input ram_empty_fb_i_reg_0;
+  input ram_empty_i_reg_0;
   input rd_clk;
   input [0:0]AR;
   input rd_en;
@@ -3211,8 +3253,8 @@ module cross_clock_fifo_36x16_rd_status_flags_as
   wire [0:0]AR;
   wire [0:0]E;
   (* DONT_TOUCH *) wire ram_empty_fb_i;
-  wire ram_empty_fb_i_reg_0;
   (* DONT_TOUCH *) wire ram_empty_i;
+  wire ram_empty_i_reg_0;
   wire rd_clk;
   wire rd_en;
 
@@ -3232,7 +3274,7 @@ module cross_clock_fifo_36x16_rd_status_flags_as
     ram_empty_fb_i_reg
        (.C(rd_clk),
         .CE(1'b1),
-        .D(ram_empty_fb_i_reg_0),
+        .D(ram_empty_i_reg_0),
         .PRE(AR),
         .Q(ram_empty_fb_i));
   (* DONT_TOUCH *) 
@@ -3243,7 +3285,7 @@ module cross_clock_fifo_36x16_rd_status_flags_as
     ram_empty_i_reg
        (.C(rd_clk),
         .CE(1'b1),
-        .D(ram_empty_fb_i_reg_0),
+        .D(ram_empty_i_reg_0),
         .PRE(AR),
         .Q(ram_empty_i));
 endmodule
@@ -3251,17 +3293,17 @@ endmodule
 (* ORIG_REF_NAME = "reset_blk_ramfifo" *) 
 module cross_clock_fifo_36x16_reset_blk_ramfifo
    (AR,
-    \syncstages_ff_reg[0] ,
+    \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_reg_0 ,
     out,
-    ram_full_i_reg,
+    \grstd1.grst_full.grst_f.rst_d3_reg_0 ,
     wr_rst_busy,
     rst,
     wr_clk,
     rd_clk);
   output [0:0]AR;
-  output [0:0]\syncstages_ff_reg[0] ;
+  output [0:0]\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_reg_0 ;
   output out;
-  output ram_full_i_reg;
+  output \grstd1.grst_full.grst_f.rst_d3_reg_0 ;
   output wr_rst_busy;
   input rst;
   input wr_clk;
@@ -3271,6 +3313,7 @@ module cross_clock_fifo_36x16_reset_blk_ramfifo
   wire dest_out;
   wire \grstd1.grst_full.grst_f.rst_d3_i_1_n_0 ;
   wire \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_i_1_n_0 ;
+  wire [0:0]\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_reg_0 ;
   wire \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_wr_rst_ic_i_1_n_0 ;
   wire \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_i_1_n_0 ;
   wire rd_clk;
@@ -3282,13 +3325,12 @@ module cross_clock_fifo_36x16_reset_blk_ramfifo
   (* async_reg = "true" *) (* msgon = "true" *) wire rst_rd_reg2;
   (* async_reg = "true" *) (* msgon = "true" *) wire rst_wr_reg2;
   wire sckt_rd_rst_wr;
-  wire [0:0]\syncstages_ff_reg[0] ;
   wire wr_clk;
   wire wr_rst_busy;
   wire [1:0]wr_rst_rd_ext;
 
+  assign \grstd1.grst_full.grst_f.rst_d3_reg_0  = rst_d3;
   assign out = rst_d2;
-  assign ram_full_i_reg = rst_d3;
   (* ASYNC_REG *) 
   (* KEEP = "yes" *) 
   (* msgon = "true" *) 
@@ -3375,7 +3417,7 @@ module cross_clock_fifo_36x16_reset_blk_ramfifo
   LUT2 #(
     .INIT(4'h2)) 
     \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_i_1 
-       (.I0(\syncstages_ff_reg[0] ),
+       (.I0(\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_reg_0 ),
         .I1(wr_rst_rd_ext[1]),
         .O(\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_i_1_n_0 ));
   FDPE #(
@@ -3385,7 +3427,7 @@ module cross_clock_fifo_36x16_reset_blk_ramfifo
         .CE(1'b1),
         .D(\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_i_1_n_0 ),
         .PRE(rst_rd_reg2),
-        .Q(\syncstages_ff_reg[0] ));
+        .Q(\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_reg_0 ));
   LUT3 #(
     .INIT(8'h8A)) 
     \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_wr_rst_ic_i_1 
@@ -3445,7 +3487,7 @@ module cross_clock_fifo_36x16_reset_blk_ramfifo
        (.dest_clk(wr_clk),
         .dest_out(sckt_rd_rst_wr),
         .src_clk(rd_clk),
-        .src_in(\syncstages_ff_reg[0] ));
+        .src_in(\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_reg_0 ));
   (* DEST_SYNC_FF = "4" *) 
   (* INIT_SYNC_FF = "0" *) 
   (* SIM_ASSERT_CHK = "0" *) 
@@ -3453,7 +3495,7 @@ module cross_clock_fifo_36x16_reset_blk_ramfifo
   (* VERSION = "0" *) 
   (* XPM_CDC = "SINGLE" *) 
   (* XPM_MODULE = "TRUE" *) 
-  cross_clock_fifo_36x16_xpm_cdc_single__1 \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.xpm_cdc_single_inst_wrst_rd 
+  cross_clock_fifo_36x16_xpm_cdc_single__2 \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.xpm_cdc_single_inst_wrst_rd 
        (.dest_clk(rd_clk),
         .dest_out(dest_out),
         .src_clk(wr_clk),
@@ -3466,7 +3508,7 @@ module cross_clock_fifo_36x16_reset_blk_ramfifo
   (* VERSION = "0" *) 
   (* XPM_CDC = "ASYNC_RST" *) 
   (* XPM_MODULE = "TRUE" *) 
-  cross_clock_fifo_36x16_xpm_cdc_async_rst__1 \ngwrdrst.grst.g7serrst.gnsckt_wrst.rst_wr_reg2_inst 
+  cross_clock_fifo_36x16_xpm_cdc_async_rst__2 \ngwrdrst.grst.g7serrst.gnsckt_wrst.rst_wr_reg2_inst 
        (.dest_arst(rst_wr_reg2),
         .dest_clk(wr_clk),
         .src_arst(rst));
@@ -3474,23 +3516,23 @@ endmodule
 
 (* ORIG_REF_NAME = "wr_bin_cntr" *) 
 module cross_clock_fifo_36x16_wr_bin_cntr
-   (ram_full_i_reg,
+   (\dest_out_bin_ff_reg[3] ,
     Q,
-    \src_gray_ff_reg[3] ,
-    \dest_out_bin_ff_reg[2] ,
-    ram_full_fb_i_reg,
+    \gic0.gc0.count_d2_reg[3]_0 ,
+    ram_full_i_reg,
+    ram_full_i_reg_0,
     RD_PNTR_WR,
-    \grstd1.grst_full.grst_f.rst_d3_reg ,
+    ram_full_i_reg_1,
     E,
     wr_clk,
     AR);
-  output ram_full_i_reg;
+  output \dest_out_bin_ff_reg[3] ;
   output [3:0]Q;
-  output [3:0]\src_gray_ff_reg[3] ;
-  input \dest_out_bin_ff_reg[2] ;
-  input ram_full_fb_i_reg;
+  output [3:0]\gic0.gc0.count_d2_reg[3]_0 ;
+  input ram_full_i_reg;
+  input ram_full_i_reg_0;
   input [3:0]RD_PNTR_WR;
-  input \grstd1.grst_full.grst_f.rst_d3_reg ;
+  input ram_full_i_reg_1;
   input [0:0]E;
   input wr_clk;
   input [0:0]AR;
@@ -3499,14 +3541,14 @@ module cross_clock_fifo_36x16_wr_bin_cntr
   wire [0:0]E;
   wire [3:0]Q;
   wire [3:0]RD_PNTR_WR;
-  wire \dest_out_bin_ff_reg[2] ;
-  wire \grstd1.grst_full.grst_f.rst_d3_reg ;
+  wire \dest_out_bin_ff_reg[3] ;
+  wire [3:0]\gic0.gc0.count_d2_reg[3]_0 ;
   wire [3:0]p_14_out;
   wire [3:0]plusOp;
-  wire ram_full_fb_i_reg;
   wire ram_full_i_i_4_n_0;
   wire ram_full_i_reg;
-  wire [3:0]\src_gray_ff_reg[3] ;
+  wire ram_full_i_reg_0;
+  wire ram_full_i_reg_1;
   wire wr_clk;
 
   LUT1 #(
@@ -3576,7 +3618,7 @@ module cross_clock_fifo_36x16_wr_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(p_14_out[0]),
-        .Q(\src_gray_ff_reg[3] [0]));
+        .Q(\gic0.gc0.count_d2_reg[3]_0 [0]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[1] 
@@ -3584,7 +3626,7 @@ module cross_clock_fifo_36x16_wr_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(p_14_out[1]),
-        .Q(\src_gray_ff_reg[3] [1]));
+        .Q(\gic0.gc0.count_d2_reg[3]_0 [1]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[2] 
@@ -3592,7 +3634,7 @@ module cross_clock_fifo_36x16_wr_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(p_14_out[2]),
-        .Q(\src_gray_ff_reg[3] [2]));
+        .Q(\gic0.gc0.count_d2_reg[3]_0 [2]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[3] 
@@ -3600,7 +3642,7 @@ module cross_clock_fifo_36x16_wr_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(p_14_out[3]),
-        .Q(\src_gray_ff_reg[3] [3]));
+        .Q(\gic0.gc0.count_d2_reg[3]_0 [3]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_reg[0] 
@@ -3636,13 +3678,13 @@ module cross_clock_fifo_36x16_wr_bin_cntr
   LUT6 #(
     .INIT(64'h0000F88F00008888)) 
     ram_full_i_i_1
-       (.I0(\dest_out_bin_ff_reg[2] ),
-        .I1(ram_full_fb_i_reg),
+       (.I0(ram_full_i_reg),
+        .I1(ram_full_i_reg_0),
         .I2(RD_PNTR_WR[3]),
         .I3(p_14_out[3]),
-        .I4(\grstd1.grst_full.grst_f.rst_d3_reg ),
+        .I4(ram_full_i_reg_1),
         .I5(ram_full_i_i_4_n_0),
-        .O(ram_full_i_reg));
+        .O(\dest_out_bin_ff_reg[3] ));
   LUT6 #(
     .INIT(64'h9009000000009009)) 
     ram_full_i_i_4
@@ -3660,23 +3702,23 @@ module cross_clock_fifo_36x16_wr_logic
    (full,
     Q,
     E,
-    \src_gray_ff_reg[3] ,
+    \gic0.gc0.count_d2_reg[3] ,
     wr_clk,
     out,
-    \dest_out_bin_ff_reg[2] ,
+    ram_full_i_reg,
     RD_PNTR_WR,
-    \grstd1.grst_full.grst_f.rst_d3_reg ,
+    ram_full_i_reg_0,
     wr_en,
     AR);
   output full;
   output [2:0]Q;
   output [0:0]E;
-  output [3:0]\src_gray_ff_reg[3] ;
+  output [3:0]\gic0.gc0.count_d2_reg[3] ;
   input wr_clk;
   input out;
-  input \dest_out_bin_ff_reg[2] ;
+  input ram_full_i_reg;
   input [3:0]RD_PNTR_WR;
-  input \grstd1.grst_full.grst_f.rst_d3_reg ;
+  input ram_full_i_reg_0;
   input wr_en;
   input [0:0]AR;
 
@@ -3684,12 +3726,12 @@ module cross_clock_fifo_36x16_wr_logic
   wire [0:0]E;
   wire [2:0]Q;
   wire [3:0]RD_PNTR_WR;
-  wire \dest_out_bin_ff_reg[2] ;
   wire full;
-  wire \grstd1.grst_full.grst_f.rst_d3_reg ;
+  wire [3:0]\gic0.gc0.count_d2_reg[3] ;
   wire \gwas.wsts_n_1 ;
   wire out;
-  wire [3:0]\src_gray_ff_reg[3] ;
+  wire ram_full_i_reg;
+  wire ram_full_i_reg_0;
   wire wpntr_n_0;
   wire wr_clk;
   wire wr_en;
@@ -3699,10 +3741,10 @@ module cross_clock_fifo_36x16_wr_logic
        (.E(E),
         .Q(wr_pntr_plus2),
         .RD_PNTR_WR(RD_PNTR_WR[3]),
-        .\dest_out_bin_ff_reg[3] (wpntr_n_0),
         .full(full),
         .out(out),
-        .ram_full_i_reg_0(\gwas.wsts_n_1 ),
+        .ram_full_fb_i_reg_0(\gwas.wsts_n_1 ),
+        .ram_full_i_reg_0(wpntr_n_0),
         .wr_clk(wr_clk),
         .wr_en(wr_en));
   cross_clock_fifo_36x16_wr_bin_cntr wpntr
@@ -3710,29 +3752,29 @@ module cross_clock_fifo_36x16_wr_logic
         .E(E),
         .Q({wr_pntr_plus2,Q}),
         .RD_PNTR_WR(RD_PNTR_WR),
-        .\dest_out_bin_ff_reg[2] (\dest_out_bin_ff_reg[2] ),
-        .\grstd1.grst_full.grst_f.rst_d3_reg (\grstd1.grst_full.grst_f.rst_d3_reg ),
-        .ram_full_fb_i_reg(\gwas.wsts_n_1 ),
-        .ram_full_i_reg(wpntr_n_0),
-        .\src_gray_ff_reg[3] (\src_gray_ff_reg[3] ),
+        .\dest_out_bin_ff_reg[3] (wpntr_n_0),
+        .\gic0.gc0.count_d2_reg[3]_0 (\gic0.gc0.count_d2_reg[3] ),
+        .ram_full_i_reg(ram_full_i_reg),
+        .ram_full_i_reg_0(\gwas.wsts_n_1 ),
+        .ram_full_i_reg_1(ram_full_i_reg_0),
         .wr_clk(wr_clk));
 endmodule
 
 (* ORIG_REF_NAME = "wr_status_flags_as" *) 
 module cross_clock_fifo_36x16_wr_status_flags_as
    (full,
-    ram_full_i_reg_0,
+    ram_full_fb_i_reg_0,
     E,
-    \dest_out_bin_ff_reg[3] ,
+    ram_full_i_reg_0,
     wr_clk,
     out,
     wr_en,
     Q,
     RD_PNTR_WR);
   output full;
-  output ram_full_i_reg_0;
+  output ram_full_fb_i_reg_0;
   output [0:0]E;
-  input \dest_out_bin_ff_reg[3] ;
+  input ram_full_i_reg_0;
   input wr_clk;
   input out;
   input wr_en;
@@ -3742,9 +3784,9 @@ module cross_clock_fifo_36x16_wr_status_flags_as
   wire [0:0]E;
   wire [0:0]Q;
   wire [0:0]RD_PNTR_WR;
-  wire \dest_out_bin_ff_reg[3] ;
   wire out;
   (* DONT_TOUCH *) wire ram_full_fb_i;
+  wire ram_full_fb_i_reg_0;
   (* DONT_TOUCH *) wire ram_full_i;
   wire ram_full_i_reg_0;
   wire wr_clk;
@@ -3765,7 +3807,7 @@ module cross_clock_fifo_36x16_wr_status_flags_as
     ram_full_fb_i_reg
        (.C(wr_clk),
         .CE(1'b1),
-        .D(\dest_out_bin_ff_reg[3] ),
+        .D(ram_full_i_reg_0),
         .PRE(out),
         .Q(ram_full_fb_i));
   LUT4 #(
@@ -3775,7 +3817,7 @@ module cross_clock_fifo_36x16_wr_status_flags_as
         .I1(wr_en),
         .I2(Q),
         .I3(RD_PNTR_WR),
-        .O(ram_full_i_reg_0));
+        .O(ram_full_fb_i_reg_0));
   (* DONT_TOUCH *) 
   (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
@@ -3784,7 +3826,7 @@ module cross_clock_fifo_36x16_wr_status_flags_as
     ram_full_i_reg
        (.C(wr_clk),
         .CE(1'b1),
-        .D(\dest_out_bin_ff_reg[3] ),
+        .D(ram_full_i_reg_0),
         .PRE(out),
         .Q(ram_full_i));
 endmodule

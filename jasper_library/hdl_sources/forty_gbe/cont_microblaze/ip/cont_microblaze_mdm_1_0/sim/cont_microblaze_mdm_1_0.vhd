@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2018 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2019 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -47,14 +47,14 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: xilinx.com:ip:mdm:3.2
--- IP Revision: 14
+-- IP Revision: 16
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-LIBRARY mdm_v3_2_14;
-USE mdm_v3_2_14.MDM;
+LIBRARY mdm_v3_2_16;
+USE mdm_v3_2_16.MDM;
 
 ENTITY cont_microblaze_mdm_1_0 IS
   PORT (
@@ -103,6 +103,7 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
       C_M_AXI_ADDR_WIDTH : INTEGER;
       C_M_AXI_DATA_WIDTH : INTEGER;
       C_M_AXI_THREAD_ID_WIDTH : INTEGER;
+      C_ADDR_SIZE : INTEGER;
       C_DATA_SIZE : INTEGER;
       C_M_AXIS_DATA_WIDTH : INTEGER;
       C_M_AXIS_ID_WIDTH : INTEGER
@@ -1639,7 +1640,7 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
   ATTRIBUTE X_INTERFACE_INFO OF Dbg_TDO_0: SIGNAL IS "xilinx.com:interface:mbdebug:3.0 MBDEBUG_0 TDO";
   ATTRIBUTE X_INTERFACE_INFO OF Dbg_TDI_0: SIGNAL IS "xilinx.com:interface:mbdebug:3.0 MBDEBUG_0 TDI";
   ATTRIBUTE X_INTERFACE_INFO OF Dbg_Clk_0: SIGNAL IS "xilinx.com:interface:mbdebug:3.0 MBDEBUG_0 CLK";
-  ATTRIBUTE X_INTERFACE_PARAMETER OF Debug_SYS_Rst: SIGNAL IS "XIL_INTERFACENAME RST.Debug_SYS_Rst, POLARITY ACTIVE_HIGH";
+  ATTRIBUTE X_INTERFACE_PARAMETER OF Debug_SYS_Rst: SIGNAL IS "XIL_INTERFACENAME RST.Debug_SYS_Rst, POLARITY ACTIVE_HIGH, INSERT_VIP 0";
   ATTRIBUTE X_INTERFACE_INFO OF Debug_SYS_Rst: SIGNAL IS "xilinx.com:signal:reset:1.0 RST.Debug_SYS_Rst RST";
 BEGIN
   U0 : MDM
@@ -1671,6 +1672,7 @@ BEGIN
       C_M_AXI_ADDR_WIDTH => 32,
       C_M_AXI_DATA_WIDTH => 32,
       C_M_AXI_THREAD_ID_WIDTH => 1,
+      C_ADDR_SIZE => 32,
       C_DATA_SIZE => 32,
       C_M_AXIS_DATA_WIDTH => 32,
       C_M_AXIS_ID_WIDTH => 7

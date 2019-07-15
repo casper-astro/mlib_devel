@@ -1,10 +1,10 @@
-// Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
+// Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
-// Tool Version: Vivado v.2018.2 (lin64) Build 2258646 Thu Jun 14 20:02:38 MDT 2018
-// Date        : Wed Nov  7 10:54:43 2018
-// Host        : adam-cm running 64-bit Ubuntu 16.04.5 LTS
+// Tool Version: Vivado v.2019.1.1 (lin64) Build 2580384 Sat Jun 29 08:04:45 MDT 2019
+// Date        : Mon Jul 15 17:22:23 2019
+// Host        : casper1 running 64-bit Ubuntu 16.04.6 LTS
 // Command     : write_verilog -force -mode funcsim
-//               /home/aisaacson/work/git_work/ska_sa/projects/mlib_devel/jasper_library/test_models/skarab_fgbe/myproj/myproj.srcs/sources_1/ip/cpu_rx_packet_size/cpu_rx_packet_size_sim_netlist.v
+//               /home/hpw1/work/tutorials_devel/vivado_2018/skarab/tut_intro/skarab_tut_intro/myproj/myproj.srcs/sources_1/ip/cpu_rx_packet_size/cpu_rx_packet_size_sim_netlist.v
 // Design      : cpu_rx_packet_size
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -12,7 +12,7 @@
 // --------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CHECK_LICENSE_TYPE = "cpu_rx_packet_size,fifo_generator_v13_2_2,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "fifo_generator_v13_2_2,Vivado 2018.2" *) 
+(* CHECK_LICENSE_TYPE = "cpu_rx_packet_size,fifo_generator_v13_2_4,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "fifo_generator_v13_2_4,Vivado 2019.1.1" *) 
 (* NotValidForBitStream *)
 module cpu_rx_packet_size
    (rst,
@@ -26,8 +26,8 @@ module cpu_rx_packet_size
     empty,
     wr_data_count);
   input rst;
-  (* x_interface_info = "xilinx.com:signal:clock:1.0 write_clk CLK" *) (* x_interface_parameter = "XIL_INTERFACENAME write_clk, FREQ_HZ 100000000, PHASE 0.000" *) input wr_clk;
-  (* x_interface_info = "xilinx.com:signal:clock:1.0 read_clk CLK" *) (* x_interface_parameter = "XIL_INTERFACENAME read_clk, FREQ_HZ 100000000, PHASE 0.000" *) input rd_clk;
+  (* x_interface_info = "xilinx.com:signal:clock:1.0 write_clk CLK" *) (* x_interface_parameter = "XIL_INTERFACENAME write_clk, FREQ_HZ 100000000, PHASE 0.000, INSERT_VIP 0" *) input wr_clk;
+  (* x_interface_info = "xilinx.com:signal:clock:1.0 read_clk CLK" *) (* x_interface_parameter = "XIL_INTERFACENAME read_clk, FREQ_HZ 100000000, PHASE 0.000, INSERT_VIP 0" *) input rd_clk;
   (* x_interface_info = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_DATA" *) input [10:0]din;
   (* x_interface_info = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_EN" *) input wr_en;
   (* x_interface_info = "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_EN" *) input rd_en;
@@ -371,7 +371,7 @@ module cpu_rx_packet_size
   (* C_WR_PNTR_WIDTH_WDCH = "10" *) 
   (* C_WR_PNTR_WIDTH_WRCH = "4" *) 
   (* C_WR_RESPONSE_LATENCY = "1" *) 
-  cpu_rx_packet_size_fifo_generator_v13_2_2 U0
+  cpu_rx_packet_size_fifo_generator_v13_2_4 U0
        (.almost_empty(NLW_U0_almost_empty_UNCONNECTED),
         .almost_full(NLW_U0_almost_full_UNCONNECTED),
         .axi_ar_data_count(NLW_U0_axi_ar_data_count_UNCONNECTED[4:0]),
@@ -648,7 +648,7 @@ endmodule
 (* DEF_VAL = "1'b0" *) (* DEST_SYNC_FF = "2" *) (* INIT_SYNC_FF = "0" *) 
 (* INV_DEF_VAL = "1'b1" *) (* ORIG_REF_NAME = "xpm_cdc_async_rst" *) (* RST_ACTIVE_HIGH = "1" *) 
 (* VERSION = "0" *) (* XPM_MODULE = "TRUE" *) (* xpm_cdc = "ASYNC_RST" *) 
-module cpu_rx_packet_size_xpm_cdc_async_rst__1
+module cpu_rx_packet_size_xpm_cdc_async_rst__2
    (src_arst,
     dest_clk,
     dest_arst);
@@ -876,7 +876,7 @@ endmodule
 (* REG_OUTPUT = "1" *) (* SIM_ASSERT_CHK = "0" *) (* SIM_LOSSLESS_GRAY_CHK = "0" *) 
 (* VERSION = "0" *) (* WIDTH = "4" *) (* XPM_MODULE = "TRUE" *) 
 (* xpm_cdc = "GRAY" *) 
-module cpu_rx_packet_size_xpm_cdc_gray__1
+module cpu_rx_packet_size_xpm_cdc_gray__2
    (src_clk,
     src_in_bin,
     dest_clk,
@@ -1118,7 +1118,7 @@ endmodule
 (* DEST_SYNC_FF = "4" *) (* INIT_SYNC_FF = "0" *) (* ORIG_REF_NAME = "xpm_cdc_single" *) 
 (* SIM_ASSERT_CHK = "0" *) (* SRC_INPUT_REG = "0" *) (* VERSION = "0" *) 
 (* XPM_MODULE = "TRUE" *) (* xpm_cdc = "SINGLE" *) 
-module cpu_rx_packet_size_xpm_cdc_single__1
+module cpu_rx_packet_size_xpm_cdc_single__2
    (src_clk,
     src_in,
     dest_clk,
@@ -1173,44 +1173,44 @@ endmodule
 
 (* ORIG_REF_NAME = "clk_x_pntrs" *) 
 module cpu_rx_packet_size_clk_x_pntrs
-   (ram_full_fb_i_reg,
+   (\gic0.gc0.count_d1_reg[3] ,
     RD_PNTR_WR,
     D,
     WR_PNTR_RD,
     Q,
-    ram_full_fb_i_reg_0,
+    ram_full_fb_i_reg,
     out,
-    \gic0.gc0.count_reg[2] ,
-    \gic0.gc0.count_d2_reg[3] ,
+    ram_full_fb_i_reg_0,
+    \src_gray_ff_reg[3] ,
     wr_clk,
     rd_clk,
-    \gc0.count_d1_reg[3] );
-  output ram_full_fb_i_reg;
+    \src_gray_ff_reg[3]_0 );
+  output \gic0.gc0.count_d1_reg[3] ;
   output [3:0]RD_PNTR_WR;
   output [0:0]D;
   output [3:0]WR_PNTR_RD;
   input [3:0]Q;
-  input ram_full_fb_i_reg_0;
+  input ram_full_fb_i_reg;
   input out;
-  input [2:0]\gic0.gc0.count_reg[2] ;
-  input [3:0]\gic0.gc0.count_d2_reg[3] ;
+  input [2:0]ram_full_fb_i_reg_0;
+  input [3:0]\src_gray_ff_reg[3] ;
   input wr_clk;
   input rd_clk;
-  input [3:0]\gc0.count_d1_reg[3] ;
+  input [3:0]\src_gray_ff_reg[3]_0 ;
 
   wire [0:0]D;
   wire [3:0]Q;
   wire [3:0]RD_PNTR_WR;
   wire [3:0]WR_PNTR_RD;
-  wire [3:0]\gc0.count_d1_reg[3] ;
-  wire [3:0]\gic0.gc0.count_d2_reg[3] ;
-  wire [2:0]\gic0.gc0.count_reg[2] ;
+  wire \gic0.gc0.count_d1_reg[3] ;
   wire out;
   wire ram_full_fb_i_reg;
-  wire ram_full_fb_i_reg_0;
+  wire [2:0]ram_full_fb_i_reg_0;
   wire ram_full_i_i_2_n_0;
   wire ram_full_i_i_4_n_0;
   wire rd_clk;
+  wire [3:0]\src_gray_ff_reg[3] ;
+  wire [3:0]\src_gray_ff_reg[3]_0 ;
   wire wr_clk;
 
   LUT6 #(
@@ -1219,10 +1219,10 @@ module cpu_rx_packet_size_clk_x_pntrs
        (.I0(ram_full_i_i_2_n_0),
         .I1(Q[3]),
         .I2(RD_PNTR_WR[3]),
-        .I3(ram_full_fb_i_reg_0),
+        .I3(ram_full_fb_i_reg),
         .I4(ram_full_i_i_4_n_0),
         .I5(out),
-        .O(ram_full_fb_i_reg));
+        .O(\gic0.gc0.count_d1_reg[3] ));
   LUT6 #(
     .INIT(64'h9009000000009009)) 
     ram_full_i_i_2
@@ -1237,10 +1237,10 @@ module cpu_rx_packet_size_clk_x_pntrs
     .INIT(64'h6FF6FFFFFFFF6FF6)) 
     ram_full_i_i_4
        (.I0(RD_PNTR_WR[0]),
-        .I1(\gic0.gc0.count_reg[2] [0]),
-        .I2(\gic0.gc0.count_reg[2] [2]),
+        .I1(ram_full_fb_i_reg_0[0]),
+        .I2(ram_full_fb_i_reg_0[2]),
         .I3(RD_PNTR_WR[2]),
-        .I4(\gic0.gc0.count_reg[2] [1]),
+        .I4(ram_full_fb_i_reg_0[1]),
         .I5(RD_PNTR_WR[1]),
         .O(ram_full_i_i_4_n_0));
   (* DEST_SYNC_FF = "2" *) 
@@ -1256,12 +1256,12 @@ module cpu_rx_packet_size_clk_x_pntrs
        (.dest_clk(wr_clk),
         .dest_out_bin(RD_PNTR_WR),
         .src_clk(rd_clk),
-        .src_in_bin(\gc0.count_d1_reg[3] ));
+        .src_in_bin(\src_gray_ff_reg[3]_0 ));
   LUT2 #(
     .INIT(4'h6)) 
     \wr_data_count_i[0]_i_1 
        (.I0(RD_PNTR_WR[0]),
-        .I1(\gic0.gc0.count_d2_reg[3] [0]),
+        .I1(\src_gray_ff_reg[3] [0]),
         .O(D));
   (* DEST_SYNC_FF = "2" *) 
   (* INIT_SYNC_FF = "0" *) 
@@ -1272,11 +1272,11 @@ module cpu_rx_packet_size_clk_x_pntrs
   (* WIDTH = "4" *) 
   (* XPM_CDC = "GRAY" *) 
   (* XPM_MODULE = "TRUE" *) 
-  cpu_rx_packet_size_xpm_cdc_gray__1 wr_pntr_cdc_inst
+  cpu_rx_packet_size_xpm_cdc_gray__2 wr_pntr_cdc_inst
        (.dest_clk(rd_clk),
         .dest_out_bin(WR_PNTR_RD),
         .src_clk(wr_clk),
-        .src_in_bin(\gic0.gc0.count_d2_reg[3] ));
+        .src_in_bin(\src_gray_ff_reg[3] ));
 endmodule
 
 (* ORIG_REF_NAME = "dmem" *) 
@@ -1315,6 +1315,13 @@ module cpu_rx_packet_size_dmem
   wire [1:0]NLW_RAM_reg_0_15_6_10_DOD_UNCONNECTED;
 
   (* METHODOLOGY_DRC_VIOS = "" *) 
+  (* RTL_RAM_BITS = "176" *) 
+  (* RTL_RAM_NAME = "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM" *) 
+  (* ram_addr_begin = "0" *) 
+  (* ram_addr_end = "15" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "0" *) 
+  (* ram_slice_end = "5" *) 
   RAM32M RAM_reg_0_15_0_5
        (.ADDRA({1'b0,Q}),
         .ADDRB({1'b0,Q}),
@@ -1331,6 +1338,13 @@ module cpu_rx_packet_size_dmem
         .WCLK(wr_clk),
         .WE(EN));
   (* METHODOLOGY_DRC_VIOS = "" *) 
+  (* RTL_RAM_BITS = "176" *) 
+  (* RTL_RAM_NAME = "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM" *) 
+  (* ram_addr_begin = "0" *) 
+  (* ram_addr_end = "15" *) 
+  (* ram_offset = "0" *) 
+  (* ram_slice_begin = "6" *) 
+  (* ram_slice_end = "10" *) 
   RAM32M RAM_reg_0_15_6_10
        (.ADDRA({1'b0,Q}),
         .ADDRB({1'b0,Q}),
@@ -1495,13 +1509,13 @@ module cpu_rx_packet_size_fifo_generator_ramfifo
         .Q(p_14_out),
         .RD_PNTR_WR(p_25_out),
         .WR_PNTR_RD(p_24_out),
-        .\gc0.count_d1_reg[3] (p_0_out_0),
-        .\gic0.gc0.count_d2_reg[3] (p_13_out),
-        .\gic0.gc0.count_reg[2] (wr_pntr_plus2),
+        .\gic0.gc0.count_d1_reg[3] (\gntv_or_sync_fifo.gcx.clkx_n_0 ),
         .out(rst_full_gen_i),
-        .ram_full_fb_i_reg(\gntv_or_sync_fifo.gcx.clkx_n_0 ),
-        .ram_full_fb_i_reg_0(\gntv_or_sync_fifo.gl0.wr_n_1 ),
+        .ram_full_fb_i_reg(\gntv_or_sync_fifo.gl0.wr_n_1 ),
+        .ram_full_fb_i_reg_0(wr_pntr_plus2),
         .rd_clk(rd_clk),
+        .\src_gray_ff_reg[3] (p_13_out),
+        .\src_gray_ff_reg[3]_0 (p_0_out_0),
         .wr_clk(wr_clk));
   cpu_rx_packet_size_rd_logic \gntv_or_sync_fifo.gl0.rd 
        (.AR(AR),
@@ -1518,14 +1532,14 @@ module cpu_rx_packet_size_fifo_generator_ramfifo
         .Q(wr_pntr_plus2),
         .RD_PNTR_WR(p_25_out),
         .full(full),
-        .\gic0.gc0.count_d1_reg[3] (\gntv_or_sync_fifo.gcx.clkx_n_0 ),
-        .\gic0.gc0.count_d2_reg[3] (p_14_out),
+        .\gic0.gc0.count_d1_reg[3] (p_14_out),
+        .\gic0.gc0.count_d2_reg[3] (p_13_out),
         .out(rst_full_ff_i),
-        .ram_full_fb_i_reg(\gntv_or_sync_fifo.gl0.wr_n_1 ),
-        .\src_gray_ff_reg[3] (p_13_out),
+        .ram_full_fb_i_reg(\gntv_or_sync_fifo.gcx.clkx_n_0 ),
         .wr_clk(wr_clk),
         .wr_data_count(wr_data_count),
-        .wr_en(wr_en));
+        .wr_en(wr_en),
+        .wr_en_0(\gntv_or_sync_fifo.gl0.wr_n_1 ));
   cpu_rx_packet_size_memory \gntv_or_sync_fifo.mem 
        (.AR(AR),
         .E(ram_rd_en_i),
@@ -1538,11 +1552,11 @@ module cpu_rx_packet_size_fifo_generator_ramfifo
         .wr_clk(wr_clk));
   cpu_rx_packet_size_reset_blk_ramfifo rstblk
        (.AR(rstblk_n_0),
+        .\grstd1.grst_full.grst_f.rst_d3_reg_0 (rst_full_gen_i),
+        .\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_reg_0 (AR),
         .out(rst_full_ff_i),
-        .ram_full_fb_i_reg(rst_full_gen_i),
         .rd_clk(rd_clk),
         .rst(rst),
-        .\syncstages_ff_reg[0] (AR),
         .wr_clk(wr_clk),
         .wr_rst_busy(wr_rst_busy));
 endmodule
@@ -1669,8 +1683,8 @@ endmodule
 (* C_WR_DEPTH_WRCH = "16" *) (* C_WR_FREQ = "1" *) (* C_WR_PNTR_WIDTH = "4" *) 
 (* C_WR_PNTR_WIDTH_AXIS = "10" *) (* C_WR_PNTR_WIDTH_RACH = "4" *) (* C_WR_PNTR_WIDTH_RDCH = "10" *) 
 (* C_WR_PNTR_WIDTH_WACH = "4" *) (* C_WR_PNTR_WIDTH_WDCH = "10" *) (* C_WR_PNTR_WIDTH_WRCH = "4" *) 
-(* C_WR_RESPONSE_LATENCY = "1" *) (* ORIG_REF_NAME = "fifo_generator_v13_2_2" *) 
-module cpu_rx_packet_size_fifo_generator_v13_2_2
+(* C_WR_RESPONSE_LATENCY = "1" *) (* ORIG_REF_NAME = "fifo_generator_v13_2_4" *) 
+module cpu_rx_packet_size_fifo_generator_v13_2_4
    (backup,
     backup_marker,
     clk,
@@ -2654,7 +2668,7 @@ module cpu_rx_packet_size_fifo_generator_v13_2_2
        (.G(\<const0> ));
   VCC VCC
        (.P(\<const1> ));
-  cpu_rx_packet_size_fifo_generator_v13_2_2_synth inst_fifo_gen
+  cpu_rx_packet_size_fifo_generator_v13_2_4_synth inst_fifo_gen
        (.AR(rd_rst_busy),
         .din(din),
         .dout(dout),
@@ -2669,8 +2683,8 @@ module cpu_rx_packet_size_fifo_generator_v13_2_2
         .wr_rst_busy(wr_rst_busy));
 endmodule
 
-(* ORIG_REF_NAME = "fifo_generator_v13_2_2_synth" *) 
-module cpu_rx_packet_size_fifo_generator_v13_2_2_synth
+(* ORIG_REF_NAME = "fifo_generator_v13_2_4_synth" *) 
+module cpu_rx_packet_size_fifo_generator_v13_2_4_synth
    (wr_rst_busy,
     AR,
     empty,
@@ -2769,7 +2783,7 @@ endmodule
 
 (* ORIG_REF_NAME = "rd_bin_cntr" *) 
 module cpu_rx_packet_size_rd_bin_cntr
-   (ram_empty_i_reg,
+   (rd_en_0,
     Q,
     rd_en,
     out,
@@ -2777,7 +2791,7 @@ module cpu_rx_packet_size_rd_bin_cntr
     E,
     rd_clk,
     AR);
-  output ram_empty_i_reg;
+  output rd_en_0;
   output [3:0]Q;
   input rd_en;
   input out;
@@ -2796,9 +2810,9 @@ module cpu_rx_packet_size_rd_bin_cntr
   wire ram_empty_i_i_3_n_0;
   wire ram_empty_i_i_4_n_0;
   wire ram_empty_i_i_5_n_0;
-  wire ram_empty_i_reg;
   wire rd_clk;
   wire rd_en;
+  wire rd_en_0;
   wire [3:0]rd_pntr_plus1;
 
   LUT1 #(
@@ -2903,7 +2917,7 @@ module cpu_rx_packet_size_rd_bin_cntr
         .I3(out),
         .I4(ram_empty_i_i_4_n_0),
         .I5(ram_empty_i_i_5_n_0),
-        .O(ram_empty_i_reg));
+        .O(rd_en_0));
   LUT4 #(
     .INIT(16'h9009)) 
     ram_empty_i_i_2
@@ -2971,7 +2985,7 @@ module cpu_rx_packet_size_rd_logic
         .E(E),
         .empty(empty),
         .out(p_2_out),
-        .ram_empty_fb_i_reg_0(rpntr_n_0),
+        .ram_empty_i_reg_0(rpntr_n_0),
         .rd_clk(rd_clk),
         .rd_en(rd_en));
   cpu_rx_packet_size_rd_bin_cntr rpntr
@@ -2980,9 +2994,9 @@ module cpu_rx_packet_size_rd_logic
         .Q(Q),
         .WR_PNTR_RD(WR_PNTR_RD),
         .out(p_2_out),
-        .ram_empty_i_reg(rpntr_n_0),
         .rd_clk(rd_clk),
-        .rd_en(rd_en));
+        .rd_en(rd_en),
+        .rd_en_0(rpntr_n_0));
 endmodule
 
 (* ORIG_REF_NAME = "rd_status_flags_as" *) 
@@ -2990,14 +3004,14 @@ module cpu_rx_packet_size_rd_status_flags_as
    (empty,
     out,
     E,
-    ram_empty_fb_i_reg_0,
+    ram_empty_i_reg_0,
     rd_clk,
     AR,
     rd_en);
   output empty;
   output out;
   output [0:0]E;
-  input ram_empty_fb_i_reg_0;
+  input ram_empty_i_reg_0;
   input rd_clk;
   input [0:0]AR;
   input rd_en;
@@ -3005,8 +3019,8 @@ module cpu_rx_packet_size_rd_status_flags_as
   wire [0:0]AR;
   wire [0:0]E;
   (* DONT_TOUCH *) wire ram_empty_fb_i;
-  wire ram_empty_fb_i_reg_0;
   (* DONT_TOUCH *) wire ram_empty_i;
+  wire ram_empty_i_reg_0;
   wire rd_clk;
   wire rd_en;
 
@@ -3026,7 +3040,7 @@ module cpu_rx_packet_size_rd_status_flags_as
     ram_empty_fb_i_reg
        (.C(rd_clk),
         .CE(1'b1),
-        .D(ram_empty_fb_i_reg_0),
+        .D(ram_empty_i_reg_0),
         .PRE(AR),
         .Q(ram_empty_fb_i));
   (* DONT_TOUCH *) 
@@ -3037,7 +3051,7 @@ module cpu_rx_packet_size_rd_status_flags_as
     ram_empty_i_reg
        (.C(rd_clk),
         .CE(1'b1),
-        .D(ram_empty_fb_i_reg_0),
+        .D(ram_empty_i_reg_0),
         .PRE(AR),
         .Q(ram_empty_i));
 endmodule
@@ -3045,17 +3059,17 @@ endmodule
 (* ORIG_REF_NAME = "reset_blk_ramfifo" *) 
 module cpu_rx_packet_size_reset_blk_ramfifo
    (AR,
-    \syncstages_ff_reg[0] ,
+    \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_reg_0 ,
     out,
-    ram_full_fb_i_reg,
+    \grstd1.grst_full.grst_f.rst_d3_reg_0 ,
     wr_rst_busy,
     rst,
     wr_clk,
     rd_clk);
   output [0:0]AR;
-  output [0:0]\syncstages_ff_reg[0] ;
+  output [0:0]\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_reg_0 ;
   output out;
-  output ram_full_fb_i_reg;
+  output \grstd1.grst_full.grst_f.rst_d3_reg_0 ;
   output wr_rst_busy;
   input rst;
   input wr_clk;
@@ -3065,6 +3079,7 @@ module cpu_rx_packet_size_reset_blk_ramfifo
   wire dest_out;
   wire \grstd1.grst_full.grst_f.rst_d3_i_1_n_0 ;
   wire \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_i_1_n_0 ;
+  wire [0:0]\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_reg_0 ;
   wire \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_wr_rst_ic_i_1_n_0 ;
   wire \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_i_1_n_0 ;
   wire rd_clk;
@@ -3076,13 +3091,12 @@ module cpu_rx_packet_size_reset_blk_ramfifo
   (* async_reg = "true" *) (* msgon = "true" *) wire rst_rd_reg2;
   (* async_reg = "true" *) (* msgon = "true" *) wire rst_wr_reg2;
   wire sckt_rd_rst_wr;
-  wire [0:0]\syncstages_ff_reg[0] ;
   wire wr_clk;
   wire wr_rst_busy;
   wire [1:0]wr_rst_rd_ext;
 
+  assign \grstd1.grst_full.grst_f.rst_d3_reg_0  = rst_d3;
   assign out = rst_d2;
-  assign ram_full_fb_i_reg = rst_d3;
   (* ASYNC_REG *) 
   (* KEEP = "yes" *) 
   (* msgon = "true" *) 
@@ -3169,7 +3183,7 @@ module cpu_rx_packet_size_reset_blk_ramfifo
   LUT2 #(
     .INIT(4'h2)) 
     \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_i_1 
-       (.I0(\syncstages_ff_reg[0] ),
+       (.I0(\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_reg_0 ),
         .I1(wr_rst_rd_ext[1]),
         .O(\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_i_1_n_0 ));
   FDPE #(
@@ -3179,7 +3193,7 @@ module cpu_rx_packet_size_reset_blk_ramfifo
         .CE(1'b1),
         .D(\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_i_1_n_0 ),
         .PRE(rst_rd_reg2),
-        .Q(\syncstages_ff_reg[0] ));
+        .Q(\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_reg_0 ));
   LUT3 #(
     .INIT(8'h8A)) 
     \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_wr_rst_ic_i_1 
@@ -3239,7 +3253,7 @@ module cpu_rx_packet_size_reset_blk_ramfifo
        (.dest_clk(wr_clk),
         .dest_out(sckt_rd_rst_wr),
         .src_clk(rd_clk),
-        .src_in(\syncstages_ff_reg[0] ));
+        .src_in(\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_reg_0 ));
   (* DEST_SYNC_FF = "4" *) 
   (* INIT_SYNC_FF = "0" *) 
   (* SIM_ASSERT_CHK = "0" *) 
@@ -3247,7 +3261,7 @@ module cpu_rx_packet_size_reset_blk_ramfifo
   (* VERSION = "0" *) 
   (* XPM_CDC = "SINGLE" *) 
   (* XPM_MODULE = "TRUE" *) 
-  cpu_rx_packet_size_xpm_cdc_single__1 \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.xpm_cdc_single_inst_wrst_rd 
+  cpu_rx_packet_size_xpm_cdc_single__2 \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.xpm_cdc_single_inst_wrst_rd 
        (.dest_clk(rd_clk),
         .dest_out(dest_out),
         .src_clk(wr_clk),
@@ -3260,7 +3274,7 @@ module cpu_rx_packet_size_reset_blk_ramfifo
   (* VERSION = "0" *) 
   (* XPM_CDC = "ASYNC_RST" *) 
   (* XPM_MODULE = "TRUE" *) 
-  cpu_rx_packet_size_xpm_cdc_async_rst__1 \ngwrdrst.grst.g7serrst.gnsckt_wrst.rst_wr_reg2_inst 
+  cpu_rx_packet_size_xpm_cdc_async_rst__2 \ngwrdrst.grst.g7serrst.gnsckt_wrst.rst_wr_reg2_inst 
        (.dest_arst(rst_wr_reg2),
         .dest_clk(wr_clk),
         .src_arst(rst));
@@ -3270,16 +3284,16 @@ endmodule
 module cpu_rx_packet_size_wr_bin_cntr
    (Q,
     D,
-    \src_gray_ff_reg[3] ,
     \gic0.gc0.count_d2_reg[3]_0 ,
+    \gic0.gc0.count_d1_reg[3]_0 ,
     RD_PNTR_WR,
     E,
     wr_clk,
     AR);
   output [3:0]Q;
   output [2:0]D;
-  output [3:0]\src_gray_ff_reg[3] ;
   output [3:0]\gic0.gc0.count_d2_reg[3]_0 ;
+  output [3:0]\gic0.gc0.count_d1_reg[3]_0 ;
   input [3:0]RD_PNTR_WR;
   input [0:0]E;
   input wr_clk;
@@ -3290,9 +3304,9 @@ module cpu_rx_packet_size_wr_bin_cntr
   wire [0:0]E;
   wire [3:0]Q;
   wire [3:0]RD_PNTR_WR;
+  wire [3:0]\gic0.gc0.count_d1_reg[3]_0 ;
   wire [3:0]\gic0.gc0.count_d2_reg[3]_0 ;
   wire [3:0]plusOp;
-  wire [3:0]\src_gray_ff_reg[3] ;
   wire wr_clk;
   wire \wr_data_count_i[3]_i_2_n_0 ;
 
@@ -3331,7 +3345,7 @@ module cpu_rx_packet_size_wr_bin_cntr
         .CE(E),
         .D(Q[0]),
         .PRE(AR),
-        .Q(\gic0.gc0.count_d2_reg[3]_0 [0]));
+        .Q(\gic0.gc0.count_d1_reg[3]_0 [0]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d1_reg[1] 
@@ -3339,7 +3353,7 @@ module cpu_rx_packet_size_wr_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(Q[1]),
-        .Q(\gic0.gc0.count_d2_reg[3]_0 [1]));
+        .Q(\gic0.gc0.count_d1_reg[3]_0 [1]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d1_reg[2] 
@@ -3347,7 +3361,7 @@ module cpu_rx_packet_size_wr_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(Q[2]),
-        .Q(\gic0.gc0.count_d2_reg[3]_0 [2]));
+        .Q(\gic0.gc0.count_d1_reg[3]_0 [2]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d1_reg[3] 
@@ -3355,39 +3369,39 @@ module cpu_rx_packet_size_wr_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(Q[3]),
-        .Q(\gic0.gc0.count_d2_reg[3]_0 [3]));
+        .Q(\gic0.gc0.count_d1_reg[3]_0 [3]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[0] 
        (.C(wr_clk),
         .CE(E),
         .CLR(AR),
-        .D(\gic0.gc0.count_d2_reg[3]_0 [0]),
-        .Q(\src_gray_ff_reg[3] [0]));
+        .D(\gic0.gc0.count_d1_reg[3]_0 [0]),
+        .Q(\gic0.gc0.count_d2_reg[3]_0 [0]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[1] 
        (.C(wr_clk),
         .CE(E),
         .CLR(AR),
-        .D(\gic0.gc0.count_d2_reg[3]_0 [1]),
-        .Q(\src_gray_ff_reg[3] [1]));
+        .D(\gic0.gc0.count_d1_reg[3]_0 [1]),
+        .Q(\gic0.gc0.count_d2_reg[3]_0 [1]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[2] 
        (.C(wr_clk),
         .CE(E),
         .CLR(AR),
-        .D(\gic0.gc0.count_d2_reg[3]_0 [2]),
-        .Q(\src_gray_ff_reg[3] [2]));
+        .D(\gic0.gc0.count_d1_reg[3]_0 [2]),
+        .Q(\gic0.gc0.count_d2_reg[3]_0 [2]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[3] 
        (.C(wr_clk),
         .CE(E),
         .CLR(AR),
-        .D(\gic0.gc0.count_d2_reg[3]_0 [3]),
-        .Q(\src_gray_ff_reg[3] [3]));
+        .D(\gic0.gc0.count_d1_reg[3]_0 [3]),
+        .Q(\gic0.gc0.count_d2_reg[3]_0 [3]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_reg[0] 
@@ -3424,38 +3438,38 @@ module cpu_rx_packet_size_wr_bin_cntr
   LUT4 #(
     .INIT(16'h4BB4)) 
     \wr_data_count_i[1]_i_1 
-       (.I0(\src_gray_ff_reg[3] [0]),
+       (.I0(\gic0.gc0.count_d2_reg[3]_0 [0]),
         .I1(RD_PNTR_WR[0]),
-        .I2(\src_gray_ff_reg[3] [1]),
+        .I2(\gic0.gc0.count_d2_reg[3]_0 [1]),
         .I3(RD_PNTR_WR[1]),
         .O(D[0]));
   LUT6 #(
     .INIT(64'h40F4BF0BBF0B40F4)) 
     \wr_data_count_i[2]_i_1 
-       (.I0(\src_gray_ff_reg[3] [0]),
+       (.I0(\gic0.gc0.count_d2_reg[3]_0 [0]),
         .I1(RD_PNTR_WR[0]),
         .I2(RD_PNTR_WR[1]),
-        .I3(\src_gray_ff_reg[3] [1]),
+        .I3(\gic0.gc0.count_d2_reg[3]_0 [1]),
         .I4(RD_PNTR_WR[2]),
-        .I5(\src_gray_ff_reg[3] [2]),
+        .I5(\gic0.gc0.count_d2_reg[3]_0 [2]),
         .O(D[1]));
   LUT5 #(
     .INIT(32'h718E8E71)) 
     \wr_data_count_i[3]_i_1 
        (.I0(\wr_data_count_i[3]_i_2_n_0 ),
-        .I1(\src_gray_ff_reg[3] [2]),
+        .I1(\gic0.gc0.count_d2_reg[3]_0 [2]),
         .I2(RD_PNTR_WR[2]),
-        .I3(\src_gray_ff_reg[3] [3]),
+        .I3(\gic0.gc0.count_d2_reg[3]_0 [3]),
         .I4(RD_PNTR_WR[3]),
         .O(D[2]));
   (* SOFT_HLUTNM = "soft_lutpair4" *) 
   LUT4 #(
     .INIT(16'hBB2B)) 
     \wr_data_count_i[3]_i_2 
-       (.I0(\src_gray_ff_reg[3] [1]),
+       (.I0(\gic0.gc0.count_d2_reg[3]_0 [1]),
         .I1(RD_PNTR_WR[1]),
         .I2(RD_PNTR_WR[0]),
-        .I3(\src_gray_ff_reg[3] [0]),
+        .I3(\gic0.gc0.count_d2_reg[3]_0 [0]),
         .O(\wr_data_count_i[3]_i_2_n_0 ));
 endmodule
 
@@ -3512,13 +3526,13 @@ endmodule
 (* ORIG_REF_NAME = "wr_logic" *) 
 module cpu_rx_packet_size_wr_logic
    (full,
-    ram_full_fb_i_reg,
+    wr_en_0,
     Q,
     E,
-    \src_gray_ff_reg[3] ,
     \gic0.gc0.count_d2_reg[3] ,
-    wr_data_count,
     \gic0.gc0.count_d1_reg[3] ,
+    wr_data_count,
+    ram_full_fb_i_reg,
     wr_clk,
     out,
     wr_en,
@@ -3526,13 +3540,13 @@ module cpu_rx_packet_size_wr_logic
     D,
     AR);
   output full;
-  output ram_full_fb_i_reg;
+  output wr_en_0;
   output [2:0]Q;
   output [0:0]E;
-  output [3:0]\src_gray_ff_reg[3] ;
   output [3:0]\gic0.gc0.count_d2_reg[3] ;
+  output [3:0]\gic0.gc0.count_d1_reg[3] ;
   output [3:0]wr_data_count;
-  input \gic0.gc0.count_d1_reg[3] ;
+  input ram_full_fb_i_reg;
   input wr_clk;
   input out;
   input wr_en;
@@ -3546,15 +3560,15 @@ module cpu_rx_packet_size_wr_logic
   wire [2:0]Q;
   wire [3:0]RD_PNTR_WR;
   wire full;
-  wire \gic0.gc0.count_d1_reg[3] ;
+  wire [3:0]\gic0.gc0.count_d1_reg[3] ;
   wire [3:0]\gic0.gc0.count_d2_reg[3] ;
   wire [3:1]minusOp;
   wire out;
   wire ram_full_fb_i_reg;
-  wire [3:0]\src_gray_ff_reg[3] ;
   wire wr_clk;
   wire [3:0]wr_data_count;
   wire wr_en;
+  wire wr_en_0;
   wire [3:3]wr_pntr_plus2;
 
   cpu_rx_packet_size_wr_dc_as \gwas.gwdc0.wdc 
@@ -3567,37 +3581,37 @@ module cpu_rx_packet_size_wr_logic
         .Q(wr_pntr_plus2),
         .RD_PNTR_WR(RD_PNTR_WR[3]),
         .full(full),
-        .\gic0.gc0.count_d1_reg[3] (\gic0.gc0.count_d1_reg[3] ),
         .out(out),
         .ram_full_fb_i_reg_0(ram_full_fb_i_reg),
         .wr_clk(wr_clk),
-        .wr_en(wr_en));
+        .wr_en(wr_en),
+        .wr_en_0(wr_en_0));
   cpu_rx_packet_size_wr_bin_cntr wpntr
        (.AR(AR),
         .D(minusOp),
         .E(E),
         .Q({wr_pntr_plus2,Q}),
         .RD_PNTR_WR(RD_PNTR_WR),
+        .\gic0.gc0.count_d1_reg[3]_0 (\gic0.gc0.count_d1_reg[3] ),
         .\gic0.gc0.count_d2_reg[3]_0 (\gic0.gc0.count_d2_reg[3] ),
-        .\src_gray_ff_reg[3] (\src_gray_ff_reg[3] ),
         .wr_clk(wr_clk));
 endmodule
 
 (* ORIG_REF_NAME = "wr_status_flags_as" *) 
 module cpu_rx_packet_size_wr_status_flags_as
    (full,
-    ram_full_fb_i_reg_0,
+    wr_en_0,
     E,
-    \gic0.gc0.count_d1_reg[3] ,
+    ram_full_fb_i_reg_0,
     wr_clk,
     out,
     wr_en,
     RD_PNTR_WR,
     Q);
   output full;
-  output ram_full_fb_i_reg_0;
+  output wr_en_0;
   output [0:0]E;
-  input \gic0.gc0.count_d1_reg[3] ;
+  input ram_full_fb_i_reg_0;
   input wr_clk;
   input out;
   input wr_en;
@@ -3607,13 +3621,13 @@ module cpu_rx_packet_size_wr_status_flags_as
   wire [0:0]E;
   wire [0:0]Q;
   wire [0:0]RD_PNTR_WR;
-  wire \gic0.gc0.count_d1_reg[3] ;
   wire out;
   (* DONT_TOUCH *) wire ram_full_fb_i;
   wire ram_full_fb_i_reg_0;
   (* DONT_TOUCH *) wire ram_full_i;
   wire wr_clk;
   wire wr_en;
+  wire wr_en_0;
 
   assign full = ram_full_i;
   LUT2 #(
@@ -3630,7 +3644,7 @@ module cpu_rx_packet_size_wr_status_flags_as
     ram_full_fb_i_reg
        (.C(wr_clk),
         .CE(1'b1),
-        .D(\gic0.gc0.count_d1_reg[3] ),
+        .D(ram_full_fb_i_reg_0),
         .PRE(out),
         .Q(ram_full_fb_i));
   LUT4 #(
@@ -3640,7 +3654,7 @@ module cpu_rx_packet_size_wr_status_flags_as
         .I1(ram_full_fb_i),
         .I2(RD_PNTR_WR),
         .I3(Q),
-        .O(ram_full_fb_i_reg_0));
+        .O(wr_en_0));
   (* DONT_TOUCH *) 
   (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
@@ -3649,7 +3663,7 @@ module cpu_rx_packet_size_wr_status_flags_as
     ram_full_i_reg
        (.C(wr_clk),
         .CE(1'b1),
-        .D(\gic0.gc0.count_d1_reg[3] ),
+        .D(ram_full_fb_i_reg_0),
         .PRE(out),
         .Q(ram_full_i));
 endmodule

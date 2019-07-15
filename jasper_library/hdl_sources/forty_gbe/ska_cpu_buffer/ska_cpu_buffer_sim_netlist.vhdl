@@ -1,10 +1,10 @@
--- Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
+-- Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
--- Tool Version: Vivado v.2018.2 (lin64) Build 2258646 Thu Jun 14 20:02:38 MDT 2018
--- Date        : Wed Nov  7 10:55:23 2018
--- Host        : adam-cm running 64-bit Ubuntu 16.04.5 LTS
+-- Tool Version: Vivado v.2019.1.1 (lin64) Build 2580384 Sat Jun 29 08:04:45 MDT 2019
+-- Date        : Mon Jul 15 17:25:02 2019
+-- Host        : casper1 running 64-bit Ubuntu 16.04.6 LTS
 -- Command     : write_vhdl -force -mode funcsim
---               /home/aisaacson/work/git_work/ska_sa/projects/mlib_devel/jasper_library/test_models/skarab_fgbe/myproj/myproj.srcs/sources_1/ip/ska_cpu_buffer/ska_cpu_buffer_sim_netlist.vhdl
+--               /home/hpw1/work/tutorials_devel/vivado_2018/skarab/tut_intro/skarab_tut_intro/myproj/myproj.srcs/sources_1/ip/ska_cpu_buffer/ska_cpu_buffer_sim_netlist.vhdl
 -- Design      : ska_cpu_buffer
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -2627,7 +2627,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity ska_cpu_buffer_blk_mem_gen_v8_4_1_synth is
+entity ska_cpu_buffer_blk_mem_gen_v8_4_3_synth is
   port (
     douta : out STD_LOGIC_VECTOR ( 259 downto 0 );
     doutb : out STD_LOGIC_VECTOR ( 259 downto 0 );
@@ -2641,10 +2641,10 @@ entity ska_cpu_buffer_blk_mem_gen_v8_4_1_synth is
     web : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of ska_cpu_buffer_blk_mem_gen_v8_4_1_synth : entity is "blk_mem_gen_v8_4_1_synth";
-end ska_cpu_buffer_blk_mem_gen_v8_4_1_synth;
+  attribute ORIG_REF_NAME of ska_cpu_buffer_blk_mem_gen_v8_4_3_synth : entity is "blk_mem_gen_v8_4_3_synth";
+end ska_cpu_buffer_blk_mem_gen_v8_4_3_synth;
 
-architecture STRUCTURE of ska_cpu_buffer_blk_mem_gen_v8_4_1_synth is
+architecture STRUCTURE of ska_cpu_buffer_blk_mem_gen_v8_4_3_synth is
 begin
 \gnbram.gnativebmg.native_blk_mem_gen\: entity work.ska_cpu_buffer_blk_mem_gen_top
      port map (
@@ -2664,7 +2664,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity ska_cpu_buffer_blk_mem_gen_v8_4_1 is
+entity ska_cpu_buffer_blk_mem_gen_v8_4_3 is
   port (
     clka : in STD_LOGIC;
     rsta : in STD_LOGIC;
@@ -2731,158 +2731,162 @@ entity ska_cpu_buffer_blk_mem_gen_v8_4_1 is
     s_axi_rdaddrecc : out STD_LOGIC_VECTOR ( 9 downto 0 )
   );
   attribute C_ADDRA_WIDTH : integer;
-  attribute C_ADDRA_WIDTH of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 10;
+  attribute C_ADDRA_WIDTH of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 10;
   attribute C_ADDRB_WIDTH : integer;
-  attribute C_ADDRB_WIDTH of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 10;
+  attribute C_ADDRB_WIDTH of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 10;
   attribute C_ALGORITHM : integer;
-  attribute C_ALGORITHM of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 1;
+  attribute C_ALGORITHM of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 1;
   attribute C_AXI_ID_WIDTH : integer;
-  attribute C_AXI_ID_WIDTH of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 4;
+  attribute C_AXI_ID_WIDTH of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 4;
   attribute C_AXI_SLAVE_TYPE : integer;
-  attribute C_AXI_SLAVE_TYPE of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_AXI_SLAVE_TYPE of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_AXI_TYPE : integer;
-  attribute C_AXI_TYPE of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 1;
+  attribute C_AXI_TYPE of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 1;
   attribute C_BYTE_SIZE : integer;
-  attribute C_BYTE_SIZE of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 9;
+  attribute C_BYTE_SIZE of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 9;
   attribute C_COMMON_CLK : integer;
-  attribute C_COMMON_CLK of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_COMMON_CLK of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_COUNT_18K_BRAM : string;
-  attribute C_COUNT_18K_BRAM of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is "1";
+  attribute C_COUNT_18K_BRAM of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is "1";
   attribute C_COUNT_36K_BRAM : string;
-  attribute C_COUNT_36K_BRAM of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is "7";
+  attribute C_COUNT_36K_BRAM of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is "7";
   attribute C_CTRL_ECC_ALGO : string;
-  attribute C_CTRL_ECC_ALGO of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is "NONE";
+  attribute C_CTRL_ECC_ALGO of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is "NONE";
   attribute C_DEFAULT_DATA : string;
-  attribute C_DEFAULT_DATA of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is "0";
+  attribute C_DEFAULT_DATA of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is "0";
   attribute C_DISABLE_WARN_BHV_COLL : integer;
-  attribute C_DISABLE_WARN_BHV_COLL of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_DISABLE_WARN_BHV_COLL of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_DISABLE_WARN_BHV_RANGE : integer;
-  attribute C_DISABLE_WARN_BHV_RANGE of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_DISABLE_WARN_BHV_RANGE of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_ELABORATION_DIR : string;
-  attribute C_ELABORATION_DIR of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is "./";
+  attribute C_ELABORATION_DIR of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is "./";
   attribute C_ENABLE_32BIT_ADDRESS : integer;
-  attribute C_ENABLE_32BIT_ADDRESS of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_ENABLE_32BIT_ADDRESS of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_EN_DEEPSLEEP_PIN : integer;
-  attribute C_EN_DEEPSLEEP_PIN of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_EN_DEEPSLEEP_PIN of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_EN_ECC_PIPE : integer;
-  attribute C_EN_ECC_PIPE of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_EN_ECC_PIPE of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_EN_RDADDRA_CHG : integer;
-  attribute C_EN_RDADDRA_CHG of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_EN_RDADDRA_CHG of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_EN_RDADDRB_CHG : integer;
-  attribute C_EN_RDADDRB_CHG of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_EN_RDADDRB_CHG of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_EN_SAFETY_CKT : integer;
-  attribute C_EN_SAFETY_CKT of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_EN_SAFETY_CKT of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_EN_SHUTDOWN_PIN : integer;
-  attribute C_EN_SHUTDOWN_PIN of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_EN_SHUTDOWN_PIN of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_EN_SLEEP_PIN : integer;
-  attribute C_EN_SLEEP_PIN of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_EN_SLEEP_PIN of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_EST_POWER_SUMMARY : string;
-  attribute C_EST_POWER_SUMMARY of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is "Estimated Power for IP     :     45.083004 mW";
+  attribute C_EST_POWER_SUMMARY of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is "Estimated Power for IP     :     45.083004 mW";
   attribute C_FAMILY : string;
-  attribute C_FAMILY of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is "virtex7";
+  attribute C_FAMILY of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is "virtex7";
   attribute C_HAS_AXI_ID : integer;
-  attribute C_HAS_AXI_ID of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_HAS_AXI_ID of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_HAS_ENA : integer;
-  attribute C_HAS_ENA of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_HAS_ENA of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_HAS_ENB : integer;
-  attribute C_HAS_ENB of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_HAS_ENB of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_HAS_INJECTERR : integer;
-  attribute C_HAS_INJECTERR of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_HAS_INJECTERR of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_HAS_MEM_OUTPUT_REGS_A : integer;
-  attribute C_HAS_MEM_OUTPUT_REGS_A of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_HAS_MEM_OUTPUT_REGS_A of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_HAS_MEM_OUTPUT_REGS_B : integer;
-  attribute C_HAS_MEM_OUTPUT_REGS_B of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_HAS_MEM_OUTPUT_REGS_B of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_HAS_MUX_OUTPUT_REGS_A : integer;
-  attribute C_HAS_MUX_OUTPUT_REGS_A of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_HAS_MUX_OUTPUT_REGS_A of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_HAS_MUX_OUTPUT_REGS_B : integer;
-  attribute C_HAS_MUX_OUTPUT_REGS_B of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_HAS_MUX_OUTPUT_REGS_B of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_HAS_REGCEA : integer;
-  attribute C_HAS_REGCEA of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_HAS_REGCEA of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_HAS_REGCEB : integer;
-  attribute C_HAS_REGCEB of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_HAS_REGCEB of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_HAS_RSTA : integer;
-  attribute C_HAS_RSTA of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_HAS_RSTA of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_HAS_RSTB : integer;
-  attribute C_HAS_RSTB of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_HAS_RSTB of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_HAS_SOFTECC_INPUT_REGS_A : integer;
-  attribute C_HAS_SOFTECC_INPUT_REGS_A of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_HAS_SOFTECC_INPUT_REGS_A of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_HAS_SOFTECC_OUTPUT_REGS_B : integer;
-  attribute C_HAS_SOFTECC_OUTPUT_REGS_B of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_HAS_SOFTECC_OUTPUT_REGS_B of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_INITA_VAL : string;
-  attribute C_INITA_VAL of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is "0";
+  attribute C_INITA_VAL of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is "0";
   attribute C_INITB_VAL : string;
-  attribute C_INITB_VAL of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is "0";
+  attribute C_INITB_VAL of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is "0";
   attribute C_INIT_FILE : string;
-  attribute C_INIT_FILE of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is "ska_cpu_buffer.mem";
+  attribute C_INIT_FILE of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is "ska_cpu_buffer.mem";
   attribute C_INIT_FILE_NAME : string;
-  attribute C_INIT_FILE_NAME of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is "no_coe_file_loaded";
+  attribute C_INIT_FILE_NAME of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is "no_coe_file_loaded";
   attribute C_INTERFACE_TYPE : integer;
-  attribute C_INTERFACE_TYPE of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_INTERFACE_TYPE of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_LOAD_INIT_FILE : integer;
-  attribute C_LOAD_INIT_FILE of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_LOAD_INIT_FILE of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_MEM_TYPE : integer;
-  attribute C_MEM_TYPE of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 2;
+  attribute C_MEM_TYPE of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 2;
   attribute C_MUX_PIPELINE_STAGES : integer;
-  attribute C_MUX_PIPELINE_STAGES of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_MUX_PIPELINE_STAGES of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_PRIM_TYPE : integer;
-  attribute C_PRIM_TYPE of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 1;
+  attribute C_PRIM_TYPE of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 1;
   attribute C_READ_DEPTH_A : integer;
-  attribute C_READ_DEPTH_A of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 1024;
+  attribute C_READ_DEPTH_A of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 1024;
   attribute C_READ_DEPTH_B : integer;
-  attribute C_READ_DEPTH_B of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 1024;
+  attribute C_READ_DEPTH_B of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 1024;
+  attribute C_READ_LATENCY_A : integer;
+  attribute C_READ_LATENCY_A of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 1;
+  attribute C_READ_LATENCY_B : integer;
+  attribute C_READ_LATENCY_B of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 1;
   attribute C_READ_WIDTH_A : integer;
-  attribute C_READ_WIDTH_A of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 260;
+  attribute C_READ_WIDTH_A of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 260;
   attribute C_READ_WIDTH_B : integer;
-  attribute C_READ_WIDTH_B of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 260;
+  attribute C_READ_WIDTH_B of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 260;
   attribute C_RSTRAM_A : integer;
-  attribute C_RSTRAM_A of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_RSTRAM_A of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_RSTRAM_B : integer;
-  attribute C_RSTRAM_B of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_RSTRAM_B of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_RST_PRIORITY_A : string;
-  attribute C_RST_PRIORITY_A of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is "CE";
+  attribute C_RST_PRIORITY_A of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is "CE";
   attribute C_RST_PRIORITY_B : string;
-  attribute C_RST_PRIORITY_B of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is "CE";
+  attribute C_RST_PRIORITY_B of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is "CE";
   attribute C_SIM_COLLISION_CHECK : string;
-  attribute C_SIM_COLLISION_CHECK of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is "ALL";
+  attribute C_SIM_COLLISION_CHECK of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is "ALL";
   attribute C_USE_BRAM_BLOCK : integer;
-  attribute C_USE_BRAM_BLOCK of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_USE_BRAM_BLOCK of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_USE_BYTE_WEA : integer;
-  attribute C_USE_BYTE_WEA of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_USE_BYTE_WEA of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_USE_BYTE_WEB : integer;
-  attribute C_USE_BYTE_WEB of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_USE_BYTE_WEB of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_USE_DEFAULT_DATA : integer;
-  attribute C_USE_DEFAULT_DATA of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_USE_DEFAULT_DATA of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_USE_ECC : integer;
-  attribute C_USE_ECC of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_USE_ECC of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_USE_SOFTECC : integer;
-  attribute C_USE_SOFTECC of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_USE_SOFTECC of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_USE_URAM : integer;
-  attribute C_USE_URAM of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 0;
+  attribute C_USE_URAM of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 0;
   attribute C_WEA_WIDTH : integer;
-  attribute C_WEA_WIDTH of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 1;
+  attribute C_WEA_WIDTH of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 1;
   attribute C_WEB_WIDTH : integer;
-  attribute C_WEB_WIDTH of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 1;
+  attribute C_WEB_WIDTH of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 1;
   attribute C_WRITE_DEPTH_A : integer;
-  attribute C_WRITE_DEPTH_A of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 1024;
+  attribute C_WRITE_DEPTH_A of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 1024;
   attribute C_WRITE_DEPTH_B : integer;
-  attribute C_WRITE_DEPTH_B of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 1024;
+  attribute C_WRITE_DEPTH_B of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 1024;
   attribute C_WRITE_MODE_A : string;
-  attribute C_WRITE_MODE_A of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is "WRITE_FIRST";
+  attribute C_WRITE_MODE_A of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is "WRITE_FIRST";
   attribute C_WRITE_MODE_B : string;
-  attribute C_WRITE_MODE_B of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is "WRITE_FIRST";
+  attribute C_WRITE_MODE_B of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is "WRITE_FIRST";
   attribute C_WRITE_WIDTH_A : integer;
-  attribute C_WRITE_WIDTH_A of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 260;
+  attribute C_WRITE_WIDTH_A of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 260;
   attribute C_WRITE_WIDTH_B : integer;
-  attribute C_WRITE_WIDTH_B of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is 260;
+  attribute C_WRITE_WIDTH_B of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is 260;
   attribute C_XDEVICEFAMILY : string;
-  attribute C_XDEVICEFAMILY of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is "virtex7";
+  attribute C_XDEVICEFAMILY of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is "virtex7";
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is "blk_mem_gen_v8_4_1";
+  attribute ORIG_REF_NAME of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is "blk_mem_gen_v8_4_3";
   attribute downgradeipidentifiedwarnings : string;
-  attribute downgradeipidentifiedwarnings of ska_cpu_buffer_blk_mem_gen_v8_4_1 : entity is "yes";
-end ska_cpu_buffer_blk_mem_gen_v8_4_1;
+  attribute downgradeipidentifiedwarnings of ska_cpu_buffer_blk_mem_gen_v8_4_3 : entity is "yes";
+end ska_cpu_buffer_blk_mem_gen_v8_4_3;
 
-architecture STRUCTURE of ska_cpu_buffer_blk_mem_gen_v8_4_1 is
+architecture STRUCTURE of ska_cpu_buffer_blk_mem_gen_v8_4_3 is
   signal \<const0>\ : STD_LOGIC;
 begin
   dbiterr <= \<const0>\;
@@ -3193,7 +3197,7 @@ GND: unisim.vcomponents.GND
      port map (
       G => \<const0>\
     );
-inst_blk_mem_gen: entity work.ska_cpu_buffer_blk_mem_gen_v8_4_1_synth
+inst_blk_mem_gen: entity work.ska_cpu_buffer_blk_mem_gen_v8_4_3_synth
      port map (
       addra(9 downto 0) => addra(9 downto 0),
       addrb(9 downto 0) => addrb(9 downto 0),
@@ -3227,11 +3231,11 @@ entity ska_cpu_buffer is
   attribute NotValidForBitStream : boolean;
   attribute NotValidForBitStream of ska_cpu_buffer : entity is true;
   attribute CHECK_LICENSE_TYPE : string;
-  attribute CHECK_LICENSE_TYPE of ska_cpu_buffer : entity is "ska_cpu_buffer,blk_mem_gen_v8_4_1,{}";
+  attribute CHECK_LICENSE_TYPE of ska_cpu_buffer : entity is "ska_cpu_buffer,blk_mem_gen_v8_4_3,{}";
   attribute downgradeipidentifiedwarnings : string;
   attribute downgradeipidentifiedwarnings of ska_cpu_buffer : entity is "yes";
   attribute x_core_info : string;
-  attribute x_core_info of ska_cpu_buffer : entity is "blk_mem_gen_v8_4_1,Vivado 2018.2";
+  attribute x_core_info of ska_cpu_buffer : entity is "blk_mem_gen_v8_4_3,Vivado 2019.1.1";
 end ska_cpu_buffer;
 
 architecture STRUCTURE of ska_cpu_buffer is
@@ -3354,6 +3358,10 @@ architecture STRUCTURE of ska_cpu_buffer is
   attribute C_READ_DEPTH_A of U0 : label is 1024;
   attribute C_READ_DEPTH_B : integer;
   attribute C_READ_DEPTH_B of U0 : label is 1024;
+  attribute C_READ_LATENCY_A : integer;
+  attribute C_READ_LATENCY_A of U0 : label is 1;
+  attribute C_READ_LATENCY_B : integer;
+  attribute C_READ_LATENCY_B of U0 : label is 1;
   attribute C_READ_WIDTH_A : integer;
   attribute C_READ_WIDTH_A of U0 : label is 260;
   attribute C_READ_WIDTH_B : integer;
@@ -3404,9 +3412,9 @@ architecture STRUCTURE of ska_cpu_buffer is
   attribute x_interface_info : string;
   attribute x_interface_info of clka : signal is "xilinx.com:interface:bram:1.0 BRAM_PORTA CLK";
   attribute x_interface_parameter : string;
-  attribute x_interface_parameter of clka : signal is "XIL_INTERFACENAME BRAM_PORTA, MEM_SIZE 8192, MEM_WIDTH 32, MEM_ECC NONE, MASTER_TYPE OTHER";
+  attribute x_interface_parameter of clka : signal is "XIL_INTERFACENAME BRAM_PORTA, MEM_SIZE 8192, MEM_WIDTH 32, MEM_ECC NONE, MASTER_TYPE OTHER, READ_LATENCY 1";
   attribute x_interface_info of clkb : signal is "xilinx.com:interface:bram:1.0 BRAM_PORTB CLK";
-  attribute x_interface_parameter of clkb : signal is "XIL_INTERFACENAME BRAM_PORTB, MEM_SIZE 8192, MEM_WIDTH 32, MEM_ECC NONE, MASTER_TYPE OTHER";
+  attribute x_interface_parameter of clkb : signal is "XIL_INTERFACENAME BRAM_PORTB, MEM_SIZE 8192, MEM_WIDTH 32, MEM_ECC NONE, MASTER_TYPE OTHER, READ_LATENCY 1";
   attribute x_interface_info of addra : signal is "xilinx.com:interface:bram:1.0 BRAM_PORTA ADDR";
   attribute x_interface_info of addrb : signal is "xilinx.com:interface:bram:1.0 BRAM_PORTB ADDR";
   attribute x_interface_info of dina : signal is "xilinx.com:interface:bram:1.0 BRAM_PORTA DIN";
@@ -3416,7 +3424,7 @@ architecture STRUCTURE of ska_cpu_buffer is
   attribute x_interface_info of wea : signal is "xilinx.com:interface:bram:1.0 BRAM_PORTA WE";
   attribute x_interface_info of web : signal is "xilinx.com:interface:bram:1.0 BRAM_PORTB WE";
 begin
-U0: entity work.ska_cpu_buffer_blk_mem_gen_v8_4_1
+U0: entity work.ska_cpu_buffer_blk_mem_gen_v8_4_3
      port map (
       addra(9 downto 0) => addra(9 downto 0),
       addrb(9 downto 0) => addrb(9 downto 0),

@@ -1,8 +1,8 @@
---Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
+--Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
---Tool Version: Vivado v.2018.2 (lin64) Build 2258646 Thu Jun 14 20:02:38 MDT 2018
---Date        : Wed Oct 24 14:56:57 2018
---Host        : adam-cm running 64-bit Ubuntu 16.04.5 LTS
+--Tool Version: Vivado v.2019.1.1 (lin64) Build 2580384 Sat Jun 29 08:04:45 MDT 2019
+--Date        : Mon Jul 15 17:19:26 2019
+--Host        : casper1 running 64-bit Ubuntu 16.04.6 LTS
 --Command     : generate_target cont_microblaze.bd
 --Design      : cont_microblaze
 --Purpose     : IP block netlist
@@ -801,24 +801,6 @@ architecture STRUCTURE of microblaze_0_local_memory_imp_18JXXNV is
     LMB_BE : out STD_LOGIC_VECTOR ( 0 to 3 )
   );
   end component cont_microblaze_ilmb_v10_0;
-  component cont_microblaze_lmb_bram_0 is
-  port (
-    clka : in STD_LOGIC;
-    rsta : in STD_LOGIC;
-    ena : in STD_LOGIC;
-    wea : in STD_LOGIC_VECTOR ( 3 downto 0 );
-    addra : in STD_LOGIC_VECTOR ( 31 downto 0 );
-    dina : in STD_LOGIC_VECTOR ( 31 downto 0 );
-    douta : out STD_LOGIC_VECTOR ( 31 downto 0 );
-    clkb : in STD_LOGIC;
-    rstb : in STD_LOGIC;
-    enb : in STD_LOGIC;
-    web : in STD_LOGIC_VECTOR ( 3 downto 0 );
-    addrb : in STD_LOGIC_VECTOR ( 31 downto 0 );
-    dinb : in STD_LOGIC_VECTOR ( 31 downto 0 );
-    doutb : out STD_LOGIC_VECTOR ( 31 downto 0 )
-  );
-  end component cont_microblaze_lmb_bram_0;
   component cont_microblaze_dlmb_bram_if_cntlr_0 is
   port (
     LMB_Clk : in STD_LOGIC;
@@ -867,6 +849,24 @@ architecture STRUCTURE of microblaze_0_local_memory_imp_18JXXNV is
     BRAM_Din_A : in STD_LOGIC_VECTOR ( 0 to 31 )
   );
   end component cont_microblaze_ilmb_bram_if_cntlr_0;
+  component cont_microblaze_lmb_bram_0 is
+  port (
+    clka : in STD_LOGIC;
+    rsta : in STD_LOGIC;
+    ena : in STD_LOGIC;
+    wea : in STD_LOGIC_VECTOR ( 3 downto 0 );
+    addra : in STD_LOGIC_VECTOR ( 31 downto 0 );
+    dina : in STD_LOGIC_VECTOR ( 31 downto 0 );
+    douta : out STD_LOGIC_VECTOR ( 31 downto 0 );
+    clkb : in STD_LOGIC;
+    rstb : in STD_LOGIC;
+    enb : in STD_LOGIC;
+    web : in STD_LOGIC_VECTOR ( 3 downto 0 );
+    addrb : in STD_LOGIC_VECTOR ( 31 downto 0 );
+    dinb : in STD_LOGIC_VECTOR ( 31 downto 0 );
+    doutb : out STD_LOGIC_VECTOR ( 31 downto 0 )
+  );
+  end component cont_microblaze_lmb_bram_0;
   signal microblaze_0_Clk : STD_LOGIC;
   signal microblaze_0_LMB_Rst : STD_LOGIC_VECTOR ( 0 to 0 );
   signal microblaze_0_dlmb_ABUS : STD_LOGIC_VECTOR ( 0 to 31 );
@@ -2419,27 +2419,6 @@ architecture STRUCTURE of cont_microblaze is
     S_AXI_RREADY : in STD_LOGIC
   );
   end component cont_microblaze_axi_slave_wishbone_classic_master_0_0;
-  component cont_microblaze_rst_Clk_100M_0 is
-  port (
-    slowest_sync_clk : in STD_LOGIC;
-    ext_reset_in : in STD_LOGIC;
-    aux_reset_in : in STD_LOGIC;
-    mb_debug_sys_rst : in STD_LOGIC;
-    dcm_locked : in STD_LOGIC;
-    mb_reset : out STD_LOGIC;
-    bus_struct_reset : out STD_LOGIC_VECTOR ( 0 to 0 );
-    peripheral_reset : out STD_LOGIC_VECTOR ( 0 to 0 );
-    interconnect_aresetn : out STD_LOGIC_VECTOR ( 0 to 0 );
-    peripheral_aresetn : out STD_LOGIC_VECTOR ( 0 to 0 )
-  );
-  end component cont_microblaze_rst_Clk_100M_0;
-  component cont_microblaze_xlconcat_0_0 is
-  port (
-    In0 : in STD_LOGIC_VECTOR ( 0 to 0 );
-    In1 : in STD_LOGIC_VECTOR ( 0 to 0 );
-    dout : out STD_LOGIC_VECTOR ( 1 downto 0 )
-  );
-  end component cont_microblaze_xlconcat_0_0;
   component cont_microblaze_axi_timebase_wdt_0_0 is
   port (
     s_axi_araddr : in STD_LOGIC_VECTOR ( 3 downto 0 );
@@ -2622,6 +2601,27 @@ architecture STRUCTURE of cont_microblaze is
     interrupt_address : out STD_LOGIC_VECTOR ( 31 downto 0 )
   );
   end component cont_microblaze_microblaze_0_axi_intc_0;
+  component cont_microblaze_rst_Clk_100M_0 is
+  port (
+    slowest_sync_clk : in STD_LOGIC;
+    ext_reset_in : in STD_LOGIC;
+    aux_reset_in : in STD_LOGIC;
+    mb_debug_sys_rst : in STD_LOGIC;
+    dcm_locked : in STD_LOGIC;
+    mb_reset : out STD_LOGIC;
+    bus_struct_reset : out STD_LOGIC_VECTOR ( 0 to 0 );
+    peripheral_reset : out STD_LOGIC_VECTOR ( 0 to 0 );
+    interconnect_aresetn : out STD_LOGIC_VECTOR ( 0 to 0 );
+    peripheral_aresetn : out STD_LOGIC_VECTOR ( 0 to 0 )
+  );
+  end component cont_microblaze_rst_Clk_100M_0;
+  component cont_microblaze_xlconcat_0_0 is
+  port (
+    In0 : in STD_LOGIC_VECTOR ( 0 to 0 );
+    In1 : in STD_LOGIC_VECTOR ( 0 to 0 );
+    dout : out STD_LOGIC_VECTOR ( 1 downto 0 )
+  );
+  end component cont_microblaze_xlconcat_0_0;
   signal ACK_I_1 : STD_LOGIC;
   signal DAT_I_1 : STD_LOGIC_VECTOR ( 31 downto 0 );
   signal Reset1_1 : STD_LOGIC;
@@ -2815,13 +2815,13 @@ architecture STRUCTURE of cont_microblaze is
   attribute X_INTERFACE_INFO : string;
   attribute X_INTERFACE_INFO of Clk : signal is "xilinx.com:signal:clock:1.0 CLK.CLK CLK";
   attribute X_INTERFACE_PARAMETER : string;
-  attribute X_INTERFACE_PARAMETER of Clk : signal is "XIL_INTERFACENAME CLK.CLK, CLK_DOMAIN cont_microblaze_Clk, FREQ_HZ 39062500, PHASE 0.000";
+  attribute X_INTERFACE_PARAMETER of Clk : signal is "XIL_INTERFACENAME CLK.CLK, CLK_DOMAIN cont_microblaze_Clk, FREQ_HZ 39062500, INSERT_VIP 0, PHASE 0.000";
   attribute X_INTERFACE_INFO of Reset : signal is "xilinx.com:signal:reset:1.0 RST.RESET RST";
-  attribute X_INTERFACE_PARAMETER of Reset : signal is "XIL_INTERFACENAME RST.RESET, POLARITY ACTIVE_HIGH";
+  attribute X_INTERFACE_PARAMETER of Reset : signal is "XIL_INTERFACENAME RST.RESET, INSERT_VIP 0, POLARITY ACTIVE_HIGH";
   attribute X_INTERFACE_INFO of UART_rxd : signal is "xilinx.com:interface:uart:1.0 UART RxD";
   attribute X_INTERFACE_INFO of UART_txd : signal is "xilinx.com:interface:uart:1.0 UART TxD";
   attribute X_INTERFACE_INFO of dcm_locked : signal is "xilinx.com:signal:reset:1.0 RST.DCM_LOCKED RST";
-  attribute X_INTERFACE_PARAMETER of dcm_locked : signal is "XIL_INTERFACENAME RST.DCM_LOCKED, POLARITY ACTIVE_HIGH";
+  attribute X_INTERFACE_PARAMETER of dcm_locked : signal is "XIL_INTERFACENAME RST.DCM_LOCKED, INSERT_VIP 0, POLARITY ACTIVE_HIGH";
 begin
   ACK_I_1 <= ACK_I;
   ADR_O(31 downto 0) <= axi_slave_wishbone_classic_master_0_ADR_O(31 downto 0);
