@@ -34,10 +34,10 @@ pins:
     loc: AB43
   usb_tx:
     iostd: LVCMOS18
-    loc: AW25
+    loc: BN26
   usb_rx:
     iostd: LVCMOS18
-    loc: BB21
+    loc: BP26
   led: 
     iostd: LVCMOS18
     loc:
@@ -76,9 +76,9 @@ pins:
   gbe_phy_sgmii_clk_p:
     iostd: DIFF_HSTL_I_18
     loc: BH27
-  gbe_phy_rst_n:
-    iostd: LVCMOS18
-    loc: U65.19 #TODO
+  #gbe_phy_rst_n:
+  #  iostd: LVCMOS18
+  #  loc: U65.19 #TODO
   gbe_phy_gpio:
     iostd: LVCMOS18
     loc: BP27

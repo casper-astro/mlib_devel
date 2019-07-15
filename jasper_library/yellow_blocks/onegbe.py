@@ -286,10 +286,10 @@ class onegbe_vcu128(onegbe):
             gbe_pcs.add_port('rx_vtc_rdy_2', '1\'b1')
 	    gbe_pcs.add_port('rx_vtc_rdy_3', '1\'b1')
 
-            top.add_port('phy_rst_n', dir='out', width=0)
-            top.assign_signal('phy_rst_n', '~sys_rst')
-            top.add_port('phy_pdown_n', dir='out', width=0)
-            top.assign_signal('phy_pdown_n', '1\'b1')
+            #top.add_port('phy_rst_n', dir='out', width=0)
+            #top.assign_signal('phy_rst_n', '~sys_rst')
+            #top.add_port('phy_pdown_n', dir='out', width=0)
+            #top.assign_signal('phy_pdown_n', '1\'b1')
  
         '''def _instantiate_phy(self, top):
             
@@ -344,7 +344,7 @@ class onegbe_vcu128(onegbe):
             consts += [PortConstraint(self.fullname+'_tx_n', 'gbe_phy_sgmii_in_n')]
             consts += [PortConstraint(self.fullname+'_rx_p', 'gbe_phy_sgmii_out_p')]
             consts += [PortConstraint(self.fullname+'_rx_n', 'gbe_phy_sgmii_out_n')]
-            consts += [PortConstraint('phy_rst_n', 'gbe_phy_rst_n')]
+            #consts += [PortConstraint('phy_rst_n', 'gbe_phy_rst_n')]
             consts += [PortConstraint('phy_pdown_n', 'gbe_phy_power_down_n')]
             consts += [PortConstraint('phy_mdio', 'gbe_phy_mdio')]
             consts += [PortConstraint('phy_mdc', 'gbe_phy_mdc')]
