@@ -36,9 +36,23 @@ class skarab(YellowBlock):
         inst.add_port('hmc_rst_o',        'hmc_rst',          dir='out')
         inst.add_port('board_clk_o',      'board_clk',        dir='out')
         inst.add_port('board_clk_rst_o',  'board_clk_rst',    dir='out')
-        inst.add_port('qsfp_gtrefclk_pb', 'qsfp_gtrefclk_pb', dir='out')
+        inst.add_port('qsfp_gtrefclk',    'qsfp_gtrefclk_0',  dir='in',  parent_sig=False) # only the first 40gbe core drives this ref clk
 
         inst.add_port('GND', 'GND', parent_port=True, dir='out', width=16)
+
+        inst.add_port('eth_if_0_present', 'eth_if_0_present', parent_sig=True, dir='in')
+        inst.add_port('eth_if_1_present', 'eth_if_1_present', parent_sig=True, dir='in')
+        inst.add_port('eth_if_2_present', 'eth_if_2_present', parent_sig=True, dir='in')
+        inst.add_port('eth_if_3_present', 'eth_if_3_present', parent_sig=True, dir='in')
+
+        inst.add_port('xlgmii_txled_0', 'xlgmii_txled_0', width=2, parent_sig=True, dir='in')
+        inst.add_port('xlgmii_rxled_0', 'xlgmii_rxled_0', width=2, parent_sig=True, dir='in')
+        inst.add_port('xlgmii_txled_1', 'xlgmii_txled_1', width=2, parent_sig=True, dir='in')
+        inst.add_port('xlgmii_rxled_1', 'xlgmii_rxled_1', width=2, parent_sig=True, dir='in')
+        inst.add_port('xlgmii_txled_2', 'xlgmii_txled_2', width=2, parent_sig=True, dir='in')
+        inst.add_port('xlgmii_rxled_2', 'xlgmii_rxled_2', width=2, parent_sig=True, dir='in')
+        inst.add_port('xlgmii_txled_3', 'xlgmii_txled_3', width=2, parent_sig=True, dir='in')
+        inst.add_port('xlgmii_rxled_3', 'xlgmii_rxled_3', width=2, parent_sig=True, dir='in')
 
         inst.add_port('FPGA_RESET_N',       'FPGA_RESET_N',       parent_port=True, dir='in')
         inst.add_port('FPGA_REFCLK_BUF0_P', 'FPGA_REFCLK_BUF0_P', parent_port=True, dir='in')

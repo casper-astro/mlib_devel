@@ -51,8 +51,15 @@ entity forty_gbe is
         MEZ3_REFCLK_0_P : in std_logic;
         MEZ3_REFCLK_0_N : in std_logic;
 
-        qsfp_gtrefclk_pb : in std_logic;
-        qsfp_soft_reset  : in std_logic;
+        qsfp_gtrefclk    : out std_logic;
+        qsfp_soft_reset  : in  std_logic;
+
+        eth_if_present   : out std_logic;
+
+        xlgmii_txled     : out std_logic_vector(1 downto 0);
+        xlgmii_rxled     : out std_logic_vector(1 downto 0);
+
+        phy_rx_up : out std_logic;
 
         forty_gbe_rst             : in  std_logic;
         forty_gbe_tx_valid        : in  std_logic_vector(3 downto 0);
@@ -258,6 +265,8 @@ architecture arch_forty_gbe of forty_gbe is
     signal rx_start_count_2 : std_logic_vector(15 downto 0);
     signal rx_start_count_3 : std_logic_vector(15 downto 0);
 
+    signal qsfp_gtrefclk_pb : std_logic
+
 begin
 
     xlgmii_tx_valid        <= forty_gbe_tx_valid;
@@ -347,6 +356,13 @@ begin
         --debug_out   => debug_out,
         debug_led   => open);
 
+    signal qsfp_gtrefclk_pb : std_logic;
+
+    GTREFCLK_buf : BUFG
+    port map(
+        O => qsfp_gtrefclk,
+        I => qsfp_gtrefclk_pb);
+
     gen_xlgmii_tx_reg : process(sys_clk)
     begin
         if (rising_edge(sys_clk))then
@@ -417,6 +433,8 @@ begin
             TEST_PATTERN_EN_I    => '0',
             TEST_PATTERN_ERROR_O => open
         );
+
+        eth_if_present <= '1';
 
 end arch_forty_gbe;
 

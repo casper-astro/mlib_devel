@@ -83,8 +83,14 @@ class forty_gbe(YellowBlock):
         inst.add_port('forty_gbe_led_tx',          self.fullname+'_led_tx',          width=1,  dir='out')
         inst.add_port('forty_gbe_led_up',          self.fullname+'_led_up',          width=1,  dir='out')
 
-        inst.add_port('qsfp_gtrefclk_pb',          'qsfp_gtrefclk_pb',               width=1,  dir='in', parent_sig=False)
+        inst.add_port('qsfp_gtrefclk',             'qsfp_gtrefclk_'+str(self.port),  width=1,  dir='out')
         inst.add_port('qsfp_soft_reset',           'qsfp_soft_reset',                width=1,  dir='in', parent_sig=False)
+
+        inst.add_port('eth_if_present',            'eth_if_%s_present'%str(self.port),  width=1,  dir='out', parent_sig=False)
+
+        inst.add_port('phy_rx_up',                 'phy_rx_up_%s' %str(self.port),   width=1,  dir='out', parent_sig=False)
+        inst.add_port('xlgmii_txled',              'xlgmii_txled_%s' %str(self.port),   width=2,  dir='out', parent_sig=False)
+        inst.add_port('xlgmii_rxled',              'xlgmii_rxled_%s' %str(self.port),   width=2,  dir='out', parent_sig=False)
 
 
     def initialize(self):
