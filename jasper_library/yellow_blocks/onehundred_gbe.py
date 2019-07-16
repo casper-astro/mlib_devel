@@ -55,9 +55,9 @@ class onehundredgbe_vcu118(onehundred_gbe):
         consts = []
         consts += [PortConstraint(self.fullname+'_refclk156_p', 'mgt_ref_clk_p', iogroup_index=self.port)]
         consts += [PortConstraint(self.fullname+'_refclk156_n', 'mgt_ref_clk_p', iogroup_index=self.port)]
-        consts += [PortConstraint(self.fullname+'_qsfp_mgt_rx_p', 'qsfp_mgt_rx_p', iogroup_index=range(4*self.port, 4*(self.port + 1)))]
-        consts += [PortConstraint(self.fullname+'_qsfp_mgt_rx_n', 'qsfp_mgt_rx_n', iogroup_index=range(4*self.port, 4*(self.port + 1)))]
-        consts += [PortConstraint(self.fullname+'_qsfp_mgt_tx_p', 'qsfp_mgt_tx_p', iogroup_index=range(4*self.port, 4*(self.port + 1)))]
-        consts += [PortConstraint(self.fullname+'_qsfp_mgt_tx_n', 'qsfp_mgt_tx_n', iogroup_index=range(4*self.port, 4*(self.port + 1)))]
+        consts += [PortConstraint(self.fullname+'_qsfp_mgt_rx_p', 'qsfp_mgt_rx_p', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
+        consts += [PortConstraint(self.fullname+'_qsfp_mgt_rx_n', 'qsfp_mgt_rx_n', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
+        consts += [PortConstraint(self.fullname+'_qsfp_mgt_tx_p', 'qsfp_mgt_tx_p', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
+        consts += [PortConstraint(self.fullname+'_qsfp_mgt_tx_n', 'qsfp_mgt_tx_n', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
         consts += [ClockConstraint(self.fullname+'_refclk156_p', name=self.fullname+'_refclk156_p', freq=self.refclk_freq)]
         return consts
