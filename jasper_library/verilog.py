@@ -7,7 +7,7 @@ at some point.
 
 import os
 import re
-from math import ceil, floor
+from math import ceil, floor, log
 import logging
 import inspect
 import operator
@@ -778,7 +778,10 @@ class VerilogModule(object):
                     max_key = key
             ordered_memory_map[max_key] = self.memory_map.pop(max_key)
         # append the sw_reg entries at the end
-        ordered_memory_map['sw_reg'] = software_reg_mem_map
+        if software_reg_mem_map is not None:
+            ordered_memory_map['sw_reg'] = software_reg_mem_map
+            # Make size a 2^n byte block to try to keep the alignment working
+            ordered_memory_map['sw_reg']['size'] = 2**int(ceil(log(ordered_memory_map['sw_reg']['size'], 2)))
         # Now replace the memory map with the ordered one and continue
         self.memory_map = ordered_memory_map.copy()
 
