@@ -883,6 +883,7 @@ class Toolflow(object):
         # generate xml interconnect for input
         self.generate_xml_ic(self.top.memory_map)
         # execute xml2vhdl script
+        self.logger.info('Running: python %sxml2vhdl.py -d %s -x %s -v %s -s %s -b %s' % (self.xml2vhdl_path, self.xml_source_dir, self.xml_output_dir, self.hdl_output_dir, 'xil_defaultlib', 'xil_defaultlib'))
         os.system('python %sxml2vhdl.py -d %s -x %s -v %s -s %s -b %s' % (self.xml2vhdl_path, self.xml_source_dir, self.xml_output_dir, self.hdl_output_dir, 'xil_defaultlib', 'xil_defaultlib'))
 
 

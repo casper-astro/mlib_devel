@@ -7,12 +7,13 @@ at some point.
 
 import os
 import re
-from math import ceil, floor
+from math import ceil, floor, log
 import logging
 import inspect
 import operator
 from memory import Register
 import pdb
+from yellow_blocks.yellow_block_typecodes import *
 
 logger = logging.getLogger('jasper.verilog')
 
@@ -77,6 +78,7 @@ class WbDevice(object):
         #: If using multiple bus arbiters, which arbiter should this slave attach to?
         self.sub_arb_id = 0
 
+# TODO: This class is the same as the Wishbone class? What's the point of it?
 class AXI4LiteDevice(object):
     """
     A class to encapsulate the parameters (name, size, etc.) of a AXI4-Lite slave device.
@@ -700,16 +702,31 @@ class VerilogModule(object):
          - 'relative_address': address relative to base_addr
          - 'axi4lite_devices': List of AXI4LiteDevice objects for core_info backwards compatibility
         """
+        #TODO: WHOEVER WROTE THIS CODE -- WHAT IS IT SUPPOSED TO DO?
+        # Need to get the register map in size order for xmltovhdl
+        # For this use odict
+
+        import odict
+
+        # I'm just going to go ahead and guess. :-S
+
+        # All software registers get ganged together in one self.memory_map entry,
+        # called 'sw_reg'. These ultimately become a bunch of ports in the AXI interconnect
+        # Each Bram gets its own memory_map entry, with a name matching the one provided
+        # when the ram was instantiated via YellowBlock.add_axi4lite_interface.
+        
         for dev in self.axi4lite_devices:
             # add all software registers to one memory mapped AXI4-Lite interface
-            if dev.typecode == 0:
+            if dev.typecode == TYPECODE_SWREG:
                 # check to see if this is the first sw_reg in the memory_map dict
                 if 'sw_reg' not in self.memory_map:
                     # Make new interface dict for software registers
-                    interface = self.memory_map['sw_reg'] = {}
+                    self.memory_map['sw_reg'] = {}
+                    interface = self.memory_map['sw_reg']
                     interface['size'] = dev.nbytes
                     interface['memory_map'] = dev.memory_map
                     # erase dev.memory_map so that core_info doesn't add sw_regs twice
+                    # ?????
                     dev.memory_map = []
                     interface['axi4lite_devices'] = [dev]
                 else:
@@ -724,24 +741,51 @@ class VerilogModule(object):
                     # # erase dev.memory_map so that core_info doesn't add sw_regs twice
                     dev.memory_map = []
                     interface['axi4lite_devices'] += [dev]
-            elif dev.typecode == 4:
+            elif dev.typecode == TYPECODE_BRAM:
                 # tell the axi_ic to generate a bram
-                interface = self.memory_map[dev.regname] = {}
+                self.memory_map[dev.regname] = {}
+                interface = self.memory_map[dev.regname]
                 interface['size'] = dev.nbytes # seems brams need to be sized in bytes not words
                 interface['memory_map'] = dev.memory_map
                 interface['axi4lite_devices'] = [dev]
                 # erase dev.memory_map so that core_info doesn't add brams twice
-                # only a mad man would attempt to debug this shit!
+                # only a mad man would attempt to debug this!
+                # And here I am. Please document this code better.
                 dev.memory_map = []
             else:
                 # add all other yellow blocks to their own interface and make xml memory map
-                interface = self.memory_map[dev.regname] = {}
+                self.memory_map[dev.regname] = {}
+                interface = self.memory_map[dev.regname]
                 interface['size'] = dev.nbytes
                 interface['memory_map'] = dev.memory_map
                 interface['axi4lite_devices'] = [dev]
 
         relative_address = 0
-        # Now loop over interfaces in memory_map to determine addresses
+        # Now loop over interfaces in memory_map to determine addresses.
+        # A limitation / feature of the xml2vhdl axi generation code is that it expects
+        # all memory-mapped devices of size N-bytes to by aligned on N-byte boundaries.
+        # Thus, we can't put a 4-byte register at address 0x0, and then a 1kiB bram at address 0x4.
+        # Though not foolproof, we try and coerce an acceptable layout by placing the devices
+        # in size order with the largest first. Hopefully all the devices are 2^n bytes in size --
+        # this seems to be enforced by the xml2vhdl generator
+
+        # First *we* round up the sizes so we agree with xml2vhdl
+        for key in self.memory_map.keys():
+            self.memory_map[key]['size'] = 2**int(ceil(log(self.memory_map[key]['size'], 2)))
+
+        ordered_memory_map = odict.odict()
+        # quick sort be damned. Go slow.
+        while(len(self.memory_map) > 0):
+            max_size = 0
+            for key,val in self.memory_map.items():
+                if val['size'] > max_size:
+                    max_size = val['size']
+                    max_key = key
+            ordered_memory_map[max_key] = self.memory_map.pop(max_key)
+
+        # Now replace the memory map with the ordered one and continue
+        self.memory_map = ordered_memory_map.copy()
+
         for key,val in self.memory_map.items():
             val['relative_address'] = hex(relative_address)
             # this is really gross, but didn't want to rewrite anything in core_info... Sorry.
