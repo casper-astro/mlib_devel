@@ -157,9 +157,7 @@ proc create_hier_cell_microblaze_0_local_memory { parentCell nameHier } {
 
   # Create interface pins
   create_bd_intf_pin -mode MirroredMaster -vlnv xilinx.com:interface:lmb_rtl:1.0 DLMB
-
   create_bd_intf_pin -mode MirroredMaster -vlnv xilinx.com:interface:lmb_rtl:1.0 ILMB
-
 
   # Create pins
   create_bd_pin -dir I -type clk LMB_Clk
@@ -247,7 +245,6 @@ proc create_root_design { parentCell } {
 
   # Create interface ports
   set UART [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:uart_rtl:1.0 UART ]
-
 
   # Create ports
   set ACK_I [ create_bd_port -dir I ACK_I ]
