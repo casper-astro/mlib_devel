@@ -15,19 +15,6 @@ class onegbe(YellowBlock):
         else:
             return onegbe_snap(blk, plat, hdl_root)
 
-class onegbe_vcu118(onegbe):
-    def initialize(self):
-        self.typecode = TYPECODE_ETHCORE
-        self.add_source('onegbe/*.v')
-        self.add_source('onegbe/*.xci')
-        self.add_source('onegbe/*.coe')
-
-        self.provides = ['ethernet']
-        if (not self.dis_cpu_tx) and (not self.dis_cpu_tx):
-            self.provides += ['cpu_ethernet']
-
-        self.refclk_freq = 625.0
-
     def _instantiate_udp(self, top):
         gbe_udp = top.get_instance(entity='gbe_udp', name=self.fullname)
         gbe_udp.add_parameter('LOCAL_ENABLE',   '%d' % int(self.local_en))
