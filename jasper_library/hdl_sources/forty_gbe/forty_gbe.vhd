@@ -48,8 +48,8 @@ entity forty_gbe is
         sys_clk : in std_logic;
         sys_rst : in std_logic;
 
-        MEZ3_REFCLK_0_P : in std_logic;
-        MEZ3_REFCLK_0_N : in std_logic;
+        MEZ3_REFCLK_P : in std_logic;
+        MEZ3_REFCLK_N : in std_logic;
 
         qsfp_gtrefclk    : out std_logic;
         qsfp_soft_reset  : in  std_logic;
