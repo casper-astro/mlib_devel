@@ -1,3 +1,4 @@
+# Legacy file to be removed
 set_property IOSTANDARD LVDS [get_ports AUX_CLK_P]
 set_property IOSTANDARD LVDS [get_ports AUX_CLK_N]
 
