@@ -132,13 +132,13 @@ class Toolflow(object):
 
         # Have the toolflow parse the information from the
         # frontend and generate the YellowBlock objects
-        print 'generating peripheral objects'
+        self.logger.info('Generating peripheral objects')
         self.gen_periph_objs()
 
         # Copy the platforms top-level hdl file
         # and begin modifying it based on the yellow
         # block objects.
-        print 'Generating HDL'
+        self.logger.info('Generating HDL')
         self.build_top()
         self.generate_hdl()
         # Generate constraints (not yet xilinx standard)
@@ -158,10 +158,10 @@ class Toolflow(object):
             # it's nice to run it at the end, so there's
             # an opportunity to catch toolflow errors
             # before waiting for it
-            print 'Running frontend compile'
+            self.logger.info('Running frontend compile')
             # skip this step if you don't want to wait for sysgen in testing
             self.frontend.compile_user_ip(update=True)
-            print 'frontend complete'
+            self.logger.info('frontend complete')
 
         self.dump_castro(self.compile_dir+'/castro.yml')
 
@@ -401,7 +401,7 @@ class Toolflow(object):
         Calls each yellow block's modify_top method against the class'
         top VerilogModule instance
         """
-        print 'top:', self.topfile
+        self.logger.info('top: %s' % self.topfile)
         for obj in self.periph_objs:
             self.logger.debug('modifying top for obj %s' % obj.name)
             # self.top.set_cur_blk(obj.fullname)
@@ -550,7 +550,8 @@ class Toolflow(object):
         else:
             self.top.wb_compute(self.plat.dsp_wb_base_address,
                             self.plat.dsp_wb_base_address_alignment)
-        print self.top.gen_module_file(filename=self.compile_dir+'/top.v')
+        # Write top module file
+        self.top.gen_module_file(filename=self.compile_dir+'/top.v')
         # Write any submodule files required for the compile. This is probably
         # only the hierarchical WB arbiter, or nothing at all
         for key, val in self.top.generated_sub_modules.iteritems():
@@ -590,13 +591,16 @@ class Toolflow(object):
         Check pin constraints against top level signals.
         Warn about missing constraints.
         """
+        self.logger.info('Carrying out constraints rule check')
         port_constraints = []
         for const in self.constraints:
             if isinstance(const, PortConstraint):
                 port_constraints += [const.portname]
-        for port in self.top.ports:
-            if port not in port_constraints:
-                self.logger.warning('Port %s has no constraints!' % port)
+        for key in self.top.ports.keys():
+            for port in self.top.ports[key]:
+                if port not in port_constraints:
+                    self.logger.warning('Port %s (instantiated by %s) has no constraints!' % (port, key))
+        self.logger.info('Constraint rule check complete')
 
     def dump_castro(self, filename):
         """
@@ -1403,7 +1407,7 @@ class VivadoBackend(ToolflowBackend):
             'promgen'     : '',
         }
 
-        if plat.manufacturer != self.manufacturer:
+        if plat.manufacturer.lower() != self.manufacturer.lower():
             self.logger.error('Trying to compile a %s FPGA using %s %s' % (
                 plat.manufacturer, self.manufacturer, self.name))
 
@@ -2025,11 +2029,11 @@ class VivadoBackend(ToolflowBackend):
         constfile = '%s/user_const.xdc' % self.compile_dir
         user_const = ''
         for constraint in constraints:
-            print 'parsing constraint', constraint
+            self.logger.info('parsing constraint %s' % constraint)
             user_const += self.get_tcl_const(constraint)
-        print user_const
+        self.logger.info("Constraints: %s" % user_const)
         helpers.write_file(constfile, user_const)
-        print 'written constraint file', constfile
+        self.logger.info('Finished writing constraints file: %s' % constfile)
         self.add_const_file(constfile)
 
 class ISEBackend(VivadoBackend):
@@ -2117,13 +2121,12 @@ class ISEBackend(VivadoBackend):
         """
         constfile = '%s/user_const.ucf' % self.compile_dir
         user_const = ''
-        print 'constraints %s' % constraints
         for constraint in constraints:
-            print 'parsing constraint', constraint
+            self.logger.info('parsing constraint %s' % constraint)
             user_const += self.get_ucf_const(constraint)
-        print user_const
+        self.logger.info("Constraints: %s" % user_const)
         helpers.write_file(constfile, user_const)
-        print 'written constraint file', constfile
+        self.logger.info('Finished writing constraints file: %s' % constfile)
         self.add_const_file(constfile)
 
     def get_ucf_const(self, const):

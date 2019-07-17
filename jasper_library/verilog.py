@@ -1249,8 +1249,6 @@ class VerilogModule(object):
                 n = 0
                 for paramname, parameter in sorted(self.parameters[block].items()):
                     s += '    .%s(%s)'%(parameter.name, parameter.value)
-                    print('%s(%s)'%(parameter.name, parameter.value))
-                    print('n: %s\n n_params: %s'%(n,n_params))
                     if n != (n_params - 1):
                         s += ',\n'
                     else:
