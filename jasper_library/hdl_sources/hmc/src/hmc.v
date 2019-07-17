@@ -45,6 +45,19 @@ module hmc #(
     parameter USE_LEDS              = 1
 )(
 
+    // wishbone HMC interface
+    input wire          wb_clk_i,
+    input wire          wb_rst_i,
+    output wire [31:0]  wb_dat_o,
+    output wire         wb_err_o,
+    output wire         wb_ack_o,
+    input  wire [31:0]  wb_adr_i,
+    input  wire [3:0]   wb_sel_i,
+    input  wire [31:0]  wb_dat_i,
+    input  wire         wb_we_i,
+    input  wire         wb_cyc_i,
+    input  wire         wb_stb_i,
+
     // FPGA GTH Transceivers RX (HMC TX)
     input wire  [3:0]   PHY11_LANE_RX_P,
     input wire  [3:0]   PHY12_LANE_RX_P,
@@ -107,8 +120,6 @@ module hmc #(
     output wire DATA_VALID_LINK2,
     output wire RD_READY_LINK2,
     output wire WR_READY_LINK2,
-    output wire [15:0] RX_CRC_ERR_CNT_LINK2,
-    output wire [6:0] ERRSTAT_LINK2,
     //output wire QPLL_LOCK_ERR_LINK2,
     //output wire [7:0] FIFO_TX_FLAG_STATUS_LINK2,    
     //output wire [7:0] FIFO_RX_FLAG_STATUS_LINK2,    
@@ -125,8 +136,6 @@ module hmc #(
     output wire DATA_VALID_LINK3,
     output wire RD_READY_LINK3,
     output wire WR_READY_LINK3,
-    output wire [15:0] RX_CRC_ERR_CNT_LINK3,
-    output wire [6:0] ERRSTAT_LINK3,
     //output wire QPLL_LOCK_ERR_LINK3,
     //output wire [7:0] FIFO_TX_FLAG_STATUS_LINK3,    
     //output wire [7:0] FIFO_RX_FLAG_STATUS_LINK3,    
@@ -134,8 +143,9 @@ module hmc #(
     //Simulink Ports Clocks and Status
     input  wire USER_CLK,
     input  wire USER_RST,
-    output wire POST_OK,    
+    output wire HMC_OK,
     output wire INIT_DONE,
+    output wire POST_OK,
     output wire [2:0] MEZZ_ID,
     output wire MEZZ_PRESENT,
     //System Clocks
@@ -151,10 +161,10 @@ module hmc #(
 (* mark_debug = "true" *) reg time_out_cnt_rst;
 (* mark_debug = "true" *) wire soft_reset;
 
-(* mark_debug = "true" *) wire [15:0] dbg_RX_CRC_ERR_CNT_LINK3;
-(* mark_debug = "true" *) wire [15:0] dbg_RX_CRC_ERR_CNT_LINK2;
-(* mark_debug = "true" *) wire [6:0] dbg_ERRSTAT_LINK3;
-(* mark_debug = "true" *) wire [6:0] dbg_ERRSTAT_LINK2;
+(* mark_debug = "true" *) wire [15:0] dbg_rx_crc_err_cnt_link3;
+(* mark_debug = "true" *) wire [15:0] dbg_rx_crc_err_cnt_link2;
+(* mark_debug = "true" *) wire [6:0] dbg_errstat_link2;
+(* mark_debug = "true" *) wire [6:0] dbg_errstat_link3;
 (* mark_debug = "true" *) wire dbg_QPLL_LOCK_ERR_LINK2;
 (* mark_debug = "true" *) wire dbg_QPLL_LOCK_ERR_LINK3;
 (* mark_debug = "true" *) wire [7:0] dbg_FIFO_TX_FLAG_STATUS_LINK2;
@@ -162,10 +172,10 @@ module hmc #(
 (* mark_debug = "true" *) wire [7:0] dbg_FIFO_TX_FLAG_STATUS_LINK3;
 (* mark_debug = "true" *) wire [7:0] dbg_FIFO_RX_FLAG_STATUS_LINK3;
 
-assign dbg_RX_CRC_ERR_CNT_LINK3 = RX_CRC_ERR_CNT_LINK3;
-assign dbg_RX_CRC_ERR_CNT_LINK2 = RX_CRC_ERR_CNT_LINK2;
-assign dbg_ERRSTAT_LINK3 = ERRSTAT_LINK3;
-assign dbg_ERRSTAT_LINK2 = ERRSTAT_LINK2;
+assign dbg_rx_crc_err_cnt_link3 = rx_crc_err_cnt_link3;
+assign dbg_rx_crc_err_cnt_link2 = rx_crc_err_cnt_link2;
+assign dbg_errstat_link3 = errstat_link3;
+assign dbg_errstat_link2 = errstat_link2;
 assign dbg_QPLL_LOCK_ERR_LINK2 = QPLL_LOCK_ERR_LINK2;
 assign dbg_QPLL_LOCK_ERR_LINK3 = QPLL_LOCK_ERR_LINK3;
 assign dbg_FIFO_TX_FLAG_STATUS_LINK2 = FIFO_TX_FLAG_STATUS_LINK2;
@@ -185,6 +195,10 @@ assign QPLL_LOCK_ERR_LINK3 = ~qpll_lock_link3RRRR;
 
 wire soft_reset_link2_async,soft_reset_link3_async;
 wire soft_reset_async,user_rst;
+
+wire [3:0] flit_error_resp_link2, flit_error_resp_link3;
+wire [6:0] errstat_link2, errstat_link3;
+
 
 //assign soft_reset_link2_async = (qpll_lock_link2 == 1'b0 || USER_RST == 1'b1 || time_out_cnt_rst == 1'b1);
 //assign soft_reset_link3_async = (qpll_lock_link3 == 1'b0 || USER_RST == 1'b1 || time_out_cnt_rst == 1'b1);
@@ -210,6 +224,8 @@ wire open_hmc_done_link2_i,open_hmc_done_link3_i;
 //HMC_CLK domain sync's
 (* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg open_hmc_done_link2Rb,open_hmc_done_link2RRb,open_hmc_done_link2RRRb,open_hmc_done_link2RRRRb;
 (* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg open_hmc_done_link3Rb,open_hmc_done_link3RRb,open_hmc_done_link3RRRb,open_hmc_done_link3RRRRb;
+
+
 
 always @(posedge USER_CLK) begin 
    
@@ -365,7 +381,8 @@ wire [NUM_DATA_BYTES-1:0]    user_flit_m_axis_rx_TUSER_link3;
 //----------------------------------
 //----Connect RF
 //----------------------------------
-wire  [HMC_RF_AWIDTH-1:0]    rf_address_link2,rf_address_link3;
+wire  [HMC_RF_AWIDTH-1:0]    rf_address_in_link2,rf_address_in_link3;
+wire  [HMC_RF_AWIDTH-1:0]    rf_address_out_link2,rf_address_out_link3;
 wire  [HMC_RF_RWIDTH-1:0]    rf_read_data_link2,rf_read_data_link3;
 wire                         rf_invalid_address_link2,rf_invalid_address_link3;
 wire                         rf_access_complete_link2,rf_access_complete_link3;
@@ -377,20 +394,14 @@ wire  [HMC_RF_WWIDTH-1:0]    rf_write_data_link2,rf_write_data_link3;
 (* mark_debug = "true" *) wire [63:0] data_rx_flit_cnt_link2,data_rx_flit_cnt_link3;
 (* mark_debug = "true" *) wire [63:0] data_rx_err_flit_cnt_link2,data_rx_err_flit_cnt_link3;
 wire data_err_detect_link2,data_err_detect_link3;
-wire [15:0] rx_crc_err_cnt_link2a,rx_crc_err_cnt_link3a;
-reg [15:0] rx_crc_err_cnt_link2aR, rx_crc_err_cnt_link2aRR, rx_crc_err_cnt_link2aRRR, rx_crc_err_cnt_link2aRRRR; 
-reg [15:0] rx_crc_err_cnt_link3aR, rx_crc_err_cnt_link3aRR, rx_crc_err_cnt_link3aRRR, rx_crc_err_cnt_link3aRRRR; 
-
-assign RX_CRC_ERR_CNT_LINK2 = rx_crc_err_cnt_link2aRRRR;
-assign RX_CRC_ERR_CNT_LINK3 = rx_crc_err_cnt_link3aRRRR;
 
 // Currently not connected to Wisbone
-assign rf_address_link2 = {HMC_RF_AWIDTH{1'b0}};
+assign rf_address_in_link2 = {HMC_RF_AWIDTH{1'b0}};
 assign rf_read_en_link2 = 1'b0;
 assign rf_write_en_link2 = 1'b0;
 assign rf_write_data_link2 = {HMC_RF_WWIDTH{1'b0}};
 
-assign rf_address_link3 = {HMC_RF_AWIDTH{1'b0}};
+assign rf_address_in_link3 = {HMC_RF_AWIDTH{1'b0}};
 assign rf_read_en_link3 = 1'b0;
 assign rf_write_en_link3 = 1'b0;
 assign rf_write_data_link3 = {HMC_RF_WWIDTH{1'b0}};
@@ -634,6 +645,7 @@ end
 
 
 (* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg soft_reset_syncR,soft_reset_syncRR,soft_reset_syncRRR,soft_reset_syncRRRR;
+(* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg soft_reset_syncbR,soft_reset_syncbRR,soft_reset_syncbRRR,soft_reset_syncbRRRR;
 (* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg hmc_iic_init_doneR,hmc_iic_init_doneRR,hmc_iic_init_doneRRR,hmc_iic_init_doneRRRR;
 (* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg SCL_INR,SCL_INRR,SCL_INRRR,SCL_INRRRR;
 (* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg SDA_INR,SDA_INRR,SDA_INRRR,SDA_INRRRR;
@@ -663,6 +675,14 @@ end
 assign SCL_IN_sync = SCL_INRRRR;
 assign SDA_IN_sync = SDA_INRRRR;
 
+
+always @(posedge clk_hmc_out_link3) begin
+  soft_reset_syncbR <= soft_reset;
+  soft_reset_syncbRR <= soft_reset_syncbR;
+  soft_reset_syncbRRR <= soft_reset_syncbRR;
+  soft_reset_syncbRRRR <= soft_reset_syncbRRR;
+end
+
 always @(posedge clk_hmc_out_link3) begin
   hmc_iic_init_doneR    <= hmc_iic_init_done_i;
   hmc_iic_init_doneRR   <= hmc_iic_init_doneR;
@@ -670,7 +690,8 @@ always @(posedge clk_hmc_out_link3) begin
   hmc_iic_init_doneRRRR <= hmc_iic_init_doneRRR;
 end
 
-assign soft_reset_sync = soft_reset_syncRRRR;
+assign soft_reset_sync = soft_reset_syncRRRR;   //link2 soft reset (hmc_clk link2)
+assign soft_reset_syncb = soft_reset_syncbRRRR; //link3 soft reset (hmc_clk link3)
 
 wire post_done_latch,post_done_latch_i,post_done;
 (* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg post_done_latchR,post_done_latchRR,post_done_latchRRR,post_done_latchRRRR;
@@ -695,16 +716,6 @@ always @(posedge USER_CLK) begin
   post_done_latchRR   <= post_done_latchR;
   post_done_latchRRR  <= post_done_latchRR;
   post_done_latchRRRR <= post_done_latchRRR;
-
-  rx_crc_err_cnt_link2aR <= rx_crc_err_cnt_link2a;    
-  rx_crc_err_cnt_link2aRR <= rx_crc_err_cnt_link2aR;    
-  rx_crc_err_cnt_link2aRRR <= rx_crc_err_cnt_link2aRR;    
-  rx_crc_err_cnt_link2aRRRR <= rx_crc_err_cnt_link2aRRR;    
-
-  rx_crc_err_cnt_link3aR <= rx_crc_err_cnt_link3a;    
-  rx_crc_err_cnt_link3aRR <= rx_crc_err_cnt_link3aR;    
-  rx_crc_err_cnt_link3aRRR <= rx_crc_err_cnt_link3aRR;    
-  rx_crc_err_cnt_link3aRRRR <= rx_crc_err_cnt_link3aRRR; 
   
   fifo_tx_flag_status_link2R <= fifo_tx_flag_status_link2;   
   fifo_tx_flag_status_link2RR <= fifo_tx_flag_status_link2R;   
@@ -761,6 +772,54 @@ assign tx_phy_reset_done = tx_phy_reset_done_link2 & tx_phy_reset_done_link3;
 assign rx_phy_reset_done = rx_phy_reset_done_link2 & rx_phy_reset_done_link3;
 
 
+hmc_wb_attach #(
+    .HMC_RF_RWIDTH(HMC_RF_RWIDTH),
+    .HMC_RF_AWIDTH(HMC_RF_AWIDTH)
+  )
+  hmc_wb_attach_inst (
+    //wishbone interface 
+    .wb_clk_i(wb_clk_i),
+    .wb_rst_i(wb_rst_i),
+    .wb_dat_o(wb_dat_o),
+    .wb_err_o(wb_err_o),
+    .wb_ack_o(wb_ack_o),
+    .wb_adr_i(wb_adr_i),
+    .wb_sel_i(wb_sel_i),
+    .wb_dat_i(wb_dat_i),
+    .wb_we_i(wb_we_i),
+    .wb_cyc_i(wb_cyc_i),
+    .wb_stb_i(wb_stb_i),    
+    //OpenHMC link 2 registers (RF) 
+    //(hmc_link2_clk)
+    .rf_read_data_link2(rf_read_data_link2),
+    .rf_address_link2(rf_address_out_link2),
+    .rf_access_complete_link2(rf_access_complete_link2),
+    .rx_crc_err_cnt_link2(rx_crc_err_cnt_link2),
+    //OpenHMC link 3 registers (RF) 
+    //(hmc_link3_clk)
+    .rf_read_data_link3(rf_read_data_link3),
+    .rf_address_link3(rf_address_out_link3),
+    .rf_access_complete_link3(rf_access_complete_link3),
+    .rx_crc_err_cnt_link3(rx_crc_err_cnt_link3),
+    //HMC Status (user_clk)
+    .post_ok(post_ok),
+    .init_done(init_done),
+    .hmc_ok(hmc_okay),
+    .flit_err_resp_link2(flit_error_resp_link2),
+    .flit_err_resp_link3(flit_error_resp_link3),
+    .errstat_link2(errstat_link2),
+    .errstat_link3(errstat_link3),        
+    //Clocks
+    .user_clk(USER_CLK),
+    .hmc_link2_clk(clk_hmc_out_link2),
+    .hmc_link3_clk(clk_hmc_out_link3),    
+    //Resets
+    .user_rst(soft_reset_link2),
+    .hmc_link2_rst(soft_reset_sync),
+    .hmc_link3_rst(soft_reset_syncb)
+    
+  );
+
 hmc_iic_init 
 hmc_iic_init_inst (
   .CLK         (clk_hmc_out_link2),
@@ -783,11 +842,18 @@ hmc_iic_init_inst (
   .SDA_IN(SDA_IN_sync)  
 );
 
-assign POST_OK = post_ok_latchRRRR;
+wire post_ok, init_done, hmc_okay;
+
+assign post_ok = post_ok_latchRRRR;
 //Important to AND init_done and the post_done_latch to ensure the I2C switch over happens after POST_DONE_LATCH is asserted. If not then POST_LED on HMC Card will not be illuminated when POST is done
 //and there will be no visual indication to the user that the HMC is ready for use 
-assign INIT_DONE = init_done_latchRRRR & post_done_latchRRRR; //post_done_latch
+assign init_done = init_done_latchRRRR & post_done_latchRRRR; //post_done_latch
 assign HMC_MEZZ_RESET = hmc_resetRRRR;//~P_RST_N; 
+//HMC OK flag depends on initialisation done, POST okay, FLIT error response indicators (link 2 and 3) and ERRSTAT register from HMC (link 2 and 3)
+assign hmc_okay = init_done & post_ok & (&(~flit_error_resp_link2)) & (&(~flit_error_resp_link3)) & (&(~errstat_link2)) & (&(~errstat_link3));
+assign HMC_OK = hmc_okay;
+assign INIT_DONE = init_done;
+assign POST_OK = post_ok;
 
 // Instantiate core for HMC link2
 hmc_ska_sa_top #(
@@ -850,7 +916,8 @@ hmc_ska_sa_top_link2_inst(
   //----------------------------------
   //----Connect RF
   //----------------------------------
-  .rf_address(rf_address_link2),
+  .rf_address_in(rf_address_in_link2),
+  .rf_address_out(rf_address_out_link2),
   .rf_read_data(rf_read_data_link2),
   .rf_invalid_address(rf_invalid_address_link2),
   .rf_access_complete(rf_access_complete_link2),
@@ -884,7 +951,7 @@ hmc_ska_sa_top_link2_inst(
   .MMCM_RESET_IN(mmcm_reset),
   .QPLL0_RESET_IN(qpll_reset),
   .QPLL1_RESET_IN(qpll_reset),      
-  .RX_CRC_ERR_CNT(rx_crc_err_cnt_link2a),
+  .RX_CRC_ERR_CNT(rx_crc_err_cnt_link2),
   .FIFO_TX_FLAG_STATUS(fifo_tx_flag_status_link2),
   .FIFO_RX_FLAG_STATUS(fifo_rx_flag_status_link2)  
 );
@@ -950,7 +1017,8 @@ hmc_ska_sa_top_link3_inst(
   //----------------------------------
   //----Connect RF
   //----------------------------------
-  .rf_address(rf_address_link3),
+  .rf_address_in(rf_address_in_link3),
+  .rf_address_out(rf_address_out_link3),
   .rf_read_data(rf_read_data_link3),
   .rf_invalid_address(rf_invalid_address_link3),
   .rf_access_complete(rf_access_complete_link3),
@@ -984,7 +1052,7 @@ hmc_ska_sa_top_link3_inst(
   .MMCM_RESET_IN(mmcm_reset), 
   .QPLL0_RESET_IN(qpll_reset_in),
   .QPLL1_RESET_IN(qpll_reset_in),       
-  .RX_CRC_ERR_CNT(rx_crc_err_cnt_link3a),
+  .RX_CRC_ERR_CNT(rx_crc_err_cnt_link3),
   .FIFO_TX_FLAG_STATUS(fifo_tx_flag_status_link3),
   .FIFO_RX_FLAG_STATUS(fifo_rx_flag_status_link3)  
 
@@ -1106,7 +1174,8 @@ flit_gen_user_link2_inst (
   .TAG_OUT(TAG_OUT_LINK2),
   .DATA_VALID(DATA_VALID_LINK2),
   .RD_READY(RD_READY_LINK2),
-  .FLIT_TAIL_ERRSTAT(ERRSTAT_LINK2)
+  .FLIT_TAIL_ERRSTAT(errstat_link2),
+  .FLIT_ERROR_RESP(flit_error_resp_link2)
 );
 
 // FLIT generator and checker for HMC LINK3 POST
@@ -1152,7 +1221,8 @@ flit_gen_user_link3_inst (
   .TAG_OUT(TAG_OUT_LINK3),
   .DATA_VALID(DATA_VALID_LINK3),
   .RD_READY(RD_READY_LINK3),
-  .FLIT_TAIL_ERRSTAT(ERRSTAT_LINK3)
+  .FLIT_TAIL_ERRSTAT(errstat_link3),
+  .FLIT_ERROR_RESP(flit_error_resp_link3)
 );
 
 // AXI Mux between POST & User FLIT Generation

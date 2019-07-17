@@ -42,8 +42,7 @@ entity forty_gbe is
         FABRIC_GATEWAY    : std_logic_vector( 7 downto 0);
         FABRIC_ENABLE     : std_logic;
         TTL               : std_logic_vector( 7 downto 0);
-        PORT              : std_logic_vector( 1 downto 0);
-        PROMISC_MODE      : integer;
+        MEZZ_PORT         : std_logic_vector( 1 downto 0);
         RX_CRC_CHK_ENABLE : integer := 0);
     port(
         user_clk_o : out std_logic;
@@ -289,7 +288,7 @@ entity forty_gbe is
 
         --DSP Wishbone Arbiter Interface
         WB_SLV_CLK_I_top : out std_logic;
-        WB_SLV_RST_I_top:  out std_logic;
+        WB_SLV_RST_I_top : out std_logic;
         WB_SLV_DAT_I_top : out std_logic_vector(31 downto 0);--ST_WB_DATA;
         WB_SLV_DAT_O_top : in  std_logic_vector(31 downto 0);--ST_WB_DATA;
         WB_SLV_ACK_O_top : in  std_logic;
@@ -540,7 +539,7 @@ architecture arch_forty_gbe of forty_gbe is
         DAT_I : in std_logic_vector(31 downto 0);
         DAT_O : out std_logic_vector(31 downto 0);
         ACK_O : out std_logic;
-        ADR_I : in std_logic_vector(13 downto 0);
+        ADR_I : in std_logic_vector(15 downto 0);
         CYC_I : in std_logic;
         SEL_I : in std_logic_vector(3 downto 0);
         STB_I : in std_logic;
@@ -648,6 +647,7 @@ architecture arch_forty_gbe of forty_gbe is
         FABRIC_GATEWAY    : std_logic_vector(7 downto 0);
         FABRIC_ENABLE     : std_logic;
         TTL               : std_logic_vector(7 downto 0);
+        MEZZ_PORT         : std_logic_vector( 1 downto 0);
         PROMISC_MODE      : integer;
         RX_CRC_CHK_ENABLE : integer);
     port (
@@ -676,7 +676,7 @@ architecture arch_forty_gbe of forty_gbe is
         DAT_I : in std_logic_vector(31 downto 0);
         DAT_O : out std_logic_vector(31 downto 0);
         ACK_O : out std_logic;
-        ADR_I : in std_logic_vector(13 downto 0);
+        ADR_I : in std_logic_vector(15 downto 0);
         CYC_I : in std_logic;
         SEL_I : in std_logic_vector(3 downto 0);
         STB_I : in std_logic;
@@ -1300,105 +1300,105 @@ architecture arch_forty_gbe of forty_gbe is
     signal FABRIC_MAC_3        : std_logic_vector(47 downto 0);
     
     -- Mark Debug ILA Testing    
---    signal dbg_wb_cross_clock_out_din : std_logic_vector(72 downto 0);
---    signal dbg_wb_cross_clock_out_wrreq : std_logic;
---    signal dbg_wb_cross_clock_out_rdreq : std_logic;
---    signal dbg_wb_cross_clock_out_dout : std_logic_vector(72 downto 0);
---    signal dbg_wb_cross_clock_out_full : std_logic;
---    signal dbg_wb_cross_clock_out_empty : std_logic;
-    
---    signal dbg_wb_data_in : std_logic_vector(31 downto 0);
---    signal dbg_wb_ack_in : std_logic;
---    signal dbg_wb_ack_in_z1 : std_logic;
---    signal dbg_wb_ack_in_z2 : std_logic;
---    signal dbg_wb_sync_ack_in : std_logic;
---    signal dbg_wb_sync_data_in : std_logic_vector(31 downto 0);
-    
---    signal dbg_wb_dsp_wr_state : T_WB_DSP_WR_STATE;   
---    signal dbg_WB_SLV_ACK_O_top : std_logic;
---    signal dbg_WB_SLV_DAT_O_top : std_logic_vector(31 downto 0);
---    signal dbg_WB_SLV_DAT_O : std_logic_vector(31 downto 0);
---    signal dbg_WB_SLV_ACK_O : std_logic;
---    signal dbg_WB_SLV_SEL_I_top : std_logic_vector(3 downto 0);
---    signal dbg_WB_SLV_STB_I_top : std_logic;
---    signal dbg_WB_SLV_WE_I_top : std_logic;    
-    
---    signal dbg_WB_SLV_ADR_I_top : std_logic_vector(31 downto 0);
---    signal dbg_WB_SLV_CYC_I_top : std_logic;
---    signal dbg_WB_SLV_DAT_I : std_logic_vector(31 downto 0);  
---    signal dbg_WB_SLV_ADR_I : std_logic_vector(31 downto 0);  
---    signal dbg_WB_SLV_CYC_I : std_logic;  
---    signal dbg_WB_SLV_SEL_I : std_logic_vector(3 downto 0);  
---    signal dbg_WB_SLV_WE_I : std_logic; 
---    signal dbg_WB_SLV_STB_I : std_logic;
+    --signal dbg_wb_cross_clock_out_din : std_logic_vector(72 downto 0);
+    --signal dbg_wb_cross_clock_out_wrreq : std_logic;
+    --signal dbg_wb_cross_clock_out_rdreq : std_logic;
+    --signal dbg_wb_cross_clock_out_dout : std_logic_vector(72 downto 0);
+    --signal dbg_wb_cross_clock_out_full : std_logic;
+    --signal dbg_wb_cross_clock_out_empty : std_logic;
+  --
+    --signal dbg_wb_data_in : std_logic_vector(31 downto 0);
+    --signal dbg_wb_ack_in : std_logic;
+    --signal dbg_wb_ack_in_z1 : std_logic;
+    --signal dbg_wb_ack_in_z2 : std_logic;
+    --signal dbg_wb_sync_ack_in : std_logic;
+    --signal dbg_wb_sync_data_in : std_logic_vector(31 downto 0);
+  --
+    --signal dbg_wb_dsp_wr_state : T_WB_DSP_WR_STATE;   
+    --signal dbg_WB_SLV_ACK_O_top : std_logic;
+    --signal dbg_WB_SLV_DAT_O_top : std_logic_vector(31 downto 0);
+    --signal dbg_WB_SLV_DAT_O : std_logic_vector(31 downto 0);
+    --signal dbg_WB_SLV_ACK_O : std_logic;
+    --signal dbg_WB_SLV_SEL_I_top : std_logic_vector(3 downto 0);
+    --signal dbg_WB_SLV_STB_I_top : std_logic;
+    --signal dbg_WB_SLV_WE_I_top : std_logic;    
+  --
+    --signal dbg_WB_SLV_ADR_I_top : std_logic_vector(31 downto 0);
+    --signal dbg_WB_SLV_CYC_I_top : std_logic;
+    --signal dbg_WB_SLV_DAT_I : std_logic_vector(31 downto 0);  
+    --signal dbg_WB_SLV_ADR_I : std_logic_vector(31 downto 0);  
+    --signal dbg_WB_SLV_CYC_I : std_logic;  
+    --signal dbg_WB_SLV_SEL_I : std_logic_vector(3 downto 0);  
+    --signal dbg_WB_SLV_WE_I : std_logic; 
+    --signal dbg_WB_SLV_STB_I : std_logic;
     
     
                                     
     -- Mark Debug ILA Testing
     
---    attribute MARK_DEBUG : string;
---    attribute MARK_DEBUG of dbg_wb_cross_clock_out_din : signal is "TRUE";
---    attribute MARK_DEBUG of dbg_wb_cross_clock_out_wrreq : signal is "TRUE";
---    attribute MARK_DEBUG of dbg_wb_cross_clock_out_rdreq : signal is "TRUE";
---    attribute MARK_DEBUG of dbg_wb_cross_clock_out_dout : signal is "TRUE";
---    attribute MARK_DEBUG of dbg_wb_cross_clock_out_full : signal is "TRUE"; 
---    attribute MARK_DEBUG of dbg_wb_cross_clock_out_empty : signal is "TRUE";    
---    attribute MARK_DEBUG of dbg_wb_data_in : signal is "TRUE";    
---    attribute MARK_DEBUG of dbg_wb_ack_in : signal is "TRUE";    
---    attribute MARK_DEBUG of dbg_wb_ack_in_z1 : signal is "TRUE";    
---    attribute MARK_DEBUG of dbg_wb_ack_in_z2 : signal is "TRUE";    
---    attribute MARK_DEBUG of dbg_wb_sync_ack_in : signal is "TRUE";    
---    attribute MARK_DEBUG of dbg_wb_sync_data_in : signal is "TRUE";    
-
---    attribute MARK_DEBUG of dbg_wb_dsp_wr_state : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_ACK_O_top : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_DAT_O_top : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_DAT_O : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_ACK_O : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_SEL_I_top : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_STB_I_top : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_WE_I_top : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_ADR_I_top : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_CYC_I_top : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_DAT_I : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_ADR_I : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_CYC_I : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_SEL_I : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_WE_I : signal is "TRUE";   
---    attribute MARK_DEBUG of dbg_WB_SLV_STB_I : signal is "TRUE";   
+    --attribute MARK_DEBUG : string;
+    --attribute MARK_DEBUG of dbg_wb_cross_clock_out_din : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_wb_cross_clock_out_wrreq : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_wb_cross_clock_out_rdreq : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_wb_cross_clock_out_dout : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_wb_cross_clock_out_full : signal is "TRUE"; 
+    --attribute MARK_DEBUG of dbg_wb_cross_clock_out_empty : signal is "TRUE";    
+    --attribute MARK_DEBUG of dbg_wb_data_in : signal is "TRUE";    
+    --attribute MARK_DEBUG of dbg_wb_ack_in : signal is "TRUE";    
+    --attribute MARK_DEBUG of dbg_wb_ack_in_z1 : signal is "TRUE";    
+    --attribute MARK_DEBUG of dbg_wb_ack_in_z2 : signal is "TRUE";    
+    --attribute MARK_DEBUG of dbg_wb_sync_ack_in : signal is "TRUE";    
+    --attribute MARK_DEBUG of dbg_wb_sync_data_in : signal is "TRUE";    
+--
+    --attribute MARK_DEBUG of dbg_wb_dsp_wr_state : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_ACK_O_top : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_DAT_O_top : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_DAT_O : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_ACK_O : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_SEL_I_top : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_STB_I_top : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_WE_I_top : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_ADR_I_top : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_CYC_I_top : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_DAT_I : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_ADR_I : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_CYC_I : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_SEL_I : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_WE_I : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_WB_SLV_STB_I : signal is "TRUE";   
     
     
 begin
 
     --ILA Assignments
---    dbg_wb_cross_clock_out_din <= wb_cross_clock_out_din;
---    dbg_wb_cross_clock_out_wrreq <= wb_cross_clock_out_wrreq;
---    dbg_wb_cross_clock_out_rdreq <= wb_cross_clock_out_rdreq;
---    dbg_wb_cross_clock_out_dout <= wb_cross_clock_out_dout;
---    dbg_wb_cross_clock_out_full <= wb_cross_clock_out_full;
---    dbg_wb_cross_clock_out_empty <= wb_cross_clock_out_empty;
---    dbg_wb_data_in <= wb_data_in;
---    dbg_wb_ack_in <= wb_ack_in;
---    dbg_wb_ack_in_z1 <= wb_ack_in_z1;
---    dbg_wb_ack_in_z2 <= wb_ack_in_z2;
---    dbg_wb_sync_ack_in <= wb_sync_ack_in;
---    dbg_wb_sync_data_in <= wb_sync_data_in;
---    dbg_wb_dsp_wr_state <= wb_dsp_wr_state;
---    dbg_WB_SLV_ACK_O_top <= WB_SLV_ACK_O_top;
---    dbg_WB_SLV_DAT_O_top <= WB_SLV_DAT_O_top;
---    dbg_WB_SLV_DAT_O <= WB_SLV_DAT_O(14);
---    dbg_WB_SLV_ACK_O <= WB_SLV_ACK_O(14);
---    dbg_WB_SLV_SEL_I_top <= wb_cross_clock_out_dout(4 downto 1);
---    dbg_WB_SLV_STB_I_top <= wb_cross_clock_out_dout(72);
---    dbg_WB_SLV_WE_I_top <= wb_cross_clock_out_dout(0);
---    dbg_WB_SLV_ADR_I_top <= wb_cross_clock_out_dout(37 downto 6);
---    dbg_WB_SLV_CYC_I_top <= wb_cross_clock_out_dout(5);
---    dbg_WB_SLV_DAT_I <= WB_SLV_DAT_I(14);
---    dbg_WB_SLV_ADR_I <= WB_SLV_ADR_I(14);
---    dbg_WB_SLV_CYC_I <= WB_SLV_CYC_I(14);
---    dbg_WB_SLV_SEL_I <= WB_SLV_SEL_I(14);
---    dbg_WB_SLV_WE_I <= WB_SLV_WE_I(14);
---    dbg_WB_SLV_STB_I <= WB_SLV_STB_I(14);
+    --dbg_wb_cross_clock_out_din <= wb_cross_clock_out_din;
+    --dbg_wb_cross_clock_out_wrreq <= wb_cross_clock_out_wrreq;
+    --dbg_wb_cross_clock_out_rdreq <= wb_cross_clock_out_rdreq;
+    --dbg_wb_cross_clock_out_dout <= wb_cross_clock_out_dout;
+    --dbg_wb_cross_clock_out_full <= wb_cross_clock_out_full;
+    --dbg_wb_cross_clock_out_empty <= wb_cross_clock_out_empty;
+    --dbg_wb_data_in <= wb_data_in;
+    --dbg_wb_ack_in <= wb_ack_in;
+    --dbg_wb_ack_in_z1 <= wb_ack_in_z1;
+    --dbg_wb_ack_in_z2 <= wb_ack_in_z2;
+    --dbg_wb_sync_ack_in <= wb_sync_ack_in;
+    --dbg_wb_sync_data_in <= wb_sync_data_in;
+    --dbg_wb_dsp_wr_state <= wb_dsp_wr_state;
+    --dbg_WB_SLV_ACK_O_top <= WB_SLV_ACK_O_top;
+    --dbg_WB_SLV_DAT_O_top <= WB_SLV_DAT_O_top;
+    --dbg_WB_SLV_DAT_O <= WB_SLV_DAT_O(14);
+    --dbg_WB_SLV_ACK_O <= WB_SLV_ACK_O(14);
+    --dbg_WB_SLV_SEL_I_top <= wb_cross_clock_out_dout(4 downto 1);
+    --dbg_WB_SLV_STB_I_top <= wb_cross_clock_out_dout(72);
+    --dbg_WB_SLV_WE_I_top <= wb_cross_clock_out_dout(0);
+    --dbg_WB_SLV_ADR_I_top <= wb_cross_clock_out_dout(37 downto 6);
+    --dbg_WB_SLV_CYC_I_top <= wb_cross_clock_out_dout(5);
+    --dbg_WB_SLV_DAT_I <= WB_SLV_DAT_I(14);
+    --dbg_WB_SLV_ADR_I <= WB_SLV_ADR_I(14);
+    --dbg_WB_SLV_CYC_I <= WB_SLV_CYC_I(14);
+    --dbg_WB_SLV_SEL_I <= WB_SLV_SEL_I(14);
+    --dbg_WB_SLV_WE_I <= WB_SLV_WE_I(14);
+    --dbg_WB_SLV_STB_I <= WB_SLV_STB_I(14);
 
     --Mezzanine 3 ID and Present (this should be part of the 40GbE yellow block, but is part of the BSP for now)
     --Mezzanine ID: "000" = spare, "001" = 40GbE, "010" = HMC, "011" = ADC, rest = spare
@@ -1505,7 +1505,7 @@ begin
     port map (
         I => bsp_clk_mmcm, -- Clock input
         O => bsp_clk       -- Clock output
-    );
+    );  
 
     USER_CLK_MMCM_inst : MMCME2_BASE
     generic map (
@@ -1523,11 +1523,11 @@ begin
         CLKOUT0   => user_clk_mmcm,
         CLKFBOUT  => user_clk_mmcm_fb,  -- Feedback clock output
         LOCKED    => user_mmcm_locked,
-        CLKIN1    => sys_clk_mmcm,      -- Main clock input
+        CLKIN1    => refclk_0,--sys_clk_mmcm,      -- Main clock input
         PWRDWN    => '0',
         RST       => not sys_mmcm_locked,   --fpga_reset,
         CLKFBIN   => user_clk_mmcm_fb   -- Feedback clock input
-    );
+    );  
 
     user_clk_BUFG_inst : BUFG
     port map (
@@ -1793,12 +1793,14 @@ begin
     brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(27 downto 26) <= xlgmii_rxled(2); -- 40GBE ETH 2 RX
     brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(29 downto 28) <= xlgmii_txled(3); -- 40GBE ETH 3 TX
     brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(31 downto 30) <= xlgmii_rxled(3); -- 40GBE ETH 3 RX
-
-
-    qsfp_soft_reset(0) <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(1);
-    qsfp_soft_reset(1) <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(2);
-    qsfp_soft_reset(2) <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(3);
-    qsfp_soft_reset(3) <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(4);
+    
+    --The 40GbE MAC and PHY microblaze reset needs to be OR'ed with hard reset in
+    --order to make the reset deterministic. This will prevent the Rx Link from not
+    --functioning properly
+    qsfp_soft_reset(0) <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(1) or sys_rst;
+    qsfp_soft_reset(1) <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(2) or sys_rst;
+    qsfp_soft_reset(2) <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(3) or sys_rst;
+    qsfp_soft_reset(3) <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(4) or sys_rst;
 
     -- Microblaze Alive Signal
     brd_user_read_regs(C_RD_UBLAZE_ALIVE_ADDR) <= brd_user_write_regs(C_WR_UBLAZE_ALIVE_ADDR);
@@ -1954,6 +1956,7 @@ begin
 
     USB_UART_RXD <= microblaze_uart_txd;
     -- USB SERIAL CURRENTLY NOT USED FOR RECEIVING
+    microblaze_uart_rxd <= USB_UART_TXD;
     --USB_UART_TXD
 
     --brd_user_read_regs(C_RD_AUX_CLK_FREQ_ADDR) <= aux_clk_frequency;
@@ -2035,7 +2038,7 @@ begin
         
 
 
-    microblaze_uart_rxd <= DEBUG_UART_RX;
+    --microblaze_uart_rxd <= DEBUG_UART_RX;
     DEBUG_UART_TX <= microblaze_uart_txd;
 
 ----------------------------------------------------------------------------
@@ -2375,7 +2378,7 @@ begin
         DAT_I => WB_SLV_DAT_I(9),
         DAT_O => WB_SLV_DAT_O(9),
         ACK_O => WB_SLV_ACK_O(9),
-        ADR_I => WB_SLV_ADR_I(9)(13 downto 0),
+        ADR_I => WB_SLV_ADR_I(9)(15 downto 0),
         CYC_I => WB_SLV_CYC_I(9),
         SEL_I => WB_SLV_SEL_I(9),
         STB_I => WB_SLV_STB_I(9),
@@ -2474,6 +2477,7 @@ begin
         FABRIC_GATEWAY    => FABRIC_GATEWAY,
         FABRIC_ENABLE     => FABRIC_ENABLE,
         TTL               => TTL,
+        MEZZ_PORT         => MEZZ_PORT,
         PROMISC_MODE      => PROMISC_MODE,
         RX_CRC_CHK_ENABLE => RX_CRC_CHK_ENABLE)
     port map(
@@ -2502,7 +2506,7 @@ begin
         DAT_I => WB_SLV_DAT_I(10),
         DAT_O => WB_SLV_DAT_O(10),
         ACK_O => WB_SLV_ACK_O(10),
-        ADR_I => WB_SLV_ADR_I(10)(13 downto 0),
+        ADR_I => WB_SLV_ADR_I(10)(15 downto 0),
         CYC_I => WB_SLV_CYC_I(10),
         SEL_I => WB_SLV_SEL_I(10),
         STB_I => WB_SLV_STB_I(10),
@@ -3377,7 +3381,7 @@ begin
     end process;   
    
     --Start reading out of the wishbone FIFO (wishbone to DSP interface [39.0625MHz to 39.0625MHz]) when FIFO is not empty   
-    wb_cross_clock_out_rdreq <= '1' when (wb_cross_clock_out_empty = '0') else '0';
+    wb_cross_clock_out_rdreq <= '1' when ((wb_cross_clock_out_empty = '0') and (bsp_rst = '0')) else '0';
     
     --Wishbone signals from the DSP
     
@@ -3438,3 +3442,4 @@ begin
     );
 
 end arch_forty_gbe;
+

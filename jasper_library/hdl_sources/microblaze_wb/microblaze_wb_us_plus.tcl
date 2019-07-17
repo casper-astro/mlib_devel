@@ -20,7 +20,7 @@ set script_folder [_tcl::get_script_folder]
 ################################################################
 # Check if script is running in correct Vivado version.
 ################################################################
-set scripts_vivado_version 2018.2
+set scripts_vivado_version 2019.1
 set current_vivado_version [version -short]
 
 if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
@@ -43,7 +43,7 @@ if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
 
 set list_projs [get_projects -quiet]
 if { $list_projs eq "" } {
-   create_project project_1 myproj -part xcvu9p-flga2104-2L-e
+   create_project project_1 myproj -part xc7vx485tffg1157-1
 }
 
 
@@ -51,14 +51,70 @@ if { $list_projs eq "" } {
 variable design_name
 set design_name cont_microblaze
 
-# Create regular design
-if { [catch {create_bd_design $design_name} errmsg] } {
-   common::send_msg_id "BD_TCL-012" "INFO" "Please set a different value to variable <design_name>."
+# If you do not already have an existing IP Integrator design open,
+# you can create a design using the following command:
+#    create_bd_design $design_name
 
-   return 1
+# Creating design if needed
+set errMsg ""
+set nRet 0
+
+set cur_design [current_bd_design -quiet]
+set list_cells [get_bd_cells -quiet]
+
+if { ${design_name} eq "" } {
+   # USE CASES:
+   #    1) Design_name not set
+
+   set errMsg "Please set the variable <design_name> to a non-empty value."
+   set nRet 1
+
+} elseif { ${cur_design} ne "" && ${list_cells} eq "" } {
+   # USE CASES:
+   #    2): Current design opened AND is empty AND names same.
+   #    3): Current design opened AND is empty AND names diff; design_name NOT in project.
+   #    4): Current design opened AND is empty AND names diff; design_name exists in project.
+
+   if { $cur_design ne $design_name } {
+      common::send_msg_id "BD_TCL-001" "INFO" "Changing value of <design_name> from <$design_name> to <$cur_design> since current design is empty."
+      set design_name [get_property NAME $cur_design]
+   }
+   common::send_msg_id "BD_TCL-002" "INFO" "Constructing design in IPI design <$cur_design>..."
+
+} elseif { ${cur_design} ne "" && $list_cells ne "" && $cur_design eq $design_name } {
+   # USE CASES:
+   #    5) Current design opened AND has components AND same names.
+
+   set errMsg "Design <$design_name> already exists in your project, please set the variable <design_name> to another value."
+   set nRet 1
+} elseif { [get_files -quiet ${design_name}.bd] ne "" } {
+   # USE CASES: 
+   #    6) Current opened design, has components, but diff names, design_name exists in project.
+   #    7) No opened design, design_name exists in project.
+
+   set errMsg "Design <$design_name> already exists in your project, please set the variable <design_name> to another value."
+   set nRet 2
+
+} else {
+   # USE CASES:
+   #    8) No opened design, design_name not in project.
+   #    9) Current opened design, has components, but diff names, design_name not in project.
+
+   common::send_msg_id "BD_TCL-003" "INFO" "Currently there is no design <$design_name> in project, so creating one..."
+
+   create_bd_design $design_name
+
+   common::send_msg_id "BD_TCL-004" "INFO" "Making design <$design_name> as current_bd_design."
+   current_bd_design $design_name
+
 }
 
-current_bd_design $design_name
+common::send_msg_id "BD_TCL-005" "INFO" "Currently the variable <design_name> is equal to \"$design_name\"."
+
+if { $nRet != 0 } {
+   catch {common::send_msg_id "BD_TCL-114" "ERROR" $errMsg}
+   return $nRet
+}
 
 set bCheckIPsPassed 1
 ##################################################################
@@ -73,7 +129,7 @@ xilinx.com:ip:axi_timebase_wdt:3.0\
 xilinx.com:ip:axi_timer:2.0\
 xilinx.com:ip:axi_uartlite:2.0\
 xilinx.com:ip:mdm:3.2\
-xilinx.com:ip:microblaze:10.0\
+xilinx.com:ip:microblaze:11.0\
 xilinx.com:ip:axi_intc:4.1\
 xilinx.com:ip:proc_sys_reset:5.0\
 xilinx.com:ip:xlconcat:2.1\
@@ -145,7 +201,9 @@ proc create_hier_cell_microblaze_0_local_memory { parentCell nameHier } {
 
   # Create interface pins
   create_bd_intf_pin -mode MirroredMaster -vlnv xilinx.com:interface:lmb_rtl:1.0 DLMB
+
   create_bd_intf_pin -mode MirroredMaster -vlnv xilinx.com:interface:lmb_rtl:1.0 ILMB
+
 
   # Create pins
   create_bd_pin -dir I -type clk LMB_Clk
@@ -234,6 +292,7 @@ proc create_root_design { parentCell } {
   # Create interface ports
   set UART [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:uart_rtl:1.0 UART ]
 
+
   # Create ports
   set ACK_I [ create_bd_port -dir I ACK_I ]
   set ADR_O [ create_bd_port -dir O -from 19 -to 0 ADR_O ]
@@ -289,7 +348,7 @@ proc create_root_design { parentCell } {
  ] $mdm_1
 
   # Create instance: microblaze_0, and set properties
-  set microblaze_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:10.0 microblaze_0 ]
+  set microblaze_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:11.0 microblaze_0 ]
   set_property -dict [ list \
    CONFIG.C_DEBUG_ENABLED {1} \
    CONFIG.C_D_AXI {1} \
@@ -383,6 +442,7 @@ proc create_root_design { parentCell } {
   # Restore current instance
   current_bd_instance $oldCurInst
 
+  validate_bd_design
   save_bd_design
 }
 # End of create_root_design()

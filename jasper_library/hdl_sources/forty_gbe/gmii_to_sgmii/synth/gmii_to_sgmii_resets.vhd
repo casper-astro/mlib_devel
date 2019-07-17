@@ -67,10 +67,7 @@ use ieee.std_logic_1164.all;
 entity gmii_to_sgmii_resets is
    port (
     reset                    : in  std_logic;                -- Asynchronous reset for entire core.
-    independent_clock_bufg   : in  std_logic;                -- System clock 
-
-    mmcm_locked              : in std_logic;
-    mmcm_reset               : out std_logic;                -- MMCM Reset
+    independent_clock_bufg   : in  std_logic;                -- System clock
     pma_reset                : out std_logic                 -- Synchronous transcevier PMA reset
    );
 end gmii_to_sgmii_resets;
@@ -91,14 +88,13 @@ architecture top_level of gmii_to_sgmii_resets is
 
 begin
 
-   mmcm_reset <= reset ;
 
    -----------------------------------------------------------------------------
    -- Transceiver PMA reset circuitry
    -----------------------------------------------------------------------------
-   process(mmcm_locked, reset, independent_clock_bufg)
+   process(reset, independent_clock_bufg)
    begin
-     if (reset = '1' or mmcm_locked= '0' ) then
+     if (reset = '1' ) then
        pma_reset_pipe <= "1111";
      elsif independent_clock_bufg'event and independent_clock_bufg = '1' then
        pma_reset_pipe <= pma_reset_pipe(2 downto 0) & reset;

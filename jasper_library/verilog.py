@@ -11,6 +11,8 @@ from math import ceil, floor
 import logging
 import inspect
 import operator
+from memory import Register
+import pdb
 
 logger = logging.getLogger('jasper.verilog')
 
@@ -19,7 +21,7 @@ class ImmutableWithComments(object):
     A class which you can add attributes to, but
     you can't change them once they're set. You are allowed
     to try and set them to the same value again.
-    The 'comment' attribute is special. Each time you
+    The ``comment`` attribute is special. Each time you
     try to set it, the comment string is appended to the
     existing comment attribute.
     """
@@ -41,6 +43,43 @@ class ImmutableWithComments(object):
 class WbDevice(object):
     """
     A class to encapsulate the parameters (name, size, etc.) of a wishbone slave device.
+    """
+    def __init__(self, regname, nbytes, mode, hdl_suffix='', hdl_candr_suffix='', memory_map=[], typecode=0xff):
+        """
+        Class constructor.
+
+        :param regname: Name of register (this name is the string used to access the register from software)
+        :type regname: str
+        :param nbytes: Number of bytes in this slave's memory space.
+        :type nbytes: int
+        :param mode: Permissions ('r': readable, 'w': writable, 'rw': read/writeable)
+        :type mode: str
+        :param hdl_suffix: Suffix given to wishbone port names. Eg. if ``hdl_suffix = foo``, ports have the form ``wbs_dat_i_foo``
+        :type hdl_suffix: str
+        :param hdl_candr_suffix: Suffix given to wishbone clock and reset port names. Eg. if ``hdl_suffix = foo``, ports have the form ``wbs_clk_i_foo``
+        :type hdl_candr_suffix: str
+        :param memory_map: A list or ``Register`` instances defining the contents of sub-blocks of this device's memory.
+        :type memory_map: list
+        :param typecode: Typecode number (0-255) identifying the type of this block. See ``yellow_block_typecodes.py``
+        :type typecode: int
+        """
+        self.typecode = typecode
+        self.regname = regname
+        self.nbytes = nbytes
+        self.mode=mode
+        #: Start (lowest) address of the memory space used by this device, in bytes.
+        self.base_addr = None
+        #: End (highest) address of the memory space used by this device, in bytes.
+        self.high_addr = None
+        self.hdl_suffix = hdl_suffix
+        self.hdl_candr_suffix = hdl_candr_suffix
+        self.memory_map = memory_map
+        #: If using multiple bus arbiters, which arbiter should this slave attach to?
+        self.sub_arb_id = 0
+
+class AXI4LiteDevice(object):
+    """
+    A class to encapsulate the parameters (name, size, etc.) of a AXI4-Lite slave device.
     """
     def __init__(self, regname, nbytes, mode, hdl_suffix='', hdl_candr_suffix='', memory_map=[], typecode=0xff):
         """
@@ -72,8 +111,6 @@ class WbDevice(object):
         self.hdl_suffix = hdl_suffix
         self.hdl_candr_suffix = hdl_candr_suffix
         self.memory_map = memory_map
-        #: If using multiple bus arbiters, which arbiter should this slave attach to?
-        self.sub_arb_id = 0
 
 class Port(ImmutableWithComments):
     """
@@ -82,18 +119,17 @@ class Port(ImmutableWithComments):
     """
     def __init__(self, name, signal=None, parent_port=False, parent_sig=True, **kwargs):
         """
-        Create a 'Port' instance.
+        Create a ``Port`` instance.
 
         :param name: Name of the port
-        :type port: String
+        :type port: str
         :param signal: Signal to which this port is attached
-        :type signal: String
+        :type signal: str
         :param parent_port: When module 'A' instantiates the module to which this port is attached, should this port be connected to a similar port on 'A'.
-        :type parent_port: Boolean
+        :type parent_port: bool
         :param parent_sig: When module 'A' instantiates the module to which this port is attached, should 'A' also instantiate a signal matching the one connected to this port.
-        :type parent_sig: Boolean
-        :param **kwargs: Other keywords which should become attributes of this instance.
-
+        :type parent_sig: bool
+        :param kwargs: Other keywords which should become attributes of this instance.
         """
         self.update_attrs(name, signal=signal, parent_port=parent_port, parent_sig=parent_sig, **kwargs)
 
@@ -102,14 +138,14 @@ class Port(ImmutableWithComments):
         Update the attributes of this block.
 
         :param name: Name of the port
-        :type port: String
+        :type port: str
         :param signal: Signal to which this port is attached
-        :type signal: String
+        :type signal: str
         :param parent_port: When module 'A' instantiates the module to which this port is attached, should this port be connected to a similar port on 'A'.
-        :type parent_port: Boolean
+        :type parent_port: bool
         :param parent_sig: When module 'A' instantiates the module to which this port is attached, should 'A' also instantiate a signal matching the one connected to this port.
-        :type parent_sig: Boolean
-        :param **kwargs: Other keywords which should become attributes of this instance.
+        :type parent_sig: bool
+        :param kwargs: Other keywords which should become attributes of this instance.
         """
         self.name = name.rstrip(' ')
         self.parent_sig = parent_sig and not parent_port
@@ -127,14 +163,14 @@ class Parameter(ImmutableWithComments):
     """
     def __init__(self, name, value, comment=None):
         """
-        Create a 'Parameter' instance.
+        Create a ``Parameter`` instance.
 
         :param name: Name of this parameter
-        :type name: String
+        :type name: str
         :param value: Value this parameter should be set to.
         :type value: Varies
         :param comment: User-assisting comment string to attach to this parameter.
-        :type comment: String
+        :type comment: str
         """
         self.update_attrs(name, value=value, comment=comment)
 
@@ -143,11 +179,11 @@ class Parameter(ImmutableWithComments):
         Update the attributes of this block.
 
         :param name: Name of this parameter
-        :type name: String
+        :type name: str
         :param value: Value this parameter should be set to.
         :type value: Varies
         :param comment: User-assisting comment string to attach to this parameter.
-        :type comment: String
+        :type comment: str
         """
         self.name = name.rstrip(' ')
         self.value = value
@@ -165,12 +201,12 @@ class Signal(ImmutableWithComments):
         Create a 'Signal' instance.
 
         :param name: Name of this signal
-        :type name: String
+        :type name: str
         :param signal: Name of this signal
-        :type signal: String
+        :type signal: str
         :param width: Bitwidth of this signal
-        :type signal: Integer
-        :param **kwargs: Other keywords which should become attributes of this instance.
+        :type signal: int
+        :param kwargs: Other keywords which should become attributes of this instance.
         """
         self.update_attrs(name, width=width, **kwargs)
 
@@ -387,10 +423,10 @@ def instantiate_wb_arb_module(module, n_slaves, n_sub_arbs=None):
     :param module: Module into which the arbiter should be instantiated.
     :type module: VerilogModule instance
     :param n_slaves: Number of slaves this arbiter is connected to.
-    :type n_slaves: Integer
+    :type n_slaves: int
     :param n_sub_arbs: Number of sub-arbiters beneath the arbiter being instantiated here.
                        If None, a non-hierarchical arbiter will be used.
-    :type n_sub_arbs: Integer or None
+    :type n_sub_arbs: int or None
     """
     if n_sub_arbs is not None:
         inst = module.get_instance('wbs_master_arbiter', 'wbs_arbiter_inst')
@@ -429,17 +465,17 @@ class VerilogModule(object):
     """
     def __init__(self, name='', topfile=None, comment=''):
         """
-        Construct a new module, named 'name'.
+        Construct a new module, named ``name``.
         You can either start with an empty module
         and add ports/signals/instances to it,
         or you can specify an existing top-level file
         topfile, which will be modified.
         If doing the latter, the construction of
         wishbone interconnect demands that the
-        topfile has a localparam N_WB_SLAVES,
+        topfile has a ``localparam N_WB_SLAVES``,
         which specifies the number of wishbone
         slaves in the un-modified topfile. And 
-        SLAVE_BASE and SLAVE_HIGH localparams
+        ``SLAVE_BASE`` and ``SLAVE_HIGH`` localparams
         definiting the slave addresses.
 
         Eg:
@@ -487,11 +523,11 @@ class VerilogModule(object):
             localparam SLAVE_BASE = {32'h00000000};
 
         :param name: Name of this module
-        :type name: String
+        :type name: str
         :param topfile: The filename of an existing verilog file, if any, to which this module should add.
-        :type topfile: String or None
+        :type topfile: str or None
         :param comment: A user-friendly comment to be inserted in Verilog where this module is instantiated.
-        :type comment: String
+        :type comment: str
         """
 
         if len(name) != 0:
@@ -532,6 +568,11 @@ class VerilogModule(object):
         self.wb_base = []
         self.wb_high = []
         self.wb_name = []
+        # AXI4-Lite stuff
+        self.n_axi4lite_slaves = 0 # axi4lite slaves added to this module programmatically
+        self.axi4lite_devices = []
+        self.n_axi4lite_interfaces = 0 # axi4lite interfaces to this module
+        self.memory_map = {}
         # sourcefiles required by the module (this is currently NOT
         # how the jasper toolflow implements source management)
         self.sourcefiles = []
@@ -546,7 +587,7 @@ class VerilogModule(object):
         particular instances, so that the output Verilog is prettier.
 
         :param cur_blk: The name of the current block driving code generation.
-        :type cur_blk: String.
+        :type cur_blk: str
         """
         self.cur_blk = cur_blk
         if cur_blk not in self.ports.keys():
@@ -640,10 +681,89 @@ class VerilogModule(object):
             self.add_localparam('SLAVE_ADDR', base_addrs)
             self.add_localparam('SLAVE_HIGH', high_addrs)
 
+    def axi4lite_memory_map(self, base_addr=0x10000, alignment=4):
+        """
+        This function is only to be called by the 'top' verilog module after all other yellow blocks have called 'modify_top', but
+        before the axi4lite_interconnect yellow block class has called 'modify_top' as that class requires the memory map this creates.
+
+        :param base_addr: The address from which indexing of instance axi4lite interfaces will begin. Any memory space required by the template verilog file should be below this address.
+        :type base_addr: int
+        :param alignment: Alignment required by all memory start addresses.
+        :type alignment: int
+
+        memory map: 
+        keys: name of AXI4-Lite interfaces.
+        values: 
+         - 'memory_map': internal memory map for this interface
+         - 'size': size of internal memory map in bytes
+         - 'absolute_address': actual address in memory determined by base_addr
+         - 'relative_address': address relative to base_addr
+         - 'axi4lite_devices': List of AXI4LiteDevice objects for core_info backwards compatibility
+        """
+        for dev in self.axi4lite_devices:
+            # add all software registers to one memory mapped AXI4-Lite interface
+            if dev.typecode == 0:
+                # check to see if this is the first sw_reg in the memory_map dict
+                if 'sw_reg' not in self.memory_map:
+                    # Make new interface dict for software registers
+                    interface = self.memory_map['sw_reg'] = {}
+                    interface['size'] = dev.nbytes
+                    interface['memory_map'] = dev.memory_map
+                    # erase dev.memory_map so that core_info doesn't add sw_regs twice
+                    dev.memory_map = []
+                    interface['axi4lite_devices'] = [dev]
+                else:
+                    # add another sw_reg to this interface dict
+                    interface = self.memory_map['sw_reg']
+                    # adjust offset of register
+                    dev.memory_map[0].offset = interface['size']
+                    # grow size of interface
+                    interface['size'] += dev.nbytes
+                    # append device memory_map
+                    interface['memory_map'] += dev.memory_map
+                    # # erase dev.memory_map so that core_info doesn't add sw_regs twice
+                    dev.memory_map = []
+                    interface['axi4lite_devices'] += [dev]
+            elif dev.typecode == 4:
+                # tell the axi_ic to generate a bram
+                interface = self.memory_map[dev.regname] = {}
+                interface['size'] = dev.nbytes # seems brams need to be sized in bytes not words
+                interface['memory_map'] = dev.memory_map
+                interface['axi4lite_devices'] = [dev]
+                # erase dev.memory_map so that core_info doesn't add brams twice
+                # only a mad man would attempt to debug this shit!
+                dev.memory_map = []
+            else:
+                # add all other yellow blocks to their own interface and make xml memory map
+                interface = self.memory_map[dev.regname] = {}
+                interface['size'] = dev.nbytes
+                interface['memory_map'] = dev.memory_map
+                interface['axi4lite_devices'] = [dev]
+
+        relative_address = 0
+        # Now loop over interfaces in memory_map to determine addresses
+        for key,val in self.memory_map.items():
+            val['relative_address'] = hex(relative_address)
+            # this is really gross, but didn't want to rewrite anything in core_info... Sorry.
+            if key == 'sw_reg':
+                # loop over registers and axi4lite_devices, assign correct dev.base_addr for core_info
+                # There could be a better python one-liner to do this but idk...
+                for reg in val['memory_map']:
+                    for dev in val['axi4lite_devices']:
+                        # if names match, set base_addr from interface's base_addr + core addr + register offset
+                        if reg.name == dev.regname:
+                            dev.base_addr = base_addr + relative_address + reg.offset
+            else:
+                # 'base_addr' for interface (for core_info to reference later)
+                val['axi4lite_devices'][0].base_addr = base_addr + relative_address
+            # adjust addresses for next loop
+            relative_address = relative_address + (alignment*int(ceil(val['size']/float(alignment))))
+
+
 
     def get_base_wb_slaves(self):
         """
-        Look for the pattern 'localparam N_WB_SLAVES'
+        Look for the pattern ``localparam N_WB_SLAVES``
         in this module's topfile, and use it to extract the
         number of wishbone slaves in the module.
         Update the base_wb_slaves attribute accordingly.
@@ -669,18 +789,21 @@ class VerilogModule(object):
 
     def add_port(self, name, signal=None, parent_port=False, parent_sig=True, **kwargs):
         """
-        Add a port to the module. Only the parameter 'name' is compulsory. Others may be required when instantiating
-        this module in another. E.g., an instance of this module needs all ports to have a defined 'signal' value.
+        Add a port to the module. Only the parameter ``name`` is compulsory. Others may be required when instantiating
+        this module in another.
+        
+        E.g., an instance of this module needs all ports to have a defined ``signal`` value.
+
         However, if this module is at the top level, this isn't necessary. Similarly, a port featuring in an
         instantiated module need not have a width or direction specified, but if you want to instantiate the module
         and propagate the port to the parent, the parent won't know what to do unless these port parameters are specified.
 
         :param name: name of the port
-        :param signal: name of the signal to connect port to. Can include bit indexing, e.g. `my_signal[15:8]`
+        :param signal: name of the signal to connect port to. Can include bit indexing, e.g. ``my_signal[15:8]``
         :param dir: direction of signal
         :param width: width of signal
         :param parent_port: When instantiating this module, promote this port to a port of the parent
-        :param parent_sig: When instantiating this module, add a signal named 'signal' to the parent
+        :param parent_sig: When instantiating this module, add a signal named ``signal`` to the parent
         :param comment: Use this to add a comment string which will end up in the generated verilog
         """
         name = name.rstrip(' ')
@@ -706,8 +829,9 @@ class VerilogModule(object):
 
     def add_parameter(self, name, value, comment=None):
         """
-        Add a parameter to the entity, with name 'parameter' and value
-        'value'.
+        Add a parameter to the entity, with name ``parameter`` and value
+        ``value``.
+        
         You may add a comment that will end up in the generated verilog.
         """
         # check every nested dictionary to see if name is in it
@@ -721,8 +845,9 @@ class VerilogModule(object):
 
     def add_localparam(self, name, value, comment=None):
         """
-        Add a parameter to the entity, with name 'parameter' and value
-        'value'.
+        Add a parameter to the entity, with name ``parameter`` and value
+        ``value``.
+        
         You may add a comment that will end up in the generated verilog.
         """
         # check every nested dictionary to see if name is in it
@@ -736,8 +861,9 @@ class VerilogModule(object):
 
     def add_signal(self, name, width=0, **kwargs):
         """
-        Add an internal signal to the entity, with name 'signal'
-        and width 'width'.
+        Add an internal signal to the entity, with name ``signal``
+        and width ``width``.
+
         You may add a comment that will end up in the generated verilog.
         """
         name = name.rstrip(' ')
@@ -753,10 +879,11 @@ class VerilogModule(object):
     def assign_signal(self, lhs, rhs, comment=None):
         """
         Assign one signal to another, or one signal to a port.
-        i.e., generate lines of verilog like:
-        assign lhs = rhs;
-        'lhs' and 'rhs' are strings that can represent port or signal
-        names, and may include verilog-style indexing, eg '[15:8]'
+
+        i.e., generate lines of verilog like: ``assign lhs = rhs;``
+
+        ``lhs`` and ``rhs`` are strings that can represent port or signal
+        names, and may include verilog-style indexing, eg ``[15:8]``
 
         You may add a comment that will end up in the generated verilog.
         """
@@ -764,7 +891,8 @@ class VerilogModule(object):
 
     def get_instance(self, entity, name, comment=None):
         """
-        Instantiate and return a new instance of entity 'entity', with instance name 'name'.
+        Instantiate and return a new instance of entity ``entity``, with instance name ``name``.
+
         You may add a comment that will end up in the generated verilog.
         """
         new_inst = VerilogModule(name=entity, comment=comment)
@@ -816,6 +944,7 @@ class VerilogModule(object):
         Rewrite the intially supplied verilog file to
         include instance, signals, ports, assignments and
         wishbone interfaces added programmatically.
+
         The initial verilog file is backed up with a '.base' extension.
         """
         os.system('cp %s %s.base'%(self.topfile,self.topfile))
@@ -861,7 +990,7 @@ class VerilogModule(object):
         programmatic additions of instances / signals / etc.
         to the VerilogModule instance.
 
-        The jasper toolflow has been using rewrite_module_file()
+        The jasper toolflow has been using ``rewrite_module_file()``
         rather than this method, so it may or may not still
         work correctly. It used to, at least...
         """
@@ -910,8 +1039,9 @@ class VerilogModule(object):
     def gen_top_mod(self):
         """
         Return the code that needs to go in a top level verilog file
-        to incorporate this module. I.e., everything except the module
-        port declaration headers and endmodule lines.
+        to incorporate this module. 
+        
+        I.e., everything except the module port declaration headers and endmodule lines.
 
         TODO: This is almost identical to write_new_module_file(). Combine?
         """        
@@ -1107,7 +1237,7 @@ class VerilogModule(object):
     def gen_instance_verilog(self, instname):
         """
         Generate a string corresponding to the instantiation of this instance,
-        with instance name 'instname'
+        with instance name ``instname``
         """
         s = ''
         if self.comment is not None:
@@ -1119,8 +1249,6 @@ class VerilogModule(object):
                 n = 0
                 for paramname, parameter in sorted(self.parameters[block].items()):
                     s += '    .%s(%s)'%(parameter.name, parameter.value)
-                    print('%s(%s)'%(parameter.name, parameter.value))
-                    print('n: %s\n n_params: %s'%(n,n_params))
                     if n != (n_params - 1):
                         s += ',\n'
                     else:
@@ -1194,10 +1322,29 @@ class VerilogModule(object):
         self.add_port('wb_ack_o'+suffix, signal='wbs_ack_i[%s]'%wb_id,parent_sig=False)
         self.add_port('wb_err_o'+suffix, signal='wbs_err_i[%s]'%wb_id,parent_sig=False)
 
+    def add_axi4lite_interface(self, regname, mode, nbytes=4, default_val=0, suffix='', candr_suffix='', memory_map=[], typecode=0xff):
+        """
+        Add the ports necessary for a AXI4-Lite slave interface.
+
+        This function returns the AXI4LiteDevice object, so the caller can mess with it's memory map
+        if they so desire.
+        """
+        if regname in [axi_dev.regname for axi_dev in self.axi4lite_devices]:
+            return
+        else:
+            # Make single register in memory_map if memory_map is empty
+            if not memory_map:
+                memory_map = [Register(regname, nbytes=nbytes, offset=0, mode=mode, default_val=default_val, ram_size=nbytes if typecode==4 else -1, ram=True if typecode==4 else False)]
+            axi4lite_device = AXI4LiteDevice(regname, nbytes=nbytes, mode=mode, hdl_suffix=suffix, hdl_candr_suffix=candr_suffix, memory_map=memory_map, typecode=typecode)
+            self.axi4lite_devices += [axi4lite_device]
+            self.n_axi4lite_interfaces += 1
+            return axi4lite_device
+
+
     def search_dict_for_name(self, dict, name):
         """
         This helper function searches each top level dictionary
-        to see if it contains 'name' and returns the key that does.
+        to see if it contains ``name`` and returns the key that does.
         """
         for top_dict_key, top_dict_value in dict.items():
             # does the second level dict keys contain name?
@@ -1210,7 +1357,7 @@ class VerilogModule(object):
         """
         This helper function returns the current block string,
         if the dictionary is not empty and the current block 
-        is not 'default'.
+        is not ``default``.
         """
         # is the dictionary empty?
         if dict and cur_blk != 'default':

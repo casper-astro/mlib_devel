@@ -1,8 +1,8 @@
---Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+--Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
---Tool Version: Vivado v.2016.2 (lin64) Build 1577090 Thu Jun  2 16:32:35 MDT 2016
---Date        : Mon Feb 19 12:51:44 2018
---Host        : adam-cm running 64-bit Ubuntu 14.04.5 LTS
+--Tool Version: Vivado v.2019.1.1 (lin64) Build 2580384 Sat Jun 29 08:04:45 MDT 2019
+--Date        : Mon Jul 15 17:19:26 2019
+--Host        : casper1 running 64-bit Ubuntu 16.04.6 LTS
 --Command     : generate_target cont_microblaze_wrapper.bd
 --Design      : cont_microblaze_wrapper
 --Purpose     : IP block netlist

@@ -65,11 +65,13 @@ The recommended OS is Ubuntu as it is what the majority of the collaboration are
 +-------------+--------------------+----------------+---------------+-------------------------------------------------------------------------+
 | Platform    | OS                 | Matlab Version | Xilinx Tools  | mlib_devel                                                              |
 +=============+====================+================+===============+=========================================================================+
-| ROACH1 or 2 | Ubuntu 12.04/14.04 | R2013b         | ISE 14.7      | `ROACH HEAD <https://github.com/casper-astro/mlib_devel/tree/roach2>`__ |
+| ROACH1 or 2 | Ubuntu 12.04/14.04 | R2013b         | ISE 14.7      | `ROACH branch <https://github.com/casper-astro/mlib_devel/tree/roach2>`__ |
 +-------------+--------------------+----------------+---------------+-------------------------------------------------------------------------+
-| SNAP        | Ubuntu 14.04/16.04 | R2016b         | Vivado 2016.4 | `Master HEAD <https://github.com/casper-astro/mlib_devel>`__            |
+| SNAP        | Ubuntu 14.04/16.04 | R2016b         | Vivado 2016.4 | `Master branch <https://github.com/casper-astro/mlib_devel>`__            |
 +-------------+--------------------+----------------+---------------+-------------------------------------------------------------------------+
-| SKARAB      | Ubuntu 14.04/16.04 | R2016b         | Vivado 2016.2 | `Master HEAD <https://github.com/casper-astro/mlib_devel>`__            |
+| SKARAB      | Ubuntu 14.04/16.04 | R2016b         | Vivado 2016.2 | `Master branch <https://github.com/casper-astro/mlib_devel>`__            |
++-------------+--------------------+----------------+---------------+-------------------------------------------------------------------------+
+| VCU118      | Ubuntu 14.04/16.04 | R2017b         | Vivado 2018.2 | `vcu118 branch <https://github.com/casper-astro/mlib_devel/tree/vcu118>`__            |
 +-------------+--------------------+----------------+---------------+-------------------------------------------------------------------------+
 
 1. :doc:`Setting up the Toolflow <src/Setting-up-the-Toolflow>`
@@ -97,6 +99,7 @@ Documentation
 * :doc:`Block Documentation <blockdocumentation>`
 * :doc:`Toolflow Documentation <jasper_documentation>`
 * :doc:`Toolflow Sourcecode <src/jasper_library_modules/modules>`
+* `casperfpga Sourcecode <https://casper-toolflow.readthedocs.io/projects/casperfpga/en/latest/>`__
 
 ..  toctree::
     :hidden:
@@ -107,3 +110,11 @@ Documentation
     blockdocumentation
     jasper_documentation
     Toolflow Sourcecode <src/jasper_library_modules/modules>
+    casperfpga Sourcecode <https://casper-toolflow.readthedocs.io/projects/casperfpga/en/latest/>
+
+
+Get Involved
+--------------
+If you are a CASPER collaborator, or you’re just interested in what we’re up to, feel free to join our mailing list by sending a blank email `here. <casper+subscribe@lists.berkeley.edu>`_
+
+If would like to get involved in the development of the tools, please join our dev mailing list by sending a blank email `here. <casper-dev+subscribe@lists.berkeley.edu>`_.

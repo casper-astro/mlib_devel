@@ -1,6 +1,6 @@
 --------------------------------------------------------------------------------
 -- Title      : Top-level Transceiver GT wrapper for Ethernet
--- Project    : Ethernet 1000BASE-X PCS/PMA or SGMII LogiCORE
+-- Project    : 1G/2.5G Ethernet PCS/PMA or SGMII LogiCORE
 --------------------------------------------------------------------------------
 -- File       : gmii_to_sgmii_transceiver.vhd
 -- Author     : Xilinx
@@ -72,6 +72,8 @@ generic
     EXAMPLE_SIMULATION                      : integer   := 0          -- Set to 1 for simulation
 );
    port (
+      mmcm_reset          : out   std_logic;
+      recclk_mmcm_reset   : out   std_logic;
       data_valid          : in    std_logic;
       independent_clock   : in    std_logic;
       encommaalign        : in    std_logic;
@@ -103,6 +105,8 @@ generic
       rxn                 : in    std_logic;
       rxp                 : in    std_logic;
       gtrefclk            : in    std_logic;
+      gtrefclk_bufg       : in    std_logic;
+     
       pmareset            : in    std_logic;
       mmcm_locked         : in    std_logic;
       resetdone           : out   std_logic;
@@ -111,6 +115,7 @@ generic
         gt0_rxcommadet_out        : out std_logic;
         gt0_txpolarity_in         : in  std_logic;
         gt0_txdiffctrl_in         : in  std_logic_vector(3 downto 0);
+        gt0_txinhibit_in          : in  std_logic;
         gt0_txpostcursor_in       : in  std_logic_vector(4 downto 0);
         gt0_txprecursor_in        : in  std_logic_vector(4 downto 0);
         gt0_rxpolarity_in         : in  std_logic;
@@ -223,8 +228,11 @@ architecture wrapper of gmii_to_sgmii_transceiver is
   port
   (
 
+    mmcm_reset                              : out   std_logic;
+    recclk_mmcm_reset                       : out   std_logic;
     SYSCLK_IN                               : in   std_logic;
-    SOFT_RESET_IN                           : in   std_logic;
+    SOFT_RESET_TX_IN                        : in   std_logic;
+    SOFT_RESET_RX_IN                        : in   std_logic;
     DONT_RESET_ON_DATA_ERROR_IN             : in   std_logic;
     GT0_DRP_BUSY_OUT                        : out  std_logic;
     GT0_TX_FSM_RESET_DONE_OUT               : out  std_logic;
@@ -241,6 +249,8 @@ architecture wrapper of gmii_to_sgmii_transceiver is
     gt0_cpllreset_in                        : in   std_logic;
     -------------------------- Channel - Clocking Ports ------------------------
     gt0_gtrefclk0_in                        : in   std_logic;
+    gt0_gtrefclk0_bufg_in                   : in   std_logic;
+     
     ---------------------------- Channel - DRP Ports  --------------------------
     gt0_drpaddr_in                          : in   std_logic_vector(8 downto 0);
     gt0_drpclk_in                           : in   std_logic;
@@ -326,6 +336,7 @@ architecture wrapper of gmii_to_sgmii_transceiver is
     gt0_txbufstatus_out                     : out  std_logic_vector(1 downto 0);
     --------------- Transmit Ports - TX Configurable Driver Ports --------------
     gt0_txdiffctrl_in                       : in   std_logic_vector(3 downto 0);
+    gt0_txinhibit_in                        : in  std_logic;
     ------------------ Transmit Ports - TX Data Path interface -----------------
     gt0_txdata_in                           : in   std_logic_vector(15 downto 0);
     ---------------- Transmit Ports - TX Driver and OOB signaling --------------
@@ -393,6 +404,7 @@ architecture wrapper of gmii_to_sgmii_transceiver is
 
    -- signals reclocked onto the 62.5MHz userclk source of the GT transceiver
    signal txreset_int            : std_logic;
+   signal rxreset_int            : std_logic;
    signal rxreset_rec            : std_logic;
 
    -- Register transmitter signals from the core
@@ -482,7 +494,13 @@ begin
       reset_in  => txreset,
       reset_out => txreset_int
    );
-
+   -- Reclock rxreset
+   reclock_rxreset_ind_clk : gmii_to_sgmii_reset_sync
+   port map(
+      clk       => independent_clock,
+      reset_in  => rxreset,
+      reset_out => rxreset_int
+   );
 
    -- Reclock rxreset
    reclock_rxreset : gmii_to_sgmii_reset_sync
@@ -591,6 +609,8 @@ begin
     )    
 
     port map (
+        mmcm_reset                      =>      mmcm_reset,
+        recclk_mmcm_reset               =>      recclk_mmcm_reset,
         ------------------------------- Loopback Ports -----------------------------
         gt0_loopback_in                 =>      gt0_loopback_in,
     --------------------- RX Initialization and Reset Ports --------------------
@@ -625,6 +645,7 @@ begin
         gt0_txprbsforceerr_in           =>      gt0_txprbsforceerr_in,
     --------------- Transmit Ports - TX Configurable Driver Ports --------------
         gt0_txdiffctrl_in               =>      gt0_txdiffctrl_in,
+        gt0_txinhibit_in                =>      gt0_txinhibit_in,
     ----------------- Transmit Ports - TX Polarity Control Ports ---------------
         gt0_txpolarity_in               =>      gt0_txpolarity_in,
     ------------------ Transmit Ports - pattern Generator Ports ----------------
@@ -638,7 +659,8 @@ begin
         gt0_drprdy_out                  =>     gt0_drprdy_out , 
         gt0_drpwe_in                    =>     gt0_drpwe_in   , 
         sysclk_in                       => independent_clock,
-        soft_reset_in                   => pmareset,
+        soft_reset_tx_in                =>     pmareset,
+        soft_reset_rx_in                =>     pmareset,
         dont_reset_on_data_error_in     => gt0_rxprbssel_in_orded,
         gt0_tx_fsm_reset_done_out       => resetdone_tx,
         gt0_rx_fsm_reset_done_out       => resetdone_rx,
@@ -649,6 +671,8 @@ begin
     --____________________________channel ports________________________________
     ------------------------- channel - ref clock ports ------------------------
         gt0_gtrefclk0_in                =>      gtrefclk,
+        gt0_gtrefclk0_bufg_in           =>      gtrefclk_bufg,
+     
     -------------------------------- channel pll -------------------------------
         gt0_cpllfbclklost_out           =>      open,
         gt0_cplllock_out                =>      cplllock,
@@ -672,7 +696,9 @@ begin
         gt0_rxdata_out                  =>      rxdata_rec,
         gt0_rxoutclk_out                =>      rxoutclk,
         gt0_rxusrclk_in                 =>      rxusrclk,
-        gt0_rxusrclk2_in                =>      rxusrclk2,
+-- portmapping rxuserclk2 to rxuserclk because when rx_gmii_clk_src is RXOUTCLK rxuserclk2 of GT should be connected to
+-- rxuserclk , in all other modes rxuserclk and rxuserclk2 are essentially same
+        gt0_rxusrclk2_in                =>      rxusrclk,
     ------- receive ports - rx driver,oob signalling,coupling and eq.,cdr ------
         gt0_gthrxn_in                   =>      rxn,
         gt0_gthrxp_in                   =>      rxp,
@@ -728,17 +754,17 @@ begin
    -----------------------------------------------------------------------------
 
   -- Reclock the transceiver signals
+
   process (usrclk2)
   begin
     if usrclk2'event and usrclk2= '1' then
-      if rxreset = '1' then
-        rxpowerdown_reg    <= '0';
+      if txreset = '1' then
+        rxpowerdown_reg    <=  '0';
       else
         rxpowerdown_reg    <= powerdown;
       end if;
     end if;
   end process;
-
 
    -- Instantiate the RX elastic buffer. This performs clock
    -- correction on the incoming data to cope with differences
@@ -771,7 +797,7 @@ begin
 
    -- Hold the transmitter and receiver paths of the GT transceiver in reset
    -- until the PLL has locked.
-   gt_reset_rx <=  (rxreset and resetdone_rx);
+   gt_reset_rx <=  (rxreset_int and resetdone_rx);
    gt_reset_tx <=  (txreset_int and resetdone_tx);
    gt0_rxresetdone_out <= resetdone_rx;
    gt0_txresetdone_out <= resetdone_tx;

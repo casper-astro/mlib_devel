@@ -1,10 +1,10 @@
-# (c) Copyright 2012-2018 Xilinx, Inc. All rights reserved.
-# 
+# (c) Copyright 2009 - 2011 Xilinx, Inc. All rights reserved.
+#
 # This file contains confidential and proprietary information
 # of Xilinx, Inc. and is protected under U.S. and
 # international copyright and other intellectual property
 # laws.
-# 
+#
 # DISCLAIMER
 # This disclaimer is not a license and does not grant any
 # rights to the materials distributed herewith. Except as
@@ -26,7 +26,7 @@
 # by a third party) even if such damage or loss was
 # reasonably foreseeable or Xilinx had been advised of the
 # possibility of the same.
-# 
+#
 # CRITICAL APPLICATIONS
 # Xilinx products are not designed or intended to be fail-
 # safe, or for use in any application requiring fail-safe
@@ -40,18 +40,13 @@
 # liability of any use of Xilinx products in Critical
 # Applications, subject only to applicable laws and
 # regulations governing limitations on product liability.
-# 
+#
 # THIS COPYRIGHT NOTICE AND DISCLAIMER MUST BE RETAINED AS
 # PART OF THIS FILE AT ALL TIMES.
-# 
-# DO NOT MODIFY THIS FILE.
-# #########################################################
-#
-# This XDC is used only in OOC mode for synthesis, implementation
-#
-# #########################################################
 
 
-create_clock -period 25.600 -name s_axi_aclk [get_ports s_axi_aclk]
+# This XDC is used only for OOC mode of synthesis, implementation
+# User should update the correct clock period before proceeding further
 
-
+ create_clock -name s_axi_clk -period 10 [get_ports s_axi_aclk]
+## set_property HD.CLK_SRC BUFGCTRL_X0Y0 [get_ports s_axi_aclk]

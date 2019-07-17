@@ -1,7 +1,6 @@
-exec\_flow module
-=================
+exec\_flow
+===========
 
 .. automodule:: exec_flow
     :members:
     :undoc-members:
-    :show-inheritance:

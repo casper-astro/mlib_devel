@@ -2,7 +2,7 @@
 --   ____  ____
 --  /   /\/   /
 -- /___/  \  /    Vendor: Xilinx
--- \   \   \/     Version : 3.4
+-- \   \   \/     Version : 3.6
 --  \   \         Application : 7 Series FPGAs Transceivers Wizard 
 --  /   /         Filename : gmii_to_sgmii_gtwizard_init.vhd
 -- /___/   /\      
@@ -84,8 +84,11 @@ generic
 );
 port
 (
+    mmcm_reset                              : out  std_logic;
+    recclk_mmcm_reset                       : out  std_logic;
     SYSCLK_IN                               : in   std_logic;
-    SOFT_RESET_IN                           : in   std_logic;
+    SOFT_RESET_TX_IN                        : in   std_logic;
+    SOFT_RESET_RX_IN                        : in   std_logic;
     DONT_RESET_ON_DATA_ERROR_IN             : in   std_logic;
     GT0_DRP_BUSY_OUT                        : out  std_logic;
     GT0_TX_FSM_RESET_DONE_OUT               : out  std_logic;
@@ -102,6 +105,7 @@ port
     gt0_cpllreset_in                        : in   std_logic;
     -------------------------- Channel - Clocking Ports ------------------------
     gt0_gtrefclk0_in                        : in   std_logic;
+    gt0_gtrefclk0_bufg_in                   : in   std_logic;
     ---------------------------- Channel - DRP Ports  --------------------------
     gt0_drpaddr_in                          : in   std_logic_vector(8 downto 0);
     gt0_drpclk_in                           : in   std_logic;
@@ -190,6 +194,7 @@ port
     gt0_txbufstatus_out                     : out  std_logic_vector(1 downto 0);
     --------------- Transmit Ports - TX Configurable Driver Ports --------------
     gt0_txdiffctrl_in                       : in   std_logic_vector(3 downto 0);
+    gt0_txinhibit_in                        : in   std_logic;
     ------------------ Transmit Ports - TX Data Path interface -----------------
     gt0_txdata_in                           : in   std_logic_vector(15 downto 0);
     ---------------- Transmit Ports - TX Driver and OOB signaling --------------
@@ -255,6 +260,7 @@ port
     gt0_cpllreset_in                        : in   std_logic;
     -------------------------- Channel - Clocking Ports ------------------------
     gt0_gtrefclk0_in                        : in   std_logic;
+    gt0_gtrefclk0_bufg_in                   : in   std_logic;
     ---------------------------- Channel - DRP Ports  --------------------------
     gt0_drpaddr_in                          : in   std_logic_vector(8 downto 0);
     gt0_drpclk_in                           : in   std_logic;
@@ -303,9 +309,9 @@ port
     gt0_rxmcommaalignen_in                  : in   std_logic;
     gt0_rxpcommaalignen_in                  : in   std_logic;
     --------------------- Receive Ports - RX Equalizer Ports -------------------
-    gt0_rxdfeagchold_in                     : in   std_logic;
+    gt0_rxlpmhfhold_in                      : in   std_logic;
     gt0_rxdfeagcovrden_in                   : in   std_logic;
-    gt0_rxdfelfhold_in                      : in   std_logic;
+    gt0_rxlpmlfhold_in                      : in   std_logic;
     gt0_rxdfelpmreset_in                    : in   std_logic;
     gt0_rxmonitorout_out                    : out  std_logic_vector(6 downto 0);
     gt0_rxmonitorsel_in                     : in   std_logic_vector(1 downto 0);
@@ -346,6 +352,7 @@ port
     gt0_txbufstatus_out                     : out  std_logic_vector(1 downto 0);
     --------------- Transmit Ports - TX Configurable Driver Ports --------------
     gt0_txdiffctrl_in                       : in   std_logic_vector(3 downto 0);
+    gt0_txinhibit_in                        : in   std_logic;
     ------------------ Transmit Ports - TX Data Path interface -----------------
     gt0_txdata_in                           : in   std_logic_vector(15 downto 0);
     ---------------- Transmit Ports - TX Driver and OOB signaling --------------
@@ -413,7 +420,7 @@ end component;
 component gmii_to_sgmii_RX_STARTUP_FSM
   Generic(
            EXAMPLE_SIMULATION       : integer := 0;
-           EQ_MODE                  : string := "DFE";
+           EQ_MODE                  : string := "LPM";
            STABLE_CLOCK_PERIOD      : integer range 4 to 250 := 8; --Period of the stable clock driving this state-machine, unit is [ns]
            RETRY_COUNTER_BITWIDTH   : integer range 2 to 8  := 8; 
            TX_QPLL_USED             : boolean := False;           -- the TX and RX Reset FSMs must
@@ -456,17 +463,6 @@ component gmii_to_sgmii_RX_STARTUP_FSM
                                                             -- Retries it took to get the transceiver up and running
            );
 end component;
-   component gmii_to_sgmii_sync_block
-   generic (
-     INITIALISE : bit_vector(1 downto 0) := "00"
-   );
-   port  (
-             clk           : in  std_logic;
-             data_in       : in  std_logic;
-             data_out      : out std_logic
-          );
-end component;
-
 
   function get_cdrlock_time(is_sim : in integer) return integer is
     variable lock_time: integer;
@@ -533,7 +529,8 @@ end component;
     
     signal   gt0_gttxreset_gt                : std_logic;
     signal   gt0_gtrxreset_gt                : std_logic;
-    signal   gt0_gtrxreset_gt_sync                : std_logic;
+    -- Registered Version of gt0_gtrxreset_gt so that there is no combo logic at the input of synchronizer in _gtwizard_gtrxreset_seq  
+    signal   gt0_gtrxreset_gt_d1             : std_logic;
 
 --**************************** Main Body of Code *******************************
 begin
@@ -541,8 +538,7 @@ begin
     tied_to_ground_i                             <= '0';
     tied_to_vcc_i                                <= '1';
     gt0_gttxreset_gt                             <= gt0_gttxreset_t or gt0_gttxreset_in; 
-    -- GT 11/04/2017 SEE AR 64835 gt0_gtrxreset_gt                             <= gt0_gtrxreset_t or gt0_gtrxreset_in;
-	gt0_gtrxreset_gt                             <= gt0_gtrxreset_t;
+    gt0_gtrxreset_gt                             <= gt0_gtrxreset_t or gt0_gtrxreset_in;
     gt0_rxpmaresetdone_out <= gt0_rxpmaresetdone_i;
     
     ----------------------------- The GT Wrapper -----------------------------
@@ -576,6 +572,7 @@ begin
         gt0_cpllreset_in                =>      gt0_cpllreset_i,
         -------------------------- Channel - Clocking Ports ------------------------
         gt0_gtrefclk0_in                =>      gt0_gtrefclk0_in,
+        gt0_gtrefclk0_bufg_in           =>      gt0_gtrefclk0_bufg_in,
         ---------------------------- Channel - DRP Ports  --------------------------
         gt0_drpaddr_in                  =>      gt0_drpaddr_in,
         gt0_drpclk_in                   =>      gt0_drpclk_in,
@@ -602,7 +599,7 @@ begin
         ------------------ Receive Ports - FPGA RX Interface Ports -----------------
         gt0_rxusrclk_in                 =>      gt0_rxusrclk_in,
         gt0_rxusrclk2_in                =>      gt0_rxusrclk2_in,
-        gt0_gtrxreset_in                =>      gt0_gtrxreset_gt,
+        gt0_gtrxreset_in                =>      gt0_gtrxreset_gt_d1,
         gt0_gttxreset_in                =>      gt0_gttxreset_gt,
         ------------------ Receive Ports - FPGA RX interface Ports -----------------
         gt0_rxdata_out                  =>      gt0_rxdata_out,
@@ -626,9 +623,9 @@ begin
         gt0_rxmcommaalignen_in          =>      gt0_rxmcommaalignen_in,
         gt0_rxpcommaalignen_in          =>      gt0_rxpcommaalignen_in,
         --------------------- Receive Ports - RX Equalizer Ports -------------------
-        gt0_rxdfeagchold_in             =>      gt0_rxdfeagchold_i,
+        gt0_rxlpmhfhold_in              =>      gt0_rxlpmhfhold_i,
         gt0_rxdfeagcovrden_in           =>      gt0_rxdfeagcovrden_in,
-        gt0_rxdfelfhold_in              =>      gt0_rxdfelfhold_i,
+        gt0_rxlpmlfhold_in              =>      gt0_rxlpmlfhold_i,
         gt0_rxdfelpmreset_in            =>      gt0_rxdfelpmreset_in,
         gt0_rxmonitorout_out            =>      gt0_rxmonitorout_out,
         gt0_rxmonitorsel_in             =>      gt0_rxmonitorsel_in,
@@ -667,6 +664,7 @@ begin
         gt0_txbufstatus_out             =>      gt0_txbufstatus_out,
         --------------- Transmit Ports - TX Configurable Driver Ports --------------
         gt0_txdiffctrl_in               =>      gt0_txdiffctrl_in,
+        gt0_txinhibit_in                =>      gt0_txinhibit_in,
         ------------------ Transmit Ports - TX Data Path interface -----------------
         gt0_txdata_in                   =>      gt0_txdata_in,
         ---------------- Transmit Ports - TX Driver and OOB signaling --------------
@@ -734,7 +732,7 @@ gt0_txresetfsm_i:  gmii_to_sgmii_TX_STARTUP_FSM
     port map ( 
         STABLE_CLOCK                    =>      SYSCLK_IN,
         TXUSERCLK                       =>      GT0_TXUSRCLK_IN,
-        SOFT_RESET                      =>      SOFT_RESET_IN,
+        SOFT_RESET                      =>      SOFT_RESET_TX_IN,
         QPLLREFCLKLOST                  =>      tied_to_ground_i,
         CPLLREFCLKLOST                  =>      gt0_cpllrefclklost_i,
         QPLLLOCK                        =>      tied_to_vcc_i,
@@ -742,7 +740,7 @@ gt0_txresetfsm_i:  gmii_to_sgmii_TX_STARTUP_FSM
         TXRESETDONE                     =>      gt0_txresetdone_i,
         MMCM_LOCK                       =>      gt0_txuserrdy_in,
         GTTXRESET                       =>      gt0_gttxreset_t,
-        MMCM_RESET                      =>      open,
+        MMCM_RESET                      =>      mmcm_reset,
         QPLL_RESET                      =>      open,
         CPLL_RESET                      =>      gt0_cpllreset_t,
         TX_FSM_RESET_DONE               =>      GT0_TX_FSM_RESET_DONE_OUT,
@@ -762,7 +760,7 @@ gt0_rxresetfsm_i:  gmii_to_sgmii_RX_STARTUP_FSM
 
   generic map(
            EXAMPLE_SIMULATION       => EXAMPLE_SIMULATION,
-           EQ_MODE                  => "DFE",                 --Rx Equalization Mode - Set to DFE or LPM
+           EQ_MODE                  => "LPM",                 --Rx Equalization Mode - Set to DFE or LPM
            STABLE_CLOCK_PERIOD      => STABLE_CLOCK_PERIOD,           --Period of the stable clock driving this state-machine, unit is [ns]
            RETRY_COUNTER_BITWIDTH   => 8, 
            TX_QPLL_USED             => FALSE ,                       -- the TX and RX Reset FSMs must
@@ -774,10 +772,10 @@ gt0_rxresetfsm_i:  gmii_to_sgmii_RX_STARTUP_FSM
     port map ( 
         STABLE_CLOCK                    =>      SYSCLK_IN,
         RXUSERCLK                       =>      GT0_RXUSRCLK_IN,
-        SOFT_RESET                      =>      SOFT_RESET_IN,
+        RXOUTCLK                        =>      GT0_RXUSRCLK_IN,
+        SOFT_RESET                      =>      SOFT_RESET_RX_IN,
         DONT_RESET_ON_DATA_ERROR        =>      DONT_RESET_ON_DATA_ERROR_IN,
         RXPMARESETDONE                  =>      gt0_rxpmaresetdone_i,
-        RXOUTCLK                        =>      GT0_RXUSRCLK_IN,
         QPLLREFCLKLOST                  =>      tied_to_ground_i,
         CPLLREFCLKLOST                  =>      gt0_cpllrefclklost_i,
         QPLLLOCK                        =>      tied_to_vcc_i,
@@ -789,7 +787,7 @@ gt0_rxresetfsm_i:  gmii_to_sgmii_RX_STARTUP_FSM
         DATA_VALID                      =>      GT0_DATA_VALID_IN,
         TXUSERRDY                       =>      tied_to_vcc_i,
         GTRXRESET                       =>      gt0_gtrxreset_t,
-        MMCM_RESET                      =>      open,
+        MMCM_RESET                      =>      recclk_mmcm_reset,
         QPLL_RESET                      =>      open,
         CPLL_RESET                      =>      open,
         RX_FSM_RESET_DONE               =>      GT0_RX_FSM_RESET_DONE_OUT,
@@ -804,22 +802,11 @@ gt0_rxresetfsm_i:  gmii_to_sgmii_RX_STARTUP_FSM
         RETRY_COUNTER                   =>      open
            );
 
-
-
-  sync_block_gtrxreset : gmii_to_sgmii_sync_block
-  port map
-         (
-            clk             =>  sysclk_in,
-            data_in         =>  gt0_gtrxreset_gt,
-            data_out        =>  gt0_gtrxreset_gt_sync 
-         );
-
-
-
   cdrlock_timeout:process(sysclk_in)
   begin
     if rising_edge(sysclk_in) then
-        if(gt0_gtrxreset_gt_sync = '1') then
+      gt0_gtrxreset_gt_d1 <= gt0_gtrxreset_gt; 
+        if(gt0_gtrxreset_gt_d1 = '1') then
           gt0_rx_cdrlocked       <= '0';
           gt0_rx_cdrlock_counter <=  0                        after DLY;
         elsif (gt0_rx_cdrlock_counter = WAIT_TIME_CDRLOCK) then

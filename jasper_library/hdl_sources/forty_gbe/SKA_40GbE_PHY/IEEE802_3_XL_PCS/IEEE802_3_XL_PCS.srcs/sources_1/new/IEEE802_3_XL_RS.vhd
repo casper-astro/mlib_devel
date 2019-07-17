@@ -288,7 +288,12 @@ begin
 			XLGMII_TX_FIFO_wr_en <= '0';
 		else
 			if rising_edge(SYS_CLK_I) then
-				XLGMII_TX_FIFO_wr_en <= '1';
+			    --only write into the FIFO when not full and reset is deasserted 
+			    if (XLGMII_TX_FIFO_full = '0') then
+				    XLGMII_TX_FIFO_wr_en <= '1';
+			    else
+				    XLGMII_TX_FIFO_wr_en <= '0';			  	
+			    end if;	
 			end if;
 		end if;
 	end process XLGMII_TX_FIFO_WRITE_CTRL_proc;
@@ -636,8 +641,9 @@ begin
 			RX_frame_started_sr(23 downto 1) <= RX_frame_started_sr(22 downto 0);
 		end if;
 	end process CROSS_CLK_proc;
-
-	XLGMII_RX_FIFO_wr_en <= RX_RS64_X4_d1_valid(0);
+	
+    --write into the FIFO when FIFO is not full and reset is not asserted
+	XLGMII_RX_FIFO_wr_en <= RX_RS64_X4_d1_valid(0) and (not XLGMII_RX_FIFO_full) and (not XL_RX_CLK_RST_I);
 
 	RX_FIFO_inst : component RS256_FIFO
 		port map(
@@ -660,9 +666,9 @@ begin
 			empty               => XLGMII_RX_FIFO_empty
 		);
 
-	RX_proc : process(SYS_CLK_I, XLGMII_RX_FIFO_empty) is
+	RX_proc : process(XL_RX_CLK_RST_I, SYS_CLK_I, XLGMII_RX_FIFO_empty) is
 	begin
-		if XLGMII_RX_FIFO_empty = '1' then
+		if XLGMII_RX_FIFO_empty = '1' or XL_RX_CLK_RST_I = '1' then
 			XLGMII_RX_FIFO_rd_en <= '0';
 		else
 			if rising_edge(SYS_CLK_I) then

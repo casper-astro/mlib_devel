@@ -1,7 +1,6 @@
-verilog module
-==============
+verilog
+========
 
 .. automodule:: verilog
     :members:
     :undoc-members:
-    :show-inheritance:

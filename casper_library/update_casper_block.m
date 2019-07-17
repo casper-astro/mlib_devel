@@ -51,7 +51,6 @@ function update_casper_block(oldblk)
   % Map srcblk through casper_library_forwarding_table in case it's a really
   % old name.
   srcblk = casper_library_forwarding_table(srcblk);
-  
   % Special case handling
   switch srcblk
   % Special handling for deprecated "edge" blocks
@@ -153,6 +152,13 @@ function update_casper_block(oldblk)
       % Add to new block parameters
       newblk_params{end+1} = newblk_mask_names{k};
       newblk_params{end+1} = get_param(oldblk, newblk_mask_names{k});
+    elseif(strcmp(newblk_mask_names{k},'csp_latency'))
+      %Handle renaming latency mask parameter to csp_latency. This was put
+      %in to handle update from R2016 to R2018b
+      newblk_params{end+1} = 'csp_latency';
+      mask = Simulink.Mask.get(oldblk);
+      latParam = mask.getParameter('latency');
+      newblk_params{end+1} = latParam.Value;  
     else
       type = get_param(oldblk, 'MaskType');
       if ~isempty(type)
@@ -230,7 +236,14 @@ function update_casper_block(oldblk)
       'position', p);
 
   % Restore parent's mask init setting
+
   if ~isempty(parent_mask_init)
-    set_param(parent, 'MaskInitialization', parent_mask_init);
+    %if(strcmp(srcblk,'casper_library_bus/bus_addsub'))
+    %    parent_mask_init = strrep(parent_mask_init,'''latency'',','''csp_latency'',');
+    %    set_param(parent, 'MaskInitialization', parent_mask_init);
+    %end
+    if(~strcmp(srcblk,'casper_library_bus/bus_convert') && ~strcmp(srcblk,'casper_library_bus/bus_addsub'))
+        set_param(parent, 'MaskInitialization', parent_mask_init);
+    end
   end
 end

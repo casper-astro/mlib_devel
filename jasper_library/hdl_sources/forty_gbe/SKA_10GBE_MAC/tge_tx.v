@@ -60,6 +60,7 @@ module tge_tx #(
   wire [15:0] packet_ctrl_port;
   wire [15:0] packet_ctrl_size;
   wire        packet_ctrl_empty;
+  wire        packet_ctrl_full;
   wire        packet_ctrl_overflow;
   wire        packet_ctrl_rd;
 
@@ -114,16 +115,17 @@ module tge_tx #(
   wire [63:0] packet_fifo_data;
   wire        packet_fifo_rd;
   wire        packet_fifo_empty;
+  wire        packet_fifo_full;  
 
   tx_packet_fifo tx_packet_fifo_inst(
     .wr_clk    (app_clk),
     .din       (app_tx_dataR),
-    .wr_en     (app_tx_validR),
+    .wr_en     (app_tx_validR && !app_rst && !packet_fifo_full),
     .rd_clk    (mac_clk),
     .dout      (packet_fifo_data),
-    .rd_en     (packet_fifo_rd),
+    .rd_en     (packet_fifo_rd && !app_rst && !packet_fifo_empty),
     .prog_full (tx_packet_fifo_prog_full),
-    .full      (),
+    .full      (packet_fifo_full),
     .empty     (packet_fifo_empty),
     .overflow  (packet_data_overflow),
     .rst       (app_rst)
@@ -135,16 +137,17 @@ module tge_tx #(
   wire [63:0] ctrl_fifo_data;
   wire        ctrl_fifo_rd;
   wire        ctrl_fifo_empty;
+  wire        ctrl_fifo_full;
 
   tx_packet_ctrl_fifo tx_packet_ctrl_fifo_inst(
     .wr_clk    (app_clk),
     .din       ({data_count, app_tx_dest_portR, app_tx_dest_ipR}),
-    .wr_en     (app_tx_ctrl_fifo_en),
+    .wr_en     (app_tx_ctrl_fifo_en && !app_rst && !ctrl_fifo_full),
     .rd_clk    (mac_clk),
     .dout      (ctrl_fifo_data),
-    .rd_en     (ctrl_fifo_rd),
+    .rd_en     (ctrl_fifo_rd && !app_rst),
     .prog_full (tx_packet_ctrl_fifo_prog_full),
-    .full      (),
+    .full      (ctrl_fifo_full),
     .overflow  (packet_ctrl_overflow),
     .empty     (ctrl_fifo_empty),
     .rst       (app_rst)
@@ -155,8 +158,10 @@ module tge_tx #(
 generate if (LARGE_PACKETS) begin : large_packet_gen
   /* Depth extension Fifos - required to allow >= 8k packets */
   wire data_fifo_ext_afull;
+  wire data_fifo_ext_full;
+  wire data_fifo_ext_empty;
 
-  assign packet_fifo_rd = !data_fifo_ext_afull && !packet_fifo_empty;
+  assign packet_fifo_rd = !data_fifo_ext_afull && !packet_fifo_empty && !app_rst && !data_fifo_ext_full;
 
   tx_data_fifo_ext tx_data_fifo_ext_0(
     .clk       (mac_clk),
@@ -164,15 +169,15 @@ generate if (LARGE_PACKETS) begin : large_packet_gen
     .din       (packet_fifo_data),
     .wr_en     (packet_fifo_rd),
     .dout      (packet_data),
-    .rd_en     (packet_rd),
-    .empty     (),
-    .full      (),
+    .rd_en     (packet_rd && !app_rst && !data_fifo_ext_empty),
+    .empty     (data_fifo_ext_empty),
+    .full      (data_fifo_ext_full),
     .prog_full (data_fifo_ext_afull)
   );
   //synthesis attribute box_type tx_data_fifo_ext_0 "user_black_box"
 
   wire ctrl_fifo_ext_afull;
-  assign ctrl_fifo_rd = !ctrl_fifo_ext_afull && !ctrl_fifo_empty;
+  assign ctrl_fifo_rd = !ctrl_fifo_ext_afull && !ctrl_fifo_empty && !app_rst && !packet_ctrl_full;
 
   tx_fifo_ext tx_ctrl_fifo_ext(
     .clk       (mac_clk),
@@ -180,9 +185,9 @@ generate if (LARGE_PACKETS) begin : large_packet_gen
     .din       (ctrl_fifo_data),
     .wr_en     (ctrl_fifo_rd),
     .dout      ({packet_ctrl_size, packet_ctrl_port, packet_ctrl_ip}),
-    .rd_en     (packet_ctrl_rd),
+    .rd_en     (packet_ctrl_rd && !app_rst && !packet_ctrl_empty),
     .empty     (packet_ctrl_empty),
-    .full      (),
+    .full      (packet_ctrl_full),
     .prog_full (ctrl_fifo_ext_afull)
   );
   //synthesis attribute box_type tx_ctrl_fifo_ext "user_black_box"
@@ -243,13 +248,13 @@ generate if (CPU_ENABLE) begin : tx_cpu_enabled
   cpu_buffer cpu_tx_buffer(   
     .clka      (cpu_clk),
     .dina      (cpu_tx_buffer_wr_data),
-    .addra     ({cpu_buffer_sel, cpu_tx_buffer_addr}),
+    .addra     ({2'b00, cpu_buffer_sel, cpu_tx_buffer_addr}),
     .wea       (cpu_tx_buffer_wr_en),
     .douta     (cpu_tx_buffer_rd_data),
 
     .clkb      (mac_clk),
     .dinb      (64'h0),
-    .addrb     ({!cpu_buffer_sel, mac_cpu_addr}),
+    .addrb     ({2'b00, !cpu_buffer_sel, mac_cpu_addr}),
     .web       (1'b0),
     .doutb     (mac_cpu_data)
   );

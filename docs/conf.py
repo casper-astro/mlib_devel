@@ -17,16 +17,7 @@ import sys
 from sphinx.apidoc import main as sphinx_apidoc_main
 # add jasper_library directory to sys.path so autodoc can document its modules.
 jasper_library_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'jasper_library'))
-sys.path.append(jasper_library_path)
-# use sphinx-apidoc to automatically document modules, classes, functions, etc.
-# Code found here: https://github.com/rtfd/readthedocs.org/issues/1139
-def run_apidoc(_):
-    build_modules_dir = os.path.join(os.path.dirname(__file__), 'src', 'jasper_library_modules')
-    ignore_file  = 'conf.py'
-    # Using '--force' in order to regenerate modules on every build.
-    sphinx_apidoc_main(['-e', '-o',  build_modules_dir, jasper_library_path, ignore_file, '--force'])
-
-
+sys.path.insert(0, jasper_library_path)
 # Workaround to include __init__'s with sphinx-apidoc generated documnentation.
 # Code found here: https://stackoverflow.com/questions/5599254/how-to-use-sphinxs-autodoc-to-document-a-classs-init-self-method
 def skip(app, what, name, obj, skip, options):
@@ -35,9 +26,7 @@ def skip(app, what, name, obj, skip, options):
     return skip    
 
 def setup(app):
-    app.connect('builder-inited', run_apidoc)
     app.connect("autodoc-skip-member", skip)
-
 
 # -- Project information -----------------------------------------------------
 
@@ -69,8 +58,7 @@ extensions = [
     'sphinx.ext.imgmath',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
-    'sphinx.ext.githubpages',
-    'sphinx_markdown_tables',
+    'sphinx.ext.githubpages'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -202,7 +190,7 @@ texinfo_documents = [
 # -- Options for intersphinx extension ---------------------------------------
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'https://docs.python.org/': None}
+intersphinx_mapping = {'casperfpga': ('https://casper-toolflow.readthedocs.io/projects/casperfpga/en/latest/', None)} 
 
 # -- Options for todo extension ----------------------------------------------
 

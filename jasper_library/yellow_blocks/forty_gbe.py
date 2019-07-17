@@ -34,7 +34,7 @@ class forty_gbe(YellowBlock):
         inst.add_parameter('FABRIC_ENABLE',  " 1'b%x"%self.fab_en)
         inst.add_parameter('TTL',            " 8'h%x"%self.ttl)
         inst.add_parameter('PROMISC_MODE',   " 1'b%x"%self.promisc_mode)
-        inst.add_parameter('PORT',           " 2'h%x"%self.port)
+        inst.add_parameter('MEZZ_PORT',      " 2'h%x"%self.port)
 
         inst.add_port('user_clk_o', 'sys_clk', dir='out')
         inst.add_port('user_rst_o', 'sys_rst', dir='out')
@@ -108,12 +108,29 @@ class forty_gbe(YellowBlock):
         inst.add_port('MEZZANINE_2_INT_N',     'MEZZANINE_2_INT_N',     parent_port=True, dir='in')
         inst.add_port('MEZZANINE_2_ONE_WIRE_STRONG_PULLUP_EN_N', 'MEZZANINE_2_ONE_WIRE_STRONG_PULLUP_EN_N', parent_port=True, dir='out')
 
-        inst.add_port('MEZ3_REFCLK_0_P',      'MEZ3_REFCLK_0_P',      parent_port=True, dir='in')
-        inst.add_port('MEZ3_REFCLK_0_N',      'MEZ3_REFCLK_0_N',      parent_port=True, dir='in')
-        inst.add_port('MEZ3_PHY11_LANE_RX_P', 'MEZ3_PHY11_LANE_RX_P', parent_port=True, dir='in', width=4)
-        inst.add_port('MEZ3_PHY11_LANE_RX_N', 'MEZ3_PHY11_LANE_RX_N', parent_port=True, dir='in', width=4)
-        inst.add_port('MEZ3_PHY11_LANE_TX_P', 'MEZ3_PHY11_LANE_TX_P', parent_port=True, dir='out', width=4)
-        inst.add_port('MEZ3_PHY11_LANE_TX_N', 'MEZ3_PHY11_LANE_TX_N', parent_port=True, dir='out', width=4)
+    
+
+        self.mez3_phy = "PHY11"
+        self.clock_region = "CLOCKREGION_X1Y7:CLOCKREGION_X1Y7"
+        if  (self.port ==  1):
+            self.mez3_phy = "PHY12"
+            self.clock_region = "CLOCKREGION_X1Y6:CLOCKREGION_X1Y6"
+        elif  (self.port ==  2):
+            self.mez3_phy = "PHY21"
+            self.clock_region = "CLOCKREGION_X1Y5:CLOCKREGION_X1Y5"
+        elif  (self.port ==  3):
+            self.mez3_phy = "PHY22"
+            self.clock_region = "CLOCKREGION_X1Y4:CLOCKREGION_X1Y4"
+        else:
+            self.mez3_phy == "PHY11"
+            self.clock_region = "CLOCKREGION_X1Y7:CLOCKREGION_X1Y7"
+
+        inst.add_port('MEZ3_REFCLK_'+str(self.port)+'_P',      'MEZ3_REFCLK_'+str(self.port)+'_P',      parent_port=True, dir='in')
+        inst.add_port('MEZ3_REFCLK_'+str(self.port)+'_N',      'MEZ3_REFCLK_'+str(self.port)+'_N',      parent_port=True, dir='in')
+        inst.add_port('MEZ3_'+self.mez3_phy+'_LANE_RX_P', 'MEZ3_'+self.mez3_phy+'_LANE_RX_P', parent_port=True, dir='in', width=4)
+        inst.add_port('MEZ3_'+self.mez3_phy+'_LANE_RX_N', 'MEZ3_'+self.mez3_phy+'_LANE_RX_N', parent_port=True, dir='in', width=4)
+        inst.add_port('MEZ3_'+self.mez3_phy+'_LANE_TX_P', 'MEZ3_'+self.mez3_phy+'_LANE_TX_P', parent_port=True, dir='out', width=4)
+        inst.add_port('MEZ3_'+self.mez3_phy+'_LANE_TX_N', 'MEZ3_'+self.mez3_phy+'_LANE_TX_N', parent_port=True, dir='out', width=4)
 
         inst.add_port('MEZ3_REFCLK_1_P', 'MEZ3_REFCLK_1_P', parent_port=True, dir='in')
         inst.add_port('MEZ3_REFCLK_1_N', 'MEZ3_REFCLK_1_N', parent_port=True, dir='in')
@@ -228,8 +245,7 @@ class forty_gbe(YellowBlock):
         #inst.add_port('AUX_SYNCO_N', 'AUX_SYNCO_N', parent_port=True, dir='out')
 
         inst.add_port('EMCCLK_FIX', 'EMCCLK_FIX', parent_port=True, dir='out')
- 
-        #Add fortygbe ports depending upon number of ports initialized in yellow block
+        
         inst.add_port('forty_gbe_rst',             self.fullname+'_rst',             width=1,   dir='in')
         for i in range(self.port):
             cur_port = str(i+1)
@@ -289,12 +305,12 @@ class forty_gbe(YellowBlock):
         self.add_source('forty_gbe/WISHBONE')
         self.add_source('forty_gbe/*.vhd')
         self.add_source('forty_gbe/*.sv')
+        self.add_source('forty_gbe/*.v')
         self.add_source("forty_gbe/cont_microblaze/cont_microblaze.bd")
         self.add_source("forty_gbe/cont_microblaze/hdl/cont_microblaze_wrapper.vhd")
         self.add_source("forty_gbe/cont_microblaze/EMB123701U1R1.elf")
         self.add_source("forty_gbe/arp_cache/arp_cache.coe")
-        self.add_source("forty_gbe/cont_microblaze/ip/cont_microblaze_axi_slave_wishbone_classic_master_0_0/cont_microblaze_axi_slave_wishbone_classic_master_0_0.upgrade_log")
-
+        #self.add_source("forty_gbe/cont_microblaze/ip/cont_microblaze_axi_slave_wishbone_classic_master_0_0/cont_microblaze_axi_slave_wishbone_classic_master_0_0.upgrade_log")
         self.add_source("forty_gbe/gmii_to_sgmii/*.xci")
         self.add_source("forty_gbe/isp_spi_buffer/*.xci")
         self.add_source("forty_gbe/cross_clock_fifo_67x16/*.xci")
@@ -353,22 +369,11 @@ class forty_gbe(YellowBlock):
         periodparam = clk_factors(156.25, self.platform.user_clk_rate)
 
         #Port constraints
-        cons.append(PortConstraint('MEZ3_PHY11_LANE_TX_P', 'MEZ3_PHY11_LANE_TX_P', port_index=range(4),  iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ3_PHY11_LANE_TX_N', 'MEZ3_PHY11_LANE_TX_N', port_index=range(4),  iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ3_PHY11_LANE_RX_P', 'MEZ3_PHY11_LANE_RX_P', port_index=range(4),  iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ3_PHY11_LANE_RX_N', 'MEZ3_PHY11_LANE_RX_N', port_index=range(4),  iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ3_PHY12_LANE_TX_P', 'MEZ3_PHY12_LANE_TX_P', port_index=range(4),  iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ3_PHY12_LANE_TX_N', 'MEZ3_PHY12_LANE_TX_N', port_index=range(4),  iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ3_PHY12_LANE_RX_P', 'MEZ3_PHY12_LANE_RX_P', port_index=range(4),  iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ3_PHY12_LANE_RX_N', 'MEZ3_PHY12_LANE_RX_N', port_index=range(4),  iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ3_PHY21_LANE_TX_P', 'MEZ3_PHY21_LANE_TX_P', port_index=range(4),  iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ3_PHY21_LANE_TX_N', 'MEZ3_PHY21_LANE_TX_N', port_index=range(4),  iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ3_PHY21_LANE_RX_P', 'MEZ3_PHY21_LANE_RX_P', port_index=range(4),  iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ3_PHY21_LANE_RX_N', 'MEZ3_PHY21_LANE_RX_N', port_index=range(4),  iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ3_PHY22_LANE_TX_P', 'MEZ3_PHY22_LANE_TX_P', port_index=range(4),  iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ3_PHY22_LANE_TX_N', 'MEZ3_PHY22_LANE_TX_N', port_index=range(4),  iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ3_PHY22_LANE_RX_P', 'MEZ3_PHY22_LANE_RX_P', port_index=range(4),  iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ3_PHY22_LANE_RX_N', 'MEZ3_PHY22_LANE_RX_N', port_index=range(4),  iogroup_index=range(4)))
+        cons.append(PortConstraint('MEZ3_'+self.mez3_phy+'_LANE_TX_P', 'MEZ3_'+self.mez3_phy+'_LANE_TX_P', port_index=range(4),  iogroup_index=range(4)))
+        cons.append(PortConstraint('MEZ3_'+self.mez3_phy+'_LANE_TX_N', 'MEZ3_'+self.mez3_phy+'_LANE_TX_N', port_index=range(4),  iogroup_index=range(4)))
+        cons.append(PortConstraint('MEZ3_'+self.mez3_phy+'_LANE_RX_P', 'MEZ3_'+self.mez3_phy+'_LANE_RX_P', port_index=range(4),  iogroup_index=range(4)))
+        cons.append(PortConstraint('MEZ3_'+self.mez3_phy+'_LANE_RX_N', 'MEZ3_'+self.mez3_phy+'_LANE_RX_N', port_index=range(4),  iogroup_index=range(4)))
+       
         cons.append(PortConstraint('FLASH_DQ',             'FLASH_DQ',             port_index=range(16), iogroup_index=range(16)))
         cons.append(PortConstraint('USB_FPGA',             'USB_FPGA',             port_index=range(4),  iogroup_index=range(4)))
         cons.append(PortConstraint('FLASH_A',              'FLASH_A',              port_index=range(29), iogroup_index=range(29)))
@@ -377,14 +382,8 @@ class forty_gbe(YellowBlock):
         cons.append(PortConstraint('FPGA_RESET_N', 'FPGA_RESET_N'))
         cons.append(PortConstraint('FLASH_WE_N', 'FLASH_WE_N'))
         cons.append(PortConstraint('FPGA_EMCCLK2', 'FPGA_EMCCLK2'))
-        cons.append(PortConstraint('MEZ3_REFCLK_0_P','MEZ3_REFCLK_0_P'))
-        cons.append(PortConstraint('MEZ3_REFCLK_0_N','MEZ3_REFCLK_0_N'))
-        cons.append(PortConstraint('MEZ3_REFCLK_1_P','MEZ3_REFCLK_0_P'))
-        cons.append(PortConstraint('MEZ3_REFCLK_1_N','MEZ3_REFCLK_0_N'))
-        cons.append(PortConstraint('MEZ3_REFCLK_2_P','MEZ3_REFCLK_0_P'))
-        cons.append(PortConstraint('MEZ3_REFCLK_2_N','MEZ3_REFCLK_0_N'))
-        cons.append(PortConstraint('MEZ3_REFCLK_3_P','MEZ3_REFCLK_0_P'))
-        cons.append(PortConstraint('MEZ3_REFCLK_3_N','MEZ3_REFCLK_0_N'))
+        cons.append(PortConstraint('MEZ3_REFCLK_'+str(self.port)+'_P','MEZ3_REFCLK_'+str(self.port)+'_P'))
+        cons.append(PortConstraint('MEZ3_REFCLK_'+str(self.port)+'_N','MEZ3_REFCLK_'+str(self.port)+'_N'))
         cons.append(PortConstraint('MEZZANINE_3_ONE_WIRE_STRONG_PULLUP_EN_N','MEZZANINE_3_ONE_WIRE_STRONG_PULLUP_EN_N'))
         cons.append(PortConstraint('MEZZANINE_2_ONE_WIRE_STRONG_PULLUP_EN_N','MEZZANINE_2_ONE_WIRE_STRONG_PULLUP_EN_N'))
         cons.append(PortConstraint('MEZZANINE_1_ONE_WIRE_STRONG_PULLUP_EN_N','MEZZANINE_1_ONE_WIRE_STRONG_PULLUP_EN_N'))
@@ -493,14 +492,11 @@ class forty_gbe(YellowBlock):
         #cons.append(ClockConstraint('FPGA_REFCLK_BUF1_P','FPGA_REFCLK_BUF1_P', period=6.4, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=3.2))
         cons.append(ClockConstraint('ONE_GBE_MGTREFCLK_P','ONE_GBE_MGTREFCLK_P', period=6.4, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=3.2))
         cons.append(ClockConstraint('FPGA_EMCCLK2','FPGA_EMCCLK2', period=16.666, port_en=True, virtual_en=False, waveform_min=0.000, waveform_max=8.333))
-        cons.append(ClockConstraint('MEZ3_REFCLK_0_P','MEZ3_REFCLK_0_P', period=6.4, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=3.2))
-        cons.append(ClockConstraint('MEZ3_REFCLK_1_P','MEZ3_REFCLK_1_P', period=6.4, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=3.2))
-        cons.append(ClockConstraint('MEZ3_REFCLK_2_P','MEZ3_REFCLK_2_P', period=6.4, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=3.2))
-        cons.append(ClockConstraint('MEZ3_REFCLK_3_P','MEZ3_REFCLK_3_P', period=6.4, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=3.2))
+        cons.append(ClockConstraint('MEZ3_REFCLK_'+str(self.port)+'_P','MEZ3_REFCLK_'+str(self.port)+'_P', period=6.4, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=3.2))
         cons.append(ClockConstraint(name='VIRTUAL_clkout0', period=8.0, port_en=False, virtual_en=True, waveform_min=0.0, waveform_max=4.0))
         cons.append(ClockConstraint(name='VIRTUAL_clkout0_1', period=6.4, port_en=False, virtual_en=True, waveform_min=0.0, waveform_max=3.2))
         cons.append(ClockConstraint(name='virtual_clock', period=6.4, port_en=False, virtual_en=True, waveform_min=0.0, waveform_max=3.2))
-        cons.append(ClockConstraint(name='VIRTUAL_I', period=periodparam[3], port_en=False, virtual_en=True, waveform_min=0.0, waveform_max=periodparam[4]))
+        cons.append(ClockConstraint(name='VIRTUAL_I', period=periodparam[3], port_en=False, virtual_en=True, waveform_min=0.0, waveform_max=periodparam[4]))     
 
         #Generate Clock Constraints
         cons.append(GenClockConstraint(signal='%s/wishbone_flash_sdram_interface_0/icape_controller_0/icape_clk_count_reg[3]/Q' % self.fullname, name='%s/wishbone_flash_sdram_interface_0/icape_controller_0/CLK' % self.fullname, divide_by=16, clock_source='%s/wishbone_flash_sdram_interface_0/icape_controller_0/icape_clk_count_reg[3]/C' % self.fullname))
@@ -517,39 +513,21 @@ class forty_gbe(YellowBlock):
         #cons.append(ClockGroupConstraint('virtual_clock', '-include_generated_clocks FPGA_REFCLK_BUF1_P', 'asynchronous'))
         #cons.append(ClockGroupConstraint('VIRTUAL_clkout0', '-include_generated_clocks FPGA_REFCLK_BUF1_P', 'asynchronous'))
         cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]'  % self.fullname, 'FPGA_EMCCLK2', 'asynchronous'))
-        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]'  % self.fullname, 'MEZ3_REFCLK_0_P', 'asynchronous'))
-        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]'  % self.fullname, 'MEZ3_REFCLK_1_P', 'asynchronous'))
-        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]'  % self.fullname, 'MEZ3_REFCLK_2_P', 'asynchronous'))
-        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]'  % self.fullname, 'MEZ3_REFCLK_3_P', 'asynchronous'))
+        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]'  % self.fullname, 'MEZ3_REFCLK_'+str(self.port)+'_P', 'asynchronous'))
         cons.append(ClockGroupConstraint('%s/wishbone_flash_sdram_interface_0/icape_controller_0/CLK' % self.fullname, '-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]'  % self.fullname, 'asynchronous'))
         cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]'  % self.fullname, '%s/wishbone_flash_sdram_interface_0/icape_controller_0/CLK' % self.fullname, 'asynchronous'))
         cons.append(ClockGroupConstraint('FPGA_EMCCLK2', '-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
-        cons.append(ClockGroupConstraint('MEZ3_REFCLK_0_P', '-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
-        cons.append(ClockGroupConstraint('MEZ3_REFCLK_1_P', '-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
-        cons.append(ClockGroupConstraint('MEZ3_REFCLK_2_P', '-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
-        cons.append(ClockGroupConstraint('MEZ3_REFCLK_3_P', '-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
+        cons.append(ClockGroupConstraint('MEZ3_REFCLK_'+str(self.port)+'_P', '-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
         cons.append(ClockGroupConstraint('VIRTUAL_clkout0', 'FPGA_EMCCLK2', 'asynchronous'))
         cons.append(ClockGroupConstraint('VIRTUAL_clkout0_1', '-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]'  % self.fullname, 'asynchronous'))
         cons.append(ClockGroupConstraint('VIRTUAL_clkout0_1', '-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]'  % self.fullname, 'asynchronous'))
         cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]'  % self.fullname, 'VIRTUAL_clkout0_1', 'asynchronous'))
-        cons.append(ClockGroupConstraint('VIRTUAL_clkout0', 'MEZ3_REFCLK_0_P', 'asynchronous'))
-        cons.append(ClockGroupConstraint('VIRTUAL_clkout0', 'MEZ3_REFCLK_1_P', 'asynchronous'))
-        cons.append(ClockGroupConstraint('VIRTUAL_clkout0', 'MEZ3_REFCLK_2_P', 'asynchronous'))
-        cons.append(ClockGroupConstraint('VIRTUAL_clkout0', 'MEZ3_REFCLK_3_P', 'asynchronous'))
-        cons.append(ClockGroupConstraint('MEZ3_REFCLK_0_P', 'FPGA_EMCCLK2', 'asynchronous'))
-        cons.append(ClockGroupConstraint('MEZ3_REFCLK_1_P', 'FPGA_EMCCLK2', 'asynchronous'))
-        cons.append(ClockGroupConstraint('MEZ3_REFCLK_2_P', 'FPGA_EMCCLK2', 'asynchronous'))
-        cons.append(ClockGroupConstraint('MEZ3_REFCLK_3_P', 'FPGA_EMCCLK2', 'asynchronous'))
-        cons.append(ClockGroupConstraint('FPGA_EMCCLK2', 'MEZ3_REFCLK_0_P', 'asynchronous'))
-        cons.append(ClockGroupConstraint('FPGA_EMCCLK2', 'MEZ3_REFCLK_1_P', 'asynchronous'))
-        cons.append(ClockGroupConstraint('FPGA_EMCCLK2', 'MEZ3_REFCLK_2_P', 'asynchronous'))
-        cons.append(ClockGroupConstraint('FPGA_EMCCLK2', 'MEZ3_REFCLK_3_P', 'asynchronous'))
+        cons.append(ClockGroupConstraint('VIRTUAL_clkout0', 'MEZ3_REFCLK_'+str(self.port)+'_P', 'asynchronous'))
+        cons.append(ClockGroupConstraint('MEZ3_REFCLK_'+str(self.port)+'_P', 'FPGA_EMCCLK2', 'asynchronous'))
+        cons.append(ClockGroupConstraint('FPGA_EMCCLK2', 'MEZ3_REFCLK_'+str(self.port)+'_P', 'asynchronous'))
         cons.append(ClockGroupConstraint('VIRTUAL_clkout0', '-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]'  % self.fullname, 'asynchronous'))
         cons.append(ClockGroupConstraint('virtual_clock', 'FPGA_EMCCLK2', 'asynchronous'))
-        cons.append(ClockGroupConstraint('virtual_clock', 'MEZ3_REFCLK_0_P', 'asynchronous'))
-        cons.append(ClockGroupConstraint('virtual_clock', 'MEZ3_REFCLK_1_P', 'asynchronous'))
-        cons.append(ClockGroupConstraint('virtual_clock', 'MEZ3_REFCLK_2_P', 'asynchronous'))
-        cons.append(ClockGroupConstraint('virtual_clock', 'MEZ3_REFCLK_3_P', 'asynchronous'))
+        cons.append(ClockGroupConstraint('virtual_clock', 'MEZ3_REFCLK_'+str(self.port)+'_P', 'asynchronous'))
         cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]'  % self.fullname, 'VIRTUAL_clkout0_1',  'asynchronous'))
         cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]'  % self.fullname, '-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]'  % self.fullname,  'asynchronous'))
         cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]'  % self.fullname, '-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]'  % self.fullname,  'asynchronous'))
@@ -568,10 +546,7 @@ class forty_gbe(YellowBlock):
 
         cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]'  % self.fullname, 'VIRTUAL_clkout0_1',  'asynchronous'))
 
-        cons.append(ClockGroupConstraint('MEZ3_REFCLK_0_P', 'virtual_clock', 'asynchronous'))
-        cons.append(ClockGroupConstraint('MEZ3_REFCLK_1_P', 'virtual_clock', 'asynchronous'))
-        cons.append(ClockGroupConstraint('MEZ3_REFCLK_2_P', 'virtual_clock', 'asynchronous'))
-        cons.append(ClockGroupConstraint('MEZ3_REFCLK_3_P', 'virtual_clock', 'asynchronous'))
+        cons.append(ClockGroupConstraint('MEZ3_REFCLK_'+str(self.port)+'_P', 'virtual_clock', 'asynchronous'))
         cons.append(ClockGroupConstraint('VIRTUAL_clkout0', 'virtual_clock', 'asynchronous'))
         cons.append(ClockGroupConstraint('VIRTUAL_I', 'virtual_clock', 'asynchronous'))
         cons.append(ClockGroupConstraint('virtual_clock', 'VIRTUAL_I', 'asynchronous'))
@@ -602,6 +577,14 @@ class forty_gbe(YellowBlock):
         cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]' % self.fullname, 'MEZ3_REFCLK_1_P', 'asynchronous'))
         cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]' % self.fullname, 'MEZ3_REFCLK_2_P', 'asynchronous'))
         cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]' % self.fullname, 'MEZ3_REFCLK_3_P', 'asynchronous'))
+=======
+        cons.append(ClockGroupConstraint('VIRTUAL_I', 'MEZ3_REFCLK_'+str(self.port)+'_P', 'asynchronous'))
+        cons.append(ClockGroupConstraint('MEZ3_REFCLK_'+str(self.port)+'_P', 'VIRTUAL_I','asynchronous'))
+
+        cons.append(ClockGroupConstraint('FPGA_EMCCLK2', '-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]' % self.fullname, 'asynchronous'))
+        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]' % self.fullname, 'FPGA_EMCCLK2', 'asynchronous'))
+        cons.append(ClockGroupConstraint('MEZ3_REFCLK_'+str(self.port)+'_P', '-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]' % self.fullname, 'asynchronous'))
+        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]' % self.fullname, 'MEZ3_REFCLK_'+str(self.port)+'_P', 'asynchronous'))
         cons.append(ClockGroupConstraint('VIRTUAL_clkout0', '-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]' % self.fullname, 'asynchronous'))
         cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]' % self.fullname, 'VIRTUAL_clkout0', 'asynchronous'))
         cons.append(ClockGroupConstraint('-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname, '-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]' % self.fullname, 'asynchronous'))
@@ -609,14 +592,8 @@ class forty_gbe(YellowBlock):
 
         cons.append(ClockGroupConstraint('FPGA_EMCCLK2', '-of_objects [get_pins %s/USER_CLK_MMCM_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
         cons.append(ClockGroupConstraint('-of_objects [get_pins %s/USER_CLK_MMCM_inst/CLKOUT0]' % self.fullname, 'FPGA_EMCCLK2', 'asynchronous'))
-        cons.append(ClockGroupConstraint('MEZ3_REFCLK_0_P', '-of_objects [get_pins %s/USER_CLK_MMCM_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
-        cons.append(ClockGroupConstraint('MEZ3_REFCLK_1_P', '-of_objects [get_pins %s/USER_CLK_MMCM_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
-        cons.append(ClockGroupConstraint('MEZ3_REFCLK_2_P', '-of_objects [get_pins %s/USER_CLK_MMCM_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
-        cons.append(ClockGroupConstraint('MEZ3_REFCLK_3_P', '-of_objects [get_pins %s/USER_CLK_MMCM_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
-        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/USER_CLK_MMCM_inst/CLKOUT0]' % self.fullname, 'MEZ3_REFCLK_0_P', 'asynchronous'))
-        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/USER_CLK_MMCM_inst/CLKOUT0]' % self.fullname, 'MEZ3_REFCLK_1_P', 'asynchronous'))
-        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/USER_CLK_MMCM_inst/CLKOUT0]' % self.fullname, 'MEZ3_REFCLK_2_P', 'asynchronous'))
-        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/USER_CLK_MMCM_inst/CLKOUT0]' % self.fullname, 'MEZ3_REFCLK_3_P', 'asynchronous'))
+        cons.append(ClockGroupConstraint('MEZ3_REFCLK_'+str(self.port)+'_P', '-of_objects [get_pins %s/USER_CLK_MMCM_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
+        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/USER_CLK_MMCM_inst/CLKOUT0]' % self.fullname, 'MEZ3_REFCLK_'+str(self.port)+'_P', 'asynchronous'))
         cons.append(ClockGroupConstraint('VIRTUAL_clkout0', '-of_objects [get_pins %s/USER_CLK_MMCM_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
         cons.append(ClockGroupConstraint('-of_objects [get_pins %s/USER_CLK_MMCM_inst/CLKOUT0]' % self.fullname, 'VIRTUAL_clkout0', 'asynchronous'))
 
@@ -641,14 +618,8 @@ class forty_gbe(YellowBlock):
         cons.append(InputDelayConstraint(clkname='-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]'  % self.fullname, consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='FPGA_RESET_N'))
         cons.append(InputDelayConstraint(clkname='FPGA_EMCCLK2', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='FPGA_RESET_N'))
         cons.append(InputDelayConstraint(clkname='FPGA_EMCCLK2', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='FPGA_RESET_N'))
-        cons.append(InputDelayConstraint(clkname='MEZ3_REFCLK_0_P', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='FPGA_RESET_N'))
-        cons.append(InputDelayConstraint(clkname='MEZ3_REFCLK_0_P', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='FPGA_RESET_N'))
-        cons.append(InputDelayConstraint(clkname='MEZ3_REFCLK_1_P', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='FPGA_RESET_N'))
-        cons.append(InputDelayConstraint(clkname='MEZ3_REFCLK_1_P', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='FPGA_RESET_N'))
-        cons.append(InputDelayConstraint(clkname='MEZ3_REFCLK_2_P', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='FPGA_RESET_N'))
-        cons.append(InputDelayConstraint(clkname='MEZ3_REFCLK_2_P', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='FPGA_RESET_N'))
-        cons.append(InputDelayConstraint(clkname='MEZ3_REFCLK_3_P', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='FPGA_RESET_N'))
-        cons.append(InputDelayConstraint(clkname='MEZ3_REFCLK_3_P', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='FPGA_RESET_N'))
+        cons.append(InputDelayConstraint(clkname='MEZ3_REFCLK_'+str(self.port)+'_P', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='FPGA_RESET_N'))
+        cons.append(InputDelayConstraint(clkname='MEZ3_REFCLK_'+str(self.port)+'_P', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='FPGA_RESET_N'))
         cons.append(InputDelayConstraint(clkname='VIRTUAL_clkout0', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='FPGA_RESET_N'))
         cons.append(InputDelayConstraint(clkname='VIRTUAL_clkout0', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='FPGA_RESET_N'))
         cons.append(InputDelayConstraint(clkname='-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]'  % self.fullname, consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='I2C_SCL_FPGA'))
@@ -891,14 +862,8 @@ class forty_gbe(YellowBlock):
         cons.append(MultiCycleConstraint(multicycletype='hold',sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks -of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]' % self.fullname, multicycledelay=3))
         cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks VIRTUAL_clkout0', multicycledelay=4))
         cons.append(MultiCycleConstraint(multicycletype='hold',sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks VIRTUAL_clkout0', multicycledelay=3))
-        cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks MEZ3_REFCLK_0_P', multicycledelay=4))
-        cons.append(MultiCycleConstraint(multicycletype='hold',sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks MEZ3_REFCLK_0_P', multicycledelay=4))
-        cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks MEZ3_REFCLK_1_P', multicycledelay=4))
-        cons.append(MultiCycleConstraint(multicycletype='hold',sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks MEZ3_REFCLK_1_P', multicycledelay=4))
-        cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks MEZ3_REFCLK_2_P', multicycledelay=4))
-        cons.append(MultiCycleConstraint(multicycletype='hold',sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks MEZ3_REFCLK_2_P', multicycledelay=4))
-        cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks MEZ3_REFCLK_3_P', multicycledelay=4))
-        cons.append(MultiCycleConstraint(multicycletype='hold',sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks MEZ3_REFCLK_3_P', multicycledelay=4))
+        cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks MEZ3_REFCLK_'+str(self.port)+'_P', multicycledelay=4))
+        cons.append(MultiCycleConstraint(multicycletype='hold',sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks MEZ3_REFCLK_'+str(self.port)+'_P', multicycledelay=4))
         cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks FPGA_EMCCLK2', multicycledelay=4))
         cons.append(MultiCycleConstraint(multicycletype='hold',sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks FPGA_EMCCLK2', multicycledelay=3))
         cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_clocks -of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]' % self.fullname, destpath='get_ports MEZZANINE_0_ENABLE_N', multicycledelay=4))
@@ -1007,10 +972,10 @@ class forty_gbe(YellowBlock):
 
         #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks AUX_CLK_P] -group [get_clocks FPGA_REFCLK_BUF0_P]'))
         #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks FPGA_REFCLK_BUF0_P] -group [get_clocks AUX_CLK_P]'))
-        cons.append(RawConstraint('create_pblock MEZ3_PHY11_QSFP'))
-        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ3_PHY11_QSFP] [get_cells -quiet [list '+self.fullname+'/IEEE802_3_XL_PHY_0/PHY_inst/RX_CLK_RCC]]'))
-        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ3_PHY11_QSFP] [get_cells -quiet [list '+self.fullname+'/IEEE802_3_XL_PHY_0/PHY_inst/TX_CLK_RCC]]'))
-        cons.append(RawConstraint('resize_pblock [get_pblocks MEZ3_PHY11_QSFP] -add {CLOCKREGION_X1Y7:CLOCKREGION_X1Y7}'))
+        cons.append(RawConstraint('create_pblock MEZ3_'+self.mez3_phy+'_QSFP'))
+        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ3_'+self.mez3_phy+'_QSFP] [get_cells -quiet [list '+self.fullname+'/IEEE802_3_XL_PHY_'+str(self.port)+'/PHY_inst/RX_CLK_RCC]]'))
+        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ3_'+self.mez3_phy+'_QSFP] [get_cells -quiet [list '+self.fullname+'/IEEE802_3_XL_PHY_'+str(self.port)+'/PHY_inst/TX_CLK_RCC]]'))
+        cons.append(RawConstraint('resize_pblock [get_pblocks MEZ3_'+self.mez3_phy+'_QSFP] -add {'+self.clock_region+'}'))
 
 
         cons.append(RawConstraint('create_pblock MEZ3_PHY12_QSFP'))
@@ -1163,15 +1128,14 @@ class forty_gbe(YellowBlock):
     def gen_tcl_cmds(self):
         tcl_cmds = []
 
-        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/Constraints/gmii_to_sgmii.xdc'%os.getenv('HDL_ROOT'))
+        #tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/Constraints/gmii_to_sgmii.xdc'%os.getenv('HDL_ROOT'))
         tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/Constraints/soc_version.xdc'%os.getenv('HDL_ROOT'))
         tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/constrs_1/new/IEEE802_3_XL_PCS.xdc'%os.getenv('HDL_ROOT'))
         tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/constrs_1/new/DATA_FREQUENCY_DIVIDER.xdc'%os.getenv('HDL_ROOT'))
         tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/constrs_1/new/DATA_FREQUENCY_MULTIPLIER.xdc'%os.getenv('HDL_ROOT'))
         tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PHY/IEEE802_3_XL_PHY.srcs/constrs_1/new/IEEE802_3_XL_PHY.xdc'%os.getenv('HDL_ROOT'))
-
-        tcl_cmds.append('set_property is_locked true [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/cont_microblaze/cont_microblaze.bd]')
-        tcl_cmds.append('set_property is_locked true [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/ip/gmii_to_sgmii/gmii_to_sgmii.xci]')
+        #tcl_cmds.append('set_property is_locked true [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/cont_microblaze/cont_microblaze.bd]')
+        #tcl_cmds.append('set_property is_locked true [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/ip/gmii_to_sgmii/gmii_to_sgmii.xci]')
         tcl_cmds.append('set_property SCOPED_TO_REF IEEE802_3_XL_PCS [get_files [get_property directory [current_project]]/myproj.srcs/constrs_1/imports/new/IEEE802_3_XL_PCS.xdc]')
         tcl_cmds.append('set_property processing_order LATE [get_files [get_property directory [current_project]]/myproj.srcs/constrs_1/imports/new/IEEE802_3_XL_PCS.xdc]')
         tcl_cmds.append('set_property SCOPED_TO_REF DATA_FREQUENCY_DIVIDER [get_files [get_property directory [current_project]]/myproj.srcs/constrs_1/imports/new/DATA_FREQUENCY_DIVIDER.xdc]')
@@ -1183,5 +1147,9 @@ class forty_gbe(YellowBlock):
         tcl_cmds.append('set_property SCOPED_TO_REF cont_microblaze [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/imports/cont_microblaze/EMB123701U1R1.elf]')
         tcl_cmds.append('set_property SCOPED_TO_REF cont_microblaze [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/cont_microblaze/cont_microblaze.bmm]')
         tcl_cmds.append('set_property SCOPED_TO_CELLS microblaze_0 [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/imports/cont_microblaze/EMB123701U1R1.elf]')
+        #Allows the microblaze to be edited
+        tcl_cmds.append('set_property ip_repo_paths %s/forty_gbe/cont_microblaze/ipshared/peralex.com/ [current_project]'%os.getenv('HDL_ROOT'))
+        #tcl_cmds.append('update_ip_catalog')
 
         return {'pre_synth': tcl_cmds}
+

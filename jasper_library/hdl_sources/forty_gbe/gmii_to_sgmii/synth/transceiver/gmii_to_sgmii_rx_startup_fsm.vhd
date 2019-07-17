@@ -4,7 +4,7 @@
 --//   ____  ____ 
 --//  /   /\/   / 
 --// /___/  \  /    Vendor: Xilinx 
---// \   \   \/     Version : 3.4
+--// \   \   \/     Version : 3.6
 --//  \   \         Application : 7 Series FPGAs Transceivers Wizard 
 --//  /   /         Filename : gmii_to_sgmii_rx_startup_fsm.vhd
 --// /___/   /\     
@@ -72,6 +72,8 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
+library unisim;
+use unisim.vcomponents.all;
 
 entity gmii_to_sgmii_RX_STARTUP_FSM is
   Generic( EXAMPLE_SIMULATION       : integer := 0;
@@ -152,13 +154,22 @@ architecture RTL of gmii_to_sgmii_RX_STARTUP_FSM is
     MONITOR_DATA_VALID, FSM_DONE);
     
   signal rx_state : rx_rst_fsm_type := INIT;
-
-  constant MMCM_LOCK_CNT_MAX    : integer := 1024;
+  function get_WAIT_TIMEOUT_3ms (is_sim : in integer) return integer is
+    variable wait_time: integer;
+  begin
+    if (is_sim = 1) then
+      wait_time := 1000;
+    else
+      wait_time := 3000000 / 5;
+    end if;
+    return wait_time;
+  end function;
+  constant MMCM_LOCK_CNT_MAX    : integer := 256;
   constant STARTUP_DELAY        : integer := 500;--AR43482: Transceiver needs to wait for 500 ns after configuration
   constant WAIT_CYCLES          : integer := STARTUP_DELAY / STABLE_CLOCK_PERIOD; -- Number of Clock-Cycles to wait after configuration
   constant WAIT_MAX             : integer := WAIT_CYCLES + 10;                    -- 500 ns plus some additional margin
-    
-  constant WAIT_TIMEOUT_2ms     : integer := 3000000 / STABLE_CLOCK_PERIOD;--  2 ms time-out
+  constant WAIT_TIMEOUT_2ms     : integer := 3000000 / STABLE_CLOCK_PERIOD;--  3 ms time-out
+  constant WAIT_TIMEOUT_3ms     : integer := get_WAIT_TIMEOUT_3ms(EXAMPLE_SIMULATION);
   constant WAIT_TLOCK_MAX       : integer :=  100000 / STABLE_CLOCK_PERIOD;--100 us time-out
   constant WAIT_TIMEOUT_500us   : integer :=  500000 / STABLE_CLOCK_PERIOD;--500 us time-out
   constant WAIT_TIMEOUT_1us     : integer :=  1000 / STABLE_CLOCK_PERIOD;  --1 us time-out
@@ -169,6 +180,8 @@ architecture RTL of gmii_to_sgmii_RX_STARTUP_FSM is
   signal init_wait_count        : integer range 0 to WAIT_MAX:=0;
   signal init_wait_done         : std_logic := '0';
   signal pll_reset_asserted     : std_logic := '0';
+  signal refclk_stable : std_logic := '0';
+  signal refclk_stable_count : integer :=0;
   signal rx_fsm_reset_done_int  : std_logic := '0';
   signal rx_fsm_reset_done_int_s2  : std_logic := '0';
   signal rx_fsm_reset_done_int_s3  : std_logic := '0';
@@ -195,9 +208,18 @@ architecture RTL of gmii_to_sgmii_RX_STARTUP_FSM is
   signal mmcm_lock_i            : std_logic := '0';
   signal mmcm_lock_reclocked    : std_logic := '0';
   signal gtrxreset_i    : std_logic := '0';
+  signal gtrxreset_tx_i    : std_logic := '0';
+  signal gtrxreset_rx_i    : std_logic := '0';
   signal mmcm_reset_i    : std_logic := '1';
+  signal rxpmaresetdone_i    : std_logic := '0';
+  signal txpmaresetdone_i    : std_logic := '0';
+  signal rxpmaresetdone_ss    : std_logic := '0';
+  signal rxpmaresetdone_sync    : std_logic ;
+  signal txpmaresetdone_sync    : std_logic ;
   signal rxpmaresetdone_s    : std_logic ;
---  signal cpllrefclklost_sync : std_logic ;
+  signal rxpmaresetdone_rx_s    : std_logic ;
+  signal pmaresetdone_fallingedge_detect    : std_logic ;
+  signal pmaresetdone_fallingedge_detect_s    : std_logic ;
     
   signal run_phase_alignment_int: std_logic := '0';
   signal run_phase_alignment_int_s2 : std_logic := '0';
@@ -209,6 +231,7 @@ architecture RTL of gmii_to_sgmii_RX_STARTUP_FSM is
   signal time_out_wait_bypass_s2   : std_logic := '0';
   signal time_out_wait_bypass_s3   : std_logic := '0';
 
+  signal refclk_lost              : std_logic;
   signal time_out_adapt           : std_logic := '0';   
   signal adapt_count_reset        : std_logic := '0';   
   signal adapt_count              : integer range 0 to WAIT_TIME_ADAPT-1;
@@ -220,13 +243,26 @@ architecture RTL of gmii_to_sgmii_RX_STARTUP_FSM is
   signal      qplllock_ris_edge: std_logic := '0';
   signal      wait_time_cnt : integer range 0 to WAIT_TIME_MAX;
   signal      wait_time_done : std_logic;
+  attribute shreg_extract                   : string;
+  attribute ASYNC_REG                       : string;
+  attribute KEEP                            : string;
+  attribute ASYNC_REG of reset_sync1_rx        : label is "true";
+  attribute ASYNC_REG of reset_sync2_rx        : label is "true";
+  attribute shreg_extract of reset_sync1_rx    : label is "no";
+  attribute shreg_extract of reset_sync2_rx    : label is "no";
+
+  signal      reset_sync_reg1_tx : std_logic;
+  signal      reset_sync_reg1 : std_logic;
+  signal      gtrxreset_s : std_logic;
+  signal      gtrxreset_tx_s : std_logic;
+  signal      txpmaresetdone_s : std_logic;
 begin
   --Alias section, signals used within this module mapped to output ports:
   RETRY_COUNTER     <= STD_LOGIC_VECTOR(TO_UNSIGNED(retry_counter_int,RETRY_COUNTER_BITWIDTH));
   RUN_PHALIGNMENT   <= run_phase_alignment_int;
-  RX_FSM_RESET_DONE <= rx_fsm_reset_done_int;
+  RX_FSM_RESET_DONE <= rx_fsm_reset_done_int and PHALIGNMENT_DONE;
   GTRXRESET <= gtrxreset_i; 
-  MMCM_RESET <= mmcm_reset_i; 
+  MMCM_RESET <= not rxpmaresetdone_i; 
   process(STABLE_CLOCK,SOFT_RESET)
   begin
     if (SOFT_RESET = '1') then
@@ -265,6 +301,98 @@ begin
   end process;
   end generate;
 
+
+process(STABLE_CLOCK)
+  begin
+   if rising_edge(STABLE_CLOCK) then
+   gtrxreset_rx_i <= gtrxreset_i;
+   end if;
+  end process;
+  reset_sync1_rx : FDP
+  generic map (
+    INIT => '0'
+  )
+  port map (
+    C    => RXOUTCLK,
+    PRE  => gtrxreset_rx_i,
+    D    => '0',
+    Q    => reset_sync_reg1
+  );
+
+  reset_sync2_rx : FDP
+  generic map (
+    INIT => '0'
+  )
+  port map (
+    C    => RXOUTCLK,
+    PRE  => gtrxreset_rx_i,
+    D    => reset_sync_reg1,
+    Q    => gtrxreset_s
+  );
+
+
+
+ process(RXOUTCLK,gtrxreset_s)
+ begin
+  if (gtrxreset_s = '1') then
+    rxpmaresetdone_i <= '0';
+  elsif rising_edge(RXOUTCLK) then
+    rxpmaresetdone_i <= pmaresetdone_fallingedge_detect_s and rxpmaresetdone_rx_s;
+      end if;
+ end process;
+
+  sync_pmaresetdone_fallingedge_detect : gmii_to_sgmii_sync_block
+  port map
+         (
+            clk             =>  RXOUTCLK,
+            data_in         =>  pmaresetdone_fallingedge_detect,
+            data_out        =>  pmaresetdone_fallingedge_detect_s 
+         );
+
+  sync_rxpmaresetdone : gmii_to_sgmii_sync_block
+  port map
+         (
+            clk             =>  STABLE_CLOCK,
+            data_in         =>  rxpmaresetdone_i,
+            data_out        =>  rxpmaresetdone_sync 
+         );
+
+  sync_rxpmaresetdone_rx_s : gmii_to_sgmii_sync_block
+  port map
+         (
+            clk             =>  RXOUTCLK,
+            data_in         =>  RXPMARESETDONE,
+            data_out        =>  rxpmaresetdone_rx_s 
+         );
+
+  sync2_rxpmaresetdone : gmii_to_sgmii_sync_block
+  port map
+         (
+            clk             =>  STABLE_CLOCK,
+            data_in         =>  RXPMARESETDONE,
+            data_out        =>  rxpmaresetdone_s 
+         );
+
+process(STABLE_CLOCK)
+  begin
+   if rising_edge(STABLE_CLOCK) then
+   rxpmaresetdone_ss <= rxpmaresetdone_s;
+   end if;
+  end process;
+
+
+ process(STABLE_CLOCK)
+  begin
+ if rising_edge(STABLE_CLOCK) then
+  if (gtrxreset_i = '1') then
+  pmaresetdone_fallingedge_detect <= '0';
+   elsif((rxpmaresetdone_s = '0') and (rxpmaresetdone_ss = '1')) then
+  pmaresetdone_fallingedge_detect <= '1';
+   else
+  pmaresetdone_fallingedge_detect <= pmaresetdone_fallingedge_detect;
+  end if;
+ end if;
+  end process;
   retries_recclk_monitor:process(STABLE_CLOCK)
   begin
     --This counter monitors, how many retries the RECCLK monitor
@@ -472,6 +600,19 @@ begin
       end if;
     end if;
   end process;
+   refclk_lost <= '1' when ((RX_QPLL_USED and QPLLREFCLKLOST='1') or (not RX_QPLL_USED and CPLLREFCLKLOST='1')) else '0';
+
+  process(STABLE_CLOCK)
+  begin
+    if rising_edge(STABLE_CLOCK) then
+        if (refclk_stable_count = WAIT_TIMEOUT_3ms)  then
+          refclk_stable <= '1';
+        else
+          refclk_stable <= '0';
+          refclk_stable_count <= refclk_stable_count + 1;
+        end if;
+    end if;
+  end process;
 
   timeout_max:process(STABLE_CLOCK)
   begin
@@ -546,14 +687,14 @@ begin
             --will still continue its best and rerun until the FPGA is turned off
             --or the transceivers come up correctly.
              if RX_QPLL_USED and not TX_QPLL_USED then
-              if pll_reset_asserted = '0' then
+              if (pll_reset_asserted = '0' and refclk_lost = '0')  or refclk_stable = '0'  then
                 QPLL_RESET          <= '1';
                 pll_reset_asserted  <= '1';
               else
                 QPLL_RESET          <= '0';
               end if;
             elsif not RX_QPLL_USED and TX_QPLL_USED then
-              if pll_reset_asserted = '0' then
+              if (pll_reset_asserted = '0' and refclk_lost = '0')  or refclk_stable = '0'  then
                 CPLL_RESET <= '1';
                 pll_reset_asserted  <= '1';
               else
@@ -570,9 +711,8 @@ begin
             recclk_mon_count_reset  <= '1';
             adapt_count_reset       <= '1';
             
-            
-            if (RX_QPLL_USED     and not TX_QPLL_USED  and (QPLLLOCK = '0') and pll_reset_asserted = '1') or
-               (not RX_QPLL_USED and TX_QPLL_USED  and (cplllock_sync = '0') and pll_reset_asserted = '1') or
+            if (RX_QPLL_USED     and not TX_QPLL_USED  and (QPLLLOCK = '0') and pll_reset_asserted = '1'   and refclk_stable = '1') or
+               (not RX_QPLL_USED and TX_QPLL_USED  and (cplllock_sync = '0') and pll_reset_asserted = '1'   and refclk_stable = '1') or
                (not RX_QPLL_USED and not TX_QPLL_USED  ) or
                (RX_QPLL_USED and  TX_QPLL_USED  ) then
               rx_state  <= WAIT_FOR_PLL_LOCK;
@@ -736,17 +876,10 @@ begin
                rx_fsm_reset_done_int <= '1';
             end if;
 
-            if(time_out_adapt = '1') then
-               if(EQ_MODE = "DFE") then
-                  RXDFEAGCHOLD  <=  '1';
-                  RXDFELFHOLD   <=  '1';
-               else 
                   RXDFEAGCHOLD  <=  '0';
                   RXDFELFHOLD   <=  '0';
                   RXLPMHFHOLD   <=  '0';
                   RXLPMLFHOLD   <=  '0';
-               end if;
-            end if;
            when OTHERS => 
               rx_state                <= INIT;
         end case;

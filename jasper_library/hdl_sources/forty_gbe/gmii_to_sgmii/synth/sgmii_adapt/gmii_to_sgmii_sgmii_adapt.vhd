@@ -132,28 +132,28 @@ entity gmii_to_sgmii_sgmii_adapt is
       -- Clock derivation
       -------------------
       clk125m          : in std_logic;                     -- Reference 125MHz clock.
-      sgmii_clk_r      : out std_logic;                    -- Clock to client MAC (125MHz, 12.5MHz or 1.25MHz) (to rising edge DDR).
-      sgmii_clk_f      : out std_logic;                    -- Clock to client MAC (125MHz, 12.5MHz or 1.25MHz) (to falling edge DDR).
+      sgmii_clk_r      : out std_logic := '0';                    -- Clock to client MAC (125MHz, 12.5MHz or 1.25MHz) (to rising edge DDR).
+      sgmii_clk_f      : out std_logic := '0';                    -- Clock to client MAC (125MHz, 12.5MHz or 1.25MHz) (to falling edge DDR).
 
-      sgmii_clk_en     : out std_logic;                    -- Clock enable to client MAC (125MHz, 12.5MHz or 1.25MHz).
+      sgmii_clk_en     : out std_logic := '0';                    -- Clock enable to client MAC (125MHz, 12.5MHz or 1.25MHz).
 
       -- GMII Rx
       ----------
       gmii_txd_in      : in std_logic_vector(7 downto 0);  -- Transmit data from client MAC.
       gmii_tx_en_in    : in std_logic;                     -- Transmit data valid signal from client MAC.
       gmii_tx_er_in    : in std_logic;                     -- Transmit error signal from client MAC.
-      gmii_rxd_out     : out std_logic_vector(7 downto 0); -- Received Data to client MAC.
-      gmii_rx_dv_out   : out std_logic;                    -- Received data valid signal to client MAC.
-      gmii_rx_er_out   : out std_logic;                    -- Received error signal to client MAC.
+      gmii_rxd_out     : out std_logic_vector(7 downto 0) := (others => '0'); -- Received Data to client MAC.
+      gmii_rx_dv_out   : out std_logic := '0';                    -- Received data valid signal to client MAC.
+      gmii_rx_er_out   : out std_logic := '0';                    -- Received error signal to client MAC.
 
       -- GMII Tx
       ----------
       gmii_rxd_in      : in std_logic_vector(7 downto 0);  -- Received Data to client MAC.
       gmii_rx_dv_in    : in std_logic;                     -- Received data valid signal to client MAC.
       gmii_rx_er_in    : in std_logic;                     -- Received error signal to client MAC.
-      gmii_txd_out     : out std_logic_vector(7 downto 0); -- Transmit data from client MAC.
-      gmii_tx_en_out   : out std_logic;                    -- Transmit data valid signal from client MAC.
-      gmii_tx_er_out   : out std_logic;                    -- Transmit error signal from client MAC.
+      gmii_txd_out     : out std_logic_vector(7 downto 0) := (others => '0'); -- Transmit data from client MAC.
+      gmii_tx_en_out   : out std_logic := '0';                    -- Transmit data valid signal from client MAC.
+      gmii_tx_er_out   : out std_logic := '0';                    -- Transmit error signal from client MAC.
 
       -- Speed Control
       ----------------

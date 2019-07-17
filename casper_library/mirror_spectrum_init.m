@@ -33,6 +33,10 @@ function mirror_spectrum_init(blk, varargin)
     'FFTSize', 8, ...
     'input_bitwidth', 18, ...
     'bin_pt_in', 'input_bitwidth-1', ...
+    'floating_point', 'off', ...
+    'float_type', 'single', ...
+    'exp_width', 8, ...
+    'frac_width', 24, ...       
     'bram_latency', 2, ...
     'negate_latency', 1, ...
     'negate_mode', 'Logic', ...
@@ -45,17 +49,39 @@ function mirror_spectrum_init(blk, varargin)
   munge_block(blk, varargin{:});
 
   % Retrieve values from mask fields.
-  n_inputs = get_var('n_inputs', 'defaults', defaults, varargin{:});
-  FFTSize = get_var('FFTSize', 'defaults', defaults, varargin{:});
-  input_bitwidth = get_var('input_bitwidth', 'defaults', defaults, varargin{:});
-  bin_pt_in = get_var('bin_pt_in', 'defaults', defaults, varargin{:});
-  bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
-  negate_latency = get_var('negate_latency', 'defaults', defaults, varargin{:});
-  negate_mode = get_var('negate_mode', 'defaults', defaults, varargin{:});
-  async = get_var('async', 'defaults', defaults, varargin{:});
+  n_inputs          = get_var('n_inputs', 'defaults', defaults, varargin{:});
+  FFTSize           = get_var('FFTSize', 'defaults', defaults, varargin{:});
+  input_bitwidth    = get_var('input_bitwidth', 'defaults', defaults, varargin{:});
+  bin_pt_in         = get_var('bin_pt_in', 'defaults', defaults, varargin{:});
+  floating_point    = get_var('floating_point', 'defaults', defaults, varargin{:});
+  float_type        = get_var('float_type', 'defaults', defaults, varargin{:});
+  exp_width         = get_var('exp_width', 'defaults', defaults, varargin{:});
+  frac_width        = get_var('frac_width', 'defaults', defaults, varargin{:});
+  bram_latency      = get_var('bram_latency', 'defaults', defaults, varargin{:});
+  negate_latency    = get_var('negate_latency', 'defaults', defaults, varargin{:});
+  negate_mode       = get_var('negate_mode', 'defaults', defaults, varargin{:});
+  async             = get_var('async', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
 
+  if floating_point == 1
+    float_en = 'on';
+    input_bitwidth = exp_width + frac_width;
+    bin_pt_in = 0;
+  else
+    float_en = 'off';  
+  end
+
+  if float_type == 2
+      float_type_sel = 'custom';
+  else
+      float_type_sel = 'single';
+      exp_width = 8;
+      frac_width = 24;
+  end
+  
+  
+  
   %default setup for library
   if n_inputs == 0 | FFTSize == 0,
     clean_blocks(blk);
@@ -121,14 +147,39 @@ function mirror_spectrum_init(blk, varargin)
     if strcmp(negate_mode, 'dsp48e'), cc_latency = 3;
     else, cc_latency = negate_latency;
     end
+    
+    try
+        get_param([blk,'/','complex_conj',num2str(index)],'csp_latency');
+    catch ME
+        try
+            update_casper_block([blk,'/','complex_conj',num2str(index)])
+            disp([ME.identifier,' ','Old 2016b complex_conj block, upgrading to new toolflow'])
+        catch ME
+        end
+    end
+
     reuse_block(blk, ['complex_conj',num2str(index)], 'casper_library_misc/complex_conj', ...
       'n_inputs', num2str(n_inputs), 'n_bits', num2str(input_bitwidth), ...
-      'bin_pt', num2str(bin_pt_in), 'latency', num2str(cc_latency), 'overflow', 'Wrap', ... %TODO Wrap really?
+      'bin_pt', num2str(bin_pt_in), 'csp_latency', num2str(cc_latency), 'overflow', 'Wrap', ... %TODO Wrap really?
+      'floating_point', float_en, ...
+      'float_type', float_type_sel, ...
+      'exp_width', num2str(exp_width), ...
+      'frac_width', num2str(frac_width), ...     
       'Position', [105 343+(125*index) 140 363+(125*index)]);
     add_line(blk, ['reo_in',num2str(index),'/1'], ['complex_conj',num2str(index),'/1']);
 
+    try
+        get_param([blk,'/','sel_replicate',num2str(index)],'csp_latency');
+    catch ME
+        try
+            update_casper_block([blk,'/','complex_conj',num2str(index)])
+            disp([ME.identifier,' ','Old 2016b complex_conj block, upgrading to new toolflow'])
+        catch ME
+        end
+    end
+    
     reuse_block(blk, ['sel_replicate',num2str(index)], 'casper_library_bus/bus_replicate', ...
-      'replication', 'n_inputs', 'latency', 'ceil(log2(n_inputs))', 'misc', 'off', 'implementation', 'core', ...
+      'replication', 'n_inputs', 'csp_latency', 'ceil(log2(n_inputs))', 'misc', 'off', 'implementation', 'core', ...
       'Position', [375 274+(125*index) 415 296+(125*index)]);
     add_line(blk, 'relational/1', ['sel_replicate',num2str(index),'/1']);
 

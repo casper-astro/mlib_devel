@@ -2,7 +2,7 @@
 --   ____  ____
 --  /   /\/   /
 -- /___/  \  /    Vendor: Xilinx
--- \   \   \/     Version : 3.4
+-- \   \   \/     Version : 3.6
 --  \   \         Application : 7 Series FPGAs Transceivers Wizard
 --  /   /         Filename : gmii_to_sgmii_gtwizard.vhd
 -- /___/   /\     
@@ -77,8 +77,11 @@ generic
 );
 port
 (
+    mmcm_reset                              : out  std_logic; 
+    recclk_mmcm_reset                       : out  std_logic; 
     SYSCLK_IN                               : in   std_logic;
-    SOFT_RESET_IN                           : in   std_logic;
+    SOFT_RESET_TX_IN                        : in   std_logic;
+    SOFT_RESET_RX_IN                        : in   std_logic;
     DONT_RESET_ON_DATA_ERROR_IN             : in   std_logic;
     GT0_DRP_BUSY_OUT                        : out  std_logic;
     GT0_TX_FSM_RESET_DONE_OUT               : out  std_logic;
@@ -95,6 +98,7 @@ port
     gt0_cpllreset_in                        : in   std_logic;
     -------------------------- Channel - Clocking Ports ------------------------
     gt0_gtrefclk0_in                        : in   std_logic;
+    gt0_gtrefclk0_bufg_in                   : in   std_logic;
     ---------------------------- Channel - DRP Ports  --------------------------
     gt0_drpaddr_in                          : in   std_logic_vector(8 downto 0);
     gt0_drpclk_in                           : in   std_logic;
@@ -181,6 +185,7 @@ port
     gt0_txbufstatus_out                     : out  std_logic_vector(1 downto 0);
     --------------- Transmit Ports - TX Configurable Driver Ports --------------
     gt0_txdiffctrl_in                       : in   std_logic_vector(3 downto 0);
+    gt0_txinhibit_in                        : in   std_logic;
     ------------------ Transmit Ports - TX Data Path interface -----------------
     gt0_txdata_in                           : in   std_logic_vector(15 downto 0);
     ---------------- Transmit Ports - TX Driver and OOB signaling --------------
@@ -199,18 +204,15 @@ port
     ----------- Transmit Transmit Ports - 8b10b Encoder Control Ports ----------
     gt0_txcharisk_in                        : in   std_logic_vector(1 downto 0);
 
-    gt0_txpmareset_in         : in  std_logic;
-    gt0_txpcsreset_in         : in  std_logic;
-    gt0_rxpcsreset_in         : in  std_logic;
-    gt0_rxpmaresetdone_out    : out std_logic;
-    gt0_dmonitorout_out       : out std_logic_vector(14 downto 0);       
-
+    gt0_txpmareset_in                       : in   std_logic;
+    gt0_txpcsreset_in                       : in   std_logic;
+    gt0_rxpcsreset_in                       : in   std_logic;
+    gt0_rxpmaresetdone_out                  : out  std_logic;
+    gt0_dmonitorout_out                     : out  std_logic_vector(14 downto 0);       
 
     --____________________________COMMON PORTS________________________________
-     GT0_QPLLOUTCLK_IN  : in std_logic;
-     GT0_QPLLOUTREFCLK_IN : in std_logic
-
-
+    GT0_QPLLOUTCLK_IN                       : in   std_logic;
+    GT0_QPLLOUTREFCLK_IN                    : in   std_logic
 );
 end gmii_to_sgmii_GTWIZARD;
     
@@ -230,8 +232,11 @@ generic
 );
 port
 (
+    mmcm_reset                              : out  std_logic; 
+    recclk_mmcm_reset                       : out  std_logic; 
     SYSCLK_IN                               : in   std_logic;
-    SOFT_RESET_IN                           : in   std_logic;
+    SOFT_RESET_TX_IN                        : in   std_logic;
+    SOFT_RESET_RX_IN                        : in   std_logic;
     DONT_RESET_ON_DATA_ERROR_IN             : in   std_logic;
     GT0_DRP_BUSY_OUT                        : out  std_logic;
     GT0_TX_FSM_RESET_DONE_OUT               : out  std_logic;
@@ -248,6 +253,7 @@ port
     gt0_cpllreset_in                        : in   std_logic;
     -------------------------- Channel - Clocking Ports ------------------------
     gt0_gtrefclk0_in                        : in   std_logic;
+    gt0_gtrefclk0_bufg_in                   : in   std_logic;
     ---------------------------- Channel - DRP Ports  --------------------------
     gt0_drpaddr_in                          : in   std_logic_vector(8 downto 0);
     gt0_drpclk_in                           : in   std_logic;
@@ -334,6 +340,7 @@ port
     gt0_txbufstatus_out                     : out  std_logic_vector(1 downto 0);
     --------------- Transmit Ports - TX Configurable Driver Ports --------------
     gt0_txdiffctrl_in                       : in   std_logic_vector(3 downto 0);
+    gt0_txinhibit_in                        : in   std_logic;
     ------------------ Transmit Ports - TX Data Path interface -----------------
     gt0_txdata_in                           : in   std_logic_vector(15 downto 0);
     ---------------- Transmit Ports - TX Driver and OOB signaling --------------
@@ -352,16 +359,15 @@ port
     ----------- Transmit Transmit Ports - 8b10b Encoder Control Ports ----------
     gt0_txcharisk_in                        : in   std_logic_vector(1 downto 0);
 
-
-    gt0_txpmareset_in         : in  std_logic;
-    gt0_txpcsreset_in         : in  std_logic;
-    gt0_rxpcsreset_in         : in  std_logic;
-    gt0_rxpmaresetdone_out    : out std_logic;
-    gt0_dmonitorout_out       : out std_logic_vector(14 downto 0);       
+    gt0_txpmareset_in                       : in   std_logic;
+    gt0_txpcsreset_in                       : in   std_logic;
+    gt0_rxpcsreset_in                       : in   std_logic;
+    gt0_rxpmaresetdone_out                  : out  std_logic;
+    gt0_dmonitorout_out                     : out  std_logic_vector(14 downto 0);       
 
     --____________________________COMMON PORTS________________________________
-     GT0_QPLLOUTCLK_IN  : in std_logic;
-     GT0_QPLLOUTREFCLK_IN : in std_logic
+    GT0_QPLLOUTCLK_IN                       : in   std_logic;
+    GT0_QPLLOUTREFCLK_IN                    : in   std_logic
 
 );
 end component;
@@ -371,7 +377,7 @@ begin
     U0 : gmii_to_sgmii_GTWIZARD_init
     generic map
     (
-        EXAMPLE_SIM_GTRESET_SPEEDUP   => "TRUE",
+        EXAMPLE_SIM_GTRESET_SPEEDUP   => "FALSE",
         EXAMPLE_SIMULATION            => EXAMPLE_SIMULATION,
  
         STABLE_CLOCK_PERIOD           => 5,
@@ -379,13 +385,16 @@ begin
     )
     port map
     (
+        mmcm_reset                      =>      mmcm_reset,
+        recclk_mmcm_reset               =>      recclk_mmcm_reset,
         SYSCLK_IN                       =>      SYSCLK_IN,
-        SOFT_RESET_IN                   =>      SOFT_RESET_IN,
+        SOFT_RESET_TX_IN                =>      SOFT_RESET_TX_IN,
+        SOFT_RESET_RX_IN                =>      SOFT_RESET_RX_IN,
         DONT_RESET_ON_DATA_ERROR_IN     =>      DONT_RESET_ON_DATA_ERROR_IN,
-    GT0_DRP_BUSY_OUT => GT0_DRP_BUSY_OUT,
-    GT0_TX_FSM_RESET_DONE_OUT => GT0_TX_FSM_RESET_DONE_OUT,
-    GT0_RX_FSM_RESET_DONE_OUT => GT0_RX_FSM_RESET_DONE_OUT,
-    GT0_DATA_VALID_IN => GT0_DATA_VALID_IN,
+        GT0_DRP_BUSY_OUT                =>      GT0_DRP_BUSY_OUT,
+        GT0_TX_FSM_RESET_DONE_OUT       =>      GT0_TX_FSM_RESET_DONE_OUT,
+        GT0_RX_FSM_RESET_DONE_OUT       =>      GT0_RX_FSM_RESET_DONE_OUT,
+        GT0_DATA_VALID_IN               =>      GT0_DATA_VALID_IN,
 
     --_________________________________________________________________________
     --GT0  (X1Y4)
@@ -397,6 +406,7 @@ begin
         gt0_cpllreset_in                =>      gt0_cpllreset_in,
     -------------------------- Channel - Clocking Ports ------------------------
         gt0_gtrefclk0_in                =>      gt0_gtrefclk0_in,
+        gt0_gtrefclk0_bufg_in           =>      gt0_gtrefclk0_bufg_in,
     ---------------------------- Channel - DRP Ports  --------------------------
         gt0_drpaddr_in                  =>      gt0_drpaddr_in,
         gt0_drpclk_in                   =>      gt0_drpclk_in,
@@ -483,6 +493,7 @@ begin
         gt0_txbufstatus_out             =>      gt0_txbufstatus_out,
     --------------- Transmit Ports - TX Configurable Driver Ports --------------
         gt0_txdiffctrl_in               =>      gt0_txdiffctrl_in,
+        gt0_txinhibit_in                =>      gt0_txinhibit_in,
     ------------------ Transmit Ports - TX Data Path interface -----------------
         gt0_txdata_in                   =>      gt0_txdata_in,
     ---------------- Transmit Ports - TX Driver and OOB signaling --------------
@@ -509,8 +520,8 @@ begin
         gt0_rxpmaresetdone_out          =>      gt0_rxpmaresetdone_out   , 
         gt0_dmonitorout_out             =>      gt0_dmonitorout_out      ,        
     --____________________________COMMON PORTS________________________________
-     GT0_QPLLOUTCLK_IN  => GT0_QPLLOUTCLK_IN,
-     GT0_QPLLOUTREFCLK_IN => GT0_QPLLOUTREFCLK_IN 
+        GT0_QPLLOUTCLK_IN               =>      GT0_QPLLOUTCLK_IN,
+        GT0_QPLLOUTREFCLK_IN            =>      GT0_QPLLOUTREFCLK_IN 
 
     );
 

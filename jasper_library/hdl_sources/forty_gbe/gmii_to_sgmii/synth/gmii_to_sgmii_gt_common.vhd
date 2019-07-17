@@ -2,7 +2,7 @@
 --   ____  ____ 
 --  /   /\/   /
 -- /___/  \  /    Vendor: Xilinx
--- \   \   \/     Version : 3.4
+-- \   \   \/     Version : 3.6
 --  \   \         Application : 7 Series FPGAs Transceivers Wizard
 --  /   /         Filename : gtwizard_common.vhd
 -- /___/   /\     

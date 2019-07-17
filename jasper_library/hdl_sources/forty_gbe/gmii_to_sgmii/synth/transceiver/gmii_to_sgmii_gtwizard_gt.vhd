@@ -3,7 +3,7 @@
 --   ____  ____
 --  /   /\/   /
 -- /___/  \  /    Vendor: Xilinx
--- \   \   \/     Version : 3.4
+-- \   \   \/     Version : 3.6
 --  \   \         Application : 7 Series FPGAs Transceivers Wizard
 --  /   /         Filename : gmii_to_sgmii_gtwizard_gt.vhd
 -- /___/   /\     
@@ -85,6 +85,7 @@ port
   DRP_BUSY_OUT   : out  std_logic;          -- Indicates that the DRP bus is not accessible to the User
   RXPMARESETDONE   : out  std_logic;          
   TXPMARESETDONE   : out  std_logic;          
+     cpllpd_in : in std_logic;
     --------------------------------- CPLL Ports -------------------------------
     cpllfbclklost_out                       : out  std_logic;
     cplllock_out                            : out  std_logic;
@@ -117,6 +118,8 @@ port
     eyescantrigger_in                       : in   std_logic;
     ------------------------- Receive Ports - CDR Ports ------------------------
     rxcdrhold_in                            : in   std_logic;
+    ------------------- Receive Ports - Digital Monitor Ports ------------------
+    dmonitorout_out                         : out  std_logic_vector(14 downto 0);
     ------------------ Receive Ports - FPGA RX Interface Ports -----------------
     rxusrclk_in                             : in   std_logic;
     rxusrclk2_in                            : in   std_logic;
@@ -141,14 +144,14 @@ port
     rxcommadet_out                          : out  std_logic;
     rxmcommaalignen_in                      : in   std_logic;
     rxpcommaalignen_in                      : in   std_logic;
+    -------------------- Receive Ports - RX Equailizer Ports -------------------
+    rxlpmhfhold_in                          : in   std_logic;
+    rxlpmlfhold_in                          : in   std_logic;
     --------------------- Receive Ports - RX Equalizer Ports -------------------
-    rxdfeagchold_in                         : in   std_logic;
     rxdfeagcovrden_in                       : in   std_logic;
-    rxdfelfhold_in                          : in   std_logic;
     rxdfelpmreset_in                        : in   std_logic;
     rxmonitorout_out                        : out  std_logic_vector(6 downto 0);
     rxmonitorsel_in                         : in   std_logic_vector(1 downto 0);
-    dmonitorout_out                         :out   std_logic_vector(14 downto 0);
     --------------- Receive Ports - RX Fabric Output Control Ports -------------
     rxoutclk_out                            : out  std_logic;
     ------------- Receive Ports - RX Initialization and Reset Ports ------------
@@ -186,6 +189,7 @@ port
     txbufstatus_out                         : out  std_logic_vector(1 downto 0);
     --------------- Transmit Ports - TX Configurable Driver Ports --------------
     txdiffctrl_in                           : in   std_logic_vector(3 downto 0);
+    txinhibit_in                            : in   std_logic;
     ------------------ Transmit Ports - TX Data Path interface -----------------
     txdata_in                               : in   std_logic_vector(15 downto 0);
     ---------------- Transmit Ports - TX Driver and OOB signaling --------------
@@ -306,74 +310,6 @@ end component;
     signal txdata_i                         :   std_logic_vector(63 downto 0);
     signal txkerr_float_i                   :   std_logic_vector(5 downto 0);
     signal txrundisp_float_i                :   std_logic_vector(5 downto 0);
-attribute equivalent_register_removal: string; 
-signal cpllpd_wait    :   std_logic_vector(95 downto 0)  := x"FFFFFFFFFFFFFFFFFFFFFFFF";
-signal cpllreset_wait :   std_logic_vector(127 downto 0) := x"000000000000000000000000000000FF";
-attribute equivalent_register_removal of cpllpd_wait : signal is "no";
-attribute equivalent_register_removal of cpllreset_wait : signal is "no";      
-signal    cpllpd_ovrd_i    :std_logic ;
-signal    cpllreset_ovrd_i :std_logic ;
-signal    cpll_reset_i     :std_logic ;
-signal    cpllreset_sync  :std_logic ; 
-signal    cpll_pd_i     :std_logic ;
-signal    cpllpd_sync  :std_logic ;
-signal    ack_i : std_logic;
-signal    flag : std_logic := '0';
-signal    flag2 : std_logic := '0';
-signal    ack_flag : std_logic := '0';
-  -- Internal Signals
-  signal data_sync1 : std_logic;
-  signal data_sync2 : std_logic;
-  signal data_sync3 : std_logic;
-  signal data_sync4 : std_logic;
-  signal data_sync5 : std_logic;
-  signal data_sync6 : std_logic;
-
-  signal ack_sync1 : std_logic;
-  signal ack_sync2 : std_logic;
-  signal ack_sync3 : std_logic;
-  signal ack_sync4 : std_logic;
-  signal ack_sync5 : std_logic;
-  signal ack_sync6 : std_logic;
-
-  signal gtrefclk0_in_bufg : std_logic;
-
-  -- These attributes will stop timing errors being reported in back annotated
-  -- SDF simulation.
-  attribute ASYNC_REG                       : string;
-  attribute ASYNC_REG of data_sync_reg1    : label is "true";
-  attribute ASYNC_REG of data_sync_reg2    : label is "true";
-  attribute ASYNC_REG of data_sync_reg3    : label is "true";
-  attribute ASYNC_REG of data_sync_reg4    : label is "true";
-  attribute ASYNC_REG of data_sync_reg5    : label is "true";
-  attribute ASYNC_REG of data_sync_reg6    : label is "true";
-
-  -- These attributes will stop XST translating the desired flip-flops into an
-  -- SRL based shift register.
-  attribute shreg_extract                   : string;
-  attribute shreg_extract of data_sync_reg1 : label is "no";
-  attribute shreg_extract of data_sync_reg2 : label is "no";
-  attribute shreg_extract of data_sync_reg3 : label is "no";
-  attribute shreg_extract of data_sync_reg4 : label is "no";
-  attribute shreg_extract of data_sync_reg5 : label is "no";
-  attribute shreg_extract of data_sync_reg6 : label is "no";
-
-  attribute ASYNC_REG of ack_sync_reg1    : label is "true";
-  attribute ASYNC_REG of ack_sync_reg2    : label is "true";
-  attribute ASYNC_REG of ack_sync_reg3    : label is "true";
-  attribute ASYNC_REG of ack_sync_reg4    : label is "true";
-  attribute ASYNC_REG of ack_sync_reg5    : label is "true";
-  attribute ASYNC_REG of ack_sync_reg6    : label is "true";
-
-  -- These attributes will stop XST translating the desired flip-flops into an
-  -- SRL based shift register.
-  attribute shreg_extract of ack_sync_reg1 : label is "no";
-  attribute shreg_extract of ack_sync_reg2 : label is "no";
-  attribute shreg_extract of ack_sync_reg3 : label is "no";
-  attribute shreg_extract of ack_sync_reg4 : label is "no";
-  attribute shreg_extract of ack_sync_reg5 : label is "no";
-  attribute shreg_extract of ack_sync_reg6 : label is "no"; 
- 
 --******************************** Main Body of Code***************************
                        
 begin                      
@@ -484,7 +420,7 @@ RXPMARESETDONE <= rxpmaresetdone_t;
 
        ---------------------------PMA Attributes----------------------------
         OUTREFCLK_SEL_INV                       =>     ("11"),
-        PMA_RSV                                 =>     (x"00018480"),
+        PMA_RSV                                 =>     ("00000000000000000000000010000000"),
         PMA_RSV2                                =>     (x"1C00000A"),
         PMA_RSV3                                =>     ("00"),
         PMA_RSV4                                =>     (x"0008"),
@@ -536,7 +472,22 @@ RXPMARESETDONE <= rxpmaresetdone_t;
        --For Display Port, HBR/RBR- set RXCDR_CFG=72'h0380008bff40200008
 
        --For Display Port, HBR2 -   set RXCDR_CFG=72'h038c008bff20200010
-        RXCDR_CFG                               =>     (x"0002007FE0800C2200018"),
+
+       --For SATA Gen1 GTX- set RXCDR_CFG=72'h03_8000_8BFF_4010_0008
+
+       --For SATA Gen2 GTX- set RXCDR_CFG=72'h03_8800_8BFF_4020_0008
+
+       --For SATA Gen3 GTX- set RXCDR_CFG=72'h03_8000_8BFF_1020_0010
+
+       --For SATA Gen3 GTP- set RXCDR_CFG=83'h0_0000_87FE_2060_2444_1010
+
+       --For SATA Gen2 GTP- set RXCDR_CFG=83'h0_0000_47FE_2060_2448_1010
+
+       --For SATA Gen1 GTP- set RXCDR_CFG=83'h0_0000_47FE_1060_2448_1010
+        RXCDR_CFG                               =>     (x"0002007FE0800C2080018"),
+        CPLL_FBDIV                              =>     (4),
+        RXOUT_DIV                               =>     (4),
+        TXOUT_DIV                               =>     (4),
         RXCDR_FR_RESET_ON_EIDLE                 =>     ('0'),
         RXCDR_HOLD_DURING_EIDLE                 =>     ('0'),
         RXCDR_PH_RESET_ON_EIDLE                 =>     ('0'),
@@ -626,13 +577,10 @@ RXPMARESETDONE <= rxpmaresetdone_t;
 
        ----------------------------CPLL Attributes----------------------------
         CPLL_CFG                                =>     (x"00BC07DC"),
-        CPLL_FBDIV                              =>     (4),
         CPLL_FBDIV_45                           =>     (5),
         CPLL_INIT_CFG                           =>     (x"00001E"),
         CPLL_LOCK_CFG                           =>     (x"01E8"),
         CPLL_REFCLK_DIV                         =>     (1),
-        RXOUT_DIV                               =>     (4),
-        TXOUT_DIV                               =>     (4),
         SATA_CPLL_CFG                           =>     ("VCO_3000MHZ"),
 
        --------------RX Initialization and Reset Attributes-------------
@@ -693,7 +641,7 @@ RXPMARESETDONE <= rxpmaresetdone_t;
         RX_DFELPM_CFG1                          =>     ('0'),
         RX_DFELPM_KLKH_AGC_STUP_EN              =>     ('1'),
         RX_DFE_AGC_CFG0                         =>     ("00"),
-        RX_DFE_AGC_CFG1                         =>     ("100"),
+        RX_DFE_AGC_CFG1                         =>     ("010"),
         RX_DFE_AGC_CFG2                         =>     ("0000"),
         RX_DFE_AGC_OVRDEN                       =>     ('1'),
         RX_DFE_H6_CFG                           =>     (x"020"),
@@ -702,7 +650,7 @@ RXPMARESETDONE <= rxpmaresetdone_t;
         RX_DFE_KL_LPM_KH_CFG1                   =>     ("010"),
         RX_DFE_KL_LPM_KH_CFG2                   =>     ("0010"),
         RX_DFE_KL_LPM_KH_OVRDEN                 =>     ('1'),
-        RX_DFE_KL_LPM_KL_CFG0                   =>     ("10"),
+        RX_DFE_KL_LPM_KL_CFG0                   =>     ("01"),
         RX_DFE_KL_LPM_KL_CFG1                   =>     ("010"),
         RX_DFE_KL_LPM_KL_CFG2                   =>     ("0010"),
         RX_DFE_KL_LPM_KL_OVRDEN                 =>     ('1'),
@@ -719,7 +667,7 @@ RXPMARESETDONE <= rxpmaresetdone_t;
         TXPI_INVSTROBE_SEL                      =>     ('0'),
         TXPI_PPMCLK_SEL                         =>     ("TXUSRCLK2"),
         TXPI_PPM_CFG                            =>     (x"00"),
-        TXPI_SYNFREQ_PPM                        =>     ("000"),
+        TXPI_SYNFREQ_PPM                        =>     ("001"),
         TX_RXDETECT_PRECHARGE_TIME              =>     (x"155CC"),
 
        ------------------ LOOPBACK Attributes---------------
@@ -754,10 +702,10 @@ RXPMARESETDONE <= rxpmaresetdone_t;
         CPLLLOCK                        =>      cplllock_out,
         CPLLLOCKDETCLK                  =>      cplllockdetclk_in,
         CPLLLOCKEN                      =>      tied_to_vcc_i,
-        CPLLPD                          =>      cpll_pd_i,
+        CPLLPD                          =>      cpllpd_in,
         CPLLREFCLKLOST                  =>      cpllrefclklost_out,
         CPLLREFCLKSEL                   =>      "001",
-        CPLLRESET                       =>      cpll_reset_i,
+        CPLLRESET                       =>      cpllreset_in,
         GTRSVD                          =>      "0000000000000000",
         PCSRSVDIN                       =>      "0000000000000000",
         PCSRSVDIN2                      =>      "00000",
@@ -893,20 +841,20 @@ RXPMARESETDONE <= rxpmaresetdone_t;
         RXDFESLIDETAPOVRDEN             =>      tied_to_ground_i,
         RXOSCALRESET                    =>      tied_to_ground_i,
         -------------------- Receive Ports - RX Equailizer Ports -------------------
-        RXLPMHFHOLD                     =>      tied_to_ground_i,
+        RXLPMHFHOLD                     =>      rxlpmhfhold_in,
         RXLPMHFOVRDEN                   =>      tied_to_ground_i,
-        RXLPMLFHOLD                     =>      tied_to_ground_i,
+        RXLPMLFHOLD                     =>      rxlpmlfhold_in,
         --------------------- Receive Ports - RX Equalizar Ports -------------------
         RXDFESLIDETAPSTARTED            =>      open,
         RXDFESLIDETAPSTROBEDONE         =>      open,
         RXDFESLIDETAPSTROBESTARTED      =>      open,
         --------------------- Receive Ports - RX Equalizer Ports -------------------
         RXADAPTSELTEST                  =>      tied_to_ground_vec_i(13 downto 0),
-        RXDFEAGCHOLD                    =>      rxdfeagchold_in,
+        RXDFEAGCHOLD                    =>      tied_to_ground_i,
         RXDFEAGCOVRDEN                  =>      rxdfeagcovrden_in,
         RXDFEAGCTRL                     =>      "10000",
         RXDFECM1EN                      =>      tied_to_ground_i,
-        RXDFELFHOLD                     =>      rxdfelfhold_in,
+        RXDFELFHOLD                     =>      tied_to_ground_i,
         RXDFELFOVRDEN                   =>      tied_to_ground_i,
         RXDFELPMRESET                   =>      rxdfelpmreset_in,
         RXDFESLIDETAP                   =>      tied_to_ground_vec_i(4 downto 0),
@@ -1015,7 +963,7 @@ RXPMARESETDONE <= rxpmaresetdone_t;
         TXPIPPMEN                       =>      tied_to_ground_i,
         TXPIPPMOVRDEN                   =>      tied_to_ground_i,
         TXPIPPMPD                       =>      tied_to_ground_i,
-        TXPIPPMSEL                      =>      tied_to_ground_i,
+        TXPIPPMSEL                      =>      tied_to_vcc_i,
         TXPIPPMSTEPSIZE                 =>      tied_to_ground_vec_i(4 downto 0),
         ---------------------- Transceiver Reset Mode Operation --------------------
         GTRESETSEL                      =>      tied_to_ground_i,
@@ -1067,7 +1015,7 @@ RXPMARESETDONE <= rxpmaresetdone_t;
         TXDEEMPH                        =>      tied_to_ground_i,
         TXDIFFCTRL                      =>      txdiffctrl_in,
         TXDIFFPD                        =>      tied_to_ground_i,
-        TXINHIBIT                       =>      tied_to_ground_i,
+        TXINHIBIT                       =>      txinhibit_in,
         TXMAINCURSOR                    =>      "0000000",
         TXPISOPD                        =>      tied_to_ground_i,
         ------------------ Transmit Ports - TX Data Path interface -----------------
@@ -1080,6 +1028,7 @@ RXPMARESETDONE <= rxpmaresetdone_t;
         TXOUTCLKFABRIC                  =>      txoutclkfabric_out,
         TXOUTCLKPCS                     =>      txoutclkpcs_out,
         TXOUTCLKSEL                     =>      "100",
+        
         TXRATEDONE                      =>      open,
         --------------------- Transmit Ports - TX Gearbox Ports --------------------
         TXGEARBOXREADY                  =>      open,
@@ -1216,175 +1165,8 @@ RXPMARESETDONE <= rxpmaresetdone_t;
         DRPRDY                          =>      drprdy_pma_t
             ); 
 
-  bufg_gtrefclk0_in : BUFG
-   port map (
-      I     => gtrefclk0_in,
-      O     => gtrefclk0_in_bufg
-   );
 
 
-    process( gtrefclk0_in_bufg )
-    begin
-        if(gtrefclk0_in_bufg'event and gtrefclk0_in_bufg = '1') then 
-           cpllpd_wait <= cpllpd_wait(94 downto 0) & '0';
-           cpllreset_wait <= cpllreset_wait(126 downto 0) & '0';
-         end if;
-    end process;
-
-cpllpd_ovrd_i <= cpllpd_wait(95);
-cpllreset_ovrd_i <= cpllreset_wait(127);
-
- cpll_pd_i <= cpllpd_ovrd_i;
-
-process (cplllockdetclk_in)
-begin
-if(cplllockdetclk_in'event and cplllockdetclk_in = '1') then 
-  if(cpllreset_in = '1' and ack_flag = '0') then
-    flag <= not flag;
-    flag2 <= '1';
-  else
-    flag <= flag; 
-    flag2 <= '0';
-end if;
-end if;
-end process;
-
-
-process (cplllockdetclk_in)
-begin
-if(cplllockdetclk_in'event and cplllockdetclk_in = '1') then 
-  if(flag2 = '1') then
-   ack_flag <= '1';
- elsif(ack_i = '1') then
-   ack_flag <= '0';
- end if;
-end if;
-end process;
-
-
-  data_sync_reg1 : FD
-  generic map (
-    INIT => '0'
-  )
-  port map (
-    C    => gtrefclk0_in_bufg,
-    D    => flag,
-    Q    => data_sync1
-  );
-
- data_sync_reg2 : FD
-  generic map (
-    INIT => '0'
-  )
-  port map (
-    C    => gtrefclk0_in_bufg,
-    D    => data_sync1,
-    Q    => data_sync2
-  );
-
- data_sync_reg3 : FD
-  generic map (
-    INIT => '0'
-  )
-  port map (
-    C    => gtrefclk0_in_bufg,
-    D    => data_sync2,
-    Q    => data_sync3
-  );
-
- data_sync_reg4 : FD
-  generic map (
-    INIT => '0'
-  )
-  port map (
-    C    => gtrefclk0_in_bufg,
-    D    => data_sync3,
-    Q    => data_sync4
-  );
-
- data_sync_reg5 : FD
-  generic map (
-    INIT => '0'
-  )
-  port map (
-    C    => gtrefclk0_in_bufg,
-    D    => data_sync4,
-    Q    => data_sync5
-  );  
-
-  data_sync_reg6 : FD
-  generic map (
-    INIT => '0'
-  )
-  port map (
-    C    => gtrefclk0_in_bufg,
-    D    => data_sync5,
-    Q    => data_sync6
-  );
-cpllreset_sync <= data_sync6 xor data_sync5;
-
-  ack_sync_reg1 : FD
-  generic map (
-    INIT => '0'
-  )
-  port map (
-    C    => cplllockdetclk_in,
-    D    => data_sync6,
-    Q    => ack_sync1
-  );
-
- ack_sync_reg2 : FD
-  generic map (
-    INIT => '0'
-  )
-  port map (
-    C    => cplllockdetclk_in,
-    D    => ack_sync1,
-    Q    => ack_sync2
-  );
-
- ack_sync_reg3 : FD
-  generic map (
-    INIT => '0'
-  )
-  port map (
-    C    => cplllockdetclk_in,
-    D    => ack_sync2,
-    Q    => ack_sync3
-  );
-
- ack_sync_reg4 : FD
-  generic map (
-    INIT => '0'
-  )
-  port map (
-    C    => cplllockdetclk_in,
-    D    => ack_sync3,
-    Q    => ack_sync4
-  );
-
- ack_sync_reg5 : FD
-  generic map (
-    INIT => '0'
-  )
-  port map (
-    C    => cplllockdetclk_in,
-    D    => ack_sync4,
-    Q    => ack_sync5
-  );  
-
-  ack_sync_reg6 : FD
-  generic map (
-    INIT => '0'
-  )
-  port map (
-    C    => cplllockdetclk_in,
-    D    => ack_sync5,
-    Q    => ack_sync6
-  );
-
-ack_i <= ack_sync5 xor ack_sync6;
-cpll_reset_i <= cpllreset_sync or cpllreset_ovrd_i;
  end RTL;
 
 
