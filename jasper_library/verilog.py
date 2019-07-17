@@ -766,10 +766,15 @@ class VerilogModule(object):
         # all memory-mapped devices of size N-bytes to by aligned on N-byte boundaries.
         # Thus, we can't put a 4-byte register at address 0x0, and then a 1kiB bram at address 0x4.
         # Though not foolproof, we try and coerce an acceptable layout by placing the devices
-        # in size order with the largest first. Hopefully all the devices are 2^n bytes in size.
+        # in size order with the largest first. Hopefully all the devices are 2^n bytes in size --
+        # this seems to be enforced by the xml2vhdl generator
+
+        # First *we* round up the sizes so we agree with xml2vhdl
+        for key in self.memory_map.keys():
+            self.memory_map[key]['size'] = 2**int(ceil(log(self.memory_map[key]['size'], 2)))
+
         ordered_memory_map = odict.odict()
-        # quick sort be damned. Go slow. And put the sw_reg block at the end, since it's made of 32-bit devices
-        software_reg_mem_map = self.memory_map.pop('sw_reg', None)
+        # quick sort be damned. Go slow.
         while(len(self.memory_map) > 0):
             max_size = 0
             for key,val in self.memory_map.items():
@@ -777,11 +782,7 @@ class VerilogModule(object):
                     max_size = val['size']
                     max_key = key
             ordered_memory_map[max_key] = self.memory_map.pop(max_key)
-        # append the sw_reg entries at the end
-        if software_reg_mem_map is not None:
-            ordered_memory_map['sw_reg'] = software_reg_mem_map
-            # Make size a 2^n byte block to try to keep the alignment working
-            ordered_memory_map['sw_reg']['size'] = 2**int(ceil(log(ordered_memory_map['sw_reg']['size'], 2)))
+
         # Now replace the memory map with the ordered one and continue
         self.memory_map = ordered_memory_map.copy()
 
