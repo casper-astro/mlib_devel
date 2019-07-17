@@ -73,8 +73,9 @@ class red_pitaya_dac(YellowBlock):
         #To do: add timing constraints
 
         #Clock Group Constraints
-        cons.append(ClockGroupConstraint('user_clk_mmcm', 'adc_clk_125_mmcm', 'asynchronous'))
-        cons.append(ClockGroupConstraint('adc_clk_125_mmcm', 'user_clk_mmcm', 'asynchronous'))
+        cons.append(ClockGroupConstraint('-of_objects [get_pins red_pitaya_infr_inst/user_clk_mmcm_inst/CLKOUT0]', '-of_objects [get_pins red_pitaya_infr_inst/adc_clk_mmcm_inst/CLKOUT1]', 'asynchronous'))
+        cons.append(ClockGroupConstraint('-of_objects [get_pins red_pitaya_infr_inst/adc_clk_mmcm_inst/CLKOUT1]', '-of_objects [get_pins red_pitaya_infr_inst/user_clk_mmcm_inst/CLKOUT0]', 'asynchronous'))
+        
         #cons.append(ClockGroupConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', 'aux_clk_diff_p', 'asynchronous'))
         #cons.append(ClockGroupConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', 'sync_in_p', 'asynchronous'))
         #cons.append(ClockGroupConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', '%s/ADC32RF45_RX_0/ADC_PHY_inst/ADC_GT_SUPPPORT_inst/JESD204B_4LaneRX_7500MHz_init_i/U0/JESD204B_4LaneRX_7500MHz_i/gt0_JESD204B_4LaneRX_7500MHz_i/gthe2_i/RXOUTCLK'% self.fullname, 'asynchronous'))

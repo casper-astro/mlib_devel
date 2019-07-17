@@ -61,10 +61,8 @@ class red_pitaya(YellowBlock):
         cons = []
         cons.append(PortConstraint('ADC_CLK_IN_P', 'ADC_CLK_IN_P'))
         cons.append(ClockConstraint('ADC_CLK_IN_P','ADC_CLK_IN_P', period=8.0, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=4.0))
-        cons.append(ClockGroupConstraint('user_clk_mmcm', 'clk_fpga_0', 'asynchronous'))
-        cons.append(ClockGroupConstraint('clk_fpga_0', 'user_clk_mmcm', 'asynchronous'))
-
-
+        cons.append(ClockGroupConstraint('-of_objects [get_pins red_pitaya_infr_inst/user_clk_mmcm_inst/CLKOUT0]', '-of_objects [get_pins red_pitaya_inst/processing_system7_0/inst/PS7_i/FCLKCLK[0]]', 'asynchronous'))
+        cons.append(ClockGroupConstraint('-of_objects [get_pins red_pitaya_inst/processing_system7_0/inst/PS7_i/FCLKCLK[0]]', '-of_objects [get_pins red_pitaya_infr_inst/user_clk_mmcm_inst/CLKOUT0]', 'asynchronous'))
 
         return cons
         #const_list = [
