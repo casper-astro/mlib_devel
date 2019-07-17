@@ -52,8 +52,8 @@ class forty_gbe(YellowBlock):
             self.mez3_phy == "PHY11"
             self.clock_region = "CLOCKREGION_X1Y7:CLOCKREGION_X1Y7"
 
-        inst.add_port('MEZ3_REFCLK_P',      'MEZ3_REFCLK_P',                    parent_port=True, dir='in')
-        inst.add_port('MEZ3_REFCLK_N',      'MEZ3_REFCLK_N',                    parent_port=True, dir='in')
+        inst.add_port('MEZ3_REFCLK_0_P',    'MEZ3_REFCLK_0_P',                  parent_port=True, dir='in')
+        inst.add_port('MEZ3_REFCLK_0_N',    'MEZ3_REFCLK_0_N',                  parent_port=True, dir='in')
         inst.add_port('MEZ3_PHY_LANE_RX_P', 'MEZ3_'+self.mez3_phy+'_LANE_RX_P', parent_port=True, dir='in', width=4)
         inst.add_port('MEZ3_PHY_LANE_RX_N', 'MEZ3_'+self.mez3_phy+'_LANE_RX_N', parent_port=True, dir='in', width=4)
         inst.add_port('MEZ3_PHY_LANE_TX_P', 'MEZ3_'+self.mez3_phy+'_LANE_TX_P', parent_port=True, dir='out', width=4)
@@ -166,16 +166,16 @@ class forty_gbe(YellowBlock):
         cons.append(PortConstraint('MEZ3_'+self.mez3_phy+'_LANE_TX_N', 'MEZ3_'+self.mez3_phy+'_LANE_TX_N', port_index=range(4),  iogroup_index=range(4)))
         cons.append(PortConstraint('MEZ3_'+self.mez3_phy+'_LANE_RX_P', 'MEZ3_'+self.mez3_phy+'_LANE_RX_P', port_index=range(4),  iogroup_index=range(4)))
         cons.append(PortConstraint('MEZ3_'+self.mez3_phy+'_LANE_RX_N', 'MEZ3_'+self.mez3_phy+'_LANE_RX_N', port_index=range(4),  iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ3_REFCLK_P','MEZ3_REFCLK_P'))
-        cons.append(PortConstraint('MEZ3_REFCLK_N','MEZ3_REFCLK_N'))
-        cons.append(ClockConstraint('MEZ3_REFCLK_P','MEZ3_REFCLK_P', period=6.4, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=3.2))
+        cons.append(PortConstraint('MEZ3_REFCLK_0_P','MEZ3_REFCLK_0_P'))
+        cons.append(PortConstraint('MEZ3_REFCLK_0_N','MEZ3_REFCLK_0_N'))
+        cons.append(ClockConstraint('MEZ3_REFCLK_0_P','MEZ3_REFCLK_0_P', period=6.4, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=3.2))
 
         cons.append(RawConstraint('create_pblock MEZ3_'+self.mez3_phy+'_QSFP'))
         cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ3_'+self.mez3_phy+'_QSFP] [get_cells -quiet [list '+self.fullname+'/IEEE802_3_XL_PHY_'+str(self.port)+'/PHY_inst/RX_CLK_RCC]]'))
         cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ3_'+self.mez3_phy+'_QSFP] [get_cells -quiet [list '+self.fullname+'/IEEE802_3_XL_PHY_'+str(self.port)+'/PHY_inst/TX_CLK_RCC]]'))
         cons.append(RawConstraint('resize_pblock [get_pblocks MEZ3_'+self.mez3_phy+'_QSFP] -add {'+self.clock_region+'}'))
 
-
+        return cons
 
 
 
