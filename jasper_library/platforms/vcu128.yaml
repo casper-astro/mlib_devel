@@ -59,22 +59,22 @@ pins:
     iostd: LVCMOS18
     loc: BF22
   gbe_phy_sgmii_in_n:
-    iostd: DIFF_HSTL_I_18
+    iostd: LVDS
     loc: BH22
   gbe_phy_sgmii_in_p:
-    iostd: DIFF_HSTL_I_18
+    iostd: LVDS
     loc: BG22
   gbe_phy_sgmii_out_n:
-    iostd: DIFF_HSTL_I_18
+    iostd: LVDS
     loc: BK21
   gbe_phy_sgmii_out_p:
-    iostd: DIFF_HSTL_I_18
+    iostd: LVDS
     loc: BJ22
   gbe_phy_sgmii_clk_n:
-    iostd: DIFF_HSTL_I_18
+    iostd: LVDS
     loc: BJ27
   gbe_phy_sgmii_clk_p:
-    iostd: DIFF_HSTL_I_18
+    iostd: LVDS
     loc: BH27
   #gbe_phy_rst_n:
   #  iostd: LVCMOS18
