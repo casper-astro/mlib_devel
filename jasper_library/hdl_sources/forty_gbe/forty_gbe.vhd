@@ -48,8 +48,8 @@ entity forty_gbe is
         sys_clk : in std_logic;
         sys_rst : in std_logic;
 
-        MEZ3_REFCLK_0_P : in std_logic;
-        MEZ3_REFCLK_0_N : in std_logic;
+        MEZ3_REFCLK_P : in std_logic;
+        MEZ3_REFCLK_N : in std_logic;
 
         qsfp_gtrefclk    : out std_logic;
         qsfp_soft_reset  : in  std_logic;
@@ -235,8 +235,8 @@ architecture arch_forty_gbe of forty_gbe is
     signal xlgmii_rxd : std_logic_vector(255 downto 0);
     signal xlgmii_rxc : std_logic_vector(31 downto 0);
 
-    signal xlgmii_txled : std_logic_vector(1 downto 0);
-    signal xlgmii_rxled : std_logic_vector(1 downto 0);
+    signal xlgmii_txled_sig : std_logic_vector(1 downto 0);
+    signal xlgmii_rxled_sig : std_logic_vector(1 downto 0);
 
     signal xlgmii_txd_i : std_logic_vector(255 downto 0);
     signal xlgmii_txc_i : std_logic_vector(31 downto 0);
@@ -246,7 +246,7 @@ architecture arch_forty_gbe of forty_gbe is
     signal xlgmii_rxd_reg : std_logic_vector(255 downto 0);
     signal xlgmii_rxc_reg : std_logic_vector(31 downto 0);
 
-    signal phy_rx_up : std_logic;
+    signal phy_rx_up_sig : std_logic;
     signal xlgmii_src_ip_address : std_logic_vector(31 downto 0);
     signal xlgmii_src_mac_address : std_logic_vector(47 downto 0);
     signal xlgmii_src_enable : std_logic;
@@ -265,7 +265,7 @@ architecture arch_forty_gbe of forty_gbe is
     signal rx_start_count_2 : std_logic_vector(15 downto 0);
     signal rx_start_count_3 : std_logic_vector(15 downto 0);
 
-    signal qsfp_gtrefclk_pb : std_logic
+    signal qsfp_gtrefclk_pb : std_logic;
 
 begin
 
@@ -338,14 +338,14 @@ begin
         xlgmii_txrst    => sys_rst,
         xlgmii_txd      => xlgmii_txd,
         xlgmii_txc      => xlgmii_txc,
-        xlgmii_txled    => xlgmii_txled,
+        xlgmii_txled    => xlgmii_txled_sig,
         xlgmii_rxclk    => sys_clk,
         xlgmii_rxrst    => sys_rst,
         xlgmii_rxd      => xlgmii_rxd,
         xlgmii_rxc      => xlgmii_rxc,
-        xlgmii_rxled    => xlgmii_rxled,
+        xlgmii_rxled    => xlgmii_rxled_sig,
         phy_tx_rst      => qsfp_soft_reset,
-        phy_rx_up       => phy_rx_up,
+        phy_rx_up       => phy_rx_up_sig,
         src_ip_address      => xlgmii_src_ip_address,
         src_mac_address     => xlgmii_src_mac_address,
         src_enable          => xlgmii_src_enable,
@@ -355,8 +355,6 @@ begin
         src_local_mc_recv_ip_mask   => xlgmii_src_local_mc_recv_ip_mask,
         --debug_out   => debug_out,
         debug_led   => open);
-
-    signal qsfp_gtrefclk_pb : std_logic;
 
     GTREFCLK_buf : BUFG
     port map(
@@ -409,23 +407,23 @@ begin
 
     --xlgmii_rx_overrun_ack  <= forty_gbe_rx_overrun_ack;
     --xlgmii_rx_ack          <= forty_gbe_rx_ack;
-    forty_gbe_led_rx <= xlgmii_rxled(1); -- xlgmii_rxled(0)(1) is activity, xlgmii_rxled(0)(0) is phy rx up
-    forty_gbe_led_tx <= xlgmii_txled(1); -- xlgmii_txled(0)(1) is activity, xlgmii_txled(0)(0) is phy tx up
-    forty_gbe_led_up <= phy_rx_up;
+    forty_gbe_led_rx <= xlgmii_rxled_sig(1); -- xlgmii_rxled(0)(1) is activity, xlgmii_rxled(0)(0) is phy rx up
+    forty_gbe_led_tx <= xlgmii_txled_sig(1); -- xlgmii_txled(0)(1) is activity, xlgmii_txled(0)(0) is phy tx up
+    forty_gbe_led_up <= phy_rx_up_sig;
 
     IEEE802_3_XL_PHY_0 : component IEEE802_3_XL_PHY_top
         port map(
             SYS_CLK_I            => sys_clk,
             SYS_CLK_RST_I        => sys_rst,
-            GTREFCLK_PAD_N_I     => MEZ3_REFCLK_0_N,
-            GTREFCLK_PAD_P_I     => MEZ3_REFCLK_0_P,
+            GTREFCLK_PAD_N_I     => MEZ3_REFCLK_N,
+            GTREFCLK_PAD_P_I     => MEZ3_REFCLK_P,
             GTREFCLK_O           => qsfp_gtrefclk_pb,
             TXN_O                => MEZ3_PHY_LANE_TX_N,
             TXP_O                => MEZ3_PHY_LANE_TX_P,
             RXN_I                => MEZ3_PHY_LANE_RX_N,
             RXP_I                => MEZ3_PHY_LANE_RX_P,
             SOFT_RESET_I         => qsfp_soft_reset,
-            LINK_UP_O            => phy_rx_up,
+            LINK_UP_O            => phy_rx_up_sig,
             XLGMII_X4_TXC_I      => xlgmii_txc,
             XLGMII_X4_TXD_I      => xlgmii_txd,
             XLGMII_X4_RXC_O      => xlgmii_rxc,
@@ -435,6 +433,8 @@ begin
         );
 
         eth_if_present <= '1';
+        phy_rx_up    <= phy_rx_up_sig;
+        xlgmii_txled <= xlgmii_txled_sig;
+        xlgmii_rxled <= xlgmii_rxled_sig;
 
 end arch_forty_gbe;
-

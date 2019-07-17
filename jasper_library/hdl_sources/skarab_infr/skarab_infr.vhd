@@ -15,12 +15,12 @@ entity skarab_infr is
         DIVIDE   : REAL    := 6.0;
         DIVCLK   : INTEGER := 1);
     port(
-        user_clk_o    : out std_logic;
-        user_rst_o    : out std_logic;
-        board_clk     : out std_logic;
-        board_clk_rst : out std_logic;
-        hmc_rst_o     : out std_logic;
-        hmc_clk_o     : out std_logic; 
+        user_clk_o      : out std_logic;
+        user_rst_o      : out std_logic;
+        board_clk_o     : out std_logic;
+        board_clk_rst_o : out std_logic;
+        hmc_rst_o       : out std_logic;
+        hmc_clk_o       : out std_logic; 
 
         qsfp_gtrefclk     : in  std_logic;
         qsfp_soft_reset_0 : out std_logic;
@@ -2749,8 +2749,7 @@ begin
         leds_out              => fpga_leds_o
     );
 
-    board_clk <= sys_clk;
-    board_clk_rst <= sys_rst;
+    board_clk_o <= sys_clk;
+    board_clk_rst_o <= sys_rst;
 
 end arch_skarab_infr;
-
