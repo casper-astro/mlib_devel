@@ -2,7 +2,7 @@
 
 import os
 import logging
-from optparse import OptionParser
+from argparse import ArgumentParser
 import toolflow
 
 # A straight lift from StackOverflow...
@@ -20,37 +20,37 @@ def shell_source(script):
     os.environ.update(env)
 
 if __name__ == '__main__':
-    parser = OptionParser()
-    parser.add_option("--perfile", dest="perfile", action='store_true',
+    parser = ArgumentParser(prog=os.path.basename(__file__))
+    parser.add_argument("--perfile", dest="perfile", action='store_true',
                     default=False, help="Run Frontend peripheral file generation")
-    parser.add_option("--frontend", dest="frontend", action='store_true',
+    parser.add_argument("--frontend", dest="frontend", action='store_true',
                     default=False, help="Run Frontend IP compile")
-    parser.add_option("--middleware", dest="middleware", action='store_true',
+    parser.add_argument("--middleware", dest="middleware", action='store_true',
                     default=False, help="Run Toolflow middle")
-    parser.add_option("--backend", dest="backend", action='store_true',
+    parser.add_argument("--backend", dest="backend", action='store_true',
                     default=False, help="Run backend compilation")
-    parser.add_option("--software", dest="software", action='store_true',
+    parser.add_argument("--software", dest="software", action='store_true',
                     default=False, help="Run software compilation")
-    parser.add_option("--be", dest="be", type='string', default='vivado',
+    parser.add_argument("--be", dest="be", type=str, default='vivado',
                     help="Backend to use. Default: vivado")
-    parser.add_option("--sysgen", dest="sysgen", type='string', default='',
+    parser.add_argument("--sysgen", dest="sysgen", type=str, default='',
                     help="Specify a specific sysgen startup script.")
-    parser.add_option("--jobs", dest="jobs", type='int', default=4,
+    parser.add_argument("--jobs", dest="jobs", type=int, default=4,
                     help="Number of cores to run compiles with. Default=4")
-    parser.add_option("--nonprojectmode", dest="nonprojectmode",
+    parser.add_argument("--nonprojectmode", dest="nonprojectmode",
                     action='store_false', default=True,
                     help="Project Mode is enabled by default/Non Project Mode "
                         "is disabled by Default (NB: Vivado Only)")
-    parser.add_option("-m", "--model", dest="model", type='string',
+    parser.add_argument("-m", "--model", dest="model", type=str,
                     default='/tools/mlib_devel/jasper_library/test_models/'
                             'test.slx',
                     help="model to compile")
-    parser.add_option("-c", "--builddir", dest="builddir", type='string',
+    parser.add_argument("-c", "--builddir", dest="builddir", type=str,
                     default='',
                     help="build directory. Default: Use directory with same "
                         "name as model")
 
-    (opts, args) = parser.parse_args()
+    opts = parser.parse_args()
 
     # if we don't have the environment set up, source the default config file
     if 'XILINX_PATH' not in os.environ.keys():
