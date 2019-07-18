@@ -293,8 +293,9 @@ class onegbe_vcu128(onegbe):
             gbe_pcs.add_port('rx_vtc_rdy_2', '1\'b1')
 	    gbe_pcs.add_port('rx_vtc_rdy_3', '1\'b1')
 
-            top.add_port('phy_rst_n', dir='out', width=0)
-            top.assign_signal('phy_rst_n', '~sys_rst')
+            # AB: Pin not present on xcvu37p
+            #top.add_port('phy_rst_n', dir='out', width=0)
+            #top.assign_signal('phy_rst_n', '~sys_rst')
             top.add_port('phy_pdown_n', dir='out', width=0)
             top.assign_signal('phy_pdown_n', '1\'b1')
         
