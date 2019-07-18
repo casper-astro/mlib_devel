@@ -36,7 +36,7 @@ module vcu128_infrastructure(
 
   MMCM_BASE #(
    .BANDWIDTH          ("OPTIMIZED"), // Jitter programming ("HIGH","LOW","OPTIMIZED")
-   .CLKFBOUT_MULT_F    (8), // Multiply value for all CLKOUT (5.0-64.0).
+   .CLKFBOUT_MULT_F    (12), // Multiply value for all CLKOUT (5.0-64.0).
    .CLKFBOUT_PHASE     (0.0),
    .CLKIN1_PERIOD      (10), // VCU128 clock is 100 MHz
    .CLKOUT0_DIVIDE_F   (1.0), // Divide amount for CLKOUT0 (1.000-128.000).
