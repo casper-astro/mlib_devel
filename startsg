@@ -120,22 +120,12 @@ then
   $on_error 1
 fi
 
-# If not yet defined, set XML2VHDL_PATH based on the path of the xml2vhdl git submodule.
-# The LD_PRELOAD is needed so that the "jasper" command can run in the command window for
-# the XML2VHDL AXI interface e.g. the Red Pitaya 
-if ! [ -n "${XML2VHDL_PATH}" ]
-then
-  export XML2VHDL_PATH="${MLIB_DEVEL_PATH}/xml2vhdl/scripts/python/xml2vhdl-ox/xml2vhdl/"
-  export LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libexpat.so" 
-fi
 # Make sure that these variables are exported
 export XILINX_PATH
 export MATLAB_PATH
 export PLATFORM
 export MLIB_DEVEL_PATH
 export JASPER_BACKEND
-export XML2VHDL_PATH
-export LD_PRELOAD
 
 # Show environment essentials
 echo "Using MATLAB_PATH=${MATLAB_PATH}"

@@ -1,35 +1,70 @@
-# Setting up the Toolflow
+# Installing the Toolflow
 
 This page explains how to install the CASPER tools and what supporting software is required to run them.
 
-## Obtaining the Toolflow
-* The CASPER toolflow resides in the [mlib_devel](https://github.com/casper-astro/mlib_devel) git repository. You can download a copy of it to your local machine with the command `git clone https://github.com/casper-astro/mlib_devel.git`; this will leave you on the master branch.
-* If you wish to select another branch (for example, the `roach2` branch) you can do this by first navigating into the newly-cloned repository (`cd mlib_devel`) and then switching branches with `git checkout -b roach2 origin/roach2`.
-* You can always see the local and remote branches are available (i.e. which branches are in the casper-astro github repository) by running `git branch -a` in your local `mlib_devel` folder.
-* Using the terminal, type `git status` in the `mlib_devel` folder. This should indicate that the master branch has been selected.
+## Getting the right versions
 
-## Getting the right tools for your hardware
-The CASPER tools have changed significantly to support Xilinx series 7 (and later) FPGAs. For these boards - i.e. any FPGA platform based on a 7-series, UltraScale, or Ultrascale+ board - you should follow the latest instructions in this guide for the _Vivado-based_ flow. For earlier platforms, which include ROACH1 and ROACH2, you should follow instructions for the _ISE-based_ flow.
+The toolflow is very sensitive to mis-matching software versions. Depending on the hardware you intend to use, you will need different versions of:
+1. CASPER's `mlib_devel` libraries
+2. Mathworks MATLAB / Simulink
+3. Xilinx Vivado / ISE
 
-## Required 3rd Party Tools
+The current compatibility matric is below:
 
-### Operating System
-We suggest Ubuntu 16.04 LTS (18.04 has been show not to work), or Red Hat Enterprise 6.7+ or 7.3+. Other operating systems are viable, but not recommended as there won't be many people running the same setup as you and support will be hard to come by! Please see the [Matlab System Requirements](https://www.mathworks.com/support/sysreq.html) and page 11 of the [Vivado Design Suit User Guide](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2018_2/ug973-vivado-release-notes-install-license.pdf).
+|  Hardware   |   Operating System  |    Matlab Version  |    Xilinx Version  |    mlib_devel branch / commit   |
+|-------------|---------------------|--------------------|--------------------|---------------------------------|
+|ROACH1/2     | Ubuntu 14.04        |  2013b             |  ISE 14.7          |  branch: `roach`                |
+|SKARAB       | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |
+|SNAP         | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |
+|Red Pitaya   | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |
+|VCU118       | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |
+|VCU128       | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |
+|ZCU111       | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |
+|SNAP2        | Ubuntu 16.04        |  ???               |  ???               |  branch: `master`               |
 
-### MATLAB
-The tools currently support MATLAB 2016b for the SNAP platform and MATLAB 2018a for the SKARAB platform, and the corresponding version of Simulink. You will need to obtain this software and corresponding licenses either direct from MathWorks or from your institution. MATLAB installation instructions [here](https://casper-toolflow.readthedocs.io/en/latest/src/How-to-install-Matlab.html) or in the navigation pane alongside.
+Other software combinations may work, but these are the tested configurations.
+The master branch is usually updated once a year. Between updates, code with newer features can be found in the `casper-astro-soak-test` branch. This branch can usually be used in place of the `master` branch for platforms which support `master`. However, be aware that `casper-astro-soak-test` is likely to be less stable. Please report any bugs you encounter via github's issue tracker.
 
-### Xilinx ISE/Vivado
+## Pre-requisites
+1. MATLAB
+
+MATLAB installation instructions are available [here](https://casper-toolflow.readthedocs.io/en/latest/src/How-to-install-Matlab.html), or, contact whoever manages your software installations.
+You will need to install both MATLAB and Simulink.
+
+2. Xilinx Vivado / ISE
+
 These are available from [xilinx.com](https://www.xilinx.com) and will require a license. If you are part of an academic institution you may be eligible for free licenses via the [Xilinx University Program](https://www.xilinx.com/support/university.html).
-
-As the name suggests, _ISE-based_ flows require Xilinx ISE 14.7 and _Vivado-based_ flows require Xilinx Vivado. Currently we support Vivado version 2016.4 for the SNAP platform and 2018.2 for the SKARAB platform.  Instructions on how to install ISE and Vivado can be found below and in the navigation pane alongside:
+If you need them, install instructions are available:
 * [How to install Xilinx ISE](https://casper-toolflow.readthedocs.io/en/latest/src/How-to-install-Xilinx-ISE.html)
 * [How to install Xilinx Vivado](https://casper-toolflow.readthedocs.io/en/latest/src/How-to-install-Xilinx-Vivado.html)
 
+3. Python
 
-### Python
-The toolflow requires Python 2.7. If you don't have it already you can install it in Ubuntu environments by opening a terminal <ctrl+alt+T> and running the command `sudo apt-get install python`.
+Currently, the toolflow only supports Python 2.7. You will also require the python package installer [`pip`](https://pypi.org/project/pip/).
+Other python requirements are listed in the toolflow's repository.
 
-You will also need the [PyYAML](https://pypi.python.org/pypi/PyYAML) package. You can download this and install this directly from source or use a Python package manager, e.g. [pip](https://pypi.python.org/pypi/pip). To install pip, from a terminal, run `sudo apt-get install python-pip`.
+## Obtaining the Toolflow
+Clone the toolflow from the [mlib_devel](https://github.com/casper-astro/mlib_devel) git repository. 
 
-Once you have pip installed you can install PyYAML by running the command `sudo pip install pyyaml` in a terminal.
+```bash
+# Clone the mlib_devel repository. Replace <branch_name> with the branch
+# supported by your chosen platform.
+# Eg. for roach you should run:
+# git clone -b roach2 https://github.com/casper-astro.mlib_devel
+git clone -b <branch_name> https://github.com/casper-astro/mlib_devel
+```
+
+This could take a while -- the repository is several hundred megabytes. If you want, you can save some time by adding the `--depth=1` flag to the above command. This will only download the current version of the repository, rather than its full git history.
+
+Next, move into the repository you have just created and download any python dependencies you need. *This is only necessary for non-ROACH versions of the toolflow.
+
+```bash
+cd mlib_devel
+pip install -r requirements.txt
+```
+
+You may need to run the `pip install` command as an administrator if you are using the system-maintained python installation. We thoroughly recommend using a [virtual environment](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#installing-virtualenv) to separate the version of python and its libraries the toolflow uses from the rest of your system.
+
+## Configuring the toolflow
+
+You now have all the software you need to start building your designs. However, you'll still need to specify some local configuration details which will depend on how you carried out your installation. See [Configuring the Toolflow](https://casper-toolflow.readthedocs.io/en/latest/src/Configuring-the-Toolflow.html) for more details.
