@@ -23,6 +23,7 @@ class skarab(YellowBlock):
     def modify_top(self,top):
         #multiply, divide, divclk = clk_factors(156.25, self.platform.user_clk_rate)
         self.clkparams = clk_factors(156.25, self.platform.user_clk_rate)
+        self.fullname = 'skarab_infr'
 
         #inst = top.get_instance(name=self.fullname, entity='skarab_infr')
         inst = top.get_instance(name='skarab_infr', entity='skarab_infr')

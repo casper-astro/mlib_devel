@@ -90,7 +90,7 @@ entity forty_gbe is
         wb_dat_i : in  std_logic_vector(31 downto 0);
         wb_dat_o : out std_logic_vector(31 downto 0);
         wb_ack_o : out std_logic;
-        wb_adr_i : in  std_logic_vector(15 downto 0);
+        wb_adr_i : in  std_logic_vector(31 downto 0);
         wb_cyc_i : in  std_logic;
         wb_sel_i : in  std_logic_vector(3 downto 0);
         wb_stb_i : in  std_logic;
