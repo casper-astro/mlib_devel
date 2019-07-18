@@ -865,7 +865,7 @@ class Toolflow(object):
 
         Obtained from: https://bitbucket.org/ricch/xml2vhdl/src/master/
         """
-        from xml2vhdl.xml2vhdl import Xml2VhdlGenerate
+        from xml2vhdl.xml2vhdl import Xml2VhdlGenerate, helper
         # make input and output directories
         if not os.path.exists(self.xml_source_dir):
             os.makedirs(self.xml_source_dir)
@@ -877,19 +877,27 @@ class Toolflow(object):
         self.generate_xml_memory_map(self.top.memory_map)
         # generate xml interconnect for input
         self.generate_xml_ic(self.top.memory_map)
-        # execute xml2vhdl script
-        #self.logger.info('Running: python %sxml2vhdl.py -d %s -x %s -v %s -s %s -b %s' % (self.xml2vhdl_path, self.xml_source_dir, self.xml_output_dir, self.hdl_output_dir, 'xil_defaultlib', 'xil_defaultlib'))
+        # execute xml2vhdl generation
         try:
+            # Xml2VhdlGenerate takes arguments as attributes of an args class
+            args = helper.arguments.Arguments()
+            # see the help of the xml2vhdl.py script
+            args.input_folder  = [self.xml_source_dir] # Needs to be a list (can be multiple directories)
+            args.vhdl_output   = self.hdl_output_dir
+            args.xml_output    = self.xml_output_dir
+            args.bus_library   = "xil_defaultlib"
+            args.slave_library = "xil_defaultlib"
             self.logger.info("Trying to generate AXI HDL from XML")
-            Xml2VhdlGenerate(input_folder=self.xml_source_dir,
-                             xml_output=self.xml_output_dir,
-                             vhdl_output=self.hdl_output_dir,
-                             slave_library="xil_defaultlib",
-                             bus_library="xil_defaultlib")
+            self.logger.info("  Input directory: %s" % args.input_folder)
+            self.logger.info("  Output XML directory: %s" % args.xml_output)
+            self.logger.info("  Output directory: %s" % args.vhdl_output)
+            self.logger.info("  Slave library: %s" % args.slave_library)
+            self.logger.info("  Bus library: %s" % args.bus_library)
+            Xml2VhdlGenerate(args)
         except:
-            raise RuntimeError("Failed to generate AXI HDL from XML!")
-        #os.system('python %sxml2vhdl.py -d %s -x %s -v %s -s %s -b %s' % (self.xml2vhdl_path, self.xml_source_dir, self.xml_output_dir, self.hdl_output_dir, 'xil_defaultlib', 'xil_defaultlib'))
-
+            self.logger.error("Failed to generate AXI HDL from XML!")
+            # Throw whatever error was caught
+            raise
 
     def _gen_hdl_simulink(self, hdl_sysgen_filename):
         """
