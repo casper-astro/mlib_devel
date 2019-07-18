@@ -43,7 +43,7 @@ if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
 
 set list_projs [get_projects -quiet]
 if { $list_projs eq "" } {
-   create_project project_1 myproj -part xcvu37p-fsvh2892-2L-e
+   create_project project_1 myproj -part xc7vx485tffg1157-1
 }
 
 
@@ -116,6 +116,50 @@ if { $nRet != 0 } {
    return $nRet
 }
 
+set bCheckIPsPassed 1
+##################################################################
+# CHECK IPs
+##################################################################
+set bCheckIPs 1
+if { $bCheckIPs == 1 } {
+   set list_check_ips "\ 
+xilinx.com:ip:axi_hwicap:3.0\
+peralex.com:user:axi_slave_wishbone_classic_master:1.0\
+xilinx.com:ip:axi_timebase_wdt:3.0\
+xilinx.com:ip:axi_timer:2.0\
+xilinx.com:ip:axi_uartlite:2.0\
+xilinx.com:ip:mdm:3.2\
+xilinx.com:ip:microblaze:11.0\
+xilinx.com:ip:axi_intc:4.1\
+xilinx.com:ip:proc_sys_reset:5.0\
+xilinx.com:ip:xlconcat:2.1\
+xilinx.com:ip:lmb_bram_if_cntlr:4.0\
+xilinx.com:ip:lmb_v10:3.0\
+xilinx.com:ip:blk_mem_gen:8.4\
+"
+
+   set list_ips_missing ""
+   common::send_msg_id "BD_TCL-006" "INFO" "Checking if the following IPs exist in the project's IP catalog: $list_check_ips ."
+
+   foreach ip_vlnv $list_check_ips {
+      set ip_obj [get_ipdefs -all $ip_vlnv]
+      if { $ip_obj eq "" } {
+         lappend list_ips_missing $ip_vlnv
+      }
+   }
+
+   if { $list_ips_missing ne "" } {
+      catch {common::send_msg_id "BD_TCL-115" "ERROR" "The following IPs are not found in the IP Catalog:\n  $list_ips_missing\n\nResolution: Please add the repository containing the IP(s) to the project." }
+      set bCheckIPsPassed 0
+   }
+
+}
+
+if { $bCheckIPsPassed != 1 } {
+  common::send_msg_id "BD_TCL-1003" "WARNING" "Will not continue with creation of design due to the error(s) above."
+  return 3
+}
+
 ##################################################################
 # DESIGN PROCs
 ##################################################################
@@ -157,7 +201,9 @@ proc create_hier_cell_microblaze_0_local_memory { parentCell nameHier } {
 
   # Create interface pins
   create_bd_intf_pin -mode MirroredMaster -vlnv xilinx.com:interface:lmb_rtl:1.0 DLMB
+
   create_bd_intf_pin -mode MirroredMaster -vlnv xilinx.com:interface:lmb_rtl:1.0 ILMB
+
 
   # Create pins
   create_bd_pin -dir I -type clk LMB_Clk
@@ -245,6 +291,7 @@ proc create_root_design { parentCell } {
 
   # Create interface ports
   set UART [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:uart_rtl:1.0 UART ]
+
 
   # Create ports
   set ACK_I [ create_bd_port -dir I ACK_I ]
