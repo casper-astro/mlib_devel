@@ -27,6 +27,7 @@ class skarab(YellowBlock):
 
         #inst = top.get_instance(name=self.fullname, entity='skarab_infr')
         inst = top.get_instance(name='skarab_infr', entity='skarab_infr')
+        self.fullname = 'skarab_infr'
         # mmcm specific parameters
         inst.add_parameter('MULTIPLY', self.clkparams[0])
         inst.add_parameter('DIVIDE',   self.clkparams[1])
@@ -40,7 +41,17 @@ class skarab(YellowBlock):
         inst.add_port('board_clk_rst_o',  'board_clk_rst',    dir='out')
         inst.add_port('qsfp_gtrefclk',    'qsfp_gtrefclk_0',  dir='in',  parent_sig=False) # only the first 40gbe core drives this ref clk
 
+        inst.add_port('qsfp_soft_reset_0',  'qsfp_soft_reset_0',    dir='out')
+        inst.add_port('qsfp_soft_reset_1',  'qsfp_soft_reset_1',    dir='out')
+        inst.add_port('qsfp_soft_reset_2',  'qsfp_soft_reset_2',    dir='out')
+        inst.add_port('qsfp_soft_reset_3',  'qsfp_soft_reset_3',    dir='out')
+
         inst.add_port('GND', 'GND', parent_port=True, dir='out', width=16)
+
+        inst.add_port('phy_rx_up_0', 'phy_rx_up_0', parent_sig=True, dir='in')
+        inst.add_port('phy_rx_up_1', 'phy_rx_up_1', parent_sig=True, dir='in')
+        inst.add_port('phy_rx_up_2', 'phy_rx_up_2', parent_sig=True, dir='in')
+        inst.add_port('phy_rx_up_3', 'phy_rx_up_3', parent_sig=True, dir='in')
 
         inst.add_port('eth_if_0_present', 'eth_if_0_present', parent_sig=True, dir='in')
         inst.add_port('eth_if_1_present', 'eth_if_1_present', parent_sig=True, dir='in')
