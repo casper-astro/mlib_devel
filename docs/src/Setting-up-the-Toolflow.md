@@ -9,20 +9,18 @@ The toolflow is very sensitive to mis-matching software versions. Depending on t
 2. Mathworks MATLAB / Simulink
 3. Xilinx Vivado / ISE
 
-The current compatibility matric is below
+The current compatibility matric is below:
 
-============  ====================  ==================  ==================  ===============================
-**Hardware**  **Operating System**  **Matlab Version**  **Xilinx Version**  **mlib_devel branch / commit **
-============  ====================  ==================  ==================  ===============================
-ROACH1/2      Ubuntu 14.04          2013b               ISE 14.7            branch: `roach`
-SKARAB        Ubuntu 16.04          2018a               Vivado 2019.1.1     branch: `master`
-SNAP          Ubuntu 16.04          2018a               Vivado 2019.1.1     branch: `master`
-Red Pitaya    Ubuntu 16.04          2018a               Vivado 2019.1.1     branch: `master`
-VCU118        Ubuntu 16.04          2018a               Vivado 2019.1.1     branch: `master`
-VCU128        Ubuntu 16.04          2018a               Vivado 2019.1.1     branch: `master`
-ZCU111        Ubuntu 16.04          2018a               Vivado 2019.1.1     branch: `master`
-SNAP2         Ubuntu 16.04          ???                 ???                 branch: `master`
-============  ====================  ==================  ==================  ===============================
+|  Hardware   |   Operating System  |    Matlab Version  |    Xilinx Version  |    mlib_devel branch / commit   |
+|-------------|---------------------|--------------------|--------------------|---------------------------------|
+|ROACH1/2     | Ubuntu 14.04        |  2013b             |  ISE 14.7          |  branch: `roach`                |
+|SKARAB       | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |
+|SNAP         | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |
+|Red Pitaya   | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |
+|VCU118       | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |
+|VCU128       | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |
+|ZCU111       | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |
+|SNAP2        | Ubuntu 16.04        |  ???               |  ???               |  branch: `master`               |
 
 Other software combinations may work, but these are the tested configurations.
 The master branch is usually updated once a year. Between updates, code with newer features can be found in the `casper-astro-soak-test` branch. This branch can usually be used in place of the `master` branch for platforms which support `master`. However, be aware that `casper-astro-soak-test` is likely to be less stable. Please report any bugs you encounter via github's issue tracker.
