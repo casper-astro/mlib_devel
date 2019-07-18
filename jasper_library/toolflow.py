@@ -865,6 +865,7 @@ class Toolflow(object):
 
         Obtained from: https://bitbucket.org/ricch/xml2vhdl/src/master/
         """
+        from xml2vhdl.xml2vhdl import Xml2VhdlGenerate
         # make input and output directories
         if not os.path.exists(self.xml_source_dir):
             os.makedirs(self.xml_source_dir)
@@ -872,19 +873,22 @@ class Toolflow(object):
             os.makedirs(self.xml_output_dir)
         if not os.path.exists(self.hdl_output_dir):
             os.makedirs(self.hdl_output_dir)
-        # get path to generator
-        self.xml2vhdl_path = os.getenv('XML2VHDL_PATH')
-        # Throw error to user that 'XML2VHDL_PATH' is not in their env
-        if self.xml2vhdl_path is None:
-            self.logger.error('XML2VHDL_PATH environment variable does not exist!')
-            raise Exception('XML2VHDL_PATH environment variable does not exist! Please set path to xml2vhdl.py.')
         # generate xml memory maps for input
         self.generate_xml_memory_map(self.top.memory_map)
         # generate xml interconnect for input
         self.generate_xml_ic(self.top.memory_map)
         # execute xml2vhdl script
-        self.logger.info('Running: python %sxml2vhdl.py -d %s -x %s -v %s -s %s -b %s' % (self.xml2vhdl_path, self.xml_source_dir, self.xml_output_dir, self.hdl_output_dir, 'xil_defaultlib', 'xil_defaultlib'))
-        os.system('python %sxml2vhdl.py -d %s -x %s -v %s -s %s -b %s' % (self.xml2vhdl_path, self.xml_source_dir, self.xml_output_dir, self.hdl_output_dir, 'xil_defaultlib', 'xil_defaultlib'))
+        #self.logger.info('Running: python %sxml2vhdl.py -d %s -x %s -v %s -s %s -b %s' % (self.xml2vhdl_path, self.xml_source_dir, self.xml_output_dir, self.hdl_output_dir, 'xil_defaultlib', 'xil_defaultlib'))
+        try:
+            self.logger.info("Trying to generate AXI HDL from XML")
+            Xml2VhdlGenerate(input_folder=self.xml_source_dir,
+                             xml_output=self.xml_output_dir,
+                             vhdl_output=self.hdl_output_dir,
+                             slave_library="xil_defaultlib",
+                             bus_library="xil_defaultlib")
+        except:
+            raise RuntimeError("Failed to generate AXI HDL from XML!")
+        #os.system('python %sxml2vhdl.py -d %s -x %s -v %s -s %s -b %s' % (self.xml2vhdl_path, self.xml_source_dir, self.xml_output_dir, self.hdl_output_dir, 'xil_defaultlib', 'xil_defaultlib'))
 
 
     def _gen_hdl_simulink(self, hdl_sysgen_filename):

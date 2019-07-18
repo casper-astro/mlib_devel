@@ -1,0 +1,7 @@
+numpy
+colorlog
+pyaml
+odict
+#xml2vhdl requirements
+lxml
+-e git://github.com/casper-astro/xml2vhdl.git@add_built_egg#egg=xml2vhdl_ox-0.1.16-py2.7.egg
