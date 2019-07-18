@@ -28,13 +28,14 @@
 # The offset and length fields are stored in network byte order (big endian).
 
 import re
+import os
 import sys
 import struct
 import fileinput
 
 import argparse
 
-parser = argparse.ArgumentParser(description='Convert core_info.tab to CSL form.')
+parser = argparse.ArgumentParser(description='Convert core_info.tab to CSL form.', prog=os.path.basename(__file__))
 parser.add_argument('-a', '--address', action='store',
                     default=0x1f000, type=lambda x: int(x,0),
                     help='Starting address for memory file')
