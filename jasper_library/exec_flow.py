@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import os
+import sys
 import logging
 from argparse import ArgumentParser
 import toolflow
@@ -51,6 +52,7 @@ if __name__ == '__main__':
                         "name as model")
 
     opts = parser.parse_args()
+    sys.argv = []
 
     # if we don't have the environment set up, source the default config file
     if 'XILINX_PATH' not in os.environ.keys():
