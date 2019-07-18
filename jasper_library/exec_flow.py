@@ -52,7 +52,7 @@ if __name__ == '__main__':
                         "name as model")
 
     opts = parser.parse_args()
-    sys.argv = sys.argv[0] # Keep only the script name. Flush other options
+    sys.argv = [sys.argv[0]] # Keep only the script name. Flush other options
 
     # if we don't have the environment set up, source the default config file
     if 'XILINX_PATH' not in os.environ.keys():
