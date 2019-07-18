@@ -807,10 +807,13 @@ class Toolflow(object):
                 # toolflow only currently supports 32-bit registers
                 node.set('mask', hex(0xFFFFFFFF))
                 # node.set('size', str(reg.nbytes))
-                node.set('permission', reg.mode)
+                node.set('permission', reg.mode)               
                 if reg.mode == 'r':
                     # Basically a To Processor register (status)
                     node.set('hw_permission', 'w')
+                    # Populate defaults if sys_block version registers
+                    if reg.name == 'sys_board_id' or reg.name == 'sys_rev' or reg.name == 'sys_rev_rcs': 
+                        node.set('hw_rst', str(reg.default_val))                                     		      
                 else:
                     # Only for a From Processor register (control)
                     node.set('hw_rst', str(reg.default_val))
@@ -820,7 +823,6 @@ class Toolflow(object):
                 if hasattr(reg, 'ram') and reg.ram==True:
                     node.set('hw_dp_ram', 'yes')
                     node.set('size', str(reg.nbytes/4)) # this needs to be in words not bytes!!! Dammit Janet
-
 
             # output xml file describing memory map as input for xml2vhdl
             myxml = xml.dom.minidom.parseString(ET.tostring(xml_root))
