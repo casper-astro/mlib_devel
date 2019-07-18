@@ -73,8 +73,8 @@ class red_pitaya_dac(YellowBlock):
         #To do: add timing constraints
 
         #Clock Group Constraints
-        cons.append(ClockGroupConstraint('-of_objects [get_pins red_pitaya_infr_inst/user_clk_mmcm_inst/CLKOUT0]', '-of_objects [get_pins red_pitaya_infr_inst/adc_clk_mmcm_inst/CLKOUT1]', 'asynchronous'))
-        cons.append(ClockGroupConstraint('-of_objects [get_pins red_pitaya_infr_inst/adc_clk_mmcm_inst/CLKOUT1]', '-of_objects [get_pins red_pitaya_infr_inst/user_clk_mmcm_inst/CLKOUT0]', 'asynchronous'))
+        cons.append(ClockGroupConstraint('-of_objects [get_pins red_pitaya_infr_inst/dsp_clk_mmcm_inst/CLKOUT0]', '-of_objects [get_pins red_pitaya_infr_inst/adc_clk_mmcm_inst/CLKOUT1]', 'asynchronous'))
+        cons.append(ClockGroupConstraint('-of_objects [get_pins red_pitaya_infr_inst/adc_clk_mmcm_inst/CLKOUT1]', '-of_objects [get_pins red_pitaya_infr_inst/dsp_clk_mmcm_inst/CLKOUT0]', 'asynchronous'))
         
         #cons.append(ClockGroupConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', 'aux_clk_diff_p', 'asynchronous'))
         #cons.append(ClockGroupConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', 'sync_in_p', 'asynchronous'))

@@ -1,4 +1,4 @@
-function build_cmd = jasper(model)
+function jasper(model)
 
 if nargin > 0
     build_cmd = jasper_frontend(model);
@@ -12,5 +12,17 @@ if isempty(build_cmd)
         'environment variable?']);
 end
 
-system(build_cmd)
-% end
+disp('****************************************')
+disp('*  Frontend complete!                  *')
+disp('*  Running Backend generation          *')
+disp('****************************************')
+
+rv = system(build_cmd);
+
+if rv > 0
+    error('Backend build failed! Check log files for more information');
+else
+    disp('****************************************')
+    disp('*  Backend complete!                   *')
+    disp('****************************************')
+end

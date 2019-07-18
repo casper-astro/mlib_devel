@@ -195,7 +195,7 @@ class tengbe_v2_xilinx_v6(ten_gbe):
 class tengbaser_xilinx_k7(ten_gbe):
     def __init__(self, blk, plat, hdl_root, use_gth=False):
         self.use_gth = use_gth
-        self.invert_sfp_disable = True
+        self.invert_sfp_disable = plat.conf.get('invert_sfp_disable', False)
         ten_gbe.__init__(self, blk, plat, hdl_root)
     def initialize(self):
         self.typecode = TYPECODE_ETHCORE
@@ -343,8 +343,8 @@ class tengbaser_xilinx_k7(ten_gbe):
         
         if self.platform.name == 'snap':
            cons.append(PortConstraint('tx_disable%d'%self.port, 'sfp_disable', iogroup_index=self.port))
-           cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d -asynchronous -group [get_clocks -include_generated_clocks sys_clk_p_CLK] -group [get_clocks -include_generated_clocks ref_clk_p%d_CLK]'%(num,num)))
-           cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d_usr_clk -asynchronous -group [get_clocks -of_objects [get_cells -hierarchical -filter {name=~*clk_counter*}]] -group [get_clocks -include_generated_clocks ref_clk_p%d_CLK]' % (num, num)))
+           cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d -asynchronous -group [get_clocks -include_generated_clocks sys_clk_p_CLK] -group [get_clocks -include_generated_clocks ethclk%d]'%(num,num)))
+           cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d_usr_clk -asynchronous -group [get_clocks -of_objects [get_cells -hierarchical -filter {name=~*clk_counter*}]] -group [get_clocks -include_generated_clocks ethclk%d]' % (num, num)))
         else:
            cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d -asynchronous -group [get_clocks -include_generated_clocks sys_clk_in_CLK] -group [get_clocks -include_generated_clocks ethclk%d]'%(num,num)))
            cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d_usr_clk -asynchronous -group [get_clocks -of_objects [get_cells -hierarchical -filter {name=~*clk_counter*}]] -group [get_clocks -include_generated_clocks ethclk%d]' % (num, num)))        
