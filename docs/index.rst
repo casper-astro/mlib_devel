@@ -74,7 +74,7 @@ The recommended OS is Ubuntu as it is what the majority of the collaboration are
 | VCU118      | Ubuntu 14.04/16.04 | R2017b         | Vivado 2018.2 | `vcu118 branch <https://github.com/casper-astro/mlib_devel/tree/vcu118>`__            |
 +-------------+--------------------+----------------+---------------+-------------------------------------------------------------------------+
 
-1. :doc:`Setting up the Toolflow <src/Setting-up-the-Toolflow>`
+1. :doc:`Installing the Toolflow <src/Installing-the-Toolflow>`
 2. :doc:`Installing Matlab <src/How-to-install-Matlab>`
 3. :doc:`Installing Xilinx Vivado <src/How-to-install-Xilinx-Vivado>` or :doc:`Installing Xilinx ISE (ROACH only) <src/How-to-install-Xilinx-ISE>`
 4. :doc:`Configuring the Toolflow <src/Configuring-the-Toolflow>`
@@ -85,7 +85,7 @@ The recommended OS is Ubuntu as it is what the majority of the collaboration are
     :maxdepth: 1
     :caption: Setup
 
-    src/Setting-up-the-Toolflow
+    src/Installing-the-Toolflow
     src/How-to-install-Matlab
     src/How-to-install-Xilinx-Vivado
     src/How-to-install-Xilinx-ISE
