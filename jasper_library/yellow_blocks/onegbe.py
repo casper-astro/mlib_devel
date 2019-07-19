@@ -294,7 +294,7 @@ class onegbe_vcu128(onegbe):
 	    gbe_pcs.add_port('rx_vtc_rdy_3', '1\'b1')
             
             # Referene pg047
-            gbe_pcs.add_port('dummy_port_in',self.fullname+'_dummy_port_in',dir='out',parent_port=True)
+            gbe_pcs.add_port('dummy_port_in',self.fullname+'_dummy_port_in',dir='in',parent_port=True)
 
             # AB: Pin not present on xcvu37p
             #top.add_port('phy_rst_n', dir='out', width=0)
