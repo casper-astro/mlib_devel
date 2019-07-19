@@ -14,6 +14,7 @@ The CASPER toolflow allows you to generate signal processing designs using MATLA
 For more information about installing and using the CASPER Toolflow, see the project's [documentation](https://casper-toolflow.readthedocs.io).
 
 If you want to build the documentation for a particular version of this repository you can do so by following [these instructions](docs/README.md).
+This may be useful if, for example, you're trying to do old (ROACH2) versions of tutorials.
 
 ## Tutorials
 
