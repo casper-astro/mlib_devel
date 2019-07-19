@@ -292,6 +292,9 @@ class onegbe_vcu128(onegbe):
             gbe_pcs.add_port('rx_vtc_rdy_1', '1\'b1')
             gbe_pcs.add_port('rx_vtc_rdy_2', '1\'b1')
 	    gbe_pcs.add_port('rx_vtc_rdy_3', '1\'b1')
+            
+            # Referene pg047
+            gbe_pcs.add_port('dummy_port_in',self.fullname+'_dummy_port_in',dir='out',parent_port=True)
 
             # AB: Pin not present on xcvu37p
             #top.add_port('phy_rst_n', dir='out', width=0)
@@ -309,7 +312,7 @@ class onegbe_vcu128(onegbe):
    
         def gen_constraints(self):
             consts = []
-                 
+            consts += [PortConstraint(self.fullname+'_dummy_port_in', 'gbe_phy_rx_bitslice')]     
             consts += [PortConstraint(self.fullname+'_tx_p', 'gbe_phy_sgmii_in_p')]
             consts += [PortConstraint(self.fullname+'_tx_n', 'gbe_phy_sgmii_in_n')]
             consts += [PortConstraint(self.fullname+'_rx_p', 'gbe_phy_sgmii_out_p')]
