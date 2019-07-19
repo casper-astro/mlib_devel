@@ -32,6 +32,15 @@ update_casper_blocks(bdroot)
 This script will resynchronize every CASPER block in your design with its latest library version. Depending on the size of your model, it may take many minutes to complete!
 As always, **back up your designs before attempting such a major operation**. And, if you experience problems, please raise Github issues!
 
+### Upgrade Notes
+
+As of version 2.0.0, chances are (if you're using the suggested MATLAB / OS versions) you'll need to add the following to your `startsg.local` file
+
+```
+export LD_PRELOAD=${LD_PRELOAD}:"/usr/lib/x86_64-linux-gnu/libexpat.so"
+```
+See the installation instructions for more information
+
 ## Directory structure
 
 <dl>
