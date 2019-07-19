@@ -62,19 +62,19 @@ The software stack you will require to use the toolflow will depend what hardwar
 
 The recommended OS is Ubuntu as it is what the majority of the collaboration are using. This makes it easier for us to support you. If you are so inclined, you could also use Red Hat, but we definitely do not support Windows. You are welcome to try but you will be on your own. You could always run Linux in a VM although this will increase your compile times.
 
-+-------------+--------------------+----------------+---------------+-------------------------------------------------------------------------+
-| Platform    | OS                 | Matlab Version | Xilinx Tools  | mlib_devel                                                              |
-+=============+====================+================+===============+=========================================================================+
-| ROACH1 or 2 | Ubuntu 12.04/14.04 | R2013b         | ISE 14.7      | `ROACH branch <https://github.com/casper-astro/mlib_devel/tree/roach2>`__ |
-+-------------+--------------------+----------------+---------------+-------------------------------------------------------------------------+
-| SNAP        | Ubuntu 14.04/16.04 | R2016b         | Vivado 2016.4 | `Master branch <https://github.com/casper-astro/mlib_devel>`__            |
-+-------------+--------------------+----------------+---------------+-------------------------------------------------------------------------+
-| SKARAB      | Ubuntu 14.04/16.04 | R2016b         | Vivado 2016.2 | `Master branch <https://github.com/casper-astro/mlib_devel>`__            |
-+-------------+--------------------+----------------+---------------+-------------------------------------------------------------------------+
-| VCU118      | Ubuntu 14.04/16.04 | R2017b         | Vivado 2018.2 | `vcu118 branch <https://github.com/casper-astro/mlib_devel/tree/vcu118>`__            |
-+-------------+--------------------+----------------+---------------+-------------------------------------------------------------------------+
++-------------+--------------------+----------------+---------------+----------------------------------------------------------------------------+
+| Platform    | OS                 | Matlab Version | Xilinx Tools  | mlib_devel                                                                 |
++=============+====================+================+===============+============================================================================+
+| ROACH1 or 2 | Ubuntu 12.04/14.04 | R2013b         | ISE 14.7      | `ROACH branch <https://github.com/casper-astro/mlib_devel/tree/roach2>`__  |
++-------------+--------------------+----------------+---------------+----------------------------------------------------------------------------+
+| SNAP        | Ubuntu 14.04/16.04 | R2016b         | Vivado 2016.4 | `Master branch <https://github.com/casper-astro/mlib_devel>`__             |
++-------------+--------------------+----------------+---------------+----------------------------------------------------------------------------+
+| SKARAB      | Ubuntu 14.04/16.04 | R2016b         | Vivado 2016.2 | `Master branch <https://github.com/casper-astro/mlib_devel>`__             |
++-------------+--------------------+----------------+---------------+----------------------------------------------------------------------------+
+| VCU118      | Ubuntu 14.04/16.04 | R2017b         | Vivado 2018.2 | `vcu118 branch <https://github.com/casper-astro/mlib_devel/tree/vcu118>`__ |
++-------------+--------------------+----------------+---------------+----------------------------------------------------------------------------+
 
-1. :doc:`Setting up the Toolflow <src/Setting-up-the-Toolflow>`
+1. :doc:`Installing the Toolflow <src/Installing-the-Toolflow>`
 2. :doc:`Installing Matlab <src/How-to-install-Matlab>`
 3. :doc:`Installing Xilinx Vivado <src/How-to-install-Xilinx-Vivado>` or :doc:`Installing Xilinx ISE (ROACH only) <src/How-to-install-Xilinx-ISE>`
 4. :doc:`Configuring the Toolflow <src/Configuring-the-Toolflow>`
@@ -85,7 +85,7 @@ The recommended OS is Ubuntu as it is what the majority of the collaboration are
     :maxdepth: 1
     :caption: Setup
 
-    src/Setting-up-the-Toolflow
+    src/Installing-the-Toolflow
     src/How-to-install-Matlab
     src/How-to-install-Xilinx-Vivado
     src/How-to-install-Xilinx-ISE
