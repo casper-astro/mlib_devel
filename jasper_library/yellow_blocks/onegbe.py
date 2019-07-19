@@ -1,7 +1,7 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from constraints import PortConstraint, ClockConstraint, FalsePathConstraint, RawConstraint
 from helpers import to_int_list
-from yellow_block_typecodes import *
+from .yellow_block_typecodes import *
 
 class onegbe(YellowBlock):
     @staticmethod

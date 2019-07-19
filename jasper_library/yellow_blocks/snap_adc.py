@@ -1,7 +1,7 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from verilog import VerilogModule
 from constraints import PortConstraint, ClockConstraint, RawConstraint
-from yellow_block_typecodes import *
+from .yellow_block_typecodes import *
 import math, numpy as np
 
 class snap_adc(YellowBlock):
@@ -197,8 +197,8 @@ class snap_adc(YellowBlock):
         cons.append(PortConstraint('adc0_adc3wire_csn1',   'adc_csn', iogroup_index=0))
         cons.append(PortConstraint('adc0_adc3wire_csn2',   'adc_csn', iogroup_index=1))
         cons.append(PortConstraint('adc0_adc3wire_csn3',   'adc_csn', iogroup_index=2))
-        cons.append(PortConstraint('adc0_adc3wire_sdata', 'adc_sdata', port_index=range(3), iogroup_index=range(3)))
-        cons.append(PortConstraint('adc0_adc3wire_sclk',  'adc_sclk', port_index=range(3), iogroup_index=range(3)))
+        cons.append(PortConstraint('adc0_adc3wire_sdata', 'adc_sdata', port_index=list(range(3)), iogroup_index=list(range(3))))
+        cons.append(PortConstraint('adc0_adc3wire_sclk',  'adc_sclk', port_index=list(range(3)), iogroup_index=list(range(3))))
 
         cons.append(PortConstraint('adc16_clk_line_p',  'adc_lclkp', iogroup_index=0))
         cons.append(PortConstraint('adc16_clk_line_n',  'adc_lclkn', iogroup_index=0))
@@ -229,27 +229,27 @@ class snap_adc(YellowBlock):
         bp_index = [2, 6, 10, 14]
         bn_index = [3, 7, 11, 15]
 
-        cons.append(PortConstraint('adc16_ser_a_p', 'adc0_out', port_index=range(4), iogroup_index=ap_index))
-        cons.append(PortConstraint('adc16_ser_a_n', 'adc0_out', port_index=range(4), iogroup_index=an_index))
-        cons.append(PortConstraint('adc16_ser_b_p', 'adc0_out', port_index=range(4), iogroup_index=bp_index))
-        cons.append(PortConstraint('adc16_ser_b_n', 'adc0_out', port_index=range(4), iogroup_index=bn_index))
+        cons.append(PortConstraint('adc16_ser_a_p', 'adc0_out', port_index=list(range(4)), iogroup_index=ap_index))
+        cons.append(PortConstraint('adc16_ser_a_n', 'adc0_out', port_index=list(range(4)), iogroup_index=an_index))
+        cons.append(PortConstraint('adc16_ser_b_p', 'adc0_out', port_index=list(range(4)), iogroup_index=bp_index))
+        cons.append(PortConstraint('adc16_ser_b_n', 'adc0_out', port_index=list(range(4)), iogroup_index=bn_index))
 
-        cons.append(PortConstraint('adc16_ser_a_p', 'adc1_out', port_index=range(4,8), iogroup_index=ap_index))
-        cons.append(PortConstraint('adc16_ser_a_n', 'adc1_out', port_index=range(4,8), iogroup_index=an_index))
-        cons.append(PortConstraint('adc16_ser_b_p', 'adc1_out', port_index=range(4,8), iogroup_index=bp_index))
-        cons.append(PortConstraint('adc16_ser_b_n', 'adc1_out', port_index=range(4,8), iogroup_index=bn_index))
+        cons.append(PortConstraint('adc16_ser_a_p', 'adc1_out', port_index=list(range(4,8)), iogroup_index=ap_index))
+        cons.append(PortConstraint('adc16_ser_a_n', 'adc1_out', port_index=list(range(4,8)), iogroup_index=an_index))
+        cons.append(PortConstraint('adc16_ser_b_p', 'adc1_out', port_index=list(range(4,8)), iogroup_index=bp_index))
+        cons.append(PortConstraint('adc16_ser_b_n', 'adc1_out', port_index=list(range(4,8)), iogroup_index=bn_index))
 
-        cons.append(PortConstraint('adc16_ser_a_p', 'adc2_out', port_index=range(8,12), iogroup_index=ap_index))
-        cons.append(PortConstraint('adc16_ser_a_n', 'adc2_out', port_index=range(8,12), iogroup_index=an_index))
-        cons.append(PortConstraint('adc16_ser_b_p', 'adc2_out', port_index=range(8,12), iogroup_index=bp_index))
-        cons.append(PortConstraint('adc16_ser_b_n', 'adc2_out', port_index=range(8,12), iogroup_index=bn_index))
+        cons.append(PortConstraint('adc16_ser_a_p', 'adc2_out', port_index=list(range(8,12)), iogroup_index=ap_index))
+        cons.append(PortConstraint('adc16_ser_a_n', 'adc2_out', port_index=list(range(8,12)), iogroup_index=an_index))
+        cons.append(PortConstraint('adc16_ser_b_p', 'adc2_out', port_index=list(range(8,12)), iogroup_index=bp_index))
+        cons.append(PortConstraint('adc16_ser_b_n', 'adc2_out', port_index=list(range(8,12)), iogroup_index=bn_index))
 
         if self.i_am_the_first:
-            cons.append(PortConstraint('clk_sel_a', 'clk_sel_a', port_index=range(1), iogroup_index=range(1)))
-            cons.append(PortConstraint('clk_sel_b', 'clk_sel_b', port_index=range(1), iogroup_index=range(1)))
+            cons.append(PortConstraint('clk_sel_a', 'clk_sel_a', port_index=list(range(1)), iogroup_index=list(range(1))))
+            cons.append(PortConstraint('clk_sel_b', 'clk_sel_b', port_index=list(range(1)), iogroup_index=list(range(1))))
 
-        cons.append(PortConstraint('adc_rst_n', 'adc_rst_n', port_index=range(3), iogroup_index=range(3)))
-        cons.append(PortConstraint('adc_pd', 'adc_pd', port_index=range(3), iogroup_index=range(3)))
+        cons.append(PortConstraint('adc_rst_n', 'adc_rst_n', port_index=list(range(3)), iogroup_index=list(range(3))))
+        cons.append(PortConstraint('adc_pd', 'adc_pd', port_index=list(range(3)), iogroup_index=list(range(3))))
         
         # clock constraint with variable period
         clkconst = ClockConstraint('adc16_clk_line_p', name='adc_clk', freq=self.line_clock_freq)

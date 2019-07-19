@@ -6,9 +6,9 @@ def to_int_list(s):
     s = str(s)
 
     try:
-        return map(int,s.rstrip(']').lstrip('[').split(','))
+        return list(map(int,s.rstrip(']').lstrip('[').split(',')))
     except ValueError:
-        return map(int,s.rstrip(']').lstrip('[').split())
+        return list(map(int,s.rstrip(']').lstrip('[').split()))
 
 def write_file(fn,str):
     '''

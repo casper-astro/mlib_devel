@@ -1,7 +1,7 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from constraints import PortConstraint, ClockConstraint, RawConstraint
 from itertools import count
-from yellow_block_typecodes import *
+from .yellow_block_typecodes import *
 
 class ten_gbe(YellowBlock):
     @staticmethod
@@ -176,13 +176,13 @@ class tengbe_v2_xilinx_v6(ten_gbe):
 
     def gen_constraints(self):
         cons = []
-        cons.append(PortConstraint('xaui_refclk_p', 'xaui_refclk_p', port_index=range(3), iogroup_index=range(3)))
-        cons.append(PortConstraint('xaui_refclk_n', 'xaui_refclk_n', port_index=range(3), iogroup_index=range(3)))
+        cons.append(PortConstraint('xaui_refclk_p', 'xaui_refclk_p', port_index=list(range(3)), iogroup_index=list(range(3))))
+        cons.append(PortConstraint('xaui_refclk_n', 'xaui_refclk_n', port_index=list(range(3)), iogroup_index=list(range(3))))
 
-        cons.append(PortConstraint('mgt_gpio', 'mgt_gpio', port_index=range(12), iogroup_index=range(12)))
+        cons.append(PortConstraint('mgt_gpio', 'mgt_gpio', port_index=list(range(12)), iogroup_index=list(range(12))))
 
-        index = range(4*self.port, 4*(self.port + 1))
-        print index
+        index = list(range(4*self.port, 4*(self.port + 1)))
+        print(index)
         cons.append(PortConstraint('mgt_tx_p', 'mgt_tx_p', port_index=index, iogroup_index=index))
         cons.append(PortConstraint('mgt_tx_n', 'mgt_tx_n', port_index=index, iogroup_index=index))
         cons.append(PortConstraint('mgt_rx_p', 'mgt_rx_p', port_index=index, iogroup_index=index))

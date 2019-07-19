@@ -1,6 +1,6 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from memory import Register
-from yellow_block_typecodes import *
+from .yellow_block_typecodes import *
 
 class sys_block(YellowBlock):
     def initialize(self):

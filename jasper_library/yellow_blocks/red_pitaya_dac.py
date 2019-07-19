@@ -1,5 +1,5 @@
 import os
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from constraints import PortConstraint, ClockConstraint, ClockGroupConstraint, MultiCycleConstraint, \
     OutputDelayConstraint, RawConstraint, FalsePathConstraint
 from helpers import to_int_list
@@ -63,7 +63,7 @@ class red_pitaya_dac(YellowBlock):
         cons = []
         
         # Pin Constraints
-        cons.append(PortConstraint('DAC_DATA_OUT', 'DAC_DATA_OUT', port_index=range(self.bits), iogroup_index=range(self.bits)))
+        cons.append(PortConstraint('DAC_DATA_OUT', 'DAC_DATA_OUT', port_index=list(range(self.bits)), iogroup_index=list(range(self.bits))))
         cons.append(PortConstraint('DAC_IQWRT', 'DAC_IQWRT'))
         cons.append(PortConstraint('DAC_IQSEL', 'DAC_IQSEL'))
         cons.append(PortConstraint('DAC_IQCLK', 'DAC_IQCLK'))

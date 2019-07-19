@@ -1,5 +1,5 @@
 import os
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from constraints import PortConstraint, ClockConstraint, GenClockConstraint, ClockGroupConstraint, InputDelayConstraint,\
     OutputDelayConstraint, MaxDelayConstraint, MinDelayConstraint, FalsePathConstraint, MultiCycleConstraint, RawConstraint
 from itertools import count
@@ -346,15 +346,15 @@ class forty_gbe(YellowBlock):
         periodparam = clk_factors(156.25, self.platform.user_clk_rate)
 
         #Port constraints
-        cons.append(PortConstraint('MEZ3_'+self.mez3_phy+'_LANE_TX_P', 'MEZ3_'+self.mez3_phy+'_LANE_TX_P', port_index=range(4),  iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ3_'+self.mez3_phy+'_LANE_TX_N', 'MEZ3_'+self.mez3_phy+'_LANE_TX_N', port_index=range(4),  iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ3_'+self.mez3_phy+'_LANE_RX_P', 'MEZ3_'+self.mez3_phy+'_LANE_RX_P', port_index=range(4),  iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ3_'+self.mez3_phy+'_LANE_RX_N', 'MEZ3_'+self.mez3_phy+'_LANE_RX_N', port_index=range(4),  iogroup_index=range(4)))
+        cons.append(PortConstraint('MEZ3_'+self.mez3_phy+'_LANE_TX_P', 'MEZ3_'+self.mez3_phy+'_LANE_TX_P', port_index=list(range(4)),  iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ3_'+self.mez3_phy+'_LANE_TX_N', 'MEZ3_'+self.mez3_phy+'_LANE_TX_N', port_index=list(range(4)),  iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ3_'+self.mez3_phy+'_LANE_RX_P', 'MEZ3_'+self.mez3_phy+'_LANE_RX_P', port_index=list(range(4)),  iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ3_'+self.mez3_phy+'_LANE_RX_N', 'MEZ3_'+self.mez3_phy+'_LANE_RX_N', port_index=list(range(4)),  iogroup_index=list(range(4))))
        
-        cons.append(PortConstraint('FLASH_DQ',             'FLASH_DQ',             port_index=range(16), iogroup_index=range(16)))
-        cons.append(PortConstraint('USB_FPGA',             'USB_FPGA',             port_index=range(4),  iogroup_index=range(4)))
-        cons.append(PortConstraint('FLASH_A',              'FLASH_A',              port_index=range(29), iogroup_index=range(29)))
-        cons.append(PortConstraint('GND',                  'GND',                  port_index=range(16), iogroup_index=range(16)))
+        cons.append(PortConstraint('FLASH_DQ',             'FLASH_DQ',             port_index=list(range(16)), iogroup_index=list(range(16))))
+        cons.append(PortConstraint('USB_FPGA',             'USB_FPGA',             port_index=list(range(4)),  iogroup_index=list(range(4))))
+        cons.append(PortConstraint('FLASH_A',              'FLASH_A',              port_index=list(range(29)), iogroup_index=list(range(29))))
+        cons.append(PortConstraint('GND',                  'GND',                  port_index=list(range(16)), iogroup_index=list(range(16))))
         cons.append(PortConstraint('ONE_GBE_INT_N', 'ONE_GBE_INT_N'))
         cons.append(PortConstraint('FPGA_RESET_N', 'FPGA_RESET_N'))
         cons.append(PortConstraint('FLASH_WE_N', 'FLASH_WE_N'))
@@ -458,7 +458,7 @@ class forty_gbe(YellowBlock):
         cons.append(PortConstraint('CONFIG_IO_11','CONFIG_IO_11'))
 
         # - Front Panel LED constraints
-        cons.append(PortConstraint(portname='FPGA_LEDS', iogroup='led', port_index=range(8), iogroup_index=range(8)))
+        cons.append(PortConstraint(portname='FPGA_LEDS', iogroup='led', port_index=list(range(8)), iogroup_index=list(range(8))))
         cons.append(MaxDelayConstraint(destpath='[get_ports {FPGA_LEDS[*]}]', constdelay_ns=1.0))
         cons.append(MinDelayConstraint(destpath='[get_ports {FPGA_LEDS[*]}]', constdelay_ns=1.0))
         cons.append(FalsePathConstraint(destpath='[get_ports {FPGA_LEDS[*]}]'))
