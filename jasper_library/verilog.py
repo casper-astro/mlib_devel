@@ -7,10 +7,13 @@ at some point.
 
 import os
 import re
-from math import ceil, floor
+from math import ceil, floor, log
 import logging
 import inspect
 import operator
+from memory import Register
+import pdb
+from yellow_blocks.yellow_block_typecodes import *
 
 logger = logging.getLogger('jasper.verilog')
 
@@ -74,6 +77,42 @@ class WbDevice(object):
         self.memory_map = memory_map
         #: If using multiple bus arbiters, which arbiter should this slave attach to?
         self.sub_arb_id = 0
+
+# TODO: This class is the same as the Wishbone class? What's the point of it?
+class AXI4LiteDevice(object):
+    """
+    A class to encapsulate the parameters (name, size, etc.) of a AXI4-Lite slave device.
+    """
+    def __init__(self, regname, nbytes, mode, hdl_suffix='', hdl_candr_suffix='', memory_map=[], typecode=0xff):
+        """
+        Class constructor.
+
+        :param regname: Name of register (this name is the string used to access the register from software)
+        :type regname: String
+        :param nbytes: Number of bytes in this slave's memory space.
+        :type nbytes: Integer
+        :param mode: Permissions ('r': readable, 'w': writable, 'rw': read/writeable)
+        :type mode: String
+        :param hdl_suffix: Suffix given to wishbone port names. Eg. if `hdl_suffix = foo`, ports have the form `wbs_dat_i_foo`
+        :type hdl_suffix: String
+        :param hdl_candr_suffix: Suffix given to wishbone clock and reset port names. Eg. if `hdl_suffix = foo`, ports have the form `wbs_clk_i_foo`
+        :type hdl_candr_suffix: String
+        :param memory_map: A list or `Register` instances defining the contents of sub-blocks of this device's memory.
+        :type memory_map: list
+        :param typecode: Typecode number (0-255) identifying the type of this block. See `yellow_block_typecodes.py`
+        :type typecode: Integer
+        """
+        self.typecode = typecode
+        self.regname = regname
+        self.nbytes = nbytes
+        self.mode=mode
+        #: Start (lowest) address of the memory space used by this device, in bytes.
+        self.base_addr = None
+        #: End (highest) address of the memory space used by this device, in bytes.
+        self.high_addr = None
+        self.hdl_suffix = hdl_suffix
+        self.hdl_candr_suffix = hdl_candr_suffix
+        self.memory_map = memory_map
 
 class Port(ImmutableWithComments):
     """
@@ -531,6 +570,11 @@ class VerilogModule(object):
         self.wb_base = []
         self.wb_high = []
         self.wb_name = []
+        # AXI4-Lite stuff
+        self.n_axi4lite_slaves = 0 # axi4lite slaves added to this module programmatically
+        self.axi4lite_devices = []
+        self.n_axi4lite_interfaces = 0 # axi4lite interfaces to this module
+        self.memory_map = {}
         # sourcefiles required by the module (this is currently NOT
         # how the jasper toolflow implements source management)
         self.sourcefiles = []
@@ -638,6 +682,127 @@ class VerilogModule(object):
                 instantiate_wb_arb_module(self, self.n_wb_slaves)
             self.add_localparam('SLAVE_ADDR', base_addrs)
             self.add_localparam('SLAVE_HIGH', high_addrs)
+
+    def axi4lite_memory_map(self, base_addr=0x10000, alignment=4):
+        """
+        This function is only to be called by the 'top' verilog module after all other yellow blocks have called 'modify_top', but
+        before the axi4lite_interconnect yellow block class has called 'modify_top' as that class requires the memory map this creates.
+
+        :param base_addr: The address from which indexing of instance axi4lite interfaces will begin. Any memory space required by the template verilog file should be below this address.
+        :type base_addr: int
+        :param alignment: Alignment required by all memory start addresses.
+        :type alignment: int
+
+        memory map: 
+        keys: name of AXI4-Lite interfaces.
+        values: 
+         - 'memory_map': internal memory map for this interface
+         - 'size': size of internal memory map in bytes
+         - 'absolute_address': actual address in memory determined by base_addr
+         - 'relative_address': address relative to base_addr
+         - 'axi4lite_devices': List of AXI4LiteDevice objects for core_info backwards compatibility
+        """
+        #TODO: WHOEVER WROTE THIS CODE -- WHAT IS IT SUPPOSED TO DO?
+        # Need to get the register map in size order for xmltovhdl
+        # For this use odict
+
+        import odict
+
+        # I'm just going to go ahead and guess. :-S
+
+        # All software registers get ganged together in one self.memory_map entry,
+        # called 'sw_reg'. These ultimately become a bunch of ports in the AXI interconnect
+        # Each Bram gets its own memory_map entry, with a name matching the one provided
+        # when the ram was instantiated via YellowBlock.add_axi4lite_interface.
+        
+        for dev in self.axi4lite_devices:
+            # add all software registers to one memory mapped AXI4-Lite interface
+            if dev.typecode == TYPECODE_SWREG:
+                # check to see if this is the first sw_reg in the memory_map dict
+                if 'sw_reg' not in self.memory_map:
+                    # Make new interface dict for software registers
+                    self.memory_map['sw_reg'] = {}
+                    interface = self.memory_map['sw_reg']
+                    interface['size'] = dev.nbytes
+                    interface['memory_map'] = dev.memory_map
+                    # erase dev.memory_map so that core_info doesn't add sw_regs twice
+                    # ?????
+                    dev.memory_map = []
+                    interface['axi4lite_devices'] = [dev]
+                else:
+                    # add another sw_reg to this interface dict
+                    interface = self.memory_map['sw_reg']
+                    # adjust offset of register
+                    dev.memory_map[0].offset = interface['size']
+                    # grow size of interface
+                    interface['size'] += dev.nbytes
+                    # append device memory_map
+                    interface['memory_map'] += dev.memory_map
+                    # # erase dev.memory_map so that core_info doesn't add sw_regs twice
+                    dev.memory_map = []
+                    interface['axi4lite_devices'] += [dev]
+            elif dev.typecode == TYPECODE_BRAM:
+                # tell the axi_ic to generate a bram
+                self.memory_map[dev.regname] = {}
+                interface = self.memory_map[dev.regname]
+                interface['size'] = dev.nbytes # seems brams need to be sized in bytes not words
+                interface['memory_map'] = dev.memory_map
+                interface['axi4lite_devices'] = [dev]
+                # erase dev.memory_map so that core_info doesn't add brams twice
+                # only a mad man would attempt to debug this!
+                # And here I am. Please document this code better.
+                dev.memory_map = []
+            else:
+                # add all other yellow blocks to their own interface and make xml memory map
+                self.memory_map[dev.regname] = {}
+                interface = self.memory_map[dev.regname]
+                interface['size'] = dev.nbytes
+                interface['memory_map'] = dev.memory_map
+                interface['axi4lite_devices'] = [dev]
+
+        relative_address = 0
+        # Now loop over interfaces in memory_map to determine addresses.
+        # A limitation / feature of the xml2vhdl axi generation code is that it expects
+        # all memory-mapped devices of size N-bytes to by aligned on N-byte boundaries.
+        # Thus, we can't put a 4-byte register at address 0x0, and then a 1kiB bram at address 0x4.
+        # Though not foolproof, we try and coerce an acceptable layout by placing the devices
+        # in size order with the largest first. Hopefully all the devices are 2^n bytes in size --
+        # this seems to be enforced by the xml2vhdl generator
+
+        # First *we* round up the sizes so we agree with xml2vhdl
+        for key in self.memory_map.keys():
+            self.memory_map[key]['size'] = 2**int(ceil(log(self.memory_map[key]['size'], 2)))
+
+        ordered_memory_map = odict.odict()
+        # quick sort be damned. Go slow.
+        while(len(self.memory_map) > 0):
+            max_size = 0
+            for key,val in self.memory_map.items():
+                if val['size'] > max_size:
+                    max_size = val['size']
+                    max_key = key
+            ordered_memory_map[max_key] = self.memory_map.pop(max_key)
+
+        # Now replace the memory map with the ordered one and continue
+        self.memory_map = ordered_memory_map.copy()
+
+        for key,val in self.memory_map.items():
+            val['relative_address'] = hex(relative_address)
+            # this is really gross, but didn't want to rewrite anything in core_info... Sorry.
+            if key == 'sw_reg':
+                # loop over registers and axi4lite_devices, assign correct dev.base_addr for core_info
+                # There could be a better python one-liner to do this but idk...
+                for reg in val['memory_map']:
+                    for dev in val['axi4lite_devices']:
+                        # if names match, set base_addr from interface's base_addr + core addr + register offset
+                        if reg.name == dev.regname:
+                            dev.base_addr = base_addr + relative_address + reg.offset
+            else:
+                # 'base_addr' for interface (for core_info to reference later)
+                val['axi4lite_devices'][0].base_addr = base_addr + relative_address
+            # adjust addresses for next loop
+            relative_address = relative_address + (alignment*int(ceil(val['size']/float(alignment))))
+
 
 
     def get_base_wb_slaves(self):
@@ -1128,8 +1293,6 @@ class VerilogModule(object):
                 n = 0
                 for paramname, parameter in sorted(self.parameters[block].items()):
                     s += '    .%s(%s)'%(parameter.name, parameter.value)
-                    print('%s(%s)'%(parameter.name, parameter.value))
-                    print('n: %s\n n_params: %s'%(n,n_params))
                     if n != (n_params - 1):
                         s += ',\n'
                     else:
@@ -1202,6 +1365,25 @@ class VerilogModule(object):
         self.add_port('wb_dat_o'+suffix, signal='wbs_dat_i[(%s+1)*32-1:(%s)*32]'%(wb_id,wb_id), width=32, parent_sig=False)
         self.add_port('wb_ack_o'+suffix, signal='wbs_ack_i[%s]'%wb_id,parent_sig=False)
         self.add_port('wb_err_o'+suffix, signal='wbs_err_i[%s]'%wb_id,parent_sig=False)
+
+    def add_axi4lite_interface(self, regname, mode, nbytes=4, default_val=0, suffix='', candr_suffix='', memory_map=[], typecode=0xff):
+        """
+        Add the ports necessary for a AXI4-Lite slave interface.
+
+        This function returns the AXI4LiteDevice object, so the caller can mess with it's memory map
+        if they so desire.
+        """
+        if regname in [axi_dev.regname for axi_dev in self.axi4lite_devices]:
+            return
+        else:
+            # Make single register in memory_map if memory_map is empty
+            if not memory_map:
+                memory_map = [Register(regname, nbytes=nbytes, offset=0, mode=mode, default_val=default_val, ram_size=nbytes if typecode==4 else -1, ram=True if typecode==4 else False)]
+            axi4lite_device = AXI4LiteDevice(regname, nbytes=nbytes, mode=mode, hdl_suffix=suffix, hdl_candr_suffix=candr_suffix, memory_map=memory_map, typecode=typecode)
+            self.axi4lite_devices += [axi4lite_device]
+            self.n_axi4lite_interfaces += 1
+            return axi4lite_device
+
 
     def search_dict_for_name(self, dict, name):
         """

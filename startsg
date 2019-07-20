@@ -21,6 +21,7 @@
 #                                                                         #
 ###########################################################################
 
+
 # Find canonical ("real") directory of this script
 SCRIPT_DIR=$(dirname `readlink -e "${BASH_SOURCE[0]}"`)
 #echo "SCRIPT_DIR=${SCRIPT_DIR}"
@@ -132,6 +133,8 @@ echo "Using XILINX_PATH=${XILINX_PATH}"
 echo "Using PLATFORM=${PLATFORM}"
 echo "Using MLIB_DEVEL_PATH=${MLIB_DEVEL_PATH}"
 echo "Using JASPER_BACKEND=${JASPER_BACKEND}"
+echo "Using XML2VHDL_PATH=${XML2VHDL_PATH}"
+echo "Using LD_PRELOAD=${LD_PRELOAD}"
 
 # Finish environment setup
 export SYSGEN_SCRIPT="$MLIB_DEVEL_PATH/startsg"
@@ -162,6 +165,8 @@ then
   # (so MATLAB will find our startup.m file).
   cd "${MLIB_DEVEL_PATH}"
 
-  # Start sysgen
-  "${XILINX_PATH}/bin/sysgen"
+  # Start sysgen in OPENGL graphics mode to prevent java errors
+  "${XILINX_PATH}/bin/sysgen" -softwareopengl
+
 fi
+

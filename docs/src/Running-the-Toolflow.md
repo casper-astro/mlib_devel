@@ -1,6 +1,6 @@
 # Running the Toolflow
 
-1) There are two ways of working with the [new, Vivado-based] CASPER toolflow. You can do this initially with the MATLAB GUI to compile the front end and then handle the middleware and backend generation using Python or you can run everything in Python. The former stage is more for design and debugging (steps 2-11) and the later stage (steps 12-15) is for the final tested and working design. This How To will cover both methods.
+1) There are two ways of working with the (new, Vivado-based) CASPER toolflow. You can do this initially with the MATLAB GUI to compile the front end and then handle the middleware and backend generation using Python or you can run everything in Python. The former stage is more for design and debugging (steps 2-11) and the later stage (steps 12-15) is for the final tested and working design. This How-to will cover both methods.
 
 2) **Matlab/Python method:** Using the terminal, type the following under "mlib_devel": 
 `./startsg` 
@@ -33,46 +33,58 @@ This command will execute the middleware, which calls the yellow block construct
 
 10) **Matlab/Python method:** Using the terminal, wait until the design has finished compiling. Vivado compiles should indicate that there are no timing violations. Check the slack times for the setup and hold reports. They should not be negative. If they are then your design is not meeting timing and some changes will need to be made to your design.
 
-11) **Matlab/Python method:** The output directories are generated where the *.slx file sits. In my case, because I was using “test_snap.slx”, the directories were generated under “jasper_library/test_models/test_snap”. The following directories were created under “test_snap” and should be the same as yours: “sysgen” (contains the system generator files), “outputs” (contains the bof and fpg files) and “myproj” (contains the Vivado projects files, source files, synth results and implementation results. The bin and bit files are also stored here). 
+11) **Matlab/Python method:** The output directories are generated where the *.slx file sits. For example, building for `test_snap.slx` results in the following directories being generated under `jasper_library/test_models/test_snap/`:
+    * `sysgen/`: contains the system generator files,
+    * `outputs/`: contains the bof and fpg files, and
+    * `myproj/`: contains the Vivado projects files, source files, synth results and implementation results. The bin and bit files are also stored here. 
 
     **NB:** Instead of running “jasper_frontend” from the Matlab command window, you can run “jasper”, which will do all the above steps from 6) to now, but all display output will be routed through the Matlab Command window.   
 
-12) **Python method:** Before I explain this method it is important to explain how the “exec_flow” command works and the arguments that are passed to it. The “exec_flow”, which stands for “execution flow” can either run the whole flow or just parts of the flow depending on the needs of the user. The Vivado compile is done using project mode only. I have already explained the `--middleware`, `--backend` and `--software` arguments in step 9) above. There is also a `--perfile` and `--frontend` argument, which is not needed in the Matlab/Python method, but is required for the Python method. The `--perfile` and `--frontend` arguments run the yellow block peripheral file generation and the system generator compile, respectively. It is identical to running “jasper_frontend” from the command window in Matlab - see Matlab/Python method above. Below is a list of the “exec_flow” arguments.
-    * `--perfile`. Runs the front end peripheral file generation. If not specified, then it won’t generate the peripheral file.
-    * `--frontend`. This compiles the front end IP, which basically runs the system generator. If not specified, then the compile will not be run.
-    * `--middleware`. This runs the tool flow middle process. If not specified, then this process will not be run.
-    * `--backend`. This runs the backend compilation i.e. Xilinx Vivado or ISE. If not specified, then this process will not be run.
-    * `--software`. This runs the software compilation - generates a *.bof and *.fpg file. If not specified, then this process will not be run.
-    * `--be`. This specifies the type of backend to be run. This is “--be vivado”, but provision has been made for other backends. If this is not specified, then the d default is the Vivado backend.
-    * `--jobs`. The number of processor cores to run the compile with. If this is not specified, the default is 4. You need to make sure that your processor has at least 4 threads if this is to work.
-    * `-m`. The absolute path and filename of the *.slx file (Simulink model) to compile. If not specified, the default is “/tools/mlib_devel/jasper_library/test_models/test.slx”. I would suggest always specifying this.
-    * `-c`. This is the build directory. The default is the same directory as the *.slx file (Simulink model). I don’t normally specify this.
+12) **Python method:** Before I explain this method it is important to explain how the “exec_flow” command works and the arguments that are passed to it.
+    * The `exec_flow`, which stands for “execution flow” can either run the whole flow or just parts of the flow depending on the needs of the user.
+    * The Vivado compile is done using project mode only.
+    * I have already explained the `--middleware`, `--backend` and `--software` arguments in step 9) above. 
+    * There is also a `--perfile` and `--frontend` argument, which is not needed in the Matlab/Python method, but is required for the Python method.
+    * The `--perfile` and `--frontend` arguments run the yellow block peripheral file generation and the system generator compile, respectively. It is identical to running `jasper_frontend` from the command window in Matlab - see Matlab/Python method above. 
+    * Below is a list of the `exec_flow` arguments.
+        - `--perfile` - Runs the front end peripheral file generation. If not specified, then it won’t generate the peripheral file.
+        - `--frontend` - This compiles the front end IP, which basically runs the system generator. If not specified, then the compile will not be run.
+        - `--middleware` - This runs the toolflow middle process. If not specified, then this process will not be run.
+        - `--backend` - This runs the backend compilation i.e. Xilinx Vivado or ISE. If not specified, then this process will not be run.
+        - `--software` - This runs the software compilation - generates a *.bof and *.fpg file. If not specified, then this process will not be run.
+        - `--be` - This specifies the type of backend to be run. This is “--be vivado”, but provision has been made for other backends. If this is not specified, then the default is the Vivado backend.
+        - `--jobs` - The number of processor cores to run the compile with. If this is not specified, the default is 4. You need to make sure that your processor has at least 4 threads if this is to work.
+        - `-m` - The absolute path and filename of the *.slx file (Simulink model) to compile. If not specified, the default is “/tools/mlib_devel/jasper_library/test_models/test.slx”. I would suggest always specifying this.
+        - `-c` - This is the build directory. The default is the same directory as the *.slx file (Simulink model). I don’t normally specify this.
 
     Here are some examples of how to run the command:
 
     This will run the whole process, except will not generate a fpg and bof file for programming.
     ```bash 
-    python …/exec_flow.py -m /home/<username>/work/git_work/mlib_devel/jasper_library/test_models/test_snap.slx --perfile --frontend --middleware --backend
+    python .../exec_flow.py -m /home/<username>/mlib_devel/jasper_library/test_models/test_snap.slx --perfile --frontend --middleware --backend
     ```
 
     This will run the whole process. 
     ```bash
-    python .../exec_flow.py -m /home/<username>/work/git_work/mlib_devel/jasper_library/test_models/test_snap.slx --perfile --frontend --middleware --backend --software
+    python .../exec_flow.py -m /home/<username>/mlib_devel/jasper_library/test_models/test_snap.slx --perfile --frontend --middleware --backend --software
     ```
 
     This will run the front end peripheral file generation and IP compile process using the Vivado system generator. 
     ```bash
-    python .../exec_flow.py -m /home/<username>/work/git_work/mlib_devel/jasper_library/test_models/test_snap.slx --perfile --frontend
+    python .../exec_flow.py -m /home/<username>/mlib_devel/jasper_library/test_models/test_snap.slx --perfile --frontend
     ```
 
-13) **Python method:** Open a new terminal <CTRL+ALT+T>, and source the following files from the “mlib_devel” directory:
-`source startsg startsg.local`
-This is an important step, because the Xilinx and Matlab paths will not be specified properly and “exec_flow.py” will fail to run.
+13) **Python method:** Open a new terminal <CTRL+ALT+T>, and source the following files from the `mlib_devel` directory:
+    * `source startsg startsg.local`
+    * This is an important step, because the Xilinx and Matlab paths will not be specified properly and `exec_flow.py` will fail to run.
 
 14) **Python method:** Using the terminal, run the complete “exec_flow” command:
     ```bash
-    python .../exec_flow.py -m /home/<username>/work/git_work/mlib_devel/jasper_library/test_models/test_snap.slx --perfile --frontend --middleware --backend --software
+    python .../exec_flow.py -m /home/<username>/mlib_devel/jasper_library/test_models/test_snap.slx --perfile --frontend --middleware --backend --software
     ``` 
-    Feel free to add or remove arguments as you wish or need. The design should run through the whole tool flow generation process and when complete the Vivado compile will of completed without any errors and with a little luck there will be no timing issues. The Vivado compile will determine if timing is met or not and display this to the screen. The user will need to monitor the slack time variable to see whether the compile has met timing or not. If the slack time is negative then timing is not met and if the slack time is positive for both setup and hold timing then the design has met the timing requirements.
+    Feel free to add or remove arguments as you wish or need. The design should run through the toolflow generation process to completion. Once complete, the Vivado compile should report any errors, e.g. timing issues. The Vivado compile will determine if timing is met or not and display this to the screen. The user will need to monitor the slack time variable to see whether the compile has met timing or not. If the slack time is negative then timing is not met and if the slack time is positive for both setup and hold timing then the design has met the timing requirements.
 
-15) **Python method:** The output directories are generated where the *.slx file sits. In my case, because I was using “test_snap.slx”, the directories were generated under “jasper_library/test_models/test_snap”. The following directories were created under “test_snap” and should be the same as yours: “sysgen” (contains the system generator files), “outputs” (contains the bof and fpg files) and “myproj” (contains the Vivado projects files, source files, synth results and implementation results. The bin and bit files are also stored here). The Vivado project mode creates synthesis and implementation run folders with a project file under “myproj”.
+15) **Python method:** The output directories are generated where the *.slx file sits. I used “test_snap.slx”, hence the following directories were generated under `jasper_library/test_models/test_snap/`:
+    * `sysgen/`: contains the system generator files,
+    * `outputs/`: contains the bof and fpg files, and
+    * `myproj/`: contains the Vivado projects files, source files, synthesis results and implementation results. The bin and bit files are also stored here.

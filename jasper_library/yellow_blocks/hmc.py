@@ -14,8 +14,6 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         
         hmcc = top.get_instance(name=self.fullname, entity='hmc')
 
-        #import IPython
-        #IPython.embed()
         hmcc.add_port('USER_CLK', 'sys_clk', dir='in')
         hmcc.add_port('USER_RST', 'sys_rst', dir='in')
         hmcc.add_port('HMC_CLK', 'hmc_clk', dir='in')
@@ -28,6 +26,7 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         hmcc.add_port('MEZZ_ID', 'mez%s_id' % self.mez, dir='out', width=3)
         hmcc.add_port('MEZZ_PRESENT', 'mez%s_present' % self.mez, dir='out')
         hmcc.add_port('POST_OK', '%s_post_ok' % self.fullname, dir='out')
+        hmcc.add_port('HMC_OK', '%s_hmc_ok' % self.fullname, dir='out')
 
         hmcc.add_port('HMC_MEZZ_RESET', 'MEZZANINE_%s_RESET' % self.mez, parent_port=True, dir='out')
         hmcc.add_port('MEZZ_CLK_SEL', 'MEZZANINE_%s_CLK_SEL' % self.mez, parent_port=True, dir='out')
@@ -70,8 +69,8 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         hmcc.add_port('DATA_VALID_LINK2', '%s_data_valid_link2' % self.fullname, dir='out')
         hmcc.add_port('RD_READY_LINK2', '%s_rd_ready_link2' % self.fullname, dir='out')
         hmcc.add_port('WR_READY_LINK2', '%s_wr_ready_link2' % self.fullname, dir='out')
-        hmcc.add_port('RX_CRC_ERR_CNT_LINK2', '%s_rx_crc_err_cnt_link2' % self.fullname, dir='out', width=16)
-        hmcc.add_port('ERRSTAT_LINK2', '%s_errstat_link2' % self.fullname, dir='out', width=7)
+        #hmcc.add_port('RX_CRC_ERR_CNT_LINK2', '%s_rx_crc_err_cnt_link2' % self.fullname, dir='out', width=16)
+        #hmcc.add_port('ERRSTAT_LINK2', '%s_errstat_link2' % self.fullname, dir='out', width=7)
 
 
         # Simulink ports Link3
@@ -87,15 +86,11 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         hmcc.add_port('DATA_VALID_LINK3', '%s_data_valid_link3' % self.fullname, dir='out')
         hmcc.add_port('RD_READY_LINK3', '%s_rd_ready_link3' % self.fullname, dir='out')
         hmcc.add_port('WR_READY_LINK3', '%s_wr_ready_link3' % self.fullname, dir='out')
-        hmcc.add_port('RX_CRC_ERR_CNT_LINK3', '%s_rx_crc_err_cnt_link3' % self.fullname, dir='out', width=16)
-        hmcc.add_port('ERRSTAT_LINK3', '%s_errstat_link3' % self.fullname, dir='out', width=7)
+        #hmcc.add_port('RX_CRC_ERR_CNT_LINK3', '%s_rx_crc_err_cnt_link3' % self.fullname, dir='out', width=16)
+        #hmcc.add_port('ERRSTAT_LINK3', '%s_errstat_link3' % self.fullname, dir='out', width=7)
 
-
-    #----------------------------------------------------------------------------------------------------
-
-        
-        # Wishbone memory for status registers / ARP table
-        #hmcc.add_wb_interface(self.unique_name, mode='rw', nbytes=0x4000) # as in matlab code
+        #wishbone interface
+        hmcc.add_wb_interface(regname=self.unique_name, mode='rw', nbytes=220)
 
     def initialize(self):
 
@@ -104,6 +99,7 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         self.add_source('hmc/src/*.ngc')
         self.add_source("hmc/src/hmc_user_axi_fifo/*.xci")
         self.add_source('hmc/open_hmc')
+        self.add_source('utils/cdc_synchroniser.vhd')
         # This block takes a mezzanine site and should prevent other blocks from using it
         self.exc_requires = ['mezz%d' % self.mez]
 
@@ -112,6 +108,7 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         self.instantiate_hmcc(top)
         top.assign_signal('mez%s_init_done' % self.mez, '%s_init_done' % self.fullname)
         top.assign_signal('mez%s_post_ok' % self.mez, '%s_post_ok' % self.fullname)
+        #top.assign_signal('mez%s_hmc_ok' % self.mez, '%s_hmc_ok' % self.fullname)
 
     def gen_constraints(self):
         cons = []

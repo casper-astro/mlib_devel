@@ -5,7 +5,7 @@ function bus_relational_init(blk, varargin)
   defaults = { ...
     'n_bits_a', [8 8] ,  'bin_pt_a',     [0],   'type_a',   1, ...
     'n_bits_b', [8]  ,  'bin_pt_b',     [0],   'type_b',   1, ...
-    'mode', 'a=b', 'latency', 1, 'en', 'off', 'misc', 'off', ...
+    'mode', 'a=b', 'csp_latency', 1, 'en', 'off', 'misc', 'off', ...
   };  
   
   check_mask_type(blk, 'bus_relational');
@@ -28,7 +28,7 @@ function bus_relational_init(blk, varargin)
   n_bits_b	    = get_var('n_bits_b', 'defaults', defaults, varargin{:});
   bin_pt_b	    = get_var('bin_pt_b', 'defaults', defaults, varargin{:});
   type_b	    = get_var('type_b', 'defaults', defaults, varargin{:});
-  latency      	    = get_var('latency', 'defaults', defaults, varargin{:});
+  latency      	    = get_var('csp_latency', 'defaults', defaults, varargin{:});
   misc         	    = get_var('misc', 'defaults', defaults, varargin{:});
   mode              = get_var('mode', 'defaults', defaults, varargin{:});
   en		    = get_var('en', 'defaults', defaults, varargin{:});

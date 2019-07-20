@@ -39,6 +39,16 @@ munge_block(blk, varargin{:});
 
 latency = get_var('latency', 'defaults', defaults, varargin{:});
 
+try
+   get_param([blk],'csp_latency');
+catch ME
+   try
+       update_casper_block([blk])
+       disp([ME.identifier,' ','Old 2016b bus_replicate block, upgrading to new toolflow'])
+   catch ME
+   end
+end
+
 delete_lines(blk);
 
 if (latency < 0)

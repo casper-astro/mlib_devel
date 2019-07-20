@@ -1,0 +1,136 @@
+name: vcu128
+manufacturer: Xilinx
+fpga: xcvu37p-fsvh2892-2L-e
+backend_target: vivado
+sources: []
+constraints: []
+provides:
+  - qsfp1
+  - qsfp2
+  - qsfp3
+  - qsfp4
+pins:
+  sys_clk_p:
+    loc: F35
+    iostd: DIFF_SSTL12
+  sys_clk_n:
+    loc: F36
+    iostd: DIFF_SSTL12
+  qsfp1_clk156_p:
+    loc: P42
+  qsfp1_clk156_n:
+    loc: P43
+  qsfp2_clk156_p:
+    loc: T42
+  qsfp2_clk156_n:
+    loc: T43
+  qsfp3_clk156_p:
+    loc: Y42
+  qsfp3_clk156_n:
+    loc: Y43
+  qsfp4_clk156_p:
+    loc: AB42
+  qsfp4_clk156_n:
+    loc: AB43
+  usb_tx:
+    iostd: LVCMOS18
+    loc: BN26
+  usb_rx:
+    iostd: LVCMOS18
+    loc: BP26
+  led: 
+    iostd: LVCMOS18
+    loc:
+      - BH24
+      - BG24
+      - BG25
+      - BF25
+      - BF26
+      - BF27
+      - BG27
+      - BG28
+  gbe_phy_mdio:
+    iostd: LVCMOS18
+    loc: BG23
+  gbe_phy_mdc:
+    iostd: LVCMOS18
+    loc: BN27
+  gbe_phy_power_down_n:
+    iostd: LVCMOS18
+    loc: BF22
+  gbe_phy_sgmii_in_n:
+    iostd: DIFF_HSTL_I_18
+    loc: BH22
+  gbe_phy_sgmii_in_p:
+    iostd: DIFF_HSTL_I_18
+    loc: BG22
+  gbe_phy_sgmii_out_n:
+    iostd: DIFF_HSTL_I_18
+    loc: BK21
+  gbe_phy_sgmii_out_p:
+    iostd: DIFF_HSTL_I_18
+    loc: BJ22
+  gbe_phy_rx_bitslice:
+    iostd: LVCMOS18
+    loc: BL23
+  gbe_phy_sgmii_clk_n:
+    iostd: DIFF_HSTL_I_18
+    loc: BJ27
+  gbe_phy_sgmii_clk_p:
+    iostd: DIFF_HSTL_I_18
+    loc: BH27
+  #gbe_phy_rst_n:
+  #  iostd: LVCMOS18
+  #  loc: U65.19 #TODO
+  gbe_phy_gpio:
+    iostd: LVCMOS18
+    loc: BP27
+  gbe_phy_clk_out:
+    iostd: LVCMOS18
+    loc: BJ23
+  eth_clk_p: 
+    loc: 
+      - CKOUT1_P
+  eth_clk_n:
+    loc: 
+      - CKOUT1_N    
+  sfp_disable:
+    loc:
+      - RESETL
+  mgt_tx_p:
+    loc:
+      - TX1P
+      - TX2P
+      - TX3P
+      - TX4P
+  mgt_tx_n:
+    loc:
+      - TX1N
+      - TX2N
+      - TX3N
+      - TX4N
+  mgt_rx_p:
+    loc:
+      - RX1P
+      - RX2P
+      - RX3P
+      - RX4P
+  mgt_rx_n:
+    loc:
+      - RX1N
+      - RX2N
+      - RX3N
+      - RX4N
+  spi_flash_csn:
+    iostd: LVCMOS18
+    loc: BC15
+  spi_flash_clk:
+    iostd: LVCMOS18
+    loc: BD14
+  spi_flash_data:
+    iostd: LVCMOS18
+    loc: 
+      - AW15
+      - AY15
+      - AY14
+      - AY13

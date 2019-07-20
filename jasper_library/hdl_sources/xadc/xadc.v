@@ -28,7 +28,7 @@ module xadc (
 
 
   xadc_wiz_0 xadc_inst (
-    .di_in(wb_dat_ri),                              // input wire [15 : 0] di_in
+    .di_in(wb_dat_i[15:0]),                         // input wire [15 : 0] di_in
     .daddr_in(wb_adr_i[6+2:0+2]),                   // input wire [6 : 0] daddr_in
     .den_in(wb_is_vld & ~wb_was_vld),               // input wire den_in  //take posedges of wishbone transaction
     .dwe_in(wb_we_i),                               // input wire dwe_in

@@ -70,9 +70,11 @@ int main()
 #ifdef DEBUG_ETH_0_CORE
     int rx_size;
 #endif
+#ifdef USE_XADC
     int fpga_temp;
     uint32_t next_ms = HEARTBEAT_MS;
     uint32_t curr_ms;
+#endif
 #ifdef JAM_TEST_TMRCTR
     u64 time0, time1;
     u32 tick0, tick1;
@@ -83,6 +85,21 @@ int main()
     xil_printf("\n# JAM starting\n");
     xil_printf("Built %s %s@%s\n", BUILD_DATE, BUILD_USER, BUILD_HOST);
     xil_printf("%s\n\n", GIT_VERSION);
+#ifdef USE_XADC
+    xil_printf("\n# Compiled with XADC support\n");
+#else
+    xil_printf("\n# Compiled without XADC support\n");
+#endif
+#ifdef USE_SPI
+    xil_printf("\n# Compiled with SPI flash support\n");
+#else
+    xil_printf("\n# Compiled without SPI flash support\n");
+#endif
+#ifdef USE_ICAP
+    xil_printf("\n# Compiled with ICAPE support\n");
+#else
+    xil_printf("\n# Compiled without ICAPE support\n");
+#endif
 
     casper_lwip_init();
 
@@ -326,6 +343,7 @@ int main()
       }
 #endif
 
+#ifdef USE_XADC
       curr_ms = ms_tmrctr();
       if(next_ms <= curr_ms) {
         next_ms = curr_ms + HEARTBEAT_MS;
@@ -334,6 +352,7 @@ int main()
         xil_printf("FPGA at %d.%d C [ms %d]\n",
             fpga_temp / 10, fpga_temp % 10, ms_tmrctr());
       }
+#endif
     }
 
     // Should "never" get here

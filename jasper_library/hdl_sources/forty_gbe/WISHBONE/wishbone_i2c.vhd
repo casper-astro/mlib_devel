@@ -1,25 +1,25 @@
 ----------------------------------------------------------------------------------
 -- Company: Peralex Electronics
 -- Engineer: Gavin Teague
--- 
+--
 -- Create Date: 05.09.2014 10:19:29
--- Design Name: 
+-- Design Name:
 -- Module Name: wishbone_i2c - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
+-- Project Name:
+-- Target Devices:
+-- Tool Versions:
+-- Description:
+--
 -- Wishbone Classic slave, I2C interface
 --
 --  Assumes a 156.25MHz clock.
 --
--- Dependencies: 
--- 
+-- Dependencies:
+--
 -- Revision:
 -- Revision 0.01 - File Created
 -- Additional Comments:
--- 
+--
 ----------------------------------------------------------------------------------
 
 library ieee;
@@ -31,20 +31,20 @@ library work;
 use work.parameter.all;
 
 entity wishbone_i2c is
-	port (
-		-- WISHBONE CLASSIC SIGNALS
-		CLK_I : in std_logic;
-		RST_I : in std_logic;
-		DAT_I : in std_logic_vector(31 downto 0);
-		DAT_O : out std_logic_vector(31 downto 0);
-		ACK_O : out std_logic;
-		ADR_I : in std_logic_vector(4 downto 0);
-		CYC_I : in std_logic;
-		SEL_I : in std_logic_vector(3 downto 0);
-		STB_I : in std_logic;
-		WE_I  : in std_logic;
-		
-		-- I2C INTERFACE
+    port (
+        -- WISHBONE CLASSIC SIGNALS
+        CLK_I : in std_logic;
+        RST_I : in std_logic;
+        DAT_I : in std_logic_vector(31 downto 0);
+        DAT_O : out std_logic_vector(31 downto 0);
+        ACK_O : out std_logic;
+        ADR_I : in std_logic_vector(4 downto 0);
+        CYC_I : in std_logic;
+        SEL_I : in std_logic_vector(3 downto 0);
+        STB_I : in std_logic;
+        WE_I  : in std_logic;
+
+        -- I2C INTERFACE
         scl_pad_i     : in std_logic;
         scl_pad_o     : out std_logic;
         scl_padoen_o  : out std_logic;
@@ -71,7 +71,7 @@ architecture arch_wishbone_i2c of wishbone_i2c is
         wb_cyc_i      : in  std_logic;                    -- Valid bus cycle input
         wb_ack_o      : out std_logic;                    -- Bus cycle acknowledge output
         wb_inta_o     : out std_logic;                    -- interrupt request output signal
-        
+
         -- i2c lines
         scl_pad_i     : in  std_logic;                    -- i2c clock line input
         scl_pad_o     : out std_logic;                    -- i2c clock line output
@@ -83,14 +83,14 @@ architecture arch_wishbone_i2c of wishbone_i2c is
 
     signal addra : std_logic_vector(2 downto 0);
     signal dout : std_logic_vector(7 downto 0);
-    
+
 begin
 
     addra <= ADR_I(4 downto 2);
-    
+
     DAT_O(7 downto 0) <= dout;
     DAT_O(31 downto 8) <= (others => '0');
-    
+
 -------------------------------------------------------------------------------------
 -- INSTANTIATE OPEN CORES I2C CORE
 -------------------------------------------------------------------------------------

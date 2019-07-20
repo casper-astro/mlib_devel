@@ -1,10 +1,17 @@
 # [Sphinx documentation generation](http://www.sphinx-doc.org/en/master/)
 
-## Getting Started:
-- Create a fork of the tutorials_devel repository
+## Getting Started (if you just want to build the documentation locally):
+- `git clone` this repository
+- Install the required tools using `pip install -r requirements.txt` in this directory.
+- Follow the build instructions below
+
+## Getting Started (If you want to modify this documentation):
+- Create a fork of the this repository
 - `git clone` the forked repository
-- Install markdown first: `pip install markdown`
-- Install the required tools using `pip install -r requirements.txt`
+- Install the required tools using `pip install -r requirements.txt` in this directory.
+- Make your changes and rebuild using the build instructions below.
+- Push your changes to your fork of this repository
+- Raise a pull request to https://github.com/casper-astro/mlib_devel
 
 ## Information:
 - A [ReadtheDocs](https://readthedocs.org/) Sphinx theme `sphinx-rtd-theme` is used in order to host our documents on their platform.
@@ -19,9 +26,9 @@
 1. Open a terminal and `cd` into the `docs/` directory of your cloned repository
 2. Build using `make html` command, which will build the documentation in the `_build/` directory.
 3. Pay close attention to any warning that might appear.
-4. Open a web browser and point it towards the build directory, then manually inspect the built html.
+4. Open a web browser and point it towards the build directory, then manually inspect the built html, starting at `_build/index.html`.
 
-Note: Please do not push a build directory to GitHub.
+**Note: Please do not push a build directory to GitHub.**
 
 ## Resources:
 - [ReadtheDocs](https://readthedocs.org/)

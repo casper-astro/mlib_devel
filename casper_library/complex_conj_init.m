@@ -32,7 +32,11 @@ function complex_conj_init(blk, varargin)
     'n_inputs', 1, ...
     'n_bits', 18, ...
     'bin_pt', 17, ...
-    'latency', 1, ...
+    'floating_point', 'off', ...
+    'float_type', 'single', ...
+    'exp_width', 8, ...
+    'frac_width', 24, ...       
+    'csp_latency', 1, ...
     'overflow', 'Wrap', ...
     'reg_retiming', 'on', ...
   };
@@ -42,14 +46,35 @@ function complex_conj_init(blk, varargin)
   munge_block(blk, varargin{:});
 
   % Retrieve values from mask fields.
-  n_inputs = get_var('n_inputs', 'defaults', defaults, varargin{:});
-  n_bits = get_var('n_bits', 'defaults', defaults, varargin{:});
-  bin_pt = get_var('bin_pt', 'defaults', defaults, varargin{:});
-  latency = get_var('latency', 'defaults', defaults, varargin{:});
-  overflow = get_var('overflow', 'defaults', defaults, varargin{:});
+  n_inputs          = get_var('n_inputs', 'defaults', defaults, varargin{:});
+  n_bits            = get_var('n_bits', 'defaults', defaults, varargin{:});
+  bin_pt            = get_var('bin_pt', 'defaults', defaults, varargin{:});
+  floating_point    = get_var('floating_point', 'defaults', defaults, varargin{:});
+  float_type        = get_var('float_type', 'defaults', defaults, varargin{:});
+  exp_width         = get_var('exp_width', 'defaults', defaults, varargin{:});
+  frac_width        = get_var('frac_width', 'defaults', defaults, varargin{:});  
+  latency           = get_var('csp_latency', 'defaults', defaults, varargin{:});
+  overflow          = get_var('overflow', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
 
+  if float_type == 2
+    float_type_sel = 'custom';
+  else
+    float_type_sel = 'single';
+    exp_width = 8;
+    frac_width = 24;
+  end
+  
+  if floating_point == 1
+    float_en = 'on';
+    n_bits = (exp_width+frac_width);
+    bin_pt = 0;
+  else
+    float_en = 'off';  
+  end
+ 
+  
   %default setup for library
   if n_inputs == 0,
     clean_blocks(blk);
@@ -87,8 +112,12 @@ function complex_conj_init(blk, varargin)
   end
 
   reuse_block(blk, 'imag_negate', 'casper_library_bus/bus_negate', ...
-          'n_bits_in', mat2str(repmat(n_bits, 1, n_inputs)), 'bin_pt_in', num2str(bin_pt), ...
-          'cmplx', 'off', 'overflow', of, 'misc', 'off', 'latency', num2str(latency), ... 
+          'n_bits_in', mat2str(repmat(n_bits, 1, n_inputs)), 'bin_pt_in', num2str(bin_pt), ...3
+          'floating_point', float_en, ...
+          'float_type', float_type_sel, ...
+          'exp_width', num2str(exp_width), ...
+          'frac_width', num2str(frac_width), ...     
+          'cmplx', 'off', 'overflow', of, 'misc', 'off', 'csp_latency', num2str(latency), ... 
           'Position', [230 109 290 141]);
   add_line(blk,'bus_expand/2','imag_negate/1');
 

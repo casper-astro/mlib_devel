@@ -237,9 +237,16 @@ for k=1:length(portnames),
             ds_factor = 8;
         end
 
+        % add signal convert block
+        reuse_block(cursys, [gateway_in_name, '_conv'], 'xps_library/ADCs/conv', ...
+            'Position', convert_pos, ...
+            'bit_width', num2str(sample_bit_width));
+
+
         add_line( cursys, [adc_sim_block, '/', num2str( mod(sim_port,port_mod_factor)+1 )], [gateway_in_name, '/1'] );
         sim_port = sim_port +1;
-        add_line( cursys, [gateway_in_name,'/1'], [port, '/1']);
+        add_line( cursys, [gateway_in_name,'/1'], [gateway_in_name, '_conv/1']);
+        add_line( cursys, [gateway_in_name, '_conv/1'], [port, '/1']);
     elseif regexp( port, '(adc\d+)_outofrange' ),
         toks = regexp( port, '(adc\d+)_(\w+)$', 'tokens');
         if clock_sync,
