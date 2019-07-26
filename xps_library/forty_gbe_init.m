@@ -1,4 +1,4 @@
-% forty_gbe_callback
+% forty_gbe_init
 %
 % mask callback function
 
@@ -26,7 +26,7 @@
 
 function forty_gbe_init()
 
-clog('entering forty_gbe_callback', 'trace');
+clog('entering forty_gbe_init', 'trace');
 
 currPort = eval(get_param(gcb, 'port'));
 
