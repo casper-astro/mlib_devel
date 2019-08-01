@@ -17,6 +17,7 @@ class vcu118(YellowBlock):
         inst.add_port('clk_200      ', 'clk_200   ')
         inst.add_port('sys_rst      ', 'sys_rst   ')
         inst.add_port('idelay_rdy   ', 'idelay_rdy')
+        inst.add_port('sys_clk_rst_sync', 'sys_clk_rst_sync')
 
         top.add_signal('sys_clk90')
         top.assign_signal('sys_clk90', '~sys_clk270')

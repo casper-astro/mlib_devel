@@ -227,7 +227,7 @@ static char tapcp_help_msg[] =
 "  /temp    - get FPGA temperature\n"
 "  /progdev - Boot FPGA from flash.\n"
 "  /flash.OFFSET[.LENGTH] - access flash memory\n"
-"  /flashcmd[.LEN].CMD` - low level flash commands\n"
+"  /flashcmd[.LEN].CMD - low level flash commands\n"
 "  [/dev/]DEVNAME[.OFFSET[.LENGTH]] - access DEVNAME\n"
 "  /fpga.OFFSET[.LENGTH] - access FPGA memory space\n"
 "  /cpu.OFFSET[.LENGTH]  - access CPU memory space\n"

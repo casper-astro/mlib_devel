@@ -10,6 +10,10 @@ class ten_gbe(YellowBlock):
             return tengbaser_xilinx_k7(blk, plat, hdl_root)
         elif plat.fpga.startswith('xc7v'):
             return tengbaser_xilinx_k7(blk, plat, hdl_root, use_gth=plat.name=='mx175')
+        elif plat.fpga.startswith('xcvu'):
+            return tengbaser_xilinx_k7(blk, plat, hdl_root, use_gth=plat.name=='vcu118')
+        elif plat.fpga.startswith('xcku'):
+            return tengbaser_xilinx_ku7(blk, plat, hdl_root)
         else:
             return tengbe_v2_xilinx_v6(blk, plat, hdl_root)
 
@@ -75,7 +79,7 @@ class ten_gbe(YellowBlock):
         ktge.add_port('led_tx', '%s_led_tx'%self.fullname)
 
         # Wishbone memory for status registers / ARP table
-        ktge.add_wb_interface(self.unique_name, mode='rw', nbytes=0x4000, typecode=self.typecode) # as in matlab code
+        ktge.add_wb_interface(self.unique_name, mode='rw', nbytes=0xF000, typecode=self.typecode) # as in matlab code
 
 class tengbe_v2_xilinx_v6(ten_gbe):
     def initialize(self):
@@ -191,6 +195,7 @@ class tengbe_v2_xilinx_v6(ten_gbe):
 class tengbaser_xilinx_k7(ten_gbe):
     def __init__(self, blk, plat, hdl_root, use_gth=False):
         self.use_gth = use_gth
+        self.invert_sfp_disable = plat.conf.get('invert_sfp_disable', False)
         ten_gbe.__init__(self, blk, plat, hdl_root)
     def initialize(self):
         self.typecode = TYPECODE_ETHCORE
@@ -298,7 +303,12 @@ class tengbaser_xilinx_k7(ten_gbe):
         top.assign_signal('signal_detect%d'%self.port, "1'b1") #snap doesn't wire this to SFP(?)
         phy.add_port('tx_fault', 'tx_fault%d'%self.port)
         top.assign_signal('tx_fault%d'%self.port, "1'b0") #snap doesn't wire this to SFP(?)
-        phy.add_port('tx_disable', 'tx_disable%d'%self.port, parent_port=True, dir='out')
+        phy.add_port('tx_disable', 'tx_disable%d_int'%self.port)
+        top.add_port('tx_disable%d'%self.port, '', dir='out', width=0)
+        if self.invert_sfp_disable:
+            top.assign_signal('tx_disable%d'%self.port, '~tx_disable%d_int'%self.port)
+        else:
+            top.assign_signal('tx_disable%d'%self.port, 'tx_disable%d_int'%self.port)
 
         phy.add_port('resetdone', 'resetdone%d'%self.port)
         phy.add_port('status_vector', '', parent_sig=False)
@@ -316,14 +326,166 @@ class tengbaser_xilinx_k7(ten_gbe):
     def gen_constraints(self):
         num = self.infrastructure_id
         cons = []
-        cons.append(PortConstraint('ref_clk_p%d'%num, 'eth_clk_p'))
-        cons.append(PortConstraint('ref_clk_n%d'%num, 'eth_clk_n'))
+        cons.append(PortConstraint('ref_clk_p%d'%num, 'eth_clk_p',iogroup_index=num))
+        cons.append(PortConstraint('ref_clk_n%d'%num, 'eth_clk_n',iogroup_index=num))
         cons.append(PortConstraint('mgt_tx_p%d'%self.port, 'mgt_tx_p', iogroup_index=self.port))
         cons.append(PortConstraint('mgt_tx_n%d'%self.port, 'mgt_tx_n', iogroup_index=self.port))
         cons.append(PortConstraint('mgt_rx_p%d'%self.port, 'mgt_rx_p', iogroup_index=self.port))
         cons.append(PortConstraint('mgt_rx_n%d'%self.port, 'mgt_rx_n', iogroup_index=self.port))
 
-        cons.append(PortConstraint('tx_disable%d'%self.port, 'sfp_disable', iogroup_index=self.port))
+        cons.append(ClockConstraint('ref_clk_p%d'%num, name='ethclk%d'%num, freq=156.25))
+
+
+        cons.append(RawConstraint('set_false_path -from [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/reset_pulse_reg[0]/C}] -to [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/gttxreset_txusrclk2_sync_i/sync1_r_reg*/PRE}]' % (num, num)))
+
+        # make the ethernet core clock async relative to whatever the user is using as user_clk
+        # Find the clock of *clk_counter* to determine what source user_clk comes from. This is fragile.
+        
+        if self.platform.name == 'snap':
+           cons.append(PortConstraint('tx_disable%d'%self.port, 'sfp_disable', iogroup_index=self.port))
+           cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d -asynchronous -group [get_clocks -include_generated_clocks sys_clk_p_CLK] -group [get_clocks -include_generated_clocks ethclk%d]'%(num,num)))
+           cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d_usr_clk -asynchronous -group [get_clocks -of_objects [get_cells -hierarchical -filter {name=~*clk_counter*}]] -group [get_clocks -include_generated_clocks ethclk%d]' % (num, num)))
+        else:
+           cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d -asynchronous -group [get_clocks -include_generated_clocks sys_clk_in_CLK] -group [get_clocks -include_generated_clocks ethclk%d]'%(num,num)))
+           cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d_usr_clk -asynchronous -group [get_clocks -of_objects [get_cells -hierarchical -filter {name=~*clk_counter*}]] -group [get_clocks -include_generated_clocks ethclk%d]' % (num, num)))        
+        return cons
+
+class tengbaser_xilinx_ku7(ten_gbe):
+    def __init__(self, blk, plat, hdl_root, use_gth=False):
+        self.use_gth = use_gth
+        tengbe.__init__(self, blk, plat, hdl_root)
+    def initialize(self):
+        self.typecode = TYPECODE_ETHCORE
+        self.exc_requirements = ['tge%d'%self.slot]
+        self.add_source('kat_ten_gb_eth/*')
+        self.add_source('tengbaser_phy_v2/tengbaser_phy_v2.v')
+        self.add_source('tengbaser_phy_v2/ten_gig_eth_pcs_pma_6.xci')
+        #self.add_source('tengbaser_phy/ten_gig_pcs_pma_5.xdc')
+        self.add_source('tengbaser_infrastructure_v2')
+
+        # the use of multiple platform dependent parameters to
+        # describe the port in the simulink block is a bit grim.
+        # Why not have a callback change the allowed port number
+        # options, rather than turn on and off parameter visibilities
+        # for a bunch of parameters describing the same thing...
+
+        ##roach2 mezzanine slot 0 has 4-7, roach2 mezzanine slot 1 has 0-3, so barrel shift
+        #if self.flavour == 'cx4':
+        #    self.port = self.port_r2_cx4 + 4*((self.slot+1)%2) 
+        #elif self.flavour == 'sfp':
+        #    self.port = self.port_r2_sfpp + 4*((self.slot+1)%2)
+        self.port = self.port_r1
+        self.infrastructure_id = self.port // 4
+
+        self.provides = ['ethernet']
+        if self.cpu_rx_en and self.cpu_tx_en:
+            self.provides += ['cpu_ethernet']
+
+    def gen_children(self):
+        """
+        The mx175 clocks the gth from a clock which is passed through the FPGA and through
+        a jitter cleaner (si5324) back into the GTH clock port. The first ten gig core
+        needs to make sure this pass through is instantiated.
+        """
+        if self.i_am_the_first and (self.name == 'mx175'):
+            pt = YellowBlock.make_block({'tag':'xps:clock_passthrough', 'fullpath':'%s/clock_passthrough'%self.name, 'name':'clock_passthrough'}, self.platform)
+            return [pt]
+        else:
+            return []
+
+    def modify_top(self,top):
+        # An infrastructure instance is good for 4 SFPs. Assuming the ports are numbered
+        # so that instance0 serves ports 0-3, instance1 serves ports 4-7, etc. decide
+        # whether to instantiate a new infrastrucure block
+        if top.has_instance('tengbaser_infra%d_inst'%self.infrastructure_id):
+            pass
+        else:
+            self.instantiate_infra(top, self.infrastructure_id)
+            
+        self.instantiate_phy(top, self.infrastructure_id)
+        self.instantiate_ktge(top, self.infrastructure_id)
+
+    def instantiate_infra(self, top, num):
+        infra = top.get_instance('tengbaser_infrastructure_v2', 'tengbaser_infra%d_inst'%num)
+        if self.use_gth:
+            infra.add_parameter('USE_GTH', '"TRUE"') #verilog module defaults to false
+        infra.add_port('refclk_n', 'ref_clk_n%d'%num, parent_port=True, dir='in')
+        infra.add_port('refclk_p', 'ref_clk_p%d'%num, parent_port=True, dir='in')
+        infra.add_port('reset', 'sys_rst', parent_sig=False) #no parent sig -- the wire is declared in top.v
+
+        #infra.add_port('dclk', 'dclk%d'%num)
+        infra.add_port('core_clk', 'core_clk%d'%num)
+        infra.add_port('core_clk156_out', 'core_clk_156_%d'%num)
+        infra.add_port('xgmii_rx_clk', 'xgmii_rx_clk%d'%num)
+
+        infra.add_port('qplloutclk_out        ', 'qplloutclk_out%d        '%num)
+        infra.add_port('qplloutrefclk_out     ', 'qplloutrefclk_out%d     '%num)
+        infra.add_port('qplllock_out          ', 'qplllock_out%d          '%num)
+        infra.add_port('areset_clk156_out     ', 'areset_clk156_out%d     '%num)
+        infra.add_port('txusrclk_out          ', 'txusrclk_out%d          '%num)
+        infra.add_port('txusrclk2_out         ', 'txusrclk2_out%d         '%num)
+        infra.add_port('gttxreset_out         ', 'gttxreset_out%d         '%num)
+        infra.add_port('gtrxreset_out         ', 'gtrxreset_out%d         '%num)
+        infra.add_port('txuserrdy_out         ', 'txuserrdy_out%d         '%num)
+        infra.add_port('reset_counter_done_out', 'reset_counter_done_out%d'%num)
+        infra.add_port('txclk322', 'txclk322_%d'%self.port)
+
+    def instantiate_phy(self, top, num):
+
+        phy = top.get_instance('tengbaser_phy_v2', 'tengbaser_phy%d'%self.port)
+
+        phy.add_port('areset', 'sys_rst')
+
+        # sigs from infrastructure
+        phy.add_port('dclk', 'sys_clk')
+        phy.add_port('clk156', 'core_clk%d'%num)
+        phy.add_port('qplloutclk', 'qplloutclk_out%d'%num)
+        phy.add_port('qplloutrefclk', 'qplloutrefclk_out%d'%num)
+        phy.add_port('qplllock', 'qplllock_out%d'%num)
+        phy.add_port('areset_clk156', 'areset_clk156_out%d'%num)
+        phy.add_port('txusrclk', 'txusrclk_out%d'%num)
+        phy.add_port('txusrclk2', 'txusrclk2_out%d'%num)
+        phy.add_port('gttxreset', 'gttxreset_out%d'%num)
+        phy.add_port('gtrxreset', 'gtrxreset_out%d'%num)
+        phy.add_port('txuserrdy', 'txuserrdy_out%d'%num)
+        phy.add_port('reset_counter_done', 'reset_counter_done_out%d'%num)
+        phy.add_port('txclk322', 'txclk322_%d'%self.port)
+
+        # top level ports
+        phy.add_port('txp', 'mgt_tx_p%d'%self.port, parent_port=True, dir='out')
+        phy.add_port('txn', 'mgt_tx_n%d'%self.port, parent_port=True, dir='out')
+        phy.add_port('rxp', 'mgt_rx_p%d'%self.port, parent_port=True, dir='in')
+        phy.add_port('rxn', 'mgt_rx_n%d'%self.port, parent_port=True, dir='in')
+        phy.add_port('signal_detect', 'signal_detect%d'%self.port)
+        top.assign_signal('signal_detect%d'%self.port, "1'b1") #snap doesn't wire this to SFP(?)
+        phy.add_port('tx_fault', 'tx_fault%d'%self.port)
+        top.assign_signal('tx_fault%d'%self.port, "1'b0") #snap doesn't wire this to SFP(?)
+        phy.add_port('tx_disable', 'tx_disable%d'%self.port)
+
+        phy.add_port('resetdone', 'resetdone%d'%self.port)
+        phy.add_port('status_vector', '', parent_sig=False)
+        # pma_pmd_type: 111=10g-base-SR, 110=-LR 101=-ER
+        phy.add_port('pma_pmd_type', "3'b111", parent_sig=False)
+        phy.add_port('configuration_vector', "536'b0", parent_sig=False)
+
+        # XGMII signals to MAC
+        phy.add_port('xgmii_txd', 'xgmii_txd%d'%self.port, width=64)
+        phy.add_port('xgmii_txc', 'xgmii_txc%d'%self.port, width=8)
+        phy.add_port('xgmii_rxd', 'xgmii_rxd%d'%self.port, width=64)
+        phy.add_port('xgmii_rxc', 'xgmii_rxc%d'%self.port, width=8)
+        phy.add_port('core_status', 'xaui_status%d'%self.port, width=8) #called xaui status for compatibility with kat-tge block
+
+    def gen_constraints(self):
+        num = self.infrastructure_id
+        cons = []
+        cons.append(PortConstraint('ref_clk_p%d'%num, 'gth_clk_p',iogroup_index=num))
+        cons.append(PortConstraint('ref_clk_n%d'%num, 'gth_clk_n',iogroup_index=num))
+        cons.append(PortConstraint('mgt_tx_p%d'%self.port, 'gth_tx_p', iogroup_index=self.port))
+        cons.append(PortConstraint('mgt_tx_n%d'%self.port, 'gth_tx_n', iogroup_index=self.port))
+        cons.append(PortConstraint('mgt_rx_p%d'%self.port, 'gth_rx_p', iogroup_index=self.port))
+        cons.append(PortConstraint('mgt_rx_n%d'%self.port, 'gth_rx_n', iogroup_index=self.port))
+
+        #cons.append(PortConstraint('tx_disable%d'%self.port, 'sfp_disable', iogroup_index=self.port))
 
         cons.append(ClockConstraint('ref_clk_p%d'%num, name='ethclk%d'%num, freq=156.25))
 
@@ -338,4 +500,3 @@ class tengbaser_xilinx_k7(ten_gbe):
 
 
         return cons
-        

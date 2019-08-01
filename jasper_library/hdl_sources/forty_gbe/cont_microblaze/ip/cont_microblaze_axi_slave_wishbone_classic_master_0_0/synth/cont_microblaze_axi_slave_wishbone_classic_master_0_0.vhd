@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2018 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2019 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -186,7 +186,7 @@ ARCHITECTURE cont_microblaze_axi_slave_wishbone_classic_master_0_0_arch OF cont_
     );
   END COMPONENT axi_slave_wishbone_classic_master;
   ATTRIBUTE X_CORE_INFO : STRING;
-  ATTRIBUTE X_CORE_INFO OF cont_microblaze_axi_slave_wishbone_classic_master_0_0_arch: ARCHITECTURE IS "axi_slave_wishbone_classic_master,Vivado 2018.2";
+  ATTRIBUTE X_CORE_INFO OF cont_microblaze_axi_slave_wishbone_classic_master_0_0_arch: ARCHITECTURE IS "axi_slave_wishbone_classic_master,Vivado 2019.1.1";
   ATTRIBUTE CHECK_LICENSE_TYPE : STRING;
   ATTRIBUTE CHECK_LICENSE_TYPE OF cont_microblaze_axi_slave_wishbone_classic_master_0_0_arch : ARCHITECTURE IS "cont_microblaze_axi_slave_wishbone_classic_master_0_0,axi_slave_wishbone_classic_master,{}";
   ATTRIBUTE X_INTERFACE_INFO : STRING;

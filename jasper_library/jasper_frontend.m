@@ -67,8 +67,10 @@ end
 
 disp('Launching System Generator compile');
 update_model = 0;
-start_sysgen_compile(modelpath, builddir, update_model);
-disp('Completed sysgen okay.');
+xsg_result = start_sysgen_compile(modelpath, builddir, update_model);
+if xsg_result ~= 0
+    error('XSG generation failed!')
+end
 
 % if vivado is to be used
 build_cmd = '';

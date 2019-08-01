@@ -3,6 +3,7 @@ manufacturer: Xilinx
 fpga: xc7k160tffg676-2
 #fpga: xc7k410tffg676-2
 backend_target: vivado
+invert_sfp_disable: True
 sources: []
 constraints: []
 provides:

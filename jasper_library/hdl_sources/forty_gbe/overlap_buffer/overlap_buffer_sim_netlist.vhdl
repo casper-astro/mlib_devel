@@ -1,10 +1,10 @@
--- Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
+-- Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
--- Tool Version: Vivado v.2018.2 (lin64) Build 2258646 Thu Jun 14 20:02:38 MDT 2018
--- Date        : Thu Aug 23 13:40:48 2018
--- Host        : adam-cm running 64-bit Ubuntu 14.04.5 LTS
+-- Tool Version: Vivado v.2019.1.1 (lin64) Build 2580384 Sat Jun 29 08:04:45 MDT 2019
+-- Date        : Mon Jul 15 17:27:47 2019
+-- Host        : casper1 running 64-bit Ubuntu 16.04.6 LTS
 -- Command     : write_vhdl -force -mode funcsim
---               /home/aisaacson/work/git_work/ska_sa/projects/skarab_bsp_firmware/firmware/FRM123701U1R1/Vivado/IP/overlap_buffer/overlap_buffer_sim_netlist.vhdl
+--               /home/hpw1/work/tutorials_devel/vivado_2018/skarab/tut_intro/skarab_tut_intro/myproj/myproj.srcs/sources_1/ip/overlap_buffer/overlap_buffer_sim_netlist.vhdl
 -- Design      : overlap_buffer
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -90,9 +90,9 @@ entity overlap_buffer_dmem is
     clk : in STD_LOGIC;
     E : in STD_LOGIC_VECTOR ( 0 to 0 );
     din : in STD_LOGIC_VECTOR ( 289 downto 0 );
-    \gc0.count_d1_reg[3]\ : in STD_LOGIC_VECTOR ( 3 downto 0 );
-    \gcc0.gc0.count_d1_reg[3]\ : in STD_LOGIC_VECTOR ( 3 downto 0 );
-    \gpregsm1.curr_fwft_state_reg[0]\ : in STD_LOGIC_VECTOR ( 0 to 0 );
+    \gpr1.dout_i_reg[1]_0\ : in STD_LOGIC_VECTOR ( 3 downto 0 );
+    \gpr1.dout_i_reg[1]_1\ : in STD_LOGIC_VECTOR ( 3 downto 0 );
+    \gpr1.dout_i_reg[0]_0\ : in STD_LOGIC_VECTOR ( 0 to 0 );
     AR : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
   attribute ORIG_REF_NAME : string;
@@ -154,65 +154,415 @@ architecture STRUCTURE of overlap_buffer_dmem is
   signal NLW_RAM_reg_0_15_96_101_DOD_UNCONNECTED : STD_LOGIC_VECTOR ( 1 downto 0 );
   attribute METHODOLOGY_DRC_VIOS : string;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_0_5 : label is "";
+  attribute RTL_RAM_BITS : integer;
+  attribute RTL_RAM_BITS of RAM_reg_0_15_0_5 : label is 4640;
+  attribute RTL_RAM_NAME : string;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_0_5 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin : integer;
+  attribute ram_addr_begin of RAM_reg_0_15_0_5 : label is 0;
+  attribute ram_addr_end : integer;
+  attribute ram_addr_end of RAM_reg_0_15_0_5 : label is 15;
+  attribute ram_offset : integer;
+  attribute ram_offset of RAM_reg_0_15_0_5 : label is 0;
+  attribute ram_slice_begin : integer;
+  attribute ram_slice_begin of RAM_reg_0_15_0_5 : label is 0;
+  attribute ram_slice_end : integer;
+  attribute ram_slice_end of RAM_reg_0_15_0_5 : label is 5;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_102_107 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_102_107 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_102_107 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_102_107 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_102_107 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_102_107 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_102_107 : label is 102;
+  attribute ram_slice_end of RAM_reg_0_15_102_107 : label is 107;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_108_113 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_108_113 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_108_113 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_108_113 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_108_113 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_108_113 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_108_113 : label is 108;
+  attribute ram_slice_end of RAM_reg_0_15_108_113 : label is 113;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_114_119 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_114_119 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_114_119 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_114_119 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_114_119 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_114_119 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_114_119 : label is 114;
+  attribute ram_slice_end of RAM_reg_0_15_114_119 : label is 119;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_120_125 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_120_125 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_120_125 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_120_125 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_120_125 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_120_125 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_120_125 : label is 120;
+  attribute ram_slice_end of RAM_reg_0_15_120_125 : label is 125;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_126_131 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_126_131 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_126_131 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_126_131 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_126_131 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_126_131 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_126_131 : label is 126;
+  attribute ram_slice_end of RAM_reg_0_15_126_131 : label is 131;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_12_17 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_12_17 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_12_17 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_12_17 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_12_17 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_12_17 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_12_17 : label is 12;
+  attribute ram_slice_end of RAM_reg_0_15_12_17 : label is 17;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_132_137 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_132_137 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_132_137 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_132_137 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_132_137 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_132_137 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_132_137 : label is 132;
+  attribute ram_slice_end of RAM_reg_0_15_132_137 : label is 137;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_138_143 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_138_143 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_138_143 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_138_143 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_138_143 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_138_143 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_138_143 : label is 138;
+  attribute ram_slice_end of RAM_reg_0_15_138_143 : label is 143;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_144_149 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_144_149 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_144_149 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_144_149 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_144_149 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_144_149 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_144_149 : label is 144;
+  attribute ram_slice_end of RAM_reg_0_15_144_149 : label is 149;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_150_155 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_150_155 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_150_155 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_150_155 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_150_155 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_150_155 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_150_155 : label is 150;
+  attribute ram_slice_end of RAM_reg_0_15_150_155 : label is 155;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_156_161 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_156_161 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_156_161 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_156_161 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_156_161 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_156_161 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_156_161 : label is 156;
+  attribute ram_slice_end of RAM_reg_0_15_156_161 : label is 161;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_162_167 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_162_167 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_162_167 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_162_167 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_162_167 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_162_167 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_162_167 : label is 162;
+  attribute ram_slice_end of RAM_reg_0_15_162_167 : label is 167;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_168_173 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_168_173 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_168_173 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_168_173 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_168_173 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_168_173 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_168_173 : label is 168;
+  attribute ram_slice_end of RAM_reg_0_15_168_173 : label is 173;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_174_179 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_174_179 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_174_179 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_174_179 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_174_179 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_174_179 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_174_179 : label is 174;
+  attribute ram_slice_end of RAM_reg_0_15_174_179 : label is 179;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_180_185 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_180_185 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_180_185 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_180_185 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_180_185 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_180_185 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_180_185 : label is 180;
+  attribute ram_slice_end of RAM_reg_0_15_180_185 : label is 185;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_186_191 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_186_191 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_186_191 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_186_191 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_186_191 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_186_191 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_186_191 : label is 186;
+  attribute ram_slice_end of RAM_reg_0_15_186_191 : label is 191;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_18_23 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_18_23 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_18_23 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_18_23 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_18_23 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_18_23 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_18_23 : label is 18;
+  attribute ram_slice_end of RAM_reg_0_15_18_23 : label is 23;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_192_197 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_192_197 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_192_197 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_192_197 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_192_197 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_192_197 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_192_197 : label is 192;
+  attribute ram_slice_end of RAM_reg_0_15_192_197 : label is 197;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_198_203 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_198_203 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_198_203 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_198_203 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_198_203 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_198_203 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_198_203 : label is 198;
+  attribute ram_slice_end of RAM_reg_0_15_198_203 : label is 203;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_204_209 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_204_209 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_204_209 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_204_209 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_204_209 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_204_209 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_204_209 : label is 204;
+  attribute ram_slice_end of RAM_reg_0_15_204_209 : label is 209;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_210_215 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_210_215 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_210_215 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_210_215 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_210_215 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_210_215 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_210_215 : label is 210;
+  attribute ram_slice_end of RAM_reg_0_15_210_215 : label is 215;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_216_221 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_216_221 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_216_221 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_216_221 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_216_221 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_216_221 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_216_221 : label is 216;
+  attribute ram_slice_end of RAM_reg_0_15_216_221 : label is 221;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_222_227 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_222_227 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_222_227 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_222_227 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_222_227 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_222_227 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_222_227 : label is 222;
+  attribute ram_slice_end of RAM_reg_0_15_222_227 : label is 227;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_228_233 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_228_233 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_228_233 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_228_233 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_228_233 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_228_233 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_228_233 : label is 228;
+  attribute ram_slice_end of RAM_reg_0_15_228_233 : label is 233;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_234_239 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_234_239 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_234_239 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_234_239 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_234_239 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_234_239 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_234_239 : label is 234;
+  attribute ram_slice_end of RAM_reg_0_15_234_239 : label is 239;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_240_245 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_240_245 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_240_245 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_240_245 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_240_245 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_240_245 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_240_245 : label is 240;
+  attribute ram_slice_end of RAM_reg_0_15_240_245 : label is 245;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_246_251 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_246_251 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_246_251 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_246_251 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_246_251 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_246_251 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_246_251 : label is 246;
+  attribute ram_slice_end of RAM_reg_0_15_246_251 : label is 251;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_24_29 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_24_29 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_24_29 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_24_29 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_24_29 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_24_29 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_24_29 : label is 24;
+  attribute ram_slice_end of RAM_reg_0_15_24_29 : label is 29;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_252_257 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_252_257 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_252_257 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_252_257 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_252_257 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_252_257 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_252_257 : label is 252;
+  attribute ram_slice_end of RAM_reg_0_15_252_257 : label is 257;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_258_263 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_258_263 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_258_263 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_258_263 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_258_263 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_258_263 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_258_263 : label is 258;
+  attribute ram_slice_end of RAM_reg_0_15_258_263 : label is 263;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_264_269 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_264_269 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_264_269 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_264_269 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_264_269 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_264_269 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_264_269 : label is 264;
+  attribute ram_slice_end of RAM_reg_0_15_264_269 : label is 269;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_270_275 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_270_275 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_270_275 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_270_275 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_270_275 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_270_275 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_270_275 : label is 270;
+  attribute ram_slice_end of RAM_reg_0_15_270_275 : label is 275;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_276_281 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_276_281 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_276_281 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_276_281 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_276_281 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_276_281 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_276_281 : label is 276;
+  attribute ram_slice_end of RAM_reg_0_15_276_281 : label is 281;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_282_287 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_282_287 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_282_287 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_282_287 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_282_287 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_282_287 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_282_287 : label is 282;
+  attribute ram_slice_end of RAM_reg_0_15_282_287 : label is 287;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_288_289 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_288_289 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_288_289 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_288_289 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_288_289 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_288_289 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_288_289 : label is 288;
+  attribute ram_slice_end of RAM_reg_0_15_288_289 : label is 289;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_30_35 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_30_35 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_30_35 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_30_35 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_30_35 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_30_35 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_30_35 : label is 30;
+  attribute ram_slice_end of RAM_reg_0_15_30_35 : label is 35;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_36_41 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_36_41 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_36_41 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_36_41 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_36_41 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_36_41 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_36_41 : label is 36;
+  attribute ram_slice_end of RAM_reg_0_15_36_41 : label is 41;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_42_47 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_42_47 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_42_47 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_42_47 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_42_47 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_42_47 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_42_47 : label is 42;
+  attribute ram_slice_end of RAM_reg_0_15_42_47 : label is 47;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_48_53 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_48_53 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_48_53 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_48_53 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_48_53 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_48_53 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_48_53 : label is 48;
+  attribute ram_slice_end of RAM_reg_0_15_48_53 : label is 53;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_54_59 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_54_59 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_54_59 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_54_59 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_54_59 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_54_59 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_54_59 : label is 54;
+  attribute ram_slice_end of RAM_reg_0_15_54_59 : label is 59;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_60_65 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_60_65 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_60_65 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_60_65 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_60_65 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_60_65 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_60_65 : label is 60;
+  attribute ram_slice_end of RAM_reg_0_15_60_65 : label is 65;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_66_71 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_66_71 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_66_71 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_66_71 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_66_71 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_66_71 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_66_71 : label is 66;
+  attribute ram_slice_end of RAM_reg_0_15_66_71 : label is 71;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_6_11 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_6_11 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_6_11 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_6_11 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_6_11 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_6_11 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_6_11 : label is 6;
+  attribute ram_slice_end of RAM_reg_0_15_6_11 : label is 11;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_72_77 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_72_77 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_72_77 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_72_77 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_72_77 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_72_77 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_72_77 : label is 72;
+  attribute ram_slice_end of RAM_reg_0_15_72_77 : label is 77;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_78_83 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_78_83 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_78_83 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_78_83 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_78_83 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_78_83 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_78_83 : label is 78;
+  attribute ram_slice_end of RAM_reg_0_15_78_83 : label is 83;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_84_89 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_84_89 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_84_89 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_84_89 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_84_89 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_84_89 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_84_89 : label is 84;
+  attribute ram_slice_end of RAM_reg_0_15_84_89 : label is 89;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_90_95 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_90_95 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_90_95 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_90_95 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_90_95 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_90_95 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_90_95 : label is 90;
+  attribute ram_slice_end of RAM_reg_0_15_90_95 : label is 95;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_96_101 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_96_101 : label is 4640;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_96_101 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_96_101 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_96_101 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_96_101 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_96_101 : label is 96;
+  attribute ram_slice_end of RAM_reg_0_15_96_101 : label is 101;
 begin
 RAM_reg_0_15_0_5: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(1 downto 0),
       DIB(1 downto 0) => din(3 downto 2),
       DIC(1 downto 0) => din(5 downto 4),
@@ -227,13 +577,13 @@ RAM_reg_0_15_0_5: unisim.vcomponents.RAM32M
 RAM_reg_0_15_102_107: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(103 downto 102),
       DIB(1 downto 0) => din(105 downto 104),
       DIC(1 downto 0) => din(107 downto 106),
@@ -248,13 +598,13 @@ RAM_reg_0_15_102_107: unisim.vcomponents.RAM32M
 RAM_reg_0_15_108_113: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(109 downto 108),
       DIB(1 downto 0) => din(111 downto 110),
       DIC(1 downto 0) => din(113 downto 112),
@@ -269,13 +619,13 @@ RAM_reg_0_15_108_113: unisim.vcomponents.RAM32M
 RAM_reg_0_15_114_119: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(115 downto 114),
       DIB(1 downto 0) => din(117 downto 116),
       DIC(1 downto 0) => din(119 downto 118),
@@ -290,13 +640,13 @@ RAM_reg_0_15_114_119: unisim.vcomponents.RAM32M
 RAM_reg_0_15_120_125: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(121 downto 120),
       DIB(1 downto 0) => din(123 downto 122),
       DIC(1 downto 0) => din(125 downto 124),
@@ -311,13 +661,13 @@ RAM_reg_0_15_120_125: unisim.vcomponents.RAM32M
 RAM_reg_0_15_126_131: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(127 downto 126),
       DIB(1 downto 0) => din(129 downto 128),
       DIC(1 downto 0) => din(131 downto 130),
@@ -332,13 +682,13 @@ RAM_reg_0_15_126_131: unisim.vcomponents.RAM32M
 RAM_reg_0_15_12_17: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(13 downto 12),
       DIB(1 downto 0) => din(15 downto 14),
       DIC(1 downto 0) => din(17 downto 16),
@@ -353,13 +703,13 @@ RAM_reg_0_15_12_17: unisim.vcomponents.RAM32M
 RAM_reg_0_15_132_137: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(133 downto 132),
       DIB(1 downto 0) => din(135 downto 134),
       DIC(1 downto 0) => din(137 downto 136),
@@ -374,13 +724,13 @@ RAM_reg_0_15_132_137: unisim.vcomponents.RAM32M
 RAM_reg_0_15_138_143: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(139 downto 138),
       DIB(1 downto 0) => din(141 downto 140),
       DIC(1 downto 0) => din(143 downto 142),
@@ -395,13 +745,13 @@ RAM_reg_0_15_138_143: unisim.vcomponents.RAM32M
 RAM_reg_0_15_144_149: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(145 downto 144),
       DIB(1 downto 0) => din(147 downto 146),
       DIC(1 downto 0) => din(149 downto 148),
@@ -416,13 +766,13 @@ RAM_reg_0_15_144_149: unisim.vcomponents.RAM32M
 RAM_reg_0_15_150_155: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(151 downto 150),
       DIB(1 downto 0) => din(153 downto 152),
       DIC(1 downto 0) => din(155 downto 154),
@@ -437,13 +787,13 @@ RAM_reg_0_15_150_155: unisim.vcomponents.RAM32M
 RAM_reg_0_15_156_161: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(157 downto 156),
       DIB(1 downto 0) => din(159 downto 158),
       DIC(1 downto 0) => din(161 downto 160),
@@ -458,13 +808,13 @@ RAM_reg_0_15_156_161: unisim.vcomponents.RAM32M
 RAM_reg_0_15_162_167: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(163 downto 162),
       DIB(1 downto 0) => din(165 downto 164),
       DIC(1 downto 0) => din(167 downto 166),
@@ -479,13 +829,13 @@ RAM_reg_0_15_162_167: unisim.vcomponents.RAM32M
 RAM_reg_0_15_168_173: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(169 downto 168),
       DIB(1 downto 0) => din(171 downto 170),
       DIC(1 downto 0) => din(173 downto 172),
@@ -500,13 +850,13 @@ RAM_reg_0_15_168_173: unisim.vcomponents.RAM32M
 RAM_reg_0_15_174_179: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(175 downto 174),
       DIB(1 downto 0) => din(177 downto 176),
       DIC(1 downto 0) => din(179 downto 178),
@@ -521,13 +871,13 @@ RAM_reg_0_15_174_179: unisim.vcomponents.RAM32M
 RAM_reg_0_15_180_185: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(181 downto 180),
       DIB(1 downto 0) => din(183 downto 182),
       DIC(1 downto 0) => din(185 downto 184),
@@ -542,13 +892,13 @@ RAM_reg_0_15_180_185: unisim.vcomponents.RAM32M
 RAM_reg_0_15_186_191: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(187 downto 186),
       DIB(1 downto 0) => din(189 downto 188),
       DIC(1 downto 0) => din(191 downto 190),
@@ -563,13 +913,13 @@ RAM_reg_0_15_186_191: unisim.vcomponents.RAM32M
 RAM_reg_0_15_18_23: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(19 downto 18),
       DIB(1 downto 0) => din(21 downto 20),
       DIC(1 downto 0) => din(23 downto 22),
@@ -584,13 +934,13 @@ RAM_reg_0_15_18_23: unisim.vcomponents.RAM32M
 RAM_reg_0_15_192_197: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(193 downto 192),
       DIB(1 downto 0) => din(195 downto 194),
       DIC(1 downto 0) => din(197 downto 196),
@@ -605,13 +955,13 @@ RAM_reg_0_15_192_197: unisim.vcomponents.RAM32M
 RAM_reg_0_15_198_203: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(199 downto 198),
       DIB(1 downto 0) => din(201 downto 200),
       DIC(1 downto 0) => din(203 downto 202),
@@ -626,13 +976,13 @@ RAM_reg_0_15_198_203: unisim.vcomponents.RAM32M
 RAM_reg_0_15_204_209: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(205 downto 204),
       DIB(1 downto 0) => din(207 downto 206),
       DIC(1 downto 0) => din(209 downto 208),
@@ -647,13 +997,13 @@ RAM_reg_0_15_204_209: unisim.vcomponents.RAM32M
 RAM_reg_0_15_210_215: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(211 downto 210),
       DIB(1 downto 0) => din(213 downto 212),
       DIC(1 downto 0) => din(215 downto 214),
@@ -668,13 +1018,13 @@ RAM_reg_0_15_210_215: unisim.vcomponents.RAM32M
 RAM_reg_0_15_216_221: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(217 downto 216),
       DIB(1 downto 0) => din(219 downto 218),
       DIC(1 downto 0) => din(221 downto 220),
@@ -689,13 +1039,13 @@ RAM_reg_0_15_216_221: unisim.vcomponents.RAM32M
 RAM_reg_0_15_222_227: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(223 downto 222),
       DIB(1 downto 0) => din(225 downto 224),
       DIC(1 downto 0) => din(227 downto 226),
@@ -710,13 +1060,13 @@ RAM_reg_0_15_222_227: unisim.vcomponents.RAM32M
 RAM_reg_0_15_228_233: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(229 downto 228),
       DIB(1 downto 0) => din(231 downto 230),
       DIC(1 downto 0) => din(233 downto 232),
@@ -731,13 +1081,13 @@ RAM_reg_0_15_228_233: unisim.vcomponents.RAM32M
 RAM_reg_0_15_234_239: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(235 downto 234),
       DIB(1 downto 0) => din(237 downto 236),
       DIC(1 downto 0) => din(239 downto 238),
@@ -752,13 +1102,13 @@ RAM_reg_0_15_234_239: unisim.vcomponents.RAM32M
 RAM_reg_0_15_240_245: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(241 downto 240),
       DIB(1 downto 0) => din(243 downto 242),
       DIC(1 downto 0) => din(245 downto 244),
@@ -773,13 +1123,13 @@ RAM_reg_0_15_240_245: unisim.vcomponents.RAM32M
 RAM_reg_0_15_246_251: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(247 downto 246),
       DIB(1 downto 0) => din(249 downto 248),
       DIC(1 downto 0) => din(251 downto 250),
@@ -794,13 +1144,13 @@ RAM_reg_0_15_246_251: unisim.vcomponents.RAM32M
 RAM_reg_0_15_24_29: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(25 downto 24),
       DIB(1 downto 0) => din(27 downto 26),
       DIC(1 downto 0) => din(29 downto 28),
@@ -815,13 +1165,13 @@ RAM_reg_0_15_24_29: unisim.vcomponents.RAM32M
 RAM_reg_0_15_252_257: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(253 downto 252),
       DIB(1 downto 0) => din(255 downto 254),
       DIC(1 downto 0) => din(257 downto 256),
@@ -836,13 +1186,13 @@ RAM_reg_0_15_252_257: unisim.vcomponents.RAM32M
 RAM_reg_0_15_258_263: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(259 downto 258),
       DIB(1 downto 0) => din(261 downto 260),
       DIC(1 downto 0) => din(263 downto 262),
@@ -857,13 +1207,13 @@ RAM_reg_0_15_258_263: unisim.vcomponents.RAM32M
 RAM_reg_0_15_264_269: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(265 downto 264),
       DIB(1 downto 0) => din(267 downto 266),
       DIC(1 downto 0) => din(269 downto 268),
@@ -878,13 +1228,13 @@ RAM_reg_0_15_264_269: unisim.vcomponents.RAM32M
 RAM_reg_0_15_270_275: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(271 downto 270),
       DIB(1 downto 0) => din(273 downto 272),
       DIC(1 downto 0) => din(275 downto 274),
@@ -899,13 +1249,13 @@ RAM_reg_0_15_270_275: unisim.vcomponents.RAM32M
 RAM_reg_0_15_276_281: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(277 downto 276),
       DIB(1 downto 0) => din(279 downto 278),
       DIC(1 downto 0) => din(281 downto 280),
@@ -920,13 +1270,13 @@ RAM_reg_0_15_276_281: unisim.vcomponents.RAM32M
 RAM_reg_0_15_282_287: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(283 downto 282),
       DIB(1 downto 0) => din(285 downto 284),
       DIC(1 downto 0) => din(287 downto 286),
@@ -941,13 +1291,13 @@ RAM_reg_0_15_282_287: unisim.vcomponents.RAM32M
 RAM_reg_0_15_288_289: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(289 downto 288),
       DIB(1 downto 0) => B"00",
       DIC(1 downto 0) => B"00",
@@ -962,13 +1312,13 @@ RAM_reg_0_15_288_289: unisim.vcomponents.RAM32M
 RAM_reg_0_15_30_35: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(31 downto 30),
       DIB(1 downto 0) => din(33 downto 32),
       DIC(1 downto 0) => din(35 downto 34),
@@ -983,13 +1333,13 @@ RAM_reg_0_15_30_35: unisim.vcomponents.RAM32M
 RAM_reg_0_15_36_41: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(37 downto 36),
       DIB(1 downto 0) => din(39 downto 38),
       DIC(1 downto 0) => din(41 downto 40),
@@ -1004,13 +1354,13 @@ RAM_reg_0_15_36_41: unisim.vcomponents.RAM32M
 RAM_reg_0_15_42_47: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(43 downto 42),
       DIB(1 downto 0) => din(45 downto 44),
       DIC(1 downto 0) => din(47 downto 46),
@@ -1025,13 +1375,13 @@ RAM_reg_0_15_42_47: unisim.vcomponents.RAM32M
 RAM_reg_0_15_48_53: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(49 downto 48),
       DIB(1 downto 0) => din(51 downto 50),
       DIC(1 downto 0) => din(53 downto 52),
@@ -1046,13 +1396,13 @@ RAM_reg_0_15_48_53: unisim.vcomponents.RAM32M
 RAM_reg_0_15_54_59: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(55 downto 54),
       DIB(1 downto 0) => din(57 downto 56),
       DIC(1 downto 0) => din(59 downto 58),
@@ -1067,13 +1417,13 @@ RAM_reg_0_15_54_59: unisim.vcomponents.RAM32M
 RAM_reg_0_15_60_65: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(61 downto 60),
       DIB(1 downto 0) => din(63 downto 62),
       DIC(1 downto 0) => din(65 downto 64),
@@ -1088,13 +1438,13 @@ RAM_reg_0_15_60_65: unisim.vcomponents.RAM32M
 RAM_reg_0_15_66_71: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(67 downto 66),
       DIB(1 downto 0) => din(69 downto 68),
       DIC(1 downto 0) => din(71 downto 70),
@@ -1109,13 +1459,13 @@ RAM_reg_0_15_66_71: unisim.vcomponents.RAM32M
 RAM_reg_0_15_6_11: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(7 downto 6),
       DIB(1 downto 0) => din(9 downto 8),
       DIC(1 downto 0) => din(11 downto 10),
@@ -1130,13 +1480,13 @@ RAM_reg_0_15_6_11: unisim.vcomponents.RAM32M
 RAM_reg_0_15_72_77: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(73 downto 72),
       DIB(1 downto 0) => din(75 downto 74),
       DIC(1 downto 0) => din(77 downto 76),
@@ -1151,13 +1501,13 @@ RAM_reg_0_15_72_77: unisim.vcomponents.RAM32M
 RAM_reg_0_15_78_83: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(79 downto 78),
       DIB(1 downto 0) => din(81 downto 80),
       DIC(1 downto 0) => din(83 downto 82),
@@ -1172,13 +1522,13 @@ RAM_reg_0_15_78_83: unisim.vcomponents.RAM32M
 RAM_reg_0_15_84_89: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(85 downto 84),
       DIB(1 downto 0) => din(87 downto 86),
       DIC(1 downto 0) => din(89 downto 88),
@@ -1193,13 +1543,13 @@ RAM_reg_0_15_84_89: unisim.vcomponents.RAM32M
 RAM_reg_0_15_90_95: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(91 downto 90),
       DIB(1 downto 0) => din(93 downto 92),
       DIC(1 downto 0) => din(95 downto 94),
@@ -1214,13 +1564,13 @@ RAM_reg_0_15_90_95: unisim.vcomponents.RAM32M
 RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
      port map (
       ADDRA(4) => '0',
-      ADDRA(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRA(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRB(4) => '0',
-      ADDRB(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRB(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRC(4) => '0',
-      ADDRC(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRC(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0),
       ADDRD(4) => '0',
-      ADDRD(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
+      ADDRD(3 downto 0) => \gpr1.dout_i_reg[1]_1\(3 downto 0),
       DIA(1 downto 0) => din(97 downto 96),
       DIB(1 downto 0) => din(99 downto 98),
       DIC(1 downto 0) => din(101 downto 100),
@@ -1238,7 +1588,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(0),
       Q => Q(0)
@@ -1249,7 +1599,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(100),
       Q => Q(100)
@@ -1260,7 +1610,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(101),
       Q => Q(101)
@@ -1271,7 +1621,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(102),
       Q => Q(102)
@@ -1282,7 +1632,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(103),
       Q => Q(103)
@@ -1293,7 +1643,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(104),
       Q => Q(104)
@@ -1304,7 +1654,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(105),
       Q => Q(105)
@@ -1315,7 +1665,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(106),
       Q => Q(106)
@@ -1326,7 +1676,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(107),
       Q => Q(107)
@@ -1337,7 +1687,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(108),
       Q => Q(108)
@@ -1348,7 +1698,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(109),
       Q => Q(109)
@@ -1359,7 +1709,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(10),
       Q => Q(10)
@@ -1370,7 +1720,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(110),
       Q => Q(110)
@@ -1381,7 +1731,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(111),
       Q => Q(111)
@@ -1392,7 +1742,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(112),
       Q => Q(112)
@@ -1403,7 +1753,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(113),
       Q => Q(113)
@@ -1414,7 +1764,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(114),
       Q => Q(114)
@@ -1425,7 +1775,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(115),
       Q => Q(115)
@@ -1436,7 +1786,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(116),
       Q => Q(116)
@@ -1447,7 +1797,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(117),
       Q => Q(117)
@@ -1458,7 +1808,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(118),
       Q => Q(118)
@@ -1469,7 +1819,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(119),
       Q => Q(119)
@@ -1480,7 +1830,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(11),
       Q => Q(11)
@@ -1491,7 +1841,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(120),
       Q => Q(120)
@@ -1502,7 +1852,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(121),
       Q => Q(121)
@@ -1513,7 +1863,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(122),
       Q => Q(122)
@@ -1524,7 +1874,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(123),
       Q => Q(123)
@@ -1535,7 +1885,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(124),
       Q => Q(124)
@@ -1546,7 +1896,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(125),
       Q => Q(125)
@@ -1557,7 +1907,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(126),
       Q => Q(126)
@@ -1568,7 +1918,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(127),
       Q => Q(127)
@@ -1579,7 +1929,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(128),
       Q => Q(128)
@@ -1590,7 +1940,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(129),
       Q => Q(129)
@@ -1601,7 +1951,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(12),
       Q => Q(12)
@@ -1612,7 +1962,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(130),
       Q => Q(130)
@@ -1623,7 +1973,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(131),
       Q => Q(131)
@@ -1634,7 +1984,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(132),
       Q => Q(132)
@@ -1645,7 +1995,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(133),
       Q => Q(133)
@@ -1656,7 +2006,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(134),
       Q => Q(134)
@@ -1667,7 +2017,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(135),
       Q => Q(135)
@@ -1678,7 +2028,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(136),
       Q => Q(136)
@@ -1689,7 +2039,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(137),
       Q => Q(137)
@@ -1700,7 +2050,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(138),
       Q => Q(138)
@@ -1711,7 +2061,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(139),
       Q => Q(139)
@@ -1722,7 +2072,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(13),
       Q => Q(13)
@@ -1733,7 +2083,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(140),
       Q => Q(140)
@@ -1744,7 +2094,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(141),
       Q => Q(141)
@@ -1755,7 +2105,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(142),
       Q => Q(142)
@@ -1766,7 +2116,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(143),
       Q => Q(143)
@@ -1777,7 +2127,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(144),
       Q => Q(144)
@@ -1788,7 +2138,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(145),
       Q => Q(145)
@@ -1799,7 +2149,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(146),
       Q => Q(146)
@@ -1810,7 +2160,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(147),
       Q => Q(147)
@@ -1821,7 +2171,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(148),
       Q => Q(148)
@@ -1832,7 +2182,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(149),
       Q => Q(149)
@@ -1843,7 +2193,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(14),
       Q => Q(14)
@@ -1854,7 +2204,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(150),
       Q => Q(150)
@@ -1865,7 +2215,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(151),
       Q => Q(151)
@@ -1876,7 +2226,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(152),
       Q => Q(152)
@@ -1887,7 +2237,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(153),
       Q => Q(153)
@@ -1898,7 +2248,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(154),
       Q => Q(154)
@@ -1909,7 +2259,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(155),
       Q => Q(155)
@@ -1920,7 +2270,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(156),
       Q => Q(156)
@@ -1931,7 +2281,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(157),
       Q => Q(157)
@@ -1942,7 +2292,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(158),
       Q => Q(158)
@@ -1953,7 +2303,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(159),
       Q => Q(159)
@@ -1964,7 +2314,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(15),
       Q => Q(15)
@@ -1975,7 +2325,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(160),
       Q => Q(160)
@@ -1986,7 +2336,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(161),
       Q => Q(161)
@@ -1997,7 +2347,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(162),
       Q => Q(162)
@@ -2008,7 +2358,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(163),
       Q => Q(163)
@@ -2019,7 +2369,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(164),
       Q => Q(164)
@@ -2030,7 +2380,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(165),
       Q => Q(165)
@@ -2041,7 +2391,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(166),
       Q => Q(166)
@@ -2052,7 +2402,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(167),
       Q => Q(167)
@@ -2063,7 +2413,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(168),
       Q => Q(168)
@@ -2074,7 +2424,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(169),
       Q => Q(169)
@@ -2085,7 +2435,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(16),
       Q => Q(16)
@@ -2096,7 +2446,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(170),
       Q => Q(170)
@@ -2107,7 +2457,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(171),
       Q => Q(171)
@@ -2118,7 +2468,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(172),
       Q => Q(172)
@@ -2129,7 +2479,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(173),
       Q => Q(173)
@@ -2140,7 +2490,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(174),
       Q => Q(174)
@@ -2151,7 +2501,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(175),
       Q => Q(175)
@@ -2162,7 +2512,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(176),
       Q => Q(176)
@@ -2173,7 +2523,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(177),
       Q => Q(177)
@@ -2184,7 +2534,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(178),
       Q => Q(178)
@@ -2195,7 +2545,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(179),
       Q => Q(179)
@@ -2206,7 +2556,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(17),
       Q => Q(17)
@@ -2217,7 +2567,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(180),
       Q => Q(180)
@@ -2228,7 +2578,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(181),
       Q => Q(181)
@@ -2239,7 +2589,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(182),
       Q => Q(182)
@@ -2250,7 +2600,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(183),
       Q => Q(183)
@@ -2261,7 +2611,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(184),
       Q => Q(184)
@@ -2272,7 +2622,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(185),
       Q => Q(185)
@@ -2283,7 +2633,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(186),
       Q => Q(186)
@@ -2294,7 +2644,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(187),
       Q => Q(187)
@@ -2305,7 +2655,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(188),
       Q => Q(188)
@@ -2316,7 +2666,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(189),
       Q => Q(189)
@@ -2327,7 +2677,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(18),
       Q => Q(18)
@@ -2338,7 +2688,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(190),
       Q => Q(190)
@@ -2349,7 +2699,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(191),
       Q => Q(191)
@@ -2360,7 +2710,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(192),
       Q => Q(192)
@@ -2371,7 +2721,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(193),
       Q => Q(193)
@@ -2382,7 +2732,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(194),
       Q => Q(194)
@@ -2393,7 +2743,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(195),
       Q => Q(195)
@@ -2404,7 +2754,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(196),
       Q => Q(196)
@@ -2415,7 +2765,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(197),
       Q => Q(197)
@@ -2426,7 +2776,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(198),
       Q => Q(198)
@@ -2437,7 +2787,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(199),
       Q => Q(199)
@@ -2448,7 +2798,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(19),
       Q => Q(19)
@@ -2459,7 +2809,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(1),
       Q => Q(1)
@@ -2470,7 +2820,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(200),
       Q => Q(200)
@@ -2481,7 +2831,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(201),
       Q => Q(201)
@@ -2492,7 +2842,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(202),
       Q => Q(202)
@@ -2503,7 +2853,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(203),
       Q => Q(203)
@@ -2514,7 +2864,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(204),
       Q => Q(204)
@@ -2525,7 +2875,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(205),
       Q => Q(205)
@@ -2536,7 +2886,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(206),
       Q => Q(206)
@@ -2547,7 +2897,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(207),
       Q => Q(207)
@@ -2558,7 +2908,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(208),
       Q => Q(208)
@@ -2569,7 +2919,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(209),
       Q => Q(209)
@@ -2580,7 +2930,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(20),
       Q => Q(20)
@@ -2591,7 +2941,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(210),
       Q => Q(210)
@@ -2602,7 +2952,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(211),
       Q => Q(211)
@@ -2613,7 +2963,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(212),
       Q => Q(212)
@@ -2624,7 +2974,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(213),
       Q => Q(213)
@@ -2635,7 +2985,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(214),
       Q => Q(214)
@@ -2646,7 +2996,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(215),
       Q => Q(215)
@@ -2657,7 +3007,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(216),
       Q => Q(216)
@@ -2668,7 +3018,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(217),
       Q => Q(217)
@@ -2679,7 +3029,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(218),
       Q => Q(218)
@@ -2690,7 +3040,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(219),
       Q => Q(219)
@@ -2701,7 +3051,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(21),
       Q => Q(21)
@@ -2712,7 +3062,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(220),
       Q => Q(220)
@@ -2723,7 +3073,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(221),
       Q => Q(221)
@@ -2734,7 +3084,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(222),
       Q => Q(222)
@@ -2745,7 +3095,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(223),
       Q => Q(223)
@@ -2756,7 +3106,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(224),
       Q => Q(224)
@@ -2767,7 +3117,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(225),
       Q => Q(225)
@@ -2778,7 +3128,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(226),
       Q => Q(226)
@@ -2789,7 +3139,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(227),
       Q => Q(227)
@@ -2800,7 +3150,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(228),
       Q => Q(228)
@@ -2811,7 +3161,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(229),
       Q => Q(229)
@@ -2822,7 +3172,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(22),
       Q => Q(22)
@@ -2833,7 +3183,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(230),
       Q => Q(230)
@@ -2844,7 +3194,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(231),
       Q => Q(231)
@@ -2855,7 +3205,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(232),
       Q => Q(232)
@@ -2866,7 +3216,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(233),
       Q => Q(233)
@@ -2877,7 +3227,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(234),
       Q => Q(234)
@@ -2888,7 +3238,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(235),
       Q => Q(235)
@@ -2899,7 +3249,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(236),
       Q => Q(236)
@@ -2910,7 +3260,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(237),
       Q => Q(237)
@@ -2921,7 +3271,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(238),
       Q => Q(238)
@@ -2932,7 +3282,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(239),
       Q => Q(239)
@@ -2943,7 +3293,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(23),
       Q => Q(23)
@@ -2954,7 +3304,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(240),
       Q => Q(240)
@@ -2965,7 +3315,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(241),
       Q => Q(241)
@@ -2976,7 +3326,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(242),
       Q => Q(242)
@@ -2987,7 +3337,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(243),
       Q => Q(243)
@@ -2998,7 +3348,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(244),
       Q => Q(244)
@@ -3009,7 +3359,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(245),
       Q => Q(245)
@@ -3020,7 +3370,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(246),
       Q => Q(246)
@@ -3031,7 +3381,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(247),
       Q => Q(247)
@@ -3042,7 +3392,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(248),
       Q => Q(248)
@@ -3053,7 +3403,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(249),
       Q => Q(249)
@@ -3064,7 +3414,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(24),
       Q => Q(24)
@@ -3075,7 +3425,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(250),
       Q => Q(250)
@@ -3086,7 +3436,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(251),
       Q => Q(251)
@@ -3097,7 +3447,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(252),
       Q => Q(252)
@@ -3108,7 +3458,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(253),
       Q => Q(253)
@@ -3119,7 +3469,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(254),
       Q => Q(254)
@@ -3130,7 +3480,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(255),
       Q => Q(255)
@@ -3141,7 +3491,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(256),
       Q => Q(256)
@@ -3152,7 +3502,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(257),
       Q => Q(257)
@@ -3163,7 +3513,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(258),
       Q => Q(258)
@@ -3174,7 +3524,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(259),
       Q => Q(259)
@@ -3185,7 +3535,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(25),
       Q => Q(25)
@@ -3196,7 +3546,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(260),
       Q => Q(260)
@@ -3207,7 +3557,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(261),
       Q => Q(261)
@@ -3218,7 +3568,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(262),
       Q => Q(262)
@@ -3229,7 +3579,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(263),
       Q => Q(263)
@@ -3240,7 +3590,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(264),
       Q => Q(264)
@@ -3251,7 +3601,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(265),
       Q => Q(265)
@@ -3262,7 +3612,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(266),
       Q => Q(266)
@@ -3273,7 +3623,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(267),
       Q => Q(267)
@@ -3284,7 +3634,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(268),
       Q => Q(268)
@@ -3295,7 +3645,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(269),
       Q => Q(269)
@@ -3306,7 +3656,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(26),
       Q => Q(26)
@@ -3317,7 +3667,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(270),
       Q => Q(270)
@@ -3328,7 +3678,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(271),
       Q => Q(271)
@@ -3339,7 +3689,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(272),
       Q => Q(272)
@@ -3350,7 +3700,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(273),
       Q => Q(273)
@@ -3361,7 +3711,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(274),
       Q => Q(274)
@@ -3372,7 +3722,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(275),
       Q => Q(275)
@@ -3383,7 +3733,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(276),
       Q => Q(276)
@@ -3394,7 +3744,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(277),
       Q => Q(277)
@@ -3405,7 +3755,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(278),
       Q => Q(278)
@@ -3416,7 +3766,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(279),
       Q => Q(279)
@@ -3427,7 +3777,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(27),
       Q => Q(27)
@@ -3438,7 +3788,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(280),
       Q => Q(280)
@@ -3449,7 +3799,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(281),
       Q => Q(281)
@@ -3460,7 +3810,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(282),
       Q => Q(282)
@@ -3471,7 +3821,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(283),
       Q => Q(283)
@@ -3482,7 +3832,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(284),
       Q => Q(284)
@@ -3493,7 +3843,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(285),
       Q => Q(285)
@@ -3504,7 +3854,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(286),
       Q => Q(286)
@@ -3515,7 +3865,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(287),
       Q => Q(287)
@@ -3526,7 +3876,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(288),
       Q => Q(288)
@@ -3537,7 +3887,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(289),
       Q => Q(289)
@@ -3548,7 +3898,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(28),
       Q => Q(28)
@@ -3559,7 +3909,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(29),
       Q => Q(29)
@@ -3570,7 +3920,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(2),
       Q => Q(2)
@@ -3581,7 +3931,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(30),
       Q => Q(30)
@@ -3592,7 +3942,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(31),
       Q => Q(31)
@@ -3603,7 +3953,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(32),
       Q => Q(32)
@@ -3614,7 +3964,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(33),
       Q => Q(33)
@@ -3625,7 +3975,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(34),
       Q => Q(34)
@@ -3636,7 +3986,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(35),
       Q => Q(35)
@@ -3647,7 +3997,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(36),
       Q => Q(36)
@@ -3658,7 +4008,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(37),
       Q => Q(37)
@@ -3669,7 +4019,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(38),
       Q => Q(38)
@@ -3680,7 +4030,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(39),
       Q => Q(39)
@@ -3691,7 +4041,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(3),
       Q => Q(3)
@@ -3702,7 +4052,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(40),
       Q => Q(40)
@@ -3713,7 +4063,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(41),
       Q => Q(41)
@@ -3724,7 +4074,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(42),
       Q => Q(42)
@@ -3735,7 +4085,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(43),
       Q => Q(43)
@@ -3746,7 +4096,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(44),
       Q => Q(44)
@@ -3757,7 +4107,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(45),
       Q => Q(45)
@@ -3768,7 +4118,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(46),
       Q => Q(46)
@@ -3779,7 +4129,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(47),
       Q => Q(47)
@@ -3790,7 +4140,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(48),
       Q => Q(48)
@@ -3801,7 +4151,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(49),
       Q => Q(49)
@@ -3812,7 +4162,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(4),
       Q => Q(4)
@@ -3823,7 +4173,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(50),
       Q => Q(50)
@@ -3834,7 +4184,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(51),
       Q => Q(51)
@@ -3845,7 +4195,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(52),
       Q => Q(52)
@@ -3856,7 +4206,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(53),
       Q => Q(53)
@@ -3867,7 +4217,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(54),
       Q => Q(54)
@@ -3878,7 +4228,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(55),
       Q => Q(55)
@@ -3889,7 +4239,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(56),
       Q => Q(56)
@@ -3900,7 +4250,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(57),
       Q => Q(57)
@@ -3911,7 +4261,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(58),
       Q => Q(58)
@@ -3922,7 +4272,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(59),
       Q => Q(59)
@@ -3933,7 +4283,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(5),
       Q => Q(5)
@@ -3944,7 +4294,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(60),
       Q => Q(60)
@@ -3955,7 +4305,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(61),
       Q => Q(61)
@@ -3966,7 +4316,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(62),
       Q => Q(62)
@@ -3977,7 +4327,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(63),
       Q => Q(63)
@@ -3988,7 +4338,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(64),
       Q => Q(64)
@@ -3999,7 +4349,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(65),
       Q => Q(65)
@@ -4010,7 +4360,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(66),
       Q => Q(66)
@@ -4021,7 +4371,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(67),
       Q => Q(67)
@@ -4032,7 +4382,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(68),
       Q => Q(68)
@@ -4043,7 +4393,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(69),
       Q => Q(69)
@@ -4054,7 +4404,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(6),
       Q => Q(6)
@@ -4065,7 +4415,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(70),
       Q => Q(70)
@@ -4076,7 +4426,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(71),
       Q => Q(71)
@@ -4087,7 +4437,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(72),
       Q => Q(72)
@@ -4098,7 +4448,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(73),
       Q => Q(73)
@@ -4109,7 +4459,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(74),
       Q => Q(74)
@@ -4120,7 +4470,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(75),
       Q => Q(75)
@@ -4131,7 +4481,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(76),
       Q => Q(76)
@@ -4142,7 +4492,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(77),
       Q => Q(77)
@@ -4153,7 +4503,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(78),
       Q => Q(78)
@@ -4164,7 +4514,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(79),
       Q => Q(79)
@@ -4175,7 +4525,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(7),
       Q => Q(7)
@@ -4186,7 +4536,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(80),
       Q => Q(80)
@@ -4197,7 +4547,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(81),
       Q => Q(81)
@@ -4208,7 +4558,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(82),
       Q => Q(82)
@@ -4219,7 +4569,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(83),
       Q => Q(83)
@@ -4230,7 +4580,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(84),
       Q => Q(84)
@@ -4241,7 +4591,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(85),
       Q => Q(85)
@@ -4252,7 +4602,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(86),
       Q => Q(86)
@@ -4263,7 +4613,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(87),
       Q => Q(87)
@@ -4274,7 +4624,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(88),
       Q => Q(88)
@@ -4285,7 +4635,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(89),
       Q => Q(89)
@@ -4296,7 +4646,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(8),
       Q => Q(8)
@@ -4307,7 +4657,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(90),
       Q => Q(90)
@@ -4318,7 +4668,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(91),
       Q => Q(91)
@@ -4329,7 +4679,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(92),
       Q => Q(92)
@@ -4340,7 +4690,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(93),
       Q => Q(93)
@@ -4351,7 +4701,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(94),
       Q => Q(94)
@@ -4362,7 +4712,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(95),
       Q => Q(95)
@@ -4373,7 +4723,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(96),
       Q => Q(96)
@@ -4384,7 +4734,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(97),
       Q => Q(97)
@@ -4395,7 +4745,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(98),
       Q => Q(98)
@@ -4406,7 +4756,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(99),
       Q => Q(99)
@@ -4417,7 +4767,7 @@ RAM_reg_0_15_96_101: unisim.vcomponents.RAM32M
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[0]\(0),
+      CE => \gpr1.dout_i_reg[0]_0\(0),
       CLR => AR(0),
       D => p_0_out(9),
       Q => Q(9)
@@ -4430,26 +4780,26 @@ use UNISIM.VCOMPONENTS.ALL;
 entity overlap_buffer_rd_bin_cntr is
   port (
     ram_full_comb : out STD_LOGIC;
-    ram_empty_fb_i_reg : out STD_LOGIC;
-    \gpr1.dout_i_reg[1]\ : out STD_LOGIC_VECTOR ( 3 downto 0 );
+    ram_full_fb_i_reg : out STD_LOGIC;
+    \gc0.count_d1_reg[3]_0\ : out STD_LOGIC_VECTOR ( 3 downto 0 );
     wr_en : in STD_LOGIC;
     E : in STD_LOGIC_VECTOR ( 0 to 0 );
     \out\ : in STD_LOGIC;
     FULL_FB : in STD_LOGIC;
-    ram_empty_fb_i_reg_0 : in STD_LOGIC;
+    ram_empty_fb_i_reg : in STD_LOGIC;
     Q : in STD_LOGIC_VECTOR ( 3 downto 0 );
-    \gcc0.gc0.count_reg[3]\ : in STD_LOGIC_VECTOR ( 3 downto 0 );
+    ram_full_fb_i_i_2_0 : in STD_LOGIC_VECTOR ( 3 downto 0 );
     clk : in STD_LOGIC;
-    \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\ : in STD_LOGIC
+    \gc0.count_d1_reg[0]_0\ : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
   attribute ORIG_REF_NAME of overlap_buffer_rd_bin_cntr : entity is "rd_bin_cntr";
 end overlap_buffer_rd_bin_cntr;
 
 architecture STRUCTURE of overlap_buffer_rd_bin_cntr is
+  signal \^gc0.count_d1_reg[3]_0\ : STD_LOGIC_VECTOR ( 3 downto 0 );
   signal \gntv_or_sync_fifo.gl0.wr/gwss.wsts/comp0\ : STD_LOGIC;
   signal \gntv_or_sync_fifo.gl0.wr/gwss.wsts/comp1\ : STD_LOGIC;
-  signal \^gpr1.dout_i_reg[1]\ : STD_LOGIC_VECTOR ( 3 downto 0 );
   signal \grss.rsts/comp1\ : STD_LOGIC;
   signal plusOp : STD_LOGIC_VECTOR ( 3 downto 0 );
   signal ram_empty_fb_i_i_4_n_0 : STD_LOGIC;
@@ -4462,7 +4812,7 @@ architecture STRUCTURE of overlap_buffer_rd_bin_cntr is
   attribute SOFT_HLUTNM of \gc0.count[3]_i_1\ : label is "soft_lutpair1";
   attribute SOFT_HLUTNM of ram_empty_fb_i_i_2 : label is "soft_lutpair0";
 begin
-  \gpr1.dout_i_reg[1]\(3 downto 0) <= \^gpr1.dout_i_reg[1]\(3 downto 0);
+  \gc0.count_d1_reg[3]_0\(3 downto 0) <= \^gc0.count_d1_reg[3]_0\(3 downto 0);
 \gc0.count[0]_i_1\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"1"
@@ -4508,9 +4858,9 @@ begin
         port map (
       C => clk,
       CE => E(0),
-      CLR => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\,
+      CLR => \gc0.count_d1_reg[0]_0\,
       D => rd_pntr_plus1(0),
-      Q => \^gpr1.dout_i_reg[1]\(0)
+      Q => \^gc0.count_d1_reg[3]_0\(0)
     );
 \gc0.count_d1_reg[1]\: unisim.vcomponents.FDCE
     generic map(
@@ -4519,9 +4869,9 @@ begin
         port map (
       C => clk,
       CE => E(0),
-      CLR => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\,
+      CLR => \gc0.count_d1_reg[0]_0\,
       D => rd_pntr_plus1(1),
-      Q => \^gpr1.dout_i_reg[1]\(1)
+      Q => \^gc0.count_d1_reg[3]_0\(1)
     );
 \gc0.count_d1_reg[2]\: unisim.vcomponents.FDCE
     generic map(
@@ -4530,9 +4880,9 @@ begin
         port map (
       C => clk,
       CE => E(0),
-      CLR => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\,
+      CLR => \gc0.count_d1_reg[0]_0\,
       D => rd_pntr_plus1(2),
-      Q => \^gpr1.dout_i_reg[1]\(2)
+      Q => \^gc0.count_d1_reg[3]_0\(2)
     );
 \gc0.count_d1_reg[3]\: unisim.vcomponents.FDCE
     generic map(
@@ -4541,9 +4891,9 @@ begin
         port map (
       C => clk,
       CE => E(0),
-      CLR => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\,
+      CLR => \gc0.count_d1_reg[0]_0\,
       D => rd_pntr_plus1(3),
-      Q => \^gpr1.dout_i_reg[1]\(3)
+      Q => \^gc0.count_d1_reg[3]_0\(3)
     );
 \gc0.count_reg[0]\: unisim.vcomponents.FDPE
     generic map(
@@ -4553,7 +4903,7 @@ begin
       C => clk,
       CE => E(0),
       D => plusOp(0),
-      PRE => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\,
+      PRE => \gc0.count_d1_reg[0]_0\,
       Q => rd_pntr_plus1(0)
     );
 \gc0.count_reg[1]\: unisim.vcomponents.FDCE
@@ -4563,7 +4913,7 @@ begin
         port map (
       C => clk,
       CE => E(0),
-      CLR => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\,
+      CLR => \gc0.count_d1_reg[0]_0\,
       D => plusOp(1),
       Q => rd_pntr_plus1(1)
     );
@@ -4574,7 +4924,7 @@ begin
         port map (
       C => clk,
       CE => E(0),
-      CLR => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\,
+      CLR => \gc0.count_d1_reg[0]_0\,
       D => plusOp(2),
       Q => rd_pntr_plus1(2)
     );
@@ -4585,7 +4935,7 @@ begin
         port map (
       C => clk,
       CE => E(0),
-      CLR => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\,
+      CLR => \gc0.count_d1_reg[0]_0\,
       D => plusOp(3),
       Q => rd_pntr_plus1(3)
     );
@@ -4599,8 +4949,8 @@ ram_empty_fb_i_i_1: unisim.vcomponents.LUT6
       I2 => \gntv_or_sync_fifo.gl0.wr/gwss.wsts/comp0\,
       I3 => FULL_FB,
       I4 => wr_en,
-      I5 => ram_empty_fb_i_reg_0,
-      O => ram_empty_fb_i_reg
+      I5 => ram_empty_fb_i_reg,
+      O => ram_full_fb_i_reg
     );
 ram_empty_fb_i_i_2: unisim.vcomponents.LUT5
     generic map(
@@ -4620,9 +4970,9 @@ ram_empty_fb_i_i_3: unisim.vcomponents.LUT5
     )
         port map (
       I0 => Q(1),
-      I1 => \^gpr1.dout_i_reg[1]\(1),
+      I1 => \^gc0.count_d1_reg[3]_0\(1),
       I2 => Q(0),
-      I3 => \^gpr1.dout_i_reg[1]\(0),
+      I3 => \^gc0.count_d1_reg[3]_0\(0),
       I4 => ram_empty_fb_i_i_5_n_0,
       O => \gntv_or_sync_fifo.gl0.wr/gwss.wsts/comp0\
     );
@@ -4642,9 +4992,9 @@ ram_empty_fb_i_i_5: unisim.vcomponents.LUT4
       INIT => X"9009"
     )
         port map (
-      I0 => \^gpr1.dout_i_reg[1]\(2),
+      I0 => \^gc0.count_d1_reg[3]_0\(2),
       I1 => Q(2),
-      I2 => \^gpr1.dout_i_reg[1]\(3),
+      I2 => \^gc0.count_d1_reg[3]_0\(3),
       I3 => Q(3),
       O => ram_empty_fb_i_i_5_n_0
     );
@@ -4666,10 +5016,10 @@ ram_full_fb_i_i_2: unisim.vcomponents.LUT5
       INIT => X"90090000"
     )
         port map (
-      I0 => \gcc0.gc0.count_reg[3]\(1),
-      I1 => \^gpr1.dout_i_reg[1]\(1),
-      I2 => \gcc0.gc0.count_reg[3]\(0),
-      I3 => \^gpr1.dout_i_reg[1]\(0),
+      I0 => ram_full_fb_i_i_2_0(1),
+      I1 => \^gc0.count_d1_reg[3]_0\(1),
+      I2 => ram_full_fb_i_i_2_0(0),
+      I3 => \^gc0.count_d1_reg[3]_0\(0),
       I4 => ram_full_fb_i_i_3_n_0,
       O => \gntv_or_sync_fifo.gl0.wr/gwss.wsts/comp1\
     );
@@ -4678,10 +5028,10 @@ ram_full_fb_i_i_3: unisim.vcomponents.LUT4
       INIT => X"9009"
     )
         port map (
-      I0 => \^gpr1.dout_i_reg[1]\(2),
-      I1 => \gcc0.gc0.count_reg[3]\(2),
-      I2 => \^gpr1.dout_i_reg[1]\(3),
-      I3 => \gcc0.gc0.count_reg[3]\(3),
+      I0 => \^gc0.count_d1_reg[3]_0\(2),
+      I1 => ram_full_fb_i_i_2_0(2),
+      I2 => \^gc0.count_d1_reg[3]_0\(3),
+      I3 => ram_full_fb_i_i_2_0(3),
       O => ram_full_fb_i_i_3_n_0
     );
 end STRUCTURE;
@@ -4693,10 +5043,10 @@ entity overlap_buffer_rd_fwft is
   port (
     empty : out STD_LOGIC;
     E : out STD_LOGIC_VECTOR ( 0 to 0 );
-    \goreg_dm.dout_i_reg[289]\ : out STD_LOGIC_VECTOR ( 0 to 0 );
-    \gc0.count_d1_reg[3]\ : out STD_LOGIC_VECTOR ( 0 to 0 );
+    \gpregsm1.curr_fwft_state_reg[1]_0\ : out STD_LOGIC_VECTOR ( 0 to 0 );
+    ram_empty_fb_i_reg : out STD_LOGIC_VECTOR ( 0 to 0 );
     clk : in STD_LOGIC;
-    \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\ : in STD_LOGIC;
+    \gpregsm1.user_valid_reg_0\ : in STD_LOGIC;
     rd_en : in STD_LOGIC;
     \out\ : in STD_LOGIC
   );
@@ -4772,7 +5122,7 @@ aempty_fwft_fb_i_reg: unisim.vcomponents.FDPE
       C => clk,
       CE => '1',
       D => aempty_fwft_i0,
-      PRE => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\,
+      PRE => \gpregsm1.user_valid_reg_0\,
       Q => aempty_fwft_fb_i
     );
 aempty_fwft_i_reg: unisim.vcomponents.FDPE
@@ -4783,7 +5133,7 @@ aempty_fwft_i_reg: unisim.vcomponents.FDPE
       C => clk,
       CE => '1',
       D => aempty_fwft_i0,
-      PRE => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\,
+      PRE => \gpregsm1.user_valid_reg_0\,
       Q => aempty_fwft_i
     );
 empty_fwft_fb_i_i_1: unisim.vcomponents.LUT4
@@ -4805,7 +5155,7 @@ empty_fwft_fb_i_reg: unisim.vcomponents.FDPE
       C => clk,
       CE => '1',
       D => empty_fwft_i0,
-      PRE => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\,
+      PRE => \gpregsm1.user_valid_reg_0\,
       Q => empty_fwft_fb_i
     );
 empty_fwft_fb_o_i_i_1: unisim.vcomponents.LUT4
@@ -4827,7 +5177,7 @@ empty_fwft_fb_o_i_reg: unisim.vcomponents.FDPE
       C => clk,
       CE => '1',
       D => empty_fwft_fb_o_i0,
-      PRE => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\,
+      PRE => \gpregsm1.user_valid_reg_0\,
       Q => empty_fwft_fb_o_i
     );
 empty_fwft_i_reg: unisim.vcomponents.FDPE
@@ -4838,7 +5188,7 @@ empty_fwft_i_reg: unisim.vcomponents.FDPE
       C => clk,
       CE => '1',
       D => empty_fwft_i0,
-      PRE => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\,
+      PRE => \gpregsm1.user_valid_reg_0\,
       Q => empty_fwft_i
     );
 \gc0.count_d1[3]_i_1\: unisim.vcomponents.LUT4
@@ -4850,7 +5200,7 @@ empty_fwft_i_reg: unisim.vcomponents.FDPE
       I1 => rd_en,
       I2 => curr_fwft_state(1),
       I3 => curr_fwft_state(0),
-      O => \gc0.count_d1_reg[3]\(0)
+      O => ram_empty_fb_i_reg(0)
     );
 \goreg_dm.dout_i[289]_i_1\: unisim.vcomponents.LUT3
     generic map(
@@ -4860,7 +5210,7 @@ empty_fwft_i_reg: unisim.vcomponents.FDPE
       I0 => curr_fwft_state(1),
       I1 => curr_fwft_state(0),
       I2 => rd_en,
-      O => \goreg_dm.dout_i_reg[289]\(0)
+      O => \gpregsm1.curr_fwft_state_reg[1]_0\(0)
     );
 \gpr1.dout_i[289]_i_1\: unisim.vcomponents.LUT4
     generic map(
@@ -4901,7 +5251,7 @@ empty_fwft_i_reg: unisim.vcomponents.FDPE
         port map (
       C => clk,
       CE => '1',
-      CLR => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\,
+      CLR => \gpregsm1.user_valid_reg_0\,
       D => next_fwft_state(0),
       Q => curr_fwft_state(0)
     );
@@ -4912,7 +5262,7 @@ empty_fwft_i_reg: unisim.vcomponents.FDPE
         port map (
       C => clk,
       CE => '1',
-      CLR => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\,
+      CLR => \gpregsm1.user_valid_reg_0\,
       D => next_fwft_state(1),
       Q => curr_fwft_state(1)
     );
@@ -4923,7 +5273,7 @@ empty_fwft_i_reg: unisim.vcomponents.FDPE
         port map (
       C => clk,
       CE => '1',
-      CLR => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\,
+      CLR => \gpregsm1.user_valid_reg_0\,
       D => next_fwft_state(0),
       Q => user_valid
     );
@@ -4935,9 +5285,9 @@ use UNISIM.VCOMPONENTS.ALL;
 entity overlap_buffer_rd_status_flags_ss is
   port (
     \out\ : out STD_LOGIC;
-    ram_full_fb_i_reg : in STD_LOGIC;
+    ram_empty_fb_i_reg_0 : in STD_LOGIC;
     clk : in STD_LOGIC;
-    \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\ : in STD_LOGIC
+    ram_empty_fb_i_reg_1 : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
   attribute ORIG_REF_NAME of overlap_buffer_rd_status_flags_ss : entity is "rd_status_flags_ss";
@@ -4966,8 +5316,8 @@ ram_empty_fb_i_reg: unisim.vcomponents.FDPE
         port map (
       C => clk,
       CE => '1',
-      D => ram_full_fb_i_reg,
-      PRE => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\,
+      D => ram_empty_fb_i_reg_0,
+      PRE => ram_empty_fb_i_reg_1,
       Q => ram_empty_fb_i
     );
 ram_empty_i_reg: unisim.vcomponents.FDPE
@@ -4977,8 +5327,8 @@ ram_empty_i_reg: unisim.vcomponents.FDPE
         port map (
       C => clk,
       CE => '1',
-      D => ram_full_fb_i_reg,
-      PRE => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\,
+      D => ram_empty_fb_i_reg_0,
+      PRE => ram_empty_fb_i_reg_1,
       Q => ram_empty_i
     );
 end STRUCTURE;
@@ -4989,7 +5339,7 @@ use UNISIM.VCOMPONENTS.ALL;
 entity overlap_buffer_wr_bin_cntr is
   port (
     Q : out STD_LOGIC_VECTOR ( 3 downto 0 );
-    \gpr1.dout_i_reg[1]\ : out STD_LOGIC_VECTOR ( 3 downto 0 );
+    \gcc0.gc0.count_d1_reg[3]_0\ : out STD_LOGIC_VECTOR ( 3 downto 0 );
     E : in STD_LOGIC_VECTOR ( 0 to 0 );
     clk : in STD_LOGIC;
     AR : in STD_LOGIC_VECTOR ( 0 to 0 )
@@ -5053,7 +5403,7 @@ begin
       CE => E(0),
       CLR => AR(0),
       D => \^q\(0),
-      Q => \gpr1.dout_i_reg[1]\(0)
+      Q => \gcc0.gc0.count_d1_reg[3]_0\(0)
     );
 \gcc0.gc0.count_d1_reg[1]\: unisim.vcomponents.FDCE
     generic map(
@@ -5064,7 +5414,7 @@ begin
       CE => E(0),
       CLR => AR(0),
       D => \^q\(1),
-      Q => \gpr1.dout_i_reg[1]\(1)
+      Q => \gcc0.gc0.count_d1_reg[3]_0\(1)
     );
 \gcc0.gc0.count_d1_reg[2]\: unisim.vcomponents.FDCE
     generic map(
@@ -5075,7 +5425,7 @@ begin
       CE => E(0),
       CLR => AR(0),
       D => \^q\(2),
-      Q => \gpr1.dout_i_reg[1]\(2)
+      Q => \gcc0.gc0.count_d1_reg[3]_0\(2)
     );
 \gcc0.gc0.count_d1_reg[3]\: unisim.vcomponents.FDCE
     generic map(
@@ -5086,7 +5436,7 @@ begin
       CE => E(0),
       CLR => AR(0),
       D => \^q\(3),
-      Q => \gpr1.dout_i_reg[1]\(3)
+      Q => \gcc0.gc0.count_d1_reg[3]_0\(3)
     );
 \gcc0.gc0.count_reg[0]\: unisim.vcomponents.FDPE
     generic map(
@@ -5230,11 +5580,11 @@ entity overlap_buffer_memory is
     clk : in STD_LOGIC;
     E : in STD_LOGIC_VECTOR ( 0 to 0 );
     din : in STD_LOGIC_VECTOR ( 289 downto 0 );
-    \gc0.count_d1_reg[3]\ : in STD_LOGIC_VECTOR ( 3 downto 0 );
-    \gcc0.gc0.count_d1_reg[3]\ : in STD_LOGIC_VECTOR ( 3 downto 0 );
-    \gpregsm1.curr_fwft_state_reg[0]\ : in STD_LOGIC_VECTOR ( 0 to 0 );
+    \gpr1.dout_i_reg[1]\ : in STD_LOGIC_VECTOR ( 3 downto 0 );
+    \gpr1.dout_i_reg[1]_0\ : in STD_LOGIC_VECTOR ( 3 downto 0 );
+    \gpr1.dout_i_reg[0]\ : in STD_LOGIC_VECTOR ( 0 to 0 );
     AR : in STD_LOGIC_VECTOR ( 0 to 0 );
-    \gpregsm1.curr_fwft_state_reg[1]\ : in STD_LOGIC_VECTOR ( 0 to 0 )
+    \goreg_dm.dout_i_reg[289]_0\ : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
   attribute ORIG_REF_NAME : string;
   attribute ORIG_REF_NAME of overlap_buffer_memory : entity is "memory";
@@ -5250,9 +5600,9 @@ begin
       Q(289 downto 0) => dout_i(289 downto 0),
       clk => clk,
       din(289 downto 0) => din(289 downto 0),
-      \gc0.count_d1_reg[3]\(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
-      \gcc0.gc0.count_d1_reg[3]\(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0),
-      \gpregsm1.curr_fwft_state_reg[0]\(0) => \gpregsm1.curr_fwft_state_reg[0]\(0)
+      \gpr1.dout_i_reg[0]_0\(0) => \gpr1.dout_i_reg[0]\(0),
+      \gpr1.dout_i_reg[1]_0\(3 downto 0) => \gpr1.dout_i_reg[1]\(3 downto 0),
+      \gpr1.dout_i_reg[1]_1\(3 downto 0) => \gpr1.dout_i_reg[1]_0\(3 downto 0)
     );
 \goreg_dm.dout_i_reg[0]\: unisim.vcomponents.FDCE
     generic map(
@@ -5260,7 +5610,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(0),
       Q => dout(0)
@@ -5271,7 +5621,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(100),
       Q => dout(100)
@@ -5282,7 +5632,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(101),
       Q => dout(101)
@@ -5293,7 +5643,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(102),
       Q => dout(102)
@@ -5304,7 +5654,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(103),
       Q => dout(103)
@@ -5315,7 +5665,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(104),
       Q => dout(104)
@@ -5326,7 +5676,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(105),
       Q => dout(105)
@@ -5337,7 +5687,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(106),
       Q => dout(106)
@@ -5348,7 +5698,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(107),
       Q => dout(107)
@@ -5359,7 +5709,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(108),
       Q => dout(108)
@@ -5370,7 +5720,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(109),
       Q => dout(109)
@@ -5381,7 +5731,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(10),
       Q => dout(10)
@@ -5392,7 +5742,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(110),
       Q => dout(110)
@@ -5403,7 +5753,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(111),
       Q => dout(111)
@@ -5414,7 +5764,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(112),
       Q => dout(112)
@@ -5425,7 +5775,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(113),
       Q => dout(113)
@@ -5436,7 +5786,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(114),
       Q => dout(114)
@@ -5447,7 +5797,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(115),
       Q => dout(115)
@@ -5458,7 +5808,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(116),
       Q => dout(116)
@@ -5469,7 +5819,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(117),
       Q => dout(117)
@@ -5480,7 +5830,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(118),
       Q => dout(118)
@@ -5491,7 +5841,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(119),
       Q => dout(119)
@@ -5502,7 +5852,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(11),
       Q => dout(11)
@@ -5513,7 +5863,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(120),
       Q => dout(120)
@@ -5524,7 +5874,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(121),
       Q => dout(121)
@@ -5535,7 +5885,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(122),
       Q => dout(122)
@@ -5546,7 +5896,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(123),
       Q => dout(123)
@@ -5557,7 +5907,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(124),
       Q => dout(124)
@@ -5568,7 +5918,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(125),
       Q => dout(125)
@@ -5579,7 +5929,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(126),
       Q => dout(126)
@@ -5590,7 +5940,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(127),
       Q => dout(127)
@@ -5601,7 +5951,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(128),
       Q => dout(128)
@@ -5612,7 +5962,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(129),
       Q => dout(129)
@@ -5623,7 +5973,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(12),
       Q => dout(12)
@@ -5634,7 +5984,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(130),
       Q => dout(130)
@@ -5645,7 +5995,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(131),
       Q => dout(131)
@@ -5656,7 +6006,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(132),
       Q => dout(132)
@@ -5667,7 +6017,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(133),
       Q => dout(133)
@@ -5678,7 +6028,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(134),
       Q => dout(134)
@@ -5689,7 +6039,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(135),
       Q => dout(135)
@@ -5700,7 +6050,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(136),
       Q => dout(136)
@@ -5711,7 +6061,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(137),
       Q => dout(137)
@@ -5722,7 +6072,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(138),
       Q => dout(138)
@@ -5733,7 +6083,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(139),
       Q => dout(139)
@@ -5744,7 +6094,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(13),
       Q => dout(13)
@@ -5755,7 +6105,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(140),
       Q => dout(140)
@@ -5766,7 +6116,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(141),
       Q => dout(141)
@@ -5777,7 +6127,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(142),
       Q => dout(142)
@@ -5788,7 +6138,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(143),
       Q => dout(143)
@@ -5799,7 +6149,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(144),
       Q => dout(144)
@@ -5810,7 +6160,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(145),
       Q => dout(145)
@@ -5821,7 +6171,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(146),
       Q => dout(146)
@@ -5832,7 +6182,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(147),
       Q => dout(147)
@@ -5843,7 +6193,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(148),
       Q => dout(148)
@@ -5854,7 +6204,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(149),
       Q => dout(149)
@@ -5865,7 +6215,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(14),
       Q => dout(14)
@@ -5876,7 +6226,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(150),
       Q => dout(150)
@@ -5887,7 +6237,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(151),
       Q => dout(151)
@@ -5898,7 +6248,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(152),
       Q => dout(152)
@@ -5909,7 +6259,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(153),
       Q => dout(153)
@@ -5920,7 +6270,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(154),
       Q => dout(154)
@@ -5931,7 +6281,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(155),
       Q => dout(155)
@@ -5942,7 +6292,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(156),
       Q => dout(156)
@@ -5953,7 +6303,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(157),
       Q => dout(157)
@@ -5964,7 +6314,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(158),
       Q => dout(158)
@@ -5975,7 +6325,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(159),
       Q => dout(159)
@@ -5986,7 +6336,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(15),
       Q => dout(15)
@@ -5997,7 +6347,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(160),
       Q => dout(160)
@@ -6008,7 +6358,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(161),
       Q => dout(161)
@@ -6019,7 +6369,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(162),
       Q => dout(162)
@@ -6030,7 +6380,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(163),
       Q => dout(163)
@@ -6041,7 +6391,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(164),
       Q => dout(164)
@@ -6052,7 +6402,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(165),
       Q => dout(165)
@@ -6063,7 +6413,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(166),
       Q => dout(166)
@@ -6074,7 +6424,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(167),
       Q => dout(167)
@@ -6085,7 +6435,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(168),
       Q => dout(168)
@@ -6096,7 +6446,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(169),
       Q => dout(169)
@@ -6107,7 +6457,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(16),
       Q => dout(16)
@@ -6118,7 +6468,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(170),
       Q => dout(170)
@@ -6129,7 +6479,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(171),
       Q => dout(171)
@@ -6140,7 +6490,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(172),
       Q => dout(172)
@@ -6151,7 +6501,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(173),
       Q => dout(173)
@@ -6162,7 +6512,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(174),
       Q => dout(174)
@@ -6173,7 +6523,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(175),
       Q => dout(175)
@@ -6184,7 +6534,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(176),
       Q => dout(176)
@@ -6195,7 +6545,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(177),
       Q => dout(177)
@@ -6206,7 +6556,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(178),
       Q => dout(178)
@@ -6217,7 +6567,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(179),
       Q => dout(179)
@@ -6228,7 +6578,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(17),
       Q => dout(17)
@@ -6239,7 +6589,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(180),
       Q => dout(180)
@@ -6250,7 +6600,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(181),
       Q => dout(181)
@@ -6261,7 +6611,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(182),
       Q => dout(182)
@@ -6272,7 +6622,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(183),
       Q => dout(183)
@@ -6283,7 +6633,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(184),
       Q => dout(184)
@@ -6294,7 +6644,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(185),
       Q => dout(185)
@@ -6305,7 +6655,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(186),
       Q => dout(186)
@@ -6316,7 +6666,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(187),
       Q => dout(187)
@@ -6327,7 +6677,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(188),
       Q => dout(188)
@@ -6338,7 +6688,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(189),
       Q => dout(189)
@@ -6349,7 +6699,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(18),
       Q => dout(18)
@@ -6360,7 +6710,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(190),
       Q => dout(190)
@@ -6371,7 +6721,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(191),
       Q => dout(191)
@@ -6382,7 +6732,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(192),
       Q => dout(192)
@@ -6393,7 +6743,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(193),
       Q => dout(193)
@@ -6404,7 +6754,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(194),
       Q => dout(194)
@@ -6415,7 +6765,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(195),
       Q => dout(195)
@@ -6426,7 +6776,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(196),
       Q => dout(196)
@@ -6437,7 +6787,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(197),
       Q => dout(197)
@@ -6448,7 +6798,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(198),
       Q => dout(198)
@@ -6459,7 +6809,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(199),
       Q => dout(199)
@@ -6470,7 +6820,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(19),
       Q => dout(19)
@@ -6481,7 +6831,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(1),
       Q => dout(1)
@@ -6492,7 +6842,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(200),
       Q => dout(200)
@@ -6503,7 +6853,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(201),
       Q => dout(201)
@@ -6514,7 +6864,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(202),
       Q => dout(202)
@@ -6525,7 +6875,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(203),
       Q => dout(203)
@@ -6536,7 +6886,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(204),
       Q => dout(204)
@@ -6547,7 +6897,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(205),
       Q => dout(205)
@@ -6558,7 +6908,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(206),
       Q => dout(206)
@@ -6569,7 +6919,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(207),
       Q => dout(207)
@@ -6580,7 +6930,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(208),
       Q => dout(208)
@@ -6591,7 +6941,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(209),
       Q => dout(209)
@@ -6602,7 +6952,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(20),
       Q => dout(20)
@@ -6613,7 +6963,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(210),
       Q => dout(210)
@@ -6624,7 +6974,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(211),
       Q => dout(211)
@@ -6635,7 +6985,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(212),
       Q => dout(212)
@@ -6646,7 +6996,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(213),
       Q => dout(213)
@@ -6657,7 +7007,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(214),
       Q => dout(214)
@@ -6668,7 +7018,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(215),
       Q => dout(215)
@@ -6679,7 +7029,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(216),
       Q => dout(216)
@@ -6690,7 +7040,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(217),
       Q => dout(217)
@@ -6701,7 +7051,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(218),
       Q => dout(218)
@@ -6712,7 +7062,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(219),
       Q => dout(219)
@@ -6723,7 +7073,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(21),
       Q => dout(21)
@@ -6734,7 +7084,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(220),
       Q => dout(220)
@@ -6745,7 +7095,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(221),
       Q => dout(221)
@@ -6756,7 +7106,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(222),
       Q => dout(222)
@@ -6767,7 +7117,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(223),
       Q => dout(223)
@@ -6778,7 +7128,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(224),
       Q => dout(224)
@@ -6789,7 +7139,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(225),
       Q => dout(225)
@@ -6800,7 +7150,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(226),
       Q => dout(226)
@@ -6811,7 +7161,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(227),
       Q => dout(227)
@@ -6822,7 +7172,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(228),
       Q => dout(228)
@@ -6833,7 +7183,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(229),
       Q => dout(229)
@@ -6844,7 +7194,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(22),
       Q => dout(22)
@@ -6855,7 +7205,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(230),
       Q => dout(230)
@@ -6866,7 +7216,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(231),
       Q => dout(231)
@@ -6877,7 +7227,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(232),
       Q => dout(232)
@@ -6888,7 +7238,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(233),
       Q => dout(233)
@@ -6899,7 +7249,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(234),
       Q => dout(234)
@@ -6910,7 +7260,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(235),
       Q => dout(235)
@@ -6921,7 +7271,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(236),
       Q => dout(236)
@@ -6932,7 +7282,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(237),
       Q => dout(237)
@@ -6943,7 +7293,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(238),
       Q => dout(238)
@@ -6954,7 +7304,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(239),
       Q => dout(239)
@@ -6965,7 +7315,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(23),
       Q => dout(23)
@@ -6976,7 +7326,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(240),
       Q => dout(240)
@@ -6987,7 +7337,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(241),
       Q => dout(241)
@@ -6998,7 +7348,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(242),
       Q => dout(242)
@@ -7009,7 +7359,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(243),
       Q => dout(243)
@@ -7020,7 +7370,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(244),
       Q => dout(244)
@@ -7031,7 +7381,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(245),
       Q => dout(245)
@@ -7042,7 +7392,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(246),
       Q => dout(246)
@@ -7053,7 +7403,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(247),
       Q => dout(247)
@@ -7064,7 +7414,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(248),
       Q => dout(248)
@@ -7075,7 +7425,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(249),
       Q => dout(249)
@@ -7086,7 +7436,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(24),
       Q => dout(24)
@@ -7097,7 +7447,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(250),
       Q => dout(250)
@@ -7108,7 +7458,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(251),
       Q => dout(251)
@@ -7119,7 +7469,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(252),
       Q => dout(252)
@@ -7130,7 +7480,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(253),
       Q => dout(253)
@@ -7141,7 +7491,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(254),
       Q => dout(254)
@@ -7152,7 +7502,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(255),
       Q => dout(255)
@@ -7163,7 +7513,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(256),
       Q => dout(256)
@@ -7174,7 +7524,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(257),
       Q => dout(257)
@@ -7185,7 +7535,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(258),
       Q => dout(258)
@@ -7196,7 +7546,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(259),
       Q => dout(259)
@@ -7207,7 +7557,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(25),
       Q => dout(25)
@@ -7218,7 +7568,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(260),
       Q => dout(260)
@@ -7229,7 +7579,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(261),
       Q => dout(261)
@@ -7240,7 +7590,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(262),
       Q => dout(262)
@@ -7251,7 +7601,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(263),
       Q => dout(263)
@@ -7262,7 +7612,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(264),
       Q => dout(264)
@@ -7273,7 +7623,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(265),
       Q => dout(265)
@@ -7284,7 +7634,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(266),
       Q => dout(266)
@@ -7295,7 +7645,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(267),
       Q => dout(267)
@@ -7306,7 +7656,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(268),
       Q => dout(268)
@@ -7317,7 +7667,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(269),
       Q => dout(269)
@@ -7328,7 +7678,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(26),
       Q => dout(26)
@@ -7339,7 +7689,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(270),
       Q => dout(270)
@@ -7350,7 +7700,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(271),
       Q => dout(271)
@@ -7361,7 +7711,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(272),
       Q => dout(272)
@@ -7372,7 +7722,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(273),
       Q => dout(273)
@@ -7383,7 +7733,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(274),
       Q => dout(274)
@@ -7394,7 +7744,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(275),
       Q => dout(275)
@@ -7405,7 +7755,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(276),
       Q => dout(276)
@@ -7416,7 +7766,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(277),
       Q => dout(277)
@@ -7427,7 +7777,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(278),
       Q => dout(278)
@@ -7438,7 +7788,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(279),
       Q => dout(279)
@@ -7449,7 +7799,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(27),
       Q => dout(27)
@@ -7460,7 +7810,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(280),
       Q => dout(280)
@@ -7471,7 +7821,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(281),
       Q => dout(281)
@@ -7482,7 +7832,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(282),
       Q => dout(282)
@@ -7493,7 +7843,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(283),
       Q => dout(283)
@@ -7504,7 +7854,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(284),
       Q => dout(284)
@@ -7515,7 +7865,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(285),
       Q => dout(285)
@@ -7526,7 +7876,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(286),
       Q => dout(286)
@@ -7537,7 +7887,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(287),
       Q => dout(287)
@@ -7548,7 +7898,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(288),
       Q => dout(288)
@@ -7559,7 +7909,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(289),
       Q => dout(289)
@@ -7570,7 +7920,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(28),
       Q => dout(28)
@@ -7581,7 +7931,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(29),
       Q => dout(29)
@@ -7592,7 +7942,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(2),
       Q => dout(2)
@@ -7603,7 +7953,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(30),
       Q => dout(30)
@@ -7614,7 +7964,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(31),
       Q => dout(31)
@@ -7625,7 +7975,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(32),
       Q => dout(32)
@@ -7636,7 +7986,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(33),
       Q => dout(33)
@@ -7647,7 +7997,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(34),
       Q => dout(34)
@@ -7658,7 +8008,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(35),
       Q => dout(35)
@@ -7669,7 +8019,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(36),
       Q => dout(36)
@@ -7680,7 +8030,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(37),
       Q => dout(37)
@@ -7691,7 +8041,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(38),
       Q => dout(38)
@@ -7702,7 +8052,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(39),
       Q => dout(39)
@@ -7713,7 +8063,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(3),
       Q => dout(3)
@@ -7724,7 +8074,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(40),
       Q => dout(40)
@@ -7735,7 +8085,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(41),
       Q => dout(41)
@@ -7746,7 +8096,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(42),
       Q => dout(42)
@@ -7757,7 +8107,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(43),
       Q => dout(43)
@@ -7768,7 +8118,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(44),
       Q => dout(44)
@@ -7779,7 +8129,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(45),
       Q => dout(45)
@@ -7790,7 +8140,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(46),
       Q => dout(46)
@@ -7801,7 +8151,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(47),
       Q => dout(47)
@@ -7812,7 +8162,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(48),
       Q => dout(48)
@@ -7823,7 +8173,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(49),
       Q => dout(49)
@@ -7834,7 +8184,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(4),
       Q => dout(4)
@@ -7845,7 +8195,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(50),
       Q => dout(50)
@@ -7856,7 +8206,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(51),
       Q => dout(51)
@@ -7867,7 +8217,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(52),
       Q => dout(52)
@@ -7878,7 +8228,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(53),
       Q => dout(53)
@@ -7889,7 +8239,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(54),
       Q => dout(54)
@@ -7900,7 +8250,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(55),
       Q => dout(55)
@@ -7911,7 +8261,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(56),
       Q => dout(56)
@@ -7922,7 +8272,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(57),
       Q => dout(57)
@@ -7933,7 +8283,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(58),
       Q => dout(58)
@@ -7944,7 +8294,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(59),
       Q => dout(59)
@@ -7955,7 +8305,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(5),
       Q => dout(5)
@@ -7966,7 +8316,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(60),
       Q => dout(60)
@@ -7977,7 +8327,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(61),
       Q => dout(61)
@@ -7988,7 +8338,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(62),
       Q => dout(62)
@@ -7999,7 +8349,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(63),
       Q => dout(63)
@@ -8010,7 +8360,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(64),
       Q => dout(64)
@@ -8021,7 +8371,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(65),
       Q => dout(65)
@@ -8032,7 +8382,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(66),
       Q => dout(66)
@@ -8043,7 +8393,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(67),
       Q => dout(67)
@@ -8054,7 +8404,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(68),
       Q => dout(68)
@@ -8065,7 +8415,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(69),
       Q => dout(69)
@@ -8076,7 +8426,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(6),
       Q => dout(6)
@@ -8087,7 +8437,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(70),
       Q => dout(70)
@@ -8098,7 +8448,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(71),
       Q => dout(71)
@@ -8109,7 +8459,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(72),
       Q => dout(72)
@@ -8120,7 +8470,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(73),
       Q => dout(73)
@@ -8131,7 +8481,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(74),
       Q => dout(74)
@@ -8142,7 +8492,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(75),
       Q => dout(75)
@@ -8153,7 +8503,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(76),
       Q => dout(76)
@@ -8164,7 +8514,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(77),
       Q => dout(77)
@@ -8175,7 +8525,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(78),
       Q => dout(78)
@@ -8186,7 +8536,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(79),
       Q => dout(79)
@@ -8197,7 +8547,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(7),
       Q => dout(7)
@@ -8208,7 +8558,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(80),
       Q => dout(80)
@@ -8219,7 +8569,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(81),
       Q => dout(81)
@@ -8230,7 +8580,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(82),
       Q => dout(82)
@@ -8241,7 +8591,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(83),
       Q => dout(83)
@@ -8252,7 +8602,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(84),
       Q => dout(84)
@@ -8263,7 +8613,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(85),
       Q => dout(85)
@@ -8274,7 +8624,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(86),
       Q => dout(86)
@@ -8285,7 +8635,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(87),
       Q => dout(87)
@@ -8296,7 +8646,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(88),
       Q => dout(88)
@@ -8307,7 +8657,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(89),
       Q => dout(89)
@@ -8318,7 +8668,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(8),
       Q => dout(8)
@@ -8329,7 +8679,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(90),
       Q => dout(90)
@@ -8340,7 +8690,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(91),
       Q => dout(91)
@@ -8351,7 +8701,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(92),
       Q => dout(92)
@@ -8362,7 +8712,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(93),
       Q => dout(93)
@@ -8373,7 +8723,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(94),
       Q => dout(94)
@@ -8384,7 +8734,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(95),
       Q => dout(95)
@@ -8395,7 +8745,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(96),
       Q => dout(96)
@@ -8406,7 +8756,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(97),
       Q => dout(97)
@@ -8417,7 +8767,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(98),
       Q => dout(98)
@@ -8428,7 +8778,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(99),
       Q => dout(99)
@@ -8439,7 +8789,7 @@ begin
     )
         port map (
       C => clk,
-      CE => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      CE => \goreg_dm.dout_i_reg[289]_0\(0),
       CLR => AR(0),
       D => dout_i(9),
       Q => dout(9)
@@ -8454,16 +8804,16 @@ entity overlap_buffer_rd_logic is
     empty : out STD_LOGIC;
     E : out STD_LOGIC_VECTOR ( 0 to 0 );
     ram_full_comb : out STD_LOGIC;
-    \gpr1.dout_i_reg[1]\ : out STD_LOGIC_VECTOR ( 3 downto 0 );
-    \goreg_dm.dout_i_reg[289]\ : out STD_LOGIC_VECTOR ( 0 to 0 );
+    \gc0.count_d1_reg[3]\ : out STD_LOGIC_VECTOR ( 3 downto 0 );
+    \gpregsm1.curr_fwft_state_reg[1]\ : out STD_LOGIC_VECTOR ( 0 to 0 );
     clk : in STD_LOGIC;
-    \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\ : in STD_LOGIC;
+    \gc0.count_d1_reg[0]\ : in STD_LOGIC;
     rd_en : in STD_LOGIC;
     wr_en : in STD_LOGIC;
     \out\ : in STD_LOGIC;
     FULL_FB : in STD_LOGIC;
     Q : in STD_LOGIC_VECTOR ( 3 downto 0 );
-    \gcc0.gc0.count_reg[3]\ : in STD_LOGIC_VECTOR ( 3 downto 0 )
+    ram_full_fb_i_i_2 : in STD_LOGIC_VECTOR ( 3 downto 0 )
   );
   attribute ORIG_REF_NAME : string;
   attribute ORIG_REF_NAME of overlap_buffer_rd_logic : entity is "rd_logic";
@@ -8479,18 +8829,18 @@ begin
       E(0) => E(0),
       clk => clk,
       empty => empty,
-      \gc0.count_d1_reg[3]\(0) => p_8_out,
-      \goreg_dm.dout_i_reg[289]\(0) => \goreg_dm.dout_i_reg[289]\(0),
-      \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\ => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\,
+      \gpregsm1.curr_fwft_state_reg[1]_0\(0) => \gpregsm1.curr_fwft_state_reg[1]\(0),
+      \gpregsm1.user_valid_reg_0\ => \gc0.count_d1_reg[0]\,
       \out\ => p_2_out,
+      ram_empty_fb_i_reg(0) => p_8_out,
       rd_en => rd_en
     );
 \grss.rsts\: entity work.overlap_buffer_rd_status_flags_ss
      port map (
       clk => clk,
-      \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\ => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\,
       \out\ => p_2_out,
-      ram_full_fb_i_reg => rpntr_n_1
+      ram_empty_fb_i_reg_0 => rpntr_n_1,
+      ram_empty_fb_i_reg_1 => \gc0.count_d1_reg[0]\
     );
 rpntr: entity work.overlap_buffer_rd_bin_cntr
      port map (
@@ -8498,13 +8848,13 @@ rpntr: entity work.overlap_buffer_rd_bin_cntr
       FULL_FB => FULL_FB,
       Q(3 downto 0) => Q(3 downto 0),
       clk => clk,
-      \gcc0.gc0.count_reg[3]\(3 downto 0) => \gcc0.gc0.count_reg[3]\(3 downto 0),
-      \gpr1.dout_i_reg[1]\(3 downto 0) => \gpr1.dout_i_reg[1]\(3 downto 0),
-      \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\ => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\,
+      \gc0.count_d1_reg[0]_0\ => \gc0.count_d1_reg[0]\,
+      \gc0.count_d1_reg[3]_0\(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0),
       \out\ => \out\,
-      ram_empty_fb_i_reg => rpntr_n_1,
-      ram_empty_fb_i_reg_0 => p_2_out,
+      ram_empty_fb_i_reg => p_2_out,
       ram_full_comb => ram_full_comb,
+      ram_full_fb_i_i_2_0(3 downto 0) => ram_full_fb_i_i_2(3 downto 0),
+      ram_full_fb_i_reg => rpntr_n_1,
       wr_en => wr_en
     );
 end STRUCTURE;
@@ -8515,7 +8865,7 @@ use UNISIM.VCOMPONENTS.ALL;
 entity overlap_buffer_reset_blk_ramfifo is
   port (
     \out\ : out STD_LOGIC;
-    ram_full_i_reg : out STD_LOGIC;
+    \grstd1.grst_full.grst_f.rst_d3_reg_0\ : out STD_LOGIC;
     wr_rst_busy : out STD_LOGIC;
     AR : out STD_LOGIC_VECTOR ( 0 to 0 );
     rst : in STD_LOGIC;
@@ -8526,6 +8876,8 @@ entity overlap_buffer_reset_blk_ramfifo is
 end overlap_buffer_reset_blk_ramfifo;
 
 architecture STRUCTURE of overlap_buffer_reset_blk_ramfifo is
+  signal \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg_n_0_[3]\ : STD_LOGIC;
+  signal p_0_in : STD_LOGIC_VECTOR ( 3 downto 1 );
   signal p_2_out : STD_LOGIC;
   signal rst_d1 : STD_LOGIC;
   attribute async_reg : string;
@@ -8541,7 +8893,6 @@ architecture STRUCTURE of overlap_buffer_reset_blk_ramfifo is
   signal rst_wr_reg2 : STD_LOGIC;
   attribute async_reg of rst_wr_reg2 : signal is "true";
   attribute msgon of rst_wr_reg2 : signal is "true";
-  signal sckt_wr_rst_cc : STD_LOGIC_VECTOR ( 3 downto 0 );
   signal \^wr_rst_busy\ : STD_LOGIC;
   attribute ASYNC_REG_boolean : boolean;
   attribute ASYNC_REG_boolean of \grstd1.grst_full.grst_f.rst_d1_reg\ : label is std.standard.true;
@@ -8571,16 +8922,16 @@ architecture STRUCTURE of overlap_buffer_reset_blk_ramfifo is
   attribute XPM_MODULE : string;
   attribute XPM_MODULE of \ngwrdrst.grst.g7serrst.gnsckt_wrst.rst_wr_reg2_inst\ : label is "TRUE";
 begin
+  \grstd1.grst_full.grst_f.rst_d3_reg_0\ <= rst_d3;
   \out\ <= rst_d2;
-  ram_full_i_reg <= rst_d3;
   wr_rst_busy <= \^wr_rst_busy\;
 \goreg_dm.dout_i[289]_i_2\: unisim.vcomponents.LUT3
     generic map(
       INIT => X"FE"
     )
         port map (
-      I0 => sckt_wr_rst_cc(1),
-      I1 => sckt_wr_rst_cc(0),
+      I0 => p_0_in(2),
+      I1 => p_0_in(1),
       I2 => rst_wr_reg2,
       O => AR(0)
     );
@@ -8611,8 +8962,8 @@ begin
       INIT => X"FFFE"
     )
         port map (
-      I0 => sckt_wr_rst_cc(1),
-      I1 => sckt_wr_rst_cc(0),
+      I0 => p_0_in(2),
+      I1 => p_0_in(1),
       I2 => rst_wr_reg2,
       I3 => rst_d2,
       O => p_2_out
@@ -8636,7 +8987,7 @@ begin
       C => clk,
       CE => '1',
       D => rst_wr_reg2,
-      Q => sckt_wr_rst_cc(0),
+      Q => p_0_in(1),
       R => '0'
     );
 \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\: unisim.vcomponents.FDRE
@@ -8646,8 +8997,8 @@ begin
         port map (
       C => clk,
       CE => '1',
-      D => sckt_wr_rst_cc(0),
-      Q => sckt_wr_rst_cc(1),
+      D => p_0_in(1),
+      Q => p_0_in(2),
       R => '0'
     );
 \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[2]\: unisim.vcomponents.FDRE
@@ -8657,8 +9008,8 @@ begin
         port map (
       C => clk,
       CE => '1',
-      D => sckt_wr_rst_cc(1),
-      Q => sckt_wr_rst_cc(2),
+      D => p_0_in(2),
+      Q => p_0_in(3),
       R => '0'
     );
 \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[3]\: unisim.vcomponents.FDRE
@@ -8668,8 +9019,8 @@ begin
         port map (
       C => clk,
       CE => '1',
-      D => sckt_wr_rst_cc(2),
-      Q => sckt_wr_rst_cc(3),
+      D => p_0_in(3),
+      Q => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg_n_0_[3]\,
       R => '0'
     );
 \ngwrdrst.grst.g7serrst.gnsckt_wrst.rst_wr_reg2_inst\: entity work.overlap_buffer_xpm_cdc_async_rst
@@ -8683,10 +9034,10 @@ rd_rst_busy_INST_0: unisim.vcomponents.LUT5
       INIT => X"FFFFFFFE"
     )
         port map (
-      I0 => sckt_wr_rst_cc(2),
-      I1 => sckt_wr_rst_cc(3),
-      I2 => sckt_wr_rst_cc(0),
-      I3 => sckt_wr_rst_cc(1),
+      I0 => p_0_in(3),
+      I1 => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg_n_0_[3]\,
+      I2 => p_0_in(1),
+      I3 => p_0_in(2),
       I4 => rst_wr_reg2,
       O => \^wr_rst_busy\
     );
@@ -8701,7 +9052,7 @@ entity overlap_buffer_wr_logic is
     full : out STD_LOGIC;
     E : out STD_LOGIC_VECTOR ( 0 to 0 );
     Q : out STD_LOGIC_VECTOR ( 3 downto 0 );
-    \gpr1.dout_i_reg[1]\ : out STD_LOGIC_VECTOR ( 3 downto 0 );
+    \gcc0.gc0.count_d1_reg[3]\ : out STD_LOGIC_VECTOR ( 3 downto 0 );
     ram_full_comb : in STD_LOGIC;
     clk : in STD_LOGIC;
     \out\ : in STD_LOGIC;
@@ -8732,7 +9083,7 @@ wpntr: entity work.overlap_buffer_wr_bin_cntr
       E(0) => \^e\(0),
       Q(3 downto 0) => Q(3 downto 0),
       clk => clk,
-      \gpr1.dout_i_reg[1]\(3 downto 0) => \gpr1.dout_i_reg[1]\(3 downto 0)
+      \gcc0.gc0.count_d1_reg[3]_0\(3 downto 0) => \gcc0.gc0.count_d1_reg[3]\(3 downto 0)
     );
 end STRUCTURE;
 library IEEE;
@@ -8775,12 +9126,12 @@ begin
       Q(3 downto 0) => p_12_out(3 downto 0),
       clk => clk,
       empty => empty,
-      \gcc0.gc0.count_reg[3]\(3 downto 0) => p_13_out(3 downto 0),
-      \goreg_dm.dout_i_reg[289]\(0) => p_6_out,
-      \gpr1.dout_i_reg[1]\(3 downto 0) => p_0_out_0(3 downto 0),
-      \ngwrdrst.grst.g7serrst.gnsckt_wrst.gcc_rst.sckt_wr_rst_cc_reg[1]\ => rstblk_n_3,
+      \gc0.count_d1_reg[0]\ => rstblk_n_3,
+      \gc0.count_d1_reg[3]\(3 downto 0) => p_0_out_0(3 downto 0),
+      \gpregsm1.curr_fwft_state_reg[1]\(0) => p_6_out,
       \out\ => rst_full_gen_i,
       ram_full_comb => \gwss.wsts/ram_full_comb\,
+      ram_full_fb_i_i_2(3 downto 0) => p_13_out(3 downto 0),
       rd_en => rd_en,
       wr_en => wr_en
     );
@@ -8792,7 +9143,7 @@ begin
       Q(3 downto 0) => p_13_out(3 downto 0),
       clk => clk,
       full => full,
-      \gpr1.dout_i_reg[1]\(3 downto 0) => p_12_out(3 downto 0),
+      \gcc0.gc0.count_d1_reg[3]\(3 downto 0) => p_12_out(3 downto 0),
       \out\ => rst_full_ff_i,
       ram_full_comb => \gwss.wsts/ram_full_comb\,
       wr_en => wr_en
@@ -8804,17 +9155,17 @@ begin
       clk => clk,
       din(289 downto 0) => din(289 downto 0),
       dout(289 downto 0) => dout(289 downto 0),
-      \gc0.count_d1_reg[3]\(3 downto 0) => p_0_out_0(3 downto 0),
-      \gcc0.gc0.count_d1_reg[3]\(3 downto 0) => p_12_out(3 downto 0),
-      \gpregsm1.curr_fwft_state_reg[0]\(0) => ram_rd_en_i,
-      \gpregsm1.curr_fwft_state_reg[1]\(0) => p_6_out
+      \goreg_dm.dout_i_reg[289]_0\(0) => p_6_out,
+      \gpr1.dout_i_reg[0]\(0) => ram_rd_en_i,
+      \gpr1.dout_i_reg[1]\(3 downto 0) => p_0_out_0(3 downto 0),
+      \gpr1.dout_i_reg[1]_0\(3 downto 0) => p_12_out(3 downto 0)
     );
 rstblk: entity work.overlap_buffer_reset_blk_ramfifo
      port map (
       AR(0) => rstblk_n_3,
       clk => clk,
+      \grstd1.grst_full.grst_f.rst_d3_reg_0\ => rst_full_gen_i,
       \out\ => rst_full_ff_i,
-      ram_full_i_reg => rst_full_gen_i,
       rst => rst,
       wr_rst_busy => wr_rst_busy
     );
@@ -8858,7 +9209,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity overlap_buffer_fifo_generator_v13_2_2_synth is
+entity overlap_buffer_fifo_generator_v13_2_4_synth is
   port (
     empty : out STD_LOGIC;
     full : out STD_LOGIC;
@@ -8871,10 +9222,10 @@ entity overlap_buffer_fifo_generator_v13_2_2_synth is
     wr_en : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of overlap_buffer_fifo_generator_v13_2_2_synth : entity is "fifo_generator_v13_2_2_synth";
-end overlap_buffer_fifo_generator_v13_2_2_synth;
+  attribute ORIG_REF_NAME of overlap_buffer_fifo_generator_v13_2_4_synth : entity is "fifo_generator_v13_2_4_synth";
+end overlap_buffer_fifo_generator_v13_2_4_synth;
 
-architecture STRUCTURE of overlap_buffer_fifo_generator_v13_2_2_synth is
+architecture STRUCTURE of overlap_buffer_fifo_generator_v13_2_4_synth is
 begin
 \gconvfifo.rf\: entity work.overlap_buffer_fifo_generator_top
      port map (
@@ -8893,7 +9244,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity overlap_buffer_fifo_generator_v13_2_2 is
+entity overlap_buffer_fifo_generator_v13_2_4 is
   port (
     backup : in STD_LOGIC;
     backup_marker : in STD_LOGIC;
@@ -9128,414 +9479,414 @@ entity overlap_buffer_fifo_generator_v13_2_2 is
     axis_prog_empty : out STD_LOGIC
   );
   attribute C_ADD_NGC_CONSTRAINT : integer;
-  attribute C_ADD_NGC_CONSTRAINT of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_ADD_NGC_CONSTRAINT of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_APPLICATION_TYPE_AXIS : integer;
-  attribute C_APPLICATION_TYPE_AXIS of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_APPLICATION_TYPE_AXIS of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_APPLICATION_TYPE_RACH : integer;
-  attribute C_APPLICATION_TYPE_RACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_APPLICATION_TYPE_RACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_APPLICATION_TYPE_RDCH : integer;
-  attribute C_APPLICATION_TYPE_RDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_APPLICATION_TYPE_RDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_APPLICATION_TYPE_WACH : integer;
-  attribute C_APPLICATION_TYPE_WACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_APPLICATION_TYPE_WACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_APPLICATION_TYPE_WDCH : integer;
-  attribute C_APPLICATION_TYPE_WDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_APPLICATION_TYPE_WDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_APPLICATION_TYPE_WRCH : integer;
-  attribute C_APPLICATION_TYPE_WRCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_APPLICATION_TYPE_WRCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_AXIS_TDATA_WIDTH : integer;
-  attribute C_AXIS_TDATA_WIDTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 8;
+  attribute C_AXIS_TDATA_WIDTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 8;
   attribute C_AXIS_TDEST_WIDTH : integer;
-  attribute C_AXIS_TDEST_WIDTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_AXIS_TDEST_WIDTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_AXIS_TID_WIDTH : integer;
-  attribute C_AXIS_TID_WIDTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_AXIS_TID_WIDTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_AXIS_TKEEP_WIDTH : integer;
-  attribute C_AXIS_TKEEP_WIDTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_AXIS_TKEEP_WIDTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_AXIS_TSTRB_WIDTH : integer;
-  attribute C_AXIS_TSTRB_WIDTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_AXIS_TSTRB_WIDTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_AXIS_TUSER_WIDTH : integer;
-  attribute C_AXIS_TUSER_WIDTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 4;
+  attribute C_AXIS_TUSER_WIDTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 4;
   attribute C_AXIS_TYPE : integer;
-  attribute C_AXIS_TYPE of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_AXIS_TYPE of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_AXI_ADDR_WIDTH : integer;
-  attribute C_AXI_ADDR_WIDTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 32;
+  attribute C_AXI_ADDR_WIDTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 32;
   attribute C_AXI_ARUSER_WIDTH : integer;
-  attribute C_AXI_ARUSER_WIDTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_AXI_ARUSER_WIDTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_AXI_AWUSER_WIDTH : integer;
-  attribute C_AXI_AWUSER_WIDTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_AXI_AWUSER_WIDTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_AXI_BUSER_WIDTH : integer;
-  attribute C_AXI_BUSER_WIDTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_AXI_BUSER_WIDTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_AXI_DATA_WIDTH : integer;
-  attribute C_AXI_DATA_WIDTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 64;
+  attribute C_AXI_DATA_WIDTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 64;
   attribute C_AXI_ID_WIDTH : integer;
-  attribute C_AXI_ID_WIDTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_AXI_ID_WIDTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_AXI_LEN_WIDTH : integer;
-  attribute C_AXI_LEN_WIDTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 8;
+  attribute C_AXI_LEN_WIDTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 8;
   attribute C_AXI_LOCK_WIDTH : integer;
-  attribute C_AXI_LOCK_WIDTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_AXI_LOCK_WIDTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_AXI_RUSER_WIDTH : integer;
-  attribute C_AXI_RUSER_WIDTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_AXI_RUSER_WIDTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_AXI_TYPE : integer;
-  attribute C_AXI_TYPE of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_AXI_TYPE of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_AXI_WUSER_WIDTH : integer;
-  attribute C_AXI_WUSER_WIDTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_AXI_WUSER_WIDTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_COMMON_CLOCK : integer;
-  attribute C_COMMON_CLOCK of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_COMMON_CLOCK of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_COUNT_TYPE : integer;
-  attribute C_COUNT_TYPE of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_COUNT_TYPE of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_DATA_COUNT_WIDTH : integer;
-  attribute C_DATA_COUNT_WIDTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 5;
+  attribute C_DATA_COUNT_WIDTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 5;
   attribute C_DEFAULT_VALUE : string;
-  attribute C_DEFAULT_VALUE of overlap_buffer_fifo_generator_v13_2_2 : entity is "BlankString";
+  attribute C_DEFAULT_VALUE of overlap_buffer_fifo_generator_v13_2_4 : entity is "BlankString";
   attribute C_DIN_WIDTH : integer;
-  attribute C_DIN_WIDTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 290;
+  attribute C_DIN_WIDTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 290;
   attribute C_DIN_WIDTH_AXIS : integer;
-  attribute C_DIN_WIDTH_AXIS of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_DIN_WIDTH_AXIS of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_DIN_WIDTH_RACH : integer;
-  attribute C_DIN_WIDTH_RACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 32;
+  attribute C_DIN_WIDTH_RACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 32;
   attribute C_DIN_WIDTH_RDCH : integer;
-  attribute C_DIN_WIDTH_RDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 64;
+  attribute C_DIN_WIDTH_RDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 64;
   attribute C_DIN_WIDTH_WACH : integer;
-  attribute C_DIN_WIDTH_WACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_DIN_WIDTH_WACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_DIN_WIDTH_WDCH : integer;
-  attribute C_DIN_WIDTH_WDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 64;
+  attribute C_DIN_WIDTH_WDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 64;
   attribute C_DIN_WIDTH_WRCH : integer;
-  attribute C_DIN_WIDTH_WRCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 2;
+  attribute C_DIN_WIDTH_WRCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 2;
   attribute C_DOUT_RST_VAL : string;
-  attribute C_DOUT_RST_VAL of overlap_buffer_fifo_generator_v13_2_2 : entity is "0";
+  attribute C_DOUT_RST_VAL of overlap_buffer_fifo_generator_v13_2_4 : entity is "0";
   attribute C_DOUT_WIDTH : integer;
-  attribute C_DOUT_WIDTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 290;
+  attribute C_DOUT_WIDTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 290;
   attribute C_ENABLE_RLOCS : integer;
-  attribute C_ENABLE_RLOCS of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_ENABLE_RLOCS of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_ENABLE_RST_SYNC : integer;
-  attribute C_ENABLE_RST_SYNC of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_ENABLE_RST_SYNC of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_EN_SAFETY_CKT : integer;
-  attribute C_EN_SAFETY_CKT of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_EN_SAFETY_CKT of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_ERROR_INJECTION_TYPE : integer;
-  attribute C_ERROR_INJECTION_TYPE of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_ERROR_INJECTION_TYPE of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_ERROR_INJECTION_TYPE_AXIS : integer;
-  attribute C_ERROR_INJECTION_TYPE_AXIS of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_ERROR_INJECTION_TYPE_AXIS of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_ERROR_INJECTION_TYPE_RACH : integer;
-  attribute C_ERROR_INJECTION_TYPE_RACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_ERROR_INJECTION_TYPE_RACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_ERROR_INJECTION_TYPE_RDCH : integer;
-  attribute C_ERROR_INJECTION_TYPE_RDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_ERROR_INJECTION_TYPE_RDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_ERROR_INJECTION_TYPE_WACH : integer;
-  attribute C_ERROR_INJECTION_TYPE_WACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_ERROR_INJECTION_TYPE_WACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_ERROR_INJECTION_TYPE_WDCH : integer;
-  attribute C_ERROR_INJECTION_TYPE_WDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_ERROR_INJECTION_TYPE_WDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_ERROR_INJECTION_TYPE_WRCH : integer;
-  attribute C_ERROR_INJECTION_TYPE_WRCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_ERROR_INJECTION_TYPE_WRCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_FAMILY : string;
-  attribute C_FAMILY of overlap_buffer_fifo_generator_v13_2_2 : entity is "virtex7";
+  attribute C_FAMILY of overlap_buffer_fifo_generator_v13_2_4 : entity is "virtex7";
   attribute C_FULL_FLAGS_RST_VAL : integer;
-  attribute C_FULL_FLAGS_RST_VAL of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_FULL_FLAGS_RST_VAL of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_HAS_ALMOST_EMPTY : integer;
-  attribute C_HAS_ALMOST_EMPTY of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_ALMOST_EMPTY of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_ALMOST_FULL : integer;
-  attribute C_HAS_ALMOST_FULL of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_ALMOST_FULL of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_AXIS_TDATA : integer;
-  attribute C_HAS_AXIS_TDATA of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_HAS_AXIS_TDATA of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_HAS_AXIS_TDEST : integer;
-  attribute C_HAS_AXIS_TDEST of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_AXIS_TDEST of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_AXIS_TID : integer;
-  attribute C_HAS_AXIS_TID of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_AXIS_TID of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_AXIS_TKEEP : integer;
-  attribute C_HAS_AXIS_TKEEP of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_AXIS_TKEEP of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_AXIS_TLAST : integer;
-  attribute C_HAS_AXIS_TLAST of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_AXIS_TLAST of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_AXIS_TREADY : integer;
-  attribute C_HAS_AXIS_TREADY of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_HAS_AXIS_TREADY of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_HAS_AXIS_TSTRB : integer;
-  attribute C_HAS_AXIS_TSTRB of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_AXIS_TSTRB of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_AXIS_TUSER : integer;
-  attribute C_HAS_AXIS_TUSER of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_HAS_AXIS_TUSER of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_HAS_AXI_ARUSER : integer;
-  attribute C_HAS_AXI_ARUSER of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_AXI_ARUSER of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_AXI_AWUSER : integer;
-  attribute C_HAS_AXI_AWUSER of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_AXI_AWUSER of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_AXI_BUSER : integer;
-  attribute C_HAS_AXI_BUSER of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_AXI_BUSER of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_AXI_ID : integer;
-  attribute C_HAS_AXI_ID of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_AXI_ID of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_AXI_RD_CHANNEL : integer;
-  attribute C_HAS_AXI_RD_CHANNEL of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_HAS_AXI_RD_CHANNEL of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_HAS_AXI_RUSER : integer;
-  attribute C_HAS_AXI_RUSER of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_AXI_RUSER of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_AXI_WR_CHANNEL : integer;
-  attribute C_HAS_AXI_WR_CHANNEL of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_HAS_AXI_WR_CHANNEL of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_HAS_AXI_WUSER : integer;
-  attribute C_HAS_AXI_WUSER of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_AXI_WUSER of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_BACKUP : integer;
-  attribute C_HAS_BACKUP of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_BACKUP of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_DATA_COUNT : integer;
-  attribute C_HAS_DATA_COUNT of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_DATA_COUNT of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_DATA_COUNTS_AXIS : integer;
-  attribute C_HAS_DATA_COUNTS_AXIS of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_DATA_COUNTS_AXIS of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_DATA_COUNTS_RACH : integer;
-  attribute C_HAS_DATA_COUNTS_RACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_DATA_COUNTS_RACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_DATA_COUNTS_RDCH : integer;
-  attribute C_HAS_DATA_COUNTS_RDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_DATA_COUNTS_RDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_DATA_COUNTS_WACH : integer;
-  attribute C_HAS_DATA_COUNTS_WACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_DATA_COUNTS_WACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_DATA_COUNTS_WDCH : integer;
-  attribute C_HAS_DATA_COUNTS_WDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_DATA_COUNTS_WDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_DATA_COUNTS_WRCH : integer;
-  attribute C_HAS_DATA_COUNTS_WRCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_DATA_COUNTS_WRCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_INT_CLK : integer;
-  attribute C_HAS_INT_CLK of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_INT_CLK of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_MASTER_CE : integer;
-  attribute C_HAS_MASTER_CE of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_MASTER_CE of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_MEMINIT_FILE : integer;
-  attribute C_HAS_MEMINIT_FILE of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_MEMINIT_FILE of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_OVERFLOW : integer;
-  attribute C_HAS_OVERFLOW of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_OVERFLOW of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_PROG_FLAGS_AXIS : integer;
-  attribute C_HAS_PROG_FLAGS_AXIS of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_PROG_FLAGS_AXIS of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_PROG_FLAGS_RACH : integer;
-  attribute C_HAS_PROG_FLAGS_RACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_PROG_FLAGS_RACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_PROG_FLAGS_RDCH : integer;
-  attribute C_HAS_PROG_FLAGS_RDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_PROG_FLAGS_RDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_PROG_FLAGS_WACH : integer;
-  attribute C_HAS_PROG_FLAGS_WACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_PROG_FLAGS_WACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_PROG_FLAGS_WDCH : integer;
-  attribute C_HAS_PROG_FLAGS_WDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_PROG_FLAGS_WDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_PROG_FLAGS_WRCH : integer;
-  attribute C_HAS_PROG_FLAGS_WRCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_PROG_FLAGS_WRCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_RD_DATA_COUNT : integer;
-  attribute C_HAS_RD_DATA_COUNT of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_RD_DATA_COUNT of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_RD_RST : integer;
-  attribute C_HAS_RD_RST of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_RD_RST of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_RST : integer;
-  attribute C_HAS_RST of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_HAS_RST of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_HAS_SLAVE_CE : integer;
-  attribute C_HAS_SLAVE_CE of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_SLAVE_CE of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_SRST : integer;
-  attribute C_HAS_SRST of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_SRST of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_UNDERFLOW : integer;
-  attribute C_HAS_UNDERFLOW of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_UNDERFLOW of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_VALID : integer;
-  attribute C_HAS_VALID of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_VALID of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_WR_ACK : integer;
-  attribute C_HAS_WR_ACK of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_WR_ACK of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_WR_DATA_COUNT : integer;
-  attribute C_HAS_WR_DATA_COUNT of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_WR_DATA_COUNT of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_WR_RST : integer;
-  attribute C_HAS_WR_RST of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_WR_RST of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_IMPLEMENTATION_TYPE : integer;
-  attribute C_IMPLEMENTATION_TYPE of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_IMPLEMENTATION_TYPE of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_IMPLEMENTATION_TYPE_AXIS : integer;
-  attribute C_IMPLEMENTATION_TYPE_AXIS of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_IMPLEMENTATION_TYPE_AXIS of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_IMPLEMENTATION_TYPE_RACH : integer;
-  attribute C_IMPLEMENTATION_TYPE_RACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_IMPLEMENTATION_TYPE_RACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_IMPLEMENTATION_TYPE_RDCH : integer;
-  attribute C_IMPLEMENTATION_TYPE_RDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_IMPLEMENTATION_TYPE_RDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_IMPLEMENTATION_TYPE_WACH : integer;
-  attribute C_IMPLEMENTATION_TYPE_WACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_IMPLEMENTATION_TYPE_WACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_IMPLEMENTATION_TYPE_WDCH : integer;
-  attribute C_IMPLEMENTATION_TYPE_WDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_IMPLEMENTATION_TYPE_WDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_IMPLEMENTATION_TYPE_WRCH : integer;
-  attribute C_IMPLEMENTATION_TYPE_WRCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_IMPLEMENTATION_TYPE_WRCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_INIT_WR_PNTR_VAL : integer;
-  attribute C_INIT_WR_PNTR_VAL of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_INIT_WR_PNTR_VAL of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_INTERFACE_TYPE : integer;
-  attribute C_INTERFACE_TYPE of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_INTERFACE_TYPE of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_MEMORY_TYPE : integer;
-  attribute C_MEMORY_TYPE of overlap_buffer_fifo_generator_v13_2_2 : entity is 2;
+  attribute C_MEMORY_TYPE of overlap_buffer_fifo_generator_v13_2_4 : entity is 2;
   attribute C_MIF_FILE_NAME : string;
-  attribute C_MIF_FILE_NAME of overlap_buffer_fifo_generator_v13_2_2 : entity is "BlankString";
+  attribute C_MIF_FILE_NAME of overlap_buffer_fifo_generator_v13_2_4 : entity is "BlankString";
   attribute C_MSGON_VAL : integer;
-  attribute C_MSGON_VAL of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_MSGON_VAL of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_OPTIMIZATION_MODE : integer;
-  attribute C_OPTIMIZATION_MODE of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_OPTIMIZATION_MODE of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_OVERFLOW_LOW : integer;
-  attribute C_OVERFLOW_LOW of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_OVERFLOW_LOW of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_POWER_SAVING_MODE : integer;
-  attribute C_POWER_SAVING_MODE of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_POWER_SAVING_MODE of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PRELOAD_LATENCY : integer;
-  attribute C_PRELOAD_LATENCY of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PRELOAD_LATENCY of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PRELOAD_REGS : integer;
-  attribute C_PRELOAD_REGS of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_PRELOAD_REGS of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_PRIM_FIFO_TYPE : string;
-  attribute C_PRIM_FIFO_TYPE of overlap_buffer_fifo_generator_v13_2_2 : entity is "512x72";
+  attribute C_PRIM_FIFO_TYPE of overlap_buffer_fifo_generator_v13_2_4 : entity is "512x72";
   attribute C_PRIM_FIFO_TYPE_AXIS : string;
-  attribute C_PRIM_FIFO_TYPE_AXIS of overlap_buffer_fifo_generator_v13_2_2 : entity is "1kx18";
+  attribute C_PRIM_FIFO_TYPE_AXIS of overlap_buffer_fifo_generator_v13_2_4 : entity is "1kx18";
   attribute C_PRIM_FIFO_TYPE_RACH : string;
-  attribute C_PRIM_FIFO_TYPE_RACH of overlap_buffer_fifo_generator_v13_2_2 : entity is "512x36";
+  attribute C_PRIM_FIFO_TYPE_RACH of overlap_buffer_fifo_generator_v13_2_4 : entity is "512x36";
   attribute C_PRIM_FIFO_TYPE_RDCH : string;
-  attribute C_PRIM_FIFO_TYPE_RDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is "1kx36";
+  attribute C_PRIM_FIFO_TYPE_RDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is "1kx36";
   attribute C_PRIM_FIFO_TYPE_WACH : string;
-  attribute C_PRIM_FIFO_TYPE_WACH of overlap_buffer_fifo_generator_v13_2_2 : entity is "512x36";
+  attribute C_PRIM_FIFO_TYPE_WACH of overlap_buffer_fifo_generator_v13_2_4 : entity is "512x36";
   attribute C_PRIM_FIFO_TYPE_WDCH : string;
-  attribute C_PRIM_FIFO_TYPE_WDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is "1kx36";
+  attribute C_PRIM_FIFO_TYPE_WDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is "1kx36";
   attribute C_PRIM_FIFO_TYPE_WRCH : string;
-  attribute C_PRIM_FIFO_TYPE_WRCH of overlap_buffer_fifo_generator_v13_2_2 : entity is "512x36";
+  attribute C_PRIM_FIFO_TYPE_WRCH of overlap_buffer_fifo_generator_v13_2_4 : entity is "512x36";
   attribute C_PROG_EMPTY_THRESH_ASSERT_VAL : integer;
-  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL of overlap_buffer_fifo_generator_v13_2_2 : entity is 4;
+  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL of overlap_buffer_fifo_generator_v13_2_4 : entity is 4;
   attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_AXIS : integer;
-  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_AXIS of overlap_buffer_fifo_generator_v13_2_2 : entity is 1022;
+  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_AXIS of overlap_buffer_fifo_generator_v13_2_4 : entity is 1022;
   attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_RACH : integer;
-  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_RACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1022;
+  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_RACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1022;
   attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_RDCH : integer;
-  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_RDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1022;
+  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_RDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1022;
   attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_WACH : integer;
-  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_WACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1022;
+  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_WACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1022;
   attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_WDCH : integer;
-  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_WDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1022;
+  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_WDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1022;
   attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_WRCH : integer;
-  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_WRCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1022;
+  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_WRCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1022;
   attribute C_PROG_EMPTY_THRESH_NEGATE_VAL : integer;
-  attribute C_PROG_EMPTY_THRESH_NEGATE_VAL of overlap_buffer_fifo_generator_v13_2_2 : entity is 5;
+  attribute C_PROG_EMPTY_THRESH_NEGATE_VAL of overlap_buffer_fifo_generator_v13_2_4 : entity is 5;
   attribute C_PROG_EMPTY_TYPE : integer;
-  attribute C_PROG_EMPTY_TYPE of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_EMPTY_TYPE of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_EMPTY_TYPE_AXIS : integer;
-  attribute C_PROG_EMPTY_TYPE_AXIS of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_EMPTY_TYPE_AXIS of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_EMPTY_TYPE_RACH : integer;
-  attribute C_PROG_EMPTY_TYPE_RACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_EMPTY_TYPE_RACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_EMPTY_TYPE_RDCH : integer;
-  attribute C_PROG_EMPTY_TYPE_RDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_EMPTY_TYPE_RDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_EMPTY_TYPE_WACH : integer;
-  attribute C_PROG_EMPTY_TYPE_WACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_EMPTY_TYPE_WACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_EMPTY_TYPE_WDCH : integer;
-  attribute C_PROG_EMPTY_TYPE_WDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_EMPTY_TYPE_WDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_EMPTY_TYPE_WRCH : integer;
-  attribute C_PROG_EMPTY_TYPE_WRCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_EMPTY_TYPE_WRCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_FULL_THRESH_ASSERT_VAL : integer;
-  attribute C_PROG_FULL_THRESH_ASSERT_VAL of overlap_buffer_fifo_generator_v13_2_2 : entity is 15;
+  attribute C_PROG_FULL_THRESH_ASSERT_VAL of overlap_buffer_fifo_generator_v13_2_4 : entity is 15;
   attribute C_PROG_FULL_THRESH_ASSERT_VAL_AXIS : integer;
-  attribute C_PROG_FULL_THRESH_ASSERT_VAL_AXIS of overlap_buffer_fifo_generator_v13_2_2 : entity is 1023;
+  attribute C_PROG_FULL_THRESH_ASSERT_VAL_AXIS of overlap_buffer_fifo_generator_v13_2_4 : entity is 1023;
   attribute C_PROG_FULL_THRESH_ASSERT_VAL_RACH : integer;
-  attribute C_PROG_FULL_THRESH_ASSERT_VAL_RACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1023;
+  attribute C_PROG_FULL_THRESH_ASSERT_VAL_RACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1023;
   attribute C_PROG_FULL_THRESH_ASSERT_VAL_RDCH : integer;
-  attribute C_PROG_FULL_THRESH_ASSERT_VAL_RDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1023;
+  attribute C_PROG_FULL_THRESH_ASSERT_VAL_RDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1023;
   attribute C_PROG_FULL_THRESH_ASSERT_VAL_WACH : integer;
-  attribute C_PROG_FULL_THRESH_ASSERT_VAL_WACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1023;
+  attribute C_PROG_FULL_THRESH_ASSERT_VAL_WACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1023;
   attribute C_PROG_FULL_THRESH_ASSERT_VAL_WDCH : integer;
-  attribute C_PROG_FULL_THRESH_ASSERT_VAL_WDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1023;
+  attribute C_PROG_FULL_THRESH_ASSERT_VAL_WDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1023;
   attribute C_PROG_FULL_THRESH_ASSERT_VAL_WRCH : integer;
-  attribute C_PROG_FULL_THRESH_ASSERT_VAL_WRCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1023;
+  attribute C_PROG_FULL_THRESH_ASSERT_VAL_WRCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1023;
   attribute C_PROG_FULL_THRESH_NEGATE_VAL : integer;
-  attribute C_PROG_FULL_THRESH_NEGATE_VAL of overlap_buffer_fifo_generator_v13_2_2 : entity is 14;
+  attribute C_PROG_FULL_THRESH_NEGATE_VAL of overlap_buffer_fifo_generator_v13_2_4 : entity is 14;
   attribute C_PROG_FULL_TYPE : integer;
-  attribute C_PROG_FULL_TYPE of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_FULL_TYPE of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_FULL_TYPE_AXIS : integer;
-  attribute C_PROG_FULL_TYPE_AXIS of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_FULL_TYPE_AXIS of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_FULL_TYPE_RACH : integer;
-  attribute C_PROG_FULL_TYPE_RACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_FULL_TYPE_RACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_FULL_TYPE_RDCH : integer;
-  attribute C_PROG_FULL_TYPE_RDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_FULL_TYPE_RDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_FULL_TYPE_WACH : integer;
-  attribute C_PROG_FULL_TYPE_WACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_FULL_TYPE_WACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_FULL_TYPE_WDCH : integer;
-  attribute C_PROG_FULL_TYPE_WDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_FULL_TYPE_WDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_FULL_TYPE_WRCH : integer;
-  attribute C_PROG_FULL_TYPE_WRCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_FULL_TYPE_WRCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_RACH_TYPE : integer;
-  attribute C_RACH_TYPE of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_RACH_TYPE of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_RDCH_TYPE : integer;
-  attribute C_RDCH_TYPE of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_RDCH_TYPE of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_RD_DATA_COUNT_WIDTH : integer;
-  attribute C_RD_DATA_COUNT_WIDTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 5;
+  attribute C_RD_DATA_COUNT_WIDTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 5;
   attribute C_RD_DEPTH : integer;
-  attribute C_RD_DEPTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 16;
+  attribute C_RD_DEPTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 16;
   attribute C_RD_FREQ : integer;
-  attribute C_RD_FREQ of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_RD_FREQ of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_RD_PNTR_WIDTH : integer;
-  attribute C_RD_PNTR_WIDTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 4;
+  attribute C_RD_PNTR_WIDTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 4;
   attribute C_REG_SLICE_MODE_AXIS : integer;
-  attribute C_REG_SLICE_MODE_AXIS of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_REG_SLICE_MODE_AXIS of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_REG_SLICE_MODE_RACH : integer;
-  attribute C_REG_SLICE_MODE_RACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_REG_SLICE_MODE_RACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_REG_SLICE_MODE_RDCH : integer;
-  attribute C_REG_SLICE_MODE_RDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_REG_SLICE_MODE_RDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_REG_SLICE_MODE_WACH : integer;
-  attribute C_REG_SLICE_MODE_WACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_REG_SLICE_MODE_WACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_REG_SLICE_MODE_WDCH : integer;
-  attribute C_REG_SLICE_MODE_WDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_REG_SLICE_MODE_WDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_REG_SLICE_MODE_WRCH : integer;
-  attribute C_REG_SLICE_MODE_WRCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_REG_SLICE_MODE_WRCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_SELECT_XPM : integer;
-  attribute C_SELECT_XPM of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_SELECT_XPM of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_SYNCHRONIZER_STAGE : integer;
-  attribute C_SYNCHRONIZER_STAGE of overlap_buffer_fifo_generator_v13_2_2 : entity is 2;
+  attribute C_SYNCHRONIZER_STAGE of overlap_buffer_fifo_generator_v13_2_4 : entity is 2;
   attribute C_UNDERFLOW_LOW : integer;
-  attribute C_UNDERFLOW_LOW of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_UNDERFLOW_LOW of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_COMMON_OVERFLOW : integer;
-  attribute C_USE_COMMON_OVERFLOW of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_COMMON_OVERFLOW of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_COMMON_UNDERFLOW : integer;
-  attribute C_USE_COMMON_UNDERFLOW of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_COMMON_UNDERFLOW of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_DEFAULT_SETTINGS : integer;
-  attribute C_USE_DEFAULT_SETTINGS of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_DEFAULT_SETTINGS of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_DOUT_RST : integer;
-  attribute C_USE_DOUT_RST of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_USE_DOUT_RST of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_USE_ECC : integer;
-  attribute C_USE_ECC of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_ECC of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_ECC_AXIS : integer;
-  attribute C_USE_ECC_AXIS of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_ECC_AXIS of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_ECC_RACH : integer;
-  attribute C_USE_ECC_RACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_ECC_RACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_ECC_RDCH : integer;
-  attribute C_USE_ECC_RDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_ECC_RDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_ECC_WACH : integer;
-  attribute C_USE_ECC_WACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_ECC_WACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_ECC_WDCH : integer;
-  attribute C_USE_ECC_WDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_ECC_WDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_ECC_WRCH : integer;
-  attribute C_USE_ECC_WRCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_ECC_WRCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_EMBEDDED_REG : integer;
-  attribute C_USE_EMBEDDED_REG of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_EMBEDDED_REG of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_FIFO16_FLAGS : integer;
-  attribute C_USE_FIFO16_FLAGS of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_FIFO16_FLAGS of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_FWFT_DATA_COUNT : integer;
-  attribute C_USE_FWFT_DATA_COUNT of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_USE_FWFT_DATA_COUNT of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_USE_PIPELINE_REG : integer;
-  attribute C_USE_PIPELINE_REG of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_PIPELINE_REG of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_VALID_LOW : integer;
-  attribute C_VALID_LOW of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_VALID_LOW of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_WACH_TYPE : integer;
-  attribute C_WACH_TYPE of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_WACH_TYPE of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_WDCH_TYPE : integer;
-  attribute C_WDCH_TYPE of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_WDCH_TYPE of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_WRCH_TYPE : integer;
-  attribute C_WRCH_TYPE of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_WRCH_TYPE of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_WR_ACK_LOW : integer;
-  attribute C_WR_ACK_LOW of overlap_buffer_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_WR_ACK_LOW of overlap_buffer_fifo_generator_v13_2_4 : entity is 0;
   attribute C_WR_DATA_COUNT_WIDTH : integer;
-  attribute C_WR_DATA_COUNT_WIDTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 5;
+  attribute C_WR_DATA_COUNT_WIDTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 5;
   attribute C_WR_DEPTH : integer;
-  attribute C_WR_DEPTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 16;
+  attribute C_WR_DEPTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 16;
   attribute C_WR_DEPTH_AXIS : integer;
-  attribute C_WR_DEPTH_AXIS of overlap_buffer_fifo_generator_v13_2_2 : entity is 1024;
+  attribute C_WR_DEPTH_AXIS of overlap_buffer_fifo_generator_v13_2_4 : entity is 1024;
   attribute C_WR_DEPTH_RACH : integer;
-  attribute C_WR_DEPTH_RACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 16;
+  attribute C_WR_DEPTH_RACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 16;
   attribute C_WR_DEPTH_RDCH : integer;
-  attribute C_WR_DEPTH_RDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1024;
+  attribute C_WR_DEPTH_RDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1024;
   attribute C_WR_DEPTH_WACH : integer;
-  attribute C_WR_DEPTH_WACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 16;
+  attribute C_WR_DEPTH_WACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 16;
   attribute C_WR_DEPTH_WDCH : integer;
-  attribute C_WR_DEPTH_WDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 1024;
+  attribute C_WR_DEPTH_WDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 1024;
   attribute C_WR_DEPTH_WRCH : integer;
-  attribute C_WR_DEPTH_WRCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 16;
+  attribute C_WR_DEPTH_WRCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 16;
   attribute C_WR_FREQ : integer;
-  attribute C_WR_FREQ of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_WR_FREQ of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute C_WR_PNTR_WIDTH : integer;
-  attribute C_WR_PNTR_WIDTH of overlap_buffer_fifo_generator_v13_2_2 : entity is 4;
+  attribute C_WR_PNTR_WIDTH of overlap_buffer_fifo_generator_v13_2_4 : entity is 4;
   attribute C_WR_PNTR_WIDTH_AXIS : integer;
-  attribute C_WR_PNTR_WIDTH_AXIS of overlap_buffer_fifo_generator_v13_2_2 : entity is 10;
+  attribute C_WR_PNTR_WIDTH_AXIS of overlap_buffer_fifo_generator_v13_2_4 : entity is 10;
   attribute C_WR_PNTR_WIDTH_RACH : integer;
-  attribute C_WR_PNTR_WIDTH_RACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 4;
+  attribute C_WR_PNTR_WIDTH_RACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 4;
   attribute C_WR_PNTR_WIDTH_RDCH : integer;
-  attribute C_WR_PNTR_WIDTH_RDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 10;
+  attribute C_WR_PNTR_WIDTH_RDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 10;
   attribute C_WR_PNTR_WIDTH_WACH : integer;
-  attribute C_WR_PNTR_WIDTH_WACH of overlap_buffer_fifo_generator_v13_2_2 : entity is 4;
+  attribute C_WR_PNTR_WIDTH_WACH of overlap_buffer_fifo_generator_v13_2_4 : entity is 4;
   attribute C_WR_PNTR_WIDTH_WDCH : integer;
-  attribute C_WR_PNTR_WIDTH_WDCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 10;
+  attribute C_WR_PNTR_WIDTH_WDCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 10;
   attribute C_WR_PNTR_WIDTH_WRCH : integer;
-  attribute C_WR_PNTR_WIDTH_WRCH of overlap_buffer_fifo_generator_v13_2_2 : entity is 4;
+  attribute C_WR_PNTR_WIDTH_WRCH of overlap_buffer_fifo_generator_v13_2_4 : entity is 4;
   attribute C_WR_RESPONSE_LATENCY : integer;
-  attribute C_WR_RESPONSE_LATENCY of overlap_buffer_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_WR_RESPONSE_LATENCY of overlap_buffer_fifo_generator_v13_2_4 : entity is 1;
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of overlap_buffer_fifo_generator_v13_2_2 : entity is "fifo_generator_v13_2_2";
-end overlap_buffer_fifo_generator_v13_2_2;
+  attribute ORIG_REF_NAME of overlap_buffer_fifo_generator_v13_2_4 : entity is "fifo_generator_v13_2_4";
+end overlap_buffer_fifo_generator_v13_2_4;
 
-architecture STRUCTURE of overlap_buffer_fifo_generator_v13_2_2 is
+architecture STRUCTURE of overlap_buffer_fifo_generator_v13_2_4 is
   signal \<const0>\ : STD_LOGIC;
   signal \<const1>\ : STD_LOGIC;
   signal \^wr_rst_busy\ : STD_LOGIC;
@@ -10058,7 +10409,7 @@ VCC: unisim.vcomponents.VCC
      port map (
       P => \<const1>\
     );
-inst_fifo_gen: entity work.overlap_buffer_fifo_generator_v13_2_2_synth
+inst_fifo_gen: entity work.overlap_buffer_fifo_generator_v13_2_4_synth
      port map (
       clk => clk,
       din(289 downto 0) => din(289 downto 0),
@@ -10089,11 +10440,11 @@ entity overlap_buffer is
   attribute NotValidForBitStream : boolean;
   attribute NotValidForBitStream of overlap_buffer : entity is true;
   attribute CHECK_LICENSE_TYPE : string;
-  attribute CHECK_LICENSE_TYPE of overlap_buffer : entity is "overlap_buffer,fifo_generator_v13_2_2,{}";
+  attribute CHECK_LICENSE_TYPE of overlap_buffer : entity is "overlap_buffer,fifo_generator_v13_2_4,{}";
   attribute downgradeipidentifiedwarnings : string;
   attribute downgradeipidentifiedwarnings of overlap_buffer : entity is "yes";
   attribute x_core_info : string;
-  attribute x_core_info of overlap_buffer : entity is "fifo_generator_v13_2_2,Vivado 2018.1";
+  attribute x_core_info of overlap_buffer : entity is "fifo_generator_v13_2_4,Vivado 2019.1.1";
 end overlap_buffer;
 
 architecture STRUCTURE of overlap_buffer is
@@ -10627,7 +10978,7 @@ architecture STRUCTURE of overlap_buffer is
   attribute x_interface_info : string;
   attribute x_interface_info of clk : signal is "xilinx.com:signal:clock:1.0 core_clk CLK";
   attribute x_interface_parameter : string;
-  attribute x_interface_parameter of clk : signal is "XIL_INTERFACENAME core_clk, FREQ_HZ 100000000, PHASE 0.000";
+  attribute x_interface_parameter of clk : signal is "XIL_INTERFACENAME core_clk, FREQ_HZ 100000000, PHASE 0.000, INSERT_VIP 0";
   attribute x_interface_info of empty : signal is "xilinx.com:interface:fifo_read:1.0 FIFO_READ EMPTY";
   attribute x_interface_info of full : signal is "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE FULL";
   attribute x_interface_info of rd_en : signal is "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_EN";
@@ -10635,7 +10986,7 @@ architecture STRUCTURE of overlap_buffer is
   attribute x_interface_info of din : signal is "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_DATA";
   attribute x_interface_info of dout : signal is "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_DATA";
 begin
-U0: entity work.overlap_buffer_fifo_generator_v13_2_2
+U0: entity work.overlap_buffer_fifo_generator_v13_2_4
      port map (
       almost_empty => NLW_U0_almost_empty_UNCONNECTED,
       almost_full => NLW_U0_almost_full_UNCONNECTED,
