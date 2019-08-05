@@ -15,7 +15,7 @@ class Platform(object):
         """
         platdir = os.environ['MLIB_DEVEL_PATH'] + '/jasper_library/platforms'
         conffile = platdir + '/%s.yaml' % name.lower()
-        print conffile
+        print(conffile)
         if not os.path.isfile(conffile):
             raise RuntimeError('Couldn\'t find platform configuration file '
                                '%s' % conffile)
@@ -23,10 +23,10 @@ class Platform(object):
         with open(conffile, 'r') as fh:
             self.conf = yaml.load(fh.read())
 
-        print self.conf
+        print(self.conf)
         #: A dictionary of pin names associated with the platform.
         self._pins = {}
-        for pinname, val in self.conf['pins'].iteritems():
+        for pinname, val in self.conf['pins'].items():
             self.add_pins(pinname, val.get('iostd', None), val.get('loc', None))
         #: A list of resources present on a platform to facilitate
         #: simple drc checking. Eg. ['qdr0', 'sysclk2x']

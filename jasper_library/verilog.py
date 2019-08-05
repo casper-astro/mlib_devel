@@ -155,7 +155,7 @@ class Port(ImmutableWithComments):
         if type(signal) is str:
             signal.rstrip(' ')
         self.signal = signal
-        for kw, val in kwargs.items():
+        for kw, val in list(kwargs.items()):
             self.__setattr__(kw, val)
 
 class Parameter(ImmutableWithComments):
@@ -215,7 +215,7 @@ class Signal(ImmutableWithComments):
     def update_attrs(self, name, width=0, **kwargs):
         self.name  = name.rstrip(' ')
         self.width = width
-        for kw, val in kwargs.items():
+        for kw, val in list(kwargs.items()):
             self.__setattr__(kw, val)
 
 
@@ -592,7 +592,7 @@ class VerilogModule(object):
         :type cur_blk: str
         """
         self.cur_blk = cur_blk
-        if cur_blk not in self.ports.keys():
+        if cur_blk not in list(self.ports.keys()):
             logger.debug('Initializing second-layer dictionairies for: %s'%cur_blk)
             self.ports[cur_blk] = {}
             self.parameters[cur_blk] = {}
@@ -605,7 +605,7 @@ class VerilogModule(object):
         """
         Check if this module has an instance called <name>. If so return True
         """
-        return name in self.instances.keys()
+        return name in list(self.instances.keys())
 
     def wb_compute(self, base_addr=0x10000, alignment=4):
         """
@@ -624,8 +624,8 @@ class VerilogModule(object):
         # Now we have an instance name, we can assign the wb ports to
         # real signals
         wb_device_num = 0
-        for block in self.instances.keys():
-            for instname, inst in self.instances[block].items():
+        for block in list(self.instances.keys()):
+            for instname, inst in list(self.instances[block].items()):
                 logger.debug("Looking for WB slaves for instance %s"%inst.name)
                 for n, wb_dev in enumerate(inst.wb_devices):
                     logger.debug("Assigning interface %d (%s)"%(n, wb_dev.regname))
@@ -652,7 +652,7 @@ class VerilogModule(object):
             # If we are using a hierarchical arbiter, cut up the WB devices into blocks
             # and instantiate the appropriate address ranges in a top level arbiter
             if self.max_devices_per_arb is not None:
-                arbiters = [self.wb_devices[i:i+self.max_devices_per_arb] for i in xrange(0, len(self.wb_devices), self.max_devices_per_arb)]
+                arbiters = [self.wb_devices[i:i+self.max_devices_per_arb] for i in range(0, len(self.wb_devices), self.max_devices_per_arb)]
                 self.add_localparam('N_SUB_ARBS',  len(arbiters))
                 base_addrs = '{\n'
                 high_addrs = '{\n'
@@ -777,7 +777,7 @@ class VerilogModule(object):
         # quick sort be damned. Go slow.
         while(len(self.memory_map) > 0):
             max_size = 0
-            for key,val in self.memory_map.items():
+            for key,val in list(self.memory_map.items()):
                 if val['size'] > max_size:
                     max_size = val['size']
                     max_key = key
@@ -786,7 +786,8 @@ class VerilogModule(object):
         # Now replace the memory map with the ordered one and continue
         self.memory_map = ordered_memory_map.copy()
 
-        for key,val in self.memory_map.items():
+        # Now loop over interfaces in memory_map to determine addresses
+        for key,val in list(self.memory_map.items()):
             val['relative_address'] = hex(relative_address)
             # this is really gross, but didn't want to rewrite anything in core_info... Sorry.
             if key == 'sw_reg':
@@ -955,12 +956,12 @@ class VerilogModule(object):
         """
         Add ports and signals associated with child instances
         """
-        for block in self.instances.keys():
+        for block in list(self.instances.keys()):
             self.set_cur_blk(block)
-            for instname, inst in self.instances[block].items():
+            for instname, inst in list(self.instances[block].items()):
                 logger.debug('Instantiating child ports for %s'%instname)
-                for blk in inst.ports.keys():
-                    for pname, port in inst.ports[blk].items():
+                for blk in list(inst.ports.keys()):
+                    for pname, port in list(inst.ports[blk].items()):
                         if port.parent_sig:
                             logger.debug('  Adding instance port %s as signal %s to top'%(port.name, port.signal))
                             if not hasattr(port, 'width'):
@@ -1130,7 +1131,7 @@ class VerilogModule(object):
         declare parameters
         """
         s = ''
-        for block in self.parameters.keys():
+        for block in list(self.parameters.keys()):
             s += self.gen_cur_blk_comment(block, self.parameters[block])
             for pn, parameter in sorted(self.parameters[block].items()):
                 s += '  parameter %s = %s;'%(parameter.name,parameter.value)
@@ -1145,7 +1146,7 @@ class VerilogModule(object):
         declare localparams
         """
         s = ''
-        for block in self.localparams.keys():
+        for block in list(self.localparams.keys()):
             s += self.gen_cur_blk_comment(block, self.localparams[block])
             for pn,parameter in sorted(self.localparams[block].items()):
                 s += '  localparam %s = %s;'%(parameter.name,parameter.value)
@@ -1164,13 +1165,13 @@ class VerilogModule(object):
         n_ports = 0
         i = 1
         # get total number of ports
-        for block in self.ports.keys():
-            n_ports += len(self.ports[block].keys())
+        for block in list(self.ports.keys()):
+            n_ports += len(list(self.ports[block].keys()))
 
-        for block in self.ports.keys():
+        for block in list(self.ports.keys()):
             s += self.gen_cur_blk_comment(block, self.ports[block])
             # sort by port type then alphabetically
-            for port in sorted(self.ports[block].values(), key=operator.attrgetter('dir', 'name')):
+            for port in sorted(list(self.ports[block].values()), key=operator.attrgetter('dir', 'name')):
                 logger.debug('Generating port %s'%port.name)
                 if port.width == 0:
                     s += '    %s %s'%(kwm[port.dir],port.name)
@@ -1193,16 +1194,16 @@ class VerilogModule(object):
         # keyword map
         kwm = {'in':'input','out':'output','inout':'inout'}
         s = ''
-        for block in self.ports.keys():
+        for block in list(self.ports.keys()):
             s += self.gen_cur_blk_comment(block, self.ports[block])
             # sort port type then alphabetically
-            for port in sorted(self.ports[block].values(), key=operator.attrgetter('dir', 'name')):
+            for port in sorted(list(self.ports[block].values()), key=operator.attrgetter('dir', 'name')):
                 # set up indentation nicely
                 s += '  '
                 # first write attributes
                 if hasattr(port, 'attr'):
                     s += '(* '
-                    n_keys = len(port.attr.keys())
+                    n_keys = len(list(port.attr.keys()))
                     for kn,key in enumerate(port.attr.keys()):
                         if kn != (n_keys-1):
                             s += '%s = "%s",'%(key,port.attr[key])
@@ -1225,7 +1226,7 @@ class VerilogModule(object):
         declare signals
         """
         s = ''
-        for block in self.signals.keys():
+        for block in list(self.signals.keys()):
             s += self.gen_cur_blk_comment(block, self.signals[block])
             for name, sig in sorted(self.signals[block].items()):
                 logger.debug('Writing verilog for signal %s'%name)
@@ -1245,7 +1246,7 @@ class VerilogModule(object):
         module
         """
         s = ''
-        for block in self.instances.keys():
+        for block in list(self.instances.keys()):
             n = 0
             n_inst = len(self.instances[block])
             s += self.gen_cur_blk_comment(block, self.instances[block])
@@ -1263,7 +1264,7 @@ class VerilogModule(object):
         signal
         """
         s = ''
-        for block in self.assignments.keys():
+        for block in list(self.assignments.keys()):
             s += self.gen_cur_blk_comment(block, self.assignments[block])
             for n,assignment in sorted(self.assignments[block].items()):
                 s += '  assign %s = %s;'%(assignment['lhs'], assignment['rhs'])
@@ -1286,7 +1287,7 @@ class VerilogModule(object):
         s = ''
         if self.comment is not None:
             s += '  // %s\n'%self.comment
-        for block in self.parameters.keys():
+        for block in list(self.parameters.keys()):
             n_params = len(self.parameters[block])
             if n_params > 0:
                 s += '  %s #(\n' %self.name
@@ -1301,7 +1302,7 @@ class VerilogModule(object):
                 s += '  ) %s (\n'%instname
             else:
                 s += '  %s  %s (\n'%(self.name, instname)
-        for block in self.ports.keys():
+        for block in list(self.ports.keys()):
             n_ports = len(self.ports[block])
             n = 0
             for pn, port in sorted(self.ports[block].items()):
@@ -1390,9 +1391,9 @@ class VerilogModule(object):
         This helper function searches each top level dictionary
         to see if it contains ``name`` and returns the key that does.
         """
-        for top_dict_key, top_dict_value in dict.items():
+        for top_dict_key, top_dict_value in list(dict.items()):
             # does the second level dict keys contain name?
-            if name in top_dict_value.keys():
+            if name in list(top_dict_value.keys()):
                 return top_dict_key
         # return key as None if not in any dictionary
         return None

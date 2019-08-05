@@ -107,7 +107,7 @@ if args.bin:
     sys.stdout.write(csl)
 else:
     # Output CSL as memory file
-    print '@%08X' % args.address
+    print(('@%08X' % args.address))
     # Pad csl with 3 nul bytes (is this really necessary?)
     csl += '\0\0\0'
     # Split csl into lines of 1 to 32 bytes
