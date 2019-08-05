@@ -40,8 +40,15 @@ If you need them, install instructions are available:
 
 3. Python
 
-Currently, the toolflow only supports Python 2.7. You will also require the python package installer [`pip`](https://pypi.org/project/pip/).
-Other python requirements are listed in the toolflow's repository.
+Compiling for _ROACH_ requires Python 2.7 and `pip`. If you don't have these already you can probably install them in Ubuntu environments by opening a terminal and running the command `apt-get install python2.7 python-pip`.
+
+Compiling for _non-ROACH platforms_ requires Python 3 and `pip3`. If you don't have these already you can probably install them in Ubuntu environments by opening a terminal and running the command `apt-get install python3 python3-pip`.
+
+Once you have these installed, you can install the python dependencies of the toolflow by running, in the root directory of your mlib_devel repository:
+
+For _ROACH_: `pip install -r requirements.txt`
+
+For _non-ROACH platforms_: `pip3 install -r requirements.txt`
 
 ## Obtaining the Toolflow
 Clone the toolflow from the [mlib_devel](https://github.com/casper-astro/mlib_devel) git repository. 
