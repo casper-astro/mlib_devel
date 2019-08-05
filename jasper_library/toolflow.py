@@ -1181,7 +1181,7 @@ class ToolflowBackend(object):
                     fh4.write(line)
                     line = fh3.readline()
         # add the MD5 Checksums here
-        with open(extended_info, 'r') as fh:
+        with open(extended_info, 'rb') as fh:
             md5_header = hashlib.md5(fh.read()).hexdigest()
         with open(filename_bin, 'rb') as fh:
             bitstream = fh.read()
@@ -1248,7 +1248,7 @@ class ToolflowBackend(object):
         if (size % packet_size) != 0:
             # padding required
             num_padding_bytes = packet_size - (size % packet_size)
-            for i in range(num_padding_bytes / 2):
+            for i in range(num_padding_bytes // 2):
                 flash_write_checksum += 0xffff
 
         # Last thing to do, make sure it is a 16-bit word
