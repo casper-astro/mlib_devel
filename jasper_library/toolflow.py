@@ -7,7 +7,7 @@ A work in progress.
 """
 import logging
 import os
-import platform
+import casper_platform as platform
 import yellow_blocks.yellow_block as yellow_block
 import verilog
 from constraints import PortConstraint, ClockConstraint, GenClockConstraint, \
