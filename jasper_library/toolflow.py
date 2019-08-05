@@ -822,7 +822,7 @@ class Toolflow(object):
                 # set bram size and 
                 if hasattr(reg, 'ram') and reg.ram==True:
                     node.set('hw_dp_ram', 'yes')
-                    node.set('size', str(reg.nbytes/4)) # this needs to be in words not bytes!!! Dammit Janet
+                    node.set('size', str(reg.nbytes//4)) # this needs to be in words not bytes!!! Dammit Janet
 
             # output xml file describing memory map as input for xml2vhdl
             myxml = xml.dom.minidom.parseString(ET.tostring(xml_root))
