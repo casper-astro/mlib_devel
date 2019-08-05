@@ -135,7 +135,7 @@ class YellowBlock(object):
         self.copy_attrs()
         try:
             self.fullname = self.fullpath.replace('/','_')
-	    self.unique_name = self.fullpath.split('/',1)[1].replace('/','_')
+            self.unique_name = self.fullpath.split('/',1)[1].replace('/','_')
         except AttributeError:
             self.fullpath = self.tag + '%d'%self.inst_id
             self.fullname = self.tag + '%d'%self.inst_id
