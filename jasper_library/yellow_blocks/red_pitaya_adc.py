@@ -18,7 +18,7 @@ class red_pitaya_adc(YellowBlock):
     ADC on the 125-14 Red Pitaya version works very similar to this ADC. It is the Linear Technology,
     125-14 LTC2145CUP-14 ADC.
     """
-	
+    
     def initialize(self):
         # Set bitwidth of block (this is determined by the 'Data bitwidth' parameter in the Simulink mask)
         # self.bitwidth = int(self.bitwidth)

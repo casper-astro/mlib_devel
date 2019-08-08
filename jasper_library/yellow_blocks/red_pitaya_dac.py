@@ -20,7 +20,7 @@ class red_pitaya_dac(YellowBlock):
     DAC on the 125-14 Red Pitaya version works very similar to this DAC. It is the IDT,
     DAC1401D125 ADC. Both operate in interleaved mode only.
     """
-	
+    
     def initialize(self):
         # Set bitwidth of block (this is determined by the 'Data bitwidth' parameter in the Simulink mask)
         # self.bitwidth = int(self.bitwidth)

@@ -67,7 +67,7 @@ class onegbe(YellowBlock):
         gbe_udp.add_port('mac_rx_badframe',  self.fullname + '_mac_rx_badframe')
         gbe_udp.add_port('mac_syncacquired', self.fullname + '_mac_syncacquired')
 
-       #connections to PHY
+        #connections to PHY
         gbe_udp.add_port('phy_status', self.fullname + '_phy_status', width=16)
 
         gbe_udp.add_wb_interface(regname=self.unique_name, mode='rw', nbytes=65536, typecode=self.typecode)
@@ -291,7 +291,7 @@ class onegbe_vcu128(onegbe):
             gbe_pcs.add_port('tx_vtc_rdy_3', '1\'b1')
             gbe_pcs.add_port('rx_vtc_rdy_1', '1\'b1')
             gbe_pcs.add_port('rx_vtc_rdy_2', '1\'b1')
-	    gbe_pcs.add_port('rx_vtc_rdy_3', '1\'b1')
+            gbe_pcs.add_port('rx_vtc_rdy_3', '1\'b1')
             
             # Referene pg047
             gbe_pcs.add_port('dummy_port_in',self.fullname+'_dummy_port_in',dir='in',parent_port=True)
