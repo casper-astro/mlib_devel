@@ -12,19 +12,19 @@ class snap_adc(YellowBlock):
         self.num_units = 3
         self.num_clocks = 1
         self.zdok_rev = 2 # no frame clocks (see adc16)
-        self.n_inputs = self.snap_inputs / 3 #number of inputs per chip
+        self.n_inputs = self.snap_inputs // 3 #number of inputs per chip
 
-	# self.adc_resolution, possible values are 8, 10, 12, 14, 16
-	# Currently only 8, 12, 16 are supported
-	if self.adc_resolution <=8:
-		self.adc_data_width = 8
-	elif self.adc_resolution >8 and self.adc_resolution<=16:
-		self.adc_data_width = 16
-	else:
-		self.adc_data_width = 8
-	self.LOG_USER_WIDTH = int(math.log(self.adc_data_width*4,2))
+        # self.adc_resolution, possible values are 8, 10, 12, 14, 16
+        # Currently only 8, 12, 16 are supported
+        if self.adc_resolution <=8:
+            self.adc_data_width = 8
+        elif self.adc_resolution >8 and self.adc_resolution<=16:
+            self.adc_data_width = 16
+        else:
+            self.adc_data_width = 8
+        self.LOG_USER_WIDTH = int(math.log(self.adc_data_width*4,2))
 
-	# An HMCAD1511 has 8 ADC cores and DDR transmission 
+        # An HMCAD1511 has 8 ADC cores and DDR transmission 
         self.line_clock_freq = self.sample_rate/(8.0/self.n_inputs)*self.adc_resolution/2.0
 
         self.add_source('adc16_interface')
@@ -160,7 +160,7 @@ class snap_adc(YellowBlock):
             wbram.add_parameter('LOG_USER_WIDTH',self.LOG_USER_WIDTH)
             wbram.add_parameter('USER_ADDR_BITS','10')
             wbram.add_parameter('N_REGISTERS','2')
-            wbram.add_wb_interface(regname='adc16_wb_ram%d'%k, mode='rw', nbytes=(self.adc_data_width/8)*4*2**10, typecode=TYPECODE_SWREG)
+            wbram.add_wb_interface(regname='adc16_wb_ram%d'%k, mode='rw', nbytes=(self.adc_data_width//8)*4*2**10, typecode=TYPECODE_SWREG)
             wbram.add_port('user_clk','adc0_clk', parent_sig=False)
             wbram.add_port('user_addr','adc16_snap_addr', width=10)
             #wbram.add_port('user_din','{%s1, %s2, %s3, %s4}'%(din,din,din,din), parent_sig=False)
@@ -186,7 +186,7 @@ class snap_adc(YellowBlock):
         elif any([not isinstance(port,str) for port in port_list]):
             raise ValueError("Parameter error")
 
-        r = wb_bitwidth / self.adc_data_width
+        r = wb_bitwidth // self.adc_data_width
         port_list = np.array(port_list).reshape(-1, r)
         port_list = port_list[::-1,:].reshape(-1).tolist()
         return '{' + ','.join(port_list) + '}'

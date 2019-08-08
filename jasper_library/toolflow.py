@@ -813,7 +813,7 @@ class Toolflow(object):
                     node.set('hw_permission', 'w')
                     # Populate defaults if sys_block version registers
                     if reg.name == 'sys_board_id' or reg.name == 'sys_rev' or reg.name == 'sys_rev_rcs': 
-                        node.set('hw_rst', str(reg.default_val))                                     		      
+                        node.set('hw_rst', str(reg.default_val))
                 else:
                     # Only for a From Processor register (control)
                     node.set('hw_rst', str(reg.default_val))

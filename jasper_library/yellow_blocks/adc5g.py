@@ -75,8 +75,8 @@ class adc5g(YellowBlock):
             f_pfd = f_in / d
             for m in range(m_min, m_max+1):
                 f_vco = f_pfd * m
-		# target clock for o0 is bitclk_rate
-		# target clock for o1 is userclk_rate = bitclk_rate / 8
+                # target clock for o0 is bitclk_rate
+                # target clock for o1 is userclk_rate = bitclk_rate / 8
                 o0 = f_vco / self.bitclk_rate
                 o1 = f_vco / self.userclk_rate
                 if d not in allowed_d:
