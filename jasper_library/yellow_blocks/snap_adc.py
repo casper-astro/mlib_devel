@@ -14,17 +14,17 @@ class snap_adc(YellowBlock):
         self.zdok_rev = 2 # no frame clocks (see adc16)
         self.n_inputs = self.snap_inputs / 3 #number of inputs per chip
 
-	# self.adc_resolution, possible values are 8, 10, 12, 14, 16
-	# Currently only 8, 12, 16 are supported
-	if self.adc_resolution <=8:
-		self.adc_data_width = 8
-	elif self.adc_resolution >8 and self.adc_resolution<=16:
-		self.adc_data_width = 16
-	else:
-		self.adc_data_width = 8
-	self.LOG_USER_WIDTH = int(math.log(self.adc_data_width*4,2))
+        # self.adc_resolution, possible values are 8, 10, 12, 14, 16
+        # Currently only 8, 12, 16 are supported
+        if self.adc_resolution <=8:
+            self.adc_data_width = 8
+        elif self.adc_resolution >8 and self.adc_resolution<=16:
+            self.adc_data_width = 16
+        else:
+            self.adc_data_width = 8
+        self.LOG_USER_WIDTH = int(math.log(self.adc_data_width*4,2))
 
-	# An HMCAD1511 has 8 ADC cores and DDR transmission 
+        # An HMCAD1511 has 8 ADC cores and DDR transmission 
         self.line_clock_freq = self.sample_rate/(8.0/self.n_inputs)*self.adc_resolution/2.0
 
         self.add_source('adc16_interface')
