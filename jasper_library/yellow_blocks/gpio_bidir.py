@@ -1,4 +1,4 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from constraints import PortConstraint
 from helpers import to_int_list
 import logging
@@ -23,4 +23,4 @@ class gpio_bidir(YellowBlock):
         inst.add_parameter('WIDTH', str(self.bitwidth))
 
     def gen_constraints(self):
-        return [PortConstraint(self.fullname+'_ext', self.io_group, port_index=range(self.bitwidth), iogroup_index=to_int_list(self.bit_index))]
+        return [PortConstraint(self.fullname+'_ext', self.io_group, port_index=list(range(self.bitwidth)), iogroup_index=to_int_list(self.bit_index))]

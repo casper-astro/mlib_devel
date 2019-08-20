@@ -27,9 +27,9 @@ with open(fn, 'r') as fh:
                 is_vec = False
             except:
                 raise Exception(pinline)
-            if name not in pins.keys():
+            if name not in list(pins.keys()):
                 pins[name] = {}
-            if 'IOSTD' not in pins[name].keys():
+            if 'IOSTD' not in list(pins[name].keys()):
                 pins[name]['IOSTD'] = {}
             if is_vec:
                 pins[name]['IOSTD'][int(idx)] = iostd
@@ -47,9 +47,9 @@ with open(fn, 'r') as fh:
                 is_vec = False
             except:
                 raise Exception(pinline)
-            if name not in pins.keys():
+            if name not in list(pins.keys()):
                 pins[name] = {}
-            if 'LOC' not in pins[name].keys():
+            if 'LOC' not in list(pins[name].keys()):
                 pins[name]['LOC'] = {}
             if is_vec:
                 pins[name]['LOC'][int(idx)] = loc
@@ -57,32 +57,32 @@ with open(fn, 'r') as fh:
                 pins[name]['LOC'] = loc
 
 
-print pins            
+print(pins)            
 
-for key, val in pins.iteritems():
-    if not 'IOSTD' in val.keys():
-        print ('WARNING: key %s does not have IOSTD keyword'%key)
-    if not 'LOC' in val.keys():
-        print ('WARNING key %s does not have LOC keyword'%key)
+for key, val in pins.items():
+    if not 'IOSTD' in list(val.keys()):
+        print(('WARNING: key %s does not have IOSTD keyword'%key))
+    if not 'LOC' in list(val.keys()):
+        print(('WARNING key %s does not have LOC keyword'%key))
 
 yaml_str = 'pins:'
-for key, val in pins.iteritems():
+for key, val in pins.items():
     yaml_str += '  %s:\n'%key
-    if 'IOSTD' in val.keys() and type(val['IOSTD']) is dict:
-        for n, iostd in val['IOSTD'].iteritems():
+    if 'IOSTD' in list(val.keys()) and type(val['IOSTD']) is dict:
+        for n, iostd in val['IOSTD'].items():
             if iostd != val['IOSTD'][0]:
-                print key
+                print(key)
                 raise Exception('Vector signal %s has conflicting io standards'%key)
 
         yaml_str += '    iostd: %s\n'%val['IOSTD'][0]
-    elif 'IOSTD' in val.keys():
+    elif 'IOSTD' in list(val.keys()):
         yaml_str += '    iostd: %s\n'%val['IOSTD']
 
-    if 'LOC' in val.keys() and type(val['LOC']) is dict:
+    if 'LOC' in list(val.keys()) and type(val['LOC']) is dict:
         yaml_str += '    loc:\n'
-        for n, loc in val['LOC'].iteritems():
+        for n, loc in val['LOC'].items():
             yaml_str += '      - %s\n'%loc
-    elif 'LOC' in val.keys():
+    elif 'LOC' in list(val.keys()):
             yaml_str += '    loc: %s\n'%val['LOC']
 
 with open(fn+'.yaml', 'w') as fh:

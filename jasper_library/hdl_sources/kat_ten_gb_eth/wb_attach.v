@@ -122,16 +122,17 @@ module wb_attach #(
   localparam REG_MAC_ADDR_0      = 8'd4;
   localparam REG_IP_ADDR         = 8'd5;
   localparam REG_GATEWAY_ADDR    = 8'd6;
-  localparam REG_MC_RECV_IP      = 8'd7;
-  localparam REG_MC_RECV_IP_MASK = 8'd8;
-  localparam REG_TX_RX_BUF       = 8'd9;
-  localparam REG_PROMIS_EN       = 8'd10;
-  localparam REG_PMASK_PORT      = 8'd11;
-  localparam REG_PHY_STATUS_1    = 8'd12;
-  localparam REG_PHY_STATUS_0    = 8'd13;
-  localparam REG_PHY_CONTROL_1   = 8'd14;
-  localparam REG_PHY_CONTROL_0   = 8'd15;
-  localparam REG_ARP_SIZE        = 8'd16;
+  localparam REG_NETMASK         = 8'd7;
+  localparam REG_MC_RECV_IP      = 8'd8;
+  localparam REG_MC_RECV_IP_MASK = 8'd9;
+  localparam REG_TX_RX_BUF       = 8'd10;
+  localparam REG_PROMIS_EN       = 8'd11;
+  localparam REG_PMASK_PORT      = 8'd12;
+  localparam REG_PHY_STATUS_1    = 8'd13;
+  localparam REG_PHY_STATUS_0    = 8'd14;
+  localparam REG_PHY_CONTROL_1   = 8'd15;
+  localparam REG_PHY_CONTROL_0   = 8'd16;
+  localparam REG_ARP_SIZE        = 8'd17;
 
  
 
@@ -343,6 +344,10 @@ module wb_attach #(
               end
             end
             REG_PROMIS_EN: begin
+              if (wb_sel_i[0])
+                local_enable_reg     <= wb_dat_i[0];
+              if (wb_sel_i[2] && wb_dat_i[16])
+                soft_reset_reg       <= 1'b1;
             end
             REG_PMASK_PORT: begin
               if (wb_sel_i[0])
@@ -360,14 +365,6 @@ module wb_attach #(
             REG_PHY_STATUS_1: begin
             end
             REG_PHY_CONTROL_0: begin
-              if (wb_sel_i[0])
-                local_port_reg[7:0]  <= wb_dat_i[7:0];
-              if (wb_sel_i[1])
-                local_port_reg[15:8] <= wb_dat_i[15:8];
-              if (wb_sel_i[2])
-                local_enable_reg     <= wb_dat_i[16];
-              if (wb_sel_i[3] && wb_dat_i[24])
-                soft_reset_reg       <= 1'b1;
             end
             REG_PHY_CONTROL_1: begin
               if (wb_sel_i[0])
@@ -452,10 +449,11 @@ module wb_attach #(
                              opb_data_src == REG_MAC_ADDR_0   ? {local_mac_reg[31:0]} :
                              opb_data_src == REG_IP_ADDR      ? {local_ip_reg[31:0]} :
                              opb_data_src == REG_GATEWAY_ADDR ? local_gateway_reg :
+                             opb_data_src == REG_NETMASK ? 32'hffffff00 :
                              opb_data_src == REG_MC_RECV_IP   ? {local_mc_recv_ip_reg[31:0]} :
                              opb_data_src == REG_MC_RECV_IP_MASK ? {local_mc_recv_ip_mask_reg[31:0]} :
                              opb_data_src == REG_TX_RX_BUF ? {8'b0, cpu_tx_size_reg, 8'b0, cpu_rx_ack_reg ? 8'b0 : cpu_rx_size} :
-                             opb_data_src == REG_PROMIS_EN ? {32'b0} :
+                             opb_data_src == REG_PROMIS_EN ? {8'b0, 7'b0, soft_reset_reg, 8'b0, 7'b0, local_enable_reg} :
                              opb_data_src == REG_PMASK_PORT ? {local_port_mask_reg, local_port_reg} :
                              opb_data_src == REG_PHY_STATUS_1 ? {32'b0} :
                              opb_data_src == REG_PHY_STATUS_0 ? {24'b0,xaui_status} :
@@ -463,7 +461,7 @@ module wb_attach #(
                                                                   4'b0, mgt_txpreemphasis_reg,
                                                                   3'b0, mgt_txpostemphasis_reg,
                                                                   4'b0, 1'b0, mgt_rxeqmix_reg} :
-                             opb_data_src == REG_PHY_CONTROL_0 ? {7'b0, soft_reset_reg,7'b0,local_enable_reg,local_port_reg} :
+                             opb_data_src == REG_PHY_CONTROL_0 ? {32'b0} :
                              opb_data_src == REG_ARP_SIZE ? {32'b0} : 32'b0;
 
 

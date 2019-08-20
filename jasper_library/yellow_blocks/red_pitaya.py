@@ -1,4 +1,4 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from clk_factors import clk_factors
 from constraints import ClockConstraint, ClockGroupConstraint, PortConstraint, RawConstraint
 
@@ -8,6 +8,14 @@ class red_pitaya(YellowBlock):
         self.add_source('infrastructure/red_pitaya.v')
         self.add_source('utils/cdc_synchroniser.vhd')
         self.add_source('red_pitaya')
+        self.provides = [
+            "adc_clk",
+            "dac_clk",
+            "sys_clk",
+            "sys_clk90",
+            "sys_clk180",
+            "sysclk_270",
+        ]
 
     def modify_top(self,top):
         inst = top.get_instance('red_pitaya', 'red_pitaya_inst')

@@ -1,5 +1,5 @@
-from yellow_block import YellowBlock
-from yellow_block_typecodes import *
+from .yellow_block import YellowBlock
+from .yellow_block_typecodes import *
 from memory import Register
 
 class sw_reg(YellowBlock):

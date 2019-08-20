@@ -1,5 +1,5 @@
-from yellow_block import YellowBlock
-from yellow_block_typecodes import *
+from .yellow_block import YellowBlock
+from .yellow_block_typecodes import *
 
 class sw_reg_sync(YellowBlock):
     def initialize(self):

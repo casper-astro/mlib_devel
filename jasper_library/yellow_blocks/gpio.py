@@ -1,4 +1,4 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from constraints import PortConstraint, MaxDelayConstraint, MinDelayConstraint, FalsePathConstraint
 from helpers import to_int_list
 
@@ -56,7 +56,7 @@ class gpio(YellowBlock):
         # LEDs being managed by the platform's Board Support Package
         # - i.e. LED signals are sent through some multiplexing logic
         #        and NOT directly to an output pin
-        if self.io_group.find('gpio') < 0 and self.platform.conf.has_key('manage_leds')\
+        if self.io_group.find('gpio') < 0 and 'manage_leds' in self.platform.conf\
             and self.platform.conf['manage_leds'] == True:
             if self.bitwidth > 1:
                 led_list = to_int_list(self.bit_index)
@@ -86,8 +86,8 @@ class gpio(YellowBlock):
     def gen_constraints(self):
         if self.use_diffio:
             const = []
-            const += [PortConstraint(self.fullname+'_ext_p', self.io_group + '_p', port_index=range(self.bitwidth), iogroup_index=to_int_list(self.bit_index))]
-            const += [PortConstraint(self.fullname+'_ext_n', self.io_group + '_n', port_index=range(self.bitwidth), iogroup_index=to_int_list(self.bit_index))]
+            const += [PortConstraint(self.fullname+'_ext_p', self.io_group + '_p', port_index=list(range(self.bitwidth)), iogroup_index=to_int_list(self.bit_index))]
+            const += [PortConstraint(self.fullname+'_ext_n', self.io_group + '_n', port_index=list(range(self.bitwidth)), iogroup_index=to_int_list(self.bit_index))]
             #Constrain the I/O (it is assumed that this I/O is not timing critical and set_false_path is used)
             #NB: The set_max_delay and set_min_delay is important as Vivado will report that these signals are not
             #constrained without it
@@ -110,13 +110,13 @@ class gpio(YellowBlock):
         else:
             const = []
 
-            if self.io_group.find('gpio') < 0 and self.platform.conf.has_key('manage_leds')\
+            if self.io_group.find('gpio') < 0 and 'manage_leds' in self.platform.conf\
             and self.platform.conf['manage_leds'] == True:
                 # Don't need to generate any constraints (?)
                 # - Just need to map the output of the gpio_simulink2ext to the input of the led_manager
                     return const
             
-            const += [PortConstraint(self.fullname+'_ext', self.io_group, port_index=range(self.bitwidth), iogroup_index=to_int_list(self.bit_index))]
+            const += [PortConstraint(self.fullname+'_ext', self.io_group, port_index=list(range(self.bitwidth)), iogroup_index=to_int_list(self.bit_index))]
             
             #Constrain the I/O (it is assumed that this I/O is not timing critical and set_false_path is used)
             #NB: The set_max_delay and set_min_delay is important as Vivado will report that these signals are not

@@ -55,7 +55,7 @@ if __name__ == '__main__':
     sys.argv = [sys.argv[0]] # Keep only the script name. Flush other options
 
     # if we don't have the environment set up, source the default config file
-    if 'XILINX_PATH' not in os.environ.keys():
+    if 'XILINX_PATH' not in list(os.environ.keys()):
         this_file_path = os.path.realpath(__file__)
         config_file_path = os.path.join(os.path.dirname(os.path.dirname(this_file_path)), 'vivado_config.local')
         if os.path.exists(config_file_path):
@@ -214,9 +214,9 @@ if __name__ == '__main__':
                                             backend.compile_dir,
                                             backend.compile_dir)
                 os.system(mkbof_cmd)
-                print 'Created %s/%s' % (backend.output_dir, backend.output_bof)
+                print('Created %s/%s' % (backend.output_dir, backend.output_bof))
                 backend.mkfpg(binary, backend.output_fpg)
-                print 'Created %s/%s' % (backend.output_dir, backend.output_fpg)
+                print('Created %s/%s' % (backend.output_dir, backend.output_fpg))
 
             # Only generate the hex and mcs files if a golden image or multiboot image
             if platform.boot_image == 'golden' or platform.boot_image == 'multiboot':
@@ -228,9 +228,9 @@ if __name__ == '__main__':
                     mcs_file, backend.output_dir, backend.output_mcs))
                 os.system('cp %s %s/%s' % (
                     prm_file, backend.output_dir, backend.output_prm))
-                print 'Created bin file: %s/%s' % (backend.output_dir, backend.output_bin)
-                print 'Created hex file: %s/%s' % (backend.output_dir, backend.output_hex)
-                print 'Created mcs file: %s/%s' % (backend.output_dir, backend.output_mcs)
-                print 'Created prm file: %s/%s' % (backend.output_dir, backend.output_prm)
+                print('Created bin file: %s/%s' % (backend.output_dir, backend.output_bin))
+                print('Created hex file: %s/%s' % (backend.output_dir, backend.output_hex))
+                print('Created mcs file: %s/%s' % (backend.output_dir, backend.output_mcs))
+                print('Created prm file: %s/%s' % (backend.output_dir, backend.output_prm))
 
     # end

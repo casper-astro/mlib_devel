@@ -1,6 +1,6 @@
 import math
-from yellow_block import YellowBlock
-from yellow_block_typecodes import *
+from .yellow_block import YellowBlock
+from .yellow_block_typecodes import *
 
 class axi4lite_interconnect(YellowBlock):
     """
@@ -55,7 +55,7 @@ class axi4lite_interconnect(YellowBlock):
         self.design_name = self.fullname.replace("_axi4lite_interconnect","")
         #self.design_name = "test_red_pitaya"
 
-        for key, val in self.memory_map.items():
+        for key, val in list(self.memory_map.items()):
             for reg in val["memory_map"]:
                 if reg.ram == True:
                     inst.add_port('axi4lite_%s_%s_add'      %(key, reg.name), '%s_%s_addr'     %(self.design_name, reg.name), dir='in',  width=math.log10(reg.nbytes/4)/math.log10(2), parent_sig=True)
@@ -94,7 +94,7 @@ class axi4lite_interconnect(YellowBlock):
         axi4lite_wrapper = vhdlModule("axi4lite_ic_wrapper")
 
         libs = ['axi4lite_pkg', 'axi4lite_axi4lite_top_ic_pkg', 'axi4lite_axi4lite_top_mmap_pkg']
-        for key, val in self.memory_map.items():
+        for key, val in list(self.memory_map.items()):
             libs.append('axi4lite_%s_pkg'%key)
 
         axi4lite_wrapper.add_library('ieee', ['std_logic_1164'])
@@ -127,7 +127,7 @@ class axi4lite_interconnect(YellowBlock):
         axi4lite_wrapper.add_port('s_axi4lite_bready',  'M_AXI_bready',  dir='in',  width=1,  parent_sig=False)
 
         # breakout ports for the registers from the records
-        for key, val in self.memory_map.items():
+        for key, val in list(self.memory_map.items()):
             for reg in val["memory_map"]:
                 if reg.ram==True:
                     axi4lite_wrapper.add_port('axi4lite_%s_%s_add'      %(key, reg.name), '%s_%s_add'     %(self.design_name, reg.name), dir='in',  width=int(math.log10(reg.nbytes/4)/math.log10(2)), parent_sig=True)
@@ -159,7 +159,7 @@ class axi4lite_interconnect(YellowBlock):
         axi4lite_wrapper.add_signal('axi4lite_mosi',     't_axi4lite_mosi')
         axi4lite_wrapper.add_signal('axi4lite_miso',     't_axi4lite_miso')
 
-        for key, val in self.memory_map.items():
+        for key, val in list(self.memory_map.items()):
             # for reg in val["memory_map"]:
             #     if reg.ram==True:
             if val['memory_map'][-1].ram==True:
@@ -183,7 +183,7 @@ class axi4lite_interconnect(YellowBlock):
 
 
         # ports for devices
-        for key, val in self.memory_map.items():
+        for key, val in list(self.memory_map.items()):
             #if reg.ram==True:
             if val['memory_map'][-1].ram==True:
                 self.ic_ports = []
@@ -400,7 +400,7 @@ class Port(object):
         if type(signal) is str:
             signal.rstrip(' ')
         self.signal = signal
-        for kw, val in kwargs.items():
+        for kw, val in list(kwargs.items()):
             self.__setattr__(kw, val)
 
 class Parameter(object):
@@ -461,5 +461,5 @@ class Signal(object):
         self.name  = name.rstrip(' ')
         self.width = width
         self.signal = signal
-        for kw, val in kwargs.items():
+        for kw, val in list(kwargs.items()):
             self.__setattr__(kw, val)
