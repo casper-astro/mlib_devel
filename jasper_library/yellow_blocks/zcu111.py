@@ -51,7 +51,7 @@ class zcu111(YellowBlock):
         inst_infr.add_port('clk_100_n',      "clk_100_n", dir='in',  parent_port=True)
 
         inst_infr.add_port('sys_clk      ', 'sys_clk   ')
-	inst_infr.add_port('sys_clk90    ', 'sys_clk90 ')
+        inst_infr.add_port('sys_clk90    ', 'sys_clk90 ')
         inst_infr.add_port('sys_clk180   ', 'sys_clk180')
         inst_infr.add_port('sys_clk270   ', 'sys_clk270')
 

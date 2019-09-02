@@ -205,6 +205,7 @@ if xlver > 14.7
     fprintf(fid, sprintf('      - %s\n', [compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/imports/sysgen']));
     fprintf(fid, sprintf('      - %s\n', [compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/ip/*.coe']));
     fprintf(fid, sprintf('      - %s\n', [compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/ip/*/*.xci']));
+    fprintf(fid, sprintf('      - %s\n', [compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/imports/sysgen/*.mem']));
 else
     fprintf(fid, sprintf('      - %s\n', [compile_dir '/sysgen/' bdroot '.vhd']));
     fprintf(fid, sprintf('      - %s\n', [compile_dir '/sysgen/*.ngc']));

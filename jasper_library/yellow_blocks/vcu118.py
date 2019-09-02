@@ -1,4 +1,4 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from constraints import ClockConstraint, PortConstraint, RawConstraint
 
 class vcu118(YellowBlock):

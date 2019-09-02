@@ -1,5 +1,5 @@
 import os
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from constraints import PortConstraint, ClockConstraint, ClockGroupConstraint, MultiCycleConstraint, \
     OutputDelayConstraint, RawConstraint, FalsePathConstraint
 from helpers import to_int_list
@@ -20,7 +20,7 @@ class red_pitaya_dac(YellowBlock):
     DAC on the 125-14 Red Pitaya version works very similar to this DAC. It is the IDT,
     DAC1401D125 ADC. Both operate in interleaved mode only.
     """
-	
+    
     def initialize(self):
         # Set bitwidth of block (this is determined by the 'Data bitwidth' parameter in the Simulink mask)
         # self.bitwidth = int(self.bitwidth)
@@ -63,7 +63,7 @@ class red_pitaya_dac(YellowBlock):
         cons = []
         
         # Pin Constraints
-        cons.append(PortConstraint('DAC_DATA_OUT', 'DAC_DATA_OUT', port_index=range(self.bits), iogroup_index=range(self.bits)))
+        cons.append(PortConstraint('DAC_DATA_OUT', 'DAC_DATA_OUT', port_index=list(range(self.bits)), iogroup_index=list(range(self.bits))))
         cons.append(PortConstraint('DAC_IQWRT', 'DAC_IQWRT'))
         cons.append(PortConstraint('DAC_IQSEL', 'DAC_IQSEL'))
         cons.append(PortConstraint('DAC_IQCLK', 'DAC_IQCLK'))

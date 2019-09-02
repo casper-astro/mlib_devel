@@ -388,7 +388,7 @@ class skarab_adc_rx:
 			print("Synchronising PLL with LVDS SYSREF.")
 
 			for mezzanine in range(0, 4):
-				print("Checking PLL loss of reference for mezzanine: ", mezzanine)
+				print(("Checking PLL loss of reference for mezzanine: ", mezzanine))
 
 				if synchronise_mezzanine[mezzanine] == True:
 
@@ -428,7 +428,7 @@ class skarab_adc_rx:
 				for mezzanine in range(0, 4):
 					if synchronise_mezzanine[mezzanine] == True:
 						# Disable the PLL SYNC and wait for SYSREF outputs to be in phase
-						print("Disabling ADC SYNC on mezzanine: ", mezzanine)
+						print(("Disabling ADC SYNC on mezzanine: ", mezzanine))
 
 						skarab.transport.write_i2c(i2c_interface, STM_I2C_DEVICE_ADDRESS, MEZ_CONTROL_REG, 0x0)
 
@@ -464,7 +464,7 @@ class skarab_adc_rx:
 			
 			# Check first to see if mezzanine has a reference clock
 			for mezzanine in range(0, 4):
-				print("Checking PLL loss of reference for mezzanine: ", mezzanine)
+				print(("Checking PLL loss of reference for mezzanine: ", mezzanine))
 
 				if synchronise_mezzanine[mezzanine] == True:
 
@@ -509,7 +509,7 @@ class skarab_adc_rx:
 
 				# Wait for the PLL to report valid SYNC status
 				for mezzanine in range(0, 4):
-					print("Checking PLL SYNC status for mezzanine: ", mezzanine)
+					print(("Checking PLL SYNC status for mezzanine: ", mezzanine))
 					
 					if synchronise_mezzanine[mezzanine] == True:
 						spi_read_word = self.DirectSpiRead(skarab, mezzanine_site, SPI_DESTINATION_PLL, PLL_ALARM_READBACK)
@@ -523,7 +523,7 @@ class skarab_adc_rx:
 
 				# Synchronise ADCs to SYSREF next
 				for mezzanine in range(0, 4):
-					print("Using SYSREF to synchronise ADC on mezzanine: ", mezzanine)
+					print(("Using SYSREF to synchronise ADC on mezzanine: ", mezzanine))
 					
 					if synchronise_mezzanine[mezzanine] == True:
 						# Change the SYNC pin to pulse generator
@@ -549,7 +549,7 @@ class skarab_adc_rx:
 					timeout = timeout + 1
 
 				for mezzanine in range(0, 4):
-					print("Power down SYSREF buffer for ADC on mezzanine: ", mezzanine)
+					print(("Power down SYSREF buffer for ADC on mezzanine: ", mezzanine))
 
 					if synchronise_mezzanine[mezzanine] == True:
 						# Power down SYSREF input buffer on ADCs
@@ -561,7 +561,7 @@ class skarab_adc_rx:
 		# Enable the ADC SYNC
 		for mezzanine in range(0, 4):
 			if synchronise_mezzanine[mezzanine] == True:
-				print("Enabling ADC SYNC on mezzanine: ", mezzanine)
+				print(("Enabling ADC SYNC on mezzanine: ", mezzanine))
 
 				skarab.transport.write_i2c(i2c_interface, STM_I2C_DEVICE_ADDRESS, MEZ_CONTROL_REG, ENABLE_ADC_SYNC)
 
@@ -581,7 +581,7 @@ class skarab_adc_rx:
 		# Disable the ADC SYNC
 		for mezzanine in range(0, 4):
 			if synchronise_mezzanine[mezzanine] == True:
-				print("Disabling ADC SYNC on mezzanine: ", mezzanine)
+				print(("Disabling ADC SYNC on mezzanine: ", mezzanine))
 
 				skarab.transport.write_i2c(i2c_interface, STM_I2C_DEVICE_ADDRESS, MEZ_CONTROL_REG, 0x0)
 			
@@ -600,15 +600,15 @@ skarab_adc_rx_obj.PerformAdcPllSync(skarab)
 
 # Read register values
 read_value = skarab.read_int('adc0_data_q_out0')
-print("ADC0 Q:", read_value)
+print(("ADC0 Q:", read_value))
 read_value = skarab.read_int('adc0_data_i_out0')
-print("ADC0 I:", read_value)
+print(("ADC0 I:", read_value))
 read_value = skarab.read_int('pll_sync_complete_out')
-print("PLL SYNC:", read_value)
+print(("PLL SYNC:", read_value))
 read_value = skarab.read_int('adc_sync_complete_out')
-print("ADC SYNC:", read_value)
+print(("ADC SYNC:", read_value))
 read_value = skarab.read_int('adc_data_val_out')
-print("ADC data val:", read_value)
+print(("ADC data val:", read_value))
 
 # Arm ADC snapshots and trigger
 print("Arming ADC snapshots.")
