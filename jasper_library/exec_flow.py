@@ -8,7 +8,6 @@ import toolflow
 
 # A straight lift from StackOverflow...
 
-
 def shell_source(script):
     """Sometime you want to emulate the action of "source" in bash,
     settings some environment variables. Here is a way to do it."""
@@ -50,7 +49,15 @@ if __name__ == '__main__':
                     default='',
                     help="build directory. Default: Use directory with same "
                         "name as model")
-
+    
+    vivado_impl_strats_dict = {'pe': 'Performance_Explore',
+                               'ae': 'Area_Explore'} # Add more here as needed
+    vivado_impl_strats_str = ','.join([' {} - {}'.format(key, value) for key, value in vivado_impl_strats_dict.items()])
+    parser.add_argument("--impl_strat", dest="impl_strat",
+                    type=str, default=None,
+                    help="Specify the Implementation Strategy for your compile. "
+                            "Your options are: {}".format(vivado_impl_strats_str))
+    
     opts = parser.parse_args()
     sys.argv = [sys.argv[0]] # Keep only the script name. Flush other options
 
@@ -85,6 +92,12 @@ if __name__ == '__main__':
 
     if opts.be == 'vivado':
         os.environ['SYSGEN_SCRIPT'] = os.environ['MLIB_DEVEL_PATH'] + '/startsg'
+        if opts.impl_strat is not None:
+            # Check if the Strategy specified exists/is known
+            assert opts.impl_strat.lower() in vivado_impl_strats_dict.keys(), "Unknown Implementation Strategy specified"
+            logger.debug('Using the following Implementation Strategy: '
+                         '{}'.format(vivado_impl_strats_dict[opts.impl_strat.lower()]))
+            opts.impl_strat = vivado_impl_strats_dict[opts.impl_strat.lower()]
         logger.debug('Vivado compile will be executed.')
 
     if opts.be == 'ise':
@@ -138,7 +151,7 @@ if __name__ == '__main__':
             backend.import_from_castro(backend.compile_dir + '/castro.yml')
 
             # launch vivado via the generated .tcl file
-            backend.compile(cores=opts.jobs, plat=platform)
+            backend.compile(cores=opts.jobs, plat=platform, impl_strat=opts.impl_strat)
         # if ISE is selected to compile
         elif opts.be == 'ise':
             platform.backend_target = 'ise'
@@ -159,7 +172,7 @@ if __name__ == '__main__':
                                             compile_dir=tf.compile_dir)
             backend.import_from_castro(backend.compile_dir + '/castro.yml')
             # launch vivado via the generated .tcl file
-            backend.compile(cores=opts.jobs, plat=platform)
+            backend.compile(cores=opts.jobs, plat=platform, impl_strat=opts.impl_strat)
 
         if opts.software:
             binary = backend.binary_loc

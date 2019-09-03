@@ -81,7 +81,6 @@ class Toolflow(object):
         self.modelname = frontend_target.split('/')[-1][:-4]  # strip off extension
         self.frontend_target_base = os.path.basename(frontend_target)
 
-
         self.cores = None
         self.topfile = None
         self.top = None
@@ -327,8 +326,6 @@ class Toolflow(object):
         # just ignore if key is not present as only some platforms will have the key.
         except KeyError:
             s = ""
-        #import IPython
-        #IPython.embed()
         self.topfile = self.compile_dir+'/top.v'
         # delete top.v file if it exists, otherwise synthesis will fail
         if os.path.exists(self.topfile):
@@ -964,8 +961,7 @@ class Toolflow(object):
         else:
             self.logger.debug('File not written. Vivado version is 2018.2: %s. Dual Port RAM exists: %s'
                              % (ver_exists, dpram_exists))
-        #import IPython
-        #IPython.embed()
+        
 
 class ToolflowFrontend(object):
     """
@@ -1562,7 +1558,7 @@ class VivadoBackend(ToolflowBackend):
         s += self.tcl_cmds['promgen']
         return s
 
-    def add_compile_cmds(self, cores=8, plat=None):
+    def add_compile_cmds(self, cores=8, plat=None, impl_strat=None):
         """
         Add the tcl commands for compiling the design, and then launch
         vivado in batch mode
@@ -1598,6 +1594,9 @@ class VivadoBackend(ToolflowBackend):
             self.add_tcl_cmd('open_run synth_1', stage='post_synth')
 
             # Pre-Implementation Commands
+            if impl_strat is not None:
+                # impl_strat must be error-checked before arriving here (exec_flow.py)
+                self.add_tcl_cmd('set_property strategy {} [get_runs impl_1]'.format(impl_strat), stage='pre_impl')
             self.add_tcl_cmd('set_property STEPS.WRITE_BITSTREAM.ARGS.BIN_FILE true [get_runs impl_1]', stage='pre_impl')
             self.add_tcl_cmd('set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]', stage='pre_impl')
             self.add_tcl_cmd('set_property STEPS.POST_ROUTE_PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]', stage='pre_impl')
@@ -1801,16 +1800,19 @@ class VivadoBackend(ToolflowBackend):
                 '-hold]] ns" ')
             tcl('}')
 
-    def compile(self, cores, plat):
+    def compile(self, cores, plat, impl_strat=None):
         """
 
         :param cores:
         :param plat:
+        :param impl_strat: Implementation Strategy to use when
+                            carrying out the implementation run 'impl'
         """
-        self.add_compile_cmds(cores=cores, plat=plat)
+        self.add_compile_cmds(cores=cores, plat=plat, impl_strat=impl_strat)
         # write tcl command to file
         tcl_file = self.compile_dir+'/gogogo.tcl'
         helpers.write_file(tcl_file, self.eval_tcl())
+        
         rv = os.system('vivado -jou {cdir}/vivado.jou -log {cdir}/vivado.log '
                        '-mode batch -source '
                        '{cfile}'.format(cdir=self.compile_dir, cfile=tcl_file))
