@@ -149,9 +149,23 @@ if __name__ == '__main__':
                                             compile_dir=tf.compile_dir,
                                             periph_objs=tf.periph_objs)
             backend.import_from_castro(backend.compile_dir + '/castro.yml')
+            
+            backend.synth_strat = tf.synth_strat
+            backend.impl_strat = tf.impl_strat
+
+            # See if the manual flag has been specified for changing
+            # the Implementation Strategy
+            if (opts.impl_strat is not None) or ('default' in backend.impl_strat.lower()):
+                # Override what is specified in the Platform YellowBlock
+                backend.impl_strat = opts.impl_strat
+            else:
+                # Probably something useful
+                # - The value will reflect in its platform YellowBlock
+                backend.impl_strat = None
+                # backend.synth_strat = None
 
             # launch vivado via the generated .tcl file
-            backend.compile(cores=opts.jobs, plat=platform, impl_strat=opts.impl_strat)
+            backend.compile(cores=opts.jobs, plat=platform)
         # if ISE is selected to compile
         elif opts.be == 'ise':
             platform.backend_target = 'ise'
@@ -171,8 +185,23 @@ if __name__ == '__main__':
             backend = toolflow.VivadoBackend(plat=platform,
                                             compile_dir=tf.compile_dir)
             backend.import_from_castro(backend.compile_dir + '/castro.yml')
+            
+            backend.synth_strat = tf.synth_strat
+            backend.impl_strat = tf.impl_strat
+
+            # See if the manual flag has been specified for changing
+            # the Implementation Strategy
+            if (opts.impl_strat is not None) or ('default' in backend.impl_strat.lower()):
+                # Override what is specified in the Platform YellowBlock
+                backend.impl_strat = opts.impl_strat
+            else:
+                # Probably something useful
+                # - The value will reflect in its platform YellowBlock
+                backend.impl_strat = None
+                # backend.synth_strat = None
+
             # launch vivado via the generated .tcl file
-            backend.compile(cores=opts.jobs, plat=platform, impl_strat=opts.impl_strat)
+            backend.compile(cores=opts.jobs, plat=platform)
 
         if opts.software:
             binary = backend.binary_loc
