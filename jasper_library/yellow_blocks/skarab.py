@@ -37,23 +37,3 @@ class skarab(YellowBlock):
 
         return const_list
 
-    def gen_tcl_cmds(self):
-        """
-
-        """
-        
-        tcl_cmds = {}
-        tcl_cmds['pre_synth'] = []
-        tcl_cmds['pre_impl'] = []
-
-        try:
-            # Can't have one without the other!
-            if 'default' not in self.synth_strat.lower():
-                tcl_cmds['pre_synth'] += ['set_property strategy {} [get_runs synth_1]'.format(self.synth_strat)]
-            if 'default' not in self.impl_strat.lower():
-                tcl_cmds['pre_impl'] += ['set_property strategy {} [get_runs impl_1]'.format(self.impl_strat)]
-        except KeyError:
-            tcl_cmds = {}
-
-        return tcl_cmds
-

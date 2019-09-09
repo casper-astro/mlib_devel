@@ -254,15 +254,6 @@ class Toolflow(object):
                 self.clk_src = self.peripherals[key]['clk_src']
                 # in MHz
                 self.clk_rate = float(self.peripherals[key]['clk_rate'])
-
-                try:
-                    # Extract Synthesis and Implementation strategies here
-                    # - If one is present then both should be present
-                    self.synth_strat = self.peripherals[key]['synth_strat']
-                    self.impl_strat = self.peripherals[key]['impl_strat']
-                except KeyError:
-                    self.synth_strat = None
-                    self.impl_strat = None
                 return
         raise Exception('self.peripherals does not contain anything '
                         'tagged xps:xsg')
@@ -365,7 +356,6 @@ class Toolflow(object):
         """
         self._parse_periph_file()
         self._extract_plat_info()
-
         self.periph_objs = []
         for pk in list(self.peripherals.keys()):
             self.logger.debug('Generating Yellow Block: %s' % pk)
@@ -578,7 +568,7 @@ class Toolflow(object):
         self.logger.info('Extracting constraints from peripherals')
         self.check_attr_exists('periph_objs', 'gen_periph_objs()')
         self.constraints = []
-        # peripherals = self.peripherals
+        peripherals = self.peripherals
         for obj in self.periph_objs:
             c = obj.gen_constraints()
             if c is not None:
@@ -1411,10 +1401,6 @@ class VivadoBackend(ToolflowBackend):
 
         self.name = 'vivado'
         self.npm_sources = []
-        
-        self.synth_strat = None
-        self.impl_strat = None
-
         ToolflowBackend.__init__(self, plat=plat, compile_dir=compile_dir)
 
     def initialize(self, plat):
@@ -1572,7 +1558,7 @@ class VivadoBackend(ToolflowBackend):
         s += self.tcl_cmds['promgen']
         return s
 
-    def add_compile_cmds(self, cores=8, plat=None):
+    def add_compile_cmds(self, cores=8, plat=None, impl_strat=None):
         """
         Add the tcl commands for compiling the design, and then launch
         vivado in batch mode
@@ -1608,9 +1594,9 @@ class VivadoBackend(ToolflowBackend):
             self.add_tcl_cmd('open_run synth_1', stage='post_synth')
 
             # Pre-Implementation Commands
-            if self.impl_strat is not None:
+            if impl_strat is not None:
                 # impl_strat must be error-checked before arriving here (exec_flow.py)
-                self.add_tcl_cmd('set_property strategy {} [get_runs impl_1]'.format(self.impl_strat), stage='pre_impl')
+                self.add_tcl_cmd('set_property strategy {} [get_runs impl_1]'.format(impl_strat), stage='pre_impl')
             self.add_tcl_cmd('set_property STEPS.WRITE_BITSTREAM.ARGS.BIN_FILE true [get_runs impl_1]', stage='pre_impl')
             self.add_tcl_cmd('set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]', stage='pre_impl')
             self.add_tcl_cmd('set_property STEPS.POST_ROUTE_PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]', stage='pre_impl')
@@ -1814,7 +1800,7 @@ class VivadoBackend(ToolflowBackend):
                 '-hold]] ns" ')
             tcl('}')
 
-    def compile(self, cores, plat):
+    def compile(self, cores, plat, impl_strat=None):
         """
 
         :param cores:
@@ -1822,7 +1808,7 @@ class VivadoBackend(ToolflowBackend):
         :param impl_strat: Implementation Strategy to use when
                             carrying out the implementation run 'impl'
         """
-        self.add_compile_cmds(cores=cores, plat=plat)
+        self.add_compile_cmds(cores=cores, plat=plat, impl_strat=impl_strat)
         # write tcl command to file
         tcl_file = self.compile_dir+'/gogogo.tcl'
         helpers.write_file(tcl_file, self.eval_tcl())
