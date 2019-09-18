@@ -1558,6 +1558,7 @@
         <xilinx:family xilinx:lifeCycle="Beta">zynquplus</xilinx:family>
         <xilinx:family xilinx:lifeCycle="Beta">kintexu</xilinx:family>
         <xilinx:family xilinx:lifeCycle="Beta">virtexuplus</xilinx:family>
+        <xilinx:family xilinx:lifeCycle="Beta">virtexuplusHBM</xilinx:family>
       </xilinx:supportedFamilies>
       <xilinx:taxonomies>
         <xilinx:taxonomy>/AXI_Infrastructure</xilinx:taxonomy>

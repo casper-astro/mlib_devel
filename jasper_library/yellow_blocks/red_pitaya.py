@@ -1,4 +1,4 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from clk_factors import clk_factors
 from constraints import ClockConstraint, ClockGroupConstraint, PortConstraint, RawConstraint
 
@@ -8,6 +8,14 @@ class red_pitaya(YellowBlock):
         self.add_source('infrastructure/red_pitaya.v')
         self.add_source('utils/cdc_synchroniser.vhd')
         self.add_source('red_pitaya')
+        self.provides = [
+            "adc_clk",
+            "dac_clk",
+            "sys_clk",
+            "sys_clk90",
+            "sys_clk180",
+            "sysclk_270",
+        ]
 
     def modify_top(self,top):
         inst = top.get_instance('red_pitaya', 'red_pitaya_inst')
@@ -42,18 +50,21 @@ class red_pitaya(YellowBlock):
         inst_infr.add_parameter('MULTIPLY', clkparams[0])
         inst_infr.add_parameter('DIVIDE',   clkparams[1])
         inst_infr.add_parameter('DIVCLK',   clkparams[2])
-        inst_infr.add_port('adc_clk_in',      "ADC_CLK_IN_P", dir='in',  width=1, parent_port=True)
-        inst_infr.add_port('user_clk',        "user_clk",     dir='out', width=1, parent_sig=False)
-        inst_infr.add_port('user_rst',        "user_rst",     dir='out', width=1)
-        inst_infr.add_port('adc_clk_125',     "adc_clk",      dir='out', width=1)
-        inst_infr.add_port('adc_rst',         "adc_rst",      dir='out', width=1)
-        inst_infr.add_port('dac_clk_250',     "dac_clk",      dir='out', width=1)
-        inst_infr.add_port('dac_clk_250_315', "dac_clk_p",    dir='out', width=1)
-        inst_infr.add_port('dac_rst',         "dac_rst ",     dir='out', width=1)
+        inst_infr.add_port('adc_clk_in',       "ADC_CLK_IN_P", dir='in',  width=1, parent_port=True)
+        inst_infr.add_port('dsp_clk',          "sys_clk",      dir='out', width=1, parent_sig=False)
+        inst_infr.add_port('dsp_clk_p90',      "sys_clk90",    dir='out', width=1, parent_sig=False)
+        inst_infr.add_port('dsp_clk_p180',     "sys_clk180",   dir='out', width=1, parent_sig=False)
+        inst_infr.add_port('dsp_clk_p270',     "sys_clk270",   dir='out', width=1, parent_sig=False)
+        inst_infr.add_port('dsp_rst',          "sys_rst",      dir='out', width=1)
+        inst_infr.add_port('adc_clk_125',      "adc_clk",      dir='out', width=1)
+        inst_infr.add_port('adc_rst',          "adc_rst",      dir='out', width=1)
+        inst_infr.add_port('dac_clk_250',      "dac_clk",      dir='out', width=1)
+        inst_infr.add_port('dac_clk_250_p315', "dac_clk_p",    dir='out', width=1)
+        inst_infr.add_port('dac_rst',          "dac_rst ",     dir='out', width=1)
 
 
     def gen_children(self):
-        return [YellowBlock.make_block({'tag': 'xps:sys_block', 'board_id': '3', 'rev_maj': '2', 'rev_min': '0', 'rev_rcs': '1'}, self.platform)]
+        return [YellowBlock.make_block({'tag': 'xps:sys_block', 'board_id': '4', 'rev_maj': '1', 'rev_min': '0', 'rev_rcs': '1'}, self.platform)]
         # return [YellowBlock.make_block({'tag': 'xps:sys_block', 'board_id': '3', 'rev_maj': '2', 'rev_min': '0', 'rev_rcs': '1'}, self.platform),
         #         YellowBlock.make_block({'tag': 'xps:AXI4LiteInterconnect', 'name': 'AXI4LiteInterconnect'}, self.platform)]
 
@@ -61,10 +72,8 @@ class red_pitaya(YellowBlock):
         cons = []
         cons.append(PortConstraint('ADC_CLK_IN_P', 'ADC_CLK_IN_P'))
         cons.append(ClockConstraint('ADC_CLK_IN_P','ADC_CLK_IN_P', period=8.0, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=4.0))
-        cons.append(ClockGroupConstraint('user_clk_mmcm', 'clk_fpga_0', 'asynchronous'))
-        cons.append(ClockGroupConstraint('clk_fpga_0', 'user_clk_mmcm', 'asynchronous'))
-
-
+        cons.append(ClockGroupConstraint('-of_objects [get_pins red_pitaya_infr_inst/dsp_clk_mmcm_inst/CLKOUT0]', '-of_objects [get_pins red_pitaya_inst/processing_system7_0/inst/PS7_i/FCLKCLK[0]]', 'asynchronous'))
+        cons.append(ClockGroupConstraint('-of_objects [get_pins red_pitaya_inst/processing_system7_0/inst/PS7_i/FCLKCLK[0]]', '-of_objects [get_pins red_pitaya_infr_inst/dsp_clk_mmcm_inst/CLKOUT0]', 'asynchronous'))
 
         return cons
         #const_list = [

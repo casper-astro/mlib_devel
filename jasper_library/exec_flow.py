@@ -1,8 +1,9 @@
 #! /usr/bin/env python
 
 import os
+import sys
 import logging
-from optparse import OptionParser
+from argparse import ArgumentParser
 import toolflow
 
 # A straight lift from StackOverflow...
@@ -20,40 +21,41 @@ def shell_source(script):
     os.environ.update(env)
 
 if __name__ == '__main__':
-    parser = OptionParser()
-    parser.add_option("--perfile", dest="perfile", action='store_true',
+    parser = ArgumentParser(prog=os.path.basename(__file__))
+    parser.add_argument("--perfile", dest="perfile", action='store_true',
                     default=False, help="Run Frontend peripheral file generation")
-    parser.add_option("--frontend", dest="frontend", action='store_true',
+    parser.add_argument("--frontend", dest="frontend", action='store_true',
                     default=False, help="Run Frontend IP compile")
-    parser.add_option("--middleware", dest="middleware", action='store_true',
+    parser.add_argument("--middleware", dest="middleware", action='store_true',
                     default=False, help="Run Toolflow middle")
-    parser.add_option("--backend", dest="backend", action='store_true',
+    parser.add_argument("--backend", dest="backend", action='store_true',
                     default=False, help="Run backend compilation")
-    parser.add_option("--software", dest="software", action='store_true',
+    parser.add_argument("--software", dest="software", action='store_true',
                     default=False, help="Run software compilation")
-    parser.add_option("--be", dest="be", type='string', default='vivado',
+    parser.add_argument("--be", dest="be", type=str, default='vivado',
                     help="Backend to use. Default: vivado")
-    parser.add_option("--sysgen", dest="sysgen", type='string', default='',
+    parser.add_argument("--sysgen", dest="sysgen", type=str, default='',
                     help="Specify a specific sysgen startup script.")
-    parser.add_option("--jobs", dest="jobs", type='int', default=4,
+    parser.add_argument("--jobs", dest="jobs", type=int, default=4,
                     help="Number of cores to run compiles with. Default=4")
-    parser.add_option("--nonprojectmode", dest="nonprojectmode",
+    parser.add_argument("--nonprojectmode", dest="nonprojectmode",
                     action='store_false', default=True,
                     help="Project Mode is enabled by default/Non Project Mode "
                         "is disabled by Default (NB: Vivado Only)")
-    parser.add_option("-m", "--model", dest="model", type='string',
+    parser.add_argument("-m", "--model", dest="model", type=str,
                     default='/tools/mlib_devel/jasper_library/test_models/'
                             'test.slx',
                     help="model to compile")
-    parser.add_option("-c", "--builddir", dest="builddir", type='string',
+    parser.add_argument("-c", "--builddir", dest="builddir", type=str,
                     default='',
                     help="build directory. Default: Use directory with same "
                         "name as model")
 
-    (opts, args) = parser.parse_args()
+    opts = parser.parse_args()
+    sys.argv = [sys.argv[0]] # Keep only the script name. Flush other options
 
     # if we don't have the environment set up, source the default config file
-    if 'XILINX_PATH' not in os.environ.keys():
+    if 'XILINX_PATH' not in list(os.environ.keys()):
         this_file_path = os.path.realpath(__file__)
         config_file_path = os.path.join(os.path.dirname(os.path.dirname(this_file_path)), 'vivado_config.local')
         if os.path.exists(config_file_path):
@@ -212,9 +214,9 @@ if __name__ == '__main__':
                                             backend.compile_dir,
                                             backend.compile_dir)
                 os.system(mkbof_cmd)
-                print 'Created %s/%s' % (backend.output_dir, backend.output_bof)
+                print('Created %s/%s' % (backend.output_dir, backend.output_bof))
                 backend.mkfpg(binary, backend.output_fpg)
-                print 'Created %s/%s' % (backend.output_dir, backend.output_fpg)
+                print('Created %s/%s' % (backend.output_dir, backend.output_fpg))
 
             # Only generate the hex and mcs files if a golden image or multiboot image
             if platform.boot_image == 'golden' or platform.boot_image == 'multiboot':
@@ -226,9 +228,9 @@ if __name__ == '__main__':
                     mcs_file, backend.output_dir, backend.output_mcs))
                 os.system('cp %s %s/%s' % (
                     prm_file, backend.output_dir, backend.output_prm))
-                print 'Created bin file: %s/%s' % (backend.output_dir, backend.output_bin)
-                print 'Created hex file: %s/%s' % (backend.output_dir, backend.output_hex)
-                print 'Created mcs file: %s/%s' % (backend.output_dir, backend.output_mcs)
-                print 'Created prm file: %s/%s' % (backend.output_dir, backend.output_prm)
+                print('Created bin file: %s/%s' % (backend.output_dir, backend.output_bin))
+                print('Created hex file: %s/%s' % (backend.output_dir, backend.output_hex))
+                print('Created mcs file: %s/%s' % (backend.output_dir, backend.output_mcs))
+                print('Created prm file: %s/%s' % (backend.output_dir, backend.output_prm))
 
     # end

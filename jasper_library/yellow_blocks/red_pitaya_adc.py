@@ -1,5 +1,5 @@
 import os
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from constraints import PortConstraint, ClockConstraint, ClockGroupConstraint, MultiCycleConstraint, \
     OutputDelayConstraint, InputDelayConstraint, RawConstraint, FalsePathConstraint
 from helpers import to_int_list
@@ -18,7 +18,7 @@ class red_pitaya_adc(YellowBlock):
     ADC on the 125-14 Red Pitaya version works very similar to this ADC. It is the Linear Technology,
     125-14 LTC2145CUP-14 ADC.
     """
-	
+    
     def initialize(self):
         # Set bitwidth of block (this is determined by the 'Data bitwidth' parameter in the Simulink mask)
         # self.bitwidth = int(self.bitwidth)
@@ -61,8 +61,8 @@ class red_pitaya_adc(YellowBlock):
         cons = []
         
         # Pin Constraints
-        cons.append(PortConstraint('ADC_DATA_IN1', 'ADC_DATA_IN1', port_index=range(self.bits), iogroup_index=range(self.bits)))
-        cons.append(PortConstraint('ADC_DATA_IN2', 'ADC_DATA_IN2', port_index=range(self.bits), iogroup_index=range(self.bits)))
+        cons.append(PortConstraint('ADC_DATA_IN1', 'ADC_DATA_IN1', port_index=list(range(self.bits)), iogroup_index=list(range(self.bits))))
+        cons.append(PortConstraint('ADC_DATA_IN2', 'ADC_DATA_IN2', port_index=list(range(self.bits)), iogroup_index=list(range(self.bits))))
         cons.append(PortConstraint('ADC_CLK_STB_OUT', 'ADC_CLK_STB_OUT'))
         #cons.append(PortConstraint('ADC_LA_CLK', 'ADC_LA_CLK'))
 

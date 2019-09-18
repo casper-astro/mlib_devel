@@ -67,15 +67,34 @@ end
 
 disp('Launching System Generator compile');
 update_model = 0;
-start_sysgen_compile(modelpath, builddir, update_model);
-disp('Completed sysgen okay.');
+xsg_result = start_sysgen_compile(modelpath, builddir, update_model);
+if xsg_result ~= 0
+    error('XSG generation failed!')
+end
+
+% figure out what the version of python being used by the toolflow is
+[status, result] = system('which python');
+if status ~= 0
+    python_path = 'python';
+else
+    python_path = strtrim(result);
+end
 
 % if vivado is to be used
 build_cmd = '';
 if strcmp(getenv('JASPER_BACKEND'), 'vivado')
-    build_cmd = ['python ' jasper_python ' -m ' modelpath ' --middleware --backend --software'];
+    build_cmd = [python_path ' ' jasper_python ' -m ' modelpath ' --middleware --backend --software'];
 elseif strcmp(getenv('JASPER_BACKEND'), 'ise')
-    build_cmd = ['python ' jasper_python ' -m ' modelpath ' --middleware --backend --software --be ise'];
+    build_cmd = [python_path ' ' jasper_python ' -m ' modelpath ' --middleware --backend --software --be ise'];
 end
+
+disp('************************************');
+disp('*    Front End compile complete    *');
+disp('************************************');
+disp('');
+disp('To complete your compile, run the following command in a terminal.');
+disp('Remember to source your starst.local environment first!');
+disp(build_cmd);
+
 
 % end

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Root MajorVersion="0" MinorVersion="36">
+<Root MajorVersion="0" MinorVersion="37">
   <CompositeFile CompositeFileTopName="cont_microblaze" CanBeSetAsTop="true" CanDisplayChildGraph="true">
     <Description>Composite Fileset</Description>
-    <Generation Name="SYNTHESIS" State="GENERATED" Timestamp="1540385905"/>
-    <Generation Name="IMPLEMENTATION" State="GENERATED" Timestamp="1540385905"/>
-    <Generation Name="SIMULATION" State="GENERATED" Timestamp="1540385905"/>
-    <Generation Name="HW_HANDOFF" State="GENERATED" Timestamp="1540385905"/>
+    <Generation Name="SYNTHESIS" State="GENERATED" Timestamp="1563203968"/>
+    <Generation Name="IMPLEMENTATION" State="GENERATED" Timestamp="1563203968"/>
+    <Generation Name="SIMULATION" State="GENERATED" Timestamp="1563203968"/>
+    <Generation Name="HW_HANDOFF" State="GENERATED" Timestamp="1563203968"/>
     <FileCollection Name="SOURCES" Type="SOURCES">
       <File Name="ip/cont_microblaze_axi_slave_wishbone_classic_master_0_0/cont_microblaze_axi_slave_wishbone_classic_master_0_0.xci" Type="IP">
         <Instance HierarchyPath="axi_slave_wishbone_classic_master_0"/>
@@ -64,6 +64,7 @@
         <UsedIn Val="SIMULATION"/>
       </File>
       <File Name="ip/cont_microblaze_microblaze_0_axi_periph_0/cont_microblaze_microblaze_0_axi_periph_0.xci" Type="IP">
+        <Instance HierarchyPath="microblaze_0_axi_periph"/>
         <Properties IsEditable="false" IsVisible="false" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
         <Library Name="xil_defaultlib"/>
         <UsedIn Val="SYNTHESIS"/>
@@ -179,6 +180,11 @@
         <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="false" IsStatusTracked="false"/>
         <Library Name="xil_defaultlib"/>
         <UsedIn Val="HW_HANDOFF"/>
+      </File>
+      <File Name="sim/cont_microblaze.protoinst">
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="false" IsStatusTracked="false"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SIMULATION"/>
       </File>
     </FileCollection>
   </CompositeFile>

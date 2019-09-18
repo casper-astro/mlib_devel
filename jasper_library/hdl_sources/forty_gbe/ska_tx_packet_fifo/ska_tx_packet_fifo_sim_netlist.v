@@ -1,10 +1,10 @@
-// Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
+// Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
-// Tool Version: Vivado v.2018.2 (lin64) Build 2258646 Thu Jun 14 20:02:38 MDT 2018
-// Date        : Wed Oct 24 09:25:36 2018
-// Host        : adam-cm running 64-bit Ubuntu 16.04.5 LTS
+// Tool Version: Vivado v.2019.1.1 (lin64) Build 2580384 Sat Jun 29 08:04:45 MDT 2019
+// Date        : Mon Jul 15 17:26:24 2019
+// Host        : casper1 running 64-bit Ubuntu 16.04.6 LTS
 // Command     : write_verilog -force -mode funcsim
-//               /home/aisaacson/work/git_work/ska_sa/projects/mlib_devel/jasper_library/test_models/r2018a_test2/myproj/myproj.srcs/sources_1/ip/ska_tx_packet_fifo/ska_tx_packet_fifo_sim_netlist.v
+//               /home/hpw1/work/tutorials_devel/vivado_2018/skarab/tut_intro/skarab_tut_intro/myproj/myproj.srcs/sources_1/ip/ska_tx_packet_fifo/ska_tx_packet_fifo_sim_netlist.v
 // Design      : ska_tx_packet_fifo
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -12,7 +12,7 @@
 // --------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CHECK_LICENSE_TYPE = "ska_tx_packet_fifo,fifo_generator_v13_2_2,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "fifo_generator_v13_2_2,Vivado 2018.2" *) 
+(* CHECK_LICENSE_TYPE = "ska_tx_packet_fifo,fifo_generator_v13_2_4,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "fifo_generator_v13_2_4,Vivado 2019.1.1" *) 
 (* NotValidForBitStream *)
 module ska_tx_packet_fifo
    (rst,
@@ -27,8 +27,8 @@ module ska_tx_packet_fifo
     empty,
     prog_full);
   input rst;
-  (* x_interface_info = "xilinx.com:signal:clock:1.0 write_clk CLK" *) (* x_interface_parameter = "XIL_INTERFACENAME write_clk, FREQ_HZ 100000000, PHASE 0.000" *) input wr_clk;
-  (* x_interface_info = "xilinx.com:signal:clock:1.0 read_clk CLK" *) (* x_interface_parameter = "XIL_INTERFACENAME read_clk, FREQ_HZ 100000000, PHASE 0.000" *) input rd_clk;
+  (* x_interface_info = "xilinx.com:signal:clock:1.0 write_clk CLK" *) (* x_interface_parameter = "XIL_INTERFACENAME write_clk, FREQ_HZ 100000000, PHASE 0.000, INSERT_VIP 0" *) input wr_clk;
+  (* x_interface_info = "xilinx.com:signal:clock:1.0 read_clk CLK" *) (* x_interface_parameter = "XIL_INTERFACENAME read_clk, FREQ_HZ 100000000, PHASE 0.000, INSERT_VIP 0" *) input rd_clk;
   (* x_interface_info = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_DATA" *) input [263:0]din;
   (* x_interface_info = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_EN" *) input wr_en;
   (* x_interface_info = "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_EN" *) input rd_en;
@@ -373,7 +373,7 @@ module ska_tx_packet_fifo
   (* C_WR_PNTR_WIDTH_WDCH = "10" *) 
   (* C_WR_PNTR_WIDTH_WRCH = "4" *) 
   (* C_WR_RESPONSE_LATENCY = "1" *) 
-  ska_tx_packet_fifo_fifo_generator_v13_2_2 U0
+  ska_tx_packet_fifo_fifo_generator_v13_2_4 U0
        (.almost_empty(NLW_U0_almost_empty_UNCONNECTED),
         .almost_full(NLW_U0_almost_full_UNCONNECTED),
         .axi_ar_data_count(NLW_U0_axi_ar_data_count_UNCONNECTED[4:0]),
@@ -650,7 +650,7 @@ endmodule
 (* DEF_VAL = "1'b0" *) (* DEST_SYNC_FF = "2" *) (* INIT_SYNC_FF = "0" *) 
 (* INV_DEF_VAL = "1'b1" *) (* ORIG_REF_NAME = "xpm_cdc_async_rst" *) (* RST_ACTIVE_HIGH = "1" *) 
 (* VERSION = "0" *) (* XPM_MODULE = "TRUE" *) (* xpm_cdc = "ASYNC_RST" *) 
-module ska_tx_packet_fifo_xpm_cdc_async_rst__1
+module ska_tx_packet_fifo_xpm_cdc_async_rst__2
    (src_arst,
     dest_clk,
     dest_arst);
@@ -1104,7 +1104,7 @@ endmodule
 (* REG_OUTPUT = "1" *) (* SIM_ASSERT_CHK = "0" *) (* SIM_LOSSLESS_GRAY_CHK = "0" *) 
 (* VERSION = "0" *) (* WIDTH = "9" *) (* XPM_MODULE = "TRUE" *) 
 (* xpm_cdc = "GRAY" *) 
-module ska_tx_packet_fifo_xpm_cdc_gray__1
+module ska_tx_packet_fifo_xpm_cdc_gray__2
    (src_clk,
     src_in_bin,
     dest_clk,
@@ -1572,7 +1572,7 @@ endmodule
 (* DEST_SYNC_FF = "4" *) (* INIT_SYNC_FF = "0" *) (* ORIG_REF_NAME = "xpm_cdc_single" *) 
 (* SIM_ASSERT_CHK = "0" *) (* SRC_INPUT_REG = "0" *) (* VERSION = "0" *) 
 (* XPM_MODULE = "TRUE" *) (* xpm_cdc = "SINGLE" *) 
-module ska_tx_packet_fifo_xpm_cdc_single__1
+module ska_tx_packet_fifo_xpm_cdc_single__2
    (src_clk,
     src_in,
     dest_clk,
@@ -1633,8 +1633,8 @@ module ska_tx_packet_fifo_blk_mem_gen_generic_cstr
     tmp_ram_rd_en,
     E,
     AS,
-    \gc0.count_d1_reg[8] ,
-    \gic0.gc0.count_d2_reg[8] ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ,
     din);
   output [263:0]D;
   input rd_clk;
@@ -1642,16 +1642,16 @@ module ska_tx_packet_fifo_blk_mem_gen_generic_cstr
   input tmp_ram_rd_en;
   input [0:0]E;
   input [0:0]AS;
-  input [8:0]\gc0.count_d1_reg[8] ;
-  input [8:0]\gic0.gc0.count_d2_reg[8] ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
   input [263:0]din;
 
   wire [0:0]AS;
   wire [263:0]D;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
   wire [0:0]E;
   wire [263:0]din;
-  wire [8:0]\gc0.count_d1_reg[8] ;
-  wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
@@ -1659,40 +1659,40 @@ module ska_tx_packet_fifo_blk_mem_gen_generic_cstr
   ska_tx_packet_fifo_blk_mem_gen_prim_width \ramloop[0].ram.r 
        (.AS(AS),
         .D(D[71:0]),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ),
         .E(E),
         .din(din[71:0]),
-        .\gc0.count_d1_reg[8] (\gc0.count_d1_reg[8] ),
-        .\gic0.gc0.count_d2_reg[8] (\gic0.gc0.count_d2_reg[8] ),
         .rd_clk(rd_clk),
         .tmp_ram_rd_en(tmp_ram_rd_en),
         .wr_clk(wr_clk));
   ska_tx_packet_fifo_blk_mem_gen_prim_width__parameterized0 \ramloop[1].ram.r 
        (.AS(AS),
         .D(D[143:72]),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ),
         .E(E),
         .din(din[143:72]),
-        .\gc0.count_d1_reg[8] (\gc0.count_d1_reg[8] ),
-        .\gic0.gc0.count_d2_reg[8] (\gic0.gc0.count_d2_reg[8] ),
         .rd_clk(rd_clk),
         .tmp_ram_rd_en(tmp_ram_rd_en),
         .wr_clk(wr_clk));
   ska_tx_packet_fifo_blk_mem_gen_prim_width__parameterized1 \ramloop[2].ram.r 
        (.AS(AS),
         .D(D[215:144]),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ),
         .E(E),
         .din(din[215:144]),
-        .\gc0.count_d1_reg[8] (\gc0.count_d1_reg[8] ),
-        .\gic0.gc0.count_d2_reg[8] (\gic0.gc0.count_d2_reg[8] ),
         .rd_clk(rd_clk),
         .tmp_ram_rd_en(tmp_ram_rd_en),
         .wr_clk(wr_clk));
   ska_tx_packet_fifo_blk_mem_gen_prim_width__parameterized2 \ramloop[3].ram.r 
        (.AS(AS),
         .D(D[263:216]),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ),
         .E(E),
         .din(din[263:216]),
-        .\gc0.count_d1_reg[8] (\gc0.count_d1_reg[8] ),
-        .\gic0.gc0.count_d2_reg[8] (\gic0.gc0.count_d2_reg[8] ),
         .rd_clk(rd_clk),
         .tmp_ram_rd_en(tmp_ram_rd_en),
         .wr_clk(wr_clk));
@@ -1706,8 +1706,8 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_width
     tmp_ram_rd_en,
     E,
     AS,
-    \gc0.count_d1_reg[8] ,
-    \gic0.gc0.count_d2_reg[8] ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ,
     din);
   output [71:0]D;
   input rd_clk;
@@ -1715,16 +1715,16 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_width
   input tmp_ram_rd_en;
   input [0:0]E;
   input [0:0]AS;
-  input [8:0]\gc0.count_d1_reg[8] ;
-  input [8:0]\gic0.gc0.count_d2_reg[8] ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
   input [71:0]din;
 
   wire [0:0]AS;
   wire [71:0]D;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
   wire [0:0]E;
   wire [71:0]din;
-  wire [8:0]\gc0.count_d1_reg[8] ;
-  wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
@@ -1732,10 +1732,10 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_width
   ska_tx_packet_fifo_blk_mem_gen_prim_wrapper \prim_noinit.ram 
        (.AS(AS),
         .D(D),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_1 (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ),
         .E(E),
         .din(din),
-        .\gc0.count_d1_reg[8] (\gc0.count_d1_reg[8] ),
-        .\gic0.gc0.count_d2_reg[8] (\gic0.gc0.count_d2_reg[8] ),
         .rd_clk(rd_clk),
         .tmp_ram_rd_en(tmp_ram_rd_en),
         .wr_clk(wr_clk));
@@ -1749,8 +1749,8 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_width__parameterized0
     tmp_ram_rd_en,
     E,
     AS,
-    \gc0.count_d1_reg[8] ,
-    \gic0.gc0.count_d2_reg[8] ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ,
     din);
   output [71:0]D;
   input rd_clk;
@@ -1758,16 +1758,16 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_width__parameterized0
   input tmp_ram_rd_en;
   input [0:0]E;
   input [0:0]AS;
-  input [8:0]\gc0.count_d1_reg[8] ;
-  input [8:0]\gic0.gc0.count_d2_reg[8] ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
   input [71:0]din;
 
   wire [0:0]AS;
   wire [71:0]D;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
   wire [0:0]E;
   wire [71:0]din;
-  wire [8:0]\gc0.count_d1_reg[8] ;
-  wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
@@ -1775,10 +1775,10 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_width__parameterized0
   ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized0 \prim_noinit.ram 
        (.AS(AS),
         .D(D),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_1 (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ),
         .E(E),
         .din(din),
-        .\gc0.count_d1_reg[8] (\gc0.count_d1_reg[8] ),
-        .\gic0.gc0.count_d2_reg[8] (\gic0.gc0.count_d2_reg[8] ),
         .rd_clk(rd_clk),
         .tmp_ram_rd_en(tmp_ram_rd_en),
         .wr_clk(wr_clk));
@@ -1792,8 +1792,8 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_width__parameterized1
     tmp_ram_rd_en,
     E,
     AS,
-    \gc0.count_d1_reg[8] ,
-    \gic0.gc0.count_d2_reg[8] ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ,
     din);
   output [71:0]D;
   input rd_clk;
@@ -1801,16 +1801,16 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_width__parameterized1
   input tmp_ram_rd_en;
   input [0:0]E;
   input [0:0]AS;
-  input [8:0]\gc0.count_d1_reg[8] ;
-  input [8:0]\gic0.gc0.count_d2_reg[8] ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
   input [71:0]din;
 
   wire [0:0]AS;
   wire [71:0]D;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
   wire [0:0]E;
   wire [71:0]din;
-  wire [8:0]\gc0.count_d1_reg[8] ;
-  wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
@@ -1818,10 +1818,10 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_width__parameterized1
   ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized1 \prim_noinit.ram 
        (.AS(AS),
         .D(D),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_1 (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ),
         .E(E),
         .din(din),
-        .\gc0.count_d1_reg[8] (\gc0.count_d1_reg[8] ),
-        .\gic0.gc0.count_d2_reg[8] (\gic0.gc0.count_d2_reg[8] ),
         .rd_clk(rd_clk),
         .tmp_ram_rd_en(tmp_ram_rd_en),
         .wr_clk(wr_clk));
@@ -1835,8 +1835,8 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_width__parameterized2
     tmp_ram_rd_en,
     E,
     AS,
-    \gc0.count_d1_reg[8] ,
-    \gic0.gc0.count_d2_reg[8] ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ,
     din);
   output [47:0]D;
   input rd_clk;
@@ -1844,16 +1844,16 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_width__parameterized2
   input tmp_ram_rd_en;
   input [0:0]E;
   input [0:0]AS;
-  input [8:0]\gc0.count_d1_reg[8] ;
-  input [8:0]\gic0.gc0.count_d2_reg[8] ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
   input [47:0]din;
 
   wire [0:0]AS;
   wire [47:0]D;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
   wire [0:0]E;
   wire [47:0]din;
-  wire [8:0]\gc0.count_d1_reg[8] ;
-  wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
@@ -1861,10 +1861,10 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_width__parameterized2
   ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized2 \prim_noinit.ram 
        (.AS(AS),
         .D(D),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_1 (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ),
         .E(E),
         .din(din),
-        .\gc0.count_d1_reg[8] (\gc0.count_d1_reg[8] ),
-        .\gic0.gc0.count_d2_reg[8] (\gic0.gc0.count_d2_reg[8] ),
         .rd_clk(rd_clk),
         .tmp_ram_rd_en(tmp_ram_rd_en),
         .wr_clk(wr_clk));
@@ -1878,8 +1878,8 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_wrapper
     tmp_ram_rd_en,
     E,
     AS,
-    \gc0.count_d1_reg[8] ,
-    \gic0.gc0.count_d2_reg[8] ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_1 ,
     din);
   output [71:0]D;
   input rd_clk;
@@ -1887,16 +1887,16 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_wrapper
   input tmp_ram_rd_en;
   input [0:0]E;
   input [0:0]AS;
-  input [8:0]\gc0.count_d1_reg[8] ;
-  input [8:0]\gic0.gc0.count_d2_reg[8] ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_1 ;
   input [71:0]din;
 
   wire [0:0]AS;
   wire [71:0]D;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_1 ;
   wire [0:0]E;
   wire [71:0]din;
-  wire [8:0]\gc0.count_d1_reg[8] ;
-  wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
@@ -2085,8 +2085,8 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_wrapper
     .WRITE_WIDTH_A(0),
     .WRITE_WIDTH_B(72)) 
     \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram 
-       (.ADDRARDADDR({1'b1,\gc0.count_d1_reg[8] ,1'b1,1'b1,1'b1,1'b1,1'b1,1'b1}),
-        .ADDRBWRADDR({1'b1,\gic0.gc0.count_d2_reg[8] ,1'b1,1'b1,1'b1,1'b1,1'b1,1'b1}),
+       (.ADDRARDADDR({1'b1,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ,1'b1,1'b1,1'b1,1'b1,1'b1,1'b1}),
+        .ADDRBWRADDR({1'b1,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_1 ,1'b1,1'b1,1'b1,1'b1,1'b1,1'b1}),
         .CASCADEINA(1'b0),
         .CASCADEINB(1'b0),
         .CASCADEOUTA(\NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_CASCADEOUTA_UNCONNECTED ),
@@ -2127,8 +2127,8 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized0
     tmp_ram_rd_en,
     E,
     AS,
-    \gc0.count_d1_reg[8] ,
-    \gic0.gc0.count_d2_reg[8] ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_1 ,
     din);
   output [71:0]D;
   input rd_clk;
@@ -2136,16 +2136,16 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized0
   input tmp_ram_rd_en;
   input [0:0]E;
   input [0:0]AS;
-  input [8:0]\gc0.count_d1_reg[8] ;
-  input [8:0]\gic0.gc0.count_d2_reg[8] ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_1 ;
   input [71:0]din;
 
   wire [0:0]AS;
   wire [71:0]D;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_1 ;
   wire [0:0]E;
   wire [71:0]din;
-  wire [8:0]\gc0.count_d1_reg[8] ;
-  wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
@@ -2334,8 +2334,8 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized0
     .WRITE_WIDTH_A(0),
     .WRITE_WIDTH_B(72)) 
     \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram 
-       (.ADDRARDADDR({1'b1,\gc0.count_d1_reg[8] ,1'b1,1'b1,1'b1,1'b1,1'b1,1'b1}),
-        .ADDRBWRADDR({1'b1,\gic0.gc0.count_d2_reg[8] ,1'b1,1'b1,1'b1,1'b1,1'b1,1'b1}),
+       (.ADDRARDADDR({1'b1,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ,1'b1,1'b1,1'b1,1'b1,1'b1,1'b1}),
+        .ADDRBWRADDR({1'b1,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_1 ,1'b1,1'b1,1'b1,1'b1,1'b1,1'b1}),
         .CASCADEINA(1'b0),
         .CASCADEINB(1'b0),
         .CASCADEOUTA(\NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_CASCADEOUTA_UNCONNECTED ),
@@ -2376,8 +2376,8 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized1
     tmp_ram_rd_en,
     E,
     AS,
-    \gc0.count_d1_reg[8] ,
-    \gic0.gc0.count_d2_reg[8] ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_1 ,
     din);
   output [71:0]D;
   input rd_clk;
@@ -2385,16 +2385,16 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized1
   input tmp_ram_rd_en;
   input [0:0]E;
   input [0:0]AS;
-  input [8:0]\gc0.count_d1_reg[8] ;
-  input [8:0]\gic0.gc0.count_d2_reg[8] ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_1 ;
   input [71:0]din;
 
   wire [0:0]AS;
   wire [71:0]D;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_1 ;
   wire [0:0]E;
   wire [71:0]din;
-  wire [8:0]\gc0.count_d1_reg[8] ;
-  wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
@@ -2583,8 +2583,8 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized1
     .WRITE_WIDTH_A(0),
     .WRITE_WIDTH_B(72)) 
     \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram 
-       (.ADDRARDADDR({1'b1,\gc0.count_d1_reg[8] ,1'b1,1'b1,1'b1,1'b1,1'b1,1'b1}),
-        .ADDRBWRADDR({1'b1,\gic0.gc0.count_d2_reg[8] ,1'b1,1'b1,1'b1,1'b1,1'b1,1'b1}),
+       (.ADDRARDADDR({1'b1,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ,1'b1,1'b1,1'b1,1'b1,1'b1,1'b1}),
+        .ADDRBWRADDR({1'b1,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_1 ,1'b1,1'b1,1'b1,1'b1,1'b1,1'b1}),
         .CASCADEINA(1'b0),
         .CASCADEINB(1'b0),
         .CASCADEOUTA(\NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_CASCADEOUTA_UNCONNECTED ),
@@ -2625,8 +2625,8 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized2
     tmp_ram_rd_en,
     E,
     AS,
-    \gc0.count_d1_reg[8] ,
-    \gic0.gc0.count_d2_reg[8] ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_1 ,
     din);
   output [47:0]D;
   input rd_clk;
@@ -2634,12 +2634,14 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized2
   input tmp_ram_rd_en;
   input [0:0]E;
   input [0:0]AS;
-  input [8:0]\gc0.count_d1_reg[8] ;
-  input [8:0]\gic0.gc0.count_d2_reg[8] ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_1 ;
   input [47:0]din;
 
   wire [0:0]AS;
   wire [47:0]D;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_1 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_12 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_13 ;
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_20 ;
@@ -2666,8 +2668,6 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized2
   wire \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_n_75 ;
   wire [0:0]E;
   wire [47:0]din;
-  wire [8:0]\gc0.count_d1_reg[8] ;
-  wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
@@ -2856,8 +2856,8 @@ module ska_tx_packet_fifo_blk_mem_gen_prim_wrapper__parameterized2
     .WRITE_WIDTH_A(0),
     .WRITE_WIDTH_B(72)) 
     \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram 
-       (.ADDRARDADDR({1'b1,\gc0.count_d1_reg[8] ,1'b1,1'b1,1'b1,1'b1,1'b1,1'b1}),
-        .ADDRBWRADDR({1'b1,\gic0.gc0.count_d2_reg[8] ,1'b1,1'b1,1'b1,1'b1,1'b1,1'b1}),
+       (.ADDRARDADDR({1'b1,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ,1'b1,1'b1,1'b1,1'b1,1'b1,1'b1}),
+        .ADDRBWRADDR({1'b1,\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_1 ,1'b1,1'b1,1'b1,1'b1,1'b1,1'b1}),
         .CASCADEINA(1'b0),
         .CASCADEINB(1'b0),
         .CASCADEOUTA(\NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_CASCADEOUTA_UNCONNECTED ),
@@ -2898,8 +2898,8 @@ module ska_tx_packet_fifo_blk_mem_gen_top
     tmp_ram_rd_en,
     E,
     AS,
-    \gc0.count_d1_reg[8] ,
-    \gic0.gc0.count_d2_reg[8] ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ,
     din);
   output [263:0]D;
   input rd_clk;
@@ -2907,16 +2907,16 @@ module ska_tx_packet_fifo_blk_mem_gen_top
   input tmp_ram_rd_en;
   input [0:0]E;
   input [0:0]AS;
-  input [8:0]\gc0.count_d1_reg[8] ;
-  input [8:0]\gic0.gc0.count_d2_reg[8] ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
   input [263:0]din;
 
   wire [0:0]AS;
   wire [263:0]D;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
   wire [0:0]E;
   wire [263:0]din;
-  wire [8:0]\gc0.count_d1_reg[8] ;
-  wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
@@ -2924,25 +2924,25 @@ module ska_tx_packet_fifo_blk_mem_gen_top
   ska_tx_packet_fifo_blk_mem_gen_generic_cstr \valid.cstr 
        (.AS(AS),
         .D(D),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ),
         .E(E),
         .din(din),
-        .\gc0.count_d1_reg[8] (\gc0.count_d1_reg[8] ),
-        .\gic0.gc0.count_d2_reg[8] (\gic0.gc0.count_d2_reg[8] ),
         .rd_clk(rd_clk),
         .tmp_ram_rd_en(tmp_ram_rd_en),
         .wr_clk(wr_clk));
 endmodule
 
-(* ORIG_REF_NAME = "blk_mem_gen_v8_4_1" *) 
-module ska_tx_packet_fifo_blk_mem_gen_v8_4_1
+(* ORIG_REF_NAME = "blk_mem_gen_v8_4_3" *) 
+module ska_tx_packet_fifo_blk_mem_gen_v8_4_3
    (D,
     rd_clk,
     wr_clk,
     tmp_ram_rd_en,
     E,
     AS,
-    \gc0.count_d1_reg[8] ,
-    \gic0.gc0.count_d2_reg[8] ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ,
     din);
   output [263:0]D;
   input rd_clk;
@@ -2950,42 +2950,42 @@ module ska_tx_packet_fifo_blk_mem_gen_v8_4_1
   input tmp_ram_rd_en;
   input [0:0]E;
   input [0:0]AS;
-  input [8:0]\gc0.count_d1_reg[8] ;
-  input [8:0]\gic0.gc0.count_d2_reg[8] ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
   input [263:0]din;
 
   wire [0:0]AS;
   wire [263:0]D;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
   wire [0:0]E;
   wire [263:0]din;
-  wire [8:0]\gc0.count_d1_reg[8] ;
-  wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
 
-  ska_tx_packet_fifo_blk_mem_gen_v8_4_1_synth inst_blk_mem_gen
+  ska_tx_packet_fifo_blk_mem_gen_v8_4_3_synth inst_blk_mem_gen
        (.AS(AS),
         .D(D),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ),
         .E(E),
         .din(din),
-        .\gc0.count_d1_reg[8] (\gc0.count_d1_reg[8] ),
-        .\gic0.gc0.count_d2_reg[8] (\gic0.gc0.count_d2_reg[8] ),
         .rd_clk(rd_clk),
         .tmp_ram_rd_en(tmp_ram_rd_en),
         .wr_clk(wr_clk));
 endmodule
 
-(* ORIG_REF_NAME = "blk_mem_gen_v8_4_1_synth" *) 
-module ska_tx_packet_fifo_blk_mem_gen_v8_4_1_synth
+(* ORIG_REF_NAME = "blk_mem_gen_v8_4_3_synth" *) 
+module ska_tx_packet_fifo_blk_mem_gen_v8_4_3_synth
    (D,
     rd_clk,
     wr_clk,
     tmp_ram_rd_en,
     E,
     AS,
-    \gc0.count_d1_reg[8] ,
-    \gic0.gc0.count_d2_reg[8] ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ,
     din);
   output [263:0]D;
   input rd_clk;
@@ -2993,16 +2993,16 @@ module ska_tx_packet_fifo_blk_mem_gen_v8_4_1_synth
   input tmp_ram_rd_en;
   input [0:0]E;
   input [0:0]AS;
-  input [8:0]\gc0.count_d1_reg[8] ;
-  input [8:0]\gic0.gc0.count_d2_reg[8] ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
   input [263:0]din;
 
   wire [0:0]AS;
   wire [263:0]D;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
   wire [0:0]E;
   wire [263:0]din;
-  wire [8:0]\gc0.count_d1_reg[8] ;
-  wire [8:0]\gic0.gc0.count_d2_reg[8] ;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
@@ -3010,10 +3010,10 @@ module ska_tx_packet_fifo_blk_mem_gen_v8_4_1_synth
   ska_tx_packet_fifo_blk_mem_gen_top \gnbram.gnativebmg.native_blk_mem_gen 
        (.AS(AS),
         .D(D),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ),
         .E(E),
         .din(din),
-        .\gc0.count_d1_reg[8] (\gc0.count_d1_reg[8] ),
-        .\gic0.gc0.count_d2_reg[8] (\gic0.gc0.count_d2_reg[8] ),
         .rd_clk(rd_clk),
         .tmp_ram_rd_en(tmp_ram_rd_en),
         .wr_clk(wr_clk));
@@ -3023,47 +3023,47 @@ endmodule
 module ska_tx_packet_fifo_clk_x_pntrs
    (S,
     RD_PNTR_WR,
-    \gdiff.diff_pntr_pad_reg[8] ,
+    \dest_out_bin_ff_reg[7] ,
     v1_reg,
     v1_reg_0,
     v1_reg_1,
     WR_PNTR_RD,
     v1_reg_2,
     Q,
-    \gic0.gc0.count_reg[7] ,
-    \gc0.count_d1_reg[8] ,
-    \gc0.count_reg[8] ,
+    \gmux.gm[3].gms.ms ,
+    \src_gray_ff_reg[8] ,
+    \gmux.gm[4].gms.ms ,
     wr_clk,
-    \gic0.gc0.count_d2_reg[8] ,
+    \src_gray_ff_reg[8]_0 ,
     rd_clk);
   output [3:0]S;
   output [0:0]RD_PNTR_WR;
-  output [3:0]\gdiff.diff_pntr_pad_reg[8] ;
+  output [3:0]\dest_out_bin_ff_reg[7] ;
   output [3:0]v1_reg;
   output [3:0]v1_reg_0;
   output [0:0]v1_reg_1;
   output [7:0]WR_PNTR_RD;
   output [0:0]v1_reg_2;
   input [7:0]Q;
-  input [7:0]\gic0.gc0.count_reg[7] ;
-  input [8:0]\gc0.count_d1_reg[8] ;
-  input [0:0]\gc0.count_reg[8] ;
+  input [7:0]\gmux.gm[3].gms.ms ;
+  input [8:0]\src_gray_ff_reg[8] ;
+  input [0:0]\gmux.gm[4].gms.ms ;
   input wr_clk;
-  input [8:0]\gic0.gc0.count_d2_reg[8] ;
+  input [8:0]\src_gray_ff_reg[8]_0 ;
   input rd_clk;
 
   wire [7:0]Q;
   wire [0:0]RD_PNTR_WR;
   wire [3:0]S;
   wire [7:0]WR_PNTR_RD;
-  wire [8:0]\gc0.count_d1_reg[8] ;
-  wire [0:0]\gc0.count_reg[8] ;
-  wire [3:0]\gdiff.diff_pntr_pad_reg[8] ;
-  wire [8:0]\gic0.gc0.count_d2_reg[8] ;
-  wire [7:0]\gic0.gc0.count_reg[7] ;
+  wire [3:0]\dest_out_bin_ff_reg[7] ;
+  wire [7:0]\gmux.gm[3].gms.ms ;
+  wire [0:0]\gmux.gm[4].gms.ms ;
   wire [8:8]p_24_out;
   wire [7:0]p_25_out;
   wire rd_clk;
+  wire [8:0]\src_gray_ff_reg[8] ;
+  wire [8:0]\src_gray_ff_reg[8]_0 ;
   wire [3:0]v1_reg;
   wire [3:0]v1_reg_0;
   wire [0:0]v1_reg_1;
@@ -3082,9 +3082,9 @@ module ska_tx_packet_fifo_clk_x_pntrs
     .INIT(16'h9009)) 
     \gmux.gm[0].gm1.m1_i_1__0 
        (.I0(p_25_out[0]),
-        .I1(\gic0.gc0.count_reg[7] [0]),
+        .I1(\gmux.gm[3].gms.ms [0]),
         .I2(p_25_out[1]),
-        .I3(\gic0.gc0.count_reg[7] [1]),
+        .I3(\gmux.gm[3].gms.ms [1]),
         .O(v1_reg_0[0]));
   LUT4 #(
     .INIT(16'h9009)) 
@@ -3098,9 +3098,9 @@ module ska_tx_packet_fifo_clk_x_pntrs
     .INIT(16'h9009)) 
     \gmux.gm[1].gms.ms_i_1__0 
        (.I0(p_25_out[2]),
-        .I1(\gic0.gc0.count_reg[7] [2]),
+        .I1(\gmux.gm[3].gms.ms [2]),
         .I2(p_25_out[3]),
-        .I3(\gic0.gc0.count_reg[7] [3]),
+        .I3(\gmux.gm[3].gms.ms [3]),
         .O(v1_reg_0[1]));
   LUT4 #(
     .INIT(16'h9009)) 
@@ -3114,9 +3114,9 @@ module ska_tx_packet_fifo_clk_x_pntrs
     .INIT(16'h9009)) 
     \gmux.gm[2].gms.ms_i_1__0 
        (.I0(p_25_out[4]),
-        .I1(\gic0.gc0.count_reg[7] [4]),
+        .I1(\gmux.gm[3].gms.ms [4]),
         .I2(p_25_out[5]),
-        .I3(\gic0.gc0.count_reg[7] [5]),
+        .I3(\gmux.gm[3].gms.ms [5]),
         .O(v1_reg_0[2]));
   LUT4 #(
     .INIT(16'h9009)) 
@@ -3130,46 +3130,46 @@ module ska_tx_packet_fifo_clk_x_pntrs
     .INIT(16'h9009)) 
     \gmux.gm[3].gms.ms_i_1__0 
        (.I0(p_25_out[6]),
-        .I1(\gic0.gc0.count_reg[7] [6]),
+        .I1(\gmux.gm[3].gms.ms [6]),
         .I2(p_25_out[7]),
-        .I3(\gic0.gc0.count_reg[7] [7]),
+        .I3(\gmux.gm[3].gms.ms [7]),
         .O(v1_reg_0[3]));
   LUT2 #(
     .INIT(4'h9)) 
     \gmux.gm[4].gms.ms_i_1__0 
        (.I0(p_24_out),
-        .I1(\gc0.count_d1_reg[8] [8]),
+        .I1(\src_gray_ff_reg[8] [8]),
         .O(v1_reg_1));
   LUT2 #(
     .INIT(4'h9)) 
     \gmux.gm[4].gms.ms_i_1__1 
        (.I0(p_24_out),
-        .I1(\gc0.count_reg[8] ),
+        .I1(\gmux.gm[4].gms.ms ),
         .O(v1_reg_2));
   LUT2 #(
     .INIT(4'h9)) 
     plusOp_carry__0_i_1
        (.I0(p_25_out[7]),
         .I1(Q[7]),
-        .O(\gdiff.diff_pntr_pad_reg[8] [3]));
+        .O(\dest_out_bin_ff_reg[7] [3]));
   LUT2 #(
     .INIT(4'h9)) 
     plusOp_carry__0_i_2
        (.I0(p_25_out[6]),
         .I1(Q[6]),
-        .O(\gdiff.diff_pntr_pad_reg[8] [2]));
+        .O(\dest_out_bin_ff_reg[7] [2]));
   LUT2 #(
     .INIT(4'h9)) 
     plusOp_carry__0_i_3
        (.I0(p_25_out[5]),
         .I1(Q[5]),
-        .O(\gdiff.diff_pntr_pad_reg[8] [1]));
+        .O(\dest_out_bin_ff_reg[7] [1]));
   LUT2 #(
     .INIT(4'h9)) 
     plusOp_carry__0_i_4
        (.I0(p_25_out[4]),
         .I1(Q[4]),
-        .O(\gdiff.diff_pntr_pad_reg[8] [0]));
+        .O(\dest_out_bin_ff_reg[7] [0]));
   LUT2 #(
     .INIT(4'h9)) 
     plusOp_carry_i_1
@@ -3207,7 +3207,7 @@ module ska_tx_packet_fifo_clk_x_pntrs
        (.dest_clk(wr_clk),
         .dest_out_bin({RD_PNTR_WR,p_25_out}),
         .src_clk(rd_clk),
-        .src_in_bin(\gc0.count_d1_reg[8] ));
+        .src_in_bin(\src_gray_ff_reg[8] ));
   (* DEST_SYNC_FF = "2" *) 
   (* INIT_SYNC_FF = "0" *) 
   (* REG_OUTPUT = "1" *) 
@@ -3217,20 +3217,20 @@ module ska_tx_packet_fifo_clk_x_pntrs
   (* WIDTH = "9" *) 
   (* XPM_CDC = "GRAY" *) 
   (* XPM_MODULE = "TRUE" *) 
-  ska_tx_packet_fifo_xpm_cdc_gray__1 wr_pntr_cdc_inst
+  ska_tx_packet_fifo_xpm_cdc_gray__2 wr_pntr_cdc_inst
        (.dest_clk(rd_clk),
         .dest_out_bin({p_24_out,WR_PNTR_RD}),
         .src_clk(wr_clk),
-        .src_in_bin(\gic0.gc0.count_d2_reg[8] ));
+        .src_in_bin(\src_gray_ff_reg[8]_0 ));
 endmodule
 
 (* ORIG_REF_NAME = "compare" *) 
 module ska_tx_packet_fifo_compare
    (comp1,
-    \dest_out_bin_ff_reg[6] ,
+    \gmux.gm[4].gms.ms_0 ,
     v1_reg);
   output comp1;
-  input [3:0]\dest_out_bin_ff_reg[6] ;
+  input [3:0]\gmux.gm[4].gms.ms_0 ;
   input [0:0]v1_reg;
 
   wire carrynet_0;
@@ -3238,7 +3238,7 @@ module ska_tx_packet_fifo_compare
   wire carrynet_2;
   wire carrynet_3;
   wire comp1;
-  wire [3:0]\dest_out_bin_ff_reg[6] ;
+  wire [3:0]\gmux.gm[4].gms.ms_0 ;
   wire [0:0]v1_reg;
   wire [3:0]\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED ;
   wire [3:1]\NLW_gmux.gm[4].gms.ms_CARRY4_CO_UNCONNECTED ;
@@ -3246,6 +3246,7 @@ module ska_tx_packet_fifo_compare
   wire [3:0]\NLW_gmux.gm[4].gms.ms_CARRY4_O_UNCONNECTED ;
   wire [3:1]\NLW_gmux.gm[4].gms.ms_CARRY4_S_UNCONNECTED ;
 
+  (* OPT_MODIFIED = "MLO" *) 
   (* XILINX_LEGACY_PRIM = "(MUXCY,XORCY)" *) 
   (* box_type = "PRIMITIVE" *) 
   CARRY4 \gmux.gm[0].gm1.m1_CARRY4 
@@ -3254,7 +3255,8 @@ module ska_tx_packet_fifo_compare
         .CYINIT(1'b1),
         .DI({1'b0,1'b0,1'b0,1'b0}),
         .O(\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED [3:0]),
-        .S(\dest_out_bin_ff_reg[6] ));
+        .S(\gmux.gm[4].gms.ms_0 ));
+  (* OPT_MODIFIED = "MLO" *) 
   (* XILINX_LEGACY_PRIM = "(MUXCY,XORCY)" *) 
   (* box_type = "PRIMITIVE" *) 
   CARRY4 \gmux.gm[4].gms.ms_CARRY4 
@@ -3269,19 +3271,19 @@ endmodule
 (* ORIG_REF_NAME = "compare" *) 
 module ska_tx_packet_fifo_compare_0
    (ram_full_fb_i_reg,
-    \dest_out_bin_ff_reg[6] ,
+    \gmux.gm[4].gms.ms_0 ,
     v1_reg_0,
     out,
     wr_en,
     comp1,
-    \grstd1.grst_full.grst_f.rst_d3_reg );
+    ram_full_fb_i_reg_0);
   output ram_full_fb_i_reg;
-  input [3:0]\dest_out_bin_ff_reg[6] ;
+  input [3:0]\gmux.gm[4].gms.ms_0 ;
   input [0:0]v1_reg_0;
   input out;
   input wr_en;
   input comp1;
-  input \grstd1.grst_full.grst_f.rst_d3_reg ;
+  input ram_full_fb_i_reg_0;
 
   wire carrynet_0;
   wire carrynet_1;
@@ -3289,10 +3291,10 @@ module ska_tx_packet_fifo_compare_0
   wire carrynet_3;
   wire comp1;
   wire comp2;
-  wire [3:0]\dest_out_bin_ff_reg[6] ;
-  wire \grstd1.grst_full.grst_f.rst_d3_reg ;
+  wire [3:0]\gmux.gm[4].gms.ms_0 ;
   wire out;
   wire ram_full_fb_i_reg;
+  wire ram_full_fb_i_reg_0;
   wire [0:0]v1_reg_0;
   wire wr_en;
   wire [3:0]\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED ;
@@ -3301,6 +3303,7 @@ module ska_tx_packet_fifo_compare_0
   wire [3:0]\NLW_gmux.gm[4].gms.ms_CARRY4_O_UNCONNECTED ;
   wire [3:1]\NLW_gmux.gm[4].gms.ms_CARRY4_S_UNCONNECTED ;
 
+  (* OPT_MODIFIED = "MLO" *) 
   (* XILINX_LEGACY_PRIM = "(MUXCY,XORCY)" *) 
   (* box_type = "PRIMITIVE" *) 
   CARRY4 \gmux.gm[0].gm1.m1_CARRY4 
@@ -3309,7 +3312,8 @@ module ska_tx_packet_fifo_compare_0
         .CYINIT(1'b1),
         .DI({1'b0,1'b0,1'b0,1'b0}),
         .O(\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED [3:0]),
-        .S(\dest_out_bin_ff_reg[6] ));
+        .S(\gmux.gm[4].gms.ms_0 ));
+  (* OPT_MODIFIED = "MLO" *) 
   (* XILINX_LEGACY_PRIM = "(MUXCY,XORCY)" *) 
   (* box_type = "PRIMITIVE" *) 
   CARRY4 \gmux.gm[4].gms.ms_CARRY4 
@@ -3326,7 +3330,7 @@ module ska_tx_packet_fifo_compare_0
         .I1(out),
         .I2(wr_en),
         .I3(comp1),
-        .I4(\grstd1.grst_full.grst_f.rst_d3_reg ),
+        .I4(ram_full_fb_i_reg_0),
         .O(ram_full_fb_i_reg));
 endmodule
 
@@ -3334,17 +3338,17 @@ endmodule
 module ska_tx_packet_fifo_compare_1
    (ram_empty_fb_i_reg,
     v1_reg,
-    \dest_out_bin_ff_reg[8] ,
+    ram_empty_fb_i_reg_0,
     out,
     rd_en,
-    \gpregsm1.curr_fwft_state_reg[1] ,
+    ram_empty_fb_i_reg_1,
     comp1);
   output ram_empty_fb_i_reg;
   input [3:0]v1_reg;
-  input [0:0]\dest_out_bin_ff_reg[8] ;
+  input [0:0]ram_empty_fb_i_reg_0;
   input out;
   input rd_en;
-  input [1:0]\gpregsm1.curr_fwft_state_reg[1] ;
+  input [1:0]ram_empty_fb_i_reg_1;
   input comp1;
 
   wire carrynet_0;
@@ -3353,10 +3357,10 @@ module ska_tx_packet_fifo_compare_1
   wire carrynet_3;
   wire comp0;
   wire comp1;
-  wire [0:0]\dest_out_bin_ff_reg[8] ;
-  wire [1:0]\gpregsm1.curr_fwft_state_reg[1] ;
   wire out;
   wire ram_empty_fb_i_reg;
+  wire [0:0]ram_empty_fb_i_reg_0;
+  wire [1:0]ram_empty_fb_i_reg_1;
   wire rd_en;
   wire [3:0]v1_reg;
   wire [3:0]\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED ;
@@ -3365,6 +3369,7 @@ module ska_tx_packet_fifo_compare_1
   wire [3:0]\NLW_gmux.gm[4].gms.ms_CARRY4_O_UNCONNECTED ;
   wire [3:1]\NLW_gmux.gm[4].gms.ms_CARRY4_S_UNCONNECTED ;
 
+  (* OPT_MODIFIED = "MLO" *) 
   (* XILINX_LEGACY_PRIM = "(MUXCY,XORCY)" *) 
   (* box_type = "PRIMITIVE" *) 
   CARRY4 \gmux.gm[0].gm1.m1_CARRY4 
@@ -3374,6 +3379,7 @@ module ska_tx_packet_fifo_compare_1
         .DI({1'b0,1'b0,1'b0,1'b0}),
         .O(\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED [3:0]),
         .S(v1_reg));
+  (* OPT_MODIFIED = "MLO" *) 
   (* XILINX_LEGACY_PRIM = "(MUXCY,XORCY)" *) 
   (* box_type = "PRIMITIVE" *) 
   CARRY4 \gmux.gm[4].gms.ms_CARRY4 
@@ -3382,15 +3388,15 @@ module ska_tx_packet_fifo_compare_1
         .CYINIT(1'b0),
         .DI({\NLW_gmux.gm[4].gms.ms_CARRY4_DI_UNCONNECTED [3:1],1'b0}),
         .O(\NLW_gmux.gm[4].gms.ms_CARRY4_O_UNCONNECTED [3:0]),
-        .S({\NLW_gmux.gm[4].gms.ms_CARRY4_S_UNCONNECTED [3:1],\dest_out_bin_ff_reg[8] }));
+        .S({\NLW_gmux.gm[4].gms.ms_CARRY4_S_UNCONNECTED [3:1],ram_empty_fb_i_reg_0}));
   LUT6 #(
     .INIT(64'hBABBBBBBAAAAAAAA)) 
     ram_empty_i_i_1
        (.I0(comp0),
         .I1(out),
         .I2(rd_en),
-        .I3(\gpregsm1.curr_fwft_state_reg[1] [1]),
-        .I4(\gpregsm1.curr_fwft_state_reg[1] [0]),
+        .I3(ram_empty_fb_i_reg_1[1]),
+        .I4(ram_empty_fb_i_reg_1[0]),
         .I5(comp1),
         .O(ram_empty_fb_i_reg));
 endmodule
@@ -3399,17 +3405,17 @@ endmodule
 module ska_tx_packet_fifo_compare_2
    (comp1,
     v1_reg_0,
-    \dest_out_bin_ff_reg[8] );
+    ram_empty_fb_i_reg);
   output comp1;
   input [3:0]v1_reg_0;
-  input [0:0]\dest_out_bin_ff_reg[8] ;
+  input [0:0]ram_empty_fb_i_reg;
 
   wire carrynet_0;
   wire carrynet_1;
   wire carrynet_2;
   wire carrynet_3;
   wire comp1;
-  wire [0:0]\dest_out_bin_ff_reg[8] ;
+  wire [0:0]ram_empty_fb_i_reg;
   wire [3:0]v1_reg_0;
   wire [3:0]\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED ;
   wire [3:1]\NLW_gmux.gm[4].gms.ms_CARRY4_CO_UNCONNECTED ;
@@ -3417,6 +3423,7 @@ module ska_tx_packet_fifo_compare_2
   wire [3:0]\NLW_gmux.gm[4].gms.ms_CARRY4_O_UNCONNECTED ;
   wire [3:1]\NLW_gmux.gm[4].gms.ms_CARRY4_S_UNCONNECTED ;
 
+  (* OPT_MODIFIED = "MLO" *) 
   (* XILINX_LEGACY_PRIM = "(MUXCY,XORCY)" *) 
   (* box_type = "PRIMITIVE" *) 
   CARRY4 \gmux.gm[0].gm1.m1_CARRY4 
@@ -3426,6 +3433,7 @@ module ska_tx_packet_fifo_compare_2
         .DI({1'b0,1'b0,1'b0,1'b0}),
         .O(\NLW_gmux.gm[0].gm1.m1_CARRY4_O_UNCONNECTED [3:0]),
         .S(v1_reg_0));
+  (* OPT_MODIFIED = "MLO" *) 
   (* XILINX_LEGACY_PRIM = "(MUXCY,XORCY)" *) 
   (* box_type = "PRIMITIVE" *) 
   CARRY4 \gmux.gm[4].gms.ms_CARRY4 
@@ -3434,12 +3442,12 @@ module ska_tx_packet_fifo_compare_2
         .CYINIT(1'b0),
         .DI({\NLW_gmux.gm[4].gms.ms_CARRY4_DI_UNCONNECTED [3:1],1'b0}),
         .O(\NLW_gmux.gm[4].gms.ms_CARRY4_O_UNCONNECTED [3:0]),
-        .S({\NLW_gmux.gm[4].gms.ms_CARRY4_S_UNCONNECTED [3:1],\dest_out_bin_ff_reg[8] }));
+        .S({\NLW_gmux.gm[4].gms.ms_CARRY4_S_UNCONNECTED [3:1],ram_empty_fb_i_reg}));
 endmodule
 
 (* ORIG_REF_NAME = "fifo_generator_ramfifo" *) 
 module ska_tx_packet_fifo_fifo_generator_ramfifo
-   (\grstd1.grst_full.grst_f.rst_d1_reg ,
+   (\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ,
     AR,
     empty,
     full,
@@ -3452,7 +3460,7 @@ module ska_tx_packet_fifo_fifo_generator_ramfifo
     din,
     wr_en,
     rd_en);
-  output \grstd1.grst_full.grst_f.rst_d1_reg ;
+  output \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ;
   output [0:0]AR;
   output empty;
   output full;
@@ -3481,9 +3489,9 @@ module ska_tx_packet_fifo_fifo_generator_ramfifo
   wire \gntv_or_sync_fifo.gcx.clkx_n_8 ;
   wire [4:4]\gras.rsts/c0/v1_reg ;
   wire [4:4]\gras.rsts/c1/v1_reg ;
-  wire \grstd1.grst_full.grst_f.rst_d1_reg ;
   wire [3:0]\gwas.wsts/c1/v1_reg ;
   wire [3:0]\gwas.wsts/c2/v1_reg ;
+  wire \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ;
   wire overflow;
   wire [8:0]p_0_out;
   wire [8:0]p_13_out;
@@ -3510,12 +3518,12 @@ module ska_tx_packet_fifo_fifo_generator_ramfifo
         .RD_PNTR_WR(p_25_out),
         .S({\gntv_or_sync_fifo.gcx.clkx_n_0 ,\gntv_or_sync_fifo.gcx.clkx_n_1 ,\gntv_or_sync_fifo.gcx.clkx_n_2 ,\gntv_or_sync_fifo.gcx.clkx_n_3 }),
         .WR_PNTR_RD(p_24_out),
-        .\gc0.count_d1_reg[8] (p_0_out),
-        .\gc0.count_reg[8] (rd_pntr_plus1),
-        .\gdiff.diff_pntr_pad_reg[8] ({\gntv_or_sync_fifo.gcx.clkx_n_5 ,\gntv_or_sync_fifo.gcx.clkx_n_6 ,\gntv_or_sync_fifo.gcx.clkx_n_7 ,\gntv_or_sync_fifo.gcx.clkx_n_8 }),
-        .\gic0.gc0.count_d2_reg[8] (p_13_out),
-        .\gic0.gc0.count_reg[7] (wr_pntr_plus2),
+        .\dest_out_bin_ff_reg[7] ({\gntv_or_sync_fifo.gcx.clkx_n_5 ,\gntv_or_sync_fifo.gcx.clkx_n_6 ,\gntv_or_sync_fifo.gcx.clkx_n_7 ,\gntv_or_sync_fifo.gcx.clkx_n_8 }),
+        .\gmux.gm[3].gms.ms (wr_pntr_plus2),
+        .\gmux.gm[4].gms.ms (rd_pntr_plus1),
         .rd_clk(rd_clk),
+        .\src_gray_ff_reg[8] (p_0_out),
+        .\src_gray_ff_reg[8]_0 (p_13_out),
         .v1_reg(\gwas.wsts/c1/v1_reg ),
         .v1_reg_0(\gwas.wsts/c2/v1_reg ),
         .v1_reg_1(\gras.rsts/c0/v1_reg ),
@@ -3523,52 +3531,52 @@ module ska_tx_packet_fifo_fifo_generator_ramfifo
         .wr_clk(wr_clk));
   ska_tx_packet_fifo_rd_logic \gntv_or_sync_fifo.gl0.rd 
        (.AS(AR),
-        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram (p_0_out),
         .E(p_6_out),
         .Q(rd_pntr_plus1),
         .WR_PNTR_RD(p_24_out),
-        .\dest_out_bin_ff_reg[8] (\gras.rsts/c0/v1_reg ),
-        .\dest_out_bin_ff_reg[8]_0 (\gras.rsts/c1/v1_reg ),
         .empty(empty),
+        .\gc0.count_d1_reg[8] (p_0_out),
+        .ram_empty_fb_i_reg(\gras.rsts/c0/v1_reg ),
+        .ram_empty_fb_i_reg_0(\gras.rsts/c1/v1_reg ),
         .rd_clk(rd_clk),
         .rd_en(rd_en),
         .tmp_ram_rd_en(tmp_ram_rd_en));
   ska_tx_packet_fifo_wr_logic \gntv_or_sync_fifo.gl0.wr 
        (.AR(rstblk_n_0),
-        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram (p_13_out),
         .E(p_20_out),
         .Q(p_14_out),
         .RD_PNTR_WR(p_25_out),
         .S({\gntv_or_sync_fifo.gcx.clkx_n_0 ,\gntv_or_sync_fifo.gcx.clkx_n_1 ,\gntv_or_sync_fifo.gcx.clkx_n_2 ,\gntv_or_sync_fifo.gcx.clkx_n_3 }),
-        .\dest_out_bin_ff_reg[6] (\gwas.wsts/c1/v1_reg ),
-        .\dest_out_bin_ff_reg[6]_0 (\gwas.wsts/c2/v1_reg ),
-        .\dest_out_bin_ff_reg[7] ({\gntv_or_sync_fifo.gcx.clkx_n_5 ,\gntv_or_sync_fifo.gcx.clkx_n_6 ,\gntv_or_sync_fifo.gcx.clkx_n_7 ,\gntv_or_sync_fifo.gcx.clkx_n_8 }),
         .full(full),
-        .\gic0.gc0.count_d1_reg[7] (wr_pntr_plus2),
-        .\grstd1.grst_full.grst_f.rst_d3_reg (rst_full_gen_i),
-        .\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg (\grstd1.grst_full.grst_f.rst_d1_reg ),
+        .\gdiff.diff_pntr_pad_reg[8] ({\gntv_or_sync_fifo.gcx.clkx_n_5 ,\gntv_or_sync_fifo.gcx.clkx_n_6 ,\gntv_or_sync_fifo.gcx.clkx_n_7 ,\gntv_or_sync_fifo.gcx.clkx_n_8 }),
+        .\gic0.gc0.count_d2_reg[8] (p_13_out),
+        .\gic0.gc0.count_reg[7] (wr_pntr_plus2),
+        .\gmux.gm[4].gms.ms (\gwas.wsts/c1/v1_reg ),
+        .\gmux.gm[4].gms.ms_0 (\gwas.wsts/c2/v1_reg ),
+        .\gof.gof1.overflow_i_reg (\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ),
         .out(rst_full_ff_i),
         .overflow(overflow),
         .prog_full(prog_full),
+        .ram_full_fb_i_reg(rst_full_gen_i),
         .wr_clk(wr_clk),
         .wr_en(wr_en));
   ska_tx_packet_fifo_memory \gntv_or_sync_fifo.mem 
        (.AS(AR),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram (p_0_out),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 (p_13_out),
         .E(p_20_out),
         .din(din),
         .dout(dout),
-        .\gc0.count_d1_reg[8] (p_0_out),
-        .\gic0.gc0.count_d2_reg[8] (p_13_out),
-        .\gpregsm1.curr_fwft_state_reg[1] (p_6_out),
+        .\goreg_bm.dout_i_reg[263]_0 (p_6_out),
         .rd_clk(rd_clk),
         .tmp_ram_rd_en(tmp_ram_rd_en),
         .wr_clk(wr_clk));
   ska_tx_packet_fifo_reset_blk_ramfifo rstblk
        (.AR(rstblk_n_0),
         .AS(AR),
-        .\grstd1.grst_full.grst_f.rst_d1_reg_0 (\grstd1.grst_full.grst_f.rst_d1_reg ),
+        .\grstd1.grst_full.grst_f.rst_d3_reg_0 (rst_full_gen_i),
+        .\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg_0 (\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ),
         .out(rst_full_ff_i),
-        .ram_full_fb_i_reg(rst_full_gen_i),
         .rd_clk(rd_clk),
         .rst(rst),
         .wr_clk(wr_clk));
@@ -3576,7 +3584,7 @@ endmodule
 
 (* ORIG_REF_NAME = "fifo_generator_top" *) 
 module ska_tx_packet_fifo_fifo_generator_top
-   (\grstd1.grst_full.grst_f.rst_d1_reg ,
+   (\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ,
     AS,
     empty,
     full,
@@ -3589,7 +3597,7 @@ module ska_tx_packet_fifo_fifo_generator_top
     din,
     wr_en,
     rd_en);
-  output \grstd1.grst_full.grst_f.rst_d1_reg ;
+  output \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ;
   output [0:0]AS;
   output empty;
   output full;
@@ -3608,7 +3616,7 @@ module ska_tx_packet_fifo_fifo_generator_top
   wire [263:0]dout;
   wire empty;
   wire full;
-  wire \grstd1.grst_full.grst_f.rst_d1_reg ;
+  wire \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ;
   wire overflow;
   wire prog_full;
   wire rd_clk;
@@ -3623,7 +3631,7 @@ module ska_tx_packet_fifo_fifo_generator_top
         .dout(dout),
         .empty(empty),
         .full(full),
-        .\grstd1.grst_full.grst_f.rst_d1_reg (\grstd1.grst_full.grst_f.rst_d1_reg ),
+        .\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg (\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ),
         .overflow(overflow),
         .prog_full(prog_full),
         .rd_clk(rd_clk),
@@ -3700,8 +3708,8 @@ endmodule
 (* C_WR_DEPTH_WRCH = "16" *) (* C_WR_FREQ = "1" *) (* C_WR_PNTR_WIDTH = "9" *) 
 (* C_WR_PNTR_WIDTH_AXIS = "10" *) (* C_WR_PNTR_WIDTH_RACH = "4" *) (* C_WR_PNTR_WIDTH_RDCH = "10" *) 
 (* C_WR_PNTR_WIDTH_WACH = "4" *) (* C_WR_PNTR_WIDTH_WDCH = "10" *) (* C_WR_PNTR_WIDTH_WRCH = "4" *) 
-(* C_WR_RESPONSE_LATENCY = "1" *) (* ORIG_REF_NAME = "fifo_generator_v13_2_2" *) 
-module ska_tx_packet_fifo_fifo_generator_v13_2_2
+(* C_WR_RESPONSE_LATENCY = "1" *) (* ORIG_REF_NAME = "fifo_generator_v13_2_4" *) 
+module ska_tx_packet_fifo_fifo_generator_v13_2_4
    (backup,
     backup_marker,
     clk,
@@ -4703,13 +4711,13 @@ module ska_tx_packet_fifo_fifo_generator_v13_2_2
        (.G(\<const0> ));
   VCC VCC
        (.P(\<const1> ));
-  ska_tx_packet_fifo_fifo_generator_v13_2_2_synth inst_fifo_gen
+  ska_tx_packet_fifo_fifo_generator_v13_2_4_synth inst_fifo_gen
        (.AR(rd_rst_busy),
         .din(din),
         .dout(dout),
         .empty(empty),
         .full(full),
-        .\grstd1.grst_full.grst_f.rst_d1_reg (wr_rst_busy),
+        .\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg (wr_rst_busy),
         .overflow(overflow),
         .prog_full(prog_full),
         .rd_clk(rd_clk),
@@ -4719,9 +4727,9 @@ module ska_tx_packet_fifo_fifo_generator_v13_2_2
         .wr_en(wr_en));
 endmodule
 
-(* ORIG_REF_NAME = "fifo_generator_v13_2_2_synth" *) 
-module ska_tx_packet_fifo_fifo_generator_v13_2_2_synth
-   (\grstd1.grst_full.grst_f.rst_d1_reg ,
+(* ORIG_REF_NAME = "fifo_generator_v13_2_4_synth" *) 
+module ska_tx_packet_fifo_fifo_generator_v13_2_4_synth
+   (\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ,
     AR,
     empty,
     full,
@@ -4734,7 +4742,7 @@ module ska_tx_packet_fifo_fifo_generator_v13_2_2_synth
     din,
     wr_en,
     rd_en);
-  output \grstd1.grst_full.grst_f.rst_d1_reg ;
+  output \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ;
   output [0:0]AR;
   output empty;
   output full;
@@ -4753,7 +4761,7 @@ module ska_tx_packet_fifo_fifo_generator_v13_2_2_synth
   wire [263:0]dout;
   wire empty;
   wire full;
-  wire \grstd1.grst_full.grst_f.rst_d1_reg ;
+  wire \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ;
   wire overflow;
   wire prog_full;
   wire rd_clk;
@@ -4768,7 +4776,7 @@ module ska_tx_packet_fifo_fifo_generator_v13_2_2_synth
         .dout(dout),
         .empty(empty),
         .full(full),
-        .\grstd1.grst_full.grst_f.rst_d1_reg (\grstd1.grst_full.grst_f.rst_d1_reg ),
+        .\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg (\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ),
         .overflow(overflow),
         .prog_full(prog_full),
         .rd_clk(rd_clk),
@@ -4786,40 +4794,40 @@ module ska_tx_packet_fifo_memory
     tmp_ram_rd_en,
     E,
     AS,
-    \gc0.count_d1_reg[8] ,
-    \gic0.gc0.count_d2_reg[8] ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ,
+    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ,
     din,
-    \gpregsm1.curr_fwft_state_reg[1] );
+    \goreg_bm.dout_i_reg[263]_0 );
   output [263:0]dout;
   input rd_clk;
   input wr_clk;
   input tmp_ram_rd_en;
   input [0:0]E;
   input [0:0]AS;
-  input [8:0]\gc0.count_d1_reg[8] ;
-  input [8:0]\gic0.gc0.count_d2_reg[8] ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
+  input [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
   input [263:0]din;
-  input [0:0]\gpregsm1.curr_fwft_state_reg[1] ;
+  input [0:0]\goreg_bm.dout_i_reg[263]_0 ;
 
   wire [0:0]AS;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
+  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ;
   wire [0:0]E;
   wire [263:0]din;
   wire [263:0]dout;
   wire [263:0]doutb;
-  wire [8:0]\gc0.count_d1_reg[8] ;
-  wire [8:0]\gic0.gc0.count_d2_reg[8] ;
-  wire [0:0]\gpregsm1.curr_fwft_state_reg[1] ;
+  wire [0:0]\goreg_bm.dout_i_reg[263]_0 ;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
 
-  ska_tx_packet_fifo_blk_mem_gen_v8_4_1 \gbm.gbmg.gbmga.ngecc.bmg 
+  ska_tx_packet_fifo_blk_mem_gen_v8_4_3 \gbm.gbmg.gbmga.ngecc.bmg 
        (.AS(AS),
         .D(doutb),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ),
+        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_0 ),
         .E(E),
         .din(din),
-        .\gc0.count_d1_reg[8] (\gc0.count_d1_reg[8] ),
-        .\gic0.gc0.count_d2_reg[8] (\gic0.gc0.count_d2_reg[8] ),
         .rd_clk(rd_clk),
         .tmp_ram_rd_en(tmp_ram_rd_en),
         .wr_clk(wr_clk));
@@ -4827,7 +4835,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[0] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[0]),
         .Q(dout[0]),
         .R(AS));
@@ -4835,7 +4843,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[100] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[100]),
         .Q(dout[100]),
         .R(AS));
@@ -4843,7 +4851,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[101] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[101]),
         .Q(dout[101]),
         .R(AS));
@@ -4851,7 +4859,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[102] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[102]),
         .Q(dout[102]),
         .R(AS));
@@ -4859,7 +4867,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[103] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[103]),
         .Q(dout[103]),
         .R(AS));
@@ -4867,7 +4875,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[104] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[104]),
         .Q(dout[104]),
         .R(AS));
@@ -4875,7 +4883,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[105] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[105]),
         .Q(dout[105]),
         .R(AS));
@@ -4883,7 +4891,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[106] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[106]),
         .Q(dout[106]),
         .R(AS));
@@ -4891,7 +4899,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[107] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[107]),
         .Q(dout[107]),
         .R(AS));
@@ -4899,7 +4907,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[108] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[108]),
         .Q(dout[108]),
         .R(AS));
@@ -4907,7 +4915,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[109] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[109]),
         .Q(dout[109]),
         .R(AS));
@@ -4915,7 +4923,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[10] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[10]),
         .Q(dout[10]),
         .R(AS));
@@ -4923,7 +4931,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[110] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[110]),
         .Q(dout[110]),
         .R(AS));
@@ -4931,7 +4939,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[111] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[111]),
         .Q(dout[111]),
         .R(AS));
@@ -4939,7 +4947,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[112] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[112]),
         .Q(dout[112]),
         .R(AS));
@@ -4947,7 +4955,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[113] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[113]),
         .Q(dout[113]),
         .R(AS));
@@ -4955,7 +4963,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[114] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[114]),
         .Q(dout[114]),
         .R(AS));
@@ -4963,7 +4971,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[115] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[115]),
         .Q(dout[115]),
         .R(AS));
@@ -4971,7 +4979,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[116] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[116]),
         .Q(dout[116]),
         .R(AS));
@@ -4979,7 +4987,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[117] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[117]),
         .Q(dout[117]),
         .R(AS));
@@ -4987,7 +4995,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[118] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[118]),
         .Q(dout[118]),
         .R(AS));
@@ -4995,7 +5003,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[119] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[119]),
         .Q(dout[119]),
         .R(AS));
@@ -5003,7 +5011,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[11] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[11]),
         .Q(dout[11]),
         .R(AS));
@@ -5011,7 +5019,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[120] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[120]),
         .Q(dout[120]),
         .R(AS));
@@ -5019,7 +5027,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[121] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[121]),
         .Q(dout[121]),
         .R(AS));
@@ -5027,7 +5035,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[122] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[122]),
         .Q(dout[122]),
         .R(AS));
@@ -5035,7 +5043,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[123] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[123]),
         .Q(dout[123]),
         .R(AS));
@@ -5043,7 +5051,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[124] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[124]),
         .Q(dout[124]),
         .R(AS));
@@ -5051,7 +5059,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[125] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[125]),
         .Q(dout[125]),
         .R(AS));
@@ -5059,7 +5067,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[126] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[126]),
         .Q(dout[126]),
         .R(AS));
@@ -5067,7 +5075,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[127] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[127]),
         .Q(dout[127]),
         .R(AS));
@@ -5075,7 +5083,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[128] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[128]),
         .Q(dout[128]),
         .R(AS));
@@ -5083,7 +5091,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[129] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[129]),
         .Q(dout[129]),
         .R(AS));
@@ -5091,7 +5099,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[12] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[12]),
         .Q(dout[12]),
         .R(AS));
@@ -5099,7 +5107,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[130] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[130]),
         .Q(dout[130]),
         .R(AS));
@@ -5107,7 +5115,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[131] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[131]),
         .Q(dout[131]),
         .R(AS));
@@ -5115,7 +5123,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[132] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[132]),
         .Q(dout[132]),
         .R(AS));
@@ -5123,7 +5131,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[133] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[133]),
         .Q(dout[133]),
         .R(AS));
@@ -5131,7 +5139,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[134] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[134]),
         .Q(dout[134]),
         .R(AS));
@@ -5139,7 +5147,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[135] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[135]),
         .Q(dout[135]),
         .R(AS));
@@ -5147,7 +5155,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[136] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[136]),
         .Q(dout[136]),
         .R(AS));
@@ -5155,7 +5163,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[137] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[137]),
         .Q(dout[137]),
         .R(AS));
@@ -5163,7 +5171,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[138] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[138]),
         .Q(dout[138]),
         .R(AS));
@@ -5171,7 +5179,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[139] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[139]),
         .Q(dout[139]),
         .R(AS));
@@ -5179,7 +5187,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[13] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[13]),
         .Q(dout[13]),
         .R(AS));
@@ -5187,7 +5195,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[140] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[140]),
         .Q(dout[140]),
         .R(AS));
@@ -5195,7 +5203,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[141] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[141]),
         .Q(dout[141]),
         .R(AS));
@@ -5203,7 +5211,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[142] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[142]),
         .Q(dout[142]),
         .R(AS));
@@ -5211,7 +5219,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[143] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[143]),
         .Q(dout[143]),
         .R(AS));
@@ -5219,7 +5227,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[144] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[144]),
         .Q(dout[144]),
         .R(AS));
@@ -5227,7 +5235,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[145] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[145]),
         .Q(dout[145]),
         .R(AS));
@@ -5235,7 +5243,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[146] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[146]),
         .Q(dout[146]),
         .R(AS));
@@ -5243,7 +5251,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[147] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[147]),
         .Q(dout[147]),
         .R(AS));
@@ -5251,7 +5259,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[148] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[148]),
         .Q(dout[148]),
         .R(AS));
@@ -5259,7 +5267,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[149] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[149]),
         .Q(dout[149]),
         .R(AS));
@@ -5267,7 +5275,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[14] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[14]),
         .Q(dout[14]),
         .R(AS));
@@ -5275,7 +5283,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[150] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[150]),
         .Q(dout[150]),
         .R(AS));
@@ -5283,7 +5291,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[151] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[151]),
         .Q(dout[151]),
         .R(AS));
@@ -5291,7 +5299,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[152] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[152]),
         .Q(dout[152]),
         .R(AS));
@@ -5299,7 +5307,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[153] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[153]),
         .Q(dout[153]),
         .R(AS));
@@ -5307,7 +5315,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[154] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[154]),
         .Q(dout[154]),
         .R(AS));
@@ -5315,7 +5323,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[155] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[155]),
         .Q(dout[155]),
         .R(AS));
@@ -5323,7 +5331,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[156] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[156]),
         .Q(dout[156]),
         .R(AS));
@@ -5331,7 +5339,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[157] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[157]),
         .Q(dout[157]),
         .R(AS));
@@ -5339,7 +5347,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[158] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[158]),
         .Q(dout[158]),
         .R(AS));
@@ -5347,7 +5355,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[159] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[159]),
         .Q(dout[159]),
         .R(AS));
@@ -5355,7 +5363,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[15] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[15]),
         .Q(dout[15]),
         .R(AS));
@@ -5363,7 +5371,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[160] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[160]),
         .Q(dout[160]),
         .R(AS));
@@ -5371,7 +5379,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[161] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[161]),
         .Q(dout[161]),
         .R(AS));
@@ -5379,7 +5387,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[162] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[162]),
         .Q(dout[162]),
         .R(AS));
@@ -5387,7 +5395,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[163] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[163]),
         .Q(dout[163]),
         .R(AS));
@@ -5395,7 +5403,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[164] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[164]),
         .Q(dout[164]),
         .R(AS));
@@ -5403,7 +5411,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[165] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[165]),
         .Q(dout[165]),
         .R(AS));
@@ -5411,7 +5419,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[166] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[166]),
         .Q(dout[166]),
         .R(AS));
@@ -5419,7 +5427,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[167] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[167]),
         .Q(dout[167]),
         .R(AS));
@@ -5427,7 +5435,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[168] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[168]),
         .Q(dout[168]),
         .R(AS));
@@ -5435,7 +5443,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[169] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[169]),
         .Q(dout[169]),
         .R(AS));
@@ -5443,7 +5451,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[16] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[16]),
         .Q(dout[16]),
         .R(AS));
@@ -5451,7 +5459,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[170] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[170]),
         .Q(dout[170]),
         .R(AS));
@@ -5459,7 +5467,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[171] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[171]),
         .Q(dout[171]),
         .R(AS));
@@ -5467,7 +5475,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[172] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[172]),
         .Q(dout[172]),
         .R(AS));
@@ -5475,7 +5483,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[173] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[173]),
         .Q(dout[173]),
         .R(AS));
@@ -5483,7 +5491,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[174] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[174]),
         .Q(dout[174]),
         .R(AS));
@@ -5491,7 +5499,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[175] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[175]),
         .Q(dout[175]),
         .R(AS));
@@ -5499,7 +5507,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[176] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[176]),
         .Q(dout[176]),
         .R(AS));
@@ -5507,7 +5515,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[177] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[177]),
         .Q(dout[177]),
         .R(AS));
@@ -5515,7 +5523,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[178] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[178]),
         .Q(dout[178]),
         .R(AS));
@@ -5523,7 +5531,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[179] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[179]),
         .Q(dout[179]),
         .R(AS));
@@ -5531,7 +5539,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[17] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[17]),
         .Q(dout[17]),
         .R(AS));
@@ -5539,7 +5547,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[180] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[180]),
         .Q(dout[180]),
         .R(AS));
@@ -5547,7 +5555,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[181] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[181]),
         .Q(dout[181]),
         .R(AS));
@@ -5555,7 +5563,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[182] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[182]),
         .Q(dout[182]),
         .R(AS));
@@ -5563,7 +5571,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[183] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[183]),
         .Q(dout[183]),
         .R(AS));
@@ -5571,7 +5579,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[184] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[184]),
         .Q(dout[184]),
         .R(AS));
@@ -5579,7 +5587,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[185] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[185]),
         .Q(dout[185]),
         .R(AS));
@@ -5587,7 +5595,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[186] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[186]),
         .Q(dout[186]),
         .R(AS));
@@ -5595,7 +5603,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[187] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[187]),
         .Q(dout[187]),
         .R(AS));
@@ -5603,7 +5611,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[188] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[188]),
         .Q(dout[188]),
         .R(AS));
@@ -5611,7 +5619,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[189] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[189]),
         .Q(dout[189]),
         .R(AS));
@@ -5619,7 +5627,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[18] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[18]),
         .Q(dout[18]),
         .R(AS));
@@ -5627,7 +5635,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[190] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[190]),
         .Q(dout[190]),
         .R(AS));
@@ -5635,7 +5643,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[191] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[191]),
         .Q(dout[191]),
         .R(AS));
@@ -5643,7 +5651,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[192] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[192]),
         .Q(dout[192]),
         .R(AS));
@@ -5651,7 +5659,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[193] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[193]),
         .Q(dout[193]),
         .R(AS));
@@ -5659,7 +5667,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[194] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[194]),
         .Q(dout[194]),
         .R(AS));
@@ -5667,7 +5675,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[195] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[195]),
         .Q(dout[195]),
         .R(AS));
@@ -5675,7 +5683,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[196] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[196]),
         .Q(dout[196]),
         .R(AS));
@@ -5683,7 +5691,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[197] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[197]),
         .Q(dout[197]),
         .R(AS));
@@ -5691,7 +5699,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[198] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[198]),
         .Q(dout[198]),
         .R(AS));
@@ -5699,7 +5707,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[199] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[199]),
         .Q(dout[199]),
         .R(AS));
@@ -5707,7 +5715,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[19] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[19]),
         .Q(dout[19]),
         .R(AS));
@@ -5715,7 +5723,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[1] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[1]),
         .Q(dout[1]),
         .R(AS));
@@ -5723,7 +5731,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[200] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[200]),
         .Q(dout[200]),
         .R(AS));
@@ -5731,7 +5739,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[201] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[201]),
         .Q(dout[201]),
         .R(AS));
@@ -5739,7 +5747,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[202] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[202]),
         .Q(dout[202]),
         .R(AS));
@@ -5747,7 +5755,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[203] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[203]),
         .Q(dout[203]),
         .R(AS));
@@ -5755,7 +5763,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[204] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[204]),
         .Q(dout[204]),
         .R(AS));
@@ -5763,7 +5771,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[205] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[205]),
         .Q(dout[205]),
         .R(AS));
@@ -5771,7 +5779,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[206] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[206]),
         .Q(dout[206]),
         .R(AS));
@@ -5779,7 +5787,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[207] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[207]),
         .Q(dout[207]),
         .R(AS));
@@ -5787,7 +5795,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[208] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[208]),
         .Q(dout[208]),
         .R(AS));
@@ -5795,7 +5803,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[209] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[209]),
         .Q(dout[209]),
         .R(AS));
@@ -5803,7 +5811,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[20] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[20]),
         .Q(dout[20]),
         .R(AS));
@@ -5811,7 +5819,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[210] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[210]),
         .Q(dout[210]),
         .R(AS));
@@ -5819,7 +5827,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[211] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[211]),
         .Q(dout[211]),
         .R(AS));
@@ -5827,7 +5835,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[212] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[212]),
         .Q(dout[212]),
         .R(AS));
@@ -5835,7 +5843,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[213] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[213]),
         .Q(dout[213]),
         .R(AS));
@@ -5843,7 +5851,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[214] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[214]),
         .Q(dout[214]),
         .R(AS));
@@ -5851,7 +5859,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[215] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[215]),
         .Q(dout[215]),
         .R(AS));
@@ -5859,7 +5867,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[216] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[216]),
         .Q(dout[216]),
         .R(AS));
@@ -5867,7 +5875,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[217] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[217]),
         .Q(dout[217]),
         .R(AS));
@@ -5875,7 +5883,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[218] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[218]),
         .Q(dout[218]),
         .R(AS));
@@ -5883,7 +5891,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[219] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[219]),
         .Q(dout[219]),
         .R(AS));
@@ -5891,7 +5899,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[21] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[21]),
         .Q(dout[21]),
         .R(AS));
@@ -5899,7 +5907,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[220] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[220]),
         .Q(dout[220]),
         .R(AS));
@@ -5907,7 +5915,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[221] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[221]),
         .Q(dout[221]),
         .R(AS));
@@ -5915,7 +5923,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[222] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[222]),
         .Q(dout[222]),
         .R(AS));
@@ -5923,7 +5931,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[223] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[223]),
         .Q(dout[223]),
         .R(AS));
@@ -5931,7 +5939,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[224] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[224]),
         .Q(dout[224]),
         .R(AS));
@@ -5939,7 +5947,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[225] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[225]),
         .Q(dout[225]),
         .R(AS));
@@ -5947,7 +5955,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[226] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[226]),
         .Q(dout[226]),
         .R(AS));
@@ -5955,7 +5963,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[227] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[227]),
         .Q(dout[227]),
         .R(AS));
@@ -5963,7 +5971,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[228] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[228]),
         .Q(dout[228]),
         .R(AS));
@@ -5971,7 +5979,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[229] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[229]),
         .Q(dout[229]),
         .R(AS));
@@ -5979,7 +5987,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[22] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[22]),
         .Q(dout[22]),
         .R(AS));
@@ -5987,7 +5995,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[230] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[230]),
         .Q(dout[230]),
         .R(AS));
@@ -5995,7 +6003,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[231] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[231]),
         .Q(dout[231]),
         .R(AS));
@@ -6003,7 +6011,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[232] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[232]),
         .Q(dout[232]),
         .R(AS));
@@ -6011,7 +6019,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[233] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[233]),
         .Q(dout[233]),
         .R(AS));
@@ -6019,7 +6027,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[234] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[234]),
         .Q(dout[234]),
         .R(AS));
@@ -6027,7 +6035,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[235] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[235]),
         .Q(dout[235]),
         .R(AS));
@@ -6035,7 +6043,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[236] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[236]),
         .Q(dout[236]),
         .R(AS));
@@ -6043,7 +6051,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[237] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[237]),
         .Q(dout[237]),
         .R(AS));
@@ -6051,7 +6059,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[238] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[238]),
         .Q(dout[238]),
         .R(AS));
@@ -6059,7 +6067,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[239] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[239]),
         .Q(dout[239]),
         .R(AS));
@@ -6067,7 +6075,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[23] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[23]),
         .Q(dout[23]),
         .R(AS));
@@ -6075,7 +6083,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[240] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[240]),
         .Q(dout[240]),
         .R(AS));
@@ -6083,7 +6091,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[241] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[241]),
         .Q(dout[241]),
         .R(AS));
@@ -6091,7 +6099,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[242] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[242]),
         .Q(dout[242]),
         .R(AS));
@@ -6099,7 +6107,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[243] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[243]),
         .Q(dout[243]),
         .R(AS));
@@ -6107,7 +6115,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[244] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[244]),
         .Q(dout[244]),
         .R(AS));
@@ -6115,7 +6123,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[245] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[245]),
         .Q(dout[245]),
         .R(AS));
@@ -6123,7 +6131,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[246] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[246]),
         .Q(dout[246]),
         .R(AS));
@@ -6131,7 +6139,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[247] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[247]),
         .Q(dout[247]),
         .R(AS));
@@ -6139,7 +6147,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[248] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[248]),
         .Q(dout[248]),
         .R(AS));
@@ -6147,7 +6155,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[249] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[249]),
         .Q(dout[249]),
         .R(AS));
@@ -6155,7 +6163,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[24] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[24]),
         .Q(dout[24]),
         .R(AS));
@@ -6163,7 +6171,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[250] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[250]),
         .Q(dout[250]),
         .R(AS));
@@ -6171,7 +6179,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[251] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[251]),
         .Q(dout[251]),
         .R(AS));
@@ -6179,7 +6187,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[252] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[252]),
         .Q(dout[252]),
         .R(AS));
@@ -6187,7 +6195,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[253] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[253]),
         .Q(dout[253]),
         .R(AS));
@@ -6195,7 +6203,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[254] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[254]),
         .Q(dout[254]),
         .R(AS));
@@ -6203,7 +6211,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[255] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[255]),
         .Q(dout[255]),
         .R(AS));
@@ -6211,7 +6219,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[256] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[256]),
         .Q(dout[256]),
         .R(AS));
@@ -6219,7 +6227,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[257] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[257]),
         .Q(dout[257]),
         .R(AS));
@@ -6227,7 +6235,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[258] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[258]),
         .Q(dout[258]),
         .R(AS));
@@ -6235,7 +6243,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[259] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[259]),
         .Q(dout[259]),
         .R(AS));
@@ -6243,7 +6251,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[25] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[25]),
         .Q(dout[25]),
         .R(AS));
@@ -6251,7 +6259,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[260] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[260]),
         .Q(dout[260]),
         .R(AS));
@@ -6259,7 +6267,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[261] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[261]),
         .Q(dout[261]),
         .R(AS));
@@ -6267,7 +6275,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[262] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[262]),
         .Q(dout[262]),
         .R(AS));
@@ -6275,7 +6283,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[263] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[263]),
         .Q(dout[263]),
         .R(AS));
@@ -6283,7 +6291,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[26] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[26]),
         .Q(dout[26]),
         .R(AS));
@@ -6291,7 +6299,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[27] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[27]),
         .Q(dout[27]),
         .R(AS));
@@ -6299,7 +6307,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[28] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[28]),
         .Q(dout[28]),
         .R(AS));
@@ -6307,7 +6315,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[29] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[29]),
         .Q(dout[29]),
         .R(AS));
@@ -6315,7 +6323,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[2] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[2]),
         .Q(dout[2]),
         .R(AS));
@@ -6323,7 +6331,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[30] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[30]),
         .Q(dout[30]),
         .R(AS));
@@ -6331,7 +6339,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[31] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[31]),
         .Q(dout[31]),
         .R(AS));
@@ -6339,7 +6347,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[32] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[32]),
         .Q(dout[32]),
         .R(AS));
@@ -6347,7 +6355,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[33] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[33]),
         .Q(dout[33]),
         .R(AS));
@@ -6355,7 +6363,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[34] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[34]),
         .Q(dout[34]),
         .R(AS));
@@ -6363,7 +6371,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[35] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[35]),
         .Q(dout[35]),
         .R(AS));
@@ -6371,7 +6379,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[36] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[36]),
         .Q(dout[36]),
         .R(AS));
@@ -6379,7 +6387,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[37] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[37]),
         .Q(dout[37]),
         .R(AS));
@@ -6387,7 +6395,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[38] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[38]),
         .Q(dout[38]),
         .R(AS));
@@ -6395,7 +6403,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[39] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[39]),
         .Q(dout[39]),
         .R(AS));
@@ -6403,7 +6411,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[3] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[3]),
         .Q(dout[3]),
         .R(AS));
@@ -6411,7 +6419,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[40] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[40]),
         .Q(dout[40]),
         .R(AS));
@@ -6419,7 +6427,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[41] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[41]),
         .Q(dout[41]),
         .R(AS));
@@ -6427,7 +6435,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[42] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[42]),
         .Q(dout[42]),
         .R(AS));
@@ -6435,7 +6443,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[43] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[43]),
         .Q(dout[43]),
         .R(AS));
@@ -6443,7 +6451,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[44] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[44]),
         .Q(dout[44]),
         .R(AS));
@@ -6451,7 +6459,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[45] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[45]),
         .Q(dout[45]),
         .R(AS));
@@ -6459,7 +6467,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[46] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[46]),
         .Q(dout[46]),
         .R(AS));
@@ -6467,7 +6475,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[47] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[47]),
         .Q(dout[47]),
         .R(AS));
@@ -6475,7 +6483,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[48] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[48]),
         .Q(dout[48]),
         .R(AS));
@@ -6483,7 +6491,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[49] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[49]),
         .Q(dout[49]),
         .R(AS));
@@ -6491,7 +6499,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[4] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[4]),
         .Q(dout[4]),
         .R(AS));
@@ -6499,7 +6507,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[50] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[50]),
         .Q(dout[50]),
         .R(AS));
@@ -6507,7 +6515,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[51] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[51]),
         .Q(dout[51]),
         .R(AS));
@@ -6515,7 +6523,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[52] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[52]),
         .Q(dout[52]),
         .R(AS));
@@ -6523,7 +6531,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[53] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[53]),
         .Q(dout[53]),
         .R(AS));
@@ -6531,7 +6539,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[54] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[54]),
         .Q(dout[54]),
         .R(AS));
@@ -6539,7 +6547,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[55] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[55]),
         .Q(dout[55]),
         .R(AS));
@@ -6547,7 +6555,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[56] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[56]),
         .Q(dout[56]),
         .R(AS));
@@ -6555,7 +6563,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[57] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[57]),
         .Q(dout[57]),
         .R(AS));
@@ -6563,7 +6571,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[58] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[58]),
         .Q(dout[58]),
         .R(AS));
@@ -6571,7 +6579,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[59] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[59]),
         .Q(dout[59]),
         .R(AS));
@@ -6579,7 +6587,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[5] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[5]),
         .Q(dout[5]),
         .R(AS));
@@ -6587,7 +6595,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[60] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[60]),
         .Q(dout[60]),
         .R(AS));
@@ -6595,7 +6603,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[61] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[61]),
         .Q(dout[61]),
         .R(AS));
@@ -6603,7 +6611,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[62] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[62]),
         .Q(dout[62]),
         .R(AS));
@@ -6611,7 +6619,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[63] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[63]),
         .Q(dout[63]),
         .R(AS));
@@ -6619,7 +6627,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[64] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[64]),
         .Q(dout[64]),
         .R(AS));
@@ -6627,7 +6635,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[65] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[65]),
         .Q(dout[65]),
         .R(AS));
@@ -6635,7 +6643,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[66] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[66]),
         .Q(dout[66]),
         .R(AS));
@@ -6643,7 +6651,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[67] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[67]),
         .Q(dout[67]),
         .R(AS));
@@ -6651,7 +6659,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[68] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[68]),
         .Q(dout[68]),
         .R(AS));
@@ -6659,7 +6667,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[69] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[69]),
         .Q(dout[69]),
         .R(AS));
@@ -6667,7 +6675,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[6] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[6]),
         .Q(dout[6]),
         .R(AS));
@@ -6675,7 +6683,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[70] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[70]),
         .Q(dout[70]),
         .R(AS));
@@ -6683,7 +6691,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[71] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[71]),
         .Q(dout[71]),
         .R(AS));
@@ -6691,7 +6699,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[72] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[72]),
         .Q(dout[72]),
         .R(AS));
@@ -6699,7 +6707,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[73] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[73]),
         .Q(dout[73]),
         .R(AS));
@@ -6707,7 +6715,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[74] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[74]),
         .Q(dout[74]),
         .R(AS));
@@ -6715,7 +6723,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[75] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[75]),
         .Q(dout[75]),
         .R(AS));
@@ -6723,7 +6731,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[76] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[76]),
         .Q(dout[76]),
         .R(AS));
@@ -6731,7 +6739,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[77] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[77]),
         .Q(dout[77]),
         .R(AS));
@@ -6739,7 +6747,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[78] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[78]),
         .Q(dout[78]),
         .R(AS));
@@ -6747,7 +6755,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[79] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[79]),
         .Q(dout[79]),
         .R(AS));
@@ -6755,7 +6763,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[7] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[7]),
         .Q(dout[7]),
         .R(AS));
@@ -6763,7 +6771,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[80] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[80]),
         .Q(dout[80]),
         .R(AS));
@@ -6771,7 +6779,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[81] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[81]),
         .Q(dout[81]),
         .R(AS));
@@ -6779,7 +6787,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[82] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[82]),
         .Q(dout[82]),
         .R(AS));
@@ -6787,7 +6795,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[83] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[83]),
         .Q(dout[83]),
         .R(AS));
@@ -6795,7 +6803,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[84] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[84]),
         .Q(dout[84]),
         .R(AS));
@@ -6803,7 +6811,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[85] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[85]),
         .Q(dout[85]),
         .R(AS));
@@ -6811,7 +6819,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[86] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[86]),
         .Q(dout[86]),
         .R(AS));
@@ -6819,7 +6827,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[87] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[87]),
         .Q(dout[87]),
         .R(AS));
@@ -6827,7 +6835,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[88] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[88]),
         .Q(dout[88]),
         .R(AS));
@@ -6835,7 +6843,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[89] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[89]),
         .Q(dout[89]),
         .R(AS));
@@ -6843,7 +6851,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[8] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[8]),
         .Q(dout[8]),
         .R(AS));
@@ -6851,7 +6859,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[90] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[90]),
         .Q(dout[90]),
         .R(AS));
@@ -6859,7 +6867,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[91] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[91]),
         .Q(dout[91]),
         .R(AS));
@@ -6867,7 +6875,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[92] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[92]),
         .Q(dout[92]),
         .R(AS));
@@ -6875,7 +6883,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[93] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[93]),
         .Q(dout[93]),
         .R(AS));
@@ -6883,7 +6891,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[94] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[94]),
         .Q(dout[94]),
         .R(AS));
@@ -6891,7 +6899,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[95] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[95]),
         .Q(dout[95]),
         .R(AS));
@@ -6899,7 +6907,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[96] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[96]),
         .Q(dout[96]),
         .R(AS));
@@ -6907,7 +6915,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[97] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[97]),
         .Q(dout[97]),
         .R(AS));
@@ -6915,7 +6923,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[98] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[98]),
         .Q(dout[98]),
         .R(AS));
@@ -6923,7 +6931,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[99] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[99]),
         .Q(dout[99]),
         .R(AS));
@@ -6931,7 +6939,7 @@ module ska_tx_packet_fifo_memory
     .INIT(1'b0)) 
     \goreg_bm.dout_i_reg[9] 
        (.C(rd_clk),
-        .CE(\gpregsm1.curr_fwft_state_reg[1] ),
+        .CE(\goreg_bm.dout_i_reg[263]_0 ),
         .D(doutb[9]),
         .Q(dout[9]),
         .R(AS));
@@ -6941,7 +6949,7 @@ endmodule
 module ska_tx_packet_fifo_rd_bin_cntr
    (Q,
     v1_reg,
-    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ,
+    \gc0.count_d1_reg[8]_0 ,
     v1_reg_0,
     WR_PNTR_RD,
     E,
@@ -6949,7 +6957,7 @@ module ska_tx_packet_fifo_rd_bin_cntr
     AS);
   output [0:0]Q;
   output [3:0]v1_reg;
-  output [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
+  output [8:0]\gc0.count_d1_reg[8]_0 ;
   output [3:0]v1_reg_0;
   input [7:0]WR_PNTR_RD;
   input [0:0]E;
@@ -6957,11 +6965,11 @@ module ska_tx_packet_fifo_rd_bin_cntr
   input [0:0]AS;
 
   wire [0:0]AS;
-  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
   wire [0:0]E;
   wire [0:0]Q;
   wire [7:0]WR_PNTR_RD;
   wire \gc0.count[8]_i_2_n_0 ;
+  wire [8:0]\gc0.count_d1_reg[8]_0 ;
   wire [8:0]plusOp__1;
   wire rd_clk;
   wire [7:0]rd_pntr_plus1;
@@ -7057,7 +7065,7 @@ module ska_tx_packet_fifo_rd_bin_cntr
         .CE(E),
         .CLR(AS),
         .D(rd_pntr_plus1[0]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [0]));
+        .Q(\gc0.count_d1_reg[8]_0 [0]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[1] 
@@ -7065,7 +7073,7 @@ module ska_tx_packet_fifo_rd_bin_cntr
         .CE(E),
         .CLR(AS),
         .D(rd_pntr_plus1[1]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [1]));
+        .Q(\gc0.count_d1_reg[8]_0 [1]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[2] 
@@ -7073,7 +7081,7 @@ module ska_tx_packet_fifo_rd_bin_cntr
         .CE(E),
         .CLR(AS),
         .D(rd_pntr_plus1[2]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [2]));
+        .Q(\gc0.count_d1_reg[8]_0 [2]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[3] 
@@ -7081,7 +7089,7 @@ module ska_tx_packet_fifo_rd_bin_cntr
         .CE(E),
         .CLR(AS),
         .D(rd_pntr_plus1[3]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [3]));
+        .Q(\gc0.count_d1_reg[8]_0 [3]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[4] 
@@ -7089,7 +7097,7 @@ module ska_tx_packet_fifo_rd_bin_cntr
         .CE(E),
         .CLR(AS),
         .D(rd_pntr_plus1[4]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [4]));
+        .Q(\gc0.count_d1_reg[8]_0 [4]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[5] 
@@ -7097,7 +7105,7 @@ module ska_tx_packet_fifo_rd_bin_cntr
         .CE(E),
         .CLR(AS),
         .D(rd_pntr_plus1[5]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [5]));
+        .Q(\gc0.count_d1_reg[8]_0 [5]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[6] 
@@ -7105,7 +7113,7 @@ module ska_tx_packet_fifo_rd_bin_cntr
         .CE(E),
         .CLR(AS),
         .D(rd_pntr_plus1[6]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [6]));
+        .Q(\gc0.count_d1_reg[8]_0 [6]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[7] 
@@ -7113,7 +7121,7 @@ module ska_tx_packet_fifo_rd_bin_cntr
         .CE(E),
         .CLR(AS),
         .D(rd_pntr_plus1[7]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [7]));
+        .Q(\gc0.count_d1_reg[8]_0 [7]));
   FDCE #(
     .INIT(1'b0)) 
     \gc0.count_d1_reg[8] 
@@ -7121,7 +7129,7 @@ module ska_tx_packet_fifo_rd_bin_cntr
         .CE(E),
         .CLR(AS),
         .D(Q),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [8]));
+        .Q(\gc0.count_d1_reg[8]_0 [8]));
   FDPE #(
     .INIT(1'b1)) 
     \gc0.count_reg[0] 
@@ -7197,9 +7205,9 @@ module ska_tx_packet_fifo_rd_bin_cntr
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[0].gm1.m1_i_1__1 
-       (.I0(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [0]),
+       (.I0(\gc0.count_d1_reg[8]_0 [0]),
         .I1(WR_PNTR_RD[0]),
-        .I2(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [1]),
+        .I2(\gc0.count_d1_reg[8]_0 [1]),
         .I3(WR_PNTR_RD[1]),
         .O(v1_reg[0]));
   LUT4 #(
@@ -7213,9 +7221,9 @@ module ska_tx_packet_fifo_rd_bin_cntr
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[1].gms.ms_i_1__1 
-       (.I0(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [2]),
+       (.I0(\gc0.count_d1_reg[8]_0 [2]),
         .I1(WR_PNTR_RD[2]),
-        .I2(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [3]),
+        .I2(\gc0.count_d1_reg[8]_0 [3]),
         .I3(WR_PNTR_RD[3]),
         .O(v1_reg[1]));
   LUT4 #(
@@ -7229,9 +7237,9 @@ module ska_tx_packet_fifo_rd_bin_cntr
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[2].gms.ms_i_1__1 
-       (.I0(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [4]),
+       (.I0(\gc0.count_d1_reg[8]_0 [4]),
         .I1(WR_PNTR_RD[4]),
-        .I2(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [5]),
+        .I2(\gc0.count_d1_reg[8]_0 [5]),
         .I3(WR_PNTR_RD[5]),
         .O(v1_reg[2]));
   LUT4 #(
@@ -7245,9 +7253,9 @@ module ska_tx_packet_fifo_rd_bin_cntr
   LUT4 #(
     .INIT(16'h9009)) 
     \gmux.gm[3].gms.ms_i_1__1 
-       (.I0(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [6]),
+       (.I0(\gc0.count_d1_reg[8]_0 [6]),
         .I1(WR_PNTR_RD[6]),
-        .I2(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [7]),
+        .I2(\gc0.count_d1_reg[8]_0 [7]),
         .I3(WR_PNTR_RD[7]),
         .O(v1_reg[3]));
   LUT4 #(
@@ -7266,20 +7274,20 @@ module ska_tx_packet_fifo_rd_fwft
     empty,
     tmp_ram_rd_en,
     E,
-    \gc0.count_d1_reg[8] ,
+    ram_empty_fb_i_reg,
     rd_clk,
     AS,
     rd_en,
-    ram_empty_fb_i_reg);
+    \gpregsm1.curr_fwft_state_reg[1]_0 );
   output [1:0]out;
   output empty;
   output tmp_ram_rd_en;
   output [0:0]E;
-  output [0:0]\gc0.count_d1_reg[8] ;
+  output [0:0]ram_empty_fb_i_reg;
   input rd_clk;
   input [0:0]AS;
   input rd_en;
-  input ram_empty_fb_i_reg;
+  input \gpregsm1.curr_fwft_state_reg[1]_0 ;
 
   wire [0:0]AS;
   wire [0:0]E;
@@ -7292,9 +7300,9 @@ module ska_tx_packet_fifo_rd_fwft
   wire empty_fwft_fb_o_i0;
   (* DONT_TOUCH *) wire empty_fwft_i;
   wire empty_fwft_i0;
-  wire [0:0]\gc0.count_d1_reg[8] ;
+  wire \gpregsm1.curr_fwft_state_reg[1]_0 ;
   wire [1:0]next_fwft_state;
-  wire ram_empty_fb_i_reg;
+  wire [0:0]ram_empty_fb_i_reg;
   wire rd_clk;
   wire rd_en;
   wire tmp_ram_rd_en;
@@ -7305,7 +7313,7 @@ module ska_tx_packet_fifo_rd_fwft
   LUT5 #(
     .INIT(32'hFFFF4555)) 
     \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram_i_1 
-       (.I0(ram_empty_fb_i_reg),
+       (.I0(\gpregsm1.curr_fwft_state_reg[1]_0 ),
         .I1(rd_en),
         .I2(curr_fwft_state[1]),
         .I3(curr_fwft_state[0]),
@@ -7317,7 +7325,7 @@ module ska_tx_packet_fifo_rd_fwft
        (.I0(rd_en),
         .I1(curr_fwft_state[0]),
         .I2(curr_fwft_state[1]),
-        .I3(ram_empty_fb_i_reg),
+        .I3(\gpregsm1.curr_fwft_state_reg[1]_0 ),
         .I4(aempty_fwft_fb_i),
         .O(aempty_fwft_i0));
   (* DONT_TOUCH *) 
@@ -7394,11 +7402,11 @@ module ska_tx_packet_fifo_rd_fwft
   LUT4 #(
     .INIT(16'h4555)) 
     \gc0.count_d1[8]_i_1 
-       (.I0(ram_empty_fb_i_reg),
+       (.I0(\gpregsm1.curr_fwft_state_reg[1]_0 ),
         .I1(rd_en),
         .I2(curr_fwft_state[1]),
         .I3(curr_fwft_state[0]),
-        .O(\gc0.count_d1_reg[8] ));
+        .O(ram_empty_fb_i_reg));
   LUT3 #(
     .INIT(8'hA2)) 
     \goreg_bm.dout_i[263]_i_1 
@@ -7419,7 +7427,7 @@ module ska_tx_packet_fifo_rd_fwft
        (.I0(curr_fwft_state[1]),
         .I1(rd_en),
         .I2(curr_fwft_state[0]),
-        .I3(ram_empty_fb_i_reg),
+        .I3(\gpregsm1.curr_fwft_state_reg[1]_0 ),
         .O(next_fwft_state[1]));
   (* DONT_TOUCH *) 
   (* KEEP = "yes" *) 
@@ -7461,10 +7469,10 @@ module ska_tx_packet_fifo_rd_logic
    (empty,
     Q,
     tmp_ram_rd_en,
-    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ,
+    \gc0.count_d1_reg[8] ,
     E,
-    \dest_out_bin_ff_reg[8] ,
-    \dest_out_bin_ff_reg[8]_0 ,
+    ram_empty_fb_i_reg,
+    ram_empty_fb_i_reg_0,
     rd_clk,
     AS,
     rd_en,
@@ -7472,29 +7480,29 @@ module ska_tx_packet_fifo_rd_logic
   output empty;
   output [0:0]Q;
   output tmp_ram_rd_en;
-  output [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
+  output [8:0]\gc0.count_d1_reg[8] ;
   output [0:0]E;
-  input [0:0]\dest_out_bin_ff_reg[8] ;
-  input [0:0]\dest_out_bin_ff_reg[8]_0 ;
+  input [0:0]ram_empty_fb_i_reg;
+  input [0:0]ram_empty_fb_i_reg_0;
   input rd_clk;
   input [0:0]AS;
   input rd_en;
   input [7:0]WR_PNTR_RD;
 
   wire [0:0]AS;
-  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
   wire [0:0]E;
   wire [0:0]Q;
   wire [7:0]WR_PNTR_RD;
   wire [3:0]\c0/v1_reg ;
   wire [3:0]\c1/v1_reg ;
-  wire [0:0]\dest_out_bin_ff_reg[8] ;
-  wire [0:0]\dest_out_bin_ff_reg[8]_0 ;
   wire empty;
+  wire [8:0]\gc0.count_d1_reg[8] ;
   wire \gr1.gr1_int.rfwft_n_0 ;
   wire [0:0]p_0_in;
   wire p_2_out;
   wire p_8_out;
+  wire [0:0]ram_empty_fb_i_reg;
+  wire [0:0]ram_empty_fb_i_reg_0;
   wire rd_clk;
   wire rd_en;
   wire tmp_ram_rd_en;
@@ -7503,28 +7511,28 @@ module ska_tx_packet_fifo_rd_logic
        (.AS(AS),
         .E(E),
         .empty(empty),
-        .\gc0.count_d1_reg[8] (p_8_out),
+        .\gpregsm1.curr_fwft_state_reg[1]_0 (p_2_out),
         .out({\gr1.gr1_int.rfwft_n_0 ,p_0_in}),
-        .ram_empty_fb_i_reg(p_2_out),
+        .ram_empty_fb_i_reg(p_8_out),
         .rd_clk(rd_clk),
         .rd_en(rd_en),
         .tmp_ram_rd_en(tmp_ram_rd_en));
   ska_tx_packet_fifo_rd_status_flags_as \gras.rsts 
        (.AS(AS),
-        .\dest_out_bin_ff_reg[8] (\dest_out_bin_ff_reg[8] ),
-        .\dest_out_bin_ff_reg[8]_0 (\dest_out_bin_ff_reg[8]_0 ),
-        .\gpregsm1.curr_fwft_state_reg[1] ({\gr1.gr1_int.rfwft_n_0 ,p_0_in}),
         .out(p_2_out),
+        .ram_empty_fb_i_reg_0(ram_empty_fb_i_reg),
+        .ram_empty_fb_i_reg_1(ram_empty_fb_i_reg_0),
+        .ram_empty_fb_i_reg_2({\gr1.gr1_int.rfwft_n_0 ,p_0_in}),
         .rd_clk(rd_clk),
         .rd_en(rd_en),
         .v1_reg(\c0/v1_reg ),
         .v1_reg_0(\c1/v1_reg ));
   ska_tx_packet_fifo_rd_bin_cntr rpntr
        (.AS(AS),
-        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ),
         .E(p_8_out),
         .Q(Q),
         .WR_PNTR_RD(WR_PNTR_RD),
+        .\gc0.count_d1_reg[8]_0 (\gc0.count_d1_reg[8] ),
         .rd_clk(rd_clk),
         .v1_reg(\c0/v1_reg ),
         .v1_reg_0(\c1/v1_reg ));
@@ -7534,30 +7542,30 @@ endmodule
 module ska_tx_packet_fifo_rd_status_flags_as
    (out,
     v1_reg,
-    \dest_out_bin_ff_reg[8] ,
+    ram_empty_fb_i_reg_0,
     v1_reg_0,
-    \dest_out_bin_ff_reg[8]_0 ,
+    ram_empty_fb_i_reg_1,
     rd_clk,
     AS,
     rd_en,
-    \gpregsm1.curr_fwft_state_reg[1] );
+    ram_empty_fb_i_reg_2);
   output out;
   input [3:0]v1_reg;
-  input [0:0]\dest_out_bin_ff_reg[8] ;
+  input [0:0]ram_empty_fb_i_reg_0;
   input [3:0]v1_reg_0;
-  input [0:0]\dest_out_bin_ff_reg[8]_0 ;
+  input [0:0]ram_empty_fb_i_reg_1;
   input rd_clk;
   input [0:0]AS;
   input rd_en;
-  input [1:0]\gpregsm1.curr_fwft_state_reg[1] ;
+  input [1:0]ram_empty_fb_i_reg_2;
 
   wire [0:0]AS;
   wire c0_n_0;
   wire comp1;
-  wire [0:0]\dest_out_bin_ff_reg[8] ;
-  wire [0:0]\dest_out_bin_ff_reg[8]_0 ;
-  wire [1:0]\gpregsm1.curr_fwft_state_reg[1] ;
   (* DONT_TOUCH *) wire ram_empty_fb_i;
+  wire [0:0]ram_empty_fb_i_reg_0;
+  wire [0:0]ram_empty_fb_i_reg_1;
+  wire [1:0]ram_empty_fb_i_reg_2;
   (* DONT_TOUCH *) wire ram_empty_i;
   wire rd_clk;
   wire rd_en;
@@ -7567,15 +7575,15 @@ module ska_tx_packet_fifo_rd_status_flags_as
   assign out = ram_empty_fb_i;
   ska_tx_packet_fifo_compare_1 c0
        (.comp1(comp1),
-        .\dest_out_bin_ff_reg[8] (\dest_out_bin_ff_reg[8] ),
-        .\gpregsm1.curr_fwft_state_reg[1] (\gpregsm1.curr_fwft_state_reg[1] ),
         .out(ram_empty_fb_i),
         .ram_empty_fb_i_reg(c0_n_0),
+        .ram_empty_fb_i_reg_0(ram_empty_fb_i_reg_0),
+        .ram_empty_fb_i_reg_1(ram_empty_fb_i_reg_2),
         .rd_en(rd_en),
         .v1_reg(v1_reg));
   ska_tx_packet_fifo_compare_2 c1
        (.comp1(comp1),
-        .\dest_out_bin_ff_reg[8] (\dest_out_bin_ff_reg[8]_0 ),
+        .ram_empty_fb_i_reg(ram_empty_fb_i_reg_1),
         .v1_reg_0(v1_reg_0));
   (* DONT_TOUCH *) 
   (* KEEP = "yes" *) 
@@ -7606,16 +7614,16 @@ module ska_tx_packet_fifo_reset_blk_ramfifo
    (AR,
     AS,
     out,
-    ram_full_fb_i_reg,
-    \grstd1.grst_full.grst_f.rst_d1_reg_0 ,
+    \grstd1.grst_full.grst_f.rst_d3_reg_0 ,
+    \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg_0 ,
     rst,
     wr_clk,
     rd_clk);
   output [0:0]AR;
   output [0:0]AS;
   output out;
-  output ram_full_fb_i_reg;
-  output \grstd1.grst_full.grst_f.rst_d1_reg_0 ;
+  output \grstd1.grst_full.grst_f.rst_d3_reg_0 ;
+  output \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg_0 ;
   input rst;
   input wr_clk;
   input rd_clk;
@@ -7623,11 +7631,11 @@ module ska_tx_packet_fifo_reset_blk_ramfifo
   wire [0:0]AR;
   wire [0:0]AS;
   wire dest_out;
-  wire \grstd1.grst_full.grst_f.rst_d1_reg_0 ;
   wire \grstd1.grst_full.grst_f.rst_d3_i_1_n_0 ;
   wire \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_i_1_n_0 ;
   wire \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_wr_rst_ic_i_1_n_0 ;
   wire \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_i_1_n_0 ;
+  wire \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg_0 ;
   wire rd_clk;
   wire [3:0]rd_rst_wr_ext;
   wire rst;
@@ -7640,8 +7648,8 @@ module ska_tx_packet_fifo_reset_blk_ramfifo
   wire wr_clk;
   wire [1:0]wr_rst_rd_ext;
 
+  assign \grstd1.grst_full.grst_f.rst_d3_reg_0  = rst_d3;
   assign out = rst_d2;
-  assign ram_full_fb_i_reg = rst_d3;
   (* ASYNC_REG *) 
   (* KEEP = "yes" *) 
   (* msgon = "true" *) 
@@ -7650,7 +7658,7 @@ module ska_tx_packet_fifo_reset_blk_ramfifo
     \grstd1.grst_full.grst_f.rst_d1_reg 
        (.C(wr_clk),
         .CE(1'b1),
-        .D(\grstd1.grst_full.grst_f.rst_d1_reg_0 ),
+        .D(\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg_0 ),
         .PRE(rst_wr_reg2),
         .Q(rst_d1));
   (* ASYNC_REG *) 
@@ -7757,7 +7765,7 @@ module ska_tx_packet_fifo_reset_blk_ramfifo
   LUT5 #(
     .INIT(32'hAAAA08AA)) 
     \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_i_1 
-       (.I0(\grstd1.grst_full.grst_f.rst_d1_reg_0 ),
+       (.I0(\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg_0 ),
         .I1(rd_rst_wr_ext[1]),
         .I2(rd_rst_wr_ext[0]),
         .I3(rd_rst_wr_ext[3]),
@@ -7770,7 +7778,7 @@ module ska_tx_packet_fifo_reset_blk_ramfifo
         .CE(1'b1),
         .D(\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_i_1_n_0 ),
         .PRE(rst_wr_reg2),
-        .Q(\grstd1.grst_full.grst_f.rst_d1_reg_0 ));
+        .Q(\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg_0 ));
   FDCE #(
     .INIT(1'b0)) 
     \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_rd_ext_reg[0] 
@@ -7806,7 +7814,7 @@ module ska_tx_packet_fifo_reset_blk_ramfifo
   (* VERSION = "0" *) 
   (* XPM_CDC = "SINGLE" *) 
   (* XPM_MODULE = "TRUE" *) 
-  ska_tx_packet_fifo_xpm_cdc_single__1 \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.xpm_cdc_single_inst_wrst_rd 
+  ska_tx_packet_fifo_xpm_cdc_single__2 \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.xpm_cdc_single_inst_wrst_rd 
        (.dest_clk(rd_clk),
         .dest_out(dest_out),
         .src_clk(wr_clk),
@@ -7819,7 +7827,7 @@ module ska_tx_packet_fifo_reset_blk_ramfifo
   (* VERSION = "0" *) 
   (* XPM_CDC = "ASYNC_RST" *) 
   (* XPM_MODULE = "TRUE" *) 
-  ska_tx_packet_fifo_xpm_cdc_async_rst__1 \ngwrdrst.grst.g7serrst.gnsckt_wrst.rst_wr_reg2_inst 
+  ska_tx_packet_fifo_xpm_cdc_async_rst__2 \ngwrdrst.grst.g7serrst.gnsckt_wrst.rst_wr_reg2_inst 
        (.dest_arst(rst_wr_reg2),
         .dest_clk(wr_clk),
         .src_arst(rst));
@@ -7828,34 +7836,34 @@ endmodule
 (* ORIG_REF_NAME = "wr_bin_cntr" *) 
 module ska_tx_packet_fifo_wr_bin_cntr
    (v1_reg,
-    \gdiff.diff_pntr_pad_reg[9] ,
+    \gic0.gc0.count_d1_reg[8]_0 ,
     Q,
     v1_reg_0,
-    \gic0.gc0.count_d2_reg[7]_0 ,
-    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ,
+    \gic0.gc0.count_d1_reg[7]_0 ,
+    \gic0.gc0.count_d2_reg[8]_0 ,
     RD_PNTR_WR,
     E,
     wr_clk,
     AR);
   output [0:0]v1_reg;
-  output [0:0]\gdiff.diff_pntr_pad_reg[9] ;
+  output [0:0]\gic0.gc0.count_d1_reg[8]_0 ;
   output [7:0]Q;
   output [0:0]v1_reg_0;
-  output [7:0]\gic0.gc0.count_d2_reg[7]_0 ;
-  output [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
+  output [7:0]\gic0.gc0.count_d1_reg[7]_0 ;
+  output [8:0]\gic0.gc0.count_d2_reg[8]_0 ;
   input [0:0]RD_PNTR_WR;
   input [0:0]E;
   input wr_clk;
   input [0:0]AR;
 
   wire [0:0]AR;
-  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
   wire [0:0]E;
   wire [7:0]Q;
   wire [0:0]RD_PNTR_WR;
-  wire [0:0]\gdiff.diff_pntr_pad_reg[9] ;
   wire \gic0.gc0.count[8]_i_2_n_0 ;
-  wire [7:0]\gic0.gc0.count_d2_reg[7]_0 ;
+  wire [7:0]\gic0.gc0.count_d1_reg[7]_0 ;
+  wire [0:0]\gic0.gc0.count_d1_reg[8]_0 ;
+  wire [8:0]\gic0.gc0.count_d2_reg[8]_0 ;
   wire [8:8]p_14_out;
   wire [8:0]plusOp__0;
   wire [0:0]v1_reg;
@@ -7952,7 +7960,7 @@ module ska_tx_packet_fifo_wr_bin_cntr
         .CE(E),
         .D(Q[0]),
         .PRE(AR),
-        .Q(\gic0.gc0.count_d2_reg[7]_0 [0]));
+        .Q(\gic0.gc0.count_d1_reg[7]_0 [0]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d1_reg[1] 
@@ -7960,7 +7968,7 @@ module ska_tx_packet_fifo_wr_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(Q[1]),
-        .Q(\gic0.gc0.count_d2_reg[7]_0 [1]));
+        .Q(\gic0.gc0.count_d1_reg[7]_0 [1]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d1_reg[2] 
@@ -7968,7 +7976,7 @@ module ska_tx_packet_fifo_wr_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(Q[2]),
-        .Q(\gic0.gc0.count_d2_reg[7]_0 [2]));
+        .Q(\gic0.gc0.count_d1_reg[7]_0 [2]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d1_reg[3] 
@@ -7976,7 +7984,7 @@ module ska_tx_packet_fifo_wr_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(Q[3]),
-        .Q(\gic0.gc0.count_d2_reg[7]_0 [3]));
+        .Q(\gic0.gc0.count_d1_reg[7]_0 [3]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d1_reg[4] 
@@ -7984,7 +7992,7 @@ module ska_tx_packet_fifo_wr_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(Q[4]),
-        .Q(\gic0.gc0.count_d2_reg[7]_0 [4]));
+        .Q(\gic0.gc0.count_d1_reg[7]_0 [4]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d1_reg[5] 
@@ -7992,7 +8000,7 @@ module ska_tx_packet_fifo_wr_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(Q[5]),
-        .Q(\gic0.gc0.count_d2_reg[7]_0 [5]));
+        .Q(\gic0.gc0.count_d1_reg[7]_0 [5]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d1_reg[6] 
@@ -8000,7 +8008,7 @@ module ska_tx_packet_fifo_wr_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(Q[6]),
-        .Q(\gic0.gc0.count_d2_reg[7]_0 [6]));
+        .Q(\gic0.gc0.count_d1_reg[7]_0 [6]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d1_reg[7] 
@@ -8008,7 +8016,7 @@ module ska_tx_packet_fifo_wr_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(Q[7]),
-        .Q(\gic0.gc0.count_d2_reg[7]_0 [7]));
+        .Q(\gic0.gc0.count_d1_reg[7]_0 [7]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d1_reg[8] 
@@ -8023,64 +8031,64 @@ module ska_tx_packet_fifo_wr_bin_cntr
        (.C(wr_clk),
         .CE(E),
         .CLR(AR),
-        .D(\gic0.gc0.count_d2_reg[7]_0 [0]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [0]));
+        .D(\gic0.gc0.count_d1_reg[7]_0 [0]),
+        .Q(\gic0.gc0.count_d2_reg[8]_0 [0]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[1] 
        (.C(wr_clk),
         .CE(E),
         .CLR(AR),
-        .D(\gic0.gc0.count_d2_reg[7]_0 [1]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [1]));
+        .D(\gic0.gc0.count_d1_reg[7]_0 [1]),
+        .Q(\gic0.gc0.count_d2_reg[8]_0 [1]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[2] 
        (.C(wr_clk),
         .CE(E),
         .CLR(AR),
-        .D(\gic0.gc0.count_d2_reg[7]_0 [2]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [2]));
+        .D(\gic0.gc0.count_d1_reg[7]_0 [2]),
+        .Q(\gic0.gc0.count_d2_reg[8]_0 [2]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[3] 
        (.C(wr_clk),
         .CE(E),
         .CLR(AR),
-        .D(\gic0.gc0.count_d2_reg[7]_0 [3]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [3]));
+        .D(\gic0.gc0.count_d1_reg[7]_0 [3]),
+        .Q(\gic0.gc0.count_d2_reg[8]_0 [3]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[4] 
        (.C(wr_clk),
         .CE(E),
         .CLR(AR),
-        .D(\gic0.gc0.count_d2_reg[7]_0 [4]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [4]));
+        .D(\gic0.gc0.count_d1_reg[7]_0 [4]),
+        .Q(\gic0.gc0.count_d2_reg[8]_0 [4]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[5] 
        (.C(wr_clk),
         .CE(E),
         .CLR(AR),
-        .D(\gic0.gc0.count_d2_reg[7]_0 [5]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [5]));
+        .D(\gic0.gc0.count_d1_reg[7]_0 [5]),
+        .Q(\gic0.gc0.count_d2_reg[8]_0 [5]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[6] 
        (.C(wr_clk),
         .CE(E),
         .CLR(AR),
-        .D(\gic0.gc0.count_d2_reg[7]_0 [6]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [6]));
+        .D(\gic0.gc0.count_d1_reg[7]_0 [6]),
+        .Q(\gic0.gc0.count_d2_reg[8]_0 [6]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[7] 
        (.C(wr_clk),
         .CE(E),
         .CLR(AR),
-        .D(\gic0.gc0.count_d2_reg[7]_0 [7]),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [7]));
+        .D(\gic0.gc0.count_d1_reg[7]_0 [7]),
+        .Q(\gic0.gc0.count_d2_reg[8]_0 [7]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_d2_reg[8] 
@@ -8088,7 +8096,7 @@ module ska_tx_packet_fifo_wr_bin_cntr
         .CE(E),
         .CLR(AR),
         .D(p_14_out),
-        .Q(\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram [8]));
+        .Q(\gic0.gc0.count_d2_reg[8]_0 [8]));
   FDCE #(
     .INIT(1'b0)) 
     \gic0.gc0.count_reg[0] 
@@ -8178,20 +8186,20 @@ module ska_tx_packet_fifo_wr_bin_cntr
     plusOp_carry__1_i_1
        (.I0(p_14_out),
         .I1(RD_PNTR_WR),
-        .O(\gdiff.diff_pntr_pad_reg[9] ));
+        .O(\gic0.gc0.count_d1_reg[8]_0 ));
 endmodule
 
 (* ORIG_REF_NAME = "wr_handshaking_flags" *) 
 module ska_tx_packet_fifo_wr_handshaking_flags
    (overflow,
-    ram_full_fb_i_reg,
+    \gof.gof1.overflow_i_reg_0 ,
     wr_clk);
   output overflow;
-  input ram_full_fb_i_reg;
+  input \gof.gof1.overflow_i_reg_0 ;
   input wr_clk;
 
+  wire \gof.gof1.overflow_i_reg_0 ;
   wire overflow;
-  wire ram_full_fb_i_reg;
   wire wr_clk;
 
   FDRE #(
@@ -8199,7 +8207,7 @@ module ska_tx_packet_fifo_wr_handshaking_flags
     \gof.gof1.overflow_i_reg 
        (.C(wr_clk),
         .CE(1'b1),
-        .D(ram_full_fb_i_reg),
+        .D(\gof.gof1.overflow_i_reg_0 ),
         .Q(overflow),
         .R(1'b0));
 endmodule
@@ -8211,58 +8219,58 @@ module ska_tx_packet_fifo_wr_logic
     E,
     Q,
     prog_full,
-    \gic0.gc0.count_d1_reg[7] ,
-    \DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ,
-    \dest_out_bin_ff_reg[6] ,
-    \dest_out_bin_ff_reg[6]_0 ,
+    \gic0.gc0.count_reg[7] ,
+    \gic0.gc0.count_d2_reg[8] ,
+    \gmux.gm[4].gms.ms ,
+    \gmux.gm[4].gms.ms_0 ,
     wr_clk,
     out,
     S,
-    \dest_out_bin_ff_reg[7] ,
+    \gdiff.diff_pntr_pad_reg[8] ,
     RD_PNTR_WR,
     wr_en,
-    \grstd1.grst_full.grst_f.rst_d3_reg ,
-    \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ,
+    ram_full_fb_i_reg,
+    \gof.gof1.overflow_i_reg ,
     AR);
   output full;
   output overflow;
   output [0:0]E;
   output [7:0]Q;
   output prog_full;
-  output [7:0]\gic0.gc0.count_d1_reg[7] ;
-  output [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
-  input [3:0]\dest_out_bin_ff_reg[6] ;
-  input [3:0]\dest_out_bin_ff_reg[6]_0 ;
+  output [7:0]\gic0.gc0.count_reg[7] ;
+  output [8:0]\gic0.gc0.count_d2_reg[8] ;
+  input [3:0]\gmux.gm[4].gms.ms ;
+  input [3:0]\gmux.gm[4].gms.ms_0 ;
   input wr_clk;
   input out;
   input [3:0]S;
-  input [3:0]\dest_out_bin_ff_reg[7] ;
+  input [3:0]\gdiff.diff_pntr_pad_reg[8] ;
   input [0:0]RD_PNTR_WR;
   input wr_en;
-  input \grstd1.grst_full.grst_f.rst_d3_reg ;
-  input \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ;
+  input ram_full_fb_i_reg;
+  input \gof.gof1.overflow_i_reg ;
   input [0:0]AR;
 
   wire [0:0]AR;
-  wire [8:0]\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ;
   wire [0:0]E;
   wire [7:0]Q;
   wire [0:0]RD_PNTR_WR;
   wire [3:0]S;
   wire [4:4]\c1/v1_reg ;
   wire [4:4]\c2/v1_reg ;
-  wire [3:0]\dest_out_bin_ff_reg[6] ;
-  wire [3:0]\dest_out_bin_ff_reg[6]_0 ;
-  wire [3:0]\dest_out_bin_ff_reg[7] ;
   wire full;
-  wire [7:0]\gic0.gc0.count_d1_reg[7] ;
-  wire \grstd1.grst_full.grst_f.rst_d3_reg ;
+  wire [3:0]\gdiff.diff_pntr_pad_reg[8] ;
+  wire [8:0]\gic0.gc0.count_d2_reg[8] ;
+  wire [7:0]\gic0.gc0.count_reg[7] ;
+  wire [3:0]\gmux.gm[4].gms.ms ;
+  wire [3:0]\gmux.gm[4].gms.ms_0 ;
+  wire \gof.gof1.overflow_i_reg ;
   wire \gwas.wsts_n_1 ;
   wire \gwas.wsts_n_3 ;
-  wire \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ;
   wire out;
   wire overflow;
   wire prog_full;
+  wire ram_full_fb_i_reg;
   wire wpntr_n_1;
   wire wr_clk;
   wire wr_en;
@@ -8272,39 +8280,39 @@ module ska_tx_packet_fifo_wr_logic
         .E(E),
         .Q(Q),
         .S(S),
-        .\dest_out_bin_ff_reg[7] (\dest_out_bin_ff_reg[7] ),
-        .\gic0.gc0.count_d1_reg[8] (wpntr_n_1),
-        .\grstd1.grst_full.grst_f.rst_d3_reg (\grstd1.grst_full.grst_f.rst_d3_reg ),
+        .\gdiff.diff_pntr_pad_reg[8]_0 (\gdiff.diff_pntr_pad_reg[8] ),
+        .\gdiff.diff_pntr_pad_reg[9]_0 (wpntr_n_1),
+        .\gpf1.prog_full_i_reg_0 (ram_full_fb_i_reg),
+        .\gpf1.prog_full_i_reg_1 (\gwas.wsts_n_1 ),
         .out(out),
         .prog_full(prog_full),
-        .ram_full_fb_i_reg(\gwas.wsts_n_1 ),
         .wr_clk(wr_clk));
   ska_tx_packet_fifo_wr_status_flags_as \gwas.wsts 
        (.E(E),
-        .\dest_out_bin_ff_reg[6] (\dest_out_bin_ff_reg[6] ),
-        .\dest_out_bin_ff_reg[6]_0 (\dest_out_bin_ff_reg[6]_0 ),
         .full(full),
-        .\gof.gof1.overflow_i_reg (\gwas.wsts_n_3 ),
-        .\grstd1.grst_full.grst_f.rst_d2_reg (out),
-        .\grstd1.grst_full.grst_f.rst_d3_reg (\grstd1.grst_full.grst_f.rst_d3_reg ),
-        .\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg (\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ),
+        .\gmux.gm[4].gms.ms (\gmux.gm[4].gms.ms ),
+        .\gmux.gm[4].gms.ms_0 (\gmux.gm[4].gms.ms_0 ),
+        .\gof.gof1.overflow_i_reg (\gof.gof1.overflow_i_reg ),
         .out(\gwas.wsts_n_1 ),
+        .ram_full_fb_i_reg_0(\gwas.wsts_n_3 ),
+        .ram_full_fb_i_reg_1(out),
+        .ram_full_fb_i_reg_2(ram_full_fb_i_reg),
         .v1_reg(\c1/v1_reg ),
         .v1_reg_0(\c2/v1_reg ),
         .wr_clk(wr_clk),
         .wr_en(wr_en));
   ska_tx_packet_fifo_wr_handshaking_flags \gwhf.whf 
-       (.overflow(overflow),
-        .ram_full_fb_i_reg(\gwas.wsts_n_3 ),
+       (.\gof.gof1.overflow_i_reg_0 (\gwas.wsts_n_3 ),
+        .overflow(overflow),
         .wr_clk(wr_clk));
   ska_tx_packet_fifo_wr_bin_cntr wpntr
        (.AR(AR),
-        .\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram (\DEVICE_7SERIES.NO_BMM_INFO.SDP.WIDE_PRIM36_NO_ECC.ram ),
         .E(E),
-        .Q(\gic0.gc0.count_d1_reg[7] ),
+        .Q(\gic0.gc0.count_reg[7] ),
         .RD_PNTR_WR(RD_PNTR_WR),
-        .\gdiff.diff_pntr_pad_reg[9] (wpntr_n_1),
-        .\gic0.gc0.count_d2_reg[7]_0 (Q),
+        .\gic0.gc0.count_d1_reg[7]_0 (Q),
+        .\gic0.gc0.count_d1_reg[8]_0 (wpntr_n_1),
+        .\gic0.gc0.count_d2_reg[8]_0 (\gic0.gc0.count_d2_reg[8] ),
         .v1_reg(\c1/v1_reg ),
         .v1_reg_0(\c2/v1_reg ),
         .wr_clk(wr_clk));
@@ -8316,36 +8324,37 @@ module ska_tx_packet_fifo_wr_pf_as
     E,
     Q,
     S,
-    \dest_out_bin_ff_reg[7] ,
-    \gic0.gc0.count_d1_reg[8] ,
+    \gdiff.diff_pntr_pad_reg[8]_0 ,
+    \gdiff.diff_pntr_pad_reg[9]_0 ,
     wr_clk,
     out,
-    \grstd1.grst_full.grst_f.rst_d3_reg ,
-    ram_full_fb_i_reg,
+    \gpf1.prog_full_i_reg_0 ,
+    \gpf1.prog_full_i_reg_1 ,
     AR);
   output prog_full;
   input [0:0]E;
   input [7:0]Q;
   input [3:0]S;
-  input [3:0]\dest_out_bin_ff_reg[7] ;
-  input [0:0]\gic0.gc0.count_d1_reg[8] ;
+  input [3:0]\gdiff.diff_pntr_pad_reg[8]_0 ;
+  input [0:0]\gdiff.diff_pntr_pad_reg[9]_0 ;
   input wr_clk;
   input out;
-  input \grstd1.grst_full.grst_f.rst_d3_reg ;
-  input ram_full_fb_i_reg;
+  input \gpf1.prog_full_i_reg_0 ;
+  input \gpf1.prog_full_i_reg_1 ;
   input [0:0]AR;
 
   wire [0:0]AR;
   wire [0:0]E;
   wire [7:0]Q;
   wire [3:0]S;
-  wire [3:0]\dest_out_bin_ff_reg[7] ;
   wire [8:0]diff_pntr;
-  wire [0:0]\gic0.gc0.count_d1_reg[8] ;
+  wire [3:0]\gdiff.diff_pntr_pad_reg[8]_0 ;
+  wire [0:0]\gdiff.diff_pntr_pad_reg[9]_0 ;
   wire \gpf1.prog_full_i_i_1_n_0 ;
   wire \gpf1.prog_full_i_i_2_n_0 ;
   wire \gpf1.prog_full_i_i_3_n_0 ;
-  wire \grstd1.grst_full.grst_f.rst_d3_reg ;
+  wire \gpf1.prog_full_i_reg_0 ;
+  wire \gpf1.prog_full_i_reg_1 ;
   wire out;
   wire [9:1]plusOp;
   wire plusOp_carry__0_n_0;
@@ -8357,7 +8366,6 @@ module ska_tx_packet_fifo_wr_pf_as
   wire plusOp_carry_n_2;
   wire plusOp_carry_n_3;
   wire prog_full;
-  wire ram_full_fb_i_reg;
   wire wr_clk;
   wire [3:0]NLW_plusOp_carry__1_CO_UNCONNECTED;
   wire [3:1]NLW_plusOp_carry__1_O_UNCONNECTED;
@@ -8439,26 +8447,26 @@ module ska_tx_packet_fifo_wr_pf_as
     \gpf1.prog_full_i_i_1 
        (.I0(\gpf1.prog_full_i_i_2_n_0 ),
         .I1(\gpf1.prog_full_i_i_3_n_0 ),
-        .I2(\grstd1.grst_full.grst_f.rst_d3_reg ),
-        .I3(ram_full_fb_i_reg),
+        .I2(\gpf1.prog_full_i_reg_0 ),
+        .I3(\gpf1.prog_full_i_reg_1 ),
         .I4(prog_full),
         .O(\gpf1.prog_full_i_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h777FFFFF)) 
     \gpf1.prog_full_i_i_2 
-       (.I0(diff_pntr[3]),
-        .I1(diff_pntr[4]),
-        .I2(diff_pntr[0]),
-        .I3(diff_pntr[1]),
-        .I4(diff_pntr[2]),
+       (.I0(diff_pntr[7]),
+        .I1(diff_pntr[6]),
+        .I2(diff_pntr[1]),
+        .I3(diff_pntr[0]),
+        .I4(diff_pntr[8]),
         .O(\gpf1.prog_full_i_i_2_n_0 ));
   LUT4 #(
     .INIT(16'h7FFF)) 
     \gpf1.prog_full_i_i_3 
-       (.I0(diff_pntr[7]),
-        .I1(diff_pntr[8]),
+       (.I0(diff_pntr[3]),
+        .I1(diff_pntr[2]),
         .I2(diff_pntr[5]),
-        .I3(diff_pntr[6]),
+        .I3(diff_pntr[4]),
         .O(\gpf1.prog_full_i_i_3_n_0 ));
   FDPE #(
     .INIT(1'b1)) 
@@ -8481,14 +8489,14 @@ module ska_tx_packet_fifo_wr_pf_as
         .CYINIT(1'b0),
         .DI(Q[7:4]),
         .O(plusOp[8:5]),
-        .S(\dest_out_bin_ff_reg[7] ));
+        .S(\gdiff.diff_pntr_pad_reg[8]_0 ));
   CARRY4 plusOp_carry__1
        (.CI(plusOp_carry__0_n_0),
         .CO(NLW_plusOp_carry__1_CO_UNCONNECTED[3:0]),
         .CYINIT(1'b0),
         .DI({1'b0,1'b0,1'b0,1'b0}),
         .O({NLW_plusOp_carry__1_O_UNCONNECTED[3:1],plusOp[9]}),
-        .S({1'b0,1'b0,1'b0,\gic0.gc0.count_d1_reg[8] }));
+        .S({1'b0,1'b0,1'b0,\gdiff.diff_pntr_pad_reg[9]_0 }));
 endmodule
 
 (* ORIG_REF_NAME = "wr_status_flags_as" *) 
@@ -8496,40 +8504,40 @@ module ska_tx_packet_fifo_wr_status_flags_as
    (full,
     out,
     E,
-    \gof.gof1.overflow_i_reg ,
-    \dest_out_bin_ff_reg[6] ,
+    ram_full_fb_i_reg_0,
+    \gmux.gm[4].gms.ms ,
     v1_reg,
-    \dest_out_bin_ff_reg[6]_0 ,
+    \gmux.gm[4].gms.ms_0 ,
     v1_reg_0,
     wr_clk,
-    \grstd1.grst_full.grst_f.rst_d2_reg ,
+    ram_full_fb_i_reg_1,
     wr_en,
-    \grstd1.grst_full.grst_f.rst_d3_reg ,
-    \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg );
+    ram_full_fb_i_reg_2,
+    \gof.gof1.overflow_i_reg );
   output full;
   output out;
   output [0:0]E;
-  output \gof.gof1.overflow_i_reg ;
-  input [3:0]\dest_out_bin_ff_reg[6] ;
+  output ram_full_fb_i_reg_0;
+  input [3:0]\gmux.gm[4].gms.ms ;
   input [0:0]v1_reg;
-  input [3:0]\dest_out_bin_ff_reg[6]_0 ;
+  input [3:0]\gmux.gm[4].gms.ms_0 ;
   input [0:0]v1_reg_0;
   input wr_clk;
-  input \grstd1.grst_full.grst_f.rst_d2_reg ;
+  input ram_full_fb_i_reg_1;
   input wr_en;
-  input \grstd1.grst_full.grst_f.rst_d3_reg ;
-  input \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ;
+  input ram_full_fb_i_reg_2;
+  input \gof.gof1.overflow_i_reg ;
 
   wire [0:0]E;
   wire c2_n_0;
   wire comp1;
-  wire [3:0]\dest_out_bin_ff_reg[6] ;
-  wire [3:0]\dest_out_bin_ff_reg[6]_0 ;
+  wire [3:0]\gmux.gm[4].gms.ms ;
+  wire [3:0]\gmux.gm[4].gms.ms_0 ;
   wire \gof.gof1.overflow_i_reg ;
-  wire \grstd1.grst_full.grst_f.rst_d2_reg ;
-  wire \grstd1.grst_full.grst_f.rst_d3_reg ;
-  wire \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ;
   (* DONT_TOUCH *) wire ram_full_fb_i;
+  wire ram_full_fb_i_reg_0;
+  wire ram_full_fb_i_reg_1;
+  wire ram_full_fb_i_reg_2;
   (* DONT_TOUCH *) wire ram_full_i;
   wire [0:0]v1_reg;
   wire [0:0]v1_reg_0;
@@ -8546,23 +8554,23 @@ module ska_tx_packet_fifo_wr_status_flags_as
         .O(E));
   ska_tx_packet_fifo_compare c1
        (.comp1(comp1),
-        .\dest_out_bin_ff_reg[6] (\dest_out_bin_ff_reg[6] ),
+        .\gmux.gm[4].gms.ms_0 (\gmux.gm[4].gms.ms ),
         .v1_reg(v1_reg));
   ska_tx_packet_fifo_compare_0 c2
        (.comp1(comp1),
-        .\dest_out_bin_ff_reg[6] (\dest_out_bin_ff_reg[6]_0 ),
-        .\grstd1.grst_full.grst_f.rst_d3_reg (\grstd1.grst_full.grst_f.rst_d3_reg ),
+        .\gmux.gm[4].gms.ms_0 (\gmux.gm[4].gms.ms_0 ),
         .out(ram_full_fb_i),
         .ram_full_fb_i_reg(c2_n_0),
+        .ram_full_fb_i_reg_0(ram_full_fb_i_reg_2),
         .v1_reg_0(v1_reg_0),
         .wr_en(wr_en));
   LUT3 #(
     .INIT(8'hE0)) 
     \gof.gof1.overflow_i_i_1 
        (.I0(ram_full_fb_i),
-        .I1(\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_reg ),
+        .I1(\gof.gof1.overflow_i_reg ),
         .I2(wr_en),
-        .O(\gof.gof1.overflow_i_reg ));
+        .O(ram_full_fb_i_reg_0));
   (* DONT_TOUCH *) 
   (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
@@ -8572,7 +8580,7 @@ module ska_tx_packet_fifo_wr_status_flags_as
        (.C(wr_clk),
         .CE(1'b1),
         .D(c2_n_0),
-        .PRE(\grstd1.grst_full.grst_f.rst_d2_reg ),
+        .PRE(ram_full_fb_i_reg_1),
         .Q(ram_full_fb_i));
   (* DONT_TOUCH *) 
   (* KEEP = "yes" *) 
@@ -8583,7 +8591,7 @@ module ska_tx_packet_fifo_wr_status_flags_as
        (.C(wr_clk),
         .CE(1'b1),
         .D(c2_n_0),
-        .PRE(\grstd1.grst_full.grst_f.rst_d2_reg ),
+        .PRE(ram_full_fb_i_reg_1),
         .Q(ram_full_i));
 endmodule
 `ifndef GLBL

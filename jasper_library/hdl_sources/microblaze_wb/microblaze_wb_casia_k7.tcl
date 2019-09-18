@@ -20,7 +20,7 @@ set script_folder [_tcl::get_script_folder]
 ################################################################
 # Check if script is running in correct Vivado version.
 ################################################################
-set scripts_vivado_version 2016.4
+set scripts_vivado_version 2019.1
 set current_vivado_version [version -short]
 
 if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
@@ -43,11 +43,12 @@ if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
 
 set list_projs [get_projects -quiet]
 if { $list_projs eq "" } {
-   create_project project_1 myproj -part xc7k325tffg900-2
+   create_project project_1 myproj -part xc7k325tfbv900-2
 }
 
 
 # CHANGE DESIGN NAME HERE
+variable design_name
 set design_name cont_microblaze
 
 # If you do not already have an existing IP Integrator design open,
@@ -115,6 +116,51 @@ if { $nRet != 0 } {
    return $nRet
 }
 
+set bCheckIPsPassed 1
+##################################################################
+# CHECK IPs
+##################################################################
+set bCheckIPs 1
+if { $bCheckIPs == 1 } {
+   set list_check_ips "\ 
+xilinx.com:ip:axi_hwicap:3.0\
+xilinx.com:ip:axi_quad_spi:3.2\
+peralex.com:user:axi_slave_wishbone_classic_master:1.0\
+xilinx.com:ip:axi_timebase_wdt:3.0\
+xilinx.com:ip:axi_timer:2.0\
+xilinx.com:ip:axi_uartlite:2.0\
+xilinx.com:ip:mdm:3.2\
+xilinx.com:ip:microblaze:11.0\
+xilinx.com:ip:axi_intc:4.1\
+xilinx.com:ip:proc_sys_reset:5.0\
+xilinx.com:ip:xlconcat:2.1\
+xilinx.com:ip:lmb_bram_if_cntlr:4.0\
+xilinx.com:ip:lmb_v10:3.0\
+xilinx.com:ip:blk_mem_gen:8.4\
+"
+
+   set list_ips_missing ""
+   common::send_msg_id "BD_TCL-006" "INFO" "Checking if the following IPs exist in the project's IP catalog: $list_check_ips ."
+
+   foreach ip_vlnv $list_check_ips {
+      set ip_obj [get_ipdefs -all $ip_vlnv]
+      if { $ip_obj eq "" } {
+         lappend list_ips_missing $ip_vlnv
+      }
+   }
+
+   if { $list_ips_missing ne "" } {
+      catch {common::send_msg_id "BD_TCL-115" "ERROR" "The following IPs are not found in the IP Catalog:\n  $list_ips_missing\n\nResolution: Please add the repository containing the IP(s) to the project." }
+      set bCheckIPsPassed 0
+   }
+
+}
+
+if { $bCheckIPsPassed != 1 } {
+  common::send_msg_id "BD_TCL-1003" "WARNING" "Will not continue with creation of design due to the error(s) above."
+  return 3
+}
+
 ##################################################################
 # DESIGN PROCs
 ##################################################################
@@ -126,7 +172,7 @@ proc create_hier_cell_microblaze_0_local_memory { parentCell nameHier } {
   variable script_folder
 
   if { $parentCell eq "" || $nameHier eq "" } {
-     catch {common::send_msg_id "BD_TCL-102" "ERROR" create_hier_cell_microblaze_0_local_memory() - Empty argument(s)!"}
+     catch {common::send_msg_id "BD_TCL-102" "ERROR" "create_hier_cell_microblaze_0_local_memory() - Empty argument(s)!"}
      return
   }
 
@@ -156,7 +202,9 @@ proc create_hier_cell_microblaze_0_local_memory { parentCell nameHier } {
 
   # Create interface pins
   create_bd_intf_pin -mode MirroredMaster -vlnv xilinx.com:interface:lmb_rtl:1.0 DLMB
+
   create_bd_intf_pin -mode MirroredMaster -vlnv xilinx.com:interface:lmb_rtl:1.0 ILMB
+
 
   # Create pins
   create_bd_pin -dir I -type clk LMB_Clk
@@ -165,7 +213,7 @@ proc create_hier_cell_microblaze_0_local_memory { parentCell nameHier } {
   # Create instance: dlmb_bram_if_cntlr, and set properties
   set dlmb_bram_if_cntlr [ create_bd_cell -type ip -vlnv xilinx.com:ip:lmb_bram_if_cntlr:4.0 dlmb_bram_if_cntlr ]
   set_property -dict [ list \
-CONFIG.C_ECC {0} \
+   CONFIG.C_ECC {0} \
  ] $dlmb_bram_if_cntlr
 
   # Create instance: dlmb_v10, and set properties
@@ -174,17 +222,23 @@ CONFIG.C_ECC {0} \
   # Create instance: ilmb_bram_if_cntlr, and set properties
   set ilmb_bram_if_cntlr [ create_bd_cell -type ip -vlnv xilinx.com:ip:lmb_bram_if_cntlr:4.0 ilmb_bram_if_cntlr ]
   set_property -dict [ list \
-CONFIG.C_ECC {0} \
+   CONFIG.C_ECC {0} \
  ] $ilmb_bram_if_cntlr
 
   # Create instance: ilmb_v10, and set properties
   set ilmb_v10 [ create_bd_cell -type ip -vlnv xilinx.com:ip:lmb_v10:3.0 ilmb_v10 ]
 
   # Create instance: lmb_bram, and set properties
-  set lmb_bram [ create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.3 lmb_bram ]
+  set lmb_bram [ create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.4 lmb_bram ]
   set_property -dict [ list \
-CONFIG.Memory_Type {True_Dual_Port_RAM} \
-CONFIG.use_bram_block {BRAM_Controller} \
+   CONFIG.EN_SAFETY_CKT {false} \
+   CONFIG.Enable_B {Use_ENB_Pin} \
+   CONFIG.Memory_Type {True_Dual_Port_RAM} \
+   CONFIG.Port_B_Clock {100} \
+   CONFIG.Port_B_Enable_Rate {100} \
+   CONFIG.Port_B_Write_Rate {50} \
+   CONFIG.Use_RSTB_Pin {true} \
+   CONFIG.use_bram_block {BRAM_Controller} \
  ] $lmb_bram
 
   # Create interface connections
@@ -209,6 +263,7 @@ CONFIG.use_bram_block {BRAM_Controller} \
 proc create_root_design { parentCell } {
 
   variable script_folder
+  variable design_name
 
   if { $parentCell eq "" } {
      set parentCell [get_bd_cells /]
@@ -237,7 +292,9 @@ proc create_root_design { parentCell } {
 
   # Create interface ports
   set UART [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:uart_rtl:1.0 UART ]
+
   set spi_rtl [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:spi_rtl:1.0 spi_rtl ]
+
 
   # Create ports
   set ACK_I [ create_bd_port -dir I ACK_I ]
@@ -245,14 +302,14 @@ proc create_root_design { parentCell } {
   set CYC_O [ create_bd_port -dir O CYC_O ]
   set Clk [ create_bd_port -dir I -type clk Clk ]
   set_property -dict [ list \
-CONFIG.FREQ_HZ {100000000} \
+   CONFIG.FREQ_HZ {100000000} \
  ] $Clk
   set DAT_I [ create_bd_port -dir I -from 31 -to 0 DAT_I ]
   set DAT_O [ create_bd_port -dir O -from 31 -to 0 DAT_O ]
   set RST_O [ create_bd_port -dir O RST_O ]
   set Reset [ create_bd_port -dir I -type rst Reset ]
   set_property -dict [ list \
-CONFIG.POLARITY {ACTIVE_HIGH} \
+   CONFIG.POLARITY {ACTIVE_HIGH} \
  ] $Reset
   set SEL_O [ create_bd_port -dir O -from 3 -to 0 SEL_O ]
   set STB_O [ create_bd_port -dir O STB_O ]
@@ -263,21 +320,21 @@ CONFIG.POLARITY {ACTIVE_HIGH} \
   # Create instance: axi_hwicap_0, and set properties
   set axi_hwicap_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_hwicap:3.0 axi_hwicap_0 ]
   set_property -dict [ list \
-CONFIG.C_ICAP_EXTERNAL {0} \
-CONFIG.C_INCLUDE_STARTUP {0} \
+   CONFIG.C_ICAP_EXTERNAL {0} \
+   CONFIG.C_INCLUDE_STARTUP {0} \
  ] $axi_hwicap_0
 
   # Create instance: axi_quad_spi_0, and set properties
   set axi_quad_spi_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_quad_spi_0 ]
   set_property -dict [ list \
-CONFIG.C_SCK_RATIO {2} \
-CONFIG.C_SHARED_STARTUP {0} \
-CONFIG.C_SPI_MEMORY {2} \
-CONFIG.C_SPI_MODE {2} \
-CONFIG.C_TYPE_OF_AXI4_INTERFACE {0} \
-CONFIG.C_USE_STARTUP {1} \
-CONFIG.C_USE_STARTUP_INT {1} \
-CONFIG.C_XIP_MODE {0} \
+   CONFIG.C_SCK_RATIO {2} \
+   CONFIG.C_SHARED_STARTUP {0} \
+   CONFIG.C_SPI_MEMORY {2} \
+   CONFIG.C_SPI_MODE {2} \
+   CONFIG.C_TYPE_OF_AXI4_INTERFACE {0} \
+   CONFIG.C_USE_STARTUP {1} \
+   CONFIG.C_USE_STARTUP_INT {1} \
+   CONFIG.C_XIP_MODE {0} \
  ] $axi_quad_spi_0
 
   # Create instance: axi_slave_wishbone_classic_master_0, and set properties
@@ -286,7 +343,7 @@ CONFIG.C_XIP_MODE {0} \
   # Create instance: axi_timebase_wdt_0, and set properties
   set axi_timebase_wdt_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_timebase_wdt:3.0 axi_timebase_wdt_0 ]
   set_property -dict [ list \
-CONFIG.C_WDT_INTERVAL {29} \
+   CONFIG.C_WDT_INTERVAL {29} \
  ] $axi_timebase_wdt_0
 
   # Create instance: axi_timer_0, and set properties
@@ -295,36 +352,39 @@ CONFIG.C_WDT_INTERVAL {29} \
   # Create instance: axi_uartlite_0, and set properties
   set axi_uartlite_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_uartlite:2.0 axi_uartlite_0 ]
   set_property -dict [ list \
-CONFIG.C_BAUDRATE {115200} \
+   CONFIG.C_BAUDRATE {115200} \
  ] $axi_uartlite_0
 
   # Create instance: mdm_1, and set properties
   set mdm_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:mdm:3.2 mdm_1 ]
   set_property -dict [ list \
-CONFIG.C_USE_UART {0} \
+   CONFIG.C_USE_UART {0} \
  ] $mdm_1
 
   # Create instance: microblaze_0, and set properties
-  set microblaze_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:10.0 microblaze_0 ]
+  set microblaze_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:11.0 microblaze_0 ]
   set_property -dict [ list \
-CONFIG.C_DEBUG_ENABLED {1} \
-CONFIG.C_D_AXI {1} \
-CONFIG.C_D_LMB {1} \
-CONFIG.C_I_LMB {1} \
+   CONFIG.C_DEBUG_ENABLED {1} \
+   CONFIG.C_D_AXI {1} \
+   CONFIG.C_D_LMB {1} \
+   CONFIG.C_ICACHE_BASEADDR {0x0000000000000000} \
+   CONFIG.C_ICACHE_HIGHADDR {0x000000003FFFFFFF} \
+   CONFIG.C_I_LMB {1} \
  ] $microblaze_0
 
   # Create instance: microblaze_0_axi_intc, and set properties
   set microblaze_0_axi_intc [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_intc:4.1 microblaze_0_axi_intc ]
   set_property -dict [ list \
-CONFIG.C_HAS_FAST {1} \
-CONFIG.C_PROCESSOR_CLK_FREQ_MHZ {100} \
-CONFIG.C_S_AXI_ACLK_FREQ_MHZ {100} \
+   CONFIG.C_HAS_FAST {1} \
+   CONFIG.C_PROCESSOR_CLK_FREQ_MHZ {100} \
+   CONFIG.C_S_AXI_ACLK_FREQ_MHZ {100} \
  ] $microblaze_0_axi_intc
 
   # Create instance: microblaze_0_axi_periph, and set properties
   set microblaze_0_axi_periph [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 microblaze_0_axi_periph ]
   set_property -dict [ list \
-CONFIG.NUM_MI {8} \
+   CONFIG.NUM_MI {8} \
+   CONFIG.SYNCHRONIZATION_STAGES {2} \
  ] $microblaze_0_axi_periph
 
   # Create instance: microblaze_0_local_memory
@@ -333,14 +393,14 @@ CONFIG.NUM_MI {8} \
   # Create instance: rst_Clk_100M, and set properties
   set rst_Clk_100M [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 rst_Clk_100M ]
   set_property -dict [ list \
-CONFIG.C_AUX_RESET_HIGH {1} \
-CONFIG.C_AUX_RST_WIDTH {1} \
+   CONFIG.C_AUX_RESET_HIGH {1} \
+   CONFIG.C_AUX_RST_WIDTH {1} \
  ] $rst_Clk_100M
 
   # Create instance: xlconcat_0, and set properties
   set xlconcat_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 xlconcat_0 ]
   set_property -dict [ list \
-CONFIG.NUM_PORTS {6} \
+   CONFIG.NUM_PORTS {6} \
  ] $xlconcat_0
 
   # Create interface connections
@@ -397,84 +457,11 @@ CONFIG.NUM_PORTS {6} \
   create_bd_addr_seg -range 0x00020000 -offset 0x00000000 [get_bd_addr_spaces microblaze_0/Instruction] [get_bd_addr_segs microblaze_0_local_memory/ilmb_bram_if_cntlr/SLMB/Mem] SEG_ilmb_bram_if_cntlr_Mem
   create_bd_addr_seg -range 0x00010000 -offset 0x41200000 [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs microblaze_0_axi_intc/S_AXI/Reg] SEG_microblaze_0_axi_intc_Reg
 
-  # Perform GUI Layout
-  regenerate_bd_layout -layout_string {
-   guistr: "# # String gsaved with Nlview 6.6.5b  2016-09-06 bk=1.3687 VDI=39 GEI=35 GUI=JA:1.6
-#  -string -flagsOSRD
-preplace port ext_intr -pg 1 -y 1020 -defaultsOSRD
-preplace port RST_O -pg 1 -y 1020 -defaultsOSRD
-preplace port UART -pg 1 -y 610 -defaultsOSRD
-preplace port Clk -pg 1 -y 480 -defaultsOSRD
-preplace port WE_O -pg 1 -y 1140 -defaultsOSRD
-preplace port STB_O -pg 1 -y 1120 -defaultsOSRD
-preplace port CYC_O -pg 1 -y 1080 -defaultsOSRD
-preplace port dcm_locked -pg 1 -y 560 -defaultsOSRD
-preplace port Reset -pg 1 -y 500 -defaultsOSRD
-preplace port ACK_I -pg 1 -y 1090 -defaultsOSRD
-preplace port spi_rtl -pg 1 -y 890 -defaultsOSRD
-preplace portBus DAT_O -pg 1 -y 1040 -defaultsOSRD
-preplace portBus ADR_O -pg 1 -y 1060 -defaultsOSRD
-preplace portBus SEL_O -pg 1 -y 1100 -defaultsOSRD
-preplace portBus DAT_I -pg 1 -y 1060 -defaultsOSRD
-preplace inst axi_timebase_wdt_0 -pg 1 -lvl 4 -y 140 -defaultsOSRD
-preplace inst microblaze_0_axi_periph -pg 1 -lvl 3 -y 160 -defaultsOSRD
-preplace inst xlconcat_0 -pg 1 -lvl 5 -y 690 -defaultsOSRD
-preplace inst axi_timer_0 -pg 1 -lvl 4 -y 330 -defaultsOSRD
-preplace inst microblaze_0_axi_intc -pg 1 -lvl 1 -y 720 -defaultsOSRD
-preplace inst mdm_1 -pg 1 -lvl 1 -y 481 -defaultsOSRD
-preplace inst rst_Clk_100M -pg 1 -lvl 5 -y 500 -defaultsOSRD
-preplace inst microblaze_0 -pg 1 -lvl 2 -y 480 -defaultsOSRD
-preplace inst axi_uartlite_0 -pg 1 -lvl 4 -y 530 -defaultsOSRD
-preplace inst axi_hwicap_0 -pg 1 -lvl 1 -y 940 -defaultsOSRD
-preplace inst microblaze_0_local_memory -pg 1 -lvl 3 -y 530 -defaultsOSRD
-preplace inst axi_slave_wishbone_classic_master_0 -pg 1 -lvl 4 -y 1140 -defaultsOSRD
-preplace inst axi_quad_spi_0 -pg 1 -lvl 4 -y 940 -defaultsOSRD
-preplace netloc axi_quad_spi_0_SPI_0 1 4 2 NJ 910 2400J
-preplace netloc axi_slave_wishbone_classic_master_0_WE_O 1 4 2 N 1200 2450J
-preplace netloc microblaze_0_axi_periph_M04_AXI 1 3 1 1560
-preplace netloc rst_Clk_100M_mb_reset 1 0 6 70 560 460 560 970J 430 NJ 430 2000J 390 2390
-preplace netloc axi_uartlite_0_interrupt 1 4 1 1990
-preplace netloc axi_slave_wishbone_classic_master_0_SEL_O 1 4 2 N 1160 2430J
-preplace netloc microblaze_0_Clk 1 0 5 20 -100 460 -100 940 -100 1600 -100 2020J
-preplace netloc microblaze_0_interrupt 1 1 1 430
-preplace netloc microblaze_0_intc_axi 1 0 4 60J -130 NJ -130 NJ -130 1560
-preplace netloc microblaze_0_axi_periph_M03_AXI 1 3 1 1590
-preplace netloc dcm_locked_1 1 0 5 10J 620 420J 630 NJ 630 NJ 630 2020J
-preplace netloc microblaze_0_ilmb_1 1 2 1 930
-preplace netloc microblaze_0_axi_periph_M05_AXI 1 3 1 1580
-preplace netloc microblaze_0_axi_dp 1 2 1 950
-preplace netloc axi_slave_wishbone_classic_master_0_DAT_O 1 4 2 N 1100 2400J
-preplace netloc xlconcat_0_dout 1 0 6 80J 820 NJ 820 NJ 820 NJ 820 NJ 820 2390
-preplace netloc microblaze_0_axi_periph_M01_AXI 1 3 1 1620
-preplace netloc axi_slave_wishbone_classic_master_0_CYC_O 1 4 2 N 1140 2420J
-preplace netloc axi_slave_wishbone_classic_master_0_ADR_O 1 4 2 N 1120 2410J
-preplace netloc axi_quad_spi_0_eos 1 0 5 80 1030 NJ 1030 NJ 1030 NJ 1030 1950
-preplace netloc axi_uartlite_0_UART 1 4 2 1970 590 2400J
-preplace netloc axi_timebase_wdt_0_wdt_reset 1 4 1 2010
-preplace netloc microblaze_0_dlmb_1 1 2 1 960
-preplace netloc microblaze_0_axi_periph_M07_AXI 1 0 4 40 -150 NJ -150 NJ -150 1570
-preplace netloc microblaze_0_axi_periph_M02_AXI 1 3 1 1630
-preplace netloc axi_slave_wishbone_classic_master_0_STB_O 1 4 2 N 1180 2440J
-preplace netloc microblaze_0_debug 1 1 1 440
-preplace netloc rst_Clk_100M_peripheral_aresetn 1 0 6 50J -120 NJ -120 970 -120 1610 -120 NJ -120 2420
-preplace netloc rst_Clk_100M_interconnect_aresetn 1 2 4 980J 610 NJ 610 1960J 360 2410
-preplace netloc rst_Clk_100M_bus_struct_reset 1 2 4 990J 440 NJ 440 1970J 380 2400
-preplace netloc mdm_1_debug_sys_rst 1 1 4 440 640 NJ 640 NJ 640 1980J
-preplace netloc axi_quad_spi_0_ip2intc_irpt 1 4 1 1980
-preplace netloc axi_hwicap_0_ip2intc_irpt 1 1 4 450 720 NJ 720 NJ 720 NJ
-preplace netloc Reset_1 1 0 5 30J 540 450J 620 NJ 620 NJ 620 2000J
-preplace netloc ACK_I_1 1 0 4 20J 1140 NJ 1140 NJ 1140 NJ
-preplace netloc ext_intr_1 1 0 5 10J 830 NJ 830 NJ 830 NJ 830 2010
-preplace netloc axi_timer_0_interrupt 1 4 1 1950
-preplace netloc axi_slave_wishbone_classic_master_0_RST_O 1 4 2 N 1080 2390J
-preplace netloc DAT_I_1 1 0 4 60J 1120 NJ 1120 NJ 1120 NJ
-levelinfo -pg 1 -10 310 700 1420 1810 2220 2470 -top -160 -bot 1510
-",
-}
 
   # Restore current instance
   current_bd_instance $oldCurInst
 
+  validate_bd_design
   save_bd_design
 }
 # End of create_root_design()
@@ -486,6 +473,4 @@ levelinfo -pg 1 -10 310 700 1420 1810 2220 2470 -top -160 -bot 1510
 
 create_root_design ""
 
-
-common::send_msg_id "BD_TCL-1000" "WARNING" "This Tcl script was generated from a block design that has not been validated. It is possible that design <$design_name> may result in errors during validation."
 

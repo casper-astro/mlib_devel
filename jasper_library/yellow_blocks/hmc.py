@@ -1,5 +1,5 @@
 import logging
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from constraints import PortConstraint, ClockConstraint, ClockGroupConstraint, MultiCycleConstraint, \
     OutputDelayConstraint, RawConstraint
 
@@ -99,6 +99,7 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         self.add_source('hmc/src/*.ngc')
         self.add_source("hmc/src/hmc_user_axi_fifo/*.xci")
         self.add_source('hmc/open_hmc')
+        self.add_source('utils/cdc_synchroniser.vhd')
         # This block takes a mezzanine site and should prevent other blocks from using it
         self.exc_requires = ['mezz%d' % self.mez]
 
@@ -122,22 +123,22 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         cons.append(PortConstraint('MEZ%s_REFCLK_2_N' % self.mez, 'MEZ%s_REFCLK_2_N' % self.mez))
         cons.append(PortConstraint('MEZ%s_REFCLK_3_P' % self.mez, 'MEZ%s_REFCLK_3_P' % self.mez))
         cons.append(PortConstraint('MEZ%s_REFCLK_3_N' % self.mez, 'MEZ%s_REFCLK_3_N' % self.mez))
-        cons.append(PortConstraint('MEZ%s_PHY11_LANE_TX_P' % self.mez, 'MEZ%s_PHY11_LANE_TX_P' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY11_LANE_TX_N' % self.mez, 'MEZ%s_PHY11_LANE_TX_N' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY12_LANE_TX_P' % self.mez, 'MEZ%s_PHY12_LANE_TX_P' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY12_LANE_TX_N' % self.mez, 'MEZ%s_PHY12_LANE_TX_N' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY21_LANE_TX_P' % self.mez, 'MEZ%s_PHY21_LANE_TX_P' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY21_LANE_TX_N' % self.mez, 'MEZ%s_PHY21_LANE_TX_N' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY22_LANE_TX_P' % self.mez, 'MEZ%s_PHY22_LANE_TX_P' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY22_LANE_TX_N' % self.mez, 'MEZ%s_PHY22_LANE_TX_N' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY11_LANE_RX_P' % self.mez, 'MEZ%s_PHY11_LANE_RX_P' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY11_LANE_RX_N' % self.mez, 'MEZ%s_PHY11_LANE_RX_N' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY12_LANE_RX_P' % self.mez, 'MEZ%s_PHY12_LANE_RX_P' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY12_LANE_RX_N' % self.mez, 'MEZ%s_PHY12_LANE_RX_N' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY21_LANE_RX_P' % self.mez, 'MEZ%s_PHY21_LANE_RX_P' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY21_LANE_RX_N' % self.mez, 'MEZ%s_PHY21_LANE_RX_N' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY22_LANE_RX_P' % self.mez, 'MEZ%s_PHY22_LANE_RX_P' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY22_LANE_RX_N' % self.mez, 'MEZ%s_PHY22_LANE_RX_N' % self.mez, port_index=range(4), iogroup_index=range(4)))
+        cons.append(PortConstraint('MEZ%s_PHY11_LANE_TX_P' % self.mez, 'MEZ%s_PHY11_LANE_TX_P' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY11_LANE_TX_N' % self.mez, 'MEZ%s_PHY11_LANE_TX_N' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY12_LANE_TX_P' % self.mez, 'MEZ%s_PHY12_LANE_TX_P' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY12_LANE_TX_N' % self.mez, 'MEZ%s_PHY12_LANE_TX_N' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY21_LANE_TX_P' % self.mez, 'MEZ%s_PHY21_LANE_TX_P' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY21_LANE_TX_N' % self.mez, 'MEZ%s_PHY21_LANE_TX_N' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY22_LANE_TX_P' % self.mez, 'MEZ%s_PHY22_LANE_TX_P' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY22_LANE_TX_N' % self.mez, 'MEZ%s_PHY22_LANE_TX_N' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY11_LANE_RX_P' % self.mez, 'MEZ%s_PHY11_LANE_RX_P' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY11_LANE_RX_N' % self.mez, 'MEZ%s_PHY11_LANE_RX_N' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY12_LANE_RX_P' % self.mez, 'MEZ%s_PHY12_LANE_RX_P' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY12_LANE_RX_N' % self.mez, 'MEZ%s_PHY12_LANE_RX_N' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY21_LANE_RX_P' % self.mez, 'MEZ%s_PHY21_LANE_RX_P' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY21_LANE_RX_N' % self.mez, 'MEZ%s_PHY21_LANE_RX_N' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY22_LANE_RX_P' % self.mez, 'MEZ%s_PHY22_LANE_RX_P' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY22_LANE_RX_N' % self.mez, 'MEZ%s_PHY22_LANE_RX_N' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
 
         # GTH Clock Constraints
         #cons.append(RawConstraint('create_clock -period 6.400 -waveform {0.000 3.200} [get_ports MEZ%s_REFCLK_0_P]' % self.mez))

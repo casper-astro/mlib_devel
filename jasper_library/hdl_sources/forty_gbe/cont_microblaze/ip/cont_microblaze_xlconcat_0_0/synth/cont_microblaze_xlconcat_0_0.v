@@ -1,4 +1,4 @@
-// (c) Copyright 1995-2018 Xilinx, Inc. All rights reserved.
+// (c) Copyright 1995-2019 Xilinx, Inc. All rights reserved.
 // 
 // This file contains confidential and proprietary information
 // of Xilinx, Inc. and is protected under U.S. and
@@ -48,12 +48,12 @@
 
 
 // IP VLNV: xilinx.com:ip:xlconcat:2.1
-// IP Revision: 1
+// IP Revision: 3
 
-(* X_CORE_INFO = "xlconcat_v2_1_1_xlconcat,Vivado 2018.2" *)
-(* CHECK_LICENSE_TYPE = "cont_microblaze_xlconcat_0_0,xlconcat_v2_1_1_xlconcat,{}" *)
-(* CORE_GENERATION_INFO = "cont_microblaze_xlconcat_0_0,xlconcat_v2_1_1_xlconcat,{x_ipProduct=Vivado 2018.2,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=xlconcat,x_ipVersion=2.1,x_ipCoreRevision=1,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,IN0_WIDTH=1,IN1_WIDTH=1,IN2_WIDTH=1,IN3_WIDTH=1,IN4_WIDTH=1,IN5_WIDTH=1,IN6_WIDTH=1,IN7_WIDTH=1,IN8_WIDTH=1,IN9_WIDTH=1,IN10_WIDTH=1,IN11_WIDTH=1,IN12_WIDTH=1,IN13_WIDTH=1,IN14_WIDTH=1,IN15_WIDTH=1,IN16_WIDTH=1,IN17_WIDTH=1,IN18_WIDTH=1,IN19_WIDTH=1,IN20_WIDTH=1,IN21_WIDTH=1,IN22_WIDTH=1,\
-IN23_WIDTH=1,IN24_WIDTH=1,IN25_WIDTH=1,IN26_WIDTH=1,IN27_WIDTH=1,IN28_WIDTH=1,IN29_WIDTH=1,IN30_WIDTH=1,IN31_WIDTH=1,dout_width=2,NUM_PORTS=2}" *)
+(* X_CORE_INFO = "xlconcat_v2_1_3_xlconcat,Vivado 2019.1.1" *)
+(* CHECK_LICENSE_TYPE = "cont_microblaze_xlconcat_0_0,xlconcat_v2_1_3_xlconcat,{}" *)
+(* CORE_GENERATION_INFO = "cont_microblaze_xlconcat_0_0,xlconcat_v2_1_3_xlconcat,{x_ipProduct=Vivado 2019.1.1,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=xlconcat,x_ipVersion=2.1,x_ipCoreRevision=3,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,IN0_WIDTH=1,IN1_WIDTH=1,IN2_WIDTH=1,IN3_WIDTH=1,IN4_WIDTH=1,IN5_WIDTH=1,IN6_WIDTH=1,IN7_WIDTH=1,IN8_WIDTH=1,IN9_WIDTH=1,IN10_WIDTH=1,IN11_WIDTH=1,IN12_WIDTH=1,IN13_WIDTH=1,IN14_WIDTH=1,IN15_WIDTH=1,IN16_WIDTH=1,IN17_WIDTH=1,IN18_WIDTH=1,IN19_WIDTH=1,IN20_WIDTH=1,IN21_WIDTH=1,IN22_WIDTH=\
+1,IN23_WIDTH=1,IN24_WIDTH=1,IN25_WIDTH=1,IN26_WIDTH=1,IN27_WIDTH=1,IN28_WIDTH=1,IN29_WIDTH=1,IN30_WIDTH=1,IN31_WIDTH=1,dout_width=2,NUM_PORTS=2}" *)
 (* DowngradeIPIdentifiedWarnings = "yes" *)
 module cont_microblaze_xlconcat_0_0 (
   In0,
@@ -65,7 +65,7 @@ input wire [0 : 0] In0;
 input wire [0 : 0] In1;
 output wire [1 : 0] dout;
 
-  xlconcat_v2_1_1_xlconcat #(
+  xlconcat_v2_1_3_xlconcat #(
     .IN0_WIDTH(1),
     .IN1_WIDTH(1),
     .IN2_WIDTH(1),

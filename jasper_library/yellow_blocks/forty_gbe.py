@@ -1,5 +1,5 @@
 import os
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from constraints import PortConstraint, ClockConstraint, GenClockConstraint, ClockGroupConstraint, InputDelayConstraint,\
     OutputDelayConstraint, MaxDelayConstraint, MinDelayConstraint, FalsePathConstraint, MultiCycleConstraint, RawConstraint
 from itertools import count
@@ -162,10 +162,11 @@ class forty_gbe(YellowBlock):
         
 
         #Port constraints
-        cons.append(PortConstraint('MEZ3_'+self.mez3_phy+'_LANE_TX_P', 'MEZ3_'+self.mez3_phy+'_LANE_TX_P', port_index=range(4),  iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ3_'+self.mez3_phy+'_LANE_TX_N', 'MEZ3_'+self.mez3_phy+'_LANE_TX_N', port_index=range(4),  iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ3_'+self.mez3_phy+'_LANE_RX_P', 'MEZ3_'+self.mez3_phy+'_LANE_RX_P', port_index=range(4),  iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ3_'+self.mez3_phy+'_LANE_RX_N', 'MEZ3_'+self.mez3_phy+'_LANE_RX_N', port_index=range(4),  iogroup_index=range(4)))
+        cons.append(PortConstraint('MEZ3_'+self.mez3_phy+'_LANE_TX_P', 'MEZ3_'+self.mez3_phy+'_LANE_TX_P', port_index=list(range(4)),  iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ3_'+self.mez3_phy+'_LANE_TX_N', 'MEZ3_'+self.mez3_phy+'_LANE_TX_N', port_index=list(range(4)),  iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ3_'+self.mez3_phy+'_LANE_RX_P', 'MEZ3_'+self.mez3_phy+'_LANE_RX_P', port_index=list(range(4)),  iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ3_'+self.mez3_phy+'_LANE_RX_N', 'MEZ3_'+self.mez3_phy+'_LANE_RX_N', port_index=list(range(4)),  iogroup_index=list(range(4))))
+
         cons.append(PortConstraint('MEZ3_REFCLK_%s_P'%self.port,'MEZ3_REFCLK_%s_P'%self.port))
         cons.append(PortConstraint('MEZ3_REFCLK_%s_N'%self.port,'MEZ3_REFCLK_%s_N'%self.port))
         cons.append(ClockConstraint('MEZ3_REFCLK_%s_P'%self.port,'MEZ3_REFCLK_%s_P'%self.port, period=6.4, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=3.2))

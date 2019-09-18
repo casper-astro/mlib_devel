@@ -17,6 +17,9 @@ constraints:
   - red_pitaya.xdc
 provides:
   - sys_clk
+  - sys_clk90
+  - sys_clk180
+  - sys_clk270
   - adc_clk
 pins:
   ADC_DATA_IN1:

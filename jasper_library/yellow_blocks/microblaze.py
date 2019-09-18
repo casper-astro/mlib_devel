@@ -1,4 +1,4 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from constraints import PortConstraint, ClockConstraint, RawConstraint
 from os import environ as env
 
@@ -20,6 +20,10 @@ class microblaze(YellowBlock):
         elif self.platform.name in ['vcu118']:
             self.memfile = 'executable_us_plus.mem'
             self.blkdiagram = 'microblaze_wb_us_plus.tcl'
+            self.include_spi_ports = False
+        elif self.platform.name in ['vcu128']:
+            self.memfile = 'executable_us_plus.mem'
+            self.blkdiagram = 'microblaze_wb_us_plus_hbm.tcl'
             self.include_spi_ports = False
         elif self.platform.name == 'snap2_v2':
             self.memfile= 'executable_no_xadc.mem'

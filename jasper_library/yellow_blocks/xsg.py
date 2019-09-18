@@ -1,4 +1,4 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 
 class xsg(YellowBlock):
     """
@@ -48,8 +48,6 @@ class xsg(YellowBlock):
         if self.platform.name == 'skarab':
             self.requires.append(self.clk_src)  # we need something to provide the clock we plan to use
             self.provides.append('user_clk')
-        elif self.platform.name == 'red_pitaya':
-            self.provides.append('user_clk')
         else:
             self.requires.append(self.clk_src)
             self.requires.append(self.clk_src+'90')
@@ -70,8 +68,6 @@ class xsg(YellowBlock):
         if self.platform.name == 'skarab':
             top.add_signal('user_clk')
             top.assign_signal('user_clk', self.clk_src)
-        elif  self.platform.name == 'red_pitaya':
-            top.add_signal('user_clk')
         else:
             top.add_signal('user_clk')
             top.add_signal('user_clk90')

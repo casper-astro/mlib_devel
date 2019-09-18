@@ -1,5 +1,5 @@
 import os
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from constraints import PortConstraint, ClockConstraint, ClockGroupConstraint, MultiCycleConstraint, \
     OutputDelayConstraint, RawConstraint, FalsePathConstraint
 from helpers import to_int_list
@@ -12,7 +12,7 @@ class skarab_adc4x3g_14(YellowBlock):
     and how to use the Simulink ports, see the Getting Started Guide, available at:
     https://github.com/ska-sa/skarab_docs/raw/master/adc/PN-SKARAB%20ADC4x3G_14%20GSG.pdf
     """
-	
+    
     def initialize(self):
         # Set bitwidth of block (this is determined by the 'Data bitwidth' parameter in the Simulink mask)
         # self.bitwidth = int(self.bitwidth)
@@ -98,14 +98,14 @@ class skarab_adc4x3g_14(YellowBlock):
         cons.append(PortConstraint('MEZ%s_REFCLK_2_N' % self.mez, 'MEZ%s_REFCLK_2_N' % self.mez))
         cons.append(PortConstraint('MEZ%s_REFCLK_3_P' % self.mez, 'MEZ%s_REFCLK_3_P' % self.mez))
         cons.append(PortConstraint('MEZ%s_REFCLK_3_N' % self.mez, 'MEZ%s_REFCLK_3_N' % self.mez))
-        cons.append(PortConstraint('MEZ%s_PHY11_LANE_RX_P' % self.mez, 'MEZ%s_PHY11_LANE_RX_P' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY11_LANE_RX_N' % self.mez, 'MEZ%s_PHY11_LANE_RX_N' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY12_LANE_RX_P' % self.mez, 'MEZ%s_PHY12_LANE_RX_P' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY12_LANE_RX_N' % self.mez, 'MEZ%s_PHY12_LANE_RX_N' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY21_LANE_RX_P' % self.mez, 'MEZ%s_PHY21_LANE_RX_P' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY21_LANE_RX_N' % self.mez, 'MEZ%s_PHY21_LANE_RX_N' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY22_LANE_RX_P' % self.mez, 'MEZ%s_PHY22_LANE_RX_P' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY22_LANE_RX_N' % self.mez, 'MEZ%s_PHY22_LANE_RX_N' % self.mez, port_index=range(4), iogroup_index=range(4)))
+        cons.append(PortConstraint('MEZ%s_PHY11_LANE_RX_P' % self.mez, 'MEZ%s_PHY11_LANE_RX_P' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY11_LANE_RX_N' % self.mez, 'MEZ%s_PHY11_LANE_RX_N' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY12_LANE_RX_P' % self.mez, 'MEZ%s_PHY12_LANE_RX_P' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY12_LANE_RX_N' % self.mez, 'MEZ%s_PHY12_LANE_RX_N' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY21_LANE_RX_P' % self.mez, 'MEZ%s_PHY21_LANE_RX_P' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY21_LANE_RX_N' % self.mez, 'MEZ%s_PHY21_LANE_RX_N' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY22_LANE_RX_P' % self.mez, 'MEZ%s_PHY22_LANE_RX_P' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY22_LANE_RX_N' % self.mez, 'MEZ%s_PHY22_LANE_RX_N' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
 
         cons.append(PortConstraint('MEZZANINE_%s_RESET' % self.mez,   'MEZZANINE_%s_RESET' % self.mez))
         cons.append(PortConstraint('MEZZANINE_%s_CLK_SEL' % self.mez, 'MEZZANINE_%s_CLK_SEL' % self.mez))
@@ -138,7 +138,7 @@ class skarab_adc4x3g_14(YellowBlock):
         #create_clock -period 5.333 -waveform {0.000 2.666} [get_ports ADC_MEZ_REFCLK_3_P]
         
         cons.append(ClockConstraint('aux_clk_diff_p','aux_clk_diff_p', period=100.0, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=50.0))        
-        cons.append(ClockConstraint('sync_in_p'     ,'sync_in_p', period=100.0, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=50.0))	
+        cons.append(ClockConstraint('sync_in_p'     ,'sync_in_p', period=100.0, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=50.0))   
         cons.append(ClockConstraint('%s/ADC32RF45_RX_0/ADC_PHY_inst/ADC_GT_SUPPPORT_inst/JESD204B_4LaneRX_7500MHz_init_i/U0/JESD204B_4LaneRX_7500MHz_i/gt0_JESD204B_4LaneRX_7500MHz_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/ADC32RF45_RX_0/ADC_PHY_inst/ADC_GT_SUPPPORT_inst/JESD204B_4LaneRX_7500MHz_init_i/U0/JESD204B_4LaneRX_7500MHz_i/gt0_JESD204B_4LaneRX_7500MHz_i/gthe2_i/RXOUTCLK' % self.fullname, period=5.333, port_en=False, virtual_en=False,  waveform_min=0.0, waveform_max=2.666))
         cons.append(ClockConstraint('%s/ADC32RF45_RX_1/ADC_PHY_inst/ADC_GT_SUPPPORT_inst/JESD204B_4LaneRX_7500MHz_init_i/U0/JESD204B_4LaneRX_7500MHz_i/gt0_JESD204B_4LaneRX_7500MHz_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/ADC32RF45_RX_1/ADC_PHY_inst/ADC_GT_SUPPPORT_inst/JESD204B_4LaneRX_7500MHz_init_i/U0/JESD204B_4LaneRX_7500MHz_i/gt0_JESD204B_4LaneRX_7500MHz_i/gthe2_i/RXOUTCLK' % self.fullname, period=5.333, port_en=False, virtual_en=False,  waveform_min=0.0, waveform_max=2.666))
         cons.append(ClockConstraint('%s/ADC32RF45_RX_2/ADC_PHY_inst/ADC_GT_SUPPPORT_inst/JESD204B_4LaneRX_7500MHz_init_i/U0/JESD204B_4LaneRX_7500MHz_i/gt0_JESD204B_4LaneRX_7500MHz_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/ADC32RF45_RX_2/ADC_PHY_inst/ADC_GT_SUPPPORT_inst/JESD204B_4LaneRX_7500MHz_init_i/U0/JESD204B_4LaneRX_7500MHz_i/gt0_JESD204B_4LaneRX_7500MHz_i/gthe2_i/RXOUTCLK' % self.fullname, period=5.333, port_en=False, virtual_en=False,  waveform_min=0.0, waveform_max=2.666))
@@ -188,7 +188,7 @@ class skarab_adc4x3g_14(YellowBlock):
         #resize_pblock [get_pblocks ADC32RF45_RX_0] -add {CLOCKREGION_X1Y3:CLOCKREGION_X1Y3}
         #create_pblock ADC32RF45_RX_1
         #add_cells_to_pblock [get_pblocks ADC32RF45_RX_1] [get_cells -quiet [list SKARAB_ADC4x3G_14_inst/ADC32RF45_RX_1/ADC_PHY_inst/ADC_GT_SUPPPORT_inst/GT0_RXOUTCLK_BUFH]]
-        #resize_pblock [get_pblocks ADC32RF45_RX_1] -add {CLOCKREGION_X1Y2:CLOCKREGION_X1Y2}	
+        #resize_pblock [get_pblocks ADC32RF45_RX_1] -add {CLOCKREGION_X1Y2:CLOCKREGION_X1Y2}    
         #create_pblock ADC32RF45_RX_2
         #add_cells_to_pblock [get_pblocks ADC32RF45_RX_2] [get_cells -quiet [list SKARAB_ADC4x3G_14_inst/ADC32RF45_RX_2/ADC_PHY_inst/ADC_GT_SUPPPORT_inst/GT0_RXOUTCLK_BUFH]]
         #resize_pblock [get_pblocks ADC32RF45_RX_2] -add {CLOCKREGION_X1Y1:CLOCKREGION_X1Y1}
@@ -199,46 +199,46 @@ class skarab_adc4x3g_14(YellowBlock):
         cons.append(RawConstraint('create_pblock MEZ%s_ADC32RF45_RX_0' % self.mez))
         cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_ADC32RF45_RX_0]' % self.mez + ' [get_cells -quiet [list '+self.fullname+'/ADC32RF45_RX_0/ADC_PHY_inst/ADC_GT_SUPPPORT_inst/GT0_RXOUTCLK_BUFH]]'))
         if self.mez == 0:
-        	cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_0]' % self.mez + ' -add {CLOCKREGION_X0Y4:CLOCKREGION_X0Y4}'))        
+            cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_0]' % self.mez + ' -add {CLOCKREGION_X0Y4:CLOCKREGION_X0Y4}'))        
         elif self.mez == 1:
-        	cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_0]' % self.mez + ' -add {CLOCKREGION_X0Y0:CLOCKREGION_X0Y0}'))        
+            cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_0]' % self.mez + ' -add {CLOCKREGION_X0Y0:CLOCKREGION_X0Y0}'))        
         elif self.mez == 2:
-        	cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_0]' % self.mez + ' -add {CLOCKREGION_X1Y3:CLOCKREGION_X1Y3}'))        
+            cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_0]' % self.mez + ' -add {CLOCKREGION_X1Y3:CLOCKREGION_X1Y3}'))        
         elif self.mez == 3:
-        	cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_0]' % self.mez + ' -add {CLOCKREGION_X1Y7:CLOCKREGION_X1Y7}'))        
+            cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_0]' % self.mez + ' -add {CLOCKREGION_X1Y7:CLOCKREGION_X1Y7}'))        
 
         cons.append(RawConstraint('create_pblock MEZ%s_ADC32RF45_RX_1' % self.mez))
         cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_ADC32RF45_RX_1]' % self.mez + ' [get_cells -quiet [list '+self.fullname+'/ADC32RF45_RX_1/ADC_PHY_inst/ADC_GT_SUPPPORT_inst/GT0_RXOUTCLK_BUFH]]'))
         if self.mez == 0:
-        	cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_1]' % self.mez + ' -add {CLOCKREGION_X0Y5:CLOCKREGION_X0Y5}'))        
+            cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_1]' % self.mez + ' -add {CLOCKREGION_X0Y5:CLOCKREGION_X0Y5}'))        
         elif self.mez == 1:
-        	cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_1]' % self.mez + ' -add {CLOCKREGION_X0Y1:CLOCKREGION_X0Y1}'))        
+            cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_1]' % self.mez + ' -add {CLOCKREGION_X0Y1:CLOCKREGION_X0Y1}'))        
         elif self.mez == 2:
-        	cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_1]' % self.mez + ' -add {CLOCKREGION_X1Y2:CLOCKREGION_X1Y2}'))        
+            cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_1]' % self.mez + ' -add {CLOCKREGION_X1Y2:CLOCKREGION_X1Y2}'))        
         elif self.mez == 3:
-        	cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_1]' % self.mez + ' -add {CLOCKREGION_X1Y6:CLOCKREGION_X1Y6}'))        
+            cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_1]' % self.mez + ' -add {CLOCKREGION_X1Y6:CLOCKREGION_X1Y6}'))        
 
         cons.append(RawConstraint('create_pblock MEZ%s_ADC32RF45_RX_2' % self.mez))
         cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_ADC32RF45_RX_2]' % self.mez + ' [get_cells -quiet [list '+self.fullname+'/ADC32RF45_RX_2/ADC_PHY_inst/ADC_GT_SUPPPORT_inst/GT0_RXOUTCLK_BUFH]]'))
         if self.mez == 0:
-        	cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_2]' % self.mez + ' -add {CLOCKREGION_X0Y6:CLOCKREGION_X0Y6}'))        
+            cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_2]' % self.mez + ' -add {CLOCKREGION_X0Y6:CLOCKREGION_X0Y6}'))        
         elif self.mez == 1:
-        	cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_2]' % self.mez + ' -add {CLOCKREGION_X0Y2:CLOCKREGION_X0Y2}'))        
+            cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_2]' % self.mez + ' -add {CLOCKREGION_X0Y2:CLOCKREGION_X0Y2}'))        
         elif self.mez == 2:
-        	cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_2]' % self.mez + ' -add {CLOCKREGION_X1Y1:CLOCKREGION_X1Y1}'))        
+            cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_2]' % self.mez + ' -add {CLOCKREGION_X1Y1:CLOCKREGION_X1Y1}'))        
         elif self.mez == 3:
-        	cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_2]' % self.mez + ' -add {CLOCKREGION_X1Y5:CLOCKREGION_X1Y5}'))        
+            cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_2]' % self.mez + ' -add {CLOCKREGION_X1Y5:CLOCKREGION_X1Y5}'))        
 
         cons.append(RawConstraint('create_pblock MEZ%s_ADC32RF45_RX_3' % self.mez))
         cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_ADC32RF45_RX_3]' % self.mez + ' [get_cells -quiet [list '+self.fullname+'/ADC32RF45_RX_3/ADC_PHY_inst/ADC_GT_SUPPPORT_inst/GT0_RXOUTCLK_BUFH]]'))
         if self.mez == 0:
-        	cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_3]' % self.mez + ' -add {CLOCKREGION_X0Y7:CLOCKREGION_X0Y7}'))        
+            cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_3]' % self.mez + ' -add {CLOCKREGION_X0Y7:CLOCKREGION_X0Y7}'))        
         elif self.mez == 1:
-        	cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_3]' % self.mez + ' -add {CLOCKREGION_X0Y3:CLOCKREGION_X0Y3}'))        
+            cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_3]' % self.mez + ' -add {CLOCKREGION_X0Y3:CLOCKREGION_X0Y3}'))        
         elif self.mez == 2:
-        	cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_3]' % self.mez + ' -add {CLOCKREGION_X1Y0:CLOCKREGION_X1Y0}'))        
+            cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_3]' % self.mez + ' -add {CLOCKREGION_X1Y0:CLOCKREGION_X1Y0}'))        
         elif self.mez == 3:
-        	cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_3]' % self.mez + ' -add {CLOCKREGION_X1Y4:CLOCKREGION_X1Y4}'))        
+            cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_ADC32RF45_RX_3]' % self.mez + ' -add {CLOCKREGION_X1Y4:CLOCKREGION_X1Y4}'))        
                                                         
         return cons
         

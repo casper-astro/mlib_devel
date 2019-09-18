@@ -1,4 +1,4 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from constraints import PortConstraint, ClockConstraint
 
 class adc20g(YellowBlock):
@@ -51,14 +51,14 @@ class adc20g(YellowBlock):
         cons.append(PortConstraint('FLASH2', 'led', port_index=[0], iogroup_index=[7]))
         cons.append(PortConstraint('Q8_CLK1_GTREFCLK_PAD_P_IN', 'Q8_CLK1_GTREFCLK_PAD_P_IN', port_index=[0], iogroup_index=[0]))
         cons.append(PortConstraint('Q8_CLK1_GTREFCLK_PAD_P_IN', 'Q8_CLK1_GTREFCLK_PAD_P_IN', port_index=[0], iogroup_index=[0]))
-        cons.append(PortConstraint('RXN_IN', 'RXN_IN', port_index=range(8), iogroup_index=range(8)))
-        cons.append(PortConstraint('RXP_IN', 'RXP_IN', port_index=range(8), iogroup_index=range(8)))
+        cons.append(PortConstraint('RXN_IN', 'RXN_IN', port_index=list(range(8)), iogroup_index=list(range(8))))
+        cons.append(PortConstraint('RXP_IN', 'RXP_IN', port_index=list(range(8)), iogroup_index=list(range(8))))
         cons.append(PortConstraint('TRACK_DATA_OUT', 'TRACK_DATA_OUT', port_index=[0], iogroup_index=[0]))
-        cons.append(PortConstraint('TXN_OUT', 'TXN_OUT', port_index=range(8), iogroup_index=range(8)))
-        cons.append(PortConstraint('TXP_OUT', 'TXP_OUT', port_index=range(8), iogroup_index=range(8)))
+        cons.append(PortConstraint('TXN_OUT', 'TXN_OUT', port_index=list(range(8)), iogroup_index=list(range(8))))
+        cons.append(PortConstraint('TXP_OUT', 'TXP_OUT', port_index=list(range(8)), iogroup_index=list(range(8))))
         cons.append(PortConstraint('diff_clock_rtl_clk_n', 'diff_clock_rtl_clk_n', port_index=[0], iogroup_index=[0]))
         cons.append(PortConstraint('diff_clock_rtl_clk_p', 'diff_clock_rtl_clk_p', port_index=[0], iogroup_index=[0]))
-        cons.append(PortConstraint('gpio_adc_control_tri_o', 'gpio_adc_control_tri_o', port_index=range(6), iogroup_index=range(6)))
+        cons.append(PortConstraint('gpio_adc_control_tri_o', 'gpio_adc_control_tri_o', port_index=list(range(6)), iogroup_index=list(range(6))))
         cons.append(PortConstraint('iic_scl_io', 'iic_scl_io', port_index=[0], iogroup_index=[0]))
         cons.append(PortConstraint('iic_sda_io', 'iic_sda_io', port_index=[0], iogroup_index=[0]))
         cons.append(PortConstraint('reset_rtl', 'reset_rtl', port_index=[0], iogroup_index=[0]))

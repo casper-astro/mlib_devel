@@ -7,12 +7,13 @@ at some point.
 
 import os
 import re
-from math import ceil, floor
+from math import ceil, floor, log
 import logging
 import inspect
 import operator
 from memory import Register
 import pdb
+from yellow_blocks.yellow_block_typecodes import *
 
 logger = logging.getLogger('jasper.verilog')
 
@@ -77,6 +78,7 @@ class WbDevice(object):
         #: If using multiple bus arbiters, which arbiter should this slave attach to?
         self.sub_arb_id = 0
 
+# TODO: This class is the same as the Wishbone class? What's the point of it?
 class AXI4LiteDevice(object):
     """
     A class to encapsulate the parameters (name, size, etc.) of a AXI4-Lite slave device.
@@ -153,7 +155,7 @@ class Port(ImmutableWithComments):
         if type(signal) is str:
             signal.rstrip(' ')
         self.signal = signal
-        for kw, val in kwargs.items():
+        for kw, val in list(kwargs.items()):
             self.__setattr__(kw, val)
 
 class Parameter(ImmutableWithComments):
@@ -213,7 +215,7 @@ class Signal(ImmutableWithComments):
     def update_attrs(self, name, width=0, **kwargs):
         self.name  = name.rstrip(' ')
         self.width = width
-        for kw, val in kwargs.items():
+        for kw, val in list(kwargs.items()):
             self.__setattr__(kw, val)
 
 
@@ -590,7 +592,7 @@ class VerilogModule(object):
         :type cur_blk: str
         """
         self.cur_blk = cur_blk
-        if cur_blk not in self.ports.keys():
+        if cur_blk not in list(self.ports.keys()):
             logger.debug('Initializing second-layer dictionairies for: %s'%cur_blk)
             self.ports[cur_blk] = {}
             self.parameters[cur_blk] = {}
@@ -603,7 +605,7 @@ class VerilogModule(object):
         """
         Check if this module has an instance called <name>. If so return True
         """
-        return name in self.instances.keys()
+        return name in list(self.instances.keys())
 
     def wb_compute(self, base_addr=0x10000, alignment=4):
         """
@@ -622,13 +624,13 @@ class VerilogModule(object):
         # Now we have an instance name, we can assign the wb ports to
         # real signals
         wb_device_num = 0
-        for block in self.instances.keys():
-            for instname, inst in self.instances[block].items():
+        for block in list(self.instances.keys()):
+            for instname, inst in list(self.instances[block].items()):
                 logger.debug("Looking for WB slaves for instance %s"%inst.name)
                 for n, wb_dev in enumerate(inst.wb_devices):
                     logger.debug("Assigning interface %d (%s)"%(n, wb_dev.regname))
                     if self.max_devices_per_arb is not None:
-                        wb_dev.sub_arb_id = wb_device_num / self.max_devices_per_arb
+                        wb_dev.sub_arb_id = wb_device_num // self.max_devices_per_arb
                     wb_device_num += 1
                     inst.assign_wb_interface(instname, id=n, suffix=wb_dev.hdl_suffix, candr_suffix=wb_dev.hdl_candr_suffix, sub_arb_id=wb_dev.sub_arb_id)
 
@@ -650,7 +652,7 @@ class VerilogModule(object):
             # If we are using a hierarchical arbiter, cut up the WB devices into blocks
             # and instantiate the appropriate address ranges in a top level arbiter
             if self.max_devices_per_arb is not None:
-                arbiters = [self.wb_devices[i:i+self.max_devices_per_arb] for i in xrange(0, len(self.wb_devices), self.max_devices_per_arb)]
+                arbiters = [self.wb_devices[i:i+self.max_devices_per_arb] for i in range(0, len(self.wb_devices), self.max_devices_per_arb)]
                 self.add_localparam('N_SUB_ARBS',  len(arbiters))
                 base_addrs = '{\n'
                 high_addrs = '{\n'
@@ -700,16 +702,31 @@ class VerilogModule(object):
          - 'relative_address': address relative to base_addr
          - 'axi4lite_devices': List of AXI4LiteDevice objects for core_info backwards compatibility
         """
+        #TODO: WHOEVER WROTE THIS CODE -- WHAT IS IT SUPPOSED TO DO?
+        # Need to get the register map in size order for xmltovhdl
+        # For this use odict
+
+        import odict
+
+        # I'm just going to go ahead and guess. :-S
+
+        # All software registers get ganged together in one self.memory_map entry,
+        # called 'sw_reg'. These ultimately become a bunch of ports in the AXI interconnect
+        # Each Bram gets its own memory_map entry, with a name matching the one provided
+        # when the ram was instantiated via YellowBlock.add_axi4lite_interface.
+        
         for dev in self.axi4lite_devices:
             # add all software registers to one memory mapped AXI4-Lite interface
-            if dev.typecode == 0:
+            if dev.typecode == TYPECODE_SWREG:
                 # check to see if this is the first sw_reg in the memory_map dict
                 if 'sw_reg' not in self.memory_map:
                     # Make new interface dict for software registers
-                    interface = self.memory_map['sw_reg'] = {}
+                    self.memory_map['sw_reg'] = {}
+                    interface = self.memory_map['sw_reg']
                     interface['size'] = dev.nbytes
                     interface['memory_map'] = dev.memory_map
                     # erase dev.memory_map so that core_info doesn't add sw_regs twice
+                    # ?????
                     dev.memory_map = []
                     interface['axi4lite_devices'] = [dev]
                 else:
@@ -724,25 +741,53 @@ class VerilogModule(object):
                     # # erase dev.memory_map so that core_info doesn't add sw_regs twice
                     dev.memory_map = []
                     interface['axi4lite_devices'] += [dev]
-            elif dev.typecode == 4:
+            elif dev.typecode == TYPECODE_BRAM:
                 # tell the axi_ic to generate a bram
-                interface = self.memory_map[dev.regname] = {}
+                self.memory_map[dev.regname] = {}
+                interface = self.memory_map[dev.regname]
                 interface['size'] = dev.nbytes # seems brams need to be sized in bytes not words
                 interface['memory_map'] = dev.memory_map
                 interface['axi4lite_devices'] = [dev]
                 # erase dev.memory_map so that core_info doesn't add brams twice
-                # only a mad man would attempt to debug this shit!
+                # only a mad man would attempt to debug this!
+                # And here I am. Please document this code better.
                 dev.memory_map = []
             else:
                 # add all other yellow blocks to their own interface and make xml memory map
-                interface = self.memory_map[dev.regname] = {}
+                self.memory_map[dev.regname] = {}
+                interface = self.memory_map[dev.regname]
                 interface['size'] = dev.nbytes
                 interface['memory_map'] = dev.memory_map
                 interface['axi4lite_devices'] = [dev]
 
         relative_address = 0
+        # Now loop over interfaces in memory_map to determine addresses.
+        # A limitation / feature of the xml2vhdl axi generation code is that it expects
+        # all memory-mapped devices of size N-bytes to by aligned on N-byte boundaries.
+        # Thus, we can't put a 4-byte register at address 0x0, and then a 1kiB bram at address 0x4.
+        # Though not foolproof, we try and coerce an acceptable layout by placing the devices
+        # in size order with the largest first. Hopefully all the devices are 2^n bytes in size --
+        # this seems to be enforced by the xml2vhdl generator
+
+        # First *we* round up the sizes so we agree with xml2vhdl
+        for key in self.memory_map.keys():
+            self.memory_map[key]['size'] = 2**int(ceil(log(self.memory_map[key]['size'], 2)))
+
+        ordered_memory_map = odict.odict()
+        # quick sort be damned. Go slow.
+        while(len(self.memory_map) > 0):
+            max_size = 0
+            for key,val in list(self.memory_map.items()):
+                if val['size'] > max_size:
+                    max_size = val['size']
+                    max_key = key
+            ordered_memory_map[max_key] = self.memory_map.pop(max_key)
+
+        # Now replace the memory map with the ordered one and continue
+        self.memory_map = ordered_memory_map.copy()
+
         # Now loop over interfaces in memory_map to determine addresses
-        for key,val in self.memory_map.items():
+        for key,val in list(self.memory_map.items()):
             val['relative_address'] = hex(relative_address)
             # this is really gross, but didn't want to rewrite anything in core_info... Sorry.
             if key == 'sw_reg':
@@ -911,12 +956,12 @@ class VerilogModule(object):
         """
         Add ports and signals associated with child instances
         """
-        for block in self.instances.keys():
+        for block in list(self.instances.keys()):
             self.set_cur_blk(block)
-            for instname, inst in self.instances[block].items():
+            for instname, inst in list(self.instances[block].items()):
                 logger.debug('Instantiating child ports for %s'%instname)
-                for blk in inst.ports.keys():
-                    for pname, port in inst.ports[blk].items():
+                for blk in list(inst.ports.keys()):
+                    for pname, port in list(inst.ports[blk].items()):
                         if port.parent_sig:
                             logger.debug('  Adding instance port %s as signal %s to top'%(port.name, port.signal))
                             if not hasattr(port, 'width'):
@@ -1086,7 +1131,7 @@ class VerilogModule(object):
         declare parameters
         """
         s = ''
-        for block in self.parameters.keys():
+        for block in list(self.parameters.keys()):
             s += self.gen_cur_blk_comment(block, self.parameters[block])
             for pn, parameter in sorted(self.parameters[block].items()):
                 s += '  parameter %s = %s;'%(parameter.name,parameter.value)
@@ -1101,7 +1146,7 @@ class VerilogModule(object):
         declare localparams
         """
         s = ''
-        for block in self.localparams.keys():
+        for block in list(self.localparams.keys()):
             s += self.gen_cur_blk_comment(block, self.localparams[block])
             for pn,parameter in sorted(self.localparams[block].items()):
                 s += '  localparam %s = %s;'%(parameter.name,parameter.value)
@@ -1120,13 +1165,13 @@ class VerilogModule(object):
         n_ports = 0
         i = 1
         # get total number of ports
-        for block in self.ports.keys():
-            n_ports += len(self.ports[block].keys())
+        for block in list(self.ports.keys()):
+            n_ports += len(list(self.ports[block].keys()))
 
-        for block in self.ports.keys():
+        for block in list(self.ports.keys()):
             s += self.gen_cur_blk_comment(block, self.ports[block])
             # sort by port type then alphabetically
-            for port in sorted(self.ports[block].values(), key=operator.attrgetter('dir', 'name')):
+            for port in sorted(list(self.ports[block].values()), key=operator.attrgetter('dir', 'name')):
                 logger.debug('Generating port %s'%port.name)
                 if port.width == 0:
                     s += '    %s %s'%(kwm[port.dir],port.name)
@@ -1149,16 +1194,16 @@ class VerilogModule(object):
         # keyword map
         kwm = {'in':'input','out':'output','inout':'inout'}
         s = ''
-        for block in self.ports.keys():
+        for block in list(self.ports.keys()):
             s += self.gen_cur_blk_comment(block, self.ports[block])
             # sort port type then alphabetically
-            for port in sorted(self.ports[block].values(), key=operator.attrgetter('dir', 'name')):
+            for port in sorted(list(self.ports[block].values()), key=operator.attrgetter('dir', 'name')):
                 # set up indentation nicely
                 s += '  '
                 # first write attributes
                 if hasattr(port, 'attr'):
                     s += '(* '
-                    n_keys = len(port.attr.keys())
+                    n_keys = len(list(port.attr.keys()))
                     for kn,key in enumerate(port.attr.keys()):
                         if kn != (n_keys-1):
                             s += '%s = "%s",'%(key,port.attr[key])
@@ -1181,7 +1226,7 @@ class VerilogModule(object):
         declare signals
         """
         s = ''
-        for block in self.signals.keys():
+        for block in list(self.signals.keys()):
             s += self.gen_cur_blk_comment(block, self.signals[block])
             for name, sig in sorted(self.signals[block].items()):
                 logger.debug('Writing verilog for signal %s'%name)
@@ -1201,7 +1246,7 @@ class VerilogModule(object):
         module
         """
         s = ''
-        for block in self.instances.keys():
+        for block in list(self.instances.keys()):
             n = 0
             n_inst = len(self.instances[block])
             s += self.gen_cur_blk_comment(block, self.instances[block])
@@ -1219,7 +1264,7 @@ class VerilogModule(object):
         signal
         """
         s = ''
-        for block in self.assignments.keys():
+        for block in list(self.assignments.keys()):
             s += self.gen_cur_blk_comment(block, self.assignments[block])
             for n,assignment in sorted(self.assignments[block].items()):
                 s += '  assign %s = %s;'%(assignment['lhs'], assignment['rhs'])
@@ -1242,15 +1287,13 @@ class VerilogModule(object):
         s = ''
         if self.comment is not None:
             s += '  // %s\n'%self.comment
-        for block in self.parameters.keys():
+        for block in list(self.parameters.keys()):
             n_params = len(self.parameters[block])
             if n_params > 0:
                 s += '  %s #(\n' %self.name
                 n = 0
                 for paramname, parameter in sorted(self.parameters[block].items()):
                     s += '    .%s(%s)'%(parameter.name, parameter.value)
-                    print('%s(%s)'%(parameter.name, parameter.value))
-                    print('n: %s\n n_params: %s'%(n,n_params))
                     if n != (n_params - 1):
                         s += ',\n'
                     else:
@@ -1259,7 +1302,7 @@ class VerilogModule(object):
                 s += '  ) %s (\n'%instname
             else:
                 s += '  %s  %s (\n'%(self.name, instname)
-        for block in self.ports.keys():
+        for block in list(self.ports.keys()):
             n_ports = len(self.ports[block])
             n = 0
             for pn, port in sorted(self.ports[block].items()):
@@ -1348,9 +1391,9 @@ class VerilogModule(object):
         This helper function searches each top level dictionary
         to see if it contains ``name`` and returns the key that does.
         """
-        for top_dict_key, top_dict_value in dict.items():
+        for top_dict_key, top_dict_value in list(dict.items()):
             # does the second level dict keys contain name?
-            if name in top_dict_value.keys():
+            if name in list(top_dict_value.keys()):
                 return top_dict_key
         # return key as None if not in any dictionary
         return None
@@ -1409,7 +1452,7 @@ class VerilogModule(object):
         s += "     /\           (_)                                | |      \n"
         s += "    /  \   ___ ___ _  __ _ _ __  _ __ ___   ___ _ __ | |_ ___ \n"
         s += "   / /\ \ / __/ __| |/ _` | '_ \| '_ ` _ \ / _ \ '_ \| __/ __|\n"
-        s += "  / ____ \\__ \__ \ | (_| | | | | | | | | |  __/ | | | |_\__ \ \n"
+        s += "  / ____ \\\\__ \__ \ | (_| | | | | | | | | |  __/ | | | |_\__ \ \n"
         s += " /_/    \_\___/___/_|\__, |_| |_|_| |_| |_|\___|_| |_|\__|___/\n"
         s += "                      __/ |                                   \n"
         s += "                     |___/                                    \n"

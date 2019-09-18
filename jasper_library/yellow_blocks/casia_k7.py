@@ -1,4 +1,4 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from constraints import ClockConstraint, PortConstraint, RawConstraint
 
 class casia_k7(YellowBlock):
@@ -61,7 +61,7 @@ class casia_k7(YellowBlock):
             #cons += [RawConstraint('set_property BITSTREAM.CONFIG.NEXT_CONFIG_ADDR 0x%.7x [current_design]' % self.usermemaddr),]
             pass
         else:
-            cons += [RawConstraint('set_property BITSTREAM.CONFIG.CONFIGFALLBACK ENABLE [current_design]'),] 					
+            cons += [RawConstraint('set_property BITSTREAM.CONFIG.CONFIGFALLBACK ENABLE [current_design]'),]                    
 
         return cons
 

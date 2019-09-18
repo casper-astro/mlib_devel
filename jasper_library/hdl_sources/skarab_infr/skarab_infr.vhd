@@ -1290,7 +1290,7 @@ begin
         CLKOUT0   => user_clk_mmcm,
         CLKFBOUT  => user_clk_mmcm_fb,  -- Feedback clock output
         LOCKED    => user_mmcm_locked,
-        CLKIN1    => sys_clk_mmcm,      -- Main clock input
+        CLKIN1    => refclk_0,          -- Main clock input
         PWRDWN    => '0',
         RST       => not sys_mmcm_locked,   --fpga_reset,
         CLKFBIN   => user_clk_mmcm_fb   -- Feedback clock input
