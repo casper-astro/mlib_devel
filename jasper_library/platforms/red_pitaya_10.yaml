@@ -17,6 +17,9 @@ provides:
   - sys_clk180
   - sys_clk270
   - adc_clk
+  - adc_clk90
+  - adc_clk180
+  - adc_clk270
 pins:
   ADC_DATA_IN1:
     iostd: LVCMOS18
