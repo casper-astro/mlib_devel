@@ -58,9 +58,7 @@ This script will resynchronize every CASPER block in your design with its latest
 Setup
 ------
 
-The software stack you will require to use the toolflow will depend what hardware you are targetting. Older hardware (ROACH2 and earlier) use the older Xilinx software (ISE) which forces the use of different tools.
-
-The recommended OS is Ubuntu as it is what the majority of the collaboration are using. This makes it easier for us to support you. If you are so inclined, you could also use Red Hat, but we definitely do not support Windows. You are welcome to try but you will be on your own. You could always run Linux in a VM although this will increase your compile times.
+The software stack you will require to use the toolflow will depend what hardware you are targeting. Older hardware (ROACH2 and earlier) use the older Xilinx software (ISE) which forces the use of different tools.
 
 The current compatibility matrix is below:
 
@@ -83,6 +81,11 @@ The current compatibility matrix is below:
 +----------------+---------------------+--------------------+--------------------+---------------------------------+
 |SNAP2           | Ubuntu 16.04        |  ???               |  ???               |  branch: `master`               |
 +----------------+---------------------+--------------------+--------------------+---------------------------------+
+
+The recommended OS is Ubuntu as it is what the majority of the collaboration are using. This makes it easier for us to support you. If you are so inclined, you could also use Red Hat, but we definitely do not support Windows. You are welcome to try but you will be on your own. You could always run Linux in a VM although this will increase your compile times.
+
+Setup Links
+"""""""""""
 
 1. :doc:`Installing the Toolflow <src/Installing-the-Toolflow>`
 2. :doc:`Installing Matlab <src/How-to-install-Matlab>`
