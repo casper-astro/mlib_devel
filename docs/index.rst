@@ -62,17 +62,27 @@ The software stack you will require to use the toolflow will depend what hardwar
 
 The recommended OS is Ubuntu as it is what the majority of the collaboration are using. This makes it easier for us to support you. If you are so inclined, you could also use Red Hat, but we definitely do not support Windows. You are welcome to try but you will be on your own. You could always run Linux in a VM although this will increase your compile times.
 
-+-------------+--------------------+----------------+---------------+----------------------------------------------------------------------------+
-| Platform    | OS                 | Matlab Version | Xilinx Tools  | mlib_devel                                                                 |
-+=============+====================+================+===============+============================================================================+
-| ROACH1 or 2 | Ubuntu 12.04/14.04 | R2013b         | ISE 14.7      | `ROACH branch <https://github.com/casper-astro/mlib_devel/tree/roach2>`__  |
-+-------------+--------------------+----------------+---------------+----------------------------------------------------------------------------+
-| SNAP        | Ubuntu 14.04/16.04 | R2016b         | Vivado 2016.4 | `Master branch <https://github.com/casper-astro/mlib_devel>`__             |
-+-------------+--------------------+----------------+---------------+----------------------------------------------------------------------------+
-| SKARAB      | Ubuntu 14.04/16.04 | R2016b         | Vivado 2016.2 | `Master branch <https://github.com/casper-astro/mlib_devel>`__             |
-+-------------+--------------------+----------------+---------------+----------------------------------------------------------------------------+
-| VCU118      | Ubuntu 14.04/16.04 | R2017b         | Vivado 2018.2 | `vcu118 branch <https://github.com/casper-astro/mlib_devel/tree/vcu118>`__ |
-+-------------+--------------------+----------------+---------------+----------------------------------------------------------------------------+
+The current compatibility matrix is below:
+
++----------------+---------------------+--------------------+--------------------+---------------------------------+
+|  Hardware      |   Operating System  |    Matlab Version  |    Xilinx Version  |    mlib_devel branch / commit   |
++================+=====================+====================+====================+=================================+
+|ROACH1/2 [#f1]_ | Ubuntu 14.04        |  2013b             |  ISE 14.7          |  branch: `roach`                |
++----------------+---------------------+--------------------+--------------------+---------------------------------+
+|SKARAB          | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |
++----------------+---------------------+--------------------+--------------------+---------------------------------+
+|SNAP            | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |
++----------------+---------------------+--------------------+--------------------+---------------------------------+
+|Red Pitaya      | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |
++----------------+---------------------+--------------------+--------------------+---------------------------------+
+|VCU118          | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |
++----------------+---------------------+--------------------+--------------------+---------------------------------+
+|VCU128          | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |
++----------------+---------------------+--------------------+--------------------+---------------------------------+
+|ZCU111          | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |
++----------------+---------------------+--------------------+--------------------+---------------------------------+
+|SNAP2           | Ubuntu 16.04        |  ???               |  ???               |  branch: `master`               |
++----------------+---------------------+--------------------+--------------------+---------------------------------+
 
 1. :doc:`Installing the Toolflow <src/Installing-the-Toolflow>`
 2. :doc:`Installing Matlab <src/How-to-install-Matlab>`
@@ -118,3 +128,6 @@ Get Involved
 If you are a CASPER collaborator, or you’re just interested in what we’re up to, feel free to join our mailing list by sending a blank email `here. <casper+subscribe@lists.berkeley.edu>`_
 
 If would like to get involved in the development of the tools, please join our dev mailing list by sending a blank email `here. <casper-dev+subscribe@lists.berkeley.edu>`_.
+
+.. rubric:: Footnotes
+.. [#f1] Please note that official support for ROACH platforms is no longer provided
