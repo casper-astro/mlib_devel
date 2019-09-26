@@ -27,7 +27,7 @@ Optional variables:
 
 - `PLATFORM` - Used by the Xilinx tools to select suitable runtime binaries for your system.  If not specified, it will be defaulted to `lin64`, indicating a 64-bit Linux operating system. This is the only configuration the collaboration tests.
 - `XILINXD_LICENCE_FILE` - The path to your Xilinx software license if it exists in a non-standard location.
-- `JASPER_BACKEND` - the type of Xilinx tools you want to use to implement your design. Supported options are `vivado` or `ise`. The default is `vivado`, which is correct for all CASPER-supported platforms. ISE is the Xilinx tool used for ROACH1/ROACH2 designs _(note: official support for ROACH platforms is no longer provided)_.
+- `JASPER_BACKEND` - the type of Xilinx tools you want to use to implement your design. Supported options are `vivado` or `ise`. The default is `vivado`, which is correct for all CASPER-supported platforms. _(Note: `ise` is the Xilinx tool used for ROACH1/ROACH2 designs, however official support for ROACH platforms is no longer provided)._
 - `CASPER_PYTHON_VENV_ON_START` - The path to your Python virtual environment (if one is being used). This will activate the virtual environment on load.
 
 Other variables:
