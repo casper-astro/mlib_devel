@@ -4,23 +4,20 @@ This page explains how to install the CASPER tools and what supporting software 
 
 ## Getting the right versions
 
-The toolflow is very sensitive to mis-matching software versions. Depending on the hardware you intend to use, you will need different versions of:
-1. CASPER's `mlib_devel` libraries
-2. Mathworks MATLAB / Simulink
-3. Xilinx Vivado / ISE
+The toolflow is very sensitive to mis-matching software versions. The current compatibility matrix of software versions is below:
 
-The current compatibility matrix is below:
+_(Note that official support for ROACH plaforms is no longer provided, however [this version](https://github.com/casper-astro/mlib_devel/tree/d77999047d2f0dc53e1c1e6e516e6ef3cdd45632/docs) of `mlib_devel` contains all ROACH related documentation and [this version](https://github.com/casper-astro/tutorials_devel/tree/8bdd40d856ff542640d8f62a8d3029b084ae8efa/docs/tutorials/roach) of `tutorials_devel` contains all ROACH tutorials)_
 
-|  Hardware      |   Operating System  |    Matlab Version  |    Xilinx Version  |    mlib_devel branch / commit   |
-|----------------|---------------------|--------------------|--------------------|---------------------------------|
-|ROACH1/2        | Ubuntu 14.04        |  2013b             |  ISE 14.7          |  branch: `roach`                |
-|SKARAB          | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |
-|SNAP            | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |
-|Red Pitaya      | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |
-|VCU118          | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |
-|VCU128          | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |
-|ZCU111          | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |
-|SNAP2           | Ubuntu 16.04        |  ???               |  ???               |  branch: `master`               |
+|  Hardware      |   Operating System  |    Matlab Version  |    Xilinx Version  |    mlib_devel branch / commit   |  Python Version  |
+|----------------|---------------------|--------------------|--------------------|---------------------------------|------------------|
+|ROACH1/2        | Ubuntu 14.04        |  2013b             |  ISE 14.7          |  branch: `roach2`               |  Python 2.7      |
+|SKARAB          | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |  Python 3        |
+|SNAP            | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |  Python 3        |
+|Red Pitaya      | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |  Python 3        |
+|VCU118          | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |  Python 3        |
+|VCU128          | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |  Python 3        |
+|ZCU111          | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |  Python 3        |
+|SNAP2           | Ubuntu 16.04        |  ???               |  ???               |  branch: `master`               |  Python 3        |
 
 Other software combinations may work, but these are the tested configurations.
 The master branch is usually updated once a year. Between updates, code with newer features can be found in the `casper-astro-soak-test` branch. This branch can usually be used in place of the `master` branch for platforms which support `master`. However, be aware that `casper-astro-soak-test` is likely to be less stable. Please report any bugs you encounter via github's issue tracker.
@@ -31,18 +28,15 @@ The master branch is usually updated once a year. Between updates, code with new
 MATLAB installation instructions are available [here](https://casper-toolflow.readthedocs.io/en/latest/src/How-to-install-Matlab.html), or, contact whoever manages your software installations.
 You will need to install both MATLAB and Simulink.
 
-2. Xilinx Vivado / ISE
+2. Xilinx Vivado
 
-These are available from [xilinx.com](https://www.xilinx.com) and will require a license. If you are part of an academic institution you may be eligible for free licenses via the [Xilinx University Program](https://www.xilinx.com/support/university.html).
+This is available from [xilinx.com](https://www.xilinx.com) and will require a license. If you are part of an academic institution you may be eligible for free licenses via the [Xilinx University Program](https://www.xilinx.com/support/university.html).
 If you need them, install instructions are available:
-* [How to install Xilinx ISE](https://casper-toolflow.readthedocs.io/en/latest/src/How-to-install-Xilinx-ISE.html)
 * [How to install Xilinx Vivado](https://casper-toolflow.readthedocs.io/en/latest/src/How-to-install-Xilinx-Vivado.html)
 
 3. Python
 
-Compiling for _ROACH_ requires Python 2.7 and `pip`. If you don't have these already you can probably install them in Ubuntu environments by opening a terminal and running the command `apt-get install python2.7 python-pip`.
-
-Compiling for _non-ROACH platforms_ requires Python 3 and `pip3`. If you don't have these already you can probably install them in Ubuntu environments by opening a terminal and running the command `apt-get install python3 python3-pip`.
+Compiling for supported platforms requires Python 3 and `pip3`. If you don't have these already you can probably install them in Ubuntu environments by opening a terminal and running the command `apt-get install python3 python3-pip`.
 
 We thoroughly recommend using a [virtual environment](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#installing-virtualenv) to separate the version of Python and its libraries the toolflow uses from the rest of your system. 
 
@@ -67,14 +61,14 @@ Clone the toolflow from the [mlib_devel](https://github.com/casper-astro/mlib_de
 ```bash
 # Clone the mlib_devel repository. Replace <branch_name> with the branch
 # supported by your chosen platform.
-# Eg. for roach you should run:
-# git clone -b roach2 https://github.com/casper-astro.mlib_devel
+# Eg. for casper-astro-soak-test you should run:
+# git clone -b casper-astro-soak-test https://github.com/casper-astro.mlib_devel
 git clone -b <branch_name> https://github.com/casper-astro/mlib_devel
 ```
 
 This could take a while -- the repository is several hundred megabytes. If you want, you can save some time by adding the `--depth=1` flag to the above command. This will only download the current version of the repository, rather than its full git history.
 
-Next, move into the `mlib_devel` repository you have just created, activate your virtual environment (if using one) and download any Python dependencies you need (this is only necessary for non-ROACH versions of the toolflow). The downloaded dependencies will be installed within the virtual environment separate to the rest of your system. Installing the dependencies within the `casper-astro-soak-test` branch involves installing a single _requirements.txt_ file that contains information on all the required dependencies, other branches may require individual dependency installs.
+Next, move into the `mlib_devel` repository you have just created, activate your virtual environment (if using one) and download any Python dependencies you need. The downloaded dependencies will be installed within the virtual environment separate to the rest of your system. Installing the dependencies within the `casper-astro-soak-test` branch involves installing a single _requirements.txt_ file that contains information on all the required dependencies, other branches may require individual dependency installs.
 
 ```bash
 cd mlib_devel
