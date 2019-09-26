@@ -1,6 +1,6 @@
 # Running the Toolflow
 
-1) There are two ways of working with the (new, Vivado-based) CASPER toolflow. You can do this initially with the MATLAB GUI to compile the front end and then handle the middleware and backend generation using Python or you can run everything in Python. The former stage is more for design and debugging (steps 2-11) and the later stage (steps 12-15) is for the final tested and working design. This How-to will cover both methods.
+1) There are two ways of working with the Vivado-based CASPER toolflow. You can do this initially with the MATLAB GUI to compile the front end and then handle the middleware and backend generation using Python or you can run everything in Python. The former stage is more for design and debugging (steps 2-11) and the later stage (steps 12-15) is for the final tested and working design. This How-to will cover both methods.
 
 2) **Matlab/Python method:** Using the terminal, type the following under "mlib_devel": 
 `./startsg` 
@@ -29,7 +29,7 @@ This is an important step, because the Xilinx and Matlab paths will not be speci
 
 9) **Matlab/Python method:** Using the terminal, paste the “python exec_flow.py….” command that was cut earlier from Matlab, in the terminal: 
 `python exec_flow.py -m … --middleware --backend --software`.
-This command will execute the middleware, which calls the yellow block constructors, creates the top.v file and generates the yaml file, which contains all the parameters needed for the backend to compile. The backend reads the yaml file and builds a list of sources, constraints, generates the constraints file and the tcl file. This tcl file is used by Vivado or ISE to compile the top.v file and all other relevant source files. This generates a bit and binary file, which is used to configure the FPGA. The software reads the binary file and generates a bof and fpg file. The arguments passed to exec_flow.py will be explained in more detail below when dealing with the Python method.
+This command will execute the middleware, which calls the yellow block constructors, creates the top.v file and generates the yaml file, which contains all the parameters needed for the backend to compile. The backend reads the yaml file and builds a list of sources, constraints, generates the constraints file and the tcl file. This tcl file is used by Vivado to compile the top.v file and all other relevant source files. This generates a bit and binary file, which is used to configure the FPGA. The software reads the binary file and generates a bof and fpg file. The arguments passed to exec_flow.py will be explained in more detail below when dealing with the Python method.
 
 10) **Matlab/Python method:** Using the terminal, wait until the design has finished compiling. Vivado compiles should indicate that there are no timing violations. Check the slack times for the setup and hold reports. They should not be negative. If they are then your design is not meeting timing and some changes will need to be made to your design.
 
@@ -50,7 +50,7 @@ This command will execute the middleware, which calls the yellow block construct
         - `--perfile` - Runs the front end peripheral file generation. If not specified, then it won’t generate the peripheral file.
         - `--frontend` - This compiles the front end IP, which basically runs the system generator. If not specified, then the compile will not be run.
         - `--middleware` - This runs the toolflow middle process. If not specified, then this process will not be run.
-        - `--backend` - This runs the backend compilation i.e. Xilinx Vivado or ISE. If not specified, then this process will not be run.
+        - `--backend` - This runs the backend compilation i.e. Xilinx Vivado. If not specified, then this process will not be run.
         - `--software` - This runs the software compilation - generates a *.bof and *.fpg file. If not specified, then this process will not be run.
         - `--be` - This specifies the type of backend to be run. This is “--be vivado”, but provision has been made for other backends. If this is not specified, then the default is the Vivado backend.
         - `--jobs` - The number of processor cores to run the compile with. If this is not specified, the default is 4. You need to make sure that your processor has at least 4 threads if this is to work.
