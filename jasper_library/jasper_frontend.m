@@ -93,7 +93,7 @@ disp('*    Front End compile complete    *');
 disp('************************************');
 disp('');
 disp('To complete your compile, run the following command in a terminal.');
-disp('Remember to source your starst.local environment first!');
+disp('Remember to source your startsg.local environment first!');
 disp(build_cmd);
 
 

@@ -10,6 +10,9 @@ class red_pitaya(YellowBlock):
         self.add_source('red_pitaya')
         self.provides = [
             "adc_clk",
+            "adc_clk90",
+            "adc_clk180",
+            "adc_clk270",
             "dac_clk",
             "sys_clk",
             "sys_clk90",
@@ -57,6 +60,9 @@ class red_pitaya(YellowBlock):
         inst_infr.add_port('dsp_clk_p270',     "sys_clk270",   dir='out', width=1, parent_sig=False)
         inst_infr.add_port('dsp_rst',          "sys_rst",      dir='out', width=1)
         inst_infr.add_port('adc_clk_125',      "adc_clk",      dir='out', width=1)
+        inst_infr.add_port('adc_clk_p90',      "adc_clk90",    dir='out', width=1)
+        inst_infr.add_port('adc_clk_p180',     "adc_clk180",   dir='out', width=1)
+        inst_infr.add_port('adc_clk_p270',     "adc_clk270",   dir='out', width=1)
         inst_infr.add_port('adc_rst',          "adc_rst",      dir='out', width=1)
         inst_infr.add_port('dac_clk_250',      "dac_clk",      dir='out', width=1)
         inst_infr.add_port('dac_clk_250_p315', "dac_clk_p",    dir='out', width=1)
