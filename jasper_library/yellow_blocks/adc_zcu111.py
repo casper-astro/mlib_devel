@@ -1,11 +1,39 @@
 from yellow_block import YellowBlock
 from verilog import VerilogModule
 from constraints import PortConstraint, ClockConstraint, RawConstraint
+from memory import Register
+import re
+# import IPython
+# import pdb
 
 class adc_zcu111(YellowBlock):
     def initialize(self):
         # self.provides = ['adc0_clk','adc0_clk90', 'adc0_clk180', 'adc0_clk270']
         self.add_source('adc_zcu111/usp_rf_data_converter.xci')
+        # make dict of tiles from adc_zcu111 mask parameters
+        self.tiles = {}
+        for key, value in self.blk.items():
+            if key.startswith('tile_'):
+                tile = re.search('tile_\d+', key)
+                tile = tile.group(0)
+                param = key.split(tile)[1].lstrip('_')
+                if tile not in self.tiles.keys():
+                    self.tiles[tile] = {}
+                else:
+                    self.tiles[tile][param] = value
+        """
+        See pages 20-24 of 
+        https://www.xilinx.com/support/documentation/ip_documentation/usp_rf_data_converter/v2_1/pg269-rf-data-converter.pdf
+        for explanation behind these dictionaries... need to make respective X, Y, Z, and ZZ numbers based on mask parameters,
+        for respective HDL ports.
+        """
+        # make dict for corresponding tile indexes
+        self.tile_idx = {
+            "tile_224": 0,
+            "tile_225": 1,
+            "tile_226": 2,
+            "tile_227": 3,
+        }
 
     def modify_top(self,top):
         module = 'usp_rf_data_converter'
@@ -50,7 +78,7 @@ class adc_zcu111(YellowBlock):
             Register('XRFDC_ADC_CRSE_DLY_CFG_OFFSET', mode='rw', offset=0x0E0, default_val=0),
             Register('XRFDC_ADC_DAT_SCAL_CFG_OFFSET', mode='rw', offset=0x0E4, default_val=0),
             Register('XRFDC_ADC_SWITCH_MATRX_OFFSET', mode='rw', offset=0x0E8, default_val=0),
-            Register('XRFDC_ADC_TRSHD0_CFG_OFFSET	, mode='rw', offset=0x0EC, default_val=0),
+            Register('XRFDC_ADC_TRSHD0_CFG_OFFSET', mode='rw', offset=0x0EC, default_val=0),
             Register('XRFDC_ADC_TRSHD0_AVG_UP_OFFSET', mode='rw', offset=0x0F0, default_val=0),
             Register('XRFDC_ADC_TRSHD0_AVG_LO_OFFSET', mode='rw', offset=0x0F4, default_val=0),
             Register('XRFDC_ADC_TRSHD0_UNDER_OFFSET', mode='rw', offset=0x0F8, default_val=0),
@@ -100,28 +128,51 @@ class adc_zcu111(YellowBlock):
         # External ports
         inst.add_port('sysref_in_p', self.fullname+'_sysref_in_p', dir='in', parent_port=True)
         inst.add_port('sysref_in_n', self.fullname+'_sysref_in_n', dir='in', parent_port=True)
+        # iterate over tile dict
+        for tile, param_dict in self.tiles.items():
+            tile_num = self.tile_idx[tile]
+            # check if either ADC on respective tile is enabled
+            if param_dict['adc_0'] or param_dict['adc_1']:
+                # Add ports relevant for respective tile
+                inst.add_port('adc{}_clk_p'.format(tile_num), self.fullname+'_adc{}_clk_p'.format(tile_num), dir='in', parent_port=True)
+                inst.add_port('adc{}_clk_n'.format(tile_num), self.fullname+'_adc{}_clk_n'.format(tile_num), dir='in', parent_port=True)
+                inst.add_port('m{}_axis_aclk'.format(tile_num), self.fullname+'_m{}_axis_aclk'.format(tile_num), dir='in', parent_port=False)
+                inst.add_port('m{}_axis_aresetn'.format(tile_num), self.fullname+'_m{}_axis_aresetn'.format(tile_num), dir='in', parent_port=False)
+                inst.add_port('clk_adc{}'.format(tile_num), self.fullname+'_clk_adc{}'.format(tile_num), dir='out', parent_port=False)
 
-        for adc in self.blk:
-             # External ports
-            inst.add_port('adc{}_clk_p'.format(tile_num), self.fullname+'_adc{}_clk_p'.format(tile_num), dir='in', parent_port=True)
-            inst.add_port('adc{}_clk_n'.format(tile_num), self.fullname+'_adc{}_clk_n'.format(tile_num), dir='in', parent_port=True)
+            # only add these ports ADC0
+            if param_dict['adc_0']:
+                # lower ADC on tile, so ZZ is '01'
+                adc = '01'
+                inst.add_port('vin{}_{}_p'.format(tile_num, adc), self.fullname+'_vin{}_{}_p'.format(tile_num, adc), dir='in', parent_port=True)
+                inst.add_port('vin{}_{}_n'.format(tile_num, adc), self.fullname+'_vin{}_{}_n'.format(tile_num, adc), dir='in', parent_port=True)
+                inst.add_port('adc{}_{}_int_cal_freeze'.format(tile_num, adc), self.fullname+'_adc{}_{}_int_cal_freeze'.format(tile_num, adc), dir='in', parent_port=False)
+                inst.add_port('adc{}_{}_cal_frozen'.format(tile_num, adc), self.fullname+'_adc{}_{}_cal_frozen'.format(tile_num, adc), dir='out', parent_port=False)
+                # Add Master AXI4-Stream interfaces, 0 for real, 0,1 for I/Q
+                if param_dict['adc0_digital_output'] == 'Real':
+                    ddc_loc = [0]
+                else:
+                    ddc_loc = [0,1]
 
+            # only add these ports ADC1
+            if param_dict['adc_1']:
+                # upper ADC on tile, so ZZ is '23'
+                adc = '23'
+                inst.add_port('vin{}_{}_p'.format(tile_num, adc), self.fullname+'_vin{}_{}_p'.format(tile_num, adc), dir='in', parent_port=True)
+                inst.add_port('vin{}_{}_n'.format(tile_num, adc), self.fullname+'_vin{}_{}_n'.format(tile_num, adc), dir='in', parent_port=True)
+                inst.add_port('adc{}_{}_int_cal_freeze'.format(tile_num, adc), self.fullname+'_adc{}_{}_int_cal_freeze'.format(tile_num, adc), dir='in', parent_port=False)
+                inst.add_port('adc{}_{}_cal_frozen'.format(tile_num, adc), self.fullname+'_adc{}_{}_cal_frozen'.format(tile_num, adc), dir='out', parent_port=False)
+                # Digital output data indexes: 2 for real, 2,3 for I/Q
+                if param_dict['adc0_digital_output'] == 'Real':
+                    ddc_loc = [2]
+                else:
+                    ddc_loc = [2,3]
 
-            inst.add_port('vin{}_{}_p'.format(tile_num, adc), self.full_name+'_vin{}_{}_p'.format(tile_num, adc), dir='in', parent_port=True)
-            inst.add_port('vin{}_{}_n'.format(tile_num, adc), self.full_name+'_vin{}_{}_n'.format(tile_num, adc), dir='in', parent_port=True)
-            inst.add_port('vin{}_{}_p'.format(tile_num, adc), self.full_name+'_vin{}_{}_p'.format(tile_num, adc), dir='in', parent_port=True)
-            inst.add_port('vin{}_{}_n'.format(tile_num, adc), self.full_name+'_vin{}_{}_n'.format(tile_num, adc), dir='in', parent_port=True)
-
-            # Master AXI4-Stream interfaces
-            inst.add_port('m{}_axis_aclk'.format(adc), self.fullname+'_m{}_axis_aclk'.format(tile_num), dir='in', parent_port=False)
-            inst.add_port('m{}_axis_aresetn'.format(adc), self.fullname+'_m{}_axis_aresetn'.format(adc), dir='in', parent_port=False)
-            inst.add_port('m{}{}_axis_tdata'.format(tile_num, ddc_loc), self.fullname+'_m{}{}_axis_tdata'.format(tile_num, ddc_loc), dir='out', parent_port=False)
-            inst.add_port('m{}{}_axis_tvalid'.format(tile_num, ddc_loc), self.fullname+'_m{}{}_axis_tdata'.format(tile_num, ddc_loc), dir='out', parent_port=False)
-            inst.add_port('m{}{}_axis_tready'.format(tile_num, ddc_loc), self.fullname+'_m{}{}_axis_tdata'.format(tile_num, ddc_loc), dir='in', parent_port=False)
-
-            inst.add_port('clk_adc{}'.format(adc), self.fullname+'_clk_adc{}'.format(adc), dir='out', parent_port=False)
-            inst.add_port('adc{}_{}_int_cal_freeze'.format(tile_num, adc), self.fullname+'_adc{}_{}_int_cal_freeze'.format(tile_num, adc), dir='in', parent_port=False)
-            inst.add_port('adc{}_{}_cal_frozen'.format(tile_num, adc), self.fullname+'_adc{}_{}_cal_frozen'.format(tile_num, adc), dir='out', parent_port=False)
+            for ddc in ddc_loc:
+                # Add Master AXI4-stream interfaces for each ADC, 1 for real or 2 for I/Q data
+                inst.add_port('m{}{}_axis_tdata'.format(tile_num, ddc), self.fullname+'_m{}{}_axis_tdata'.format(tile_num, ddc), dir='out', parent_port=False)
+                inst.add_port('m{}{}_axis_tvalid'.format(tile_num, ddc), self.fullname+'_m{}{}_axis_tdata'.format(tile_num, ddc), dir='out', parent_port=False)
+                inst.add_port('m{}{}_axis_tready'.format(tile_num, ddc), self.fullname+'_m{}{}_axis_tdata'.format(tile_num, ddc), dir='in', parent_port=False)
 
         # AXI4-lite slave interface
         inst.add_port('s_axi_aclk', self.fullname+'s_axi_aclk', dir='in', parent_port=False)
