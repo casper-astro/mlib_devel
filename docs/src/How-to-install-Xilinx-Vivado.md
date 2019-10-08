@@ -4,7 +4,7 @@ This section explains How To install Vivado 2016.2, 2016.4 and 2018.2.
 
 ## How to Install 2016.x
 
-1. OS Required/suggested: Ubuntu 14.04 LTS, Ubuntu 16.04 LTS (with tweaks) and Red Hat 6.6 (Santiago). There was an issue using Ubuntu 12.04 LTS, which caused the DocNav utility to crash. *Note: 2018.1 works with Ubuntu 16.04.3 LTS*
+1. OS Required/suggested: Ubuntu 14.04 LTS, Ubuntu 16.04 LTS (with tweaks) and Red Hat 6.6 (Santiago). There was an issue using Ubuntu 12.04 LTS, which caused the DocNav utility to crash.
 2. Click/double click on the ``Xilinx_Vivado_SDK_2016.2_0605_1.tar.gz`` file in the Ubuntu Nautilius document navigator and choose a folder to extract the files to. I use “home/Installs`` in this document. If you use something different then remember to replace “Installs” with your directory name.
 3. Ubuntu 14.04. Open a terminal < ctrl + alt + T>. Change directory to
 the following folder: ``​cd Installs/Xilinx_Vivado_SDK_2016.2_0605_1``
@@ -18,7 +18,7 @@ is highly recommended, as the documentation is part of the Ultrafast design meth
 10. A window will pop up offering to create the ``opt/Xilinx`` directory if it does not exist. Select “Yes”.
 11. A window with the “Installation Summary” will be displayed showing what tools will be installed and where they will be stored on your drive. If you are happy press “Install”, otherwise press “Back” and edit your previous settings.
 12. Wait until the Xilinx Software Install window states that the “Installation completed successfully” and select “OK”.
-13. Open another terminal and navigate to the “opt” folder and remember to change user and group to your username with the following command: ``​sudo chown <username>:<username> Xilinx -R``
+13. Open another terminal and navigate to the `opt/` folder and remember to change user and group to your username with the following command: ``​sudo chown <username>:<username> Xilinx -R``
 14. Terminal: Navigate to the ``home`` folder and remember to change user and group to your username with the following command: ``​sudo chown <username>:<username> .Xilinx -R``
 15. DocNav will not work unless you follow the steps highlighted in the text file: [set_up_vivado_2015.1_on_ubuntu_14.04](https://drive.google.com/file/d/0B2dCFqGD5y-8amdKbWZBM18yTEE/view?usp=sharing) (Doc Nav section only). Install the i386 architecture and then install the missing libraries. All the commands are highlighted in the attached file.
 16. DocNav will now open, but you won’t be able to open the documentation until you have made the following link. Using the terminal type in ``​cd /opt/Xilinx/Vivado/2016.2/ids_lite/ISE/lib/lin64`` and press enter.
@@ -50,7 +50,7 @@ It may be a good idea to power your PC/lap top down and then up again as the USB
 
 ## How to Install 2018.x
 
-1. OS Required/suggested: Ubuntu 14.04 LTS, Ubuntu 16.04 LTS (with tweaks). There was an issue using Ubuntu 12.04 LTS, which caused the DocNav utility to crash. *Note: 2018.1 works with Ubuntu 16.04.3 LTS*
+1. OS Required/suggested: Ubuntu 16.04 LTS.
 2. Click/double click on the ``Xilinx_Vivado_SDK_2018.2_0614_1954.tar.gz`` file in the Ubuntu Nautilius document navigator and choose a folder to extract the files to. I use “home/Installs`` in this document. If you use something different then remember to replace “Installs” with your directory name.
 3. Ubuntu 16.04. Open a terminal < ctrl + alt + T>. Change directory to
 the following folder: ``​cd Installs/Xilinx_Vivado_SDK_2018.2_0614_1954``
@@ -58,13 +58,13 @@ the following folder: ``​cd Installs/Xilinx_Vivado_SDK_2018.2_0614_1954``
 5. The Vivado Installer GUI will pop up. The GUI might explain that there is a new version available, but ignore that and press “Continue” and then “Next” to commence with the installation process.
 6. Read the terms and conditions page and when happy tick “I agree” for all three tick boxes. Then click “Next”.
 7. Select the “Vivado HL_System Edition” radio button and select “Next”.
-8. You will then be required to select which tools you want to install with the Vivado Design Edition. I selected “Software Development Kit”, “Ultrascale+” and “Zynq UltraScale + MPSoC”. The rest of the boxes were ticked (except Cable Drivers),so I have decided to install the complete set of tools available. Make sure that “DocNav” is ticked if you want access to the documentation that Xilinx has provided. This
+8. You will then be required to select which tools you want to install with the Vivado Design Edition. I selected “Software Development Kit”, “Ultrascale+” and “Zynq UltraScale+ MPSoC”. The rest of the boxes were ticked (except Cable Drivers), so I have decided to install the complete set of tools available. Make sure that “DocNav” is ticked if you want access to the documentation that Xilinx has provided. This
 is highly recommended, as the documentation is part of the Ultrafast design methodology. Press “Next”.
-9. Select where you want to install the Vivado tool set. I am using the default ``opt/Xilinx`` folder. I have also ticked the “Create program group entries” and “create desktop shortcuts” buttons. This is not necessary though. Press “Next”.
+9. Select where you want to install the Vivado toolset. I am using the default ``opt/Xilinx`` folder. I have also ticked the “Create program group entries” and “create desktop shortcuts” buttons. This is not necessary though. Press “Next”.
 10. A window will pop up offering to create the ``opt/Xilinx`` directory if it does not exist. Select “Yes”.
 11. A window with the “Installation Summary” will be displayed showing what tools will be installed and where they will be stored on your drive. If you are happy press “Install”, otherwise press “Back” and edit your previous settings.
 12. Wait until the Xilinx Software Install window states that the “Installation completed successfully” and select “OK”.
-13. Open another terminal and navigate to the “opt” folder and remember to change user and group to your username with the following command: ``​sudo chown <username>:<username> Xilinx -R``
+13. Open another terminal and navigate to the `opt/` folder and remember to change user and group to your username with the following command: ``​sudo chown <username>:<username> Xilinx -R``
 14. Terminal: Navigate to the ``home`` folder and remember to change user and group to your username with the following command: ``​sudo chown <username>:<username> .Xilinx -R``
 15. If DocNav does not work, then try follow the steps highlighted in the text file: [set_up_vivado_2015.1_on_ubuntu_14.04](https://drive.google.com/file/d/0B2dCFqGD5y-8amdKbWZBM18yTEE/view?usp=sharing) (Doc Nav section only). Install the i386 architecture and then install the missing libraries. All the commands are highlighted in the attached file.
 16. DocNav may open, but it is possible you won’t be able to read the documentation until you have made the following link - first try and read the documentation via DocNav though. Using the terminal type in ``​cd /opt/Xilinx/Vivado/2016.2/ids_lite/ISE/lib/lin64`` and press enter.
@@ -83,8 +83,6 @@ is highly recommended, as the documentation is part of the Ultrafast design meth
 22. To confirm that the license file was successful, click on “View License Status” and make sure a list of Tools/IP is read back and that the license is still valid. Once this is done then close the “Vivado License Manager” by clicking on the red cross at the top left of the window. You will be prompted if you want to close the “Vivado License Manager”. Click “Yes”.
 
 ## Optional: Install USB Drivers for JTAG
-
-The most reliable way to install the JTAG cable drivers is to use the drivers provided with ISE.
 
 A folder containing all the files required has been uploaded in the same folder as this document: [linux_jtag_cable_drivers.tar.gz](https://drive.google.com/file/d/0Byu0Sq2IEDuJdVFMMkNLN2pxYnc/view?usp=sharing). This also includes a useful installation script that prepares the files and places them in the correct directories.
 

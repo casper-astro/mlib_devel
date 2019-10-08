@@ -1,6 +1,7 @@
 import os
 import logging
 from glob import glob
+import collections
 
 class YellowBlock(object):
     """
@@ -51,14 +52,14 @@ class YellowBlock(object):
             # This seems a little dubious
             # Import the yellow block from the same package
             # that this YellowBlock class lives
-            print blk['tag'][4:]
+            print(blk['tag'][4:])
             clsfile = __import__(__package__+'.'+blk['tag'][4:])
             cls = clsfile.__getattribute__(blk['tag'][4:])
             cls = cls.__getattribute__(blk['tag'][4:]) # don't understand
             # If the class has a factory method, call that. This should return some
             # (possibly platform dependent) yellow block instance
             # Else just return an instance of the class.
-            if callable(getattr(cls, 'factory', None)):
+            if isinstance(getattr(cls, 'factory', None), collections.Callable):
                 return cls.factory(blk, platform, hdl_root=hdl_root)
             else:
                 return cls(blk,platform,hdl_root=hdl_root)
@@ -134,7 +135,7 @@ class YellowBlock(object):
         self.copy_attrs()
         try:
             self.fullname = self.fullpath.replace('/','_')
-	    self.unique_name = self.fullpath.split('/',1)[1].replace('/','_')
+            self.unique_name = self.fullpath.split('/',1)[1].replace('/','_')
         except AttributeError:
             self.fullpath = self.tag + '%d'%self.inst_id
             self.fullname = self.tag + '%d'%self.inst_id
@@ -152,7 +153,7 @@ class YellowBlock(object):
         and turn them into attributes of this
         YellowBlock instance.
         """
-        for key in self.blk.keys():
+        for key in list(self.blk.keys()):
             self.__setattr__(key,self.blk[key])
 
     def gen_children(self):
@@ -239,6 +240,39 @@ class YellowBlock(object):
         """
         return {}
 
+    def add_build_dir_source(self):
+        """
+        This function is neccessary as yellow blocks dont have access to the build directory
+        when they want to add a source file that is not in hdl_lib this function can be used.
+        Generate a list of dictionaries containing files/directories relative to the build_dir,
+        which will be added to the sources of the project.
+        to the project.
+
+        Eg.:
+        []
+            {'files': 'xml2vhdl_hdl_output/',    -- this can be a directory or a file
+            'library' : 'work'}                  -- this is only used if the file needs to be included under a library (vhdl only) for verilog use ''
+        ]
+
+        :return: Dictionary of tcl command lists. Default {}
+        """
+        return []
+
+    def gen_custom_hdl(self):
+        """
+        Generate a dictionary of custom hdl, to be saved as a file and added to the sources of
+        the generated project.
+        The key is the file name and the value is a string of HDL code to save in to that file.
+        Eg.:
+        {
+            'my_hdl.vhdl': ["<HDL code>"],
+            'my_2nd_hdl.vhdl' : ["<More HDL code>"],
+        }
+
+        :return: Dictionary of hdl files. Default {}
+        """
+        return {}
+
     #def add_resource(self, thing):
     #    """
     #    Use this method in a block's initialize() method to add
@@ -287,7 +321,7 @@ class YellowBlock(object):
             fullpath = path
         else:
             fullpath = self.hdl_root + '/' + path
-        print path, glob(fullpath)
+        print(path, glob(fullpath))
         for fname in glob(fullpath):
             self.sources.append(fname)
         #if not os.path.exists(fullpath):

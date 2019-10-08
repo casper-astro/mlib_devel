@@ -82,9 +82,9 @@ entity gmii_to_sgmii_tx_rate_adapt is
     gmii_txd_in         : in std_logic_vector(7 downto 0);  -- Transmit data from client MAC.
     gmii_tx_en_in       : in std_logic;                     -- Transmit data valid signal from client MAC.
     gmii_tx_er_in       : in std_logic;                     -- Transmit error signal from client MAC.
-    gmii_txd_out        : out std_logic_vector(7 downto 0); -- Transmit data from client MAC.
-    gmii_tx_en_out      : out std_logic;                    -- Transmit data valid signal from client MAC.
-    gmii_tx_er_out      : out std_logic                     -- Transmit error signal from client MAC.
+    gmii_txd_out        : out std_logic_vector(7 downto 0) := (others => '0'); -- Transmit data from client MAC.
+    gmii_tx_en_out      : out std_logic := '0';                    -- Transmit data valid signal from client MAC.
+    gmii_tx_er_out      : out std_logic := '0'                     -- Transmit error signal from client MAC.
     );
 
 end gmii_to_sgmii_tx_rate_adapt;
@@ -105,7 +105,7 @@ begin
   -- cycle in ten, or one clock cycle in a hundred, respectively.
 
   -- The sampled output GMII transmitter data is sent directly into the
-  -- Ethernet 1000BASE-X PCS/PMA or SGMII LogiCORE synchronously to the
+  -- 1G/2.5G Ethernet PCS/PMA or SGMII LogiCORE synchronously to the
   -- 125MHz reference clock.
 
   sample_gmii_tx: process (clk125m)

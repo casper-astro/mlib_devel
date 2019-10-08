@@ -173,7 +173,7 @@ begin
         clock_out	 => clk,
         strobe_out	=> write_buffer_wrreq);
 
-    write_buffer_wren <= write_buffer_wrreq and (not write_buffer_full);    
+    write_buffer_wren <= write_buffer_wrreq and (not write_buffer_full) and (not rst);    
 
     isp_spi_buffer_0 : isp_spi_buffer
     port map(
@@ -186,13 +186,13 @@ begin
         empty => write_buffer_empty,
         full  => write_buffer_full);
 
-    write_buffer_rden <= write_buffer_rdreq and (not write_buffer_empty);
+    write_buffer_rden <= write_buffer_rdreq and (not write_buffer_empty) and (not rst);
 
 ----------------------------------------------------------------------
 -- BUFFER TO STORE DATA FROM SPI
 ----------------------------------------------------------------------
 
-    read_buffer_wren <= read_buffer_wrreq and (not read_buffer_full);    
+    read_buffer_wren <= read_buffer_wrreq and (not read_buffer_full) and (not rst);    
 
     isp_spi_buffer_1 : isp_spi_buffer
     port map(
@@ -205,7 +205,7 @@ begin
         empty => read_buffer_empty,
         full  => read_buffer_full);
 
-    read_buffer_rden <= read_buffer_rdreq and (not read_buffer_empty);
+    read_buffer_rden <= read_buffer_rdreq and (not read_buffer_empty) and (not rst);
 
     strobe_gen_1 : strobe_gen
     port map(

@@ -1,4 +1,4 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from verilog import VerilogModule
 from constraints import PortConstraint, ClockConstraint
 
@@ -327,15 +327,15 @@ class adc16(YellowBlock):
         17,
         ]
 
-        cons.append(PortConstraint('adc16_ser_a_p', 'zdok0_p', port_index=range(16), iogroup_index=a_group))
-        cons.append(PortConstraint('adc16_ser_a_n', 'zdok0_n', port_index=range(16), iogroup_index=a_group))
-        cons.append(PortConstraint('adc16_ser_b_p', 'zdok0_p', port_index=range(16), iogroup_index=b_group))
-        cons.append(PortConstraint('adc16_ser_b_n', 'zdok0_n', port_index=range(16), iogroup_index=b_group))
+        cons.append(PortConstraint('adc16_ser_a_p', 'zdok0_p', port_index=list(range(16)), iogroup_index=a_group))
+        cons.append(PortConstraint('adc16_ser_a_n', 'zdok0_n', port_index=list(range(16)), iogroup_index=a_group))
+        cons.append(PortConstraint('adc16_ser_b_p', 'zdok0_p', port_index=list(range(16)), iogroup_index=b_group))
+        cons.append(PortConstraint('adc16_ser_b_n', 'zdok0_n', port_index=list(range(16)), iogroup_index=b_group))
         if self.num_units > 4:
-            cons.append(PortConstraint('adc16_ser_a_p', 'zdok1_p', port_index=range(16,32), iogroup_index=a_group))
-            cons.append(PortConstraint('adc16_ser_a_n', 'zdok1_n', port_index=range(16,32), iogroup_index=a_group))
-            cons.append(PortConstraint('adc16_ser_b_p', 'zdok1_p', port_index=range(16,32), iogroup_index=b_group))
-            cons.append(PortConstraint('adc16_ser_b_n', 'zdok1_n', port_index=range(16,32), iogroup_index=b_group))
+            cons.append(PortConstraint('adc16_ser_a_p', 'zdok1_p', port_index=list(range(16,32)), iogroup_index=a_group))
+            cons.append(PortConstraint('adc16_ser_a_n', 'zdok1_n', port_index=list(range(16,32)), iogroup_index=a_group))
+            cons.append(PortConstraint('adc16_ser_b_p', 'zdok1_p', port_index=list(range(16,32)), iogroup_index=b_group))
+            cons.append(PortConstraint('adc16_ser_b_n', 'zdok1_n', port_index=list(range(16,32)), iogroup_index=b_group))
         
         # clock constraint with variable period
         cons.append(ClockConstraint('adc16_clk_line_p', name='adc_clk', freq=self.clock_freq))

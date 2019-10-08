@@ -1,4 +1,4 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from verilog import VerilogModule
 from constraints import PortConstraint, ClockConstraint, RawConstraint
 
@@ -113,14 +113,14 @@ class adc(YellowBlock):
         cons.append(PortConstraint(adcstr + 'adc_ddrb_p', adcportp, iogroup_index=29))
         cons.append(PortConstraint(adcstr + 'adc_ddrb_n', adcportn, iogroup_index=29))
 
-        cons.append(PortConstraint(adcstr + 'adc_dataeveni_p', adcportp, port_index=range(8), iogroup_index=[11, 13, 15, 17, 31, 33, 35, 37]))
-        cons.append(PortConstraint(adcstr + 'adc_dataeveni_n', adcportn, port_index=range(8), iogroup_index=[11, 13, 15, 17, 31, 33, 35, 37]))
-        cons.append(PortConstraint(adcstr + 'adc_dataoddi_p', adcportp, port_index=range(8), iogroup_index=[10, 12, 14, 16, 30, 32, 34, 36]))
-        cons.append(PortConstraint(adcstr + 'adc_dataoddi_n', adcportn, port_index=range(8), iogroup_index=[10, 12, 14, 16, 30, 32, 34, 36]))
-        cons.append(PortConstraint(adcstr + 'adc_dataevenq_p', adcportp, port_index=range(8), iogroup_index=[6, 4, 2, 0, 26, 24, 22, 20]))
-        cons.append(PortConstraint(adcstr + 'adc_dataevenq_n', adcportn, port_index=range(8), iogroup_index=[6, 4, 2, 0, 26, 24, 22, 20]))
-        cons.append(PortConstraint(adcstr + 'adc_dataoddq_p', adcportp, port_index=range(8), iogroup_index=[7, 5, 3, 1, 27, 25, 23, 21]))
-        cons.append(PortConstraint(adcstr + 'adc_dataoddq_n', adcportn, port_index=range(8), iogroup_index=[7, 5, 3, 1, 27, 25, 23, 21]))
+        cons.append(PortConstraint(adcstr + 'adc_dataeveni_p', adcportp, port_index=list(range(8)), iogroup_index=[11, 13, 15, 17, 31, 33, 35, 37]))
+        cons.append(PortConstraint(adcstr + 'adc_dataeveni_n', adcportn, port_index=list(range(8)), iogroup_index=[11, 13, 15, 17, 31, 33, 35, 37]))
+        cons.append(PortConstraint(adcstr + 'adc_dataoddi_p', adcportp, port_index=list(range(8)), iogroup_index=[10, 12, 14, 16, 30, 32, 34, 36]))
+        cons.append(PortConstraint(adcstr + 'adc_dataoddi_n', adcportn, port_index=list(range(8)), iogroup_index=[10, 12, 14, 16, 30, 32, 34, 36]))
+        cons.append(PortConstraint(adcstr + 'adc_dataevenq_p', adcportp, port_index=list(range(8)), iogroup_index=[6, 4, 2, 0, 26, 24, 22, 20]))
+        cons.append(PortConstraint(adcstr + 'adc_dataevenq_n', adcportn, port_index=list(range(8)), iogroup_index=[6, 4, 2, 0, 26, 24, 22, 20]))
+        cons.append(PortConstraint(adcstr + 'adc_dataoddq_p', adcportp, port_index=list(range(8)), iogroup_index=[7, 5, 3, 1, 27, 25, 23, 21]))
+        cons.append(PortConstraint(adcstr + 'adc_dataoddq_n', adcportn, port_index=list(range(8)), iogroup_index=[7, 5, 3, 1, 27, 25, 23, 21]))
 
 
         cons.append(PortConstraint(adcstr + 'modepin',         adcport, iogroup_index=16))

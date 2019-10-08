@@ -282,7 +282,7 @@ begin
         end if;
     end process;    
     
-    gmii_to_xaui_fifo_wrreq <= gmii_to_xaui_fifo_wr_en and (not gmii_to_xaui_fifo_full);
+    gmii_to_xaui_fifo_wrreq <= gmii_to_xaui_fifo_wr_en and (not gmii_to_xaui_fifo_full) and (not xaui_rst) ;
 
     gmii_to_xaui_fifo_0 : gmii_to_xaui_fifo
     port map(
@@ -300,7 +300,7 @@ begin
 -- RECORD TOTAL NUMBER OF BYTES WRITTEN (DIVIDED BY 8)
 ----------------------------------------------------------------------------
 
-    packet_byte_count_wrreq <= packet_byte_count_wr_en and (not packet_byte_count_full);
+    packet_byte_count_wrreq <= packet_byte_count_wr_en and (not packet_byte_count_full) and (not xaui_rst);
 
     packet_byte_count_din <= "000" & byte_count(15 downto 3);
 
@@ -347,9 +347,9 @@ begin
         end if;
     end process;
 
-    packet_byte_count_rdreq <= '1' when (current_gen_state = READ_PACKET_SIZE) else '0';
+    packet_byte_count_rdreq <= '1' when ((current_gen_state = READ_PACKET_SIZE) and (xaui_rst = '0') and (packet_byte_count_empty = '0')) else '0';
 
-    gmii_to_xaui_fifo_rdreq <= '1' when (current_gen_state = OUTPUT_PACKET) else '0';
+    gmii_to_xaui_fifo_rdreq <= '1' when ((current_gen_state = OUTPUT_PACKET) and (xaui_rst = '0') and (gmii_to_xaui_fifo_empty = '0')) else '0';
 
     reset_output_count <= '0' when (current_gen_state = OUTPUT_PACKET) else '1';
 

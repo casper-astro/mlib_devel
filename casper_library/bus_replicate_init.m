@@ -25,7 +25,7 @@ function bus_replicate_init(blk, varargin)
   
   clog('entering bus_replicate_init', {log_group, 'trace'});
   defaults = { ...
-    'replication', 8, 'latency', 4, 'misc', 'on', ...
+    'replication', 8, 'csp_latency', 4, 'misc', 'on', ...
     'implementation', 'core'}; %'core' 'behavioral'
   
   check_mask_type(blk, 'bus_replicate');
@@ -41,7 +41,7 @@ function bus_replicate_init(blk, varargin)
   bus_create_w = 50;
 
   replication     = get_var('replication', 'defaults', defaults, varargin{:});
-  latency         = get_var('latency', 'defaults', defaults, varargin{:});
+  latency         = get_var('csp_latency', 'defaults', defaults, varargin{:});
   misc            = get_var('misc', 'defaults', defaults, varargin{:});
   implementation  = get_var('implementation', 'defaults', defaults, varargin{:});
 

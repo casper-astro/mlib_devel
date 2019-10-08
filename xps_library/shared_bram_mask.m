@@ -87,7 +87,7 @@ end
 if strcmp(get_param(c_sys, 'reg_core_output'), 'on')
     latency = latency + 1;
 end
-set_param([c_sys, '/sim_mem'], 'latency', num2str(latency));
+set_param([c_sys, '/sim_mem'], 'csp_latency', num2str(latency));
 
 set_param([c_sys, '/sim_mem'], 'data_width', get_param(c_sys, 'data_width'));
 set_param([c_sys, '/sim_mem'], 'arith_type', get_param(c_sys, 'arith_type'));

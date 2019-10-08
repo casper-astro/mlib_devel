@@ -51,7 +51,7 @@
 -- 
 ------------------------------------------------------------------------
 -- Description: This is the Receiver Elastic Buffer for the design
---              example of the Ethernet 1000BASE-X PCS/PMA or SGMII
+--              example of the 1G/2.5G Ethernet PCS/PMA or SGMII
 --              core.
 --
 --              The FIFO is created from internal Memory, is of data width
@@ -201,6 +201,9 @@ architecture structural of gmii_to_sgmii_rx_elastic_buffer is
    constant underflow_threshold : unsigned := "000011";                 -- FIFO occupancy is less than this, we consider it to be an underflow.
    constant overflow_threshold  : unsigned := "111100";                 -- FIFO occupancy is greater than this, we consider it to be an overflow.
 
+   -- Underflow and Overflow thresholds for C1,C2 insertion/deletion
+   constant config_underflow_threshold : unsigned := "001111";                 -- FIFO occupancy is less than this, we consider it to be an underflow.
+   constant config_overflow_threshold  : unsigned := "110000";                 -- FIFO occupancy is greater than this, we consider it to be an overflow.
 
    -----------------------------------------------------------------------------
    -- Signal Declarations
@@ -224,9 +227,18 @@ architecture structural of gmii_to_sgmii_rx_elastic_buffer is
 
    signal k28p5_wr              : std_logic;                            -- /K28.5/ character is detected on data prior to FIFO.
    signal d16p2_wr              : std_logic;                            -- /D16.2/ character is detected on data prior to FIFO.
+   signal d21p5_wr              : std_logic;                            -- /D21.5/ character is detected on data prior to FIFO.
+   signal d2p2_wr               : std_logic;                            -- /D2.2/ character is detected on data prior to FIFO.
    signal k28p5_wr_reg          : std_logic;                            -- k28p5_wr registered.
    signal d16p2_wr_reg          : std_logic;                            -- d16p2_wr registered.
+   signal d21p5_wr_reg          : std_logic;                            -- d21p5_wr registered.
+   signal d2p2_wr_reg           : std_logic;                            -- d2p2_wr registered.
+   signal d21p5_wr_reg2          : std_logic;                            -- d21p5_wr registered.
+   signal d2p2_wr_reg2           : std_logic;                            -- d2p2_wr registered.
+   signal k28p5_wr_reg2          : std_logic;                            -- k28p5_wr registered.
    signal remove_idle           : std_logic;                            -- An Idle is removed before writing it into the FIFO.
+   signal remove_idle_reg1           : std_logic;                            -- An Idle is removed before writing it into the FIFO.
+   signal remove_idle_reg2           : std_logic;                            -- An Idle is removed before writing it into the FIFO.
    signal start                         : std_logic := '1';             -- Initial stage
    signal reset_modified                : std_logic := '0';             -- Modified reset sequence
    signal initialize_ram                : std_logic;                    -- Start of ram Indication
@@ -254,10 +266,14 @@ architecture structural of gmii_to_sgmii_rx_elastic_buffer is
    signal emptying              : std_logic;                            -- FIFO is emptying: Idles should be inserted.
    signal overflow              : std_logic;                            -- FIFO has filled up to overflow.
    signal underflow             : std_logic;                            -- FIFO has emptied to underflow
+   signal config_overflow              : std_logic;                            -- FIFO has filled up to overflow.
+   signal config_underflow             : std_logic;                            -- FIFO has emptied to underflow
 
    signal even                  : std_logic;                            -- To control reading of data from upper or lower half of FIFO word.
    signal k28p5_rd              : std_logic;                            -- /K28.5/ character is detected on data post FIFO.
    signal d16p2_rd              : std_logic;                            -- /D16.2/ character is detected on data post FIFO.
+   signal d21p5_rd              : std_logic;                            -- /D21.5/ character is detected on data post FIFO.
+   signal d2p2_rd               : std_logic;                            -- /D2.2/ character is detected on data post FIFO.
    signal insert_idle           : std_logic;                            -- An Idle is inserted whilst reading it out of the FIFO.
    signal insert_idle_reg       : std_logic;                            -- insert_idle is registered.
    signal rxclkcorcnt           : std_logic_vector(2 downto 0);         -- derive RXCLKCORCNT to mimic tranceiver behaviour.
@@ -331,6 +347,13 @@ begin
   d16p2_wr <= '1' when (wr_data(7 downto 0)   = "01010000"
                   and wr_data(11) = '0') else '0';
 
+  -- Detect /D21.5/ character in upper half of the word from tranceiver
+  d21p5_wr <= '1' when (wr_data(7 downto 0)   = "10110101"
+                  and wr_data(11) = '0') else '0';
+
+  -- Detect /D2.2/ character in upper half of the word from tranceiver
+  d2p2_wr <= '1' when (wr_data(7 downto 0)   = "01000010"
+                  and wr_data(11) = '0') else '0';
 
 
   -- Create the FIFO write enable: Idles are removed by deasserting the
@@ -341,20 +364,35 @@ begin
       if rxrecreset = '1' then
         wr_enable      <= '0';
         remove_idle    <= '0';
+        remove_idle_reg1    <= '0';
+        remove_idle_reg2    <= '0';
         k28p5_wr_reg   <= '0';
+        k28p5_wr_reg2   <= '0';
         d16p2_wr_reg   <= '0';
+        d21p5_wr_reg   <= '0';
+        d2p2_wr_reg    <= '0';
+        d21p5_wr_reg2   <= '0';
+        d2p2_wr_reg2    <= '0';
       else
         k28p5_wr_reg   <= k28p5_wr;
+        k28p5_wr_reg2   <= k28p5_wr_reg;
         d16p2_wr_reg   <= d16p2_wr;
+        d21p5_wr_reg   <= d21p5_wr;
+        d2p2_wr_reg    <= d2p2_wr;
+        d21p5_wr_reg2   <= d21p5_wr_reg;
+        d2p2_wr_reg2    <= d2p2_wr_reg;
+        remove_idle_reg1    <= remove_idle;
+        remove_idle_reg2    <= remove_idle_reg1;
 
         -- Idle removal (always leave the first /I2/ Idle, then every
         -- alternate Idle can be removed.
 	if (initialize_ram_complete = '0') then
             wr_enable   <= '1';
         else
-            if (k28p5_wr = '1'     and d16p2_wr = '1' and
-                k28p5_wr_reg = '1' and d16p2_wr_reg = '1' and
-                filling = '1' and remove_idle = '0') then
+        if ( (k28p5_wr = '1' and d16p2_wr = '1' and k28p5_wr_reg = '1' and d16p2_wr_reg = '1' and filling = '1' and remove_idle = '0') or 
+              (((k28p5_wr = '1' and d21p5_wr = '1' and k28p5_wr_reg2 = '1' and (d21p5_wr_reg2 = '1' or d2p2_wr_reg2 = '1')) or 
+               (k28p5_wr = '1' and d2p2_wr = '1' and k28p5_wr_reg2 = '1' and (d2p2_wr_reg2 = '1' or d21p5_wr_reg2 =  '1'))) and
+                config_overflow = '1' and remove_idle = '0' and remove_idle_reg1 = '0' and remove_idle_reg2 = '0'))  then
 
                wr_enable   <= '0';
                remove_idle <= '1';
@@ -526,6 +564,14 @@ begin
   d16p2_rd <= '1' when (rd_data(7 downto 0) = "01010000"
                   and rd_data(11) = '0') else '0';
 
+  -- Detect /D21.5/ character in lower half of the word read from FIFO
+  d21p5_rd <= '1' when (rd_data(7 downto 0) = "10110101"
+                  and rd_data(11) = '0') else '0';
+
+  -- Detect /D2.2/ character in lower half of the word read from FIFO
+  d2p2_rd <= '1' when (rd_data(7 downto 0) = "01000010"
+                  and rd_data(11) = '0') else '0';
+
 
 
   -- Create the FIFO read enable: Idles are inserted by pausing the
@@ -544,7 +590,7 @@ begin
 
         -- Repeat as many /I2/ code groups as required if nearly
         -- empty by pausing rd_enable.
-        if (k28p5_rd = '1' and d16p2_rd = '1' and emptying = '1') then
+        if ((k28p5_rd = '1' and d16p2_rd = '1' and emptying = '1') or (k28p5_rd = '1' and (d21p5_rd = '1' or d2p2_rd = '1') and config_underflow = '1')) then
            rd_enable    <= '0';
            insert_idle  <= even;
 
@@ -757,6 +803,15 @@ begin
      end if;
   end process gen_overflow;
 
+  -- Set underflow if FIFO occupancy is less than UNDERFLOW_THRESHOLD.
+  gen_config_underflow : process (rd_occupancy)
+  begin
+     if rd_occupancy < config_underflow_threshold then
+        config_underflow <= '1';
+     else
+        config_underflow <= '0';
+     end if;
+  end process gen_config_underflow;
 
 
   -- If either an underflow or overflow, assert the buffer error signal.
@@ -826,7 +881,15 @@ begin
      end if;
   end process gen_filling;
 
-
+  -- Set overflow if FIFO occupancy is less than OVERFLOW_THRESHOLD.
+  gen_config_overflow : process (wr_occupancy)
+  begin
+     if wr_occupancy > config_overflow_threshold then
+        config_overflow <= '1';
+     else
+        config_overflow <= '0';
+     end if;
+  end process gen_config_overflow;
 
 end structural;
 

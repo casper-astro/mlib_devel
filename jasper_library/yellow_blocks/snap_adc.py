@@ -1,7 +1,7 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from verilog import VerilogModule
 from constraints import PortConstraint, ClockConstraint, RawConstraint
-from yellow_block_typecodes import *
+from .yellow_block_typecodes import *
 import math, numpy as np
 
 class snap_adc(YellowBlock):
@@ -12,19 +12,19 @@ class snap_adc(YellowBlock):
         self.num_units = 3
         self.num_clocks = 1
         self.zdok_rev = 2 # no frame clocks (see adc16)
-        self.n_inputs = self.snap_inputs / 3 #number of inputs per chip
+        self.n_inputs = self.snap_inputs // 3 #number of inputs per chip
 
-	# self.adc_resolution, possible values are 8, 10, 12, 14, 16
-	# Currently only 8, 12, 16 are supported
-	if self.adc_resolution <=8:
-		self.adc_data_width = 8
-	elif self.adc_resolution >8 and self.adc_resolution<=16:
-		self.adc_data_width = 16
-	else:
-		self.adc_data_width = 8
-	self.LOG_USER_WIDTH = int(math.log(self.adc_data_width*4,2))
+        # self.adc_resolution, possible values are 8, 10, 12, 14, 16
+        # Currently only 8, 12, 16 are supported
+        if self.adc_resolution <=8:
+            self.adc_data_width = 8
+        elif self.adc_resolution >8 and self.adc_resolution<=16:
+            self.adc_data_width = 16
+        else:
+            self.adc_data_width = 8
+        self.LOG_USER_WIDTH = int(math.log(self.adc_data_width*4,2))
 
-	# An HMCAD1511 has 8 ADC cores and DDR transmission 
+        # An HMCAD1511 has 8 ADC cores and DDR transmission 
         self.line_clock_freq = self.sample_rate/(8.0/self.n_inputs)*self.adc_resolution/2.0
 
         self.add_source('adc16_interface')
@@ -160,7 +160,7 @@ class snap_adc(YellowBlock):
             wbram.add_parameter('LOG_USER_WIDTH',self.LOG_USER_WIDTH)
             wbram.add_parameter('USER_ADDR_BITS','10')
             wbram.add_parameter('N_REGISTERS','2')
-            wbram.add_wb_interface(regname='adc16_wb_ram%d'%k, mode='rw', nbytes=(self.adc_data_width/8)*4*2**10, typecode=TYPECODE_SWREG)
+            wbram.add_wb_interface(regname='adc16_wb_ram%d'%k, mode='rw', nbytes=(self.adc_data_width//8)*4*2**10, typecode=TYPECODE_SWREG)
             wbram.add_port('user_clk','adc0_clk', parent_sig=False)
             wbram.add_port('user_addr','adc16_snap_addr', width=10)
             #wbram.add_port('user_din','{%s1, %s2, %s3, %s4}'%(din,din,din,din), parent_sig=False)
@@ -186,7 +186,7 @@ class snap_adc(YellowBlock):
         elif any([not isinstance(port,str) for port in port_list]):
             raise ValueError("Parameter error")
 
-        r = wb_bitwidth / self.adc_data_width
+        r = wb_bitwidth // self.adc_data_width
         port_list = np.array(port_list).reshape(-1, r)
         port_list = port_list[::-1,:].reshape(-1).tolist()
         return '{' + ','.join(port_list) + '}'
@@ -197,8 +197,8 @@ class snap_adc(YellowBlock):
         cons.append(PortConstraint('adc0_adc3wire_csn1',   'adc_csn', iogroup_index=0))
         cons.append(PortConstraint('adc0_adc3wire_csn2',   'adc_csn', iogroup_index=1))
         cons.append(PortConstraint('adc0_adc3wire_csn3',   'adc_csn', iogroup_index=2))
-        cons.append(PortConstraint('adc0_adc3wire_sdata', 'adc_sdata', port_index=range(3), iogroup_index=range(3)))
-        cons.append(PortConstraint('adc0_adc3wire_sclk',  'adc_sclk', port_index=range(3), iogroup_index=range(3)))
+        cons.append(PortConstraint('adc0_adc3wire_sdata', 'adc_sdata', port_index=list(range(3)), iogroup_index=list(range(3))))
+        cons.append(PortConstraint('adc0_adc3wire_sclk',  'adc_sclk', port_index=list(range(3)), iogroup_index=list(range(3))))
 
         cons.append(PortConstraint('adc16_clk_line_p',  'adc_lclkp', iogroup_index=0))
         cons.append(PortConstraint('adc16_clk_line_n',  'adc_lclkn', iogroup_index=0))
@@ -229,27 +229,27 @@ class snap_adc(YellowBlock):
         bp_index = [2, 6, 10, 14]
         bn_index = [3, 7, 11, 15]
 
-        cons.append(PortConstraint('adc16_ser_a_p', 'adc0_out', port_index=range(4), iogroup_index=ap_index))
-        cons.append(PortConstraint('adc16_ser_a_n', 'adc0_out', port_index=range(4), iogroup_index=an_index))
-        cons.append(PortConstraint('adc16_ser_b_p', 'adc0_out', port_index=range(4), iogroup_index=bp_index))
-        cons.append(PortConstraint('adc16_ser_b_n', 'adc0_out', port_index=range(4), iogroup_index=bn_index))
+        cons.append(PortConstraint('adc16_ser_a_p', 'adc0_out', port_index=list(range(4)), iogroup_index=ap_index))
+        cons.append(PortConstraint('adc16_ser_a_n', 'adc0_out', port_index=list(range(4)), iogroup_index=an_index))
+        cons.append(PortConstraint('adc16_ser_b_p', 'adc0_out', port_index=list(range(4)), iogroup_index=bp_index))
+        cons.append(PortConstraint('adc16_ser_b_n', 'adc0_out', port_index=list(range(4)), iogroup_index=bn_index))
 
-        cons.append(PortConstraint('adc16_ser_a_p', 'adc1_out', port_index=range(4,8), iogroup_index=ap_index))
-        cons.append(PortConstraint('adc16_ser_a_n', 'adc1_out', port_index=range(4,8), iogroup_index=an_index))
-        cons.append(PortConstraint('adc16_ser_b_p', 'adc1_out', port_index=range(4,8), iogroup_index=bp_index))
-        cons.append(PortConstraint('adc16_ser_b_n', 'adc1_out', port_index=range(4,8), iogroup_index=bn_index))
+        cons.append(PortConstraint('adc16_ser_a_p', 'adc1_out', port_index=list(range(4,8)), iogroup_index=ap_index))
+        cons.append(PortConstraint('adc16_ser_a_n', 'adc1_out', port_index=list(range(4,8)), iogroup_index=an_index))
+        cons.append(PortConstraint('adc16_ser_b_p', 'adc1_out', port_index=list(range(4,8)), iogroup_index=bp_index))
+        cons.append(PortConstraint('adc16_ser_b_n', 'adc1_out', port_index=list(range(4,8)), iogroup_index=bn_index))
 
-        cons.append(PortConstraint('adc16_ser_a_p', 'adc2_out', port_index=range(8,12), iogroup_index=ap_index))
-        cons.append(PortConstraint('adc16_ser_a_n', 'adc2_out', port_index=range(8,12), iogroup_index=an_index))
-        cons.append(PortConstraint('adc16_ser_b_p', 'adc2_out', port_index=range(8,12), iogroup_index=bp_index))
-        cons.append(PortConstraint('adc16_ser_b_n', 'adc2_out', port_index=range(8,12), iogroup_index=bn_index))
+        cons.append(PortConstraint('adc16_ser_a_p', 'adc2_out', port_index=list(range(8,12)), iogroup_index=ap_index))
+        cons.append(PortConstraint('adc16_ser_a_n', 'adc2_out', port_index=list(range(8,12)), iogroup_index=an_index))
+        cons.append(PortConstraint('adc16_ser_b_p', 'adc2_out', port_index=list(range(8,12)), iogroup_index=bp_index))
+        cons.append(PortConstraint('adc16_ser_b_n', 'adc2_out', port_index=list(range(8,12)), iogroup_index=bn_index))
 
         if self.i_am_the_first:
-            cons.append(PortConstraint('clk_sel_a', 'clk_sel_a', port_index=range(1), iogroup_index=range(1)))
-            cons.append(PortConstraint('clk_sel_b', 'clk_sel_b', port_index=range(1), iogroup_index=range(1)))
+            cons.append(PortConstraint('clk_sel_a', 'clk_sel_a', port_index=list(range(1)), iogroup_index=list(range(1))))
+            cons.append(PortConstraint('clk_sel_b', 'clk_sel_b', port_index=list(range(1)), iogroup_index=list(range(1))))
 
-        cons.append(PortConstraint('adc_rst_n', 'adc_rst_n', port_index=range(3), iogroup_index=range(3)))
-        cons.append(PortConstraint('adc_pd', 'adc_pd', port_index=range(3), iogroup_index=range(3)))
+        cons.append(PortConstraint('adc_rst_n', 'adc_rst_n', port_index=list(range(3)), iogroup_index=list(range(3))))
+        cons.append(PortConstraint('adc_pd', 'adc_pd', port_index=list(range(3)), iogroup_index=list(range(3))))
         
         # clock constraint with variable period
         clkconst = ClockConstraint('adc16_clk_line_p', name='adc_clk', freq=self.line_clock_freq)

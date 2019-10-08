@@ -258,7 +258,7 @@ begin
   begin
     if clk125m'event and clk125m= '1' then     -- rising clock edge
       if reset = '1' then
-        sgmii_clk_r    <= '0';
+        sgmii_clk_r    <= '0' after 0 ps;
       else
         if speed_is_10_100 = '1' then
            if speed_is_100 = '0' then
@@ -295,7 +295,7 @@ begin
   begin
     if clk125m'event and clk125m= '0' then     -- falling clock edge
       if reset_fall = '1' then
-        sgmii_clk_f    <= '0';
+        sgmii_clk_f    <= '0' after 0 ps;
       else
         if speed_is_10_100_fall = '1' then
            if speed_is_100_fall = '0' then

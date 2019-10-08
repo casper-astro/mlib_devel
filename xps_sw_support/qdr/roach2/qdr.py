@@ -62,7 +62,7 @@ class Qdr(object):
         :return: a Qdr object
         """
         mem_address, mem_length = -1, -1
-        for mem_name in memorymap_dict.keys():
+        for mem_name in list(memorymap_dict.keys()):
             if mem_name == device_info['which_qdr'] + '_memory':
                 mem_address, mem_length = memorymap_dict[mem_name]['address'], memorymap_dict[mem_name]['bytes']
                 break
@@ -70,7 +70,7 @@ class Qdr(object):
             raise RuntimeError('Could not find address or length for Qdr %s' % device_name)
         # find the ctrl register
         ctrlreg_address, ctrlreg_length = -1, -1
-        for mem_name in memorymap_dict.keys():
+        for mem_name in list(memorymap_dict.keys()):
             if mem_name == device_info['which_qdr'] + '_ctrl':
                 ctrlreg_address, ctrlreg_length = memorymap_dict[mem_name]['address'], memorymap_dict[mem_name]['bytes']
                 break
@@ -174,9 +174,9 @@ class Qdr(object):
             for word_n,word in enumerate(pattern):
                 patfail=patfail|(word ^ retdat[word_n])
                 if verbosity>2:
-                    print "{0:032b}".format(word),
-                    print "{0:032b}".format(retdat[word_n]),
-                    print "{0:032b}".format(patfail)
+                    print("{0:032b}".format(word), end=' ')
+                    print("{0:032b}".format(retdat[word_n]), end=' ')
+                    print("{0:032b}".format(patfail))
         if patfail>0:
             #raise RuntimeError ("Calibration of QDR%i failed: 0b%s."%(qdr,"{0:032b}".format(patfail)))
             return False
@@ -198,29 +198,29 @@ class Qdr(object):
                 for word_n,word in enumerate(pattern):
                     patfail=patfail|(word ^ retdat[word_n])
                     if verbosity>2:
-                        print '\t %4i %4i'%(step,word_n),
-                        print "{0:032b}".format(word),
-                        print "{0:032b}".format(retdat[word_n]),
-                        print "{0:032b}".format(patfail)
+                        print('\t %4i %4i'%(step,word_n), end=' ')
+                        print("{0:032b}".format(word), end=' ')
+                        print("{0:032b}".format(retdat[word_n]), end=' ')
+                        print("{0:032b}".format(patfail))
             fail.append(patfail)
             for bit in range(n_bits):
                 bit_cal[bit].append(1-2*((fail[step]&(1<<bit))>>bit))
                 #if bit_cal[bit][step]==True:
                 #    valid_steps[bit].append(step)
             if (verbosity>2):
-                print 'STEP input delays to %i!'%(step+1)
+                print('STEP input delays to %i!'%(step+1))
             self.qdr_delay_in_step(0xfffffffff,1)
 
         if (verbosity > 0):
-            print 'Eye for QDR %s (0 is pass, 1 is fail):' % self.name
+            print('Eye for QDR %s (0 is pass, 1 is fail):' % self.name)
             for step in range(n_steps):
-                print '\tTap step %2i: '%step,
-                print "{0:032b}".format(fail[step])
+                print('\tTap step %2i: '%step, end=' ')
+                print("{0:032b}".format(fail[step]))
 
         if (verbosity > 3):
             for bit in range(n_bits):
-                print 'Bit %2i: '%bit,
-                print bit_cal[bit]
+                print('Bit %2i: '%bit, end=' ')
+                print(bit_cal[bit])
 
         ##find indices where calibration passed and failed:
         #for bit in range(n_bits):
@@ -238,15 +238,15 @@ class Qdr(object):
             cal_area[bit], cal_start[bit], cal_stop[bit] = find_cal_area(bit_cal[bit])
             cal_steps[bit] = (cal_start[bit] + cal_stop[bit]) // 2
             if (verbosity > 1):
-                print 'Selected tap for bit %i: %i (start: %i, stop: %i)'%(bit,cal_steps[bit], cal_start[bit], cal_stop[bit])
+                print('Selected tap for bit %i: %i (start: %i, stop: %i)'%(bit,cal_steps[bit], cal_start[bit], cal_stop[bit]))
         #since we don't have access to bits 32-35, we guess the number of taps required based on the other bits:
         median_taps=numpy.median(cal_steps)
         if verbosity>1:
-            print "Median taps: %i"%median_taps
+            print("Median taps: %i"%median_taps)
         for bit in range(32,36):
             cal_steps[bit]=median_taps
             if (verbosity > 1):
-                print 'Selected tap for bit %i: %i'%(bit,cal_steps[bit])
+                print('Selected tap for bit %i: %i'%(bit,cal_steps[bit]))
         return cal_steps, cal_area, cal_start, cal_stop
 
     def apply_cals(self,in_delays,out_delays,clk_delay,extra_clk,verbosity=0):
@@ -262,8 +262,8 @@ class Qdr(object):
             for bit in range(len(in_delays)):
                 mask+=(1<<bit if (step<in_delays[bit]) else 0)
             if verbosity>1:
-                print 'Step %i'%step,
-                print "{0:036b}".format(mask)
+                print('Step %i'%step, end=' ')
+                print("{0:036b}".format(mask))
             self.qdr_delay_in_step(mask,1)
 
         for step in range(int(max(out_delays))):
@@ -271,8 +271,8 @@ class Qdr(object):
             for bit in range(len(out_delays)):
                 mask+=(1<<bit if (step<out_delays[bit]) else 0)
             if verbosity>1:
-                print 'Step out %i'%step,
-                print "{0:036b}".format(mask)
+                print('Step out %i'%step, end=' ')
+                print("{0:036b}".format(mask))
             self.qdr_delay_out_step(mask,1)
 
     def qdr_check_cal_any_good(self,verbosity=0):
@@ -284,9 +284,9 @@ class Qdr(object):
             for word_n,word in enumerate(pattern):
                 patfail=patfail|(word ^ retdat[word_n])
                 if verbosity>2:
-                    print "{0:032b}".format(word),
-                    print "{0:032b}".format(retdat[word_n]),
-                    print "{0:032b}".format(patfail)
+                    print("{0:032b}".format(word), end=' ')
+                    print("{0:032b}".format(retdat[word_n]), end=' ')
+                    print("{0:032b}".format(patfail))
                 if patfail == 0xffffffff:
                     return False
         return True
@@ -330,7 +330,7 @@ class Qdr(object):
         out_step = self.scan_out_to_edge(verbosity)
 
         if verbosity > 0:
-            print "--- === Trying with OUT DELAYS to %i === ---" % out_step
+            print("--- === Trying with OUT DELAYS to %i === ---" % out_step)
         
         in_delays0, good_area0, good_starts0, good_stops0 = self.find_in_delays(verbosity)
         out_delays = out_step
@@ -344,29 +344,29 @@ class Qdr(object):
         if numpy.any(good_stops0 == n_taps-1):
             if numpy.any(good_area0 < min_eye_width):
                 if verbosity > 0:
-                    print 'Adding extra latency and checking for better solutions'
+                    print('Adding extra latency and checking for better solutions')
                 self.qdr_reset()
                 self.add_extra_latency(1)
                 out_step = self.scan_out_to_edge(verbosity)
                 if verbosity > 0:
-                    print "--- === Trying with OUT DELAYS to %i === ---" % out_step
+                    print("--- === Trying with OUT DELAYS to %i === ---" % out_step)
                 in_delays1, good_area1, good_starts1, good_stops1 = self.find_in_delays(verbosity)
                 if numpy.all(good_area1 > good_area0):
                     if verbosity > 0:
-                        print 'New solutions with extra latency are better'
+                        print('New solutions with extra latency are better')
                     in_delays = in_delays1
                     out_delay = out_step
                     extra_clk = True
                 else:
                     if verbosity > 0:
-                        print 'Original solutions without extra latency were better'
+                        print('Original solutions without extra latency were better')
                     in_delays = in_delays0
                     out_delay = out_delays
                     extra_clk = False
 
 
         if verbosity > 0:
-            print 'Using in delays:', in_delays
+            print('Using in delays:', in_delays)
 
         self.apply_cals(in_delays,
                         out_delays=[out_delay for bit in range(36)],

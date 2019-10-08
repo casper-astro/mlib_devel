@@ -46,7 +46,7 @@ module kat_ten_gb_eth #(
     input  [31:0] DAT_I,
     output [31:0] DAT_O,
     output        ACK_O,
-    input  [13:0] ADR_I,
+    input  [15:0] ADR_I,
     input         CYC_I,
     input   [3:0] SEL_I,
     input         STB_I,
@@ -148,24 +148,24 @@ module kat_ten_gb_eth #(
   wire [31:0] local_netmask;
 
   // CPU Arp Cache signals;
-  wire  [7:0] arp_cache_addr;
+  wire [10:0] arp_cache_addr;
   wire [47:0] arp_cache_rd_data;
   wire [47:0] arp_cache_wr_data;
   wire        arp_cache_wr_en;
 
   // CPU TX signals
-  wire  [7:0] cpu_tx_buffer_addr;
+  wire [10:0] cpu_tx_buffer_addr;
   wire [63:0] cpu_tx_buffer_rd_data;
   wire [63:0] cpu_tx_buffer_wr_data;
   wire        cpu_tx_buffer_wr_en;
-  wire  [7:0] cpu_tx_size;
+  wire [10:0] cpu_tx_size;
   wire        cpu_tx_ready;
   wire        cpu_tx_done;
 
   // CPU RX signals
-  wire  [7:0] cpu_rx_buffer_addr;
+  wire [10:0] cpu_rx_buffer_addr;
   wire [63:0] cpu_rx_buffer_rd_data;
-  wire  [7:0] cpu_rx_size;
+  wire [10:0] cpu_rx_size;
   wire        cpu_rx_ack;
 
   assign src_ip_address = local_ip;
@@ -262,7 +262,7 @@ module kat_ten_gb_eth #(
     .local_gateway       (local_gateway),
     .local_netmask       (local_netmask),
     // CPU Arp Cache signals;
-    .arp_cache_addr      (arp_cache_addr),
+    .arp_cache_addr      (arp_cache_addr[7:0]),
     .arp_cache_rd_data   (arp_cache_rd_data),
     .arp_cache_wr_data   (arp_cache_wr_data),
     .arp_cache_wr_en     (arp_cache_wr_en),
@@ -279,11 +279,11 @@ module kat_ten_gb_eth #(
     // CPU Interface
     .cpu_clk               (cpu_clk),
     .cpu_rst               (cpu_rst),
-    .cpu_tx_buffer_addr    (cpu_tx_buffer_addr),
+    .cpu_tx_buffer_addr    (cpu_tx_buffer_addr[7:0]),
     .cpu_tx_buffer_rd_data (cpu_tx_buffer_rd_data),
     .cpu_tx_buffer_wr_data (cpu_tx_buffer_wr_data),
     .cpu_tx_buffer_wr_en   (cpu_tx_buffer_wr_en),
-    .cpu_tx_size           (cpu_tx_size),
+    .cpu_tx_size           (cpu_tx_size[7:0]),
     .cpu_tx_ready          (cpu_tx_ready),
     .cpu_tx_done           (cpu_tx_done),
     // Mac
