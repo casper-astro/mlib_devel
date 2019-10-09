@@ -1,5 +1,5 @@
 from .yellow_block import YellowBlock
-import logging, IPython
+import logging
 
 from constraints import RawConstraint
 
@@ -37,9 +37,6 @@ class exception_constr(YellowBlock):
             const.append(RawConstraint(multicycle_setup_constraint_str))
             const.append(RawConstraint(multicycle_hold_constraint_str))
 
-        IPython.embed()
-
-        # raise ValueError
         return const
         
 

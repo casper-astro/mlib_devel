@@ -20,17 +20,7 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% We need to rename the gateway blocks in the yellow block
-% so that they respect the heirarchical naming conventions
-% required by the toolflow
-
-% Need to rename the delay block!
-% function clock_constr_mask(blk)
-
 cursys = gcb;
-% get hardware platform from XSG block
-% constr_blk = find_system(cursys);
-% bitwidth=str2double(get_param(constr_blk{1},'bitwidth'));
 
 delay_blks = find_system(cursys, 'searchdepth', 1, 'FollowLinks', 'on', 'lookundermasks', 'all', 'masktype', 'Xilinx Delay Block');
 
@@ -43,27 +33,3 @@ for i = 1:length(delay_blks)
         error(['Unknown gateway name: ', delay_blk]);
     end
 end
-
-% gateway_ins = find_system(cursys, 'searchdepth', 1, 'FollowLinks', 'on', 'lookundermasks', 'all', 'masktype', 'Xilinx Gateway In Block');
-
-% for i = 1:length(gateway_ins)
-%     gw = gateway_ins{i};
-%     if regexp(get_param(gw, 'Name'), '(gateway_in)$')
-%         toks = regexp(get_param(gw, 'Name'), '(gateway_in)$', 'tokens');
-%         set_param(gw, 'Name', clear_name([cursys, '_', toks{1}{1}]));
-%     else
-%         error(['Unknown gateway name: ', gw]);
-%     end
-% end
-
-% gateway_outs = find_system(cursys, 'searchdepth', 1, 'FollowLinks', 'on', 'lookundermasks', 'all', 'masktype', 'Xilinx Gateway Out Block');
-
-% for i = 1:length(gateway_outs)
-%     gw = gateway_outs{i};
-%     if regexp(get_param(gw, 'Name'), '(gateway_out)$')
-%         toks = regexp(get_param(gw, 'Name'), '(gateway_out)$', 'tokens');
-%         set_param(gw, 'Name', clear_name([cursys, '_', toks{1}{1}]));
-%     else
-%         error(['Unknown gateway name: ', gw]);
-%     end
-% end
