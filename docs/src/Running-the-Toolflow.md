@@ -38,7 +38,7 @@ This command will execute the middleware, which calls the yellow block construct
     * `outputs/`: contains the bof and fpg files, and
     * `myproj/`: contains the Vivado projects files, source files, synth results and implementation results. The bin and bit files are also stored here. 
 
-    **NB:** Instead of running “jasper_frontend” from the Matlab command window, you can run “jasper”, which will do all the above steps from 6) to now, but all display output will be routed through the Matlab Command window.   
+    **NB:** Instead of running “jasper_frontend” from the Matlab command window, you can run “jasper”, which will do all the above steps from 6) to now, but all display output will be routed through the Matlab Command window.
 
 12) **Python method:** Before I explain this method it is important to explain how the “exec_flow” command works and the arguments that are passed to it.
     * The `exec_flow`, which stands for “execution flow” can either run the whole flow or just parts of the flow depending on the needs of the user.
@@ -56,7 +56,45 @@ This command will execute the middleware, which calls the yellow block construct
         - `--jobs` - The number of processor cores to run the compile with. If this is not specified, the default is 4. You need to make sure that your processor has at least 4 threads if this is to work.
         - `-m` - The absolute path and filename of the *.slx file (Simulink model) to compile. If not specified, the default is “/tools/mlib_devel/jasper_library/test_models/test.slx”. I would suggest always specifying this.
         - `-c` - This is the build directory. The default is the same directory as the *.slx file (Simulink model). I don’t normally specify this.
-
+        - `--synth_strat` - Specify a Synthesis Strategy for your compile. The options are as follows, as provided by Vivado 2019.1.1:
+          * Flow_AreaOptimized_high
+          * Flow_AreaOptimized_medium
+          * Flow_AreaMultThresholdDSP
+          * Flow_AlternateRoutability
+          * FFlow_PerfOptimized_high
+          * Flow_PerfThresholdCarry
+          * Flow_RuntimeOptimized
+        - `--impl_strat` - Specify an Implementation Strategy for your compile. The options are as follows, as provided by Vivado 2019.1.1:
+          * Performance_Explore
+          * Performance_ExplorePostRoutePhysOpt
+          * Performance_ExploreWithRemapx
+          * Performance_WLBlockPlacement
+          * Performance_WLBlockPlacementFanoutOpt
+          * Performance_EarlyBlockPlacement
+          * Performance_NetDelay_high
+          * erformance_NetDelay_low
+          * Performance_Retiming
+          * Performance_ExtraTimingOpt
+          * Performance_RefinePlacement
+          * Performance_SpreadSLLs
+          * Performance_BalanceSLLs
+          * Performance_BalanceSLRs
+          * Performance_HighUtilSLRs
+          * Congestion_SpreadLogic_high
+          * Congestion_SpreadLogic_medium
+          * Congestion_SpreadLogic_low
+          * Congestion_SSI_SpreadLogic_high
+          * Congestion_SSI_SpreadLogic_low 
+          * Area_Explore
+          * Area_ExploreSequential 
+          * Area_ExploreWithRemap
+          * Power_DefaultOpt 
+          * Power_ExploreArea
+          * Flow_RunPhysOpt 
+          * Flow_RunPostRoutePhysOpt
+          * Flow_RuntimeOptimized 
+          * Flow_Quick
+	
     Here are some examples of how to run the command:
 
     This will run the whole process, except will not generate a fpg and bof file for programming.
