@@ -50,12 +50,12 @@ Here is a sample `startsg.local` file:
     export CASPER_PYTHON_VENV_ON_START=/home/user/work/casper_venv
 ```
 
-Since this configuration refers to your specific installation environment, in general it shouldn't be commited to the `mlib_devel` repository. In fact, the repository is configured to ignore changes to any files wite names beginning `startsg.`.
+Since this configuration refers to your specific installation environment, in general it shouldn't be commited to the `mlib_devel` repository. In fact, the repository is configured to ignore changes to any files with names beginning `startsg.`.
 If you really want to commit your local configuration file, you can do this, but it's helpful to call it something other than `startsg.local`, (eg. `startsg.local.example` or `startsg.local.my-server-name`) so as not to conflict with other users, all of whom will have similar files with different contents.
 
 ### Using `startsg`
 By default, executing (or sourcing) the `startsg` script will use variables defined in the configuration file `startsg.local` residing in the same directory as `startsg`.
-However, you can uswe a specific configuration by specifying one as an argument to `startsg`.
+However, you can use a specific configuration by specifying one as an argument to `startsg`.
 This can be useful if you want to store configurations for multiple versions of MATLAB / Xilinx tools.
 
 For example:
