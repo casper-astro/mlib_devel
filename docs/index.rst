@@ -62,7 +62,7 @@ The software stack you will require to use the toolflow will depend what hardwar
 
 The current compatibility matrix is below:
 
-(Note that official support for ROACH plaforms is no longer provided, however `this version <https://github.com/casper-astro/mlib_devel/tree/d77999047d2f0dc53e1c1e6e516e6ef3cdd45632/docs>`__ of ``mlib_devel`` contains all ROACH related documentation and `this version <https://github.com/casper-astro/tutorials_devel/tree/8bdd40d856ff542640d8f62a8d3029b084ae8efa/docs/tutorials/roach>`__ of ``tutorials_devel`` contains all ROACH tutorials)
+_(Note that official support for ROACH plaforms is no longer provided, however [this version](https://github.com/casper-astro/mlib_devel/tree/d77999047d2f0dc53e1c1e6e516e6ef3cdd45632/docs) of `mlib_devel` contains all ROACH related documentation and ROACH tutorials can be found [here](https://casper-tutorials.readthedocs.io/en/latest/tutorials/roach/tut_intro.html))_
 
 +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
 |  Hardware      |   Operating System  |    Matlab Version  |    Xilinx Version  |    mlib_devel branch / commit   |   Python Version  |
@@ -81,7 +81,7 @@ The current compatibility matrix is below:
 +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
 |ZCU111          | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |   Python 3        |
 +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
-|SNAP2           | Ubuntu 16.04        |  ???               |  ???               |  branch: `master`               |   Python 3        |
+|SNAP2           | Ubuntu 16.04        |  2016b             |  Vivado 2016.4     |  branch: `master`               |   Python 3        |
 +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
 
 The recommended OS is Ubuntu as it is what the majority of the collaboration are using. This makes it easier for us to support you. If you are so inclined, you could also use Red Hat, but we definitely do not support Windows. You are welcome to try but you will be on your own. You could always run Linux in a VM although this will increase your compile times. 
