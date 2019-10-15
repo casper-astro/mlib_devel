@@ -62,7 +62,7 @@ The software stack you will require to use the toolflow will depend what hardwar
 
 The current compatibility matrix is below:
 
-_(Note that official support for ROACH plaforms is no longer provided, however [this version](https://github.com/casper-astro/mlib_devel/tree/d77999047d2f0dc53e1c1e6e516e6ef3cdd45632/docs) of `mlib_devel` contains all ROACH related documentation and ROACH tutorials can be found [here](https://casper-tutorials.readthedocs.io/en/latest/tutorials/roach/tut_intro.html))_
+(Note that official support for ROACH plaforms is no longer provided, however `this version <https://github.com/casper-astro/mlib_devel/tree/d77999047d2f0dc53e1c1e6e516e6ef3cdd45632/docs>`__ of `mlib_devel` contains all ROACH related documentation and ROACH tutorials can be found `here <https://casper-tutorials.readthedocs.io/en/latest/tutorials/roach/tut_intro.html>`__)
 
 +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
 |  Hardware      |   Operating System  |    Matlab Version  |    Xilinx Version  |    mlib_devel branch / commit   |   Python Version  |
