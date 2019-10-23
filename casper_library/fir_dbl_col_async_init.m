@@ -272,12 +272,23 @@ end
 
 % the adder trees
 if n_inputs > 1,
+    
+    if async_ops
+        dvalid_en = 'on';
+    else
+        dvalid_en = 'off';  
+    end
+            
     reuse_block(blk, 'adder_tree1', 'casper_library_misc/adder_tree', ...
         'Position', [800 100 850 100+20*n_inputs], 'n_inputs', num2str(n_inputs),...
+        'dvalid_en', dvalid_en,...
         'csp_latency', num2str(add_latency), 'first_stage_hdl', first_stage_hdl, 'adder_imp', adder_imp);
     reuse_block(blk, 'adder_tree2', 'casper_library_misc/adder_tree', ...
         'Position', [800 200+20*n_inputs 850 200+20*n_inputs+20*n_inputs], 'n_inputs', num2str(n_inputs),...
+        'dvalid_en', dvalid_en,...
         'csp_latency', num2str(add_latency), 'first_stage_hdl', first_stage_hdl, 'adder_imp', adder_imp);
+    
+    
     reuse_block(blk, 'c1', 'xbsIndex_r4/Constant', ...
         'explicit_period', 'on', 'Position', [750 100 780 110]);
     reuse_block(blk, 'c2', 'xbsIndex_r4/Constant', ...
@@ -286,13 +297,34 @@ if n_inputs > 1,
     add_line(blk, 'adder_tree1/1', 'term1/1');
     reuse_block(blk, 'term2','built-in/Terminator', 'Position', [1000 200+20*n_inputs 1015 215+20*n_inputs]);	
     add_line(blk, 'adder_tree2/1', 'term2/1');
-    add_line(blk, 'c1/1', 'adder_tree1/1');
-    add_line(blk, 'c2/1', 'adder_tree2/1');
+
+    if async_ops
+        add_line(blk, 'dv/1', 'adder_tree1/1');
+        add_line(blk, 'dv/1', 'adder_tree2/1'); 
+        add_line(blk, 'c1/1', 'adder_tree1/2');
+    	add_line(blk, 'c2/1', 'adder_tree2/2');
+    else
+    	add_line(blk, 'c1/1', 'adder_tree1/1');
+    	add_line(blk, 'c2/1', 'adder_tree2/1');
+    end
+
     add_line(blk,'adder_tree1/2','real_sum/1');
     add_line(blk,'adder_tree2/2','imag_sum/1');
+    
+%     if async_ops
+%         add_line(blk, 'dv/1', 'adder_tree1/1');
+%         add_line(blk, 'dv/1', 'adder_tree2/1');        
+%     end
+
+    % MOD
     for ctr=1:n_inputs,
-        add_line(blk, ['fir_tap', num2str(ctr), '/5'], ['adder_tree1/', num2str(ctr+1)]);
-        add_line(blk, ['fir_tap', num2str(ctr), '/6'], ['adder_tree2/', num2str(ctr+1)]);
+    	if async_ops
+	        add_line(blk, ['fir_tap', num2str(ctr), '/5'], ['adder_tree1/', num2str(ctr+2)]);
+        	add_line(blk, ['fir_tap', num2str(ctr), '/6'], ['adder_tree2/', num2str(ctr+2)]);
+        else
+            add_line(blk, ['fir_tap', num2str(ctr), '/5'], ['adder_tree1/', num2str(ctr+1)]);
+            add_line(blk, ['fir_tap', num2str(ctr), '/6'], ['adder_tree2/', num2str(ctr+1)]);
+        end
     end
 else
     add_line(blk, 'fir_tap1/5', 'real_sum/1');

@@ -505,8 +505,11 @@ module flit_gen_user #(
       if ((m_axis_rx_TVALID_R == 1'b1) && (POST_DONE == 1'b1))
       begin
           r_data_valid_rx_valid_count <= r_data_valid_rx_valid_count + 1'b1;
-          r_flit_error_rsp [3:0] <= m_axis_rx_TUSER_R[15:12];
-      end 
+          r_flit_error_rsp [3:0] <= m_axis_rx_TUSER_R[15:12];          
+      // This state allows the error resp status to be cleared when no HMC AXI transaction is occuring
+      end else begin
+          r_flit_error_rsp [3:0] <= 4'b0;
+      end
             
       // in the case were 2 valid responses falls on the same AXI transaction on the previous cycle, this module asserted m_axis_rx_TREADY_i <= 1'b0 (not ready - hold off for one cycle)
       // Now generate data valid from 2nd transaction data
