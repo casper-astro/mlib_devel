@@ -22,37 +22,39 @@ _(Note that official support for ROACH plaforms is no longer provided, however [
 Other software combinations may work, but these are the tested configurations.
 The master branch is usually updated once a year. Between updates, code with newer features can be found in the `casper-astro-soak-test` branch. This branch can usually be used in place of the `master` branch for platforms which support `master`. However, be aware that `casper-astro-soak-test` is likely to be less stable. Please report any bugs you encounter via github's issue tracker.
 
+
 ## Pre-requisites
+
 1. MATLAB
 
-MATLAB installation instructions are available [here](https://casper-toolflow.readthedocs.io/en/latest/src/How-to-install-Matlab.html), or, contact whoever manages your software installations.
-You will need to install both MATLAB and Simulink.
+    MATLAB installation instructions are available [here](https://casper-toolflow.readthedocs.io/en/latest/src/How-to-install-Matlab.html), or, contact whoever manages your software installations.
+    You will need to install both MATLAB and Simulink.
 
 2. Xilinx Vivado
 
-This is available from [xilinx.com](https://www.xilinx.com) and will require a license. If you are part of an academic institution you may be eligible for free licenses via the [Xilinx University Program](https://www.xilinx.com/support/university.html).
-Vivado install instructions are available [here](ttps://casper-toolflow.readthedocs.io/en/latest/src/How-to-install-Xilinx-Vivado.html).
+    This is available from [xilinx.com](https://www.xilinx.com) and will require a license. If you are part of an academic institution you may be eligible for free licenses via the [Xilinx University Program](https://www.xilinx.com/support/university.html).
+    Vivado install instructions are available [here](ttps://casper-toolflow.readthedocs.io/en/latest/src/How-to-install-Xilinx-Vivado.html).
 
 3. Python
 
-Compiling for supported platforms requires Python 3 and `pip3`. If you don't have these already you can probably install them in Ubuntu environments by opening a terminal and running the command `apt-get install python3 python3-pip`.
+    Compiling for supported platforms requires Python 3 and `pip3`. If you don't have these already you can probably install them in Ubuntu environments by opening a terminal and running the command `apt-get install python3 python3-pip`.
 
-We thoroughly recommend using a [virtual environment](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#installing-virtualenv) to separate the version of Python and its libraries the toolflow uses from the rest of your system. 
+    We thoroughly recommend using a [virtual environment](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#installing-virtualenv) to separate the version of Python and its libraries the toolflow uses from the rest of your system. 
 
-To create a Python 3 virtual environment:
+    To create a Python 3 virtual environment:
 
-```bash
-# change directory to where you want the virtual environment to live
-cd /home/user/work
-# install virtualenv using pip3
-sudo pip3 install virtualenv
-# create a Python 3 virtual environment
-virtualenv -p python3 casper_venv
-# to activate the virtual environment:
-source casper_venv/bin/activate
-# to deactivate the virtual environment:
-deactivate
-```
+    ```bash
+    # change directory to where you want the virtual environment to live
+    cd /home/user/work
+    # install virtualenv using pip3
+    sudo pip3 install virtualenv
+    # create a Python 3 virtual environment
+    virtualenv -p python3 casper_venv
+    # to activate the virtual environment:
+    source casper_venv/bin/activate
+    # to deactivate the virtual environment:
+    deactivate
+    ```
 
 ## Obtaining the Toolflow
 Clone the toolflow from the [mlib_devel](https://github.com/casper-astro/mlib_devel) git repository. 
