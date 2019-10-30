@@ -354,14 +354,18 @@ class Toolflow(object):
         Then calls each yellow block's constructor.
         Runs a system-wide drc before returning.
         """
+        
+        
         self._parse_periph_file()
         self._extract_plat_info()
         self.periph_objs = []
+        
         for pk in list(self.peripherals.keys()):
             self.logger.debug('Generating Yellow Block: %s' % pk)
             self.periph_objs.append(yellow_block.YellowBlock.make_block(
                 self.peripherals[pk], self.plat))
         self._expand_children(self.periph_objs)
+        
         self._drc()
         
     def _expand_children(self, population, parents=None, recursive=True):
@@ -568,7 +572,6 @@ class Toolflow(object):
         self.logger.info('Extracting constraints from peripherals')
         self.check_attr_exists('periph_objs', 'gen_periph_objs()')
         self.constraints = []
-        peripherals = self.peripherals
         for obj in self.periph_objs:
             c = obj.gen_constraints()
             if c is not None:
@@ -860,7 +863,7 @@ class Toolflow(object):
     def xml2vhdl(self):
         """
         Function to call Oxford's python code to generate AXI4-Lite VHDL register 
-        interfaces from a XML memory map specification.
+        interfaces from an XML memory map specification.
 
         Obtained from: https://bitbucket.org/ricch/xml2vhdl/src/master/
         """
