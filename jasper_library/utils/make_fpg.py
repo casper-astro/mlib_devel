@@ -45,7 +45,7 @@ def make_bin(input_bit_file, output_bin_file):
     data = fptr.read()
     data = data.rstrip()  # get rid of pesky EOF chars
     # bin file header identifier - '\xff' * 32
-    header_end_index = data.find('\xff' * 32)
+    header_end_index = data.find(b'\xff' * 32)
     data = data[header_end_index:]
     fptr.close()
 
@@ -56,19 +56,27 @@ def make_bin(input_bit_file, output_bin_file):
     # i.e. given 09DC in .bit, require B039 in .bin
     # this equates to reversing the bits in each byte in the file
 
+    data_formatter = struct.Struct('!{}B'.format(len(data)))
+
+    if type(data) == str:
+        # python2 support
+        data_bytes = data_formatter.unpack(data)
+    else:
+        # python3 support
+        data_bytes = data
+
     # for unpacking data from bit file and repacking
-    data_format = struct.Struct('!B')
-    bitstream = ''
-    for bytectr in range(len(data)):
+    flipped_data_bytes = []
+    for byte in range(len(data_bytes)):
         # reverse bits each byte
-        byte = data_format.unpack(data[bytectr])[0]
-        bits = '{:08b}'.format(byte)
+        bits = '{:08b}'.format(data_bytes[byte])
         bits_flipped = bits[::-1]
-        byte_to_pack = int(bits_flipped, 2)
-        bitstream += data_format.pack(byte_to_pack)
+        flipped_data_bytes.append(int(bits_flipped, 2))
+
+    binary_data = data_formatter.pack(*flipped_data_bytes)
 
     bin_file = open(output_bin_file, 'wb')
-    bin_file.write(bitstream)
+    bin_file.write(binary_data)
     bin_file.close()
 
 
