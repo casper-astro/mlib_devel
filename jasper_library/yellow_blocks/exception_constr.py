@@ -9,9 +9,7 @@ class exception_constr(YellowBlock):
     """
 
     def gen_constraints(self):
-        """
 
-        """
         const = []
         # For some reason, self.fullpath != self.blk['fullpath']
         # when YellowBlock.gen_constraints is called from toolflow.generate_consts
