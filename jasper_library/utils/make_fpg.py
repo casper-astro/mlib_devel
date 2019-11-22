@@ -94,7 +94,8 @@ if __name__ == '__main__':
                              "appended to this. Defaults to the project name from the compile directory name.")
     parser.add_argument("-i", "--implementation", dest="impl", type=str, default=['1'], nargs='*',
                         help="Which implementation run should be used? Can pass multiple values and an fpg file will "
-                             "be generated for each. Defaults to 'impl_1'")
+                             "be generated for each. Provide only implementation numbers as a space separated list. "
+                             "Defaults to 'impl_1'")
 
     args = parser.parse_args()
 
