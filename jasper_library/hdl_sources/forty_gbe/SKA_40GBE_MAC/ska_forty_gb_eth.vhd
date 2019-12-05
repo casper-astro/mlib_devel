@@ -278,10 +278,11 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
         CLK_RATE   : integer;
         DATA_WIDTH : integer);
     port (
-        clk   : in  std_logic;  -- sys_clk at 156.25MHz
-        rst   : in  std_logic;  -- sys_clk at 156.25MHz
-        en    : in  std_logic;  -- sys_clk at 156.25MHz
-        rate  : out std_logic_vector(31 downto 0));  -- sys_clk at 156.25MHzs
+        rate_clk : in  std_logic;
+        clk      : in  std_logic;  -- sys_clk at 156.25MHz
+        rst      : in  std_logic;  -- sys_clk at 156.25MHz
+        en       : in  std_logic;  -- sys_clk at 156.25MHz
+        rate     : out std_logic_vector(31 downto 0));  -- sys_clk at 156.25MHzs
      end component;
 
     component counter
@@ -1013,9 +1014,9 @@ begin
     --signal rx_overflow_r2     : std_logic;
     --signal rx_bad_r1          : std_logic;
     --signal rx_bad_r2          : std_logic;
-clk_cross : process(xlgmii_txclk)
+clk_cross : process(clk)
 begin
-    if (rising_edge(xlgmii_txclk)) then
+    if (rising_edge(clk)) then
         tx_valid_r1        <= tx_valid (3) or tx_valid(2) or tx_valid(1) or tx_valid(0);
         tx_valid_r2        <= tx_valid_r1;
         tx_end_of_frame_r1 <= tx_end_of_frame;
@@ -1041,7 +1042,8 @@ tx_pkt_rate_comp : rate_counter
         CLK_RATE   => 156250000,
         DATA_WIDTH => 32)
     port map(
-        clk  => xlgmii_txclk,  -- sys_clk at 156.25MHz
+        rate_clk  => xlgmii_txclk,  -- mac_clk at 156.25MHz
+        clk  => clk,  -- sys_clk at 156.25MHz
         rst  => cnt_reset(0),
         en   => (tx_valid_r2 and tx_end_of_frame_r2),
         rate => tx_pkt_rate);
@@ -1054,7 +1056,7 @@ tx_pkt_cnt_comp : counter
         COUNT_TO   => 2147483647,
         STEP       => 1)
     port map(
-        clk   => xlgmii_txclk,  -- sys_clk at 156.25MHz
+        clk   => clk,  -- sys_clk at 156.25MHz
         rst   => cnt_reset(0),
         en    => (tx_valid_r2 and tx_end_of_frame_r2),
         count => tx_pkt_cnt);
@@ -1065,12 +1067,13 @@ tx_valid_rate_comp : rate_counter
         CLK_RATE   => 156250000,
         DATA_WIDTH => 32)
     port map(
-        clk  => xlgmii_txclk,  -- sys_clk at 156.25MHz
+        rate_clk  => xlgmii_txclk,  -- mac_clk at 156.25MHz
+        clk  => clk,  -- sys_clk at 156.25MHz
         rst  => cnt_reset(0),
         en   => tx_valid_r2,
         rate => tx_valid_rate);
 
--- TX valid rate counter
+-- TX valid counter
 tx_valid_cnt_comp : counter
     generic map(
         DATA_WIDTH => 32,
@@ -1078,7 +1081,7 @@ tx_valid_cnt_comp : counter
         COUNT_TO   => 2147483647,
         STEP       => 1)
     port map(
-        clk   => xlgmii_txclk,  -- sys_clk at 156.25MHz
+        clk   => clk,  -- sys_clk at 156.25MHz
         rst   => cnt_reset(0),
         en    => tx_valid_r2,
         count => tx_valid_cnt);
@@ -1091,7 +1094,7 @@ tx_overflow_cnt_comp : counter
         COUNT_TO   => 2147483647,
         STEP       => 1)
     port map(
-        clk   => xlgmii_txclk,  -- sys_clk at 156.25MHz
+        clk   => clk,  -- sys_clk at 156.25MHz
         rst   => cnt_reset(0),
         en    => tx_overflow_r2,
         count => tx_overflow_cnt);
@@ -1104,7 +1107,7 @@ tx_afull_cnt_comp : counter
         COUNT_TO   => 2147483647,
         STEP       => 1)
     port map(
-        clk   => xlgmii_txclk,  -- sys_clk at 156.25MHz
+        clk   => clk,  -- sys_clk at 156.25MHz
         rst   => cnt_reset(0),
         en    => tx_afull_r2,
         count => tx_afull_cnt);
@@ -1115,7 +1118,8 @@ rx_pkt_rate_comp : rate_counter
         CLK_RATE   => 156250000,
         DATA_WIDTH => 32)
     port map(
-        clk  => xlgmii_rxclk,  -- sys_clk at 156.25MHz
+        rate_clk  => xlgmii_rxclk,  -- mac_clk at 156.25MHz
+        clk  => clk,  -- sys_clk at 156.25MHz
         rst  => cnt_reset(0),
         en   => (rx_valid_r2 and rx_end_of_frame_r2),
         rate => rx_pkt_rate);
@@ -1128,7 +1132,7 @@ rx_pkt_cnt_comp : counter
         COUNT_TO   => 2147483647,
         STEP       => 1)
     port map(
-        clk   => xlgmii_rxclk,  -- sys_clk at 156.25MHz
+        clk   => clk,  -- sys_clk at 156.25MHz
         rst   => cnt_reset(0),
         en    => (rx_valid_r2 and rx_end_of_frame_r2),
         count => rx_pkt_cnt);
@@ -1139,12 +1143,13 @@ rx_valid_rate_comp : rate_counter
         CLK_RATE   => 156250000,
         DATA_WIDTH => 32)
     port map(
-        clk  => xlgmii_rxclk,  -- sys_clk at 156.25MHz
+        rate_clk  => xlgmii_rxclk,  -- mac_clk at 156.25MHz
+        clk  => clk,  -- sys_clk at 156.25MHz
         rst  => cnt_reset(0),
         en   => rx_valid_r2,
         rate => rx_valid_rate);
 
--- rx valid rate counter
+-- rx valid counter
 rx_valid_cnt_comp : counter
     generic map(
         DATA_WIDTH => 32,
@@ -1152,7 +1157,7 @@ rx_valid_cnt_comp : counter
         COUNT_TO   => 2147483647,
         STEP       => 1)
     port map(
-        clk   => xlgmii_rxclk,  -- sys_clk at 156.25MHz
+        clk   => clk,  -- sys_clk at 156.25MHz
         rst   => cnt_reset(0),
         en    => rx_valid_r2,
         count => rx_valid_cnt);
@@ -1165,7 +1170,7 @@ rx_overflow_cnt_comp : counter
         COUNT_TO   => 2147483647,
         STEP       => 1)
     port map(
-        clk   => xlgmii_rxclk,  -- sys_clk at 156.25MHz
+        clk   => clk,  -- sys_clk at 156.25MHz
         rst   => cnt_reset(0),
         en    => rx_overflow_r2,
         count => rx_overflow_cnt);
@@ -1178,7 +1183,7 @@ rx_bad_frame_cnt_comp : counter
         COUNT_TO   => 2147483647,
         STEP       => 1)
     port map(
-        clk   => xlgmii_rxclk,  -- sys_clk at 156.25MHz
+        clk   => clk,  -- sys_clk at 156.25MHz
         rst   => cnt_reset(0),
         en    => rx_bad_frame_r2,
         count => rx_bad_frame_cnt);
