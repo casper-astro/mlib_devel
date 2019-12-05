@@ -201,6 +201,10 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
         app_tx_dest_port      : in  std_logic_vector(15 downto 0);
         app_tx_overflow       : out std_logic;
         app_tx_afull          : out std_logic;
+        cnt_tx_valid          : out std_logic;
+        cnt_tx_end_of_frame   : out std_logic;
+        cnt_tx_afull          : out std_logic;
+        cnt_tx_overflow       : out std_logic;
         cpu_clk               : in  std_logic;
         cpu_rst               : in  std_logic;
         cpu_tx_buffer_addr    : in  std_logic_vector(10 downto 0);
@@ -322,6 +326,10 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
         app_rx_overrun        : out std_logic;
         app_rx_overrun_ack    : in  std_logic;
         app_rx_ack            : in  std_logic;
+        cnt_rx_valid          : out std_logic;
+        cnt_rx_end_of_frame   : out std_logic;
+        cnt_rx_bad_frame      : out std_logic;
+        cnt_rx_overflow       : out std_logic;
         cpu_clk               : in  std_logic;
         cpu_rst               : in  std_logic;
         cpu_rx_buffer_addr    : in  std_logic_vector(10 downto 0);
@@ -370,6 +378,15 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
     signal rx_overflow_sig     : std_logic;
     signal rx_end_of_frame_sig : std_logic;
     signal rx_valid_sig        : std_logic_vector(3 downto 0);
+
+    signal cnt_tx_valid        : std_logic;
+    signal cnt_tx_end_of_frame : std_logic;
+    signal cnt_tx_afull        : std_logic;
+    signal cnt_tx_overflow     : std_logic;
+    signal cnt_rx_valid        : std_logic;
+    signal cnt_rx_end_of_frame : std_logic;
+    signal cnt_rx_bad_frame    : std_logic;
+    signal cnt_rx_overflow     : std_logic;
 
     -- double reg signals for counters
     signal tx_valid_r1        : std_logic;
@@ -468,6 +485,37 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
 --    signal rx_count_good_i : std_logic_vector(7 downto 0);
 --    signal rx_count_bad_i : std_logic_vector(7 downto 0);
 
+    attribute MARK_DEBUG : string;
+    attribute MARK_DEBUG of tx_valid_r1        : signal is "TRUE"; 
+    attribute MARK_DEBUG of tx_valid_r2        : signal is "TRUE"; 
+    attribute MARK_DEBUG of tx_end_of_frame_r1 : signal is "TRUE"; 
+    attribute MARK_DEBUG of tx_end_of_frame_r2 : signal is "TRUE"; 
+    attribute MARK_DEBUG of tx_overflow_r1     : signal is "TRUE"; 
+    attribute MARK_DEBUG of tx_overflow_r2     : signal is "TRUE"; 
+    attribute MARK_DEBUG of tx_afull_r1        : signal is "TRUE"; 
+    attribute MARK_DEBUG of tx_afull_r2        : signal is "TRUE"; 
+    attribute MARK_DEBUG of rx_valid_r1        : signal is "TRUE"; 
+    attribute MARK_DEBUG of rx_valid_r2        : signal is "TRUE"; 
+    attribute MARK_DEBUG of rx_end_of_frame_r1 : signal is "TRUE"; 
+    attribute MARK_DEBUG of rx_end_of_frame_r2 : signal is "TRUE"; 
+    attribute MARK_DEBUG of rx_overflow_r1     : signal is "TRUE"; 
+    attribute MARK_DEBUG of rx_overflow_r2     : signal is "TRUE"; 
+    attribute MARK_DEBUG of rx_bad_frame_r1    : signal is "TRUE"; 
+    attribute MARK_DEBUG of rx_bad_frame_r2    : signal is "TRUE"; 
+
+    attribute MARK_DEBUG of tx_pkt_rate      : signal is "TRUE";
+    attribute MARK_DEBUG of tx_pkt_cnt       : signal is "TRUE";
+    attribute MARK_DEBUG of tx_valid_rate    : signal is "TRUE";
+    attribute MARK_DEBUG of tx_valid_cnt     : signal is "TRUE";
+    attribute MARK_DEBUG of tx_overflow_cnt  : signal is "TRUE";
+    attribute MARK_DEBUG of tx_afull_cnt     : signal is "TRUE";
+    attribute MARK_DEBUG of rx_pkt_rate      : signal is "TRUE";
+    attribute MARK_DEBUG of rx_pkt_cnt       : signal is "TRUE";
+    attribute MARK_DEBUG of rx_valid_rate    : signal is "TRUE";
+    attribute MARK_DEBUG of rx_valid_cnt     : signal is "TRUE";
+    attribute MARK_DEBUG of rx_overflow_cnt  : signal is "TRUE";
+    attribute MARK_DEBUG of rx_bad_frame_cnt : signal is "TRUE";
+    attribute MARK_DEBUG of cnt_reset        : signal is "TRUE";
 begin
 
 --    debug_out(0) <= '0';
@@ -715,6 +763,10 @@ begin
         app_tx_dest_port      => tx_dest_port,
         app_tx_overflow       => tx_overflow,
         app_tx_afull          => tx_afull_sig,
+        cnt_tx_valid          => cnt_tx_valid,
+        cnt_tx_end_of_frame   => cnt_tx_end_of_frame,
+        cnt_tx_afull          => cnt_tx_afull,
+        cnt_tx_overflow       => cnt_tx_overflow,
         cpu_clk               => CLK_I,
         cpu_rst               => RST_I,
         cpu_tx_buffer_addr    => cpu_tx_buffer_addr,
@@ -977,6 +1029,10 @@ begin
         app_rx_overrun        => rx_overflow_sig,
         app_rx_overrun_ack    => rx_overrun_ack,
         app_rx_ack            => rx_ack,
+        cnt_rx_valid          => cnt_rx_valid,
+        cnt_rx_end_of_frame   => cnt_rx_end_of_frame,
+        cnt_rx_bad_frame      => cnt_rx_bad_frame,
+        cnt_rx_overflow       => cnt_rx_overflow,
         cpu_clk               => CLK_I,
         cpu_rst               => RST_I,
         cpu_rx_buffer_addr    => cpu_rx_buffer_addr,
@@ -1045,7 +1101,7 @@ tx_pkt_rate_comp : rate_counter
         rate_clk  => xlgmii_txclk,  -- mac_clk at 156.25MHz
         clk  => clk,  -- sys_clk at 156.25MHz
         rst  => cnt_reset(0),
-        en   => (tx_valid_r2 and tx_end_of_frame_r2),
+        en   => (cnt_tx_valid and tx_end_of_frame_r2),
         rate => tx_pkt_rate);
 
 -- TX packet counter
@@ -1058,7 +1114,7 @@ tx_pkt_cnt_comp : counter
     port map(
         clk   => clk,  -- sys_clk at 156.25MHz
         rst   => cnt_reset(0),
-        en    => (tx_valid_r2 and tx_end_of_frame_r2),
+        en    => (cnt_tx_valid and cnt_tx_end_of_frame),
         count => tx_pkt_cnt);
 
 -- TX valid rate counter
@@ -1070,7 +1126,7 @@ tx_valid_rate_comp : rate_counter
         rate_clk  => xlgmii_txclk,  -- mac_clk at 156.25MHz
         clk  => clk,  -- sys_clk at 156.25MHz
         rst  => cnt_reset(0),
-        en   => tx_valid_r2,
+        en   => cnt_tx_valid,
         rate => tx_valid_rate);
 
 -- TX valid counter
@@ -1083,7 +1139,7 @@ tx_valid_cnt_comp : counter
     port map(
         clk   => clk,  -- sys_clk at 156.25MHz
         rst   => cnt_reset(0),
-        en    => tx_valid_r2,
+        en    => cnt_tx_valid,
         count => tx_valid_cnt);
 
 -- TX overflow counter
@@ -1096,7 +1152,7 @@ tx_overflow_cnt_comp : counter
     port map(
         clk   => clk,  -- sys_clk at 156.25MHz
         rst   => cnt_reset(0),
-        en    => tx_overflow_r2,
+        en    => cnt_tx_overflow,
         count => tx_overflow_cnt);
 
 -- TX almost full counter
@@ -1109,7 +1165,7 @@ tx_afull_cnt_comp : counter
     port map(
         clk   => clk,  -- sys_clk at 156.25MHz
         rst   => cnt_reset(0),
-        en    => tx_afull_r2,
+        en    => cnt_tx_afull,
         count => tx_afull_cnt);
 
 -- rx packet rate counter
@@ -1121,7 +1177,7 @@ rx_pkt_rate_comp : rate_counter
         rate_clk  => xlgmii_rxclk,  -- mac_clk at 156.25MHz
         clk  => clk,  -- sys_clk at 156.25MHz
         rst  => cnt_reset(0),
-        en   => (rx_valid_r2 and rx_end_of_frame_r2),
+        en   => (cnt_rx_valid and cnt_rx_end_of_frame),
         rate => rx_pkt_rate);
 
 -- rx packet counter
@@ -1134,7 +1190,7 @@ rx_pkt_cnt_comp : counter
     port map(
         clk   => clk,  -- sys_clk at 156.25MHz
         rst   => cnt_reset(0),
-        en    => (rx_valid_r2 and rx_end_of_frame_r2),
+        en    => (cnt_rx_valid and cnt_rx_end_of_frame),
         count => rx_pkt_cnt);
 
 -- rx valid rate counter
@@ -1146,7 +1202,7 @@ rx_valid_rate_comp : rate_counter
         rate_clk  => xlgmii_rxclk,  -- mac_clk at 156.25MHz
         clk  => clk,  -- sys_clk at 156.25MHz
         rst  => cnt_reset(0),
-        en   => rx_valid_r2,
+        en   => cnt_rx_valid,
         rate => rx_valid_rate);
 
 -- rx valid counter
@@ -1159,7 +1215,7 @@ rx_valid_cnt_comp : counter
     port map(
         clk   => clk,  -- sys_clk at 156.25MHz
         rst   => cnt_reset(0),
-        en    => rx_valid_r2,
+        en    => cnt_rx_valid,
         count => rx_valid_cnt);
 
 -- rx overflow counter
@@ -1172,7 +1228,7 @@ rx_overflow_cnt_comp : counter
     port map(
         clk   => clk,  -- sys_clk at 156.25MHz
         rst   => cnt_reset(0),
-        en    => rx_overflow_r2,
+        en    => cnt_rx_overflow,
         count => rx_overflow_cnt);
 
 -- rx bad frame  counter
@@ -1185,7 +1241,7 @@ rx_bad_frame_cnt_comp : counter
     port map(
         clk   => clk,  -- sys_clk at 156.25MHz
         rst   => cnt_reset(0),
-        en    => rx_bad_frame_r2,
+        en    => cnt_rx_bad_frame,
         count => rx_bad_frame_cnt);
 
 end arch_ska_forty_gb_eth;

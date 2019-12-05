@@ -197,6 +197,7 @@ wire soft_reset_link2_async,soft_reset_link3_async;
 wire soft_reset_async,user_rst;
 
 wire [3:0] flit_error_resp_link2, flit_error_resp_link3;
+wire flit_error_resp_pulse_link2, flit_error_resp_pulse_link3;
 wire [6:0] errstat_link2, errstat_link3;
 
 
@@ -850,7 +851,11 @@ assign post_ok = post_ok_latchRRRR;
 assign init_done = init_done_latchRRRR & post_done_latchRRRR; //post_done_latch
 assign HMC_MEZZ_RESET = hmc_resetRRRR;//~P_RST_N; 
 //HMC OK flag depends on initialisation done, POST okay, FLIT error response indicators (link 2 and 3) and ERRSTAT register from HMC (link 2 and 3)
-assign hmc_okay = init_done & post_ok & (&(~flit_error_resp_link2)) & (&(~flit_error_resp_link3)) & (&(~errstat_link2)) & (&(~errstat_link3));
+//assign hmc_okay = init_done & post_ok & (&(~flit_error_resp_link2)) & (&(~flit_error_resp_link3)) & (&(~errstat_link2)) & (&(~errstat_link3));
+//Using the FLIT error response pulse indicators instead, so that when error occurs the error is reset, so that the DSP functionality does
+//not get stuck waiting for the FLIT error response to clear, which will never happen as the DSP has stopped reading/writing to the HMC.
+assign hmc_okay = init_done & post_ok & (~flit_error_resp_pulse_link2) & (~flit_error_resp_pulse_link3) & (&(~errstat_link2)) & (&(~errstat_link3));
+
 assign HMC_OK = hmc_okay;
 assign INIT_DONE = init_done;
 assign POST_OK = post_ok;
@@ -1175,7 +1180,8 @@ flit_gen_user_link2_inst (
   .DATA_VALID(DATA_VALID_LINK2),
   .RD_READY(RD_READY_LINK2),
   .FLIT_TAIL_ERRSTAT(errstat_link2),
-  .FLIT_ERROR_RESP(flit_error_resp_link2)
+  .FLIT_ERROR_RESP(flit_error_resp_link2),
+  .FLIT_ERROR_RESP_PULSE(flit_error_resp_pulse_link2)
 );
 
 // FLIT generator and checker for HMC LINK3 POST
@@ -1222,7 +1228,9 @@ flit_gen_user_link3_inst (
   .DATA_VALID(DATA_VALID_LINK3),
   .RD_READY(RD_READY_LINK3),
   .FLIT_TAIL_ERRSTAT(errstat_link3),
-  .FLIT_ERROR_RESP(flit_error_resp_link3)
+  .FLIT_ERROR_RESP(flit_error_resp_link3),
+  .FLIT_ERROR_RESP_PULSE(flit_error_resp_pulse_link3)
+
 );
 
 // AXI Mux between POST & User FLIT Generation

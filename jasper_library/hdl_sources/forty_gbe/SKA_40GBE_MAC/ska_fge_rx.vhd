@@ -54,6 +54,13 @@ entity ska_fge_rx is
     app_rx_overrun_ack      : in std_logic;
     app_rx_ack              : in std_logic;
 
+    -- internal signals broken out to be used for the packet counters
+    -- these are all still in the 156.25MHz domain NOT the app clock domain
+    cnt_rx_valid        : out std_logic;
+    cnt_rx_end_of_frame : out std_logic;
+    cnt_rx_bad_frame    : out std_logic;
+    cnt_rx_overflow     : out std_logic;
+
     -- CPU Interface
     cpu_clk                 : in std_logic;
     cpu_rst                 : in std_logic;
@@ -991,6 +998,12 @@ begin
 --            cpu_size_z2 <= cpu_size_z1;
 --        end if;
 --    end process;
+
+    -- signals used only for packet counting purposes.
+    cnt_rx_valid        <= payload3_val_z1 or payload2_val_z1 or payload1_val_z1 or payload0_val_z1;
+    cnt_rx_end_of_frame <= rx_eof;
+    cnt_rx_bad_frame    <= rx_bad;
+    cnt_rx_overflow     <= rx_over;
 
 ---------------------------------------------------------------------------------------------
 -- APP RECEIVE BUFFER

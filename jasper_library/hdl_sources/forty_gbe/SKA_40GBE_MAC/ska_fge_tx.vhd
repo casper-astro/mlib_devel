@@ -54,6 +54,13 @@ entity ska_fge_tx is
     app_tx_overflow     : out std_logic;
     app_tx_afull        : out std_logic;
 
+    -- internal signals broken out to be used for the packet counters
+    -- these are all still in the 156.25MHz domain NOT the app clock domain
+    cnt_tx_valid        : out std_logic;
+    cnt_tx_end_of_frame : out std_logic;
+    cnt_tx_afull        : out std_logic;
+    cnt_tx_overflow     : out std_logic;
+
     -- CPU Interface
     cpu_clk                 : in std_logic;
     cpu_rst                 : in std_logic;
@@ -671,6 +678,13 @@ begin
     payload3 <= app_tx_data_dout(255 downto 192);
     payload_valid <= app_tx_data_dout(259 downto 256);
     payload_end_of_frame <= app_tx_data_dout(263);
+
+    -- signals used only for packet counting purposes.
+    cnt_tx_valid        <= payload_valid(0) or payload_valid(1) or payload_valid(2) or payload_valid(3);
+    cnt_tx_end_of_frame <= payload_end_of_frame;
+    cnt_tx_afull        <= app_tx_data_afull;
+    cnt_tx_overflow     <= app_tx_data_overflow;
+
 
     gen_payload_z1 : process(mac_clk)
     begin
