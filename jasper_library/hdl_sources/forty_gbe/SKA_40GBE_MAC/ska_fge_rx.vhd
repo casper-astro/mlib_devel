@@ -54,13 +54,6 @@ entity ska_fge_rx is
     app_rx_overrun_ack      : in std_logic;
     app_rx_ack              : in std_logic;
 
-    -- internal signals broken out to be used for the packet counters
-    -- these are all still in the 156.25MHz domain NOT the app clock domain
-    cnt_rx_valid        : out std_logic;
-    cnt_rx_end_of_frame : out std_logic;
-    cnt_rx_bad_frame    : out std_logic;
-    cnt_rx_overflow     : out std_logic;
-
     -- CPU Interface
     cpu_clk                 : in std_logic;
     cpu_rst                 : in std_logic;
@@ -999,12 +992,6 @@ begin
 --        end if;
 --    end process;
 
-    -- signals used only for packet counting purposes.
-    cnt_rx_valid        <= payload3_val_z1 or payload2_val_z1 or payload1_val_z1 or payload0_val_z1;
-    cnt_rx_end_of_frame <= rx_eof;
-    cnt_rx_bad_frame    <= rx_bad;
-    cnt_rx_overflow     <= rx_over;
-
 ---------------------------------------------------------------------------------------------
 -- APP RECEIVE BUFFER
 ---------------------------------------------------------------------------------------------
@@ -1015,9 +1002,9 @@ begin
     ((app_dvld = '1')and((packet_fifo_almost_full = '1')or(ctrl_fifo_almost_full = '1')or(txctrl_fifo_almost_full = '1'))))and(app_rst = '0')) else '0';
     rx_bad <= app_badframe when (app_rst = '0') else '0';
     -- This really shouldnt be called rx_over, it is actually almost full
-    -- rx_over <= (packet_fifo_almost_full or ctrl_fifo_almost_full or txctrl_fifo_almost_full) when (app_rst = '0') else '0';
+    rx_over <= (packet_fifo_almost_full or ctrl_fifo_almost_full or txctrl_fifo_almost_full) when (app_rst = '0') else '0';
     -- this wont work becaus the fifo will be full and this signal wont get through the fifo.
-    rx_over <= packet_fifo_full
+    -- rx_over <= packet_fifo_full
 
     packet_fifo_wr_data(255 downto 0) <= payload3_z1 & payload2_z1 & payload1_z1 & payload0_z1;
     packet_fifo_wr_data(256) <= payload0_val_z1;
