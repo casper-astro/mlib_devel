@@ -33,7 +33,7 @@ The master branch is usually updated once a year. Between updates, code with new
 2. Xilinx Vivado
 
     This is available from [xilinx.com](https://www.xilinx.com) and will require a license. If you are part of an academic institution you may be eligible for free licenses via the [Xilinx University Program](https://www.xilinx.com/support/university.html).
-    Vivado install instructions are available [here](ttps://casper-toolflow.readthedocs.io/en/latest/src/How-to-install-Xilinx-Vivado.html).
+    Vivado install instructions are available [here](https://casper-toolflow.readthedocs.io/en/latest/src/How-to-install-Xilinx-Vivado.html).
 
 3. Python
 
