@@ -344,10 +344,15 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
     signal cpu_tx_size           : std_logic_vector(10 downto 0);
     signal cpu_tx_ready          : std_logic;
     signal cpu_tx_done           : std_logic;
+    attribute MARK_DEBUG : string;
     signal cpu_rx_buffer_addr    : std_logic_vector(10 downto 0);
+    attribute MARK_DEBUG of cpu_rx_buffer_addr        : signal is "TRUE";
     signal cpu_rx_buffer_rd_data : std_logic_vector(63 downto 0);
+    attribute MARK_DEBUG of cpu_rx_buffer_rd_data        : signal is "TRUE";
     signal cpu_rx_size           : std_logic_vector(10 downto 0);
+    attribute MARK_DEBUG of cpu_rx_size        : signal is "TRUE";
     signal cpu_rx_ack            : std_logic;
+    attribute MARK_DEBUG of cpu_rx_ack        : signal is "TRUE";
     signal arp_cache_addr        : std_logic_vector(7 downto 0);
     signal arp_cache_rd_data     : std_logic_vector(47 downto 0);
     signal arp_cache_wr_data     : std_logic_vector(47 downto 0);
@@ -362,6 +367,7 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
     signal local_mc_recv_ip_mask : std_logic_vector(31 downto 0);
     signal soft_reset            : std_logic;
     signal soft_reset_ack        : std_logic;
+
 
     signal tx_afull_sig        : std_logic;
     signal tx_overflow_sig     : std_logic;
@@ -467,7 +473,55 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
 --    signal rx_count_good_i : std_logic_vector(7 downto 0);
 --    signal rx_count_bad_i : std_logic_vector(7 downto 0);
 
+    signal rx_data_sig        : std_logic_vector(255 downto 0);
+    signal rx_source_ip_sig   : std_logic_vector(31 downto 0);
+    signal rx_source_port_sig : std_logic_vector(15 downto 0);
+    signal rx_dest_ip_sig     : std_logic_vector(31 downto 0);
+    signal rx_dest_port_sig   : std_logic_vector(15 downto 0);
+
+    signal dbg_rx_valid        : std_logic_vector(3 downto 0);
+    signal dbg_rx_end_of_frame : std_logic;
+    signal dbg_rx_data         : std_logic_vector(255 downto 0);
+    signal dbg_rx_source_ip    : std_logic_vector(31 downto 0);
+    signal dbg_rx_source_port  : std_logic_vector(15 downto 0);
+    signal dbg_rx_dest_ip      : std_logic_vector(31 downto 0);
+    signal dbg_rx_dest_port    : std_logic_vector(15 downto 0);
+ -- Mark Debug ILA Testing
+    
+    attribute MARK_DEBUG of dbg_rx_valid        : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_rx_end_of_frame : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_rx_data         : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_rx_source_ip    : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_rx_source_port  : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_rx_dest_ip      : signal is "TRUE";    
+    attribute MARK_DEBUG of dbg_rx_dest_port    : signal is "TRUE";
+
+    attribute MARK_DEBUG of tx_valid_r2        : signal is "TRUE";
+    attribute MARK_DEBUG of tx_end_of_frame_r2 : signal is "TRUE";
+
+    attribute MARK_DEBUG of rx_valid_r2        : signal is "TRUE";
+    attribute MARK_DEBUG of rx_end_of_frame_r2 : signal is "TRUE";
+    
+    attribute MARK_DEBUG of mac_rx_data        : signal is "TRUE";
+    attribute MARK_DEBUG of mac_rx_data_valid  : signal is "TRUE";
+
 begin
+
+--ILA Assignments
+
+    dbg_rx_valid        <= rx_valid_sig        ;
+    dbg_rx_end_of_frame <= rx_end_of_frame_sig ;
+    dbg_rx_data         <= rx_data_sig         ;
+    dbg_rx_source_ip    <= rx_source_ip_sig    ;
+    dbg_rx_source_port  <= rx_source_port_sig  ;
+    dbg_rx_dest_ip      <= rx_dest_ip_sig      ;
+    dbg_rx_dest_port    <= rx_dest_port_sig    ;
+
+    rx_data             <= rx_data_sig         ;
+    rx_source_ip        <= rx_source_ip_sig    ;
+    rx_source_port      <= rx_source_port_sig  ;
+    rx_dest_ip          <= rx_dest_ip_sig      ;
+    rx_dest_port        <= rx_dest_port_sig    ;
 
 --    debug_out(0) <= '0';
 --    debug_out(1) <= '0';
@@ -967,11 +1021,11 @@ begin
         app_rst               => app_rst,
         app_rx_valid          => rx_valid_sig,
         app_rx_end_of_frame   => rx_end_of_frame_sig,
-        app_rx_data           => rx_data,
-        app_rx_source_ip      => rx_source_ip,
-        app_rx_source_port    => rx_source_port,
-        app_rx_dest_ip        => rx_dest_ip,
-        app_rx_dest_port      => rx_dest_port,
+        app_rx_data           => rx_data_sig,
+        app_rx_source_ip      => rx_source_ip_sig,
+        app_rx_source_port    => rx_source_port_sig,
+        app_rx_dest_ip        => rx_dest_ip_sig,
+        app_rx_dest_port      => rx_dest_port_sig,
         app_rx_bad_frame      => rx_bad_frame_sig,
         app_rx_overrun        => rx_overflow_sig,
         app_rx_overrun_ack    => rx_overrun_ack,

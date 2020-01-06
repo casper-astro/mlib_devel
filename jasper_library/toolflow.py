@@ -327,8 +327,6 @@ class Toolflow(object):
         # just ignore if key is not present as only some platforms will have the key.
         except KeyError:
             s = ""
-        #import IPython
-        #IPython.embed()
         self.topfile = self.compile_dir+'/top.v'
         # delete top.v file if it exists, otherwise synthesis will fail
         if os.path.exists(self.topfile):
@@ -964,8 +962,6 @@ class Toolflow(object):
         else:
             self.logger.debug('File not written. Vivado version is 2018.2: %s. Dual Port RAM exists: %s'
                              % (ver_exists, dpram_exists))
-        #import IPython
-        #IPython.embed()
 
 class ToolflowFrontend(object):
     """

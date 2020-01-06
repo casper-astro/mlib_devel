@@ -194,7 +194,21 @@ architecture arch_wishbone_forty_gb_eth_attach of wishbone_forty_gb_eth_attach i
 
     signal reg_sel_z1 : std_logic;
 
+    signal dbg_adr_i : std_logic_vector(15 downto 0);
+    signal dbg_dat_i : std_logic_vector(31 downto 0);
+    signal dbg_dat_o : std_logic_vector(31 downto 0);
+    signal dbg_stb_i : std_logic;
+    attribute MARK_DEBUG : string;
+    attribute MARK_DEBUG of dbg_adr_i : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_dat_i : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_dat_o : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_stb_i : signal is "TRUE";
+
 begin
+    dbg_adr_i <= ADR_I;
+    dbg_dat_i <= DAT_I;
+    dbg_stb_i <= STB_I;
+    DAT_O <= dbg_dat_o;
 
     local_mac             <= local_mac_reg;
     local_ip              <= local_ip_reg;
@@ -333,7 +347,8 @@ begin
     cnt_reset_reg                                                                when (reg_data_src = REG_CNT_RESET)        else
     (others => '0');
 
-    DAT_O <=
+    --DAT_O <=
+    dbg_dat_o <=
     arp_data_int when (arp_sel   = '1') else
     tx_data_int  when (txbuf_sel = '1') else
     rx_data_int  when (rxbuf_sel = '1') else

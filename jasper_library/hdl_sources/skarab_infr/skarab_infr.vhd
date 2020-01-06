@@ -351,7 +351,7 @@ architecture arch_skarab_infr of skarab_infr is
         gbe_rx_overrun_ack      : out std_logic;
         gbe_rx_ack              : out std_logic;
         --AI Start: Add fortygbe interface for configuration
-        --fgbe_config_en           : in std_logic;  -- if '1' SDRAM/Flash configuration is done via forty GbE else via 1 GbE
+        fgbe_config_en           : in std_logic;  -- if '1' SDRAM/Flash configuration is done via forty GbE else via 1 GbE
         --fgbe_app_clk             : in std_logic;
         --fgbe_rx_valid            : in std_logic_vector(3 downto 0);
         --fgbe_rx_end_of_frame     : in std_logic;
@@ -614,18 +614,18 @@ architecture arch_skarab_infr of skarab_infr is
             vn_in           : in std_logic);
     end component;    
        
-    component cross_clock_fifo_wb_out_73x16
-    port (
-        rst             : in std_logic;
-        wr_clk          : in std_logic;
-        rd_clk          : in std_logic;
-        din             : in std_logic_vector(72 downto 0);
-        wr_en           : in std_logic;
-        rd_en           : in std_logic;
-        dout            : out std_logic_vector(72 downto 0);
-        full            : out std_logic;
-        empty           : out std_logic);
-    end component; 
+    --component cross_clock_fifo_wb_out_73x16
+    --port (
+    --    rst             : in std_logic;
+    --    wr_clk          : in std_logic;
+    --    rd_clk          : in std_logic;
+    --    din             : in std_logic_vector(72 downto 0);
+    --    wr_en           : in std_logic;
+    --    rd_en           : in std_logic;
+    --    dout            : out std_logic_vector(72 downto 0);
+    --    full            : out std_logic;
+    --    empty           : out std_logic);
+    --end component; 
         
    type T_WB_DSP_WR_STATE is (
      WB_DSP_WR_IDLE,
@@ -878,14 +878,14 @@ architecture arch_skarab_infr of skarab_infr is
 
     --signal gmii_rx_valid_ramp_checker : std_logic;
     --signal gmii_rx_end_of_frame_ramp_checker : std_logic;
-    signal gmii_rx_overrun_ack_ramp_checker : std_logic;
-    signal gmii_rx_ack_ramp_checker : std_logic;
+    --signal gmii_rx_overrun_ack_ramp_checker : std_logic;
+    --signal gmii_rx_ack_ramp_checker : std_logic;
     
     --AI start: Add fortygbe config interface 
     --signal xlgmii_rx_valid_ramp_checker : T_40GBE_DATA_VALID;
     --signal xlgmii_rx_end_of_frame_ramp_checker : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
-    signal xlgmii_rx_overrun_ack_ramp_checker : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
-    signal xlgmii_rx_ack_ramp_checker : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
+    --signal xlgmii_rx_overrun_ack_ramp_checker : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
+    --signal xlgmii_rx_ack_ramp_checker : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
     --AI end: Add fortygbe config interface         
 
     signal microblaze_uart_rxd : std_logic;
@@ -919,8 +919,6 @@ architecture arch_skarab_infr of skarab_infr is
     signal host_reset_d : std_logic;
     signal host_reset_d2 : std_logic;
     signal host_reset_d3 : std_logic;     
-
-
 
     signal led_rx : std_logic;
     signal led_tx : std_logic;
@@ -1096,107 +1094,8 @@ architecture arch_skarab_infr of skarab_infr is
     signal MEZZ3_ID : std_logic_vector(2 downto 0);
     signal MEZZ3_PRESENT : std_logic;
     
-    -- Mark Debug ILA Testing    
-    --signal dbg_wb_cross_clock_out_din : std_logic_vector(72 downto 0);
-    --signal dbg_wb_cross_clock_out_wrreq : std_logic;
-    --signal dbg_wb_cross_clock_out_rdreq : std_logic;
-    --signal dbg_wb_cross_clock_out_dout : std_logic_vector(72 downto 0);
-    --signal dbg_wb_cross_clock_out_full : std_logic;
-    --signal dbg_wb_cross_clock_out_empty : std_logic;
-  --
-    --signal dbg_wb_data_in : std_logic_vector(31 downto 0);
-    --signal dbg_wb_ack_in : std_logic;
-    --signal dbg_wb_ack_in_z1 : std_logic;
-    --signal dbg_wb_ack_in_z2 : std_logic;
-    --signal dbg_wb_sync_ack_in : std_logic;
-    --signal dbg_wb_sync_data_in : std_logic_vector(31 downto 0);
-  --
-    --signal dbg_wb_dsp_wr_state : T_WB_DSP_WR_STATE;   
-    --signal dbg_WB_SLV_ACK_O_top : std_logic;
-    --signal dbg_WB_SLV_DAT_O_top : std_logic_vector(31 downto 0);
-    --signal dbg_WB_SLV_DAT_O : std_logic_vector(31 downto 0);
-    --signal dbg_WB_SLV_ACK_O : std_logic;
-    --signal dbg_WB_SLV_SEL_I_top : std_logic_vector(3 downto 0);
-    --signal dbg_WB_SLV_STB_I_top : std_logic;
-    --signal dbg_WB_SLV_WE_I_top : std_logic;    
-  --
-    --signal dbg_WB_SLV_ADR_I_top : std_logic_vector(31 downto 0);
-    --signal dbg_WB_SLV_CYC_I_top : std_logic;
-    --signal dbg_WB_SLV_DAT_I : std_logic_vector(31 downto 0);  
-    --signal dbg_WB_SLV_ADR_I : std_logic_vector(31 downto 0);  
-    --signal dbg_WB_SLV_CYC_I : std_logic;  
-    --signal dbg_WB_SLV_SEL_I : std_logic_vector(3 downto 0);  
-    --signal dbg_WB_SLV_WE_I : std_logic; 
-    --signal dbg_WB_SLV_STB_I : std_logic;
-    
-    
-                                    
-    -- Mark Debug ILA Testing
-    
-    --attribute MARK_DEBUG : string;
-    --attribute MARK_DEBUG of dbg_wb_cross_clock_out_din : signal is "TRUE";
-    --attribute MARK_DEBUG of dbg_wb_cross_clock_out_wrreq : signal is "TRUE";
-    --attribute MARK_DEBUG of dbg_wb_cross_clock_out_rdreq : signal is "TRUE";
-    --attribute MARK_DEBUG of dbg_wb_cross_clock_out_dout : signal is "TRUE";
-    --attribute MARK_DEBUG of dbg_wb_cross_clock_out_full : signal is "TRUE"; 
-    --attribute MARK_DEBUG of dbg_wb_cross_clock_out_empty : signal is "TRUE";    
-    --attribute MARK_DEBUG of dbg_wb_data_in : signal is "TRUE";    
-    --attribute MARK_DEBUG of dbg_wb_ack_in : signal is "TRUE";    
-    --attribute MARK_DEBUG of dbg_wb_ack_in_z1 : signal is "TRUE";    
-    --attribute MARK_DEBUG of dbg_wb_ack_in_z2 : signal is "TRUE";    
-    --attribute MARK_DEBUG of dbg_wb_sync_ack_in : signal is "TRUE";    
-    --attribute MARK_DEBUG of dbg_wb_sync_data_in : signal is "TRUE";    
---
-    --attribute MARK_DEBUG of dbg_wb_dsp_wr_state : signal is "TRUE";   
-    --attribute MARK_DEBUG of dbg_WB_SLV_ACK_O_top : signal is "TRUE";   
-    --attribute MARK_DEBUG of dbg_WB_SLV_DAT_O_top : signal is "TRUE";   
-    --attribute MARK_DEBUG of dbg_WB_SLV_DAT_O : signal is "TRUE";   
-    --attribute MARK_DEBUG of dbg_WB_SLV_ACK_O : signal is "TRUE";   
-    --attribute MARK_DEBUG of dbg_WB_SLV_SEL_I_top : signal is "TRUE";   
-    --attribute MARK_DEBUG of dbg_WB_SLV_STB_I_top : signal is "TRUE";   
-    --attribute MARK_DEBUG of dbg_WB_SLV_WE_I_top : signal is "TRUE";   
-    --attribute MARK_DEBUG of dbg_WB_SLV_ADR_I_top : signal is "TRUE";   
-    --attribute MARK_DEBUG of dbg_WB_SLV_CYC_I_top : signal is "TRUE";   
-    --attribute MARK_DEBUG of dbg_WB_SLV_DAT_I : signal is "TRUE";   
-    --attribute MARK_DEBUG of dbg_WB_SLV_ADR_I : signal is "TRUE";   
-    --attribute MARK_DEBUG of dbg_WB_SLV_CYC_I : signal is "TRUE";   
-    --attribute MARK_DEBUG of dbg_WB_SLV_SEL_I : signal is "TRUE";   
-    --attribute MARK_DEBUG of dbg_WB_SLV_WE_I : signal is "TRUE";   
-    --attribute MARK_DEBUG of dbg_WB_SLV_STB_I : signal is "TRUE";   
-    
     
 begin
-
-    --ILA Assignments
-    --dbg_wb_cross_clock_out_din <= wb_cross_clock_out_din;
-    --dbg_wb_cross_clock_out_wrreq <= wb_cross_clock_out_wrreq;
-    --dbg_wb_cross_clock_out_rdreq <= wb_cross_clock_out_rdreq;
-    --dbg_wb_cross_clock_out_dout <= wb_cross_clock_out_dout;
-    --dbg_wb_cross_clock_out_full <= wb_cross_clock_out_full;
-    --dbg_wb_cross_clock_out_empty <= wb_cross_clock_out_empty;
-    --dbg_wb_data_in <= wb_data_in;
-    --dbg_wb_ack_in <= wb_ack_in;
-    --dbg_wb_ack_in_z1 <= wb_ack_in_z1;
-    --dbg_wb_ack_in_z2 <= wb_ack_in_z2;
-    --dbg_wb_sync_ack_in <= wb_sync_ack_in;
-    --dbg_wb_sync_data_in <= wb_sync_data_in;
-    --dbg_wb_dsp_wr_state <= wb_dsp_wr_state;
-    --dbg_WB_SLV_ACK_O_top <= WB_SLV_ACK_O_top;
-    --dbg_WB_SLV_DAT_O_top <= WB_SLV_DAT_O_top;
-    --dbg_WB_SLV_DAT_O <= WB_SLV_DAT_O(14);
-    --dbg_WB_SLV_ACK_O <= WB_SLV_ACK_O(14);
-    --dbg_WB_SLV_SEL_I_top <= wb_cross_clock_out_dout(4 downto 1);
-    --dbg_WB_SLV_STB_I_top <= wb_cross_clock_out_dout(72);
-    --dbg_WB_SLV_WE_I_top <= wb_cross_clock_out_dout(0);
-    --dbg_WB_SLV_ADR_I_top <= wb_cross_clock_out_dout(37 downto 6);
-    --dbg_WB_SLV_CYC_I_top <= wb_cross_clock_out_dout(5);
-    --dbg_WB_SLV_DAT_I <= WB_SLV_DAT_I(14);
-    --dbg_WB_SLV_ADR_I <= WB_SLV_ADR_I(14);
-    --dbg_WB_SLV_CYC_I <= WB_SLV_CYC_I(14);
-    --dbg_WB_SLV_SEL_I <= WB_SLV_SEL_I(14);
-    --dbg_WB_SLV_WE_I <= WB_SLV_WE_I(14);
-    --dbg_WB_SLV_STB_I <= WB_SLV_STB_I(14);
-
     --Mezzanine 3 ID and Present (this should be part of the 40GbE yellow block, but is part of the BSP for now)
     --Mezzanine ID: "000" = spare, "001" = 40GbE, "010" = HMC, "011" = ADC, rest = spare
     MEZZ3_ID <= "001";
@@ -1586,7 +1485,7 @@ begin
     
     --This is part of the configuration link auto-sensing function. If any of the 40GbE links are up then configuration
     --defaults to the 40GbE interface else it defaults to the 1GbE interface 
-    --fgbe_link_status <= phy_rx_up_cpu(0) or phy_rx_up_cpu(1) or phy_rx_up_cpu(2) or phy_rx_up_cpu(3);
+    --fgbe_link_status <= phy_rx_up_cpu_0 or phy_rx_up_cpu_1 or phy_rx_up_cpu_2 or phy_rx_up_cpu_3;
     --Select whether configuration via forty_gbe interface or via 1GbE interface (0 = 1GbE, 1 = 40GbE)
     --This will override the auto-sensing select function (default is 40GbE)
     --Obviously if there is no 40GbE this will have no effect, as fbe_link_status will be '0' and hence, 1GbE will
@@ -1913,7 +1812,7 @@ begin
         gbe_rx_overrun_ack      => gmii_rx_overrun_ack_flash_sdram_controller,
         gbe_rx_ack              => gmii_rx_ack_flash_sdram_controller,
         --AI Start: Added fortygbe interface for configuration
-        --fgbe_config_en          => fgbe_config_en,  -- if '1' SDRAM/Flash configuration is done via forty GbE else via 1 GbE
+        fgbe_config_en          => '1',  -- if '1' SDRAM/Flash configuration is done via forty GbE else via 1 GbE
         --fgbe_app_clk            => sys_clk,
         --fgbe_rx_valid           => xlgmii_rx_valid_flash_sdram_controller(0), --xlgmii_rx_valid(0),
         --fgbe_rx_end_of_frame    => xlgmii_rx_end_of_frame_flash_sdram_controller(0),--xlgmii_rx_end_of_frame(0),
@@ -2218,14 +2117,14 @@ begin
 
     --AI Start: Added fortygbe config interface
     -- MUX BETWEEN FLASH_SDRAM CONTROLLER AND 1GbE Data Streaming
-    gmii_rx_valid_flash_sdram_controller <= gmii_rx_valid when (select_one_gbe_data_sel  = '0') else '0';
-    gmii_rx_end_of_frame_flash_sdram_controller <= gmii_rx_end_of_frame when (select_one_gbe_data_sel  = '0') else '0';
+    --gmii_rx_valid_flash_sdram_controller <= gmii_rx_valid when (select_one_gbe_data_sel  = '0') else '0';
+    --gmii_rx_end_of_frame_flash_sdram_controller <= gmii_rx_end_of_frame when (select_one_gbe_data_sel  = '0') else '0';
 
     --gmii_rx_valid_ramp_checker <= gmii_rx_valid when (select_one_gbe_data_sel  = '1') else '0';
     --gmii_rx_end_of_frame_ramp_checker <= gmii_rx_end_of_frame when (select_one_gbe_data_sel  = '1') else '0';
 
-    gmii_rx_overrun_ack <= gmii_rx_overrun_ack_flash_sdram_controller when (select_one_gbe_data_sel  = '0') else gmii_rx_overrun_ack_ramp_checker;
-    gmii_rx_ack <= gmii_rx_ack_flash_sdram_controller when (select_one_gbe_data_sel  = '0') else gmii_rx_ack_ramp_checker;
+    --gmii_rx_overrun_ack <= gmii_rx_overrun_ack_flash_sdram_controller when (select_one_gbe_data_sel  = '0') else gmii_rx_overrun_ack_ramp_checker;
+    --gmii_rx_ack <= gmii_rx_ack_flash_sdram_controller when (select_one_gbe_data_sel  = '0') else gmii_rx_ack_ramp_checker;
 
     -- MUX BETWEEN FLASH_SDRAM CONTROLLER AND 40GbE Data Streaming on link 1 (Eth 0)
     --xlgmii_rx_valid_flash_sdram_controller(0) <= xlgmii_rx_valid when (select_forty_gbe_data_sel  = '0') else "0000";
@@ -2584,153 +2483,170 @@ begin
 -------------------------------------------------------------------------
 -- Wishbone DSP Registers
 -------------------------------------------------------------------------
-                
+       
     -- WISHBONE SLAVE 14 - DSP Registers
     WB_SLV_CLK_I_top <= bsp_clk;--sys_clk;
     WB_SLV_RST_I_top <= bsp_rst;--sys_rst;
-    WB_SLV_DAT_I_top <= wb_cross_clock_out_dout(69 downto 38);--WB_SLV_DAT_I(14);
-    --WB_SLV_DAT_O(14) <= WB_SLV_DAT_O_top;
-    --WB_SLV_ACK_O(14) <= WB_SLV_ACK_O_top;
+    WB_SLV_DAT_I_top <= WB_SLV_DAT_I(14);
+    WB_SLV_DAT_O(14) <= WB_SLV_DAT_O_top;
+    WB_SLV_ACK_O(14) <= WB_SLV_ACK_O_top;
     --Deconcatenate the signals from the FIFO to the wishbone interconnect
-    WB_SLV_DAT_O(14) <= wb_sync_data_in;--wb_cross_clock_in_dout(31 downto 0);
-    WB_SLV_ACK_O(14) <= wb_sync_ack_in;--wb_cross_clock_in_dout(32);    
-    WB_SLV_ADR_I_top <= wb_cross_clock_out_dout(37 downto 6);--WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0);
-    WB_SLV_CYC_I_top <= wb_cross_clock_out_dout(5);--WB_SLV_CYC_I(14);
-    WB_SLV_SEL_I_top <= wb_cross_clock_out_dout(4 downto 1);--WB_SLV_SEL_I(14);
-    WB_SLV_STB_I_top <= wb_cross_clock_out_dout(72);--WB_SLV_STB_I(14);
-    WB_SLV_WE_I_top  <= wb_cross_clock_out_dout(0);--WB_SLV_WE_I(14); 
-    
-    --Wishbone signals to the DSP
-    cross_clock_fifo_wb_out_73x16_dsp : cross_clock_fifo_wb_out_73x16
-    port map(
-        rst             => bsp_rst,
-        wr_clk          => bsp_clk,
-        rd_clk          => bsp_clk, 
-        din             => wb_cross_clock_out_din,
-        wr_en           => wb_cross_clock_out_wrreq,
-        rd_en           => wb_cross_clock_out_rdreq,
-        dout            => wb_cross_clock_out_dout,
-        full            => wb_cross_clock_out_full,
-        empty           => wb_cross_clock_out_empty);  
-     
-        
-   --WB FIFO Write State Machine (Wishbone to DSP Interface [39.0625MHz to 39.0625MHz)
-   --The Strobe, Write Enable and Cyclic signals are asserted for a long duration and
-   -- so this state machine ensures that the arbiter will see three clock cycle write asserted 
-   --strobes and write enabled and one clock cycle read asserted strobes with write disabled.   
-    fifo_wb_write_to_dsp_state_machine : process(bsp_rst, bsp_clk)
-    begin
-        if (bsp_rst = '1')then
-            wb_cross_clock_out_wrreq <= '0';
-            wb_dsp_wr_state <= WB_DSP_WR_IDLE;
-            wb_cross_clock_out_din <= (others => '0');
-            wb_slv_stb_hist_i <= '0';
-        elsif (rising_edge(bsp_clk))then
-            wb_slv_stb_hist_i <= WB_SLV_STB_I(14);
-            case wb_dsp_wr_state is    
-                when WB_DSP_WR_IDLE =>
-                  wb_dsp_wr_state <= WB_DSP_WR_STROBE_CHECK;
-                  wb_cross_clock_out_wrreq <= '0';
-                  wb_cross_clock_out_din <= "000" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & '0' & WB_SLV_SEL_I(14) & '0';                                                 
-                when WB_DSP_WR_STROBE_CHECK =>
-                                    
-                  --Check for strobe and write enable (write operation)
-                  if (WB_SLV_STB_I(14) = '1' and wb_slv_stb_hist_i = '0' and WB_SLV_WE_I(14) = '1')then
-                      wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_EN_1;
-                      wb_cross_clock_out_din <= "100" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '1';   
-                      wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);
-                  --Check for strobe and write deasserted (read operation)    
-                  elsif (WB_SLV_STB_I(14) = '1' and wb_slv_stb_hist_i = '0' and  WB_SLV_WE_I(14) = '0') then
-                      wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_EN_3;
-                      wb_cross_clock_out_din <= "100" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '0';   
-                      wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);                  
-                  else
-                      wb_dsp_wr_state <= WB_DSP_WR_STROBE_CHECK;                  
-                      wb_cross_clock_out_din <= "000" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '0';
-                      wb_cross_clock_out_wrreq <= '0';
-                  end if;
-                --enable write for two clock cycles to ensure wishbone write is successful  
-                when WB_DSP_WR_FIFO_WR_EN_1 =>
-                  
-                  wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_EN_2;
-                  wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);
-                  wb_cross_clock_out_din <= "100" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '1';                           
+    --WB_SLV_DAT_O(14) <= wb_sync_data_in;--wb_cross_clock_in_dout(31 downto 0);
+    --WB_SLV_ACK_O(14) <= wb_sync_ack_in;--wb_cross_clock_in_dout(32);    
+    WB_SLV_ADR_I_top <= WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0);
+    WB_SLV_CYC_I_top <= WB_SLV_CYC_I(14);
+    WB_SLV_SEL_I_top <= WB_SLV_SEL_I(14);
+    WB_SLV_STB_I_top <= WB_SLV_STB_I(14);
+    WB_SLV_WE_I_top  <= WB_SLV_WE_I(14);
 
-                --enable write for three clock cycles to ensure wishbone write is successful  
-                when WB_DSP_WR_FIFO_WR_EN_2 =>
-                  
-                  wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_EN_3;
-                  wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);
-                  wb_cross_clock_out_din <= "100" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '1';                           
 
-                --write in next cycle to ensure strobe and values have cleared, except cyc signal                
-                when WB_DSP_WR_FIFO_WR_EN_3 =>
 
-                  wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_EN_4;
-                  wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);
-                  wb_cross_clock_out_din <= "000" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '0';
-                --write in next cycle to ensure all strobe and values have cleared, including cyc signal                
-                when WB_DSP_WR_FIFO_WR_EN_4 =>
-                 
-                  wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_DIS;
-                  wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);
-                  wb_cross_clock_out_din <= "000" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & '0' & WB_SLV_SEL_I(14) & '0';
-
-                --stop writing and allow slower clock to read out              
-                when WB_DSP_WR_FIFO_WR_DIS =>
-                  wb_dsp_wr_state <= WB_DSP_WR_STROBE_CHECK;
-                  wb_cross_clock_out_wrreq <= '0';
-                  wb_cross_clock_out_din <= "000" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & '0' & WB_SLV_SEL_I(14) & '0';
-                  
-                when others =>
-                  wb_dsp_wr_state <= WB_DSP_WR_IDLE;
-            end case;
-        end if;
-    end process;   
-   
-    --Start reading out of the wishbone FIFO (wishbone to DSP interface [39.0625MHz to 39.0625MHz]) when FIFO is not empty   
-    wb_cross_clock_out_rdreq <= '1' when ((wb_cross_clock_out_empty = '0') and (bsp_rst = '0')) else '0';
-    
-    --Wishbone signals from the DSP
-    
-    --This process only allows valid data to be latched through
-    --creates a static bus signal for the synchroniser function below
-    read_wb_dsp_data : process(bsp_rst, bsp_clk)
-    begin
-        if (bsp_rst = '1')then
-            wb_data_in <= (others => '0');
-            wb_ack_in <= '0';
-        elsif (rising_edge(bsp_clk))then
-            --if valid data
-            if (WB_SLV_ACK_O_top = '1')then
-                wb_data_in <= WB_SLV_DAT_O_top;
-                wb_ack_in <= '1';
-            else
-                wb_ack_in <= '0';                
-            end if;   
-        end if;
-    end process; 
-    
-    -- This function performs clock domain crossing synchronisation
-    -- on a static bus signal
-    wb_read_synchroniser: process(bsp_rst, bsp_clk, wb_ack_in)
-    begin
-        if (bsp_rst = '1') then
-            wb_ack_in_z1 <= '0';
-            wb_ack_in_z2 <= '0';
-            wb_sync_data_in <= (others => '0');
-            wb_sync_ack_in <= '0';
-        elsif (rising_edge(bsp_clk)) then
-            wb_ack_in_z2 <= wb_ack_in_z1;
-            wb_ack_in_z1 <= wb_ack_in;
-            if (wb_ack_in_z2 = '1') then
-                wb_sync_data_in <= wb_data_in;
-                wb_sync_ack_in <= '1';
-            else
-                wb_sync_ack_in <= '0';
-            end if;
-        end if;
-    end process;
+--    -- WISHBONE SLAVE 14 - DSP Registers
+--    WB_SLV_CLK_I_top <= bsp_clk;--sys_clk;
+--    WB_SLV_RST_I_top <= bsp_rst;--sys_rst;
+--    WB_SLV_DAT_I_top <= wb_cross_clock_out_dout(69 downto 38);--WB_SLV_DAT_I(14);
+--    --WB_SLV_DAT_O(14) <= WB_SLV_DAT_O_top;
+--    --WB_SLV_ACK_O(14) <= WB_SLV_ACK_O_top;
+--    --Deconcatenate the signals from the FIFO to the wishbone interconnect
+--    WB_SLV_DAT_O(14) <= wb_sync_data_in;--wb_cross_clock_in_dout(31 downto 0);
+--    WB_SLV_ACK_O(14) <= wb_sync_ack_in;--wb_cross_clock_in_dout(32);    
+--    WB_SLV_ADR_I_top <= wb_cross_clock_out_dout(37 downto 6);--WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0);
+--    WB_SLV_CYC_I_top <= wb_cross_clock_out_dout(5);--WB_SLV_CYC_I(14);
+--    WB_SLV_SEL_I_top <= wb_cross_clock_out_dout(4 downto 1);--WB_SLV_SEL_I(14);
+--    WB_SLV_STB_I_top <= wb_cross_clock_out_dout(72);--WB_SLV_STB_I(14);
+--    WB_SLV_WE_I_top  <= wb_cross_clock_out_dout(0);--WB_SLV_WE_I(14); 
+--    
+--    --Wishbone signals to the DSP
+--    cross_clock_fifo_wb_out_73x16_dsp : cross_clock_fifo_wb_out_73x16
+--    port map(
+--        rst             => bsp_rst,
+--        wr_clk          => bsp_clk,
+--        rd_clk          => bsp_clk, 
+--        din             => wb_cross_clock_out_din,
+--        wr_en           => wb_cross_clock_out_wrreq,
+--        rd_en           => wb_cross_clock_out_rdreq,
+--        dout            => wb_cross_clock_out_dout,
+--        full            => wb_cross_clock_out_full,
+--        empty           => wb_cross_clock_out_empty);  
+--     
+--        
+--   --WB FIFO Write State Machine (Wishbone to DSP Interface [39.0625MHz to 39.0625MHz)
+--   --The Strobe, Write Enable and Cyclic signals are asserted for a long duration and
+--   -- so this state machine ensures that the arbiter will see three clock cycle write asserted 
+--   --strobes and write enabled and one clock cycle read asserted strobes with write disabled.   
+--    fifo_wb_write_to_dsp_state_machine : process(bsp_rst, bsp_clk)
+--    begin
+--        if (bsp_rst = '1')then
+--            wb_cross_clock_out_wrreq <= '0';
+--            wb_dsp_wr_state <= WB_DSP_WR_IDLE;
+--            wb_cross_clock_out_din <= (others => '0');
+--            wb_slv_stb_hist_i <= '0';
+--        elsif (rising_edge(bsp_clk))then
+--            wb_slv_stb_hist_i <= WB_SLV_STB_I(14);
+--            case wb_dsp_wr_state is    
+--                when WB_DSP_WR_IDLE =>
+--                  wb_dsp_wr_state <= WB_DSP_WR_STROBE_CHECK;
+--                  wb_cross_clock_out_wrreq <= '0';
+--                  wb_cross_clock_out_din <= "000" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & '0' & WB_SLV_SEL_I(14) & '0';                                                 
+--                when WB_DSP_WR_STROBE_CHECK =>
+--                                    
+--                  --Check for strobe and write enable (write operation)
+--                  if (WB_SLV_STB_I(14) = '1' and wb_slv_stb_hist_i = '0' and WB_SLV_WE_I(14) = '1')then
+--                      wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_EN_1;
+--                      wb_cross_clock_out_din <= "100" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '1';   
+--                      wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);
+--                  --Check for strobe and write deasserted (read operation)    
+--                  elsif (WB_SLV_STB_I(14) = '1' and wb_slv_stb_hist_i = '0' and  WB_SLV_WE_I(14) = '0') then
+--                      wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_EN_3;
+--                      wb_cross_clock_out_din <= "100" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '0';   
+--                      wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);                  
+--                  else
+--                      wb_dsp_wr_state <= WB_DSP_WR_STROBE_CHECK;                  
+--                      wb_cross_clock_out_din <= "000" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '0';
+--                      wb_cross_clock_out_wrreq <= '0';
+--                  end if;
+--                --enable write for two clock cycles to ensure wishbone write is successful  
+--                when WB_DSP_WR_FIFO_WR_EN_1 =>
+--                  
+--                  wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_EN_2;
+--                  wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);
+--                  wb_cross_clock_out_din <= "100" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '1';                           
+--
+--                --enable write for three clock cycles to ensure wishbone write is successful  
+--                when WB_DSP_WR_FIFO_WR_EN_2 =>
+--                  
+--                  wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_EN_3;
+--                  wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);
+--                  wb_cross_clock_out_din <= "100" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '1';                           
+--
+--                --write in next cycle to ensure strobe and values have cleared, except cyc signal                
+--                when WB_DSP_WR_FIFO_WR_EN_3 =>
+--
+--                  wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_EN_4;
+--                  wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);
+--                  wb_cross_clock_out_din <= "000" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & WB_SLV_CYC_I(14) & WB_SLV_SEL_I(14) & '0';
+--                --write in next cycle to ensure all strobe and values have cleared, including cyc signal                
+--                when WB_DSP_WR_FIFO_WR_EN_4 =>
+--                 
+--                  wb_dsp_wr_state <= WB_DSP_WR_FIFO_WR_DIS;
+--                  wb_cross_clock_out_wrreq <= '1' and not(wb_cross_clock_out_full);
+--                  wb_cross_clock_out_din <= "000" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & '0' & WB_SLV_SEL_I(14) & '0';
+--
+--                --stop writing and allow slower clock to read out              
+--                when WB_DSP_WR_FIFO_WR_DIS =>
+--                  wb_dsp_wr_state <= WB_DSP_WR_STROBE_CHECK;
+--                  wb_cross_clock_out_wrreq <= '0';
+--                  wb_cross_clock_out_din <= "000" &  WB_SLV_DAT_I(14) & WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0) & '0' & WB_SLV_SEL_I(14) & '0';
+--                  
+--                when others =>
+--                  wb_dsp_wr_state <= WB_DSP_WR_IDLE;
+--            end case;
+--        end if;
+--    end process;   
+--   
+--    --Start reading out of the wishbone FIFO (wishbone to DSP interface [39.0625MHz to 39.0625MHz]) when FIFO is not empty   
+--    wb_cross_clock_out_rdreq <= '1' when ((wb_cross_clock_out_empty = '0') and (bsp_rst = '0')) else '0';
+--    
+--    --Wishbone signals from the DSP
+--    
+--    --This process only allows valid data to be latched through
+--    --creates a static bus signal for the synchroniser function below
+--    read_wb_dsp_data : process(bsp_rst, bsp_clk)
+--    begin
+--        if (bsp_rst = '1')then
+--            wb_data_in <= (others => '0');
+--            wb_ack_in <= '0';
+--        elsif (rising_edge(bsp_clk))then
+--            --if valid data
+--            if (WB_SLV_ACK_O_top = '1')then
+--                wb_data_in <= WB_SLV_DAT_O_top;
+--                wb_ack_in <= '1';
+--            else
+--                wb_ack_in <= '0';                
+--            end if;   
+--        end if;
+--    end process; 
+--    
+--    -- This function performs clock domain crossing synchronisation
+--    -- on a static bus signal
+--    wb_read_synchroniser: process(bsp_rst, bsp_clk, wb_ack_in)
+--    begin
+--        if (bsp_rst = '1') then
+--            wb_ack_in_z1 <= '0';
+--            wb_ack_in_z2 <= '0';
+--            wb_sync_data_in <= (others => '0');
+--            wb_sync_ack_in <= '0';
+--        elsif (rising_edge(bsp_clk)) then
+--            wb_ack_in_z2 <= wb_ack_in_z1;
+--            wb_ack_in_z1 <= wb_ack_in;
+--            if (wb_ack_in_z2 = '1') then
+--                wb_sync_data_in <= wb_data_in;
+--                wb_sync_ack_in <= '1';
+--            else
+--                wb_sync_ack_in <= '0';
+--            end if;
+--        end if;
+--    end process;
     
     -------------------------------------------------------------------------
     -- LED Manager Instantiation
@@ -2740,7 +2656,7 @@ begin
     port map(
         clk                   => sys_clk,
         rst                   => sys_rst,
-        forty_gbe_link_status => phy_rx_up_cpu_0, -- Only using 40GbE_0
+        forty_gbe_link_status => phy_rx_up_cpu_0 or phy_rx_up_cpu_1 or phy_rx_up_cpu_2 or phy_rx_up_cpu_3, -- Only using 40GbE_0
         dhcp_resolved         => brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(0),
         firmware_version      => C_VERSION(31 downto 28),
         ublaze_toggle_value   => brd_user_read_regs(C_RD_UBLAZE_ALIVE_ADDR)(0),

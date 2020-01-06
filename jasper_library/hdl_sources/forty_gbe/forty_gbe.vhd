@@ -211,6 +211,8 @@ architecture arch_forty_gbe of forty_gbe is
         );
     end component IEEE802_3_XL_PHY_top;
     
+    attribute mark_debug : string;
+    
     signal xlgmii_tx_valid        : std_logic_vector(3 downto 0);
     signal xlgmii_tx_end_of_frame : std_logic;
     signal xlgmii_tx_data         : std_logic_vector(255 downto 0);
@@ -219,9 +221,13 @@ architecture arch_forty_gbe of forty_gbe is
     signal xlgmii_tx_overflow     : std_logic;
     signal xlgmii_tx_afull        : std_logic;
     signal xlgmii_rx_valid        : std_logic_vector(3 downto 0);
+    --attribute mark_debug of xlgmii_rx_valid: signal is "true";
     signal xlgmii_rx_end_of_frame : std_logic;
+    --attribute mark_debug of xlgmii_rx_end_of_frame: signal is "true";
     signal xlgmii_rx_data         : std_logic_vector(255 downto 0);
+    --attribute mark_debug of xlgmii_rx_data: signal is "true";
     signal xlgmii_rx_source_ip    : std_logic_vector(31 downto 0);
+    --attribute mark_debug of xlgmii_rx_source_ip: signal is "true";
     signal xlgmii_rx_source_port  : std_logic_vector(15 downto 0);
     signal xlgmii_rx_dest_ip      : std_logic_vector(31 downto 0);
     signal xlgmii_rx_dest_port    : std_logic_vector(15 downto 0);
@@ -233,7 +239,9 @@ architecture arch_forty_gbe of forty_gbe is
     signal xlgmii_txd : std_logic_vector(255 downto 0);
     signal xlgmii_txc : std_logic_vector(31 downto 0);
     signal xlgmii_rxd : std_logic_vector(255 downto 0);
+    attribute mark_debug of xlgmii_rxd: signal is "true";
     signal xlgmii_rxc : std_logic_vector(31 downto 0);
+    attribute mark_debug of xlgmii_rxc: signal is "true";
 
     signal xlgmii_txled_sig : std_logic_vector(1 downto 0);
     signal xlgmii_rxled_sig : std_logic_vector(1 downto 0);
@@ -405,8 +413,8 @@ begin
         end if;
     end process;
 
-    --xlgmii_rx_overrun_ack  <= forty_gbe_rx_overrun_ack;
-    --xlgmii_rx_ack          <= forty_gbe_rx_ack;
+    xlgmii_rx_overrun_ack  <= forty_gbe_rx_overrun_ack;
+    xlgmii_rx_ack          <= forty_gbe_rx_ack;
     forty_gbe_led_rx <= xlgmii_rxled_sig(1); -- xlgmii_rxled(0)(1) is activity, xlgmii_rxled(0)(0) is phy rx up
     forty_gbe_led_tx <= xlgmii_txled_sig(1); -- xlgmii_txled(0)(1) is activity, xlgmii_txled(0)(0) is phy tx up
     forty_gbe_led_up <= phy_rx_up_sig;

@@ -45,7 +45,7 @@ class WbDevice(object):
     """
     A class to encapsulate the parameters (name, size, etc.) of a wishbone slave device.
     """
-    def __init__(self, regname, nbytes, mode, hdl_suffix='', hdl_candr_suffix='', memory_map=[], typecode=0xff):
+    def __init__(self, regname, nbytes, mode, hdl_suffix='', hdl_candr_suffix='', memory_map=[], typecode=0xff, req_offset=-1):
         """
         Class constructor.
 
@@ -63,6 +63,8 @@ class WbDevice(object):
         :type memory_map: list
         :param typecode: Typecode number (0-255) identifying the type of this block. See ``yellow_block_typecodes.py``
         :type typecode: int
+        :param req_offset: Requsted offset (0-0xFFFFFFF) used to request a particular address on the memory map, please only use this if really requred``
+        :type typecode: int or hex
         """
         self.typecode = typecode
         self.regname = regname
@@ -77,6 +79,7 @@ class WbDevice(object):
         self.memory_map = memory_map
         #: If using multiple bus arbiters, which arbiter should this slave attach to?
         self.sub_arb_id = 0
+        self.req_offset = req_offset
 
 # TODO: This class is the same as the Wishbone class? What's the point of it?
 class AXI4LiteDevice(object):
@@ -273,7 +276,18 @@ def gen_wbs_master_arbiter(arbiters, max_devices_per_arb=32):
         input   [N_SLAVES    - 1:0] wbs_err_i\n\
       );\n\
     \n'
-    
+   
+    # ensure that the base address for each arbiter is actually the lowest address in the range
+    # this is caused by the non-deterministic nature of lists in python. Meaning that the 1st
+    # device on the arbiter is not garunteed to be the 1st in the address range supplied to that
+    # arbiter.
+    arbiter_base_addresses = [] 
+    for i, arbiter in enumerate(arbiters):
+        arbiter_base_addresses += [0xFFFFFFFF]
+        for dev in arbiter:
+            if dev.base_addr < arbiter_base_addresses[i]:
+                arbiter_base_addresses[i] = dev.base_addr
+
     # add the SUBARB localparams
     for i in range(n_sub_arbs):
         wbs_parent_arbiter += '  localparam SUBARB_%s = %s;\n' %(i,i)
@@ -293,7 +307,7 @@ def gen_wbs_master_arbiter(arbiters, max_devices_per_arb=32):
     for i, arbiter in enumerate(arbiters):
         wbs_parent_arbiter += '  localparam SLAVE_ADDR_ARB%s = { ' %i
         for j, device in enumerate(reversed(arbiter)):
-            wbs_parent_arbiter += '32\'h%s - 32\'h%s,' %(str(hex(device.base_addr))[2:], str(hex(arbiter[0].base_addr))[2:])
+            wbs_parent_arbiter += '32\'h%s - 32\'h%s,' %(str(hex(device.base_addr))[2:], str(hex(arbiter_base_addresses[i]))[2:])
             if j == len(arbiter)-1:
                 wbs_parent_arbiter = wbs_parent_arbiter[:-1]
                 wbs_parent_arbiter += '}; //%s\n' %(device.regname)
@@ -301,7 +315,7 @@ def gen_wbs_master_arbiter(arbiters, max_devices_per_arb=32):
                 wbs_parent_arbiter += '//%s\n' %(device.regname)
         wbs_parent_arbiter += '  localparam SLAVE_HIGH_ARB%s = { ' %i
         for j, device in enumerate(reversed(arbiter)):
-            wbs_parent_arbiter += '32\'h%s - 32\'h%s,' %(str(hex(device.high_addr))[2:], str(hex(arbiter[0].base_addr)[2:]))
+            wbs_parent_arbiter += '32\'h%s - 32\'h%s,' %(str(hex(device.high_addr))[2:], str(hex(arbiter_base_addresses[i])[2:]))
             if j == len(arbiter)-1:
                 wbs_parent_arbiter = wbs_parent_arbiter[:-1]
                 wbs_parent_arbiter += '}; //%s\n' %(device.regname)
@@ -623,26 +637,73 @@ class VerilogModule(object):
         """
         # Now we have an instance name, we can assign the wb ports to
         # real signals
+
+        #TODO: check that requested offsets dont overlap
+
+        # first iteration adds devices that have requested an offset
         wb_device_num = 0
+        wb_offset = base_addr
+
         for block in list(self.instances.keys()):
             for instname, inst in list(self.instances[block].items()):
                 logger.debug("Looking for WB slaves for instance %s"%inst.name)
                 for n, wb_dev in enumerate(inst.wb_devices):
-                    logger.debug("Assigning interface %d (%s)"%(n, wb_dev.regname))
-                    if self.max_devices_per_arb is not None:
-                        wb_dev.sub_arb_id = wb_device_num // self.max_devices_per_arb
-                    wb_device_num += 1
-                    inst.assign_wb_interface(instname, id=n, suffix=wb_dev.hdl_suffix, candr_suffix=wb_dev.hdl_candr_suffix, sub_arb_id=wb_dev.sub_arb_id)
-
+                    if wb_dev.req_offset != -1:
+                        logger.debug("Assigning interface %d (%s)"%(n, wb_dev.regname))
+                        if self.max_devices_per_arb is not None:
+                            wb_dev.sub_arb_id = wb_device_num // self.max_devices_per_arb
+                        wb_device_num += 1
+                        inst.assign_wb_interface(instname, id=n, suffix=wb_dev.hdl_suffix, candr_suffix=wb_dev.hdl_candr_suffix, sub_arb_id=wb_dev.sub_arb_id)
+    
+                # loop through devices and assign requested offsets
                 for n, wb_dev in enumerate(inst.wb_devices):
-                    logger.debug("Found new WB slave for instance %s"%inst.name)
-                    wb_dev.base_addr = base_addr
-                    wb_dev.high_addr = base_addr + (alignment*int(ceil(wb_dev.nbytes/float(alignment)))) - 1
-                    #self.wb_name += [inst.wb_names[n]]
-                    self.add_localparam(name=inst.wb_ids[n], value=self.n_wb_slaves+self.base_wb_slaves)
-                    base_addr = wb_dev.high_addr + 1
-                    self.n_wb_slaves += 1
-                    self.wb_devices += [wb_dev]
+                    #print(hex(wb_dev.req_offset))
+                    if wb_dev.req_offset != -1:
+                        logger.debug("Found new WB slave for instance %s"%inst.name)
+                        wb_dev.base_addr = wb_offset + wb_dev.req_offset
+                        wb_dev.high_addr = wb_offset + wb_dev.req_offset + (alignment*int(ceil(wb_dev.nbytes/float(alignment)))) - 1
+                        #self.wb_name += [inst.wb_names[n]]
+                        self.add_localparam(name=inst.wb_ids[n], value=self.n_wb_slaves+self.base_wb_slaves)
+                        if wb_dev.high_addr > base_addr:
+                            print(hex(base_addr))
+                            print(hex(wb_dev.high_addr))
+                            base_addr = wb_dev.high_addr + 1
+                        self.n_wb_slaves += 1
+                        #if wb_dev.regname == 'sys_block':
+                        #    self.wb_devices.insert(0,wb_dev)
+                        #else:
+                        self.wb_devices += [wb_dev]
+                        print("Req offset: %s Base addr: %s High Addr: %s"%(hex(wb_dev.req_offset), hex(base_addr), hex(wb_dev.high_addr)))
+        
+        # 2nd iteration adds devices that have not requested an offset
+        for block in list(self.instances.keys()):
+            for instname, inst in list(self.instances[block].items()):
+                logger.debug("Looking for WB slaves for instance %s"%inst.name)
+                for n, wb_dev in enumerate(inst.wb_devices):
+                    if wb_dev.req_offset == -1:
+                        logger.debug("Assigning interface %d (%s)"%(n, wb_dev.regname))
+                        if self.max_devices_per_arb is not None:
+                            wb_dev.sub_arb_id = wb_device_num // self.max_devices_per_arb
+                        wb_device_num += 1
+                        inst.assign_wb_interface(instname, id=n, suffix=wb_dev.hdl_suffix, candr_suffix=wb_dev.hdl_candr_suffix, sub_arb_id=wb_dev.sub_arb_id)
+    
+                # loop through devices and assign non requested offsets
+                for n, wb_dev in enumerate(inst.wb_devices):
+                    #print(hex(wb_dev.req_offset))
+                    if wb_dev.req_offset == -1:
+                        logger.debug("Found new WB slave for instance %s"%inst.name)
+                        wb_dev.base_addr = base_addr
+                        wb_dev.high_addr = base_addr + (alignment*int(ceil(wb_dev.nbytes/float(alignment)))) - 1
+                        #self.wb_name += [inst.wb_names[n]]
+                        self.add_localparam(name=inst.wb_ids[n], value=self.n_wb_slaves+self.base_wb_slaves)
+                        base_addr = wb_dev.high_addr + 1
+                        self.n_wb_slaves += 1
+                        #if wb_dev.regname == 'sys_block':
+                        #    self.wb_devices.insert(0,wb_dev)
+                        #else:
+                        self.wb_devices += [wb_dev]
+                        #print("None req offset: %s %s"%(hex(wb_dev.req_offset), hex(base_addr)))
+
 
         # If we are starting a file from scratch, we need the wishbone parameters
         # otherwise we assume they are in the file and rewrite_module_file will
@@ -1315,7 +1376,7 @@ class VerilogModule(object):
         s += '  );\n\n'
         return s
 
-    def add_wb_interface(self, regname, mode, nbytes=4, suffix='', candr_suffix='', memory_map=[], typecode=0xff):
+    def add_wb_interface(self, regname, mode, nbytes=4, suffix='', candr_suffix='', memory_map=[], typecode=0xff, req_offset=-1):
         """
         Add the ports necessary for a wishbone slave interface.
         Wishbone ports that depend on the slave index are identified by a parameter
@@ -1328,7 +1389,7 @@ class VerilogModule(object):
         if regname in [wb_dev.regname for wb_dev in self.wb_devices]:
             return
         else:
-            wb_device = WbDevice(regname, nbytes=nbytes, mode=mode, hdl_suffix=suffix, hdl_candr_suffix=candr_suffix, memory_map=memory_map, typecode=typecode)
+            wb_device = WbDevice(regname, nbytes=nbytes, mode=mode, hdl_suffix=suffix, hdl_candr_suffix=candr_suffix, memory_map=memory_map, typecode=typecode, req_offset=req_offset)
             self.wb_devices += [wb_device]
             self.n_wb_interfaces += 1
             self.sub_arb_id = 0
@@ -1336,7 +1397,7 @@ class VerilogModule(object):
             self.add_port('wb_rst_i'+candr_suffix, parent_sig=False)
             self.add_port('wb_cyc_i'+suffix, parent_sig=False)
             self.add_port('wb_stb_i'+suffix, parent_sig=False)
-            self.add_port('wb_we_i'+suffix,  width=1, parent_sig=False)
+            self.add_port('wb_we_i' +suffix, width=1, parent_sig=False)
             self.add_port('wb_sel_i'+suffix, width=4, parent_sig=False)
             self.add_port('wb_adr_i'+suffix, width=32, parent_sig=False)
             self.add_port('wb_dat_i'+suffix, width=32, parent_sig=False)

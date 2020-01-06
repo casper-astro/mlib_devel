@@ -15,7 +15,10 @@ class forty_gbe(YellowBlock):
 
         inst = top.get_instance(name=self.fullname, entity='forty_gbe')
         # Wishbone memory for status registers / ARP table
-        inst.add_wb_interface(self.unique_name, mode='rw', nbytes=0x16000) # as in matlab code
+        
+        # request a wishbone offset that is a multiple of the port number
+        req_offset = 0x16000 * self.port
+        inst.add_wb_interface(self.unique_name, mode='rw', nbytes=0x16000, req_offset=req_offset) # as in matlab code
 
         # forty gbe specific parameters
         inst.add_parameter('FABRIC_MAC',     "48'h%x"%self.fab_mac)
@@ -27,9 +30,6 @@ class forty_gbe(YellowBlock):
         inst.add_parameter('TTL',            " 8'h%x"%self.ttl)
         inst.add_parameter('PROMISC_MODE',   " 1'b%x"%self.promisc_mode)
         inst.add_parameter('MEZZ_PORT',      " 2'h%x"%self.port)
-
-        #import IPython
-        #IPython.embed()
 
         inst.add_port('user_clk', 'sys_clk', dir='in', parent_sig=False)
         inst.add_port('user_rst', 'sys_rst', dir='in', parent_sig=False)
