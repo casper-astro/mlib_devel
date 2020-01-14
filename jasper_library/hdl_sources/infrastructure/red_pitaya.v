@@ -15,6 +15,9 @@ module red_pitaya_infrastructure #(
         output dsp_rst,
 
         output adc_clk_125,
+        output adc_clk_p90,
+        output adc_clk_p180,
+        output adc_clk_p270,
         output adc_rst,
         output dac_clk_250,
         output dac_rst,
@@ -25,6 +28,9 @@ module red_pitaya_infrastructure #(
     wire adc_clk_mmcm_fb;
     wire dsp_clk_mmcm_fb;
     wire adc_clk_mmcm;
+    wire adc_clk_mmcm_p90;
+    wire adc_clk_mmcm_p180;
+    wire adc_clk_mmcm_p270;
     wire dsp_clk_mmcm;
     wire dsp_clk_mmcm_p90;
     wire dsp_clk_mmcm_p180;
@@ -109,15 +115,15 @@ module red_pitaya_infrastructure #(
         .CLKOUT1_PHASE      (0.0),
         .CLKOUT2_PHASE      (0.0),
         .CLKOUT3_PHASE      (-45.0),
-        .CLKOUT4_PHASE      (0.0),
-        .CLKOUT5_PHASE      (0.0),
-        .CLKOUT6_PHASE      (0.0),
+        .CLKOUT4_PHASE      (90.0),
+        .CLKOUT5_PHASE      (180.0),
+        .CLKOUT6_PHASE      (270.0),
         .CLKOUT1_DIVIDE     (8),
         .CLKOUT2_DIVIDE     (4),
         .CLKOUT3_DIVIDE     (4),
-        .CLKOUT4_DIVIDE     (1),
-        .CLKOUT5_DIVIDE     (1),
-        .CLKOUT6_DIVIDE     (1),
+        .CLKOUT4_DIVIDE     (8),
+        .CLKOUT5_DIVIDE     (8),
+        .CLKOUT6_DIVIDE     (8),
         .CLKOUT4_CASCADE    ("FALSE"),
         .CLOCK_HOLD         ("FALSE"),
         .DIVCLK_DIVIDE      (1), // Master division value (1-80)
@@ -136,17 +142,17 @@ module red_pitaya_infrastructure #(
         .CLKOUT2B (),
         .CLKOUT3  (dac_clk_250_mmcm_p315),
         .CLKOUT3B (),
-        .CLKOUT4  (),
-        .CLKOUT5  (),
-        .CLKOUT6  (),
+        .CLKOUT4  (adc_clk_mmcm_p90),
+        .CLKOUT5  (adc_clk_mmcm_p180),
+        .CLKOUT6  (adc_clk_mmcm_p270),
         .LOCKED   (adc_mmcm_lock),
         .PWRDWN   (1'b0),
         .RST      (1'b0)
     );
     
-    BUFG bufg_sysclk[6:0](
-      .I({dsp_clk_mmcm, dsp_clk_mmcm_p90, dsp_clk_mmcm_p180, dsp_clk_mmcm_p270, adc_clk_125_mmcm, dac_clk_250_mmcm, dac_clk_250_mmcm_p315}),
-      .O({dsp_clk,      dsp_clk_p90,      dsp_clk_p180,      dsp_clk_p270,      adc_clk_125,      dac_clk_250     , dac_clk_250_p315})
+    BUFG bufg_sysclk[9:0](
+      .I({dsp_clk_mmcm, dsp_clk_mmcm_p90, dsp_clk_mmcm_p180, dsp_clk_mmcm_p270, adc_clk_125_mmcm, dac_clk_250_mmcm, dac_clk_250_mmcm_p315, adc_clk_mmcm_p90, adc_clk_mmcm_p180, adc_clk_mmcm_p270}),
+      .O({dsp_clk,      dsp_clk_p90,      dsp_clk_p180,      dsp_clk_p270,      adc_clk_125,      dac_clk_250     , dac_clk_250_p315     , adc_clk_p90,      adc_clk_p180,      adc_clk_p270})
     );
     
     // TODO: Check this logic and look a the resets

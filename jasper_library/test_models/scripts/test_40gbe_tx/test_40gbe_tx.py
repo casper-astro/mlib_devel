@@ -17,7 +17,7 @@ def snapdata2packets(snapdata):
     pkt_start = 0
     for ctr in range(len(snapdata['eof'])):
         if snapdata['eof'][ctr] == 1:
-            pktval = {k: v[pkt_start:ctr+1] for k, v in snapdata.items()}
+            pktval = {k: v[pkt_start:ctr+1] for k, v in list(snapdata.items())}
             pkts.append(pktval)
             pkt_start = ctr + 1
     return pkts
@@ -110,8 +110,8 @@ def process_tut2_data(packets, printlimit=-1):
         printed += 1
         last_pkt_count = this_pkt_cnt
     print('-------------------------\nERRORS:')
-    for key, val in errors.items():
-        print('\t%s: %i' % (key, val))
+    for key, val in list(errors.items()):
+        print(('\t%s: %i' % (key, val)))
     return errors
 
 
@@ -147,8 +147,8 @@ def check_rx_pkt_counters():
         if ctr != last_ctr + 1:
             errors += 1
         last_ctr = ctr
-    print '%i errors in %i packets (%i->%i).' % (
-        errors, len(d['pkt_ctr']), d['pkt_ctr'][0], d['pkt_ctr'][-1])
+    print('%i errors in %i packets (%i->%i).' % (
+        errors, len(d['pkt_ctr']), d['pkt_ctr'][0], d['pkt_ctr'][-1]))
     return errors
 
 
@@ -165,8 +165,8 @@ def check_rx_pkt_counters2():
         old = d['pkt_ctr_old'][ctr]
         if now != old + 1:
             errors += 1
-    print '%i errors in %i packets (%i->%i).' % (
-        errors, len(d['pkt_ctr']), d['pkt_ctr'][0], d['pkt_ctr'][-1])
+    print('%i errors in %i packets (%i->%i).' % (
+        errors, len(d['pkt_ctr']), d['pkt_ctr'][0], d['pkt_ctr'][-1]))
     return errors
 
 
@@ -294,7 +294,7 @@ if __name__ == '__main__':
     # set up TX
     import IPython
     IPython.embed()
-    print frx
+    print(frx)
     ip_dest = frx.gbes["forty_gbe"].get_ip()
     if to_pc:
         from casperfpga import tengbe
@@ -324,7 +324,7 @@ if __name__ == '__main__':
     try:
         ftx.registers.control.write(tx_en=1, pkt_rst='pulse')
     except:
-        print 'NO RESPONSE!'
+        print('NO RESPONSE!')
         tx_comms_lost = True
 
     time.sleep(1)
@@ -339,7 +339,7 @@ if __name__ == '__main__':
 
     if not tx_comms_lost:
         print_txsnap(2)
-        print ''
+        print('')
 
     if not to_pc:
         print_rxsnap(2)
@@ -354,14 +354,14 @@ if __name__ == '__main__':
 
     if not tx_comms_lost:
         print_txsnap(2)
-        print ''
+        print('')
 
     if not to_pc:
         print_rxsnap(2)
 
     if not tx_comms_lost:
         print_txsnap(2)
-        print ''
+        print('')
 
     if not to_pc:
         print_rxsnap(2)

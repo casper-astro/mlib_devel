@@ -7,7 +7,7 @@ A work in progress.
 """
 import logging
 import os
-import platform
+import casper_platform as platform
 import yellow_blocks.yellow_block as yellow_block
 import verilog
 from constraints import PortConstraint, ClockConstraint, GenClockConstraint, \
@@ -80,7 +80,6 @@ class Toolflow(object):
         self.frontend_target = frontend_target
         self.modelname = frontend_target.split('/')[-1][:-4]  # strip off extension
         self.frontend_target_base = os.path.basename(frontend_target)
-
 
         self.cores = None
         self.topfile = None
@@ -245,7 +244,7 @@ class Toolflow(object):
         Use this to instantiate the appropriate
         device from the Platform class.
         """
-        for key in self.peripherals.keys():
+        for key in list(self.peripherals.keys()):
             if self.peripherals[key]['tag'] == 'xps:xsg':
                 # self.plat = platform.Platform.get_loader(
                 #     self.peripherals[key]['hw_sys'])
@@ -327,8 +326,6 @@ class Toolflow(object):
         # just ignore if key is not present as only some platforms will have the key.
         except KeyError:
             s = ""
-        #import IPython
-        #IPython.embed()
         self.topfile = self.compile_dir+'/top.v'
         # delete top.v file if it exists, otherwise synthesis will fail
         if os.path.exists(self.topfile):
@@ -360,7 +357,7 @@ class Toolflow(object):
         self._parse_periph_file()
         self._extract_plat_info()
         self.periph_objs = []
-        for pk in self.peripherals.keys():
+        for pk in list(self.peripherals.keys()):
             self.logger.debug('Generating Yellow Block: %s' % pk)
             self.periph_objs.append(yellow_block.YellowBlock.make_block(
                 self.peripherals[pk], self.plat))
@@ -416,7 +413,7 @@ class Toolflow(object):
             # Make an AXI4-Lite interconnect yellow block and let it modify top
             axi4lite_interconnect = yellow_block.YellowBlock.make_block(
                 {'tag': 'xps:axi4lite_interconnect', 'name': 'axi4lite_interconnect', 
-                'fullpath': self.user_modules.keys()[0] +'/axi4lite_interconnect'}, self.plat)
+                'fullpath': list(self.user_modules.keys())[0] +'/axi4lite_interconnect'}, self.plat)
             axi4lite_interconnect.modify_top(self.top)
             # Generate xml2vhdl
             self.xml2vhdl()
@@ -428,17 +425,17 @@ class Toolflow(object):
         Adds VerilogInstance and ports associated with user-ip to the class' top
         VerilogModule instance.
         """
-        for name, usermodule in self.user_modules.items():
+        for name, usermodule in list(self.user_modules.items()):
             inst = self.top.get_instance(entity=name, name='%s_inst' % name)
             self.top.set_cur_blk('usermodule: %s'%name)
             # internal = False --> we assume that other yellow
             # blocks have set up appropriate signals in top.v
             # (we can't add them here anyway, because we don't
             # know the port widths)
-            if 'clock' in usermodule.keys():
+            if 'clock' in list(usermodule.keys()):
                 inst.add_port(name=usermodule['clock'], signal='user_clk',
                               parent_sig=False)
-            if 'clock_enable' in usermodule.keys():
+            if 'clock_enable' in list(usermodule.keys()):
                 inst.add_port(name=usermodule['clock_enable'], signal='1\'b1',
                               parent_sig=False)
             for port in usermodule['ports']:
@@ -455,7 +452,7 @@ class Toolflow(object):
         if self.plat.mmbus_architecture == 'AXI4-Lite':
             # get list of all axi4lite_devices in self.top.memory_map dict
             self.cores = []
-            for val in self.top.memory_map.values():
+            for val in list(self.top.memory_map.values()):
                 self.cores += val['axi4lite_devices']
         else:
             self.cores = self.top.wb_devices
@@ -492,7 +489,7 @@ class Toolflow(object):
         if self.plat.mmbus_architecture == 'AXI4-Lite':
             # get list of all axi4lite_devices in self.top.memory_map dict
             self.cores = []
-            for val in self.top.memory_map.values():
+            for val in list(self.top.memory_map.values()):
                 self.cores += val['axi4lite_devices']
         else:
             self.cores = self.top.wb_devices
@@ -541,7 +538,7 @@ class Toolflow(object):
         """
         # Decide if we're going to use a hierarchical arbiter.
         self.logger.debug("Looking for a max_devices_per_arbiter spec")
-        if self.plat.conf.has_key('max_devices_per_arbiter'):
+        if 'max_devices_per_arbiter' in self.plat.conf:
             self.top.max_devices_per_arb = self.plat.conf['max_devices_per_arbiter']
             self.logger.debug("Found max_devices_per_arbiter: %s" % self.top.max_devices_per_arb)
         # Check for memory map bus architecture, added to support AXI4-Lite
@@ -554,7 +551,7 @@ class Toolflow(object):
         self.top.gen_module_file(filename=self.compile_dir+'/top.v')
         # Write any submodule files required for the compile. This is probably
         # only the hierarchical WB arbiter, or nothing at all
-        for key, val in self.top.generated_sub_modules.iteritems():
+        for key, val in self.top.generated_sub_modules.items():
             self.logger.info("Writing sub module file %s.v" % key)
             with open(self.compile_dir+'/%s.v'%key, 'w') as fh:
                 fh.write(val)
@@ -596,7 +593,7 @@ class Toolflow(object):
         for const in self.constraints:
             if isinstance(const, PortConstraint):
                 port_constraints += [const.portname]
-        for key in self.top.ports.keys():
+        for key in list(self.top.ports.keys()):
             for port in self.top.ports[key]:
                 if port not in port_constraints:
                     self.logger.warning('Port %s (instantiated by %s) has no constraints!' % (port, key))
@@ -795,7 +792,7 @@ class Toolflow(object):
         Generate xml memory map files that represent each AXI4-Lite interface for Oxford's xml2vhdl.
         """
         # Generate memory map xml file for each interface in memory_map
-        for interface in memory_map.keys():
+        for interface in list(memory_map.keys()):
             xml_root = ET.Element('node')
             xml_root.set('id', interface)
             # fill xml node with slave info from memory map
@@ -813,7 +810,7 @@ class Toolflow(object):
                     node.set('hw_permission', 'w')
                     # Populate defaults if sys_block version registers
                     if reg.name == 'sys_board_id' or reg.name == 'sys_rev' or reg.name == 'sys_rev_rcs': 
-                        node.set('hw_rst', str(reg.default_val))                                     		      
+                        node.set('hw_rst', str(reg.default_val))
                 else:
                     # Only for a From Processor register (control)
                     node.set('hw_rst', str(reg.default_val))
@@ -822,7 +819,7 @@ class Toolflow(object):
                 # set bram size and 
                 if hasattr(reg, 'ram') and reg.ram==True:
                     node.set('hw_dp_ram', 'yes')
-                    node.set('size', str(reg.nbytes/4)) # this needs to be in words not bytes!!! Dammit Janet
+                    node.set('size', str(reg.nbytes//4)) # this needs to be in words not bytes!!! Dammit Janet
 
             # output xml file describing memory map as input for xml2vhdl
             myxml = xml.dom.minidom.parseString(ET.tostring(xml_root))
@@ -843,7 +840,7 @@ class Toolflow(object):
         xml_root.set('id', 'axi4lite_top')
         xml_root.set('address', hex(self.plat.mmbus_base_address))
         xml_root.set('hw_type', 'ic')
-        for interface in memory_map.keys():
+        for interface in list(memory_map.keys()):
             # add a child to parent node
             node = ET.SubElement(xml_root, 'node')
             node.set('id', interface)
@@ -964,8 +961,7 @@ class Toolflow(object):
         else:
             self.logger.debug('File not written. Vivado version is 2018.2: %s. Dual Port RAM exists: %s'
                              % (ver_exists, dpram_exists))
-        #import IPython
-        #IPython.embed()
+        
 
 class ToolflowFrontend(object):
     """
@@ -1112,7 +1108,7 @@ class ToolflowBackend(object):
 
         for ip in self.castro.ips:
             self.add_library(ip['path'])
-            if ip.has_key('module_name'):
+            if 'module_name' in ip:
                 self.add_ip(ip)
 
         # elaborate pin constraints
@@ -1181,7 +1177,7 @@ class ToolflowBackend(object):
                     fh4.write(line)
                     line = fh3.readline()
         # add the MD5 Checksums here
-        with open(extended_info, 'r') as fh:
+        with open(extended_info, 'rb') as fh:
             md5_header = hashlib.md5(fh.read()).hexdigest()
         with open(filename_bin, 'rb') as fh:
             bitstream = fh.read()
@@ -1248,7 +1244,7 @@ class ToolflowBackend(object):
         if (size % packet_size) != 0:
             # padding required
             num_padding_bytes = packet_size - (size % packet_size)
-            for i in range(num_padding_bytes / 2):
+            for i in range(num_padding_bytes // 2):
                 flash_write_checksum += 0xffff
 
         # Last thing to do, make sure it is a 16-bit word
@@ -1562,7 +1558,7 @@ class VivadoBackend(ToolflowBackend):
         s += self.tcl_cmds['promgen']
         return s
 
-    def add_compile_cmds(self, cores=8, plat=None):
+    def add_compile_cmds(self, cores=8, plat=None, synth_strat=None, impl_strat=None):
         """
         Add the tcl commands for compiling the design, and then launch
         vivado in batch mode
@@ -1581,13 +1577,18 @@ class VivadoBackend(ToolflowBackend):
             self.add_tcl_cmd('}', stage='pre_synth')
 
             # add the upgrade_ip command to the tcl file if the yaml file requrests it, default to upgrading the IP
-            if "upgrade_ip" not in plat.conf.keys() or plat.conf['upgrade_ip'] == True:
+            if "upgrade_ip" not in list(plat.conf.keys()) or plat.conf['upgrade_ip'] == True:
                 self.add_tcl_cmd('upgrade_ip -quiet [get_ips *]', stage='pre_synth')
                 self.logger.debug('adding the upgrade_ip command to the tcl script')
             else:
                 self.logger.debug('The upgrade_ip command is not being added to the tcl script')
             # Add in if ILA is being used to prevent signal names from changing during synthesis
             #self.add_tcl_cmd('set_property STEPS.SYNTH_DESIGN.ARGS.FLATTEN_HIERARCHY none [get_runs synth_1]')
+
+            # Pre-Synthesis Commands
+            if synth_strat is not None:
+                # synth_strat must be error-checked before arriving here
+                self.add_tcl_cmd('set_property strategy {} [get_runs synth_1]'.format(synth_strat), stage='pre_synth')
 
             # Synthesis Commands
             self.add_tcl_cmd('reset_run synth_1', stage='synth')
@@ -1598,6 +1599,9 @@ class VivadoBackend(ToolflowBackend):
             self.add_tcl_cmd('open_run synth_1', stage='post_synth')
 
             # Pre-Implementation Commands
+            if impl_strat is not None:
+                # impl_strat must be error-checked before arriving here
+                self.add_tcl_cmd('set_property strategy {} [get_runs impl_1]'.format(impl_strat), stage='pre_impl')
             self.add_tcl_cmd('set_property STEPS.WRITE_BITSTREAM.ARGS.BIN_FILE true [get_runs impl_1]', stage='pre_impl')
             self.add_tcl_cmd('set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]', stage='pre_impl')
             self.add_tcl_cmd('set_property STEPS.POST_ROUTE_PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]', stage='pre_impl')
@@ -1608,7 +1612,6 @@ class VivadoBackend(ToolflowBackend):
 
             # Post-Implementation Commands
             self.add_tcl_cmd('open_run impl_1', stage='post_impl')
-
 
             # Pre-Bitgen Commands
 
@@ -1801,16 +1804,19 @@ class VivadoBackend(ToolflowBackend):
                 '-hold]] ns" ')
             tcl('}')
 
-    def compile(self, cores, plat):
+    def compile(self, cores, plat, synth_strat=None, impl_strat=None):
         """
 
         :param cores:
         :param plat:
+        :param impl_strat: Implementation Strategy to use when
+                            carrying out the implementation run 'impl'
         """
-        self.add_compile_cmds(cores=cores, plat=plat)
+        self.add_compile_cmds(cores=cores, plat=plat, synth_strat=synth_strat, impl_strat=impl_strat)
         # write tcl command to file
         tcl_file = self.compile_dir+'/gogogo.tcl'
         helpers.write_file(tcl_file, self.eval_tcl())
+
         rv = os.system('vivado -jou {cdir}/vivado.jou -log {cdir}/vivado.log '
                        '-mode batch -source '
                        '{cfile}'.format(cdir=self.compile_dir, cfile=tcl_file))
@@ -1999,7 +2005,7 @@ class VivadoBackend(ToolflowBackend):
                          ' from peripherals')
         for obj in self.periph_objs:
             c = obj.gen_tcl_cmds()
-            for key, val in c.iteritems():
+            for key, val in c.items():
                 if val is not None:
                     for v in val:
                         self.add_tcl_cmd(v, stage=key)
@@ -2011,7 +2017,7 @@ class VivadoBackend(ToolflowBackend):
         self.logger.info('Generating yellow block custom hdl files')
         for obj in self.periph_objs:
             c = obj.gen_custom_hdl()
-            for key, val in c.iteritems():
+            for key, val in c.items():
                 # create file and write the source string to it
                 f = open('%s/%s' %(self.compile_dir, key),"w")
                 f.write(val)

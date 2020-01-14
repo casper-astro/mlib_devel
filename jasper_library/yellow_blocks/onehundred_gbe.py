@@ -1,7 +1,7 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from constraints import PortConstraint, ClockConstraint
 from helpers import to_int_list
-from yellow_block_typecodes import *
+from .yellow_block_typecodes import *
 
 class onehundred_gbe(YellowBlock):
     @staticmethod
