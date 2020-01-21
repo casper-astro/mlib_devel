@@ -1,0 +1,39 @@
+name: adm_pcie_9h7
+manufacturer: Xilinx
+fpga: xcvu37p-fsvh2892-2-e
+backend_target: vivado
+sources: []
+constraints: []
+provides:
+  - qsfp0
+  - qsfp1
+  - qsfp2
+  - qsfp3
+pins:
+  sys_clk_p:
+    loc: BJ9
+    iostd: LVDS
+  sys_clk_n:
+    loc: BK9
+    iostd: LVDS
+  # Use GPIO 9,10,11,12 for SPI
+  miso:
+    loc: BJ29
+    iostd: LVCMOS18
+  mosi:
+    loc: BG32
+    iostd: LVCMOS18
+  sclk:
+    loc: BF32
+    iostd: LVCMOS18
+  cs_n:
+    loc: BK30
+    iostd: LVCMOS18
+  led:
+    iostd: LVCMOS18
+    loc:
+      - BF53
+      - BG48
+      - BG49
+      - BE54
+      - BE53
