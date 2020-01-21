@@ -141,8 +141,9 @@ function delay_bram_init(blk, varargin)
         'en', async, ...
         'reg_retiming', 'on');
    
-        add_line(blk, 'en/1', [delay_num '/2']);
-     
+        if strcmp(async,'on'),
+          add_line(blk, 'en/1', [delay_num '/2']);
+        end   
         pos_shift = pos_shift + 50;
   end
 
