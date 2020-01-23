@@ -44,7 +44,7 @@ use ieee.std_logic_1164.all;
 package axi4lite_pkg is
 
    constant c_axi4lite_addr_w   : natural := 32;
-   constant c_axi4lite_data_w   : natural := 32;
+   constant c_axi4lite_data_w   : natural := 64; -- Changed from 32 for testing BRAM generation
    constant c_axi4lite_stb_w    : natural := c_axi4lite_data_w/8;
    constant c_axi4lite_resp_w   : natural := 2;
    
