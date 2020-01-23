@@ -2,6 +2,10 @@ name: adm_pcie_9h7
 manufacturer: Xilinx
 fpga: xcvu37p-fsvh2892-2-e
 backend_target: vivado
+mmbus_architecture: AXI4-Lite
+mmbus_base_address: 0x10000000
+# How to address each 32-bit (i.e. 4 indicates byte-addressable)
+mmbus_address_alignment: 4
 sources: []
 constraints: []
 provides:
@@ -37,6 +41,43 @@ pins:
       - BG49
       - BE54
       - BE53
+  # PCI Express lanes
+  pcie_gty_rx_p:
+    loc:
+      - AL2
+      - AM4
+      - AN6
+      - AN2
+      - AP4
+      - AR2
+      - AT4
+      - AU2
+      - AV4
+      - AW6
+      - AW2
+      - AY4
+      - BA6
+      - BA2
+      - BB4
+      - BC2
+  pcie_gty_tx_p:
+    loc:
+      - AL11
+      - AM9
+      - AN11
+      - AP9
+      - AR11
+      - AR7
+      - AT9
+      - AU11
+      - AU7
+      - AV9
+      - AW11
+      - AY9
+      - BA11
+      - BB9
+      - BC11
+      - BC7
   # DTS pins
   dts_gty_rx_p:
     loc:
@@ -87,4 +128,5 @@ pins:
       - BG9
       # Firefly 2
       - BF12
+
 

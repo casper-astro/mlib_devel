@@ -27,7 +27,7 @@ class adm_pcie_9h7(YellowBlock):
         if self.use_microblaze:
             pass
         else:
-            children.append(YellowBlock.make_block({'tag':'xps:spi_wb_bridge'}, self.platform))
+            children.append(YellowBlock.make_block({'tag':'xps:pci_dma_axilite_master'}, self.platform))
         return children
 
     def gen_constraints(self):
