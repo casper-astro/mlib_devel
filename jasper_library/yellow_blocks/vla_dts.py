@@ -17,6 +17,7 @@ class vla_dts(YellowBlock):
         self.add_source('vla_dts/*.xci')
 
         self.requires = []
+        self.provides = ['dts_500_clk', 'dts_500_clk90', 'dts_500_clk180', 'dts_500_clk270']
 
     def modify_top(self,top):
         module = 'dts_gty_rx'
@@ -44,10 +45,10 @@ class vla_dts(YellowBlock):
         # Internal ports
         inst.add_port('clk100', 'sys_clk')
         inst.add_port('gearbox_slip', self.fullname+'_gearbox_slip', width=12)
-        inst.add_port('clk_500_0', 'dts_clk_500_0')
-        inst.add_port('clk_500_90', 'dts_clk_500_90')
-        inst.add_port('clk_500_180', 'dts_clk_500_180')
-        inst.add_port('clk_500_270', 'dts_clk_500_270')
+        inst.add_port('clk_500_0', 'dts_500_clk')
+        inst.add_port('clk_500_90', 'dts_500_clk90')
+        inst.add_port('clk_500_180', 'dts_500_clk180')
+        inst.add_port('clk_500_270', 'dts_500_clk270')
 
     def gen_constraints(self):
         cons = []
@@ -60,12 +61,12 @@ class vla_dts(YellowBlock):
         clkconst = ClockConstraint(self.fullname+'_mgtclk0_p', name=self.fullname+'_mgtclk0', freq=161.1328125)
         cons.append(clkconst)
         # Make asynchronous to sysclk
-        cons.append(RawConstraint('set_clock_groups -name async_sysclk_dts -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks sys_clk0_dcm]' % clkconst.name))
+        cons.append(RawConstraint('set_clock_groups -name async_sysclk_dts0 -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks sys_clk0_dcm]' % clkconst.name))
 
         clkconst = ClockConstraint(self.fullname+'_mgtclk1_p', name=self.fullname+'_mgtclk1', freq=161.1328125)
         cons.append(clkconst)
         # Make asynchronous to sysclk
-        cons.append(RawConstraint('set_clock_groups -name async_sysclk_dts -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks sys_clk0_dcm]' % clkconst.name))
+        cons.append(RawConstraint('set_clock_groups -name async_sysclk_dts1 -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks sys_clk0_dcm]' % clkconst.name))
 
         return cons
 
