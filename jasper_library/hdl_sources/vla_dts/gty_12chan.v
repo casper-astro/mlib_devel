@@ -107,7 +107,7 @@ module gty_12chan(
    ,.gtwiz_reset_rx_cdr_stable_out           () // PG182 says "Reserved; do not use"
    ,.gtwiz_reset_tx_done_out                 ()
    ,.gtwiz_reset_rx_done_out                 (status_int[1])
-   ,.gtwiz_userdata_tx_in                    ()
+   ,.gtwiz_userdata_tx_in                    ({12{32'b0}})
    ,.gtwiz_userdata_rx_out                   (dout)
    ,.gtrefclk00_in                           (refclk_int)
    ,.qpll0outclk_out                         ()
