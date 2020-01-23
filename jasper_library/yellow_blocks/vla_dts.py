@@ -52,10 +52,11 @@ class vla_dts(YellowBlock):
 
     def gen_constraints(self):
         cons = []
-        cons.append(PortConstraint(self.fullname+'_rx_p',  'dts_gty_rx_p', port_index=range(12), iogroup_index=range(12)))
-        cons.append(PortConstraint(self.fullname+'_tx_p',  'dts_gty_tx_p', port_index=range(12), iogroup_index=range(12)))
-        cons.append(PortConstraint(self.fullname+'_mgtclk0_p',  'dts_gty_refclk_p', iogroup_index=0))
-        cons.append(PortConstraint(self.fullname+'_mgtclk1_p',  'dts_gty_refclk_p', iogroup_index=1))
+        cons.append(PortConstraint(self.fullname+'_rx_p', 'dts_gty_rx_p', port_index=range(12), iogroup_index=range(12)))
+        cons.append(PortConstraint(self.fullname+'_tx_p', 'dts_gty_tx_p', port_index=range(12), iogroup_index=range(12)))
+        cons.append(PortConstraint(self.fullname+'_modprsl', 'dts_qsfp_modprsl', port_index=range(3), iogroup_index=range(3)))
+        cons.append(PortConstraint(self.fullname+'_mgtclk0_p', 'dts_gty_refclk_p', iogroup_index=0))
+        cons.append(PortConstraint(self.fullname+'_mgtclk1_p', 'dts_gty_refclk_p', iogroup_index=1))
 
         # clock constraint with variable period
         clkconst = ClockConstraint(self.fullname+'_mgtclk0_p', name=self.fullname+'_mgtclk0', freq=161.1328125)
