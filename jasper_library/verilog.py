@@ -861,6 +861,12 @@ class VerilogModule(object):
             # port is connected to a constant
             parent_port = False
             parent_sig = False
+        elif not signal[0].isalpha():
+            # port is assigned to an expression of another signal.
+            # e.g. "~sys_rst"
+            # Could try and be clever and decode the signal. But let's not.
+            parent_port = False
+            parent_sig = False
             
         logger.debug('Attempting to add port "%s" (parent sig: %s, parent port: %s)'%(name,parent_sig,parent_port))
         # check every nested dictionary to see if name is in it
