@@ -77,7 +77,7 @@ pins:
       # bank 125. Clocks banks 124/125
       - AR40
       # bank 126.
-      - AN41
+      - AN40
   dts_qsfp_modprsl:
     iostd: LVCMOS18
     loc:
