@@ -49,7 +49,7 @@ core_info.o: core_info.bin
 		$< $@
 
 core_info.bin: core_info.tab
-	ruby ../util/cit2bin.rb $< > $@
+	python ../util/cit2csl.py -b $< > $@
 
 test:
 	@echo CC=$(CC)
@@ -57,6 +57,6 @@ test:
 	@echo OBJARCH=$(OBJARCH)
 
 clean:
-	rm csl_find_key_test csl_find_by_payload_test *.o core_info.bin
+	rm -f csl_find_key_test csl_find_by_payload_test *.o core_info.bin
 
 .PHONY: test clean

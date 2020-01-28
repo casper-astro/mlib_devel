@@ -1,4 +1,4 @@
-# (c) Copyright 2012-2016 Xilinx, Inc. All rights reserved.
+# (c) Copyright 2012-2019 Xilinx, Inc. All rights reserved.
 # 
 # This file contains confidential and proprietary information
 # of Xilinx, Inc. and is protected under U.S. and
@@ -52,6 +52,6 @@
 # #########################################################
 
 
-create_clock -period 6.400 -name aclk [get_ports aclk]
+create_clock -period 25.600 -name aclk [get_ports aclk]
 
 

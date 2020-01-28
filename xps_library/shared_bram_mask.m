@@ -30,6 +30,7 @@ arith_type  = get_param(c_sys, 'arith_type');
 data_width  = str2double(get_param(c_sys, 'data_width'));
 data_bin_pt = eval_param(c_sys, 'data_bin_pt');
 addr_width  = eval_param(c_sys, 'addr_width');
+init_vals   = eval_param(c_sys, 'init_vals');
 
 % set up address manipulation blocks
 
@@ -66,6 +67,19 @@ end
 
 % set up simulation memory
 
+% To prevent the simulation from bombing out, if the initial values array is not
+% the same size as the bram, truncate or zero pad it.
+init_vals_sized = zeros(1, 2^addr_width);
+if max(size(init_vals_sized)) > max(size(init_vals))
+    init_vals_sized(1:max(size(init_vals))) = init_vals;
+    warning([c_sys ': Zero padding shared_bram simulation values to match size of RAM']);
+elseif max(size(init_vals_sized)) < max(size(init_vals))
+    init_vals_sized = init_vals(1:max(size(init_vals_sized)));
+    warning([c_sys ': Truncating shared_bram simulation values to match size of RAM']);
+else
+    init_vals_sized = init_vals;
+end
+
 latency = 1;
 if strcmp(get_param(c_sys, 'reg_prim_output'), 'on')
     latency = latency + 1;
@@ -73,13 +87,13 @@ end
 if strcmp(get_param(c_sys, 'reg_core_output'), 'on')
     latency = latency + 1;
 end
-set_param([c_sys, '/sim_mem'], 'latency', num2str(latency));
+set_param([c_sys, '/sim_mem'], 'csp_latency', num2str(latency));
 
 set_param([c_sys, '/sim_mem'], 'data_width', get_param(c_sys, 'data_width'));
 set_param([c_sys, '/sim_mem'], 'arith_type', get_param(c_sys, 'arith_type'));
 set_param([c_sys, '/sim_mem'], 'addr_width', get_param(c_sys, 'addr_width'));
 set_param([c_sys, '/sim_mem'], 'data_bin_pt', get_param(c_sys, 'data_bin_pt'));
-set_param([c_sys, '/sim_mem'], 'init_vals', get_param(c_sys, 'init_vals'));
+set_param([c_sys, '/sim_mem'], 'init_vals', ['[', num2str(init_vals_sized) ']']);
 set_param([c_sys, '/sim_mem'], 'sample_rate', get_param(c_sys, 'sample_rate'));
 
 % set up various munge blocks (which may have to redraw, so disable library link first)

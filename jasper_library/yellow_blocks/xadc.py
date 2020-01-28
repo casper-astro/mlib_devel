@@ -1,4 +1,4 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from constraints import PortConstraint
 
 class xadc(YellowBlock):
@@ -15,7 +15,7 @@ class xadc(YellowBlock):
 
     def modify_top(self,top):
         module = 'xadc'
-        inst = top.get_instance(entity=module, name='xadc_inst', comment=self.fullname)
+        inst = top.get_instance(entity=module, name='xadc_inst')
         inst.add_wb_interface(regname='xadc', mode='rw', nbytes=512)
         #inst.add_port('vp_in', 'xadc_vp_in', parent_port=True, dir='in')
         #inst.add_port('vn_in', 'xadc_vp_in', parent_port=True, dir='in')

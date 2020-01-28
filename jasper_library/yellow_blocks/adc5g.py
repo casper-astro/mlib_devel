@@ -1,4 +1,4 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from verilog import VerilogModule
 from constraints import PortConstraint, ClockConstraint, RawConstraint
 
@@ -51,13 +51,13 @@ class adc5g(YellowBlock):
         f_vcomax = 1200.0
         f_vcomin = 600.0
 
-        allowed_d = range(1, 107)
-        allowed_m = range(2, 65)
+        allowed_d = list(range(1, 107))
+        allowed_m = list(range(2, 65))
         # floatify
         #allowed_o0 = [1.0*i for i in range(1,128)]
         #allowed_o1 = [1.0*i for i in range(1,128)]
-        allowed_o0 = range(1,128)
-        allowed_o1 = range(1,128)
+        allowed_o0 = list(range(1,128))
+        allowed_o1 = list(range(1,128))
         
         # input clock to MMCM
         f_in = float(self.bitclk_rate)
@@ -75,8 +75,8 @@ class adc5g(YellowBlock):
             f_pfd = f_in / d
             for m in range(m_min, m_max+1):
                 f_vco = f_pfd * m
-		# target clock for o0 is bitclk_rate
-		# target clock for o1 is userclk_rate = bitclk_rate / 8
+                # target clock for o0 is bitclk_rate
+                # target clock for o1 is userclk_rate = bitclk_rate / 8
                 o0 = f_vco / self.bitclk_rate
                 o1 = f_vco / self.userclk_rate
                 if d not in allowed_d:
@@ -91,7 +91,7 @@ class adc5g(YellowBlock):
                 # force o0 and o1 to be ints. This is fine since we have already tested that they
                 # are in the allowed list -- which are ints.
                 rv = {'f_vco':f_vco, 'f_pfd':f_pfd, 'd':d, 'm':m, 'o0':int(o0), 'o1':int(o1)}
-                print rv
+                print(rv)
                 return rv
         # if we've got to here, there's no valid MMCM options
         raise RuntimeError("adc5g: No valid MMCM parameters found!")
@@ -99,7 +99,7 @@ class adc5g(YellowBlock):
 
     def modify_top(self,top):
         module = 'adc5g_dmux1_interface'
-        inst = top.get_instance(entity=module, name=self.fullname, comment=self.fullname)
+        inst = top.get_instance(entity=module, name=self.fullname)
         inst.add_parameter('adc_bit_width', '8')
         inst.add_parameter('clkin_period ', '%.3f' % self.bitclk_period)
         inst.add_parameter('mode         ', self.chan_mode)
@@ -167,7 +167,7 @@ class adc5g(YellowBlock):
 
         # ADC software controller
         # static name -- multiple ADCs on different ZDOK ports should pick up the same instance
-        inst = top.get_instance(entity='wb_adc5g_controller', name='wb_adc5g_controller', comment=self.fullname)
+        inst = top.get_instance(entity='wb_adc5g_controller', name='wb_adc5g_controller')
         inst.add_wb_interface(nbytes=512, regname='adc5g_controller', mode='rw')
 
         inst.add_parameter('INITIAL_CONFIG_MODE_%d' % self.zdok_num, '%d' % self.ctrl_mode)
@@ -197,14 +197,14 @@ class adc5g(YellowBlock):
         cons.append(PortConstraint(self.fullname+'_adc_clk_n_i     ', 'zdok%d_n' % self.zdok_num, iogroup_index=39))
         cons.append(PortConstraint(self.fullname+'_adc_sync_p      ', 'zdok%d_p' % self.zdok_num, iogroup_index=38))
         cons.append(PortConstraint(self.fullname+'_adc_sync_n      ', 'zdok%d_n' % self.zdok_num, iogroup_index=38))
-        cons.append(PortConstraint(self.fullname+'_adc_data0_p_i   ', 'zdok%d_p' % self.zdok_num, port_index=range(8), iogroup_index=range(8)))
-        cons.append(PortConstraint(self.fullname+'_adc_data0_n_i   ', 'zdok%d_n' % self.zdok_num, port_index=range(8), iogroup_index=range(8)))
-        cons.append(PortConstraint(self.fullname+'_adc_data1_p_i   ', 'zdok%d_p' % self.zdok_num, port_index=range(8), iogroup_index=range(10,18)))
-        cons.append(PortConstraint(self.fullname+'_adc_data1_n_i   ', 'zdok%d_n' % self.zdok_num, port_index=range(8), iogroup_index=range(10,18)))
-        cons.append(PortConstraint(self.fullname+'_adc_data2_p_i   ', 'zdok%d_p' % self.zdok_num, port_index=range(8), iogroup_index=range(20,28)))
-        cons.append(PortConstraint(self.fullname+'_adc_data2_n_i   ', 'zdok%d_n' % self.zdok_num, port_index=range(8), iogroup_index=range(20,28)))
-        cons.append(PortConstraint(self.fullname+'_adc_data3_p_i   ', 'zdok%d_p' % self.zdok_num, port_index=range(8), iogroup_index=range(30,38)))
-        cons.append(PortConstraint(self.fullname+'_adc_data3_n_i   ', 'zdok%d_n' % self.zdok_num, port_index=range(8), iogroup_index=range(30,38)))
+        cons.append(PortConstraint(self.fullname+'_adc_data0_p_i   ', 'zdok%d_p' % self.zdok_num, port_index=list(range(8)), iogroup_index=list(range(8))))
+        cons.append(PortConstraint(self.fullname+'_adc_data0_n_i   ', 'zdok%d_n' % self.zdok_num, port_index=list(range(8)), iogroup_index=list(range(8))))
+        cons.append(PortConstraint(self.fullname+'_adc_data1_p_i   ', 'zdok%d_p' % self.zdok_num, port_index=list(range(8)), iogroup_index=list(range(10,18))))
+        cons.append(PortConstraint(self.fullname+'_adc_data1_n_i   ', 'zdok%d_n' % self.zdok_num, port_index=list(range(8)), iogroup_index=list(range(10,18))))
+        cons.append(PortConstraint(self.fullname+'_adc_data2_p_i   ', 'zdok%d_p' % self.zdok_num, port_index=list(range(8)), iogroup_index=list(range(20,28))))
+        cons.append(PortConstraint(self.fullname+'_adc_data2_n_i   ', 'zdok%d_n' % self.zdok_num, port_index=list(range(8)), iogroup_index=list(range(20,28))))
+        cons.append(PortConstraint(self.fullname+'_adc_data3_p_i   ', 'zdok%d_p' % self.zdok_num, port_index=list(range(8)), iogroup_index=list(range(30,38))))
+        cons.append(PortConstraint(self.fullname+'_adc_data3_n_i   ', 'zdok%d_n' % self.zdok_num, port_index=list(range(8)), iogroup_index=list(range(30,38))))
 
         cons.append(PortConstraint(self.fullname+'_adc3wire_clk    ', 'zdok%d' % self.zdok_num, iogroup_index=17))
         cons.append(PortConstraint(self.fullname+'_adc3wire_data   ', 'zdok%d' % self.zdok_num, iogroup_index=18))

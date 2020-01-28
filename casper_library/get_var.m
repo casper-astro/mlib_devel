@@ -31,11 +31,11 @@ function value = get_var(varname, varargin)
 % varargin = {'varname', value, ...} pairs
 
 i = find(strcmp(varname,varargin));
-if i >= 1,
+if i >= 1
     value = varargin{i+1};
 else
     i = find(strcmp('defaults',varargin));
-    if i >= 1,
+    if i >= 1
         value = get_var(varname,varargin{i+1}{:});
     else
         value = nan;

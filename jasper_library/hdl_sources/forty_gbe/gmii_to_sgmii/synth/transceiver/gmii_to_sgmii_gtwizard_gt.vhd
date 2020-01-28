@@ -3,7 +3,7 @@
 --   ____  ____
 --  /   /\/   /
 -- /___/  \  /    Vendor: Xilinx
--- \   \   \/     Version : 3.2
+-- \   \   \/     Version : 3.6
 --  \   \         Application : 7 Series FPGAs Transceivers Wizard
 --  /   /         Filename : gmii_to_sgmii_gtwizard_gt.vhd
 -- /___/   /\     
@@ -85,6 +85,7 @@ port
   DRP_BUSY_OUT   : out  std_logic;          -- Indicates that the DRP bus is not accessible to the User
   RXPMARESETDONE   : out  std_logic;          
   TXPMARESETDONE   : out  std_logic;          
+     cpllpd_in : in std_logic;
     --------------------------------- CPLL Ports -------------------------------
     cpllfbclklost_out                       : out  std_logic;
     cplllock_out                            : out  std_logic;
@@ -117,6 +118,8 @@ port
     eyescantrigger_in                       : in   std_logic;
     ------------------------- Receive Ports - CDR Ports ------------------------
     rxcdrhold_in                            : in   std_logic;
+    ------------------- Receive Ports - Digital Monitor Ports ------------------
+    dmonitorout_out                         : out  std_logic_vector(14 downto 0);
     ------------------ Receive Ports - FPGA RX Interface Ports -----------------
     rxusrclk_in                             : in   std_logic;
     rxusrclk2_in                            : in   std_logic;
@@ -141,14 +144,14 @@ port
     rxcommadet_out                          : out  std_logic;
     rxmcommaalignen_in                      : in   std_logic;
     rxpcommaalignen_in                      : in   std_logic;
+    -------------------- Receive Ports - RX Equailizer Ports -------------------
+    rxlpmhfhold_in                          : in   std_logic;
+    rxlpmlfhold_in                          : in   std_logic;
     --------------------- Receive Ports - RX Equalizer Ports -------------------
-    rxdfeagchold_in                         : in   std_logic;
     rxdfeagcovrden_in                       : in   std_logic;
-    rxdfelfhold_in                          : in   std_logic;
     rxdfelpmreset_in                        : in   std_logic;
     rxmonitorout_out                        : out  std_logic_vector(6 downto 0);
     rxmonitorsel_in                         : in   std_logic_vector(1 downto 0);
-    dmonitorout_out                         :out   std_logic_vector(14 downto 0);
     --------------- Receive Ports - RX Fabric Output Control Ports -------------
     rxoutclk_out                            : out  std_logic;
     ------------- Receive Ports - RX Initialization and Reset Ports ------------
@@ -186,6 +189,7 @@ port
     txbufstatus_out                         : out  std_logic_vector(1 downto 0);
     --------------- Transmit Ports - TX Configurable Driver Ports --------------
     txdiffctrl_in                           : in   std_logic_vector(3 downto 0);
+    txinhibit_in                            : in   std_logic;
     ------------------ Transmit Ports - TX Data Path interface -----------------
     txdata_in                               : in   std_logic_vector(15 downto 0);
     ---------------- Transmit Ports - TX Driver and OOB signaling --------------
@@ -306,8 +310,6 @@ end component;
     signal txdata_i                         :   std_logic_vector(63 downto 0);
     signal txkerr_float_i                   :   std_logic_vector(5 downto 0);
     signal txrundisp_float_i                :   std_logic_vector(5 downto 0);
-       
- 
 --******************************** Main Body of Code***************************
                        
 begin                      
@@ -418,7 +420,7 @@ RXPMARESETDONE <= rxpmaresetdone_t;
 
        ---------------------------PMA Attributes----------------------------
         OUTREFCLK_SEL_INV                       =>     ("11"),
-        PMA_RSV                                 =>     (x"00018480"),
+        PMA_RSV                                 =>     ("00000000000000000000000010000000"),
         PMA_RSV2                                =>     (x"1C00000A"),
         PMA_RSV3                                =>     ("00"),
         PMA_RSV4                                =>     (x"0008"),
@@ -470,7 +472,22 @@ RXPMARESETDONE <= rxpmaresetdone_t;
        --For Display Port, HBR/RBR- set RXCDR_CFG=72'h0380008bff40200008
 
        --For Display Port, HBR2 -   set RXCDR_CFG=72'h038c008bff20200010
-        RXCDR_CFG                               =>     (x"0002007FE0800C2200018"),
+
+       --For SATA Gen1 GTX- set RXCDR_CFG=72'h03_8000_8BFF_4010_0008
+
+       --For SATA Gen2 GTX- set RXCDR_CFG=72'h03_8800_8BFF_4020_0008
+
+       --For SATA Gen3 GTX- set RXCDR_CFG=72'h03_8000_8BFF_1020_0010
+
+       --For SATA Gen3 GTP- set RXCDR_CFG=83'h0_0000_87FE_2060_2444_1010
+
+       --For SATA Gen2 GTP- set RXCDR_CFG=83'h0_0000_47FE_2060_2448_1010
+
+       --For SATA Gen1 GTP- set RXCDR_CFG=83'h0_0000_47FE_1060_2448_1010
+        RXCDR_CFG                               =>     (x"0002007FE0800C2080018"),
+        CPLL_FBDIV                              =>     (4),
+        RXOUT_DIV                               =>     (4),
+        TXOUT_DIV                               =>     (4),
         RXCDR_FR_RESET_ON_EIDLE                 =>     ('0'),
         RXCDR_HOLD_DURING_EIDLE                 =>     ('0'),
         RXCDR_PH_RESET_ON_EIDLE                 =>     ('0'),
@@ -491,7 +508,7 @@ RXPMARESETDONE <= rxpmaresetdone_t;
         GEARBOX_MODE                            =>     ("000"),
 
        -------------------------PRBS Detection Attribute-----------------------
-        RXPRBS_ERR_LOOPBACK                     =>     ('1'),
+        RXPRBS_ERR_LOOPBACK                     =>     ('0'),
 
        -------------Power-Down Attributes----------
         PD_TRANS_TIME_FROM_P2                   =>     (x"03c"),
@@ -501,7 +518,7 @@ RXPMARESETDONE <= rxpmaresetdone_t;
        -------------RX OOB Signaling Attributes----------
         SAS_MAX_COM                             =>     (64),
         SAS_MIN_COM                             =>     (36),
-        SATA_BURST_SEQ_LEN                      =>     ("1111"),
+        SATA_BURST_SEQ_LEN                      =>     ("0101"),
         SATA_BURST_VAL                          =>     ("100"),
         SATA_EIDLE_VAL                          =>     ("100"),
         SATA_MAX_BURST                          =>     (8),
@@ -560,13 +577,10 @@ RXPMARESETDONE <= rxpmaresetdone_t;
 
        ----------------------------CPLL Attributes----------------------------
         CPLL_CFG                                =>     (x"00BC07DC"),
-        CPLL_FBDIV                              =>     (4),
         CPLL_FBDIV_45                           =>     (5),
         CPLL_INIT_CFG                           =>     (x"00001E"),
         CPLL_LOCK_CFG                           =>     (x"01E8"),
         CPLL_REFCLK_DIV                         =>     (1),
-        RXOUT_DIV                               =>     (4),
-        TXOUT_DIV                               =>     (4),
         SATA_CPLL_CFG                           =>     ("VCO_3000MHZ"),
 
        --------------RX Initialization and Reset Attributes-------------
@@ -627,7 +641,7 @@ RXPMARESETDONE <= rxpmaresetdone_t;
         RX_DFELPM_CFG1                          =>     ('0'),
         RX_DFELPM_KLKH_AGC_STUP_EN              =>     ('1'),
         RX_DFE_AGC_CFG0                         =>     ("00"),
-        RX_DFE_AGC_CFG1                         =>     ("100"),
+        RX_DFE_AGC_CFG1                         =>     ("010"),
         RX_DFE_AGC_CFG2                         =>     ("0000"),
         RX_DFE_AGC_OVRDEN                       =>     ('1'),
         RX_DFE_H6_CFG                           =>     (x"020"),
@@ -636,7 +650,7 @@ RXPMARESETDONE <= rxpmaresetdone_t;
         RX_DFE_KL_LPM_KH_CFG1                   =>     ("010"),
         RX_DFE_KL_LPM_KH_CFG2                   =>     ("0010"),
         RX_DFE_KL_LPM_KH_OVRDEN                 =>     ('1'),
-        RX_DFE_KL_LPM_KL_CFG0                   =>     ("10"),
+        RX_DFE_KL_LPM_KL_CFG0                   =>     ("01"),
         RX_DFE_KL_LPM_KL_CFG1                   =>     ("010"),
         RX_DFE_KL_LPM_KL_CFG2                   =>     ("0010"),
         RX_DFE_KL_LPM_KL_OVRDEN                 =>     ('1'),
@@ -653,7 +667,7 @@ RXPMARESETDONE <= rxpmaresetdone_t;
         TXPI_INVSTROBE_SEL                      =>     ('0'),
         TXPI_PPMCLK_SEL                         =>     ("TXUSRCLK2"),
         TXPI_PPM_CFG                            =>     (x"00"),
-        TXPI_SYNFREQ_PPM                        =>     ("000"),
+        TXPI_SYNFREQ_PPM                        =>     ("001"),
         TX_RXDETECT_PRECHARGE_TIME              =>     (x"155CC"),
 
        ------------------ LOOPBACK Attributes---------------
@@ -688,7 +702,7 @@ RXPMARESETDONE <= rxpmaresetdone_t;
         CPLLLOCK                        =>      cplllock_out,
         CPLLLOCKDETCLK                  =>      cplllockdetclk_in,
         CPLLLOCKEN                      =>      tied_to_vcc_i,
-        CPLLPD                          =>      tied_to_ground_i,
+        CPLLPD                          =>      cpllpd_in,
         CPLLREFCLKLOST                  =>      cpllrefclklost_out,
         CPLLREFCLKSEL                   =>      "001",
         CPLLRESET                       =>      cpllreset_in,
@@ -827,20 +841,20 @@ RXPMARESETDONE <= rxpmaresetdone_t;
         RXDFESLIDETAPOVRDEN             =>      tied_to_ground_i,
         RXOSCALRESET                    =>      tied_to_ground_i,
         -------------------- Receive Ports - RX Equailizer Ports -------------------
-        RXLPMHFHOLD                     =>      tied_to_ground_i,
+        RXLPMHFHOLD                     =>      rxlpmhfhold_in,
         RXLPMHFOVRDEN                   =>      tied_to_ground_i,
-        RXLPMLFHOLD                     =>      tied_to_ground_i,
+        RXLPMLFHOLD                     =>      rxlpmlfhold_in,
         --------------------- Receive Ports - RX Equalizar Ports -------------------
         RXDFESLIDETAPSTARTED            =>      open,
         RXDFESLIDETAPSTROBEDONE         =>      open,
         RXDFESLIDETAPSTROBESTARTED      =>      open,
         --------------------- Receive Ports - RX Equalizer Ports -------------------
         RXADAPTSELTEST                  =>      tied_to_ground_vec_i(13 downto 0),
-        RXDFEAGCHOLD                    =>      rxdfeagchold_in,
+        RXDFEAGCHOLD                    =>      tied_to_ground_i,
         RXDFEAGCOVRDEN                  =>      rxdfeagcovrden_in,
         RXDFEAGCTRL                     =>      "10000",
         RXDFECM1EN                      =>      tied_to_ground_i,
-        RXDFELFHOLD                     =>      rxdfelfhold_in,
+        RXDFELFHOLD                     =>      tied_to_ground_i,
         RXDFELFOVRDEN                   =>      tied_to_ground_i,
         RXDFELPMRESET                   =>      rxdfelpmreset_in,
         RXDFESLIDETAP                   =>      tied_to_ground_vec_i(4 downto 0),
@@ -949,7 +963,7 @@ RXPMARESETDONE <= rxpmaresetdone_t;
         TXPIPPMEN                       =>      tied_to_ground_i,
         TXPIPPMOVRDEN                   =>      tied_to_ground_i,
         TXPIPPMPD                       =>      tied_to_ground_i,
-        TXPIPPMSEL                      =>      tied_to_ground_i,
+        TXPIPPMSEL                      =>      tied_to_vcc_i,
         TXPIPPMSTEPSIZE                 =>      tied_to_ground_vec_i(4 downto 0),
         ---------------------- Transceiver Reset Mode Operation --------------------
         GTRESETSEL                      =>      tied_to_ground_i,
@@ -1001,7 +1015,7 @@ RXPMARESETDONE <= rxpmaresetdone_t;
         TXDEEMPH                        =>      tied_to_ground_i,
         TXDIFFCTRL                      =>      txdiffctrl_in,
         TXDIFFPD                        =>      tied_to_ground_i,
-        TXINHIBIT                       =>      tied_to_ground_i,
+        TXINHIBIT                       =>      txinhibit_in,
         TXMAINCURSOR                    =>      "0000000",
         TXPISOPD                        =>      tied_to_ground_i,
         ------------------ Transmit Ports - TX Data Path interface -----------------
@@ -1014,6 +1028,7 @@ RXPMARESETDONE <= rxpmaresetdone_t;
         TXOUTCLKFABRIC                  =>      txoutclkfabric_out,
         TXOUTCLKPCS                     =>      txoutclkpcs_out,
         TXOUTCLKSEL                     =>      "100",
+        
         TXRATEDONE                      =>      open,
         --------------------- Transmit Ports - TX Gearbox Ports --------------------
         TXGEARBOXREADY                  =>      open,
@@ -1149,6 +1164,9 @@ RXPMARESETDONE <= rxpmaresetdone_t;
         DRPDI                           =>      drpdi_pma_t,
         DRPRDY                          =>      drprdy_pma_t
             ); 
+
+
+
  end RTL;
 
 

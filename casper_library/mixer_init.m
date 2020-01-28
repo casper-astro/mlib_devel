@@ -75,7 +75,7 @@ add_line(blk, 'delay/1', 'sync_out/1');
 
 reuse_block(blk, 'dds', 'casper_library_downconverter/dds', ...
     'Position', [20 100 80 100+30*nstreams], 'num_lo', num2str(nstreams), 'freq', num2str(freq),...
-    'freq_div', num2str(freq_div), 'n_bits', num2str(n_bits), 'latency','2');
+    'freq_div', num2str(freq_div), 'n_bits', num2str(n_bits), 'csp_latency','2');
 
 if counter_step ~= 0,
     add_line(blk, 'sync/1', 'dds/1')
@@ -93,7 +93,7 @@ for i=1:nstreams,
     reuse_block(blk, imag, 'built-in/outport', ...
         'Position', [330 i*80+25 360 40+80*i], 'Port', num2str(2*i+1));
     reuse_block(blk, rcmult, 'casper_library_downconverter/rcmult', ...
-        'Position', [230 i*80-10 280 50+80*i], 'latency', num2str(mult_latency));
+        'Position', [230 i*80-10 280 50+80*i], 'mult_latency', num2str(mult_latency));
     add_line(blk,[din,'/1'],[rcmult,'/1']);
     add_line(blk,['dds/',num2str(i*2-1)],[rcmult,'/2']);
     add_line(blk,['dds/',num2str(i*2)],[rcmult,'/3']);

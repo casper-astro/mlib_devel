@@ -66,23 +66,22 @@ disregards      = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', '
 
 % parents of disregard blocks -- i.e., blocks we should ignore
 dummy_parents = {};
-for ctr = 1 : numel(disregards), 
+for ctr = 1 : numel(disregards)
     dummy_parents{ctr} = get_param(disregards{ctr}, 'Parent');
 end
 
 
-% check for spaces in xps or casper block names
+% check for improper xps or casper block names
 for ctr = 1 : numel(xps_blks)
-    if numel(strfind(xps_blks{ctr}, ' ')) > 0
-        error('Block names may not have spaces - %s', xps_blks{ctr});
-    end 
+    if any(isstrprop(xps_blks{ctr}, 'wspace'))
+        error('Block name can not contain whitespace: space, tab, newline, or carriage return - %s', xps_blks{ctr});
+    end
 end
 for ctr = 1 : numel(casper_blks)
-    if numel(strfind(casper_blks{ctr}, ' ')) > 0
-        error('Block names may not have spaces - %s', casper_blks{ctr});
-    end 
+    if any(isstrprop(casper_blks{ctr}, 'wspace'))
+        error('Block name can not contain whitespace: space, tab, newline, or carriage return - %s', casper_blks{ctr});
+    end
 end
-
 
 if length(xps_xsg_blks) ~= 1
     error('There has to be exactly 1 XPS_XSG block on each chip level (sub)system (Is the current system the correct one ?)');
@@ -140,9 +139,15 @@ for n = 1:length(xps_blks)
     fprintf(fid, '    %s: %s\n', 'fullpath', xps_blks{n});
     fprintf(fid, '    %s: %s\n', 'tag', get_param(xps_blks{n}, 'Tag'));
     for m = 1:length(fields)
-        val = eval_param(xps_blks{n}, fields{m});
+        try
+            val = eval_param(xps_blks{n}, fields{m});
+        catch exp
+            error('ERROR: %s\n\nblock(%s) param(%s) could not be evaluated.\n', exp, xps_blks{n}, fields{m});
+        end
         try
             val = num2str(val);
+        catch
+            % pass
         end
         fprintf(fid, '    %s: %s\n', fields{m}, yaml_sanitize(val));
     end
@@ -200,6 +205,7 @@ if xlver > 14.7
     fprintf(fid, sprintf('      - %s\n', [compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/imports/sysgen']));
     fprintf(fid, sprintf('      - %s\n', [compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/ip/*.coe']));
     fprintf(fid, sprintf('      - %s\n', [compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/ip/*/*.xci']));
+    fprintf(fid, sprintf('      - %s\n', [compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/imports/sysgen/*.mem']));
 else
     fprintf(fid, sprintf('      - %s\n', [compile_dir '/sysgen/' bdroot '.vhd']));
     fprintf(fid, sprintf('      - %s\n', [compile_dir '/sysgen/*.ngc']));

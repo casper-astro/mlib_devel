@@ -1,8 +1,8 @@
---Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+--Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
---Tool Version: Vivado v.2016.2 (lin64) Build 1577090 Thu Jun  2 16:32:35 MDT 2016
---Date        : Tue Nov  8 10:51:00 2016
---Host        : adam-cm running 64-bit Ubuntu 14.04.5 LTS
+--Tool Version: Vivado v.2019.1.1 (lin64) Build 2580384 Sat Jun 29 08:04:45 MDT 2019
+--Date        : Mon Jul 15 17:19:26 2019
+--Host        : casper1 running 64-bit Ubuntu 16.04.6 LTS
 --Command     : generate_target cont_microblaze_wrapper.bd
 --Design      : cont_microblaze_wrapper
 --Purpose     : IP block netlist
@@ -25,7 +25,8 @@ entity cont_microblaze_wrapper is
     STB_O : out STD_LOGIC;
     UART_rxd : in STD_LOGIC;
     UART_txd : out STD_LOGIC;
-    WE_O : out STD_LOGIC
+    WE_O : out STD_LOGIC;
+    dcm_locked : in STD_LOGIC
   );
 end cont_microblaze_wrapper;
 
@@ -44,7 +45,8 @@ architecture STRUCTURE of cont_microblaze_wrapper is
     SEL_O : out STD_LOGIC_VECTOR ( 3 downto 0 );
     STB_O : out STD_LOGIC;
     WE_O : out STD_LOGIC;
-    Clk : in STD_LOGIC
+    Clk : in STD_LOGIC;
+    dcm_locked : in STD_LOGIC
   );
   end component cont_microblaze;
 begin
@@ -62,6 +64,7 @@ cont_microblaze_i: component cont_microblaze
       STB_O => STB_O,
       UART_rxd => UART_rxd,
       UART_txd => UART_txd,
-      WE_O => WE_O
+      WE_O => WE_O,
+      dcm_locked => dcm_locked
     );
 end STRUCTURE;

@@ -1,4 +1,4 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from verilog import VerilogModule
 from constraints import PortConstraint, ClockConstraint, RawConstraint
 
@@ -14,7 +14,7 @@ class adc(YellowBlock):
 
     def modify_top(self,top):
         module = 'adc_interface'
-        inst = top.get_instance(entity=module, name=self.fullname, comment=self.fullname)
+        inst = top.get_instance(entity=module, name=self.fullname)
         
         # External ports
         inst.add_port('adc_clk_p',  self.fullname+'_adc_clk_p', dir='in', parent_port=True)
@@ -79,7 +79,7 @@ class adc(YellowBlock):
 
         # Now the ADC controller
         module = 'wb_adccontroller'
-        inst = top.get_instance(entity=module, name='adc%d_wb_controller' % self.adc_brd, comment=self.fullname)
+        inst = top.get_instance(entity=module, name='adc%d_wb_controller' % self.adc_brd)
         inst.add_wb_interface(regname='iadc%d_controller' % self.adc_brd, nbytes=0x10, mode='rw')
         inst.add_port('adc3wire_clk   ', self.fullname+'_adc3wire_clk   ', dir='out', parent_port=True)
         inst.add_port('adc3wire_data  ', self.fullname+'_adc3wire_data  ', dir='out', parent_port=True)
@@ -113,14 +113,14 @@ class adc(YellowBlock):
         cons.append(PortConstraint(adcstr + 'adc_ddrb_p', adcportp, iogroup_index=29))
         cons.append(PortConstraint(adcstr + 'adc_ddrb_n', adcportn, iogroup_index=29))
 
-        cons.append(PortConstraint(adcstr + 'adc_dataeveni_p', adcportp, port_index=range(8), iogroup_index=[11, 13, 15, 17, 31, 33, 35, 37]))
-        cons.append(PortConstraint(adcstr + 'adc_dataeveni_n', adcportn, port_index=range(8), iogroup_index=[11, 13, 15, 17, 31, 33, 35, 37]))
-        cons.append(PortConstraint(adcstr + 'adc_dataoddi_p', adcportp, port_index=range(8), iogroup_index=[10, 12, 14, 16, 30, 32, 34, 36]))
-        cons.append(PortConstraint(adcstr + 'adc_dataoddi_n', adcportn, port_index=range(8), iogroup_index=[10, 12, 14, 16, 30, 32, 34, 36]))
-        cons.append(PortConstraint(adcstr + 'adc_dataevenq_p', adcportp, port_index=range(8), iogroup_index=[6, 4, 2, 0, 26, 24, 22, 20]))
-        cons.append(PortConstraint(adcstr + 'adc_dataevenq_n', adcportn, port_index=range(8), iogroup_index=[6, 4, 2, 0, 26, 24, 22, 20]))
-        cons.append(PortConstraint(adcstr + 'adc_dataoddq_p', adcportp, port_index=range(8), iogroup_index=[7, 5, 3, 1, 27, 25, 23, 21]))
-        cons.append(PortConstraint(adcstr + 'adc_dataoddq_n', adcportn, port_index=range(8), iogroup_index=[7, 5, 3, 1, 27, 25, 23, 21]))
+        cons.append(PortConstraint(adcstr + 'adc_dataeveni_p', adcportp, port_index=list(range(8)), iogroup_index=[11, 13, 15, 17, 31, 33, 35, 37]))
+        cons.append(PortConstraint(adcstr + 'adc_dataeveni_n', adcportn, port_index=list(range(8)), iogroup_index=[11, 13, 15, 17, 31, 33, 35, 37]))
+        cons.append(PortConstraint(adcstr + 'adc_dataoddi_p', adcportp, port_index=list(range(8)), iogroup_index=[10, 12, 14, 16, 30, 32, 34, 36]))
+        cons.append(PortConstraint(adcstr + 'adc_dataoddi_n', adcportn, port_index=list(range(8)), iogroup_index=[10, 12, 14, 16, 30, 32, 34, 36]))
+        cons.append(PortConstraint(adcstr + 'adc_dataevenq_p', adcportp, port_index=list(range(8)), iogroup_index=[6, 4, 2, 0, 26, 24, 22, 20]))
+        cons.append(PortConstraint(adcstr + 'adc_dataevenq_n', adcportn, port_index=list(range(8)), iogroup_index=[6, 4, 2, 0, 26, 24, 22, 20]))
+        cons.append(PortConstraint(adcstr + 'adc_dataoddq_p', adcportp, port_index=list(range(8)), iogroup_index=[7, 5, 3, 1, 27, 25, 23, 21]))
+        cons.append(PortConstraint(adcstr + 'adc_dataoddq_n', adcportn, port_index=list(range(8)), iogroup_index=[7, 5, 3, 1, 27, 25, 23, 21]))
 
 
         cons.append(PortConstraint(adcstr + 'modepin',         adcport, iogroup_index=16))

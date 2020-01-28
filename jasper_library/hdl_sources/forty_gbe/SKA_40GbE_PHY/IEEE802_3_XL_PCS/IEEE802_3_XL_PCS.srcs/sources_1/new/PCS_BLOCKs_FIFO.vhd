@@ -71,6 +71,10 @@ architecture Behavioral of PCS_BLOCKs_FIFO is
 	signal rd_data : std_logic_vector(263 downto 0);
 
 	signal fifo_empty : std_logic;
+	signal fifo_full : std_logic;	
+	signal fifo_dual_clk_wrreq : std_logic;
+	signal fifo_dual_clk_rdreq : std_logic;
+	
 begin
 	wr_data <= PCS_BLOCKs_I(3).P & PCS_BLOCKs_I(3).H & PCS_BLOCKs_I(2).P & PCS_BLOCKs_I(2).H & PCS_BLOCKs_I(1).P & PCS_BLOCKs_I(1).H & PCS_BLOCKs_I(0).P & PCS_BLOCKs_I(0).H;
 
@@ -87,14 +91,22 @@ begin
 			wr_clk => WR_CLK_I,
 			rd_clk => RD_CLK_I,
 			din    => wr_data,
-			wr_en  => BLOCKS_VALID_I,
-			rd_en  => RD_EN_I,
+			wr_en  => fifo_dual_clk_wrreq,
+			rd_en  => fifo_dual_clk_rdreq,
 			dout   => rd_data,
-			full   => FULL,
+			full   => fifo_full,
 			empty  => fifo_empty
 		);
+	
+	--FIFO dual clock write control	
+	fifo_dual_clk_wrreq <= BLOCKS_VALID_I and (not fifo_full) and (not RST_I);
+	
+	--FIFO dual clock read control	
+	fifo_dual_clk_rdreq <= RD_EN_I and (not fifo_empty) and (not RST_I);
+	   	
 
 	EMPTY <= fifo_empty;
+	FULL <= fifo_full;
 
 	BLOCKS_VALID_O_PROC : process(RD_CLK_I) is
 	begin

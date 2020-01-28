@@ -97,17 +97,14 @@ for i =1:length(gateway_ins)
     elseif regexp(get_param(gw, 'Name'), '(rd_tag_out_link2)$')
         toks = regexp(get_param(gw, 'Name'), '(rd_tag_out_link2)$', 'tokens');
         set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
-    elseif regexp(get_param(gw, 'Name'), '(post_ok)$')
-        toks = regexp(get_param(gw, 'Name'), '(post_ok)$', 'tokens');
+    elseif regexp(get_param(gw, 'Name'), '(hmc_ok)$')
+        toks = regexp(get_param(gw, 'Name'), '(hmc_ok)$', 'tokens');
         set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
     elseif regexp(get_param(gw, 'Name'), '(rd_ready_link2)$')
         toks = regexp(get_param(gw, 'Name'), '(rd_ready_link2)$', 'tokens');
         set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
     elseif regexp(get_param(gw, 'Name'), '(data_valid_link2)$')
         toks = regexp(get_param(gw, 'Name'), '(data_valid_link2)$', 'tokens');
-        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
-    elseif regexp(get_param(gw, 'Name'), '(init_done)$')
-        toks = regexp(get_param(gw, 'Name'), '(init_done)$', 'tokens');
         set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
     elseif regexp(get_param(gw, 'Name'), '(wr_ready_link2)$')
         toks = regexp(get_param(gw, 'Name'), '(wr_ready_link2)$', 'tokens');
@@ -123,18 +120,6 @@ for i =1:length(gateway_ins)
         set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}])); 
     elseif regexp(get_param(gw, 'Name'), '(wr_ready_link3)$')
         toks = regexp(get_param(gw, 'Name'), '(wr_ready_link3)$', 'tokens');
-        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
-    elseif regexp(get_param(gw, 'Name'), '(rx_crc_err_cnt_link2)$')
-        toks = regexp(get_param(gw, 'Name'), '(rx_crc_err_cnt_link2)$', 'tokens');
-        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
-    elseif regexp(get_param(gw, 'Name'), '(errstat_link2)$')
-        toks = regexp(get_param(gw, 'Name'), '(errstat_link2)$', 'tokens');
-        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
-    elseif regexp(get_param(gw, 'Name'), '(rx_crc_err_cnt_link3)$')
-        toks = regexp(get_param(gw, 'Name'), '(rx_crc_err_cnt_link3)$', 'tokens');
-        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
-    elseif regexp(get_param(gw, 'Name'), '(errstat_link3)$')
-        toks = regexp(get_param(gw, 'Name'), '(errstat_link3)$', 'tokens');
         set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
     else
         error(['Unknown gateway name: ', gw]);

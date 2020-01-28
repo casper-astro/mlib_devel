@@ -96,7 +96,8 @@ module hmc_ska_sa_top #(
     //----Connect RF
     //----------------------------------
     // NB! On 
-    input  wire  [HMC_RF_AWIDTH-1:0]    rf_address,
+    input  wire  [HMC_RF_AWIDTH-1:0]    rf_address_in,
+    output  wire [HMC_RF_AWIDTH-1:0]    rf_address_out,    
     output wire  [HMC_RF_RWIDTH-1:0]    rf_read_data,
     output wire                         rf_invalid_address,
     output wire                         rf_access_complete,
@@ -396,7 +397,7 @@ wire [127:0] crc_out;
   );
 
 // HMC Register interface mux
-//assign rf_address_hmc = (OPEN_HMC_INIT_DONE == 1'b0) ? rf_address_hmc_init : rf_address;
+//assign rf_address_hmc = (OPEN_HMC_INIT_DONE == 1'b0) ? rf_address_hmc_init : rf_address_in;
 assign rf_address_hmc = rf_address_hmc_init;
 assign rf_read_data_hmc_init = rf_read_data_hmc;
 assign rf_read_data = rf_read_data_hmc;
@@ -410,6 +411,7 @@ assign rf_access_complete = rf_access_complete_hmc;
 assign rf_read_en_hmc = rf_read_en_hmc_init;
 assign rf_write_en_hmc = rf_write_en_hmc_init;
 assign rf_write_data_hmc = rf_write_data_hmc_init;
+assign rf_address_out = rf_address_hmc;
 
 // Instantiate openHMC controller
 
@@ -567,7 +569,11 @@ reg [15:0] rx_crc_err_cnt;
     if (res_n == 1'b0) begin
       rx_crc_err_cnt <= 16'd0;
     end begin
-      rx_crc_err_cnt <= rx_crc_err_cnt + rf_dbg_reg[3:0];
+    //if CRC error occurs in any flit then increment
+    //the CRC counter
+      if (rf_dbg_reg[3:0] > 0) begin
+        rx_crc_err_cnt <= rx_crc_err_cnt + 1;
+      end  
     end  
   end
 

@@ -22,50 +22,6 @@
 
 cursys = gcb;
 
-[hw_sys,io_group] = xps_get_hw_info(get_param(gcb,'io_group'));
-if ~exist(hw_sys) | ~isstruct(hw_sys)
-    load_hw_routes();
-end
-
-try
-    eval(['pads = ',hw_sys,'.',io_group,';']);
-catch
-    try
-        eval(['pads = ',hw_sys,'.',io_group,'_p;']);
-    catch
-        errordlg(['Undefined routing table for hardware system: ',hw_sys,'(',io_group,')']);
-    end
-end
-
-if arith_type==1
-	real_bitwidth = 1;
-else
-	real_bitwidth = bitwidth;
-end
-
-if ~isempty(find(bit_index>=length(pads)))
-    errordlg('Gateway bit index contain values that exceeds the bitwidth');
-end
-
-if use_ddr
-    if ~reg_iob
-        errordlg('When using DDR signaling mode, "Register at IOB" option must be on');
-    end
-	if real_bitwidth/2 > length(pads)
-	    errordlg('Gateway bitwidth is larger than the number of available pads');
-	end
-    if length(bit_index) ~= real_bitwidth/2
-        errordlg('Gateway bit index does not have half the number of elements as the I/O bitwidth');
-    end
-else
-	if real_bitwidth > length(pads)
-	    errordlg('Gateway bitwidth is larger than the number of available pads');
-	end
-    if length(bit_index) ~= real_bitwidth
-        errordlg('Gateway bit index does not have the same number of elements as the I/O bitwidth. When using bitwidths greater than one, you should specify a vector of bit indices to use.');
-    end
-end
-
 pos = get_param(cursys,'Position');
 x= pos(1);
 y= pos(2);
@@ -118,3 +74,24 @@ switch get_param(cursys,'io_dir')
 end
 
 clean_ports(cursys,old_ports);
+
+if ~strcmp(io_group_real, 'custom')
+    if arith_type==1
+    	real_bitwidth = 1;
+    else
+    	real_bitwidth = bitwidth;
+    end
+    
+    if use_ddr
+        if ~reg_iob
+            errordlg('When using DDR signaling mode, "Register at IOB" option must be on');
+        end
+        if length(bit_index) ~= real_bitwidth/2
+            errordlg('Gateway bit index does not have half the number of elements as the I/O bitwidth');
+        end
+    else
+        if length(bit_index) ~= real_bitwidth
+            errordlg('Gateway bit index does not have the same number of elements as the I/O bitwidth. When using bitwidths greater than one, you should specify a vector of bit indices to use.');
+        end
+    end
+end

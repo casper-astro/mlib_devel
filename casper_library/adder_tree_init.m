@@ -36,15 +36,30 @@ function adder_tree_init(blk,varargin)
 clog('entering adder_tree_init', 'trace');
 check_mask_type(blk, 'adder_tree');
 
-defaults = {'n_inputs', 3, 'latency', 1, 'first_stage_hdl', 'off', 'adder_imp', 'Fabric'};
+defaults = {
+    'n_inputs', 3, ...
+    'csp_latency', 1, ....
+    'first_stage_hdl', 'off', ...
+    'adder_imp', 'Fabric', ...
+    'floating_point', 'off', ...
+    'float_type', 'single', ...
+    'exp_width', 8, ...
+    'frac_width', 24, ...  
+    };
+
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 clog('adder_tree_init: post same_state', 'trace');
 munge_block(blk, varargin{:});
 
-n_inputs = get_var('n_inputs', 'defaults', defaults, varargin{:});
-latency = get_var('latency', 'defaults', defaults, varargin{:});
-first_stage_hdl = get_var('first_stage_hdl', 'defaults', defaults, varargin{:});
-adder_imp = get_var('adder_imp', 'defaults', defaults, varargin{:});
+  n_inputs          = get_var('n_inputs', 'defaults', defaults, varargin{:});
+  latency           = get_var('csp_latency', 'defaults', defaults, varargin{:});
+  first_stage_hdl   = get_var('first_stage_hdl', 'defaults', defaults, varargin{:});
+  adder_imp         = get_var('adder_imp', 'defaults', defaults, varargin{:});
+  floating_point    = get_var('floating_point', 'defaults', defaults, varargin{:});
+  float_type        = get_var('float_type', 'defaults', defaults, varargin{:});
+  exp_width         = get_var('exp_width', 'defaults', defaults, varargin{:});
+  frac_width        = get_var('frac_width', 'defaults', defaults, varargin{:});     
+
 
 hw_selection = adder_imp;
 
@@ -62,6 +77,36 @@ stages = ceil(log2(n_inputs));
 
 delete_lines(blk);
 
+
+   % sanity check for old block that has not been updated for floating point
+  if (strcmp(floating_point, 'on')|floating_point == 1)
+    floating_point = 1;
+  else
+    floating_point = 0;
+  end
+  
+  % Check for floating point
+  if floating_point == 1
+      float_en = 'on';
+      
+      if float_type == 2
+          float_type_sel = 'custom';
+
+      else
+          float_type_sel = 'single';
+          exp_width = 8;
+          frac_width = 24;
+      end
+  else
+      float_en = 'off';  
+      float_type_sel = 'single';
+      exp_width = 8;
+      frac_width = 24;
+  end
+  
+
+
+
 % Take care of sync
 reuse_block(blk, 'sync', 'built-in/inport', 'Position', [30 10 60 25], 'Port', '1');
 reuse_block(blk, 'sync_delay', 'xbsIndex_r4/Delay', ...
@@ -78,57 +123,151 @@ for i=1:n_inputs,
 end
 reuse_block(blk, 'dout', 'built-in/outport', 'Position', [30+(stages+1)*100 40 60+(stages+1)*100 55]);
 
-% If nothing to add, connect in to out
-if stages==0
-    add_line(blk,'din1/1','dout/1');
-else
-    % Make adder tree
-    cur_n = n_inputs;
-    stage = 0;
-    blk_cnt = 0;
-    blks = {};
-    while cur_n > 1,
-        n_adds = floor(cur_n / 2);
-        n_dlys = mod(cur_n, 2);
-        cur_n = n_adds + n_dlys;
-        prev_blks = blks;
+if floating_point == 1
+    
+    % If nothing to add, connect in to out
+    if stages==0
+        add_line(blk,'din1/1','dout/1');
+    else
+        % Make adder tree
+        cur_n = n_inputs;
+        stage = 0;
+        blk_cnt = 0;
         blks = {};
-        stage = stage + 1;
-        for j=1:cur_n,
-            blk_cnt = blk_cnt + 1;
-            if j <= n_adds,
-                addr = ['addr',num2str(blk_cnt)];
-                blks{j} = addr;
-                reuse_block(blk, addr, 'xbsIndex_r4/AddSub', ...
-                    'latency', num2str(latency), ...
-                    'use_behavioral_HDL', behavioral, 'hw_selection', hw_selection, ...
-                    'pipelined', 'on', 'use_rpm', 'on', ...
-                    'Position', [30+stage*100 j*80-40 70+stage*100 j*80+20]);
-                if stage == 1,
-		    set_param([blk,'/',addr], 'use_behavioral_HDL', first_stage_hdl);
-                    add_line(blk,['din',num2str((j*2-1)),'/1'],[addr,'/1']);
-                    add_line(blk,['din',num2str((j*2)),'/1'],[addr,'/2']);
+        while cur_n > 1,
+            n_adds = floor(cur_n / 2);
+            n_dlys = mod(cur_n, 2);
+            cur_n = n_adds + n_dlys;
+            prev_blks = blks;
+            blks = {};
+            stage = stage + 1;
+            for j=1:cur_n,
+                blk_cnt = blk_cnt + 1;
+                if j <= n_adds,
+                    addr = ['addr',num2str(blk_cnt)];
+                    blks{j} = addr;
+                    reuse_block(blk, addr, 'xbsIndex_r4/AddSub', ...
+                        'latency', num2str(latency), ...
+                        'use_behavioral_HDL', behavioral, 'hw_selection', hw_selection, ...
+                        'pipelined', 'on', 'use_rpm', 'on', ...
+                        'Position', [30+stage*100 j*80-40 70+stage*100 j*80+20]);
+
+                        reint_name_a = ['reinta',num2str((j*2-1))];
+                        reint_name_b = ['reintb',num2str((j*2))];
+                    
+                        % Insert reinterpret block
+                        reuse_block(blk, reint_name_b, 'xbsIndex_r4/Reinterpret', ...
+                        'force_arith_type', 'on', ...
+                        'arith_type', 'Floating-point', ...
+                        'force_bin_pt', 'on', ...
+                        'bin_pt',num2str(frac_width), ...
+                        'Position', [100 200 120 220]);
+
+                        % Insert reinterpret block
+                        reuse_block(blk, reint_name_a, 'xbsIndex_r4/Reinterpret', ...
+                        'force_arith_type', 'on', ...
+                        'arith_type', 'Floating-point', ...
+                        'force_bin_pt', 'on', ...
+                        'bin_pt',num2str(frac_width), ...
+                        'Position', [100 200 120 220]);
+                    
+                    if stage == 1,
+                        set_param([blk,'/',addr], 'use_behavioral_HDL', first_stage_hdl);
+
+                        add_line(blk, ['din',num2str((j*2-1)),'/1'], [reint_name_a,'/1']);
+                        add_line(blk, ['din',num2str((j*2)),'/1'], [reint_name_b,'/1']);
+
+                        add_line(blk,[reint_name_a,'/1'],[addr,'/1']);
+                        add_line(blk,[reint_name_b,'/1'],[addr,'/2']);
+                        
+                    else,
+                        add_line(blk,[prev_blks{2*j-1},'/1'],[addr,'/1']);
+                        add_line(blk,[prev_blks{2*j},'/1'],[addr,'/2']);
+                    end
                 else,
-                    add_line(blk,[prev_blks{2*j-1},'/1'],[addr,'/1']);
-                    add_line(blk,[prev_blks{2*j},'/1'],[addr,'/2']);
-                end
-            else,
-                dly = ['dly',num2str(blk_cnt)];
-                blks{j} = dly;
-                reuse_block(blk, dly, 'xbsIndex_r4/Delay', ...
-                    'latency', num2str(latency), ...
-                    'reg_retiming', 'on', ...
-                    'Position', [30+stage*100 j*80-40 70+stage*100 j*80+20]);
-                if stage == 1,
-                    add_line(blk,['din',num2str((j*2-1)),'/1'],[dly,'/1']);
-                else,
-                    add_line(blk,[prev_blks{2*j-1},'/1'],[dly,'/1']);
+                    dly = ['dly',num2str(blk_cnt)];
+                    blks{j} = dly;
+                    reuse_block(blk, dly, 'xbsIndex_r4/Delay', ...
+                        'latency', num2str(latency), ...
+                        'reg_retiming', 'on', ...
+                        'Position', [30+stage*100 j*80-40 70+stage*100 j*80+20]);
+                    if stage == 1,
+                        add_line(blk,['din',num2str((j*2-1)),'/1'],[dly,'/1']);
+                    else,
+                        add_line(blk,[prev_blks{2*j-1},'/1'],[dly,'/1']);
+                    end
                 end
             end
         end
+            % Insert reinterpret block
+            reuse_block(blk, 'reint_out', 'xbsIndex_r4/Reinterpret', ...
+            'force_arith_type', 'on', ...
+            'arith_type', 'Unsigned', ...
+            'force_bin_pt', 'on', ...
+            'bin_pt',num2str(0), ...
+            'Position', [100 200 120 220]);
+            
+            add_line(blk, [blks{1},'/1'], ['reint_out','/1']);
+            add_line(blk,['reint_out','/1'],['dout/1']);
     end
-    add_line(blk,[blks{1},'/1'],['dout/1']);
+    
+    
+    
+    
+else
+    % If nothing to add, connect in to out
+    if stages==0
+        add_line(blk,'din1/1','dout/1');
+    else
+        % Make adder tree
+        cur_n = n_inputs;
+        stage = 0;
+        blk_cnt = 0;
+        blks = {};
+        while cur_n > 1,
+            n_adds = floor(cur_n / 2);
+            n_dlys = mod(cur_n, 2);
+            cur_n = n_adds + n_dlys;
+            prev_blks = blks;
+            blks = {};
+            stage = stage + 1;
+            for j=1:cur_n,
+                blk_cnt = blk_cnt + 1;
+                if j <= n_adds,
+                    addr = ['addr',num2str(blk_cnt)];
+                    blks{j} = addr;
+                    reuse_block(blk, addr, 'xbsIndex_r4/AddSub', ...
+                        'latency', num2str(latency), ...
+                        'use_behavioral_HDL', behavioral, 'hw_selection', hw_selection, ...
+                        'pipelined', 'on', 'use_rpm', 'on', ...
+                        'Position', [30+stage*100 j*80-40 70+stage*100 j*80+20]);
+                    if stage == 1,
+                set_param([blk,'/',addr], 'use_behavioral_HDL', first_stage_hdl);
+                        add_line(blk,['din',num2str((j*2-1)),'/1'],[addr,'/1']);
+                        add_line(blk,['din',num2str((j*2)),'/1'],[addr,'/2']);
+                    else,
+                        add_line(blk,[prev_blks{2*j-1},'/1'],[addr,'/1']);
+                        add_line(blk,[prev_blks{2*j},'/1'],[addr,'/2']);
+                    end
+                else,
+                    dly = ['dly',num2str(blk_cnt)];
+                    blks{j} = dly;
+                    reuse_block(blk, dly, 'xbsIndex_r4/Delay', ...
+                        'latency', num2str(latency), ...
+                        'reg_retiming', 'on', ...
+                        'Position', [30+stage*100 j*80-40 70+stage*100 j*80+20]);
+                    if stage == 1,
+                        add_line(blk,['din',num2str((j*2-1)),'/1'],[dly,'/1']);
+                    else,
+                        add_line(blk,[prev_blks{2*j-1},'/1'],[dly,'/1']);
+                    end
+                end
+            end
+        end
+        add_line(blk,[blks{1},'/1'],['dout/1']);
+    end
 end
+
 
 % When finished drawing blocks and lines, remove all unused blocks.
 clean_blocks(blk);

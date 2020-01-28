@@ -1,8 +1,8 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from verilog import VerilogModule
 from constraints import PortConstraint, ClockConstraint, RawConstraint
 from helpers import to_int_list
-from yellow_block_typecodes import *
+from .yellow_block_typecodes import *
 import math
 
 class adc_5g_e2v(YellowBlock):
@@ -244,10 +244,10 @@ class adc_5g_e2v(YellowBlock):
             cons.append(PortConstraint('adc_5g_chip1_bor_p', 'adc_5g_chip%d_bor_p'%self.fmc_port))
             cons.append(PortConstraint('adc_5g_chip1_cor_p', 'adc_5g_chip%d_cor_p'%self.fmc_port))
             cons.append(PortConstraint('adc_5g_chip1_dor_p', 'adc_5g_chip%d_dor_p'%self.fmc_port))
-            cons.append(PortConstraint('adc_5g_chip1_a_p'  , 'adc_5g_chip%d_a_p'%self.fmc_port , port_index=range(10), iogroup_index=range(10)))
-            cons.append(PortConstraint('adc_5g_chip1_b_p'  , 'adc_5g_chip%d_b_p'%self.fmc_port , port_index=range(10), iogroup_index=range(10)))
-            cons.append(PortConstraint('adc_5g_chip1_c_p'  , 'adc_5g_chip%d_c_p'%self.fmc_port , port_index=range(10), iogroup_index=range(10)))
-            cons.append(PortConstraint('adc_5g_chip1_d_p'  , 'adc_5g_chip%d_d_p'%self.fmc_port , port_index=range(10), iogroup_index=range(10)))
+            cons.append(PortConstraint('adc_5g_chip1_a_p'  , 'adc_5g_chip%d_a_p'%self.fmc_port , port_index=list(range(10)), iogroup_index=list(range(10))))
+            cons.append(PortConstraint('adc_5g_chip1_b_p'  , 'adc_5g_chip%d_b_p'%self.fmc_port , port_index=list(range(10)), iogroup_index=list(range(10))))
+            cons.append(PortConstraint('adc_5g_chip1_c_p'  , 'adc_5g_chip%d_c_p'%self.fmc_port , port_index=list(range(10)), iogroup_index=list(range(10))))
+            cons.append(PortConstraint('adc_5g_chip1_d_p'  , 'adc_5g_chip%d_d_p'%self.fmc_port , port_index=list(range(10)), iogroup_index=list(range(10))))
 
             cons.append(PortConstraint('adc_5g_chip1_sclk', 'adc_5g_chip%d_sclk'%self.fmc_port))
             cons.append(PortConstraint('adc_5g_chip1_sen' , 'adc_5g_chip%d_sen'%self.fmc_port))
@@ -262,10 +262,10 @@ class adc_5g_e2v(YellowBlock):
             cons.append(PortConstraint('adc_5g_chip1_bor_p', 'adc_5g_chip1_bor_p'))
             cons.append(PortConstraint('adc_5g_chip1_cor_p', 'adc_5g_chip1_cor_p'))
             cons.append(PortConstraint('adc_5g_chip1_dor_p', 'adc_5g_chip1_dor_p'))
-            cons.append(PortConstraint('adc_5g_chip1_a_p'  , 'adc_5g_chip1_a_p' , port_index=range(10), iogroup_index=range(10)))
-            cons.append(PortConstraint('adc_5g_chip1_b_p'  , 'adc_5g_chip1_b_p' , port_index=range(10), iogroup_index=range(10)))
-            cons.append(PortConstraint('adc_5g_chip1_c_p'  , 'adc_5g_chip1_c_p' , port_index=range(10), iogroup_index=range(10)))
-            cons.append(PortConstraint('adc_5g_chip1_d_p'  , 'adc_5g_chip1_d_p' , port_index=range(10), iogroup_index=range(10)))
+            cons.append(PortConstraint('adc_5g_chip1_a_p'  , 'adc_5g_chip1_a_p' , port_index=list(range(10)), iogroup_index=list(range(10))))
+            cons.append(PortConstraint('adc_5g_chip1_b_p'  , 'adc_5g_chip1_b_p' , port_index=list(range(10)), iogroup_index=list(range(10))))
+            cons.append(PortConstraint('adc_5g_chip1_c_p'  , 'adc_5g_chip1_c_p' , port_index=list(range(10)), iogroup_index=list(range(10))))
+            cons.append(PortConstraint('adc_5g_chip1_d_p'  , 'adc_5g_chip1_d_p' , port_index=list(range(10)), iogroup_index=list(range(10))))
 
             cons.append(PortConstraint('adc_5g_chip1_sclk', 'adc_5g_chip1_sclk'))
             cons.append(PortConstraint('adc_5g_chip1_sen' , 'adc_5g_chip1_sen'))
@@ -281,10 +281,10 @@ class adc_5g_e2v(YellowBlock):
             cons.append(PortConstraint('adc_5g_chip2_bor_p', 'adc_5g_chip2_bor_p'))
             cons.append(PortConstraint('adc_5g_chip2_cor_p', 'adc_5g_chip2_cor_p'))
             cons.append(PortConstraint('adc_5g_chip2_dor_p', 'adc_5g_chip2_dor_p'))
-            cons.append(PortConstraint('adc_5g_chip2_a_p'  , 'adc_5g_chip2_a_p' , port_index=range(10), iogroup_index=range(10)))
-            cons.append(PortConstraint('adc_5g_chip2_b_p'  , 'adc_5g_chip2_b_p' , port_index=range(10), iogroup_index=range(10)))
-            cons.append(PortConstraint('adc_5g_chip2_c_p'  , 'adc_5g_chip2_c_p' , port_index=range(10), iogroup_index=range(10)))
-            cons.append(PortConstraint('adc_5g_chip2_d_p'  , 'adc_5g_chip2_d_p' , port_index=range(10), iogroup_index=range(10)))
+            cons.append(PortConstraint('adc_5g_chip2_a_p'  , 'adc_5g_chip2_a_p' , port_index=list(range(10)), iogroup_index=list(range(10))))
+            cons.append(PortConstraint('adc_5g_chip2_b_p'  , 'adc_5g_chip2_b_p' , port_index=list(range(10)), iogroup_index=list(range(10))))
+            cons.append(PortConstraint('adc_5g_chip2_c_p'  , 'adc_5g_chip2_c_p' , port_index=list(range(10)), iogroup_index=list(range(10))))
+            cons.append(PortConstraint('adc_5g_chip2_d_p'  , 'adc_5g_chip2_d_p' , port_index=list(range(10)), iogroup_index=list(range(10))))
 
             cons.append(PortConstraint('adc_5g_chip2_sclk', 'adc_5g_chip2_sclk'))
             cons.append(PortConstraint('adc_5g_chip2_sen' , 'adc_5g_chip2_sen'))

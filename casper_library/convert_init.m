@@ -23,7 +23,7 @@ function convert_init(blk,varargin)
 
 check_mask_type(blk, 'convert');
 
-defaults = {'latency', 2};
+defaults = {'csp_latency', 2};
 
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 munge_block(blk, varargin{:});
@@ -32,7 +32,7 @@ n_bits_out = get_var('n_bits_out', 'defaults', defaults, varargin{:});
 bin_pt_out = get_var('bin_pt_out', 'defaults', defaults, varargin{:});
 quantization = get_var('quantization', 'defaults', defaults, varargin{:});
 overflow = get_var('overflow', 'defaults', defaults, varargin{:});
-latency = get_var('latency', 'defaults', defaults, varargin{:});
+latency = get_var('csp_latency', 'defaults', defaults, varargin{:});
 
 % If bin_pt_out == bin_pt_in, set quantization mode to truncate
 if bin_pt_out == bin_pt_in

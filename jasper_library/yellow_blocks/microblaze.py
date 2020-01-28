@@ -1,4 +1,4 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from constraints import PortConstraint, ClockConstraint, RawConstraint
 from os import environ as env
 
@@ -12,10 +12,19 @@ class microblaze(YellowBlock):
             return microblaze_k7(blk, plat, hdl_root)
 
     def initialize(self):
-        if self.platform.name == 'snap2':
+        self.include_spi_ports = True
+        if self.platform.name in ['snap2']:
             self.memfile= 'executable_no_xadc.mem'
            # self.memfile = 'executable.mem'
             self.blkdiagram = 'microblaze_wb_no_xadc.tcl'
+        elif self.platform.name in ['vcu118']:
+            self.memfile = 'executable_us_plus.mem'
+            self.blkdiagram = 'microblaze_wb_us_plus.tcl'
+            self.include_spi_ports = False
+        elif self.platform.name in ['vcu128']:
+            self.memfile = 'executable_us_plus.mem'
+            self.blkdiagram = 'microblaze_wb_us_plus_hbm.tcl'
+            self.include_spi_ports = False
         elif self.platform.name == 'snap2_v2':
             self.memfile= 'executable_no_xadc.mem'
            # self.memfile = 'executable.mem'
@@ -48,7 +57,7 @@ class microblaze_k7(microblaze):
         Instantiate a tri-state buffer, connected to inst's I,O, and T ports.
         Propagate the IO port to a port in top.
         """
-        ioinst = top.get_instance(entity='IOBUF', name=name, comment='Bidirectional buffer placed by microblaze yellow block')
+        ioinst = top.get_instance(entity='IOBUF', name=name+'_inst', comment='Bidirectional buffer placed by microblaze yellow block')
         ioinst.add_port('I',  '%s_o'  % name,  dir='in',    parent_port=False)
         ioinst.add_port('O',  '%s_i'  % name,  dir='out',   parent_port=False)
         ioinst.add_port('IO', '%s' % name,     dir='inout', parent_port=True)
@@ -77,13 +86,14 @@ class microblaze_k7(microblaze):
         inst.add_port('ACK_I', 'wbm_ack_i')
         inst.add_port('RST_O', 'wbm_rst_o')
         inst.add_port('ext_intr', 'mb_intr') 
-        # Add the SPI ports, which get connected through tristate buffers
-        self._connect_to_tristate_buf(top, inst, 'spi_rtl_io0')
-        self._connect_to_tristate_buf(top, inst, 'spi_rtl_io1')
-        self._connect_to_tristate_buf(top, inst, 'spi_rtl_io2')
-        self._connect_to_tristate_buf(top, inst, 'spi_rtl_io3')
-        #self._connect_to_tristate_buf(top, inst, 'spi_rtl_sck')
-        self._connect_to_tristate_buf(top, inst, 'spi_rtl_ss')
+        if self.include_spi_ports:
+            # Add the SPI ports, which get connected through tristate buffers
+            self._connect_to_tristate_buf(top, inst, 'spi_rtl_io0')
+            self._connect_to_tristate_buf(top, inst, 'spi_rtl_io1')
+            self._connect_to_tristate_buf(top, inst, 'spi_rtl_io2')
+            self._connect_to_tristate_buf(top, inst, 'spi_rtl_io3')
+            #self._connect_to_tristate_buf(top, inst, 'spi_rtl_sck')
+            self._connect_to_tristate_buf(top, inst, 'spi_rtl_ss')
 
         top.assign_signal('wb_clk_i', 'sys_clk')
         top.assign_signal('wb_rst_i', 'sys_rst')
@@ -97,12 +107,13 @@ class microblaze_k7(microblaze):
         cons = []
         cons.append(PortConstraint('UART_rxd', 'usb_tx'))
         cons.append(PortConstraint('UART_txd', 'usb_rx')) 
-        cons.append(PortConstraint('spi_rtl_io0', 'spi_flash_data', iogroup_index=[0]))
-        cons.append(PortConstraint('spi_rtl_io1', 'spi_flash_data', iogroup_index=[1]))
-        cons.append(PortConstraint('spi_rtl_io2', 'spi_flash_data', iogroup_index=[2]))
-        cons.append(PortConstraint('spi_rtl_io3', 'spi_flash_data', iogroup_index=[3]))
-        #cons.append(PortConstraint('spi_rtl_sck', 'spi_flash_clk'))
-        cons.append(PortConstraint('spi_rtl_ss' , 'spi_flash_csn'))
+        if self.include_spi_ports:
+            cons.append(PortConstraint('spi_rtl_io0', 'spi_flash_data', iogroup_index=[0]))
+            cons.append(PortConstraint('spi_rtl_io1', 'spi_flash_data', iogroup_index=[1]))
+            cons.append(PortConstraint('spi_rtl_io2', 'spi_flash_data', iogroup_index=[2]))
+            cons.append(PortConstraint('spi_rtl_io3', 'spi_flash_data', iogroup_index=[3]))
+            #cons.append(PortConstraint('spi_rtl_sck', 'spi_flash_clk'))
+            cons.append(PortConstraint('spi_rtl_ss' , 'spi_flash_csn'))
         return cons
 
     def gen_tcl_cmds(self):

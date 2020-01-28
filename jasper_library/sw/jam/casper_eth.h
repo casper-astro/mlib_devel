@@ -39,13 +39,13 @@
 #define ETH_MAC_REGISTERS_OFFSET (0x0000)
 
 // Byte offset to TX buffer region
-#define ETH_MAC_TX_BUFFER_OFFSET (0x1000)
+#define ETH_MAC_TX_BUFFER_OFFSET (0x4000)
 
 // Byte offset to RX buffer region
-#define ETH_MAC_RX_BUFFER_OFFSET (0x2000)
+#define ETH_MAC_RX_BUFFER_OFFSET (0x8000)
 
 // Byte offset to ARP cache (aka ARP table) region
-#define ETH_MAC_ARP_CACHE_OFFSET (0x3000)
+#define ETH_MAC_ARP_CACHE_OFFSET (0x1000)
 
 //
 // Offstes for registers within the register region
@@ -53,71 +53,86 @@
 
 // Lower 16 bits at this offset are the upper 16 bits of the 48 bit MAC
 // address.
-#define ETH_MAC_REG32_LOCAL_MAC_1     (0x00)
+#define ETH_MAC_REG32_LOCAL_MAC_1     (0x03)
 // Lower 32 bits of the 48 bit MAC address
-#define ETH_MAC_REG32_LOCAL_MAC_0     (0x01)
+#define ETH_MAC_REG32_LOCAL_MAC_0     (0x04)
 // Upper 16 bits of the 48 bit MAC address
-#define ETH_MAC_REG16_LOCAL_MAC_HI    (0x00)
+#define ETH_MAC_REG16_LOCAL_MAC_HI    (0x06)
 // Middle 16 bits of the 48 bit MAC address
-#define ETH_MAC_REG16_LOCAL_MAC_MD    (0x03)
+#define ETH_MAC_REG16_LOCAL_MAC_MD    (0x09)
 // Lower 16 bits of the 48 bit MAC address
-#define ETH_MAC_REG16_LOCAL_MAC_LO    (0x02)
+#define ETH_MAC_REG16_LOCAL_MAC_LO    (0x08)
 
 // Lower 8 bits is the last octet of the IP gateway address
-#define ETH_MAC_REG32_LOCAL_GATEWAY   (0x03)
+#define ETH_MAC_REG32_LOCAL_GATEWAY   (0x06)
 
 // 32 bit IP address
-#define ETH_MAC_REG32_LOCAL_IPADDR    (0x04)
+#define ETH_MAC_REG32_LOCAL_IPADDR    (0x05)
 
 // Upper 16 bits are size/length of data in the CPU TX buffer
 // Lower 16 bits are size/length of data in the CPU RX buffer
-#define ETH_MAC_REG32_BUFFER_SIZES    (0x06)
+#define ETH_MAC_REG32_BUFFER_SIZES    (0x0a)
 // Size/length of data in CPU TX buffer (16 bit access)
-#define ETH_MAC_REG16_TX_BUFFER_SIZE  (0x0d)
+#define ETH_MAC_REG16_TX_BUFFER_SIZE  (0x15)
 // Size/length of data in CPU RX buffer (16 bit access)
-#define ETH_MAC_REG16_RX_BUFFER_SIZE  (0x0c)
+#define ETH_MAC_REG16_RX_BUFFER_SIZE  (0x14)
 
+// Upper 16 bits is length in bytes of a word in the tx buffer.
+// I.e., number of bytes to be sent is
+// ETH_MAC_REG16_TX_WORD_SIZE * ETH_MAC_REG16_TX_BUFFER_SIZE
+// Lower 16 bits is length in bytes of a word in the CPU RX buffer.
+// I.e., number of bytes to be read is
+// ETH_MAC_REG16_RX_WORD_SIZE * ETH_MAC_REG16_RX_BUFFER_SIZE
+#define ETH_MAC_REG32_WORD_SIZES      (0x02)
+// Size/length of data in CPU TX buffer (16 bit access)
+#define ETH_MAC_REG16_TX_WORD_SIZE    (0x05)
 // Size/length of data in CPU RX buffer (16 bit access)
-#define ETH_MAC_REG16_ARP_CACHE_SIZE  (0x0e)
+#define ETH_MAC_REG16_RX_WORD_SIZE    (0x04)
 
-// Control bits and UDP port for fabric receive
-// Bit 24 is software reset (1 to reset, 0 to run)
+// UDP port for fabric receive
+#define ETH_MAC_REG32_PORT            (0x0c)
+// UDP port for fabric receive (16 bit access)
+#define ETH_MAC_REG16_PORT            (0x18)
+// UDP port mask (for subscribing an FPGA to multiple consecutive ports)
+#define ETH_MAC_REG16_PORT_MASK       (0x19)
+
+
+// Control bits
 // Bit 16 is enable bit (1 to enable, 0 to disable)
 // Lower 16 bits are the UDP port for fabric receive.
 // Note: In Verilog this is called `..._VALID_PORTS`.
-#define ETH_MAC_REG32_CTRL_PORT       (0x08)
-// Control bits (16 bit access)
-// Bit 8 is software reset (1 to reset, 0 to run)
-// Bit 0 is enable bit (1 to enable, 0 to disable)
-#define ETH_MAC_REG16_CTRL            (0x11)
-// Reset bit (8 bit access)
-// Bit 0 is software reset (1 to reset, 0 to run)
-#define ETH_MAC_REG8_RESET            (0x23)
+#define ETH_MAC_REG32_CTRL            (0x0b)
+#define ETH_MAC_REG16_CTRL            (0x16)
 // Enable bit (8 bit access)
 // Bit 0 is enable bit (1 to enable, 0 to disable)
-#define ETH_MAC_REG8_ENABLE           (0x22)
-// CPU RX enabled (8 bit access)
-// Bit 0 indicates status (1 is enabled, 0 is disabled)
-#define ETH_MAC_REG8_RX_ENABLE        (0x26)
-// CPU TX enabled (8 bit access)
-// Bit 0 indicates status (1 is enabled, 0 is disabled)
-#define ETH_MAC_REG8_TX_ENABLE        (0x27)
-// XAUI status (8 bit access)
-#define ETH_MAC_REG8_XAUI_STATUS      (0x24)
-// UDP port for fabric receive (16 bit access)
-#define ETH_MAC_REG16_PORT            (0x10)
+#define ETH_MAC_REG8_ENABLE           (0x2c)
+// Bit 8 is promiscuousness enable bit (1 to enable, 0 to disable)
+#define ETH_MAC_REG8_PROMISC_ENABLE   (0x30)
 
-// PHY config
-#define ETH_MAC_REG32_PHY_CONFIG      (0x0a)
+// Core config bits
+// Read-only bits which give information about the core
+#define ETH_MAC_REG32_CORE_CONFIG     (0x00)
+// bits[7:0] give core type (1GbE vs 10GbE vs 40GbE, etc.)
+#define ETH_MAC_REG8_CORE_TYPE        (0x00)
+// bits[15:8] give core revision
+#define ETH_MAC_REG8_CORE_REV         (0x01)
+// bit 16 is the CPU RX enable bit (1 indicates enabled, 0 is disabled)
+#define ETH_MAC_REG8_RX_ENABLE        (0x02)
+// Bit 24 indicates status (1 is enabled, 0 is disabled)
+#define ETH_MAC_REG8_TX_ENABLE        (0x03)
 
-// XAUS config
-#define ETH_MAC_REG32_XAUI_CONFIG     (0x0b)
+// Phy control
+#define ETH_MAC_REG32_CONTROL         (0x0f)
 
-// CPU IP address
-#define ETH_MAC_REG32_MC_RECV_IP      (0x0c)
+// PHY status
+#define ETH_MAC_REG32_STATUS          (0x0e)
+#define ETH_MAC_REG8_STATUS           (0x38)
 
-// CPU subnet mask
-#define ETH_MAC_REG32_MC_RECV_IP_MASK (0x0d)
+// CPU Multicast IP address
+#define ETH_MAC_REG32_MC_RECV_IP      (0x08)
+
+// CPU Multicast mask
+#define ETH_MAC_REG32_MC_RECV_IP_MASK (0x09)
 
 //
 // Macros to get pointers to various TX/RX parts of the core whose base address
@@ -136,6 +151,14 @@
 #define RX_BUF_SIZE_PTR16(p) \
   (((volatile uint16_t *)p) + ETH_MAC_REG16_RX_BUFFER_SIZE)
 
+// Can be used as pointer to RX buffer size (as uint16_t)
+#define RX_BUF_WORD_SIZE_PTR16(p) \
+  (((volatile uint16_t *)p) + ETH_MAC_REG16_RX_WORD_SIZE)
+
+// Can be used as pointer to RX buffer size (as uint16_t)
+#define TX_BUF_WORD_SIZE_PTR16(p) \
+  (((volatile uint16_t *)p) + ETH_MAC_REG16_TX_WORD_SIZE)
+
 // Can be used as pointer to TX buffer itself (as uint8_t)
 #define TX_BUF_PTR8(p) \
   ((uint8_t *)(p + ETH_MAC_TX_BUFFER_OFFSET))
@@ -147,18 +170,6 @@
 // Can be used as pointer to TX buffer size (as uint16_t)
 #define TX_BUF_SIZE_PTR16(p) \
   (((volatile uint16_t *)p) + ETH_MAC_REG16_TX_BUFFER_SIZE)
-
-// Can be used as pointer to TX buffer itself (as uint8_t)
-#define ARP_BUF_PTR8(p) \
-  ((uint8_t *)(p + ETH_MAC_ARP_CACHE_OFFSET))
-
-// Can be used as pointer to TX buffer itself (as uint32_t)
-#define ARP_BUF_PTR32(p) \
-  ((uint32_t *)(p + ETH_MAC_ARP_CACHE_OFFSET))
-
-// Can be used as pointer to TX buffer size (as uint16_t)
-#define ARP_BUF_SIZE_PTR16(p) \
-  (((volatile uint16_t *)p) + ETH_MAC_REG16_ARP_CACHE_SIZE)
 
 // The data received in the RX buffer needs to be 4-byte byte-swapped into
 // another region of 4-byte aligned memory.  If the RX buffer were writable, we

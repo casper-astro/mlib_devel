@@ -305,7 +305,7 @@ generate
     if(SYNC_AXI4_IF==0) begin : async_axi4_tx_fifo
         openhmc_async_fifo #(
             .DWIDTH(DWIDTH+(FPW*3)),
-            .ENTRIES(128)//.ENTRIES(16)
+            .ENTRIES(128)//.ENTRIES(512)//.ENTRIES(16)
         ) fifo_tx_data (
             //System
             .si_clk(clk_user),
@@ -560,7 +560,7 @@ generate
     if(SYNC_AXI4_IF==0) begin : async_axi4_rx_fifo
         openhmc_async_fifo #(
             .DWIDTH(DWIDTH+(FPW*4)),
-            .ENTRIES(16)
+            .ENTRIES(16)//.ENTRIES(512)
         ) fifo_rx_data(
             //System
             .si_clk(clk_hmc),

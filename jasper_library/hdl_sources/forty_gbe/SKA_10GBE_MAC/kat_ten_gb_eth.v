@@ -18,7 +18,7 @@ module kat_ten_gb_eth #(
     parameter LARGE_PACKETS     = 0,
     parameter TTL               = 1,
     parameter PROMISC_MODE      = 0
-    
+
   ) (
     input         clk,
     input         rst,
@@ -28,8 +28,8 @@ module kat_ten_gb_eth #(
     input  [63:0] tx_data,
     input  [31:0] tx_dest_ip,
     input  [15:0] tx_dest_port,
-    output        tx_overflow, 
-    output        tx_afull, 
+    output        tx_overflow,
+    output        tx_afull,
 
     output        rx_valid,
     output        rx_end_of_frame,
@@ -41,12 +41,12 @@ module kat_ten_gb_eth #(
     input         rx_overrun_ack,
     input         rx_ack,
 
-	input         CLK_I,
+    input         CLK_I,
     input         RST_I,
     input  [31:0] DAT_I,
     output [31:0] DAT_O,
     output        ACK_O,
-    input  [13:0] ADR_I,
+    input  [15:0] ADR_I,
     input         CYC_I,
     input   [3:0] SEL_I,
     input         STB_I,
@@ -68,16 +68,15 @@ module kat_ten_gb_eth #(
     output  [3:0] mgt_txpreemphasis,
     output  [4:0] mgt_txpostemphasis,
     output  [3:0] mgt_txdiffctrl,
-    
+
     output  [31:0]  src_ip_address,
     output  [47:0]  src_mac_address,
     output          src_enable,
     output  [15:0]  src_port,
     output   [7:0]  src_gateway,
-        
+
     output  [31:0]  src_local_mc_recv_ip,
     output  [31:0]  src_local_mc_recv_ip_mask
-
   );
 
   /**************************************** MAC Controller ***************************************/
@@ -130,7 +129,7 @@ module kat_ten_gb_eth #(
 
   assign mac_clk = xaui_clk;
   assign mac_rst = xaui_reset;
-  
+
 
   /**************************************** CPU Controller ***************************************/
   wire cpu_clk = CLK_I;
@@ -144,28 +143,29 @@ module kat_ten_gb_eth #(
   wire [31:0] local_ip;
   wire [15:0] local_port;
   wire [31:0] local_mc_recv_ip;
-  wire [31:0] local_mc_recv_ip_mask;  
+  wire [31:0] local_mc_recv_ip_mask;
   wire  [7:0] local_gateway;
+  wire [31:0] local_netmask;
 
   // CPU Arp Cache signals;
-  wire  [7:0] arp_cache_addr;
+  wire [10:0] arp_cache_addr;
   wire [47:0] arp_cache_rd_data;
   wire [47:0] arp_cache_wr_data;
   wire        arp_cache_wr_en;
 
   // CPU TX signals
-  wire  [7:0] cpu_tx_buffer_addr;
+  wire [10:0] cpu_tx_buffer_addr;
   wire [63:0] cpu_tx_buffer_rd_data;
   wire [63:0] cpu_tx_buffer_wr_data;
   wire        cpu_tx_buffer_wr_en;
-  wire  [7:0] cpu_tx_size;
+  wire [10:0] cpu_tx_size;
   wire        cpu_tx_ready;
   wire        cpu_tx_done;
 
   // CPU RX signals
-  wire  [7:0] cpu_rx_buffer_addr;
+  wire [10:0] cpu_rx_buffer_addr;
   wire [63:0] cpu_rx_buffer_rd_data;
-  wire  [7:0] cpu_rx_size;
+  wire [10:0] cpu_rx_size;
   wire        cpu_rx_ack;
 
   assign src_ip_address = local_ip;
@@ -262,7 +262,7 @@ module kat_ten_gb_eth #(
     .local_gateway       (local_gateway),
     .local_netmask       (local_netmask),
     // CPU Arp Cache signals;
-    .arp_cache_addr      (arp_cache_addr),
+    .arp_cache_addr      (arp_cache_addr[7:0]),
     .arp_cache_rd_data   (arp_cache_rd_data),
     .arp_cache_wr_data   (arp_cache_wr_data),
     .arp_cache_wr_en     (arp_cache_wr_en),
@@ -274,16 +274,16 @@ module kat_ten_gb_eth #(
     .app_tx_data         (tx_data),
     .app_tx_dest_ip      (tx_dest_ip),
     .app_tx_dest_port    (tx_dest_port),
-    .app_tx_overflow     (tx_overflow), 
-    .app_tx_afull        (tx_afull), 
+    .app_tx_overflow     (tx_overflow),
+    .app_tx_afull        (tx_afull),
     // CPU Interface
     .cpu_clk               (cpu_clk),
     .cpu_rst               (cpu_rst),
-    .cpu_tx_buffer_addr    (cpu_tx_buffer_addr),
+    .cpu_tx_buffer_addr    (cpu_tx_buffer_addr[7:0]),
     .cpu_tx_buffer_rd_data (cpu_tx_buffer_rd_data),
     .cpu_tx_buffer_wr_data (cpu_tx_buffer_wr_data),
     .cpu_tx_buffer_wr_en   (cpu_tx_buffer_wr_en),
-    .cpu_tx_size           (cpu_tx_size),
+    .cpu_tx_size           (cpu_tx_size[7:0]),
     .cpu_tx_ready          (cpu_tx_ready),
     .cpu_tx_done           (cpu_tx_done),
     // Mac
@@ -300,7 +300,7 @@ module kat_ten_gb_eth #(
   tge_rx #(
     .CPU_ENABLE          (CPU_RX_ENABLE),
     .USE_DISTRIBUTED_RAM (RX_DIST_RAM),
-	.PROMISC_MODE (PROMISC_MODE)
+    .PROMISC_MODE (PROMISC_MODE)
 
   ) tge_rx_inst (
     // Local Parameters
@@ -342,7 +342,7 @@ module kat_ten_gb_eth #(
   /*********************** Software Reset Logic **************************/
 
   reg [1:0] swr_state;
-  
+
   wire mac_reset_ack;
   wire mac_reset;
 
@@ -453,9 +453,9 @@ module kat_ten_gb_eth #(
     end
   end
 
-  reg led_up_reg; 
-  reg led_rx_reg; 
-  reg led_tx_reg; 
+  reg led_up_reg;
+  reg led_rx_reg;
+  reg led_tx_reg;
 
   always @(posedge clk) begin
     led_up_reg <= !down_stretch[LED_WIDTH-1];

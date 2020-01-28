@@ -1,4 +1,4 @@
-// (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
+// (c) Copyright 1995-2019 Xilinx, Inc. All rights reserved.
 // 
 // This file contains confidential and proprietary information
 // of Xilinx, Inc. and is protected under U.S. and
@@ -46,7 +46,7 @@
 // 
 // DO NOT MODIFY THIS FILE.
 
-// IP VLNV: xilinx.com:ip:blk_mem_gen:8.3
+// IP VLNV: xilinx.com:ip:blk_mem_gen:8.4
 // IP Revision: 3
 
 // The following must be inserted into your Verilog file for this
@@ -57,12 +57,12 @@
 cpu_buffer your_instance_name (
   .clka(clka),    // input wire clka
   .wea(wea),      // input wire [0 : 0] wea
-  .addra(addra),  // input wire [8 : 0] addra
+  .addra(addra),  // input wire [10 : 0] addra
   .dina(dina),    // input wire [63 : 0] dina
   .douta(douta),  // output wire [63 : 0] douta
   .clkb(clkb),    // input wire clkb
   .web(web),      // input wire [0 : 0] web
-  .addrb(addrb),  // input wire [8 : 0] addrb
+  .addrb(addrb),  // input wire [10 : 0] addrb
   .dinb(dinb),    // input wire [63 : 0] dinb
   .doutb(doutb)  // output wire [63 : 0] doutb
 );

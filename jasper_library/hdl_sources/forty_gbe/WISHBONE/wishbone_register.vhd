@@ -1,23 +1,23 @@
 ----------------------------------------------------------------------------------
 -- Company: Peralex Electronics
 -- Engineer: Gavin Teague
--- 
+--
 -- Create Date: 05.09.2014 10:19:29
--- Design Name: 
+-- Design Name:
 -- Module Name: wishbone_register - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
+-- Project Name:
+-- Target Devices:
+-- Tool Versions:
+-- Description:
+--
 -- Wishbone Classic slave, 32 x 32 register interface
 --
--- Dependencies: 
--- 
+-- Dependencies:
+--
 -- Revision:
 -- Revision 0.01 - File Created
 -- Additional Comments:
--- 
+--
 ----------------------------------------------------------------------------------
 
 library ieee;
@@ -29,22 +29,22 @@ library work;
 use work.parameter.all;
 
 entity wishbone_register is
-	port (
-		-- WISHBONE CLASSIC SIGNALS
-		CLK_I : in std_logic;
-		RST_I : in std_logic;
-		DAT_I : in std_logic_vector(31 downto 0);
-		DAT_O : out std_logic_vector(31 downto 0);
-		ACK_O : out std_logic;
-		ADR_I : in std_logic_vector((C_NUM_REGISTER_ADDRESS_BITS + 1) downto 0);
-		CYC_I : in std_logic;
-		SEL_I : in std_logic_vector(3 downto 0);
-		STB_I : in std_logic;
-		WE_I  : in std_logic;
-		
-		-- REGISTER INTERFACE
-		user_read_regs    : in T_REGISTER_BLOCK;
-		user_write_regs   : out T_REGISTER_BLOCK);
+    port (
+        -- WISHBONE CLASSIC SIGNALS
+        CLK_I : in std_logic;
+        RST_I : in std_logic;
+        DAT_I : in std_logic_vector(31 downto 0);
+        DAT_O : out std_logic_vector(31 downto 0);
+        ACK_O : out std_logic;
+        ADR_I : in std_logic_vector((C_NUM_REGISTER_ADDRESS_BITS + 1) downto 0);
+        CYC_I : in std_logic;
+        SEL_I : in std_logic_vector(3 downto 0);
+        STB_I : in std_logic;
+        WE_I  : in std_logic;
+
+        -- REGISTER INTERFACE
+        user_read_regs    : in T_REGISTER_BLOCK;
+        user_write_regs   : out T_REGISTER_BLOCK);
 end wishbone_register;
 
 architecture arch_wishbone_register of wishbone_register is
@@ -56,7 +56,7 @@ architecture arch_wishbone_register of wishbone_register is
 begin
 
     addra <= ADR_I((C_NUM_REGISTER_ADDRESS_BITS + 1) downto 2);
-   
+
     gen_wea : process(RST_I, CLK_I)
     begin
         if (RST_I = '1')then
@@ -88,9 +88,9 @@ begin
         elsif (rising_edge(CLK_I))then
             if ((STB_I_z = '1')and(STB_I_z2 = '0'))then
                 ACK_O <= '1';
-            else    
+            else
                 ACK_O <= '0';
-            end if;    
+            end if;
         end if;
     end process;
 
@@ -98,7 +98,7 @@ begin
     gen_user_write_regs : process(RST_I, CLK_I)
     begin
         if (RST_I = '1')then
-            for a in 0 to C_NUM_REGISTERS - 1 loop    
+            for a in 0 to C_NUM_REGISTERS - 1 loop
                 user_write_regs(a) <= (others => '0');
             end loop;
         elsif (rising_edge(CLK_I))then
@@ -125,8 +125,8 @@ begin
         if (RST_I = '1')then
             DAT_O <= (others => '0');
         elsif (rising_edge(CLK_I))then
-            DAT_O <= user_read_regs(to_integer(unsigned(addra)));   
+            DAT_O <= user_read_regs(to_integer(unsigned(addra)));
         end if;
     end process;
- 
+
 end arch_wishbone_register;

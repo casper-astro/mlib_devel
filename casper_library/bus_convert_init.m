@@ -18,7 +18,7 @@ function bus_convert_init(blk, varargin)
     'overflow', 1, ...
     'quantization', 1, ...
     'misc', 'on', ...
-    'latency', 2, ...
+    'csp_latency', 2, ...
     'of', 'on', ...
     'reg_retiming', 'on', ...
   };  
@@ -46,7 +46,7 @@ function bus_convert_init(blk, varargin)
   type_out        = get_var('type_out', 'defaults', defaults, varargin{:});
   overflow        = get_var('overflow', 'defaults', defaults, varargin{:});
   quantization    = get_var('quantization', 'defaults', defaults, varargin{:});
-  latency         = get_var('latency', 'defaults', defaults, varargin{:});
+  latency         = get_var('csp_latency', 'defaults', defaults, varargin{:});
   misc            = get_var('misc', 'defaults', defaults, varargin{:});
   of              = get_var('of', 'defaults', defaults, varargin{:});
 
@@ -222,25 +222,46 @@ function bus_convert_init(blk, varargin)
     position = [xpos-convert_w/2 ypos_tmp xpos+convert_w/2 ypos_tmp+convert_d-20];
 
     %casper convert blocks don't support increasing binary points
-    if strcmp(of, 'on'),
+    if strcmp(of, 'on')
+      try
+        get_param([blk,'/',conv_name],'csp_latency');
+      catch ME
+        try
+            update_casper_block([blk,'/',conv_name])
+            disp([ME.identifier,' ','Old 2016b bus_replicate block, upgrading to new toolflow'])
+        catch ME
+        end
+      end
+
       reuse_block(blk, conv_name, 'casper_library_misc/convert_of', ...
         'bit_width_i', num2str(bits_in), 'binary_point_i', num2str(pt_in), ... 
         'bit_width_o', num2str(bits_out), 'binary_point_o', num2str(pt_out), ... 
-        'latency', num2str(latency), 'overflow', oflow, 'quantization', quant, ...
+        'csp_latency', num2str(latency), 'overflow', oflow, 'quantization', quant, ...
         'Position', position);
-    else,
+    else
       %CASPER converts can't increase binary points so use generic Xilinx
-      if pt_out > pt_in,
+      if pt_out > pt_in
         reuse_block(blk, conv_name, 'xbsIndex_r4/Convert', ...
           'arith_type', 'Signed  (2''s comp)', ...
           'n_bits', num2str(bits_out), 'bin_pt', num2str(pt_out), 'latency', num2str(latency), ...
           'overflow', oflow, 'quantization', quant, 'pipeline', 'on', ...
           'Position', position);
-      else,
+      else
+          
+        try
+            get_param([blk,'/',conv_name],'csp_latency');
+        catch ME
+            try
+                update_casper_block([blk,'/',conv_name])
+                disp([ME.identifier,' ','Old 2016b convert block, upgrading to new toolflow'])
+            catch ME
+            end
+        end
+
         reuse_block(blk, conv_name, 'casper_library_misc/convert', ...
           'bin_pt_in', num2str(pt_in), ...
           'n_bits_out', num2str(bits_out), 'bin_pt_out', num2str(pt_out), ...
-          'overflow', oflow, 'quantization', quant, 'latency', num2str(latency), ...  
+          'overflow', oflow, 'quantization', quant, 'csp_latency', num2str(latency), ...  
           'Position', position);
       end
     end
@@ -257,7 +278,7 @@ function bus_convert_init(blk, varargin)
 
   if strcmp(misc, 'on'),
     reuse_block(blk, 'dmisc', 'xbsIndex_r4/Delay', ...
-      'latency', 'latency', 'reg_retiming', 'on', ...
+      'latency', 'csp_latency', 'reg_retiming', 'on', ...
       'Position', [xpos-del_w/2 ypos_tmp-del_d/2 xpos+del_w/2 ypos_tmp+del_d/2]);
     add_line(blk, 'misci/1', 'dmisc/1');
     ypos_tmp = ypos_tmp + convert_d;

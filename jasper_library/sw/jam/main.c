@@ -56,11 +56,8 @@
 #include "casper_eth.h"
 #include "casper_devcsl.h"
 #include "icap.h"
-#include "flash.h"
 
 #define HEARTBEAT_MS 10000
-#define PRINT_SPI_DETAILS
-
 
 int main()
 {
@@ -69,14 +66,15 @@ int main()
     int j;
     u32 len;
     u8 buf[128];
-   // u32 addr;
 #endif
 #ifdef DEBUG_ETH_0_CORE
     int rx_size;
 #endif
-   // int fpga_temp;
-   // uint32_t next_ms = HEARTBEAT_MS;
-    //uint32_t curr_ms;
+#ifdef USE_XADC
+    int fpga_temp;
+    uint32_t next_ms = HEARTBEAT_MS;
+    uint32_t curr_ms;
+#endif
 #ifdef JAM_TEST_TMRCTR
     u64 time0, time1;
     u32 tick0, tick1;
@@ -84,7 +82,24 @@ int main()
 
     init_platform();
 
-    xil_printf("\n# JAM starting\n\n");
+    xil_printf("\n# JAM starting\n");
+    xil_printf("Built %s %s@%s\n", BUILD_DATE, BUILD_USER, BUILD_HOST);
+    xil_printf("%s\n\n", GIT_VERSION);
+#ifdef USE_XADC
+    xil_printf("\n# Compiled with XADC support\n");
+#else
+    xil_printf("\n# Compiled without XADC support\n");
+#endif
+#ifdef USE_SPI
+    xil_printf("\n# Compiled with SPI flash support\n");
+#else
+    xil_printf("\n# Compiled without SPI flash support\n");
+#endif
+#ifdef USE_ICAP
+    xil_printf("\n# Compiled with ICAPE support\n");
+#else
+    xil_printf("\n# Compiled without ICAPE support\n");
+#endif
 
     casper_lwip_init();
 
@@ -182,7 +197,6 @@ int main()
       print("\n");
     }
     print("\n");
-
 #endif //  PRINT_SPI_DETAILS
 
 #if 0
@@ -305,7 +319,6 @@ int main()
     } // CPU core exists
 #endif
 
-
     while(1) {
       casper_lwip_handler();
 #ifdef DEBUG_ETH_0_CORE
@@ -329,7 +342,8 @@ int main()
         }
       }
 #endif
-/*
+
+#ifdef USE_XADC
       curr_ms = ms_tmrctr();
       if(next_ms <= curr_ms) {
         next_ms = curr_ms + HEARTBEAT_MS;
@@ -337,7 +351,8 @@ int main()
         fpga_temp = (int)(10*get_fpga_temp());
         xil_printf("FPGA at %d.%d C [ms %d]\n",
             fpga_temp / 10, fpga_temp % 10, ms_tmrctr());
-      }*/
+      }
+#endif
     }
 
     // Should "never" get here

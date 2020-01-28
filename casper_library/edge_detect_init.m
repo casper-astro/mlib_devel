@@ -1,4 +1,4 @@
-function edge_detect_init(blk,varargin)
+function edge_detect_init(blk, varargin)
 % Configure an edge_detect block
 %
 % edge = Edge to detect
@@ -10,7 +10,7 @@ function edge_detect_init(blk,varargin)
 %                2 = 'Active Low'
 
 clog(sprintf('entering edge_detect_init.m for %s', blk), {'trace', 'edge_detect_init_debug'});
-check_mask_type(blk,'edge_detect');
+check_mask_type(blk, 'edge_detect');
 
 defaults = {'edge', 'Rising',...
             'polarity','Active High',...
@@ -23,8 +23,8 @@ if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 clog('edge_detect_init.m post same_state', {'edge_detect_init_debug'});
 
 munge_block(blk, varargin{:});
-edge=get_var('edge', 'defaults', defaults, varargin{:});
-polarity=get_var('polarity', 'defaults', defaults, varargin{:});
+edge = get_var('edge', 'defaults', defaults, varargin{:});
+polarity = get_var('polarity', 'defaults', defaults, varargin{:});
 
 switch polarity
     case 'Active High'
