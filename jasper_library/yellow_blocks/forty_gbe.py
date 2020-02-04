@@ -81,10 +81,10 @@ class forty_gbe(YellowBlock):
     def initialize(self):
 
         if self.platform.fpga.startswith('xcku'):
-            self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PMA/ip/XLAUI/*ultrascale.xci")
+            self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PMA/ip/XLAUI/xlaui_us.xci")
             self.add_source('forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PMA/hdl/ultrascale/*')
         elif self.platform.fpga.startswith('xc7'):
-            self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PMA/ip/XLAUI/*.xci")
+            self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PMA/ip/XLAUI/xlaui.xci")
             self.add_source('forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PMA/hdl/7series/*')
             
 
