@@ -47,6 +47,13 @@ class PortConstraint(object):
         else:
             self.is_vector = True
 
+        # In Python3  range(x,y) returns a range instance, not a list.
+        # Deal with that here so the user doesn't have to
+        if isinstance(port_index, range): port_index = list(port_index)
+        if isinstance(iogroup_index, range): iogroup_index = list(iogroup_index)
+        if isinstance(loc, range): loc = list(loc)
+        if isinstance(iostd, range): iostd = list(iostd)
+
         if type(port_index) != list: port_index = [port_index]
         if type(iogroup_index) != list: iogroup_index = [iogroup_index]
         if type(loc) != list: loc = [loc]
