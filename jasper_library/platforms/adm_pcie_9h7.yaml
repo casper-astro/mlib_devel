@@ -8,6 +8,8 @@ mmbus_base_address: 0x10000000
 mmbus_address_alignment: 4
 sources: []
 constraints: []
+pcie:
+  loc: PCIE4C_X1Y1
 provides:
   - qsfp0
   - qsfp1
@@ -42,6 +44,11 @@ pins:
       - BE54
       - BE53
   # PCI Express lanes
+  pcie_rst_n:
+    loc: BF41
+    iostd: LVCMOS18
+  pcie_refclk_p:
+    loc: AN15
   pcie_gty_rx_p:
     loc:
       - AL2
