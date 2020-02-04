@@ -85,6 +85,96 @@ pins:
     #iostd: DIFF_HSTL_I_18
     iostd: LVDS_25
     loc: AU25
+  forty_gbe_refclk_p:
+    #iostd: DIFF_HSTL_I_18
+    loc:
+      - M8
+      - K8
+      - T8
+      - P8
+  forty_gbe_refclk_n:
+    #iostd: DIFF_HSTL_I_18
+    loc:
+      - M7
+      - K7
+      - T7
+      - P7
+  forty_gbe_tx_p:
+    #iostd: DIFF_HSTL_I_18
+    loc:
+      - E6
+      - D8
+      - C6
+      - B8
+      - F12
+      - D12
+      - C14
+      - A10
+      - T4
+      - P4
+      - M4
+      - K4
+      - J6
+      - H8
+      - G6
+      - F8
+  forty_gbe_tx_n:
+    #iostd: DIFF_HSTL_I_18
+    loc:
+      - E5
+      - D7
+      - C5
+      - B7
+      - F11
+      - D11
+      - C13
+      - A9
+      - T3
+      - P3
+      - M3
+      - K3
+      - J5
+      - H7
+      - G5
+      - F7
+  forty_gbe_rx_p:
+    #iostd: DIFF_HSTL_I_18
+    loc:
+      - E2
+      - D4
+      - C2
+      - B4
+      - E10
+      - C10
+      - B12
+      - A6
+      - U2
+      - R2
+      - N2
+      - L2
+      - J2
+      - H4
+      - G2
+      - F4
+  forty_gbe_rx_n:
+    #iostd: DIFF_HSTL_I_18
+    loc:
+      - E1
+      - D3
+      - C1
+      - B3
+      - E9
+      - C9
+      - B11
+      - A5
+      - U1
+      - R1
+      - N1
+      - L1
+      - J1
+      - H3
+      - G1
+      - F3
   gth_clk_p:
     #iostd: DIFF_HSTL_I_18
     loc:
