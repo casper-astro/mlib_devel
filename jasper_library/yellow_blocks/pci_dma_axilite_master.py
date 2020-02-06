@@ -92,9 +92,8 @@ class pci_dma_axilite_master(YellowBlock):
         clkconst = ClockConstraint('pcie_refclk_p', freq=100.0)
         cons.append(clkconst)
 
-        # Make asynchronous to the user clock (whatever is driving the clk_counter reg).
-        # TODO: make this better.
-        cons.append(RawConstraint('set_clock_groups -name asyncclocks_pcie_usr_clk -asynchronous -group [get_clocks -of_objects [get_cells -hierarchical -filter {name=~*clk_counter*}]] -group [get_clocks -include_generated_clocks %s]' % clkconst.name))
+        ## Make AXI clock asynchronous to the user clock
+        cons.append(RawConstraint('set_clock_groups -name asyncclocks_pcie_usr_clk -asynchronous -group [get_clocks -include_generated_clocks -of_objects [get_nets user_clk]] -group [get_clocks -include_generated_clocks axil_clk]'))
 
         return cons
 
