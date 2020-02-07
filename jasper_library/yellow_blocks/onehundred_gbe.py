@@ -6,15 +6,15 @@ from .yellow_block_typecodes import *
 class onehundred_gbe(YellowBlock):
     @staticmethod
     def factory(blk, plat, hdl_root=None):
-        if plat.name in ['vcu118', 'vcu128']:
-            return onehundredgbe_vcu118(blk, plat, hdl_root)
+        if plat.name in ['vcu118', 'vcu128'] or plat.family in ["ultrascaleplus"]:
+            return onehundredgbe_usplus(blk, plat, hdl_root)
         else:
             pass
     """
     Future common methods here.
     """
 
-class onehundredgbe_vcu118(onehundred_gbe):
+class onehundredgbe_usplus(onehundred_gbe):
     def initialize(self):
         self.typecode = TYPECODE_ETHCORE
         self.add_source('onehundred_gbe/kutleng/*.xci')
