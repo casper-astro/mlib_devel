@@ -1001,7 +1001,10 @@ begin
     (app_badframe = '1')or
     ((app_dvld = '1')and((packet_fifo_almost_full = '1')or(ctrl_fifo_almost_full = '1')or(txctrl_fifo_almost_full = '1'))))and(app_rst = '0')) else '0';
     rx_bad <= app_badframe when (app_rst = '0') else '0';
+    -- This really shouldnt be called rx_over, it is actually almost full
     rx_over <= (packet_fifo_almost_full or ctrl_fifo_almost_full or txctrl_fifo_almost_full) when (app_rst = '0') else '0';
+    -- this wont work becaus the fifo will be full and this signal wont get through the fifo.
+    -- rx_over <= packet_fifo_full
 
     packet_fifo_wr_data(255 downto 0) <= payload3_z1 & payload2_z1 & payload1_z1 & payload0_z1;
     packet_fifo_wr_data(256) <= payload0_val_z1;
