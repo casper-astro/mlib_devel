@@ -6,7 +6,7 @@ use IEEE.std_logic_unsigned.all;
 use IEEE.numeric_std.all;
 
 -- entity declaraction
-entity  adc16_caltech_interface  is
+entity  ads5296x4_interface  is
     generic (
                G_NUM_CLOCKS : integer := 4;
                G_NUM_UNITS  : integer := 4 -- Typically 4 or 8
@@ -17,7 +17,7 @@ entity  adc16_caltech_interface  is
                fabric_clk_90  :  out std_logic;
                fabric_clk_180 :  out std_logic;
                fabric_clk_270 :  out std_logic;
-               locked         :  out std_logic_vector((G_NUM_UNITS >> 2) - 1 downto 0);
+               locked         :  out std_logic_vector((G_NUM_UNITS / 4) - 1 downto 0);
                reset          :  in  std_logic;
                sof            :  out std_logic;
 
@@ -118,9 +118,9 @@ entity  adc16_caltech_interface  is
                num_units        :  out std_logic_vector(3 downto 0)
     );
 
-end  adc16_caltech_interface;
+end  ads5296x4_interface;
 
-architecture adc16_caltech_interface_arc of adc16_caltech_interface is
+architecture ads5296x4_interface_arc of ads5296x4_interface is
 
      -- Components
 
@@ -204,7 +204,7 @@ architecture adc16_caltech_interface_arc of adc16_caltech_interface is
 
      -- Clocking (keep and s attributes retain unused clocks)
      signal line_clk_in       : std_logic_vector(G_NUM_CLOCKS-1 downto 0);
-     signal line_clk_in_per_quad  : std_logic_vector((G_NUM_UNITS >> 2)-1 downto 0);
+     signal line_clk_in_per_quad  : std_logic_vector((G_NUM_UNITS / 4)-1 downto 0);
      attribute keep of line_clk_in : signal is "true";
      attribute s    of line_clk_in : signal is "yes";
 
@@ -219,6 +219,7 @@ architecture adc16_caltech_interface_arc of adc16_caltech_interface is
      signal fabric_clk_0 : std_logic;
      signal absel        : std_logic;
      signal absel_enable : std_logic;
+     signal locked_0     : std_logic;
 
      -- MMCM BUFGs
      signal bufg_i : std_logic_vector(6 downto 0);
@@ -252,15 +253,15 @@ architecture adc16_caltech_interface_arc of adc16_caltech_interface is
      begin
 
      -- Select line clocks for each quad ADC board
-     line_clk_gen: for i in 0 to ((G_NUM_UNITS >> 2) - 1) generate
+     line_clk_gen: for i in 0 to ((G_NUM_UNITS / 4) - 1) generate
          line_clk_in_per_quad(i) <= line_clk_in(4*i);
      end generate;
 
      adc_mmcm_0 : ADC_MMCM
      PORT MAP (
        reset        => reset,
-       locked       => locked(0),
-       clkin        => line_clk_in(
+       locked       => locked_0,
+       clkin        => line_clk_in_per_quad(0),
        clkout0p     => bufg_i(0),
        clkout0n     => open,
        clkout1p     => bufg_i(1),
@@ -271,6 +272,7 @@ architecture adc16_caltech_interface_arc of adc16_caltech_interface is
        clkout2_270  => bufg_i(5),
        clkout3      => bufg_i(6)
      );
+     locked(0) <= locked_0;
 
      -- MMCM BUFGs
      bufg_gen: for i in 0 to 6 generate
@@ -293,27 +295,15 @@ architecture adc16_caltech_interface_arc of adc16_caltech_interface is
          IB  => clk_line_n(i),
          O   => line_clk_in(i)
        );
-       zdok_rev1_frame_clk: if G_ZDOK_REV = 1 generate
-         -- ADC frame clocks
-         frame_clk_inst : IBUFDS
-         generic map (
-           DIFF_TERM  => TRUE,
-           IOSTANDARD => "LVDS_25")
-         port map (
-           I   => clk_frame_p(i),
-           IB  => clk_frame_n(i),
-           O   => frame_clk_in(i)
-         );
-       end generate;
      end generate;
 
      -- Generate MMCMs for all but the first ADC. These outputs don't get used
-     adc_mmcm_gen: for i in 1 to ((G_NUM_UNITS >> 2) - 1) generate
-       adc_mmcm : ADC_MMCM
+     adc_mmcm_gen: for i in 1 to ((G_NUM_UNITS / 4) - 1) generate
+       adc_mmcm_others : ADC_MMCM
        PORT MAP (
          reset        => reset,
-         locked       => locked(4*i),
-         clkin        => line_clk_in_per_quad(4*i),
+         locked       => locked(i),
+         clkin        => line_clk_in_per_quad(i),
          clkout0p     => open,
          clkout0n     => open,
          clkout1p     => open,
@@ -323,7 +313,7 @@ architecture adc16_caltech_interface_arc of adc16_caltech_interface is
          clkout2_180  => open,
          clkout2_270  => open
        );
-     end generate
+     end generate;
 
      -- Internal routing
      line_clk       <= bufg_o(0);
@@ -335,8 +325,6 @@ architecture adc16_caltech_interface_arc of adc16_caltech_interface is
      fabric_clk_270 <= bufg_o(5);
      line_clk_10bit <= bufg_o(6);
 
-     roach2_rev <= std_logic_vector(to_unsigned(G_ROACH2_REV, roach2_rev'length));
-     zdok_rev   <= std_logic_vector(to_unsigned(G_ZDOK_REV,   zdok_rev'length));
      num_units  <= std_logic_vector(to_unsigned(G_NUM_UNITS,  num_units'length));
 
      -- Parallel data outputs
@@ -573,4 +561,4 @@ architecture adc16_caltech_interface_arc of adc16_caltech_interface is
     snap_we <= not s_snap_counter(10);
     snap_addr <= s_snap_counter(9 downto 0);
 
-end adc16_caltech_interface_arc;
+end ads5296x4_interface_arc;
