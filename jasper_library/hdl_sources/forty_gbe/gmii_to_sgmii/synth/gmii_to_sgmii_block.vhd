@@ -98,8 +98,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-library gig_ethernet_pcs_pma_v16_1_4;
-use gig_ethernet_pcs_pma_v16_1_4.all;
+library gig_ethernet_pcs_pma_v16_1_6;
+use gig_ethernet_pcs_pma_v16_1_6.all;
 --------------------------------------------------------------------------------
 -- The entity declaration for the Core Block wrapper.
 --------------------------------------------------------------------------------
@@ -330,7 +330,7 @@ architecture block_level of gmii_to_sgmii_block is
    -----------------------------------------------------------------------------
    -- Component Declaration for the 1000BASE-X PCS/PMA sublayer core.
    -----------------------------------------------------------------------------
-   component gig_ethernet_pcs_pma_v16_1_4
+   component gig_ethernet_pcs_pma_v16_1_6
       generic (
          C_ELABORATION_TRANSIENT_DIR : string := "";
          C_COMPONENT_NAME            : string := "";
@@ -551,7 +551,7 @@ sgmii_clk_f <= sgmii_clk_f_i;
   -- Instantiate the core
   ------------------------------------------------------------------------------
 
-  gmii_to_sgmii_core : gig_ethernet_pcs_pma_v16_1_4
+  gmii_to_sgmii_core : gig_ethernet_pcs_pma_v16_1_6
     generic map (
       C_ELABORATION_TRANSIENT_DIR => "BlankString",
       C_COMPONENT_NAME            => "gmii_to_sgmii",

@@ -42,6 +42,7 @@ entity forty_gbe is
         FABRIC_GATEWAY    : std_logic_vector( 7 downto 0);
         FABRIC_ENABLE     : std_logic;
         TTL               : std_logic_vector( 7 downto 0);
+        MEZZ_PORT         : std_logic_vector( 1 downto 0);
         PROMISC_MODE      : integer;
         RX_CRC_CHK_ENABLE : integer := 0);
     port(
@@ -623,6 +624,7 @@ architecture arch_forty_gbe of forty_gbe is
         FABRIC_GATEWAY    : std_logic_vector(7 downto 0);
         FABRIC_ENABLE     : std_logic;
         TTL               : std_logic_vector(7 downto 0);
+        MEZZ_PORT         : std_logic_vector( 1 downto 0);
         PROMISC_MODE      : integer;
         RX_CRC_CHK_ENABLE : integer);
     port (
@@ -1472,7 +1474,7 @@ begin
     port map (
         I => bsp_clk_mmcm, -- Clock input
         O => bsp_clk       -- Clock output
-    );
+    );  
 
     USER_CLK_MMCM_inst : MMCME2_BASE
     generic map (
@@ -1490,11 +1492,11 @@ begin
         CLKOUT0   => user_clk_mmcm,
         CLKFBOUT  => user_clk_mmcm_fb,  -- Feedback clock output
         LOCKED    => user_mmcm_locked,
-        CLKIN1    => sys_clk_mmcm,      -- Main clock input
+        CLKIN1    => refclk_0,--sys_clk_mmcm,      -- Main clock input
         PWRDWN    => '0',
         RST       => not sys_mmcm_locked,   --fpga_reset,
         CLKFBIN   => user_clk_mmcm_fb   -- Feedback clock input
-    );
+    );  
 
     user_clk_BUFG_inst : BUFG
     port map (
@@ -1923,6 +1925,7 @@ begin
 
     USB_UART_RXD <= microblaze_uart_txd;
     -- USB SERIAL CURRENTLY NOT USED FOR RECEIVING
+    microblaze_uart_rxd <= USB_UART_TXD;
     --USB_UART_TXD
 
     --brd_user_read_regs(C_RD_AUX_CLK_FREQ_ADDR) <= aux_clk_frequency;
@@ -2004,7 +2007,7 @@ begin
         
 
 
-    microblaze_uart_rxd <= DEBUG_UART_RX;
+    --microblaze_uart_rxd <= DEBUG_UART_RX;
     DEBUG_UART_TX <= microblaze_uart_txd;
 
 ----------------------------------------------------------------------------
@@ -2443,6 +2446,7 @@ begin
         FABRIC_GATEWAY    => FABRIC_GATEWAY,
         FABRIC_ENABLE     => FABRIC_ENABLE,
         TTL               => TTL,
+        MEZZ_PORT         => MEZZ_PORT,
         PROMISC_MODE      => PROMISC_MODE,
         RX_CRC_CHK_ENABLE => RX_CRC_CHK_ENABLE)
     port map(
@@ -3407,3 +3411,4 @@ begin
     );
 
 end arch_forty_gbe;
+

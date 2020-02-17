@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2018 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2019 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -125,11 +125,11 @@ ARCHITECTURE cont_microblaze_dlmb_v10_0_arch OF cont_microblaze_dlmb_v10_0 IS
     );
   END COMPONENT lmb_v10;
   ATTRIBUTE X_CORE_INFO : STRING;
-  ATTRIBUTE X_CORE_INFO OF cont_microblaze_dlmb_v10_0_arch: ARCHITECTURE IS "lmb_v10,Vivado 2018.2";
+  ATTRIBUTE X_CORE_INFO OF cont_microblaze_dlmb_v10_0_arch: ARCHITECTURE IS "lmb_v10,Vivado 2019.1.1";
   ATTRIBUTE CHECK_LICENSE_TYPE : STRING;
   ATTRIBUTE CHECK_LICENSE_TYPE OF cont_microblaze_dlmb_v10_0_arch : ARCHITECTURE IS "cont_microblaze_dlmb_v10_0,lmb_v10,{}";
   ATTRIBUTE CORE_GENERATION_INFO : STRING;
-  ATTRIBUTE CORE_GENERATION_INFO OF cont_microblaze_dlmb_v10_0_arch: ARCHITECTURE IS "cont_microblaze_dlmb_v10_0,lmb_v10,{x_ipProduct=Vivado 2018.2,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=lmb_v10,x_ipVersion=3.0,x_ipCoreRevision=9,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,C_LMB_NUM_SLAVES=1,C_LMB_DWIDTH=32,C_LMB_AWIDTH=32,C_EXT_RESET_HIGH=1}";
+  ATTRIBUTE CORE_GENERATION_INFO OF cont_microblaze_dlmb_v10_0_arch: ARCHITECTURE IS "cont_microblaze_dlmb_v10_0,lmb_v10,{x_ipProduct=Vivado 2019.1.1,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=lmb_v10,x_ipVersion=3.0,x_ipCoreRevision=9,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,C_LMB_NUM_SLAVES=1,C_LMB_DWIDTH=32,C_LMB_AWIDTH=32,C_EXT_RESET_HIGH=1}";
   ATTRIBUTE X_INTERFACE_INFO : STRING;
   ATTRIBUTE X_INTERFACE_PARAMETER : STRING;
   ATTRIBUTE X_INTERFACE_INFO OF LMB_BE: SIGNAL IS "xilinx.com:interface:lmb:1.0 LMB_Sl_0 BE";

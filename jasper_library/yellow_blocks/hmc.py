@@ -1,5 +1,5 @@
 import logging
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from constraints import PortConstraint, ClockConstraint, ClockGroupConstraint, MultiCycleConstraint, \
     OutputDelayConstraint, RawConstraint
 
@@ -14,8 +14,6 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         
         hmcc = top.get_instance(name=self.fullname, entity='hmc')
 
-        #import IPython
-        #IPython.embed()
         hmcc.add_port('USER_CLK', 'sys_clk', dir='in')
         hmcc.add_port('USER_RST', 'sys_rst', dir='in')
         hmcc.add_port('HMC_CLK', 'hmc_clk', dir='in')
@@ -101,6 +99,7 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         self.add_source('hmc/src/*.ngc')
         self.add_source("hmc/src/hmc_user_axi_fifo/*.xci")
         self.add_source('hmc/open_hmc')
+        self.add_source('utils/cdc_synchroniser.vhd')
         # This block takes a mezzanine site and should prevent other blocks from using it
         self.exc_requires = ['mezz%d' % self.mez]
 
@@ -124,22 +123,22 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         cons.append(PortConstraint('MEZ%s_REFCLK_2_N' % self.mez, 'MEZ%s_REFCLK_2_N' % self.mez))
         cons.append(PortConstraint('MEZ%s_REFCLK_3_P' % self.mez, 'MEZ%s_REFCLK_3_P' % self.mez))
         cons.append(PortConstraint('MEZ%s_REFCLK_3_N' % self.mez, 'MEZ%s_REFCLK_3_N' % self.mez))
-        cons.append(PortConstraint('MEZ%s_PHY11_LANE_TX_P' % self.mez, 'MEZ%s_PHY11_LANE_TX_P' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY11_LANE_TX_N' % self.mez, 'MEZ%s_PHY11_LANE_TX_N' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY12_LANE_TX_P' % self.mez, 'MEZ%s_PHY12_LANE_TX_P' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY12_LANE_TX_N' % self.mez, 'MEZ%s_PHY12_LANE_TX_N' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY21_LANE_TX_P' % self.mez, 'MEZ%s_PHY21_LANE_TX_P' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY21_LANE_TX_N' % self.mez, 'MEZ%s_PHY21_LANE_TX_N' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY22_LANE_TX_P' % self.mez, 'MEZ%s_PHY22_LANE_TX_P' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY22_LANE_TX_N' % self.mez, 'MEZ%s_PHY22_LANE_TX_N' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY11_LANE_RX_P' % self.mez, 'MEZ%s_PHY11_LANE_RX_P' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY11_LANE_RX_N' % self.mez, 'MEZ%s_PHY11_LANE_RX_N' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY12_LANE_RX_P' % self.mez, 'MEZ%s_PHY12_LANE_RX_P' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY12_LANE_RX_N' % self.mez, 'MEZ%s_PHY12_LANE_RX_N' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY21_LANE_RX_P' % self.mez, 'MEZ%s_PHY21_LANE_RX_P' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY21_LANE_RX_N' % self.mez, 'MEZ%s_PHY21_LANE_RX_N' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY22_LANE_RX_P' % self.mez, 'MEZ%s_PHY22_LANE_RX_P' % self.mez, port_index=range(4), iogroup_index=range(4)))
-        cons.append(PortConstraint('MEZ%s_PHY22_LANE_RX_N' % self.mez, 'MEZ%s_PHY22_LANE_RX_N' % self.mez, port_index=range(4), iogroup_index=range(4)))
+        cons.append(PortConstraint('MEZ%s_PHY11_LANE_TX_P' % self.mez, 'MEZ%s_PHY11_LANE_TX_P' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY11_LANE_TX_N' % self.mez, 'MEZ%s_PHY11_LANE_TX_N' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY12_LANE_TX_P' % self.mez, 'MEZ%s_PHY12_LANE_TX_P' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY12_LANE_TX_N' % self.mez, 'MEZ%s_PHY12_LANE_TX_N' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY21_LANE_TX_P' % self.mez, 'MEZ%s_PHY21_LANE_TX_P' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY21_LANE_TX_N' % self.mez, 'MEZ%s_PHY21_LANE_TX_N' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY22_LANE_TX_P' % self.mez, 'MEZ%s_PHY22_LANE_TX_P' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY22_LANE_TX_N' % self.mez, 'MEZ%s_PHY22_LANE_TX_N' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY11_LANE_RX_P' % self.mez, 'MEZ%s_PHY11_LANE_RX_P' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY11_LANE_RX_N' % self.mez, 'MEZ%s_PHY11_LANE_RX_N' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY12_LANE_RX_P' % self.mez, 'MEZ%s_PHY12_LANE_RX_P' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY12_LANE_RX_N' % self.mez, 'MEZ%s_PHY12_LANE_RX_N' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY21_LANE_RX_P' % self.mez, 'MEZ%s_PHY21_LANE_RX_P' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY21_LANE_RX_N' % self.mez, 'MEZ%s_PHY21_LANE_RX_N' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY22_LANE_RX_P' % self.mez, 'MEZ%s_PHY22_LANE_RX_P' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
+        cons.append(PortConstraint('MEZ%s_PHY22_LANE_RX_N' % self.mez, 'MEZ%s_PHY22_LANE_RX_N' % self.mez, port_index=list(range(4)), iogroup_index=list(range(4))))
 
         # GTH Clock Constraints
         #cons.append(RawConstraint('create_clock -period 6.400 -waveform {0.000 3.200} [get_ports MEZ%s_REFCLK_0_P]' % self.mez))
@@ -346,38 +345,24 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
 
 
         #Placement constraints
-        #Link 2
-        cons.append(RawConstraint('create_pblock MEZ%s_HMC_LINK2' % self.mez))
-        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_HMC_LINK2]' % self.mez + ' [get_cells -quiet [list '+self.fullname+'/flit_gen_link2_inst]]'))
-        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_HMC_LINK2]' % self.mez + ' [get_cells -quiet [list '+self.fullname+'/flit_gen_user_link2_inst]]'))
-        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_HMC_LINK2]' % self.mez + ' [get_cells -quiet [list '+self.fullname+'/hmc_ska_sa_top_link2_inst]]'))
+        #Link 2 and Link3
+        cons.append(RawConstraint('create_pblock MEZ%s_HMC' % self.mez))
+        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_HMC]' % self.mez + ' [get_cells -quiet [list '+self.fullname+'/flit_gen_link2_inst]]'))
+        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_HMC]' % self.mez + ' [get_cells -quiet [list '+self.fullname+'/flit_gen_user_link2_inst]]'))
+        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_HMC]' % self.mez + ' [get_cells -quiet [list '+self.fullname+'/hmc_ska_sa_top_link2_inst]]'))
+        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_HMC]' % self.mez + ' [get_cells -quiet [list ' + self.fullname + '/flit_gen_link3_inst]]'))
+        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_HMC]' % self.mez + ' [get_cells -quiet [list ' + self.fullname + '/flit_gen_user_link3_inst]]'))
+        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_HMC]' % self.mez + ' [get_cells -quiet [list ' + self.fullname + '/hmc_ska_sa_top_link3_inst]]'))
         #Mez 0 Selected
         if self.mez == 0:
-          cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_HMC_LINK2] -add {CLOCKREGION_X0Y6:CLOCKREGION_X0Y7}' % self.mez))
+          cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_HMC] -add {CLOCKREGION_X0Y4:CLOCKREGION_X0Y7}' % self.mez))
         #Mez 1 Selected
         elif self.mez == 1:
-          cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_HMC_LINK2] -add {CLOCKREGION_X0Y2:CLOCKREGION_X0Y3}' % self.mez))
+          cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_HMC] -add {CLOCKREGION_X0Y0:CLOCKREGION_X0Y3}' % self.mez))
         #Mez 2 Selected
         elif self.mez == 2:
-          cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_HMC_LINK2] -add {CLOCKREGION_X1Y0:CLOCKREGION_X1Y1}' % self.mez))
+          cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_HMC] -add {CLOCKREGION_X1Y0:CLOCKREGION_X1Y3}' % self.mez))
         else:
-            self.logger.error('Invalid Mezzanine site selected for LINK 2. Placement ignored for LINK2')
-
-        #Link 3
-        cons.append(RawConstraint('create_pblock MEZ%s_HMC_LINK3' % self.mez))
-        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_HMC_LINK3]' % self.mez + ' [get_cells -quiet [list '+self.fullname+'/flit_gen_link3_inst]]'))
-        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_HMC_LINK3]' % self.mez + ' [get_cells -quiet [list '+self.fullname+'/flit_gen_user_link3_inst]]'))
-        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_HMC_LINK3]' % self.mez + ' [get_cells -quiet [list '+self.fullname+'/hmc_ska_sa_top_link3_inst]]'))
-        #Mez 0 Selected
-        if self.mez == 0:
-          cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_HMC_LINK3] -add {CLOCKREGION_X0Y4:CLOCKREGION_X0Y5}' % self.mez))
-        #Mez 1 Selected
-        elif self.mez == 1:
-          cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_HMC_LINK3] -add {CLOCKREGION_X0Y0:CLOCKREGION_X0Y1}' % self.mez))
-        #Mez 2 Selected
-        elif self.mez == 2:
-          cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_HMC_LINK3] -add {CLOCKREGION_X1Y2:CLOCKREGION_X1Y3}' % self.mez))
-        else:
-            self.logger.error('Invalid Mezzanine site selected for LINK 3. Placement ignored for LINK3')
+            self.logger.error('Invalid Mezzanine site selected for HMC. Placement ignored for HMC')
 
         return cons

@@ -636,6 +636,8 @@ function bus_mult_init(blk, varargin)
             quant = 'Truncate';
           case 1,
             quant = 'Round  (unbiased: +/- Inf)';
+          case 2,
+            quant = 'Round  (unbiased: Even Values)';
         end  
         switch overflow(index),
           case 0,

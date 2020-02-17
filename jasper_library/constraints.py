@@ -2,97 +2,99 @@ import logging
 logger = logging.getLogger('jasper.toolflow.constraints')
 
 class PortConstraint(object):
-     """
-     A class to facilitate constructing abstracted port constraints.
-     Eg, adc_data[7:0] <=> zdok0[7:0]
-     which can later be translated into physical constraints by providing
-     information about a target platform.
+    """
+    A class to facilitate constructing abstracted port constraints.
+    
+    Eg, adc_data[7:0] <=> zdok0[7:0]
+    which can later be translated into physical constraints by providing
+    information about a target platform.
 
-     This assigns the port LOC and voltage constraints to user_const.xdc, for example:
-     "PortConstraint('A', 'A')" is translated to "set_property PACKAGE_PIN BC27 [get_ports A]" and
-     "set_property IOSTANDARD LVCMOS18 [A] in the xdc file. The
-     "BC27" LOC and "LVCMOS18" is determined by the platform yaml file, which contains all the platform top level
-     ports and LOC assignments.
-     """
-     def __init__(self, portname, iogroup, port_index=[], iogroup_index=[0], loc=None, iostd=None):
-         """
-         Construct a PortConstraint instance.
+    This assigns the port LOC and voltage constraints to user_const.xdc, for example:
 
-         :param portname: The name (in verilog) of the port
-         :type portname: str
-         :param port_index: Specify an offset of the port index to attach to iogroup[index]. This feature was added so that
-         we can do (eg.) myport[3:0] <=> gpioA[3:0], myport[7:4] <=> gpioB[3:0]
-         :type port_index: int
-         :param iogroup: The abstract name of the ports physical connection (eg. zdok0, zdok1, gpioa)
-         :type iogroup: str
-         :param iogroup_index: The index of the abstract name to which the HDL port should connect
-         :type iogroup_index: int or list
-         :param loc: Specify a loc to construct a physical constraint, forgoing the abstract names. Experimental.
-         :type loc: list
-         :param iostd: Specify an iostd to construct a physical constraint, forgoing the abstract names. Experimental.
-         :type loc: list
-         """
-         logger.debug('new PortConstraint:')
-         logger.debug('  portname: %s'%portname)
-         logger.debug('  iogroup: %s'%iogroup)
-         logger.debug('  port_index: %s'%port_index)
-         logger.debug('  iogroup_index: %s'%iogroup_index)
-         logger.debug('  loc: %s'%loc)
-         logger.debug('  iostd: %s'%iostd)
+    ``PortConstraint('A', 'A')`` is translated to ``set_property PACKAGE_PIN BC27 [get_ports A]`` and
+    ``set_property IOSTANDARD LVCMOS18 [A]`` in the xdc file. The
+    "BC27" LOC and "LVCMOS18" is determined by the platform yaml file, which contains all the platform top level
+    ports and LOC assignments.
+    """
+    def __init__(self, portname, iogroup, port_index=[], iogroup_index=[0], loc=None, iostd=None):
+        """
+        Construct a PortConstraint instance.
 
-         if port_index == []:
-             self.is_vector = False
-         else:
-             self.is_vector = True
+        :param portname: The name (in verilog) of the port
+        :type portname: str
+        :param port_index: Specify an offset of the port index to attach to iogroup[index]. This feature was added so that
+            we can do (eg.) myport[3:0] <=> gpioA[3:0], myport[7:4] <=> gpioB[3:0]
+        :type port_index: int
+        :param iogroup: The abstract name of the ports physical connection (eg. zdok0, zdok1, gpioa)
+        :type iogroup: str
+        :param iogroup_index: The index of the abstract name to which the HDL port should connect
+        :type iogroup_index: int or list
+        :param loc: Specify a loc to construct a physical constraint, forgoing the abstract names. Experimental.
+        :type loc: list
+        :param iostd: Specify an iostd to construct a physical constraint, forgoing the abstract names. Experimental.
+        :type loc: list
+        """
+        logger.debug('new PortConstraint:')
+        logger.debug('  portname: %s'%portname)
+        logger.debug('  iogroup: %s'%iogroup)
+        logger.debug('  port_index: %s'%port_index)
+        logger.debug('  iogroup_index: %s'%iogroup_index)
+        logger.debug('  loc: %s'%loc)
+        logger.debug('  iostd: %s'%iostd)
 
-         if type(port_index) != list: port_index = [port_index]
-         if type(iogroup_index) != list: iogroup_index = [iogroup_index]
-         if type(loc) != list: loc = [loc]
-         if type(iostd) != list: iostd = [iostd]
+        if port_index == []:
+            self.is_vector = False
+        else:
+            self.is_vector = True
 
-         self.portname = portname.strip(' ') #clear out whitespace
-         self.port_index = port_index
-         self.iogroup = iogroup.strip(' ') 
-         self.iogroup_index = iogroup_index
-         self.loc = loc
-         self.iostd = iostd
-         self.width = len(iogroup_index)
+        if type(port_index) != list: port_index = [port_index]
+        if type(iogroup_index) != list: iogroup_index = [iogroup_index]
+        if type(loc) != list: loc = [loc]
+        if type(iostd) != list: iostd = [iostd]
 
-         if (port_index != []) and (len(port_index) != len(iogroup_index)):
-             raise ValueError("Tried to constrain a multidimensional signal with iogroup with different dimensions!")
+        self.portname = portname.strip(' ') #clear out whitespace
+        self.port_index = port_index
+        self.iogroup = iogroup.strip(' ') 
+        self.iogroup_index = iogroup_index
+        self.loc = loc
+        self.iostd = iostd
+        self.width = len(iogroup_index)
 
-         if self.loc == [None]:
-             self.loc *= self.width
-         elif len(self.loc) != self.width:
-             raise ValueError("Tried to constrain a multidimensional signal with a list of LOCs with different dimensions!")
+        if (port_index != []) and (len(port_index) != len(iogroup_index)):
+            raise ValueError("Tried to constrain a multidimensional signal with iogroup with different dimensions!")
 
-         if len(self.iostd) == 1:
-             self.iostd *= self.width
-         elif len(self.iostd) != self.width:
-             raise ValueError("Tried to constrain a multidimensional signal with a list of IOSTDs with different dimensions!")
+        if self.loc == [None]:
+            self.loc *= self.width
+        elif len(self.loc) != self.width:
+            raise ValueError("Tried to constrain a multidimensional signal with a list of LOCs with different dimensions!")
 
-     def __str__(self):
-         """
-         A user friendly string representation
-         """
-         return self.portname
+        if len(self.iostd) == 1:
+            self.iostd *= self.width
+        elif len(self.iostd) != self.width:
+            raise ValueError("Tried to constrain a multidimensional signal with a list of IOSTDs with different dimensions!")
 
-     def gen_physical_const(self, platform):
-         """
-         Set the LOC and IOSTDs of an abstract constraint for a given platform.
+    def __str__(self):
+        """
+        A user friendly string representation
+        """
+        return self.portname
 
-         :param platform: The platform instance against which to evaluate the constraint(s).
-         :type platform: Platform
-         """
-         logger.debug('Attempting to get physical constraints for port %s on %s '%(self.portname, self.iogroup))
-         pins = platform.get_pins(self.iogroup, index=self.iogroup_index)
-         for i in range(self.width):
-             if self.loc[i] is None:
-                 logger.debug('Setting pin loc: %s %s'%(self.portname, pins[i].loc))
-                 self.loc[i] = pins[i].loc
-             if self.iostd[i] is None:
-                 logger.debug('Setting pin iostd: %s %s'%(self.portname, pins[i].iostd))
-                 self.iostd[i] = pins[i].iostd
+    def gen_physical_const(self, platform):
+        """
+        Set the LOC and IOSTDs of an abstract constraint for a given platform.
+
+        :param platform: The platform instance against which to evaluate the constraint(s).
+        :type platform: Platform
+        """
+        logger.debug('Attempting to get physical constraints for port %s on %s '%(self.portname, self.iogroup))
+        pins = platform.get_pins(self.iogroup, index=self.iogroup_index)
+        for i in range(self.width):
+            if self.loc[i] is None:
+                logger.debug('Setting pin loc: %s %s'%(self.portname, pins[i].loc))
+                self.loc[i] = pins[i].loc
+            if self.iostd[i] is None:
+                logger.debug('Setting pin iostd: %s %s'%(self.portname, pins[i].iostd))
+                self.iostd[i] = pins[i].iostd
          
 class ClockConstraint(object):
     """
@@ -101,9 +103,11 @@ class ClockConstraint(object):
     duty cycle and the corresponding clock freq and period.
 
     This assigns the clock timing constraint on the clock port in user_const.xdc, for example:
-    "ClockConstraint('A','A', period=6.4, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=3.2))"
-    is translated to "create_clock -period 6.400 -name A -waveform {0.000 3.200} [get_ports {A}]" in the xdc file. This
-    tells Vivado which ports should be clocks.
+
+    ``ClockConstraint('A','A', period=6.4, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=3.2))``
+    is translated to ``create_clock -period 6.400 -name A -waveform {0.000 3.200} [get_ports {A}]`` in the xdc file. 
+
+    This tells Vivado which ports should be clocks.
     """
     def __init__(self, signal=None, name=None, freq=None, period=None, port_en=True, virtual_en=False, waveform_min=0., waveform_max=None):
         """
@@ -118,14 +122,14 @@ class ClockConstraint(object):
         :param period: The period of the clock in ns (no need to specify frequency if the period is specified)
         :type period: float
         :param port_en: If True then the clock port is enabled. If False then the clock port is bypassed for the case of
-        a virtual clock.
+            a virtual clock.
         :type port_en: boolean
         :param virtual_en: This is set to True when using a virtual clock, otherwise it is False.
         :type virtual_en: bool
         :param waveform_min: This parameter is used to determine the duty cycle of the clock in ns. Typically 0ns.
         :type waveform_min: float
         :param waveform_max: This parameter is used to determine the duty cycle of the clock in ns. Typically half the
-        period of the clock for a 50% duty cycle.
+            period of the clock for a 50% duty cycle.
         :type waveform_max: float
         """
         logger.debug('New clock constraint')
@@ -157,10 +161,12 @@ class GenClockConstraint(object):
     signal, clock name, clock source and divide by value.
 
     This assigns the generated clock timing constraint on a non global clock port in user_const.xdc, for example:
-    "GenClockConstraint(signal='sub/Q', name='sub/CLK', divide_by=16, clock_source='sub/C')"
-    is translated to "create_generated_clock -name sub/CLK -source [get_pins {sub/C}] -divide_by 16
-    [get_pins {sub/Q}]" in the xdc file. This constraint is used to assign a clock to signals that are not inferred by
-    Vivado naturally and should be.
+
+    ``GenClockConstraint(signal='sub/Q', name='sub/CLK', divide_by=16, clock_source='sub/C')``
+    is translated to ``create_generated_clock -name sub/CLK -source [get_pins {sub/C}] -divide_by 16
+    [get_pins {sub/Q}]`` in the xdc file. 
+    
+    This constraint is used to assign a clock to signals that are not inferred by Vivado naturally and should be.
     """
     def __init__(self, signal, name=None, divide_by=None, clock_source=None):
         """
@@ -171,11 +177,11 @@ class GenClockConstraint(object):
         :param name: The name of the generated clock
         :type name: str
         :param divide_by: The value to divide the clock_source by in order to determine the clock frequency of the
-        generated clock in MHz
+            generated clock in MHz
         :type divide_by: int
         :param clock_source: This is the clock source (input) of the generated clock. The clock_source and the
-        divide_by value determined the generated clock out frequency in MHz:
-        generated clock in MHz = clock_source*divide_by
+            divide_by value determined the generated clock out frequency in MHz:
+            generated clock in MHz = clock_source*divide_by
         :type clock_source: str
         """
 
@@ -194,9 +200,11 @@ class ClockGroupConstraint(object):
     A clock group constraint -- simply holds the name of both clock domains and the domain relationship e.g. asynchronous
 
     This assigns the clock group timing constraint on two or more clock groups in user_const.xdc, for example:
-    "ClockGroupConstraint('A', 'B', 'asynchronous')" is translated to
-    "set_clock_groups -asynchronous -group [get_clocks A] -group [get_clocks B]" in the xdc file. This constraint is
-    used to cut the clock relationship between two or more clock groups.
+
+    ``ClockGroupConstraint('A', 'B', 'asynchronous')`` is translated to
+    ``set_clock_groups -asynchronous -group [get_clocks A] -group [get_clocks B]`` in the xdc file. 
+    
+    This constraint is used to cut the clock relationship between two or more clock groups.
     """
     def __init__(self, clock_name_group_1=None, clock_name_group_2=None, clock_domain_relationship=None):
         """
@@ -207,8 +215,8 @@ class ClockGroupConstraint(object):
         :param clock_name_group_2: The clock name of the second group e.g. the clock port name or virtual clock name
         :type clock_name_group_2: str
         :param clock_domain_relationship: This specifies the relationship between the two clock name groups. Typically
-        this is set to "asynchronous" which tells the Vivado timing analyzer to ignore the timing relationship
-        between these two clock domains, as the clocks are asynchronous.
+            this is set to ``asynchronous`` which tells the Vivado timing analyzer to ignore the timing relationship
+            between these two clock domains, as the clocks are asynchronous.
         :type clock_domain_relationship: str
         """
 
@@ -227,10 +235,11 @@ class InputDelayConstraint(object):
     constraint applies to.
 
     This assigns the clock input delay timing constraint in user_const.xdc, for example:
-    "InputDelayConstraint(clkname='A', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='B')" is
+    ``InputDelayConstraint(clkname='A', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='B')`` is
     translated to
-    "set_input_delay -clock [get_clocks A] -min -add_delay 1.000 [get_ports {B}]" in the xdc file. This constraint is
-    used to assign input constraints referenced to the clock.
+    ``set_input_delay -clock [get_clocks A] -min -add_delay 1.000 [get_ports {B}]`` in the xdc file. 
+    
+    This constraint is used to assign input constraints referenced to the clock.
     """
     def __init__(self, clkname=None, consttype=None, constdelay_ns=None, add_delay_en=None, portname=None ):
         """
@@ -238,13 +247,13 @@ class InputDelayConstraint(object):
 
         :param clkname: The clock name which the port name is referenced to
         :type clkname: str
-        :param consttype: This is constraint type: either be a "min" (hold) or "max" (setup).
+        :param consttype: This is constraint type: either be a ``min`` (hold) or ``max`` (setup).
         :type consttype: str
         :param constdelay_ns: This is the constraint delay in ns - takes into account the Tco, clock skew and board
-        delay.
+            delay.
         :type constdelay_ns: float
         :param add_delay_en: If more than one constraint is needed on the portname then this is True, else set it to
-        False.
+            False.
         :type add_delay_en: bool
         :param portname: The port name of the signal that needs to be constrained.
         :type portname: str
@@ -269,11 +278,12 @@ class OutputDelayConstraint(object):
     constraint applies to.
 
     This assigns the clock output delay timing constraint in user_const.xdc, for example:
-    "OutputDelayConstraint(clkname='A', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='B')" is
-    translated to
-    "set_output_delay -clock [get_clocks A] -min -add_delay 1.000 [get_ports {B}]" in the xdc file. This constraint is
-    used to assign output constraints referenced to the clock.
 
+    ``OutputDelayConstraint(clkname='A', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='B')`` is
+    translated to
+    ``set_output_delay -clock [get_clocks A] -min -add_delay 1.000 [get_ports {B}]`` in the xdc file. 
+    
+    This constraint is used to assign output constraints referenced to the clock.
     """
     def __init__(self, clkname=None, consttype=None, constdelay_ns=None, add_delay_en=None, portname=None ):
         """
@@ -281,13 +291,13 @@ class OutputDelayConstraint(object):
 
         :param clkname: The clock name which the port name is referenced to
         :type clkname: str
-        :param consttype: This is constraint type: either be a "min" (hold) or "max" (setup).
+        :param consttype: This is constraint type: either be a ``min`` (hold) or ``max`` (setup).
         :type consttype: str
         :param constdelay_ns: This is the constraint delay in ns - takes into account the Tsu, Th, clock skew and board
-        delay.
+            delay.
         :type constdelay_ns: float
         :param add_delay_en: If more than one constraint is needed on the portname then this is True, else set it to
-        False.
+            False.
         :type add_delay_en: bool
         :param portname: The port name of the signal that needs to be constrained.
         :type portname: str
@@ -311,8 +321,10 @@ class MaxDelayConstraint(object):
     delay value (ns).
 
     This assigns the max delay timing constraint in user_const.xdc, for example:
-    "MaxDelayConstraint(destpath='[get_ports {A}]', constdelay_ns=1.0)" is translated to
-    "set_max_delay 1.0 -to [get_ports {A}]" in the xdc file. This constraint is used when there is no clock reference.
+    ``MaxDelayConstraint(destpath='[get_ports {A}]', constdelay_ns=1.0)`` is translated to
+    ``set_max_delay 1.0 -to [get_ports {A}]`` in the xdc file. 
+    
+    This constraint is used when there is no clock reference.
     """
     def __init__(self, sourcepath=None, destpath=None , constdelay_ns=None):
         """
@@ -323,7 +335,7 @@ class MaxDelayConstraint(object):
         :param destpath: The destination path that the constraint is applied to  - includes path and port names.
         :type destpath: str
         :param constdelay_ns: This is the constraint delay in ns - takes into account the Tsu, clock skew and board
-        delay.
+            delay.
         :type constdelay_ns: float
         """
 
@@ -339,10 +351,13 @@ class MinDelayConstraint(object):
     """
     A set min delay constraint - simply holds the source, destination paths and the constraint
     delay value (ns).
-
+ 
     This assigns the min delay timing constraint in user_const.xdc, for example:
-    "MinDelayConstraint(destpath='[get_ports {A}]', constdelay_ns=1.0)" is translated to
-    "set_min_delay 1.0 -to [get_ports {A}]" in the xdc file. This constraint is used when there is no clock reference.
+
+    ``MinDelayConstraint(destpath='[get_ports {A}]', constdelay_ns=1.0)`` is translated to
+    ``set_min_delay 1.0 -to [get_ports {A}]`` in the xdc file. 
+    
+    This constraint is used when there is no clock reference.
     """
     def __init__(self, sourcepath=None, destpath=None , constdelay_ns=None):
         """
@@ -353,7 +368,7 @@ class MinDelayConstraint(object):
         :param destpath: The destination path that the constraint is applied to  - includes path and port names.
         :type destpath: str
         :param constdelay_ns: This is the constraint delay in ns - takes into account the Th, clock skew and board
-        delay.
+            delay.
         :type constdelay_ns: float
         """
 
@@ -370,10 +385,11 @@ class FalsePathConstraint(object):
     A false path constraint - simply holds the source and destination paths.
 
     This assigns the false path timing constraint in user_const.xdc, for example:
-    "FalsePathConstraint(destpath='[get_ports {A}]')" is translated to
-    "set_false_path -to [get_ports {A}]" in the xdc file. Any path that appears in the FalsePathConstraint is ignored
-    by the Vivado timing analyzer.
-
+    
+    ``FalsePathConstraint(destpath='[get_ports {A}]')`` is translated to
+    ``set_false_path -to [get_ports {A}]`` in the xdc file. 
+    
+    Any path that appears in the FalsePathConstraint is ignored by the Vivado timing analyzer.
     """
     def __init__(self, sourcepath=None, destpath=None):
         """
@@ -397,15 +413,17 @@ class MultiCycleConstraint(object):
     multi cycle delay value in clock cycles.
 
     This assigns the multicycle timing constraint in user_const.xdc, for example:
-    "MultiCycleConstraint(multicycletype='setup',sourcepath='get_clocks B', destpath='get_ports A', multicycledelay=4)"
-    is translated to "set_multicycle_path -setup -from [get_ports A] -to [get_clocks B] 4" in the xdc file. This tells
-    the Vivado timing analyzer that the signal will take more than one clock cycle to propagate through the logic.
+
+    ``MultiCycleConstraint(multicycletype='setup',sourcepath='get_clocks B', destpath='get_ports A', multicycledelay=4)``
+    is translated to ``set_multicycle_path -setup -from [get_ports A] -to [get_clocks B] 4`` in the xdc file. 
+    
+    This tells the Vivado timing analyzer that the signal will take more than one clock cycle to propagate through the logic.
     """
     def __init__(self, multicycletype=None, sourcepath=None, destpath=None, multicycledelay=None):
         """
         Construct a MultiCycleConstraint instance.
 
-        :param multicycletype: The type of multicycle constraint: either "setup" or "hold"
+        :param multicycletype: The type of multicycle constraint: either ``setup`` or ``hold``
         :type multicycletype: str
         :param sourcepath: The source path that the constraint is applied to - includes path and port names.
         :type sourcepath: str
@@ -430,10 +448,11 @@ class RawConstraint(object):
     constraint file.
 
     This assigns any raw constraints (set_property, pblock etc) in user_const.xdc, for example:
-    "RawConstraint('set_property OFFCHIP_TERM NONE [get_ports A]')"
-    is translated to "set_property OFFCHIP_TERM NONE [get_ports A]" in the xdc file. Any constraint not handled in the
-    above classes can be added using the raw constraints.
 
+    ``RawConstraint('set_property OFFCHIP_TERM NONE [get_ports A]')``
+    is translated to ``set_property OFFCHIP_TERM NONE [get_ports A]`` in the xdc file. 
+    
+    Any constraint not handled in the above classes can be added using the raw constraints.
     """
     def __init__(self, const):
 

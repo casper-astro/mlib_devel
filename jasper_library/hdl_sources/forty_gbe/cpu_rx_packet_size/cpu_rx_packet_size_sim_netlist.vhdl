@@ -1,10 +1,10 @@
--- Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
+-- Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
--- Tool Version: Vivado v.2018.2 (lin64) Build 2258646 Thu Jun 14 20:02:38 MDT 2018
--- Date        : Wed Nov  7 10:54:43 2018
--- Host        : adam-cm running 64-bit Ubuntu 16.04.5 LTS
+-- Tool Version: Vivado v.2019.1.1 (lin64) Build 2580384 Sat Jun 29 08:04:45 MDT 2019
+-- Date        : Mon Jul 15 17:22:23 2019
+-- Host        : casper1 running 64-bit Ubuntu 16.04.6 LTS
 -- Command     : write_vhdl -force -mode funcsim
---               /home/aisaacson/work/git_work/ska_sa/projects/mlib_devel/jasper_library/test_models/skarab_fgbe/myproj/myproj.srcs/sources_1/ip/cpu_rx_packet_size/cpu_rx_packet_size_sim_netlist.vhdl
+--               /home/hpw1/work/tutorials_devel/vivado_2018/skarab/tut_intro/skarab_tut_intro/myproj/myproj.srcs/sources_1/ip/cpu_rx_packet_size/cpu_rx_packet_size_sim_netlist.vhdl
 -- Design      : cpu_rx_packet_size
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -84,33 +84,33 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \cpu_rx_packet_size_xpm_cdc_async_rst__1\ is
+entity \cpu_rx_packet_size_xpm_cdc_async_rst__2\ is
   port (
     src_arst : in STD_LOGIC;
     dest_clk : in STD_LOGIC;
     dest_arst : out STD_LOGIC
   );
   attribute DEF_VAL : string;
-  attribute DEF_VAL of \cpu_rx_packet_size_xpm_cdc_async_rst__1\ : entity is "1'b0";
+  attribute DEF_VAL of \cpu_rx_packet_size_xpm_cdc_async_rst__2\ : entity is "1'b0";
   attribute DEST_SYNC_FF : integer;
-  attribute DEST_SYNC_FF of \cpu_rx_packet_size_xpm_cdc_async_rst__1\ : entity is 2;
+  attribute DEST_SYNC_FF of \cpu_rx_packet_size_xpm_cdc_async_rst__2\ : entity is 2;
   attribute INIT_SYNC_FF : integer;
-  attribute INIT_SYNC_FF of \cpu_rx_packet_size_xpm_cdc_async_rst__1\ : entity is 0;
+  attribute INIT_SYNC_FF of \cpu_rx_packet_size_xpm_cdc_async_rst__2\ : entity is 0;
   attribute INV_DEF_VAL : string;
-  attribute INV_DEF_VAL of \cpu_rx_packet_size_xpm_cdc_async_rst__1\ : entity is "1'b1";
+  attribute INV_DEF_VAL of \cpu_rx_packet_size_xpm_cdc_async_rst__2\ : entity is "1'b1";
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \cpu_rx_packet_size_xpm_cdc_async_rst__1\ : entity is "xpm_cdc_async_rst";
+  attribute ORIG_REF_NAME of \cpu_rx_packet_size_xpm_cdc_async_rst__2\ : entity is "xpm_cdc_async_rst";
   attribute RST_ACTIVE_HIGH : integer;
-  attribute RST_ACTIVE_HIGH of \cpu_rx_packet_size_xpm_cdc_async_rst__1\ : entity is 1;
+  attribute RST_ACTIVE_HIGH of \cpu_rx_packet_size_xpm_cdc_async_rst__2\ : entity is 1;
   attribute VERSION : integer;
-  attribute VERSION of \cpu_rx_packet_size_xpm_cdc_async_rst__1\ : entity is 0;
+  attribute VERSION of \cpu_rx_packet_size_xpm_cdc_async_rst__2\ : entity is 0;
   attribute XPM_MODULE : string;
-  attribute XPM_MODULE of \cpu_rx_packet_size_xpm_cdc_async_rst__1\ : entity is "TRUE";
+  attribute XPM_MODULE of \cpu_rx_packet_size_xpm_cdc_async_rst__2\ : entity is "TRUE";
   attribute xpm_cdc : string;
-  attribute xpm_cdc of \cpu_rx_packet_size_xpm_cdc_async_rst__1\ : entity is "ASYNC_RST";
-end \cpu_rx_packet_size_xpm_cdc_async_rst__1\;
+  attribute xpm_cdc of \cpu_rx_packet_size_xpm_cdc_async_rst__2\ : entity is "ASYNC_RST";
+end \cpu_rx_packet_size_xpm_cdc_async_rst__2\;
 
-architecture STRUCTURE of \cpu_rx_packet_size_xpm_cdc_async_rst__1\ is
+architecture STRUCTURE of \cpu_rx_packet_size_xpm_cdc_async_rst__2\ is
   signal arststages_ff : STD_LOGIC_VECTOR ( 1 downto 0 );
   attribute RTL_KEEP : string;
   attribute RTL_KEEP of arststages_ff : signal is "true";
@@ -417,7 +417,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \cpu_rx_packet_size_xpm_cdc_gray__1\ is
+entity \cpu_rx_packet_size_xpm_cdc_gray__2\ is
   port (
     src_clk : in STD_LOGIC;
     src_in_bin : in STD_LOGIC_VECTOR ( 3 downto 0 );
@@ -425,28 +425,28 @@ entity \cpu_rx_packet_size_xpm_cdc_gray__1\ is
     dest_out_bin : out STD_LOGIC_VECTOR ( 3 downto 0 )
   );
   attribute DEST_SYNC_FF : integer;
-  attribute DEST_SYNC_FF of \cpu_rx_packet_size_xpm_cdc_gray__1\ : entity is 2;
+  attribute DEST_SYNC_FF of \cpu_rx_packet_size_xpm_cdc_gray__2\ : entity is 2;
   attribute INIT_SYNC_FF : integer;
-  attribute INIT_SYNC_FF of \cpu_rx_packet_size_xpm_cdc_gray__1\ : entity is 0;
+  attribute INIT_SYNC_FF of \cpu_rx_packet_size_xpm_cdc_gray__2\ : entity is 0;
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \cpu_rx_packet_size_xpm_cdc_gray__1\ : entity is "xpm_cdc_gray";
+  attribute ORIG_REF_NAME of \cpu_rx_packet_size_xpm_cdc_gray__2\ : entity is "xpm_cdc_gray";
   attribute REG_OUTPUT : integer;
-  attribute REG_OUTPUT of \cpu_rx_packet_size_xpm_cdc_gray__1\ : entity is 1;
+  attribute REG_OUTPUT of \cpu_rx_packet_size_xpm_cdc_gray__2\ : entity is 1;
   attribute SIM_ASSERT_CHK : integer;
-  attribute SIM_ASSERT_CHK of \cpu_rx_packet_size_xpm_cdc_gray__1\ : entity is 0;
+  attribute SIM_ASSERT_CHK of \cpu_rx_packet_size_xpm_cdc_gray__2\ : entity is 0;
   attribute SIM_LOSSLESS_GRAY_CHK : integer;
-  attribute SIM_LOSSLESS_GRAY_CHK of \cpu_rx_packet_size_xpm_cdc_gray__1\ : entity is 0;
+  attribute SIM_LOSSLESS_GRAY_CHK of \cpu_rx_packet_size_xpm_cdc_gray__2\ : entity is 0;
   attribute VERSION : integer;
-  attribute VERSION of \cpu_rx_packet_size_xpm_cdc_gray__1\ : entity is 0;
+  attribute VERSION of \cpu_rx_packet_size_xpm_cdc_gray__2\ : entity is 0;
   attribute WIDTH : integer;
-  attribute WIDTH of \cpu_rx_packet_size_xpm_cdc_gray__1\ : entity is 4;
+  attribute WIDTH of \cpu_rx_packet_size_xpm_cdc_gray__2\ : entity is 4;
   attribute XPM_MODULE : string;
-  attribute XPM_MODULE of \cpu_rx_packet_size_xpm_cdc_gray__1\ : entity is "TRUE";
+  attribute XPM_MODULE of \cpu_rx_packet_size_xpm_cdc_gray__2\ : entity is "TRUE";
   attribute xpm_cdc : string;
-  attribute xpm_cdc of \cpu_rx_packet_size_xpm_cdc_gray__1\ : entity is "GRAY";
-end \cpu_rx_packet_size_xpm_cdc_gray__1\;
+  attribute xpm_cdc of \cpu_rx_packet_size_xpm_cdc_gray__2\ : entity is "GRAY";
+end \cpu_rx_packet_size_xpm_cdc_gray__2\;
 
-architecture STRUCTURE of \cpu_rx_packet_size_xpm_cdc_gray__1\ is
+architecture STRUCTURE of \cpu_rx_packet_size_xpm_cdc_gray__2\ is
   signal async_path : STD_LOGIC_VECTOR ( 3 downto 0 );
   signal binval : STD_LOGIC_VECTOR ( 2 downto 0 );
   signal \dest_graysync_ff[0]\ : STD_LOGIC_VECTOR ( 3 downto 0 );
@@ -765,7 +765,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \cpu_rx_packet_size_xpm_cdc_single__1\ is
+entity \cpu_rx_packet_size_xpm_cdc_single__2\ is
   port (
     src_clk : in STD_LOGIC;
     src_in : in STD_LOGIC;
@@ -773,24 +773,24 @@ entity \cpu_rx_packet_size_xpm_cdc_single__1\ is
     dest_out : out STD_LOGIC
   );
   attribute DEST_SYNC_FF : integer;
-  attribute DEST_SYNC_FF of \cpu_rx_packet_size_xpm_cdc_single__1\ : entity is 4;
+  attribute DEST_SYNC_FF of \cpu_rx_packet_size_xpm_cdc_single__2\ : entity is 4;
   attribute INIT_SYNC_FF : integer;
-  attribute INIT_SYNC_FF of \cpu_rx_packet_size_xpm_cdc_single__1\ : entity is 0;
+  attribute INIT_SYNC_FF of \cpu_rx_packet_size_xpm_cdc_single__2\ : entity is 0;
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \cpu_rx_packet_size_xpm_cdc_single__1\ : entity is "xpm_cdc_single";
+  attribute ORIG_REF_NAME of \cpu_rx_packet_size_xpm_cdc_single__2\ : entity is "xpm_cdc_single";
   attribute SIM_ASSERT_CHK : integer;
-  attribute SIM_ASSERT_CHK of \cpu_rx_packet_size_xpm_cdc_single__1\ : entity is 0;
+  attribute SIM_ASSERT_CHK of \cpu_rx_packet_size_xpm_cdc_single__2\ : entity is 0;
   attribute SRC_INPUT_REG : integer;
-  attribute SRC_INPUT_REG of \cpu_rx_packet_size_xpm_cdc_single__1\ : entity is 0;
+  attribute SRC_INPUT_REG of \cpu_rx_packet_size_xpm_cdc_single__2\ : entity is 0;
   attribute VERSION : integer;
-  attribute VERSION of \cpu_rx_packet_size_xpm_cdc_single__1\ : entity is 0;
+  attribute VERSION of \cpu_rx_packet_size_xpm_cdc_single__2\ : entity is 0;
   attribute XPM_MODULE : string;
-  attribute XPM_MODULE of \cpu_rx_packet_size_xpm_cdc_single__1\ : entity is "TRUE";
+  attribute XPM_MODULE of \cpu_rx_packet_size_xpm_cdc_single__2\ : entity is "TRUE";
   attribute xpm_cdc : string;
-  attribute xpm_cdc of \cpu_rx_packet_size_xpm_cdc_single__1\ : entity is "SINGLE";
-end \cpu_rx_packet_size_xpm_cdc_single__1\;
+  attribute xpm_cdc of \cpu_rx_packet_size_xpm_cdc_single__2\ : entity is "SINGLE";
+end \cpu_rx_packet_size_xpm_cdc_single__2\;
 
-architecture STRUCTURE of \cpu_rx_packet_size_xpm_cdc_single__1\ is
+architecture STRUCTURE of \cpu_rx_packet_size_xpm_cdc_single__2\ is
   signal syncstages_ff : STD_LOGIC_VECTOR ( 3 downto 0 );
   attribute RTL_KEEP : string;
   attribute RTL_KEEP of syncstages_ff : signal is "true";
@@ -873,7 +873,28 @@ architecture STRUCTURE of cpu_rx_packet_size_dmem is
   signal NLW_RAM_reg_0_15_6_10_DOD_UNCONNECTED : STD_LOGIC_VECTOR ( 1 downto 0 );
   attribute METHODOLOGY_DRC_VIOS : string;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_0_5 : label is "";
+  attribute RTL_RAM_BITS : integer;
+  attribute RTL_RAM_BITS of RAM_reg_0_15_0_5 : label is 176;
+  attribute RTL_RAM_NAME : string;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_0_5 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin : integer;
+  attribute ram_addr_begin of RAM_reg_0_15_0_5 : label is 0;
+  attribute ram_addr_end : integer;
+  attribute ram_addr_end of RAM_reg_0_15_0_5 : label is 15;
+  attribute ram_offset : integer;
+  attribute ram_offset of RAM_reg_0_15_0_5 : label is 0;
+  attribute ram_slice_begin : integer;
+  attribute ram_slice_begin of RAM_reg_0_15_0_5 : label is 0;
+  attribute ram_slice_end : integer;
+  attribute ram_slice_end of RAM_reg_0_15_0_5 : label is 5;
   attribute METHODOLOGY_DRC_VIOS of RAM_reg_0_15_6_10 : label is "";
+  attribute RTL_RAM_BITS of RAM_reg_0_15_6_10 : label is 176;
+  attribute RTL_RAM_NAME of RAM_reg_0_15_6_10 : label is "inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM";
+  attribute ram_addr_begin of RAM_reg_0_15_6_10 : label is 0;
+  attribute ram_addr_end of RAM_reg_0_15_6_10 : label is 15;
+  attribute ram_offset of RAM_reg_0_15_6_10 : label is 0;
+  attribute ram_slice_begin of RAM_reg_0_15_6_10 : label is 6;
+  attribute ram_slice_end of RAM_reg_0_15_6_10 : label is 10;
 begin
 RAM_reg_0_15_0_5: unisim.vcomponents.RAM32M
      port map (
@@ -1047,7 +1068,7 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity cpu_rx_packet_size_rd_bin_cntr is
   port (
-    ram_empty_i_reg : out STD_LOGIC;
+    rd_en_0 : out STD_LOGIC;
     Q : out STD_LOGIC_VECTOR ( 3 downto 0 );
     rd_en : in STD_LOGIC;
     \out\ : in STD_LOGIC;
@@ -1212,7 +1233,7 @@ ram_empty_i_i_1: unisim.vcomponents.LUT6
       I3 => \out\,
       I4 => ram_empty_i_i_4_n_0,
       I5 => ram_empty_i_i_5_n_0,
-      O => ram_empty_i_reg
+      O => rd_en_0
     );
 ram_empty_i_i_2: unisim.vcomponents.LUT4
     generic map(
@@ -1268,7 +1289,7 @@ entity cpu_rx_packet_size_rd_status_flags_as is
     empty : out STD_LOGIC;
     \out\ : out STD_LOGIC;
     E : out STD_LOGIC_VECTOR ( 0 to 0 );
-    ram_empty_fb_i_reg_0 : in STD_LOGIC;
+    ram_empty_i_reg_0 : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
     AR : in STD_LOGIC_VECTOR ( 0 to 0 );
     rd_en : in STD_LOGIC
@@ -1310,7 +1331,7 @@ ram_empty_fb_i_reg: unisim.vcomponents.FDPE
         port map (
       C => rd_clk,
       CE => '1',
-      D => ram_empty_fb_i_reg_0,
+      D => ram_empty_i_reg_0,
       PRE => AR(0),
       Q => ram_empty_fb_i
     );
@@ -1321,7 +1342,7 @@ ram_empty_i_reg: unisim.vcomponents.FDPE
         port map (
       C => rd_clk,
       CE => '1',
-      D => ram_empty_fb_i_reg_0,
+      D => ram_empty_i_reg_0,
       PRE => AR(0),
       Q => ram_empty_i
     );
@@ -1334,8 +1355,8 @@ entity cpu_rx_packet_size_wr_bin_cntr is
   port (
     Q : out STD_LOGIC_VECTOR ( 3 downto 0 );
     D : out STD_LOGIC_VECTOR ( 2 downto 0 );
-    \src_gray_ff_reg[3]\ : out STD_LOGIC_VECTOR ( 3 downto 0 );
     \gic0.gc0.count_d2_reg[3]_0\ : out STD_LOGIC_VECTOR ( 3 downto 0 );
+    \gic0.gc0.count_d1_reg[3]_0\ : out STD_LOGIC_VECTOR ( 3 downto 0 );
     RD_PNTR_WR : in STD_LOGIC_VECTOR ( 3 downto 0 );
     E : in STD_LOGIC_VECTOR ( 0 to 0 );
     wr_clk : in STD_LOGIC;
@@ -1347,9 +1368,9 @@ end cpu_rx_packet_size_wr_bin_cntr;
 
 architecture STRUCTURE of cpu_rx_packet_size_wr_bin_cntr is
   signal \^q\ : STD_LOGIC_VECTOR ( 3 downto 0 );
+  signal \^gic0.gc0.count_d1_reg[3]_0\ : STD_LOGIC_VECTOR ( 3 downto 0 );
   signal \^gic0.gc0.count_d2_reg[3]_0\ : STD_LOGIC_VECTOR ( 3 downto 0 );
   signal plusOp : STD_LOGIC_VECTOR ( 3 downto 0 );
-  signal \^src_gray_ff_reg[3]\ : STD_LOGIC_VECTOR ( 3 downto 0 );
   signal \wr_data_count_i[3]_i_2_n_0\ : STD_LOGIC;
   attribute SOFT_HLUTNM : string;
   attribute SOFT_HLUTNM of \gic0.gc0.count[2]_i_1\ : label is "soft_lutpair5";
@@ -1358,8 +1379,8 @@ architecture STRUCTURE of cpu_rx_packet_size_wr_bin_cntr is
   attribute SOFT_HLUTNM of \wr_data_count_i[3]_i_2\ : label is "soft_lutpair4";
 begin
   Q(3 downto 0) <= \^q\(3 downto 0);
+  \gic0.gc0.count_d1_reg[3]_0\(3 downto 0) <= \^gic0.gc0.count_d1_reg[3]_0\(3 downto 0);
   \gic0.gc0.count_d2_reg[3]_0\(3 downto 0) <= \^gic0.gc0.count_d2_reg[3]_0\(3 downto 0);
-  \src_gray_ff_reg[3]\(3 downto 0) <= \^src_gray_ff_reg[3]\(3 downto 0);
 \gic0.gc0.count[0]_i_1\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"1"
@@ -1407,7 +1428,7 @@ begin
       CE => E(0),
       D => \^q\(0),
       PRE => AR(0),
-      Q => \^gic0.gc0.count_d2_reg[3]_0\(0)
+      Q => \^gic0.gc0.count_d1_reg[3]_0\(0)
     );
 \gic0.gc0.count_d1_reg[1]\: unisim.vcomponents.FDCE
     generic map(
@@ -1418,7 +1439,7 @@ begin
       CE => E(0),
       CLR => AR(0),
       D => \^q\(1),
-      Q => \^gic0.gc0.count_d2_reg[3]_0\(1)
+      Q => \^gic0.gc0.count_d1_reg[3]_0\(1)
     );
 \gic0.gc0.count_d1_reg[2]\: unisim.vcomponents.FDCE
     generic map(
@@ -1429,7 +1450,7 @@ begin
       CE => E(0),
       CLR => AR(0),
       D => \^q\(2),
-      Q => \^gic0.gc0.count_d2_reg[3]_0\(2)
+      Q => \^gic0.gc0.count_d1_reg[3]_0\(2)
     );
 \gic0.gc0.count_d1_reg[3]\: unisim.vcomponents.FDCE
     generic map(
@@ -1440,7 +1461,7 @@ begin
       CE => E(0),
       CLR => AR(0),
       D => \^q\(3),
-      Q => \^gic0.gc0.count_d2_reg[3]_0\(3)
+      Q => \^gic0.gc0.count_d1_reg[3]_0\(3)
     );
 \gic0.gc0.count_d2_reg[0]\: unisim.vcomponents.FDCE
     generic map(
@@ -1450,8 +1471,8 @@ begin
       C => wr_clk,
       CE => E(0),
       CLR => AR(0),
-      D => \^gic0.gc0.count_d2_reg[3]_0\(0),
-      Q => \^src_gray_ff_reg[3]\(0)
+      D => \^gic0.gc0.count_d1_reg[3]_0\(0),
+      Q => \^gic0.gc0.count_d2_reg[3]_0\(0)
     );
 \gic0.gc0.count_d2_reg[1]\: unisim.vcomponents.FDCE
     generic map(
@@ -1461,8 +1482,8 @@ begin
       C => wr_clk,
       CE => E(0),
       CLR => AR(0),
-      D => \^gic0.gc0.count_d2_reg[3]_0\(1),
-      Q => \^src_gray_ff_reg[3]\(1)
+      D => \^gic0.gc0.count_d1_reg[3]_0\(1),
+      Q => \^gic0.gc0.count_d2_reg[3]_0\(1)
     );
 \gic0.gc0.count_d2_reg[2]\: unisim.vcomponents.FDCE
     generic map(
@@ -1472,8 +1493,8 @@ begin
       C => wr_clk,
       CE => E(0),
       CLR => AR(0),
-      D => \^gic0.gc0.count_d2_reg[3]_0\(2),
-      Q => \^src_gray_ff_reg[3]\(2)
+      D => \^gic0.gc0.count_d1_reg[3]_0\(2),
+      Q => \^gic0.gc0.count_d2_reg[3]_0\(2)
     );
 \gic0.gc0.count_d2_reg[3]\: unisim.vcomponents.FDCE
     generic map(
@@ -1483,8 +1504,8 @@ begin
       C => wr_clk,
       CE => E(0),
       CLR => AR(0),
-      D => \^gic0.gc0.count_d2_reg[3]_0\(3),
-      Q => \^src_gray_ff_reg[3]\(3)
+      D => \^gic0.gc0.count_d1_reg[3]_0\(3),
+      Q => \^gic0.gc0.count_d2_reg[3]_0\(3)
     );
 \gic0.gc0.count_reg[0]\: unisim.vcomponents.FDCE
     generic map(
@@ -1535,9 +1556,9 @@ begin
       INIT => X"4BB4"
     )
         port map (
-      I0 => \^src_gray_ff_reg[3]\(0),
+      I0 => \^gic0.gc0.count_d2_reg[3]_0\(0),
       I1 => RD_PNTR_WR(0),
-      I2 => \^src_gray_ff_reg[3]\(1),
+      I2 => \^gic0.gc0.count_d2_reg[3]_0\(1),
       I3 => RD_PNTR_WR(1),
       O => D(0)
     );
@@ -1546,12 +1567,12 @@ begin
       INIT => X"40F4BF0BBF0B40F4"
     )
         port map (
-      I0 => \^src_gray_ff_reg[3]\(0),
+      I0 => \^gic0.gc0.count_d2_reg[3]_0\(0),
       I1 => RD_PNTR_WR(0),
       I2 => RD_PNTR_WR(1),
-      I3 => \^src_gray_ff_reg[3]\(1),
+      I3 => \^gic0.gc0.count_d2_reg[3]_0\(1),
       I4 => RD_PNTR_WR(2),
-      I5 => \^src_gray_ff_reg[3]\(2),
+      I5 => \^gic0.gc0.count_d2_reg[3]_0\(2),
       O => D(1)
     );
 \wr_data_count_i[3]_i_1\: unisim.vcomponents.LUT5
@@ -1560,9 +1581,9 @@ begin
     )
         port map (
       I0 => \wr_data_count_i[3]_i_2_n_0\,
-      I1 => \^src_gray_ff_reg[3]\(2),
+      I1 => \^gic0.gc0.count_d2_reg[3]_0\(2),
       I2 => RD_PNTR_WR(2),
-      I3 => \^src_gray_ff_reg[3]\(3),
+      I3 => \^gic0.gc0.count_d2_reg[3]_0\(3),
       I4 => RD_PNTR_WR(3),
       O => D(2)
     );
@@ -1571,10 +1592,10 @@ begin
       INIT => X"BB2B"
     )
         port map (
-      I0 => \^src_gray_ff_reg[3]\(1),
+      I0 => \^gic0.gc0.count_d2_reg[3]_0\(1),
       I1 => RD_PNTR_WR(1),
       I2 => RD_PNTR_WR(0),
-      I3 => \^src_gray_ff_reg[3]\(0),
+      I3 => \^gic0.gc0.count_d2_reg[3]_0\(0),
       O => \wr_data_count_i[3]_i_2_n_0\
     );
 end STRUCTURE;
@@ -1647,9 +1668,9 @@ use UNISIM.VCOMPONENTS.ALL;
 entity cpu_rx_packet_size_wr_status_flags_as is
   port (
     full : out STD_LOGIC;
-    ram_full_fb_i_reg_0 : out STD_LOGIC;
+    wr_en_0 : out STD_LOGIC;
     E : out STD_LOGIC_VECTOR ( 0 to 0 );
-    \gic0.gc0.count_d1_reg[3]\ : in STD_LOGIC;
+    ram_full_fb_i_reg_0 : in STD_LOGIC;
     wr_clk : in STD_LOGIC;
     \out\ : in STD_LOGIC;
     wr_en : in STD_LOGIC;
@@ -1692,7 +1713,7 @@ ram_full_fb_i_reg: unisim.vcomponents.FDPE
         port map (
       C => wr_clk,
       CE => '1',
-      D => \gic0.gc0.count_d1_reg[3]\,
+      D => ram_full_fb_i_reg_0,
       PRE => \out\,
       Q => ram_full_fb_i
     );
@@ -1705,7 +1726,7 @@ ram_full_i_i_3: unisim.vcomponents.LUT4
       I1 => ram_full_fb_i,
       I2 => RD_PNTR_WR(0),
       I3 => Q(0),
-      O => ram_full_fb_i_reg_0
+      O => wr_en_0
     );
 ram_full_i_reg: unisim.vcomponents.FDPE
     generic map(
@@ -1714,7 +1735,7 @@ ram_full_i_reg: unisim.vcomponents.FDPE
         port map (
       C => wr_clk,
       CE => '1',
-      D => \gic0.gc0.count_d1_reg[3]\,
+      D => ram_full_fb_i_reg_0,
       PRE => \out\,
       Q => ram_full_i
     );
@@ -1725,18 +1746,18 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity cpu_rx_packet_size_clk_x_pntrs is
   port (
-    ram_full_fb_i_reg : out STD_LOGIC;
+    \gic0.gc0.count_d1_reg[3]\ : out STD_LOGIC;
     RD_PNTR_WR : out STD_LOGIC_VECTOR ( 3 downto 0 );
     D : out STD_LOGIC_VECTOR ( 0 to 0 );
     WR_PNTR_RD : out STD_LOGIC_VECTOR ( 3 downto 0 );
     Q : in STD_LOGIC_VECTOR ( 3 downto 0 );
-    ram_full_fb_i_reg_0 : in STD_LOGIC;
+    ram_full_fb_i_reg : in STD_LOGIC;
     \out\ : in STD_LOGIC;
-    \gic0.gc0.count_reg[2]\ : in STD_LOGIC_VECTOR ( 2 downto 0 );
-    \gic0.gc0.count_d2_reg[3]\ : in STD_LOGIC_VECTOR ( 3 downto 0 );
+    ram_full_fb_i_reg_0 : in STD_LOGIC_VECTOR ( 2 downto 0 );
+    \src_gray_ff_reg[3]\ : in STD_LOGIC_VECTOR ( 3 downto 0 );
     wr_clk : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
-    \gc0.count_d1_reg[3]\ : in STD_LOGIC_VECTOR ( 3 downto 0 )
+    \src_gray_ff_reg[3]_0\ : in STD_LOGIC_VECTOR ( 3 downto 0 )
   );
   attribute ORIG_REF_NAME : string;
   attribute ORIG_REF_NAME of cpu_rx_packet_size_clk_x_pntrs : entity is "clk_x_pntrs";
@@ -1783,10 +1804,10 @@ ram_full_i_i_1: unisim.vcomponents.LUT6
       I0 => ram_full_i_i_2_n_0,
       I1 => Q(3),
       I2 => \^rd_pntr_wr\(3),
-      I3 => ram_full_fb_i_reg_0,
+      I3 => ram_full_fb_i_reg,
       I4 => ram_full_i_i_4_n_0,
       I5 => \out\,
-      O => ram_full_fb_i_reg
+      O => \gic0.gc0.count_d1_reg[3]\
     );
 ram_full_i_i_2: unisim.vcomponents.LUT6
     generic map(
@@ -1807,10 +1828,10 @@ ram_full_i_i_4: unisim.vcomponents.LUT6
     )
         port map (
       I0 => \^rd_pntr_wr\(0),
-      I1 => \gic0.gc0.count_reg[2]\(0),
-      I2 => \gic0.gc0.count_reg[2]\(2),
+      I1 => ram_full_fb_i_reg_0(0),
+      I2 => ram_full_fb_i_reg_0(2),
       I3 => \^rd_pntr_wr\(2),
-      I4 => \gic0.gc0.count_reg[2]\(1),
+      I4 => ram_full_fb_i_reg_0(1),
       I5 => \^rd_pntr_wr\(1),
       O => ram_full_i_i_4_n_0
     );
@@ -1819,7 +1840,7 @@ rd_pntr_cdc_inst: entity work.cpu_rx_packet_size_xpm_cdc_gray
       dest_clk => wr_clk,
       dest_out_bin(3 downto 0) => \^rd_pntr_wr\(3 downto 0),
       src_clk => rd_clk,
-      src_in_bin(3 downto 0) => \gc0.count_d1_reg[3]\(3 downto 0)
+      src_in_bin(3 downto 0) => \src_gray_ff_reg[3]_0\(3 downto 0)
     );
 \wr_data_count_i[0]_i_1\: unisim.vcomponents.LUT2
     generic map(
@@ -1827,15 +1848,15 @@ rd_pntr_cdc_inst: entity work.cpu_rx_packet_size_xpm_cdc_gray
     )
         port map (
       I0 => \^rd_pntr_wr\(0),
-      I1 => \gic0.gc0.count_d2_reg[3]\(0),
+      I1 => \src_gray_ff_reg[3]\(0),
       O => D(0)
     );
-wr_pntr_cdc_inst: entity work.\cpu_rx_packet_size_xpm_cdc_gray__1\
+wr_pntr_cdc_inst: entity work.\cpu_rx_packet_size_xpm_cdc_gray__2\
      port map (
       dest_clk => rd_clk,
       dest_out_bin(3 downto 0) => WR_PNTR_RD(3 downto 0),
       src_clk => wr_clk,
-      src_in_bin(3 downto 0) => \gic0.gc0.count_d2_reg[3]\(3 downto 0)
+      src_in_bin(3 downto 0) => \src_gray_ff_reg[3]\(3 downto 0)
     );
 end STRUCTURE;
 library IEEE;
@@ -1903,7 +1924,7 @@ begin
       E(0) => \^e\(0),
       empty => empty,
       \out\ => p_2_out,
-      ram_empty_fb_i_reg_0 => rpntr_n_0,
+      ram_empty_i_reg_0 => rpntr_n_0,
       rd_clk => rd_clk,
       rd_en => rd_en
     );
@@ -1914,9 +1935,9 @@ rpntr: entity work.cpu_rx_packet_size_rd_bin_cntr
       Q(3 downto 0) => Q(3 downto 0),
       WR_PNTR_RD(3 downto 0) => WR_PNTR_RD(3 downto 0),
       \out\ => p_2_out,
-      ram_empty_i_reg => rpntr_n_0,
       rd_clk => rd_clk,
-      rd_en => rd_en
+      rd_en => rd_en,
+      rd_en_0 => rpntr_n_0
     );
 end STRUCTURE;
 library IEEE;
@@ -1926,9 +1947,9 @@ use UNISIM.VCOMPONENTS.ALL;
 entity cpu_rx_packet_size_reset_blk_ramfifo is
   port (
     AR : out STD_LOGIC_VECTOR ( 0 to 0 );
-    \syncstages_ff_reg[0]\ : out STD_LOGIC_VECTOR ( 0 to 0 );
+    \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_reg_0\ : out STD_LOGIC_VECTOR ( 0 to 0 );
     \out\ : out STD_LOGIC;
-    ram_full_fb_i_reg : out STD_LOGIC;
+    \grstd1.grst_full.grst_f.rst_d3_reg_0\ : out STD_LOGIC;
     wr_rst_busy : out STD_LOGIC;
     rst : in STD_LOGIC;
     wr_clk : in STD_LOGIC;
@@ -1943,6 +1964,7 @@ architecture STRUCTURE of cpu_rx_packet_size_reset_blk_ramfifo is
   signal dest_out : STD_LOGIC;
   signal \grstd1.grst_full.grst_f.rst_d3_i_1_n_0\ : STD_LOGIC;
   signal \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_i_1_n_0\ : STD_LOGIC;
+  signal \^ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_reg_0\ : STD_LOGIC_VECTOR ( 0 to 0 );
   signal \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_wr_rst_ic_i_1_n_0\ : STD_LOGIC;
   signal \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.wr_rst_busy_i_i_1_n_0\ : STD_LOGIC;
   signal rd_rst_wr_ext : STD_LOGIC_VECTOR ( 3 downto 0 );
@@ -1964,7 +1986,6 @@ architecture STRUCTURE of cpu_rx_packet_size_reset_blk_ramfifo is
   attribute async_reg of rst_wr_reg2 : signal is "true";
   attribute msgon of rst_wr_reg2 : signal is "true";
   signal sckt_rd_rst_wr : STD_LOGIC;
-  signal \^syncstages_ff_reg[0]\ : STD_LOGIC_VECTOR ( 0 to 0 );
   signal \^wr_rst_busy\ : STD_LOGIC;
   signal wr_rst_rd_ext : STD_LOGIC_VECTOR ( 1 downto 0 );
   attribute ASYNC_REG_boolean : boolean;
@@ -2020,9 +2041,9 @@ architecture STRUCTURE of cpu_rx_packet_size_reset_blk_ramfifo is
   attribute XPM_MODULE of \ngwrdrst.grst.g7serrst.gnsckt_wrst.rst_wr_reg2_inst\ : label is "TRUE";
 begin
   AR(0) <= \^ar\(0);
+  \grstd1.grst_full.grst_f.rst_d3_reg_0\ <= rst_d3;
+  \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_reg_0\(0) <= \^ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_reg_0\(0);
   \out\ <= rst_d2;
-  ram_full_fb_i_reg <= rst_d3;
-  \syncstages_ff_reg[0]\(0) <= \^syncstages_ff_reg[0]\(0);
   wr_rst_busy <= \^wr_rst_busy\;
 \grstd1.grst_full.grst_f.rst_d1_reg\: unisim.vcomponents.FDPE
     generic map(
@@ -2121,7 +2142,7 @@ begin
       INIT => X"2"
     )
         port map (
-      I0 => \^syncstages_ff_reg[0]\(0),
+      I0 => \^ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_reg_0\(0),
       I1 => wr_rst_rd_ext(1),
       O => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_i_1_n_0\
     );
@@ -2134,7 +2155,7 @@ begin
       CE => '1',
       D => \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_i_1_n_0\,
       PRE => rst_rd_reg2,
-      Q => \^syncstages_ff_reg[0]\(0)
+      Q => \^ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_reg_0\(0)
     );
 \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_wr_rst_ic_i_1\: unisim.vcomponents.LUT3
     generic map(
@@ -2207,16 +2228,16 @@ begin
       dest_clk => wr_clk,
       dest_out => sckt_rd_rst_wr,
       src_clk => rd_clk,
-      src_in => \^syncstages_ff_reg[0]\(0)
+      src_in => \^ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_reg_0\(0)
     );
-\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.xpm_cdc_single_inst_wrst_rd\: entity work.\cpu_rx_packet_size_xpm_cdc_single__1\
+\ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.xpm_cdc_single_inst_wrst_rd\: entity work.\cpu_rx_packet_size_xpm_cdc_single__2\
      port map (
       dest_clk => rd_clk,
       dest_out => dest_out,
       src_clk => wr_clk,
       src_in => \^ar\(0)
     );
-\ngwrdrst.grst.g7serrst.gnsckt_wrst.rst_wr_reg2_inst\: entity work.\cpu_rx_packet_size_xpm_cdc_async_rst__1\
+\ngwrdrst.grst.g7serrst.gnsckt_wrst.rst_wr_reg2_inst\: entity work.\cpu_rx_packet_size_xpm_cdc_async_rst__2\
      port map (
       dest_arst => rst_wr_reg2,
       dest_clk => wr_clk,
@@ -2230,13 +2251,13 @@ use UNISIM.VCOMPONENTS.ALL;
 entity cpu_rx_packet_size_wr_logic is
   port (
     full : out STD_LOGIC;
-    ram_full_fb_i_reg : out STD_LOGIC;
+    wr_en_0 : out STD_LOGIC;
     Q : out STD_LOGIC_VECTOR ( 2 downto 0 );
     E : out STD_LOGIC_VECTOR ( 0 to 0 );
-    \src_gray_ff_reg[3]\ : out STD_LOGIC_VECTOR ( 3 downto 0 );
     \gic0.gc0.count_d2_reg[3]\ : out STD_LOGIC_VECTOR ( 3 downto 0 );
+    \gic0.gc0.count_d1_reg[3]\ : out STD_LOGIC_VECTOR ( 3 downto 0 );
     wr_data_count : out STD_LOGIC_VECTOR ( 3 downto 0 );
-    \gic0.gc0.count_d1_reg[3]\ : in STD_LOGIC;
+    ram_full_fb_i_reg : in STD_LOGIC;
     wr_clk : in STD_LOGIC;
     \out\ : in STD_LOGIC;
     wr_en : in STD_LOGIC;
@@ -2268,11 +2289,11 @@ begin
       Q(0) => wr_pntr_plus2(3),
       RD_PNTR_WR(0) => RD_PNTR_WR(3),
       full => full,
-      \gic0.gc0.count_d1_reg[3]\ => \gic0.gc0.count_d1_reg[3]\,
       \out\ => \out\,
       ram_full_fb_i_reg_0 => ram_full_fb_i_reg,
       wr_clk => wr_clk,
-      wr_en => wr_en
+      wr_en => wr_en,
+      wr_en_0 => wr_en_0
     );
 wpntr: entity work.cpu_rx_packet_size_wr_bin_cntr
      port map (
@@ -2282,8 +2303,8 @@ wpntr: entity work.cpu_rx_packet_size_wr_bin_cntr
       Q(3) => wr_pntr_plus2(3),
       Q(2 downto 0) => Q(2 downto 0),
       RD_PNTR_WR(3 downto 0) => RD_PNTR_WR(3 downto 0),
+      \gic0.gc0.count_d1_reg[3]_0\(3 downto 0) => \gic0.gc0.count_d1_reg[3]\(3 downto 0),
       \gic0.gc0.count_d2_reg[3]_0\(3 downto 0) => \gic0.gc0.count_d2_reg[3]\(3 downto 0),
-      \src_gray_ff_reg[3]\(3 downto 0) => \src_gray_ff_reg[3]\(3 downto 0),
       wr_clk => wr_clk
     );
 end STRUCTURE;
@@ -2334,13 +2355,13 @@ begin
       Q(3 downto 0) => p_14_out(3 downto 0),
       RD_PNTR_WR(3 downto 0) => p_25_out(3 downto 0),
       WR_PNTR_RD(3 downto 0) => p_24_out(3 downto 0),
-      \gc0.count_d1_reg[3]\(3 downto 0) => p_0_out_0(3 downto 0),
-      \gic0.gc0.count_d2_reg[3]\(3 downto 0) => p_13_out(3 downto 0),
-      \gic0.gc0.count_reg[2]\(2 downto 0) => wr_pntr_plus2(2 downto 0),
+      \gic0.gc0.count_d1_reg[3]\ => \gntv_or_sync_fifo.gcx.clkx_n_0\,
       \out\ => rst_full_gen_i,
-      ram_full_fb_i_reg => \gntv_or_sync_fifo.gcx.clkx_n_0\,
-      ram_full_fb_i_reg_0 => \gntv_or_sync_fifo.gl0.wr_n_1\,
+      ram_full_fb_i_reg => \gntv_or_sync_fifo.gl0.wr_n_1\,
+      ram_full_fb_i_reg_0(2 downto 0) => wr_pntr_plus2(2 downto 0),
       rd_clk => rd_clk,
+      \src_gray_ff_reg[3]\(3 downto 0) => p_13_out(3 downto 0),
+      \src_gray_ff_reg[3]_0\(3 downto 0) => p_0_out_0(3 downto 0),
       wr_clk => wr_clk
     );
 \gntv_or_sync_fifo.gl0.rd\: entity work.cpu_rx_packet_size_rd_logic
@@ -2361,14 +2382,14 @@ begin
       Q(2 downto 0) => wr_pntr_plus2(2 downto 0),
       RD_PNTR_WR(3 downto 0) => p_25_out(3 downto 0),
       full => full,
-      \gic0.gc0.count_d1_reg[3]\ => \gntv_or_sync_fifo.gcx.clkx_n_0\,
-      \gic0.gc0.count_d2_reg[3]\(3 downto 0) => p_14_out(3 downto 0),
+      \gic0.gc0.count_d1_reg[3]\(3 downto 0) => p_14_out(3 downto 0),
+      \gic0.gc0.count_d2_reg[3]\(3 downto 0) => p_13_out(3 downto 0),
       \out\ => rst_full_ff_i,
-      ram_full_fb_i_reg => \gntv_or_sync_fifo.gl0.wr_n_1\,
-      \src_gray_ff_reg[3]\(3 downto 0) => p_13_out(3 downto 0),
+      ram_full_fb_i_reg => \gntv_or_sync_fifo.gcx.clkx_n_0\,
       wr_clk => wr_clk,
       wr_data_count(3 downto 0) => wr_data_count(3 downto 0),
-      wr_en => wr_en
+      wr_en => wr_en,
+      wr_en_0 => \gntv_or_sync_fifo.gl0.wr_n_1\
     );
 \gntv_or_sync_fifo.mem\: entity work.cpu_rx_packet_size_memory
      port map (
@@ -2385,11 +2406,11 @@ begin
 rstblk: entity work.cpu_rx_packet_size_reset_blk_ramfifo
      port map (
       AR(0) => rstblk_n_0,
+      \grstd1.grst_full.grst_f.rst_d3_reg_0\ => rst_full_gen_i,
+      \ngwrdrst.grst.g7serrst.gnsckt_wrst.gic_rst.sckt_rd_rst_ic_reg_0\(0) => \^ar\(0),
       \out\ => rst_full_ff_i,
-      ram_full_fb_i_reg => rst_full_gen_i,
       rd_clk => rd_clk,
       rst => rst,
-      \syncstages_ff_reg[0]\(0) => \^ar\(0),
       wr_clk => wr_clk,
       wr_rst_busy => wr_rst_busy
     );
@@ -2439,7 +2460,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity cpu_rx_packet_size_fifo_generator_v13_2_2_synth is
+entity cpu_rx_packet_size_fifo_generator_v13_2_4_synth is
   port (
     wr_rst_busy : out STD_LOGIC;
     AR : out STD_LOGIC_VECTOR ( 0 to 0 );
@@ -2455,10 +2476,10 @@ entity cpu_rx_packet_size_fifo_generator_v13_2_2_synth is
     rd_en : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of cpu_rx_packet_size_fifo_generator_v13_2_2_synth : entity is "fifo_generator_v13_2_2_synth";
-end cpu_rx_packet_size_fifo_generator_v13_2_2_synth;
+  attribute ORIG_REF_NAME of cpu_rx_packet_size_fifo_generator_v13_2_4_synth : entity is "fifo_generator_v13_2_4_synth";
+end cpu_rx_packet_size_fifo_generator_v13_2_4_synth;
 
-architecture STRUCTURE of cpu_rx_packet_size_fifo_generator_v13_2_2_synth is
+architecture STRUCTURE of cpu_rx_packet_size_fifo_generator_v13_2_4_synth is
 begin
 \gconvfifo.rf\: entity work.cpu_rx_packet_size_fifo_generator_top
      port map (
@@ -2480,7 +2501,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity cpu_rx_packet_size_fifo_generator_v13_2_2 is
+entity cpu_rx_packet_size_fifo_generator_v13_2_4 is
   port (
     backup : in STD_LOGIC;
     backup_marker : in STD_LOGIC;
@@ -2715,414 +2736,414 @@ entity cpu_rx_packet_size_fifo_generator_v13_2_2 is
     axis_prog_empty : out STD_LOGIC
   );
   attribute C_ADD_NGC_CONSTRAINT : integer;
-  attribute C_ADD_NGC_CONSTRAINT of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_ADD_NGC_CONSTRAINT of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_APPLICATION_TYPE_AXIS : integer;
-  attribute C_APPLICATION_TYPE_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_APPLICATION_TYPE_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_APPLICATION_TYPE_RACH : integer;
-  attribute C_APPLICATION_TYPE_RACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_APPLICATION_TYPE_RACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_APPLICATION_TYPE_RDCH : integer;
-  attribute C_APPLICATION_TYPE_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_APPLICATION_TYPE_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_APPLICATION_TYPE_WACH : integer;
-  attribute C_APPLICATION_TYPE_WACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_APPLICATION_TYPE_WACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_APPLICATION_TYPE_WDCH : integer;
-  attribute C_APPLICATION_TYPE_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_APPLICATION_TYPE_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_APPLICATION_TYPE_WRCH : integer;
-  attribute C_APPLICATION_TYPE_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_APPLICATION_TYPE_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_AXIS_TDATA_WIDTH : integer;
-  attribute C_AXIS_TDATA_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 8;
+  attribute C_AXIS_TDATA_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 8;
   attribute C_AXIS_TDEST_WIDTH : integer;
-  attribute C_AXIS_TDEST_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_AXIS_TDEST_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_AXIS_TID_WIDTH : integer;
-  attribute C_AXIS_TID_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_AXIS_TID_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_AXIS_TKEEP_WIDTH : integer;
-  attribute C_AXIS_TKEEP_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_AXIS_TKEEP_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_AXIS_TSTRB_WIDTH : integer;
-  attribute C_AXIS_TSTRB_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_AXIS_TSTRB_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_AXIS_TUSER_WIDTH : integer;
-  attribute C_AXIS_TUSER_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 4;
+  attribute C_AXIS_TUSER_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 4;
   attribute C_AXIS_TYPE : integer;
-  attribute C_AXIS_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_AXIS_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_AXI_ADDR_WIDTH : integer;
-  attribute C_AXI_ADDR_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 32;
+  attribute C_AXI_ADDR_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 32;
   attribute C_AXI_ARUSER_WIDTH : integer;
-  attribute C_AXI_ARUSER_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_AXI_ARUSER_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_AXI_AWUSER_WIDTH : integer;
-  attribute C_AXI_AWUSER_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_AXI_AWUSER_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_AXI_BUSER_WIDTH : integer;
-  attribute C_AXI_BUSER_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_AXI_BUSER_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_AXI_DATA_WIDTH : integer;
-  attribute C_AXI_DATA_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 64;
+  attribute C_AXI_DATA_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 64;
   attribute C_AXI_ID_WIDTH : integer;
-  attribute C_AXI_ID_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_AXI_ID_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_AXI_LEN_WIDTH : integer;
-  attribute C_AXI_LEN_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 8;
+  attribute C_AXI_LEN_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 8;
   attribute C_AXI_LOCK_WIDTH : integer;
-  attribute C_AXI_LOCK_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_AXI_LOCK_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_AXI_RUSER_WIDTH : integer;
-  attribute C_AXI_RUSER_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_AXI_RUSER_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_AXI_TYPE : integer;
-  attribute C_AXI_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_AXI_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_AXI_WUSER_WIDTH : integer;
-  attribute C_AXI_WUSER_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_AXI_WUSER_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_COMMON_CLOCK : integer;
-  attribute C_COMMON_CLOCK of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_COMMON_CLOCK of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_COUNT_TYPE : integer;
-  attribute C_COUNT_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_COUNT_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_DATA_COUNT_WIDTH : integer;
-  attribute C_DATA_COUNT_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 4;
+  attribute C_DATA_COUNT_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 4;
   attribute C_DEFAULT_VALUE : string;
-  attribute C_DEFAULT_VALUE of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is "BlankString";
+  attribute C_DEFAULT_VALUE of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is "BlankString";
   attribute C_DIN_WIDTH : integer;
-  attribute C_DIN_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 11;
+  attribute C_DIN_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 11;
   attribute C_DIN_WIDTH_AXIS : integer;
-  attribute C_DIN_WIDTH_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_DIN_WIDTH_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_DIN_WIDTH_RACH : integer;
-  attribute C_DIN_WIDTH_RACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 32;
+  attribute C_DIN_WIDTH_RACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 32;
   attribute C_DIN_WIDTH_RDCH : integer;
-  attribute C_DIN_WIDTH_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 64;
+  attribute C_DIN_WIDTH_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 64;
   attribute C_DIN_WIDTH_WACH : integer;
-  attribute C_DIN_WIDTH_WACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_DIN_WIDTH_WACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_DIN_WIDTH_WDCH : integer;
-  attribute C_DIN_WIDTH_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 64;
+  attribute C_DIN_WIDTH_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 64;
   attribute C_DIN_WIDTH_WRCH : integer;
-  attribute C_DIN_WIDTH_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 2;
+  attribute C_DIN_WIDTH_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 2;
   attribute C_DOUT_RST_VAL : string;
-  attribute C_DOUT_RST_VAL of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is "0";
+  attribute C_DOUT_RST_VAL of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is "0";
   attribute C_DOUT_WIDTH : integer;
-  attribute C_DOUT_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 11;
+  attribute C_DOUT_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 11;
   attribute C_ENABLE_RLOCS : integer;
-  attribute C_ENABLE_RLOCS of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_ENABLE_RLOCS of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_ENABLE_RST_SYNC : integer;
-  attribute C_ENABLE_RST_SYNC of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_ENABLE_RST_SYNC of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_EN_SAFETY_CKT : integer;
-  attribute C_EN_SAFETY_CKT of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_EN_SAFETY_CKT of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_ERROR_INJECTION_TYPE : integer;
-  attribute C_ERROR_INJECTION_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_ERROR_INJECTION_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_ERROR_INJECTION_TYPE_AXIS : integer;
-  attribute C_ERROR_INJECTION_TYPE_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_ERROR_INJECTION_TYPE_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_ERROR_INJECTION_TYPE_RACH : integer;
-  attribute C_ERROR_INJECTION_TYPE_RACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_ERROR_INJECTION_TYPE_RACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_ERROR_INJECTION_TYPE_RDCH : integer;
-  attribute C_ERROR_INJECTION_TYPE_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_ERROR_INJECTION_TYPE_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_ERROR_INJECTION_TYPE_WACH : integer;
-  attribute C_ERROR_INJECTION_TYPE_WACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_ERROR_INJECTION_TYPE_WACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_ERROR_INJECTION_TYPE_WDCH : integer;
-  attribute C_ERROR_INJECTION_TYPE_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_ERROR_INJECTION_TYPE_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_ERROR_INJECTION_TYPE_WRCH : integer;
-  attribute C_ERROR_INJECTION_TYPE_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_ERROR_INJECTION_TYPE_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_FAMILY : string;
-  attribute C_FAMILY of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is "virtex7";
+  attribute C_FAMILY of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is "virtex7";
   attribute C_FULL_FLAGS_RST_VAL : integer;
-  attribute C_FULL_FLAGS_RST_VAL of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_FULL_FLAGS_RST_VAL of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_HAS_ALMOST_EMPTY : integer;
-  attribute C_HAS_ALMOST_EMPTY of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_ALMOST_EMPTY of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_ALMOST_FULL : integer;
-  attribute C_HAS_ALMOST_FULL of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_ALMOST_FULL of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_AXIS_TDATA : integer;
-  attribute C_HAS_AXIS_TDATA of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_HAS_AXIS_TDATA of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_HAS_AXIS_TDEST : integer;
-  attribute C_HAS_AXIS_TDEST of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_AXIS_TDEST of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_AXIS_TID : integer;
-  attribute C_HAS_AXIS_TID of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_AXIS_TID of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_AXIS_TKEEP : integer;
-  attribute C_HAS_AXIS_TKEEP of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_AXIS_TKEEP of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_AXIS_TLAST : integer;
-  attribute C_HAS_AXIS_TLAST of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_AXIS_TLAST of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_AXIS_TREADY : integer;
-  attribute C_HAS_AXIS_TREADY of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_HAS_AXIS_TREADY of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_HAS_AXIS_TSTRB : integer;
-  attribute C_HAS_AXIS_TSTRB of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_AXIS_TSTRB of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_AXIS_TUSER : integer;
-  attribute C_HAS_AXIS_TUSER of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_HAS_AXIS_TUSER of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_HAS_AXI_ARUSER : integer;
-  attribute C_HAS_AXI_ARUSER of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_AXI_ARUSER of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_AXI_AWUSER : integer;
-  attribute C_HAS_AXI_AWUSER of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_AXI_AWUSER of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_AXI_BUSER : integer;
-  attribute C_HAS_AXI_BUSER of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_AXI_BUSER of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_AXI_ID : integer;
-  attribute C_HAS_AXI_ID of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_AXI_ID of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_AXI_RD_CHANNEL : integer;
-  attribute C_HAS_AXI_RD_CHANNEL of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_HAS_AXI_RD_CHANNEL of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_HAS_AXI_RUSER : integer;
-  attribute C_HAS_AXI_RUSER of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_AXI_RUSER of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_AXI_WR_CHANNEL : integer;
-  attribute C_HAS_AXI_WR_CHANNEL of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_HAS_AXI_WR_CHANNEL of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_HAS_AXI_WUSER : integer;
-  attribute C_HAS_AXI_WUSER of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_AXI_WUSER of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_BACKUP : integer;
-  attribute C_HAS_BACKUP of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_BACKUP of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_DATA_COUNT : integer;
-  attribute C_HAS_DATA_COUNT of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_DATA_COUNT of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_DATA_COUNTS_AXIS : integer;
-  attribute C_HAS_DATA_COUNTS_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_DATA_COUNTS_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_DATA_COUNTS_RACH : integer;
-  attribute C_HAS_DATA_COUNTS_RACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_DATA_COUNTS_RACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_DATA_COUNTS_RDCH : integer;
-  attribute C_HAS_DATA_COUNTS_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_DATA_COUNTS_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_DATA_COUNTS_WACH : integer;
-  attribute C_HAS_DATA_COUNTS_WACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_DATA_COUNTS_WACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_DATA_COUNTS_WDCH : integer;
-  attribute C_HAS_DATA_COUNTS_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_DATA_COUNTS_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_DATA_COUNTS_WRCH : integer;
-  attribute C_HAS_DATA_COUNTS_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_DATA_COUNTS_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_INT_CLK : integer;
-  attribute C_HAS_INT_CLK of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_INT_CLK of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_MASTER_CE : integer;
-  attribute C_HAS_MASTER_CE of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_MASTER_CE of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_MEMINIT_FILE : integer;
-  attribute C_HAS_MEMINIT_FILE of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_MEMINIT_FILE of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_OVERFLOW : integer;
-  attribute C_HAS_OVERFLOW of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_OVERFLOW of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_PROG_FLAGS_AXIS : integer;
-  attribute C_HAS_PROG_FLAGS_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_PROG_FLAGS_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_PROG_FLAGS_RACH : integer;
-  attribute C_HAS_PROG_FLAGS_RACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_PROG_FLAGS_RACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_PROG_FLAGS_RDCH : integer;
-  attribute C_HAS_PROG_FLAGS_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_PROG_FLAGS_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_PROG_FLAGS_WACH : integer;
-  attribute C_HAS_PROG_FLAGS_WACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_PROG_FLAGS_WACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_PROG_FLAGS_WDCH : integer;
-  attribute C_HAS_PROG_FLAGS_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_PROG_FLAGS_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_PROG_FLAGS_WRCH : integer;
-  attribute C_HAS_PROG_FLAGS_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_PROG_FLAGS_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_RD_DATA_COUNT : integer;
-  attribute C_HAS_RD_DATA_COUNT of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_RD_DATA_COUNT of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_RD_RST : integer;
-  attribute C_HAS_RD_RST of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_RD_RST of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_RST : integer;
-  attribute C_HAS_RST of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_HAS_RST of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_HAS_SLAVE_CE : integer;
-  attribute C_HAS_SLAVE_CE of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_SLAVE_CE of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_SRST : integer;
-  attribute C_HAS_SRST of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_SRST of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_UNDERFLOW : integer;
-  attribute C_HAS_UNDERFLOW of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_UNDERFLOW of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_VALID : integer;
-  attribute C_HAS_VALID of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_VALID of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_WR_ACK : integer;
-  attribute C_HAS_WR_ACK of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_WR_ACK of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_HAS_WR_DATA_COUNT : integer;
-  attribute C_HAS_WR_DATA_COUNT of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_HAS_WR_DATA_COUNT of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_HAS_WR_RST : integer;
-  attribute C_HAS_WR_RST of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_HAS_WR_RST of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_IMPLEMENTATION_TYPE : integer;
-  attribute C_IMPLEMENTATION_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 2;
+  attribute C_IMPLEMENTATION_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 2;
   attribute C_IMPLEMENTATION_TYPE_AXIS : integer;
-  attribute C_IMPLEMENTATION_TYPE_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_IMPLEMENTATION_TYPE_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_IMPLEMENTATION_TYPE_RACH : integer;
-  attribute C_IMPLEMENTATION_TYPE_RACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_IMPLEMENTATION_TYPE_RACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_IMPLEMENTATION_TYPE_RDCH : integer;
-  attribute C_IMPLEMENTATION_TYPE_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_IMPLEMENTATION_TYPE_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_IMPLEMENTATION_TYPE_WACH : integer;
-  attribute C_IMPLEMENTATION_TYPE_WACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_IMPLEMENTATION_TYPE_WACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_IMPLEMENTATION_TYPE_WDCH : integer;
-  attribute C_IMPLEMENTATION_TYPE_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_IMPLEMENTATION_TYPE_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_IMPLEMENTATION_TYPE_WRCH : integer;
-  attribute C_IMPLEMENTATION_TYPE_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_IMPLEMENTATION_TYPE_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_INIT_WR_PNTR_VAL : integer;
-  attribute C_INIT_WR_PNTR_VAL of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_INIT_WR_PNTR_VAL of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_INTERFACE_TYPE : integer;
-  attribute C_INTERFACE_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_INTERFACE_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_MEMORY_TYPE : integer;
-  attribute C_MEMORY_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 2;
+  attribute C_MEMORY_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 2;
   attribute C_MIF_FILE_NAME : string;
-  attribute C_MIF_FILE_NAME of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is "BlankString";
+  attribute C_MIF_FILE_NAME of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is "BlankString";
   attribute C_MSGON_VAL : integer;
-  attribute C_MSGON_VAL of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_MSGON_VAL of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_OPTIMIZATION_MODE : integer;
-  attribute C_OPTIMIZATION_MODE of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_OPTIMIZATION_MODE of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_OVERFLOW_LOW : integer;
-  attribute C_OVERFLOW_LOW of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_OVERFLOW_LOW of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_POWER_SAVING_MODE : integer;
-  attribute C_POWER_SAVING_MODE of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_POWER_SAVING_MODE of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PRELOAD_LATENCY : integer;
-  attribute C_PRELOAD_LATENCY of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_PRELOAD_LATENCY of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_PRELOAD_REGS : integer;
-  attribute C_PRELOAD_REGS of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PRELOAD_REGS of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PRIM_FIFO_TYPE : string;
-  attribute C_PRIM_FIFO_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is "512x36";
+  attribute C_PRIM_FIFO_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is "512x36";
   attribute C_PRIM_FIFO_TYPE_AXIS : string;
-  attribute C_PRIM_FIFO_TYPE_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is "1kx18";
+  attribute C_PRIM_FIFO_TYPE_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is "1kx18";
   attribute C_PRIM_FIFO_TYPE_RACH : string;
-  attribute C_PRIM_FIFO_TYPE_RACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is "512x36";
+  attribute C_PRIM_FIFO_TYPE_RACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is "512x36";
   attribute C_PRIM_FIFO_TYPE_RDCH : string;
-  attribute C_PRIM_FIFO_TYPE_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is "1kx36";
+  attribute C_PRIM_FIFO_TYPE_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is "1kx36";
   attribute C_PRIM_FIFO_TYPE_WACH : string;
-  attribute C_PRIM_FIFO_TYPE_WACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is "512x36";
+  attribute C_PRIM_FIFO_TYPE_WACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is "512x36";
   attribute C_PRIM_FIFO_TYPE_WDCH : string;
-  attribute C_PRIM_FIFO_TYPE_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is "1kx36";
+  attribute C_PRIM_FIFO_TYPE_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is "1kx36";
   attribute C_PRIM_FIFO_TYPE_WRCH : string;
-  attribute C_PRIM_FIFO_TYPE_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is "512x36";
+  attribute C_PRIM_FIFO_TYPE_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is "512x36";
   attribute C_PROG_EMPTY_THRESH_ASSERT_VAL : integer;
-  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 2;
+  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 2;
   attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_AXIS : integer;
-  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1022;
+  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1022;
   attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_RACH : integer;
-  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_RACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1022;
+  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_RACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1022;
   attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_RDCH : integer;
-  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1022;
+  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1022;
   attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_WACH : integer;
-  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_WACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1022;
+  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_WACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1022;
   attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_WDCH : integer;
-  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1022;
+  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1022;
   attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_WRCH : integer;
-  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1022;
+  attribute C_PROG_EMPTY_THRESH_ASSERT_VAL_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1022;
   attribute C_PROG_EMPTY_THRESH_NEGATE_VAL : integer;
-  attribute C_PROG_EMPTY_THRESH_NEGATE_VAL of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 3;
+  attribute C_PROG_EMPTY_THRESH_NEGATE_VAL of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 3;
   attribute C_PROG_EMPTY_TYPE : integer;
-  attribute C_PROG_EMPTY_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_EMPTY_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_EMPTY_TYPE_AXIS : integer;
-  attribute C_PROG_EMPTY_TYPE_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_EMPTY_TYPE_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_EMPTY_TYPE_RACH : integer;
-  attribute C_PROG_EMPTY_TYPE_RACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_EMPTY_TYPE_RACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_EMPTY_TYPE_RDCH : integer;
-  attribute C_PROG_EMPTY_TYPE_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_EMPTY_TYPE_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_EMPTY_TYPE_WACH : integer;
-  attribute C_PROG_EMPTY_TYPE_WACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_EMPTY_TYPE_WACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_EMPTY_TYPE_WDCH : integer;
-  attribute C_PROG_EMPTY_TYPE_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_EMPTY_TYPE_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_EMPTY_TYPE_WRCH : integer;
-  attribute C_PROG_EMPTY_TYPE_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_EMPTY_TYPE_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_FULL_THRESH_ASSERT_VAL : integer;
-  attribute C_PROG_FULL_THRESH_ASSERT_VAL of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 13;
+  attribute C_PROG_FULL_THRESH_ASSERT_VAL of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 13;
   attribute C_PROG_FULL_THRESH_ASSERT_VAL_AXIS : integer;
-  attribute C_PROG_FULL_THRESH_ASSERT_VAL_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1023;
+  attribute C_PROG_FULL_THRESH_ASSERT_VAL_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1023;
   attribute C_PROG_FULL_THRESH_ASSERT_VAL_RACH : integer;
-  attribute C_PROG_FULL_THRESH_ASSERT_VAL_RACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1023;
+  attribute C_PROG_FULL_THRESH_ASSERT_VAL_RACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1023;
   attribute C_PROG_FULL_THRESH_ASSERT_VAL_RDCH : integer;
-  attribute C_PROG_FULL_THRESH_ASSERT_VAL_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1023;
+  attribute C_PROG_FULL_THRESH_ASSERT_VAL_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1023;
   attribute C_PROG_FULL_THRESH_ASSERT_VAL_WACH : integer;
-  attribute C_PROG_FULL_THRESH_ASSERT_VAL_WACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1023;
+  attribute C_PROG_FULL_THRESH_ASSERT_VAL_WACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1023;
   attribute C_PROG_FULL_THRESH_ASSERT_VAL_WDCH : integer;
-  attribute C_PROG_FULL_THRESH_ASSERT_VAL_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1023;
+  attribute C_PROG_FULL_THRESH_ASSERT_VAL_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1023;
   attribute C_PROG_FULL_THRESH_ASSERT_VAL_WRCH : integer;
-  attribute C_PROG_FULL_THRESH_ASSERT_VAL_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1023;
+  attribute C_PROG_FULL_THRESH_ASSERT_VAL_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1023;
   attribute C_PROG_FULL_THRESH_NEGATE_VAL : integer;
-  attribute C_PROG_FULL_THRESH_NEGATE_VAL of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 12;
+  attribute C_PROG_FULL_THRESH_NEGATE_VAL of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 12;
   attribute C_PROG_FULL_TYPE : integer;
-  attribute C_PROG_FULL_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_FULL_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_FULL_TYPE_AXIS : integer;
-  attribute C_PROG_FULL_TYPE_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_FULL_TYPE_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_FULL_TYPE_RACH : integer;
-  attribute C_PROG_FULL_TYPE_RACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_FULL_TYPE_RACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_FULL_TYPE_RDCH : integer;
-  attribute C_PROG_FULL_TYPE_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_FULL_TYPE_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_FULL_TYPE_WACH : integer;
-  attribute C_PROG_FULL_TYPE_WACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_FULL_TYPE_WACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_FULL_TYPE_WDCH : integer;
-  attribute C_PROG_FULL_TYPE_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_FULL_TYPE_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_PROG_FULL_TYPE_WRCH : integer;
-  attribute C_PROG_FULL_TYPE_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_PROG_FULL_TYPE_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_RACH_TYPE : integer;
-  attribute C_RACH_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_RACH_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_RDCH_TYPE : integer;
-  attribute C_RDCH_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_RDCH_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_RD_DATA_COUNT_WIDTH : integer;
-  attribute C_RD_DATA_COUNT_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 4;
+  attribute C_RD_DATA_COUNT_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 4;
   attribute C_RD_DEPTH : integer;
-  attribute C_RD_DEPTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 16;
+  attribute C_RD_DEPTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 16;
   attribute C_RD_FREQ : integer;
-  attribute C_RD_FREQ of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_RD_FREQ of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_RD_PNTR_WIDTH : integer;
-  attribute C_RD_PNTR_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 4;
+  attribute C_RD_PNTR_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 4;
   attribute C_REG_SLICE_MODE_AXIS : integer;
-  attribute C_REG_SLICE_MODE_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_REG_SLICE_MODE_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_REG_SLICE_MODE_RACH : integer;
-  attribute C_REG_SLICE_MODE_RACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_REG_SLICE_MODE_RACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_REG_SLICE_MODE_RDCH : integer;
-  attribute C_REG_SLICE_MODE_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_REG_SLICE_MODE_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_REG_SLICE_MODE_WACH : integer;
-  attribute C_REG_SLICE_MODE_WACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_REG_SLICE_MODE_WACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_REG_SLICE_MODE_WDCH : integer;
-  attribute C_REG_SLICE_MODE_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_REG_SLICE_MODE_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_REG_SLICE_MODE_WRCH : integer;
-  attribute C_REG_SLICE_MODE_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_REG_SLICE_MODE_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_SELECT_XPM : integer;
-  attribute C_SELECT_XPM of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_SELECT_XPM of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_SYNCHRONIZER_STAGE : integer;
-  attribute C_SYNCHRONIZER_STAGE of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 2;
+  attribute C_SYNCHRONIZER_STAGE of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 2;
   attribute C_UNDERFLOW_LOW : integer;
-  attribute C_UNDERFLOW_LOW of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_UNDERFLOW_LOW of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_COMMON_OVERFLOW : integer;
-  attribute C_USE_COMMON_OVERFLOW of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_COMMON_OVERFLOW of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_COMMON_UNDERFLOW : integer;
-  attribute C_USE_COMMON_UNDERFLOW of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_COMMON_UNDERFLOW of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_DEFAULT_SETTINGS : integer;
-  attribute C_USE_DEFAULT_SETTINGS of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_DEFAULT_SETTINGS of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_DOUT_RST : integer;
-  attribute C_USE_DOUT_RST of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_USE_DOUT_RST of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_USE_ECC : integer;
-  attribute C_USE_ECC of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_ECC of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_ECC_AXIS : integer;
-  attribute C_USE_ECC_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_ECC_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_ECC_RACH : integer;
-  attribute C_USE_ECC_RACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_ECC_RACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_ECC_RDCH : integer;
-  attribute C_USE_ECC_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_ECC_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_ECC_WACH : integer;
-  attribute C_USE_ECC_WACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_ECC_WACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_ECC_WDCH : integer;
-  attribute C_USE_ECC_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_ECC_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_ECC_WRCH : integer;
-  attribute C_USE_ECC_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_ECC_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_EMBEDDED_REG : integer;
-  attribute C_USE_EMBEDDED_REG of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_EMBEDDED_REG of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_FIFO16_FLAGS : integer;
-  attribute C_USE_FIFO16_FLAGS of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_FIFO16_FLAGS of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_FWFT_DATA_COUNT : integer;
-  attribute C_USE_FWFT_DATA_COUNT of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_FWFT_DATA_COUNT of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_USE_PIPELINE_REG : integer;
-  attribute C_USE_PIPELINE_REG of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_USE_PIPELINE_REG of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_VALID_LOW : integer;
-  attribute C_VALID_LOW of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_VALID_LOW of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_WACH_TYPE : integer;
-  attribute C_WACH_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_WACH_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_WDCH_TYPE : integer;
-  attribute C_WDCH_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_WDCH_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_WRCH_TYPE : integer;
-  attribute C_WRCH_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_WRCH_TYPE of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_WR_ACK_LOW : integer;
-  attribute C_WR_ACK_LOW of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 0;
+  attribute C_WR_ACK_LOW of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 0;
   attribute C_WR_DATA_COUNT_WIDTH : integer;
-  attribute C_WR_DATA_COUNT_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 4;
+  attribute C_WR_DATA_COUNT_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 4;
   attribute C_WR_DEPTH : integer;
-  attribute C_WR_DEPTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 16;
+  attribute C_WR_DEPTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 16;
   attribute C_WR_DEPTH_AXIS : integer;
-  attribute C_WR_DEPTH_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1024;
+  attribute C_WR_DEPTH_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1024;
   attribute C_WR_DEPTH_RACH : integer;
-  attribute C_WR_DEPTH_RACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 16;
+  attribute C_WR_DEPTH_RACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 16;
   attribute C_WR_DEPTH_RDCH : integer;
-  attribute C_WR_DEPTH_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1024;
+  attribute C_WR_DEPTH_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1024;
   attribute C_WR_DEPTH_WACH : integer;
-  attribute C_WR_DEPTH_WACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 16;
+  attribute C_WR_DEPTH_WACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 16;
   attribute C_WR_DEPTH_WDCH : integer;
-  attribute C_WR_DEPTH_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1024;
+  attribute C_WR_DEPTH_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1024;
   attribute C_WR_DEPTH_WRCH : integer;
-  attribute C_WR_DEPTH_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 16;
+  attribute C_WR_DEPTH_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 16;
   attribute C_WR_FREQ : integer;
-  attribute C_WR_FREQ of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_WR_FREQ of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute C_WR_PNTR_WIDTH : integer;
-  attribute C_WR_PNTR_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 4;
+  attribute C_WR_PNTR_WIDTH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 4;
   attribute C_WR_PNTR_WIDTH_AXIS : integer;
-  attribute C_WR_PNTR_WIDTH_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 10;
+  attribute C_WR_PNTR_WIDTH_AXIS of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 10;
   attribute C_WR_PNTR_WIDTH_RACH : integer;
-  attribute C_WR_PNTR_WIDTH_RACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 4;
+  attribute C_WR_PNTR_WIDTH_RACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 4;
   attribute C_WR_PNTR_WIDTH_RDCH : integer;
-  attribute C_WR_PNTR_WIDTH_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 10;
+  attribute C_WR_PNTR_WIDTH_RDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 10;
   attribute C_WR_PNTR_WIDTH_WACH : integer;
-  attribute C_WR_PNTR_WIDTH_WACH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 4;
+  attribute C_WR_PNTR_WIDTH_WACH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 4;
   attribute C_WR_PNTR_WIDTH_WDCH : integer;
-  attribute C_WR_PNTR_WIDTH_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 10;
+  attribute C_WR_PNTR_WIDTH_WDCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 10;
   attribute C_WR_PNTR_WIDTH_WRCH : integer;
-  attribute C_WR_PNTR_WIDTH_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 4;
+  attribute C_WR_PNTR_WIDTH_WRCH of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 4;
   attribute C_WR_RESPONSE_LATENCY : integer;
-  attribute C_WR_RESPONSE_LATENCY of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is 1;
+  attribute C_WR_RESPONSE_LATENCY of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is 1;
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of cpu_rx_packet_size_fifo_generator_v13_2_2 : entity is "fifo_generator_v13_2_2";
-end cpu_rx_packet_size_fifo_generator_v13_2_2;
+  attribute ORIG_REF_NAME of cpu_rx_packet_size_fifo_generator_v13_2_4 : entity is "fifo_generator_v13_2_4";
+end cpu_rx_packet_size_fifo_generator_v13_2_4;
 
-architecture STRUCTURE of cpu_rx_packet_size_fifo_generator_v13_2_2 is
+architecture STRUCTURE of cpu_rx_packet_size_fifo_generator_v13_2_4 is
   signal \<const0>\ : STD_LOGIC;
   signal \<const1>\ : STD_LOGIC;
 begin
@@ -3635,7 +3656,7 @@ VCC: unisim.vcomponents.VCC
      port map (
       P => \<const1>\
     );
-inst_fifo_gen: entity work.cpu_rx_packet_size_fifo_generator_v13_2_2_synth
+inst_fifo_gen: entity work.cpu_rx_packet_size_fifo_generator_v13_2_4_synth
      port map (
       AR(0) => rd_rst_busy,
       din(10 downto 0) => din(10 downto 0),
@@ -3671,11 +3692,11 @@ entity cpu_rx_packet_size is
   attribute NotValidForBitStream : boolean;
   attribute NotValidForBitStream of cpu_rx_packet_size : entity is true;
   attribute CHECK_LICENSE_TYPE : string;
-  attribute CHECK_LICENSE_TYPE of cpu_rx_packet_size : entity is "cpu_rx_packet_size,fifo_generator_v13_2_2,{}";
+  attribute CHECK_LICENSE_TYPE of cpu_rx_packet_size : entity is "cpu_rx_packet_size,fifo_generator_v13_2_4,{}";
   attribute downgradeipidentifiedwarnings : string;
   attribute downgradeipidentifiedwarnings of cpu_rx_packet_size : entity is "yes";
   attribute x_core_info : string;
-  attribute x_core_info of cpu_rx_packet_size : entity is "fifo_generator_v13_2_2,Vivado 2018.2";
+  attribute x_core_info of cpu_rx_packet_size : entity is "fifo_generator_v13_2_4,Vivado 2019.1.1";
 end cpu_rx_packet_size;
 
 architecture STRUCTURE of cpu_rx_packet_size is
@@ -4210,15 +4231,15 @@ architecture STRUCTURE of cpu_rx_packet_size is
   attribute x_interface_info of full : signal is "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE FULL";
   attribute x_interface_info of rd_clk : signal is "xilinx.com:signal:clock:1.0 read_clk CLK";
   attribute x_interface_parameter : string;
-  attribute x_interface_parameter of rd_clk : signal is "XIL_INTERFACENAME read_clk, FREQ_HZ 100000000, PHASE 0.000";
+  attribute x_interface_parameter of rd_clk : signal is "XIL_INTERFACENAME read_clk, FREQ_HZ 100000000, PHASE 0.000, INSERT_VIP 0";
   attribute x_interface_info of rd_en : signal is "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_EN";
   attribute x_interface_info of wr_clk : signal is "xilinx.com:signal:clock:1.0 write_clk CLK";
-  attribute x_interface_parameter of wr_clk : signal is "XIL_INTERFACENAME write_clk, FREQ_HZ 100000000, PHASE 0.000";
+  attribute x_interface_parameter of wr_clk : signal is "XIL_INTERFACENAME write_clk, FREQ_HZ 100000000, PHASE 0.000, INSERT_VIP 0";
   attribute x_interface_info of wr_en : signal is "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_EN";
   attribute x_interface_info of din : signal is "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_DATA";
   attribute x_interface_info of dout : signal is "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_DATA";
 begin
-U0: entity work.cpu_rx_packet_size_fifo_generator_v13_2_2
+U0: entity work.cpu_rx_packet_size_fifo_generator_v13_2_4
      port map (
       almost_empty => NLW_U0_almost_empty_UNCONNECTED,
       almost_full => NLW_U0_almost_full_UNCONNECTED,

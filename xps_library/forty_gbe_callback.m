@@ -63,6 +63,7 @@ mask_visibilities{ismember(mask_names, 'large_frames')} = 'on';
 mask_visibilities{ismember(mask_names, 'show_param')} = 'on';
 try
     mask_visibilities{ismember(mask_names, 'input_pipeline_delay')} = 'on';
+    mask_visibilities{ismember(mask_names, 'port')} = 'on';
 catch e
 end
 
@@ -118,3 +119,4 @@ set_param(blk, 'MaskVisibilities', mask_visibilities);
 clog('exiting forty_gbe_callback', 'trace');
 
 % end
+

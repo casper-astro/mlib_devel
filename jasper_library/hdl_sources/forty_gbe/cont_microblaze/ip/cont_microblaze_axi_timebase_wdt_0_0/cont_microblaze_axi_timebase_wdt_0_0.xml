@@ -423,6 +423,15 @@
             </xilinx:parameterInfo>
           </spirit:vendorExtensions>
         </spirit:parameter>
+        <spirit:parameter>
+          <spirit:name>INSERT_VIP</spirit:name>
+          <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="BUSIFPARAM_VALUE.S_AXI.INSERT_VIP">0</spirit:value>
+          <spirit:vendorExtensions>
+            <xilinx:parameterInfo>
+              <xilinx:parameterUsage>simulation.rtl</xilinx:parameterUsage>
+            </xilinx:parameterInfo>
+          </spirit:vendorExtensions>
+        </spirit:parameter>
       </spirit:parameters>
     </spirit:busInterface>
     <spirit:busInterface>
@@ -475,6 +484,15 @@
             </xilinx:parameterInfo>
           </spirit:vendorExtensions>
         </spirit:parameter>
+        <spirit:parameter>
+          <spirit:name>INSERT_VIP</spirit:name>
+          <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="BUSIFPARAM_VALUE.S_AXI_ACLK.INSERT_VIP">0</spirit:value>
+          <spirit:vendorExtensions>
+            <xilinx:parameterInfo>
+              <xilinx:parameterUsage>simulation.rtl</xilinx:parameterUsage>
+            </xilinx:parameterInfo>
+          </spirit:vendorExtensions>
+        </spirit:parameter>
       </spirit:parameters>
     </spirit:busInterface>
     <spirit:busInterface>
@@ -498,6 +516,15 @@
         <spirit:parameter>
           <spirit:name>POLARITY</spirit:name>
           <spirit:value spirit:id="BUSIFPARAM_VALUE.S_AXI_ARESETN.POLARITY">ACTIVE_LOW</spirit:value>
+        </spirit:parameter>
+        <spirit:parameter>
+          <spirit:name>INSERT_VIP</spirit:name>
+          <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="BUSIFPARAM_VALUE.S_AXI_ARESETN.INSERT_VIP">0</spirit:value>
+          <spirit:vendorExtensions>
+            <xilinx:parameterInfo>
+              <xilinx:parameterUsage>simulation.rtl</xilinx:parameterUsage>
+            </xilinx:parameterInfo>
+          </spirit:vendorExtensions>
         </spirit:parameter>
       </spirit:parameters>
     </spirit:busInterface>
@@ -595,6 +622,15 @@
         <spirit:parameter>
           <spirit:name>POLARITY</spirit:name>
           <spirit:value spirit:id="BUSIFPARAM_VALUE.WDT_RESET.POLARITY">ACTIVE_HIGH</spirit:value>
+        </spirit:parameter>
+        <spirit:parameter>
+          <spirit:name>INSERT_VIP</spirit:name>
+          <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="BUSIFPARAM_VALUE.WDT_RESET.INSERT_VIP">0</spirit:value>
+          <spirit:vendorExtensions>
+            <xilinx:parameterInfo>
+              <xilinx:parameterUsage>simulation.rtl</xilinx:parameterUsage>
+            </xilinx:parameterInfo>
+          </spirit:vendorExtensions>
         </spirit:parameter>
       </spirit:parameters>
     </spirit:busInterface>
@@ -1142,7 +1178,7 @@ This field provides the count value for the first window and is valid for both W
 FW[31:0] = First Window Count value
 FW Counter is a down counter and it starts from the programmed FWR value and ends at 0.
 First window continue. When completed, it is followed by the second window.
-This field can be set as 0. In this case, it achieves close window absent case.
+This field can be set as 0. In this case, it achieves “close” window absent case.
 Xilinx recommends that the minimum non-zero value should be 15 or more.
 </spirit:description>
             <spirit:bitOffset>0</spirit:bitOffset>
@@ -1184,7 +1220,7 @@ SW Counter is a down counter and it starts with the programmed SWR value and end
 SW[31:0] is used to place the interrupt assertion with the help of BSS[1:0] and SBC[7:0].
 Any good or bad event ends the second window.
 Absence of a good or bad event allows the second window timeout. This is considered a bad event.
-This field cannot be set as 0. Setting this field as 0 causes Wrong Config status bit set which disables WWDT (by clearing WEN bit irrespective of WDP settings).
+This field cannot be set as 0. Setting this field as 0 causes “Wrong Config” status bit set which disables WWDT (by clearing WEN bit irrespective of WDP settings).
 Xilinx recommends that the minimum value should be sufficiently large to complete the required AXI4-Lite write transactions at system-level.
 </spirit:description>
             <spirit:bitOffset>0</spirit:bitOffset>
@@ -1298,7 +1334,7 @@ The core does not track writes to this register and it makes comparison at resta
             <spirit:name>SC</spirit:name>
             <spirit:displayName>SST Count</spirit:displayName>
             <spirit:description>SST Count
-This is free running down counter starts from 2^(SST_WIDTH  1).
+This is free running down counter starts from 2^(SST_WIDTH – 1).
 Function of this counter is to provide extra delay before inevitable wdt_reset is generated.
 Width of the counter is provided as a GUI option from 8 to 31.
 This counter runs only if SSTE = 1.
@@ -1344,11 +1380,11 @@ This counter runs only if SSTE = 1.
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Wed Oct 24 12:56:57 UTC 2018</spirit:value>
+            <spirit:value>Mon Jul 15 15:19:26 UTC 2019</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>8:9cf5af5a</spirit:value>
+            <spirit:value>9:3b1ef0e9</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1359,7 +1395,7 @@ This counter runs only if SSTE = 1.
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>8:9cf5af5a</spirit:value>
+            <spirit:value>9:3b1ef0e9</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1375,11 +1411,11 @@ This counter runs only if SSTE = 1.
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Wed Oct 24 12:56:57 UTC 2018</spirit:value>
+            <spirit:value>Mon Jul 15 15:19:26 UTC 2019</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>8:9cf5af5a</spirit:value>
+            <spirit:value>9:3b1ef0e9</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1401,11 +1437,11 @@ This counter runs only if SSTE = 1.
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Wed Oct 24 12:56:57 UTC 2018</spirit:value>
+            <spirit:value>Mon Jul 15 15:19:26 UTC 2019</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>8:f7da7f95</spirit:value>
+            <spirit:value>9:d1f9d721</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1421,11 +1457,11 @@ This counter runs only if SSTE = 1.
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Wed Oct 24 12:56:57 UTC 2018</spirit:value>
+            <spirit:value>Mon Jul 15 15:19:26 UTC 2019</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>8:f7da7f95</spirit:value>
+            <spirit:value>9:d1f9d721</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1871,13 +1907,13 @@ This counter runs only if SSTE = 1.
     <spirit:fileSet>
       <spirit:name>xilinx_vhdlsynthesis_xilinx_com_ip_axi_lite_ipif_3_0__ref_view_fileset</spirit:name>
       <spirit:file>
-        <spirit:name>../../ipshared/cced/hdl/axi_lite_ipif_v3_0_vh_rfs.vhd</spirit:name>
+        <spirit:name>../../ipshared/66ea/hdl/axi_lite_ipif_v3_0_vh_rfs.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:logicalName>axi_lite_ipif_v3_0_4</spirit:logicalName>
       </spirit:file>
       <spirit:vendorExtensions>
         <xilinx:subCoreRef>
-          <xilinx:componentRef xilinx:vendor="xilinx.com" xilinx:library="ip" xilinx:name="axi_lite_ipif" xilinx:version="3.0" xilinx:isGenerated="true" xilinx:checksum="19a13c85">
+          <xilinx:componentRef xilinx:vendor="xilinx.com" xilinx:library="ip" xilinx:name="axi_lite_ipif" xilinx:version="3.0" xilinx:isGenerated="true" xilinx:checksum="db189391">
             <xilinx:mode xilinx:name="copy_mode"/>
           </xilinx:componentRef>
         </xilinx:subCoreRef>
@@ -1901,9 +1937,9 @@ This counter runs only if SSTE = 1.
     <spirit:fileSet>
       <spirit:name>xilinx_vhdlsynthesis_view_fileset</spirit:name>
       <spirit:file>
-        <spirit:name>../../ipshared/1118/hdl/axi_timebase_wdt_v3_0_vh_rfs.vhd</spirit:name>
+        <spirit:name>../../ipshared/0ae3/hdl/axi_timebase_wdt_v3_0_vh_rfs.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:logicalName>axi_timebase_wdt_v3_0_9</spirit:logicalName>
+        <spirit:logicalName>axi_timebase_wdt_v3_0_11</spirit:logicalName>
       </spirit:file>
       <spirit:file>
         <spirit:name>cont_microblaze_axi_timebase_wdt_0_0.xdc</spirit:name>
@@ -1928,14 +1964,14 @@ This counter runs only if SSTE = 1.
     <spirit:fileSet>
       <spirit:name>xilinx_vhdlbehavioralsimulation_xilinx_com_ip_axi_lite_ipif_3_0__ref_view_fileset</spirit:name>
       <spirit:file>
-        <spirit:name>../../ipshared/cced/hdl/axi_lite_ipif_v3_0_vh_rfs.vhd</spirit:name>
+        <spirit:name>../../ipshared/66ea/hdl/axi_lite_ipif_v3_0_vh_rfs.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
         <spirit:logicalName>axi_lite_ipif_v3_0_4</spirit:logicalName>
       </spirit:file>
       <spirit:vendorExtensions>
         <xilinx:subCoreRef>
-          <xilinx:componentRef xilinx:vendor="xilinx.com" xilinx:library="ip" xilinx:name="axi_lite_ipif" xilinx:version="3.0" xilinx:isGenerated="true" xilinx:checksum="19a13c85">
+          <xilinx:componentRef xilinx:vendor="xilinx.com" xilinx:library="ip" xilinx:name="axi_lite_ipif" xilinx:version="3.0" xilinx:isGenerated="true" xilinx:checksum="db189391">
             <xilinx:mode xilinx:name="copy_mode"/>
           </xilinx:componentRef>
         </xilinx:subCoreRef>
@@ -1960,10 +1996,10 @@ This counter runs only if SSTE = 1.
     <spirit:fileSet>
       <spirit:name>xilinx_vhdlbehavioralsimulation_view_fileset</spirit:name>
       <spirit:file>
-        <spirit:name>../../ipshared/1118/hdl/axi_timebase_wdt_v3_0_vh_rfs.vhd</spirit:name>
+        <spirit:name>../../ipshared/0ae3/hdl/axi_timebase_wdt_v3_0_vh_rfs.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-        <spirit:logicalName>axi_timebase_wdt_v3_0_9</spirit:logicalName>
+        <spirit:logicalName>axi_timebase_wdt_v3_0_11</spirit:logicalName>
       </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
@@ -2018,9 +2054,9 @@ This counter runs only if SSTE = 1.
   <spirit:vendorExtensions>
     <xilinx:coreExtensions>
       <xilinx:displayName>AXI Timebase Watchdog Timer</xilinx:displayName>
-      <xilinx:coreRevision>9</xilinx:coreRevision>
+      <xilinx:coreRevision>11</xilinx:coreRevision>
       <xilinx:configElementInfos>
-        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.S_AXI.ADDR_WIDTH" xilinx:valueSource="user" xilinx:valuePermission="bd"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.S_AXI.ADDR_WIDTH" xilinx:valueSource="auto" xilinx:valuePermission="bd"/>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.S_AXI.ARUSER_WIDTH" xilinx:valueSource="constant" xilinx:valuePermission="bd"/>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.S_AXI.AWUSER_WIDTH" xilinx:valueSource="constant" xilinx:valuePermission="bd"/>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.S_AXI.BUSER_WIDTH" xilinx:valueSource="constant" xilinx:valuePermission="bd"/>
@@ -2051,10 +2087,10 @@ This counter runs only if SSTE = 1.
       </xilinx:configElementInfos>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
-      <xilinx:xilinxVersion>2018.2</xilinx:xilinxVersion>
+      <xilinx:xilinxVersion>2019.1.1</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="ec788a43"/>
       <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="00000000"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="f6fc2fcf"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="d2eac27b"/>
       <xilinx:checksum xilinx:scope="ports" xilinx:value="40656e5b"/>
       <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="3b4832fb"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="02b76af0"/>

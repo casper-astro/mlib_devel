@@ -120,6 +120,19 @@ then
   $on_error 1
 fi
 
+# Check for a custom python environment to load
+if [ -n "$CASPER_PYTHON_VENV_ON_START" ]
+then
+    echo "Found python on start variable"
+    if ! [ -d -a "${CASPER_PYTHON_VENV_ON_START}/bin/activate" ]
+    then
+      echo "ERROR: Python activation script cannot be found at ${CASPER_PYTHON_VENV_ON_START}/bin/activate"
+      $on_error 1
+    else
+      source ${CASPER_PYTHON_VENV_ON_START}/bin/activate
+    fi
+fi
+
 # Make sure that these variables are exported
 export XILINX_PATH
 export MATLAB_PATH
@@ -133,6 +146,9 @@ echo "Using XILINX_PATH=${XILINX_PATH}"
 echo "Using PLATFORM=${PLATFORM}"
 echo "Using MLIB_DEVEL_PATH=${MLIB_DEVEL_PATH}"
 echo "Using JASPER_BACKEND=${JASPER_BACKEND}"
+echo "Using XML2VHDL_PATH=${XML2VHDL_PATH}"
+echo "Using LD_PRELOAD=${LD_PRELOAD}"
+echo "Using python: `which python`"
 
 # Finish environment setup
 export SYSGEN_SCRIPT="$MLIB_DEVEL_PATH/startsg"
@@ -167,4 +183,3 @@ then
   "${XILINX_PATH}/bin/sysgen" -softwareopengl
 
 fi
-

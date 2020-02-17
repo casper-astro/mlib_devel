@@ -35,7 +35,7 @@ cd /opt/Matlab/R2013b/bin/
     navigator is set to run the script.
 
 23. Run the script and the Matlab IDE will launch. You can now select the required Matlab m files (*.m) and continue.
-24. In order to run Matlab with the Casper tools please look at the CASPER wiki page: https://casper.berkeley.edu/wiki/MSSGE_Setup_with_Xilinx_14.x_and_Matlab_2012b
+24. In order to run the ISE-flow of the CASPER tools, please see [here](https://casper.berkeley.edu/wiki/MSSGE_Setup_with_Xilinx_14.x_and_Matlab_2012b)
 
 ## How To Install R2016b
 
@@ -66,4 +66,35 @@ cd /opt/Matlab/R2016b/bin/
 NB: Make sure the file is executable and that the nautilius documentation navigator is set to run the script.
 
 20. Run the script and the Matlab IDE will launch. You can now select the required Matlab m files (*.m) and continue.
-21. In order to run Matlab with the Casper tools please look at the CASPER wiki page: https://casper.berkeley.edu/wiki/MSSGE_Setup_with_Xilinx_14.x_and_Matlab_2012b​ . NB: This may need to be updated when using R2016b (TBD).
+21. In order to run Matlab with the Casper tools please look at the CASPER read the docs page: https://casper-toolflow.readthedocs.io/en/latest/jasper_documentation.html.
+## How To Install R2018a
+
+1. OS Required/suggested: Ubuntu 14.04 LTS/Ubuntu 16.04 LTS.
+2. Ubuntu 16.04. Using Nautilius, click on “R2018a_glnxa64_dvd1.iso” and extract to “Installs/Matlab2018a”.
+3. Ubuntu 16.04. Open a terminal < ctrl + alt + T> and type `cd ~/Installs` and then type `chmod +w Matlab2018a/ -R`. This will give all the files in the Matlab2018a folder write access.
+4. Ubuntu 16.04. Using Nautilius, click on “R2018a_glnxa64_dvd2.iso” and extract to “Installs/Matlab2018a”.
+5. Open a terminal <ctrl + alt + T> and type `cd ​ ~/Installs/Matlab2018a/`,then `sudo ./install` and enter.
+6. The MathWorks Installer GUI should pop up. Select “Use a File Installation Key” and select “Next”.
+7. You will be requested to sign the “License Agreement” page. Click “Yes” and then click “Next”.
+8. You will be requested to fill in the file installation key for your license. The Matlab Administrator should of provided a license and file installation key. If not, make sure you get one from him. Type in the file installation key and press “Next”. I choose to install my license file under “~/Matlab”.
+9. You will then need to specify the installation folder. I choose “/opt/Matlab/R2018a”. Press “Select” and then “Next”.
+10. You will then see a “Product Selection” window. Make sure that all products are ticked and select “Next”.
+11. You must then decide where you want the symbolic links to your Matlab scripts to be stored. I chose the default location “/usr/local/bin”.
+12. You will then be required to confirm your installation settings. If happy then press “Install” else press “Back” and then return to this step when happy.
+13. You will be informed that your installation may require additional configuration skips. This can be ignored. Click “Next”.
+14. You will be informed that the installation is complete. Make sure Activate Matlab is ticked and click “Next”.
+15. It is now time to Activate MathWorks Software. A “MathWorks Software Activation” window will pop up. Click on the “Activate manually without the internet” and press “Next”.
+16. Click on the “Enter the full path to your license file, including the file name:” and browse to the license file (*.lic) and click “Select”. Then press “Next”. If all goes well then you will receive a message that says “Activation is complete.”. Click “Finish”.
+17. Open another terminal and navigate to the “opt” folder and remember to change user and group to your username with the following command: `​sudo chown <username>:<username> Matlab -R`
+18. Terminal: Navigate to the “home” folder and remember to change user and group to your username with the following command: `sudo chown <username>:<username> .matlab -R`
+19. It will be a good idea to create an Matlab R2016b startup script file on your Desktop with the following lines:
+```bash
+#!/bin/bash
+cd /opt/Matlab/R2018a/bin/
+./matlab
+```
+NB: Make sure the file is executable and that the nautilius documentation navigator is set to run the script.
+
+20. Run the script and the Matlab IDE will launch. You can now select the required Matlab m files (*.m) and continue.
+21. Install the R2018a update pack: "r2018a-update-6.tar.gz" by unpacking the tar.gz file and following the install instructions "r2018a-updates-install-instructions.pdf" for linux.
+22. In order to run Matlab with the Casper tools please look at the CASPER read the docs page: https://casper-toolflow.readthedocs.io/en/latest/jasper_documentation.html.

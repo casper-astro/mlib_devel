@@ -144,7 +144,7 @@ function xps_build_new_library(source_dir,lib_name)
     disp('Finished build, saving library...')
     % Finished, so save the new library
     cd ..
-    save_system(lib_name);
+    save_system(lib_name, [],'OverwriteIfChangedOnDisk',true);
     % NOTE: in order for this library to show up in the Library Browser,
     %       this must be defined in the 'slblocks.m' file and loaded in the
     %       'startup.m' file

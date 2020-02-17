@@ -1,5 +1,5 @@
 #*****************************************************************************************
-# Vivado (TM) v2018.2 (64-bit)
+# Vivado (TM) v2019.1 (64-bit)
 #
 # cont_microblaze_gen_proj.tcl: Tcl script for re-creating project with only the microblaze,
 #                               so that changes can be made to the SOC and IP can be

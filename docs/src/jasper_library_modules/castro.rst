@@ -1,7 +1,6 @@
-castro module
-=============
+castro
+=======
 
 .. automodule:: castro
     :members:
     :undoc-members:
-    :show-inheritance:

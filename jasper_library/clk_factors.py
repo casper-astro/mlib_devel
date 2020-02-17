@@ -8,13 +8,13 @@ def clk_factors (clk_freq, target_freq):
 
     # the Multiply value is a even number because we need to divide by 1/2 of
     # it to get the 200MHz clock, which is used for the QDR.
-    M = range(8,65,2)
-    D = range(2,128,1)
+    M = list(range(8,65,2))
+    D = list(range(2,128,1))
     # If the input clock freq >= 315 then DD cant be 3 or 4.
     if clk_freq >= 315:
-        DD = range(5,81,1)
+        DD = list(range(5,81,1))
     else:
-        DD = range(1,81,1)
+        DD = list(range(1,81,1))
     # x = [x 100*M(i)/D(j)/DD(k)];
     # the VCO freq is required to be between 600 and 1200 for the -1
     # speed grade vitrex 6, but it was found being close to the boundaries

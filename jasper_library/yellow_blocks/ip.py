@@ -1,4 +1,4 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 
 class ip(YellowBlock):
     def initialize(self):

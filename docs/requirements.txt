@@ -1,4 +1,6 @@
+markdown
 sphinx
 sphinx_rtd_theme
 recommonmark
-sphinx-markdown-tables==0.0.6
+PyYAML
+numpy

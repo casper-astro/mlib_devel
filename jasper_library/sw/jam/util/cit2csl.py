@@ -28,13 +28,14 @@
 # The offset and length fields are stored in network byte order (big endian).
 
 import re
+import os
 import sys
 import struct
 import fileinput
 
 import argparse
 
-parser = argparse.ArgumentParser(description='Convert core_info.tab to CSL form.')
+parser = argparse.ArgumentParser(description='Convert core_info.tab to CSL form.', prog=os.path.basename(__file__))
 parser.add_argument('-a', '--address', action='store',
                     default=0x1f000, type=lambda x: int(x,0),
                     help='Starting address for memory file')
@@ -91,7 +92,7 @@ for (dev, entry) in lines:
         reuse = payload_length
 
     #print reuse, len(tail), tail, entry, dev
-    csl += struct.pack('>BB%dsIIB' % len(tail), reuse, len(tail), tail, *entry)
+    csl += struct.pack('>BB%dsIIB' % len(tail), reuse, len(tail), tail.encode('utf-8'), *entry)
 
     prev = dev
 
@@ -103,17 +104,22 @@ csl = struct.pack('>H', len(csl)) + csl
 
 if args.bin:
     # Output CSL as binary
-    sys.stdout.write(csl)
+    sys.stdout.buffer.write(csl)
 else:
     # Output CSL as memory file
-    print '@%08X' % args.address
+    print(('@%08X' % args.address))
     # Pad csl with 3 nul bytes (is this really necessary?)
-    csl += '\0\0\0'
+    csl += b'\0\0\0'
     # Split csl into lines of 1 to 32 bytes
-    lines = re.findall('.{1,32}', csl, re.MULTILINE|re.DOTALL)
-    for line in lines:
+    n_lines = len(csl) // 32
+    for line_n in range(n_lines):
+        try:
+            line = csl[32*line_n : 32*(line_n+1)]
+        except IndexError:
+            line = csl[32*line_n : ]
+    
         #sys.stderr.writelines(len(line))
         sys.stdout.write('   ')
         for byte in line:
-            sys.stdout.write(' %02X' % ord(byte))
+            sys.stdout.write(' %02X' % byte)
         sys.stdout.write('\n')
