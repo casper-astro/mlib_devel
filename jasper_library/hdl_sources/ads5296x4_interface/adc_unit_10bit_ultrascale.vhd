@@ -6,7 +6,7 @@ use IEEE.std_logic_unsigned.all;
 use IEEE.numeric_std.all;
 
 -- entity declaraction
-entity  adc_unit_10bit  is
+entity  adc_unit_10bit_ultrascale  is
     port (
                -- System
                fabric_clk    :  in std_logic;
@@ -30,43 +30,40 @@ entity  adc_unit_10bit  is
                -- IODELAY Controller
                delay_rst_a      :  in  std_logic_vector(3 downto 0);
                delay_rst_b      :  in  std_logic_vector(3 downto 0);
-               delay_tap        :  in  std_logic_vector(4 downto 0)
+               delay_tap        :  in  std_logic_vector(8 downto 0)
     );
 
-end  adc_unit_10bit;
+end  adc_unit_10bit_ultrascale;
 
-architecture adc_unit_arc of adc_unit_10bit is
-
+architecture adc_unit_arc of adc_unit_10bit_ultrascale is
      -- Components
-      component IODELAYE1 generic(
-         CINVCTRL_SEL           :  boolean;         -- TRUE, FALSE
-         DELAY_SRC              :  string;          -- I, IO, O, CLKIN, DATAIN
-         HIGH_PERFORMANCE_MODE  :  boolean;         -- TRUE, FALSE
-         IDELAY_TYPE            :  string;          -- FIXED, DEFAULT, VARIABLE, or VAR_LOADABLE
-         IDELAY_VALUE           :  integer;         -- 0 to 31
-         ODELAY_TYPE            :  string;          -- Has to be set to FIXED when IODELAYE1 is configured for Input
-         ODELAY_VALUE           :  integer;         -- Set to 0 as IODELAYE1 is configured for Input
-         REFCLK_FREQUENCY       :  real;
-         SIGNAL_PATTERN         :  string           -- CLOCK, DATA
-         );
-       port (
+     component IDELAYE3 generic (
+        DELAY_SRC              : string;
+        CASCADE                : string; 
+        DELAY_TYPE             : string; 
+        REFCLK_FREQUENCY       : real;
+        DELAY_FORMAT           : string
+        );
+     port (
+         CASC_IN                : in std_logic;
+         CASC_RETURN            : in std_logic;
+         CASC_OUT               : out std_logic;
          DATAOUT                : out std_logic;
-         DATAIN                 : in  std_logic;
-         C                      : in  std_logic;
-         CE                     : in  std_logic;
-         INC                    : in  std_logic;
-         IDATAIN                : in  std_logic;
-         ODATAIN                : in  std_logic;
-         RST                    : in  std_logic;
-         T                      : in  std_logic;
-         CNTVALUEIN             : in  std_logic_vector(4 downto 0);
-         CNTVALUEOUT            : out std_logic_vector(4 downto 0);
-         CLKIN                  : in  std_logic;
-         CINVCTRL               : in  std_logic
+         DATAIN                 : in std_logic;
+         CLK                    : in std_logic; 
+         CE                     : in std_logic; 
+         INC                    : in std_logic; 
+         LOAD                   : in std_logic; 
+         CNTVALUEIN             : in std_logic_vector(8 downto 0);
+         CNTVALUEOUT            : out std_logic_vector(8 downto 0);
+         IDATAIN                : in std_logic; 
+         RST                    : in std_logic; 
+         EN_VTC                 : in std_logic
          );
-      end component;
+     end component;
 
-     component ADC_ISERDES_10bit   port (
+
+     component ADC_ISERDES_10bit_ultrascale   port (
                -- System
                reset        :  in  std_logic;
                bitslip      :  in  std_logic;
@@ -74,7 +71,7 @@ architecture adc_unit_arc of adc_unit_10bit is
                -- Clock inputs
                clkin        :  in  std_logic; -- line
                clkdiv       :  in  std_logic; -- iserdes output clock (div by 4)
-               frame_clock  :  in  std_logic; -- frame/system
+               frame_clk    :  in  std_logic; -- frame/system
 
                -- Data (serial in, parallel out)
                s_data       :  in  std_logic;
@@ -162,7 +159,7 @@ architecture adc_unit_arc of adc_unit_10bit is
      -- ISERDES block
      ISERDES_GEN : for i in 0 to 3 generate
      begin
-     adc_iserdes_a_inst : ADC_ISERDES_10bit
+     adc_iserdes_a_inst : ADC_ISERDES_10bit_ultrascale
      PORT MAP (
                reset      => reset,
                bitslip    => iserdes_bitslip(2*i),
@@ -173,7 +170,7 @@ architecture adc_unit_arc of adc_unit_10bit is
                p_data     => adc_iserdes_data_a(10*(3-i)+9 downto 10*(3-i))
       );
 
-     adc_iserdes_b_inst : ADC_ISERDES_10bit
+     adc_iserdes_b_inst : ADC_ISERDES_10bit_ultrascale
      PORT MAP (
                reset      => reset,
                bitslip    => iserdes_bitslip(2*i+1),
@@ -204,60 +201,54 @@ architecture adc_unit_arc of adc_unit_10bit is
                O   => ibuf_ser_b(i)
       );
 
-     iodelay1_a : IODELAYE1
+     iodelay1_a : IDELAYE3
        generic map (
-         CINVCTRL_SEL           => FALSE,            -- TRUE, FALSE
-         DELAY_SRC              => "I",              -- I, IO, O, CLKIN, DATAIN
-         HIGH_PERFORMANCE_MODE  => TRUE,             -- TRUE, FALSE
-         IDELAY_TYPE            => "VAR_LOADABLE",   -- FIXED, DEFAULT, VARIABLE, or VAR_LOADABLE
-         IDELAY_VALUE           => 0,                -- 0 to 31
-         ODELAY_TYPE            => "FIXED",          -- Has to be set to FIXED when IODELAYE1 is configured for Input
-         ODELAY_VALUE           => 0,                -- Set to 0 as IODELAYE1 is configured for Input
+         DELAY_SRC              => "IDATAIN",        -- DATAIN, IDATAIN
+         CASCADE                => "NONE",           -- NONE, MASTER, SLAVE_MIDDLE, SLAVE_END
+         DELAY_TYPE             => "VAR_LOAD",       -- FIXED, VARIABLE, or VAR_LOAD
          REFCLK_FREQUENCY       => 200.0,
-         SIGNAL_PATTERN         => "DATA"            -- CLOCK, DATA
+         DELAY_FORMAT           => "COUNT"           -- TIME, COUNT
          )
        port map (
+         CASC_IN                => '0',
+         CASC_RETURN            => '0',
+         CASC_OUT               => open,
          DATAOUT                => delay_a_out(i),
          DATAIN                 => '0',              -- Data from FPGA logic
-         C                      => frame_clk,
+         CLK                    => frame_clk,
          CE                     => '0',              -- DELAY_DATA_CE,
          INC                    => '0',              -- DELAY_DATA_INC,
-         IDATAIN                => ibuf_ser_a(i),    -- Driven by IOB
-         ODATAIN                => '0',
-         RST                    => delay_rst_a(i),
-         T                      => '1',
+         LOAD                   => delay_rst_a(i),
          CNTVALUEIN             => delay_tap,        -- DELAY_TAP_IN,
          CNTVALUEOUT            => open,             -- DELAY_TAP_OUT,
-         CLKIN                  => '0',
-         CINVCTRL               => '0'
+         IDATAIN                => ibuf_ser_a(i),    -- Driven by IOB
+         RST                    => '0',
+         EN_VTC                 => '0'
          );
 
-     iodelay1_b : IODELAYE1
+     iodelay1_b : IDELAYE3
        generic map (
-         CINVCTRL_SEL           => FALSE,            -- TRUE, FALSE
-         DELAY_SRC              => "I",              -- I, IO, O, CLKIN, DATAIN
-         HIGH_PERFORMANCE_MODE  => TRUE,             -- TRUE, FALSE
-         IDELAY_TYPE            => "VAR_LOADABLE",   -- FIXED, DEFAULT, VARIABLE, or VAR_LOADABLE
-         IDELAY_VALUE           => 0,                -- 0 to 31
-         ODELAY_TYPE            => "FIXED",          -- Has to be set to FIXED when IODELAYE1 is configured for Input
-         ODELAY_VALUE           => 0,                -- Set to 0 as IODELAYE1 is configured for Input
+         DELAY_SRC              => "IDATAIN",        -- DATAIN, IDATAIN
+         CASCADE                => "NONE",           -- NONE, MASTER, SLAVE_MIDDLE, SLAVE_END
+         DELAY_TYPE             => "VAR_LOAD",       -- FIXED, VARIABLE, or VAR_LOAD
          REFCLK_FREQUENCY       => 200.0,
-         SIGNAL_PATTERN         => "DATA"            -- CLOCK, DATA
+         DELAY_FORMAT           => "COUNT"           -- TIME, COUNT
          )
        port map (
+         CASC_IN                => '0',
+         CASC_RETURN            => '0',
+         CASC_OUT               => open,
          DATAOUT                => delay_b_out(i),
          DATAIN                 => '0',              -- Data from FPGA logic
-         C                      => frame_clk,
+         CLK                    => frame_clk,
          CE                     => '0',              -- DELAY_DATA_CE,
          INC                    => '0',              -- DELAY_DATA_INC,
-         IDATAIN                => ibuf_ser_b(i),    -- Driven by IOB
-         ODATAIN                => '0',
-         RST                    => delay_rst_b(i),
-         T                      => '1',
+         LOAD                   => delay_rst_b(i),
          CNTVALUEIN             => delay_tap,        -- DELAY_TAP_IN,
          CNTVALUEOUT            => open,             -- DELAY_TAP_OUT,
-         CLKIN                  => '0',
-         CINVCTRL               => '0'
+         IDATAIN                => ibuf_ser_b(i),    -- Driven by IOB
+         RST                    => '0',
+         EN_VTC                 => '0'
          );
 
      end generate ISERDES_GEN;

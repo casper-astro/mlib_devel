@@ -31,8 +31,8 @@ entity  ads5296x4_interface  is
                ser_b_p       :  in  std_logic_vector(4*G_NUM_UNITS-1 downto 0);
                ser_b_n       :  in  std_logic_vector(4*G_NUM_UNITS-1 downto 0);
 
-               -- ISERDES Controller (always 64 bits even if G_NUM_UNITS=4)
-               iserdes_bitslip  :  in  std_logic_vector(63 downto 0);
+	       -- ISERDES Controller (always 128 bits no matter what G_NUM_UNITS is)
+               iserdes_bitslip  :  in  std_logic_vector(127 downto 0);
 
                -- Parallel outputs
                a1  :  out std_logic_vector(9 downto 0);
@@ -100,9 +100,9 @@ entity  ads5296x4_interface  is
                p3  :  out std_logic_vector(9 downto 0);
                p4  :  out std_logic_vector(9 downto 0);
 
-               -- Delay Controller (always 64 bits, even if G_NUM_UNITS=4)
-               delay_rst        :  in  std_logic_vector(63 downto 0);
-               delay_tap        :  in  std_logic_vector(4 downto 0);
+               -- Delay Controller (always 128 bits, no matter the value of G_NUM_UNITS)
+               delay_rst        :  in  std_logic_vector(127 downto 0);
+               delay_tap        :  in  std_logic_vector(8 downto 0);
 
                -- Demux mode bits
                demux_mode       :  in  std_logic_vector(1 downto 0);
@@ -124,10 +124,11 @@ architecture ads5296x4_interface_arc of ads5296x4_interface is
 
      -- Components
 
-     component adc_unit_10bit port (
+     component adc_unit_10bit_ultrascale port (
                -- System
                fabric_clk    :  in std_logic;
                line_clk      :  in std_logic;
+               iserdes_divclk:  in std_logic;
                frame_clk     :  in std_logic;
                reset         :  in  std_logic;
 
@@ -146,7 +147,7 @@ architecture ads5296x4_interface_arc of ads5296x4_interface is
                -- Delay Controller
                delay_rst_a      :  in  std_logic_vector(3 downto 0);
                delay_rst_b      :  in  std_logic_vector(3 downto 0);
-               delay_tap        :  in  std_logic_vector(4 downto 0)
+               delay_tap        :  in  std_logic_vector(8 downto 0)
      );
      end component;
 
@@ -213,8 +214,8 @@ architecture ads5296x4_interface_arc of ads5296x4_interface is
      attribute keep of frame_clk_in : signal is "true";
      attribute s    of frame_clk_in : signal is "yes";
 
-     signal line_clk     : std_logic;
      signal line_clk_10bit : std_logic;
+     signal line_clk_4bit  : std_logic;
      signal frame_clk    : std_logic;
      signal fabric_clk_0 : std_logic;
      signal absel        : std_logic;
@@ -241,10 +242,10 @@ architecture ads5296x4_interface_arc of ads5296x4_interface is
      -- Delay Controller
      signal s_delay_rst_a  : i4_v4;
      signal s_delay_rst_b  : i4_v4;
-     signal delay_rst0     : std_logic_vector(63 downto 0);
-     signal delay_rst1     : std_logic_vector(63 downto 0);
-     signal delay_rst2     : std_logic_vector(63 downto 0);
-     signal delay_rst_edge : std_logic_vector(63 downto 0);
+     signal delay_rst0     : std_logic_vector(127 downto 0);
+     signal delay_rst1     : std_logic_vector(127 downto 0);
+     signal delay_rst2     : std_logic_vector(127 downto 0);
+     signal delay_rst_edge : std_logic_vector(127 downto 0);
 
      -- Snap Controller
      signal s_snap_req : std_logic_vector(1 downto 0);
@@ -254,7 +255,7 @@ architecture ads5296x4_interface_arc of ads5296x4_interface is
 
      -- Select line clocks for each quad ADC board
      line_clk_gen: for i in 0 to ((G_NUM_UNITS / 4) - 1) generate
-         line_clk_in_per_quad(i) <= line_clk_in(4*i);
+         line_clk_in_per_quad(i) <= line_clk_in(0); -- TODO: this hardcodes a single clock
      end generate;
 
      adc_mmcm_0 : ADC_MMCM
@@ -316,7 +317,7 @@ architecture ads5296x4_interface_arc of ads5296x4_interface is
      end generate;
 
      -- Internal routing
-     line_clk       <= bufg_o(0);
+     line_clk_4bit  <= bufg_o(0);
      frame_clk      <= bufg_o(1);
      fabric_clk_0   <= bufg_o(2);
      fabric_clk     <= fabric_clk_0;
@@ -478,10 +479,11 @@ architecture ads5296x4_interface_arc of ads5296x4_interface is
        s_delay_rst_a(i) <= delay_rst_edge(4*i+3    downto 4*i);
        s_delay_rst_b(i) <= delay_rst_edge(4*i+3+32 downto 4*i+32);
 
-       adc_unit_10_bit_inst: adc_unit_10bit
+       adc_unit_10_bit_inst: adc_unit_10bit_ultrascale
        port map (
                    fabric_clk => fabric_clk_0,
                    line_clk   => line_clk_10bit,
+                   iserdes_divclk => line_clk_4bit,
                    frame_clk  => frame_clk,
                    reset      => reset,
 

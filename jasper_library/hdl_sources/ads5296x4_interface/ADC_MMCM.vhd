@@ -17,15 +17,15 @@ entity  ADC_MMCM  is
                clkin        :  in  std_logic;
 
                -- Clock outputs
-               clkout0p     :  out std_logic; -- serial line clock (line_clk)
+               clkout0p     :  out std_logic; -- post iserdes clock (clkin / 2)
                clkout0n     :  out std_logic;
-               clkout1p     :  out std_logic; -- framing clock (frame_clk = line_clk/8)
+               clkout1p     :  out std_logic; -- framing clock (frame_clk = clkin/5)
                clkout1n     :  out std_logic;
                clkout2      :  out std_logic; -- fabric clock (2 * frame_clk) @   0 degrees phase
                clkout2_90   :  out std_logic; -- fabric clock (2 * frame_clk) @  90 degrees phase
                clkout2_180  :  out std_logic; -- fabric clock (2 * frame_clk) @ 180 degrees phase
                clkout2_270  :  out std_logic; -- fabric clock (2 * frame_clk) @ 270 degrees phase
-               clkout3      :  out std_logic  -- serial line clock for 10-bit adc (1.25*line_clk)
+               clkout3      :  out std_logic  -- serial line clock for 10-bit adc (=clkin)
     );
 
 end  ADC_MMCM;
@@ -161,27 +161,27 @@ architecture ADC_MMCM_arc of ADC_MMCM is
       COMPENSATION         => "ZHOLD",
       STARTUP_WAIT         => false,
       DIVCLK_DIVIDE        => 2,     -- D = 2
-      CLKFBOUT_MULT_F      => 5.000, -- M = 5.000
+      CLKFBOUT_MULT_F      => 4.000, -- M = 5.000
       CLKFBOUT_PHASE       => 0.000,
       CLKFBOUT_USE_FINE_PS => false,
-      CLKOUT0_DIVIDE_F     => 2.500, -- Fout = (M * Fin) / (D * 2.500) = Fin (when D=2, M=5)
+      CLKOUT0_DIVIDE_F     => 4.000, -- Fout = (M * Fin) / (D * 4.000) = Fin/2 (when D=2, M=4)
       CLKOUT0_PHASE        => 0.000,
       CLKOUT0_DUTY_CYCLE   => 0.500,
       CLKOUT0_USE_FINE_PS  => false,
-      CLKOUT1_DIVIDE       => 10,    -- Fout = (M * Fin) / (D * 10) = Fin / 4 (when D=2, M=5)
+      CLKOUT1_DIVIDE       => 10,    -- Fout = (M * Fin) / (D * 10) = Fin / 5 (when D=2, M=4)
       CLKOUT1_PHASE        => 0.000,
       CLKOUT1_DUTY_CYCLE   => 0.500,
       CLKOUT1_USE_FINE_PS  => false,
-      CLKOUT2_DIVIDE       => 5,     -- Fout = (M * Fin) / (D * 4) = Fin / 2 (when D=2, M=5)
+      CLKOUT2_DIVIDE       => 5,     -- Fout = (M * Fin) / (D * 4) = Fin / 2.5 (when D=2, M=4)
       CLKOUT2_PHASE        => 0.000,
       CLKOUT2_DUTY_CYCLE   => 0.500,
       CLKOUT2_USE_FINE_PS  => false,
-      CLKOUT3_DIVIDE       => 5,     -- Fout = (M * Fin) / (D * 4) = Fin / 2 (when D=2, M=5)
+      CLKOUT3_DIVIDE       => 5,     -- Fout = (M * Fin) / (D * 4) = Fin / 2.5 (when D=2, M=4)
       CLKOUT3_PHASE        => 90.000,
       CLKOUT3_DUTY_CYCLE   => 0.500,
       CLKOUT3_USE_FINE_PS  => false,
       -- 10-bit ADC clocks, which are 1.25x the 8-bit clock rates
-      CLKOUT4_DIVIDE       => 2,     -- Fout = (M * Fin) / (D * 4) = Fin * 1.25 (when D=2, M=5)
+      CLKOUT4_DIVIDE       => 2,     -- Fout = (M * Fin) / (D * 4) = Fin (when D=2, M=4)
       CLKOUT4_PHASE        => 0.000,
       CLKOUT4_DUTY_CYCLE   => 0.500,
       CLKOUT4_USE_FINE_PS  => false,

@@ -24,8 +24,8 @@ class ads5296x4(YellowBlock):
         # An HMCAD1511 has 8 ADC cores and DDR transmission 
         self.line_clock_freq = self.sample_rate/(8.0/self.n_inputs_per_chip)*self.adc_resolution/2.0
 
-        self.add_source('ads5296x4_interface/*.vhd')
-        self.add_source('wb_adc16_controller')
+        self.add_source('ads5296x4_interface')
+        self.add_source('wb_ads5296_controller')
         self.add_source('wb_bram')
 
         self.provides = ['adc_clk','adc_clk90', 'adc_clk180', 'adc_clk270']
@@ -51,10 +51,10 @@ class ads5296x4(YellowBlock):
         inst.add_port('fabric_clk_270', 'adc_clk270')
 
         inst.add_port('reset', 'adc16_reset')
-        inst.add_port('iserdes_bitslip', 'adc16_iserdes_bitslip', width=64)
+        inst.add_port('iserdes_bitslip', 'adc16_iserdes_bitslip', width=self.num_units*4*2)
 
-        inst.add_port('delay_rst', 'adc16_delay_rst', width=64)
-        inst.add_port('delay_tap', 'adc16_delay_tap', width=5)
+        inst.add_port('delay_rst', 'adc16_delay_rst', width=self.num_units*4*2)
+        inst.add_port('delay_tap', 'adc16_delay_tap', width=8)
 
         inst.add_port('snap_req', 'adc16_snap_req')
         inst.add_port('snap_we', 'adc16_snap_we')
@@ -84,7 +84,7 @@ class ads5296x4(YellowBlock):
 
         # wb controller
 
-        wbctrl = top.get_instance(entity='wb_adc16_controller', name='wb_adc16_controller')
+        wbctrl = top.get_instance(entity='wb_ads5296_controller', name='wb_ads5296_controller')
         wbctrl.add_parameter('G_ROACH2_REV', 0)
         wbctrl.add_parameter('G_ZDOK_REV', self.REV)
         wbctrl.add_parameter('G_NUM_UNITS', int(self.num_units))
@@ -92,30 +92,21 @@ class ads5296x4(YellowBlock):
         wbctrl.add_parameter('G_NUM_SDATA_LINES', 3)
         # These are top-level ports -- they don't need signal declarations,
         # but they do need ports added to the top-level
-        wbctrl.add_port('adc0_adc3wire_csn1', 'adc0_adc3wire_csn1', dir='out', parent_port=True)
-        wbctrl.add_port('adc0_adc3wire_csn2', 'adc0_adc3wire_csn2', dir='out', parent_port=True)
-        wbctrl.add_port('adc0_adc3wire_csn3', 'adc0_adc3wire_csn3', dir='out', parent_port=True)
-        wbctrl.add_port('adc0_adc3wire_csn4', '')
-        wbctrl.add_port('adc0_adc3wire_sdata','adc0_adc3wire_sdata', width=3, dir='out', parent_port=True)
-        wbctrl.add_port('adc0_adc3wire_sclk', 'adc0_adc3wire_sclk', width=3, dir='out', parent_port=True)
-        wbctrl.add_port('adc1_adc3wire_csn1', '')
-        wbctrl.add_port('adc1_adc3wire_csn2', '')
-        wbctrl.add_port('adc1_adc3wire_csn3', '')
-        wbctrl.add_port('adc1_adc3wire_csn4', '')
-        wbctrl.add_port('adc1_adc3wire_sdata','')
-        wbctrl.add_port('adc1_adc3wire_sclk', '')
+        wbctrl.add_port('adc_adc3wire_csn', 'adc_adc3wire_csn', dir='out', parent_port=True, width=self.num_units)
+        wbctrl.add_port('adc_adc3wire_sdata', 'adc_adc3wire_sdata', dir='out', parent_port=True, width=self.num_units)
+        wbctrl.add_port('adc_adc3wire_sclk', 'adc_adc3wire_sclk', dir='out', parent_port=True, width=self.num_units)
 
         # internal connections to the adc controller. We have already declared the corresponding
         # signals earlier.
-        wbctrl.add_port('adc16_reset','adc16_reset')
-        wbctrl.add_port('adc16_iserdes_bitslip','adc16_iserdes_bitslip', width=64)
-        wbctrl.add_port('adc16_delay_rst', 'adc16_delay_rst', width=64)
-        wbctrl.add_port('adc16_delay_tap', 'adc16_delay_tap', width=5)
-        wbctrl.add_port('adc16_snap_req',  'adc16_snap_req')
-        wbctrl.add_port('adc16_locked',    'adc16_locked', width=self.board_count)
-        wbctrl.add_port('adc16_demux_mode', 'adc16_demux_mode', width=2)
+        wbctrl.add_port('adc_reset','adc16_reset')
+        wbctrl.add_port('adc_iserdes_bitslip','adc16_iserdes_bitslip', width=self.num_units*4*2)
+        wbctrl.add_port('adc_delay_rst', 'adc16_delay_rst', width=self.num_units*4*2)
+        wbctrl.add_port('adc_delay_tap', 'adc16_delay_tap', width=8)
+        wbctrl.add_port('adc_snap_req',  'adc16_snap_req')
+        wbctrl.add_port('adc_locked',    'adc16_locked', width=self.board_count)
+        wbctrl.add_port('adc_demux_mode', 'adc16_demux_mode', width=2)
         # and finally the wb interface
-        wbctrl.add_wb_interface(nbytes=2**8, regname='adc16_controller', mode='rw', typecode=self.typecode)
+        wbctrl.add_wb_interface(nbytes=2**8, regname='ads5296_controller', mode='rw', typecode=self.typecode)
 
         snap_chan = ascii_lowercase
         for k in range(self.num_units):
@@ -128,7 +119,7 @@ class ads5296x4(YellowBlock):
             wbram.add_parameter('USER_ADDR_BITS','10')
             wbram.add_parameter('N_REGISTERS','2')
             wbram.add_wb_interface(regname='adc16_wb_ram%d'%k, mode='rw', nbytes=(2**bram_log_width//8)*2**10, typecode=TYPECODE_SWREG)
-            wbram.add_port('user_clk','adc0_clk', parent_sig=False)
+            wbram.add_port('user_clk','adc_clk', parent_sig=False)
             wbram.add_port('user_addr','adc16_snap_addr', width=10)
             wbram.add_port('user_din',self.reorder_ports([din+'1',din+'2',din+'3',din+'4'], wb_bitwidth=64, word_width=16, padding="%s'b0" % padding), parent_sig=False)
             wbram.add_port('user_we','adc16_snap_we')
