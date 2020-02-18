@@ -866,8 +866,8 @@ pins:
       - BB17
       - BD21
       - BC21
-      - BC22
-      - BB22
+      - BD19
+      - BD20
       - BD16
       - BC16
       - BA18
@@ -1016,7 +1016,7 @@ pins:
       - BC31
       - BB17
       - BC21
-      - BB22
+      - BD20
       - BC16
       - BA19
       - BB19
@@ -1103,7 +1103,7 @@ pins:
       - BD31
       - BC17
       - BD21
-      - BC22
+      - BD19
       - BD16
       - BA18
       - BC19
