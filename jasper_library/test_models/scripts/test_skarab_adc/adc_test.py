@@ -587,7 +587,7 @@ class skarab_adc_rx:
 			
 # Connect to SKARAB and upload .fpg file
 skarab = casperfpga.CasperFpga('10.0.0.14')
-skarab.upload_to_ram_and_program('test_skarab_adc_2019-01-28_1152.fpg', legacy_reg_map=False)
+skarab.upload_to_ram_and_program('test_skarab_adc_2019-01-28_1152.fpg')
 skarab.listdev()
 # Specify Mezzanine Site
 mezzanine_site = 2
