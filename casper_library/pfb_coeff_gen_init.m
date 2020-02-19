@@ -63,8 +63,7 @@ debug_mode      = get_var('debug_mode', 'defaults', defaults, varargin{:});
 try
 	window('hamming',1024);
 catch
-	disp('pfb_coeff_gen_init:Signal Processing Library absent or not working correctly');
-	error('pfb_coeff_gen_init:Signal Processing Library absent or not working correctly');
+	warning('pfb_coeff_gen_init:Signal Processing Library absent or not working correctly');
 end
 %alltaps = TotalTaps*2^PFBSize;
 %windowval = transpose(window(WindowType, alltaps));
