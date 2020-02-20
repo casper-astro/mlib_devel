@@ -77,19 +77,19 @@ class ads5296x4(YellowBlock):
         inst.add_port('ser_b_n', 'adc16_ser_b_n', parent_port=True, dir='in', width=4*self.num_units)
 
         # ADC Power down and reset signals are wired to the FPGA, but hardwire them to match the adc16 card
-        top.add_port('adc_rst_n', dir='out', width=3)
-        top.add_port('adc_pd', dir='out', width=3)
-        top.assign_signal('adc_rst_n', "3'b111")
-        top.assign_signal('adc_pd', "3'b000")
+        #top.add_port('adc_rst_n', dir='out', width=3)
+        #top.add_port('adc_pd', dir='out', width=3)
+        #top.assign_signal('adc_rst_n', "3'b111")
+        #top.assign_signal('adc_pd', "3'b000")
 
         # wb controller
 
         wbctrl = top.get_instance(entity='wb_ads5296_controller', name='wb_ads5296_controller')
         wbctrl.add_parameter('G_ROACH2_REV', 0)
         wbctrl.add_parameter('G_ZDOK_REV', self.REV)
-        wbctrl.add_parameter('G_NUM_UNITS', int(self.num_units))
-        wbctrl.add_parameter('G_NUM_SCLK_LINES', 3)
-        wbctrl.add_parameter('G_NUM_SDATA_LINES', 3)
+        wbctrl.add_parameter('G_NUM_UNITS', self.num_units)
+        wbctrl.add_parameter('G_NUM_SCLK_LINES', self.num_units)
+        wbctrl.add_parameter('G_NUM_SDATA_LINES', self.num_units)
         # These are top-level ports -- they don't need signal declarations,
         # but they do need ports added to the top-level
         wbctrl.add_port('adc_adc3wire_csn', 'adc_adc3wire_csn', dir='out', parent_port=True, width=self.num_units)
@@ -160,50 +160,90 @@ class ads5296x4(YellowBlock):
             return '{' + ','.join(port_list) + '}'
 
     def gen_constraints(self):
+        # Reduce the FMC indices to only those which are connected (on SNAP2). TODO: Get the real connections when the board is designed
+        ha_pins = list(range(24)) # 0..23
+        hb_pins = list(range(ha_pins[-1]+1, ha_pins[-1]+1+24)) # 24..47
+        la_pins = list(range(hb_pins[-1]+1, hb_pins[-1]+1+34)) # 48..81
+        valid_pins = ha_pins[0:23] + hb_pins[0:20] + la_pins[0:34]
+        print('*****')
+        print(valid_pins)
+
+        clock_pin = valid_pins[0]
+        valid_pins = valid_pins[1:]
+        print('*')
+        print(valid_pins)
+        # The "a" lanes of the first board in an FMC slot
+        index_a_board0 = valid_pins[0:4*self.num_units_per_board]
+        valid_pins = valid_pins[4*self.num_units_per_board:]
+        print('*')
+        print(valid_pins)
+        # The "b" lanes of the first board in an FMC slot
+        index_b_board0 = valid_pins[0:4*self.num_units_per_board]
+        valid_pins = valid_pins[4*self.num_units_per_board:]
+        print('*')
+        print(valid_pins)
+
+        # The "a" lanes of the second board in an FMC slot
+        index_a_board1 = valid_pins[0:4*self.num_units_per_board]
+        valid_pins = valid_pins[4*self.num_units_per_board:]
+        print('*')
+        print(valid_pins)
+        # The "b" lanes of the second board in an FMC slot
+        index_b_board1 = valid_pins[0:4*self.num_units_per_board]
+        valid_pins = valid_pins[4*self.num_units_per_board:]
+        print('*')
+        print(valid_pins)
+        print(len(valid_pins))
+
+        valid_single_ended_pins = range(valid_pins[0]*2, (valid_pins[-1]+1)*2)
+        print('**********')
+        print(valid_single_ended_pins)
+        print(len(valid_single_ended_pins))
+        #csn = valid_single_ended_pins[0:self.num_units]
+        #valid_single_ended_pins = valid_single_ended_pins[self.num_units:]
+        #sdata = valid_single_ended_pins[0:self.num_units]
+        #valid_single_ended_pins = valid_single_ended_pins[self.num_units:]
+        #sclk = valid_single_ended_pins[0:self.num_units]
+        #valid_single_ended_pins = valid_single_ended_pins[self.num_units:]
+
         cons = []
-        # ADC SPI interface
-        # TODO: cons.append(PortConstraint('adc0_adc3wire_csn1',   'adc_csn', iogroup_index=0))
-        # TODO: cons.append(PortConstraint('adc0_adc3wire_csn2',   'adc_csn', iogroup_index=1))
-        # TODO: cons.append(PortConstraint('adc0_adc3wire_csn3',   'adc_csn', iogroup_index=2))
-        # TODO: cons.append(PortConstraint('adc0_adc3wire_sdata', 'adc_sdata', port_index=list(range(3)), iogroup_index=list(range(3))))
-        # TODO: cons.append(PortConstraint('adc0_adc3wire_sclk',  'adc_sclk', port_index=list(range(3)), iogroup_index=list(range(3))))
 
         cons.append(PortConstraint('adc16_clk_line_p',  'fmc0_p', iogroup_index=0))
         cons.append(PortConstraint('adc16_clk_line_n',  'fmc0_n', iogroup_index=0))
-
-        fmc0_a_boards = min(2, self.board_count)
-        fmc0_b_boards = min(2, self.board_count - 2)
-        fmc1_a_boards = min(2, self.board_count - 4)
-        fmc1_b_boards = min(2, self.board_count - 6)
-        # The "a" lanes of the first board in an FMC slot
-        index_a_board0 = list(range(1, 1+4*self.num_units_per_board))
-        # The "b" lanes of the first board in an FMC slot
-        index_b_board0 = list(range(1+4*self.num_units_per_board, 1+8*self.num_units_per_board))
-        # The "a" lanes of the second board in an FMC slot
-        index_a_board1 = list(range(1+8*self.num_units_per_board, 1+12*self.num_units_per_board))
-        # The "b" lanes of the second board in an FMC slot
-        index_b_board1 = list(range(1+12*self.num_units_per_board, 1+16*self.num_units_per_board))
 
         cons.append(PortConstraint('adc16_ser_a_p', 'fmc0_p', port_index=list(range(4*self.num_units_per_board)), iogroup_index=index_a_board0))
         cons.append(PortConstraint('adc16_ser_a_n', 'fmc0_n', port_index=list(range(4*self.num_units_per_board)), iogroup_index=index_a_board0))
         cons.append(PortConstraint('adc16_ser_b_p', 'fmc0_p', port_index=list(range(4*self.num_units_per_board)), iogroup_index=index_b_board0))
         cons.append(PortConstraint('adc16_ser_b_n', 'fmc0_n', port_index=list(range(4*self.num_units_per_board)), iogroup_index=index_b_board0))
 
+        cons.append(PortConstraint('adc_adc3wire_csn',   'fmc0', port_index=range(0*self.num_units_per_board, 1*self.num_units_per_board), iogroup_index=valid_single_ended_pins[0*self.num_units_per_board : 1*self.num_units_per_board]))
+        cons.append(PortConstraint('adc_adc3wire_sdata', 'fmc0', port_index=range(0*self.num_units_per_board, 1*self.num_units_per_board), iogroup_index=valid_single_ended_pins[1*self.num_units_per_board : 2*self.num_units_per_board]))
+        cons.append(PortConstraint('adc_adc3wire_sclk',  'fmc0', port_index=range(0*self.num_units_per_board, 1*self.num_units_per_board), iogroup_index=valid_single_ended_pins[2*self.num_units_per_board : 3*self.num_units_per_board]))
+
         if self.board_count > 1:
             cons.append(PortConstraint('adc16_ser_a_p', 'fmc0_p', port_index=list(range(4*self.num_units_per_board, 8*self.num_units_per_board)), iogroup_index=index_a_board1))
             cons.append(PortConstraint('adc16_ser_a_n', 'fmc0_n', port_index=list(range(4*self.num_units_per_board, 8*self.num_units_per_board)), iogroup_index=index_a_board1))
             cons.append(PortConstraint('adc16_ser_b_p', 'fmc0_p', port_index=list(range(4*self.num_units_per_board, 8*self.num_units_per_board)), iogroup_index=index_b_board1))
             cons.append(PortConstraint('adc16_ser_b_n', 'fmc0_n', port_index=list(range(4*self.num_units_per_board, 8*self.num_units_per_board)), iogroup_index=index_b_board1))
+            cons.append(PortConstraint('adc_adc3wire_csn',   'fmc0', port_index=range(1*self.num_units_per_board, 2*self.num_units_per_board), iogroup_index=valid_single_ended_pins[3*self.num_units_per_board : 4*self.num_units_per_board]))
+            cons.append(PortConstraint('adc_adc3wire_sdata', 'fmc0', port_index=range(1*self.num_units_per_board, 2*self.num_units_per_board), iogroup_index=valid_single_ended_pins[4*self.num_units_per_board : 5*self.num_units_per_board]))
+            cons.append(PortConstraint('adc_adc3wire_sclk',  'fmc0', port_index=range(1*self.num_units_per_board, 2*self.num_units_per_board), iogroup_index=valid_single_ended_pins[5*self.num_units_per_board : 6*self.num_units_per_board]))
         if self.board_count > 2:
             cons.append(PortConstraint('adc16_ser_a_p', 'fmc1_p', port_index=list(range(4*self.num_units_per_board)), iogroup_index=index_a_board0))
             cons.append(PortConstraint('adc16_ser_a_n', 'fmc1_n', port_index=list(range(4*self.num_units_per_board)), iogroup_index=index_a_board0))
             cons.append(PortConstraint('adc16_ser_b_p', 'fmc1_p', port_index=list(range(4*self.num_units_per_board)), iogroup_index=index_b_board0))
             cons.append(PortConstraint('adc16_ser_b_n', 'fmc1_n', port_index=list(range(4*self.num_units_per_board)), iogroup_index=index_b_board0))
+            cons.append(PortConstraint('adc_adc3wire_csn',   'fmc1', port_index=range(2*self.num_units_per_board, 3*self.num_units_per_board), iogroup_index=valid_single_ended_pins[0*self.num_units_per_board : 1*self.num_units_per_board]))
+            cons.append(PortConstraint('adc_adc3wire_sdata', 'fmc1', port_index=range(2*self.num_units_per_board, 3*self.num_units_per_board), iogroup_index=valid_single_ended_pins[1*self.num_units_per_board : 2*self.num_units_per_board]))
+            cons.append(PortConstraint('adc_adc3wire_sclk',  'fmc1', port_index=range(2*self.num_units_per_board, 3*self.num_units_per_board), iogroup_index=valid_single_ended_pins[2*self.num_units_per_board : 3*self.num_units_per_board]))
         if self.board_count > 3:
             cons.append(PortConstraint('adc16_ser_a_p', 'fmc1_p', port_index=list(range(4*self.num_units_per_board, 8*self.num_units_per_board)), iogroup_index=index_a_board1))
             cons.append(PortConstraint('adc16_ser_a_n', 'fmc1_n', port_index=list(range(4*self.num_units_per_board, 8*self.num_units_per_board)), iogroup_index=index_a_board1))
             cons.append(PortConstraint('adc16_ser_b_p', 'fmc1_p', port_index=list(range(4*self.num_units_per_board, 8*self.num_units_per_board)), iogroup_index=index_b_board1))
             cons.append(PortConstraint('adc16_ser_b_n', 'fmc1_n', port_index=list(range(4*self.num_units_per_board, 8*self.num_units_per_board)), iogroup_index=index_b_board1))
+            cons.append(PortConstraint('adc_adc3wire_csn',   'fmc1', port_index=range(3*self.num_units_per_board, 4*self.num_units_per_board), iogroup_index=valid_single_ended_pins[3*self.num_units_per_board : 4*self.num_units_per_board]))
+            cons.append(PortConstraint('adc_adc3wire_sdata', 'fmc1', port_index=range(3*self.num_units_per_board, 4*self.num_units_per_board), iogroup_index=valid_single_ended_pins[4*self.num_units_per_board : 5*self.num_units_per_board]))
+            cons.append(PortConstraint('adc_adc3wire_sclk',  'fmc1', port_index=range(3*self.num_units_per_board, 4*self.num_units_per_board), iogroup_index=valid_single_ended_pins[5*self.num_units_per_board : 6*self.num_units_per_board]))
         
 
         # TODO: cons.append(PortConstraint('adc_rst_n', 'adc_rst_n', port_index=list(range(3)), iogroup_index=list(range(3))))
