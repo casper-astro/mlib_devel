@@ -64,9 +64,10 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity macifudpreceiver is
+entity bandwidthtestreceiver is
     generic(
         G_SLOT_WIDTH      : natural                          := 4;
+        G_UDP_SERVER_PORT : natural range 0 to ((2**16) - 1) := 5;
         -- For normal maximum ethernet frame packet size = ceil(1522)=2048 Bytes 
         -- The address width is log2(2048/(512/8))=5 bits wide
         -- 1 x (16KBRAM) per slot = 1 x 4 = 4 (16K BRAMS)/ 2 (32K BRAMS)   
@@ -78,27 +79,18 @@ entity macifudpreceiver is
     );
     port(
         axis_clk                 : in  STD_LOGIC;
-        axis_app_clk             : in  STD_LOGIC;
         axis_reset               : in  STD_LOGIC;
         -- Setup information
-        ReceiverMACAddress       : in  STD_LOGIC_VECTOR(47 downto 0);
-        ReceiverIPAddress        : in  STD_LOGIC_VECTOR(31 downto 0);
-        ReceiverUDPPort          : in  STD_LOGIC_VECTOR(15 downto 0);
-        -- MAC Statistics
-        RXOverFlowCount          : out STD_LOGIC_VECTOR(31 downto 0);
-        RXAlmostFullCount        : out STD_LOGIC_VECTOR(31 downto 0);                      
+        ServerMACAddress         : in  STD_LOGIC_VECTOR(47 downto 0);
+        ServerIPAddress          : in  STD_LOGIC_VECTOR(31 downto 0);
         -- Packet Readout in addressed bus format
-        RingBufferSlotID         : in  STD_LOGIC_VECTOR(G_SLOT_WIDTH - 1 downto 0);
-        RingBufferSlotClear      : in  STD_LOGIC;
-        RingBufferSlotStatus     : out STD_LOGIC;
-        RingBufferSlotTypeStatus : out STD_LOGIC;
-        RingBufferSlotsFilled    : out STD_LOGIC_VECTOR(G_SLOT_WIDTH - 1 downto 0);
-        RingBufferDataRead       : in  STD_LOGIC;
-        -- Enable[0] is a special bit (we assume always 1 when packet is valid)
-        -- we use it to save TLAST
-        RingBufferDataEnable     : out STD_LOGIC_VECTOR(63 downto 0);
-        RingBufferDataOut        : out STD_LOGIC_VECTOR(511 downto 0);
-        RingBufferAddress        : in  STD_LOGIC_VECTOR(G_ADDR_WIDTH - 1 downto 0);
+        ClientMACAddress         : out STD_LOGIC_VECTOR(47 downto 0);
+        ClientIPAddress          : out STD_LOGIC_VECTOR(31 downto 0);
+        ClientUDPPort            : out STD_LOGIC_VECTOR(15 downto 0);
+        TestUDPLength            : out STD_LOGIC_VECTOR(15 downto 0);
+        TestUDPIterations        : out STD_LOGIC_VECTOR(15 downto 0);
+        TestUDPPattern           : out STD_LOGIC_VECTOR(15 downto 0);
+        TestUDPRun               : out STD_LOGIC;
         --Inputs from AXIS bus of the MAC side
         axis_rx_tdata            : in  STD_LOGIC_VECTOR(511 downto 0);
         axis_rx_tvalid           : in  STD_LOGIC;
@@ -106,40 +98,10 @@ entity macifudpreceiver is
         axis_rx_tkeep            : in  STD_LOGIC_VECTOR(63 downto 0);
         axis_rx_tlast            : in  STD_LOGIC
     );
-end entity macifudpreceiver;
+end entity bandwidthtestreceiver;
 
-architecture rtl of macifudpreceiver is
+architecture rtl of bandwidthtestreceiver is
 
-    component dualportpacketringbuffer is
-    generic(
-        G_SLOT_WIDTH : natural := 4;
-        G_ADDR_WIDTH : natural := 8;
-        G_DATA_WIDTH : natural := 64
-    );
-    port(
-        RxClk                  : in  STD_LOGIC;
-        TxClk                  : in  STD_LOGIC;
-            -- Transmission port
-            TxPacketByteEnable     : out STD_LOGIC_VECTOR((G_DATA_WIDTH / 8) - 1 downto 0);
-            TxPacketDataRead       : in  STD_LOGIC;
-            TxPacketData           : out STD_LOGIC_VECTOR(G_DATA_WIDTH - 1 downto 0);
-            TxPacketAddress        : in  STD_LOGIC_VECTOR(G_ADDR_WIDTH - 1 downto 0);
-            TxPacketSlotClear      : in  STD_LOGIC;
-            TxPacketSlotID         : in  STD_LOGIC_VECTOR(G_SLOT_WIDTH - 1 downto 0);
-            TxPacketSlotStatus     : out STD_LOGIC;
-            TxPacketSlotTypeStatus : out STD_LOGIC;
-            -- Reception port
-            RxPacketByteEnable     : in  STD_LOGIC_VECTOR((G_DATA_WIDTH / 8) - 1 downto 0);
-            RxPacketDataWrite      : in  STD_LOGIC;
-            RxPacketData           : in  STD_LOGIC_VECTOR(G_DATA_WIDTH - 1 downto 0);
-            RxPacketAddress        : in  STD_LOGIC_VECTOR(G_ADDR_WIDTH - 1 downto 0);
-            RxPacketSlotSet        : in  STD_LOGIC;
-            RxPacketSlotID         : in  STD_LOGIC_VECTOR(G_SLOT_WIDTH - 1 downto 0);
-            RxPacketSlotType       : in  STD_LOGIC;
-            RxPacketSlotStatus     : out STD_LOGIC;
-            RxPacketSlotTypeStatus : out STD_LOGIC
-        );
-    end component dualportpacketringbuffer;
 
     type AxisUDPReaderSM_t is (
         InitialiseSt,                   -- On the reset state
@@ -157,15 +119,11 @@ architecture rtl of macifudpreceiver is
     constant C_IPV_IHL           : std_logic_vector(7 downto 0)  := X"45";
     -- UDP Protocol =0x06 	
     constant C_UDP_PROTOCOL      : std_logic_vector(7 downto 0)  := X"11";
+	-- Start command
+	constant C_START_COMMAND     : std_logic_vector(31 downto 0)  := X"A5A5A5A5"; 
+	-- Stop command
+	constant C_STOP_COMMAND      : std_logic_vector(31 downto 0)  := X"BDBDBDBD"; 
     -- Tuples registers
-    signal lPacketByteEnable     : std_logic_vector(RingBufferDataEnable'length - 1 downto 0);
-    signal lPacketDataWrite      : std_logic;
-    signal lPacketData           : std_logic_vector(RingBufferDataOut'length - 1 downto 0);
-    signal lPacketAddressCounter : unsigned(RingBufferAddress'length - 1 downto 0);
-    signal lPacketAddress        : unsigned(RingBufferAddress'length - 1 downto 0);
-    signal lPacketSlotSet        : std_logic;
-    signal lPacketSlotType       : std_logic;
-    signal lPacketSlotID         : unsigned(RingBufferSlotID'length - 1 downto 0);
     signal lInPacket             : std_logic;
     alias lDestinationMACAddress : std_logic_vector(47 downto 0) is axis_rx_tdata(47 downto 0);
     alias lSourceMACAddress      : std_logic_vector(47 downto 0) is axis_rx_tdata(95 downto 48);
@@ -184,6 +142,15 @@ architecture rtl of macifudpreceiver is
     alias lDestinationUDPPort    : std_logic_vector(15 downto 0) is axis_rx_tdata(303 downto 288);
     alias lUDPDataStreamLength   : std_logic_vector(15 downto 0) is axis_rx_tdata(319 downto 304);
     alias lUDPCheckSum           : std_logic_vector(15 downto 0) is axis_rx_tdata(335 downto 320);
+    alias lCommand               : std_logic_vector(31 downto 0) is axis_rx_tdata(367 downto 336);
+
+    signal lClientMACAddress     : std_logic_vector(47 downto 0);
+    signal lClientIPAddress      : std_logic_vector(31 downto 0);
+    signal lClientUDPPort        : std_logic_vector(15 downto 0);
+    signal lTestUDPLength        : std_logic_vector(15 downto 0);
+    signal lTestUDPIterations    : std_logic_vector(15 downto 0);
+    signal lTestUDPPattern       : std_logic_vector(15 downto 0);
+	signal lTestUDPRun           : std_logic;
     signal lFilledSlots          : unsigned(G_SLOT_WIDTH - 1 downto 0);
     -- The left over is 22 bytes
     function byteswap(DataIn : in std_logic_vector)
@@ -222,94 +189,19 @@ architecture rtl of macifudpreceiver is
         end if;
     end byteswap;
 
-    signal lSlotClearBuffer               : STD_LOGIC_VECTOR(G_SLOT_WIDTH - 1 downto 0);
-    signal lSlotClear                     : STD_LOGIC;
-    signal lSlotSetBuffer                 : STD_LOGIC_VECTOR(G_SLOT_WIDTH - 1 downto 0);
-    signal lSlotSet                       : STD_LOGIC;
-
 begin
-    --These slot clear and set operations are assynchronous and must have CDC.
-    SlotSetClearProc : process(axis_clk)
+
+        ClientMACAddress         <= lClientMACAddress;
+        ClientIPAddress          <= lClientIPAddress;
+        ClientUDPPort            <= lClientUDPPort;
+        TestUDPLength            <= lTestUDPLength;
+        TestUDPIterations        <= lTestUDPIterations;
+        TestUDPPattern           <= lTestUDPPattern;
+		TestUDPRun				 <= lTestUDPRun;
+
+    SynchStateProc : process(axis_clk)
     begin
         if rising_edge(axis_clk) then
-            if (axis_reset = '1') then
-                lSlotClear <= '0';
-                lSlotSet   <= '0';
-            else
-                lSlotClearBuffer <= lSlotClearBuffer(G_SLOT_WIDTH - 2 downto 0) & RingBufferSlotClear;
-                lSlotSetBuffer   <= lSlotSetBuffer(G_SLOT_WIDTH - 2 downto 0) & lPacketSlotSet;
-                -- Slot clear is late processed
-                if (lSlotClearBuffer = X"1100") then
-                    lSlotClear <= '1';
-                else
-                    lSlotClear <= '0';
-                end if;
-                -- Slot set is early processed
-                if (lSlotSetBuffer = X"0001") then
-                    lSlotSet <= '1';
-                else
-                    lSlotSet <= '0';
-                end if;
-
-            end if;
-        end if;
-    end process SlotSetClearProc;
-        
-    FilledSlotCounterProc : process(axis_clk)
-    begin
-        if rising_edge(axis_clk) then
-            if (axis_reset = '1') then
-                lFilledSlots <= (others => '0');
-            else
-                if ((lSlotClear = '0') and (lSlotSet = '1')) then
-                    if (lFilledSlots /= X"F") then
-                        lFilledSlots <= lFilledSlots + 1;
-                    end if;
-                elsif ((lSlotClear = '1') and (lSlotSet = '0')) then
-                    if (lFilledSlots /= 0) then
-                        lFilledSlots <= lFilledSlots - 1;
-                    end if;
-                else
-                    -- Its a neutral operation
-                    lFilledSlots <= lFilledSlots;
-                end if;
-            end if;
-        end if;
-    end process FilledSlotCounterProc;
-
-    RingBufferSlotsFilled <= std_logic_vector(lFilledSlots);
-    PacketBuffer_i : dualportpacketringbuffer
-        generic map(
-            G_SLOT_WIDTH => RingBufferSlotID'length,
-            G_ADDR_WIDTH => RingBufferAddress'length,
-            G_DATA_WIDTH => RingBufferDataOut'length
-        )
-        port map(
-            RxClk                  => axis_clk,
-            TxClk                  => axis_app_clk,
-            -- Transmission port
-            TxPacketByteEnable     => RingBufferDataEnable,
-            TxPacketDataRead       => RingBufferDataRead,
-            TxPacketData           => RingBufferDataOut,
-            TxPacketAddress        => RingBufferAddress,
-            TxPacketSlotClear      => RingBufferSlotClear,
-            TxPacketSlotID         => RingBufferSlotID,
-            TxPacketSlotStatus     => RingBufferSlotStatus,
-            TxPacketSlotTypeStatus => RingBufferSlotTypeStatus,
-            RxPacketByteEnable     => lPacketByteEnable,
-            RxPacketDataWrite      => lPacketDataWrite,
-            RxPacketData           => lPacketData,
-            RxPacketAddress        => std_logic_vector(lPacketAddress),
-            RxPacketSlotSet        => lPacketSlotSet,
-            RxPacketSlotID         => std_logic_vector(lPacketSlotID),
-            RxPacketSlotType       => lPacketSlotType,
-            RxPacketSlotStatus     => open,
-            RxPacketSlotTypeStatus => open
-        );
-
-    SynchStateProc : process(axis_app_clk)
-    begin
-        if rising_edge(axis_app_clk) then
             if (axis_reset = '1') then
                 -- Initialize SM on reset
                 StateVariable <= InitialiseSt;
@@ -319,70 +211,59 @@ begin
 
                         -- Wait for packet after initialization
                         StateVariable         <= ProcessPacketSt;
-                        lPacketAddressCounter <= (others => '0');
-                        lPacketAddress        <= (others => '0');
-                        lPacketSlotID         <= (others => '0');
-                        lPacketDataWrite      <= '0';
                         lInPacket             <= '0';
+    					lClientMACAddress     <= (others => '0');
+    					lClientIPAddress      <= (others => '0');
+    					lClientUDPPort        <= (others => '0');
+    					lTestUDPLength        <= (others => '0');
+    					lTestUDPIterations    <= (others => '0');
+    					lTestUDPPattern       <= (others => '0');
+						lTestUDPRun			  <= '0';
 
                     when ProcessPacketSt =>
-                        lPacketAddress <= lPacketAddressCounter;
-                        if (lPacketSlotSet = '1') then
-                            -- If the previous slot was set then point to next slot.
-                            lPacketSlotID <= unsigned(lPacketSlotID) + 1;
-                        end if;
 
                         if ((lInPacket = '1') or -- Already processing a packet
-                                (       -- First Time processing a packet or 64 byte packet
-                                    (lInPacket = '0') and -- First Time processing a packet or 64 byte packet 
-                                    (   -- First Time processing a packet or 64 byte packet
-                                        (axis_rx_tvalid = '1') and -- Check the valid
-                                        (axis_rx_tuser /= '1') and -- Check for errors 
-                                        (lEtherType = byteswap(C_IPV4_TYPE)) and -- Check the Frame Type
-                                        (lDestinationUDPPort = byteswap(ReceiverUDPPort)) and -- Check the UDP Port   
-                                        (lDestinationIPAddress = byteswap(ReceiverIPAddress)) and -- Check the Destination IP Address   
-                                        (lDestinationMACAddress = byteswap(ReceiverMACAddress)) and -- Check the Destination MAC Address   
-                                        (lIPVIHL = C_IPV_IHL) and -- Check the IPV4 IHL 									 
-                                        (lProtocol = C_UDP_PROTOCOL) -- Check the UDP Protocol
-                                    )   -- First Time processing a packet or 64 byte packet
-                                )       -- First Time processing a packet or 64 byte packet 
-                               ) then
-                            -- Write the packet by passing the tvalid signal
-                            lPacketDataWrite <= axis_rx_tvalid;
+                            (           -- First Time processing a packet or 64 byte packet
+							(lInPacket = '0') and -- First Time processing a packet or 64 byte packet 
+                            (           -- First Time processing a packet or 64 byte packet
+							(axis_rx_tvalid = '1') and -- Check the valid
+                            (axis_rx_tuser /= '1') and -- Check for errors 
+                            (lEtherType = byteswap(C_IPV4_TYPE)) and -- Check the Frame Type
+                            (lDestinationUDPPort = byteswap(std_logic_vector(to_unsigned(G_UDP_SERVER_PORT, lDestinationUDPPort'length)))) and -- Check the UDP Port   
+                            (lDestinationIPAddress = byteswap(ServerIPAddress)) and -- Check the Destination IP Address   
+                            (lDestinationMACAddress = byteswap(ServerMACAddress)) and -- Check the Destination MAC Address   
+                            (lIPVIHL = C_IPV_IHL) and -- Check the IPV4 IHL 									 
+                            (lProtocol = C_UDP_PROTOCOL) -- Check the UDP Protocol
+							)           -- First Time processing a packet or 64 byte packet
+							)           -- First Time processing a packet or 64 byte packet 
+                            ) then
                             --Send the ARP Response
                             if (lInpacket = '0') then
-                                -- This is the first 64 bytes								
-                                lPacketData(47 downto 0)    <= lSourceMACAddress;
-                                lPacketData(95 downto 48)   <= lDestinationMACAddress;
-                                lPacketData(111 downto 96)  <= lEtherType;
-                                lPacketData(119 downto 112) <= lIPVIHL;
-                                lPacketData(127 downto 120) <= lDSCPECN;
-                                lPacketData(143 downto 128) <= lTotalLength;
-                                lPacketData(159 downto 144) <= lIdentification;
-                                lPacketData(175 downto 160) <= lFlagsOffset;
-                                lPacketData(183 downto 176) <= lTimeToLeave;
-                                lPacketData(191 downto 184) <= lProtocol;
-                                lPacketData(207 downto 192) <= lHeaderChecksum;
-                                lPacketData(239 downto 208) <= lDestinationIPAddress;
-                                lPacketData(271 downto 240) <= lSourceIPAddress;
-                                lPacketData(287 downto 272) <= lDestinationUDPPort;
-                                lPacketData(303 downto 288) <= lSourceUDPPort;
-                                lPacketData(319 downto 304) <= lUDPDataStreamLength;
-                                lPacketData(335 downto 320) <= lUDPCheckSum;
-                                lPacketData(511 downto 336) <= axis_rx_tdata(511 downto 336);
-                            else
-                                -- This is other bytes
-                                -- Pass all data
-                                lPacketData <= axis_rx_tdata;
+                                -- This is the first 64 bytes	
+								if (lCommand = C_RUN_COMMAND) then									 							
+									-- Save the command data
+									lClientMACAddress     <= axis_rx_tdata(415 downto 368);
+									lClientIPAddress      <= axis_rx_tdata(447 downto 416);
+									lClientUDPPort        <= axis_rx_tdata(463 downto 448);
+									lTestUDPLength        <= axis_rx_tdata(479 downto 464);
+									lTestUDPIterations    <= axis_rx_tdata(495 downto 480);
+									lTestUDPPattern       <= axis_rx_tdata(511 downto 496);
+								end if;
+								-- Process the command
+								if (lCommand = C_START_COMMAND) then 																	
+									lTestUDPRun <= '1';
+								else
+									if (lCommand = C_STOP_COMMAND) then 																	
+										lTestUDPRun <= '0';
+									else
+										lTestUDPRun <= lTestUDPRun;
+									end if;
+								end if;
 
                             end if;
-                            -- This is UDP Transfer to this server port on this system
-
                             --  Save the packet for processing
                             if ((axis_rx_tlast = '1') and (axis_rx_tvalid = '1')) then
-                                -- This is the very last 64 byte packet data
-                                -- Go to next slot
-                                lPacketSlotType                <= axis_rx_tvalid;
+                                -- This is the very first or last 64 byte packet data
                                 if (axis_rx_tuser = '1') then
                                     -- There was an error
                                     StateVariable <= InitialiseSt;
@@ -391,28 +272,13 @@ begin
                                 end if;
                                 -- If this is the last segment then restart the packet address
                                 lInPacket                      <= '0';
-                                lPacketSlotSet                 <= '1';
-                                --
-                                lPacketAddressCounter          <= (others => '0');
-                                lPacketByteEnable(0)           <= '1';
-                                lPacketByteEnable(63 downto 1) <= axis_rx_tkeep(63 downto 1);
                             else
                                 -- This is a longer than 64 byte packet
                                 lInPacket                      <= '1';
-                                -- tkeep(0) is always 1 when writing data is valid 
-                                lPacketByteEnable(0)           <= '0';
-                                lPacketByteEnable(63 downto 1) <= axis_rx_tkeep(63 downto 1);
-                                if (axis_rx_tvalid = '1') then
-                                    lPacketAddressCounter <= unsigned(lPacketAddressCounter) + 1;
-                                end if;
-                                lPacketSlotSet                 <= '0';
                                 -- Keep processing packets
                                 StateVariable                  <= ProcessPacketSt;
                             end if;
                         else
-                            lPacketDataWrite <= '0';
-                            lPacketSlotType  <= '0';
-                            lPacketSlotSet   <= '0';
 
                         end if;
 

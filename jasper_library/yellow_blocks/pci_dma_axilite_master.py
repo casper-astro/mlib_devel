@@ -92,8 +92,6 @@ class pci_dma_axilite_master(YellowBlock):
         clkconst = ClockConstraint('pcie_refclk_p', freq=100.0)
         cons.append(clkconst)
 
-        ## Make AXI clock asynchronous to the user clock
-        cons.append(RawConstraint('set_clock_groups -name asyncclocks_pcie_usr_clk -asynchronous -group [get_clocks -include_generated_clocks -of_objects [get_nets user_clk]] -group [get_clocks -include_generated_clocks axil_clk]'))
 
         return cons
 
@@ -106,4 +104,7 @@ class pci_dma_axilite_master(YellowBlock):
             tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.pcie_blk_locn {%s}] [get_ips %s]' % (pcie_loc, self.module_name)]
         except KeyError:
             pass
+        ## Make AXI clock asynchronous to the user clock
+        # Need to wait until synthesis is complete for all the clocks to exist
+        tcl_cmds['post_synth'] = ['set_clock_groups -name asyncclocks_pcie_usr_clk -asynchronous -group [get_clocks -include_generated_clocks -of_objects [get_nets user_clk]] -group [get_clocks -include_generated_clocks axil_clk]']
         return tcl_cmds

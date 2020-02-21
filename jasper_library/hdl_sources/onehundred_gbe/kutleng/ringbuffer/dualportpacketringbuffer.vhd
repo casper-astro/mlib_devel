@@ -156,7 +156,7 @@ architecture rtl of dualportpacketringbuffer is
     signal VCC_onebit       : std_logic;
     signal GND_onebit       : std_logic;
     signal GND_twobit       : std_logic_vector(1 downto 0);
-    signal GND_dwidth       : std_logic_vector(((G_DATA_WIDTH)+(G_DATA_WIDTH / 8))  - 1 downto 0);
+    signal GND_dwidth       : std_logic_vector(((G_DATA_WIDTH) + (G_DATA_WIDTH / 8)) - 1 downto 0);
 
 begin
     VCC_onebit <= '1';
@@ -187,7 +187,6 @@ begin
             ReadBData(0)  => TxPacketSlotStatus,
             ReadBData(1)  => TxPacketSlotTypeStatus
         );
-        
 
     lRxPacketData((RxPacketByteEnable'length + RxPacketData'length) - 1 downto RxPacketData'length) <= RxPacketByteEnable;
     lRxPacketData(RxPacketData'length - 1 downto 0)                                                 <= RxPacketData;
@@ -214,10 +213,10 @@ begin
             WriteAEnable  => RxPacketDataWrite,
             WriteAData    => lRxPacketData,
             ReadAData     => open,
+            WriteBAddress => lTxPacketAddress,
+            EnableB       => TxPacketDataRead,
             WriteBEnable  => GND_onebit,
             WriteBData    => GND_dwidth,
-            EnableB       => TxPacketDataRead,
-            WriteBAddress => lTxPacketAddress,
             ReadBData     => lTxPacketData
         );
 end architecture rtl;

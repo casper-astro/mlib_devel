@@ -133,7 +133,7 @@ architecture rtl of arpreceiver is
     -- Packet Type ARP=0x0806 
     constant C_ARP_TYPE      : std_logic_vector(15 downto 0) := X"0806";
     -- Packet Type RARP=0x0835 
-    constant C_RARP_TYPE     : std_logic_vector(15 downto 0) := X"0835";
+    constant C_RARP_TYPE     : std_logic_vector(15 downto 0) := X"8035";
     -- Packet Type VLAN=0x8100 
     --constant C_VLAN_TYPE      : std_logic_vector(15 downto 0)       := X"8100";
     -- Packet Type DVLAN=0x88A8 
@@ -281,9 +281,23 @@ begin
                             lPacketSlotID <= unsigned(lPacketSlotID) + 1;
                         end if;
 
-                        if ((axis_rx_tvalid = '1') and (lHardType = byteswap(C_ETHERNET_TYPE)) and (lProtoType = byteswap(C_IPV4_TYPE)) and (lHardSize = C_HWMAC_SIZE) and (lProtoSize = C_IPV4_SIZE)) then
+                        if (-- Check for valid frame
+                                (axis_rx_tvalid = '1') and -- Check for valid frame 
+                                (lHardType = byteswap(C_ETHERNET_TYPE)) and -- Check Ethernet packet type
+                                (lProtoType = byteswap(C_IPV4_TYPE)) and -- Check IPV4 packet type
+                                (lHardSize = C_HWMAC_SIZE) and -- Check Ethernet size 
+                                (lProtoSize = C_IPV4_SIZE) -- Check IP size
+                            ) then
 
-                            if (((lDestinationMAC = byteswap(C_BROADCAST_MAC)) or (lDestinationMAC = byteswap(ARPMACAddress))) and (lARPOperation = byteswap(C_ARP_REQ)) and (lDestIP = byteswap(ARPIPAddress)) and (lEtherType = byteswap(C_ARP_TYPE))) then
+                            if (        -- Check the MAC addressing for broadcast
+                                    (
+                                    (lDestinationMAC = byteswap(C_BROADCAST_MAC)) or -- Broadcast address 
+                                        (lDestinationMAC = byteswap(ARPMACAddress)) -- Dedicated address
+                                    ) and -- Check framing
+                                    (lARPOperation = byteswap(C_ARP_REQ)) and -- ARP Request 
+                                    (lDestIP = byteswap(ARPIPAddress)) and -- Check IP Address
+                                    (lEtherType = byteswap(C_ARP_TYPE)) -- Check Ethertype ARP
+                                ) then
                                 -- This is an ARP request to this system
                                 -- Supply ARP Request signals and progress slots
                                 if (axis_rx_tlast = '1') then
@@ -298,7 +312,7 @@ begin
                                         lPacketSlotSet <= '0';
                                     end if;
                                 else
-                                    lPacketSlotSet <= '0';                                
+                                    lPacketSlotSet <= '0';
                                     lPacketAddress <= unsigned(lPacketAddress) + 1;
                                 end if;
                                 -- tkeep(0) is always 1 when writing data is valid
@@ -306,22 +320,22 @@ begin
                                 -- on the last bit  
                                 lPacketByteEnable(0)           <= axis_rx_tlast;
                                 lPacketByteEnable(63 downto 1) <= axis_rx_tkeep(63 downto 1);
-                                lPacketDataWrite <= '1';
-                                lPacketSlotType <= axis_rx_tlast;
+                                lPacketDataWrite               <= '1';
+                                lPacketSlotType                <= axis_rx_tlast;
                                 --Send the ARP Response
-                                lPacketData(47 downto 0) <= lSourceMAC;
-                                lPacketData(95 downto 48) <= byteswap(ARPMACAddress);
-                                lPacketData(111 downto 96) <= lEtherType;
-                                lPacketData(127 downto 112) <= lHardType;
-                                lPacketData(143 downto 128) <= lProtoType;
-                                lPacketData(151 downto 144) <= lHardSize;
-                                lPacketData(159 downto 152) <= lProtoSize;
-                                lPacketData(175 downto 160) <= byteswap(C_ARP_RESP);
-                                lPacketData(223 downto 176) <= byteswap(ARPMACAddress);
-                                lPacketData(255 downto 224) <= byteswap(ARPIPAddress);
-                                lPacketData(303 downto 256) <= lSenderMAC;
-                                lPacketData(335 downto 304) <= lSenderIP;
-                                lPacketData(511 downto 336) <= (others => '0');
+                                lPacketData(47 downto 0)       <= lSourceMAC;
+                                lPacketData(95 downto 48)      <= byteswap(ARPMACAddress);
+                                lPacketData(111 downto 96)     <= lEtherType;
+                                lPacketData(127 downto 112)    <= lHardType;
+                                lPacketData(143 downto 128)    <= lProtoType;
+                                lPacketData(151 downto 144)    <= lHardSize;
+                                lPacketData(159 downto 152)    <= lProtoSize;
+                                lPacketData(175 downto 160)    <= byteswap(C_ARP_RESP);
+                                lPacketData(223 downto 176)    <= byteswap(ARPMACAddress);
+                                lPacketData(255 downto 224)    <= byteswap(ARPIPAddress);
+                                lPacketData(303 downto 256)    <= lSenderMAC;
+                                lPacketData(335 downto 304)    <= lSenderIP;
+                                lPacketData(511 downto 336)    <= (others => '0');
                             else
                                 if ((lDestinationMAC = byteswap(ARPMACAddress)) and (lARPOperation = byteswap(C_RARP_REQ)) and (lEtherType = byteswap(C_RARP_TYPE))) then
                                     --Supply RARP Request signals and progress slots
@@ -335,7 +349,7 @@ begin
                                             -- errors, drop it
                                             lPacketSlotSet <= '0';
                                         end if;
-                                        lPacketAddress <= (others => '0');
+                                        lPacketAddress                 <= (others => '0');
                                         -- tkeep(0) is always 1 when writing data is valid 
                                         lPacketByteEnable(0)           <= '1';
                                         lPacketByteEnable(63 downto 1) <= axis_rx_tkeep(63 downto 1);
@@ -343,15 +357,15 @@ begin
                                         -- tkeep(0) is always 1 when writing data is valid 
                                         lPacketByteEnable(0)           <= '0';
                                         lPacketByteEnable(63 downto 1) <= axis_rx_tkeep(63 downto 1);
-                                        lPacketSlotSet <= '0';
-                                        lPacketAddress <= unsigned(lPacketAddress) + 1;
+                                        lPacketSlotSet                 <= '0';
+                                        lPacketAddress                 <= unsigned(lPacketAddress) + 1;
                                     end if;
-                                    lPacketDataWrite <= '1';
-                                    lPacketSlotType <= axis_rx_tlast;
+                                    lPacketDataWrite            <= '1';
+                                    lPacketSlotType             <= axis_rx_tlast;
                                     --Send the RARP Response
-                                    lPacketData(47 downto 0) <= lSourceMAC;
-                                    lPacketData(95 downto 48) <= byteswap(ARPMACAddress);
-                                    lPacketData(111 downto 96) <= lEtherType;
+                                    lPacketData(47 downto 0)    <= lSourceMAC;
+                                    lPacketData(95 downto 48)   <= byteswap(ARPMACAddress);
+                                    lPacketData(111 downto 96)  <= lEtherType;
                                     lPacketData(127 downto 112) <= lHardType;
                                     lPacketData(143 downto 128) <= lProtoType;
                                     lPacketData(151 downto 144) <= lHardSize;

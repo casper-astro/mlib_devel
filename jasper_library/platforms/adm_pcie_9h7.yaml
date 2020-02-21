@@ -10,7 +10,7 @@ mmbus_address_alignment: 4
 sources: []
 constraints: []
 pcie:
-  loc: PCIE4C_X1Y1
+  loc: PCIE4C_X1Y0
 provides:
   - qsfp0
   - qsfp1
@@ -96,7 +96,7 @@ pins:
       - Y3
       - W1
       - V3
-  qsf_mgt_tx_p:
+  qsfp_mgt_tx_p:
     loc:
       - AK9
       - AJ7
@@ -114,7 +114,7 @@ pins:
       - Y9
       - W7
       - W11
-  qsf_mgt_tx_n:
+  qsfp_mgt_tx_n:
     loc:
       - AK8
       - AJ6

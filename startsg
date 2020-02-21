@@ -170,6 +170,8 @@ export PATH="${MATLAB_PATH}/bin:${PATH}"
 # Set umask to allow group writes
 umask 002
 
+unset MYVIVADO
+
 if [ "$0" == "${BASH_SOURCE[0]}" ]
 then
   # Save start-up directory (if defined, startup.m will cd there)

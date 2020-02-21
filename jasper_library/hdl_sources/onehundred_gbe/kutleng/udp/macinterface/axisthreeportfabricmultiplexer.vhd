@@ -113,6 +113,7 @@ architecture rtl of axisthreeportfabricmultiplexer is
             axis_clk          : in  STD_LOGIC;
             axis_reset        : in  STD_LOGIC;
             --Outputs to AXIS bus MAC side 
+            axis_tx_tpriority : out STD_LOGIC_VECTOR(G_PRIORITY_WIDTH - 1 downto 0);
             axis_tx_tdata     : out STD_LOGIC_VECTOR(G_DATA_WIDTH - 1 downto 0);
             axis_tx_tvalid    : out STD_LOGIC;
             axis_tx_tready    : in  STD_LOGIC;
@@ -154,17 +155,17 @@ begin
     axis_rx_tready_2   <= laxis_rx_tready(1);
     axis_rx_tready_3   <= laxis_rx_tready(2);
 
-    laxis_rx_tpriority((1 * G_PRIORITY_WIDTH) - 1 downto G_PRIORITY_WIDTH*(1-1)) <= axis_rx_tpriority_1;
-    laxis_rx_tpriority((2 * G_PRIORITY_WIDTH) - 1 downto G_PRIORITY_WIDTH*(2-1)) <= axis_rx_tpriority_2;
-    laxis_rx_tpriority((3 * G_PRIORITY_WIDTH) - 1 downto G_PRIORITY_WIDTH*(3-1)) <= axis_rx_tpriority_3;
+    laxis_rx_tpriority((1 * G_PRIORITY_WIDTH) - 1 downto G_PRIORITY_WIDTH * (1 - 1)) <= axis_rx_tpriority_1;
+    laxis_rx_tpriority((2 * G_PRIORITY_WIDTH) - 1 downto G_PRIORITY_WIDTH * (2 - 1)) <= axis_rx_tpriority_2;
+    laxis_rx_tpriority((3 * G_PRIORITY_WIDTH) - 1 downto G_PRIORITY_WIDTH * (3 - 1)) <= axis_rx_tpriority_3;
 
-    laxis_rx_tdata((1 * G_DATA_WIDTH) - 1 downto G_DATA_WIDTH*(1-1)) <= axis_rx_tdata_1;
-    laxis_rx_tdata((2 * G_DATA_WIDTH) - 1 downto G_DATA_WIDTH*(2-1)) <= axis_rx_tdata_2;
-    laxis_rx_tdata((3 * G_DATA_WIDTH) - 1 downto G_DATA_WIDTH*(3-1)) <= axis_rx_tdata_3;
+    laxis_rx_tdata((1 * G_DATA_WIDTH) - 1 downto G_DATA_WIDTH * (1 - 1)) <= axis_rx_tdata_1;
+    laxis_rx_tdata((2 * G_DATA_WIDTH) - 1 downto G_DATA_WIDTH * (2 - 1)) <= axis_rx_tdata_2;
+    laxis_rx_tdata((3 * G_DATA_WIDTH) - 1 downto G_DATA_WIDTH * (3 - 1)) <= axis_rx_tdata_3;
 
-    laxis_rx_tkeep((1 * (G_DATA_WIDTH / 8)) - 1 downto (G_DATA_WIDTH / 8)*(1-1)) <= axis_rx_tkeep_1;
-    laxis_rx_tkeep((2 * (G_DATA_WIDTH / 8)) - 1 downto (G_DATA_WIDTH / 8)*(2-1)) <= axis_rx_tkeep_2;
-    laxis_rx_tkeep((3 * (G_DATA_WIDTH / 8)) - 1 downto (G_DATA_WIDTH / 8)*(3-1)) <= axis_rx_tkeep_3;
+    laxis_rx_tkeep((1 * (G_DATA_WIDTH / 8)) - 1 downto (G_DATA_WIDTH / 8) * (1 - 1)) <= axis_rx_tkeep_1;
+    laxis_rx_tkeep((2 * (G_DATA_WIDTH / 8)) - 1 downto (G_DATA_WIDTH / 8) * (2 - 1)) <= axis_rx_tkeep_2;
+    laxis_rx_tkeep((3 * (G_DATA_WIDTH / 8)) - 1 downto (G_DATA_WIDTH / 8) * (3 - 1)) <= axis_rx_tkeep_3;
 
     AXISMUX_i : axisfabricmultiplexer
         generic map(
@@ -176,6 +177,7 @@ begin
         port map(
             axis_clk          => axis_clk,
             axis_reset        => axis_reset,
+            axis_tx_tpriority => open,
             axis_tx_tdata     => axis_tx_tdata,
             axis_tx_tvalid    => axis_tx_tvalid,
             axis_tx_tready    => axis_tx_tready,
