@@ -961,7 +961,6 @@ class Toolflow(object):
         else:
             self.logger.debug('File not written. Vivado version is 2018.2: %s. Dual Port RAM exists: %s'
                              % (ver_exists, dpram_exists))
-        
 
 class ToolflowFrontend(object):
     """

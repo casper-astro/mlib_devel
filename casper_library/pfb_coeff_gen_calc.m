@@ -47,8 +47,36 @@ end
 if debug,
     coeff_vector = index;
 else
-    windowval = transpose(window(WindowType, alltaps));
-    total_coeffs = windowval .* sinc(fwidth * ([0:alltaps-1]/(2^PFBSize)-TotalTaps/2));
+    try
+        windowval = transpose(window(WindowType, alltaps));
+    catch err
+        switch err.identifier
+            case 'MATLAB:UndefinedFunction'
+                warning('window function undefined in MATLAB. Attempting to use python variant')
+                try
+                    windowval = cellfun(@double, cell(py.window.window(WindowType, int32(alltaps))));
+                catch
+                    error('Python call to window() failed!')
+                end
+            otherwise
+                rethrow(err)
+        end
+    end
+    try
+        total_coeffs = windowval .* sinc(fwidth * ([0:alltaps-1]/(2^PFBSize)-TotalTaps/2));
+    catch err
+        switch err.identifier
+            case 'MATLAB:UndefinedFunction'
+                warning('sinc function undefined in MATLAB. Attempting to use python variant')
+                try
+                    total_coeffs = windowval .* cellfun(@double, cell(py.window.sinc(py.list(fwidth * ([0:alltaps-1]/(2^PFBSize)-TotalTaps/2)))));
+                catch
+                    error('Python call to sinc() failed!')
+                end
+            otherwise
+                rethrow(err)
+        end
+    end
     coeff_vector = total_coeffs(index);
 end
 % end

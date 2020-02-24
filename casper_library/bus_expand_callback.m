@@ -27,6 +27,7 @@ clog('entering bus_expand_callback', 'trace');
 blk = gcb;
 
 check_mask_type(blk, 'bus_expand');
+set_param(blk, 'LinkStatus', 'inactive');
 
 outputToWorkspace = get_param(blk, 'outputToWorkspace');
 mode = get_param(blk, 'mode');

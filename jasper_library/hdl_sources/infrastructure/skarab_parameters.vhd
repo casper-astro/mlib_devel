@@ -57,6 +57,13 @@ package parameter is
     constant C_RD_MEZZANINE_STAT_1_ADDR     : integer := 12;
     constant C_RD_DSP_OVERRIDE_ADDR         : integer := 13;
 
+    -- offsets of the multiple 40gbe cores
+    constant C_RD_40GBE_IF_0_OFFSET_ADDR     : integer := 14;
+    constant C_RD_40GBE_IF_1_OFFSET_ADDR     : integer := 15;
+    constant C_RD_40GBE_IF_2_OFFSET_ADDR     : integer := 16;
+    constant C_RD_40GBE_IF_3_OFFSET_ADDR     : integer := 17;
+
+
     constant C_RD_THROUGHPUT_COUNTER_ADDR     : integer := 22;
     constant C_RD_NUM_PACKETS_CHECKED_0_ADDR     : integer := 23;
     constant C_RD_NUM_PACKETS_CHECKED_1_ADDR     : integer := 24;
