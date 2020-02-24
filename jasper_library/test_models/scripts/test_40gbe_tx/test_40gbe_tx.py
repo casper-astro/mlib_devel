@@ -274,11 +274,11 @@ if __name__ == '__main__':
 
     if args.program:
         logging.info('Programming SKARABs.')
-        res = ftx.upload_to_ram_and_program(args.txfpg, legacy_reg_map=False)
+        res = ftx.upload_to_ram_and_program(args.txfpg)
         if not res:
             logging.error('Could not program TX SKARAB: %s' % args.txhost)
         logging.info('\tDone programming TXer.')
-        res = frx.upload_to_ram_and_program(args.rxfpg, legacy_reg_map=False)
+        res = frx.upload_to_ram_and_program(args.rxfpg)
         if not res:
             logging.error('Could not program RX SKARAB: %s' % args.rxhost)
         logging.info('\tDone programming RXer.')

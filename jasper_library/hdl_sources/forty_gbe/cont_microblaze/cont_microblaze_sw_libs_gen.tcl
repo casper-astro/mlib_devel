@@ -1,5 +1,5 @@
 #*****************************************************************************************
-# Vivado (TM) v2018.2 (64-bit)
+# Vivado (TM) v2019.1 (64-bit)
 #
 # cont_microblaze_sw_libs_gen.tcl: Tcl script for creating the microblaze software libraries (microblaze BSP),
 #                                  so that the skarab_microblaze_software repo can be linked to these libraries
@@ -15,11 +15,11 @@
 #
 #*****************************************************************************************
 
-#Set path where the SDK drivers, BSP and libraries are stored - normally <install_path>/Xilinx/SDK/2018.2/data/embeddedsw
-set sdk_lib_path "/media/aisaacson/HD1TB/Xilinx/SDK/2018.2/data/embeddedsw"
+#Set path where the SDK drivers, BSP and libraries are stored - normally <install_path>/Xilinx/SDK/2019.1/data/embeddedsw
+set sdk_lib_path "/opt/Xilinx/SDK/2019.1/data/embeddedsw"
 
 #Set path to where mb-ar executable is in order to generate software BSP
-set ::env(PATH) "$::env(PATH):/media/aisaacson/HD1TB/Xilinx/SDK/2018.2/gnu/microblaze/lin/bin"
+set ::env(PATH) "$::env(PATH):/opt/Xilinx/SDK/2019.1/gnu/microblaze/lin/bin"
 
 #Software design name
 set swdesign "microblaze_sw"

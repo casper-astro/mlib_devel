@@ -14,9 +14,7 @@ print('done')
 
 #program the SKARAB
 print('programming the SKARAB...')
-#f.upload_to_ram_and_program('tut9_2017-7-28_1414.fpg', legacy_reg_map=False)
-#f.upload_to_ram_and_program('tut_hmc_2018-07-16_1009.fpg', legacy_reg_map=False)
-f.upload_to_ram_and_program('top_tut_hmc_2018_2_rev1.fpg', legacy_reg_map=False)
+f.upload_to_ram_and_program('top_tut_hmc_2018_2_rev1.fpg')
 print('done')
 
 #Set the data rate control
