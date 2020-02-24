@@ -70,7 +70,8 @@ class pci_dma_axilite_master(YellowBlock):
         inst.add_port('sys_rst_n', 'pcie_rst_n', parent_port=True, dir='in')
 
         # Internal ports
-        inst.add_port('sys_clk', 'pcie_refclk_div2') # signal comes through IBUFDS_GTE4 (see below)
+        # US+: if sys_clk_gt is 250MHz, sys_clk should be 1/2 sys_clk_gt.
+        inst.add_port('sys_clk', 'pcie_refclk_odiv2') # signal comes through IBUFDS_GTE4 (see below)
         inst.add_port('sys_clk_gt', 'pcie_refclk')   # signal comes through IBUFDS_GTE4 (see below)
         inst.add_port('usr_irq_req', '1\'b0')
 
@@ -80,7 +81,7 @@ class pci_dma_axilite_master(YellowBlock):
         ibuf.add_port('IB', 'pcie_refclk_n', dir='in', parent_port=True)
         ibuf.add_port('CEB', '1\'b0')
         ibuf.add_port('O', 'pcie_refclk')
-        ibuf.add_port('ODIV2', 'pcie_refclk_div2')
+        ibuf.add_port('ODIV2', 'pcie_refclk_odiv2')
 
     def gen_constraints(self):
         cons = []
