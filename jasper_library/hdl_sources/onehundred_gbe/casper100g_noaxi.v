@@ -123,7 +123,7 @@ module casper100g_noaxi (
         .axis_streaming_data_tx_tdata(gbe_tx_data),
         .axis_streaming_data_tx_tvalid(tx_valid_int),
         .axis_streaming_data_tx_tuser(32'b0),
-        .axis_streaming_data_tx_tkeep(32'hffffffff),
+        .axis_streaming_data_tx_tkeep(64'hffffffffffffffff),
         .axis_streaming_data_tx_tlast(gbe_tx_end_of_frame),
         .axis_streaming_data_tx_tready()
     );
