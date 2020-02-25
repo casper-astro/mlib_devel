@@ -127,7 +127,7 @@ class forty_gbe(YellowBlock):
         self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/ip/XGMII_FIFO_DUAL_SYNC/*.xci")
         self.add_source("forty_gbe/cpu_rx_packet_size/*.xci")
         self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/ip/RS256_FIFO/*.xci")
-        self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PHY/ip/IEEE802_3_XL_VIO/*.xci")
+        #self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PHY/ip/IEEE802_3_XL_VIO/*.xci") # Only for debugging
         self.add_source("forty_gbe/WISHBONE/wishbone_forty_gb_eth_attach.vhd")
 
         self.suffix = "_%d" % self.inst_id
@@ -200,10 +200,10 @@ class forty_gbe(YellowBlock):
         #cons.append(ClockGroupConstraint('-of_objects [get_pins %s/USER_CLK_MMCM_inst/CLKOUT0]' % self.fullname, 'MEZ3_REFCLK_%s_P'%self.port, 'asynchronous'))
         
 
-        cons.append(InputDelayConstraint(clkname=clockconst.name, consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='FPGA_RESET_N'))
-        cons.append(InputDelayConstraint(clkname=clockconst.name, consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='FPGA_RESET_N'))
-        cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks %s'%clockconst.name, multicycledelay=4))
-        cons.append(MultiCycleConstraint(multicycletype='hold', sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks %s'%clockconst.name, multicycledelay=4))
+        #cons.append(InputDelayConstraint(clkname=clockconst.name, consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='FPGA_RESET_N'))
+        #cons.append(InputDelayConstraint(clkname=clockconst.name, consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='FPGA_RESET_N'))
+        #cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks %s'%clockconst.name, multicycledelay=4))
+        #cons.append(MultiCycleConstraint(multicycletype='hold', sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks %s'%clockconst.name, multicycledelay=4))
         return cons
 
 
@@ -215,6 +215,8 @@ class forty_gbe(YellowBlock):
         tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/constraints/IEEE802_3_XL_PCS.xdc'%os.getenv('HDL_ROOT'))
         tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/constraints/DATA_FREQUENCY_DIVIDER.xdc'%os.getenv('HDL_ROOT'))
         tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/constraints/DATA_FREQUENCY_MULTIPLIER.xdc'%os.getenv('HDL_ROOT'))
+        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/constraints/DUAL_CLOCK_STROBE_GENERATOR.xdc'%os.getenv('HDL_ROOT'))
+        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PHY/constraints/IEEE802_3_XL_PHY.xdc'%os.getenv('HDL_ROOT'))
         tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PHY/constraints/IEEE802_3_XL_PHY.xdc'%os.getenv('HDL_ROOT'))
         #tcl_cmds.append('set_property is_locked true [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/cont_microblaze/cont_microblaze.bd]')
         #tcl_cmds.append('set_property is_locked true [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/ip/gmii_to_sgmii/gmii_to_sgmii.xci]')
@@ -226,5 +228,7 @@ class forty_gbe(YellowBlock):
         tcl_cmds.append('set_property processing_order LATE [get_files [get_property directory [current_project]]/myproj.srcs/constrs_1/imports/constraints/DATA_FREQUENCY_MULTIPLIER.xdc]')
         tcl_cmds.append('set_property SCOPED_TO_REF IEEE802_3_XL_PHY [get_files [get_property directory [current_project]]/myproj.srcs/constrs_1/imports/constraints/IEEE802_3_XL_PHY.xdc]')
         tcl_cmds.append('set_property processing_order LATE [get_files [get_property directory [current_project]]/myproj.srcs/constrs_1/imports/constraints/IEEE802_3_XL_PHY.xdc]')
+        tcl_cmds.append('set_property SCOPED_TO_REF DUAL_CLOCK_STROBE_GENERATOR [get_files [get_property directory [current_project]]/myproj.srcs/constrs_1/imports/constraints/DUAL_CLOCK_STROBE_GENERATOR.xdc]')
+        tcl_cmds.append('set_property processing_order LATE [get_files [get_property directory [current_project]]/myproj.srcs/constrs_1/imports/constraints/DUAL_CLOCK_STROBE_GENERATOR.xdc]')
 
         return {'pre_synth': tcl_cmds}

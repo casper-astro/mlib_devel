@@ -56,6 +56,7 @@ entity IEEE802_3_XL_PMA is
     GT_TXUSRCLK_RESET_OUT   : out std_logic;
 
     GT0_RXOUTCLK_OUT        : out std_logic;
+    GT_RXUSRCLK2_OUT        : out std_logic;
     GT_RXUSRCLK2_IN         : in  std_logic;
     GT_RXUSRCLK_IN          : in  std_logic;
     GT_RXUSRCLK_LOCKED_IN   : in  std_logic;
@@ -188,6 +189,9 @@ architecture Behavioral of IEEE802_3_XL_PMA is
         
   --GT ref clock after input buffer
   signal GTREFCLK              : std_logic;
+  -- Internal signal to connect GTREFCLK to BUFG_GT
+  -- (since this needs to use the ODIV2 output of an IBUFDS_GTE)
+  signal GTREFCLK_INT          : std_logic;
 
   --GT0
   signal LANE0_RX_DATA         : std_logic_vector(63 downto 0);
@@ -341,14 +345,28 @@ begin
   LANE3_TX_HEADER(1) <= LANE3_TX_HEADER_I(0);
   --$$$~~ BIT ORDER REVERSAL END ~~$$$--
 
-        gth_refclk_ibuf : IBUFDS_GTE3
-          port map(
+  gth_refclk_ibuf : IBUFDS_GTE3
+    generic map (
+      REFCLK_HROW_CK_SEL => "00"
+    ) port map (
       I     => GTREFCLK_PAD_P_I,
       IB    => GTREFCLK_PAD_N_I,
       O     => GTREFCLK,
       CEB   => '0',
-      ODIV2 => open
+      ODIV2 => GTREFCLK_INT
     );
+
+    gtrefclk_bufg_gt: BUFG_GT
+      port map(
+        CE => '1',
+        CEMASK => '0',
+        CLR => '0',
+        CLRMASK => '0',
+        DIV => "000",
+        I => GTREFCLK_INT,
+        O => GTREFCLK_O
+      );
+
 
   XLAUI_support_i : xlaui_us
     port map(
@@ -370,7 +388,7 @@ begin
       gtwiz_userclk_tx_usrclk2_out(0) => open,
       gtwiz_userclk_tx_active_out(0)  => open,
       gtwiz_userclk_rx_usrclk_out(0)  => open,
-      gtwiz_userclk_rx_usrclk2_out(0) => open,
+      gtwiz_userclk_rx_usrclk2_out(0) => GT_RXUSRCLK2_OUT, --open,
       gtwiz_userclk_rx_active_out(0)  => open,
       gtwiz_userdata_tx_in(255 downto 192)   => LANE3_TX_DATA,
       gtwiz_userdata_tx_in(191 downto 128)   => LANE2_TX_DATA,
@@ -382,7 +400,7 @@ begin
       gtwiz_userdata_rx_out( 63 downto 0  )  => LANE0_RX_DATA,
 
       gtrefclk00_in(0)       => GTREFCLK,
-      qpll0outrefclk_out(0)  => GTREFCLK_O,
+      qpll0outrefclk_out(0)  => open, --GTREFCLK_O,
       qpll0outclk_out(0)     => open,
 
       rxpmaresetdone_out     => gt_rx_ready,
