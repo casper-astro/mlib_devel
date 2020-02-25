@@ -976,7 +976,9 @@ class VerilogModule(object):
         Add an internal signal to the entity, with name ``signal``
         and width ``width``.
 
-        You may add a comment that will end up in the generated verilog.
+        You may add a comment that will end up in the generated verilog using the `comment` kwarg.
+        You may add special compiler directives using the `attributes` kwarg.
+          For example, `attributes={'keep':'"true"'}` will generate a wire with a (* keep = "true" *) prefix
         """
         name = name.rstrip(' ')
         # check every nested dictionary to see if name is in it
@@ -1297,10 +1299,16 @@ class VerilogModule(object):
             s += self.gen_cur_blk_comment(block, self.signals[block])
             for name, sig in sorted(self.signals[block].items()):
                 logger.debug('Writing verilog for signal %s'%name)
-                if sig.width == 0:
-                    s += '  wire %s;'%(name)
+                if hasattr(sig, 'attributes'):
+                    s += '  '
+                    for k, v in sig.attributes.items():
+                        s += '(* %s = %s *) ' % (k, v)
                 else:
-                    s += '  wire [%d:0] %s;'%((sig.width-1), name)
+                    s += '  '
+                if sig.width == 0:
+                    s += 'wire %s;'%(name)
+                else:
+                    s += 'wire [%d:0] %s;'%((sig.width-1), name)
                 if hasattr(sig, 'comment'):
                     s += ' // %s'%sig.comment
                 s += '\n'

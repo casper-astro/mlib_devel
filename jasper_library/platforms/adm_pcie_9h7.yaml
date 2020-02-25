@@ -1,6 +1,7 @@
 name: adm_pcie_9h7
 manufacturer: Xilinx
 fpga: xcvu37p-fsvh2892-2-e
+family: ultrascaleplus
 backend_target: vivado
 mmbus_architecture: AXI4-Lite
 mmbus_base_address: 0x10000000
@@ -9,7 +10,7 @@ mmbus_address_alignment: 4
 sources: []
 constraints: []
 pcie:
-  loc: PCIE4C_X1Y1
+  loc: PCIE4C_X1Y0
 provides:
   - qsfp0
   - qsfp1
@@ -47,6 +48,99 @@ pins:
   pcie_rst_n:
     loc: BF41
     iostd: LVCMOS18
+  qsfp_mgt_ref_clk_p:
+    loc:
+      - AJ15
+      - AD13
+      - AG40
+      - AB42
+  qsfp_mgt_ref_clk_n:
+    loc:
+      - AJ14
+      - AD12
+      - AG41
+      - AB43
+  qsfp_mgt_rx_p:
+    loc:
+      - AL6
+      - AK4
+      - AJ2
+      - AH4
+      - AG2
+      - AF4
+      - AE2
+      - AE6
+      - AD4
+      - AC2
+      - AC6
+      - AB4
+      - AA2
+      - Y4
+      - W2
+      - V4
+  qsfp_mgt_rx_n:
+    loc:
+      - AL5
+      - AK3
+      - AJ1
+      - AH3
+      - AG1
+      - AF3
+      - AE1
+      - AE5
+      - AD3
+      - AC1
+      - AC5
+      - AB3
+      - AA1
+      - Y3
+      - W1
+      - V3
+  qsfp_mgt_tx_p:
+    loc:
+      - AK9
+      - AJ7
+      - AJ11
+      - AH9
+      - AG7
+      - AG11
+      - AF9
+      - AE11
+      - AD9
+      - AC11
+      - AB9
+      - AA7
+      - AA11
+      - Y9
+      - W7
+      - W11
+  qsfp_mgt_tx_n:
+    loc:
+      - AK8
+      - AJ6
+      - AJ10
+      - AH8
+      - AG6
+      - AG10
+      - AF8
+      - AE10
+      - AD8
+      - AC10
+      - AB8
+      - AA6
+      - AA10
+      - Y8
+      - W6
+      - W10
+  qsfp_modprs:
+    iostd: LVCMOS18
+    loc: [BN35, BN34, BP34, BL32]
+  qsfp_sda:
+    iostd: LVCMOS18
+    loc: [BN30, BM30, BP32, BM34]
+  qsfp_scl:
+    iostd: LVCMOS18
+    loc: [BN29, BL30, BN32, BM32]
   pcie_refclk_p:
     loc: AN15
   pcie_gty_rx_p:

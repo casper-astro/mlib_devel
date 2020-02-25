@@ -35,8 +35,17 @@ class adm_pcie_9h7(YellowBlock):
             PortConstraint('sys_clk_n', 'sys_clk_n'),
             PortConstraint('sys_clk_p', 'sys_clk_p'),
             ClockConstraint('sys_clk_p', period=3.333),
-            RawConstraint('set_property CONFIG_VOLTAGE 1.8 [current_design]'),
-            RawConstraint('set_property CFGBVS GND [current_design]'),
-            #RawConstraint('set_property BITSTREAM.CONFIG.CONFIGRATE 33 [current_design]'),
-            #RawConstraint('set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]'),
+            RawConstraint("set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]"),
+            RawConstraint("set_property BITSTREAM.CONFIG.EXTMASTERCCLK_EN {DIV-2} [current_design]"),
+            RawConstraint("set_property BITSTREAM.CONFIG.SPI_32BIT_ADDR YES [current_design]"),
+            RawConstraint("set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 8 [current_design]"),
+            RawConstraint("set_property BITSTREAM.CONFIG.SPI_FALL_EDGE YES [current_design]"),
+            RawConstraint("set_property BITSTREAM.CONFIG.UNUSEDPIN {Pullnone} [current_design]"),
+            RawConstraint("set_property CFGBVS GND [ current_design ]"),
+            RawConstraint("set_property CONFIG_VOLTAGE 1.8 [ current_design ]"),
+            RawConstraint("set_property BITSTREAM.CONFIG.OVERTEMPSHUTDOWN Enable [current_design]"),
         ]
+    def gen_tcl_cmds(self):
+       tcl_cmds = {}
+       tcl_cmds['promgen'] = ['write_cfgmem  -format mcs -size 64 -interface SPIx8 -loadbit "up 0x0 ./myproj.runs/impl_1/top.bit " -checksum -file "./myproj.runs/impl_1/top.mcs" -force']
+       return tcl_cmds

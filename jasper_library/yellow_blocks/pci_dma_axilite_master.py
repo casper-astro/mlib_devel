@@ -70,7 +70,8 @@ class pci_dma_axilite_master(YellowBlock):
         inst.add_port('sys_rst_n', 'pcie_rst_n', parent_port=True, dir='in')
 
         # Internal ports
-        inst.add_port('sys_clk', 'pcie_refclk_div2') # signal comes through IBUFDS_GTE4 (see below)
+        # US+: if sys_clk_gt is 250MHz, sys_clk should be 1/2 sys_clk_gt.
+        inst.add_port('sys_clk', 'pcie_refclk_odiv2') # signal comes through IBUFDS_GTE4 (see below)
         inst.add_port('sys_clk_gt', 'pcie_refclk')   # signal comes through IBUFDS_GTE4 (see below)
         inst.add_port('usr_irq_req', '1\'b0')
 
@@ -80,7 +81,7 @@ class pci_dma_axilite_master(YellowBlock):
         ibuf.add_port('IB', 'pcie_refclk_n', dir='in', parent_port=True)
         ibuf.add_port('CEB', '1\'b0')
         ibuf.add_port('O', 'pcie_refclk')
-        ibuf.add_port('ODIV2', 'pcie_refclk_div2')
+        ibuf.add_port('ODIV2', 'pcie_refclk_odiv2')
 
     def gen_constraints(self):
         cons = []
@@ -92,9 +93,6 @@ class pci_dma_axilite_master(YellowBlock):
         clkconst = ClockConstraint('pcie_refclk_p', freq=100.0)
         cons.append(clkconst)
 
-        # Make asynchronous to the user clock (whatever is driving the clk_counter reg).
-        # TODO: make this better.
-        cons.append(RawConstraint('set_clock_groups -name asyncclocks_pcie_usr_clk -asynchronous -group [get_clocks -of_objects [get_cells -hierarchical -filter {name=~*clk_counter*}]] -group [get_clocks -include_generated_clocks %s]' % clkconst.name))
 
         return cons
 
@@ -107,4 +105,7 @@ class pci_dma_axilite_master(YellowBlock):
             tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.pcie_blk_locn {%s}] [get_ips %s]' % (pcie_loc, self.module_name)]
         except KeyError:
             pass
+        ## Make AXI clock asynchronous to the user clock
+        # Need to wait until synthesis is complete for all the clocks to exist
+        tcl_cmds['post_synth'] = ['set_clock_groups -name asyncclocks_pcie_usr_clk -asynchronous -group [get_clocks -include_generated_clocks -of_objects [get_nets user_clk]] -group [get_clocks -include_generated_clocks axil_clk]']
         return tcl_cmds

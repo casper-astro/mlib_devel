@@ -32,6 +32,56 @@ pins:
   userclk156_n:
     iostd: LVDS
     loc: G32
+#### 100 GbE QSFP support
+  mgt_ref_clk_p:
+    loc:
+      - R9
+      - W9
+  mgt_ref_clk_n:
+    loc:
+      - R8
+      - W8
+  qsfp_mgt_tx_p:
+    loc:
+      - L5
+      - K7
+      - J5
+      - H7
+      - V7
+      - T7
+      - P7
+      - M7
+  qsfp_mgt_tx_n:
+    loc:
+      - L4
+      - K6
+      - J4
+      - H6
+      - V6
+      - T6
+      - P6
+      - M6
+  qsfp_mgt_rx_p:
+    loc:
+      - T2
+      - R4
+      - P2
+      - M2
+      - Y2
+      - W4
+      - V2
+      - U4
+  qsfp_mgt_rx_n:
+    loc:
+      - T1
+      - R3
+      - P1
+      - M1
+      - Y1
+      - W3
+      - V1
+      - U3
+#
   qsfpclk156_p:
     loc: W9
   qsfpclk156_n:
