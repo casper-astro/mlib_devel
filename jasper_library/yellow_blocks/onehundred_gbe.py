@@ -2,6 +2,7 @@ from .yellow_block import YellowBlock
 from constraints import PortConstraint, ClockConstraint
 from helpers import to_int_list
 from .yellow_block_typecodes import *
+from os.path import join
 
 class onehundred_gbe(YellowBlock):
     @staticmethod
@@ -17,24 +18,49 @@ class onehundred_gbe(YellowBlock):
 class onehundredgbe_usplus(onehundred_gbe):
     def initialize(self):
         self.typecode = TYPECODE_ETHCORE
+        kdir = "onehundred_gbe/kutleng_skarab2_bsp_firmware/casperbsp/sources/vhdl/rtl"
         self.add_source('onehundred_gbe/*.v')
-        self.add_source('onehundred_gbe/kutleng/*.vhd')
-        self.add_source('onehundred_gbe/kutleng/arp/*.vhd')
-        self.add_source('onehundred_gbe/kutleng/lbustoaxis/*.vhd')
-        self.add_source('onehundred_gbe/kutleng/macphy/*.vhd')
-        self.add_source('onehundred_gbe/kutleng/ringbuffer/*.vhd')
-        self.add_source('onehundred_gbe/kutleng/udp/*.vhd')
-        self.add_source('onehundred_gbe/kutleng/udp/macinterface/*.vhd')
-        self.add_source('onehundred_gbe/kutleng/udp/macinterface/cpuinterface/*.vhd')
-        self.add_source('onehundred_gbe/ip/*.xci')
+        self.add_source(join(kdir, "*.vhd"))
+        self.add_source(join(kdir, "*", "*.vhd"))
+        self.add_source(join(kdir, "udp", "macinterface", "*.vhd"))
+        self.add_source(join(kdir, "udp", "macinterface", "*", "*.vhd"))
+        #self.add_source('onehundred_gbe/kutleng/*.vhd')
+        #self.add_source('onehundred_gbe/kutleng/arp/*.vhd')
+        #self.add_source('onehundred_gbe/kutleng/lbustoaxis/*.vhd')
+        #self.add_source('onehundred_gbe/kutleng/macphy/*.vhd')
+        #self.add_source('onehundred_gbe/kutleng/ringbuffer/*.vhd')
+        #self.add_source('onehundred_gbe/kutleng/udp/*.vhd')
+        #self.add_source('onehundred_gbe/kutleng/udp/macinterface/*.vhd')
+        #self.add_source('onehundred_gbe/kutleng/udp/macinterface/cpuinterface/*.vhd')
+        self.add_source('onehundred_gbe/ip/*/*.xci')
 
         self.provides = ['ethernet']
         if self.cpu_rx_en and self.cpu_tx_en:
             self.provides += ['cpu_ethernet']
 
-        self.refclk_freq = 156.25
         # Hard-code to port 0 for now
         self.port = 0
+
+        try:
+            ethconf = self.platform.conf["onehundredgbe"]
+        except KeyError:
+            self.logger.exception("Failed to find `onehundredgbe` configuration in platform's YAML file")
+            raise
+        
+        try:
+            self.refclk_freq_str = ethconf["refclk_freq_str"]
+        except KeyError:
+            self.logger.error("Missing onehundredgbe `refclk_freq_str` parameter in YAML file")
+            raise
+        self.refclk_freq = float(self.refclk_freq_str)
+        try:
+            self.cmac_loc = ethconf["cmac_loc"][self.port]
+        except KeyError:
+            self.logger.error("Missing onehundredgbe `cmac_loc` parameter in YAML file")
+            raise
+        except IndexError:
+            self.logger.error("Missing entry for port %d in onehundredgbe `cmac_loc` parameter" % self.port)
+            raise
 
     def modify_top(self, top):
         inst = top.get_instance(entity='casper100g_noaxi', name=self.fullname+'_inst')
@@ -43,10 +69,10 @@ class onehundredgbe_usplus(onehundred_gbe):
         inst.add_port('RefClkLocked', '~sys_rst', parent_sig=False)
         inst.add_port('aximm_clk', 'axil_clk')
         inst.add_port('icap_clk', 'axil_clk')
-        inst.add_port('axis_reset', 'axil_rst')
+        inst.add_port('axis_reset', "1'b0")#'axil_rst')
         # MGT connections
-        inst.add_port('mgt_qsfp_clock_p', self.fullname+'_refclk156_p', dir='in', parent_port=True)
-        inst.add_port('mgt_qsfp_clock_n', self.fullname+'_refclk156_n', dir='in', parent_port=True)
+        inst.add_port('mgt_qsfp_clock_p', self.fullname+'_refclk_p', dir='in', parent_port=True)
+        inst.add_port('mgt_qsfp_clock_n', self.fullname+'_refclk_n', dir='in', parent_port=True)
 
         inst.add_port('qsfp_mgt_rx_p', self.fullname+'_qsfp_mgt_rx_p', dir='in', width=4, parent_port=True)
         inst.add_port('qsfp_mgt_rx_n', self.fullname+'_qsfp_mgt_rx_n', dir='in', width=4, parent_port=True)
@@ -88,8 +114,8 @@ class onehundredgbe_usplus(onehundred_gbe):
 
     def gen_constraints(self):
         consts = []
-        consts += [PortConstraint(self.fullname+'_refclk156_p', 'qsfp_mgt_ref_clk_p', iogroup_index=self.port)]
-        consts += [PortConstraint(self.fullname+'_refclk156_n', 'qsfp_mgt_ref_clk_n', iogroup_index=self.port)]
+        consts += [PortConstraint(self.fullname+'_refclk_p', 'qsfp_mgt_ref_clk_p', iogroup_index=self.port)]
+        consts += [PortConstraint(self.fullname+'_refclk_n', 'qsfp_mgt_ref_clk_n', iogroup_index=self.port)]
         consts += [PortConstraint(self.fullname+'_qsfp_mgt_rx_p', 'qsfp_mgt_rx_p', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
         consts += [PortConstraint(self.fullname+'_qsfp_mgt_rx_n', 'qsfp_mgt_rx_n', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
         consts += [PortConstraint(self.fullname+'_qsfp_mgt_tx_p', 'qsfp_mgt_tx_p', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
@@ -99,12 +125,19 @@ class onehundredgbe_usplus(onehundred_gbe):
         consts += [PortConstraint(self.fullname+'_qsfp_modprsl_ls', 'qsfp_modprs', iogroup_index=self.port)]
         #consts += [PortConstraint(self.fullname+'_qsfp_intl_ls', '', iogroup_index=self.port)]
         #consts += [PortConstraint(self.fullname+'_qsfp_lpmode_ls', '', iogroup_index=self.port)]
-        consts += [ClockConstraint(self.fullname+'_refclk156_p', name=self.fullname+'_refclk156_p', freq=self.refclk_freq)]
+        self.myclk = ClockConstraint(self.fullname+'_refclk_p', name=self.fullname+'_refclk_p', freq=self.refclk_freq)
+        consts += [self.myclk]
         return consts
 
     def gen_tcl_cmds(self):
         tcl_cmds = {}
-        # We've let the IP manage where to put transceivers and CMAC cores based on its properties.
+        # Override the IP reference clock frequency
+        tcl_cmds['pre_synth'] = ['set_property -dict [list CONFIG.GT_REF_CLK_FREQ {%s}] [get_ips EthMACPHY100GQSFP4x]' % self.refclk_freq_str]
+
         # The LOCs seem to get overriden by the user constraints above, but we need to manually unplace the CMAC blocks
-        tcl_cmds['post_synth'] = ['unplace_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 } ]']
+        tcl_cmds['post_synth'] = ['unplace_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s*" }]' % self.fullname]
+        tcl_cmds['post_synth'] += ['place_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s*" }] %s' % (self.fullname, self.cmac_loc)]
+        # Set the 100G clock to be asynchronous to both the user clock and the AXI clock. Do this after synth so we can get the user clock without knowing what the user is clocking from
+        tcl_cmds['post_synth'] = ['set_clock_groups -name async_user_%s -asynchronous -group [get_clocks -include_generated_clocks -of_objects [get_nets user_clk]] -group [get_clocks -include_generated_clocks %s]' % (self.myclk.name, self.myclk.name)]
+        tcl_cmds['post_synth'] = ['set_clock_groups -name async_axi_%s -asynchronous -group [get_clocks -include_generated_clocks  axil_clk] -group [get_clocks -include_generated_clocks %s]' % (self.myclk.name, self.myclk.name)]
         return tcl_cmds

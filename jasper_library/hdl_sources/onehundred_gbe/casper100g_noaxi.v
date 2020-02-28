@@ -76,7 +76,7 @@ module casper100g_noaxi (
     assign tx_valid_int = |gbe_tx_valid;
     assign gbe_rx_valid = {4{rx_valid_int}};
 
-    casper100gethernetblock #(
+    casper100gethernetblock_no_cpu #(
         .G_INCLUDE_ICAP(1'b0),
         .G_AXI_DATA_WIDTH(512),
         .G_NUM_STREAMING_DATA_SERVERS(1)
@@ -118,7 +118,7 @@ module casper100g_noaxi (
         .axis_streaming_data_tx_destination_ip(gbe_tx_dest_ip),
         .axis_streaming_data_tx_destination_udp_port(gbe_tx_dest_port),
         .axis_streaming_data_tx_source_udp_port(gbe_tx_source_port),
-        .axis_streaming_data_tx_packet_length(1024), // FIXME
+        .axis_streaming_data_tx_packet_length(16'd448), // FIXME
         
         .axis_streaming_data_tx_tdata(gbe_tx_data),
         .axis_streaming_data_tx_tvalid(tx_valid_int),
