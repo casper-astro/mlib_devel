@@ -1,3 +1,3 @@
 [submodule "jasper_library/hdl_sources/onehundred_gbe/kutleng_skarab2_bsp_firmware"]
 	path = jasper_library/hdl_sources/onehundred_gbe/kutleng_skarab2_bsp_firmware
-	url = https://github.com/hectorkutleng/kutleng_skarab2_bsp_firmware
+	url = https://github.com/realtimeradio/kutleng_skarab2_bsp_firmware
