@@ -138,6 +138,6 @@ class onehundredgbe_usplus(onehundred_gbe):
         tcl_cmds['post_synth'] = ['unplace_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s*" }]' % self.fullname]
         tcl_cmds['post_synth'] += ['place_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s*" }] %s' % (self.fullname, self.cmac_loc)]
         # Set the 100G clock to be asynchronous to both the user clock and the AXI clock. Do this after synth so we can get the user clock without knowing what the user is clocking from
-        tcl_cmds['post_synth'] = ['set_clock_groups -name async_user_%s -asynchronous -group [get_clocks -include_generated_clocks -of_objects [get_nets user_clk]] -group [get_clocks -include_generated_clocks %s]' % (self.myclk.name, self.myclk.name)]
-        tcl_cmds['post_synth'] = ['set_clock_groups -name async_axi_%s -asynchronous -group [get_clocks -include_generated_clocks  axil_clk] -group [get_clocks -include_generated_clocks %s]' % (self.myclk.name, self.myclk.name)]
+        tcl_cmds['post_synth'] += ['set_clock_groups -name async_user_%s -asynchronous -group [get_clocks -include_generated_clocks -of_objects [get_nets user_clk]] -group [get_clocks -include_generated_clocks %s]' % (self.myclk.name, self.myclk.name)]
+        tcl_cmds['post_synth'] += ['set_clock_groups -name async_axi_%s -asynchronous -group [get_clocks -include_generated_clocks  axil_clk] -group [get_clocks -include_generated_clocks %s]' % (self.myclk.name, self.myclk.name)]
         return tcl_cmds
