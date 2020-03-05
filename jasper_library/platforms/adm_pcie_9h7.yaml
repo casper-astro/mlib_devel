@@ -148,7 +148,7 @@ pins:
     iostd: LVCMOS18
     loc: [BN29, BL30, BN32, BM32]
   pcie_refclk_p:
-    loc: AN15
+    loc: AR15
   pcie_gty_rx_p:
     loc:
       - AL2
