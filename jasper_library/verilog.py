@@ -83,7 +83,10 @@ class AXI4LiteDevice(object):
     """
     A class to encapsulate the parameters (name, size, etc.) of a AXI4-Lite slave device.
     """
-    def __init__(self, regname, nbytes, mode, hdl_suffix='', hdl_candr_suffix='', memory_map=[], typecode=0xff):
+    def __init__(self, regname, nbytes, mode,
+                hdl_suffix='', hdl_candr_suffix='',
+                memory_map=[], typecode=0xff,
+                data_width=32):
         """
         Class constructor.
 
@@ -101,11 +104,16 @@ class AXI4LiteDevice(object):
         :type memory_map: list
         :param typecode: Typecode number (0-255) identifying the type of this block. See `yellow_block_typecodes.py`
         :type typecode: Integer
+        :param data_width: Width of the data to be stored in this device
+        :type data_width: Integer
         """
         self.typecode = typecode
         self.regname = regname
         self.nbytes = nbytes
-        self.mode=mode
+        # Need this for variable-width BRAMs (in snapshot blocks)
+        self.data_width = data_width
+
+        self.mode = mode
         #: Start (lowest) address of the memory space used by this device, in bytes.
         self.base_addr = None
         #: End (highest) address of the memory space used by this device, in bytes.
@@ -1367,20 +1375,31 @@ class VerilogModule(object):
         self.add_port('wb_ack_o'+suffix, signal='wbs_ack_i[%s]'%wb_id,parent_sig=False)
         self.add_port('wb_err_o'+suffix, signal='wbs_err_i[%s]'%wb_id,parent_sig=False)
 
-    def add_axi4lite_interface(self, regname, mode, nbytes=4, default_val=0, suffix='', candr_suffix='', memory_map=[], typecode=0xff):
+    def add_axi4lite_interface(self, regname, mode, nbytes=4,
+                               default_val=0, suffix='',
+                               candr_suffix='', memory_map=[],
+                               typecode=0xff, data_width=32):
         """
         Add the ports necessary for a AXI4-Lite slave interface.
 
         This function returns the AXI4LiteDevice object, so the caller can mess with it's memory map
         if they so desire.
+
+        Added the (optional) data_width parameter to make provision for variable-size BRAMs
         """
         if regname in [axi_dev.regname for axi_dev in self.axi4lite_devices]:
             return
         else:
             # Make single register in memory_map if memory_map is empty
             if not memory_map:
-                memory_map = [Register(regname, nbytes=nbytes, offset=0, mode=mode, default_val=default_val, ram_size=nbytes if typecode==4 else -1, ram=True if typecode==4 else False)]
-            axi4lite_device = AXI4LiteDevice(regname, nbytes=nbytes, mode=mode, hdl_suffix=suffix, hdl_candr_suffix=candr_suffix, memory_map=memory_map, typecode=typecode)
+                memory_map = [Register(regname, nbytes=nbytes, offset=0, mode=mode,
+                                        default_val=default_val, data_width=data_width,
+                                        ram_size=nbytes if typecode==4 else -1,
+                                        ram=True if typecode==4 else False)]
+            axi4lite_device = AXI4LiteDevice(regname, nbytes=nbytes, mode=mode,
+                                            hdl_suffix=suffix, hdl_candr_suffix=candr_suffix,
+                                            memory_map=memory_map, typecode=typecode,
+                                            data_width=data_width)
             self.axi4lite_devices += [axi4lite_device]
             self.n_axi4lite_interfaces += 1
             return axi4lite_device
