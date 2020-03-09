@@ -124,19 +124,19 @@ architecture arch_wishbone_forty_gb_eth_attach of wishbone_forty_gb_eth_attach i
     constant REG_VALID_PORTS     : std_logic_vector(7 downto 0) := X"0C";
 
     -- COUNTER REGISTERS (read only)
-    constant REG_TX_PKT_RATE      : std_logic_vector(7 downto 0) := X"0E";
-    constant REG_TX_PKT_CNT       : std_logic_vector(7 downto 0) := X"0F";
-    constant REG_TX_VALID_RATE    : std_logic_vector(7 downto 0) := X"10";
-    constant REG_TX_VALID_CNT     : std_logic_vector(7 downto 0) := X"11";
-    constant REG_TX_OVERFLOW_CNT  : std_logic_vector(7 downto 0) := X"12";
-    constant REG_TX_AFULL_CNT     : std_logic_vector(7 downto 0) := X"13";
-    constant REG_RX_PKT_RATE      : std_logic_vector(7 downto 0) := X"14";
-    constant REG_RX_PKT_CNT       : std_logic_vector(7 downto 0) := X"15";
-    constant REG_RX_VALID_RATE    : std_logic_vector(7 downto 0) := X"16";
-    constant REG_RX_VALID_CNT     : std_logic_vector(7 downto 0) := X"17";
-    constant REG_RX_OVERFLOW_CNT  : std_logic_vector(7 downto 0) := X"18";
-    constant REG_RX_BAD_FRAME_CNT : std_logic_vector(7 downto 0) := X"19";
-    constant REG_CNT_RESET        : std_logic_vector(7 downto 0) := X"1A";
+    constant REG_TX_PKT_RATE      : std_logic_vector(7 downto 0) := X"12";
+    constant REG_TX_PKT_CNT       : std_logic_vector(7 downto 0) := X"13";
+    constant REG_TX_VALID_RATE    : std_logic_vector(7 downto 0) := X"14";
+    constant REG_TX_VALID_CNT     : std_logic_vector(7 downto 0) := X"15";
+    constant REG_TX_OVERFLOW_CNT  : std_logic_vector(7 downto 0) := X"16";
+    constant REG_TX_AFULL_CNT     : std_logic_vector(7 downto 0) := X"17";
+    constant REG_RX_PKT_RATE      : std_logic_vector(7 downto 0) := X"18";
+    constant REG_RX_PKT_CNT       : std_logic_vector(7 downto 0) := X"19";
+    constant REG_RX_VALID_RATE    : std_logic_vector(7 downto 0) := X"1A";
+    constant REG_RX_VALID_CNT     : std_logic_vector(7 downto 0) := X"1B";
+    constant REG_RX_OVERFLOW_CNT  : std_logic_vector(7 downto 0) := X"1C";
+    constant REG_RX_BAD_FRAME_CNT : std_logic_vector(7 downto 0) := X"1D";
+    constant REG_CNT_RESET        : std_logic_vector(7 downto 0) := X"1E"; -- obviously writable
 
     signal STB_I_z  : std_logic;
     signal STB_I_z2 : std_logic;
