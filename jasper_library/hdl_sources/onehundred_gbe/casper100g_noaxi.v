@@ -59,7 +59,6 @@ module casper100g_noaxi (
     );
 
     assign gbe_tx_afull = 1'b0;
-    assign gbe_tx_overflow = 1'b0;
     assign gbe_rx_source_ip = 32'b0;
     assign gbe_rx_source_port = 16'b0;
     assign gbe_rx_dest_ip = 32'b0;
@@ -79,7 +78,8 @@ module casper100g_noaxi (
     casper100gethernetblock_no_cpu #(
         .G_INCLUDE_ICAP(1'b0),
         .G_AXI_DATA_WIDTH(512),
-        .G_NUM_STREAMING_DATA_SERVERS(1)
+        .G_NUM_STREAMING_DATA_SERVERS(1),
+        .G_SLOT_WIDTH(2)
     ) casper100gethernetblock_inst (
         .RefClk100MHz(RefClk100MHz),
         .RefClkLocked(RefClkLocked),
@@ -118,14 +118,20 @@ module casper100g_noaxi (
         .axis_streaming_data_tx_destination_ip(gbe_tx_dest_ip),
         .axis_streaming_data_tx_destination_udp_port(gbe_tx_dest_port),
         .axis_streaming_data_tx_source_udp_port(gbe_tx_source_port),
-        .axis_streaming_data_tx_packet_length(16'd448), // FIXME
+        // packet_length is not used internally with JH's udppacker. It is kept here
+        // for compatibility with the original packing module.
+        .axis_streaming_data_tx_packet_length(16'b0),
         
         .axis_streaming_data_tx_tdata(gbe_tx_data),
         .axis_streaming_data_tx_tvalid(tx_valid_int),
+        // TUSER is (I think) a discard flag
         .axis_streaming_data_tx_tuser(32'b0),
+        // Could expose byte enables to user to allow finer payload control.
+        // BUT, need to check what patterns are actually allowed. Eg. valid
+        // bytes must be a contiguous block in the LSBs
         .axis_streaming_data_tx_tkeep(64'hffffffffffffffff),
         .axis_streaming_data_tx_tlast(gbe_tx_end_of_frame),
-        .axis_streaming_data_tx_tready()
+        .axis_streaming_data_tx_tready(gbe_tx_overflow)
     );
 
 endmodule
