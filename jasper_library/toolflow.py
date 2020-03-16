@@ -1504,13 +1504,13 @@ class VivadoBackend(ToolflowBackend):
                     self.add_tcl_cmd('read_bd %s/%s' % (source,current_source))
                 # ELF Microblaze File
                 elif ext == self.src_file_elf_ext:
-                    self.add_tcl_cmd('add_files %s/%s' % (source,current_source))
+                    self.add_tcl_cmd('import_files %s/%s' % (source,current_source))
                 # Coefficient BRAM File
                 elif ext == self.src_file_coe_ext:
-                    self.add_tcl_cmd('add_files %s/%s' % (source,current_source))
+                    self.add_tcl_cmd('import_files %s/%s' % (source,current_source))
                 # Design checkpoint files
                 elif ext == self.src_file_design_checkpoint_ext:
-                    self.add_tcl_cmd('add_files %s' % current_source)
+                    self.add_tcl_cmd('import_files %s' % current_source)
                 else:
                     self.logger.warning('unknown extension, ignoring source file %s' % current_source)
 
