@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="awc" version="2">
+	<waveform>
+		<datasets>
+			<dataset alias="sim" file="../../../../../projects/riviera/workspace/ethmac/ethdesign/dataset.asdb" id="0" uniqueid="1571617946"/>
+		</datasets>
+		<browser type="events"/>
+		<view active="true">
+			<cursors>
+				<cursor name="Default cursor" id="-1" time="0fs+0" lock="0" tip="1"/>
+				<active name="Default cursor" time="0fs+0"/>
+			</cursors>
+			<signalspart>
+				<viewmode value="namedrow"/>
+				<expand value="1"/>
+				<group name="/cpuifreceiverpacketringbuffer_tb/UUTRBi">
+					<viewmode value=""/>
+					<expand value=""/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/RxClk" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/TxClk" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/Reset" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/RxPacketByteEnable" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/RxPacketDataWrite" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/RxPacketData" aliasid="0"/>
+					<integral_representation value="DecimalUnsigned"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/RxPacketAddress" aliasid="0"/>
+					<integral_representation value=""/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/RxPacketSlotSet" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/RxPacketSlotID" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/RxPacketSlotStatus" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/TxPacketReadByteEnable" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/TxPacketDataOut" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/TxPacketReadAddress" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/TxPacketDataRead" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/TxPacketSlotClear" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/TxPacketSlotID" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/TxPacketSlotStatus" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/StateVariable" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/lRingBufferData" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/lRingBufferDataEnable" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressRingBufferDataEnable" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressRingBufferDataRead" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressRingBufferDataOut" aliasid="0"/>
+					<integral_representation value="DecimalUnsigned"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressRingBufferAddress" aliasid="0"/>
+					<integral_representation value=""/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressRingBufferSlotClear" aliasid="0"/>
+					<integral_representation value="DecimalUnsigned"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressRingBufferSlotID" aliasid="0"/>
+					<integral_representation value=""/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressRingBufferSlotStatus" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressRingBufferDataEnable" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressRingBufferDataWrite" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressRingBufferData" aliasid="0"/>
+					<integral_representation value="DecimalUnsigned"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressRingBufferAddress" aliasid="0"/>
+					<integral_representation value=""/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressRingBufferSlotSet" aliasid="0"/>
+					<integral_representation value="DecimalUnsigned"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressRingBufferSlotID" aliasid="0"/>
+					<integral_representation value=""/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressRingBufferSlotStatus" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/lFrameIndex" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/lByteIndex" aliasid="0"/>
+				</group>
+				<viewmode value="namedrow"/>
+				<expand value="1"/>
+				<group name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i">
+					<viewmode value=""/>
+					<expand value=""/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/Clk" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/TxPacketByteEnable" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/TxPacketDataRead" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/TxPacketData" aliasid="0"/>
+					<integral_representation value="DecimalUnsigned"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/TxPacketAddress" aliasid="0"/>
+					<integral_representation value=""/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/TxPacketSlotClear" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/TxPacketSlotID" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/TxPacketSlotStatus" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/TxPacketSlotTypeStatus" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/RxPacketByteEnable" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/RxPacketDataWrite" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/RxPacketData" aliasid="0"/>
+					<integral_representation value="DecimalUnsigned"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/RxPacketAddress" aliasid="0"/>
+					<integral_representation value=""/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/RxPacketSlotSet" aliasid="0"/>
+					<integral_representation value="DecimalUnsigned"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/RxPacketSlotID" aliasid="0"/>
+					<integral_representation value=""/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/RxPacketSlotType" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/RxPacketSlotStatus" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/RxPacketSlotTypeStatus" aliasid="0"/>
+					<height value="18"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/lRxPacketAddress" aliasid="0"/>
+					<height value=""/>
+					<integral_representation value="DecimalUnsigned"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/lTxPacketAddress" aliasid="0"/>
+					<integral_representation value=""/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/lTxPacketData" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/lRxPacketData" aliasid="0"/>
+				</group>
+				<viewmode value="namedrow"/>
+				<group name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i">
+					<viewmode value=""/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/RxClk" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/TxClk" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/TxPacketByteEnable" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/TxPacketDataRead" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/TxPacketData" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/TxPacketAddress" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/TxPacketSlotClear" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/TxPacketSlotID" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/TxPacketSlotStatus" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/TxPacketSlotTypeStatus" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/RxPacketByteEnable" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/RxPacketDataWrite" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/RxPacketData" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/RxPacketAddress" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/RxPacketSlotSet" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/RxPacketSlotID" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/RxPacketSlotType" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/RxPacketSlotStatus" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/RxPacketSlotTypeStatus" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/lRxPacketAddress" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/lTxPacketAddress" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/lTxPacketData" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/lRxPacketData" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/VCC_onebit" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/GND_onebit" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/GND_twobit" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/GND_dwidth" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/G_SLOT_WIDTH" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/G_ADDR_WIDTH" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/G_DATA_WIDTH" aliasid="0"/>
+				</group>
+				<viewmode value="namedrow"/>
+				<group name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/packetstatusram_i">
+					<viewmode value=""/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/packetstatusram_i/ClkA" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/packetstatusram_i/ClkB" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/packetstatusram_i/EnableA" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/packetstatusram_i/WriteAEnable" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/packetstatusram_i/WriteAData" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/packetstatusram_i/WriteAAddress" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/packetstatusram_i/ReadAData" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/packetstatusram_i/WriteBAddress" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/packetstatusram_i/EnableB" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/packetstatusram_i/WriteBEnable" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/packetstatusram_i/WriteBData" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/packetstatusram_i/ReadBData" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/packetstatusram_i/G_ADDR_WIDTH" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/packetstatusram_i/RAMData" aliasid="0"/>
+				</group>
+				<viewmode value="namedrow"/>
+				<group name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/Buffer_i">
+					<viewmode value=""/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/Buffer_i/Clk" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/Buffer_i/WriteAddress" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/Buffer_i/ReadAddress" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/Buffer_i/WriteEnable" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/Buffer_i/ReadEnable" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/Buffer_i/WriteData" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/Buffer_i/ReadData" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/Buffer_i/RAMData" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/Buffer_i/G_ADDR_WIDTH" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/IngressPacketBuffer_i/Buffer_i/G_DATA_WIDTH" aliasid="0"/>
+				</group>
+				<viewmode value="namedrow"/>
+				<group name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/packetstatusram_i">
+					<viewmode value=""/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/packetstatusram_i/ClkA" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/packetstatusram_i/ClkB" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/packetstatusram_i/EnableA" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/packetstatusram_i/WriteAEnable" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/packetstatusram_i/WriteAData" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/packetstatusram_i/WriteAAddress" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/packetstatusram_i/ReadAData" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/packetstatusram_i/WriteBAddress" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/packetstatusram_i/EnableB" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/packetstatusram_i/WriteBEnable" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/packetstatusram_i/WriteBData" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/packetstatusram_i/ReadBData" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/packetstatusram_i/G_ADDR_WIDTH" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/packetstatusram_i/RAMData" aliasid="0"/>
+				</group>
+				<viewmode value="namedrow"/>
+				<group name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/Buffer_i">
+					<viewmode value=""/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/Buffer_i/ClkA" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/Buffer_i/ClkB" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/Buffer_i/WriteAAddress" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/Buffer_i/EnableA" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/Buffer_i/WriteAEnable" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/Buffer_i/WriteAData" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/Buffer_i/ReadAData" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/Buffer_i/WriteBAddress" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/Buffer_i/EnableB" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/Buffer_i/WriteBEnable" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/Buffer_i/WriteBData" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/Buffer_i/ReadBData" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/Buffer_i/G_ADDR_WIDTH" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/Buffer_i/G_DATA_WIDTH" aliasid="0"/>
+					<signal name="/cpuifreceiverpacketringbuffer_tb/UUTRBi/EgressPacketBuffer_i/Buffer_i/RAMData" aliasid="0"/>
+				</group>
+			</signalspart>
+			<firstvisiblesignal number="0"/>
+			<timesynchronization value="1"/>
+			<cursorssynchronization value="1"/>
+			<time beginvisible="0fs" endvisible="0fs"/>
+		</view>
+		<bookmarks/>
+		<time beginvisible="0fs" endvisible="5983744ps"/>
+		<timeunit name="auto"/>
+		<cursors>
+			<cursor name="Default cursor" id="-1" time="366ns" lock="0" tip="1"/>
+			<active name="Default cursor" time="366ns"/>
+		</cursors>
+		<hierarchy_depth value="0"/>
+	</waveform>
+</document>

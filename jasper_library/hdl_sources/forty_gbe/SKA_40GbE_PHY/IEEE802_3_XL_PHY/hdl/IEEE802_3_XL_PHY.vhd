@@ -28,8 +28,8 @@ use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
+library UNISIM;
+use UNISIM.VComponents.all;
 
 use work.IEEE802_3_XL_PKG.all;
 
@@ -75,6 +75,91 @@ entity IEEE802_3_XL_PHY is
 end IEEE802_3_XL_PHY;
 
 architecture Behavioral of IEEE802_3_XL_PHY is
+    component IEEE802_3_XL_PMA is
+       Generic(
+            TX_POLARITY_INVERT          : std_logic_vector(3 downto 0) := "0000";
+            EXAMPLE_SIM_GTRESET_SPEEDUP : string                       := "TRUE"; -- simulation setting for GT SecureIP model
+            STABLE_CLOCK_PERIOD         : integer                      := 7;
+            EXAMPLE_USE_CHIPSCOPE       : integer                      := 0 -- Set to 1 to use Chipscope to drive resets
+        );
+        Port (
+            SYS_CLK_I               : in  std_logic;
+        
+            SOFT_RESET_IN           : in  std_logic;
+        
+            GTREFCLK_PAD_N_I        : in  std_logic;
+            GTREFCLK_PAD_P_I        : in  std_logic;
+        
+            GTREFCLK_O              : out std_logic;
+        
+            GT0_TXOUTCLK_OUT        : out std_logic;
+            GT_TXUSRCLK2_IN         : in  std_logic;
+            GT_TXUSRCLK_IN          : in  std_logic;
+            GT_TXUSRCLK_LOCKED_IN   : in  std_logic;
+            GT_TXUSRCLK_RESET_OUT   : out std_logic;
+        
+            GT0_RXOUTCLK_OUT        : out std_logic;
+            GT_RXUSRCLK2_OUT        : out std_logic;
+            GT_RXUSRCLK2_IN         : in  std_logic;
+            GT_RXUSRCLK_IN          : in  std_logic;
+            GT_RXUSRCLK_LOCKED_IN   : in  std_logic;
+            GT_RXUSRCLK_RESET_OUT   : out std_logic;
+        
+            TX_READ_EN_O            : out std_logic;
+        
+            LANE0_TX_HEADER_I       : in  std_logic_vector(1 downto 0);
+            LANE0_TX_DATA_I         : in  std_logic_vector(63 downto 0);
+            LANE1_TX_HEADER_I       : in  std_logic_vector(1 downto 0);
+            LANE1_TX_DATA_I         : in  std_logic_vector(63 downto 0);
+            LANE2_TX_HEADER_I       : in  std_logic_vector(1 downto 0);
+            LANE2_TX_DATA_I         : in  std_logic_vector(63 downto 0);
+            LANE3_TX_HEADER_I       : in  std_logic_vector(1 downto 0);
+            LANE3_TX_DATA_I         : in  std_logic_vector(63 downto 0);
+        
+            LANE0_RX_HEADER_VALID_O : out std_logic;
+            LANE0_RX_HEADER_O       : out std_logic_vector(1 downto 0);
+            LANE0_RX_DATA_VALID_O   : out std_logic;
+            LANE0_RX_DATA_O         : out std_logic_vector(63 downto 0);
+            LANE0_RX_GEARBOXSLIP_I  : in  std_logic;
+            LANE0_RX_DATA_VALID_I   : in  std_logic;
+            LANE1_RX_HEADER_VALID_O : out std_logic;
+            LANE1_RX_HEADER_O       : out std_logic_vector(1 downto 0);
+            LANE1_RX_DATA_VALID_O   : out std_logic;
+            LANE1_RX_DATA_O         : out std_logic_vector(63 downto 0);
+            LANE1_RX_GEARBOXSLIP_I  : in  std_logic;
+            LANE1_RX_DATA_VALID_I   : in  std_logic;
+            LANE2_RX_HEADER_VALID_O : out std_logic;
+            LANE2_RX_HEADER_O       : out std_logic_vector(1 downto 0);
+            LANE2_RX_DATA_VALID_O   : out std_logic;
+            LANE2_RX_DATA_O         : out std_logic_vector(63 downto 0);
+            LANE2_RX_GEARBOXSLIP_I  : in  std_logic;
+            LANE2_RX_DATA_VALID_I   : in  std_logic;
+            LANE3_RX_HEADER_VALID_O : out std_logic;
+            LANE3_RX_HEADER_O       : out std_logic_vector(1 downto 0);
+            LANE3_RX_DATA_VALID_O   : out std_logic;
+            LANE3_RX_DATA_O         : out std_logic_vector(63 downto 0);
+            LANE3_RX_GEARBOXSLIP_I  : in  std_logic;
+            LANE3_RX_DATA_VALID_I   : in  std_logic;
+        
+            RXN_I                   : in  std_logic_vector(3 downto 0);
+            RXP_I                   : in  std_logic_vector(3 downto 0);
+            TXN_O                   : out std_logic_vector(3 downto 0);
+            TXP_O                   : out std_logic_vector(3 downto 0);
+        
+            GT_TX_READY_O           : out std_logic_vector(3 downto 0);
+            GT_RX_READY_O           : out std_logic_vector(3 downto 0);
+        
+            gt0_txbufstatus_out     : out std_logic_vector(1 downto 0);
+            gt0_rxbufstatus_out     : out std_logic_vector(2 downto 0);
+            gt1_txbufstatus_out     : out std_logic_vector(1 downto 0);
+            gt1_rxbufstatus_out     : out std_logic_vector(2 downto 0);
+            gt2_txbufstatus_out     : out std_logic_vector(1 downto 0);
+            gt2_rxbufstatus_out     : out std_logic_vector(2 downto 0);
+            gt3_txbufstatus_out     : out std_logic_vector(1 downto 0);
+            gt3_rxbufstatus_out     : out std_logic_vector(2 downto 0)
+        );
+    end component;
+  
 	component XL_PMA_TX_RESET_CLOCKING_CONTROLLER is
 		Port(
 			REFCLK_I            : in  std_logic;
@@ -84,7 +169,7 @@ architecture Behavioral of IEEE802_3_XL_PHY is
 
 			XL_TX_CLK_156M25_O  : out std_logic;
 			XL_TX_CLK_161M133_O : out std_logic;
-			XL_TX_CLK_322M266_O : out std_logic;
+			--XL_TX_CLK_322M266_O : out std_logic;
 			XL_TX_CLK_625M_O    : out std_logic;
 			XL_TX_CLK_RST_O     : out std_logic;
 			XL_TX_CLK_LOCKED_O  : out std_logic
@@ -139,18 +224,21 @@ architecture Behavioral of IEEE802_3_XL_PHY is
 	signal PMA_soft_reset_d1           : std_logic;
 
 	signal GTREFCLK : std_logic;
+	signal GTREFCLK_NOBUF : std_logic;
 
 	signal GT0_TXOUTCLK    : std_logic;
+	signal GT0_TXOUTCLK_NOBUF : std_logic;
 	signal GT_TXOUTCLK_RST : std_logic;
 
 	signal XL_TX_CLK_156M25  : std_logic;
 	signal XL_TX_CLK_161M133 : std_logic;
-	signal XL_TX_CLK_322M266 : std_logic;
+	--signal XL_TX_CLK_322M266 : std_logic;
 	signal XL_TX_CLK_625M    : std_logic;
 	signal XL_TX_CLK_RST     : std_logic;
 	signal XL_TX_CLK_LOCKED  : std_logic;
 
 	signal GT0_RXOUTCLK    : std_logic;
+	signal GT0_RXOUTCLK_NOBUF : std_logic;
 	signal GT_RXOUTCLK_RST : std_logic;
 
 	signal XL_RX_CLK_156M25  : std_logic;
@@ -249,12 +337,13 @@ architecture Behavioral of IEEE802_3_XL_PHY is
 begin
 	TX_CLK_RCC : component XL_PMA_TX_RESET_CLOCKING_CONTROLLER
 		port map(
-			GTREFCLK_I          => GTREFCLK,
+		    GTREFCLK_I          => GTREFCLK,
+
 			REFCLK_I            => GT0_TXOUTCLK,
 			REFCLK_RST_I        => GT_TXOUTCLK_RST,
 			XL_TX_CLK_156M25_O  => XL_TX_CLK_156M25,
 			XL_TX_CLK_161M133_O => XL_TX_CLK_161M133,
-			XL_TX_CLK_322M266_O => XL_TX_CLK_322M266,
+			--XL_TX_CLK_322M266_O => XL_TX_CLK_322M266,
 			XL_TX_CLK_625M_O    => XL_TX_CLK_625M,
 			XL_TX_CLK_RST_O     => XL_TX_CLK_RST,
 			XL_TX_CLK_LOCKED_O  => XL_TX_CLK_LOCKED
@@ -265,12 +354,47 @@ begin
 			REFCLK_I            => GT0_RXOUTCLK,
 			REFCLK_RST_I        => GT_RXOUTCLK_RST,
 			XL_RX_CLK_156M25_O  => XL_RX_CLK_156M25,
-			XL_RX_CLK_161M133_O => XL_RX_CLK_161M133,
+			XL_RX_CLK_161M133_O => open, --XL_RX_CLK_161M133,
 			XL_RX_CLK_322M266_O => XL_RX_CLK_322M266,
 			XL_RX_CLK_625M_O    => XL_RX_CLK_625M,
 			XL_RX_CLK_RST_O     => XL_RX_CLK_RST,
 			XL_RX_CLK_LOCKED_O  => XL_RX_CLK_LOCKED
 		);
+
+	--- BUFG_GTs for the GT clocks
+    rxoutclk_bufg_gt: BUFG_GT
+      port map(
+        CE => '1',
+        CEMASK => '0',
+        CLR => '0',
+        CLRMASK => '0',
+        DIV => "000",
+        I => GT0_RXOUTCLK_NOBUF,
+        O => GT0_RXOUTCLK
+      );
+
+    txoutclk_bufg_gt: BUFG_GT
+      port map(
+        CE => '1',
+        CEMASK => '0',
+        CLR => '0',
+        CLRMASK => '0',
+        DIV => "001",
+        I => GT0_TXOUTCLK_NOBUF,
+        O => GT0_TXOUTCLK -- 161.133 MHz
+      );
+      
+--    gtclk_bufg_gt: BUFG_GT
+--      port map(
+--        CE => '1',
+--        CEMASK => '0',
+--        CLR => '0',
+--        CLRMASK => '0',
+--        DIV => "000",
+--        I => GTREFCLK_NOBUF,
+--        O => GTREFCLK
+--      );
+
 
 	PMA_inst : component IEEE802_3_XL_PMA
 		generic map(
@@ -282,12 +406,13 @@ begin
 			GTREFCLK_PAD_N_I        => GTREFCLK_PAD_N_I,
 			GTREFCLK_PAD_P_I        => GTREFCLK_PAD_P_I,
 			GTREFCLK_O              => GTREFCLK,
-			GT0_TXOUTCLK_OUT        => GT0_TXOUTCLK,
+			GT0_TXOUTCLK_OUT        => GT0_TXOUTCLK_NOBUF,
 			GT_TXUSRCLK2_IN         => XL_TX_CLK_161M133,
-			GT_TXUSRCLK_IN          => XL_TX_CLK_322M266,
+			GT_TXUSRCLK_IN          => '0', -- Doesn't get used by the underlying core XL_TX_CLK_322M266,
 			GT_TXUSRCLK_LOCKED_IN   => XL_TX_CLK_LOCKED,
 			GT_TXUSRCLK_RESET_OUT   => GT_TXOUTCLK_RST,
-			GT0_RXOUTCLK_OUT        => GT0_RXOUTCLK,
+			GT0_RXOUTCLK_OUT        => GT0_RXOUTCLK_NOBUF,
+			GT_RXUSRCLK2_OUT        => XL_RX_CLK_161M133,
 			GT_RXUSRCLK2_IN         => XL_RX_CLK_161M133,
 			GT_RXUSRCLK_IN          => XL_RX_CLK_322M266,
 			GT_RXUSRCLK_LOCKED_IN   => XL_RX_CLK_LOCKED,
