@@ -120,31 +120,31 @@ pins:
   DAC_IQRESET:
     iostd: LVCMOS33
     loc: N15
-#  DDR_VRP:
-#    iostd: SSTL15_T_DCI
-#    loc: H5
-#  DDR_VRN:
-#    iostd: SSTL15_T_DCI
-#    loc: G5
-#  DDR_WEB:
-#    iostd: SSTL15
-#    loc: M5
+  FIXED_IO_ddr_vrp:
+    iostd: SSTL15_T_DCI
+    loc: H5
+  FIXED_IO_ddr_vrn:
+    iostd: SSTL15_T_DCI
+    loc: G5
+  DDR_we_n:
+    iostd: SSTL15
+    loc: M5
   DDR_RAS_n:
     iostd: SSTL15
     loc: P4
   DDR_ODT:
     iostd: SSTL15
     loc: N5
-#  DDR_DRSTB:
-#    iostd: SSTL15
-#    loc: B4
-#  DDR_DQS:
-#    iostd: DIFF_SSTL15_T_DCI
-#    loc:
-#       - C2
-#       - G2
-#       - R2
-#       - W5
+  DDR_reset_n:
+    iostd: SSTL15
+    loc: B4
+  DDR_DQS_p:
+    iostd: DIFF_SSTL15_T_DCI
+    loc:
+       - C2
+       - G2
+       - R2
+       - W5
   DDR_DQS_n:
     iostd: DIFF_SSTL15_T_DCI
     loc:
@@ -200,21 +200,21 @@ pins:
   DDR_CKE:
     iostd: SSTL15
     loc: N3
-#  DDR_Clk:
-#    iostd: SSTL15
-#    loc: L2
-#  DDR_Clk_n:
-#    iostd: SSTL15
-#    loc: M2
+  DDR_Ck_p:
+    iostd: SSTL15
+    loc: L2
+  DDR_Ck_n:
+    iostd: SSTL15
+    loc: M2
   DDR_CAS_n:
     iostd: SSTL15
     loc: P5
-#  DDR_BankAddr:
-#    iostd: DIFF_SSTL15
-#    loc:
-#       - L5
-#       - R4
-#       - J5
+  DDR_ba:
+    iostd: DIFF_SSTL15
+    loc:
+       - L5
+       - R4
+       - J5
   DDR_Addr:
     iostd: SSTL15
     loc:
@@ -233,9 +233,15 @@ pins:
        - E4
        - D4
        - F4 
-  DDR_ODT:
-    iostd: SSTL15
-    loc: N5        
+  FIXED_IO_ps_porb:
+    iostd: LVCMOS33
+    loc: C7
+  FIXED_IO_ps_srstb:
+    iostd: LVCMOS33
+    loc: B10
+  FIXED_IO_ps_clk:
+    iostd: LVCMOS33
+    loc: E7
       
 
 
