@@ -1504,13 +1504,13 @@ class VivadoBackend(ToolflowBackend):
                     self.add_tcl_cmd('read_bd %s/%s' % (source,current_source))
                 # ELF Microblaze File
                 elif ext == self.src_file_elf_ext:
-                    self.add_tcl_cmd('import_files %s/%s' % (source,current_source))
+                    self.add_tcl_cmd('add_files %s/%s' % (source,current_source))
                 # Coefficient BRAM File
                 elif ext == self.src_file_coe_ext:
-                    self.add_tcl_cmd('import_files %s/%s' % (source,current_source))
+                    self.add_tcl_cmd('add_files %s/%s' % (source,current_source))
                 # Design checkpoint files
                 elif ext == self.src_file_design_checkpoint_ext:
-                    self.add_tcl_cmd('import_files %s' % current_source)
+                    self.add_tcl_cmd('add_files %s' % current_source)
                 else:
                     self.logger.warning('unknown extension, ignoring source file %s' % current_source)
 
@@ -2037,7 +2037,7 @@ class VivadoBackend(ToolflowBackend):
             c = obj.add_build_dir_source()
             for d in c:
                 #self.add_source('%s/%s' %(self.compile_dir, d['files']), self.plat)
-                self.add_tcl_cmd('add_files %s/%s' %(self.compile_dir, d['files']), stage='pre_synth')
+                self.add_tcl_cmd('import_files %s/%s' %(self.compile_dir, d['files']), stage='pre_synth')
                 #if d['library'] != '':
                     # add the source to a library if the library key exists
                 #    self.add_tcl_cmd('set_property library %s [get_files  {%s/%s%s}]' %(d['library'], self.compile_dir, d['files'], '*' if d['files'][-1]=='/' else ''), stage='pre_synth')
