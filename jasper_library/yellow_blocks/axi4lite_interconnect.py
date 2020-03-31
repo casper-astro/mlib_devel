@@ -78,7 +78,7 @@ class axi4lite_interconnect(YellowBlock):
         print('=====================')
         tcl_cmds = {}
         tcl_cmds['pre_synth'] = []
-        tcl_cmds['pre_synth'] += ['add_files {%s/axi4_lite/axi4lite_slave_logic.vhd %s/axi4_lite/axi4lite_pkg.vhd}' %(self.hdl_root, self.hdl_root)]
+        tcl_cmds['pre_synth'] += ['import_files {%s/axi4_lite/axi4lite_slave_logic.vhd %s/axi4_lite/axi4lite_pkg.vhd}' %(self.hdl_root, self.hdl_root)]
         tcl_cmds['pre_synth'] += ['update_compile_order -fileset sources_1']
         return tcl_cmds
 

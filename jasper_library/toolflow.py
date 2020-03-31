@@ -2043,7 +2043,7 @@ class VivadoBackend(ToolflowBackend):
             c = obj.add_build_dir_source()
             for d in c:
                 #self.add_source('%s/%s' %(self.compile_dir, d['files']), self.plat)
-                self.add_tcl_cmd('add_files %s/%s' %(self.compile_dir, d['files']), stage='pre_synth')
+                self.add_tcl_cmd('import_files %s/%s' %(self.compile_dir, d['files']), stage='pre_synth')
                 #if d['library'] != '':
                     # add the source to a library if the library key exists
                 #    self.add_tcl_cmd('set_property library %s [get_files  {%s/%s%s}]' %(d['library'], self.compile_dir, d['files'], '*' if d['files'][-1]=='/' else ''), stage='pre_synth')
