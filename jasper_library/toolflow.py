@@ -809,11 +809,12 @@ class Toolflow(object):
                 # node.set('size', str(reg.nbytes))
                 node.set('permission', reg.mode)               
                 if reg.mode == 'r':
-                    # Basically a To Processor register (status)
-                    node.set('hw_permission', 'w')
-                    # Populate defaults if sys_block version registers
-                    if reg.name == 'sys_board_id' or reg.name == 'sys_rev' or reg.name == 'sys_rev_rcs': 
-                        node.set('hw_rst', str(reg.default_val))
+                    if reg.default_val != 0:
+                       # Populate defaults of sys_block version registers
+                       node.set('hw_rst', str(reg.default_val))
+                    else:
+                       # Basically a To Processor register (status)
+                       node.set('hw_permission', 'w')
                 else:
                     # Only for a From Processor register (control)
                     node.set('hw_rst', str(reg.default_val))
