@@ -640,13 +640,14 @@ class VerilogModule(object):
 
         #TODO: check that requested offsets dont overlap
 
-        # first iteration adds devices that have requested an offset
         wb_device_num = 0
         wb_offset = base_addr
 
+        # 1st iteration adds devices that have requested an offset
         for block in list(self.instances.keys()):
             for instname, inst in list(self.instances[block].items()):
                 logger.debug("Looking for WB slaves for instance %s"%inst.name)
+                # loop through devices and assign to sub_arbiters
                 for n, wb_dev in enumerate(inst.wb_devices):
                     if wb_dev.req_offset != -1:
                         logger.debug("Assigning interface %d (%s)"%(n, wb_dev.regname))
@@ -662,16 +663,12 @@ class VerilogModule(object):
                         logger.debug("Found new WB slave for instance %s"%inst.name)
                         wb_dev.base_addr = wb_offset + wb_dev.req_offset
                         wb_dev.high_addr = wb_offset + wb_dev.req_offset + (alignment*int(ceil(wb_dev.nbytes/float(alignment)))) - 1
-                        #self.wb_name += [inst.wb_names[n]]
                         self.add_localparam(name=inst.wb_ids[n], value=self.n_wb_slaves+self.base_wb_slaves)
                         if wb_dev.high_addr > base_addr:
                             print(hex(base_addr))
                             print(hex(wb_dev.high_addr))
                             base_addr = wb_dev.high_addr + 1
                         self.n_wb_slaves += 1
-                        #if wb_dev.regname == 'sys_block':
-                        #    self.wb_devices.insert(0,wb_dev)
-                        #else:
                         self.wb_devices += [wb_dev]
                         print("Req offset: %s Base addr: %s High Addr: %s"%(hex(wb_dev.req_offset), hex(base_addr), hex(wb_dev.high_addr)))
         
@@ -694,17 +691,16 @@ class VerilogModule(object):
                         logger.debug("Found new WB slave for instance %s"%inst.name)
                         wb_dev.base_addr = base_addr
                         wb_dev.high_addr = base_addr + (alignment*int(ceil(wb_dev.nbytes/float(alignment)))) - 1
-                        #self.wb_name += [inst.wb_names[n]]
                         self.add_localparam(name=inst.wb_ids[n], value=self.n_wb_slaves+self.base_wb_slaves)
                         base_addr = wb_dev.high_addr + 1
                         self.n_wb_slaves += 1
-                        #if wb_dev.regname == 'sys_block':
-                        #    self.wb_devices.insert(0,wb_dev)
-                        #else:
                         self.wb_devices += [wb_dev]
-                        #print("None req offset: %s %s"%(hex(wb_dev.req_offset), hex(base_addr)))
 
 
+        # sort the wb_devices by descending order of addresses, otherwise the 
+        # arbiter could get the addresses out of order and it doesnt like that.
+        self.wb_devices = sorted(self.wb_devices, key = lambda i:i.base_addr)  
+        
         # If we are starting a file from scratch, we need the wishbone parameters
         # otherwise we assume they are in the file and rewrite_module_file will
         # modify them.

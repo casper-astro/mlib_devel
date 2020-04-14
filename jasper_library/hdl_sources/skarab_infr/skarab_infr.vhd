@@ -1449,11 +1449,18 @@ begin
     -- LINK UP STATUS
     -- GT 29/03/2017 INCLUDE 1GBE PHY LINK UP STATUS
     brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(0) <= '1' when ((status_vector(0) = '1')and(ONE_GBE_LINK = '1')) else '0'; -- 1GB ETH LINK UP
-    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(1) <= phy_rx_up_cpu_0; -- 40GB ETH 0 LINK UP
-    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(2) <= phy_rx_up_cpu_1; -- 40GB ETH 1 LINK UP
-    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(3) <= phy_rx_up_cpu_2; -- 40GB ETH 2 LINK UP
-    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(4) <= phy_rx_up_cpu_3; -- 40GB ETH 3 LINK UP
-    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(15 downto 5) <= (others => '0');
+    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(1) <= phy_rx_up_cpu_0;  -- 40GB ETH 0 LINK UP
+    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(2) <= phy_rx_up_cpu_1;  -- 40GB ETH 1 LINK UP
+    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(3) <= phy_rx_up_cpu_2;  -- 40GB ETH 2 LINK UP
+    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(4) <= phy_rx_up_cpu_3;  -- 40GB ETH 3 LINK UP
+    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(5) <= '1';    -- GBE COMPILED IN
+    -- include when the 1gbe is extracted
+    --brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(5) <= gbe_core_pres;    -- GBE COMPILED IN
+    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(6) <= eth_if_0_present; -- 40GB ETH 1 COMPILED IN
+    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(7) <= eth_if_1_present; -- 40GB ETH 2 COMPILED IN
+    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(8) <= eth_if_2_present; -- 40GB ETH 3 COMPILED IN
+    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(9) <= eth_if_3_present; -- 40GB ETH 4 COMPILED IN
+    --brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(15 downto 5) <= (others => '0');
 
     -- LED STATUS
     brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(17 downto 16) <= xlgmii_txled_0; -- 40GBE ETH 0 TX
