@@ -803,6 +803,11 @@ class onegbe_snap(onegbe):
         consts += [RawConstraint('set_clock_groups -name asyncclocks_onegbe -asynchronous -group [get_clocks -include_generated_clocks sys_clk_p_CLK] -group [get_clocks -include_generated_clocks gbe_userclk2_out]')]
         consts += [RawConstraint('set_clock_groups -name asyncclocks_onegbe_usr_clk -asynchronous -group [get_clocks -of_objects [get_cells -hierarchical -filter {name=~*clk_counter*}]] -group [get_clocks -include_generated_clocks gbe_userclk2_out]')]
 
+        if self.platform.name in ['snap2']:
+            # In vivado 2019.1.3 the placer does something mad with an IDELAY block, putting it in the wrong SLR, which stops the design meeting timing.
+            # Force it to a reasonable place here.
+            consts += [RawConstraint('set_property LOC BITSLICE_RX_TX_X2Y86 [get_cells %s_pcs_pma/U0/pcs_pma_block_i/lvds_transceiver_mw/serdes_1_to_10_ser8_i/idelay_cal]' % self.fullname)]
+
         if (not self.use_lvds) and (self.platform.name in ['snap']):
             consts += [PortConstraint(self.fullname+'_sfp_disable', 'sfp_disable')]
         else:

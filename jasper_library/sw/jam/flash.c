@@ -108,6 +108,8 @@ flash_read(uint32_t addr, uint8_t *p, int len)
   //xil_printf("r %d B: %08x\n", len, addr);
 
   // enter 4 bytes address mode
+  buf[0] = FLASH_WRITE_ENABLE;
+  send_spi(buf, buf, 1, 0);
   buf[0] = FLASH_ENTER_4B_MODE;
   send_spi(buf, buf, 1, 0);
 
@@ -134,9 +136,8 @@ flash_read(uint32_t addr, uint8_t *p, int len)
   //exit 4 bytes address mode
   buf[0] = FLASH_EXIT_4B_MODE;
   send_spi(buf, buf, 1, 0);
-
-  // There should be some error checking here
-  // to make sure the erase actually worked
+  buf[0] = FLASH_WRITE_DISABLE;
+  send_spi(buf, buf, 1, 0);
   return len;
 }
 
