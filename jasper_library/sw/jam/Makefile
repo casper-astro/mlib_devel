@@ -11,8 +11,9 @@ GIT_VERSION := $(shell git describe --abbrev=10 --dirty --always --tags)
 CC := mb-gcc
 CC_FLAGS := -MMD -MP -mlittle-endian -mxl-soft-mul -mcpu=v10.0 \
             -DGIT_VERSION=\"$(GIT_VERSION)\" -DBUILD_USER=\"$(BUILD_USER)\" \
-            -DBUILD_HOST=\"$(BUILD_HOST)\" -DBUILD_DATE=\"$(BUILD_DATE)\"
-override CFLAGS += -ffunction-sections -fdata-sections -O2
+            -DBUILD_HOST=\"$(BUILD_HOST)\" -DBUILD_DATE=\"$(BUILD_DATE)\" \
+            -DUSER_ARGS="\"$(CFLAGS)\""
+override CFLAGS += -O2 -ffunction-sections -fdata-sections
 CFLAGS_PEDANTIC := -Wall -Werror
 LN_FLAGS := -Wl,--start-group,-lxil,-lgcc,-lc,--end-group \
             -Wl,--gc-sections \
