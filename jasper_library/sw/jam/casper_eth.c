@@ -313,6 +313,11 @@ casper_lwip_init()
   //     0x----0001 0x02030405
   uint32_t buf[4] = {0, 0, 0x00000203, 0x04050118};
 #ifdef USE_SPI
+  // flash_read_id seems to fail (returns all F's) the first time.
+  // If it preceded by a flash read it works. This is a new issue
+  // in firmware from Vivado 2019.1.2 vs 2016.4
+  // Just run it twice. TODO: but why?!
+  flash_read_id((uint8_t *)buf);
   flash_read_id((uint8_t *)buf);
 #endif
   ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_1] = buf[2] & 0x02ff;
