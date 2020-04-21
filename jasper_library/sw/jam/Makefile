@@ -2,6 +2,7 @@
 
 # Set size of heap
 HEAP_SIZE = 0x5000
+STACK_SIZE = 0x0800
 
 BUILD_USER := $(shell whoami)
 BUILD_HOST := $(shell hostname)
@@ -19,7 +20,8 @@ LN_FLAGS := -Wl,--start-group,-lxil,-lgcc,-lc,--end-group \
             -Wl,--gc-sections \
             -Wl,-Map=map \
             -Wl,--strip-debug \
-            -Wl,--defsym=_HEAP_SIZE=$(HEAP_SIZE)
+            -Wl,--defsym=_HEAP_SIZE=$(HEAP_SIZE) \
+            -Wl,--defsym=_STACK_SIZE=$(STACK_SIZE) \
 
 c_SOURCES := $(wildcard *.c)
 

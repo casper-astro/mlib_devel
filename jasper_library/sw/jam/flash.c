@@ -6,6 +6,36 @@
 #include "spi.h"
 #include "flash.h"
 
+static void
+flash_enter_4b_mode()
+{
+  uint8_t buf[2];
+  // get status reg
+  buf[0] = FLASH_READ_FLAG_STATUS_REG;
+  send_spi(buf, buf, 2, 0);
+  if (buf[1] & 1) {
+    return;
+  }
+
+  buf[0] = FLASH_WRITE_ENABLE;
+  send_spi(buf, buf, 1, 0);
+
+  // enter 4 bytes address mode
+  buf[0] = FLASH_ENTER_4B_MODE;
+  send_spi(buf, buf, 1, 0);
+
+  buf[0] = FLASH_READ_FLAG_STATUS_REG;
+  send_spi(buf, buf, 2, 0);
+  if (buf[1] & 1) {
+    print("Set to 4B mode\n");
+  } else {
+    print("Failed to set to 4B mode\n");
+  }
+
+  buf[0] = FLASH_WRITE_DISABLE;
+  send_spi(buf, buf, 1, 0);
+}
+
 // Erase a sector of memory including the address `addr`
 // Will block until the memory indicates completion or timeout/error
 // Returns the number of bytes erased, or 0 for failure
@@ -19,10 +49,7 @@ flash_erase_sector(uint32_t addr)
   buf[0] = FLASH_WRITE_ENABLE;
   send_spi(buf, buf, 1, 0);
 
-  // enter 4 bytes address mode
-  buf[0] = FLASH_ENTER_4B_MODE;
-  send_spi(buf, buf, 1, 0);
-
+  flash_enter_4b_mode();
 
   buf[0] = FLASH_SECTOR_ERASE;
   buf[1] = (addr >> 24) & 0xff;
@@ -38,10 +65,6 @@ flash_erase_sector(uint32_t addr)
     buf[0] = FLASH_READ_STATUS_REG;
     send_spi(buf, buf, 2, 0);
   }
-
-  //exit 4 bytes address mode
-  buf[0] = FLASH_EXIT_4B_MODE;
-  send_spi(buf, buf, 1, 0);
 
   // turn off the write enable
   buf[0] = FLASH_WRITE_DISABLE;
@@ -61,12 +84,11 @@ flash_write_page(uint32_t addr, uint8_t *p, int len)
     xil_printf("Wrong size\n");
     return 0;
   }
+
+  flash_enter_4b_mode();
+
   // Turn on the write enable
   buf[0] = FLASH_WRITE_ENABLE;
-  send_spi(buf, buf, 1, 0);
-
-  // enter 4 bytes address mode
-  buf[0] = FLASH_ENTER_4B_MODE;
   send_spi(buf, buf, 1, 0);
 
   // Send the write command and address
@@ -88,9 +110,6 @@ flash_write_page(uint32_t addr, uint8_t *p, int len)
     buf[0] = FLASH_READ_STATUS_REG;
     send_spi(buf, buf, 2, 0);
   }
-  //exit 4 bytes address mode
-  buf[0] = FLASH_EXIT_4B_MODE;
-  send_spi(buf, buf, 1, 0);
 
   // turn off the write enable
   buf[0] = FLASH_WRITE_DISABLE;
@@ -106,12 +125,7 @@ flash_read(uint32_t addr, uint8_t *p, int len)
 {
   uint8_t buf[5];
   //xil_printf("r %d B: %08x\n", len, addr);
-
-  // enter 4 bytes address mode
-  buf[0] = FLASH_WRITE_ENABLE;
-  send_spi(buf, buf, 1, 0);
-  buf[0] = FLASH_ENTER_4B_MODE;
-  send_spi(buf, buf, 1, 0);
+  flash_enter_4b_mode();
 
   // Send the read command and address
   // Leave the transaction open for the data
@@ -133,16 +147,15 @@ flash_read(uint32_t addr, uint8_t *p, int len)
     send_spi(buf, buf, 2, 0);
   }
 
-  //exit 4 bytes address mode
-  buf[0] = FLASH_EXIT_4B_MODE;
-  send_spi(buf, buf, 1, 0);
-  buf[0] = FLASH_WRITE_DISABLE;
-  send_spi(buf, buf, 1, 0);
   return len;
 }
 
+/*
+ * Read the flash UID into buffer p,
+ * grabbing a maximum of len bytes
+*/
 int
-flash_read_id(uint8_t *p)
+flash_read_id(uint8_t *p, int len)
 {
   uint8_t buf[5];
   // Send the read command
@@ -150,7 +163,11 @@ flash_read_id(uint8_t *p)
   buf[0] = FLASH_READ_ID;
   send_spi(buf, buf, 5, SEND_SPI_MORE);
   // read the data
-  send_spi(p, p, buf[4], 0);
+  if (buf[4] > len) {
+    send_spi(p, p, len, 0);
+  } else {
+    send_spi(p, p, buf[4], 0);
+  }
   // wait for the read to complete
   buf[0] = FLASH_READ_STATUS_REG;
   send_spi(buf, buf, 2, 0);

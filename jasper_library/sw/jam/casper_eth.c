@@ -317,8 +317,12 @@ casper_lwip_init()
   // If it preceded by a flash read it works. This is a new issue
   // in firmware from Vivado 2019.1.2 vs 2016.4
   // Just run it twice. TODO: but why?!
-  flash_read_id((uint8_t *)buf);
-  flash_read_id((uint8_t *)buf);
+  int flash_id_rv;
+  flash_read_id((uint8_t *)buf, 16);
+  flash_id_rv = flash_read_id((uint8_t *)buf, 16);
+  if (flash_id_rv > 16) {
+    xil_printf("Failed to read flash UID because it was too long (%d bytes)\n", flash_id_rv);
+  }
 #endif
   ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_1] = buf[2] & 0x02ff;
   ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_0] = buf[3];
