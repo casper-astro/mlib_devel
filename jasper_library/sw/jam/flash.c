@@ -10,13 +10,6 @@ static void
 flash_enter_4b_mode()
 {
   uint8_t buf[2];
-  // get status reg
-  buf[0] = FLASH_READ_FLAG_STATUS_REG;
-  send_spi(buf, buf, 2, 0);
-  if (buf[1] & 1) {
-    return;
-  }
-
   buf[0] = FLASH_WRITE_ENABLE;
   send_spi(buf, buf, 1, 0);
 
@@ -27,9 +20,32 @@ flash_enter_4b_mode()
   buf[0] = FLASH_READ_FLAG_STATUS_REG;
   send_spi(buf, buf, 2, 0);
   if (buf[1] & 1) {
-    print("Set to 4B mode\n");
+    //print("Set to 4B mode\n");
   } else {
     print("Failed to set to 4B mode\n");
+  }
+
+  buf[0] = FLASH_WRITE_DISABLE;
+  send_spi(buf, buf, 1, 0);
+}
+
+static void
+flash_exit_4b_mode()
+{
+  uint8_t buf[2];
+  buf[0] = FLASH_WRITE_ENABLE;
+  send_spi(buf, buf, 1, 0);
+
+  // enter 4 bytes address mode
+  buf[0] = FLASH_EXIT_4B_MODE;
+  send_spi(buf, buf, 1, 0);
+
+  buf[0] = FLASH_READ_FLAG_STATUS_REG;
+  send_spi(buf, buf, 2, 0);
+  if (~(buf[1] & 1)) {
+    //print("Left 4B mode\n");
+  } else {
+    print("Failed to exit to 4B mode\n");
   }
 
   buf[0] = FLASH_WRITE_DISABLE;
@@ -117,6 +133,9 @@ flash_write_page(uint32_t addr, uint8_t *p, int len)
   //xil_printf("done\n");
   // There should be some error checking here
   // to make sure the erase actually worked
+
+  flash_exit_4b_mode();
+
   return len;
 }
 
@@ -146,6 +165,7 @@ flash_read(uint32_t addr, uint8_t *p, int len)
     buf[0] = FLASH_READ_STATUS_REG;
     send_spi(buf, buf, 2, 0);
   }
+  flash_exit_4b_mode();
 
   return len;
 }
