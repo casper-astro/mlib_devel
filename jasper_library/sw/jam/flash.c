@@ -52,6 +52,70 @@ flash_exit_4b_mode()
   send_spi(buf, buf, 1, 0);
 }
 
+/* 
+ * Check the non-volatile
+ * 3B/4B addressing flag,
+ * and if it is not set to 4B,
+ * change it.
+ */
+void
+flash_enter_4b_non_volatile()
+{
+  uint8_t buf[3];
+  int complete=0;
+  buf[0] = FLASH_READ_NON_VOLATILE_CONFIG_REG;
+  send_spi(buf, buf, 3, 0);
+  if (~(buf[1] & 1)) {
+    buf[0] = FLASH_WRITE_NON_VOLATILE_CONFIG_REG;
+    buf[1] = buf[1] ^ 1; // Set the address bit to 0
+    send_spi(buf, buf, 3, 0);
+    // wait for the write to complete
+    // The data sheet suggests completion
+    // can only be guaranteed by reading the flag
+    // register on two polls, and seeing it high
+    // both times
+    while(complete < 2) {
+      buf[0] = FLASH_READ_FLAG_STATUS_REG;
+      send_spi(buf, buf, 2, 0);
+      complete += (buf[1] >> 7) & 1;
+    }
+  }
+  // Enter dynamic 4B mode for good measure
+  flash_enter_4b_mode();
+}
+  
+/* 
+ * Check the non-volatile
+ * 3B/4B addressing flag,
+ * and if it is not set to 3B
+ * change it.
+ */
+void
+flash_exit_4b_non_volatile()
+{
+  uint8_t buf[3];
+  int complete=0;
+  buf[0] = FLASH_READ_NON_VOLATILE_CONFIG_REG;
+  send_spi(buf, buf, 3, 0);
+  if (buf[1] & 1) {
+    buf[0] = FLASH_WRITE_NON_VOLATILE_CONFIG_REG;
+    buf[1] = buf[1] | 1; // Set the address bit to 1
+    send_spi(buf, buf, 2, 0);
+    // wait for the write to complete
+    // The data sheet suggests completion
+    // can only be guaranteed by reading the flag
+    // register on two polls, and seeing it high
+    // both times
+    while(complete < 2) {
+      buf[0] = FLASH_READ_FLAG_STATUS_REG;
+      send_spi(buf, buf, 2, 0);
+      complete += (buf[1] >> 7) & 1;
+    }
+  }
+  // Exit dynamic 4B mode for good measure
+  flash_exit_4b_mode();
+}
+
 // Erase a sector of memory including the address `addr`
 // Will block until the memory indicates completion or timeout/error
 // Returns the number of bytes erased, or 0 for failure

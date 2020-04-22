@@ -56,6 +56,7 @@
 #include "casper_eth.h"
 #include "casper_devcsl.h"
 #include "icap.h"
+#include "flash.h"
 
 #define HEARTBEAT_MS 10000
 
@@ -79,6 +80,13 @@ int main()
 
     xil_printf("\n# JAM starting\n");
     xil_printf("JAM: built %s %s@%s\nFlags %s\nVersion %s\n", BUILD_DATE, BUILD_USER, BUILD_HOST, USER_ARGS, GIT_VERSION);
+
+#ifdef SPI_4B
+    flash_enter_4b_non_volatile();
+#endif
+#ifdef SPI_3B
+    flash_enter_3b_non_volatile();
+#endif
 
     casper_lwip_init();
 
