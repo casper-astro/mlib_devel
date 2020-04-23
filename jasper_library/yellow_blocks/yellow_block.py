@@ -211,6 +211,20 @@ class YellowBlock(object):
         """
         pass
 
+    def finalize_top(self, top):
+        """
+        A final opportunity for a block to modify VerilogModule instance `top` after all
+        other YellowBlocks have called their `modify_top` methods.
+        Unlike `modify_top`, `finalize_top` returns a new top-level VerilogModule.
+        This method was added to facilitate blocks which might need to do elaborate things,
+        such as wrap an entire user-level design so that it can be used with (eg) partial
+        reconfiguration.
+
+        :param top: A VerilogModule instance, defining the top-level of the user's design.
+        Returns: A new `VerilogModule` instance, definining the top-level of the user's design.
+        """
+        return top
+
     def gen_constraints(self):
         """
         Generate a list of Constraint objects, appropriate for this block.
