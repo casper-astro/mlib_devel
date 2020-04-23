@@ -218,6 +218,8 @@ class Toolflow(object):
         self._instantiate_periphs()
         self.logger.info('instantiating user_ip')
         self._instantiate_user_ip()
+        self.logger.info('Finalizing top-level design')
+        self._finalize_top()
         self.logger.info('regenerating top')
         self.regenerate_top()
 
@@ -423,6 +425,15 @@ class Toolflow(object):
             self.xml2vhdl()
             # add the AXI4lite yellowblock to the peripherals manually
             self.periph_objs.append(axi4lite_interconnect)
+
+    def _finalize_top(self):
+        """
+        Call every Yellow Block's `finalize_top` method, in case
+        any of them want to modify the design now all the peripherals
+        and user IP have been instantiated.
+        """
+        for obj in self.periph_objs:
+            self.top = obj.finalize_top(self.top)
 
     def _instantiate_user_ip(self):
         """
