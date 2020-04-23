@@ -121,8 +121,8 @@ architecture arch_axi_slave_wishbone_classic_master of axi_slave_wishbone_classi
     T_READ_AXI_READY);
     
     --Timeout in AXI clock cycles (39.0625MHz)  
-    --Default: < 1ms second timeout
-    constant C_S_AXI_TIME_OUT_CLK_CYC  : std_logic_vector(31 downto 0) := x"00009895"; --Dec: 39061;
+    --Default: < 1us second timeout
+    constant C_S_AXI_TIME_OUT_CLK_CYC  : std_logic_vector(31 downto 0) := x"00000027"; --Dec: 39;
     
     signal current_axi_bridge_state : T_AXI_BRIDGE_STATE;
     signal current_address : std_logic_vector(C_S_AXI_ADDR_WIDTH-1 downto 0);
