@@ -130,7 +130,7 @@ class Port(ImmutableWithComments):
     A simple class to hold port attributes. It is immutable, and will throw an error if
     multiple manipulation attempts are incompatible.
     """
-    def __init__(self, name, signal=None, parent_port=False, parent_sig=True, **kwargs):
+    def __init__(self, name, signal=None, parent_port=False, parent_sig=True, width=0, **kwargs):
         """
         Create a ``Port`` instance.
 
@@ -142,11 +142,13 @@ class Port(ImmutableWithComments):
         :type parent_port: bool
         :param parent_sig: When module 'A' instantiates the module to which this port is attached, should 'A' also instantiate a signal matching the one connected to this port.
         :type parent_sig: bool
+        :param width: Bitwidth of the port (0 for non-vector ports)
+        :type width: bool
         :param kwargs: Other keywords which should become attributes of this instance.
         """
-        self.update_attrs(name, signal=signal, parent_port=parent_port, parent_sig=parent_sig, **kwargs)
+        self.update_attrs(name, signal=signal, parent_port=parent_port, parent_sig=parent_sig, width=width, **kwargs)
 
-    def update_attrs(self, name, signal=None, parent_port=False, parent_sig=True, **kwargs):
+    def update_attrs(self, name, signal=None, parent_port=False, parent_sig=True, width=0, **kwargs):
         """
         Update the attributes of this block.
 
@@ -158,11 +160,14 @@ class Port(ImmutableWithComments):
         :type parent_port: bool
         :param parent_sig: When module 'A' instantiates the module to which this port is attached, should 'A' also instantiate a signal matching the one connected to this port.
         :type parent_sig: bool
+        :param width: Bitwidth of the port (0 for non-vector ports)
+        :type width: bool
         :param kwargs: Other keywords which should become attributes of this instance.
         """
         self.name = name.rstrip(' ')
         self.parent_sig = parent_sig and not parent_port
         self.parent_port = parent_port
+        self.width = width
         if type(signal) is str:
             signal.rstrip(' ')
         self.signal = signal
@@ -229,6 +234,16 @@ class Signal(ImmutableWithComments):
         for kw, val in list(kwargs.items()):
             self.__setattr__(kw, val)
 
+
+def wrap_instance(wrapper_name, instance):
+    wrapper = VerilogModule(wrapper_name)
+    newinst = wrapper.get_instance(instance.name, instance.name + "_inst")
+    instance.instantiate_child_ports()
+    for categories, ports in instance.ports.items():
+        for portname, port in ports.items():
+            newinst.add_port(portname, signal=portname, dir=port.dir, width=port.width, parent_port=True)
+    wrapper.instantiate_child_ports()
+    return wrapper
 
 def gen_wbs_master_arbiter(arbiters, max_devices_per_arb=32):
     """
@@ -901,7 +916,7 @@ class VerilogModule(object):
         logger.error('No N_WB_SLAVES localparam found in topfile %s!'%self.topfile)
         raise Exception('No N_WB_SLAVES localparam found in topfile %s!'%self.topfile)
 
-    def add_port(self, name, signal=None, parent_port=False, parent_sig=True, **kwargs):
+    def add_port(self, name, signal=None, parent_port=False, parent_sig=True, width=0, **kwargs):
         """
         Add a port to the module. Only the parameter ``name`` is compulsory. Others may be required when instantiating
         this module in another.
@@ -942,10 +957,10 @@ class VerilogModule(object):
         key = self.search_dict_for_name(self.ports, name)
         if (key is None):
             logger.debug('  Port "%s" is new'%name)
-            self.ports[self.cur_blk][name] = Port(name, signal=signal, parent_port=parent_port, parent_sig=parent_sig, **kwargs)
+            self.ports[self.cur_blk][name] = Port(name, signal=signal, parent_port=parent_port, parent_sig=parent_sig, width=width, **kwargs)
         else:
             logger.debug('  Port "%s" already exists'%name)
-            self.ports[key][name].update_attrs(name, signal=signal, parent_port=parent_port, parent_sig=parent_sig, **kwargs)
+            self.ports[key][name].update_attrs(name, signal=signal, parent_port=parent_port, parent_sig=parent_sig, width=width, **kwargs)
 
     def add_parameter(self, name, value, comment=None):
         """
