@@ -6,6 +6,7 @@
 #include "spi.h"
 #include "flash.h"
 
+#ifdef SPI_4B
 static void
 flash_enter_4b_mode()
 {
@@ -28,7 +29,9 @@ flash_enter_4b_mode()
   buf[0] = FLASH_WRITE_DISABLE;
   send_spi(buf, buf, 1, 0);
 }
+#endif
 
+#ifdef SPI_3B
 static void
 flash_exit_4b_mode()
 {
@@ -51,7 +54,9 @@ flash_exit_4b_mode()
   buf[0] = FLASH_WRITE_DISABLE;
   send_spi(buf, buf, 1, 0);
 }
+#endif
 
+#ifdef SPI_4B
 /* 
  * Check the non-volatile
  * 3B/4B addressing flag,
@@ -87,7 +92,10 @@ flash_enter_4b_non_volatile()
   // Enter dynamic 4B mode for good measure
   flash_enter_4b_mode();
 }
+#endif
   
+
+#ifdef SPI_3B
 /* 
  * Check the non-volatile
  * 3B/4B addressing flag,
@@ -123,6 +131,7 @@ flash_exit_4b_non_volatile()
   // Exit dynamic 4B mode for good measure
   flash_exit_4b_mode();
 }
+#endif
 
 // Erase a sector of memory including the address `addr`
 // Will block until the memory indicates completion or timeout/error
@@ -133,11 +142,13 @@ flash_erase_sector(uint32_t addr)
   uint8_t buf[5];
   xil_printf("erase: %08x\n", addr);
 
+#if !defined(SPI_4B) && !defined(SPI_3B)
+  flash_enter_4b_mode();
+#endif
+
   // Turn on the write enable
   buf[0] = FLASH_WRITE_ENABLE;
   send_spi(buf, buf, 1, 0);
-
-  flash_enter_4b_mode();
 
   buf[0] = FLASH_SECTOR_ERASE;
   buf[1] = (addr >> 24) & 0xff;
@@ -153,6 +164,10 @@ flash_erase_sector(uint32_t addr)
     buf[0] = FLASH_READ_STATUS_REG;
     send_spi(buf, buf, 2, 0);
   }
+
+#if !defined(SPI_4B) && !defined(SPI_3B)
+  flash_exit_4b_mode();
+#endif
 
   // turn off the write enable
   buf[0] = FLASH_WRITE_DISABLE;
@@ -173,7 +188,7 @@ flash_write_page(uint32_t addr, uint8_t *p, int len)
     return 0;
   }
 
-#if !defined(SPI_3B) && !defined(SPI_3B)
+#if !defined(SPI_4B) && !defined(SPI_3B)
   flash_enter_4b_mode();
 #endif
 
@@ -208,7 +223,7 @@ flash_write_page(uint32_t addr, uint8_t *p, int len)
   // There should be some error checking here
   // to make sure the erase actually worked
 
-#if !defined(SPI_3B) && !defined(SPI_3B)
+#if !defined(SPI_4B) && !defined(SPI_3B)
   flash_exit_4b_mode();
 #endif
 
@@ -220,7 +235,7 @@ flash_read(uint32_t addr, uint8_t *p, int len)
 {
   uint8_t buf[5];
   //xil_printf("r %d B: %08x\n", len, addr);
-#if !defined(SPI_3B) && !defined(SPI_3B)
+#if !defined(SPI_4B) && !defined(SPI_3B)
   flash_enter_4b_mode();
 #endif
 
@@ -243,7 +258,7 @@ flash_read(uint32_t addr, uint8_t *p, int len)
     buf[0] = FLASH_READ_STATUS_REG;
     send_spi(buf, buf, 2, 0);
   }
-#if !defined(SPI_3B) && !defined(SPI_3B)
+#if !defined(SPI_4B) && !defined(SPI_3B)
   flash_exit_4b_mode();
 #endif
 
