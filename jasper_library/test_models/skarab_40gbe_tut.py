@@ -23,7 +23,7 @@ def snapdata2packets(snapdata):
     return pkts
 
 
-def process_tut2_data(packets, printlimit=-1):
+def process_tut2_data(name, packets, printlimit=-1):
     """
     Given a dictionary of tut2 data, analyse it for errors
     :param packets: packets, in the form of individual dictionaries
@@ -45,7 +45,7 @@ def process_tut2_data(packets, printlimit=-1):
         this_pkt_cnt = pkt['ctr0'][0]
         pktlen = len(pkt['eof'])
         pktstr = '------------------------- pkt_%03i ' \
-                 '------------------------- ' % pktctr
+                  '------------------------- ' % pktctr
         if this_pkt_cnt != last_pkt_count + 1:
             pktstr += 'PKTCNT_ERROR '
             errors['pkt_count_progression'] += 1
@@ -109,7 +109,7 @@ def process_tut2_data(packets, printlimit=-1):
                 pktstr = ''
         printed += 1
         last_pkt_count = this_pkt_cnt
-    print('-------------------------\nERRORS:')
+    print('\n-------------------------\n%s ERRORS:' %name)
     for key, val in errors.items():
         print('\t%s: %i' % (key, val))
     return errors
@@ -176,15 +176,17 @@ def print_txsnap(packets_to_print=-1):
     :param packets_to_print: 
     :return: 
     """
-    f.registers.control.write(snap_arm=0)
+    f.registers.tx_control.write(snap_arm=0)
     f.snapshots.txsnap0_ss.arm()
     f.snapshots.txsnap1_ss.arm()
-    f.registers.control.write(snap_arm=1)
+    f.registers.tx_control.write(snap_arm=1)
     d = f.snapshots.txsnap0_ss.read(arm=False)['data']
     d1 = f.snapshots.txsnap1_ss.read(arm=False)['data']
     d.update(d1)
     pkts = snapdata2packets(d)
-    errors = process_tut2_data(pkts, printlimit=packets_to_print)
+    print('\n-------------------- tx packet buffers '\
+          '--------------------')
+    errors = process_tut2_data('TX', pkts, printlimit=packets_to_print)
 
 
 def print_rxsnap(packets_to_print=-1):
@@ -193,21 +195,23 @@ def print_rxsnap(packets_to_print=-1):
     :param packets_to_print: 
     :return: 
     """
-    import IPython
-    IPython.embed()
-    f.registers.control1.write(snap_arm=0)
+    f.registers.rx_control.write(snap_arm=0)
     f.snapshots.d0_ss.arm()
     f.snapshots.d1_ss.arm()
     f.snapshots.d2_ss.arm()
-    f.registers.control1.write(snap_arm=1)
+    f.registers.rx_control.write(snap_arm=1)
     time.sleep(1)
+    print('waiting on RX snap blocks to trigger...')
+    print('if we hang here, the RX side is not receiving any data')
     d0 = f.snapshots.d0_ss.read(arm=False)['data']
     d1 = f.snapshots.d1_ss.read(arm=False)['data']
     d2 = f.snapshots.d2_ss.read(arm=False)['data']
     d0.update(d1)
     d0.update(d2)
     pkts = snapdata2packets(d0)
-    errors = process_tut2_data(pkts, printlimit=packets_to_print)
+    print('\n-------------------- rx packet buffers '\
+             '--------------------')
+    errors = process_tut2_data('RX', pkts, printlimit=packets_to_print)
 
 
 if __name__ == '__main__':
@@ -276,18 +280,18 @@ if __name__ == '__main__':
     else:
         f.get_system_information(args.fpg)
         logging.info('Stopping TX.')
-        f.registers.control.write(tx_en=0, pkt_rst='pulse')
-        f.registers.control.write(snap_arm=0)
+        f.registers.tx_control.write(tx_en=0, pkt_rst='pulse')
+        f.registers.tx_control.write(snap_arm=0)
 
     to_pc = False
 
     port = 8765
-    logging.info("TX ip address %s" %f.gbes["forty_gbe"].get_ip())
-    logging.info("RX ip address %s" %f.gbes["forty_gbe1"].get_ip())
+    logging.info("TX ip address %s" %f.gbes["tx_forty_gbe"].get_ip())
+    logging.info("RX ip address %s" %f.gbes["rx_forty_gbe"].get_ip())
 
     # set up TX
     print f
-    ip_dest = f.gbes["forty_gbe1"].get_ip()
+    ip_dest = f.gbes["rx_forty_gbe"].get_ip()
     if to_pc:
         from casperfpga import tengbe
         ip_dest = tengbe.IpAddress('10.99.1.1')
@@ -296,7 +300,7 @@ if __name__ == '__main__':
     logging.info('Setting TX port to %s' %port)
     f.registers.tx_port = port
     logging.info('Setting packet size to %s' %args.pktsize)
-    f.registers.control.write(pkt_len=args.pktsize)
+    f.registers.tx_control.write(pkt_len=args.pktsize)
     #clk_ghz = f.registers.clk_mhz.read()['data']['reg'] / 1000.0
     clk_ghz = f.estimate_fpga_clock()/1000
     logging.info('Clock speed calculated as %s' %clk_ghz)
@@ -312,14 +316,14 @@ if __name__ == '__main__':
 
     # set up RX
     logging.info('Setting RX port to %s' %port)
-    f.gbes["forty_gbe1"].set_port(port)
-    f.registers.control.write(gbe_rst='pulse')
+    f.gbes["rx_forty_gbe"].set_port(port)
+    f.registers.tx_control.write(gbe_rst='pulse')
 
     # Enable tx
     logging.info('Starting TX.')
     tx_comms_lost = False
     try:
-        f.registers.control.write(tx_en=1, pkt_rst='pulse')
+        f.registers.tx_control.write(tx_en=1, pkt_rst='pulse')
     except:
         print 'NO RESPONSE!'
         tx_comms_lost = True
@@ -343,9 +347,9 @@ if __name__ == '__main__':
     #f.registers.control.write(tx_en=1, gbe_rst='pulse')
 
     #f.registers.control.write(tx_en=1, gbe_rst=1)
-    f.registers.control.write(gbe_rst=1)
+    f.registers.tx_control.write(gbe_rst=1)
     time.sleep(15)
-    f.registers.control.write(gbe_rst=0)
+    f.registers.tx_control.write(gbe_rst=0)
     #f.registers.control.write(tx_en=1, gbe_rst=0)
 
     if not tx_comms_lost:
