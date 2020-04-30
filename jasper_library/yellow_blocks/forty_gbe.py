@@ -146,15 +146,6 @@ class forty_gbe(YellowBlock):
 
     def gen_constraints(self):
         cons = []
-        # leaving the aux constraints here so that we can support them at a later stage.
-        #cons.append(PortConstraint('AUX_CLK_N','AUX_CLK_N'))
-        #cons.append(PortConstraint('AUX_CLK_P','AUX_CLK_P'))
-        #cons.append(PortConstraint('AUX_SYNCO_P','AUX_SYNCO_P'))
-        #cons.append(PortConstraint('AUX_SYNCI_P','AUX_SYNCI_P'))
-        #cons.append(PortConstraint('AUX_SYNCO_N','AUX_SYNCO_N'))
-        #cons.append(PortConstraint('AUX_SYNCI_N', 'AUX_SYNCI_N'))
-        #Need to extract the period and half period for creating the clock
-        
 
         #Port constraints
         cons.append(PortConstraint('forty_gbe_tx' + self.suffix + '_p', 'forty_gbe_tx_p', port_index=range(4),  iogroup_index=range(4*self.port, 4*(self.port + 1))))
@@ -167,61 +158,20 @@ class forty_gbe(YellowBlock):
         clockconst = ClockConstraint('forty_gbe_refclk' + self.suffix + '_p', period=6.4, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=3.2)
         cons.append(clockconst)
 
-        #cons.append(RawConstraint('create_pblock MEZ3_'+self.bank+'_QSFP'))
-        #cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ3_'+self.bank+'_QSFP] [get_cells -quiet [list '+self.fullname+'/IEEE802_3_XL_PHY_0/PHY_inst/RX_CLK_RCC]]'))
-        #cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ3_'+self.bank+'_QSFP] [get_cells -quiet [list '+self.fullname+'/IEEE802_3_XL_PHY_0/PHY_inst/TX_CLK_RCC]]'))
-        #cons.append(RawConstraint('resize_pblock [get_pblocks MEZ3_'+self.bank+'_QSFP] -add {'+self.clock_region+'}'))
+        cons.append(ClockGroupConstraint(clockconst.name, '-include_generated_clocks -of_objects [get_nets user_clk]', 'asynchronous'))
+        cons.append(ClockGroupConstraint(clockconst.name, '-include_generated_clocks -of_objects [get_nets wb_clk_i]', 'asynchronous'))
 
-        ##cons.append(ClockGroupConstraint('MEZ3_REFCLK_%s_P'%self.port, '-include_generated_clocks FPGA_REFCLK_BUF1_P', 'asynchronous'))
-        #cons.append(ClockGroupConstraint('-of_objects [get_pins skarab_infr/SYS_CLK_MMCM_inst/CLKOUT0]', 'MEZ3_REFCLK_%s_P'%self.port, 'asynchronous'))
-        #cons.append(ClockGroupConstraint('MEZ3_REFCLK_%s_P'%self.port, '-of_objects [get_pins skarab_infr/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]', 'asynchronous'))
-        #cons.append(ClockGroupConstraint('VIRTUAL_clkout0', 'MEZ3_REFCLK_%s_P'%self.port, 'asynchronous'))
-        #cons.append(ClockGroupConstraint('virtual_clock', 'MEZ3_REFCLK_%s_P'%self.port, 'asynchronous'))
-        #cons.append(ClockGroupConstraint('MEZ3_REFCLK_%s_P'%self.port, 'FPGA_EMCCLK2', 'asynchronous'))
-        #cons.append(ClockGroupConstraint('FPGA_EMCCLK2', 'MEZ3_REFCLK_%s_P'%self.port, 'asynchronous'))
-        #cons.append(ClockGroupConstraint('MEZ3_REFCLK_%s_P'%self.port, 'virtual_clock', 'asynchronous'))
-        #cons.append(ClockGroupConstraint('VIRTUAL_I', 'MEZ3_REFCLK_%s_P'%self.port, 'asynchronous'))
-        #cons.append(ClockGroupConstraint('MEZ3_REFCLK_%s_P'%self.port, 'VIRTUAL_I','asynchronous'))
-        #cons.append(ClockGroupConstraint('MEZ3_REFCLK_%s_P'%self.port, '-of_objects [get_pins skarab_infr/SYS_CLK_MMCM_inst/CLKOUT1]', 'asynchronous'))
-        #cons.append(ClockGroupConstraint('-of_objects [get_pins skarab_infr/SYS_CLK_MMCM_inst/CLKOUT1]', 'MEZ3_REFCLK_%s_P'%self.port, 'asynchronous'))
-        #cons.append(ClockGroupConstraint('MEZ3_REFCLK_%s_P'%self.port, '-of_objects [get_pins skarab_infr/USER_CLK_MMCM_inst/CLKOUT0]', 'asynchronous'))
-        #cons.append(ClockGroupConstraint('-of_objects [get_pins skarab_infr/USER_CLK_MMCM_inst/CLKOUT0]', 'MEZ3_REFCLK_%s_P'%self.port, 'asynchronous'))
-        
-        #cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]'  % self.fullname, 'MEZ3_REFCLK_%s_P'%self.port, 'asynchronous'))
-        #cons.append(ClockGroupConstraint('MEZ3_REFCLK_%s_P'%self.port, '-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
-        #cons.append(ClockGroupConstraint('VIRTUAL_clkout0', 'MEZ3_REFCLK_%s_P'%self.port, 'asynchronous'))
-        #cons.append(ClockGroupConstraint('virtual_clock', 'MEZ3_REFCLK_%s_P'%self.port, 'asynchronous'))
-        #cons.append(ClockGroupConstraint('MEZ3_REFCLK_%s_P'%self.port, 'FPGA_EMCCLK2', 'asynchronous'))
-        #cons.append(ClockGroupConstraint('FPGA_EMCCLK2', 'MEZ3_REFCLK_%s_P'%self.port, 'asynchronous'))
-        #cons.append(ClockGroupConstraint('MEZ3_REFCLK_%s_P'%self.port, 'virtual_clock', 'asynchronous'))
-        #cons.append(ClockGroupConstraint('VIRTUAL_I', 'MEZ3_REFCLK_%s_P'%self.port, 'asynchronous'))
-        #cons.append(ClockGroupConstraint('MEZ3_REFCLK_%s_P'%self.port, 'VIRTUAL_I','asynchronous'))
-        #cons.append(ClockGroupConstraint('MEZ3_REFCLK_%s_P'%self.port, '-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]' % self.fullname, 'asynchronous'))
-        #cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]' % self.fullname, 'MEZ3_REFCLK_%s_P'%self.port, 'asynchronous'))
-        #cons.append(ClockGroupConstraint('MEZ3_REFCLK_%s_P'%self.port, '-of_objects [get_pins %s/USER_CLK_MMCM_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
-        #cons.append(ClockGroupConstraint('-of_objects [get_pins %s/USER_CLK_MMCM_inst/CLKOUT0]' % self.fullname, 'MEZ3_REFCLK_%s_P'%self.port, 'asynchronous'))
-        
-
-        #cons.append(InputDelayConstraint(clkname=clockconst.name, consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='FPGA_RESET_N'))
-        #cons.append(InputDelayConstraint(clkname=clockconst.name, consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='FPGA_RESET_N'))
-        #cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks %s'%clockconst.name, multicycledelay=4))
-        #cons.append(MultiCycleConstraint(multicycletype='hold', sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks %s'%clockconst.name, multicycledelay=4))
         return cons
-
-
 
     def gen_tcl_cmds(self):
         tcl_cmds = []
 
-        #tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/Constraints/gmii_to_sgmii.xdc'%os.getenv('HDL_ROOT'))
         tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PCS/constraints/IEEE802_3_XL_PCS.xdc'%os.getenv('HDL_ROOT'))
         tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PCS/constraints/DATA_FREQUENCY_DIVIDER.xdc'%os.getenv('HDL_ROOT'))
         tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PCS/constraints/DATA_FREQUENCY_MULTIPLIER.xdc'%os.getenv('HDL_ROOT'))
         tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PCS/constraints/DUAL_CLOCK_STROBE_GENERATOR.xdc'%os.getenv('HDL_ROOT'))
         tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PHY/constraints/IEEE802_3_XL_PHY.xdc'%os.getenv('HDL_ROOT'))
         tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PHY/constraints/IEEE802_3_XL_PHY.xdc'%os.getenv('HDL_ROOT'))
-        #tcl_cmds.append('set_property is_locked true [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/cont_microblaze/cont_microblaze.bd]')
-        #tcl_cmds.append('set_property is_locked true [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/ip/gmii_to_sgmii/gmii_to_sgmii.xci]')
         tcl_cmds.append('set_property SCOPED_TO_REF IEEE802_3_XL_PCS [get_files [get_property directory [current_project]]/myproj.srcs/constrs_1/imports/constraints/IEEE802_3_XL_PCS.xdc]')
         tcl_cmds.append('set_property processing_order LATE [get_files [get_property directory [current_project]]/myproj.srcs/constrs_1/imports/constraints/IEEE802_3_XL_PCS.xdc]')
         tcl_cmds.append('set_property SCOPED_TO_REF DATA_FREQUENCY_DIVIDER [get_files [get_property directory [current_project]]/myproj.srcs/constrs_1/imports/constraints/DATA_FREQUENCY_DIVIDER.xdc]')
