@@ -56,7 +56,7 @@ entity IEEE802_3_XL_PMA is
     GT_TXUSRCLK_RESET_OUT   : out std_logic;
 
     GT0_RXOUTCLK_OUT        : out std_logic;
-    GT_RXUSRCLK2_OUT        : out std_logic;
+    --GT_RXUSRCLK2_OUT        : out std_logic;
     GT_RXUSRCLK2_IN         : in  std_logic;
     GT_RXUSRCLK_IN          : in  std_logic;
     GT_RXUSRCLK_LOCKED_IN   : in  std_logic;
@@ -119,47 +119,49 @@ end IEEE802_3_XL_PMA;
 
 architecture Behavioral of IEEE802_3_XL_PMA is
         COMPONENT xlaui_us
-          PORT (
-            gtwiz_userclk_tx_reset_in : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-            gtwiz_userclk_tx_srcclk_out : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
-            gtwiz_userclk_tx_usrclk_out : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
-            gtwiz_userclk_tx_usrclk2_out : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
-            gtwiz_userclk_tx_active_out : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
-            gtwiz_userclk_rx_reset_in : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-            gtwiz_userclk_rx_srcclk_out : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
-            gtwiz_userclk_rx_usrclk_out : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
-            gtwiz_userclk_rx_usrclk2_out : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
-            gtwiz_userclk_rx_active_out : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
-            gtwiz_reset_clk_freerun_in : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-            gtwiz_reset_all_in : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-            gtwiz_reset_tx_pll_and_datapath_in : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-            gtwiz_reset_tx_datapath_in : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-            gtwiz_reset_rx_pll_and_datapath_in : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-            gtwiz_reset_rx_datapath_in : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-            gtwiz_reset_rx_cdr_stable_out : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
-            gtwiz_reset_tx_done_out : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
-            gtwiz_reset_rx_done_out : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
-            gtwiz_userdata_tx_in : IN STD_LOGIC_VECTOR(255 DOWNTO 0);
-            gtwiz_userdata_rx_out : OUT STD_LOGIC_VECTOR(255 DOWNTO 0);
-            gtrefclk00_in : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-            qpll0outclk_out : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
-            qpll0outrefclk_out : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
-            gthrxn_in : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
-            gthrxp_in : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
-            rxgearboxslip_in : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
-            txheader_in : IN STD_LOGIC_VECTOR(23 DOWNTO 0);
-            txsequence_in : IN STD_LOGIC_VECTOR(27 DOWNTO 0);
-            gthtxn_out : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-            gthtxp_out : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-            gtpowergood_out : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-            rxdatavalid_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-            rxheader_out : OUT STD_LOGIC_VECTOR(23 DOWNTO 0);
-            rxheadervalid_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-            rxpmaresetdone_out : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-            rxstartofseq_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-            txpmaresetdone_out : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
-          );
-        END COMPONENT;
+  PORT (
+    gtwiz_userclk_tx_active_in : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    gtwiz_userclk_rx_active_in : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    gtwiz_reset_clk_freerun_in : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    gtwiz_reset_all_in : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    gtwiz_reset_tx_pll_and_datapath_in : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    gtwiz_reset_tx_datapath_in : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    gtwiz_reset_rx_pll_and_datapath_in : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    gtwiz_reset_rx_datapath_in : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    gtwiz_reset_rx_cdr_stable_out : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
+    gtwiz_reset_tx_done_out : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
+    gtwiz_reset_rx_done_out : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
+    gtwiz_userdata_tx_in : IN STD_LOGIC_VECTOR(255 DOWNTO 0);
+    gtwiz_userdata_rx_out : OUT STD_LOGIC_VECTOR(255 DOWNTO 0);
+    gtrefclk00_in : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    qpll0outclk_out : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
+    qpll0outrefclk_out : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
+    gthrxn_in : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+    gthrxp_in : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+    rxgearboxslip_in : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+    rxusrclk_in : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+    rxusrclk2_in : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+    txdiffctrl_in : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+    txheader_in : IN STD_LOGIC_VECTOR(23 DOWNTO 0);
+    txpolarity_in : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+    txpostcursor_in : IN STD_LOGIC_VECTOR(19 DOWNTO 0);
+    txprecursor_in : IN STD_LOGIC_VECTOR(19 DOWNTO 0);
+    txsequence_in : IN STD_LOGIC_VECTOR(27 DOWNTO 0);
+    txusrclk_in : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+    txusrclk2_in : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+    gthtxn_out : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+    gthtxp_out : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+    gtpowergood_out : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+    rxdatavalid_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+    rxheader_out : OUT STD_LOGIC_VECTOR(23 DOWNTO 0);
+    rxheadervalid_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+    rxoutclk_out : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+    rxpmaresetdone_out : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+    rxstartofseq_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+    txoutclk_out : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+    txpmaresetdone_out : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
+  );
+  END COMPONENT;
   component ARRAY_REVERSE_ORDER is
     Generic(
       NUMBER_OF_BITS : Natural := 32
@@ -183,6 +185,20 @@ architecture Behavioral of IEEE802_3_XL_PMA is
       SLIP_O         : out std_logic
     );
   end component IEEE802_3_XL_PMA_AN;
+  
+  --component ila_0 is
+  --  Port (
+  --  clk : in std_logic;
+  --  probe0 : in std_logic_vector(1 downto 0);
+  --  probe1 : in std_logic_vector(63 downto 0);
+  --  probe2 : in std_logic_vector(1 downto 0);
+  --  probe3 : in std_logic_vector(63 downto 0);
+  --  probe4 : in std_logic_vector(1 downto 0);
+  --  probe5 : in std_logic_vector(63 downto 0);
+  --  probe6 : in std_logic_vector(1 downto 0);
+  --  probe7 : in std_logic_vector(63 downto 0)
+  --  );
+  --end component;
 
   signal tied_to_ground_i : std_logic;
   signal tied_to_vcc_i    : std_logic;
@@ -238,6 +254,14 @@ architecture Behavioral of IEEE802_3_XL_PMA is
   signal gt1_rxbuffault : std_logic;
   signal gt2_rxbuffault : std_logic;
   signal gt3_rxbuffault : std_logic;
+  
+  signal GT1_RXOUTCLK_OUT : std_logic;
+  signal GT2_RXOUTCLK_OUT : std_logic;
+  signal GT3_RXOUTCLK_OUT : std_logic;
+  signal GT1_TXOUTCLK_OUT : std_logic;
+  signal GT2_TXOUTCLK_OUT : std_logic;
+  signal GT3_TXOUTCLK_OUT : std_logic;
+
 
   signal gt0_rxdatavalid_in_d1 : std_logic;
   signal gt1_rxdatavalid_in_d1 : std_logic;
@@ -356,40 +380,54 @@ begin
       ODIV2 => GTREFCLK_INT
     );
 
-    gtrefclk_bufg_gt: BUFG_GT
-      port map(
-        CE => '1',
-        CEMASK => '0',
-        CLR => '0',
-        CLRMASK => '0',
-        DIV => "000",
-        I => GTREFCLK_INT,
-        O => GTREFCLK_O
-      );
+  gtrefclk_bufg_gt: BUFG_GT
+    port map(
+      CE => '1',
+      CEMASK => '0',
+      CLR => '0',
+      CLRMASK => '0',
+      DIV => "000",
+      I => GTREFCLK_INT,
+      O => GTREFCLK_O
+    );
 
+  --xlaui_ila: ila_0
+  --  port map(
+  --    clk => GT_TXUSRCLK2_IN,
+  --    probe0 => LANE0_TX_HEADER,
+  --    probe1 => LANE0_TX_DATA,
+  --    probe2 => LANE1_TX_HEADER,
+  --    probe3 => LANE1_TX_DATA,
+  --    probe4 => LANE2_TX_HEADER,
+  --    probe5 => LANE2_TX_DATA,
+  --    probe6 => LANE3_TX_HEADER,
+  --    probe7 => LANE3_TX_DATA
+  --  );
 
   XLAUI_support_i : xlaui_us
     port map(
+    gtwiz_userclk_tx_active_in(0) => GT_TXUSRCLK_LOCKED_IN,
+    gtwiz_userclk_rx_active_in(0) => GT_RXUSRCLK_LOCKED_IN,
       gtwiz_reset_clk_freerun_in(0)  => SYS_CLK_I,
       gtwiz_reset_all_in(0)          => SOFT_RESET_IN,
-      gtwiz_userclk_tx_reset_in(0)   => tied_to_ground_i,
-      gtwiz_userclk_rx_reset_in(0)   => tied_to_ground_i,
+     -- gtwiz_userclk_tx_reset_in(0)   => tied_to_ground_i,
+     -- gtwiz_userclk_rx_reset_in(0)   => tied_to_ground_i,
       gtwiz_reset_tx_pll_and_datapath_in(0) => tied_to_ground_i,
       gtwiz_reset_tx_datapath_in(0)         => tied_to_ground_i,
       gtwiz_reset_rx_pll_and_datapath_in(0) => tied_to_ground_i,
       gtwiz_reset_rx_datapath_in(0)         => tied_to_ground_i,
-      gtwiz_reset_rx_cdr_stable_out(0)      => open,
-      gtwiz_reset_tx_done_out(0)            => open,
-      gtwiz_reset_rx_done_out(0)            => open,
+      gtwiz_reset_rx_cdr_stable_out      => open,
+      gtwiz_reset_tx_done_out            => open,
+      gtwiz_reset_rx_done_out            => open,
 
-      gtwiz_userclk_tx_srcclk_out(0)  => GT0_TXOUTCLK_OUT,
-      gtwiz_userclk_rx_srcclk_out(0)  => GT0_RXOUTCLK_OUT,
-      gtwiz_userclk_tx_usrclk_out(0)  => open,
-      gtwiz_userclk_tx_usrclk2_out(0) => open,
-      gtwiz_userclk_tx_active_out(0)  => open,
-      gtwiz_userclk_rx_usrclk_out(0)  => open,
-      gtwiz_userclk_rx_usrclk2_out(0) => GT_RXUSRCLK2_OUT, --open,
-      gtwiz_userclk_rx_active_out(0)  => open,
+     -- gtwiz_userclk_tx_srcclk_out(0)  => GT0_TXOUTCLK_OUT,
+     -- gtwiz_userclk_rx_srcclk_out(0)  => GT0_RXOUTCLK_OUT,
+     -- gtwiz_userclk_tx_usrclk_out(0)  => open,
+     -- gtwiz_userclk_tx_usrclk2_out(0) => open,
+     -- gtwiz_userclk_tx_active_out(0)  => open,
+     -- gtwiz_userclk_rx_usrclk_out(0)  => open,
+     -- gtwiz_userclk_rx_usrclk2_out(0) => GT_RXUSRCLK2_OUT, --open,
+     -- gtwiz_userclk_rx_active_out(0)  => open,
       gtwiz_userdata_tx_in(255 downto 192)   => LANE3_TX_DATA,
       gtwiz_userdata_tx_in(191 downto 128)   => LANE2_TX_DATA,
       gtwiz_userdata_tx_in(127 downto 64 )   => LANE1_TX_DATA,
@@ -400,8 +438,8 @@ begin
       gtwiz_userdata_rx_out( 63 downto 0  )  => LANE0_RX_DATA,
 
       gtrefclk00_in(0)       => GTREFCLK,
-      qpll0outrefclk_out(0)  => open, --GTREFCLK_O,
-      qpll0outclk_out(0)     => open,
+      qpll0outrefclk_out  => open, --GTREFCLK_O,
+      qpll0outclk_out     => open,
 
       rxpmaresetdone_out     => gt_rx_ready,
       txpmaresetdone_out     => gt_tx_ready,
@@ -410,7 +448,36 @@ begin
       gthrxp_in         => RXP_I,
       gthtxn_out        => TXN_O,
       gthtxp_out        => TXP_O,
+      
+      rxusrclk_in(0)  => GT_RXUSRCLK_IN,
+      rxusrclk_in(1)  => GT_RXUSRCLK_IN,
+      rxusrclk_in(2)  => GT_RXUSRCLK_IN,
+      rxusrclk_in(3)  => GT_RXUSRCLK_IN,
 
+      rxusrclk2_in(0) => GT_RXUSRCLK2_IN,
+      rxusrclk2_in(1) => GT_RXUSRCLK2_IN,
+      rxusrclk2_in(2) => GT_RXUSRCLK2_IN,
+      rxusrclk2_in(3) => GT_RXUSRCLK2_IN,
+
+      txusrclk_in(0)  => GT_TXUSRCLK_IN,
+      txusrclk_in(1)  => GT_TXUSRCLK_IN,
+      txusrclk_in(2)  => GT_TXUSRCLK_IN,
+      txusrclk_in(3)  => GT_TXUSRCLK_IN,
+      
+      txusrclk2_in(0) => GT_TXUSRCLK2_IN,
+      txusrclk2_in(1) => GT_TXUSRCLK2_IN,
+      txusrclk2_in(2) => GT_TXUSRCLK2_IN,
+      txusrclk2_in(3) => GT_TXUSRCLK2_IN,
+
+      rxoutclk_out(0) => GT0_RXOUTCLK_OUT,
+      rxoutclk_out(1) => GT1_RXOUTCLK_OUT,
+      rxoutclk_out(2) => GT2_RXOUTCLK_OUT,
+      rxoutclk_out(3) => GT3_RXOUTCLK_OUT,
+
+      txoutclk_out(0) => GT0_TXOUTCLK_OUT,
+      txoutclk_out(1) => GT1_TXOUTCLK_OUT,
+      txoutclk_out(2) => GT2_TXOUTCLK_OUT,
+      txoutclk_out(3) => GT3_TXOUTCLK_OUT,
       txsequence_in(27 downto 21)    => txseq_counter_i,
       txsequence_in(20 downto 14)    => txseq_counter_i,
       txsequence_in(13 downto 7)     => txseq_counter_i,
@@ -452,7 +519,11 @@ begin
       rxheadervalid_out(2) => LANE1_RX_HEADER_VALID,
       rxheadervalid_out(1) => open,
       rxheadervalid_out(0) => LANE0_RX_HEADER_VALID,
-      rxstartofseq_out  => open
+      rxstartofseq_out  => open,
+      txpolarity_in     => TX_POLARITY_INVERT,
+      txprecursor_in    => "10101101011010110101",
+      txpostcursor_in   => "00000000000000000000",
+      txdiffctrl_in     => "1100110011001100"
     );
 
   --____________________________ TXSEQUENCE counter to GT __________________________    

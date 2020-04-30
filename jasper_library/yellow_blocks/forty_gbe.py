@@ -31,11 +31,13 @@ class forty_gbe(YellowBlock):
         inst.add_parameter('PROMISC_MODE',   " 1'b%x"%self.promisc_mode)
         inst.add_parameter('MEZZ_PORT',      " 2'h%x"%self.port)
 
-        inst.add_port('user_clk', 'sys_clk', dir='in', parent_sig=False)
+        # User clk is the simulink clock
+        inst.add_port('user_clk', 'user_clk', dir='in', parent_sig=False)
         inst.add_port('user_rst', 'sys_rst', dir='in', parent_sig=False)
 
-        inst.add_port('sys_clk', 'board_clk',     dir='in', parent_sig=False)
-        inst.add_port('sys_rst', 'board_clk_rst', dir='in', parent_sig=False)
+        # Don't be fooled -- sys_clk is used as the xlgmii clock and MUST be a 156.25 MHz.
+        inst.add_port('sys_clk', 'qsfp_gtrefclk_'+str(self.port),     dir='in', parent_sig=False)
+        inst.add_port('sys_rst', '1\'b0', dir='in', parent_sig=False)
 
         inst.add_port('MEZ3_REFCLK_P',      'forty_gbe_refclk' + self.suffix + '_p', parent_port=True, dir='in')
         inst.add_port('MEZ3_REFCLK_N',      'forty_gbe_refclk' + self.suffix + '_n', parent_port=True, dir='in')

@@ -95,7 +95,7 @@ architecture Behavioral of IEEE802_3_XL_PHY_top is
 begin
 	PHY_inst : component IEEE802_3_XL_PHY
 		generic map(
-			TX_POLARITY_INVERT => "0001",
+			TX_POLARITY_INVERT => "0000",
 			USE_CHIPSCOPE      => 0
 		)
 		port map(
@@ -174,7 +174,7 @@ begin
 				if (block_lock = "1111") then
 					link_up_check2 <= '1';
 				else
-					link_up_check3 <= '0';
+					link_up_check2 <= '0';
 				end if;
 
 				if (am_lock = "1111") then

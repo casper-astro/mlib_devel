@@ -57,35 +57,31 @@ architecture Behavioral of XL_PMA_RX_RESET_CLOCKING_CONTROLLER is
 	signal ref_clkA_locked : std_logic;
 
 begin
-	REFCLK_I_bufmr : BUFMR
-		port map(
-			O => ref_clk_BUFMR,         -- 1-bit output: Clock output (connect to BUFIOs/BUFRs)
-			I => REFCLK_I               -- 1-bit input: Clock input (Connect to IBUF)
-		);
+	--- BUFG_GTs for the GT clocks
+    rxoutclk_bufg_gt: BUFG_GT
+      port map(
+        CE => '1',
+        CEMASK => '0',
+        CLR => '0',
+        CLRMASK => '0',
+        DIV => "000",
+        I => REFCLK_I,
+        O => ref_clk_BUFMR
+      );
+      
+    rxoutclk3_bufg_gt: BUFG_GT
+      port map(
+        CE => '1',
+        CEMASK => '0',
+        CLR => '0',
+        CLRMASK => '0',
+        DIV => "001",
+        I => REFCLK_I,
+        O => XL_RX_CLK_161M133_O
+      );
 
-	XL_RX_CLK_322M266_bufr : BUFR
-		generic map(
-			BUFR_DIVIDE => "BYPASS",    -- Values: "BYPASS, 1, 2, 3, 4, 5, 6, 7, 8" 
-			SIM_DEVICE  => "7SERIES"    -- Must be set to "7SERIES" 
-		)
-		port map(
-			O   => XL_RX_CLK_322M266_O, -- 1-bit output: Clock output port
-			CE  => '1',                 -- 1-bit input: Active high, clock enable (Divided modes only)
-			CLR => '0',                 -- 1-bit input: Active high, asynchronous clear (Divided modes only)
-			I   => ref_clk_BUFMR        -- 1-bit input: Clock buffer input driven by an IBUF, MMCM or local interconnect
-		);
 
-	XL_RX_CLK_161M133_bufr : BUFR
-		generic map(
-			BUFR_DIVIDE => "2",         -- Values: "BYPASS, 1, 2, 3, 4, 5, 6, 7, 8" 
-			SIM_DEVICE  => "7SERIES"    -- Must be set to "7SERIES" 
-		)
-		port map(
-			O   => XL_RX_CLK_161M133_O, -- 1-bit output: Clock output port
-			CE  => '1',                 -- 1-bit input: Active high, clock enable (Divided modes only)
-			CLR => '0',                 -- 1-bit input: Active high, asynchronous clear (Divided modes only)
-			I   => ref_clk_BUFMR        -- 1-bit input: Clock buffer input driven by an IBUF, MMCM or local interconnect
-		);
+    XL_RX_CLK_322M266_O <= ref_clk_BUFMR;
 
 	ref_clkB_MMCME2_BASE_inst : MMCME2_BASE
 		generic map(
@@ -141,7 +137,7 @@ begin
 			-- Status Ports: 1-bit (each) output: MMCM status ports
 			LOCKED    => ref_clkA_locked, -- 1-bit output: LOCK
 			-- Clock Inputs: 1-bit (each) input: Clock input
-			CLKIN1    => REFCLK_I,      -- 1-bit input: Clock
+			CLKIN1    => ref_clk_BUFMR,      -- 1-bit input: Clock
 			-- Control Ports: 1-bit (each) input: MMCM control ports
 			PWRDWN    => '0',           -- 1-bit input: Power-down
 			RST       => REFCLK_RST_I,  -- 1-bit input: Reset

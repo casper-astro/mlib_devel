@@ -99,7 +99,7 @@ architecture Behavioral of IEEE802_3_XL_PHY is
             GT_TXUSRCLK_RESET_OUT   : out std_logic;
         
             GT0_RXOUTCLK_OUT        : out std_logic;
-            GT_RXUSRCLK2_OUT        : out std_logic;
+           -- GT_RXUSRCLK2_OUT        : out std_logic;
             GT_RXUSRCLK2_IN         : in  std_logic;
             GT_RXUSRCLK_IN          : in  std_logic;
             GT_RXUSRCLK_LOCKED_IN   : in  std_logic;
@@ -169,7 +169,7 @@ architecture Behavioral of IEEE802_3_XL_PHY is
 
 			XL_TX_CLK_156M25_O  : out std_logic;
 			XL_TX_CLK_161M133_O : out std_logic;
-			--XL_TX_CLK_322M266_O : out std_logic;
+			XL_TX_CLK_322M266_O : out std_logic;
 			XL_TX_CLK_625M_O    : out std_logic;
 			XL_TX_CLK_RST_O     : out std_logic;
 			XL_TX_CLK_LOCKED_O  : out std_logic
@@ -232,7 +232,7 @@ architecture Behavioral of IEEE802_3_XL_PHY is
 
 	signal XL_TX_CLK_156M25  : std_logic;
 	signal XL_TX_CLK_161M133 : std_logic;
-	--signal XL_TX_CLK_322M266 : std_logic;
+	signal XL_TX_CLK_322M266 : std_logic;
 	signal XL_TX_CLK_625M    : std_logic;
 	signal XL_TX_CLK_RST     : std_logic;
 	signal XL_TX_CLK_LOCKED  : std_logic;
@@ -343,7 +343,7 @@ begin
 			REFCLK_RST_I        => GT_TXOUTCLK_RST,
 			XL_TX_CLK_156M25_O  => XL_TX_CLK_156M25,
 			XL_TX_CLK_161M133_O => XL_TX_CLK_161M133,
-			--XL_TX_CLK_322M266_O => XL_TX_CLK_322M266,
+			XL_TX_CLK_322M266_O => XL_TX_CLK_322M266,
 			XL_TX_CLK_625M_O    => XL_TX_CLK_625M,
 			XL_TX_CLK_RST_O     => XL_TX_CLK_RST,
 			XL_TX_CLK_LOCKED_O  => XL_TX_CLK_LOCKED
@@ -354,35 +354,35 @@ begin
 			REFCLK_I            => GT0_RXOUTCLK,
 			REFCLK_RST_I        => GT_RXOUTCLK_RST,
 			XL_RX_CLK_156M25_O  => XL_RX_CLK_156M25,
-			XL_RX_CLK_161M133_O => open, --XL_RX_CLK_161M133,
+			XL_RX_CLK_161M133_O => XL_RX_CLK_161M133,
 			XL_RX_CLK_322M266_O => XL_RX_CLK_322M266,
 			XL_RX_CLK_625M_O    => XL_RX_CLK_625M,
 			XL_RX_CLK_RST_O     => XL_RX_CLK_RST,
 			XL_RX_CLK_LOCKED_O  => XL_RX_CLK_LOCKED
 		);
 
-	--- BUFG_GTs for the GT clocks
-    rxoutclk_bufg_gt: BUFG_GT
-      port map(
-        CE => '1',
-        CEMASK => '0',
-        CLR => '0',
-        CLRMASK => '0',
-        DIV => "000",
-        I => GT0_RXOUTCLK_NOBUF,
-        O => GT0_RXOUTCLK
-      );
+--	--- BUFG_GTs for the GT clocks
+--    rxoutclk_bufg_gt: BUFG_GT
+--      port map(
+--        CE => '1',
+--        CEMASK => '0',
+--        CLR => '0',
+--        CLRMASK => '0',
+--        DIV => "000",
+--        I => GT0_RXOUTCLK_NOBUF,
+--        O => GT0_RXOUTCLK
+--      );
 
-    txoutclk_bufg_gt: BUFG_GT
-      port map(
-        CE => '1',
-        CEMASK => '0',
-        CLR => '0',
-        CLRMASK => '0',
-        DIV => "001",
-        I => GT0_TXOUTCLK_NOBUF,
-        O => GT0_TXOUTCLK -- 161.133 MHz
-      );
+--    txoutclk_bufg_gt: BUFG_GT
+--      port map(
+--        CE => '1',
+--        CEMASK => '0',
+--        CLR => '0',
+--        CLRMASK => '0',
+--        DIV => "001",
+--        I => GT0_TXOUTCLK_NOBUF,
+--        O => GT0_TXOUTCLK -- 161.133 MHz
+--      );
       
 --    gtclk_bufg_gt: BUFG_GT
 --      port map(
@@ -406,13 +406,13 @@ begin
 			GTREFCLK_PAD_N_I        => GTREFCLK_PAD_N_I,
 			GTREFCLK_PAD_P_I        => GTREFCLK_PAD_P_I,
 			GTREFCLK_O              => GTREFCLK,
-			GT0_TXOUTCLK_OUT        => GT0_TXOUTCLK_NOBUF,
+			GT0_TXOUTCLK_OUT        => GT0_TXOUTCLK,
 			GT_TXUSRCLK2_IN         => XL_TX_CLK_161M133,
-			GT_TXUSRCLK_IN          => '0', -- Doesn't get used by the underlying core XL_TX_CLK_322M266,
+			GT_TXUSRCLK_IN          => XL_TX_CLK_322M266,
 			GT_TXUSRCLK_LOCKED_IN   => XL_TX_CLK_LOCKED,
 			GT_TXUSRCLK_RESET_OUT   => GT_TXOUTCLK_RST,
-			GT0_RXOUTCLK_OUT        => GT0_RXOUTCLK_NOBUF,
-			GT_RXUSRCLK2_OUT        => XL_RX_CLK_161M133,
+			GT0_RXOUTCLK_OUT        => GT0_RXOUTCLK,
+			--GT_RXUSRCLK2_OUT        => XL_RX_CLK_161M133,
 			GT_RXUSRCLK2_IN         => XL_RX_CLK_161M133,
 			GT_RXUSRCLK_IN          => XL_RX_CLK_322M266,
 			GT_RXUSRCLK_LOCKED_IN   => XL_RX_CLK_LOCKED,
