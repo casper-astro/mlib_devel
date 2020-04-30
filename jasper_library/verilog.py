@@ -473,6 +473,9 @@ def instantiate_wb_arb_module(module, n_slaves, n_sub_arbs=None):
     inst.add_port('wbs_dat_i', 'wbs_dat_i', width=32*n_slaves)
     inst.add_port('wbs_ack_i', 'wbs_ack_i', width=n_slaves)
     inst.add_port('wbs_err_i', 'wbs_err_i', width=n_slaves)
+    # Don't optimize away wb_clk_i since it probably gets
+    # used for timing constraints
+    module.add_signal('wb_clk_i', attributes={'keep': '"true"'})
 
 
 class VerilogModule(object):
