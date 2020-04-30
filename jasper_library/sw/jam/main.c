@@ -85,7 +85,7 @@ int main()
     flash_enter_4b_non_volatile();
 #endif
 #ifdef SPI_3B
-    flash_enter_3b_non_volatile();
+    flash_exit_4b_non_volatile();
 #endif
 
     casper_lwip_init();
