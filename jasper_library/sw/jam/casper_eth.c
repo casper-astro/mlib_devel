@@ -289,11 +289,11 @@ casper_lwip_init()
   ifstate.last_link_state = -1;
 
   if(!ifstate.ptr) {
-    print("No ethernet cores found!\n");
+    print("No eth cores found!\n");
     return ERR_IF;
   }
 
-  print("using ethernet core ");
+  print("using eth core ");
   print((const char *)core_name);
   print("\n");
 
@@ -321,7 +321,7 @@ casper_lwip_init()
   flash_read_id((uint8_t *)buf, 16);
   flash_id_rv = flash_read_id((uint8_t *)buf, 16);
   if (flash_id_rv > 16) {
-    xil_printf("Failed to read flash UID because it was too long (%d bytes)\n", flash_id_rv);
+    xil_printf("Flash UID read fail: too long (%d bytes)\n", flash_id_rv);
   }
 #endif
   ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_1] = buf[2] & 0x02ff;

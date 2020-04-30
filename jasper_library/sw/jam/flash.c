@@ -88,6 +88,7 @@ flash_enter_4b_non_volatile()
   flash_enter_4b_mode();
 }
   
+
 /* 
  * Check the non-volatile
  * 3B/4B addressing flag,
@@ -133,11 +134,11 @@ flash_erase_sector(uint32_t addr)
   uint8_t buf[5];
   xil_printf("erase: %08x\n", addr);
 
+  flash_enter_4b_mode();
+
   // Turn on the write enable
   buf[0] = FLASH_WRITE_ENABLE;
   send_spi(buf, buf, 1, 0);
-
-  flash_enter_4b_mode();
 
   buf[0] = FLASH_SECTOR_ERASE;
   buf[1] = (addr >> 24) & 0xff;
@@ -153,6 +154,8 @@ flash_erase_sector(uint32_t addr)
     buf[0] = FLASH_READ_STATUS_REG;
     send_spi(buf, buf, 2, 0);
   }
+
+  flash_exit_4b_mode();
 
   // turn off the write enable
   buf[0] = FLASH_WRITE_DISABLE;
@@ -173,9 +176,7 @@ flash_write_page(uint32_t addr, uint8_t *p, int len)
     return 0;
   }
 
-#if !defined(SPI_3B) && !defined(SPI_3B)
   flash_enter_4b_mode();
-#endif
 
   // Turn on the write enable
   buf[0] = FLASH_WRITE_ENABLE;
@@ -208,9 +209,7 @@ flash_write_page(uint32_t addr, uint8_t *p, int len)
   // There should be some error checking here
   // to make sure the erase actually worked
 
-#if !defined(SPI_3B) && !defined(SPI_3B)
   flash_exit_4b_mode();
-#endif
 
   return len;
 }
@@ -220,9 +219,7 @@ flash_read(uint32_t addr, uint8_t *p, int len)
 {
   uint8_t buf[5];
   //xil_printf("r %d B: %08x\n", len, addr);
-#if !defined(SPI_3B) && !defined(SPI_3B)
   flash_enter_4b_mode();
-#endif
 
   // Send the read command and address
   // Leave the transaction open for the data
@@ -243,9 +240,7 @@ flash_read(uint32_t addr, uint8_t *p, int len)
     buf[0] = FLASH_READ_STATUS_REG;
     send_spi(buf, buf, 2, 0);
   }
-#if !defined(SPI_3B) && !defined(SPI_3B)
   flash_exit_4b_mode();
-#endif
 
   return len;
 }
