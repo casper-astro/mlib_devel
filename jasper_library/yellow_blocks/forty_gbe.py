@@ -81,19 +81,19 @@ class forty_gbe(YellowBlock):
     def initialize(self):
 
         if self.platform.fpga.startswith('xcku'):
-            self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PMA/ip/XLAUI/xlaui_us.xci")
-            self.add_source('forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PMA/hdl/ultrascale/*')
+            self.add_source("forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PMA/ip/XLAUI/xlaui_us.xci")
+            self.add_source('forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PMA/hdl/ultrascale/*')
         elif self.platform.fpga.startswith('xc7'):
-            self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PMA/ip/XLAUI/xlaui.xci")
-            self.add_source('forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PMA/hdl/7series/*')
+            self.add_source("forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PMA/ip/XLAUI/xlaui.xci")
+            self.add_source('forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PMA/hdl/7series/*')
             
 
         #self.add_source('forty_gbe/SKA_10GBE_MAC')
         self.add_source('forty_gbe/SKA_40GBE_MAC')
-        self.add_source('forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/hdl')
-        self.add_source('forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PHY_top')
-        self.add_source('forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PHY/hdl')
-        self.add_source('forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PMA/hdl/*.vhd')
+        self.add_source('forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PCS/hdl')
+        self.add_source('forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PHY_top')
+        self.add_source('forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PHY/hdl')
+        self.add_source('forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PMA/hdl/*.vhd')
         self.add_source('forty_gbe/*.vhd')
         self.add_source('forty_gbe/*.sv')
         self.add_source('forty_gbe/*.v')
@@ -123,11 +123,11 @@ class forty_gbe(YellowBlock):
         self.add_source("forty_gbe/common_clock_fifo_32x16/*.xci")
         self.add_source("forty_gbe/cross_clock_fifo_wb_out_73x16/*.xci")
         self.add_source("forty_gbe/overlap_buffer/*.xci")
-        self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/ip/fifo_dual_clk/*.xci")
-        self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/ip/XGMII_FIFO_DUAL_SYNC/*.xci")
+        self.add_source("forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PCS/ip/fifo_dual_clk/*.xci")
+        self.add_source("forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PCS/ip/XGMII_FIFO_DUAL_SYNC/*.xci")
         self.add_source("forty_gbe/cpu_rx_packet_size/*.xci")
-        self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/ip/RS256_FIFO/*.xci")
-        #self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PHY/ip/IEEE802_3_XL_VIO/*.xci") # Only for debugging
+        self.add_source("forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PCS/ip/RS256_FIFO/*.xci")
+        #self.add_source("forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PHY/ip/IEEE802_3_XL_VIO/*.xci") # Only for debugging
         self.add_source("forty_gbe/WISHBONE/wishbone_forty_gb_eth_attach.vhd")
 
         self.suffix = "_%d" % self.inst_id
@@ -212,12 +212,12 @@ class forty_gbe(YellowBlock):
         tcl_cmds = []
 
         #tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/Constraints/gmii_to_sgmii.xdc'%os.getenv('HDL_ROOT'))
-        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/constraints/IEEE802_3_XL_PCS.xdc'%os.getenv('HDL_ROOT'))
-        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/constraints/DATA_FREQUENCY_DIVIDER.xdc'%os.getenv('HDL_ROOT'))
-        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/constraints/DATA_FREQUENCY_MULTIPLIER.xdc'%os.getenv('HDL_ROOT'))
-        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/constraints/DUAL_CLOCK_STROBE_GENERATOR.xdc'%os.getenv('HDL_ROOT'))
-        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PHY/constraints/IEEE802_3_XL_PHY.xdc'%os.getenv('HDL_ROOT'))
-        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PHY/constraints/IEEE802_3_XL_PHY.xdc'%os.getenv('HDL_ROOT'))
+        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PCS/constraints/IEEE802_3_XL_PCS.xdc'%os.getenv('HDL_ROOT'))
+        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PCS/constraints/DATA_FREQUENCY_DIVIDER.xdc'%os.getenv('HDL_ROOT'))
+        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PCS/constraints/DATA_FREQUENCY_MULTIPLIER.xdc'%os.getenv('HDL_ROOT'))
+        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PCS/constraints/DUAL_CLOCK_STROBE_GENERATOR.xdc'%os.getenv('HDL_ROOT'))
+        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PHY/constraints/IEEE802_3_XL_PHY.xdc'%os.getenv('HDL_ROOT'))
+        tcl_cmds.append('import_files -force -fileset constrs_1 %s/forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PHY/constraints/IEEE802_3_XL_PHY.xdc'%os.getenv('HDL_ROOT'))
         #tcl_cmds.append('set_property is_locked true [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/cont_microblaze/cont_microblaze.bd]')
         #tcl_cmds.append('set_property is_locked true [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/ip/gmii_to_sgmii/gmii_to_sgmii.xci]')
         tcl_cmds.append('set_property SCOPED_TO_REF IEEE802_3_XL_PCS [get_files [get_property directory [current_project]]/myproj.srcs/constrs_1/imports/constraints/IEEE802_3_XL_PCS.xdc]')
