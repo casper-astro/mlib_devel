@@ -29,7 +29,6 @@ class forty_gbe(YellowBlock):
         inst.add_parameter('FABRIC_ENABLE',  " 1'b%x"%self.fab_en)
         inst.add_parameter('TTL',            " 8'h%x"%self.ttl)
         inst.add_parameter('PROMISC_MODE',   " 1'b%x"%self.promisc_mode)
-        inst.add_parameter('MEZZ_PORT',      " 2'h%x"%self.port)
 
         # User clk is the simulink clock
         inst.add_port('user_clk', 'user_clk', dir='in', parent_sig=False)
@@ -37,14 +36,16 @@ class forty_gbe(YellowBlock):
 
         # Don't be fooled -- sys_clk is used as the xlgmii clock and MUST be a 156.25 MHz.
         inst.add_port('sys_clk', 'qsfp_gtrefclk_'+str(self.port),     dir='in', parent_sig=False)
+        # Should probably use a real reset here, but it would have to be [probably] on the sys_clk domain(?)
+        # Empirically (on SNAP2), tying the reset to 0 doesn't seem to cause a problem with the fabric interface.
         inst.add_port('sys_rst', '1\'b0', dir='in', parent_sig=False)
 
-        inst.add_port('MEZ3_REFCLK_P',      'forty_gbe_refclk' + self.suffix + '_p', parent_port=True, dir='in')
-        inst.add_port('MEZ3_REFCLK_N',      'forty_gbe_refclk' + self.suffix + '_n', parent_port=True, dir='in')
-        inst.add_port('MEZ3_PHY_LANE_RX_P', 'forty_gbe_rx' + self.suffix + '_p', parent_port=True, dir='in', width=4)
-        inst.add_port('MEZ3_PHY_LANE_RX_N', 'forty_gbe_rx' + self.suffix + '_n', parent_port=True, dir='in', width=4)
-        inst.add_port('MEZ3_PHY_LANE_TX_P', 'forty_gbe_tx' + self.suffix + '_p', parent_port=True, dir='out', width=4)
-        inst.add_port('MEZ3_PHY_LANE_TX_N', 'forty_gbe_tx' + self.suffix + '_n', parent_port=True, dir='out', width=4)
+        inst.add_port('REFCLK_P',      'forty_gbe_refclk' + self.suffix + '_p', parent_port=True, dir='in')
+        inst.add_port('REFCLK_N',      'forty_gbe_refclk' + self.suffix + '_n', parent_port=True, dir='in')
+        inst.add_port('PHY_LANE_RX_P', 'forty_gbe_rx' + self.suffix + '_p', parent_port=True, dir='in', width=4)
+        inst.add_port('PHY_LANE_RX_N', 'forty_gbe_rx' + self.suffix + '_n', parent_port=True, dir='in', width=4)
+        inst.add_port('PHY_LANE_TX_P', 'forty_gbe_tx' + self.suffix + '_p', parent_port=True, dir='out', width=4)
+        inst.add_port('PHY_LANE_TX_N', 'forty_gbe_tx' + self.suffix + '_n', parent_port=True, dir='out', width=4)
         
         inst.add_port('forty_gbe_rst',             self.fullname+'_rst',             width=1,   dir='in')
         inst.add_port('forty_gbe_tx_valid',        self.fullname+'_tx_valid',        width=4,   dir='in')
@@ -71,13 +72,18 @@ class forty_gbe(YellowBlock):
         inst.add_port('forty_gbe_led_up',          self.fullname+'_led_up',          width=1,  dir='out')
 
         inst.add_port('qsfp_gtrefclk',             'qsfp_gtrefclk_'+str(self.port),   width=1,  dir='out')
-        inst.add_port('qsfp_soft_reset',           'qsfp_soft_reset_'+str(self.port), width=1,  dir='in', parent_sig=False)
+        #inst.add_port('qsfp_soft_reset',           'qsfp_soft_reset_'+str(self.port), width=1,  dir='in', parent_sig=False)
+        inst.add_port('qsfp_soft_reset',           '1\'b0', width=1,  dir='in', parent_sig=False)
 
-        inst.add_port('eth_if_present',            'eth_if_%s_present'%str(self.port),  width=1,  dir='out', parent_sig=False)
+        #inst.add_port('eth_if_present',            'eth_if_%s_present'%str(self.port),  width=1,  dir='out', parent_sig=False)
+        inst.add_port('eth_if_present',            '',  width=1,  dir='out', parent_sig=False)
 
-        inst.add_port('phy_rx_up',                 'phy_rx_up_%s' %str(self.port),   width=1,  dir='out', parent_sig=False)
-        inst.add_port('xlgmii_txled',              'xlgmii_txled_%s' %str(self.port),   width=2,  dir='out', parent_sig=False)
-        inst.add_port('xlgmii_rxled',              'xlgmii_rxled_%s' %str(self.port),   width=2,  dir='out', parent_sig=False)
+        #inst.add_port('phy_rx_up',                 'phy_rx_up_%s' %str(self.port),   width=1,  dir='out', parent_sig=False)
+        #inst.add_port('xlgmii_txled',              'xlgmii_txled_%s' %str(self.port),   width=2,  dir='out', parent_sig=False)
+        #inst.add_port('xlgmii_rxled',              'xlgmii_rxled_%s' %str(self.port),   width=2,  dir='out', parent_sig=False)
+        inst.add_port('phy_rx_up',                 '',   width=1,  dir='out', parent_sig=False)
+        inst.add_port('xlgmii_txled',              '',   width=2,  dir='out', parent_sig=False)
+        inst.add_port('xlgmii_rxled',              '',   width=2,  dir='out', parent_sig=False)
 
 
     def initialize(self):
