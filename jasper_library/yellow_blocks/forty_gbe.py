@@ -30,6 +30,8 @@ class forty_gbe(YellowBlock):
         inst.add_parameter('FABRIC_ENABLE',  " 1'b%x"%self.fab_en)
         inst.add_parameter('TTL',            " 8'h%x"%self.ttl)
         inst.add_parameter('PROMISC_MODE',   " 1'b%x"%self.promisc_mode)
+        if self.platform.name == 'skarab':
+            inst.add_parameter('RX_2B_SWAP',   "true") # SKARAB Microblaze requires some swizzling of RX data read via wishbone
 
         # User clk is the simulink clock
         inst.add_port('user_clk', 'user_clk', dir='in', parent_sig=False)

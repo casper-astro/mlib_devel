@@ -34,7 +34,8 @@ entity wishbone_forty_gb_eth_attach is
         FABRIC_GATEWAY  : std_logic_vector( 7 downto 0);
         FABRIC_ENABLE   : std_logic;
         MC_RECV_IP      : std_logic_vector(31 downto 0);
-        MC_RECV_IP_MASK : std_logic_vector(31 downto 0));
+        MC_RECV_IP_MASK : std_logic_vector(31 downto 0);
+        RX_2B_SWAP      : boolean := false);
     port (
         -- WISHBONE CLASSIC SIGNALS
         CLK_I : in  std_logic;
@@ -309,16 +310,26 @@ begin
     cpu_tx_buffer_rd_data(63 downto 32);
 
     -- SWAP DATA ORDER TO MATCH THAT USED IN MICROBLAZE
-    rx_data_int <=
-    (cpu_rx_buffer_rd_data(15 downto  0) & cpu_rx_buffer_rd_data(31 downto 16)) when (rxbuf_addr(2) = '1') else
-    (cpu_rx_buffer_rd_data(47 downto 32) & cpu_rx_buffer_rd_data(63 downto 48));
+    if (RX_2B_SWAP) generate
+        rx_data_int <=
+        (cpu_rx_buffer_rd_data(15 downto  0) & cpu_rx_buffer_rd_data(31 downto 16)) when (rxbuf_addr(2) = '1') else
+        (cpu_rx_buffer_rd_data(47 downto 32) & cpu_rx_buffer_rd_data(63 downto 48));
+    end generate
+    if (not RX_2B_SWAP) generate
+        rx_data_int <=
+        cpu_rx_buffer_rd_data(31 downto 0) when (rxbuf_addr(2) = '1') else
+        cpu_rx_buffer_rd_data(63 downto 32);
+    end generate
 
     cpu_rx_size_int <= ("000" & X"00") when (cpu_rx_ack_reg = '1') else cpu_rx_size;
 
     reg_data_int <=
-    (X"00000000")                                                                when (reg_data_src = REG_CORE_TYPE)        else
-    (X"00000000")                                                                when (reg_data_src = REG_MAX_BUF_SIZE)     else
-    (X"00000000")                                                                when (reg_data_src = REG_WORD_LENS)        else
+    -- CPU TX/RX enabled. Version 1. 40GbE Core
+    (X"01010104")                                                                when (reg_data_src = REG_CORE_TYPE)        else
+    -- TX/RX buffer sizes = 16384 bytes
+    (X"40004000")                                                                when (reg_data_src = REG_MAX_BUF_SIZE)     else
+    -- TX/RX word size = 64 bits
+    (X"00080008")                                                                when (reg_data_src = REG_WORD_LENS)        else
     (X"0000" & local_mac_reg(47 downto 32))                                      when (reg_data_src = REG_LOCAL_MAC_1)      else
     local_mac_reg(31 downto 0)                                                   when (reg_data_src = REG_LOCAL_MAC_0)      else
     local_ip_reg(31 downto 0)                                                    when (reg_data_src = REG_LOCAL_IPADDR)     else

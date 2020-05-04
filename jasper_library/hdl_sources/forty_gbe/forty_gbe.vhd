@@ -39,7 +39,8 @@ entity forty_gbe is
         FABRIC_ENABLE     : std_logic;
         TTL               : std_logic_vector( 7 downto 0);
         PROMISC_MODE      : integer;
-        RX_CRC_CHK_ENABLE : integer := 0);
+        RX_CRC_CHK_ENABLE : integer := 0;
+        RX_2B_SWAP        : boolean := false);
     port(
         user_clk : in std_logic;
         user_rst : in std_logic;
@@ -119,7 +120,8 @@ architecture arch_forty_gbe of forty_gbe is
         FABRIC_ENABLE     : std_logic;
         TTL               : std_logic_vector(7 downto 0);
         PROMISC_MODE      : integer;
-        RX_CRC_CHK_ENABLE : integer);
+        RX_CRC_CHK_ENABLE : integer;
+        RX_2B_SWAP        : boolean);
     port (
         clk : in std_logic;
         rst : in std_logic;
@@ -306,7 +308,8 @@ begin
         FABRIC_ENABLE     => FABRIC_ENABLE,
         TTL               => TTL,
         PROMISC_MODE      => PROMISC_MODE,
-        RX_CRC_CHK_ENABLE => RX_CRC_CHK_ENABLE)
+        RX_CRC_CHK_ENABLE => RX_CRC_CHK_ENABLE,
+        RX_2B_SWAP        => RX_2B_SWAP)
     port map(
         clk => user_clk, --forty_gb_eth_clk,
         rst => user_rst,--user_rst, --forty_gb_eth_rst,
