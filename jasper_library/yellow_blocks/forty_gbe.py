@@ -4,6 +4,7 @@ from constraints import PortConstraint, ClockConstraint, GenClockConstraint, Clo
     OutputDelayConstraint, MaxDelayConstraint, MinDelayConstraint, FalsePathConstraint, MultiCycleConstraint, RawConstraint
 from itertools import count
 
+from .yellow_block_typecodes import TYPECODE_ETHCORE
 
 
 class forty_gbe(YellowBlock):
@@ -18,7 +19,7 @@ class forty_gbe(YellowBlock):
         
         # request a wishbone offset that is a multiple of the port number
         req_offset = 0x16000 * self.port
-        inst.add_wb_interface(self.unique_name, mode='rw', nbytes=0x16000, req_offset=req_offset) # as in matlab code
+        inst.add_wb_interface(self.unique_name, mode='rw', nbytes=0x16000, req_offset=req_offset, typecode=TYPECODE_ETHCORE)
 
         # forty gbe specific parameters
         inst.add_parameter('FABRIC_MAC',     "48'h%x"%self.fab_mac)
