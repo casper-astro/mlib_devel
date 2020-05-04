@@ -310,16 +310,16 @@ begin
     cpu_tx_buffer_rd_data(63 downto 32);
 
     -- SWAP DATA ORDER TO MATCH THAT USED IN MICROBLAZE
-    if (RX_2B_SWAP) generate
+    SWAP: if (RX_2B_SWAP) generate
         rx_data_int <=
         (cpu_rx_buffer_rd_data(15 downto  0) & cpu_rx_buffer_rd_data(31 downto 16)) when (rxbuf_addr(2) = '1') else
         (cpu_rx_buffer_rd_data(47 downto 32) & cpu_rx_buffer_rd_data(63 downto 48));
-    end generate
-    if (not RX_2B_SWAP) generate
+    end generate;
+    NO_SWAP: if (not RX_2B_SWAP) generate
         rx_data_int <=
         cpu_rx_buffer_rd_data(31 downto 0) when (rxbuf_addr(2) = '1') else
         cpu_rx_buffer_rd_data(63 downto 32);
-    end generate
+    end generate;
 
     cpu_rx_size_int <= ("000" & X"00") when (cpu_rx_ack_reg = '1') else cpu_rx_size;
 
