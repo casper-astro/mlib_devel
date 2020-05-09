@@ -139,7 +139,8 @@ class forty_gbe(YellowBlock):
         self.add_source("forty_gbe/cpu_rx_packet_size/*.xci")
         self.add_source("forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PCS/ip/RS256_FIFO/*.xci")
         #self.add_source("forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PHY/ip/IEEE802_3_XL_VIO/*.xci") # Only for debugging
-        self.add_source("forty_gbe/WISHBONE/wishbone_forty_gb_eth_attach.vhd")
+        #self.add_source("forty_gbe/WISHBONE/wishbone_forty_gb_eth_attach.vhd") # The original SARAO/SKARAB Wb attachment
+        self.add_source("forty_gbe/WISHBONE/wishbone_forty_gb_eth_attach2.v") # An attachment based on the 10GbE module
 
         self.suffix = "_%d" % self.inst_id
 
