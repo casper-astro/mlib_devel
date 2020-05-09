@@ -9,7 +9,7 @@ class skarab(YellowBlock):
     def initialize(self):
         self.add_source('infrastructure/')
         self.add_source('skarab_infr/skarab_infr.vhd')
-        self.add_source('wbs_arbiter_skarab/*.v')
+        self.add_source('wbs_arbiter/*.v')
         self.add_source('wbs_arbiter/timeout.v')
         self.add_source('wishbone_i2c')
         self.add_source('wishbone_one_wire')
