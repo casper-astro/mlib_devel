@@ -600,7 +600,7 @@ class VerilogModule(object):
         :type cur_blk: str
         """
         self.cur_blk = cur_blk
-        if cur_blk not in list(self.ports.keys()):
+        if cur_blk not in list(sorted(self.ports.keys())):
             logger.debug('Initializing second-layer dictionairies for: %s'%cur_blk)
             self.ports[cur_blk] = {}
             self.parameters[cur_blk] = {}
@@ -613,7 +613,7 @@ class VerilogModule(object):
         """
         Check if this module has an instance called <name>. If so return True
         """
-        return name in list(self.instances.keys())
+        return name in list(sorted(self.instances.keys()))
 
     def wb_compute(self, base_addr=0x10000, alignment=4):
         """
@@ -632,7 +632,7 @@ class VerilogModule(object):
         # Now we have an instance name, we can assign the wb ports to
         # real signals
         wb_device_num = 0
-        for block in list(self.instances.keys()):
+        for block in list(sorted(self.instances.keys())):
             for instname, inst in list(self.instances[block].items()):
                 logger.debug("Looking for WB slaves for instance %s"%inst.name)
                 for n, wb_dev in enumerate(inst.wb_devices):
@@ -964,11 +964,11 @@ class VerilogModule(object):
         """
         Add ports and signals associated with child instances
         """
-        for block in list(self.instances.keys()):
+        for block in list(sorted(self.instances.keys())):
             self.set_cur_blk(block)
             for instname, inst in list(self.instances[block].items()):
                 logger.debug('Instantiating child ports for %s'%instname)
-                for blk in list(inst.ports.keys()):
+                for blk in list(sorted(inst.ports.keys())):
                     for pname, port in list(inst.ports[blk].items()):
                         if port.parent_sig:
                             logger.debug('  Adding instance port %s as signal %s to top'%(port.name, port.signal))
@@ -1139,7 +1139,7 @@ class VerilogModule(object):
         declare parameters
         """
         s = ''
-        for block in list(self.parameters.keys()):
+        for block in list(sorted(self.parameters.keys())):
             s += self.gen_cur_blk_comment(block, self.parameters[block])
             for pn, parameter in sorted(self.parameters[block].items()):
                 s += '  parameter %s = %s;'%(parameter.name,parameter.value)
@@ -1154,7 +1154,7 @@ class VerilogModule(object):
         declare localparams
         """
         s = ''
-        for block in list(self.localparams.keys()):
+        for block in list(sorted(self.localparams.keys())):
             s += self.gen_cur_blk_comment(block, self.localparams[block])
             for pn,parameter in sorted(self.localparams[block].items()):
                 s += '  localparam %s = %s;'%(parameter.name,parameter.value)
@@ -1173,10 +1173,10 @@ class VerilogModule(object):
         n_ports = 0
         i = 1
         # get total number of ports
-        for block in list(self.ports.keys()):
+        for block in list(sorted(self.ports.keys())):
             n_ports += len(list(self.ports[block].keys()))
 
-        for block in list(self.ports.keys()):
+        for block in list(sorted(self.ports.keys())):
             s += self.gen_cur_blk_comment(block, self.ports[block])
             # sort by port type then alphabetically
             for port in sorted(list(self.ports[block].values()), key=operator.attrgetter('dir', 'name')):
@@ -1202,7 +1202,7 @@ class VerilogModule(object):
         # keyword map
         kwm = {'in':'input','out':'output','inout':'inout'}
         s = ''
-        for block in list(self.ports.keys()):
+        for block in list(sorted(self.ports.keys())):
             s += self.gen_cur_blk_comment(block, self.ports[block])
             # sort port type then alphabetically
             for port in sorted(list(self.ports[block].values()), key=operator.attrgetter('dir', 'name')):
@@ -1234,7 +1234,7 @@ class VerilogModule(object):
         declare signals
         """
         s = ''
-        for block in list(self.signals.keys()):
+        for block in list(sorted(self.signals.keys())):
             s += self.gen_cur_blk_comment(block, self.signals[block])
             for name, sig in sorted(self.signals[block].items()):
                 logger.debug('Writing verilog for signal %s'%name)
@@ -1254,7 +1254,7 @@ class VerilogModule(object):
         module
         """
         s = ''
-        for block in list(self.instances.keys()):
+        for block in list(sorted(self.instances.keys())):
             n = 0
             n_inst = len(self.instances[block])
             s += self.gen_cur_blk_comment(block, self.instances[block])
@@ -1272,7 +1272,7 @@ class VerilogModule(object):
         signal
         """
         s = ''
-        for block in list(self.assignments.keys()):
+        for block in list(sorted(self.assignments.keys())):
             s += self.gen_cur_blk_comment(block, self.assignments[block])
             for n,assignment in sorted(self.assignments[block].items()):
                 s += '  assign %s = %s;'%(assignment['lhs'], assignment['rhs'])
@@ -1295,7 +1295,7 @@ class VerilogModule(object):
         s = ''
         if self.comment is not None:
             s += '  // %s\n'%self.comment
-        for block in list(self.parameters.keys()):
+        for block in list(sorted(self.parameters.keys())):
             n_params = len(self.parameters[block])
             if n_params > 0:
                 s += '  %s #(\n' %self.name
@@ -1310,7 +1310,7 @@ class VerilogModule(object):
                 s += '  ) %s (\n'%instname
             else:
                 s += '  %s  %s (\n'%(self.name, instname)
-        for block in list(self.ports.keys()):
+        for block in list(sorted(self.ports.keys())):
             n_ports = len(self.ports[block])
             n = 0
             for pn, port in sorted(self.ports[block].items()):
@@ -1412,7 +1412,7 @@ class VerilogModule(object):
         """
         for top_dict_key, top_dict_value in list(dict.items()):
             # does the second level dict keys contain name?
-            if name in list(top_dict_value.keys()):
+            if name in list(sorted(top_dict_value.keys())):
                 return top_dict_key
         # return key as None if not in any dictionary
         return None
