@@ -489,6 +489,7 @@ end endgenerate
     endcase
   end
 
+  /*
   max_tx_ila ila_inst (
     .clk(mac_clk),
     .probe0({5'b0, tx_state}),
@@ -498,6 +499,7 @@ end endgenerate
     .probe4(tx_count),
     .probe5({7'b0, mac_tx_ack})
     );
+  */
 
 
   //reg [2:0] tx_state_z;
