@@ -38,9 +38,9 @@ entity forty_gbe is
         FABRIC_GATEWAY    : std_logic_vector( 7 downto 0);
         FABRIC_ENABLE     : std_logic;
         TTL               : std_logic_vector( 7 downto 0);
-        MEZZ_PORT         : std_logic_vector( 1 downto 0);
         PROMISC_MODE      : integer;
-        RX_CRC_CHK_ENABLE : integer := 0);
+        RX_CRC_CHK_ENABLE : integer := 0;
+        RX_2B_SWAP        : boolean := false);
     port(
         user_clk : in std_logic;
         user_rst : in std_logic;
@@ -48,8 +48,8 @@ entity forty_gbe is
         sys_clk : in std_logic;
         sys_rst : in std_logic;
 
-        MEZ3_REFCLK_P : in std_logic;
-        MEZ3_REFCLK_N : in std_logic;
+        REFCLK_P : in std_logic;
+        REFCLK_N : in std_logic;
 
         qsfp_gtrefclk    : out std_logic;
         qsfp_soft_reset  : in  std_logic;
@@ -98,10 +98,10 @@ entity forty_gbe is
         wb_err_o : in  std_logic;
 
         -- MEZZANINE GTH SIGNALS
-        MEZ3_PHY_LANE_RX_P : in  std_logic_vector(3 downto 0);
-        MEZ3_PHY_LANE_RX_N : in  std_logic_vector(3 downto 0);
-        MEZ3_PHY_LANE_TX_P : out std_logic_vector(3 downto 0);
-        MEZ3_PHY_LANE_TX_N : out std_logic_vector(3 downto 0)
+        PHY_LANE_RX_P : in  std_logic_vector(3 downto 0);
+        PHY_LANE_RX_N : in  std_logic_vector(3 downto 0);
+        PHY_LANE_TX_P : out std_logic_vector(3 downto 0);
+        PHY_LANE_TX_N : out std_logic_vector(3 downto 0)
  );
 
 end forty_gbe;
@@ -119,9 +119,9 @@ architecture arch_forty_gbe of forty_gbe is
         FABRIC_GATEWAY    : std_logic_vector(7 downto 0);
         FABRIC_ENABLE     : std_logic;
         TTL               : std_logic_vector(7 downto 0);
-        MEZZ_PORT         : std_logic_vector( 1 downto 0);
         PROMISC_MODE      : integer;
-        RX_CRC_CHK_ENABLE : integer);
+        RX_CRC_CHK_ENABLE : integer;
+        RX_2B_SWAP        : boolean);
     port (
         clk : in std_logic;
         rst : in std_logic;
@@ -307,9 +307,9 @@ begin
         FABRIC_GATEWAY    => FABRIC_GATEWAY,
         FABRIC_ENABLE     => FABRIC_ENABLE,
         TTL               => TTL,
-        MEZZ_PORT         => MEZZ_PORT,
         PROMISC_MODE      => PROMISC_MODE,
-        RX_CRC_CHK_ENABLE => RX_CRC_CHK_ENABLE)
+        RX_CRC_CHK_ENABLE => RX_CRC_CHK_ENABLE,
+        RX_2B_SWAP        => RX_2B_SWAP)
     port map(
         clk => user_clk, --forty_gb_eth_clk,
         rst => user_rst,--user_rst, --forty_gb_eth_rst,
@@ -423,13 +423,13 @@ begin
         port map(
             SYS_CLK_I            => sys_clk,
             SYS_CLK_RST_I        => sys_rst,
-            GTREFCLK_PAD_N_I     => MEZ3_REFCLK_N,
-            GTREFCLK_PAD_P_I     => MEZ3_REFCLK_P,
+            GTREFCLK_PAD_N_I     => REFCLK_N,
+            GTREFCLK_PAD_P_I     => REFCLK_P,
             GTREFCLK_O           => qsfp_gtrefclk_pb,
-            TXN_O                => MEZ3_PHY_LANE_TX_N,
-            TXP_O                => MEZ3_PHY_LANE_TX_P,
-            RXN_I                => MEZ3_PHY_LANE_RX_N,
-            RXP_I                => MEZ3_PHY_LANE_RX_P,
+            TXN_O                => PHY_LANE_TX_N,
+            TXP_O                => PHY_LANE_TX_P,
+            RXN_I                => PHY_LANE_RX_N,
+            RXP_I                => PHY_LANE_RX_P,
             SOFT_RESET_I         => qsfp_soft_reset,
             LINK_UP_O            => phy_rx_up_sig,
             XLGMII_X4_TXC_I      => xlgmii_txc,

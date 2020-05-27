@@ -29,7 +29,7 @@ class snap2_v2(YellowBlock):
         top.assign_signal('clk_250MHz180', '~clk_250MHz')
 
     def gen_children(self):
-        children = [YellowBlock.make_block({'tag':'xps:sys_block', 'board_id':'12', 'rev_maj':'12', 'rev_min':'0', 'rev_rcs':'32'}, self.platform)]
+        children = [YellowBlock.make_block({'tag':'xps:sys_block', 'board_id':'13', 'rev_maj':'2', 'rev_min':'0', 'rev_rcs':'32'}, self.platform)]
         if self.use_microblaze:
             children.append(YellowBlock.make_block({'tag':'xps:microblaze'}, self.platform))
         else:

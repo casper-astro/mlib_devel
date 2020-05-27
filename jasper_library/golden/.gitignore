@@ -1,2 +1,4 @@
 snap160t_golden/*
-!snap160t_golden/outputs
+snap2_golden/*
+!snap160t_golden/outputs/
+!snap2_golden/outputs/

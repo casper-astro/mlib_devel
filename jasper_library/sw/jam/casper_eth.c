@@ -289,11 +289,11 @@ casper_lwip_init()
   ifstate.last_link_state = -1;
 
   if(!ifstate.ptr) {
-    print("No ethernet cores found!\n");
+    print("No eth cores found!\n");
     return ERR_IF;
   }
 
-  print("using ethernet core ");
+  print("using eth core ");
   print((const char *)core_name);
   print("\n");
 
@@ -313,11 +313,20 @@ casper_lwip_init()
   //     0x----0001 0x02030405
   uint32_t buf[4] = {0, 0, 0x00000203, 0x04050118};
 #ifdef USE_SPI
-  flash_read_id((uint8_t *)buf);
+  // flash_read_id seems to fail (returns all F's) the first time.
+  // If it preceded by a flash read it works. This is a new issue
+  // in firmware from Vivado 2019.1.2 vs 2016.4
+  // Just run it twice. TODO: but why?!
+  int flash_id_rv;
+  flash_read_id((uint8_t *)buf, 16);
+  flash_id_rv = flash_read_id((uint8_t *)buf, 16);
+  if (flash_id_rv > 16) {
+    xil_printf("Flash UID read fail: too long (%d bytes)\n", flash_id_rv);
+  }
 #endif
-  ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_1] = buf[2] & 0xffff;
+  ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_1] = buf[2] & 0x02ff;
   ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_0] = buf[3];
-  xil_printf("MAC 0x%04x%08x\n", buf[2] & 0xffff, buf[3]);
+  xil_printf("MAC 0x%04x%08x\n", buf[2] & 0x02ff, buf[3]);
 
 
 #ifdef DEBUG_ETH0_MEM

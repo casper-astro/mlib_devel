@@ -169,7 +169,9 @@ architecture arch_ska_fge_tx of ska_fge_tx is
     signal app_tx_any_valid : std_logic;
     signal app_tx_data_z1 : std_logic_vector(255 downto 0);
     signal app_tx_dest_ip_z1 : std_logic_vector(31 downto 0);
+    signal app_tx_dest_ip_z2 : std_logic_vector(31 downto 0);
     signal app_tx_dest_port_z1 : std_logic_vector(15 downto 0);
+    signal app_tx_dest_port_z2 : std_logic_vector(15 downto 0);
     signal app_tx_data_din : std_logic_vector(263 downto 0);--std_logic_vector(259 downto 0);
     signal app_tx_data_wrreq : std_logic;
     signal app_tx_data_rdreq : std_logic;
@@ -580,6 +582,8 @@ begin
             app_tx_dest_ip_z1 <= app_tx_dest_ip;
             app_tx_dest_port_z1 <= app_tx_dest_port;
             app_tx_end_of_frame_z1 <= app_tx_end_of_frame;
+            app_tx_dest_port_z2 <= app_tx_dest_port_z1;
+            app_tx_dest_ip_z2 <= app_tx_dest_ip_z1;
         end if;
     end process;
 
@@ -688,8 +692,8 @@ begin
     -- AI: Deassert write when FIFO full and reset asserted
     app_tx_ctrl_wrreq <= app_tx_ctrl_fifo_en and (not app_tx_ctrl_full) and (not app_rst);
 
-    app_tx_ctrl_din(31 downto 0) <= app_tx_dest_ip_z1;
-    app_tx_ctrl_din(47 downto 32) <= app_tx_dest_port_z1;
+    app_tx_ctrl_din(31 downto 0) <= app_tx_dest_ip_z2;
+    app_tx_ctrl_din(47 downto 32) <= app_tx_dest_port_z2;
     app_tx_ctrl_din(58 downto 48) <= data_count;
     app_tx_ctrl_din(63 downto 59) <= (others => '0');
 

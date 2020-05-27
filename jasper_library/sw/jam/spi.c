@@ -135,6 +135,7 @@ send_spi(u8 *src, u8 *dst, u32 len, u32 opt)
   return len;
 }
 
+#if 0
 // Dump contents of SPI registers
 void
 dump_spi()
@@ -150,3 +151,4 @@ dump_spi()
   xil_printf("  IPISR  %08x\n", XSpi_IntrGetStatus(&xspi));
   xil_printf("  IPIER  %08x\n", XSpi_IntrGetEnabled(&xspi));
 }
+#endif

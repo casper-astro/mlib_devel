@@ -34,19 +34,20 @@ entity wishbone_forty_gb_eth_attach is
         FABRIC_GATEWAY  : std_logic_vector( 7 downto 0);
         FABRIC_ENABLE   : std_logic;
         MC_RECV_IP      : std_logic_vector(31 downto 0);
-        MC_RECV_IP_MASK : std_logic_vector(31 downto 0));
+        MC_RECV_IP_MASK : std_logic_vector(31 downto 0);
+        RX_2B_SWAP      : boolean := false);
     port (
         -- WISHBONE CLASSIC SIGNALS
-        CLK_I : in  std_logic;
-        RST_I : in  std_logic;
-        DAT_I : in  std_logic_vector(31 downto 0);
-        DAT_O : out std_logic_vector(31 downto 0);
-        ACK_O : out std_logic;
-        ADR_I : in  std_logic_vector(15 downto 0);
-        CYC_I : in  std_logic;
-        SEL_I : in  std_logic_vector( 3 downto 0);
-        STB_I : in  std_logic;
-        WE_I  : in  std_logic;
+        wb_clk_i : in  std_logic;
+        wb_rst_i : in  std_logic;
+        wb_dat_i : in  std_logic_vector(31 downto 0);
+        wb_dat_o : out std_logic_vector(31 downto 0);
+        wb_ack_o : out std_logic;
+        wb_adr_i : in  std_logic_vector(15 downto 0);
+        wb_cyc_i : in  std_logic;
+        wb_sel_i : in  std_logic_vector( 3 downto 0);
+        wb_stb_i : in  std_logic;
+        wb_we_i  : in  std_logic;
 
         -- CPU TX BUFFER
         cpu_tx_buffer_addr    : out std_logic_vector(10 downto 0);
@@ -138,8 +139,8 @@ architecture arch_wishbone_forty_gb_eth_attach of wishbone_forty_gb_eth_attach i
     constant REG_RX_BAD_FRAME_CNT : std_logic_vector(7 downto 0) := X"1D";
     constant REG_CNT_RESET        : std_logic_vector(7 downto 0) := X"1E"; -- obviously writable
 
-    signal STB_I_z  : std_logic;
-    signal STB_I_z2 : std_logic;
+    signal wb_stb_i_z  : std_logic;
+    signal wb_stb_i_z2 : std_logic;
 
     signal wishbone_sel : std_logic;
     signal reg_sel      : std_logic;
@@ -191,6 +192,10 @@ architecture arch_wishbone_forty_gb_eth_attach of wishbone_forty_gb_eth_attach i
     signal tx_data_int  : std_logic_vector(31 downto 0);
     signal rx_data_int  : std_logic_vector(31 downto 0);
     signal reg_data_int : std_logic_vector(31 downto 0);
+    --AI: signal to store data for wishbone read 
+    signal reg_dat_o_int : std_logic_vector(31 downto 0);
+    --AI: signal for wishbone ack
+    signal reg_ack : std_logic;
 
     signal reg_sel_z1 : std_logic;
 
@@ -198,17 +203,59 @@ architecture arch_wishbone_forty_gb_eth_attach of wishbone_forty_gb_eth_attach i
     signal dbg_dat_i : std_logic_vector(31 downto 0);
     signal dbg_dat_o : std_logic_vector(31 downto 0);
     signal dbg_stb_i : std_logic;
+    signal dbg_we_i  : std_logic;
+    signal dbg_cyc_i : std_logic;
+    signal dbg_ack_o : std_logic;
+    signal dbg_reg_sel : std_logic;
+    signal dbg_arp_sel : std_logic;
+    signal dbg_tx_sel  : std_logic;
+    signal dbg_rx_sel  : std_logic;
     attribute MARK_DEBUG : string;
     attribute MARK_DEBUG of dbg_adr_i : signal is "TRUE";
     attribute MARK_DEBUG of dbg_dat_i : signal is "TRUE";
     attribute MARK_DEBUG of dbg_dat_o : signal is "TRUE";
     attribute MARK_DEBUG of dbg_stb_i : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_we_i  : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_cyc_i : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_ack_o  : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_reg_sel : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_arp_sel : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_tx_sel  : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_rx_sel  : signal is "TRUE";
+
+    signal dbg_local_mac : std_logic_vector(47 downto 0);
+    signal dbg_local_ip : std_logic_vector(31 downto 0);
+    signal dbg_cpu_rx_buffer_addr : std_logic_vector(10 downto 0);
+    signal dbg_cpu_rx_buffer_rd_data : std_logic_vector(63 downto 0);
+    signal dbg_cpu_rx_size : std_logic_vector(10 downto 0);
+    signal dbg_cpu_rx_ack : std_logic;
+    signal dbg_tx_rx_sizes : std_logic_vector(31 downto 0);
+    attribute MARK_DEBUG of dbg_local_mac : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_local_ip : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_cpu_rx_buffer_addr : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_cpu_rx_buffer_rd_data : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_cpu_rx_size : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_cpu_rx_ack : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_tx_rx_sizes : signal is "TRUE";
+
 
 begin
-    dbg_adr_i <= ADR_I;
-    dbg_dat_i <= DAT_I;
-    dbg_stb_i <= STB_I;
-    DAT_O <= dbg_dat_o;
+    dbg_adr_i <= wb_adr_i;
+    dbg_dat_i <= wb_dat_i;
+    dbg_stb_i <= wb_stb_i;
+    dbg_we_i  <= wb_we_i;
+    dbg_cyc_i <= wb_cyc_i;
+    dbg_reg_sel <= reg_sel;
+    dbg_arp_sel <= arp_sel;
+    dbg_tx_sel  <= txbuf_sel;
+    dbg_rx_sel  <= rxbuf_sel;
+
+    dbg_local_mac <= local_mac_reg;
+    dbg_local_ip <= local_ip_reg;
+    dbg_cpu_rx_buffer_rd_data <= cpu_rx_buffer_rd_data;
+    dbg_cpu_rx_size <= dbg_cpu_rx_size;
+    dbg_cpu_rx_ack <= cpu_rx_ack_reg;
+    dbg_tx_rx_sizes <= ("00000" & cpu_tx_size_reg & "00000" & cpu_rx_size_int);
 
     local_mac             <= local_mac_reg;
     local_ip              <= local_ip_reg;
@@ -244,31 +291,32 @@ begin
     cpu_tx_buffer_wr_data <= write_data;
     cpu_tx_buffer_wr_en   <= tx_buffer_we;
     cpu_rx_buffer_addr    <= rxbuf_addr(13 downto 3);
+    dbg_cpu_rx_buffer_addr <= rxbuf_addr(13 downto 3);
 
 --------------------------------------------------------------------------------
 -- WISHBONE ACK GENERATION
 --------------------------------------------------------------------------------
 
-    gen_STB_I_z : process(RST_I, CLK_I)
+    gen_wb_stb_i_z : process(wb_rst_i, wb_clk_i)
     begin
-        if (RST_I = '1')then
-            STB_I_z  <= '0';
-            STB_I_z2 <= '0';
-        elsif (rising_edge(CLK_I))then
-            STB_I_z  <= STB_I;
-            STB_I_z2 <= STB_I_z;
+        if (wb_rst_i = '1')then
+            wb_stb_i_z  <= '0';
+            wb_stb_i_z2 <= '0';
+        elsif (rising_edge(wb_clk_i))then
+            wb_stb_i_z  <= wb_stb_i;
+            wb_stb_i_z2 <= wb_stb_i_z;
         end if;
     end process;
 
-    gen_ACK_O : process(RST_I, CLK_I)
+    gen_wb_ack_o : process(wb_rst_i, wb_clk_i)
     begin
-        if (RST_I = '1')then
-            ACK_O <= '0';
-        elsif (rising_edge(CLK_I))then
-            if ((STB_I_z = '1')and(STB_I_z2 = '0'))then
-                ACK_O <= '1';
+        if (wb_rst_i = '1')then
+            reg_ack <= '0';
+        elsif (rising_edge(wb_clk_i))then
+            if ((wb_stb_i_z = '1')and(wb_stb_i_z2 = '0'))then
+                reg_ack <= '1';
             else
-                ACK_O <= '0';
+                reg_ack <= '0';
             end if;
         end if;
     end process;
@@ -277,21 +325,22 @@ begin
 -- DECODE ADDRESSES INTO DIFFERENT REGIONS
 --------------------------------------------------------------------------------
 
-    wishbone_sel <= CYC_I and STB_I;
+    wishbone_sel <= (wb_cyc_i and wb_stb_i) or wb_stb_i_z or wb_stb_i_z2;
+    --wishbone_sel <= wb_stb_i or wb_stb_i_z;
 
-    reg_sel   <= wishbone_sel when ((ADR_I >= REGISTERS_OFFSET) and (ADR_I <= REGISTERS_HIGH)) else '0';
-    txbuf_sel <= wishbone_sel when ((ADR_I >= TX_BUFFER_OFFSET) and (ADR_I <= TX_BUFFER_HIGH)) else '0';
-    rxbuf_sel <= wishbone_sel when ((ADR_I >= RX_BUFFER_OFFSET) and (ADR_I <= RX_BUFFER_HIGH)) else '0';
-    arp_sel   <= wishbone_sel when ((ADR_I >= ARP_CACHE_OFFSET) and (ADR_I <= ARP_CACHE_HIGH)) else '0';
+    reg_sel   <= wishbone_sel when ((wb_adr_i >= REGISTERS_OFFSET) and (wb_adr_i <= REGISTERS_HIGH)) else '0';
+    txbuf_sel <= wishbone_sel when ((wb_adr_i >= TX_BUFFER_OFFSET) and (wb_adr_i <= TX_BUFFER_HIGH)) else '0';
+    rxbuf_sel <= wishbone_sel when ((wb_adr_i >= RX_BUFFER_OFFSET) and (wb_adr_i <= RX_BUFFER_HIGH)) else '0';
+    arp_sel   <= wishbone_sel when ((wb_adr_i >= ARP_CACHE_OFFSET) and (wb_adr_i <= ARP_CACHE_HIGH)) else '0';
 
-    reg_addr   <= ADR_I - REGISTERS_OFFSET;
-    rxbuf_addr <= ADR_I - RX_BUFFER_OFFSET;
-    txbuf_addr <= ADR_I - TX_BUFFER_OFFSET;
-    arp_addr   <= ADR_I - ARP_CACHE_OFFSET;
+    reg_addr   <= wb_adr_i - REGISTERS_OFFSET;
+    rxbuf_addr <= wb_adr_i - RX_BUFFER_OFFSET;
+    txbuf_addr <= wb_adr_i - TX_BUFFER_OFFSET;
+    arp_addr   <= wb_adr_i - ARP_CACHE_OFFSET;
 
-    gen_reg_sel_z1 : process(CLK_I)
+    gen_reg_sel_z1 : process(wb_clk_i)
     begin
-        if (rising_edge(CLK_I))then
+        if (rising_edge(wb_clk_i))then
             reg_sel_z1 <= reg_sel;
         end if;
     end process;
@@ -309,16 +358,26 @@ begin
     cpu_tx_buffer_rd_data(63 downto 32);
 
     -- SWAP DATA ORDER TO MATCH THAT USED IN MICROBLAZE
-    rx_data_int <=
-    (cpu_rx_buffer_rd_data(15 downto  0) & cpu_rx_buffer_rd_data(31 downto 16)) when (rxbuf_addr(2) = '1') else
-    (cpu_rx_buffer_rd_data(47 downto 32) & cpu_rx_buffer_rd_data(63 downto 48));
+    SWAP: if (RX_2B_SWAP) generate
+        rx_data_int <=
+        (cpu_rx_buffer_rd_data(15 downto  0) & cpu_rx_buffer_rd_data(31 downto 16)) when (rxbuf_addr(2) = '1') else
+        (cpu_rx_buffer_rd_data(47 downto 32) & cpu_rx_buffer_rd_data(63 downto 48));
+    end generate;
+    NO_SWAP: if (not RX_2B_SWAP) generate
+        rx_data_int <=
+        cpu_rx_buffer_rd_data(31 downto 0) when (rxbuf_addr(2) = '1') else
+        cpu_rx_buffer_rd_data(63 downto 32);
+    end generate;
 
     cpu_rx_size_int <= ("000" & X"00") when (cpu_rx_ack_reg = '1') else cpu_rx_size;
 
     reg_data_int <=
-    (X"00000000")                                                                when (reg_data_src = REG_CORE_TYPE)        else
-    (X"00000000")                                                                when (reg_data_src = REG_MAX_BUF_SIZE)     else
-    (X"00000000")                                                                when (reg_data_src = REG_WORD_LENS)        else
+    -- CPU TX/RX enabled. Version 1. 40GbE Core
+    (X"01010104")                                                                when (reg_data_src = REG_CORE_TYPE)        else
+    -- TX/RX buffer sizes = 16384 bytes
+    (X"40004000")                                                                when (reg_data_src = REG_MAX_BUF_SIZE)     else
+    -- TX/RX word size = 64 bits
+    (X"00080008")                                                                when (reg_data_src = REG_WORD_LENS)        else
     (X"0000" & local_mac_reg(47 downto 32))                                      when (reg_data_src = REG_LOCAL_MAC_1)      else
     local_mac_reg(31 downto 0)                                                   when (reg_data_src = REG_LOCAL_MAC_0)      else
     local_ip_reg(31 downto 0)                                                    when (reg_data_src = REG_LOCAL_IPADDR)     else
@@ -327,6 +386,7 @@ begin
     local_mc_recv_ip_reg(31 downto 0)                                            when (reg_data_src = REG_MC_RECV_IP)       else
     local_mc_recv_ip_mask_reg(31 downto 0)                                       when (reg_data_src = REG_MC_RECV_IP_MASK)  else
     ("00000" & cpu_tx_size_reg & "00000" & cpu_rx_size_int)                      when (reg_data_src = REG_BUFFER_SIZES)     else
+    --X"A5A5A5A5"                      when (reg_data_src = REG_BUFFER_SIZES)     else
     (X"00" & "0000000" & soft_reset_reg & X"00" & "0000000" & local_enable_reg)  when (reg_data_src = REG_PROMISC_RST_EN)   else
     (X"0000" & local_port_reg)                                                   when (reg_data_src = REG_VALID_PORTS)      else
 
@@ -347,20 +407,25 @@ begin
     cnt_reset_reg                                                                when (reg_data_src = REG_CNT_RESET)        else
     (others => '0');
 
-    --DAT_O <=
-    dbg_dat_o <=
-    arp_data_int when (arp_sel   = '1') else
+    reg_dat_o_int <=
+    arp_data_int when (arp_sel    = '1') else
     tx_data_int  when (txbuf_sel = '1') else
     rx_data_int  when (rxbuf_sel = '1') else
     reg_data_int;
+    
+    --AI: latch data out when wishbone ack is asserted
+    wb_dat_o <= reg_dat_o_int when (reg_ack = '1') else x"00000000";
+    dbg_dat_o <= reg_dat_o_int when (reg_ack = '1') else x"00000000";
+    wb_ack_o <= reg_ack;
+    dbg_ack_o <= reg_ack;
 
 --------------------------------------------------------------------------------
 -- REGISTER HANDLING
 --------------------------------------------------------------------------------
 
-    gen_reg : process(RST_I, CLK_I)
+    gen_reg : process(wb_rst_i, wb_clk_i)
     begin
-        if (RST_I = '1')then
+        if (wb_rst_i = '1')then
             local_mac_reg             <= FABRIC_MAC;
             local_ip_reg              <= FABRIC_IP;
             local_gateway_reg         <= FABRIC_GATEWAY;
@@ -373,7 +438,7 @@ begin
             cpu_rx_ack_reg            <= '0';
             soft_reset_reg            <= '0';
             reg_data_src              <= "00000000";
-        elsif (rising_edge(CLK_I))then
+        elsif (rising_edge(wb_clk_i))then
 
             if (cpu_tx_done = '1')then
                 cpu_tx_size_reg  <= (others => '0');
@@ -390,128 +455,128 @@ begin
 
             if ((reg_sel = '1')and(reg_sel_z1 = '0'))then
                 reg_data_src <= reg_addr(9 downto 2);
-                if (WE_I = '1')then
+                if (wb_we_i = '1')then
                     case (reg_addr(9 downto 2))is
                         when REG_LOCAL_MAC_1 =>
-                        if (SEL_I(0) = '1')then
-                            local_mac_reg(39 downto 32) <= DAT_I(7 downto 0);
+                        if (wb_sel_i(0) = '1')then
+                            local_mac_reg(39 downto 32) <= wb_dat_i(7 downto 0);
                         end if;
-                        if (SEL_I(1) = '1')then
-                            local_mac_reg(47 downto 40) <= DAT_I(15 downto 8);
+                        if (wb_sel_i(1) = '1')then
+                            local_mac_reg(47 downto 40) <= wb_dat_i(15 downto 8);
                         end if;
 
                         when REG_LOCAL_MAC_0 =>
-                        if (SEL_I(0) = '1')then
-                            local_mac_reg(7 downto 0) <= DAT_I(7 downto 0);
+                        if (wb_sel_i(0) = '1')then
+                            local_mac_reg(7 downto 0) <= wb_dat_i(7 downto 0);
                         end if;
-                        if (SEL_I(1) = '1')then
-                            local_mac_reg(15 downto 8)  <= DAT_I(15 downto 8);
+                        if (wb_sel_i(1) = '1')then
+                            local_mac_reg(15 downto 8)  <= wb_dat_i(15 downto 8);
                         end if;
-                        if (SEL_I(2) = '1')then
-                            local_mac_reg(23 downto 16) <= DAT_I(23 downto 16);
+                        if (wb_sel_i(2) = '1')then
+                            local_mac_reg(23 downto 16) <= wb_dat_i(23 downto 16);
                         end if;
-                        if (SEL_I(3) = '1')then
-                            local_mac_reg(31 downto 24) <= DAT_I(31 downto 24);
+                        if (wb_sel_i(3) = '1')then
+                            local_mac_reg(31 downto 24) <= wb_dat_i(31 downto 24);
                         end if;
 
                         when REG_LOCAL_IPADDR =>
-                        if (SEL_I(0) = '1')then
-                            local_ip_reg(7 downto 0) <= DAT_I(7 downto 0);
+                        if (wb_sel_i(0) = '1')then
+                            local_ip_reg(7 downto 0) <= wb_dat_i(7 downto 0);
                         end if;
-                        if (SEL_I(1) = '1')then
-                            local_ip_reg(15 downto 8) <= DAT_I(15 downto 8);
+                        if (wb_sel_i(1) = '1')then
+                            local_ip_reg(15 downto 8) <= wb_dat_i(15 downto 8);
                         end if;
-                        if (SEL_I(2) = '1')then
-                            local_ip_reg(23 downto 16) <= DAT_I(23 downto 16);
+                        if (wb_sel_i(2) = '1')then
+                            local_ip_reg(23 downto 16) <= wb_dat_i(23 downto 16);
                         end if;
-                        if (SEL_I(3) = '1')then
-                            local_ip_reg(31 downto 24) <= DAT_I(31 downto 24);
+                        if (wb_sel_i(3) = '1')then
+                            local_ip_reg(31 downto 24) <= wb_dat_i(31 downto 24);
                         end if;
 
                         when REG_LOCAL_GATEWAY =>
-                        if (SEL_I(0) = '1')then
-                            local_gateway_reg(7 downto 0) <= DAT_I(7 downto 0);
+                        if (wb_sel_i(0) = '1')then
+                            local_gateway_reg(7 downto 0) <= wb_dat_i(7 downto 0);
                         end if;
 
                         when REG_LOCAL_NETMASK =>
-                        if (SEL_I(0) = '1')then
-                            local_netmask_reg(7 downto 0) <= DAT_I(7 downto 0);
+                        if (wb_sel_i(0) = '1')then
+                            local_netmask_reg(7 downto 0) <= wb_dat_i(7 downto 0);
                         end if;
-                        if (SEL_I(1) = '1')then
-                            local_netmask_reg(15 downto 8) <= DAT_I(15 downto 8);
+                        if (wb_sel_i(1) = '1')then
+                            local_netmask_reg(15 downto 8) <= wb_dat_i(15 downto 8);
                         end if;
-                        if (SEL_I(2) = '1')then
-                            local_netmask_reg(23 downto 16) <= DAT_I(23 downto 16);
+                        if (wb_sel_i(2) = '1')then
+                            local_netmask_reg(23 downto 16) <= wb_dat_i(23 downto 16);
                         end if;
-                        if (SEL_I(3) = '1')then
-                            local_netmask_reg(31 downto 24) <= DAT_I(31 downto 24);
+                        if (wb_sel_i(3) = '1')then
+                            local_netmask_reg(31 downto 24) <= wb_dat_i(31 downto 24);
                         end if;
 
                         when REG_MC_RECV_IP =>
-                        if (SEL_I(0) = '1')then
-                            local_mc_recv_ip_reg(7 downto 0) <= DAT_I(7 downto 0);
+                        if (wb_sel_i(0) = '1')then
+                            local_mc_recv_ip_reg(7 downto 0) <= wb_dat_i(7 downto 0);
                         end if;
-                        if (SEL_I(1) = '1')then
-                            local_mc_recv_ip_reg(15 downto 8) <= DAT_I(15 downto 8);
+                        if (wb_sel_i(1) = '1')then
+                            local_mc_recv_ip_reg(15 downto 8) <= wb_dat_i(15 downto 8);
                         end if;
-                        if (SEL_I(2) = '1')then
-                            local_mc_recv_ip_reg(23 downto 16) <= DAT_I(23 downto 16);
+                        if (wb_sel_i(2) = '1')then
+                            local_mc_recv_ip_reg(23 downto 16) <= wb_dat_i(23 downto 16);
                         end if;
-                        if (SEL_I(3) = '1')then
-                            local_mc_recv_ip_reg(31 downto 24) <= DAT_I(31 downto 24);
+                        if (wb_sel_i(3) = '1')then
+                            local_mc_recv_ip_reg(31 downto 24) <= wb_dat_i(31 downto 24);
                         end if;
 
                         when REG_MC_RECV_IP_MASK =>
-                        if (SEL_I(0) = '1')then
-                            local_mc_recv_ip_mask_reg(7 downto 0) <= DAT_I(7 downto 0);
+                        if (wb_sel_i(0) = '1')then
+                            local_mc_recv_ip_mask_reg(7 downto 0) <= wb_dat_i(7 downto 0);
                         end if;
-                        if (SEL_I(1) = '1')then
-                            local_mc_recv_ip_mask_reg(15 downto 8) <= DAT_I(15 downto 8);
+                        if (wb_sel_i(1) = '1')then
+                            local_mc_recv_ip_mask_reg(15 downto 8) <= wb_dat_i(15 downto 8);
                         end if;
-                        if (SEL_I(2) = '1')then
-                            local_mc_recv_ip_mask_reg(23 downto 16) <= DAT_I(23 downto 16);
+                        if (wb_sel_i(2) = '1')then
+                            local_mc_recv_ip_mask_reg(23 downto 16) <= wb_dat_i(23 downto 16);
                         end if;
-                        if (SEL_I(3) = '1')then
-                            local_mc_recv_ip_mask_reg(31 downto 24) <= DAT_I(31 downto 24);
+                        if (wb_sel_i(3) = '1')then
+                            local_mc_recv_ip_mask_reg(31 downto 24) <= wb_dat_i(31 downto 24);
                         end if;
 
                         when REG_BUFFER_SIZES =>
-                        if ((SEL_I(0) = '1')and(DAT_I(10 downto 0) = ("000" & X"00")))then
+                        if ((wb_sel_i(0) = '1')and(wb_dat_i(10 downto 0) = ("000" & X"00")))then
                             cpu_rx_ack_reg <= '1';
                         end if;
-                        if (SEL_I(2) = '1')then
-                            cpu_tx_size_reg <= DAT_I(26 downto 16);
+                        if (wb_sel_i(2) = '1')then
+                            cpu_tx_size_reg <= wb_dat_i(26 downto 16);
                             cpu_tx_ready_reg <= '1';
                         end if;
 
                         when REG_PROMISC_RST_EN =>
-                        if (SEL_I(0) = '1')then
-                            local_enable_reg <= DAT_I(0);
+                        if (wb_sel_i(0) = '1')then
+                            local_enable_reg <= wb_dat_i(0);
                         end if;
-                        if ((SEL_I(2) = '1')and(DAT_I(24) = '1'))then
+                        if ((wb_sel_i(2) = '1')and(wb_dat_i(24) = '1'))then
                             soft_reset_reg <= '1';
                         end if;
 
                         when REG_VALID_PORTS =>
-                        if (SEL_I(0) = '1')then
-                            local_port_reg(7 downto 0) <= DAT_I(7 downto 0);
+                        if (wb_sel_i(0) = '1')then
+                            local_port_reg(7 downto 0) <= wb_dat_i(7 downto 0);
                         end if;
-                        if (SEL_I(1) = '1')then
-                            local_port_reg(15 downto 8) <= DAT_I(15 downto 8);
+                        if (wb_sel_i(1) = '1')then
+                            local_port_reg(15 downto 8) <= wb_dat_i(15 downto 8);
                         end if;
                         
                         when REG_CNT_RESET =>
-                        if (SEL_I(0) = '1')then
-                            cnt_reset_reg(7 downto 0) <= DAT_I(7 downto 0);
+                        if (wb_sel_i(0) = '1')then
+                            cnt_reset_reg(7 downto 0) <= wb_dat_i(7 downto 0);
                         end if;
-                        if (SEL_I(1) = '1')then
-                            cnt_reset_reg(15 downto 8) <= DAT_I(15 downto 8);
+                        if (wb_sel_i(1) = '1')then
+                            cnt_reset_reg(15 downto 8) <= wb_dat_i(15 downto 8);
                         end if;
-                        if (SEL_I(2) = '1')then
-                            cnt_reset_reg(23 downto 16) <= DAT_I(23 downto 16);
+                        if (wb_sel_i(2) = '1')then
+                            cnt_reset_reg(23 downto 16) <= wb_dat_i(23 downto 16);
                         end if;
-                        if (SEL_I(3) = '1')then
-                            cnt_reset_reg(31 downto 24) <= DAT_I(31 downto 24);
+                        if (wb_sel_i(3) = '1')then
+                            cnt_reset_reg(31 downto 24) <= wb_dat_i(31 downto 24);
                         end if;
 
                         when others =>
@@ -526,9 +591,9 @@ begin
 -- MEMORY HANDLING
 --------------------------------------------------------------------------------
 
-    gen_write_data : process(CLK_I)
+    gen_write_data : process(wb_clk_i)
     begin
-        if (rising_edge(CLK_I))then
+        if (rising_edge(wb_clk_i))then
             arp_cache_we <= '0';
             tx_buffer_we <= '0';
 
@@ -538,14 +603,14 @@ begin
             if (arp_sel = '1')then
                 if (arp_addr(2) = '0')then
                     -- NOT SURE ABOUT ENDIANNESS HERE!!!
-                    if (SEL_I(0) = '1')then
-                        write_data(39 downto 32) <= DAT_I(7 downto 0);
+                    if (wb_sel_i(0) = '1')then
+                        write_data(39 downto 32) <= wb_dat_i(7 downto 0);
                     else
                         write_data(39 downto 32) <= arp_cache_rd_data(39 downto 32);
                     end if;
 
-                    if (SEL_I(1) = '1')then
-                        write_data(47 downto 40) <= DAT_I(15 downto 8);
+                    if (wb_sel_i(1) = '1')then
+                        write_data(47 downto 40) <= wb_dat_i(15 downto 8);
                     else
                         write_data(47 downto 40) <= arp_cache_rd_data(47 downto 40);
                     end if;
@@ -553,26 +618,26 @@ begin
                     -- WRITE LOWER 32 BITS AFTER THE UPPER 16 BITS
                     arp_cache_we <= '1';
 
-                    if (SEL_I(0) = '1')then
-                        write_data(7 downto 0) <= DAT_I(7 downto 0);
+                    if (wb_sel_i(0) = '1')then
+                        write_data(7 downto 0) <= wb_dat_i(7 downto 0);
                     else
                         write_data(7 downto 0) <= arp_cache_rd_data(7 downto 0);
                     end if;
 
-                    if (SEL_I(1) = '1')then
-                        write_data(15 downto 8) <= DAT_I(15 downto 8);
+                    if (wb_sel_i(1) = '1')then
+                        write_data(15 downto 8) <= wb_dat_i(15 downto 8);
                     else
                         write_data(15 downto 8) <= arp_cache_rd_data(15 downto 8);
                     end if;
 
-                    if (SEL_I(2) = '1')then
-                        write_data(23 downto 16) <= DAT_I(23 downto 16);
+                    if (wb_sel_i(2) = '1')then
+                        write_data(23 downto 16) <= wb_dat_i(23 downto 16);
                     else
                         write_data(23 downto 16) <= arp_cache_rd_data(23 downto 16);
                     end if;
 
-                    if (SEL_I(3) = '1')then
-                        write_data(31 downto 24) <= DAT_I(31 downto 24);
+                    if (wb_sel_i(3) = '1')then
+                        write_data(31 downto 24) <= wb_dat_i(31 downto 24);
                     else
                         write_data(31 downto 24) <= arp_cache_rd_data(31 downto 24);
                     end if;
@@ -585,51 +650,51 @@ begin
 
                 if (txbuf_addr(2) = '0')then
                     -- NOT SURE ABOUT ENDIANNESS HERE!!!
-                    if (SEL_I(0) = '1')then
-                        write_data(39 downto 32) <= DAT_I(23 downto 16); --DAT_I(7 downto 0);
+                    if (wb_sel_i(0) = '1')then
+                        write_data(39 downto 32) <= wb_dat_i(23 downto 16); --wb_dat_i(7 downto 0);
                     else
                         write_data(39 downto 32) <= cpu_tx_buffer_rd_data(39 downto 32);
                     end if;
 
-                    if (SEL_I(1) = '1')then
-                        write_data(47 downto 40) <= DAT_I(31 downto 24); --DAT_I(15 downto 8);
+                    if (wb_sel_i(1) = '1')then
+                        write_data(47 downto 40) <= wb_dat_i(31 downto 24); --wb_dat_i(15 downto 8);
                     else
                         write_data(47 downto 40) <= cpu_tx_buffer_rd_data(47 downto 40);
                     end if;
 
-                    if (SEL_I(2) = '1')then
-                        write_data(55 downto 48) <= DAT_I(7 downto 0); --DAT_I(23 downto 16);
+                    if (wb_sel_i(2) = '1')then
+                        write_data(55 downto 48) <= wb_dat_i(7 downto 0); --wb_dat_i(23 downto 16);
                     else
                         write_data(55 downto 48) <= cpu_tx_buffer_rd_data(55 downto 48);
                     end if;
 
-                    if (SEL_I(3) = '1')then
-                        write_data(63 downto 56) <= DAT_I(15 downto 8); --DAT_I(31 downto 24);
+                    if (wb_sel_i(3) = '1')then
+                        write_data(63 downto 56) <= wb_dat_i(15 downto 8); --wb_dat_i(31 downto 24);
                     else
                         write_data(63 downto 56) <= cpu_tx_buffer_rd_data(63 downto 56);
                     end if;
 
                 else
-                    if (SEL_I(0) = '1')then
-                        write_data(7 downto 0) <= DAT_I(23 downto 16); --DAT_I(7 downto 0);
+                    if (wb_sel_i(0) = '1')then
+                        write_data(7 downto 0) <= wb_dat_i(23 downto 16); --wb_dat_i(7 downto 0);
                     else
                         write_data(7 downto 0) <= cpu_tx_buffer_rd_data(7 downto 0);
                     end if;
 
-                    if (SEL_I(1) = '1')then
-                        write_data(15 downto 8) <= DAT_I(31 downto 24); --DAT_I(15 downto 8);
+                    if (wb_sel_i(1) = '1')then
+                        write_data(15 downto 8) <= wb_dat_i(31 downto 24); --wb_dat_i(15 downto 8);
                     else
                         write_data(15 downto 8) <= cpu_tx_buffer_rd_data(15 downto 8);
                     end if;
 
-                    if (SEL_I(2) = '1')then
-                        write_data(23 downto 16) <= DAT_I(7 downto 0); --DAT_I(23 downto 16);
+                    if (wb_sel_i(2) = '1')then
+                        write_data(23 downto 16) <= wb_dat_i(7 downto 0); --wb_dat_i(23 downto 16);
                     else
                         write_data(23 downto 16) <= cpu_tx_buffer_rd_data(23 downto 16);
                     end if;
 
-                    if (SEL_I(3) = '1')then
-                        write_data(31 downto 24) <= DAT_I(15 downto 8); --DAT_I(31 downto 24);
+                    if (wb_sel_i(3) = '1')then
+                        write_data(31 downto 24) <= wb_dat_i(15 downto 8); --wb_dat_i(31 downto 24);
                     else
                         write_data(31 downto 24) <= cpu_tx_buffer_rd_data(31 downto 24);
                     end if;
