@@ -60,10 +60,9 @@ module flit_gen_user #(
     output wire DATA_VALID,
     output wire RD_READY,
     output wire [6:0] FLIT_TAIL_ERRSTAT,
-    output wire [3:0] FLIT_ERROR_RESP
+    output wire [3:0] FLIT_ERROR_RESP,
+    output wire FLIT_ERROR_RESP_PULSE
     
-
-
   );
   
   
@@ -115,6 +114,9 @@ module flit_gen_user #(
   (* mark_debug = "true" *) wire [63:0] dbg_wr_req_count; //Virtual test probe for the logic analyser
   (* mark_debug = "true" *) wire [63:0] dbg_rd_req_count; //Virtual test probe for the logic analyser
   
+  (* mark_debug = "true" *) wire [2:0] dbg_flit_err_resp_pulse_gen_state; //Virtual test probe for the logic analyser
+  (* mark_debug = "true" *) wire dbg_flit_err_resp_pulse; //Virtual test probe for the logic analyser
+  
   
   assign dbg_flit_gen_post_done = POST_DONE;
   assign dbg_flit_gen_s_tx_tvalid = s_axis_tx_TVALID_i; // & s_axis_tx_TREADY;
@@ -155,7 +157,9 @@ module flit_gen_user #(
   assign dbg_wr_req_count = wr_req_count;
   assign dbg_rd_req_count = rd_req_count;
   
-  
+  assign dbg_flit_err_resp_pulse_gen_state = flit_err_resp_pulse_gen_state;
+  assign dbg_flit_err_resp_pulse = flit_err_resp_pulse;
+    
 // FLIT Layout
 // -----------
 // 1 FLIT = 128 bits. Thus 4 FLITS per AXI word (512bits)
@@ -300,9 +304,7 @@ module flit_gen_user #(
   localparam WAIT_AXI_TX_RDY    = 4'd1; // Wait for AXI TX bus to become available
   localparam STATE_WR_RD_DATA   = 4'd2; // Issue WR32 Request header + write data [255:0] or RD32 Requests
   localparam STATE_CHK_RD_DATA  = 4'd5; // Wait for RX AXI bus to present valid return data and then check it for errors
-
-
-
+  
   // ***************************************************************************************************************************************************************************************
   // Request State Machine: Issue either write or read request for 256bit (32byte) 
   // ***************************************************************************************************************************************************************************************
@@ -505,8 +507,8 @@ module flit_gen_user #(
       if ((m_axis_rx_TVALID_R == 1'b1) && (POST_DONE == 1'b1))
       begin
           r_data_valid_rx_valid_count <= r_data_valid_rx_valid_count + 1'b1;
-          r_flit_error_rsp [3:0] <= m_axis_rx_TUSER_R[15:12];
-      end 
+          r_flit_error_rsp [3:0] <= m_axis_rx_TUSER_R[15:12];          
+      end
             
       // in the case were 2 valid responses falls on the same AXI transaction on the previous cycle, this module asserted m_axis_rx_TREADY_i <= 1'b0 (not ready - hold off for one cycle)
       // Now generate data valid from 2nd transaction data
@@ -649,9 +651,64 @@ module flit_gen_user #(
     end    
   end
 
+  //State machine FLIT_ERROR_RESP Pulse Generate state elements
+  localparam STATE_CHECK_ERROR = 3'd0; // Default state: wait for FLIT_ERROR_RESP error to occur, exit when FLIT_ERROR_RESP occurs 
+  localparam STATE_ASSERT_ERROR = 3'd1; //Assert FLIT_ERROR_RESP_PULSE signal  
+  localparam STATE_DEASSERT_ERROR = 3'd2; //Deassert FLIT_ERROR_RESP_PULSE and exit to STATE_CHECK_ERROR when FLIT_ERROR_RESP is low again
+  
+  // Signals used in this state machine
+  reg [2:0] flit_err_resp_pulse_gen_state;
+  reg flit_err_resp_pulse;
+  
+ // ***************************************************************************************************************************************************************************************
+  // FLIT Error Response Pulse Generate State Machine: Generate a pulse every time a FLIT error response occurs, so that the DSP functionality that stops the HMC write/read process when 
+  // a FLIT response error occurs can restart as the single is pulsed and not active high, which causes the mechanism to hang, as the FLIT error response is only cleared when the next
+  // transaction is read. This can't occur if the HMC read/write process is halted.
+  // ***************************************************************************************************************************************************************************************
+  always @(posedge CLK) begin : flit_err_resp_pulse_gen
+
+  if (RST) begin
+    flit_err_resp_pulse_gen_state <= STATE_CHECK_ERROR;
+    flit_err_resp_pulse <= 1'b0;
+   
+  end else begin
+
+      case (flit_err_resp_pulse_gen_state)
+        // State: Entry to state machine (from reset)
+        STATE_CHECK_ERROR: begin
+          flit_err_resp_pulse <= 1'b0;
+          //Wait until a FLIT error response is detected in the Receiver and then exit to state that asserts error
+          if (r_flit_error_rsp[0] == 1'b1 || r_flit_error_rsp[1] == 1'b1 || r_flit_error_rsp[2] == 1'b1 || r_flit_error_rsp[3] == 1'b1 ) begin
+            flit_err_resp_pulse_gen_state <= STATE_ASSERT_ERROR; 
+          //Stay in this state if no error
+          end else begin
+            flit_err_resp_pulse_gen_state <= STATE_CHECK_ERROR;
+          end
+        end
+        STATE_ASSERT_ERROR: begin
+          //Assert the error on the FLIT error response pulse signal
+          flit_err_resp_pulse <= 1'b1;
+          flit_err_resp_pulse_gen_state <= STATE_DEASSERT_ERROR;
+        end
+        STATE_DEASSERT_ERROR: begin
+          flit_err_resp_pulse <= 1'b0;
+          //Wait in this state until a FLIT error response is cleared and exit to STATE_CHECK_ERROR
+          if (r_flit_error_rsp[0] == 1'b0 && r_flit_error_rsp[1] == 1'b0 && r_flit_error_rsp[2] == 1'b0 && r_flit_error_rsp[3] == 1'b0 ) begin
+            flit_err_resp_pulse_gen_state <= STATE_CHECK_ERROR; 
+          //Stay in this state if FLIT error response is not cleared
+          end else begin
+            flit_err_resp_pulse_gen_state <= STATE_DEASSERT_ERROR;
+          end
+        end                    
+      endcase
+    end    
+  end
+  
+
   assign TAG_OUT = rd_tag;
   assign DATA_VALID = rd_data_val;
   assign DATA_OUT = rd_data;
   assign FLIT_TAIL_ERRSTAT = rd_tail[26:20]; //Assign ERRSTAT register of FLIT tail
+  assign FLIT_ERROR_RESP_PULSE = flit_err_resp_pulse;
 
 endmodule

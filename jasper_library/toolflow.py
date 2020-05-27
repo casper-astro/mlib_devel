@@ -354,14 +354,18 @@ class Toolflow(object):
         Then calls each yellow block's constructor.
         Runs a system-wide drc before returning.
         """
+        
+        
         self._parse_periph_file()
         self._extract_plat_info()
         self.periph_objs = []
+        
         for pk in list(self.peripherals.keys()):
             self.logger.debug('Generating Yellow Block: %s' % pk)
             self.periph_objs.append(yellow_block.YellowBlock.make_block(
                 self.peripherals[pk], self.plat))
         self._expand_children(self.periph_objs)
+        
         self._drc()
         
     def _expand_children(self, population, parents=None, recursive=True):
@@ -568,7 +572,6 @@ class Toolflow(object):
         self.logger.info('Extracting constraints from peripherals')
         self.check_attr_exists('periph_objs', 'gen_periph_objs()')
         self.constraints = []
-        peripherals = self.peripherals
         for obj in self.periph_objs:
             c = obj.gen_constraints()
             if c is not None:
@@ -792,6 +795,7 @@ class Toolflow(object):
         Generate xml memory map files that represent each AXI4-Lite interface for Oxford's xml2vhdl.
         """
         # Generate memory map xml file for each interface in memory_map
+
         for interface in list(memory_map.keys()):
             xml_root = ET.Element('node')
             xml_root.set('id', interface)
@@ -820,6 +824,10 @@ class Toolflow(object):
                 if hasattr(reg, 'ram') and reg.ram==True:
                     node.set('hw_dp_ram', 'yes')
                     node.set('size', str(reg.nbytes//4)) # this needs to be in words not bytes!!! Dammit Janet
+
+                    # Need to make special mention of the bitwidth (data width) here
+                    # - Reading from xml2slave.py - need the key 'hw_dp_ram_width'
+                    node.set('hw_dp_ram_width', str(reg.data_width))
 
             # output xml file describing memory map as input for xml2vhdl
             myxml = xml.dom.minidom.parseString(ET.tostring(xml_root))
@@ -860,7 +868,7 @@ class Toolflow(object):
     def xml2vhdl(self):
         """
         Function to call Oxford's python code to generate AXI4-Lite VHDL register 
-        interfaces from a XML memory map specification.
+        interfaces from an XML memory map specification.
 
         Obtained from: https://bitbucket.org/ricch/xml2vhdl/src/master/
         """
@@ -877,6 +885,7 @@ class Toolflow(object):
         # generate xml interconnect for input
         self.generate_xml_ic(self.top.memory_map)
         # execute xml2vhdl generation
+
         try:
             # Xml2VhdlGenerate takes arguments as attributes of an args class
             args = helper.arguments.Arguments()

@@ -99,9 +99,13 @@ function fir_tap_async_init(blk)
     if async_ops,
         set_param([blk, '/Register0'], 'en', 'on');
         set_param([blk, '/Register1'], 'en', 'on');
+        set_param([blk, '/Mult0'], 'en', 'on');        
+        set_param([blk, '/Mult1'], 'en', 'on');
     else
         set_param([blk, '/Register0'], 'en', 'off');
         set_param([blk, '/Register1'], 'en', 'off');
+        set_param([blk, '/Mult0'], 'en', 'off');        
+        set_param([blk, '/Mult1'], 'en', 'off');
     end
 
     reuse_block(blk, 'a_out', 'built-in/Outport', ...
@@ -123,7 +127,10 @@ function fir_tap_async_init(blk)
     if async_ops,
         add_line(blk, 'dv_in/1', 'Register0/2', 'autorouting', 'on');
         add_line(blk, 'dv_in/1', 'Register1/2', 'autorouting', 'on');
+        add_line(blk, 'dv_in/1', 'Mult0/3', 'autorouting', 'on');
+        add_line(blk, 'dv_in/1', 'Mult1/3', 'autorouting', 'on');
     end
+    
     add_line(blk,'b/1','Mult1/2', 'autorouting', 'on');
     add_line(blk,'b/1','Register1/1', 'autorouting', 'on');
     add_line(blk,'a/1','Mult0/2', 'autorouting', 'on');

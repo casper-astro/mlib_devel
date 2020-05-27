@@ -8,6 +8,12 @@ pcie_gty_rx_p (LOC only) # PCIe RX transceiver pins, p-side
 pcie_gty_tx_p (LOC only) # PCIe TX transceiver pins, p-side
 pcie_rst_n               # PCI connector active-low reset signal
 pcie_refclk_p (LOC only) # PCI reference clock pin, p-side           
+
+Requires the following config section:
+
+pcie:
+  loc: PCIE4C_X1Y0 # LOC of PCIE core (should be MCAP capable if using PCIe programming methods)
+  use_tandem: True # True to turn on PCIe tandem with field updates in IP core. Requires an appropriate PCIE LOC. See Xilinx PG213
 """
 
 class pci_dma_axilite_master(YellowBlock):
@@ -15,6 +21,15 @@ class pci_dma_axilite_master(YellowBlock):
         self.add_source('pci_dma_axilite_master/*.xci')
         self.add_source('utils/cdc_synchroniser.vhd')
         self.module_name = 'pci_dma_axilite_master'
+        try:
+            self.use_tandem = self.platform.conf['pcie']['use_tandem']
+        except KeyError:
+            self.use_tandem = False
+        # Update the PCIe block location if the platform's config yaml specified one
+        try:
+            self.pcie_loc = self.platform.conf['pcie']['loc']
+        except KeyError:
+            self.pcie_loc = None
 
     def modify_top(self,top):
         inst = top.get_instance(entity=self.module_name, name=self.module_name+'_inst')
@@ -75,6 +90,11 @@ class pci_dma_axilite_master(YellowBlock):
         inst.add_port('sys_clk_gt', 'pcie_refclk')   # signal comes through IBUFDS_GTE4 (see below)
         inst.add_port('usr_irq_req', '1\'b0')
 
+        if self.use_tandem:
+            inst.add_port('cap_gnt', '1\'b1')
+            inst.add_port('cap_rel', '1\'b0')
+            inst.add_port('cap_req', '')
+
         # Instantiate IBUFDS_GTE4 for the reference clock
         ibuf = top.get_instance(entity='IBUFDS_GTE4', name='pci_refclk_buf')
         ibuf.add_port('I', 'pcie_refclk_p', dir='in', parent_port=True)
@@ -99,13 +119,18 @@ class pci_dma_axilite_master(YellowBlock):
     def gen_tcl_cmds(self):
         tcl_cmds = {}
         tcl_cmds['pre_synth'] = []
+        tcl_cmds['post_synth'] = []
         # Update the PCIe block location if the platform's config yaml specified one
-        try:
-            pcie_loc = self.platform.conf['pcie']['loc']
+        if self.pcie_loc is not None:
             tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.pcie_blk_locn {%s}] [get_ips %s]' % (pcie_loc, self.module_name)]
-        except KeyError:
-            pass
+        # Try to turn on the tandem pcie + field updates IP option.
+        # This will only be available if an appropriate PCIE LOC has been selected. See Xilinx PG213
+        # IP is saved in the library with MCAP option set to None.
+        if self.use_tandem:
+            tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.mcap_enablement {Tandem_PCIe_with_Field_Updates}] [get_ips %s]' % (self.module_name)]
+
         ## Make AXI clock asynchronous to the user clock
         # Need to wait until synthesis is complete for all the clocks to exist
-        tcl_cmds['post_synth'] = ['set_clock_groups -name asyncclocks_pcie_usr_clk -asynchronous -group [get_clocks -include_generated_clocks -of_objects [get_nets user_clk]] -group [get_clocks -include_generated_clocks axil_clk]']
+        tcl_cmds['post_synth'] += ['set_clock_groups -name asyncclocks_axi_sys_clk -asynchronous -group [get_clocks -include_generated_clocks sys_clk_p] -group [get_clocks -include_generated_clocks axil_clk]']
+        tcl_cmds['post_synth'] += ['set_clock_groups -name asyncclocks_pcie_usr_clk -asynchronous -group [get_clocks -include_generated_clocks -of_objects [get_nets user_clk]] -group [get_clocks -include_generated_clocks axil_clk]']
         return tcl_cmds

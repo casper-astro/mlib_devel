@@ -11,6 +11,13 @@ sources: []
 constraints: []
 pcie:
   loc: PCIE4C_X1Y0
+  use_tandem: True
+onehundredgbe:
+  refclk_freq_str: "161.1328125"
+  cmac_loc:
+    - CMACE4_X0Y3
+    - CMACE4_X0Y4
+    - CMACE4_X0Y5
 provides:
   - qsfp0
   - qsfp1
@@ -142,7 +149,7 @@ pins:
     iostd: LVCMOS18
     loc: [BN29, BL30, BN32, BM32]
   pcie_refclk_p:
-    loc: AN15
+    loc: AR15
   pcie_gty_rx_p:
     loc:
       - AL2
