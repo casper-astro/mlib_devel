@@ -124,6 +124,9 @@ class YellowBlock(object):
         self.blk = blk
         #: Stores the `platform` parameter, passed into this block's constructor
         self.platform = platform
+        #: Stores the path to a template project which should be the starting point
+        #: for instantiating this block. None indicates no template is needed.
+        self.template_project = None
         #: A friendly name for this block, generated from the `tag` entry in the `self.blk` dictionary
         #: and `self.inst_id`. Eg. "sw_reg5", or "ten_gbe0"
         #: Be sure to throw away the `xps:` from the tag before using it to make a name

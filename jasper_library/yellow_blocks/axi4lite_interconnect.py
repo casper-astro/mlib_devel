@@ -15,9 +15,7 @@ class axi4lite_interconnect(YellowBlock):
     """
     def initialize(self):
         self.platform_support = 'all'
-        self.add_source('axi4_lite')
-
-
+        self.add_source('axi4_lite/*.vhd')
 
     def modify_top(self,top):
         # Make a memory map for all axi4lite interfaces/slaves
@@ -72,18 +70,8 @@ class axi4lite_interconnect(YellowBlock):
                         inst.add_port('axi4lite_%s_%s_out'    %(key, reg.name), '%s_%s_out'    %(self.design_name, reg.name), dir='in', width=32, parent_sig=True)
                         inst.add_port('axi4lite_%s_%s_out_we' %(key, reg.name), '%s_%s_out_we' %(self.design_name, reg.name), dir='in', width=1)
            
-
-    def gen_tcl_cmds(self):
-        print('axi4lite gen_tcl_cmds')
-        print('=====================')
-        tcl_cmds = {}
-        tcl_cmds['pre_synth'] = []
-        tcl_cmds['pre_synth'] += ['add_files {%s/axi4_lite/axi4lite_slave_logic.vhd %s/axi4_lite/axi4lite_pkg.vhd}' %(self.hdl_root, self.hdl_root)]
-        tcl_cmds['pre_synth'] += ['update_compile_order -fileset sources_1']
-        return tcl_cmds
-
     def add_build_dir_source(self):
-        return [{'files':'xml2vhdl_hdl_output/', 'library':'xil_defaultlib'}]
+        return [{'files':'xml2vhdl_hdl_output/*.vhd', 'library':'xil_defaultlib'}]
 
 
     # create axi4lite_wrapper vhdl module

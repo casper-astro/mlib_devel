@@ -1,6 +1,8 @@
 from .yellow_block import YellowBlock
-from verilog import VerilogModule
-from constraints import PortConstraint, ClockConstraint, RawConstraint
+from verilog import VerilogModule, wrap_instance
+from constraints import PortConstraint, ClockConstraint, RawConstraint, ClockGroupConstraint
+
+import os
 
 """
 Requires the following pins defined in an appropriate platform.yaml:
@@ -13,25 +15,37 @@ Requires the following config section:
 
 pcie:
   loc: PCIE4C_X1Y0 # LOC of PCIE core (should be MCAP capable if using PCIe programming methods)
-  use_tandem: True # True to turn on PCIe tandem with field updates in IP core. Requires an appropriate PCIE LOC. See Xilinx PG213
+  use_pr: True # True to use partial reconfiguration and instantiate a user design dynamically in a 
+                 pre-existing static top-level. See XAPP 1338
 """
 
 class pci_dma_axilite_master(YellowBlock):
     def initialize(self):
-        self.add_source('pci_dma_axilite_master/*.xci')
-        self.add_source('utils/cdc_synchroniser.vhd')
         self.module_name = 'pci_dma_axilite_master'
         try:
-            self.use_tandem = self.platform.conf['pcie']['use_tandem']
+            self.use_pr = self.platform.conf['pcie']['use_pr']
         except KeyError:
-            self.use_tandem = False
+            self.use_pr = False
         # Update the PCIe block location if the platform's config yaml specified one
         try:
             self.pcie_loc = self.platform.conf['pcie']['loc']
         except KeyError:
             self.pcie_loc = None
+        if self.use_pr:
+            self.pcie_loc = None
+            self.template_project = os.path.join(os.getenv('MLIB_DEVEL_PATH'), 'jasper_library', 'template_projects', 'pcie', 'top_%s.xpr.zip' % self.platform.name)
+        else:
+            # PCIe core is already in the static top-level
+            self.add_source('pci_dma_axilite_master/*.xci')
+        self.add_source('utils/cdc_synchroniser.vhd')
 
     def modify_top(self,top):
+        # If we're using partial reconfiguration, then the
+        # PCIe code should be in a static top-level.
+        # It should onlt be instantiated at the user's level if
+        # we're not using PR.
+        if self.use_pr:
+            return
         inst = top.get_instance(entity=self.module_name, name=self.module_name+'_inst')
 
         inst.add_port('axi_aclk',   'axil_clk')
@@ -105,32 +119,77 @@ class pci_dma_axilite_master(YellowBlock):
 
     def gen_constraints(self):
         cons = []
+        cons.append(ClockGroupConstraint('-of_objects [get_ports sys_clk_p]', 'axil_clk', 'asynchronous'))
+        cons.append(ClockGroupConstraint('-of_objects [get_nets user_clk]', 'axil_clk', 'asynchronous'))
+        if self.use_pr:
+            # The static top-level will already contain the below constraints.
+            return cons
         cons.append(PortConstraint(self.fullname+'_rx_p', 'pcie_gty_rx_p', port_index=[0], iogroup_index=[0]))
         cons.append(PortConstraint(self.fullname+'_tx_p', 'pcie_gty_tx_p', port_index=[0], iogroup_index=[0]))
         cons.append(PortConstraint('pcie_rst_n', 'pcie_rst_n'))
         cons.append(PortConstraint('pcie_refclk_p', 'pcie_refclk_p'))
-
-        clkconst = ClockConstraint('pcie_refclk_p', freq=100.0)
-        cons.append(clkconst)
-
-
+        pcie_clkconst = ClockConstraint('pcie_refclk_p', freq=100.0)
+        cons.append(pcie_clkconst)
         return cons
 
     def gen_tcl_cmds(self):
         tcl_cmds = {}
         tcl_cmds['pre_synth'] = []
         tcl_cmds['post_synth'] = []
+        tcl_cmds['promgen'] = []
         # Update the PCIe block location if the platform's config yaml specified one
         if self.pcie_loc is not None:
-            tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.pcie_blk_locn {%s}] [get_ips %s]' % (pcie_loc, self.module_name)]
-        # Try to turn on the tandem pcie + field updates IP option.
-        # This will only be available if an appropriate PCIE LOC has been selected. See Xilinx PG213
-        # IP is saved in the library with MCAP option set to None.
-        if self.use_tandem:
-            tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.mcap_enablement {Tandem_PCIe_with_Field_Updates}] [get_ips %s]' % (self.module_name)]
+            tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.pcie_blk_locn {%s}] [get_ips %s]' % (self.pcie_loc, self.module_name)]
 
-        ## Make AXI clock asynchronous to the user clock
-        # Need to wait until synthesis is complete for all the clocks to exist
-        tcl_cmds['post_synth'] += ['set_clock_groups -name asyncclocks_axi_sys_clk -asynchronous -group [get_clocks -include_generated_clocks sys_clk_p] -group [get_clocks -include_generated_clocks axil_clk]']
-        tcl_cmds['post_synth'] += ['set_clock_groups -name asyncclocks_pcie_usr_clk -asynchronous -group [get_clocks -include_generated_clocks -of_objects [get_nets user_clk]] -group [get_clocks -include_generated_clocks axil_clk]']
+        if self.use_pr:
+            tcl_cmds['pre_synth'] += ['set_property SCOPED_TO_REF {user_top} [get_files user_const.xdc]']
+            tcl_cmds['pre_synth'] += ['set_property used_in_synthesis false [get_files -of_objects [get_reconfig_modules user_top-toolflow] user_const.xdc]']
+            tcl_cmds['promgen'] += ['set_property CONFIG_MODE S_SELECTMAP32 [current_design]'] 
+            #tcl_cmds['promgen'] += ['write_bitstream -force -cell user_top'] 
+            tcl_cmds['promgen'] += ['write_cfgmem -force -format BIN -interface SMAPx32 -loadbit "up 0x00000000 $bit_file" $bin_file']
+            #tcl_cmds['post_synth'] += ['set_clock_groups -asynchronous -group [get_clocks -of_objects [get_nets user_top_inst/axil_clk]] -group [get_clocks -of_objects [get_nets user_top_inst/user_clk]]']
+            #tcl_cmds['post_synth'] += ['set_clock_groups -asynchronous -group [get_clocks -of_objects [get_nets user_top_inst/axil_clk]] -group [get_clocks -of_objects [get_ports sys_clk_p]]']
+
+            ## Make AXI clock asynchronous to the user clock
+            # Need to wait until synthesis is complete for all the clocks to exist
+            #tcl_cmds['post_synth'] += ['set_clock_groups -name asyncclocks_axi_sys_clk -asynchronous -group [get_clocks -include_generated_clocks sys_clk_p] -group [get_clocks -include_generated_clocks axil_clk]']
+            #tcl_cmds['post_synth'] += ['set_clock_groups -name asyncclocks_pcie_usr_clk -asynchronous -group [get_clocks -include_generated_clocks -of_objects [get_nets user_clk]] -group [get_clocks -include_generated_clocks axil_clk]']
         return tcl_cmds
+
+    def finalize_top(self, top):
+        """
+        If we are operating with Partial Reconfiguration, demote the entire user design to a submodule, allowing
+        a static top-level to be used.
+        """
+        if not self.use_pr:
+            return top
+
+        # Expose AXI interface to the top level, and then wrap the entire
+        # user design.
+        top.add_port('axil_clk', 'axil_clk', parent_sig=False, dir='in')
+        top.add_port('axil_rst_n', 'axil_clk', parent_sig=False, dir='in')
+        top.add_port('M_AXI_araddr', 'M_AXI_araddr', width=32, parent_sig=False, dir='in')
+        top.add_port('M_AXI_arready', 'M_AXI_arready', parent_sig=False, dir='out')
+        top.add_port('M_AXI_arvalid', 'M_AXI_arvalid', parent_sig=False, dir='in')
+        top.add_port('M_AXI_awaddr', 'M_AXI_awaddr', width=32, parent_sig=False, dir='in')
+        top.add_port('M_AXI_awready', 'M_AXI_awready', parent_sig=False, dir='out')
+        top.add_port('M_AXI_awvalid', 'M_AXI_awvalid', parent_sig=False, dir='in')
+        top.add_port('M_AXI_bready', 'M_AXI_bready', parent_sig=False, dir='in')
+        top.add_port('M_AXI_bresp', 'M_AXI_bresp', width=2, parent_sig=False, dir='out')
+        top.add_port('M_AXI_bvalid', 'M_AXI_bvalid', parent_sig=False, dir='out')
+        top.add_port('M_AXI_rdata', 'M_AXI_rdata', width=32, parent_sig=False, dir='out')
+        top.add_port('M_AXI_rready', 'M_AXI_rready', parent_sig=False, dir='in')
+        top.add_port('M_AXI_rresp', 'M_AXI_rresp', width=2, parent_sig=False, dir='out')
+        top.add_port('M_AXI_rvalid', 'M_AXI_rvalid', parent_sig=False, dir='out')
+        top.add_port('M_AXI_wdata', 'M_AXI_wdata', width=32, parent_sig=False, dir='in')
+        top.add_port('M_AXI_wready', 'M_AXI_wready', parent_sig=False, dir='out')
+        top.add_port('M_AXI_wstrb', 'M_AXI_wstrb', width=4, parent_sig=False, dir='in')
+        top.add_port('M_AXI_wvalid', 'M_AXI_wvalid', parent_sig=False, dir='in')
+        top.instantiate_child_ports()
+        # With PR, we're not going to be using this module as top. Instead, let's
+        # rename is `user_top` which will be instantiated within a high-level static top-level.
+        # The assumpion is that the static top-level is already routed and included in a project and need
+        # not be generated here.
+        top.name = 'user_top'
+        return top
+            
