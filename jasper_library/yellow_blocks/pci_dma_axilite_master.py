@@ -15,25 +15,23 @@ Requires the following config section:
 
 pcie:
   loc: PCIE4C_X1Y0 # LOC of PCIE core (should be MCAP capable if using PCIe programming methods)
-  use_pr: True # True to use partial reconfiguration and instantiate a user design dynamically in a 
-                 pre-existing static top-level. See XAPP 1338
 """
 
 class pci_dma_axilite_master(YellowBlock):
     def initialize(self):
         self.module_name = 'pci_dma_axilite_master'
-        try:
-            self.use_pr = self.platform.conf['pcie']['use_pr']
-        except KeyError:
-            self.use_pr = False
+        if not hasattr(self, 'use_pr'): self.use_pr = False
+        if self.use_pr:
+            if not hasattr(self, 'template_project') or self.template_project == None:
+                self.template_project = os.path.join(os.getenv('MLIB_DEVEL_PATH'), 'jasper_library', 'template_projects', 'pcie', 'top_%s.xpr.zip' % self.platform.name)
         # Update the PCIe block location if the platform's config yaml specified one
         try:
             self.pcie_loc = self.platform.conf['pcie']['loc']
         except KeyError:
             self.pcie_loc = None
+
         if self.use_pr:
             self.pcie_loc = None
-            self.template_project = os.path.join(os.getenv('MLIB_DEVEL_PATH'), 'jasper_library', 'template_projects', 'pcie', 'top_%s.xpr.zip' % self.platform.name)
         else:
             # PCIe core is already in the static top-level
             self.add_source('pci_dma_axilite_master/*.xci')
@@ -103,11 +101,6 @@ class pci_dma_axilite_master(YellowBlock):
         inst.add_port('sys_clk', 'pcie_refclk_odiv2') # signal comes through IBUFDS_GTE4 (see below)
         inst.add_port('sys_clk_gt', 'pcie_refclk')   # signal comes through IBUFDS_GTE4 (see below)
         inst.add_port('usr_irq_req', '1\'b0')
-
-        if self.use_tandem:
-            inst.add_port('cap_gnt', '1\'b1')
-            inst.add_port('cap_rel', '1\'b0')
-            inst.add_port('cap_req', '')
 
         # Instantiate IBUFDS_GTE4 for the reference clock
         ibuf = top.get_instance(entity='IBUFDS_GTE4', name='pci_refclk_buf')
