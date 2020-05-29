@@ -117,8 +117,8 @@ class pci_dma_axilite_master(YellowBlock):
             cons.append(ClockGroupConstraint('-of_objects [get_nets user_clk]', 'axil_clk', 'asynchronous'))
             # The static top-level will already contain the below constraints.
             return cons
-        cons.append(ClockGroupConstraint('-of_objects [get_ports sys_clk_p]', '-of_objects [get_ports pcie_refclk_p]', 'asynchronous'))
-        cons.append(ClockGroupConstraint('-of_objects [get_nets user_clk]', '-of_objects [get_ports pcie_refclk_p]', 'asynchronous'))
+        cons.append(ClockGroupConstraint('-include_generated_clocks sys_clk_p_CLK', '-include_generated_clocks -of_objects [get_nets axil_clk]', 'asynchronous'))
+        cons.append(ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets user_clk]', '-include_generated_clocks -of_objects [get_nets axil_clk]', 'asynchronous'))
         cons.append(PortConstraint(self.fullname+'_rx_p', 'pcie_gty_rx_p', port_index=[0], iogroup_index=[0]))
         cons.append(PortConstraint(self.fullname+'_tx_p', 'pcie_gty_tx_p', port_index=[0], iogroup_index=[0]))
         cons.append(PortConstraint('pcie_rst_n', 'pcie_rst_n'))
