@@ -95,6 +95,8 @@ class YellowBlock(object):
             if not os.path.isdir(self.hdl_root):
                 raise Exception('Specified hdl root path %s does not exist!'%self.hdl_root)
 
+        #: The classname of this block
+        self.blocktype = type(self).__name__
         #: The ID of this block within all the instances of this block's class
         self.inst_id = self._get_id()
         #: A boolean, which is `True` if `self.inst_id == 0`

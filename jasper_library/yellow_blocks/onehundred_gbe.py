@@ -32,7 +32,11 @@ class onehundredgbe_usplus(onehundred_gbe):
         #self.add_source('onehundred_gbe/kutleng/udp/*.vhd')
         #self.add_source('onehundred_gbe/kutleng/udp/macinterface/*.vhd')
         #self.add_source('onehundred_gbe/kutleng/udp/macinterface/cpuinterface/*.vhd')
-        self.add_source('onehundred_gbe/ip/*/*.xci')
+        self.add_source('onehundred_gbe/ip/axis_data_fifo/*.xci')
+        self.add_source('onehundred_gbe/ip/axisila/*.xci')
+        self.add_source('onehundred_gbe/ip/axispacketbufferfifo/*.xci')
+        self.add_source('onehundred_gbe/ip/dest_address_fifo/*.xci')
+        self.add_source('onehundred_gbe/ip/EthMACPHY100GQSFP4x/*.xci')
 
         self.provides = ['ethernet']
         if self.cpu_rx_en and self.cpu_tx_en:
@@ -40,6 +44,10 @@ class onehundredgbe_usplus(onehundred_gbe):
 
         # Hard-code to port 0 for now
         self.port = 0
+        # For partial reconfig, it is useful to have statically-named top-level ports
+        # which don't depend on model name. Generate a prefix which will probably
+        # be unique
+        self.portbase = '{blocktype}{port}'.format(blocktype=self.blocktype, port=self.port)
 
         try:
             ethconf = self.platform.conf["onehundredgbe"]
@@ -71,19 +79,19 @@ class onehundredgbe_usplus(onehundred_gbe):
         inst.add_port('icap_clk', 'axil_clk')
         inst.add_port('axis_reset', "1'b0")#'axil_rst')
         # MGT connections
-        inst.add_port('mgt_qsfp_clock_p', self.fullname+'_refclk_p', dir='in', parent_port=True)
-        inst.add_port('mgt_qsfp_clock_n', self.fullname+'_refclk_n', dir='in', parent_port=True)
+        inst.add_port('mgt_qsfp_clock_p', self.portbase+'_refclk_p', dir='in', parent_port=True)
+        inst.add_port('mgt_qsfp_clock_n', self.portbase+'_refclk_n', dir='in', parent_port=True)
 
-        inst.add_port('qsfp_mgt_rx_p', self.fullname+'_qsfp_mgt_rx_p', dir='in', width=4, parent_port=True)
-        inst.add_port('qsfp_mgt_rx_n', self.fullname+'_qsfp_mgt_rx_n', dir='in', width=4, parent_port=True)
-        inst.add_port('qsfp_mgt_tx_p', self.fullname+'_qsfp_mgt_tx_p', dir='out', width=4, parent_port=True)
-        inst.add_port('qsfp_mgt_tx_n', self.fullname+'_qsfp_mgt_tx_n', dir='out', width=4, parent_port=True)
+        inst.add_port('qsfp_mgt_rx_p', self.portbase+'_qsfp_mgt_rx_p', dir='in', width=4, parent_port=True)
+        inst.add_port('qsfp_mgt_rx_n', self.portbase+'_qsfp_mgt_rx_n', dir='in', width=4, parent_port=True)
+        inst.add_port('qsfp_mgt_tx_p', self.portbase+'_qsfp_mgt_tx_p', dir='out', width=4, parent_port=True)
+        inst.add_port('qsfp_mgt_tx_n', self.portbase+'_qsfp_mgt_tx_n', dir='out', width=4, parent_port=True)
         # QSFP config interface
-        inst.add_port('qsfp_modsell_ls', '') #self.fullname+'_qsfp_modsell_ls')
-        inst.add_port('qsfp_resetl_ls',  '') #self.fullname+'_qsfp_resetl_ls')
-        inst.add_port('qsfp_modprsl_ls', self.fullname+'_qsfp_modprsl_ls', dir='in', parent_port=True)
-        inst.add_port('qsfp_intl_ls',    '1\'b1') #self.fullname+'_qsfp_intl_ls')
-        inst.add_port('qsfp_lpmode_ls',  '') #self.fullname+'_qsfp_lpmode_ls')
+        inst.add_port('qsfp_modsell_ls', '') #self.portbase+'_qsfp_modsell_ls')
+        inst.add_port('qsfp_resetl_ls',  '') #self.portbase+'_qsfp_resetl_ls')
+        inst.add_port('qsfp_modprsl_ls', self.portbase+'_qsfp_modprsl_ls', dir='in', parent_port=True)
+        inst.add_port('qsfp_intl_ls',    '1\'b1') #self.portbase+'_qsfp_intl_ls')
+        inst.add_port('qsfp_lpmode_ls',  '') #self.portbase+'_qsfp_lpmode_ls')
 
         inst.add_port('user_clk', 'user_clk')
 
@@ -114,18 +122,18 @@ class onehundredgbe_usplus(onehundred_gbe):
 
     def gen_constraints(self):
         consts = []
-        consts += [PortConstraint(self.fullname+'_refclk_p', 'qsfp_mgt_ref_clk_p', iogroup_index=self.port)]
-        consts += [PortConstraint(self.fullname+'_refclk_n', 'qsfp_mgt_ref_clk_n', iogroup_index=self.port)]
-        consts += [PortConstraint(self.fullname+'_qsfp_mgt_rx_p', 'qsfp_mgt_rx_p', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
-        consts += [PortConstraint(self.fullname+'_qsfp_mgt_rx_n', 'qsfp_mgt_rx_n', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
-        consts += [PortConstraint(self.fullname+'_qsfp_mgt_tx_p', 'qsfp_mgt_tx_p', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
-        consts += [PortConstraint(self.fullname+'_qsfp_mgt_tx_n', 'qsfp_mgt_tx_n', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
-        #consts += [PortConstraint(self.fullname+'_qsfp_modsell_ls', '', iogroup_index=self.port)]
-        #consts += [PortConstraint(self.fullname+'_qsfp_resetl_ls', '', iogroup_index=self.port)]
-        consts += [PortConstraint(self.fullname+'_qsfp_modprsl_ls', 'qsfp_modprs', iogroup_index=self.port)]
-        #consts += [PortConstraint(self.fullname+'_qsfp_intl_ls', '', iogroup_index=self.port)]
-        #consts += [PortConstraint(self.fullname+'_qsfp_lpmode_ls', '', iogroup_index=self.port)]
-        self.myclk = ClockConstraint(self.fullname+'_refclk_p', name=self.fullname+'_refclk_p', freq=self.refclk_freq)
+        consts += [PortConstraint(self.portbase+'_refclk_p', 'qsfp_mgt_ref_clk_p', iogroup_index=self.port)]
+        consts += [PortConstraint(self.portbase+'_refclk_n', 'qsfp_mgt_ref_clk_n', iogroup_index=self.port)]
+        consts += [PortConstraint(self.portbase+'_qsfp_mgt_rx_p', 'qsfp_mgt_rx_p', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
+        consts += [PortConstraint(self.portbase+'_qsfp_mgt_rx_n', 'qsfp_mgt_rx_n', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
+        consts += [PortConstraint(self.portbase+'_qsfp_mgt_tx_p', 'qsfp_mgt_tx_p', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
+        consts += [PortConstraint(self.portbase+'_qsfp_mgt_tx_n', 'qsfp_mgt_tx_n', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
+        #consts += [PortConstraint(self.portbase+'_qsfp_modsell_ls', '', iogroup_index=self.port)]
+        #consts += [PortConstraint(self.portbase+'_qsfp_resetl_ls', '', iogroup_index=self.port)]
+        consts += [PortConstraint(self.portbase+'_qsfp_modprsl_ls', 'qsfp_modprs', iogroup_index=self.port)]
+        #consts += [PortConstraint(self.portbase+'_qsfp_intl_ls', '', iogroup_index=self.port)]
+        #consts += [PortConstraint(self.portbase+'_qsfp_lpmode_ls', '', iogroup_index=self.port)]
+        self.myclk = ClockConstraint(self.portbase+'_refclk_p', name=self.fullname+'_refclk_p', freq=self.refclk_freq)
         consts += [self.myclk]
         return consts
 
