@@ -1495,6 +1495,51 @@ class VivadoBackend(ToolflowBackend):
         self.add_tcl_cmd('set mcs_file "%s"'%self.mcs_loc, stage='init')
         self.add_tcl_cmd('set prm_file "%s"'%self.prm_loc, stage='init')
 
+        # A function to print timing errors
+
+        check_timing = """
+proc check_timing {run} {
+  if { [get_property STATS.WNS [get_runs $run] ] < 0 } {
+    send_msg_id "CASPER-1" {CRITICAL WARNING} "ERROR: Found timing violations => Worst Negative Slack: [get_property STATS.WNS [get_runs $run]] ns"
+  } else {
+    puts "No timing violations => Worst Negative Slack: [get_property STATS.WNS [get_runs $run]] ns"
+  }
+
+  if { [get_property STATS.TNS [get_runs $run] ] < 0 } {
+    send_msg_id "CASPER-1" {CRITICAL WARNING} "ERROR: Found timing violations => Total Negative Slack: [get_property STATS.TNS [get_runs $run]] ns"
+  }
+
+  if { [get_property STATS.WHS [get_runs $run] ] < 0 } {
+    send_msg_id "CASPER-1" {CRITICAL WARNING} "ERROR: Found timing violations => Worst Hold Slack: [get_property STATS.WHS [get_runs $run]] ns"
+  } else {
+    puts "No timing violations => Worst Hold Slack: [get_property STATS.WHS [get_runs $run]] ns"
+  }
+
+  if { [get_property STATS.THS [get_runs $run] ] < 0 } {
+    send_msg_id "CASPER-1" {CRITICAL WARNING} "ERROR: Found timing violations => Total Hold Slack: [get_property STATS.THS [get_runs $run]] ns"
+  }
+}
+"""
+        self.add_tcl_cmd(check_timing, stage='init')
+        check_zero_critical = """
+proc check_zero_critical {count mess} {
+  if {$count > 0} {
+    puts "************************************************"
+    send_msg_id "CASPER-2" {CRITICAL WARNING} "$mess critical warning count: $count"
+    puts "************************************************"
+  }
+}
+"""
+        self.add_tcl_cmd(check_zero_critical, stage='init')
+        puts_red = """
+proc puts_red {s} {
+  puts -nonewline "\033\[1;31m"; #RED
+  puts $s
+  puts -nonewline "\033\[0m";# Reset
+}
+"""
+        self.add_tcl_cmd(puts_red, stage='init')
+
         self.add_tcl_cmd('puts "Starting tcl script"', stage='init')
         # Create Vivado Project in project mode only
         if plat.project_mode:
@@ -1685,6 +1730,7 @@ class VivadoBackend(ToolflowBackend):
 
         # Post-Synthesis Commands
         tcl('open_run {0}'.format(synth_run), stage='post_synth')
+        self.add_tcl_cmd('set synth_critical_count [get_msg_config -count -severity {CRITICAL WARNING}]', stage='post_synth')
 
         # Pre-Implementation Commands
         if impl_strat is not None:
@@ -1700,6 +1746,7 @@ class VivadoBackend(ToolflowBackend):
 
         # Post-Implementation Commands
         tcl('open_run {0}'.format(impl_run), stage='post_impl')
+        self.add_tcl_cmd('set impl_critical_count [get_msg_config -count -severity {CRITICAL WARNING}]', stage='post_impl')
 
         # Pre-Bitgen Commands
         # Platform yellow blocks should insert their settings here
@@ -1713,12 +1760,13 @@ class VivadoBackend(ToolflowBackend):
         # PROM generation is generally very platform specific.
         # write_cfgmem commands should be part of yellow block modules. (see, eg, SNAP)
 
-        # Determine if the design meets timing or not
-        # Look for Worst Negative Slack
-        tcl('report_timing_summary -warn_on_violation', stage='post_bitgen')
-
         # Let Yellow Blocks add their own tcl commands
         self.gen_yellowblock_tcl_cmds()
+
+        # Determine if the design meets timing or not
+        self.add_tcl_cmd('check_timing {0}'.format(impl_run), stage='promgen') # promgen so the error comes last
+        self.add_tcl_cmd('check_zero_critical $impl_critical_count implementation', stage='promgen') # promgen so the error comes last
+        self.add_tcl_cmd('check_zero_critical $synth_critical_count synthesis', stage='promgen') # promgen so the error comes last
 
     def add_compile_cmds(self, cores=8, plat=None, synth_strat=None, impl_strat=None):
         """
@@ -1760,6 +1808,7 @@ class VivadoBackend(ToolflowBackend):
 
             # Post-Synthesis Commands
             self.add_tcl_cmd('open_run synth_1', stage='post_synth')
+            self.add_tcl_cmd('set synth_critical_count [get_msg_config -count -severity {CRITICAL WARNING}]', stage='post_synth')
 
             # Pre-Implementation Commands
             if impl_strat is not None:
@@ -1775,6 +1824,7 @@ class VivadoBackend(ToolflowBackend):
 
             # Post-Implementation Commands
             self.add_tcl_cmd('open_run impl_1', stage='post_impl')
+            self.add_tcl_cmd('set impl_critical_count [get_msg_config -count -severity {CRITICAL WARNING}]', stage='post_synth')
 
             # Pre-Bitgen Commands
 
@@ -1816,42 +1866,13 @@ class VivadoBackend(ToolflowBackend):
             except KeyError:
                 s = ""
 
-            # Determine if the design meets timing or not
-            # Look for Worst Negative Slack
-            self.add_tcl_cmd('if { [get_property STATS.WNS [get_runs impl_1] ] < 0 } {', stage='post_bitgen')
-            self.add_tcl_cmd('puts "Found timing violations => Worst Negative Slack:'
-                             ' [get_property STATS.WNS [get_runs impl_1]] ns" ', stage='post_bitgen')
-            self.add_tcl_cmd('} else {', stage='post_bitgen')
-            self.add_tcl_cmd('puts "No timing violations => Worst Negative Slack:'
-                             ' [get_property STATS.WNS [get_runs impl_1]] ns" ', stage='post_bitgen')
-            self.add_tcl_cmd('}', stage='post_bitgen')
-            # Look for Total Negative Slack
-            self.add_tcl_cmd('if { [get_property STATS.TNS [get_runs impl_1] ] < 0 } {', stage='post_bitgen')
-            self.add_tcl_cmd('puts "Found timing violations => Total Negative Slack:'
-                             ' [get_property STATS.TNS [get_runs impl_1]] ns" ', stage='post_bitgen')
-            self.add_tcl_cmd('} else {', stage='post_bitgen')
-            self.add_tcl_cmd('puts "No timing violations => Total Negative Slack:'
-                             ' [get_property STATS.TNS [get_runs impl_1]] ns" ', stage='post_bitgen')
-            self.add_tcl_cmd('}', stage='post_bitgen')
-            # Look for Worst Hold Slack
-            self.add_tcl_cmd('if { [get_property STATS.WHS [get_runs impl_1] ] < 0 } {', stage='post_bitgen')
-            self.add_tcl_cmd('puts "Found timing violations => Worst Hold Slack:'
-                             ' [get_property STATS.WHS [get_runs impl_1]] ns" ', stage='post_bitgen')
-            self.add_tcl_cmd('} else {', stage='post_bitgen')
-            self.add_tcl_cmd('puts "No timing violations => Worst Hold Slack:'
-                             ' [get_property STATS.WHS [get_runs impl_1]] ns" ', stage='post_bitgen')
-            self.add_tcl_cmd('}', stage='post_bitgen')
-            # Look for Total Hold Slack
-            self.add_tcl_cmd('if { [get_property STATS.THS [get_runs impl_1] ] < 0 } {', stage='post_bitgen')
-            self.add_tcl_cmd('puts "Found timing violations => Total Hold Slack:'
-                             ' [get_property STATS.THS [get_runs impl_1]] ns" ', stage='post_bitgen')
-            self.add_tcl_cmd('} else {', stage='post_bitgen')
-            self.add_tcl_cmd('puts "No timing violations => Total Hold Slack:'
-                             ' [get_property STATS.THS [get_runs impl_1]] ns" ', stage='post_bitgen')
-            self.add_tcl_cmd('}', stage='post_bitgen')
-
             # Let Yellow Blocks add their own tcl commands
             self.gen_yellowblock_tcl_cmds()
+
+            # Determine if the design meets timing or not
+            self.add_tcl_cmd('check_timing impl_1', stage='promgen') # promgen so the error comes last
+            self.add_tcl_cmd('check_zero_critical $impl_critical_count implementation', stage='promgen') # promgen so the error comes last
+            self.add_tcl_cmd('check_zero_critical $synth_critical_count synthesis', stage='promgen') # promgen so the error comes last
 
         # Non-Project mode is enabled
         # Options can be added to the *_design commands to change strategies
