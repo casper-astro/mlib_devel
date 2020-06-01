@@ -1824,7 +1824,7 @@ proc puts_red {s} {
 
             # Post-Implementation Commands
             self.add_tcl_cmd('open_run impl_1', stage='post_impl')
-            self.add_tcl_cmd('set impl_critical_count [get_msg_config -count -severity {CRITICAL WARNING}]', stage='post_synth')
+            self.add_tcl_cmd('set impl_critical_count [get_msg_config -count -severity {CRITICAL WARNING}]', stage='post_impl')
 
             # Pre-Bitgen Commands
 
