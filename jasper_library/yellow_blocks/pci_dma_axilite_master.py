@@ -142,13 +142,6 @@ class pci_dma_axilite_master(YellowBlock):
             tcl_cmds['promgen'] += ['set_property CONFIG_MODE S_SELECTMAP32 [current_design]'] 
             #tcl_cmds['promgen'] += ['write_bitstream -force -cell user_top'] 
             tcl_cmds['promgen'] += ['write_cfgmem -force -format BIN -interface SMAPx32 -loadbit "up 0x00000000 $bit_file" $bin_file']
-            #tcl_cmds['post_synth'] += ['set_clock_groups -asynchronous -group [get_clocks -of_objects [get_nets user_top_inst/axil_clk]] -group [get_clocks -of_objects [get_nets user_top_inst/user_clk]]']
-            #tcl_cmds['post_synth'] += ['set_clock_groups -asynchronous -group [get_clocks -of_objects [get_nets user_top_inst/axil_clk]] -group [get_clocks -of_objects [get_ports sys_clk_p]]']
-
-            ## Make AXI clock asynchronous to the user clock
-            # Need to wait until synthesis is complete for all the clocks to exist
-            #tcl_cmds['post_synth'] += ['set_clock_groups -name asyncclocks_axi_sys_clk -asynchronous -group [get_clocks -include_generated_clocks sys_clk_p] -group [get_clocks -include_generated_clocks axil_clk]']
-            #tcl_cmds['post_synth'] += ['set_clock_groups -name asyncclocks_pcie_usr_clk -asynchronous -group [get_clocks -include_generated_clocks -of_objects [get_nets user_clk]] -group [get_clocks -include_generated_clocks axil_clk]']
         return tcl_cmds
 
     def finalize_top(self, top):
