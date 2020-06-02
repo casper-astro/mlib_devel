@@ -42,8 +42,6 @@ class onehundredgbe_usplus(onehundred_gbe):
         if self.cpu_rx_en and self.cpu_tx_en:
             self.provides += ['cpu_ethernet']
 
-        # Hard-code to port 0 for now
-        self.port = 0
         # For partial reconfig, it is useful to have statically-named top-level ports
         # which don't depend on model name. Generate a prefix which will probably
         # be unique
@@ -149,9 +147,7 @@ class onehundredgbe_usplus(onehundred_gbe):
         tcl_cmds['pre_synth'] = ['set_property -dict [list CONFIG.GT_REF_CLK_FREQ {%s}] [get_ips EthMACPHY100GQSFP4x]' % self.refclk_freq_str]
 
         # The LOCs seem to get overriden by the user constraints above, but we need to manually unplace the CMAC blocks
-        tcl_cmds['post_synth'] = ['unplace_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s*" }]' % self.fullname]
-        tcl_cmds['post_synth'] += ['place_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s*" }] %s' % (self.fullname, self.cmac_loc)]
-        # Set the 100G clock to be asynchronous to both the user clock and the AXI clock. Do this after synth so we can get the user clock without knowing what the user is clocking from
-        tcl_cmds['post_synth'] += ['set_clock_groups -name async_user_%s -asynchronous -group [get_clocks -include_generated_clocks -of_objects [get_nets user_clk]] -group [get_clocks -include_generated_clocks %s]' % (self.myclk.name, self.myclk.name)]
-        tcl_cmds['post_synth'] += ['set_clock_groups -name async_axi_%s -asynchronous -group [get_clocks -include_generated_clocks  axil_clk] -group [get_clocks -include_generated_clocks %s]' % (self.myclk.name, self.myclk.name)]
+        # Unplace all CMACs post_synth, then place all pre_impl, to avoid situations where we try to place on a site already being used
+        tcl_cmds['post_synth'] = ['unplace_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s_inst/*" }]' % self.fullname]
+        tcl_cmds['pre_impl'] = ['place_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s_inst/*" }] %s' % (self.fullname, self.cmac_loc)]
         return tcl_cmds
