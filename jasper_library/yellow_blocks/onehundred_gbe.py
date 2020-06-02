@@ -1,5 +1,5 @@
 from .yellow_block import YellowBlock
-from constraints import PortConstraint, ClockConstraint
+from constraints import PortConstraint, ClockConstraint, ClockGroupConstraint
 from helpers import to_int_list
 from .yellow_block_typecodes import *
 from os.path import join
@@ -133,8 +133,14 @@ class onehundredgbe_usplus(onehundred_gbe):
         consts += [PortConstraint(self.portbase+'_qsfp_modprsl_ls', 'qsfp_modprs', iogroup_index=self.port)]
         #consts += [PortConstraint(self.portbase+'_qsfp_intl_ls', '', iogroup_index=self.port)]
         #consts += [PortConstraint(self.portbase+'_qsfp_lpmode_ls', '', iogroup_index=self.port)]
-        self.myclk = ClockConstraint(self.portbase+'_refclk_p', name=self.fullname+'_refclk_p', freq=self.refclk_freq)
-        consts += [self.myclk]
+        clkname = self.portbase+'_refclk_p' # defined by IP
+        #self.myclk = ClockConstraint(self.portbase+'_refclk_p', freq=self.refclk_freq)
+        #consts += [self.myclk]
+        # Set the 100G clock to be asynchronous to both the user clock and the system clock / axi clk
+        consts += [ClockGroupConstraint('-include_generated_clocks -of_objects [get_ports sys_clk_p]', '-include_generated_clocks %s' % clkname, 'asynchronous')]
+        consts += [ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets user_clk]', '-include_generated_clocks %s' % clkname, 'asynchronous')]
+        consts += [ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets axil_clk]', '-include_generated_clocks %s' % clkname, 'asynchronous')]
+
         return consts
 
     def gen_tcl_cmds(self):
