@@ -636,11 +636,11 @@ class Toolflow(object):
                 # If there are no constraints, move on
                 continue
             for constraint in constraints:
-                if isinstance(constraint, PortConstraint) and self.template_project is not None:
-                    self.logger.info('Skipping PortConstraint because this is a PR run')
-                    # Partial reconfiguration projects have pin constraints
-                    # defined at the top-level. If we're in PR mode, skip them
-                    continue
+                #if isinstance(constraint, PortConstraint) and self.template_project is not None:
+                #    self.logger.info('Skipping PortConstraint because this is a PR run')
+                #    # Partial reconfiguration projects have pin constraints
+                #    # defined at the top-level. If we're in PR mode, skip them
+                #    continue
                 self.constraints += [constraint]
         self.logger.info('Generating physical constraints')
         for constraint in self.constraints:
