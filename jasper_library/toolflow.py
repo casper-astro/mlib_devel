@@ -630,18 +630,24 @@ class Toolflow(object):
         self.check_attr_exists('periph_objs', 'gen_periph_objs()')
         self.constraints = []
         for obj in self.periph_objs:
-            c = obj.gen_constraints()
-            if c is not None:
-                self.constraints += c
+            self.logger.info('Getting constraints for block %s' % obj.name)
+            constraints = obj.gen_constraints()
+            if constraints is None:
+                # If there are no constraints, move on
+                continue
+            for constraint in constraints:
+                if isinstance(constraint, PortConstraint) and self.template_project is not None:
+                    self.logger.info('Skipping PortConstraint because this is a PR run')
+                    # Partial reconfiguration projects have pin constraints
+                    # defined at the top-level. If we're in PR mode, skip them
+                    continue
+                self.constraints += [constraint]
         self.logger.info('Generating physical constraints')
         for constraint in self.constraints:
             try:
                 constraint.gen_physical_const(self.plat)
             except AttributeError:
                 pass  # some constraints don't have this method
-        # check for any funny business
-        # used_pins = []
-        # for constraint in self.constraints:
 
     def constraints_rule_check(self):
         """
