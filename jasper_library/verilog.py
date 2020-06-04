@@ -86,7 +86,7 @@ class AXI4LiteDevice(object):
     def __init__(self, regname, nbytes, mode,
                 hdl_suffix='', hdl_candr_suffix='',
                 memory_map=[], typecode=0xff,
-                data_width=32):
+                data_width=32, axi4lite_mode=''):
         """
         Class constructor.
 
@@ -121,6 +121,7 @@ class AXI4LiteDevice(object):
         self.hdl_suffix = hdl_suffix
         self.hdl_candr_suffix = hdl_candr_suffix
         self.memory_map = memory_map
+        self.axi4lite_mode = axi4lite_mode
 
 class Port(ImmutableWithComments):
     """
@@ -760,6 +761,15 @@ class VerilogModule(object):
                 # only a mad man would attempt to debug this!
                 # And here I am. Please document this code better.
                 dev.memory_map = []
+            elif dev.axi4lite_mode == 'raw':
+                 # tell the axi_ic to generate a raw axi device
+                self.memory_map[dev.regname] = {}
+                interface = self.memory_map[dev.regname]
+                interface['size'] = dev.nbytes 
+                interface['memory_map'] = dev.memory_map
+                interface['axi4lite_devices'] = [dev]
+                # erase dev.memory_map so that core_info doesn't add raw axi device twice
+                dev.memory_map = [] 
             else:
                 # add all other yellow blocks to their own interface and make xml memory map
                 self.memory_map[dev.regname] = {}
@@ -1378,7 +1388,7 @@ class VerilogModule(object):
     def add_axi4lite_interface(self, regname, mode, nbytes=4,
                                default_val=0, suffix='',
                                candr_suffix='', memory_map=[],
-                               typecode=0xff, data_width=32):
+                               typecode=0xff, data_width=32, axi4lite_mode=''):
         """
         Add the ports necessary for a AXI4-Lite slave interface.
 
@@ -1393,13 +1403,13 @@ class VerilogModule(object):
             # Make single register in memory_map if memory_map is empty
             if not memory_map:
                 memory_map = [Register(regname, nbytes=nbytes, offset=0, mode=mode,
-                                        default_val=default_val, data_width=data_width,
+                                        default_val=default_val, data_width=data_width, axi4lite_mode=axi4lite_mode,
                                         ram_size=nbytes if typecode==4 else -1,
                                         ram=True if typecode==4 else False)]
             axi4lite_device = AXI4LiteDevice(regname, nbytes=nbytes, mode=mode,
                                             hdl_suffix=suffix, hdl_candr_suffix=candr_suffix,
                                             memory_map=memory_map, typecode=typecode,
-                                            data_width=data_width)
+                                            data_width=data_width, axi4lite_mode=axi4lite_mode)
             self.axi4lite_devices += [axi4lite_device]
             self.n_axi4lite_interfaces += 1
             return axi4lite_device

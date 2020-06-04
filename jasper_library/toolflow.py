@@ -809,6 +809,7 @@ class Toolflow(object):
                 node.set('mask', hex(0xFFFFFFFF))
                 # node.set('size', str(reg.nbytes))
                 node.set('permission', reg.mode)               
+                node.set('axi4lite_mode', reg.axi4lite_mode)
                 if reg.mode == 'r':
                     if reg.default_val != 0:
                        # Populate defaults of sys_block version registers
