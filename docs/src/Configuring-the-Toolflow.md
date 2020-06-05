@@ -10,7 +10,7 @@ A startup script -- `startsg` -- is provided as part of the toolflow repository.
 - If _executed_ (i.e. `/path/to/mlib_devel/startsg`): start MATLAB with the correctly defined library paths. 
 - If _sourced_ (i.e. `source /path/to/mlib_devel/startsg`): configure software paths without starting MATLAB.
 
-The former method is what you shoud do if you want to start a Simulink design, or open an existing one.
+The former method is what you should do if you want to start a Simulink design, or open an existing one.
 
 The latter method is useful if you want to run parts of the toolflow outside of MATLAB (eg. `exec_flow.py`) or run Xilinx tools (eg. `vivado`) directly from the command line.
 
@@ -27,7 +27,8 @@ Optional variables:
 
 - `PLATFORM` - Used by the Xilinx tools to select suitable runtime binaries for your system.  If not specified, it will be defaulted to `lin64`, indicating a 64-bit Linux operating system. This is the only configuration the collaboration tests.
 - `XILINXD_LICENCE_FILE` - The path to your Xilinx software license if it exists in a non-standard location.
-- `JASPER_BACKEND` - the type of Xilinx tools you want to use to implement your design. Supported options are `vivado` or `ise`. The default is `vivado`, which is correct for all CASPER-supporterd platforms except ROACH1/ROACH2.
+- `JASPER_BACKEND` - the type of Xilinx tools you want to use to implement your design. Supported options are `vivado` or `ise`. The default is `vivado`, which is correct for all CASPER-supported platforms. _(Note: `ise` is the Xilinx tool used for ROACH1/ROACH2 designs, however official support for ROACH platforms is no longer provided)._
+- `CASPER_PYTHON_VENV_ON_START` - The path to your Python virtual environment (if one is being used). This will activate the virtual environment on load.
 
 Other variables:
 Depending on your operating system, and MATLAB / Xilinx quirks, you may need to specify other generic OS variables. For example, with MATLAB 2018a and Ubuntu 16.04, it is necessary to over-ride the default MATLAB libexpat library to a newer version. To do this you can set the `LD_PRELOAD` variable.
@@ -39,18 +40,22 @@ Here is a sample `startsg.local` file:
     export MATLAB_PATH=/usr/local/MATLAB/R2018a
     export PLATFORM=lin64
     export JASPER_BACKEND=vivado
+
     # over-ride the MATLAB libexpat version with the OS's one.
     # Using LD_PRELOAD=${LD_PRELOAD}:"..." rather than just LD_PRELOAD="..."
     # ensures that we preserve any other settings already configured
     export LD_PRELOAD=${LD_PRELOAD}:"/usr/lib/x86_64-linux-gnu/libexpat.so"
+
+    # Activate a custom python environment on load
+    export CASPER_PYTHON_VENV_ON_START=/home/user/work/casper_venv
 ```
 
-Since this configuration refers to your specific installation environment, in general it shouldn't be commited to the `mlib_devel` repository. In fact, the repository is configured to ignore changes to any files wite names beginning `startsg.`.
+Since this configuration refers to your specific installation environment, in general it shouldn't be commited to the `mlib_devel` repository. In fact, the repository is configured to ignore changes to any files with names beginning `startsg.`.
 If you really want to commit your local configuration file, you can do this, but it's helpful to call it something other than `startsg.local`, (eg. `startsg.local.example` or `startsg.local.my-server-name`) so as not to conflict with other users, all of whom will have similar files with different contents.
 
 ### Using `startsg`
 By default, executing (or sourcing) the `startsg` script will use variables defined in the configuration file `startsg.local` residing in the same directory as `startsg`.
-However, you can uswe a specific configuration by specifying one as an argument to `startsg`.
+However, you can use a specific configuration by specifying one as an argument to `startsg`.
 This can be useful if you want to store configurations for multiple versions of MATLAB / Xilinx tools.
 
 For example:
