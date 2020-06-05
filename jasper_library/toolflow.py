@@ -695,6 +695,7 @@ class Toolflow(object):
                     portname_indices=const.port_index,
                     symbolic_indices=const.iogroup_index,
                     io_standard=const.iostd,
+                    drive_strength=const.drive_strength,
                     location=const.loc
                     )]
             elif isinstance(const, ClockConstraint):
@@ -1187,6 +1188,7 @@ class ToolflowBackend(object):
             numindices = len(const.symbolic_indices)
             const.location = [pins[idx].loc for idx in range(numindices)]
             const.io_standard = [pins[idx].iostd for idx in range(numindices)]
+            const.drive_strength = [pins[idx].drive_strength for idx in range(numindices)]
             const.is_vector = const.portname_indices != []
 
         self.gen_constraint_file(
@@ -2039,6 +2041,16 @@ proc puts_red {s} {
                     self.logger.debug('IOSTD constraint found: %s' % iostd)
                     user_const += self.format_const(
                         'IOSTANDARD', iostd, const.portname,
+                        index=const.portname_indices[idx]
+                        if const.portname_indices else None)
+
+            for idx, p in enumerate(const.symbolic_indices):
+                self.logger.debug('Getting drive_strength for port index %d' % idx)
+                drive_strength = const.drive_strength[idx]
+                if drive_strength is not None:
+                    self.logger.debug('DRIVE_STRENGTH constraint found: %s' % drive_strength)
+                    user_const += self.format_const(
+                        'DRIVE', drive_strength, const.portname,
                         index=const.portname_indices[idx]
                         if const.portname_indices else None)
 
