@@ -159,7 +159,7 @@ class YellowBlock(object):
         and turn them into attributes of this
         YellowBlock instance.
         """
-        for key in list(self.blk.keys()):
+        for key in list(sorted(self.blk.keys())):
             self.__setattr__(key,self.blk[key])
 
     def gen_children(self):

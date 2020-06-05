@@ -406,7 +406,7 @@ class Toolflow(object):
         self._extract_plat_info()
         self.periph_objs = []
         
-        for pk in list(self.peripherals.keys()):
+        for pk in list(sorted(self.peripherals.keys())):
             self.logger.debug('Generating Yellow Block: %s' % pk)
             self.periph_objs.append(yellow_block.YellowBlock.make_block(
                 self.peripherals[pk], self.plat))
@@ -463,7 +463,7 @@ class Toolflow(object):
             # Make an AXI4-Lite interconnect yellow block and let it modify top
             axi4lite_interconnect = yellow_block.YellowBlock.make_block(
                 {'tag': 'xps:axi4lite_interconnect', 'name': 'axi4lite_interconnect', 
-                'fullpath': list(self.user_modules.keys())[0] +'/axi4lite_interconnect'}, self.plat)
+                'fullpath': list(sorted(self.user_modules.keys()))[0] +'/axi4lite_interconnect'}, self.plat)
             axi4lite_interconnect.modify_top(self.top)
             self.sources += axi4lite_interconnect.sources
             self.ips += axi4lite_interconnect.ips
@@ -493,10 +493,10 @@ class Toolflow(object):
             # blocks have set up appropriate signals in top.v
             # (we can't add them here anyway, because we don't
             # know the port widths)
-            if 'clock' in list(usermodule.keys()):
+            if 'clock' in list(sorted(usermodule.keys())):
                 inst.add_port(name=usermodule['clock'], signal='user_clk',
                               parent_sig=False)
-            if 'clock_enable' in list(usermodule.keys()):
+            if 'clock_enable' in list(sorted(usermodule.keys())):
                 inst.add_port(name=usermodule['clock_enable'], signal='1\'b1',
                               parent_sig=False)
             for port in usermodule['ports']:
@@ -659,7 +659,7 @@ class Toolflow(object):
         for const in self.constraints:
             if isinstance(const, PortConstraint):
                 port_constraints += [const.portname]
-        for key in list(self.top.ports.keys()):
+        for key in list(sorted(self.top.ports.keys())):
             for port in self.top.ports[key]:
                 if port not in port_constraints:
                     self.logger.warning('Port %s (instantiated by %s) has no constraints!' % (port, key))
@@ -860,7 +860,7 @@ class Toolflow(object):
         """
         # Generate memory map xml file for each interface in memory_map
 
-        for interface in list(memory_map.keys()):
+        for interface in list(sorted(memory_map.keys())):
             xml_root = ET.Element('node')
             xml_root.set('id', interface)
             # fill xml node with slave info from memory map
@@ -873,12 +873,14 @@ class Toolflow(object):
                 node.set('mask', hex(0xFFFFFFFF))
                 # node.set('size', str(reg.nbytes))
                 node.set('permission', reg.mode)               
+                node.set('axi4lite_mode', reg.axi4lite_mode)
                 if reg.mode == 'r':
-                    # Basically a To Processor register (status)
-                    node.set('hw_permission', 'w')
-                    # Populate defaults if sys_block version registers
-                    if reg.name == 'sys_board_id' or reg.name == 'sys_rev' or reg.name == 'sys_rev_rcs': 
-                        node.set('hw_rst', str(reg.default_val))
+                    if reg.default_val != 0:
+                       # Populate defaults of sys_block version registers
+                       node.set('hw_rst', str(reg.default_val))
+                    else:
+                       # Basically a To Processor register (status)
+                       node.set('hw_permission', 'w')
                 else:
                     # Only for a From Processor register (control)
                     node.set('hw_rst', str(reg.default_val))
@@ -912,7 +914,7 @@ class Toolflow(object):
         xml_root.set('id', 'axi4lite_top')
         xml_root.set('address', hex(self.plat.mmbus_base_address))
         xml_root.set('hw_type', 'ic')
-        for interface in list(memory_map.keys()):
+        for interface in list(sorted(memory_map.keys())):
             # add a child to parent node
             node = ET.SubElement(xml_root, 'node')
             node.set('id', interface)
@@ -2210,6 +2212,21 @@ proc puts_red {s} {
                 if val is not None:
                     for v in val:
                         self.add_tcl_cmd(v, stage=key)
+
+    def gen_yellowblock_custom_hdl(self):
+        """
+        Create each yellowblock's custom hdl files and add them to the projects sources
+        """
+        self.logger.info('Generating yellow block custom hdl files')
+        for obj in self.periph_objs:
+            c = obj.gen_custom_hdl()
+            for key, val in c.items():
+                # create file and write the source string to it
+                f = open('%s/%s' %(self.compile_dir, key),"w")
+                f.write(val)
+                f.close()
+                # add the tcl command to add the source to the project
+                self.add_source('%s/%s' %(self.compile_dir, key), self.plat)
 
     def gen_constraint_file(self, constraints):
         """

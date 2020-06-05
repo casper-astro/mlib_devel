@@ -105,7 +105,7 @@ if __name__ == '__main__':
     sys.argv = [sys.argv[0]] # Keep only the script name. Flush other options
 
     # if we don't have the environment set up, source the default config file
-    if 'XILINX_PATH' not in list(os.environ.keys()):
+    if 'XILINX_PATH' not in list(sorted(os.environ.keys())):
         this_file_path = os.path.realpath(__file__)
         config_file_path = os.path.join(os.path.dirname(os.path.dirname(this_file_path)), 'vivado_config.local')
         if os.path.exists(config_file_path):
