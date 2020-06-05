@@ -19,24 +19,61 @@ class onehundredgbe_usplus(onehundred_gbe):
     def initialize(self):
         self.typecode = TYPECODE_ETHCORE
         kdir = "onehundred_gbe/kutleng_skarab2_bsp_firmware/casperbsp/sources/vhdl/rtl"
-        self.add_source('onehundred_gbe/*.v')
-        self.add_source(join(kdir, "*.vhd"))
-        self.add_source(join(kdir, "*", "*.vhd"))
-        self.add_source(join(kdir, "udp", "macinterface", "*.vhd"))
-        self.add_source(join(kdir, "udp", "macinterface", "*", "*.vhd"))
-        #self.add_source('onehundred_gbe/kutleng/*.vhd')
-        #self.add_source('onehundred_gbe/kutleng/arp/*.vhd')
-        #self.add_source('onehundred_gbe/kutleng/lbustoaxis/*.vhd')
-        #self.add_source('onehundred_gbe/kutleng/macphy/*.vhd')
-        #self.add_source('onehundred_gbe/kutleng/ringbuffer/*.vhd')
-        #self.add_source('onehundred_gbe/kutleng/udp/*.vhd')
-        #self.add_source('onehundred_gbe/kutleng/udp/macinterface/*.vhd')
-        #self.add_source('onehundred_gbe/kutleng/udp/macinterface/cpuinterface/*.vhd')
-        self.add_source('onehundred_gbe/ip/axis_data_fifo/*.xci')
-        self.add_source('onehundred_gbe/ip/axisila/*.xci')
-        self.add_source('onehundred_gbe/ip/axispacketbufferfifo/*.xci')
-        self.add_source('onehundred_gbe/ip/dest_address_fifo/*.xci')
-        self.add_source('onehundred_gbe/ip/EthMACPHY100GQSFP4x/*.xci')
+
+        self.add_source('onehundred_gbe/casper100g_noaxi.v')
+        self.add_source('onehundred_gbe/async.v')
+        self.add_source(kdir + '/preconfig/protocolchecksumprconfigsm.vhd')
+        self.add_source(kdir + '/preconfig/prconfigcontroller.vhd')
+        self.add_source(kdir + '/preconfig/icapwritersm.vhd')
+        self.add_source(kdir + '/preconfig/protocolresponderprconfigsm.vhd')
+        self.add_source(kdir + '/udp/axioffseter.vhd')
+        self.add_source(kdir + '/udp/udpipinterfacepr.vhd')
+        self.add_source(kdir + '/udp/udpstreamingapps.vhd')
+        self.add_source(kdir + '/udp/udpdatastripper.vhd')
+        self.add_source(kdir + '/udp/udpdatapacker_jh.vhd')
+        self.add_source(kdir + '/udp/casper100gethernetblock_no_cpu.vhd')
+        self.add_source(kdir + '/udp/udpstreamingapp.vhd')
+        self.add_source(kdir + '/macphy/mac100gphy.vhd')
+        self.add_source(kdir + '/macphy/macaxissender.vhd')
+        self.add_source(kdir + '/macphy/macaxisdecoupler.vhd')
+        self.add_source(kdir + '/macphy/macaxisreceiver.vhd')
+        self.add_source(kdir + '/macphy/gmacqsfptop.vhd')
+        self.add_source(kdir + '/ringbuffer/cpudualportpacketringbuffer.vhd')
+        self.add_source(kdir + '/ringbuffer/packetringbuffer.vhd')
+        self.add_source(kdir + '/ringbuffer/dualportpacketringbuffer.vhd')
+        self.add_source(kdir + '/ringbuffer/packetramsp.vhd')
+        self.add_source(kdir + '/ringbuffer/cpuifsenderpacketringbuffer.vhd')
+        self.add_source(kdir + '/ringbuffer/cpuifreceiverpacketringbuffer.vhd')
+        self.add_source(kdir + '/ringbuffer/packetstatusram.vhd')
+        self.add_source(kdir + '/ringbuffer/packetramdp.vhd')
+        self.add_source(kdir + '/ringbuffer/truedualportpacketringbuffer.vhd')
+        self.add_source(kdir + '/arp/arpreceiver.vhd')
+        self.add_source(kdir + '/arp/arpmodule.vhd')
+        self.add_source(kdir + '/arp/arpramadpwrr.vhd')
+        self.add_source(kdir + '/arp/arpcache.vhd')
+        self.add_source(kdir + '/arp/arpramadpwr.vhd')
+        self.add_source(kdir + '/arp/ramdpwr.vhd')
+        self.add_source(kdir + '/arp/ramdpwrr.vhd')
+        self.add_source(kdir + '/udp/macinterface/macifudpreceiver.vhd')
+        self.add_source(kdir + '/udp/macinterface/yellow_block_100gbe_udp_rx.vhd')
+        self.add_source(kdir + '/udp/macinterface/macifudpsender.vhd')
+        self.add_source(kdir + '/udp/macinterface/axisfabricmultiplexer.vhd')
+        self.add_source(kdir + '/udp/macinterface/cpuethernetmacif.vhd')
+        self.add_source(kdir + '/udp/macinterface/macifudpserver.vhd')
+        self.add_source(kdir + '/udp/macinterface/axistwoportfabricmultiplexer.vhd')
+        self.add_source(kdir + '/udp/macinterface/axisthreeportfabricmultiplexer.vhd')
+        self.add_source(kdir + '/udp/macinterface/cpuinterface/cpumacifudpreceiver.vhd')
+        self.add_source(kdir + '/udp/macinterface/cpuinterface/cpumacifethernetreceiver.vhd')
+        self.add_source(kdir + '/udp/macinterface/cpuinterface/cpumacifudpsender.vhd')
+        self.add_source('onehundred_gbe/ip/axispacketbufferfifo/axispacketbufferfifo.xci')
+        self.add_source('onehundred_gbe/ip/async_fifo_513b_512deep/async_fifo_513b_512deep.xci')
+        self.add_source('onehundred_gbe/ip/axis_data_fifo/axis_data_fifo_0.xci')
+        self.add_source('onehundred_gbe/ip/EthMACPHY100GQSFP4x/EthMACPHY100GQSFP4x.xci')
+        self.add_source('onehundred_gbe/ip/dest_address_fifo/dest_address_fifo.xci')
+
+        ## TODO: remove this when we're done debugging
+        if self.platform in ['vcu118']:
+            self.add_source('onehundred_gbe/debug.xdc')
 
         self.provides = ['ethernet']
         if self.cpu_rx_en and self.cpu_tx_en:
@@ -71,7 +108,7 @@ class onehundredgbe_usplus(onehundred_gbe):
     def modify_top(self, top):
         inst = top.get_instance(entity='casper100g_noaxi', name=self.fullname+'_inst')
         
-        inst.add_port('RefClk100MHz', 'sys_clk')
+        inst.add_port('RefClk100MHz', 'sys_clk') # sys_clk is decreed to be 100 MHz.
         inst.add_port('RefClkLocked', '~sys_rst', parent_sig=False)
         inst.add_port('aximm_clk', 'axil_clk')
         inst.add_port('icap_clk', 'axil_clk')
@@ -85,11 +122,18 @@ class onehundredgbe_usplus(onehundred_gbe):
         inst.add_port('qsfp_mgt_tx_p', self.portbase+'_qsfp_mgt_tx_p', dir='out', width=4, parent_port=True)
         inst.add_port('qsfp_mgt_tx_n', self.portbase+'_qsfp_mgt_tx_n', dir='out', width=4, parent_port=True)
         # QSFP config interface
-        inst.add_port('qsfp_modsell_ls', '') #self.portbase+'_qsfp_modsell_ls')
-        inst.add_port('qsfp_resetl_ls',  '') #self.portbase+'_qsfp_resetl_ls')
-        inst.add_port('qsfp_modprsl_ls', self.portbase+'_qsfp_modprsl_ls', dir='in', parent_port=True)
-        inst.add_port('qsfp_intl_ls',    '1\'b1') #self.portbase+'_qsfp_intl_ls')
-        inst.add_port('qsfp_lpmode_ls',  '') #self.portbase+'_qsfp_lpmode_ls')
+        if self.platform.name in ['vcu118']:
+            inst.add_port('qsfp_modsell_ls', self.portbase+'_qsfp_modsell_ls', dir='out', parent_port=True)
+            inst.add_port('qsfp_resetl_ls',  self.portbase+'_qsfp_resetl_ls',  dir='out', parent_port=True)
+            inst.add_port('qsfp_modprsl_ls', self.portbase+'_qsfp_modprsl_ls', dir='in',  parent_port=True)
+            inst.add_port('qsfp_lpmode_ls',  self.portbase+'_qsfp_lpmode_ls',  dir='out', parent_port=True)
+            inst.add_port('qsfp_intl_ls',    '1\'b1') #self.portbase+'_qsfp_intl_ls')
+        else:
+            inst.add_port('qsfp_modsell_ls', '') #self.portbase+'_qsfp_modsell_ls')
+            inst.add_port('qsfp_resetl_ls',  '') #self.portbase+'_qsfp_resetl_ls')
+            inst.add_port('qsfp_modprsl_ls', self.portbase+'_qsfp_modprsl_ls', dir='in', parent_port=True)
+            inst.add_port('qsfp_intl_ls',    '1\'b1') #self.portbase+'_qsfp_intl_ls')
+            inst.add_port('qsfp_lpmode_ls',  '') #self.portbase+'_qsfp_lpmode_ls')
 
         inst.add_port('user_clk', 'user_clk')
 
@@ -97,7 +141,7 @@ class onehundredgbe_usplus(onehundred_gbe):
         inst.add_port('gbe_tx_afull',         self.fullname+'_tx_afull')        
         inst.add_port('gbe_tx_overflow',      self.fullname+'_tx_overflow')
         inst.add_port('gbe_rx_data',          self.fullname+'_rx_data',        width=512)
-        inst.add_port('gbe_rx_valid',         self.fullname+'_rx_valid',       width=4)
+        inst.add_port('gbe_rx_valid',         self.fullname+'_rx_valid')
         inst.add_port('gbe_rx_source_ip',     self.fullname+'_rx_source_ip',   width=32)
         inst.add_port('gbe_rx_source_port',   self.fullname+'_rx_source_port', width=16)
         inst.add_port('gbe_rx_dest_ip',       self.fullname+'_rx_dest_ip',     width=32)
@@ -126,11 +170,15 @@ class onehundredgbe_usplus(onehundred_gbe):
         consts += [PortConstraint(self.portbase+'_qsfp_mgt_rx_n', 'qsfp_mgt_rx_n', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
         consts += [PortConstraint(self.portbase+'_qsfp_mgt_tx_p', 'qsfp_mgt_tx_p', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
         consts += [PortConstraint(self.portbase+'_qsfp_mgt_tx_n', 'qsfp_mgt_tx_n', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
-        #consts += [PortConstraint(self.portbase+'_qsfp_modsell_ls', '', iogroup_index=self.port)]
-        #consts += [PortConstraint(self.portbase+'_qsfp_resetl_ls', '', iogroup_index=self.port)]
-        consts += [PortConstraint(self.portbase+'_qsfp_modprsl_ls', 'qsfp_modprs', iogroup_index=self.port)]
-        #consts += [PortConstraint(self.portbase+'_qsfp_intl_ls', '', iogroup_index=self.port)]
-        #consts += [PortConstraint(self.portbase+'_qsfp_lpmode_ls', '', iogroup_index=self.port)]
+
+        if self.platform.name in ['vcu118']:
+            consts += [PortConstraint(self.portbase+'_qsfp_modsell_ls', 'qsfp_modsell_ls', iogroup_index=self.port)]
+            consts += [PortConstraint(self.portbase+'_qsfp_resetl_ls',  'qsfp_resetl_ls', iogroup_index=self.port)]
+            consts += [PortConstraint(self.portbase+'_qsfp_modprsl_ls', 'qsfp_modprsl_ls', iogroup_index=self.port)]
+            consts += [PortConstraint(self.portbase+'_qsfp_lpmode_ls',  'qsfp_lpmode_ls', iogroup_index=self.port)]
+        else:
+            consts += [PortConstraint(self.portbase+'_qsfp_modprsl_ls', 'qsfp_modprsl_ls', iogroup_index=self.port)]
+
         clkname = self.portbase+'_refclk_p' # defined by IP
         #self.myclk = ClockConstraint(self.portbase+'_refclk_p', freq=self.refclk_freq)
         #consts += [self.myclk]

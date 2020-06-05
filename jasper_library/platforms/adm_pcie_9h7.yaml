@@ -139,7 +139,7 @@ pins:
       - Y8
       - W6
       - W10
-  qsfp_modprs:
+  qsfp_modprsl_ls:
     iostd: LVCMOS18
     loc: [BN35, BN34, BP34, BL32]
   qsfp_sda:

@@ -1,4 +1,8 @@
-module casper100g_noaxi (
+module casper100g_noaxi#(
+    parameter FABRIC_MAC = 48'hff_ff_ff_ff_ff_ff,
+    parameter FABRIC_IP = 32'hc0a805c8,
+    parameter FABRIC_PORT = 16'h2710
+   ) (
         // 100MHz reference clock needed by 100G Ethernet PHY
         // This must be a stable 100MHz clock as per the 100G PHY requirements 
         input RefClk100MHz,
@@ -35,7 +39,7 @@ module casper100g_noaxi (
         output gbe_tx_afull,
         output gbe_tx_overflow,
         output [511:0] gbe_rx_data,
-        output [3:0] gbe_rx_valid,
+        output gbe_rx_valid,
         output [31:0] gbe_rx_source_ip,
         output [15:0] gbe_rx_source_port,
         output [31:0] gbe_rx_dest_ip,
@@ -64,18 +68,21 @@ module casper100g_noaxi (
     assign gbe_rx_dest_ip = 32'b0;
     assign gbe_rx_dest_port = 16'b0;
     assign gbe_rx_bad_frame = 1'b0;
-    assign gbe_rx_overrun = 1'b0;
+    //assign gbe_rx_overrun = 1'b0;
     assign gbe_led_up = 1'b0;
     assign gbe_led_rx = 1'b0;
     assign gbe_led_tx = 1'b0;
 
-    wire rx_valid_int;
+    //wire rx_valid_int;
     wire tx_valid_int;
 
     assign tx_valid_int = |gbe_tx_valid;
-    assign gbe_rx_valid = {4{rx_valid_int}};
+    //assign gbe_rx_valid = {4{rx_valid_int}};
 
     casper100gethernetblock_no_cpu #(
+        .FABRIC_MAC(FABRIC_MAC),
+        .FABRIC_IP(FABRIC_IP),
+        .FABRIC_PORT(FABRIC_PORT),
         .G_INCLUDE_ICAP(1'b0),
         .G_AXI_DATA_WIDTH(512),
         .G_NUM_STREAMING_DATA_SERVERS(1),
@@ -108,12 +115,17 @@ module casper100g_noaxi (
         .axis_streaming_data_rx_packet_length(),
         
         // Streaming data outputs to AXIS of the Yellow Blocks
-        .axis_streaming_data_rx_tdata(gbe_rx_data),
-        .axis_streaming_data_rx_tvalid(rx_valid_int),
-        .axis_streaming_data_rx_tready(gbe_rx_ack),
-        .axis_streaming_data_rx_tkeep(),
-        .axis_streaming_data_rx_tlast(gbe_rx_end_of_frame),
-        .axis_streaming_data_rx_tuser(),
+        //.axis_streaming_data_rx_tdata(gbe_rx_data),
+        //.axis_streaming_data_rx_tvalid(rx_valid_int),
+        //.axis_streaming_data_rx_tready(1'b1),//(gbe_rx_ack),
+        //.axis_streaming_data_rx_tkeep(),
+        //.axis_streaming_data_rx_tlast(gbe_rx_end_of_frame),
+        //.axis_streaming_data_rx_tuser(1'b0),
+        .yellow_block_rx_data      (gbe_rx_data),
+        .yellow_block_rx_valid     (gbe_rx_valid),
+        .yellow_block_rx_eof       (gbe_rx_end_of_frame),
+        .yellow_block_rx_overrun   (gbe_rx_overrun),
+
         //Data inputs from AXIS bus of the Yellow Blocks
         .axis_streaming_data_tx_destination_ip(gbe_tx_dest_ip),
         .axis_streaming_data_tx_destination_udp_port(gbe_tx_dest_port),
