@@ -95,6 +95,8 @@ class YellowBlock(object):
             if not os.path.isdir(self.hdl_root):
                 raise Exception('Specified hdl root path %s does not exist!'%self.hdl_root)
 
+        #: The classname of this block
+        self.blocktype = type(self).__name__
         #: The ID of this block within all the instances of this block's class
         self.inst_id = self._get_id()
         #: A boolean, which is `True` if `self.inst_id == 0`
@@ -124,6 +126,9 @@ class YellowBlock(object):
         self.blk = blk
         #: Stores the `platform` parameter, passed into this block's constructor
         self.platform = platform
+        #: Stores the path to a template project which should be the starting point
+        #: for instantiating this block. None indicates no template is needed.
+        self.template_project = None
         #: A friendly name for this block, generated from the `tag` entry in the `self.blk` dictionary
         #: and `self.inst_id`. Eg. "sw_reg5", or "ten_gbe0"
         #: Be sure to throw away the `xps:` from the tag before using it to make a name
@@ -210,6 +215,20 @@ class YellowBlock(object):
                     of an HDL design into which this block should instantiate itself.
         """
         pass
+
+    def finalize_top(self, top):
+        """
+        A final opportunity for a block to modify VerilogModule instance `top` after all
+        other YellowBlocks have called their `modify_top` methods.
+        Unlike `modify_top`, `finalize_top` returns a new top-level VerilogModule.
+        This method was added to facilitate blocks which might need to do elaborate things,
+        such as wrap an entire user-level design so that it can be used with (eg) partial
+        reconfiguration.
+
+        :param top: A VerilogModule instance, defining the top-level of the user's design.
+        Returns: A new `VerilogModule` instance, definining the top-level of the user's design.
+        """
+        return top
 
     def gen_constraints(self):
         """

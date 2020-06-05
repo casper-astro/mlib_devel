@@ -29,6 +29,7 @@ architecture Behavioral of gpio_simulink2ext is
     attribute IOB: string;
 	signal one  : std_logic := '1';
 	signal zero : std_logic := '0';
+  signal io_pad_buf : std_logic_vector((WIDTH/(DDR+1)-1) downto 0);
 
 	signal integer_convert : std_logic_vector(0 downto 0);
 begin
@@ -77,9 +78,15 @@ begin
 			Q_REG_SDR: FD
 			port map( 
 				D => gateway(i),
-				Q => io_pad(i),
+				Q => io_pad_buf(i),
 				C => sample_clk
 			);
+
+      OBUF_SDR: OBUF
+      port map(
+        I => io_pad_buf(i),
+        O => io_pad(i)
+      );
 		end generate REG_SDR_GEN;
 	end generate SDR_GEN;
 
