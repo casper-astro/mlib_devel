@@ -15,7 +15,11 @@ module adm_pcie_9h7_infrastructure(
 
   // Sys clk is 300MHz on the ADM-PCIE-9H7
   wire sys_clk_ds;
-  IBUFDS #(
+  // Don't let the optimizer touch this. It has a tendency
+  // to insert a pair of single-ended buffers on these inputs
+  // and then moan about that being innappropriate for an
+  // LVDS differential input.
+  (* dont_touch = "true" *) IBUFDS #(
     .IOSTANDARD("LVDS"),
     .DIFF_TERM("TRUE")
   ) ibufgds_sys_clk (

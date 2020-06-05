@@ -39,9 +39,29 @@ class gpio(YellowBlock):
         # add the source files, which have the same name as the module
         self.add_source(self.module)
 
+        # Create a name for the external pins, which depends on the type of yellow block,
+        # but not the model name (i.e., NOT self.fullname). This makes PR easier since
+        # the top-level interface doesn't vary between models.
+        pins = to_int_list(self.bit_index)
+        start_pin = pins[0]
+        end_pin = pins[-1]
+        self.portbase = "{blocktype}_{iotype}_{start}_{end}".format(
+            blocktype=self.blocktype, iotype=self.io_group, start=start_pin, end=end_pin)
+
     def modify_top(self,top):
         instance_name = self.fullname
         gateway_name = '{}_gateway'.format(self.fullname)
+
+        # If the io_group is set to gateway, propagate the signal
+        # straight to the top-level. This is probably only useful
+        # if a) the synth tool are going to instantiate buffers themselves
+        # or b) there is some higher level logic to connect to in a template PR design.
+        if self.io_group == 'gateway':
+            top.add_port(self.name, dir=self.io_dir, width=self.pad_bitwidth)
+            top.add_signal(self.name, width=self.pad_bitwidth)
+            top.add_signal(gateway_name, width=self.pad_bitwidth)
+            top.assign_signal(self.name, gateway_name)
+            return
 
         inst = top.get_instance(entity=self.module, name=self.fullname)
         inst.add_parameter('CLK_PHASE', self.reg_clk_phase)
@@ -75,7 +95,7 @@ class gpio(YellowBlock):
             inst.add_parameter('PORT_BYPASS', '1')
         else:
             # Just dealing with normal GPIOs
-            external_port_name = self.fullname + '_ext'
+            external_port_name = self.portbase + '_ext'
             
             if self.use_diffio:
                 inst.add_port('io_pad_p', signal=external_port_name + '_p', dir=self.io_dir, width=self.pad_bitwidth, parent_port=True)
@@ -84,28 +104,30 @@ class gpio(YellowBlock):
                 inst.add_port('io_pad', signal=external_port_name, dir=self.io_dir, width=self.pad_bitwidth, parent_port=True)
         
     def gen_constraints(self):
+        if self.io_group == 'gateway':
+            return []
         if self.use_diffio:
             const = []
-            const += [PortConstraint(self.fullname+'_ext_p', self.io_group + '_p', port_index=list(range(self.bitwidth)), iogroup_index=to_int_list(self.bit_index))]
-            const += [PortConstraint(self.fullname+'_ext_n', self.io_group + '_n', port_index=list(range(self.bitwidth)), iogroup_index=to_int_list(self.bit_index))]
+            const += [PortConstraint(self.portbase+'_ext_p', self.io_group + '_p', port_index=list(range(self.bitwidth)), iogroup_index=to_int_list(self.bit_index))]
+            const += [PortConstraint(self.portbase+'_ext_n', self.io_group + '_n', port_index=list(range(self.bitwidth)), iogroup_index=to_int_list(self.bit_index))]
             #Constrain the I/O (it is assumed that this I/O is not timing critical and set_false_path is used)
             #NB: The set_max_delay and set_min_delay is important as Vivado will report that these signals are not
             #constrained without it
             if self.io_dir == 'in':
-                const += [MaxDelayConstraint(sourcepath='[get_ports {%s_ext_p[*]}]' % self.fullname, constdelay_ns=1.0)]
-                const += [MaxDelayConstraint(sourcepath='[get_ports {%s_ext_n[*]}]' % self.fullname, constdelay_ns=1.0)]
-                const += [MinDelayConstraint(sourcepath='[get_ports {%s_ext_p[*]}]' % self.fullname, constdelay_ns=1.0)]
-                const += [MinDelayConstraint(sourcepath='[get_ports {%s_ext_n[*]}]' % self.fullname, constdelay_ns=1.0)]
-                const += [FalsePathConstraint(sourcepath='[get_ports {%s_ext_p[*]}]' % self.fullname)]
-                const += [FalsePathConstraint(sourcepath='[get_ports {%s_ext_n[*]}]' % self.fullname)]
+                const += [MaxDelayConstraint(sourcepath='[get_ports {%s_ext_p[*]}]' % self.portbase, constdelay_ns=1.0)]
+                const += [MaxDelayConstraint(sourcepath='[get_ports {%s_ext_n[*]}]' % self.portbase, constdelay_ns=1.0)]
+                const += [MinDelayConstraint(sourcepath='[get_ports {%s_ext_p[*]}]' % self.portbase, constdelay_ns=1.0)]
+                const += [MinDelayConstraint(sourcepath='[get_ports {%s_ext_n[*]}]' % self.portbase, constdelay_ns=1.0)]
+                const += [FalsePathConstraint(sourcepath='[get_ports {%s_ext_p[*]}]' % self.portbase)]
+                const += [FalsePathConstraint(sourcepath='[get_ports {%s_ext_n[*]}]' % self.portbase)]
 
             elif self.io_dir == 'out':
-                const += [MaxDelayConstraint(destpath='[get_ports {%s_ext_p[*]}]' % self.fullname, constdelay_ns=1.0)]
-                const += [MaxDelayConstraint(destpath='[get_ports {%s_ext_n[*]}]' % self.fullname, constdelay_ns=1.0)]
-                const += [MinDelayConstraint(destpath='[get_ports {%s_ext_p[*]}]' % self.fullname, constdelay_ns=1.0)]
-                const += [MinDelayConstraint(destpath='[get_ports {%s_ext_n[*]}]' % self.fullname, constdelay_ns=1.0)]
-                const += [FalsePathConstraint(destpath='[get_ports {%s_ext_p[*]}]' % self.fullname)]
-                const += [FalsePathConstraint(destpath='[get_ports {%s_ext_n[*]}]' % self.fullname)]
+                const += [MaxDelayConstraint(destpath='[get_ports {%s_ext_p[*]}]' % self.portbase, constdelay_ns=1.0)]
+                const += [MaxDelayConstraint(destpath='[get_ports {%s_ext_n[*]}]' % self.portbase, constdelay_ns=1.0)]
+                const += [MinDelayConstraint(destpath='[get_ports {%s_ext_p[*]}]' % self.portbase, constdelay_ns=1.0)]
+                const += [MinDelayConstraint(destpath='[get_ports {%s_ext_n[*]}]' % self.portbase, constdelay_ns=1.0)]
+                const += [FalsePathConstraint(destpath='[get_ports {%s_ext_p[*]}]' % self.portbase)]
+                const += [FalsePathConstraint(destpath='[get_ports {%s_ext_n[*]}]' % self.portbase)]
             return const
         else:
             const = []
@@ -116,19 +138,19 @@ class gpio(YellowBlock):
                 # - Just need to map the output of the gpio_simulink2ext to the input of the led_manager
                     return const
             
-            const += [PortConstraint(self.fullname+'_ext', self.io_group, port_index=list(range(self.bitwidth)), iogroup_index=to_int_list(self.bit_index))]
+            const += [PortConstraint(self.portbase+'_ext', self.io_group, port_index=list(range(self.bitwidth)), iogroup_index=to_int_list(self.bit_index))]
             
             #Constrain the I/O (it is assumed that this I/O is not timing critical and set_false_path is used)
             #NB: The set_max_delay and set_min_delay is important as Vivado will report that these signals are not
             #constrained without it
             if self.io_dir == 'in':
-                const += [MaxDelayConstraint(sourcepath='[get_ports {%s_ext[*]}]' % self.fullname, constdelay_ns=1.0)]
-                const += [MinDelayConstraint(sourcepath='[get_ports {%s_ext[*]}]' % self.fullname, constdelay_ns=1.0)]
-                const += [FalsePathConstraint(sourcepath='[get_ports {%s_ext[*]}]' % self.fullname)]
+                const += [MaxDelayConstraint(sourcepath='[get_ports {%s_ext[*]}]' % self.portbase, constdelay_ns=1.0)]
+                const += [MinDelayConstraint(sourcepath='[get_ports {%s_ext[*]}]' % self.portbase, constdelay_ns=1.0)]
+                const += [FalsePathConstraint(sourcepath='[get_ports {%s_ext[*]}]' % self.portbase)]
             elif self.io_dir == 'out':
-                const += [MaxDelayConstraint(destpath='[get_ports {%s_ext[*]}]' % self.fullname, constdelay_ns=1.0)]
-                const += [MinDelayConstraint(destpath='[get_ports {%s_ext[*]}]' % self.fullname, constdelay_ns=1.0)]
-                const += [FalsePathConstraint(destpath='[get_ports {%s_ext[*]}]' % self.fullname)]
+                const += [MaxDelayConstraint(destpath='[get_ports {%s_ext[*]}]' % self.portbase, constdelay_ns=1.0)]
+                const += [MinDelayConstraint(destpath='[get_ports {%s_ext[*]}]' % self.portbase, constdelay_ns=1.0)]
+                const += [FalsePathConstraint(destpath='[get_ports {%s_ext[*]}]' % self.portbase)]
             return const
 
 

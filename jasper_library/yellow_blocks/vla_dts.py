@@ -18,6 +18,8 @@ class vla_dts(YellowBlock):
 
         self.requires = []
         self.provides = ['dts_500_clk', 'dts_500_clk90', 'dts_500_clk180', 'dts_500_clk270']
+        # Create a standard port name prefix to make PR simpler between models
+        self.portbase = 'vla_dts'
 
     def modify_top(self,top):
         module = 'dts_gty_rx'
@@ -32,15 +34,15 @@ class vla_dts(YellowBlock):
         inst.add_port('locked',  self.fullname+'_locked')
 
         # External ports
-        inst.add_port('rx_p', self.fullname+'_rx_p', width=12, parent_port=True, dir='in')
-        inst.add_port('rx_n', self.fullname+'_rx_n', width=12, parent_port=True, dir='in')
-        inst.add_port('tx_p', self.fullname+'_tx_p', width=12, parent_port=True, dir='out')
-        inst.add_port('tx_n', self.fullname+'_tx_n', width=12, parent_port=True, dir='out')
-        inst.add_port('mgtrefclk0_p', self.fullname+'_mgtclk0_p', parent_port=True, dir='in')
-        inst.add_port('mgtrefclk0_n', self.fullname+'_mgtclk0_n', parent_port=True, dir='in')
-        inst.add_port('mgtrefclk1_p', self.fullname+'_mgtclk1_p', parent_port=True, dir='in')
-        inst.add_port('mgtrefclk1_n', self.fullname+'_mgtclk1_n', parent_port=True, dir='in')
-        inst.add_port('qsfp_modprsl', self.fullname+'_modprsl', width=3, parent_port=True, dir='in')
+        inst.add_port('rx_p', self.portbase+'_rx_p', width=12, parent_port=True, dir='in')
+        inst.add_port('rx_n', self.portbase+'_rx_n', width=12, parent_port=True, dir='in')
+        inst.add_port('tx_p', self.portbase+'_tx_p', width=12, parent_port=True, dir='out')
+        inst.add_port('tx_n', self.portbase+'_tx_n', width=12, parent_port=True, dir='out')
+        inst.add_port('mgtrefclk0_p', self.portbase+'_mgtclk0_p', parent_port=True, dir='in')
+        inst.add_port('mgtrefclk0_n', self.portbase+'_mgtclk0_n', parent_port=True, dir='in')
+        inst.add_port('mgtrefclk1_p', self.portbase+'_mgtclk1_p', parent_port=True, dir='in')
+        inst.add_port('mgtrefclk1_n', self.portbase+'_mgtclk1_n', parent_port=True, dir='in')
+        inst.add_port('qsfp_modprsl', self.portbase+'_modprsl', width=3, parent_port=True, dir='in')
 
         # Internal ports
         inst.add_port('clk100', 'sys_clk')
@@ -55,17 +57,17 @@ class vla_dts(YellowBlock):
         # Transceiver LOC constraints are built into IP. So they are not needed here.
         #cons.append(PortConstraint(self.fullname+'_rx_p', 'dts_gty_rx_p', port_index=range(12), iogroup_index=range(12)))
         #cons.append(PortConstraint(self.fullname+'_tx_p', 'dts_gty_tx_p', port_index=range(12), iogroup_index=range(12)))
-        cons.append(PortConstraint(self.fullname+'_mgtclk0_p', 'dts_gty_refclk_p', iogroup_index=0))
-        cons.append(PortConstraint(self.fullname+'_mgtclk1_p', 'dts_gty_refclk_p', iogroup_index=1))
-        cons.append(PortConstraint(self.fullname+'_modprsl', 'dts_qsfp_modprsl', port_index=range(3), iogroup_index=range(3)))
+        cons.append(PortConstraint(self.portbase+'_mgtclk0_p', 'dts_gty_refclk_p', iogroup_index=0))
+        cons.append(PortConstraint(self.portbase+'_mgtclk1_p', 'dts_gty_refclk_p', iogroup_index=1))
+        cons.append(PortConstraint(self.portbase+'_modprsl', 'dts_qsfp_modprsl', port_index=range(3), iogroup_index=range(3)))
 
         # clock constraint with variable period
-        clkconst = ClockConstraint(self.fullname+'_mgtclk0_p', name=self.fullname+'_mgtclk0', freq=161.1328125)
+        clkconst = ClockConstraint(self.portbase+'_mgtclk0_p', name=self.fullname+'_mgtclk0', freq=161.1328125)
         cons.append(clkconst)
         # Make asynchronous to sysclk
         cons.append(RawConstraint('set_clock_groups -name async_sysclk_dts0 -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks sys_clk0_dcm]' % clkconst.name))
 
-        clkconst = ClockConstraint(self.fullname+'_mgtclk1_p', name=self.fullname+'_mgtclk1', freq=161.1328125)
+        clkconst = ClockConstraint(self.portbase+'_mgtclk1_p', name=self.fullname+'_mgtclk1', freq=161.1328125)
         cons.append(clkconst)
         # Make asynchronous to sysclk
         cons.append(RawConstraint('set_clock_groups -name async_sysclk_dts1 -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks sys_clk0_dcm]' % clkconst.name))

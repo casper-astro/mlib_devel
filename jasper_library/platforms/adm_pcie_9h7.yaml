@@ -11,7 +11,7 @@ sources: []
 constraints: []
 pcie:
   loc: PCIE4C_X1Y0
-  use_tandem: True
+  use_pr: True
 onehundredgbe:
   refclk_freq_str: "161.1328125"
   cmac_loc:

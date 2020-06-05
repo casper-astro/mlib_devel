@@ -55,7 +55,13 @@ module dts_gty_rx(
   wire [12*2 - 1 : 0] gt_dvld;
   wire gt_clkout;
 
-  wire all_qsfp_present = ~|qsfp_modprsl;
+  wire [2:0] qsfp_modprsl_buf;
+  IBUF IBUF_inst[2:0] (
+    .I(qsfp_modprsl),
+    .O(qsfp_modprsl_buf)
+  );
+
+  wire all_qsfp_present = ~|qsfp_modprsl_buf;
   
   gty_12chan gty_inst (
     .rx_p(rx_p),
