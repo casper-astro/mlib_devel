@@ -185,6 +185,7 @@ pins:
     iostd: LVCMOS18
   led:
     iostd: LVCMOS12
+    drive_strength: 8 #HP banks don't support the default of 12
     loc:
       - AT32
       - AV34
