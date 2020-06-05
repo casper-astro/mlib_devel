@@ -107,6 +107,12 @@ class onehundredgbe_usplus(onehundred_gbe):
 
     def modify_top(self, top):
         inst = top.get_instance(entity='casper100g_noaxi', name=self.fullname+'_inst')
+
+        # The below call doesn't (yet) add any AXI ports to `inst`, which is required
+        # for anything useful to happen.
+        # But the 100G core doesn't (yet) have an axi interface exposed in the HDL anyway!
+        #top.add_axi4lite_interface(regname=self.unique_name, mode='rw', nbytes=65536,
+        #                            typecode=self.typecode, axi4lite_mode='raw')
         
         inst.add_port('RefClk100MHz', 'sys_clk') # sys_clk is decreed to be 100 MHz.
         inst.add_port('RefClkLocked', '~sys_rst', parent_sig=False)
