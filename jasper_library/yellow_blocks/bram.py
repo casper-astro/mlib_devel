@@ -9,12 +9,14 @@ class bram(YellowBlock):
         We could override __init__ here, but this seems a little
         bit more user friendly.
         '''
+
         if self.platform.mmbus_architecture == 'AXI4-Lite':
             self.typecode = TYPECODE_BRAM
             self.requirements = ['axil_clk']
             self.requirements = ['sys_clk']
             self.depth = 2**self.addr_width
             self.n_registers = int(self.reg_prim_output) + int(self.reg_core_output)
+            
         else:
             self.typecode = TYPECODE_SWREG
             self.platform_support = 'all'
@@ -24,12 +26,15 @@ class bram(YellowBlock):
             self.n_registers = int(self.reg_prim_output) + int(self.reg_core_output)
             # parameters from the simulink block which currently don't do anything
             # self.optimisation
-
+        
     def modify_top(self,top):
         # axi4lite bram
         if self.platform.mmbus_architecture == 'AXI4-Lite':
 
-            top.add_axi4lite_interface(regname=self.unique_name, mode='rw', nbytes=self.depth*4, typecode=self.typecode) #width is in bits
+            top.add_axi4lite_interface(regname=self.unique_name,
+                                mode='rw', nbytes=self.depth*self.data_width//8,
+                                typecode=self.typecode,
+                                data_width=self.data_width) #width is in bits
         else:
             module = 'wb_bram'
             inst = top.get_instance(entity=module, name=self.fullname)
