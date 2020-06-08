@@ -38,6 +38,8 @@ is highly recommended, as the documentation is part of the Ultrafast design meth
 
 ## Optional: Install USB Drivers for JTAG
 
+*Note: this will only be used by toolflow/yellow block developers and is not required for standard use of the toolflow*
+
 The most reliable way to install the JTAG cable drivers is to use the drivers provided with ISE.
 
 A folder containing all the files required has been uploaded in the same folder as this document: [linux_jtag_cable_drivers.tar.gz](https://drive.google.com/file/d/0Byu0Sq2IEDuJdVFMMkNLN2pxYnc/view?usp=sharing). This also includes a useful installation script that prepares the files and places them in the correct directories.
@@ -83,6 +85,8 @@ is highly recommended, as the documentation is part of the Ultrafast design meth
 22. To confirm that the license file was successful, click on “View License Status” and make sure a list of Tools/IP is read back and that the license is still valid. Once this is done then close the “Vivado License Manager” by clicking on the red cross at the top left of the window. You will be prompted if you want to close the “Vivado License Manager”. Click “Yes”.
 
 ## Optional: Install USB Drivers for JTAG
+
+*Note: this will only be used by toolflow/yellow block developers and is not required for standard use of the toolflow*
 
 A folder containing all the files required has been uploaded in the same folder as this document: [linux_jtag_cable_drivers.tar.gz](https://drive.google.com/file/d/0Byu0Sq2IEDuJdVFMMkNLN2pxYnc/view?usp=sharing). This also includes a useful installation script that prepares the files and places them in the correct directories.
 

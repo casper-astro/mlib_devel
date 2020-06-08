@@ -795,6 +795,7 @@ class Toolflow(object):
         Generate xml memory map files that represent each AXI4-Lite interface for Oxford's xml2vhdl.
         """
         # Generate memory map xml file for each interface in memory_map
+
         for interface in list(memory_map.keys()):
             xml_root = ET.Element('node')
             xml_root.set('id', interface)
@@ -809,11 +810,12 @@ class Toolflow(object):
                 # node.set('size', str(reg.nbytes))
                 node.set('permission', reg.mode)               
                 if reg.mode == 'r':
-                    # Basically a To Processor register (status)
-                    node.set('hw_permission', 'w')
-                    # Populate defaults if sys_block version registers
-                    if reg.name == 'sys_board_id' or reg.name == 'sys_rev' or reg.name == 'sys_rev_rcs': 
-                        node.set('hw_rst', str(reg.default_val))
+                    if reg.default_val != 0:
+                       # Populate defaults of sys_block version registers
+                       node.set('hw_rst', str(reg.default_val))
+                    else:
+                       # Basically a To Processor register (status)
+                       node.set('hw_permission', 'w')
                 else:
                     # Only for a From Processor register (control)
                     node.set('hw_rst', str(reg.default_val))
@@ -823,6 +825,10 @@ class Toolflow(object):
                 if hasattr(reg, 'ram') and reg.ram==True:
                     node.set('hw_dp_ram', 'yes')
                     node.set('size', str(reg.nbytes//4)) # this needs to be in words not bytes!!! Dammit Janet
+
+                    # Need to make special mention of the bitwidth (data width) here
+                    # - Reading from xml2slave.py - need the key 'hw_dp_ram_width'
+                    node.set('hw_dp_ram_width', str(reg.data_width))
 
             # output xml file describing memory map as input for xml2vhdl
             myxml = xml.dom.minidom.parseString(ET.tostring(xml_root))
@@ -880,6 +886,7 @@ class Toolflow(object):
         # generate xml interconnect for input
         self.generate_xml_ic(self.top.memory_map)
         # execute xml2vhdl generation
+
         try:
             # Xml2VhdlGenerate takes arguments as attributes of an args class
             args = helper.arguments.Arguments()
@@ -2037,7 +2044,7 @@ class VivadoBackend(ToolflowBackend):
             c = obj.add_build_dir_source()
             for d in c:
                 #self.add_source('%s/%s' %(self.compile_dir, d['files']), self.plat)
-                self.add_tcl_cmd('add_files %s/%s' %(self.compile_dir, d['files']), stage='pre_synth')
+                self.add_tcl_cmd('import_files %s/%s' %(self.compile_dir, d['files']), stage='pre_synth')
                 #if d['library'] != '':
                     # add the source to a library if the library key exists
                 #    self.add_tcl_cmd('set_property library %s [get_files  {%s/%s%s}]' %(d['library'], self.compile_dir, d['files'], '*' if d['files'][-1]=='/' else ''), stage='pre_synth')
