@@ -1433,7 +1433,7 @@ class VerilogModule(object):
             self.add_port('wb_rst_i'+candr_suffix, parent_sig=False)
             self.add_port('wb_cyc_i'+suffix, parent_sig=False)
             self.add_port('wb_stb_i'+suffix, parent_sig=False)
-            self.add_port('wb_we_i' +suffix, width=1, parent_sig=False)
+            self.add_port('wb_we_i' +suffix, parent_sig=False)
             self.add_port('wb_sel_i'+suffix, width=4, parent_sig=False)
             self.add_port('wb_adr_i'+suffix, width=32, parent_sig=False)
             self.add_port('wb_dat_i'+suffix, width=32, parent_sig=False)
