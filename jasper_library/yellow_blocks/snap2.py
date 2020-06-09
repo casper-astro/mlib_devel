@@ -3,11 +3,18 @@ from constraints import ClockConstraint, PortConstraint, RawConstraint
 
 class snap2(YellowBlock):
     def initialize(self):
-        self.add_source('infrastructure')
+        self.add_source('infrastructure/snap2*')
         self.add_source('wbs_arbiter')
+        if self.name == 'snap2_v2':
+            self.version = 2
+        else:
+            self.version = 1
 
     def modify_top(self,top):
-        inst = top.get_instance('snap2_infrastructure', 'snap2_infrastructure_inst')
+        if self.version == 2:
+            inst = top.get_instance('snap2_v2_infrastructure', 'snap2_v2_infrastructure_inst')
+        else:
+            inst = top.get_instance('snap2_infrastructure', 'snap2_infrastructure_inst')
         inst.add_port('sys_clk_buf_n', 'sys_clk_n', parent_port=True, dir='in')
         inst.add_port('sys_clk_buf_p', 'sys_clk_p', parent_port=True, dir='in')
         #inst.add_port('ext_sys_rst_n', 'ext_sys_rst_n', parent_port=True, dir='in')
@@ -39,13 +46,19 @@ class snap2(YellowBlock):
         return children
 
     def gen_constraints(self):
+        if self.version == 2:
+            config_voltage = '2.5'
+            cfgbvs = 'VCCO'
+        else:
+            config_voltage = '1.8'
+            cfgbvs = 'GND'
         return [
             PortConstraint('sys_clk_n', 'sys_clk_n'),
             PortConstraint('sys_clk_p', 'sys_clk_p'),
             ClockConstraint('sys_clk_p', period=8.0),
             #PortConstraint('ext_sys_rst_n', 'ext_sys_rst_n'),
-            RawConstraint('set_property CONFIG_VOLTAGE 1.8 [current_design]'),
-            RawConstraint('set_property CFGBVS GND [current_design]'),
+            RawConstraint('set_property CONFIG_VOLTAGE %s [current_design]' % config_voltage),
+            RawConstraint('set_property CFGBVS %s [current_design]' % cfgbvs),
             RawConstraint('set_property BITSTREAM.CONFIG.CONFIGRATE 33 [current_design]'),
             RawConstraint('set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]'),
             RawConstraint('set_property BITSTREAM.CONFIG.SPI_32BIT_ADDR Yes [current_design]'),
