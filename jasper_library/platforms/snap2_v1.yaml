@@ -1,4 +1,5 @@
 name: snap2
+version: 1
 manufacturer: Xilinx
 fpga: xcku115-flvf1924-2-e
 backend_target: vivado

@@ -5,10 +5,7 @@ class snap2(YellowBlock):
     def initialize(self):
         self.add_source('infrastructure/snap2*')
         self.add_source('wbs_arbiter')
-        if self.name == 'snap2_v2':
-            self.version = 2
-        else:
-            self.version = 1
+        self.version = self.platform.version
 
     def modify_top(self,top):
         if self.version == 2:

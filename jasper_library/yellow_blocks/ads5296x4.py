@@ -197,8 +197,8 @@ class ads5296x4(YellowBlock):
                     iogroup_index=range(8*self.num_units_per_board)[lane_n::2],
                 ))
 
-        cons.append(PortConstraint(self.port_prefix+'clk_line_p', 'fmc%d_clk_p' % self.port, iogroup_index=[1]))
-        cons.append(PortConstraint(self.port_prefix+'clk_line_n', 'fmc%d_clk_n' % self.port, iogroup_index=[1]))
+        cons.append(PortConstraint(self.port_prefix+'clk_line_p', 'fmc%d_clk_p' % self.port, iogroup_index=[0]))
+        cons.append(PortConstraint(self.port_prefix+'clk_line_n', 'fmc%d_clk_n' % self.port, iogroup_index=[0]))
 
         cons.append(PortConstraint(self.port_prefix+'adc_spi_cs',  'fmc%d_la' % self.port, port_index=[0], iogroup_index=[2*33]))
         cons.append(PortConstraint(self.port_prefix+'adc_spi_cs',  'fmc%d_la' % self.port, port_index=[1], iogroup_index=[2*33+1]))
