@@ -41,6 +41,15 @@ class Register(object):
         :type mode: String
         :param default_val: Default value for register to be reset to and initialized.
         :type default_val: Integer
+        :param ram: Whether the register is a RAM or not.
+        :type ram: Boolean
+        :param ram_size: Size of the RAM
+        :type ram_size: Integer
+        :param data_width: Width of the data to be stored in this register.
+        :type data_width: Integer
+        :param axi4lite_mode: Mode of the axi4lite interface. Eg. axi4lite_mode = 'raw', instantiates a raw axi4lite device.
+        :type axi4lite_mode: String
+
         """
         self.name = name
         self.nbytes = nbytes

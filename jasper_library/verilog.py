@@ -90,22 +90,24 @@ class AXI4LiteDevice(object):
         """
         Class constructor.
 
-        :param regname: Name of register (this name is the string used to access the register from software)
+        :param regname: Name of register (this name is the string used to access the register from software).
         :type regname: String
         :param nbytes: Number of bytes in this slave's memory space.
         :type nbytes: Integer
-        :param mode: Permissions ('r': readable, 'w': writable, 'rw': read/writeable)
+        :param mode: Permissions ('r': readable, 'w': writable, 'rw': read/writeable).
         :type mode: String
-        :param hdl_suffix: Suffix given to wishbone port names. Eg. if `hdl_suffix = foo`, ports have the form `wbs_dat_i_foo`
+        :param hdl_suffix: Suffix given to wishbone port names. Eg. if `hdl_suffix = foo`, ports have the form `wbs_dat_i_foo`.
         :type hdl_suffix: String
-        :param hdl_candr_suffix: Suffix given to wishbone clock and reset port names. Eg. if `hdl_suffix = foo`, ports have the form `wbs_clk_i_foo`
+        :param hdl_candr_suffix: Suffix given to wishbone clock and reset port names. Eg. if `hdl_suffix = foo`, ports have the form `wbs_clk_i_foo`.
         :type hdl_candr_suffix: String
         :param memory_map: A list or `Register` instances defining the contents of sub-blocks of this device's memory.
         :type memory_map: list
-        :param typecode: Typecode number (0-255) identifying the type of this block. See `yellow_block_typecodes.py`
+        :param typecode: Typecode number (0-255) identifying the type of this block. See `yellow_block_typecodes.py`.
         :type typecode: Integer
-        :param data_width: Width of the data to be stored in this device
+        :param data_width: Width of the data to be stored in this device.
         :type data_width: Integer
+        :param axi4lite_mode: Mode of the axi4lite interface. Eg. axi4lite_mode = 'raw', instantiates a raw axi4lite device.
+        :type axi4lite_mode: String
         """
         self.typecode = typecode
         self.regname = regname
@@ -1395,8 +1397,31 @@ class VerilogModule(object):
         This function returns the AXI4LiteDevice object, so the caller can mess with it's memory map
         if they so desire.
 
-        Added the (optional) data_width parameter to make provision for variable-size BRAMs
+        Added the (optional) data_width parameter to make provision for variable-size BRAMs.
+        Added the (optional) axi4lite_mode parameter. Eg. axi4lite_mode = 'raw' instantiates a raw axi4lite device.
+              
+
+        :param regname: Name of register (this name is the string used to access the register from software).
+        :type regname: String
+        :param nbytes: Number of bytes in this slave's memory space.
+        :type nbytes: Integer
+        :param mode: Permissions ('r': readable, 'w': writable, 'rw': read/writeable).
+        :type mode: String
+        :param suffix: Suffix given to port names.
+        :type suffix: String
+        :param candr_suffix: Suffix given to clock and reset port names.
+        :type candr_suffix: String
+        :param memory_map: A list or `Register` instances defining the contents of sub-blocks of this device's memory.
+        :type memory_map: list
+        :param typecode: Typecode number (0-255) identifying the type of this block. See `yellow_block_typecodes.py`.
+        :type typecode: Integer
+        :param data_width: Width of the data to be stored in this device.
+        :type data_width: Integer
+        :param axi4lite_mode: Mode of the axi4lite interface. Eg. axi4lite_mode = 'raw', instantiates a raw axi4lite device.
+        :type axi4lite_mode: String
+
         """
+
         if regname in [axi_dev.regname for axi_dev in self.axi4lite_devices]:
             return
         else:
