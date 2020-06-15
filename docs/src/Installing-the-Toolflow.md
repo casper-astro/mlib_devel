@@ -55,6 +55,11 @@ The master branch is usually updated once a year. Between updates, code with new
     # to deactivate the virtual environment:
     deactivate
     ```
+4. casperfpga
+    
+    `casperfpga` is a python library used to interact and interface with [**CASPER** Hardware](https://github.com/casper-astro/casper-hardware). Functionality includes being able to reconfigure firmware, as well as read and write registers across the various communication interfaces.
+
+    You will need to install this library to interface with CASPER hardware. Installation instructions can be found [here](https://casper-toolflow.readthedocs.io/en/latest/src/How-to-install-casperfpga.html).
 
 ## Obtaining the Toolflow
 Clone the toolflow from the [mlib_devel](https://github.com/casper-astro/mlib_devel) git repository. 
