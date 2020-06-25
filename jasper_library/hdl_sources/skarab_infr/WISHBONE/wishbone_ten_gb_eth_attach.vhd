@@ -233,7 +233,7 @@ begin
 -- DECODE ADDRESSES INTO DIFFERENT REGIONS
 --------------------------------------------------------------------------------
 
-    wishbone_sel <= CYC_I and STB_I;
+    wishbone_sel <= (CYC_I and STB_I) or STB_I_z or STB_I_z2;
 
     reg_sel   <= wishbone_sel when ((ADR_I >= REGISTERS_OFFSET) and (ADR_I <= REGISTERS_HIGH)) else '0';
     txbuf_sel <= wishbone_sel when ((ADR_I >= TX_BUFFER_OFFSET) and (ADR_I <= TX_BUFFER_HIGH)) else '0';

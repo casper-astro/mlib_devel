@@ -1,5 +1,6 @@
 from .yellow_block import YellowBlock
-from constraints import PortConstraint, ClockConstraint, FalsePathConstraint, RawConstraint
+from constraints import PortConstraint, ClockConstraint, GenClockConstraint, ClockGroupConstraint, InputDelayConstraint,\
+    OutputDelayConstraint, MaxDelayConstraint, MinDelayConstraint, FalsePathConstraint, MultiCycleConstraint, RawConstraint
 from helpers import to_int_list
 from .yellow_block_typecodes import *
 
@@ -14,6 +15,8 @@ class onegbe(YellowBlock):
             return onegbe_casia_k7(blk, plat, hdl_root)
         elif plat.name in ['casia_k7_21cma']:
             return onegbe_casia_k7(blk, plat, hdl_root)
+        elif plat.name in ['skarab']:
+            return onegbe_skarab(blk, plat, hdl_root)
         else:
             return onegbe_snap(blk, plat, hdl_root)
 
@@ -961,3 +964,145 @@ class onegbe_casia_k7(onegbe):
     def modify_top(self,top):
         self._instantiate_udp(top)
         self._instantiate_mac(top)
+
+
+
+class onegbe_skarab(onegbe):
+    def initialize(self):
+        self.typecode = TYPECODE_ETHCORE
+    
+        self.add_source('skarab_one_gbe/SKA_10GBE_MAC')
+        self.add_source('skarab_one_gbe/xaui_to_gmii_fifo/*.xci')
+        self.add_source('skarab_one_gbe/gmii_to_xaui_fifo/*.xci')
+        self.add_source('skarab_one_gbe/gmii_to_sgmii/*.xci')
+        self.add_source('skarab_one_gbe/one_gbe.vhd')
+        self.add_source('skarab_one_gbe/*.vhd')
+        self.add_source("skarab_one_gbe/tx_fifo_ext/*.xci")
+        self.add_source("skarab_one_gbe/tx_data_fifo_ext/*.xci")
+        self.add_source("skarab_one_gbe/cpu_buffer/*.xci")
+        self.add_source("skarab_one_gbe/tx_packet_fifo/*.xci")
+        self.add_source("skarab_one_gbe/tx_packet_ctrl_fifo/*.xci")
+        self.add_source("skarab_one_gbe/rx_packet_fifo_bram/*.xci")
+        self.add_source("skarab_one_gbe/rx_packet_ctrl_fifo/*.xci")
+        self.add_source("skarab_one_gbe/packet_byte_count_fifo/*.xci")
+
+        self.provides = ['ethernet']
+        self.refclk_freq = 125.0
+
+    def _instantiate_udp_mac(self, top):
+        # the forty_gbe cores are at the first 4 locations
+        # so we request the 5th (zero indexed) one for the one_gbe
+        req_offset = 0x16000 * 4
+        gbe_udp = top.get_instance(entity='one_gbe', name=self.fullname, comment=self.fullname)
+        gbe_udp.add_parameter('FABRIC_MAC',             '48\'d%d' % self.local_mac)
+        gbe_udp.add_parameter('FABRIC_IP',              '32\'d%d' % self.local_ip)
+        gbe_udp.add_parameter('FABRIC_PORT',            '16\'d%d' % self.local_port)
+        gbe_udp.add_parameter('FABRIC_NETMASK',         '32\'d%d' % 256)
+        gbe_udp.add_parameter('FABRIC_GATEWAY',         '8\'d%d' % self.local_gateway)
+        gbe_udp.add_parameter('FABRIC_ENABLE',          '1\'d%d' % int(self.local_en))
+        gbe_udp.add_parameter('FABRIC_MC_RECV_IP',      '32\'hFFFFFFFF')
+        gbe_udp.add_parameter('FABRIC_MC_RECV_IP_MASK', '32\'hFFFFFFFF')
+
+        # simulink interface
+        gbe_udp.add_port('user_clk', 'user_clk', parent_sig=False),
+        gbe_udp.add_port('user_rst', 'user_rst', parent_sig=False),
+
+        gbe_udp.add_port('sys_clk', 'board_clk',     parent_sig=False),
+        gbe_udp.add_port('sys_rst', 'board_clk_rst', parent_sig=False),
+
+        gbe_udp.add_port('gmii_tx_data',         self.fullname+'_app_tx_data',     dir='in', width=8)
+        gbe_udp.add_port('gmii_tx_valid',        self.fullname+'_app_tx_dvld',     dir='in', )
+        gbe_udp.add_port('gmii_tx_end_of_frame', self.fullname+'_app_tx_eof',      dir='in', )
+        gbe_udp.add_port('gmii_tx_dest_ip',      self.fullname+'_app_tx_destip',   dir='in', width=32)
+        gbe_udp.add_port('gmii_tx_dest_port',    self.fullname+'_app_tx_destport', dir='in', width=16)
+        gbe_udp.add_port('gmii_tx_afull',        self.fullname+'_app_tx_afull',    dir='out', )
+        gbe_udp.add_port('gmii_tx_overflow',     self.fullname+'_app_tx_overflow', dir='out', )
+        #gbe_udp.add_port('tx_rst',          self.fullname+'_app_tx_rst'     )dir='out', 
+        gbe_udp.add_port('gmii_rx_data',         self.fullname+'_app_rx_data',     dir='out', width=8)
+        gbe_udp.add_port('gmii_rx_valid',        self.fullname+'_app_rx_dvld',     dir='out', )
+        gbe_udp.add_port('gmii_rx_end_of_frame', self.fullname+'_app_rx_eof',      dir='out', )
+        gbe_udp.add_port('gmii_rx_source_ip',    self.fullname+'_app_rx_srcip',    dir='out', width=32)
+        gbe_udp.add_port('gmii_rx_source_port',  self.fullname+'_app_rx_srcport',  dir='out', width=16)
+        gbe_udp.add_port('gmii_rx_bad_frame',    self.fullname+'_app_rx_badframe', dir='out', )
+        gbe_udp.add_port('gmii_rx_overrun',      self.fullname+'_app_rx_overrun',  dir='out', )
+        gbe_udp.add_port('gmii_rx_ack',          self.fullname+'_app_rx_ack',      dir='in', )
+        
+        gbe_udp.add_port('gbe_if_present',     'gbe_if_present',    dir='out')
+        gbe_udp.add_port('gbe_link_up',        'gbe_link_up',       dir='out')
+        gbe_udp.add_port('gbe_phy_up',         'gbe_link_up',       dir='out')
+        gbe_udp.add_port('gmii_reset_done_o',  'gmii_reset_done',   dir='out')
+        gbe_udp.add_port('gbe_status_vector',  'gbe_status_vector', dir='out')
+        #gbe_udp.add_port('ONE_GBE_INT_N',     'ONE_GBE_INT_N',     dir='out')
+        #gbe_udp.add_port('host_reset_gmii_synced', 'host_reset_gmii_synced', parent_sig=True, dir='out')
+        gbe_udp.add_port('host_reset',         'host_reset_o'      , dir='in')
+        gbe_udp.add_port('sync_gmii_fpga_rst', 'sync_gmii_fpga_rst', dir='in')
+        #gbe_udp.add_port('FPGA_RESET_N',       'FPGA_RESET_N',       dir='in', parent_sig=False)
+
+        # 1GBE SIDEBAND SIGNALS
+        gbe_udp.add_port('ONE_GBE_RESET_N',   'ONE_GBE_RESET_N', dir='out', parent_port=True)
+        #gbe_udp.add_port('ONE_GBE_INT_N',   self.fullname+'_ONE_GBE_INT_N',   dir='in',  parent_port=True)
+        #gbe_udp.add_port('ONE_GBE_LINK',    self.fullname+'_ONE_GBE_LINK',    dir='in',  parent_port=True)
+
+        # 1GBE SIGNALS
+        gbe_udp.add_port('ONE_GBE_SGMII_TX_P',  'ONE_GBE_SGMII_TX_P',  dir='out', parent_port=True)
+        gbe_udp.add_port('ONE_GBE_SGMII_TX_N',  'ONE_GBE_SGMII_TX_N',  dir='out', parent_port=True)
+        gbe_udp.add_port('ONE_GBE_SGMII_RX_P',  'ONE_GBE_SGMII_RX_P',  dir='in',  parent_port=True)
+        gbe_udp.add_port('ONE_GBE_SGMII_RX_N',  'ONE_GBE_SGMII_RX_N',  dir='in',  parent_port=True)
+        gbe_udp.add_port('ONE_GBE_MGTREFCLK_P', 'ONE_GBE_MGTREFCLK_P', dir='in',  parent_port=True)
+        gbe_udp.add_port('ONE_GBE_MGTREFCLK_N', 'ONE_GBE_MGTREFCLK_N', dir='in',  parent_port=True)
+
+        #gbe_udp.add_port('rx_rst',          self.fullname+'_app_rx_rst'     )
+        # simulink debug interface
+        #gbe_udp.add_port('dbg_data'      , self.fullname+'_app_dbg_data' , width=32)
+        #gbe_udp.add_port('dbg_dvld'      , self.fullname+'_app_dbg_dvld' )
+
+        # connections to MAC
+        #gbe_udp.add_port('mac_tx_clk',  'gbe_userclk2_out')
+        #gbe_udp.add_port('mac_tx_rst',  self.fullname + '_app_tx_rst')
+        #gbe_udp.add_port('mac_tx_data', self.fullname + '_mac_tx_data', width=8)
+        #gbe_udp.add_port('mac_tx_dvld', self.fullname + '_mac_tx_dvld')
+        #gbe_udp.add_port('mac_tx_ack',  self.fullname + '_mac_tx_ack')
+#
+        #gbe_udp.add_port('mac_rx_clk',       'gbe_userclk2_out')
+        #gbe_udp.add_port('mac_rx_rst',       self.fullname + '_app_rx_rst')
+        #gbe_udp.add_port('mac_rx_data',      self.fullname + '_mac_rx_data', width=8)
+        #gbe_udp.add_port('mac_rx_dvld',      self.fullname + '_mac_rx_dvld')
+        #gbe_udp.add_port('mac_rx_goodframe', self.fullname + '_mac_rx_goodframe')
+        #gbe_udp.add_port('mac_rx_badframe',  self.fullname + '_mac_rx_badframe')
+        #gbe_udp.add_port('mac_syncacquired', self.fullname + '_mac_syncacquired')
+
+        #connections to PHY
+        #gbe_udp.add_port('phy_status', self.fullname + '_phy_status', width=16)
+
+        gbe_udp.add_wb_interface(regname=self.unique_name, mode='rw', nbytes=65536, typecode=self.typecode, req_offset=req_offset)
+
+    def gen_constraints(self):
+        consts = []
+        #consts.append(PortConstraint('ONE_GBE_INT_N', 'ONE_GBE_INT_N'))
+        consts.append(PortConstraint('ONE_GBE_SGMII_RX_P','ONE_GBE_SGMII_RX_P'))
+        consts.append(PortConstraint('ONE_GBE_SGMII_RX_N','ONE_GBE_SGMII_RX_N'))
+        consts.append(PortConstraint('ONE_GBE_SGMII_TX_P','ONE_GBE_SGMII_TX_P'))
+        consts.append(PortConstraint('ONE_GBE_SGMII_TX_N','ONE_GBE_SGMII_TX_N'))
+        consts.append(PortConstraint('ONE_GBE_MGTREFCLK_N','ONE_GBE_MGTREFCLK_N'))
+        consts.append(PortConstraint('ONE_GBE_MGTREFCLK_P','ONE_GBE_MGTREFCLK_P'))
+        consts.append(PortConstraint('ONE_GBE_RESET_N','ONE_GBE_RESET_N'))
+        consts.append(ClockConstraint('ONE_GBE_MGTREFCLK_P','ONE_GBE_MGTREFCLK_P', period=6.4, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=3.2))
+        consts.append(InputDelayConstraint(clkname='-of_objects [get_pins skarab_infr/SYS_CLK_MMCM_inst/CLKOUT1]', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='ONE_GBE_INT_N'))
+        consts.append(InputDelayConstraint(clkname='-of_objects [get_pins skarab_infr/SYS_CLK_MMCM_inst/CLKOUT1]', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='ONE_GBE_INT_N'))
+        consts.append(InputDelayConstraint(clkname='-of_objects [get_pins skarab_infr/SYS_CLK_MMCM_inst/CLKOUT1]', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='ONE_GBE_LINK'))
+        consts.append(InputDelayConstraint(clkname='-of_objects [get_pins skarab_infr/SYS_CLK_MMCM_inst/CLKOUT1]', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='ONE_GBE_LINK'))
+        consts.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports ONE_GBE_RESET_N]'))
+        consts.append(ClockGroupConstraint('-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname, '-of_objects [get_pins skarab_infr/SYS_CLK_MMCM_inst/CLKOUT0]', 'asynchronous'))
+        consts.append(ClockGroupConstraint('-of_objects [get_pins skarab_infr/SYS_CLK_MMCM_inst/CLKOUT0]', '-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
+        consts.append(ClockGroupConstraint('FPGA_EMCCLK2', '-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
+        consts.append(ClockGroupConstraint('VIRTUAL_clkout0', '-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname,  'asynchronous'))
+        consts.append(ClockGroupConstraint('virtual_clock', '-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname,  'asynchronous'))
+        consts.append(ClockGroupConstraint('-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname,'VIRTUAL_I', 'asynchronous'))
+        consts.append(ClockGroupConstraint('VIRTUAL_I', '-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
+        consts.append(ClockGroupConstraint('-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname, '-of_objects [get_pins skarab_infr/SYS_CLK_MMCM_inst/CLKOUT1]', 'asynchronous'))
+        consts.append(ClockGroupConstraint('-of_objects [get_pins skarab_infr/SYS_CLK_MMCM_inst/CLKOUT1]', '-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
+        consts.append(ClockGroupConstraint('MEZ3_REFCLK_0_P', '-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
+        return consts
+
+    def modify_top(self,top):
+        self._instantiate_udp_mac(top)

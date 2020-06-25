@@ -54,7 +54,7 @@ entity forty_gbe is
         qsfp_gtrefclk    : out std_logic;
         qsfp_soft_reset  : in  std_logic;
 
-        eth_if_present   : out std_logic;
+        fgbe_if_present   : out std_logic;
 
         xlgmii_txled     : out std_logic_vector(1 downto 0);
         xlgmii_rxled     : out std_logic_vector(1 downto 0);
@@ -440,7 +440,7 @@ begin
             TEST_PATTERN_ERROR_O => open
         );
 
-        eth_if_present <= '1';
+        fgbe_if_present <= '1';
         phy_rx_up    <= phy_rx_up_sig;
         xlgmii_txled <= xlgmii_txled_sig;
         xlgmii_rxled <= xlgmii_rxled_sig;
