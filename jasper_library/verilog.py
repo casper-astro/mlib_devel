@@ -684,7 +684,7 @@ class VerilogModule(object):
                         print("Req offset: %s Base addr: %s High Addr: %s"%(hex(wb_dev.req_offset), hex(base_addr), hex(wb_dev.high_addr)))
         
         # 2nd iteration adds devices that have not requested an offset
-        for block in list(sort(self.instances.keys())):
+        for block in list(sorted(self.instances.keys())):
             for instname, inst in list(self.instances[block].items()):
                 logger.debug("Looking for WB slaves for instance %s"%inst.name)
                 for n, wb_dev in enumerate(inst.wb_devices):
