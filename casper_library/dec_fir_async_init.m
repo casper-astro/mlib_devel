@@ -124,23 +124,42 @@ if coeff_sym,
     sync_latency = add_latency + sync_latency;
 end
 % if delay is greater than 17*3 then might as well use logic as using more than 3 SRL16s and sync_delay uses approx 3 (2 comparators, one counter) 
-if sync_latency > 17*3,
-    sync_delay_block = 'casper_library_delays/sync_delay';
-    parm_name = 'DelayLen';
-else 
-    sync_delay_block = 'xbsIndex_r4/Delay';
-    parm_name = 'latency';
+% if sync_latency > 17*3,
+%     sync_delay_block = 'casper_library_delays/sync_delay';
+%     parm_name = 'DelayLen';
+% else 
+%     sync_delay_block = 'xbsIndex_r4/Delay';
+%     parm_name = 'latency';
+% end
+
+% NOTE: The above code is commented out as we need an enable for the delay
+% block. This may be added to the casper library delay block later
+% New:
+sync_delay_block = 'xbsIndex_r4/Delay';
+parm_name = 'latency';
+
+
+
+
+if async_ops
+   dvalid_en = 'on';    
+else
+   dvalid_en = 'off';
 end
+
 reuse_block(blk, 'sync_in', 'built-in/inport', ...
     'Position', [0 20 30 36], 'Port', '1');
 reuse_block(blk, 'sync_delay', sync_delay_block, ...
     'Position', [60 8 100 48], ...
+    'en', dvalid_en, ...
     parm_name, num2str(sync_latency));
+
 % reuse_block(blk, 'sync_goto', 'built-in/goto', ...
 %         'GotoTag', 'sync_in', 'showname', showname, ...
 %         'Position', [130, 20, 130+sizex_goto, 20+sizey_goto]);
 add_line(blk, 'sync_in/1', 'sync_delay/1');
 % add_line(blk, 'sync_delay/1', 'sync_goto/1');
+
 
 % dv in
 dv_latency = sync_latency + (ceil(log2(num_fir_col))*add_latency);
@@ -152,6 +171,11 @@ if async_ops,
         ypos = n_inputs*60 + 300;
     end
     data_port_start = 3;
+    
+    % Overwrite dv_latency: Empiricaltests showed it was equal to
+    % num_fir_col. THIS NEEDS TO BE VERIFIED!
+    dv_latency = num_fir_col;
+    
     reuse_block(blk, 'dv_in', 'built-in/inport', ...
         'Position', [0 ypos 30 ypos+16], 'Port', '2');
     reuse_block(blk, 'dv_delay', 'xbsIndex_r4/Delay', ...
@@ -165,6 +189,13 @@ if async_ops,
 %             'GotoTag', 'dv_in', 'showname', showname, ...
 %             'Position', [60, 50, 60+sizex_goto, 50+sizey_goto]);
 %     add_line(blk, 'dv_in/1', 'dv_goto/1');
+
+    add_line(blk, 'dv_in/1', 'sync_delay/2');
+
+    % NEW: Halt sync if the DV drops
+    %set_param([blk, '/dv_delay'], 'en', 'on');
+    %add_line(blk, 'dv_in/1', 'dv_delay/2');
+
 end
 
 % data bus in
@@ -193,13 +224,21 @@ else
   first_stage_hdl_external = 'off';
 end
 
+if async_ops
+    dvalid_en = 'on';
+else
+    dvalid_en = 'off';
+end
+
 reuse_block(blk, 'real_sum', 'casper_library_misc/adder_tree', ...
     'Position', [200*num_fir_col+400 300 200*num_fir_col+460 num_fir_col*10+350], ...
     'n_inputs',num2str(num_fir_col),'csp_latency',num2str(add_latency), ...
+    'dvalid_en', dvalid_en, ... 
     'adder_imp', adder_imp, 'first_stage_hdl', first_stage_hdl_external);
 reuse_block(blk, 'imag_sum', 'casper_library_misc/adder_tree', ...
     'Position', [200*num_fir_col+400 num_fir_col*10+400 200*num_fir_col+460 num_fir_col*20+450], ...
     'n_inputs',num2str(num_fir_col),'csp_latency',num2str(add_latency), ...
+    'dvalid_en', dvalid_en, ... 
     'adder_imp', adder_imp, 'first_stage_hdl', first_stage_hdl_external);
 
 % the tap columns
@@ -259,12 +298,23 @@ for ctr = 1:num_fir_col,
                 add_line(blk, [prev_blk_name, '/', num2str(ctr2*2)],   [blk_name, '/', num2str(ctr2*2)]);
             end
         end
-        if coeff_sym,
-            add_line(blk, [blk_name, '/', num2str(n_inputs*4+1)], ['real_sum/', num2str(ctr+1)]);
-            add_line(blk, [blk_name, '/', num2str(n_inputs*4+2)], ['imag_sum/', num2str(ctr+1)]);
+        
+        if async_ops,
+            if coeff_sym,
+                add_line(blk, [blk_name, '/', num2str(n_inputs*4+1)], ['real_sum/', num2str(ctr+2)]);
+                add_line(blk, [blk_name, '/', num2str(n_inputs*4+2)], ['imag_sum/', num2str(ctr+2)]);
+            else
+                add_line(blk, [blk_name, '/', num2str(n_inputs*2+1)], ['real_sum/', num2str(ctr+2)]);
+                add_line(blk, [blk_name, '/', num2str(n_inputs*2+2)], ['imag_sum/', num2str(ctr+2)]);
+            end
         else
-            add_line(blk, [blk_name, '/', num2str(n_inputs*2+1)], ['real_sum/', num2str(ctr+1)]);
-            add_line(blk, [blk_name, '/', num2str(n_inputs*2+2)], ['imag_sum/', num2str(ctr+1)]);
+            if coeff_sym,
+                add_line(blk, [blk_name, '/', num2str(n_inputs*4+1)], ['real_sum/', num2str(ctr+1)]);
+                add_line(blk, [blk_name, '/', num2str(n_inputs*4+2)], ['imag_sum/', num2str(ctr+1)]);
+            else
+                add_line(blk, [blk_name, '/', num2str(n_inputs*2+1)], ['real_sum/', num2str(ctr+1)]);
+                add_line(blk, [blk_name, '/', num2str(n_inputs*2+2)], ['imag_sum/', num2str(ctr+1)]);
+            end
         end
         if async_ops,
             if coeff_sym,
@@ -282,14 +332,44 @@ reuse_block(blk, 'shift1', 'xbsIndex_r4/Shift', ...
 reuse_block(blk, 'shift2', 'xbsIndex_r4/Shift', ...
     'shift_dir', 'Left', 'shift_bits', num2str(lshift), ...
     'Position', [200*num_fir_col+500 500 200*num_fir_col+530 515]);
-reuse_block(blk, 'convert1', 'xbsIndex_r4/Convert', ...
-    'Position', [200*num_fir_col+560 300 200*num_fir_col+590 315], ...
-    'n_bits', num2str(output_width), 'bin_pt', num2str(output_bp), 'arith_type', 'Signed  (2''s comp)', ...
-    'latency', num2str(conv_latency), 'quantization', quantization);
-reuse_block(blk, 'convert2', 'xbsIndex_r4/Convert', ...
-    'Position', [200*num_fir_col+560 500 200*num_fir_col+590 515], ...
-    'n_bits', num2str(output_width), 'bin_pt', num2str(output_bp), 'arith_type', 'Signed  (2''s comp)', ...
-    'latency', num2str(conv_latency), 'quantization', quantization);
+
+
+% Original convert. This does not include overlfow detection logic. 
+%
+% reuse_block(blk, 'convert1', 'xbsIndex_r4/Convert', ...
+%     'Position', [200*num_fir_col+560 300 200*num_fir_col+590 315], ...
+%     'n_bits', num2str(output_width), 'bin_pt', num2str(output_bp), 'arith_type', 'Signed  (2''s comp)', ...
+%     'latency', num2str(conv_latency), 'quantization', quantization);
+% reuse_block(blk, 'convert2', 'xbsIndex_r4/Convert', ...
+%     'Position', [200*num_fir_col+560 500 200*num_fir_col+590 515], ...
+%     'n_bits', num2str(output_width), 'bin_pt', num2str(output_bp), 'arith_type', 'Signed  (2''s comp)', ...
+%     'latency', num2str(conv_latency), 'quantization', quantization);
+
+reuse_block(blk, 'convert1', 'casper_library_misc/convert_of', ...
+    'bit_width_i', num2str(43), ...
+    'binary_point_i', num2str(34), ...
+    'bit_width_o', num2str(output_width), ...
+    'binary_point_o', num2str(output_bp), ...
+    'quantization', 2, ...
+    'overflow', 'wrap', ...
+    'csp_latency', num2str(conv_latency), ...
+    'Position', [200*num_fir_col+560 300 200*num_fir_col+590 315]);
+
+reuse_block(blk, 'convert2', 'casper_library_misc/convert_of', ...
+    'bit_width_i', num2str(43), ...
+    'binary_point_i', num2str(34), ...
+    'bit_width_o', num2str(output_width), ...
+    'binary_point_o', num2str(output_bp), ...
+    'quantization', 2, ...
+    'overflow', 'wrap', ...
+    'csp_latency', num2str(conv_latency), ...
+    'Position', [200*num_fir_col+560 500 200*num_fir_col+590 515]);
+
+reuse_block(blk, 'or_reduce', 'xbsIndex_r4/Logical', ...
+    'logical_function', 2, ...
+    'latency', num2str(1), ...
+    'Position', [200*num_fir_col+620 430 200*num_fir_col+650 490]);
+
 
 reuse_block(blk, 'ri_to_c', 'casper_library_misc/ri_to_c', ...
     'Position', [200*num_fir_col+620 400 200*num_fir_col+650 430]);
@@ -298,17 +378,33 @@ reuse_block(blk, 'sync_out', 'built-in/outport', ...
     'Position', [200*num_fir_col+500 250 200*num_fir_col+530 265], 'Port', '1');
 reuse_block(blk, 'dout', 'built-in/outport', ...
     'Position', [200*num_fir_col+680 400 200*num_fir_col+710 415], 'Port', '2');
+reuse_block(blk, 'of_out', 'built-in/outport', ...
+    'Position', [200*num_fir_col+700 400 200*num_fir_col+710 415], 'Port', '3');
 
 add_line(blk, 'real_sum/2',     'shift1/1');
 add_line(blk, 'imag_sum/2',     'shift2/1');
 add_line(blk, 'shift1/1',       'convert1/1');
 add_line(blk, 'shift2/1',       'convert2/1');
 add_line(blk, 'convert1/1',     'ri_to_c/1');
+add_line(blk, 'convert1/2',     'or_reduce/1');
 add_line(blk, 'convert2/1',     'ri_to_c/2');
+add_line(blk, 'convert2/2',     'or_reduce/2');
+add_line(blk, 'or_reduce/1',     'of_out/1');
+
 add_line(blk, 'ri_to_c/1',      'dout/1');
-add_line(blk, 'sync_delay/1',   'real_sum/1');
-add_line(blk, 'sync_delay/1',   'imag_sum/1');
+%add_line(blk, 'sync_delay/1',   'real_sum/2');
+%add_line(blk, 'sync_delay/1',   'imag_sum/2');
 add_line(blk, 'real_sum/1',     'sync_out/1');
+
+if async_ops
+    add_line(blk, 'sync_delay/1',   'real_sum/2');
+    add_line(blk, 'sync_delay/1',   'imag_sum/2');
+    add_line(blk, 'dv_in/1', 'real_sum/1');
+    add_line(blk, 'dv_in/1', 'imag_sum/1');  
+else
+    add_line(blk, 'sync_delay/1',   'real_sum/1');
+    add_line(blk, 'sync_delay/1',   'imag_sum/1');   
+end
 
 % backward links for symmetric coefficients
 if coeff_sym,

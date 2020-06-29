@@ -4,4 +4,4 @@ pyaml
 odict
 #xml2vhdl requirements
 lxml
--e git+http://github.com/casper-astro/xml2vhdl#egg=xml2vhdl_ox-0.2.0-py3.5.egg&subdirectory=scripts/python/xml2vhdl-ox
+-e git+http://github.com/casper-astro/xml2vhdl#egg=xml2vhdl_ox-0.2.2-py3.5.egg&subdirectory=scripts/python/xml2vhdl-ox

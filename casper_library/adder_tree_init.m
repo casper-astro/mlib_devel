@@ -41,6 +41,7 @@ defaults = {
     'csp_latency', 1, ....
     'first_stage_hdl', 'off', ...
     'adder_imp', 'Fabric', ...
+    'dvalid_en','off',...
     'floating_point', 'off', ...
     'float_type', 'single', ...
     'exp_width', 8, ...
@@ -55,6 +56,7 @@ munge_block(blk, varargin{:});
   latency           = get_var('csp_latency', 'defaults', defaults, varargin{:});
   first_stage_hdl   = get_var('first_stage_hdl', 'defaults', defaults, varargin{:});
   adder_imp         = get_var('adder_imp', 'defaults', defaults, varargin{:});
+  dvalid_en         = get_var('dvalid_en', 'defaults', defaults, varargin{:});
   floating_point    = get_var('floating_point', 'defaults', defaults, varargin{:});
   float_type        = get_var('float_type', 'defaults', defaults, varargin{:});
   exp_width         = get_var('exp_width', 'defaults', defaults, varargin{:});
@@ -117,10 +119,17 @@ reuse_block(blk, 'sync_out', 'built-in/outport', 'Position', [30+(stages+1)*100 
 add_line(blk, 'sync/1', 'sync_delay/1');
 add_line(blk, 'sync_delay/1', 'sync_out/1');
 
+% Take care of dvalid
+if dvalid_en == 1
+    reuse_block(blk, 'dv_in', 'built-in/inport', 'Position', [30 10+20 60 25+20], 'Port', '1');   
+end
+
+
 % Take care of adder tree
 for i=1:n_inputs,
     reuse_block(blk, ['din',num2str(i)], 'built-in/inport', 'Position', [30 i*40+20 60 35+40*i]);
 end
+
 reuse_block(blk, 'dout', 'built-in/outport', 'Position', [30+(stages+1)*100 40 60+(stages+1)*100 55]);
 
 if floating_point == 1
@@ -170,6 +179,14 @@ if floating_point == 1
                         'force_bin_pt', 'on', ...
                         'bin_pt',num2str(frac_width), ...
                         'Position', [100 200 120 220]);
+                    
+                                        
+                    if dvalid_en == 1
+                        set_param([blk, ['/', addr]], 'en', 'on');  
+                        add_line(blk, 'dv_in/1', [addr, '/3'], 'autorouting', 'on');       
+                    else
+                        set_param([blk, ['/', addr]], 'en', 'off'); 
+                    end
                     
                     if stage == 1,
                         set_param([blk,'/',addr], 'use_behavioral_HDL', first_stage_hdl);
@@ -241,8 +258,16 @@ else
                         'use_behavioral_HDL', behavioral, 'hw_selection', hw_selection, ...
                         'pipelined', 'on', 'use_rpm', 'on', ...
                         'Position', [30+stage*100 j*80-40 70+stage*100 j*80+20]);
+                    
+                    if dvalid_en == 1
+                        set_param([blk, ['/', addr]], 'en', 'on');  
+                        add_line(blk, 'dv_in/1', [addr, '/3'], 'autorouting', 'on');       
+                    else
+                        set_param([blk, ['/', addr]], 'en', 'off'); 
+                    end
+                    
                     if stage == 1,
-                set_param([blk,'/',addr], 'use_behavioral_HDL', first_stage_hdl);
+                        set_param([blk,'/',addr], 'use_behavioral_HDL', first_stage_hdl);
                         add_line(blk,['din',num2str((j*2-1)),'/1'],[addr,'/1']);
                         add_line(blk,['din',num2str((j*2)),'/1'],[addr,'/2']);
                     else,

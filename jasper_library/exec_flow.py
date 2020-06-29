@@ -8,7 +8,6 @@ import toolflow
 
 # A straight lift from StackOverflow...
 
-
 def shell_source(script):
     """Sometime you want to emulate the action of "source" in bash,
     settings some environment variables. Here is a way to do it."""
@@ -22,6 +21,7 @@ def shell_source(script):
 
 if __name__ == '__main__':
     parser = ArgumentParser(prog=os.path.basename(__file__))
+                            
     parser.add_argument("--perfile", dest="perfile", action='store_true',
                     default=False, help="Run Frontend peripheral file generation")
     parser.add_argument("--frontend", dest="frontend", action='store_true',
@@ -50,12 +50,62 @@ if __name__ == '__main__':
                     default='',
                     help="build directory. Default: Use directory with same "
                         "name as model")
+    
+    vivado_synth_strats_list = ['Flow_AreaOptimized_high',
+                                'Flow_AreaOptimized_medium',
+                                'Flow_AreaMultThresholdDSP',
+                                'Flow_AlternateRoutability',
+                                'Flow_PerfOptimized_high',
+                                'Flow_PerfThresholdCarry',
+                                'Flow_RuntimeOptimized']
 
+    vivado_synth_strats_str = '\n ||'.join(vivado_synth_strats_list)
+    parser.add_argument("--synth_strat", dest="synth_strat",
+                    type=str, default=None,
+                    help="Specify the Synthesis Strategy for your compile. "
+                            "Your options are: ||{}".format(vivado_synth_strats_str))
+
+    vivado_impl_strats_list = ['Performance_Explore',
+                               'Performance_ExplorePostRoutePhysOpt',
+                               'Performance_ExploreWithRemap',
+                               'Performance_WLBlockPlacement',
+                               'Performance_WLBlockPlacementFanoutOpt',
+                               'Performance_EarlyBlockPlacement',
+                               'Performance_NetDelay_high',
+                               'Performance_NetDelay_low',
+                               'Performance_Retiming',
+                               'Performance_ExtraTimingOpt',
+                               'Performance_RefinePlacement',
+                               'Performance_SpreadSLLs',
+                               'Performance_BalanceSLLs',
+                               'Performance_BalanceSLRs',
+                               'Performance_HighUtilSLRs',
+                               'Congestion_SpreadLogic_high',
+                               'Congestion_SpreadLogic_medium',
+                               'Congestion_SpreadLogic_low',
+                               'Congestion_SSI_SpreadLogic_high',
+                               'Congestion_SSI_SpreadLogic_low',
+                               'Area_Explore',
+                               'Area_ExploreSequential',
+                               'Area_ExploreWithRemap',
+                               'Power_DefaultOpt',
+                               'Power_ExploreArea',
+                               'Flow_RunPhysOpt',
+                               'Flow_RunPostRoutePhysOpt',
+                               'Flow_RuntimeOptimized',
+                               'Flow_Quick']
+
+    vivado_impl_strats_str = ' \n ||'.join(vivado_impl_strats_list)
+    parser.add_argument("--impl_strat", dest="impl_strat",
+                    type=str, default=None,
+                    help="Specify the Implementation Strategy for your compile. "
+                            "Your options are: ||{}".format(vivado_impl_strats_str))
+    
     opts = parser.parse_args()
     sys.argv = [sys.argv[0]] # Keep only the script name. Flush other options
 
     # if we don't have the environment set up, source the default config file
-    if 'XILINX_PATH' not in list(os.environ.keys()):
+    if 'XILINX_PATH' not in list(sorted(os.environ.keys())):
         this_file_path = os.path.realpath(__file__)
         config_file_path = os.path.join(os.path.dirname(os.path.dirname(this_file_path)), 'vivado_config.local')
         if os.path.exists(config_file_path):
@@ -85,6 +135,40 @@ if __name__ == '__main__':
 
     if opts.be == 'vivado':
         os.environ['SYSGEN_SCRIPT'] = os.environ['MLIB_DEVEL_PATH'] + '/startsg'
+
+        if opts.synth_strat is not None:
+            # Check if the Strategy specified exists/is known
+            # - Looking for a direct match, albeit as lower-case
+            result = [synth_strat for synth_strat in vivado_synth_strats_list 
+                        if opts.synth_strat.lower() == synth_strat.lower()]
+
+            if len(result) < 1:
+                # Problem
+                errmsg = 'Synthesis Strategy specified is not supported - {}. ' \
+                            '\nChoose from the following options:\n ||{}'.format(opts.synth_strat, vivado_synth_strats_str)
+                logger.error(errmsg)
+                raise ValueError
+
+            opts.synth_strat = result[0]
+            logger.debug('Using the following Synthesis Strategy: {}'.format(opts.synth_strat))
+            
+
+        if opts.impl_strat is not None:
+            # Check if the Strategy specified exists/is known
+            # - Looking for a direct match, albeit as lower-case
+            result = [impl_strat for impl_strat in vivado_impl_strats_list
+                        if opts.impl_strat.lower() == impl_strat.lower()]
+            
+            if len(result) < 1:
+                # Problem
+                errmsg = 'Implementation Strategy specified is not supported - {}. ' \
+                            '\nChoose from the following options:\n ||{}'.format(opts.impl_strat, vivado_impl_strats_str)
+                logger.error(errmsg)
+                raise ValueError
+
+            opts.impl_strat = result[0]
+            logger.debug('Using the following Implementation Strategy: {}'.format(opts.impl_strat))
+            
         logger.debug('Vivado compile will be executed.')
 
     if opts.be == 'ise':
@@ -138,7 +222,8 @@ if __name__ == '__main__':
             backend.import_from_castro(backend.compile_dir + '/castro.yml')
 
             # launch vivado via the generated .tcl file
-            backend.compile(cores=opts.jobs, plat=platform)
+            backend.compile(cores=opts.jobs, plat=platform,
+                            synth_strat=opts.synth_strat, impl_strat=opts.impl_strat)
         # if ISE is selected to compile
         elif opts.be == 'ise':
             platform.backend_target = 'ise'
@@ -159,7 +244,8 @@ if __name__ == '__main__':
                                             compile_dir=tf.compile_dir)
             backend.import_from_castro(backend.compile_dir + '/castro.yml')
             # launch vivado via the generated .tcl file
-            backend.compile(cores=opts.jobs, plat=platform)
+            backend.compile(cores=opts.jobs, plat=platform,
+                            synth_strat=opts.synth_strat, impl_strat=opts.impl_strat)
 
         if opts.software:
             binary = backend.binary_loc

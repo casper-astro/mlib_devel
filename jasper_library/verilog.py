@@ -86,29 +86,39 @@ class AXI4LiteDevice(object):
     """
     A class to encapsulate the parameters (name, size, etc.) of a AXI4-Lite slave device.
     """
-    def __init__(self, regname, nbytes, mode, hdl_suffix='', hdl_candr_suffix='', memory_map=[], typecode=0xff):
+    def __init__(self, regname, nbytes, mode,
+                hdl_suffix='', hdl_candr_suffix='',
+                memory_map=[], typecode=0xff,
+                data_width=32, axi4lite_mode=''):
         """
         Class constructor.
 
-        :param regname: Name of register (this name is the string used to access the register from software)
+        :param regname: Name of register (this name is the string used to access the register from software).
         :type regname: String
         :param nbytes: Number of bytes in this slave's memory space.
         :type nbytes: Integer
-        :param mode: Permissions ('r': readable, 'w': writable, 'rw': read/writeable)
+        :param mode: Permissions ('r': readable, 'w': writable, 'rw': read/writeable).
         :type mode: String
-        :param hdl_suffix: Suffix given to wishbone port names. Eg. if `hdl_suffix = foo`, ports have the form `wbs_dat_i_foo`
+        :param hdl_suffix: Suffix given to wishbone port names. Eg. if `hdl_suffix = foo`, ports have the form `wbs_dat_i_foo`.
         :type hdl_suffix: String
-        :param hdl_candr_suffix: Suffix given to wishbone clock and reset port names. Eg. if `hdl_suffix = foo`, ports have the form `wbs_clk_i_foo`
+        :param hdl_candr_suffix: Suffix given to wishbone clock and reset port names. Eg. if `hdl_suffix = foo`, ports have the form `wbs_clk_i_foo`.
         :type hdl_candr_suffix: String
         :param memory_map: A list or `Register` instances defining the contents of sub-blocks of this device's memory.
         :type memory_map: list
-        :param typecode: Typecode number (0-255) identifying the type of this block. See `yellow_block_typecodes.py`
+        :param typecode: Typecode number (0-255) identifying the type of this block. See `yellow_block_typecodes.py`.
         :type typecode: Integer
+        :param data_width: Width of the data to be stored in this device.
+        :type data_width: Integer
+        :param axi4lite_mode: Mode of the axi4lite interface. Eg. axi4lite_mode = 'raw', instantiates a raw axi4lite device.
+        :type axi4lite_mode: String
         """
         self.typecode = typecode
         self.regname = regname
         self.nbytes = nbytes
-        self.mode=mode
+        # Need this for variable-width BRAMs (in snapshot blocks)
+        self.data_width = data_width
+
+        self.mode = mode
         #: Start (lowest) address of the memory space used by this device, in bytes.
         self.base_addr = None
         #: End (highest) address of the memory space used by this device, in bytes.
@@ -116,6 +126,7 @@ class AXI4LiteDevice(object):
         self.hdl_suffix = hdl_suffix
         self.hdl_candr_suffix = hdl_candr_suffix
         self.memory_map = memory_map
+        self.axi4lite_mode = axi4lite_mode
 
 class Port(ImmutableWithComments):
     """
@@ -606,7 +617,7 @@ class VerilogModule(object):
         :type cur_blk: str
         """
         self.cur_blk = cur_blk
-        if cur_blk not in list(self.ports.keys()):
+        if cur_blk not in list(sorted(self.ports.keys())):
             logger.debug('Initializing second-layer dictionairies for: %s'%cur_blk)
             self.ports[cur_blk] = {}
             self.parameters[cur_blk] = {}
@@ -619,7 +630,7 @@ class VerilogModule(object):
         """
         Check if this module has an instance called <name>. If so return True
         """
-        return name in list(self.instances.keys())
+        return name in list(sorted(self.instances.keys()))
 
     def wb_compute(self, base_addr=0x10000, alignment=4):
         """
@@ -644,7 +655,7 @@ class VerilogModule(object):
         wb_offset = base_addr
 
         # 1st iteration adds devices that have requested an offset
-        for block in list(self.instances.keys()):
+        for block in list(sorted(self.instances.keys())):
             for instname, inst in list(self.instances[block].items()):
                 logger.debug("Looking for WB slaves for instance %s"%inst.name)
                 # loop through devices and assign to sub_arbiters
@@ -673,7 +684,7 @@ class VerilogModule(object):
                         print("Req offset: %s Base addr: %s High Addr: %s"%(hex(wb_dev.req_offset), hex(base_addr), hex(wb_dev.high_addr)))
         
         # 2nd iteration adds devices that have not requested an offset
-        for block in list(self.instances.keys()):
+        for block in list(sort(self.instances.keys())):
             for instname, inst in list(self.instances[block].items()):
                 logger.debug("Looking for WB slaves for instance %s"%inst.name)
                 for n, wb_dev in enumerate(inst.wb_devices):
@@ -809,6 +820,15 @@ class VerilogModule(object):
                 # only a mad man would attempt to debug this!
                 # And here I am. Please document this code better.
                 dev.memory_map = []
+            elif dev.axi4lite_mode == 'raw':
+                 # tell the axi_ic to generate a raw axi device
+                self.memory_map[dev.regname] = {}
+                interface = self.memory_map[dev.regname]
+                interface['size'] = dev.nbytes 
+                interface['memory_map'] = dev.memory_map
+                interface['axi4lite_devices'] = [dev]
+                # erase dev.memory_map so that core_info doesn't add raw axi device twice
+                dev.memory_map = [] 
             else:
                 # add all other yellow blocks to their own interface and make xml memory map
                 self.memory_map[dev.regname] = {}
@@ -1013,11 +1033,11 @@ class VerilogModule(object):
         """
         Add ports and signals associated with child instances
         """
-        for block in list(self.instances.keys()):
+        for block in list(sorted(self.instances.keys())):
             self.set_cur_blk(block)
             for instname, inst in list(self.instances[block].items()):
                 logger.debug('Instantiating child ports for %s'%instname)
-                for blk in list(inst.ports.keys()):
+                for blk in list(sorted(inst.ports.keys())):
                     for pname, port in list(inst.ports[blk].items()):
                         if port.parent_sig:
                             logger.debug('  Adding instance port %s as signal %s to top'%(port.name, port.signal))
@@ -1188,7 +1208,7 @@ class VerilogModule(object):
         declare parameters
         """
         s = ''
-        for block in list(self.parameters.keys()):
+        for block in list(sorted(self.parameters.keys())):
             s += self.gen_cur_blk_comment(block, self.parameters[block])
             for pn, parameter in sorted(self.parameters[block].items()):
                 s += '  parameter %s = %s;'%(parameter.name,parameter.value)
@@ -1203,7 +1223,7 @@ class VerilogModule(object):
         declare localparams
         """
         s = ''
-        for block in list(self.localparams.keys()):
+        for block in list(sorted(self.localparams.keys())):
             s += self.gen_cur_blk_comment(block, self.localparams[block])
             for pn,parameter in sorted(self.localparams[block].items()):
                 s += '  localparam %s = %s;'%(parameter.name,parameter.value)
@@ -1222,10 +1242,10 @@ class VerilogModule(object):
         n_ports = 0
         i = 1
         # get total number of ports
-        for block in list(self.ports.keys()):
+        for block in list(sorted(self.ports.keys())):
             n_ports += len(list(self.ports[block].keys()))
 
-        for block in list(self.ports.keys()):
+        for block in list(sorted(self.ports.keys())):
             s += self.gen_cur_blk_comment(block, self.ports[block])
             # sort by port type then alphabetically
             for port in sorted(list(self.ports[block].values()), key=operator.attrgetter('dir', 'name')):
@@ -1251,7 +1271,7 @@ class VerilogModule(object):
         # keyword map
         kwm = {'in':'input','out':'output','inout':'inout'}
         s = ''
-        for block in list(self.ports.keys()):
+        for block in list(sorted(self.ports.keys())):
             s += self.gen_cur_blk_comment(block, self.ports[block])
             # sort port type then alphabetically
             for port in sorted(list(self.ports[block].values()), key=operator.attrgetter('dir', 'name')):
@@ -1283,7 +1303,7 @@ class VerilogModule(object):
         declare signals
         """
         s = ''
-        for block in list(self.signals.keys()):
+        for block in list(sorted(self.signals.keys())):
             s += self.gen_cur_blk_comment(block, self.signals[block])
             for name, sig in sorted(self.signals[block].items()):
                 logger.debug('Writing verilog for signal %s'%name)
@@ -1303,7 +1323,7 @@ class VerilogModule(object):
         module
         """
         s = ''
-        for block in list(self.instances.keys()):
+        for block in list(sorted(self.instances.keys())):
             n = 0
             n_inst = len(self.instances[block])
             s += self.gen_cur_blk_comment(block, self.instances[block])
@@ -1321,7 +1341,7 @@ class VerilogModule(object):
         signal
         """
         s = ''
-        for block in list(self.assignments.keys()):
+        for block in list(sorted(self.assignments.keys())):
             s += self.gen_cur_blk_comment(block, self.assignments[block])
             for n,assignment in sorted(self.assignments[block].items()):
                 s += '  assign %s = %s;'%(assignment['lhs'], assignment['rhs'])
@@ -1344,7 +1364,7 @@ class VerilogModule(object):
         s = ''
         if self.comment is not None:
             s += '  // %s\n'%self.comment
-        for block in list(self.parameters.keys()):
+        for block in list(sorted(self.parameters.keys())):
             n_params = len(self.parameters[block])
             if n_params > 0:
                 s += '  %s #(\n' %self.name
@@ -1359,7 +1379,7 @@ class VerilogModule(object):
                 s += '  ) %s (\n'%instname
             else:
                 s += '  %s  %s (\n'%(self.name, instname)
-        for block in list(self.ports.keys()):
+        for block in list(sorted(self.ports.keys())):
             n_ports = len(self.ports[block])
             n = 0
             for pn, port in sorted(self.ports[block].items()):
@@ -1424,20 +1444,54 @@ class VerilogModule(object):
         self.add_port('wb_ack_o'+suffix, signal='wbs_ack_i[%s]'%wb_id,parent_sig=False)
         self.add_port('wb_err_o'+suffix, signal='wbs_err_i[%s]'%wb_id,parent_sig=False)
 
-    def add_axi4lite_interface(self, regname, mode, nbytes=4, default_val=0, suffix='', candr_suffix='', memory_map=[], typecode=0xff):
+    def add_axi4lite_interface(self, regname, mode, nbytes=4,
+                               default_val=0, suffix='',
+                               candr_suffix='', memory_map=[],
+                               typecode=0xff, data_width=32, axi4lite_mode=''):
         """
         Add the ports necessary for a AXI4-Lite slave interface.
 
         This function returns the AXI4LiteDevice object, so the caller can mess with it's memory map
         if they so desire.
+
+        Added the (optional) data_width parameter to make provision for variable-size BRAMs.
+        Added the (optional) axi4lite_mode parameter. Eg. axi4lite_mode = 'raw' instantiates a raw axi4lite device.
+              
+
+        :param regname: Name of register (this name is the string used to access the register from software).
+        :type regname: String
+        :param nbytes: Number of bytes in this slave's memory space.
+        :type nbytes: Integer
+        :param mode: Permissions ('r': readable, 'w': writable, 'rw': read/writeable).
+        :type mode: String
+        :param suffix: Suffix given to port names.
+        :type suffix: String
+        :param candr_suffix: Suffix given to clock and reset port names.
+        :type candr_suffix: String
+        :param memory_map: A list or `Register` instances defining the contents of sub-blocks of this device's memory.
+        :type memory_map: list
+        :param typecode: Typecode number (0-255) identifying the type of this block. See `yellow_block_typecodes.py`.
+        :type typecode: Integer
+        :param data_width: Width of the data to be stored in this device.
+        :type data_width: Integer
+        :param axi4lite_mode: Mode of the axi4lite interface. Eg. axi4lite_mode = 'raw', instantiates a raw axi4lite device.
+        :type axi4lite_mode: String
+
         """
+
         if regname in [axi_dev.regname for axi_dev in self.axi4lite_devices]:
             return
         else:
             # Make single register in memory_map if memory_map is empty
             if not memory_map:
-                memory_map = [Register(regname, nbytes=nbytes, offset=0, mode=mode, default_val=default_val, ram_size=nbytes if typecode==4 else -1, ram=True if typecode==4 else False)]
-            axi4lite_device = AXI4LiteDevice(regname, nbytes=nbytes, mode=mode, hdl_suffix=suffix, hdl_candr_suffix=candr_suffix, memory_map=memory_map, typecode=typecode)
+                memory_map = [Register(regname, nbytes=nbytes, offset=0, mode=mode,
+                                        default_val=default_val, data_width=data_width, axi4lite_mode=axi4lite_mode,
+                                        ram_size=nbytes if typecode==4 else -1,
+                                        ram=True if typecode==4 else False)]
+            axi4lite_device = AXI4LiteDevice(regname, nbytes=nbytes, mode=mode,
+                                            hdl_suffix=suffix, hdl_candr_suffix=candr_suffix,
+                                            memory_map=memory_map, typecode=typecode,
+                                            data_width=data_width, axi4lite_mode=axi4lite_mode)
             self.axi4lite_devices += [axi4lite_device]
             self.n_axi4lite_interfaces += 1
             return axi4lite_device
@@ -1450,7 +1504,7 @@ class VerilogModule(object):
         """
         for top_dict_key, top_dict_value in list(dict.items()):
             # does the second level dict keys contain name?
-            if name in list(top_dict_value.keys()):
+            if name in list(sorted(top_dict_value.keys())):
                 return top_dict_key
         # return key as None if not in any dictionary
         return None
