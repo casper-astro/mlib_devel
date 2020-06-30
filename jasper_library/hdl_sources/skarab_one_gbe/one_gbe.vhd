@@ -608,7 +608,9 @@ begin
     end process;
 
     --SGMII TO GMII
-    ONE_GBE_RESET_N <= not sys_rst;
+    --ONE_GBE_RESET_N <= not sys_rst;
+    --the same reset as bsp_fpga_rst
+    ONE_GBE_RESET_N <= not WB_RST_I;
     
     -- GT 11/04/2017 UPDATED SGMII CORE RESET TO ADD A TIMEOUT gmii_to_sgmii_reset <= fpga_reset;
     

@@ -1964,8 +1964,8 @@ begin
 
 
 
-    I2C_RESET_FPGA <= sys_fpga_rst;
-
+    --I2C_RESET_FPGA <= sys_fpga_rst;
+    I2C_RESET_FPGA <= bsp_fpga_rst;
     I2C_SCL_FPGA <= i2c_scl_pad_o(0) when (i2c_scl_padoen_o(0) = '0') else 'Z';
     I2C_SDA_FPGA <= i2c_sda_pad_o(0) when (i2c_sda_padoen_o(0) = '0') else 'Z';
     i2c_scl_pad_i(0) <= I2C_SCL_FPGA;
