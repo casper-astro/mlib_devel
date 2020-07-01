@@ -179,8 +179,8 @@ class skarab(YellowBlock):
 
         #inst.add_port('ONE_GBE_RESET_N', 'ONE_GBE_RESET_N', parent_port=True, dir='out')
         #inst.add_port('ONE_GBE_INT_N',   'ONE_GBE_INT_N',   parent_port=True, dir='in')
-        #inst.add_port('ONE_GBE_LINK',    'ONE_GBE_LINK',    parent_port=True, dir='in')
-
+        inst.add_port('ONE_GBE_LINK',    'ONE_GBE_LINK',    parent_port=True, dir='in')
+        inst.add_port('GBE_INT_N', 'ONE_GBE_INT_N', parent_sig=True, parent_port=True, dir='in')
         inst.add_port('ONE_WIRE_EEPROM',                    'ONE_WIRE_EEPROM',                    parent_port=True, dir='inout')
         inst.add_port('ONE_WIRE_EEPROM_STRONG_PULLUP_EN_N', 'ONE_WIRE_EEPROM_STRONG_PULLUP_EN_N', parent_port=True, dir='out')
 
@@ -297,7 +297,7 @@ class skarab(YellowBlock):
         cons.append(PortConstraint('USB_FPGA',             'USB_FPGA',             port_index=list(range( 4)), iogroup_index=list(range( 4))))
         cons.append(PortConstraint('FLASH_A',              'FLASH_A',              port_index=list(range(29)), iogroup_index=list(range(29))))
         cons.append(PortConstraint('GND',                  'GND',                  port_index=list(range(16)), iogroup_index=list(range(16))))
-        #cons.append(PortConstraint('ONE_GBE_INT_N', 'ONE_GBE_INT_N'))
+        cons.append(PortConstraint('ONE_GBE_INT_N', 'ONE_GBE_INT_N'))
         cons.append(PortConstraint('FPGA_RESET_N', 'FPGA_RESET_N'))
         cons.append(PortConstraint('FLASH_WE_N', 'FLASH_WE_N'))
         cons.append(PortConstraint('FPGA_EMCCLK2', 'FPGA_EMCCLK2'))
@@ -314,7 +314,7 @@ class skarab(YellowBlock):
         cons.append(PortConstraint('I2C_SCL_FPGA','I2C_SCL_FPGA'))
         cons.append(PortConstraint('FPGA_REFCLK_BUF0_P','FPGA_REFCLK_BUF0_P'))
         cons.append(PortConstraint('FPGA_REFCLK_BUF0_N','FPGA_REFCLK_BUF0_N'))
-        #cons.append(PortConstraint('ONE_GBE_LINK','ONE_GBE_LINK'))
+        cons.append(PortConstraint('ONE_GBE_LINK','ONE_GBE_LINK'))
         cons.append(PortConstraint('SPI_CLK','SPI_CLK'))
         cons.append(PortConstraint('MEZZANINE_3_INT_N','MEZZANINE_3_INT_N'))
         cons.append(PortConstraint('MEZZANINE_2_INT_N','MEZZANINE_2_INT_N'))
@@ -537,6 +537,10 @@ class skarab(YellowBlock):
         cons.append(InputDelayConstraint(clkname='virtual_emcc_clock', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='EMCCLK'))
         cons.append(InputDelayConstraint(clkname='-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]'  % self.fullname, consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='USB_UART_TXD'))
         cons.append(InputDelayConstraint(clkname='-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]'  % self.fullname, consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='USB_UART_TXD'))
+        cons.append(InputDelayConstraint(clkname='-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]'  % self.fullname, consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='ONE_GBE_INT_N'))
+        cons.append(InputDelayConstraint(clkname='-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]'  % self.fullname, consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='ONE_GBE_INT_N'))
+        cons.append(InputDelayConstraint(clkname='-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]'  % self.fullname, consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='ONE_GBE_LINK'))
+        cons.append(InputDelayConstraint(clkname='-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]'  % self.fullname, consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='ONE_GBE_LINK'))
 
         #cons.append(InputDelayConstraint(clkname='get_clocks -of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]'  % self.fullname, consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='FPGA_RESET_N'))
         #cons.append(InputDelayConstraint(clkname='get_clocks -of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]'  % self.fullname, consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='FPGA_RESET_N'))
