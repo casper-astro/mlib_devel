@@ -10,7 +10,6 @@
 -- Tool Versions:
 -- Description:
 --
--- Wishbone Classic slave, Replaces opb_attach in 10GBE MAC
 --
 -- Dependencies:
 --
@@ -46,7 +45,7 @@ entity wishbone_ten_gb_eth_attach is
         DAT_I : in  std_logic_vector(31 downto 0);
         DAT_O : out std_logic_vector(31 downto 0);
         ACK_O : out std_logic;
-        ADR_I : in  std_logic_vector(15 downto 0);
+        ADR_I : in  std_logic_vector(31 downto 0);
         CYC_I : in  std_logic;
         SEL_I : in  std_logic_vector( 3 downto 0);
         STB_I : in  std_logic;
@@ -98,14 +97,14 @@ end wishbone_ten_gb_eth_attach;
 
 architecture arch_wishbone_ten_gb_eth_attach of wishbone_ten_gb_eth_attach is
 
-    constant REGISTERS_OFFSET : std_logic_vector(15 downto 0) := X"0000";
-    constant REGISTERS_HIGH   : std_logic_vector(15 downto 0) := X"0FFF";
-    constant ARP_CACHE_OFFSET : std_logic_vector(15 downto 0) := X"1000";
-    constant ARP_CACHE_HIGH   : std_logic_vector(15 downto 0) := X"3FFF";
-    constant TX_BUFFER_OFFSET : std_logic_vector(15 downto 0) := X"4000";
-    constant TX_BUFFER_HIGH   : std_logic_vector(15 downto 0) := X"7FFF";
-    constant RX_BUFFER_OFFSET : std_logic_vector(15 downto 0) := X"8000";
-    constant RX_BUFFER_HIGH   : std_logic_vector(15 downto 0) := X"BFFF";
+    constant REGISTERS_OFFSET : std_logic_vector(16 downto 0) := B"0" & X"0000";
+    constant REGISTERS_HIGH   : std_logic_vector(16 downto 0) := B"0" & X"0FFF";
+    constant ARP_CACHE_OFFSET : std_logic_vector(16 downto 0) := B"0" & X"1000";
+    constant ARP_CACHE_HIGH   : std_logic_vector(16 downto 0) := B"0" & X"3FFF";
+    constant TX_BUFFER_OFFSET : std_logic_vector(16 downto 0) := B"0" & X"4000";
+    constant TX_BUFFER_HIGH   : std_logic_vector(16 downto 0) := B"0" & X"7FFF";
+    constant RX_BUFFER_OFFSET : std_logic_vector(16 downto 0) := B"0" & X"8000";
+    constant RX_BUFFER_HIGH   : std_logic_vector(16 downto 0) := B"0" & X"BFFF";
 
     constant REG_CORE_TYPE       : std_logic_vector(7 downto 0) := X"00";
     constant REG_MAX_BUF_SIZE    : std_logic_vector(7 downto 0) := X"01";
@@ -134,10 +133,10 @@ architecture arch_wishbone_ten_gb_eth_attach of wishbone_ten_gb_eth_attach is
     signal arp_sel      : std_logic;
     signal reg_data_src : std_logic_vector(7 downto 0);
 
-    signal reg_addr   : std_logic_vector(15 downto 0);
-    signal rxbuf_addr : std_logic_vector(15 downto 0);
-    signal txbuf_addr : std_logic_vector(15 downto 0);
-    signal arp_addr   : std_logic_vector(15 downto 0);
+    signal reg_addr   : std_logic_vector(16 downto 0);
+    signal rxbuf_addr : std_logic_vector(16 downto 0);
+    signal txbuf_addr : std_logic_vector(16 downto 0);
+    signal arp_addr   : std_logic_vector(16 downto 0);
 
     signal local_mac_reg             : std_logic_vector(47 downto 0);
     signal local_ip_reg              : std_logic_vector(31 downto 0);
@@ -171,6 +170,10 @@ architecture arch_wishbone_ten_gb_eth_attach of wishbone_ten_gb_eth_attach is
     signal tx_data_int  : std_logic_vector(31 downto 0);
     signal rx_data_int  : std_logic_vector(31 downto 0);
     signal reg_data_int : std_logic_vector(31 downto 0);
+    --AI: signal to store data for wishbone read 
+    signal reg_dat_o_int : std_logic_vector(31 downto 0);
+    --AI: signal for wishbone ack
+    signal reg_ack : std_logic;
 
     signal reg_sel_z1 : std_logic;
 
@@ -219,12 +222,12 @@ begin
     gen_ACK_O : process(RST_I, CLK_I)
     begin
         if (RST_I = '1')then
-            ACK_O <= '0';
+            reg_ack <= '0';
         elsif (rising_edge(CLK_I))then
             if ((STB_I_z = '1')and(STB_I_z2 = '0'))then
-                ACK_O <= '1';
+                reg_ack <= '1';
             else
-                ACK_O <= '0';
+                reg_ack <= '0';
             end if;
         end if;
     end process;
@@ -235,15 +238,15 @@ begin
 
     wishbone_sel <= (CYC_I and STB_I) or STB_I_z or STB_I_z2;
 
-    reg_sel   <= wishbone_sel when ((ADR_I >= REGISTERS_OFFSET) and (ADR_I <= REGISTERS_HIGH)) else '0';
-    txbuf_sel <= wishbone_sel when ((ADR_I >= TX_BUFFER_OFFSET) and (ADR_I <= TX_BUFFER_HIGH)) else '0';
-    rxbuf_sel <= wishbone_sel when ((ADR_I >= RX_BUFFER_OFFSET) and (ADR_I <= RX_BUFFER_HIGH)) else '0';
-    arp_sel   <= wishbone_sel when ((ADR_I >= ARP_CACHE_OFFSET) and (ADR_I <= ARP_CACHE_HIGH)) else '0';
+    reg_sel   <= wishbone_sel when ((ADR_I(16 downto 0) >= REGISTERS_OFFSET) and (ADR_I(16 downto 0) <= REGISTERS_HIGH)) else '0';
+    txbuf_sel <= wishbone_sel when ((ADR_I(16 downto 0) >= TX_BUFFER_OFFSET) and (ADR_I(16 downto 0) <= TX_BUFFER_HIGH)) else '0';
+    rxbuf_sel <= wishbone_sel when ((ADR_I(16 downto 0) >= RX_BUFFER_OFFSET) and (ADR_I(16 downto 0) <= RX_BUFFER_HIGH)) else '0';
+    arp_sel   <= wishbone_sel when ((ADR_I(16 downto 0) >= ARP_CACHE_OFFSET) and (ADR_I(16 downto 0) <= ARP_CACHE_HIGH)) else '0';
 
-    reg_addr   <= ADR_I - REGISTERS_OFFSET;
-    rxbuf_addr <= ADR_I - RX_BUFFER_OFFSET;
-    txbuf_addr <= ADR_I - TX_BUFFER_OFFSET;
-    arp_addr   <= ADR_I - ARP_CACHE_OFFSET;
+    reg_addr   <= ADR_I(16 downto 0) - REGISTERS_OFFSET;
+    rxbuf_addr <= ADR_I(16 downto 0) - RX_BUFFER_OFFSET;
+    txbuf_addr <= ADR_I(16 downto 0) - TX_BUFFER_OFFSET;
+    arp_addr   <= ADR_I(16 downto 0) - ARP_CACHE_OFFSET;
 
     gen_reg_sel_z1 : process(CLK_I)
     begin
@@ -291,11 +294,15 @@ begin
     local_mc_recv_ip_mask_reg(31 downto 0) when (reg_data_src = REG_MC_RECV_IP_MASK) else
     (others => '0');
 
-    DAT_O <=
-    arp_data_int when (arp_sel   = '1') else
+    reg_dat_o_int <=
+    arp_data_int when (arp_sel    = '1') else
     tx_data_int  when (txbuf_sel = '1') else
     rx_data_int  when (rxbuf_sel = '1') else
     reg_data_int;
+    
+    --AI: latch data out when wishbone ack is asserted
+    DAT_O <= reg_dat_o_int when (reg_ack = '1') else x"00000000";
+    ACK_O <= reg_ack;
 
 --------------------------------------------------------------------------------
 -- REGISTER HANDLING

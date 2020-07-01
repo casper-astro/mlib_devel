@@ -46,7 +46,7 @@ module kat_ten_gb_eth #(
     input  [31:0] DAT_I,
     output [31:0] DAT_O,
     output        ACK_O,
-    input  [15:0] ADR_I,
+    input  [31:0] ADR_I,
     input         CYC_I,
     input   [3:0] SEL_I,
     input         STB_I,

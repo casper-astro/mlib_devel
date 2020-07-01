@@ -198,7 +198,7 @@ architecture arch_one_gbe of one_gbe is
         DAT_I : in std_logic_vector(31 downto 0);
         DAT_O : out std_logic_vector(31 downto 0);
         ACK_O : out std_logic;
-        ADR_I : in std_logic_vector(15 downto 0);
+        ADR_I : in std_logic_vector(31 downto 0);
         CYC_I : in std_logic;
         SEL_I : in std_logic_vector(3 downto 0);
         STB_I : in std_logic;
@@ -345,7 +345,7 @@ begin
         DAT_I => WB_DAT_I,
         DAT_O => WB_DAT_O,
         ACK_O => WB_ACK_O,
-        ADR_I => WB_ADR_I(15 downto 0),
+        ADR_I => WB_ADR_I,
         CYC_I => WB_CYC_I,
         SEL_I => WB_SEL_I,
         STB_I => WB_STB_I,

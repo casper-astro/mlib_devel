@@ -67,7 +67,7 @@ entity ska_forty_gb_eth is
         DAT_I : in  std_logic_vector(31 downto 0);
         DAT_O : out std_logic_vector(31 downto 0);
         ACK_O : out std_logic;
-        ADR_I : in  std_logic_vector(15 downto 0);
+        ADR_I : in  std_logic_vector(31 downto 0);
         CYC_I : in  std_logic;
         SEL_I : in  std_logic_vector(3 downto 0);
         STB_I : in  std_logic;
@@ -132,7 +132,7 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
         DAT_I : in  std_logic_vector(31 downto 0);
         DAT_O : out std_logic_vector(31 downto 0);
         ACK_O : out std_logic;
-        ADR_I : in  std_logic_vector(15 downto 0);
+        ADR_I : in  std_logic_vector(31 downto 0);
         CYC_I : in  std_logic;
         SEL_I : in  std_logic_vector(3 downto 0);
         STB_I : in  std_logic;

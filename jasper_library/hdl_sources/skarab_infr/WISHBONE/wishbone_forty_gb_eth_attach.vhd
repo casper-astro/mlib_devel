@@ -42,7 +42,7 @@ entity wishbone_forty_gb_eth_attach is
         DAT_I : in  std_logic_vector(31 downto 0);
         DAT_O : out std_logic_vector(31 downto 0);
         ACK_O : out std_logic;
-        ADR_I : in  std_logic_vector(15 downto 0);
+        ADR_I : in  std_logic_vector(31 downto 0);
         CYC_I : in  std_logic;
         SEL_I : in  std_logic_vector( 3 downto 0);
         STB_I : in  std_logic;
@@ -100,14 +100,14 @@ end wishbone_forty_gb_eth_attach;
 
 architecture arch_wishbone_forty_gb_eth_attach of wishbone_forty_gb_eth_attach is
 
-    constant REGISTERS_OFFSET : std_logic_vector(15 downto 0) := X"0000";
-    constant REGISTERS_HIGH   : std_logic_vector(15 downto 0) := X"0FFF";
-    constant ARP_CACHE_OFFSET : std_logic_vector(15 downto 0) := X"1000";
-    constant ARP_CACHE_HIGH   : std_logic_vector(15 downto 0) := X"3FFF";
-    constant TX_BUFFER_OFFSET : std_logic_vector(15 downto 0) := X"4000";
-    constant TX_BUFFER_HIGH   : std_logic_vector(15 downto 0) := X"7FFF";
-    constant RX_BUFFER_OFFSET : std_logic_vector(15 downto 0) := X"8000";
-    constant RX_BUFFER_HIGH   : std_logic_vector(15 downto 0) := X"BFFF";
+    constant REGISTERS_OFFSET : std_logic_vector(16 downto 0) := B"0" & X"0000";
+    constant REGISTERS_HIGH   : std_logic_vector(16 downto 0) := B"0" & X"0FFF";
+    constant ARP_CACHE_OFFSET : std_logic_vector(16 downto 0) := B"0" & X"1000";
+    constant ARP_CACHE_HIGH   : std_logic_vector(16 downto 0) := B"0" & X"3FFF";
+    constant TX_BUFFER_OFFSET : std_logic_vector(16 downto 0) := B"0" & X"4000";
+    constant TX_BUFFER_HIGH   : std_logic_vector(16 downto 0) := B"0" & X"7FFF";
+    constant RX_BUFFER_OFFSET : std_logic_vector(16 downto 0) := B"0" & X"8000";
+    constant RX_BUFFER_HIGH   : std_logic_vector(16 downto 0) := B"0" & X"BFFF";
 
     constant REG_CORE_TYPE       : std_logic_vector(7 downto 0) := X"00";
     constant REG_MAX_BUF_SIZE    : std_logic_vector(7 downto 0) := X"01";
@@ -148,10 +148,10 @@ architecture arch_wishbone_forty_gb_eth_attach of wishbone_forty_gb_eth_attach i
     signal arp_sel      : std_logic;
     signal reg_data_src : std_logic_vector(7 downto 0);
 
-    signal reg_addr   : std_logic_vector(15 downto 0);
-    signal rxbuf_addr : std_logic_vector(15 downto 0);
-    signal txbuf_addr : std_logic_vector(15 downto 0);
-    signal arp_addr   : std_logic_vector(15 downto 0);
+    signal reg_addr   : std_logic_vector(16 downto 0);
+    signal rxbuf_addr : std_logic_vector(16 downto 0);
+    signal txbuf_addr : std_logic_vector(16 downto 0);
+    signal arp_addr   : std_logic_vector(16 downto 0);
 
     signal local_mac_reg             : std_logic_vector(47 downto 0);
     signal local_ip_reg              : std_logic_vector(31 downto 0);
@@ -198,63 +198,7 @@ architecture arch_wishbone_forty_gb_eth_attach of wishbone_forty_gb_eth_attach i
 
     signal reg_sel_z1 : std_logic;
 
-    signal dbg_adr_i : std_logic_vector(15 downto 0);
-    signal dbg_dat_i : std_logic_vector(31 downto 0);
-    signal dbg_dat_o : std_logic_vector(31 downto 0);
-    signal dbg_stb_i : std_logic;
-    signal dbg_we_i  : std_logic;
-    signal dbg_cyc_i : std_logic;
-    signal dbg_ack_o : std_logic;
-    signal dbg_reg_sel : std_logic;
-    signal dbg_arp_sel : std_logic;
-    signal dbg_tx_sel  : std_logic;
-    signal dbg_rx_sel  : std_logic;
-    attribute MARK_DEBUG : string;
-    attribute MARK_DEBUG of dbg_adr_i : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_dat_i : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_dat_o : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_stb_i : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_we_i  : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_cyc_i : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_ack_o  : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_reg_sel : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_arp_sel : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_tx_sel  : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_rx_sel  : signal is "TRUE";
-
-    signal dbg_local_mac : std_logic_vector(47 downto 0);
-    signal dbg_local_ip : std_logic_vector(31 downto 0);
-    signal dbg_cpu_rx_buffer_addr : std_logic_vector(10 downto 0);
-    signal dbg_cpu_rx_buffer_rd_data : std_logic_vector(63 downto 0);
-    signal dbg_cpu_rx_size : std_logic_vector(10 downto 0);
-    signal dbg_cpu_rx_ack : std_logic;
-    signal dbg_tx_rx_sizes : std_logic_vector(31 downto 0);
-    attribute MARK_DEBUG of dbg_local_mac : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_local_ip : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_cpu_rx_buffer_addr : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_cpu_rx_buffer_rd_data : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_cpu_rx_size : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_cpu_rx_ack : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_tx_rx_sizes : signal is "TRUE";
-
-
 begin
-    dbg_adr_i <= ADR_I;
-    dbg_dat_i <= DAT_I;
-    dbg_stb_i <= STB_I;
-    dbg_we_i  <= WE_I;
-    dbg_cyc_i <= CYC_I;
-    dbg_reg_sel <= reg_sel;
-    dbg_arp_sel <= arp_sel;
-    dbg_tx_sel  <= txbuf_sel;
-    dbg_rx_sel  <= rxbuf_sel;
-
-    dbg_local_mac <= local_mac_reg;
-    dbg_local_ip <= local_ip_reg;
-    dbg_cpu_rx_buffer_rd_data <= cpu_rx_buffer_rd_data;
-    dbg_cpu_rx_size <= dbg_cpu_rx_size;
-    dbg_cpu_rx_ack <= cpu_rx_ack_reg;
-    dbg_tx_rx_sizes <= ("00000" & cpu_tx_size_reg & "00000" & cpu_rx_size_int);
 
     local_mac             <= local_mac_reg;
     local_ip              <= local_ip_reg;
@@ -290,7 +234,6 @@ begin
     cpu_tx_buffer_wr_data <= write_data;
     cpu_tx_buffer_wr_en   <= tx_buffer_we;
     cpu_rx_buffer_addr    <= rxbuf_addr(13 downto 3);
-    dbg_cpu_rx_buffer_addr <= rxbuf_addr(13 downto 3);
 
 --------------------------------------------------------------------------------
 -- WISHBONE ACK GENERATION
@@ -325,17 +268,16 @@ begin
 --------------------------------------------------------------------------------
 
     wishbone_sel <= (CYC_I and STB_I) or STB_I_z or STB_I_z2;
-    --wishbone_sel <= STB_I or STB_I_z;
 
-    reg_sel   <= wishbone_sel when ((ADR_I >= REGISTERS_OFFSET) and (ADR_I <= REGISTERS_HIGH)) else '0';
-    txbuf_sel <= wishbone_sel when ((ADR_I >= TX_BUFFER_OFFSET) and (ADR_I <= TX_BUFFER_HIGH)) else '0';
-    rxbuf_sel <= wishbone_sel when ((ADR_I >= RX_BUFFER_OFFSET) and (ADR_I <= RX_BUFFER_HIGH)) else '0';
-    arp_sel   <= wishbone_sel when ((ADR_I >= ARP_CACHE_OFFSET) and (ADR_I <= ARP_CACHE_HIGH)) else '0';
+    reg_sel   <= wishbone_sel when ((ADR_I(16 downto 0) >= REGISTERS_OFFSET) and (ADR_I(16 downto 0) <= REGISTERS_HIGH)) else '0';
+    txbuf_sel <= wishbone_sel when ((ADR_I(16 downto 0) >= TX_BUFFER_OFFSET) and (ADR_I(16 downto 0) <= TX_BUFFER_HIGH)) else '0';
+    rxbuf_sel <= wishbone_sel when ((ADR_I(16 downto 0) >= RX_BUFFER_OFFSET) and (ADR_I(16 downto 0) <= RX_BUFFER_HIGH)) else '0';
+    arp_sel   <= wishbone_sel when ((ADR_I(16 downto 0) >= ARP_CACHE_OFFSET) and (ADR_I(16 downto 0) <= ARP_CACHE_HIGH)) else '0';
 
-    reg_addr   <= ADR_I - REGISTERS_OFFSET;
-    rxbuf_addr <= ADR_I - RX_BUFFER_OFFSET;
-    txbuf_addr <= ADR_I - TX_BUFFER_OFFSET;
-    arp_addr   <= ADR_I - ARP_CACHE_OFFSET;
+    reg_addr   <= ADR_I(16 downto 0) - REGISTERS_OFFSET;
+    rxbuf_addr <= ADR_I(16 downto 0) - RX_BUFFER_OFFSET;
+    txbuf_addr <= ADR_I(16 downto 0) - TX_BUFFER_OFFSET;
+    arp_addr   <= ADR_I(16 downto 0) - ARP_CACHE_OFFSET;
 
     gen_reg_sel_z1 : process(CLK_I)
     begin
@@ -375,7 +317,6 @@ begin
     local_mc_recv_ip_reg(31 downto 0)                                            when (reg_data_src = REG_MC_RECV_IP)       else
     local_mc_recv_ip_mask_reg(31 downto 0)                                       when (reg_data_src = REG_MC_RECV_IP_MASK)  else
     ("00000" & cpu_tx_size_reg & "00000" & cpu_rx_size_int)                      when (reg_data_src = REG_BUFFER_SIZES)     else
-    --X"A5A5A5A5"                      when (reg_data_src = REG_BUFFER_SIZES)     else
     (X"00" & "0000000" & soft_reset_reg & X"00" & "0000000" & local_enable_reg)  when (reg_data_src = REG_PROMISC_RST_EN)   else
     (X"0000" & local_port_reg)                                                   when (reg_data_src = REG_VALID_PORTS)      else
 
@@ -404,9 +345,7 @@ begin
     
     --AI: latch data out when wishbone ack is asserted
     DAT_O <= reg_dat_o_int when (reg_ack = '1') else x"00000000";
-    dbg_dat_o <= reg_dat_o_int when (reg_ack = '1') else x"00000000";
     ACK_O <= reg_ack;
-    dbg_ack_o <= reg_ack;
 
 --------------------------------------------------------------------------------
 -- REGISTER HANDLING
