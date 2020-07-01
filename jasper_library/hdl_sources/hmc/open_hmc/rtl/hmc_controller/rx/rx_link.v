@@ -73,14 +73,14 @@ module rx_link #(
     //----------------------------------
     input   wire                        clk,
     input   wire                        res_n,
-    (* mark_debug="TRUE", keep="TRUE" *)
+    //(* mark_debug="TRUE", keep="TRUE" *)
     input   wire                        run_rx,
 
     //----------------------------------
     //----TO HMC PHY
     //----------------------------------
     input   wire  [DWIDTH-1:0]          phy_scrambled_data_in,
-    (* mark_debug="TRUE", keep="TRUE" *)
+    //(* mark_debug="TRUE", keep="TRUE" *)
     output  reg   [NUM_LANES-1:0]       phy_bit_slip,
 
     //----------------------------------
@@ -94,16 +94,16 @@ module rx_link #(
     //----------------------------------
     //----TO TX Block
     //----------------------------------
-    (* mark_debug="TRUE", keep="TRUE" *)
+    //(* mark_debug="TRUE", keep="TRUE" *)
     output  reg                         tx_link_retry,
-    (* mark_debug="TRUE", keep="TRUE" *)
-    (* mark_debug="TRUE", keep="TRUE" *)
+    //(* mark_debug="TRUE", keep="TRUE" *)
+    //(* mark_debug="TRUE", keep="TRUE" *)
     output  reg                         tx_error_abort_mode,
-    (* mark_debug="TRUE", keep="TRUE" *)
+    //(* mark_debug="TRUE", keep="TRUE" *)
     output  reg                         tx_error_abort_mode_cleared,
-    (* mark_debug="TRUE", keep="TRUE" *)
+    //(* mark_debug="TRUE", keep="TRUE" *)
     output  reg   [7:0]                 tx_hmc_frp,
-    (* mark_debug="TRUE", keep="TRUE" *)
+    //(* mark_debug="TRUE", keep="TRUE" *)
     output  reg   [7:0]                 tx_rrp,
     output  reg   [MAX_RTC_RET_LOG-1:0] tx_returned_tokens,
     output  wire  [LOG_FPW:0]           tx_hmc_tokens_to_return,
@@ -119,7 +119,7 @@ module rx_link #(
     output  reg                         rf_errstat_valid,
     //Status
     output  reg                         rf_link_up,
-    (* mark_debug="TRUE", keep="TRUE" *)
+    //(* mark_debug="TRUE", keep="TRUE" *)
     output  reg   [2:0]                 rf_rx_init_status,
     input   wire                        rf_hmc_sleep,
     //Init Status
@@ -130,7 +130,7 @@ module rx_link #(
     output  wire  [NUM_LANES-1:0]       rf_lane_polarity,           
     input   wire                        rf_scrambler_disable,
     output  wire                        rf_lane_reversal_detected,
-    (* mark_debug="TRUE", keep="TRUE" *)
+    //(* mark_debug="TRUE", keep="TRUE" *)
     output  reg   [NUM_LANES-1:0]       rf_descramblers_locked,
     input   wire  [4:0]                 rf_irtry_received_threshold,
     //AI: Route out CRC per FLIT for debugging
@@ -186,19 +186,19 @@ genvar n;   //Counts to NUM_LANES
 genvar w;   //Counts to WIDTH_PER_LANE
 
 //------------------------------------------------------------------------------------DESCRAMBLER AND DATA ORDERING
-(* mark_debug="TRUE", keep="TRUE" *)
+//(* mark_debug="TRUE", keep="TRUE" *)
 reg                     all_descramblers_part_aligned;
-(* mark_debug="TRUE", keep="TRUE" *)
+//(* mark_debug="TRUE", keep="TRUE" *)
 reg [NUM_LANES-1:0]     init_descrambler_part_aligned;
 wire [NUM_LANES-1:0]    lane_zero;
-(* mark_debug="TRUE", keep="TRUE" *)
+//(* mark_debug="TRUE", keep="TRUE" *)
 reg [NUM_LANES-1:0]     init_descrambler_aligned;
 assign                  rf_descrambler_part_aligned = init_descrambler_part_aligned;
 assign                  rf_descrambler_aligned      = init_descrambler_aligned;
 
 //DATA and REORDERING
 wire [128-1:0]              init_d_in_flit              [FPW-1:0];
-(* mark_debug="TRUE", keep="TRUE" *)
+//(* mark_debug="TRUE", keep="TRUE" *)
 wire [WIDTH_PER_LANE-1:0]   descrambled_data_per_lane   [NUM_LANES-1:0];
 reg  [WIDTH_PER_LANE-1:0]   descrambled_data_per_lane_dly   [NUM_LANES-1:0];
 wire [DWIDTH-1:0]           d_in;
@@ -220,27 +220,27 @@ assign rx_data_lane6 = descrambled_data_per_lane[6];
 assign rx_data_lane7 = descrambled_data_per_lane[7];
 
 
-(* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_0; //Virtual test probe for the logic analyser  
-(* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_1; //Virtual test probe for the logic analyser  
-(* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_2; //Virtual test probe for the logic analyser  
-(* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_3; //Virtual test probe for the logic analyser  
-(* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_4; //Virtual test probe for the logic analyser  
-(* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_5; //Virtual test probe for the logic analyser  
-(* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_6; //Virtual test probe for the logic analyser  
-(* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_7; //Virtual test probe for the logic analyser
-(* mark_debug = "true" *) wire [2:0] dbg_rf_rx_init_status; //Virtual test probe for the logic analyser 
-(* mark_debug = "true" *) wire [NUM_LANES-1:0] dbg_rf_descramblers_locked; //Virtual test probe for the logic analyser  
+//(* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_0; //Virtual test probe for the logic analyser  
+//(* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_1; //Virtual test probe for the logic analyser  
+//(* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_2; //Virtual test probe for the logic analyser  
+//(* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_3; //Virtual test probe for the logic analyser  
+//(* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_4; //Virtual test probe for the logic analyser  
+//(* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_5; //Virtual test probe for the logic analyser  
+//(* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_6; //Virtual test probe for the logic analyser  
+//(* mark_debug = "true" *) wire [WIDTH_PER_LANE-1:0] dbg_descrambled_data_per_lane_7; //Virtual test probe for the logic analyser
+//(* mark_debug = "true" *) wire [2:0] dbg_rf_rx_init_status; //Virtual test probe for the logic analyser 
+//(* mark_debug = "true" *) wire [NUM_LANES-1:0] dbg_rf_descramblers_locked; //Virtual test probe for the logic analyser  
   
-assign dbg_descrambled_data_per_lane_0 = descrambled_data_per_lane[0][63:0];
-assign dbg_descrambled_data_per_lane_1 = descrambled_data_per_lane[1][63:0];
-assign dbg_descrambled_data_per_lane_2 = descrambled_data_per_lane[2][63:0];
-assign dbg_descrambled_data_per_lane_3 = descrambled_data_per_lane[3][63:0];  
-assign dbg_descrambled_data_per_lane_4 = descrambled_data_per_lane[4][63:0];
-assign dbg_descrambled_data_per_lane_5 = descrambled_data_per_lane[5][63:0];
-assign dbg_descrambled_data_per_lane_6 = descrambled_data_per_lane[6][63:0];
-assign dbg_descrambled_data_per_lane_7 = descrambled_data_per_lane[7][63:0];
-assign dbg_rf_rx_init_status =  rf_rx_init_status;
-assign dbg_rf_descramblers_locked = rf_descramblers_locked;
+//assign dbg_descrambled_data_per_lane_0 = descrambled_data_per_lane[0][63:0];
+//assign dbg_descrambled_data_per_lane_1 = descrambled_data_per_lane[1][63:0];
+//assign dbg_descrambled_data_per_lane_2 = descrambled_data_per_lane[2][63:0];
+//assign dbg_descrambled_data_per_lane_3 = descrambled_data_per_lane[3][63:0];  
+//assign dbg_descrambled_data_per_lane_4 = descrambled_data_per_lane[4][63:0];
+//assign dbg_descrambled_data_per_lane_5 = descrambled_data_per_lane[5][63:0];
+//assign dbg_descrambled_data_per_lane_6 = descrambled_data_per_lane[6][63:0];
+//assign dbg_descrambled_data_per_lane_7 = descrambled_data_per_lane[7][63:0];
+//assign dbg_rf_rx_init_status =  rf_rx_init_status;
+//assign dbg_rf_descramblers_locked = rf_descramblers_locked;
 
 generate
 
@@ -275,12 +275,12 @@ endgenerate
 localparam                  LINK_DOWN   = 1'b0;
 localparam                  LINK_UP     = 1'b1;
 
-(* mark_debug="TRUE", keep="TRUE" *)
+//(* mark_debug="TRUE", keep="TRUE" *)
 reg [NUM_LANES-1:0]         init_bit_slip;
-(* mark_debug="TRUE", keep="TRUE" *)
+//(* mark_debug="TRUE", keep="TRUE" *)
 reg [NUM_LANES-1:0]         init_bit_slip_part;
 reg [RX_BIT_SLIP_CNT_LOG-1:0]init_bit_slip_cnt;
-(* mark_debug="TRUE", keep="TRUE" *)
+//(* mark_debug="TRUE", keep="TRUE" *)
 wire[NUM_LANES-1:0]         init_descrambler_locked;           //locked from the descrambler
 reg [3:0]                   init_tmp_seq;
 
@@ -400,23 +400,23 @@ reg     [2:0]           next_seqnum_comb; //can be reduced to [1:0] for 2FLIT co
 reg     [2:0]           first_seq_after_error;
 
 //------------------------------------------------------------------------------------IRTRY packet count stage
-(* mark_debug="TRUE", keep="TRUE" *)
+//(* mark_debug="TRUE", keep="TRUE" *)
 reg     [128-1:0]       flit_after_mask_stage                   [FPW-1:0];
-(* mark_debug="TRUE", keep="TRUE" *)
+//(* mark_debug="TRUE", keep="TRUE" *)
 reg     [FPW-1:0]       flit_after_mask_stage_is_hdr;
-(* mark_debug="TRUE", keep="TRUE" *)
+//(* mark_debug="TRUE", keep="TRUE" *)
 reg     [FPW-1:0]       flit_after_mask_stage_is_tail;
-(* mark_debug="TRUE", keep="TRUE" *)
+//(* mark_debug="TRUE", keep="TRUE" *)
 reg     [FPW-1:0]       flit_after_mask_stage_is_valid;
 reg     [FPW-1:0]       flit_after_mask_stage_is_valid_mask_lsb;
 reg     [FPW-1:0]       flit_after_mask_stage_is_valid_mask_msb;
-(* mark_debug="TRUE", keep="TRUE" *)
+//(* mark_debug="TRUE", keep="TRUE" *)
 reg     [FPW-1:0]       flit_after_mask_stage_is_error;
-(* mark_debug="TRUE", keep="TRUE" *)
+//(* mark_debug="TRUE", keep="TRUE" *)
 reg     [FPW-1:0]       flit_after_mask_stage_is_poisoned;
-(* mark_debug="TRUE", keep="TRUE" *)
+//(* mark_debug="TRUE", keep="TRUE" *)
 reg     [FPW-1:0]       flit_after_mask_stage_is_start_retry;
-(* mark_debug="TRUE", keep="TRUE" *)
+//(* mark_debug="TRUE", keep="TRUE" *)
 reg     [FPW-1:0]       flit_after_mask_stage_has_rtc;
 
 
@@ -589,14 +589,14 @@ generate
     end
 endgenerate
 
-(* mark_debug="TRUE", keep="TRUE" *)
+//(* mark_debug="TRUE", keep="TRUE" *)
 reg    init_no_valid_flit   ;
-(* mark_debug="TRUE", keep="TRUE" *)
+//(* mark_debug="TRUE", keep="TRUE" *)
 reg    init_all_flits_valid ;
 
-(* mark_debug="TRUE", keep="TRUE" *)
+//(* mark_debug="TRUE", keep="TRUE" *)
 reg [NUM_LANES-1:0] lock_int;
-(* mark_debug="TRUE", keep="TRUE" *)
+//(* mark_debug="TRUE", keep="TRUE" *)
 reg [4:0]           init_lock_cnt;
 
 `ifdef ASYNC_RES
@@ -1581,7 +1581,7 @@ wire   lanes_can_lock;
 assign lanes_can_lock = (rf_hmc_sleep || !run_rx) ? 1'b0 : 1'b1;
 
 wire   [47:0] bit_slip_cnt_temp [NUM_LANES-1:0];
-(* mark_debug="TRUE", keep="TRUE" *)
+//(* mark_debug="TRUE", keep="TRUE" *)
 wire   [7:0] bit_slip_cnt [NUM_LANES-1:0];
 // 
 //Lane Init

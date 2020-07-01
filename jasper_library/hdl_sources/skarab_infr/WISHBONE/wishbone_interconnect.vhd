@@ -61,9 +61,9 @@ architecture arch_wishbone_interconnect of wishbone_interconnect is
     --AI: New signals to handle DSP address space
     signal upper_add_bits : std_logic_vector(4 downto 0);
 
-    attribute mark_debug : string;
-    attribute mark_debug of upper_add_bits : signal is "true";
-    attribute mark_debug of current_slave  : signal is "true";
+    --attribute mark_debug : string;
+    --attribute mark_debug of upper_add_bits : signal is "true";
+    --attribute mark_debug of current_slave  : signal is "true";
 
     --attribute mark_debug of MST_ACK_I : signal is "true";
     --attribute mark_debug of MST_ADR_O : signal is "true";

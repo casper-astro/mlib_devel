@@ -211,7 +211,7 @@ architecture arch_forty_gbe of forty_gbe is
         );
     end component IEEE802_3_XL_PHY_top;
     
-    attribute mark_debug : string;
+    --attribute mark_debug : string;
     
     signal xlgmii_tx_valid        : std_logic_vector(3 downto 0);
     signal xlgmii_tx_end_of_frame : std_logic;
@@ -239,9 +239,9 @@ architecture arch_forty_gbe of forty_gbe is
     signal xlgmii_txd : std_logic_vector(255 downto 0);
     signal xlgmii_txc : std_logic_vector(31 downto 0);
     signal xlgmii_rxd : std_logic_vector(255 downto 0);
-    attribute mark_debug of xlgmii_rxd: signal is "true";
+    --attribute mark_debug of xlgmii_rxd: signal is "true";
     signal xlgmii_rxc : std_logic_vector(31 downto 0);
-    attribute mark_debug of xlgmii_rxc: signal is "true";
+    --attribute mark_debug of xlgmii_rxc: signal is "true";
 
     signal xlgmii_txled_sig : std_logic_vector(1 downto 0);
     signal xlgmii_rxled_sig : std_logic_vector(1 downto 0);

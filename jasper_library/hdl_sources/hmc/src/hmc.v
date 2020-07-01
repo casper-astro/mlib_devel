@@ -156,32 +156,37 @@ module hmc #(
 );
 
 //(* mark_debug = "true" *)
-(* mark_debug = "true" *) wire soft_reset_link2,soft_reset_link3;
-(* mark_debug = "true" *) reg [31:0] time_out_cnt;
-(* mark_debug = "true" *) reg time_out_cnt_rst;
-(* mark_debug = "true" *) wire soft_reset;
+//(* mark_debug = "true" *) wire soft_reset_link2,soft_reset_link3;
+//(* mark_debug = "true" *) reg [31:0] time_out_cnt;
+//(* mark_debug = "true" *) reg time_out_cnt_rst;
+//(* mark_debug = "true" *) wire soft_reset;
+wire soft_reset_link2,soft_reset_link3;
+reg [31:0] time_out_cnt;
+reg time_out_cnt_rst;
+wire soft_reset;
 
-(* mark_debug = "true" *) wire [15:0] dbg_rx_crc_err_cnt_link3;
-(* mark_debug = "true" *) wire [15:0] dbg_rx_crc_err_cnt_link2;
-(* mark_debug = "true" *) wire [6:0] dbg_errstat_link2;
-(* mark_debug = "true" *) wire [6:0] dbg_errstat_link3;
-(* mark_debug = "true" *) wire dbg_QPLL_LOCK_ERR_LINK2;
-(* mark_debug = "true" *) wire dbg_QPLL_LOCK_ERR_LINK3;
-(* mark_debug = "true" *) wire [7:0] dbg_FIFO_TX_FLAG_STATUS_LINK2;
-(* mark_debug = "true" *) wire [7:0] dbg_FIFO_RX_FLAG_STATUS_LINK2;
-(* mark_debug = "true" *) wire [7:0] dbg_FIFO_TX_FLAG_STATUS_LINK3;
-(* mark_debug = "true" *) wire [7:0] dbg_FIFO_RX_FLAG_STATUS_LINK3;
 
-assign dbg_rx_crc_err_cnt_link3 = rx_crc_err_cnt_link3;
-assign dbg_rx_crc_err_cnt_link2 = rx_crc_err_cnt_link2;
-assign dbg_errstat_link3 = errstat_link3;
-assign dbg_errstat_link2 = errstat_link2;
-assign dbg_QPLL_LOCK_ERR_LINK2 = QPLL_LOCK_ERR_LINK2;
-assign dbg_QPLL_LOCK_ERR_LINK3 = QPLL_LOCK_ERR_LINK3;
-assign dbg_FIFO_TX_FLAG_STATUS_LINK2 = FIFO_TX_FLAG_STATUS_LINK2;
-assign dbg_FIFO_RX_FLAG_STATUS_LINK2 = FIFO_RX_FLAG_STATUS_LINK2;
-assign dbg_FIFO_TX_FLAG_STATUS_LINK3 = FIFO_TX_FLAG_STATUS_LINK3;
-assign dbg_FIFO_RX_FLAG_STATUS_LINK3 = FIFO_RX_FLAG_STATUS_LINK3;
+//(* mark_debug = "true" *) wire [15:0] dbg_rx_crc_err_cnt_link3;
+//(* mark_debug = "true" *) wire [15:0] dbg_rx_crc_err_cnt_link2;
+//(* mark_debug = "true" *) wire [6:0] dbg_errstat_link2;
+//(* mark_debug = "true" *) wire [6:0] dbg_errstat_link3;
+//(* mark_debug = "true" *) wire dbg_QPLL_LOCK_ERR_LINK2;
+//(* mark_debug = "true" *) wire dbg_QPLL_LOCK_ERR_LINK3;
+//(* mark_debug = "true" *) wire [7:0] dbg_FIFO_TX_FLAG_STATUS_LINK2;
+//(* mark_debug = "true" *) wire [7:0] dbg_FIFO_RX_FLAG_STATUS_LINK2;
+//(* mark_debug = "true" *) wire [7:0] dbg_FIFO_TX_FLAG_STATUS_LINK3;
+//(* mark_debug = "true" *) wire [7:0] dbg_FIFO_RX_FLAG_STATUS_LINK3;
+
+//assign dbg_rx_crc_err_cnt_link3 = rx_crc_err_cnt_link3;
+//assign dbg_rx_crc_err_cnt_link2 = rx_crc_err_cnt_link2;
+//assign dbg_errstat_link3 = errstat_link3;
+//assign dbg_errstat_link2 = errstat_link2;
+//assign dbg_QPLL_LOCK_ERR_LINK2 = QPLL_LOCK_ERR_LINK2;
+//assign dbg_QPLL_LOCK_ERR_LINK3 = QPLL_LOCK_ERR_LINK3;
+//assign dbg_FIFO_TX_FLAG_STATUS_LINK2 = FIFO_TX_FLAG_STATUS_LINK2;
+//assign dbg_FIFO_RX_FLAG_STATUS_LINK2 = FIFO_RX_FLAG_STATUS_LINK2;
+//assign dbg_FIFO_TX_FLAG_STATUS_LINK3 = FIFO_TX_FLAG_STATUS_LINK3;
+//assign dbg_FIFO_RX_FLAG_STATUS_LINK3 = FIFO_RX_FLAG_STATUS_LINK3;
 
 
 //Assign HMC ID = 010 (uBlaze needs to know this is an HMC card)
@@ -391,9 +396,12 @@ wire                         rf_read_en_link2,rf_read_en_link3;
 wire                         rf_write_en_link2,rf_write_en_link3;
 wire  [HMC_RF_WWIDTH-1:0]    rf_write_data_link2,rf_write_data_link3;
 
-(* mark_debug = "true" *) wire open_hmc_done_link2,open_hmc_done_link3, open_hmc_done_link2b,open_hmc_done_link3b;
-(* mark_debug = "true" *) wire [63:0] data_rx_flit_cnt_link2,data_rx_flit_cnt_link3;
-(* mark_debug = "true" *) wire [63:0] data_rx_err_flit_cnt_link2,data_rx_err_flit_cnt_link3;
+//(* mark_debug = "true" *) wire open_hmc_done_link2,open_hmc_done_link3, open_hmc_done_link2b,open_hmc_done_link3b;
+//(* mark_debug = "true" *) wire [63:0] data_rx_flit_cnt_link2,data_rx_flit_cnt_link3;
+//(* mark_debug = "true" *) wire [63:0] data_rx_err_flit_cnt_link2,data_rx_err_flit_cnt_link3;
+wire open_hmc_done_link2,open_hmc_done_link3, open_hmc_done_link2b,open_hmc_done_link3b;
+wire [63:0] data_rx_flit_cnt_link2,data_rx_flit_cnt_link3;
+wire [63:0] data_rx_err_flit_cnt_link2,data_rx_err_flit_cnt_link3;
 wire data_err_detect_link2,data_err_detect_link3;
 
 // Currently not connected to Wisbone
@@ -513,28 +521,28 @@ reg qpll_reset_cnt_en;
 (* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg init_done_latchR,init_done_latchRR,init_done_latchRRR,init_done_latchRRRR;
 
 
-(* mark_debug = "true" *) wire [15:0] dbg_reset_cnt;
-(* mark_debug = "true" *) wire [31:0] dbg_num_reset_cnt;
-(* mark_debug = "true" *) wire dbg_hmc_resetRRRR;
-(* mark_debug = "true" *) wire dbg_hmc_reset_i;
-(* mark_debug = "true" *) wire dbg_mmcm_reset;
-(* mark_debug = "true" *) wire [15:0] dbg_mmcm_reset_cnt;
-(* mark_debug = "true" *) wire dbg_mmcm_reset_cnt_en;
-(* mark_debug = "true" *) wire dbg_qpll_reset;
-(* mark_debug = "true" *) wire [15:0] dbg_qpll_reset_cnt;
-(* mark_debug = "true" *) wire dbg_qpll_reset_cnt_en;
+//(* mark_debug = "true" *) wire [15:0] dbg_reset_cnt;
+//(* mark_debug = "true" *) wire [31:0] dbg_num_reset_cnt;
+//(* mark_debug = "true" *) wire dbg_hmc_resetRRRR;
+//(* mark_debug = "true" *) wire dbg_hmc_reset_i;
+//(* mark_debug = "true" *) wire dbg_mmcm_reset;
+//(* mark_debug = "true" *) wire [15:0] dbg_mmcm_reset_cnt;
+//(* mark_debug = "true" *) wire dbg_mmcm_reset_cnt_en;
+//(* mark_debug = "true" *) wire dbg_qpll_reset;
+//(* mark_debug = "true" *) wire [15:0] dbg_qpll_reset_cnt;
+//(* mark_debug = "true" *) wire dbg_qpll_reset_cnt_en;
 
 
-assign dbg_reset_cnt = reset_cnt;
-assign dbg_num_reset_cnt = num_reset_cnt;
-assign dbg_hmc_resetRRRR = hmc_resetRRRR;
-assign dbg_hmc_reset_i = hmc_reset_i;
-assign dbg_mmcm_reset = mmcm_reset;
-assign dbg_mmcm_reset_cnt = mmcm_reset_cnt;
-assign dbg_mmcm_reset_cnt_en = mmcm_reset_cnt_en;
-assign dbg_qpll_reset = qpll_reset;
-assign dbg_qpll_reset_cnt = qpll_reset_cnt;
-assign dbg_qpll_reset_cnt_en = qpll_reset_cnt_en;
+//assign dbg_reset_cnt = reset_cnt;
+//assign dbg_num_reset_cnt = num_reset_cnt;
+//assign dbg_hmc_resetRRRR = hmc_resetRRRR;
+//assign dbg_hmc_reset_i = hmc_reset_i;
+//assign dbg_mmcm_reset = mmcm_reset;
+//assign dbg_mmcm_reset_cnt = mmcm_reset_cnt;
+//assign dbg_mmcm_reset_cnt_en = mmcm_reset_cnt_en;
+//assign dbg_qpll_reset = qpll_reset;
+//assign dbg_qpll_reset_cnt = qpll_reset_cnt;
+//assign dbg_qpll_reset_cnt_en = qpll_reset_cnt_en;
 
 wire hmc_reset_i;
 (* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg hmc_resetR,hmc_resetRR,hmc_resetRRR,hmc_resetRRRR;
