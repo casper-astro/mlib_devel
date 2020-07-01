@@ -24,29 +24,29 @@ module openhmc_init #(
   reg [7:0] hmc_init_state;
   
   //Debug OpenHMC Registers
-  (* mark_debug = "true" *) wire [7:0] dbg_hmc_init_state; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire [HMC_RF_AWIDTH-1:0] dbg_rf_address; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire [HMC_RF_RWIDTH-1:0] dbg_rf_read_data; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire dbg_rf_invalid_address; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire dbg_rf_access_complete; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire dbg_rf_read_en; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire dbg_rf_write_en; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire [HMC_RF_WWIDTH-1:0] dbg_rf_write_data; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire [HMC_RF_AWIDTH-1:0] dbg_read_rf_addr; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire dbg_rf_read_data_lsb; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire dbg_open_hmc_init_done_i; //Virtual test probe for the logic analyser  
+  //(* mark_debug = "true" *) wire [7:0] dbg_hmc_init_state; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire [HMC_RF_AWIDTH-1:0] dbg_rf_address; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire [HMC_RF_RWIDTH-1:0] dbg_rf_read_data; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire dbg_rf_invalid_address; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire dbg_rf_access_complete; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire dbg_rf_read_en; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire dbg_rf_write_en; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire [HMC_RF_WWIDTH-1:0] dbg_rf_write_data; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire [HMC_RF_AWIDTH-1:0] dbg_read_rf_addr; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire dbg_rf_read_data_lsb; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire dbg_open_hmc_init_done_i; //Virtual test probe for the logic analyser  
   
-  assign dbg_hmc_init_state = hmc_init_state;
-  assign dbg_rf_address = rf_address_i;
-  assign dbg_rf_read_data = rf_read_data;
-  assign dbg_rf_invalid_address = rf_invalid_address;
-  assign dbg_rf_access_complete = rf_access_complete; 
-  assign dbg_rf_read_en = rf_read_en_i;  
-  assign dbg_rf_write_en = rf_write_en_i;  
-  assign dbg_rf_write_data = rf_write_data_i; 
-  assign dbg_read_rf_addr = read_rf_addr;
-  assign dbg_rf_read_data_lsb = rf_read_data[0];
-  assign dbg_open_hmc_init_done_i = open_hmc_init_done_i;
+  //assign dbg_hmc_init_state = hmc_init_state;
+  //assign dbg_rf_address = rf_address_i;
+  //assign dbg_rf_read_data = rf_read_data;
+  //assign dbg_rf_invalid_address = rf_invalid_address;
+  //assign dbg_rf_access_complete = rf_access_complete; 
+  //assign dbg_rf_read_en = rf_read_en_i;  
+  //assign dbg_rf_write_en = rf_write_en_i;  
+  //assign dbg_rf_write_data = rf_write_data_i; 
+  //assign dbg_read_rf_addr = read_rf_addr;
+  //assign dbg_rf_read_data_lsb = rf_read_data[0];
+  //assign dbg_open_hmc_init_done_i = open_hmc_init_done_i;
   
 
   // State machine states

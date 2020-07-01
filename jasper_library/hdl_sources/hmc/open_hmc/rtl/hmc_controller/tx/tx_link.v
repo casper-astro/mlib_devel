@@ -198,8 +198,8 @@ assign  rf_tx_init_status = init_state;
 
 reg     rtc_rx_initialize;
 
-(* mark_debug = "true" *) wire [1:0] dbg_rf_tx_init_status; //Virtual test probe for the logic analyser  
-assign dbg_rf_tx_init_status =  rf_tx_init_status;
+//(* mark_debug = "true" *) wire [1:0] dbg_rf_tx_init_status; //Virtual test probe for the logic analyser  
+//assign dbg_rf_tx_init_status =  rf_tx_init_status;
 
 //------------------------------------------------------------------------------------DATA and ORDERING
 //reorder incoming data to FLITs
