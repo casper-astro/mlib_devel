@@ -47,35 +47,6 @@ entity wishbone_flash_sdram_interface is
         STB_I : in std_logic;
         WE_I  : in std_logic;
 
-        -- HIGH BANDWIDTH SDRAM PROGRAMMING INTERFACE
-        -- (CONNECTS DIRECTLY TO FABRIC INTERFACE OF 1GBE)
-        gbe_app_clk             : in std_logic;
-        gbe_rx_valid            : in std_logic;
-        gbe_rx_end_of_frame     : in std_logic;
-        gbe_rx_data             : in std_logic_vector(63 downto 0);
-        gbe_rx_source_ip        : in std_logic_vector(31 downto 0);
-        gbe_rx_source_port      : in std_logic_vector(15 downto 0);
-        gbe_rx_bad_frame        : in std_logic;
-        gbe_rx_overrun          : in std_logic;
-        gbe_rx_overrun_ack      : out std_logic;
-        gbe_rx_ack              : out std_logic;
-
-        --AI Start: Add fortygbe interface for configuration
-        -- HIGH BANDWIDTH SDRAM PROGRAMMING INTERFACE
-        -- (CONNECTS DIRECTLY TO FABRIC INTERFACE OF 40GBE)
-        fgbe_config_en           : in std_logic;  -- if '1' SDRAM/Flash configuration is done via forty GbE else via 1 GbE above
-        fgbe_app_clk             : in std_logic;
-        fgbe_rx_valid            : in std_logic_vector(3 downto 0);
-        fgbe_rx_end_of_frame     : in std_logic;
-        fgbe_rx_data             : in std_logic_vector(255 downto 0);
-        fgbe_rx_source_ip        : in std_logic_vector(31 downto 0);
-        fgbe_rx_source_port      : in std_logic_vector(15 downto 0);
-        fgbe_rx_bad_frame        : in std_logic;
-        fgbe_rx_overrun          : in std_logic;
-        fgbe_rx_overrun_ack      : out std_logic;
-        fgbe_rx_ack              : out std_logic;
-        --AI End: Add fortygbe interface for configuration
-
         -- FLASH CONFIGURATION INTERFACE
         fpga_emcclk     : in std_logic;
         fpga_emcclk2    : in std_logic;
@@ -148,36 +119,6 @@ architecture arch_wishbone_flash_sdram_interface of wishbone_flash_sdram_interfa
        empty            : out std_logic);
     end component;
 
-    component cross_clock_fifo_67x16
-    port (
-        rst             : in std_logic;
-        wr_clk          : in std_logic;
-        rd_clk          : in std_logic;
-        din             : in std_logic_vector(66 downto 0);
-        wr_en           : in std_logic;
-        rd_en           : in std_logic;
-        dout            : out std_logic_vector(66 downto 0);
-        full            : out std_logic;
-        almost_full     : out std_logic;
-        empty           : out std_logic);
-    end component;
-
-    --AI Start: Add fortygbe interface for configuration
-    component cross_clock_fifo_259x16
-    port (
-        rst             : in std_logic;
-        wr_clk          : in std_logic;
-        rd_clk          : in std_logic;
-        din             : in std_logic_vector(258 downto 0);
-        wr_en           : in std_logic;
-        rd_en           : in std_logic;
-        dout            : out std_logic_vector(258 downto 0);
-        full            : out std_logic;
-        almost_full     : out std_logic;
-        empty           : out std_logic);
-    end component;
-    --AI End: Add fortygbe interface for configuration
-
     component isp_spi_programmer
     port(
         clk : in std_logic;
@@ -211,7 +152,8 @@ architecture arch_wishbone_flash_sdram_interface of wishbone_flash_sdram_interfa
     constant C_OUTPUT_MODE_REG : std_logic_vector(3 downto 0) := X"0";
     constant C_UPPER_ADDRESS_REG : std_logic_vector(3 downto 0) := X"1";
     constant C_CONFIG_IO_REG : std_logic_vector(3 downto 0) := X"2";
-    constant C_GBE_STATISTICS_REG : std_logic_vector(3 downto 0) := X"3"; --for forty GbE and 1GbE
+    --for forty GbE and 1GbE no longer used, but kept for legacy
+    constant C_GBE_STATISTICS_REG : std_logic_vector(3 downto 0) := X"3";
     constant C_ICAPE_DATA_REG : std_logic_vector(3 downto 0) := X"4";
     constant C_ICAPE_CTL_REG : std_logic_vector(3 downto 0) := X"5";
     constant C_ISP_SPI_ADDRESS_REG : std_logic_vector(3 downto 0) := X"6";
@@ -249,10 +191,7 @@ architecture arch_wishbone_flash_sdram_interface of wishbone_flash_sdram_interfa
     signal reg_ack : std_logic;
     signal mem_ack : std_logic;
 
-    signal gbe_reg_dout : std_logic_vector(31 downto 0);
-    --AI Start: Add fortygbe interface for configuration
-    signal fgbe_reg_dout : std_logic_vector(31 downto 0);
-    --AI End: Add fortygbe interface for configuration
+    signal reg_dout : std_logic_vector(31 downto 0);
     signal mem_dout : std_logic_vector(31 downto 0);
 
     signal current_mode : std_logic_vector(1 downto 0);
@@ -295,38 +234,6 @@ architecture arch_wishbone_flash_sdram_interface of wishbone_flash_sdram_interfa
     signal config_io_2_z3 : std_logic;
     signal config_io_5_z3 : std_logic;
 
-    signal gbe_rx_bad_frame_count : std_logic_vector(7 downto 0);
-    signal gbe_rx_overrun_count : std_logic_vector(7 downto 0);
-    signal gbe_rx_frame_count : std_logic_vector(15 downto 0);
-    signal gbe_clear_count : std_logic;
-
-    --AI Start: Add fortygbe interface for configuration
-    signal fgbe_rx_bad_frame_count : std_logic_vector(7 downto 0);
-    signal fgbe_rx_overrun_count : std_logic_vector(7 downto 0);
-    signal fgbe_rx_frame_count : std_logic_vector(15 downto 0);
-    signal fgbe_clear_count : std_logic;
-    --AI End: Add fortygbe interface for configuration
-
-    signal gbe_cross_clock_din : std_logic_vector(66 downto 0);
-    signal gbe_cross_clock_wrreq : std_logic;
-    signal gbe_cross_clock_rdreq : std_logic;
-    signal gbe_cross_clock_rdreq_z1 : std_logic;
-    signal gbe_cross_clock_dout : std_logic_vector(66 downto 0);
-    signal gbe_cross_clock_almost_full : std_logic;
-    signal gbe_cross_clock_empty : std_logic;
-    signal gbe_cross_clock_full : std_logic;
-
-    --AI Start: Add fortygbe interface for configuration
-    signal fgbe_cross_clock_din : std_logic_vector(258 downto 0);
-    signal fgbe_cross_clock_wrreq : std_logic;
-    signal fgbe_cross_clock_rdreq : std_logic;
-    signal fgbe_cross_clock_rdreq_z1 : std_logic;
-    signal fgbe_cross_clock_dout : std_logic_vector(258 downto 0);
-    signal fgbe_cross_clock_almost_full : std_logic;
-    signal fgbe_cross_clock_empty : std_logic;
-    signal fgbe_cross_clock_full : std_logic;
-    --AI End: Add fortygbe interface for configuration
-
     signal wb_comm_clock_din : std_logic_vector(31 downto 0);
     signal wb_comm_clock_wrreq : std_logic;
     signal wb_comm_clock_rdreq : std_logic;
@@ -344,10 +251,6 @@ architecture arch_wishbone_flash_sdram_interface of wishbone_flash_sdram_interfa
     signal spartan_clk_i : std_logic;
     signal spartan_clk_rising_edge_enable : std_logic;
     signal spartan_clk_falling_edge_enable : std_logic;
-    signal gbe_sdram_dq_count : std_logic_vector(2 downto 0); --AI: Provision for 1GbE interface
-    --AI Start: Add fortygbe interface for configuration
-    signal fgbe_sdram_dq_count : std_logic_vector(4 downto 0); --AI: Provision for 40GbE interface
-    --AI End: Add fortygbe interface for configuration
     signal wb_sdram_dq_count : std_logic_vector(1 downto 0); --AI: Provision for wishbone configuration interface
 
 
@@ -395,66 +298,8 @@ architecture arch_wishbone_flash_sdram_interface of wishbone_flash_sdram_interfa
     signal sdram_wb_program_rx_valid_pulse : std_logic;
     signal sdram_wb_program_ack : std_logic;
 
-    --Debug ILA Nets that won't be optimised
-    signal fgbe_rx_eof : std_logic;
-    signal gbe_rx_eof : std_logic;
-    signal fgbe_rx_bf : std_logic;
-    signal gbe_rx_bf : std_logic;
-    signal fgbe_rx_or : std_logic;
-    signal gbe_rx_or : std_logic;
-    signal gbe_data_din : std_logic_vector(63 downto 0);
-    signal gbe_data_dout : std_logic_vector(63 downto 0);
-    signal fgbe_data_din : std_logic_vector(255 downto 0);
-    signal fgbe_data_dout : std_logic_vector(255 downto 0);
-
-    --ILA Netlist Insertion for Debug
---    attribute mark_debug : string;
---    attribute mark_debug of gbe_cross_clock_rdreq : signal is "true";
---    attribute mark_debug of fgbe_cross_clock_rdreq : signal is "true";
---    attribute mark_debug of fgbe_cross_clock_almost_full : signal is "true";
---    attribute mark_debug of fgbe_rx_valid : signal is "true";
---    attribute mark_debug of gbe_rx_valid : signal is "true";
---    attribute mark_debug of fgbe_sdram_dq_count : signal is "true";
---    attribute mark_debug of gbe_sdram_dq_count : signal is "true";
---    attribute mark_debug of sdram_dq_out_i : signal is "true";
---    attribute mark_debug of sdram_program_header : signal is "true";
---    attribute mark_debug of config_io_1_i : signal is "true";
---    attribute mark_debug of valid_sdram_program_packet : signal is "true";
---    attribute mark_debug of sequence_number : signal is "true";
---    attribute mark_debug of fgbe_config_en : signal is "true";
---    attribute mark_debug of gbe_cross_clock_full : signal is "true";
---    attribute mark_debug of fgbe_cross_clock_full : signal is "true";
---    attribute mark_debug of gbe_cross_clock_almost_full : signal is "true";
---    attribute mark_debug of gbe_cross_clock_empty : signal is "true";
---    attribute mark_debug of fgbe_cross_clock_empty : signal is "true";
---    attribute mark_debug of gbe_cross_clock_wrreq : signal is "true";
---    attribute mark_debug of fgbe_cross_clock_wrreq : signal is "true";
---    attribute mark_debug of gbe_data_din : signal is "true";
---    attribute mark_debug of gbe_data_dout : signal is "true";
---    attribute mark_debug of fgbe_data_din : signal is "true";
---    attribute mark_debug of fgbe_data_dout : signal is "true";
---    attribute mark_debug of fgbe_rx_eof : signal is "true";
---    attribute mark_debug of fgbe_rx_bf : signal is "true";
---    attribute mark_debug of fgbe_rx_or : signal is "true";
---    attribute mark_debug of gbe_rx_eof : signal is "true";
---    attribute mark_debug of gbe_rx_bf : signal is "true";
---    attribute mark_debug of gbe_rx_or : signal is "true";
-
 
 begin
-
-   --Debug Nets for ILA assignments
---   fgbe_rx_eof <= fgbe_cross_clock_dout(256);
---   fgbe_rx_bf <= fgbe_cross_clock_dout(257);
---   fgbe_rx_or <= fgbe_cross_clock_dout(258);
---   gbe_rx_eof <= gbe_cross_clock_dout(64);
---   gbe_rx_bf <= gbe_cross_clock_dout(65);
---   gbe_rx_or <= gbe_cross_clock_dout(66);
---   gbe_data_din(63 downto 0) <= gbe_cross_clock_din(63 downto 0);
---   gbe_data_dout(63 downto 0) <= gbe_cross_clock_dout(63 downto 0);
---   fgbe_data_din(255 downto 0) <= fgbe_cross_clock_din(255 downto 0);
---   fgbe_data_dout(255 downto 0) <= fgbe_cross_clock_dout(255 downto 0);
-
     -- WISHBONE ADDRESS IS BYTE ADDRESSING
     addra <= ADR_I(13 downto 2);
 
@@ -472,26 +317,16 @@ begin
         end if;
     end process;
 
---AI Start: Add fortygbe interface for configuration
---Modified for fortygbe interface
     gen_DAT_O : process(CLK_I)
     begin
         if (rising_edge(CLK_I))then
             if (ADR_I(14) = '1')then
-              --1GbE Configuration Only
-              if (fgbe_config_en = '0') then
-                 DAT_O <= gbe_reg_dout;
-              --40GbE Configuration Only
-              else
-                 DAT_O <= fgbe_reg_dout;
-              end if;
+                DAT_O <= reg_dout;
             else
                 DAT_O <= mem_dout;
             end if;
         end if;
     end process;
---AI End: Add fortygbe interface for configuration
-
 
     -- DEFAULT HIGH BECAUSE OF PULL-UP RESISTORS
     flash_rs0 <=
@@ -502,8 +337,6 @@ begin
         continuity_test_output(25) when (continuity_test_mode = '1')else
         flash_a_i(25) when (current_mode = C_FLASH_MODE) else
         'Z';
-
-    gbe_rx_overrun_ack <= gbe_rx_overrun;
 
 -----------------------------------------------------------------------
 -- CONFIGURATION REGISTERS
@@ -521,12 +354,6 @@ begin
             finished_booting_from_sdram <= '0';
             reset_sdram_read_address <= '0';
             debug_sdram_read_mode <= '0';
-
-            gbe_clear_count <= '0';
-            --AI Start: Add fortygbe interface for configuration
-            fgbe_clear_count <= '0';
-            --AI End: Add fortygbe interface for configuration
-
 
             upper_address_bits <= (others => '0');
 
@@ -555,10 +382,6 @@ begin
             sdram_wb_program_rx_valid_z1 <= '0';
 
         elsif (rising_edge(CLK_I))then
-            gbe_clear_count <= '0';
-            --AI Start: Add fortygbe interface for configuration
-            fgbe_clear_count <= '0';
-            --AI End: Add fortygbe interface for configuration
             sdram_wb_program_rx_valid <= '0';
             sdram_wb_program_rx_valid_z1 <= sdram_wb_program_rx_valid;
             --generate a write pulse valid for a single CLK_I cycle to ensure data is only written into
@@ -604,11 +427,10 @@ begin
 
                     when C_GBE_STATISTICS_REG =>
                     if (SEL_I(0) = '1')then
-                        gbe_clear_count <= DAT_I(0);
-                        --AI Start: Add fortygbe interface for configuration
-                        fgbe_clear_count <= DAT_I(0);
-                        --AI End: Add fortygbe interface for configuration
-
+                        -- This register is no longer required since the 1 and 40 gbe programming
+                        -- is now removed. Programming is managed via the microblaze.
+                        -- it is possible that casperfpga might access this reg so it is kept for
+                        -- legacy reasons
                     end if;
 
                     when C_ICAPE_DATA_REG =>
@@ -709,11 +531,10 @@ begin
         end if;
     end process;
 
-    gbe_reg_dout <=
+    reg_dout <=
     ("000000000000000000000000000000" & current_mode) when (addra(3 downto 0) = C_OUTPUT_MODE_REG) else
     ("000000000000000" & upper_address_bits) when (addra(3 downto 0) = C_UPPER_ADDRESS_REG) else
     ("000000000000000000000" & continuity_test_high & continuity_test_low & continuity_test_mode & write_to_sdram_stall & booting_from_sdram & debug_sdram_read_mode & reset_sdram_read_address & finished_booting_from_sdram & about_to_boot_from_sdram & finished_writing_to_sdram & clear_sdram) when (addra(3 downto 0) = C_CONFIG_IO_REG) else
-    (gbe_rx_overrun_count & gbe_rx_bad_frame_count & gbe_rx_frame_count) when (addra(3 downto 0) = C_GBE_STATISTICS_REG) else
     (icape_read_data) when (addra(3 downto 0) = C_ICAPE_DATA_REG) else
     ("0000000000000000000000000000000" & icape_transaction_complete) when (addra(3 downto 0) = C_ICAPE_CTL_REG) else
     (isp_num_bytes & isp_address) when (addra(3 downto 0) = C_ISP_SPI_ADDRESS_REG) else
@@ -723,23 +544,6 @@ begin
     (sdram_wb_program_data_wr) when (addra(3 downto 0) = C_SDRAM_WB_PROGRAM_DATA_WR_REG) else
     ("00000000000000000000000000000" & sdram_wb_program_ctl(2) & sdram_wb_program_ctl(1) & sdram_wb_program_ack) when (addra(3 downto 0) = C_SDRAM_WB_PROGRAM_CTL_REG) else
     (others => '0');
-
-    --AI Start: Add fortygbe interface for configuration
-    fgbe_reg_dout <=
-    ("000000000000000000000000000000" & current_mode) when (addra(3 downto 0) = C_OUTPUT_MODE_REG) else
-    ("000000000000000" & upper_address_bits) when (addra(3 downto 0) = C_UPPER_ADDRESS_REG) else
-    ("000000000000000000000" & continuity_test_high & continuity_test_low & continuity_test_mode & write_to_sdram_stall & booting_from_sdram & debug_sdram_read_mode & reset_sdram_read_address & finished_booting_from_sdram & about_to_boot_from_sdram & finished_writing_to_sdram & clear_sdram) when (addra(3 downto 0) = C_CONFIG_IO_REG) else
-    (fgbe_rx_overrun_count & fgbe_rx_bad_frame_count & fgbe_rx_frame_count) when (addra(3 downto 0) = C_GBE_STATISTICS_REG) else
-    (icape_read_data) when (addra(3 downto 0) = C_ICAPE_DATA_REG) else
-    ("0000000000000000000000000000000" & icape_transaction_complete) when (addra(3 downto 0) = C_ICAPE_CTL_REG) else
-    (isp_num_bytes & isp_address) when (addra(3 downto 0) = C_ISP_SPI_ADDRESS_REG) else
-    ("00000000000000000000000" & isp_transaction_complete & isp_read_data) when (addra(3 downto 0) = C_ISP_SPI_DATA_CTRL_REG) else
-    ("0000000000000000" & flash_dq_in) when (addra(3 downto 0) = C_CONTINUITY_TEST_OUTPUT_REG) else
-    ("0000000000000000000000000000000" & sdram_wb_program_en) when (addra(3 downto 0) = C_SDRAM_WB_PROGRAM_EN_REG) else
-    (sdram_wb_program_data_wr) when (addra(3 downto 0) = C_SDRAM_WB_PROGRAM_DATA_WR_REG) else
-    ("00000000000000000000000000000" & sdram_wb_program_ctl(2) & sdram_wb_program_ctl(1) & sdram_wb_program_ack) when (addra(3 downto 0) = C_SDRAM_WB_PROGRAM_CTL_REG) else
-    (others => '0');
-    --AI End: Add fortygbe interface for configuration
 
     gen_reg_select_z1 : process(CLK_I)
     begin
@@ -782,63 +586,6 @@ begin
         empty           => wb_comm_clock_empty);
 
 -----------------------------------------------------------------------
--- MOVE 1GBE ETHERNET HIGH BANDWIDTH TO WISHBONE CLOCK DOMAIN
------------------------------------------------------------------------
-
-    gbe_cross_clock_din(63 downto 0) <= gbe_rx_data;
-    gbe_cross_clock_din(64) <= gbe_rx_end_of_frame;
-    gbe_cross_clock_din(65) <= gbe_rx_bad_frame;
-    gbe_cross_clock_din(66) <= gbe_rx_overrun;
-
-    gbe_rx_ack <= '1' when ((gbe_rx_valid = '1')and(gbe_cross_clock_almost_full = '0')) else '0';
-    gbe_cross_clock_wrreq <= '1' when ((gbe_rx_valid = '1') and (gbe_cross_clock_almost_full = '0') and (RST_I = '0')) else '0';
-
-    cross_clock_fifo_67x16_0 : cross_clock_fifo_67x16
-    port map(
-        rst             => RST_I,
-        wr_clk          => gbe_app_clk,
-        rd_clk          => CLK_I,
-        din             => gbe_cross_clock_din,
-        wr_en           => gbe_cross_clock_wrreq,
-        rd_en           => gbe_cross_clock_rdreq,
-        dout            => gbe_cross_clock_dout,
-        full            => gbe_cross_clock_full,
-        almost_full     => gbe_cross_clock_almost_full,
-        empty           => gbe_cross_clock_empty);
-
---AI Start: Add fortygbe interface for configuration
------------------------------------------------------------------------
--- MOVE 40GBE ETHERNET HIGH BANDWIDTH TO WISHBONE CLOCK DOMAIN
------------------------------------------------------------------------
-   --NB: 64 bit Words need to be swopped around in order for flash SDRAM interface to configure correctly.
-    fgbe_cross_clock_din(255 downto 192) <= fgbe_rx_data(63 downto 0);
-    fgbe_cross_clock_din(191 downto 128) <= fgbe_rx_data(127 downto 64);
-    fgbe_cross_clock_din(127 downto 64) <= fgbe_rx_data(191 downto 128);
-    fgbe_cross_clock_din(63 downto 0) <= fgbe_rx_data(255 downto 192);
-
-    fgbe_cross_clock_din(256) <= fgbe_rx_end_of_frame;
-    fgbe_cross_clock_din(257) <= fgbe_rx_bad_frame;
-    fgbe_cross_clock_din(258) <= fgbe_rx_overrun;
-
-    fgbe_rx_ack <= '1' when ((fgbe_rx_valid /= "0000")and(fgbe_cross_clock_almost_full = '0')) else '0';
-    fgbe_cross_clock_wrreq <= '1' when ((fgbe_rx_valid /= "0000")and(fgbe_cross_clock_almost_full = '0')and(RST_I = '0')) else '0';
-
-    cross_clock_fifo_259x16_0 : cross_clock_fifo_259x16
-    port map(
-        rst             => RST_I,
-        wr_clk          => fgbe_app_clk,
-        rd_clk          => CLK_I,
-        din             => fgbe_cross_clock_din,
-        wr_en           => fgbe_cross_clock_wrreq,
-        rd_en           => fgbe_cross_clock_rdreq,
-        dout            => fgbe_cross_clock_dout,
-        full            => fgbe_cross_clock_full,
-        almost_full     => fgbe_cross_clock_almost_full,
-        empty           => fgbe_cross_clock_empty);
-
---AI End: Add fortygbe interface for configuration
-
------------------------------------------------------------------------
 -- SDRAM PROGRAM MODE
 -----------------------------------------------------------------------
 
@@ -857,62 +604,12 @@ begin
     spartan_clk_rising_edge_enable <= not spartan_clk_i;
     spartan_clk_falling_edge_enable <= spartan_clk_i;
 
-    gbe_cross_clock_rdreq <= '1' when
-    ((spartan_clk_rising_edge_enable = '1')and
-    (gbe_cross_clock_empty = '0')and
-    (write_to_sdram_stall = '0')and
-    (RST_I = '0')and
-    (gbe_sdram_dq_count >= "011")) else '0';
-
---AI Start: Add fortygbe interface for configuration
-
-    fgbe_cross_clock_rdreq <= '1' when
-    ((spartan_clk_rising_edge_enable = '1')and
-    (fgbe_cross_clock_empty = '0')and
-    (write_to_sdram_stall = '0')and
-    (RST_I = '0')and
-    (fgbe_sdram_dq_count >= "01111")) else '0';
-
---AI End: Add fortygbe interface for configuration
-
     wb_comm_clock_rdreq <= '1' when
     ((spartan_clk_rising_edge_enable = '1')and
     (wb_comm_clock_empty = '0')and
     (write_to_sdram_stall = '0')and
     (RST_I = '0') and
     (wb_sdram_dq_count >= "01")) else '0';
-
-    gen_gbe_sdram_dq_count : process(RST_I, CLK_I)
-    begin
-        if (RST_I = '1')then
-            gbe_sdram_dq_count <= "111";
-        elsif (rising_edge(CLK_I))then
-            if (gbe_cross_clock_rdreq = '1')then
-                gbe_sdram_dq_count <= "000";
-            else
-                if ((gbe_sdram_dq_count /= "111")and(spartan_clk_rising_edge_enable = '1'))then
-                    gbe_sdram_dq_count <= gbe_sdram_dq_count + "001";
-                end if;
-            end if;
-        end if;
-    end process;
-
-   --AI Start: Add fortygbe interface for configuration
-   gen_fgbe_sdram_dq_count : process(RST_I, CLK_I)
-   begin
-       if (RST_I = '1')then
-           fgbe_sdram_dq_count <= "11111";
-       elsif (rising_edge(CLK_I))then
-           if (fgbe_cross_clock_rdreq = '1')then
-               fgbe_sdram_dq_count <= "00000";
-           else
-               if ((fgbe_sdram_dq_count /= "11111")and(spartan_clk_rising_edge_enable = '1'))then
-                   fgbe_sdram_dq_count <= fgbe_sdram_dq_count + "00001";
-               end if;
-           end if;
-       end if;
-   end process;
-   --AI End: Add fortygbe interface for configuration
 
     gen_wb_sdram_dq_count : process(RST_I, CLK_I)
     begin
@@ -929,23 +626,6 @@ begin
         end if;
     end process;
 
-
-    gen_gbe_cross_clock_rdreq_z1 : process(CLK_I)
-    begin
-        if (rising_edge(CLK_I))then
-            gbe_cross_clock_rdreq_z1 <= gbe_cross_clock_rdreq;
-        end if;
-    end process;
-
-   --AI Start: Add fortygbe interface for configuration
-    gen_fgbe_cross_clock_rdreq_z1 : process(CLK_I)
-    begin
-        if (rising_edge(CLK_I))then
-            fgbe_cross_clock_rdreq_z1 <= fgbe_cross_clock_rdreq;
-        end if;
-    end process;
-   --AI End: Add fortygbe interface for configuration
-
     gen_wb_comm_clock_rdreq_z1 : process(CLK_I)
     begin
        if (rising_edge(CLK_I))then
@@ -957,10 +637,7 @@ begin
        end if;
     end process;
 
-   --AI Start: Add fortygbe interface for configuration
-   --Modified to handle fortygbe interface for configuration as well
-
-    gen_sdram_dq_out_i : process(RST_I, CLK_I, fgbe_config_en, sdram_wb_program_en, sdram_wb_program_ctl)
+    gen_sdram_dq_out_i : process(RST_I, CLK_I, sdram_wb_program_en, sdram_wb_program_ctl)
     begin
         if (RST_I = '1')then
             sdram_program_header <= '1';
@@ -969,185 +646,43 @@ begin
             config_io_1_i <= '0';
         elsif (rising_edge(CLK_I))then
             if (spartan_clk_falling_edge_enable = '1')then
-                --Wishbone Configuration Only
-                if(sdram_wb_program_en = '1') then
-                    sdram_program_header <= '0';
-                    --if the SDRAM is starting to be programmed then set the valid to '1'
-                    if (sdram_wb_program_ctl(1) = '1' and sdram_wb_program_ctl(2) = '0' ) then
-                        sdram_program_valid_a <= '1';
-                    --if the SDRAM is finishing the programming the set the valid to '0'
-                    elsif(sdram_wb_program_ctl(1) = '0' and sdram_wb_program_ctl(2) = '1') then
-                        sdram_program_valid_a <= '0';
-                    end if;
-                    if (wb_sdram_dq_count = "00")then
-                        sdram_dq_out_i <= wb_comm_clock_dout(31 downto 16);
-                        config_io_1_i <= '1';
-                    elsif (wb_sdram_dq_count = "01")then
-                        sdram_dq_out_i <= wb_comm_clock_dout(15 downto 0);
-                        config_io_1_i <= '1';
-                    else
-                        sdram_dq_out_i <= (others => '0');
-                        config_io_1_i <= '0';
-                    end if;
-                --1GbE Configuration Only
-                elsif(fgbe_config_en = '0') then
+                sdram_program_header <= '0';
+                --if the SDRAM is starting to be programmed then set the valid to '1'
+                if (sdram_wb_program_ctl(1) = '1' and sdram_wb_program_ctl(2) = '0' ) then
+                    sdram_program_valid_a <= '1';
+                --if the SDRAM is finishing the programming the set the valid to '0'
+                elsif(sdram_wb_program_ctl(1) = '0' and sdram_wb_program_ctl(2) = '1') then
                     sdram_program_valid_a <= '0';
-                    if (gbe_sdram_dq_count = "000")then
-                        config_io_1_i <= not sdram_program_header;
-                        sdram_dq_out_i <= gbe_cross_clock_dout(63 downto 48);
-                    elsif (gbe_sdram_dq_count = "001")then
-                        sdram_dq_out_i <= gbe_cross_clock_dout(47 downto 32);
-                        config_io_1_i <= not sdram_program_header;
-                    elsif (gbe_sdram_dq_count = "010")then
-                        sdram_dq_out_i <= gbe_cross_clock_dout(31 downto 16);
-                        config_io_1_i <= not sdram_program_header;
-                    elsif (gbe_sdram_dq_count = "011")then
-                        sdram_dq_out_i <= gbe_cross_clock_dout(15 downto 0);
-                        config_io_1_i <= not sdram_program_header;
-
-                        if (gbe_cross_clock_dout(64) = '1')then
-                            -- REACHED END OF PACKET SO ENABLE FOR HEADER AGAIN
-                            sdram_program_header <= '1';
-                        else
-                            sdram_program_header <= '0';
-                        end if;
-                    else
-                        sdram_dq_out_i <= (others => '0');
-                        config_io_1_i <= '0';
-                    end if;
-                --40GbE Configuration Only
+                end if;
+                if (wb_sdram_dq_count = "00")then
+                    sdram_dq_out_i <= wb_comm_clock_dout(31 downto 16);
+                    config_io_1_i <= '1';
+                elsif (wb_sdram_dq_count = "01")then
+                    sdram_dq_out_i <= wb_comm_clock_dout(15 downto 0);
+                    config_io_1_i <= '1';
                 else
-                    sdram_program_valid_a <= '0';
-                    if (fgbe_sdram_dq_count = "00000")then
-                        config_io_1_i <= not sdram_program_header;
-                        sdram_dq_out_i <= fgbe_cross_clock_dout(255 downto 240);
-                    elsif (fgbe_sdram_dq_count = "00001")then
-                        sdram_dq_out_i <= fgbe_cross_clock_dout(239 downto 224);
-                        config_io_1_i <= not sdram_program_header;
-                    elsif (fgbe_sdram_dq_count = "00010")then
-                        sdram_dq_out_i <= fgbe_cross_clock_dout(223 downto 208);
-                        config_io_1_i <= not sdram_program_header;
-                    elsif (fgbe_sdram_dq_count = "00011")then
-                        sdram_dq_out_i <= fgbe_cross_clock_dout(207 downto 192);
-                        config_io_1_i <= not sdram_program_header;
-                        if (fgbe_cross_clock_dout(256) = '1')then
-                        -- REACHED END OF PACKET SO ENABLE FOR HEADER AGAIN
-                           sdram_program_header <= '1';
-                        else
-                           sdram_program_header <= '0';
-                        end if;
-                    elsif (fgbe_sdram_dq_count = "00100")then
-                        sdram_dq_out_i <= fgbe_cross_clock_dout(191 downto 176);
-                        config_io_1_i <= not sdram_program_header;
-                    elsif (fgbe_sdram_dq_count = "00101")then
-                        sdram_dq_out_i <= fgbe_cross_clock_dout(175 downto 160);
-                        config_io_1_i <= not sdram_program_header;
-                    elsif (fgbe_sdram_dq_count = "00110")then
-                        sdram_dq_out_i <= fgbe_cross_clock_dout(159 downto 144);
-                        config_io_1_i <= not sdram_program_header;
-                    elsif (fgbe_sdram_dq_count = "00111")then
-                        sdram_dq_out_i <= fgbe_cross_clock_dout(143 downto 128);
-                        config_io_1_i <= not sdram_program_header;
-                    elsif (fgbe_sdram_dq_count = "01000")then
-                        sdram_dq_out_i <= fgbe_cross_clock_dout(127 downto 112);
-                        config_io_1_i <= not sdram_program_header;
-                    elsif (fgbe_sdram_dq_count = "01001")then
-                        sdram_dq_out_i <= fgbe_cross_clock_dout(111 downto 96);
-                        config_io_1_i <= not sdram_program_header;
-                    elsif (fgbe_sdram_dq_count = "01010")then
-                        sdram_dq_out_i <= fgbe_cross_clock_dout(95 downto 80);
-                        config_io_1_i <= not sdram_program_header;
-                    elsif (fgbe_sdram_dq_count = "01011")then
-                        sdram_dq_out_i <= fgbe_cross_clock_dout(79 downto 64);
-                        config_io_1_i <= not sdram_program_header;
-                    elsif (fgbe_sdram_dq_count = "01100")then
-                        sdram_dq_out_i <= fgbe_cross_clock_dout(63 downto 48);
-                        config_io_1_i <= not sdram_program_header;
-                    elsif (fgbe_sdram_dq_count = "01101")then
-                        sdram_dq_out_i <= fgbe_cross_clock_dout(47 downto 32);
-                        config_io_1_i <= not sdram_program_header;
-                    elsif (fgbe_sdram_dq_count = "01110")then
-                        sdram_dq_out_i <= fgbe_cross_clock_dout(31 downto 16);
-                        config_io_1_i <= not sdram_program_header;
-                    elsif (fgbe_sdram_dq_count = "01111")then
-                        sdram_dq_out_i <= fgbe_cross_clock_dout(15 downto 0);
-                        config_io_1_i <= not sdram_program_header;
-                    else
-                       sdram_dq_out_i <= (others => '0');
-                       config_io_1_i <= '0';
-                    end if;
+                    sdram_dq_out_i <= (others => '0');
+                    config_io_1_i <= '0';
                 end if;
             end if;
         end if;
     end process;
-   --AI End: Add fortygbe interface for configuration
-
 
 
     -- FILTER OUTPUT BASED ON PACKET TYPE
-    --AI Start: Add fortygbe interface for configuration
-    --Modified to handle fortygbe interface for configuration as well
-    gen_valid_sdram_program_packet : process(RST_I, CLK_I, fgbe_config_en)
+    gen_valid_sdram_program_packet : process(RST_I, CLK_I)
     begin
         if (RST_I = '1')then
             valid_sdram_program_packet <= '0';
             debug_sdram_program_header <= (others => '0');
             sequence_number <= (others => '0');
         elsif (rising_edge(CLK_I))then
-          --1GbE Configuration Only
-          if (fgbe_config_en = '0') then
-            if (sdram_program_header = '1')and(gbe_cross_clock_rdreq_z1 = '1')then
-                if (gbe_cross_clock_dout(63 downto 48) = C_SDRAM_PROGRAM_PACKET_TYPE)then
-                    -- IF FIRST PACKET THEN JUST GET THE SEQUENCE NUMBER
-                    if (gbe_cross_clock_dout(31 downto 16) = X"0001")then
-                        sequence_number <= gbe_cross_clock_dout(47 downto 32) + X"0001";
-                        valid_sdram_program_packet <= '1';
-                    else
-                    -- ELSE CHECK THE SEQUENCE NUMBER
-                        if (gbe_cross_clock_dout(47 downto 32) = sequence_number)then
-                            valid_sdram_program_packet <= '1';
-                            sequence_number <= sequence_number + X"0001";
-                        else
-                            valid_sdram_program_packet <= '0';
-                        end if;
-                    end if;
-                    debug_sdram_program_header <= gbe_cross_clock_dout(63 downto 0);
-                else
-                    valid_sdram_program_packet <= '0';
-                    debug_sdram_program_header <= gbe_cross_clock_dout(63 downto 0);
-                end if;
-            end if;
-          --40GbE Configuration Only
-          else
-            if (sdram_program_header = '1')and(fgbe_cross_clock_rdreq_z1 = '1')then
-              if (fgbe_cross_clock_dout(255 downto 240) = C_SDRAM_PROGRAM_PACKET_TYPE)then
-                  -- IF FIRST PACKET THEN JUST GET THE SEQUENCE NUMBER
-                  if (fgbe_cross_clock_dout(223 downto 208) = X"0001")then
-                      sequence_number <= fgbe_cross_clock_dout(239 downto 224) + X"0001";
-                      valid_sdram_program_packet <= '1';
-                  else
-                  -- ELSE CHECK THE SEQUENCE NUMBER
-                      if (fgbe_cross_clock_dout(239 downto 224) = sequence_number)then
-                          valid_sdram_program_packet <= '1';
-                          sequence_number <= sequence_number + X"0001";
-                      else
-                          valid_sdram_program_packet <= '0';
-                      end if;
-                  end if;
-                  debug_sdram_program_header <= fgbe_cross_clock_dout(255 downto 192);
-              else
-                  valid_sdram_program_packet <= '0';
-                  debug_sdram_program_header <= fgbe_cross_clock_dout(255 downto 192);
-              end if;
-            end if;
-          end if;
+            -- no longer needed for programming
         end if;
     end process;
-    --AI End: Add fortygbe interface for configuration
 
     --gate the delayed rd request signal with the sdram program data valid
     sdram_program_valid <= sdram_program_valid_a and (wb_comm_clock_rdreq_z3 or wb_comm_clock_rdreq_z5);
-
 
     gen_sdram_dq_out : process(RST_I, CLK_I, valid_sdram_program_packet, sdram_program_valid)
     begin
@@ -1166,107 +701,6 @@ begin
             end if;
         end if;
     end process;
-
------------------------------------------------------------------------
--- 1GBE ETHERNET STATISTICS
------------------------------------------------------------------------
-
-    gen_gbe_rx_frame_count : process(RST_I, CLK_I)
-    begin
-        if (RST_I = '1')then
-            gbe_rx_frame_count <= (others => '0');
-        elsif (rising_edge(CLK_I))then
-            if (gbe_clear_count = '1')then
-                gbe_rx_frame_count <= (others => '0');
-            else
-                if ((gbe_cross_clock_rdreq_z1 = '1')and(gbe_cross_clock_dout(64) = '1')and(valid_sdram_program_packet = '1'))then
-                    gbe_rx_frame_count <= gbe_rx_frame_count + X"0001";
-                end if;
-            end if;
-        end if;
-    end process;
-
-    gen_gbe_rx_bad_frame_count : process(RST_I, CLK_I)
-    begin
-        if (RST_I = '1')then
-            gbe_rx_bad_frame_count <= (others => '0');
-        elsif (rising_edge(CLK_I))then
-            if (gbe_clear_count = '1')then
-                gbe_rx_bad_frame_count <= (others => '0');
-            else
-                if ((gbe_cross_clock_rdreq_z1 = '1')and(gbe_cross_clock_dout(65) = '1'))then
-                    gbe_rx_bad_frame_count <= gbe_rx_bad_frame_count + X"01";
-                end if;
-            end if;
-        end if;
-    end process;
-
-    gen_gbe_rx_overrun_count : process(RST_I, CLK_I)
-    begin
-        if (RST_I = '1')then
-            gbe_rx_overrun_count <= (others => '0');
-        elsif (rising_edge(CLK_I))then
-            if (gbe_clear_count = '1')then
-                gbe_rx_overrun_count <= (others => '0');
-            else
-                if ((gbe_cross_clock_rdreq_z1 = '1')and(gbe_cross_clock_dout(66) = '1'))then
-                    gbe_rx_overrun_count <= gbe_rx_overrun_count + X"01";
-                end if;
-            end if;
-        end if;
-    end process;
-
---AI Start: Add fortygbe interface for configuration
------------------------------------------------------------------------
--- 40GBE ETHERNET STATISTICS
------------------------------------------------------------------------
-
-   gen_fgbe_rx_frame_count : process(RST_I, CLK_I)
-   begin
-       if (RST_I = '1')then
-           fgbe_rx_frame_count <= (others => '0');
-       elsif (rising_edge(CLK_I))then
-           if (fgbe_clear_count = '1')then
-               fgbe_rx_frame_count <= (others => '0');
-           else
-               if ((fgbe_cross_clock_rdreq_z1 = '1')and(fgbe_cross_clock_dout(256) = '1')and(valid_sdram_program_packet = '1'))then
-                   fgbe_rx_frame_count <= fgbe_rx_frame_count + X"0001";
-               end if;
-           end if;
-       end if;
-   end process;
-
-   gen_fgbe_rx_bad_frame_count : process(RST_I, CLK_I)
-   begin
-       if (RST_I = '1')then
-           fgbe_rx_bad_frame_count <= (others => '0');
-       elsif (rising_edge(CLK_I))then
-           if (fgbe_clear_count = '1')then
-               fgbe_rx_bad_frame_count <= (others => '0');
-           else
-               if ((fgbe_cross_clock_rdreq_z1 = '1')and(fgbe_cross_clock_dout(257) = '1'))then
-                   fgbe_rx_bad_frame_count <= fgbe_rx_bad_frame_count + X"01";
-               end if;
-           end if;
-       end if;
-   end process;
-
-   gen_fgbe_rx_overrun_count : process(RST_I, CLK_I)
-   begin
-       if (RST_I = '1')then
-           fgbe_rx_overrun_count <= (others => '0');
-       elsif (rising_edge(CLK_I))then
-           if (fgbe_clear_count = '1')then
-               fgbe_rx_overrun_count <= (others => '0');
-           else
-               if ((fgbe_cross_clock_rdreq_z1 = '1')and(fgbe_cross_clock_dout(258) = '1'))then
-                   fgbe_rx_overrun_count <= fgbe_rx_overrun_count + X"01";
-               end if;
-           end if;
-       end if;
-   end process;
-
---AI End: Add fortygbe interface for configuration
 
 -----------------------------------------------------------------------
 -- CONFIG IO SIDEBAND SIGNALS

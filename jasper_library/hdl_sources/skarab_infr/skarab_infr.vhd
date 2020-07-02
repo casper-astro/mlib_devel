@@ -341,29 +341,6 @@ architecture arch_skarab_infr of skarab_infr is
         SEL_I : in std_logic_vector(3 downto 0);
         STB_I : in std_logic;
         WE_I  : in std_logic;
-        --gbe_app_clk             : in std_logic;
-        --gbe_rx_valid            : in std_logic;
-        --gbe_rx_end_of_frame     : in std_logic;
-        --gbe_rx_data             : in std_logic_vector(63 downto 0);
-        --gbe_rx_source_ip        : in std_logic_vector(31 downto 0);
-        --gbe_rx_source_port      : in std_logic_vector(15 downto 0);
-        --gbe_rx_bad_frame        : in std_logic;
-        --gbe_rx_overrun          : in std_logic;
-        --gbe_rx_overrun_ack      : out std_logic;
-        --gbe_rx_ack              : out std_logic;
-        --AI Start: Add fortygbe interface for configuration
-        --fgbe_config_en           : in std_logic;  -- if '1' SDRAM/Flash configuration is done via forty GbE else via 1 GbE
-        --fgbe_app_clk             : in std_logic;
-        --fgbe_rx_valid            : in std_logic_vector(3 downto 0);
-        --fgbe_rx_end_of_frame     : in std_logic;
-        --fgbe_rx_data             : in std_logic_vector(255 downto 0);
-        --fgbe_rx_source_ip        : in std_logic_vector(31 downto 0);
-        --fgbe_rx_source_port      : in std_logic_vector(15 downto 0);
-        --fgbe_rx_bad_frame        : in std_logic;
-        --fgbe_rx_overrun          : in std_logic;
-        --fgbe_rx_overrun_ack      : out std_logic;
-        --fgbe_rx_ack              : out std_logic;
-        --AI End: Add fortygbe interface for configuration         
         fpga_emcclk     : in std_logic;
         fpga_emcclk2    : in std_logic;
         flash_dq_in     : in std_logic_vector(15 downto 0);
@@ -1492,29 +1469,6 @@ begin
         SEL_I => WB_SLV_SEL_I(2),
         STB_I => WB_SLV_STB_I(2),
         WE_I  => WB_SLV_WE_I(2),
-        --gbe_app_clk             => sys_clk,
-        --gbe_rx_valid            => gmii_rx_valid_flash_sdram_controller,
-        --gbe_rx_end_of_frame     => gmii_rx_end_of_frame_flash_sdram_controller,
-        --gbe_rx_data             => gmii_rx_data,
-        --gbe_rx_source_ip        => gmii_rx_source_ip,
-        --gbe_rx_source_port      => gmii_rx_source_port,
-        --gbe_rx_bad_frame        => gmii_rx_bad_frame,
-        --gbe_rx_overrun          => gmii_rx_overrun,
-        --gbe_rx_overrun_ack      => gmii_rx_overrun_ack_flash_sdram_controller,
-        --gbe_rx_ack              => gmii_rx_ack_flash_sdram_controller,
-        --AI Start: Added fortygbe interface for configuration
-        --fgbe_config_en          => fgbe_config_en,  -- if '1' SDRAM/Flash configuration is done via forty GbE else via 1 GbE
-        --fgbe_app_clk            => sys_clk,
-        --fgbe_rx_valid           => xlgmii_rx_valid_flash_sdram_controller(0), --xlgmii_rx_valid(0),
-        --fgbe_rx_end_of_frame    => xlgmii_rx_end_of_frame_flash_sdram_controller(0),--xlgmii_rx_end_of_frame(0),
-        --fgbe_rx_data            => xlgmii_rx_data,
-        --fgbe_rx_source_ip       => xlgmii_rx_source_ip,
-        --fgbe_rx_source_port     => xlgmii_rx_source_port,
-        --fgbe_rx_bad_frame       => xlgmii_rx_bad_frame,
-        --fgbe_rx_overrun         => xlgmii_rx_overrun,
-        --fgbe_rx_overrun_ack     => xlgmii_rx_overrun_ack_flash_sdram_controller(0),--xlgmii_rx_overrun_ack(0),
-        --fgbe_rx_ack             => xlgmii_rx_ack_flash_sdram_controller(0),--xlgmii_rx_ack(0),
-        --AI End: Added fortygbe interface for configuration
         fpga_emcclk     => '0',
         fpga_emcclk2    => '0',
         flash_dq_in     => FLASH_DQ,
