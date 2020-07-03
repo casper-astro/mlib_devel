@@ -37,6 +37,8 @@ class forty_gbe(YellowBlock):
         inst.add_port('sys_rst', 'board_clk_rst', dir='in', parent_sig=False)
 
         self.mez3_phy = "PHY11"
+        self.psize_extend = False
+        self.clock_region2 = ""
         self.clock_region = "CLOCKREGION_X1Y7:CLOCKREGION_X1Y7"
         if  (self.port ==  1):
             self.mez3_phy = "PHY12"
@@ -46,7 +48,9 @@ class forty_gbe(YellowBlock):
             self.clock_region = "CLOCKREGION_X1Y5:CLOCKREGION_X1Y5"
         elif  (self.port ==  3):
             self.mez3_phy = "PHY22"
-            self.clock_region = "CLOCKREGION_X1Y4:CLOCKREGION_X1Y4"
+            self.clock_region = "CLOCKREGION_X0Y4:CLOCKREGION_X1Y4"
+            self.clock_region2 = "CLOCKREGION_X1Y3:CLOCKREGION_X1Y3"
+            self.psize_extend = True
         else:
             self.mez3_phy == "PHY11"
             self.clock_region = "CLOCKREGION_X1Y7:CLOCKREGION_X1Y7"
@@ -174,7 +178,17 @@ class forty_gbe(YellowBlock):
         cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ3_'+self.mez3_phy+'_QSFP] [get_cells -quiet [list '+self.fullname+'/IEEE802_3_XL_PHY_0/PHY_inst/RX_CLK_RCC]]'))
         cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ3_'+self.mez3_phy+'_QSFP] [get_cells -quiet [list '+self.fullname+'/IEEE802_3_XL_PHY_0/PHY_inst/TX_CLK_RCC]]'))
         cons.append(RawConstraint('resize_pblock [get_pblocks MEZ3_'+self.mez3_phy+'_QSFP] -add {'+self.clock_region+'}'))
-
+        if(self.psize_extend):
+          cons.append(RawConstraint('resize_pblock [get_pblocks MEZ3_'+self.mez3_phy+'_QSFP] -add {'+self.clock_region2+'}'))
+          cons.append(RawConstraint('set_property BEL MMCME2_ADV [get_cells [list skarab_40gbe_tx_rx_forty_gbe3/IEEE802_3_XL_lPHY_0/PHY_inst/RX_CLK_RCC/ref_clkB_MMCME2_BASE_inst]]'))
+          cons.append(RawConstraint('set_property LOC MMCME2_ADV_X1Y4 [get_cells [list skarab_40gbe_tx_rx_forty_gbe3/IEEE802_3_XL_PHY_0/PHY_inst/RX_CLK_RCC/ref_clkB_MMCME2_BASE_inst]]'))
+          cons.append(RawConstraint('set_property BEL PLLE2_ADV [get_cells [list skarab_40gbe_tx_rx_forty_gbe3/IEEE802_3_XL_PHY_0/PHY_inst/TX_CLK_RCC/PLLE2_BASE_inst]]'))
+          cons.append(RawConstraint('set_property LOC PLLE2_ADV_X1Y4 [get_cells [list skarab_40gbe_tx_rx_forty_gbe3/IEEE802_3_XL_PHY_0/PHY_inst/TX_CLK_RCC/PLLE2_BASE_inst]]'))
+          cons.append(RawConstraint('set_property BEL MMCME2_ADV [get_cells [list skarab_infr/SYS_CLK_MMCM_inst]]'))
+          cons.append(RawConstraint('set_property LOC MMCME2_ADV_X1Y3 [get_cells [list skarab_infr/SYS_CLK_MMCM_inst]]'))
+          cons.append(RawConstraint('set_property BEL MMCME2_ADV [get_cells [list skarab_infr/USER_CLK_MMCM_inst]]'))
+          cons.append(RawConstraint('set_property LOC MMCME2_ADV_X0Y4 [get_cells [list skarab_infr/USER_CLK_MMCM_inst]]'))
+          cons.append(RawConstraint('set_property CLOCK_DEDICATED_ROUTE ANY_CMT_COLUMN [get_nets skarab_infr/refclk_0]'))
         #cons.append(ClockGroupConstraint('MEZ3_REFCLK_%s_P'%self.port, '-include_generated_clocks FPGA_REFCLK_BUF1_P', 'asynchronous'))
         cons.append(ClockGroupConstraint('-of_objects [get_pins skarab_infr/SYS_CLK_MMCM_inst/CLKOUT0]', 'MEZ3_REFCLK_%s_P'%self.port, 'asynchronous'))
         #cons.append(ClockGroupConstraint('MEZ3_REFCLK_%s_P'%self.port, '-of_objects [get_pins skarab_infr/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]', 'asynchronous'))
