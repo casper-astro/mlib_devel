@@ -323,10 +323,10 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
 
         #Timing Constraints
         #Output Constraints
-        cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
-        cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
-        cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
-        cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
+        #cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
+        #cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
+        cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT1]', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
+        cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT1]', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
 
         #multi-cycle constraints
         #cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_clocks -of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', destpath='get_ports MEZZANINE_%s_RESET' % self.mez, multicycledelay=4))

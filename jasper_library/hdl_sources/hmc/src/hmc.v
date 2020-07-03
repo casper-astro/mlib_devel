@@ -546,6 +546,7 @@ reg qpll_reset_cnt_en;
 
 wire hmc_reset_i;
 (* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg hmc_resetR,hmc_resetRR,hmc_resetRRR,hmc_resetRRRR;
+(* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg hmc_reset2R,hmc_reset2RR,hmc_reset2RRR,hmc_reset2RRRR;
 
 
 //Process ensures initialisation is successful. If initialisation is not successful then reset is issued again.
@@ -760,6 +761,13 @@ always @(posedge HMC_CLK) begin
   hmc_resetRRRR <= hmc_resetRRR;
 end
 
+always @(posedge wb_clk_i) begin
+  hmc_reset2R    <= hmc_reset_i;
+  hmc_reset2RR   <= hmc_reset2R;
+  hmc_reset2RRR  <= hmc_reset2RR;
+  hmc_reset2RRRR <= hmc_reset2RRR;
+end
+
 always @(posedge USER_CLK) begin
   post_done_reg <= post_done_i;
 end
@@ -857,7 +865,7 @@ assign post_ok = post_ok_latchRRRR;
 //Important to AND init_done and the post_done_latch to ensure the I2C switch over happens after POST_DONE_LATCH is asserted. If not then POST_LED on HMC Card will not be illuminated when POST is done
 //and there will be no visual indication to the user that the HMC is ready for use 
 assign init_done = init_done_latchRRRR & post_done_latchRRRR; //post_done_latch
-assign HMC_MEZZ_RESET = hmc_resetRRRR;//~P_RST_N; 
+assign HMC_MEZZ_RESET = hmc_reset2RRRR;//~P_RST_N; 
 //HMC OK flag depends on initialisation done, POST okay, FLIT error response indicators (link 2 and 3) and ERRSTAT register from HMC (link 2 and 3)
 //assign hmc_okay = init_done & post_ok & (&(~flit_error_resp_link2)) & (&(~flit_error_resp_link3)) & (&(~errstat_link2)) & (&(~errstat_link3));
 //Using the FLIT error response pulse indicators instead, so that when error occurs the error is reset, so that the DSP functionality does

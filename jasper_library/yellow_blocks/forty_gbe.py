@@ -202,8 +202,8 @@ class forty_gbe(YellowBlock):
         #cons.append(ClockGroupConstraint('-of_objects [get_pins %s/USER_CLK_MMCM_inst/CLKOUT0]' % self.fullname, 'MEZ3_REFCLK_%s_P'%self.port, 'asynchronous'))
         
 
-        cons.append(InputDelayConstraint(clkname='MEZ3_REFCLK_%s_P'%self.port, consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='FPGA_RESET_N'))
-        cons.append(InputDelayConstraint(clkname='MEZ3_REFCLK_%s_P'%self.port, consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='FPGA_RESET_N'))
+        #cons.append(InputDelayConstraint(clkname='MEZ3_REFCLK_%s_P'%self.port, consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='FPGA_RESET_N'))
+        #cons.append(InputDelayConstraint(clkname='MEZ3_REFCLK_%s_P'%self.port, consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='FPGA_RESET_N'))
         #cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks MEZ3_REFCLK_%s_P'%self.port, multicycledelay=4))
         #cons.append(MultiCycleConstraint(multicycletype='hold',sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks MEZ3_REFCLK_%s_P'%self.port, multicycledelay=4))
         return cons
