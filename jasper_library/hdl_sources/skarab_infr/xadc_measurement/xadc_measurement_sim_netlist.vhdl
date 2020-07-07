@@ -1,10 +1,10 @@
 -- Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2019.1.1 (lin64) Build 2580384 Sat Jun 29 08:04:45 MDT 2019
--- Date        : Mon Jul 15 17:28:58 2019
--- Host        : casper1 running 64-bit Ubuntu 16.04.6 LTS
+-- Date        : Mon Jul  6 16:30:03 2020
+-- Host        : adam-cm running 64-bit Ubuntu 16.04.6 LTS
 -- Command     : write_vhdl -force -mode funcsim
---               /home/hpw1/work/tutorials_devel/vivado_2018/skarab/tut_intro/skarab_tut_intro/myproj/myproj.srcs/sources_1/ip/xadc_measurement/xadc_measurement_sim_netlist.vhdl
+--               /home/aisaacson/work/git_work/ska-sa/wes/mlib_devel/jasper_library/test_models/skarab_fgbe/myproj/myproj.srcs/sources_1/ip/xadc_measurement/xadc_measurement_sim_netlist.vhdl
 -- Design      : xadc_measurement
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -51,7 +51,7 @@ U0: unisim.vcomponents.XADC
     generic map(
       INIT_40 => X"1000",
       INIT_41 => X"21AC",
-      INIT_42 => X"0700",
+      INIT_42 => X"0200",
       INIT_43 => X"0000",
       INIT_44 => X"0000",
       INIT_45 => X"0000",

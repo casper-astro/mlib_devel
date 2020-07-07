@@ -624,12 +624,12 @@ class skarab(YellowBlock):
 
         #False Path Constraints
         cons.append(FalsePathConstraint(destpath='[get_pins {%s/FPGA_DNA_CHECKER_inst/FPGA_DNA_O_reg[*]/D}]' % self.fullname))
-        cons.append(FalsePathConstraint(destpath='[get_pins {%s/clock_frequency_measure_1/second_toggle_z_reg/D}]' % self.fullname))
-        cons.append(FalsePathConstraint(destpath='[get_pins {%s/clock_frequency_measure_1/clk_count_low_reg_reg[*]/D}]' % self.fullname))
-        cons.append(FalsePathConstraint(destpath='[get_pins {%s/clock_frequency_measure_1/clk_count_high_reg_reg[*]/D}]' % self.fullname))
-        cons.append(FalsePathConstraint(destpath='[get_pins {%s/clock_frequency_measure_2/second_toggle_z_reg/D}]' % self.fullname))
-        cons.append(FalsePathConstraint(destpath='[get_pins {%s/clock_frequency_measure_2/clk_count_low_reg_reg[*]/D}]' % self.fullname))
-        cons.append(FalsePathConstraint(destpath='[get_pins {%s/clock_frequency_measure_2/clk_count_high_reg_reg[*]/D}]' % self.fullname))
+        #cons.append(FalsePathConstraint(destpath='[get_pins {%s/clock_frequency_measure_1/second_toggle_z_reg/D}]' % self.fullname))
+        #cons.append(FalsePathConstraint(destpath='[get_pins {%s/clock_frequency_measure_1/clk_count_low_reg_reg[*]/D}]' % self.fullname))
+        #cons.append(FalsePathConstraint(destpath='[get_pins {%s/clock_frequency_measure_1/clk_count_high_reg_reg[*]/D}]' % self.fullname))
+        #cons.append(FalsePathConstraint(destpath='[get_pins {%s/clock_frequency_measure_2/second_toggle_z_reg/D}]' % self.fullname))
+        #cons.append(FalsePathConstraint(destpath='[get_pins {%s/clock_frequency_measure_2/clk_count_low_reg_reg[*]/D}]' % self.fullname))
+        #cons.append(FalsePathConstraint(destpath='[get_pins {%s/clock_frequency_measure_2/clk_count_high_reg_reg[*]/D}]' % self.fullname))
 
         #Multi Cycle Constraints
         #cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks FPGA_REFCLK_BUF0_P', multicycledelay=4))

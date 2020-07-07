@@ -283,13 +283,13 @@ architecture arch_skarab_infr of skarab_infr is
         second_toggle : out std_logic);
     end component; 
     
-    component clock_frequency_measure
-    port(
-        clk : in std_logic;
-        rst : in std_logic;
-        second_toggle   : in std_logic;
-        measure_freq    : out std_logic_vector(31 downto 0));
-    end component;       
+    --component clock_frequency_measure
+    --port(
+    --    clk : in std_logic;
+    --    rst : in std_logic;
+    --    second_toggle   : in std_logic;
+    --    measure_freq    : out std_logic_vector(31 downto 0));
+    --end component;       
 
     component wishbone_interconnect
     port (
@@ -491,9 +491,9 @@ architecture arch_skarab_infr of skarab_infr is
 
     signal refclk_0 : std_logic;
     signal refclk_1 : std_logic;
-    signal aux_clk : std_logic;
-    signal aux_synci : std_logic;
-    signal aux_synco : std_logic;
+    --signal aux_clk : std_logic;
+    --signal aux_synci : std_logic;
+    --signal aux_synco : std_logic;
 
     signal user_clk : std_logic;
     signal user_clk_mmcm : std_logic;
@@ -513,10 +513,10 @@ architecture arch_skarab_infr of skarab_infr is
     attribute ASYNC_REG of sys_fpga_rst: signal is "TRUE";
     attribute ASYNC_REG of sync_sys_fpga_rst: signal is "TRUE";
 
-    signal aux_fpga_rst : std_logic;
-    signal sync_aux_fpga_rst : std_logic;
-    attribute ASYNC_REG of aux_fpga_rst: signal is "TRUE";
-    attribute ASYNC_REG of sync_aux_fpga_rst: signal is "TRUE";
+    --signal aux_fpga_rst : std_logic;
+    --signal sync_aux_fpga_rst : std_logic;
+    --attribute ASYNC_REG of aux_fpga_rst: signal is "TRUE";
+    --attribute ASYNC_REG of sync_aux_fpga_rst: signal is "TRUE";
 
     signal user_fpga_rst : std_logic;
     signal sync_user_fpga_rst : std_logic;
@@ -533,15 +533,15 @@ architecture arch_skarab_infr of skarab_infr is
     attribute ASYNC_REG of gmii_fpga_rst: signal is "TRUE";
     attribute ASYNC_REG of sync_gmii_fpga_rst: signal is "TRUE";
 
-    signal qsfp_fpga_rst : std_logic;
-    signal sync_qsfp_fpga_rst : std_logic;
-    attribute ASYNC_REG of qsfp_fpga_rst: signal is "TRUE";
-    attribute ASYNC_REG of sync_qsfp_fpga_rst: signal is "TRUE";
+    --signal qsfp_fpga_rst : std_logic;
+    --signal sync_qsfp_fpga_rst : std_logic;
+    --attribute ASYNC_REG of qsfp_fpga_rst: signal is "TRUE";
+    --attribute ASYNC_REG of sync_qsfp_fpga_rst: signal is "TRUE";
 
-    signal emcclk_fpga_rst : std_logic;
-    signal sync_emcclk_fpga_rst : std_logic;       
-    attribute ASYNC_REG of emcclk_fpga_rst: signal is "TRUE";
-    attribute ASYNC_REG of sync_emcclk_fpga_rst: signal is "TRUE";
+    --signal emcclk_fpga_rst : std_logic;
+    --signal sync_emcclk_fpga_rst : std_logic;       
+    --attribute ASYNC_REG of emcclk_fpga_rst: signal is "TRUE";
+    --attribute ASYNC_REG of sync_emcclk_fpga_rst: signal is "TRUE";
     
     signal enable_40gbe_packet_generation : std_logic_vector(3 downto 0);
     signal enable_40gbe_packet_generation_z1 : std_logic_vector(3 downto 0);
@@ -716,14 +716,14 @@ architecture arch_skarab_infr of skarab_infr is
     signal latched_packet_number : std_logic_vector(15 downto 0);
     signal packet_size : std_logic_vector(15 downto 0);
 
-    signal qsfp_xl_tx_clk_156m25_frequency : std_logic_vector(31 downto 0);
-    signal fpga_emcclk2_frequency : std_logic_vector(31 downto 0);
+    --signal qsfp_xl_tx_clk_156m25_frequency : std_logic_vector(31 downto 0);
+    --signal fpga_emcclk2_frequency : std_logic_vector(31 downto 0);
 
     signal ramp_fault : std_logic;
     signal ramp_fault_reg : std_logic;
 
     signal second_toggle : std_logic;
-    signal aux_clk_frequency : std_logic_vector(31 downto 0);
+    --signal aux_clk_frequency : std_logic_vector(31 downto 0);
 
     signal ramp_source_destination_ip_address_0 : std_logic_vector(31 downto 0);
     signal ramp_checker_source_ip_address_0 : std_logic_vector(31 downto 0);
@@ -967,16 +967,16 @@ begin
     --user_rst <= user_fpga_rst;
     bsp_rst <=  bsp_fpga_rst;
  
-    pFpgaResetAuxSynchroniser : process(user_mmcm_locked, aux_clk)
-    begin
-        if (user_mmcm_locked = '0')then
-            sync_aux_fpga_rst <= '1';
-            aux_fpga_rst <= '1';
-        elsif (rising_edge(aux_clk))then
-            sync_aux_fpga_rst <= '0';
-            aux_fpga_rst <= sync_aux_fpga_rst;
-        end if;
-    end process; 
+    --pFpgaResetAuxSynchroniser : process(user_mmcm_locked, aux_clk)
+    --begin
+    --    if (user_mmcm_locked = '0')then
+    --        sync_aux_fpga_rst <= '1';
+    --        aux_fpga_rst <= '1';
+    --    elsif (rising_edge(aux_clk))then
+    --        sync_aux_fpga_rst <= '0';
+    --        aux_fpga_rst <= sync_aux_fpga_rst;
+    --    end if;
+    --end process; 
 
     pFpgaResetGmiiSynchroniser : process(user_mmcm_locked, gmii_clk)
     begin
@@ -989,27 +989,27 @@ begin
         end if;
     end process;
 
-    pFpgaResetQsfpSynchroniser : process(user_mmcm_locked, qsfp_gtrefclk)
-    begin
-        if (user_mmcm_locked = '0')then
-            sync_qsfp_fpga_rst <= '1';
-            qsfp_fpga_rst <= '1';
-        elsif (rising_edge(qsfp_gtrefclk))then
-            sync_qsfp_fpga_rst <= '0';
-            qsfp_fpga_rst <= sync_qsfp_fpga_rst;
-        end if;
-    end process; 
+    --pFpgaResetQsfpSynchroniser : process(user_mmcm_locked, qsfp_gtrefclk)
+    --begin
+    --    if (user_mmcm_locked = '0')then
+    --        sync_qsfp_fpga_rst <= '1';
+    --        qsfp_fpga_rst <= '1';
+    --    elsif (rising_edge(qsfp_gtrefclk))then
+    --        sync_qsfp_fpga_rst <= '0';
+    --        qsfp_fpga_rst <= sync_qsfp_fpga_rst;
+    --    end if;
+    --end process; 
     
-    pFpgaResetEmcclkSynchroniser : process(user_mmcm_locked, FPGA_EMCCLK2)
-    begin
-        if (user_mmcm_locked = '0')then
-            sync_emcclk_fpga_rst <= '1';
-            emcclk_fpga_rst <= '1';
-        elsif (rising_edge(FPGA_EMCCLK2))then
-            sync_emcclk_fpga_rst <= '0';
-            emcclk_fpga_rst <= sync_emcclk_fpga_rst;
-        end if;
-    end process;     
+    --pFpgaResetEmcclkSynchroniser : process(user_mmcm_locked, FPGA_EMCCLK2)
+    --begin
+    --    if (user_mmcm_locked = '0')then
+    --        sync_emcclk_fpga_rst <= '1';
+    --        emcclk_fpga_rst <= '1';
+    --    elsif (rising_edge(FPGA_EMCCLK2))then
+    --        sync_emcclk_fpga_rst <= '0';
+    --        emcclk_fpga_rst <= sync_emcclk_fpga_rst;
+    --    end if;
+    --end process;     
 
     FAN_CONT_RST_N <= FPGA_RESET_N;
 
@@ -1315,9 +1315,9 @@ begin
 
     --brd_user_read_regs(C_RD_AUX_CLK_FREQ_ADDR) <= aux_clk_frequency;
 
-    brd_user_read_regs(C_RD_MEZZANINE_CLK_FREQ_ADDR) <= qsfp_xl_tx_clk_156m25_frequency;
+    --brd_user_read_regs(C_RD_MEZZANINE_CLK_FREQ_ADDR) <= qsfp_xl_tx_clk_156m25_frequency;
 
-    brd_user_read_regs(C_RD_CONFIG_CLK_FREQ_ADDR) <= fpga_emcclk2_frequency;
+    --brd_user_read_regs(C_RD_CONFIG_CLK_FREQ_ADDR) <= fpga_emcclk2_frequency;
 
     USR_ACCESSE2_0 : USR_ACCESSE2
     port map (
@@ -1670,31 +1670,32 @@ begin
 
     second_gen_0 : second_gen
     port map(
-        clk => sys_clk,
-        rst => sys_rst,
+        clk => bsp_clk,
+        rst => bsp_rst,
         second_toggle => second_toggle);
 
 -------------------------------------------------------------------------
 -- MEASURE FREQUENCY OF GTH CLOCK
 -------------------------------------------------------------------------
-
-    clock_frequency_measure_1 : clock_frequency_measure
-    port map(
-        clk => qsfp_gtrefclk,
-        rst => qsfp_fpga_rst,
-        second_toggle   => second_toggle,
-        measure_freq    => qsfp_xl_tx_clk_156m25_frequency);
+    --AI: Remove Nice to have function - free up resources 
+    --clock_frequency_measure_1 : clock_frequency_measure
+    --port map(
+    --    clk => qsfp_gtrefclk,
+    --    rst => qsfp_fpga_rst,
+    --    second_toggle   => second_toggle,
+    --    measure_freq    => qsfp_xl_tx_clk_156m25_frequency);
 
 -------------------------------------------------------------------------
 -- MEASURE FREQUENCY OF CONFIG CLOCK
 -------------------------------------------------------------------------
 
-    clock_frequency_measure_2 : clock_frequency_measure
-    port map(
-        clk => FPGA_EMCCLK2,
-        rst => emcclk_fpga_rst,
-        second_toggle   => second_toggle,
-        measure_freq    => fpga_emcclk2_frequency);
+    --AI: Remove Nice to have function - free up resources
+    --clock_frequency_measure_2 : clock_frequency_measure
+    --port map(
+    --    clk => FPGA_EMCCLK2,
+    --    rst => emcclk_fpga_rst,
+    --    second_toggle   => second_toggle,
+    --    measure_freq    => fpga_emcclk2_frequency);
 
 
 -------------------------------------------------------------------------
@@ -1703,8 +1704,8 @@ begin
 
     FPGA_DNA_CHECKER_inst : component FPGA_DNA_CHECKER
         port map(
-            CLK_I            => sys_clk,
-            RST_I            => sys_rst,
+            CLK_I            => bsp_clk,
+            RST_I            => bsp_rst,
             FPGA_EMCCLK2_I   => fpga_emcclk2,
             FPGA_DNA_O       => fpga_dna,
             FPGA_DNA_MATCH_O => open
@@ -1722,8 +1723,8 @@ begin
         dwe_in          => xadc_dwe_in,
         do_out          => xadc_do_out,
         drdy_out        => xadc_drdy_out,
-        dclk_in         => sys_clk,
-        reset_in        => sys_rst,
+        dclk_in         => bsp_clk,
+        reset_in        => bsp_rst,
         busy_out        => xadc_busy_out,
         channel_out     => xadc_channel_out,
         eoc_out         => xadc_eoc_out,
@@ -1734,7 +1735,7 @@ begin
         vp_in           => '0',
         vn_in           => '0');
 
-    gen_xadc_latched : process(sys_rst, sys_clk)
+    gen_xadc_latched : process(bsp_rst, bsp_clk)
     begin
         if (bsp_rst = '1')then
             brd_user_read_regs(C_RD_XADC_LATCHED_ADDR) <= (others => '0');

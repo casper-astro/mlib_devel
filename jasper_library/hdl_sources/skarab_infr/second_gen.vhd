@@ -13,7 +13,7 @@
 -- Generates a pulse that toggles once a second. Used for clock frequency 
 -- measurement.
 --
--- Assumes clock frequency of 156.25MHz
+-- Assumes clock frequency of 39.0625MHz
 --
 -- Dependencies: 
 -- 
@@ -40,7 +40,7 @@ end second_gen;
 architecture arch_second_gen of second_gen is
 
     constant C_MILLISECOND_PERIOD : std_logic_vector(17 downto 0) := 
-        "100110001001011001"; -- 156249
+        "001001100010010111"; -- 39063
         
     constant C_SECOND_PERIOD : std_logic_vector(9 downto 0) :=
         "1111100111"; -- 999
