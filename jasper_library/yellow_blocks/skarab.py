@@ -623,7 +623,7 @@ class skarab(YellowBlock):
         cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT1]'  % self.fullname, consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='I2C_RESET_FPGA'))
 
         #False Path Constraints
-        cons.append(FalsePathConstraint(destpath='[get_pins {%s/FPGA_DNA_CHECKER_inst/FPGA_DNA_O_reg[*]/D}]' % self.fullname))
+        #cons.append(FalsePathConstraint(destpath='[get_pins {%s/FPGA_DNA_CHECKER_inst/FPGA_DNA_O_reg[*]/D}]' % self.fullname))
         #cons.append(FalsePathConstraint(destpath='[get_pins {%s/clock_frequency_measure_1/second_toggle_z_reg/D}]' % self.fullname))
         #cons.append(FalsePathConstraint(destpath='[get_pins {%s/clock_frequency_measure_1/clk_count_low_reg_reg[*]/D}]' % self.fullname))
         #cons.append(FalsePathConstraint(destpath='[get_pins {%s/clock_frequency_measure_1/clk_count_high_reg_reg[*]/D}]' % self.fullname))

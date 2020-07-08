@@ -31,6 +31,7 @@ use IEEE.NUMERIC_STD.ALL;
 library UNISIM;
 use UNISIM.VComponents.all;
 
+
 entity FPGA_DNA_CHECKER is
 	Port(
 		CLK_I            : in  std_logic;
@@ -43,6 +44,10 @@ entity FPGA_DNA_CHECKER is
 end FPGA_DNA_CHECKER;
 
 architecture Behavioral of FPGA_DNA_CHECKER is
+
+    --Reset Synchroniser and user reset signals
+    attribute ASYNC_REG : string;
+    
 	signal local_reset_sr : std_logic_vector(3 downto 0) := (others => '1');
 	signal local_reset    : std_logic                    := '1';
 
@@ -54,6 +59,14 @@ architecture Behavioral of FPGA_DNA_CHECKER is
 
 	signal DNA_VALUE : std_logic_vector(56 downto 0) := (others => '0');
 	signal DNA_MATCH : std_logic                     := '0';
+	--signal sDNA_0 : std_logic_vector(63 downto 0) := (others => '0');
+	signal sCDC_DNA_0 : std_logic_vector(63 downto 0) := (others => '0');
+	
+	signal sBusValid : std_logic := '0';
+	signal sBusValidD1 : std_logic := '0';
+	
+    attribute ASYNC_REG of sBusValid : signal is "TRUE";
+    attribute ASYNC_REG of sBusValidD1 : signal is "TRUE";	
 
 begin
 	DNA_PORT_inst : DNA_PORT
@@ -121,13 +134,29 @@ begin
 		end if;
 	end process DNA_PORT_READ_proc;
 
-	fpga_dna_register_proc : process(CLK_I) is
-	begin
-		if rising_edge(CLK_I) then
-			FPGA_DNA_O <= DNA_MATCH & DNA_READ_DONE & DNA_SHIFT & DNA_READ & "000" & DNA_VALUE;
-		end if;
-	end process fpga_dna_register_proc;
-
+	--fpga_dna_register_proc : process(CLK_I) is
+	--begin
+	--	if rising_edge(CLK_I) then
+	--		sDNA_0 <= DNA_MATCH & DNA_READ_DONE & DNA_SHIFT & DNA_READ & "000" & DNA_VALUE;
+	--	end if;
+	--end process fpga_dna_register_proc;
+	
+    pCDCSynchroniser : process(RST_I, CLK_I)
+    begin
+       if (RST_I = '1')then
+           sCDC_DNA_0 <= (others => '0');
+           sBusValidD1 <= '0';
+           sBusValid <= '0';           
+       elsif (rising_edge(CLK_I))then
+           sBusValidD1 <= sBusValid;
+           sBusValid <= DNA_READ_DONE;
+		   if (sBusValidD1 = '1') then
+			  sCDC_DNA_0 <= DNA_MATCH & DNA_READ_DONE & DNA_SHIFT & DNA_READ & "000" & DNA_VALUE;--sDNA_0;           
+          end if;  
+       end if;
+    end process pCDCSynchroniser;  
+    
 	FPGA_DNA_MATCH_O <= DNA_MATCH;
+	FPGA_DNA_O <= sCDC_DNA_0;
 
 end Behavioral;
