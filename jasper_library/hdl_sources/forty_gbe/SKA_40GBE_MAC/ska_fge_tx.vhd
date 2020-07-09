@@ -164,6 +164,8 @@ architecture arch_ska_fge_tx of ska_fge_tx is
         dinb    : in std_logic_vector(259 downto 0);
         doutb   : out std_logic_vector(259 downto 0));
     end component;
+    
+    attribute ASYNC_REG : string;
 
     signal app_tx_valid_z1 : std_logic_vector(3 downto 0);
     signal app_tx_any_valid : std_logic;
@@ -215,6 +217,9 @@ architecture arch_ska_fge_tx of ska_fge_tx is
     signal mac_cpu_ack : std_logic;
     signal mac_cpu_ack_z1 : std_logic;
     signal mac_cpu_ack_z2 : std_logic;
+    attribute ASYNC_REG of mac_cpu_ack_z1: signal is "TRUE";
+    attribute ASYNC_REG of mac_cpu_ack_z2: signal is "TRUE"; 
+    
     signal mac_cpu_size : std_logic_vector(10 downto 0);
     signal mac_cpu_pending : std_logic;
 

@@ -955,7 +955,7 @@ begin
     end process;
 
     cpu_rx_packet_size_rdreq <= '1' when (current_cpu_read_state = CPU_READ_LATENCY) else '0';
-    cpu_rx_packet_size_rdreq_1 <= cpu_rx_packet_size_rdreq and (not mac_rst) and (not cpu_rx_packet_size_empty);
+    cpu_rx_packet_size_rdreq_1 <= cpu_rx_packet_size_rdreq and (not cpu_rst) and (not cpu_rx_packet_size_empty);
 
 
     cpu_rx_size <= cpu_size;

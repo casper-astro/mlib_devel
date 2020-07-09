@@ -642,9 +642,16 @@ architecture arch_skarab_infr of skarab_infr is
     signal host_reset_u : std_logic;
     signal host_reset_u2 : std_logic;
     signal host_reset_u3 : std_logic; 
+    attribute ASYNC_REG of host_reset_u: signal is "TRUE";
+    attribute ASYNC_REG of host_reset_u2: signal is "TRUE";    
+    attribute ASYNC_REG of host_reset_u3: signal is "TRUE";    
+    
     signal host_reset_d : std_logic;
     signal host_reset_d2 : std_logic;
-    signal host_reset_d3 : std_logic;     
+    signal host_reset_d3 : std_logic; 
+    attribute ASYNC_REG of host_reset_d: signal is "TRUE";
+    attribute ASYNC_REG of host_reset_d2: signal is "TRUE";    
+    attribute ASYNC_REG of host_reset_d3: signal is "TRUE";         
 
     signal led_rx : std_logic;
     signal led_tx : std_logic;
@@ -653,19 +660,31 @@ architecture arch_skarab_infr of skarab_infr is
     signal phy_rx_up_z1_0  : std_logic;
     signal phy_rx_up_z2_0  : std_logic;
     signal phy_rx_up_cpu_0 : std_logic;
+    attribute ASYNC_REG of phy_rx_up_z1_0: signal is "TRUE";
+    attribute ASYNC_REG of phy_rx_up_z2_0: signal is "TRUE";    
+    attribute ASYNC_REG of phy_rx_up_cpu_0: signal is "TRUE";     
 
     signal phy_rx_up_z1_1  : std_logic;
     signal phy_rx_up_z2_1  : std_logic;
     signal phy_rx_up_cpu_1 : std_logic;
+    attribute ASYNC_REG of phy_rx_up_z1_1: signal is "TRUE";
+    attribute ASYNC_REG of phy_rx_up_z2_1: signal is "TRUE";    
+    attribute ASYNC_REG of phy_rx_up_cpu_1: signal is "TRUE";      
 
     signal phy_rx_up_z1_2  : std_logic;
     signal phy_rx_up_z2_2  : std_logic;
     signal phy_rx_up_cpu_2 : std_logic;
-
+    attribute ASYNC_REG of phy_rx_up_z1_2: signal is "TRUE";
+    attribute ASYNC_REG of phy_rx_up_z2_2: signal is "TRUE";    
+    attribute ASYNC_REG of phy_rx_up_cpu_2: signal is "TRUE";      
+    
     signal phy_rx_up_z1_3  : std_logic;
     signal phy_rx_up_z2_3  : std_logic;
     signal phy_rx_up_cpu_3 : std_logic;
-
+    attribute ASYNC_REG of phy_rx_up_z1_3: signal is "TRUE";
+    attribute ASYNC_REG of phy_rx_up_z2_3: signal is "TRUE";    
+    attribute ASYNC_REG of phy_rx_up_cpu_3: signal is "TRUE";      
+    
     -- GT 29/03/2017 XADC SIGNALS
     signal xadc_busy_out : std_logic;
     signal xadc_channel_out :  std_logic_vector (4 downto 0);
@@ -788,7 +807,20 @@ architecture arch_skarab_infr of skarab_infr is
     signal MEZZ3_ID : std_logic_vector(2 downto 0);
     signal MEZZ3_PRESENT : std_logic;
     
-    
+    --fortygbe tx and rx LED signals
+    signal s_xlgmii_txled_0 : std_logic_vector(1 downto 0);
+    signal s_xlgmii_txled_1 : std_logic_vector(1 downto 0);
+    signal s_xlgmii_txled_2 : std_logic_vector(1 downto 0);
+    signal s_xlgmii_txled_3 : std_logic_vector(1 downto 0);
+    signal s_xlgmii_rxled_0 : std_logic_vector(1 downto 0);
+    signal s_xlgmii_rxled_1 : std_logic_vector(1 downto 0);
+    signal s_xlgmii_rxled_2 : std_logic_vector(1 downto 0);
+    signal s_xlgmii_rxled_3 : std_logic_vector(1 downto 0);
+    signal sBusLedValid : std_logic;
+    signal sBusLedValidD1 : std_logic;
+    attribute ASYNC_REG of sBusLedValid: signal is "TRUE";
+    attribute ASYNC_REG of sBusLedValidD1: signal is "TRUE";      
+            
 begin
     --Mezzanine 3 ID and Present (this should be part of the 40GbE yellow block, but is part of the BSP for now)
     --Mezzanine ID: "000" = spare, "001" = 40GbE, "010" = HMC, "011" = ADC, rest = spare
@@ -921,7 +953,7 @@ begin
            sys_fpga_rst <= '1';
            sync_sys_fpga_rst <= '1';
        elsif (rising_edge(sys_clk))then
-          if (host_reset = '0') then
+          if (host_reset_d3 = '0') then
             sync_sys_fpga_rst <= '0';
             sys_fpga_rst <= sync_sys_fpga_rst;
           else
@@ -953,7 +985,7 @@ begin
             bsp_fpga_rst <= '1';
             sync_bsp_fpga_rst <= '1';
         elsif (rising_edge(bsp_clk))then
-           if (host_reset_d3 = '0') then
+           if (host_reset = '0') then
              sync_bsp_fpga_rst <= '0';
              bsp_fpga_rst <= sync_bsp_fpga_rst;
            else
@@ -1013,18 +1045,18 @@ begin
 
     FAN_CONT_RST_N <= FPGA_RESET_N;
 
-    gen_host_reset_req_z : process(sys_clk)
+    gen_host_reset_req_z : process(bsp_clk)
     begin
-        if (rising_edge(sys_clk))then
+        if (rising_edge(bsp_clk))then
             host_reset_req_z <= host_reset_req;
         end if;
     end process;
 
-    gen_host_reset_count : process(user_mmcm_locked, sys_clk)
+    gen_host_reset_count : process(user_mmcm_locked, bsp_clk)
     begin
         if (user_mmcm_locked = '0')then
             host_reset_count <= (others => '1');
-        elsif (rising_edge(sys_clk))then
+        elsif (rising_edge(bsp_clk))then
             if ((host_reset_req_z = '0')and(host_reset_req = '1'))then
                 host_reset_count <= (others => '0');
             else
@@ -1047,10 +1079,10 @@ begin
         end if;
     end process;
     
-    --host reset synchronised to the bsp_clk
-    gen_host_reset_d : process(bsp_clk)
+    --host reset synchronised to the sys_clk
+    gen_host_reset_d : process(sys_clk)
     begin
-        if (rising_edge(bsp_clk))then
+        if (rising_edge(sys_clk))then
             host_reset_d <= host_reset;
             host_reset_d2 <= host_reset_d;
             host_reset_d3 <= host_reset_d2;
@@ -1122,16 +1154,46 @@ begin
     brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(8) <= fgbe_if_2_present; -- 40GB ETH 3 COMPILED IN
     brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(9) <= fgbe_if_3_present; -- 40GB ETH 4 COMPILED IN
     --brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(15 downto 5) <= (others => '0');
+    
+    
+    pCDCLedSynchroniser : process(bsp_rst, bsp_clk)
+    begin
+       if (bsp_rst = '1')then
+           sBusLedValidD1 <= '0';
+           sBusLedValid <= '0'; 
+           s_xlgmii_txled_0 <= (others => '0');
+           s_xlgmii_rxled_0 <= (others => '0');
+           s_xlgmii_txled_1 <= (others => '0');
+           s_xlgmii_rxled_1 <= (others => '0');
+           s_xlgmii_txled_2 <= (others => '0');
+           s_xlgmii_rxled_2 <= (others => '0');
+           s_xlgmii_txled_3 <= (others => '0');
+           s_xlgmii_rxled_3 <= (others => '0');           
+       elsif (rising_edge(bsp_clk))then
+           sBusLedValidD1 <= sBusLedValid;
+           sBusLedValid <= '1';
+	     if (sBusLedValidD1 = '1') then
+		s_xlgmii_txled_0 <= xlgmii_txled_0; 
+		s_xlgmii_rxled_0 <= xlgmii_rxled_0;
+		s_xlgmii_txled_1 <= xlgmii_txled_1; 
+		s_xlgmii_rxled_1 <= xlgmii_rxled_1;
+		s_xlgmii_txled_2 <= xlgmii_txled_2; 
+		s_xlgmii_rxled_2 <= xlgmii_rxled_2;
+		s_xlgmii_txled_3 <= xlgmii_txled_3; 
+		s_xlgmii_rxled_3 <= xlgmii_rxled_3;		
+             end if;  
+       end if;
+    end process pCDCLedSynchroniser;     
 
     -- LED STATUS
-    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(17 downto 16) <= xlgmii_txled_0; -- 40GBE ETH 0 TX
-    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(19 downto 18) <= xlgmii_rxled_0; -- 40GBE ETH 0 RX
-    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(21 downto 20) <= xlgmii_txled_1; -- 40GBE ETH 1 TX
-    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(23 downto 22) <= xlgmii_rxled_1; -- 40GBE ETH 1 RX
-    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(25 downto 24) <= xlgmii_txled_2; -- 40GBE ETH 2 TX
-    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(27 downto 26) <= xlgmii_rxled_2; -- 40GBE ETH 2 RX
-    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(29 downto 28) <= xlgmii_txled_3; -- 40GBE ETH 3 TX
-    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(31 downto 30) <= xlgmii_rxled_3; -- 40GBE ETH 3 RX
+    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(17 downto 16) <= s_xlgmii_txled_0; -- 40GBE ETH 0 TX
+    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(19 downto 18) <= s_xlgmii_rxled_0; -- 40GBE ETH 0 RX
+    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(21 downto 20) <= s_xlgmii_txled_1; -- 40GBE ETH 1 TX
+    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(23 downto 22) <= s_xlgmii_rxled_1; -- 40GBE ETH 1 RX
+    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(25 downto 24) <= s_xlgmii_txled_2; -- 40GBE ETH 2 TX
+    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(27 downto 26) <= s_xlgmii_rxled_2; -- 40GBE ETH 2 RX
+    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(29 downto 28) <= s_xlgmii_txled_3; -- 40GBE ETH 3 TX
+    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(31 downto 30) <= s_xlgmii_rxled_3; -- 40GBE ETH 3 RX
     
     --The 40GbE MAC and PHY microblaze reset needs to be OR'ed with hard reset in
     --order to make the reset deterministic. This will prevent the Rx Link from not
@@ -1163,10 +1225,10 @@ begin
     --fgbe_config_en <= fgbe_link_status and fgbe_reg_sel;
     --AI end: Add fortygbe config interface            
 
-    -- MOVE 40GBE LINK UP TO sys_clk CLOCK DOMAIN
-    gen_phy_rx_up_cpu : process(sys_clk)
+    -- MOVE 40GBE LINK UP TO bsp_clk CLOCK DOMAIN
+    gen_phy_rx_up_cpu : process(bsp_clk)
     begin
-        if (rising_edge(sys_clk))then
+        if (rising_edge(bsp_clk))then
             phy_rx_up_z1_0 <= fgbe_phy_rx_up_0;
             phy_rx_up_z2_0 <= phy_rx_up_z1_0;
             phy_rx_up_cpu_0 <= phy_rx_up_z2_0;
@@ -1917,7 +1979,7 @@ begin
     port map(
         clk                   => sys_clk,
         rst                   => sys_rst,
-        forty_gbe_link_status => phy_rx_up_cpu_0 or phy_rx_up_cpu_1 or phy_rx_up_cpu_2 or phy_rx_up_cpu_3, -- Only using 40GbE_0
+        forty_gbe_link_status => fgbe_phy_rx_up_0 or fgbe_phy_rx_up_1 or fgbe_phy_rx_up_2 or fgbe_phy_rx_up_3, -- Only using 40GbE_0
         dhcp_resolved         => brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(0),
         firmware_version      => C_VERSION(31 downto 28),
         ublaze_toggle_value   => brd_user_read_regs(C_RD_UBLAZE_ALIVE_ADDR)(0),
