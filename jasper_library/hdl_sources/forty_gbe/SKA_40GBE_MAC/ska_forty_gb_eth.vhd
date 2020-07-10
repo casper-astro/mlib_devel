@@ -337,7 +337,9 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
         phy_rx_up           : in std_logic;
         debug_port : out std_logic_vector(7 downto 0));
     end component;
-
+    
+    
+    attribute ASYNC_REG : string;
     signal cpu_tx_buffer_addr    : std_logic_vector(10 downto 0);
     signal cpu_tx_buffer_rd_data : std_logic_vector(63 downto 0);
     signal cpu_tx_buffer_wr_data : std_logic_vector(63 downto 0);
@@ -345,15 +347,15 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
     signal cpu_tx_size           : std_logic_vector(10 downto 0);
     signal cpu_tx_ready          : std_logic;
     signal cpu_tx_done           : std_logic;
-    attribute MARK_DEBUG : string;
+    --attribute MARK_DEBUG : string;
     signal cpu_rx_buffer_addr    : std_logic_vector(10 downto 0);
-    attribute MARK_DEBUG of cpu_rx_buffer_addr        : signal is "TRUE";
+    --attribute MARK_DEBUG of cpu_rx_buffer_addr        : signal is "TRUE";
     signal cpu_rx_buffer_rd_data : std_logic_vector(63 downto 0);
-    attribute MARK_DEBUG of cpu_rx_buffer_rd_data        : signal is "TRUE";
+    --attribute MARK_DEBUG of cpu_rx_buffer_rd_data        : signal is "TRUE";
     signal cpu_rx_size           : std_logic_vector(10 downto 0);
-    attribute MARK_DEBUG of cpu_rx_size        : signal is "TRUE";
+    --attribute MARK_DEBUG of cpu_rx_size        : signal is "TRUE";
     signal cpu_rx_ack            : std_logic;
-    attribute MARK_DEBUG of cpu_rx_ack        : signal is "TRUE";
+    --attribute MARK_DEBUG of cpu_rx_ack        : signal is "TRUE";
     signal arp_cache_addr        : std_logic_vector(7 downto 0);
     signal arp_cache_rd_data     : std_logic_vector(47 downto 0);
     signal arp_cache_wr_data     : std_logic_vector(47 downto 0);
@@ -399,9 +401,14 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
     signal mac_rst_ack    : std_logic;
     signal mac_rst_ack_z1 : std_logic;
     signal mac_rst_ack_z2 : std_logic;
+    attribute ASYNC_REG of mac_rst_ack_z1 : signal is "TRUE";
+    attribute ASYNC_REG of mac_rst_ack_z2 : signal is "TRUE";    
     signal mac_rst_req    : std_logic;
     signal mac_rst_req_z1 : std_logic;
     signal mac_rst_req_z2 : std_logic;
+    attribute ASYNC_REG of mac_rst_req_z1 : signal is "TRUE";
+    attribute ASYNC_REG of mac_rst_req_z2 : signal is "TRUE";    
+    
     signal current_mac_reset_state : T_MAC_RESET_STATE;
 
     signal mac_tx_data       : std_logic_vector(255 downto 0);
@@ -462,23 +469,28 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
     signal rx_source_port_sig : std_logic_vector(15 downto 0);
     signal rx_dest_ip_sig     : std_logic_vector(31 downto 0);
     signal rx_dest_port_sig   : std_logic_vector(15 downto 0);
+    
+    signal sCntResetD1        : std_logic;
+    signal sCntResetD2        : std_logic;
+    attribute ASYNC_REG of sCntResetD1 : signal is "TRUE";
+    attribute ASYNC_REG of sCntResetD2 : signal is "TRUE";	    
 
-    signal dbg_rx_valid        : std_logic_vector(3 downto 0);
-    signal dbg_rx_end_of_frame : std_logic;
-    signal dbg_rx_data         : std_logic_vector(255 downto 0);
-    signal dbg_rx_source_ip    : std_logic_vector(31 downto 0);
-    signal dbg_rx_source_port  : std_logic_vector(15 downto 0);
-    signal dbg_rx_dest_ip      : std_logic_vector(31 downto 0);
-    signal dbg_rx_dest_port    : std_logic_vector(15 downto 0);
+    --signal dbg_rx_valid        : std_logic_vector(3 downto 0);
+    --signal dbg_rx_end_of_frame : std_logic;
+    --signal dbg_rx_data         : std_logic_vector(255 downto 0);
+    --signal dbg_rx_source_ip    : std_logic_vector(31 downto 0);
+    --signal dbg_rx_source_port  : std_logic_vector(15 downto 0);
+    --signal dbg_rx_dest_ip      : std_logic_vector(31 downto 0);
+    --signal dbg_rx_dest_port    : std_logic_vector(15 downto 0);
  -- Mark Debug ILA Testing
     
-    attribute MARK_DEBUG of dbg_rx_valid        : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_rx_end_of_frame : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_rx_data         : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_rx_source_ip    : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_rx_source_port  : signal is "TRUE"; 
-    attribute MARK_DEBUG of dbg_rx_dest_ip      : signal is "TRUE";    
-    attribute MARK_DEBUG of dbg_rx_dest_port    : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_rx_valid        : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_rx_end_of_frame : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_rx_data         : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_rx_source_ip    : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_rx_source_port  : signal is "TRUE"; 
+    --attribute MARK_DEBUG of dbg_rx_dest_ip      : signal is "TRUE";    
+    --attribute MARK_DEBUG of dbg_rx_dest_port    : signal is "TRUE";
 
     --attribute MARK_DEBUG of tx_valid_r2        : signal is "TRUE";
     --attribute MARK_DEBUG of tx_end_of_frame_r2 : signal is "TRUE";
@@ -486,20 +498,20 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
     --attribute MARK_DEBUG of rx_valid_r2        : signal is "TRUE";
     --attribute MARK_DEBUG of rx_end_of_frame_r2 : signal is "TRUE";
     
-    attribute MARK_DEBUG of mac_rx_data        : signal is "TRUE";
-    attribute MARK_DEBUG of mac_rx_data_valid  : signal is "TRUE";
-
+    --attribute MARK_DEBUG of mac_rx_data        : signal is "TRUE";
+    --attribute MARK_DEBUG of mac_rx_data_valid  : signal is "TRUE";
+     
 begin
 
 --ILA Assignments
 
-    dbg_rx_valid        <= rx_valid_sig        ;
-    dbg_rx_end_of_frame <= rx_end_of_frame_sig ;
-    dbg_rx_data         <= rx_data_sig         ;
-    dbg_rx_source_ip    <= rx_source_ip_sig    ;
-    dbg_rx_source_port  <= rx_source_port_sig  ;
-    dbg_rx_dest_ip      <= rx_dest_ip_sig      ;
-    dbg_rx_dest_port    <= rx_dest_port_sig    ;
+    --dbg_rx_valid        <= rx_valid_sig        ;
+    --dbg_rx_end_of_frame <= rx_end_of_frame_sig ;
+    --dbg_rx_data         <= rx_data_sig         ;
+    --dbg_rx_source_ip    <= rx_source_ip_sig    ;
+    --dbg_rx_source_port  <= rx_source_port_sig  ;
+    --dbg_rx_dest_ip      <= rx_dest_ip_sig      ;
+    --dbg_rx_dest_port    <= rx_dest_port_sig    ;
 
     rx_data             <= rx_data_sig         ;
     rx_source_ip        <= rx_source_ip_sig    ;
@@ -1034,6 +1046,15 @@ begin
 ----------------------------------------------------------------------------------------
 tx_valid_ored <= tx_valid(0) or tx_valid(1) or tx_valid(2) or tx_valid(3);
 rx_valid_ored <= rx_valid_sig(0) or rx_valid_sig(1) or rx_valid_sig(2) or rx_valid_sig(3);
+
+pCDCRegSynchroniser : process(clk)
+begin
+  if (rising_edge(clk))then
+    sCntResetD2 <= sCntResetD1;
+    sCntResetD1 <= cnt_reset(0);
+  end if;
+end process pCDCRegSynchroniser; 
+
 -- TX packet rate counter
 tx_pkt_rate_comp : rate_counter
     generic map(
@@ -1042,7 +1063,7 @@ tx_pkt_rate_comp : rate_counter
     port map(
         rate_clk  => xlgmii_txclk,  -- sys_clk at 156.25MHz
         clk  => clk,  -- sys_clk at 156.25MHz
-        rst  => cnt_reset(0) or rst,
+        rst  => sCntResetD2 or rst,
         en   => ((tx_valid_ored) and tx_end_of_frame),
         rate => tx_pkt_rate);
 
@@ -1055,7 +1076,7 @@ tx_pkt_cnt_comp : counter
         STEP       => 1)
     port map(
         clk   => clk,  -- sys_clk at 156.25MHz
-        rst   => cnt_reset(0) or rst,
+        rst   => sCntResetD2 or rst,
         en    => (tx_valid_ored and tx_end_of_frame),
         count => tx_pkt_cnt);
 
@@ -1067,7 +1088,7 @@ tx_valid_rate_comp : rate_counter
     port map(
         rate_clk  => xlgmii_txclk,  -- sys_clk at 156.25MHz
         clk  => clk,  -- sys_clk at 156.25MHz
-        rst  => cnt_reset(0) or rst,
+        rst  => sCntResetD2 or rst,
         en   => tx_valid_ored,
         rate => tx_valid_rate);
 
@@ -1080,7 +1101,7 @@ tx_valid_cnt_comp : counter
         STEP       => 1)
     port map(
         clk   => clk,  -- sys_clk at 156.25MHz
-        rst   => cnt_reset(0) or rst,
+        rst   => sCntResetD2 or rst,
         en    => tx_valid_ored,
         count => tx_valid_cnt);
 
@@ -1093,7 +1114,7 @@ tx_overflow_cnt_comp : counter
         STEP       => 1)
     port map(
         clk   => clk,  -- sys_clk at 156.25MHz
-        rst   => cnt_reset(0) or rst,
+        rst   => sCntResetD2 or rst,
         en    => tx_overflow_sig,
         count => tx_overflow_cnt);
 
@@ -1106,7 +1127,7 @@ tx_afull_cnt_comp : counter
         STEP       => 1)
     port map(
         clk   => clk,  -- sys_clk at 156.25MHz
-        rst   => cnt_reset(0) or rst,
+        rst   => sCntResetD2 or rst,
         en    => tx_afull_sig,
         count => tx_afull_cnt);
 
@@ -1118,7 +1139,7 @@ rx_pkt_rate_comp : rate_counter
     port map(
         rate_clk  => xlgmii_rxclk,  -- sys_clk at 156.25MHz
         clk  => clk,  -- sys_clk at 156.25MHz
-        rst  => cnt_reset(0) or rst,
+        rst  => sCntResetD2 or rst,
         en   => (rx_valid_ored and rx_end_of_frame_sig),
         rate => rx_pkt_rate);
 
@@ -1131,7 +1152,7 @@ rx_pkt_cnt_comp : counter
         STEP       => 1)
     port map(
         clk   => clk,  -- sys_clk at 156.25MHz
-        rst   => cnt_reset(0) or rst,
+        rst   => sCntResetD2 or rst,
         en    => (rx_valid_ored and rx_end_of_frame_sig),
         count => rx_pkt_cnt);
 
@@ -1143,7 +1164,7 @@ rx_valid_rate_comp : rate_counter
     port map(
         rate_clk  => xlgmii_rxclk,  -- sys_clk at 156.25MHz
         clk  => clk,  -- sys_clk at 156.25MHz
-        rst  => cnt_reset(0) or rst,
+        rst  => sCntResetD2 or rst,
         en   => rx_valid_ored,
         rate => rx_valid_rate);
 
@@ -1156,7 +1177,7 @@ rx_valid_cnt_comp : counter
         STEP       => 1)
     port map(
         clk   => clk,  -- sys_clk at 156.25MHz
-        rst   => cnt_reset(0) or rst,
+        rst   => sCntResetD2 or rst,
         en    => rx_valid_ored,
         count => rx_valid_cnt);
 
@@ -1169,7 +1190,7 @@ rx_overflow_cnt_comp : counter
         STEP       => 1)
     port map(
         clk   => clk,  -- sys_clk at 156.25MHz
-        rst   => cnt_reset(0) or rst,
+        rst   => sCntResetD2 or rst,
         en    => rx_overflow_sig,
         count => rx_overflow_cnt);
 
@@ -1182,7 +1203,7 @@ rx_bad_frame_cnt_comp : counter
         STEP       => 1)
     port map(
         clk   => clk,  -- sys_clk at 156.25MHz
-        rst   => cnt_reset(0) or rst,
+        rst   => sCntResetD2 or rst,
         en    => rx_bad_frame_sig,
         count => rx_bad_frame_cnt);
 

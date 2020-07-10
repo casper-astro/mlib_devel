@@ -28,11 +28,12 @@ module wb_register_ppc2simulink #(
   reg wb_ack_reg;
   assign wb_ack_o = wb_ack_reg;
 
-  reg register_doneR;
-  reg register_doneRR;
+  (* ASYNC_REG = "true" *) reg register_doneR;
+  (* ASYNC_REG = "true" *) reg register_doneRR;
 
-  reg register_readyR;
-  reg register_readyRR;
+  (* ASYNC_REG = "true" *) reg register_readyR;
+  (* ASYNC_REG = "true" *) reg register_readyRR;
+    
   reg [31:0] user_data_out_reg;
 
   assign user_data_out = user_data_out_reg;

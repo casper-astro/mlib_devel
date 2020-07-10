@@ -166,6 +166,7 @@ architecture arch_ska_fge_rx of ska_fge_rx is
         wr_data_count   : out std_logic_vector(3 downto 0));
     end component;
 
+    attribute ASYNC_REG : string;
     signal cpu_mac_cross_clock_count : std_logic_vector(3 downto 0);
     signal cpu_mac_cross_clock_fifo_din : std_logic_vector(35 downto 0);
     signal cpu_mac_cross_clock_fifo_wrreq : std_logic;
@@ -281,6 +282,12 @@ architecture arch_ska_fge_rx of ska_fge_rx is
     signal txctrl_fifo_rd_data : std_logic_vector(47 downto 0);
 
     signal current_app_state : T_APP_STATE;
+    signal sCDCCurrentAppState : T_APP_STATE;
+    signal sBusValidD1 : std_logic;
+    signal sBusValidD2 : std_logic;
+    attribute ASYNC_REG of sBusValidD1 : signal is "TRUE";
+    attribute ASYNC_REG of sBusValidD2 : signal is "TRUE";    
+    
     signal first_word : std_logic;
 
     signal overrun_ack_retimed : std_logic;
@@ -432,7 +439,7 @@ begin
         full    => cpu_mac_cross_clock_fifo_full,
         empty   => cpu_mac_cross_clock_fifo_empty);
 
-    cpu_mac_cross_clock_fifo_rdreq <= (not cpu_mac_cross_clock_fifo_empty) and (not cpu_rst);
+    cpu_mac_cross_clock_fifo_rdreq <= (not cpu_mac_cross_clock_fifo_empty) and (not mac_rst);
 
     gen_cpu_mac_cross_clock_fifo_rdreq_z : process(mac_clk)
     begin
@@ -1129,6 +1136,21 @@ begin
             end case;
         end if;
     end process;
+    
+    pCDCAppStateSynchroniser : process(app_rst, app_clk)
+    begin
+       if (app_rst = '1')then
+           sCDCCurrentAppState <= APP_RUN;
+           sBusValidD1 <= '0';
+           sBusValidD2 <= '0';           
+       elsif (rising_edge(app_clk))then
+           sBusValidD2 <= sBusValidD1;
+           sBusValidD1 <= '1';
+             if (sBusValidD2 = '1') then
+               sCDCCurrentAppState <= current_app_state;
+             end if;  
+       end if;
+    end process pCDCAppStateSynchroniser;      
 
     gen_app_overrun_ack : process(app_rst, app_clk)
     begin
@@ -1136,7 +1158,7 @@ begin
             app_overrun_ack <= '1';
             overrun_z1 <= '0';
         elsif (rising_edge(app_clk))then
-            if (current_app_state = APP_OVER)then
+            if (sCDCCurrentAppState = APP_OVER)then
                 overrun_z1 <= '1';
             else
                 overrun_z1 <= '0';

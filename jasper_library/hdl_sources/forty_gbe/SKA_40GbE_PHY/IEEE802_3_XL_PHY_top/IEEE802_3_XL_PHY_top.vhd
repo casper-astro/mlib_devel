@@ -68,6 +68,8 @@ entity IEEE802_3_XL_PHY_top is
 end IEEE802_3_XL_PHY_top;
 
 architecture Behavioral of IEEE802_3_XL_PHY_top is
+	
+	attribute ASYNC_REG : string;
 	signal TX_READ_EN : std_logic;
 
 	signal GT_TX_READY : std_logic_vector(3 downto 0);
@@ -91,8 +93,27 @@ architecture Behavioral of IEEE802_3_XL_PHY_top is
 
 	signal test_pattern_error_count    : std_logic_vector(15 downto 0);
 	signal test_pattern_error_count_d1 : std_logic_vector(15 downto 0);
+	signal sSoftRstD1 : std_logic;
+	signal sSoftRstD2 : std_logic;
+	attribute ASYNC_REG of sSoftRstD1 : signal is "TRUE";
+	attribute ASYNC_REG of sSoftRstD2 : signal is "TRUE"; 	
 
 begin
+
+-----------------------------------------------------------------------------------
+-- CDC Synchronisation
+-----------------------------------------------------------------------------------
+
+	pCDCSoftRstSynchroniser : process(SYS_CLK_I)
+	begin
+	if (rising_edge(SYS_CLK_I))then
+	  sSoftRstD2 <= sSoftRstD1;
+	  sSoftRstD1 <= SOFT_RESET_I;
+	end if;
+	end process pCDCSoftRstSynchroniser; 
+
+
+
 	PHY_inst : component IEEE802_3_XL_PHY
 		generic map(
 			TX_POLARITY_INVERT => "0001",
@@ -108,7 +129,7 @@ begin
 			TXP_O                      => TXP_O,
 			RXN_I                      => RXN_I,
 			RXP_I                      => RXP_I,
-			SOFT_RESET_I               => SOFT_RESET_I,
+			SOFT_RESET_I               => sSoftRstD2,
 			GT_TX_READY_O              => GT_TX_READY,
 			GT_RX_READY_O              => GT_RX_READY,
 			XLGMII_X4_TX_I             => XLGMII_X4_TX,

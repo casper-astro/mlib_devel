@@ -137,6 +137,9 @@ architecture arch_wishbone_forty_gb_eth_attach of wishbone_forty_gb_eth_attach i
     constant REG_RX_OVERFLOW_CNT  : std_logic_vector(7 downto 0) := X"1C";
     constant REG_RX_BAD_FRAME_CNT : std_logic_vector(7 downto 0) := X"1D";
     constant REG_CNT_RESET        : std_logic_vector(7 downto 0) := X"1E"; -- obviously writable
+    
+    --Reset Synchroniser and user reset signals
+    attribute ASYNC_REG : string;    
 
     signal STB_I_z  : std_logic;
     signal STB_I_z2 : std_logic;
@@ -197,6 +200,16 @@ architecture arch_wishbone_forty_gb_eth_attach of wishbone_forty_gb_eth_attach i
     signal reg_ack : std_logic;
 
     signal reg_sel_z1 : std_logic;
+    
+    signal sBusRegValidD1 : std_logic;
+    signal sBusRegValid : std_logic;
+    attribute ASYNC_REG of sBusRegValid : signal is "TRUE";
+    attribute ASYNC_REG of sBusRegValidD1 : signal is "TRUE";    
+    signal sSoftResetAck : std_logic;
+    signal sSoftResetAckD1 : std_logic;
+    attribute ASYNC_REG of sSoftResetAck : signal is "TRUE";
+    attribute ASYNC_REG of sSoftResetAckD1 : signal is "TRUE";    
+         
 
 begin
 
@@ -210,18 +223,6 @@ begin
     local_mc_recv_ip      <= local_mc_recv_ip_reg;
     local_mc_recv_ip_mask <= local_mc_recv_ip_mask_reg;
 
-    tx_pkt_rate_reg       <= tx_pkt_rate;
-    tx_pkt_cnt_reg        <= tx_pkt_cnt;
-    tx_valid_rate_reg     <= tx_valid_rate;
-    tx_valid_cnt_reg      <= tx_valid_cnt;
-    tx_overflow_cnt_reg   <= tx_overflow_cnt;
-    tx_afull_cnt_reg      <= tx_afull_cnt;
-    rx_pkt_rate_reg       <= rx_pkt_rate;
-    rx_pkt_cnt_reg        <= rx_pkt_cnt;
-    rx_valid_rate_reg     <= rx_valid_rate;
-    rx_valid_cnt_reg      <= rx_valid_cnt;
-    rx_overflow_cnt_reg   <= rx_overflow_cnt;
-    rx_bad_frame_cnt_reg  <= rx_bad_frame_cnt;
     cnt_reset             <= cnt_reset_reg;
 
     cpu_tx_size  <= cpu_tx_size_reg;
@@ -234,6 +235,51 @@ begin
     cpu_tx_buffer_wr_data <= write_data;
     cpu_tx_buffer_wr_en   <= tx_buffer_we;
     cpu_rx_buffer_addr    <= rxbuf_addr(13 downto 3);
+    
+--------------------------------------------------------------------------------
+-- CDC Synchronisation
+--------------------------------------------------------------------------------    
+    
+    pCDCRegSynchroniser : process(RST_I, CLK_I)
+    begin
+       if (RST_I = '1')then
+           tx_pkt_rate_reg <= (others => '0');
+           tx_pkt_cnt_reg <= (others => '0');
+           tx_valid_rate_reg <= (others => '0');
+           tx_valid_cnt_reg <= (others => '0');
+           tx_overflow_cnt_reg <= (others => '0');
+           tx_afull_cnt_reg <= (others => '0');
+           rx_pkt_rate_reg <= (others => '0');
+           rx_pkt_cnt_reg <= (others => '0');
+           rx_valid_rate_reg <= (others => '0');
+           rx_valid_cnt_reg <= (others => '0');
+           rx_overflow_cnt_reg <= (others => '0');
+           rx_bad_frame_cnt_reg <= (others => '0');          
+           sBusRegValidD1 <= '0';
+           sBusRegValid <= '0'; 
+           sSoftResetAck <= '0';
+           sSoftResetAckD1 <= '0';
+       elsif (rising_edge(CLK_I))then
+           sBusRegValidD1 <= sBusRegValid;
+           sBusRegValid <= '1';
+           sSoftResetAckD1 <= sSoftResetAck;
+           sSoftResetAck <= soft_reset_ack;
+             if (sBusRegValidD1 = '1') then
+               tx_pkt_rate_reg  <= tx_pkt_rate;
+               tx_pkt_cnt_reg <= tx_pkt_cnt;
+               tx_valid_rate_reg <= tx_valid_rate;
+               tx_valid_cnt_reg <= tx_valid_cnt;
+               tx_overflow_cnt_reg <= tx_overflow_cnt;
+               tx_afull_cnt_reg  <= tx_afull_cnt;
+               rx_pkt_rate_reg  <= rx_pkt_rate;
+               rx_pkt_cnt_reg  <= rx_pkt_cnt;
+               rx_valid_rate_reg <= rx_valid_rate;
+               rx_valid_cnt_reg  <= rx_valid_cnt;
+               rx_overflow_cnt_reg <= rx_overflow_cnt;
+               rx_bad_frame_cnt_reg  <= rx_bad_frame_cnt;                          
+             end if;  
+       end if;
+    end process pCDCRegSynchroniser;     
 
 --------------------------------------------------------------------------------
 -- WISHBONE ACK GENERATION
@@ -346,7 +392,8 @@ begin
     --AI: latch data out when wishbone ack is asserted
     DAT_O <= reg_dat_o_int when (reg_ack = '1') else x"00000000";
     ACK_O <= reg_ack;
-
+    
+          
 --------------------------------------------------------------------------------
 -- REGISTER HANDLING
 --------------------------------------------------------------------------------
@@ -377,7 +424,7 @@ begin
                 cpu_rx_ack_reg <= '0';
             end if;
 
-            if (soft_reset_ack = '1')then
+            if (sSoftResetAckD1 = '1')then
                 soft_reset_reg <= '0';
             end if;
 

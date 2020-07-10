@@ -210,7 +210,7 @@ architecture arch_forty_gbe of forty_gbe is
     end component IEEE802_3_XL_PHY_top;
     
     --attribute mark_debug : string;
-    
+    attribute ASYNC_REG : string; 
     signal xlgmii_tx_valid        : std_logic_vector(3 downto 0);
     signal xlgmii_tx_end_of_frame : std_logic;
     signal xlgmii_tx_data         : std_logic_vector(255 downto 0);
@@ -272,7 +272,22 @@ architecture arch_forty_gbe of forty_gbe is
     signal rx_start_count_3 : std_logic_vector(15 downto 0);
 
     signal qsfp_gtrefclk_pb : std_logic;
-
+    
+    signal sXlGmiiRxLedD2 : std_logic;
+    signal sXlGmiiRxLedD1 : std_logic;
+    attribute ASYNC_REG of sXlGmiiRxLedD1 : signal is "TRUE";
+    attribute ASYNC_REG of sXlGmiiRxLedD2 : signal is "TRUE";       
+    
+    signal sXlGmiiTxLedD2 : std_logic;
+    signal sXlGmiiTxLedD1 : std_logic;
+    attribute ASYNC_REG of sXlGmiiTxLedD1 : signal is "TRUE";
+    attribute ASYNC_REG of sXlGmiiTxLedD2 : signal is "TRUE";       
+    
+    signal sPhyRxUpSigD2 : std_logic;
+    signal sPhyRxUpSigD1 : std_logic;
+    attribute ASYNC_REG of sPhyRxUpSigD1 : signal is "TRUE";
+    attribute ASYNC_REG of sPhyRxUpSigD2 : signal is "TRUE";       
+   
 begin
 
     xlgmii_tx_valid        <= forty_gbe_tx_valid;
@@ -412,9 +427,30 @@ begin
 
     xlgmii_rx_overrun_ack  <= forty_gbe_rx_overrun_ack;
     xlgmii_rx_ack          <= forty_gbe_rx_ack;
-    forty_gbe_led_rx <= xlgmii_rxled_sig(1); -- xlgmii_rxled(0)(1) is activity, xlgmii_rxled(0)(0) is phy rx up
-    forty_gbe_led_tx <= xlgmii_txled_sig(1); -- xlgmii_txled(0)(1) is activity, xlgmii_txled(0)(0) is phy tx up
-    forty_gbe_led_up <= phy_rx_up_sig;
+    
+    pCDCLedSynchroniser : process(user_rst, user_clk)
+    begin
+       if (user_rst = '1')then
+           sXlGmiiRxLedD1 <= '0';
+           sXlGmiiRxLedD2 <= '0';      
+           sXlGmiiTxLedD1 <= '0';
+           sXlGmiiTxLedD2 <= '0';
+           sPhyRxUpSigD1 <= '0';
+           sPhyRxUpSigD2 <= '0';
+       elsif (rising_edge(user_clk))then
+           sXlGmiiRxLedD2 <= sXlGmiiRxLedD1;
+           sXlGmiiRxLedD1 <= xlgmii_rxled_sig(1);
+           sXlGmiiTxLedD2 <= sXlGmiiTxLedD1;
+           sXlGmiiTxLedD1 <= xlgmii_txled_sig(1);
+           sPhyRxUpSigD2 <= sPhyRxUpSigD1;
+           sPhyRxUpSigD1 <= phy_rx_up_sig;                     
+       end if;
+    end process pCDCLedSynchroniser;        
+    
+    
+    forty_gbe_led_rx <= sXlGmiiRxLedD2; -- xlgmii_rxled(0)(1) is activity, xlgmii_rxled(0)(0) is phy rx up
+    forty_gbe_led_tx <= sXlGmiiTxLedD2; -- xlgmii_txled(0)(1) is activity, xlgmii_txled(0)(0) is phy tx up
+    forty_gbe_led_up <= sPhyRxUpSigD2;
 
     IEEE802_3_XL_PHY_0 : component IEEE802_3_XL_PHY_top
         port map(

@@ -212,6 +212,8 @@ architecture arch_ska_fge_tx of ska_fge_tx is
     signal mac_pending : std_logic;
     signal mac_pending_z1 : std_logic;
     signal mac_pending_z2 : std_logic;
+    attribute ASYNC_REG of mac_pending_z1: signal is "TRUE";
+    attribute ASYNC_REG of mac_pending_z2: signal is "TRUE";     
     signal ack_low_wait : std_logic;
     signal cpu_tx_size_reg : std_logic_vector(10 downto 0);
     signal mac_cpu_ack : std_logic;
@@ -542,7 +544,7 @@ begin
         full    => cpu_mac_cross_clock_fifo_full,
         empty   => cpu_mac_cross_clock_fifo_empty);
 
-    cpu_mac_cross_clock_fifo_rdreq <= (not cpu_mac_cross_clock_fifo_empty) and (not cpu_rst);
+    cpu_mac_cross_clock_fifo_rdreq <= (not cpu_mac_cross_clock_fifo_empty) and (not mac_rst);
 
     gen_cpu_mac_cross_clock_fifo_rdreq_z : process(mac_clk)
     begin

@@ -819,7 +819,22 @@ architecture arch_skarab_infr of skarab_infr is
     signal sBusLedValid : std_logic;
     signal sBusLedValidD1 : std_logic;
     attribute ASYNC_REG of sBusLedValid: signal is "TRUE";
-    attribute ASYNC_REG of sBusLedValidD1: signal is "TRUE";      
+    attribute ASYNC_REG of sBusLedValidD1: signal is "TRUE"; 
+   
+    --LED Manager synchronisation signals
+    signal sDhcpResolvedD2 : std_logic;
+    signal sDhcpResolvedD1 : std_logic;  
+    attribute ASYNC_REG of sDhcpResolvedD2: signal is "TRUE";
+    attribute ASYNC_REG of sDhcpResolvedD1: signal is "TRUE";     
+    signal sUbToggleValueD2 : std_logic;
+    signal sUbToggleValueD1 : std_logic;  
+    attribute ASYNC_REG of sUbToggleValueD2: signal is "TRUE";
+    attribute ASYNC_REG of sUbToggleValueD1: signal is "TRUE";     
+    signal sDspOverrideD2 : std_logic;
+    signal sDspOverrideD1 : std_logic;  
+    attribute ASYNC_REG of sDspOverrideD2: signal is "TRUE";
+    attribute ASYNC_REG of sDspOverrideD1: signal is "TRUE";     
+     
             
 begin
     --Mezzanine 3 ID and Present (this should be part of the 40GbE yellow block, but is part of the BSP for now)
@@ -1198,10 +1213,17 @@ begin
     --The 40GbE MAC and PHY microblaze reset needs to be OR'ed with hard reset in
     --order to make the reset deterministic. This will prevent the Rx Link from not
     --functioning properly
-    qsfp_soft_reset_0 <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(1) or sys_rst;
-    qsfp_soft_reset_1 <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(2) or sys_rst;
-    qsfp_soft_reset_2 <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(3) or sys_rst;
-    qsfp_soft_reset_3 <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(4) or sys_rst;
+    
+    pCDCSoftResetynchroniser : process(bsp_clk)
+    begin
+       if (rising_edge(bsp_clk))then
+         qsfp_soft_reset_0 <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(1) or bsp_rst;
+         qsfp_soft_reset_1 <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(2) or bsp_rst;
+         qsfp_soft_reset_2 <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(3) or bsp_rst;
+         qsfp_soft_reset_3 <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(4) or bsp_rst;       
+       end if;
+    end process pCDCSoftResetynchroniser;   
+    
 
     -- Microblaze Alive Signal
     brd_user_read_regs(C_RD_UBLAZE_ALIVE_ADDR) <= brd_user_write_regs(C_WR_UBLAZE_ALIVE_ADDR);
@@ -1974,16 +1996,30 @@ begin
     -------------------------------------------------------------------------
     -- LED Manager Instantiation
     -------------------------------------------------------------------------
+    
+    pCDCLedManSynchroniser : process(sys_clk)
+    begin
+       if (rising_edge(sys_clk))then
+         sDhcpResolvedD2 <= sDhcpResolvedD1;
+         sDhcpResolvedD1 <= brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(0);        
+         
+         sUbToggleValueD2 <= sUbToggleValueD1;
+         sUbToggleValueD1 <= brd_user_read_regs(C_RD_UBLAZE_ALIVE_ADDR)(0);        
+         
+         sDspOverrideD2 <= sDspOverrideD1;
+         sDspOverrideD1 <= brd_user_read_regs(C_RD_DSP_OVERRIDE_ADDR)(0);               
+       end if;
+    end process pCDCLedManSynchroniser;     
 
     led_manager_0 : led_manager
     port map(
         clk                   => sys_clk,
         rst                   => sys_rst,
         forty_gbe_link_status => fgbe_phy_rx_up_0 or fgbe_phy_rx_up_1 or fgbe_phy_rx_up_2 or fgbe_phy_rx_up_3, -- Only using 40GbE_0
-        dhcp_resolved         => brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(0),
+        dhcp_resolved         => sDhcpResolvedD2,
         firmware_version      => C_VERSION(31 downto 28),
-        ublaze_toggle_value   => brd_user_read_regs(C_RD_UBLAZE_ALIVE_ADDR)(0),
-        dsp_override_i        => brd_user_read_regs(C_RD_DSP_OVERRIDE_ADDR)(0),
+        ublaze_toggle_value   => sUbToggleValueD2,
+        dsp_override_i        => sDspOverrideD2,
         dsp_leds_i            => dsp_leds_i,
         leds_out              => fpga_leds_o
     );

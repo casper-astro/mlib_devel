@@ -21,8 +21,8 @@ module rate_counter #(
    wire [DATA_WIDTH-1:0] out;
    wire [DATA_WIDTH-1:0] sec_cnt;
    reg                   pulse;
-   reg                   pulse_r1;
-   reg                   pulse_r2;
+   (* ASYNC_REG = "true" *) reg  pulse_r1;
+   (* ASYNC_REG = "true" *) reg  pulse_r2;
    reg                   valid_rst;
 
    // 1 second counter
