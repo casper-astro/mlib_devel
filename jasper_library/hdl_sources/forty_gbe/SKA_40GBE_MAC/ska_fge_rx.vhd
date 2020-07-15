@@ -99,7 +99,8 @@ architecture arch_ska_fge_rx of ska_fge_rx is
 
     component cross_clock_fifo_36x16
     port (
-        rst     : in std_logic;
+        wr_rst  : in std_logic;
+        rd_rst  : in std_logic;
         wr_clk  : in std_logic;
         rd_clk  : in std_logic;
         din     : in std_logic_vector(35 downto 0);
@@ -429,7 +430,8 @@ begin
 
     cross_clock_fifo_36x16_0 : cross_clock_fifo_36x16
     port map(
-        rst     => cpu_rst,
+        wr_rst  => cpu_rst,
+        rd_rst  => mac_rst,
         wr_clk  => cpu_clk,
         rd_clk  => mac_clk,
         din     => cpu_mac_cross_clock_fifo_din,

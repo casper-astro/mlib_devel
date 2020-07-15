@@ -833,7 +833,26 @@ architecture arch_skarab_infr of skarab_infr is
     signal sDspOverrideD2 : std_logic;
     signal sDspOverrideD1 : std_logic;  
     attribute ASYNC_REG of sDspOverrideD2: signal is "TRUE";
-    attribute ASYNC_REG of sDspOverrideD1: signal is "TRUE";     
+    attribute ASYNC_REG of sDspOverrideD1: signal is "TRUE"; 
+    
+    --QSFP Soft Reset Signal
+    signal sQsfpSoftReset0D1 : std_logic;
+    signal sQsfpSoftReset0D2 : std_logic;
+    attribute ASYNC_REG of sQsfpSoftReset0D2: signal is "TRUE";
+    attribute ASYNC_REG of sQsfpSoftReset0D1: signal is "TRUE"; 
+    signal sQsfpSoftReset1D1 : std_logic;
+    signal sQsfpSoftReset1D2 : std_logic;
+    attribute ASYNC_REG of sQsfpSoftReset1D2: signal is "TRUE";
+    attribute ASYNC_REG of sQsfpSoftReset1D1: signal is "TRUE"; 
+    signal sQsfpSoftReset2D1 : std_logic;
+    signal sQsfpSoftReset2D2 : std_logic;
+    attribute ASYNC_REG of sQsfpSoftReset2D2: signal is "TRUE";
+    attribute ASYNC_REG of sQsfpSoftReset2D1: signal is "TRUE"; 
+    signal sQsfpSoftReset3D1 : std_logic;
+    signal sQsfpSoftReset3D2 : std_logic;
+    attribute ASYNC_REG of sQsfpSoftReset3D2: signal is "TRUE";
+    attribute ASYNC_REG of sQsfpSoftReset3D1: signal is "TRUE"; 
+    
      
             
 begin
@@ -1081,8 +1100,19 @@ begin
             end if;
         end if;
     end process;
+    
+    reg_host_reset :process(bsp_clk)
+    begin
+        if (rising_edge(bsp_clk))then
+            if ((host_reset_count = X"FF"))then
+                host_reset <= '0';
+            else
+                host_reset <= '1'; 
+            end if;
+        end if;    
+    end process;
 
-    host_reset <= '0' when (host_reset_count = X"FF") else '1';
+    --host_reset <= '0' when (host_reset_count = X"FF") else '1';
 
     --host reset synchronised to the user_clk
     gen_host_reset_u : process(user_clk)
@@ -1214,17 +1244,26 @@ begin
     --order to make the reset deterministic. This will prevent the Rx Link from not
     --functioning properly
     
-    pCDCSoftResetynchroniser : process(bsp_clk)
+     
+    pCDCSoftResetSynchroniser : process(sys_clk)
     begin
-       if (rising_edge(bsp_clk))then
-         qsfp_soft_reset_0 <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(1) or bsp_rst;
-         qsfp_soft_reset_1 <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(2) or bsp_rst;
-         qsfp_soft_reset_2 <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(3) or bsp_rst;
-         qsfp_soft_reset_3 <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(4) or bsp_rst;       
+       if (rising_edge(sys_clk))then
+         sQsfpSoftReset0D2 <= sQsfpSoftReset0D1;
+         sQsfpSoftReset0D1 <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(1);-- or bsp_rst;
+         sQsfpSoftReset1D2 <= sQsfpSoftReset1D1;
+         sQsfpSoftReset1D1 <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(2);-- or bsp_rst;
+         sQsfpSoftReset2D2 <= sQsfpSoftReset2D1;
+         sQsfpSoftReset2D1 <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(3);-- or bsp_rst;
+         sQsfpSoftReset3D2 <= sQsfpSoftReset3D1;
+         sQsfpSoftReset3D1 <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(4);-- or bsp_rst;       
        end if;
-    end process pCDCSoftResetynchroniser;   
+    end process pCDCSoftResetSynchroniser;
     
-
+    qsfp_soft_reset_0 <= sQsfpSoftReset0D2 or sys_rst;
+    qsfp_soft_reset_1 <= sQsfpSoftReset1D2 or sys_rst;
+    qsfp_soft_reset_2 <= sQsfpSoftReset2D2 or sys_rst;
+    qsfp_soft_reset_3 <= sQsfpSoftReset3D2 or sys_rst;
+    
     -- Microblaze Alive Signal
     brd_user_read_regs(C_RD_UBLAZE_ALIVE_ADDR) <= brd_user_write_regs(C_WR_UBLAZE_ALIVE_ADDR);
 

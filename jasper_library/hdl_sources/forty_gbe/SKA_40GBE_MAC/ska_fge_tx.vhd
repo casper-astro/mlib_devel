@@ -27,7 +27,10 @@ use ieee.numeric_std.all;
 
 entity ska_fge_tx is
     generic (
-    TTL             : std_logic_vector(7 downto 0));
+    TTL             : std_logic_vector(7 downto 0);
+    FABRIC_IP       : std_logic_vector(31 downto 0);
+    FABRIC_NETMASK  : std_logic_vector(31 downto 0);
+    FABRIC_GATEWAY  : std_logic_vector(7 downto 0));
 
     port (
     local_enable    : in std_logic;
@@ -96,7 +99,8 @@ architecture arch_ska_fge_tx of ska_fge_tx is
 
     component cross_clock_fifo_36x16
     port (
-        rst     : in std_logic;
+        wr_rst  : in std_logic;
+        rd_rst  : in std_logic;
         wr_clk  : in std_logic;
         rd_clk  : in std_logic;
         din     : in std_logic_vector(35 downto 0);
@@ -230,7 +234,11 @@ architecture arch_ska_fge_tx of ska_fge_tx is
     signal app_overflow_retimed : std_logic;
 
     signal cpu_buf_select : std_logic;
-
+    signal cpu_buf_select_z1 : std_logic;
+    signal cpu_buf_select_z2 : std_logic;
+    attribute ASYNC_REG of cpu_buf_select_z1: signal is "TRUE";
+    attribute ASYNC_REG of cpu_buf_select_z2: signal is "TRUE";     
+    
     signal current_tx_packet_state : T_TX_PACKET_STATE;
     signal current_tx_packet_state_z1 : T_TX_PACKET_STATE;
     signal tx_size : std_logic_vector(10 downto 0);
@@ -321,177 +329,186 @@ architecture arch_ska_fge_tx of ska_fge_tx is
     signal misalign_cond2_count : std_logic_vector(63 downto 0);
 
     signal eof_flag_activate : std_logic;
+    
+    signal sLocalIp : std_logic_vector(31 downto 0);
+    signal sLocalNetmask : std_logic_vector(31 downto 0);
+    signal sLocalGateWay : std_logic_vector(7 downto 0);    
+    signal sBusLocalRegValid : std_logic;
+    signal sBusLocalRegValidD1 : std_logic;
+    attribute ASYNC_REG of sBusLocalRegValid: signal is "TRUE";
+    attribute ASYNC_REG of sBusLocalRegValidD1: signal is "TRUE"; 
+        
 --    signal arp_cache_write_error_i : std_logic_vector(7 downto 0);
 --    signal arp_cache_read_error_i : std_logic_vector(7 downto 0);
 
 -- Mark Debug ILA Testing
-    signal dbg_app_tx_valid_z1 : std_logic_vector(3 downto 0);
-    signal dbg_app_tx_any_valid : std_logic;
-    signal dbg_app_tx_data_z1 : std_logic_vector(255 downto 0);
-    signal dbg_app_tx_dest_ip_z1 : std_logic_vector(31 downto 0);
-    signal dbg_app_tx_dest_port_z1 : std_logic_vector(15 downto 0);
-    signal dbg_app_tx_data_din : std_logic_vector(263 downto 0);
-    signal dbg_app_tx_data_wrreq : std_logic;
-    signal dbg_app_tx_data_rdreq : std_logic;
-    signal dbg_app_tx_data_dout : std_logic_vector(263 downto 0);
-    signal dbg_app_tx_data_full : std_logic;
-    signal dbg_app_tx_data_empty : std_logic;
-    signal dbg_app_tx_data_overflow : std_logic;
-    signal dbg_app_tx_data_rd : std_logic;
-    signal dbg_app_tx_data_afull : std_logic;
-    signal dbg_app_tx_end_of_frame_z1 : std_logic;
-    signal dbg_payload0 :std_logic_vector(63 downto 0);
-    signal dbg_payload1 :std_logic_vector(63 downto 0);
-    signal dbg_payload2 :std_logic_vector(63 downto 0);
-    signal dbg_payload3 :std_logic_vector(63 downto 0);
-    signal dbg_payload_valid :std_logic_vector(3 downto 0);
-    signal dbg_payload_end_of_frame : std_logic;
-    signal dbg_app_tx_ctrl_din :std_logic_vector(63 downto 0);
-    signal dbg_app_tx_ctrl_wrreq :std_logic;
-    signal dbg_app_tx_ctrl_rdreq :std_logic;
-    signal dbg_app_tx_ctrl_dout :std_logic_vector(63 downto 0);
-    signal dbg_app_tx_ctrl_full :std_logic;
-    signal dbg_app_tx_ctrl_overflow :std_logic;
-    signal dbg_app_tx_ctrl_empty :std_logic;
-    signal dbg_app_tx_ctrl_afull :std_logic;
-    signal dbg_app_tx_ctrl_wrreq_latched : std_logic;
-    signal dbg_app_tx_data_wrreq_latched : std_logic;
-    signal dbg_app_tx_end_of_frame_latched : std_logic;
-    signal dbg_app_tx_ctrl_fifo_en : std_logic;
-    signal dbg_data_count : std_logic_vector(10 downto 0);
-    signal dbg_app_tx_ctrl_rd : std_logic;
-    signal dbg_current_tx_packet_state : T_TX_PACKET_STATE;
-    signal dbg_mac_tx_start_i : std_logic;
-    signal dbg_payload_finish_state : std_logic;
-    signal dbg_dest_mac : std_logic_vector(47 downto 0);
-    signal dbg_dest_ip : std_logic_vector(31 downto 0);
-    signal dbg_dest_port : std_logic_vector(15 downto 0);
-    signal dbg_tx_total_size : std_logic_vector(10 downto 0);
-    signal dbg_mac_tx_start_z1 : std_logic;
-    signal dbg_mac_tx_data_i : std_logic_vector(255 downto 0);
-    signal dbg_mac_tx_data_valid_i : std_logic_vector(31 downto 0);
-    signal dbg_app_rst : std_logic;
-    signal dbg_tx_size : std_logic_vector(10 downto 0);
-    signal dbg_read_eof_data_cnt : std_logic_vector(63 downto 0);
-    signal dbg_read_eof_data_ctrl_cnt : std_logic_vector(63 downto 0);
-    signal dbg_write_eof_data_cnt : std_logic_vector(63 downto 0);
-    signal dbg_write_eof_data_ctrl_cnt : std_logic_vector(63 downto 0);
-    signal dbg_misalign_cond1_count : std_logic_vector(63 downto 0);
-    signal dbg_misalign_cond2_count : std_logic_vector(63 downto 0);
+    --signal dbg_app_tx_valid_z1 : std_logic_vector(3 downto 0);
+    --signal dbg_app_tx_any_valid : std_logic;
+    --signal dbg_app_tx_data_z1 : std_logic_vector(255 downto 0);
+    --signal dbg_app_tx_dest_ip_z1 : std_logic_vector(31 downto 0);
+    --signal dbg_app_tx_dest_port_z1 : std_logic_vector(15 downto 0);
+    --signal dbg_app_tx_data_din : std_logic_vector(263 downto 0);
+    --signal dbg_app_tx_data_wrreq : std_logic;
+    --signal dbg_app_tx_data_rdreq : std_logic;
+    --signal dbg_app_tx_data_dout : std_logic_vector(263 downto 0);
+    --signal dbg_app_tx_data_full : std_logic;
+    --signal dbg_app_tx_data_empty : std_logic;
+    --signal dbg_app_tx_data_overflow : std_logic;
+    --signal dbg_app_tx_data_rd : std_logic;
+    --signal dbg_app_tx_data_afull : std_logic;
+    --signal dbg_app_tx_end_of_frame_z1 : std_logic;
+    --signal dbg_payload0 :std_logic_vector(63 downto 0);
+    --signal dbg_payload1 :std_logic_vector(63 downto 0);
+    --signal dbg_payload2 :std_logic_vector(63 downto 0);
+    --signal dbg_payload3 :std_logic_vector(63 downto 0);
+    --signal dbg_payload_valid :std_logic_vector(3 downto 0);
+    --signal dbg_payload_end_of_frame : std_logic;
+    --signal dbg_app_tx_ctrl_din :std_logic_vector(63 downto 0);
+    --signal dbg_app_tx_ctrl_wrreq :std_logic;
+    --signal dbg_app_tx_ctrl_rdreq :std_logic;
+    --signal dbg_app_tx_ctrl_dout :std_logic_vector(63 downto 0);
+    --signal dbg_app_tx_ctrl_full :std_logic;
+    --signal dbg_app_tx_ctrl_overflow :std_logic;
+    --signal dbg_app_tx_ctrl_empty :std_logic;
+    --signal dbg_app_tx_ctrl_afull :std_logic;
+    --signal dbg_app_tx_ctrl_wrreq_latched : std_logic;
+    --signal dbg_app_tx_data_wrreq_latched : std_logic;
+    --signal dbg_app_tx_end_of_frame_latched : std_logic;
+    --signal dbg_app_tx_ctrl_fifo_en : std_logic;
+    --signal dbg_data_count : std_logic_vector(10 downto 0);
+    --signal dbg_app_tx_ctrl_rd : std_logic;
+    --signal dbg_current_tx_packet_state : T_TX_PACKET_STATE;
+    --signal dbg_mac_tx_start_i : std_logic;
+    --signal dbg_payload_finish_state : std_logic;
+    --signal dbg_dest_mac : std_logic_vector(47 downto 0);
+    --signal dbg_dest_ip : std_logic_vector(31 downto 0);
+    --signal dbg_dest_port : std_logic_vector(15 downto 0);
+    --signal dbg_tx_total_size : std_logic_vector(10 downto 0);
+    --signal dbg_mac_tx_start_z1 : std_logic;
+    --signal dbg_mac_tx_data_i : std_logic_vector(255 downto 0);
+    --signal dbg_mac_tx_data_valid_i : std_logic_vector(31 downto 0);
+    --signal dbg_app_rst : std_logic;
+    --signal dbg_tx_size : std_logic_vector(10 downto 0);
+    --signal dbg_read_eof_data_cnt : std_logic_vector(63 downto 0);
+    --signal dbg_read_eof_data_ctrl_cnt : std_logic_vector(63 downto 0);
+    --signal dbg_write_eof_data_cnt : std_logic_vector(63 downto 0);
+    --signal dbg_write_eof_data_ctrl_cnt : std_logic_vector(63 downto 0);
+    --signal dbg_misalign_cond1_count : std_logic_vector(63 downto 0);
+    --signal dbg_misalign_cond2_count : std_logic_vector(63 downto 0);
 
     -- Mark Debug ILA Testing
 
-    attribute MARK_DEBUG : string;
-    attribute MARK_DEBUG of dbg_app_tx_valid_z1 : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_any_valid : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_data_z1 : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_dest_ip_z1 : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_dest_port_z1 : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_data_din : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_data_wrreq : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_data_rdreq : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_data_dout : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_data_full : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_data_empty : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_data_overflow : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_data_rd : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_data_afull : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_end_of_frame_z1 : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_payload0 : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_payload1 : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_payload2 : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_payload3 : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_payload_valid : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_payload_end_of_frame : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_ctrl_din : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_ctrl_wrreq : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_ctrl_rdreq : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_ctrl_dout : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_ctrl_full : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_ctrl_overflow : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_ctrl_empty : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_ctrl_afull : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_ctrl_wrreq_latched : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_data_wrreq_latched : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_end_of_frame_latched : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_ctrl_fifo_en : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_data_count : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_tx_ctrl_rd : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_current_tx_packet_state : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_mac_tx_start_i : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_dest_mac : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_dest_ip : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_dest_port : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_tx_total_size : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_payload_finish_state : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_mac_tx_start_z1 : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_mac_tx_data_i : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_mac_tx_data_valid_i : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_app_rst : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_tx_size : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_read_eof_data_cnt : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_read_eof_data_ctrl_cnt : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_write_eof_data_cnt : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_write_eof_data_ctrl_cnt : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_misalign_cond1_count : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_misalign_cond2_count : signal is "TRUE";
+    --attribute MARK_DEBUG : string;
+    --attribute MARK_DEBUG of dbg_app_tx_valid_z1 : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_any_valid : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_data_z1 : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_dest_ip_z1 : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_dest_port_z1 : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_data_din : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_data_wrreq : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_data_rdreq : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_data_dout : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_data_full : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_data_empty : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_data_overflow : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_data_rd : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_data_afull : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_end_of_frame_z1 : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_payload0 : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_payload1 : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_payload2 : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_payload3 : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_payload_valid : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_payload_end_of_frame : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_ctrl_din : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_ctrl_wrreq : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_ctrl_rdreq : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_ctrl_dout : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_ctrl_full : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_ctrl_overflow : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_ctrl_empty : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_ctrl_afull : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_ctrl_wrreq_latched : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_data_wrreq_latched : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_end_of_frame_latched : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_ctrl_fifo_en : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_data_count : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_tx_ctrl_rd : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_current_tx_packet_state : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_mac_tx_start_i : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_dest_mac : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_dest_ip : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_dest_port : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_tx_total_size : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_payload_finish_state : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_mac_tx_start_z1 : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_mac_tx_data_i : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_mac_tx_data_valid_i : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_app_rst : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_tx_size : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_read_eof_data_cnt : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_read_eof_data_ctrl_cnt : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_write_eof_data_cnt : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_write_eof_data_ctrl_cnt : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_misalign_cond1_count : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_misalign_cond2_count : signal is "TRUE";
 
 begin
 
     -- ILA Debug Signals
-    dbg_app_tx_valid_z1 <= app_tx_valid_z1;
-    dbg_app_tx_any_valid <= app_tx_any_valid;
-    dbg_app_tx_data_z1 <= app_tx_data_z1;
-    dbg_app_tx_dest_ip_z1 <= app_tx_dest_ip_z1;
-    dbg_app_tx_dest_port_z1 <= app_tx_dest_port_z1;
-    dbg_app_tx_data_din <= app_tx_data_din;
-    dbg_app_tx_data_wrreq <= app_tx_data_wrreq;
-    dbg_app_tx_data_rdreq <= app_tx_data_rdreq;
-    dbg_app_tx_data_dout <= app_tx_data_dout;
-    dbg_app_tx_data_full <= app_tx_data_full;
-    dbg_app_tx_data_empty <= app_tx_data_empty;
-    dbg_app_tx_data_overflow <= app_tx_data_overflow;
-    dbg_app_tx_data_rd <= app_tx_data_rd;
-    dbg_app_tx_data_afull <= app_tx_data_afull;
-    dbg_app_tx_end_of_frame_z1 <= app_tx_end_of_frame_z1;
-    dbg_payload0 <= payload0;
-    dbg_payload1 <= payload1;
-    dbg_payload2 <= payload2;
-    dbg_payload3 <= payload3;
-    dbg_payload_valid <= payload_valid;
-    dbg_payload_end_of_frame <= payload_end_of_frame;
-    dbg_app_tx_ctrl_din <= app_tx_ctrl_din;
-    dbg_app_tx_ctrl_wrreq <= app_tx_ctrl_wrreq;
-    dbg_app_tx_ctrl_rdreq <= app_tx_ctrl_rdreq;
-    dbg_app_tx_ctrl_dout <= app_tx_ctrl_dout;
-    dbg_app_tx_ctrl_full <= app_tx_ctrl_full;
-    dbg_app_tx_ctrl_overflow <= app_tx_ctrl_overflow;
-    dbg_app_tx_ctrl_empty <= app_tx_ctrl_empty;
-    dbg_app_tx_ctrl_afull <= app_tx_ctrl_afull;
-    dbg_app_tx_ctrl_wrreq_latched <= app_tx_ctrl_wrreq_latched;
-    dbg_app_tx_data_wrreq_latched <= app_tx_data_wrreq_latched;
-    dbg_app_tx_end_of_frame_latched <= app_tx_end_of_frame_latched;
-    dbg_app_tx_ctrl_fifo_en <= app_tx_ctrl_fifo_en;
-    dbg_data_count <= data_count;
-    dbg_app_tx_ctrl_rd <= app_tx_ctrl_rd;
-    dbg_current_tx_packet_state <= current_tx_packet_state;
-    dbg_mac_tx_start_i <= mac_tx_start_i;
-    dbg_payload_finish_state <= payload_finish_state;
-    dbg_dest_mac <= dest_mac;
-    dbg_dest_ip <= dest_ip;
-    dbg_dest_port <= dest_port;
-    dbg_tx_total_size <= tx_total_size;
-    dbg_mac_tx_start_z1 <= mac_tx_start_z1;
-    dbg_mac_tx_data_i <= mac_tx_data_i;
-    dbg_mac_tx_data_valid_i <= mac_tx_data_valid_i;
-    dbg_app_rst <= app_rst;
-    dbg_tx_size <= tx_size;
-    dbg_read_eof_data_cnt <= read_eof_data_cnt;
-    dbg_read_eof_data_ctrl_cnt <= read_eof_data_ctrl_cnt;
-    dbg_write_eof_data_cnt <= write_eof_data_cnt;
-    dbg_write_eof_data_ctrl_cnt <= write_eof_data_ctrl_cnt;
-    dbg_misalign_cond1_count <= misalign_cond1_count;
-    dbg_misalign_cond2_count <= misalign_cond2_count;
+    --dbg_app_tx_valid_z1 <= app_tx_valid_z1;
+    --dbg_app_tx_any_valid <= app_tx_any_valid;
+    --dbg_app_tx_data_z1 <= app_tx_data_z1;
+    --dbg_app_tx_dest_ip_z1 <= app_tx_dest_ip_z1;
+    --dbg_app_tx_dest_port_z1 <= app_tx_dest_port_z1;
+    --dbg_app_tx_data_din <= app_tx_data_din;
+    --dbg_app_tx_data_wrreq <= app_tx_data_wrreq;
+    --dbg_app_tx_data_rdreq <= app_tx_data_rdreq;
+    --dbg_app_tx_data_dout <= app_tx_data_dout;
+    --dbg_app_tx_data_full <= app_tx_data_full;
+    --dbg_app_tx_data_empty <= app_tx_data_empty;
+    --dbg_app_tx_data_overflow <= app_tx_data_overflow;
+    --dbg_app_tx_data_rd <= app_tx_data_rd;
+    --dbg_app_tx_data_afull <= app_tx_data_afull;
+    --dbg_app_tx_end_of_frame_z1 <= app_tx_end_of_frame_z1;
+    --dbg_payload0 <= payload0;
+    --dbg_payload1 <= payload1;
+    --dbg_payload2 <= payload2;
+    --dbg_payload3 <= payload3;
+    --dbg_payload_valid <= payload_valid;
+    --dbg_payload_end_of_frame <= payload_end_of_frame;
+    --dbg_app_tx_ctrl_din <= app_tx_ctrl_din;
+    --dbg_app_tx_ctrl_wrreq <= app_tx_ctrl_wrreq;
+    --dbg_app_tx_ctrl_rdreq <= app_tx_ctrl_rdreq;
+    --dbg_app_tx_ctrl_dout <= app_tx_ctrl_dout;
+    --dbg_app_tx_ctrl_full <= app_tx_ctrl_full;
+    --dbg_app_tx_ctrl_overflow <= app_tx_ctrl_overflow;
+    --dbg_app_tx_ctrl_empty <= app_tx_ctrl_empty;
+    --dbg_app_tx_ctrl_afull <= app_tx_ctrl_afull;
+    --dbg_app_tx_ctrl_wrreq_latched <= app_tx_ctrl_wrreq_latched;
+    --dbg_app_tx_data_wrreq_latched <= app_tx_data_wrreq_latched;
+    --dbg_app_tx_end_of_frame_latched <= app_tx_end_of_frame_latched;
+    --dbg_app_tx_ctrl_fifo_en <= app_tx_ctrl_fifo_en;
+    --dbg_data_count <= data_count;
+    --dbg_app_tx_ctrl_rd <= app_tx_ctrl_rd;
+    --dbg_current_tx_packet_state <= current_tx_packet_state;
+    --dbg_mac_tx_start_i <= mac_tx_start_i;
+    --dbg_payload_finish_state <= payload_finish_state;
+    --dbg_dest_mac <= dest_mac;
+    --dbg_dest_ip <= dest_ip;
+    --dbg_dest_port <= dest_port;
+    --dbg_tx_total_size <= tx_total_size;
+    --dbg_mac_tx_start_z1 <= mac_tx_start_z1;
+    --dbg_mac_tx_data_i <= mac_tx_data_i;
+    --dbg_mac_tx_data_valid_i <= mac_tx_data_valid_i;
+    --dbg_app_rst <= app_rst;
+    --dbg_tx_size <= tx_size;
+    --dbg_read_eof_data_cnt <= read_eof_data_cnt;
+    --dbg_read_eof_data_ctrl_cnt <= read_eof_data_ctrl_cnt;
+    --dbg_write_eof_data_cnt <= write_eof_data_cnt;
+    --dbg_write_eof_data_ctrl_cnt <= write_eof_data_ctrl_cnt;
+    --dbg_misalign_cond1_count <= misalign_cond1_count;
+    --dbg_misalign_cond2_count <= misalign_cond2_count;
 
     debug_out(0) <= app_tx_ctrl_wrreq_latched;
     debug_out(1) <= app_tx_data_wrreq_latched;
@@ -534,7 +551,8 @@ begin
 
     cross_clock_fifo_36x16_0 : cross_clock_fifo_36x16
     port map(
-        rst     => cpu_rst,
+        wr_rst  => cpu_rst,
+        rd_rst  => mac_rst,
         wr_clk  => cpu_clk,
         rd_clk  => mac_clk,
         din     => cpu_mac_cross_clock_fifo_din,
@@ -816,6 +834,25 @@ begin
 
 --    arp_cache_read_error <= arp_cache_read_error_i;
 
+    pCDCLocalRegSynchroniser : process(mac_rst, mac_clk)
+    begin
+       if (mac_rst = '1') then
+         sBusLocalRegValid <= '0';
+         sBusLocalRegValidD1 <= '0';
+         sLocalIp <= FABRIC_IP;
+         sLocalNetmask <= FABRIC_NETMASK;
+         sLocalGateWay <= FABRIC_GATEWAY;
+       elsif (rising_edge(mac_clk))then
+           sBusLocalRegValidD1 <= sBusLocalRegValid;
+           sBusLocalRegValid <= '1';
+           if (sBusLocalRegValidD1 = '1') then
+	     sLocalIp <= local_ip;
+	     sLocalNetmask <= local_netmask;
+	     sLocalGateWay <= local_gateway;
+	   end if;  
+       end if;
+    end process pCDCLocalRegSynchroniser;  
+    
     gen_dest_mac : process(mac_clk)
     begin
         if (rising_edge(mac_clk))then
@@ -834,7 +871,9 @@ begin
 --        end if;
 --    end process;
 
-    packet_arp_cache_addr <= local_gateway when ((dest_ip and local_netmask) /= (local_ip and local_netmask)) else dest_ip(7 downto 0);
+    --packet_arp_cache_addr <= local_gateway when ((dest_ip and local_netmask) /= (local_ip and local_netmask)) else dest_ip(7 downto 0);
+    packet_arp_cache_addr <= sLocalGateWay when ((dest_ip and sLocalNetmask) /= (sLocalIp and sLocalNetmask)) else dest_ip(7 downto 0);
+
     --packet_arp_cache_addr <= local_gateway when (dest_ip(31 downto 8) /= local_ip(31 downto 8)) else dest_ip(7 downto 0);
 
 -----------------------------------------------------------------------------------------
@@ -921,7 +960,7 @@ begin
     --cpu_tx_buffer_addrb(8 downto 7) <= (others => '0');
     --cpu_tx_buffer_addrb(6) <= not cpu_buf_select;
     cpu_tx_buffer_addrb(9) <= '0';
-    cpu_tx_buffer_addrb(8) <= not cpu_buf_select;
+    cpu_tx_buffer_addrb(8) <= not cpu_buf_select_z2;--cpu_buf_select;
     cpu_tx_buffer_addrb(7 downto 0) <= mac_cpu_addr;
 
     cpu_payload0 <= cpu_tx_buffer_doutb(63 downto 0);
@@ -966,6 +1005,14 @@ begin
     cpu_tx_done <= (not ack_low_wait) and (not mac_pending) and cpu_tx_ready;
 
     gen_mac_pending_z : process(mac_clk)
+    begin
+        if (rising_edge(mac_clk))then
+            cpu_buf_select_z1  <= cpu_buf_select;
+            cpu_buf_select_z2 <= cpu_buf_select_z1;
+        end if;
+    end process;
+    
+    gen_cpu_buf_sel_z : process(mac_clk)
     begin
         if (rising_edge(mac_clk))then
             mac_pending_z1  <= mac_pending;
