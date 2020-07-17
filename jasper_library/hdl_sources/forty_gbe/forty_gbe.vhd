@@ -286,7 +286,15 @@ architecture arch_forty_gbe of forty_gbe is
     signal sPhyRxUpSigD2 : std_logic;
     signal sPhyRxUpSigD1 : std_logic;
     attribute ASYNC_REG of sPhyRxUpSigD1 : signal is "TRUE";
-    attribute ASYNC_REG of sPhyRxUpSigD2 : signal is "TRUE";       
+    attribute ASYNC_REG of sPhyRxUpSigD2 : signal is "TRUE"; 
+    
+    --signal sFortyGbeRstD2 : std_logic;
+    --signal sFortyGbeRstD1 : std_logic;
+    --attribute ASYNC_REG of sFortyGbeRstD1 : signal is "TRUE";
+    --attribute ASYNC_REG of sFortyGbeRstD2 : signal is "TRUE"; 
+    
+    --signal sUserCombRst : std_logic;
+    --signal sSysCombRst : std_logic;
    
 begin
 
@@ -309,6 +317,18 @@ begin
     forty_gbe_rx_dest_port    <= xlgmii_rx_dest_port;
     forty_gbe_rx_bad_frame    <= xlgmii_rx_bad_frame;
     forty_gbe_rx_overrun      <= xlgmii_rx_overrun;
+    
+    
+    --pCDC40GbEResetSynchroniser : process(sys_clk)
+    --begin
+    --   if (rising_edge(sys_clk))then
+    --       sFortyGbeRstD2 <= sFortyGbeRstD1;
+    --       sFortyGbeRstD1 <= forty_gbe_rst;                    
+    --   end if;
+    --end process pCDC40GbEResetSynchroniser; 
+    
+    --sUserCombRst <= user_rst or forty_gbe_rst;
+    --sSysCombRst <= sys_rst or sFortyGbeRstD2;
 
     -- WISHBONE SLAVE 10 - 40GBE MAC 0
     ska_forty_gb_eth_0 : ska_forty_gb_eth
@@ -324,7 +344,7 @@ begin
         RX_CRC_CHK_ENABLE => RX_CRC_CHK_ENABLE)
     port map(
         clk => user_clk,
-        rst => user_rst or forty_gbe_rst,
+        rst => user_rst,
         tx_valid            => xlgmii_tx_valid,
         tx_end_of_frame     => xlgmii_tx_end_of_frame,
         tx_data             => xlgmii_tx_data,

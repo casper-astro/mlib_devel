@@ -74,50 +74,54 @@ end led_manager;
 
 architecture arch_led_manager of led_manager is
 
-    -- In reality, using firmware_version does not mean the board is up
-    -- > Therefore we need a foolproof mechanism to dictate if the FPGA configured succesfully    
-    constant C_DHCP_RESOLVED      : std_logic_vector(2 downto 0)  := "100";
-    constant C_FGBE_LINK_UP       : std_logic_vector(2 downto 0)  := "010";
-    constant C_FGBE_LINK_DOWN     : std_logic_vector(2 downto 0)  := "001";    
+     -- In reality, using firmware_version does not mean the board is up
+     -- > Therefore we need a foolproof mechanism to dictate if the FPGA configured succesfully    
+     constant C_DHCP_RESOLVED      : std_logic_vector(2 downto 0)  := "100";
+     constant C_FGBE_LINK_UP       : std_logic_vector(2 downto 0)  := "010";
+     constant C_FGBE_LINK_DOWN     : std_logic_vector(2 downto 0)  := "001";    
 
-    constant C_GOLDEN_IMAGE       : std_logic_vector(3 downto 0)  := "1000";
-    constant C_MULTIBOOT_IMAGE    : std_logic_vector(3 downto 0)  := "0100";
-    constant C_TOOLFLOW_IMAGE     : std_logic_vector(3 downto 0)  := "0000";
+     constant C_GOLDEN_IMAGE       : std_logic_vector(3 downto 0)  := "1000";
+     constant C_MULTIBOOT_IMAGE    : std_logic_vector(3 downto 0)  := "0100";
+     constant C_TOOLFLOW_IMAGE     : std_logic_vector(3 downto 0)  := "0000";
 
-	constant C_MAX_COUNT_25BIT    : std_logic_vector(24 downto 0) := "1111111111111111111111111"; -- 16#1FFFFFF#;
-	constant C_MAX_COUNT_31BIT    : std_logic_vector(30 downto 0) := "1111111111111111111111111111111"; -- 16#7FFFFFFF#;
+     constant C_MAX_COUNT_25BIT    : std_logic_vector(24 downto 0) := "1111111111111111111111111"; -- 16#1FFFFFF#;
+     constant C_MAX_COUNT_31BIT    : std_logic_vector(30 downto 0) := "1111111111111111111111111111111"; -- 16#7FFFFFFF#;
+     
+     attribute ASYNC_REG : string;
+ 
+     signal bsp_leds_out : std_logic_vector(7 downto 0);
+     -- Need to cross clock domains for DSP LEDs (user_clk to sys_clk)
+     signal sDspLeds : std_logic_vector(7 downto 0);
+     signal sBusLedValidD1 : std_logic;
+     signal sBusLedValid : std_logic;
+     attribute ASYNC_REG of sBusLedValidD1: signal is "TRUE";
+     attribute ASYNC_REG of sBusLedValid: signal is "TRUE";	
 	
-	signal bsp_leds_out : std_logic_vector(7 downto 0);
-	-- Need to cross clock domains for DSP LEDs (user_clk to sys_clk)
-    signal dsp_leds_z  : std_logic_vector(7 downto 0);
-    signal dsp_leds_z2 : std_logic_vector(7 downto 0);
-	signal dsp_leds_z3 : std_logic_vector(7 downto 0);
-	
-    -- One counter to handle flashing for all cases of LED-flashing
-    signal flash_counter	  : std_logic_vector(26 downto 0);
-    signal flash_toggle_value : std_logic;
+     -- One counter to handle flashing for all cases of LED-flashing
+     signal flash_counter	  : std_logic_vector(26 downto 0);
+     signal flash_toggle_value : std_logic;
 
-	-- > According to THREE possible states of Ethernet connection
-	--   -> 100: DHCP Success  |  010: Link UP, No DHCP  |  000: Link DOWN
-	signal eth_led_indicators  : std_logic_vector(2 downto 0);
-	signal flash_link_up	   : std_logic;
-	-- signal flash_link_up_counter    : std_logic_vector(26 downto 0);
+     -- > According to THREE possible states of Ethernet connection
+     --   -> 100: DHCP Success  |  010: Link UP, No DHCP  |  000: Link DOWN
+     signal eth_led_indicators  : std_logic_vector(2 downto 0);
+     signal flash_link_up	   : std_logic;
+     -- signal flash_link_up_counter    : std_logic_vector(26 downto 0);
 
-	--   -> 100: Toolflow Image  |  010: Multiboot Image  |  000: Golden Image
-	signal image_led_indicators  : std_logic_vector(2 downto 0);
-	signal flash_multiboot_image : std_logic;
-	-- signal flash_multiboot_image_counter    : std_logic_vector(26 downto 0);
+     --   -> 100: Toolflow Image  |  010: Multiboot Image  |  000: Golden Image
+     signal image_led_indicators  : std_logic_vector(2 downto 0);
+     signal flash_multiboot_image : std_logic;
+     -- signal flash_multiboot_image_counter    : std_logic_vector(26 downto 0);
 
-	-- The mere fact that this process is running
-	-- is enough evidence that the fpga is running
-	signal fpga_running_flag    : std_logic;
+     -- The mere fact that this process is running
+     -- is enough evidence that the fpga is running
+     signal fpga_running_flag    : std_logic;
 
-	-- > To be read from a register specified in the uBlaze
-	signal ublaze_toggle        : std_logic;
-	signal ublaze_toggle_z      : std_logic;
-	signal ublaze_count_reset   : std_logic;
-	signal ublaze_counter       : std_logic_vector(26 downto 0);    
-	signal ublaze_running       : std_logic;
+     -- > To be read from a register specified in the uBlaze
+     signal ublaze_toggle        : std_logic;
+     signal ublaze_toggle_z      : std_logic;
+     signal ublaze_count_reset   : std_logic;
+     signal ublaze_counter       : std_logic_vector(26 downto 0);    
+     signal ublaze_running       : std_logic;
 	
 --	attribute mark_debug   : string;
 --	attribute mark_debug of forty_gbe_link_status  : signal is "true";
@@ -294,22 +298,24 @@ begin
 	end process;
 
     -- ---------------------------------------------------------------------------------------
-
-	-- Crossing from user_clk to sys_clk
-    dsp_leds_cdc : process(rst, clk)
+    
+    -- Crossing from user_clk to sys_clk
+    pCDCDspLedSynchroniser : process(rst, clk)
     begin
-        if (rst = '1')then
-            dsp_leds_z    <= (others => '0');
-            dsp_leds_z2   <= (others => '0');
-			dsp_leds_z3   <= (others => '0');
-        elsif (rising_edge(clk))then
-			dsp_leds_z    <= not dsp_leds_i;
-            dsp_leds_z2   <= dsp_leds_z;
-			dsp_leds_z3   <= dsp_leds_z2;
-        end if;
-    end process;
+       if (rst = '1')then
+           sBusLedValidD1 <= '0';
+           sBusLedValid <= '0'; 
+           sDspLeds <= (others => '0');         
+       elsif (rising_edge(clk))then
+           sBusLedValidD1 <= sBusLedValid;
+           sBusLedValid <= '1';
+	     if (sBusLedValidD1 = '1') then
+		sDspLeds <= not dsp_leds_i; 		
+             end if;  
+       end if;
+    end process pCDCDspLedSynchroniser;    
 	
-	-- Make final assignment here
-	leds_out <= dsp_leds_z3 when (dsp_override_i = '1') else (bsp_leds_out);
+    -- Make final assignment here
+    leds_out <= sDspLeds when (dsp_override_i = '1') else (bsp_leds_out);
 	
 end arch_led_manager;

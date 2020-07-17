@@ -620,12 +620,13 @@ begin
             soft_reset_ack <= '0';
             mac_rst_ack_z1 <= '0';
             mac_rst_ack_z2 <= '0';
+            mac_rst_req <= '0';
             current_cpu_reset_state <= CPU_RESET_IDLE;
         elsif (rising_edge(clk))then
             soft_reset_ack <= '0';
             mac_rst_ack_z1 <= mac_rst_ack;
             mac_rst_ack_z2 <= mac_rst_ack_z1;
-
+            
             case current_cpu_reset_state is
                 when CPU_RESET_IDLE =>
                 current_cpu_reset_state <= CPU_RESET_IDLE;
@@ -633,6 +634,7 @@ begin
                 if (sSoftResetD2 = '1')then
                     current_cpu_reset_state <= CPU_RESET_WAIT_FOR_MAC_START;
                 end if;
+                mac_rst_req <= '0';
 
                 when CPU_RESET_WAIT_FOR_MAC_START =>
                 current_cpu_reset_state <= CPU_RESET_WAIT_FOR_MAC_START;
@@ -640,6 +642,7 @@ begin
                 if (mac_rst_ack_z2 = '1')then
                     current_cpu_reset_state <= CPU_RESET_WAIT_FOR_MAC_FINISH;
                 end if;
+                mac_rst_req <= '1';
 
                 when CPU_RESET_WAIT_FOR_MAC_FINISH =>
                 current_cpu_reset_state <= CPU_RESET_WAIT_FOR_MAC_FINISH;
@@ -648,12 +651,13 @@ begin
                     soft_reset_ack <= '1';
                     current_cpu_reset_state <= CPU_RESET_IDLE;
                 end if;
+                mac_rst_req <= '0';
 
             end case;
         end if;
     end process;
 
-    mac_rst_req <= '1' when (current_cpu_reset_state = CPU_RESET_WAIT_FOR_MAC_START) else '0';
+    --mac_rst_req <= '1' when (current_cpu_reset_state = CPU_RESET_WAIT_FOR_MAC_START) else '0';
 
     gen_current_mac_reset_state : process(xlgmii_txrst, xlgmii_txclk)
     begin

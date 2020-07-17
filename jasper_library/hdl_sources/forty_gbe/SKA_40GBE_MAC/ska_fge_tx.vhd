@@ -113,7 +113,8 @@ architecture arch_ska_fge_tx of ska_fge_tx is
 
     component ska_tx_packet_fifo
     port (
-        rst         : in std_logic;
+        wr_rst      : in std_logic;
+        rd_rst      : in std_logic;
         wr_clk      : in std_logic;
         rd_clk      : in std_logic;
         din         : in std_logic_vector(263 downto 0);--std_logic_vector(259 downto 0);
@@ -128,7 +129,8 @@ architecture arch_ska_fge_tx of ska_fge_tx is
 
     component ska_tx_packet_ctrl_fifo
     port (
-        rst         : in std_logic;
+        wr_rst      : in std_logic;
+        rd_rst      : in std_logic;
         wr_clk      : in std_logic;
         rd_clk      : in std_logic;
         din         : in std_logic_vector(63 downto 0);
@@ -232,6 +234,8 @@ architecture arch_ska_fge_tx of ska_fge_tx is
     signal tx_overflow_latch : std_logic;
     signal app_overflow_z1 : std_logic;
     signal app_overflow_retimed : std_logic;
+    attribute ASYNC_REG of app_overflow_z1: signal is "TRUE";
+    attribute ASYNC_REG of app_overflow_retimed: signal is "TRUE";     
 
     signal cpu_buf_select : std_logic;
     signal cpu_buf_select_z1 : std_logic;
@@ -675,7 +679,8 @@ begin
 
     ska_tx_packet_fifo_0 : ska_tx_packet_fifo
     port map(
-        rst         => app_rst,
+        wr_rst      => app_rst,
+        rd_rst      => mac_rst,
         wr_clk      => app_clk,
         rd_clk      => mac_clk,
         din         => app_tx_data_din,
@@ -688,7 +693,7 @@ begin
         prog_full   => app_tx_data_afull);
 
     --AI: Deassert read when FIFO empty and reset asserted
-    app_tx_data_rdreq <= app_tx_data_rd and (not app_tx_data_empty) and (not app_rst);
+    app_tx_data_rdreq <= app_tx_data_rd and (not app_tx_data_empty) and (not mac_rst);
 
     payload0 <= app_tx_data_dout(63 downto 0);
     payload1 <= app_tx_data_dout(127 downto 64);
@@ -732,7 +737,8 @@ begin
 
     ska_tx_packet_ctrl_fifo_0 : ska_tx_packet_ctrl_fifo
     port map(
-        rst         => app_rst,
+        wr_rst      => app_rst,
+        rd_rst      => mac_rst,
         wr_clk      => app_clk,
         rd_clk      => mac_clk,
         din         => app_tx_ctrl_din,
@@ -745,7 +751,7 @@ begin
         prog_full   => app_tx_ctrl_afull);
 
    --AI: Deassert read when FIFO empty and reset asserted
-    app_tx_ctrl_rdreq <= app_tx_ctrl_rd and (not app_tx_ctrl_empty) and (not app_rst);
+    app_tx_ctrl_rdreq <= app_tx_ctrl_rd and (not app_tx_ctrl_empty) and (not mac_rst);
 
     gen_app_tx_afull : process(app_rst, app_clk)
     begin

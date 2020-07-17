@@ -117,7 +117,7 @@ begin
 	PHY_inst : component IEEE802_3_XL_PHY
 		generic map(
 			TX_POLARITY_INVERT => "0001",
-			USE_CHIPSCOPE      => 1
+			USE_CHIPSCOPE      => 0
 		)
 		port map(
 			SYS_CLK_I                  => SYS_CLK_I,
