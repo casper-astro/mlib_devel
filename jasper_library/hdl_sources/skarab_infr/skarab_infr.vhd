@@ -853,8 +853,32 @@ architecture arch_skarab_infr of skarab_infr is
     attribute ASYNC_REG of sQsfpSoftReset3D2: signal is "TRUE";
     attribute ASYNC_REG of sQsfpSoftReset3D1: signal is "TRUE"; 
     
-     
-            
+    --HMC Status Signals
+    signal sMezz0InitDoneD1 : std_logic;
+    signal sMezz0InitDoneD2 : std_logic;
+    attribute ASYNC_REG of sMezz0InitDoneD2: signal is "TRUE";
+    attribute ASYNC_REG of sMezz0InitDoneD1: signal is "TRUE";     
+    signal sMezz1InitDoneD1 : std_logic;
+    signal sMezz1InitDoneD2 : std_logic;
+    attribute ASYNC_REG of sMezz1InitDoneD2: signal is "TRUE";
+    attribute ASYNC_REG of sMezz1InitDoneD1: signal is "TRUE";     
+    signal sMezz2InitDoneD1 : std_logic;
+    signal sMezz2InitDoneD2 : std_logic;
+    attribute ASYNC_REG of sMezz2InitDoneD2: signal is "TRUE";
+    attribute ASYNC_REG of sMezz2InitDoneD1: signal is "TRUE";        
+    signal sMezz0PostOkD1 : std_logic;
+    signal sMezz0PostOkD2 : std_logic;
+    attribute ASYNC_REG of sMezz0PostOkD2: signal is "TRUE";
+    attribute ASYNC_REG of sMezz0PostOkD1: signal is "TRUE";       
+    signal sMezz1PostOkD1 : std_logic;
+    signal sMezz1PostOkD2 : std_logic;    
+    attribute ASYNC_REG of sMezz1PostOkD2: signal is "TRUE";
+    attribute ASYNC_REG of sMezz1PostOkD1: signal is "TRUE";       
+    signal sMezz2PostOkD1 : std_logic;
+    signal sMezz2PostOkD2 : std_logic;
+    attribute ASYNC_REG of sMezz2PostOkD2: signal is "TRUE";
+    attribute ASYNC_REG of sMezz2PostOkD1: signal is "TRUE";       
+                     
 begin
     --Mezzanine 3 ID and Present (this should be part of the 40GbE yellow block, but is part of the BSP for now)
     --Mezzanine ID: "000" = spare, "001" = 40GbE, "010" = HMC, "011" = ADC, rest = spare
@@ -1341,26 +1365,47 @@ begin
     mezzanine_2_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(2);
     mezzanine_3_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(3);
     
+    --HMC status signals synchronised to the bsp_clk
+    pHmcStatusSynchroniser : process(bsp_clk)
+    begin
+        if (rising_edge(bsp_clk))then
+            --Init_Done Mezz 0, 1 and 2
+            sMezz0InitDoneD1 <= MEZZ0_INIT_DONE;
+            sMezz0InitDoneD2 <= sMezz0InitDoneD1;
+            sMezz1InitDoneD1 <= MEZZ1_INIT_DONE;
+            sMezz1InitDoneD2 <= sMezz1InitDoneD1;
+            sMezz2InitDoneD1 <= MEZZ2_INIT_DONE;
+            sMezz2InitDoneD2 <= sMezz2InitDoneD1;
+            --Post OK Mezz 0, 1 and 2
+            sMezz0PostOkD1 <= MEZZ0_POST_OK;
+            sMezz0PostOkD2 <= sMezz0PostOkD1;
+            sMezz1PostOkD1 <= MEZZ1_POST_OK;
+            sMezz1PostOkD2 <= sMezz1PostOkD1;
+            sMezz2PostOkD1 <= MEZZ2_POST_OK;
+            sMezz2PostOkD2 <= sMezz2PostOkD1;           
+        end if;
+    end process;     
+    
     
     --MEZZANINE STATUS 1 REGISTER (MEZZ0)
     brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(0) <= ((not MEZZANINE_0_PRESENT_N) and MEZZ0_PRESENT);
     brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(3 downto 1) <= MEZZ0_ID;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(4) <= MEZZ0_INIT_DONE;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(5) <= MEZZ0_POST_OK;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(4) <= sMezz0InitDoneD2; --MEZZ0_INIT_DONE;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(5) <= sMezz0PostOkD2; --MEZZ0_POST_OK;
     brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(7 downto 6) <= (others => '0');    
     
     --MEZZANINE STATUS 1 REGISTER (MEZZ1)
     brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(8) <= ((not MEZZANINE_1_PRESENT_N) and MEZZ1_PRESENT);
     brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(11 downto 9) <= MEZZ1_ID;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(12) <= MEZZ1_INIT_DONE;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(13) <= MEZZ1_POST_OK;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(12) <= sMezz1InitDoneD2; --MEZZ1_INIT_DONE;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(13) <= sMezz1PostOkD2; --MEZZ1_POST_OK;
     brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(15 downto 14) <= (others => '0');    
     
     --MEZZANINE STATUS 1 REGISTER (MEZZ2)
     brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(16) <= ((not MEZZANINE_2_PRESENT_N) and MEZZ2_PRESENT);
     brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(19 downto 17) <= MEZZ2_ID;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(20) <= MEZZ2_INIT_DONE;
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(21) <= MEZZ2_POST_OK;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(20) <= sMezz2InitDoneD2; --MEZZ2_INIT_DONE;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(21) <= sMezz2PostOkD2; --MEZZ2_POST_OK;
     brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(23 downto 22) <= (others => '0');    
 
     --MEZZANINE STATUS 1 REGISTER (MEZZ3)
@@ -1747,22 +1792,22 @@ begin
     i2c_sda_pad_i(4) <= MEZZANINE_3_SDA_FPGA;
     
     --IIC MUX
-    MEZZANINE_0_SCL_FPGA <= smezz0_scl_out when (MEZZ0_INIT_DONE = '0' and MEZZ0_ID = "010") else i2c_scl_pad_o(1) when (i2c_scl_padoen_o(1) = '0') else 'Z';
-    MEZZANINE_0_SDA_FPGA <= smezz0_sda_out when (MEZZ0_INIT_DONE = '0' and MEZZ0_ID = "010") else i2c_sda_pad_o(1) when (i2c_sda_padoen_o(1) = '0') else 'Z';
+    MEZZANINE_0_SCL_FPGA <= smezz0_scl_out when (sMezz0InitDoneD2 = '0' and MEZZ0_ID = "010") else i2c_scl_pad_o(1) when (i2c_scl_padoen_o(1) = '0') else 'Z';
+    MEZZANINE_0_SDA_FPGA <= smezz0_sda_out when (sMezz0InitDoneD2 = '0' and MEZZ0_ID = "010") else i2c_sda_pad_o(1) when (i2c_sda_padoen_o(1) = '0') else 'Z';
     i2c_scl_pad_i(1) <= MEZZANINE_0_SCL_FPGA;
     i2c_sda_pad_i(1) <= MEZZANINE_0_SDA_FPGA;
     smezz0_scl_in <= MEZZANINE_0_SCL_FPGA;
     smezz0_sda_in <= MEZZANINE_0_SDA_FPGA; 
 
-    MEZZANINE_1_SCL_FPGA <= smezz1_scl_out when (MEZZ1_INIT_DONE = '0' and MEZZ1_ID = "010") else i2c_scl_pad_o(2) when (i2c_scl_padoen_o(2) = '0') else 'Z';
-    MEZZANINE_1_SDA_FPGA <= smezz1_sda_out when (MEZZ1_INIT_DONE = '0' and MEZZ1_ID = "010") else i2c_sda_pad_o(2) when (i2c_sda_padoen_o(2) = '0') else 'Z';
+    MEZZANINE_1_SCL_FPGA <= smezz1_scl_out when (sMezz1InitDoneD2 = '0' and MEZZ1_ID = "010") else i2c_scl_pad_o(2) when (i2c_scl_padoen_o(2) = '0') else 'Z';
+    MEZZANINE_1_SDA_FPGA <= smezz1_sda_out when (sMezz1InitDoneD2 = '0' and MEZZ1_ID = "010") else i2c_sda_pad_o(2) when (i2c_sda_padoen_o(2) = '0') else 'Z';
     i2c_scl_pad_i(2) <= MEZZANINE_1_SCL_FPGA;
     i2c_sda_pad_i(2) <= MEZZANINE_1_SDA_FPGA;
     smezz1_scl_in <= MEZZANINE_1_SCL_FPGA;
     smezz1_sda_in <= MEZZANINE_1_SDA_FPGA; 
 
-    MEZZANINE_2_SCL_FPGA <= smezz2_scl_out when (MEZZ2_INIT_DONE = '0' and MEZZ2_ID = "010") else  i2c_scl_pad_o(3) when (i2c_scl_padoen_o(3) = '0') else 'Z';
-    MEZZANINE_2_SDA_FPGA <= smezz2_sda_out when (MEZZ2_INIT_DONE = '0' and MEZZ2_ID = "010") else  i2c_sda_pad_o(3) when (i2c_sda_padoen_o(3) = '0') else 'Z';
+    MEZZANINE_2_SCL_FPGA <= smezz2_scl_out when (sMezz2InitDoneD2 = '0' and MEZZ2_ID = "010") else  i2c_scl_pad_o(3) when (i2c_scl_padoen_o(3) = '0') else 'Z';
+    MEZZANINE_2_SDA_FPGA <= smezz2_sda_out when (sMezz2InitDoneD2 = '0' and MEZZ2_ID = "010") else  i2c_sda_pad_o(3) when (i2c_sda_padoen_o(3) = '0') else 'Z';
     i2c_scl_pad_i(3) <= MEZZANINE_2_SCL_FPGA;
     i2c_sda_pad_i(3) <= MEZZANINE_2_SDA_FPGA;
     smezz2_scl_in <= MEZZANINE_2_SCL_FPGA;

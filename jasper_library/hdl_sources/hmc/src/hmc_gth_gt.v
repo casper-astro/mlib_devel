@@ -150,23 +150,15 @@ module hmc_gth_GT #
     //-------------------  GT Datapath byte mapping  -----------------
 
  //The GT deserializes the rightmost parallel bit (LSb) first
- reg rx_rst_doneR,rx_rst_doneRR,rx_rst_doneRRR,phy_tx_rst_done, phy_rx_rst_done;
+ (* ASYNC_REG = "true" *) reg rx_rst_doneR,rx_rst_doneRR,rx_rst_doneRRR;
  always @(posedge TXUSRCLK2_IN) begin 
    rx_rst_doneR <= rx_rst_done;
    rx_rst_doneRR <= rx_rst_doneR;
-   rx_rst_doneRRR <= rx_rst_doneRR; 
-   phy_rx_rst_done <= 1'b0;
-   phy_tx_rst_done <= 1'b0;
-   if (rx_rst_doneRRR == 1'b1) begin
-     phy_rx_rst_done <= 1'b1;
-   end; 
-   if (tx_rst_done == 1'b1) begin
-     phy_tx_rst_done <= 1'b1;
-   end;       
+   rx_rst_doneRRR <= rx_rst_doneRR;     
   end
 
-    assign PHY_TX_RST_DONE = phy_tx_rst_done;
-    assign PHY_RX_RST_DONE = phy_rx_rst_done;
+    assign PHY_TX_RST_DONE = tx_rst_done;
+    assign PHY_RX_RST_DONE = rx_rst_doneRRR;
 
     //The GT serializes the rightmost parallel bit (LSb) first
     assign txdata_i =   TXDATA_IN;
