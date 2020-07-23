@@ -45,7 +45,7 @@ class WbDevice(object):
     """
     A class to encapsulate the parameters (name, size, etc.) of a wishbone slave device.
     """
-    def __init__(self, regname, nbytes, mode, hdl_suffix='', hdl_candr_suffix='', memory_map=[], typecode=0xff, req_offset=-1):
+    def __init__(self, regname, nbytes, mode, hdl_suffix='', hdl_candr_suffix='', memory_map=[], typecode=0xff, req_offset=-1, id=''):
         """
         Class constructor.
 
@@ -674,7 +674,7 @@ class VerilogModule(object):
                         logger.debug("Found new WB slave for instance %s"%inst.name)
                         wb_dev.base_addr = wb_offset + wb_dev.req_offset
                         wb_dev.high_addr = wb_offset + wb_dev.req_offset + (alignment*int(ceil(wb_dev.nbytes/float(alignment)))) - 1
-                        self.add_localparam(name=inst.wb_ids[n], value=self.n_wb_slaves+self.base_wb_slaves)
+                        wb_dev.id = inst.wb_ids[n]
                         if wb_dev.high_addr > base_addr:
                             print(hex(base_addr))
                             print(hex(wb_dev.high_addr))
@@ -702,16 +702,21 @@ class VerilogModule(object):
                         logger.debug("Found new WB slave for instance %s"%inst.name)
                         wb_dev.base_addr = base_addr
                         wb_dev.high_addr = base_addr + (alignment*int(ceil(wb_dev.nbytes/float(alignment)))) - 1
-                        self.add_localparam(name=inst.wb_ids[n], value=self.n_wb_slaves+self.base_wb_slaves)
+                        wb_dev.id = inst.wb_ids[n]
                         base_addr = wb_dev.high_addr + 1
                         self.n_wb_slaves += 1
                         self.wb_devices += [wb_dev]
-
 
         # sort the wb_devices by descending order of addresses, otherwise the 
         # arbiter could get the addresses out of order and it doesnt like that.
         self.wb_devices = sorted(self.wb_devices, key = lambda i:i.base_addr)  
         
+        # add the localparams wishbone IDs to top.v for each wb_device
+        # this used to be done in the for loops above but since we are now sorting
+        # the list before using them further we need to generate it after the sort
+        for n, wb_dev in enumerate(self.wb_devices):
+            self.add_localparam(name=wb_dev.id, value=n)
+
         # If we are starting a file from scratch, we need the wishbone parameters
         # otherwise we assume they are in the file and rewrite_module_file will
         # modify them.
