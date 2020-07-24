@@ -877,7 +877,18 @@ architecture arch_skarab_infr of skarab_infr is
     signal sMezz2PostOkD1 : std_logic;
     signal sMezz2PostOkD2 : std_logic;
     attribute ASYNC_REG of sMezz2PostOkD2: signal is "TRUE";
-    attribute ASYNC_REG of sMezz2PostOkD1: signal is "TRUE";       
+    attribute ASYNC_REG of sMezz2PostOkD1: signal is "TRUE";      
+    --1GbE Signals
+    signal sGbeStatusVectorD2 : std_logic;
+    signal sGbeStatusVectorD1 : std_logic;
+    attribute ASYNC_REG of sGbeStatusVectorD2: signal is "TRUE";
+    attribute ASYNC_REG of sGbeStatusVectorD1: signal is "TRUE"; 
+    signal sGmiiResetDoneD2 : std_logic;
+    signal sGmiiResetDoneD1 : std_logic;
+    attribute ASYNC_REG of sGmiiResetDoneD2: signal is "TRUE";
+    attribute ASYNC_REG of sGmiiResetDoneD1: signal is "TRUE";
+    signal sGmiiResetDone : std_logic;
+    
                      
 begin
     --Mezzanine 3 ID and Present (this should be part of the 40GbE yellow block, but is part of the BSP for now)
@@ -1164,7 +1175,7 @@ begin
 
     brd_user_read_regs(C_RD_VERSION_ADDR) <= C_VERSION;
 
-    brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(0) <= gmii_reset_done;
+    brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(0) <= sGmiiResetDoneD2;
 
 
     brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(1) <= not MONITOR_ALERT_N;
@@ -1207,10 +1218,31 @@ begin
     
 
     brd_user_read_regs(C_RD_LOOPBACK_ADDR) <= brd_user_write_regs(C_WR_LOOPBACK_ADDR);
+    
+    
+    pCDC1GbESynchroniser : process(bsp_clk)
+    begin
+        if (rising_edge(bsp_clk))then
+           sGbeStatusVectorD2 <= sGbeStatusVectorD1;
+           sGbeStatusVectorD1 <= gbe_status_vector(0);
+           sGmiiResetDoneD2 <= sGmiiResetDoneD1;
+           sGmiiResetDoneD1 <= sGmiiResetDone;                        
+       end if;
+    end process pCDC1GbESynchroniser;
+    
+    pCDC1GbEResetDoneReg : process(gmii_clk)
+    begin
+        if (rising_edge(gmii_clk))then
+          sGmiiResetDone <= gmii_reset_done;                       
+       end if;
+    end process pCDC1GbEResetDoneReg;    
+    
+    
+    
 
     -- LINK UP STATUS
     -- GT 29/03/2017 INCLUDE 1GBE PHY LINK UP STATUS
-    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(0) <= '1' when ((gbe_status_vector(0) = '1')and(ONE_GBE_LINK = '1')) else '0'; -- 1GB ETH LINK UP
+    brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(0) <= '1' when ((sGbeStatusVectorD2 = '1')and(ONE_GBE_LINK = '1')) else '0'; -- 1GB ETH LINK UP
     brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(1) <= phy_rx_up_cpu_0;  -- 40GB ETH 0 LINK UP
     brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(2) <= phy_rx_up_cpu_1;  -- 40GB ETH 1 LINK UP
     brd_user_read_regs(C_RD_ETH_IF_LINK_UP_ADDR)(3) <= phy_rx_up_cpu_2;  -- 40GB ETH 2 LINK UP

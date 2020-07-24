@@ -70,6 +70,7 @@ end one_gbe;
 
 architecture arch_one_gbe of one_gbe is 
 
+    attribute ASYNC_REG : string; 
     signal sgmii_link_up : std_logic;
     signal sgmii_link_up_z : std_logic;
     signal sgmii_link_up_z2 : std_logic;
@@ -153,6 +154,17 @@ architecture arch_one_gbe of one_gbe is
     signal an_adv_config_vector : std_logic_vector(15 downto 0);
     signal an_restart_config : std_logic;
     signal status_vector : std_logic_vector(15 downto 0);
+    signal sGbeStatusVectorD2 : std_logic;
+    signal sGbeStatusVectorD1 : std_logic;
+    attribute ASYNC_REG of sGbeStatusVectorD2: signal is "TRUE";
+    attribute ASYNC_REG of sGbeStatusVectorD1: signal is "TRUE"; 
+    signal sgmii_link_up_retimed : std_logic;
+    signal gmii_reset_done_retimed : std_logic;
+    signal sGbeGmiiResetDoneD2 : std_logic;
+    signal sGbeGmiiResetDoneD1 : std_logic; 
+    attribute ASYNC_REG of sGbeGmiiResetDoneD2: signal is "TRUE";
+    attribute ASYNC_REG of sGbeGmiiResetDoneD1: signal is "TRUE";     
+    signal gmii_reset_done_z : std_logic;
 
     component kat_ten_gb_eth
     generic (
@@ -393,13 +405,21 @@ begin
             end if;
         end if;
     end process;
+    
+    pCDCXauiStatusSynchroniser : process(sys_clk)
+    begin
+        if (rising_edge(sys_clk))then
+           sGbeStatusVectorD2 <= sGbeStatusVectorD1;
+           sGbeStatusVectorD1 <= status_vector(0);                       
+       end if;
+    end process pCDCXauiStatusSynchroniser;
 
     gen_gmii_xaui_status : process(sys_rst, sys_clk)
     begin
         if (sys_rst = '1')then
             gmii_xaui_status <= (others => '0');
         elsif (rising_edge(sys_clk))then
-            if (status_vector(0) = '1')then
+            if (sGbeStatusVectorD2 = '1')then
                 gmii_xaui_status <= "11111100";
             else
                 gmii_xaui_status <= (others => '0');
@@ -488,7 +508,7 @@ begin
         elsif (rising_edge(sys_clk))then
             sgmii_timeout_count_low_over <= '0';
 
-            if ((gmii_reset_done = '1')and(sgmii_link_up = '1'))then
+            if ((gmii_reset_done_retimed = '1')and(sgmii_link_up_retimed = '1'))then
                 sgmii_timeout_count_low <= (others => '0');
             else
                 if (sgmii_timeout_count_low = X"FFFF")then           
@@ -509,7 +529,7 @@ begin
         elsif (rising_edge(sys_clk))then
             sgmii_timeout <= '0';
 
-            if ((gmii_reset_done = '1')and(sgmii_link_up = '1'))then
+            if ((gmii_reset_done_retimed = '1')and(sgmii_link_up_retimed = '1'))then
                 sgmii_timeout_count_high <= (others => '0');
             else
                 if (sgmii_timeout_count_low_over = '1')then
@@ -633,7 +653,30 @@ begin
     --    end if;
     --end process; 
     
+    gen_gmii_reset_done_z : process (gmii_clk)
+    begin
+        if (rising_edge(gmii_clk))then
+            gmii_reset_done_z <= gmii_reset_done;
+        end if;
+    end process;     
+    
     sgmii_link_up <= status_vector(0);
+    sgmii_link_up_retimed <= sGbeStatusVectorD2;
+    
+    
+    pCDCGmiiResetDoneSynchroniser : process(sys_clk)
+    begin
+        if (rising_edge(sys_clk))then
+           sGbeGmiiResetDoneD2 <= sGbeGmiiResetDoneD1;
+           sGbeGmiiResetDoneD1 <= gmii_reset_done_z;                       
+       end if;
+    end process pCDCGmiiResetDoneSynchroniser;    
+    
+    
+    
+    gmii_reset_done_retimed <= sGbeGmiiResetDoneD2;
+    
+    
     
     gen_sgmii_link_up_z : process (gmii_clk)
     begin

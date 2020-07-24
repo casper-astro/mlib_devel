@@ -55,7 +55,8 @@
 
 //----------- Begin Cut here for INSTANTIATION Template ---// INST_TAG
 gmii_to_xaui_fifo your_instance_name (
-  .rst(rst),        // input wire rst
+  .wr_rst(wr_rst),     // input wire wr_rst
+  .rd_rst(rd_rst),     // input wire rd_rst				      
   .wr_clk(wr_clk),  // input wire wr_clk
   .rd_clk(rd_clk),  // input wire rd_clk
   .din(din),        // input wire [71 : 0] din

@@ -1368,11 +1368,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Tue Oct 30 14:45:13 UTC 2018</spirit:value>
+            <spirit:value>Thu Jul 23 13:58:30 UTC 2020</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>8:c47cb152</spirit:value>
+            <spirit:value>9:ee651213</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>

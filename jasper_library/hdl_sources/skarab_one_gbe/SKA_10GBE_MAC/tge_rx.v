@@ -56,7 +56,7 @@ module tge_rx #(
   wire [31:0] app_source_ip;
   wire [15:0] app_source_port;
 
-  wire local_enable_retimed;
+  //wire local_enable_retimed;
 
   /*************** Primary State Machine *************/
 
@@ -226,7 +226,7 @@ endgenerate
           end
         end
       endcase
-      if (!local_enable_retimed) begin
+      if (!local_enable) begin
         application_frame <= 1'b0;
       end
     end
@@ -260,7 +260,8 @@ endgenerate
 
   /* rx data fifo - 64x1024 */
 
-  wire        cpu_buffer_sel;
+  wire        cpu_buffer_sela;
+  wire        cpu_buffer_selb;  
   wire        cpu_buffer_we;
   wire [63:0] cpu_buffer_data;
   wire [10:0] cpu_buffer_addr;
@@ -270,13 +271,13 @@ generate if (CPU_ENABLE) begin : rx_cpu_enabled
   cpu_buffer cpu_rx_buffer(
     .clka      (cpu_clk),
     .dina      (64'h0),
-    .addra     ({cpu_buffer_sel, cpu_rx_buffer_addr[9:0]}),
+    .addra     ({cpu_buffer_sela, cpu_rx_buffer_addr[9:0]}),
     .wea       (1'b0), //no writing from cpu side
     .douta     (cpu_rx_buffer_rd_data),
 
     .clkb      (mac_clk),
     .dinb      (cpu_buffer_data),
-    .addrb     ({!cpu_buffer_sel, cpu_buffer_addr[9:0]}),
+    .addrb     ({!cpu_buffer_selb, cpu_buffer_addr[9:0]}),
     .web       (cpu_buffer_we),
     .doutb     () //no reading on mac side
   );
@@ -291,7 +292,23 @@ end endgenerate
   localparam CPU_WAIT      = 1'd1;
 
   reg cpu_buffer_sel_reg;
-  assign cpu_buffer_sel = cpu_buffer_sel_reg;
+  (* ASYNC_REG = "true" *) reg cpu_buffer_sel_regaR, cpu_buffer_sel_regaRR;
+  reg cpu_buffer_sel_regbR, cpu_buffer_sel_regbRR;
+  assign cpu_buffer_sela = cpu_buffer_sel_regaRR;
+  assign cpu_buffer_selb = cpu_buffer_sel_regbRR;
+  
+  always @(posedge cpu_clk) begin 
+   
+    cpu_buffer_sel_regaR <= cpu_buffer_sel_reg;
+    cpu_buffer_sel_regaRR <= cpu_buffer_sel_regaR; 
+  end
+  
+  always @(posedge mac_clk) begin 
+   
+    cpu_buffer_sel_regbR <= cpu_buffer_sel_reg;
+    cpu_buffer_sel_regbRR <= cpu_buffer_sel_regbR; 
+  end  
+  
   /* TODO: ^^^^^^^ this might be dodge (addr msb on wrong clock domain)... */
 
   reg [10:0] cpu_addr;
@@ -353,8 +370,8 @@ end endgenerate
   /* CPU Handshaking */
 
   reg [10:0] cpu_size;
-  (* shreg_extract = "NO" *) reg cpu_ackR;
-  (* shreg_extract = "NO" *) reg cpu_ackRR;
+  (* ASYNC_REG = "true" *)(* shreg_extract = "NO" *) reg cpu_ackR;
+  (* ASYNC_REG = "true" *)(* shreg_extract = "NO" *) reg cpu_ackRR;
   assign cpu_buffer_free = cpu_size == 11'd0 && !cpu_ackRR;
 
   always @(posedge mac_clk) begin
@@ -374,13 +391,24 @@ end endgenerate
   end
 
   /* FIXME: this is pretty dumb (registering on size), should add handshake signal */
+  //(* shreg_extract = "NO" *) reg [10:0] cpu_sizeRR;
   (* shreg_extract = "NO" *) reg [10:0] cpu_sizeR;
-  (* shreg_extract = "NO" *) reg [10:0] cpu_sizeRR;
-  assign cpu_rx_size = cpu_sizeRR;
+  (* ASYNC_REG = "true" *) reg cpu_size_dvalidR;
+  (* ASYNC_REG = "true" *) reg cpu_size_dvalidRR;
+  assign cpu_rx_size = cpu_sizeR;
 
   always @(posedge cpu_clk) begin
-    cpu_sizeR  <= cpu_size;
-    cpu_sizeRR <= cpu_sizeR;
+    if (cpu_rst) begin
+      cpu_size_dvalidR <= 1'b0;
+      cpu_size_dvalidRR <= 1'b0; 
+      cpu_sizeR <= 11'd0;
+    end else begin
+      cpu_size_dvalidR <= 1'b1;
+      cpu_size_dvalidRR <= cpu_size_dvalidR;
+      if(cpu_size_dvalidRR) begin
+        cpu_sizeR <= cpu_size;
+      end
+    end  
   end
 
   /********** Application buffer Logic *************/
@@ -401,11 +429,12 @@ generate if (USE_DISTRIBUTED_RAM == 0) begin : use_bram
     .rd_en     (packet_fifo_rd_en && !app_rst && !packet_fifo_empty),
     .dout      (packet_fifo_rd_data),
     .wr_clk    (mac_clk),
-    .wr_en     (packet_fifo_wr_en && !app_rst && !packet_fifo_full),
+    .wr_en     (packet_fifo_wr_en && !mac_rst && !packet_fifo_full),
     .din       (packet_fifo_wr_data),
     .empty     (packet_fifo_empty),
     .full      (packet_fifo_full),
-    .rst       (app_rst),
+    .wr_rst    (mac_rst),
+    .rd_rst    (app_rst),
     .prog_full (packet_fifo_almost_full)
   );
   //synthesis attribute box_type rx_packet_fifo_bram_inst "user_black_box"
@@ -442,11 +471,12 @@ end endgenerate
     .rd_en     (ctrl_fifo_rd_en && !app_rst && !ctrl_fifo_empty),
     .dout      (ctrl_fifo_rd_data),
     .wr_clk    (mac_clk),
-    .wr_en     (ctrl_fifo_wr_en && !app_rst && !ctrl_fifo_full),
+    .wr_en     (ctrl_fifo_wr_en && !mac_rst && !ctrl_fifo_full),
     .din       (ctrl_fifo_wr_data),
     .empty     (ctrl_fifo_empty),
     .full      (ctrl_fifo_full),
-    .rst       (app_rst),
+    .wr_rst    (mac_rst),
+    .rd_rst    (app_rst),
     .prog_full (ctrl_fifo_almost_full)
   );
   //synthesis attribute box_type rx_packet_ctrl_fifo_inst "user_black_box"
@@ -480,8 +510,8 @@ end endgenerate
   assign ctrl_fifo_wr_en     = app_dvld && first_word && app_state == APP_RUN;
 
   wire overrun_ack;   
-  (* shreg_extract = "NO" *) reg overrun_ackR;   
-  (* shreg_extract = "NO" *) reg overrun_ackRR;   
+ (* ASYNC_REG = "true" *) (* shreg_extract = "NO" *) reg overrun_ackR;   
+ (* ASYNC_REG = "true" *)(* shreg_extract = "NO" *) reg overrun_ackRR;   
 
   always @(posedge mac_clk) begin
     overrun_ackR  <= overrun_ack;
@@ -517,14 +547,20 @@ end endgenerate
     end
   end
 
-  (* shreg_extract = "NO" *) reg overrunR;
-  (* shreg_extract = "NO" *) reg overrunRR;
+  (* ASYNC_REG = "true" *) (* shreg_extract = "NO" *) reg overrunR;
+  (* ASYNC_REG = "true" *) (* shreg_extract = "NO" *) reg overrunRR;
 
   reg app_overrun_ack;
+  reg overrunreg;
   assign overrun_ack = app_overrun_ack;
+  
+  always @(posedge mac_clk) begin
+    overrunreg  <= app_state == APP_OVER;
+  end
+  
 
   always @(posedge app_clk) begin
-    overrunR  <= app_state == APP_OVER;
+    overrunR  <= overrunreg;
     overrunRR <= overrunR;
 
     if (app_rst) begin
@@ -538,14 +574,31 @@ end endgenerate
       end
     end
   end
+  
+    /******* cross local_enable to MAC clock domain **********/
 
-  (* shreg_extract = "NO" *) reg local_enableR;
-  (* shreg_extract = "NO" *) reg local_enableRR;
+  //(* ASYNC_REG = "true" *) (* shreg_extract = "NO" *) reg local_enableR;
+  //(* ASYNC_REG = "true" *) (* shreg_extract = "NO" *) reg local_enableRR; 
 
-  always @(posedge mac_clk) begin
-    local_enableR  <= local_enable;
-    local_enableRR <= local_enableR;
-  end
-  assign local_enable_retimed = local_enableRR;
+  //reg [47:0] local_mac_retimed;
+  //reg [31:0] local_ip_retimed;
+  //reg [15:0] local_port_retimed;
+  //reg [31:0] local_mc_recv_ip_retimed;
+  //reg [31:0] local_mc_recv_ip_mask_retimed;
+  
+  //always @(posedge mac_clk) begin
+  //    local_enableR   <= local_enable;
+  //    local_enableRR <= local_enableR;
+  //    if (local_enableRR) begin
+  //      local_mac_retimed <= local_mac;
+  //      local_ip_retimed <= local_ip;
+  //      local_port_retimed <= local_port;
+  //      local_mc_recv_ip_retimed <= local_mc_recv_ip;
+  //      local_mc_recv_ip_mask_retimed <= local_mc_recv_ip_mask;        
+  //    end  
+  //end  
+  
+  
+  //assign local_enable_retimed = local_enableRR;
 
 endmodule

@@ -244,10 +244,49 @@ module kat_ten_gb_eth #(
 
   /**************************** TGE transmit logic ******************************/
   wire usr_rst; //software user reset
+  reg usr_rst_reg;
   reg app_rst;
+  (* ASYNC_REG = "true" *) reg usr_rstR;
+  (* ASYNC_REG = "true" *) reg usr_rstRR;
+
+  always @(posedge mac_clk) begin
+    usr_rst_reg <= usr_rst;
+  end  
+  
   always @(posedge clk) begin
-    app_rst <= rst || usr_rst;
+    usr_rstR <= usr_rst_reg;
+    usr_rstRR <= usr_rstR; 
   end
+    
+  always @(posedge clk) begin
+    app_rst <= rst || usr_rstRR;
+  end
+  
+    /******* cross local_enable to MAC clock domain **********/
+
+  (* ASYNC_REG = "true" *) reg local_enableR;
+  (* ASYNC_REG = "true" *) reg local_enableRR; 
+  reg [47:0] local_mac_retimed;
+  reg [31:0] local_ip_retimed;
+  reg [15:0] local_port_retimed;
+  reg [7:0] local_gateway_retimed;
+  reg [31:0] local_netmask_retimed;
+  reg [31:0] local_mc_recv_ip_retimed;
+  reg [31:0] local_mc_recv_ip_mask_retimed;  
+  
+  always @(posedge mac_clk) begin
+      local_enableR   <= local_enable;
+      local_enableRR <= local_enableR;
+      if (local_enableRR) begin
+        local_mac_retimed <= local_mac;
+        local_ip_retimed <= local_ip;
+        local_port_retimed <= local_port;
+        local_mc_recv_ip_retimed <= local_mc_recv_ip;
+        local_mc_recv_ip_mask_retimed <= local_mc_recv_ip_mask; 
+        local_gateway_retimed <= local_gateway;
+        local_netmask_retimed <= local_netmask;        
+      end  
+  end    
 
   tge_tx #(
     .CPU_ENABLE          (CPU_TX_ENABLE),
@@ -255,12 +294,12 @@ module kat_ten_gb_eth #(
     .TTL                 (TTL)
   ) tge_tx_inst (
     // Local parameters
-    .local_enable        (local_enable),
-    .local_mac           (local_mac),
-    .local_ip            (local_ip),
-    .local_port          (local_port),
-    .local_gateway       (local_gateway),
-    .local_netmask       (local_netmask),
+    .local_enable        (local_enableRR),
+    .local_mac           (local_mac_retimed),
+    .local_ip            (local_ip_retimed),
+    .local_port          (local_port_retimed),
+    .local_gateway       (local_gateway_retimed),
+    .local_netmask       (local_netmask_retimed),
     // CPU Arp Cache signals;
     .arp_cache_addr      (arp_cache_addr[7:0]),
     .arp_cache_rd_data   (arp_cache_rd_data),
@@ -304,12 +343,12 @@ module kat_ten_gb_eth #(
 
   ) tge_rx_inst (
     // Local Parameters
-    .local_enable (local_enable),
-    .local_mac    (local_mac),
-    .local_ip     (local_ip),
-    .local_port   (local_port),
-    .local_mc_recv_ip      (local_mc_recv_ip),
-    .local_mc_recv_ip_mask (local_mc_recv_ip_mask),
+    .local_enable (local_enableRR),
+    .local_mac    (local_mac_retimed),
+    .local_ip     (local_ip_retimed),
+    .local_port   (local_port_retimed),
+    .local_mc_recv_ip      (local_mc_recv_ip_retimed),
+    .local_mc_recv_ip_mask (local_mc_recv_ip_mask_retimed),
     .app_clk             (clk),
     .app_rst             (app_rst),
     .app_rx_valid        (rx_valid),
@@ -346,8 +385,8 @@ module kat_ten_gb_eth #(
   wire mac_reset_ack;
   wire mac_reset;
 
-  reg mac_reset_ackR;
-  reg mac_reset_ackRR;
+  (* ASYNC_REG = "true" *) reg mac_reset_ackR;
+  (* ASYNC_REG = "true" *) reg mac_reset_ackRR;
 
   always @(posedge cpu_clk) begin
     mac_reset_ackR  <= mac_reset_ack;
@@ -381,8 +420,8 @@ module kat_ten_gb_eth #(
 
   reg macr_state;
 
-  reg mac_resetR;
-  reg mac_resetRR;
+  (* ASYNC_REG = "true" *) reg mac_resetR;
+  (* ASYNC_REG = "true" *) reg mac_resetRR;
 
   always @(posedge mac_clk) begin
     mac_resetR  <= mac_reset;

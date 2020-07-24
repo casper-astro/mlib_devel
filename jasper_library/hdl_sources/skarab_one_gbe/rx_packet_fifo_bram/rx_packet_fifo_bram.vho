@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2019 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2020 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -54,9 +54,10 @@
 ------------- Begin Cut here for COMPONENT Declaration ------ COMP_TAG
 COMPONENT rx_packet_fifo_bram
   PORT (
-    rst : IN STD_LOGIC;
     wr_clk : IN STD_LOGIC;
+    wr_rst : IN STD_LOGIC;
     rd_clk : IN STD_LOGIC;
+    rd_rst : IN STD_LOGIC;
     din : IN STD_LOGIC_VECTOR(66 DOWNTO 0);
     wr_en : IN STD_LOGIC;
     rd_en : IN STD_LOGIC;
@@ -74,9 +75,10 @@ END COMPONENT;
 ------------- Begin Cut here for INSTANTIATION Template ----- INST_TAG
 your_instance_name : rx_packet_fifo_bram
   PORT MAP (
-    rst => rst,
     wr_clk => wr_clk,
+    wr_rst => wr_rst,
     rd_clk => rd_clk,
+    rd_rst => rd_rst,
     din => din,
     wr_en => wr_en,
     rd_en => rd_en,

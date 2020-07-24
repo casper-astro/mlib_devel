@@ -1100,7 +1100,7 @@ class onegbe_skarab(onegbe):
         consts.append(ClockGroupConstraint('-of_objects [get_pins skarab_infr/USER_CLK_MMCM_inst/CLKOUT0]', '-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
         consts.append(ClockGroupConstraint('-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname, '-of_objects [get_pins skarab_infr/SYS_CLK_MMCM_inst/CLKOUT1]', 'asynchronous'))
         consts.append(ClockGroupConstraint('-of_objects [get_pins skarab_infr/SYS_CLK_MMCM_inst/CLKOUT1]', '-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
-        consts.append(ClockGroupConstraint('MEZ3_REFCLK_0_P', '-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
+        #consts.append(ClockGroupConstraint('MEZ3_REFCLK_0_P', '-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
         #consts.append(InputDelayConstraint(clkname='-of_objects [get_pins skarab_infr/SYS_CLK_MMCM_inst/CLKOUT1]', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='ONE_GBE_INT_N'))
         #consts.append(InputDelayConstraint(clkname='-of_objects [get_pins skarab_infr/SYS_CLK_MMCM_inst/CLKOUT1]', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='ONE_GBE_INT_N'))
         #consts.append(InputDelayConstraint(clkname='-of_objects [get_pins skarab_infr/SYS_CLK_MMCM_inst/CLKOUT1]', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='ONE_GBE_LINK'))

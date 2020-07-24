@@ -156,11 +156,11 @@ begin
     end process;
 
     xaui_full <= xaui_fifo_full;
-    xaui_fifo_wrreq <= xaui_fifo_write when (xaui_fifo_full = '0' and gmii_rst = '0') else '0';
+    xaui_fifo_wrreq <= xaui_fifo_write when (xaui_fifo_full = '0' and xaui_rst = '0') else '0';
 
     xaui_to_gmii_fifo_0 : xaui_to_gmii_fifo
     port map(
-        rst       => gmii_rst,
+        rst       => xaui_rst,
         wr_clk    => xaui_clk,
         rd_clk    => gmii_clk,
         din       => xaui_fifo_din,

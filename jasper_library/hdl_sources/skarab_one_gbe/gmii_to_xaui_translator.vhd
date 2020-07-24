@@ -67,7 +67,8 @@ architecture arch_gmii_to_xaui_translator of gmii_to_xaui_translator is
 
     component gmii_to_xaui_fifo
     port (
-        rst     : in std_logic;
+        wr_rst  : in std_logic;
+        rd_rst  : in std_logic;
         wr_clk  : in std_logic;
         rd_clk  : in std_logic;
         din     : in std_logic_vector(71 downto 0);
@@ -80,7 +81,8 @@ architecture arch_gmii_to_xaui_translator of gmii_to_xaui_translator is
 	
     component packet_byte_count_fifo
     port (
-        rst     : in std_logic;
+        wr_rst  : in std_logic;
+        rd_rst  : in std_logic;
         wr_clk  : in std_logic;
         rd_clk  : in std_logic;
         din     : in std_logic_vector(15 downto 0);
@@ -91,8 +93,7 @@ architecture arch_gmii_to_xaui_translator of gmii_to_xaui_translator is
         empty   : out std_logic);
     end component;
 	
-	signal gmii_rx_dv_z : std_logic;
-	
+    signal gmii_rx_dv_z : std_logic;	
     signal gmii_to_xaui_fifo_din : std_logic_vector(71 downto 0);
     signal gmii_to_xaui_fifo_wr_en : std_logic;
     signal gmii_to_xaui_fifo_wrreq : std_logic;
@@ -104,10 +105,10 @@ architecture arch_gmii_to_xaui_translator of gmii_to_xaui_translator is
     
     signal current_convert_state : T_CONVERT_STATE;
 	
-	signal byte_count : std_logic_vector(15 downto 0);
-	signal reset_byte_count : std_logic;
-	signal next_gbe_byte : std_logic_vector(7 downto 0);
-	signal next_gbe_control : std_logic;
+    signal byte_count : std_logic_vector(15 downto 0);
+    signal reset_byte_count : std_logic;
+    signal next_gbe_byte : std_logic_vector(7 downto 0);
+    signal next_gbe_control : std_logic;
 	
     signal packet_byte_count_din : std_logic_vector(15 downto 0);
     signal packet_byte_count_wrreq : std_logic;
@@ -117,11 +118,11 @@ architecture arch_gmii_to_xaui_translator of gmii_to_xaui_translator is
     signal packet_byte_count_full : std_logic;
     signal packet_byte_count_empty : std_logic;
 	
-	signal current_gen_state : T_GEN_STATE;
-	signal xaui_output_count : std_logic_vector(15 downto 0);
-	signal reset_output_count : std_logic;
+    signal current_gen_state : T_GEN_STATE;
+    signal xaui_output_count : std_logic_vector(15 downto 0);
+    signal reset_output_count : std_logic;
 	
-	signal gmii_rxd_z : std_logic_vector(7 downto 0);
+    signal gmii_rxd_z : std_logic_vector(7 downto 0);
 	
 begin
 
@@ -282,11 +283,12 @@ begin
         end if;
     end process;    
     
-    gmii_to_xaui_fifo_wrreq <= gmii_to_xaui_fifo_wr_en and (not gmii_to_xaui_fifo_full) and (not xaui_rst) ;
+    gmii_to_xaui_fifo_wrreq <= gmii_to_xaui_fifo_wr_en and (not gmii_to_xaui_fifo_full) and (not gmii_rst) ;
 
     gmii_to_xaui_fifo_0 : gmii_to_xaui_fifo
     port map(
-        rst     => xaui_rst,
+        wr_rst  => gmii_rst,
+        rd_rst  => xaui_rst,
         wr_clk  => gmii_clk,
         rd_clk  => xaui_clk,
         din     => gmii_to_xaui_fifo_din,
@@ -300,13 +302,14 @@ begin
 -- RECORD TOTAL NUMBER OF BYTES WRITTEN (DIVIDED BY 8)
 ----------------------------------------------------------------------------
 
-    packet_byte_count_wrreq <= packet_byte_count_wr_en and (not packet_byte_count_full) and (not xaui_rst);
+    packet_byte_count_wrreq <= packet_byte_count_wr_en and (not packet_byte_count_full) and (not gmii_rst);
 
     packet_byte_count_din <= "000" & byte_count(15 downto 3);
 
     packet_byte_count_fifo_0 : packet_byte_count_fifo
     port map(
-        rst     => xaui_rst,
+        wr_rst  => gmii_rst,
+        rd_rst  => xaui_rst,
         wr_clk  => gmii_clk,
         rd_clk  => xaui_clk,
         din     => packet_byte_count_din,

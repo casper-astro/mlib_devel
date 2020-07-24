@@ -123,12 +123,13 @@ module tge_tx #(
     .wr_en     (app_tx_validR && !app_rst && !packet_fifo_full),
     .rd_clk    (mac_clk),
     .dout      (packet_fifo_data),
-    .rd_en     (packet_fifo_rd && !app_rst && !packet_fifo_empty),
+    .rd_en     (packet_fifo_rd && !mac_rst && !packet_fifo_empty),
     .prog_full (tx_packet_fifo_prog_full),
     .full      (packet_fifo_full),
     .empty     (packet_fifo_empty),
     .overflow  (packet_data_overflow),
-    .rst       (app_rst)
+    .wr_rst    (app_rst),
+    .rd_rst    (mac_rst)
   );
   //synthesis attribute box_type tx_packet_fifo_inst "user_black_box"
 
@@ -145,12 +146,13 @@ module tge_tx #(
     .wr_en     (app_tx_ctrl_fifo_en && !app_rst && !ctrl_fifo_full),
     .rd_clk    (mac_clk),
     .dout      (ctrl_fifo_data),
-    .rd_en     (ctrl_fifo_rd && !app_rst),
+    .rd_en     (ctrl_fifo_rd && !mac_rst),
     .prog_full (tx_packet_ctrl_fifo_prog_full),
     .full      (ctrl_fifo_full),
     .overflow  (packet_ctrl_overflow),
     .empty     (ctrl_fifo_empty),
-    .rst       (app_rst)
+    .wr_rst    (app_rst),
+    .rd_rst    (mac_rst)       
   );
   //synthesis attribute box_type tx_packet_ctrl_fifo_inst "user_black_box"
   assign app_tx_afull = tx_packet_fifo_prog_full || tx_packet_ctrl_fifo_prog_full;
@@ -161,15 +163,15 @@ generate if (LARGE_PACKETS) begin : large_packet_gen
   wire data_fifo_ext_full;
   wire data_fifo_ext_empty;
 
-  assign packet_fifo_rd = !data_fifo_ext_afull && !packet_fifo_empty && !app_rst && !data_fifo_ext_full;
+  assign packet_fifo_rd = !data_fifo_ext_afull && !packet_fifo_empty && !mac_rst && !data_fifo_ext_full;
 
   tx_data_fifo_ext tx_data_fifo_ext_0(
     .clk       (mac_clk),
-    .rst       (app_rst),
+    .rst       (mac_rst),
     .din       (packet_fifo_data),
     .wr_en     (packet_fifo_rd),
     .dout      (packet_data),
-    .rd_en     (packet_rd && !app_rst && !data_fifo_ext_empty),
+    .rd_en     (packet_rd && !mac_rst && !data_fifo_ext_empty),
     .empty     (data_fifo_ext_empty),
     .full      (data_fifo_ext_full),
     .prog_full (data_fifo_ext_afull)
@@ -177,15 +179,15 @@ generate if (LARGE_PACKETS) begin : large_packet_gen
   //synthesis attribute box_type tx_data_fifo_ext_0 "user_black_box"
 
   wire ctrl_fifo_ext_afull;
-  assign ctrl_fifo_rd = !ctrl_fifo_ext_afull && !ctrl_fifo_empty && !app_rst && !packet_ctrl_full;
+  assign ctrl_fifo_rd = !ctrl_fifo_ext_afull && !ctrl_fifo_empty && !mac_rst && !packet_ctrl_full;
 
   tx_fifo_ext tx_ctrl_fifo_ext(
     .clk       (mac_clk),
-    .rst       (app_rst),
+    .rst       (mac_rst),
     .din       (ctrl_fifo_data),
     .wr_en     (ctrl_fifo_rd),
     .dout      ({packet_ctrl_size, packet_ctrl_port, packet_ctrl_ip}),
-    .rd_en     (packet_ctrl_rd && !app_rst && !packet_ctrl_empty),
+    .rd_en     (packet_ctrl_rd && !mac_rst && !packet_ctrl_empty),
     .empty     (packet_ctrl_empty),
     .full      (packet_ctrl_full),
     .prog_full (ctrl_fifo_ext_afull)
@@ -239,7 +241,19 @@ end endgenerate
 
   /************ TX CPU Memory ************/
 
-  reg cpu_buffer_sel;  
+  reg cpu_buffer_sela;
+  wire cpu_buffer_selb;
+  
+  (* ASYNC_REG = "true" *) reg cpu_buffer_selaR;
+  (* ASYNC_REG = "true" *) reg cpu_buffer_selaRR;
+
+  always @(posedge mac_clk) begin
+    cpu_buffer_selaR  <= cpu_buffer_sela;
+    cpu_buffer_selaRR <= cpu_buffer_selaR;
+  end  
+  
+  assign cpu_buffer_selb = cpu_buffer_selaRR;
+  
 
   /* tx data fifo - 64x512 */
 
@@ -248,13 +262,13 @@ generate if (CPU_ENABLE) begin : tx_cpu_enabled
   cpu_buffer cpu_tx_buffer(   
     .clka      (cpu_clk),
     .dina      (cpu_tx_buffer_wr_data),
-    .addra     ({2'b00, cpu_buffer_sel, cpu_tx_buffer_addr}),
+    .addra     ({2'b00, cpu_buffer_sela, cpu_tx_buffer_addr}),
     .wea       (cpu_tx_buffer_wr_en),
     .douta     (cpu_tx_buffer_rd_data),
 
     .clkb      (mac_clk),
     .dinb      (64'h0),
-    .addrb     ({2'b00, !cpu_buffer_sel, mac_cpu_addr}),
+    .addrb     ({2'b00, !cpu_buffer_selb, mac_cpu_addr}),
     .web       (1'b0),
     .doutb     (mac_cpu_data)
   );
@@ -264,7 +278,7 @@ end endgenerate
 
   /* CPU handshaking */
   reg ack_low_wait;
-  reg mac_cpu_ackR, mac_cpu_ackRR;
+  (* ASYNC_REG = "true" *) reg mac_cpu_ackR, mac_cpu_ackRR;
   reg mac_pending;
 
   reg [7:0] cpu_tx_size_reg;
@@ -273,7 +287,7 @@ end endgenerate
     mac_cpu_ackR  <= mac_cpu_ack;
     mac_cpu_ackRR <= mac_cpu_ackR;
     if (cpu_rst) begin
-      cpu_buffer_sel  <= 1'b0;
+      cpu_buffer_sela  <= 1'b0;
       mac_pending     <= 1'b0;
       ack_low_wait    <= 1'b0;
       cpu_tx_size_reg <= 8'h0;
@@ -282,7 +296,7 @@ end endgenerate
         1'b0: begin
           if (!mac_pending && cpu_tx_ready) begin
             mac_pending     <= 1'b1;
-            cpu_buffer_sel  <= !cpu_buffer_sel;
+            cpu_buffer_sela  <= !cpu_buffer_sela;
             cpu_tx_size_reg <= cpu_tx_size;
           end 
           if (mac_cpu_ackRR) begin
@@ -298,33 +312,66 @@ end endgenerate
       endcase
     end
   end
+    
   assign cpu_tx_done = !ack_low_wait && !mac_pending && cpu_tx_ready;
 
-  reg mac_pendingR;
-  reg mac_pendingRR;
+  (* ASYNC_REG = "true" *) reg mac_pendingR;
+  (* ASYNC_REG = "true" *) reg mac_pendingRR;
 
   always @(posedge mac_clk) begin
     mac_pendingR  <= mac_pending;
     mac_pendingRR <= mac_pendingR;
   end
 
-  assign mac_cpu_size = cpu_tx_size_reg;
+  reg [7:0] cpu_tx_size_retimed_reg;
+  (* ASYNC_REG = "true" *) reg cpu_tx_size_dvalR;
+  (* ASYNC_REG = "true" *) reg cpu_tx_size_dvalRR;  
+ 
+  always @(posedge mac_clk) begin
+    if(mac_rst) begin
+      cpu_tx_size_dvalR  <= 1'b0;
+      cpu_tx_size_dvalRR <= 1'b0;
+      cpu_tx_size_retimed_reg <= 8'b0;
+    end else begin
+      cpu_tx_size_dvalR  <= 1'b1;
+      cpu_tx_size_dvalRR <= cpu_tx_size_dvalR;
+      if (cpu_tx_size_dvalRR) begin
+        cpu_tx_size_retimed_reg  <= cpu_tx_size_reg;
+      end
+    end  
+  end  
+  
+  assign mac_cpu_size =  cpu_tx_size_retimed_reg;
   assign mac_cpu_pending = mac_pendingRR;
 
   /******* cross local_enable to MAC clock domain **********/
 
-  reg local_enable_R;
-  reg local_enable_retimed;
+  //(* ASYNC_REG = "true" *) reg local_enable_R;
+  //(* ASYNC_REG = "true" *) reg local_enable_retimed;
+  //reg [47:0] local_mac_retimed;
+  //reg [31:0] local_ip_retimed;
+  //reg [15:0] local_port_retimed;
+  //reg [7:0] local_gateway_retimed;
+  //reg [31:0] local_netmask_retimed;
+  
 
-  always @(posedge mac_clk) begin
-    local_enable_R   <= local_enable;
-    local_enable_retimed <= local_enable_R;
-  end
+  //always @(posedge mac_clk) begin
+  //    local_enable_R   <= local_enable;
+  //    local_enable_retimed <= local_enable_R;
+  //    if (local_enable_retimed) begin
+  //      local_mac_retimed <= local_mac;
+  //      local_ip_retimed <= local_ip;
+  //      local_port_retimed <= local_port;
+  //      local_gateway_retimed <= local_gateway;
+  //      local_netmask_retimed <= local_netmask;        
+  //    end  
+  //end
 
-  reg app_overflowR;
-  wire app_overflow_retimed = app_overflowR;
+  (* ASYNC_REG = "true" *) reg app_overflowR, app_overflowRR;
+  wire app_overflow_retimed = app_overflowRR;
   always @(posedge mac_clk) begin
     app_overflowR  <= tx_overflow_latch;
+    app_overflowRR <= app_overflowR;
   end
 
   /************** Primary transmit State Machine ***************/
@@ -393,7 +440,7 @@ end endgenerate
         TX_IDLE:          begin
           mac_cpu_addr_reg <= 8'd0;
 
-          if (!packet_ctrl_empty && local_enable_retimed && !app_overflow_retimed) begin
+          if (!packet_ctrl_empty && local_enable && !app_overflow_retimed) begin
             mac_data_valid <= {8{1'b1}};
             tx_size        <= packet_ctrl_size - 16'h1;
             tx_ip_ttl      <= TTL;
@@ -503,8 +550,8 @@ end endgenerate
                        {2'b00, 16'h0000              }+ // ID
                        {2'b00, 16'h4000              }+ // Frag Offset
                        {2'b00, tx_ip_ttl, 8'h11      }+ // TTL, Protocol
-                       {2'b00, local_ip      [15: 0] }+ // Source IP 1
-                       {2'b00, local_ip      [31:16] }+ // Source IP 2
+                       {2'b00, local_ip [15: 0] }+ // Source IP 1
+                       {2'b00, local_ip [31:16] }+ // Source IP 2
                        {2'b00, packet_ctrl_ip[15: 0] }+ // Dest IP 1
                        {2'b00, packet_ctrl_ip[31:16] }; // Dest IP 2 
       ip_checksum_1 <= {1'b0 , ip_checksum_0 [15: 0] }+
@@ -521,7 +568,7 @@ end endgenerate
   assign packet_ctrl_rd = tx_state == TX_SEND_LAST;
 
   /* Mac Start assign */
-  assign mac_tx_start = (tx_state == TX_IDLE) && ((!packet_ctrl_empty && local_enable_retimed && !app_overflow_retimed) || (!mac_cpu_ack_reg && mac_cpu_pending && mac_cpu_size != 16'd0));
+  assign mac_tx_start = (tx_state == TX_IDLE) && ((!packet_ctrl_empty && local_enable && !app_overflow_retimed) || (!mac_cpu_ack_reg && mac_cpu_pending && mac_cpu_size != 16'd0));
 
   /*** MAC data decode ***/
   reg [63:0] mac_data;

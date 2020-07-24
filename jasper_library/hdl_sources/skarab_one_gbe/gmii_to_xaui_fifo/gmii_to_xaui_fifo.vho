@@ -54,7 +54,8 @@
 ------------- Begin Cut here for COMPONENT Declaration ------ COMP_TAG
 COMPONENT gmii_to_xaui_fifo
   PORT (
-    rst : IN STD_LOGIC;
+    wr_rst : IN STD_LOGIC;
+    rd_rst : IN STD_LOGIC;
     wr_clk : IN STD_LOGIC;
     rd_clk : IN STD_LOGIC;
     din : IN STD_LOGIC_VECTOR(71 DOWNTO 0);
@@ -73,7 +74,8 @@ END COMPONENT;
 ------------- Begin Cut here for INSTANTIATION Template ----- INST_TAG
 your_instance_name : gmii_to_xaui_fifo
   PORT MAP (
-    rst => rst,
+    wr_rst => wr_rst,
+    rd_rst => rd_rst,    
     wr_clk => wr_clk,
     rd_clk => rd_clk,
     din => din,

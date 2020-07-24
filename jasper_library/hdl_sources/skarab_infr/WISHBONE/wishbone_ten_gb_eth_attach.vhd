@@ -122,7 +122,8 @@ architecture arch_wishbone_ten_gb_eth_attach of wishbone_ten_gb_eth_attach is
     constant REG_XAUI_STATUS     : std_logic_vector(7 downto 0) := X"11";
     constant REG_PHY_CONFIG      : std_logic_vector(7 downto 0) := X"12";
     constant REG_XAUI_CONFIG     : std_logic_vector(7 downto 0) := X"13";
-
+    
+    attribute ASYNC_REG : string;
     signal STB_I_z  : std_logic;
     signal STB_I_z2 : std_logic;
 
@@ -176,6 +177,13 @@ architecture arch_wishbone_ten_gb_eth_attach of wishbone_ten_gb_eth_attach is
     signal reg_ack : std_logic;
 
     signal reg_sel_z1 : std_logic;
+    
+    --XAUI Status Signals
+    signal sXauiStatusDvalidRR : std_logic;
+    signal sXauiStatusDvalidR : std_logic; 
+    attribute ASYNC_REG of sXauiStatusDvalidRR: signal is "TRUE";
+    attribute ASYNC_REG of sXauiStatusDvalidR: signal is "TRUE";
+    signal sXauiStatus : std_logic_vector(7 downto 0);   
 
 begin
 
@@ -273,6 +281,21 @@ begin
     (cpu_rx_buffer_rd_data(47 downto 32) & cpu_rx_buffer_rd_data(63 downto 48));
 
     cpu_rx_size_int <= ("000" & X"00") when (cpu_rx_ack_reg = '1') else cpu_rx_size;
+    
+    pCDCXauiStatusSynchroniser : process(RST_I, CLK_I)
+    begin
+       if (RST_I = '1')then
+           sXauiStatusDvalidRR <= '0';
+           sXauiStatusDvalidR <= '0'; 
+           sXauiStatus <= (others => '0');          
+       elsif (rising_edge(CLK_I))then
+           sXauiStatusDvalidRR <= sXauiStatusDvalidR;
+           sXauiStatusDvalidR <= '1';
+	     if (sXauiStatusDvalidRR = '1') then
+		sXauiStatus <= xaui_status; 		
+             end if;  
+       end if;
+    end process pCDCXauiStatusSynchroniser;    
 
     reg_data_int <=
     (X"00000000")                                                                when (reg_data_src = REG_CORE_TYPE)        else
@@ -288,7 +311,7 @@ begin
     ("00000" & cpu_tx_size_reg & "00000" & cpu_rx_size_int)                      when (reg_data_src = REG_BUFFER_SIZES)     else
     (X"00" & "0000000" & soft_reset_reg & X"00" & "0000000" & local_enable_reg)  when (reg_data_src = REG_PROMISC_RST_EN)   else
     (X"0000" & local_port_reg)                                                   when (reg_data_src = REG_VALID_PORTS)      else
-    (X"000000" & xaui_status) when (reg_data_src = REG_XAUI_STATUS) else
+    (X"000000" & sXauiStatus) when (reg_data_src = REG_XAUI_STATUS) else
     ("0000" & mgt_txdiffctrl_reg & "0000" & mgt_txpreemphasis_reg & "000" & mgt_txpostemphasis_reg & "00000" & mgt_rxeqmix_reg) when (reg_data_src = REG_PHY_CONFIG) else
     local_mc_recv_ip_reg(31 downto 0) when (reg_data_src = REG_MC_RECV_IP) else
     local_mc_recv_ip_mask_reg(31 downto 0) when (reg_data_src = REG_MC_RECV_IP_MASK) else

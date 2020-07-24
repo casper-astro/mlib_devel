@@ -1,4 +1,4 @@
-// (c) Copyright 1995-2019 Xilinx, Inc. All rights reserved.
+// (c) Copyright 1995-2020 Xilinx, Inc. All rights reserved.
 // 
 // This file contains confidential and proprietary information
 // of Xilinx, Inc. and is protected under U.S. and
@@ -55,9 +55,10 @@
 
 //----------- Begin Cut here for INSTANTIATION Template ---// INST_TAG
 tx_packet_fifo your_instance_name (
-  .rst(rst),              // input wire rst
   .wr_clk(wr_clk),        // input wire wr_clk
+  .wr_rst(wr_rst),        // input wire wr_rst
   .rd_clk(rd_clk),        // input wire rd_clk
+  .rd_rst(rd_rst),        // input wire rd_rst
   .din(din),              // input wire [63 : 0] din
   .wr_en(wr_en),          // input wire wr_en
   .rd_en(rd_en),          // input wire rd_en
