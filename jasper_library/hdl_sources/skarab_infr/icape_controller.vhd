@@ -30,9 +30,11 @@ library UNISIM;
 use UNISIM.VComponents.all;
 
 entity icape_controller is
+        generic (
+        BUFR_CLK_DIV_G : string := "4");
 	port(
-		clk : in std_logic;
-		rst : in std_logic;
+	clk : in std_logic;
+	rst : in std_logic;
         
         -- ICAPE CONTROLLER REGISTER INTERFACE
         icape_write_data           : in std_logic_vector(31 downto 0);
@@ -64,11 +66,12 @@ architecture arch_icape_controller of icape_controller is
         strobe_out	 : out std_logic);
     end component;
 
-    signal icape_clk_count : std_logic_vector(3 downto 0);
-    signal icape_rising_edge : std_logic;
+    --signal icape_clk_count : std_logic_vector(3 downto 0);
+    --signal icape_rising_edge : std_logic;
     signal icape_falling_edge : std_logic;
 
     signal icape_clk : std_logic;
+    signal icape_clk_hist : std_logic;
     signal icape_csib : std_logic;
     signal icape_din : std_logic_vector(31 downto 0);
     signal icape_dout : std_logic_vector(31 downto 0);
@@ -87,23 +90,49 @@ begin
 -- GENERATE ICAPE CLOCK
 ----------------------------------------------------------------------
     
-    gen_icape_clk_count : process(rst, clk)
+    --gen_icape_clk_count : process(rst, clk)
+    --begin
+    --    if (rst = '1')then
+    --        icape_clk_count <= "0000";
+    --    elsif (rising_edge(clk))then
+    --        if (icape_clk_count = "1111")then
+    --            icape_clk_count <= "0000";
+    --        else
+    --            icape_clk_count <= icape_clk_count + "0001";
+    --        end if;
+    --    end if;
+    --end process;
+    
+    
+    gen_icape_clk_falling_edge_detect : process(rst, clk)
     begin
         if (rst = '1')then
-            icape_clk_count <= "0000";
+            icape_falling_edge <= '0';
+            icape_clk_hist <= '0';
         elsif (rising_edge(clk))then
-            if (icape_clk_count = "1111")then
-                icape_clk_count <= "0000";
+            icape_clk_hist <= icape_clk;
+            --detect falling edge of icape_clk
+            if (icape_clk = '0' and icape_clk_hist = '1')then
+                icape_falling_edge <= '1';
             else
-                icape_clk_count <= icape_clk_count + "0001";
+                icape_falling_edge <= '0';
             end if;
         end if;
-    end process;
+    end process;    
+    
+    BUFR_ICAPE2 : BUFR
+       generic map (
+         BUFR_DIVIDE => BUFR_CLK_DIV_G)
+       port map (
+         CE => '1',
+         CLR => '0',
+         I => clk,
+         O => icape_clk);
+         
+    --icape_clk <= icape_clk_count(3);
 
-    icape_clk <= icape_clk_count(3);
-
-    icape_rising_edge <= '1' when (icape_clk_count = "0111") else '0';
-    icape_falling_edge <= '1' when (icape_clk_count = "1111") else '0';
+    --icape_rising_edge <= '1' when (icape_clk_count = "0111") else '0';
+    --icape_falling_edge <= '1' when (icape_clk_count = "1111") else '0';
 
 ----------------------------------------------------------------------
 -- STATE MACHINE TO GENERATE REQUIRED ICAPE TIMING
@@ -229,7 +258,7 @@ begin
         icape_dout_bit_swapped(16 + b) <= icape_dout(23 - b);
         icape_dout_bit_swapped(24 + b) <= icape_dout(31 - b);
     end generate generate_icape_dout_bit_swapped;
-
+      
 -----------------------------------------------------------------------
 -- ICAPE2 COMPONENT
 -----------------------------------------------------------------------

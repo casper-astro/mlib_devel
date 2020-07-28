@@ -139,6 +139,8 @@ architecture arch_wishbone_flash_sdram_interface of wishbone_flash_sdram_interfa
     end component;
 
     component icape_controller
+    generic (
+        BUFR_CLK_DIV_G : string);
     port(
         clk : in std_logic;
         rst : in std_logic;
@@ -270,10 +272,10 @@ architecture arch_wishbone_flash_sdram_interface of wishbone_flash_sdram_interfa
     signal isp_start_transaction : std_logic;
     signal isp_transaction_complete : std_logic;
 
-    signal icape_write_data : std_logic_vector(31 downto 0);
+    signal icape_write_data : std_logic_vector(31 downto 0);   
     signal icape_read_data : std_logic_vector(31 downto 0);
-    signal icape_read_nwrite : std_logic;
-    signal icape_start_transaction : std_logic;
+    signal icape_read_nwrite : std_logic;  
+    signal icape_start_transaction : std_logic;   
     signal icape_transaction_complete : std_logic;
 
     signal sdram_program_header : std_logic;
@@ -1024,6 +1026,8 @@ begin
 -----------------------------------------------------------------------
 
     icape_controller_0 : icape_controller
+    generic map (
+        BUFR_CLK_DIV_G => "4")    
     port map (
         clk => CLK_I,
         rst => RST_I,

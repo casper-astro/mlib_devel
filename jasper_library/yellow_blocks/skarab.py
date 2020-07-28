@@ -391,7 +391,7 @@ class skarab(YellowBlock):
         cons.append(ClockConstraint(name='virtual_emcc_clock', period=16.666, port_en=False, virtual_en=True, waveform_min=0.0, waveform_max=8.333))
 
         #Generate Clock Constraints
-        cons.append(GenClockConstraint(signal='%s/wishbone_flash_sdram_interface_0/icape_controller_0/icape_clk_count_reg[3]/Q' % self.fullname, name='%s/wishbone_flash_sdram_interface_0/icape_controller_0/CLK' % self.fullname, divide_by=16, clock_source='%s/wishbone_flash_sdram_interface_0/icape_controller_0/icape_clk_count_reg[3]/C' % self.fullname))
+        #cons.append(GenClockConstraint(signal='%s/wishbone_flash_sdram_interface_0/icape_controller_0/icape_clk_count_reg[3]/Q' % self.fullname, name='%s/wishbone_flash_sdram_interface_0/icape_controller_0/CLK' % self.fullname, divide_by=16, clock_source='%s/wishbone_flash_sdram_interface_0/icape_controller_0/icape_clk_count_reg[3]/C' % self.fullname))
 
         #Clock Group Constraints
         cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]'  % self.fullname, 'FPGA_EMCCLK2', 'asynchronous'))
