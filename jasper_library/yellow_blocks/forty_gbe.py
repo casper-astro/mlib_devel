@@ -29,6 +29,7 @@ class forty_gbe(YellowBlock):
         inst.add_parameter('FABRIC_ENABLE',  " 1'b%x"%self.fab_en)
         inst.add_parameter('TTL',            " 8'h%x"%self.ttl)
         inst.add_parameter('PROMISC_MODE',   " 1'b%x"%self.promisc_mode)
+        inst.add_parameter('MEZZ_PORT',      " 2'h%x"%self.port)
 
         inst.add_port('user_clk', 'sys_clk', dir='in', parent_sig=False)
         inst.add_port('user_rst', 'sys_rst', dir='in', parent_sig=False)
@@ -140,7 +141,7 @@ class forty_gbe(YellowBlock):
         self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/sources_1/ip/XGMII_FIFO_DUAL_SYNC/*.xci")
         self.add_source("forty_gbe/cpu_rx_packet_size/*.xci")
         self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/sources_1/ip/RS256_FIFO/*.xci")
-        #self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PHY/IEEE802_3_XL_PHY.srcs/sources_1/ip/IEEE802_3_XL_VIO/*.xci")
+        self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PHY/IEEE802_3_XL_PHY.srcs/sources_1/ip/IEEE802_3_XL_VIO/*.xci")
 
         #self.add_raw_tcl_cmd("")
 
@@ -180,10 +181,10 @@ class forty_gbe(YellowBlock):
         cons.append(RawConstraint('resize_pblock [get_pblocks MEZ3_'+self.mez3_phy+'_QSFP] -add {'+self.clock_region+'}'))
         if(self.psize_extend):
           cons.append(RawConstraint('resize_pblock [get_pblocks MEZ3_'+self.mez3_phy+'_QSFP] -add {'+self.clock_region2+'}'))
-          cons.append(RawConstraint('set_property BEL MMCME2_ADV [get_cells [list skarab_40gbe_tx_rx_forty_gbe3/IEEE802_3_XL_lPHY_0/PHY_inst/RX_CLK_RCC/ref_clkB_MMCME2_BASE_inst]]'))
-          cons.append(RawConstraint('set_property LOC MMCME2_ADV_X1Y4 [get_cells [list skarab_40gbe_tx_rx_forty_gbe3/IEEE802_3_XL_PHY_0/PHY_inst/RX_CLK_RCC/ref_clkB_MMCME2_BASE_inst]]'))
-          cons.append(RawConstraint('set_property BEL PLLE2_ADV [get_cells [list skarab_40gbe_tx_rx_forty_gbe3/IEEE802_3_XL_PHY_0/PHY_inst/TX_CLK_RCC/PLLE2_BASE_inst]]'))
-          cons.append(RawConstraint('set_property LOC PLLE2_ADV_X1Y4 [get_cells [list skarab_40gbe_tx_rx_forty_gbe3/IEEE802_3_XL_PHY_0/PHY_inst/TX_CLK_RCC/PLLE2_BASE_inst]]'))
+          cons.append(RawConstraint('set_property BEL MMCME2_ADV [get_cells [list '+self.fullname+'/IEEE802_3_XL_lPHY_0/PHY_inst/RX_CLK_RCC/ref_clkB_MMCME2_BASE_inst]]'))
+          cons.append(RawConstraint('set_property LOC MMCME2_ADV_X1Y4 [get_cells [list '+self.fullname+'/IEEE802_3_XL_PHY_0/PHY_inst/RX_CLK_RCC/ref_clkB_MMCME2_BASE_inst]]'))
+          cons.append(RawConstraint('set_property BEL PLLE2_ADV [get_cells [list '+self.fullname+'/IEEE802_3_XL_PHY_0/PHY_inst/TX_CLK_RCC/PLLE2_BASE_inst]]'))
+          cons.append(RawConstraint('set_property LOC PLLE2_ADV_X1Y4 [get_cells [list '+self.fullname+'/IEEE802_3_XL_PHY_0/PHY_inst/TX_CLK_RCC/PLLE2_BASE_inst]]'))
           cons.append(RawConstraint('set_property BEL MMCME2_ADV [get_cells [list skarab_infr/SYS_CLK_MMCM_inst]]'))
           cons.append(RawConstraint('set_property LOC MMCME2_ADV_X1Y3 [get_cells [list skarab_infr/SYS_CLK_MMCM_inst]]'))
           cons.append(RawConstraint('set_property BEL MMCME2_ADV [get_cells [list skarab_infr/USER_CLK_MMCM_inst]]'))
@@ -216,8 +217,8 @@ class forty_gbe(YellowBlock):
         #cons.append(ClockGroupConstraint('-of_objects [get_pins %s/USER_CLK_MMCM_inst/CLKOUT0]' % self.fullname, 'MEZ3_REFCLK_%s_P'%self.port, 'asynchronous'))
         
 
-        #cons.append(InputDelayConstraint(clkname='MEZ3_REFCLK_%s_P'%self.port, consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='FPGA_RESET_N'))
-        #cons.append(InputDelayConstraint(clkname='MEZ3_REFCLK_%s_P'%self.port, consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='FPGA_RESET_N'))
+        cons.append(InputDelayConstraint(clkname='MEZ3_REFCLK_%s_P'%self.port, consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='FPGA_RESET_N'))
+        cons.append(InputDelayConstraint(clkname='MEZ3_REFCLK_%s_P'%self.port, consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='FPGA_RESET_N'))
         #cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks MEZ3_REFCLK_%s_P'%self.port, multicycledelay=4))
         #cons.append(MultiCycleConstraint(multicycletype='hold',sourcepath='get_ports FPGA_RESET_N', destpath='get_clocks MEZ3_REFCLK_%s_P'%self.port, multicycledelay=4))
         return cons
