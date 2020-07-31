@@ -1091,7 +1091,7 @@ class onegbe_skarab(onegbe):
         consts.append(PortConstraint('ONE_GBE_RESET_N','ONE_GBE_RESET_N'))
         #consts.append(PortConstraint('ONE_GBE_LINK','ONE_GBE_LINK'))
         #consts.append(PortConstraint('ONE_GBE_INT_N', 'ONE_GBE_INT_N'))
-        consts.append(ClockConstraint('ONE_GBE_MGTREFCLK_P','ONE_GBE_MGTREFCLK_P', period=6.4, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=3.2))
+        consts.append(ClockConstraint('ONE_GBE_MGTREFCLK_P','ONE_GBE_MGTREFCLK_P', period=8.0, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=4.0))
         consts.append(ClockGroupConstraint('-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname, '-of_objects [get_pins skarab_infr/SYS_CLK_MMCM_inst/CLKOUT0]', 'asynchronous'))
         consts.append(ClockGroupConstraint('-of_objects [get_pins skarab_infr/SYS_CLK_MMCM_inst/CLKOUT0]', '-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname, 'asynchronous'))
         consts.append(ClockGroupConstraint('FPGA_EMCCLK2', '-of_objects [get_pins %s/gmii_to_sgmii_0/U0/core_clocking_i/mmcm_adv_inst/CLKOUT0]' % self.fullname, 'asynchronous'))

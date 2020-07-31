@@ -502,6 +502,8 @@ architecture arch_skarab_infr of skarab_infr is
     signal bsp_clk : std_logic;
     signal bsp_clk_mmcm : std_logic;
     
+    signal emcclk2 : std_logic;
+    
     signal sys_mmcm_locked : std_logic;
     signal user_mmcm_locked : std_logic;
 
@@ -998,6 +1000,12 @@ begin
 
     --signal qsfp_gtrefclk : std_logic;
     --signal qsfp_gtrefclk_pb : std_logic;
+    
+    emcclk2_BUFG_inst : BUFG
+    port map (
+        I => FPGA_EMCCLK2, -- Clock input
+        O => emcclk2       -- Clock output
+    );
 
 
 
@@ -1906,7 +1914,7 @@ begin
         port map(
             CLK_I            => bsp_clk,
             RST_I            => bsp_rst,
-            FPGA_EMCCLK2_I   => fpga_emcclk2,
+            FPGA_EMCCLK2_I   => emcclk2,
             FPGA_DNA_O       => fpga_dna,
             FPGA_DNA_MATCH_O => open
         );
