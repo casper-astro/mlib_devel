@@ -308,7 +308,7 @@ class Toolflow(object):
         """
         try:
             # generate multiboot, golden or tooflow image based on yaml file
-            self.hdl_filename = '%s/infrastructure/%s_parameters.vhd' % (os.getenv('HDL_ROOT'), self.plat.name)
+            self.hdl_filename = '%s/skarab_infr/%s_parameters.vhd' % (os.getenv('HDL_ROOT'), self.plat.name)
             # check to see if parameter file exists. Some platforms may not use this.
             if os.path.isfile(self.hdl_filename):
                 self._gen_hdl_version(filename_hdl=self.hdl_filename)
