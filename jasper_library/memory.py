@@ -1,6 +1,6 @@
 class Register(object):
     def __init__(self, name, nbytes=4, offset=0, mode='r',
-                default_val=0, ram=False, ram_size=-1, data_width=32, axi4lite_mode=''):
+                default_val=None, ram=False, ram_size=-1, data_width=32, axi4lite_mode=''):
         """
         A class to encapsulate a register's parameters. This is used when
         instantiating a device with a large address space, but it is desirable
@@ -49,12 +49,15 @@ class Register(object):
         self.ram = ram
         # Downstream the default value seems to be interpretted as a hex string, so
         # convert here
-        if isinstance(default_val, int):
-            self.default_val = "%x" % default_val
-        elif isinstance(default_val, str):
-            self.default_val = default_val
+        if default_val is None:
+            self.default_val = None
         else:
-            raise RuntimeError("Default value should be an integer or a hex string!")
+            if isinstance(default_val, int):
+                self.default_val = "%x" % default_val
+            elif isinstance(default_val, str):
+                self.default_val = default_val
+            else:
+                raise RuntimeError("Default value should be an integer or a hex string!")
 
         # Addded to make provision for variable-size BRAMs in AXI4-Lite devices
         # - Placing here for now because toolflow.py:generate_xml_memory_map

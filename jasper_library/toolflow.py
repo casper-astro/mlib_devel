@@ -877,7 +877,7 @@ class Toolflow(object):
                 node.set('permission', reg.mode)               
                 node.set('axi4lite_mode', reg.axi4lite_mode)
                 if reg.mode == 'r':
-                    if reg.default_val != 0:
+                    if reg.default_val is not None:
                        # Populate defaults of sys_block version registers
                        node.set('hw_rst', str(reg.default_val))
                     else:
@@ -885,7 +885,10 @@ class Toolflow(object):
                        node.set('hw_permission', 'w')
                 else:
                     # Only for a From Processor register (control)
-                    node.set('hw_rst', str(reg.default_val))
+                    if reg.default_val is not None:
+                        node.set('hw_rst', str(reg.default_val))
+                    else:
+                        node.set('hw_rst', str(0))
                 # Best we can currently do for a description...? haha
                 node.set('description', str(interface + "_" + reg.name))
                 # set bram size and 
