@@ -39,16 +39,22 @@ class Register(object):
         :type offset: Integer
         :param mode: Read/write permission for this register. 'r' (readable), 'w' (writable), 'rw' (read/writable)
         :type mode: String
-        :param default_val: Default value for register to be reset to and initialized.
-        :type default_val: Integer
+        :param default_val: Default value for register to be reset to and initialized. Eg (0xa, 10, or "a")
+        :type default_val: Integer or hex string
         """
         self.name = name
         self.nbytes = nbytes
         self.offset = offset
         self.mode = mode
         self.ram = ram
-        #self.ram_size = ram_size
-        self.default_val = default_val
+        # Downstream the default value seems to be interpretted as a hex string, so
+        # convert here
+        if isinstance(default_val, int):
+            self.default_val = "%x" % default_val
+        elif isinstance(default_val, str):
+            self.default_val = default_val
+        else:
+            raise RuntimeError("Default value should be an integer or a hex string!")
 
         # Addded to make provision for variable-size BRAMs in AXI4-Lite devices
         # - Placing here for now because toolflow.py:generate_xml_memory_map
