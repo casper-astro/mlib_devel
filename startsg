@@ -133,12 +133,29 @@ then
     fi
 fi
 
+# If user has defined HDL_DSP_DEVEL_PATH, include relevant libraries
+if [ -n "${HDL_DSP_DEVEL_PATH}" ]
+then
+    echo "Using DSP HDL libraries from ${HDL_DSP_DEVEL_PATH}"
+    if [ -d "${HDL_DSP_DEVEL_PATH}/wrappers/simulink" ]
+    then
+        export DSP_HDL_SL_PATH="${HDL_DSP_DEVEL_PATH}/wrappers/simulink"
+        echo "Found DSP Simulink bindings at ${DSP_HDL_SL_PATH}"
+    else
+        echo "Error finding DSP HDL simulink libraries at ${HDL_DSP_DEVEL_PATH}/wrappers/simulink"
+        echo "Continuing without DSP HDL libraries"
+        unset DSP_HDL_SL_PATH
+    fi
+fi
+
+
 # Make sure that these variables are exported
 export XILINX_PATH
 export MATLAB_PATH
 export PLATFORM
 export MLIB_DEVEL_PATH
 export JASPER_BACKEND
+export HDL_DSP_DEVEL_PATH
 
 # Show environment essentials
 echo "Using MATLAB_PATH=${MATLAB_PATH}"
@@ -148,6 +165,7 @@ echo "Using MLIB_DEVEL_PATH=${MLIB_DEVEL_PATH}"
 echo "Using JASPER_BACKEND=${JASPER_BACKEND}"
 echo "Using XML2VHDL_PATH=${XML2VHDL_PATH}"
 echo "Using LD_PRELOAD=${LD_PRELOAD}"
+echo "Using DSP_HDL_DEVEL_PATH = ${HDL_DSP_DEVEL_PATH}"
 echo "Using python: `which python`"
 
 # Finish environment setup

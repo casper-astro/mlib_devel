@@ -12,6 +12,10 @@ if strcmp(jasper_backend, 'vivado') || isempty(jasper_backend)
   addpath([getenv('MLIB_DEVEL_PATH'), '/casper_library']);
   addpath([getenv('MLIB_DEVEL_PATH'), '/xps_library']);
   addpath([getenv('MLIB_DEVEL_PATH'), '/jasper_library']);
+  %addpath(getenv('HDL_DSP_DEVEL'));
+  if ~isempty(getenv('DSP_HDL_SL_PATH'))
+    addpath(getenv('DSP_HDL_SL_PATH'));
+  end
 %if ISE is to be used  
 elseif strcmp(jasper_backend, 'ise')
   disp('Starting ISE Sysgen')
@@ -20,6 +24,10 @@ elseif strcmp(jasper_backend, 'ise')
   addpath([getenv('MLIB_DEVEL_PATH'), '/casper_library']);
   addpath([getenv('MLIB_DEVEL_PATH'), '/xps_library']);
   addpath([getenv('MLIB_DEVEL_PATH'), '/jasper_library']);
+  %addpath(getenv('HDL_DSP_DEVEL'));
+  if ~isempty(getenv('DSP_HDL_SL_PATH'))
+    addpath(getenv('DSP_HDL_SL_PATH'));
+  end
   xlAddSysgen([getenv('XILINX_PATH'), '/ISE'])
   sysgen_startup
 else
@@ -28,10 +36,17 @@ else
   addpath([getenv('MLIB_DEVEL_PATH'), '/casper_library']);
   addpath([getenv('MLIB_DEVEL_PATH'), '/xps_library']);
   addpath([getenv('MLIB_DEVEL_PATH'), '/jasper_library']);
+  %addpath(getenv('HDL_DSP_DEVEL'));
+  if ~isempty(getenv('DSP_HDL_SL_PATH'))
+    addpath(getenv('DSP_HDL_SL_PATH'));
+  end
 end
 
 load_system('casper_library');
 load_system('xps_library');
+if ~isempty(getenv('DSP_HDL_SL_PATH'))
+  load_system('hdl_library');
+end
 
 casper_startup_dir = getenv('CASPER_STARTUP_DIR');
 if ~isempty(casper_startup_dir)
