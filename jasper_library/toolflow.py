@@ -878,10 +878,16 @@ class Toolflow(object):
                 node.set('axi4lite_mode', reg.axi4lite_mode)
                 if reg.mode == 'r':
                     if reg.default_val is not None:
-                       # Populate defaults of sys_block version registers
+                       # Populate defaults of readable registers which
+                       # Aren't driven by the fabric. I.e., static compile-time
+                       # registers.
                        node.set('hw_rst', str(reg.default_val))
                     else:
-                       # Basically a To Processor register (status)
+                       # "Normal" read-only registers get written to from the
+                       # fabric every cycle.
+                       # To get to this clause it is important that simulink read-only
+                       # software registers aren't given a default value. (Which wouldn't
+                       # make sense)
                        node.set('hw_permission', 'w')
                 else:
                     # Only for a From Processor register (control)
