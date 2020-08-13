@@ -225,6 +225,7 @@ class onehundredgbe_usplus(onehundred_gbe):
                     # NOONE KNOWS HOW THE AXI INTERCONNECT IS GENERATED, SO THE BELOW
                     # PORT NAMES WERE DETERMINED BY TRIAL AND ERROR
                     inst.add_port(reg.name, self.unique_name+'_'+reg.name+'_out', width=32)
+                    inst.add_port(reg.name+'_we', self.unique_name+'_'+reg.name+'_we', width=1)
                 else:
                     inst.add_port(reg.name, self.unique_name+'_'+reg.name+'_in', width=32)
                     # Read-only ports on the AXI interconnect have a write enable input. Tie it high.

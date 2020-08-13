@@ -90,6 +90,23 @@ module casper100g_noaxi#(
         input [31:0] gmac_arp_cache_read_address     ,
         output [31:0] gmac_arp_cache_read_data       ,
 
+        input gmac_reg_phy_control_h_we,
+        input gmac_reg_phy_control_l_we,
+        input gmac_reg_mac_address_h_we,
+        input gmac_reg_mac_address_l_we,
+        input gmac_reg_local_ip_address_we,
+        input gmac_reg_gateway_ip_address_we,
+        input gmac_reg_multicast_ip_address_we,
+        input gmac_reg_multicast_ip_mask_we,
+        input gmac_reg_udp_port_we,
+        input gmac_reg_core_ctrl_we,
+        input gmac_reg_count_reset_we,
+        input gmac_arp_cache_write_enable_we,
+        input gmac_arp_cache_read_enable_we,
+        input gmac_arp_cache_write_data_we,
+        input gmac_arp_cache_write_address_we,
+        input gmac_arp_cache_read_address_we,
+
         input gbe_rst,
         input gbe_rx_ack,
         input gbe_rx_overrun_ack,
@@ -117,6 +134,58 @@ module casper100g_noaxi#(
 
     assign tx_valid_int = |gbe_tx_valid;
     //assign gbe_rx_valid = {4{rx_valid_int}};
+
+    // Register AXI signals
+    reg [31:0] gmac_reg_phy_control_h_reg;
+    reg [31:0] gmac_reg_phy_control_l_reg;
+    reg [31:0] gmac_reg_mac_address_h_reg = {16'b0, FABRIC_MAC[47:32]};
+    reg [31:0] gmac_reg_mac_address_l_reg = FABRIC_MAC[31:0];
+    reg [31:0] gmac_reg_local_ip_address_reg = FABRIC_IP;
+    reg [31:0] gmac_reg_gateway_ip_address_reg;
+    reg [31:0] gmac_reg_multicast_ip_address_reg;
+    reg [31:0] gmac_reg_multicast_ip_mask_reg;
+    reg [31:0] gmac_reg_udp_port_reg = FABRIC_PORT;
+    reg [31:0] gmac_reg_core_ctrl_reg;
+    reg [31:0] gmac_reg_count_reset_reg;
+    reg [31:0] gmac_arp_cache_write_enable_reg;
+    reg [31:0] gmac_arp_cache_read_enable_reg;
+    reg [31:0] gmac_arp_cache_write_data_reg;
+    reg [31:0] gmac_arp_cache_write_address_reg;
+    reg [31:0] gmac_arp_cache_read_address_reg;
+    always @(posedge aximm_clk) begin
+        if ( gmac_reg_phy_control_h_we )
+            gmac_reg_phy_control_h_reg <= gmac_reg_phy_control_h;
+        if ( gmac_reg_phy_control_l_we )
+            gmac_reg_phy_control_l_reg <= gmac_reg_phy_control_l;
+        if ( gmac_reg_mac_address_h_we )
+            gmac_reg_mac_address_h_reg <= gmac_reg_mac_address_h;
+        if ( gmac_reg_mac_address_l_we )
+            gmac_reg_mac_address_l_reg <= gmac_reg_mac_address_l;
+        if ( gmac_reg_local_ip_address_we )
+            gmac_reg_local_ip_address_reg <= gmac_reg_local_ip_address;
+        if ( gmac_reg_gateway_ip_address_we )
+            gmac_reg_gateway_ip_address_reg <= gmac_reg_gateway_ip_address;
+        if ( gmac_reg_multicast_ip_address_we )
+            gmac_reg_multicast_ip_address_reg <= gmac_reg_multicast_ip_address;
+        if ( gmac_reg_multicast_ip_mask_we )
+            gmac_reg_multicast_ip_mask_reg <= gmac_reg_multicast_ip_mask;
+        if ( gmac_reg_udp_port_we )
+            gmac_reg_udp_port_reg <= gmac_reg_udp_port;
+        if ( gmac_reg_core_ctrl_we )
+            gmac_reg_core_ctrl_reg <= gmac_reg_core_ctrl;
+        if ( gmac_reg_count_reset_we )
+            gmac_reg_count_reset_reg <= gmac_reg_count_reset;
+        if ( gmac_arp_cache_write_enable_we )
+            gmac_arp_cache_write_enable_reg <= gmac_arp_cache_write_enable;
+        if ( gmac_arp_cache_read_enable_we )
+            gmac_arp_cache_read_enable_reg <= gmac_arp_cache_read_enable;
+        if ( gmac_arp_cache_write_data_we )
+            gmac_arp_cache_write_data_reg <= gmac_arp_cache_write_data;
+        if ( gmac_arp_cache_write_address_we )
+            gmac_arp_cache_write_address_reg <= gmac_arp_cache_write_address;
+        if ( gmac_arp_cache_read_address_we )
+            gmac_arp_cache_read_address_reg <= gmac_arp_cache_read_address;
+    end
 
     casper100gethernetblock_no_cpu #(
         .FABRIC_MAC(FABRIC_MAC),
@@ -149,43 +218,43 @@ module casper100g_noaxi#(
         .qsfp_intl_ls(qsfp_intl_ls),
         .qsfp_lpmode_ls(qsfp_lpmode_ls),
         // Control register interfaces
-        .gmac_reg_phy_control_h       (gmac_reg_phy_control_h       ), 
-        .gmac_reg_phy_control_l       (gmac_reg_phy_control_l       ), 
-        .gmac_reg_mac_address_h       (gmac_reg_mac_address_h       ), 
-        .gmac_reg_mac_address_l       (gmac_reg_mac_address_l       ), 
-        .gmac_reg_local_ip_address    (gmac_reg_local_ip_address    ), 
-        .gmac_reg_gateway_ip_address  (gmac_reg_gateway_ip_address  ), 
-        .gmac_reg_multicast_ip_address(gmac_reg_multicast_ip_address), 
-        .gmac_reg_multicast_ip_mask   (gmac_reg_multicast_ip_mask   ), 
-        .gmac_reg_udp_port            (gmac_reg_udp_port            ), 
-        .gmac_reg_core_ctrl           (gmac_reg_core_ctrl           ),
-        .gmac_reg_count_reset         (gmac_reg_count_reset         ),
-        .gmac_reg_core_type           (gmac_reg_core_type           ),
-        .gmac_reg_phy_status_h        (gmac_reg_phy_status_h        ),
-        .gmac_reg_phy_status_l        (gmac_reg_phy_status_l        ),
-        .gmac_reg_tx_packet_rate      (gmac_reg_tx_packet_rate      ),
-        .gmac_reg_tx_packet_count     (gmac_reg_tx_packet_count     ),
-        .gmac_reg_tx_valid_rate       (gmac_reg_tx_valid_rate       ),
-        .gmac_reg_tx_valid_count      (gmac_reg_tx_valid_count      ),
-        .gmac_reg_tx_overflow_count   (gmac_reg_tx_overflow_count   ),
-        .gmac_reg_tx_almost_full_count(gmac_reg_tx_almost_full_count),
-        .gmac_reg_rx_packet_rate      (gmac_reg_rx_packet_rate      ),
-        .gmac_reg_rx_packet_count     (gmac_reg_rx_packet_count     ),
-        .gmac_reg_rx_valid_rate       (gmac_reg_rx_valid_rate       ),
-        .gmac_reg_rx_valid_count      (gmac_reg_rx_valid_count      ),
-        .gmac_reg_rx_overflow_count   (gmac_reg_rx_overflow_count   ),
-        .gmac_reg_rx_almost_full_count(gmac_reg_rx_almost_full_count),
-        .gmac_reg_rx_bad_packet_count (gmac_reg_rx_bad_packet_count ),
-        .gmac_reg_arp_size            (gmac_reg_arp_size            ),
-        .gmac_reg_word_size           (gmac_reg_word_size           ),
-        .gmac_reg_buffer_max_size     (gmac_reg_buffer_max_size     ),
+        .gmac_reg_phy_control_h       (gmac_reg_phy_control_h_reg       ), 
+        .gmac_reg_phy_control_l       (gmac_reg_phy_control_l_reg       ), 
+        .gmac_reg_mac_address_h       (gmac_reg_mac_address_h_reg       ), 
+        .gmac_reg_mac_address_l       (gmac_reg_mac_address_l_reg       ), 
+        .gmac_reg_local_ip_address    (gmac_reg_local_ip_address_reg    ), 
+        .gmac_reg_gateway_ip_address  (gmac_reg_gateway_ip_address_reg  ), 
+        .gmac_reg_multicast_ip_address(gmac_reg_multicast_ip_address_reg), 
+        .gmac_reg_multicast_ip_mask   (gmac_reg_multicast_ip_mask_reg   ), 
+        .gmac_reg_udp_port            (gmac_reg_udp_port_reg            ), 
+        .gmac_reg_core_ctrl           (gmac_reg_core_ctrl_reg           ),
+        .gmac_reg_count_reset         (gmac_reg_count_reset_reg         ),
+        .gmac_reg_core_type           (gmac_reg_core_type               ),
+        .gmac_reg_phy_status_h        (gmac_reg_phy_status_h            ),
+        .gmac_reg_phy_status_l        (gmac_reg_phy_status_l            ),
+        .gmac_reg_tx_packet_rate      (gmac_reg_tx_packet_rate          ),
+        .gmac_reg_tx_packet_count     (gmac_reg_tx_packet_count         ),
+        .gmac_reg_tx_valid_rate       (gmac_reg_tx_valid_rate           ),
+        .gmac_reg_tx_valid_count      (gmac_reg_tx_valid_count          ),
+        .gmac_reg_tx_overflow_count   (gmac_reg_tx_overflow_count       ),
+        .gmac_reg_tx_almost_full_count(gmac_reg_tx_almost_full_count    ),
+        .gmac_reg_rx_packet_rate      (gmac_reg_rx_packet_rate          ),
+        .gmac_reg_rx_packet_count     (gmac_reg_rx_packet_count         ),
+        .gmac_reg_rx_valid_rate       (gmac_reg_rx_valid_rate           ),
+        .gmac_reg_rx_valid_count      (gmac_reg_rx_valid_count          ),
+        .gmac_reg_rx_overflow_count   (gmac_reg_rx_overflow_count       ),
+        .gmac_reg_rx_almost_full_count(gmac_reg_rx_almost_full_count    ),
+        .gmac_reg_rx_bad_packet_count (gmac_reg_rx_bad_packet_count     ),
+        .gmac_reg_arp_size            (gmac_reg_arp_size                ),
+        .gmac_reg_word_size           (gmac_reg_word_size               ),
+        .gmac_reg_buffer_max_size     (gmac_reg_buffer_max_size         ),
         // Weirdo register-controlled ARP cache interface
-        .gmac_arp_cache_write_enable  (gmac_arp_cache_write_enable  ),
-        .gmac_arp_cache_read_enable   (gmac_arp_cache_read_enable   ),
-        .gmac_arp_cache_write_data    (gmac_arp_cache_write_data    ),
-        .gmac_arp_cache_write_address (gmac_arp_cache_write_address ),
-        .gmac_arp_cache_read_address  (gmac_arp_cache_read_address  ),
-        .gmac_arp_cache_read_data     (gmac_arp_cache_read_data     ),
+        .gmac_arp_cache_write_enable  (gmac_arp_cache_write_enable_reg  ),
+        .gmac_arp_cache_read_enable   (gmac_arp_cache_read_enable_reg   ),
+        .gmac_arp_cache_write_data    (gmac_arp_cache_write_data_reg    ),
+        .gmac_arp_cache_write_address (gmac_arp_cache_write_address_reg ),
+        .gmac_arp_cache_read_address  (gmac_arp_cache_read_address_reg  ),
+        .gmac_arp_cache_read_data     (gmac_arp_cache_read_data         ),
         // Fabric interface
         // Streaming data clocks 
         .axis_streaming_data_clk(user_clk),
