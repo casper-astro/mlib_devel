@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<node id="onehundred_gbe">
+  <node address="0x0" axi4lite_mode="" description="onehundred_gbe_core_type" hw_permission="w" id="core_type" mask="0xffffffff" permission="r"/>
+  <node address="0x4" axi4lite_mode="" description="onehundred_gbe_buf_sizes" hw_permission="w" id="buf_sizes" mask="0xffffffff" permission="r"/>
+  <node address="0x8" axi4lite_mode="" description="onehundred_gbe_word_lens" hw_permission="w" id="word_lens" mask="0xffffffff" permission="r"/>
+  <node address="0xc" axi4lite_mode="" description="onehundred_gbe_mac_addr1" hw_rst="0" id="mac_addr1" mask="0xffffffff" permission="rw"/>
+  <node address="0x10" axi4lite_mode="" description="onehundred_gbe_mac_addr0" hw_rst="0" id="mac_addr0" mask="0xffffffff" permission="rw"/>
+  <node address="0x14" axi4lite_mode="" description="onehundred_gbe_ip_addr" hw_rst="0" id="ip_addr" mask="0xffffffff" permission="rw"/>
+  <node address="0x18" axi4lite_mode="" description="onehundred_gbe_gw_addr" hw_rst="0" id="gw_addr" mask="0xffffffff" permission="rw"/>
+  <node address="0x1c" axi4lite_mode="" description="onehundred_gbe_netmask" hw_rst="0" id="netmask" mask="0xffffffff" permission="rw"/>
+  <node address="0x20" axi4lite_mode="" description="onehundred_gbe_mc_ip" hw_rst="0" id="mc_ip" mask="0xffffffff" permission="rw"/>
+  <node address="0x24" axi4lite_mode="" description="onehundred_gbe_mc_mask" hw_rst="0" id="mc_mask" mask="0xffffffff" permission="rw"/>
+  <node address="0x28" axi4lite_mode="" description="onehundred_gbe_bytes_rdy" hw_rst="0" id="bytes_rdy" mask="0xffffffff" permission="rw"/>
+  <node address="0x2c" axi4lite_mode="" description="onehundred_gbe_core_ctrl" hw_rst="0" id="core_ctrl" mask="0xffffffff" permission="rw"/>
+  <node address="0x30" axi4lite_mode="" description="onehundred_gbe_udp_port" hw_rst="0" id="udp_port" mask="0xffffffff" permission="rw"/>
+  <node address="0x34" axi4lite_mode="" description="onehundred_gbe_status1" hw_permission="w" id="status1" mask="0xffffffff" permission="r"/>
+  <node address="0x38" axi4lite_mode="" description="onehundred_gbe_status0" hw_permission="w" id="status0" mask="0xffffffff" permission="r"/>
+  <node address="0x3c" axi4lite_mode="" description="onehundred_gbe_phy_ctrl1" hw_rst="0" id="phy_ctrl1" mask="0xffffffff" permission="rw"/>
+  <node address="0x40" axi4lite_mode="" description="onehundred_gbe_phy_ctrl0" hw_rst="0" id="phy_ctrl0" mask="0xffffffff" permission="rw"/>
+  <node address="0x44" axi4lite_mode="" description="onehundred_gbe_arp_size" hw_permission="w" id="arp_size" mask="0xffffffff" permission="r"/>
+  <node address="0x48" axi4lite_mode="" description="onehundred_gbe_tx_pkt_rate" hw_permission="w" id="tx_pkt_rate" mask="0xffffffff" permission="r"/>
+  <node address="0x4c" axi4lite_mode="" description="onehundred_gbe_tx_pkt_cnt" hw_permission="w" id="tx_pkt_cnt" mask="0xffffffff" permission="r"/>
+  <node address="0x50" axi4lite_mode="" description="onehundred_gbe_tx_vld_rate" hw_permission="w" id="tx_vld_rate" mask="0xffffffff" permission="r"/>
+  <node address="0x54" axi4lite_mode="" description="onehundred_gbe_tx_vld_cnt" hw_permission="w" id="tx_vld_cnt" mask="0xffffffff" permission="r"/>
+  <node address="0x58" axi4lite_mode="" description="onehundred_gbe_tx_of_cnt" hw_permission="w" id="tx_of_cnt" mask="0xffffffff" permission="r"/>
+  <node address="0x5c" axi4lite_mode="" description="onehundred_gbe_tx_af_cnt" hw_permission="w" id="tx_af_cnt" mask="0xffffffff" permission="r"/>
+  <node address="0x60" axi4lite_mode="" description="onehundred_gbe_rx_pkt_rate" hw_permission="w" id="rx_pkt_rate" mask="0xffffffff" permission="r"/>
+  <node address="0x64" axi4lite_mode="" description="onehundred_gbe_rx_pkt_cnt" hw_permission="w" id="rx_pkt_cnt" mask="0xffffffff" permission="r"/>
+  <node address="0x68" axi4lite_mode="" description="onehundred_gbe_rx_vld_rate" hw_permission="w" id="rx_vld_rate" mask="0xffffffff" permission="r"/>
+  <node address="0x6c" axi4lite_mode="" description="onehundred_gbe_rx_vld_cnt" hw_permission="w" id="rx_vld_cnt" mask="0xffffffff" permission="r"/>
+  <node address="0x70" axi4lite_mode="" description="onehundred_gbe_rx_of_cnt" hw_permission="w" id="rx_of_cnt" mask="0xffffffff" permission="r"/>
+  <node address="0x74" axi4lite_mode="" description="onehundred_gbe_rx_bad_pkt_cnt" hw_permission="w" id="rx_bad_pkt_cnt" mask="0xffffffff" permission="r"/>
+  <node address="0x78" axi4lite_mode="" description="onehundred_gbe_cnt_rst" hw_rst="0" id="cnt_rst" mask="0xffffffff" permission="rw"/>
+  <node address="0x1000" axi4lite_mode="" description="onehundred_gbe_arp_cache" hw_dp_ram="yes" hw_dp_ram_width="32" hw_rst="0" id="arp_cache" mask="0xffffffff" permission="rw" size="16384"/>
+  <node address="0x4000" axi4lite_mode="" description="onehundred_gbe_tx_buf" hw_dp_ram="yes" hw_dp_ram_width="32" hw_rst="0" id="tx_buf" mask="0xffffffff" permission="rw" size="16384"/>
+  <node address="0x8000" axi4lite_mode="" description="onehundred_gbe_rx_buf" hw_dp_ram="yes" hw_dp_ram_width="32" hw_rst="0" id="rx_buf" mask="0xffffffff" permission="rw" size="16384"/>
+</node>
+
