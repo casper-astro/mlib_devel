@@ -18,6 +18,7 @@ class onehundred_gbe(YellowBlock):
 
 class onehundredgbe_usplus(onehundred_gbe):
     def initialize(self):
+        self.missing_registers = ['gmac_reg_netmask', 'gmac_reg_bytes_rdy']
         self.memory_map = [
             Register('gmac_reg_core_type',            mode='r',  offset=0x00),
             Register('gmac_reg_buffer_max_size',      mode='r',  offset=0x04),
@@ -27,10 +28,10 @@ class onehundredgbe_usplus(onehundred_gbe):
             Register('gmac_reg_local_ip_address',     mode='rw', offset=0x14, default_val=self.fab_ip),
             Register('gmac_reg_gateway_ip_address',   mode='rw', offset=0x18, default_val=self.fab_gate),
 
-            #Register('gmac_reg_netmask',              mode='rw', offset=0x1C), 100G core doesn't have this...
+            Register('gmac_reg_netmask',              mode='rw', offset=0x1C) #100G core doesn't have this...
             Register('gmac_reg_multicast_ip_address', mode='rw', offset=0x20, default_val=0),
             Register('gmac_reg_multicast_ip_mask',    mode='rw', offset=0x24, default_val=0),
-            #Register('gmac_reg_bytes_rdy',            mode='rw', offset=0x28),
+            Register('gmac_reg_bytes_rdy',            mode='rw', offset=0x28),
             Register('gmac_reg_core_ctrl',            mode='rw', offset=0x2C, default_val=int(self.fab_en)),
             Register('gmac_reg_udp_port',             mode='rw', offset=0x30, default_val=self.fab_udp),
             Register('gmac_reg_phy_status_h',         mode='r',  offset=0x34),
@@ -220,12 +221,14 @@ class onehundredgbe_usplus(onehundred_gbe):
 
         # Register interfaces
         for reg in self.memory_map:
+            if reg in self.missing_registers:
+                continue
             if not reg.ram:
                 if 'w' in reg.mode:
                     # NOONE KNOWS HOW THE AXI INTERCONNECT IS GENERATED, SO THE BELOW
                     # PORT NAMES WERE DETERMINED BY TRIAL AND ERROR
                     inst.add_port(reg.name, self.unique_name+'_'+reg.name+'_out', width=32)
-                    inst.add_port(reg.name+'_we', self.unique_name+'_'+reg.name+'_we', width=1)
+                    inst.add_port(reg.name+'_we', self.unique_name+'_'+reg.name+'_out_we', width=1)
                 else:
                     inst.add_port(reg.name, self.unique_name+'_'+reg.name+'_in', width=32)
                     # Read-only ports on the AXI interconnect have a write enable input. Tie it high.
