@@ -221,7 +221,7 @@ class onehundredgbe_usplus(onehundred_gbe):
 
         # Register interfaces
         for reg in self.memory_map:
-            if reg in self.missing_registers:
+            if reg.name in self.missing_registers:
                 continue
             if not reg.ram:
                 if 'w' in reg.mode:
