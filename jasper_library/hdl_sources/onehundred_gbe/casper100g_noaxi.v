@@ -221,7 +221,7 @@ module casper100g_noaxi#(
         .gmac_reg_phy_control_h       (gmac_reg_phy_control_h_reg       ), 
         .gmac_reg_phy_control_l       (gmac_reg_phy_control_l_reg       ), 
         .gmac_reg_mac_address_h       (gmac_reg_mac_address_h_reg       ), 
-        .gmac_reg_mac_address_l       (gmac_reg_mac_address_l_reg       ), 
+        .gmac_reg_mac_address_l       ({8'h02, gmac_reg_mac_address_l_reg[23:0]} ), 
         .gmac_reg_local_ip_address    (gmac_reg_local_ip_address_reg    ), 
         .gmac_reg_gateway_ip_address  (gmac_reg_gateway_ip_address_reg  ), 
         .gmac_reg_multicast_ip_address(gmac_reg_multicast_ip_address_reg), 
