@@ -275,7 +275,7 @@ module casper100g_noaxi#(
         //Data inputs from AXIS bus of the Yellow Blocks
         .axis_streaming_data_tx_destination_ip(gbe_tx_dest_ip),
         .axis_streaming_data_tx_destination_udp_port(gbe_tx_dest_port),
-        .axis_streaming_data_tx_source_udp_port(gbe_tx_dest_port),
+        .axis_streaming_data_tx_source_udp_port(gmac_reg_udp_port_reg),
         // packet_length is not used internally with JH's udppacker. It is kept here
         // for compatibility with the original packing module.
         .axis_streaming_data_tx_packet_length(16'b0),
