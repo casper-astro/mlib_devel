@@ -352,6 +352,8 @@ class Toolflow(object):
         Constructs an associated VerilogModule instance ready to be
         modified.
         """
+        #TODO: These weird try/except clauses seem to do odd SKARAB-specific stuff
+        # and probably shouldn't be here. Why not in the SKARAB yellow block?
         try:
             # generate multiboot, golden or tooflow image based on yaml file
             self.hdl_filename = '%s/infrastructure/%s_parameters.vhd' % (os.getenv('HDL_ROOT'), self.plat.name)
@@ -359,7 +361,7 @@ class Toolflow(object):
             if os.path.isfile(self.hdl_filename):
                 self._gen_hdl_version(filename_hdl=self.hdl_filename)
         except KeyError:
-            s = ""
+            s = "" #?!
         # check to see if entity file exists. Some platforms may not use this. This function overwrites incorrectly
         # generated sysgen hdl files
         #if self.platform.conf['bit_reversal']==True:
@@ -371,7 +373,7 @@ class Toolflow(object):
                 self._gen_hdl_simulink(hdl_sysgen_filename=self.hdl_sysgen_filename)
         # just ignore if key is not present as only some platforms will have the key.
         except KeyError:
-            s = ""
+            s = "" #?!
         self.topfile = self.compile_dir+'/top.v'
         # delete top.v file if it exists, otherwise synthesis will fail
         if os.path.exists(self.topfile):
@@ -875,15 +877,24 @@ class Toolflow(object):
                 node.set('permission', reg.mode)               
                 node.set('axi4lite_mode', reg.axi4lite_mode)
                 if reg.mode == 'r':
-                    if reg.default_val != 0:
-                       # Populate defaults of sys_block version registers
+                    if reg.default_val is not None:
+                       # Populate defaults of readable registers which
+                       # Aren't driven by the fabric. I.e., static compile-time
+                       # registers.
                        node.set('hw_rst', str(reg.default_val))
                     else:
-                       # Basically a To Processor register (status)
+                       # "Normal" read-only registers get written to from the
+                       # fabric every cycle.
+                       # To get to this clause it is important that simulink read-only
+                       # software registers aren't given a default value. (Which wouldn't
+                       # make sense)
                        node.set('hw_permission', 'w')
                 else:
                     # Only for a From Processor register (control)
-                    node.set('hw_rst', str(reg.default_val))
+                    if reg.default_val is not None:
+                        node.set('hw_rst', str(reg.default_val))
+                    else:
+                        node.set('hw_rst', str(0))
                 # Best we can currently do for a description...? haha
                 node.set('description', str(interface + "_" + reg.name))
                 # set bram size and 
@@ -909,6 +920,9 @@ class Toolflow(object):
         """
         Generate xml interconnect file that represent top-level AXI4-Lite interconnect for Oxford's xml2vhdl.
         """
+        #TODO: Fix the above docstring to be more descriptive. And maybe give some hint about what the heck
+        # `memory_map` is supposed to be.
+
         # loop over interfaces, sort by address, make interconnect
         xml_root = ET.Element('node')
         xml_root.set('id', 'axi4lite_top')
@@ -984,6 +998,9 @@ class Toolflow(object):
             the compile directory
         :type filename_bin: str
         """
+        # TODO: this is most certainly part of the backend, not the middleware, since it is only applicable
+        # to certain Xilinx versions. It should also come with a HUGE warning. If this code gets called
+        # and it shouldn't have been, then it is SILENTLY BREAKING YOUR DESIGN.
         stringToMatch_ver = '2018.2'
         stringToMatchS = '_xldpram'
         stringToMatchA = 'latency_test: if (latency > 6) generate'
@@ -1031,6 +1048,7 @@ class Toolflow(object):
             with open(hdl_sysgen_filename, 'w') as fh2:
                 fh2.writelines(lines)
             fh2.close()
+            self.logger("CRITICAL WARNING: 'correcting' bad sysgen code. This is an awful lot of trust to put in the toolflow")
             self.logger.debug('File written. Vivado version is 2018.2: %s. Dual Port RAM exists: %s'
                              % (ver_exists, dpram_exists))
         else:

@@ -3,6 +3,7 @@ from constraints import PortConstraint, ClockConstraint, ClockGroupConstraint
 from helpers import to_int_list
 from .yellow_block_typecodes import *
 from os.path import join
+from memory import Register
 
 class onehundred_gbe(YellowBlock):
     @staticmethod
@@ -10,13 +11,63 @@ class onehundred_gbe(YellowBlock):
         if plat.name in ['vcu118', 'vcu128'] or plat.conf.get('family', None) in ["ultrascaleplus"]:
             return onehundredgbe_usplus(blk, plat, hdl_root)
         else:
-            pass
+            raise RuntimeError("Don't know how to implement 100GbE for this board/FPGA")
     """
     Future common methods here.
     """
 
 class onehundredgbe_usplus(onehundred_gbe):
     def initialize(self):
+        self.missing_registers = ['gmac_reg_netmask', 'gmac_reg_bytes_rdy']
+        self.memory_map = [
+            Register('gmac_reg_core_type',            mode='r',  offset=0x00),
+            Register('gmac_reg_buffer_max_size',      mode='r',  offset=0x04),
+            Register('gmac_reg_word_size',            mode='r',  offset=0x08),
+            Register('gmac_reg_mac_address_h',        mode='rw', offset=0x0C, default_val=(self.fab_mac & 0xffffffff)),
+            Register('gmac_reg_mac_address_l',        mode='rw', offset=0x10, default_val=(self.fab_mac >> 32)),
+            Register('gmac_reg_local_ip_address',     mode='rw', offset=0x14, default_val=self.fab_ip),
+            Register('gmac_reg_gateway_ip_address',   mode='rw', offset=0x18, default_val=self.fab_gate),
+
+            Register('gmac_reg_netmask',              mode='rw', offset=0x1C), #100G core doesn't have this...
+            Register('gmac_reg_multicast_ip_address', mode='rw', offset=0x20, default_val=0),
+            Register('gmac_reg_multicast_ip_mask',    mode='rw', offset=0x24, default_val=0),
+            Register('gmac_reg_bytes_rdy',            mode='rw', offset=0x28),
+            Register('gmac_reg_core_ctrl',            mode='rw', offset=0x2C, default_val=int(self.fab_en)),
+            Register('gmac_reg_udp_port',             mode='rw', offset=0x30, default_val=self.fab_udp),
+            Register('gmac_reg_phy_status_h',         mode='r',  offset=0x34),
+            Register('gmac_reg_phy_status_l',         mode='r',  offset=0x38),
+            Register('gmac_reg_phy_control_h',        mode='rw', offset=0x3C, default_val=0),
+            Register('gmac_reg_phy_control_l',        mode='rw', offset=0x40, default_val=0),
+            Register('gmac_reg_arp_size',             mode='r',  offset=0x44),
+            Register('gmac_reg_tx_packet_rate',       mode='r',  offset=0x48),
+            Register('gmac_reg_tx_packet_count',      mode='r',  offset=0x4C),
+            Register('gmac_reg_tx_valid_rate',        mode='r',  offset=0x50),
+            Register('gmac_reg_tx_valid_count',       mode='r',  offset=0x54),
+            Register('gmac_reg_tx_overflow_count',    mode='r',  offset=0x58),
+            Register('gmac_reg_tx_almost_full_count', mode='r',  offset=0x5C),
+            Register('gmac_reg_rx_packet_rate',       mode='r',  offset=0x60),
+            Register('gmac_reg_rx_packet_count',      mode='r',  offset=0x64),
+            Register('gmac_reg_rx_valid_rate',        mode='r',  offset=0x68),
+            Register('gmac_reg_rx_valid_count',       mode='r',  offset=0x6C),
+            Register('gmac_reg_rx_overflow_count',    mode='r',  offset=0x70),
+            Register('gmac_reg_rx_bad_packet_count',  mode='r',  offset=0x74),
+            Register('gmac_reg_count_reset',          mode='rw', offset=0x78, default_val=0),
+
+            # The 100G core doesn't have an interface for the ARP cache which will work with the
+            # AXI infrastructure we currently have, so make a new one and deal with it in software :-S
+            #Register('gmac_reg_arp_cache',            mode='rw', offset=0x1000, ram=True, ram_size=8*256, data_width=32),
+            Register('gmac_arp_cache_write_enable',   mode='rw', offset=0x1000, default_val=0),
+            Register('gmac_arp_cache_read_enable',    mode='rw', offset=0x1004, default_val=0),
+            Register('gmac_arp_cache_write_data',     mode='rw', offset=0x1008, default_val=0),
+            Register('gmac_arp_cache_write_address',  mode='rw', offset=0x100C, default_val=0),
+            Register('gmac_arp_cache_read_address',   mode='rw', offset=0x1010, default_val=0),
+            Register('gmac_arp_cache_read_data',      mode='r',  offset=0x1014),
+
+            # Ignore RX/TX buffers for now -- do these actually work in the 100G core as per the mem map?
+            #Register('gmac_reg_tx_buf',    mode='rw', offset=0x4000, ram=True, ram_size=2048),
+            #Register('gmac_reg_rx_buf',    mode='rw', offset=0x8000, ram=True, ram_size=2048),
+        ]
+
         self.typecode = TYPECODE_ETHCORE
         kdir = "onehundred_gbe/kutleng_skarab2_bsp_firmware/casperbsp/sources/vhdl/rtl"
 
@@ -111,8 +162,8 @@ class onehundredgbe_usplus(onehundred_gbe):
         # The below call doesn't (yet) add any AXI ports to `inst`, which is required
         # for anything useful to happen.
         # But the 100G core doesn't (yet) have an axi interface exposed in the HDL anyway!
-        #top.add_axi4lite_interface(regname=self.unique_name, mode='rw', nbytes=65536,
-        #                            typecode=self.typecode, axi4lite_mode='raw')
+        top.add_axi4lite_interface(regname=self.unique_name, mode='rw', nbytes=65536,
+                                    typecode=self.typecode, memory_map=self.memory_map)
         
         inst.add_port('RefClk100MHz', 'sys_clk') # sys_clk is decreed to be 100 MHz.
         inst.add_port('RefClkLocked', '~sys_rst', parent_sig=False)
@@ -167,6 +218,23 @@ class onehundredgbe_usplus(onehundred_gbe):
         inst.add_port('gbe_tx_data',          self.fullname+'_tx_data',        width=512)
         inst.add_port('gbe_tx_valid',         self.fullname+'_tx_valid',       width=4)
         inst.add_port('gbe_tx_end_of_frame',  self.fullname+'_tx_end_of_frame')
+
+        # Register interfaces
+        for reg in self.memory_map:
+            if reg.name in self.missing_registers:
+                continue
+            if not reg.ram:
+                if 'w' in reg.mode:
+                    # NOONE KNOWS HOW THE AXI INTERCONNECT IS GENERATED, SO THE BELOW
+                    # PORT NAMES WERE DETERMINED BY TRIAL AND ERROR
+                    inst.add_port(reg.name, self.unique_name+'_'+reg.name+'_out', width=32)
+                    inst.add_port(reg.name+'_we', self.unique_name+'_'+reg.name+'_out_we', width=1)
+                else:
+                    inst.add_port(reg.name, self.unique_name+'_'+reg.name+'_in', width=32)
+                    # Read-only ports on the AXI interconnect have a write enable input. Tie it high.
+                    # The sys_clkcounter reg doesn't seem to do this, so who knows how it works.
+                    # Maybe it doesn't.
+                    top.assign_signal(self.unique_name+'_'+reg.name+'_in_we', "1'b1")
 
     def gen_constraints(self):
         consts = []

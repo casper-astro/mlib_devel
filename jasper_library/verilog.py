@@ -801,6 +801,9 @@ class VerilogModule(object):
         
         for dev in self.axi4lite_devices:
             # add all software registers to one memory mapped AXI4-Lite interface
+            #FIXME Switching on the typecode and then on mode seems odd.
+            # typecodes were never intended to be used for toolflow decision making.
+            # Probably the swich should be if axi4lite_mode = reg|bram|raw
             if dev.typecode == TYPECODE_SWREG:
                 # check to see if this is the first sw_reg in the memory_map dict
                 if 'sw_reg' not in self.memory_map:
@@ -1475,7 +1478,7 @@ class VerilogModule(object):
         self.add_port('wb_err_o'+suffix, signal='wbs_err_i[%s]'%wb_id,parent_sig=False)
 
     def add_axi4lite_interface(self, regname, mode, nbytes=4,
-                               default_val=0, suffix='',
+                               default_val=None, suffix='',
                                candr_suffix='', memory_map=[],
                                typecode=0xff, data_width=32, axi4lite_mode=''):
         """
