@@ -57,6 +57,7 @@ module casper100g_noaxi#(
         input [31:0] gmac_reg_mac_address_h,
         input [31:0] gmac_reg_mac_address_l,
         input [31:0] gmac_reg_local_ip_address,
+        input [31:0] gmac_reg_local_ip_netmask,
         input [31:0] gmac_reg_gateway_ip_address,
         input [31:0] gmac_reg_multicast_ip_address,
         input [31:0] gmac_reg_multicast_ip_mask,
@@ -95,6 +96,7 @@ module casper100g_noaxi#(
         input gmac_reg_mac_address_h_we,
         input gmac_reg_mac_address_l_we,
         input gmac_reg_local_ip_address_we,
+        input gmac_reg_local_ip_netmask_we,
         input gmac_reg_gateway_ip_address_we,
         input gmac_reg_multicast_ip_address_we,
         input gmac_reg_multicast_ip_mask_we,
@@ -141,6 +143,7 @@ module casper100g_noaxi#(
     reg [31:0] gmac_reg_mac_address_h_reg = {16'b0, FABRIC_MAC[47:32]};
     reg [31:0] gmac_reg_mac_address_l_reg = FABRIC_MAC[31:0];
     reg [31:0] gmac_reg_local_ip_address_reg = FABRIC_IP;
+    reg [31:0] gmac_reg_local_ip_netmask_reg;
     reg [31:0] gmac_reg_gateway_ip_address_reg;
     reg [31:0] gmac_reg_multicast_ip_address_reg;
     reg [31:0] gmac_reg_multicast_ip_mask_reg;
@@ -163,6 +166,8 @@ module casper100g_noaxi#(
             gmac_reg_mac_address_l_reg <= gmac_reg_mac_address_l;
         if ( gmac_reg_local_ip_address_we )
             gmac_reg_local_ip_address_reg <= gmac_reg_local_ip_address;
+        if ( gmac_reg_local_ip_netmask_we )
+            gmac_reg_local_ip_netmask_reg <= gmac_reg_local_ip_netmask;
         if ( gmac_reg_gateway_ip_address_we )
             gmac_reg_gateway_ip_address_reg <= gmac_reg_gateway_ip_address;
         if ( gmac_reg_multicast_ip_address_we )
@@ -223,6 +228,7 @@ module casper100g_noaxi#(
         .gmac_reg_mac_address_h       (gmac_reg_mac_address_h_reg       ), 
         .gmac_reg_mac_address_l       (gmac_reg_mac_address_l_reg       ),
         .gmac_reg_local_ip_address    (gmac_reg_local_ip_address_reg    ), 
+        .gmac_reg_local_ip_netmask    (gmac_reg_local_ip_netmask_reg    ),
         .gmac_reg_gateway_ip_address  (gmac_reg_gateway_ip_address_reg  ), 
         .gmac_reg_multicast_ip_address(gmac_reg_multicast_ip_address_reg), 
         .gmac_reg_multicast_ip_mask   (gmac_reg_multicast_ip_mask_reg   ), 
@@ -275,7 +281,7 @@ module casper100g_noaxi#(
         //Data inputs from AXIS bus of the Yellow Blocks
         .axis_streaming_data_tx_destination_ip(gbe_tx_dest_ip),
         .axis_streaming_data_tx_destination_udp_port(gbe_tx_dest_port),
-        .axis_streaming_data_tx_source_udp_port(gmac_reg_udp_port_reg),
+        .axis_streaming_data_tx_source_udp_port(gmac_reg_udp_port_reg[15:0]),
         // packet_length is not used internally with JH's udppacker. It is kept here
         // for compatibility with the original packing module.
         .axis_streaming_data_tx_packet_length(16'b0),

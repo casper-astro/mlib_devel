@@ -18,7 +18,7 @@ class onehundred_gbe(YellowBlock):
 
 class onehundredgbe_usplus(onehundred_gbe):
     def initialize(self):
-        self.missing_registers = ['gmac_reg_netmask', 'gmac_reg_bytes_rdy']
+        self.missing_registers = ['gmac_reg_bytes_rdy']
         self.memory_map = [
             Register('gmac_reg_core_type',            mode='r',  offset=0x00),
             Register('gmac_reg_buffer_max_size',      mode='r',  offset=0x04),
@@ -28,7 +28,7 @@ class onehundredgbe_usplus(onehundred_gbe):
             Register('gmac_reg_local_ip_address',     mode='rw', offset=0x14, default_val=self.fab_ip),
             Register('gmac_reg_gateway_ip_address',   mode='rw', offset=0x18, default_val=self.fab_gate),
 
-            Register('gmac_reg_netmask',              mode='rw', offset=0x1C), #100G core doesn't have this...
+            Register('gmac_reg_local_ip_netmask',     mode='rw', offset=0x1C),
             Register('gmac_reg_multicast_ip_address', mode='rw', offset=0x20, default_val=0),
             Register('gmac_reg_multicast_ip_mask',    mode='rw', offset=0x24, default_val=0),
             Register('gmac_reg_bytes_rdy',            mode='rw', offset=0x28),
