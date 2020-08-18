@@ -9,7 +9,8 @@ module wb_ads5296_controller#(
     parameter G_ZDOK_REV   = 2,
     parameter G_NUM_UNITS  = 1,
     parameter G_NUM_SDATA_LINES = 1,
-    parameter G_NUM_SCLK_LINES = 1
+    parameter G_NUM_SCLK_LINES = 1,
+    parameter G_NUM_CS_LINES = 1
     )(
     input         wb_clk_i,
     input         wb_rst_i,
@@ -23,9 +24,10 @@ module wb_ads5296_controller#(
     input         wb_cyc_i,
     input         wb_stb_i,
 
-    output        [G_NUM_UNITS - 1 : 0] adc_adc3wire_csn,
-    output        [G_NUM_SDATA_LINES - 1 : 0] adc_adc3wire_sdata,
-    output        [G_NUM_SCLK_LINES - 1 : 0] adc_adc3wire_sclk,
+    output        [G_NUM_CS_LINES - 1 : 0] adc_spi_cs,
+    output        [G_NUM_SDATA_LINES - 1 : 0] adc_spi_mosi,
+    input         [G_NUM_SDATA_LINES - 1 : 0] adc_spi_miso,
+    output        [G_NUM_SCLK_LINES - 1 : 0] adc_spi_sclk,
 
     output        adc_reset,
     output        [8*G_NUM_UNITS - 1 : 0] adc_iserdes_bitslip,
@@ -37,14 +39,14 @@ module wb_ads5296_controller#(
     input   [1:0] adc_locked
   );
 
-  localparam CONTROLLER_REV = 2'b10;
+  localparam CONTROLLER_REV = 2'd3;
 
   /********* Global Signals *************/
 
-  wire [31:0] adc_adc3wire_wire;
+  wire [31:0] adc_spi_wire;
   wire [31:0] adc_ctrl_wire;
   wire [8*G_NUM_UNITS - 1:0] adc_delay_strobe_wire;
-  wire [G_NUM_UNITS - 1:0] adc_adc3wire_cs_wire;
+  wire [G_NUM_CS_LINES - 1:0] adc_spi_cs_wire;
 
   /************ OPB Logic ***************/
 
@@ -53,22 +55,28 @@ module wb_ads5296_controller#(
   reg wb_ack;
 
   /*** Registers ****/
+  /* MISO register. Supports up to 8 1-bit inputs */
+  reg [7:0] adc_spi_miso_reg = 8'b0;
+  always @(posedge wb_clk_i) begin
+    adc_spi_miso_reg[G_NUM_SDATA_LINES - 1 : 0] <= adc_spi_miso;
+  end
 
   /* ADC0 3-Wire Register */
-  reg [31:0] adc_adc3wire_reg;
-  reg [31:0] adc_adc3wire_cs_reg;
-  assign adc_adc3wire_wire = adc_adc3wire_reg;
-  assign adc_adc3wire_cs_wire = adc_adc3wire_cs_reg;
+  reg [31:0] adc_spi_reg;
+  reg [31:0] adc_spi_cs_reg;
+  assign adc_spi_wire = adc_spi_reg;
+  assign adc_spi_cs_wire = adc_spi_cs_reg[G_NUM_CS_LINES-1:0];
 
   /* ======================================= */
-  /* ADC0 3-Wire Register (word 0)           */
+  /* ADC0 SPI Register (word 0)              */
   /* ======================================= */
   /* ZZ = ZDOK Pinout Revision               */
   /* LL = Clock locked bits                  */
   /* NNNN = Number of ADC chips supported    */
   /* RR = ROACH2 revision expected/required  */
   /* C = SCLK                                */
-  /* D = SDATA                               */
+  /* D = SDATA MOSI                          */
+  /* X = SDATA MISO (read only)              */
   /* ======================================= */
   /* |<-- MSb                       LSb -->| */
   /* 0000_0000_0011_1111_1111_2222_2222_2233 */
@@ -79,7 +87,7 @@ module wb_ads5296_controller#(
   /* ---- ---- ---- VVRR ---- ---- ---- ---- */
   /* ---- ---- ---- ---- ---- --C- ---- ---- */
   /* ---- ---- ---- ---- ---- ---D ---- ---- */
-  /* ---- ---- ---- ---- ---- ---- ---- ---- */
+  /* ---- ---- ---- ---- ---- ---- XXXX XXXX */
   /* ======================================= */
   /* NOTE: LL reflects the runtime lock      */
   /*       status of a line clock from each  */
@@ -98,7 +106,7 @@ module wb_ads5296_controller#(
   /* ======================================= */
   /* ADC0 3-Wire Register (word 1)           */
   /* ======================================= */
-  /* Chip Selects for up to 32 ADCs (active high) */
+  /* Chip Selects for up to 32 ADCs          */
   /* ======================================= */
   /* |<-- MSb                       LSb -->| */
   /* 0000_0000_0011_1111_1111_2222_2222_2233 */
@@ -124,22 +132,17 @@ module wb_ads5296_controller#(
   genvar i;
   generate
   for (i=0; i<G_NUM_SCLK_LINES; i=i+1) begin : gen_sclk
-    assign adc_adc3wire_sclk[i]  =  adc_adc3wire_wire[9];
+    assign adc_spi_sclk[i]  =  adc_spi_wire[9];
   end
   endgenerate
 
   generate
-  for (i=0; i<G_NUM_SDATA_LINES; i=i+1) begin : gen_sdata
-    assign adc_adc3wire_sdata[i] =  adc_adc3wire_wire[8];
+  for (i=0; i<G_NUM_SDATA_LINES; i=i+1) begin : gen_mosi
+    assign adc_spi_mosi[i] =  adc_spi_wire[8];
   end
   endgenerate
 
-  /* Invert chip select bits on output. */
-  generate
-  for (i=0; i<G_NUM_UNITS; i=i+1) begin : gen_csn
-    assign adc_adc3wire_csn[i] =  ~adc_adc3wire_cs_wire[i];
-  end
-  endgenerate
+  assign adc_spi_cs =  adc_spi_cs_wire;
 
   /* ADC0 Control Register */
   reg [31:0] adc_ctrl_reg;
@@ -215,8 +218,8 @@ module wb_ads5296_controller#(
   always @(posedge wb_clk_i) begin
     wb_ack <= 1'b0;
 
-    adc_adc3wire_reg <= adc_adc3wire_reg;
-    adc_adc3wire_cs_reg <= adc_adc3wire_cs_reg;
+    adc_spi_reg <= adc_spi_reg;
+    adc_spi_cs_reg <= adc_spi_cs_reg;
     adc_ctrl_reg <= adc_ctrl_reg;
     
     if (wb_rst_i) begin
@@ -227,31 +230,32 @@ module wb_ads5296_controller#(
            0:  begin
                 wb_ack <= 1'b1;
                 if (wb_sel_i[0]) begin
-                    adc_adc3wire_reg[7:0] <= wb_dat_i[7:0];
+                    // read-only
+                    //adc_spi_reg[7:0] <= wb_dat_i[7:0];
                 end
                 if (wb_sel_i[1]) begin
-                    adc_adc3wire_reg[15:8] <= wb_dat_i[15:8];
+                    adc_spi_reg[15:8] <= wb_dat_i[15:8];
                 end
                 if (wb_sel_i[2]) begin
-                    adc_adc3wire_reg[23:16] <= wb_dat_i[23:16];
+                    adc_spi_reg[23:16] <= wb_dat_i[23:16];
                 end
                 if (wb_sel_i[3]) begin
-                    adc_adc3wire_reg[31:24] <= wb_dat_i[31:24];
+                    adc_spi_reg[31:24] <= wb_dat_i[31:24];
                 end
            end
            1:  begin
                 wb_ack <= 1'b1;
                 if (wb_sel_i[0]) begin
-                    adc_adc3wire_cs_reg[7:0] <= wb_dat_i[7:0];
+                    adc_spi_cs_reg[7:0] <= wb_dat_i[7:0];
                 end
                 if (wb_sel_i[1]) begin
-                    adc_adc3wire_cs_reg[15:8] <= wb_dat_i[15:8];
+                    adc_spi_cs_reg[15:8] <= wb_dat_i[15:8];
                 end
                 if (wb_sel_i[2]) begin
-                    adc_adc3wire_cs_reg[23:16] <= wb_dat_i[23:16];
+                    adc_spi_cs_reg[23:16] <= wb_dat_i[23:16];
                 end
                 if (wb_sel_i[3]) begin
-                    adc_adc3wire_cs_reg[31:24] <= wb_dat_i[31:24];
+                    adc_spi_cs_reg[31:24] <= wb_dat_i[31:24];
                 end
            end
            2:  begin
@@ -285,7 +289,8 @@ module wb_ads5296_controller#(
                    wb_data_out_reg[23:20] <= G_NUM_UNITS;
                    wb_data_out_reg[19:18] <= CONTROLLER_REV;
                    wb_data_out_reg[17:16] <= G_ROACH2_REV;
-                   wb_data_out_reg[15:0 ] <= adc_adc3wire_reg[15:0];
+                   wb_data_out_reg[15:0 ] <= adc_spi_reg[15:8];
+                   wb_data_out_reg[ 7:0 ] <= adc_spi_miso_reg[7:0];
                end
            2:  begin
                    wb_ack <= 1'b1;

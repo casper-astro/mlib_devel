@@ -13,10 +13,19 @@ entity  ads5296x4_interface  is
     );
     port (
                -- System
-               fabric_clk     :  out std_logic;
-               fabric_clk_90  :  out std_logic;
-               fabric_clk_180 :  out std_logic;
-               fabric_clk_270 :  out std_logic;
+               fabric_clk_o     :  out std_logic;
+               fabric_clk_90_o  :  out std_logic;
+               fabric_clk_180_o :  out std_logic;
+               fabric_clk_270_o :  out std_logic;
+               frame_clk_o    :  out std_logic;
+               -- route out internal clocks so two
+               -- modules can be slaved together
+               line_clk_4b_o  :  out std_logic;
+               line_clk_10b_o :  out std_logic;
+               frame_clk_i    :  in  std_logic;
+               line_clk_4b_i  :  in  std_logic;
+               line_clk_10b_i :  in  std_logic;
+               fabric_clk_i   :  in  std_logic;
                locked         :  out std_logic_vector((G_NUM_UNITS / 4) - 1 downto 0);
                reset          :  in  std_logic;
                sof            :  out std_logic;
@@ -67,41 +76,9 @@ entity  ads5296x4_interface  is
                h2  :  out std_logic_vector(9 downto 0);
                h3  :  out std_logic_vector(9 downto 0);
                h4  :  out std_logic_vector(9 downto 0);
-               i1  :  out std_logic_vector(9 downto 0);
-               i2  :  out std_logic_vector(9 downto 0);
-               i3  :  out std_logic_vector(9 downto 0);
-               i4  :  out std_logic_vector(9 downto 0);
-               j1  :  out std_logic_vector(9 downto 0);
-               j2  :  out std_logic_vector(9 downto 0);
-               j3  :  out std_logic_vector(9 downto 0);
-               j4  :  out std_logic_vector(9 downto 0);
-               k1  :  out std_logic_vector(9 downto 0);
-               k2  :  out std_logic_vector(9 downto 0);
-               k3  :  out std_logic_vector(9 downto 0);
-               k4  :  out std_logic_vector(9 downto 0);
-               l1  :  out std_logic_vector(9 downto 0);
-               l2  :  out std_logic_vector(9 downto 0);
-               l3  :  out std_logic_vector(9 downto 0);
-               l4  :  out std_logic_vector(9 downto 0);
-               m1  :  out std_logic_vector(9 downto 0);
-               m2  :  out std_logic_vector(9 downto 0);
-               m3  :  out std_logic_vector(9 downto 0);
-               m4  :  out std_logic_vector(9 downto 0);
-               n1  :  out std_logic_vector(9 downto 0);
-               n2  :  out std_logic_vector(9 downto 0);
-               n3  :  out std_logic_vector(9 downto 0);
-               n4  :  out std_logic_vector(9 downto 0);
-               o1  :  out std_logic_vector(9 downto 0);
-               o2  :  out std_logic_vector(9 downto 0);
-               o3  :  out std_logic_vector(9 downto 0);
-               o4  :  out std_logic_vector(9 downto 0);
-               p1  :  out std_logic_vector(9 downto 0);
-               p2  :  out std_logic_vector(9 downto 0);
-               p3  :  out std_logic_vector(9 downto 0);
-               p4  :  out std_logic_vector(9 downto 0);
 
-               -- Delay Controller (always 128 bits, no matter the value of G_NUM_UNITS)
-               delay_rst        :  in  std_logic_vector(127 downto 0);
+               -- Delay Controller (always 64 bits, no matter the value of G_NUM_UNITS)
+               delay_rst        :  in  std_logic_vector(63 downto 0);
                delay_tap        :  in  std_logic_vector(8 downto 0);
 
                -- Demux mode bits
@@ -214,10 +191,10 @@ architecture ads5296x4_interface_arc of ads5296x4_interface is
      attribute keep of frame_clk_in : signal is "true";
      attribute s    of frame_clk_in : signal is "yes";
 
-     signal line_clk_10bit : std_logic;
-     signal line_clk_4bit  : std_logic;
+     signal line_clk_10b : std_logic;
+     signal line_clk_4b  : std_logic;
+     signal fabric_clk   : std_logic;
      signal frame_clk    : std_logic;
-     signal fabric_clk_0 : std_logic;
      signal absel        : std_logic;
      signal absel_enable : std_logic;
      signal locked_0     : std_logic;
@@ -242,10 +219,10 @@ architecture ads5296x4_interface_arc of ads5296x4_interface is
      -- Delay Controller
      signal s_delay_rst_a  : i4_v4;
      signal s_delay_rst_b  : i4_v4;
-     signal delay_rst0     : std_logic_vector(127 downto 0);
-     signal delay_rst1     : std_logic_vector(127 downto 0);
-     signal delay_rst2     : std_logic_vector(127 downto 0);
-     signal delay_rst_edge : std_logic_vector(127 downto 0);
+     signal delay_rst0     : std_logic_vector(63 downto 0);
+     signal delay_rst1     : std_logic_vector(63 downto 0);
+     signal delay_rst2     : std_logic_vector(63 downto 0);
+     signal delay_rst_edge : std_logic_vector(63 downto 0);
 
      -- Snap Controller
      signal s_snap_req : std_logic_vector(1 downto 0);
@@ -256,6 +233,7 @@ architecture ads5296x4_interface_arc of ads5296x4_interface is
      -- Select line clocks for each quad ADC board
      line_clk_gen: for i in 0 to ((G_NUM_UNITS / 4) - 1) generate
          line_clk_in_per_quad(i) <= line_clk_in(0); -- TODO: this hardcodes a single clock
+         locked(i) <= locked_0; -- everyone locks off a single MMCM
      end generate;
 
      adc_mmcm_0 : ADC_MMCM
@@ -263,17 +241,16 @@ architecture ads5296x4_interface_arc of ads5296x4_interface is
        reset        => reset,
        locked       => locked_0,
        clkin        => line_clk_in_per_quad(0),
-       clkout0p     => bufg_i(0),
+       clkout0p     => bufg_i(0), -- 4-bit clk = clkin / 2 (for after 4-bit SERDES)
        clkout0n     => open,
-       clkout1p     => bufg_i(1),
+       clkout1p     => bufg_i(1), -- frame_clk = clkin / 5
        clkout1n     => open,
-       clkout2      => bufg_i(2),
-       clkout2_90   => bufg_i(3),
-       clkout2_180  => bufg_i(4),
-       clkout2_270  => bufg_i(5),
+       clkout2      => bufg_i(2), -- fabric_clk = 2*clkin / 5 (=2*frame clk)
+       clkout2_90   => bufg_i(3), -- fabric_clk (90 degrees)
+       clkout2_180  => bufg_i(4), -- fabric_clk (180 degrees)
+       clkout2_270  => bufg_i(5), -- fabric_clk (270 degrees)
        clkout3      => bufg_i(6)
      );
-     locked(0) <= locked_0;
 
      -- MMCM BUFGs
      bufg_gen: for i in 0 to 6 generate
@@ -298,33 +275,19 @@ architecture ads5296x4_interface_arc of ads5296x4_interface is
        );
      end generate;
 
-     -- Generate MMCMs for all but the first ADC. These outputs don't get used
-     adc_mmcm_gen: for i in 1 to ((G_NUM_UNITS / 4) - 1) generate
-       adc_mmcm_others : ADC_MMCM
-       PORT MAP (
-         reset        => reset,
-         locked       => locked(i),
-         clkin        => line_clk_in_per_quad(i),
-         clkout0p     => open,
-         clkout0n     => open,
-         clkout1p     => open,
-         clkout1n     => open,
-         clkout2      => open,
-         clkout2_90   => open,
-         clkout2_180  => open,
-         clkout2_270  => open
-       );
-     end generate;
-
      -- Internal routing
-     line_clk_4bit  <= bufg_o(0);
-     frame_clk      <= bufg_o(1);
-     fabric_clk_0   <= bufg_o(2);
-     fabric_clk     <= fabric_clk_0;
-     fabric_clk_90  <= bufg_o(3);
-     fabric_clk_180 <= bufg_o(4);
-     fabric_clk_270 <= bufg_o(5);
-     line_clk_10bit <= bufg_o(6);
+     -- route out clocks
+     line_clk_4b_o    <= bufg_o(0);
+     frame_clk_o      <= bufg_o(1);
+     fabric_clk_o     <= bufg_o(2);
+     fabric_clk_90_o  <= bufg_o(3);
+     fabric_clk_180_o <= bufg_o(4);
+     fabric_clk_270_o <= bufg_o(5);
+     line_clk_10b_o   <= bufg_o(6);
+     -- route in clocks
+     line_clk_4b <= line_clk_4b_i;
+     line_clk_10b <= line_clk_10b_i;
+     fabric_clk <= fabric_clk_i;
 
      num_units  <= std_logic_vector(to_unsigned(G_NUM_UNITS,  num_units'length));
 
@@ -365,44 +328,6 @@ architecture ads5296x4_interface_arc of ads5296x4_interface is
        h4 <= s_p10_data(7)( 9 downto  0);
      end generate;
 
-     adc2_board: if G_NUM_UNITS > 8 generate
-       i1 <= s_p10_data(8)(39 downto 30);
-       i2 <= s_p10_data(8)(29 downto 20);
-       i3 <= s_p10_data(8)(19 downto 10);
-       i4 <= s_p10_data(8)( 9 downto  0);
-       j1 <= s_p10_data(9)(39 downto 30);
-       j2 <= s_p10_data(9)(29 downto 20);
-       j3 <= s_p10_data(9)(19 downto 10);
-       j4 <= s_p10_data(9)( 9 downto  0);
-       k1 <= s_p10_data(10)(39 downto 30);
-       k2 <= s_p10_data(10)(29 downto 20);
-       k3 <= s_p10_data(10)(19 downto 10);
-       k4 <= s_p10_data(10)( 9 downto  0);
-       l1 <= s_p10_data(11)(39 downto 30);
-       l2 <= s_p10_data(11)(29 downto 20);
-       l3 <= s_p10_data(11)(19 downto 10);
-       l4 <= s_p10_data(11)( 9 downto  0);
-     end generate;
-
-     adc3_board: if G_NUM_UNITS > 12 generate
-       m1 <= s_p10_data(12)(39 downto 30);
-       m2 <= s_p10_data(12)(29 downto 20);
-       m3 <= s_p10_data(12)(19 downto 10);
-       m4 <= s_p10_data(12)( 9 downto  0);
-       n1 <= s_p10_data(13)(39 downto 30);
-       n2 <= s_p10_data(13)(29 downto 20);
-       n3 <= s_p10_data(13)(19 downto 10);
-       n4 <= s_p10_data(13)( 9 downto  0);
-       o1 <= s_p10_data(14)(39 downto 30);
-       o2 <= s_p10_data(14)(29 downto 20);
-       o3 <= s_p10_data(14)(19 downto 10);
-       o4 <= s_p10_data(14)( 9 downto  0);
-       p1 <= s_p10_data(15)(39 downto 30);
-       p2 <= s_p10_data(15)(29 downto 20);
-       p3 <= s_p10_data(15)(19 downto 10);
-       p4 <= s_p10_data(15)( 9 downto  0);
-     end generate;
-
      adc1_dummy: if G_NUM_UNITS < 5 generate
        e1 <= "0000000000";
        e2 <= "0000000000";
@@ -423,46 +348,6 @@ architecture ads5296x4_interface_arc of ads5296x4_interface is
        locked(1) <= '0';
      end generate;
 
-     adc2_dummy: if G_NUM_UNITS < 9 generate
-       i1 <= "0000000000";
-       i2 <= "0000000000";
-       i3 <= "0000000000";
-       i4 <= "0000000000";
-       j1 <= "0000000000";
-       j2 <= "0000000000";
-       j3 <= "0000000000";
-       j4 <= "0000000000";
-       k1 <= "0000000000";
-       k2 <= "0000000000";
-       k3 <= "0000000000";
-       k4 <= "0000000000";
-       l1 <= "0000000000";
-       l2 <= "0000000000";
-       l3 <= "0000000000";
-       l4 <= "0000000000";
-       locked(2) <= '0';
-     end generate;
-
-     adc3_dummy: if G_NUM_UNITS < 13 generate
-       m1 <= "0000000000";
-       m2 <= "0000000000";
-       m3 <= "0000000000";
-       m4 <= "0000000000";
-       n1 <= "0000000000";
-       n2 <= "0000000000";
-       n3 <= "0000000000";
-       n4 <= "0000000000";
-       o1 <= "0000000000";
-       o2 <= "0000000000";
-       o3 <= "0000000000";
-       o4 <= "0000000000";
-       p1 <= "0000000000";
-       p2 <= "0000000000";
-       p3 <= "0000000000";
-       p4 <= "0000000000";
-       locked(3) <= '0';
-     end generate;
-
      -- Generate adc_unit modules and associated wiring
      ADC: for i in 0 to G_NUM_UNITS-1 generate
 
@@ -481,9 +366,9 @@ architecture ads5296x4_interface_arc of ads5296x4_interface is
 
        adc_unit_10_bit_inst: adc_unit_10bit_ultrascale
        port map (
-                   fabric_clk => fabric_clk_0,
-                   line_clk   => line_clk_10bit,
-                   iserdes_divclk => line_clk_4bit,
+                   fabric_clk => fabric_clk,
+                   line_clk   => line_clk_10b,
+                   iserdes_divclk => line_clk_4b,
                    frame_clk  => frame_clk,
                    reset      => reset,
 
@@ -522,19 +407,17 @@ architecture ads5296x4_interface_arc of ads5296x4_interface is
       end if;
     end process;
 
-    process(fabric_clk_0, absel_enable, locked_0)
+    process(fabric_clk, absel_enable, locked_0)
     begin
-      -- rising edge of fabric_clk_0
-      if rising_edge(fabric_clk_0) then
+      if rising_edge(fabric_clk) then
         -- Toggle a/b lane selector
         absel <= (not absel) and absel_enable;
       end if;
     end process;
 
-    process(fabric_clk_0)
+    process(fabric_clk)
     begin
-      -- rising edge of fabric_clk_0
-      if rising_edge(fabric_clk_0) then
+      if rising_edge(fabric_clk) then
         -- s_p_data pipeline
         s_p_data <= s_p_data0;
         s_p10_data <= s_p10_data0;
