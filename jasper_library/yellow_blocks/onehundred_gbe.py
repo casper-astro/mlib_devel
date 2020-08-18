@@ -164,6 +164,15 @@ class onehundredgbe_usplus(onehundred_gbe):
         # But the 100G core doesn't (yet) have an axi interface exposed in the HDL anyway!
         top.add_axi4lite_interface(regname=self.unique_name, mode='rw', nbytes=65536,
                                     typecode=self.typecode, memory_map=self.memory_map)
+
+        # Set defaults at startup. The AXI registers above (which have defaults) won't
+        # automatically propagate because until they are written externally their write-enable
+        # output lines don't pulse
+        inst.add_parameter("FABRIC_MAC", "48'h%x" % self.fab_mac)
+        inst.add_parameter("FABRIC_IP", "32'h%x" % self.fab_ip)
+        inst.add_parameter("FABRIC_PORT", "16'h%x" % self.fab_udp)
+        inst.add_parameter("FABRIC_GATEWAY", "32'h%x" % self.fab_gate)
+        inst.add_parameter("FABRIC_ENABLE_ON_START", "1'b%d" % int(self.fab_en))
         
         inst.add_port('RefClk100MHz', 'sys_clk') # sys_clk is decreed to be 100 MHz.
         inst.add_port('RefClkLocked', '~sys_rst', parent_sig=False)

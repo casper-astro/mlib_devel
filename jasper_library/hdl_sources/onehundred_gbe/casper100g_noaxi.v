@@ -1,7 +1,9 @@
 module casper100g_noaxi#(
     parameter FABRIC_MAC = 48'hff_ff_ff_ff_ff_ff,
     parameter FABRIC_IP = 32'hc0a805c8,
-    parameter FABRIC_PORT = 16'h2710
+    parameter FABRIC_PORT = 16'h2710,
+    parameter FABRIC_GATEWAY = 32'h1,
+    parameter FABRIC_ENABLE_ON_START = 1'b0
    ) (
         // 100MHz reference clock needed by 100G Ethernet PHY
         // This must be a stable 100MHz clock as per the 100G PHY requirements 
@@ -143,12 +145,12 @@ module casper100g_noaxi#(
     reg [31:0] gmac_reg_mac_address_h_reg = {16'b0, FABRIC_MAC[47:32]};
     reg [31:0] gmac_reg_mac_address_l_reg = FABRIC_MAC[31:0];
     reg [31:0] gmac_reg_local_ip_address_reg = FABRIC_IP;
-    reg [31:0] gmac_reg_local_ip_netmask_reg;
-    reg [31:0] gmac_reg_gateway_ip_address_reg;
+    reg [31:0] gmac_reg_local_ip_netmask_reg = 32'hffffff00;
+    reg [31:0] gmac_reg_gateway_ip_address_reg = FABRIC_GATEWAY;
     reg [31:0] gmac_reg_multicast_ip_address_reg;
     reg [31:0] gmac_reg_multicast_ip_mask_reg;
     reg [31:0] gmac_reg_udp_port_reg = FABRIC_PORT;
-    reg [31:0] gmac_reg_core_ctrl_reg;
+    reg [31:0] gmac_reg_core_ctrl_reg = FABRIC_ENABLE_ON_START;
     reg [31:0] gmac_reg_count_reset_reg;
     reg [31:0] gmac_arp_cache_write_enable_reg;
     reg [31:0] gmac_arp_cache_read_enable_reg;
