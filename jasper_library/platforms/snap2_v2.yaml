@@ -87,8 +87,96 @@ pins:
     loc: AB8
   eth_clk_125_n:
     #iostd: DIFF_HSTL_I_18
-    #iostd: LVDS_25
-    loc: AB7
+    iostd: LVDS_25
+    loc: AU25
+  # The "forty_gbe_*" indexing below
+  # reflects the schematic net names "QSFP1..4"
+  forty_gbe_refclk_p:
+    loc:
+      - T8
+      - P8
+      - M8
+      - K8
+  forty_gbe_refclk_n:
+    loc:
+      - T7
+      - P7
+      - M7
+      - K7
+  forty_gbe_tx_p:
+    loc:
+      - T4
+      - P4
+      - M4
+      - K4
+      - J6
+      - H8
+      - G6
+      - F8
+      - E6
+      - D8
+      - C6
+      - B8
+      - F12
+      - D12
+      - C14
+      - A10
+  forty_gbe_tx_n:
+    loc:
+      - T3
+      - P3
+      - M3
+      - K3
+      - J5
+      - H7
+      - G5
+      - F7
+      - E5
+      - D7
+      - C5
+      - B7
+      - F11
+      - D11
+      - C13
+      - A9
+  forty_gbe_rx_p:
+    loc:
+      - U2
+      - R2
+      - N2
+      - L2
+      - J2
+      - H4
+      - G2
+      - F4
+      - E2
+      - D4
+      - C2
+      - B4
+      - E10
+      - C10
+      - B12
+      - A6
+  forty_gbe_rx_n:
+    loc:
+      - U1
+      - R1
+      - N1
+      - L1
+      - J1
+      - H3
+      - G1
+      - F3
+      - E1
+      - D3
+      - C1
+      - B3
+      - E9
+      - C9
+      - B11
+      - A5
+  # The "gth_*" indexing below doesn't
+  # reflect the schematic net names "QSFP1..4"
   gth_clk_p:
     #iostd: DIFF_HSTL_I_18
     loc:
