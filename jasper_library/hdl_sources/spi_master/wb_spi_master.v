@@ -35,6 +35,7 @@ module wb_spi_master#(
   
   reg spi_trigger;
   reg spi_ack;
+  reg wait_for_spi = 1'b0;
    
   reg [31:0] wb_data_out_reg = 32'b0;
 
@@ -42,7 +43,7 @@ module wb_spi_master#(
     // defaults
     wb_ack <= 1'b0;
     spi_trigger <= 1'b0;
-    spi_ack <= 1'b0
+    spi_ack <= 1'b0;
     if (wb_rst_i) begin
     end else begin
       if (wb_stb_i && wb_cyc_i && !wb_ack) begin
@@ -102,8 +103,8 @@ module wb_spi_master#(
   assign wb_ack_o  = wb_ack;
 
   spi_master #(
-    .NCLKDIVBITS(NCLKDIVBITS)
-    .NBITS(NBITS)
+    .NCLKDIVBITS(NCLKDIVBITS),
+    .NBITS(NBITS),
     .NCSBITS(NCSBITS)
     ) uut (
     .clk(wb_clk_i),
@@ -117,7 +118,7 @@ module wb_spi_master#(
     .cs_n(cs_n),
     .sclk(sclk),
     .mosi(mosi),
-    .miso(miso),
+    .miso(miso)
   );
 
 endmodule
