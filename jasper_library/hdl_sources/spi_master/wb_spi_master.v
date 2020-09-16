@@ -38,6 +38,7 @@ module wb_spi_master#(
   reg wait_for_spi = 1'b0;
    
   reg [31:0] wb_data_out_reg = 32'b0;
+  reg [31:0] spi_event_count = 32'b0;
 
   always @(posedge wb_clk_i) begin
     // defaults
@@ -48,12 +49,13 @@ module wb_spi_master#(
     end else begin
       if (wb_stb_i && wb_cyc_i && !wb_ack) begin
         if (wait_for_spi && spi_dvld) begin
+          spi_event_count <= spi_event_count + 1'b1;
           wait_for_spi <= 1'b0;
           spi_dout_reg[NBITS-1:0] <= spi_dout;
           spi_ack <= 1'b1;
           wb_ack <= 1'b1;
         end else if (wb_we_i) begin
-          case (wb_adr_i[3:2])
+          case (wb_adr_i[4:2])
             // Address 0 has CS_N in byte 0
             // Writing it causes a trigger
             0:  begin
@@ -83,10 +85,19 @@ module wb_spi_master#(
             end
           endcase
         end else begin // if (wb_we_i)
-          case (wb_adr_i[3:2])
+          case (wb_adr_i[4:2])
             0: begin
               wb_ack <= 1'b1;
+              wb_data_out_reg <= {24'b0, cs_n_reg};
+            end
+            1: begin
+              wb_data_out_reg <= din_reg;
+            end
+            2: begin
               wb_data_out_reg[NBITS-1:0] <= spi_dout_reg[NBITS-1:0];
+            end
+            3: begin
+              wb_data_out_reg[NBITS-1:0] <= spi_event_count;
             end
             default: begin
               wb_ack <= 1'b1;

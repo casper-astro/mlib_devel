@@ -41,12 +41,16 @@ class ads5296x4(YellowBlock):
             # User clock always comes from board 0
             if b == 0:
                 inst.add_port('clk_out', 'adc%d_clk' % self.port)
+            else:
+                inst.add_port('clk_out', '')
 
             # split out the ports which go to simulink
             for xn, x in enumerate(ascii_lowercase[b*self.num_units_per_board : (b+1) * self.num_units_per_board]):
                 for c in range(self.channels_per_unit):
+                    signal = '%s_%s%d' % (self.fullname, x, c+1)
+                    top.add_signal(signal, width=10)
                     top.assign_signal(
-                        '%s_%s%d' % (self.fullname, x, c+1),
+                        signal,
                         '%s_%d_dout[%d-1:%d]' % (self.fullname, b, (self.channels_per_unit*xn+c+1)*self.adc_resolution, (self.channels_per_unit*xn + c)*self.adc_resolution),
                     )
         
@@ -54,17 +58,19 @@ class ads5296x4(YellowBlock):
         # to top-level ports. Let the synthesizer infer buffers.
         top.add_port('%s_adc_sync' % self.port_prefix, dir='out')
         top.add_port('%s_adc_rst'  %self.port_prefix, dir='out')
+        top.add_signal('%s_adc_sync' % self.fullname)
+        top.add_signal('%s_adc_rst' % self.fullname)
         top.assign_signal('%s_adc_sync' % self.port_prefix, '%s_adc_sync' % self.fullname)
         top.assign_signal('%s_adc_rst'  % self.port_prefix, '~%s_adc_rst' % self.fullname) # Invert
 
         # wb controller
 
         wbctrl = top.get_instance(entity='wb_spi_master', name='wb_ads5296_controller%d' % self.port)
-        wbctrl.add_wb_interface(nbytes=4*2, regname='ads5296_controller%d' % self.port, mode='rw', typecode=self.typecode)
+        wbctrl.add_wb_interface(nbytes=4*4, regname='ads5296_controller%d' % self.port, mode='rw', typecode=self.typecode)
         wbctrl.add_port('cs_n', '%s_cs_n' % self.port_prefix, dir='out', parent_port=True, width=3)
         wbctrl.add_port('sclk', '%s_sclk' % self.port_prefix, dir='out', parent_port=True)
         wbctrl.add_port('mosi', '%s_mosi' % self.port_prefix, dir='out', parent_port=True)
-        wbctrl.add_port('miso', '%s_miso' % self.port_prefix, dir='out', parent_port=True)
+        wbctrl.add_port('miso', '%s_miso' % self.port_prefix, dir='in', parent_port=True)
 
         # Tie phased clocks to zero for now. TODO
         top.add_signal("adc%d_clk90" % self.port)
