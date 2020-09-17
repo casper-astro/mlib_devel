@@ -28,9 +28,9 @@ module wb_spi_master#(
 
   /*** Registers ****/
   reg [31:0] din_reg = 32'b0;
+  reg [31:0] spi_dout_reg = 32'b0;
   reg [7:0] cs_n_reg;
   wire [NBITS-1:0] spi_dout;
-  reg [NBITS-1:0] spi_dout_reg = 32'b0;
   wire spi_dvld;
   
   reg spi_trigger;
@@ -85,9 +85,9 @@ module wb_spi_master#(
             end
           endcase
         end else begin // if (wb_we_i)
+          wb_ack <= 1'b1;
           case (wb_adr_i[4:2])
             0: begin
-              wb_ack <= 1'b1;
               wb_data_out_reg <= {24'b0, cs_n_reg};
             end
             1: begin
@@ -97,10 +97,9 @@ module wb_spi_master#(
               wb_data_out_reg[NBITS-1:0] <= spi_dout_reg[NBITS-1:0];
             end
             3: begin
-              wb_data_out_reg[NBITS-1:0] <= spi_event_count;
+              wb_data_out_reg <= spi_event_count;
             end
             default: begin
-              wb_ack <= 1'b1;
               wb_data_out_reg <= 32'b0;
             end
           endcase
