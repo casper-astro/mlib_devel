@@ -222,11 +222,11 @@ class ads5296x4(YellowBlock):
         # Add the single ended pins
         # in single-ended numbering, N pin is 1 greater than P pin
         # I.e. fmc0_la_p[33] = fmc0_la[66]; fmc0_la_n[33] = fmc0_la[67]
-        cons.append(PortConstraint('%s_cs_n' % self.port_prefix,  'fmc%d_la' % self.port, port_index=[0], iogroup_index=[2*33]))
-        cons.append(PortConstraint('%s_cs_n' % self.port_prefix,  'fmc%d_la' % self.port, port_index=[1], iogroup_index=[2*33+1]))
+        cons.append(PortConstraint('%s_cs_n' % self.port_prefix,  'fmc%d_la' % self.port, port_index=[0], iogroup_index=[2*32]))
+        cons.append(PortConstraint('%s_cs_n' % self.port_prefix,  'fmc%d_la' % self.port, port_index=[1], iogroup_index=[2*32+1]))
         cons.append(PortConstraint('%s_cs_n' % self.port_prefix,  'fmc%d_hb' % self.port, port_index=[2], iogroup_index=[2*17]))
-        cons.append(PortConstraint('%s_mosi' % self.port_prefix,  'fmc%d_la' % self.port, iogroup_index=2*32))
-        cons.append(PortConstraint('%s_sclk' % self.port_prefix,  'fmc%d_la' % self.port, iogroup_index=2*32+1))
+        cons.append(PortConstraint('%s_mosi' % self.port_prefix,  'fmc%d_la' % self.port, iogroup_index=2*33))
+        cons.append(PortConstraint('%s_sclk' % self.port_prefix,  'fmc%d_la' % self.port, iogroup_index=2*33+1))
         cons.append(PortConstraint('%s_miso' % self.port_prefix,  'fmc%d_hb' % self.port, iogroup_index=2*17+1))
         cons.append(PortConstraint('%s_adc_sync' % self.port_prefix,  'fmc%d_hb' % self.port, iogroup_index=2*19))
         cons.append(PortConstraint('%s_adc_rst' % self.port_prefix,  'fmc%d_hb' % self.port, iogroup_index=2*19+1))
