@@ -42,7 +42,7 @@ module spi_master_tb;
       .cs_n(cs_n),
       .sclk(sclk),
       .mosi(mosi),
-      .miso(mosi) // Loopback
+      .miso(~mosi) // Inverted loopback
     );
 
 endmodule
