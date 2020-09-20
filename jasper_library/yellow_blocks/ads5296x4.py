@@ -16,8 +16,8 @@ class ads5296x4(YellowBlock):
     lanes_per_channel = lanes_per_unit // channels_per_unit
     def initialize(self):
         # Compute line clock rate. Factor of 2.0 is for DDR
-        self.line_clock_freq = self.adc_resolution * self.sample_rate / self.lanes_per_channel / 2.0
-        self.logger.info("ADC {0} has line clock {1} MHz".format(self.name, self.line_clock_freq))
+        self.line_clock_freq_mhz = self.adc_resolution * self.sample_rate / self.lanes_per_channel / 2.0
+        self.logger.info("ADC {0} has line clock {1} MHz".format(self.name, self.line_clock_freq_mhz))
 
         self.add_source('ads5296x4_interface_v2/*.v')
         self.add_source('spi_master/spi_master.v')
@@ -26,10 +26,19 @@ class ads5296x4(YellowBlock):
 
         self.port_prefix = self.blocktype + 'fmc%d' % self.port
 
+    def gen_children(self):
+        swreg0 = YellowBlock.make_block({'tag':'xps:sw_reg_sync', 'fullpath':'%s/ads5296_sync%d'%(self.name,self.port), 'io_dir':'From Processor', 'name':'ads5296_sync%d'%self.port}, self.platform)
+        swreg1 = YellowBlock.make_block({'tag':'xps:sw_reg_sync', 'fullpath':'%s/ads5296_rst%d'%(self.name,self.port), 'io_dir':'From Processor', 'name':'ads5296_rst%d'%self.port}, self.platform)
+        swreg2 = YellowBlock.make_block({'tag':'xps:sw_reg_sync', 'fullpath':'%s/ads5296_spi_out%d'%(self.name,self.port), 'io_dir':'From Processor', 'name':'ads5296_spi_out%d'%self.port}, self.platform)
+        swreg3 = YellowBlock.make_block({'tag':'xps:sw_reg_sync', 'fullpath':'%s/ads5296_spi_in%d'%(self.name,self.port), 'io_dir':'To Processor', 'name':'ads5296_spi_in%d'%self.port}, self.platform)
+        return [swreg0, swreg1, swreg2, swreg3]
+
     def modify_top(self,top):
+        # Connect up the reset register
         module = 'ads5296x4_interface_v2'
         for b in range(self.board_count):
             inst = top.get_instance(entity=module, name="%s_%d" % (self.fullname, b))
+            inst.add_port('rst', '%s_adc_rst' % self.fullname)
             inst.add_port('lclk_p', '%s_%d_lclk_p' % (self.port_prefix, b), parent_port=True, dir='in')
             inst.add_port('lclk_n', '%s_%d_lclk_n' % (self.port_prefix, b), parent_port=True, dir='in')
             inst.add_port('fclk_p', '%s_%d_fclk_p' % (self.port_prefix, b), parent_port=True, dir='in')
@@ -60,17 +69,51 @@ class ads5296x4(YellowBlock):
         top.add_port('%s_adc_rst'  %self.port_prefix, dir='out')
         top.add_signal('%s_adc_sync' % self.fullname)
         top.add_signal('%s_adc_rst' % self.fullname)
-        top.assign_signal('%s_adc_sync' % self.port_prefix, '%s_adc_sync' % self.fullname)
-        top.assign_signal('%s_adc_rst'  % self.port_prefix, '~%s_adc_rst' % self.fullname) # Invert
+        #top.assign_signal('%s_adc_sync' % self.port_prefix, '%s_adc_sync' % self.fullname)
+        #top.assign_signal('%s_adc_rst'  % self.port_prefix, '~%s_adc_rst' % self.fullname) # Invert
+        top.assign_signal('%s_adc_rst'  % self.port_prefix, '~%s_ads5296_rst%d_user_data_out[0]' % (self.name, self.port)) # Invert
+        top.assign_signal('%s_adc_sync'  % self.port_prefix, '%s_ads5296_sync%d_user_data_out[0]' % (self.name, self.port))
 
         # wb controller
 
-        wbctrl = top.get_instance(entity='wb_spi_master', name='wb_ads5296_controller%d' % self.port)
-        wbctrl.add_wb_interface(nbytes=4*4, regname='ads5296_controller%d' % self.port, mode='rw', typecode=self.typecode)
-        wbctrl.add_port('cs_n', '%s_cs_n' % self.port_prefix, dir='out', parent_port=True, width=3)
-        wbctrl.add_port('sclk', '%s_sclk' % self.port_prefix, dir='out', parent_port=True)
-        wbctrl.add_port('mosi', '%s_mosi' % self.port_prefix, dir='out', parent_port=True)
-        wbctrl.add_port('miso', '%s_miso' % self.port_prefix, dir='in', parent_port=True)
+        ##wbctrl = top.get_instance(entity='wb_spi_master', name='wb_ads5296_controller%d' % self.port)
+        ### Configure SPI settings.
+        ### NBITS=24 and NCLKDIVBITS=4 gives a latency on transactions of <500 clocks.
+        ### The toolflow currently uses a WB arbiter with a timeout of 1000.
+        ### Max ADC SPI clock rate is 20 MHz. SNAP2 wb_clk is 100 MHz --> using an SPI clock of 6.25MHz
+        ### If the delay needs to be longer, the wb_spi_master core should be modified so it
+        ### acks the WB bus immediately, and then lets the user poll a register to see if the SPI transaction
+        ### has finished.
+        ##wbctrl.add_parameter("NBITS", 24)
+        ##wbctrl.add_parameter("NCSBITS", 3)
+        ##wbctrl.add_parameter("NCLKDIVBITS", 5)
+        ##wbctrl.add_wb_interface(nbytes=4*4, regname='ads5296_controller%d' % self.port, mode='rw', typecode=self.typecode)
+        ##wbctrl.add_port('cs_n', '%s_cs_n' % self.port_prefix, dir='out', parent_port=True, width=3)
+        ##wbctrl.add_port('sclk', '%s_sclk' % self.port_prefix, dir='out', parent_port=True)
+        ##wbctrl.add_port('mosi', '%s_mosi' % self.port_prefix, dir='out', parent_port=True)
+        ##wbctrl.add_port('miso', '%s_miso' % self.port_prefix, dir='in', parent_port=True)
+
+        top.add_port('%s_cs_n' % self.port_prefix, dir='out', width=3)
+        top.add_port('%s_sclk' % self.port_prefix, dir='out')
+        top.add_port('%s_mosi' % self.port_prefix, dir='out')
+        top.add_port('%s_miso' % self.port_prefix, dir='in')
+        top.assign_signal('%s_cs_n' % self.port_prefix, '%s_ads5296_spi_out%d_user_data_out[2:0]' % (self.name, self.port))
+        top.assign_signal('%s_sclk' % self.port_prefix, '%s_ads5296_spi_out%d_user_data_out[3]' % (self.name, self.port))
+        top.assign_signal('%s_mosi' % self.port_prefix, '%s_ads5296_spi_out%d_user_data_out[4]' % (self.name, self.port))
+        top.assign_signal('%s_ads5296_spi_in%d_user_data_in[0]' % (self.name, self.port), '%s_miso' % self.port_prefix)
+
+        top.add_signal('ila_miso%d' % self.port, attributes={'keep': '"true"'})
+        top.add_signal('ila_mosi%d' % self.port, attributes={'keep': '"true"'})
+        top.add_signal('ila_cs%d'   % self.port, attributes={'keep': '"true"'}, width=3)
+        top.add_signal('ila_sclk%d' % self.port, attributes={'keep': '"true"'})
+        top.add_signal('ila_sync%d' % self.port, attributes={'keep': '"true"'})
+        top.add_signal('ila_rst%d'  % self.port, attributes={'keep': '"true"'})
+        top.assign_signal('ila_cs%d'   % self.port, '%s_cs_n' % self.port_prefix)
+        top.assign_signal('ila_miso%d' % self.port, '%s_miso' % self.port_prefix)
+        top.assign_signal('ila_mosi%d' % self.port, '%s_mosi' % self.port_prefix)
+        top.assign_signal('ila_sclk%d' % self.port, '%s_sclk' % self.port_prefix)
+        top.assign_signal('ila_sync%d' % self.port, '%s_adc_sync' % self.port_prefix)
+        top.assign_signal('ila_rst%d'  % self.port, '%s_adc_rst' % self.port_prefix)
 
         # Tie phased clocks to zero for now. TODO
         top.add_signal("adc%d_clk90" % self.port)
@@ -134,20 +177,47 @@ class ads5296x4(YellowBlock):
     def gen_constraints(self):
         cons = []
 
-        # The first ADC board uses the LA pins in order for data
         for pol in ['p', 'n']:
+            # Chip 0
             cons.append(PortConstraint(
                 '%s_0_din_%s' % (self.port_prefix, pol),
-                'fmc%d_la_%s' % (self.port, pol),
-                port_index=list(range(2*4*self.num_units_per_board)),
-                iogroup_index=range(2*4*self.num_units_per_board),
+                'fmc%d_ha_%s' % (self.port, pol),
+                port_index=list(range(8)),
+                iogroup_index=range(2,2+8),
+            ))
+            # Chip 1
+            cons.append(PortConstraint(
+                '%s_0_din_%s' % (self.port_prefix, pol),
+                'fmc%d_ha_%s' % (self.port, pol),
+                port_index=list(range(7)),
+                iogroup_index=range(10,10+7),
+            ))
+            cons.append(PortConstraint(
+                '%s_0_din_%s' % (self.port_prefix, pol),
+                'fmc%d_hb_%s' % (self.port, pol),
+                port_index=[7],
+                iogroup_index=[0],
+            ))
+            # Chip 2
+            cons.append(PortConstraint(
+                '%s_0_din_%s' % (self.port_prefix, pol),
+                'fmc%d_hb_%s' % (self.port, pol),
+                port_index=list(range(8)),
+                iogroup_index=range(1,1+8),
+            ))
+            # Chip 3
+            cons.append(PortConstraint(
+                '%s_0_din_%s' % (self.port_prefix, pol),
+                'fmc%d_hb_%s' % (self.port, pol),
+                port_index=list(range(8)),
+                iogroup_index=range(9,9+8),
             ))
 
         # Add the clock pins for board 0
-        cons.append(PortConstraint('%s_0_lclk_p' % (self.port_prefix), 'fmc%d_clk_p' % self.port, iogroup_index=0))
-        cons.append(PortConstraint('%s_0_lclk_n' % (self.port_prefix), 'fmc%d_clk_n' % self.port, iogroup_index=0))
-        cons.append(PortConstraint('%s_0_fclk_p' % (self.port_prefix), 'fmc%d_hb_p' % self.port, iogroup_index=18))
-        cons.append(PortConstraint('%s_0_fclk_n' % (self.port_prefix), 'fmc%d_hb_n' % self.port, iogroup_index=18))
+        cons.append(PortConstraint('%s_0_lclk_p' % (self.port_prefix), 'fmc%d_clk_p' % self.port, iogroup_index=2))
+        cons.append(PortConstraint('%s_0_lclk_n' % (self.port_prefix), 'fmc%d_clk_n' % self.port, iogroup_index=2))
+        cons.append(PortConstraint('%s_0_fclk_p' % (self.port_prefix), 'fmc%d_ha_p' % self.port, iogroup_index=0))
+        cons.append(PortConstraint('%s_0_fclk_n' % (self.port_prefix), 'fmc%d_ha_n' % self.port, iogroup_index=0))
 
         # Add the single ended pins
         # in single-ended numbering, N pin is 1 greater than P pin
@@ -158,73 +228,126 @@ class ads5296x4(YellowBlock):
         cons.append(PortConstraint('%s_mosi' % self.port_prefix,  'fmc%d_la' % self.port, iogroup_index=2*32))
         cons.append(PortConstraint('%s_sclk' % self.port_prefix,  'fmc%d_la' % self.port, iogroup_index=2*32+1))
         cons.append(PortConstraint('%s_miso' % self.port_prefix,  'fmc%d_hb' % self.port, iogroup_index=2*17+1))
-        cons.append(PortConstraint('%s_adc_sync' % self.port_prefix,  'fmc%d_hb' % self.port, iogroup_index=19))
-        cons.append(PortConstraint('%s_adc_rst' % self.port_prefix,  'fmc%d_hb' % self.port, iogroup_index=19+1))
+        cons.append(PortConstraint('%s_adc_sync' % self.port_prefix,  'fmc%d_hb' % self.port, iogroup_index=2*19))
+        cons.append(PortConstraint('%s_adc_rst' % self.port_prefix,  'fmc%d_hb' % self.port, iogroup_index=2*19+1))
 
 
         if self.board_count > 1:
             # Add the clock pins for board 1
-            cons.append(PortConstraint('%s_1_lclk_p' % (self.port_prefix), 'fmc%d_clk_p' % self.port, iogroup_index=2))
-            cons.append(PortConstraint('%s_1_lclk_n' % (self.port_prefix), 'fmc%d_clk_n' % self.port, iogroup_index=2))
-            cons.append(PortConstraint('%s_1_fclk_p' % (self.port_prefix), 'fmc%d_ha_p' % self.port, iogroup_index=0))
-            cons.append(PortConstraint('%s_1_fclk_n' % (self.port_prefix), 'fmc%d_ha_n' % self.port, iogroup_index=0))
+            cons.append(PortConstraint('%s_1_lclk_p' % (self.port_prefix), 'fmc%d_clk_p' % self.port, iogroup_index=0))
+            cons.append(PortConstraint('%s_1_lclk_n' % (self.port_prefix), 'fmc%d_clk_n' % self.port, iogroup_index=0))
+            cons.append(PortConstraint('%s_1_fclk_p' % (self.port_prefix), 'fmc%d_hb_p' % self.port, iogroup_index=18))
+            cons.append(PortConstraint('%s_1_fclk_n' % (self.port_prefix), 'fmc%d_hb_n' % self.port, iogroup_index=18))
+            # The second (top) ADC has more convenient pin assignment numbering
             for pol in ['p', 'n']:
-                # Chip 0
                 cons.append(PortConstraint(
-                    '%s_1_din_%s' % (self.port_prefix, pol),
-                    'fmc%d_ha_%s' % (self.port, pol),
-                    port_index=list(range(8)),
-                    iogroup_index=range(2,2+8),
+                    '%s_0_din_%s' % (self.port_prefix, pol),
+                    'fmc%d_la_%s' % (self.port, pol),
+                    port_index=list(range(2*4*self.num_units_per_board)),
+                    iogroup_index=range(2*4*self.num_units_per_board),
                 ))
-                # Chip 1
-                cons.append(PortConstraint(
-                    '%s_1_din_%s' % (self.port_prefix, pol),
-                    'fmc%d_ha_%s' % (self.port, pol),
-                    port_index=list(range(7)),
-                    iogroup_index=range(10,10+7),
-                ))
-                cons.append(PortConstraint(
-                    '%s_1_din_%s' % (self.port_prefix, pol),
-                    'fmc%d_hb_%s' % (self.port, pol),
-                    port_index=[7],
-                    iogroup_index=[0],
-                ))
-                # Chip 2
-                cons.append(PortConstraint(
-                    '%s_1_din_%s' % (self.port_prefix, pol),
-                    'fmc%d_hb_%s' % (self.port, pol),
-                    port_index=list(range(8)),
-                    iogroup_index=range(1,1+8),
-                ))
-                # Chip 3
-                cons.append(PortConstraint(
-                    '%s_1_din_%s' % (self.port_prefix, pol),
-                    'fmc%d_hb_%s' % (self.port, pol),
-                    port_index=list(range(8)),
-                    iogroup_index=range(9,9+8),
-                ))
+
 
         # TODO: cons.append(PortConstraint('adc_rst_n', 'adc_rst_n', port_index=list(range(3)), iogroup_index=list(range(3))))
         # TODO: cons.append(PortConstraint('adc_pd', 'adc_pd', port_index=list(range(3)), iogroup_index=list(range(3))))
         
         # clock constraint with variable period
-        clkconst0 = ClockConstraint('%s_0_lclk_p' % self.port_prefix, name='adc_lclk0', freq=self.line_clock_freq)
+        clkconst0 = ClockConstraint('%s_0_lclk_p' % self.port_prefix, name='adc_clk0', freq=self.line_clock_freq_mhz)
         cons.append(clkconst0)
         if self.board_count > 1:
-            clkconst1 = ClockConstraint('%s_1_lclk_p' % self.port_prefix, name='adc_clk1', freq=self.line_clock_freq)
+            clkconst1 = ClockConstraint('%s_1_lclk_p' % self.port_prefix, name='adc_lclk1', freq=self.line_clock_freq_mhz)
             cons.append(clkconst1)
 
         # TODO set the skew of board 1 relative to board 0
+        # delays in ns
+        input_setup_delay = -0.2
+        input_hold_delay = 0.18 - (1000./self.line_clock_freq_mhz)
         for i in range(self.lanes_per_unit):
             for pol in ['p', 'n']:
                 for b in range(self.board_count):
-                    cons.append(InputDelayConstraint(clkname=clkconst0.name, consttype='min', constdelay_ns=0.2, portname="%s_%d_din_%s[%d]" % (self.port_prefix, b, pol, i)))
-                    cons.append(InputDelayConstraint(clkname=clkconst0.name, consttype='max', constdelay_ns=0.16, portname="%s_%d_din_%s[%d]" % (self.port_prefix, b, pol, i)))
-                cons.append(InputDelayConstraint(clkname=clkconst0.name, consttype='min', constdelay_ns=0.2, portname="%s_%d_fclk_%s" % (self.port_prefix, b, pol)))
-                cons.append(InputDelayConstraint(clkname=clkconst0.name, consttype='max', constdelay_ns=0.16, portname="%s_%d_fclk_%s" % (self.port_prefix, b, pol)))
+                    cons.append(InputDelayConstraint(clkname=clkconst0.name, consttype='min', constdelay_ns=input_hold_delay, portname="%s_%d_din_%s[%d]" % (self.port_prefix, b, pol, i)))
+                    cons.append(InputDelayConstraint(clkname=clkconst0.name, consttype='max', constdelay_ns=input_setup_delay, portname="%s_%d_din_%s[%d]" % (self.port_prefix, b, pol, i)))
+                cons.append(InputDelayConstraint(clkname=clkconst0.name, consttype='min', constdelay_ns=input_hold_delay, portname="%s_%d_fclk_%s" % (self.port_prefix, b, pol)))
+                cons.append(InputDelayConstraint(clkname=clkconst0.name, consttype='max', constdelay_ns=input_setup_delay, portname="%s_%d_fclk_%s" % (self.port_prefix, b, pol)))
 
         cons.append(RawConstraint('set_clock_groups -name async_sysclk_adcclk -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks sys_clk0_dcm]' % clkconst0.name))
         cons.append(RawConstraint('set_multicycle_path -from [get_clocks -include_generated_clocks %s] -to [get_clocks -include_generated_clocks sys_clk0_dcm] 3' % clkconst0.name))
         cons.append(RawConstraint('set_multicycle_path -from [get_clocks -include_generated_clocks %s] -to [get_clocks -include_generated_clocks sys_clk0_dcm] -hold 2' % clkconst0.name))
+
+        
+        cons.append(RawConstraint('set_property DIFF_TERM_ADV TERM_100 [get_ports [list {ads5296x4fmc%s_0_din_p[*]}]]' %self.port))
+        cons.append(RawConstraint('set_property DIFF_TERM_ADV TERM_100 [get_ports [list {ads5296x4fmc%s_0_lclk_p}]]' %self.port))
+        cons.append(RawConstraint('set_property DIFF_TERM_ADV TERM_100 [get_ports [list {ads5296x4fmc%s_0_fclk_p}]]' % self.port))
+        if self.board_count > 1:
+            cons.append(RawConstraint('set_property DIFF_TERM_ADV TERM_100 [get_ports [list {ads5296x4fmc%s_1_din_p[*]}]]' %self.port))
+            cons.append(RawConstraint('set_property DIFF_TERM_ADV TERM_100 [get_ports [list {ads5296x4fmc%s_1_lclk_p}]]' %self.port))
+            cons.append(RawConstraint('set_property DIFF_TERM_ADV TERM_100 [get_ports [list {ads5296x4fmc%s_1_fclk_p}]]' % self.port))
+
+        ila="""
+create_debug_core u_ila_0 ila
+set_property ALL_PROBE_SAME_MU true [get_debug_cores u_ila_0]
+set_property ALL_PROBE_SAME_MU_CNT 1 [get_debug_cores u_ila_0]
+set_property C_ADV_TRIGGER false [get_debug_cores u_ila_0]
+set_property C_DATA_DEPTH 16384 [get_debug_cores u_ila_0]
+set_property C_EN_STRG_QUAL false [get_debug_cores u_ila_0]
+set_property C_INPUT_PIPE_STAGES 0 [get_debug_cores u_ila_0]
+set_property C_TRIGIN_EN false [get_debug_cores u_ila_0]
+set_property C_TRIGOUT_EN false [get_debug_cores u_ila_0]
+set_property port_width 1 [get_debug_ports u_ila_0/clk]
+connect_debug_port u_ila_0/clk [get_nets wb_clk_i]
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe0]
+set_property port_width 3 [get_debug_ports u_ila_0/probe0]
+connect_debug_port u_ila_0/probe0 [get_nets [list {ila_cs1[0]} {ila_cs1[1]} {ila_cs1[2]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe1]
+set_property port_width 3 [get_debug_ports u_ila_0/probe1]
+connect_debug_port u_ila_0/probe1 [get_nets [list {ila_cs0[0]} {ila_cs0[1]} {ila_cs0[2]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe2]
+set_property port_width 1 [get_debug_ports u_ila_0/probe2]
+connect_debug_port u_ila_0/probe2 [get_nets [list ila_miso0]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe3]
+set_property port_width 1 [get_debug_ports u_ila_0/probe3]
+connect_debug_port u_ila_0/probe3 [get_nets [list ila_miso1]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe4]
+set_property port_width 1 [get_debug_ports u_ila_0/probe4]
+connect_debug_port u_ila_0/probe4 [get_nets [list ila_mosi0]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe5]
+set_property port_width 1 [get_debug_ports u_ila_0/probe5]
+connect_debug_port u_ila_0/probe5 [get_nets [list ila_mosi1]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe6]
+set_property port_width 1 [get_debug_ports u_ila_0/probe6]
+connect_debug_port u_ila_0/probe6 [get_nets [list ila_rst0]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe7]
+set_property port_width 1 [get_debug_ports u_ila_0/probe7]
+connect_debug_port u_ila_0/probe7 [get_nets [list ila_rst1]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe8]
+set_property port_width 1 [get_debug_ports u_ila_0/probe8]
+connect_debug_port u_ila_0/probe8 [get_nets [list ila_sclk0]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe9]
+set_property port_width 1 [get_debug_ports u_ila_0/probe9]
+connect_debug_port u_ila_0/probe9 [get_nets [list ila_sclk1]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe10]
+set_property port_width 1 [get_debug_ports u_ila_0/probe10]
+connect_debug_port u_ila_0/probe10 [get_nets [list ila_sync0]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe11]
+set_property port_width 1 [get_debug_ports u_ila_0/probe11]
+connect_debug_port u_ila_0/probe11 [get_nets [list ila_sync1]]
+set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
+set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
+set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]
+connect_debug_port dbg_hub/clk [get_nets wb_clk_i]
+
+        """
+        cons.append(RawConstraint(ila))
 
         return cons
