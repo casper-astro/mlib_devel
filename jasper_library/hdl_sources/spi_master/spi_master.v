@@ -43,8 +43,8 @@ module spi_master#(
     reg [2:0] state = IDLE;
 
     // Generate SPI clock
-    reg [NCLKDIVBITS : 0] sclk_ctr = 0;
-    wire sclk_int = sclk_ctr[NCLKDIVBITS];
+    reg [NCLKDIVBITS - 1: 0] sclk_ctr = 0;
+    wire sclk_int = sclk_ctr[NCLKDIVBITS - 1];
     reg sclk_intR;
     wire sclk_posedge = sclk_int & ~sclk_intR;
     wire sclk_negedge = sclk_intR & ~sclk_int;
