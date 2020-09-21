@@ -1439,6 +1439,31 @@ class VerilogModule(object):
             self.n_axi4lite_interfaces += 1
             return axi4lite_device
 
+    def add_axi_interface(self, regname, mode, nbytes=4,
+                               default_val=0, suffix='',
+                               candr_suffix='', memory_map=[],
+                               typecode=0xff, data_width=32, axi4lite_mode=''):
+
+        if axi4lite_mode == 'raw':
+                 # axi4l miso signals
+           self.add_port('s_axi4lite_awready', signal='m_axi4lite_%s_awready' %regname, width=1, dir='out')
+           self.add_port('s_axi4lite_wready', signal='m_axi4lite_%s_wready' %regname, width=1, dir='out')
+           self.add_port('s_axi4lite_bresp',  signal='m_axi4lite_%s_bresp' %regname,  width=2, dir='out')
+           self.add_port('s_axi4lite_bvalid', signal='m_axi4lite_%s_bvalid'%regname, width=1, dir='out')
+           self.add_port('s_axi4lite_arready', signal='m_axi4lite_%s_arready'%regname, width=1, dir='out')
+           self.add_port('s_axi4lite_rresp',  signal='m_axi4lite_%s_rresp' %regname,  width=2, dir='out')
+           self.add_port('s_axi4lite_rdata',  signal='m_axi4lite_%s_rdata' %regname, width=32, dir='out')
+           self.add_port('s_axi4lite_rvalid', signal='m_axi4lite_%s_rvalid' %regname, width=1, dir='out')
+                # axi4l mosi signals
+           self.add_port('s_axi4lite_awaddr', signal='m_axi4lite_%s_awaddr' %regname, width=32, dir='out')
+           self.add_port('s_axi4lite_awvalid', signal='m_axi4lite_%s_awvalid' %regname, width=1, dir='out')
+           self.add_port('s_axi4lite_wdata',  signal='m_axi4lite_%s_wdata' %regname, width=32, dir='out')
+           self.add_port('s_axi4lite_wvalid', signal='m_axi4lite_%s_wvalid' %regname, width=1, dir='out')
+           self.add_port('s_axi4lite_wstrb',  signal='m_axi4lite_%s_wstrb' %regname, width=4, dir='out')
+           self.add_port('s_axi4lite_araddr', signal='m_axi4lite_%s_araddr' %regname, width=32, dir='out')
+           self.add_port('s_axi4lite_arvalid', signal='m_axi4lite_%s_arvalid' %regname, width=1, dir='out')
+           self.add_port('s_axi4lite_rready', signal='m_axi4lite_%s_rready' %regname, width=1, dir='out')
+           self.add_port('s_axi4lite_bready', signal='m_axi4lite_%s_bready' %regname, width=1, dir='out')
 
     def search_dict_for_name(self, dict, name):
         """
