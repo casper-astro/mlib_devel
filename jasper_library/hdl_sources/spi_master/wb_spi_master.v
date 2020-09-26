@@ -22,7 +22,7 @@ module wb_spi_master#(
     input         wb_stb_i,
 
     // SPI
-    output [NCSBITS - 1 : 0] cs_n,
+    output [NCSBITS - 1 : 0] cs,
     output sclk,
     output mosi,
     input miso
@@ -33,7 +33,8 @@ module wb_spi_master#(
   /*** Registers ****/
   reg [31:0] din_reg = 32'b0;
   reg [31:0] spi_dout_reg = 32'b0;
-  reg [7:0] cs_n_reg;
+  reg [7:0] cs_reg;
+  reg [7:0] cs_idle_reg;
   wire [NBITS-1:0] spi_dout;
   wire spi_dvld;
   
@@ -73,11 +74,10 @@ module wb_spi_master#(
             // Writing it causes a trigger
             0:  begin
               wb_ack <= 1'b1;
-              if (wb_sel_i[0]) begin
-                cs_n_reg <= wb_dat_i[7:0];
-                spi_trigger <= 1'b1;
-                wait_for_spi <= 1'b1;
-              end
+              cs_reg <= wb_dat_i[7:0];
+              cs_idle_reg <= wb_dat_i[15:8];
+              spi_trigger <= 1'b1;
+              wait_for_spi <= 1'b1;
             end
             1:  begin
               wb_ack <= 1'b1;
@@ -106,7 +106,7 @@ module wb_spi_master#(
               // You should never see this high (since any
               // SPI writes don't return until the transaction
               // is complete)
-              wb_data_out_reg <= {wait_for_spi, spi_dvld, 22'b0, cs_n_reg};
+              wb_data_out_reg <= {wait_for_spi, spi_dvld, 14'b0, cs_idle_reg, cs_reg};
               wb_ack <= 1'b1;
             end
             1: begin
@@ -141,14 +141,15 @@ module wb_spi_master#(
     .NCSBITS(NCSBITS)
     ) spi_master_inst (
     .clk(wb_clk_i),
-    .cs_n_in(cs_n_reg[NCSBITS-1:0]),
+    .cs_in(cs_reg[NCSBITS-1:0]),
+    .cs_in_idle(cs_idle_reg[NCSBITS-1:0]),
     .din(din_reg[NBITS-1:0]),
     .trigger(spi_trigger),
     .ack(spi_ack),
     .dout(spi_dout),
     .dvld(spi_dvld),
 
-    .cs_n(cs_n),
+    .cs(cs),
     .sclk(sclk),
     .mosi(mosi),
     .miso(miso)
