@@ -1,6 +1,7 @@
 from .yellow_block import YellowBlock
 from .yellow_block_typecodes import *
 from memory import Register
+from constraints import RawConstraint
 
 class sw_reg(YellowBlock):
     def initialize(self):
@@ -55,4 +56,13 @@ class sw_reg(YellowBlock):
                 inst.add_wb_interface(regname=self.unique_name, mode='rw', nbytes=4, typecode=self.typecode)
                 inst.add_port('user_clk', signal='user_clk', parent_sig=False)
                 inst.add_port('user_data_out', signal='%s_user_data_out'%self.fullname, width=32)
+    def gen_constraints(self):
+        if self.platform.mmbus_architecture == 'AXI4-Lite':
+            return []
+        else:
+            # Allow 2 cycles for the handshaking registers. Could TIG them altogether?
+            return [
+                RawConstraint('set_multicycle_path -from [get_pins %s/register_request_reg/C] -to [get_pins %s/register_requestR_reg/D] 2' % (self.fullname, self.fullname)),
+                RawConstraint('set_multicycle_path -from [get_pins %s/register_request_reg/C] -to [get_pins %s/register_requestR_reg/D] -hold 1' % (self.fullname, self.fullname)),
+            ]
         
