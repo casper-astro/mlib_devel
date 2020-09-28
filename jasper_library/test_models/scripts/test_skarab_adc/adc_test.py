@@ -1308,10 +1308,10 @@ class skarab_adc_rx:
 
 						skarab.transport.write_i2c(i2c_interface, sd.STM_I2C_DEVICE_ADDRESS, sd.MEZ_CONTROL_REG, 0x0)
 
-						spi_read_word = self.DirectSpiRead(skarab, mezzanine_site, sd.SPI_DESTINATION_PLL, sd.PLL_ALARM_READBACK)
+						spi_read_word = skarab.transport.direct_spi_read(mezzanine_site, sd.SPI_DESTINATION_PLL, sd.PLL_ALARM_READBACK)
 						timeout = 0
 						while (((spi_read_word & sd.PLL_CLOCK_OUTPUT_PHASE_STATUS) == 0x0) and (timeout < 1000)):
-							spi_read_word = self.DirectSpiRead(skarab, mezzanine_site, sd.SPI_DESTINATION_PLL, sd.PLL_ALARM_READBACK)
+							spi_read_word = skarab.transport.direct_spi_read(mezzanine_site, sd.SPI_DESTINATION_PLL, sd.PLL_ALARM_READBACK)
 							timeout = timeout + 1
 
 						if timeout == 1000:
@@ -1388,10 +1388,10 @@ class skarab_adc_rx:
 					print("Checking PLL SYNC status for mezzanine: ", mezzanine)
 					
 					if synchronise_mezzanine[mezzanine] == True:
-						spi_read_word = self.DirectSpiRead(skarab, mezzanine_site, sd.SPI_DESTINATION_PLL, sd.PLL_ALARM_READBACK)
+						spi_read_word = skarab.transport.direct_spi_read(mezzanine_site, sd.SPI_DESTINATION_PLL, sd.PLL_ALARM_READBACK)
 						timeout = 0
 						while (((spi_read_word & sd.PLL_CLOCK_OUTPUT_PHASE_STATUS) == 0x0) and (timeout < 1000)):
-							spi_read_word = self.DirectSpiRead(skarab, mezzanine_site, sd.SPI_DESTINATION_PLL, sd.PLL_ALARM_READBACK)
+							spi_read_word = skarab.transport.direct_spi_read(mezzanine_site, sd.SPI_DESTINATION_PLL, sd.PLL_ALARM_READBACK)
 							timeout = timeout + 1
 
 						if timeout == 1000:
