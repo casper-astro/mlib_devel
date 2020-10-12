@@ -30,8 +30,8 @@ module wb_register_simulink2ppc
   /* OPB clock domain data buffer */
   reg [31:0] register_buffer;
 
-  reg register_readyR;
-  reg register_readyRR;
+  (* ASYNC_REG = "true" *) reg register_readyR;
+  (* ASYNC_REG = "true" *) reg register_readyRR;
 
   always @(posedge wb_clk_i) begin
     //single cycle signals
@@ -72,8 +72,8 @@ module wb_register_simulink2ppc
     end
   end
 
-  reg register_requestR;
-  reg register_requestRR;
+  (* ASYNC_REG = "true" *) reg register_requestR;
+  (* ASYNC_REG = "true" *) reg register_requestRR;
 
   always @(posedge user_clk) begin
     register_requestR  <= register_request;

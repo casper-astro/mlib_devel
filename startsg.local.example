@@ -1,4 +1,10 @@
-export XILINX_PATH=/opt/Xilinx/Vivado/2016.2
-export MATLAB_PATH=/usr/local/MATLAB/R2016b
+# export XILINX_PATH=/opt/Xilinx/Vivado/2016.2
+# export XILINX_PATH=/media/amish/DATAPART1/opt/Vivado/2019.1
+export XILINX_PATH=/opt/Xilinx/Vivado/2019.1
+export MATLAB_PATH=/usr/local/MATLAB/R2018a
 export PLATFORM=lin64
 export JASPER_BACKEND=vivado
+export LD_PRELOAD=${LD_PRELOAD}:"/usr/lib/x86_64-linux-gnu/libexpat.so"
+
+# python3
+export CASPER_PYTHON_VENV_ON_START=/home/amish/Documents/work/_casper/casper_tools
