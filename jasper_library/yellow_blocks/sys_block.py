@@ -6,7 +6,8 @@ from .yellow_block_typecodes import *
 class sys_block(YellowBlock):
     def initialize(self):
         self.typecode = TYPECODE_SYSBLOCK
-        self.add_source('sys_block')             
+        self.add_source('sys_block')
+        if not hasattr(self, 'scratchpad'): self.scratchpad = 0
         # the internal memory_map
         self.memory_map = [
             Register('sys_board_id',   mode='r',  offset=0, default_val=self.board_id),

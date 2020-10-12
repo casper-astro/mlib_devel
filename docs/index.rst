@@ -58,25 +58,42 @@ This script will resynchronize every CASPER block in your design with its latest
 Setup
 ------
 
-The software stack you will require to use the toolflow will depend what hardware you are targetting. Older hardware (ROACH2 and earlier) use the older Xilinx software (ISE) which forces the use of different tools.
+The software stack you will require to use the toolflow will depend what hardware you are targeting. Older hardware (ROACH2 and earlier) use the older Xilinx software (ISE) which forces the use of different tools.
 
-The recommended OS is Ubuntu as it is what the majority of the collaboration are using. This makes it easier for us to support you. If you are so inclined, you could also use Red Hat, but we definitely do not support Windows. You are welcome to try but you will be on your own. You could always run Linux in a VM although this will increase your compile times.
+The current compatibility matrix is below:
 
-+-------------+--------------------+----------------+---------------+----------------------------------------------------------------------------+
-| Platform    | OS                 | Matlab Version | Xilinx Tools  | mlib_devel                                                                 |
-+=============+====================+================+===============+============================================================================+
-| ROACH1 or 2 | Ubuntu 12.04/14.04 | R2013b         | ISE 14.7      | `ROACH branch <https://github.com/casper-astro/mlib_devel/tree/roach2>`__  |
-+-------------+--------------------+----------------+---------------+----------------------------------------------------------------------------+
-| SNAP        | Ubuntu 14.04/16.04 | R2016b         | Vivado 2016.4 | `Master branch <https://github.com/casper-astro/mlib_devel>`__             |
-+-------------+--------------------+----------------+---------------+----------------------------------------------------------------------------+
-| SKARAB      | Ubuntu 14.04/16.04 | R2016b         | Vivado 2016.2 | `Master branch <https://github.com/casper-astro/mlib_devel>`__             |
-+-------------+--------------------+----------------+---------------+----------------------------------------------------------------------------+
-| VCU118      | Ubuntu 14.04/16.04 | R2017b         | Vivado 2018.2 | `vcu118 branch <https://github.com/casper-astro/mlib_devel/tree/vcu118>`__ |
-+-------------+--------------------+----------------+---------------+----------------------------------------------------------------------------+
+(Note that official support for ROACH plaforms is no longer provided, however `this version <https://github.com/casper-astro/mlib_devel/tree/d77999047d2f0dc53e1c1e6e516e6ef3cdd45632/docs>`__ of `mlib_devel` contains all ROACH related documentation and ROACH tutorials can be found `here <https://casper-tutorials.readthedocs.io/en/latest/tutorials/roach/tut_intro.html>`__)
+
++----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
+|  Hardware      |   Operating System  |    Matlab Version  |    Xilinx Version  |    mlib_devel branch / commit   |   Python Version  |
++================+=====================+====================+====================+=================================+===================+
+|ROACH1/2        | Ubuntu 14.04        |  2013b             |  ISE 14.7          |  branch: `roach`                |   Python 2.7      |
++----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
+|SKARAB          | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |   Python 3        |
++----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
+|SNAP            | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |   Python 3        |
++----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
+|Red Pitaya      | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |   Python 3        |
++----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
+|VCU118          | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |   Python 3        |
++----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
+|VCU128          | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |   Python 3        |
++----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
+|ZCU111          | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |   Python 3        |
++----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
+|SNAP2           | Ubuntu 16.04        |  2016b             |  Vivado 2016.4     |  branch: `master`               |   Python 3        |
++----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
+
+The recommended OS is Ubuntu as it is what the majority of the collaboration are using. This makes it easier for us to support you. If you are so inclined, you could also use Red Hat, but we definitely do not support Windows. You are welcome to try but you will be on your own. You could always run Linux in a VM although this will increase your compile times. 
+
+Please refer to the setup links below for more information on setting up the toolflow.
+
+Setup Links
+"""""""""""
 
 1. :doc:`Installing the Toolflow <src/Installing-the-Toolflow>`
 2. :doc:`Installing Matlab <src/How-to-install-Matlab>`
-3. :doc:`Installing Xilinx Vivado <src/How-to-install-Xilinx-Vivado>` or :doc:`Installing Xilinx ISE (ROACH only) <src/How-to-install-Xilinx-ISE>`
+3. :doc:`Installing Xilinx Vivado <src/How-to-install-Xilinx-Vivado>`
 4. :doc:`Configuring the Toolflow <src/Configuring-the-Toolflow>`
 5. :doc:`Running the Toolflow <src/Running-the-Toolflow>`
 
@@ -88,7 +105,6 @@ The recommended OS is Ubuntu as it is what the majority of the collaboration are
     src/Installing-the-Toolflow
     src/How-to-install-Matlab
     src/How-to-install-Xilinx-Vivado
-    src/How-to-install-Xilinx-ISE
     src/Configuring-the-Toolflow
     src/Running-the-Toolflow
 
@@ -118,3 +134,4 @@ Get Involved
 If you are a CASPER collaborator, or you’re just interested in what we’re up to, feel free to join our mailing list by sending a blank email `here. <casper+subscribe@lists.berkeley.edu>`_
 
 If would like to get involved in the development of the tools, please join our dev mailing list by sending a blank email `here. <casper-dev+subscribe@lists.berkeley.edu>`_.
+
