@@ -79,7 +79,9 @@ architecture arch_ska_mac_tx of ska_mac_tx is
         data_in_val     : in std_logic_vector(31 downto 0);
         crc_out         : out std_logic_vector(31 downto 0));
     end component;
-
+    
+    
+    attribute ASYNC_REG : string;
     signal current_mac_state : T_MAC_STATE;
 
     signal mac_tx_data_z1 : std_logic_vector(255 downto 0);
@@ -137,8 +139,26 @@ architecture arch_ska_mac_tx of ska_mac_tx is
     signal tx_activity_timeout_low_over : std_logic;
     signal tx_activity_timeout_high : std_logic_vector(11 downto 0);
     signal tx_activity_timeout : std_logic;
+    
+    signal sPhyTxRstD1 : std_logic;
+    signal sPhyTxRstD2 : std_logic;
+    attribute ASYNC_REG of sPhyTxRstD1 : signal is "TRUE";
+    attribute ASYNC_REG of sPhyTxRstD2 : signal is "TRUE";    
 
 begin
+
+
+-----------------------------------------------------------------------------------
+-- CDC Synchronisation
+-----------------------------------------------------------------------------------
+
+     pCDCPhyRstSynchroniser : process(mac_clk)
+     begin
+     if (rising_edge(mac_clk))then
+       sPhyTxRstD2 <= sPhyTxRstD1;
+       sPhyTxRstD1 <= phy_tx_rst;
+     end if;
+     end process pCDCPhyRstSynchroniser; 
 
 -----------------------------------------------------------------------------------
 -- REGISTER TO HANDLE LATENCY THROUGH CRC
@@ -428,7 +448,7 @@ begin
             xlgmii_txled <= "00";
         elsif (rising_edge(mac_clk))then
             -- IF OUT OF RESET, THEN LINK ENABLED
-            if (phy_tx_rst = '1')then
+            if (sPhyTxRstD2 = '1')then
                 xlgmii_txled <= "00";
             else
                 xlgmii_txled(0) <= '1';
