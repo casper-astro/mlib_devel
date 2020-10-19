@@ -733,7 +733,7 @@ pins:
     loc:
       - R5
       - P7
-      - M5
+      - N5
       - M7
   MEZ3_REFCLK_2_P:
     loc: U10

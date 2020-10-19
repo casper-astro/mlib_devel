@@ -1,6 +1,6 @@
 class Register(object):
     def __init__(self, name, nbytes=4, offset=0, mode='r',
-                default_val=0, ram=False, ram_size=-1, data_width=32):
+                default_val=0, ram=False, ram_size=-1, data_width=32, axi4lite_mode=''):
         """
         A class to encapsulate a register's parameters. This is used when
         instantiating a device with a large address space, but it is desirable
@@ -41,6 +41,15 @@ class Register(object):
         :type mode: String
         :param default_val: Default value for register to be reset to and initialized.
         :type default_val: Integer
+        :param ram: Whether the register is a RAM or not.
+        :type ram: Boolean
+        :param ram_size: Size of the RAM
+        :type ram_size: Integer
+        :param data_width: Width of the data to be stored in this register.
+        :type data_width: Integer
+        :param axi4lite_mode: Mode of the axi4lite interface. Eg. axi4lite_mode = 'raw', instantiates a raw axi4lite device.
+        :type axi4lite_mode: String
+
         """
         self.name = name
         self.nbytes = nbytes
@@ -54,3 +63,4 @@ class Register(object):
         # - Placing here for now because toolflow.py:generate_xml_memory_map
         #   has access to the memory.Register object in the XML generation
         self.data_width = data_width
+        self.axi4lite_mode = axi4lite_mode

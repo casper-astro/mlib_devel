@@ -415,15 +415,15 @@ assign rf_address_out = rf_address_hmc;
 
 // Instantiate openHMC controller
 
-  (* mark_debug = "true" *) wire dbg_ska_sa_top_phy_tx_ready;
-  (* mark_debug = "true" *) wire dbg_ska_sa_top_phy_rx_ready;
-  (* mark_debug = "true" *) wire dbg_ska_sa_top_phy_init_cont_set;
-  (* mark_debug = "true" *) wire dbg_ska_sa_top_HMC_IIC_INIT_DONE;
+  //(* mark_debug = "true" *) wire dbg_ska_sa_top_phy_tx_ready;
+  //(* mark_debug = "true" *) wire dbg_ska_sa_top_phy_rx_ready;
+  //(* mark_debug = "true" *) wire dbg_ska_sa_top_phy_init_cont_set;
+  //(* mark_debug = "true" *) wire dbg_ska_sa_top_HMC_IIC_INIT_DONE;
   
-  assign dbg_ska_sa_top_phy_tx_ready = phy_tx_ready;
-  assign dbg_ska_sa_top_phy_rx_ready = phy_rx_ready;
-  assign dbg_ska_sa_top_phy_init_cont_set = phy_init_cont_set;
-  assign dbg_ska_sa_top_HMC_IIC_INIT_DONE = HMC_IIC_INIT_DONE;
+  //assign dbg_ska_sa_top_phy_tx_ready = phy_tx_ready;
+  //assign dbg_ska_sa_top_phy_rx_ready = phy_rx_ready;
+  //assign dbg_ska_sa_top_phy_init_cont_set = phy_init_cont_set;
+  //assign dbg_ska_sa_top_HMC_IIC_INIT_DONE = HMC_IIC_INIT_DONE;
   
 //  wire m_axis_rx_TREADY_ser;
 //  wire m_axis_rx_TVALID_ser;
