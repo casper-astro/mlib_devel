@@ -84,7 +84,11 @@ class Platform(object):
             self.mmbus_address_alignment = self.conf['mmbus_address_alignment']
         except KeyError:
             self.mmbus_address_alignment = 4
-
+        try:
+            self.mmbus_rfdc_base_address = self.conf['mmbus_rfdc_base_address']
+        except KeyError:
+            self.mmbus_rfdc_base_address = 0xA0800000
+			
     def add_pins(self, name, iostd, loc):
         """
         Add a pin to the platform. Generally for use in constructors

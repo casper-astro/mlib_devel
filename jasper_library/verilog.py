@@ -600,6 +600,8 @@ class VerilogModule(object):
         self.axi4lite_devices = []
         self.n_axi4lite_interfaces = 0 # axi4lite interfaces to this module
         self.memory_map = {}
+        self.rfdc_devices = [] #this is for rfdc core on RFSOC, such as zcu111 platform
+        self.n_rfdc_interfaces = 0
         # sourcefiles required by the module (this is currently NOT
         # how the jasper toolflow implements source management)
         self.sourcefiles = []
@@ -1526,6 +1528,24 @@ class VerilogModule(object):
            self.add_port('s_axi4lite_arvalid', signal='m_axi4lite_%s_arvalid' %regname, width=1, dir='out')
            self.add_port('s_axi4lite_rready', signal='m_axi4lite_%s_rready' %regname, width=1, dir='out')
            self.add_port('s_axi4lite_bready', signal='m_axi4lite_%s_bready' %regname, width=1, dir='out')
+
+    def add_rfdc_interface(self, regname, mode, nbytes=4, default_val=0, suffix='', candr_suffix='', memory_map=[], typecode=0xff):
+        """
+        Add the ports necessary for rfdc core, which is a special AXILite4 device
+
+        This function returns the AXI4LiteDevice object, so the caller can mess with it's memory map
+        if they so desire.
+        """
+        if regname in [axi_dev.regname for axi_dev in self.axi4lite_devices]:
+            return
+        else:
+            # Make single register in memory_map if memory_map is empty
+            if not memory_map:
+                memory_map = [Register(regname, nbytes=nbytes, offset=0, mode=mode, default_val=default_val, ram_size=nbytes if typecode==4 else -1, ram=True if typecode==4 else False)]
+            rfdc_device = AXI4LiteDevice(regname, nbytes=nbytes, mode=mode, hdl_suffix=suffix, hdl_candr_suffix=candr_suffix, memory_map=memory_map, typecode=typecode)
+            self.rfdc_devices += [rfdc_device]
+            self.n_rfdc_interfaces += 1
+            return rfdc_device
 
     def search_dict_for_name(self, dict, name):
         """

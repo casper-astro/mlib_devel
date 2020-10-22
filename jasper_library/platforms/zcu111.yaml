@@ -6,19 +6,30 @@ cfgbvs: GND
 backend_target: vivado
 mmbus_architecture: AXI4-Lite
 mmbus_base_address: 0xA0000000
+mmbus_rfdc_base_address: 0xA0800000
 # How to address each 32-bit (i.e. 4 indicates byte-addressable)
 mmbus_address_alignment: 4
 sources: []
 constraints: []
 provides:
   - sys_clk
+  - sfp0
+  - sfp1
+  - sfp2
+  - sfp3
 pins:
   clk_100_p:
     iostd: LVDS
-    loc: AM15
+    loc: AL16
   clk_100_n:
     iostd: LVDS
     loc: AN15
+  pl_sysref_p:
+    iostd: LVDS
+    loc: AK17
+  pl_sysref_n:
+    iostd: LVDS
+    loc: AK16
   led:
     iostd: LVCMOS18
     loc:
@@ -30,7 +41,41 @@ pins:
        - AN16
        - AN17
        - AV15
-
-
+#eth_clk could be 125MHz for 1GbE or 156.25MHz for 10GbE
+  eth_clk_p:
+    loc: Y31
+  eth_clk_n:
+    loc: Y32
+  mgt_tx_p:
+    loc: 
+      - Y35
+      - V35
+      - T35
+      - R33
+  mgt_tx_n:
+    loc:
+      - Y36
+      - V36
+      - T36
+      - R34
+  mgt_rx_p:
+    loc:
+      - AA38
+      - W38
+      - U38
+      - R38
+  mgt_rx_n:
+    loc:
+      - AA39
+      - W39
+      - U39
+      - R39
+  sfp_disable:
+    iostd: LVCMOS12
+    loc:
+      - G12
+      - G10
+      - K12
+      - J7
 
 
