@@ -571,7 +571,7 @@ class tengbaser_xilinx_ultrascale(ten_gbe):
         phy.add_port('ctl_rx_data_pattern_select_0',"1'b0")
         phy.add_port('ctl_rx_prbs31_test_pattern_enable_0',"1'b0")
         #RX_0 Stats Signals
-        phy.add_port('stat_rx_block_lock_0','stat_rx_block_lock_0')
+        phy.add_port('stat_rx_block_lock_0','stat_rx_block_lock%d'%self.port)
         phy.add_port('stat_rx_framing_err_valid_0','')
         phy.add_port('stat_rx_framing_err_0','')
         phy.add_port('stat_rx_hi_ber_0','')
@@ -673,7 +673,7 @@ class tengbaser_xilinx_ultrascale(ten_gbe):
         ktge.add_port('xgmii_rxc', 'xgmii_rxc%d'%self.port, width=8)
 
         # XAUI CONF interface
-        ktge.add_port('xaui_status', "{7'b0,stat_rx_block_lock_0}",parent_sig=False)
+        ktge.add_port('xaui_status', "{7'b0,stat_rx_block_lock%d}"%self.port,parent_sig=False)
 
         ktge.add_port('clk', 'user_clk', parent_sig=False)
 
