@@ -18,10 +18,10 @@ provides:
   - sfp2
   - sfp3
 pins:
-  clk_100_p:
+  clk_128_p:
     iostd: LVDS
     loc: AL16
-  clk_100_n:
+  clk_128_n:
     iostd: LVDS
     loc: AN15
   pl_sysref_p:
@@ -41,7 +41,7 @@ pins:
        - AN16
        - AN17
        - AV15
-#eth_clk could be 125MHz for 1GbE or 156.25MHz for 10GbE
+#eth_clk should be 156.25MHz for 10GbE
   eth_clk_p:
     loc: Y31
   eth_clk_n:

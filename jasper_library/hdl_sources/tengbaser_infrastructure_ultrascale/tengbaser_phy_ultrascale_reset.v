@@ -48,10 +48,9 @@
 
 `timescale 1ps / 1ps
 (* DowngradeIPIdentifiedWarnings="yes" *)
-module xxv_ethernet_1_reset_wrapper
+module tengbaser_phy_ultrascale_reset
 (
     input  wire sys_reset,
-    input  wire dclk,
     input  wire gt_txusrclk2,
     input  wire gt_rxusrclk2,
     input  wire rx_core_clk,
@@ -65,9 +64,7 @@ module xxv_ethernet_1_reset_wrapper
     output wire rx_serdes_reset_out,
     output wire usr_tx_reset,
     output wire usr_rx_reset,
-    output wire gtwiz_reset_all,
-    output wire gtwiz_reset_tx_datapath_out,
-    output wire gtwiz_reset_rx_datapath_out
+    output wire gtwiz_reset_all
 );
 
   wire gt_tx_reset_in_sync;
@@ -81,10 +78,6 @@ module xxv_ethernet_1_reset_wrapper
   reg  rx_reset_done_async_r;
   wire rx_reset_done;
 
-
-
-  assign gtwiz_reset_tx_datapath_out = 1'b0;
-  assign gtwiz_reset_rx_datapath_out = 1'b0;
 
   assign gtwiz_reset_all             = sys_reset;
  

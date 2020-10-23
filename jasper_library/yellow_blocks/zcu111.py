@@ -67,16 +67,16 @@ class zcu111(YellowBlock):
         inst_infr.add_parameter('MULTIPLY', clkparams[0])
         inst_infr.add_parameter('DIVIDE',   clkparams[1])
         inst_infr.add_parameter('DIVCLK',   clkparams[2])
-        inst_infr.add_port('clk_100_p',      "clk_100_p", dir='in',  parent_port=True)
-        inst_infr.add_port('clk_100_n',      "clk_100_n", dir='in',  parent_port=True)
+        inst_infr.add_port('clk_128_p',      "clk_128_p", dir='in',  parent_port=True)
+        inst_infr.add_port('clk_128_n',      "clk_128_n", dir='in',  parent_port=True)
 
         inst_infr.add_port('sys_clk      ', 'sys_clk   ')
         inst_infr.add_port('sys_clk90    ', 'sys_clk90 ')
         inst_infr.add_port('sys_clk180   ', 'sys_clk180')
         inst_infr.add_port('sys_clk270   ', 'sys_clk270')
-        inst_infr.add_port('clk_200   ', 'clk_200')
+        inst_infr.add_port('clk_128M   ', 'clk_128M')
 		
-        inst_infr.add_port('sys_clk_rst', 'sys_clk_rst')
+        inst_infr.add_port('sys_clk_rst', 'sys_rst')
 		
     def gen_children(self):
         return [YellowBlock.make_block({'fullpath': self.fullpath,'tag': 'xps:sys_block', 'board_id': '3', 'rev_maj': '2', 'rev_min': '0', 'rev_rcs': '1'}, self.platform)]
@@ -85,8 +85,8 @@ class zcu111(YellowBlock):
 
     def gen_constraints(self):
         cons = []
-        cons.append(PortConstraint('clk_100_p', 'clk_100_p'))
-        cons.append(ClockConstraint('clk_100_p','clk_100_p', period=7.8125, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=3.90625))
+        cons.append(PortConstraint('clk_128_p', 'clk_128_p'))
+        cons.append(ClockConstraint('clk_128_p','clk_128_p', period=7.8125, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=3.90625))
         cons.append(ClockGroupConstraint('-of_objects [get_pins zcu111_infr_inst/user_clk_mmcm_inst/CLKOUT0]', '-of_objects [get_pins zcu111_inst/zynq_ultra_ps_e_0/U0/PS8_i/PLCLK[0]]', 'asynchronous'))
         cons.append(ClockGroupConstraint('-of_objects [get_pins zcu111_inst/zynq_ultra_ps_e_0/U0/PS8_i/PLCLK[0]]', '-of_objects [get_pins zcu111_infr_inst/user_clk_mmcm_inst/CLKOUT0]', 'asynchronous'))
         #cons.append(ClockGroupConstraint('clk_100_p', 'clk_pl_0', 'asynchronous'))

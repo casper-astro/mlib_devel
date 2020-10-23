@@ -53,7 +53,6 @@
 module tengbaser_infrastructure_ultrascale (
      input gt_refclk_p,
      input gt_refclk_n,
-     output gt_refclk_out,
      input  [0:0] qpll0reset,
      output [0:0] qpll0lock,
      output [0:0] qpll0outclk,
@@ -61,27 +60,7 @@ module tengbaser_infrastructure_ultrascale (
      input  [0:0] qpll1reset,
      output [0:0] qpll1lock,
      output [0:0] qpll1outclk,
-     output [0:0] qpll1outrefclk,
-     input  wire gt_txusrclk2_0,
-     input  wire gt_rxusrclk2_0,
-     input  wire rx_core_clk_0,
-     input  wire gt_tx_reset_in_0,
-     input  wire gt_rx_reset_in_0,
-
-     input  wire tx_core_reset_in_0,
-     input  wire rx_core_reset_in_0,
-     output wire tx_core_reset_out_0,
-     output wire rx_core_reset_out_0,
-     output wire rx_serdes_reset_out_0,
-     output wire usr_tx_reset_0,
-     output wire usr_rx_reset_0,
-     output wire gtwiz_reset_all_0,
-     output wire gtwiz_reset_tx_datapath_out_0,
-     output wire gtwiz_reset_rx_datapath_out_0,
-    
-     input  wire sys_reset,
-     output  wire dclk
-
+     output [0:0] qpll1outrefclk
 );
 
 wire refclk;
@@ -89,10 +68,7 @@ wire refclk;
 xxv_ethernet_1_clocking_wrapper i_xxv_ethernet_1_clocking_wrapper(
     .gt_refclk_p (gt_refclk_p),
     .gt_refclk_n (gt_refclk_n),
-    .gt_refclk_out (gt_refclk_out),
-    .gt_refclk (refclk),
-	.qplllock(qpll0lock),
-	.dclk(dclk));
+    .gt_refclk (refclk));
 	
 xxv_ethernet_1_common_wrapper i_xxv_ethernet_1_common_wrapper
 (
@@ -107,24 +83,5 @@ xxv_ethernet_1_common_wrapper i_xxv_ethernet_1_common_wrapper
     .qpll1outrefclk (qpll1outrefclk)
 );
 
-xxv_ethernet_1_reset_wrapper i_xxv_ethernet_1_reset_wrapper_0(
-    .gt_txusrclk2 (gt_txusrclk2_0),
-    .gt_rxusrclk2 (gt_rxusrclk2_0),
-    .rx_core_clk (rx_core_clk_0),
-    .gt_tx_reset_in (gt_tx_reset_in_0),
-    .gt_rx_reset_in (gt_rx_reset_in_0),
-    .tx_core_reset_in (tx_core_reset_in_0),
-    .rx_core_reset_in (rx_core_reset_in_0),
-    .tx_core_reset_out (tx_core_reset_out_0),
-    .rx_core_reset_out (rx_core_reset_out_0),
-    .rx_serdes_reset_out (rx_serdes_reset_out_0),
-    .usr_tx_reset (usr_tx_reset_0),
-    .usr_rx_reset (usr_rx_reset_0),
-    .gtwiz_reset_all (gtwiz_reset_all_0),
-    .gtwiz_reset_tx_datapath_out (gtwiz_reset_tx_datapath_out_0),
-    .gtwiz_reset_rx_datapath_out (gtwiz_reset_rx_datapath_out_0),
-    .sys_reset (sys_reset),
-    .dclk (dclk)
-);
 endmodule
 

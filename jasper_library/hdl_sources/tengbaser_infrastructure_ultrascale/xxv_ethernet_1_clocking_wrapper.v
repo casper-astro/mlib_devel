@@ -53,10 +53,8 @@
 module xxv_ethernet_1_clocking_wrapper (
   input       gt_refclk_p,
   input       gt_refclk_n,
-  output wire gt_refclk_out,
-  output wire gt_refclk,
-  input       qplllock,
-  output wire dclk
+//  output wire gt_refclk_out,
+  output wire gt_refclk
   );
   wire  gt_refclkcopy;
  IBUFDS_GTE4 IBUFDS_GTE4_GTREFCLK0_INST (
@@ -67,7 +65,7 @@ module xxv_ethernet_1_clocking_wrapper (
     .ODIV2(gt_refclkcopy)
   );
   
-
+/*
      BUFG_GT refclk_bufg_gt_i
   (
       .I       (gt_refclkcopy),
@@ -78,40 +76,7 @@ module xxv_ethernet_1_clocking_wrapper (
       .DIV     (3'b000),
       .O       (gt_refclk_out)
   ); 
-
-// MMCM to generate both clk156 and dclk
-  wire mmcm_clk_fb;
-  wire dclk_buf;
-  MMCM_BASE #
-  (
-    .BANDWIDTH            ("OPTIMIZED"),
-    .STARTUP_WAIT         ("FALSE"),
-    .DIVCLK_DIVIDE        (1),
-    .CLKFBOUT_MULT_F      (8.0),
-    .CLKFBOUT_PHASE       (0.000),
-    .CLKOUT0_DIVIDE_F     (16.000),
-    .CLKOUT0_PHASE        (0.000),
-    .CLKOUT0_DUTY_CYCLE   (0.500),
-    .CLKIN1_PERIOD        (6.400),
-    .CLKOUT1_DUTY_CYCLE   (0.500),
-    .REF_JITTER1          (0.010)
-  )
-  clkgen_i
-  (
-    .CLKFBIN(mmcm_clk_fb),
-    .CLKIN1(gt_refclk_out),
-    .PWRDWN(1'b0),
-    .RST(1'b0),
-    .CLKFBOUT(mmcm_clk_fb),
-    .CLKOUT0(dclk_buf),
-    .LOCKED()
-  );
-
-  BUFG dclk_bufg_inst 
-  (
-      .I                              (dclk_buf),
-      .O                              (dclk) 
-  ); 
+*/
 
 endmodule
   
