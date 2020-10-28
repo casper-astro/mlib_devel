@@ -556,7 +556,8 @@ class tengbaser_xilinx_ultrascale(ten_gbe):
         phy.add_port('gt_rxp_in_0', 'mgt_rx_p%d'%self.port, parent_port=True, dir='in')
         phy.add_port('gt_rxn_in_0', 'mgt_rx_n%d'%self.port, parent_port=True, dir='in')
         phy.add_port('tx_mii_clk_0','tx_mii_clk%d'%self.port)
-        phy.add_port('rx_core_clk_0','rx_clk_out%d'%self.port)
+        #phy.add_port('rx_core_clk_0','rx_clk_out%d'%self.port)
+        phy.add_port('rx_core_clk_0','tx_mii_clk%d'%self.port)
         phy.add_port('rx_clk_out_0','rx_clk_out%d'%self.port)
         phy.add_port('gt_loopback_in_0',"3'b000")
         #RX_0 Signals
@@ -606,8 +607,10 @@ class tengbaser_xilinx_ultrascale(ten_gbe):
         #reset signals
         phy.add_port('rx_serdes_reset_0','rx_serdes_reset%d'%self.port)
         phy.add_port('gt_reset_all_in_0','gt_reset_all%d'%self.port)
-        phy.add_port('gt_tx_reset_in_0',"1'b0")
-        phy.add_port('gt_rx_reset_in_0',"1'b0")
+        #phy.add_port('gt_tx_reset_in_0',"1'b0")
+        #phy.add_port('gt_rx_reset_in_0',"1'b0")
+        phy.add_port('gt_tx_reset_in_0','sys_rst')
+        phy.add_port('gt_rx_reset_in_0','sys_rst')
         phy.add_port('gt_reset_tx_done_out_0','gt_reset_tx_done_out%d'%self.port)
         phy.add_port('gt_reset_rx_done_out_0','gt_reset_rx_done_out%d'%self.port)
         #clk signals
