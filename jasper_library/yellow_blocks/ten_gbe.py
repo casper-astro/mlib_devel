@@ -669,7 +669,7 @@ class tengbaser_xilinx_ultrascale(ten_gbe):
             ktge.add_port('xaui_clk', 'xaui_clk')
         else:
             ktge.add_port('xaui_clk', 'tx_mii_clk%d'%self.port)
-        ktge.add_port('xaui_reset', 'axil_rst', parent_sig=False)
+        ktge.add_port('xaui_reset', 'sys_rst', parent_sig=False)
         ktge.add_port('xgmii_txd', 'xgmii_txd%d'%self.port, width=64)
         ktge.add_port('xgmii_txc', 'xgmii_txc%d'%self.port, width=8)
         ktge.add_port('xgmii_rxd', 'xgmii_rxd%d'%self.port, width=64)

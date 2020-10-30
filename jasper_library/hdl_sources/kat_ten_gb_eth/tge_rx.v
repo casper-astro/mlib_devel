@@ -143,6 +143,7 @@ module tge_rx #(
 `endif
           end else begin
             rx_state          <= RX_HDR_WORD_3;
+            application_frame <= 1'b1;
           end
         end
         RX_HDR_WORD_3: begin
@@ -155,6 +156,7 @@ module tge_rx #(
 `endif
           end else begin
             rx_state          <= RX_HDR_WORD_4;
+            application_frame <= 1'b1;
           end
         end
         RX_HDR_WORD_4: begin
@@ -166,10 +168,11 @@ module tge_rx #(
           /* No IP checksum */
 
           rx_state               <= RX_HDR_WORD_5;
+          application_frame      <= 1'b1;
         end
         RX_HDR_WORD_5: begin
           rx_state               <= RX_HDR_WORD_6;
-
+          application_frame      <= 1'b1;
           /* Store source port */
           rx_control_data[47:40] <= mac_rx_data_z[23:16];
           rx_control_data[39:32] <= mac_rx_data_z[31:24];
@@ -194,6 +197,7 @@ module tge_rx #(
         RX_HDR_WORD_6: begin
           /* No UDP checksum */
           rx_state <= RX_DATA;
+          application_frame <= 1'b1;
         end
         RX_DATA: begin
           /* get data until good frame/bad frame signal */
@@ -209,6 +213,8 @@ module tge_rx #(
               $display("tge_rx: got BAD end of frame");
 `endif
           end
+          else
+            application_frame <= 1'b1;
         end
       endcase
       if (!local_enable_retimed) begin
