@@ -4,12 +4,12 @@ from constraints import PortConstraint, ClockConstraint, RawConstraint
 
 from math import ceil, floor
 
-class adc4x16g(YellowBlock):
+class adc_4x16g_asnt(YellowBlock):
     def initialize(self):
     
     
     def modify_top(self,top):
-        module = 'adc4x16g_interface'
+        module = 'adc_4x16g_asnt_interface'
         
     def gen_constraints(self):
         cons = []
