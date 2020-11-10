@@ -3,16 +3,16 @@
 Most programmable System on Chip (SoC) devices, such as the Zynq-7000 have architectural features which provide designers with an advanced ARM based Processing System (PS) and a flexible region of Programmable Logic (PL) based on FPGA fabric. The PS and the PL communicate using an interface standard called ARM eXtensible Interface (AXI). Other common SoC interfaces are IBM's Processor Local Bus / On-chip Peripheral Bus (PLB/OPB) interface and Wishbone OpenCore cores. In this document we will focus on the AXI since it is currently used in the CASPER toolflow developments. 
 The AXI is part of the Advanced Microntroller Bus Architecture (AMBA) developed by ARM along with the Advanced Peripheral Bus (APB), Advanced High-performance Bus (AHB) and the Advanced Trace Bus (ATB) as shown in Fig. 1 below. The AXI is also the bus of choice for chip maufacturers e.g. Xilinx. The current AXI version, AXI4 (based on AMBA 4.0:2010) has three variants viz; AXI4, AXI4-Stream and AXI4-Lite. The AXI4 is a high performance memory mapped data and address interface capable of burst access to memory maapped devices. The AXI4-Stream is a fast unidirectional protocol for transferring data from master to slave. The AXI4-Lite is a subset of the AXI that lacks the burst access capability. Again we will focus on the AXI4-Lite interface since it is currently finding application in CASPER toolflow developments.
 
-![AMBA_bus_architectures.png](../../mlib_devel/docs/_static/img/AMBA_bus_architectures.png)
+![AMBA_bus_architectures.png](_static/img/AMBA_bus_architectures.png)
 
 ## 2. AXI4-Lite Interface
 The AXI4-Lite interface exists between the AXI master and the AXI slave. The AXI master initiates the read and write transactions while the AXI slave responds to the initiated transactions. Fig.2 below illustrates this master - slave transaction concept.
 
-![master_slave_interface.png](../../mlib_devel/docs/_static/img/master_slave_interface.png)
+![master_slave_interface.png](_static/img/master_slave_interface.png)
 
 The illustration above is a one master to one slave interface. However, it is quite often that one/several master(s) may want to communicate with one/several slave(s) or vice-versa. In this case, an AXI Interconnect is required to perform the necessary abitration among the communicating master and slave devices. Fig. 3 below illustrates this concept, where there is one master and three slaves.
 
-![axi_interconnect.png](../../mlib_devel/docs/_static/img/axi_interconnect.png)
+![axi_interconnect.png](_static/img/axi_interconnect.png)
 
 ## 3. AXI4-Lite Transactions
 The transfer of data between the AXI4-Lite master and slave devices follow a specification which involves five cahannels; the read address channel, the write address channel, the read data channel, the write data channel and the write acknowledge (response) channel. All these five channels are contained in the read and write transactions discussed below.
@@ -20,12 +20,12 @@ The transfer of data between the AXI4-Lite master and slave devices follow a spe
 ###  a. Read Transactions
 The read transaction is initiated by the master to retrieve values from the slave device. This transaction is completed based on the read address and the read data channels as shown in Fig. 4 below. The read address channel carries the address information and some handshaking signals that allows the master to inititate a read transaction. The read data channel carries the actual data values that are transferred, together with the associated handshaking signals.
 
-![read_transaction.png](../../mlib_devel/docs/_static/img/read_transaction.png)
+![read_transaction.png](_static/img/read_transaction.png)
 
 ###  b. Write Transactions
 The write transaction is initiated by the master to write (store) data values in the slave device. This transaction is completed based on the write address, write data and write response channels as shown in Fig. 5 below. The write address channel carries the address information and some handshaking signals that allows the master to inititate a write transaction. It is identical to the read address channel above. The write data channel carries the actual data values that are to be written, together with the associated handshaking signals. The write response channel allows the slave to acknowledge receipt of data or to signal an error.
 
-![write_transaction.png](../../mlib_devel/docs/_static/img/write_transaction.png)
+![write_transaction.png](_static/img/write_transaction.png)
 
 ## 4. AXI4-Lite Interface Signals
 The AXI4-Lite interface signals and their descriptions are summarised in Table 1 below. The signals are grouped according to the channels as discussed above. By convention, the signals contained within each channel are named with a specific format as follows:
@@ -36,24 +36,24 @@ Write response channel - signal names have the format s_axi_b...
 Read address channel - signal names have the format s_axi_ar...
 Read data channel - signal names have the format s_axi_r...
 
-![AXI4-Lite_interface_signals.png](../../mlib_devel/docs/_static/img/AXI4-Lite_interface_signals.png)
+![AXI4-Lite_interface_signals.png](_static/img/AXI4-Lite_interface_signals.png)
 
 The details of the s_axi_wstrb and s_axi_rresp/s_axi_bresp signals can be found in Table 2 and Table 3 respectively.
 
-![axi4lite_response.png](../../mlib_devel/docs/_static/img/axi4lite_response.png)
+![axi4lite_response.png](_static/img/axi4lite_response.png)
 
-![s_axi_wstrb_signals.png](../../mlib_devel/docs/_static/img/s_axi_wstrb_signals.png)
+![s_axi_wstrb_signals.png](_static/img/s_axi_wstrb_signals.png)
 
 ## 5. Custom AXI4-Lite Interface
 
 The CASPER toolflow implements an axi4lite interface and a custom slave implementation that is based on the xml2vhdl code generation. To illustrate this concept we start with an example Simulink design that includes sofware registers (addr, data_in, data_low), BRAM (shared_bram) and a raw axi device (raw_axi_write_enable) as slave devices as shown in Fig 6.
 
-![example_simulink_design.png](../../mlib_devel/docs/_static/img/example_simulink_design.png)
+![example_simulink_design.png](_static/img/example_simulink_design.png)
 
 A block diagram of the CASPER custom axi4lite IP which is derived from the Simulink design is shown in Fig.7. The platform instance (eg red_pitaya) instantiates some logic which adapts a software interface (PL <-> PS ports eg DDR_x) which connects to the AXI_interconnect. Four axi4lite slave instances, in this case are arbitered by the AXI_interconnect. These slave instances are sys_block, sw_reg, shared_BRAM and the raw_axi_device as shown in the diagram. The existence of some of these slave instances is dynamic and depends on the Simulink yellow blocks the user instantiates. The sys_block_inst is always there as it is instantiated by the platform python code. The sw_reg_inst is always there but has a different number of outputs depending on how many sw_reg blocks a user instantiates. The bram_inst is not always there but we get one instance for each bram yellow block in the simulink design. The number of raw_axi_device instances depend on how many raw_axi devices a user instantiates.
 It is important to note that all of the axi4lite interconnect logic and the xml2vhdl slave generated blocks are dynamically wrapped up in the axi4lite_ic_wrapper and the exposed ports are available at top level to drive or be driven by Simulink or some other logic blocks. An exception to this is the raw_axi_device which must implement its own decoding logic such that it requires only a raw AXI interface.
 
-![custom_AXI4-Lite_block_diagram.png](../../mlib_devel/docs/_static/img/custom_AXI4-Lite_block_diagram.png)
+![custom_AXI4-Lite_block_diagram.png](_static/img/custom_AXI4-Lite_block_diagram.png)
 
 
 In all cases, the AXI_interconnect connects to the axi4lite slave logic instances through the axi4lite mosi/miso signals. The ipb_mosi/miso signals connects the axi4lite slave logic to the MuxDemux blocks. You will see these signals as ipb_mosi[addr], ipb_mosi[req], ipb_mosi[wdat], ipb_mosi[wreq], ipb_miso[rack], ipb_miso[rdat] and ipb_miso[wack] in the toolflow. The ipb_* string is some convention adopted in the xml2vhdl code. The respective registers or RAM can now be accessed through some decoding logic. It is important to note that the maximum number of slaves on this axi4lite interface is 32.
