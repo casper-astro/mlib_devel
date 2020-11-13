@@ -583,6 +583,12 @@ pins:
       - None # clk0_c2m; Clock chip -> mezz card
       - H28  # clk1_m2c
       - None # clk1_c2m; NC
+  fmc0_gbtclk_p:
+    iostd: lvds
+    loc:
+      - T32
+      - H31
+
   fmc0_ha_n:
     iostd: lvds
     loc:
@@ -681,6 +687,11 @@ pins:
       - None # clk0_c2m; Clock chip -> mezz card
       - H29  # clk1_m2c
       - None # clk1_c2m; NC
+  fmc0_gbtclk_n:
+    iostd: lvds
+    loc:
+      - R32
+      - G31
 
   fmc1_ha_p:
     iostd: lvds
@@ -780,6 +791,12 @@ pins:
       - None # clk0_c2m; Clock chip -> mezz card
       - AH32 # clk1_m2c
       - None # clk1_c2m; NC
+  fmc1_gbtclk_p:
+    iostd: lvds
+    loc:
+      - AV31
+      - AK32
+
   fmc1_ha_n:
     iostd: lvds
     loc:
@@ -878,6 +895,11 @@ pins:
       - None # clk0_c2m; Clock chip -> mezz card
       - AJ33 # clk1_m2c
       - None # clk1_c2m; NC
+  fmc1_gbtclk_n:
+    iostd: lvds
+    loc:
+      - AV32
+      - AK33
 
   # Single-ended FMC interface
   fmc0_ha:
