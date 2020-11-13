@@ -39,6 +39,7 @@ module ads5296x4_interface_v2 #(
   wire [4*2*G_NUM_UNITS + 1 - 1 : 0]  delay_rst;
   wire [4*2*G_NUM_UNITS + 1 - 1 : 0] delay_en_vtc;
   wire [8 : 0] delay_val;
+  wire delay_clk = wb_clk_i;
 
   wb_ads5296_attach wb_attach_inst (
     .wb_clk_i(wb_clk_i),
@@ -52,6 +53,7 @@ module ads5296x4_interface_v2 #(
     .wb_we_i(wb_we_i),
     .wb_cyc_i(wb_cyc_i),
     .wb_stb_i(wb_stb_i),
+    .user_clk(delay_clk),
     .delay_load(delay_load),
     .delay_rst(delay_rst),
     .delay_en_vtc(delay_en_vtc),
@@ -102,7 +104,6 @@ module ads5296x4_interface_v2 #(
    *   pulse LOAD high for 1 cycle
    */
 
-  wire delay_clk = wb_clk_i;
 
   reg [4*2*G_NUM_UNITS : 0] delay_loadR;
   wire [4*2*G_NUM_UNITS : 0] delay_load_strobe = delay_load & ~delay_loadR;
@@ -112,11 +113,16 @@ module ads5296x4_interface_v2 #(
 
   wire [4*2*G_NUM_UNITS - 1:0] din_delayed;
   wire fclk_delayed;
+
   IDELAYE3 #(
     .DELAY_TYPE("VAR_LOAD"),
     .DELAY_FORMAT("TIME"),
     .UPDATE_MODE("ASYNC"),
-    .REFCLK_FREQUENCY (200.0)
+    .DELAY_SRC("IDATAIN"),
+    .DELAY_VALUE(1100),
+    .CASCADE("NONE"),
+    .SIM_DEVICE("ULTRASCALE"),
+    .REFCLK_FREQUENCY(200.0)
   ) iodelay_in [ 4*2*G_NUM_UNITS : 0] (
     .CLK     (delay_clk),
     .LOAD    (delay_load_strobe),
@@ -176,7 +182,8 @@ module ads5296x4_interface_v2 #(
     .I(lclk),
     .O(sclk_div2),
     .CE(1'b1),
-    .CLR(bufr_rst_sr[3]) // ?? CHECK: Is this offset by 1 lclk or 2?
+    //.CLR(bufr_rst_sr[3]) // ?? CHECK: Is this offset by 1 lclk or 2?
+    .CLR(1'b0)
   );
 
 
@@ -214,12 +221,12 @@ module ads5296x4_interface_v2 #(
   
 
   // Deserializers
-  //wire [10*4*G_NUM_UNITS - 1:0] dout_int;
-  //reg  [10*4*G_NUM_UNITS - 1:0] dout_cdc;
-  reg syncR;
-  reg syncRR;
+  (* async_reg = "true" *) reg syncR;
+  (* async_reg = "true" *) reg syncRR;
   reg fifo_we;
   always @(posedge sclk_div2) begin
+    syncR <= sync;
+    syncRR <= syncR;
     if (rst) begin
       fifo_we <= 1'b0;
     end else begin
@@ -231,23 +238,27 @@ module ads5296x4_interface_v2 #(
 
   reg [10:0] fifo_re_sr;
   wire fifo_re = fifo_re_sr[10];
+  reg syncR_sclk;
+  reg syncRR_sclk;
   always @(posedge sclk) begin
+    syncR_sclk <= sync;
+    syncRR_sclk <= syncR_sclk;
     if (rst) begin
       fifo_re_sr <= 11'b0;
     end else begin
-      fifo_re_sr <= {fifo_re_sr[9:0], syncR & ~syncRR};
+      fifo_re_sr <= {fifo_re_sr[9:0], syncR_sclk & ~ syncRR_sclk};
     end
   end
+  
   ads5296_unit adc_unit_inst[4*G_NUM_UNITS - 1:0] (
     .lclk(lclk),
     .fclk_rise(fclk_rise),
     .fclk_fall(fclk_fall),
     .din_rise(din_rise),
     .din_fall(din_fall),
-
-    .sclk_div2(sclk_div2),
     .wr_en(fifo_we),
     .rst(rst),
+    .sclk_div2(sclk_div2),
 
     .sclk(sclk),
     .rd_en(fifo_re),

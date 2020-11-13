@@ -14,6 +14,7 @@ class ads5296x4(YellowBlock):
     lanes_per_unit = 8
     channels_per_unit = 4
     lanes_per_channel = lanes_per_unit // channels_per_unit
+    clock_source = 1
     def initialize(self):
         # Compute line clock rate. Factor of 2.0 is for DDR
         self.line_clock_freq_mhz = self.adc_resolution * self.sample_rate / self.lanes_per_channel / 2.0
@@ -42,24 +43,52 @@ class ads5296x4(YellowBlock):
         module = 'ads5296x4_interface_v2'
         for b in range(self.board_count):
             inst = top.get_instance(entity=module, name="%s_%d" % (self.fullname, b))
-            inst.add_wb_interface(nbytes=8*4, regname='ads5296_controller%d_%d' % (self.port, b), mode='rw', typecode=self.typecode)
+            inst.add_wb_interface(nbytes=16*4, regname='ads5296_controller%d_%d' % (self.port, b), mode='rw', typecode=self.typecode)
             inst.add_port('rst', '%s_adc_rst' % self.fullname)
             inst.add_port('sync', '%s_adc_sync' % self.fullname)
             inst.add_port('lclk_p', '%s_%d_lclk_p' % (self.port_prefix, b), parent_port=True, dir='in')
             inst.add_port('lclk_n', '%s_%d_lclk_n' % (self.port_prefix, b), parent_port=True, dir='in')
-            inst.add_port('fclk_p', '%s_%d_fclk_p' % (self.port_prefix, b), parent_port=True, dir='in')
-            inst.add_port('fclk_n', '%s_%d_fclk_n' % (self.port_prefix, b), parent_port=True, dir='in')
+
+            if b == 0:
+                inst.add_parameter("G_NUM_FCLKS", "2")
+                inst.add_port('fclk_p', '%s_%d_fclk_p' % (self.fullname, b), width=2)
+                inst.add_port('fclk_n', '%s_%d_fclk_n' % (self.fullname, b), width=2)
+                top.add_port('%s_%d_fclk0_p' % (self.port_prefix, b), dir='in')
+                top.add_port('%s_%d_fclk0_n' % (self.port_prefix, b), dir='in')
+                top.assign_signal('%s_%d_fclk_p[0]' % (self.fullname, b), '%s_%d_fclk0_p' % (self.port_prefix, b))
+                top.assign_signal('%s_%d_fclk_n[0]' % (self.fullname, b), '%s_%d_fclk0_n' % (self.port_prefix, b))
+                top.add_port('%s_%d_fclk2_p' % (self.port_prefix, b), dir='in')
+                top.add_port('%s_%d_fclk2_n' % (self.port_prefix, b), dir='in')
+                top.assign_signal('%s_%d_fclk_p[1]' % (self.fullname, b), '%s_%d_fclk2_p' % (self.port_prefix, b))
+                top.assign_signal('%s_%d_fclk_n[1]' % (self.fullname, b), '%s_%d_fclk2_n' % (self.port_prefix, b))
+            elif b == 1:
+                inst.add_parameter("G_NUM_FCLKS", "3")
+                inst.add_port('fclk_p', '%s_%d_fclk_p' % (self.fullname, b), width=3)
+                inst.add_port('fclk_n', '%s_%d_fclk_n' % (self.fullname, b), width=3)
+                top.add_port('%s_%d_fclk0_p' % (self.port_prefix, b), dir='in')
+                top.add_port('%s_%d_fclk0_n' % (self.port_prefix, b), dir='in')
+                top.assign_signal('%s_%d_fclk_p[0]' % (self.fullname, b), '%s_%d_fclk0_p' % (self.port_prefix, b))
+                top.assign_signal('%s_%d_fclk_n[0]' % (self.fullname, b), '%s_%d_fclk0_n' % (self.port_prefix, b))
+                top.add_port('%s_%d_fclk1_p' % (self.port_prefix, b), dir='in')
+                top.add_port('%s_%d_fclk1_n' % (self.port_prefix, b), dir='in')
+                top.assign_signal('%s_%d_fclk_p[1]' % (self.fullname, b), '%s_%d_fclk1_p' % (self.port_prefix, b))
+                top.assign_signal('%s_%d_fclk_n[1]' % (self.fullname, b), '%s_%d_fclk1_n' % (self.port_prefix, b))
+                top.add_port('%s_%d_fclk2_p' % (self.port_prefix, b), dir='in')
+                top.add_port('%s_%d_fclk2_n' % (self.port_prefix, b), dir='in')
+                top.assign_signal('%s_%d_fclk_p[2]' % (self.fullname, b), '%s_%d_fclk2_p' % (self.port_prefix, b))
+                top.assign_signal('%s_%d_fclk_n[2]' % (self.fullname, b), '%s_%d_fclk2_n' % (self.port_prefix, b))
             inst.add_port('sclk', 'user_clk')
             inst.add_port('din_p', '%s_%d_din_p' % (self.port_prefix, b), parent_port=True, width=self.num_units_per_board*self.lanes_per_unit, dir='in')
             inst.add_port('din_n', '%s_%d_din_n' % (self.port_prefix, b), parent_port=True, width=self.num_units_per_board*self.lanes_per_unit, dir='in')
             inst.add_port('dout', '%s_%d_dout' % (self.fullname, b), width=self.adc_resolution*self.num_units_per_board*self.channels_per_unit)
-            # User clock always comes from board 0
-            if b == 0:
-                inst.add_parameter("IS_MASTER", "1'b1")
+            if b == self.clock_source:
+                inst.add_parameter("G_IS_MASTER", "1'b1")
                 inst.add_port('clk_out', 'adc%d_clk' % self.port)
+                inst.add_port('sync_out', '%s_adc_sync_out' % self.fullname)
             else:
-                inst.add_parameter("IS_MASTER", "1'b0")
+                inst.add_parameter("G_IS_MASTER", "1'b0")
                 inst.add_port('clk_out', '')
+                inst.add_port('sync_out', '')
 
             # split out the ports which go to simulink
             for xn, x in enumerate(ascii_lowercase[b*self.num_units_per_board : (b+1) * self.num_units_per_board]):
@@ -225,8 +254,10 @@ class ads5296x4(YellowBlock):
         # Add the clock pins for board 0
         cons.append(PortConstraint('%s_0_lclk_p' % (self.port_prefix), 'fmc%d_clk_p' % self.port, iogroup_index=2))
         cons.append(PortConstraint('%s_0_lclk_n' % (self.port_prefix), 'fmc%d_clk_n' % self.port, iogroup_index=2))
-        cons.append(PortConstraint('%s_0_fclk_p' % (self.port_prefix), 'fmc%d_ha_p' % self.port, iogroup_index=0))
-        cons.append(PortConstraint('%s_0_fclk_n' % (self.port_prefix), 'fmc%d_ha_n' % self.port, iogroup_index=0))
+        cons.append(PortConstraint('%s_0_fclk0_p' % (self.port_prefix), 'fmc%d_ha_p' % self.port, iogroup_index=0))
+        cons.append(PortConstraint('%s_0_fclk0_n' % (self.port_prefix), 'fmc%d_ha_n' % self.port, iogroup_index=0))
+        cons.append(PortConstraint('%s_0_fclk2_p' % (self.port_prefix), 'fmc%d_ha_p' % self.port, iogroup_index=1))
+        cons.append(PortConstraint('%s_0_fclk2_n' % (self.port_prefix), 'fmc%d_ha_n' % self.port, iogroup_index=1))
 
         # Add the single ended pins
         # in single-ended numbering, N pin is 1 greater than P pin
@@ -245,8 +276,12 @@ class ads5296x4(YellowBlock):
             # Add the clock pins for board 1
             cons.append(PortConstraint('%s_1_lclk_p' % (self.port_prefix), 'fmc%d_clk_p' % self.port, iogroup_index=0))
             cons.append(PortConstraint('%s_1_lclk_n' % (self.port_prefix), 'fmc%d_clk_n' % self.port, iogroup_index=0))
-            cons.append(PortConstraint('%s_1_fclk_p' % (self.port_prefix), 'fmc%d_hb_p' % self.port, iogroup_index=18))
-            cons.append(PortConstraint('%s_1_fclk_n' % (self.port_prefix), 'fmc%d_hb_n' % self.port, iogroup_index=18))
+            cons.append(PortConstraint('%s_1_fclk0_p' % (self.port_prefix), 'fmc%d_hb_p' % self.port, iogroup_index=18))
+            cons.append(PortConstraint('%s_1_fclk0_n' % (self.port_prefix), 'fmc%d_hb_n' % self.port, iogroup_index=18))
+            cons.append(PortConstraint('%s_1_fclk1_p' % (self.port_prefix), 'fmc%d_gbtclk_p' % self.port, iogroup_index=0))
+            cons.append(PortConstraint('%s_1_fclk1_n' % (self.port_prefix), 'fmc%d_gbtclk_n' % self.port, iogroup_index=0))
+            cons.append(PortConstraint('%s_1_fclk2_p' % (self.port_prefix), 'fmc%d_gbtclk_p' % self.port, iogroup_index=1))
+            cons.append(PortConstraint('%s_1_fclk2_n' % (self.port_prefix), 'fmc%d_gbtclk_n' % self.port, iogroup_index=1))
             # The second (top) ADC has more convenient pin assignment numbering
             for pol in ['p', 'n']:
                 cons.append(PortConstraint(
@@ -262,45 +297,54 @@ class ads5296x4(YellowBlock):
         
         # clock constraint with variable period
         clkconst0 = ClockConstraint('%s_0_lclk_p' % self.port_prefix, name='adc_lclk%d_0' % self.port, freq=self.line_clock_freq_mhz)
+        cons.append(RawConstraint('set_clock_groups -name async_adc_%d_0 -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks sys_clk0_dcm]' % (self.port, clkconst0.name)))
         cons.append(clkconst0)
         if self.board_count > 1:
             clkconst1 = ClockConstraint('%s_1_lclk_p' % self.port_prefix, name='adc_lclk%d_1' % self.port, freq=self.line_clock_freq_mhz)
+            cons.append(RawConstraint('set_clock_groups -name async_adc_%d_1 -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks sys_clk0_dcm]' % (self.port, clkconst1.name)))
             cons.append(clkconst1)
+            cons.append(RawConstraint('set_clock_groups -name async_adc_lclks -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks %s]' % (clkconst0.name, clkconst1.name)))
 
         # TODO set the skew of board 1 relative to board 0
         # delays in ns
-        input_setup_delay = 0.2
-        input_hold_delay = (1000./self.line_clock_freq_mhz) - 0.18
+        input_setup_delay = (1000./self.line_clock_freq_mhz/2.) - 0.2
+        input_hold_delay = 0.18
         clocks = [clkconst0, clkconst1]
-        for b in range(self.board_count):
-            cons.append(InputDelayConstraint(clkname=clocks[b].name, consttype='min', constdelay_ns=input_hold_delay, portname="%s_%d_din_p[*]" % (self.port_prefix, b)))
-            cons.append(InputDelayConstraint(clkname=clocks[b].name, consttype='max', constdelay_ns=input_setup_delay, portname="%s_%d_din_p[*]" % (self.port_prefix, b)))
-            cons.append(InputDelayConstraint(clkname=clocks[b].name, consttype='min', constdelay_ns=input_hold_delay, portname="%s_%d_fclk_p" % (self.port_prefix, b)))
-            cons.append(InputDelayConstraint(clkname=clocks[b].name, consttype='max', constdelay_ns=input_setup_delay, portname="%s_%d_fclk_p" % (self.port_prefix, b)))
-            cons.append(InputDelayConstraint(clkname=clocks[b].name, consttype='min -clock_fall -add_delay', constdelay_ns=input_hold_delay, portname="%s_%d_din_p[*]" % (self.port_prefix, b)))
-            cons.append(InputDelayConstraint(clkname=clocks[b].name, consttype='max -clock_fall -add_delay', constdelay_ns=input_setup_delay, portname="%s_%d_din_p[*]" % (self.port_prefix, b)))
-            cons.append(InputDelayConstraint(clkname=clocks[b].name, consttype='min -clock_fall -add_delay', constdelay_ns=input_hold_delay, portname="%s_%d_fclk_p" % (self.port_prefix, b)))
-            cons.append(InputDelayConstraint(clkname=clocks[b].name, consttype='max -clock_fall -add_delay', constdelay_ns=input_setup_delay, portname="%s_%d_fclk_p" % (self.port_prefix, b)))
+        # Don't constrain IO delays -- rely on runtime dynamic link training.
+        #for b in range(self.board_count):
+        #    # See https://forums.xilinx.com/t5/Timing-Analysis/Input-Delay-Timing-Constraints-Doubts/m-p/652627/highlight/true#M8652
+        #    cons.append(InputDelayConstraint(clkname=clocks[b].name, consttype='min', constdelay_ns=input_hold_delay, portname="%s_%d_din_p[*]" % (self.port_prefix, b)))
+        #    cons.append(InputDelayConstraint(clkname=clocks[b].name, consttype='max', constdelay_ns=input_setup_delay, portname="%s_%d_din_p[*]" % (self.port_prefix, b)))
+        #    cons.append(InputDelayConstraint(clkname=clocks[b].name, consttype='min', constdelay_ns=input_hold_delay, portname="%s_%d_fclk_p" % (self.port_prefix, b)))
+        #    cons.append(InputDelayConstraint(clkname=clocks[b].name, consttype='max', constdelay_ns=input_setup_delay, portname="%s_%d_fclk_p" % (self.port_prefix, b)))
+        #    cons.append(InputDelayConstraint(clkname=clocks[b].name, consttype='min -clock_fall -add_delay', constdelay_ns=input_hold_delay, portname="%s_%d_din_p[*]" % (self.port_prefix, b)))
+        #    cons.append(InputDelayConstraint(clkname=clocks[b].name, consttype='max -clock_fall -add_delay', constdelay_ns=input_setup_delay, portname="%s_%d_din_p[*]" % (self.port_prefix, b)))
+        #    cons.append(InputDelayConstraint(clkname=clocks[b].name, consttype='min -clock_fall -add_delay', constdelay_ns=input_hold_delay, portname="%s_%d_fclk_p" % (self.port_prefix, b)))
+        #    cons.append(InputDelayConstraint(clkname=clocks[b].name, consttype='max -clock_fall -add_delay', constdelay_ns=input_setup_delay, portname="%s_%d_fclk_p" % (self.port_prefix, b)))
 
         
         
         for b in range(self.board_count):
             root = "%s_%d" % (self.fullname, b)
-            cons.append(RawConstraint("set_false_path -from [get_pins {%s/wb_attach_inst/delay_val_reg_reg[*]/C}] -to [get_pins {%s/iodelay_in[*]/CNTVALUEIN[*]}]" % (root, root)))
-            cons.append(RawConstraint("set_false_path -from [get_pins {%s/wb_attach_inst/delay_load_reg_reg*/C}] -to [get_pins {%s/delay_loadR_reg[*]/D}]" % (root, root)))
+            cons.append(RawConstraint('set_clock_groups -name async_%s -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks sys_clk0_dcm]' % (root, clocks[b].name)))
+            cons.append(RawConstraint("set_false_path -from [get_clocks -of_objects [get_pins %s/mmcm_inst/CLKOUT0]] -to [get_clocks -of_objects [get_pins %s/clkout_bufg/O]]" % (root, root)))
+            # TODO: What are the consequences of this TIG, which ignores the div-by-4 clock buffer reset
+            cons.append(RawConstraint("set_false_path -from [get_pins %s/lclk_d4_rstR_reg/C] -to [get_pins %s/clkout_bufg/CLR]" % (root, root)))
+            #cons.append(RawConstraint("set_false_path -from [get_pins {%s/wb_attach_inst/delay_val_reg_reg[*]/C}] -to [get_pins {%s/iodelay_in[*]/CNTVALUEIN[*]}]" % (root, root)))
+            #cons.append(RawConstraint("set_false_path -from [get_pins {%s/wb_attach_inst/delay_load_reg_reg*/C}] -to [get_pins {%s/delay_loadR_reg[*]/D}]" % (root, root)))
 
 
 
         cons.append(RawConstraint('set_property DIFF_TERM_ADV TERM_100 [get_ports [list {ads5296x4fmc%s_0_din_p[*]}]]' %self.port))
         cons.append(RawConstraint('set_property DIFF_TERM_ADV TERM_100 [get_ports [list {ads5296x4fmc%s_0_lclk_p}]]' %self.port))
-        cons.append(RawConstraint('set_property DIFF_TERM_ADV TERM_100 [get_ports [list {ads5296x4fmc%s_0_fclk_p}]]' % self.port))
+        cons.append(RawConstraint('set_property DIFF_TERM_ADV TERM_100 [get_ports [list {ads5296x4fmc%s_0_fclk*_p}]]' % self.port))
         if self.board_count > 1:
             cons.append(RawConstraint('set_property DIFF_TERM_ADV TERM_100 [get_ports [list {ads5296x4fmc%s_1_din_p[*]}]]' %self.port))
             cons.append(RawConstraint('set_property DIFF_TERM_ADV TERM_100 [get_ports [list {ads5296x4fmc%s_1_lclk_p}]]' %self.port))
-            cons.append(RawConstraint('set_property DIFF_TERM_ADV TERM_100 [get_ports [list {ads5296x4fmc%s_1_fclk_p}]]' % self.port))
+            cons.append(RawConstraint('set_property DIFF_TERM_ADV TERM_100 [get_ports [list {ads5296x4fmc%s_1_fclk*_p}]]' % self.port))
 
         if self.port == 1:
-            cons.append(RawConstraint('set_property UNAVAILABLE_DURING_CALIBRATION TRUE [get_ports %s_0_fclk_p]' % self.port_prefix))
+            cons.append(RawConstraint('set_property UNAVAILABLE_DURING_CALIBRATION TRUE [get_ports %s_0_fclk0_p]' % self.port_prefix))
 
         #        ila="""
         #create_debug_core u_ila_0 ila
