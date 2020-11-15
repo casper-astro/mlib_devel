@@ -5,17 +5,10 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 module gty_wrapper_0#(
-    parameter BOARD_REV = 1,
-    parameter CHANNEL_SEL = 0
+    parameter [1:0]CHANNEL_SEL = 0
 )(
     input refclk0_p,
     input refclk0_n,
-    input refclk1_p,
-    input refclk1_n,
-    input refclk2_p,
-    input refclk2_n,
-    input refclk3_p,
-    input refclk3_n,
     input clk100,
     input clk_freerun,
     input gtwiz_reset_all_in,
@@ -23,22 +16,17 @@ module gty_wrapper_0#(
     input [1:0] chan_sel,
     input [3:0] gty0rxp_in,
     input [3:0] gty0rxn_in,
-    input [3:0] gty1rxp_in,
-    input [3:0] gty1rxn_in,
-    input [3:0] gty2rxp_in,
-    input [3:0] gty2rxn_in,
-    input [3:0] gty3rxp_in,
-    input [3:0] gty3rxn_in,
     input rxcdrhold,
     input rxslide,
     input XOR_ON,
     input [31:0] match_pattern,
     input pattern_match_enable,
-    output [15:0] rxprbserr_out,
+    output [3:0] rxprbserr_out,
     output reg rxprbslocked,
     input fifo_reset,
     input fifo_read,
     output reg fifo_full,
+    output reg fifo_empty,
     output reg [31:0]data_out,
     input prbs_error_count_reset,
     //DRP Port Interface
@@ -59,14 +47,14 @@ wire [15:0] rxprbslocked_vec;
 //We'll then MUX the output from one of 16 channels to the 16b output port
 wire [3:0] drpclk_in = {clk100, clk100, clk100, clk100};
 wire [3:0] drprst_in = {drp_reset, drp_reset, drp_reset, drp_reset};
-wire [15:0] drp_ready;
+wire [3:0] drp_ready;
 reg drp_read_d1;
 wire drp_enable_pulse = drp_read & !drp_read_d1;
 wire [3:0] drp_enable_pulse_vec = {drp_enable_pulse, drp_enable_pulse, drp_enable_pulse, drp_enable_pulse};
 //These go to the GTY quads
-wire [15:0] drp_out [15:0];
+wire [3:0] drp_out [15:0];
 //These are the registered versions
-reg [15:0] drp_out_reg [15:0];
+reg [3:0] drp_out_reg [15:0];
 //Mux for the output- PCB rev 0
 //      ADC Chan    Bit     RxBank  bank      Bit
 //      A           0       126     0           1
@@ -103,135 +91,97 @@ reg [15:0] drp_out_reg [15:0];
 //      D           1       128     3           1
 //      D           2       128     3           2
 //      D           3       128     3           3
+
 generate
-      if (BOARD_REV == 0) begin: CONTROLMUX_PCB0
-always @ (*)
-    case ({chan_sel, bit_sel})
+if(CHANNEL_SEL == 0)begin: DRP_OUT_RXPRBSLOCKED0
+always @(*)
+    case(bit_sel)
         4'h0: drp_data = drp_out_reg[1];
         4'h1: drp_data = drp_out_reg[0];
         4'h2: drp_data = drp_out_reg[2];
         4'h3: drp_data = drp_out_reg[3];
-        4'h4: drp_data = drp_out_reg[7];
-        4'h5: drp_data = drp_out_reg[4];
-        4'h6: drp_data = drp_out_reg[8];
-        4'h7: drp_data = drp_out_reg[6];
-        4'h8: drp_data = drp_out_reg[9];
-        4'h9: drp_data = drp_out_reg[5];
-        4'ha: drp_data = drp_out_reg[10];
-        4'hb: drp_data = drp_out_reg[11];
-        4'hc: drp_data = drp_out_reg[12];
-        4'hd: drp_data = drp_out_reg[13];
-        4'he: drp_data = drp_out_reg[14];
-        4'hf: drp_data = drp_out_reg[15];
     endcase
-
-always @ (*)
-    case ({chan_sel, bit_sel})
+always @(*)
+    case(bit_sel)
         4'h0: rxprbslocked = rxprbslocked_vec[1];
         4'h1: rxprbslocked = rxprbslocked_vec[0];
         4'h2: rxprbslocked = rxprbslocked_vec[2];
         4'h3: rxprbslocked = rxprbslocked_vec[3];
-        4'h4: rxprbslocked = rxprbslocked_vec[7];
-        4'h5: rxprbslocked = rxprbslocked_vec[4];
-        4'h6: rxprbslocked = rxprbslocked_vec[8];
-        4'h7: rxprbslocked = rxprbslocked_vec[6];
-        4'h8: rxprbslocked = rxprbslocked_vec[9];
-        4'h9: rxprbslocked = rxprbslocked_vec[5];
-        4'ha: rxprbslocked = rxprbslocked_vec[10];
-        4'hb: rxprbslocked = rxprbslocked_vec[11];
-        4'hc: rxprbslocked = rxprbslocked_vec[12];
-        4'hd: rxprbslocked = rxprbslocked_vec[13];
-        4'he: rxprbslocked = rxprbslocked_vec[14];
-        4'hf: rxprbslocked = rxprbslocked_vec[15];
-endcase
-end else if (BOARD_REV == 1) begin: CONTROLMUX_PCB1
-always @ (*)
-    case ({chan_sel, bit_sel})
+    endcase
+                    end
+else if(CHANNEL_SEL == 1)begin: DRP_OUT_RXPRBSLOCKED1
+always @(*)
+    case(bit_sel)
+        4'h0: drp_data = drp_out_reg[3];
+        4'h1: drp_data = drp_out_reg[0];
+        4'h2: drp_data = drp_out_reg[1];
+        4'h3: drp_data = drp_out_reg[2];
+    endcase
+always @(*)
+    case(bit_sel)
+        4'h0: rxprbslocked = rxprbslocked_vec[3];
+        4'h1: rxprbslocked = rxprbslocked_vec[0];
+        4'h2: rxprbslocked = rxprbslocked_vec[1];
+        4'h3: rxprbslocked = rxprbslocked_vec[2];
+    endcase
+                    end
+else if(CHANNEL_SEL == 2)begin: DRP_OUT_RXPRBSLOCKED2
+always @(*)
+    case(bit_sel)
         4'h0: drp_data = drp_out_reg[1];
         4'h1: drp_data = drp_out_reg[0];
         4'h2: drp_data = drp_out_reg[2];
         4'h3: drp_data = drp_out_reg[3];
-        4'h4: drp_data = drp_out_reg[7];
-        4'h5: drp_data = drp_out_reg[4];
-        4'h6: drp_data = drp_out_reg[5];
-        4'h7: drp_data = drp_out_reg[6];
-        4'h8: drp_data = drp_out_reg[9];
-        4'h9: drp_data = drp_out_reg[8];
-        4'ha: drp_data = drp_out_reg[10];
-        4'hb: drp_data = drp_out_reg[11];
-        4'hc: drp_data = drp_out_reg[12];
-        4'hd: drp_data = drp_out_reg[13];
-        4'he: drp_data = drp_out_reg[14];
-        4'hf: drp_data = drp_out_reg[15];
     endcase
-
-always @ (*)
-    case ({chan_sel, bit_sel})
+always @(*)
+    case(bit_sel)
         4'h0: rxprbslocked = rxprbslocked_vec[1];
         4'h1: rxprbslocked = rxprbslocked_vec[0];
         4'h2: rxprbslocked = rxprbslocked_vec[2];
         4'h3: rxprbslocked = rxprbslocked_vec[3];
-        4'h4: rxprbslocked = rxprbslocked_vec[7];
-        4'h5: rxprbslocked = rxprbslocked_vec[4];
-        4'h6: rxprbslocked = rxprbslocked_vec[5];
-        4'h7: rxprbslocked = rxprbslocked_vec[6];
-        4'h8: rxprbslocked = rxprbslocked_vec[9];
-        4'h9: rxprbslocked = rxprbslocked_vec[8];
-        4'ha: rxprbslocked = rxprbslocked_vec[10];
-        4'hb: rxprbslocked = rxprbslocked_vec[11];
-        4'hc: rxprbslocked = rxprbslocked_vec[12];
-        4'hd: rxprbslocked = rxprbslocked_vec[13];
-        4'he: rxprbslocked = rxprbslocked_vec[14];
-        4'hf: rxprbslocked = rxprbslocked_vec[15];
-endcase
-end
+    endcase
+                    end
+else if(CHANNEL_SEL == 3)begin: DRP_OUT_RXPRBSLOCKED3
+always @(*)
+    case(bit_sel)
+        4'h0: drp_data = drp_out_reg[0];
+        4'h1: drp_data = drp_out_reg[1];
+        4'h2: drp_data = drp_out_reg[2];
+        4'h3: drp_data = drp_out_reg[3];
+    endcase
+always @(*)
+    case(bit_sel)
+        4'h0: rxprbslocked = rxprbslocked_vec[0];
+        4'h1: rxprbslocked = rxprbslocked_vec[1];
+        4'h2: rxprbslocked = rxprbslocked_vec[2];
+        4'h3: rxprbslocked = rxprbslocked_vec[3];
+    endcase
+                    end
 endgenerate
+
 
 integer ii;
 always @ (posedge clk100) begin
-    for (ii = 0; ii < 16; ii = ii + 1) if (drp_ready[ii]) drp_out_reg[ii] <= drp_out[ii];
+    for (ii = 0; ii < 3; ii = ii + 1) if (drp_ready[ii]) drp_out_reg[ii] <= drp_out[ii];
     drp_read_d1 <= drp_read;
 end
 
 //We need to sync the prbs_error_counter_reset to each rxclk
 wire rxclk0;
-wire rxclk1;
-wire rxclk2;
-wire rxclk3;
+
 wire prbs_error_count_reset_sync0;
-wire prbs_error_count_reset_sync1;
-wire prbs_error_count_reset_sync2;
-wire prbs_error_count_reset_sync3;
+
 wire [3:0] error_count_vec0 = {prbs_error_count_reset_sync0, prbs_error_count_reset_sync0, prbs_error_count_reset_sync0, prbs_error_count_reset_sync0};
-wire [3:0] error_count_vec1 = {prbs_error_count_reset_sync1, prbs_error_count_reset_sync1, prbs_error_count_reset_sync1, prbs_error_count_reset_sync1};
-wire [3:0] error_count_vec2 = {prbs_error_count_reset_sync2, prbs_error_count_reset_sync2, prbs_error_count_reset_sync2, prbs_error_count_reset_sync2};
-wire [3:0] error_count_vec3 = {prbs_error_count_reset_sync3, prbs_error_count_reset_sync3, prbs_error_count_reset_sync3, prbs_error_count_reset_sync3};
+
 sync_it S12(
     .data_in(prbs_error_count_reset),
     .clk(rxclk0),
     .data_out(prbs_error_count_reset_sync0)
     );
-sync_it S13(
-    .data_in(prbs_error_count_reset),
-    .clk(rxclk1),
-    .data_out(prbs_error_count_reset_sync1)
-    );
-sync_it S14(
-    .data_in(prbs_error_count_reset),
-    .clk(rxclk2),
-    .data_out(prbs_error_count_reset_sync2)
-    );
-sync_it S15(
-    .data_in(prbs_error_count_reset),
-    .clk(rxclk3),
-    .data_out(prbs_error_count_reset_sync3)
-    );
 
 //Instantiate four refclk buffers; these connect to the transceivers       
 wire gty_refclk0;
-wire gty_refclk1;
-wire gty_refclk2;
-wire gty_refclk3;
+
    IBUFDS_GTE4 #(
       .REFCLK_EN_TX_PATH(1'b0),   // Refer to Transceiver User Guide
       .REFCLK_HROW_CK_SEL(2'b00), // Refer to Transceiver User Guide
@@ -244,42 +194,9 @@ wire gty_refclk3;
       .I(refclk0_p),         // 1-bit input: Refer to Transceiver User Guide
       .IB(refclk0_n)        // 1-bit input: Refer to Transceiver User Guide
    );
-   IBUFDS_GTE4 #(
-      .REFCLK_EN_TX_PATH(1'b0),   // Refer to Transceiver User Guide
-      .REFCLK_HROW_CK_SEL(2'b00), // Refer to Transceiver User Guide
-      .REFCLK_ICNTL_RX(2'b00)     // Refer to Transceiver User Guide
-   )
-   IBUFDS_GTE4_1 (
-      .O(gty_refclk1),         // 1-bit output: Refer to Transceiver User Guide
-      .ODIV2(), // 1-bit output: Refer to Transceiver User Guide
-      .CEB(1'b0),     // 1-bit input: Refer to Transceiver User Guide
-      .I(refclk1_p),         // 1-bit input: Refer to Transceiver User Guide
-      .IB(refclk1_n)        // 1-bit input: Refer to Transceiver User Guide
-   );
-   IBUFDS_GTE4 #(
-      .REFCLK_EN_TX_PATH(1'b0),   // Refer to Transceiver User Guide
-      .REFCLK_HROW_CK_SEL(2'b00), // Refer to Transceiver User Guide
-      .REFCLK_ICNTL_RX(2'b00)     // Refer to Transceiver User Guide
-   )
-   IBUFDS_GTE4_2 (
-      .O(gty_refclk2),         // 1-bit output: Refer to Transceiver User Guide
-      .ODIV2(), // 1-bit output: Refer to Transceiver User Guide
-      .CEB(1'b0),     // 1-bit input: Refer to Transceiver User Guide
-      .I(refclk2_p),         // 1-bit input: Refer to Transceiver User Guide
-      .IB(refclk2_n)        // 1-bit input: Refer to Transceiver User Guide
-   );
-   IBUFDS_GTE4 #(
-      .REFCLK_EN_TX_PATH(1'b0),   // Refer to Transceiver User Guide
-      .REFCLK_HROW_CK_SEL(2'b00), // Refer to Transceiver User Guide
-      .REFCLK_ICNTL_RX(2'b00)     // Refer to Transceiver User Guide
-   )
-   IBUFDS_GTE4_3 (
-      .O(gty_refclk3),         // 1-bit output: Refer to Transceiver User Guide
-      .ODIV2(), // 1-bit output: Refer to Transceiver User Guide
-      .CEB(1'b0),     // 1-bit input: Refer to Transceiver User Guide
-      .I(refclk3_p),         // 1-bit input: Refer to Transceiver User Guide
-      .IB(refclk3_n)        // 1-bit input: Refer to Transceiver User Guide
-   );
+
+
+
 
 //Sync the rxslide input to the axi clock
 reg rxslide_reg;
@@ -294,54 +211,19 @@ sync_it S0(
     .clk(rxclk0),
     .data_out(rxslide_sync0)
     );
-sync_it S1(
-    .data_in(rxslide_reg),
-    .clk(rxclk1),
-    .data_out(rxslide_sync1)
-    );
-sync_it S2(
-    .data_in(rxslide_reg),
-    .clk(rxclk2),
-    .data_out(rxslide_sync2)
-    );
-sync_it S3(
-    .data_in(rxslide_reg),
-    .clk(rxclk3),
-    .data_out(rxslide_sync3)
-    );
 //Each rxslide pulse needs to be two rxclk's wide
 reg rxslide0_d1, rxslide0_d2;
-reg rxslide1_d1, rxslide1_d2;
-reg rxslide2_d1, rxslide2_d2;
-reg rxslide3_d1, rxslide3_d2;
 wire rxslide0_pulse;
-wire rxslide1_pulse;
-wire rxslide2_pulse;
-wire rxslide3_pulse;
 always @ (posedge rxclk0) begin
     rxslide0_d1 <= rxslide_sync0;
     rxslide0_d2 <= rxslide0_d1;
 end
-always @ (posedge rxclk1) begin
-    rxslide1_d1 <= rxslide_sync1;
-    rxslide1_d2 <= rxslide1_d1;
-end
-always @ (posedge rxclk2) begin
-    rxslide2_d1 <= rxslide_sync2;
-    rxslide2_d2 <= rxslide2_d1;
-end
-always @ (posedge rxclk3) begin
-    rxslide3_d1 <= rxslide_sync3;
-    rxslide3_d2 <= rxslide3_d1;
-end
+
 assign rxslide0_pulse = rxslide_sync0 && !rxslide0_d2;
-assign rxslide1_pulse = rxslide_sync1 && !rxslide1_d2;
-assign rxslide2_pulse = rxslide_sync2 && !rxslide2_d2;
-assign rxslide3_pulse = rxslide_sync3 && !rxslide3_d2;
 
 //We combine bit_sel and chan_sel here to make an rxslide pulse that can be applied to one of 16 channels
 reg [3:0] all_chan_sel_reg;
-always @ (posedge clk100) all_chan_sel_reg <= {chan_sel, bit_sel};
+always @ (posedge clk100) all_chan_sel_reg <= {CHANNEL_SEL, bit_sel};
 //The Channel mapping is as follows- PCB REV 0
 //      ADC Chan    Bit     RxBank  bank      Lane
 //      A           0       126     0           1
@@ -382,38 +264,57 @@ always @ (posedge clk100) all_chan_sel_reg <= {chan_sel, bit_sel};
 //      D           3       128     3           3
 
 //Rearrange these so that they are in the order of the ADC bits
-wire [15:0] rxslide_vector;
+wire [3:0] rxslide_vector;
+generate
+if(CHANNEL_SEL == 0) begin: RXSLIDE_CH0
 assign rxslide_vector = {
-            rxslide3_pulse && (all_chan_sel_reg == 4'hf),  //bank 3 lane 3  ADC D   bit 3
-            rxslide3_pulse && (all_chan_sel_reg == 4'he),  //bank 3 lane 2  ADC D   bit 2
-            rxslide3_pulse && (all_chan_sel_reg == 4'hd),  //bank 3 lane 1  ADC D   bit 1
-            rxslide3_pulse && (all_chan_sel_reg == 4'hc),  //bank 3 lane 0  ADC D   bit 0
-            
-            rxslide2_pulse && (all_chan_sel_reg == 4'hb),  //bank 2 lane 3  ADC C   bit 3
-            rxslide2_pulse && (all_chan_sel_reg == 4'ha),  //bank 2 lane 2  ADC C   bit 2
-            rxslide2_pulse && (all_chan_sel_reg == 4'h8),  //bank 2 lane 1  ADC C   bit 0
-            rxslide2_pulse && (all_chan_sel_reg == 4'h9),  //bank 2 lane 0  ADC C   bit 1
-            
-            rxslide1_pulse && (all_chan_sel_reg == 4'h4),  //bank 1 lane 3  ADC B   bit 0
-            rxslide1_pulse && (all_chan_sel_reg == 4'h7),  //bank 1 lane 2  ADC B   bit 3
-            rxslide1_pulse && (all_chan_sel_reg == 4'h6),  //bank 1 lane 1  ADC B   bit 2
-            rxslide1_pulse && (all_chan_sel_reg == 4'h5),  //bank 1 lane 0  ADC B   bit 1
-            
             rxslide0_pulse && (all_chan_sel_reg == 4'h3),  //bank 0 lane 3  ADC A   bit 3
             rxslide0_pulse && (all_chan_sel_reg == 4'h2),  //bank 0 lane 2  ADC A   bit 2
             rxslide0_pulse && (all_chan_sel_reg == 4'h0),  //bank 0 lane 1  ADC A   bit 0
-            rxslide0_pulse && (all_chan_sel_reg == 4'h1)}; //bank 0 lane 0  ADC A   bit 1
+            rxslide0_pulse && (all_chan_sel_reg == 4'h1)   //bank 0 lane 0  ADC A   bit 1
+};
+                     end
+else if(CHANNEL_SEL == 1)begin: RXSLIDE_CH1
+assign rxslide_vector = {
+            rxslide0_pulse && (all_chan_sel_reg == 4'h4),  //bank 1 lane 3  ADC B   bit 0
+            rxslide0_pulse && (all_chan_sel_reg == 4'h7),  //bank 1 lane 2  ADC B   bit 3
+            rxslide0_pulse && (all_chan_sel_reg == 4'h6),  //bank 1 lane 1  ADC B   bit 2
+            rxslide0_pulse && (all_chan_sel_reg == 4'h5)   //bank 1 lane 0  ADC B   bit 1
+};
+                     end
+else if(CHANNEL_SEL == 2)begin: RXSLIDE_CH2
+assign rxslide_vector = {
+            rxslide0_pulse && (all_chan_sel_reg == 4'hb),  //bank 2 lane 3  ADC C   bit 3
+            rxslide0_pulse && (all_chan_sel_reg == 4'ha),  //bank 2 lane 2  ADC C   bit 2
+            rxslide0_pulse && (all_chan_sel_reg == 4'h8),  //bank 2 lane 1  ADC C   bit 0
+            rxslide0_pulse && (all_chan_sel_reg == 4'h9)   //bank 2 lane 0  ADC C   bit 1
+};
+                     end
+else if(CHANNEL_SEL == 3)begin: RXSLIDE_CH3
+assign rxslide_vector = {
+            rxslide0_pulse && (all_chan_sel_reg == 4'hf),  //bank 3 lane 3  ADC D   bit 3
+            rxslide0_pulse && (all_chan_sel_reg == 4'he),  //bank 3 lane 2  ADC D   bit 2
+            rxslide0_pulse && (all_chan_sel_reg == 4'hd),  //bank 3 lane 1  ADC D   bit 1
+            rxslide0_pulse && (all_chan_sel_reg == 4'hc)  //bank 3 lane 0  ADC D   bit 0
+};
+                     end
+endgenerate
 
 wire [3:0] rxprbserr0;
-wire [3:0] rxprbserr1;
-wire [3:0] rxprbserr2;
-wire [3:0] rxprbserr3;
-assign rxprbserr_out = {
-                        rxprbserr3,
-                        rxprbserr2[3], rxprbserr2[2], rxprbserr1[1], rxprbserr2[1],
-                        rxprbserr1[2], rxprbserr2[0], rxprbserr1[0], rxprbserr1[3],
-                        rxprbserr0[3], rxprbserr0[2], rxprbserr0[0], rxprbserr0[1]
-                        };
+generate
+if(CHANNEL_SEL == 0) begin: RXPRBSERR0
+assign rxprbserr_out = {rxprbserr0[3], rxprbserr0[2], rxprbserr0[0], rxprbserr0[1]};
+                     end
+else if(CHANNEL_SEL == 1)begin: RXPRBSERR1
+assign rxprbserr_out = {rxprbserr0[2], rxprbserr0[1], rxprbserr0[0], rxprbserr0[3]};
+                     end              
+else if(CHANNEL_SEL == 2)begin: RXPRBSERR2
+assign rxprbserr_out = {rxprbserr0[3], rxprbserr0[2], rxprbserr0[0], rxprbserr0[1]};
+                     end
+else if(CHANNEL_SEL == 3)begin: RXPRBSERR3
+assign rxprbserr_out = {rxprbserr0};
+                     end
+endgenerate
                         
 //CDRHOLD may be useful to freeze the CDR phase when edge rate is not sufficient.  It's an asynch input
 //A single control for all 16 channels; could have individual controls if necessary
@@ -459,7 +360,7 @@ assign gty0_out_XOR = XOR_ON ? {
                             gty0_out[63:0] ^ prbs0_data} :
                             gty0_out;
                            end
-else if(CHANNEL_SEL == 1) begin: GTY_OUT_XOR_CH3
+else if(CHANNEL_SEL == 3) begin: GTY_OUT_XOR_CH3
 assign gty0_out_XOR = XOR_ON ? {
                             gty0_out[255:192] ^ prbs0_data,
                             gty0_out[191:128] ^ prbs0_data,
@@ -618,6 +519,7 @@ reg fifo0_wr;
 reg fifo0_wr_reg;
 wire [255:0] fifo0_out;
 wire fifo0_full;
+wire fifo0_empty;
 //The sync reset must be sync'ed to the write clock
 sync_it S4(
     .data_in(fifo_reset),
@@ -640,7 +542,7 @@ fifo_256in_32out FIFO0_ADC (
   .rd_en(fifo_read_pulse),              // input wire rd_en
   .dout(fifo0_out),                // output wire [31 : 0] dout
   .full(fifo0_full),                // output wire full
-  .empty(),              // output wire empty
+  .empty(fifo0_empty),              // output wire empty
   .wr_rst_busy(wr_rst_busy0),  // output wire wr_rst_busy
   .rd_rst_busy()  // output wire rd_rst_busy
 );
@@ -965,9 +867,9 @@ endgenerate
 //Now mux these four busses into one 32b output                    
    always @(ADC_A_out)
          data_out = ADC_A_out;
-
    always @(fifo0_full)
          fifo_full = fifo0_full;
-
+   always @(fifo0_empty)
+         fifo_empty = fifo0_empty;
    
 endmodule
