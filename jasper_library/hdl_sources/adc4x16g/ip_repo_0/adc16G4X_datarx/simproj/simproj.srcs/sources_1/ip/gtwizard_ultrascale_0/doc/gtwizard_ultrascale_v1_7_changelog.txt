@@ -1,0 +1,296 @@
+2019.2:
+ * Version 1.7 (Rev. 7)
+ * Feature Enhancement: Adjusted Ultrascale GTH specific attributes for TXPI related advanced usecases
+ * Other: Modified delay powergood for GTHE4/GTYE4 to use shift register based logic
+
+2019.1.3:
+ * Version 1.7 (Rev. 6)
+ * No changes
+
+2019.1.2:
+ * Version 1.7 (Rev. 6)
+ * No changes
+
+2019.1.1:
+ * Version 1.7 (Rev. 6)
+ * No changes
+
+2019.1:
+ * Version 1.7 (Rev. 6)
+ * General: Updated the transceiver configuration preset options for CPRI to cover additional usecases
+
+2018.3.1:
+ * Version 1.7 (Rev. 5)
+ * No changes
+
+2018.3:
+ * Version 1.7 (Rev. 5)
+ * Feature Enhancement: Added new transceiver configuration preset options for GTY-DisplayPort_8_1G/ GTH-DisplayPort_8_1G/
+ * Other: Attribute updates for I Temperature grade devices
+ * Other: Attribute updates for Q/M Temperature grade devices
+ * Other: Updated the display range of RX_PPM_OFFSET to match UltraScale/UltraScale+ FPGAs Data sheet
+
+2018.2:
+ * Version 1.7 (Rev. 4)
+ * General: Removed the XDC workaround in place for In-System IBERT rxrate ports
+ * Revision change in one or more subcores
+
+2018.1:
+ * Version 1.7 (Rev. 3)
+ * Feature Enhancement: Added new transceiver configuration preset options for GTY-12G_SDI/GTH-12G_SDI
+ * Feature Enhancement: Updated the choice of GTYE4 Reference clock sharing for line rates between 16.375 and 28.21 Gb/s
+ * Other: Updated to use simulation only bypass logic under pragma control by default for CPLL calibration module for UltraScale+ devices
+ * Other: Fixed a bug in the customization GUI that prevented Fractional-N calculator feature for some configurations
+ * Other: Adjusted the customization GUI for comma alignment selection to match the UltraScale+ FPGAs Data Sheet
+ * Other: Adjusted line rate and associated frequency limits for 8B/10B encoding configurations to match the UltraScale+ FPGAs Data Sheet
+ * Revision change in one or more subcores
+
+2017.4:
+ * Version 1.7 (Rev. 2)
+ * General: Updated the status of some transceiver configuration presets
+ * General: Modified delay powergood logic for GTHE4/GTYE4 to reduce warnings
+
+2017.3:
+ * Version 1.7 (Rev. 1)
+ * Feature Enhancement: Added new transceiver configuration preset options for GTY-3G_SDI/HD_SDI/HDMI
+ * Feature Enhancement: Added new transceiver configuration preset options for GTY-DisplayPort_5_4G/DisplayPort_2_7G/DisplayPort_1_62G
+ * Other: Updated display values of RX_TERMINATION_PROG_VALUE for UltraScale+ devices to match Xilinx UltraScale Architecture Transceivers user guides
+ * Other: Updated the choice of GTYE3/GTYE4 Reference clock sharing for line rates greater than 16.375 Gb/s
+ * Other: Added new XDC constraints conditionally for GTHE4 ES devices for handling additional timing constraints needed for DRP
+ * Other: Attribute update for PCIe Gen2/3 max capable designs for GTHE4 devices
+ * Revision change in one or more subcores
+
+2017.2:
+ * Version 1.7
+ * Feature Enhancement: gtpowergood_out is now enabled as default output port
+ * Feature Enhancement: Updated CPLL calibration block for TX and RX usecases for UltraScale+ devices
+ * Feature Enhancement: Adjusted line rate and associated frequency limits for -2LV speed grade devices to match the UltraScale+ FPGAs Data Sheet
+ * Other: Minor revision update for UltraScale+ updates
+ * Revision change in one or more subcores
+
+2017.1:
+ * Version 1.6 (Rev. 6)
+ * Feature Enhancement: Increased UltraScale+ GTY transceivers line rate for -1/-1L speed grade devices to support upto 25.78125 Gb/s
+ * Feature Enhancement: Adjusted line rate and associated frequency limits for -1H/-2LV speed grade devices to match the UltraScale+ FPGAs Data Sheet
+ * Feature Enhancement: Enhanced the choice of GTYE3/GTYE4 Reference clock sharing for line rates greater than 16.375 Gb/s
+ * Feature Enhancement: Updated the CPLL calibration module for UltraScale+ devices and added a simulation only bypass logic under pragma control
+ * Other: Updated the transceiver configuration preset options for Interlaken to cover only 1 quad
+ * Other: When Manual alignment (RXSLIDE) mode is enabled, alignment boundary is now allowed to be selected
+ * Other: GUI enhancement to allow the line rate to start with a decimal point, earlier this was erroring out
+ * Other: Fixed a bug in the Wizard customization GUI Physical Resources tab that caused the incorrect column to be displayed for some GTHE4/GTYE4 based devices
+ * Revision change in one or more subcores
+
+2016.4:
+ * Version 1.6 (Rev. 5)
+ * General: Updated the line rate ranges for some speed grade devices to match the UltraScale+ FPGAs Data sheet
+ * General: Updated the CPLL calibration module for PCIe use modes for UltraScale+ devices
+ * Revision change in one or more subcores
+
+2016.3:
+ * Version 1.6 (Rev. 4)
+ * Feature Enhancement: Added new transceiver configuration preset options for GTY-JESD/CEI
+ * Feature Enhancement: Added new Structural Options to include In-System IBERT core in Example Design
+ * Other: SIM_VERSION to SIM_DEVICE migration for GTYE4/GTHE4 unisim primitives
+ * Other: Enhanced QPLL Fractional-N calculator feature in the Wizard customization GUI to extend support to 28.21 Gb/s
+ * Other: Updated transceiver configuration preset options for Gigabit Ethernet KR configuration
+ * Other: Improved load time of the Wizard customization GUI, and its responsiveness
+ * Other: Updated the line rate ranges for -2LV/-1LV speed grade devices to match the UltraScale+ FPGAs Data sheet
+ * Other: Source HDL files are concatenated into a single file to speed up synthesis and simulation. No changes required by the user
+ * Revision change in one or more subcores
+
+2016.2:
+ * Version 1.6 (Rev. 3)
+ * Improved performance and functionality of UltraScale+ GTY serial transceivers via parameter updates
+ * Improved reliability of UltraScale+ GTH and GTY transceivers via CPLL calibration block addition optionally
+ * Fixed a bug in the customization GUI that prevented selection of a legal user data width when targeting maximum line rate for some devices
+ * Revision change in one or more subcores
+
+2016.1:
+ * Version 1.6 (Rev. 2)
+ * Improved performance and functionality of UltraScale+ GTH and GTY serial transceivers via parameter updates
+ * Added new transceiver configuration preset options
+ * Changed the lifecycle status of several UltraScale transceiver configuration presets to Production
+ * Replaced type of synchronizer in buffer bypass helper blocks to tolerate absence of clock during reset assertion
+ * Adjusted the programmable termination voltage options for UltraScale+ GTY serial transceivers
+ * Increased Kintex UltraScale GTH maximum line rate for -1LV speed grade devices from 10.3125 Gb/s to 12.5 Gb/s
+ * Adjusted line rate and associated frequency limits for GTY transceivers in -1HV speed grade devices to match Virtex UltraScale FPGAs Data Sheet
+ * Adjusted minimum CPLL VCO frequency for UltraScale+ GTH and GTY transceivers according to silicon errata
+ * Fixed a bug in the customization GUI that prevented selection of a legal user data width when targeting maximum line rate for some devices
+ * Changes to HDL library management to support Vivado IP simulation library
+ * Revision change in one or more subcores
+
+2015.4.2:
+ * Version 1.6 (Rev. 1)
+ * No changes
+
+2015.4.1:
+ * Version 1.6 (Rev. 1)
+ * No changes
+
+2015.4:
+ * Version 1.6 (Rev. 1)
+ * Improved performance and functionality of UltraScale+ GTH and GTY serial transceivers via parameter updates
+ * Added support for newer UltraScale+ GTY serial transceiver simulation and device models
+ * Added new transceiver configuration preset option
+ * Added support for UltraScale -1H and -1HV speed grades
+ * Revision change in one or more subcores
+
+2015.3:
+ * Version 1.6
+ * Added support for UltraScale+ devices and their serial transceiver architectures
+ * Improved performance of GTY transceivers via parameter updates
+ * Added new transceiver configuration preset options, and adjusted some existing transceiver configuration presets
+ * Added support for all QPLL feedback divider values, providing extensive reference clock frequency options for any given line rate
+ * Added a QPLL Fractional-N calculator feature to the Wizard customization GUI to assist with setting the fractional part of the QPLL feedback divider when enabled
+ * Raised the maximum frequency of the free-running and DRP clock for some target devices
+ * Expanded and reorganized portions of the Wizard customization GUI Transmitter Advanced and Receiver Advanced sections
+ * Added guidance text to the Equalization mode portion of the Wizard customization GUI Receiver Advanced section
+ * Restricted the Termination value to FLOAT when Link coupling is DC for some target devices
+ * Improved reliability of reset controller helper block gtwiz_reset_tx_done_out and gtwiz_reset_rx_done_out indicators in the event of PLL lock loss, by changing from bit synchronizer to active-low reset synchronizer
+ * Improved reliability of reset controller helper block control of RX programmable divider resets by asserting RXPROGDIVRESET upon RX reset and releasing it after RX CDR lock
+ * Changed to per-channel bit synchronization of TXRESETDONE and RXRESETDONE for use in the reset controller helper block to address the report_cdc CDC-10 message and to further mitigate the unlikely possibility of a glitch on those inputs
+ * Added a synchronizer stage to the user clock active indicator output of the transmitter and receiver user clocking network helper blocks
+ * Fixed a bug that incorrectly forced the enablement of gtwiz_userclk_tx_reset_in for some configurations targeting UltraScale GTH transceivers
+ * Updated the CPLL calibration module to address a reliability issue with PCIe use modes in Kintex UltraScale ES2 and Virtex UltraScale ES1 devices
+ * Updated the CPLL calibration block inclusion list to include Virtex UltraScale VU440 ES2 devices by default
+ * Virtex UltraScale production status is now determined automatically, to simplify support for future devices
+ * IP revision number added to HDL module, library, and include file names, to support designs with both locked and upgraded IP instances
+ * Revision change in one or more subcores
+
+2015.2.1:
+ * Version 1.5 (Rev. 2)
+ * No changes
+
+2015.2:
+ * Version 1.5 (Rev. 2)
+ * Improved performance of GTY transceivers via parameter updates
+ * Updated GTH transceiver parameters to enable QPLL temperature compensation, and for QPLL bandwidth tuning to address TX to QPLL coupling issue when feedback divider value exceeds 80
+ * Addressed an issue that caused the reset controller helper block to issue unreliable CPLL resets, by extending the CPLLPD pulse width to 2us
+ * Updated the default Insertion Loss at Nyquist value of several transceiver configuration presets, resulting in better default RX equalization settings for those presets, in many cases using LPM rather than DFE
+ * Expanded the range of the PPM offset between receiver and transmitter option in the Wizard customization GUI to match published UltraScale Architecture Data Sheet values
+
+2015.1:
+ * Version 1.5 (Rev. 1)
+ * Added the ability to specify LPM or DFE for the equalization mode option in the Wizard customization GUI
+ * Added support for UltraScale -1LV speed grade devices
+ * Updated the status of some GTH transceiver configuration presets
+ * Modified connectivity between the reset controller helper block and CPLL resources in all GTY configurations and in GTH configurations targeting Virtex UltraScale ES2 devices, to drive CPLLPD instead of CPLLRESET in accordance with Xilinx UltraScale Architecture Transceivers user guides
+ * Improved performance of GTH and GTY transceivers via parameter updates
+ * Fixed a bug that caused context menu options in the channel graphic of the Wizard customization GUI Physical Resources tab to be incorrectly grayed out
+ * Kintex UltraScale production status is now determined automatically, to simplify support for future devices
+
+2014.4.1:
+ * Version 1.5
+ * Added several new transceiver configuration preset options
+ * Added a recustomizable Virtual Input/Output (VIO) core instance to the example design to assist with system monitoring and analysis
+ * Added support for new QPLL feedback divider values of 60, 75, 84, 90, 96, 112, 120, 125, and 150, providing more reference clock frequency options for any given line rate
+ * Added support for GTY transceiver ES2-level simulation and device models
+ * Modified connectivity between the reset controller helper block and CPLL resources in production devices, driving CPLLPD instead of CPLLRESET in accordance with Xilinx UltraScale Architecture Transceivers user guides
+ * Improved performance of GTH and GTY transceivers via parameter updates
+ * Improved clarity of the Wizard customization GUI channel table by displaying the SLR number for each transceiver quad, and by making its transceiver resources ordering consistent with the Physical Resources block diagram
+ * Fixed minor Wizard customization GUI display bugs
+ * Reduced maximum GTY line rate in Virtex UltraScale -3 speed grade devices from 32.75 Gb/s to 30.5 Gb/s
+
+2014.4:
+ * Version 1.4 (Rev. 1)
+ * Improved performance of GTH and GTY transceivers via parameter updates
+ * Added support for GTH transceiver production-level simulation and device models, and corresponding support for GTH programmable divider values 80 and 100
+ * Fixed a bug that prevented activity on the RXRECCLKOUT port if the RXOUTCLK source is not RXPROGDIVCLK
+
+2014.3:
+ * Version 1.4
+ * Added several new transceiver configuration preset options
+ * Added an initialization module to the example design which demonstrates interactions with the reset controller helper block that can help mitigate system-related bring-up and link loss issues
+ * Removed optional port gtwiz_reset_rx_data_good_in; affects configurations which locate the reset controller helper block in the core
+ * Improved performance of GTH and GTY transceivers via parameter updates
+ * Improved the behavior of the reset controller helper block by holding PLL and data path resets high upon device programming, then automatically running an initial reset all sequence upon GTPOWERGOOD assertion
+ * Improved the behavior of the buffer bypass controller helper blocks to eliminate the risk of reporting a completed procedure based stale TXSYNCDONE and RXSYNCDONE logic levels
+ * Improved example design data integrity checking with the addition of a PRBS checker-based link status indicator, its leaky bucket implementation replacing per-cycle PRBS checker status
+ * Improved transceiver configuration presets which utilize more than two quads by choosing a channel from the middle quad as the default TX and RX master channel
+ * Improved load time of the Wizard customization GUI, and its responsiveness when applying transceiver configuration presets
+ * Expanded the range of selectable TXOUTCLK frequencies and reduced the occurrence of core generation error code 21, reporting an unsupported programmable divider value
+ * Corrected the allowed GTH maximum line rate for Kintex UltraScale devices at -2 and -1 speed grades and FBV package types
+ * Fixed a bug in the reset controller helper block which incorrectly initiated TX and RX reset sequences in parallel, rather than sequentially as intended, under probabilistic conditions in hardware operation
+ * Fixed a bug in the Wizard customization GUI Physical Resources tab that caused the incorrect transceiver primitive type, column, bank, or pin names to be displayed for some devices
+
+2014.2:
+ * Version 1.3
+ * Added several new transceiver configuration preset options
+ * Enabled synthesis and implementation of configurations utilizing GTY transceivers
+ * Refined timing constraints and their locations in XDC files to reduce warnings and redundancy
+ * Added a CDR lock timeout counter to the reset controller helper block to avoid the possibility of the RX data path reset sequence hanging due to no RXCDRLOCK assertion
+ * Improved performance of GTH transceivers via parameter updates
+ * Fixed a wiring bug in the receiver module of the user data width sizing helper block that affected only GTY transceivers configured to use the 160-bit RX user data width
+ * Fixed a small number of discrepancies between frequency/rate limits imposed by the Wizard GUI and some published UltraScale Architecture Data Sheet values
+ * Added logic to the example design which demonstrates proper reset stimulus of the buffer bypass controller helper blocks
+
+2014.1:
+ * Version 1.2
+ * Added several new transceiver configuration preset options
+ * Added support for behavioral HDL simulation of configurations utilizing GTY transceivers
+ * Added support for Cadence IES and Synopsys VCS simulators to existing support for Mentor Graphics Questa and Xilinx Vivado Simulator
+ * Added support for SATA configurations
+ * Enabled the ability to configure the secondary QPLL when one QPLL type is used
+ * Enabled the ability to select the frequency of TXOUTCLK when the TX programmable divider is used
+ * Enabled the ability to locate the reset controller helper block inside the core irrespective of transceiver common location
+ * Improved performance and reliability of GTH transceivers in Kintex UltraScale ES1 devices via parameter updates and CPLL calibration
+ * Improved resource utilization in raw mode and 8B/10B example design configurations
+ * Fixed an issue where certain complex reference clock routing configurations could lead to routing congestion
+ * Internal device family name change, no functional changes
+
+2013.4:
+ * Version 1.1
+ * Added several new transceiver configuration preset options
+ * Added support for the user data width sizing helper block
+ * Added recovered clock output options in the Physical Resources tab
+ * Added initial support for simulation of the CAUI-4 preset utilizing GTY transceivers
+
+2013.3:
+ * Version 1.0
+ * Initial release
+
+(c) Copyright 2013 - 2019 Xilinx, Inc. All rights reserved.
+
+This file contains confidential and proprietary information
+of Xilinx, Inc. and is protected under U.S. and
+international copyright and other intellectual property
+laws.
+
+DISCLAIMER
+This disclaimer is not a license and does not grant any
+rights to the materials distributed herewith. Except as
+otherwise provided in a valid license issued to you by
+Xilinx, and to the maximum extent permitted by applicable
+law: (1) THESE MATERIALS ARE MADE AVAILABLE "AS IS" AND
+WITH ALL FAULTS, AND XILINX HEREBY DISCLAIMS ALL WARRANTIES
+AND CONDITIONS, EXPRESS, IMPLIED, OR STATUTORY, INCLUDING
+BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, NON-
+INFRINGEMENT, OR FITNESS FOR ANY PARTICULAR PURPOSE; and
+(2) Xilinx shall not be liable (whether in contract or tort,
+including negligence, or under any other theory of
+liability) for any loss or damage of any kind or nature
+related to, arising under or in connection with these
+materials, including for any direct, or any indirect,
+special, incidental, or consequential loss or damage
+(including loss of data, profits, goodwill, or any type of
+loss or damage suffered as a result of any action brought
+by a third party) even if such damage or loss was
+reasonably foreseeable or Xilinx had been advised of the
+possibility of the same.
+
+CRITICAL APPLICATIONS
+Xilinx products are not designed or intended to be fail-
+safe, or for use in any application requiring fail-safe
+performance, such as life-support or safety devices or
+systems, Class III medical devices, nuclear facilities,
+applications related to the deployment of airbags, or any
+other applications that could lead to death, personal
+injury, or severe property or environmental damage
+(individually and collectively, "Critical
+Applications"). Customer assumes the sole risk and
+liability of any use of Xilinx products in Critical
+Applications, subject only to applicable laws and
+regulations governing limitations on product liability.
+
+THIS COPYRIGHT NOTICE AND DISCLAIMER MUST BE RETAINED AS
+PART OF THIS FILE AT ALL TIMES.

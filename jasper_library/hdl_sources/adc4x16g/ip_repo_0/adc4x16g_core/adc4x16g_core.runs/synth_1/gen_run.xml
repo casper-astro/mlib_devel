@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenRun Id="synth_1" LaunchPart="xcvu37p-fsvh2892-2L-e" LaunchTime="1585632830">
+  <File Type="PA-TCL" Name="gty_wrapper_0.tcl"/>
+  <File Type="RDS-PROPCONSTRS" Name="gty_wrapper_0_drc_synth.rpt"/>
+  <File Type="REPORTS-TCL" Name="gty_wrapper_0_reports.tcl"/>
+  <File Type="RDS-RDS" Name="gty_wrapper_0.vds"/>
+  <File Type="RDS-UTIL" Name="gty_wrapper_0_utilization_synth.rpt"/>
+  <File Type="RDS-UTIL-PB" Name="gty_wrapper_0_utilization_synth.pb"/>
+  <File Type="RDS-DCP" Name="gty_wrapper_0.dcp"/>
+  <File Type="VDS-TIMINGSUMMARY" Name="gty_wrapper_0_timing_summary_synth.rpt"/>
+  <File Type="VDS-TIMING-PB" Name="gty_wrapper_0_timing_summary_synth.pb"/>
+  <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1">
+    <Filter Type="Srcs"/>
+    <File Path="$PSRCDIR/sources_1/ip/fifo_256in_32out/fifo_256in_32out.xci">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../adc16G4X_datarx/src/fifo_256in_32out/fifo_256in_32out.xci"/>
+        <Attr Name="ImportTime" Val="1579760656"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/ip/gtwizard_ultrascale_3/gtwizard_ultrascale_3.xci">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/ip/gtwizard_ultrascale_2/gtwizard_ultrascale_2.xci">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/ip/gtwizard_ultrascale_1/gtwizard_ultrascale_1.xci">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/ip/gtwizard_ultrascale_0/gtwizard_ultrascale_0.xci">
+      <FileInfo>
+        <Attr Name="Library" Val=""/>
+        <Attr Name="ImportPath" Val="$PPRDIR/../adc16G4X_datarx/src/gtwizard_ultrascale_0/gtwizard_ultrascale_0.xci"/>
+        <Attr Name="ImportTime" Val="1582609955"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/src/gtwizard_ultrascale_0_prbs_any.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../adc16G4X_datarx/src/gtwizard_ultrascale_0_prbs_any.v"/>
+        <Attr Name="ImportTime" Val="1581392807"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/src/sync_it.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../adc16G4X_datarx/src/sync_it.v"/>
+        <Attr Name="ImportTime" Val="1577574813"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/adc16G4X_datarx/src/gty_wrapper_0.v">
+      <FileInfo>
+        <Attr Name="Library" Val=""/>
+        <Attr Name="ImportPath" Val="$PPRDIR/../adc16G4X_datarx/src/gty_wrapper_0.v"/>
+        <Attr Name="ImportTime" Val="1582603196"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PPRDIR/../component.xml">
+      <FileInfo SFType="IPXACT"/>
+    </File>
+    <Config>
+      <Option Name="DesignMode" Val="RTL"/>
+      <Option Name="TopModule" Val="gty_wrapper_0"/>
+      <Option Name="TopRTLFile" Val="$PSRCDIR/sources_1/imports/adc16G4X_datarx/src/gty_wrapper_0.v"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="constrs_in" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1">
+    <Filter Type="Constrs"/>
+    <Config>
+      <Option Name="ConstrsType" Val="XDC"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="utils" Type="Utils" RelSrcDir="$PSRCDIR/utils_1">
+    <Filter Type="Utils"/>
+    <Config>
+      <Option Name="TopAutoSet" Val="TRUE"/>
+    </Config>
+  </FileSet>
+  <Strategy Version="1" Minor="2">
+    <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
+    <Step Id="synth_design"/>
+  </Strategy>
+</GenRun>
