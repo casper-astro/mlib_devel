@@ -246,6 +246,13 @@ class microblaze_vu_plus(microblaze):
         inst.add_port('ACK_I', 'wbm_ack_i')
         inst.add_port('RST_O', 'wbm_rst_o')
         inst.add_port('ext_intr', 'mb_intr') 
+        #add signals for adc4x16g initlization
+        inst.add_port('ADC4X16G_CONFIG','adc4x16g_config',width=32)
+        inst.add_port('ADC4X16G_MATCH_PATTERN','adc4x16g_match_pattern',width=32)
+        inst.add_port('MOSI','adc4x16g_mosi')
+        inst.add_port('MISO','adc4x16g_miso')
+        inst.add_port('SCK','adc4x16g_sck')
+        inst.add_port('SSELb','adc4x16g_sselb',width=4)
         if self.include_spi_ports:
             # Add the SPI ports, which get connected through tristate buffers
             self._connect_to_tristate_buf(top, inst, 'spi_rtl_io0')
@@ -260,6 +267,7 @@ class microblaze_vu_plus(microblaze):
 
         top.add_signal('mb_intr_v', width=4)
         top.assign_signal('mb_intr', '|mb_intr_v')
+        
     
     def gen_constraints(self):
         cons = []

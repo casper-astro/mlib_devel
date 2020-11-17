@@ -292,9 +292,9 @@ proc create_root_design { parentCell } {
 
 
   # Create interface ports
-  set ADCX416G_CONFIG [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 ADCX416G_CONFIG ]
+  set ADC4X16G_CONFIG [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 ADC4X16G_CONFIG ]
 
-  set ADCX416G_MATCH_PATTERN [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 ADCX416G_MATCH_PATTERN ]
+  set ADC4X16G_MATCH_PATTERN [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 ADC4X16G_MATCH_PATTERN ]
 
   set UART [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:uart_rtl:1.0 UART ]
 
@@ -326,6 +326,9 @@ proc create_root_design { parentCell } {
 
   # Create instance: adc_config, and set properties
   set adc_config [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 adc_config ]
+  set_property -dict [ list \
+   CONFIG.C_ALL_OUTPUTS {1} \
+ ] $adc_config
 
   # Create instance: axi_hwicap_0, and set properties
   set axi_hwicap_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_hwicap:3.0 axi_hwicap_0 ]
@@ -419,9 +422,9 @@ proc create_root_design { parentCell } {
  ] $xlconcat_0
 
   # Create interface connections
-  connect_bd_intf_net -intf_net adc_config_GPIO [get_bd_intf_ports ADCX416G_CONFIG] [get_bd_intf_pins adc_config/GPIO]
+  connect_bd_intf_net -intf_net adc_config_GPIO [get_bd_intf_ports ADC4X16G_CONFIG] [get_bd_intf_pins adc_config/GPIO]
   connect_bd_intf_net -intf_net axi_uartlite_0_UART [get_bd_intf_ports UART] [get_bd_intf_pins axi_uartlite_0/UART]
-  connect_bd_intf_net -intf_net match_pattern_config_GPIO [get_bd_intf_ports ADCX416G_MATCH_PATTERN] [get_bd_intf_pins match_pattern_config/GPIO]
+  connect_bd_intf_net -intf_net match_pattern_config_GPIO [get_bd_intf_ports ADC4X16G_MATCH_PATTERN] [get_bd_intf_pins match_pattern_config/GPIO]
   connect_bd_intf_net -intf_net microblaze_0_axi_dp [get_bd_intf_pins microblaze_0/M_AXI_DP] [get_bd_intf_pins microblaze_0_axi_periph/S00_AXI]
   connect_bd_intf_net -intf_net microblaze_0_axi_periph_M01_AXI [get_bd_intf_pins axi_uartlite_0/S_AXI] [get_bd_intf_pins microblaze_0_axi_periph/M01_AXI]
   connect_bd_intf_net -intf_net microblaze_0_axi_periph_M02_AXI [get_bd_intf_pins axi_timebase_wdt_0/S_AXI] [get_bd_intf_pins microblaze_0_axi_periph/M02_AXI]
@@ -483,7 +486,6 @@ proc create_root_design { parentCell } {
   # Restore current instance
   current_bd_instance $oldCurInst
 
-  validate_bd_design
   save_bd_design
 }
 # End of create_root_design()
@@ -495,4 +497,6 @@ proc create_root_design { parentCell } {
 
 create_root_design ""
 
+
+common::send_msg_id "BD_TCL-1000" "WARNING" "This Tcl script was generated from a block design that has not been validated. It is possible that design <$design_name> may result in errors during validation."
 
