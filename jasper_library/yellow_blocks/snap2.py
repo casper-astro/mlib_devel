@@ -59,7 +59,7 @@ class snap2(YellowBlock):
             RawConstraint('set_property BITSTREAM.CONFIG.CONFIGRATE 33 [current_design]'),
             RawConstraint('set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]'),
             RawConstraint('set_property BITSTREAM.CONFIG.SPI_32BIT_ADDR Yes [current_design]'),
-            RawConstraint('set_property BITSTREAM.CONFIG.TIMER_CFG 20000000 [current_design]'),
+            #RawConstraint('set_property BITSTREAM.CONFIG.TIMER_CFG 20000000 [current_design]'),
             RawConstraint('set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]'),
             ]
 
@@ -72,6 +72,6 @@ class snap2(YellowBlock):
         tcl_cmds['promgen'] = []
         #tcl_cmds['promgen'] += ['write_cfgmem  -format mcs -size 32 -interface SPIx4 -loadbit "up 0x0 ./myproj.runs/impl_1/top.bit " -checksum -file "./myproj.runs/impl_1/top.mcs" -force']
         #tcl_cmds['promgen'] += ['write_cfgmem  -format mcs -size 32 -interface SPIx4 -loadbit "up 0x%.7x ./myproj.runs/impl_1/top.bit " -checksum -file "./myproj.runs/impl_1/top_0x%x.mcs" -force' % (self.usermemaddr, self.usermemaddr)]
-        tcl_cmds['promgen'] += ['write_cfgmem  -format bin -size 32 -interface SPIx4 -loadbit "up 0x0 ./myproj.runs/impl_1/top.bit " -checksum -file "./myproj.runs/impl_1/top.bin" -force']
+        tcl_cmds['promgen'] += ['write_cfgmem  -format bin -size 64 -interface SPIx4 -loadbit "up 0x0 ./myproj.runs/impl_1/top.bit " -checksum -file "./myproj.runs/impl_1/top.bin" -force']
         return tcl_cmds
 
