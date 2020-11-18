@@ -279,3 +279,48 @@ pins:
         AF52
         AE54
         AE50
+  #adc4x16 ctrl signals
+  adc4x16g_asnt_ctrl_0:
+    iostd: LVCMOS18
+    loc:
+        H19
+        K24
+        E27
+        B16
+  adc4x16g_asnt_ctrl_1:
+    iostd: LVCMOS18
+    loc:
+        H18
+        A21
+        J22
+        D20
+  adc4x16g_asnt_ctrl_2:
+    iostd: LVCMOS18
+    loc:
+        H27
+        E18
+        E21
+        D21
+  adc4x16g_asnt_ctrl_3:
+    iostd: LVCMOS18
+    loc:
+        A25
+        G27
+        E26
+        D26
+  adc4x16g_mosi:
+    iostd: LVCMOS18
+    loc: H17
+  adc4x16g_miso:
+    iostd: LVCMOS18
+    loc: B22
+  adc4x16g_sck:
+    iostd: LVCMOS18
+    loc: G16
+  adc4x16g_sselb:
+    iostd: LVCMOS18
+    loc:
+        K21
+        E22
+        D22
+        B23

@@ -13,7 +13,6 @@ module gty_wrapper_0#(
     input clk_freerun,
     input gtwiz_reset_all_in,
     input [1:0] bit_sel,
-    input [1:0] chan_sel,
     input [3:0] gty0rxp_in,
     input [3:0] gty0rxn_in,
     input rxcdrhold,
@@ -27,7 +26,7 @@ module gty_wrapper_0#(
     input fifo_read,
     output reg fifo_full,
     output reg fifo_empty,
-    output reg [31:0]data_out,
+    output reg [255:0]data_out,
     input prbs_error_count_reset,
     //DRP Port Interface
     input [9:0] drp_addr,

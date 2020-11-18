@@ -247,8 +247,10 @@ class microblaze_vu_plus(microblaze):
         inst.add_port('RST_O', 'wbm_rst_o')
         inst.add_port('ext_intr', 'mb_intr') 
         #add signals for adc4x16g initlization
-        inst.add_port('ADC4X16G_CONFIG','adc4x16g_config',width=32)
-        inst.add_port('ADC4X16G_MATCH_PATTERN','adc4x16g_match_pattern',width=32)
+        inst.add_port('ADC4X16G_CONFIG_tri_o','adc4x16g_config',width=32)
+        inst.add_port('ADC4X16G_MATCH_PATTERN_tri_o','adc4x16g_match_pattern',width=32)
+        inst.add_port('ADC4X16G_DRP_CONFIG_tri_o','adc4x16g_drp_config',width=32)
+        inst.add_port('ADC4X16G_DRP_DATA_tri_i','adc4x16g_drp_data',width=32)
         inst.add_port('MOSI','adc4x16g_mosi')
         inst.add_port('MISO','adc4x16g_miso')
         inst.add_port('SCK','adc4x16g_sck')
