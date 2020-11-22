@@ -10,7 +10,7 @@ module wbs_arbiter(
     wbs_adr_o, wbs_dat_o, wbs_dat_i,
     wbs_ack_i, wbs_err_i
   );
-  parameter NUM_SLAVES = 14;
+  parameter N_SLAVES = 14;
   parameter SLAVE_ADDR = 0;
   parameter SLAVE_HIGH = 0;
   parameter TIMEOUT    = 10;
@@ -27,24 +27,24 @@ module wbs_arbiter(
   output wbm_ack_o;
   output wbm_err_o;
 
-  output [NUM_SLAVES - 1:0] wbs_cyc_o;
-  output [NUM_SLAVES - 1:0] wbs_stb_o;
+  output [N_SLAVES - 1:0] wbs_cyc_o;
+  output [N_SLAVES - 1:0] wbs_stb_o;
   output wbs_we_o;
   output  [3:0] wbs_sel_o;
   output [31:0] wbs_adr_o;
   output [31:0] wbs_dat_o;
-  input  [NUM_SLAVES*32 - 1:0] wbs_dat_i;
-  input  [NUM_SLAVES - 1:0] wbs_ack_i;
-  input  [NUM_SLAVES - 1:0] wbs_err_i;
+  input  [N_SLAVES*32 - 1:0] wbs_dat_i;
+  input  [N_SLAVES - 1:0] wbs_ack_i;
+  input  [N_SLAVES - 1:0] wbs_err_i;
 
   /************************* Function Defines **************************/
-  function [NUM_SLAVES-1:0] encode;
-    input [NUM_SLAVES-1:0] in;
+  function [N_SLAVES-1:0] encode;
+    input [N_SLAVES-1:0] in;
 
     integer trans;
     begin
       encode = 0; //default condition
-      for (trans=0; trans < NUM_SLAVES; trans=trans+1) begin
+      for (trans=0; trans < N_SLAVES; trans=trans+1) begin
         if (in[trans]) begin
           encode = trans;
         end
@@ -55,8 +55,8 @@ module wbs_arbiter(
 
   /************************** Common Signals ***************************/
 
-  wire [NUM_SLAVES - 1:0] wbs_sel;
-  reg  [NUM_SLAVES - 1:0] wbs_active;
+  wire [N_SLAVES - 1:0] wbs_sel;
+  reg  [N_SLAVES - 1:0] wbs_active;
 
   wire timeout_reset;
   wire timeout;
@@ -76,11 +76,11 @@ module wbs_arbiter(
 
   /* Generate wbs_sel from wbm_adr_i and SLAVE_ADDR & SLAVE_HIGH ie 001 -> slave 0 sel, 100 -> slave 2 sel*/
   genvar gen_i;
-  generate for (gen_i=0; gen_i < NUM_SLAVES; gen_i=gen_i+1) begin : G0
+  generate for (gen_i=0; gen_i < N_SLAVES; gen_i=gen_i+1) begin : G0
     assign wbs_sel[gen_i] = wbm_adr_i[32 - 1:0] >= SLAVE_ADDR[32*(gen_i+1) - 1:32*(gen_i)] &&
                             wbm_adr_i[32 - 1:0] <= SLAVE_HIGH[32*(gen_i+1) - 1:32*(gen_i)];
   end endgenerate
-  wire [NUM_SLAVES-1:0] wbs_sel_enc = encode(wbs_sel); //this is the encoded value ie 10 -> 2, 100 -> 3 etc
+  wire [N_SLAVES-1:0] wbs_sel_enc = encode(wbs_sel); //this is the encoded value ie 10 -> 2, 100 -> 3 etc
 
   /* Generate wbs_adr_o from wbm_adr_i and wbs_sel */
   wire [31:0] wbs_adr_o_int;
@@ -101,14 +101,14 @@ module wbs_arbiter(
   generate for (gen_k=0; gen_k < 32; gen_k=gen_k+1) begin : G2
     assign wbm_dat_o[gen_k] = wbs_dat_i[32*wbs_sel_enc + gen_k];
   end endgenerate
-  assign wbm_ack_o = (wbs_ack_i & wbs_active) != {NUM_SLAVES{1'b0}};
+  assign wbm_ack_o = (wbs_ack_i & wbs_active) != {N_SLAVES{1'b0}};
 
   assign wbs_we_o = wbm_we_i;
   assign wbs_dat_o = wbm_dat_i;
 
   reg wbm_err_o;
 
-  reg [NUM_SLAVES - 1:0] wbs_cyc_o;
+  reg [N_SLAVES - 1:0] wbs_cyc_o;
   assign wbs_stb_o = wbs_cyc_o;
 
   reg state;
@@ -119,17 +119,17 @@ module wbs_arbiter(
   
   always @(posedge wb_clk_i) begin
     /* strobes */
-    wbs_cyc_o <= {NUM_SLAVES{1'b0}};
+    wbs_cyc_o <= {N_SLAVES{1'b0}};
     wbm_err_o <= 1'b0;
 
     if (wb_rst_i) begin
       state <= STATE_IDLE;
-      wbs_active <= {NUM_SLAVES{1'b0}};
+      wbs_active <= {N_SLAVES{1'b0}};
     end else begin
       case (state)
         STATE_IDLE: begin
           if (wbm_cyc_i & wbm_stb_i) begin
-            if (wbs_sel == {NUM_SLAVES{1'b0}}) begin
+            if (wbs_sel == {N_SLAVES{1'b0}}) begin
               wbm_err_o <= 1'b1;
             end else begin
               wbs_active <= wbs_sel;
@@ -141,7 +141,7 @@ module wbs_arbiter(
             $display("wb_arb: got event, wbs_sel = %x",wbs_sel);
 `endif
           end else begin
-            //wbs_active <= {NUM_SLAVES{1'b0}};
+            //wbs_active <= {N_SLAVES{1'b0}};
             /* this delayed clear is intentional as the wbm_ack depends on the value */
           end
         end
