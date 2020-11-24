@@ -15,6 +15,7 @@ class adc_4x16g_asnt(YellowBlock):
                      'library':'user',
                      'version':'1.1',
                     }]
+        self.typecode = TYPECODE_SWREG
 
     
     def modify_top(self,top):
@@ -64,7 +65,8 @@ class adc_4x16g_asnt(YellowBlock):
             low_bit  = i * 4
             top.assign_signal(self.fullname + '_data_a%d'%i,'adc4x16g_data_out%d['%self.channel_sel + str(high_bit)+ ':'+ str(low_bit) + ']')
         top.assign_signal(self.fullname + '_sync', '~adc4x16g_empty%d'%self.channel_sel)
-        
+        for regname, bus_addr in self.platform.mmbus_xil_base_address:
+            inst.add_xil_axi4lite_interface(regname, mode='rw', nbytes=0xFFFF, typecode=self.typecode)
     def _instantiate_channel_sel(self,top):
         module = 'ADC4X16G_Channel_Sel'
         inst = top.get_instance(entity=module, name='adc4x16g_channel_sel')

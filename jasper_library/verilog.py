@@ -602,6 +602,10 @@ class VerilogModule(object):
         self.memory_map = {}
         self.rfdc_devices = [] #this is for rfdc core on RFSOC, such as zcu111 platform
         self.n_rfdc_interfaces = 0
+        # this is for xilinx axi4lite devices.
+        # in some applications, we add some axi-spi or axi-gpio, which are not casper axi4lite devices
+        self.xil_axi4lite_devices = []      
+        self.n_xil_axi4lite_devices = 0
         # sourcefiles required by the module (this is currently NOT
         # how the jasper toolflow implements source management)
         self.sourcefiles = []
@@ -1536,7 +1540,7 @@ class VerilogModule(object):
         This function returns the AXI4LiteDevice object, so the caller can mess with it's memory map
         if they so desire.
         """
-        if regname in [axi_dev.regname for axi_dev in self.axi4lite_devices]:
+        if regname in [axi_dev.regname for axi_dev in self.rfdc_devices]:
             return
         else:
             # Make single register in memory_map if memory_map is empty
@@ -1547,6 +1551,24 @@ class VerilogModule(object):
             self.n_rfdc_interfaces += 1
             return rfdc_device
 
+    def add_xil_axi4lite_interface(self, regname, mode, nbytes=4, default_val=0, suffix='', candr_suffix='', memory_map=[], typecode=0xff):
+        """
+        Add the ports necessary for xilinx axi4lite cores, which are not casper AXILite4 devices
+
+        This function returns the AXI4LiteDevice object, so the caller can mess with it's memory map
+        if they so desire.
+        """
+        if regname in [axi_dev.regname for axi_dev in self.xil_axi4lite_devices]:
+            return
+        else:
+            # Make single register in memory_map if memory_map is empty
+            if not memory_map:
+                memory_map = [Register(regname, nbytes=nbytes, offset=0, mode=mode, default_val=default_val, ram_size=nbytes if typecode==4 else -1, ram=True if typecode==4 else False)]
+            xil_axi4lite_device = AXI4LiteDevice(regname, nbytes=nbytes, mode=mode, hdl_suffix=suffix, hdl_candr_suffix=candr_suffix, memory_map=memory_map, typecode=typecode)
+            self.xil_axi4lite_device += [xil_axi4lite_device]
+            self.n_xil_axi4lite_device += 1
+            return xil_axi4lite_device
+            
     def search_dict_for_name(self, dict, name):
         """
         This helper function searches each top level dictionary

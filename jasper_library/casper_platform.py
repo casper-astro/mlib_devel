@@ -88,7 +88,10 @@ class Platform(object):
             self.mmbus_rfdc_base_address = self.conf['mmbus_rfdc_base_address']
         except KeyError:
             self.mmbus_rfdc_base_address = 0xA0800000
-			
+        try:
+            self.mmbus_xil_base_address = self.conf['mmbus_xil_base_address']
+        except KeyError:
+            self.mmbus_xil_base_address = []
     def add_pins(self, name, iostd, loc):
         """
         Add a pin to the platform. Generally for use in constructors
