@@ -1565,8 +1565,8 @@ class VerilogModule(object):
             if not memory_map:
                 memory_map = [Register(regname, nbytes=nbytes, offset=0, mode=mode, default_val=default_val, ram_size=nbytes if typecode==4 else -1, ram=True if typecode==4 else False)]
             xil_axi4lite_device = AXI4LiteDevice(regname, nbytes=nbytes, mode=mode, hdl_suffix=suffix, hdl_candr_suffix=candr_suffix, memory_map=memory_map, typecode=typecode)
-            self.xil_axi4lite_device += [xil_axi4lite_device]
-            self.n_xil_axi4lite_device += 1
+            self.xil_axi4lite_devices += [xil_axi4lite_device]
+            self.n_xil_axi4lite_devices += 1
             return xil_axi4lite_device
             
     def search_dict_for_name(self, dict, name):
