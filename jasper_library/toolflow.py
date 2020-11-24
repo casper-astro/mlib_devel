@@ -458,6 +458,8 @@ class Toolflow(object):
             self.cores = []
             for val in list(self.top.memory_map.values()):
                 self.cores += val['axi4lite_devices']
+            for val in self.top.rfdc_devices:
+                self.cores += [val]
         else:
             self.cores = self.top.wb_devices
         basefile = '%s/%s/core_info.tab' % (os.getenv('HDL_ROOT'),
