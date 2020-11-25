@@ -1,6 +1,7 @@
 from .yellow_block import YellowBlock
 from verilog import VerilogModule
 from constraints import PortConstraint, ClockConstraint, RawConstraint
+from .yellow_block_typecodes import *
 
 from math import ceil, floor
 from os import environ as env
@@ -15,7 +16,7 @@ class adc_4x16g_asnt(YellowBlock):
                      'library':'user',
                      'version':'1.1',
                     }]
-        self.typecode = TYPECODE_SWREG
+        self.typecode = TYPECODE_BRAM
 
     
     def modify_top(self,top):
@@ -65,9 +66,12 @@ class adc_4x16g_asnt(YellowBlock):
             low_bit  = i * 4
             top.assign_signal(self.fullname + '_data_a%d'%i,'adc4x16g_data_out%d['%self.channel_sel + str(high_bit)+ ':'+ str(low_bit) + ']')
         top.assign_signal(self.fullname + '_sync', '~adc4x16g_empty%d'%self.channel_sel)
-        for regname, bus_addr in self.platform.mmbus_xil_base_address:
-            dev = inst.add_xil_axi4lite_interface(regname, mode='rw', nbytes=0xFFFF, typecode=self.typecode)
-            dev.bus_addr = bus_addr
+        for (devname, base_addr) in self.platform.mmbus_xil_base_address.items():
+            dev = top.add_xil_axi4lite_interface(devname, mode='rw', nbytes=0xFFFF, typecode=self.typecode)
+            try:
+                dev.base_addr = base_addr
+            except:
+                pass
         
     def _instantiate_channel_sel(self,top):
         module = 'ADC4X16G_Channel_Sel'
