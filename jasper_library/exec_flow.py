@@ -38,6 +38,8 @@ if __name__ == '__main__':
                     help="Specify a specific sysgen startup script.")
     parser.add_argument("--jobs", dest="jobs", type=int, default=4,
                     help="Number of cores to run compiles with. Default=4")
+    parser.add_argument("--threads", dest="threads", type=str, default='multi',
+                    help="Processor threads to use for compiling - either multi or single. Default: multi")
     parser.add_argument("--nonprojectmode", dest="nonprojectmode",
                     action='store_false', default=True,
                     help="Project Mode is enabled by default/Non Project Mode "
@@ -223,7 +225,7 @@ if __name__ == '__main__':
 
             # launch vivado via the generated .tcl file
             backend.compile(cores=opts.jobs, plat=platform,
-                            synth_strat=opts.synth_strat, impl_strat=opts.impl_strat)
+                            synth_strat=opts.synth_strat, impl_strat=opts.impl_strat, threads=opts.threads)
         # if ISE is selected to compile
         elif opts.be == 'ise':
             platform.backend_target = 'ise'
@@ -245,7 +247,7 @@ if __name__ == '__main__':
             backend.import_from_castro(backend.compile_dir + '/castro.yml')
             # launch vivado via the generated .tcl file
             backend.compile(cores=opts.jobs, plat=platform,
-                            synth_strat=opts.synth_strat, impl_strat=opts.impl_strat)
+                            synth_strat=opts.synth_strat, impl_strat=opts.impl_strat, threads=opts.threads)
 
         if opts.software:
             binary = backend.binary_loc

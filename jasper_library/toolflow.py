@@ -1569,7 +1569,7 @@ class VivadoBackend(ToolflowBackend):
         s += self.tcl_cmds['promgen']
         return s
 
-    def add_compile_cmds(self, cores=8, plat=None, synth_strat=None, impl_strat=None):
+    def add_compile_cmds(self, cores=8, plat=None, synth_strat=None, impl_strat=None, threads='multi'):
         """
         Add the tcl commands for compiling the design, and then launch
         vivado in batch mode
@@ -1603,6 +1603,14 @@ class VivadoBackend(ToolflowBackend):
 
             # Synthesis Commands
             self.add_tcl_cmd('reset_run synth_1', stage='synth')
+            try:
+                if threads == 'single':
+                    # This enables single threading, which is guaranteed to produce repeatable Vivado placement,
+                    # routing and timing closure for designs that do not change.
+                    self.add_tcl_cmd('set_param general.MaxThreads 1', stage='synth')
+            # just ignore if key is not present as only some platforms will have the key.
+            except KeyError:
+                s = ""
             self.add_tcl_cmd('launch_runs synth_1 -jobs %d' % cores, stage='synth')
             self.add_tcl_cmd('wait_on_run synth_1', stage='synth')
 
@@ -1815,7 +1823,7 @@ class VivadoBackend(ToolflowBackend):
                 '-hold]] ns" ')
             tcl('}')
 
-    def compile(self, cores, plat, synth_strat=None, impl_strat=None):
+    def compile(self, cores, plat, synth_strat=None, impl_strat=None, threads='multi'):
         """
 
         :param cores:
@@ -1823,7 +1831,7 @@ class VivadoBackend(ToolflowBackend):
         :param impl_strat: Implementation Strategy to use when
                             carrying out the implementation run 'impl'
         """
-        self.add_compile_cmds(cores=cores, plat=plat, synth_strat=synth_strat, impl_strat=impl_strat)
+        self.add_compile_cmds(cores=cores, plat=plat, synth_strat=synth_strat, impl_strat=impl_strat, threads=threads)
         # write tcl command to file
         tcl_file = self.compile_dir+'/gogogo.tcl'
         helpers.write_file(tcl_file, self.eval_tcl())
