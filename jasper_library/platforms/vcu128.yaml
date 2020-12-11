@@ -2,11 +2,6 @@ name: vcu128
 manufacturer: Xilinx
 fpga: xcvu37p-fsvh2892-2L-e
 backend_target: vivado
-mmbus_xil_base_address:
-  adc_config: 0x40000000
-  match_pattern_config: 0x40010000
-  axi_quad_spi: 0x44B00000
-  drp_config: 0x40020000
 sources: []
 constraints: []
 provides:

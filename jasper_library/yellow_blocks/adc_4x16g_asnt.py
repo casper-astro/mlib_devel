@@ -66,12 +66,12 @@ class adc_4x16g_asnt(YellowBlock):
             low_bit  = i * 4
             top.assign_signal(self.fullname + '_data_a%d'%i,'adc4x16g_data_out%d['%self.channel_sel + str(high_bit)+ ':'+ str(low_bit) + ']')
         top.assign_signal(self.fullname + '_sync', '~adc4x16g_empty%d'%self.channel_sel)
-        for (devname, base_addr) in self.platform.mmbus_xil_base_address.items():
-            dev = top.add_xil_axi4lite_interface(devname, mode='rw', nbytes=0xFFFF, typecode=self.typecode)
-            try:
-                dev.base_addr = base_addr
-            except:
-                pass
+        #for (devname, base_addr) in self.platform.mmbus_xil_base_address.items():
+        #    dev = top.add_xil_axi4lite_interface(devname, mode='rw', nbytes=0xFFFF, typecode=self.typecode)
+        #    try:
+        #        dev.base_addr = base_addr
+        #    except:
+        #        pass
         
     def _instantiate_channel_sel(self,top):
         module = 'ADC4X16G_Channel_Sel'
