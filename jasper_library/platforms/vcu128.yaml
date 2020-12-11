@@ -34,10 +34,10 @@ pins:
     loc: AB43
   usb_tx:
     iostd: LVCMOS18
-    loc: BN26
+    loc: BP26
   usb_rx:
     iostd: LVCMOS18
-    loc: BP26
+    loc: BN26
   led: 
     iostd: LVCMOS18
     loc:
