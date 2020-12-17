@@ -6,6 +6,7 @@ module vcu128_infrastructure(
     output sys_clk180,
     output sys_clk270,
 
+    output mb_clk,
     output clk_200,
 
     output sys_rst,
@@ -29,6 +30,7 @@ module vcu128_infrastructure(
   wire sys_clk180_dcm;
   wire sys_clk270_dcm;
   wire clk_200_dcm;
+  wire mb_clk_dcm;
 
   wire clk_fb;
 
@@ -36,7 +38,7 @@ module vcu128_infrastructure(
 
   MMCM_BASE #(
    .BANDWIDTH          ("OPTIMIZED"), // Jitter programming ("HIGH","LOW","OPTIMIZED")
-   .CLKFBOUT_MULT_F    (12), // Multiply value for all CLKOUT (5.0-64.0).
+   .CLKFBOUT_MULT_F    (10), // Multiply value for all CLKOUT (5.0-64.0). the orginal value here is 12
    .CLKFBOUT_PHASE     (0.0),
    .CLKIN1_PERIOD      (10), // VCU128 clock is 100 MHz
    .CLKOUT0_DIVIDE_F   (1.0), // Divide amount for CLKOUT0 (1.000-128.000).
@@ -54,10 +56,10 @@ module vcu128_infrastructure(
    .CLKOUT4_PHASE      (0.0),
    .CLKOUT5_PHASE      (0.0),
    .CLKOUT6_PHASE      (0.0),
-   .CLKOUT1_DIVIDE     (12),
-   .CLKOUT2_DIVIDE     (12),
-   .CLKOUT3_DIVIDE     (6),
-   .CLKOUT4_DIVIDE     (1),
+   .CLKOUT1_DIVIDE     (10),		//the orginal value here is 12
+   .CLKOUT2_DIVIDE     (10),		//the orginal value here is 12
+   .CLKOUT3_DIVIDE     (5), 	//the orginal value here is 6
+   .CLKOUT4_DIVIDE     (4),
    .CLKOUT5_DIVIDE     (1),
    .CLKOUT6_DIVIDE     (1),
    .CLKOUT4_CASCADE    ("FALSE"),
@@ -80,7 +82,7 @@ module vcu128_infrastructure(
    .CLKOUT2B (),
    .CLKOUT3  (clk_200_dcm),
    .CLKOUT3B (),
-   .CLKOUT4  (),
+   .CLKOUT4  (mb_clk_dcm),
    .CLKOUT5  (),
    .CLKOUT6  (),
    .LOCKED   (pll_lock),
@@ -91,9 +93,9 @@ module vcu128_infrastructure(
   );
 
 
-  BUFG bufg_sysclk[3:0](
-    .I({sys_clk0_dcm, sys_clk180_dcm, sys_clk270_dcm, clk_200_dcm}),
-    .O({sys_clk0,     sys_clk180,     sys_clk270,     clk_200})
+  BUFG bufg_sysclk[4:0](
+    .I({sys_clk0_dcm, sys_clk180_dcm, sys_clk270_dcm, clk_200_dcm, mb_clk_dcm}),
+    .O({sys_clk0,     sys_clk180,     sys_clk270,     clk_200,     mb_clk})
   );
   
   /* reset gen */

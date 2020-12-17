@@ -9,6 +9,7 @@ from os import environ as env
 class adc_4x16g_asnt(YellowBlock):
     def initialize(self):
         self.add_source('adc4x16g/ADC4X16G_Channel_Sel.v')
+        self.add_source('adc4x16g/data_splitter.v')
         #add the adc4x16g IP 
         self.ips = [{'path':'%s/adc4x16g/ip_repo_0' % env['HDL_ROOT'],
                      'name':'adc4x16g_core',
@@ -22,6 +23,7 @@ class adc_4x16g_asnt(YellowBlock):
     def modify_top(self,top):
         self._instantiate_channel_sel(top)
         self._add_external_ports(top)
+        self._add_data_splitter(top)
         module = 'adc4x16g_core'
         inst = top.get_instance(entity=module,name='adc4x16g_adc4x16g_inst%d'%self.channel_sel)
         # channel selection
@@ -61,11 +63,14 @@ class adc_4x16g_asnt(YellowBlock):
         inst.add_port('fifo_full','adc4x16g_full%d'%self.channel_sel)
         # test points, no need currently
         inst.add_port('rxprbserr_out','')
+        """
         for i in range(64):
             high_bit = (i+1) * 4 - 1
             low_bit  = i * 4
             top.assign_signal(self.fullname + '_data_a%d'%i,'adc4x16g_data_out%d['%self.channel_sel + str(high_bit)+ ':'+ str(low_bit) + ']')
         top.assign_signal(self.fullname + '_sync', '~adc4x16g_empty%d'%self.channel_sel)
+        """
+
         #for (devname, base_addr) in self.platform.mmbus_xil_base_address.items():
         #    dev = top.add_xil_axi4lite_interface(devname, mode='rw', nbytes=0xFFFF, typecode=self.typecode)
         #    try:
@@ -103,7 +108,14 @@ class adc_4x16g_asnt(YellowBlock):
         low_bit = str(self.channel_sel*4)
         high_bit = str((self.channel_sel+1)*4 - 1)
         top.assign_signal('adc4x16g_asnt_ctrl_%d'%self.channel_sel,'adc4x16g_drp_config[' + high_bit + ':' + low_bit + ']')
-        
+    
+    def _add_data_splitter(self,top):
+        module = 'data_splitter'
+        inst = top.get_instance(entity=module, name='data_splitter_inst%d'%self.channel_sel)
+        inst.add_port('data_in', 'adc4x16g_data_out%d'%self.channel_sel,width=256, parent_sig=False)
+        for i in range(64):
+            inst.add_port('data_out' + str(i), self.fullname + '_data_a%d'%i, width=4)
+
     def gen_constraints(self):
         cons = []
         # In the yaml file, we have 6 banks, which are bank124, 125, 126, 127, 128, 129
