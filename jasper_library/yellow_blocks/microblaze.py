@@ -101,8 +101,7 @@ class microblaze_k7(microblaze):
             #self._connect_to_tristate_buf(top, inst, 'spi_rtl_sck')
             self._connect_to_tristate_buf(top, inst, 'spi_rtl_ss')
 
-        #top.assign_signal('wb_clk_i', 'sys_clk')
-        top.assign_signal('wb_clk_i', 'mb_clk')
+        top.assign_signal('wb_clk_i', 'sys_clk')
         top.assign_signal('wb_rst_i', 'sys_rst')
 
         top.add_signal('mb_intr_v', width=4)
@@ -265,7 +264,8 @@ class microblaze_vu_plus(microblaze):
             #self._connect_to_tristate_buf(top, inst, 'spi_rtl_sck')
             self._connect_to_tristate_buf(top, inst, 'spi_rtl_ss')
 
-        top.assign_signal('wb_clk_i', 'sys_clk')
+        #top.assign_signal('wb_clk_i', 'sys_clk')
+        top.assign_signal('wb_clk_i', 'mb_clk')
         top.assign_signal('wb_rst_i', 'sys_rst')
 
         top.add_signal('mb_intr_v', width=4)

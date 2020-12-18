@@ -56,10 +56,10 @@ module vcu128_infrastructure(
    .CLKOUT4_PHASE      (0.0),
    .CLKOUT5_PHASE      (0.0),
    .CLKOUT6_PHASE      (0.0),
-   .CLKOUT1_DIVIDE     (10),		//the orginal value here is 12
-   .CLKOUT2_DIVIDE     (10),		//the orginal value here is 12
+   .CLKOUT1_DIVIDE     (4),		//the orginal value here is 12
+   .CLKOUT2_DIVIDE     (4),		//the orginal value here is 12
    .CLKOUT3_DIVIDE     (5), 	//the orginal value here is 6
-   .CLKOUT4_DIVIDE     (4),
+   .CLKOUT4_DIVIDE     (10),
    .CLKOUT5_DIVIDE     (1),
    .CLKOUT6_DIVIDE     (1),
    .CLKOUT4_CASCADE    ("FALSE"),
