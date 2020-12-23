@@ -231,12 +231,9 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         #Cut paths between SYS_CLK_MMCM_inst/CLKOUT0 and HMC Link 2 clocks
         cons.append(ClockGroupConstraint('-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', '-of_objects [get_pins %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
 
-        #Cut paths between VIRTUAL_clkout0_1 and HMC Link 2 clocks
-        cons.append(ClockGroupConstraint('VIRTUAL_clkout0_1', '-of_objects [get_pins %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
-
-        #Cut paths between VIRTUAL_I and HMC Link 2 clocks
-        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname, 'VIRTUAL_I','asynchronous'))
-        cons.append(ClockGroupConstraint('VIRTUAL_I', '-of_objects [get_pins %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
+        #Cut paths between skarab_infr/USER_CLK_MMCM_inst/CLKOUT0] and HMC Link 2 clocks
+        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname, '-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]','asynchronous'))
+        cons.append(ClockGroupConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', '-of_objects [get_pins %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
 
 
         # *******************************************************************************************************
@@ -319,64 +316,47 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         #Cut paths between SYS_CLK_MMCM_inst/CLKOUT0 and HMC Link 3 clocks
         cons.append(ClockGroupConstraint('-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', '-of_objects [get_pins %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
 
-        #Cut paths between VIRTUAL_clkout0_1 and HMC Link 3 clocks
-        cons.append(ClockGroupConstraint('VIRTUAL_clkout0_1', '-of_objects [get_pins %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
-
-        #Cut paths between VIRTUAL_I and HMC Link 2 clocks
-        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname, 'VIRTUAL_I','asynchronous'))
-        cons.append(ClockGroupConstraint('VIRTUAL_I', '-of_objects [get_pins %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
+        #Cut paths between skarab_infr/USER_CLK_MMCM_inst/CLKOUT0] and HMC Link 2 clocks
+        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname, '-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]','asynchronous'))
+        cons.append(ClockGroupConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', '-of_objects [get_pins %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
 
 
         #Timing Constraints
         #Output Constraints
-        cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
-        cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
-        cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
-        cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
+        #cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
+        #cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
+        cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT1]', consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
+        cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT1]', consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
 
         #multi-cycle constraints
-        cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_clocks -of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', destpath='get_ports MEZZANINE_%s_RESET' % self.mez, multicycledelay=4))
-        cons.append(MultiCycleConstraint(multicycletype='hold',sourcepath='get_clocks -of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', destpath='get_ports MEZZANINE_%s_RESET' % self.mez, multicycledelay=3))
-        cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_clocks -of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', destpath='get_ports MEZZANINE_%s_RESET' % self.mez, multicycledelay=4))
-        cons.append(MultiCycleConstraint(multicycletype='hold',sourcepath='get_clocks -of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', destpath='get_ports MEZZANINE_%s_RESET' % self.mez, multicycledelay=3))
+        #cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_clocks -of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', destpath='get_ports MEZZANINE_%s_RESET' % self.mez, multicycledelay=4))
+        #cons.append(MultiCycleConstraint(multicycletype='hold',sourcepath='get_clocks -of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', destpath='get_ports MEZZANINE_%s_RESET' % self.mez, multicycledelay=3))
+        #cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_clocks -of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', destpath='get_ports MEZZANINE_%s_RESET' % self.mez, multicycledelay=4))
+        #cons.append(MultiCycleConstraint(multicycletype='hold',sourcepath='get_clocks -of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', destpath='get_ports MEZZANINE_%s_RESET' % self.mez, multicycledelay=3))
 
-        cons.append(ClockGroupConstraint('VIRTUAL_clkout0_1', '-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', 'asynchronous'))
-        cons.append(ClockGroupConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]' ,'VIRTUAL_clkout0_1', 'asynchronous'))
+        #cons.append(ClockGroupConstraint('-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', '-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', 'asynchronous'))
+        #cons.append(ClockGroupConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]' ,' -of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', 'asynchronous'))
 
 
         #Placement constraints
-        #Link 2
-        cons.append(RawConstraint('create_pblock MEZ%s_HMC_LINK2' % self.mez))
-        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_HMC_LINK2]' % self.mez + ' [get_cells -quiet [list '+self.fullname+'/flit_gen_link2_inst]]'))
-        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_HMC_LINK2]' % self.mez + ' [get_cells -quiet [list '+self.fullname+'/flit_gen_user_link2_inst]]'))
-        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_HMC_LINK2]' % self.mez + ' [get_cells -quiet [list '+self.fullname+'/hmc_ska_sa_top_link2_inst]]'))
+        #Link 2 and Link3
+        cons.append(RawConstraint('create_pblock MEZ%s_HMC' % self.mez))
+        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_HMC]' % self.mez + ' [get_cells -quiet [list '+self.fullname+'/flit_gen_link2_inst]]'))
+        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_HMC]' % self.mez + ' [get_cells -quiet [list '+self.fullname+'/flit_gen_user_link2_inst]]'))
+        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_HMC]' % self.mez + ' [get_cells -quiet [list '+self.fullname+'/hmc_ska_sa_top_link2_inst]]'))
+        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_HMC]' % self.mez + ' [get_cells -quiet [list ' + self.fullname + '/flit_gen_link3_inst]]'))
+        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_HMC]' % self.mez + ' [get_cells -quiet [list ' + self.fullname + '/flit_gen_user_link3_inst]]'))
+        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_HMC]' % self.mez + ' [get_cells -quiet [list ' + self.fullname + '/hmc_ska_sa_top_link3_inst]]'))
         #Mez 0 Selected
         if self.mez == 0:
-          cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_HMC_LINK2] -add {CLOCKREGION_X0Y6:CLOCKREGION_X0Y7}' % self.mez))
+          cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_HMC] -add {CLOCKREGION_X0Y4:CLOCKREGION_X0Y7}' % self.mez))
         #Mez 1 Selected
         elif self.mez == 1:
-          cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_HMC_LINK2] -add {CLOCKREGION_X0Y2:CLOCKREGION_X0Y3}' % self.mez))
+          cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_HMC] -add {CLOCKREGION_X0Y0:CLOCKREGION_X0Y3}' % self.mez))
         #Mez 2 Selected
         elif self.mez == 2:
-          cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_HMC_LINK2] -add {CLOCKREGION_X1Y0:CLOCKREGION_X1Y1}' % self.mez))
+          cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_HMC] -add {CLOCKREGION_X1Y0:CLOCKREGION_X1Y3}' % self.mez))
         else:
-            self.logger.error('Invalid Mezzanine site selected for LINK 2. Placement ignored for LINK2')
-
-        #Link 3
-        cons.append(RawConstraint('create_pblock MEZ%s_HMC_LINK3' % self.mez))
-        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_HMC_LINK3]' % self.mez + ' [get_cells -quiet [list '+self.fullname+'/flit_gen_link3_inst]]'))
-        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_HMC_LINK3]' % self.mez + ' [get_cells -quiet [list '+self.fullname+'/flit_gen_user_link3_inst]]'))
-        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ%s_HMC_LINK3]' % self.mez + ' [get_cells -quiet [list '+self.fullname+'/hmc_ska_sa_top_link3_inst]]'))
-        #Mez 0 Selected
-        if self.mez == 0:
-          cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_HMC_LINK3] -add {CLOCKREGION_X0Y4:CLOCKREGION_X0Y5}' % self.mez))
-        #Mez 1 Selected
-        elif self.mez == 1:
-          cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_HMC_LINK3] -add {CLOCKREGION_X0Y0:CLOCKREGION_X0Y1}' % self.mez))
-        #Mez 2 Selected
-        elif self.mez == 2:
-          cons.append(RawConstraint('resize_pblock [get_pblocks MEZ%s_HMC_LINK3] -add {CLOCKREGION_X1Y2:CLOCKREGION_X1Y3}' % self.mez))
-        else:
-            self.logger.error('Invalid Mezzanine site selected for LINK 3. Placement ignored for LINK3')
+            self.logger.error('Invalid Mezzanine site selected for HMC. Placement ignored for HMC')
 
         return cons

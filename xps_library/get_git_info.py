@@ -45,7 +45,7 @@ def run_subproc(cmd):
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                          shell=True)
     (output, err) = p.communicate()
-    return output, err
+    return output.decode("utf-8"), err.decode("utf-8")
 
 
 def get_new_git_info(file_or_dir):
@@ -127,7 +127,7 @@ if args.target:
     fptr.write(new_info)
     fptr.close()
 elif args.fpgstring:
-    print(('?meta\t77777_git\trcs\t{}'.format(new_info)), end=' ')
+    print('?meta\t77777_git\trcs\t{}'.format(new_info))
 else:
     if not os.path.exists(args.file_dir):
         print(('ERROR no_such_file: ' + args.file_dir))

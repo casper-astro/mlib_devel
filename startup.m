@@ -42,5 +42,8 @@ if ~isempty(casper_startup_dir)
   end
 end
 
+% Add the local python directory to MATLAB's python environment
+insert(py.sys.path, int32(0), [getenv('MLIB_DEVEL_PATH'), '/casper_library/python'])
+
 clear casper_startup_dir;
 clear jasper_backend;
