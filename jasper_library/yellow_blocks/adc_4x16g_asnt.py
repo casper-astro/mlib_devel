@@ -107,7 +107,7 @@ class adc_4x16g_asnt(YellowBlock):
         top.add_port('adc4x16g_asnt_ctrl_%d'%self.channel_sel,dir='out',width=4)
         low_bit = str(self.channel_sel*4)
         high_bit = str((self.channel_sel+1)*4 - 1)
-        top.assign_signal('adc4x16g_asnt_ctrl_%d'%self.channel_sel,'adc4x16g_drp_config[' + high_bit + ':' + low_bit + ']')
+        top.assign_signal('adc4x16g_asnt_ctrl_%d'%self.channel_sel,'adc4x16g_config[' + high_bit + ':' + low_bit + ']')
     
     def _add_data_splitter(self,top):
         module = 'data_splitter'
