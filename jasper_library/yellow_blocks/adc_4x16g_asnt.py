@@ -15,7 +15,7 @@ class adc_4x16g_asnt(YellowBlock):
                      'name':'adc4x16g_core',
                      'vendor':'xilinx.com',
                      'library':'user',
-                     'version':'1.1',
+                     'version':'1.2',
                     }]
         self.typecode = TYPECODE_BRAM
 
@@ -115,6 +115,8 @@ class adc_4x16g_asnt(YellowBlock):
         inst.add_port('data_in', 'adc4x16g_data_out%d'%self.channel_sel,width=256, parent_sig=False)
         for i in range(64):
             inst.add_port('data_out' + str(i), self.fullname + '_data_a%d'%i, width=4)
+        inst.add_port('sync_in','~adc4x16g_empty%d'%self.channel_sel,parent_sig=False)
+        inst.add_port('sync_out',self.fullname + '_sync')
 
     def gen_constraints(self):
         cons = []

@@ -21,6 +21,8 @@
 
 
 module data_splitter(
+    input sync_in,
+    output sync_out,
     input [255:0] data_in,
     output [3:0] data_out0,
     output [3:0] data_out1,
@@ -88,6 +90,7 @@ module data_splitter(
     output [3:0] data_out63
     );
 
+assign sync_out = sync_in;
 assign data_out0 = data_in[3:0];
 assign data_out1 = data_in[7:4];
 assign data_out2 = data_in[11:8];

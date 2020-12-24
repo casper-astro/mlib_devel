@@ -538,7 +538,8 @@ fifo_256in_32out FIFO0_ADC (
   .rd_clk(clk100),            // input wire rd_clk
   .din(fifo0_in),                  // input wire [255 : 0] din
   .wr_en(fifo0_wr_reg && !fifo0_full),  // input wire wr_en
-  .rd_en(fifo_read_pulse),              // input wire rd_en
+  //.rd_en(fifo_read_pulse),              // input wire rd_en
+  .rd_en(fifo_read_d1),
   .dout(fifo0_out),                // output wire [31 : 0] dout
   .full(fifo0_full),                // output wire full
   .empty(fifo0_empty),              // output wire empty

@@ -3,7 +3,7 @@
   <spirit:vendor>xilinx.com</spirit:vendor>
   <spirit:library>user</spirit:library>
   <spirit:name>adc4x16g_core</spirit:name>
-  <spirit:version>1.1</spirit:version>
+  <spirit:version>1.2</spirit:version>
   <spirit:busInterfaces>
     <spirit:busInterface>
       <spirit:name>fifo_reset</spirit:name>
@@ -74,7 +74,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>b9f9c379</spirit:value>
+            <spirit:value>ac9f2051</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -96,7 +96,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>b9f9c379</spirit:value>
+            <spirit:value>ac9f2051</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -530,7 +530,7 @@
       <spirit:file>
         <spirit:name>adc4x16g_core/adc4x16g_core.srcs/sources_1/imports/adc16G4X_datarx/src/gty_wrapper_0.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_1af54448</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_c9e00530</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
@@ -599,14 +599,14 @@
     <spirit:fileSet>
       <spirit:name>xilinx_xpgui_view_fileset</spirit:name>
       <spirit:file>
-        <spirit:name>xgui/adc4x16g_core_v1_1.tcl</spirit:name>
+        <spirit:name>xgui/adc4x16g_core_v1_2.tcl</spirit:name>
         <spirit:fileType>tclSource</spirit:fileType>
         <spirit:userFileType>CHECKSUM_cb6221fb</spirit:userFileType>
         <spirit:userFileType>XGUI_VERSION_2</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
   </spirit:fileSets>
-  <spirit:description>Core for one channel of ADC4x16G board, CHANNEL_SEL is used for the channel selection.</spirit:description>
+  <spirit:description>Core for one channel of ADC4x16G board, CHANNEL_SEL is used for the channel selection.change fifo_fifo_pulse to read_d1</spirit:description>
   <spirit:parameters>
     <spirit:parameter>
       <spirit:name>Component_Name</spirit:name>
@@ -626,18 +626,19 @@
       <xilinx:taxonomies>
         <xilinx:taxonomy>/UserIP</xilinx:taxonomy>
       </xilinx:taxonomies>
-      <xilinx:displayName>adc4x16g_core_v1_1</xilinx:displayName>
+      <xilinx:displayName>adc4x16g_core_v1_2</xilinx:displayName>
       <xilinx:definitionSource>package_project</xilinx:definitionSource>
       <xilinx:xpmLibraries>
         <xilinx:xpmLibrary>XPM_CDC</xilinx:xpmLibrary>
         <xilinx:xpmLibrary>XPM_MEMORY</xilinx:xpmLibrary>
       </xilinx:xpmLibraries>
-      <xilinx:coreRevision>6</xilinx:coreRevision>
+      <xilinx:coreRevision>1</xilinx:coreRevision>
       <xilinx:upgrades>
         <xilinx:canUpgradeFrom>xilinx.com:user:gty_wrapper_0:1.0</xilinx:canUpgradeFrom>
         <xilinx:canUpgradeFrom>xilinx.com:user:adc4x16g_core:1.0</xilinx:canUpgradeFrom>
+        <xilinx:canUpgradeFrom>xilinx.com:user:adc4x16g_core:1.1</xilinx:canUpgradeFrom>
       </xilinx:upgrades>
-      <xilinx:coreCreationDateTime>2020-11-17T23:57:22Z</xilinx:coreCreationDateTime>
+      <xilinx:coreCreationDateTime>2020-12-24T06:35:05Z</xilinx:coreCreationDateTime>
       <xilinx:tags>
         <xilinx:tag xilinx:name="ui.data.coregen.dd@a23aa74_ARCHIVE_LOCATION">c:/XilinxProjects/ip_repo</xilinx:tag>
         <xilinx:tag xilinx:name="ui.data.coregen.dd@33ceaba8_ARCHIVE_LOCATION">c:/XilinxProjects/ip_repo</xilinx:tag>
@@ -1320,12 +1321,33 @@
         <xilinx:tag xilinx:name="ui.data.coregen.dd@4d294d01_ARCHIVE_LOCATION">/home/wei/casper/VCU128/mlib_devel/jasper_library/hdl_sources/adc4x16g/ip_repo_0</xilinx:tag>
         <xilinx:tag xilinx:name="ui.data.coregen.dd@3d7b44a4_ARCHIVE_LOCATION">/home/wei/casper/VCU128/mlib_devel/jasper_library/hdl_sources/adc4x16g/ip_repo_0</xilinx:tag>
         <xilinx:tag xilinx:name="ui.data.coregen.dd@3524bf19_ARCHIVE_LOCATION">/home/wei/casper/VCU128/mlib_devel/jasper_library/hdl_sources/adc4x16g/ip_repo_0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@4666b0f5_ARCHIVE_LOCATION">/home/wei/casper/VCU128/mlib_devel/jasper_library/hdl_sources/adc4x16g/ip_repo_0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@6707148c_ARCHIVE_LOCATION">/home/wei/casper/VCU128/mlib_devel/jasper_library/hdl_sources/adc4x16g/ip_repo_0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@195ac896_ARCHIVE_LOCATION">/home/wei/casper/VCU128/mlib_devel/jasper_library/hdl_sources/adc4x16g/ip_repo_0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@5df6aff1_ARCHIVE_LOCATION">/home/wei/casper/VCU128/mlib_devel/jasper_library/hdl_sources/adc4x16g/ip_repo_0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@239c54a7_ARCHIVE_LOCATION">/home/wei/casper/VCU128/mlib_devel/jasper_library/hdl_sources/adc4x16g/ip_repo_0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@4d0809b0_ARCHIVE_LOCATION">/home/wei/casper/VCU128/mlib_devel/jasper_library/hdl_sources/adc4x16g/ip_repo_0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@7f519787_ARCHIVE_LOCATION">/home/wei/casper/VCU128/mlib_devel/jasper_library/hdl_sources/adc4x16g/ip_repo_0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@5730a4de_ARCHIVE_LOCATION">/home/wei/casper/VCU128/mlib_devel/jasper_library/hdl_sources/adc4x16g/ip_repo_0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@7d93a0ea_ARCHIVE_LOCATION">/home/wei/casper/VCU128/mlib_devel/jasper_library/hdl_sources/adc4x16g/ip_repo_0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@98d4b06_ARCHIVE_LOCATION">/home/wei/casper/VCU128/mlib_devel/jasper_library/hdl_sources/adc4x16g/ip_repo_0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@6ffd3f10_ARCHIVE_LOCATION">/home/wei/casper/VCU128/mlib_devel/jasper_library/hdl_sources/adc4x16g/ip_repo_0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@1e0bdcb9_ARCHIVE_LOCATION">/home/wei/casper/VCU128/mlib_devel/jasper_library/hdl_sources/adc4x16g/ip_repo_0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@381c1697_ARCHIVE_LOCATION">/home/wei/casper/VCU128/mlib_devel/jasper_library/hdl_sources/adc4x16g/ip_repo_0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@1b4a95c4_ARCHIVE_LOCATION">/home/wei/casper/VCU128/mlib_devel/jasper_library/hdl_sources/adc4x16g/ip_repo_0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@7b33d2ee_ARCHIVE_LOCATION">/home/wei/casper/VCU128/mlib_devel/jasper_library/hdl_sources/adc4x16g/ip_repo_0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@5dfba3b2_ARCHIVE_LOCATION">/home/wei/casper/VCU128/mlib_devel/jasper_library/hdl_sources/adc4x16g/ip_repo_0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@77e14131_ARCHIVE_LOCATION">/home/wei/casper/VCU128/mlib_devel/jasper_library/hdl_sources/adc4x16g/ip_repo_0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@34025db0_ARCHIVE_LOCATION">/home/wei/casper/VCU128/mlib_devel/jasper_library/hdl_sources/adc4x16g/ip_repo_0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@4cdfef0d_ARCHIVE_LOCATION">/home/wei/casper/VCU128/mlib_devel/jasper_library/hdl_sources/adc4x16g/ip_repo_0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@46b7fd6_ARCHIVE_LOCATION">/home/wei/casper/VCU128/mlib_devel/jasper_library/hdl_sources/adc4x16g/ip_repo_0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@452b0bac_ARCHIVE_LOCATION">/home/wei/casper/VCU128/mlib_devel/jasper_library/hdl_sources/adc4x16g/ip_repo_0</xilinx:tag>
       </xilinx:tags>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2019.1.3</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="c14a4249"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="ad74f30c"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="c4033624"/>
       <xilinx:checksum xilinx:scope="ports" xilinx:value="4b62ef39"/>
       <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="a03c19c3"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="966c3318"/>
