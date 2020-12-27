@@ -15,7 +15,7 @@ class adc_4x16g_asnt(YellowBlock):
                      'name':'adc4x16g_core',
                      'vendor':'xilinx.com',
                      'library':'user',
-                     'version':'1.2',
+                     'version':'1.3',
                     }]
         self.typecode = TYPECODE_BRAM
 
@@ -34,8 +34,8 @@ class adc_4x16g_asnt(YellowBlock):
         inst.add_port('gty0rxp_in','gty%drxp_in'%self.channel_sel, dir='in', parent_port = True,width=4)
         inst.add_port('gty0rxn_in','gty%drxn_in'%self.channel_sel, dir='in', parent_port = True,width=4)
         # clock signals
-        inst.add_port('clk100','sys_clk')
-        inst.add_port('clk_freerun','sys_clk')
+        inst.add_port('clk100','user_clk')
+        inst.add_port('clk_freerun','user_clk')
         # the following signals are connected to adc4x16g_config
         # config
         inst.add_port('XOR_ON','adc4x16g_config[24:24]',parent_sig=False)
@@ -63,6 +63,7 @@ class adc_4x16g_asnt(YellowBlock):
         inst.add_port('fifo_full','adc4x16g_full%d'%self.channel_sel)
         # test points, no need currently
         inst.add_port('rxprbserr_out','')
+        inst.add_port('adc_clk','adc_clk')
         """
         for i in range(64):
             high_bit = (i+1) * 4 - 1
@@ -81,7 +82,7 @@ class adc_4x16g_asnt(YellowBlock):
     def _instantiate_channel_sel(self,top):
         module = 'ADC4X16G_Channel_Sel'
         inst = top.get_instance(entity=module, name='adc4x16g_channel_sel')
-        inst.add_port('channel_sel','adc4x16g_drp_config[21:20]',parent_sig=False)
+        inst.add_port('channel_sel','adc4x16g_config[21:20]',parent_sig=False)
         inst.add_port('drp_data0','adc4x16g_drp_data0',width=16)
         inst.add_port('drp_data1','adc4x16g_drp_data1',width=16)
         inst.add_port('drp_data2','adc4x16g_drp_data2',width=16)
@@ -92,7 +93,7 @@ class adc_4x16g_asnt(YellowBlock):
         inst.add_port('rxprbslocked2','adc4x16g_rxprbslocked2')
         inst.add_port('rxprbslocked3','adc4x16g_rxprbslocked3')
         inst.add_port('rxprbslocked','adc4x16g_drp_data[16:16]',parent_sig=False)
-        inst.add_port('rxslide','adc4x16g_drp_config[23:23]',parent_sig=False)
+        inst.add_port('rxslide','adc4x16g_config[23:23]',parent_sig=False)
         inst.add_port('rxslide0','rxslide0')
         inst.add_port('rxslide1','rxslide1')
         inst.add_port('rxslide2','rxslide2')
@@ -132,7 +133,7 @@ class adc_4x16g_asnt(YellowBlock):
         cons.append(PortConstraint('adc4x16g_miso', 'adc4x16g_miso'))
         cons.append(PortConstraint('adc4x16g_sck', 'adc4x16g_sck'))
         cons.append(PortConstraint('adc4x16g_sselb', 'adc4x16g_sselb',port_index=list(range(4)),iogroup_index=list(range(4))))
-        cons.append(ClockConstraint('refclk%d_p'%num, name='adcclk%d'%num, freq=156.25))
+        cons.append(ClockConstraint('refclk%d_p'%num, name='adcclk%d'%num, freq=500))
         cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d -asynchronous -group [get_clocks -include_generated_clocks sys_clk_p_CLK] -group [get_clocks -include_generated_clocks adcclk%d]'%(num,num)))
         return cons
         

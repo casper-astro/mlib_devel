@@ -37,6 +37,7 @@ class vcu128(YellowBlock):
         return [
             PortConstraint('sys_clk_n', 'sys_clk_n'),
             PortConstraint('sys_clk_p', 'sys_clk_p'),
+            #ClockConstraint('sys_clk_p', period=10),
             ClockConstraint('sys_clk_p', period=10),
             RawConstraint('set_property CONFIG_VOLTAGE 1.8 [current_design]'),
             #RawConstraint('set_property CFGBVS GND [current_design]'),

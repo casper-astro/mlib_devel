@@ -33,7 +33,8 @@ module gty_wrapper_0#(
     input drp_reset,
     input drp_read,
     output reg [15:0] drp_data,
-    input [7:0] write_interval
+    input [7:0] write_interval,
+    output adc_clk
         );
 
 //This parameter is set to 1 to compile for the rev1 board whose pairs are
@@ -465,14 +466,15 @@ genvar gg;
 (*keep = "true"*)wire [255:0] fifo0_in;	
 //The 256-in, 32-out FIFO delivers the MS word first when reading, so arrange the bank0_samples accordingly
 assign fifo0_in = {
-    bank0_samples[7], bank0_samples[6], bank0_samples[5], bank0_samples[4], bank0_samples[3], bank0_samples[2], bank0_samples[1], bank0_samples[0], 
-    bank0_samples[15], bank0_samples[14], bank0_samples[13], bank0_samples[12], bank0_samples[11], bank0_samples[10], bank0_samples[9], bank0_samples[8], 
-    bank0_samples[23], bank0_samples[22], bank0_samples[21], bank0_samples[20], bank0_samples[19], bank0_samples[18], bank0_samples[17], bank0_samples[16], 
-    bank0_samples[31], bank0_samples[30], bank0_samples[29], bank0_samples[28], bank0_samples[27], bank0_samples[26], bank0_samples[25], bank0_samples[24], 
-    bank0_samples[39], bank0_samples[38], bank0_samples[37], bank0_samples[36], bank0_samples[35], bank0_samples[34], bank0_samples[33], bank0_samples[32], 
-    bank0_samples[47], bank0_samples[46], bank0_samples[45], bank0_samples[44], bank0_samples[43], bank0_samples[42], bank0_samples[41], bank0_samples[40], 
+    bank0_samples[63], bank0_samples[62], bank0_samples[61], bank0_samples[60], bank0_samples[59], bank0_samples[58], bank0_samples[57], bank0_samples[56],
     bank0_samples[55], bank0_samples[54], bank0_samples[53], bank0_samples[52], bank0_samples[51], bank0_samples[50], bank0_samples[49], bank0_samples[48], 
-    bank0_samples[63], bank0_samples[62], bank0_samples[61], bank0_samples[60], bank0_samples[59], bank0_samples[58], bank0_samples[57], bank0_samples[56]};
+    bank0_samples[47], bank0_samples[46], bank0_samples[45], bank0_samples[44], bank0_samples[43], bank0_samples[42], bank0_samples[41], bank0_samples[40],
+    bank0_samples[39], bank0_samples[38], bank0_samples[37], bank0_samples[36], bank0_samples[35], bank0_samples[34], bank0_samples[33], bank0_samples[32],
+    bank0_samples[31], bank0_samples[30], bank0_samples[29], bank0_samples[28], bank0_samples[27], bank0_samples[26], bank0_samples[25], bank0_samples[24],
+    bank0_samples[23], bank0_samples[22], bank0_samples[21], bank0_samples[20], bank0_samples[19], bank0_samples[18], bank0_samples[17], bank0_samples[16],
+    bank0_samples[15], bank0_samples[14], bank0_samples[13], bank0_samples[12], bank0_samples[11], bank0_samples[10], bank0_samples[9], bank0_samples[8], 
+    bank0_samples[7], bank0_samples[6], bank0_samples[5], bank0_samples[4], bank0_samples[3], bank0_samples[2], bank0_samples[1], bank0_samples[0]
+    };
 
 //A read pulse for all the FIFOs
 wire fifo_read_pulse;
@@ -546,6 +548,7 @@ fifo_256in_32out FIFO0_ADC (
   .wr_rst_busy(wr_rst_busy0),  // output wire wr_rst_busy
   .rd_rst_busy()  // output wire rd_rst_busy
 );
+assign adc_clk = rxclk0;
 //Now we can remap the FIFO output data so that the ADC bits appear in the correct order
 //The Channel mapping is as follows
 //      ADC Chan    Bit     RxBank  bank      Bit

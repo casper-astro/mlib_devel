@@ -123,7 +123,7 @@ set bCheckIPsPassed 1
 set bCheckIPs 1
 if { $bCheckIPs == 1 } {
    set list_check_ips "\ 
-xilinx.com:user:adc4x16g_core:1.2\
+xilinx.com:user:adc4x16g_core:1.3\
 "
 
    set list_ips_missing ""
@@ -217,7 +217,7 @@ proc create_root_design { parentCell } {
   set write_interval [ create_bd_port -dir I -from 7 -to 0 write_interval ]
 
   # Create instance: adc4x16g_core_0, and set properties
-  set adc4x16g_core_0 [ create_bd_cell -type ip -vlnv xilinx.com:user:adc4x16g_core:1.2 adc4x16g_core_0 ]
+  set adc4x16g_core_0 [ create_bd_cell -type ip -vlnv xilinx.com:user:adc4x16g_core:1.3 adc4x16g_core_0 ]
 
   # Create port connections
   connect_bd_net -net XOR_ON_0_1 [get_bd_ports XOR_ON] [get_bd_pins adc4x16g_core_0/XOR_ON]

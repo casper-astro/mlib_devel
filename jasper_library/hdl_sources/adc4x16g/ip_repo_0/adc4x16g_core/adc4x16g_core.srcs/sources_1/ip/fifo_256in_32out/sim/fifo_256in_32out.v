@@ -71,7 +71,7 @@ input wire srst;
 (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME write_clk, FREQ_HZ 250000000, PHASE 0.000, INSERT_VIP 0" *)
 (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 write_clk CLK" *)
 input wire wr_clk;
-(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME read_clk, FREQ_HZ 100000000, PHASE 0.000, INSERT_VIP 0" *)
+(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME read_clk, FREQ_HZ 250000000, PHASE 0.000, INSERT_VIP 0" *)
 (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 read_clk CLK" *)
 input wire rd_clk;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_DATA" *)
@@ -134,7 +134,7 @@ output wire rd_rst_busy;
     .C_PROG_FULL_TYPE(0),
     .C_RD_DATA_COUNT_WIDTH(10),
     .C_RD_DEPTH(1024),
-    .C_RD_FREQ(100),
+    .C_RD_FREQ(250),
     .C_RD_PNTR_WIDTH(10),
     .C_UNDERFLOW_LOW(0),
     .C_USE_DOUT_RST(1),
