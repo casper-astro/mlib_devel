@@ -181,7 +181,7 @@ sync_it S12(
 
 //Instantiate four refclk buffers; these connect to the transceivers       
 wire gty_refclk0;
-
+wire gty_refclk_odiv2;
    IBUFDS_GTE4 #(
       .REFCLK_EN_TX_PATH(1'b0),   // Refer to Transceiver User Guide
       .REFCLK_HROW_CK_SEL(2'b00), // Refer to Transceiver User Guide
@@ -189,13 +189,21 @@ wire gty_refclk0;
    )
    IBUFDS_GTE4_0 (
       .O(gty_refclk0),         // 1-bit output: Refer to Transceiver User Guide
-      .ODIV2(), // 1-bit output: Refer to Transceiver User Guide
+      .ODIV2(gty_refclk_odiv2), // 1-bit output: Refer to Transceiver User Guide
       .CEB(1'b0),     // 1-bit input: Refer to Transceiver User Guide
       .I(refclk0_p),         // 1-bit input: Refer to Transceiver User Guide
       .IB(refclk0_n)        // 1-bit input: Refer to Transceiver User Guide
    );
 
-
+BUFG_GT BUFG_GT_inst (
+      .O(adc_clk),             // 1-bit output: Buffer
+      .CE(1'b1),           // 1-bit input: Buffer enable
+      .CEMASK(1'b0),   // 1-bit input: CE Mask
+      .CLR(1'b0),         // 1-bit input: Asynchronous clear
+      .CLRMASK(1'b0), // 1-bit input: CLR Mask
+      .DIV(3'b001),         // 3-bit input: Dynamic divide Value
+      .I(gty_refclk_odiv2)              // 1-bit input: Buffer
+   );
 
 
 //Sync the rxslide input to the axi clock
@@ -534,6 +542,7 @@ always @ (negedge rxclk0) begin
 end
 //the output of this fifo is changed to 256 instead of 32
 always @ (posedge rxclk0) fifo0_wr_reg <= fifo0_wr;
+
 fifo_256in_32out FIFO0_ADC (
   .srst(fifo0_reset_sync),                // input wire srst
   .wr_clk(rxclk0),            // input wire wr_clk
@@ -548,7 +557,7 @@ fifo_256in_32out FIFO0_ADC (
   .wr_rst_busy(wr_rst_busy0),  // output wire wr_rst_busy
   .rd_rst_busy()  // output wire rd_rst_busy
 );
-assign adc_clk = rxclk0;
+
 //Now we can remap the FIFO output data so that the ADC bits appear in the correct order
 //The Channel mapping is as follows
 //      ADC Chan    Bit     RxBank  bank      Bit
@@ -867,12 +876,19 @@ assign ADC_A_out = {
                     fifo0_out[3],fifo0_out[2],fifo0_out[1],fifo0_out[0]};
 end
 endgenerate
-//Now mux these four busses into one 32b output                    
+//Now mux these four busses into one 32b output      
+/*              
    always @(ADC_A_out)
          data_out = ADC_A_out;
    always @(fifo0_full)
          fifo_full = fifo0_full;
    always @(fifo0_empty)
          fifo_empty = fifo0_empty;
-   
+         */
+   always @(posedge clk100)
+         data_out <= ADC_A_out;
+   always @(posedge clk100)
+         fifo_full <= fifo0_full;
+   always @(posedge clk100)
+         fifo_empty <= fifo0_empty;   
 endmodule

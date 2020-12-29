@@ -8,6 +8,7 @@ from os import environ as env
 
 class adc_4x16g_asnt(YellowBlock):
     def initialize(self):
+        self.provides = ['adc_clk','adc_clk90', 'adc_clk180', 'adc_clk270']
         self.add_source('adc4x16g/ADC4X16G_Channel_Sel.v')
         self.add_source('adc4x16g/data_splitter.v')
         #add the adc4x16g IP 
@@ -64,6 +65,13 @@ class adc_4x16g_asnt(YellowBlock):
         # test points, no need currently
         inst.add_port('rxprbserr_out','')
         inst.add_port('adc_clk','adc_clk')
+
+        top.add_signal('adc_clk270')
+        top.assign_signal('adc_clk270', 'adc_clk') # just to match the requirement of toolflow
+        top.add_signal('adc_clk90')
+        top.assign_signal('adc_clk90', '~adc_clk270')
+        top.add_signal('adc_clk180')
+        top.assign_signal('adc_clk180', '~adc_clk')
         """
         for i in range(64):
             high_bit = (i+1) * 4 - 1

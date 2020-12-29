@@ -190,6 +190,7 @@ proc create_root_design { parentCell } {
 
   # Create ports
   set XOR_ON [ create_bd_port -dir I XOR_ON ]
+  set adc_clk [ create_bd_port -dir O -type clk adc_clk ]
   set bit_sel [ create_bd_port -dir I -from 1 -to 0 bit_sel ]
   set clk100 [ create_bd_port -dir I clk100 ]
   set clk_freerun [ create_bd_port -dir I clk_freerun ]
@@ -221,6 +222,7 @@ proc create_root_design { parentCell } {
 
   # Create port connections
   connect_bd_net -net XOR_ON_0_1 [get_bd_ports XOR_ON] [get_bd_pins adc4x16g_core_0/XOR_ON]
+  connect_bd_net -net adc4x16g_core_0_adc_clk [get_bd_ports adc_clk] [get_bd_pins adc4x16g_core_0/adc_clk]
   connect_bd_net -net adc4x16g_core_0_data_out [get_bd_ports data_out] [get_bd_pins adc4x16g_core_0/data_out]
   connect_bd_net -net adc4x16g_core_0_drp_data [get_bd_ports drp_data] [get_bd_pins adc4x16g_core_0/drp_data]
   connect_bd_net -net adc4x16g_core_0_fifo_empty [get_bd_ports fifo_empty] [get_bd_pins adc4x16g_core_0/fifo_empty]
@@ -253,7 +255,6 @@ proc create_root_design { parentCell } {
   # Restore current instance
   current_bd_instance $oldCurInst
 
-  validate_bd_design
   save_bd_design
 }
 # End of create_root_design()
@@ -265,4 +266,6 @@ proc create_root_design { parentCell } {
 
 create_root_design ""
 
+
+common::send_msg_id "BD_TCL-1000" "WARNING" "This Tcl script was generated from a block design that has not been validated. It is possible that design <$design_name> may result in errors during validation."
 
