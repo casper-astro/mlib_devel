@@ -36,7 +36,7 @@ class adc_4x16g_asnt(YellowBlock):
         inst.add_port('gty0rxn_in','gty%drxn_in'%self.channel_sel, dir='in', parent_port = True,width=4)
         # clock signals
         inst.add_port('clk100','user_clk')
-        inst.add_port('clk_freerun','user_clk')
+        inst.add_port('clk_freerun','mb_clk')
         # the following signals are connected to adc4x16g_config
         # config
         inst.add_port('XOR_ON','adc4x16g_config[24:24]',parent_sig=False)

@@ -194,9 +194,9 @@ wire gty_refclk_odiv2;
       .I(refclk0_p),         // 1-bit input: Refer to Transceiver User Guide
       .IB(refclk0_n)        // 1-bit input: Refer to Transceiver User Guide
    );
-
+wire adc_clk_tmp;
 BUFG_GT BUFG_GT_inst (
-      .O(adc_clk),             // 1-bit output: Buffer
+      .O(adc_clk_tmp),             // 1-bit output: Buffer
       .CE(1'b1),           // 1-bit input: Buffer enable
       .CEMASK(1'b0),   // 1-bit input: CE Mask
       .CLR(1'b0),         // 1-bit input: Asynchronous clear
@@ -205,7 +205,10 @@ BUFG_GT BUFG_GT_inst (
       .I(gty_refclk_odiv2)              // 1-bit input: Buffer
    );
 
-
+BUFG BUFG_inst(
+    .I(adc_clk_tmp),
+    .O(adc_clk)
+);
 //Sync the rxslide input to the axi clock
 reg rxslide_reg;
 always @ (posedge clk100)rxslide_reg <= rxslide;
@@ -877,18 +880,20 @@ assign ADC_A_out = {
 end
 endgenerate
 //Now mux these four busses into one 32b output      
-/*              
+             
    always @(ADC_A_out)
          data_out = ADC_A_out;
    always @(fifo0_full)
          fifo_full = fifo0_full;
    always @(fifo0_empty)
          fifo_empty = fifo0_empty;
-         */
+         
+   /* 
    always @(posedge clk100)
          data_out <= ADC_A_out;
    always @(posedge clk100)
          fifo_full <= fifo0_full;
    always @(posedge clk100)
          fifo_empty <= fifo0_empty;   
+   */
 endmodule
