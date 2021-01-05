@@ -1,19 +1,32 @@
 name: vcu118
 manufacturer: Xilinx
 fpga: xcvu9p-flga2104-2L-e
+family: ultrascaleplus
 backend_target: vivado
+mmbus_architecture: AXI4-Lite
+mmbus_base_address: 0x10000000
+# How to address each 32-bit (i.e. 4 indicates byte-addressable)
+mmbus_address_alignment: 4
 sources: []
 constraints: []
+pcie:
+  loc: X1Y2
+onehundredgbe:
+  refclk_freq_str: "156.25"
+  cmac_loc:
+    - CMACE4_X0Y7  # QSFP1 (qsfp0) is routed to X1Y48 to X1Y51 GTY QUAD 231
+    - CMACE4_X0Y8  # QSFP2 (qsfp1) is routed to X1Y52 to X1Y55 GTY QUAD 232
 provides:
   - qsfp0
   - qsfp1
 pins:
+  # 250MHz, schematic name 250MHZ_CLK1_P|N
   sys_clk_p:
-    loc: G31
-    iostd: DIFF_SSTL12
+    loc: E12
+    iostd: LVDS
   sys_clk_n:
-    loc: F31
-    iostd: DIFF_SSTL12
+    loc: D12
+    iostd: LVDS
   refclk125_p:
     iostd: LVDS
     loc:  AY24
@@ -32,89 +45,154 @@ pins:
   userclk156_n:
     iostd: LVDS
     loc: G32
+#### PCIe
+  pcie_rst_n:
+    loc: AM17
+    iostd: LVCMOS18
+  pcie_refclk_p:
+    loc: AC9
+  pcie_gty_rx_p:
+    loc:
+      - AA4
+      - AM4
+  pcie_gty_tx_p:
+    loc:
+      - Y7
+      - AM9
 #### 100 GbE QSFP support
-  mgt_ref_clk_p:
+  qsfp_mgt_ref_clk_p:
     loc:
-      - R9
       - W9
-  mgt_ref_clk_n:
+      - R9
+      #- AJ15
+      #- AD13
+      #- AG40
+      #- AB42
+  qsfp_mgt_ref_clk_n:
     loc:
-      - R8
       - W8
-  qsfp_mgt_tx_p:
-    loc:
-      - L5
-      - K7
-      - J5
-      - H7
-      - V7
-      - T7
-      - P7
-      - M7
-  qsfp_mgt_tx_n:
-    loc:
-      - L4
-      - K6
-      - J4
-      - H6
-      - V6
-      - T6
-      - P6
-      - M6
+      - R8
+      #- AJ14
+      #- AD12
+      #- AG41
+      #- AB43
   qsfp_mgt_rx_p:
     loc:
-      - T2
-      - R4
-      - P2
-      - M2
       - Y2
       - W4
       - V2
       - U4
+      - T2
+      - R4
+      - P2
+      - M2
+      - AD4
+      - AC2
+      - AC6
+      - AB4
+      - AA2
+      - Y4
+      - W2
+      - V4
   qsfp_mgt_rx_n:
     loc:
-      - T1
-      - R3
-      - P1
-      - M1
       - Y1
       - W3
       - V1
       - U3
-#
-  qsfpclk156_p:
-    loc: W9
-  qsfpclk156_n:
-    loc: W8
+      - T1
+      - R3
+      - P1
+      - M1
+      - AD3
+      - AC1
+      - AC5
+      - AB3
+      - AA1
+      - Y3
+      - W1
+      - V3
+  qsfp_mgt_tx_p:
+    loc:
+      - V7
+      - T7
+      - P7
+      - M7
+      - L5
+      - K7
+      - J5
+      - H7
+      - AD9
+      - AC11
+      - AB9
+      - AA7
+      - AA11
+      - Y9
+      - W7
+      - W11
+  qsfp_mgt_tx_n:
+    loc:
+      - V6
+      - T6
+      - P6
+      - M6
+      - L4
+      - K6
+      - J4
+      - H6
+      - AD8
+      - AC10
+      - AB8
+      - AA6
+      - AA10
+      - Y8
+      - W6
+      - W10
+  qsfp_modsell_ls:
+    iostd: LVCMOS18
+    loc: [AM21, AN23]
+  qsfp_modprsl_ls:
+    iostd: LVCMOS18
+    loc: [AL21, AN24]
+  qsfp_resetl_ls:
+    iostd: LVCMOS18
+    loc: [BA22, AY22]
+  qsfp_intl_ls:
+    iostd: LVCMOS18
+    loc: [AP21, AT21]
+  qsfp_lpmode_ls:
+    iostd: LVCMOS18
+    loc: [AN21, AT24]
+#### UART / SPI / GPIO
   usb_tx:
     iostd: LVCMOS18
     loc: AW25
   usb_rx:
     iostd: LVCMOS18
     loc: BB21
+  # Use GPIO 9,10,11,12 for SPI
   miso:
-    loc: B17
-    iostd: LVCMOS12
+    loc: BJ29
+    iostd: LVCMOS18
   mosi:
-    loc: G16
-    iostd: LVCMOS12
+    loc: BG32
+    iostd: LVCMOS18
   sclk:
-    loc: J16
-    iostd: LVCMOS12
+    loc: BF32
+    iostd: LVCMOS18
   cs_n:
-    loc: D21
-    iostd: LVCMOS12
+    loc: BK30
+    iostd: LVCMOS18
   led:
     iostd: LVCMOS12
+    drive_strength: 8 #HP banks don't support the default of 12
     loc:
       - AT32
       - AV34
       - AY30
       - BB32
       - BF32
-      - AU37
-      - AV36
-      - BA37
+#### 1GbE
   gbe_phy_mdio:
     iostd: LVCMOS18
     loc: AR23

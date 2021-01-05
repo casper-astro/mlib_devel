@@ -120,12 +120,17 @@ architecture arch_axi_slave_wishbone_classic_master of axi_slave_wishbone_classi
     T_READ_WB_ACK,
     T_READ_AXI_READY);
     
+    --Timeout in AXI clock cycles (39.0625MHz)  
+    --Default: < 1us second timeout
+    constant C_S_AXI_TIME_OUT_CLK_CYC  : std_logic_vector(31 downto 0) := x"00000027"; --Dec: 39;
+    
     signal current_axi_bridge_state : T_AXI_BRIDGE_STATE;
     signal current_address : std_logic_vector(C_S_AXI_ADDR_WIDTH-1 downto 0);
     signal inc_current_address : std_logic;
     signal burst_length : std_logic_vector(7 downto 0);
     signal burst_count : std_logic_vector(7 downto 0);
     signal inc_burst_count : std_logic;
+    signal axi_timeout_count : std_logic_vector(31 downto 0);
 
 begin
 
@@ -164,11 +169,11 @@ begin
 		end if;
 	end process;
 
-    S_AXI_BRESP <= "00"; -- ALWAYS 'OK'
+    --S_AXI_BRESP <= "00"; -- ALWAYS 'OK'
     
     --S_AXI_BUSER <= "0"; -- NOT USED
     
-    S_AXI_RRESP <= "00"; -- ALWAYS OK
+    --S_AXI_RRESP <= "00"; -- ALWAYS OK
     
     --S_AXI_RUSER <= "0"; -- NOT USED
     
@@ -182,9 +187,15 @@ begin
             CYC_O <= '0'; -- MUST BE REGISTERED OUTPUT
             STB_O <= '0'; -- MUST BE REGISTERED OUTPUT
             current_axi_bridge_state <= T_IDLE;
+            axi_timeout_count <= (others => '0');
+            S_AXI_BRESP <= "00";
+            S_AXI_RRESP <= "00";
         elsif (rising_edge(S_AXI_ACLK))then
             case current_axi_bridge_state is
                 when T_IDLE =>
+                axi_timeout_count <= (others => '0');
+                S_AXI_BRESP <= "00";
+                S_AXI_RRESP <= "00";
                 current_axi_bridge_state <= T_IDLE;
                 
                 if (S_AXI_AWVALID = '1')and(S_AXI_WVALID = '1')then
@@ -195,11 +206,16 @@ begin
                 
                 when T_LATCH_WRITE_ADDRESS =>
                 CYC_O <= '1';
+                S_AXI_BRESP <= "00";
+                S_AXI_RRESP <= "00";
                 current_axi_bridge_state <= T_WRITE_AXI_VALID;
+                axi_timeout_count <= (others => '0');
                 
                 
                 when T_WRITE_AXI_VALID =>
                 current_axi_bridge_state <= T_WRITE_AXI_VALID;
+                axi_timeout_count <= (others => '0');
+                S_AXI_RRESP <= "00";
                 
                 if (S_AXI_WVALID = '1')then
                     STB_O <= '1';
@@ -209,13 +225,24 @@ begin
                 
                 when T_WRITE_WB_ACK =>
                 current_axi_bridge_state <= T_WRITE_WB_ACK;
-                
+                axi_timeout_count <= axi_timeout_count + '1';
+                S_AXI_RRESP <= "00";
+                --stay in this state unless wishbone ack or AXI timeout occurs
                 if (ACK_I = '1')then
                     STB_O <= '0';
-                    current_axi_bridge_state <= T_WRITE_AXI_READY;
+                    S_AXI_BRESP <= "00";
+                    axi_timeout_count <= (others => '0');
+                    current_axi_bridge_state <= T_WRITE_AXI_READY;  
+                elsif (axi_timeout_count = C_S_AXI_TIME_OUT_CLK_CYC) then
+                    STB_O <= '0';
+                    S_AXI_BRESP <= "11";
+                    axi_timeout_count <= (others => '0');
+                    current_axi_bridge_state <= T_WRITE_AXI_READY; 
                 end if;
                 
                 when T_WRITE_AXI_READY =>
+                axi_timeout_count <= (others => '0');
+                S_AXI_RRESP <= "00";
                 
                 if (burst_length = burst_count)then
                     CYC_O <= '0';
@@ -225,6 +252,8 @@ begin
                 end if;
                 
                 when T_WRITE_RESP =>
+                axi_timeout_count <= (others => '0');
+                S_AXI_RRESP <= "00";
                 current_axi_bridge_state <= T_WRITE_RESP;
                 
                 if (S_AXI_BREADY = '1')then
@@ -232,21 +261,34 @@ begin
                 end if;
                 
                 when T_LATCH_READ_ADDRESS =>
+                axi_timeout_count <= (others => '0');
+                S_AXI_RRESP <= "00";
+                S_AXI_BRESP <= "00";
                 STB_O <= '1';
                 CYC_O <= '1';
                 current_axi_bridge_state <= T_READ_WB_ACK;
                 
                 when T_READ_WB_ACK =>
                 current_axi_bridge_state <= T_READ_WB_ACK;
-                
+                axi_timeout_count <= axi_timeout_count + '1';
+                S_AXI_BRESP <= "00";
+                --stay in this state unless wishbone ack or AXI timeout has occurred
                 if (ACK_I = '1')then
                     STB_O <= '0';
+                    S_AXI_RRESP <= "00";
+                    axi_timeout_count <= (others => '0');
                     current_axi_bridge_state <= T_READ_AXI_READY;
+                elsif (axi_timeout_count = C_S_AXI_TIME_OUT_CLK_CYC) then
+                    STB_O <= '0';
+                    S_AXI_RRESP <= "11";
+                    axi_timeout_count <= (others => '0');
+                    current_axi_bridge_state <= T_READ_AXI_READY;                
                 end if;
                 
                 when T_READ_AXI_READY =>
                 current_axi_bridge_state <= T_READ_AXI_READY;
-                
+                axi_timeout_count <= (others => '0');
+                S_AXI_BRESP <= "00";
                 if (S_AXI_RREADY = '1')then
                     if (burst_length = burst_count)then
                         current_axi_bridge_state <= T_IDLE;

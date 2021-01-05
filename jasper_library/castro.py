@@ -104,7 +104,7 @@ class PinConstraint(object):
     '''
     Class to hold a pin constraint
     '''
-    def __init__(self, portname, symbolic_name, portname_indices=None, symbolic_indices=None, location='', drive_strength=0, slew_rate=0, io_standard='', termination=''):
+    def __init__(self, portname, symbolic_name, portname_indices=None, symbolic_indices=None, location='', drive_strength=None, slew_rate=0, io_standard='', termination=''):
         # toplevel portname
         self.portname = portname # HDL Top level entity port name
         # symbolic name for a pin
