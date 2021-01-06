@@ -144,7 +144,7 @@ module dts_gty_rx(
    .LOCKED   (mmcm_locked),
 
    .PWRDWN   (1'b0),
-   .RST      (~rx_clock_ok)
+   .RST      (~rx_clk_ok)
 
   );
   
