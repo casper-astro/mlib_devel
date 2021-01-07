@@ -194,7 +194,7 @@ wire gty_refclk_odiv2;
       .I(refclk0_p),         // 1-bit input: Refer to Transceiver User Guide
       .IB(refclk0_n)        // 1-bit input: Refer to Transceiver User Guide
    );
-   /*
+
 wire adc_clk_tmp;
 BUFG_GT BUFG_GT_inst (
       .O(adc_clk_tmp),             // 1-bit output: Buffer
@@ -210,12 +210,14 @@ BUFG BUFG_inst(
     .I(adc_clk_tmp),
     .O(adc_clk)
 );
-*/
+
 //assign adc_clk = rxclk0;
+/*
 BUFG BUFG_inst(
     .I(rxclk0),
     .O(adc_clk)
 );
+*/
 //Sync the rxslide input to the axi clock
 reg rxslide_reg;
 always @ (posedge clk100)rxslide_reg <= rxslide;
