@@ -7,6 +7,7 @@ from math import ceil, floor
 from os import environ as env
 
 class adc_4x16g_asnt(YellowBlock):
+    adc_clk_exist = False
     def initialize(self):
         self.provides = ['adc_clk','adc_clk90', 'adc_clk180', 'adc_clk270']
         self.add_source('adc4x16g/ADC4X16G_Channel_Sel.v')
@@ -64,7 +65,11 @@ class adc_4x16g_asnt(YellowBlock):
         inst.add_port('fifo_full','adc4x16g_full%d'%self.channel_sel)
         # test points, no need currently
         inst.add_port('rxprbserr_out','')
-        inst.add_port('adc_clk','adc_clk')
+        if(adc_4x16g_asnt.adc_clk_exist == False):
+            inst.add_port('adc_clk','adc_clk')
+            adc_4x16g_asnt.adc_clk_exist = True
+        else:
+            inst.add_port('adc_clk','')
 
         top.add_signal('adc_clk270')
         top.assign_signal('adc_clk270', 'adc_clk') # just to match the requirement of toolflow
