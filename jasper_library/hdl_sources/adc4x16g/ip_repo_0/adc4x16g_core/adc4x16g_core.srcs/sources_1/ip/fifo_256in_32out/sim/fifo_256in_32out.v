@@ -1,4 +1,4 @@
-// (c) Copyright 1995-2020 Xilinx, Inc. All rights reserved.
+// (c) Copyright 1995-2021 Xilinx, Inc. All rights reserved.
 // 
 // This file contains confidential and proprietary information
 // of Xilinx, Inc. and is protected under U.S. and
@@ -54,9 +54,8 @@
 
 (* DowngradeIPIdentifiedWarnings = "yes" *)
 module fifo_256in_32out (
+  clk,
   srst,
-  wr_clk,
-  rd_clk,
   din,
   wr_en,
   rd_en,
@@ -67,13 +66,10 @@ module fifo_256in_32out (
   rd_rst_busy
 );
 
+(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME core_clk, FREQ_HZ 100000000, PHASE 0.000, INSERT_VIP 0" *)
+(* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 core_clk CLK" *)
+input wire clk;
 input wire srst;
-(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME write_clk, FREQ_HZ 1000000, PHASE 0.000, INSERT_VIP 0" *)
-(* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 write_clk CLK" *)
-input wire wr_clk;
-(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME read_clk, FREQ_HZ 1000000, PHASE 0.000, INSERT_VIP 0" *)
-(* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 read_clk CLK" *)
-input wire rd_clk;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_DATA" *)
 input wire [255 : 0] din;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_EN" *)
@@ -90,7 +86,7 @@ output wire wr_rst_busy;
 output wire rd_rst_busy;
 
   fifo_generator_v13_2_4 #(
-    .C_COMMON_CLOCK(0),
+    .C_COMMON_CLOCK(1),
     .C_SELECT_XPM(0),
     .C_COUNT_TYPE(0),
     .C_DATA_COUNT_WIDTH(9),
@@ -117,20 +113,20 @@ output wire rd_rst_busy;
     .C_HAS_WR_ACK(0),
     .C_HAS_WR_DATA_COUNT(0),
     .C_HAS_WR_RST(0),
-    .C_IMPLEMENTATION_TYPE(6),
+    .C_IMPLEMENTATION_TYPE(0),
     .C_INIT_WR_PNTR_VAL(0),
-    .C_MEMORY_TYPE(4),
+    .C_MEMORY_TYPE(2),
     .C_MIF_FILE_NAME("BlankString"),
     .C_OPTIMIZATION_MODE(0),
     .C_OVERFLOW_LOW(0),
-    .C_PRELOAD_LATENCY(2),
-    .C_PRELOAD_REGS(1),
+    .C_PRELOAD_LATENCY(1),
+    .C_PRELOAD_REGS(0),
     .C_PRIM_FIFO_TYPE("512x72"),
-    .C_PROG_EMPTY_THRESH_ASSERT_VAL(5),
-    .C_PROG_EMPTY_THRESH_NEGATE_VAL(6),
+    .C_PROG_EMPTY_THRESH_ASSERT_VAL(2),
+    .C_PROG_EMPTY_THRESH_NEGATE_VAL(3),
     .C_PROG_EMPTY_TYPE(0),
-    .C_PROG_FULL_THRESH_ASSERT_VAL(511),
-    .C_PROG_FULL_THRESH_NEGATE_VAL(510),
+    .C_PROG_FULL_THRESH_ASSERT_VAL(510),
+    .C_PROG_FULL_THRESH_NEGATE_VAL(509),
     .C_PROG_FULL_TYPE(0),
     .C_RD_DATA_COUNT_WIDTH(9),
     .C_RD_DEPTH(512),
@@ -139,7 +135,7 @@ output wire rd_rst_busy;
     .C_UNDERFLOW_LOW(0),
     .C_USE_DOUT_RST(1),
     .C_USE_ECC(0),
-    .C_USE_EMBEDDED_REG(1),
+    .C_USE_EMBEDDED_REG(0),
     .C_USE_PIPELINE_REG(0),
     .C_POWER_SAVING_MODE(0),
     .C_USE_FIFO16_FLAGS(0),
@@ -295,12 +291,12 @@ output wire rd_rst_busy;
   ) inst (
     .backup(1'D0),
     .backup_marker(1'D0),
-    .clk(1'D0),
+    .clk(clk),
     .rst(1'D0),
     .srst(srst),
-    .wr_clk(wr_clk),
+    .wr_clk(1'D0),
     .wr_rst(1'D0),
-    .rd_clk(rd_clk),
+    .rd_clk(1'D0),
     .rd_rst(1'D0),
     .din(din),
     .wr_en(wr_en),

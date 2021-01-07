@@ -194,6 +194,7 @@ wire gty_refclk_odiv2;
       .I(refclk0_p),         // 1-bit input: Refer to Transceiver User Guide
       .IB(refclk0_n)        // 1-bit input: Refer to Transceiver User Guide
    );
+   /*
 wire adc_clk_tmp;
 BUFG_GT BUFG_GT_inst (
       .O(adc_clk_tmp),             // 1-bit output: Buffer
@@ -207,6 +208,12 @@ BUFG_GT BUFG_GT_inst (
 
 BUFG BUFG_inst(
     .I(adc_clk_tmp),
+    .O(adc_clk)
+);
+*/
+//assign adc_clk = rxclk0;
+BUFG BUFG_inst(
+    .I(rxclk0),
     .O(adc_clk)
 );
 //Sync the rxslide input to the axi clock
@@ -545,11 +552,27 @@ always @ (negedge rxclk0) begin
 end
 //the output of this fifo is changed to 256 instead of 32
 always @ (posedge rxclk0) fifo0_wr_reg <= fifo0_wr;
-
+/*
 fifo_256in_32out FIFO0_ADC (
   .srst(fifo0_reset_sync),                // input wire srst
   .wr_clk(rxclk0),            // input wire wr_clk
   .rd_clk(clk100),            // input wire rd_clk
+  .din(fifo0_in),                  // input wire [255 : 0] din
+  .wr_en(fifo0_wr_reg && !fifo0_full),  // input wire wr_en
+  //.rd_en(fifo_read_pulse),              // input wire rd_en
+  .rd_en(fifo_read_d1),
+  .dout(fifo0_out),                // output wire [31 : 0] dout
+  .full(fifo0_full),                // output wire full
+  .empty(fifo0_empty),              // output wire empty
+  .wr_rst_busy(wr_rst_busy0),  // output wire wr_rst_busy
+  .rd_rst_busy()  // output wire rd_rst_busy
+);
+*/
+
+fifo_256in_32out FIFO0_ADC (
+  .srst(fifo0_reset_sync),                // input wire srst
+  .clk(rxclk0),            // input wire wr_clk
+  //.rd_clk(clk100),            // input wire rd_clk
   .din(fifo0_in),                  // input wire [255 : 0] din
   .wr_en(fifo0_wr_reg && !fifo0_full),  // input wire wr_en
   //.rd_en(fifo_read_pulse),              // input wire rd_en
