@@ -71,6 +71,21 @@ class adc_4x16g_asnt(YellowBlock):
         else:
             inst.add_port('adc_clk','')
 
+        # add wb_bram and controller for alignment
+        # it has the same function as snapshot
+        din = 'adc4x16g_data_out%d'%self.channel_sel
+        wbram = VerilogModule(entity='wb_bram', name='adc16_wb_ram%d'%k)
+        wbram.add_parameter('LOG_USER_WIDTH','5')
+        wbram.add_parameter('USER_ADDR_BITS','10')
+        wbram.add_parameter('N_REGISTERS','2')
+        wbram.add_wb_interface(nbytes=4*2**10)
+        wbram.add_port('user_clk','user_clk', parent_sig=False)
+        wbram.add_port('user_addr','adc16_snap_addr')
+        wbram.add_port('user_din',din)
+        wbram.add_port('user_we','adc16_snap_we')
+        wbram.add_port('user_dout','')
+        top.add_instance(wbram)
+        
         top.add_signal('adc_clk270')
         top.assign_signal('adc_clk270', 'adc_clk') # just to match the requirement of toolflow
         top.add_signal('adc_clk90')
