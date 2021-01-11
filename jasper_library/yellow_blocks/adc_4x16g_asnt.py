@@ -13,6 +13,7 @@ class adc_4x16g_asnt(YellowBlock):
         self.add_source('adc4x16g/ADC4X16G_Channel_Sel.v')
         self.add_source('adc4x16g/data_splitter.v')
         self.add_source('adc4x16g/wb_adc4x16g_controller.v')
+        self.add_source('wb_bram')
         #add the adc4x16g IP 
         self.ips = [{'path':'%s/adc4x16g/ip_repo_0' % env['HDL_ROOT'],
                      'name':'adc4x16g_core',
@@ -73,29 +74,26 @@ class adc_4x16g_asnt(YellowBlock):
             inst.add_port('adc_clk','')
 
         # add wb_controller for snap_addr and snap_we
-        wbctrl = VerilogModule(entity='wb_adc4x16g_controller', name='wb_adc4x16g_controller%d'%self.channel_sel)
+        wbctrl = top.get_instance(entity='wb_adc4x16g_controller', name='wb_adc4x16g_controller%d'%self.channel_sel)
         wbctrl.add_port('user_clk','user_clk',parent_sig=False)
         wbctrl.add_port('rst','sys_rst',arent_sig=False)
         wbctrl.add_port('snap_addr','adc4x16g_snap_addr%d'%self.channel_sel,width=6)
         wbctrl.add_port('snap_we','adc4x16g_snap_we%d'%self.channel_sel)
         # The memory space is only 4 bytes, and only 1 bit is used currently.
         # In case, we will have more registers in the future, the nbytes is set to 2**8.
-        wbctrl.add_wb_interface(nbytes=2**8, regname='adc4x16g_controller%d'%self.channel_sel, mode='rw', typecode=self.typecode)
-        top.add_instance(wbctrl)
+        wbctrl.add_wb_interface(nbytes=2**8, regname='adc4x16g_controller%d'%self.channel_sel, mode='rw', typecode=TYPECODE_SWREG)
 
         # add wb_bram for alignment
-        wbram = VerilogModule(entity='wb_bram', name='adc16_wb_ram%d'%self.channel_sel)
-        wbram.add_parameter('LOG_USER_WIDTH','6')
-        wbram.add_parameter('USER_ADDR_BITS','256')
+        wbram = top.get_instance(entity='wb_bram', name='adc4x16g_wb_ram%d'%self.channel_sel)
+        wbram.add_parameter('LOG_USER_WIDTH','8')
+        wbram.add_parameter('USER_ADDR_BITS','6')
         wbram.add_parameter('N_REGISTERS','2')
-        wbram.add_wb_interface(nbytes=4*2**10)
         wbram.add_port('user_clk','user_clk', parent_sig=False)
         wbram.add_port('user_addr','adc4x16g_snap_addr%d'%self.channel_sel, parent_sig=False)
         wbram.add_port('user_din','adc4x16g_data_out%d'%self.channel_sel, parent_sig=False)
         wbram.add_port('user_we','adc4x16g_snap_we%d'%self.channel_sel, parent_sig=False)
         wbram.add_port('user_dout','')
         wbram.add_wb_interface(regname='adc4x16g_wb_ram%d'%self.channel_sel, mode='rw', nbytes=4*2**10, typecode=TYPECODE_SWREG)
-        top.add_instance(wbram)
         
         # These clocks are just to match the requirement of toolflow
         top.add_signal('adc_clk270')
