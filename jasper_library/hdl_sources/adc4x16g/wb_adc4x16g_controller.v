@@ -41,9 +41,8 @@ module wb_adc4x16g_controller(
   
   reg [31:0] adc_snap_ctrl;
 
-  /***  Signal   ****/
-  wire 
-   
+  /***  Signal   ****/ 
+
   reg [31:0] wb_data_out_reg;
 
   always @(posedge wb_clk_i) begin
