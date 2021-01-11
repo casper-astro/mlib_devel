@@ -123,9 +123,13 @@ always @(posedge user_clk)
       begin
         s_snap_counter <= 0;
       end
-    else 
+    else if(s_snap_counter[6:6]==1'b0)
       begin
         s_snap_counter <= s_snap_counter + 1;
+      end
+    else
+      begin
+        s_snap_counter <= s_snap_counter;
       end
   end
 
