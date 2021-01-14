@@ -197,10 +197,20 @@ module ads5296x4_interface_v2 #(
   reg fclk_delayedR;
   reg iserdes_rst_reg = 1'b0;
   wire start_of_frame = fclk_delayed & ~fclk_delayedR;
+  reg mmcm_rstR;
+  reg mmcm_rstRR;
+  // Only reset the MMCM using the mmcm_rst posedge, since once
+  // reset is asserted, lclk_d4 stops, and mmcm_rst (which exits
+  // the wishbone controller on the lclk_d4 domain) won't deassert
+  wire mmcm_rst_posedge = mmcm_rstR & ~mmcm_rstRR;
   always @(posedge lclk) begin
+    mmcm_rstR <= mmcm_rst; // mmcm_rst is on lclk_d4 domain
+    mmcm_rstRR <= mmcm_rstR;
     fclk_delayedR <= fclk_delayed;
     lclk_d4_rstR <= lclk_d4_rst;
-    if (mmcm_rst) begin
+    // TODO: we can't assert mmcm_rst, because once high
+    // lclk_d4 stops and start_of_frame never clears the reset?
+    if (mmcm_rst_posedge) begin
       lclk_d4_rst <= 1'b1;
     end else if (start_of_frame) begin
       lclk_d4_rst <= 1'b0;
