@@ -4,7 +4,7 @@ if nargin > 0
     load_system(model);
 end
 
-sys = gcs;
+sys = bdroot;
 
 modelpath = get_param(sys, 'filename');
 
