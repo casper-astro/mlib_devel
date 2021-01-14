@@ -93,15 +93,15 @@ module ads5296_unit (
     endcase
   end
 
-  // On sync, reset the deserializer. After a sync,
+  // On sync or reset, reset the deserializer. After a sync,
   // start writing on the next word start, where frame clock = 1111.
   // Thereafter, just count. This means that behaviour is (might be)
-  // predictable with a corrupted frame clock
+  // unpredictable with a corrupted frame clock
   reg [2:0] ctr;
   reg wait_reg;
   always @(posedge lclk_d4) begin
-    if (sync) begin
-      ctr <= 4'b0;
+    if (sync | rst) begin
+      ctr <= 3'b0;
       wait_reg <= 1'b1;
     end else begin
       if (~wait_reg) begin
@@ -112,7 +112,8 @@ module ads5296_unit (
         end
       end else begin
         // On the last cycle, release the counter reset.
-        // On the next clock the counter will be 0, as fclk4b goes to 0b1111
+        // On the next clock the counter will be 0, which should happen as fclk4b goes to 0b1111.
+        // I.e. release the counter when fclk4b is 0b0000
         // And the first values in a data word are received.
         if (fclk4b == 4'b0000) begin
           wait_reg <= 1'b0;
