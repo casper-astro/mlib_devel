@@ -149,7 +149,7 @@ always @(posedge clk)
             end
     end
 //bit_sel
-always @(posedge)
+always @(posedge clk)
     begin
         if(rst)
             begin
@@ -182,7 +182,7 @@ always @(posedge)
                             bit_sel2 <= bit_sel;
                             bit_sel3 <= bit_sel3;
                         end
-                    2h'3:
+                    2'h3:
                         begin
                             bit_sel0 <= bit_sel0;
                             bit_sel1 <= bit_sel1;
@@ -248,6 +248,7 @@ always @(posedge clk)
                             fifo_read2 <= 0;
                             fifo_read3 <= 0;
                         end
+                endcase
             end
     end
 //fifo_reset
@@ -298,6 +299,7 @@ always @(posedge clk)
                             fifo_reset2 <= 0;
                             fifo_reset3 <= 0;
                         end
+                endcase
             end
     end
 ////gtwiz_reset_all_in
@@ -348,6 +350,7 @@ always @(posedge clk)
                             gtwiz_reset_all_in2 <= 0;
                             gtwiz_reset_all_in3 <= 0;
                         end
+                endcase
             end
     end
 
@@ -399,6 +402,7 @@ always @(posedge clk)
                             pattern_match_enable2 <= 0;
                             pattern_match_enable3 <= 0;
                         end
+                endcase
             end
     end
 
@@ -450,6 +454,7 @@ always @(posedge clk)
                             rxcdrhold2 <= 0;
                             rxcdrhold3 <= 0;
                         end
+                endcase
             end
     end
 
