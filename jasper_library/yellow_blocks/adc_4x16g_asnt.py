@@ -145,10 +145,10 @@ class adc_4x16g_asnt(YellowBlock):
         inst.add_port('pattern_match_enable','adc4x16g_config[27:27]',parent_sig=False)
         inst.add_port('fifo_reset','adc4x16g_config[17:17]',parent_sig=False)
         inst.add_port('fifo_read','adc4x16g_config[25:25]',parent_sig=False)
-        inst.add_port('XOR_ON0','XOR_ON0'）
-        inst.add_port('XOR_ON1','XOR_ON1'）
-        inst.add_port('XOR_ON2','XOR_ON2'）
-        inst.add_port('XOR_ON3','XOR_ON3'）
+        inst.add_port('XOR_ON0','XOR_ON0')
+        inst.add_port('XOR_ON1','XOR_ON1')
+        inst.add_port('XOR_ON2','XOR_ON2')
+        inst.add_port('XOR_ON3','XOR_ON3')
         inst.add_port('bit_sel0'，'bit_sel0'，width=2)
         inst.add_port('bit_sel1'，'bit_sel1'，width=2)
         inst.add_port('bit_sel2'，'bit_sel2'，width=2)
