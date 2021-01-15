@@ -42,14 +42,14 @@ class adc_4x16g_asnt(YellowBlock):
         inst.add_port('clk_freerun','mb_clk')
         # the following signals are connected to adc4x16g_config
         # config
-        inst.add_port('XOR_ON','adc4x16g_config[24:24]',parent_sig=False)
-        inst.add_port('bit_sel','adc4x16g_config[19:18]',parent_sig=False)
-        inst.add_port('gtwiz_reset_all_in','adc4x16g_config[16:16]',parent_sig=False)
-        inst.add_port('rxcdrhold','adc4x16g_config[22:22]',parent_sig=False)
-        inst.add_port('rxslide','rxslide%d'%self.channel_sel)
-        inst.add_port('pattern_match_enable','adc4x16g_config[27:27]',parent_sig=False)
-        inst.add_port('fifo_reset','adc4x16g_config[17:17]',parent_sig=False)
-        inst.add_port('fifo_read','adc4x16g_config[25:25]',parent_sig=False)
+        inst.add_port('XOR_ON','XOR_ON%d'%self.channel_sel,parent_sig=False)
+        inst.add_port('bit_sel','bit_sel%d'%self.channel_sel,parent_sig=False)
+        inst.add_port('gtwiz_reset_all_in','gtwiz_reset_all_in%d'%self.channel_sel,parent_sig=False)
+        inst.add_port('rxcdrhold','rxcdrhold%d'%self.channel_sel,parent_sig=False)
+        inst.add_port('rxslide','rxslide%d'%self.channel_sel,parent_sig=False)
+        inst.add_port('pattern_match_enable','pattern_match_enable%d'%self.channel_sel,parent_sig=False)
+        inst.add_port('fifo_reset','fifo_reset%d'%self.channel_sel,parent_sig=False)
+        inst.add_port('fifo_read','fifo_read%d'%self.channel_sel,parent_sig=False)
         # drp_config
         inst.add_port('prbs_error_count_reset','adc4x16g_drp_config[11:11]',parent_sig=False)
         inst.add_port('drp_addr','adc4x16g_drp_config[9:0]',parent_sig=False)
@@ -76,7 +76,7 @@ class adc_4x16g_asnt(YellowBlock):
         # add wb_controller for snap_addr and snap_we
         wbctrl = top.get_instance(entity='wb_adc4x16g_controller', name='wb_adc4x16g_controller%d'%self.channel_sel)
         wbctrl.add_port('user_clk','user_clk',parent_sig=False)
-        wbctrl.add_port('rst','sys_rst',arent_sig=False)
+        wbctrl.add_port('rst','sys_rst',parent_sig=False)
         wbctrl.add_port('snap_addr','adc4x16g_snap_addr%d'%self.channel_sel,width=6)
         wbctrl.add_port('snap_we','adc4x16g_snap_we%d'%self.channel_sel)
         # The memory space is only 4 bytes, and only 1 bit is used currently.
@@ -120,6 +120,8 @@ class adc_4x16g_asnt(YellowBlock):
     def _instantiate_channel_sel(self,top):
         module = 'ADC4X16G_Channel_Sel'
         inst = top.get_instance(entity=module, name='adc4x16g_channel_sel')
+        inst.add_port('clk','user_clk',parent_sig=False)
+        inst.add_port('rst','sys_rst',parent_sig=False)
         inst.add_port('channel_sel','adc4x16g_config[21:20]',parent_sig=False)
         inst.add_port('drp_data0','adc4x16g_drp_data0',width=16)
         inst.add_port('drp_data1','adc4x16g_drp_data1',width=16)
@@ -136,7 +138,42 @@ class adc_4x16g_asnt(YellowBlock):
         inst.add_port('rxslide1','rxslide1')
         inst.add_port('rxslide2','rxslide2')
         inst.add_port('rxslide3','rxslide3')
-        
+        inst.add_port('XOR_ON','adc4x16g_config[24:24]',parent_sig=False)
+        inst.add_port('bit_sel','adc4x16g_config[19:18]',parent_sig=False)
+        inst.add_port('gtwiz_reset_all_in','adc4x16g_config[16:16]',parent_sig=False)
+        inst.add_port('rxcdrhold','adc4x16g_config[22:22]',parent_sig=False)
+        inst.add_port('pattern_match_enable','adc4x16g_config[27:27]',parent_sig=False)
+        inst.add_port('fifo_reset','adc4x16g_config[17:17]',parent_sig=False)
+        inst.add_port('fifo_read','adc4x16g_config[25:25]',parent_sig=False)
+        inst.add_port('XOR_ON0','XOR_ON0'）
+        inst.add_port('XOR_ON1','XOR_ON1'）
+        inst.add_port('XOR_ON2','XOR_ON2'）
+        inst.add_port('XOR_ON3','XOR_ON3'）
+        inst.add_port('bit_sel0'，'bit_sel0'，width=2)
+        inst.add_port('bit_sel1'，'bit_sel1'，width=2)
+        inst.add_port('bit_sel2'，'bit_sel2'，width=2)
+        inst.add_port('bit_sel3'，'bit_sel3'，width=2)
+        inst.add_port('gtwiz_reset_all_in0','gtwiz_reset_all_in0')
+        inst.add_port('gtwiz_reset_all_in1','gtwiz_reset_all_in1')
+        inst.add_port('gtwiz_reset_all_in2','gtwiz_reset_all_in2')
+        inst.add_port('gtwiz_reset_all_in3','gtwiz_reset_all_in3')
+        inst.add_port('rxcdrhold0','rxcdrhold0')
+        inst.add_port('rxcdrhold1','rxcdrhold1')
+        inst.add_port('rxcdrhold2','rxcdrhold2')
+        inst.add_port('rxcdrhold3','rxcdrhold3')
+        inst.add_port('pattern_match_enable0','pattern_match_enable0')
+        inst.add_port('pattern_match_enable1','pattern_match_enable1')
+        inst.add_port('pattern_match_enable2','pattern_match_enable2')
+        inst.add_port('pattern_match_enable3','pattern_match_enable3')
+        inst.add_port('fifo_reset0','fifo_reset0')
+        inst.add_port('fifo_reset1','fifo_reset1')
+        inst.add_port('fifo_reset2','fifo_reset2')
+        inst.add_port('fifo_reset3','fifo_reset3')
+        inst.add_port('fifo_read0','fifo_read0')
+        inst.add_port('fifo_read1','fifo_read1')
+        inst.add_port('fifo_read2','fifo_read2')
+        inst.add_port('fifo_read3','fifo_read3')
+
     def _add_external_ports(self,top):
         # on-board clock configuration
         top.add_port('adc4x16g_mosi',dir='out',width=1)
