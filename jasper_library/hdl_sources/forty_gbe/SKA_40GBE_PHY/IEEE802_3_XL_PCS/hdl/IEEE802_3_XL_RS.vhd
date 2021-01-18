@@ -231,54 +231,54 @@ architecture Behavioral of IEEE802_3_XL_RS is
 	signal RX_frame_error_count : unsigned(31 downto 0);
 	
 	    -- Mark Debug ILA Testing 
-    signal dbg_RX_RS256_d1_valid : std_logic;
-    signal dbg_RX_RS256_d2 : RS_256bit_t;
-    signal dbg_RX_RS256_d1 : RS_256bit_t;
-    signal dbg_RX_frame_queue_count_dec : std_logic;
-    signal dbg_RX_RS256_insert_idle : std_logic;
-    signal dbg_RX_RS256_d2_valid : std_logic;
-    signal dbg_XLGMII_RX_FIFO_rd_en : std_logic;
-    signal dbg_XLGMII_RX_FIFO_empty : std_logic;
-    signal dbg_RX_frame_queue_empty : boolean;
-    signal dbg_XLGMII_RX_FIFO_full : std_logic;
-    signal dbg_RX_FRAME_COUNT_O : std_logic_vector(31 downto 0);
-    signal dbg_RX_FRAME_ERROR_COUNT_O : std_logic_vector(31 downto 0);
-    signal dbg_RX_RS256_insert_idle_comb : std_logic;
+    --signal dbg_RX_RS256_d1_valid : std_logic;
+    --signal dbg_RX_RS256_d2 : RS_256bit_t;
+    --signal dbg_RX_RS256_d1 : RS_256bit_t;
+    --signal dbg_RX_frame_queue_count_dec : std_logic;
+    --signal dbg_RX_RS256_insert_idle : std_logic;
+    --signal dbg_RX_RS256_d2_valid : std_logic;
+    --signal dbg_XLGMII_RX_FIFO_rd_en : std_logic;
+    --signal dbg_XLGMII_RX_FIFO_empty : std_logic;
+    --signal dbg_RX_frame_queue_empty : boolean;
+    --signal dbg_XLGMII_RX_FIFO_full : std_logic;
+    --signal dbg_RX_FRAME_COUNT_O : std_logic_vector(31 downto 0);
+    --signal dbg_RX_FRAME_ERROR_COUNT_O : std_logic_vector(31 downto 0);
+    --signal dbg_RX_RS256_insert_idle_comb : std_logic;
     
           
     
     -- Mark Debug ILA Testing   
-    attribute MARK_DEBUG : string;
-    attribute MARK_DEBUG of dbg_RX_RS256_d1_valid : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_RX_RS256_d2 : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_RX_RS256_d1 : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_RX_frame_queue_count_dec : signal is "TRUE"; 
-    attribute MARK_DEBUG of dbg_RX_RS256_insert_idle : signal is "TRUE";    
-    attribute MARK_DEBUG of dbg_RX_RS256_d2_valid : signal is "TRUE";   
-    attribute MARK_DEBUG of dbg_XLGMII_RX_FIFO_rd_en : signal is "TRUE";   
-    attribute MARK_DEBUG of dbg_XLGMII_RX_FIFO_empty : signal is "TRUE"; 
-    attribute MARK_DEBUG of dbg_RX_frame_queue_empty : signal is "TRUE"; 
-    attribute MARK_DEBUG of dbg_XLGMII_RX_FIFO_full : signal is "TRUE"; 
-    attribute MARK_DEBUG of dbg_RX_FRAME_COUNT_O : signal is "TRUE"; 
-    attribute MARK_DEBUG of dbg_RX_FRAME_ERROR_COUNT_O : signal is "TRUE"; 
-    attribute MARK_DEBUG of dbg_RX_RS256_insert_idle_comb : signal is "TRUE"; 	
+    --attribute MARK_DEBUG : string;
+    --attribute MARK_DEBUG of dbg_RX_RS256_d1_valid : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_RX_RS256_d2 : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_RX_RS256_d1 : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_RX_frame_queue_count_dec : signal is "TRUE"; 
+    --attribute MARK_DEBUG of dbg_RX_RS256_insert_idle : signal is "TRUE";    
+    --attribute MARK_DEBUG of dbg_RX_RS256_d2_valid : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_XLGMII_RX_FIFO_rd_en : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_XLGMII_RX_FIFO_empty : signal is "TRUE"; 
+    --attribute MARK_DEBUG of dbg_RX_frame_queue_empty : signal is "TRUE"; 
+    --attribute MARK_DEBUG of dbg_XLGMII_RX_FIFO_full : signal is "TRUE"; 
+    --attribute MARK_DEBUG of dbg_RX_FRAME_COUNT_O : signal is "TRUE"; 
+    --attribute MARK_DEBUG of dbg_RX_FRAME_ERROR_COUNT_O : signal is "TRUE"; 
+    --attribute MARK_DEBUG of dbg_RX_RS256_insert_idle_comb : signal is "TRUE"; 	
 
 begin
 
     --Mark debug ILA
-    dbg_RX_RS256_d1_valid <= RX_RS256_d1_valid;
-    dbg_RX_RS256_d2 <= RX_RS256_d2;
-    dbg_RX_RS256_d1 <= RX_RS256_d1;
-    dbg_RX_frame_queue_count_dec <= RX_frame_queue_count_dec;
-    dbg_RX_RS256_insert_idle <= RX_RS256_insert_idle;
-    dbg_RX_RS256_d2_valid <= RX_RS256_d2_valid;
-    dbg_XLGMII_RX_FIFO_rd_en <= XLGMII_RX_FIFO_rd_en;
-    dbg_XLGMII_RX_FIFO_empty <= XLGMII_RX_FIFO_empty;
-    dbg_RX_frame_queue_empty <= RX_frame_queue_empty;
-    dbg_XLGMII_RX_FIFO_full <= XLGMII_RX_FIFO_full;
-    dbg_RX_FRAME_COUNT_O <= std_logic_vector(RX_frame_count);
-    dbg_RX_FRAME_ERROR_COUNT_O <= std_logic_vector(RX_frame_error_count);
-    dbg_RX_RS256_insert_idle_comb <= RX_RS256_insert_idle_comb;	
+    --dbg_RX_RS256_d1_valid <= RX_RS256_d1_valid;
+    --dbg_RX_RS256_d2 <= RX_RS256_d2;
+    --dbg_RX_RS256_d1 <= RX_RS256_d1;
+    --dbg_RX_frame_queue_count_dec <= RX_frame_queue_count_dec;
+    --dbg_RX_RS256_insert_idle <= RX_RS256_insert_idle;
+    --dbg_RX_RS256_d2_valid <= RX_RS256_d2_valid;
+    --dbg_XLGMII_RX_FIFO_rd_en <= XLGMII_RX_FIFO_rd_en;
+    --dbg_XLGMII_RX_FIFO_empty <= XLGMII_RX_FIFO_empty;
+    --dbg_RX_frame_queue_empty <= RX_frame_queue_empty;
+    --dbg_XLGMII_RX_FIFO_full <= XLGMII_RX_FIFO_full;
+    --dbg_RX_FRAME_COUNT_O <= std_logic_vector(RX_frame_count);
+    --dbg_RX_FRAME_ERROR_COUNT_O <= std_logic_vector(RX_frame_error_count);
+    --dbg_RX_RS256_insert_idle_comb <= RX_RS256_insert_idle_comb;	
 
 
 

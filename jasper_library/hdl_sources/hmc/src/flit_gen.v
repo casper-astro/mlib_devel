@@ -53,34 +53,34 @@ module flit_gen #(
   );
   
   //Debug HMC Registers
-  (* mark_debug = "true" *) wire dbg_flit_gen_post_done_in; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire dbg_flit_gen_post_done_out_i; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire dbg_flit_gen_s_tx_tvalid; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire dbg_flit_gen_s_tx_tready; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire [DWIDTH-1:0] dbg_flit_gen_s_tx_tdata; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire [NUM_DATA_BYTES-1:0] dbg_flit_gen_s_tx_tuser; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire [3:0] dbg_flit_gen_wr_flit_state; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire dbg_flit_gen_post_done_in; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire dbg_flit_gen_post_done_out_i; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire dbg_flit_gen_s_tx_tvalid; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire dbg_flit_gen_s_tx_tready; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire [DWIDTH-1:0] dbg_flit_gen_s_tx_tdata; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire [NUM_DATA_BYTES-1:0] dbg_flit_gen_s_tx_tuser; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire [3:0] dbg_flit_gen_wr_flit_state; //Virtual test probe for the logic analyser
   
-  (* mark_debug = "true" *) wire dbg_flit_gen_m_rx_tvalid; //Virtual test probe for the logic analyser 
-  (* mark_debug = "true" *) wire dbg_flit_gen_m_rx_tready; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire [DWIDTH-1:0] dbg_flit_gen_m_rx_tdata; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire [NUM_DATA_BYTES-1:0] dbg_flit_gen_m_rx_tuser; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire [3:0] dbg_flit_gen_rd_flit_state; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire dbg_flit_gen_m_rx_tvalid; //Virtual test probe for the logic analyser 
+  //(* mark_debug = "true" *) wire dbg_flit_gen_m_rx_tready; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire [DWIDTH-1:0] dbg_flit_gen_m_rx_tdata; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire [NUM_DATA_BYTES-1:0] dbg_flit_gen_m_rx_tuser; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire [3:0] dbg_flit_gen_rd_flit_state; //Virtual test probe for the logic analyser
 
-  assign dbg_flit_gen_post_done_in = POST_DONE_IN;
-  assign dbg_flit_gen_s_tx_tvalid = s_axis_tx_TVALID_i & s_axis_tx_TREADY;
-  assign dbg_flit_gen_s_tx_tready = s_axis_tx_TREADY;
-  assign dbg_flit_gen_s_tx_tdata = s_axis_tx_TDATA_i;
-  assign dbg_flit_gen_s_tx_tuser = s_axis_tx_TUSER_i; 
+  //assign dbg_flit_gen_post_done_in = POST_DONE_IN;
+  //assign dbg_flit_gen_s_tx_tvalid = s_axis_tx_TVALID_i & s_axis_tx_TREADY;
+  //assign dbg_flit_gen_s_tx_tready = s_axis_tx_TREADY;
+  //assign dbg_flit_gen_s_tx_tdata = s_axis_tx_TDATA_i;
+  //assign dbg_flit_gen_s_tx_tuser = s_axis_tx_TUSER_i; 
   
-  assign dbg_flit_gen_m_rx_tvalid = m_axis_rx_TVALID;  
-  assign dbg_flit_gen_m_rx_tready = m_axis_rx_TREADY_i;  
-  assign dbg_flit_gen_m_rx_tdata = m_axis_rx_TDATA;
-  assign dbg_flit_gen_m_rx_tuser = m_axis_rx_TUSER;
+  //assign dbg_flit_gen_m_rx_tvalid = m_axis_rx_TVALID;  
+  //assign dbg_flit_gen_m_rx_tready = m_axis_rx_TREADY_i;  
+  //assign dbg_flit_gen_m_rx_tdata = m_axis_rx_TDATA;
+  //assign dbg_flit_gen_m_rx_tuser = m_axis_rx_TUSER;
   
-  assign dbg_flit_gen_rd_flit_state = rd_flit_state;
-  assign dbg_flit_gen_wr_flit_state = wr_flit_state;
-  assign dbg_flit_gen_post_done_out_i = post_done_out_i;
+  //assign dbg_flit_gen_rd_flit_state = rd_flit_state;
+  //assign dbg_flit_gen_wr_flit_state = wr_flit_state;
+  //assign dbg_flit_gen_post_done_out_i = post_done_out_i;
 
 // FLIT Layout
 // -----------
@@ -355,41 +355,41 @@ module flit_gen #(
   reg [63:0] data_rx_flit_cnt_case_4;
 
   //Debug OpenHMC Registers
-  (* mark_debug = "true" *) wire dbg_flit_gen_open_hmc_init_done; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire dbg_flit_gen_flit0; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire dbg_flit_gen_flit1; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire dbg_flit_gen_flit2; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire dbg_flit_gen_flit3; //Virtual test probe for the logic analyser 
-  (* mark_debug = "true" *) wire [63:0] dbg_flit_gen_data_rx_err_flit_cnt; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire [63:0] dbg_flit_gen_data_rx_flit_cnt; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case1_second; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case1_third; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case2_second; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case2_third; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case3_second; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case3_third; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case4_second; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case4_third; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire [63:0] dbg_flit_gen_axi_tvalid_rx_counter; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire [63:0] dbg_flit_gen_data_rx_flit_cnt_case_1; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire [63:0] dbg_flit_gen_data_rx_flit_cnt_case_2; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire [63:0] dbg_flit_gen_data_rx_flit_cnt_case_3; //Virtual test probe for the logic analyser
-  (* mark_debug = "true" *) wire [63:0] dbg_flit_gen_data_rx_flit_cnt_case_4; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire dbg_flit_gen_open_hmc_init_done; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire dbg_flit_gen_flit0; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire dbg_flit_gen_flit1; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire dbg_flit_gen_flit2; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire dbg_flit_gen_flit3; //Virtual test probe for the logic analyser 
+  //(* mark_debug = "true" *) wire [63:0] dbg_flit_gen_data_rx_err_flit_cnt; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire [63:0] dbg_flit_gen_data_rx_flit_cnt; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case1_second; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case1_third; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case2_second; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case2_third; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case3_second; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case3_third; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case4_second; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire dbg_flit_gen_next_flit_case4_third; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire [63:0] dbg_flit_gen_axi_tvalid_rx_counter; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire [63:0] dbg_flit_gen_data_rx_flit_cnt_case_1; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire [63:0] dbg_flit_gen_data_rx_flit_cnt_case_2; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire [63:0] dbg_flit_gen_data_rx_flit_cnt_case_3; //Virtual test probe for the logic analyser
+  //(* mark_debug = "true" *) wire [63:0] dbg_flit_gen_data_rx_flit_cnt_case_4; //Virtual test probe for the logic analyser
   
   
   
-  assign dbg_flit_gen_open_hmc_init_done = OPEN_HMC_INIT_DONE;
-  assign dbg_flit_gen_flit0 = flit[0];
-  assign dbg_flit_gen_flit1 = flit[1];
-  assign dbg_flit_gen_flit2 = flit[2];
-  assign dbg_flit_gen_flit3 = flit[3];
-  assign dbg_flit_gen_data_rx_err_flit_cnt = data_rx_err_flit_cnt;
-  assign dbg_flit_gen_data_rx_flit_cnt = data_rx_flit_cnt;
-  assign dbg_flit_gen_axi_tvalid_rx_counter = axi_tvalid_rx_counter;
-  assign dbg_flit_gen_data_rx_flit_cnt_case_1 = data_rx_flit_cnt_case_1;
-  assign dbg_flit_gen_data_rx_flit_cnt_case_2 = data_rx_flit_cnt_case_2;
-  assign dbg_flit_gen_data_rx_flit_cnt_case_3 = data_rx_flit_cnt_case_3;
-  assign dbg_flit_gen_data_rx_flit_cnt_case_4 = data_rx_flit_cnt_case_4;
+  //assign dbg_flit_gen_open_hmc_init_done = OPEN_HMC_INIT_DONE;
+  //assign dbg_flit_gen_flit0 = flit[0];
+  //assign dbg_flit_gen_flit1 = flit[1];
+  //assign dbg_flit_gen_flit2 = flit[2];
+  //assign dbg_flit_gen_flit3 = flit[3];
+  //assign dbg_flit_gen_data_rx_err_flit_cnt = data_rx_err_flit_cnt;
+  //assign dbg_flit_gen_data_rx_flit_cnt = data_rx_flit_cnt;
+  //assign dbg_flit_gen_axi_tvalid_rx_counter = axi_tvalid_rx_counter;
+  //assign dbg_flit_gen_data_rx_flit_cnt_case_1 = data_rx_flit_cnt_case_1;
+  //assign dbg_flit_gen_data_rx_flit_cnt_case_2 = data_rx_flit_cnt_case_2;
+  //assign dbg_flit_gen_data_rx_flit_cnt_case_3 = data_rx_flit_cnt_case_3;
+  //assign dbg_flit_gen_data_rx_flit_cnt_case_4 = data_rx_flit_cnt_case_4;
 
   // ***************************************************************************************************************************************************************************************
   // Read state machine 

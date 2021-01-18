@@ -4,19 +4,20 @@ module zcu111_infrastructure #(
         parameter DIVCLK   = 1
     ) (
 
-        input clk_100_n,
-	input clk_100_p,
+    input clk_128_n,
+	input clk_128_p,
 
 	output sys_clk,
 	output sys_clk90,
 	output sys_clk180,
 	output sys_clk270,
-
-        output sys_clk_rst
+	output clk_128M,
+	
+    output sys_clk_rst
 
     );
 
-    wire clk_100;
+    wire clk_128_buf;
     wire user_clk_mmcm_fb;
     wire user_clk_mmcm;
     wire user_clk_90_mmcm;
@@ -28,13 +29,13 @@ module zcu111_infrastructure #(
     //IBUF adc_clk_ibuf_inst (.I (adc_clk_in), .O (adc_clk_ibuf));  // differential clock input
     
     // diferential clock input
-    IBUFDS i_clk (.I (clk_100_p), .IB (clk_100_n), .O (clk_100));  // differential clock input
+    IBUFDS i_clk (.I (clk_128_p), .IB (clk_128_n), .O (clk_128_buf));  // differential clock input
     
     MMCM_BASE #(
         .BANDWIDTH          ("OPTIMIZED"), // Jitter programming ("HIGH","LOW","OPTIMIZED")
         .CLKFBOUT_MULT_F    (MULTIPLY), // Multiply value for all CLKOUT (5.0-64.0).
         .CLKFBOUT_PHASE     (0.0),
-        .CLKIN1_PERIOD      (10.0),     // ZCU111 clock is 100 MHz
+        .CLKIN1_PERIOD      (7.8125),     // ZCU111 clock is 128 MHz
         .CLKOUT0_DIVIDE_F   (DIVIDE),   // Divide amount for CLKOUT0 (1.000-128.000).
         .CLKOUT0_DUTY_CYCLE (0.5),
         .CLKOUT1_DUTY_CYCLE (0.5),
@@ -62,7 +63,7 @@ module zcu111_infrastructure #(
         .REF_JITTER1        (0.0),
         .STARTUP_WAIT       ("FALSE")
     ) user_clk_mmcm_inst (
-        .CLKIN1   (clk_100),
+        .CLKIN1   (clk_128_buf),
         .CLKFBIN  (user_clk_mmcm_fb),
         .CLKFBOUT  (user_clk_mmcm_fb),
         .CLKFBOUTB (),
@@ -86,8 +87,11 @@ module zcu111_infrastructure #(
       .I({user_clk_mmcm, user_clk_90_mmcm, user_clk_180_mmcm, user_clk_270_mmcm}),
       .O({sys_clk, sys_clk90, sys_clk180, sys_clk270})
     );
-    
+	BUFG bufg_128(
+	  .I(clk_128_buf),
+	  .O(clk_128M)
+	  );
     // TODO: Check this logic and look a the resets
     assign sys_clk_rst = !user_mmcm_lock;
-
+	
 endmodule

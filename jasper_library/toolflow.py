@@ -356,7 +356,7 @@ class Toolflow(object):
         # and probably shouldn't be here. Why not in the SKARAB yellow block?
         try:
             # generate multiboot, golden or tooflow image based on yaml file
-            self.hdl_filename = '%s/infrastructure/%s_parameters.vhd' % (os.getenv('HDL_ROOT'), self.plat.name)
+            self.hdl_filename = '%s/skarab_infr/%s_parameters.vhd' % (os.getenv('HDL_ROOT'), self.plat.name)
             # check to see if parameter file exists. Some platforms may not use this.
             if os.path.isfile(self.hdl_filename):
                 self._gen_hdl_version(filename_hdl=self.hdl_filename)
@@ -517,8 +517,12 @@ class Toolflow(object):
             self.cores = []
             for val in list(self.top.memory_map.values()):
                 self.cores += val['axi4lite_devices']
+            for val in self.top.rfdc_devices:
+                self.cores += [val]
         else:
             self.cores = self.top.wb_devices
+        for val in self.top.xil_axi4lite_devices:
+            self.cores += [val]
         basefile = '%s/%s/core_info.tab' % (os.getenv('HDL_ROOT'),
                                             self.plat.name)
         newfile = '%s/core_info.tab' % self.compile_dir
