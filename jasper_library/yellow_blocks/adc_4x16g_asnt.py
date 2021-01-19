@@ -44,12 +44,23 @@ class adc_4x16g_asnt(YellowBlock):
         # config
         inst.add_port('XOR_ON','XOR_ON%d'%self.channel_sel,parent_sig=False)
         inst.add_port('bit_sel','bit_sel%d'%self.channel_sel,parent_sig=False)
-        inst.add_port('gtwiz_reset_all_in','gtwiz_reset_all_in%d'%self.channel_sel,parent_sig=False)
         inst.add_port('rxcdrhold','rxcdrhold%d'%self.channel_sel,parent_sig=False)
         inst.add_port('rxslide','rxslide%d'%self.channel_sel,parent_sig=False)
         inst.add_port('pattern_match_enable','pattern_match_enable%d'%self.channel_sel,parent_sig=False)
         inst.add_port('fifo_reset','fifo_reset%d'%self.channel_sel,parent_sig=False)
         inst.add_port('fifo_read','fifo_read%d'%self.channel_sel,parent_sig=False)
+        inst.add_port('gtwiz_reset_all_in','gtwiz_reset_all_in%d'%self.channel_sel,parent_sig=False)
+        """
+        # gty transceiver reset is very sensitive
+        if(self.channel_sel == 0):
+            inst.add_port('gtwiz_reset_all_in','adc4x16g_config[16:16]',parent_sig=False)
+        elif(self.channel_sel == 1):
+            inst.add_port('gtwiz_reset_all_in','adc4x16g_config[28:28]',parent_sig=False)
+        elif(self.channel_sel == 2):
+            inst.add_port('gtwiz_reset_all_in','adc4x16g_config[29:29]',parent_sig=False)
+        elif(self.channel_sel == 3):
+            inst.add_port('gtwiz_reset_all_in','adc4x16g_config[30:30]',parent_sig=False)
+        """
         # drp_config
         inst.add_port('prbs_error_count_reset','adc4x16g_drp_config[11:11]',parent_sig=False)
         inst.add_port('drp_addr','adc4x16g_drp_config[9:0]',parent_sig=False)
