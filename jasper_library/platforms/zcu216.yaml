@@ -1,0 +1,137 @@
+name: zcu216
+manufacturer: Xilinx
+fpga: xczu49dr-ffvf1760-2-e-es1
+family: zynq-ultrascaleplus-rfsoc
+config_voltage: 1.8 # TODO: not used?
+cfgbvs: GND         # TODO: not used?
+backend_target: vivado
+mmbus_architecture: AXI4-Lite
+mmbus_base_address: 0xA0000000
+# How to address each 32-bit (i.e. 4 indicates byte-addressable)
+mmbus_address_alignment: 4
+sources: []
+constraints: []
+onehundredgbe:
+  refclk_freq_str: "156.25"
+  cmac_loc:
+    - CMACE4_X0Y1
+    
+provides:
+  - sys_clk
+  - axil_clk # TODO: add this?
+  - qsfp_clk
+
+pins:
+  clk_100_p:
+    iostd: LVDS_25
+    loc: G12
+  clk_100_n:
+    iostd: LVDS_25
+    loc: G11
+  clk_125_p:
+    iostd: LVDS_25
+    loc: A13
+  clk_125_n:
+    iostd: LVDS_25
+    loc: A12
+
+# 100 GbE
+  # IDT 8A34001 output Q7, refclk1 GTY bank 129
+  mgt_ref_clk_p:
+    loc:
+      - T34
+  mgt_ref_clk_n:
+    loc:
+      - T35
+  qsfp_mgt_tx_p:
+    loc:
+      # bank 129 SFP[0:1]
+      - V38
+      - U36
+      # bank 128 SFP[2:3]
+      - P38
+      - N36
+  qsfp_mgt_tx_n:
+    loc:
+      # bank 129
+      - V39
+      - U37
+      # bank 128
+      - P39
+      - N37
+  qsfp_mgt_rx_p:
+    loc:
+      # bank 129
+      - AC41
+      - AB39
+      # bank 128
+      - W41
+      - U41
+  qsfp_mgt_rx_n:
+    loc:
+      # bank 129
+      - AC42
+      - AB40
+      # bank 128
+      - W42
+      - U42
+
+  # TODO: what do we do here? These pins are strapped?
+  #qsfp_modprs:
+
+# mcb: zcu216 has 8 RGB LEDs (24 total)
+# however, not all of the LEDs of the same color have the same voltage
+# standard. Not sure how the tools can handle this.
+  led_red:
+    iostd: LVCMOS12
+    loc:
+      - AN14
+      - AP16
+      - AP14
+      - AU16
+      - AW12
+      - AY16
+      - BB12
+      - E25
+  led_green:
+    iostd: [LVCMOS18, LVCMOS12]
+    loc: [[C13, D14, D12, D13], [AW18, AV18, BA19, AP21]]
+
+  led_blue:
+    iostd: LVCMOS12
+    loc:
+      - B26
+      - E24
+      - G26
+      - J23
+      - L24
+      - P21
+      - AV21
+      - AR21
+
+  led:
+    iostd: LVCMOS12
+    loc:
+      # red
+      - AN14
+      - AP16
+      - AP14
+      - AU16
+      - AW12
+      - AY16
+      - BB12
+      - E25
+      # green - remaining 4 green leds are lvcmos18
+      - AW18
+      - AV18
+      - BA19
+      - AP21
+      # blue
+      - B26
+      - E24
+      - G26
+      - J23
+      - L24
+      - P21
+      - AV21
+      - AR21
