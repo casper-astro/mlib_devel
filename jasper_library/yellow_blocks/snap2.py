@@ -32,6 +32,7 @@ class snap2(YellowBlock):
         top.add_signal('clk_250MHz180')
         top.assign_signal('clk_250MHz180', '~clk_250MHz')
 
+        top.add_signal('clk200')
         # HACK: these clocks aren't at the phases they claim.
         # I hope you're not using them!
         top.add_signal('clk20090')

@@ -1,4 +1,4 @@
-module ads5296x4_interface_v3 #(
+module ads5296x4_interface_demux2 #(
     parameter G_NUM_UNITS = 4,
     parameter G_NUM_FCLKS = 4,
     parameter G_IS_MASTER = 1'b1
@@ -12,7 +12,7 @@ module ads5296x4_interface_v3 #(
     input [G_NUM_FCLKS - 1 : 0] fclk_p,
     input [G_NUM_FCLKS - 1 : 0] fclk_n,
     // If not a master -- use this clock
-    input clk_in,
+    input sclk2_in,
     input sclk_in,
     input sclk5_in,
     // Data inputs
@@ -20,7 +20,7 @@ module ads5296x4_interface_v3 #(
     input [4*2*G_NUM_UNITS - 1:0] din_n,
     // Deserialized outputs
     output [10*4*G_NUM_UNITS - 1:0] dout,
-    output clk_out,
+    output sclk2_out,
     output sclk_out,
     output sclk5_out,
     output sync_out,
@@ -187,86 +187,22 @@ module ads5296x4_interface_v3 #(
       .PWRDWN(1'b0)
     );
 
-  BUFG clk_out_buf[2:0] (
-    .I({sclk_mmcm, sclk5_mmcm, sclk_fb_mmcm}),
-    .O({sclk, sclk5, sclk_fb})
+  BUFG clk_out_buf[3:0] (
+    .I({sclk_mmcm, sclk2_mmcm, sclk5_mmcm, sclk_fb_mmcm}),
+    .O({sclk, sclk2, sclk5, sclk_fb})
   );
   
-
-    BUFG sclk2_buf (
-      .I(sclk2_mmcm),
-      .O(sclk2)
-    );
     assign sclk_out = sclk;
+    assign sclk2_out = sclk2;
     assign sclk5_out = sclk5;
   end else begin
-    assign sclk2 = 1'b0;
+    assign sclk2_out = 1'b0;
     assign sclk_out = 1'b0;
     assign sclk5_out = 1'b0;
-    assign sclk = sclk_in;
-    assign sclk5 = sclk5_in;
   end
   endgenerate
  
- /*
- 
-    reg mmcm_rstR;
-    reg mmcm_rstRR;
-    wire mcmm_rst_strobe = mmcm_rstR & ~mmcm_rstRR;
-    
-    always @(posedge fclk) begin
-      mmcm_rstR <= mmcm_rst;
-      mmcm_rstRR <= mmcm_rstR;
-    end
-    
-    MMCME3_BASE #(
-      .BANDWIDTH("OPTIMIZED"),
-      .DIVCLK_DIVIDE(2),
-      .CLKFBOUT_MULT_F(20.000),
-      .CLKOUT0_DIVIDE_F(10.0),
-      .CLKOUT1_DIVIDE(5),
-      .CLKOUT1_PHASE(90),
-      .CLKOUT2_DIVIDE(2),
-      .CLKIN1_PERIOD(10.000)
-    ) mmcm_inst (
-      .CLKIN1(fclk),   // 2.5 fs
-      .RST(mcmm_rst_strobe),
-      // Use inverted clocks so all clocks are in phase,
-      // But sclk5 is out of phase with data transitions
-      //.CLKOUT0B(sclk_mmcm),  // fs
-      //.CLKOUT1B(sclk2_mmcm),
-      //.CLKOUT2B(sclk5_mmcm),
-      
-      .CLKOUT0(sclk_mmcm),  // fs
-      .CLKOUT1(sclk2_mmcm),
-      .CLKOUT2(sclk5_mmcm),
-      .CLKFBOUT(sclk_fb_mmcm),
-      .CLKFBIN(sclk_fb),
-      .LOCKED(),
-      .PWRDWN(1'b0)
-    );
-
-  BUFG clk_out_buf[2:0] (
-    .I({sclk_mmcm, sclk5_mmcm, sclk_fb_mmcm}),
-    .O({sclk, sclk5, sclk_fb})
-  );
-  
-  generate
-  if (G_IS_MASTER) begin
-    BUFG sclk2_buf (
-      .I(sclk2_mmcm),
-      .O(sclk2)
-    );
-
-  end else begin
-    assign sclk2 = 1'b0;
-  end
-  endgenerate
-  
-  */
-  
-  assign clk_out = sclk2;
-  assign wb_user_clk = sclk;
+  assign wb_user_clk = sclk_in;
 
   /*
    * To update:
@@ -285,7 +221,7 @@ module ads5296x4_interface_v3 #(
   (* async_reg = "true" *) reg [4*2*G_NUM_UNITS : 0] delay_loadRRR;
 
   wire [4*2*G_NUM_UNITS : 0] delay_load_strobe = delay_loadRR & ~delay_loadRRR;
-  always @(posedge sclk) begin
+  always @(posedge sclk_in) begin
     delay_loadR <= delay_load;
     delay_loadRR <= delay_loadR;
     delay_loadRRR <= delay_loadRR;
@@ -304,7 +240,7 @@ module ads5296x4_interface_v3 #(
   (* mark_debug = "true" *) wire idelay_rst = idelay_rst_sr != 32'b0;
   (* mark_debug = "true" *) wire iserdes_rst = iserdes_rst_sr != 32'b0;
   (* mark_debug = "true" *) wire idelay_rdy;
-  always @(posedge sclk) begin
+  always @(posedge sclk_in) begin
     delay_master_rstR <= delay_master_rst;
     idelay_rst_sr <= {idelay_rst_sr[31:1], delay_master_rst_trig};
     iserdes_rst_sr <= {iserdes_rst_sr[31:0], idelay_rst};
@@ -322,7 +258,7 @@ module ads5296x4_interface_v3 #(
     .SIM_DEVICE("ULTRASCALE"),
     .REFCLK_FREQUENCY(200.0)
   ) iodelay_in [ 4*2*G_NUM_UNITS - 1: 0] (
-    .CLK     (sclk),
+    .CLK     (sclk_in),
     .LOAD    (delay_load_strobe[ 4*2*G_NUM_UNITS - 1: 0]),
     .DATAIN  (1'b0),
     .IDATAIN (din),
@@ -361,8 +297,8 @@ module ads5296x4_interface_v3 #(
   IDDRE1 #(
     .DDR_CLK_EDGE("SAME_EDGE_PIPELINED")
   ) data_iddr_inst [4*2*G_NUM_UNITS - 1 : 0] (
-    .C(sclk5),
-    .CB(~sclk5),
+    .C(sclk5_in),
+    .CB(~sclk5_in),
     .D(din_delayed),
     .R(1'b0),
     .Q1(din_rise),
@@ -375,8 +311,8 @@ module ads5296x4_interface_v3 #(
   wire fifo_re;
   
   ads5296_unit adc_unit_inst[4*G_NUM_UNITS - 1:0] (
-    .lclk(sclk5),
-    .clk_in(sclk),
+    .lclk(sclk5_in),
+    .clk_in(sclk_in),
     .din_rise(din_rise),
     .din_fall(din_fall),
     .bitslip(bitslip),
@@ -394,7 +330,7 @@ module ads5296x4_interface_v3 #(
   (* async_reg = "true" *) reg syncRR;
   reg fifo_we_reg;
   assign fifo_we = fifo_we_reg;
-  always @(posedge sclk) begin
+  always @(posedge sclk_in) begin
     syncR <= sync;
     syncRR <= syncR;
     if (rst) begin
@@ -411,7 +347,7 @@ module ads5296x4_interface_v3 #(
   assign fifo_re = fifo_re_sr[10];
   reg syncR_sclk;
   reg syncRR_sclk;
-  always @(posedge clk_in) begin
+  always @(posedge sclk2_in) begin
     syncR_sclk <= sync;
     syncRR_sclk <= syncR_sclk;
     if (rst) begin
