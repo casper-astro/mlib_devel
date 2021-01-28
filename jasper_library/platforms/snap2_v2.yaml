@@ -18,6 +18,11 @@ provides:
   - clk_250MHz90
   - clk_250MHz180
   - clk_250MHz270
+  - clk_200
+  # These phased 200 MHz clocks aren't really provided. Lies!
+  - clk_20090
+  - clk_200180
+  - clk_200270
 pins:
   sys_clk_p:
     loc: N13
