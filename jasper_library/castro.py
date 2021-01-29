@@ -29,7 +29,7 @@ class Castro(object):
         loads this class object from a yaml file and assert that it is of type Castro
         '''
         with open(filename, 'r') as fh:
-            c = yaml.load(fh)
+            c = yaml.load(fh, Loader=yaml.Loader)
             assert isinstance(c, Castro)
             return c
 
