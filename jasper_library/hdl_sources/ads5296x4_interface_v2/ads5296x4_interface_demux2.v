@@ -1,6 +1,7 @@
 module ads5296x4_interface_demux2 #(
     parameter G_NUM_UNITS = 4,
     parameter G_NUM_FCLKS = 4,
+    parameter G_FCLK_MASTER = 0,
     parameter G_IS_MASTER = 1'b1
  )(
     input rst,
@@ -113,13 +114,6 @@ module ads5296x4_interface_demux2 #(
     .O(lclk_int)
   );
 
-  /*
-  BUFG lclk_buf (
-    .I(lclk_int),
-    .O(lclk)
-  );
-  */
-
   IBUFDS din_buf[4*2*G_NUM_UNITS - 1:0] (
     .I(din_p),
     .IB(din_n),
@@ -127,9 +121,11 @@ module ads5296x4_interface_demux2 #(
   );
   
   BUFG fclk_buf (
-    .I(fclk_int),
+    .I(fclk_int[G_FCLK_MASTER]),
     .O(fclk)
   );
+
+  wire [3:0] fclk_reordered;
 
   // Generate clocks at rate
   // FCLK   (The rate at which samples are clocked into the FIFO)
@@ -275,17 +271,22 @@ module ads5296x4_interface_demux2 #(
   );
   
   
-  //TODO always @(posedge fclk_delayed) begin
-  always @(posedge fclk) begin
+  wire [3:0] fclk_ctr_clk;
+  assign fclk_ctr_clk[0] = G_FCLK_MASTER==0 ? fclk : fclk_int[0];
+  assign fclk_ctr_clk[1] = G_FCLK_MASTER==1 ? fclk : fclk_int[1];
+  assign fclk_ctr_clk[2] = G_FCLK_MASTER==2 ? fclk : fclk_int[2];
+  assign fclk_ctr_clk[3] = G_FCLK_MASTER==3 ? fclk : fclk_int[3];
+
+  always @(posedge fclk_ctr_clk[0]) begin
     fclk0_ctr <= fclk0_ctr + 1'b1;
   end
-  always @(posedge fclk_int[1]) begin
+  always @(posedge fclk_ctr_clk[1]) begin
     fclk1_ctr <= fclk1_ctr + 1'b1;
   end
-  always @(posedge fclk_int[2]) begin
+  always @(posedge fclk_ctr_clk[2]) begin
     fclk2_ctr <= fclk2_ctr + 1'b1;
   end
-  always @(posedge fclk_int[3]) begin
+  always @(posedge fclk_ctr_clk[3]) begin
     fclk3_ctr <= fclk3_ctr + 1'b1;
   end
   always @(posedge lclk_int) begin
@@ -318,7 +319,7 @@ module ads5296x4_interface_demux2 #(
     .bitslip(bitslip),
     .wr_en(fifo_we),
     .rst(rst),
-    .clk_out(clk_in),
+    .clk_out(sclk2_in),
     .rd_en(fifo_re),
     .dout(dout),
     .sync_out(sync_out_multi)

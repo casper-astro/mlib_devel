@@ -62,6 +62,7 @@ class ads5296x4(YellowBlock):
 
             if b == 0:
                 inst.add_parameter("G_NUM_FCLKS", "2")
+                inst.add_parameter("G_FCLK_MASTER", "0") # FCLK from chip A is on a clock-capable pin
                 inst.add_port('fclk_p', '%s_%d_fclk_p' % (self.fullname, b), width=2)
                 inst.add_port('fclk_n', '%s_%d_fclk_n' % (self.fullname, b), width=2)
                 top.add_port('%s_%d_fclk0_p' % (self.port_prefix, b), dir='in')
@@ -74,6 +75,7 @@ class ads5296x4(YellowBlock):
                 top.assign_signal('%s_%d_fclk_n[1]' % (self.fullname, b), '%s_%d_fclk2_n' % (self.port_prefix, b))
             elif b == 1:
                 inst.add_parameter("G_NUM_FCLKS", "3")
+                inst.add_parameter("G_FCLK_MASTER", "1") # FCLK from chip B is the first on a clock-capable pin
                 inst.add_port('fclk_p', '%s_%d_fclk_p' % (self.fullname, b), width=3)
                 inst.add_port('fclk_n', '%s_%d_fclk_n' % (self.fullname, b), width=3)
                 top.add_port('%s_%d_fclk0_p' % (self.port_prefix, b), dir='in')
