@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<fsm version="2">
-    <signal_name>sim:/udpdatastripper_tb/DSRBi/StateVariable</signal_name>
-    <values>
-        <value>initialisest</value>
-    </values>
-    <transitions/>
-</fsm>

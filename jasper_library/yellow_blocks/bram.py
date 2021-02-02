@@ -32,7 +32,7 @@ class bram(YellowBlock):
         if self.platform.mmbus_architecture == 'AXI4-Lite':
 
             top.add_axi4lite_interface(regname=self.unique_name,
-                                mode='rw', nbytes=self.depth*4,
+                                mode='rw', nbytes=self.depth*self.data_width//8,
                                 typecode=self.typecode,
                                 data_width=self.data_width) #width is in bits
         else:

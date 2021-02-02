@@ -352,6 +352,8 @@ class Toolflow(object):
         Constructs an associated VerilogModule instance ready to be
         modified.
         """
+        #TODO: These weird try/except clauses seem to do odd SKARAB-specific stuff
+        # and probably shouldn't be here. Why not in the SKARAB yellow block?
         try:
             # generate multiboot, golden or tooflow image based on yaml file
             self.hdl_filename = '%s/infrastructure/%s_parameters.vhd' % (os.getenv('HDL_ROOT'), self.plat.name)
@@ -359,7 +361,7 @@ class Toolflow(object):
             if os.path.isfile(self.hdl_filename):
                 self._gen_hdl_version(filename_hdl=self.hdl_filename)
         except KeyError:
-            s = ""
+            s = "" #?!
         # check to see if entity file exists. Some platforms may not use this. This function overwrites incorrectly
         # generated sysgen hdl files
         #if self.platform.conf['bit_reversal']==True:
@@ -371,7 +373,7 @@ class Toolflow(object):
                 self._gen_hdl_simulink(hdl_sysgen_filename=self.hdl_sysgen_filename)
         # just ignore if key is not present as only some platforms will have the key.
         except KeyError:
-            s = ""
+            s = "" #?!
         self.topfile = self.compile_dir+'/top.v'
         # delete top.v file if it exists, otherwise synthesis will fail
         if os.path.exists(self.topfile):
@@ -406,7 +408,7 @@ class Toolflow(object):
         self._extract_plat_info()
         self.periph_objs = []
         
-        for pk in list(self.peripherals.keys()):
+        for pk in list(sorted(self.peripherals.keys())):
             self.logger.debug('Generating Yellow Block: %s' % pk)
             self.periph_objs.append(yellow_block.YellowBlock.make_block(
                 self.peripherals[pk], self.plat))
@@ -463,7 +465,7 @@ class Toolflow(object):
             # Make an AXI4-Lite interconnect yellow block and let it modify top
             axi4lite_interconnect = yellow_block.YellowBlock.make_block(
                 {'tag': 'xps:axi4lite_interconnect', 'name': 'axi4lite_interconnect', 
-                'fullpath': list(self.user_modules.keys())[0] +'/axi4lite_interconnect'}, self.plat)
+                'fullpath': list(sorted(self.user_modules.keys()))[0] +'/axi4lite_interconnect'}, self.plat)
             axi4lite_interconnect.modify_top(self.top)
             self.sources += axi4lite_interconnect.sources
             self.ips += axi4lite_interconnect.ips
@@ -493,10 +495,10 @@ class Toolflow(object):
             # blocks have set up appropriate signals in top.v
             # (we can't add them here anyway, because we don't
             # know the port widths)
-            if 'clock' in list(usermodule.keys()):
+            if 'clock' in list(sorted(usermodule.keys())):
                 inst.add_port(name=usermodule['clock'], signal='user_clk',
                               parent_sig=False)
-            if 'clock_enable' in list(usermodule.keys()):
+            if 'clock_enable' in list(sorted(usermodule.keys())):
                 inst.add_port(name=usermodule['clock_enable'], signal='1\'b1',
                               parent_sig=False)
             for port in usermodule['ports']:
@@ -659,7 +661,7 @@ class Toolflow(object):
         for const in self.constraints:
             if isinstance(const, PortConstraint):
                 port_constraints += [const.portname]
-        for key in list(self.top.ports.keys()):
+        for key in list(sorted(self.top.ports.keys())):
             for port in self.top.ports[key]:
                 if port not in port_constraints:
                     self.logger.warning('Port %s (instantiated by %s) has no constraints!' % (port, key))
@@ -695,6 +697,7 @@ class Toolflow(object):
                     portname_indices=const.port_index,
                     symbolic_indices=const.iogroup_index,
                     io_standard=const.iostd,
+                    drive_strength=const.drive_strength,
                     location=const.loc
                     )]
             elif isinstance(const, ClockConstraint):
@@ -859,7 +862,7 @@ class Toolflow(object):
         """
         # Generate memory map xml file for each interface in memory_map
 
-        for interface in list(memory_map.keys()):
+        for interface in list(sorted(memory_map.keys())):
             xml_root = ET.Element('node')
             xml_root.set('id', interface)
             # fill xml node with slave info from memory map
@@ -872,15 +875,26 @@ class Toolflow(object):
                 node.set('mask', hex(0xFFFFFFFF))
                 # node.set('size', str(reg.nbytes))
                 node.set('permission', reg.mode)               
+                node.set('axi4lite_mode', reg.axi4lite_mode)
                 if reg.mode == 'r':
-                    # Basically a To Processor register (status)
-                    node.set('hw_permission', 'w')
-                    # Populate defaults if sys_block version registers
-                    if reg.name == 'sys_board_id' or reg.name == 'sys_rev' or reg.name == 'sys_rev_rcs': 
-                        node.set('hw_rst', str(reg.default_val))
+                    if reg.default_val is not None:
+                       # Populate defaults of readable registers which
+                       # Aren't driven by the fabric. I.e., static compile-time
+                       # registers.
+                       node.set('hw_rst', str(reg.default_val))
+                    else:
+                       # "Normal" read-only registers get written to from the
+                       # fabric every cycle.
+                       # To get to this clause it is important that simulink read-only
+                       # software registers aren't given a default value. (Which wouldn't
+                       # make sense)
+                       node.set('hw_permission', 'w')
                 else:
                     # Only for a From Processor register (control)
-                    node.set('hw_rst', str(reg.default_val))
+                    if reg.default_val is not None:
+                        node.set('hw_rst', str(reg.default_val))
+                    else:
+                        node.set('hw_rst', str(0))
                 # Best we can currently do for a description...? haha
                 node.set('description', str(interface + "_" + reg.name))
                 # set bram size and 
@@ -906,12 +920,15 @@ class Toolflow(object):
         """
         Generate xml interconnect file that represent top-level AXI4-Lite interconnect for Oxford's xml2vhdl.
         """
+        #TODO: Fix the above docstring to be more descriptive. And maybe give some hint about what the heck
+        # `memory_map` is supposed to be.
+
         # loop over interfaces, sort by address, make interconnect
         xml_root = ET.Element('node')
         xml_root.set('id', 'axi4lite_top')
         xml_root.set('address', hex(self.plat.mmbus_base_address))
         xml_root.set('hw_type', 'ic')
-        for interface in list(memory_map.keys()):
+        for interface in list(sorted(memory_map.keys())):
             # add a child to parent node
             node = ET.SubElement(xml_root, 'node')
             node.set('id', interface)
@@ -981,6 +998,9 @@ class Toolflow(object):
             the compile directory
         :type filename_bin: str
         """
+        # TODO: this is most certainly part of the backend, not the middleware, since it is only applicable
+        # to certain Xilinx versions. It should also come with a HUGE warning. If this code gets called
+        # and it shouldn't have been, then it is SILENTLY BREAKING YOUR DESIGN.
         stringToMatch_ver = '2018.2'
         stringToMatchS = '_xldpram'
         stringToMatchA = 'latency_test: if (latency > 6) generate'
@@ -1028,6 +1048,7 @@ class Toolflow(object):
             with open(hdl_sysgen_filename, 'w') as fh2:
                 fh2.writelines(lines)
             fh2.close()
+            self.logger("CRITICAL WARNING: 'correcting' bad sysgen code. This is an awful lot of trust to put in the toolflow")
             self.logger.debug('File written. Vivado version is 2018.2: %s. Dual Port RAM exists: %s'
                              % (ver_exists, dpram_exists))
         else:
@@ -1187,6 +1208,7 @@ class ToolflowBackend(object):
             numindices = len(const.symbolic_indices)
             const.location = [pins[idx].loc for idx in range(numindices)]
             const.io_standard = [pins[idx].iostd for idx in range(numindices)]
+            const.drive_strength = [pins[idx].drive_strength for idx in range(numindices)]
             const.is_vector = const.portname_indices != []
 
         self.gen_constraint_file(
@@ -2042,6 +2064,16 @@ proc puts_red {s} {
                         index=const.portname_indices[idx]
                         if const.portname_indices else None)
 
+            for idx, p in enumerate(const.symbolic_indices):
+                self.logger.debug('Getting drive_strength for port index %d' % idx)
+                drive_strength = const.drive_strength[idx]
+                if drive_strength is not None:
+                    self.logger.debug('DRIVE_STRENGTH constraint found: %s' % drive_strength)
+                    user_const += self.format_const(
+                        'DRIVE', drive_strength, const.portname,
+                        index=const.portname_indices[idx]
+                        if const.portname_indices else None)
+
         if isinstance(const, castro.ClkConstraint):
             self.logger.debug('New Clock constraint found')
             user_const += self.format_clock_const(const)
@@ -2198,6 +2230,21 @@ proc puts_red {s} {
                 if val is not None:
                     for v in val:
                         self.add_tcl_cmd(v, stage=key)
+
+    def gen_yellowblock_custom_hdl(self):
+        """
+        Create each yellowblock's custom hdl files and add them to the projects sources
+        """
+        self.logger.info('Generating yellow block custom hdl files')
+        for obj in self.periph_objs:
+            c = obj.gen_custom_hdl()
+            for key, val in c.items():
+                # create file and write the source string to it
+                f = open('%s/%s' %(self.compile_dir, key),"w")
+                f.write(val)
+                f.close()
+                # add the tcl command to add the source to the project
+                self.add_source('%s/%s' %(self.compile_dir, key), self.plat)
 
     def gen_constraint_file(self, constraints):
         """
