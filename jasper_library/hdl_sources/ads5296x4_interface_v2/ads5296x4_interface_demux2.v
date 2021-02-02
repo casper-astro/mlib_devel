@@ -25,6 +25,9 @@ module ads5296x4_interface_demux2 #(
     output sclk_out,
     output sclk5_out,
     output sync_out,
+    
+    input  fclk_in,
+    output fclk_out,
 
     // Software register interface
 
@@ -56,6 +59,8 @@ module ads5296x4_interface_demux2 #(
   wire [31:0] fclk_err_cnt;
   wire iserdes_rst_wb;
   wire mmcm_rst;
+  wire mmcm_locked;
+  wire mmcm_clksel;
   reg [31:0] fclk0_ctr;
   reg [31:0] fclk1_ctr;
   reg [31:0] fclk2_ctr;
@@ -65,6 +70,7 @@ module ads5296x4_interface_demux2 #(
   wire wb_user_clk;
   wb_ads5296_attach #( 
     .G_NUM_UNITS(G_NUM_UNITS),
+    .G_IS_MASTER(G_IS_MASTER),
     .G_NUM_FCLKS(1) // Only bother controlling 1 fclk
   ) wb_ads5296_attach_inst (
     .wb_clk_i(wb_clk_i),
@@ -78,7 +84,7 @@ module ads5296x4_interface_demux2 #(
     .wb_we_i(wb_we_i),
     .wb_cyc_i(wb_cyc_i),
     .wb_stb_i(wb_stb_i),
-    .user_clk(wb_user_clk),
+    //.user_clk(wb_user_clk),
     .lclk_cnt(lclk_ctr),
     .fclk0_cnt(fclk0_ctr),
     .fclk1_cnt(fclk1_ctr),
@@ -91,7 +97,9 @@ module ads5296x4_interface_demux2 #(
     .delay_en_vtc(delay_en_vtc),
     .delay_val(delay_val),
     .iserdes_rst(iserdes_rst_wb),
-    .mmcm_rst(mmcm_rst)
+    .mmcm_rst(mmcm_rst),
+    .mmcm_locked(mmcm_locked),
+    .mmcm_clksel(mmcm_clksel)
   );
 
   // Buffer the differential inputs
@@ -114,17 +122,25 @@ module ads5296x4_interface_demux2 #(
     .O(lclk_int)
   );
 
+  BUFG lclk_buf (
+    .I(lclk_int),
+    .O(lclk)
+  );
+
   IBUFDS din_buf[4*2*G_NUM_UNITS - 1:0] (
     .I(din_p),
     .IB(din_n),
     .O(din)
   );
   
+ // assign fclk_out = fclk_int[G_FCLK_MASTER];
+  //assign fclk = fclk_in;
   BUFG fclk_buf (
     .I(fclk_int[G_FCLK_MASTER]),
     .O(fclk)
+    //.O(fclk_out)
   );
-
+  assign fclk_out = fclk;
   wire [3:0] fclk_reordered;
 
   // Generate clocks at rate
@@ -147,6 +163,7 @@ module ads5296x4_interface_demux2 #(
     wire sclk5;
   generate
   if (G_IS_MASTER) begin
+    /*
     reg mmcm_rstR;
     reg mmcm_rstRR;
     wire mcmm_rst_strobe = mmcm_rstR & ~mmcm_rstRR;
@@ -155,8 +172,10 @@ module ads5296x4_interface_demux2 #(
       mmcm_rstR <= mmcm_rst;
       mmcm_rstRR <= mmcm_rstR;
     end
+    */
     
-    MMCME3_BASE #(
+    //MMCME3_BASE #(
+    MMCME3_ADV #(
       .BANDWIDTH("OPTIMIZED"),
       .DIVCLK_DIVIDE(2),
       .CLKFBOUT_MULT_F(20.000),
@@ -166,8 +185,10 @@ module ads5296x4_interface_demux2 #(
       .CLKOUT2_DIVIDE(2),
       .CLKIN1_PERIOD(10.000)
     ) mmcm_inst (
-      .CLKIN1(fclk),   // 2.5 fs
-      .RST(mcmm_rst_strobe),
+      .CLKIN1(fclk_in),   // 2.5 fs
+      .CLKIN2(fclk),
+      .CLKINSEL(mmcm_clksel), // mmcm_clksel=0 => use CLK2
+      .RST(mmcm_rst),
       // Use inverted clocks so all clocks are in phase,
       // But sclk5 is out of phase with data transitions
       //.CLKOUT0B(sclk_mmcm),  // fs
@@ -179,7 +200,7 @@ module ads5296x4_interface_demux2 #(
       .CLKOUT2(sclk5_mmcm),
       .CLKFBOUT(sclk_fb_mmcm),
       .CLKFBIN(sclk_fb),
-      .LOCKED(),
+      .LOCKED(mmcm_locked),
       .PWRDWN(1'b0)
     );
 
@@ -254,7 +275,7 @@ module ads5296x4_interface_demux2 #(
     .SIM_DEVICE("ULTRASCALE"),
     .REFCLK_FREQUENCY(200.0)
   ) iodelay_in [ 4*2*G_NUM_UNITS - 1: 0] (
-    .CLK     (sclk_in),
+    .CLK     (sclk_in), // Not using CLKDIV in an ISERDES, so what are the rules here?
     .LOAD    (delay_load_strobe[ 4*2*G_NUM_UNITS - 1: 0]),
     .DATAIN  (1'b0),
     .IDATAIN (din),
@@ -270,7 +291,7 @@ module ads5296x4_interface_demux2 #(
     .CASC_RETURN()
   );
   
-  
+  // Use the buffered FCLK signal for the counter driver. This just seems like good form.
   wire [3:0] fclk_ctr_clk;
   assign fclk_ctr_clk[0] = G_FCLK_MASTER==0 ? fclk : fclk_int[0];
   assign fclk_ctr_clk[1] = G_FCLK_MASTER==1 ? fclk : fclk_int[1];
@@ -289,7 +310,7 @@ module ads5296x4_interface_demux2 #(
   always @(posedge fclk_ctr_clk[3]) begin
     fclk3_ctr <= fclk3_ctr + 1'b1;
   end
-  always @(posedge lclk_int) begin
+  always @(posedge lclk) begin
     lclk_ctr <= lclk_ctr + 1'b1;
   end
 
@@ -316,7 +337,7 @@ module ads5296x4_interface_demux2 #(
     .clk_in(sclk_in),
     .din_rise(din_rise),
     .din_fall(din_fall),
-    .bitslip(bitslip),
+   // .bitslip(bitslip),
     .wr_en(fifo_we),
     .rst(rst),
     .clk_out(sclk2_in),

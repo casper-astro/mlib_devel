@@ -14,7 +14,6 @@ class ads5296x4(YellowBlock):
     lanes_per_unit = 8
     channels_per_unit = 4
     lanes_per_channel = lanes_per_unit // channels_per_unit
-    clock_source = 1
     # version 1: Pinout "Alt2 pinout" (First boards manufactured)
     # version 2: Pinout "Alt3 pinout"
     version = 1 # May be overwritten by block attributes
@@ -29,18 +28,33 @@ class ads5296x4(YellowBlock):
         self.add_source('ads5296x4_interface_v2/data_fifo.xci')
         self.add_source('spi_master/spi_master.v')
         self.add_source('spi_master/wb_spi_master.v')
-        self.provides = ['adc%d_clk' % self.port, 'adc%d_clk90' % self.port, 'adc%d_clk180' % self.port, 'adc%d_clk270' % self.port]
+        if self.port == self.clockport:
+            self.provides = [
+                             'adc%d_clk' % self.port,
+                             'adc%d_clk90' % self.port,
+                             'adc%d_clk180' % self.port,
+                             'adc%d_clk270' % self.port,
+                             'ads5296_%d_sclk' % self.port,
+                             'ads5296_%d_sclk2' % self.port,
+                             'ads5296_%d_sclk5' % self.port,
+                            ]
+        self.requires = [
+                         'ads5296_%d_sclk' % self.clockport,
+                         'ads5296_%d_sclk2' % self.clockport,
+                         'ads5296_%d_sclk5' % self.clockport,
+                        ]
 
         self.port_prefix = self.blocktype + 'fmc%d' % self.port
 
     def gen_children(self):
-        # A register to control the which ADC on this FMC is providing the clock
-        swreg = YellowBlock.make_block({'tag':'xps:sw_reg_sync',
-                                        'fullpath':'%s/ads5296_clksel%d'%(self.name,self.port),
-                                        'io_dir':'From Processor',
-                                        'name':'ads5296_clksel%d'%self.port},
-                                       self.platform)
-        return [swreg]
+        ## A register to control the which ADC on this FMC is providing the clock
+        #swreg = YellowBlock.make_block({'tag':'xps:sw_reg_sync',
+        #                                'fullpath':'%s/ads5296_clksel%d'%(self.name,self.port),
+        #                                'io_dir':'From Processor',
+        #                                'name':'ads5296_clksel%d'%self.port},
+        #                               self.platform)
+        #return [swreg]
+        return []
 
     def modify_top(self,top):
         # Connect up the reset register
@@ -51,20 +65,32 @@ class ads5296x4(YellowBlock):
             # Delare all boards master, so that they all instantiate
             # Their own internal clock generators.
             # We will decide which of these to actually use at runtime
-            inst.add_parameter("G_IS_MASTER", "1'b1") 
-            inst.add_port('sclk_out', 'adc%d_sclk_%d' % (self.port, b))
-            inst.add_port('sclk2_out', 'adc%d_sclk2_%d' % (self.port, b))
-            inst.add_port('sclk5_out', 'adc%d_sclk5_%d' % (self.port, b))
             inst.add_port('rst', '%s_adc_rst' % self.fullname)
             inst.add_port('sync', '%s_adc_sync' % self.fullname)
             inst.add_port('lclk_p', '%s_%d_lclk_p' % (self.port_prefix, b), parent_port=True, dir='in')
             inst.add_port('lclk_n', '%s_%d_lclk_n' % (self.port_prefix, b), parent_port=True, dir='in')
 
             if b == 0:
+                # If we're clocking from this FMC, then board 0 is the master.
+                # If not, we derive our other clocks from elsewhere (hopefully from
+                # a block configured to provide them!
+                if self.port == self.clockport:
+                    inst.add_parameter("G_IS_MASTER", "1'b1") 
+                else:
+                    inst.add_parameter("G_IS_MASTER", "1'b0") 
+                # If G_IS_MASTER is 0, these clocks are tied to zero
+                inst.add_port('sclk_out', 'ads5296_%d_sclk' % (self.port))
+                inst.add_port('sclk2_out', 'ads5296_%d_sclk2' % (self.port))
+                inst.add_port('sclk5_out', 'ads5296_%d_sclk5' % (self.port))
                 inst.add_parameter("G_NUM_FCLKS", "2")
                 inst.add_parameter("G_FCLK_MASTER", "0") # FCLK from chip A is on a clock-capable pin
                 inst.add_port('fclk_p', '%s_%d_fclk_p' % (self.fullname, b), width=2)
                 inst.add_port('fclk_n', '%s_%d_fclk_n' % (self.fullname, b), width=2)
+                if self.board_count == 2:
+                    inst.add_port('fclk_in', 'adc%d_fclk_1' % self.port)
+                else:
+                    inst.add_port('fclk_in', '1\'b0')
+                inst.add_port('fclk_out', '')
                 top.add_port('%s_%d_fclk0_p' % (self.port_prefix, b), dir='in')
                 top.add_port('%s_%d_fclk0_n' % (self.port_prefix, b), dir='in')
                 top.assign_signal('%s_%d_fclk_p[0]' % (self.fullname, b), '%s_%d_fclk0_p' % (self.port_prefix, b))
@@ -74,10 +100,16 @@ class ads5296x4(YellowBlock):
                 top.assign_signal('%s_%d_fclk_p[1]' % (self.fullname, b), '%s_%d_fclk2_p' % (self.port_prefix, b))
                 top.assign_signal('%s_%d_fclk_n[1]' % (self.fullname, b), '%s_%d_fclk2_n' % (self.port_prefix, b))
             elif b == 1:
+                inst.add_parameter("G_IS_MASTER", "1'b0") 
                 inst.add_parameter("G_NUM_FCLKS", "3")
                 inst.add_parameter("G_FCLK_MASTER", "1") # FCLK from chip B is the first on a clock-capable pin
+                inst.add_port('sclk_out', '')
+                inst.add_port('sclk2_out', '')
+                inst.add_port('sclk5_out', '')
                 inst.add_port('fclk_p', '%s_%d_fclk_p' % (self.fullname, b), width=3)
                 inst.add_port('fclk_n', '%s_%d_fclk_n' % (self.fullname, b), width=3)
+                inst.add_port('fclk_out', 'adc%d_fclk_1' % self.port)
+                inst.add_port('fclk_in', '')
                 top.add_port('%s_%d_fclk0_p' % (self.port_prefix, b), dir='in')
                 top.add_port('%s_%d_fclk0_n' % (self.port_prefix, b), dir='in')
                 top.assign_signal('%s_%d_fclk_p[0]' % (self.fullname, b), '%s_%d_fclk0_p' % (self.port_prefix, b))
@@ -91,11 +123,12 @@ class ads5296x4(YellowBlock):
                 top.assign_signal('%s_%d_fclk_p[2]' % (self.fullname, b), '%s_%d_fclk2_p' % (self.port_prefix, b))
                 top.assign_signal('%s_%d_fclk_n[2]' % (self.fullname, b), '%s_%d_fclk2_n' % (self.port_prefix, b))
             inst.add_port('sclk2_in', 'user_clk')
-            inst.add_port('sclk_in', 'adc%d_sclk2' % self.port)
-            inst.add_port('sclk5_in', 'adc%d_sclk5' % self.port)
+            inst.add_port('sclk_in', 'ads5296_%d_sclk' % (self.clockport))
+            inst.add_port('sclk5_in', 'ads5296_%d_sclk5' % (self.clockport))
             inst.add_port('din_p', '%s_%d_din_p' % (self.port_prefix, b), parent_port=True, width=self.num_units_per_board*self.lanes_per_unit, dir='in')
             inst.add_port('din_n', '%s_%d_din_n' % (self.port_prefix, b), parent_port=True, width=self.num_units_per_board*self.lanes_per_unit, dir='in')
             inst.add_port('dout', '%s_%d_dout' % (self.fullname, b), width=self.adc_resolution*self.num_units_per_board*self.channels_per_unit)
+
             # Always derive sync out from first board
             if b == 0:
                 inst.add_port('sync_out', '%s_adc_sync_out' % self.fullname)
@@ -113,30 +146,10 @@ class ads5296x4(YellowBlock):
                         '%s_%d_dout[%d-1:%d]' % (self.fullname, b, (self.channels_per_unit*xn+c+1)*self.adc_resolution, (self.channels_per_unit*xn + c)*self.adc_resolution),
                     )
         
-        if self.board_count == 2:
-            # Instantiate clock mux (Xilinx BUFGMUX primitive)
-            clkmux = top.get_instance(entity="BUFGMUX", name="%s_sclk_mux" % self.fullname)
-            clkmux.add_port('I0', 'adc%d_sclk_0' % self.port)
-            clkmux.add_port('I1', 'adc%d_sclk_1' % self.port)
-            clkmux.add_port('O', 'adc%d_sclk' % self.port)
-            clkmux.add_port('S', '%s_ads5296_clksel%d_user_data_out[0]' % (self.name, self.port), parent_sig=False) # Provided by a child swreg
-
-            clkmux = top.get_instance(entity="BUFGMUX", name="%s_sclk2_mux" % self.fullname)
-            clkmux.add_port('I0', 'adc%d_sclk2_0' % self.port)
-            clkmux.add_port('I1', 'adc%d_sclk2_1' % self.port)
-            clkmux.add_port('O', 'adc%d_sclk2' % self.port)
-            clkmux.add_port('S', '%s_ads5296_clksel%d_user_data_out[0]' % (self.name, self.port), parent_sig=False) # Provided by a child swreg
-            clkmux = top.get_instance(entity="BUFGMUX", name="%s_sclk5_mux" % self.fullname)
-            clkmux.add_port('I0', 'adc%d_sclk5_0' % self.port)
-            clkmux.add_port('I1', 'adc%d_sclk5_1' % self.port)
-            clkmux.add_port('O', 'adc%d_sclk5' % self.port)
-            clkmux.add_port('S', '%s_ads5296_clksel%d_user_data_out[0]' % (self.name, self.port), parent_sig=False) # Provided by a child swreg
-            top.add_signal('adc%d_clk' % self.port)
-            top.assign_signal('adc%d_clk' % self.port, 'adc%d_sclk' % self.port)
-        else:
-            # Unless there are two boards, use clock 0
-            top.add_signal('adc%d_clk' % self.port)
-            top.assign_signal('adc%d_clk' % self.port, 'adc%d_sclk_0' % self.port)
+        # The master FPGA clock (which will get turned into user_clk if the Simulink
+        # clock source is set to be this FMC port) is adcX_sclk2
+        top.add_signal('adc%d_clk' % self.port)
+        top.assign_signal('adc%d_clk' % self.port, 'adc%d_sclk2' % self.port)
 
         # The simulink yellow block provides a simulink-input to drive sync / reset. These can be passed straight
         # to top-level ports. Let the synthesizer infer buffers.
@@ -356,14 +369,38 @@ class ads5296x4(YellowBlock):
         # TODO: cons.append(PortConstraint('adc_pd', 'adc_pd', port_index=list(range(3)), iogroup_index=list(range(3))))
         
         # clock constraint with variable period
-        clkconst0 = ClockConstraint('%s_0_fclk_p' % self.port_prefix, name='adc_fclk%d_0' % self.port, freq=self.line_clock_freq_mhz / 5)
-        cons.append(RawConstraint('set_clock_groups -name async_adc_%d_0 -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks sys_clk0_dcm]' % (self.port, clkconst0.name)))
-        cons.append(clkconst0)
+        clkconsts0 = []
+        # Board 0 FCLK inputs
+        clkconsts0 += [ClockConstraint('%s_0_fclk0_p' % self.port_prefix, name='adc_fclk%d_0_0' % self.port, freq=self.line_clock_freq_mhz / 5)]
+        clkconsts0 += [ClockConstraint('%s_0_fclk2_p' % self.port_prefix, name='adc_fclk%d_0_2' % self.port, freq=self.line_clock_freq_mhz / 5)]
+        # All these clocks are async with sys_clk
+        for clkconst0 in clkconsts0:
+            cons.append(clkconst0)
+            cons.append(RawConstraint('set_clock_groups -name async_%s -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks sys_clk0_dcm]' % (clkconst0.name, clkconst0.name)))
+
         if self.board_count > 1:
-            clkconst1 = ClockConstraint('%s_1_fclk_p' % self.port_prefix, name='adc_fclk%d_1' % self.port, freq=self.line_clock_freq_mhz / 5)
-            cons.append(RawConstraint('set_clock_groups -name async_adc_%d_1 -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks sys_clk0_dcm]' % (self.port, clkconst1.name)))
-            cons.append(clkconst1)
-            cons.append(RawConstraint('set_clock_groups -name async_adc_lclks -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks %s]' % (clkconst0.name, clkconst1.name)))
+            # Board 1 FCLK inputs
+            clkconsts1 = []
+            clkconsts1 += [ClockConstraint('%s_1_fclk0_p' % self.port_prefix, name='adc_fclk%d_1_0' % self.port, freq=self.line_clock_freq_mhz / 5)]
+            clkconsts1 += [ClockConstraint('%s_1_fclk1_p' % self.port_prefix, name='adc_fclk%d_1_1' % self.port, freq=self.line_clock_freq_mhz / 5)]
+            clkconsts1 += [ClockConstraint('%s_1_fclk2_p' % self.port_prefix, name='adc_fclk%d_1_2' % self.port, freq=self.line_clock_freq_mhz / 5)]
+            # Make async with sys_clk
+            for clkconst1 in clkconsts1:
+                cons.append(clkconst1)
+                cons.append(RawConstraint('set_clock_groups -name async_%s -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks sys_clk0_dcm]' % (clkconst1.name, clkconst1.name)))
+            # Make clocks between boards async
+            for clkconst1 in clkconsts1:
+                for clkconst0 in clkconsts0:
+                    cons.append(RawConstraint('set_clock_groups -name async_%s_%s -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks %s]' % (clkconst0.name, clkconst1.name, clkconst0.name, clkconst1.name)))
+
+        # CDC crosses
+        # TODO: make these a scoped xdc file rather than adding here
+        for b in range(self.board_count):
+            cons.append(RawConstraint("set_false_path -from [get_pins {%s_%d/wb_ads5296_attach_inst/bitslip_reg_cdc_reg[*]/C}] -to [get_pins {%s_%d/adc_unit_inst[*]/bitslip_unstable_reg/D}]" % (self.fullname, b, self.fullname, b)))
+
+        if self.board_count == 2:
+            cons.append(RawConstraint("set_case_analysis 0 [get_pins %s_0/mmcm_inst/CLKINSEL]" % self.fullname))
+            cons.append(RawConstraint("set_property CLOCK_DEDICATED_ROUTE BACKBONE [get_nets %s_0/fclk_buf_n_0]" % self.fullname))
 
         # TODO set the skew of board 1 relative to board 0
         # delays in ns
