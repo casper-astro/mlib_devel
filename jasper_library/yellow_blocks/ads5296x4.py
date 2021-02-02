@@ -149,7 +149,7 @@ class ads5296x4(YellowBlock):
         # The master FPGA clock (which will get turned into user_clk if the Simulink
         # clock source is set to be this FMC port) is adcX_sclk2
         top.add_signal('adc%d_clk' % self.port)
-        top.assign_signal('adc%d_clk' % self.port, 'adc%d_sclk2' % self.port)
+        top.assign_signal('adc%d_clk' % self.port, 'ads5296_%d_sclk2' % self.port)
 
         # The simulink yellow block provides a simulink-input to drive sync / reset. These can be passed straight
         # to top-level ports. Let the synthesizer infer buffers.
