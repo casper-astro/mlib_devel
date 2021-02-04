@@ -1,8 +1,9 @@
 name: zcu111
 manufacturer: Xilinx
 fpga: xczu28dr-ffvg1517-2-e
-config_voltage: 1.8
-cfgbvs: GND
+family: zynq-ultrascaleplus-rfsoc
+config_voltage: 1.8 # not used?
+cfgbvs: GND         # not used?
 backend_target: vivado
 mmbus_architecture: AXI4-Lite
 mmbus_base_address: 0xA0000000
@@ -10,8 +11,22 @@ mmbus_base_address: 0xA0000000
 mmbus_address_alignment: 4
 sources: []
 constraints: []
+
+rfdc:
+  gen: 2
+
+onehundredgbe:
+  # does the freq matter much?
+  refclk_freq_str: "156.25"
+  cmac_loc:
+    - CMACE4_X0Y1
+
 provides:
   - sys_clk
+  - axil_clk # keep this? come from pl_clk? or use clk100?
+# TODO: does name matter? Jack's 100G block should list what the provides therefore this matters
+  - sfp4x25
+
 pins:
   clk_100_p:
     iostd: LVDS
@@ -19,6 +34,33 @@ pins:
   clk_100_n:
     iostd: LVDS
     loc: AN15
+
+# RFDC clocking
+  # `SYSREF_P/N_228` on bank 228
+  # constraints determined by rfdc ip, iostandard and loc not set by user
+  sysref_p:
+    loc: U5
+  sysref_n:
+    loc: U4
+
+  # SYSREF_FPGA_C_N/P on bank 64
+  # TODO: add DIFF_TERM_ADV TERM_100
+  pl_sysref_p:
+    iostd: LVDS
+    loc: AK17
+  pl_sysref_n:
+    iostd: LVDS
+    loc: AK16
+
+  #`FPGA_REFCLK_OUT_C_N/P` on bank 64   
+  # TODO: add DIFF_TERM_ADV TERM_100
+  pl_clk_p:
+    iostd: LVDS
+    loc: AL15
+  pl_clk_n:
+    iostd: LVDS
+    loc: AL16
+ 
   led:
     iostd: LVCMOS18
     loc:
@@ -31,6 +73,36 @@ pins:
        - AN17
        - AV15
 
-
-
-
+# 100 GbE
+  # Programmable MGT SI570 chip GTY bank 129
+  mgt_ref_clk_p:
+    loc:
+      - V31
+  mgt_ref_clk_n:
+    loc:
+      - V32
+  # SFP connected to MGT bank 130
+  qsfp_mgt_tx_p: 
+    loc:
+      - Y35
+      - V35
+      - T35
+      - R33
+  qsfp_mgt_tx_n:
+    loc:
+      - Y36
+      - V36
+      - T36
+      - R34
+  qsfp_mgt_rx_p:
+    loc:
+      - AA38
+      - W38
+      - U38
+      - R38
+  qsfp_mgt_rx_n:
+    loc:
+      - AA39
+      - W39
+      - U39
+      - R39
