@@ -70,6 +70,8 @@ class skarab_adc4x3g_14_byp(YellowBlock):
         inst.add_port('ADC_TRIGGER_OUT',          signal='%s_adc_trigger_out' % self.fullname,             dir='out')
         inst.add_port('PLL_SYNC_START_IN',        signal='%s_pll_sync_start_in' % self.fullname,           dir='in' ) 
         inst.add_port('PLL_SYNC_COMPLETE_OUT',    signal='%s_pll_sync_complete_out' % self.fullname,       dir='out')
+        inst.add_port('ADC_DATA_CLOCK_OUT',       signal='adc_clk',                  dir='out') 
+        inst.add_port('ADC_DATA_RESET_OUT',       signal='adc_rst',                  dir='out')        
         
         inst.add_port('MEZZ_ID', 'mez%s_id' % self.mez, dir='out', width=3)
         inst.add_port('MEZZ_PRESENT', 'mez%s_present' % self.mez, dir='out')

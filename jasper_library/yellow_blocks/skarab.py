@@ -42,7 +42,10 @@ class skarab(YellowBlock):
         inst.add_parameter('MULTIPLY', self.clkparams[0])
         inst.add_parameter('DIVIDE',   self.clkparams[1])
         inst.add_parameter('DIVCLK',   self.clkparams[2])
-
+        
+        inst.add_port('adc_clk_i',        'adc_clk',          dir='in')
+        inst.add_port('adc_rst_i',        'adc_rst',          dir='in')
+        inst.add_port('adc_clk_sel_i',    'adc_clk_sel',      dir='in')        
         inst.add_port('user_clk_o',       'sys_clk',          dir='out')
         inst.add_port('user_rst_o',       'sys_rst',          dir='out')
         inst.add_port('hmc_clk_o',        'hmc_clk',          dir='out')

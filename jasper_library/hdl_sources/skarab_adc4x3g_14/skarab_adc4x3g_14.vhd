@@ -67,6 +67,8 @@ entity SKARAB_ADC4x3G_14 is
         ADC3_DATA_VAL_OUT : out std_logic;
         ADC3_DATA_OUT : out std_logic_vector(127 downto 0);
 
+        ADC_DATA_CLOCK_OUT : out std_logic;
+        ADC_DATA_RESET_OUT : out std_logic;
         ADC_SYNC_START_IN : in std_logic;
         ADC_SYNC_COMPLETE_OUT : out std_logic;
         ADC_TRIGGER_OUT : out std_logic;
@@ -74,7 +76,8 @@ entity SKARAB_ADC4x3G_14 is
         PLL_SYNC_COMPLETE_OUT : out std_logic;
         
         MEZZ_ID : out std_logic_vector(2 downto 0);
-        MEZZ_PRESENT : out std_logic;        
+        MEZZ_PRESENT : out std_logic; 
+        
         
         AUX_CLK_P : in std_logic;
         AUX_CLK_N : in std_logic;
@@ -192,6 +195,12 @@ begin
 	
 	--Fault line is now the ADC trigger line
 	ADC_TRIGGER_OUT <= not(MEZZANINE_FAULT_N);
+	
+	--Route out the ADC Data clock (equivalent to the adc_clk)
+	ADC_DATA_CLOCK_OUT <= '0'; --FT please assign your clock here
+	
+	--Route out the ADC Data clock reset (equivalent to adc_rst)
+	ADC_DATA_RESET_OUT <= '0'; --FT please assign your reset here (active high)
 	
 ---------------------------------------------------------------------------------------------------------
 -- CORRECT FOR SWAP IN YAML FILE, SAME FOR ALL MEZZANINE SITES

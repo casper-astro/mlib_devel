@@ -15,6 +15,9 @@ entity skarab_infr is
         DIVIDE   : REAL    := 6.0;
         DIVCLK   : INTEGER := 1);
     port(
+        adc_clk_sel_i   : in std_logic;
+        adc_clk_i       : in std_logic;
+        adc_rst_i       : in std_logic;    
         user_clk_o      : out std_logic;
         user_rst_o      : out std_logic;
         board_clk_o     : out std_logic;
@@ -506,6 +509,7 @@ architecture arch_skarab_infr of skarab_infr is
     
     signal sys_mmcm_locked : std_logic;
     signal user_mmcm_locked : std_logic;
+    signal user_mmcm_locked_1 : std_logic; 
 
     --Reset Synchroniser and user reset signals
     attribute ASYNC_REG : string;
@@ -891,6 +895,9 @@ architecture arch_skarab_infr of skarab_infr is
     attribute ASYNC_REG of sGmiiResetDoneD1: signal is "TRUE";
     signal sGmiiResetDone : std_logic;
     
+    --ADC Signals
+    signal adc_select : std_logic;
+    
                      
 begin
     --Mezzanine 3 ID and Present (this should be part of the 40GbE yellow block, but is part of the BSP for now)
@@ -985,17 +992,26 @@ begin
     port map (
         CLKOUT0   => user_clk_mmcm,
         CLKFBOUT  => user_clk_mmcm_fb,  -- Feedback clock output
-        LOCKED    => user_mmcm_locked,
+        LOCKED    => user_mmcm_locked_1,
         CLKIN1    => refclk_0,          -- Main clock input
         PWRDWN    => '0',
         RST       => not sys_mmcm_locked,   --fpga_reset,
         CLKFBIN   => user_clk_mmcm_fb   -- Feedback clock input
     );
-
-    user_clk_BUFG_inst : BUFG
+    
+    --NB: the user will need to make sure the ADC yellow block and module is present in order for the clock to be generated
+    --correctly.
+    -- if the user selects the adc_clk via the SKARAB platform yellow block then adc_clk_sel_i will be set high else low
+    adc_select <= '0' when (adc_clk_sel_i /= '1') else
+                  '1';    
+    
+    -- If any of the ADC modules are pesent then we must use the adc_clk else we must use the user_clk_mmcm
+    user_clk_BUFG_inst : BUFGMUX
     port map (
-        I => user_clk_mmcm, -- Clock input
-        O => user_clk       -- Clock output
+        S => adc_select,     -- determines which clock to select
+        I0 => user_clk_mmcm, -- Clock input 1
+        I1 => adc_clk_i,     -- Clock input 2
+        O => user_clk        -- Clock output
     );
 
     --signal qsfp_gtrefclk : std_logic;
@@ -1006,9 +1022,16 @@ begin
         I => FPGA_EMCCLK2, -- Clock input
         O => emcclk2       -- Clock output
     );
+    
 
-
-
+    -- NB: if the user selects the adc_clk via the SKARAB platform yellow block then user_mmcm_locked will be driven by the adc_rst_i signal
+    -- and not the user_mmcm_locked_1 signal. The user needs to ensure that the SKARAB ADC yellow block and module is added in order to drive this signal 
+    --correctly
+    user_mmcm_locked <= user_mmcm_locked_1 when (adc_clk_sel_i /= '1') else
+                        not(adc_rst_i); 
+                        
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(0) <= ((not MEZZANINE_0_PRESENT_N) and MEZZ0_PRESENT);
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(3 downto 1) <= MEZZ0_ID;                        
     --user_clk <= sys_clk;
 
     --sys_clk    <= refclk_0;
