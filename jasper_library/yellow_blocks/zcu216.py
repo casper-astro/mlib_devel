@@ -20,6 +20,7 @@ class zcu216(YellowBlock):
 
         # TODO: Need to add this? Is it a bug that `axi4lite_interconnect.py` does not make a `requires` call
         self.provides.append('axil_clk')  # zcu216 infrastructure
+        self.provides.append('axil_rst_n')  # zcu216 infrastructure
 
         # for the rfsocs it seems appropriate to use the requires/provides for `sysref` and `pl_sysref` for MTS?
         self.provides.append('pl_sysref') # zcu216 infrastructure provides so rfdc can require
@@ -57,45 +58,45 @@ class zcu216(YellowBlock):
         mpsoc_inst = top.get_instance('mpsoc', 'mpsoc_inst')
         # HPM GP0
         mpsoc_inst.add_port('maxihpm0_fpd_aclk', 'pl_clk0') #'maxihpm0_fpd_aclk')# // input wire maxihpm0_fpd_aclk
-        mpsoc_inst.add_port('maxigp0_awid',    'maxigp0_awid',     width=16)           # // output wire [15 : 0] maxigp0_awid
-        mpsoc_inst.add_port('maxigp0_awaddr',  'maxigp0_awaddr',   width=40)       # // output wire [39 : 0] maxigp0_awaddr
-        mpsoc_inst.add_port('maxigp0_awlen',   'maxigp0_awlen',    width=8)         # // output wire [7 : 0] maxigp0_awlen
-        mpsoc_inst.add_port('maxigp0_awsize',  'maxigp0_awsize',   width=3)       # // output wire [2 : 0] maxigp0_awsize
-        mpsoc_inst.add_port('maxigp0_awburst', 'maxigp0_awburst',  width=2)     # // output wire [1 : 0] maxigp0_awburst
+        mpsoc_inst.add_port('maxigp0_awid',    'maxigp0_awid',     width=16)  # // output wire [15 : 0] maxigp0_awid
+        mpsoc_inst.add_port('maxigp0_awaddr',  'maxigp0_awaddr',   width=40)  # // output wire [39 : 0] maxigp0_awaddr
+        mpsoc_inst.add_port('maxigp0_awlen',   'maxigp0_awlen',    width=8)   # // output wire [7 : 0] maxigp0_awlen
+        mpsoc_inst.add_port('maxigp0_awsize',  'maxigp0_awsize',   width=3)   # // output wire [2 : 0] maxigp0_awsize
+        mpsoc_inst.add_port('maxigp0_awburst', 'maxigp0_awburst',  width=2)   # // output wire [1 : 0] maxigp0_awburst
         mpsoc_inst.add_port('maxigp0_awlock',  'maxigp0_awlock')        # // output wire maxigp0_awlock
-        mpsoc_inst.add_port('maxigp0_awcache', 'maxigp0_awcache',  width=4)     # // output wire [3 : 0] maxigp0_awcache
-        mpsoc_inst.add_port('maxigp0_awprot',  'maxigp0_awprot',   width=3)       # // output wire [2 : 0] maxigp0_awprot
+        mpsoc_inst.add_port('maxigp0_awcache', 'maxigp0_awcache',  width=4)   # // output wire [3 : 0] maxigp0_awcache
+        mpsoc_inst.add_port('maxigp0_awprot',  'maxigp0_awprot',   width=3)   # // output wire [2 : 0] maxigp0_awprot
         mpsoc_inst.add_port('maxigp0_awvalid', 'maxigp0_awvalid')      # // output wire maxigp0_awvalid
-        mpsoc_inst.add_port('maxigp0_awuser',  'maxigp0_awuser',   width=16)       # // output wire [15 : 0] maxigp0_awuser
+        mpsoc_inst.add_port('maxigp0_awuser',  'maxigp0_awuser',   width=16)  # // output wire [15 : 0] maxigp0_awuser
         mpsoc_inst.add_port('maxigp0_awready', 'maxigp0_awready')      # // input wire maxigp0_awready
-        mpsoc_inst.add_port('maxigp0_wdata',   'maxigp0_wdata',    width=32)         # // output wire [31: 0] maxigp0_wdata
-        mpsoc_inst.add_port('maxigp0_wstrb',   'maxigp0_wstrb',    width=16)         # // output wire [15 : 0] maxigp0_wstrb
+        mpsoc_inst.add_port('maxigp0_wdata',   'maxigp0_wdata',    width=32)  # // output wire [31: 0] maxigp0_wdata
+        mpsoc_inst.add_port('maxigp0_wstrb',   'maxigp0_wstrb',    width=16)  # // output wire [15 : 0] maxigp0_wstrb
         mpsoc_inst.add_port('maxigp0_wlast',   'maxigp0_wlast')          # // output wire maxigp0_wlast
         mpsoc_inst.add_port('maxigp0_wvalid',  'maxigp0_wvalid')        # // output wire maxigp0_wvalid
         mpsoc_inst.add_port('maxigp0_wready',  'maxigp0_wready')        # // input wire maxigp0_wready
-        mpsoc_inst.add_port('maxigp0_bid',     'maxigp0_bid',     width=16)             # // input wire [15 : 0] maxigp0_bid
-        mpsoc_inst.add_port('maxigp0_bresp',   'maxigp0_bresp',   width=2)         # // input wire [1 : 0] maxigp0_bresp
+        mpsoc_inst.add_port('maxigp0_bid',     'maxigp0_bid',     width=16)   # // input wire [15 : 0] maxigp0_bid
+        mpsoc_inst.add_port('maxigp0_bresp',   'maxigp0_bresp',   width=2)    # // input wire [1 : 0] maxigp0_bresp
         mpsoc_inst.add_port('maxigp0_bvalid',  'maxigp0_bvalid')       # // input wire maxigp0_bvalid
         mpsoc_inst.add_port('maxigp0_bready',  'maxigp0_bready')       # // output wire maxigp0_bready
-        mpsoc_inst.add_port('maxigp0_arid',    'maxigp0_arid',    width=16)           # // output wire [15 : 0] maxigp0_arid
-        mpsoc_inst.add_port('maxigp0_araddr',  'maxigp0_araddr',  width=40)       # // output wire [39 : 0] maxigp0_araddr
-        mpsoc_inst.add_port('maxigp0_arlen',   'maxigp0_arlen',   width=8)         # // output wire [7 : 0] maxigp0_arlen
-        mpsoc_inst.add_port('maxigp0_arsize',  'maxigp0_arsize',  width=3)       # // output wire [2 : 0] maxigp0_arsize
-        mpsoc_inst.add_port('maxigp0_arburst', 'maxigp0_arburst', width=2)     # // output wire [1 : 0] maxigp0_arburst
+        mpsoc_inst.add_port('maxigp0_arid',    'maxigp0_arid',    width=16)   # // output wire [15 : 0] maxigp0_arid
+        mpsoc_inst.add_port('maxigp0_araddr',  'maxigp0_araddr',  width=40)   # // output wire [39 : 0] maxigp0_araddr
+        mpsoc_inst.add_port('maxigp0_arlen',   'maxigp0_arlen',   width=8)    # // output wire [7 : 0] maxigp0_arlen
+        mpsoc_inst.add_port('maxigp0_arsize',  'maxigp0_arsize',  width=3)    # // output wire [2 : 0] maxigp0_arsize
+        mpsoc_inst.add_port('maxigp0_arburst', 'maxigp0_arburst', width=2)    # // output wire [1 : 0] maxigp0_arburst
         mpsoc_inst.add_port('maxigp0_arlock',  'maxigp0_arlock')       # // output wire maxigp0_arlock
-        mpsoc_inst.add_port('maxigp0_arcache', 'maxigp0_arcache', width=4)     # // output wire [3 : 0] maxigp0_arcache
-        mpsoc_inst.add_port('maxigp0_arprot',  'maxigp0_arprot',  width=3)       # // output wire [2 : 0] maxigp0_arprot
+        mpsoc_inst.add_port('maxigp0_arcache', 'maxigp0_arcache', width=4)    # // output wire [3 : 0] maxigp0_arcache
+        mpsoc_inst.add_port('maxigp0_arprot',  'maxigp0_arprot',  width=3)    # // output wire [2 : 0] maxigp0_arprot
         mpsoc_inst.add_port('maxigp0_arvalid', 'maxigp0_arvalid')     # // output wire maxigp0_arvalid
-        mpsoc_inst.add_port('maxigp0_aruser',  'maxigp0_aruser',  width=16)       # // output wire [15 : 0] maxigp0_aruser
+        mpsoc_inst.add_port('maxigp0_aruser',  'maxigp0_aruser',  width=16)   # // output wire [15 : 0] maxigp0_aruser
         mpsoc_inst.add_port('maxigp0_arready', 'maxigp0_arready')     # // input wire maxigp0_arready
-        mpsoc_inst.add_port('maxigp0_rid',     'maxigp0_rid',     width=16)         # // input wire [15 : 0] maxigp0_rid
-        mpsoc_inst.add_port('maxigp0_rdata',   'maxigp0_rdata',   width=32)         # // input wire [31: 0] maxigp0_rdata
-        mpsoc_inst.add_port('maxigp0_rresp',   'maxigp0_rresp',   width=2)         # // input wire [1 : 0] maxigp0_rresp
+        mpsoc_inst.add_port('maxigp0_rid',     'maxigp0_rid',     width=16)   # // input wire [15 : 0] maxigp0_rid
+        mpsoc_inst.add_port('maxigp0_rdata',   'maxigp0_rdata',   width=32)   # // input wire [31: 0] maxigp0_rdata
+        mpsoc_inst.add_port('maxigp0_rresp',   'maxigp0_rresp',   width=2)    # // input wire [1 : 0] maxigp0_rresp
         mpsoc_inst.add_port('maxigp0_rlast',   'maxigp0_rlast')         # // input wire maxigp0_rlast
         mpsoc_inst.add_port('maxigp0_rvalid',  'maxigp0_rvalid')       # // input wire maxigp0_rvalid
         mpsoc_inst.add_port('maxigp0_rready',  'maxigp0_rready')       # // output wire maxigp0_rready
-        mpsoc_inst.add_port('maxigp0_awqos',   'maxigp0_awqos',   width=4)         # // output wire [3 : 0] maxigp0_awqos
-        mpsoc_inst.add_port('maxigp0_arqos',   'maxigp0_arqos',   width=4)         # // output wire [3 : 0] maxigp0_arqos
+        mpsoc_inst.add_port('maxigp0_awqos',   'maxigp0_awqos',   width=4)    # // output wire [3 : 0] maxigp0_awqos
+        mpsoc_inst.add_port('maxigp0_arqos',   'maxigp0_arqos',   width=4)    # // output wire [3 : 0] maxigp0_arqos
 
         # HPM GP1 TODO: note this interface is for rfsoc but data width on mpsoc is 128, may need to be changed for rfsoc
         #mpsoc_inst.add_port('maxihpm1_fpd_aclk', 'pl_clk0')#'maxihpm1_fpd_aclk') # // input wire maxihpm1_fpd_aclk
@@ -219,52 +220,6 @@ class zcu216(YellowBlock):
         proc_rst_inst.add_port('interconnect_aresetn', 'interconnect_aresetn') #// output wire [0 : 0] interconnect_aresetn
         proc_rst_inst.add_port('peripheral_aresetn',   'peripheral_aresetn') #// output wire [0: 0] peripheral_aresetn
 
-        ## instantiate rfsoc and test axi4lite stuff
-        top.add_axi4lite_interface(regname="RFDC", mode='rw', nbytes=4, typecode=TYPECODE_RFDC, axi4lite_mode='raw') #self.unique_name
-        rfdc_inst = top.get_instance('rfdc', 'rfdc_inst')
-        # TODO: need to get the clock right, same one on the same domain too
-        rfdc_inst.add_port('s_axi_aclk',    'axil_clk')
-        rfdc_inst.add_port('s_axi_aresetn', 'axil_rst_n')
-
-        rfdc_inst.add_port('s_axi_awaddr',  'm_axi4lite_RFDC_awaddr', width=32) # TODO: check right width on everything
-        rfdc_inst.add_port('s_axi_awvalid', 'm_axi4lite_RFDC_awvalid')
-        rfdc_inst.add_port('s_axi_awready', 'm_axi4lite_RFDC_awready')
-        rfdc_inst.add_port('s_axi_wdata',   'm_axi4lite_RFDC_wdata', width=32)
-        rfdc_inst.add_port('s_axi_wstrb',   'm_axi4lite_RFDC_wstrb', width=4)
-        rfdc_inst.add_port('s_axi_wvalid',  'm_axi4lite_RFDC_wvalid')
-        rfdc_inst.add_port('s_axi_wready',  'm_axi4lite_RFDC_wready')
-        rfdc_inst.add_port('s_axi_bresp',   'm_axi4lite_RFDC_bresp', width=2)
-        rfdc_inst.add_port('s_axi_bvalid',  'm_axi4lite_RFDC_bvalid')
-        rfdc_inst.add_port('s_axi_bready',  'm_axi4lite_RFDC_bready')
-        rfdc_inst.add_port('s_axi_araddr',  'm_axi4lite_RFDC_araddr', width=32)
-        rfdc_inst.add_port('s_axi_arvalid', 'm_axi4lite_RFDC_arvalid')
-        rfdc_inst.add_port('s_axi_arready', 'm_axi4lite_RFDC_arready')
-        rfdc_inst.add_port('s_axi_rdata',   'm_axi4lite_RFDC_rdata', width=32)
-        rfdc_inst.add_port('s_axi_rresp',   'm_axi4lite_RFDC_rresp', width=2)
-        rfdc_inst.add_port('s_axi_rvalid',  'm_axi4lite_RFDC_rvalid')
-        rfdc_inst.add_port('s_axi_rready',  'm_axi4lite_RFDC_rready')
-
-        # TODO: pins most likely need to be added in platform files
-        rfdc_inst.add_port('sysref_in_p', 'sysref_in_p', dir='in', parent_port=True) #self.fullname+'_sysref_in_p',
-        rfdc_inst.add_port('sysref_in_n', 'sysref_in_n', dir='in', parent_port=True) #self.fullname+'_sysref_in_n',
-        rfdc_inst.add_port('adc0_clk_p',  'adc0_clk_p',  dir='in', parent_port=True) #self.fullname+
-        rfdc_inst.add_port('adc0_clk_n',  'adc0_clk_n',  dir='in', parent_port=True) #self.fullname+
-        rfdc_inst.add_port('vin00_p',     'vin00_p' ,  dir='in', parent_port=True)   #self.fullname+
-        rfdc_inst.add_port('vin00_n',     'vin00_n' ,  dir='in', parent_port=True)   #self.fullname+
-        # TODO: pl_sysref needed for mts
-
-        rfdc_inst.add_port('clk_adc0', 'clk_adc0', dir='out') #self.fullname+'_clk_adc0'
-        rfdc_inst.add_port('irq', 'rfdc_irq') #self.fullname+'_irq'
-
-        # AXI4-Stream data interface
-        rfdc_inst.add_port('m0_axis_aclk',    'm0_axis_aclk')               #self.fullname+'_m0_axis_aclk'
-        rfdc_inst.add_port('m0_axis_aresetn', 'm0_axis_aresetn')            #self.fullname+'_m0_axis_aresetn'
-        rfdc_inst.add_port('m00_axis_tdata',  'm00_axis_tdata', width=128)  #self.fullname+'_m00_axis_tdata'
-        rfdc_inst.add_port('m00_axis_tready', "1'b1",) #'m00_axis_tready')            #self.fullname+'_m00_axis_tready'
-        rfdc_inst.add_port('m00_axis_tvalid', 'm00_axis_tvalid')            #self.fullname+'_m00_axis_tvalid'
-
-        #top.assign_signal('m0_axis_aresetn', 'peripheral_aresetn')
-        #top.assign_signal('m0_axis_aclk', 'adc_clk')
 
     def gen_children(self):
         children = []
@@ -278,11 +233,6 @@ class zcu216(YellowBlock):
 
     def gen_constraints(self):
         cons = []
-        # From PG269 The idea will be that we don't have to add any constraints for the rfdc the ip generates the constraints based on internal
-        # part configuration and vivado has this information.
-        #cons.append(PortConstraint('vin00_p', 'vin00_p'))
-        #cons.append(PortConstraint('vin00_n', 'vin00_n'))
-        #cons.append(PortConstraint('pl_sysref_p', 'pl_sysref_p')) # TODO: needed with MTS
         cons.append(PortConstraint('pl_clk_p', 'pl_clk_p'))
         #cons.append(PortConstraint('clk_100_p', 'clk_100_p'))
         #cons.append(ClockConstraint('clk_100_p','clk_100_p', period=10.0, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=5.0))
@@ -290,13 +240,12 @@ class zcu216(YellowBlock):
         #cons.append(ClockGroupConstraint('clk_100_p', 'clk_pl_0', 'asynchronous'))
         return cons
 
+
     def gen_tcl_cmds(self):
         tcl_cmds = {}
         tcl_cmds['init'] = []
-        tcl_cmds['init'] += ['puts "I am a init zcu216 teapot"']
 
         tcl_cmds['pre_synth'] = []
-        tcl_cmds['pre_synth'] += ['puts "I am a pre_synth zcu216 teapot"']
         # If children were recursively generated added tcl commands then platform dependent mpsoc (and other) configuration could be added here.
         # add the mpsoc
         tcl_cmds['pre_synth'] += ['create_ip -name zynq_ultra_ps_e -vendor xilinx.com -library ip -version * -module_name mpsoc']
@@ -340,38 +289,11 @@ class zcu216(YellowBlock):
         tcl_cmds['pre_synth'] += ['] [get_ips processor_reset]']
         tcl_cmds['pre_synth'] += ['generate_target all [get_ips processor_reset]']
         tcl_cmds['pre_synth'] += ['update_compile_order -fileset sources_1']
-        # add the rfsoc
-        tcl_cmds['pre_synth'] += ['create_ip -name usp_rf_data_converter -vendor xilinx.com -library ip -version * -module_name rfdc']
-        tcl_cmds['pre_synth'] += ['set_property -dict [ list CONFIG.Converter_Setup {0}  \\']
-        tcl_cmds['pre_synth'] += ['CONFIG.ADC224_En {true}  \\']
-        tcl_cmds['pre_synth'] += ['CONFIG.ADC225_En {false}  \\']
-        tcl_cmds['pre_synth'] += ['CONFIG.ADC0_Clock_Dist {0}  \\']
-        tcl_cmds['pre_synth'] += ['CONFIG.ADC_NCO_Freq10 {0}  \\']
-        tcl_cmds['pre_synth'] += ['CONFIG.ADC_NCO_Freq30 {0}  \\']
-        tcl_cmds['pre_synth'] += ['CONFIG.mADC_Enable {1}  \\']
-        tcl_cmds['pre_synth'] += ['CONFIG.mADC_Fabric_Freq {250.000}  \\']
-        tcl_cmds['pre_synth'] += ['CONFIG.mADC_Slice00_Enable {true}  \\']
-        tcl_cmds['pre_synth'] += ['CONFIG.mADC_Decimation_Mode00 {1}  \\']
-        tcl_cmds['pre_synth'] += ['CONFIG.mADC_Mixer_Type00 {1}  \\']
-        tcl_cmds['pre_synth'] += ['CONFIG.mADC_Coarse_Mixer_Freq00 {3}  \\']
-        tcl_cmds['pre_synth'] += ['CONFIG.DAC_Mixer_Mode00 {0}  \\']
-        tcl_cmds['pre_synth'] += ['CONFIG.DAC_Mixer_Mode01 {0}  \\']
-        tcl_cmds['pre_synth'] += ['CONFIG.DAC_Mixer_Mode03 {0}  \\']
-        tcl_cmds['pre_synth'] += ['CONFIG.DAC_Mixer_Mode10 {0}  \\']
-        tcl_cmds['pre_synth'] += ['CONFIG.DAC_Mixer_Mode11 {0}  \\']
-        tcl_cmds['pre_synth'] += ['CONFIG.DAC_Mixer_Mode13 {0}  \\']
-        tcl_cmds['pre_synth'] += ['CONFIG.DAC_Mixer_Mode20 {0}  \\']
-        tcl_cmds['pre_synth'] += ['CONFIG.DAC_Mixer_Mode21 {0}  \\']
-        tcl_cmds['pre_synth'] += ['CONFIG.DAC_Mixer_Mode30 {0}  \\']
-        tcl_cmds['pre_synth'] += ['CONFIG.DAC_Mixer_Mode31 {0}  \\']
-        tcl_cmds['pre_synth'] += ['] [get_ips rfdc]']
-        tcl_cmds['pre_synth'] += ['generate_target all [get_ips rfdc]']
-        tcl_cmds['pre_synth'] += ['update_compile_order -fileset sources_1']
 
-        # TODO: make note of how to use HD bank clocks to drive an MMCM on US+
         tcl_cmds['synth'] = []
 
         tcl_cmds['post_synth'] = []
+        # TODO: make note of how to use HD bank clocks to drive an MMCM on US+
         #tcl_cmds['post_synth'] += ['set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets clk_100_p]']
         tcl_cmds['post_synth'] += ['set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pl_clk_p]']
 
