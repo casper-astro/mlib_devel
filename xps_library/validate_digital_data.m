@@ -1,5 +1,4 @@
 function [] = validate_digital_data(gcb)
-  display('validate_digital_data');
 
   msk = Simulink.Mask.get(gcb);
 

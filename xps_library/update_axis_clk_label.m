@@ -1,5 +1,4 @@
 function [] = update_axis_clk_label(gcb)
-  display('update_axis_clk_label');
   % TODO get this constant from somewhere
   QuadTile = 1;
 
@@ -10,6 +9,8 @@ function [] = update_axis_clk_label(gcb)
     adc_silces = 0:1;
     prefix = 'DT';
   end
+
+  msk = Simulink.Mask.get(gcb);
 
   sample_rate_mhz = str2double(get_param(gcb, 'sample_rate'));
 
@@ -28,7 +29,11 @@ function [] = update_axis_clk_label(gcb)
     end
     sys_clk_mhz = round(sys_clk_mhz, 3);
 
-    set_param(gcb, [prefix, '_adc', num2str(a), '_req_axis_clk'], num2str(sys_clk_mhz));
+    % only update label if new axis clk different than current one
+    clk_label = [prefix, '_adc', num2str(a), '_req_axis_clk'];
+    if ~strcmp(get_param(gcb, clk_label), num2str(sys_clk_mhz))
+      set_param(gcb, [prefix, '_adc', num2str(a), '_req_axis_clk'], num2str(sys_clk_mhz));
+    end
 
   end
 

@@ -1,4 +1,3 @@
-display('rfdc_mask');
 msk = Simulink.Mask.get(gcb);
 
 %chk_mask_param(msk, 'QT_adc0_digital_output', 'REAL')
@@ -94,7 +93,6 @@ if ~axis_clk_valid
          'in a consistent required axi-stream (system) clock across all slices.']);
 end
 
-display('ending rfdc_mask');
 
 % let simulink auto-layout
 %display('auto simulink layout');

@@ -1,5 +1,4 @@
 function [] = update_axis_clk(gcb)
-  display('update_axis_clk');
   % compute axis interface (sys_clk) requirements and options
 
   msk = Simulink.Mask.get(gcb);
@@ -62,28 +61,16 @@ function [] = update_axis_clk(gcb)
 end
 
   % Known work to do and issues to fix:
-  % TODO: !!! popup for `clk_out` and `ref_clk` are being updated/saved correctly.
-  % They are reset each time. But this doesn't happen to other things like the
-  % adc data options why are not applied between calls? I don't feel like I am
-  % doing anything different...
-  % I think the problem is I need to segment out the call backs better because
-  % for the parameters thta don't change I don't actually touch them again? Well
-  % tht doesn't make complete sense because if the mask re initializes they to
-  % should when you load, right?
-
+  %
   % TODO: !!! mask does not check and guard on min/max sampling frequency
 
   % TODO: !! Gen3 parts have configuration for clocking source and
   % distribution. Although this could be a board specific thing and just managed
   % by the platform (e.g., zcu216) yellow block
 
-  % TODO: Mask does nothing to place the blocks nicely
+  % TODO: Mask does nothing to place the gateway blocks nicely
 
-  % TODO: bringing up the mask is now slow. This is due to the number of
-  % callbacks called. The simulink mask evaluates each callback in order when
-  % opened for configuration. Potential logic improvemets may exist to improve.
-
-  % TODO: Much of this has not been tested for Dual-Tile ADCs: top level init does not
+  % TODO: Dual-Tile ADCs (e.g., zcu111 has not been tested): top level init does not
   % implement drawing for the interfaces. Callbacks are not set.
 
   % TODO: Constants (gen, QuadTile, etc.) need to be determined and able to
@@ -104,11 +91,6 @@ end
   % 'Enabled Checkbox being on' but not checking the even slice data mode
   % correctly. (or it does check the mode correctly, but the callback appears
   % in th wrong order).
-
-  % TODO: The individual adc slice required axi clock label is correct for at
-  % least one of the values in the updated 'samples per cycle' popup. But, when
-  % the popup is set it overrides and so should default to the min and then set
-  % it in the popup.
 
   % NOTE: Only maxis_tdata filed implemented. The ADC ignores tready and it is
   % reasonably accurate to assume that the data will be valid before the user

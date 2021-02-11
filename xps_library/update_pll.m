@@ -1,6 +1,5 @@
 function [] = update_pll(gcb)
-  display('update_pll');
-  % apply changes to RF-PLL
+  % apply changes to RF-PLL parameter and ref clock list
 
   % TODO need to get access to these
   gen = 3;
@@ -16,10 +15,9 @@ function [] = update_pll(gcb)
     msk.getParameter('ref_clk').Enabled = 'off';
   else
     % compute usable PLL reference frequencies
-    % [m, vco, fbdiv, refclk] = update_pll_params(gcb);
     [M, VCO] = calc_rfpll_vco(gen, sample_rate_mhz);
     if isempty(VCO)
-      error('RFPLL parameters could not be resolved to determine a valid reference clock frequency');
+      error('RFPLL parameters could not be resolved to determine a valid ref. clock freq.');
     end
 
     % select the first one
@@ -31,10 +29,10 @@ function [] = update_pll(gcb)
     [fbdiv, refclk] = calc_refclk(vco, 1);
 
     % set a default value for the refclk to be sample_rate_mhz/8.0 or
-    % if not arbitrarily on the low end
+    % if not available then something arbitrarily on the low end of the range
     I = find(refclk <= sample_rate_mhz/8.0);
     if isempty(I)
-      I = find(refclk <= 130.00);
+      I = find(refclk <= 130.00); % arbitrary, should change to target a valid one in fbdiv range
     end
     n = fbdiv(I(1));
     f = refclk(I(1));
@@ -45,13 +43,22 @@ function [] = update_pll(gcb)
 
     refclk_list = compose('%g', refclk);
     msk.getParameter('ref_clk').Enabled = 'on';
-    msk.getParameter('ref_clk').TypeOptions = refclk_list;
-    % TODO: not sure why after disabling the PLL and re-enabling it that this
-    % `ref_clk` value of `f` is not being applied in the mask popup
-    set_param(gcb, 'ref_clk', num2str(f));
+
+    % Simulink runs all callbacks sequentially when opening the mask dialog. So
+    % the list of refclks and user selected value would be overwritten when
+    % opening if the TypeOptions are reset each time.
+    % So, only update the PLL if the list of refclk is not up to date. There is
+    % probably a smarter way to organize all the logic to be more efficent.
+    current_refclk_list = msk.getParameter('ref_clk').TypeOptions;
+    if ~isempty( setdiff(current_refclk_list, refclk_list) )
+      msk.getParameter('ref_clk').TypeOptions = refclk_list;
+      % TODO: not sure why after disabling the PLL and re-enabling it that this
+      % `ref_clk` value of `f` is not being applied in the mask popup, but
+      % changing the sample rate has the correct behavior
+      set_param(gcb, 'ref_clk', num2str(f));
+    end
 
   end
 
-
-
 end
+

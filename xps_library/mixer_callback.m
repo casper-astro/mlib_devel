@@ -23,8 +23,6 @@ function [] = mixer_callback(gcb)
       % no need to check if ditial output is C because C2C only an option if already C
       mixer_mode_param = [prefix, '_adc', num2str(a), '_mixer_mode'];
       if chk_param(gcb, mixer_mode_param, 'I/Q -> I/Q')
-        % not sure if `set_param` is to be used here like this... given my
-        % confusion over `get_param` vs. `msk.getParameter()`
         set_param(gcb, [prefix, '_adc', num2str(a+1), '_enable'], 'on');
         msk.getParameter([prefix, '_adc', num2str(a+1), '_enable']).Enabled = 'off';
 

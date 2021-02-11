@@ -17,7 +17,7 @@ function [M, VCO] = calc_rfpll_vco(gen, sample_rate_mhz)
 
   M = [];
   VCO = [];
-  for m=[2, 3, 4:64]
+  for m=[2, 3, 4:2:64]
     %vco = (samp_rate_ghz*1000.0)*m;
     vco = sample_rate_mhz*m;
     if (vco >= vco_min)

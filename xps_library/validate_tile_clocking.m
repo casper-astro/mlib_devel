@@ -1,5 +1,4 @@
 function [axis_clks_valid] = validate_tile_clocking(gcb)
-  display('validate_tile_clocking');
   % TODO get this constant from somewhere
   QuadTile = 1;
 
@@ -10,6 +9,8 @@ function [axis_clks_valid] = validate_tile_clocking(gcb)
     adc_silces = 0:1;
     prefix = 'DT';
   end
+
+  msk = Simulink.Mask.get(gcb);
 
   enabled_adcs = [];
   for a = adc_slices
@@ -27,9 +28,14 @@ function [axis_clks_valid] = validate_tile_clocking(gcb)
   % axis clocks must be the same for each adc slice within a tile
   axis_clks_valid = all(axis_clks == axis_clks(1));
   if ~axis_clks_valid
-    set_param(gcb, 'axi_stream_clk', '*Axis Clocking Invalid*');
+    label_txt = '*Axis Clockign Invalid*';
   else
-    set_param(gcb, 'axi_stream_clk', num2str(axis_clks(1)));
+    label_txt = num2str(axis_clks(1));
+  end
+
+  % compare label with current value and only update if needed
+  if ~strcmp(get_param(gcb, 'axi_stream_clk'), label_txt)
+    set_param(gcb, 'axi_stream_clk', label_txt);
   end
 
 end

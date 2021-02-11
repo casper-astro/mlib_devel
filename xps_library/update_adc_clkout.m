@@ -1,5 +1,4 @@
-function [adc_clkout] = update_adc_clkout(gcb)
-  display('update_adc_clkout');
+function [adc_clkout] = update_adc_clkout(gcb, parent)
   % compute output adc clk options and update mask list
 
   % TODO need to get access to these
