@@ -13,7 +13,24 @@ sources: []
 constraints: []
 
 rfdc:
-  gen: 2
+  # gen3 devices can internally route their input refclk or the output of the RFPLL
+  # as the sample clock for adjacent tiles. See PG269. For such configurations,
+  # tile 225 is the preferred tile when available. The zcu216/208 eval boards only
+  # have the sample clock connected to tile 255.
+  #
+  # For gen1 and gen2 devices the `adc_clk_src` is the same as the tile index
+  tile224:
+    has_adc_clk: True
+    adc_clk_src: 1
+  tile225:
+    has_adc_clk: True
+    adc_clk_src: 2
+  tile226:
+    has_adc_clk: True
+    adc_clk_src: 3
+  tile227:
+    has_adc_clk: True
+    adc_clk_src: 4
 
 onehundredgbe:
   # does the freq matter much?
@@ -26,6 +43,7 @@ provides:
   - axil_clk # keep this? come from pl_clk? or use clk100?
 # TODO: does name matter? Jack's 100G block should list what the provides therefore this matters
   - sfp4x25
+  - sysref_in
 
 pins:
   clk_100_p:
@@ -34,6 +52,12 @@ pins:
   clk_100_n:
     iostd: LVDS
     loc: AN15
+
+# NOTE: most of the IO constraints and clocking constraints are taken care of by
+# the RFDC IP itself. Vivado has that baked into the output products of teh IP
+# core. The only necessary pins below are the fabirc clocking related to
+# multi-tile sync Adding additional pins and constraints would not hurt anything
+# but provide more transparent less 'hand-wavy'
 
 # RFDC clocking
   # `SYSREF_P/N_228` on bank 228

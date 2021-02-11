@@ -12,9 +12,25 @@ mmbus_address_alignment: 4
 sources: []
 constraints: []
 
-# potential idea for help in rfdc capability support (e.g., clock distribution?)
 rfdc:
-  gen: 3
+  # gen3 devices can internally route their input refclk or the output of the RFPLL
+  # as the sample clock for adjacent tiles. See PG269. For such configurations,
+  # tile 225 is the preferred tile when available. The zcu216/208 eval boards only
+  # have the sample clock connected to tile 255.
+  #
+  # For gen1 and gen2 devices the `adc_clk_src` is the same as the tile index
+  tile224:
+    has_adc_clk: False
+    adc_clk_src: 1
+  tile225:
+    has_adc_clk: True
+    adc_clk_src: 1
+  tile226:
+    has_adc_clk: True
+    adc_clk_src: 1
+  tile227:
+    has_adc_clk: False
+    adc_clk_src: 1
 
 onehundredgbe:
   # does the freq matter much?
@@ -26,7 +42,8 @@ onehundredgbe:
 provides:
   - adc_clk
   - axil_clk # TODO: keep this? come from pl_clk on mpsoc? Or use clk100?
-  - sfp4x25  
+  - sfp4x25  # TODO this isn't the right name
+  - sysref_in
 
 pins:
   clk_100_p:
@@ -42,10 +59,11 @@ pins:
     iostd: LVDS_25
     loc: A12
 
-# So I think the idea is that we don't actually have to assign anything, Vivado
-# knows all...
-# But it may be a good idea to still put them and either A) see what happens, or
-# B) just make a note for the present/future developers
+# NOTE: most of the IO constraints and clocking constraints are taken care of by
+# the RFDC IP itself. Vivado has that baked into the output products of teh IP
+# core. The only necessary pins below are the fabirc clocking related to
+# multi-tile sync Adding additional pins and constraints would not hurt anything
+# but provide more transparent less 'hand-wavy'
 # RFDC clocking
 
   # `SYSREF_P/N_228` on bank 228
