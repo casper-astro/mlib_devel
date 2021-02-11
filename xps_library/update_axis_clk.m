@@ -2,17 +2,17 @@ function [] = update_axis_clk(gcb)
   % compute axis interface (sys_clk) requirements and options
 
   msk = Simulink.Mask.get(gcb);
-  
-  % TODO get these constants from somewhere
-  gen = 3;
-  QuadTile = 1;
 
-  if QuadTile
+  [gen, tile_arch, ~, ~] = get_rfsoc_properties(gcb);
+  
+  if strcmp(tile_arch, 'quad')
     adc_slices = 0:3;
     prefix = 'QT';
-  else
+    QuadTile = 1;
+  elseif strcmp(tile_arch, 'dual')
     adc_silces = 0:1;
     prefix = 'DT';
+    QuadTile = 0;
   end
 
   sample_rate_mhz = str2double(get_param(gcb, 'sample_rate'));
@@ -60,40 +60,3 @@ function [] = update_axis_clk(gcb)
   
 end
 
-  % Known work to do and issues to fix:
-  %
-  % TODO: !!! mask does not check and guard on min/max sampling frequency
-
-  % TODO: !! Gen3 parts have configuration for clocking source and
-  % distribution. Although this could be a board specific thing and just managed
-  % by the platform (e.g., zcu216) yellow block
-
-  % TODO: Mask does nothing to place the gateway blocks nicely
-
-  % TODO: Dual-Tile ADCs (e.g., zcu111 has not been tested): top level init does not
-  % implement drawing for the interfaces. Callbacks are not set.
-
-  % TODO: Constants (gen, QuadTile, etc.) need to be determined and able to
-  % provide to the methods
-
-  % TODO: there is only a specific range of suggested tested frequencies for
-  % the fbdiv parameter that is tested within the specification given on
-  % DS926. These should be the ones that Vivado displays a warning when
-  % selected. Extend the same warning here. Need to figure out that range.
-
-  % TODO: Enabling I/Q -> I/Q and then chaning the decimation factor and axi
-  % samples per clock results in an invalid axi clocking configuration. This
-  % should not happen because the odd slice configuration is now dependent on
-  % the even slice.
-
-  % TODO: Enabling I/Q -> I/Q disables the odd slice ADC but when you hit OK and
-  % bring up the rfdc mask again the field is enabled. This is a symptom of the
-  % 'Enabled Checkbox being on' but not checking the even slice data mode
-  % correctly. (or it does check the mode correctly, but the callback appears
-  % in th wrong order).
-
-  % NOTE: Only maxis_tdata filed implemented. The ADC ignores tready and it is
-  % reasonably accurate to assume that the data will be valid before the user
-  % design is ready. Also, problems are typically handled and reported through
-  % the IRQ.
-  

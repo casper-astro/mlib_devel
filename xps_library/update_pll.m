@@ -1,8 +1,7 @@
 function [] = update_pll(gcb)
   % apply changes to RF-PLL parameter and ref clock list
 
-  % TODO need to get access to these
-  gen = 3;
+  [gen, tile_arch, ~, ~] = get_rfsoc_properties(gcb);
 
   msk = Simulink.Mask.get(gcb);
 

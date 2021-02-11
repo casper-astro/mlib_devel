@@ -2,13 +2,12 @@ function [] = validate_digital_data(gcb)
 
   msk = Simulink.Mask.get(gcb);
 
-  % TODO get this parameter from somewhere
-  QuadTile = 1;
+  [~, tile_arch, ~, ~] = get_rfsoc_properties(gcb);
 
-  if QuadTile
+  if strcmp(tile_arch, 'quad')
     adc_slices = 0:3;
     prefix = 'QT';
-  else
+  elseif strcmp(tile_arch, 'dual')
     adc_silces = 0:1;
     prefix = 'DT';
   end

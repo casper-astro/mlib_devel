@@ -1,11 +1,10 @@
 function [axis_clks_valid] = validate_tile_clocking(gcb)
-  % TODO get this constant from somewhere
-  QuadTile = 1;
 
-  if QuadTile
+  [~, tile_arch, ~, ~] = get_rfsoc_properties(gcb);
+  if strcmp(tile_arch, 'quad')
     adc_slices = 0:3;
     prefix = 'QT';
-  else
+  elseif strcmp(tile_arch, 'dual')
     adc_silces = 0:1;
     prefix = 'DT';
   end

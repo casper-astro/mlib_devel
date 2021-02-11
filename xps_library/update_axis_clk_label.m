@@ -1,13 +1,14 @@
 function [] = update_axis_clk_label(gcb)
-  % TODO get this constant from somewhere
-  QuadTile = 1;
 
-  if QuadTile
+  [~, tile_arch, ~, ~] = get_rfsoc_properties(gcb);
+  if strcmp(tile_arch, 'quad')
     adc_slices = 0:3;
     prefix = 'QT';
-  else
+    QuadTile = 1;
+  elseif strcmp(tile_arch, 'dual')
     adc_silces = 0:1;
     prefix = 'DT';
+    QuadTile = 0;
   end
 
   msk = Simulink.Mask.get(gcb);
