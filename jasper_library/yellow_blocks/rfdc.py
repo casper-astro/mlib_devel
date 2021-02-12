@@ -245,7 +245,7 @@ class rfdc(YellowBlock):
         rfdc_inst.add_port('vin{:d}{:d}_n'.format(tidx, aidx), 'vin{:d}{:d}_n'.format(tidx, aidx),  dir='in', parent_port=True)   #self.fullname+
         # maxis data ports
         data_width = 16*self.adcs[aidx].sample_per_cycle
-        rfdc_inst.add_port('m{:d}{:d}_axis_tdata'.format(tidx, aidx), 'm{:d}{:d}_axis_tdata'.format(tidx, aidx), width=data_width) #self.fullname+'_m00_axis_tdata'
+        rfdc_inst.add_port('m{:d}{:d}_axis_tdata'.format(tidx, aidx), '{:s}_m{:d}{:d}_axis_tdata'.format(self.fullname, tidx, aidx), width=data_width) #self.fullname+'_m00_axis_tdata'
         rfdc_inst.add_port('m{:d}{:d}_axis_tready'.format(tidx, aidx), "1'b1",) #'m00_axis_tready')  #self.fullname+'_m00_axis_tready'
         rfdc_inst.add_port('m{:d}{:d}_axis_tvalid'.format(tidx, aidx), 'm{:d}{:d}_axis_tvalid'.format(tidx, aidx)) #self.fullname+'_m00_axis_tvalid'
 
