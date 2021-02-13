@@ -1416,7 +1416,10 @@ class VerilogModule(object):
             n_ports = len(self.ports[block])
             n = 0
             for pn, port in sorted(self.ports[block].items()):
-                s += '    .%s(%s)'%(port.name, port.signal.rstrip(' '))
+                try:
+                    s += '    .%s(%s)'%(port.name, port.signal.rstrip(' '))
+                except:
+                    logger.error("Could't instantiate port %s connected to signal %s" % (port.name, port.signal))
                 if n != (n_ports - 1):
                     s += ',\n'
                 else:
