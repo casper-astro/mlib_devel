@@ -128,7 +128,8 @@ use IEEE.STD_LOGIC_1164.all;
 
 entity cdc_synchroniser is
 	 generic(	
-	      G_BUS_WIDTH : integer := 8   --default width of bus	
+	      G_BUS_WIDTH : integer := 8;   --default width of bus
+	      G_OP_INITIAL_VAL: std_logic_vector := X"00000000"  --value of the output after reset
 	        );		
 	 port(
 		 IP_CLK : in STD_LOGIC;
@@ -190,6 +191,7 @@ begin
     if ( IP_RESET = '1' ) then
         vBusValidTmp := '0';
         sBusValid <= '0';
+        sBus <= G_OP_INITIAL_VAL(G_BUS_WIDTH-1 to 0);
     elsif ( rising_edge(IP_CLK) ) then
         sBusValid <= vBusValidTmp;
         vBusValidTmp := IP_BUS_VALID;
