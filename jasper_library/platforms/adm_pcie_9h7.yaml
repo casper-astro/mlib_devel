@@ -5,6 +5,8 @@ family: ultrascaleplus
 backend_target: vivado
 mmbus_architecture: AXI4-Lite
 mmbus_base_address: 0x10000000
+#mmbus_architecture: wishbone
+#dsp_wb_base_address: 0x10000000
 # How to address each 32-bit (i.e. 4 indicates byte-addressable)
 mmbus_address_alignment: 4
 sources: []
@@ -148,6 +150,15 @@ pins:
   qsfp_scl:
     iostd: LVCMOS18
     loc: [BN29, BL30, BN32, BM32]
+  ff_modprsl_ls:
+    iostd: LVCMOS18
+    loc: [BG10, BG9, BF12, BF11, BE11, BF10, BE10, BE9]
+  ff_sda:
+    iostd: LVCMOS18
+    loc: [BP12, BP14, BM12, BN15, BM14, BL15, BN11, BP8]
+  ff_scl:
+    iostd: LVCMOS18
+    loc: [BP11, BP13, BN12, BN14, BM13, BM15, BP9, BM10]
   pcie_refclk_p:
     loc: AR15
   pcie_gty_rx_p:
