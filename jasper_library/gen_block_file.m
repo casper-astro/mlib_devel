@@ -31,7 +31,7 @@ if nargin > 2
     load_system(sys);
 end
 
-this_sys = gcs;
+this_sys = bdroot;
 
 % get system generator version. There are some small differences in the
 % netlists generated depending on version

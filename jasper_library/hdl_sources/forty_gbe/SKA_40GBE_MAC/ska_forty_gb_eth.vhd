@@ -482,12 +482,6 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
     attribute MARK_DEBUG of dbg_rx_dest_ip      : signal is "TRUE";    
     attribute MARK_DEBUG of dbg_rx_dest_port    : signal is "TRUE";
 
-    attribute MARK_DEBUG of tx_valid_r2        : signal is "TRUE";
-    attribute MARK_DEBUG of tx_end_of_frame_r2 : signal is "TRUE";
-
-    attribute MARK_DEBUG of rx_valid_r2        : signal is "TRUE";
-    attribute MARK_DEBUG of rx_end_of_frame_r2 : signal is "TRUE";
-    
     attribute MARK_DEBUG of mac_rx_data        : signal is "TRUE";
     attribute MARK_DEBUG of mac_rx_data_valid  : signal is "TRUE";
 

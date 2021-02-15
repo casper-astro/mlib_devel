@@ -1,4 +1,5 @@
-name: snap2_v2
+name: snap2
+version: 2
 manufacturer: Xilinx
 fpga: xcku115-flvf1924-2-e
 backend_target: vivado
@@ -17,6 +18,11 @@ provides:
   - clk_250MHz90
   - clk_250MHz180
   - clk_250MHz270
+  - clk_200
+  # These phased 200 MHz clocks aren't really provided. Lies!
+  - clk_20090
+  - clk_200180
+  - clk_200270
 pins:
   sys_clk_p:
     loc: N13
@@ -86,8 +92,96 @@ pins:
     loc: AB8
   eth_clk_125_n:
     #iostd: DIFF_HSTL_I_18
-    #iostd: LVDS_25
-    loc: AB7
+    iostd: LVDS_25
+    loc: AU25
+  # The "forty_gbe_*" indexing below
+  # reflects the schematic net names "QSFP1..4"
+  forty_gbe_refclk_p:
+    loc:
+      - T8
+      - P8
+      - M8
+      - K8
+  forty_gbe_refclk_n:
+    loc:
+      - T7
+      - P7
+      - M7
+      - K7
+  forty_gbe_tx_p:
+    loc:
+      - T4
+      - P4
+      - M4
+      - K4
+      - J6
+      - H8
+      - G6
+      - F8
+      - E6
+      - D8
+      - C6
+      - B8
+      - F12
+      - D12
+      - C14
+      - A10
+  forty_gbe_tx_n:
+    loc:
+      - T3
+      - P3
+      - M3
+      - K3
+      - J5
+      - H7
+      - G5
+      - F7
+      - E5
+      - D7
+      - C5
+      - B7
+      - F11
+      - D11
+      - C13
+      - A9
+  forty_gbe_rx_p:
+    loc:
+      - U2
+      - R2
+      - N2
+      - L2
+      - J2
+      - H4
+      - G2
+      - F4
+      - E2
+      - D4
+      - C2
+      - B4
+      - E10
+      - C10
+      - B12
+      - A6
+  forty_gbe_rx_n:
+    loc:
+      - U1
+      - R1
+      - N1
+      - L1
+      - J1
+      - H3
+      - G1
+      - F3
+      - E1
+      - D3
+      - C1
+      - B3
+      - E9
+      - C9
+      - B11
+      - A5
+  # The "gth_*" indexing below doesn't
+  # reflect the schematic net names "QSFP1..4"
   gth_clk_p:
     #iostd: DIFF_HSTL_I_18
     loc:
@@ -394,3 +488,770 @@ pins:
   adc_5g_chip2_trig_ext:
     iostd: lvcmos18
     loc: AU20
+
+
+  fmc0_ha_p:
+    iostd: lvds
+    loc:
+      - G35
+      - F34
+      - F38
+      - H38
+      - H33
+      - J33
+      - J39
+      - L38
+      - J35
+      - V32
+      - K38
+      - H37
+      - P36
+      - K36
+      - Y35
+      - L33
+      - M34
+      - R11
+      - K11
+      - H13
+      - T13
+      - J11
+      - L14
+      - None
+  fmc0_hb_p:
+    iostd: lvds
+    loc:
+      - E36
+      - D38
+      - E35
+      - D34
+      - M30
+      - D39
+      - F37
+      - R27
+      - D36
+      - B37
+      - B34
+      - D33
+      - E30
+      - B35
+      - C31
+      - A33
+      - B30
+      - P14
+      - A29
+      - H11
+      - None
+      - None
+      - None
+      - None
+  fmc0_la_p:
+    iostd: lvds
+    loc:
+      - P34
+      - R33
+      - U31
+      - T33
+      - W33
+      - N37
+      - U30
+      - V34
+      - U35
+      - N33
+      - M35
+      - U29
+      - M36
+      - L32
+      - N32
+      - R30
+      - N31
+      - G30
+      - G29
+      - P28
+      - L28
+      - N27
+      - N29
+      - K30
+      - F28
+      - H32
+      - K31
+      - J28
+      - F32
+      - E31
+      - C29
+      - B32
+      - D28
+      - R10
+  fmc0_clk_p:
+    iostd: lvds
+    loc:
+      - R31  # clk0_m2c
+      - None # clk0_c2m; Clock chip -> mezz card
+      - H28  # clk1_m2c
+      - None # clk1_c2m; NC
+  fmc0_gbtclk_p:
+    iostd: lvds
+    loc:
+      - T32
+      - H31
+
+  fmc0_ha_n:
+    iostd: lvds
+    loc:
+      - G36
+      - F35
+      - F39
+      - G39
+      - G34
+      - H34
+      - H39
+      - L39
+      - H36
+      - V33
+      - J38
+      - G37
+      - N36
+      - J36
+      - W35
+      - K33
+      - L34
+      - P11
+      - K10
+      - H12
+      - T12
+      - J10
+      - L13
+      - None
+  fmc0_hb_n:
+    iostd: lvds
+    loc:
+      - E37
+      - C38
+      - D35
+      - C34
+      - L30
+      - C39
+      - E38
+      - R28
+      - C36
+      - A37
+      - A35
+      - C33
+      - D30
+      - B36
+      - C32
+      - A34
+      - B31
+      - P13
+      - A30
+      - H10
+      - None
+      - None
+      - None
+      - None
+  fmc0_la_n:
+    iostd: lvds
+    loc:
+      - P35
+      - P33
+      - U32
+      - T34
+      - W34
+      - M37
+      - T30
+      - U34
+      - T35
+      - N34
+      - L35
+      - T29
+      - L37
+      - K32
+      - M32
+      - P30
+      - M31
+      - F30
+      - F29
+      - P29
+      - L29
+      - N28
+      - M29
+      - J30
+      - E28
+      - G32
+      - J31
+      - J29
+      - E32
+      - D31
+      - B29
+      - A32
+      - C28
+      - P10
+  fmc0_clk_n:
+    iostd: lvds
+    loc:
+      - P31  # clk0_m2c
+      - None # clk0_c2m; Clock chip -> mezz card
+      - H29  # clk1_m2c
+      - None # clk1_c2m; NC
+  fmc0_gbtclk_n:
+    iostd: lvds
+    loc:
+      - R32
+      - G31
+
+  fmc1_ha_p:
+    iostd: lvds
+    loc:
+      - AV36
+      - AY35
+      - AT37
+      - AV37
+      - AU39
+      - AU36
+      - AR39
+      - AW38
+      - AR37
+      - BB29
+      - AU34
+      - AW34
+      - BD29
+      - AT34
+      - BA32
+      - AN32
+      - BC31
+      - BB17
+      - BC21
+      - BD20
+      - BC16
+      - BA19
+      - BB19
+      - None
+  fmc1_hb_p:
+    iostd: lvds
+    loc:
+      - BA37
+      - BA34
+      - BC34
+      - BC33
+      - AL32
+      - BD35
+      - AY37
+      - AM34
+      - BC39
+      - BC38
+      - BB35
+      - BA38
+      - AL33
+      - BB36
+      - AN36
+      - BA33
+      - AM37
+      - AH12
+      - AP34
+      - BB22
+      - None
+      - None
+      - None
+      - None
+  fmc1_la_p:
+    iostd: lvds
+    loc:
+      - AT32
+      - AT29
+      - AM30
+      - AM29
+      - AL29
+      - AP28
+      - AN31
+      - BB31
+      - AR28
+      - AW29
+      - AR30
+      - AV33
+      - BA30
+      - AY30
+      - AW31
+      - AR32
+      - AP30
+      - AK30
+      - AH31
+      - AG30
+      - AJ29
+      - AE35
+      - AE33
+      - AC35
+      - AF32
+      - AF34
+      - AG29
+      - AJ28
+      - AH33
+      - AJ34
+      - AM35
+      - AK35
+      - AE31
+      - AM17
+  fmc1_clk_p:
+    iostd: lvds
+    loc:
+      - AU30 # clk0_m2c
+      - None # clk0_c2m; Clock chip -> mezz card
+      - AH32 # clk1_m2c
+      - None # clk1_c2m; NC
+  fmc1_gbtclk_p:
+    iostd: lvds
+    loc:
+      - AV31
+      - AK32
+
+  fmc1_ha_n:
+    iostd: lvds
+    loc:
+      - AW36
+      - AY36
+      - AT38
+      - AV38
+      - AV39
+      - AU37
+      - AT39
+      - AW39
+      - AR38
+      - BC29
+      - AU35
+      - AW35
+      - BD30
+      - AT35
+      - BB32
+      - AP33
+      - BD31
+      - BC17
+      - BD21
+      - BD19
+      - BD16
+      - BA18
+      - BC19
+      - None
+  fmc1_hb_n:
+    iostd: lvds
+    loc:
+      - BB37
+      - BA35
+      - BD34
+      - BD33
+      - AM32
+      - BD36
+      - AY38
+      - AN34
+      - BD39
+      - BD38
+      - BC36
+      - BB39
+      - AL34
+      - BC37
+      - AP36
+      - BB34
+      - AN37
+      - AH11
+      - AP35
+      - BC22
+      - None
+      - None
+      - None
+      - None
+  fmc1_la_n:
+    iostd: lvds
+    loc:
+      - AU32
+      - AU29
+      - AM31
+      - AN29
+      - AL30
+      - AP29
+      - AP31
+      - BC32
+      - AT28
+      - AW30
+      - AT30
+      - AW33
+      - BB30
+      - AY31
+      - AY32
+      - AR33
+      - AR31
+      - AK31
+      - AJ31
+      - AG31
+      - AJ30
+      - AF35
+      - AF33
+      - AD35
+      - AG32
+      - AG34
+      - AH29
+      - AK28
+      - AH34
+      - AJ35
+      - AM36
+      - AL35
+      - AE32
+      - AM16
+  fmc1_clk_n:
+    iostd: lvds
+    loc:
+      - AU31 # clk0_m2c
+      - None # clk0_c2m; Clock chip -> mezz card
+      - AJ33 # clk1_m2c
+      - None # clk1_c2m; NC
+  fmc1_gbtclk_n:
+    iostd: lvds
+    loc:
+      - AV32
+      - AK33
+
+  # Single-ended FMC interface
+  fmc0_ha:
+    iostd: LVCMOS18
+    loc:
+      - G35
+      - G36
+      - F34
+      - F35
+      - F38
+      - F39
+      - H38
+      - G39
+      - H33
+      - G34
+      - J33
+      - H34
+      - J39
+      - H39
+      - L38
+      - L39
+      - J35
+      - H36
+      - V32
+      - V33
+      - K38
+      - J38
+      - H37
+      - G37
+      - P36
+      - N36
+      - K36
+      - J36
+      - Y35
+      - W35
+      - L33
+      - K33
+      - M34
+      - L34
+      - R11
+      - P11
+      - K11
+      - K10
+      - H13
+      - H12
+      - T13
+      - T12
+      - J11
+      - J10
+      - L14
+      - L13
+      - None
+      - None
+  fmc0_hb:
+    iostd: LVCMOS18
+    loc:
+      - E36
+      - E37
+      - D38
+      - C38
+      - E35
+      - D35
+      - D34
+      - C34
+      - M30
+      - L30
+      - D39
+      - C39
+      - F37
+      - E38
+      - R27
+      - R28
+      - D36
+      - C36
+      - B37
+      - A37
+      - B34
+      - A35
+      - D33
+      - C33
+      - E30
+      - D30
+      - B35
+      - B36
+      - C31
+      - C32
+      - A33
+      - A34
+      - B30
+      - B31
+      - P14
+      - P13
+      - A29
+      - A30
+      - H11
+      - H10
+      - None
+      - None
+      - None
+      - None
+      - None
+      - None
+      - None
+      - None
+  fmc0_la:
+    iostd: LVCMOS18
+    loc:
+      - P34
+      - P35
+      - R33
+      - P33
+      - U31
+      - U32
+      - T33
+      - T34
+      - W33
+      - W34
+      - N37
+      - M37
+      - U30
+      - T30
+      - V34
+      - U34
+      - U35
+      - T35
+      - N33
+      - N34
+      - M35
+      - L35
+      - U29
+      - T29
+      - M36
+      - L37
+      - L32
+      - K32
+      - N32
+      - M32
+      - R30
+      - P30
+      - N31
+      - M31
+      - G30
+      - F30
+      - G29
+      - F29
+      - P28
+      - P29
+      - L28
+      - L29
+      - N27
+      - N28
+      - N29
+      - M29
+      - K30
+      - J30
+      - F28
+      - E28
+      - H32
+      - G32
+      - K31
+      - J31
+      - J28
+      - J29
+      - F32
+      - E32
+      - E31
+      - D31
+      - C29
+      - B29
+      - B32
+      - A32
+      - D28
+      - C28
+      - R10
+      - P10
+
+
+  fmc1_ha:
+    iostd: LVCMOS18
+    loc:
+      - AV36
+      - AW36
+      - AY35
+      - AY36
+      - AT37
+      - AT38
+      - AV37
+      - AV38
+      - AU39
+      - AV39
+      - AU36
+      - AU37
+      - AR39
+      - AT39
+      - AW38
+      - AW39
+      - AR37
+      - AR38
+      - BB29
+      - BC29
+      - AU34
+      - AU35
+      - AW34
+      - AW35
+      - BD29
+      - BD30
+      - AT34
+      - AT35
+      - BA32
+      - BB32
+      - AN32
+      - AP33
+      - BC31
+      - BD31
+      - BB17
+      - BC17
+      - BC21
+      - BD21
+      - BD20
+      - BD19
+      - BC16
+      - BD16
+      - BA19
+      - BA18
+      - BB19
+      - BC19
+      - None
+      - None
+  fmc1_hb:
+    iostd: LVCMOS18
+    loc:
+      - BA37
+      - BB37
+      - BA34
+      - BA35
+      - BC34
+      - BD34
+      - BC33
+      - BD33
+      - AL32
+      - AM32
+      - BD35
+      - BD36
+      - AY37
+      - AY38
+      - AM34
+      - AN34
+      - BC39
+      - BD39
+      - BC38
+      - BD38
+      - BB35
+      - BC36
+      - BA38
+      - BB39
+      - AL33
+      - AL34
+      - BB36
+      - BC37
+      - AN36
+      - AP36
+      - BA33
+      - BB34
+      - AM37
+      - AN37
+      - AH12
+      - AH11
+      - AP34
+      - AP35
+      - BB22
+      - BC22
+      - None
+      - None
+      - None
+      - None
+      - None
+      - None
+      - None
+      - None
+  fmc1_la:
+    iostd: LVCMOS18
+    loc:
+      - AT32
+      - AU32
+      - AT29
+      - AU29
+      - AM30
+      - AM31
+      - AM29
+      - AN29
+      - AL29
+      - AL30
+      - AP28
+      - AP29
+      - AN31
+      - AP31
+      - BB31
+      - BC32
+      - AR28
+      - AT28
+      - AW29
+      - AW30
+      - AR30
+      - AT30
+      - AV33
+      - AW33
+      - BA30
+      - BB30
+      - AY30
+      - AY31
+      - AW31
+      - AY32
+      - AR32
+      - AR33
+      - AP30
+      - AR31
+      - AK30
+      - AK31
+      - AH31
+      - AJ31
+      - AG30
+      - AG31
+      - AJ29
+      - AJ30
+      - AE35
+      - AF35
+      - AE33
+      - AF33
+      - AC35
+      - AD35
+      - AF32
+      - AG32
+      - AF34
+      - AG34
+      - AG29
+      - AH29
+      - AJ28
+      - AK28
+      - AH33
+      - AH34
+      - AJ34
+      - AJ35
+      - AM35
+      - AM36
+      - AK35
+      - AL35
+      - AE31
+      - AE32
+      - AM17
+      - AM16

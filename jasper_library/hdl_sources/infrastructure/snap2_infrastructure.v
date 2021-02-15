@@ -14,7 +14,8 @@ module snap2_infrastructure(
 
     output sys_rst,
 
-    output pll_lock
+    output pll_lock,
+    output idelay_rdy
   );
 
   wire sys_clk_ds;
@@ -123,12 +124,18 @@ module snap2_infrastructure(
   assign sys_rst = sys_rst_reg_z & pll_lock;
 
   /* io delay reset */
-  /*
-  IDELAYCTRL idelayctrl_inst(
+  reg idelay_rst;
+  reg idelay_rstR;
+  always @(posedge clk_200) begin
+    idelay_rst <= sys_rst;
+    idelay_rstR <= idelay_rst;
+  end
+  IDELAYCTRL #(
+    .SIM_DEVICE("ULTRASCALE")
+  ) idelayctrl_inst (
     .REFCLK(clk_200),
-    .RST(sys_rst),
+    .RST(idelay_rstR),
     .RDY(idelay_rdy)
   );
-  */
 
 endmodule

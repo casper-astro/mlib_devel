@@ -31,6 +31,9 @@ class Platform(object):
         #: A list of resources present on a platform to facilitate
         #: simple drc checking. Eg. ['qdr0', 'sysclk2x']
         self.provides = self.conf.get('provides', [])
+        #: A version number for the underlying hardware
+        #: defaults to 1 if none is specified in the yaml configuration
+        self.version = self.conf.get('version', 1)
         #: A list of source files/directories required to compile
         #: the template top.v (does NOT include top.v itself)
         self.sources = self.conf.get('sources', [])

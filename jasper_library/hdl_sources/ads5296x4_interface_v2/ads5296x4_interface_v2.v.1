@@ -1,0 +1,144 @@
+module ads5296x4_interface_v2 #(
+    parameter G_NUM_UNITS = 4
+  )(
+    input rst,
+    // Line clocks
+    input lclk_p,
+    input lclk_n,
+    // Frame clocks
+    input fclk_p,
+    input fclk_n,
+    // If not a master -- use this clock
+    input sclk,
+    // Data inputs
+    input [4*2*G_NUM_UNITS - 1:0] din_p,
+    input [4*2*G_NUM_UNITS - 1:0] din_n,
+    // Deserialized outputs
+    output [10*4*G_NUM_UNITS - 1:0] dout,
+    output clk_out
+  );
+
+  // Buffer the differential inputs
+  wire lclk_int;
+  wire fclk;
+  wire lclk;
+  wire [4*2*G_NUM_UNITS - 1:0] din;
+  wire [4*2*G_NUM_UNITS - 1:0] din_rise;
+  wire [4*2*G_NUM_UNITS - 1:0] din_fall;
+  wire fclk_rise;
+  wire fclk_fall;
+
+  IBUFDS fclk_buf (
+    .I(fclk_p),
+    .IB(fclk_n),
+    .O(fclk)
+  );
+   
+  IBUFDS lclk_buf (
+    .I(lclk_p),
+    .IB(lclk_n),
+    .O(lclk_int)
+  );
+
+  IBUFDS din_buf[4*2*G_NUM_UNITS - 1:0] (
+    .I(din_p),
+    .IB(din_n),
+    .O(din)
+  );
+
+  // deal with data DDR
+  IDDRE1 #(
+    .DDR_CLK_EDGE("SAME_EDGE_PIPELINED")
+  ) data_iddr_inst [4*2*G_NUM_UNITS - 1:0] (
+    .C(lclk),
+    //.CB(~lclk),
+    .D(din),
+    .R(1'b0),
+    .Q1(din_rise),
+    .Q2(din_fall)
+  );
+
+  IDDRE1 #(
+    .DDR_CLK_EDGE("SAME_EDGE_PIPELINED")
+  ) fclk_iddr_inst (
+    .C(lclk),
+    //.CB(~lclk),
+    .D(fclk),
+    .R(1'b0),
+    .Q1(fclk_rise),
+    .Q2(fclk_fall)
+  );
+
+  // Clock buffers
+
+  BUFG lclk_bufg(
+    .I(lclk_int),
+    .O(lclk)
+  );
+
+  // Divide the input clock
+  // to end up with a clock at 2x fclk
+  // TODO: Need to use fclk to reset this so
+  // phase relationship with samples is known
+  wire sclk_buf;
+  BUFGCE_DIV #(
+    .BUFGCE_DIVIDE(5)
+  ) clkout_bufg(
+    .I(lclk),
+    .O(sclk_buf),
+    .CE(1'b1),
+    .CLR(1'b0)
+  );
+
+  //// Generate output clock
+  //wire sclk_int;
+  //wire sclk_buf;
+  //wire sclkd2_int;
+  //wire sclkd2_buf;
+  //wire clk_fb_out;
+  //wire clk_fb_buf;
+  //MMCME3_BASE #(
+  //  .BANDWIDTH("OPTIMIZED"),
+  //  .DIVCLK_DIVIDE(5),
+  //  .CLKFBOUT_MULT_F(8.000),
+  //  .CLKOUT0_DIVIDE_F(4.0),
+  //  .CLKOUT1_DIVIDE(10),
+  //  .CLKIN1_PERIOD(2.000)
+  //) mmcm_inst (
+  //  .CLKIN1(lclk),
+  //  .RST(rst),
+  //  .CLKOUT0(sclk_int),
+  //  .CLKOUT1(sclkd2_int),
+  //  .CLKFBOUT(clk_fb_out),
+  //  .CLKFBIN(clk_fb_buf),
+  //  .LOCKED(),
+  //  .PWRDWN(1'b0)
+  //);
+
+  //BUFG clk_out_buf[2:0] (
+  //  .I({sclk_int, sclkd2_int, clk_fb_out}),
+  //  .O({sclk_buf, sclkd2_buf, clk_fb_buf})
+  //);
+
+  assign clk_out = sclk_buf;
+
+  // Deserializers
+  //wire [10*4*G_NUM_UNITS - 1:0] dout_int;
+  //reg  [10*4*G_NUM_UNITS - 1:0] dout_cdc;
+  ads5296_unit adc_unit_inst[4*G_NUM_UNITS - 1:0] (
+    .lclk(lclk),
+    .fclk_rise(fclk_rise),
+    .fclk_fall(fclk_fall),
+//    .sclkd2(sclkd2_buf),
+    .sclk(sclk),
+    .din_rise(din_rise),
+    .din_fall(din_fall),
+    .dout(dout)
+  );
+
+  //always @(posedge sclk) begin
+  //  dout_cdc <= dout_int;
+  //end
+  //assign dout = dout_cdc;
+
+endmodule

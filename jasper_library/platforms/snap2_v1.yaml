@@ -1,4 +1,5 @@
 name: snap2
+version: 1
 manufacturer: Xilinx
 fpga: xcku115-flvf1924-2-e
 backend_target: vivado
@@ -573,10 +574,10 @@ pins:
   fmc0_clk_p:
     iostd: lvds
     loc:
-      - None # Clock chip -> mezz card
-      - R31
-      - None # NC
-      - H28
+      - R31  # clk0_m2c
+      - None # clk0_c2m; Clock chip -> mezz card
+      - H28  # clk1_m2c
+      - None # clk1_c2m; NC
   fmc0_ha_n:
     iostd: lvds
     loc:
@@ -671,10 +672,10 @@ pins:
   fmc0_clk_n:
     iostd: lvds
     loc:
-      - None # Clock chip -> mezz card
-      - P31
-      - None # NC
-      - H29
+      - P31  # clk0_m2c
+      - None # clk0_c2m; Clock chip -> mezz card
+      - H29  # clk1_m2c
+      - None # clk1_c2m; NC
 
   fmc1_ha_p:
     iostd: lvds
@@ -770,10 +771,10 @@ pins:
   fmc1_clk_p:
     iostd: lvds
     loc:
-      - None # Clock chip -> mezz card
-      - AU30
-      - None # NC
-      - AH32
+      - AU30 # clk0_m2c
+      - None # clk0_c2m; Clock chip -> mezz card
+      - AH32 # clk1_m2c
+      - None # clk1_c2m; NC
   fmc1_ha_n:
     iostd: lvds
     loc:
@@ -868,10 +869,10 @@ pins:
   fmc1_clk_n:
     iostd: lvds
     loc:
-      - None # Clock chip -> mezz card
-      - AU31
-      - None # NC
-      - AJ33
+      - AU31 # clk0_m2c
+      - None # clk0_c2m; Clock chip -> mezz card
+      - AJ33 # clk1_m2c
+      - None # clk1_c2m; NC
 
   # Single-ended FMC interface
   fmc0_ha:

@@ -14,9 +14,12 @@ class microblaze(YellowBlock):
     def initialize(self):
         self.include_spi_ports = True
         if self.platform.name in ['snap2']:
-            self.memfile= 'executable_no_xadc.mem'
-            # self.memfile = 'executable.mem'
-            self.blkdiagram = 'microblaze_wb_no_xadc.tcl'
+            if self.platform.version == 1:
+                self.memfile= 'executable_no_xadc.mem'
+                self.blkdiagram = 'microblaze_wb_no_xadc.tcl'
+            else:
+                self.memfile= 'executable_no_xadc.mem'
+                self.blkdiagram = 'microblaze_wb_no_xadc.tcl'
         elif self.platform.name in ['vcu118']:
             self.memfile = 'executable_us_plus.mem'
             self.blkdiagram = 'microblaze_wb_us_plus.tcl'
@@ -25,10 +28,6 @@ class microblaze(YellowBlock):
             self.memfile = 'executable_us_plus.mem'
             self.blkdiagram = 'microblaze_wb_us_plus_hbm.tcl'
             self.include_spi_ports = False
-        elif self.platform.name == 'snap2_v2':
-            self.memfile= 'executable_no_xadc.mem'
-           # self.memfile = 'executable.mem'
-            self.blkdiagram = 'microblaze_wb_no_xadc.tcl'
         elif self.platform.name == 'casia_k7':
             self.memfile= 'executable_casia_k7.mem'
            # self.memfile = 'executable.mem'

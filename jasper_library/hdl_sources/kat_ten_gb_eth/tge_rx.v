@@ -245,7 +245,8 @@ module tge_rx #(
 
   /* rx data fifo - 64x1024 */
 
-  wire        cpu_buffer_sel;
+  wire        cpu_buffer_wr_sel;
+  wire        cpu_buffer_rd_sel;
   wire        cpu_buffer_we;
   wire [63:0] cpu_buffer_data;
   wire  [7:0] cpu_buffer_addr;
@@ -255,17 +256,16 @@ generate if (CPU_ENABLE) begin : rx_cpu_enabled
   cpu_buffer cpu_rx_buffer(   
     .clka      (cpu_clk),
     .dina      (64'h0),
-    .addra     ({cpu_buffer_sel, cpu_rx_buffer_addr}),
+    .addra     ({cpu_buffer_rd_sel, cpu_rx_buffer_addr}),
     .wea       (1'b0), //no writing from cpu side
     .douta     (cpu_rx_buffer_rd_data),
 
     .clkb      (mac_clk),
     .dinb      (cpu_buffer_data),
-    .addrb     ({!cpu_buffer_sel, cpu_buffer_addr}),
+    .addrb     ({cpu_buffer_wr_sel, cpu_buffer_addr}),
     .web       (cpu_buffer_we),
     .doutb     () //no reading on mac side
   );
-  //synthesis attribute box_type cpu_rx_buffer "user_black_box"
 
 end endgenerate
 
@@ -275,14 +275,21 @@ end endgenerate
   localparam CPU_BUFFERING = 1'd0;
   localparam CPU_WAIT      = 1'd1;
 
+  (* async_reg = "true" *) reg cpu_buffer_sel_cpu_clk;
+  (* async_reg = "true" *) reg cpu_buffer_sel_cpu_clkR;
   reg cpu_buffer_sel_reg;
-  assign cpu_buffer_sel = cpu_buffer_sel_reg;
-  /* TODO: ^^^^^^^ this might be dodge (addr msb on wrong clock domain)... */
+  assign cpu_buffer_wr_sel = ~cpu_buffer_sel_reg;
+  assign cpu_buffer_rd_sel = cpu_buffer_sel_cpu_clkR;
+
+  always @(posedge cpu_clk) begin
+    cpu_buffer_sel_cpu_clk <= cpu_buffer_sel_reg;
+    cpu_buffer_sel_cpu_clkR <= cpu_buffer_sel_cpu_clk;
+  end
 
   reg [7:0] cpu_addr;
-  reg frame_bypass;
+  (* mark_debug = "true" *) reg frame_bypass;
 
-  wire cpu_buffer_free;
+  (* mark_debug = "true" *) wire cpu_buffer_free;
 
   assign cpu_buffer_data = cpu_data;
   assign cpu_buffer_addr = cpu_addr;
@@ -338,8 +345,9 @@ end endgenerate
   /* CPU Handshaking */
 
   reg [7:0] cpu_size;
-  (* shreg_extract = "NO" *) reg cpu_ackR;
-  (* shreg_extract = "NO" *) reg cpu_ackRR;
+  reg cpu_buf_ready;
+  (* async_reg = "true" *) reg cpu_ackR;
+  (* async_reg = "true" *) reg cpu_ackRR;
   assign cpu_buffer_free = cpu_size == 8'd0 && !cpu_ackRR;
 
   always @(posedge mac_clk) begin
@@ -348,24 +356,29 @@ end endgenerate
 
     if (mac_rst) begin
       cpu_size <= 8'd0;
+      cpu_buf_ready <= 1'b0;
     end else begin
       if (cpu_ackRR) begin
         cpu_size <= 8'd0;
+        cpu_buf_ready <= 1'b0;
       end
       if (cpu_state == CPU_WAIT && cpu_buffer_free) begin
-        cpu_size <= cpu_addr;
+        cpu_size <= cpu_addr; // as soon as CPU size is set, cpu_buffer_free goes low
+        cpu_buf_ready <= 1'b1;
       end
     end
   end
 
-  /* FIXME: this is pretty dumb (registering on size), should add handshake signal */
-  (* shreg_extract = "NO" *) reg [7:0] cpu_sizeR;
-  (* shreg_extract = "NO" *) reg [7:0] cpu_sizeRR;
-  assign cpu_rx_size = cpu_sizeRR;
-
+  reg [7:0] cpu_size_stable;
+  assign cpu_rx_size = cpu_size_stable;
+  (* async_reg = "true" *) reg cpu_buf_readyR;
+  (* async_reg = "true" *) reg cpu_buf_readyRR;
   always @(posedge cpu_clk) begin
-    cpu_sizeR  <= cpu_size;
-    cpu_sizeRR <= cpu_sizeR;
+    cpu_buf_readyR <= cpu_buf_ready;
+    cpu_buf_readyRR <= cpu_buf_readyR;
+    if (cpu_buf_readyRR) begin
+      cpu_size_stable <= cpu_size;
+    end
   end
 
   /* Trigger interrupt when CPU rx size is non-zero. A cpu-read (ack) resets this */
@@ -465,8 +478,8 @@ end endgenerate
   assign ctrl_fifo_wr_en     = app_dvld && first_word && app_state == APP_RUN;
 
   wire overrun_ack;   
-  (* shreg_extract = "NO" *) reg overrun_ackR;   
-  (* shreg_extract = "NO" *) reg overrun_ackRR;   
+  (* async_reg = "true" *) reg overrun_ackR;
+  (* async_reg = "true" *) reg overrun_ackRR;
 
   always @(posedge mac_clk) begin
     overrun_ackR  <= overrun_ack;
@@ -502,8 +515,8 @@ end endgenerate
     end
   end
 
-  (* shreg_extract = "NO" *) reg overrunR;
-  (* shreg_extract = "NO" *) reg overrunRR;
+  (* async_reg = "true" *) reg overrunR;
+  (* async_reg = "true" *) reg overrunRR;
 
   reg app_overrun_ack;
   assign overrun_ack = app_overrun_ack;
@@ -524,8 +537,8 @@ end endgenerate
     end
   end
 
-  (* shreg_extract = "NO" *) reg local_enableR;
-  (* shreg_extract = "NO" *) reg local_enableRR;
+  (* async_reg = "true" *) reg local_enableR;
+  (* async_reg = "true" *) reg local_enableRR;
 
   always @(posedge mac_clk) begin
     local_enableR  <= local_enable;

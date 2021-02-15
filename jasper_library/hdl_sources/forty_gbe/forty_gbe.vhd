@@ -26,7 +26,7 @@ use ieee.std_logic_unsigned.all;
 library unisim;
 use unisim.vcomponents.all;
 
-use work.parameter.all;
+--use work.parameter.all;
 
 entity forty_gbe is
     generic (

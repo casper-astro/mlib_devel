@@ -5,10 +5,7 @@ class snap2(YellowBlock):
     def initialize(self):
         self.add_source('infrastructure/snap2*')
         self.add_source('wbs_arbiter')
-        if self.name == 'snap2_v2':
-            self.version = 2
-        else:
-            self.version = 1
+        self.version = self.platform.version
 
     def modify_top(self,top):
         if self.version == 2:
@@ -34,6 +31,16 @@ class snap2(YellowBlock):
         top.assign_signal('clk_250MHz90', '~clk_250MHz270')
         top.add_signal('clk_250MHz180')
         top.assign_signal('clk_250MHz180', '~clk_250MHz')
+
+        top.add_signal('clk200')
+        # HACK: these clocks aren't at the phases they claim.
+        # I hope you're not using them!
+        top.add_signal('clk20090')
+        top.assign_signal('clk20090', 'clk200')
+        top.add_signal('clk200180')
+        top.assign_signal('clk200180', '~clk200')
+        top.add_signal('clk200270')
+        top.assign_signal('clk200270', '~clk200')
 
     def gen_children(self):
         children = [YellowBlock.make_block({'tag':'xps:sys_block', 'board_id':'13', 'rev_maj':'1', 'rev_min':'0', 'rev_rcs':'32'}, self.platform)]
@@ -62,7 +69,7 @@ class snap2(YellowBlock):
             RawConstraint('set_property BITSTREAM.CONFIG.CONFIGRATE 33 [current_design]'),
             RawConstraint('set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]'),
             RawConstraint('set_property BITSTREAM.CONFIG.SPI_32BIT_ADDR Yes [current_design]'),
-           # RawConstraint('set_property BITSTREAM.CONFIG.TIMER_CFG 2000000 [current_design]'), # about 10 seconds
+            #RawConstraint('set_property BITSTREAM.CONFIG.TIMER_CFG 20000000 [current_design]'),
             RawConstraint('set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]'),
             ]
 
@@ -75,6 +82,6 @@ class snap2(YellowBlock):
         tcl_cmds['promgen'] = []
         #tcl_cmds['promgen'] += ['write_cfgmem  -format mcs -size 32 -interface SPIx4 -loadbit "up 0x0 ./myproj.runs/impl_1/top.bit " -checksum -file "./myproj.runs/impl_1/top.mcs" -force']
         #tcl_cmds['promgen'] += ['write_cfgmem  -format mcs -size 32 -interface SPIx4 -loadbit "up 0x%.7x ./myproj.runs/impl_1/top.bit " -checksum -file "./myproj.runs/impl_1/top_0x%x.mcs" -force' % (self.usermemaddr, self.usermemaddr)]
-        tcl_cmds['promgen'] += ['write_cfgmem  -format bin -size 32 -interface SPIx4 -loadbit "up 0x0 ./myproj.runs/impl_1/top.bit " -checksum -file "./myproj.runs/impl_1/top.bin" -force']
+        tcl_cmds['promgen'] += ['write_cfgmem  -format bin -size 64 -interface SPIx4 -loadbit "up 0x0 ./myproj.runs/impl_1/top.bit " -checksum -file "./myproj.runs/impl_1/top.bin" -force']
         return tcl_cmds
 
