@@ -206,12 +206,33 @@ else
 
     % the adder trees
     if n_inputs > 1,
+        try
+            get_param([blk,'/','adder_tree1'],'csp_latency');
+        catch ME
+            try
+                update_casper_block([blk,'/','adder_tree1'])
+                disp([ME.identifier,' ','Old 2016b adder_tree block, upgrading to new toolflow'])
+            catch ME
+            end
+        end
+        
+        try
+            get_param([blk,'/','adder_tree2'],'csp_latency');
+        catch ME
+            try
+                update_casper_block([blk,'/','adder_tree2'])
+                disp([ME.identifier,' ','Old 2016b adder_tree block, upgrading to new toolflow'])
+            catch ME
+            end
+        end
+        
+        
         reuse_block(blk, 'adder_tree1', 'casper_library_misc/adder_tree', ...
             'Position', [800 100 850 100+20*n_inputs], 'n_inputs', num2str(n_inputs),...
-            'latency', num2str(add_latency), 'first_stage_hdl', first_stage_hdl, 'adder_imp', adder_imp);
+            'csp_latency', num2str(add_latency), 'first_stage_hdl', first_stage_hdl, 'adder_imp', adder_imp);
         reuse_block(blk, 'adder_tree2', 'casper_library_misc/adder_tree', ...
             'Position', [800 200+20*n_inputs 850 200+20*n_inputs+20*n_inputs], 'n_inputs', num2str(n_inputs),...
-            'latency', num2str(add_latency), 'first_stage_hdl', first_stage_hdl, 'adder_imp', adder_imp);
+            'csp_latency', num2str(add_latency), 'first_stage_hdl', first_stage_hdl, 'adder_imp', adder_imp);
         reuse_block(blk, 'c1', 'xbsIndex_r4/Constant', ...
             'explicit_period', 'on', 'Position', [750 100 780 110]);
         reuse_block(blk, 'c2', 'xbsIndex_r4/Constant', ...

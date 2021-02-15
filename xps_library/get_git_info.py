@@ -6,6 +6,7 @@ import subprocess
 import os
 import argparse
 import sys
+import time
 
 parser = argparse.ArgumentParser(
     description='Get git info for a file/dir.',
@@ -44,7 +45,7 @@ def run_subproc(cmd):
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                          shell=True)
     (output, err) = p.communicate()
-    return output, err
+    return output.decode("utf-8"), err.decode("utf-8")
 
 
 def get_new_git_info(file_or_dir):
@@ -99,13 +100,19 @@ def get_new_git_info(file_or_dir):
                     '[{branch}]\t{modified_files}'.format(
                         username=username.replace('\n', ''),
                         hostname=hostname.replace('\n', ''),
-                        hashstring=output1 or 'file not in Git',
+                        hashstring=output1 or
+                        'File not in Git. Compiled: {}'.format(
+                            time.strftime("%a, %d %b %Y %H:%M:%S %z")),
                         branch=output3[0] + ' - ' + output3[1],
                         modified_files=modified_files,
                         filename=file_or_dir,
                         origin=output4)
     except GitInfoError as e:
-        gitstring = file_or_dir + ' - ' + str(e)
+        gitstring = '{filename}\tCompiled: {compile_time}\t{err}'.format(
+            filename=file_or_dir,
+            compile_time=time.strftime("%a, %d %b %Y %H:%M:%S %z"),
+            err=str(e)
+        )
     return gitstring
 
 if args.katversion:
@@ -120,10 +127,10 @@ if args.target:
     fptr.write(new_info)
     fptr.close()
 elif args.fpgstring:
-    print('?meta\t77777_git\trcs\t{}'.format(new_info)),
+    print('?meta\t77777_git\trcs\t{}'.format(new_info))
 else:
     if not os.path.exists(args.file_dir):
-        print ('ERROR no_such_file: ' + args.file_dir)
+        print(('ERROR no_such_file: ' + args.file_dir))
         sys.exit(-1)
     print(new_info)
 

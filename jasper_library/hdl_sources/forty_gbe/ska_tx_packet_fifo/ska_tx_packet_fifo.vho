@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2020 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -46,21 +46,22 @@
 -- 
 -- DO NOT MODIFY THIS FILE.
 
--- IP VLNV: xilinx.com:ip:fifo_generator:13.1
--- IP Revision: 1
+-- IP VLNV: xilinx.com:ip:fifo_generator:13.2
+-- IP Revision: 4
 
 -- The following code must appear in the VHDL architecture header.
 
 ------------- Begin Cut here for COMPONENT Declaration ------ COMP_TAG
 COMPONENT ska_tx_packet_fifo
   PORT (
-    rst : IN STD_LOGIC;
     wr_clk : IN STD_LOGIC;
+    wr_rst : IN STD_LOGIC;
     rd_clk : IN STD_LOGIC;
-    din : IN STD_LOGIC_VECTOR(259 DOWNTO 0);
+    rd_rst : IN STD_LOGIC;
+    din : IN STD_LOGIC_VECTOR(263 DOWNTO 0);
     wr_en : IN STD_LOGIC;
     rd_en : IN STD_LOGIC;
-    dout : OUT STD_LOGIC_VECTOR(259 DOWNTO 0);
+    dout : OUT STD_LOGIC_VECTOR(263 DOWNTO 0);
     full : OUT STD_LOGIC;
     overflow : OUT STD_LOGIC;
     empty : OUT STD_LOGIC;
@@ -75,9 +76,10 @@ END COMPONENT;
 ------------- Begin Cut here for INSTANTIATION Template ----- INST_TAG
 your_instance_name : ska_tx_packet_fifo
   PORT MAP (
-    rst => rst,
     wr_clk => wr_clk,
+    wr_rst => wr_rst,
     rd_clk => rd_clk,
+    rd_rst => rd_rst,
     din => din,
     wr_en => wr_en,
     rd_en => rd_en,

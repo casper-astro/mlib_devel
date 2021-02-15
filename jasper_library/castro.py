@@ -29,7 +29,7 @@ class Castro(object):
         loads this class object from a yaml file and assert that it is of type Castro
         '''
         with open(filename, 'r') as fh:
-            c = yaml.load(fh)
+            c = yaml.load(fh, Loader=yaml.Loader)
             assert isinstance(c, Castro)
             return c
 
@@ -40,8 +40,8 @@ class Synthesis(object):
     def __init__(self, platform_name='', fpga_manufacturer='', fpga_model='', synth_tool='', pin_map=[],
                  vendor_constraints_files='', pin_constraints=[], clk_constraints=[], gen_clk_constraints=[],
                  clk_grp_constraints=[], input_delay_constraints = [], output_delay_constraints=[],
-                 multi_cycle_constraints =[], false_path_constraints=[],
-                 raw_constraints=[], temp_fpga_model='', temp_quartus_qsf_files=[]):
+                 max_delay_constraints=[], min_delay_constraints=[], multi_cycle_constraints =[],
+                 false_path_constraints=[], raw_constraints=[], temp_fpga_model='', temp_quartus_qsf_files=[]):
         # name of the platform Roach, Snap, Uniboard, ..
         self.platform_name = platform_name  # Roach, Snap, UniBoard, ..
         # name of the fpga manufacturer Xilinx/Altera
@@ -66,6 +66,10 @@ class Synthesis(object):
         self.input_delay_constraints = input_delay_constraints
         # a list of output delay constraint objects
         self.output_delay_constraints = output_delay_constraints
+        # a list of output delay constraint objects
+        self.max_delay_constraints = max_delay_constraints
+        # a list of output delay constraint objects
+        self.min_delay_constraints = min_delay_constraints
         # a list of false path constraint objects
         self.false_path_constraints = false_path_constraints
         # a list of multi cycle constraint objects
@@ -197,6 +201,30 @@ class OutDelayConstraint(object):
         self.add_delay_en = add_delay_en
         #The name of the port that the constraint is applied to
         self.portname = portname
+
+class MaxDelayConstraint(object):
+    '''
+    Class to hold a Max Delay constraint.
+    '''
+    def __init__(self, sourcepath=None, destpath=None, constdelay_ns=None):
+        #False path source path
+        self.sourcepath = sourcepath
+        #False path dest path
+        self.destpath = destpath
+        #constraint output delay in ns (Tsu/Th)
+        self.constdelay_ns = constdelay_ns
+
+class MinDelayConstraint(object):
+    '''
+    Class to hold a Min Delay constraint.
+    '''
+    def __init__(self, sourcepath=None, destpath=None, constdelay_ns=None):
+        #False path source path
+        self.sourcepath = sourcepath
+        #False path dest path
+        self.destpath = destpath
+        #constraint output delay in ns (Tsu/Th)
+        self.constdelay_ns = constdelay_ns
 
 class FalsePthConstraint(object):
     '''

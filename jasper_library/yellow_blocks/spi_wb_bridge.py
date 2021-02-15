@@ -1,4 +1,4 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from constraints import PortConstraint, ClockConstraint
 
 class spi_wb_bridge(YellowBlock):

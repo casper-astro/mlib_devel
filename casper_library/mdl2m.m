@@ -36,7 +36,7 @@ function mdl2m(mdl, varargin)
   base = 'getenv(''MLIB_DEVEL_PATH''), ''/casper_library/''';
   name = get_param(mdl, 'name');
   defaults = { ...
-    'script_name', [eval(['[',base,']']), name, '_init'], ...           
+    'script_name', [eval(['[',base,']']), name, '_initialize'], ...           
     'mode', 'w', ...                                           
     'subsystem', 'off', ...
     'file', -1, ...
@@ -190,7 +190,7 @@ function mdl2m(mdl, varargin)
 
   %if a library, must be saved somewhere before can be used
   if strcmp(library, 'on'),
-      fprintf(fp, '\tfilename = save_system(mdl,[%s, ''.mdl'']);\n', mdl_name);
+      fprintf(fp, '\tfilename = save_system(mdl,[%s, ''.slx'']);\n', mdl_name);
       % Make sure other's can overwrite so we can share mlib_devel working copy
       % between users.
       fprintf(fp, '\tif iscell(filename), filename = filename{1}; end;\n');
@@ -686,7 +686,7 @@ function blk_gen(blk, file)
     fprintf(file, '\n');    
 
     fprintf(file, '\t%s_mask(blk);\n',name);      %logic to generate the mask    
-    fprintf(file, '\t%s_init(blk);\n',name);      %logic to generate the internal logic
+    fprintf(file, '\t%s_initialize(blk);\n',name);      %logic to generate the internal logic
 
     params = get_params(blk, {'MaskInitialization'});
     set_params(file, 'blk', params, 'no_empty');

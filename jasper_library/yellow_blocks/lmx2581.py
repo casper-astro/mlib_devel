@@ -1,4 +1,4 @@
-from yellow_block import YellowBlock
+from .yellow_block import YellowBlock
 from verilog import VerilogModule
 from constraints import PortConstraint, ClockConstraint
 

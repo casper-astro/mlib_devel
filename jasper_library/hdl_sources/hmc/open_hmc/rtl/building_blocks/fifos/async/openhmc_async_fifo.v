@@ -100,13 +100,13 @@ module openhmc_async_fifo #(
     reg [ENTRIES-1:0]       thermo_wp;
     reg [ENTRIES-1:0]       thermo_rp;
 
-    reg [ENTRIES-1:0]       thermo_wp_synced_0;
+    (* ASYNC_REG = "true" *) reg [ENTRIES-1:0] thermo_wp_synced_0;
 
-    reg [ENTRIES-1:0]       thermo_wp_synced_1;
+    (* ASYNC_REG = "true" *) reg [ENTRIES-1:0] thermo_wp_synced_1;
 
-    reg [ENTRIES-1:0]       thermo_rp_synced_0;
+    (* ASYNC_REG = "true" *) reg [ENTRIES-1:0] thermo_rp_synced_0;
 
-    reg [ENTRIES-1:0]       thermo_rp_synced_1;
+    (* ASYNC_REG = "true" *) reg [ENTRIES-1:0] thermo_rp_synced_1;
 
     wire [LG_ENTRIES-1:0]   next_rp;
     wire [LG_ENTRIES-1:0]   next_rp_p1;

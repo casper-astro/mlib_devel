@@ -18,6 +18,17 @@ if exist(builddir, 'dir') ~= 7
     mkdir(modeldir, modelname);
 end
 
+disp('Checking Mezzanine block sites');
+hmc_blks = find_system(gcs, 'SearchDepth', 10, 'LookUnderMasks', 'all', 'Tag', 'xps:hmc');
+mez_sites = get_param(hmc_blks, 'mez');
+if length(mez_sites) ~= length(unique(mez_sites))
+    sitestr = '';
+    for ctr = 1 : length(mez_sites)
+        sitestr = sprintf('%s\n\t%s - %s', sitestr, hmc_blks{ctr}, mez_sites{ctr});
+    end
+    error('ERROR: Mezzanine blocks set to use same sites:\n%s', sitestr);
+end
+
 disp('Updating diagram');
 set_param(sys, 'SimulationCommand', 'update');
 
@@ -54,15 +65,36 @@ if rv ~= 0
     return;
 end
 
-disp('Launching System Generator compile')
+disp('Launching System Generator compile');
 update_model = 0;
-start_sysgen_compile(modelpath, builddir, update_model);
-
-disp('Complete');
-% if vivado is to be used
-if getenv('JASPER_BACKEND') == 'vivado'
-    build_cmd = ['python ' jasper_python ' -m ' modelpath ' --middleware --backend --software'];
-else
-    build_cmd = ['python ' jasper_python ' -m ' modelpath ' --middleware --backend --software --be ise'];
+xsg_result = start_sysgen_compile(modelpath, builddir, update_model);
+if xsg_result ~= 0
+    error('XSG generation failed!')
 end
+
+% figure out what the version of python being used by the toolflow is
+[status, result] = system('which python');
+if status ~= 0
+    python_path = 'python';
+else
+    python_path = strtrim(result);
+end
+
+% if vivado is to be used
+build_cmd = '';
+if strcmp(getenv('JASPER_BACKEND'), 'vivado')
+    build_cmd = [python_path ' ' jasper_python ' -m ' modelpath ' --middleware --backend --software'];
+elseif strcmp(getenv('JASPER_BACKEND'), 'ise')
+    build_cmd = [python_path ' ' jasper_python ' -m ' modelpath ' --middleware --backend --software --be ise'];
+end
+
+disp('************************************');
+disp('*    Front End compile complete    *');
+disp('************************************');
+disp('');
+disp('To complete your compile, run the following command in a terminal.');
+disp('Remember to source your startsg.local environment first!');
+disp(build_cmd);
+
+
 % end

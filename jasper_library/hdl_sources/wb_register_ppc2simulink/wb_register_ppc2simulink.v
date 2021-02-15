@@ -1,5 +1,6 @@
-module wb_register_ppc2simulink
-  (
+module wb_register_ppc2simulink #(
+    parameter INIT_VAL = 32'h00000000
+  ) (
     input         wb_clk_i,
     input         wb_rst_i,
     output [31:0] wb_dat_o,
@@ -27,8 +28,15 @@ module wb_register_ppc2simulink
   reg wb_ack_reg;
   assign wb_ack_o = wb_ack_reg;
 
-  reg register_doneR;
-  reg register_doneRR;
+  (* ASYNC_REG = "true" *) reg register_doneR;
+  (* ASYNC_REG = "true" *) reg register_doneRR;
+
+  (* ASYNC_REG = "true" *) reg register_readyR;
+  (* ASYNC_REG = "true" *) reg register_readyRR;
+    
+  reg [31:0] user_data_out_reg;
+
+  assign user_data_out = user_data_out_reg;
 
   always @(posedge wb_clk_i) begin
     //single cycle signals
@@ -40,10 +48,11 @@ module wb_register_ppc2simulink
 
     if (wb_rst_i) begin
       register_ready <= 1'b0;
+      reg_buffer <= INIT_VAL;
     end else if (wb_stb_i && wb_cyc_i && !wb_ack_reg) begin
       wb_ack_reg <= 1'b1;
       if (wb_we_i) begin
-        reg_buffer <= wb_dat_i; 
+        reg_buffer <= wb_dat_i;
 
         register_ready <= 1'b1;
       end
@@ -64,11 +73,6 @@ module wb_register_ppc2simulink
     end
   end
 
-  reg register_readyR;
-  reg register_readyRR;
-  reg [31:0] user_data_out_reg;
-  assign user_data_out = user_data_out_reg;
-
   always @(posedge user_clk) begin
     /* Clock domain crossing registering */
     register_readyR  <= register_ready;
@@ -82,6 +86,5 @@ module wb_register_ppc2simulink
       register_done <= 1'b1;
       user_data_out_reg <= reg_buffer;
     end
-
   end
 endmodule

@@ -208,6 +208,7 @@ architecture Behavioral of IEEE802_3_XL_RS is
 	signal RX_RS256_d2       : RS_256bit_t;
 
 	signal RX_RS256_insert_idle : std_logic;
+	signal RX_RS256_insert_idle_comb : std_logic;
 
 	signal RX_frame_started     : std_logic                     := '0';
 	signal RX_frame_started_sr  : std_logic_vector(23 downto 0) := (others => '0');
@@ -228,15 +229,71 @@ architecture Behavioral of IEEE802_3_XL_RS is
 	signal RX_frame_active      : std_logic;
 	signal RX_frame_count       : unsigned(31 downto 0);
 	signal RX_frame_error_count : unsigned(31 downto 0);
+	
+	    -- Mark Debug ILA Testing 
+    --signal dbg_RX_RS256_d1_valid : std_logic;
+    --signal dbg_RX_RS256_d2 : RS_256bit_t;
+    --signal dbg_RX_RS256_d1 : RS_256bit_t;
+    --signal dbg_RX_frame_queue_count_dec : std_logic;
+    --signal dbg_RX_RS256_insert_idle : std_logic;
+    --signal dbg_RX_RS256_d2_valid : std_logic;
+    --signal dbg_XLGMII_RX_FIFO_rd_en : std_logic;
+    --signal dbg_XLGMII_RX_FIFO_empty : std_logic;
+    --signal dbg_RX_frame_queue_empty : boolean;
+    --signal dbg_XLGMII_RX_FIFO_full : std_logic;
+    --signal dbg_RX_FRAME_COUNT_O : std_logic_vector(31 downto 0);
+    --signal dbg_RX_FRAME_ERROR_COUNT_O : std_logic_vector(31 downto 0);
+    --signal dbg_RX_RS256_insert_idle_comb : std_logic;
+    
+          
+    
+    -- Mark Debug ILA Testing   
+    --attribute MARK_DEBUG : string;
+    --attribute MARK_DEBUG of dbg_RX_RS256_d1_valid : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_RX_RS256_d2 : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_RX_RS256_d1 : signal is "TRUE";
+    --attribute MARK_DEBUG of dbg_RX_frame_queue_count_dec : signal is "TRUE"; 
+    --attribute MARK_DEBUG of dbg_RX_RS256_insert_idle : signal is "TRUE";    
+    --attribute MARK_DEBUG of dbg_RX_RS256_d2_valid : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_XLGMII_RX_FIFO_rd_en : signal is "TRUE";   
+    --attribute MARK_DEBUG of dbg_XLGMII_RX_FIFO_empty : signal is "TRUE"; 
+    --attribute MARK_DEBUG of dbg_RX_frame_queue_empty : signal is "TRUE"; 
+    --attribute MARK_DEBUG of dbg_XLGMII_RX_FIFO_full : signal is "TRUE"; 
+    --attribute MARK_DEBUG of dbg_RX_FRAME_COUNT_O : signal is "TRUE"; 
+    --attribute MARK_DEBUG of dbg_RX_FRAME_ERROR_COUNT_O : signal is "TRUE"; 
+    --attribute MARK_DEBUG of dbg_RX_RS256_insert_idle_comb : signal is "TRUE"; 	
 
 begin
+
+    --Mark debug ILA
+    --dbg_RX_RS256_d1_valid <= RX_RS256_d1_valid;
+    --dbg_RX_RS256_d2 <= RX_RS256_d2;
+    --dbg_RX_RS256_d1 <= RX_RS256_d1;
+    --dbg_RX_frame_queue_count_dec <= RX_frame_queue_count_dec;
+    --dbg_RX_RS256_insert_idle <= RX_RS256_insert_idle;
+    --dbg_RX_RS256_d2_valid <= RX_RS256_d2_valid;
+    --dbg_XLGMII_RX_FIFO_rd_en <= XLGMII_RX_FIFO_rd_en;
+    --dbg_XLGMII_RX_FIFO_empty <= XLGMII_RX_FIFO_empty;
+    --dbg_RX_frame_queue_empty <= RX_frame_queue_empty;
+    --dbg_XLGMII_RX_FIFO_full <= XLGMII_RX_FIFO_full;
+    --dbg_RX_FRAME_COUNT_O <= std_logic_vector(RX_frame_count);
+    --dbg_RX_FRAME_ERROR_COUNT_O <= std_logic_vector(RX_frame_error_count);
+    --dbg_RX_RS256_insert_idle_comb <= RX_RS256_insert_idle_comb;	
+
+
+
 	XLGMII_TX_FIFO_WRITE_CTRL_proc : process(XL_TX_CLK_RST_I, SYS_CLK_I) is
 	begin
 		if XL_TX_CLK_RST_I = '1' then
 			XLGMII_TX_FIFO_wr_en <= '0';
 		else
 			if rising_edge(SYS_CLK_I) then
-				XLGMII_TX_FIFO_wr_en <= '1';
+			    --only write into the FIFO when not full and reset is deasserted 
+			    if (XLGMII_TX_FIFO_full = '0') then
+				    XLGMII_TX_FIFO_wr_en <= '1';
+			    else
+				    XLGMII_TX_FIFO_wr_en <= '0';			  	
+			    end if;	
 			end if;
 		end if;
 	end process XLGMII_TX_FIFO_WRITE_CTRL_proc;
@@ -584,8 +641,9 @@ begin
 			RX_frame_started_sr(23 downto 1) <= RX_frame_started_sr(22 downto 0);
 		end if;
 	end process CROSS_CLK_proc;
-
-	XLGMII_RX_FIFO_wr_en <= RX_RS64_X4_d1_valid(0);
+	
+    --write into the FIFO when FIFO is not full and reset is not asserted
+	XLGMII_RX_FIFO_wr_en <= RX_RS64_X4_d1_valid(0) and (not XLGMII_RX_FIFO_full) and (not XL_RX_CLK_RST_I);
 
 	RX_FIFO_inst : component RS256_FIFO
 		port map(
@@ -608,9 +666,9 @@ begin
 			empty               => XLGMII_RX_FIFO_empty
 		);
 
-	RX_proc : process(SYS_CLK_I, XLGMII_RX_FIFO_empty) is
+	RX_proc : process(XL_RX_CLK_RST_I, SYS_CLK_I, XLGMII_RX_FIFO_empty) is
 	begin
-		if XLGMII_RX_FIFO_empty = '1' then
+		if XLGMII_RX_FIFO_empty = '1' or XL_RX_CLK_RST_I = '1' then
 			XLGMII_RX_FIFO_rd_en <= '0';
 		else
 			if rising_edge(SYS_CLK_I) then
@@ -624,7 +682,7 @@ begin
 			end if;
 		end if;
 	end process RX_proc;
-
+    --AI: Insert debug from here
 	RX2_proc : process(SYS_CLK_I) is
 	begin
 		if rising_edge(SYS_CLK_I) then
@@ -633,6 +691,9 @@ begin
 				RX_RS256_d2_valid        <= '0';
 				RX_frame_queue_count_dec <= '0';
 				RX_RS256_insert_idle     <= not RX_RS256_d2_valid;
+				--AI: Insert idle as soon as RX FIFO is empty
+				--RX_RS256_insert_idle     <= '1';
+				
 			elsif (XLGMII_RX_FIFO_rd_en = '1') then
 				RX_RS256_d1_valid        <= '1';
 				RX_RS256_d2_valid        <= RX_RS256_d1_valid;
@@ -651,7 +712,12 @@ begin
 			end if;
 		end if;
 	end process RX2_proc;
-
+	
+	--AI: Gate insert idle single with start frame or terminate frame signal, so that idles are not inserted after the frame
+	--start or frame terminate signal
+	RX_RS256_insert_idle_comb <= RX_RS256_insert_idle and (RX_RS256_d1.is_S or RX_RS256_d1.is_T);
+	--RX_RS256_insert_idle_comb <= (RX_RS256_d1.is_S and RX_RS256_d2.is_S) or (RX_RS256_d1.is_T and RX_RS256_d2.is_T);
+		
 	RX_FRAME_STARTED_CROSS_CLOCK_proc : process(SYS_CLK_I) is
 	begin
 		if rising_edge(SYS_CLK_I) then
@@ -695,7 +761,7 @@ begin
 	RX_OUTPUT_REGISTER_proc : process(SYS_CLK_I) is
 	begin
 		if rising_edge(SYS_CLK_I) then
-			if (RX_RS256_insert_idle = '1') then
+			if (RX_RS256_insert_idle_comb = '1') then
 				XLGMII_X4_RX_O <= (others => IBLOCK_R);
 			else
 				XLGMII_X4_RX_O(0).C <= RX_RS256_d2.C(7 downto 0);
@@ -719,7 +785,7 @@ begin
 				RX_frame_count       <= (others => '0');
 				RX_frame_error_count <= (others => '0');
 			else
-				if (RX_RS256_insert_idle = '0') then
+				if (RX_RS256_insert_idle_comb = '0') then
 					if (RX_frame_active = '1') then
 						if (RX_RS256_d2.is_T = '1') then
 							RX_frame_count <= RX_frame_count + 1;

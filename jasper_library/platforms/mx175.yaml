@@ -1,6 +1,7 @@
 name: mx175
 manufacturer: Xilinx
 fpga: xc7vx690tffg1930-2
+backend_target: vivado
 config_voltage: 2.5
 cfgbvs: VCCO
 sources:
@@ -23,69 +24,79 @@ provides:
   - sys_clk180
   - sys_clk270
 pins:  
-  Q8_CLK1_GTREFCLK_PAD_P_IN:
-    loc: AF8
-  diff_clock_rtl_clk_p:
-    iostd: LVDS
+  #Q8_CLK1_GTREFCLK_PAD_P_IN:
+  #  loc: AF8
+  #diff_clock_rtl_clk_p:
+  sys_clk_p:
+    #iostd: LVCMOS18
+    iostd: DIFF_HSTL_I_18
     loc: AR21
-  clk_200mhz_p:
-    iostd: LVDS
-    loc: AR21
-  TRACK_DATA_OUT:
+  #diff_clock_rtl_clk_n:
+  sys_clk_n:
+    loc: AT21
+  #user_clock_n:
+  #  iostd: LVDS
+  #clk_200mhz_p:
+  #  iostd: LVDS
+  #  loc: AR21
+  #TRACK_DATA_OUT:
+  #  iostd: LVCMOS18
+  #  loc: T26
+  #reset_rtl:
+  #  iostd: LVCMOS18
+  #  loc: T28
+  #TXP_OUT:
+  #  loc:
+  #    - AE2
+  #    - AL2
+  #    - AF4
+  #    - AJ2
+  #    - AC2
+  #    - AG2
+  #    - AK4
+  #    - AN2
+  #FLASH1:
+  #  iostd: LVCMOS18
+  #  loc: C29
+  #FLASH2:
+  #  iostd: LVCMOS18
+  #  loc: C30
+  #uart_rxd:
+  usb_rx:
     iostd: LVCMOS18
-    loc: T26
-  reset_rtl:
-    iostd: LVCMOS18
-    loc: T28
-  TXP_OUT:
-    loc:
-      - AE2
-      - AL2
-      - AF4
-      - AJ2
-      - AC2
-      - AG2
-      - AK4
-      - AN2
-  FLASH1:
-    iostd: LVCMOS18
-    loc: C29
-  FLASH2:
-    iostd: LVCMOS18
-    loc: C30
-  uart_rxd:
+    loc: AW40
+  #uart_txd:
+  usb_tx:
     iostd: LVCMOS18
     loc: AV40
   iic_scl_io:
     iostd: LVCMOS18
     loc: AW39
-  RXP_IN:
-    loc:
-      - AE6
-      - AL6
-      - AH4
-      - AJ6
-      - AC6
-      - AG6
-      - AM4
-      - AN6
+  #RXP_IN:
+  #  loc:
+  #    - AE6
+  #    - AL6
+  #    - AH4
+  #    - AJ6
+  #    - AC6
+  #    - AG6
+  #    - AM4
+  #    - AN6
   si5324_out_p:
     iostd: LVDS
     loc: AR38
   si5324_out_n:
     iostd: LVDS
-  TXN_OUT:
-    loc:
-      - AE1
-      - AL1
-      - AF3
-      - AJ1
-      - AC1
-      - AG1
-      - AK3
-      - AN1
-  diff_clock_rtl_clk_n:
-    iostd: LVDS
+  #TXN_OUT:
+  #  loc:
+  #    - AE1
+  #    - AL1
+  #    - AF3
+  #    - AJ1
+  #    - AC1
+  #    - AG1
+  #    - AK3
+  #    - AN1
   led:
     iostd: LVCMOS18
     loc:
@@ -97,33 +108,28 @@ pins:
       - C28
       - C29
       - C30
-  user_clock_n:
-    iostd: LVDS
-  gpio_adc_control_tri_o:
-    iostd: LVCMOS18
-    loc:
-      - E2
-      - E3
-      - F3
-      - F4
-      - D4
-      - E4
-  RXN_IN:
-    loc:
-      - AE5
-      - AL5
-      - AH3
-      - AJ5
-      - AC5
-      - AG5
-      - AM3
-      - AN5
-  user_clock_p:
-    iostd: LVDS
-    loc: AP21
-  uart_txd:
-    iostd: LVCMOS18
-    loc: AW40
+  #gpio_adc_control_tri_o:
+  #  iostd: LVCMOS18
+  #  loc:
+  #    - E2
+  #    - E3
+  #    - F3
+  #    - F4
+  #    - D4
+  #    - E4
+  #RXN_IN:
+  #  loc:
+  #    - AE5
+  #    - AL5
+  #    - AH3
+  #    - AJ5
+  #    - AC5
+  #    - AG5
+  #    - AM3
+  #    - AN5
+  #user_clock_p:
+  #  iostd: LVDS
+  #  loc: AP21
   gpioa:
     iostd: LVCMOS18
     loc: 
@@ -158,35 +164,72 @@ pins:
       - F29
       - E29
 
-  # 10GbE / SFP nets
-  eth_clk_p:
+  # 1GbE 
+  eth_clk_125_p:
     loc: AY8
-  eth_clk_n:
+    #iostd: LVCMOS18
+  eth_clk_125_n:
     loc: AY7
-  mgt_rx_n:
-    loc: 
-      - BA5
-      - AY3
-      - BC5
-      - BD7
+  gbe_mdio:
+    loc: AR24
+    iostd: LVCMOS18
+  gbe_mdc:
+    loc: AN24
+    iostd: LVCMOS18
+  gbe_int_b:
+    loc: AT23
+    iostd: LVCMOS18
+  gbe_rst_b:
+    loc: AR23
+    iostd: LVCMOS18
+  gbe_tx_p:
+    loc: BD4
+  gbe_tx_n:
+    loc: BD3
+  gbe_rx_p:
+    loc: BD8
+  gbe_rx_n:
+    loc: BD7
+  # 10GbE
+  eth_clk_p:
+    loc: AT8
+    #loc: AP21
+    #iostd: DIFF_HSTL_I_18
+    #iostd: LVCMOS18
+  eth_clk_n:
+    loc: AT7
   mgt_rx_p:
-    loc:
-      - BA6
-      - AY4
-      - BC6
-      - BD8
-  mgt_tx_n:
-    loc: 
-      - BA1
-      - AW1
-      - BB3
-      - BD3
+    loc: BD8
+  mgt_rx_n:
+    loc: BD7
   mgt_tx_p:
-    loc: 
-      - BA2
-      - AW2
-      - BB4
-      - BD4
+    loc: BD4
+  mgt_tx_n:
+    loc: BD3
+  #mgt_rx_n:
+  #  loc: 
+  #    - BA5
+  #    - AY3
+  #    - BC5
+  #    - BD7
+  #mgt_rx_p:
+  #  loc:
+  #    - BA6
+  #    - AY4
+  #    - BC6
+  #    - BD8
+  #mgt_tx_n:
+  #  loc: 
+  #    - BA1
+  #    - AW1
+  #    - BB3
+  #    - BD3
+  #mgt_tx_p:
+  #  loc: 
+  #    - BA2
+  #    - AW2
+  #    - BB4
+  #    - BD4
   sfp_disable:
     iostd: LVCMOS18
     loc: 
@@ -204,3 +247,16 @@ pins:
   iic_sda_io:
     iostd: LVCMOS18
     loc: AV39
+  phy_rst_n:
+    loc: AR23
+    iostd: LVCMOS18
+  spi_flash_data:
+    iostd: LVCMOS18
+    loc:
+      - AW44
+      - BC42
+      - BB42
+      - BA43
+  spi_flash_csn:
+    iostd: LVCMOS18
+    loc: BC40

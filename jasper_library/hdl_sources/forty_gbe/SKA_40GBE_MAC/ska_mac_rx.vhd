@@ -1,23 +1,23 @@
 ----------------------------------------------------------------------------------
 -- Company: Peralex Electronics
 -- Engineer: Gavin Teague
--- 
+--
 -- Create Date: 05.09.2014 10:19:29
--- Design Name: 
+-- Design Name:
 -- Module Name: ska_mac_rx - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
+-- Project Name:
+-- Target Devices:
+-- Tool Versions:
+-- Description:
+--
 -- SKA 40GBE RX path - MAC
 --
--- Dependencies: 
--- 
+-- Dependencies:
+--
 -- Revision:
 -- Revision 0.01 - File Created
 -- Additional Comments:
--- 
+--
 ----------------------------------------------------------------------------------
 
 library ieee;
@@ -27,7 +27,7 @@ use ieee.numeric_std.all;
 
 entity ska_mac_rx is
     generic (
-    RX_CRC_CHK_ENABLE   : integer); 
+    RX_CRC_CHK_ENABLE   : integer);
     port (
     -- XLGMII
     xlgmii_rxd      : in std_logic_vector(255 downto 0);
@@ -38,7 +38,7 @@ entity ska_mac_rx is
     mac_rst             : in std_logic;
     mac_rx_enable       : in std_logic;
     mac_rx_busy         : out std_logic;
-    mac_rx_data         : out std_logic_vector(255 downto 0); 
+    mac_rx_data         : out std_logic_vector(255 downto 0);
     mac_rx_data_valid   : out std_logic_vector(31 downto 0);
     mac_rx_good_frame   : out std_logic;
     mac_rx_bad_frame    : out std_logic);
@@ -52,14 +52,14 @@ architecture arch_ska_mac_rx of ska_mac_rx is
     constant C_START_BYTE : std_logic_vector(7 downto 0) := X"FB";
     constant C_IDLE_BYTE : std_logic_vector(7 downto 0) := X"07";
     constant C_TERMINATE_BYTE : std_logic_vector(7 downto 0) := X"FD";
-    
+
     type T_MAC_STATE is (
     IDLE,
     REC_ALIGNED_0,
     REC_ALIGNED_64,
     REC_ALIGNED_128,
     REC_ALIGNED_192);
-    
+
 --    component ska_mac_rx_crc
 --    port (
 --        clk             : in std_logic;
@@ -88,12 +88,12 @@ architecture arch_ska_mac_rx of ska_mac_rx is
 
     signal current_mac_state : T_MAC_STATE;
     signal current_mac_state_z1 : T_MAC_STATE;
-   
+
     signal xlgmii_rxd_z1 : std_logic_vector(255 downto 0);
     signal xlgmii_rxc_z1 : std_logic_vector(31 downto 0);
     signal xlgmii_rxd_z2 : std_logic_vector(255 downto 0);
     signal xlgmii_rxc_z2 : std_logic_vector(31 downto 0);
-    
+
     signal xlgmii_rxd_aligned_0 : std_logic_vector(255 downto 0);
     signal xlgmii_rxc_aligned_0 : std_logic_vector(31 downto 0);
     signal xlgmii_rxd_aligned_64 : std_logic_vector(255 downto 0);
@@ -107,7 +107,7 @@ architecture arch_ska_mac_rx of ska_mac_rx is
     signal xlgmii_rxc_aligned : std_logic_vector(31 downto 0);
     signal xlgmii_rxd_aligned_z1 : std_logic_vector(255 downto 0);
     signal xlgmii_rxc_aligned_z1 : std_logic_vector(31 downto 0);
-           
+
     signal xlgmii_rxd_crc_masked : std_logic_vector(255 downto 0);
     signal xlgmii_rxc_crc_masked : std_logic_vector(31 downto 0);
     signal next_xlgmii_rxd_crc_masked : std_logic_vector(255 downto 0);
@@ -120,7 +120,7 @@ architecture arch_ska_mac_rx of ska_mac_rx is
     signal terminate_byte_found_z4 : std_logic;
     signal terminate_byte_found_z5 : std_logic;
     signal terminate_byte_found_z6 : std_logic;
-    
+
     signal received_crc : std_logic_vector(31 downto 0);
     signal received_crc_z1 : std_logic_vector(31 downto 0);
     signal received_crc_z2 : std_logic_vector(31 downto 0);
@@ -134,9 +134,9 @@ architecture arch_ska_mac_rx of ska_mac_rx is
 
     signal crc_do_reset : std_logic;
     signal crc_do_reset_z1 : std_logic;
-    
+
     signal crc_out_multi : std_logic_vector(31 downto 0);
-    
+
     signal mac_rx_data_i : std_logic_vector(255 downto 0);
     signal mac_rx_data_valid_i : std_logic_vector(31 downto 0);
     signal mac_rx_data_i_z1 : std_logic_vector(255 downto 0);
@@ -147,11 +147,11 @@ architecture arch_ska_mac_rx of ska_mac_rx is
     signal mac_rx_data_valid_i_z3 : std_logic_vector(31 downto 0);
     signal mac_rx_data_i_z4 : std_logic_vector(255 downto 0);
     signal mac_rx_data_valid_i_z4 : std_logic_vector(31 downto 0);
-    
+
     signal crc_out_old : std_logic_vector(31 downto 0);
     signal finished_packet : std_logic;
     signal clear_finished_packet : std_logic;
-    
+
 begin
 
     -- NEED TO BE ABLE TO HANDLE MINIMUM IFG!!!!
@@ -184,14 +184,14 @@ begin
         elsif (rising_edge(mac_clk))then
 
             current_mac_state_z1 <= current_mac_state;
-            
+
             crc_do_reset <= '0';
             clear_finished_packet <= '0';
 
             case current_mac_state is
                 when IDLE =>
                 current_mac_state <= IDLE;
-                
+
                 -- CAN'T HANDLE PACKETS SHORTER THAN SPECIFICATION OF 64 BYTES SO EXTEND CHECK OF START
                 --if ((xlgmii_rxd(7 downto 0) = C_START_BYTE)and(xlgmii_rxc(0) = '1')and(mac_rx_enable = '1'))then
                 if ((xlgmii_rxd(7 downto 0) = C_START_BYTE)and(xlgmii_rxc(31 downto 0) = X"00000001")and(mac_rx_enable = '1'))then
@@ -214,35 +214,35 @@ begin
                     clear_finished_packet <= '1';
                     current_mac_state <= REC_ALIGNED_192;
                 end if;
-                
+
                 when REC_ALIGNED_0 =>
                 current_mac_state <= REC_ALIGNED_0;
-                
+
                 if (terminate_byte_found = '1')then
                     current_mac_state <= IDLE;
                 end if;
-                
+
                 when REC_ALIGNED_64 =>
                 current_mac_state <= REC_ALIGNED_64;
-                
+
                 if (terminate_byte_found = '1')then
                     current_mac_state <= IDLE;
                 end if;
 
                 when REC_ALIGNED_128 =>
                 current_mac_state <= REC_ALIGNED_128;
-                
+
                 if (terminate_byte_found = '1')then
                     current_mac_state <= IDLE;
                 end if;
-                
+
                 when REC_ALIGNED_192 =>
                 current_mac_state <= REC_ALIGNED_192;
-                
+
                 if (terminate_byte_found = '1')then
                     current_mac_state <= IDLE;
                 end if;
-                
+
             end case;
         end if;
     end process;
@@ -258,7 +258,7 @@ begin
     xlgmii_rxd_aligned_0(255 downto 192) <= xlgmii_rxd(63 downto 0);
     xlgmii_rxc_aligned_0(23 downto 0) <= xlgmii_rxc_z1(31 downto 8);
     xlgmii_rxc_aligned_0(31 downto 24) <= xlgmii_rxc(7 downto 0);
-    
+
     -- 64 ALIGNED
     xlgmii_rxd_aligned_64(127 downto 0) <= xlgmii_rxd_z1(255 downto 128);
     xlgmii_rxd_aligned_64(255 downto 128) <= xlgmii_rxd(127 downto 0);
@@ -320,13 +320,13 @@ begin
             if (clear_finished_packet = '1')then
                 finished_packet <= '0';
             end if;
-            
+
             if (use_next_xlgmii_rxd_crc_masked = '1')then
                 xlgmii_rxd_crc_masked <= next_xlgmii_rxd_crc_masked;
                 xlgmii_rxc_crc_masked <= next_xlgmii_rxc_crc_masked;
                 use_next_xlgmii_rxd_crc_masked <= '0';
                 finished_packet <= '1';
-                --terminate_byte_found <= '1'; 
+                --terminate_byte_found <= '1';
             else
                 use_next_xlgmii_rxd_crc_masked <= '0';
                 if ((xlgmii_rxd_aligned(7 downto 0) = C_TERMINATE_BYTE)and(xlgmii_rxc_aligned(0) = '1'))then
@@ -334,7 +334,7 @@ begin
                     xlgmii_rxc_crc_masked <= X"0FFFFFFF"; -- UPPER 32 BITS ARE CRC
                     received_crc <= xlgmii_rxd_aligned_z1(255 downto 224);
                     finished_packet <= '1';
-                    --terminate_byte_found <= '1'; 
+                    --terminate_byte_found <= '1';
                 elsif ((xlgmii_rxd_aligned(15 downto 8) = C_TERMINATE_BYTE)and(xlgmii_rxc_aligned(1) = '1'))then
                     xlgmii_rxd_crc_masked <= xlgmii_rxd_aligned_z1;
                     xlgmii_rxc_crc_masked <= X"1FFFFFFF"; -- UPPER 24 BITS ARE CRC
@@ -590,11 +590,11 @@ begin
     terminate_byte_found <= '1' when
     (((xlgmii_rxd_aligned(7 downto 0) = C_TERMINATE_BYTE)and(xlgmii_rxc_aligned(0) = '1'))or
     ((xlgmii_rxd_aligned(15 downto 8) = C_TERMINATE_BYTE)and(xlgmii_rxc_aligned(1) = '1'))or
-    ((xlgmii_rxd_aligned(23 downto 16) = C_TERMINATE_BYTE)and(xlgmii_rxc_aligned(2) = '1'))or   
+    ((xlgmii_rxd_aligned(23 downto 16) = C_TERMINATE_BYTE)and(xlgmii_rxc_aligned(2) = '1'))or
     ((xlgmii_rxd_aligned(31 downto 24) = C_TERMINATE_BYTE)and(xlgmii_rxc_aligned(3) = '1'))or
     ((xlgmii_rxd_aligned(39 downto 32) = C_TERMINATE_BYTE)and(xlgmii_rxc_aligned(4) = '1')))else
     use_next_xlgmii_rxd_crc_masked;
-    
+
 ------------------------------------------------------------------------------
 -- CALCULATE CRC ON RECEIVED FRAME
 ------------------------------------------------------------------------------
@@ -608,9 +608,9 @@ begin
     end process;
 
     crc_data_in <= xlgmii_rxd_crc_masked;
-    crc_data_in_val <= xlgmii_rxc_crc_masked;             
-       
-    generate_mac_rx_crc : if RX_CRC_CHK_ENABLE = 1 generate            
+    crc_data_in_val <= xlgmii_rxc_crc_masked;
+
+    generate_mac_rx_crc : if RX_CRC_CHK_ENABLE = 1 generate
 --        ska_mac_rx_crc_0 : ska_mac_rx_crc
 --        port map(
 --            clk             => mac_clk,
@@ -641,7 +641,7 @@ begin
             --crc_data_in_z1 <= crc_data_in;
             --crc_data_in_z2 <= crc_data_in_z1;
             mac_rx_data_i <= crc_data_in;
-            
+
             --crc_data_in_val_z1 <= crc_data_in_val;
             --crc_data_in_val_z2 <= crc_data_in_val_z1;
             if (current_mac_state_z1 /= IDLE)then
@@ -649,47 +649,47 @@ begin
             else
                 mac_rx_data_valid_i <= (others => '0');
             end if;
-    
+
             mac_rx_data_i_z1 <= mac_rx_data_i;
             mac_rx_data_i_z2 <= mac_rx_data_i_z1;
             mac_rx_data_i_z3 <= mac_rx_data_i_z2;
             mac_rx_data_i_z4 <= mac_rx_data_i_z3;
-            
+
             mac_rx_data_valid_i_z1 <= mac_rx_data_valid_i;
             mac_rx_data_valid_i_z2 <= mac_rx_data_valid_i_z1;
             mac_rx_data_valid_i_z3 <= mac_rx_data_valid_i_z2;
             mac_rx_data_valid_i_z4 <= mac_rx_data_valid_i_z3;
-    
+
             terminate_byte_found_z1 <= terminate_byte_found;
             terminate_byte_found_z2 <= terminate_byte_found_z1;
             terminate_byte_found_z3 <= terminate_byte_found_z2;
             terminate_byte_found_z4 <= terminate_byte_found_z3;
             terminate_byte_found_z5 <= terminate_byte_found_z4;
             terminate_byte_found_z6 <= terminate_byte_found_z5;
-            
+
             received_crc_z1 <= received_crc;
             received_crc_z2 <= received_crc_z1;
             received_crc_z3 <= received_crc_z2;
             -- ONLY GO UP TO Z3 FOR RECEIVED CRC BECAUSE OF VARIATION IN
             -- LOCATION OF CRC
             -- CRC IS LATCHED SO THIS PURELY PROTECTION AGAINST ARRIVAL
-            -- OF A SECOND PACKET STRAIGHT AFTER THIS ONE 
+            -- OF A SECOND PACKET STRAIGHT AFTER THIS ONE
 
 
         end if;
-    end process;    
-  
+    end process;
+
     mac_rx_data <= mac_rx_data_i_z4;
     mac_rx_data_valid <= mac_rx_data_valid_i_z4;
-  
-    generate_mac_rx_good_bad_frame_crc : if RX_CRC_CHK_ENABLE = 1 generate 
+
+    generate_mac_rx_good_bad_frame_crc : if RX_CRC_CHK_ENABLE = 1 generate
         mac_rx_good_frame <= '1' when ((terminate_byte_found_z6 = '1')and(crc_out = received_crc_z3)) else '0';
         mac_rx_bad_frame <= '1' when ((terminate_byte_found_z6 = '1')and(crc_out /= received_crc_z3)) else '0';
-    end generate generate_mac_rx_good_bad_frame_crc; 
+    end generate generate_mac_rx_good_bad_frame_crc;
 
-    generate_mac_rx_good_bad_frame_no_crc : if RX_CRC_CHK_ENABLE = 0 generate 
+    generate_mac_rx_good_bad_frame_no_crc : if RX_CRC_CHK_ENABLE = 0 generate
         mac_rx_good_frame <= '1' when (terminate_byte_found_z6 = '1') else '0';
         mac_rx_bad_frame <= '0';
-    end generate generate_mac_rx_good_bad_frame_no_crc; 
-    	
+    end generate generate_mac_rx_good_bad_frame_no_crc;
+
 end arch_ska_mac_rx;

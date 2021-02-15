@@ -1,0 +1,276 @@
+# The name in Simulink for the 14-bit red pitaya is RED_PITAYA_14 whilst the 10-bit red pitaya is RED_PITAYA_10. 
+# Therefore, the instantiated .yaml file needs to match the Red Pitaya instance name (RED_PITAYA_14 or RED_PITAYA_10).
+# However, the undelying Python YellowBlock class instantiated is the same for both instances.
+# As a result, the name field in both .yaml files (red_pitaya_10.yaml and red_pitaya_14.yaml) is the same (red_pitaya - pointing to red_pitaya.py).
+name: red_pitaya
+manufacturer: Xilinx
+fpga: xc7z010clg400-1
+config_voltage: 1.8
+cfgbvs: GND
+backend_target: vivado
+mmbus_architecture: AXI4-Lite
+mmbus_base_address: 0x40000000
+# How to address each 32-bit (i.e. 4 indicates byte-addressable)
+mmbus_address_alignment: 4
+sources: []
+constraints:
+  - red_pitaya.xdc
+provides:
+  - sys_clk
+  - sys_clk90
+  - sys_clk180
+  - sys_clk270
+  - adc_clk
+  - adc_clk90
+  - adc_clk180
+  - adc_clk270
+pins:
+  ADC_DATA_IN1:
+    iostd: LVCMOS18
+    loc:
+       - Y17
+       - W16
+       - Y16
+       - W15
+       - W14
+       - Y14
+       - W13
+       - V12
+       - V13
+       - T14
+       - T15
+       - V15
+       - T16
+       - V16
+  ADC_DATA_IN2:
+    iostd: LVCMOS18
+    loc:
+       - R18
+       - P16
+       - P18
+       - N17
+       - R19
+       - T20
+       - T19
+       - U20
+       - V20
+       - W20
+       - W19
+       - Y19
+       - W18
+       - Y18
+  ADC_CLK_IN_P:
+    iostd: LVCMOS18
+    loc: U18
+  ADC_CLK_IN_N:
+    iostd: LVCMOS18
+    loc: U19
+  ADC_CLK_STB_OUT:
+    iostd: LVCMOS18
+    loc: V18
+  FCLK_P:
+    iostd: LVCMOS18
+    loc: N20
+  FCLK_N:
+    iostd: LVCMOS18
+    loc: P20
+  led:
+    iostd: LVCMOS33
+    loc:
+       - F16
+       - F17
+       - G15
+       - H15
+       - K14
+       - G14
+       - J15
+       - J14
+       - E6
+       - D8
+  gpio:
+    iostd: LVCMOS33
+    loc:
+       - G17
+       - G18
+       - H16
+       - H17
+       - J18
+       - H18
+       - K17
+       - K18
+       - L14
+       - L15
+       - L16
+       - L17
+       - K16
+       - J16
+       - M14
+       - M15
+#  ADC_LA_CLK:
+#     iostd: LVCMOS33
+#     loc: J16
+  DAC_DATA_OUT:
+    iostd: LVCMOS33
+    loc:
+       - M19
+       - M20
+       - L19
+       - L20
+       - K19
+       - J19
+       - J20
+       - H20
+       - G19
+       - G20
+       - F19
+       - F20
+       - D20
+       - D19
+  DAC_IQWRT:
+    iostd: LVCMOS33
+    loc: M17
+  DAC_IQSEL:
+    iostd: LVCMOS33
+    loc: N16
+  DAC_IQCLK:
+    iostd: LVCMOS33
+    loc: M18
+  DAC_IQRESET:
+    iostd: LVCMOS33
+    loc: N15
+  FIXED_IO_ddr_vrp:
+    iostd: SSTL15_T_DCI
+    loc: H5
+  FIXED_IO_ddr_vrn:
+    iostd: SSTL15_T_DCI
+    loc: G5
+  DDR_we_n:
+    iostd: SSTL15
+    loc: M5
+  DDR_RAS_n:
+    iostd: SSTL15
+    loc: P4
+  DDR_ODT:
+    iostd: SSTL15
+    loc: N5
+  DDR_reset_n:
+    iostd: SSTL15
+    loc: B4
+  DDR_DQS_p:
+    iostd: DIFF_SSTL15_T_DCI
+    loc:
+       - C2
+       - G2
+       - R2
+       - W5
+  DDR_DQS_n:
+    iostd: DIFF_SSTL15_T_DCI
+    loc:
+       - B2
+       - F2
+       - T2
+       - W4
+  DDR_DQ:
+    iostd: SSTL15_T_DCI
+    loc:
+       - C3
+       - B3
+       - A2
+       - A4
+       - D3
+       - D1
+       - C1
+       - E1
+       - E2
+       - E3
+       - G3
+       - H3
+       - J3
+       - H2
+       - H1
+       - J1
+       - P1
+       - P3
+       - R3
+       - R1
+       - T4
+       - U4
+       - U2
+       - U3
+       - V1
+       - Y3
+       - W1
+       - Y4
+       - Y2
+       - W3
+       - V2
+       - V3
+  DDR_DM:
+    iostd: DIFF_SSTL15_T_DCI
+    loc:
+       - A1
+       - F1
+       - T1
+       - Y1
+  DDR_CS_n:
+    iostd: SSTL15
+    loc: N1
+  DDR_CKE:
+    iostd: SSTL15
+    loc: N3
+  DDR_Ck_p:
+    iostd: SSTL15
+    loc: L2
+  DDR_Ck_n:
+    iostd: SSTL15
+    loc: M2
+  DDR_CAS_n:
+    iostd: SSTL15
+    loc: P5
+  DDR_ba:
+    iostd: DIFF_SSTL15
+    loc:
+       - L5
+       - R4
+       - J5
+  DDR_Addr:
+    iostd: SSTL15
+    loc:
+       - N2
+       - K2
+       - M3
+       - K3
+       - M4
+       - L1
+       - L4
+       - K4
+       - K1
+       - J4
+       - F5
+       - G4
+       - E4
+       - D4
+       - F4
+  FIXED_IO_ps_porb:
+    iostd: LVCMOS33
+    loc: C7
+  FIXED_IO_ps_srstb:
+    iostd: LVCMOS33
+    loc: B10
+  FIXED_IO_ps_clk:
+    iostd: LVCMOS33
+    loc: E7
+
+
+
+
+
+
+
+
+
+
+
+
+
+

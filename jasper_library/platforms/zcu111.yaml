@@ -1,0 +1,36 @@
+name: zcu111
+manufacturer: Xilinx
+fpga: xczu28dr-ffvg1517-2-e
+config_voltage: 1.8
+cfgbvs: GND
+backend_target: vivado
+mmbus_architecture: AXI4-Lite
+mmbus_base_address: 0xA0000000
+# How to address each 32-bit (i.e. 4 indicates byte-addressable)
+mmbus_address_alignment: 4
+sources: []
+constraints: []
+provides:
+  - sys_clk
+pins:
+  clk_100_p:
+    iostd: LVDS
+    loc: AM15
+  clk_100_n:
+    iostd: LVDS
+    loc: AN15
+  led:
+    iostd: LVCMOS18
+    loc:
+       - AR13
+       - AP13
+       - AR16
+       - AP16
+       - AP15
+       - AN16
+       - AN17
+       - AV15
+
+
+
+

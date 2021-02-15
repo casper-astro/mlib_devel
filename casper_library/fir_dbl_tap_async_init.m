@@ -91,18 +91,6 @@ reuse_block(blk, 'Register3', 'xbsIndex_r4/Register');
 set_param([blk,'/Register3'], ...
 'Position', '[315 286 360 334]');
 
-    if async_ops,
-        set_param([blk, '/Register0'], 'en', 'on');
-        set_param([blk, '/Register1'], 'en', 'on');
-        set_param([blk, '/Register2'], 'en', 'on');
-        set_param([blk, '/Register3'], 'en', 'on');
-    else
-        set_param([blk, '/Register0'], 'en', 'off');
-        set_param([blk, '/Register1'], 'en', 'off');
-        set_param([blk, '/Register2'], 'en', 'off');
-        set_param([blk, '/Register3'], 'en', 'off');
-    end
-
     reuse_block(blk, 'coefficient', 'xbsIndex_r4/Constant');
     set_param([blk,'/coefficient'], ...
         'const', 'factor', ...
@@ -180,12 +168,41 @@ set_param([blk,'/Register3'], ...
         set_param([blk,'/imag'], ...
         'Port', '6', ...
         'Position', '[390 508 420 522]');
-
+    
+    
+    if async_ops,
+        set_param([blk, '/Register0'], 'en', 'on');
+        set_param([blk, '/Register1'], 'en', 'on');
+        set_param([blk, '/Register2'], 'en', 'on');
+        set_param([blk, '/Register3'], 'en', 'on');
+        set_param([blk, '/Mult0'], 'en', 'on');        
+        set_param([blk, '/Mult1'], 'en', 'on');
+    else
+        set_param([blk, '/Register0'], 'en', 'off');
+        set_param([blk, '/Register1'], 'en', 'off');
+        set_param([blk, '/Register2'], 'en', 'off');
+        set_param([blk, '/Register3'], 'en', 'off');
+        set_param([blk, '/Mult0'], 'en', 'off');        
+        set_param([blk, '/Mult1'], 'en', 'off'); 
+    end
+    
+    if async_ops,
+        set_param([blk, '/AddSub0'], 'en', 'on');        
+        set_param([blk, '/AddSub1'], 'en', 'on');
+    else
+        set_param([blk, '/AddSub0'], 'en', 'off');        
+        set_param([blk, '/AddSub1'], 'en', 'off');      
+    end
+    
     if async_ops,
         add_line(blk, 'dv_in/1', 'Register0/2', 'autorouting', 'on');
         add_line(blk, 'dv_in/1', 'Register1/2', 'autorouting', 'on');
         add_line(blk, 'dv_in/1', 'Register2/2', 'autorouting', 'on');
         add_line(blk, 'dv_in/1', 'Register3/2', 'autorouting', 'on');
+        add_line(blk, 'dv_in/1', 'Mult0/3', 'autorouting', 'on');
+        add_line(blk, 'dv_in/1', 'Mult1/3', 'autorouting', 'on');  
+        add_line(blk, 'dv_in/1', 'AddSub0/3', 'autorouting', 'on');
+        add_line(blk, 'dv_in/1', 'AddSub1/3', 'autorouting', 'on'); 
     end
     add_line(blk,'d/1','AddSub1/2', 'autorouting', 'on');
     add_line(blk,'d/1','Register3/1', 'autorouting', 'on');

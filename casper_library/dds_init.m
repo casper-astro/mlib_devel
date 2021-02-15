@@ -35,7 +35,7 @@
 function dds_init(blk,varargin)
 
 % Declare any default values for arguments you might like.
-defaults = {'num_lo', 1, 'n_bits', 8, 'latency', 2};
+defaults = {'num_lo', 1, 'n_bits', 8, 'csp_latency', 2};
 check_mask_type(blk, 'dds');
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 munge_block(blk, varargin{:});
@@ -44,7 +44,7 @@ freq_div = get_var('freq_div','defaults', defaults, varargin{:});
 freq = get_var('freq','defaults', defaults, varargin{:});
 num_lo = get_var('num_lo','defaults', defaults, varargin{:});
 n_bits = get_var('n_bits','defaults', defaults, varargin{:});
-latency = get_var('latency','defaults', defaults, varargin{:});
+latency = get_var('csp_latency','defaults', defaults, varargin{:});
 
 delete_lines(blk);
 
@@ -88,7 +88,7 @@ for i = 0 : num_lo - 1,
         lo_name = ['lo_osc',num2str(i)];
         reuse_block(blk, 'sync', 'built-in/inport', 'Position', [30 100 60 115]);
         reuse_block(blk, lo_name, 'casper_library_downconverter/lo_osc', 'Position', [100 i*100+50 140 i*100+90], ...
-            'n_bits', num2str(n_bits), 'latency', num2str(latency), ...
+            'n_bits', num2str(n_bits), 'csp_latency', num2str(latency), ...
             'counter_width', num2str(counter_width), 'counter_start', num2str(mod(i*freq,freq_div)), ...
             'counter_step', num2str(counter_step));
          add_line(blk,['sync','/1'],[lo_name,'/1']);
