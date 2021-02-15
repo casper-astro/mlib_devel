@@ -10,7 +10,7 @@ class bram(YellowBlock):
         bit more user friendly.
         '''
 
-        if self.platform.mmbus_architecture == 'AXI4-Lite':
+        if self.platform.mmbus_architecture[0] == 'AXI4-Lite':
             self.typecode = TYPECODE_BRAM
             self.requirements = ['axil_clk']
             self.requirements = ['sys_clk']
@@ -29,7 +29,7 @@ class bram(YellowBlock):
         
     def modify_top(self,top):
         # axi4lite bram
-        if self.platform.mmbus_architecture == 'AXI4-Lite':
+        if self.platform.mmbus_architecture[0] == 'AXI4-Lite':
 
             top.add_axi4lite_interface(regname=self.unique_name,
                                 mode='rw', nbytes=self.depth*self.data_width//8,

@@ -17,7 +17,7 @@ class sys_block(YellowBlock):
             Register('sys_clkcounter', mode='r',  offset=0x14),
         ]
     def modify_top(self,top):
-        if self.platform.mmbus_architecture == 'AXI4-Lite':
+        if self.platform.mmbus_architecture[0] == 'AXI4-Lite':
             inst = top.get_instance('sys_block_counter', 'sys_block_counter_inst')          
             inst.add_parameter('DATA_WIDTH', 32)
             inst.add_port('user_clk', 'user_clk')

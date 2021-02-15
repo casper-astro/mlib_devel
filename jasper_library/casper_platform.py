@@ -74,12 +74,18 @@ class Platform(object):
         # Add respective memory map bus architecture attributes to support AXI4-lite
         try:
             self.mmbus_architecture = self.conf['mmbus_architecture']
+            if not isinstance(self.mmbus_architecture, list):
+                self.mmbus_architecture = [self.mmbus_architecture]
         except KeyError:
-            self.mmbus_architecture = 'wishbone'
-        try:
-            self.mmbus_base_address = self.conf['mmbus_base_address']
-        except KeyError:
-            self.mmbus_base_address = 0x40000000
+            self.mmbus_architecture = ['wishbone']
+        
+        # mmbus_base_address is the address the client should use for an AXI transaction
+        self.mmbus_base_address = self.conf.get('mmbus_base_address', 0x40000000)
+        # axi_ic_base_address is the address the AXI devices consider themselves to have.
+        # This may or may not be the same as mmbus_base_address. It will be different
+        # if an upstream arbiter is removing the mmbus_base_address before passing
+        # on an AXI command
+        self.axi_ic_base_address = self.conf.get('axi_ic_base_address', self.mmbus_base_address)
         try:
             self.mmbus_address_alignment = self.conf['mmbus_address_alignment']
         except KeyError:

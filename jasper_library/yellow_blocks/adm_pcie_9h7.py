@@ -24,15 +24,9 @@ class adm_pcie_9h7(YellowBlock):
 
     def gen_children(self):
         children = [YellowBlock.make_block({'tag':'xps:sys_block', 'board_id':'12', 'rev_maj':'12', 'rev_min':'0', 'rev_rcs':'32'}, self.platform)]
-        if self.use_microblaze:
-            pass
-        else:
-            b = YellowBlock.make_block({
-                'tag' : 'xps:pci_dma_axilite_master',
-                'use_pr' : self.use_pr,
-                'template_project' : self.pr_template,
-                }, self.platform)
-            children.append(b)
+        enable_wishbone = 'wishbone' in self.platform.mmbus_architecture
+        children.append(YellowBlock.make_block({'tag':'xps:pci_dma_axilite_master',
+                                                'enable_wishbone': enable_wishbone}, self.platform))
         return children
 
     def gen_constraints(self):
@@ -52,5 +46,5 @@ class adm_pcie_9h7(YellowBlock):
         ]
     def gen_tcl_cmds(self):
        tcl_cmds = {}
-       tcl_cmds['promgen'] = ['write_cfgmem  -format mcs -size 64 -interface SPIx8 -loadbit "up 0x0 $impl_dir/top.bit " -checksum -file "$impl_dir/top.mcs" -force']
+       tcl_cmds['promgen'] = ['write_cfgmem  -format mcs -size 64 -interface SPIx8 -loadbit "up 0x0 ./myproj.runs/impl_1/top.bit " -checksum -file "./myproj.runs/impl_1/top.mcs" -force']
        return tcl_cmds

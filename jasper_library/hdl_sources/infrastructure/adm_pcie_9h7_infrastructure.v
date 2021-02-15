@@ -9,6 +9,7 @@ module adm_pcie_9h7_infrastructure(
     output clk_200,
 
     output sys_rst,
+    input  user_clk,
     output sys_clk_rst_sync,
     output idelay_rdy
   );
@@ -133,20 +134,15 @@ module adm_pcie_9h7_infrastructure(
     .RDY(idelay_rdy)
   );
   
-  reg rstR1 = 1'b1;
-  reg rstR2 = 1'b1;
-  reg rstR3 = 1'b1;
-  reg rstR4 = 1'b1;
+  (* ASYNC_REG = "TRUE" *) reg rstR1 = 1'b1;
+  (* ASYNC_REG = "TRUE" *) reg rstR2 = 1'b1;
+  (* ASYNC_REG = "TRUE" *) reg rstR3 = 1'b1;
+  (* ASYNC_REG = "TRUE" *) reg rstR4 = 1'b1;
   assign sys_clk_rst_sync = rstR4;
  
-  always @(posedge sys_clk0 or negedge pll_lock) begin
-      if (~pll_lock) begin
-          rstR1 <= 1'b1;
-          rstR2 <= 1'b1;
-          rstR3 <= 1'b1;
-          rstR4 <= 1'b1;
-      end else begin
-          rstR1 <= 1'b0;
+  always @(posedge user_clk) begin
+      begin
+          rstR1 <= sys_rst;
           rstR2 <= rstR1;
           rstR3 <= rstR2;
           rstR4 <= rstR3;
