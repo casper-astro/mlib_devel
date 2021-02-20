@@ -7,8 +7,8 @@ backend_target: vivado
 mmbus_architecture: ['AXI4-Lite', 'wishbone']
 # wishbone at address 0; AXI offset = 1MB
 mmbus_base_address: 0x00100000
-axi_ic_base_address: 0x0
-dsp_wb_base_address: 0x0
+#axi_ic_base_address: 0x44A00000
+dsp_wb_base_address: 0x00010000
 # How to address each 32-bit (i.e. 4 indicates byte-addressable)
 mmbus_address_alignment: 4
 sources: []

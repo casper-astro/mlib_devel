@@ -58,7 +58,7 @@ class sw_reg(YellowBlock):
                 inst.add_port('user_clk', signal='user_clk', parent_sig=False)
                 inst.add_port('user_data_out', signal='%s_user_data_out'%self.fullname, width=32)
     def gen_constraints(self):
-        if self.platform.mmbus_architecture == 'AXI4-Lite':
+        if self.platform.mmbus_architecture[0] == 'AXI4-Lite':
             return []
         else:
             # Allow 2 cycles for the handshaking registers. Could TIG them altogether?
