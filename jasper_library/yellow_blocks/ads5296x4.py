@@ -54,7 +54,12 @@ class ads5296x4(YellowBlock):
         #                                'name':'ads5296_clksel%d'%self.port},
         #                               self.platform)
         #return [swreg]
-        return []
+        rst_reg = YellowBlock.make_block({'tag':'xps:sw_reg_sync',
+                                        'fullpath':'%s/ads5296_hardware_rst%d'%(self.name,self.port),
+                                        'io_dir':'From Processor',
+                                        'name':'ads5296_hardware_rst%d'%self.port},
+                                        self.platform)
+        return [rst_reg]
 
     def modify_top(self,top):
         # Connect up the reset register
@@ -158,8 +163,8 @@ class ads5296x4(YellowBlock):
         top.add_signal('%s_adc_sync' % self.fullname)
         #top.add_signal('%s_adc_rst' % self.fullname)
         top.assign_signal('%s_adc_sync' % self.port_prefix, '%s_adc_sync' % self.fullname)
-        #top.assign_signal('%s_adc_rst'  % self.port_prefix, '~%s_adc_rst' % self.fullname) # Invert
-        top.assign_signal('%s_adc_rst'  % self.port_prefix, '1\'b1') # active low
+        top.assign_signal('%s_adc_rst'  % self.port_prefix, '~%s_ads5296_hardware_rst%d_user_data_out[0]' % (self.name, self.port)) # Invert
+        #top.assign_signal('%s_adc_rst'  % self.port_prefix, '1\'b1') # active low
         #top.assign_signal('%s_adc_rst'  % self.port_prefix, '~%s_ads5296_rst%d_user_data_out[0]' % (self.name, self.port)) # Invert
         #top.assign_signal('%s_adc_sync'  % self.port_prefix, '%s_ads5296_sync%d_user_data_out[0]' % (self.name, self.port))
 
