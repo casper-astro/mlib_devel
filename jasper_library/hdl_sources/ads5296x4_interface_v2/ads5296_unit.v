@@ -114,7 +114,10 @@ module ads5296_unit (
     .rd_clk(clk_out),              // input wire rd_clk
     //.din({1'b1, 5'b0, fifo_din1, 1'b0, 5'b0, fifo_din0}), // input wire [31 : 0] din
     // Big endian -- write first sample out into MSBs
-    .din({1'b0, 5'b0, shreg0RR, 1'b1, 5'b0, shreg1RR}), // input wire [31 : 0] din
+    // ???? Hardware testing suggests the order of samples is lane 1 before lane0.
+    // ???? This is NOT what the data sheet says!
+    //.din({1'b0, 5'b0, shreg0RR, 1'b1, 5'b0, shreg1RR}), // input wire [31 : 0] din
+    .din({1'b1, 5'b0, shreg1RR, 1'b0, 5'b0, shreg0RR}), // input wire [31 : 0] din
     .wr_en(wr_en),    // input wire wr_en
     .rd_en(rd_en),              // input wire rd_en
     .dout(fifo_dout),           // output wire [15 : 0] dout
