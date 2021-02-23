@@ -958,7 +958,7 @@ begin
         CLKOUT1   => bsp_clk_mmcm,
         CLKFBOUT  => sys_clk_mmcm_fb,  -- Feedback clock output
         LOCKED    => sys_mmcm_locked,
-        --LOCKED    => user_mmcm_locked,
+        --LOCKED    => user_mmcm_locked_1,
         CLKIN1    => refclk_0,         -- Main clock input
         PWRDWN    => '0',
         RST       => not FPGA_RESET_N,--'0',              -- fpga_reset,
@@ -1047,9 +1047,9 @@ begin
 -- RESETS
 ---------------------------------------------------------------------------
 
-    pSysResetSynchroniser : process(user_mmcm_locked, sys_clk)
+    pSysResetSynchroniser : process(user_mmcm_locked_1, sys_clk)
     begin
-       if (user_mmcm_locked = '0')then
+       if (user_mmcm_locked_1 = '0')then
            sys_fpga_rst <= '1';
            sync_sys_fpga_rst <= '1';
        elsif (rising_edge(sys_clk))then
@@ -1079,9 +1079,9 @@ begin
        end if;
     end process;
     
-   pBspResetSynchroniser : process(user_mmcm_locked, bsp_clk)
+   pBspResetSynchroniser : process(user_mmcm_locked_1, bsp_clk)
     begin
-        if (user_mmcm_locked = '0')then
+        if (user_mmcm_locked_1 = '0')then
             bsp_fpga_rst <= '1';
             sync_bsp_fpga_rst <= '1';
         elsif (rising_edge(bsp_clk))then
@@ -1099,9 +1099,9 @@ begin
     --user_rst <= user_fpga_rst;
     bsp_rst <=  bsp_fpga_rst;
  
-    --pFpgaResetAuxSynchroniser : process(user_mmcm_locked, aux_clk)
+    --pFpgaResetAuxSynchroniser : process(user_mmcm_locked_1, aux_clk)
     --begin
-    --    if (user_mmcm_locked = '0')then
+    --    if (user_mmcm_locked_1 = '0')then
     --        sync_aux_fpga_rst <= '1';
     --        aux_fpga_rst <= '1';
     --    elsif (rising_edge(aux_clk))then
@@ -1110,9 +1110,9 @@ begin
     --    end if;
     --end process; 
 
-    pFpgaResetGmiiSynchroniser : process(user_mmcm_locked, gmii_clk)
+    pFpgaResetGmiiSynchroniser : process(user_mmcm_locked_1, gmii_clk)
     begin
-        if (user_mmcm_locked = '0')then
+        if (user_mmcm_locked_1 = '0')then
             sync_gmii_fpga_rst <= '1';
             gmii_fpga_rst <= '1';
         elsif (rising_edge(gmii_clk))then
@@ -1121,9 +1121,9 @@ begin
         end if;
     end process;
 
-    --pFpgaResetQsfpSynchroniser : process(user_mmcm_locked, qsfp_gtrefclk)
+    --pFpgaResetQsfpSynchroniser : process(user_mmcm_locked_1, qsfp_gtrefclk)
     --begin
-    --    if (user_mmcm_locked = '0')then
+    --    if (user_mmcm_locked_1 = '0')then
     --        sync_qsfp_fpga_rst <= '1';
     --        qsfp_fpga_rst <= '1';
     --    elsif (rising_edge(qsfp_gtrefclk))then
@@ -1132,9 +1132,9 @@ begin
     --    end if;
     --end process; 
     
-    --pFpgaResetEmcclkSynchroniser : process(user_mmcm_locked, FPGA_EMCCLK2)
+    --pFpgaResetEmcclkSynchroniser : process(user_mmcm_locked_1, FPGA_EMCCLK2)
     --begin
-    --    if (user_mmcm_locked = '0')then
+    --    if (user_mmcm_locked_1 = '0')then
     --        sync_emcclk_fpga_rst <= '1';
     --        emcclk_fpga_rst <= '1';
     --    elsif (rising_edge(FPGA_EMCCLK2))then
@@ -1152,9 +1152,9 @@ begin
         end if;
     end process;
 
-    gen_host_reset_count : process(user_mmcm_locked, bsp_clk)
+    gen_host_reset_count : process(user_mmcm_locked_1, bsp_clk)
     begin
-        if (user_mmcm_locked = '0')then
+        if (user_mmcm_locked_1 = '0')then
             host_reset_count <= (others => '1');
         elsif (rising_edge(bsp_clk))then
             if ((host_reset_req_z = '0')and(host_reset_req = '1'))then
@@ -1619,7 +1619,7 @@ begin
         UART_rxd    => microblaze_uart_rxd,
         UART_txd    => microblaze_uart_txd,
         WE_O        => WB_MST_WE_O,
-        dcm_locked  => user_mmcm_locked);
+        dcm_locked  => user_mmcm_locked_1);
         
 
 
@@ -2173,5 +2173,5 @@ begin
 
     board_clk_o <= sys_clk;
     board_clk_rst_o <= sys_rst;
-    --user_mmcm_locked_o <= user_mmcm_locked;
+    --user_mmcm_locked_o <= user_mmcm_locked_1;
 end arch_skarab_infr;
