@@ -7,6 +7,8 @@ import math, numpy as np
 
 from string import ascii_lowercase
 
+SNAPSHOT_ADDR_BITS = 9
+
 class ads5296x4(YellowBlock):
     # Number of ADC chips per board
     num_units_per_board = 4
@@ -67,6 +69,7 @@ class ads5296x4(YellowBlock):
         for b in range(self.board_count):
             inst = top.get_instance(entity=module, name="%s_%d" % (self.fullname, b))
             inst.add_wb_interface(nbytes=32*4, regname='ads5296_controller%d_%d' % (self.port, b), mode='rw', typecode=self.typecode)
+            inst.add_parameter('SNAPSHOT_ADDR_BITS', SNAPSHOT_ADDR_BITS)
             # Delare all boards master, so that they all instantiate
             # Their own internal clock generators.
             # We will decide which of these to actually use at runtime
@@ -139,6 +142,11 @@ class ads5296x4(YellowBlock):
                 inst.add_port('sync_out', '%s_adc_sync_out' % self.fullname)
             else:
                 inst.add_port('sync_out', '')
+
+            # snapshot ports
+            inst.add_port('snapshot_ext_trigger', '%s_snapshot_ext_trigger' % self.fullname) # simulink input
+            inst.add_port('snapshot_we', '%s_snapshot_we_%d' % (self.fullname, b))
+            inst.add_port('snapshot_addr', '%s_snapshot_addr_%d' % (self.fullname, b), width=SNAPSHOT_ADDR_BITS)
 
 
             # split out the ports which go to simulink
@@ -217,22 +225,23 @@ class ads5296x4(YellowBlock):
         top.assign_signal("adc%d_clk180" % self.port, "1'b0")
         top.assign_signal("adc%d_clk270" % self.port, "1'b0")
 
-        #snap_chan = ascii_lowercase
-        #for k in range(self.num_units):
-        #    # Embedded wb-RAM
-        #    bram_log_width = int(ceil(log(self.adc_data_width*4,2)))
-        #    padding = 2**(bram_log_width-2) - self.adc_data_width
-        #    din = self.fullname+'_%s'%snap_chan[k]
-        #    wbram = top.get_instance(entity='wb_bram', name='adc16_wb_ram%d_%d' % (self.port, k), comment='Embedded ADC16 bram')
-        #    wbram.add_parameter('LOG_USER_WIDTH', bram_log_width)
-        #    wbram.add_parameter('USER_ADDR_BITS','10')
-        #    wbram.add_parameter('N_REGISTERS','2')
-        #    wbram.add_wb_interface(regname='adc16_wb_ram%d_%d' % (self.port, k), mode='rw', nbytes=(2**bram_log_width//8)*2**10, typecode=TYPECODE_SWREG)
-        #    wbram.add_port('user_clk','user_clk', parent_sig=False)
-        #    wbram.add_port('user_addr', self.port_prefix+'snap_addr', width=10)
-        #    wbram.add_port('user_din',self.reorder_ports([din+'1',din+'2',din+'3',din+'4'], wb_bitwidth=64, word_width=16, padding="%s'b0" % padding), parent_sig=False)
-        #    wbram.add_port('user_we', self.port_prefix+'snap_we')
-        #    wbram.add_port('user_dout','')
+        snap_chan = ascii_lowercase
+        for b in range(self.board_count):
+            for u in range(self.num_units_per_board): 
+                    # Embedded wb-RAM
+                    bram_log_width = int(ceil(log(self.adc_resolution*self.channels_per_unit,2)))
+                    padding = 2**(bram_log_width-2) - self.adc_resolution
+                    din = self.fullname+'_%s'%snap_chan[b*self.num_units_per_board + u]
+                    wbram = top.get_instance(entity='wb_bram', name='ads5296_wb_ram%d_%d_%d' % (self.port, b, u), comment='Embedded ADS5296 bram for fmc %d, board %d, chip %d' % (self.port, b, u))
+                    wbram.add_parameter('LOG_USER_WIDTH', bram_log_width)
+                    wbram.add_parameter('USER_ADDR_BITS', SNAPSHOT_ADDR_BITS)
+                    wbram.add_parameter('N_REGISTERS','2')
+                    wbram.add_wb_interface(regname='ads5296_wb_ram%d_%d_%d' % (self.port, b, u), mode='rw', nbytes=(2**bram_log_width//8)*2**SNAPSHOT_ADDR_BITS, typecode=TYPECODE_SWREG)
+                    wbram.add_port('user_clk','user_clk', parent_sig=False)
+                    wbram.add_port('user_addr', '%s_snapshot_addr_%d' % (self.fullname, b), width=SNAPSHOT_ADDR_BITS)
+                    wbram.add_port('user_din',self.reorder_ports([din+'1',din+'2',din+'3',din+'4'], word_width=16, padding="%d'b0" % padding), parent_sig=False)
+                    wbram.add_port('user_we', '%s_snapshot_we_%d' % (self.fullname, b))
+                    wbram.add_port('user_dout','')
 
     def reorder_ports(self, port_list, wb_bitwidth=32, word_width=8, padding=None):
         """ Reorder output ports of ADCs to arrange sampling data in correct order in wb_bram
@@ -266,7 +275,7 @@ class ads5296x4(YellowBlock):
             for port in port_list:
                 port_list_padded += [port]
                 port_list_padded += [padding]
-            return '{' + ','.join(port_list) + '}'
+            return '{' + ','.join(port_list_padded) + '}'
 
     def gen_constraints(self):
         cons = []

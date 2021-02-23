@@ -28,6 +28,7 @@ module wb_ads5296_attach #(
     input [31:0] fclk2_cnt,
     input [31:0] fclk3_cnt,
     output [4*G_NUM_UNITS - 1 : 0] bitslip,
+    output snapshot_trigger,
 
     //input user_clk,
     output [4*2*G_NUM_UNITS + G_NUM_FCLKS - 1: 0]  delay_load,
@@ -49,6 +50,7 @@ module wb_ads5296_attach #(
   reg iserdes_rst_reg;
   reg mmcm_rst_reg;
   reg mmcm_clksel_reg;
+  reg snapshot_trigger_reg;
 
   /*
   reg [4*2*G_NUM_UNITS + G_NUM_FCLKS - 1: 0]  delay_load_reg_cdc;
@@ -58,6 +60,7 @@ module wb_ads5296_attach #(
   reg [4*G_NUM_UNITS - 1 : 0] bitslip_reg_cdc;
   reg iserdes_rst_reg_cdc;
   reg mmcm_rst_reg_cdc;
+  reg snapshot_trigger_reg_cdc;
   */
 
   assign delay_load = delay_load_reg;//_cdc;
@@ -68,6 +71,7 @@ module wb_ads5296_attach #(
   assign mmcm_rst = mmcm_rst_reg;//_cdc;
   assign bitslip = bitslip_reg;//_cdc;
   assign mmcm_clksel = mmcm_clksel_reg;
+  assign snapshot_trigger = snapshot_trigger_reg;
 
   reg [31:0] fclk_err_cnt_reg;
   reg [31:0] lclk_cnt_reg;
@@ -175,6 +179,9 @@ module wb_ads5296_attach #(
             15 : begin
               bitslip_reg <= wb_dat_i[4*G_NUM_UNITS - 1:0];
             end
+            16 : begin
+              snapshot_trigger_reg <= wb_dat_i[0];
+            end
             default: begin
             end
           endcase
@@ -234,6 +241,10 @@ module wb_ads5296_attach #(
             15: begin
               wb_data_out_reg[4*G_NUM_UNITS-1:0] <= bitslip_reg;
               wb_data_out_reg[31:4*G_NUM_UNITS] <= {(32 - (4*G_NUM_UNITS)){1'b0}};
+            end
+            16: begin
+              wb_data_out_reg[0] <= snapshot_trigger_reg;
+              wb_data_out_reg[31:1] <= 31'b0;
             end
             default: begin
               wb_data_out_reg <= 32'b0;

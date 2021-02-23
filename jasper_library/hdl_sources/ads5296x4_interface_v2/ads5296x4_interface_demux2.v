@@ -2,7 +2,8 @@ module ads5296x4_interface_demux2 #(
     parameter G_NUM_UNITS = 4,
     parameter G_NUM_FCLKS = 4,
     parameter G_FCLK_MASTER = 0,
-    parameter G_IS_MASTER = 1'b1
+    parameter G_IS_MASTER = 1'b1,
+    parameter SNAPSHOT_ADDR_BITS = 9
  )(
     input rst,
     input sync,
@@ -30,6 +31,12 @@ module ads5296x4_interface_demux2 #(
     output fclk_out,
 
     // Software register interface
+   
+    // external snapshot control
+    
+    input         snapshot_ext_trigger,
+    output        snapshot_we,
+    output [SNAPSHOT_ADDR_BITS-1:0] snapshot_addr,
 
     // Wishbone interface
     input         wb_clk_i,
@@ -67,6 +74,7 @@ module ads5296x4_interface_demux2 #(
   reg [31:0] fclk3_ctr;
   reg [31:0] lclk_ctr;
   wire [4*G_NUM_UNITS - 1 : 0] bitslip;
+  wire snapshot_trigger;
   wire wb_user_clk;
   wb_ads5296_attach #( 
     .G_NUM_UNITS(G_NUM_UNITS),
@@ -99,8 +107,40 @@ module ads5296x4_interface_demux2 #(
     .iserdes_rst(iserdes_rst_wb),
     .mmcm_rst(mmcm_rst),
     .mmcm_locked(mmcm_locked),
-    .mmcm_clksel(mmcm_clksel)
+    .mmcm_clksel(mmcm_clksel),
+    .snapshot_trigger(snapshot_trigger)
   );
+
+  (* async_reg = "true" *) reg snapshot_trigger_unstable;
+  (* async_reg = "true" *) reg snapshot_trigger_stable;
+  reg snapshot_trigger_stableR;
+  wire snapshot_trigger_pulse = snapshot_trigger_stable & ~snapshot_trigger_stableR;
+  reg snapshot_ext_triggerR;
+  wire snapshot_ext_trigger_pulse = snapshot_ext_trigger & ~snapshot_ext_triggerR;
+  reg [SNAPSHOT_ADDR_BITS-1:0] snapshot_addr_reg;
+  assign snapshot_addr = snapshot_addr_reg;
+  reg snapshot_we_reg;
+  assign snapshot_we = snapshot_we_reg;
+  reg snapshot_pending = 1'b0;
+  always @(posedge sclk2_in) begin
+    snapshot_addr_reg <= snapshot_addr_reg + 1'b1;
+    snapshot_trigger_unstable <= snapshot_trigger;
+    snapshot_trigger_stable <= snapshot_trigger_unstable;
+    snapshot_trigger_stableR <= snapshot_trigger_stable;
+    if (snapshot_trigger_pulse || snapshot_ext_trigger_pulse) begin
+      snapshot_pending <= 1'b1;
+    end
+    if (&snapshot_addr_reg) begin
+      snapshot_we_reg <= 1'b0;
+    end
+    if (snapshot_pending && sync_out) begin
+      snapshot_we_reg <= 1'b1;
+      snapshot_addr_reg <= {SNAPSHOT_ADDR_BITS{1'b0}};
+      snapshot_pending <= 1'b0;
+    end
+  end
+    
+    
 
   // Buffer the differential inputs
   wire [4*2*G_NUM_UNITS - 1:0] din;
@@ -181,7 +221,9 @@ module ads5296x4_interface_demux2 #(
       .CLKFBOUT_MULT_F(20.000),
       .CLKOUT0_DIVIDE_F(10.0),
       .CLKOUT1_DIVIDE(5),
-      //.CLKOUT1_PHASE(90),
+      .CLKOUT0_PHASE(36), // Advance 1 bit time (empirically determined)
+      .CLKOUT1_PHASE(72), // Advance 1
+      .CLKOUT2_PHASE(180), // Advance 1
       .CLKOUT2_DIVIDE(2),
       .CLKIN1_PERIOD(10.000)
     ) mmcm_inst (
@@ -189,12 +231,6 @@ module ads5296x4_interface_demux2 #(
       .CLKIN2(fclk),
       .CLKINSEL(mmcm_clksel), // mmcm_clksel=0 => use CLK2
       .RST(mmcm_rst),
-      // Use inverted clocks so all clocks are in phase,
-      // But sclk5 is out of phase with data transitions
-      //.CLKOUT0B(sclk_mmcm),  // fs
-      //.CLKOUT1B(sclk2_mmcm),
-      //.CLKOUT2B(sclk5_mmcm),
-      
       .CLKOUT0(sclk_mmcm),  // fs
       .CLKOUT1(sclk2_mmcm),
       .CLKOUT2(sclk5_mmcm),
@@ -265,16 +301,18 @@ module ads5296x4_interface_demux2 #(
   end
   
 
+  wire [4*2*G_NUM_UNITS - 1:0] delay_casc_out;
+  wire [4*2*G_NUM_UNITS - 1:0] delay_casc_return;
   IDELAYE3 #(
     .DELAY_TYPE("VAR_LOAD"),
     .DELAY_FORMAT("COUNT"),//("TIME"),
     .UPDATE_MODE("ASYNC"),
     .DELAY_SRC("IDATAIN"),
     //.DELAY_VALUE(1100),
-    .CASCADE("NONE"),
+    .CASCADE("MASTER"),
     .SIM_DEVICE("ULTRASCALE"),
     .REFCLK_FREQUENCY(200.0)
-  ) iodelay_in [ 4*2*G_NUM_UNITS - 1: 0] (
+  ) idelay_in [ 4*2*G_NUM_UNITS - 1: 0] (
     .CLK     (sclk_in), // Not using CLKDIV in an ISERDES, so what are the rules here?
     .LOAD    (delay_load_strobe[ 4*2*G_NUM_UNITS - 1: 0]),
     .DATAIN  (1'b0),
@@ -287,6 +325,30 @@ module ads5296x4_interface_demux2 #(
     .DATAOUT (din_delayed),
     .EN_VTC(1'b0),//(delay_en_vtc),
     .CASC_IN(),
+    .CASC_OUT(delay_casc_out),
+    .CASC_RETURN(delay_casc_return)
+  );
+
+  ODELAYE3 #(
+    .DELAY_TYPE("VAR_LOAD"),
+    .DELAY_FORMAT("COUNT"),//("TIME"),
+    .UPDATE_MODE("ASYNC"),
+    //.DELAY_VALUE(1100),
+    .CASCADE("SLAVE_END"),
+    .SIM_DEVICE("ULTRASCALE"),
+    .REFCLK_FREQUENCY(200.0)
+  ) odelay_in [ 4*2*G_NUM_UNITS - 1: 0] (
+    .CLK     (sclk_in), // Not using CLKDIV in an ISERDES, so what are the rules here?
+    .LOAD    (delay_load_strobe[ 4*2*G_NUM_UNITS - 1: 0]),
+    .ODATAIN (),
+    .CNTVALUEIN(delay_val),
+    .CNTVALUEOUT(),
+    .INC     (1'b0),
+    .CE      (1'b0),
+    .RST     (idelay_rst),
+    .DATAOUT (delay_casc_return),
+    .EN_VTC(1'b0),//(delay_en_vtc),
+    .CASC_IN(delay_casc_out),
     .CASC_OUT(),
     .CASC_RETURN()
   );
