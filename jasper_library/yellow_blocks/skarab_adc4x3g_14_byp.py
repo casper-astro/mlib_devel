@@ -1,7 +1,7 @@
 import os
 from .yellow_block import YellowBlock
 from constraints import PortConstraint, ClockConstraint, ClockGroupConstraint, MultiCycleConstraint, \
-    OutputDelayConstraint, RawConstraint, FalsePathConstraint
+    OutputDelayConstraint, RawConstraint, FalsePathConstraint, InputDelayConstraint
 from helpers import to_int_list
 
 class skarab_adc4x3g_14_byp(YellowBlock):
@@ -19,8 +19,9 @@ class skarab_adc4x3g_14_byp(YellowBlock):
         # add the source files, which have the same name as the module (this is the verilog module created above)
         self.module = 'skarab_adc4x3g_14_byp'
         self.add_source('skarab_adc4x3g_14_byp/*.vhd')
-        self.add_source('skarab_adc4x3g_14_byp/adc_data_sync_fifo/*.xci')
-        self.add_source('skarab_adc4x3g_14_byp/ADC_AXIS_ASYNC_FIFO/*.xci')
+        self.add_source('skarab_adc4x3g_14_byp/chbfifo/*.xci')
+        self.add_source('skarab_adc4x3g_14_byp/adcrx_async_fifo/*.xci')
+        self.add_source('skarab_adc4x3g_14_byp/adc_pll/*.xci')
 
     def modify_top(self,top):
     
@@ -33,6 +34,7 @@ class skarab_adc4x3g_14_byp(YellowBlock):
         top.assign_signal('mez%s_fault_n' % self.mez, 'MEZZANINE_%s_FAULT_N' % self.mez)
         
         inst.add_port('FREE_RUN_156M25HZ_CLK_IN', signal='hmc_clk',                  dir='in') 
+        inst.add_port('FREE_RUN_156M25HZ_RST_IN', signal='hmc_rst',                  dir='in') 
         
         inst.add_port('ADC_MEZ_REFCLK_0_P',       'MEZ%s_REFCLK_0_P' % self.mez, parent_port=True,  dir='in')
         inst.add_port('ADC_MEZ_REFCLK_0_N',       'MEZ%s_REFCLK_0_N' % self.mez, parent_port=True,  dir='in')
@@ -58,23 +60,28 @@ class skarab_adc4x3g_14_byp(YellowBlock):
         inst.add_port('DSP_CLK_IN',               signal='sys_clk',                  dir='in' ) 
         inst.add_port('DSP_RST_IN',               signal='sys_rst',                  dir='in' )
         inst.add_port('ADC0_DATA_VAL_OUT',        signal='%s_adc0_data_val_out' % self.fullname,           dir='out')
-        inst.add_port('ADC0_DATA_OUT',            signal='%s_adc0_data_out' % self.fullname,               dir='out' ,width=128) 
+        inst.add_port('ADC0_DATA_OUT',            signal='%s_adc0_data_out' % self.fullname,               dir='out' ,width=192) 
         inst.add_port('ADC1_DATA_VAL_OUT',        signal='%s_adc1_data_val_out' % self.fullname,           dir='out') 
-        inst.add_port('ADC1_DATA_OUT',            signal='%s_adc1_data_out' % self.fullname,               dir='out' ,width=128) 
+        inst.add_port('ADC1_DATA_OUT',            signal='%s_adc1_data_out' % self.fullname,               dir='out' ,width=192) 
         inst.add_port('ADC2_DATA_VAL_OUT',        signal='%s_adc2_data_val_out' % self.fullname,           dir='out')
-        inst.add_port('ADC2_DATA_OUT',            signal='%s_adc2_data_out' % self.fullname,               dir='out' ,width=128) 
+        inst.add_port('ADC2_DATA_OUT',            signal='%s_adc2_data_out' % self.fullname,               dir='out' ,width=192) 
         inst.add_port('ADC3_DATA_VAL_OUT',        signal='%s_adc3_data_val_out' % self.fullname,           dir='out')
-        inst.add_port('ADC3_DATA_OUT',            signal='%s_adc3_data_out' % self.fullname,               dir='out' ,width=128) 
-        inst.add_port('ADC_SYNC_START_IN',        signal='%s_adc_sync_start_in' % self.fullname,           dir='in' ) 
-        inst.add_port('ADC_SYNC_COMPLETE_OUT',    signal='%s_adc_sync_complete_out' % self.fullname,       dir='out') 
+        inst.add_port('ADC3_DATA_OUT',            signal='%s_adc3_data_out' % self.fullname,               dir='out' ,width=192) 
+        inst.add_port('ADC_SYNC_START_IN',        signal='%s_adc_sync_start_in' % self.fullname,           dir='in')
+        inst.add_port('ADC_SYNC_PART2_START_IN',  signal='%s_adc_sync_part2_start_in' % self.fullname,     dir='in')
+        inst.add_port('ADC_SYNC_PART3_START_IN',  signal='%s_adc_sync_part3_start_in' % self.fullname,     dir='in')
+
+        inst.add_port('ADC_SYNC_COMPLETE_OUT',    signal='%s_adc_sync_complete_out' % self.fullname,       dir='out')
+        inst.add_port('ADC_SYNC_REQUEST_OUT',     signal='%s_adc_sync_request_out' % self.fullname,        dir='out', width=4)
         inst.add_port('ADC_TRIGGER_OUT',          signal='%s_adc_trigger_out' % self.fullname,             dir='out')
-        inst.add_port('PLL_SYNC_START_IN',        signal='%s_pll_sync_start_in' % self.fullname,           dir='in' ) 
+        inst.add_port('PLL_SYNC_START_IN',        signal='%s_pll_sync_start_in' % self.fullname,           dir='in' )
+        inst.add_port('PLL_PULSE_GEN_START_IN',   signal='%s_pll_pulse_gen_start_in' % self.fullname,      dir='in' )
         inst.add_port('PLL_SYNC_COMPLETE_OUT',    signal='%s_pll_sync_complete_out' % self.fullname,       dir='out')
-        inst.add_port('ADC_DATA_CLOCK_OUT',       signal='adc_clk',                  dir='out') 
-        inst.add_port('ADC_DATA_RESET_OUT',       signal='adc_rst',                  dir='out')        
         
         inst.add_port('MEZZ_ID', 'mez%s_id' % self.mez, dir='out', width=3)
         inst.add_port('MEZZ_PRESENT', 'mez%s_present' % self.mez, dir='out')
+
+        inst.add_port('MEZZANINE_RESET_IN',       signal='%s_mezzanine_reset_in' % self.fullname,          dir='in')
         
         inst.add_port('AUX_CLK_P',                signal='aux_clk_diff_p',             parent_port=True, dir='in' )
         inst.add_port('AUX_CLK_N',                signal='aux_clk_diff_n',             parent_port=True, dir='in' ) 
@@ -82,6 +89,14 @@ class skarab_adc4x3g_14_byp(YellowBlock):
         inst.add_port('AUX_SYNCI_N',              signal='sync_in_n',                  parent_port=True, dir='in' ) 
         inst.add_port('AUX_SYNCO_P',              signal='sync_out_p',                 parent_port=True, dir='out') 
         inst.add_port('AUX_SYNCO_N',              signal='sync_out_n',                 parent_port=True, dir='out')
+
+        inst.add_port('ADC_DATA_CLOCK_OUT',       signal='adc_clk',                    dir='out')
+        inst.add_port('ADC_DATA_RESET_OUT',       signal='adc_rst',                    dir='out')
+
+        inst.add_port('ADC0_STATUS_OUT',     signal='%s_adc0_status_out' % self.fullname, dir='out', width=32)
+        inst.add_port('ADC1_STATUS_OUT',     signal='%s_adc1_status_out' % self.fullname, dir='out', width=32)
+        inst.add_port('ADC2_STATUS_OUT',     signal='%s_adc2_status_out' % self.fullname, dir='out', width=32)
+        inst.add_port('ADC3_STATUS_OUT',     signal='%s_adc3_status_out' % self.fullname, dir='out', width=32)
 
     def gen_constraints(self):
     
@@ -122,10 +137,22 @@ class skarab_adc4x3g_14_byp(YellowBlock):
         #set_output_delay -clock [get_clocks FPGA_REFCLK_BUF0_P] -min -add_delay -3.000 [get_ports AUX_SYNCO_P]
         #set_output_delay -clock [get_clocks FPGA_REFCLK_BUF0_P] -max -add_delay -3.000 [get_ports AUX_SYNCO_P]
         
-        cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', consttype='min', constdelay_ns=-3.0, add_delay_en=True, portname='sync_out_p'))
-        cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', consttype='max', constdelay_ns=-3.0, add_delay_en=True, portname='sync_out_p'))
-        cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_clocks -of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', destpath='get_ports sync_out_p', multicycledelay=4))
-        cons.append(MultiCycleConstraint(multicycletype='hold', sourcepath='get_clocks -of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', destpath='get_ports sync_out_p', multicycledelay=3))
+        # cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', consttype='min', constdelay_ns=-3.0, add_delay_en=True, portname='sync_out_p'))
+        # cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', consttype='max', constdelay_ns=-3.0, add_delay_en=True, portname='sync_out_p'))
+        # cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_clocks -of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', destpath='get_ports sync_out_p', multicycledelay=4))
+        # cons.append(MultiCycleConstraint(multicycletype='hold', sourcepath='get_clocks -of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', destpath='get_ports sync_out_p', multicycledelay=3))
+
+        cons.append(InputDelayConstraint(clkname='-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', consttype='min',  constdelay_ns=1.0, add_delay_en=True, portname='sync_in_p'))
+        cons.append(InputDelayConstraint(clkname='-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', consttype='max',  constdelay_ns=2.0, add_delay_en=True, portname='sync_in_p'))
+        cons.append(InputDelayConstraint(clkname='-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', consttype='min',  constdelay_ns=1.0, add_delay_en=True, portname='aux_clk_diff_p'))
+        cons.append(InputDelayConstraint(clkname='-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', consttype='max',  constdelay_ns=2.0, add_delay_en=True, portname='aux_clk_diff_p'))
+        cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', consttype='min', constdelay_ns=-3.0, add_delay_en=True, portname='sync_out_p'))
+        cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]', consttype='max', constdelay_ns=-3.0, add_delay_en=True, portname='sync_out_p'))
+
+        cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', consttype='min', constdelay_ns=0.1, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
+        cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', consttype='max', constdelay_ns=0.2, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
+        cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_clocks -of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', destpath='get_ports MEZZANINE_%s_RESET' % self.mez, multicycledelay=2))
+        cons.append(MultiCycleConstraint(multicycletype='hold', sourcepath='get_clocks -of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', destpath='get_ports MEZZANINE_%s_RESET' % self.mez, multicycledelay=1))
 
         #Clock Constraints
         #create_clock -period 100.000 -name AUX_CLK_P -waveform {0.000 50.000} [get_ports AUX_CLK_P]
@@ -139,12 +166,12 @@ class skarab_adc4x3g_14_byp(YellowBlock):
         #create_clock -period 5.714 -waveform {0.000 2.857} [get_ports ADC_MEZ_REFCLK_2_P]
         #create_clock -period 5.714 -waveform {0.000 2.857} [get_ports ADC_MEZ_REFCLK_3_P]
         
-        cons.append(ClockConstraint('aux_clk_diff_p', 'aux_clk_diff_p', period=100.0, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=50.0))        
-        cons.append(ClockConstraint('sync_in_p'     , 'sync_in_p',      period=100.0, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=50.0)) 
-        cons.append(ClockConstraint('%s/ADC32RF45_11G2_RX_0/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/ADC32RF45_11G2_RX_0/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK' % self.fullname, period=3.57, port_en=False, virtual_en=False,  waveform_min=0.0, waveform_max=1.785))
-        cons.append(ClockConstraint('%s/ADC32RF45_11G2_RX_1/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/ADC32RF45_11G2_RX_1/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK' % self.fullname, period=3.57, port_en=False, virtual_en=False,  waveform_min=0.0, waveform_max=1.785))
-        cons.append(ClockConstraint('%s/ADC32RF45_11G2_RX_2/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/ADC32RF45_11G2_RX_2/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK' % self.fullname, period=3.57, port_en=False, virtual_en=False,  waveform_min=0.0, waveform_max=1.785))
-        cons.append(ClockConstraint('%s/ADC32RF45_11G2_RX_3/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/ADC32RF45_11G2_RX_3/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK' % self.fullname, period=3.57, port_en=False, virtual_en=False,  waveform_min=0.0, waveform_max=1.785))
+        #cons.append(ClockConstraint('aux_clk_diff_p', 'aux_clk_diff_p', period=100.0, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=50.0))        
+        #cons.append(ClockConstraint('sync_in_p'     , 'sync_in_p',      period=100.0, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=50.0)) 
+        cons.append(ClockConstraint('%s/ADC32RF45_11G2_RX_0/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/ADC32RF45_11G2_RX_0/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK' % self.fullname, period=3.571, port_en=False, virtual_en=False,  waveform_min=0.0, waveform_max=1.785))
+        cons.append(ClockConstraint('%s/ADC32RF45_11G2_RX_1/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/ADC32RF45_11G2_RX_1/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK' % self.fullname, period=3.571, port_en=False, virtual_en=False,  waveform_min=0.0, waveform_max=1.785))
+        cons.append(ClockConstraint('%s/ADC32RF45_11G2_RX_2/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/ADC32RF45_11G2_RX_2/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK' % self.fullname, period=3.571, port_en=False, virtual_en=False,  waveform_min=0.0, waveform_max=1.785))
+        cons.append(ClockConstraint('%s/ADC32RF45_11G2_RX_3/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/ADC32RF45_11G2_RX_3/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK' % self.fullname, period=3.571, port_en=False, virtual_en=False,  waveform_min=0.0, waveform_max=1.785))
         cons.append(ClockConstraint('MEZ%s_REFCLK_0_P' % self.mez,'MEZ%s_REFCLK_0_P' % self.mez, period=5.714, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=2.857))        
         cons.append(ClockConstraint('MEZ%s_REFCLK_1_P' % self.mez,'MEZ%s_REFCLK_1_P' % self.mez, period=5.714, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=2.857))        
         cons.append(ClockConstraint('MEZ%s_REFCLK_2_P' % self.mez,'MEZ%s_REFCLK_2_P' % self.mez, period=5.714, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=2.857))        
@@ -158,13 +185,12 @@ class skarab_adc4x3g_14_byp(YellowBlock):
         #set_clock_groups -asynchronous -group [get_clocks FPGA_REFCLK_BUF0_P] -group [get_clocks SKARAB_ADC4x3G_14_inst/ADC32RF45_11G2_RX_2/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK]
         #set_clock_groups -asynchronous -group [get_clocks FPGA_REFCLK_BUF0_P] -group [get_clocks SKARAB_ADC4x3G_14_inst/ADC32RF45_11G2_RX_3/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK]
         
-        cons.append(ClockGroupConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', 'aux_clk_diff_p', 'asynchronous'))
-        cons.append(ClockGroupConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', 'sync_in_p', 'asynchronous'))
+        #cons.append(ClockGroupConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', 'aux_clk_diff_p', 'asynchronous'))
+        #cons.append(ClockGroupConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', 'sync_in_p', 'asynchronous'))
         cons.append(ClockGroupConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', '%s/ADC32RF45_11G2_RX_0/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK'% self.fullname, 'asynchronous'))
         cons.append(ClockGroupConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', '%s/ADC32RF45_11G2_RX_1/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK'% self.fullname, 'asynchronous'))
         cons.append(ClockGroupConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', '%s/ADC32RF45_11G2_RX_2/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK'% self.fullname, 'asynchronous'))
         cons.append(ClockGroupConstraint('-of_objects [get_pins */USER_CLK_MMCM_inst/CLKOUT0]', '%s/ADC32RF45_11G2_RX_3/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK'% self.fullname, 'asynchronous'))
-
 
         #False Path Constraints
         #set_false_path -to [get_pins {SKARAB_ADC4x3G_14_inst/ADC32RF45_11G2_RX_0/ADC_RX_PHY_soft_reset_SR_reg[*]/PRE}]
@@ -184,14 +210,14 @@ class skarab_adc4x3g_14_byp(YellowBlock):
         #set_false_path -from [get_clocks test_skarab_adc_byp_skarab_adc4x3g14_byp/ADC32RF45_11G2_RX_2/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK] -to [get_clocks -of_objects [get_pins test_skarab_adc_byp_Subsystem_fgbe/SYS_CLK_MMCM_inst/CLKOUT0]]
         #set_false_path -from [get_clocks test_skarab_adc_byp_skarab_adc4x3g14_byp/ADC32RF45_11G2_RX_3/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK] -to [get_clocks -of_objects [get_pins test_skarab_adc_byp_Subsystem_fgbe/SYS_CLK_MMCM_inst/CLKOUT0]]        
 
-        cons.append(FalsePathConstraint(destpath='[get_pins {%s/ADC32RF45_11G2_RX_0/ADC_RX_PHY_soft_reset_SR_reg[*]/PRE}]' % self.fullname))
-        cons.append(FalsePathConstraint(destpath='[get_pins {%s/ADC32RF45_11G2_RX_0/reset_RX_SYNC_SR_reg[*]/PRE}]' % self.fullname))
-        cons.append(FalsePathConstraint(destpath='[get_pins {%s/ADC32RF45_11G2_RX_1/ADC_RX_PHY_soft_reset_SR_reg[*]/PRE}]' % self.fullname))
-        cons.append(FalsePathConstraint(destpath='[get_pins {%s/ADC32RF45_11G2_RX_1/reset_RX_SYNC_SR_reg[*]/PRE}]' % self.fullname))
-        cons.append(FalsePathConstraint(destpath='[get_pins {%s/ADC32RF45_11G2_RX_2/ADC_RX_PHY_soft_reset_SR_reg[*]/PRE}]' % self.fullname))
-        cons.append(FalsePathConstraint(destpath='[get_pins {%s/ADC32RF45_11G2_RX_2/reset_RX_SYNC_SR_reg[*]/PRE}]' % self.fullname))
-        cons.append(FalsePathConstraint(destpath='[get_pins {%s/ADC32RF45_11G2_RX_3/ADC_RX_PHY_soft_reset_SR_reg[*]/PRE}]' % self.fullname))
-        cons.append(FalsePathConstraint(destpath='[get_pins {%s/ADC32RF45_11G2_RX_3/reset_RX_SYNC_SR_reg[*]/PRE}]' % self.fullname))
+        # cons.append(FalsePathConstraint(destpath='[get_pins {%s/ADC32RF45_11G2_RX_0/ADC_RX_PHY_soft_reset_SR_reg[*]/PRE}]' % self.fullname))
+        # cons.append(FalsePathConstraint(destpath='[get_pins {%s/ADC32RF45_11G2_RX_0/reset_RX_SYNC_SR_reg[*]/PRE}]' % self.fullname))
+        # cons.append(FalsePathConstraint(destpath='[get_pins {%s/ADC32RF45_11G2_RX_1/ADC_RX_PHY_soft_reset_SR_reg[*]/PRE}]' % self.fullname))
+        # cons.append(FalsePathConstraint(destpath='[get_pins {%s/ADC32RF45_11G2_RX_1/reset_RX_SYNC_SR_reg[*]/PRE}]' % self.fullname))
+        # cons.append(FalsePathConstraint(destpath='[get_pins {%s/ADC32RF45_11G2_RX_2/ADC_RX_PHY_soft_reset_SR_reg[*]/PRE}]' % self.fullname))
+        # cons.append(FalsePathConstraint(destpath='[get_pins {%s/ADC32RF45_11G2_RX_2/reset_RX_SYNC_SR_reg[*]/PRE}]' % self.fullname))
+        # cons.append(FalsePathConstraint(destpath='[get_pins {%s/ADC32RF45_11G2_RX_3/ADC_RX_PHY_soft_reset_SR_reg[*]/PRE}]' % self.fullname))
+        # cons.append(FalsePathConstraint(destpath='[get_pins {%s/ADC32RF45_11G2_RX_3/reset_RX_SYNC_SR_reg[*]/PRE}]' % self.fullname))
         cons.append(FalsePathConstraint(sourcepath='[get_clocks -of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]]', destpath='[get_clocks %s/ADC32RF45_11G2_RX_0/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK]' % self.fullname))
         cons.append(FalsePathConstraint(sourcepath='[get_clocks -of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]]', destpath='[get_clocks %s/ADC32RF45_11G2_RX_1/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK]' % self.fullname))
         cons.append(FalsePathConstraint(sourcepath='[get_clocks -of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]]', destpath='[get_clocks %s/ADC32RF45_11G2_RX_2/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK]' % self.fullname))
@@ -200,8 +226,16 @@ class skarab_adc4x3g_14_byp(YellowBlock):
         cons.append(FalsePathConstraint(sourcepath='[get_clocks %s/ADC32RF45_11G2_RX_1/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK]' % self.fullname, destpath='[get_clocks -of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]]'))
         cons.append(FalsePathConstraint(sourcepath='[get_clocks %s/ADC32RF45_11G2_RX_2/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK]' % self.fullname, destpath='[get_clocks -of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]]'))
         cons.append(FalsePathConstraint(sourcepath='[get_clocks %s/ADC32RF45_11G2_RX_3/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK]' % self.fullname, destpath='[get_clocks -of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]]'))
+        #cons.append(FalsePathConstraint(sourcepath='[get_clocks aux_clk_diff_p]', destpath='[get_clocks -of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]]'))
+        #cons.append(FalsePathConstraint(sourcepath='[get_clocks sync_in_p]', destpath='[get_clocks -of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]]'))
 
-        
+        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -of_objects [get_pins %s/adc_pll_i/U0/mmcm_adv_inst/CLKOUT0]]' % self.fullname))
+
+        cons.append(RawConstraint('create_waiver -type CDC -id CDC-11 -from [get_pins skarab_infr/user_fpga_rst_reg/C] -to [get_pins %s/ADC32RF45_11G2_RX_0/tff_adcplllocked/reg_z_reg/D] -user Peralex -description {Confirmed CDC-11 can be ignored in this case}' % self.fullname))
+        cons.append(RawConstraint('create_waiver -type CDC -id CDC-11 -from [get_pins skarab_infr/user_fpga_rst_reg/C] -to [get_pins %s/ADC32RF45_11G2_RX_1/tff_adcplllocked/reg_z_reg/D] -user Peralex -description {Confirmed CDC-11 can be ignored in this case}' % self.fullname))
+        cons.append(RawConstraint('create_waiver -type CDC -id CDC-11 -from [get_pins skarab_infr/user_fpga_rst_reg/C] -to [get_pins %s/ADC32RF45_11G2_RX_2/tff_adcplllocked/reg_z_reg/D] -user Peralex -description {Confirmed CDC-11 can be ignored in this case}' % self.fullname))
+        cons.append(RawConstraint('create_waiver -type CDC -id CDC-11 -from [get_pins skarab_infr/user_fpga_rst_reg/C] -to [get_pins %s/ADC32RF45_11G2_RX_3/tff_adcplllocked/reg_z_reg/D] -user Peralex -description {Confirmed CDC-11 can be ignored in this case}' % self.fullname))
+
         #Raw Constraints
         #create_pblock ADC32RF45_11G2_RX_0
         #add_cells_to_pblock [get_pblocks ADC32RF45_11G2_RX_0] [get_cells -quiet [list SKARAB_ADC4x3G_14_inst/ADC32RF45_11G2_RX_0/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/gt_usrclk_source/rxoutclk_bufg0_i]]

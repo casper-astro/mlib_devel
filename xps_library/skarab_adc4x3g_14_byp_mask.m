@@ -11,8 +11,20 @@ for i =1:length(gateway_outs)
     if regexp(get_param(gw, 'Name'), '(adc_sync_start_in)$')
         toks = regexp(get_param(gw, 'Name'), '(adc_sync_start_in)$', 'tokens');
         set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+    elseif regexp(get_param(gw, 'Name'), '(adc_sync_part2_start_in)$')
+        toks = regexp(get_param(gw, 'Name'), '(adc_sync_part2_start_in)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+    elseif regexp(get_param(gw, 'Name'), '(adc_sync_part3_start_in)$')
+        toks = regexp(get_param(gw, 'Name'), '(adc_sync_part3_start_in)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+    elseif regexp(get_param(gw, 'Name'), '(pll_pulse_gen_start_in)$')
+        toks = regexp(get_param(gw, 'Name'), '(pll_pulse_gen_start_in)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
     elseif regexp(get_param(gw, 'Name'), '(pll_sync_start_in)$')
         toks = regexp(get_param(gw, 'Name'), '(pll_sync_start_in)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+    elseif regexp(get_param(gw, 'Name'), '(mezzanine_reset_in)$')
+        toks = regexp(get_param(gw, 'Name'), '(mezzanine_reset_in)$', 'tokens');
         set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
     else
         error(['Unknown gateway name: ', gw]);
@@ -52,8 +64,23 @@ for i =1:length(gateway_ins)
     elseif regexp(get_param(gw, 'Name'), '(adc_sync_complete_out)$')
         toks = regexp(get_param(gw, 'Name'), '(adc_sync_complete_out)$', 'tokens');
         set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+    elseif regexp(get_param(gw, 'Name'), '(adc_sync_request_out)$')
+        toks = regexp(get_param(gw, 'Name'), '(adc_sync_request_out)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
     elseif regexp(get_param(gw, 'Name'), '(adc_trigger_out)$')
         toks = regexp(get_param(gw, 'Name'), '(adc_trigger_out)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+    elseif regexp(get_param(gw, 'Name'), '(adc0_status_out)$')
+        toks = regexp(get_param(gw, 'Name'), '(adc0_status_out)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+    elseif regexp(get_param(gw, 'Name'), '(adc1_status_out)$')
+        toks = regexp(get_param(gw, 'Name'), '(adc1_status_out)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+    elseif regexp(get_param(gw, 'Name'), '(adc2_status_out)$')
+        toks = regexp(get_param(gw, 'Name'), '(adc2_status_out)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+    elseif regexp(get_param(gw, 'Name'), '(adc3_status_out)$')
+        toks = regexp(get_param(gw, 'Name'), '(adc3_status_out)$', 'tokens');
         set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
     else
         error(['Unknown gateway name: ', gw]);
