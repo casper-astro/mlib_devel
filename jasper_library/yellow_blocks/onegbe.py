@@ -1,5 +1,5 @@
 from .yellow_block import YellowBlock
-from constraints import PortConstraint, ClockConstraint, FalsePathConstraint, RawConstraint
+from constraints import PortConstraint, ClockConstraint, FalsePathConstraint, RawConstraint, ClockGroupConstraint
 from helpers import to_int_list
 from .yellow_block_typecodes import *
 
@@ -803,14 +803,24 @@ class onegbe_snap(onegbe):
         consts += [PortConstraint(self.fullname+'_mgt_clk_p', 'eth_clk_125_p')]
         consts += [PortConstraint(self.fullname+'_mgt_clk_n', 'eth_clk_125_n')]
         consts += [ClockConstraint(self.fullname+'_mgt_clk_p', name='onegbe_clk', freq=self.refclk_freq)]
-        consts += [RawConstraint('create_clock -period 8.000 -name gbe_userclk2_out -waveform {0.000 4.000} [get_nets {gbe_userclk2_out}]')]
-        consts += [RawConstraint('set_clock_groups -name asyncclocks_onegbe -asynchronous -group [get_clocks -include_generated_clocks sys_clk_p_CLK] -group [get_clocks -include_generated_clocks gbe_userclk2_out]')]
-        consts += [RawConstraint('set_clock_groups -name asyncclocks_onegbe_usr_clk -asynchronous -group [get_clocks -of_objects [get_cells -hierarchical -filter {name=~*clk_counter*}]] -group [get_clocks -include_generated_clocks gbe_userclk2_out]')]
+        if self.use_lvds:
+            # Maybe this constraint is never needed? Definitely not needed if the IP is for a transceiver core, which sets the clock constraint.
+            consts += [RawConstraint('create_clock -period 8.000 -name gbe_userclk2_out -waveform {0.000 4.000} [get_nets {gbe_userclk2_out}]')]
+        #consts += [RawConstraint('set_clock_groups -name asyncclocks_onegbe -asynchronous -group [get_clocks -include_generated_clocks sys_clk_p_CLK] -group [get_clocks -include_generated_clocks gbe_userclk2_out]')]
+        #consts += [RawConstraint('set_clock_groups -name asyncclocks_onegbe_usr_clk -asynchronous -group [get_clocks -of_objects [get_cells -hierarchical -filter {name=~*clk_counter*}]] -group [get_clocks -include_generated_clocks gbe_userclk2_out]')]
+        
+        consts += [ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets user_clk]',
+                                        '-include_generated_clocks -of_objects [get_ports %s_mgt_clk_p]' % self.fullname,
+                                        'asynchronous')]
+        consts += [ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets sys_clk]',
+                                        '-include_generated_clocks -of_objects [get_ports %s_mgt_clk_p]' % self.fullname,
+                                        'asynchronous')]
 
         if self.platform.name in ['snap2']:
-            # In vivado 2019.1.3 the placer does something mad with an IDELAY block, putting it in the wrong SLR, which stops the design meeting timing.
-            # Force it to a reasonable place here.
-            consts += [RawConstraint('set_property LOC BITSLICE_RX_TX_X2Y86 [get_cells %s_pcs_pma/U0/pcs_pma_block_i/lvds_transceiver_mw/serdes_1_to_10_ser8_i/idelay_cal]' % self.fullname)]
+            if self.platform.version == 1:
+                # In vivado 2019.1.3 the placer does something mad with an IDELAY block, putting it in the wrong SLR, which stops the design meeting timing.
+                # Force it to a reasonable place here.
+                consts += [RawConstraint('set_property LOC BITSLICE_RX_TX_X2Y86 [get_cells %s_pcs_pma/U0/pcs_pma_block_i/lvds_transceiver_mw/serdes_1_to_10_ser8_i/idelay_cal]' % self.fullname)]
 
         if (not self.use_lvds) and (self.platform.name in ['snap']):
             consts += [PortConstraint(self.fullname+'_sfp_disable', 'sfp_disable')]
