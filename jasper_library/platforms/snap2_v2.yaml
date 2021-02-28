@@ -56,6 +56,12 @@ pins:
   sync_in_n:
     iostd: DIFF_HSTL_I_18
     loc: AT13
+  trig: # Schematic net TRIG_EXT
+    iostd: LVCMOS18
+    loc: AU20
+  trig_oe: # Schemantic net TRIG_IO
+    iostd: LVCMOS18
+    loc: BA20
   gpio:
     iostd: LVCMOS25
     loc:
