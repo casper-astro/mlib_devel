@@ -30,6 +30,8 @@ module ads5296x4_interface_demux2 #(
     input  fclk_in,
     output fclk_out,
 
+    output sync_out,
+
     // Software register interface
    
     // external snapshot control
@@ -52,9 +54,9 @@ module ads5296x4_interface_demux2 #(
     input         wb_stb_i
   );
 
-  (* mark_debug = "true" *) wire [4*2*G_NUM_UNITS - 1 + 1: 0]  delay_load;
-  (* mark_debug = "true" *) wire [4*2*G_NUM_UNITS - 1 + 1: 0]  delay_rst;
-  (* mark_debug = "true" *) wire [4*2*G_NUM_UNITS - 1 + 1: 0] delay_en_vtc;
+  (* mark_debug = "true" *) wire [4*2*G_NUM_UNITS - 1 + 2: 0]  delay_load;
+  (* mark_debug = "true" *) wire [4*2*G_NUM_UNITS - 1 + 2: 0]  delay_rst;
+  (* mark_debug = "true" *) wire [4*2*G_NUM_UNITS - 1 + 2: 0] delay_en_vtc;
   (* mark_debug = "true" *) wire [8 : 0] delay_val;
 
   // Clocks
@@ -269,11 +271,11 @@ module ads5296x4_interface_demux2 #(
 
   wire delay_clk = wb_clk_i;
 
-  (* async_reg = "true" *) reg [4*2*G_NUM_UNITS : 0] delay_loadR;
-  (* async_reg = "true" *) reg [4*2*G_NUM_UNITS : 0] delay_loadRR;
-  (* async_reg = "true" *) reg [4*2*G_NUM_UNITS : 0] delay_loadRRR;
+  (* async_reg = "true" *) reg [4*2*G_NUM_UNITS + 2 - 1: 0] delay_loadR;
+  (* async_reg = "true" *) reg [4*2*G_NUM_UNITS + 2 - 1: 0] delay_loadRR;
+  (* async_reg = "true" *) reg [4*2*G_NUM_UNITS + 2 - 1: 0] delay_loadRRR;
 
-  wire [4*2*G_NUM_UNITS : 0] delay_load_strobe = delay_loadRR & ~delay_loadRRR;
+  wire [4*2*G_NUM_UNITS + 2 - 1: 0] delay_load_strobe = delay_loadRR & ~delay_loadRRR;
   always @(posedge sclk_in) begin
     delay_loadR <= delay_load;
     delay_loadRR <= delay_loadR;
@@ -440,5 +442,50 @@ module ads5296x4_interface_demux2 #(
       fifo_re_sr <= {fifo_re_sr[9:0], syncR_sclk & ~ syncRR_sclk};
     end
   end
+
+  generate
+  if (G_IS_MASTER) begin
+    // Sync output delay
+    wire sync_out_delay_load = delay_load[4*2*G_NUM_UNITS + 2 - 1];
+    (* async_reg = "true" *) reg sync_out_delay_loadR;
+    (* async_reg = "true" *) reg sync_out_delay_loadRR;
+    reg sync_out_delay_loadRRR;
+    wire sync_out_delay_load_strobe = sync_out_delay_loadRR & ~sync_out_delay_loadRRR;
+    (* async_reg = "true" *) reg sync_out_delay_rstR;
+    (* async_reg = "true" *) reg sync_out_delay_rstRR;
+    always @(posedge sclk_in) begin
+      sync_out_delay_loadR <= sync_out_delay_load;
+      sync_out_delay_loadRR <= sync_out_delay_loadR;
+      sync_out_delay_loadRRR <= sync_out_delay_loadRR;
+      sync_out_delay_rstR <= delay_rst[4*2*G_NUM_UNITS + 2 - 1];
+      sync_out_delay_rstRR <= sync_out_delay_rstR;
+    end
+    ODELAYE3 #(
+      .DELAY_TYPE("VAR_LOAD"),
+      .DELAY_FORMAT("COUNT"),//("TIME"),
+      .UPDATE_MODE("ASYNC"),
+      //.DELAY_VALUE(1100),
+      .CASCADE("NONE"),
+      .SIM_DEVICE("ULTRASCALE"),
+      .REFCLK_FREQUENCY(200.0)
+    ) odelay_in (
+      .CLK     (sclk2_in), // Not using CLKDIV in an ISERDES, so what are the rules here?
+      .LOAD    (sync_out_delay_load_strobe),
+      .ODATAIN (sync),
+      .CNTVALUEIN(delay_val),
+      .CNTVALUEOUT(),
+      .INC     (1'b0),
+      .CE      (1'b0),
+      .RST     (sync_out_delay_rstRR),
+      .DATAOUT (sync_out),
+      .EN_VTC(1'b0),//(delay_en_vtc),
+      .CASC_IN(),
+      .CASC_OUT(),
+      .CASC_RETURN()
+    );
+  end else begin
+    assign sync_out = sync;
+  end
+  endgenerate
 
 endmodule

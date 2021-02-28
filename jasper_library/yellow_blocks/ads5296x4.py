@@ -92,6 +92,8 @@ class ads5296x4(YellowBlock):
                 inst.add_port('sclk5_out', 'ads5296_%d_sclk5' % (self.port))
                 inst.add_parameter("G_NUM_FCLKS", "2")
                 inst.add_parameter("G_FCLK_MASTER", "0") # FCLK from chip A is on a clock-capable pin
+                # Board 0 always controls the sync
+                inst.add_port("sync_out", "%s_adc_sync" % self.port_prefix, dir="out", parent_port=True)
                 inst.add_port('fclk_p', '%s_%d_fclk_p' % (self.fullname, b), width=2)
                 inst.add_port('fclk_n', '%s_%d_fclk_n' % (self.fullname, b), width=2)
                 if self.board_count == 2:
@@ -111,6 +113,8 @@ class ads5296x4(YellowBlock):
                 inst.add_parameter("G_IS_MASTER", "1'b0") 
                 inst.add_parameter("G_NUM_FCLKS", "3")
                 inst.add_parameter("G_FCLK_MASTER", "1") # FCLK from chip B is the first on a clock-capable pin
+                # Board 0 always controls the sync
+                inst.add_port("sync_out", '')
                 inst.add_port('sclk_out', '')
                 inst.add_port('sclk2_out', '')
                 inst.add_port('sclk5_out', '')
@@ -137,12 +141,6 @@ class ads5296x4(YellowBlock):
             inst.add_port('din_n', '%s_%d_din_n' % (self.port_prefix, b), parent_port=True, width=self.num_units_per_board*self.lanes_per_unit, dir='in')
             inst.add_port('dout', '%s_%d_dout' % (self.fullname, b), width=self.adc_resolution*self.num_units_per_board*self.channels_per_unit)
 
-            # Always derive sync out from first board
-            if b == 0:
-                inst.add_port('sync_out', '%s_adc_sync_out' % self.fullname)
-            else:
-                inst.add_port('sync_out', '')
-
             # snapshot ports
             inst.add_port('snapshot_ext_trigger', '%s_snapshot_ext_trigger' % self.fullname) # simulink input
             inst.add_port('snapshot_we', '%s_snapshot_we_%d' % (self.fullname, b))
@@ -164,13 +162,10 @@ class ads5296x4(YellowBlock):
         top.add_signal('adc%d_clk' % self.port)
         top.assign_signal('adc%d_clk' % self.port, 'ads5296_%d_sclk2' % self.port)
 
-        # The simulink yellow block provides a simulink-input to drive sync / reset. These can be passed straight
+        # The simulink yellow block provides a simulink-input to drive reset. This can be passed straight
         # to top-level ports. Let the synthesizer infer buffers.
-        top.add_port('%s_adc_sync' % self.port_prefix, dir='out')
         top.add_port('%s_adc_rst'  %self.port_prefix, dir='out')
-        top.add_signal('%s_adc_sync' % self.fullname)
         #top.add_signal('%s_adc_rst' % self.fullname)
-        top.assign_signal('%s_adc_sync' % self.port_prefix, '%s_adc_sync' % self.fullname)
         top.assign_signal('%s_adc_rst'  % self.port_prefix, '~%s_ads5296_hardware_rst%d_user_data_out[0]' % (self.name, self.port)) # Invert
         #top.assign_signal('%s_adc_rst'  % self.port_prefix, '1\'b1') # active low
         #top.assign_signal('%s_adc_rst'  % self.port_prefix, '~%s_ads5296_rst%d_user_data_out[0]' % (self.name, self.port)) # Invert
@@ -422,6 +417,11 @@ class ads5296x4(YellowBlock):
         input_hold_delay = 0.18
         clocks = [clkconst0, clkconst1]
         # Don't constrain IO delays -- rely on runtime dynamic link training.
+        # Explicitly set as false path to keep compiler from issuing warnings
+        for b in range(self.board_count):
+            cons.append(InputDelayConstraint(clkname=clocks[b].name, consttype='min', constdelay_ns=input_hold_delay, portname="%s_%d_din_p[*]" % (self.port_prefix, b)))
+            cons.append(RawConstraint("set_false_path -from [get_ports %s_%d_din_p[*]]" % (self.port_prefix, b)))
+        
         #for b in range(self.board_count):
         #    # See https://forums.xilinx.com/t5/Timing-Analysis/Input-Delay-Timing-Constraints-Doubts/m-p/652627/highlight/true#M8652
         #    cons.append(InputDelayConstraint(clkname=clocks[b].name, consttype='min', constdelay_ns=input_hold_delay, portname="%s_%d_din_p[*]" % (self.port_prefix, b)))
