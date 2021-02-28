@@ -359,10 +359,17 @@ class ads5296x4(YellowBlock):
             # Add the clock pins for board 1
             cons.append(PortConstraint('%s_1_lclk_p' % (self.port_prefix), 'fmc%d_clk_p' % self.port, iogroup_index=0))
             cons.append(PortConstraint('%s_1_lclk_n' % (self.port_prefix), 'fmc%d_clk_n' % self.port, iogroup_index=0))
-            cons.append(PortConstraint('%s_1_fclk0_p' % (self.port_prefix), 'fmc%d_hb_p' % self.port, iogroup_index=18))
-            cons.append(PortConstraint('%s_1_fclk0_n' % (self.port_prefix), 'fmc%d_hb_n' % self.port, iogroup_index=18))
-            cons.append(PortConstraint('%s_1_fclk1_p' % (self.port_prefix), 'fmc%d_gbtclk_p' % self.port, iogroup_index=0))
-            cons.append(PortConstraint('%s_1_fclk1_n' % (self.port_prefix), 'fmc%d_gbtclk_n' % self.port, iogroup_index=0))
+            # FCLKs from upper board A and B are swapped in version 2 (so that an upper board has both LCLK and FCLK from chip A on a clock capable pin)
+            if self.version == 1:
+                cons.append(PortConstraint('%s_1_fclk0_p' % (self.port_prefix), 'fmc%d_gbtclk_p' % self.port, iogroup_index=0))
+                cons.append(PortConstraint('%s_1_fclk0_n' % (self.port_prefix), 'fmc%d_gbtclk_n' % self.port, iogroup_index=0))
+                cons.append(PortConstraint('%s_1_fclk1_p' % (self.port_prefix), 'fmc%d_hb_p' % self.port, iogroup_index=18))
+                cons.append(PortConstraint('%s_1_fclk1_n' % (self.port_prefix), 'fmc%d_hb_n' % self.port, iogroup_index=18))
+            elif self.version == 2:
+                cons.append(PortConstraint('%s_1_fclk0_p' % (self.port_prefix), 'fmc%d_hb_p' % self.port, iogroup_index=18))
+                cons.append(PortConstraint('%s_1_fclk0_n' % (self.port_prefix), 'fmc%d_hb_n' % self.port, iogroup_index=18))
+                cons.append(PortConstraint('%s_1_fclk1_p' % (self.port_prefix), 'fmc%d_gbtclk_p' % self.port, iogroup_index=0))
+                cons.append(PortConstraint('%s_1_fclk1_n' % (self.port_prefix), 'fmc%d_gbtclk_n' % self.port, iogroup_index=0))
             cons.append(PortConstraint('%s_1_fclk2_p' % (self.port_prefix), 'fmc%d_gbtclk_p' % self.port, iogroup_index=1))
             cons.append(PortConstraint('%s_1_fclk2_n' % (self.port_prefix), 'fmc%d_gbtclk_n' % self.port, iogroup_index=1))
             # The second (top) ADC has more convenient pin assignment numbering
