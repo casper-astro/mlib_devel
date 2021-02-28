@@ -42,9 +42,10 @@ module wb_ads5296_attach #(
   reg [31:0] wb_data_out_reg;
 
   /* registers */
-  reg [4*2*G_NUM_UNITS + G_NUM_FCLKS - 1: 0]  delay_load_reg;
-  reg [4*2*G_NUM_UNITS + G_NUM_FCLKS - 1: 0]  delay_rst_reg;
-  reg [4*2*G_NUM_UNITS + G_NUM_FCLKS - 1: 0]  delay_en_vtc_reg;
+  // Extra bit is for sync_out control
+  reg [4*2*G_NUM_UNITS + G_NUM_FCLKS + 1 - 1: 0]  delay_load_reg;
+  reg [4*2*G_NUM_UNITS + G_NUM_FCLKS + 1 - 1: 0]  delay_rst_reg;
+  reg [4*2*G_NUM_UNITS + G_NUM_FCLKS + 1 - 1: 0]  delay_en_vtc_reg;
   reg [8 : 0] delay_val_reg;
   reg [4*G_NUM_UNITS - 1 : 0] bitslip_reg;
   reg iserdes_rst_reg;

@@ -30,8 +30,6 @@ module ads5296x4_interface_demux2 #(
     input  fclk_in,
     output fclk_out,
 
-    output sync_out,
-
     // Software register interface
    
     // external snapshot control
@@ -189,11 +187,6 @@ module ads5296x4_interface_demux2 #(
   // FCLK   (The rate at which samples are clocked into the FIFO)
   // 2*FCLK (Two ADC lanes interleaved -- the rate at which samples are clocked out of the FIFO)
   // 5*FCLK (The (DDR) bit clock
-  //
-  // Make 2*FCLK (used for the main FPGA clock) 180 degrees out of phase. This means there is always
-  // 2.5 ns between a 2*FCLK and an FCLK posedge. The goal here is to make sure we can pass data from
-  // a common 2*FCLK control domain to a (different, per ADC board) FCLK domain on the same FCLK edge.
-  // TODO: think about this much more.
   
     wire sclk_mmcm;
     wire sclk_fb_mmcm;
