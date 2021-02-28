@@ -1,5 +1,5 @@
 from .yellow_block import YellowBlock
-from constraints import PortConstraint, MaxDelayConstraint, MinDelayConstraint, FalsePathConstraint
+from constraints import PortConstraint, MaxDelayConstraint, MinDelayConstraint, FalsePathConstraint, RawConstraint
 from helpers import to_int_list
 
 class gpio(YellowBlock):
@@ -147,6 +147,8 @@ class gpio(YellowBlock):
                 const += [MaxDelayConstraint(sourcepath='[get_ports {%s_ext[*]}]' % self.portbase, constdelay_ns=1.0)]
                 const += [MinDelayConstraint(sourcepath='[get_ports {%s_ext[*]}]' % self.portbase, constdelay_ns=1.0)]
                 const += [FalsePathConstraint(sourcepath='[get_ports {%s_ext[*]}]' % self.portbase)]
+                if self.termination is not None:
+                    const += [RawConstraint('set_property PULLTYPE %s [get_ports %s_ext[*]]' % (self.termination.upper(), self.portbase))]
             elif self.io_dir == 'out':
                 const += [MaxDelayConstraint(destpath='[get_ports {%s_ext[*]}]' % self.portbase, constdelay_ns=1.0)]
                 const += [MinDelayConstraint(destpath='[get_ports {%s_ext[*]}]' % self.portbase, constdelay_ns=1.0)]
