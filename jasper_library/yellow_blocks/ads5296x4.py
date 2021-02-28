@@ -1,6 +1,6 @@
 from .yellow_block import YellowBlock
 from verilog import VerilogModule
-from constraints import PortConstraint, ClockConstraint, RawConstraint, InputDelayConstraint
+from constraints import PortConstraint, ClockConstraint, RawConstraint, InputDelayConstraint, FalsePathConstraint
 from .yellow_block_typecodes import *
 from math import log, ceil
 import math, numpy as np
@@ -277,8 +277,8 @@ class ads5296x4(YellowBlock):
         assert self.version in [1,2], "Don't know what to do with version %d!" % self.version
 
         for pol in ['p', 'n']:
-            # Chip 0
             if self.version == 1:
+                # Chip 0
                 cons.append(PortConstraint(
                     '%s_0_din_%s' % (self.port_prefix, pol),
                     'fmc%d_ha_%s' % (self.port, pol),
@@ -299,6 +299,7 @@ class ads5296x4(YellowBlock):
                     iogroup_index=[0],
                 ))
             elif self.version == 2:
+                # Chip 0
                 cons.append(PortConstraint(
                     '%s_0_din_%s' % (self.port_prefix, pol),
                     'fmc%d_ha_%s' % (self.port, pol),
@@ -420,7 +421,7 @@ class ads5296x4(YellowBlock):
         # Explicitly set as false path to keep compiler from issuing warnings
         for b in range(self.board_count):
             cons.append(InputDelayConstraint(clkname=clocks[b].name, consttype='min', constdelay_ns=input_hold_delay, portname="%s_%d_din_p[*]" % (self.port_prefix, b)))
-            cons.append(RawConstraint("set_false_path -from [get_ports %s_%d_din_p[*]]" % (self.port_prefix, b)))
+            cons.append(FalsePathConstraint(destpath="[get_ports %s_%d_din_p[*]]" % (self.port_prefix, b)))
         
         #for b in range(self.board_count):
         #    # See https://forums.xilinx.com/t5/Timing-Analysis/Input-Delay-Timing-Constraints-Doubts/m-p/652627/highlight/true#M8652
