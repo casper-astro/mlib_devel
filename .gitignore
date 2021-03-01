@@ -33,3 +33,6 @@ vivado_pid*.str
 
 # ignore docs build directory
 docs/_build/
+
+src/*
+workspace/*

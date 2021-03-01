@@ -1,19 +1,20 @@
+module zcu216_infrastructure #(
+        parameter MULTIPLY = 1,
+        parameter DIVIDE   = 1,
+        parameter DIVCLK   = 1
+    ) (
 
-module zcu111_infrastructure #(
-  parameter MULTIPLY = 1,
-  parameter DIVIDE   = 1,
-  parameter DIVCLK   = 1
-) (
-  input clk_100_n,
-  input clk_100_p,
+        input clk_100_n,
+	input clk_100_p,
 
-  output sys_clk,
-  output sys_clk90,
-  output sys_clk180,
-  output sys_clk270,
+	output sys_clk,
+	output sys_clk90,
+	output sys_clk180,
+	output sys_clk270,
 
-  output sys_clk_rst
-);
+        output sys_clk_rst
+
+    );
 
     wire clk_100;
     wire user_clk_mmcm_fb;
@@ -33,7 +34,7 @@ module zcu111_infrastructure #(
         .BANDWIDTH          ("OPTIMIZED"), // Jitter programming ("HIGH","LOW","OPTIMIZED")
         .CLKFBOUT_MULT_F    (MULTIPLY), // Multiply value for all CLKOUT (5.0-64.0).
         .CLKFBOUT_PHASE     (0.0),
-        .CLKIN1_PERIOD      (10.0),     // ZCU111 clock is 100 MHz
+        .CLKIN1_PERIOD      (10.0),     // ZCU216 clock is 100 MHz
         .CLKOUT0_DIVIDE_F   (DIVIDE),   // Divide amount for CLKOUT0 (1.000-128.000).
         .CLKOUT0_DUTY_CYCLE (0.5),
         .CLKOUT1_DUTY_CYCLE (0.5),

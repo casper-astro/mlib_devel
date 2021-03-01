@@ -1,35 +1,90 @@
 name: zcu111
 manufacturer: Xilinx
 fpga: xczu28dr-ffvg1517-2-e
-config_voltage: 1.8
-cfgbvs: GND
+family: zynq-ultrascaleplus-rfsoc
+config_voltage: 1.8 # not used?
+cfgbvs: GND         # not used?
 backend_target: vivado
 mmbus_architecture: AXI4-Lite
 mmbus_base_address: 0xA0000000
-mmbus_rfdc_base_address: 0xA0800000
 # How to address each 32-bit (i.e. 4 indicates byte-addressable)
 mmbus_address_alignment: 4
 sources: []
 constraints: []
+
+rfdc:
+  # gen3 devices can internally route their input refclk or the output of the RFPLL
+  # as the sample clock for adjacent tiles. See PG269. For such configurations,
+  # tile 225 is the preferred tile when available. The zcu216/208 eval boards only
+  # have the sample clock connected to tile 255.
+  #
+  # For gen1 and gen2 devices the `adc_clk_src` is the same as the tile index
+  tile224:
+    has_adc_clk: True
+    adc_clk_src: 1
+  tile225:
+    has_adc_clk: True
+    adc_clk_src: 2
+  tile226:
+    has_adc_clk: True
+    adc_clk_src: 3
+  tile227:
+    has_adc_clk: True
+    adc_clk_src: 4
+
+onehundredgbe:
+  # does the freq matter much?
+  refclk_freq_str: "156.25"
+  cmac_loc:
+    - CMACE4_X0Y1
+
 provides:
   - sys_clk
-  - sfp0
-  - sfp1
-  - sfp2
-  - sfp3
+  - axil_clk # keep this? come from pl_clk? or use clk100?
+# TODO: does name matter? Jack's 100G block should list what the provides therefore this matters
+  - sfp4x25
+  - sysref_in
+
 pins:
-  clk_128_p:
+  clk_100_p:
     iostd: LVDS
-    loc: AL16
-  clk_128_n:
+    loc: AM15
+  clk_100_n:
     iostd: LVDS
     loc: AN15
+
+# NOTE: most of the IO constraints and clocking constraints are taken care of by
+# the RFDC IP itself. Vivado has that baked into the output products of teh IP
+# core. The only necessary pins below are the fabirc clocking related to
+# multi-tile sync Adding additional pins and constraints would not hurt anything
+# but provide more transparent less 'hand-wavy'
+
+# RFDC clocking
+  # `SYSREF_P/N_228` on bank 228
+  # constraints determined by rfdc ip, iostandard and loc not set by user
+  sysref_p:
+    loc: U5
+  sysref_n:
+    loc: U4
+
+  # SYSREF_FPGA_C_N/P on bank 64
+  # TODO: add DIFF_TERM_ADV TERM_100
   pl_sysref_p:
     iostd: LVDS
     loc: AK17
   pl_sysref_n:
     iostd: LVDS
     loc: AK16
+
+  #`FPGA_REFCLK_OUT_C_N/P` on bank 64   
+  # TODO: add DIFF_TERM_ADV TERM_100
+  pl_clk_p:
+    iostd: LVDS
+    loc: AL15
+  pl_clk_n:
+    iostd: LVDS
+    loc: AL16
+ 
   led:
     iostd: LVCMOS18
     loc:
@@ -41,41 +96,37 @@ pins:
        - AN16
        - AN17
        - AV15
-#eth_clk should be 156.25MHz for 10GbE
-  eth_clk_p:
-    loc: Y31
-  eth_clk_n:
-    loc: Y32
-  mgt_tx_p:
-    loc: 
+
+# 100 GbE
+  # Programmable MGT SI570 chip GTY bank 129
+  mgt_ref_clk_p:
+    loc:
+      - V31
+  mgt_ref_clk_n:
+    loc:
+      - V32
+  # SFP connected to MGT bank 130
+  qsfp_mgt_tx_p: 
+    loc:
       - Y35
       - V35
       - T35
       - R33
-  mgt_tx_n:
+  qsfp_mgt_tx_n:
     loc:
       - Y36
       - V36
       - T36
       - R34
-  mgt_rx_p:
+  qsfp_mgt_rx_p:
     loc:
       - AA38
       - W38
       - U38
       - R38
-  mgt_rx_n:
+  qsfp_mgt_rx_n:
     loc:
       - AA39
       - W39
       - U39
       - R39
-  sfp_disable:
-    iostd: LVCMOS12
-    loc:
-      - G12
-      - G10
-      - K12
-      - J7
-
-
