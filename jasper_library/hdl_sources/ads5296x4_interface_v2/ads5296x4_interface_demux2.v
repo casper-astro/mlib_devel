@@ -25,7 +25,8 @@ module ads5296x4_interface_demux2 #(
     output sclk2_out,
     output sclk_out,
     output sclk5_out,
-    output sync_out,
+    output sync_out,     // To Simulink
+    output ext_sync_out, // To ADC pin
     
     input  fclk_in,
     output fclk_out,
@@ -470,14 +471,14 @@ module ads5296x4_interface_demux2 #(
       .INC     (1'b0),
       .CE      (1'b0),
       .RST     (sync_out_delay_rstRR),
-      .DATAOUT (sync_out),
+      .DATAOUT (ext_sync_out),
       .EN_VTC(1'b0),//(delay_en_vtc),
       .CASC_IN(),
       .CASC_OUT(),
       .CASC_RETURN()
     );
   end else begin
-    assign sync_out = sync;
+    assign ext_sync_out = sync;
   end
   endgenerate
 
