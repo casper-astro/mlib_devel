@@ -438,7 +438,7 @@ class ads5296x4(YellowBlock):
         # Explicitly set as false path to keep compiler from issuing warnings
         for b in range(self.board_count):
             cons.append(InputDelayConstraint(clkname=clocks[b].name, consttype='min', constdelay_ns=input_hold_delay, portname="%s_%d_din_p[*]" % (self.port_prefix, b)))
-            cons.append(FalsePathConstraint(destpath="[get_ports %s_%d_din_p[*]]" % (self.port_prefix, b)))
+            cons.append(FalsePathConstraint(sourcepath="[get_ports %s_%d_din_p[*]]" % (self.port_prefix, b)))
         
         #for b in range(self.board_count):
         #    # See https://forums.xilinx.com/t5/Timing-Analysis/Input-Delay-Timing-Constraints-Doubts/m-p/652627/highlight/true#M8652
