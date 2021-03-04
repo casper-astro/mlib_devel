@@ -33,9 +33,11 @@ class skarab_adc4x3g_14_byp(YellowBlock):
 
         top.assign_signal('mez%s_fault_n' % self.mez, 'MEZZANINE_%s_FAULT_N' % self.mez)
         
+        inst.add_wb_interface(regname=self.unique_name, mode='rw', nbytes=0x40)
+        
         inst.add_port('FREE_RUN_156M25HZ_CLK_IN', signal='hmc_clk',                  dir='in') 
         inst.add_port('FREE_RUN_156M25HZ_RST_IN', signal='hmc_rst',                  dir='in') 
-        
+
         inst.add_port('ADC_MEZ_REFCLK_0_P',       'MEZ%s_REFCLK_0_P' % self.mez, parent_port=True,  dir='in')
         inst.add_port('ADC_MEZ_REFCLK_0_N',       'MEZ%s_REFCLK_0_N' % self.mez, parent_port=True,  dir='in')
         inst.add_port('ADC_MEZ_PHY11_LANE_RX_P',  'MEZ%s_PHY11_LANE_RX_P' % self.mez, parent_port=True, dir='in', width=4)
@@ -67,21 +69,21 @@ class skarab_adc4x3g_14_byp(YellowBlock):
         inst.add_port('ADC2_DATA_OUT',            signal='%s_adc2_data_out' % self.fullname,               dir='out' ,width=192) 
         inst.add_port('ADC3_DATA_VAL_OUT',        signal='%s_adc3_data_val_out' % self.fullname,           dir='out')
         inst.add_port('ADC3_DATA_OUT',            signal='%s_adc3_data_out' % self.fullname,               dir='out' ,width=192) 
-        inst.add_port('ADC_SYNC_START_IN',        signal='%s_adc_sync_start_in' % self.fullname,           dir='in')
-        inst.add_port('ADC_SYNC_PART2_START_IN',  signal='%s_adc_sync_part2_start_in' % self.fullname,     dir='in')
-        inst.add_port('ADC_SYNC_PART3_START_IN',  signal='%s_adc_sync_part3_start_in' % self.fullname,     dir='in')
+        #inst.add_port('ADC_SYNC_START_IN',        signal='%s_adc_sync_start_in' % self.fullname,           dir='in')
+        #inst.add_port('ADC_SYNC_PART2_START_IN',  signal='%s_adc_sync_part2_start_in' % self.fullname,     dir='in')
+        #inst.add_port('ADC_SYNC_PART3_START_IN',  signal='%s_adc_sync_part3_start_in' % self.fullname,     dir='in')
 
-        inst.add_port('ADC_SYNC_COMPLETE_OUT',    signal='%s_adc_sync_complete_out' % self.fullname,       dir='out')
-        inst.add_port('ADC_SYNC_REQUEST_OUT',     signal='%s_adc_sync_request_out' % self.fullname,        dir='out', width=4)
-        inst.add_port('ADC_TRIGGER_OUT',          signal='%s_adc_trigger_out' % self.fullname,             dir='out')
-        inst.add_port('PLL_SYNC_START_IN',        signal='%s_pll_sync_start_in' % self.fullname,           dir='in' )
-        inst.add_port('PLL_PULSE_GEN_START_IN',   signal='%s_pll_pulse_gen_start_in' % self.fullname,      dir='in' )
-        inst.add_port('PLL_SYNC_COMPLETE_OUT',    signal='%s_pll_sync_complete_out' % self.fullname,       dir='out')
+        #inst.add_port('ADC_SYNC_COMPLETE_OUT',    signal='%s_adc_sync_complete_out' % self.fullname,       dir='out')
+        #inst.add_port('ADC_SYNC_REQUEST_OUT',     signal='%s_adc_sync_request_out' % self.fullname,        dir='out', width=4)
+        #inst.add_port('ADC_TRIGGER_OUT',          signal='%s_adc_trigger_out' % self.fullname,             dir='out')
+        #inst.add_port('PLL_SYNC_START_IN',        signal='%s_pll_sync_start_in' % self.fullname,           dir='in' )
+        #inst.add_port('PLL_PULSE_GEN_START_IN',   signal='%s_pll_pulse_gen_start_in' % self.fullname,      dir='in' )
+        #inst.add_port('PLL_SYNC_COMPLETE_OUT',    signal='%s_pll_sync_complete_out' % self.fullname,       dir='out')
         
         inst.add_port('MEZZ_ID', 'mez%s_id' % self.mez, dir='out', width=3)
         inst.add_port('MEZZ_PRESENT', 'mez%s_present' % self.mez, dir='out')
 
-        inst.add_port('MEZZANINE_RESET_IN',       signal='%s_mezzanine_reset_in' % self.fullname,          dir='in')
+        #inst.add_port('MEZZANINE_RESET_IN',       signal='%s_mezzanine_reset_in' % self.fullname,          dir='in')
         
         inst.add_port('AUX_CLK_P',                signal='aux_clk_diff_p',             parent_port=True, dir='in' )
         inst.add_port('AUX_CLK_N',                signal='aux_clk_diff_n',             parent_port=True, dir='in' ) 
@@ -89,14 +91,14 @@ class skarab_adc4x3g_14_byp(YellowBlock):
         inst.add_port('AUX_SYNCI_N',              signal='sync_in_n',                  parent_port=True, dir='in' ) 
         inst.add_port('AUX_SYNCO_P',              signal='sync_out_p',                 parent_port=True, dir='out') 
         inst.add_port('AUX_SYNCO_N',              signal='sync_out_n',                 parent_port=True, dir='out')
+        if self.sync_ms == "Master":
+            inst.add_port('ADC_DATA_CLOCK_OUT',       signal='adc_clk',                    dir='out')
+            inst.add_port('ADC_DATA_RESET_OUT',       signal='adc_rst',                    dir='out')
 
-        inst.add_port('ADC_DATA_CLOCK_OUT',       signal='adc_clk',                    dir='out')
-        inst.add_port('ADC_DATA_RESET_OUT',       signal='adc_rst',                    dir='out')
-
-        inst.add_port('ADC0_STATUS_OUT',     signal='%s_adc0_status_out' % self.fullname, dir='out', width=32)
-        inst.add_port('ADC1_STATUS_OUT',     signal='%s_adc1_status_out' % self.fullname, dir='out', width=32)
-        inst.add_port('ADC2_STATUS_OUT',     signal='%s_adc2_status_out' % self.fullname, dir='out', width=32)
-        inst.add_port('ADC3_STATUS_OUT',     signal='%s_adc3_status_out' % self.fullname, dir='out', width=32)
+        #inst.add_port('ADC0_STATUS_OUT',     signal='%s_adc0_status_out' % self.fullname, dir='out', width=32)
+        #inst.add_port('ADC1_STATUS_OUT',     signal='%s_adc1_status_out' % self.fullname, dir='out', width=32)
+        #inst.add_port('ADC2_STATUS_OUT',     signal='%s_adc2_status_out' % self.fullname, dir='out', width=32)
+        #inst.add_port('ADC3_STATUS_OUT',     signal='%s_adc3_status_out' % self.fullname, dir='out', width=32)
 
     def gen_constraints(self):
     
@@ -226,6 +228,10 @@ class skarab_adc4x3g_14_byp(YellowBlock):
         cons.append(FalsePathConstraint(sourcepath='[get_clocks %s/ADC32RF45_11G2_RX_1/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK]' % self.fullname, destpath='[get_clocks -of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]]'))
         cons.append(FalsePathConstraint(sourcepath='[get_clocks %s/ADC32RF45_11G2_RX_2/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK]' % self.fullname, destpath='[get_clocks -of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]]'))
         cons.append(FalsePathConstraint(sourcepath='[get_clocks %s/ADC32RF45_11G2_RX_3/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK]' % self.fullname, destpath='[get_clocks -of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]]'))
+        cons.append(FalsePathConstraint(sourcepath='[get_clocks %s/ADC32RF45_11G2_RX_0/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK]' % self.fullname, destpath='[get_clocks -of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT1]]'))
+        cons.append(FalsePathConstraint(sourcepath='[get_clocks %s/ADC32RF45_11G2_RX_1/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK]' % self.fullname, destpath='[get_clocks -of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT1]]'))
+        cons.append(FalsePathConstraint(sourcepath='[get_clocks %s/ADC32RF45_11G2_RX_2/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK]' % self.fullname, destpath='[get_clocks -of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT1]]'))
+        cons.append(FalsePathConstraint(sourcepath='[get_clocks %s/ADC32RF45_11G2_RX_3/ADC32RF45_11G2_RX_PHY_i/jesd204b_11200_rx_support_i/jesd204b_11200_rx_init_i/U0/jesd204b_11200_rx_i/gt0_jesd204b_11200_rx_i/gthe2_i/RXOUTCLK]' % self.fullname, destpath='[get_clocks -of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT1]]'))
         #cons.append(FalsePathConstraint(sourcepath='[get_clocks aux_clk_diff_p]', destpath='[get_clocks -of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]]'))
         #cons.append(FalsePathConstraint(sourcepath='[get_clocks sync_in_p]', destpath='[get_clocks -of_objects [get_pins */SYS_CLK_MMCM_inst/CLKOUT0]]'))
 
