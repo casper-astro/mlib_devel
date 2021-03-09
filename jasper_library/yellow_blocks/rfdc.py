@@ -285,6 +285,7 @@ class rfdc(YellowBlock):
     for tidx in range(0, 4):
       vivado_cmd = 'CONFIG.{:s} {{{}}} \\'
       tcl_cmds['pre_synth'].append(vivado_cmd.format('ADC{:d}_En'.format(tidx+224), (tidx in self.enabled_tiles)))
+      tcl_cmds['pre_synth'].append(vivado_cmd.format('ADC{:d}_Enable'.format(tidx), (1 if (tidx in self.enabled_tiles) else 0)))
 
     # add configuration parameters for enabled tiles and adcs
     for tidx in self.enabled_tiles:
