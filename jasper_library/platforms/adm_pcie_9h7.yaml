@@ -13,6 +13,39 @@ dsp_wb_base_address: 0x00010000
 mmbus_address_alignment: 4
 sources: []
 constraints: []
+dts:
+  linerate: '10.24'
+  reffreq: '163.84'
+  ports:
+    # GT pins when using QSFPs A through C
+    qsfp_a_b_c:
+      phys_clocks: [[qsfp_mgt_ref_clk, 0], [qsfp_mgt_ref_clk, 1], [qsfp_mgt_ref_clk, 1]]
+      channel:
+        - X1Y16
+        - X1Y17
+        - X1Y18
+        - X1Y19
+        - X1Y20
+        - X1Y21
+        - X1Y22
+        - X1Y23
+        - X1Y24
+        - X1Y25
+        - X1Y26
+        - X1Y27
+      clock:
+        - 'clk0'
+        - 'clk0'
+        - 'clk0'
+        - 'clk0'
+        - 'clk0+1'
+        - 'clk0+1'
+        - 'clk0+1'
+        - 'clk0+1'
+        - 'clk0'
+        - 'clk0'
+        - 'clk0'
+        - 'clk0'
 pcie:
   loc: PCIE4C_X1Y0
   use_pr: True
