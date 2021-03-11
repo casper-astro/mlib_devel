@@ -15,6 +15,7 @@ class adm_pcie_9h7(YellowBlock):
         inst.add_port('sys_clk180   ', 'sys_clk180')
         inst.add_port('sys_clk270   ', 'sys_clk270')
         inst.add_port('clk_200      ', 'clk_200   ')
+        inst.add_port('clk_50       ', 'clk_50    ')
         inst.add_port('sys_rst      ', 'sys_rst   ')
         inst.add_port('idelay_rdy   ', 'idelay_rdy')
         inst.add_port('sys_clk_rst_sync', 'sys_clk_rst_sync')
