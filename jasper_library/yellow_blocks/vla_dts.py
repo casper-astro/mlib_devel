@@ -39,7 +39,7 @@ class vla_dts(YellowBlock):
     def modify_top(self,top):
         module = 'dts_gty_rx'
         inst = top.get_instance(entity=module, name=self.fullname)
-        inst.add_wb_interface(regname=self.unique_name, mode='rw', nbytes=4*4)
+        inst.add_wb_interface(regname=self.unique_name, mode='rw', nbytes=8*4)
         inst.add_parameter('N_REFCLOCKS', self.n_clocks)
         inst.add_parameter('REFCLOCK_0', self.clock_indices[0])
         inst.add_parameter('REFCLOCK_1', self.clock_indices[1])
