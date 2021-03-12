@@ -111,7 +111,7 @@ module dts_gty_rx #(
    .CLKFBOUT_MULT_F    (24), // Multiply value for all CLKOUT (5.0-64.0).
    .CLKFBOUT_PHASE     (0.0),
    .CLKIN1_PERIOD      (16), // 62.5 MHz clock from GT
-   .CLKOUT0_DIVIDE_F   (3.0), // 500M: overall * 8, Divide amount for CLKOUT0 (1.000-128.000).
+   .CLKOUT0_DIVIDE_F   (24.0), // 500M: overall * 8, Divide amount for CLKOUT0 (1.000-128.000).
    .CLKOUT0_DUTY_CYCLE (0.5),
    .CLKOUT1_DUTY_CYCLE (0.5),
    .CLKOUT2_DUTY_CYCLE (0.5),
@@ -128,7 +128,7 @@ module dts_gty_rx #(
    .CLKOUT6_PHASE      (0.0),
    .CLKOUT1_DIVIDE     (24>>MUX_FACTOR_BITS),
    .CLKOUT2_DIVIDE     (24>>MUX_FACTOR_BITS),
-   .CLKOUT3_DIVIDE     (24>>MUX_FACTOR_BITS),
+   .CLKOUT3_DIVIDE     (1),
    .CLKOUT4_DIVIDE     (1),
    .CLKOUT5_DIVIDE     (1),
    .CLKOUT6_DIVIDE     (1),
@@ -143,12 +143,12 @@ module dts_gty_rx #(
    .CLKFBOUT  (clk_fb_int),
    .CLKFBOUTB (),
 
-   .CLKOUT0  (clk_mux_0_int),
-   .CLKOUT0B (clk_mux_180_int),
-   .CLKOUT1  (clk_mux_90_int),
-   .CLKOUT1B (clk_mux_270_int),
-   .CLKOUT2  (),
-   .CLKOUT2B (),
+   .CLKOUT0  (),
+   .CLKOUT0B (),
+   .CLKOUT1  (clk_mux_0_int),
+   .CLKOUT1B (clk_mux_180_int),
+   .CLKOUT2  (clk_mux_90_int),
+   .CLKOUT2B (clk_mux_270_int),
    .CLKOUT3  (),
    .CLKOUT3B (),
    .CLKOUT4  (),

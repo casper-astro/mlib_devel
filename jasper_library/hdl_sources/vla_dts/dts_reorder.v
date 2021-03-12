@@ -23,14 +23,6 @@ module dts_reorder #(
     output dout_sync
   );
 
-  // Mux output wires
-  wire [INPUT_WIDTH-1 : 0] dout_int;
-  wire dout_locked_int;
-  wire dout_one_sec_int;
-  wire dout_ten_sec_int;
-  wire dout_index_int;
-  wire dout_sync_int;
-
   // Mux output registers
   reg [INPUT_WIDTH-1 : 0] dout_reg;
   reg dout_locked_reg;
@@ -39,6 +31,17 @@ module dts_reorder #(
   reg dout_index_reg;
   reg dout_sync_reg;
 
+  always @(posedge clk) begin
+    // equivalent to din[(sel+1)*INPUT_WIDTH-1:sel*INPUT_WIDTH]; which
+    // verilog doesn't permit for non-constant `sel`
+    dout_reg <= din[(sel+1)*INPUT_WIDTH-1 -: INPUT_WIDTH];
+    dout_locked_reg  <= din_locked[sel];
+    dout_one_sec_reg <= din_one_sec[sel];
+    dout_ten_sec_reg <= din_ten_sec[sel];
+    dout_index_reg   <= din_index[sel];
+    dout_sync_reg    <= din_sync[sel];
+  end
+
   // output assignments
   assign dout         = dout_reg;
   assign dout_locked  = dout_locked_reg;
@@ -46,22 +49,5 @@ module dts_reorder #(
   assign dout_ten_sec = dout_ten_sec_reg;
   assign dout_index   = dout_index_reg;
   assign dout_sync    = dout_sync_reg;
-
-  // The actual multiplexor
-  assign dout_int         = din >> (INPUT_WIDTH * sel);
-  assign dout_locked_int  = din_locked  >> sel;
-  assign dout_one_sec_int = din_one_sec >> sel;
-  assign dout_ten_sec_int = din_ten_sec >> sel;
-  assign dout_index_int   = din_index   >> sel;
-  assign dout_sync_int    = din_sync    >> sel;
-
-  always @(posedge clk) begin
-    dout_reg         = dout_int;
-    dout_locked_reg  = dout_locked_int;
-    dout_one_sec_reg = dout_one_sec_int;
-    dout_ten_sec_reg = dout_ten_sec_int;
-    dout_index_reg   = dout_index_int;
-    dout_sync_reg    = dout_sync_int;
-  end
 
 endmodule

@@ -130,10 +130,10 @@ module dts_offsetter #(
                        din_one_sec, din_ten_sec, din_index, din_sync, din[63:32],
                        din_one_sec, din_ten_sec, din_index, din_sync, din[95:64],
                        din_one_sec, din_ten_sec, din_index, din_sync, din[127:96]};
-    assign dout_one_sec = fifo_dout[3];
-    assign dout_ten_sec = fifo_dout[2];
-    assign dout_index   = fifo_dout[1];
-    assign dout_sync    = fifo_dout[0];
+    assign dout_one_sec = fifo_dout[35];
+    assign dout_ten_sec = fifo_dout[34];
+    assign dout_index   = fifo_dout[33];
+    assign dout_sync    = fifo_dout[32];
     assign dout         = fifo_dout[31:0];
   end
   endgenerate 

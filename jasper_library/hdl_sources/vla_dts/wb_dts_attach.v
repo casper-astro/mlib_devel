@@ -144,7 +144,7 @@ module wb_dts_attach(
           0: control_reg_wb <= wb_dat_i;
           1: delay_control_reg_wb <= wb_dat_i;
           2: mux_control_reg_wb[31:0] <= wb_dat_i;
-          3: mux_control_reg_wb[15:0] <= wb_dat_i[15:0];
+          3: mux_control_reg_wb[47:32] <= wb_dat_i[15:0];
           4: is_three_bit_reg_wb <= wb_dat_i[0];
         endcase
       end else begin
@@ -152,7 +152,7 @@ module wb_dts_attach(
           0: wb_dat_reg <= user_data_in_reg_wb;
           1: wb_dat_reg <= delay_control_reg_wb;
           2: wb_dat_reg <= mux_control_reg_wb[31:0];
-          3: wb_dat_reg <= {16'b0, mux_control_reg_wb[15:0]};
+          3: wb_dat_reg <= {16'b0, mux_control_reg_wb[47:32]};
           4: wb_dat_reg <= {31'b0, is_three_bit_reg_wb};
         endcase
       end
