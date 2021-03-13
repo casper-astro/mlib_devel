@@ -1,19 +1,19 @@
 `timescale 1ns / 1ps
 
 module dts_reorder #(
-    parameter NINPUTS = 12,
+    parameter N_INPUTS = 12,
     parameter INPUT_WIDTH = 128,
     parameter SELECT_WIDTH = 4
   ) (
     input clk,
     input [SELECT_WIDTH-1:0] sel,
 
-    input [INPUT_WIDTH * NINPUTS - 1:0] din,
-    input [NINPUTS - 1:0] din_locked,
-    input [NINPUTS - 1:0] din_one_sec,
-    input [NINPUTS - 1:0] din_ten_sec,
-    input [NINPUTS - 1:0] din_index,
-    input [NINPUTS - 1:0] din_sync,
+    input [INPUT_WIDTH * N_INPUTS - 1:0] din,
+    input [N_INPUTS - 1:0] din_locked,
+    input [N_INPUTS - 1:0] din_one_sec,
+    input [N_INPUTS - 1:0] din_ten_sec,
+    input [N_INPUTS - 1:0] din_index,
+    input [N_INPUTS - 1:0] din_sync,
        
     output [INPUT_WIDTH-1 : 0] dout,
     output dout_locked,

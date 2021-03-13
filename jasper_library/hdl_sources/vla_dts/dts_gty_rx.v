@@ -304,7 +304,7 @@ wb_dts_attach wb_dts_attach_inst(
   wire [N_INPUTS-1:0] reorder_locked_out;
 
   dts_reorder #(
-    .NINPUTS(N_INPUTS),
+    .N_INPUTS(N_INPUTS),
     .INPUT_WIDTH(OUTPUT_DWIDTH),
     .SELECT_WIDTH(4)
   ) dts_reorder_inst[N_INPUTS-1:0] (
