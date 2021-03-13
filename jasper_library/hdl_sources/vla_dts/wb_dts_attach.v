@@ -58,7 +58,7 @@ module wb_dts_attach(
   /* WB domain registers, to be crossed to user_clock */
   reg [31:0] control_reg_wb;
   reg [31:0] delay_control_reg_wb;
-  reg [48:0] mux_control_reg_wb;
+  reg [47:0] mux_control_reg_wb;
   reg is_three_bit_reg_wb;
   
   /* Handshake signal from OPB to application indicating data is ready to be latched */
