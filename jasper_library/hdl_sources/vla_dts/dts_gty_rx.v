@@ -359,6 +359,6 @@ wb_dts_attach wb_dts_attach_inst(
     .dout(dout)
   );
   
-  assign locked = def_locked_out;
+  assign locked = reorder_locked_out;
 
 endmodule
