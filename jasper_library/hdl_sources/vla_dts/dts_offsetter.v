@@ -77,7 +77,7 @@ module dts_offsetter #(
     always @(posedge clk_out) begin
       delay_strobe_sr <= {delay_strobe_sr[MUX_FACTOR-2:0], delay_strobe}; 
     end
-    assign fifo_rd_en = ~(&delay_strobe_sr);
+    assign fifo_rd_en = delay_strobe_sr == {MUX_FACTOR{1'b0}};
   end else begin
     assign fifo_rd_en = ~delay_strobe;
   end
