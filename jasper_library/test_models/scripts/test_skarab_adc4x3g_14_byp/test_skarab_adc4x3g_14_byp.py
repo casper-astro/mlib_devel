@@ -1,6 +1,6 @@
-#---------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------
 # COMPANY              : PERALEX ELECTRONICS (PTY) LTD
-#---------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------
 # COPYRIGHT NOTICE :
 #
 # The copyright, manufacturing and patent rights stemming from this document
@@ -10,7 +10,7 @@
 #
 # PERALEX ELECTRONICS (PTY) LTD has ceded these rights to its clients
 # where contractually agreed.
-#---------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------
 # DESCRIPTION :
 #
 # This script is used to perform synchronised ADC data captures on (1 to 4) 
@@ -22,20 +22,86 @@
 #     ADC32RF45X2 Mezzanine Module.
 #   - Create an fpg file from the test model in mlib_devel/jasper_library/
 #     test_models/test_skarab_adc_byp.slx
-#   - Set up the hardware test configuration as described in the SKARAB 
-#     4X3G-14 DAQ 2M Client Qualification Acceptance Test Procedure 
-#     Document (please contact Peralex Electronics for a copy of this
-#     document)
-# 	- Set the script configuration (under "1. SCRIPT CONFIG")
+#   - Set up the hardware test configuration as described in:
+#     https://casper-tutorials.readthedocs.io/en/latest/tutorials/skarab/tut_adc.html
+#   - Set the script configuration (under "1. SCRIPT CONFIG")
 # 
-#---------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------
 
 import casperfpga
 from casperfpga import skarab_definitions as sd
 import time
 
+
 # ---------------------------------------------------------------
-# 0. DEFINITIONS
+# FUNCTIONS
+# ---------------------------------------------------------------
+def get_wb_addresses(filename):
+    """
+    Read the meta information from the FPG file.
+    :param filename: the name of the fpg file to parse
+    :return: device info dictionary, memory map info (coreinfo.tab) dictionary
+    """
+    if filename is not None:
+        fptr = open(filename, 'r')
+        firstline = fptr.readline().strip().rstrip('\n')
+        if firstline != '#!/bin/kcpfpg':
+            fptr.close()
+            raise RuntimeError('%s does not look like an fpg file we can '
+                               'parse.' % filename)
+    else:
+        raise IOError('No such file %s' % filename)
+    memorydict = {}
+    metalist = []
+    while True:
+        line = fptr.readline().strip().rstrip('\n')
+        if line.lstrip().rstrip() == '?quit':
+            break
+        elif line.startswith('?meta'):
+            # some versions of mlib_devel may mistakenly have put spaces
+            # as delimiters where tabs should have been used. Rectify that
+            # here.
+            if line.startswith('?meta '):
+                line = line.replace(' ', '\t')
+            # and carry on as usual.
+            line = line.replace('\_', ' ').replace('?meta', '')
+            line = line.replace('\n', '').lstrip().rstrip()
+            #line_split = line.split('\t')
+            # Rather split on any space
+            line_split = line.split()
+            name = line_split[0]
+            tag = line_split[1]
+            param = line_split[2]
+            if len(line_split[3:]) == 1:
+                value = line_split[3:][0]
+            else:
+                value = ' '.join(line_split[3:])
+            # name, tag, param, value = line.split('\t')
+            name = name.replace('/', '_')
+            metalist.append((name, tag, param, value))
+        elif line.startswith('?register'):
+            if line.startswith('?register '):
+                register = line.replace('\_', ' ').replace('?register ', '')
+                register = register.replace('\n', '').lstrip().rstrip()
+                name, address, size_bytes = register.split(' ')
+            elif line.startswith('?register\t'):
+                register = line.replace('\_', ' ').replace('?register\t', '')
+                register = register.replace('\n', '').lstrip().rstrip()
+                name, address, size_bytes = register.split('\t')
+            else:
+                raise ValueError('Cannot find ?register entries in '
+                                 'correct format.')
+            address = int(address, 16)
+            size_bytes = int(size_bytes, 16)
+            if name in memorydict.keys():
+                raise RuntimeError('%s: mem device %s already in '
+                                   'dictionary' % (filename, name))
+            memorydict[name] = {'address': address, 'bytes': size_bytes}
+    fptr.close()
+    return memorydict
+
+# ---------------------------------------------------------------
+# DEFINITIONS
 # ---------------------------------------------------------------
 # WB REGISTER DEFINITIONS
 REGADR_WR_ADC_SYNC_START       = 0x00
@@ -50,8 +116,7 @@ REGADR_RD_ADC2_STATUS          = 0x20
 REGADR_RD_ADC3_STATUS          = 0x24
 REGADR_RD_ADC_SYNC_COMPLETE    = 0x28
 REGADR_RD_PLL_SYNC_COMPLETE    = 0x2C
-REGADR_RD_ADC_SYNC_REQUEST     = 0x30   
-WB_BASEADR = 0x124000
+REGADR_RD_ADC_SYNC_REQUEST     = 0x30 
 
 # ---------------------------------------------------------------
 # 1. SCRIPT CONFIG
@@ -75,6 +140,7 @@ print("Multi-SKARAB Synchronised Sampling Test Script")
 print("----------------------------------------------")
 usr_input = raw_input("Upload FPG file? (y/n): ")
 skarabs = [None] * 4
+WB_BASEADR = 0x7FFFFFFF & get_wb_addresses(fpg_file_dir)['skarab_adc4x3g14_byp']['address']
 for i in range(skarab_num):
 	skarabs[i] = casperfpga.CasperFpga(skarab_ips[i])
 	if usr_input.lower() == 'y':
