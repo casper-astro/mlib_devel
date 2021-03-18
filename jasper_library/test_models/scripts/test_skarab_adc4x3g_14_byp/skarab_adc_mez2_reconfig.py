@@ -5,6 +5,76 @@ import numpy as np
 import time
 import math
 
+# ---------------------------------------------------------------
+# FUNCTIONS
+# ---------------------------------------------------------------
+def get_wb_addresses(filename):
+    """
+    Read the meta information from the FPG file.
+    :param filename: the name of the fpg file to parse
+    :return: device info dictionary, memory map info (coreinfo.tab) dictionary
+    """
+    if filename is not None:
+        fptr = open(filename, 'r')
+        firstline = fptr.readline().strip().rstrip('\n')
+        if firstline != '#!/bin/kcpfpg':
+            fptr.close()
+            raise RuntimeError('%s does not look like an fpg file we can '
+                               'parse.' % filename)
+    else:
+        raise IOError('No such file %s' % filename)
+    memorydict = {}
+    metalist = []
+    while True:
+        line = fptr.readline().strip().rstrip('\n')
+        if line.lstrip().rstrip() == '?quit':
+            break
+        elif line.startswith('?meta'):
+            # some versions of mlib_devel may mistakenly have put spaces
+            # as delimiters where tabs should have been used. Rectify that
+            # here.
+            if line.startswith('?meta '):
+                line = line.replace(' ', '\t')
+            # and carry on as usual.
+            line = line.replace('\_', ' ').replace('?meta', '')
+            line = line.replace('\n', '').lstrip().rstrip()
+            #line_split = line.split('\t')
+            # Rather split on any space
+            line_split = line.split()
+            name = line_split[0]
+            tag = line_split[1]
+            param = line_split[2]
+            if len(line_split[3:]) == 1:
+                value = line_split[3:][0]
+            else:
+                value = ' '.join(line_split[3:])
+            # name, tag, param, value = line.split('\t')
+            name = name.replace('/', '_')
+            metalist.append((name, tag, param, value))
+        elif line.startswith('?register'):
+            if line.startswith('?register '):
+                register = line.replace('\_', ' ').replace('?register ', '')
+                register = register.replace('\n', '').lstrip().rstrip()
+                name, address, size_bytes = register.split(' ')
+            elif line.startswith('?register\t'):
+                register = line.replace('\_', ' ').replace('?register\t', '')
+                register = register.replace('\n', '').lstrip().rstrip()
+                name, address, size_bytes = register.split('\t')
+            else:
+                raise ValueError('Cannot find ?register entries in '
+                                 'correct format.')
+            address = int(address, 16)
+            size_bytes = int(size_bytes, 16)
+            if name in memorydict.keys():
+                raise RuntimeError('%s: mem device %s already in '
+                                   'dictionary' % (filename, name))
+            memorydict[name] = {'address': address, 'bytes': size_bytes}
+    fptr.close()
+    return memorydict
+
+# ---------------------------------------------------------------
+# DEFINITIONS
+# ---------------------------------------------------------------
 STM32_I2C_ADDRESS = 0x08
 MAX_STM32_IMAGE_SIZE_BYTES = 1024*1024
 MAX_I2C_TRANSMIT_BYTES = 32
@@ -34,8 +104,7 @@ REGADR_RD_ADC2_STATUS          = 0x20
 REGADR_RD_ADC3_STATUS          = 0x24
 REGADR_RD_ADC_SYNC_COMPLETE    = 0x28
 REGADR_RD_PLL_SYNC_COMPLETE    = 0x2C
-REGADR_RD_ADC_SYNC_REQUEST     = 0x30   
-WB_BASEADR = 0x124000
+REGADR_RD_ADC_SYNC_REQUEST     = 0x30
 
 uImageSize = 0
 uMezzanine = 2
@@ -66,11 +135,12 @@ for init in range(MAX_I2C_RECEIVE_BYTES):
 	
 # Connect to SKARAB and upload .fpg file
 skarab = casperfpga.CasperFpga(sIPAddress)
-loadfirmware = str(raw_input("Do you want to load an FPG file? (y/n): "))
-if (loadfirmware[0] == 'y' or loadfirmware[0] == 'Y'):
-	fpgfilename = str(raw_input("Specify FPG file name (Example: skarab_adc_byp.fpg): "))
-	#skarab.upload_to_ram_and_program('test_skarab_adc_byp_2021-02-12_1344.fpg')
-	skarab.upload_to_ram_and_program(fpgfilename)
+# loadfirmware = str(raw_input("Do you want to load an FPG file? (y/n): "))
+# if (loadfirmware[0] == 'y' or loadfirmware[0] == 'Y'):
+fpgfilename = str(raw_input("Specify FPG file name (Example: skarab_adc_byp.fpg): "))
+#skarab.upload_to_ram_and_program('test_skarab_adc_byp_2021-02-12_1344.fpg')
+skarab.upload_to_ram_and_program(fpgfilename)
+WB_BASEADR = 0x7FFFFFFF & get_wb_addresses(fpgfilename)['skarab_adc4x3g14_byp']['address']
 skarab.listdev()
 
 skarab.transport.write_wishbone(WB_BASEADR + REGADR_WR_MEZZANINE_RESET, 1)
