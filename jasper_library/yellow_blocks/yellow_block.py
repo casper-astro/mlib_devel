@@ -185,7 +185,7 @@ class YellowBlock(object):
         if self.platform_support == 'all':
             pass
         elif self.platform.name not in self.platform_support:
-            self.throw_error('Unsupported hardware system %s'%self.platform)
+            self.throw_error('Unsupported hardware system %s'%self.platform.name)
 
     def initialize(self):
         """
