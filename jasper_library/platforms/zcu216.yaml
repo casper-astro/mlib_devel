@@ -21,16 +21,16 @@ rfdc:
   # For gen1 and gen2 devices the `adc_clk_src` is the same as the tile index
   tile224:
     has_adc_clk: False
-    adc_clk_src: 1
+    adc_clk_src: 2
   tile225:
     has_adc_clk: True
-    adc_clk_src: 1
+    adc_clk_src: 2
   tile226:
     has_adc_clk: True
-    adc_clk_src: 1
+    adc_clk_src: 2
   tile227:
     has_adc_clk: False
-    adc_clk_src: 1
+    adc_clk_src: 2
 
 onehundredgbe:
   # does the freq matter much?
