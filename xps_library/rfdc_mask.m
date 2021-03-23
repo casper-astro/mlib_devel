@@ -27,6 +27,11 @@
 % the IRQ.
 
 function [] = rfdc_mask(gcb);
+  if strcmp(bdroot, 'xps_library')
+    % exit early as to not run initialization for building out xps_library models
+    return
+  end
+
   msk = Simulink.Mask.get(gcb);
 
   [gen, tile_arch, fs_max, fs_min] = get_rfsoc_properties(gcb);
