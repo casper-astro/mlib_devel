@@ -99,6 +99,52 @@ def get_wb_addresses(filename):
             memorydict[name] = {'address': address, 'bytes': size_bytes}
     fptr.close()
     return memorydict
+	
+def ConfigureGain(skarab, mezzanine_site, adc_input, gain):
+	
+	"""
+	Function used to set the gain of the amplifiers in the analogue channels of the SKARAB ADC32RF45X2 Mezzanine Module.
+	:param skarab: The casperfpga object created for the SKARAB.
+	:type skarab: casperfpga
+	:param mezzanine_site: The SKARAB mezzanine site onto the SKARAB ADC board is installed.
+	:type mezzanine_site: int
+	:param adc_input: The ADC channel whose gain should be set (0 -> 3).
+	:type adc_input: int
+	:param gain: The gain of the ADC channel (-6 to 15 dB).
+	:type gain: int
+	"""
+
+	i2c_interface = mezzanine_site + 1
+	gain_channel = sd.ADC_GAIN_CHANNEL_0
+	 
+	if adc_input == 0:
+		gain_channel = sd.ADC_GAIN_CHANNEL_0
+	elif adc_input == 1:
+		gain_channel = sd.ADC_GAIN_CHANNEL_1
+	elif adc_input == 2:
+		gain_channel = sd.ADC_GAIN_CHANNEL_2
+	else:
+		gain_channel = sd.ADC_GAIN_CHANNEL_3
+
+	gain_control_word = (-1 * gain) + 15
+
+	write_byte = gain_channel | (gain_control_word << 2) | sd.UPDATE_GAIN
+
+	skarab.transport.write_i2c(i2c_interface, sd.STM_I2C_DEVICE_ADDRESS, sd.GAIN_CONTROL_REG, write_byte)
+
+	skarab.transport.write_i2c(i2c_interface, sd.STM_I2C_DEVICE_ADDRESS, sd.GAIN_CONTROL_REG)
+
+	read_byte = skarab.transport.read_i2c(i2c_interface, sd.STM_I2C_DEVICE_ADDRESS, 1)
+
+	timeout = 0
+
+	while (((read_byte[0] & sd.UPDATE_GAIN) != 0) and (timeout < 1000)):
+		skarab.transport.write_i2c(i2c_interface, sd.STM_I2C_DEVICE_ADDRESS, sd.GAIN_CONTROL_REG)
+		read_byte = skarab.transport.read_i2c(i2c_interface, sd.STM_I2C_DEVICE_ADDRESS, 1)
+		timeout = timeout + 1
+
+	if timeout == 1000:
+		print("ERROR: Timeout waiting for configure gain to complete!")
 
 # ---------------------------------------------------------------
 # DEFINITIONS
@@ -131,6 +177,8 @@ skarab_num = 4
 mst_sk_i = 0
 # SET SKARAB IPS
 skarab_ips = ['10.0.7.2', '10.0.7.3', '10.0.7.4', '10.0.7.5']
+# SET ADC CHANNEL GAIN (-6 dB to 15 dB) 
+channel_gain = 15
 
 # ---------------------------------------------------------------
 # 2. CONNECT TO SKARAB HARDWARE AND UPLOAD FPG FILE (ALL SKARABS)
@@ -153,7 +201,14 @@ print("")
 raw_input("Press Enter to continue with the ADC data captures")
 
 # ---------------------------------------------------------------
-# 3. CONFIGURE IN TEST PATTERN MODE; DEBUGGING ONLY (ALL SKARABS)
+# 3. SET CHANNEL GAIN (ALL SKARABS)
+# ---------------------------------------------------------------
+for i in range(skarab_num):
+	for j in range(4):
+		ConfigureGain(skarabs[i], mezzanine_site, j, channel_gain)
+
+# ---------------------------------------------------------------
+# 4. CONFIGURE IN TEST PATTERN MODE; DEBUGGING ONLY (ALL SKARABS)
 # ---------------------------------------------------------------
 #print(Configuring test pattern mode...)
 #for i in range(skarab_num):
@@ -173,7 +228,7 @@ raw_input("Press Enter to continue with the ADC data captures")
 #	skarabs[i].transport.direct_spi_write(mezzanine_site, sd.SPI_DESTINATION_ADC_1, sd.ADC_JESD_CHAN_B_LINK_LAYER_TESTMODE, 0x00);
 
 # ---------------------------------------------------------------
-# 4. RESET YELLOW BLOCK REGISTERS (ALL SKARABS)
+# 5. RESET YELLOW BLOCK REGISTERS (ALL SKARABS)
 # ---------------------------------------------------------------
 print("Resetting registers...")
 for i in range(skarab_num):
@@ -186,7 +241,7 @@ for i in range(skarab_num):
 	skarabs[i].write_int('adc_trig', 0)
 
 # ---------------------------------------------------------------
-# 5. EMBEDDED SOFTWARE VERSION CHECK (ALL SKARABS)
+# 6. EMBEDDED SOFTWARE VERSION CHECK (ALL SKARABS)
 # ---------------------------------------------------------------
 print("Checking embedded software version...")
 for i in range(skarab_num):
@@ -200,7 +255,7 @@ for i in range(skarab_num):
 		exit()
 
 # ---------------------------------------------------------------
-# 6. REFERENCE CLOCK CHECK (ALL SKARABS)
+# 7. REFERENCE CLOCK CHECK (ALL SKARABS)
 # ---------------------------------------------------------------
 print("Checking reference clock...")
 for i in range(skarab_num):
@@ -212,29 +267,29 @@ for i in range(skarab_num):
 		exit()
 
 # ---------------------------------------------------------------
-# 7. PREPARE PLL SYNC (ALL SKARABS)
+# 8. PREPARE PLL SYNC (ALL SKARABS)
 # ---------------------------------------------------------------
 print("Preparing PLL sync...")
 for i in range(skarab_num):
-	# 7.1 CHANGE SYNC PIN TO SYNC SOURCE
+	# 8.1 CHANGE SYNC PIN TO SYNC SOURCE
 	skarabs[i].transport.direct_spi_write(mezzanine_site, sd.SPI_DESTINATION_PLL, sd.PLL_GLOBAL_MODE_AND_ENABLE_CONTROL, 0x41)
-	# 7.2 CHANGE SYSREF TO PULSE GEN MODE
+	# 8.2 CHANGE SYSREF TO PULSE GEN MODE
 	skarabs[i].transport.direct_spi_write(mezzanine_site, sd.SPI_DESTINATION_PLL, sd.PLL_CHANNEL_OUTPUT_3_CONTROL_FORCE_MUTE, 0x88)
 	skarabs[i].transport.direct_spi_write(mezzanine_site, sd.SPI_DESTINATION_PLL, sd.PLL_CHANNEL_OUTPUT_7_CONTROL_FORCE_MUTE, 0x88)
 	skarabs[i].transport.direct_spi_write(mezzanine_site, sd.SPI_DESTINATION_PLL, sd.PLL_CHANNEL_OUTPUT_3_CONTROL_HIGH_PERFORMANCE_MODE, 0xDD)
 	skarabs[i].transport.direct_spi_write(mezzanine_site, sd.SPI_DESTINATION_PLL, sd.PLL_CHANNEL_OUTPUT_7_CONTROL_HIGH_PERFORMANCE_MODE, 0xDD)
-	# 7.3 ENABLE PLL SYNC
+	# 8.3 ENABLE PLL SYNC
 	i2c_interface = mezzanine_site + 1
 	skarabs[i].transport.write_i2c(i2c_interface, sd.STM_I2C_DEVICE_ADDRESS, sd.MEZ_CONTROL_REG, sd.ENABLE_PLL_SYNC)
 
 # ---------------------------------------------------------------
-# 8. PERFORM PLL SYNC (MASTER SKARAB)
+# 9. PERFORM PLL SYNC (MASTER SKARAB)
 # ---------------------------------------------------------------
 print("Performing PLL sync...")
-# 8.1 TRIGGER PLL SYNC
+# 9.1 TRIGGER PLL SYNC
 skarabs[mst_sk_i].transport.write_wishbone(WB_BASEADR+REGADR_WR_PLL_SYNC_START, 0) #skarabs[mst_sk_i].write_int('pll_sync_start_in', 0)
 skarabs[mst_sk_i].transport.write_wishbone(WB_BASEADR+REGADR_WR_PLL_SYNC_START, 1) #skarabs[mst_sk_i].write_int('pll_sync_start_in', 1)
-# 8.2 WAIT FOR PLL SYNC COMPLETION
+# 9.2 WAIT FOR PLL SYNC COMPLETION
 timeout = 0
 read_reg = skarabs[mst_sk_i].transport.read_wishbone(WB_BASEADR+REGADR_RD_PLL_SYNC_COMPLETE) #read_reg = skarabs[mst_sk_i].read_int('pll_sync_complete_out')
 while ((read_reg == 0) and (timeout < 100)):
@@ -246,7 +301,7 @@ if timeout == 100:
 	exit()
 
 # ---------------------------------------------------------------
-# 9. CHECK SYNC STATUS (ALL SKARABS)
+# 10. CHECK SYNC STATUS (ALL SKARABS)
 # ---------------------------------------------------------------
 print("Checking sync status...")
 for i in range(skarab_num):
@@ -261,13 +316,13 @@ for i in range(skarab_num):
 		exit()
 
 # ---------------------------------------------------------------
-# 10. PREPARE LMFC ALIGN (ALL SKARABS)
+# 11. PREPARE LMFC ALIGN (ALL SKARABS)
 # ---------------------------------------------------------------
 print("Preparing LMFC align...")
 for i in range(skarab_num):
-	# 10.1 CHANGE SYNC PIN TO PULSE GENERATOR
+	# 11.1 CHANGE SYNC PIN TO PULSE GENERATOR
 	skarabs[i].transport.direct_spi_write(mezzanine_site, sd.SPI_DESTINATION_PLL, sd.PLL_GLOBAL_MODE_AND_ENABLE_CONTROL, 0x81)
-	# 10.2 POWER UP ADC SYSREF INPUT BUFFERS
+	# 11.2 POWER UP ADC SYSREF INPUT BUFFERS
 	skarabs[i].transport.direct_spi_write(mezzanine_site, sd.SPI_DESTINATION_ADC_0, sd.ADC_GENERAL_ADC_PAGE_SEL, 0x00)
 	skarabs[i].transport.direct_spi_write(mezzanine_site, sd.SPI_DESTINATION_ADC_0, sd.ADC_GENERAL_MASTER_PAGE_SEL, 0x04)
 	skarabs[i].transport.direct_spi_write(mezzanine_site, sd.SPI_DESTINATION_ADC_0, sd.ADC_MASTER_PDN_SYSREF, 0x00)
@@ -276,13 +331,13 @@ for i in range(skarab_num):
 	skarabs[i].transport.direct_spi_write(mezzanine_site, sd.SPI_DESTINATION_ADC_1, sd.ADC_MASTER_PDN_SYSREF, 0x00)
 
 # ---------------------------------------------------------------
-# 11. PERFORM LMFC ALIGN (MASTER SKARAB)
+# 12. PERFORM LMFC ALIGN (MASTER SKARAB)
 # ---------------------------------------------------------------
 print("Performing LMFC align...")
-# 11.1 TRIGGER PULSE GENERATION
+# 12.1 TRIGGER PULSE GENERATION
 skarabs[mst_sk_i].transport.write_wishbone(WB_BASEADR+REGADR_WR_PLL_PULSE_GEN_START, 0) #skarabs[mst_sk_i].write_int('pll_pulse_gen_start_in', 0)
 skarabs[mst_sk_i].transport.write_wishbone(WB_BASEADR+REGADR_WR_PLL_PULSE_GEN_START, 1) #skarabs[mst_sk_i].write_int('pll_pulse_gen_start_in', 1)
-# 11.2 WAIT FOR PULSE GENERATION TO COMPLETE
+# 12.2 WAIT FOR PULSE GENERATION TO COMPLETE
 timeout = 0
 read_reg = skarabs[mst_sk_i].transport.read_wishbone(WB_BASEADR+REGADR_RD_PLL_SYNC_COMPLETE) #read_reg = skarabs[mst_sk_i].read_int('pll_sync_complete_out')
 while ((read_reg == 0) and (timeout < 100)):
@@ -294,7 +349,7 @@ if timeout == 100:
 	exit()
 
 # ---------------------------------------------------------------
-# 12. POWER DOWN SYSREF BUFFERS (ALL SKARABS)
+# 13. POWER DOWN SYSREF BUFFERS (ALL SKARABS)
 # ---------------------------------------------------------------
 print("Powering down SYSREF buffers...")
 for i in range(skarab_num):
@@ -302,7 +357,7 @@ for i in range(skarab_num):
 	skarabs[i].transport.direct_spi_write(mezzanine_site, sd.SPI_DESTINATION_ADC_1, sd.ADC_MASTER_PDN_SYSREF, 0x10)
 
 # ---------------------------------------------------------------
-# 13. PREPARE ADC SYNC (ALL SKARABS)
+# 14. PREPARE ADC SYNC (ALL SKARABS)
 # ---------------------------------------------------------------
 print("Preparing ADC sync...")
 for i in range(skarab_num):
@@ -310,14 +365,14 @@ for i in range(skarab_num):
 	skarabs[i].transport.write_i2c(i2c_interface, sd.STM_I2C_DEVICE_ADDRESS, sd.MEZ_CONTROL_REG, sd.ENABLE_ADC_SYNC)
 
 # ---------------------------------------------------------------
-# 14. ADC SYNC PART 1 (ALL SKARABS)
+# 15. ADC SYNC PART 1 (ALL SKARABS)
 # ---------------------------------------------------------------
 print("Performing ADC sync part 1...")
 for i in range(skarab_num):
-	# 14.1 TRIGGER ADC SYNC PART 1
+	# 15.1 TRIGGER ADC SYNC PART 1
 	skarabs[i].transport.write_wishbone(WB_BASEADR+REGADR_WR_ADC_SYNC_START, 0) #skarabs[i].write_int('adc_sync_start_in', 0)
 	skarabs[i].transport.write_wishbone(WB_BASEADR+REGADR_WR_ADC_SYNC_START, 1) #skarabs[i].write_int('adc_sync_start_in', 1)
-	# 14.2 WAIT FOR ADC SYNC PART 1 COMPLETION
+	# 15.2 WAIT FOR ADC SYNC PART 1 COMPLETION
 	timeout = 0
 	read_reg = skarabs[i].transport.read_wishbone(WB_BASEADR+REGADR_RD_ADC_SYNC_COMPLETE) #read_reg = skarabs[i].read_int('adc_sync_complete_out')
 	while ((read_reg == 0) and (timeout < 100)):
@@ -329,7 +384,7 @@ for i in range(skarab_num):
 		exit()
 
 # ---------------------------------------------------------------
-# 15. ARM THE BLOCK CAPTURE COMPONENTS (ALL SKARABS)
+# 16. ARM THE BLOCK CAPTURE COMPONENTS (ALL SKARABS)
 # ---------------------------------------------------------------
 print("Arming block capture components...")
 for i in range(skarab_num):
@@ -344,7 +399,7 @@ for i in range(skarab_num):
 	skarabs[i].write_int('adc_trig', 1)
 
 # ---------------------------------------------------------------
-# 16. WAIT FOR ADC SYNC REQUEST ASSERT (ALL SKARABS)
+# 17. WAIT FOR ADC SYNC REQUEST ASSERT (ALL SKARABS)
 # ---------------------------------------------------------------
 print("Waiting for ADC sync request assertion...")
 for i in range(skarab_num):
@@ -359,13 +414,13 @@ for i in range(skarab_num):
 		exit()
 
 # ---------------------------------------------------------------
-# 17. ADC SYNC PART 2 (MASTER SKARAB)
+# 18. ADC SYNC PART 2 (MASTER SKARAB)
 # ---------------------------------------------------------------
 print("Performing ADC sync part 2...")
-# 17.1 TRIGGER ADC SYNC PART 2
+# 18.1 TRIGGER ADC SYNC PART 2
 skarabs[mst_sk_i].transport.write_wishbone(WB_BASEADR+REGADR_WR_ADC_SYNC_PART2_START, 0) #skarabs[mst_sk_i].write_int('adc_sync_part2_start_in', 0)
 skarabs[mst_sk_i].transport.write_wishbone(WB_BASEADR+REGADR_WR_ADC_SYNC_PART2_START, 1) #skarabs[mst_sk_i].write_int('adc_sync_part2_start_in', 1)
-# 17.2 WAIT FOR ADC SYNC PART 2 COMPLETION
+# 18.2 WAIT FOR ADC SYNC PART 2 COMPLETION
 timeout = 0
 read_reg = skarabs[mst_sk_i].transport.read_wishbone(WB_BASEADR+REGADR_RD_ADC_SYNC_COMPLETE) #read_reg = skarabs[mst_sk_i].read_int('adc_sync_complete_out')
 while ((read_reg == 0) and (timeout < 100)):
@@ -377,7 +432,7 @@ if timeout == 100:
 	exit()
 
 # ---------------------------------------------------------------
-# 18. WAIT FOR SYNC REQUEST DE-ASSERT (ALL SKARABS)
+# 19. WAIT FOR SYNC REQUEST DE-ASSERT (ALL SKARABS)
 # ---------------------------------------------------------------
 print("Waiting for ADC sync request de-assertion...")
 for i in range(skarab_num):
@@ -392,13 +447,13 @@ for i in range(skarab_num):
 		exit()
 
 # ---------------------------------------------------------------
-# 19. ADC SYNC PART 3 (MASTER SKARAB)
+# 20. ADC SYNC PART 3 (MASTER SKARAB)
 # ---------------------------------------------------------------
 print("Performing ADC sync part 3...")
-# 19.1 TRIGGER ADC SYNC PART 3
+# 20.1 TRIGGER ADC SYNC PART 3
 skarabs[mst_sk_i].transport.write_wishbone(WB_BASEADR+REGADR_WR_ADC_SYNC_PART3_START, 0) #skarabs[mst_sk_i].write_int('adc_sync_part3_start_in', 0)
 skarabs[mst_sk_i].transport.write_wishbone(WB_BASEADR+REGADR_WR_ADC_SYNC_PART3_START, 1) #skarabs[mst_sk_i].write_int('adc_sync_part3_start_in', 1)
-# 19.2 WAIT FOR ADC SYNC PART 3 COMPLETION
+# 20.2 WAIT FOR ADC SYNC PART 3 COMPLETION
 timeout = 0
 read_reg = skarabs[mst_sk_i].transport.read_wishbone(WB_BASEADR+REGADR_RD_ADC_SYNC_COMPLETE) #read_reg = skarabs[mst_sk_i].read_int('adc_sync_complete_out')
 while ((read_reg == 0) and (timeout < 100)):
@@ -410,7 +465,7 @@ if timeout == 100:
 	exit()
 
 # ---------------------------------------------------------------
-# 20. DISABLE THE ADC SYNC (ALL SKARABS)
+# 21. DISABLE THE ADC SYNC (ALL SKARABS)
 # ---------------------------------------------------------------
 print("Disabling ADC sync...")
 for i in range(skarab_num):
@@ -418,7 +473,7 @@ for i in range(skarab_num):
 	skarabs[i].transport.write_i2c(i2c_interface, sd.STM_I2C_DEVICE_ADDRESS, sd.MEZ_CONTROL_REG, 0x0)
 
 # ---------------------------------------------------------------
-# 21. ADC STATUS REGISTER CHECK (ALL SKARABS)
+# 22. ADC STATUS REGISTER CHECK (ALL SKARABS)
 # ---------------------------------------------------------------
 print("Performing ADC status reg check...")
 for i in range(skarab_num):
@@ -434,7 +489,7 @@ for i in range(skarab_num):
 		print(str("ADC 3 STATUS REG: " + str(hex(adc3_status_out))))
 
 # ---------------------------------------------------------------
-# 22. ADC/PLL SYNC ERROR CHECK (MASTER SKARAB)
+# 23. ADC/PLL SYNC ERROR CHECK (MASTER SKARAB)
 # ---------------------------------------------------------------
 print("Performing ADC/PLL sync check...")
 if skarabs[mst_sk_i].transport.read_wishbone(WB_BASEADR+REGADR_RD_PLL_SYNC_COMPLETE) != 1: #skarabs[mst_sk_i].read_int('pll_sync_complete_out') != 1:
@@ -443,7 +498,7 @@ if skarabs[mst_sk_i].transport.read_wishbone(WB_BASEADR+REGADR_RD_ADC_SYNC_COMPL
 	print(str("ERROR: ADC SYNC COULD NOT COMPLETE"))
 
 # -------------------------------------------------
-# 23. WRITE CAPTURED ADC DATA TO FILE (ALL SKARABS)
+# 24. WRITE CAPTURED ADC DATA TO FILE (ALL SKARABS)
 # -------------------------------------------------
 print("Storing captured ADC data...")
 for i in range(skarab_num):
