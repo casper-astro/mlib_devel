@@ -178,7 +178,7 @@ mst_sk_i = 0
 # SET SKARAB IPS
 skarab_ips = ['10.0.7.2', '10.0.7.3', '10.0.7.4', '10.0.7.5']
 # SET ADC CHANNEL GAIN (-6 dB to 15 dB) 
-channel_gain = 15
+channel_gain = 6
 
 # ---------------------------------------------------------------
 # 2. CONNECT TO SKARAB HARDWARE AND UPLOAD FPG FILE (ALL SKARABS)
