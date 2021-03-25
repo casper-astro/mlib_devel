@@ -2,8 +2,154 @@ from .yellow_block import YellowBlock
 from clk_factors import clk_factors
 from constraints import ClockConstraint, ClockGroupConstraint, PortConstraint, RawConstraint
 
-
 class zcu216(YellowBlock):
+    # TODO: if any of the methods turn out to be very similar (e.g., initialize looks to be that way) we could have that method live in this
+    # top class to reduce duplication
+    # or perhaps remove this factory method all together and instance based on blk[] contents where need to in the modify top and the
+    # gen_tcl_cmds method also calls two different methods based on blk[]
+    @staticmethod
+    def factory(blk, plat, hdl_root=None):
+        if True:
+          return zcu216_bd(blk, plat, hdl_root)
+        else:
+          return zcu216_v(blk, plat, hdl_root)
+
+class zcu216_bd(zcu216):
+    def initialize(self):
+        self.add_source('infrastructure/zcu216_clk_infrastructure.sv')
+        #self.add_source('infrastructure/zcu216_infrastructure.v')
+        self.add_source('utils/cdc_synchroniser.vhd')
+        #self.add_source('zynq/config_mpsoc_zcu216.tcl')
+
+        # TODO: need new provides and figure the extent to provide these, because as the documentation says
+        # if these lines aren't here the the toolflow breaks.
+        self.provides.append(self.clk_src)
+        self.provides.append(self.clk_src+'90')
+        self.provides.append(self.clk_src+'180')
+        self.provides.append(self.clk_src+'270')
+        self.provides.append(self.clk_src+'_rst')
+
+        # TODO: Need to add this? Is it a bug that `axi4lite_interconnect.py` does not make a `requires` call
+        self.provides.append('axil_clk')  # zcu216 infrastructure
+        self.provides.append('axil_rst_n')  # zcu216 infrastructure
+
+        # for the rfsocs it seems appropriate to use the requires/provides for `sysref` and `pl_sysref` for MTS?
+        self.provides.append('pl_sysref') # zcu216 infrastructure provides so rfdc can require
+        self.provides.append('clk_adc0')  # rfdc IP provides on the output
+
+    def modify_top(self, top):
+        top.assign_signal('axil_clk', 'pl_clk0')            # TODO: need to have these signals come out of the block diagram
+        top.assign_signal('axil_rst', 'peripheral_reset')
+        top.assign_signal('axil_rst_n', 'peripheral_aresetn')
+
+        clkparams = clk_factors(100, self.platform.user_clk_rate)
+
+        # TODO: clk infrastructure change to accomodate the high-density global clock package pin inputs has worked -- need to decide what to do
+        inst_infr = top.get_instance('zcu216_clk_infrastructure', 'zcu216_infr_inst')
+        inst_infr.add_parameter('PERIOD', '10.0')
+        inst_infr.add_parameter('MULTIPLY', clkparams[0])
+        inst_infr.add_parameter('DIVIDE',   clkparams[1])
+        inst_infr.add_parameter('DIVCLK',   clkparams[2])
+        inst_infr.add_port('pl_clk_p',      "pl_clk_p", dir='in',  parent_port=True)
+        inst_infr.add_port('pl_clk_n',      "pl_clk_n", dir='in',  parent_port=True)
+
+        inst_infr.add_port('adc_clk', 'adc_clk')
+        inst_infr.add_port('adc_clk90', 'adc_clk90')
+        inst_infr.add_port('adc_clk180', 'adc_clk180')
+        inst_infr.add_port('adc_clk270', 'adc_clk270')
+        inst_infr.add_port('mmcm_locked', 'mmcm_locked', dir='out', parent_port=True)
+
+        # instance block design containing mpsoc, and axi protocol converter for casper mermory map (HPM0), axi gpio for software clk104 config (HPM1) 
+        bd_inst = top.get_instance('zcu216_base', 'zcu216_inst')
+
+        bd_inst.add_port('m_axi_awaddr',  'M_AXI_awaddr', width=40)#// output wire [39 : 0] m_axi_awaddr
+        bd_inst.add_port('m_axi_awprot',  'M_AXI_awprot', width=3)#// output wire [2 : 0] m_axi_awprot
+        bd_inst.add_port('m_axi_awvalid', 'M_AXI_awvalid')#// output wire m_axi_awvalid
+        bd_inst.add_port('m_axi_awready', 'M_AXI_awready')#// input wire m_axi_awready
+        bd_inst.add_port('m_axi_wdata',   'M_AXI_wdata', width=32)#// output wire [31 : 0] m_axi_wdata
+        bd_inst.add_port('m_axi_wstrb',   'M_AXI_wstrb', width=4)#// output wire [3 : 0] m_axi_wstrb
+        bd_inst.add_port('m_axi_wvalid',  'M_AXI_wvalid')#// output wire m_axi_wvalid
+        bd_inst.add_port('m_axi_wready',  'M_AXI_wready')#// input wire m_axi_wready
+        bd_inst.add_port('m_axi_bresp',   'M_AXI_bresp', width=2)#// input wire [1 : 0] m_axi_bresp
+        bd_inst.add_port('m_axi_bvalid',  'M_AXI_bvalid')#// input wire m_axi_bvalid
+        bd_inst.add_port('m_axi_bready',  'M_AXI_bready')#// output wire m_axi_bready
+        bd_inst.add_port('m_axi_araddr',  'M_AXI_araddr', width=40)#// output wire [39 : 0] m_axi_araddr
+        bd_inst.add_port('m_axi_arprot',  'M_AXI_arprot', width=3)#// output wire [2 : 0] m_axi_arprot
+        bd_inst.add_port('m_axi_arvalid', 'M_AXI_arvalid')#// output wire m_axi_arvalid
+        bd_inst.add_port('m_axi_arready', 'M_AXI_arready')#// input wire m_axi_arready
+        bd_inst.add_port('m_axi_rdata',   'M_AXI_rdata', width=32)#// input wire [31 : 0] m_axi_rdata
+        bd_inst.add_port('m_axi_rresp',   'M_AXI_rresp', width=2)#// input wire [1 : 0] m_axi_rresp
+        bd_inst.add_port('m_axi_rvalid',  'M_AXI_rvalid')#// input wire m_axi_rvalid
+        bd_inst.add_port('m_axi_rready',  'M_AXI_rready')#// output wire m_axi_rready
+
+        bd_inst.add_port('clk104_spi_mux_sel', 'clk104_spi_mux_sel', width=2, dir='out', parent_port=True)
+
+        bd_inst.add_port('pl_clk0', 'pl_clk0')
+        bd_inst.add_port('peripheral_reset', 'peripheral_reset')
+        bd_inst.add_port('peripheral_aresetn', 'peripheral_aresetn')
+
+        bd_inst.add_port('mux_led', 'mux_led', width=2, dir='out', parent_port=True)
+
+
+    def gen_children(self):
+        children = []
+        children.append(YellowBlock.make_block({'tag': 'xps:sys_block', 'board_id': '3', 'rev_maj': '2', 'rev_min': '0', 'rev_rcs': '1'}, self.platform))
+        # gonna just put in the zcu216 for now then compartamentalize
+        #children.append(YellowBlock.make_block({'tag': 'xps:zynq_usplus'}, self.platform))
+        #children.append(YellowBlock.make_block({'tag': 'xps:axi_protocol_converter'}, self.platform))
+
+        return children
+
+
+    def gen_constraints(self):
+        cons = []
+        cons.append(PortConstraint('pl_clk_p', 'pl_clk_p'))
+        cons.append(RawConstraint('set_property -dict { PACKAGE_PIN G10 IOSTANDARD LVCMOS18 } [get_ports { clk104_spi_mux_sel[0] }]'))
+        cons.append(RawConstraint('set_property -dict { PACKAGE_PIN H11 IOSTANDARD LVCMOS18 } [get_ports { clk104_spi_mux_sel[1] }]'))
+        cons.append(RawConstraint('set_property -dict { PACKAGE_PIN B26 IOSTANDARD LVCMOS12 } [get_ports { mmcm_locked }]'))
+
+        cons.append(RawConstraint('set_property -dict { PACKAGE_PIN AV21 IOSTANDARD LVCMOS12 } [get_ports { mux_led[0] }]'))
+        cons.append(RawConstraint('set_property -dict { PACKAGE_PIN AR21 IOSTANDARD LVCMOS12 } [get_ports { mux_led[1] }]'))
+
+        #cons.append(PortConstraint('clk_100_p', 'clk_100_p'))
+        #cons.append(ClockConstraint('clk_100_p','clk_100_p', period=10.0, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=5.0))
+        #cons.append(ClockGroupConstraint('clk_pl_0', 'clk_100_p', 'asynchronous'))
+        #cons.append(ClockGroupConstraint('clk_100_p', 'clk_pl_0', 'asynchronous'))
+        return cons
+
+
+    def gen_tcl_cmds(self):
+        tcl_cmds = {}
+        tcl_cmds['pre_synth'] = []
+        """
+        Add a block design to project with wrapper via its exported tcl script.
+        1. Source the tcl script.
+        2. Generate the block design via generate_target.
+        3. Have vivado make an HDL wrapper around the block design.
+        4. Add the wrapper HDL file to project.
+        """
+        tcl_cmds['pre_synth'] += ['source {}'.format(self.hdl_root + '/infrastructure/zcu216_base.tcl')]
+        tcl_cmds['pre_synth'] += ['generate_target all [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/zcu216_base/zcu216_base.bd]']
+        tcl_cmds['pre_synth'] += ['make_wrapper -files [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/zcu216_base/zcu216_base.bd] -top']
+        tcl_cmds['pre_synth'] += ['add_files -norecurse [get_property directory [current_project]]/myproj.srcs/sources_1/bd/zcu216_base/hdl/zcu216_base_wrapper.vhd']
+        tcl_cmds['pre_synth'] += ['update_compile_order -fileset sources_1']
+
+        tcl_cmds['post_synth'] = []
+        # TODO: make note of how to use HD bank clocks to drive an MMCM on US+
+        #tcl_cmds['post_synth'] += ['set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets clk_100_p]']
+        tcl_cmds['post_synth'] += ['set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pl_clk_p]']
+
+        return tcl_cmds
+
+
+"""
+
+Implement the same functionality without a tcl block design
+
+"""
+
+# TODO: does not have clk104 gpio pins included
+class zcu216_v(zcu216):
     def initialize(self):
         self.add_source('infrastructure/zcu216_clk_infrastructure.sv')
         #self.add_source('infrastructure/zcu216_infrastructure.v')
@@ -52,7 +198,7 @@ class zcu216(YellowBlock):
         inst_infr.add_port('adc_clk90', 'adc_clk90')
         inst_infr.add_port('adc_clk180', 'adc_clk180')
         inst_infr.add_port('adc_clk270', 'adc_clk270')
-        inst_infr.add_port('mmcm_locked', 'mmcm_locked')
+        inst_infr.add_port('mmcm_locked', 'mmcm_locked', dir='out', parent_port=True)
 
         # instantiate mpsoc
         mpsoc_inst = top.get_instance('mpsoc', 'mpsoc_inst')
