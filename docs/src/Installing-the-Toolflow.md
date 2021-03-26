@@ -44,17 +44,22 @@ The master branch is usually updated once a year. Between updates, code with new
     To create a Python 3 virtual environment:
 
     ```bash
+    # install the python3-venv package
+    sudo apt install python3-venv
     # change directory to where you want the virtual environment to live
     cd /home/user/work
-    # install virtualenv using pip3
-    sudo pip3 install virtualenv
     # create a Python 3 virtual environment
-    virtualenv -p python3 casper_venv
+    python3 -m venv casper_venv
     # to activate the virtual environment:
     source casper_venv/bin/activate
     # to deactivate the virtual environment:
     deactivate
     ```
+4. casperfpga
+    
+    `casperfpga` is a python library used to interact and interface with [**CASPER** Hardware](https://github.com/casper-astro/casper-hardware). Functionality includes being able to reconfigure firmware, as well as read and write registers across the various communication interfaces.
+
+    You will need to install this library to interface with CASPER hardware. Installation instructions can be found [here](https://casper-toolflow.readthedocs.io/en/latest/src/How-to-install-casperfpga.html).
 
 ## Obtaining the Toolflow
 Clone the toolflow from the [mlib_devel](https://github.com/casper-astro/mlib_devel) git repository. 

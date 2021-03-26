@@ -94,8 +94,9 @@ Setup Links
 1. :doc:`Installing the Toolflow <src/Installing-the-Toolflow>`
 2. :doc:`Installing Matlab <src/How-to-install-Matlab>`
 3. :doc:`Installing Xilinx Vivado <src/How-to-install-Xilinx-Vivado>`
-4. :doc:`Configuring the Toolflow <src/Configuring-the-Toolflow>`
-5. :doc:`Running the Toolflow <src/Running-the-Toolflow>`
+4. :doc:`Installing casperfpga <src/How-to-install-casperfpga>`
+5. :doc:`Configuring the Toolflow <src/Configuring-the-Toolflow>`
+6. :doc:`Running the Toolflow <src/Running-the-Toolflow>`
 
 ..  toctree::
     :hidden:
@@ -105,6 +106,7 @@ Setup Links
     src/Installing-the-Toolflow
     src/How-to-install-Matlab
     src/How-to-install-Xilinx-Vivado
+    src/How-to-install-casperfpga
     src/Configuring-the-Toolflow
     src/Running-the-Toolflow
 
