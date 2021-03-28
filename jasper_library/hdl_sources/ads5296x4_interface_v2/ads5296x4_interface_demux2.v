@@ -128,6 +128,7 @@ module ads5296x4_interface_demux2 #(
     snapshot_trigger_unstable <= snapshot_trigger;
     snapshot_trigger_stable <= snapshot_trigger_unstable;
     snapshot_trigger_stableR <= snapshot_trigger_stable;
+    snapshot_ext_triggerR <= snapshot_ext_trigger;
     if (snapshot_trigger_pulse || snapshot_ext_trigger_pulse) begin
       snapshot_pending <= 1'b1;
     end
@@ -389,6 +390,7 @@ module ads5296x4_interface_demux2 #(
   assign sync_out = sync_out_multi[0];
   wire fifo_we;
   wire fifo_re;
+  wire fifo_rst;
   
   ads5296_unit adc_unit_inst[4*G_NUM_UNITS - 1:0] (
     .lclk(sclk5_in),
@@ -397,7 +399,7 @@ module ads5296x4_interface_demux2 #(
     .din_fall(din_fall),
    // .bitslip(bitslip),
     .wr_en(fifo_we),
-    .rst(rst),
+    .rst(fifo_rst),
     .clk_out(sclk2_in),
     .rd_en(fifo_re),
     .dout(dout),
@@ -405,18 +407,23 @@ module ads5296x4_interface_demux2 #(
   );
   
 
-  // Deserializers
-  (* async_reg = "true" *) reg syncR;
-  (* async_reg = "true" *) reg syncRR;
+  // Generate FIFO control signals from sclk, to guard
+  // against phase ambiguities
+  reg syncR_sclk;
+  reg syncRR_sclk;
   reg fifo_we_reg;
+  reg fifo_rst_reg;
+  assign fifo_rst = fifo_rst_reg;
   assign fifo_we = fifo_we_reg;
   always @(posedge sclk_in) begin
-    syncR <= sync;
-    syncRR <= syncR;
+    syncR_sclk <= sync;
+    syncRR_sclk <= syncR_sclk;
     if (rst) begin
       fifo_we_reg <= 1'b0;
+      fifo_rst_reg <= 1'b1;
     end else begin
-      if (syncR & ~syncRR) begin
+      fifo_rst_reg <= 1'b0;
+      if (syncR_sclk & ~syncRR_sclk) begin
         fifo_we_reg <= 1'b1;
       end
     end
@@ -425,15 +432,11 @@ module ads5296x4_interface_demux2 #(
   reg [10:0] fifo_re_sr;
   reg fifo_re_reg;
   assign fifo_re = fifo_re_sr[10];
-  reg syncR_sclk;
-  reg syncRR_sclk;
   always @(posedge sclk2_in) begin
-    syncR_sclk <= sync;
-    syncRR_sclk <= syncR_sclk;
     if (rst) begin
       fifo_re_sr <= 11'b0;
     end else if ( ~fifo_re ) begin
-      fifo_re_sr <= {fifo_re_sr[9:0], syncR_sclk & ~ syncRR_sclk};
+      fifo_re_sr <= {fifo_re_sr[9:0], fifo_we_reg};
     end
   end
 
