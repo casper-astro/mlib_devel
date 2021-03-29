@@ -3,12 +3,49 @@ manufacturer: Xilinx
 fpga: xcvu37p-fsvh2892-2-e
 family: ultrascaleplus
 backend_target: vivado
-mmbus_architecture: AXI4-Lite
-mmbus_base_address: 0x10000000
+#mmbus_architecture: ['wishbone', 'AXI4-Lite']
+mmbus_architecture: ['AXI4-Lite', 'wishbone']
+# wishbone at address 0; AXI offset = 1MB
+mmbus_base_address: 0x00100000
+#axi_ic_base_address: 0x44A00000
+dsp_wb_base_address: 0x00010000
 # How to address each 32-bit (i.e. 4 indicates byte-addressable)
 mmbus_address_alignment: 4
 sources: []
 constraints: []
+dts:
+  linerate: '10.24'
+  reffreq: '163.84'
+  ports:
+    # GT pins when using QSFPs A through C
+    qsfp_a_b_c:
+      phys_clocks: [[qsfp_mgt_ref_clk, 0], [qsfp_mgt_ref_clk, 1], [qsfp_mgt_ref_clk, 1]]
+      channel:
+        - X1Y16
+        - X1Y17
+        - X1Y18
+        - X1Y19
+        - X1Y20
+        - X1Y21
+        - X1Y22
+        - X1Y23
+        - X1Y24
+        - X1Y25
+        - X1Y26
+        - X1Y27
+      clock:
+        - 'clk0'
+        - 'clk0'
+        - 'clk0'
+        - 'clk0'
+        - 'clk0+1'
+        - 'clk0+1'
+        - 'clk0+1'
+        - 'clk0+1'
+        - 'clk0'
+        - 'clk0'
+        - 'clk0'
+        - 'clk0'
 pcie:
   loc: PCIE4C_X1Y0
   use_pr: True
@@ -148,6 +185,15 @@ pins:
   qsfp_scl:
     iostd: LVCMOS18
     loc: [BN29, BL30, BN32, BM32]
+  ff_modprsl_ls:
+    iostd: LVCMOS18
+    loc: [BG10, BG9, BF12, BF11, BE11, BF10, BE10, BE9]
+  ff_sda:
+    iostd: LVCMOS18
+    loc: [BP12, BP14, BM12, BN15, BM14, BL15, BN11, BP8]
+  ff_scl:
+    iostd: LVCMOS18
+    loc: [BP11, BP13, BN12, BN14, BM13, BM15, BP9, BM10]
   pcie_refclk_p:
     loc: AR15
   pcie_gty_rx_p:

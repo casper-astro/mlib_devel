@@ -154,15 +154,15 @@ use ieee.std_logic_arith.all;
 
 entity deformatter_seti is
   generic(
-    cr_address : unsigned(7 downto 0) := X"00";
-    pc_address : unsigned(7 downto 0) := X"00";
-    sc_address : unsigned(7 downto 0) := X"00";
-    md_address : unsigned(7 downto 0) := X"00";
-    tm_address : unsigned(7 downto 0) := X"00"
+    cr_address : unsigned(7 downto 0) := X"00"; --control register
+    pc_address : unsigned(7 downto 0) := X"01"; --parity register
+    sc_address : unsigned(7 downto 0) := X"02"; --scramble code register
+    md_address : unsigned(7 downto 0) := X"03"; --meta-data register
+    tm_address : unsigned(7 downto 0) := X"04"  --timing register
     );
   port(
     rx_in      : in  std_logic_vector(159 downto 0);   -- demuxed data
-    frame_clock: in  std_logic;                        -- clock at 10GHz/160 (62.5 MHz)
+    rx_inclock : in  std_logic;                        -- clock at 10GHz/160 (62.5 MHz)
     rx_locked  : in  std_logic;
     lockdet    : in  std_logic;         -- demux locked.
     def_out    : out std_logic_vector(127 downto 0);  -- one frame
@@ -174,7 +174,8 @@ entity deformatter_seti is
     locked     : out std_logic;         -- synchronized to input data frames.
 
     -- monitor and control related ports
-    data   : inout std_logic_vector(7 downto 0);
+    din    : in    std_logic_vector(7 downto 0);
+    dout   : out   std_logic_vector(7 downto 0);
     sel    : in    std_logic_vector(7 downto 0);
     cs     : in    std_logic;           -- chip select, active low.
     wrstb  : in    std_logic;           -- data write strobe.
@@ -199,7 +200,7 @@ architecture structural of deformatter_seti is
       cs    : in    std_logic;
       rdstb : in    std_logic;
       sel   : in    std_logic_vector(7 downto 0);
-      data  : inout std_logic_vector(7 downto 0));
+      dout  : out   std_logic_vector(7 downto 0));
   end component;
 
   component metadata_capture
@@ -272,7 +273,8 @@ architecture structural of deformatter_seti is
   component parity_counter
     port(
       wstb   : in    std_logic;         -- write strobe
-      d      : inout std_logic_vector(7 downto 0);
+      din    : in    std_logic_vector(7 downto 0);
+      dout   : out   std_logic_vector(7 downto 0);
       rstb   : in    std_logic;         -- read strobe
       sel    : in    std_logic;         -- address select
       cs     : in    std_logic;         -- chip select
@@ -284,6 +286,9 @@ architecture structural of deformatter_seti is
   end component;
 
   signal dvmode        : std_logic;
+  signal dout_md       : std_logic_vector(7 downto 0);
+  signal dout_parity   : std_logic_vector(7 downto 0);
+  signal raw_frame     : std_logic_vector(159 downto 0);
   signal inorder_frame : std_logic_vector(159 downto 0);
   signal sorted_frame  : std_logic_vector(159 downto 0);
   signal frame_data    : std_logic_vector(127 downto 0);
@@ -295,12 +300,14 @@ architecture structural of deformatter_seti is
   signal frame_index   : std_logic;
   signal frame_indexn  : std_logic;
   signal frame_indexe  : std_logic;
+  signal frame_clock   : std_logic;
   signal input_shift   : std_logic;
   signal one_seci      : std_logic;
   signal ten_seci      : std_logic;
   signal parity        : std_logic;
   signal nsync         : std_logic;
   signal sc_sel        : std_logic;
+  signal md_sel        : std_logic;
   signal init_sel      : std_logic;
   signal parity_sel    : std_logic;
   signal tm_sel        : std_logic;
@@ -334,17 +341,21 @@ begin
   sc_sel <= '1' when sel = std_logic_vector(sc_address)
             and cs = '0' else '0';
   init_sel <= '1' when sel = std_logic_vector(cr_address)
-              and cs = '0' else '0';
+            and cs = '0' else '0';
   parity_sel <= '1' when sel = std_logic_vector(pc_address)
-                else '0';
+            and cs = '0' else '0';
   tm_sel <= '1' when sel = std_logic_vector(tm_address)
+            and cs = '0' else '0';
+  md_sel <= '1' when sel = std_logic_vector(md_address)
             and cs = '0' else '0';
   
   f_clock <= frame_clock;
 
-  data <= "0000000" & nsync when init_sel = '1' and rdstb = '0' else
+  dout <= "0000000" & nsync when init_sel = '1' and rdstb = '0' else
           scan_chain when sc_sel = '1' and rdstb = '0' else
-          "ZZZZZZZZ";
+          dout_parity when parity_sel = '1' and rdstb = '0' else
+          dout_md when md_sel = '1' and rdstb = '0' else
+          "00000000";
   
   u0a : metadata_capture
     port map (
@@ -363,23 +374,34 @@ begin
       cs    => cs,
       rdstb => rdstb,
       sel   => sel,
-      data  => data);
+      dout  => dout_md);
 
   u0c : timing_gen
     port map (
       clock  => frame_clock,
       index  => frame_index,
-      d      => data,
+      d      => din,
       wrs    => wrstb,
       cs     => tm_sel,
       tenms  => frame_indexn,
       onesec => one_seci,
       tensec => ten_seci); 
 
-  u2 : bit_reorder
-    port map(
-      input  => rx_in,
-      output => inorder_frame);
+  --u1 : inputblock
+  --  port map(
+  --    rx_in       => rx_in, rx_inclock => rx_inclock,
+  --    rx_out      => raw_frame, rx_locked => rx_locked,
+  --    rx_outclock => frame_clock);
+  
+  frame_clock <= rx_inclock;    
+  raw_frame <= rx_in;
+
+  --u2 : bit_reorder
+  --  port map(
+  --    input  => raw_frame,
+  --    output => inorder_frame);
+      
+  inorder_frame <= raw_frame;
 
   u3 : synchronizer
     port map(
@@ -387,7 +409,7 @@ begin
       clock     => frame_clock,
       lockdet   => lockdet,
       rx_locked => rx_locked,
-      init      => data(2),
+      init      => din(2),
       wrstb     => wrstb,
       sel       => init_sel,
       synced    => nsync,
@@ -409,7 +431,7 @@ begin
       indexe     => frame_indexe,
       parity     => parity,
       valid      => open,
-      data       => data,
+      data       => din,
       strobe     => wrstb,
       sel        => sc_sel,
       scan_chain => scan_chain);
@@ -417,7 +439,8 @@ begin
   u10 : parity_counter
     port map(
       wstb   => wrstb,
-      d      => data,
+      din    => din,
+      dout   => dout_parity,
       rstb   => rdstb,
       clock  => frame_clock,
       parity => parity,

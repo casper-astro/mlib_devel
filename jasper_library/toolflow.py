@@ -461,7 +461,7 @@ class Toolflow(object):
             self.sources += obj.sources
             self.ips += obj.ips
         # add AXI4-Lite architecture specfic stuff, which must be called after all yellow blocks have modified top.
-        if self.plat.mmbus_architecture == 'AXI4-Lite':
+        if 'AXI4-Lite' in self.plat.mmbus_architecture:
             # Make an AXI4-Lite interconnect yellow block and let it modify top
             axi4lite_interconnect = yellow_block.YellowBlock.make_block(
                 {'tag': 'xps:axi4lite_interconnect', 'name': 'axi4lite_interconnect', 
@@ -512,15 +512,15 @@ class Toolflow(object):
             #        self.tcl_sources += glob.glob(source)
 
     def write_core_info(self):
-        if self.plat.mmbus_architecture == 'AXI4-Lite':
+        self.cores = []
+        if 'AXI4-Lite' in self.plat.mmbus_architecture:
             # get list of all axi4lite_devices in self.top.memory_map dict
-            self.cores = []
             for val in list(self.top.memory_map.values()):
                 self.cores += val['axi4lite_devices']
             for val in self.top.rfdc_devices:
                 self.cores += [val]
-        else:
-            self.cores = self.top.wb_devices
+        if 'wishbone' in self.plat.mmbus_architecture:
+            self.cores += self.top.wb_devices
         for val in self.top.xil_axi4lite_devices:
             self.cores += [val]
         basefile = '%s/%s/core_info.tab' % (os.getenv('HDL_ROOT'),
@@ -553,13 +553,13 @@ class Toolflow(object):
             fh.write(s)
 
     def write_core_jam_info(self):
-        if self.plat.mmbus_architecture == 'AXI4-Lite':
+        self.cores = []
+        if 'AXI4-Lite' in self.plat.mmbus_architecture:
             # get list of all axi4lite_devices in self.top.memory_map dict
-            self.cores = []
             for val in list(self.top.memory_map.values()):
                 self.cores += val['axi4lite_devices']
-        else:
-            self.cores = self.top.wb_devices
+        if 'wishbone' in self.plat.mmbus_architecture:
+            self.cores += self.top.wb_devices
         basefile = '%s/%s/core_info.jam.tab' % (os.getenv('HDL_ROOT'), self.plat.name)
         newfile = '%s/core_info.jam.tab' % self.compile_dir
         self.logger.debug('Opening %s' % basefile)
@@ -609,9 +609,9 @@ class Toolflow(object):
             self.top.max_devices_per_arb = self.plat.conf['max_devices_per_arbiter']
             self.logger.debug("Found max_devices_per_arbiter: %s" % self.top.max_devices_per_arb)
         # Check for memory map bus architecture, added to support AXI4-Lite
-        if self.plat.mmbus_architecture == 'AXI4-Lite':
+        if 'AXI4-Lite' in self.plat.mmbus_architecture:
             pass
-        else:
+        if 'wishbone' in self.plat.mmbus_architecture:
             self.top.wb_compute(self.plat.dsp_wb_base_address,
                             self.plat.dsp_wb_base_address_alignment)
         # Write top module file
@@ -790,7 +790,7 @@ class Toolflow(object):
         c.synthesis.pin_map = self.plat._pins
 
         mm_slaves = []
-        if self.plat.mmbus_architecture == 'AXI4-Lite':
+        if 'AXI4-Lite' in self.plat.mmbus_architecture:
             for dev in self.top.axi4lite_devices:
                 if dev.mode == 'rw':
                     mode = 3
@@ -802,7 +802,7 @@ class Toolflow(object):
                     mode = 1
                 mm_slaves += [castro.mm_slave(dev.regname, mode, dev.base_addr,
                                             dev.nbytes)]
-        else:
+        if 'wishbone' in self.plat.mmbus_architecture:
             for dev in self.top.wb_devices:
                 if dev.mode == 'rw':
                     mode = 3
@@ -930,7 +930,7 @@ class Toolflow(object):
         # loop over interfaces, sort by address, make interconnect
         xml_root = ET.Element('node')
         xml_root.set('id', 'axi4lite_top')
-        xml_root.set('address', hex(self.plat.mmbus_base_address))
+        xml_root.set('address', hex(self.plat.axi_ic_base_address))
         xml_root.set('hw_type', 'ic')
         for interface in list(sorted(memory_map.keys())):
             # add a child to parent node

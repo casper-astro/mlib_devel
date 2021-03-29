@@ -7,8 +7,10 @@ module adm_pcie_9h7_infrastructure(
     output sys_clk270,
 
     output clk_200,
+    output clk_50,
 
     output sys_rst,
+    input  user_clk,
     output sys_clk_rst_sync,
     output idelay_rdy
   );
@@ -62,7 +64,7 @@ module adm_pcie_9h7_infrastructure(
    .CLKOUT1_DIVIDE     (12),
    .CLKOUT2_DIVIDE     (12),
    .CLKOUT3_DIVIDE     (6),
-   .CLKOUT4_DIVIDE     (1),
+   .CLKOUT4_DIVIDE     (24),
    .CLKOUT5_DIVIDE     (1),
    .CLKOUT6_DIVIDE     (1),
    .CLKOUT4_CASCADE    ("FALSE"),
@@ -85,7 +87,7 @@ module adm_pcie_9h7_infrastructure(
    .CLKOUT2B (),
    .CLKOUT3  (clk_200_dcm),
    .CLKOUT3B (),
-   .CLKOUT4  (),
+   .CLKOUT4  (clk_50_dcm),
    .CLKOUT5  (),
    .CLKOUT6  (),
    .LOCKED   (pll_lock),
@@ -96,9 +98,9 @@ module adm_pcie_9h7_infrastructure(
   );
 
 
-  BUFG bufg_sysclk[3:0](
-    .I({sys_clk0_dcm, sys_clk180_dcm, sys_clk270_dcm, clk_200_dcm}),
-    .O({sys_clk0,     sys_clk180,     sys_clk270,     clk_200})
+  BUFG bufg_sysclk[4:0](
+    .I({sys_clk0_dcm, sys_clk180_dcm, sys_clk270_dcm, clk_200_dcm, clk_50_dcm}),
+    .O({sys_clk0,     sys_clk180,     sys_clk270,     clk_200,     clk_50})
   );
   
   /* reset gen */
@@ -133,20 +135,15 @@ module adm_pcie_9h7_infrastructure(
     .RDY(idelay_rdy)
   );
   
-  reg rstR1 = 1'b1;
-  reg rstR2 = 1'b1;
-  reg rstR3 = 1'b1;
-  reg rstR4 = 1'b1;
+  (* ASYNC_REG = "TRUE" *) reg rstR1 = 1'b1;
+  (* ASYNC_REG = "TRUE" *) reg rstR2 = 1'b1;
+  (* ASYNC_REG = "TRUE" *) reg rstR3 = 1'b1;
+  (* ASYNC_REG = "TRUE" *) reg rstR4 = 1'b1;
   assign sys_clk_rst_sync = rstR4;
  
-  always @(posedge sys_clk0 or negedge pll_lock) begin
-      if (~pll_lock) begin
-          rstR1 <= 1'b1;
-          rstR2 <= 1'b1;
-          rstR3 <= 1'b1;
-          rstR4 <= 1'b1;
-      end else begin
-          rstR1 <= 1'b0;
+  always @(posedge user_clk) begin
+      begin
+          rstR1 <= sys_rst;
           rstR2 <= rstR1;
           rstR3 <= rstR2;
           rstR4 <= rstR3;
