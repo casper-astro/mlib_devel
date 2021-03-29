@@ -4,6 +4,14 @@ from constraints import ClockConstraint, ClockGroupConstraint, PortConstraint, R
 
 
 class htg_zrf16(YellowBlock):
+    def __init__(self, blk, platform, hdl_root=None):
+        YellowBlock.__init__(self, blk, platform, hdl_root=hdl_root)
+        if self.hw_sys.endswith('xczu29dr'):
+            platform.fpga = "xczu29dr-ffvf1760-2-e"
+        elif self.hw_sys.endswith('xczu49dr'):
+            #platform.fpga = "xczu49dr-ffvf1760-2-e-es1"
+            platform.fpga = "xczu49dr-ffvf1760-2-e"
+
     def initialize(self):
         self.add_source('infrastructure/htg_zrf16_infrastructure.v')
         self.add_source('utils/cdc_synchroniser.vhd')
@@ -78,17 +86,24 @@ class htg_zrf16(YellowBlock):
         inst_infr.add_port('clk_300_p',      "clk_300_p", dir='in',  parent_port=True)
         inst_infr.add_port('clk_300_n',      "clk_300_n", dir='in',  parent_port=True)
 
-        inst_infr.add_port('sys_clk      ', 'sys_clk   ')
-        inst_infr.add_port('sys_clk90    ', 'sys_clk90 ')
-        inst_infr.add_port('sys_clk180   ', 'sys_clk180')
-        inst_infr.add_port('sys_clk270   ', 'sys_clk270')
-        inst_infr.add_port('sys_clk_rst', 'sys_rst')
+        inst_infr.add_port('sys_clk      ', 'sys_clk_int   ')
+        inst_infr.add_port('sys_clk90    ', 'sys_clk90_int ')
+        inst_infr.add_port('sys_clk180   ', 'sys_clk180_int')
+        inst_infr.add_port('sys_clk270   ', 'sys_clk270_int')
+        inst_infr.add_port('sys_clk_rst', 'sys_rst_int')
 
         inst_infr.add_port('user_clk      ', 'arb_clk   ')
         inst_infr.add_port('user_clk90    ', 'arb_clk90 ')
         inst_infr.add_port('user_clk180   ', 'arb_clk180')
         inst_infr.add_port('user_clk270   ', 'arb_clk270')
         inst_infr.add_port('user_clk_rst', 'arb_rst')
+
+        # Get sys clock from the processor
+        top.assign_signal('sys_clk', 'axil_clk')
+        top.assign_signal('sys_clk90', 'axil_clk')
+        top.assign_signal('sys_clk180', 'axil_clk')
+        top.assign_signal('sys_clk270', 'axil_clk')
+        top.assign_signal('sys_rst', '~axil_rst_n')
 		
     def gen_children(self):
         return [YellowBlock.make_block({'fullpath': self.fullpath,'tag': 'xps:sys_block', 'board_id': '20', 'rev_maj': '1', 'rev_min': '0', 'rev_rcs': '1'}, self.platform)]
