@@ -69,7 +69,8 @@ class ads5296x4(YellowBlock):
         for b in range(self.board_count):
             inst = top.get_instance(entity=module, name="%s_%d" % (self.fullname, b))
             inst.add_wb_interface(nbytes=32*4, regname='ads5296_controller%d_%d' % (self.port, b), mode='rw', typecode=self.typecode)
-            inst.add_parameter('SNAPSHOT_ADDR_BITS', SNAPSHOT_ADDR_BITS)
+            inst.add_parameter('G_SNAPSHOT_ADDR_BITS', SNAPSHOT_ADDR_BITS)
+            inst.add_parameter('G_VERSION', self.version)
             # Delare all boards master, so that they all instantiate
             # Their own internal clock generators.
             # We will decide which of these to actually use at runtime

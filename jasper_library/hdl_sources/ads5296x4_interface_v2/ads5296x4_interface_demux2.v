@@ -3,7 +3,8 @@ module ads5296x4_interface_demux2 #(
     parameter G_NUM_FCLKS = 4,
     parameter G_FCLK_MASTER = 0,
     parameter G_IS_MASTER = 1'b1,
-    parameter SNAPSHOT_ADDR_BITS = 9
+    parameter G_SNAPSHOT_ADDR_BITS = 9,
+    parameter G_VERSION = 1
  )(
     input rst,
     input sync,
@@ -37,7 +38,7 @@ module ads5296x4_interface_demux2 #(
     
     input         snapshot_ext_trigger,
     output        snapshot_we,
-    output [SNAPSHOT_ADDR_BITS-1:0] snapshot_addr,
+    output [G_SNAPSHOT_ADDR_BITS-1:0] snapshot_addr,
 
     // Wishbone interface
     input         wb_clk_i,
@@ -80,7 +81,8 @@ module ads5296x4_interface_demux2 #(
   wb_ads5296_attach #( 
     .G_NUM_UNITS(G_NUM_UNITS),
     .G_IS_MASTER(G_IS_MASTER),
-    .G_NUM_FCLKS(1) // Only bother controlling 1 fclk
+    .G_NUM_FCLKS(1), // Only bother controlling 1 fclk
+    .G_VERSION(G_VERSION)
   ) wb_ads5296_attach_inst (
     .wb_clk_i(wb_clk_i),
     .wb_rst_i(wb_rst_i),
@@ -118,7 +120,7 @@ module ads5296x4_interface_demux2 #(
   wire snapshot_trigger_pulse = snapshot_trigger_stable & ~snapshot_trigger_stableR;
   reg snapshot_ext_triggerR;
   wire snapshot_ext_trigger_pulse = snapshot_ext_trigger & ~snapshot_ext_triggerR;
-  reg [SNAPSHOT_ADDR_BITS-1:0] snapshot_addr_reg;
+  reg [G_SNAPSHOT_ADDR_BITS-1:0] snapshot_addr_reg;
   assign snapshot_addr = snapshot_addr_reg;
   reg snapshot_we_reg;
   assign snapshot_we = snapshot_we_reg;
@@ -137,7 +139,7 @@ module ads5296x4_interface_demux2 #(
     end
     if (snapshot_pending && sync_out) begin
       snapshot_we_reg <= 1'b1;
-      snapshot_addr_reg <= {SNAPSHOT_ADDR_BITS{1'b0}};
+      snapshot_addr_reg <= {G_SNAPSHOT_ADDR_BITS{1'b0}};
       snapshot_pending <= 1'b0;
     end
   end

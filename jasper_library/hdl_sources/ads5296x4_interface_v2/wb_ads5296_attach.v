@@ -2,7 +2,8 @@ module wb_ads5296_attach #(
     // Need to adapt the wishbone addressing if this isn't 4
     parameter G_NUM_UNITS = 4,
     parameter G_NUM_FCLKS = 1,
-    parameter G_IS_MASTER = 0
+    parameter G_IS_MASTER = 0,
+    parameter G_VERSION = 0
     ) (
     // Wishbone interface
     input         wb_clk_i,
@@ -183,6 +184,7 @@ module wb_ads5296_attach #(
             16 : begin
               snapshot_trigger_reg <= wb_dat_i[0];
             end
+            // 17 [READ ONLY] version register
             default: begin
             end
           endcase
@@ -246,6 +248,8 @@ module wb_ads5296_attach #(
             16: begin
               wb_data_out_reg[0] <= snapshot_trigger_reg;
               wb_data_out_reg[31:1] <= 31'b0;
+            17: begin
+              wb_data_out_reg <= G_VERSION;
             end
             default: begin
               wb_data_out_reg <= 32'b0;
