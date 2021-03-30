@@ -248,6 +248,7 @@ module wb_ads5296_attach #(
             16: begin
               wb_data_out_reg[0] <= snapshot_trigger_reg;
               wb_data_out_reg[31:1] <= 31'b0;
+            end
             17: begin
               wb_data_out_reg <= G_VERSION;
             end
