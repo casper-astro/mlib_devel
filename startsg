@@ -139,6 +139,7 @@ then
     echo "Using DSP HDL libraries from ${HDL_DSP_DEVEL_PATH}"
     if [ -d "${HDL_DSP_DEVEL_PATH}/wrappers/simulink" ]
     then
+        HDL_DSP_DEVEL_PATH=`readlink -e ${HDL_DSP_DEVEL_PATH}`
         export DSP_HDL_SL_PATH="${HDL_DSP_DEVEL_PATH}/wrappers/simulink"
         echo "Found DSP Simulink bindings at ${DSP_HDL_SL_PATH}"
     else
