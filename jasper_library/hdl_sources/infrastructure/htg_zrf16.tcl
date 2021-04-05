@@ -123,6 +123,7 @@ set bCheckIPsPassed 1
 set bCheckIPs 1
 if { $bCheckIPs == 1 } {
    set list_check_ips "\ 
+peralex.com:user:axi_slave_wishbone_classic_master:1.0\
 xilinx.com:ip:proc_sys_reset:5.0\
 xilinx.com:ip:zynq_ultra_ps_e:3.3\
 "
@@ -208,6 +209,15 @@ proc create_root_design { parentCell } {
 
 
   # Create ports
+  set ACK_I [ create_bd_port -dir I ACK_I ]
+  set ADR_O [ create_bd_port -dir O -from 31 -to 0 ADR_O ]
+  set CYC_O [ create_bd_port -dir O CYC_O ]
+  set DAT_I [ create_bd_port -dir I -from 31 -to 0 DAT_I ]
+  set DAT_O [ create_bd_port -dir O -from 31 -to 0 DAT_O ]
+  set RST_O [ create_bd_port -dir O RST_O ]
+  set SEL_O [ create_bd_port -dir O -from 3 -to 0 SEL_O ]
+  set STB_O [ create_bd_port -dir O STB_O ]
+  set WE_O [ create_bd_port -dir O WE_O ]
   set axil_clk [ create_bd_port -dir O -type clk axil_clk ]
   set_property -dict [ list \
    CONFIG.ASSOCIATED_BUSIF {M_AXI:M_AXI_RFDC} \
@@ -217,6 +227,15 @@ proc create_root_design { parentCell } {
 
   # Create instance: axi_interconnect_0, and set properties
   set axi_interconnect_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_interconnect_0 ]
+  set_property -dict [ list \
+   CONFIG.NUM_MI {3} \
+ ] $axi_interconnect_0
+
+  # Create instance: axi_slave_wishbone_c_0, and set properties
+  set axi_slave_wishbone_c_0 [ create_bd_cell -type ip -vlnv peralex.com:user:axi_slave_wishbone_classic_master:1.0 axi_slave_wishbone_c_0 ]
+  set_property -dict [ list \
+   CONFIG.C_S_AXI_ADDR_WIDTH {32} \
+ ] $axi_slave_wishbone_c_0
 
   # Create instance: rst_ps8_0_99M, and set properties
   set rst_ps8_0_99M [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 rst_ps8_0_99M ]
@@ -1743,16 +1762,27 @@ proc create_root_design { parentCell } {
   connect_bd_intf_net -intf_net S00_AXI_1 [get_bd_intf_pins axi_interconnect_0/S00_AXI] [get_bd_intf_pins zynq_ultra_ps_e_0/M_AXI_HPM0_FPD]
   connect_bd_intf_net -intf_net axi_interconnect_0_M00_AXI [get_bd_intf_ports M_AXI] [get_bd_intf_pins axi_interconnect_0/M00_AXI]
   connect_bd_intf_net -intf_net axi_interconnect_0_M01_AXI [get_bd_intf_ports M_AXI_RFDC] [get_bd_intf_pins axi_interconnect_0/M01_AXI]
+  connect_bd_intf_net -intf_net axi_interconnect_0_M02_AXI [get_bd_intf_pins axi_interconnect_0/M02_AXI] [get_bd_intf_pins axi_slave_wishbone_c_0/S_AXI]
 
   # Create port connections
-  connect_bd_net -net rst_ps8_0_99M_peripheral_aresetn [get_bd_ports axil_rst_n] [get_bd_pins axi_interconnect_0/ARESETN] [get_bd_pins axi_interconnect_0/M00_ARESETN] [get_bd_pins axi_interconnect_0/M01_ARESETN] [get_bd_pins axi_interconnect_0/S00_ARESETN] [get_bd_pins rst_ps8_0_99M/peripheral_aresetn]
+  connect_bd_net -net ACK_I_0_1 [get_bd_ports ACK_I] [get_bd_pins axi_slave_wishbone_c_0/ACK_I]
+  connect_bd_net -net DAT_I_0_1 [get_bd_ports DAT_I] [get_bd_pins axi_slave_wishbone_c_0/DAT_I]
+  connect_bd_net -net axi_slave_wishbone_c_0_ADR_O [get_bd_ports ADR_O] [get_bd_pins axi_slave_wishbone_c_0/ADR_O]
+  connect_bd_net -net axi_slave_wishbone_c_0_CYC_O [get_bd_ports CYC_O] [get_bd_pins axi_slave_wishbone_c_0/CYC_O]
+  connect_bd_net -net axi_slave_wishbone_c_0_DAT_O [get_bd_ports DAT_O] [get_bd_pins axi_slave_wishbone_c_0/DAT_O]
+  connect_bd_net -net axi_slave_wishbone_c_0_RST_O [get_bd_ports RST_O] [get_bd_pins axi_slave_wishbone_c_0/RST_O]
+  connect_bd_net -net axi_slave_wishbone_c_0_SEL_O [get_bd_ports SEL_O] [get_bd_pins axi_slave_wishbone_c_0/SEL_O]
+  connect_bd_net -net axi_slave_wishbone_c_0_STB_O [get_bd_ports STB_O] [get_bd_pins axi_slave_wishbone_c_0/STB_O]
+  connect_bd_net -net axi_slave_wishbone_c_0_WE_O [get_bd_ports WE_O] [get_bd_pins axi_slave_wishbone_c_0/WE_O]
+  connect_bd_net -net rst_ps8_0_99M_peripheral_aresetn [get_bd_ports axil_rst_n] [get_bd_pins axi_interconnect_0/ARESETN] [get_bd_pins axi_interconnect_0/M00_ARESETN] [get_bd_pins axi_interconnect_0/M01_ARESETN] [get_bd_pins axi_interconnect_0/M02_ARESETN] [get_bd_pins axi_interconnect_0/S00_ARESETN] [get_bd_pins axi_slave_wishbone_c_0/S_AXI_ARESETN] [get_bd_pins rst_ps8_0_99M/peripheral_aresetn]
   connect_bd_net -net rst_ps8_0_99M_peripheral_reset [get_bd_ports axil_rst] [get_bd_pins rst_ps8_0_99M/peripheral_reset]
-  connect_bd_net -net zynq_ultra_ps_e_0_pl_clk0 [get_bd_ports axil_clk] [get_bd_pins axi_interconnect_0/ACLK] [get_bd_pins axi_interconnect_0/M00_ACLK] [get_bd_pins axi_interconnect_0/M01_ACLK] [get_bd_pins axi_interconnect_0/S00_ACLK] [get_bd_pins rst_ps8_0_99M/slowest_sync_clk] [get_bd_pins zynq_ultra_ps_e_0/maxihpm0_fpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/pl_clk0]
+  connect_bd_net -net zynq_ultra_ps_e_0_pl_clk0 [get_bd_ports axil_clk] [get_bd_pins axi_interconnect_0/ACLK] [get_bd_pins axi_interconnect_0/M00_ACLK] [get_bd_pins axi_interconnect_0/M01_ACLK] [get_bd_pins axi_interconnect_0/M02_ACLK] [get_bd_pins axi_interconnect_0/S00_ACLK] [get_bd_pins axi_slave_wishbone_c_0/S_AXI_ACLK] [get_bd_pins rst_ps8_0_99M/slowest_sync_clk] [get_bd_pins zynq_ultra_ps_e_0/maxihpm0_fpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/pl_clk0]
   connect_bd_net -net zynq_ultra_ps_e_0_pl_resetn0 [get_bd_pins rst_ps8_0_99M/ext_reset_in] [get_bd_pins zynq_ultra_ps_e_0/pl_resetn0]
 
   # Create address segments
   assign_bd_address -offset 0xA0000000 -range 0x00100000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs M_AXI_RFDC/Reg] -force
   assign_bd_address -offset 0xA1000000 -range 0x00400000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs M_AXI/Reg] -force
+  assign_bd_address -offset 0xA0100000 -range 0x00100000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs axi_slave_wishbone_c_0/S_AXI/reg0] -force
 
 
   # Restore current instance

@@ -1,9 +1,11 @@
 from .yellow_block import YellowBlock
 from clk_factors import clk_factors
 from constraints import ClockConstraint, ClockGroupConstraint, PortConstraint, RawConstraint
+from os import environ as env
 
 
 class htg_zrf16(YellowBlock):
+    enable_wishbone = True
     def __init__(self, blk, platform, hdl_root=None):
         YellowBlock.__init__(self, blk, platform, hdl_root=hdl_root)
         if self.hw_sys.endswith('xczu29dr'):
@@ -13,8 +15,16 @@ class htg_zrf16(YellowBlock):
             platform.fpga = "xczu49dr-ffvf1760-2-e"
 
     def initialize(self):
+        if self.enable_wishbone:
+            self.ips = [{'path':'%s/axi_wb_bridge/ip_repo' % env['HDL_ROOT'],
+                 'name':'axi_slave_wishbone_classic_master',
+                 'vendor':'peralex.com',
+                 'library':'user',
+                 'version':'1.0',
+                }]
         self.add_source('infrastructure/htg_zrf16_infrastructure.v')
         self.add_source('utils/cdc_synchroniser.vhd')
+        self.add_source('wbs_arbiter')
 
         self.provides.append(self.clk_src)
         self.provides.append(self.clk_src+'90')
@@ -73,6 +83,21 @@ class htg_zrf16(YellowBlock):
         inst.add_port('M_AXI_RFDC_wready', 'M_AXI_RFDC_wready')
         inst.add_port('M_AXI_RFDC_wstrb', 'M_AXI_RFDC_wstrb', width=4)
         inst.add_port('M_AXI_RFDC_wvalid', 'M_AXI_RFDC_wvalid')
+        if self.enable_wishbone:
+            # Wishbone ports
+            inst.add_port('CYC_O', 'wbm_cyc_o')
+            inst.add_port('STB_O', 'wbm_stb_o')
+            inst.add_port('WE_O ', 'wbm_we_o ')
+            inst.add_port('SEL_O', 'wbm_sel_o', width=4)
+            inst.add_port('ADR_O', 'wbm_adr_o', width=32)
+            inst.add_port('DAT_O', 'wbm_dat_o', width=32)
+            inst.add_port('DAT_I', 'wbm_dat_i', width=32)
+            inst.add_port('ACK_I', 'wbm_ack_i')
+            inst.add_port('RST_O', 'wbm_rst_o')
+            top.add_signal('wb_clk_i')
+            top.add_signal('wb_rst_i')
+            top.assign_signal('wb_clk_i', 'axil_clk')
+            top.assign_signal('wb_rst_i', 'axil_rst')
 
         inst_infr = top.get_instance('htg_zrf16_infrastructure', 'htg_zrf16_infr_inst')
         if self.clk_src == "arb_clk":
