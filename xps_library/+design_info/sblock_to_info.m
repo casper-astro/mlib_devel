@@ -18,8 +18,9 @@ function infoblocks = sblock_to_info(block)
             error('Block %s: parameter is empty?', block);
         end
         if isempty(strtrim(value)) == 1,
-            error('Block %s: parameter %s has an empty value?', ...
+            warning('Block %s: parameter %s has an empty value? Defaulting to ""', ...
                 block, strtrim(value));
+            value='""';
         end
         if isnumeric(value),
             value = num2str(value);

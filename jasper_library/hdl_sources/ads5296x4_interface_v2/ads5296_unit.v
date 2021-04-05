@@ -30,7 +30,7 @@ module ads5296_unit (
    *
    * 1 word every 5 cycles.
    * latency of data input to FIFO is :
-   * 4 clock dinRRRR <= din
+   * 4 clock dinRRRR <= din // But we are only using 2 cycles
    * 5 clock through shift reg
    * 1 clock shregR <= shreg
    */
@@ -57,15 +57,15 @@ module ads5296_unit (
     din_riseRR <= din_riseR;
     din_fallRR <= din_fallR;
     
-        din_riseRRR <= din_riseRR;
+    din_riseRRR <= din_riseRR;
     din_fallRRR <= din_fallRR;
-        din_riseRRRR <= din_riseRRR;
+    din_riseRRRR <= din_riseRRR;
     din_fallRRRR <= din_fallRRR;
-    
+    //TODO Is this latency right? Seems to work in hardware
     shreg0 <= {din_fallRR[0], din_riseRR[0], shreg0[9:2]};
     shreg1 <= {din_fallRR[1], din_riseRR[1], shreg1[9:2]};
-          shreg0R <= shreg0;
-      shreg1R <= shreg1;
+    shreg0R <= shreg0;
+    shreg1R <= shreg1;
     
     /*
     // Increment bit index by 1, unless bitslip is strobed, in which case increment by 2
@@ -99,7 +99,7 @@ module ads5296_unit (
     shreg1RR <= shreg1R;
   end
   
-  wire [15:0] fifo_dout;
+  (* mark_debug = "true" *) wire [15:0] fifo_dout;
   assign dout = fifo_dout[9:0];
   assign sync_out = fifo_dout[15];
   (* mark_debug = "true" *) wire fifo_full;
@@ -114,7 +114,10 @@ module ads5296_unit (
     .rd_clk(clk_out),              // input wire rd_clk
     //.din({1'b1, 5'b0, fifo_din1, 1'b0, 5'b0, fifo_din0}), // input wire [31 : 0] din
     // Big endian -- write first sample out into MSBs
-    .din({1'b0, 5'b0, shreg0RR, 1'b1, 5'b0, shreg1RR}), // input wire [31 : 0] din
+    // ???? Hardware testing suggests the order of samples is lane 1 before lane0.
+    // ???? This is NOT what the data sheet says!
+    //.din({1'b0, 5'b0, shreg0RR, 1'b1, 5'b0, shreg1RR}), // input wire [31 : 0] din
+    .din({1'b1, 5'b0, shreg1RR, 1'b0, 5'b0, shreg0RR}), // input wire [31 : 0] din
     .wr_en(wr_en),    // input wire wr_en
     .rd_en(rd_en),              // input wire rd_en
     .dout(fifo_dout),           // output wire [15 : 0] dout

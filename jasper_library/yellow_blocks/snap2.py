@@ -44,12 +44,11 @@ class snap2(YellowBlock):
 
     def gen_children(self):
         children = [YellowBlock.make_block({'tag':'xps:sys_block', 'board_id':'13', 'rev_maj':'1', 'rev_min':'0', 'rev_rcs':'32'}, self.platform)]
+        children += [YellowBlock.make_block({'tag':'xps:sysmon'}, self.platform)]
         if self.use_microblaze:
             children.append(YellowBlock.make_block({'tag':'xps:microblaze'}, self.platform))
         else:
             children.append(YellowBlock.make_block({'tag':'xps:spi_wb_bridge'}, self.platform))
-            # XADC is embedded in the microblaze core, so don't include another one unless we're not microblazin'
-            #children.append(YellowBlock.make_block({'tag':'xps:xadc'}, self.platform))
         return children
 
     def gen_constraints(self):
