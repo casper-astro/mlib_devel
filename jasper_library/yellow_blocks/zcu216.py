@@ -42,11 +42,16 @@ class zcu216_bd(zcu216):
         top.assign_signal('axil_rst', 'peripheral_reset')
         top.assign_signal('axil_rst_n', 'peripheral_aresetn')
 
-        clkparams = clk_factors(100, self.platform.user_clk_rate)
+        # TODO: my current thinking is that the ADCs are not starting up because the clock configuration is incorrect. The LMK should be
+        # have valid output ferquency but perhaps the core is detecting an incompatible input maxis clock?
+        #clkparams = clk_factors(100, self.platform.user_clk_rate)
+        target_freq = 125
+        T_clk = 8 #1/125*1000
+        clkparams = clk_factors(125, 250) # pl_clk from LMK in test environment is 125 MHz, targeting 250 MHz as the required axis data clock from the rfdc
 
         # TODO: clk infrastructure change to accomodate the high-density global clock package pin inputs has worked -- need to decide what to do
         inst_infr = top.get_instance('zcu216_clk_infrastructure', 'zcu216_infr_inst')
-        inst_infr.add_parameter('PERIOD', '10.0')
+        inst_infr.add_parameter('PERIOD', "{:0.3f}".format(T_clk))
         inst_infr.add_parameter('MULTIPLY', clkparams[0])
         inst_infr.add_parameter('DIVIDE',   clkparams[1])
         inst_infr.add_parameter('DIVCLK',   clkparams[2])
@@ -120,15 +125,19 @@ class zcu216_bd(zcu216):
 
     def gen_tcl_cmds(self):
         tcl_cmds = {}
-        tcl_cmds['pre_synth'] = []
+        tcl_cmds['init'] = []
+        # source tcl script building out the base board design
+        tcl_cmds['init'] += ['source {}'.format(self.hdl_root + '/infrastructure/zcu216_base.tcl')]
         """
         Add a block design to project with wrapper via its exported tcl script.
-        1. Source the tcl script.
-        2. Generate the block design via generate_target.
-        3. Have vivado make an HDL wrapper around the block design.
-        4. Add the wrapper HDL file to project.
+          - Validate and save board design against all edits children yb made
+          - Generate output products for all IP in block design
+          - Have vivado make an HDL wrapper around the block design.
+          - Add the wrapper HDL file to project.
         """
-        tcl_cmds['pre_synth'] += ['source {}'.format(self.hdl_root + '/infrastructure/zcu216_base.tcl')]
+        tcl_cmds['pre_synth'] = []
+        tcl_cmds['pre_synth'] += ['validate_bd_design']
+        tcl_cmds['pre_synth'] += ['save_bd_design']
         tcl_cmds['pre_synth'] += ['generate_target all [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/zcu216_base/zcu216_base.bd]']
         tcl_cmds['pre_synth'] += ['make_wrapper -files [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/zcu216_base/zcu216_base.bd] -top']
         tcl_cmds['pre_synth'] += ['add_files -norecurse [get_property directory [current_project]]/myproj.srcs/sources_1/bd/zcu216_base/hdl/zcu216_base_wrapper.vhd']

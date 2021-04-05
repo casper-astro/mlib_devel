@@ -1433,12 +1433,13 @@ class VivadoBackend(ToolflowBackend):
             self.logger.error('Trying to compile a %s FPGA using %s %s' % (
                 plat.manufacturer, self.manufacturer, self.name))
 
-        self.add_tcl_cmd('puts "Starting tcl script"')
+        self.add_tcl_cmd('puts "Starting tcl script"', stage='init')
         # Create Vivado Project in project mode only
         if plat.project_mode:
             self.add_tcl_cmd('create_project -f %s %s/%s -part %s' % (
                 self.project_name, self.compile_dir, self.project_name,
-                plat.fpga))
+                plat.fpga),
+                stage='init')
         # Create the part in non-project mode (project runs in memory only)
         else:
             self.add_tcl_cmd('file mkdir %s/%s' % (self.compile_dir,
