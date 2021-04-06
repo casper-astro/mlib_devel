@@ -6,7 +6,6 @@ from six import iteritems
 import re
 
 class rfdc(YellowBlock):
-
   # maps tile and adc attributes to vivado parameters
   tile_attr_map = {
     # removed the enable object to be handled higher the class abstraction as this indexing [224-227] is incosistent with [0-3]
@@ -51,8 +50,8 @@ class rfdc(YellowBlock):
       'Off'      : 3
     }
 
-    # dec_mode_value_map = lambda d: d[0] # could use `callable()` to provide more capability to prepare arguments if needed for both values
-    # and vivado parameter formatting
+    # dec_mode_value_map = lambda d: d[0] # could use `callable()` to provide more capability to prepare
+    # arguments if needed for both values and vivado parameter formatting
     dec_mode_value_map = {
       '1x'  : 1,
       '2x'  : 2,
@@ -77,14 +76,14 @@ class rfdc(YellowBlock):
     self.enabled_tiles = []
     self.enabled_adcs  = []
     self.tiles         = []
-    # current support configures all adcs to be the same in each enabled tiles. Later support
+    # current support configures all adcs to be the same in each enabled tiles. Future support
     # would extend each tile to have its own set of adc objects allowing for different cross
     # tile configuration
     self.adcs          = []
 
     self.typecode = TYPECODE_RFDC
 
-    # sources for mts and other
+    # TODO: sources for mts and other
     # self.add_source('')
 
     self.rfdc_conf = self.platform.conf['rfdc']
@@ -185,17 +184,23 @@ class rfdc(YellowBlock):
       self.provides.append('adc_clk{:d}'.format(a))
 
   def modify_top(self, top):
-    # include axi4lite
-    # rfdc axi4lite interface now managed within block design on seperate mpsoc master interface, not exposing it to the casper axi
-    # lite interconnect. The rfdc will be managed more by the xrfdc driver. This interface can be exposed to the casper interconnect
-    # and this has been tested and works before, but it seemed to make little sense to be able to use casperfpga/katcp for raw
-    # register access
+    # Note: rfdc axi4lite managed within block design on seperate mpsoc master interface. This has the downside of not exposing it to the
+    # casper axi lite interconnect that ultimately adds the rfdc memory map to the core info table. In general though, the RFDC is more
+    # managed by the xrfdc c driver than through direct memory map access that seemed to justify this being OK. However, granted there are
+    # somethings that are easier with raw register access than using a c implementation. Specficially when it comes to providing casperfpga
+    # support.
+
+    # Given the above this can be changed and there is a way to again add the RFDC to the CASPER axi4lite memory map Through the established
+    # toolflow. To do this would be implemented in the gen_tcl section by adding a port that we will expect to hook into from the casper
+    # axi4lite interface. However, I am interested in additionally knowing about how core info tab is made and the ability for yellow blocks
+    # to add info directly rather than the what seems to be 'catch all' implementation where the single axi4lite interface observes
+    # everything added to it and then does its thing at the very end.
     #top.add_axi4lite_interface(regname="RFDC", mode='rw', nbytes=4, typecode=self.typecode, axi4lite_mode='raw') #self.unique_name
 
     # instantiate rfdc
     #rfdc_inst = top.get_instance('rfdc', 'rfdc_inst')
 
-    # get reference to rfdc within platform board design
+    # get block design reference from platform info to be able to add rfdc relevant ports
     platform_name = '{:s}'.format(self.platform.conf['name'])
     bd_inst = top.get_instance('{:s}_base'.format(platform_name), '{:s}_inst'.format(platform_name))
 
@@ -217,55 +222,62 @@ class rfdc(YellowBlock):
       bd_inst.add_port('clk_adc{:d}'.format(tidx), 'clk_adc{:d}'.format(tidx), dir='out') #self.fullname+'_clk_adc0'
 
       # wire these ports to supporting infrastructure
-      #top.assign_signal('m{:d}_axis_aresetn'.format(tidx), 'axil_rst_n')
       top.assign_signal('m{:d}_axis_aclk'.format(tidx), 'adc_clk')
 
       # For now tile source information comes from the board platform file configuration, later support could extend this to get
       # information from simulink, but the platform would need to support it (current gen3 xilinx eval boards don't for example)
       if (self.rfdc_conf['tile{:d}'.format(tidx+224)]['adc_clk_src'] == tidx):
       #if (self.tilestidx].clk_src == tidx):
-        bd_inst.add_port('adc{:d}_clk_p'.format(tidx), 'adc{:d}_clk_p'.format(tidx), dir='in', parent_port=True) #self.fullname+
-        bd_inst.add_port('adc{:d}_clk_n'.format(tidx), 'adc{:d}_clk_n'.format(tidx), dir='in', parent_port=True) #self.fullname+
+        bd_inst.add_port('adc{:d}_clk_p'.format(tidx), 'adc{:d}_clk_p'.format(tidx), dir='in', parent_port=True)
+        bd_inst.add_port('adc{:d}_clk_n'.format(tidx), 'adc{:d}_clk_n'.format(tidx), dir='in', parent_port=True)
 
       for aidx in self.enabled_adcs:
         # vin ports
-        bd_inst.add_port('vin{:d}{:d}_p'.format(tidx, aidx), 'vin{:d}{:d}_p'.format(tidx, aidx),  dir='in', parent_port=True)   #self.fullname+
-        bd_inst.add_port('vin{:d}{:d}_n'.format(tidx, aidx), 'vin{:d}{:d}_n'.format(tidx, aidx),  dir='in', parent_port=True)   #self.fullname+
+        bd_inst.add_port('vin{:d}{:d}_p'.format(tidx, aidx), 'vin{:d}{:d}_p'.format(tidx, aidx),  dir='in', parent_port=True)
+        bd_inst.add_port('vin{:d}{:d}_n'.format(tidx, aidx), 'vin{:d}{:d}_n'.format(tidx, aidx),  dir='in', parent_port=True)
         # maxis data ports
         data_width = 16*self.adcs[aidx].sample_per_cycle
-        bd_inst.add_port('m{:d}{:d}_axis_tdata'.format(tidx, aidx), '{:s}_m{:d}{:d}_axis_tdata'.format(self.fullname, tidx, aidx), width=data_width) #self.fullname+'_m00_axis_tdata'
-        bd_inst.add_port('m{:d}{:d}_axis_tready'.format(tidx, aidx), "1'b1",) #'m00_axis_tready')  #self.fullname+'_m00_axis_tready'
-        bd_inst.add_port('m{:d}{:d}_axis_tvalid'.format(tidx, aidx), 'm{:d}{:d}_axis_tvalid'.format(tidx, aidx)) #self.fullname+'_m00_axis_tvalid'
+        bd_inst.add_port('m{:d}{:d}_axis_tdata'.format(tidx, aidx), '{:s}_m{:d}{:d}_axis_tdata'.format(self.fullname, tidx, aidx), width=data_width)
+        bd_inst.add_port('m{:d}{:d}_axis_tready'.format(tidx, aidx), "1'b1",)
+        # TODO: currently not exposed in simulink rfdc yellow block, can be extended
+        bd_inst.add_port('m{:d}{:d}_axis_tvalid'.format(tidx, aidx), 'm{:d}{:d}_axis_tvalid'.format(tidx, aidx))
 
 
   def gen_constraints(self):
-    # So the idea seems to be that we do not need to add any constraints... Per PG269 and some experience using the core the constraints are
-    # auto included and determined as part of the output products for the IP core. The only pins that I have constrained in a user design
-    # are the pl_clk and pl_sysref and these should be provided by the infrastructure...
+    # The idea is that we do not need to add any sample clock, adc input pin constraints. Per PG269 (and some experience using the core) the
+    # constraints are auto included and determined by the rfdc IP as part of the output products for the IP core. The only pins that I have
+    # constrained in a user design are the pl_clk and pl_sysref and these should be provided by the infrastructure.
     #
-    # will not include for now and come back and verify... although I do know that including them won't hurt anything
-    #
+    # Adding the constraints however won't hurt and would be more explicit, will not include, but may come back to include for transparency
     #cons.append(PortConstraint('vin00_p', 'vin00_p'))
     #cons.append(PortConstraint('vin00_n', 'vin00_n'))
 
-    # TODO: needed with MTS
+    # TODO: will be needed with MTS
     #cons.append(PortConstraint('pl_sysref_p', 'pl_sysref_p'))
     cons = []
 
     return cons
+
 
   def gen_tcl_cmds(self):
     tcl_cmds = {}
     tcl_cmds['init'] = []
 
     tcl_cmds['pre_synth'] = []
-    #tcl_cmds['pre_synth'] += ['create_ip -name usp_rf_data_converter -vendor xilinx.com -library ip -version * -module_name rfdc']
-    # RFDC defaults with tile 224 and ADC 0 enabled -- disable everything as a starting point
+
+    # get a reference to the rfdc in the block design, currently assume that only one rfdc is in the design (decent assumption)
+    tcl_cmds['pre_synth'] = ['set rfdc [get_bd_cells -filter { NAME =~ *usp_rf_data_converter*}]']
+
+    # rfdc block design instance  defaults with tile 224 and ADC 0 enabled -- disable everything as a starting point
+    # TODO: how necessary is this, what may be causing some of my observed funny behavior may be casued by tile 0 being disabled. From PG269
+    # and some testing disabling the cores does not have the expected behaviour as disabling the tile is not synonymous with "tile powerdown
+    # per the UG" instead, power down is implemented as part of the software driver.
     tcl_cmds['pre_synth'] += ['set_property -dict [list \\']
     tcl_cmds['pre_synth'] += ['CONFIG.ADC224_En {false} \\']
     tcl_cmds['pre_synth'] += ['CONFIG.ADC_Slice00_Enable {false} \\']
-    tcl_cmds['pre_synth'] += ['] [get_bd_cells usp_rf_data_converter_0]']
-    # begin to apply casper user configuration
+    tcl_cmds['pre_synth'] += ['] [get_bd_cells $rfdc]']
+
+    # begin to apply user configuration
     tcl_cmds['pre_synth'] += ['set_property -dict [list \\']
 
     # enable/disable tiles
@@ -283,14 +295,7 @@ class rfdc(YellowBlock):
         a = self.adcs[aidx]
         tcl_cmds['pre_synth'] += self.build_config_cmd(a, self.adc_attr_map, tidx, aidx)
 
-    tcl_cmds['pre_synth'] += ['] [get_bd_cells usp_rf_data_converter_0]'] # TODO need dynamic board design ip name?
-
-    # run board automation to create board design input vin/adc clk pins named as expected
-    #bd_auto_str = 'apply_bd_automation -rule xilinx.com:bd_rule:rf_converter_usp -config {'
-    #for tidx in self.enabled_tiles:
-    #  bd_auto_str+= 'ADC{:d}_AXIS_SOURCE "Custom" '.format(tidx)
-    #bd_auto_str+= '} [get_bd_cells usp_rf_data_converter_0]'
-    #tcl_cmds['pre_synth'].append(bd_auto_str)
+    tcl_cmds['pre_synth'] += ['] [get_bd_cells $rfdc]']
 
     # create board interface ports for axis data/clk/reset pins and adc tile output clock for each enabled tile
     for tidx in self.enabled_tiles:
@@ -301,6 +306,7 @@ class rfdc(YellowBlock):
         # create port for input sample clock
         tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('adc{:d}_clk_n'.format(tidx), port_dir='in', port_type='clk', clk_freq_hz=t.ref_clk*1e6))
         tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('adc{:d}_clk_p'.format(tidx), port_dir='in', port_type='clk', clk_freq_hz=t.ref_clk*1e6))
+
       # create board design output ports for the enabled tile clocks
       tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('clk_adc{:d}'.format(tidx), port_dir='out', port_type='clk'))
       # create port for m_axis_aclk for each tile enabled
@@ -317,7 +323,7 @@ class rfdc(YellowBlock):
         tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('vin{:d}{:d}_n'.format(tidx, aidx), port_dir='in'))
         tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('vin{:d}{:d}_p'.format(tidx, aidx), port_dir='in'))
 
-      # TODO: if mts enabled need a bd port for that!
+      # TODO: implement mts
       # if self.enable_mts:
       # TODO: also add ports for anything needed for PL capture synchronizer
 
@@ -326,11 +332,6 @@ class rfdc(YellowBlock):
 
     tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('sysref_in_p', port_dir='in'))
     tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('sysref_in_n', port_dir='in'))
-
-    # generate output products
-    # if we do a block design we don't need to generate output products here, that is done by the zcu216 platform when everythign is added
-    #tcl_cmds['pre_synth'] += ['generate_target all [get_bd_cells usp_rf_data_converter_0]']
-    #tcl_cmds['pre_synth'] += ['update_compile_order -fileset sources_1']
 
     return tcl_cmds
 
@@ -355,15 +356,15 @@ class rfdc(YellowBlock):
       opt_str = opt_str + ' -from {:d} -to {:d}'.format(width-1, 0)
 
     s = ('create_bd_port {:s} {:s}\n'
-         'connect_bd_net [get_bd_pins /usp_rf_data_converter_0/{:s}] [get_bd_ports {:s}]').format(opt_str, name, name, name)
+         'connect_bd_net [get_bd_pins $rfdc/{:s}] [get_bd_ports {:s}]').format(opt_str, name, name, name)
 
     return s
 
 
   def build_config_cmd(self, cls_object, attr_map, *tile_slice_fmt):
     """
-    cls_object : object containing attributes to target vivado parameter
-    attr_map : dictionary mapping the `cls_object` attributes to their vivado equivalent
+    cls_object     : object containing attributes to target vivado parameter
+    attr_map       : dictionary mapping the `cls_object` attributes to their vivado equivalent
     tile_slice_fmt : variable input targeting the tile and slice formatter fields of the vivado parameter
     """
     vivado_cmd = 'CONFIG.{:s} {{{}}} \\'
@@ -379,14 +380,11 @@ class rfdc(YellowBlock):
           v = vmap[getattr(cls_object, attr)]
         else:
           v = getattr(cls_object, attr)
-        # lower() to force boolean to become lowercase, a NOP for numeric values, would
-        # cause problem for vivado params that are neither bool or numeric
-        # I had thought the .lower() at the end was correct, but I just realized that It is accidently applied in the wrong
-        # place and the entire command is being converted to lowecase. Which I don't think that is what we want. So for now
-        # added another check until sampling is working OK
+        # lower() to force boolean converted to string to become lowercase - probably a better way to get that done...
         if type(v) == bool:
           v = str(v).lower()
-        cmds.append(vivado_cmd.format(full_param, fmt).format(v))#.lower())
+        cmds.append(vivado_cmd.format(full_param, fmt).format(v))
 
     return cmds
+
 
