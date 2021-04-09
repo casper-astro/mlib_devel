@@ -7,6 +7,8 @@ class zcu216(YellowBlock):
         self.add_source('infrastructure/zcu216_clk_infrastructure.sv')
         self.add_source('utils/cdc_synchroniser.vhd')
 
+        self.blkdesign = '{:s}_base'.format(self.platform.conf['name'])
+
         # TODO: need new provides and figure the extent to provide these, because as the documentation says
         # if these lines aren't here the the toolflow breaks.
         self.provides.append(self.clk_src)
@@ -21,15 +23,13 @@ class zcu216(YellowBlock):
 
         # for the rfsocs it seems appropriate to use the requires/provides for `sysref` and `pl_sysref` for MTS?
         self.provides.append('pl_sysref') # zcu216 infrastructure provides so rfdc can require
-        self.provides.append('clk_adc0')  # rfdc IP provides on the output
 
     def modify_top(self, top):
         top.assign_signal('axil_clk', 'pl_clk0')
         top.assign_signal('axil_rst', 'peripheral_reset')
         top.assign_signal('axil_rst_n', 'peripheral_aresetn')
 
-        # TODO: my current thinking is that the ADCs are not starting up because the clock configuration is incorrect. The LMK should be
-        # have valid output ferquency but perhaps the core is detecting an incompatible input maxis clock?
+        # TODO: intelligently pass in clock
         #clkparams = clk_factors(100, self.platform.user_clk_rate)
         target_freq = 125
         T_clk = 8 #1/125*1000
@@ -52,7 +52,7 @@ class zcu216(YellowBlock):
 
         # instance block design containing mpsoc, and axi protocol converter for casper mermory map (HPM0), axi gpio for software clk104
         # config (HPM1), and RFDC Xilinx IP (HPM1) that the rfdc yellow block will update based on user configuration
-        bd_inst = top.get_instance('zcu216_base', 'zcu216_inst')
+        bd_inst = top.get_instance(self.blkdesign, '{:s}_inst'.format(self.blkdesign))
 
         bd_inst.add_port('m_axi_awaddr',  'M_AXI_awaddr', width=40)
         bd_inst.add_port('m_axi_awprot',  'M_AXI_awprot', width=3)

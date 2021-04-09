@@ -201,8 +201,8 @@ class rfdc(YellowBlock):
     #rfdc_inst = top.get_instance('rfdc', 'rfdc_inst')
 
     # get block design reference from platform info to be able to add rfdc relevant ports
-    platform_name = '{:s}'.format(self.platform.conf['name'])
-    bd_inst = top.get_instance('{:s}_base'.format(platform_name), '{:s}_inst'.format(platform_name))
+    blkdesign = '{:s}_base'.format(self.platform.conf['name'])
+    bd_inst = top.get_instance(blkdesign, '{:s}_inst'.format(blkdesign))
 
     bd_inst.add_port('irq', 'rfdc_irq') #self.fullname+'_irq'
 
