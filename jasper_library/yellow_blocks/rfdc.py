@@ -1,3 +1,4 @@
+
 from .yellow_block import YellowBlock
 from .yellow_block_typecodes import TYPECODE_RFDC
 from constraints import PortConstraint, ClockConstraint, RawConstraint
@@ -144,6 +145,15 @@ class rfdc(YellowBlock):
       else:
         t.clk_dist = 0 # distribute: off
 
+      # validate platform user clk against expected core axi stream clk
+      print("platform clk rate={:.3f}, rfdc clk={:.3f}".format(self.platform.user_clk_rate, t.axi_stream_clk))
+      if (t.axi_stream_clk != self.platform.user_clk_rate):
+        s = '\n\n'
+        s += 'ERROR: expected rfdc core axi stream clock rate {:.3f} MHz does not match platform selected clock\n'
+        s += 'rate of {:.3f} MHz.\n'
+        s = s.format(t.axi_stream_clk, self.platform.user_clk_rate)
+        self.throw_error(s)
+
       self.tiles.append(t)
 
     # simulink mask asks for sample rate in Msps (liked it better) convert here to units of Gsps to hand to
@@ -170,7 +180,7 @@ class rfdc(YellowBlock):
 
     # validate tile clocking distribution
     if (False in [(t.clk_src in self.enabled_tiles) for t in self.tiles]):
-      s = ''
+      s = '\n\n'
       s+="ERROR: clocking distribution is inconsistent\n"
       s+=("expected source tiles: " + (4*"{:3d} ").format(*[t.clk_src+224 for t in self.tiles]) + '\n')
       s+=("enabled tiles: " + (len(self.enabled_tiles)*"{:3d} ").format(*[t+224 for t in self.enabled_tiles]) + '\n')

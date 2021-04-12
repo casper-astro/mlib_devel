@@ -31,15 +31,13 @@ class zcu111(YellowBlock):
         top.assign_signal('axil_rst', 'peripheral_reset')
         top.assign_signal('axil_rst_n', 'peripheral_aresetn')
 
-        # TODO: intelligently pass in clock
-        #clkparams = clk_factors(100, self.platform.user_clk_rate)
-        target_freq = 125
-        T_clk = 8 #1/125*1000
-        clkparams = clk_factors(125, 250) # pl_clk from LMK in test environment is 125 MHz, targeting 250 MHz as the required axis data clock from the rfdc
+        # generate clock parameters to use pl_clk to drive as the user IP clock
+        pl_clk_mhz = self.blk['pl_clk_rate']
+        T_pl_clk_ns = 1.0/pl_clk_mhz*1000
+        clkparams = clk_factors(pl_clk_mhz, self.platform.user_clk_rate)
 
-        # TODO: clk infrastructure change to accomodate the high-density global clock package pin inputs has worked -- need to decide what to do
         inst_infr = top.get_instance('zcu216_clk_infrastructure', 'zcu216_clk_infr_inst')
-        inst_infr.add_parameter('PERIOD', "{:0.3f}".format(T_clk))
+        inst_infr.add_parameter('PERIOD', "{:0.3f}".format(T_pl_clk_ns))
         inst_infr.add_parameter('MULTIPLY', clkparams[0])
         inst_infr.add_parameter('DIVIDE',   clkparams[1])
         inst_infr.add_parameter('DIVCLK',   clkparams[2])
