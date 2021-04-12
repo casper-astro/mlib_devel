@@ -1,9 +1,9 @@
-name: zcu111
+name: zcu208
 manufacturer: Xilinx
-fpga: xczu28dr-ffvg1517-2-e
+fpga: xczu48dr-fsvg1517-2-e-es1
 family: zynq-ultrascaleplus-rfsoc
-config_voltage: 1.8 # not used?
-cfgbvs: GND         # not used?
+config_voltage: 1.8 # TODO: not used?
+cfgbvs: GND         # TODO: not used?
 backend_target: vivado
 mmbus_architecture: AXI4-Lite
 mmbus_base_address: 0xA0000000
@@ -20,52 +20,52 @@ rfdc:
   #
   # For gen1 and gen2 devices the `adc_clk_src` is the same as the tile index
   tile224:
-    has_adc_clk: True
-    adc_clk_src: 0
+    has_adc_clk: False
+    adc_clk_src: 2
   tile225:
     has_adc_clk: True
-    adc_clk_src: 1
+    adc_clk_src: 2
   tile226:
     has_adc_clk: True
     adc_clk_src: 2
   tile227:
-    has_adc_clk: True
-    adc_clk_src: 3
+    has_adc_clk: False
+    adc_clk_src: 2
 
 onehundredgbe:
-  # TODO: determine freq cmac should have been determined already
+  # TODO: what do we program the clock to
   refclk_freq_str: "156.25"
   # TODO test this out, or is it X0Y1?
   cmac_loc:
     - CMACE4_X0Y0
-
+    
 provides:
-  - sys_clk
-  - axil_clk # keep this? come from pl_clk? or use clk100?
-  - sfp4x25  # TODO: this isn't right
+  - adc_clk
+  - axil_clk # TODO: keep this?
+  - sfp4x25  # TODO this isn't the right name
   - sysref_in
 
 pins:
   clk_100_p:
     iostd: LVDS
-    loc: AM15
+    loc: G12
   clk_100_n:
     iostd: LVDS
-    loc: AN15
+    loc: G11
   clk_125_p:
     iostd: LVDS
-    loc: AL17
+    loc: A13
   clk_125_n:
     iostd: LVDS
-    loc: AM17
+    loc: A12
 
 # NOTE: most of the IO constraints and clocking constraints are taken care of by
 # the RFDC IP itself. Vivado has that baked into the output products of teh IP
 # core. The only necessary pins below are the fabirc clocking related to
 # multi-tile sync Adding additional pins and constraints would not hurt anything
 # but provide more transparent less 'hand-wavy'
-
 # RFDC clocking
+
   # `SYSREF_P/N_228` on bank 228
   # constraints determined by rfdc ip, iostandard and loc not set by user
   sysref_p:
@@ -73,71 +73,94 @@ pins:
   sysref_n:
     loc: U4
 
-  # SYSREF_FPGA_C_N/P on bank 64
+  # `CLK104_PL_SYSREF_P/N` on HD bank 87, VCCO is 1.8 but LVDS_25 still
+  # supported, see UG571 SelectIO Resources table 3-2 and DS926 tables 23, 24,
+  # and 2
   pl_sysref_p:
-    iostd: LVDS
-    loc: AK17
+    iostd: LVDS_25
+    loc: B10
   pl_sysref_n:
-    iostd: LVDS
-    loc: AK16
+    iostd: LVDS_25
+    loc: B9
 
-  #`FPGA_REFCLK_OUT_C_N/P` on bank 64   
+  # `CLK104_PL_CLK_P/N` on HD bank 87
   pl_clk_p:
-    iostd: LVDS
-    loc: AL16
+    iostd: LVDS_25
+    loc: B8
   pl_clk_n:
-    iostd: LVDS
-    loc: AL15
+    iostd: LVDS_25
+    loc: B7
+
+  # Do not instantiate clock buffer inputs in the user design, part of the RF-ADC [PG269 v2.4 pg.153]
+  adc_clk_224_p:
+    loc: AF5
+  adc_clk_224_n:
+    loc: AF4
+
+  # naming changes between quad- and dual-tile adcs
+  # quad tile vinXZ
+  # dual tile vinX_ZZ
+  # X-tile location, Z refers to adc location in the tile (0-3), ZZ-is either 01
+  # for lower ADC or 23 for upper
+  vin0_01_p:
+    loc: AP2
+  vin_01_n:
+    loc: AP1
 
 # 100 GbE
-  # TODO: go over this clocking info because is it the user mgt si570
-  # in on bank 129? (pins V31, V32 _P/N)
-  # Because looking at it again I think it should be SI5382 on bank 128?
-  # (pins AA33/AA34 _P/N)
-  # Or had I originally looked at the clock on 129 to clock across multiple banks?
- 
-  # Programmable MGT SI5382 chip GTY bank 128
+  # IDT 8A34001 output Q7, refclk1 GTY bank 129
   mgt_ref_clk_p:
     loc:
-      - AA33
+      - V31
   mgt_ref_clk_n:
     loc:
-      - AA34
-  # SFP connected to MGT bank 128
-  qsfp_mgt_tx_p: 
+      - V32
+  qsfp_mgt_tx_p:
     loc:
+      # bank 128 SFP[0:1]
       - Y35
       - V35
-      - T35
-      - R33
+      # bank 129 SFP[2:3]
+      - P35
+      - N33
   qsfp_mgt_tx_n:
     loc:
+      # bank 128
       - Y36
       - V36
-      - T36
-      - R34
+      # bank 129
+      - P36
+      - N34
   qsfp_mgt_rx_p:
     loc:
+      # bank 128
       - AA38
       - W38
-      - U38
-      - R38
+      # bank 129
+      - N38
+      - M36
   qsfp_mgt_rx_n:
     loc:
+      # bank 128
       - AA39
       - W39
-      - U39
-      - R39
+      # bank 129
+      - N39
+      - M37
 
+  # TODO: what do we do here? These pins are strapped?
+  #qsfp_modprs:
+
+# zcu208 has access 8 sets of 3 green single color LEDs (24 total)
   led:
-    iostd: LVCMOS18
+    iostd: LVCMOS12
     loc:
-       - AR13
-       - AP13
-       - AR16
-       - AP16
-       - AP15
-       - AN16
-       - AN17
-       - AV15
+      - AR19
+      - AT17
+      - AR17
+      - AU19
+      - AU20
+      - AW21
+      - AV21
+      - AV17
 

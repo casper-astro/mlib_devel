@@ -2,8 +2,7 @@ from .yellow_block import YellowBlock
 from clk_factors import clk_factors
 from constraints import ClockConstraint, ClockGroupConstraint, PortConstraint, RawConstraint
 
-
-class zcu111(YellowBlock):
+class zcu208(YellowBlock):
     def initialize(self):
         # TODO need any clocking infrastrucutre block - most likely can repurpose zcu216 but for htg clock pins
         self.add_source('infrastructure/zcu216_clk_infrastructure.sv')
@@ -76,9 +75,13 @@ class zcu111(YellowBlock):
         bd_inst.add_port('m_axi_rvalid',  'M_AXI_rvalid')
         bd_inst.add_port('m_axi_rready',  'M_AXI_rready')
 
+        bd_inst.add_port('clk104_spi_mux_sel', 'clk104_spi_mux_sel', width=2, dir='out', parent_port=True)
+
         bd_inst.add_port('pl_clk0', 'pl_clk0')
         bd_inst.add_port('peripheral_reset', 'peripheral_reset')
         bd_inst.add_port('peripheral_aresetn', 'peripheral_aresetn')
+
+        bd_inst.add_port('mux_led', 'mux_led', width=2, dir='out', parent_port=True)
 
 
     def gen_children(self):
@@ -91,10 +94,13 @@ class zcu111(YellowBlock):
     def gen_constraints(self):
         cons = []
         cons.append(PortConstraint('pl_clk_p', 'pl_clk_p'))
-        cons.append(RawConstraint('set_property DIFF_TERM_ADV TERM_100 [get_ports {pl_clk_p}]'))
         # TODO: will need to add pl_sysref constraint under MTS
-        # TODO: will need to set DIFF_TERM_ADV for pl_sysref under MTS
-        cons.append(RawConstraint('set_property -dict { PACKAGE_PIN AV15 IOSTANDARD LVCMOS18 } [get_ports { mmcm_locked }]'))
+        cons.append(RawConstraint('set_property -dict { PACKAGE_PIN C10  IOSTANDARD LVCMOS12 } [get_ports { clk104_spi_mux_sel[0] }]'))
+        cons.append(RawConstraint('set_property -dict { PACKAGE_PIN B12  IOSTANDARD LVCMOS12 } [get_ports { clk104_spi_mux_sel[1] }]'))
+        cons.append(RawConstraint('set_property -dict { PACKAGE_PIN AV20 IOSTANDARD LVCMOS12 } [get_ports { mmcm_locked }]'))
+
+        cons.append(RawConstraint('set_property -dict { PACKAGE_PIN AV21 IOSTANDARD LVCMOS12 } [get_ports { mux_led[0] }]'))
+        cons.append(RawConstraint('set_property -dict { PACKAGE_PIN AV17 IOSTANDARD LVCMOS12 } [get_ports { mux_led[1] }]'))
 
         # TODO: can extend to provide other onboard clocks
         #cons.append(PortConstraint('clk_100_p', 'clk_100_p'))
