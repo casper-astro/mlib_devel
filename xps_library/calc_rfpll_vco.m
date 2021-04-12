@@ -14,6 +14,7 @@ function [M, VCO] = calc_rfpll_vco(gen, sample_rate_mhz)
     vco_max = 13112.0;
   else
     vco_max = 13200.0;
+  end
 
   M = [];
   VCO = [];

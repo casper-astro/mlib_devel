@@ -6,7 +6,7 @@ function [] = update_axis_clk_label(gcb)
     prefix = 'QT';
     QuadTile = 1;
   elseif strcmp(tile_arch, 'dual')
-    adc_silces = 0:1;
+    adc_slices = 0:1;
     prefix = 'DT';
     QuadTile = 0;
   end

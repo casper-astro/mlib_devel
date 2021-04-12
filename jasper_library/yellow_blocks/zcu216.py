@@ -93,6 +93,7 @@ class zcu216(YellowBlock):
     def gen_constraints(self):
         cons = []
         cons.append(PortConstraint('pl_clk_p', 'pl_clk_p'))
+        # TODO: will need to add pl_sysref constraint under MTS
         cons.append(RawConstraint('set_property -dict { PACKAGE_PIN G10 IOSTANDARD LVCMOS18 } [get_ports { clk104_spi_mux_sel[0] }]'))
         cons.append(RawConstraint('set_property -dict { PACKAGE_PIN H11 IOSTANDARD LVCMOS18 } [get_ports { clk104_spi_mux_sel[1] }]'))
         cons.append(RawConstraint('set_property -dict { PACKAGE_PIN B26 IOSTANDARD LVCMOS12 } [get_ports { mmcm_locked }]'))
@@ -113,7 +114,7 @@ class zcu216(YellowBlock):
         tcl_cmds['init'] = []
         # source tcl script building out the base block design that other yellow blocks (e.g., rfdc can access and
         # update based on user configuration
-        tcl_cmds['init'] += ['source {}'.format(self.hdl_root + '/infrastructure/zcu216_base.tcl')]
+        tcl_cmds['init'] += ['source {:s}/infrastructure/{:s}.tcl'.format(self.hdl_root, self.blkdesign)]
         """
         Add a block design to project with wrapper via its exported tcl script.
           - Validate and save board design against all edits children yb made
@@ -124,9 +125,9 @@ class zcu216(YellowBlock):
         tcl_cmds['pre_synth'] = []
         tcl_cmds['pre_synth'] += ['validate_bd_design']
         tcl_cmds['pre_synth'] += ['save_bd_design']
-        tcl_cmds['pre_synth'] += ['generate_target all [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/zcu216_base/zcu216_base.bd]']
-        tcl_cmds['pre_synth'] += ['make_wrapper -files [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/zcu216_base/zcu216_base.bd] -top']
-        tcl_cmds['pre_synth'] += ['add_files -norecurse [get_property directory [current_project]]/myproj.srcs/sources_1/bd/zcu216_base/hdl/zcu216_base_wrapper.vhd']
+        tcl_cmds['pre_synth'] += ['generate_target all [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/{:s}/{:s}.bd]'.format(self.blkdesign, self.blkdesign)]
+        tcl_cmds['pre_synth'] += ['make_wrapper -files [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/{:s}/{:s}.bd] -top'.format(self.blkdesign, self.blkdesign)]
+        tcl_cmds['pre_synth'] += ['add_files -norecurse [get_property directory [current_project]]/myproj.srcs/sources_1/bd/{:s}/hdl/{:s}_wrapper.vhd'.format(self.blkdesign, self.blkdesign)]
         tcl_cmds['pre_synth'] += ['update_compile_order -fileset sources_1']
 
         tcl_cmds['post_synth'] = []

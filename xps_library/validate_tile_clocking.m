@@ -5,7 +5,7 @@ function [axis_clks_valid] = validate_tile_clocking(gcb)
     adc_slices = 0:3;
     prefix = 'QT';
   elseif strcmp(tile_arch, 'dual')
-    adc_silces = 0:1;
+    adc_slices = 0:1;
     prefix = 'DT';
   end
 

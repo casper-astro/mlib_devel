@@ -53,7 +53,7 @@ class zrf16(YellowBlock):
 
         # instance block design containing mpsoc, and axi protocol converter for casper mermory map (HPM0), axi gpio for software clk104
         # config (HPM1), and RFDC Xilinx IP (HPM1) that the rfdc yellow block will update based on user configuration
-        bd_inst = top.get_instance(self.blk_design, self.blkdesign + '_inst')
+        bd_inst = top.get_instance(self.blkdesign, '{:s}_inst'.format(self.blkdesign))
 
         bd_inst.add_port('m_axi_awaddr',  'M_AXI_awaddr', width=40)
         bd_inst.add_port('m_axi_awprot',  'M_AXI_awprot', width=3)
@@ -90,6 +90,7 @@ class zrf16(YellowBlock):
     def gen_constraints(self):
         cons = []
         cons.append(PortConstraint('pl_clk_p', 'pl_clk_p'))
+        # TODO: will need to add pl_sysref constraint under MTS
         cons.append(RawConstraint('set_property -dict { PACKAGE_PIN AR12 IOSTANDARD LVCMOS18 } [get_ports { mmcm_locked }]'))
 
         # TODO: can extend to provide other onboard clocks
@@ -118,7 +119,7 @@ class zrf16(YellowBlock):
         tcl_cmds['pre_synth'] += ['save_bd_design']
         tcl_cmds['pre_synth'] += ['generate_target all [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/{:s}/{:s}.bd]'.format(self.blkdesign, self.blkdesign)]
         tcl_cmds['pre_synth'] += ['make_wrapper -files [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/{:s}/{:s}.bd] -top'.format(self.blkdesign, self.blkdesign)]
-        tcl_cmds['pre_synth'] += ['add_files -norecurse [get_property directory [current_project]]/myproj.srcs/sources_1/bd/zrf16_49dr_base/hdl/{:s}_wrapper.vhd'.format(self.blkdesign)]
+        tcl_cmds['pre_synth'] += ['add_files -norecurse [get_property directory [current_project]]/myproj.srcs/sources_1/bd/{:s}/hdl/{:s}_wrapper.vhd'.format(self.blkdesign, self.blkdesign)]
         tcl_cmds['pre_synth'] += ['update_compile_order -fileset sources_1']
 
         tcl_cmds['post_synth'] = []

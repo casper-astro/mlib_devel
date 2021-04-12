@@ -33,15 +33,15 @@ rfdc:
     adc_clk_src: 2
 
 onehundredgbe:
-  # does the freq matter much?
   # TODO: what do we program the clock to
   refclk_freq_str: "156.25"
   cmac_loc:
-    - CMACE4_X0Y1
+  # TODO: test this out, or is it X0Y0
+    - CMACE4_X0Y0
     
 provides:
   - adc_clk
-  - axil_clk # TODO: keep this? come from pl_clk on mpsoc? Or use clk100?
+  - axil_clk # TODO: keep this?
   - sfp4x25  # TODO this isn't the right name
   - sysref_in
 
@@ -99,6 +99,9 @@ pins:
 
   # naming changes between quad- and dual-tile adcs
   # quad tile vinXZ
+  # dual tile vinX_ZZ
+  # X-tile location, Z refers to adc location in the tile (0-3), ZZ-is either 01
+  # for lower ADC or 23 for upper
   vin00_p:
     loc: AU5
   vin00_n:
@@ -114,34 +117,34 @@ pins:
       - T35
   qsfp_mgt_tx_p:
     loc:
-      # bank 129 SFP[0:1]
+      # bank 128 SFP[0:1]
       - V38
       - U36
-      # bank 128 SFP[2:3]
+      # bank 129 SFP[2:3]
       - P38
       - N36
   qsfp_mgt_tx_n:
     loc:
-      # bank 129
+      # bank 128
       - V39
       - U37
-      # bank 128
+      # bank 129
       - P39
       - N37
   qsfp_mgt_rx_p:
     loc:
-      # bank 129
+      # bank 128
       - AC41
       - AB39
-      # bank 128
+      # bank 129
       - W41
       - U41
   qsfp_mgt_rx_n:
     loc:
-      # bank 129
+      # bank 128
       - AC42
       - AB40
-      # bank 128
+      # bank 129
       - W42
       - U42
 
