@@ -153,12 +153,23 @@ for n = 1:length(xps_blks)
     end
 end 
 
+% Add The IP which sysgen is about to build. We could do this through
+% a child IP YellowBlock of the xsg yellow block, but simulink knows
+% where the IP is going to get created. YellowBlocks don't
+% (aren't supposed to?) know what the sysgen compile directory was.
+fprintf(fid, '  sysgen_ip:\n');
+fprintf(fid, '    %s: %s\n', 'name', 'sysgen_ip')
+fprintf(fid, '    %s: %s\n', 'fullpath', [this_sys, '/sysgen_ip'])
+fprintf(fid, '    %s: %s\n', 'tag', 'xps:ip')
+fprintf(fid, '    %s: %s\n', 'lib_path', [compile_dir, '/sysgen'])
+fprintf(fid, '    %s: %s\n', 'ip_name', this_sys)
+
 % Write the names of all ports
 % Maybe in future also include data types, but these are not trivially available
 % from the gateway out block parameters, which inherit type.
 
 fprintf(fid, '\nuser_modules:\n');
-fprintf(fid, '  %s:\n', bdroot);
+fprintf(fid, '  %s:\n', [bdroot, '_ip']);
 % explicitly add clock and clock enable ports, and give their names so that
 % the rest of the toolflow handles them properly.
 if xlver > 14.7
@@ -199,16 +210,11 @@ end
 % Expand relative paths for easy location of the files later.
 % Vivado puts the compiled vhd netlist in a different place than earlier
 % sysgen versions, so accommodate for that here.
-fprintf(fid, '    sources:\n'); 
 xlver = str2double(xilinx.environment.getversion('sysgen'));
 if xlver > 14.7
-    fprintf(fid, sprintf('      - %s\n', [compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/imports/sysgen']));
-    fprintf(fid, sprintf('      - %s\n', [compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/ip/*.coe']));
-    fprintf(fid, sprintf('      - %s\n', [compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/ip/*/*.xci']));
-    fprintf(fid, sprintf('      - %s\n', [compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/imports/sysgen/*.mem']));
+    fprintf(fid, '    sources: []'); % Include SysGen compile as IP, via xsg YellowBlock
 else
-    fprintf(fid, sprintf('      - %s\n', [compile_dir '/sysgen/' bdroot '.vhd']));
-    fprintf(fid, sprintf('      - %s\n', [compile_dir '/sysgen/*.ngc']));
+    error('Non-Vivado compiles are not supported!')
 end
 
 fprintf('Closing output file: %s\n', output_fname);
