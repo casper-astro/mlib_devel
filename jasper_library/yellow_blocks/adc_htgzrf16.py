@@ -7,6 +7,7 @@ import re
 class adc_htgzrf16(YellowBlock):
     def initialize(self):
         self.provides = ['adc_clk', 'adc_clk90', 'adc_clk180', 'adc_clk270']
+        self.add_source('rfdc/rfdc_2048.xci')
         pass
 
     def make_ip_tcl(self):
@@ -15,12 +16,12 @@ class adc_htgzrf16(YellowBlock):
             'ADC1_PLL_Enable': 'true',
             'ADC2_PLL_Enable': 'true',
             'ADC3_PLL_Enable': 'true',
-            'ADC0_Refclk_Freq': '250.000',
-            'ADC1_Refclk_Freq': '250.000',
-            'ADC2_Refclk_Freq': '250.000',
-            'ADC3_Refclk_Freq': '250.000',
+            'ADC0_Refclk_Freq': '256.000',
+            'ADC1_Refclk_Freq': '256.000',
+            'ADC2_Refclk_Freq': '256.000',
+            'ADC3_Refclk_Freq': '256.000',
             'mADC_PLL_Enable': 'true',
-            'mADC_Refclk_Freq': '250.000',
+            'mADC_Refclk_Freq': '256.000',
 
             'Converter_Setup': '0',
             'ADC224_En': 'true',
@@ -28,8 +29,8 @@ class adc_htgzrf16(YellowBlock):
             'ADC226_En': 'true',
             'ADC227_En': 'true',
             'ADC0_Enable': '1',
-            'ADC0_Outclk_Freq': '250.000',
-            'ADC0_Fabric_Freq': '250.000',
+            'ADC0_Outclk_Freq': '256.000',
+            'ADC0_Fabric_Freq': '256.000',
             'ADC_Slice00_Enable': 'true',
             'ADC_Dither00': 'false',
             'ADC_Decimation_Mode00': '1',
@@ -58,8 +59,8 @@ class adc_htgzrf16(YellowBlock):
             'ADC_RESERVED_1_03': '0',
             'ADC_OBS03': '0',
             'ADC1_Enable': '1',
-            'ADC1_Outclk_Freq': '250.000',
-            'ADC1_Fabric_Freq': '250.000',
+            'ADC1_Outclk_Freq': '256.000',
+            'ADC1_Fabric_Freq': '256.000',
             'ADC_Slice10_Enable': 'true',
             'ADC_Dither10': 'false',
             'ADC_Decimation_Mode10': '1',
@@ -88,8 +89,8 @@ class adc_htgzrf16(YellowBlock):
             'ADC_RESERVED_1_13': '0',
             'ADC_OBS13': '0',
             'ADC2_Enable': '1',
-            'ADC2_Outclk_Freq': '250.000',
-            'ADC2_Fabric_Freq': '250.000',
+            'ADC2_Outclk_Freq': '256.000',
+            'ADC2_Fabric_Freq': '256.000',
             'ADC_Slice20_Enable': 'true',
             'ADC_Dither20': 'false',
             'ADC_Decimation_Mode20': '1',
@@ -118,8 +119,8 @@ class adc_htgzrf16(YellowBlock):
             'ADC_RESERVED_1_23': '0',
             'ADC_OBS23': '0',
             'ADC3_Enable': '1',
-            'ADC3_Outclk_Freq': '250.000',
-            'ADC3_Fabric_Freq': '250.000',
+            'ADC3_Outclk_Freq': '256.000',
+            'ADC3_Fabric_Freq': '256.000',
             'ADC_Slice30_Enable': 'true',
             'ADC_Dither30': 'false',
             'ADC_Decimation_Mode30': '1',
@@ -148,8 +149,8 @@ class adc_htgzrf16(YellowBlock):
             'ADC_RESERVED_1_33': '0',
             'ADC_OBS33': '0',
             'mADC_Enable': '1',
-            'mADC_Outclk_Freq': '250.000',
-            'mADC_Fabric_Freq': '250.000',
+            'mADC_Outclk_Freq': '256.000',
+            'mADC_Fabric_Freq': '256.000',
             'mADC_Slice00_Enable': 'true',
             'mADC_Dither00': 'false',
             'mADC_Decimation_Mode00': '1',
@@ -218,7 +219,12 @@ class adc_htgzrf16(YellowBlock):
         return commands
 
     def gen_tcl_cmds(self):
-        return {'pre_synth': self.make_ip_tcl()}
+        #return {}
+        # For some reason the first synth call errors with an "unsupported sample clock" check.
+        # This check is wrong, and calling the synth command again seems to work.
+        # So, put a synth call of the RFDC core prior to main synth and catch the error with -quiet
+        return {'pre_synth': ['generate_target all [get_files rfdc_2048.xci] -quiet']}
+        #return {'pre_synth': self.make_ip_tcl()}
 
 
     def modify_top(self,top):
@@ -228,7 +234,7 @@ class adc_htgzrf16(YellowBlock):
         top.add_signal('adc_clk270')
         top.assign_signal('adc_clk', 'adc0_clk')
         # instantiate rf data converter ip and add relevant ports
-        adc_inst = top.get_instance(entity='rfdc', name='rfdc_inst')
+        adc_inst = top.get_instance(entity='rfdc_2048', name='rfdc_inst')
 
         for t in range(4):
             # Ports to simulink
