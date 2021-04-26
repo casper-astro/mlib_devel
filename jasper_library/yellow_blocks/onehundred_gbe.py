@@ -8,7 +8,7 @@ from memory import Register
 class onehundred_gbe(YellowBlock):
     @staticmethod
     def factory(blk, plat, hdl_root=None):
-        if plat.name in ['vcu118', 'vcu128'] or plat.conf.get('family', None) in ["ultrascaleplus"]:
+        if plat.name in ['vcu118', 'vcu128'] or plat.conf.get('family', None) in ["ultrascaleplus", "rfsoc"]:
             return onehundredgbe_usplus(blk, plat, hdl_root)
         else:
             raise RuntimeError("Don't know how to implement 100GbE for this board/FPGA")
