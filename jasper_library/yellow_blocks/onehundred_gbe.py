@@ -88,7 +88,7 @@ class onehundredgbe_usplus(onehundred_gbe):
         self.add_source(kdir + '/macphy/macaxissender.vhd')
         self.add_source(kdir + '/macphy/macaxisdecoupler.vhd')
         self.add_source(kdir + '/macphy/macaxisreceiver.vhd')
-        self.add_source(kdir + '/macphy/gmacqsfptop.vhd')
+        self.add_source(kdir + '/macphy/gmacqsfptop2.vhd')
         self.add_source(kdir + '/ringbuffer/cpudualportpacketringbuffer.vhd')
         self.add_source(kdir + '/ringbuffer/packetringbuffer.vhd')
         self.add_source(kdir + '/ringbuffer/dualportpacketringbuffer.vhd')
