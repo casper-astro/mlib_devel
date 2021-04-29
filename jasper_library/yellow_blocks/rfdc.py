@@ -26,7 +26,9 @@ class rfdc(YellowBlock):
     'dec_mode'        : {'param' : 'ADC_Decimation_Mode{:d}{:d}', 'fmt' : "{{:d}}"},
     'sample_per_cycle': {'param' : 'ADC_Data_Width{:d}{:d}',      'fmt' : "{{:d}}"},
     'mixer_type'      : {'param' : 'ADC_Mixer_Type{:d}{:d}',      'fmt' : "{{:d}}"},
-    'mixer_mode'      : {'param' : 'ADC_Mixer_Mode{:d}{:d}',      'fmt' : "{{:d}}"}
+    'mixer_mode'      : {'param' : 'ADC_Mixer_Mode{:d}{:d}',      'fmt' : "{{:d}}"}#,
+#    'nco_freq'        : {'param' : 'ADC_NCO_Freq{:d}{:d}',        'fmt' : "{{:.3f}}"},
+#    'nyquist_zone'    : {'param' : 'ADC_Nyquist{:d}{:d}',         'fmt' : "{{:d}}"}
   }
 
   """
@@ -174,6 +176,9 @@ class rfdc(YellowBlock):
         attr_key = adc_mask_fmt.format(self.tile_arch, aidx, adc_attr)
         if attr_key in self.blk:
           setattr(a, adc_attr, self.blk[attr_key])
+
+      #a.nco_freq = 0.5
+      #a.nyquist_zone = 1
       self.adcs.append(a)
 
     self.enable_mts = self.blk['enable_mts']
@@ -199,6 +204,14 @@ class rfdc(YellowBlock):
       self.provides.append('adc_clk{:d}'.format(a))
 
   def modify_top(self, top):
+    # instantiate rfdc
+    #rfdc_inst = top.get_instance('rfdc', 'rfdc_inst')
+
+    # get block design reference from platform info to be able to add rfdc relevant ports
+    blkdesign = '{:s}_base'.format(self.platform.conf['name'])
+    bd_inst = top.get_instance(blkdesign, '{:s}_inst'.format(blkdesign))
+
+    top.add_axi4lite_interface(regname="RFDC", mode='rw', nbytes=0x40000, typecode=self.typecode, axi4lite_mode='raw') #self.unique_name
     # Note: rfdc axi4lite managed within block design on seperate mpsoc master interface. This has the downside of not exposing it to the
     # casper axi lite interconnect that ultimately adds the rfdc memory map to the core info table. In general though, the RFDC is more
     # managed by the xrfdc c driver than through direct memory map access that seemed to justify this being OK. However, granted there are
@@ -210,14 +223,24 @@ class rfdc(YellowBlock):
     # axi4lite interface. However, I am interested in additionally knowing about how core info tab is made and the ability for yellow blocks
     # to add info directly rather than the what seems to be 'catch all' implementation where the single axi4lite interface observes
     # everything added to it and then does its thing at the very end.
-    #top.add_axi4lite_interface(regname="RFDC", mode='rw', nbytes=4, typecode=self.typecode, axi4lite_mode='raw') #self.unique_name
 
-    # instantiate rfdc
-    #rfdc_inst = top.get_instance('rfdc', 'rfdc_inst')
-
-    # get block design reference from platform info to be able to add rfdc relevant ports
-    blkdesign = '{:s}_base'.format(self.platform.conf['name'])
-    bd_inst = top.get_instance(blkdesign, '{:s}_inst'.format(blkdesign))
+    bd_inst.add_port('RFDC_awaddr',  'm_axi4lite_RFDC_awaddr', width=32)
+    bd_inst.add_port('RFDC_awvalid', 'm_axi4lite_RFDC_awvalid')
+    bd_inst.add_port('RFDC_awready', 'm_axi4lite_RFDC_awready')
+    bd_inst.add_port('RFDC_wdata',   'm_axi4lite_RFDC_wdata', width=32)
+    bd_inst.add_port('RFDC_wstrb',   'm_axi4lite_RFDC_wstrb', width=4)
+    bd_inst.add_port('RFDC_wvalid',  'm_axi4lite_RFDC_wvalid')
+    bd_inst.add_port('RFDC_wready',  'm_axi4lite_RFDC_wready')
+    bd_inst.add_port('RFDC_bresp',   'm_axi4lite_RFDC_bresp', width=2)
+    bd_inst.add_port('RFDC_bvalid',  'm_axi4lite_RFDC_bvalid')
+    bd_inst.add_port('RFDC_bready',  'm_axi4lite_RFDC_bready')
+    bd_inst.add_port('RFDC_araddr',  'm_axi4lite_RFDC_araddr', width=32)
+    bd_inst.add_port('RFDC_arvalid', 'm_axi4lite_RFDC_arvalid')
+    bd_inst.add_port('RFDC_arready', 'm_axi4lite_RFDC_arready')
+    bd_inst.add_port('RFDC_rdata',   'm_axi4lite_RFDC_rdata', width=32)
+    bd_inst.add_port('RFDC_rresp',   'm_axi4lite_RFDC_rresp', width=2)
+    bd_inst.add_port('RFDC_rvalid',  'm_axi4lite_RFDC_rvalid')
+    bd_inst.add_port('RFDC_rready',  'm_axi4lite_RFDC_rready')
 
     bd_inst.add_port('irq', 'rfdc_irq') #self.fullname+'_irq'
 
@@ -225,8 +248,13 @@ class rfdc(YellowBlock):
     bd_inst.add_port('sysref_in_p', 'sysref_in_p', dir='in', parent_port=True) #self.fullname+'_sysref_in_p',
     bd_inst.add_port('sysref_in_n', 'sysref_in_n', dir='in', parent_port=True) #self.fullname+'_sysref_in_n',
 
+    bd_inst.add_port('s_axi_aclk', 'axil_clk')
+    bd_inst.add_port('s_axi_aresetn', 'axil_rst_n')
+
     if self.enable_mts:
       # TODO: add instance of PL capture synchronizer, get port name correct
+      # I think it just dawned on me that in order to to do sysref on something like the zcu216 it will require the DAC 228 tile being
+      # programmed since this is where the SYSREF comes into the fabric (this will most likely be similar for other platforms too...)
       bd_inst.add_port('user_adc_sysref', 'user_adc_sysref', dir='in')
 
     # generate tile/slice interface ports
@@ -313,8 +341,46 @@ class rfdc(YellowBlock):
 
     tcl_cmds['pre_synth'] = []
 
+    # place the rfdc
+    rfdc_bd_name = 'usp_rf_data_converter_0'#rfdc'
+    tcl_cmds['pre_synth'] += ['create_bd_cell -type ip -vlnv xilinx.com:ip:usp_rf_data_converter:2.4 {:s}'.format(rfdc_bd_name)]
+
     # get a reference to the rfdc in the block design, currently assume that only one rfdc is in the design (decent assumption)
-    tcl_cmds['pre_synth'] = ['set rfdc [get_bd_cells -filter { NAME =~ *usp_rf_data_converter*}]']
+    tcl_cmds['pre_synth'] += ['set rfdc [get_bd_cells -filter { NAME =~ *usp_rf_data_converter*}]']
+    #tcl_cmds['pre_synth'] += ['set rfdc [get_bd_cells -filter { NAME == rfdc}]']
+
+    # create bd s axi intf port
+    s_axi_ifport = 'RFDC'
+    tcl_cmds['pre_synth'] += ['create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 {:s}'.format(s_axi_ifport)]
+
+    # configures the interface port, will auto inherit everything from the rfdc connection
+    tcl_cmds['pre_synth'] += ['set_property -dict [list \\']
+    tcl_cmds['pre_synth'] += ['CONFIG.PROTOCOL [get_property CONFIG.PROTOCOL [get_bd_intf_pins $rfdc/s_axi]] \\']
+    tcl_cmds['pre_synth'] += ['CONFIG.ADDR_WIDTH [get_property CONFIG.ADDR_WIDTH [get_bd_intf_pins $rfdc/s_axi]] \\']
+    tcl_cmds['pre_synth'] += ['CONFIG.HAS_BURST [get_property CONFIG.HAS_BURST [get_bd_intf_pins $rfdc/s_axi]] \\']
+    tcl_cmds['pre_synth'] += ['CONFIG.HAS_LOCK [get_property CONFIG.HAS_LOCK [get_bd_intf_pins $rfdc/s_axi]] \\']
+    tcl_cmds['pre_synth'] += ['CONFIG.HAS_PROT [get_property CONFIG.HAS_PROT [get_bd_intf_pins $rfdc/s_axi]] \\']
+    tcl_cmds['pre_synth'] += ['CONFIG.HAS_CACHE [get_property CONFIG.HAS_CACHE [get_bd_intf_pins $rfdc/s_axi]] \\']
+    tcl_cmds['pre_synth'] += ['CONFIG.HAS_QOS [get_property CONFIG.HAS_QOS [get_bd_intf_pins $rfdc/s_axi]] \\']
+    tcl_cmds['pre_synth'] += ['CONFIG.HAS_REGION [get_property CONFIG.HAS_REGION [get_bd_intf_pins $rfdc/s_axi]] \\']
+    tcl_cmds['pre_synth'] += ['CONFIG.SUPPORTS_NARROW_BURST [get_property CONFIG.SUPPORTS_NARROW_BURST [get_bd_intf_pins $rfdc/s_axi]] \\']
+    tcl_cmds['pre_synth'] += ['CONFIG.MAX_BURST_LENGTH [get_property CONFIG.MAX_BURST_LENGTH [get_bd_intf_pins $rfdc/s_axi]] \\']
+    tcl_cmds['pre_synth'] += ['] [get_bd_intf_ports RFDC]']
+
+    # but, we need to override the address width so we can assign an address in the range of the HMP0
+    tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.ADDR_WIDTH {{40}}] [get_bd_intf_ports {:s}]'.format(s_axi_ifport)]
+    # set the stupid clock requirment
+    tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.FREQ_HZ {{99990001}}] [get_bd_intf_ports {:s}]'.format(s_axi_ifport)]
+
+    # connect the rfdc up to the external port
+    tcl_cmds['pre_synth'] += ['connect_bd_intf_net [get_bd_intf_pins $rfdc/s_axi] [get_bd_intf_ports {:s}]'.format(s_axi_ifport)]
+
+    # add bd ports and connect for s axi clk/rst
+    tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s_axi_aclk', port_dir='in', port_type='clk', clk_freq_hz=99990001))
+    tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s_axi_aresetn', port_dir='in', port_type='rst'))
+
+    # probably the better way to assign the address
+    tcl_cmds['pre_synth'] += ['assign_bd_address -offset 0xA0000000 -range 256K [get_bd_addr_segs $rfdc/s_axi/Reg]']
 
     # rfdc block design instance  defaults with tile 224 and ADC 0 enabled -- disable everything as a starting point
     # TODO: how necessary is this, what may be causing some of my observed funny behavior may be casued by tile 0 being disabled. From PG269
