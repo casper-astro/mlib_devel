@@ -1,11 +1,12 @@
 module ads5296x4_interface_demux2 #(
-    parameter G_NUM_UNITS = 4,
-    parameter G_NUM_FCLKS = 4,
-    parameter G_FCLK_MASTER = 0,
-    parameter G_IS_MASTER = 1'b1,
-    parameter G_SNAPSHOT_ADDR_BITS = 9,
-    parameter G_VERSION = 1
+    parameter G_NUM_UNITS = 4,          // Number of ADC chips. Only tested for 4
+    parameter G_NUM_FCLKS = 4,          // Number of FCLKs routed to this interface
+    parameter G_FCLK_MASTER = 0,        // Index of the FCLK vector to use for clock generation
+    parameter G_IS_MASTER = 1'b1,       // If 1, generate output clocks in this core
+    parameter G_SNAPSHOT_ADDR_BITS = 9, // log2 ADC sample snapshot depth
+    parameter G_VERSION = 1             // Interface revision. Used only for runtime readback
  )(
+    // Control signals from Simulink
     input rst,
     input sync,
     // Line clocks
@@ -14,22 +15,26 @@ module ads5296x4_interface_demux2 #(
     // Frame clocks
     input [G_NUM_FCLKS - 1 : 0] fclk_p,
     input [G_NUM_FCLKS - 1 : 0] fclk_n,
-    // If not a master -- use this clock
-    input sclk2_in,
-    input sclk_in,
-    input sclk5_in,
+    // Clocks
+    input sclk2_in, // Sample clock x2 (i.e. interleaved sample clock)
+    input sclk_in,  // Sample clock (per ADC lane)
+    input sclk5_in, // Sample clock x5 (i.e. bit clock)
     // Data inputs
     input [4*2*G_NUM_UNITS - 1:0] din_p,
     input [4*2*G_NUM_UNITS - 1:0] din_n,
     // Deserialized outputs
     output [10*4*G_NUM_UNITS - 1:0] dout,
-    output sclk2_out,
-    output sclk_out,
-    output sclk5_out,
+    // Generate these clocks if G_IS_MASTER=1; otherwise tie to 0
+    output sclk2_out, // Sample clock x2 (i.e. interleaved sample clock)
+    output sclk_out,  // Sample clock (per ADC lane)
+    output sclk5_out, // Sample clock x5 (i.e. bit clock)
     output sync_out,     // To Simulink
     output ext_sync_out, // To ADC pin
     
-    input  fclk_in,
+    // Pre-buffered Frame clock inputs. Software control allows either of 
+    // these to be used to generate sclk*_out if G_IS_MASTER=1
+    input  [1:0] fclk_in,
+    // Frame clock output. Buffered fclk_p/n[G_FCLK_MASTER]
     output fclk_out,
 
     // Software register interface
@@ -220,14 +225,14 @@ module ads5296x4_interface_demux2 #(
       .CLKFBOUT_MULT_F(20.000),
       .CLKOUT0_DIVIDE_F(10.0),
       .CLKOUT1_DIVIDE(5),
-      .CLKOUT0_PHASE(36), // Advance 1 bit time (empirically determined)
-      .CLKOUT1_PHASE(72), // Advance 1
-      .CLKOUT2_PHASE(180), // Advance 1
+      //.CLKOUT0_PHASE(36), // Advance 1 bit time (empirically determined)
+      //.CLKOUT1_PHASE(72), // Advance 1
+      //.CLKOUT2_PHASE(180), // Advance 1
       .CLKOUT2_DIVIDE(2),
       .CLKIN1_PERIOD(10.000)
     ) mmcm_inst (
-      .CLKIN1(fclk_in),   // 2.5 fs
-      .CLKIN2(fclk),
+      .CLKIN1(fclk_in[1]),   // 2.5 fs
+      .CLKIN2(fclk_in[0]),
       .CLKINSEL(mmcm_clksel), // mmcm_clksel=0 => use CLK2
       .RST(mmcm_rst),
       .CLKOUT0(sclk_mmcm),  // fs
