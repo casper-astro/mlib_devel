@@ -80,13 +80,7 @@ class ads5296x4(YellowBlock):
             inst.add_port('lclk_n', '%s_%d_lclk_n' % (self.port_prefix, b), parent_port=True, dir='in')
 
             if b == 0:
-                # If we're clocking from this FMC, then board 0 is the master.
-                # If not, we derive our other clocks from elsewhere (hopefully from
-                # a block configured to provide them!
-                if self.port == self.clockport:
-                    inst.add_parameter("G_IS_MASTER", "1'b1") 
-                else:
-                    inst.add_parameter("G_IS_MASTER", "1'b0") 
+                inst.add_parameter("G_IS_MASTER", "1'b1")
                 # If G_IS_MASTER is 0, these clocks are tied to zero
                 inst.add_port('sclk_out', 'ads5296_%d_sclk' % (self.port))
                 inst.add_port('sclk2_out', 'ads5296_%d_sclk2' % (self.port))
@@ -98,10 +92,9 @@ class ads5296x4(YellowBlock):
                 inst.add_port('fclk_p', '%s_%d_fclk_p' % (self.fullname, b), width=2)
                 inst.add_port('fclk_n', '%s_%d_fclk_n' % (self.fullname, b), width=2)
                 if self.board_count == 2:
-                    inst.add_port('fclk_in', 'adc%d_fclk_1' % self.port)
+                    inst.add_port('fclk_in', '{adc%d_fclk1, adc%d_fclk0}' % (self.clockport, self.clockport))
                 else:
-                    inst.add_port('fclk_in', '1\'b0')
-                inst.add_port('fclk_out', '')
+                    inst.add_port('fclk_in', '{adc%d_fclk0, adc%d_fclk0}' % (self.clockport))
                 top.add_port('%s_%d_fclk0_p' % (self.port_prefix, b), dir='in')
                 top.add_port('%s_%d_fclk0_n' % (self.port_prefix, b), dir='in')
                 top.assign_signal('%s_%d_fclk_p[0]' % (self.fullname, b), '%s_%d_fclk0_p' % (self.port_prefix, b))
@@ -124,8 +117,7 @@ class ads5296x4(YellowBlock):
                 inst.add_port('sclk5_out', '')
                 inst.add_port('fclk_p', '%s_%d_fclk_p' % (self.fullname, b), width=3)
                 inst.add_port('fclk_n', '%s_%d_fclk_n' % (self.fullname, b), width=3)
-                inst.add_port('fclk_out', 'adc%d_fclk_1' % self.port)
-                inst.add_port('fclk_in', '')
+                inst.add_port('fclk_in', '2\'b0')
                 top.add_port('%s_%d_fclk0_p' % (self.port_prefix, b), dir='in')
                 top.add_port('%s_%d_fclk0_n' % (self.port_prefix, b), dir='in')
                 top.assign_signal('%s_%d_fclk_p[0]' % (self.fullname, b), '%s_%d_fclk0_p' % (self.port_prefix, b))
@@ -138,9 +130,10 @@ class ads5296x4(YellowBlock):
                 top.add_port('%s_%d_fclk2_n' % (self.port_prefix, b), dir='in')
                 top.assign_signal('%s_%d_fclk_p[2]' % (self.fullname, b), '%s_%d_fclk2_p' % (self.port_prefix, b))
                 top.assign_signal('%s_%d_fclk_n[2]' % (self.fullname, b), '%s_%d_fclk2_n' % (self.port_prefix, b))
+            inst.add_port('fclk_out', 'adc%d_fclk%d' % (self.port, b))
             inst.add_port('sclk2_in', 'user_clk')
-            inst.add_port('sclk_in', 'ads5296_%d_sclk' % (self.clockport))
-            inst.add_port('sclk5_in', 'ads5296_%d_sclk5' % (self.clockport))
+            inst.add_port('sclk_in', 'ads5296_%d_sclk' % (self.port))
+            inst.add_port('sclk5_in', 'ads5296_%d_sclk5' % (self.port))
             inst.add_port('din_p', '%s_%d_din_p' % (self.port_prefix, b), parent_port=True, width=self.num_units_per_board*self.lanes_per_unit, dir='in')
             inst.add_port('din_n', '%s_%d_din_n' % (self.port_prefix, b), parent_port=True, width=self.num_units_per_board*self.lanes_per_unit, dir='in')
             inst.add_port('dout', '%s_%d_dout' % (self.fullname, b), width=self.adc_resolution*self.num_units_per_board*self.channels_per_unit)
