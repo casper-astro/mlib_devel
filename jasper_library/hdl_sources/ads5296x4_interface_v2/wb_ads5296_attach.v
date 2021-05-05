@@ -29,6 +29,7 @@ module wb_ads5296_attach #(
     input [31:0] fclk2_cnt,
     input [31:0] fclk3_cnt,
     output [4*G_NUM_UNITS - 1 : 0] bitslip,
+    output [2:0] slip_index,
     output snapshot_trigger,
 
     //input user_clk,
@@ -49,6 +50,7 @@ module wb_ads5296_attach #(
   reg [4*2*G_NUM_UNITS + G_NUM_FCLKS + 1 - 1: 0]  delay_en_vtc_reg;
   reg [8 : 0] delay_val_reg;
   reg [4*G_NUM_UNITS - 1 : 0] bitslip_reg;
+  reg [2:0] slip_index_reg;
   reg iserdes_rst_reg;
   reg mmcm_rst_reg;
   reg mmcm_clksel_reg;
@@ -72,6 +74,7 @@ module wb_ads5296_attach #(
   assign iserdes_rst = iserdes_rst_reg;//_cdc;
   assign mmcm_rst = mmcm_rst_reg;//_cdc;
   assign bitslip = bitslip_reg;//_cdc;
+  assign slip_index = slip_index_reg;//_cdc;
   assign mmcm_clksel = mmcm_clksel_reg;
   assign snapshot_trigger = snapshot_trigger_reg;
 
@@ -185,6 +188,9 @@ module wb_ads5296_attach #(
               snapshot_trigger_reg <= wb_dat_i[0];
             end
             // 17 [READ ONLY] version register
+            18 : begin
+              slip_index_reg <= wb_dat_i[2:0];
+            end
             default: begin
             end
           endcase
@@ -251,6 +257,9 @@ module wb_ads5296_attach #(
             end
             17: begin
               wb_data_out_reg <= G_VERSION;
+            end
+            18: begin
+              wb_data_out_reg <= {29'b0, slip_index_reg};
             end
             default: begin
               wb_data_out_reg <= 32'b0;

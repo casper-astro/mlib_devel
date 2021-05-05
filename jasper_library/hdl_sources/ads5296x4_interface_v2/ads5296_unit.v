@@ -5,6 +5,7 @@ module ads5296_unit (
   input [1:0] din_rise,  // 4bit deserialized fclk
   input [1:0] din_fall,   // 4bit deserialized data lane0 for two lanes
   input bitslip,
+  input [2:0] slip_index,
   input rst,
   input wr_en,
   // clk_out domain signals
@@ -52,6 +53,16 @@ module ads5296_unit (
   
   reg [2:0] bit_cnt;
   always @(posedge lclk) begin
+    // Probably want to deassert rst with known phase to the frame clock
+    // else bit slip will come up randomly
+    if (rst) begin
+      bit_cnt <= 3'd0;
+    end else begin
+      // Increment bit index by 1, unless bitslip is strobed, in which case increment by 2
+      if (!bitslip_strobe) begin
+        bit_cnt <= bit_cnt == 3'd4 ? 3'd0 : bit_cnt + 1'b1;
+      end
+    end
     din_riseR <= din_rise;
     din_fallR <= din_fall;
     din_riseRR <= din_riseR;
@@ -64,29 +75,15 @@ module ads5296_unit (
     //TODO Is this latency right? Seems to work in hardware
     shreg0 <= {din_fallRR[0], din_riseRR[0], shreg0[9:2]};
     shreg1 <= {din_fallRR[1], din_riseRR[1], shreg1[9:2]};
-    shreg0R <= shreg0;
-    shreg1R <= shreg1;
+    //shreg0R <= shreg0;
+    //shreg1R <= shreg1;
     
-    /*
-    // Increment bit index by 1, unless bitslip is strobed, in which case increment by 2
-    if (!bitslip_strobe) begin
-      bit_cnt <= bit_cnt == 3'd4 ? 3'd0 : bit_cnt + 1'b1;
-    end else begin
-      if (bit_cnt == 3'd4) begin
-        bit_cnt <= 3'd1;
-      end else if (bit_cnt == 3'd3) begin
-        bit_cnt <= 3'd0;
-      end else begin
-        bit_cnt <= bit_cnt + 2'd2;
-      end
-    end
     // Copy shift register contents only
     // At the end of a word 
-    if (bit_cnt == 3'd0) begin
+    if (bit_cnt == slip_index) begin
       shreg0R <= shreg0;
       shreg1R <= shreg1;
     end
-    */
   end
   
   // Copy the shift register again into the FIFO write clock domain.

@@ -81,6 +81,7 @@ module ads5296x4_interface_demux2 #(
   reg [31:0] fclk3_ctr;
   reg [31:0] lclk_ctr;
   wire [4*G_NUM_UNITS - 1 : 0] bitslip;
+  wire [2:0] slip_index;
   wire snapshot_trigger;
   wire wb_user_clk;
   wb_ads5296_attach #( 
@@ -107,6 +108,7 @@ module ads5296x4_interface_demux2 #(
     .fclk2_cnt(fclk2_ctr),
     .fclk3_cnt(fclk3_ctr),
     .bitslip(bitslip),
+    .slip_index(slip_index),
     .fclk_err_cnt(fclk_err_cnt),
     .delay_load(delay_load),
     .delay_rst(delay_rst),
@@ -404,7 +406,8 @@ module ads5296x4_interface_demux2 #(
     .clk_in(sclk_in),
     .din_rise(din_rise),
     .din_fall(din_fall),
-   // .bitslip(bitslip),
+    .bitslip(bitslip),
+    .slip_index(slip_index),
     .wr_en(fifo_we),
     .rst(fifo_rst),
     .clk_out(sclk2_in),
