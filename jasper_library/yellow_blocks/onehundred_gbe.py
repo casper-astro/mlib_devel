@@ -227,6 +227,7 @@ class onehundredgbe_usplus(onehundred_gbe):
         inst.add_port('gbe_tx_data',          self.fullname+'_tx_data',        width=512)
         inst.add_port('gbe_tx_valid',         self.fullname+'_tx_valid',       width=4)
         inst.add_port('gbe_tx_end_of_frame',  self.fullname+'_tx_end_of_frame')
+        inst.add_port('gbe_tx_byte_enable',   self.fullname+'_tx_byte_enable', width=64)
 
         # Register interfaces
         for reg in self.memory_map:

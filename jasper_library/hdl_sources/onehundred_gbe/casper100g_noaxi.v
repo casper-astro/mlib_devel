@@ -118,6 +118,7 @@ module casper100g_noaxi#(
         input [15:0] gbe_tx_dest_port,
         input [511:0] gbe_tx_data,
         input [3:0] gbe_tx_valid,
+        input [63:0] gbe_tx_byte_enable,
         input gbe_tx_end_of_frame
         
     );
@@ -292,10 +293,8 @@ module casper100g_noaxi#(
         .axis_streaming_data_tx_tvalid(tx_valid_int),
         // TUSER is (I think) a discard flag
         .axis_streaming_data_tx_tuser(32'b0),
-        // Could expose byte enables to user to allow finer payload control.
-        // BUT, need to check what patterns are actually allowed. Eg. valid
-        // bytes must be a contiguous block in the LSBs
-        .axis_streaming_data_tx_tkeep(64'hffffffffffffffff),
+        // Valid bytes must be a contiguous block in the LSBs
+        .axis_streaming_data_tx_tkeep(gbe_tx_byte_enable),
         .axis_streaming_data_tx_tlast(gbe_tx_end_of_frame),
         .axis_streaming_data_tx_tready(gbe_tx_overflow)
     );
