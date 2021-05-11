@@ -22,6 +22,17 @@ function [adc_clkout] = update_adc_clkout(gcb, parent)
   end
 
   adc_clkout_list = compose('%g', adc_clkout);
-  msk.getParameter('clk_out').TypeOptions = adc_clkout_list;
+  % Simulink runs all callbacks sequentially when opening the mask dialog. So
+  % the list of refclks and user selected value would be overwritten when
+  % opening if the TypeOptions are reset each time.
+  % So, only update the PLL if the list of refclk is not up to date. There is
+  % probably a smarter way to organize all the logic to be more efficent.
+  % TODO: this is the same as `update_pll.m`
+  current_clkout_list = msk.getParameter('clk_out').TypeOptions;
+  if ~isempty( setdiff(adc_clkout_list, current_clkout_list) )
+    msk.getParameter('clk_out').TypeOptions = adc_clkout_list;
+    set_param(gcb, 'clk_out', num2str(adc_clkout(1)));
+  end
+
 
 end

@@ -33,9 +33,7 @@ class zcu216(YellowBlock):
         pl_clk_mhz = self.blk['pl_clk_rate']
         T_pl_clk_ns = 1.0/pl_clk_mhz*1000
         clkparams = clk_factors(pl_clk_mhz, self.platform.user_clk_rate)
-        # TODO I think I have this wrong. clkparams[1] should really be the DIVCLK. Especially based on the formula used in clk_factors and
-        # what the vivado DRC failure says vco = freq_mhz*M/divclk and to get my numbers from clk factors to match what vivado requires
-        # needs to swap the parameters
+
         inst_infr = top.get_instance('zcu216_clk_infrastructure', 'zcu216_clk_infr_inst')
         inst_infr.add_parameter('PERIOD', "{:0.3f}".format(T_pl_clk_ns))
         inst_infr.add_parameter('MULTIPLY', clkparams[0])
@@ -136,7 +134,7 @@ class zcu216(YellowBlock):
         tcl_cmds['post_synth'] += ['set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pl_clk_p]']
 
         # export hardware design xsa for software
-        tcl_cmds['post_synth'] += ['write_hw_platform -fixed -force -file [get_property directory [current_project]/top.xsa']
+        tcl_cmds['post_synth'] += ['write_hw_platform -fixed -force -file [get_property directory [current_project]]/top.xsa']
 
         return tcl_cmds
 

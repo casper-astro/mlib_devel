@@ -2,7 +2,7 @@ from .yellow_block import YellowBlock
 from clk_factors import clk_factors
 from constraints import ClockConstraint, ClockGroupConstraint, PortConstraint, RawConstraint
 
-class zcu111(YellowBlock):
+class PYNQ2x2(YellowBlock):
     def initialize(self):
         # TODO need any clocking infrastrucutre block - most likely can repurpose zcu216 but for htg clock pins
         self.add_source('infrastructure/zcu216_clk_infrastructure.sv')
@@ -80,7 +80,7 @@ class zcu111(YellowBlock):
 
     def gen_children(self):
         children = []
-        children.append(YellowBlock.make_block({'tag': 'xps:sys_block', 'board_id': '162', 'rev_maj': '2', 'rev_min': '0', 'rev_rcs': '1'}, self.platform))
+        children.append(YellowBlock.make_block({'tag': 'xps:sys_block', 'board_id': '165', 'rev_maj': '2', 'rev_min': '0', 'rev_rcs': '1'}, self.platform))
 
         return children
 
@@ -91,6 +91,8 @@ class zcu111(YellowBlock):
         cons.append(RawConstraint('set_property DIFF_TERM_ADV TERM_100 [get_ports {pl_clk_p}]'))
         # TODO: will need to add pl_sysref constraint under MTS
         # TODO: will need to set DIFF_TERM_ADV for pl_sysref under MTS
+
+        # TODO: update this constraint pin to a valid LED for the pynq2x2
         cons.append(RawConstraint('set_property -dict { PACKAGE_PIN AV15 IOSTANDARD LVCMOS18 } [get_ports { mmcm_locked }]'))
 
         # TODO: can extend to provide other onboard clocks
@@ -129,7 +131,7 @@ class zcu111(YellowBlock):
         #tcl_cmds['post_synth'] += ['set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pl_clk_p]']
 
         # export hardware design xsa for software
-        tcl_cmds['post_synth'] += ['write_hw_platform -fixed -force -file [get_property directory [current_project]]/top.xsa']
+        tcl_cmds['post_synth'] += ['write_hw_platform -fixed -force -file [get_property directory [current_project]/top.xsa']
 
         return tcl_cmds
 

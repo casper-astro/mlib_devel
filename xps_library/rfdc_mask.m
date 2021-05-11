@@ -1,22 +1,19 @@
 % Known work to do and issues to fix:
 
-% TODO: updating the sample rate does not update the gui correctly (pll refclk,
-% adc clk out). noticed this when extending gui to support DT because I had not
-% added the `get_rfsoc_properties` to `update_adc_clkout` and in testing noticed
-% changes were not being applied to get teh correct lower frequency's used on DT
-% architectures
-
-% TODO: make sure DT spliting data interfaces for complex doesn't mess with the
-% computed data widths from number of samples per cycle
-
 % TODO: the lag in opening the mask is back after triming, drawing, cleaning is
 % added because the initialization is ran every time the mask is re-opened. Need
 % to either optimize base on how the callbacks are structured or implement a
 % sort of state. Explored this with my own struct, but couldn't see how to make
 % it persistent. I see the casper_library `save_state`/`same_state` methods.
-% This might help here?
+% This might help here? May get worse as the sample rate check is now done every
+% time
 
-% TODO: ADCs visibility not correct if mask starts with a check box disabled
+% TODO: make sure DT spliting data interfaces for complex doesn't mess with the
+% computed data widths from number of samples per cycle (already double checked
+% that it is right with regard to QT and since that works I recall that DT
+% should be too).
+
+% TODO: Sanitize and validate NCO freq range for fine mixer mode
 
 % TODO: there is only a specific range of suggested tested frequencies for
 % the fbdiv parameter that is tested within the specification given on

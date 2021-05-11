@@ -48,6 +48,7 @@ function [] = update_pll(gcb)
     % opening if the TypeOptions are reset each time.
     % So, only update the PLL if the list of refclk is not up to date. There is
     % probably a smarter way to organize all the logic to be more efficent.
+    % TODO: this is the same as in `update_adc_clkout.m`
     current_refclk_list = msk.getParameter('ref_clk').TypeOptions;
     if ~isempty( setdiff(current_refclk_list, refclk_list) )
       msk.getParameter('ref_clk').TypeOptions = refclk_list;

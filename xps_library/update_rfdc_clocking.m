@@ -13,16 +13,18 @@ function [] = update_rfdc_clocking(gcb)
   end
 
   % update only when value changes not each time the mask initializes
-  if ~strcmp(fs_mask, fs_value)
-    % compute and update pll settings and `ref_clk` options
-    update_pll(gcb);
+  % TODO: this check didn't work, so this is still running every time... slowing
+  % us down more... need to investigate how to speed things up
+  %if ~strcmp(fs_mask, fs_value)
+  % compute and update pll settings and `ref_clk` options
+  update_pll(gcb);
 
-    % compute rfdc adc_clk# output clock options
-    update_adc_clkout(gcb);
+  % compute rfdc adc_clk# output clock options
+  update_adc_clkout(gcb);
 
-    % compute axis interface (sys_clk) requirements and options
-    update_axis_clk(gcb);
-  end
+  % compute axis interface (sys_clk) requirements and options
+  update_axis_clk(gcb);
+  %end
 
 end
 

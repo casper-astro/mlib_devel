@@ -21,14 +21,16 @@ class rfdc(YellowBlock):
   }
 
   adc_attr_map = {
-    'enable'          : {'param' : 'ADC_Slice{:d}{:d}_Enable',    'fmt' : "{{}}"},
-    'digital_output'  : {'param' : 'ADC_Data_Type{:d}{:d}',       'fmt' : "{{:d}}"},
-    'dec_mode'        : {'param' : 'ADC_Decimation_Mode{:d}{:d}', 'fmt' : "{{:d}}"},
-    'sample_per_cycle': {'param' : 'ADC_Data_Width{:d}{:d}',      'fmt' : "{{:d}}"},
-    'mixer_type'      : {'param' : 'ADC_Mixer_Type{:d}{:d}',      'fmt' : "{{:d}}"},
-    'mixer_mode'      : {'param' : 'ADC_Mixer_Mode{:d}{:d}',      'fmt' : "{{:d}}"}#,
-#    'nco_freq'        : {'param' : 'ADC_NCO_Freq{:d}{:d}',        'fmt' : "{{:.3f}}"},
-#    'nyquist_zone'    : {'param' : 'ADC_Nyquist{:d}{:d}',         'fmt' : "{{:d}}"}
+    'enable'          : {'param' : 'ADC_Slice{:d}{:d}_Enable',     'fmt' : "{{}}"},
+    'digital_output'  : {'param' : 'ADC_Data_Type{:d}{:d}',        'fmt' : "{{:d}}"},
+    'dec_mode'        : {'param' : 'ADC_Decimation_Mode{:d}{:d}',  'fmt' : "{{:d}}"},
+    'sample_per_cycle': {'param' : 'ADC_Data_Width{:d}{:d}',       'fmt' : "{{:d}}"},
+    'mixer_type'      : {'param' : 'ADC_Mixer_Type{:d}{:d}',       'fmt' : "{{:d}}"},
+    'mixer_mode'      : {'param' : 'ADC_Mixer_Mode{:d}{:d}',       'fmt' : "{{:d}}"},
+    'nco_freq'        : {'param' : 'ADC_NCO_Freq{:d}{:d}',         'fmt' : "{{:.3f}}"},
+    'coarse_freq'     : {'param' : 'ADC_Coarse_Mixer_Freq{:d}{:d}','fmt' : "{{:d}}"},
+    'nyquist_zone'    : {'param' : 'ADC_Nyquist{:d}{:d}',          'fmt' : "{{:d}}"},
+    'cal_modde'       : {'param' : 'ADC_CalOpt_Mode{:d}{:d}',      'fmt' : "{{:d}}"}
   }
 
   """
@@ -75,6 +77,11 @@ class rfdc(YellowBlock):
           '24x' : 24,
           '40x' : 40
         }
+
+        self.coarse_freq_value_map = {'Fs/2' : 0, 'Fs/4' : 1, '-Fs/4' : 2, 0 : 3};
+        self.nyquist_zone_value_map = { 'Zone 1' : 0, 'Zone 2' : 1}
+        self.cal_freq_value_map = { 'Mode 1' : 0, 'Mode 2': 1} #, 'AutoCal' : 2}
+
 
 
   def initialize(self):
@@ -177,8 +184,6 @@ class rfdc(YellowBlock):
         if attr_key in self.blk:
           setattr(a, adc_attr, self.blk[attr_key])
 
-      #a.nco_freq = 0.5
-      #a.nyquist_zone = 1
       self.adcs.append(a)
 
     self.enable_mts = self.blk['enable_mts']
