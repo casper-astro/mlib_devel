@@ -70,6 +70,7 @@ class snap2(YellowBlock):
             RawConstraint('set_property BITSTREAM.CONFIG.SPI_32BIT_ADDR Yes [current_design]'),
             #RawConstraint('set_property BITSTREAM.CONFIG.TIMER_CFG 20000000 [current_design]'),
             RawConstraint('set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]'),
+            RawConstraint("set_property BITSTREAM.CONFIG.OVERTEMPSHUTDOWN Enable [current_design]"),
             ]
 
 
