@@ -16,7 +16,8 @@ mmbus_address_alignment: 4
 sources: []
 constraints: []
 onehundredgbe:
-  refclk_freq_str: "161.1328125"
+  refclk_freq_str: "156.25" # Needs configuring by programming PLL
+  include_rs_fec: 1
   # See UG1075; Fig 1-40
   cmac_loc:
     - CMACE4_X0Y0
@@ -38,6 +39,9 @@ pins:
   pl_sysref_n:
     iostd: LVDS
     loc: AK16
+  sync_in:
+    iostd: LVCMOS33
+    loc: D11
   led:
     iostd: LVCMOS33
     loc:
@@ -77,7 +81,7 @@ pins:
   qsfp_mgt_tx_n:
     loc: [K39, H39, J37, G37, F35, C37, E37, A37]
   qsfp_modprsl_ls:
-    iostd: LVCMOS18
+    iostd: LVCMOS33
     loc: [E14, B15]
   qsfp_sda:
     iostd: LVCMOS18
@@ -86,13 +90,13 @@ pins:
     iostd: LVCMOS18
     loc: [None, None]
   qsfp_intl:
-    iostd: LVCMOS18
+    iostd: LVCMOS33
     loc: [F13, E12]
   qsfp_rst_l:
-    iostd: LVCMOS18
+    iostd: LVCMOS33
     loc: [AT10, AP10]
   qsfp_lpmode:
-    iostd: LVCMOS18
+    iostd: LVCMOS33
     loc: [B16, F12]
   rfsoc_vin_p:
     loc:

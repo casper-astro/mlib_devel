@@ -119,7 +119,6 @@ class onehundredgbe_usplus(onehundred_gbe):
         self.add_source('onehundred_gbe/ip/axispacketbufferfifo/axispacketbufferfifo.xci')
         self.add_source('onehundred_gbe/ip/async_fifo_513b_512deep/async_fifo_513b_512deep.xci')
         self.add_source('onehundred_gbe/ip/axis_data_fifo/axis_data_fifo_0.xci')
-        self.add_source('onehundred_gbe/ip/EthMACPHY100GQSFP4x/EthMACPHY100GQSFP4x.xci')
         self.add_source('onehundred_gbe/ip/dest_address_fifo/dest_address_fifo.xci')
 
         ## TODO: remove this when we're done debugging
@@ -147,6 +146,19 @@ class onehundredgbe_usplus(onehundred_gbe):
             self.logger.error("Missing onehundredgbe `refclk_freq_str` parameter in YAML file")
             raise
         self.refclk_freq = float(self.refclk_freq_str)
+
+        try:
+            self.include_rs_fec = ethconf["include_rs_fec"]
+        except KeyError:
+            self.logger.warning("Missing `include_rs_fec` parameter in YAML file. Defaulting to 0")
+
+        if self.include_rs_fec:
+            self.cmac_ip_name = 'EthMACPHY100GQSFP4x_rsfec'
+            self.add_source('onehundred_gbe/ip/EthMACPHY100GQSFP4x_rsfec/EthMACPHY100GQSFP4x_rsfec.xci')
+        else:
+            self.cmac_ip_name = 'EthMACPHY100GQSFP4x'
+            self.add_source('onehundred_gbe/ip/EthMACPHY100GQSFP4x/EthMACPHY100GQSFP4x.xci')
+
         try:
             self.cmac_loc = ethconf["cmac_loc"][self.port]
         except KeyError:
@@ -173,12 +185,13 @@ class onehundredgbe_usplus(onehundred_gbe):
         inst.add_parameter("FABRIC_PORT", "16'h%x" % self.fab_udp)
         inst.add_parameter("FABRIC_GATEWAY", "32'h%x" % self.fab_gate)
         inst.add_parameter("FABRIC_ENABLE_ON_START", "1'b%d" % int(self.fab_en))
+        inst.add_parameter("USE_RS_FEC", "1'b%d" % int(self.include_rs_fec))
         
         inst.add_port('RefClk100MHz', 'sys_clk') # sys_clk is decreed to be 100 MHz.
         inst.add_port('RefClkLocked', '~sys_rst', parent_sig=False)
         inst.add_port('aximm_clk', 'axil_clk')
         inst.add_port('icap_clk', 'axil_clk')
-        inst.add_port('axis_reset', "1'b0")#'axil_rst')
+        inst.add_port('axis_reset', 'axil_rst')
         # MGT connections
         inst.add_port('mgt_qsfp_clock_p', self.portbase+'_refclk_p', dir='in', parent_port=True)
         inst.add_port('mgt_qsfp_clock_n', self.portbase+'_refclk_n', dir='in', parent_port=True)
@@ -267,7 +280,7 @@ class onehundredgbe_usplus(onehundred_gbe):
         #self.myclk = ClockConstraint(self.portbase+'_refclk_p', freq=self.refclk_freq)
         #consts += [self.myclk]
         # Set the 100G clock to be asynchronous to both the user clock and the system clock / axi clk
-        consts += [ClockGroupConstraint('-include_generated_clocks -of_objects [get_ports sys_clk_p]', '-include_generated_clocks %s' % clkname, 'asynchronous')]
+        consts += [ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets sys_clk]', '-include_generated_clocks %s' % clkname, 'asynchronous')]
         consts += [ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets user_clk]', '-include_generated_clocks %s' % clkname, 'asynchronous')]
         consts += [ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets axil_clk]', '-include_generated_clocks %s' % clkname, 'asynchronous')]
 
@@ -276,7 +289,7 @@ class onehundredgbe_usplus(onehundred_gbe):
     def gen_tcl_cmds(self):
         tcl_cmds = {}
         # Override the IP reference clock frequency
-        tcl_cmds['pre_synth'] = ['set_property -dict [list CONFIG.GT_REF_CLK_FREQ {%s}] [get_ips EthMACPHY100GQSFP4x]' % self.refclk_freq_str]
+        tcl_cmds['pre_synth'] = ['set_property -dict [list CONFIG.GT_REF_CLK_FREQ {%s}] [get_ips %s]' % (self.refclk_freq_str, self.cmac_ip_name)]
 
         # The LOCs seem to get overriden by the user constraints above, but we need to manually unplace the CMAC blocks
         # Unplace all CMACs post_synth, then place all pre_impl, to avoid situations where we try to place on a site already being used
