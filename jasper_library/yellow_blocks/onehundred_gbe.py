@@ -188,7 +188,7 @@ class onehundredgbe_usplus(onehundred_gbe):
         else:
             inst.add_port('aximm_clk', 'axil_clk')
             inst.add_port('icap_clk', 'axil_clk')
-        inst.add_port('axis_reset', "1'b0")#'axil_rst')
+        inst.add_port('axis_reset',              self.fullname+'_rst')
         # MGT connections
         inst.add_port('mgt_qsfp_clock_p', self.portbase+'_refclk_p', dir='in', parent_port=True)
         inst.add_port('mgt_qsfp_clock_n', self.portbase+'_refclk_n', dir='in', parent_port=True)
