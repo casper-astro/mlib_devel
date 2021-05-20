@@ -258,8 +258,8 @@ RXPMARESETDONE <= rxpmaresetdone_t;
         CBCC_DATA_SOURCE_SEL                    =>     ("DECODED"),
         CLK_COR_SEQ_2_USE                       =>     ("FALSE"),
         CLK_COR_KEEP_IDLE                       =>     ("FALSE"),
-        CLK_COR_MAX_LAT                         =>     (35),
-        CLK_COR_MIN_LAT                         =>     (31),
+        CLK_COR_MAX_LAT                         =>     (12),
+        CLK_COR_MIN_LAT                         =>     (8),
         CLK_COR_PRECEDENCE                      =>     ("TRUE"),
         CLK_COR_REPEAT_WAIT                     =>     (0),
         CLK_COR_SEQ_LEN                         =>     (1),
@@ -277,7 +277,7 @@ RXPMARESETDONE <= rxpmaresetdone_t;
 
        ------------------------RX Channel Bonding Attributes----------------------
         CHAN_BOND_KEEP_ALIGN                    =>     ("FALSE"),
-        CHAN_BOND_MAX_SKEW                      =>     (8),
+        CHAN_BOND_MAX_SKEW                      =>     (1),
         CHAN_BOND_SEQ_LEN                       =>     (1),
         CHAN_BOND_SEQ_1_1                       =>     ("0100011100"),
         CHAN_BOND_SEQ_1_2                       =>     ("0000000000"),
@@ -335,7 +335,7 @@ RXPMARESETDONE <= rxpmaresetdone_t;
         PCS_RSVD_ATTR                           =>     (x"000000000000"),
 
        -------------RX Buffer Attributes------------
-        RXBUF_ADDR_MODE                         =>     ("FULL"),
+        RXBUF_ADDR_MODE                         =>     ("FAST"),
         RXBUF_EIDLE_HI_CNT                      =>     ("1000"),
         RXBUF_EIDLE_LO_CNT                      =>     ("0000"),
         RXBUF_EN                                =>     ("TRUE"),

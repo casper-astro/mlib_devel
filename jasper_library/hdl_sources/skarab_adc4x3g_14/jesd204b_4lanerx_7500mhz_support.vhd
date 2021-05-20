@@ -622,7 +622,7 @@ begin
 
 	gtrefclk_i <= GTREFCLK_IN;
 
-	GT0_RXOUTCLK_BUFH : BUFH
+	GT0_RXOUTCLK_BUFG : BUFG
 		port map(
 			O => gt_rxusrclk_i,
 			I => gt0_rxoutclk_i
