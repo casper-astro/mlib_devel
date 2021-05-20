@@ -114,7 +114,7 @@ pins:
       - AG2
       - AE5
       - AE2
-      - AU5
+      - AC5
       - AC2
   rfsoc_refclk_p:
     loc: [BA3, AW4, BA5, AW6]
