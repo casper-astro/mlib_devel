@@ -19,7 +19,8 @@
 # - The filename ("BIN file name") of the firmware to upload. This file needs to be 
 #   stored under the directory of this script. The following firmwares are provided
 #   along with this script: 
-#     FW version 1.9 (skarab_adc_fw_v1p9.bin)
+#     EMB124901U8R2_BYP.bin (Configures the SKARAB ADC board in Bypass Mode by default)
+#     EMB124901U8R2_DDC.bin (Configures the SKARAB ADC board in DDC Mode by default)
 # - The mezzanine site onto which the SKARAB ADC board is installed
 # - The IP address of the SKARAB
 # - The name of the fpg file that needs to be uploaded to the SKARAB before the
@@ -154,7 +155,7 @@ i = 0
 
 #filename = 'EMB124901U8R1.bin'
 #sIPAddress = '10.0.7.3'
-filename = str(raw_input("Specify BIN file name (Example: skarab_adc_fw_v1p9.bin): "))
+filename = str(raw_input("Specify BIN file name (Example: EMB124901U8R2_DDC.bin): "))
 uMezzanine = int(raw_input("Specify mezzanine site (Example: 1): "))
 sYbName = str(raw_input("Specify Yellow Block name (Examples: skarab_adc4x3g_14_master, skarab_adc4x3g_14_slave): "))
 sIPAddress = str(raw_input("Specify IP address of the SKARAB (Example: 10.0.7.2): "))
