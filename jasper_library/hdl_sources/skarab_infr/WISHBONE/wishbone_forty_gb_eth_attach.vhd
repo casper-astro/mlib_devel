@@ -409,7 +409,7 @@ begin
             local_enable_reg          <= FABRIC_ENABLE;
             local_mc_recv_ip_reg      <= MC_RECV_IP;
             local_mc_recv_ip_mask_reg <= MC_RECV_IP_MASK;
-            cnt_reset_reg             <= (others => '1');
+            cnt_reset_reg             <= (others => '0');
             cpu_tx_size_reg           <= (others => '0');
             cpu_rx_ack_reg            <= '0';
             soft_reset_reg            <= '0';

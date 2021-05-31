@@ -478,6 +478,14 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
     signal rx_dest_ip_sig     : std_logic_vector(31 downto 0);
     signal rx_dest_port_sig   : std_logic_vector(15 downto 0);
     
+    signal rstD1        : std_logic;
+    signal rstD2        : std_logic;
+    attribute ASYNC_REG of rstD1 : signal is "TRUE";
+    attribute ASYNC_REG of rstD2 : signal is "TRUE";	
+    signal rstbD1        : std_logic;
+    signal rstbD2        : std_logic;
+    attribute ASYNC_REG of rstbD1 : signal is "TRUE";
+    attribute ASYNC_REG of rstbD2 : signal is "TRUE";	
     signal sCntResetD1        : std_logic;
     signal sCntResetD2        : std_logic;
     attribute ASYNC_REG of sCntResetD1 : signal is "TRUE";
@@ -1074,6 +1082,22 @@ begin
 tx_valid_ored <= tx_valid(0) or tx_valid(1) or tx_valid(2) or tx_valid(3);
 rx_valid_ored <= rx_valid_sig(0) or rx_valid_sig(1) or rx_valid_sig(2) or rx_valid_sig(3);
 
+pCDCRegRstSynchroniser : process(clk)
+begin
+  if (rising_edge(clk))then
+    rstD2 <= rstD1;
+    rstD1 <= rst;
+  end if;
+end process pCDCRegRstSynchroniser; 
+
+pCDCRegRstSynchroniserb : process(xlgmii_txclk)
+begin
+  if (rising_edge(xlgmii_txclk))then
+    rstbD2 <= rstbD1;
+    rstbD1 <= rst;
+  end if;
+end process pCDCRegRstSynchroniserb;
+
 pCDCRegSynchroniser : process(clk)
 begin
   if (rising_edge(clk))then
@@ -1098,7 +1122,7 @@ tx_pkt_rate_comp : rate_counter
     port map(
         rate_clk  => xlgmii_txclk,  -- sys_clk at 156.25MHz
         clk  => clk,  -- sys_clk at 156.25MHz
-        rst  => sCntResetbD2, -- or rst,
+        rst  => sCntResetbD2 or rstbD2,
         en   => ((tx_valid_ored) and tx_end_of_frame),
         rate => tx_pkt_rate);
 
@@ -1111,7 +1135,7 @@ tx_pkt_cnt_comp : counter
         STEP       => 1)
     port map(
         clk   => clk,  -- sys_clk at 156.25MHz
-        rst   => sCntResetD2, -- or rst,
+        rst   => sCntResetD2 or rstD2,
         en    => (tx_valid_ored and tx_end_of_frame),
         count => tx_pkt_cnt);
 
@@ -1123,7 +1147,7 @@ tx_valid_rate_comp : rate_counter
     port map(
         rate_clk  => xlgmii_txclk,  -- sys_clk at 156.25MHz
         clk  => clk,  -- sys_clk at 156.25MHz
-        rst  => sCntResetbD2, --or rst,
+        rst  => sCntResetbD2 or rstbD2,
         en   => tx_valid_ored,
         rate => tx_valid_rate);
 
@@ -1136,7 +1160,7 @@ tx_valid_cnt_comp : counter
         STEP       => 1)
     port map(
         clk   => clk,  -- sys_clk at 156.25MHz
-        rst   => sCntResetD2, --or rst,
+        rst   => sCntResetD2 or rstD2,
         en    => tx_valid_ored,
         count => tx_valid_cnt);
 
@@ -1149,7 +1173,7 @@ tx_overflow_cnt_comp : counter
         STEP       => 1)
     port map(
         clk   => clk,  -- sys_clk at 156.25MHz
-        rst   => sCntResetD2, -- or rst,
+        rst   => sCntResetD2 or rstD2,
         en    => tx_overflow_sig,
         count => tx_overflow_cnt);
 
@@ -1162,7 +1186,7 @@ tx_afull_cnt_comp : counter
         STEP       => 1)
     port map(
         clk   => clk,  -- sys_clk at 156.25MHz
-        rst   => sCntResetD2, -- or rst,
+        rst   => sCntResetD2 or rstD2,
         en    => tx_afull_sig,
         count => tx_afull_cnt);
 
@@ -1174,7 +1198,7 @@ rx_pkt_rate_comp : rate_counter
     port map(
         rate_clk  => xlgmii_rxclk,  -- sys_clk at 156.25MHz
         clk  => clk,  -- sys_clk at 156.25MHz
-        rst  => sCntResetbD2, --or rst,
+        rst  => sCntResetbD2 or rstbD2,
         en   => (rx_valid_ored and rx_end_of_frame_sig),
         rate => rx_pkt_rate);
 
@@ -1187,7 +1211,7 @@ rx_pkt_cnt_comp : counter
         STEP       => 1)
     port map(
         clk   => clk,  -- sys_clk at 156.25MHz
-        rst   => sCntResetD2, --or rst,
+        rst   => sCntResetD2 or rstD2,
         en    => (rx_valid_ored and rx_end_of_frame_sig),
         count => rx_pkt_cnt);
 
@@ -1199,7 +1223,7 @@ rx_valid_rate_comp : rate_counter
     port map(
         rate_clk  => xlgmii_rxclk,  -- sys_clk at 156.25MHz
         clk  => clk,  -- sys_clk at 156.25MHz
-        rst  => sCntResetbD2, --or rst,
+        rst  => sCntResetbD2 or rstbD2,
         en   => rx_valid_ored,
         rate => rx_valid_rate);
 
@@ -1212,7 +1236,7 @@ rx_valid_cnt_comp : counter
         STEP       => 1)
     port map(
         clk   => clk,  -- sys_clk at 156.25MHz
-        rst   => sCntResetD2, --or rst,
+        rst   => sCntResetD2 or rstD2,
         en    => rx_valid_ored,
         count => rx_valid_cnt);
 
@@ -1225,7 +1249,7 @@ rx_overflow_cnt_comp : counter
         STEP       => 1)
     port map(
         clk   => clk,  -- sys_clk at 156.25MHz
-        rst   => sCntResetD2, --or rst,
+        rst   => sCntResetD2 or rstD2,
         en    => rx_overflow_sig,
         count => rx_overflow_cnt);
 
@@ -1238,7 +1262,7 @@ rx_bad_frame_cnt_comp : counter
         STEP       => 1)
     port map(
         clk   => clk,  -- sys_clk at 156.25MHz
-        rst   => sCntResetD2, --or rst,
+        rst   => sCntResetD2 or rstD2,
         en    => rx_bad_frame_sig,
         count => rx_bad_frame_cnt);
 
