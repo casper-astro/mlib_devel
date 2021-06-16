@@ -1279,3 +1279,9 @@ pins:
   qsfp_sda:
     iostd: LVCMOS18
     loc: G14
+  f_z7_link_p:
+    iostd: LVCMOS25
+    loc: [AV26, BC24, AY26, AW28]
+  f_z7_link_n:
+    iostd: LVCMOS25
+    loc: [AV27, BD24, BA27, AY28]
