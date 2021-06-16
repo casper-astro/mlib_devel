@@ -1,9 +1,9 @@
 name: zcu216
 manufacturer: Xilinx
 fpga: xczu49dr-ffvf1760-2-e-es1
-family: zynq-ultrascaleplus-rfsoc
-config_voltage: 1.8 # TODO: not used?
-cfgbvs: GND         # TODO: not used?
+family: rfsoc
+config_voltage: 1.8
+cfgbvs: GND
 backend_target: vivado
 mmbus_architecture: AXI4-Lite
 mmbus_base_address: 0xA0000000
@@ -33,16 +33,21 @@ rfdc:
     adc_clk_src: 2
 
 onehundredgbe:
-  # TODO: what do we program the clock to
   refclk_freq_str: "156.25"
+  include_rs_fec: 1
+  ncommon: 2
+  # modprs pin strapped, sfp tx enable not supported to be managed by 100g core.
+  # It must be toggled by an fpga pin gpio (not yet in yaml), or use the onboard jumpers
+  management_interface: []
+  # UG1075 v1.9 Fig. 1-54
   cmac_loc:
-  # TODO: test this out, or is it X0Y0
+    # xczu49dr has 2 cmac locations, zcu216 can support a second through FMC+
     - CMACE4_X0Y0
+    - CMACE4_X0Y1
     
 provides:
   - adc_clk
-  - axil_clk # TODO: keep this?
-  - sfp4x25  # TODO this isn't the right name
+  - axil_clk
   - sysref_in
 
 pins:
@@ -108,52 +113,31 @@ pins:
     loc: AU4
 
 # 100 GbE
-  # IDT 8A34001 output Q7, refclk1 GTY bank 129
-  mgt_ref_clk_p:
+  # The 4 GTY lanes are split, 2 to bank 128, 2 to bank 129
+  # IDT 8A34001 output Q7, refclk1 GTY bank 129 P T34 N T35
+  # IDT 8A34001 output Q11 refclk1 GTY bank 128 P Y34 N Y35
+  qsfp_mgt_ref_clk_p:
     loc:
-      - T34
-  mgt_ref_clk_n:
+      - Y34
+  qsfp_mgt_ref_clk_n:
     loc:
-      - T35
+      - Y35
   qsfp_mgt_tx_p:
-    loc:
-      # bank 128 SFP[0:1]
-      - V38
-      - U36
-      # bank 129 SFP[2:3]
-      - P38
-      - N36
+         # bank 128 SFP[0:1] # bank 129 SFP[2:3]
+    loc: [V38, U36, P38, N36]
   qsfp_mgt_tx_n:
-    loc:
-      # bank 128
-      - V39
-      - U37
-      # bank 129
-      - P39
-      - N37
+         # bank 128  # bank 129
+    loc: [V39, U37,  P39, N37]
   qsfp_mgt_rx_p:
-    loc:
-      # bank 128
-      - AC41
-      - AB39
-      # bank 129
-      - W41
-      - U41
+         # bank 128   # bank 129
+    loc: [AC41, AB39, W41, U41]
   qsfp_mgt_rx_n:
-    loc:
-      # bank 128
-      - AC42
-      - AB40
-      # bank 129
-      - W42
-      - U42
-
-  # TODO: what do we do here? These pins are strapped?
-  #qsfp_modprs:
+         # bank 128   # bank 129
+    loc: [AC42, AB40, W42, U42]
 
 # zcu216 has 8 RGB LEDs (24 total) however, not all of the LEDs of the same
 # color have the same voltage standard. Not sure how the tools can handle this
-# if at all
+# if at all (probably just named custom io group)
   led_red:
     iostd: LVCMOS12
     loc:
@@ -167,7 +151,7 @@ pins:
       - E25
   led_green:
     iostd: [LVCMOS18, LVCMOS12]
-    loc: [[C13, D14, D12, D13], [AW18, AV18, BA19, AP21]]
+    loc: [[C13, D14, D12, D13], [AW18, AV18, BA19, AP21]] #LED position 0-7
 
   led_blue:
     iostd: LVCMOS12

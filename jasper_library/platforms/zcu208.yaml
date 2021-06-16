@@ -2,8 +2,8 @@ name: zcu208
 manufacturer: Xilinx
 fpga: xczu48dr-fsvg1517-2-e-es1
 family: zynq-ultrascaleplus-rfsoc
-config_voltage: 1.8 # TODO: not used?
-cfgbvs: GND         # TODO: not used?
+config_voltage: 1.8
+cfgbvs: GND
 backend_target: vivado
 mmbus_architecture: AXI4-Lite
 mmbus_base_address: 0xA0000000
@@ -33,16 +33,21 @@ rfdc:
     adc_clk_src: 2
 
 onehundredgbe:
-  # TODO: what do we program the clock to
   refclk_freq_str: "156.25"
-  # TODO test this out, or is it X0Y1?
+  include_rs_fec: 1
+  ncommon: 2
+  # modprs pin strapped, sfp tx enable not supported to be managed by 100g core.
+  # It must be toggled by an fpga pin gpio (not yet in yaml), or use the onboard jumpers
+  management_interface: []
+  # UG1075 v1.9 Fig. 1-54
   cmac_loc:
+    # xczu48dr has 2 cmac locations, zcu111 can support a second through FMC
     - CMACE4_X0Y0
+    - CMACE4_X0Y1
     
 provides:
   - adc_clk
-  - axil_clk # TODO: keep this?
-  - sfp4x25  # TODO this isn't the right name
+  - axil_clk
   - sysref_in
 
 pins:

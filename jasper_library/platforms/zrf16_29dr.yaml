@@ -1,9 +1,9 @@
 name: zrf16_29dr
 manufacturer: Xilinx
 fpga: xczu29dr-ffvf1760-2-e
-family: zynq-ultrascaleplus-rfsoc
-config_voltage: 1.8 # TODO: not used?
-cfgbvs: GND         # TODO: not used?
+family: rfsoc
+config_voltage: 1.8
+cfgbvs: GND
 backend_target: vivado
 mmbus_architecture: AXI4-Lite
 mmbus_base_address: 0xA0000000
@@ -29,21 +29,27 @@ rfdc:
     has_adc_clk: True
     adc_clk_src: 2
   tile227:
-    has_adc_clk: False
+    has_adc_clk: True
     adc_clk_src: 3
 
 onehundredgbe:
   # TODO: determine freq and cmac loc for 
   refclk_freq_str: "156.25"
+  include_rs_fec: 1
+  # transceiver interface signals that the core/manages directly from the fpga.
+  # Other signals may also be managed by fpga gpios are not included here e.g., reset_ls
+  # but are within the user design
+  management_interface: [modprsl_ls, intl_ls]
+  # UG1075 v1.9 Fig. 1-54
   cmac_loc:
+    - CMACE4_X0Y0
     - CMACE4_X0Y1
+  ncommon: 1
     
 provides:
   - adc_clk
-  - axil_clk # TODO: keep this?
+  - axil_clk
   - sysref_in
-  - qsfp0
-  - qsfp1
 
 pins:
   clk_100_p:
@@ -99,69 +105,50 @@ pins:
     loc: AU4
 
 # 100 GbE
-  mgt_ref_clk_p:
+  qsfp_mgt_ref_clk_p:
     loc:
       - P34 # QSFP28_A, GTY bank 130
       - K34 # QSFP28_B, GTY bank 131
-  mgt_ref_clk_n:
+  qsfp_mgt_ref_clk_n:
     loc:
       - P35 # QSFP28_A, GTY bank 130
       - K35 # QSFP28_B, GTY bank 131
-  qsfp_mgt_tx_p:
-    loc:
-      # QSFP28_A
-      - K38
-      - H38
-      - J36
-      - G36
-      # QSFP28_B      
-      - F34
-      - C36
-      - E36
-      - A36
-  qsfp_mgt_tx_n:
-    loc:
-      # QSFP28_A
-      - K39
-      - H39
-      - J37
-      - G37
-      # QSFP28_B
-      - F35
-      - C37
-      - E37
-      - A37
-  qsfp_mgt_rx_p:
-    loc:
-      # QSFP28_A
-      - L41
-      - G41
-      - J41
-      - F39
-      # QSFP28_B
-      - E41
-      - C41
-      - D39
-      - B39
-  qsfp_mgt_rx_n:
-    loc:
-      # QSFP28_A
-      - L42
-      - G42
-      - J42
-      - F40 
-      # QSFP28_B
-      - E42
-      - C42
-      - D40
-      - B40
 
-  qsfp_modprs:
-    iostd: LVCMOS18
+  qsfp_mgt_tx_p:
+         # QSFP28_A           # QSFP28_B
+    loc: [K38, H38, J36, G36, F34, C36, E36, A36]
+  qsfp_mgt_tx_n:
+         # QSFP28_A           # QSFP28_B
+    loc: [K39, H39, J37, G37, F35, C37, E37, A37]
+  qsfp_mgt_rx_p:
+         # QSFP28_A           # QSFP28_B
+    loc: [L41, G41, J41, F39, E41, C41, D39, B39]
+  qsfp_mgt_rx_n:
+         # QSFP28_A           # QSFP28_B
+    loc: [L42, G42, J42, F40, E42, C42, D40, B40]
+
+
+  qsfp_modprsl_ls:
+    iostd: LVCMOS33
     loc: [E14, B15]
+  qsfp_sda:
+    iostd: LVCMOS18
+    loc: [None, None]
+  qsfp_scl:
+    iostd: LVCMOS18
+    loc: [None, None]
+  qsfp_intl_ls:
+    iostd: LVCMOS33
+    loc: [F13, E12]
+  qsfp_reset_ls:
+    iostd: LVCMOS33
+    loc: [AT10, AP10]
+  qsfp_lpmode_ls:
+    iostd: LVCMOS33
+    loc: [B16, F12]
 
   led:
-    iostd: LVCMOS18
+    iostd: LVCMOS33
     loc:
       # green 
       - AR10 # PL_USER_LED1

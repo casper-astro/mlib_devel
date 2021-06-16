@@ -39,8 +39,8 @@ class Register(object):
         :type offset: Integer
         :param mode: Read/write permission for this register. 'r' (readable), 'w' (writable), 'rw' (read/writable)
         :type mode: String
-        :param default_val: Default value for register to be reset to and initialized.
-        :type default_val: Integer
+        :param default_val: Default value for register to be reset to and initialized. E.g., (0xbeef, 48879, "0xbeef", "beef")
+        :type default_val: Integer or hex string litreal
         :param ram: Whether the register is a RAM or not.
         :type ram: Boolean
         :param ram_size: Size of the RAM
@@ -49,7 +49,6 @@ class Register(object):
         :type data_width: Integer
         :param axi4lite_mode: Mode of the axi4lite interface. Eg. axi4lite_mode = 'raw', instantiates a raw axi4lite device.
         :type axi4lite_mode: String
-
         """
         self.name = name
         self.nbytes = nbytes
@@ -57,7 +56,22 @@ class Register(object):
         self.mode = mode
         self.ram = ram
         #self.ram_size = ram_size
-        self.default_val = default_val
+
+        # Generation for `hw_rst` values of AXI4-Lite registers in XML2VHDL are interpreted as hex strings.
+        # Make some checks, prepare, and convert
+        if isinstance(default_val, int):
+          if default_val > ((1 << data_width) - 1):
+            raise RuntimeError("register `default_val` {:x} greater than represented width {:d}".format(hex(default_val), data_width))
+
+          self.default_val = "{:x}".format(default_val)
+        elif isinstance(default_val, str):
+          if int(default_val, 16) > ((1 << data_width) - 1):
+            raise RuntimeError("register `default_val` {:x} greater than represented width {:d}".format(hex(default_val), data_width))
+
+          self.default_val = "{:s}".format(default_val)
+
+        else:
+          raise RuntimeError("`default_val` for Register must be an integer or hex string literal")
 
         # Addded to make provision for variable-size BRAMs in AXI4-Lite devices
         # - Placing here for now because toolflow.py:generate_xml_memory_map

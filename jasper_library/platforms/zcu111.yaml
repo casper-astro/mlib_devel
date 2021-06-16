@@ -1,9 +1,9 @@
 name: zcu111
 manufacturer: Xilinx
 fpga: xczu28dr-ffvg1517-2-e
-family: zynq-ultrascaleplus-rfsoc
-config_voltage: 1.8 # not used?
-cfgbvs: GND         # not used?
+family: rfsoc
+config_voltage: 1.8
+cfgbvs: GND
 backend_target: vivado
 mmbus_architecture: AXI4-Lite
 mmbus_base_address: 0xA0000000
@@ -33,16 +33,19 @@ rfdc:
     adc_clk_src: 3
 
 onehundredgbe:
-  # TODO: determine freq cmac should have been determined already
   refclk_freq_str: "156.25"
-  # TODO test this out, or is it X0Y1?
+  include_rs_fec: 1
+  ncommon: 1
+  management_interface: []
+  # UG1075 v1.9 Fig. 1-39
   cmac_loc:
+    # xczu28dr has 2 cmac locations, zcu111 can support a second through FMC
     - CMACE4_X0Y0
+    - CMACE4_X0Y1
 
 provides:
-  - sys_clk
-  - axil_clk # keep this? come from pl_clk? or use clk100?
-  - sfp4x25  # TODO: this isn't right
+  - adc_clk
+  - axil_clk
   - sysref_in
 
 pins:
@@ -90,44 +93,22 @@ pins:
     loc: AL15
 
 # 100 GbE
-  # TODO: go over this clocking info because is it the user mgt si570
-  # in on bank 129? (pins V31, V32 _P/N)
-  # Because looking at it again I think it should be SI5382 on bank 128?
-  # (pins AA33/AA34 _P/N)
-  # Or had I originally looked at the clock on 129 to clock across multiple banks?
- 
   # Programmable MGT SI5382 chip GTY bank 128
-  mgt_ref_clk_p:
+  qsfp_mgt_ref_clk_p:
     loc:
       - AA33
-  mgt_ref_clk_n:
+  qsfp_mgt_ref_clk_n:
     loc:
       - AA34
   # SFP connected to MGT bank 128
   qsfp_mgt_tx_p: 
-    loc:
-      - Y35
-      - V35
-      - T35
-      - R33
+    loc: [Y35, V35, T35, R33]
   qsfp_mgt_tx_n:
-    loc:
-      - Y36
-      - V36
-      - T36
-      - R34
+    loc: [Y36, V36, T36, R34]
   qsfp_mgt_rx_p:
-    loc:
-      - AA38
-      - W38
-      - U38
-      - R38
+    loc: [AA38, W38, U38, R38]
   qsfp_mgt_rx_n:
-    loc:
-      - AA39
-      - W39
-      - U39
-      - R39
+    loc: [AA39, W39, U39, R39]
 
   led:
     iostd: LVCMOS18

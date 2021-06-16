@@ -2,6 +2,7 @@ from .yellow_block import YellowBlock
 from clk_factors import clk_factors
 from constraints import ClockConstraint, ClockGroupConstraint, PortConstraint, RawConstraint
 
+
 class zrf16(YellowBlock):
     def initialize(self):
         # TODO need any clocking infrastrucutre block - most likely can repurpose zcu216 but for htg clock pins
@@ -10,33 +11,41 @@ class zrf16(YellowBlock):
 
         self.blkdesign = '{:s}_base'.format(self.platform.conf['name'])
 
-        # TODO: need new provides and figure the extent to provide these, because as the documentation says
-        # if these lines aren't here the the toolflow breaks.
-        self.provides.append(self.clk_src)
-        self.provides.append(self.clk_src+'90')
-        self.provides.append(self.clk_src+'180')
-        self.provides.append(self.clk_src+'270')
-        self.provides.append(self.clk_src+'_rst')
+        self.pl_clk_mhz = self.blk['pl_clk_rate']
+        self.T_pl_clk_ns = 1.0/self.pl_clk_mhz*1000
 
-        # TODO: Need to add this? Is it a bug that `axi4lite_interconnect.py` does not make a `requires` call
-        self.provides.append('axil_clk')    # from zcu216 block design infrastructure
-        self.provides.append('axil_rst_n')  # from zcu216 block desgin infrastructure
+        self.provides.append('adc_clk')
+        self.provides.append('adc_clk90')
+        self.provides.append('adc_clk180')
+        self.provides.append('adc_clk270')
+        self.provides.append('adc_clk_rst')
 
-        # for the rfsocs it seems appropriate to use the requires/provides for `sysref` and `pl_sysref` for MTS?
-        self.provides.append('pl_sysref') # zcu216 infrastructure provides so rfdc can require
+        self.provides.append('sys_clk')
+        self.provides.append('sys_rst')
+
+        # TODO: is a bug that `axi4lite_interconnect` does not make a `requires` on `axil_clk`.
+        # Looking into this more: the `_drc` check on YB requires/provides is done in `gen_periph_objs` but the `axi4lite_interconnect`
+        # is not done until later within `generate_hdl > _instantiate_periphs` there fore by-passing any checks done
+        self.provides.append('axil_clk')    # from block design
+        self.provides.append('axil_rst_n')  # from block desgin
+
+        # rfsocs use the requires/provides for to check for `sysref` and `pl_sysref` for MTS
+        self.provides.append('pl_sysref') # rfsoc platform/infrastructure provides so rfdc can require
+
 
     def modify_top(self, top):
         top.assign_signal('axil_clk', 'pl_clk0')
         top.assign_signal('axil_rst', 'peripheral_reset')
         top.assign_signal('axil_rst_n', 'peripheral_aresetn')
+        top.assign_signal('sys_clk', 'pl_clk0')
+        top.assign_signal('sys_rst', '~peripheral_aresetn')
 
         # generate clock parameters to use pl_clk to drive as the user IP clock
-        pl_clk_mhz = self.blk['pl_clk_rate']
-        T_pl_clk_ns = 1.0/pl_clk_mhz*1000
-        clkparams = clk_factors(pl_clk_mhz, self.platform.user_clk_rate)
+        # TODO: will need to make changes when other user ip clk source options provided
+        clkparams = clk_factors(self.pl_clk_mhz, self.platform.user_clk_rate)
 
         inst_infr = top.get_instance('zcu216_clk_infrastructure', 'zcu216_clk_infr_inst')
-        inst_infr.add_parameter('PERIOD', "{:0.3f}".format(T_pl_clk_ns))
+        inst_infr.add_parameter('PERIOD', "{:0.3f}".format(self.T_pl_clk_ns))
         inst_infr.add_parameter('MULTIPLY', clkparams[0])
         inst_infr.add_parameter('DIVIDE',   clkparams[1])
         inst_infr.add_parameter('DIVCLK',   clkparams[2])
@@ -88,11 +97,15 @@ class zrf16(YellowBlock):
 
     def gen_constraints(self):
         cons = []
-        cons.append(PortConstraint('pl_clk_p', 'pl_clk_p'))
-        # TODO: will need to add pl_sysref constraint under MTS
-        cons.append(RawConstraint('set_property -dict { PACKAGE_PIN AR12 IOSTANDARD LVCMOS18 } [get_ports { mmcm_locked }]'))
 
-        # TODO: can extend to provide other onboard clocks
+        cons.append(ClockConstraint('pl_clk_p', 'pl_clk_p', period=self.T_pl_clk_ns, port_en=True, virtual_en=False))
+        cons.append(PortConstraint('pl_clk_p', 'pl_clk_p'))
+        # TODO: tweak this until we have the right reference clocks
+        cons.append(ClockGroupConstraint('clk_pl_0', 'pl_clk_mmcm', 'asynchronous'))
+        # TODO: will need to add pl_sysref constraint under MTS
+        cons.append(RawConstraint('set_property -dict { PACKAGE_PIN AR12 IOSTANDARD LVCMOS33 } [get_ports { mmcm_locked }]'))
+
+        # TODO: extend to provide other onboard clocks
         #cons.append(PortConstraint('clk_100_p', 'clk_100_p'))
         #cons.append(ClockConstraint('clk_100_p','clk_100_p', period=10.0, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=5.0))
         #cons.append(ClockGroupConstraint('clk_pl_0', 'clk_100_p', 'asynchronous'))
