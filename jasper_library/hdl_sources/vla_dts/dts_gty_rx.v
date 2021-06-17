@@ -52,7 +52,7 @@ module dts_gty_rx #(
     input rst,
     input [2:0] qsfp_modprsl,
     
-    output clkout,
+    input  clkout,
     output [((12*128) >> MUX_FACTOR_BITS) - 1 : 0] dout,
     output [12*2 - 1 : 0] dvld,
     output [12 - 1 : 0] locked,
@@ -78,6 +78,7 @@ module dts_gty_rx #(
   (* mark_debug = "true" *) wire all_qsfp_present = ~|qsfp_modprsl;
   
   (* mark_debug = "true" *) wire [N_INPUTS-1:0] bitslip_int;
+  wire [11:0] induce_error;
   gty_12chan #(
     .N_REFCLOCKS(N_REFCLOCKS),
     .REFCLOCK_0(REFCLOCK_0),
@@ -91,6 +92,7 @@ module dts_gty_rx #(
     .tx_n(tx_n),
     .mgtrefclk_p(mgtrefclk_p),
     .mgtrefclk_n(mgtrefclk_n),
+    .induce_error(induce_error),
     .clk50(clk_50),
     .rst(rst),
     .gearbox_slip(bitslip_int),
@@ -248,8 +250,10 @@ wb_dts_attach wb_dts_attach_inst(
     .shift_delay(shift_delay),
     .shift_rst(shift_rst),
     .mux_control(mux_control),
+    .induce_error(induce_error),
     .is_three_bit(is_three_bit)
   );
+
   
   wire [N_INPUTS*8 - 1 : 0] def_data_out_multi;
   wire [N_INPUTS*OUTPUT_DWIDTH-1:0] def_frame_out;

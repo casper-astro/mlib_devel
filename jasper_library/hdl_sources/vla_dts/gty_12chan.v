@@ -29,6 +29,7 @@ module gty_12chan #(
   ) (
     input [11:0] rx_p,
     input [11:0] rx_n,
+    input [11:0] induce_error,
     output [11:0] tx_p,
     output [11:0] tx_n,
     input [N_REFCLOCKS-1:0] mgtrefclk_p,
@@ -234,20 +235,46 @@ wire [159:0] doutc1_reverse;
 wire [159:0] doutc2_reverse;
 wire [159:0] doutc3_reverse;
 
+wire [159:0] douta0_err;
+wire [159:0] douta1_err;
+wire [159:0] douta2_err;
+wire [159:0] douta3_err;
+wire [159:0] doutb0_err;
+wire [159:0] doutb1_err;
+wire [159:0] doutb2_err;
+wire [159:0] doutb3_err;
+wire [159:0] doutc0_err;
+wire [159:0] doutc1_err;
+wire [159:0] doutc2_err;
+wire [159:0] doutc3_err;
+
+assign douta0_err = induce_error[0] ?  {dout_a0[159:30], ~dout_a0[29], dout_a0[28:0]} : dout_a0;
+assign douta1_err = induce_error[1] ?  {dout_a1[159:30], ~dout_a1[29], dout_a1[28:0]} : dout_a1;
+assign douta2_err = induce_error[2] ?  {dout_a2[159:30], ~dout_a2[29], dout_a2[28:0]} : dout_a2;
+assign douta3_err = induce_error[3] ?  {dout_a3[159:30], ~dout_a3[29], dout_a3[28:0]} : dout_a3;
+assign doutb0_err = induce_error[4] ?  {dout_b0[159:30], ~dout_b0[29], dout_b0[28:0]} : dout_b0;
+assign doutb1_err = induce_error[5] ?  {dout_b1[159:30], ~dout_b1[29], dout_b1[28:0]} : dout_b1;
+assign doutb2_err = induce_error[6] ?  {dout_b2[159:30], ~dout_b2[29], dout_b2[28:0]} : dout_b2;
+assign doutb3_err = induce_error[7] ?  {dout_b3[159:30], ~dout_b3[29], dout_b3[28:0]} : dout_b3;
+assign doutc0_err = induce_error[8] ?  {dout_c0[159:30], ~dout_c0[29], dout_c0[28:0]} : dout_c0;
+assign doutc1_err = induce_error[9] ?  {dout_c1[159:30], ~dout_c1[29], dout_c1[28:0]} : dout_c1;
+assign doutc2_err = induce_error[10] ? {dout_c2[159:30], ~dout_c2[29], dout_c2[28:0]} : dout_c2;
+assign doutc3_err = induce_error[11] ? {dout_c3[159:30], ~dout_c3[29], dout_c3[28:0]} : dout_c3;
+
 generate
 for (genvar i=0; i<160; i=i+1) begin
-  assign douta0_reverse[i] = dout_a0[159-i];
-  assign douta1_reverse[i] = dout_a1[159-i];
-  assign douta2_reverse[i] = dout_a2[159-i];
-  assign douta3_reverse[i] = dout_a3[159-i];
-  assign doutb0_reverse[i] = dout_b0[159-i];
-  assign doutb1_reverse[i] = dout_b1[159-i];
-  assign doutb2_reverse[i] = dout_b2[159-i];
-  assign doutb3_reverse[i] = dout_b3[159-i];
-  assign doutc0_reverse[i] = dout_c0[159-i];
-  assign doutc1_reverse[i] = dout_c1[159-i];
-  assign doutc2_reverse[i] = dout_c2[159-i];
-  assign doutc3_reverse[i] = dout_c3[159-i];
+  assign douta0_reverse[i] = douta0_err[159-i];
+  assign douta1_reverse[i] = douta1_err[159-i];
+  assign douta2_reverse[i] = douta2_err[159-i];
+  assign douta3_reverse[i] = douta3_err[159-i];
+  assign doutb0_reverse[i] = doutb0_err[159-i];
+  assign doutb1_reverse[i] = doutb1_err[159-i];
+  assign doutb2_reverse[i] = doutb2_err[159-i];
+  assign doutb3_reverse[i] = doutb3_err[159-i];
+  assign doutc0_reverse[i] = doutc0_err[159-i];
+  assign doutc1_reverse[i] = doutc1_err[159-i];
+  assign doutc2_reverse[i] = doutc2_err[159-i];
+  assign doutc3_reverse[i] = doutc3_err[159-i];
 end
 endgenerate
 
