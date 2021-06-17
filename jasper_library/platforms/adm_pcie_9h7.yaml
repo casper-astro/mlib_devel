@@ -14,11 +14,13 @@ mmbus_address_alignment: 4
 sources: []
 constraints: []
 dts:
-  linerate: '10.24'
-  reffreq: '163.84'
+  linerate: '10.24' # Gb/s
+  reffreq: '163.84' # MHz
   ports:
     # GT pins when using QSFPs A through C
     qsfp_a_b_c:
+      # List of clocks for 3 channels, each entry is a tuple: [pin name in this file, index of this pin]
+      # Can use clocks multiple times if necessary
       phys_clocks: [[qsfp_mgt_ref_clk, 0], [qsfp_mgt_ref_clk, 1], [qsfp_mgt_ref_clk, 1]]
       channel:
         - X1Y16
@@ -42,6 +44,66 @@ dts:
         - 'clk0+1'
         - 'clk0+1'
         - 'clk0+1'
+        - 'clk0'
+        - 'clk0'
+        - 'clk0'
+        - 'clk0'
+    firefly0:
+      # Clock from banks 125, 125, 126
+      phys_clocks: [[firefly_ref_clk, 0], [firefly_ref_clk, 0], [firefly_ref_clk, 1]]
+      channel:
+        # bank 125, 124, 126
+        - X0Y4
+        - X0Y5
+        - X0Y6
+        - X0Y7
+        - X0Y0
+        - X0Y1
+        - X0Y2
+        - X0Y3
+        - X0Y8
+        - X0Y9
+        - X0Y10
+        - X0Y11
+      clock:
+        - 'clk0'
+        - 'clk0'
+        - 'clk0'
+        - 'clk0'
+        - 'clk0+1'
+        - 'clk0+1'
+        - 'clk0+1'
+        - 'clk0+1'
+        - 'clk0'
+        - 'clk0'
+        - 'clk0'
+        - 'clk0'
+    firefly1:
+      # Clock from banks 234, 234, 135
+      phys_clocks: [[firefly_ref_clk, 2], [firefly_ref_clk, 2], [firefly_ref_clk, 3]]
+      channel:
+        # bank 234, 235, 135
+        - X1Y40
+        - X1Y41
+        - X1Y42
+        - X1Y43
+        - X1Y44
+        - X1Y45
+        - X1Y46
+        - X1Y47
+        - X0Y44
+        - X0Y45
+        - X0Y46
+        - X0Y47
+      clock:
+        - 'clk0'
+        - 'clk0'
+        - 'clk0'
+        - 'clk0'
+        - 'clk0-1'
+        - 'clk0-1'
+        - 'clk0-1'
+        - 'clk0-1'
         - 'clk0'
         - 'clk0'
         - 'clk0'
@@ -88,10 +150,50 @@ pins:
       - BG49
       - BE54
       - BE53
+  gpio:
+    iostd: LVCMOS18
+    loc:
+      # 0_p
+      - BH32
+      # 1_p
+      - BF35
+      # 2_p
+      - BH34
+      # 3, 4, ... 12
+      - BG29
+      - BG33
+      - BH29
+      - BG30
+      - BF31
+      - BH30
+      - BJ29
+      - BG32
+      - BF32
+      - BK30
   # PCI Express lanes
   pcie_rst_n:
     loc: BF41
     iostd: LVCMOS18
+  firefly_ref_clk_p:
+    loc:
+      # FIREFLY_CLK_0_PIN bank 125
+      - AR40
+      # FIREFLY_CLK_1_PIN bank 126
+      - AN40
+      # FIREFLY_CLK_2_PIN bank 234
+      - T13
+      # FIREFLY_CLK_3_PIN bank 135
+      - P42
+  firefly_ref_clk_n:
+    loc:
+      # FIREFLY_CLK_0_PIN bank 125
+      - AR41
+      # FIREFLY_CLK_1_PIN bank 126
+      - AN41
+      # FIREFLY_CLK_2_PIN bank 234
+      - T12
+      # FIREFLY_CLK_3_PIN bank 135
+      - P43
   qsfp_mgt_ref_clk_p:
     loc:
       - AJ15
