@@ -15,9 +15,11 @@ class vla_dts(YellowBlock):
         #self.add_source('vla_dts/dts_offset_fifo.xci')
 
         self.requires = []
-        self.provides = ['dts_500_clk', 'dts_500_clk90', 'dts_500_clk180', 'dts_500_clk270']
+        if self.is_master:
+            self.provides = ['dts_clk', 'dts_clk90', 'dts_clk180', 'dts_clk270']
         # Create a standard port name prefix to make PR simpler between models
-        self.portbase = 'vla_dts'
+        # Depends on block configuration (i.e. port choice), but not on block name
+        self.portbase = 'vla_dts_' + self.port
         try:
             self.dtsconf = self.platform.conf['dts']
         except KeyError:
@@ -47,6 +49,9 @@ class vla_dts(YellowBlock):
         inst.add_parameter('INSTANCE_NUMBER', self.inst_id)
         inst.add_parameter('MUX_FACTOR_BITS', self.mux_factor_bits)
 
+        # Output clock for the data fifo.
+        inst.add_port('clkout', 'user_clk')
+
         # ports which go to simulink
         inst.add_port('rst',     self.fullname+'_rst')
         inst.add_port('dout',    self.fullname+'_frame_out', width=128*12)
@@ -68,10 +73,16 @@ class vla_dts(YellowBlock):
 
         # Internal ports
         inst.add_port('clk_50', 'clk_50')
-        inst.add_port('clk_mux_0', 'dts_500_clk')
-        inst.add_port('clk_mux_90', 'dts_500_clk90')
-        inst.add_port('clk_mux_180', 'dts_500_clk180')
-        inst.add_port('clk_mux_270', 'dts_500_clk270')
+        if self.is_master:
+            inst.add_port('clk_mux_0', 'dts_clk')
+            inst.add_port('clk_mux_90', 'dts_clk90')
+            inst.add_port('clk_mux_180', 'dts_clk180')
+            inst.add_port('clk_mux_270', 'dts_clk270')
+        else:
+            inst.add_port('clk_mux_0', '')
+            inst.add_port('clk_mux_90', '')
+            inst.add_port('clk_mux_180', '')
+            inst.add_port('clk_mux_270', '')
 
     def gen_constraints(self):
         cons = []
