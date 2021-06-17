@@ -139,6 +139,11 @@ class vla_dts(YellowBlock):
         commands += ['create_ip -name gtwizard_ultrascale -vendor xilinx.com -library ip -version 1.7 -module_name gtwizard_dts_gtyx12_%d' % self.inst_id]
         param_str = ' '.join(['CONFIG.%s {%s}' % (k,v) for k,v in config.items()])
         commands += ['set_property -dict [list %s] [get_ips gtwizard_dts_gtyx12_%d]' % (param_str, self.inst_id)]
+        try:
+            if self.platform.use_pr:
+                commands += ['move_files -of_objects [get_reconfig_modules user_top-toolflow] [get_files gtwizard_dts_gtyx12_%d.xci]' % self.inst_id]
+        except AttributeError:
+            pass
 
         # OUTPUT FIFO
 
@@ -168,5 +173,10 @@ class vla_dts(YellowBlock):
             commands += ['create_ip -name fifo_generator -vendor xilinx.com -library ip -version 13.2 -module_name dts_offset_fifo']
             param_str = ' '.join(['CONFIG.%s {%s}' % (k,v) for k,v in config.items()])
             commands += ['set_property -dict [list %s] [get_ips dts_offset_fifo]' % (param_str)]
+            try:
+                if self.platform.use_pr:
+                    commands += ['move_files -of_objects [get_reconfig_modules user_top-toolflow] [get_files dts_offset_fifo.xci]']
+            except AttributeError:
+                pass
 
         return commands
