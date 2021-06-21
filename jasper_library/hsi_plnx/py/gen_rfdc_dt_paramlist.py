@@ -1,801 +1,78 @@
-
 import struct
+import os
 
-gold_param_list = """00 00 00 00 00 00 00 b0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 01 00 00 00 02 00 00 00 00 00 00 00
-00 00 00 00 00 00 00 00 9a 99 99 99 99 99 19 40 00 00 00 00 00 00 b9 40 00 00 00 00 00 00 00 00 0a 00 00 00 02 00 00 00 01 00 00 00 00 00 00
-00 00 00 00 00 00 00 24 40 04 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00
-00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00
-00 00 00 03 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00
-00 00 00 00 03 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 00 00 00 00 9a 99 99 99 99 99 19
-40 00 00 00 00 00 00 b9 40 00 00 00 00 00 00 00 00 0a 00 00 00 02 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 24 40 04 00 00 00 00 00
-00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00
-00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 10 00 00 00
-00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 10 00 00
-00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 00 00 00 00 9a 99 99 99 99 99 19 40 00 00 00 00 00 00 b9 40 00 00 00 00 00 00
-00 00 0a 00 00 00 02 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 24 40 04 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00
-00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00
-00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00
-00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00
-00 00 00 00 00 00 00 00 00 00 9a 99 99 99 99 99 19 40 00 00 00 00 00 00 b9 40 00 00 00 00 00 00 00 00 0a 00 00 00 02 00 00 00 01 00 00 00 00
-00 00 00 00 00 00 00 00 00 24 40 04 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00
-00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00
-00 00 00 00 00 03 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00
-00 00 00 00 00 00 03 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 01 00 00 00 01 00 00 00 00 00 00 00 00
-00 00 40 00 00 00 00 00 40 6f 40 00 00 00 00 00 40 6f 40 30 00 00 00 06 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 04 40 04 00 00 00
-01 00 00 00 02 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 01 00 00 00 08 00 00 00 00 00 00
-00 01 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00
-00 00 08 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 01 00 00 00 01 00 00 00 00 00 00 00 00 00 00 40 00 00 00 00 00 40 6f 40 00 00 00 00 00
-40 6f 40 30 00 00 00 06 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 04 40 04 00 00 00 01 00 00 00 02 00 00 00 00 00 00 00 02 00 00 00
-00 00 00 00 02 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 01 00 00 00 08 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00 08 00 00 00 00 00 00
-00 00 00 00 00 03 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00 00 00 00 00 03 00
-00 00 01 00 00 00 01 00 00 00 00 00 00 00 00 00 00 40 00 00 00 00 00 40 6f 40 00 00 00 00 00 40 6f 40 30 00 00 00 06 00 00 00 01 00 00 00 00
-00 00 00 00 00 00 00 00 00 04 40 04 00 00 00 01 00 00 00 02 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 02 00 00 00
-00 00 00 00 01 00 00 00 08 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 08 00 00
-00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 01 00 00 00 01 00 00 00 00 00 00 00 00 00
-00 40 00 00 00 00 00 40 6f 40 00 00 00 00 00 40 6f 40 30 00 00 00 06 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 04 40 04 00 00 00 01
-00 00 00 02 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 01 00 00 00 08 00 00 00 00 00 00 00
-01 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00
-00 08 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00"""
+# rfdc driver xsa configuration field names
+import rfdc_dt_info
 
-rfdc_keys_git = [
-"DEVICE_ID",
-"C_BASEADDR",
-"C_High_Speed_ADC",
-"C_Sysref_Master",
-"C_Sysref_Master",
-"C_Sysref_Source",
-"C_Sysref_Source",
-"C_IP_Type",
-"C_Silicon_Revision",
-"C_DAC0_Enable",
-"C_DAC0_PLL_Enable",
-"C_DAC0_Sampling_Rate",
-"C_DAC0_Refclk_Freq",
-"C_DAC0_Fabric_Freq",
-"C_DAC0_FBDIV",
-"C_DAC0_OutDiv",
-"C_DAC0_Refclk_Div",
-"C_DAC0_Band",
-"C_DAC0_Fs_Max",
-"C_DAC0_Slices",
-"C_DAC_Slice00_Enable",
-"C_DAC_Invsinc_Ctrl00",
-"C_DAC_Mixer_Mode00",
-"C_DAC_Decoder_Mode00",
-"C_DAC_Slice01_Enable",
-"C_DAC_Invsinc_Ctrl01",
-"C_DAC_Mixer_Mode01",
-"C_DAC_Decoder_Mode01",
-"C_DAC_Slice02_Enable",
-"C_DAC_Invsinc_Ctrl02",
-"C_DAC_Mixer_Mode02",
-"C_DAC_Decoder_Mode02",
-"C_DAC_Slice03_Enable",
-"C_DAC_Invsinc_Ctrl03",
-"C_DAC_Mixer_Mode03",
-"C_DAC_Decoder_Mode03",
-"C_DAC_Data_Type00",
-"C_DAC_Data_Width00",
-"C_DAC_Interpolation_Mode00",
-"C_DAC_Fifo00_Enable",
-"C_DAC_Adder00_Enable",
-"C_DAC_Mixer_Type00",
-"C_DAC_Data_Type01",
-"C_DAC_Data_Width01",
-"C_DAC_Interpolation_Mode01",
-"C_DAC_Fifo01_Enable",
-"C_DAC_Adder01_Enable",
-"C_DAC_Mixer_Type01",
-"C_DAC_Data_Type02",
-"C_DAC_Data_Width02",
-"C_DAC_Interpolation_Mode02",
-"C_DAC_Fifo02_Enable",
-"C_DAC_Adder02_Enable",
-"C_DAC_Mixer_Type02",
-"C_DAC_Data_Type03",
-"C_DAC_Data_Width03",
-"C_DAC_Interpolation_Mode03",
-"C_DAC_Fifo03_Enable",
-"C_DAC_Adder03_Enable",
-"C_DAC_Mixer_Type03",
-"C_DAC1_Enable",
-"C_DAC1_PLL_Enable",
-"C_DAC1_Sampling_Rate",
-"C_DAC1_Refclk_Freq",
-"C_DAC1_Fabric_Freq",
-"C_DAC1_FBDIV",
-"C_DAC1_OutDiv",
-"C_DAC1_Refclk_Div",
-"C_DAC1_Band",
-"C_DAC1_Fs_Max",
-"C_DAC1_Slices",
-"C_DAC_Slice10_Enable",
-"C_DAC_Invsinc_Ctrl10",
-"C_DAC_Mixer_Mode10",
-"C_DAC_Decoder_Mode10",
-"C_DAC_Slice11_Enable",
-"C_DAC_Invsinc_Ctrl11",
-"C_DAC_Mixer_Mode11",
-"C_DAC_Decoder_Mode11",
-"C_DAC_Slice12_Enable",
-"C_DAC_Invsinc_Ctrl12",
-"C_DAC_Mixer_Mode12",
-"C_DAC_Decoder_Mode12",
-"C_DAC_Slice13_Enable",
-"C_DAC_Invsinc_Ctrl13",
-"C_DAC_Mixer_Mode13",
-"C_DAC_Decoder_Mode13",
-"C_DAC_Data_Type10",
-"C_DAC_Data_Width10",
-"C_DAC_Interpolation_Mode10",
-"C_DAC_Fifo10_Enable",
-"C_DAC_Adder10_Enable",
-"C_DAC_Mixer_Type10",
-"C_DAC_Data_Type11",
-"C_DAC_Data_Width11",
-"C_DAC_Interpolation_Mode11",
-"C_DAC_Fifo11_Enable",
-"C_DAC_Adder11_Enable",
-"C_DAC_Mixer_Type11",
-"C_DAC_Data_Type12",
-"C_DAC_Data_Width12",
-"C_DAC_Interpolation_Mode12",
-"C_DAC_Fifo12_Enable",
-"C_DAC_Adder12_Enable",
-"C_DAC_Mixer_Type12",
-"C_DAC_Data_Type13",
-"C_DAC_Data_Width13",
-"C_DAC_Interpolation_Mode13",
-"C_DAC_Fifo13_Enable",
-"C_DAC_Adder13_Enable",
-"C_DAC_Mixer_Type13",
-"C_DAC2_Enable",
-"C_DAC2_PLL_Enable",
-"C_DAC2_Sampling_Rate",
-"C_DAC2_Refclk_Freq",
-"C_DAC2_Fabric_Freq",
-"C_DAC2_FBDIV",
-"C_DAC2_OutDiv",
-"C_DAC2_Refclk_Div",
-"C_DAC2_Band",
-"C_DAC2_Fs_Max",
-"C_DAC2_Slices",
-"C_DAC_Slice20_Enable",
-"C_DAC_Invsinc_Ctrl20",
-"C_DAC_Mixer_Mode20",
-"C_DAC_Decoder_Mode20",
-"C_DAC_Slice21_Enable",
-"C_DAC_Invsinc_Ctrl21",
-"C_DAC_Mixer_Mode21",
-"C_DAC_Decoder_Mode21",
-"C_DAC_Slice22_Enable",
-"C_DAC_Invsinc_Ctrl22",
-"C_DAC_Mixer_Mode22",
-"C_DAC_Decoder_Mode22",
-"C_DAC_Slice23_Enable",
-"C_DAC_Invsinc_Ctrl23",
-"C_DAC_Mixer_Mode23",
-"C_DAC_Decoder_Mode23",
-"C_DAC_Data_Type20",
-"C_DAC_Data_Width20",
-"C_DAC_Interpolation_Mode20",
-"C_DAC_Fifo20_Enable",
-"C_DAC_Adder20_Enable",
-"C_DAC_Mixer_Type20",
-"C_DAC_Data_Type21",
-"C_DAC_Data_Width21",
-"C_DAC_Interpolation_Mode21",
-"C_DAC_Fifo21_Enable",
-"C_DAC_Adder21_Enable",
-"C_DAC_Mixer_Type21",
-"C_DAC_Data_Type22",
-"C_DAC_Data_Width22",
-"C_DAC_Interpolation_Mode22",
-"C_DAC_Fifo22_Enable",
-"C_DAC_Adder22_Enable",
-"C_DAC_Mixer_Type22",
-"C_DAC_Data_Type23",
-"C_DAC_Data_Width23",
-"C_DAC_Interpolation_Mode23",
-"C_DAC_Fifo23_Enable",
-"C_DAC_Adder23_Enable",
-"C_DAC_Mixer_Type23",
-"C_DAC3_Enable",
-"C_DAC3_PLL_Enable",
-"C_DAC3_Sampling_Rate",
-"C_DAC3_Refclk_Freq",
-"C_DAC3_Fabric_Freq",
-"C_DAC3_FBDIV",
-"C_DAC3_OutDiv",
-"C_DAC3_Refclk_Div",
-"C_DAC3_Band",
-"C_DAC3_Fs_Max",
-"C_DAC3_Slices",
-"C_DAC_Slice30_Enable",
-"C_DAC_Invsinc_Ctrl30",
-"C_DAC_Mixer_Mode30",
-"C_DAC_Decoder_Mode30",
-"C_DAC_Slice31_Enable",
-"C_DAC_Invsinc_Ctrl31",
-"C_DAC_Mixer_Mode31",
-"C_DAC_Decoder_Mode31",
-"C_DAC_Slice32_Enable",
-"C_DAC_Invsinc_Ctrl32",
-"C_DAC_Mixer_Mode32",
-"C_DAC_Decoder_Mode32",
-"C_DAC_Slice33_Enable",
-"C_DAC_Invsinc_Ctrl33",
-"C_DAC_Mixer_Mode33",
-"C_DAC_Decoder_Mode33",
-"C_DAC_Data_Type30",
-"C_DAC_Data_Width30",
-"C_DAC_Interpolation_Mode30",
-"C_DAC_Fifo30_Enable",
-"C_DAC_Adder30_Enable",
-"C_DAC_Mixer_Type30",
-"C_DAC_Data_Type31",
-"C_DAC_Data_Width31",
-"C_DAC_Interpolation_Mode31",
-"C_DAC_Fifo31_Enable",
-"C_DAC_Adder31_Enable",
-"C_DAC_Mixer_Type31",
-"C_DAC_Data_Type32",
-"C_DAC_Data_Width32",
-"C_DAC_Interpolation_Mode32",
-"C_DAC_Fifo32_Enable",
-"C_DAC_Adder32_Enable",
-"C_DAC_Mixer_Type32",
-"C_DAC_Data_Type33",
-"C_DAC_Data_Width33",
-"C_DAC_Interpolation_Mode33",
-"C_DAC_Fifo33_Enable",
-"C_DAC_Adder33_Enable",
-"C_DAC_Mixer_Type33",
-"C_ADC0_Enable",
-"C_ADC0_PLL_Enable",
-"C_ADC0_Sampling_Rate",
-"C_ADC0_Refclk_Freq",
-"C_ADC0_Fabric_Freq",
-"C_ADC0_FBDIV",
-"C_ADC0_OutDiv",
-"C_ADC0_Refclk_Div",
-"C_ADC0_Band",
-"C_ADC0_Fs_Max",
-"C_ADC0_Slices",
-"C_ADC_Slice00_Enable",
-"C_ADC_Mixer_Mode00",
-"C_ADC_Slice01_Enable",
-"C_ADC_Mixer_Mode01",
-"C_ADC_Slice02_Enable",
-"C_ADC_Mixer_Mode02",
-"C_ADC_Slice03_Enable",
-"C_ADC_Mixer_Mode03",
-"C_ADC_Data_Type00",
-"C_ADC_Data_Width00",
-"C_ADC_Decimation_Mode00",
-"C_ADC_Fifo00_Enable",
-"C_ADC_Mixer_Type00",
-"C_ADC_Data_Type01",
-"C_ADC_Data_Width01",
-"C_ADC_Decimation_Mode01",
-"C_ADC_Fifo01_Enable",
-"C_ADC_Mixer_Type01",
-"C_ADC_Data_Type02",
-"C_ADC_Data_Width02",
-"C_ADC_Decimation_Mode02",
-"C_ADC_Fifo02_Enable",
-"C_ADC_Mixer_Type02",
-"C_ADC_Data_Type03",
-"C_ADC_Data_Width03",
-"C_ADC_Decimation_Mode03",
-"C_ADC_Fifo03_Enable",
-"C_ADC_Mixer_Type03",
-"C_ADC1_Enable",
-"C_ADC1_PLL_Enable",
-"C_ADC1_Sampling_Rate",
-"C_ADC1_Refclk_Freq",
-"C_ADC1_Fabric_Freq",
-"C_ADC1_FBDIV",
-"C_ADC1_OutDiv",
-"C_ADC1_Refclk_Div",
-"C_ADC1_Band",
-"C_ADC1_Fs_Max",
-"C_ADC1_Slices",
-"C_ADC_Slice10_Enable",
-"C_ADC_Mixer_Mode10",
-"C_ADC_Slice11_Enable",
-"C_ADC_Mixer_Mode11",
-"C_ADC_Slice12_Enable",
-"C_ADC_Mixer_Mode12",
-"C_ADC_Slice13_Enable",
-"C_ADC_Mixer_Mode13",
-"C_ADC_Data_Type10",
-"C_ADC_Data_Width10",
-"C_ADC_Decimation_Mode10",
-"C_ADC_Fifo10_Enable",
-"C_ADC_Mixer_Type10",
-"C_ADC_Data_Type11",
-"C_ADC_Data_Width11",
-"C_ADC_Decimation_Mode11",
-"C_ADC_Fifo11_Enable",
-"C_ADC_Mixer_Type11",
-"C_ADC_Data_Type12",
-"C_ADC_Data_Width12",
-"C_ADC_Decimation_Mode12",
-"C_ADC_Fifo12_Enable",
-"C_ADC_Mixer_Type12",
-"C_ADC_Data_Type13",
-"C_ADC_Data_Width13",
-"C_ADC_Decimation_Mode13",
-"C_ADC_Fifo13_Enable",
-"C_ADC_Mixer_Type13",
-"C_ADC2_Enable",
-"C_ADC2_PLL_Enable",
-"C_ADC2_Sampling_Rate",
-"C_ADC2_Refclk_Freq",
-"C_ADC2_Fabric_Freq",
-"C_ADC2_FBDIV",
-"C_ADC2_OutDiv",
-"C_ADC2_Refclk_Div",
-"C_ADC2_Band",
-"C_ADC2_Fs_Max",
-"C_ADC2_Slices",
-"C_ADC_Slice20_Enable",
-"C_ADC_Mixer_Mode20",
-"C_ADC_Slice21_Enable",
-"C_ADC_Mixer_Mode21",
-"C_ADC_Slice22_Enable",
-"C_ADC_Mixer_Mode22",
-"C_ADC_Slice23_Enable",
-"C_ADC_Mixer_Mode23",
-"C_ADC_Data_Type20",
-"C_ADC_Data_Width20",
-"C_ADC_Decimation_Mode20",
-"C_ADC_Fifo20_Enable",
-"C_ADC_Mixer_Type20",
-"C_ADC_Data_Type21",
-"C_ADC_Data_Width21",
-"C_ADC_Decimation_Mode21",
-"C_ADC_Fifo21_Enable",
-"C_ADC_Mixer_Type21",
-"C_ADC_Data_Type22",
-"C_ADC_Data_Width22",
-"C_ADC_Decimation_Mode22",
-"C_ADC_Fifo22_Enable",
-"C_ADC_Mixer_Type22",
-"C_ADC_Data_Type23",
-"C_ADC_Data_Width23",
-"C_ADC_Decimation_Mode23",
-"C_ADC_Fifo23_Enable",
-"C_ADC_Mixer_Type23",
-"C_ADC3_Enable",
-"C_ADC3_PLL_Enable",
-"C_ADC3_Sampling_Rate",
-"C_ADC3_Refclk_Freq",
-"C_ADC3_Fabric_Freq",
-"C_ADC3_FBDIV",
-"C_ADC3_OutDiv",
-"C_ADC3_Refclk_Div",
-"C_ADC3_Band",
-"C_ADC3_Fs_Max",
-"C_ADC3_Slices",
-"C_ADC_Slice30_Enable",
-"C_ADC_Mixer_Mode30",
-"C_ADC_Slice31_Enable",
-"C_ADC_Mixer_Mode31",
-"C_ADC_Slice32_Enable",
-"C_ADC_Mixer_Mode32",
-"C_ADC_Slice33_Enable",
-"C_ADC_Mixer_Mode33",
-"C_ADC_Data_Type30",
-"C_ADC_Data_Width30",
-"C_ADC_Decimation_Mode30",
-"C_ADC_Fifo30_Enable",
-"C_ADC_Mixer_Type30",
-"C_ADC_Data_Type31",
-"C_ADC_Data_Width31",
-"C_ADC_Decimation_Mode31",
-"C_ADC_Fifo31_Enable",
-"C_ADC_Mixer_Type31",
-"C_ADC_Data_Type32",
-"C_ADC_Data_Width32",
-"C_ADC_Decimation_Mode32",
-"C_ADC_Fifo32_Enable",
-"C_ADC_Mixer_Type32",
-"C_ADC_Data_Type33",
-"C_ADC_Data_Width33",
-"C_ADC_Decimation_Mode33",
-"C_ADC_Fifo33_Enable",
-"C_ADC_Mixer_Type33"
-]
+"""
 
-rfdc_keys = [
-  "DEVICE_ID",
-  "C_BASEADDR",
-  "C_High_Speed_ADC",
-  "C_Sysref_Master",
-  "C_Sysref_Master",
-  "C_Sysref_Source",
-  "C_Sysref_Source",
-  "C_IP_Type",
-  "C_Silicon_Revision",
-  "C_DAC0_Enable",
-  "C_DAC0_PLL_Enable",
-  "C_DAC0_Sampling_Rate",
-  "C_DAC0_Refclk_Freq",
-  "C_DAC0_Fabric_Freq",
-  "C_DAC0_FBDIV",
-  "C_DAC0_OutDiv",
-  "C_DAC0_Refclk_Div",
-  "C_DAC0_Band",
-  "C_DAC0_Fs_Max",
-  "C_DAC0_Slices",
-  "C_DAC_Slice00_Enable",
-  "C_DAC_Invsinc_Ctrl00",
-  "C_DAC_Mixer_Mode00",
-  "C_DAC_Decoder_Mode00",
-  "C_DAC_Slice01_Enable",
-  "C_DAC_Invsinc_Ctrl01",
-  "C_DAC_Mixer_Mode01",
-  "C_DAC_Decoder_Mode01",
-  "C_DAC_Slice02_Enable",
-  "C_DAC_Invsinc_Ctrl02",
-  "C_DAC_Mixer_Mode02",
-  "C_DAC_Decoder_Mode02",
-  "C_DAC_Slice03_Enable",
-  "C_DAC_Invsinc_Ctrl03",
-  "C_DAC_Mixer_Mode03",
-  "C_DAC_Decoder_Mode03",
-  "C_DAC_Data_Type00",
-  "C_DAC_Data_Width00",
-  "C_DAC_Interpolation_Mode00",
-  "C_DAC_Fifo00_Enable",
-  "C_DAC_Adder00_Enable",
-  "C_DAC_Mixer_Type00",
-  "C_DAC_Data_Type01",
-  "C_DAC_Data_Width01",
-  "C_DAC_Interpolation_Mode01",
-  "C_DAC_Fifo01_Enable",
-  "C_DAC_Adder01_Enable",
-  "C_DAC_Mixer_Type01",
-  "C_DAC_Data_Type02",
-  "C_DAC_Data_Width02",
-  "C_DAC_Interpolation_Mode02",
-  "C_DAC_Fifo02_Enable",
-  "C_DAC_Adder02_Enable",
-  "C_DAC_Mixer_Type02",
-  "C_DAC_Data_Type03",
-  "C_DAC_Data_Width03",
-  "C_DAC_Interpolation_Mode03",
-  "C_DAC_Fifo03_Enable",
-  "C_DAC_Adder03_Enable",
-  "C_DAC_Mixer_Type03",
-  "C_DAC1_Enable",
-  "C_DAC1_PLL_Enable",
-  "C_DAC1_Sampling_Rate",
-  "C_DAC1_Refclk_Freq",
-  "C_DAC1_Fabric_Freq",
-  "C_DAC1_FBDIV",
-  "C_DAC1_OutDiv",
-  "C_DAC1_Refclk_Div",
-  "C_DAC1_Band",
-  "C_DAC1_Fs_Max",
-  "C_DAC1_Slices",
-  "C_DAC_Slice10_Enable",
-  "C_DAC_Invsinc_Ctrl10",
-  "C_DAC_Mixer_Mode10",
-  "C_DAC_Decoder_Mode10",
-  "C_DAC_Slice11_Enable",
-  "C_DAC_Invsinc_Ctrl11",
-  "C_DAC_Mixer_Mode11",
-  "C_DAC_Decoder_Mode11",
-  "C_DAC_Slice12_Enable",
-  "C_DAC_Invsinc_Ctrl12",
-  "C_DAC_Mixer_Mode12",
-  "C_DAC_Decoder_Mode12",
-  "C_DAC_Slice13_Enable",
-  "C_DAC_Invsinc_Ctrl13",
-  "C_DAC_Mixer_Mode13",
-  "C_DAC_Decoder_Mode13",
-  "C_DAC_Data_Type10",
-  "C_DAC_Data_Width10",
-  "C_DAC_Interpolation_Mode10",
-  "C_DAC_Fifo10_Enable",
-  "C_DAC_Adder10_Enable",
-  "C_DAC_Mixer_Type10",
-  "C_DAC_Data_Type11",
-  "C_DAC_Data_Width11",
-  "C_DAC_Interpolation_Mode11",
-  "C_DAC_Fifo11_Enable",
-  "C_DAC_Adder11_Enable",
-  "C_DAC_Mixer_Type11",
-  "C_DAC_Data_Type12",
-  "C_DAC_Data_Width12",
-  "C_DAC_Interpolation_Mode12",
-  "C_DAC_Fifo12_Enable",
-  "C_DAC_Adder12_Enable",
-  "C_DAC_Mixer_Type12",
-  "C_DAC_Data_Type13",
-  "C_DAC_Data_Width13",
-  "C_DAC_Interpolation_Mode13",
-  "C_DAC_Fifo13_Enable",
-  "C_DAC_Adder13_Enable",
-  "C_DAC_Mixer_Type13",
-  "C_DAC2_Enable",
-  "C_DAC2_PLL_Enable",
-  "C_DAC2_Sampling_Rate",
-  "C_DAC2_Refclk_Freq",
-  "C_DAC2_Fabric_Freq",
-  "C_DAC2_FBDIV",
-  "C_DAC2_OutDiv",
-  "C_DAC2_Refclk_Div",
-  "C_DAC2_Band",
-  "C_DAC2_Fs_Max",
-  "C_DAC2_Slices",
-  "C_DAC_Slice20_Enable",
-  "C_DAC_Invsinc_Ctrl20",
-  "C_DAC_Mixer_Mode20",
-  "C_DAC_Decoder_Mode20",
-  "C_DAC_Slice21_Enable",
-  "C_DAC_Invsinc_Ctrl21",
-  "C_DAC_Mixer_Mode21",
-  "C_DAC_Decoder_Mode21",
-  "C_DAC_Slice22_Enable",
-  "C_DAC_Invsinc_Ctrl22",
-  "C_DAC_Mixer_Mode22",
-  "C_DAC_Decoder_Mode22" 
-  "C_DAC_Slice23_Enable",
-  "C_DAC_Invsinc_Ctrl23",
-  "C_DAC_Mixer_Mode23",
-  "C_DAC_Decoder_Mode23",
-  "C_DAC_Data_Type20",
-  "C_DAC_Data_Width20",
-  "C_DAC_Interpolation_Mode20",
-  "C_DAC_Fifo20_Enable",
-  "C_DAC_Adder20_Enable",
-  "C_DAC_Mixer_Type20",
-  "C_DAC_Data_Type21",
-  "C_DAC_Data_Width21",
-  "C_DAC_Interpolation_Mode21",
-  "C_DAC_Fifo21_Enable",
-  "C_DAC_Adder21_Enable",
-  "C_DAC_Mixer_Type21",
-  "C_DAC_Data_Type22",
-  "C_DAC_Data_Width22",
-  "C_DAC_Interpolation_Mode22",
-  "C_DAC_Fifo22_Enable",
-  "C_DAC_Adder22_Enable",
-  "C_DAC_Mixer_Type22",
-  "C_DAC_Data_Type23",
-  "C_DAC_Data_Width23",
-  "C_DAC_Interpolation_Mode23",
-  "C_DAC_Fifo23_Enable",
-  "C_DAC_Adder23_Enable",
-  "C_DAC_Mixer_Type23",
-  "C_DAC3_Enable",
-  "C_DAC3_PLL_Enable",
-  "C_DAC3_Sampling_Rate",
-  "C_DAC3_Refclk_Freq",
-  "C_DAC3_Fabric_Freq",
-  "C_DAC3_FBDIV",
-  "C_DAC3_OutDiv",
-  "C_DAC3_Refclk_Div",
-  "C_DAC3_Band",
-  "C_DAC3_Fs_Max",
-  "C_DAC3_Slices",
-  "C_DAC_Slice30_Enable",
-  "C_DAC_Invsinc_Ctrl30",
-  "C_DAC_Mixer_Mode30",
-  "C_DAC_Decoder_Mode30",
-  "C_DAC_Slice31_Enable",
-  "C_DAC_Invsinc_Ctrl31",
-  "C_DAC_Mixer_Mode31",
-  "C_DAC_Decoder_Mode31",
-  "C_DAC_Slice32_Enable",
-  "C_DAC_Invsinc_Ctrl32",
-  "C_DAC_Mixer_Mode32",
-  "C_DAC_Decoder_Mode32",
-  "C_DAC_Slice33_Enable",
-  "C_DAC_Invsinc_Ctrl33",
-  "C_DAC_Mixer_Mode33",
-  "C_DAC_Decoder_Mode33",
-  "C_DAC_Data_Type30",
-  "C_DAC_Data_Width30",
-  "C_DAC_Interpolation_Mode30",
-  "C_DAC_Fifo30_Enable",
-  "C_DAC_Adder30_Enable",
-  "C_DAC_Mixer_Type30",
-  "C_DAC_Data_Type31",
-  "C_DAC_Data_Width31",
-  "C_DAC_Interpolation_Mode31",
-  "C_DAC_Fifo31_Enable",
-  "C_DAC_Adder31_Enable",
-  "C_DAC_Mixer_Type31",
-  "C_DAC_Data_Type32",
-  "C_DAC_Data_Width32",
-  "C_DAC_Interpolation_Mode32",
-  "C_DAC_Fifo32_Enable",
-  "C_DAC_Adder32_Enable",
-  "C_DAC_Mixer_Type32",
-  "C_DAC_Data_Type33",
-  "C_DAC_Data_Width33",
-  "C_DAC_Interpolation_Mode33",
-  "C_DAC_Fifo33_Enable",
-  "C_DAC_Adder33_Enable",
-  "C_DAC_Mixer_Type33",
-  "C_ADC0_Enable",
-  "C_ADC0_PLL_Enable",
-  "C_ADC0_Sampling_Rate",
-  "C_ADC0_Refclk_Freq",
-  "C_ADC0_Fabric_Freq",
-  "C_ADC0_FBDIV",
-  "C_ADC0_OutDiv",
-  "C_ADC0_Refclk_Div",
-  "C_ADC0_Band",
-  "C_ADC0_Fs_Max",
-  "C_ADC0_Slices",
-  "C_ADC_Slice00_Enable",
-  "C_ADC_Mixer_Mode00",
-  "C_ADC_Slice01_Enable",
-  "C_ADC_Mixer_Mode01",
-  "C_ADC_Slice02_Enable",
-  "C_ADC_Mixer_Mode02",
-  "C_ADC_Slice03_Enable",
-  "C_ADC_Mixer_Mode03",
-  "C_ADC_Data_Type00",
-  "C_ADC_Data_Width00",
-  "C_ADC_Decimation_Mode00",
-  "C_ADC_Fifo00_Enable",
-  "C_ADC_Mixer_Type00",
-  "C_ADC_Data_Type01",
-  "C_ADC_Data_Width01",
-  "C_ADC_Decimation_Mode01",
-  "C_ADC_Fifo01_Enable",
-  "C_ADC_Mixer_Type01",
-  "C_ADC_Data_Type02",
-  "C_ADC_Data_Width02",
-  "C_ADC_Decimation_Mode02",
-  "C_ADC_Fifo02_Enable",
-  "C_ADC_Mixer_Type02",
-  "C_ADC_Data_Type03",
-  "C_ADC_Data_Width03",
-  "C_ADC_Decimation_Mode03",
-  "C_ADC_Fifo03_Enable",
-  "C_ADC_Mixer_Type03",
-  "C_ADC1_Enable",
-  "C_ADC1_PLL_Enable",
-  "C_ADC1_Sampling_Rate",
-  "C_ADC1_Refclk_Freq",
-  "C_ADC1_Fabric_Freq",
-  "C_ADC1_FBDIV",
-  "C_ADC1_OutDiv",
-  "C_ADC1_Refclk_Div",
-  "C_ADC1_Band",
-  "C_ADC1_Fs_Max",
-  "C_ADC1_Slices",
-  "C_ADC_Slice10_Enable",
-  "C_ADC_Mixer_Mode10",
-  "C_ADC_Slice11_Enable",
-  "C_ADC_Mixer_Mode11",
-  "C_ADC_Slice12_Enable",
-  "C_ADC_Mixer_Mode12",
-  "C_ADC_Slice13_Enable",
-  "C_ADC_Mixer_Mode13",
-  "C_ADC_Data_Type10",
-  "C_ADC_Data_Width10",
-  "C_ADC_Decimation_Mode10",
-  "C_ADC_Fifo10_Enable",
-  "C_ADC_Mixer_Type10",
-  "C_ADC_Data_Type11",
-  "C_ADC_Data_Width11",
-  "C_ADC_Decimation_Mode11",
-  "C_ADC_Fifo11_Enable",
-  "C_ADC_Mixer_Type11",
-  "C_ADC_Data_Type12",
-  "C_ADC_Data_Width12",
-  "C_ADC_Decimation_Mode12",
-  "C_ADC_Fifo12_Enable",
-  "C_ADC_Mixer_Type12",
-  "C_ADC_Data_Type13",
-  "C_ADC_Data_Width13",
-  "C_ADC_Decimation_Mode13",
-  "C_ADC_Fifo13_Enable",
-  "C_ADC_Mixer_Type13",
-  "C_ADC2_Enable",
-  "C_ADC2_PLL_Enable",
-  "C_ADC2_Sampling_Rate",
-  "C_ADC2_Refclk_Freq",
-  "C_ADC2_Fabric_Freq",
-  "C_ADC2_FBDIV",
-  "C_ADC2_OutDiv",
-  "C_ADC2_Refclk_Div",
-  "C_ADC2_Band",
-  "C_ADC2_Fs_Max",
-  "C_ADC2_Slices",
-  "C_ADC_Slice20_Enable",
-  "C_ADC_Mixer_Mode20",
-  "C_ADC_Slice21_Enable",
-  "C_ADC_Mixer_Mode21",
-  "C_ADC_Slice22_Enable",
-  "C_ADC_Mixer_Mode22",
-  "C_ADC_Slice23_Enable",
-  "C_ADC_Mixer_Mode23",
-  "C_ADC_Data_Type20",
-  "C_ADC_Data_Width20",
-  "C_ADC_Decimation_Mode20",
-  "C_ADC_Fifo20_Enable",
-  "C_ADC_Mixer_Type20",
-  "C_ADC_Data_Type21",
-  "C_ADC_Data_Width21",
-  "C_ADC_Decimation_Mode21",
-  "C_ADC_Fifo21_Enable",
-  "C_ADC_Mixer_Type21",
-  "C_ADC_Data_Type22",
-  "C_ADC_Data_Width22",
-  "C_ADC_Decimation_Mode22",
-  "C_ADC_Fifo22_Enable",
-  "C_ADC_Mixer_Type22",
-  "C_ADC_Data_Type23",
-  "C_ADC_Data_Width23",
-  "C_ADC_Decimation_Mode23",
-  "C_ADC_Fifo23_Enable",
-  "C_ADC_Mixer_Type23",
-  "C_ADC3_Enable",
-  "C_ADC3_PLL_Enable",
-  "C_ADC3_Sampling_Rate",
-  "C_ADC3_Refclk_Freq",
-  "C_ADC3_Fabric_Freq",
-  "C_ADC3_FBDIV",
-  "C_ADC3_OutDiv",
-  "C_ADC3_Refclk_Div",
-  "C_ADC3_Band",
-  "C_ADC3_Fs_Max",
-  "C_ADC3_Slices",
-  "C_ADC_Slice30_Enable",
-  "C_ADC_Mixer_Mode30",
-  "C_ADC_Slice31_Enable",
-  "C_ADC_Mixer_Mode31",
-  "C_ADC_Slice32_Enable",
-  "C_ADC_Mixer_Mode32",
-  "C_ADC_Slice33_Enable",
-  "C_ADC_Mixer_Mode33",
-  "C_ADC_Data_Type30",
-  "C_ADC_Data_Width30",
-  "C_ADC_Decimation_Mode30",
-  "C_ADC_Fifo30_Enable",
-  "C_ADC_Mixer_Type30",
-  "C_ADC_Data_Type31",
-  "C_ADC_Data_Width31",
-  "C_ADC_Decimation_Mode31",
-  "C_ADC_Fifo31_Enable",
-  "C_ADC_Mixer_Type31",
-  "C_ADC_Data_Type32",
-  "C_ADC_Data_Width32",
-  "C_ADC_Decimation_Mode32",
-  "C_ADC_Fifo32_Enable",
-  "C_ADC_Mixer_Type32",
-  "C_ADC_Data_Type33",
-  "C_ADC_Data_Width33",
-  "C_ADC_Decimation_Mode33",
-  "C_ADC_Fifo33_Enable",
-  "C_ADC_Mixer_Type33"
-]
+  Example device tree declaration for the Xilinx RF-Data Converter, the Xilinx rfdc
+  linux software driver uses the device tree information to initialize and start
+  the driver
 
-if __name__=="__main__":
+  usp_rf_data_converter_0: usp_rf_data_converter@b0000000 {
+    clock-names = "adc2_clk_p", "adc2_clk_n", "s_axi_aclk", "m0_axis_aclk", "m1_axis_aclk", "m2_axis_aclk", "m3_axis_aclk";
+    clocks = <&misc_clk_0>, <&misc_clk_0>, <&zynqmp_clk 71>, <&misc_clk_0>, <&misc_clk_0>, <&misc_clk_0>, <&misc_clk_0>;
+    compatible = "xlnx,usp-rf-data-converter-2.4";
+    num-insts = <0x1>;
+    param-list = [ 00 00 00 00 00 00 00 b0 00 00 00 00 ... 00 00 00 03 00 00 00];
+    reg = <0x0 0xb0000000 0x0 0x40000>;
+};
 
+  param-list:
+    A little-endian byte string of all configuration parameters matching the
+    `XRFdc_Config` struct in the xilinx c rfdc driver
+    (github.com/xilinx/embeddedsw/XilinxProcessorIPLib/drivers/rfdc/src/xrfdc.h).
+    Instead of always looking at each of the fields and structs that make up the
+    `XRFdc_Config` struct the list of parameters that make this up are listed in the
+    xilinx device tree genertor tcl script
+    (github.com/xilinx/device-tree-xlnx/rfdc/data/rfdc.tcl). That list of parameters
+    are stored here and used for parsing as the `rfdc_param_keys` list. It is
+    possible that the `XRFdc_Config` struct change as the driver is updated.
+
+"""
+
+
+def gen_rfdc_dt(fpath, opath, baseaddr):
+  """
+    generates device tree node for xilinx rfdc, dumps the device tree
+    description as a dtsi and compiles using `dtc` to a dtbo for application as
+    an overlay
+
+    fpath, str: file name containing dumped information from IP core
+    opath, str: output file name for the dts
+    baseaddr, str: string of hex literals of the memory mapped address for nodes unit-address
+
+    return:
+      dt, dict: device tree node dictionary representation
+  """
+  # dictionary containing configuration parsed from dumped tcl
   rfdc_params = {}
+  # dictionary representing the property list and values for the rfdc device tree node
   dt = {}
+
+  # static properties from the rfdc device tree binding 
   dt['compatible'] = '"xlnx,usp-rf-data-converter-2.4";'
   dt['num-insts'] = '<0x1>;'
-  dt['baseaddr'] = ''
+
+  # baseaddr and size of rfdc address space to be used to complete the node unit-address
+  dt['baseaddr'] = baseaddr
   dt['range'] = '0x40000'
 
-  #fd = open('dump_rfdc2.txt', 'r')
-  fd = open('dump_rfdc_alpaca_snapshots.txt', 'r')
+  # hard code device id to be zero, only one rfdc allowed
+  rfdc_params['DEVICE_ID'] = '0'
 
-  # skip first line
+  dtreg_fmt = '<{:s} {:s} {:s} {:s}>;'
+  dt['reg'] = dtreg_fmt.format('0x0', dt['baseaddr'], '0x0', dt['range'])
+
+  if not os.path.exists(fpath):
+    raise FileNotFoundError
+  fd = open(fname, 'r')
+
+  # skip first line, just column headers
   s = fd.readline()
 
+  # parsing loop builind the `rfdc_params` dict
   for s in fd.readlines():
     s = s.split()
 
@@ -811,11 +88,11 @@ if __name__=="__main__":
 
   fd.close()
 
-  # build param list
+  # build `param-list` property, see file header for information on property format
+  rfdc_param_keys = rfdc_dt_info.rfdc_keys_git
   param_list = ""
-  rfdc_params['DEVICE_ID'] = '0'
 
-  for k in rfdc_keys_git:
+  for k in rfdc_param_keys:
     fmt = ""
 
     if k == "C_BASEADDR":
@@ -826,7 +103,6 @@ if __name__=="__main__":
       # high address hard coded to 0x00000000
       param_list += " 00 00 00 00"
 
-      
     else:
       if ('_Sampling_Rate' in k) or ('_Refclk_Freq' in k) or ('_Fabric_Freq' in k) or ('_Fs_Max' in k):
         fmt = '<d' # little-endian double
@@ -856,22 +132,10 @@ if __name__=="__main__":
   param_list = param_list.lower()
 
   dt['param-list'] = '[{:s}];'.format(param_list)
-
-  dtreg_fmt = '<{:s} {:s} {:s} {:s}>;'
-  dt['reg'] = dtreg_fmt.format('0x0', dt['baseaddr'], '0x0', dt['range'])
-
-  # compare
-  g = gold_param_list.split()
-  p = param_list.split()
-
-  k = 0
-  for (i,j) in zip(g, p):
-    if (i != j):
-      print("ERROR", k, "g[k]=", i, "p[k]=",j)
-    k+=1
-
+  
+  # assemble dt node
   dtstr = []
-  dtstr.append('/* AUTOMATICALLY GENERATED */\n')
+  dtstr.append('/* AUTOMATICALLY GENERATED BY CASPER TOOLS */\n\n')
   dtstr.append('/dts-v1/;')
   dtstr.append('/plugin/;')
   dtstr.append('/ {')
@@ -891,9 +155,81 @@ if __name__=="__main__":
   dtstr.append('    };')
   dtstr.append('};')
 
+  # write dtsi node to file
   dtnode = '\n'.join(dtstr)
-  print(dtnode)
-
-  fd = open('casper-rfdc-overlay-fragment.dtsi', 'w+')
+  fd = open(opath, 'w+')
   fd.write(dtnode)
-  fd.close() 
+  fd.close()
+
+  # write dtbo, could instead pipe to stdin if wanted
+  # as long as we sourced Vitis before starting `dtc` should be on the path, check anyway
+  path = os.getenv('PATH')
+  dtcexe = None
+  for p in path.split(':'):
+    if os.path.exists(os.path.join(p, 'dtc')):
+      dtcexe = os.path.join(p, 'dtc')
+
+  if dtcexe:
+    e = os.system("{:s} -I dts {:s} -O dtb -b 0 -@ -o {:s}".format(dtcexe, opath, dtbopath)
+    if e not 0:
+      print("Failed to write dtb")
+  else:
+    print("dtc executable not found, cannot compile dtbo")
+
+  return dt
+
+
+if __name__=="__main__":
+
+  gold_param_list = """00 00 00 00 00 00 00 b0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 01 00 00 00 02 00 00 00 00 00 00 00
+     00 00 00 00 00 00 00 00 9a 99 99 99 99 99 19 40 00 00 00 00 00 00 b9 40 00 00 00 00 00 00 00 00 0a 00 00 00 02 00 00 00 01 00 00 00 00 00 00
+     00 00 00 00 00 00 00 24 40 04 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00
+     00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00
+     00 00 00 03 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00
+     00 00 00 00 03 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 00 00 00 00 9a 99 99 99 99 99 19
+     40 00 00 00 00 00 00 b9 40 00 00 00 00 00 00 00 00 0a 00 00 00 02 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 24 40 04 00 00 00 00 00
+     00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00
+     00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 10 00 00 00
+     00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 10 00 00
+     00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 00 00 00 00 9a 99 99 99 99 99 19 40 00 00 00 00 00 00 b9 40 00 00 00 00 00 00
+     00 00 0a 00 00 00 02 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 24 40 04 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00
+     00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00
+     00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00
+     00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00
+     00 00 00 00 00 00 00 00 00 00 9a 99 99 99 99 99 19 40 00 00 00 00 00 00 b9 40 00 00 00 00 00 00 00 00 0a 00 00 00 02 00 00 00 01 00 00 00 00
+     00 00 00 00 00 00 00 00 00 24 40 04 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00
+     00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00
+     00 00 00 00 00 03 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00
+     00 00 00 00 00 00 03 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 01 00 00 00 01 00 00 00 00 00 00 00 00
+     00 00 40 00 00 00 00 00 40 6f 40 00 00 00 00 00 40 6f 40 30 00 00 00 06 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 04 40 04 00 00 00
+     01 00 00 00 02 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 01 00 00 00 08 00 00 00 00 00 00
+     00 01 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00
+     00 00 08 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 01 00 00 00 01 00 00 00 00 00 00 00 00 00 00 40 00 00 00 00 00 40 6f 40 00 00 00 00 00
+     40 6f 40 30 00 00 00 06 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 04 40 04 00 00 00 01 00 00 00 02 00 00 00 00 00 00 00 02 00 00 00
+     00 00 00 00 02 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 01 00 00 00 08 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00 08 00 00 00 00 00 00
+     00 00 00 00 00 03 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00 00 00 00 00 03 00
+     00 00 01 00 00 00 01 00 00 00 00 00 00 00 00 00 00 40 00 00 00 00 00 40 6f 40 00 00 00 00 00 40 6f 40 30 00 00 00 06 00 00 00 01 00 00 00 00
+     00 00 00 00 00 00 00 00 00 04 40 04 00 00 00 01 00 00 00 02 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 02 00 00 00
+     00 00 00 00 01 00 00 00 08 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 08 00 00
+     00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 01 00 00 00 01 00 00 00 00 00 00 00 00 00
+     00 40 00 00 00 00 00 40 6f 40 00 00 00 00 00 40 6f 40 30 00 00 00 06 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 04 40 04 00 00 00 01
+     00 00 00 02 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 01 00 00 00 08 00 00 00 00 00 00 00
+     01 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00
+     00 08 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00"""
+
+  fpath = 'dump_rfdc_alpaca_snapshots.txt'
+  opath = 'alpaca-rfdc-overlay-fragment.dtsi'
+  dt = gen_rfdc_dt(fpath, opath, '0xa0040000')
+
+  # compare
+  g = gold_param_list.split()
+  p = dt['param_list'].split()
+
+  k = 0
+  for (i,j) in zip(g, p):
+    if (i != j):
+      print("ERROR", k, "g[k]=", i, "p[k]=",j)
+    k+=1
+
+  print("SUCCESS byte strings matched")
+
