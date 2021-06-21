@@ -44,7 +44,10 @@ def gen_rfdc_dt(fpath, opath, baseaddr):
     baseaddr, str: string of hex literals of the memory mapped address for nodes unit-address
 
     return:
-      dt, dict: device tree node dictionary representation
+      dt, dict: device tree node dictionary representation, if this ends up being to the tools
+                a more useful implementation would manage a device tree implementation adding
+                this (and other nodes) as part of a managed tree
+                
   """
   # dictionary containing configuration parsed from dumped tcl
   rfdc_params = {}
@@ -67,7 +70,7 @@ def gen_rfdc_dt(fpath, opath, baseaddr):
 
   if not os.path.exists(fpath):
     raise FileNotFoundError
-  fd = open(fname, 'r')
+  fd = open(fpath, 'r')
 
   # skip first line, just column headers
   s = fd.readline()
@@ -157,7 +160,7 @@ def gen_rfdc_dt(fpath, opath, baseaddr):
 
   # write dtsi node to file
   dtnode = '\n'.join(dtstr)
-  fd = open(opath, 'w+')
+  fd = open(opath+'.dtsi', 'w+')
   fd.write(dtnode)
   fd.close()
 
@@ -170,8 +173,8 @@ def gen_rfdc_dt(fpath, opath, baseaddr):
       dtcexe = os.path.join(p, 'dtc')
 
   if dtcexe:
-    e = os.system("{:s} -I dts {:s} -O dtb -b 0 -@ -o {:s}".format(dtcexe, opath, dtbopath)
-    if e not 0:
+    e = os.system("{:s} -I dts {:s} -O dtb -b 0 -@ -o {:s}".format(dtcexe, opath+'.dtsi', opath+'.dtbo'))
+    if e != 0:
       print("Failed to write dtb")
   else:
     print("dtc executable not found, cannot compile dtbo")
