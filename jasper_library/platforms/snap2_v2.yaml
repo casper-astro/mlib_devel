@@ -51,10 +51,10 @@ pins:
     loc: AV27
     iostd: LVCMOS25
   sync_in_p:
-    iostd: DIFF_HSTL_I_18
+    iostd: LVDS
     loc: AT14
   sync_in_n:
-    iostd: DIFF_HSTL_I_18
+    iostd: LVDS
     loc: AT13
   trig: # Schematic net TRIG_EXT
     iostd: LVCMOS18
