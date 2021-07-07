@@ -25,13 +25,13 @@ proc get_rfdc_clks {} {
   return $clk_pins
 }
 
-proc rfdc_dts_info {xsa} {
+proc rfdc_dts_info {xsa ofile} {
 
   hsi::open_hw_design $xsa
   set prop [rfdc_prop_list]
   set clks [get_rfdc_clks]
   set out "${prop}\nDT.CLOCKS ${clks}"
-  set dts_outfile [open "dump_rfdc.txt" w+]
+  set dts_outfile [open $ofile w+]
   puts $dts_outfile $out
   close $dts_outfile
   hsi::close_hw_design [hsi::current_hw_design]
