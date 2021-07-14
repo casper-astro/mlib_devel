@@ -33,6 +33,7 @@ bin_pt_out = get_var('bin_pt_out', 'defaults', defaults, varargin{:});
 quantization = get_var('quantization', 'defaults', defaults, varargin{:});
 overflow = get_var('overflow', 'defaults', defaults, varargin{:});
 latency = get_var('csp_latency', 'defaults', defaults, varargin{:});
+implementation = get_var('implementation', 'defaults', defaults, varargin{:});
 
 % If bin_pt_out == bin_pt_in, set quantization mode to truncate
 if bin_pt_out == bin_pt_in
@@ -116,13 +117,23 @@ set_param([blk,'/bit'], ...
   end
 
   % Setup adder
+  if implementation == 2
+    use_behavioral_HDL = 'on';
+  else
+    use_behavioral_HDL = 'off';
+  end
+  if implementation == 1
+    hw_selection = 'DSP48';
+  else
+    hw_selection = 'Fabric';
+  end
   set_param([blk,'/adder'], ...
     'n_bits', num2str(n_bits_out), ...
     'bin_pt', num2str(bin_pt_out), ...
     'overflow', overflow, ...
     'latency', num2str(latency), ...
-    'use_behavioral_HDL', 'off', ...
-    'hw_selection', 'Fabric', ...
+    'use_behavioral_HDL', use_behavioral_HDL, ...
+    'hw_selection', hw_selection, ...
     'pipelined', 'on');
 
   % Set attribute format string (block annotation)
