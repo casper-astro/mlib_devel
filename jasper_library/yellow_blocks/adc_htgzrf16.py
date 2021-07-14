@@ -254,12 +254,12 @@ class adc_htgzrf16(YellowBlock):
             # Data output clocks
             adc_inst.add_port('m%d_axis_aclk'%t, 'adc_clk')
             adc_inst.add_port('m%d_axis_aresetn'%t, self.fullname + "_rstn")
-            # Clock inputs
-            adc_inst.add_port('adc%d_clk_p'%t, 'rfdc_adc%d_clk_p'%t, dir='in', parent_port=True)
-            adc_inst.add_port('adc%d_clk_n'%t, 'rfdc_adc%d_clk_n'%t, dir='in', parent_port=True)
+        # Clock input -- all tiles use the ADC0 reference
+        adc_inst.add_port('adc0_clk_p', 'rfdc_adc%d_clk_p'%t, dir='in', parent_port=True)
+        adc_inst.add_port('adc0_clk_n', 'rfdc_adc%d_clk_n'%t, dir='in', parent_port=True)
 
-        adc_inst.add_port('sysref_in_p', 'rfdc_sysref_in_p', dir='in', parent_port=True)
-        adc_inst.add_port('sysref_in_n', 'rfdc_sysref_in_n', dir='in', parent_port=True)
+        adc_inst.add_port('sysref_in_p', '1\'b0', dir='in', parent_port=True)
+        adc_inst.add_port('sysref_in_n', '1\'b0', dir='in', parent_port=True)
 
         # RFDC AXI control interface
         adc_inst.add_port('s_axi_aclk', 'axil_clk')
