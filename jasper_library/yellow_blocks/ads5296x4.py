@@ -431,8 +431,8 @@ class ads5296x4(YellowBlock):
         # Don't constrain IO delays -- rely on runtime dynamic link training.
         # Explicitly set as false path to keep compiler from issuing warnings
         for b in range(self.board_count):
-            cons.append(InputDelayConstraint(clkname=clocks[b].name, consttype='min', constdelay_ns=1.25, portname="%s_%d_din_p[*]" % (self.port_prefix, b)))
-            cons.append(InputDelayConstraint(clkname=clocks[b].name, consttype='max', constdelay_ns=1.25, portname="%s_%d_din_p[*]" % (self.port_prefix, b)))
+            cons.append(InputDelayConstraint(clkname=clocks[b].name, consttype='min', constdelay_ns=1.5, portname="%s_%d_din_p[*]" % (self.port_prefix, b)))
+            cons.append(InputDelayConstraint(clkname=clocks[b].name, consttype='max', constdelay_ns=1.5, portname="%s_%d_din_p[*]" % (self.port_prefix, b)))
             cons.append(FalsePathConstraint(sourcepath="[get_ports %s_%d_din_p[*]]" % (self.port_prefix, b)))
         
         #for b in range(self.board_count):

@@ -51,11 +51,13 @@ module ads5296_unit (
   reg [9:0] shreg0R;
   reg [9:0] shreg1R;
   
+  reg rst_lclk; // Reset on LCLK domain. Maybe better timing to cross rst before using it?
   reg [2:0] bit_cnt;
   always @(posedge lclk) begin
     // Probably want to deassert rst with known phase to the frame clock
     // else bit slip will come up randomly
-    if (rst) begin
+    rst_lclk <= rst;
+    if (rst_lclk) begin
       bit_cnt <= 3'd0;
     end else begin
       // Increment bit index by 1, unless bitslip is strobed, in which case increment by 2
@@ -106,9 +108,9 @@ module ads5296_unit (
   assign fifo_rd_en = rd_en;
   assign fifo_wr_en = wr_en;
   data_fifo data_fifo_inst(
-    .rst(rst),                  // input wire srst
+    .rst(rst_lclk),            // input wire srst
     .wr_clk(clk_in),           // input wire wr_clk
-    .rd_clk(clk_out),              // input wire rd_clk
+    .rd_clk(clk_out),          // input wire rd_clk
     //.din({1'b1, 5'b0, fifo_din1, 1'b0, 5'b0, fifo_din0}), // input wire [31 : 0] din
     // Big endian -- write first sample out into MSBs
     // ???? Hardware testing suggests the order of samples is lane 1 before lane0.
