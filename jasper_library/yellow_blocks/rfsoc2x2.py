@@ -2,13 +2,17 @@ from .yellow_block import YellowBlock
 from clk_factors import clk_factors
 from constraints import ClockConstraint, ClockGroupConstraint, PortConstraint, RawConstraint
 
-class PYNQ2x2(YellowBlock):
+
+class rfsoc2x2(YellowBlock):
     def initialize(self):
         # TODO need any clocking infrastrucutre block - most likely can repurpose zcu216 but for htg clock pins
         self.add_source('infrastructure/zcu216_clk_infrastructure.sv')
         self.add_source('utils/cdc_synchroniser.vhd')
 
         self.blkdesign = '{:s}_base'.format(self.platform.conf['name'])
+
+        self.pl_clk_mhz = self.blk['pl_clk_rate']
+        self.T_pl_clk_ns = 1.0/self.pl_clk_mhz*1000
 
         # TODO: need new provides and figure the extent to provide these, because as the documentation says
         # if these lines aren't here the the toolflow breaks.
@@ -31,12 +35,11 @@ class PYNQ2x2(YellowBlock):
         top.assign_signal('axil_rst_n', 'peripheral_aresetn')
 
         # generate clock parameters to use pl_clk to drive as the user IP clock
-        pl_clk_mhz = self.blk['pl_clk_rate']
-        T_pl_clk_ns = 1.0/pl_clk_mhz*1000
-        clkparams = clk_factors(pl_clk_mhz, self.platform.user_clk_rate)
+        # TODO: will need to make changes when other user ip clk source options provided
+        clkparams = clk_factors(self.pl_clk_mhz, self.platform.user_clk_rate)
 
         inst_infr = top.get_instance('zcu216_clk_infrastructure', 'zcu216_clk_infr_inst')
-        inst_infr.add_parameter('PERIOD', "{:0.3f}".format(T_pl_clk_ns))
+        inst_infr.add_parameter('PERIOD', "{:0.3f}".format(self.T_pl_clk_ns))
         inst_infr.add_parameter('MULTIPLY', clkparams[0])
         inst_infr.add_parameter('DIVIDE',   clkparams[1])
         inst_infr.add_parameter('DIVCLK',   clkparams[2])
@@ -47,7 +50,10 @@ class PYNQ2x2(YellowBlock):
         inst_infr.add_port('adc_clk90', 'adc_clk90')
         inst_infr.add_port('adc_clk180', 'adc_clk180')
         inst_infr.add_port('adc_clk270', 'adc_clk270')
-        inst_infr.add_port('mmcm_locked', 'mmcm_locked', dir='out', parent_port=True)
+        inst_infr.add_port('mmcm_locked', 'mmcm_locked', dir='out')#, parent_sig=True)
+
+        top.add_port('mmcm_locked_gpio', dir='out', width=1)
+        top.assign_signal('mmcm_locked_gpio', '~mmcm_locked')
 
         # instance block design containing mpsoc, and axi protocol converter for casper mermory map (HPM0), axi gpio for software clk104
         # config (HPM1), and RFDC Xilinx IP (HPM1) that the rfdc yellow block will update based on user configuration
@@ -87,14 +93,14 @@ class PYNQ2x2(YellowBlock):
 
     def gen_constraints(self):
         cons = []
+
+        cons.append(ClockConstraint('pl_clk_p', 'pl_clk_p', period=self.T_pl_clk_ns, port_en=True, virtual_en=False))
         cons.append(PortConstraint('pl_clk_p', 'pl_clk_p'))
-        cons.append(RawConstraint('set_property DIFF_TERM_ADV TERM_100 [get_ports {pl_clk_p}]'))
+        # TODO: tweak this until we have the right reference clocks
+        cons.append(ClockGroupConstraint('clk_pl_0', 'pl_clk_mmcm', 'asynchronous'))
         # TODO: will need to add pl_sysref constraint under MTS
-        # TODO: will need to set DIFF_TERM_ADV for pl_sysref under MTS
 
-        # TODO: update this constraint pin to a valid LED for the pynq2x2
-        cons.append(RawConstraint('set_property -dict { PACKAGE_PIN AV15 IOSTANDARD LVCMOS18 } [get_ports { mmcm_locked }]'))
-
+        cons.append(RawConstraint('set_property -dict { PACKAGE_PIN AU12 IOSTANDARD LVCMOS18 } [get_ports { mmcm_locked_gpio }]'))
         # TODO: can extend to provide other onboard clocks
         #cons.append(PortConstraint('clk_100_p', 'clk_100_p'))
         #cons.append(ClockConstraint('clk_100_p','clk_100_p', period=10.0, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=5.0))
@@ -131,7 +137,8 @@ class PYNQ2x2(YellowBlock):
         #tcl_cmds['post_synth'] += ['set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pl_clk_p]']
 
         # export hardware design xsa for software
-        tcl_cmds['post_synth'] += ['write_hw_platform -fixed -force -file [get_property directory [current_project]/top.xsa']
+        tcl_cmds['post_bitgen'] = []
+        tcl_cmds['post_bitgen'] += ['write_hw_platform -fixed -include_bit -force -file [get_property directory [current_project]]/top.xsa']
 
         return tcl_cmds
 

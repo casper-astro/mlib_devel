@@ -1,9 +1,9 @@
-name: pynq2x2 
+name: rfsoc2x2 
 manufacturer: Xilinx
 fpga: xczu28dr-ffvg1517-2-e
 family: zynq-ultrascaleplus-rfsoc
-config_voltage: 1.8 # not used?
-cfgbvs: GND         # not used?
+config_voltage: 1.8
+cfgbvs: GND
 backend_target: vivado
 mmbus_architecture: AXI4-Lite
 mmbus_base_address: 0xA0000000
@@ -32,33 +32,18 @@ rfdc:
     has_adc_clk: False
     adc_clk_src: 3
 
-onehundredgbe:
-  # TODO: determine freq cmac should have been determined already
-  refclk_freq_str: "156.25"
-  # TODO test this out, or is it X0Y1?
-  cmac_loc:
-    - CMACE4_X0Y0
-
 provides:
-  - sys_clk
-  - axil_clk # keep this? come from pl_clk? or use clk100?
-  - sfp4x25  # TODO: this isn't right
+  - adc_clk
+  - axil_clk
   - sysref_in
 
-# TODO: figure these out, if available
 pins:
-  clk_100_p:
-    iostd: LVDS
-    loc: AM15
-  clk_100_n:
-    iostd: LVDS
-    loc: AN15
-  clk_125_p:
-    iostd: LVDS
-    loc: AL17
-  clk_125_n:
-    iostd: LVDS
-    loc: AM17
+  clk_200_p:
+    iostd: DIFF_HSTL_I_12
+    loc: G13
+  clk_200_n:
+    iostd: DIFF_HSTL_I_12
+    loc: G12
 
 # NOTE: most of the IO constraints and clocking constraints are taken care of by
 # the RFDC IP itself. Vivado has that baked into the output products of teh IP
@@ -74,34 +59,56 @@ pins:
   sysref_n:
     loc: U4
 
-  # SYSREF_FPGA_N/P on bank 64
+  # SYSREF_FPGA_N/P on bank 66
   pl_sysref_p:
-    iostd: LVDS
+    iostd: DIFF_HSTL_I_12
+    #iostd: LVDS
     loc: AP18
   pl_sysref_n:
-    iostd: LVDS
+    iostd: DIFF_HSTL_I_12
+    #iostd: LVDS
     loc: AR18
 
   #`FPGA_REFCLK_IN_N/P` on bank 65
   pl_clk_p:
-    iostd: LVDS
+    iostd: DIFF_HSTL_I_12
+    #iostd: LVDS
     loc: AN11
   pl_clk_n:
-    iostd: LVDS
+    iostd: DIFF_HSTL_I_12
+    #iostd: LVDS
     loc: AP11
 
-# TODO add vin since there are only two
-
-#TODO
   led:
     iostd: LVCMOS18
     loc:
-       - AR13
-       - AP13
-       - AR16
-       - AP16
-       - AP15
-       - AN16
-       - AN17
-       - AV15
+      - AW11 # blue
+      - AT11 # green
+      - AV11 # red
+      - AR11 # blue
+      - AN12 # green
+      - AN13 # red
+      - AR12 # white
+      - AT12 # white
+      - AV12 # white
+      - AU12 # white
 
+  lmk_reset:
+    iostd: LVCMOS18
+    loc: AT9
+
+  button:
+    iostd: LVCMOS18
+    loc:
+      - AM7 # PB0
+      - AM8 # PB1
+      - AN8 # PB2
+      - AP8 # PB3
+
+  switch:
+    iostd: LVCMOS18
+    loc:
+      - AT10 # SW1
+      - AU10 # SW2
+      - AV10 # SW2
+      - AW10 # SW3

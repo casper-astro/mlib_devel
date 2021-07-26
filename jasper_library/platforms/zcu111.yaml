@@ -96,10 +96,10 @@ pins:
   # Programmable MGT SI5382 chip GTY bank 128
   qsfp_mgt_ref_clk_p:
     loc:
-      - AA33
+      - Y31
   qsfp_mgt_ref_clk_n:
     loc:
-      - AA34
+      - Y32
   # SFP connected to MGT bank 128
   qsfp_mgt_tx_p: 
     loc: [Y35, V35, T35, R33]
