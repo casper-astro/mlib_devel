@@ -30,7 +30,7 @@ class ads5296x4(YellowBlock):
         self.add_source('ads5296x4_interface_v2/data_fifo.xci')
         self.add_source('spi_master/spi_master.v')
         self.add_source('spi_master/wb_spi_master.v')
-        self.add_source('wb_bram/wb_bram.v')
+        self.add_source('wb_bram')
         if self.port == self.clockport:
             self.provides = [
                              'adc%d_clk' % self.port,
