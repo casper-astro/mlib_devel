@@ -81,6 +81,10 @@ begin
     end generate DELAY_BITGEN;
   end generate DELAYGEN;
 
+  NODELAYGEN: if USE_DELAY = 0 generate
+    io_pad_delay <= io_pad;
+  end generate NODELAYGEN;
+
 -- ddr/sdr selection and register instantiation
 	DDR_GEN: if DDR = 1 generate
 		REG_DDR_GEN: for i in 0 to (WIDTH/(DDR+1)-1) generate

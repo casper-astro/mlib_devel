@@ -81,6 +81,10 @@ begin
     end generate DELAY_BITGEN;
   end generate DELAYGEN;
 
+  NODELAYGEN: if USE_DELAY = 0 generate
+    io_pad <= io_pad_delay;
+  end generate NODELAYGEN;
+
 -- diff output  buffer instantiation
     DIFFBUF_GEN: for i in 0 to (WIDTH/(DDR+1)-1) generate
         begin
