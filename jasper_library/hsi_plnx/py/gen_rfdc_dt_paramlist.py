@@ -2,7 +2,9 @@ import struct
 import os
 
 # rfdc driver xsa configuration field names
-import rfdc_dt_info
+from rfdc_dt_info import rfdc_keys_git
+
+DEBUG = 0
 
 """
 
@@ -33,7 +35,7 @@ import rfdc_dt_info
 """
 
 
-def gen_rfdc_dt(fpath, opath, baseaddr):
+def gen_rfdc_dt(fpath, opath, baseaddr, compile_dtbo=False):
   """
     generates device tree node for xilinx rfdc, dumps the device tree
     description as a dtsi and compiles using `dtc` to a dtbo for application as
@@ -92,15 +94,20 @@ def gen_rfdc_dt(fpath, opath, baseaddr):
   fd.close()
 
   # build `param-list` property, see file header for information on property format
-  rfdc_param_keys = rfdc_dt_info.rfdc_keys_git
+  rfdc_param_keys = rfdc_keys_git
   param_list = ""
 
   for k in rfdc_param_keys:
     fmt = ""
 
     if k == "C_BASEADDR":
-      v = rfdc_params[k]
+      # opt for casper provided `baseaddr` as the rfdc is managed by the casper axi4lite mmap and not
+      # the vivado board design
+      #v = rfdc_params[k]
+      v = dt['baseaddr'] # e.g., 0xA0040000
+
       dt['baseaddr'] = v.lower()
+
       # low address in little-endian
       param_list += " {:2s} {:2s} {:2s} {:2s}".format(v[8:10], v[6:8], v[4:6], v[2:4])#format(v[2:4], v[4:6], v[6:8], v[8:10])
       # high address hard coded to 0x00000000
@@ -126,12 +133,13 @@ def gen_rfdc_dt(fpath, opath, baseaddr):
       # make byte conversion
       p = struct.pack(fmt, t(v)) # struct.pack('d', 250.0)
       to_add = " {:s}".format(p.hex(' ', 1))
-      if fmt == '<d':
-        # NOTE: the {:8.3f} prints out to 3 dec but the value passed to jasper should contain 5
-        # as defined by the rfdc structure in the yellow block
-        print("{:28s} {:s} {:8.3f} {:s}".format(k, fmt, t(v), to_add))
-      elif fmt == '<i':
-        print("{:28s} {:s} {:8d} {:s}".format(k, fmt, t(v), to_add))
+      if DEBUG:
+        if fmt == '<d':
+          # NOTE: the {:8.3f} prints out to 3 decimal but fields have the precision as defined by
+          #  rfdc structure in the yellow block (e.g., sample rate/NCO have precision of 5)
+          print("{:28s} {:s} {:8.3f} {:s}".format(k, fmt, t(v), to_add))
+        elif fmt == '<i':
+          print("{:28s} {:s} {:8d} {:s}".format(k, fmt, t(v), to_add))
       param_list += " {:s}".format(p.hex(' ', 1))
 
   param_list = param_list.lower()
@@ -166,20 +174,21 @@ def gen_rfdc_dt(fpath, opath, baseaddr):
   fd.write(dtnode)
   fd.close()
 
-  # write dtbo, could instead pipe to stdin if wanted
-  # as long as we sourced Vitis before starting `dtc` should be on the path, check anyway
-  path = os.getenv('PATH')
-  dtcexe = None
-  for p in path.split(':'):
-    if os.path.exists(os.path.join(p, 'dtc')):
-      dtcexe = os.path.join(p, 'dtc')
+  if compile_dtbo:
+    # write dtbo, could instead pipe to stdin if wanted
+    # as long as we sourced Vitis before starting `dtc` should be on the path, check anyway
+    path = os.getenv('PATH')
+    dtcexe = None
+    for p in path.split(':'):
+      if os.path.exists(os.path.join(p, 'dtc')):
+        dtcexe = os.path.join(p, 'dtc')
 
-  if dtcexe:
-    e = os.system("{:s} -I dts {:s} -O dtb -b 0 -@ -o {:s}".format(dtcexe, opath+'.dtsi', opath+'.dtbo'))
-    if e != 0:
-      print("Failed to write dtb")
-  else:
-    print("dtc executable not found, cannot compile dtbo")
+    if dtcexe:
+      e = os.system("{:s} -I dts {:s} -O dtb -b 0 -@ -o {:s}".format(dtcexe, opath+'.dtsi', opath+'.dtbo'))
+      if e != 0:
+        print("Failed to write dtb")
+    else:
+      print("dtc executable not found, cannot compile dtbo")
 
   return dt
 
