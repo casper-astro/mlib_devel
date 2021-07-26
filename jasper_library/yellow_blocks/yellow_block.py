@@ -242,6 +242,19 @@ class YellowBlock(object):
         """
         return {}
 
+    def gen_xsct_tcl_cmds(self, jdts_dir):
+        """
+        :param jdts_dir:
+
+        :return: A list of xsct tcl cmds, None if no commands to add
+        """
+        return None
+
+    def gen_dt_node(self, mmap_info, jdts_dir):
+        """
+        """
+        return None
+
     def add_build_dir_source(self):
         """
         This function is neccessary as yellow blocks dont have access to the build directory

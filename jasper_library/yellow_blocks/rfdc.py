@@ -3,6 +3,8 @@ from .yellow_block import YellowBlock
 from .yellow_block_typecodes import TYPECODE_RFDC
 from constraints import PortConstraint, ClockConstraint, RawConstraint
 
+import os
+import struct
 from six import iteritems
 import re
 
@@ -11,7 +13,7 @@ class rfdc(YellowBlock):
   tile_attr_map = {
     # removed the enable object to be handled higher the class abstraction as this indexing [224-227] is incosistent with [0-3]
     #'enable'         : 'ADC{:d}_En',# ADC suffix {:d} is 224-227
-    'sample_rate'    : {'param' : 'ADC{:d}_Sampling_Rate', 'fmt' : "{{:.3f}}"}, # ADC suffix {:d} is 0-3
+    'sample_rate'    : {'param' : 'ADC{:d}_Sampling_Rate', 'fmt' : "{{:.5f}}"}, # ADC suffix {:d} is 0-3 # TODO: how many digits to add? was 3, upped to 5 for zcu111 tests
     'ref_clk'        : {'param' : 'ADC{:d}_Refclk_Freq'  , 'fmt' : "{{:.3f}}"},
     'clk_out'        : {'param' : 'ADC{:d}_Outclk_Freq'  , 'fmt' : "{{:.3f}}"},
     'axi_stream_clk' : {'param' : 'ADC{:d}_Fabric_Freq'  , 'fmt' : "{{:.3f}}"},
@@ -27,7 +29,7 @@ class rfdc(YellowBlock):
     'sample_per_cycle': {'param' : 'ADC_Data_Width{:d}{:d}',       'fmt' : "{{:d}}"},
     'mixer_type'      : {'param' : 'ADC_Mixer_Type{:d}{:d}',       'fmt' : "{{:d}}"},
     'mixer_mode'      : {'param' : 'ADC_Mixer_Mode{:d}{:d}',       'fmt' : "{{:d}}"},
-    'nco_freq'        : {'param' : 'ADC_NCO_Freq{:d}{:d}',         'fmt' : "{{:.3f}}"},
+    'nco_freq'        : {'param' : 'ADC_NCO_Freq{:d}{:d}',         'fmt' : "{{:.5f}}"}, # ADC suffix {:d} is 0-3 # TODO: how many digits to add? was 3, upped to 5 for zcu111 tests
     'coarse_freq'     : {'param' : 'ADC_Coarse_Mixer_Freq{:d}{:d}','fmt' : "{{:d}}"},
     'nyquist_zone'    : {'param' : 'ADC_Nyquist{:d}{:d}',          'fmt' : "{{:d}}"},
     'cal_modde'       : {'param' : 'ADC_CalOpt_Mode{:d}{:d}',      'fmt' : "{{:d}}"}
@@ -216,7 +218,9 @@ class rfdc(YellowBlock):
     blkdesign = '{:s}_base'.format(self.platform.conf['name'])
     bd_inst = top.get_instance(blkdesign, '{:s}_inst'.format(blkdesign))
 
-    top.add_axi4lite_interface(regname="RFDC", mode='rw', nbytes=0x40000, typecode=self.typecode, axi4lite_mode='raw') #self.unique_name
+    top.add_axi4lite_interface(regname="rfdc", mode='rw', nbytes=0x40000, typecode=self.typecode, axi4lite_mode='raw') #self.unique_name
+    # TODO: remove this, explain current approach (second paragraph) and that we can revert -- also mention that `regname` needs to match
+    # the signals `bd_inst` ports added, or breaks... this seems to be a flaw in our axi4lite apparoach
     # Note: rfdc axi4lite managed within block design on seperate mpsoc master interface. This has the downside of not exposing it to the
     # casper axi lite interconnect that ultimately adds the rfdc memory map to the core info table. In general though, the RFDC is more
     # managed by the xrfdc c driver than through direct memory map access that seemed to justify this being OK. However, granted there are
@@ -229,23 +233,23 @@ class rfdc(YellowBlock):
     # to add info directly rather than the what seems to be 'catch all' implementation where the single axi4lite interface observes
     # everything added to it and then does its thing at the very end.
 
-    bd_inst.add_port('RFDC_awaddr',  'm_axi4lite_RFDC_awaddr', width=32)
-    bd_inst.add_port('RFDC_awvalid', 'm_axi4lite_RFDC_awvalid')
-    bd_inst.add_port('RFDC_awready', 'm_axi4lite_RFDC_awready')
-    bd_inst.add_port('RFDC_wdata',   'm_axi4lite_RFDC_wdata', width=32)
-    bd_inst.add_port('RFDC_wstrb',   'm_axi4lite_RFDC_wstrb', width=4)
-    bd_inst.add_port('RFDC_wvalid',  'm_axi4lite_RFDC_wvalid')
-    bd_inst.add_port('RFDC_wready',  'm_axi4lite_RFDC_wready')
-    bd_inst.add_port('RFDC_bresp',   'm_axi4lite_RFDC_bresp', width=2)
-    bd_inst.add_port('RFDC_bvalid',  'm_axi4lite_RFDC_bvalid')
-    bd_inst.add_port('RFDC_bready',  'm_axi4lite_RFDC_bready')
-    bd_inst.add_port('RFDC_araddr',  'm_axi4lite_RFDC_araddr', width=32)
-    bd_inst.add_port('RFDC_arvalid', 'm_axi4lite_RFDC_arvalid')
-    bd_inst.add_port('RFDC_arready', 'm_axi4lite_RFDC_arready')
-    bd_inst.add_port('RFDC_rdata',   'm_axi4lite_RFDC_rdata', width=32)
-    bd_inst.add_port('RFDC_rresp',   'm_axi4lite_RFDC_rresp', width=2)
-    bd_inst.add_port('RFDC_rvalid',  'm_axi4lite_RFDC_rvalid')
-    bd_inst.add_port('RFDC_rready',  'm_axi4lite_RFDC_rready')
+    bd_inst.add_port('rfdc_awaddr',  'm_axi4lite_rfdc_awaddr', width=32)
+    bd_inst.add_port('rfdc_awvalid', 'm_axi4lite_rfdc_awvalid')
+    bd_inst.add_port('rfdc_awready', 'm_axi4lite_rfdc_awready')
+    bd_inst.add_port('rfdc_wdata',   'm_axi4lite_rfdc_wdata', width=32)
+    bd_inst.add_port('rfdc_wstrb',   'm_axi4lite_rfdc_wstrb', width=4)
+    bd_inst.add_port('rfdc_wvalid',  'm_axi4lite_rfdc_wvalid')
+    bd_inst.add_port('rfdc_wready',  'm_axi4lite_rfdc_wready')
+    bd_inst.add_port('rfdc_bresp',   'm_axi4lite_rfdc_bresp', width=2)
+    bd_inst.add_port('rfdc_bvalid',  'm_axi4lite_rfdc_bvalid')
+    bd_inst.add_port('rfdc_bready',  'm_axi4lite_rfdc_bready')
+    bd_inst.add_port('rfdc_araddr',  'm_axi4lite_rfdc_araddr', width=32)
+    bd_inst.add_port('rfdc_arvalid', 'm_axi4lite_rfdc_arvalid')
+    bd_inst.add_port('rfdc_arready', 'm_axi4lite_rfdc_arready')
+    bd_inst.add_port('rfdc_rdata',   'm_axi4lite_rfdc_rdata', width=32)
+    bd_inst.add_port('rfdc_rresp',   'm_axi4lite_rfdc_rresp', width=2)
+    bd_inst.add_port('rfdc_rvalid',  'm_axi4lite_rfdc_rvalid')
+    bd_inst.add_port('rfdc_rready',  'm_axi4lite_rfdc_rready')
 
     bd_inst.add_port('irq', 'rfdc_irq') #self.fullname+'_irq'
 
@@ -536,3 +540,288 @@ class rfdc(YellowBlock):
     return cmds
 
 
+  def gen_xsct_tcl_cmds(self, jdts_dir):
+    """
+    Generate xsct commands to produce a custom text dump intermediate representation of the rfdc configuration 
+    for device tree generation
+
+    Args:
+      jtds_dir (str): directory where build and intermediate products are placed
+
+    returns:
+      tcl_cmds (list[str]): xsct commands to append to custom xsct scripts
+    """
+    tcl_cmds = []
+
+    tcl_cmds.append('')
+    tcl_cmds.append('# generate property list for manual device tree node generation')
+    tcl_cmds.append('set rfdc_dts_dir {:s}/rfdc'.format(jdts_dir))
+    tcl_cmds.append('file mkdir $rfdc_dts_dir')
+    tcl_cmds.append('set ofile "${{rfdc_dts_dir}}/{:s}"'.format('rfdc.txt'))
+    tcl_cmds.append('set rfdc [hsi::get_cells usp_rf_data_converter_0]')
+    tcl_cmds.append('set prop_list [common::report_property -return_string $rfdc]')
+    tcl_cmds.append('set clk_pins [hsi::get_pins -of_objects [hsi::get_cells -hier $rfdc] -filter {TYPE==clk&&DIRECTION==I}]')
+    tcl_cmds.append('set out "${prop_list}\\nDT.CLOCKS ${clk_pins}"')
+    tcl_cmds.append('set fd_dts_outfile [open $ofile w+]')
+    tcl_cmds.append('puts $fd_dts_outfile $out')
+    tcl_cmds.append('close $fd_dts_outfile')
+    tcl_cmds.append('')
+
+    return tcl_cmds
+
+
+  def gen_dt_node(self, mmap_info, jdts_dir):
+    """
+    """
+    baseaddr = mmap_info['baseaddr']
+    # where the intermediate configuration information from xsct is stored
+    propinfo = '{:s}/{:s}/{:s}'.format(jdts_dir, 'rfdc', 'rfdc.txt')
+    # our output peripheral fragment
+    dtsopath = '{:s}/{:s}/{:s}'.format(jdts_dir, 'rfdc', 'rfdc-overlay-fragment')
+
+    # writes dtsi fragment
+    dt = self.gen_rfdc_dt(propinfo, dtsopath, '0x{:s}'.format(baseaddr))
+
+    return dt
+
+
+  def gen_rfdc_dt(self, fpath, opath, baseaddr):
+    """
+    Generates device tree node for xilinx rfdc, dumps the device tree
+    description as a dtsi and compiles using `dtc` to a dtbo for application as
+    an overlay
+
+    Args:
+      fpath (str): file name containing dumped information from IP core
+      opath (str): output file name for the dts
+      baseaddr (str): string of hex literals of the memory mapped address for nodes unit-address
+
+    return:
+      dt (dict): device tree node dictionary representation, if this ends up being to the tools
+                a more useful implementation would manage a device tree implementation adding
+                this (and other nodes) as part of a managed tree
+
+
+    Example device tree declaration for the Xilinx RF-Data Converter, the Xilinx rfdc
+    linux software driver uses the device tree information to initialize and start
+    the driver
+
+    usp_rf_data_converter_0: usp_rf_data_converter@b0000000 {
+      clock-names = "adc2_clk_p", "adc2_clk_n", "s_axi_aclk", "m0_axis_aclk", "m1_axis_aclk", "m2_axis_aclk", "m3_axis_aclk";
+      clocks = <&misc_clk_0>, <&misc_clk_0>, <&zynqmp_clk 71>, <&misc_clk_0>, <&misc_clk_0>, <&misc_clk_0>, <&misc_clk_0>;
+      compatible = "xlnx,usp-rf-data-converter-2.4";
+      num-insts = <0x1>;
+      param-list = [ 00 00 00 00 00 00 00 b0 00 00 00 00 ... 00 00 00 03 00 00 00];
+      reg = <0x0 0xb0000000 0x0 0x40000>;
+    };
+
+    param-list:
+      A little-endian byte string of all configuration parameters matching the
+      `XRFdc_Config` struct in the xilinx c rfdc driver
+      (github.com/xilinx/embeddedsw/XilinxProcessorIPLib/drivers/rfdc/src/xrfdc.h).
+      Instead of always looking at each of the fields and structs that make up the
+      `XRFdc_Config` struct the list of parameters that make this up are listed in the
+      xilinx device tree genertor tcl script
+      (github.com/xilinx/device-tree-xlnx/rfdc/data/rfdc.tcl). That list of parameters
+      are stored here and used for parsing as the `rfdc_param_keys` list. It is
+      possible that the `XRFdc_Config` struct change as the driver is updated.
+    """
+    DEBUG = 0
+
+    # dictionary containing configuration parsed from dumped tcl
+    rfdc_params = {}
+    # dictionary representing the property list and values for the rfdc device tree node
+    dt = {}
+
+    # static properties from the rfdc device tree binding
+    dt['compatible'] = '"xlnx,usp-rf-data-converter-2.4";'
+    dt['num-insts'] = '<0x1>;'
+
+    # baseaddr and size of rfdc address space to be used to complete the node unit-address
+    dt['baseaddr'] = baseaddr
+    dt['range'] = '0x40000'
+
+    # hard code device id to be zero, only one rfdc allowed
+    rfdc_params['DEVICE_ID'] = '0'
+
+    dtreg_fmt = '<{:s} {:s} {:s} {:s}>;'
+    dt['reg'] = dtreg_fmt.format('0x0', dt['baseaddr'], '0x0', dt['range'])
+
+    if not os.path.exists(fpath):
+      raise FileNotFoundError
+    fd = open(fpath, 'r')
+
+    # skip first line, just column headers
+    s = fd.readline()
+
+    # main parsing loop builind the `rfdc_params` dict
+    for s in fd.readlines():
+      s = s.split()
+
+      k = s[0]
+      if "CONFIG." in k:
+        v = s[3]
+        rfdc_params[k[7:]] = v # strip "CONFIG." and add value
+      elif "DT.CLOCKS" in k:
+        clks = s[1:]
+        clkstr = (len(clks)*'"{:s}"').format(*clks)
+        clkstr = clkstr.replace('""', '", "')
+        dt['clock-names'] = clkstr + ";"
+
+    fd.close()
+
+    # build `param-list` property, see file header for information on property format
+    rfdc_param_keys = rfdc_dt_conf_keys # intermediate variable to reference different possible key lists across driver versions
+    param_list = ""
+
+    for k in rfdc_param_keys:
+      fmt = ""
+
+      if k == "C_BASEADDR":
+        # opt for casper provided `baseaddr` as the rfdc is managed by the casper axi4lite mmap and not
+        # the vivado board design
+        #v = rfdc_params[k]
+        v = dt['baseaddr'] # e.g., 0xA0040000
+
+        dt['baseaddr'] = v.lower()
+
+        # low address in little-endian
+        param_list += " {:2s} {:2s} {:2s} {:2s}".format(v[8:10], v[6:8], v[4:6], v[2:4])#format(v[2:4], v[4:6], v[6:8], v[8:10])
+        # high address hard coded to 0x00000000
+        param_list += " 00 00 00 00"
+
+      else:
+        if ('_Sampling_Rate' in k) or ('_Refclk_Freq' in k) or ('_Fabric_Freq' in k) or ('_Fs_Max' in k):
+          fmt = '<d' # little-endian double
+          t = float
+        else:
+          fmt = '<i' # little-endian int
+          t = int
+
+        if k in rfdc_params.keys():
+          v = rfdc_params[k]
+          if v == 'true':
+            v = 1
+          elif v == 'false':
+            v = 0
+        else:
+          v = 0
+
+        # make byte conversion
+        p = struct.pack(fmt, t(v)) # struct.pack('d', 250.0)
+        to_add = " {:s}".format(p.hex(' ', 1))
+        if DEBUG:
+          if fmt == '<d':
+            # NOTE: the {:8.3f} prints out to 3 decimal but fields have the precision as defined by
+            #  rfdc structure in the yellow block (e.g., sample rate/NCO have precision of 5)
+            print("{:28s} {:s} {:8.3f} {:s}".format(k, fmt, t(v), to_add))
+          elif fmt == '<i':
+            print("{:28s} {:s} {:8d} {:s}".format(k, fmt, t(v), to_add))
+        param_list += " {:s}".format(p.hex(' ', 1))
+
+    param_list = param_list.lower()
+
+    dt['param-list'] = '[{:s}];'.format(param_list)
+
+    # assemble dt node
+    dtstr = []
+    dtstr.append('/* AUTOMATICALLY GENERATED */\n\n')
+    dtstr.append('/dts-v1/;')
+    # TODO: only one `/plugin/` directive can be present will need to remove this when combining with xlnx
+    dtstr.append('/plugin/;')
+    dtstr.append('/ {')
+    # TODO: if when jasper has more software needs for dt will need to pass bus-id in to this method, see
+    # note when toolflow calls peripheral (yellow blocks) `gen_dt_node()` method
+    dtstr.append('    fragment@0 {')
+    dtstr.append('      target = <&amba>;')
+    dtstr.append('      overlay0: __overlay__ {')
+    dtstr.append('        #address-cells = <2>;')
+    dtstr.append('        #size-cells = <2>;')
+    dtstr.append('        usp_rf_data_converter_0: usp_rf_data_converter@{:s} {{'.format(dt['baseaddr'][2:]))
+    dtstr.append('         clock-names = {:s}'.format(dt['clock-names']))
+    dtstr.append('         compatible = {:s}'.format(dt['compatible']))
+    dtstr.append('         num-insts = {:s}'.format(dt['num-insts']))
+    dtstr.append('         param-list = {:s}'.format(dt['param-list']))
+    dtstr.append('         reg = {:s}'.format(dt['reg']))
+    dtstr.append('        };')
+    dtstr.append('      };')
+    dtstr.append('    };')
+    dtstr.append('};')
+
+    # write dtsi node to file
+    dtnode = '\n'.join(dtstr)
+    fd = open(opath+'.dtsi', 'w+')
+    fd.write(dtnode)
+    fd.close()
+
+    return dt
+
+
+# These keys are not guaranteed to the same between `xrfdc` driver versions (or petalinux/vitis versions), these were from
+# device-tree-xlnx for 2020.2
+rfdc_dt_conf_keys = [
+  "DEVICE_ID", "C_BASEADDR", "C_High_Speed_ADC", "C_Sysref_Master", "C_Sysref_Master", "C_Sysref_Source", "C_Sysref_Source", "C_IP_Type",
+  "C_Silicon_Revision", "C_DAC0_Enable", "C_DAC0_PLL_Enable", "C_DAC0_Sampling_Rate", "C_DAC0_Refclk_Freq", "C_DAC0_Fabric_Freq",
+  "C_DAC0_FBDIV", "C_DAC0_OutDiv", "C_DAC0_Refclk_Div", "C_DAC0_Band", "C_DAC0_Fs_Max", "C_DAC0_Slices", "C_DAC_Slice00_Enable",
+  "C_DAC_Invsinc_Ctrl00", "C_DAC_Mixer_Mode00", "C_DAC_Decoder_Mode00", "C_DAC_Slice01_Enable", "C_DAC_Invsinc_Ctrl01", "C_DAC_Mixer_Mode01",
+  "C_DAC_Decoder_Mode01", "C_DAC_Slice02_Enable", "C_DAC_Invsinc_Ctrl02", "C_DAC_Mixer_Mode02", "C_DAC_Decoder_Mode02",
+  "C_DAC_Slice03_Enable", "C_DAC_Invsinc_Ctrl03", "C_DAC_Mixer_Mode03", "C_DAC_Decoder_Mode03", "C_DAC_Data_Type00", "C_DAC_Data_Width00",
+  "C_DAC_Interpolation_Mode00", "C_DAC_Fifo00_Enable", "C_DAC_Adder00_Enable", "C_DAC_Mixer_Type00", "C_DAC_Data_Type01",
+  "C_DAC_Data_Width01", "C_DAC_Interpolation_Mode01", "C_DAC_Fifo01_Enable", "C_DAC_Adder01_Enable", "C_DAC_Mixer_Type01",
+  "C_DAC_Data_Type02", "C_DAC_Data_Width02", "C_DAC_Interpolation_Mode02", "C_DAC_Fifo02_Enable", "C_DAC_Adder02_Enable",
+  "C_DAC_Mixer_Type02", "C_DAC_Data_Type03", "C_DAC_Data_Width03", "C_DAC_Interpolation_Mode03", "C_DAC_Fifo03_Enable",
+  "C_DAC_Adder03_Enable", "C_DAC_Mixer_Type03", "C_DAC1_Enable", "C_DAC1_PLL_Enable", "C_DAC1_Sampling_Rate", "C_DAC1_Refclk_Freq",
+  "C_DAC1_Fabric_Freq", "C_DAC1_FBDIV", "C_DAC1_OutDiv", "C_DAC1_Refclk_Div", "C_DAC1_Band", "C_DAC1_Fs_Max", "C_DAC1_Slices",
+  "C_DAC_Slice10_Enable", "C_DAC_Invsinc_Ctrl10", "C_DAC_Mixer_Mode10", "C_DAC_Decoder_Mode10", "C_DAC_Slice11_Enable",
+  "C_DAC_Invsinc_Ctrl11", "C_DAC_Mixer_Mode11", "C_DAC_Decoder_Mode11", "C_DAC_Slice12_Enable", "C_DAC_Invsinc_Ctrl12", "C_DAC_Mixer_Mode12",
+  "C_DAC_Decoder_Mode12", "C_DAC_Slice13_Enable", "C_DAC_Invsinc_Ctrl13", "C_DAC_Mixer_Mode13", "C_DAC_Decoder_Mode13", "C_DAC_Data_Type10",
+  "C_DAC_Data_Width10", "C_DAC_Interpolation_Mode10", "C_DAC_Fifo10_Enable", "C_DAC_Adder10_Enable", "C_DAC_Mixer_Type10",
+  "C_DAC_Data_Type11", "C_DAC_Data_Width11", "C_DAC_Interpolation_Mode11", "C_DAC_Fifo11_Enable", "C_DAC_Adder11_Enable",
+  "C_DAC_Mixer_Type11", "C_DAC_Data_Type12", "C_DAC_Data_Width12", "C_DAC_Interpolation_Mode12", "C_DAC_Fifo12_Enable",
+  "C_DAC_Adder12_Enable", "C_DAC_Mixer_Type12", "C_DAC_Data_Type13", "C_DAC_Data_Width13", "C_DAC_Interpolation_Mode13",
+  "C_DAC_Fifo13_Enable", "C_DAC_Adder13_Enable", "C_DAC_Mixer_Type13", "C_DAC2_Enable", "C_DAC2_PLL_Enable", "C_DAC2_Sampling_Rate",
+  "C_DAC2_Refclk_Freq", "C_DAC2_Fabric_Freq", "C_DAC2_FBDIV", "C_DAC2_OutDiv", "C_DAC2_Refclk_Div", "C_DAC2_Band", "C_DAC2_Fs_Max",
+  "C_DAC2_Slices", "C_DAC_Slice20_Enable", "C_DAC_Invsinc_Ctrl20", "C_DAC_Mixer_Mode20", "C_DAC_Decoder_Mode20", "C_DAC_Slice21_Enable",
+  "C_DAC_Invsinc_Ctrl21", "C_DAC_Mixer_Mode21", "C_DAC_Decoder_Mode21", "C_DAC_Slice22_Enable", "C_DAC_Invsinc_Ctrl22", "C_DAC_Mixer_Mode22",
+  "C_DAC_Decoder_Mode22", "C_DAC_Slice23_Enable", "C_DAC_Invsinc_Ctrl23", "C_DAC_Mixer_Mode23", "C_DAC_Decoder_Mode23", "C_DAC_Data_Type20",
+  "C_DAC_Data_Width20", "C_DAC_Interpolation_Mode20", "C_DAC_Fifo20_Enable", "C_DAC_Adder20_Enable", "C_DAC_Mixer_Type20",
+  "C_DAC_Data_Type21", "C_DAC_Data_Width21", "C_DAC_Interpolation_Mode21", "C_DAC_Fifo21_Enable", "C_DAC_Adder21_Enable",
+  "C_DAC_Mixer_Type21", "C_DAC_Data_Type22", "C_DAC_Data_Width22", "C_DAC_Interpolation_Mode22", "C_DAC_Fifo22_Enable",
+  "C_DAC_Adder22_Enable", "C_DAC_Mixer_Type22", "C_DAC_Data_Type23", "C_DAC_Data_Width23", "C_DAC_Interpolation_Mode23",
+  "C_DAC_Fifo23_Enable", "C_DAC_Adder23_Enable", "C_DAC_Mixer_Type23", "C_DAC3_Enable", "C_DAC3_PLL_Enable", "C_DAC3_Sampling_Rate",
+  "C_DAC3_Refclk_Freq", "C_DAC3_Fabric_Freq", "C_DAC3_FBDIV", "C_DAC3_OutDiv", "C_DAC3_Refclk_Div", "C_DAC3_Band", "C_DAC3_Fs_Max",
+  "C_DAC3_Slices", "C_DAC_Slice30_Enable", "C_DAC_Invsinc_Ctrl30", "C_DAC_Mixer_Mode30", "C_DAC_Decoder_Mode30", "C_DAC_Slice31_Enable",
+  "C_DAC_Invsinc_Ctrl31", "C_DAC_Mixer_Mode31", "C_DAC_Decoder_Mode31", "C_DAC_Slice32_Enable", "C_DAC_Invsinc_Ctrl32", "C_DAC_Mixer_Mode32",
+  "C_DAC_Decoder_Mode32", "C_DAC_Slice33_Enable", "C_DAC_Invsinc_Ctrl33", "C_DAC_Mixer_Mode33", "C_DAC_Decoder_Mode33", "C_DAC_Data_Type30",
+  "C_DAC_Data_Width30", "C_DAC_Interpolation_Mode30", "C_DAC_Fifo30_Enable", "C_DAC_Adder30_Enable", "C_DAC_Mixer_Type30",
+  "C_DAC_Data_Type31", "C_DAC_Data_Width31", "C_DAC_Interpolation_Mode31", "C_DAC_Fifo31_Enable", "C_DAC_Adder31_Enable",
+  "C_DAC_Mixer_Type31", "C_DAC_Data_Type32", "C_DAC_Data_Width32", "C_DAC_Interpolation_Mode32", "C_DAC_Fifo32_Enable",
+  "C_DAC_Adder32_Enable", "C_DAC_Mixer_Type32", "C_DAC_Data_Type33", "C_DAC_Data_Width33", "C_DAC_Interpolation_Mode33",
+  "C_DAC_Fifo33_Enable", "C_DAC_Adder33_Enable", "C_DAC_Mixer_Type33", "C_ADC0_Enable", "C_ADC0_PLL_Enable", "C_ADC0_Sampling_Rate",
+  "C_ADC0_Refclk_Freq", "C_ADC0_Fabric_Freq", "C_ADC0_FBDIV", "C_ADC0_OutDiv", "C_ADC0_Refclk_Div", "C_ADC0_Band", "C_ADC0_Fs_Max",
+  "C_ADC0_Slices", "C_ADC_Slice00_Enable", "C_ADC_Mixer_Mode00", "C_ADC_Slice01_Enable", "C_ADC_Mixer_Mode01", "C_ADC_Slice02_Enable",
+  "C_ADC_Mixer_Mode02", "C_ADC_Slice03_Enable", "C_ADC_Mixer_Mode03", "C_ADC_Data_Type00", "C_ADC_Data_Width00", "C_ADC_Decimation_Mode00",
+  "C_ADC_Fifo00_Enable", "C_ADC_Mixer_Type00", "C_ADC_Data_Type01", "C_ADC_Data_Width01", "C_ADC_Decimation_Mode01", "C_ADC_Fifo01_Enable",
+  "C_ADC_Mixer_Type01", "C_ADC_Data_Type02", "C_ADC_Data_Width02", "C_ADC_Decimation_Mode02", "C_ADC_Fifo02_Enable", "C_ADC_Mixer_Type02",
+  "C_ADC_Data_Type03", "C_ADC_Data_Width03", "C_ADC_Decimation_Mode03", "C_ADC_Fifo03_Enable", "C_ADC_Mixer_Type03", "C_ADC1_Enable",
+  "C_ADC1_PLL_Enable", "C_ADC1_Sampling_Rate", "C_ADC1_Refclk_Freq", "C_ADC1_Fabric_Freq", "C_ADC1_FBDIV", "C_ADC1_OutDiv",
+  "C_ADC1_Refclk_Div", "C_ADC1_Band", "C_ADC1_Fs_Max", "C_ADC1_Slices", "C_ADC_Slice10_Enable", "C_ADC_Mixer_Mode10", "C_ADC_Slice11_Enable",
+  "C_ADC_Mixer_Mode11", "C_ADC_Slice12_Enable", "C_ADC_Mixer_Mode12", "C_ADC_Slice13_Enable", "C_ADC_Mixer_Mode13", "C_ADC_Data_Type10",
+  "C_ADC_Data_Width10", "C_ADC_Decimation_Mode10", "C_ADC_Fifo10_Enable", "C_ADC_Mixer_Type10", "C_ADC_Data_Type11", "C_ADC_Data_Width11",
+  "C_ADC_Decimation_Mode11", "C_ADC_Fifo11_Enable", "C_ADC_Mixer_Type11", "C_ADC_Data_Type12", "C_ADC_Data_Width12",
+  "C_ADC_Decimation_Mode12", "C_ADC_Fifo12_Enable", "C_ADC_Mixer_Type12", "C_ADC_Data_Type13", "C_ADC_Data_Width13",
+  "C_ADC_Decimation_Mode13", "C_ADC_Fifo13_Enable", "C_ADC_Mixer_Type13", "C_ADC2_Enable", "C_ADC2_PLL_Enable", "C_ADC2_Sampling_Rate",
+  "C_ADC2_Refclk_Freq", "C_ADC2_Fabric_Freq", "C_ADC2_FBDIV", "C_ADC2_OutDiv", "C_ADC2_Refclk_Div", "C_ADC2_Band", "C_ADC2_Fs_Max",
+  "C_ADC2_Slices", "C_ADC_Slice20_Enable", "C_ADC_Mixer_Mode20", "C_ADC_Slice21_Enable", "C_ADC_Mixer_Mode21", "C_ADC_Slice22_Enable",
+  "C_ADC_Mixer_Mode22", "C_ADC_Slice23_Enable", "C_ADC_Mixer_Mode23", "C_ADC_Data_Type20", "C_ADC_Data_Width20", "C_ADC_Decimation_Mode20",
+  "C_ADC_Fifo20_Enable", "C_ADC_Mixer_Type20", "C_ADC_Data_Type21", "C_ADC_Data_Width21", "C_ADC_Decimation_Mode21", "C_ADC_Fifo21_Enable",
+  "C_ADC_Mixer_Type21", "C_ADC_Data_Type22", "C_ADC_Data_Width22", "C_ADC_Decimation_Mode22", "C_ADC_Fifo22_Enable", "C_ADC_Mixer_Type22",
+  "C_ADC_Data_Type23", "C_ADC_Data_Width23", "C_ADC_Decimation_Mode23", "C_ADC_Fifo23_Enable", "C_ADC_Mixer_Type23", "C_ADC3_Enable",
+  "C_ADC3_PLL_Enable", "C_ADC3_Sampling_Rate", "C_ADC3_Refclk_Freq", "C_ADC3_Fabric_Freq", "C_ADC3_FBDIV", "C_ADC3_OutDiv",
+  "C_ADC3_Refclk_Div", "C_ADC3_Band", "C_ADC3_Fs_Max", "C_ADC3_Slices", "C_ADC_Slice30_Enable", "C_ADC_Mixer_Mode30", "C_ADC_Slice31_Enable",
+  "C_ADC_Mixer_Mode31", "C_ADC_Slice32_Enable", "C_ADC_Mixer_Mode32", "C_ADC_Slice33_Enable", "C_ADC_Mixer_Mode33", "C_ADC_Data_Type30",
+  "C_ADC_Data_Width30", "C_ADC_Decimation_Mode30", "C_ADC_Fifo30_Enable", "C_ADC_Mixer_Type30", "C_ADC_Data_Type31", "C_ADC_Data_Width31",
+  "C_ADC_Decimation_Mode31", "C_ADC_Fifo31_Enable", "C_ADC_Mixer_Type31", "C_ADC_Data_Type32", "C_ADC_Data_Width32",
+  "C_ADC_Decimation_Mode32", "C_ADC_Fifo32_Enable", "C_ADC_Mixer_Type32", "C_ADC_Data_Type33", "C_ADC_Data_Width33",
+  "C_ADC_Decimation_Mode33", "C_ADC_Fifo33_Enable", "C_ADC_Mixer_Type33"
+]
