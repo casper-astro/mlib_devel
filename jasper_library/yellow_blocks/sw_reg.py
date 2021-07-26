@@ -13,6 +13,8 @@ class sw_reg(YellowBlock):
         self.typecode = TYPECODE_SWREG
         self.platform_support = 'all'
         self.requirements = ['wb_clk']
+        if not hasattr(self, 'init_val'):
+            self.init_val = 0
         if self.blk['io_dir'] == 'To Processor':
             self.add_source('wb_register_simulink2ppc')
         elif self.blk['io_dir'] == 'From Processor':
