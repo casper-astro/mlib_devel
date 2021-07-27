@@ -23,7 +23,8 @@ entity diffgpio_ext2simulink is
 		clk90     : in  std_logic;
 
     delay_load_en : in std_logic := '0';
-    delay_val     : in std_logic_vector(8 downto 0) := "000000000"
+    delay_val     : in std_logic_vector(8 downto 0) := "000000000";
+    delay_rst     : in std_logic := '0'
 	 );
 end diffgpio_ext2simulink;
 
@@ -89,7 +90,7 @@ begin
         EN_VTC => '0',
         DATAOUT => io_pad_delay(i),
         CASC_IN => '0',
-        RST => '0',
+        RST => delay_rst,
         CASC_RETURN => '0'
       );
     end generate DELAY_BITGEN;

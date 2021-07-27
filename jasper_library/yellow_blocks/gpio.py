@@ -83,7 +83,8 @@ class gpio(YellowBlock):
         inst.add_port('clk90', signal='user_clk90', parent_sig=False)
         inst.add_port('gateway', signal=gateway_name, width=self.bitwidth)
         if self.use_iodelay:
-            inst.add_port('delay_load_en', signal="%s_user_data_out[31]"%self.ctrl_reg.fullname, parent_sig=False)
+            inst.add_port('delay_load_en', signal="%s_user_data_out[24]"%self.ctrl_reg.fullname, parent_sig=False)
+            inst.add_port('delay_rst', signal="%s_user_data_out[16]"%self.ctrl_reg.fullname, parent_sig=False)
             inst.add_port('delay_val', signal="%s_user_data_out[8:0]"%self.ctrl_reg.fullname, width=9, parent_sig=False)
             inst.add_parameter('USE_DELAY', 1)
         else:
