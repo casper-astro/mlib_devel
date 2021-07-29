@@ -12,62 +12,61 @@ class au50(YellowBlock):
         ]
 
     def modify_top(self,top):
-        inst = top.get_instance('au50', 'au50_inst')
-        inst.add_port('axil_clk',   'axil_clk')
-        inst.add_port('axil_rst',   'axil_rst')
+        inst = top.get_instance('au50_bd', 'au50_bd_inst')
+	
+        inst.add_port('s_axi_aclk',   's_axi_aclk')
+        inst.add_port('s_axi_areset', 's_axi_areset')
         inst.add_port('axil_rst_n', 'axil_rst_n')
-
-        inst.add_port('FIXED_IO_ddr_vrp', 'FIXED_IO_ddr_vrp', dir='inout', parent_port=True)
-        inst.add_port('FIXED_IO_ddr_vrn', 'FIXED_IO_ddr_vrn', dir='inout', parent_port=True)
-        inst.add_port('DDR_we_n', 'DDR_we_n', dir='inout', parent_port=True)
-        inst.add_port('DDR_RAS_n', 'DDR_RAS_n', dir='inout', width=1, parent_port=True)
-        inst.add_port('DDR_ODT', 'DDR_ODT', dir='inout', parent_port=True)
-        inst.add_port('DDR_reset_n', 'DDR_reset_n', dir='inout', parent_port=True)
-        inst.add_port('DDR_DQS_p', 'DDR_DQS_p', dir='inout', width=4, parent_port=True)
-        inst.add_port('DDR_DQS_n', 'DDR_DQS_n', dir='inout', width=4, parent_port=True)
-        inst.add_port('DDR_DQ', 'DDR_DQ', dir='inout', width=32, parent_port=True)
-        inst.add_port('DDR_DM', 'DDR_DM', dir='inout', width=4, parent_port=True)
-        inst.add_port('DDR_CS_n', 'DDR_CS_n', dir='inout', parent_port=True)
-        inst.add_port('DDR_CKE', 'DDR_CKE', dir='inout', parent_port=True)
-        inst.add_port('DDR_Ck_p', 'DDR_Ck_p', dir='inout', parent_port=True)
-        inst.add_port('DDR_Ck_n', 'DDR_Ck_n', dir='inout', parent_port=True)
-        inst.add_port('DDR_CAS_n', 'DDR_CAS_n', dir='inout', parent_port=True)
-        inst.add_port('DDR_ba', 'DDR_ba', dir='inout', width=3, parent_port=True)
-        inst.add_port('DDR_Addr', 'DDR_Addr', dir='inout', width=15, parent_port=True)
-
-        inst.add_port('FIXED_IO_ps_porb', 'FIXED_IO_ps_porb', dir='inout', parent_port=True)
-        inst.add_port('FIXED_IO_ps_srstb', 'FIXED_IO_ps_srstb', dir='inout', parent_port=True)
-        inst.add_port('FIXED_IO_ps_clk', 'FIXED_IO_ps_clk', dir='inout', parent_port=True)
-
-        inst.add_port('M_AXI_araddr', 'M_AXI_araddr', width=32)
-        inst.add_port('M_AXI_arprot', 'M_AXI_arprot', width=3)
-        inst.add_port('M_AXI_arready', 'M_AXI_arready')
-        inst.add_port('M_AXI_arvalid', 'M_AXI_arvalid')
-        inst.add_port('M_AXI_awaddr', 'M_AXI_awaddr', width=32)
-        inst.add_port('M_AXI_awprot', 'M_AXI_awprot', width=3)
-        inst.add_port('M_AXI_awready', 'M_AXI_awready')
-        inst.add_port('M_AXI_awvalid', 'M_AXI_awvalid')
-        inst.add_port('M_AXI_bready', 'M_AXI_bready')
-        inst.add_port('M_AXI_bresp', 'M_AXI_bresp', width=2)
-        inst.add_port('M_AXI_bvalid', 'M_AXI_bvalid')
-        inst.add_port('M_AXI_rdata', 'M_AXI_rdata', width=32)
-        inst.add_port('M_AXI_rready', 'M_AXI_rready')
-        inst.add_port('M_AXI_rresp', 'M_AXI_rresp', width=2)
-        inst.add_port('M_AXI_rvalid', 'M_AXI_rvalid')
-        inst.add_port('M_AXI_wdata', 'M_AXI_wdata', width=32)
-        inst.add_port('M_AXI_wready', 'M_AXI_wready')
-        inst.add_port('M_AXI_wstrb', 'M_AXI_wstrb', width=4)
-        inst.add_port('M_AXI_wvalid', 'M_AXI_wvalid')
+        inst.add_port('hbm_cattrip_tri_o', 'hbm_cattrip_tri_o', dir='out', parent_port=True)
+        inst.add_port('hbm_clk_clk_n', 'hbm_clk_clk_n', dir='in', parent_port=True)
+        inst.add_port('hbm_clk_clk_p', 'hbm_clk_clk_p', dir='in', parent_port=True)
+        inst.add_port('pci_express_x1_rxn', 'pci_express_x1_rxn', dir='in', parent_port=True)
+        inst.add_port('pci_express_x1_rxp', 'pci_express_x1_rxp', dir='in', parent_port=True)
+        inst.add_port('pci_express_x1_txn', 'pci_express_x1_txn', dir='out', parent_port=True)
+        inst.add_port('pci_express_x1_txp', 'pci_express_x1_txp', dir='out', parent_port=True)
+        inst.add_port('pcie_perstn', 'pcie_perstn', dir='in', parent_port=True)
+        inst.add_port('pcie_refclk_clk_n', 'pcie_refclk_clk_n', dir='in', parent_port=True)
+        inst.add_port('pcie_refclk_clk_p', 'pcie_refclk_clk_p', dir='in', parent_port=True)
+        inst.add_port('satellite_gpio_0', 'satellite_gpio_0', dir='in', parent_port=True, width=2)
+        inst.add_port('satellite_uart_0_rxd', 'satellite_uart_0_rxd', dir='in', parent_port=True)
+        inst.add_port('satellite_uart_0_txd', 'satellite_uart_0_txd', dir='out', parent_port=True)
         
-        clk_factors
-        clkparams = clk_factors(125, self.platform.user_clk_rate)
-
-        inst_infr = top.get_instance('au50_infrastructure', 'au50_infr_inst')
-        inst_infr.add_parameter('MULTIPLY', clkparams[0])
-        inst_infr.add_parameter('DIVIDE',   clkparams[1])
-        inst_infr.add_parameter('DIVCLK',   clkparams[2])
-        inst_infr.add_port('dsp_clk',          "sys_clk",      dir='out', width=1, parent_sig=False)
-
+        inst.add_port('M04_AXI_0_araddr',  'M04_AXI_0_araddr',   dir='out', width=32)
+        inst.add_port('M04_AXI_0_arburst', 'M04_AXI_0_arburst',  dir='out', width=2)
+        inst.add_port('M04_AXI_0_arcache', 'M04_AXI_0_arcache',  dir='out', width=4)
+        inst.add_port('M04_AXI_0_arlen',   'M04_AXI_0_arlen',    dir='out', width=8)
+        inst.add_port('M04_AXI_0_arlock',  'M04_AXI_0_arlock',   dir='out', width=1)
+        inst.add_port('M04_AXI_0_arprot',  'M04_AXI_0_arprot',   dir='out', width=3)
+        inst.add_port('M04_AXI_0_arqos',   'M04_AXI_0_arqos',    dir='out', width=4)
+        inst.add_port('M04_AXI_0_arready', 'M04_AXI_0_arready',  dir='out', width=1)
+        inst.add_port('M04_AXI_0_arregion','M04_AXI_0_arregion', dir='out', width=4)
+        inst.add_port('M04_AXI_0_arsize',  'M04_AXI_0_arsize',   dir='out', width=3)
+        inst.add_port('M04_AXI_0_arvalid', 'M04_AXI_0_arvalid',  dir='out', width=1)
+        inst.add_port('M04_AXI_0_awaddr',  'M04_AXI_0_awaddr',   dir='out', width=32)
+        inst.add_port('M04_AXI_0_awburst', 'M04_AXI_0_awburst',  dir='out', width=2)
+        inst.add_port('M04_AXI_0_awcache', 'M04_AXI_0_awcache',  dir='out', width=4)
+        inst.add_port('M04_AXI_0_awlen',   'M04_AXI_0_awlen',    dir='out', width=8)
+        inst.add_port('M04_AXI_0_awlock',  'M04_AXI_0_awlock',   dir='out', width=1)
+        inst.add_port('M04_AXI_0_awprot',  'M04_AXI_0_awprot',   dir='out', width=3)
+        inst.add_port('M04_AXI_0_awqos',   'M04_AXI_0_awqos',    dir='out', width=4)
+        inst.add_port('M04_AXI_0_awready', 'M04_AXI_0_awready',  dir='in',  width=1)
+        inst.add_port('M04_AXI_0_awregion','M04_AXI_0_awregion', dir='out', width=4)
+        inst.add_port('M04_AXI_0_awsize',  'M04_AXI_0_awsize',   dir='out', width=3)
+        inst.add_port('M04_AXI_0_awvalid', 'M04_AXI_0_awvalid',  dir='out', width=1)
+        inst.add_port('M04_AXI_0_bready',  'M04_AXI_0_bready',   dir='out', width=1)
+        inst.add_port('M04_AXI_0_bresp',   'M04_AXI_0_bresp',    dir='in',  width=2)
+        inst.add_port('M04_AXI_0_bvalid',  'M04_AXI_0_bvalid',   dir='in',  width=1)
+        inst.add_port('M04_AXI_0_rdata',   'M04_AXI_0_rdata',    dir='in',  width=32)
+        inst.add_port('M04_AXI_0_rlast',   'M04_AXI_0_rlast',    dir='in',  width=1)
+        inst.add_port('M04_AXI_0_rready',  'M04_AXI_0_rready',   dir='out', width=1)
+        inst.add_port('M04_AXI_0_rresp',   'M04_AXI_0_rresp',    dir='in',  width=2)
+        inst.add_port('M04_AXI_0_rvalid',  'M04_AXI_0_rvalid',   dir='in',  width=1)
+        inst.add_port('M04_AXI_0_wdata',   'M04_AXI_0_wdata',    dir='out', width=32)
+        inst.add_port('M04_AXI_0_wlast',   'M04_AXI_0_wlast',    dir='out', width=1)
+        inst.add_port('M04_AXI_0_wready',  'M04_AXI_0_wready',   dir='in',  width=1)
+        inst.add_port('M04_AXI_0_wstrb',   'M04_AXI_0_wstrb',    dir='out', width=4)
+        inst.add_port('M04_AXI_0_wvalid',  'M04_AXI_0_wvalid',   dir='out', width=1)
+        
 
     def gen_children(self):
         return [YellowBlock.make_block({'fullpath': self.fullpath, 'tag': 'xps:sys_block', 'board_id': '4', 'rev_maj': '1', 'rev_min': '0', 'rev_rcs': '1','scratchpad': '0'}, self.platform)]
@@ -93,9 +92,9 @@ class au50(YellowBlock):
         3. Have vivado make an HDL wrapper around the block design.
         4. Add the wrapper HDL file to project.
         """
-        tcl_cmds['pre_synth'] += ['source {}'.format(self.hdl_root + '/infrastructure/au50.tcl')]
-        tcl_cmds['pre_synth'] += ['generate_target all [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/au50/au50.bd]']        
-        tcl_cmds['pre_synth'] += ['make_wrapper -files [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/au50/au50.bd] -top']
-        tcl_cmds['pre_synth'] += ['add_files -norecurse [get_property directory [current_project]]/myproj.srcs/sources_1/bd/au50/hdl/au50_wrapper.vhd']
+        tcl_cmds['pre_synth'] += ['source {}'.format(self.hdl_root + '/au50_infr/au50.tcl')]
+        tcl_cmds['pre_synth'] += ['generate_target all [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/bd/bd.bd]']        
+        tcl_cmds['pre_synth'] += ['make_wrapper -files [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/bd/bd.bd] -top']
+        tcl_cmds['pre_synth'] += ['add_files -norecurse [get_property directory [current_project]]/myproj.srcs/sources_1/bd/bd/hdl/bd_wrapper.v']
         tcl_cmds['pre_synth'] += ['update_compile_order -fileset sources_1']
         return tcl_cmds
