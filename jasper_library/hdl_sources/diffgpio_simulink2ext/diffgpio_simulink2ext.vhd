@@ -36,6 +36,8 @@ architecture Behavioral of diffgpio_simulink2ext is
 	signal one  : std_logic := '1';
 	signal zero : std_logic := '0';
   signal io_pad_delay: std_logic_vector(WIDTH/(DDR+1)-1 downto 0);
+  signal delay_load_enR: std_logic;
+  signal delay_load_strobe: std_logic;
 begin
 
 -- clock selection
@@ -56,6 +58,16 @@ begin
 		not_sample_clk <=     clk90;
 	end generate PHASE270;
 
+-- delay load strobe generation
+  process (sample_clk)
+  begin
+  if rising_edge(sample_clk) then
+    delay_load_enR <= delay_load_en;
+  end if;
+  end process;
+
+  delay_load_strobe <= (not delay_load_enR) and delay_load_en;
+
   DELAYGEN: if DELAY_GEN = 1 generate
 		DELAY_BITGEN : for i in 0 to (WIDTH/(DDR+1)-1) generate
       ODELAY_INST: ODELAYE3
@@ -68,7 +80,7 @@ begin
       )
       port map(
         CLK => sample_clk,
-        LOAD => delay_load_en,
+        LOAD => delay_load_strobe,
         ODATAIN => io_pad_delay(i),
         CNTVALUEIN => delay_val,
         INC => '0',
