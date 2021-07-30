@@ -1584,6 +1584,10 @@ proc puts_red {s} {
                     self.add_tcl_cmd('exec unzip %s' % template_basename, stage='init')
                     self.add_tcl_cmd('cd myproj', stage='init')
                     self.add_tcl_cmd('open_project myproj', stage='init')
+            import IPython
+            IPython.embed()
+            if hasattr(plat, 'board'):
+                self.add_tcl_cmd('set_property board_part %s [current_project]' % plat.board)
         # Create the part in non-project mode (project runs in memory only)
         else:
             if self.template_project is not None:

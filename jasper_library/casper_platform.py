@@ -47,6 +47,8 @@ class Platform(object):
         #: FPGA model. Should be the full version ready to pass to the
         #: vendor tools. Eg., xc7k325tffg900-2
         self.fpga = self.conf['fpga']
+        #: FPGA board (for accelerator cards)
+        self.board = self.conf['board']
         #: backend target -- used to decide what compiler to use
         self.backend_target = self.conf['backend_target']
         #: boot image --used to determine whether a toolflow, multiboot or golden image
