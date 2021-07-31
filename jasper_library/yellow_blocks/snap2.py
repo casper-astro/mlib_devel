@@ -32,15 +32,15 @@ class snap2(YellowBlock):
         top.add_signal('clk_250MHz180')
         top.assign_signal('clk_250MHz180', '~clk_250MHz')
 
-        top.add_signal('clk200')
+        top.add_signal('clk_200')
         # HACK: these clocks aren't at the phases they claim.
         # I hope you're not using them!
-        top.add_signal('clk20090')
-        top.assign_signal('clk20090', 'clk200')
-        top.add_signal('clk200180')
-        top.assign_signal('clk200180', '~clk200')
-        top.add_signal('clk200270')
-        top.assign_signal('clk200270', '~clk200')
+        top.add_signal('clk_20090')
+        top.assign_signal('clk_20090', 'clk_200')
+        top.add_signal('clk_200180')
+        top.assign_signal('clk_200180', '~clk_200')
+        top.add_signal('clk_200270')
+        top.assign_signal('clk_200270', '~clk_200')
 
     def gen_children(self):
         children = [YellowBlock.make_block({'tag':'xps:sys_block', 'board_id':'13', 'rev_maj':'1', 'rev_min':'0', 'rev_rcs':'32'}, self.platform)]
@@ -70,6 +70,7 @@ class snap2(YellowBlock):
             RawConstraint('set_property BITSTREAM.CONFIG.SPI_32BIT_ADDR Yes [current_design]'),
             #RawConstraint('set_property BITSTREAM.CONFIG.TIMER_CFG 20000000 [current_design]'),
             RawConstraint('set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]'),
+            RawConstraint("set_property BITSTREAM.CONFIG.OVERTEMPSHUTDOWN Enable [current_design]"),
             ]
 
 

@@ -104,6 +104,7 @@ for i = 1:length(gateways_blk)
         parent_tag = char(get_param(parent, 'tag'));
         if ~isempty(regexp(parent_tag, '^xps:', 'ONCE'))
             found_xps_tag = 1;
+            break
         end
         parent = get_param(parent, 'parent');
     end
@@ -111,7 +112,7 @@ for i = 1:length(gateways_blk)
     if found_xps_tag == 0
         disregard_blocks = find_system(gw_parent, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'masktype', 'Xilinx Disregard Subsystem For Generation');
         if isempty(disregard_blocks)
-            error('Xilinx input gateways cannot be used in a design. Only XPS GPIO blocks should be used.');
+            error(['Xilinx input gateways cannot be used in a design. Only XPS GPIO blocks should be used. Problem gateway in subsystem:' gateways_blk{i}]);
         end
     end
 end

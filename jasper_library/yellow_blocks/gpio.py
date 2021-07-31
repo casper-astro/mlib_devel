@@ -4,6 +4,8 @@ from helpers import to_int_list
 
 class gpio(YellowBlock):
     def initialize(self):
+        if not hasattr(self, 'use_iodelay'):
+            self.use_iodelay = False
 
         if self.arith_type == 'Boolean':
             # The yellow block will set a value for bitwidth,
@@ -48,6 +50,18 @@ class gpio(YellowBlock):
         self.portbase = "{blocktype}_{iotype}_{start}_{end}".format(
             blocktype=self.blocktype, iotype=self.io_group, start=start_pin, end=end_pin)
 
+    def gen_children(self):
+        if self.use_iodelay:
+            self.ctrl_reg = YellowBlock.make_block({
+                          'tag': 'xps:sw_reg',
+                          'io_dir': 'From Processor',
+                          'name': self.fullname + '_delay_ctrl',
+                          'fullpath': self.fullpath + '_delay_ctrl',
+                       }, self.platform)
+            return [self.ctrl_reg]
+        else:
+            return []
+
     def modify_top(self,top):
         instance_name = self.fullname
         gateway_name = '{}_gateway'.format(self.fullname)
@@ -68,6 +82,13 @@ class gpio(YellowBlock):
         inst.add_port('clk', signal='user_clk', parent_sig=False)
         inst.add_port('clk90', signal='user_clk90', parent_sig=False)
         inst.add_port('gateway', signal=gateway_name, width=self.bitwidth)
+        if self.use_iodelay:
+            inst.add_port('delay_load_en', signal="%s_user_data_out[24]"%self.ctrl_reg.fullname, parent_sig=False)
+            inst.add_port('delay_rst', signal="%s_user_data_out[16]"%self.ctrl_reg.fullname, parent_sig=False)
+            inst.add_port('delay_val', signal="%s_user_data_out[8:0]"%self.ctrl_reg.fullname, width=9, parent_sig=False)
+            inst.add_parameter('USE_DELAY', 1)
+        else:
+            inst.add_parameter('USE_DELAY', 0)
         inst.add_parameter('WIDTH', str(self.bitwidth))
         inst.add_parameter('DDR', '1' if self.use_ddr  else '0')
         inst.add_parameter('REG_IOB', '"true"' if self.reg_iob else '"false"')

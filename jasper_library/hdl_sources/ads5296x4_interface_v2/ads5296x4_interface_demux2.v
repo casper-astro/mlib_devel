@@ -1,10 +1,12 @@
 module ads5296x4_interface_demux2 #(
-    parameter G_NUM_UNITS = 4,
-    parameter G_NUM_FCLKS = 4,
-    parameter G_FCLK_MASTER = 0,
-    parameter G_IS_MASTER = 1'b1,
-    parameter SNAPSHOT_ADDR_BITS = 9
+    parameter G_NUM_UNITS = 4,          // Number of ADC chips. Only tested for 4
+    parameter G_NUM_FCLKS = 4,          // Number of FCLKs routed to this interface
+    parameter G_FCLK_MASTER = 0,        // Index of the FCLK vector to use for clock generation
+    parameter G_IS_MASTER = 1'b1,       // If 1, generate output clocks in this core
+    parameter G_SNAPSHOT_ADDR_BITS = 9, // log2 ADC sample snapshot depth
+    parameter G_VERSION = 1             // Interface revision. Used only for runtime readback
  )(
+    // Control signals from Simulink
     input rst,
     input sync,
     // Line clocks
@@ -13,22 +15,26 @@ module ads5296x4_interface_demux2 #(
     // Frame clocks
     input [G_NUM_FCLKS - 1 : 0] fclk_p,
     input [G_NUM_FCLKS - 1 : 0] fclk_n,
-    // If not a master -- use this clock
-    input sclk2_in,
-    input sclk_in,
-    input sclk5_in,
+    // Clocks
+    input sclk2_in, // Sample clock x2 (i.e. interleaved sample clock)
+    input sclk_in,  // Sample clock (per ADC lane)
+    input sclk5_in, // Sample clock x5 (i.e. bit clock)
     // Data inputs
     input [4*2*G_NUM_UNITS - 1:0] din_p,
     input [4*2*G_NUM_UNITS - 1:0] din_n,
     // Deserialized outputs
     output [10*4*G_NUM_UNITS - 1:0] dout,
-    output sclk2_out,
-    output sclk_out,
-    output sclk5_out,
+    // Generate these clocks if G_IS_MASTER=1; otherwise tie to 0
+    output sclk2_out, // Sample clock x2 (i.e. interleaved sample clock)
+    output sclk_out,  // Sample clock (per ADC lane)
+    output sclk5_out, // Sample clock x5 (i.e. bit clock)
     output sync_out,     // To Simulink
     output ext_sync_out, // To ADC pin
     
-    input  fclk_in,
+    // Pre-buffered Frame clock inputs. Software control allows either of 
+    // these to be used to generate sclk*_out if G_IS_MASTER=1
+    input  [1:0] fclk_in,
+    // Frame clock output. Buffered fclk_p/n[G_FCLK_MASTER]
     output fclk_out,
 
     // Software register interface
@@ -37,7 +43,7 @@ module ads5296x4_interface_demux2 #(
     
     input         snapshot_ext_trigger,
     output        snapshot_we,
-    output [SNAPSHOT_ADDR_BITS-1:0] snapshot_addr,
+    output [G_SNAPSHOT_ADDR_BITS-1:0] snapshot_addr,
 
     // Wishbone interface
     input         wb_clk_i,
@@ -75,12 +81,14 @@ module ads5296x4_interface_demux2 #(
   reg [31:0] fclk3_ctr;
   reg [31:0] lclk_ctr;
   wire [4*G_NUM_UNITS - 1 : 0] bitslip;
+  wire [2:0] slip_index;
   wire snapshot_trigger;
   wire wb_user_clk;
   wb_ads5296_attach #( 
     .G_NUM_UNITS(G_NUM_UNITS),
     .G_IS_MASTER(G_IS_MASTER),
-    .G_NUM_FCLKS(1) // Only bother controlling 1 fclk
+    .G_NUM_FCLKS(1), // Only bother controlling 1 fclk
+    .G_VERSION(G_VERSION)
   ) wb_ads5296_attach_inst (
     .wb_clk_i(wb_clk_i),
     .wb_rst_i(wb_rst_i),
@@ -100,6 +108,7 @@ module ads5296x4_interface_demux2 #(
     .fclk2_cnt(fclk2_ctr),
     .fclk3_cnt(fclk3_ctr),
     .bitslip(bitslip),
+    .slip_index(slip_index),
     .fclk_err_cnt(fclk_err_cnt),
     .delay_load(delay_load),
     .delay_rst(delay_rst),
@@ -118,7 +127,7 @@ module ads5296x4_interface_demux2 #(
   wire snapshot_trigger_pulse = snapshot_trigger_stable & ~snapshot_trigger_stableR;
   reg snapshot_ext_triggerR;
   wire snapshot_ext_trigger_pulse = snapshot_ext_trigger & ~snapshot_ext_triggerR;
-  reg [SNAPSHOT_ADDR_BITS-1:0] snapshot_addr_reg;
+  reg [G_SNAPSHOT_ADDR_BITS-1:0] snapshot_addr_reg;
   assign snapshot_addr = snapshot_addr_reg;
   reg snapshot_we_reg;
   assign snapshot_we = snapshot_we_reg;
@@ -137,7 +146,7 @@ module ads5296x4_interface_demux2 #(
     end
     if (snapshot_pending && sync_out) begin
       snapshot_we_reg <= 1'b1;
-      snapshot_addr_reg <= {SNAPSHOT_ADDR_BITS{1'b0}};
+      snapshot_addr_reg <= {G_SNAPSHOT_ADDR_BITS{1'b0}};
       snapshot_pending <= 1'b0;
     end
   end
@@ -218,14 +227,14 @@ module ads5296x4_interface_demux2 #(
       .CLKFBOUT_MULT_F(20.000),
       .CLKOUT0_DIVIDE_F(10.0),
       .CLKOUT1_DIVIDE(5),
-      .CLKOUT0_PHASE(36), // Advance 1 bit time (empirically determined)
-      .CLKOUT1_PHASE(72), // Advance 1
-      .CLKOUT2_PHASE(180), // Advance 1
+      //.CLKOUT0_PHASE(36), // Advance 1 bit time (empirically determined)
+      //.CLKOUT1_PHASE(72), // Advance 1
+      //.CLKOUT2_PHASE(180), // Advance 1
       .CLKOUT2_DIVIDE(2),
       .CLKIN1_PERIOD(10.000)
     ) mmcm_inst (
-      .CLKIN1(fclk_in),   // 2.5 fs
-      .CLKIN2(fclk),
+      .CLKIN1(fclk_in[1]),   // 2.5 fs
+      .CLKIN2(fclk_in[0]),
       .CLKINSEL(mmcm_clksel), // mmcm_clksel=0 => use CLK2
       .RST(mmcm_rst),
       .CLKOUT0(sclk_mmcm),  // fs
@@ -397,7 +406,8 @@ module ads5296x4_interface_demux2 #(
     .clk_in(sclk_in),
     .din_rise(din_rise),
     .din_fall(din_fall),
-   // .bitslip(bitslip),
+    .bitslip(bitslip),
+    .slip_index(slip_index),
     .wr_en(fifo_we),
     .rst(fifo_rst),
     .clk_out(sclk2_in),
@@ -413,11 +423,13 @@ module ads5296x4_interface_demux2 #(
   reg syncRR_sclk;
   reg fifo_we_reg;
   reg fifo_rst_reg;
-  assign fifo_rst = fifo_rst_reg;
+  (* max_fanout = 8 *) reg fifo_rst_regR;
+  assign fifo_rst = fifo_rst_regR;
   assign fifo_we = fifo_we_reg;
   always @(posedge sclk_in) begin
     syncR_sclk <= sync;
     syncRR_sclk <= syncR_sclk;
+    fifo_rst_regR <= fifo_rst_reg;
     if (rst) begin
       fifo_we_reg <= 1'b0;
       fifo_rst_reg <= 1'b1;
