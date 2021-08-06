@@ -14,7 +14,7 @@
 -- where contractually agreed.
 ------------------------------------------------------------------------------
 -- DESCRIPTION :
---	 This component is a JESD204B Data RX for the ADC32RF45 (LMFS=82820, 
+--	 This component is a JESD204B Data RX for the ADC32RF45 (LMFS=82820,
 --   2.8 GSPS)
 --   Target Device: xc7vx690tffg1927-2
 ------------------------------------------------------------------------------
@@ -25,7 +25,7 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity ADC32RF45_11G2_RX is
 	generic(
-		RX_POLARITY_INVERT : std_logic_vector(3 downto 0) := "0000"); 
+		RX_POLARITY_INVERT : std_logic_vector(3 downto 0) := "0000");
 	port(
 		SYS_CLK_I                : in  std_logic;
 		SYS_RST_I                : in  std_logic;
@@ -73,23 +73,26 @@ architecture ADC32RF45_11G2_RX_ARC of ADC32RF45_11G2_RX is
 	----------------------------------------------
 	-- CONNECTIONS
 	signal rctrl_apll_locked : std_logic;
+	signal rctrl_drpsysrst   : std_logic;
 	signal rctrl_fsmrstdone  : std_logic_vector(3 downto 0);
-	signal rctrl_rst         : std_logic;
 	signal rctrl_pllsncstart : std_logic;
+	signal rctrl_rst         : std_logic;
 	signal rctrl_state_code  : std_logic_vector(3 downto 0);
 	-- REGISTERS
 	type rctrl_state_type is (s0_uninit, s1_rst_predelay, s2_rst_assert, s3_rst_postdelay, s4_wait_rstdone, s5_wait_adcpll_locked, s6_done_delay, s7_done);
-	signal rctrl_pllsncstart_z1 : std_logic            := '0';
-	signal rctrl_adcpllrstn     : std_logic            := '0';
-	signal rctrl_datvalen_cnt   : unsigned(3 downto 0) := to_unsigned(0, 4);
-	signal rctrl_physoftrst     : std_logic            := '0';
-	signal rctrl_rst_z1         : std_logic            := '0';
-	signal rctrl_rstasrt_cnt    : unsigned(7 downto 0) := to_unsigned(0, 8);
-	signal rctrl_rstdasrt_cnt   : unsigned(7 downto 0) := to_unsigned(0, 8);
-	signal rctrl_rstdelay_cnt   : unsigned(3 downto 0) := to_unsigned(0, 4);
-	signal rctrl_rstdone_async  : std_logic            := '0';
-	signal rctrl_rstdone        : std_logic            := '0';
-	signal rctrl_state          : rctrl_state_type     := s0_uninit;
+	signal rctrl_adcpllrstn        : std_logic                      := '0';
+	signal rctrl_datvalen_cnt      : unsigned(3 downto 0)           := to_unsigned(0, 4);
+	signal rctrl_drpsysrst_delayed : std_logic                      := '0';
+	signal rctrl_drpsysrst_sr      : std_logic_vector(31 downto 0)  := x"00000000";
+	signal rctrl_physoftrst        : std_logic                      := '0';
+	signal rctrl_pllsncstart_z1    : std_logic                      := '0';
+	signal rctrl_rst_z1            : std_logic                      := '0';
+	signal rctrl_rstasrt_cnt       : unsigned(7 downto 0)           := to_unsigned(0, 8);
+	signal rctrl_rstdasrt_cnt      : unsigned(7 downto 0)           := to_unsigned(0, 8);
+	signal rctrl_rstdelay_cnt      : unsigned(3 downto 0)           := to_unsigned(0, 4);
+	signal rctrl_rstdone           : std_logic                      := '0';
+	signal rctrl_rstdone_async     : std_logic                      := '0';
+	signal rctrl_state             : rctrl_state_type               := s0_uninit;
 
 	----------------------------------------------
 	-- ADC RX PHY
@@ -99,21 +102,21 @@ architecture ADC32RF45_11G2_RX_ARC of ADC32RF45_11G2_RX is
 	signal rphy_4bitk            : stdlvec_arr_4bx4;
 	signal rphy_eyescandataerror : std_logic_vector(3  downto 0);
 	signal rphy_gtrefclk         : std_logic;
-	signal rphy_qplllock         : std_logic;                   
+	signal rphy_qplllock         : std_logic;
 	signal rphy_qpllrefclklost   : std_logic;
 	signal rphy_rxbufstatus      : std_logic_vector(11 downto 0);
 	signal rphy_rxbyteisaligned  : std_logic_vector(3  downto 0);
 	signal rphy_rxdisperr        : std_logic_vector(15 downto 0);
 	signal rphy_rxfsmresetdone   : std_logic_vector(3  downto 0);
-	signal rphy_rxn              : std_logic_vector(3  downto 0);  
+	signal rphy_rxn              : std_logic_vector(3  downto 0);
 	signal rphy_rxnotintable     : std_logic_vector(15 downto 0);
 	signal rphy_rxp              : std_logic_vector(3  downto 0);
 	signal rphy_rxresetdone      : std_logic_vector(3  downto 0);
-	signal rphy_softrst          : std_logic;	
+	signal rphy_softrst          : std_logic;
 	-- COMPONENTS
 	component ADC32RF45_11G2_RX_PHY is
 	generic(
-		RX_POLARITY_INVERT          : std_logic_vector(3 downto 0) := "0000"; 
+		RX_POLARITY_INVERT          : std_logic_vector(3 downto 0) := "0000";
 		EXAMPLE_SIM_GTRESET_SPEEDUP : string                       := "TRUE";
 		STABLE_CLOCK_PERIOD         : integer                      := 6);
 	port(
@@ -121,7 +124,7 @@ architecture ADC32RF45_11G2_RX_ARC of ADC32RF45_11G2_RX is
 		SYSCLK_IN             : in  std_logic;
 		SOFT_RESET_IN         : in  std_logic;
 		RXP_IN                : in  std_logic_vector(3  downto 0);
-		RXN_IN                : in  std_logic_vector(3  downto 0);     
+		RXN_IN                : in  std_logic_vector(3  downto 0);
 		LANE0_RX_DATA_O       : out std_logic_vector(31 downto 0);
 		LANE1_RX_DATA_O       : out std_logic_vector(31 downto 0);
 		LANE2_RX_DATA_O       : out std_logic_vector(31 downto 0);
@@ -130,7 +133,7 @@ architecture ADC32RF45_11G2_RX_ARC of ADC32RF45_11G2_RX is
 		LANE1_RX_DATA_IS_K_O  : out std_logic_vector(3  downto 0);
 		LANE2_RX_DATA_IS_K_O  : out std_logic_vector(3  downto 0);
 		LANE3_RX_DATA_IS_K_O  : out std_logic_vector(3  downto 0);
-		GT_RXUSRCLK2_O        : out std_logic;	 
+		GT_RXUSRCLK2_O        : out std_logic;
 		GT_RXFSMRESETDONE_O   : out std_logic_vector(3  downto 0);
 		GT_RXBUFSTATUS_O      : out std_logic_vector(11 downto 0);
 		GT_RXDISPERR_O        : out std_logic_vector(15 downto 0);
@@ -138,12 +141,12 @@ architecture ADC32RF45_11G2_RX_ARC of ADC32RF45_11G2_RX is
 		GT_EYESCANDATAERROR_O : out std_logic_vector(3  downto 0);
 		GT_RXBYTEISALIGNED_O  : out std_logic_vector(3  downto 0);
 		GT_RXRESETDONE_O      : out std_logic_vector(3  downto 0);
-		GT_QPLLLOCK_O         : out std_logic;                   
+		GT_QPLLLOCK_O         : out std_logic;
 		GT_QPLLREFCLKLOST_O   : out std_logic);
-	end component;	
+	end component;
 	
 	----------------------------------------------
-	-- K28.5 (0xBC) COMMA CHARACTER VERIFICATION 
+	-- K28.5 (0xBC) COMMA CHARACTER VERIFICATION
 	----------------------------------------------
 	-- CONNECTIONS
 	signal k28p5det_32bitpdat : stdlvec_arr_32bx4;
@@ -171,10 +174,10 @@ architecture ADC32RF45_11G2_RX_ARC of ADC32RF45_11G2_RX is
 	signal chbnd_4bitk_z1     : stdlvec_arr_4bx4             := (others => x"0");
 	signal chbnd_4bitk_z2     : stdlvec_arr_4bx4             := (others => x"0");
 	signal chbnd_4bitk_z3     : stdlvec_arr_4bx4             := (others => x"0");
-	signal chbnd_datval       : std_logic_vector(3 downto 0) := "0000";		
+	signal chbnd_datval       : std_logic_vector(3 downto 0) := "0000";
 	signal chbnd_detk28p3_z1  : std_logic_vector(3 downto 0) := "0000";
 	signal chbnd_detk28p3_z2  : std_logic_vector(3 downto 0) := "0000";
-	signal chbnd_done         : std_logic                    := '0';		
+	signal chbnd_done         : std_logic                    := '0';
 	signal chbnd_done_z1      : std_logic                    := '0';
 	signal chbnd_plsfreq_cnt  : unsigned_arr_6bx4            := (others => "100000"); -- 32
 	signal chbnd_plsfreq_err  : std_logic_vector(3 downto 0) := "0000";
@@ -204,7 +207,7 @@ architecture ADC32RF45_11G2_RX_ARC of ADC32RF45_11G2_RX is
 	signal chbfifo_full  : std_logic_vector(3 downto 0);
 	signal chbfifo_empty : std_logic_vector(3 downto 0);
 	signal chbfifo_rden  : std_logic_vector(3 downto 0);
-	signal chbfifo_din   : stdlvec_arr_36bx4;			
+	signal chbfifo_din   : stdlvec_arr_36bx4;
 	
 	----------------------------------------------
 	-- WORD ALIGNMENT
@@ -267,13 +270,15 @@ architecture ADC32RF45_11G2_RX_ARC of ADC32RF45_11G2_RX is
 	-- CONNECTIONS
 	signal gbxf_din               : std_logic_vector(191 downto 0);
 	signal gbxf_dout              : std_logic_vector(191 downto 0);
-	signal gbxf_dval        : std_logic;
+	signal gbxf_dval              : std_logic;
 	signal gbxf_empty             : std_logic;
 	signal gbxf_full              : std_logic;
 	signal gbxf_prog_empty        : std_logic;
 	signal gbxf_rden              : std_logic;
 	signal gbxf_rden_out_i        : std_logic;
 	signal gbxf_rst               : std_logic;
+	signal gbxf_rst_async         : std_logic;
+	signal gbxf_rst_async_z1      : std_logic;
 	signal gbxf_wren              : std_logic;
 	-- REGISTERS
 	signal gbxf_rden_z1           : std_logic := '0';
@@ -354,24 +359,24 @@ architecture ADC32RF45_11G2_RX_ARC of ADC32RF45_11G2_RX is
 
 	-- LATCHED STATUS SIGNALS
 	-- CONNECTIONS
-	signal stat_rxfsmresetdone_l     : std_logic;
-	signal stat_rxbufstatus_l        : std_logic;
-	signal stat_rxdisperr_l          : std_logic;
-	signal stat_rxnotintable_l       : std_logic;
-	signal stat_eyescandataerror_l   : std_logic;
-	signal stat_rxbyteisaligned_l    : std_logic;
-	signal stat_rxresetdone_l        : std_logic;
-	signal stat_qplllock_l           : std_logic;
-	signal stat_qpllrefclklost_l     : std_logic;
-	signal stat_chbnd_plswidth_err_l : std_logic;
+	signal stat_chbfifo_empty_l      : std_logic;
+	signal stat_chbfifo_full_l       : std_logic;
+	signal stat_chbnd_datval_l       : std_logic;
 	signal stat_chbnd_plsfreq_err_l  : std_logic;
 	signal stat_chbnd_plsnum_err_l   : std_logic;
-	signal stat_chbnd_datval_l       : std_logic;
-	signal stat_chbfifo_full_l       : std_logic;
-	signal stat_chbfifo_empty_l      : std_logic;
-	signal stat_rctrl_apll_locked_l  : std_logic;
-	signal stat_gbxf_full_l          : std_logic;
+	signal stat_chbnd_plswidth_err_l : std_logic;
+	signal stat_eyescandataerror_l   : std_logic;
 	signal stat_gbxf_empty_l         : std_logic;
+	signal stat_gbxf_full_l          : std_logic;
+	signal stat_qplllock_l           : std_logic;
+	signal stat_qpllrefclklost_l     : std_logic;
+	signal stat_rctrl_apll_locked_l  : std_logic;
+	signal stat_rxbufstatus_l        : std_logic;
+	signal stat_rxbyteisaligned_l    : std_logic;
+	signal stat_rxdisperr_l          : std_logic;
+	signal stat_rxfsmresetdone_l     : std_logic;
+	signal stat_rxnotintable_l       : std_logic;
+	signal stat_rxresetdone_l        : std_logic;
 
 	--- STATUS SIGNAL DONE/RESETS
 	-- CONNECTIONS
@@ -407,29 +412,37 @@ architecture ADC32RF45_11G2_RX_ARC of ADC32RF45_11G2_RX is
 		sig     : in  std_logic;
 		latched : out std_logic);
 	end component;
+	
+	-- DELAY COMPONENT
+	component del is
+	port(
+		clk         : in  std_logic;
+		input_sig   : in  std_logic;
+		delayed_sig : out std_logic);
+	end component;
 
 	-- <TEST
 	component ila_rphy
 	port (
 		clk : in std_logic;
-		probe0 : in std_logic_vector(31 downto 0); 
-		probe1 : in std_logic_vector(31 downto 0); 
-		probe2 : in std_logic_vector(31 downto 0); 
-		probe3 : in std_logic_vector(31 downto 0); 
-		probe4 : in std_logic_vector(15 downto 0); 
-		probe5 : in std_logic_vector(15 downto 0); 
-		probe6 : in std_logic_vector(11 downto 0); 
-		probe7 : in std_logic_vector(3 downto 0); 
-		probe8 : in std_logic_vector(3 downto 0); 
-		probe9 : in std_logic_vector(3 downto 0); 
-		probe10 : in std_logic_vector(3 downto 0); 
-		probe11 : in std_logic_vector(3 downto 0); 
-		probe12 : in std_logic_vector(3 downto 0); 
-		probe13 : in std_logic_vector(3 downto 0); 
-		probe14 : in std_logic_vector(3 downto 0); 
-		probe15 : in std_logic_vector(3 downto 0); 
-		probe16 : in std_logic_vector(3 downto 0); 
-		probe17 : in std_logic_vector(0 downto 0); 
+		probe0 : in std_logic_vector(31 downto 0);
+		probe1 : in std_logic_vector(31 downto 0);
+		probe2 : in std_logic_vector(31 downto 0);
+		probe3 : in std_logic_vector(31 downto 0);
+		probe4 : in std_logic_vector(15 downto 0);
+		probe5 : in std_logic_vector(15 downto 0);
+		probe6 : in std_logic_vector(11 downto 0);
+		probe7 : in std_logic_vector(3 downto 0);
+		probe8 : in std_logic_vector(3 downto 0);
+		probe9 : in std_logic_vector(3 downto 0);
+		probe10 : in std_logic_vector(3 downto 0);
+		probe11 : in std_logic_vector(3 downto 0);
+		probe12 : in std_logic_vector(3 downto 0);
+		probe13 : in std_logic_vector(3 downto 0);
+		probe14 : in std_logic_vector(3 downto 0);
+		probe15 : in std_logic_vector(3 downto 0);
+		probe16 : in std_logic_vector(3 downto 0);
+		probe17 : in std_logic_vector(0 downto 0);
 		probe18 : in std_logic_vector(0 downto 0);
 		probe19 : in std_logic_vector(0 downto 0));
 	end component;
@@ -437,18 +450,18 @@ architecture ADC32RF45_11G2_RX_ARC of ADC32RF45_11G2_RX is
 	component ila_rctrl
 	port (
 		clk : in std_logic;
-		probe0 : in std_logic_vector(7 downto 0); 
-		probe1 : in std_logic_vector(7 downto 0); 
-		probe2 : in std_logic_vector(3 downto 0); 
-		probe3 : in std_logic_vector(3 downto 0); 
-		probe4 : in std_logic_vector(3 downto 0); 
-		probe5 : in std_logic_vector(3 downto 0); 
-		probe6 : in std_logic_vector(0 downto 0); 
-		probe7 : in std_logic_vector(0 downto 0); 
-		probe8 : in std_logic_vector(0 downto 0); 
-		probe9 : in std_logic_vector(0 downto 0); 
-		probe10 : in std_logic_vector(0 downto 0); 
-		probe11 : in std_logic_vector(0 downto 0); 
+		probe0 : in std_logic_vector(7 downto 0);
+		probe1 : in std_logic_vector(7 downto 0);
+		probe2 : in std_logic_vector(3 downto 0);
+		probe3 : in std_logic_vector(3 downto 0);
+		probe4 : in std_logic_vector(3 downto 0);
+		probe5 : in std_logic_vector(3 downto 0);
+		probe6 : in std_logic_vector(0 downto 0);
+		probe7 : in std_logic_vector(0 downto 0);
+		probe8 : in std_logic_vector(0 downto 0);
+		probe9 : in std_logic_vector(0 downto 0);
+		probe10 : in std_logic_vector(0 downto 0);
+		probe11 : in std_logic_vector(0 downto 0);
 		probe12 : in std_logic_vector(0 downto 0);
 		probe13 : in std_logic_vector(0 downto 0));
 	end component;
@@ -456,51 +469,51 @@ architecture ADC32RF45_11G2_RX_ARC of ADC32RF45_11G2_RX is
 	component ila_chbnd
 	port (
 		clk : in std_logic;
-		probe0  : in std_logic_vector(31 downto 0); 
-		probe1  : in std_logic_vector(31 downto 0); 
-		probe2  : in std_logic_vector(31 downto 0); 
-		probe3  : in std_logic_vector(31 downto 0); 
-		probe4  : in std_logic_vector(31 downto 0); 
-		probe5  : in std_logic_vector(31 downto 0); 
-		probe6  : in std_logic_vector(31 downto 0); 
-		probe7  : in std_logic_vector(31 downto 0); 
-		probe8  : in std_logic_vector(31 downto 0); 
-		probe9  : in std_logic_vector(31 downto 0); 
-		probe10 : in std_logic_vector(31 downto 0); 
-		probe11 : in std_logic_vector(31 downto 0); 
-		probe12 : in std_logic_vector(31 downto 0); 
-		probe13 : in std_logic_vector(31 downto 0); 
-		probe14 : in std_logic_vector(31 downto 0); 
-		probe15 : in std_logic_vector(31 downto 0); 
-		probe16 : in std_logic_vector(5 downto 0); 
-		probe17 : in std_logic_vector(5 downto 0); 
-		probe18 : in std_logic_vector(5 downto 0); 
-		probe19 : in std_logic_vector(5 downto 0); 
-		probe20 : in std_logic_vector(3 downto 0); 
-		probe21 : in std_logic_vector(3 downto 0); 
-		probe22 : in std_logic_vector(3 downto 0); 
-		probe23 : in std_logic_vector(3 downto 0); 
-		probe24 : in std_logic_vector(3 downto 0); 
-		probe25 : in std_logic_vector(3 downto 0); 
-		probe26 : in std_logic_vector(3 downto 0); 
-		probe27 : in std_logic_vector(3 downto 0); 
-		probe28 : in std_logic_vector(3 downto 0); 
-		probe29 : in std_logic_vector(3 downto 0); 
-		probe30 : in std_logic_vector(3 downto 0); 
-		probe31 : in std_logic_vector(3 downto 0); 
-		probe32 : in std_logic_vector(3 downto 0); 
-		probe33 : in std_logic_vector(3 downto 0); 
-		probe34 : in std_logic_vector(3 downto 0); 
-		probe35 : in std_logic_vector(3 downto 0); 
-		probe36 : in std_logic_vector(3 downto 0); 
-		probe37 : in std_logic_vector(3 downto 0); 
-		probe38 : in std_logic_vector(3 downto 0); 
-		probe39 : in std_logic_vector(3 downto 0); 
-		probe40 : in std_logic_vector(3 downto 0); 
-		probe41 : in std_logic_vector(3 downto 0); 
-		probe42 : in std_logic_vector(0 downto 0); 
-		probe43 : in std_logic_vector(0 downto 0); 
-		probe44 : in std_logic_vector(0 downto 0); 
+		probe0  : in std_logic_vector(31 downto 0);
+		probe1  : in std_logic_vector(31 downto 0);
+		probe2  : in std_logic_vector(31 downto 0);
+		probe3  : in std_logic_vector(31 downto 0);
+		probe4  : in std_logic_vector(31 downto 0);
+		probe5  : in std_logic_vector(31 downto 0);
+		probe6  : in std_logic_vector(31 downto 0);
+		probe7  : in std_logic_vector(31 downto 0);
+		probe8  : in std_logic_vector(31 downto 0);
+		probe9  : in std_logic_vector(31 downto 0);
+		probe10 : in std_logic_vector(31 downto 0);
+		probe11 : in std_logic_vector(31 downto 0);
+		probe12 : in std_logic_vector(31 downto 0);
+		probe13 : in std_logic_vector(31 downto 0);
+		probe14 : in std_logic_vector(31 downto 0);
+		probe15 : in std_logic_vector(31 downto 0);
+		probe16 : in std_logic_vector(5 downto 0);
+		probe17 : in std_logic_vector(5 downto 0);
+		probe18 : in std_logic_vector(5 downto 0);
+		probe19 : in std_logic_vector(5 downto 0);
+		probe20 : in std_logic_vector(3 downto 0);
+		probe21 : in std_logic_vector(3 downto 0);
+		probe22 : in std_logic_vector(3 downto 0);
+		probe23 : in std_logic_vector(3 downto 0);
+		probe24 : in std_logic_vector(3 downto 0);
+		probe25 : in std_logic_vector(3 downto 0);
+		probe26 : in std_logic_vector(3 downto 0);
+		probe27 : in std_logic_vector(3 downto 0);
+		probe28 : in std_logic_vector(3 downto 0);
+		probe29 : in std_logic_vector(3 downto 0);
+		probe30 : in std_logic_vector(3 downto 0);
+		probe31 : in std_logic_vector(3 downto 0);
+		probe32 : in std_logic_vector(3 downto 0);
+		probe33 : in std_logic_vector(3 downto 0);
+		probe34 : in std_logic_vector(3 downto 0);
+		probe35 : in std_logic_vector(3 downto 0);
+		probe36 : in std_logic_vector(3 downto 0);
+		probe37 : in std_logic_vector(3 downto 0);
+		probe38 : in std_logic_vector(3 downto 0);
+		probe39 : in std_logic_vector(3 downto 0);
+		probe40 : in std_logic_vector(3 downto 0);
+		probe41 : in std_logic_vector(3 downto 0);
+		probe42 : in std_logic_vector(0 downto 0);
+		probe43 : in std_logic_vector(0 downto 0);
+		probe44 : in std_logic_vector(0 downto 0);
 		probe45 : in std_logic_vector(0 downto 0);
 		probe46 : in std_logic_vector(0 downto 0);
 		probe47 : in std_logic_vector(2 downto 0);
@@ -513,16 +526,16 @@ architecture ADC32RF45_11G2_RX_ARC of ADC32RF45_11G2_RX is
 	component ila_k28p5det
 	port (
 		clk     : in std_logic;
-		probe0  : in std_logic_vector(31 downto 0); 
-		probe1  : in std_logic_vector(31 downto 0); 
-		probe2  : in std_logic_vector(31 downto 0); 
-		probe3  : in std_logic_vector(31 downto 0); 
-		probe4  : in std_logic_vector(3 downto 0); 
-		probe5  : in std_logic_vector(3 downto 0); 
-		probe6  : in std_logic_vector(3 downto 0); 
-		probe7  : in std_logic_vector(3 downto 0); 
-		probe8  : in std_logic_vector(7 downto 0); 
-		probe9  : in std_logic_vector(3 downto 0); 
+		probe0  : in std_logic_vector(31 downto 0);
+		probe1  : in std_logic_vector(31 downto 0);
+		probe2  : in std_logic_vector(31 downto 0);
+		probe3  : in std_logic_vector(31 downto 0);
+		probe4  : in std_logic_vector(3 downto 0);
+		probe5  : in std_logic_vector(3 downto 0);
+		probe6  : in std_logic_vector(3 downto 0);
+		probe7  : in std_logic_vector(3 downto 0);
+		probe8  : in std_logic_vector(7 downto 0);
+		probe9  : in std_logic_vector(3 downto 0);
 		probe10 : in std_logic_vector(0 downto 0);
 		probe11 : in std_logic_vector(0 downto 0));
 	end component;
@@ -530,17 +543,17 @@ architecture ADC32RF45_11G2_RX_ARC of ADC32RF45_11G2_RX is
 	component ila_chbfifo
 	port (
 		clk     : in std_logic;
-		probe0  : in std_logic_vector(35 downto 0); 
-		probe1  : in std_logic_vector(35 downto 0); 
-		probe2  : in std_logic_vector(35 downto 0); 
-		probe3  : in std_logic_vector(35 downto 0); 
-		probe4  : in std_logic_vector(35 downto 0); 
-		probe5  : in std_logic_vector(35 downto 0); 
-		probe6  : in std_logic_vector(35 downto 0); 
-		probe7  : in std_logic_vector(35 downto 0); 
-		probe8  : in std_logic_vector(3  downto 0); 
-		probe9  : in std_logic_vector(3  downto 0); 
-		probe10 : in std_logic_vector(3  downto 0); 
+		probe0  : in std_logic_vector(35 downto 0);
+		probe1  : in std_logic_vector(35 downto 0);
+		probe2  : in std_logic_vector(35 downto 0);
+		probe3  : in std_logic_vector(35 downto 0);
+		probe4  : in std_logic_vector(35 downto 0);
+		probe5  : in std_logic_vector(35 downto 0);
+		probe6  : in std_logic_vector(35 downto 0);
+		probe7  : in std_logic_vector(35 downto 0);
+		probe8  : in std_logic_vector(3  downto 0);
+		probe9  : in std_logic_vector(3  downto 0);
+		probe10 : in std_logic_vector(3  downto 0);
 		probe11 : in std_logic_vector(3  downto 0);
 		probe12 : in std_logic_vector(3  downto 0));
 	end component;
@@ -548,37 +561,37 @@ architecture ADC32RF45_11G2_RX_ARC of ADC32RF45_11G2_RX is
 	component ila_walgn
 	port (
 		clk     : in std_logic;
-		probe0  : in std_logic_vector(31 downto 0); 
-		probe1  : in std_logic_vector(31 downto 0); 
-		probe2  : in std_logic_vector(31 downto 0); 
-		probe3  : in std_logic_vector(31 downto 0); 
-		probe4  : in std_logic_vector(31 downto 0); 
-		probe5  : in std_logic_vector(31 downto 0); 
-		probe6  : in std_logic_vector(31 downto 0); 
-		probe7  : in std_logic_vector(31 downto 0); 
-		probe8  : in std_logic_vector(31 downto 0); 
-		probe9  : in std_logic_vector(31 downto 0); 
-		probe10 : in std_logic_vector(31 downto 0); 
-		probe11 : in std_logic_vector(31 downto 0); 
-		probe12 : in std_logic_vector(31 downto 0); 
-		probe13 : in std_logic_vector(31 downto 0); 
-		probe14 : in std_logic_vector(31 downto 0); 
-		probe15 : in std_logic_vector(31 downto 0); 
-		probe16 : in std_logic_vector(3 downto 0); 
-		probe17 : in std_logic_vector(3 downto 0); 
-		probe18 : in std_logic_vector(3 downto 0); 
-		probe19 : in std_logic_vector(3 downto 0); 
-		probe20 : in std_logic_vector(3 downto 0); 
-		probe21 : in std_logic_vector(3 downto 0); 
-		probe22 : in std_logic_vector(3 downto 0); 
-		probe23 : in std_logic_vector(3 downto 0); 
-		probe24 : in std_logic_vector(3 downto 0); 
-		probe25 : in std_logic_vector(1 downto 0); 
-		probe26 : in std_logic_vector(1 downto 0); 
-		probe27 : in std_logic_vector(1 downto 0); 
-		probe28 : in std_logic_vector(1 downto 0); 
-		probe29 : in std_logic_vector(0 downto 0); 
-		probe30 : in std_logic_vector(0 downto 0); 
+		probe0  : in std_logic_vector(31 downto 0);
+		probe1  : in std_logic_vector(31 downto 0);
+		probe2  : in std_logic_vector(31 downto 0);
+		probe3  : in std_logic_vector(31 downto 0);
+		probe4  : in std_logic_vector(31 downto 0);
+		probe5  : in std_logic_vector(31 downto 0);
+		probe6  : in std_logic_vector(31 downto 0);
+		probe7  : in std_logic_vector(31 downto 0);
+		probe8  : in std_logic_vector(31 downto 0);
+		probe9  : in std_logic_vector(31 downto 0);
+		probe10 : in std_logic_vector(31 downto 0);
+		probe11 : in std_logic_vector(31 downto 0);
+		probe12 : in std_logic_vector(31 downto 0);
+		probe13 : in std_logic_vector(31 downto 0);
+		probe14 : in std_logic_vector(31 downto 0);
+		probe15 : in std_logic_vector(31 downto 0);
+		probe16 : in std_logic_vector(3 downto 0);
+		probe17 : in std_logic_vector(3 downto 0);
+		probe18 : in std_logic_vector(3 downto 0);
+		probe19 : in std_logic_vector(3 downto 0);
+		probe20 : in std_logic_vector(3 downto 0);
+		probe21 : in std_logic_vector(3 downto 0);
+		probe22 : in std_logic_vector(3 downto 0);
+		probe23 : in std_logic_vector(3 downto 0);
+		probe24 : in std_logic_vector(3 downto 0);
+		probe25 : in std_logic_vector(1 downto 0);
+		probe26 : in std_logic_vector(1 downto 0);
+		probe27 : in std_logic_vector(1 downto 0);
+		probe28 : in std_logic_vector(1 downto 0);
+		probe29 : in std_logic_vector(0 downto 0);
+		probe30 : in std_logic_vector(0 downto 0);
 		probe31 : in std_logic_vector(0 downto 0);
 		probe32 : in std_logic_vector(0 downto 0));
 	end component;
@@ -586,30 +599,30 @@ architecture ADC32RF45_11G2_RX_ARC of ADC32RF45_11G2_RX is
 	component ila_unfrm
 	port (
 		clk : in std_logic;
-		probe0 : in std_logic_vector(191 downto 0); 
-		probe1 : in std_logic_vector(119 downto 0); 
-		probe2 : in std_logic_vector(31 downto 0); 
-		probe3 : in std_logic_vector(31 downto 0); 
-		probe4 : in std_logic_vector(31 downto 0); 
-		probe5 : in std_logic_vector(31 downto 0); 
-		probe6 : in std_logic_vector(31 downto 0); 
-		probe7 : in std_logic_vector(31 downto 0); 
-		probe8 : in std_logic_vector(31 downto 0); 
-		probe9 : in std_logic_vector(31 downto 0); 
-		probe10 : in std_logic_vector(11 downto 0); 
-		probe11 : in std_logic_vector(11 downto 0); 
-		probe12 : in std_logic_vector(11 downto 0); 
-		probe13 : in std_logic_vector(11 downto 0); 
-		probe14 : in std_logic_vector(11 downto 0); 
-		probe15 : in std_logic_vector(0 downto 0); 
-		probe16 : in std_logic_vector(0 downto 0); 
-		probe17 : in std_logic_vector(0 downto 0); 
-		probe18 : in std_logic_vector(0 downto 0); 
-		probe19 : in std_logic_vector(0 downto 0); 
-		probe20 : in std_logic_vector(0 downto 0); 
-		probe21 : in std_logic_vector(0 downto 0); 
-		probe22 : in std_logic_vector(0 downto 0); 
-		probe23 : in std_logic_vector(0 downto 0); 
+		probe0 : in std_logic_vector(191 downto 0);
+		probe1 : in std_logic_vector(119 downto 0);
+		probe2 : in std_logic_vector(31 downto 0);
+		probe3 : in std_logic_vector(31 downto 0);
+		probe4 : in std_logic_vector(31 downto 0);
+		probe5 : in std_logic_vector(31 downto 0);
+		probe6 : in std_logic_vector(31 downto 0);
+		probe7 : in std_logic_vector(31 downto 0);
+		probe8 : in std_logic_vector(31 downto 0);
+		probe9 : in std_logic_vector(31 downto 0);
+		probe10 : in std_logic_vector(11 downto 0);
+		probe11 : in std_logic_vector(11 downto 0);
+		probe12 : in std_logic_vector(11 downto 0);
+		probe13 : in std_logic_vector(11 downto 0);
+		probe14 : in std_logic_vector(11 downto 0);
+		probe15 : in std_logic_vector(0 downto 0);
+		probe16 : in std_logic_vector(0 downto 0);
+		probe17 : in std_logic_vector(0 downto 0);
+		probe18 : in std_logic_vector(0 downto 0);
+		probe19 : in std_logic_vector(0 downto 0);
+		probe20 : in std_logic_vector(0 downto 0);
+		probe21 : in std_logic_vector(0 downto 0);
+		probe22 : in std_logic_vector(0 downto 0);
+		probe23 : in std_logic_vector(0 downto 0);
 		probe24 : in std_logic_vector(0 downto 0);
 		probe25 : in std_logic_vector(0 downto 0));
 	end component;
@@ -617,22 +630,20 @@ architecture ADC32RF45_11G2_RX_ARC of ADC32RF45_11G2_RX is
 	component ila_gbxf
 	port (
 		clk : in std_logic;
-		probe0 : in std_logic_vector(191 downto 0); 
-		probe1 : in std_logic_vector(0 downto 0); 
-		probe2 : in std_logic_vector(0 downto 0); 
-		probe3 : in std_logic_vector(0 downto 0); 
-		probe4 : in std_logic_vector(0 downto 0); 
-		probe5 : in std_logic_vector(0 downto 0); 
-		probe6 : in std_logic_vector(0 downto 0); 
-		probe7 : in std_logic_vector(0 downto 0); 
+		probe0 : in std_logic_vector(191 downto 0);
+		probe1 : in std_logic_vector(0 downto 0);
+		probe2 : in std_logic_vector(0 downto 0);
+		probe3 : in std_logic_vector(0 downto 0);
+		probe4 : in std_logic_vector(0 downto 0);
+		probe5 : in std_logic_vector(0 downto 0);
+		probe6 : in std_logic_vector(0 downto 0);
+		probe7 : in std_logic_vector(0 downto 0);
 		probe8 : in std_logic_vector(0 downto 0);
 		probe9 : in std_logic_vector(0 downto 0));
 	end component;
 	--TEST>
 	
-
 begin
-
 	--<TEST
 	-- ila_rphy_i : ila_rphy port map (
 		-- clk     => rxusrclk2,
@@ -836,33 +847,33 @@ begin
 		 -- probe6(0)  => gbxf_rden ,
 		 -- probe7(0)  => gbxf_empty ,
 		 -- probe8(0)  => gbxf_prog_empty       ,
-		 -- probe9(0)  => '0');  
-		
+		 -- probe9(0)  => '0');
 	--TEST>
 
 	----------------------------------------------
 	-- RESET CONTROL
 	----------------------------------------------
 	-- CONNECTIONS
-	rctrl_rst          <= SOFT_RESET_IN; 
-	rctrl_pllsncstart  <= PLL_SYNC_START; 
-	rctrl_fsmrstdone   <= rphy_rxfsmresetdone;
+	rctrl_drpsysrst   <= drpsysrst;
+	rctrl_fsmrstdone  <= rphy_rxfsmresetdone;
+	rctrl_pllsncstart <= PLL_SYNC_START;
+	rctrl_rst         <= SOFT_RESET_IN;
 	tff_adcplllocked : tff port map (drpsysclk, ADC_PLL_LOCKED, rctrl_apll_locked);
 	-- RESET CONTROL FSM PROCESS
 	process (drpsysclk)
 	begin
 		if rising_edge(drpsysclk) then
-			if drpsysrst = '1' then
-				rctrl_adcpllrstn     <= '0';
-				rctrl_datvalen_cnt   <= to_unsigned(0, 4);
-				rctrl_physoftrst     <= '0';
-				rctrl_pllsncstart_z1 <= '0';
-				rctrl_rst_z1         <= '0';
-				rctrl_rstasrt_cnt    <= to_unsigned(0, 8);
-				rctrl_rstdasrt_cnt   <= to_unsigned(0, 8);
-				rctrl_rstdelay_cnt   <= to_unsigned(0, 4);
-				rctrl_rstdone_async  <= '0';
-				rctrl_state          <= s0_uninit;
+			if rctrl_drpsysrst_delayed = '1' then
+				rctrl_adcpllrstn        <= '0';
+				rctrl_datvalen_cnt      <= to_unsigned(0, 4);
+				rctrl_physoftrst        <= '0';
+				rctrl_pllsncstart_z1    <= '0';
+				rctrl_rst_z1            <= '0';
+				rctrl_rstasrt_cnt       <= to_unsigned(0, 8);
+				rctrl_rstdasrt_cnt      <= to_unsigned(0, 8);
+				rctrl_rstdelay_cnt      <= to_unsigned(0, 4);
+				rctrl_rstdone_async     <= '0';
+				rctrl_state             <= s0_uninit;
 			else
 				if rctrl_pllsncstart_z1 = '0' and rctrl_pllsncstart = '1' then
 					rctrl_state        <= s0_uninit;
@@ -902,7 +913,7 @@ begin
 						when s4_wait_rstdone =>
 							if rctrl_fsmrstdone = x"F" then
 								rctrl_state <= s5_wait_adcpll_locked;
-							else	
+							else
 								rctrl_state <= s4_wait_rstdone;
 							end if;
 							
@@ -945,11 +956,18 @@ begin
 				else
 					rctrl_physoftrst <= '0';
 				end if;
-							
-				-- Delayed signals
-				rctrl_rst_z1         <= rctrl_rst;			
-				rctrl_pllsncstart_z1 <= rctrl_pllsncstart;			
+				
+				-- 1-clock-cycle delayed signals
+				rctrl_rst_z1         <= rctrl_rst;
+				rctrl_pllsncstart_z1 <= rctrl_pllsncstart;
 			end if;
+			
+			-- 32-clock-cycle delayed signals
+			rctrl_drpsysrst_delayed <= rctrl_drpsysrst_sr(31);
+			for i in 30 downto 0 loop
+				rctrl_drpsysrst_sr(i+1) <= rctrl_drpsysrst_sr(i);
+			end loop;
+			rctrl_drpsysrst_sr(0) <= rctrl_drpsysrst;
 		end if;
 	end process;
 	tff_rctrlrstdone : tff port map (rxusrclk2, rctrl_rstdone_async, rctrl_rstdone);
@@ -976,7 +994,7 @@ begin
 		SYSCLK_IN                => drpsysclk,
 		GT_RXUSRCLK2_O           => rxusrclk2,
 		SOFT_RESET_IN            => rphy_softrst,
-		RXP_IN                   => rphy_rxp,        
+		RXP_IN                   => rphy_rxp,
 		RXN_IN                   => rphy_rxn,
 		GTREFCLK_IN              => rphy_gtrefclk,
 		LANE0_RX_DATA_O          => rphy_32bitpdat(0),
@@ -998,7 +1016,7 @@ begin
 		GT_QPLLREFCLKLOST_O      => rphy_qpllrefclklost);
 
 	----------------------------------------------
-	-- K28.5 (0xBC) COMMA CHARACTER VERIFICATION 
+	-- K28.5 (0xBC) COMMA CHARACTER VERIFICATION
 	----------------------------------------------
 	-- CONNECTIONS
 	k28p5det_rstn      <= rctrl_rstdone;
@@ -1033,7 +1051,7 @@ begin
 					k28p5det_cnt <= to_unsigned(0, 8);
 				end if;
 			end if;
-		end if;	
+		end if;
 	end process;
 
 	----------------------------------------------
@@ -1045,9 +1063,9 @@ begin
 	chbnd_en          <= k28p5det_done;
 	chbnd_rstn        <= rctrl_rstdone;
 	G_CHANBOND: for i in 0 to 3 generate
-		chbnd_detk28p3(i) <= '1' when ((chbnd_4bitk(i)(0)  & chbnd_32bitpdat(i)(7  downto  0)) = K28p3 or 
-		                               (chbnd_4bitk(i)(1)  & chbnd_32bitpdat(i)(15 downto  8)) = K28p3 or 
-		                               (chbnd_4bitk(i)(2)  & chbnd_32bitpdat(i)(23 downto 16)) = K28p3 or 
+		chbnd_detk28p3(i) <= '1' when ((chbnd_4bitk(i)(0)  & chbnd_32bitpdat(i)(7  downto  0)) = K28p3 or
+		                               (chbnd_4bitk(i)(1)  & chbnd_32bitpdat(i)(15 downto  8)) = K28p3 or
+		                               (chbnd_4bitk(i)(2)  & chbnd_32bitpdat(i)(23 downto 16)) = K28p3 or
 		                               (chbnd_4bitk(i)(3)  & chbnd_32bitpdat(i)(31 downto 24)) = K28p3) else '0';
 	end generate;
 
@@ -1062,10 +1080,10 @@ begin
 				chbnd_4bitk_z1     <= (others => x"0");
 				chbnd_4bitk_z2     <= (others => x"0");
 				chbnd_4bitk_z3     <= (others => x"0");
-				chbnd_datval       <= "0000";			
+				chbnd_datval       <= "0000";
 				chbnd_detk28p3_z1  <= "0000";
 				chbnd_detk28p3_z2  <= "0000";
-				chbnd_done         <= '0';			
+				chbnd_done         <= '0';
 				chbnd_done_z1      <= '0';
 				chbnd_plsfreq_cnt  <= (others => "100000"); -- 32
 				chbnd_plsfreq_err  <= "0000";
@@ -1091,7 +1109,7 @@ begin
 						chbnd_done <= '1';
 					else
 						chbnd_done <= '0';
-					end if;		
+					end if;
 					
 					-- Check for k28p3 pulse width errors (should be a single clock cycle pulse)
 					for i in 0 to 3 loop
@@ -1115,7 +1133,7 @@ begin
 					for i in 0 to 3 loop
 						if chbnd_detk28p3_z1(i) = '1' then
 							chbnd_plsfreq_cnt(i) <= to_unsigned(0, 8);
-						else	
+						else
 							if chbnd_plsfreq_cnt(i) <= 31 then -- count up to 32
 								chbnd_plsfreq_cnt(i) <= chbnd_plsfreq_cnt(i) + 1;
 							end if;
@@ -1156,7 +1174,7 @@ begin
 		chbfifo_rden(i) <= chbnd_done      and (not chbfifo_empty(i));
 	end generate;
 	
-	-- CHANNEL BONDING FIFO IPs 
+	-- CHANNEL BONDING FIFO IPs
 	G_CHBFIFO: for i in 0 to 3 generate
 		chbfifo_i : chbfifo port map (
 			clk   => rxusrclk2,
@@ -1214,13 +1232,13 @@ begin
 					-- Aligned data according to walgn_ptr
 					for i in 0 to 3 loop
                         case walgn_ptr(i) is
-                            when "00"   => 
+                            when "00"   =>
                                 walgn_algndat(i) <= walgn_algnbuf(i)(39 downto 8);
-                            when "01"   => 
+                            when "01"   =>
                                 walgn_algndat(i) <= walgn_algnbuf(i)(47 downto 16);
-                            when "10"   => 
+                            when "10"   =>
                                 walgn_algndat(i) <= walgn_algnbuf(i)(55 downto 24);
-                            when others => 
+                            when others =>
                                 walgn_algndat(i) <= walgn_algnbuf(i)(63 downto 32);
                         end case;
 					end loop;
@@ -1242,7 +1260,7 @@ begin
 				end if;
 			end if;
 		end if;
-	end process;	
+	end process;
 
 	----------------------------------------------
 	-- DATA UNFRAMING
@@ -1338,7 +1356,9 @@ begin
 	----------------------------------------------
 	-- CONNECTIONS
 	-- Reset
-	gbxf_rst <= not (rctrl_rstdone);
+	gbxf_rst_async <= (not (rctrl_rstdone_async)) or drpsysrst;
+	del_gbxf_rst_async : del port map (drpsysclk, gbxf_rst_async,    gbxf_rst_async_z1);
+	tff_gbxf_rst       : tff port map (rxusrclk2, gbxf_rst_async_z1, gbxf_rst);
 	-- Data in
 	gbxf_din  <= gbxl_192bdat;
 	gbxf_wren <= gbxl_192bdat_val and (not gbxf_full);
@@ -1422,7 +1442,7 @@ begin
 	latch_qpllrefclklost   : latch port map (drpsysclk, stat_phyerror_reset, stat_qpllrefclklost,   stat_qpllrefclklost_l  );
 
 	-- ADC PLL ERROR CHECK
-	stat_adcpllerror_reset <= not rctrl_rstdone_async; 
+	stat_adcpllerror_reset <= not rctrl_rstdone_async;
 	stat_rctrl_apll_locked <= '0' when rctrl_apll_locked = '1' else '1';
 	latch_rctrl_apll_locked : latch port map (drpsysclk, stat_adcpllerror_reset, stat_rctrl_apll_locked, stat_rctrl_apll_locked_l);
 	

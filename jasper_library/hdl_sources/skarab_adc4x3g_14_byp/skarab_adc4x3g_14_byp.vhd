@@ -27,6 +27,9 @@ library unisim;
 use unisim.vcomponents.all;
 
 entity SKARAB_ADC4x3G_14_BYP is
+generic (
+		ADC_SYNC_MASTER : integer := 1;
+		ADC_SYNC_SLAVE  : integer := 0);
 port(
 		wb_clk_i : in  std_logic;
 		wb_rst_i : in  std_logic;
@@ -120,6 +123,7 @@ architecture arch_SKARAB_ADC4x3G_14_BYP of SKARAB_ADC4x3G_14_BYP is
 		RX_POLARITY_INVERT : std_logic_vector(3 downto 0) := "0000"); 
 	port(
 		SYS_CLK_I                : in  std_logic;
+		SYS_RST_I                : in  std_logic;
 		SOFT_RESET_IN            : in  std_logic;
 		PLL_SYNC_START           : in  std_logic;
 		GTREFCLK_IN              : in  std_logic;
@@ -288,6 +292,7 @@ architecture arch_SKARAB_ADC4x3G_14_BYP of SKARAB_ADC4x3G_14_BYP is
 	constant REGADR_RD_ADC_SYNC_COMPLETE    : std_logic_vector(7 downto 0) := x"28";
 	constant REGADR_RD_PLL_SYNC_COMPLETE    : std_logic_vector(7 downto 0) := x"2C";
 	constant REGADR_RD_ADC_SYNC_REQUEST     : std_logic_vector(7 downto 0) := x"30";
+	constant REGADR_WR_RESET_CORE           : std_logic_vector(7 downto 0) := x"34";
 	-- REGISTERS
 	signal wb_ack_o_i                  : std_logic                     := '0';
 	signal wb_dat_o_reg                : std_logic_vector(31 downto 0) := x"00000000";
@@ -297,6 +302,7 @@ architecture arch_SKARAB_ADC4x3G_14_BYP of SKARAB_ADC4x3G_14_BYP is
 	signal wb_reg_mezzanine_reset      : std_logic                     := '0';
 	signal wb_reg_pll_pulse_gen_start  : std_logic                     := '0';
 	signal wb_reg_pll_sync_start       : std_logic                     := '0';
+	signal wb_reg_reset_core           : std_logic                     := '0';
 	signal wb_stb_i_z                  : std_logic                     := '0';
 	signal wb_stb_i_z2                 : std_logic                     := '0';
 	-- CONNECTIONS
@@ -314,6 +320,7 @@ architecture arch_SKARAB_ADC4x3G_14_BYP of SKARAB_ADC4x3G_14_BYP is
 	signal wb_reg_pll_pulse_gen_start_async  : std_logic;
 	signal wb_reg_pll_sync_complete          : std_logic;
 	signal wb_reg_pll_sync_start_async       : std_logic;
+	signal wb_reg_reset_core_async           : std_logic;
 
 	signal adc_sync_start_in_synced_i       : std_logic;
 	signal adc_sync_part2_start_in_synced_i : std_logic;
@@ -349,6 +356,7 @@ begin
 			wb_reg_mezzanine_reset      <= '0';
 			wb_reg_pll_pulse_gen_start  <= '0';
 			wb_reg_pll_sync_start       <= '0';
+			wb_reg_reset_core           <= '0';
 			wb_stb_i_z                  <= '0';
 			wb_stb_i_z2                 <= '0';
 		elsif (rising_edge(wb_clk_i))then
@@ -368,6 +376,8 @@ begin
 						wb_reg_pll_pulse_gen_start <= wb_dat_i(0);
 					when REGADR_WR_MEZZANINE_RESET =>
 						wb_reg_mezzanine_reset <= wb_dat_i(0);
+					when REGADR_WR_RESET_CORE =>
+						wb_reg_reset_core <= wb_dat_i(0);
 					when others =>
 				end case;
 			end if;
@@ -411,7 +421,7 @@ begin
 	end process;
 
 ---------------------------------------------------------------------------------------------------------
--- OUTPUT CONENCTIONS
+-- OUTPUT CONNECTIONS
 ---------------------------------------------------------------------------------------------------------
 
 	--ADC ID = 011 (uBlaze needs to know this is an ADC card)
@@ -448,21 +458,27 @@ begin
 -- ADC SYNC BUFFERS
 ---------------------------------------------------------------------------------------------------------
     
-    aux_clk_ibufds : IBUFDS
-    generic map (
-        DIFF_TERM => TRUE)
-    port map (
-        O  => adc_reference_input_clk,
-        I  => AUX_CLK_P,
-        IB => AUX_CLK_N);
-
-    aux_synci_ibufds : IBUFDS
-    generic map (
-        DIFF_TERM => TRUE)
-    port map (
-        O  => adc_sysref_clk,
-        I  => AUX_SYNCI_P,
-        IB => AUX_SYNCI_N);
+    G_ADC_SYNC_MASTER : if ADC_SYNC_MASTER = 1 generate
+        aux_clk_ibufds : IBUFDS
+        generic map (
+            DIFF_TERM => TRUE)
+        port map (
+            O  => adc_reference_input_clk,
+            I  => AUX_CLK_P,
+            IB => AUX_CLK_N);
+        aux_synci_ibufds : IBUFDS
+        generic map (
+            DIFF_TERM => TRUE)
+        port map (
+            O  => adc_sysref_clk,
+            I  => AUX_SYNCI_P,
+            IB => AUX_SYNCI_N);
+    end generate;
+	
+    G_ADC_SYNC_SLAVE : if ADC_SYNC_SLAVE = 1 generate
+		adc_reference_input_clk <= '0';
+		adc_sysref_clk          <= '0';
+    end generate;
 
     aux_synco_obufds : OBUFDS
     port map (
@@ -486,6 +502,7 @@ begin
 	tff_wb_reg_adc_sync_part3_start : tff port map (FREE_RUN_156M25HZ_CLK_IN, wb_reg_adc_sync_part3_start, wb_reg_adc_sync_part3_start_async);
 	tff_wb_reg_pll_sync_start       : tff port map (FREE_RUN_156M25HZ_CLK_IN, wb_reg_pll_sync_start,       wb_reg_pll_sync_start_async      );
 	tff_wb_reg_pll_pulse_gen_start  : tff port map (FREE_RUN_156M25HZ_CLK_IN, wb_reg_pll_pulse_gen_start,  wb_reg_pll_pulse_gen_start_async );
+	tff_wb_reg_reset_core           : tff port map (FREE_RUN_156M25HZ_CLK_IN, wb_reg_reset_core,           wb_reg_reset_core_async          );
 	tff_wb_reg_mezzanine_reset      : tff port map (DSP_CLK_IN,               wb_reg_mezzanine_reset,      wb_reg_mezzanine_reset_async     );
 
 	-- tff_adc_sync_complete_out   : tff port map (DSP_CLK_IN, adc_sync_complete_async,   ADC_SYNC_COMPLETE_OUT);
@@ -643,6 +660,7 @@ begin
 		RX_POLARITY_INVERT => "1111")
 	port map(
 		SYS_CLK_I                => FREE_RUN_156M25HZ_CLK_IN,
+		SYS_RST_I                => wb_reg_reset_core_async,
 		SOFT_RESET_IN            => adc_soft_reset,
 		PLL_SYNC_START           => pll_sync_start_in_synced_i,
 		GTREFCLK_IN              => adc0_gtrefclk,
@@ -667,6 +685,7 @@ begin
 		RX_POLARITY_INVERT => "0000")
 	port map(
 		SYS_CLK_I                => FREE_RUN_156M25HZ_CLK_IN,
+		SYS_RST_I                => wb_reg_reset_core_async,
 		SOFT_RESET_IN            => adc_soft_reset,
 		PLL_SYNC_START           => pll_sync_start_in_synced_i,
 		GTREFCLK_IN              => adc1_gtrefclk,
@@ -691,6 +710,7 @@ begin
 		RX_POLARITY_INVERT => "1111")
 	port map(                    
 		SYS_CLK_I                => FREE_RUN_156M25HZ_CLK_IN,
+		SYS_RST_I                => wb_reg_reset_core_async,
 		SOFT_RESET_IN            => adc_soft_reset,
 		PLL_SYNC_START           => pll_sync_start_in_synced_i,
 		GTREFCLK_IN              => adc2_gtrefclk,
@@ -715,6 +735,7 @@ begin
 		RX_POLARITY_INVERT => "0000")
 	port map(
 		SYS_CLK_I                => FREE_RUN_156M25HZ_CLK_IN,
+		SYS_RST_I                => wb_reg_reset_core_async,
 		SOFT_RESET_IN            => adc_soft_reset,
 		PLL_SYNC_START           => pll_sync_start_in_synced_i,
 		GTREFCLK_IN              => adc3_gtrefclk,
