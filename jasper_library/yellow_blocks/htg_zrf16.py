@@ -38,6 +38,8 @@ class htg_zrf16(YellowBlock):
         self.provides.append('sys_clk270')
         self.provides.append('sys_clk_rst')
 
+        self.add_source('sysmon/sysmon_usplus.v')
+
     def modify_top(self,top):
         inst = top.get_instance('htg_zrf16', 'htg_zrf16_inst')
         inst.add_port('axil_clk',   'axil_clk')
@@ -99,6 +101,10 @@ class htg_zrf16(YellowBlock):
             top.assign_signal('wb_clk_i', 'axil_clk')
             top.assign_signal('wb_rst_i', 'axil_rst')
 
+            sysmon = top.get_instance(entity='sysmon', name='sysmon_inst')
+            sysmon.add_parameter('SIM_DEVICE', '"ZYNQ_ULTRASCALE"')
+            sysmon.add_wb_interface(regname='sysmon', mode='rw', nbytes=1024)
+
         inst_infr = top.get_instance('htg_zrf16_infrastructure', 'htg_zrf16_infr_inst')
         if self.clk_src == "arb_clk":
            clkparams = clk_factors(300, self.platform.user_clk_rate)
@@ -131,7 +137,8 @@ class htg_zrf16(YellowBlock):
         top.assign_signal('sys_rst', '~axil_rst_n')
 		
     def gen_children(self):
-        return [YellowBlock.make_block({'fullpath': self.fullpath,'tag': 'xps:sys_block', 'board_id': '20', 'rev_maj': '1', 'rev_min': '0', 'rev_rcs': '1'}, self.platform)]
+        children = [YellowBlock.make_block({'fullpath': self.fullpath,'tag': 'xps:sys_block', 'board_id': '20', 'rev_maj': '1', 'rev_min': '0', 'rev_rcs': '1'}, self.platform)]
+        return children
 
     def gen_constraints(self):
         cons = []
