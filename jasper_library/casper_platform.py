@@ -55,9 +55,6 @@ class Platform(object):
         self.backend_target = self.conf['backend_target']
         #: boot image --used to determine whether a toolflow, multiboot or golden image
 
-        import IPython
-        IPython.embed()        
-
         try:
             self.boot_image = self.conf['boot_image']
         except KeyError:

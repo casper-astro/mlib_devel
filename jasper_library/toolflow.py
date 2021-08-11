@@ -589,7 +589,7 @@ class Toolflow(object):
         ret = os.system('python %s/jasper_library/cit2csl.py %s > %s.mem' % (os.getenv('MLIB_DEVEL_PATH'), newfile, newfile))
         if ret != 0:
             errmsg = 'Failed to generate xilinx-style file {}.mem, error code {}.'.format(newfile,ret)
-            self.logger.error(msg)
+            self.logger.error(errmsg)
             raise Exception(errmsg)
 
     def regenerate_top(self):
@@ -1584,8 +1584,6 @@ proc puts_red {s} {
                     self.add_tcl_cmd('exec unzip %s' % template_basename, stage='init')
                     self.add_tcl_cmd('cd myproj', stage='init')
                     self.add_tcl_cmd('open_project myproj', stage='init')
-            import IPython
-            IPython.embed()
             if hasattr(plat, 'board'):
                 self.add_tcl_cmd('set_property board_part %s [current_project]' % plat.board)
         # Create the part in non-project mode (project runs in memory only)
