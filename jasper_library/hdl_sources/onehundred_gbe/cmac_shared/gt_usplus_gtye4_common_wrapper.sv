@@ -9,14 +9,14 @@ module gt_usplus_gtye4_common_wrapper #(
   parameter N_COMMON = 2
 ) (
   input wire logic refclk,
-  input wire logic [1:0] qpll0reset,
-  output logic [1:0]  qpll0lock,
-  output logic [1:0]  qpll0outclk,
-  output logic [1:0]  qpll0outrefclk,
-  input  wire logic [1:0]  qpll1reset,
-  output logic [1:0]  qpll1lock,
-  output logic [1:0]  qpll1outclk,
-  output logic [1:0]  qpll1outrefclk
+  input wire logic [N_COMMON-1:0] qpll0reset,
+  output logic [N_COMMON-1:0]  qpll0lock,
+  output logic [N_COMMON-1:0]  qpll0outclk,
+  output logic [N_COMMON-1:0]  qpll0outrefclk,
+  input  wire logic [N_COMMON-1:0]  qpll1reset,
+  output logic [N_COMMON-1:0]  qpll1lock,
+  output logic [N_COMMON-1:0]  qpll1outclk,
+  output logic [N_COMMON-1:0]  qpll1outrefclk
 );
   logic [N_COMMON-1:0] GTYE4_COMMON_QPLL0LOCK;
   logic [N_COMMON-1:0] GTYE4_COMMON_QPLL0OUTCLK;

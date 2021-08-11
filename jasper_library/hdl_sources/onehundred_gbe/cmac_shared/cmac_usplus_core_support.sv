@@ -299,7 +299,7 @@ module cmac_usplus_core_support #(
         qpll0refclk_in = {4{qpll0outrefclk_out[0]}};
 
         // forward reset to COMMON qplls
-        qpll0reset = gtwiz_reset_qpll0lock_in;
+        qpll0reset = gtwiz_reset_qpll0reset_out;
 
       end
     end
@@ -569,7 +569,7 @@ EthMACPHY100GQSFP4x_rsfec cmac_inst (
 cmac_shared_logic #(
   .N_COMMON(N_COMMON)
 ) cmac_shared_logic_inst (
-  .gt_ref_clk_p                          (gt_ref_clk_p),
+  .gt_ref_clk_p                         (gt_ref_clk_p),
   .gt_ref_clk_n                         (gt_ref_clk_n),
   .gt_txusrclk2                         (gt_txusrclk2),
   .gt_ref_clk_out                       (gt_ref_clk_out),
