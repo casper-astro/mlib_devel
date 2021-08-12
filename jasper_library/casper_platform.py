@@ -22,15 +22,18 @@ class Platform(object):
 
         with open(conffile, 'r') as fh:
             self.conf = yaml.load(fh.read())
-
+        
         print(self.conf)
         #: A dictionary of pin names associated with the platform.
         self._pins = {}
         for pinname, val in self.conf['pins'].items():
-            self.add_pins(pinname, val.get('iostd', None), val.get('loc', None))
+            self.add_pins(pinname, val.get('iostd', None), val.get('loc', None), val.get('drive_strength', None))
         #: A list of resources present on a platform to facilitate
         #: simple drc checking. Eg. ['qdr0', 'sysclk2x']
         self.provides = self.conf.get('provides', [])
+        #: A version number for the underlying hardware
+        #: defaults to 1 if none is specified in the yaml configuration
+        self.version = self.conf.get('version', 1)
         #: A list of source files/directories required to compile
         #: the template top.v (does NOT include top.v itself)
         self.sources = self.conf.get('sources', [])
@@ -44,9 +47,14 @@ class Platform(object):
         #: FPGA model. Should be the full version ready to pass to the
         #: vendor tools. Eg., xc7k325tffg900-2
         self.fpga = self.conf['fpga']
+        #: FPGA board (needed along with FPGA model for accelerator cards)
+        #: eg. xilinx.com:au50:part0:1.2 for Alveo U50
+        if 'board' in self.conf:
+            self.board = self.conf['board']
         #: backend target -- used to decide what compiler to use
         self.backend_target = self.conf['backend_target']
         #: boot image --used to determine whether a toolflow, multiboot or golden image
+
         try:
             self.boot_image = self.conf['boot_image']
         except KeyError:
@@ -85,7 +93,7 @@ class Platform(object):
         except KeyError:
             self.mmbus_address_alignment = 4
 
-    def add_pins(self, name, iostd, loc):
+    def add_pins(self, name, iostd, loc, drive_strength=None):
         """
         Add a pin to the platform. Generally for use in constructors
         of Platform subclasses.
@@ -99,6 +107,8 @@ class Platform(object):
             string or a list, if the name
         refers to a bank of pins
         :type loc: str, list of str
+        :param drive_strength: Drive strength, if applicable, of pin in mA
+        :type loc: int. Assumes all pins added have the same drive strength
         """
         if 'name' not in self._pins:
             self._pins[name] = []
@@ -106,7 +116,7 @@ class Platform(object):
         if not isinstance(loc, list):
             loc = [loc]
         
-        self._pins[name] += [Pin(iostd, l) for l in loc]
+        self._pins[name] += [Pin(iostd, l, drive_strength=drive_strength) for l in loc]
 
     def get_pins(self, name, index=None):
         """
@@ -137,7 +147,7 @@ class Pin(object):
     A simple class to hold the IO standard and LOCs
     of FPGA pins.
     """
-    def __init__(self, iostd, loc):
+    def __init__(self, iostd, loc, drive_strength=None):
         """
         iostd should be a string e.g. 'LVDS'
         loc should be string indicating a pin number.
@@ -145,5 +155,6 @@ class Pin(object):
         """
         self.iostd = iostd
         self.loc = loc
+        self.drive_strength = drive_strength
 
 # end

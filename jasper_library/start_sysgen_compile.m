@@ -39,7 +39,7 @@ fprintf('Setting output directory to: %s\n', xsg_path);
 
 % Use xlsetparam rather than set_param to configure Sysgen block properties
 % Set compilation type *before* compile directory location
-xlsetparam(xsg_blk, 'compilation_display', 'HDL Netlist', 'compilation', 'HDL Netlist', 'directory', xsg_path);
+xlsetparam(xsg_blk, 'compilation_display', 'IP Catalog', 'compilation', 'IP Catalog', 'directory', xsg_path);
 
 
 if update == 1

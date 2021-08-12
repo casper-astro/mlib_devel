@@ -23,10 +23,18 @@ class sys_block(YellowBlock):
             inst.add_port('user_clk', 'user_clk')
             inst.add_port('user_rst', 'user_rst')
             inst.add_port('en', '1')           
-            design_name = self.fullname.replace("_"+self.fullpath, "")
-            inst.add_port('we',  signal='%s_sys_clkcounter_we' % design_name, dir='out', width=1)
-            inst.add_port('count_out', signal='%s_sys_clkcounter_in' % design_name, dir='out', width=32)
+            inst.add_port('we',  signal='sys_block_sys_clkcounter_we', dir='out', width=1)
+            inst.add_port('count_out', signal='sys_block_sys_clkcounter_cdc', dir='out', width=32)
+
             top.add_axi4lite_interface('sys_block', mode='r', nbytes=32, memory_map=self.memory_map, typecode=self.typecode)                    
+
+            inst = top.get_instance(entity='cdc_synchroniser', name='sys_block_counter_cdc_inst')
+            inst.add_parameter('G_BUS_WIDTH', value=32)
+            inst.add_port('IP_CLK',       signal='axil_clk', parent_sig=False)
+            inst.add_port('IP_RESET',     signal='axil_rst', parent_sig=False)                
+            inst.add_port('IP_BUS_VALID', signal='1\'b1', parent_sig=False)
+            inst.add_port('IP_BUS',       signal='sys_block_counter_cdc', width=32, parent_sig=True)
+            inst.add_port('OP_BUS',       signal='sys_block_counter_in',  width=32, parent_sig=True)
 
         else:
             inst = top.get_instance('sys_block', 'sys_block_inst')

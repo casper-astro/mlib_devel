@@ -91,7 +91,7 @@ for (dev, entry) in lines:
     if len(csl) == 0:
         reuse = payload_length
 
-    #print reuse, len(tail), tail, entry, dev
+    #print(reuse, len(tail), tail, entry, dev)
     csl += struct.pack('>BB%dsIIB' % len(tail), reuse, len(tail), tail.encode('utf-8'), *entry)
 
     prev = dev
@@ -110,8 +110,8 @@ else:
     print(('@%08X' % args.address))
     # Pad csl with 3 nul bytes (is this really necessary?)
     csl += b'\0\0\0'
-    # Split csl into lines of 1 to 32 bytes
-    n_lines = len(csl) // 32
+    # Split csl into lines of 1 to 32 bytes, rounding up the number of lines
+    n_lines = (len(csl) + 31) // 32
     for line_n in range(n_lines):
         try:
             line = csl[32*line_n : 32*(line_n+1)]

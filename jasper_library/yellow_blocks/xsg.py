@@ -77,10 +77,10 @@ class xsg(YellowBlock):
                 top.assign_signal('adc_clk_sel', '1\'b0')	      
 	              
         else:
-            top.add_signal('user_clk')
-            top.add_signal('user_clk90')
-            top.add_signal('user_clk180')
-            top.add_signal('user_clk270')
+            top.add_signal('user_clk', attributes={'keep': '"true"'})
+            top.add_signal('user_clk90', attributes={'keep': '"true"'})
+            top.add_signal('user_clk180', attributes={'keep': '"true"'})
+            top.add_signal('user_clk270', attributes={'keep': '"true"'})
 
             top.assign_signal('user_clk',   self.clk_src)
             top.assign_signal('user_clk90', self.clk_src+'90')

@@ -224,10 +224,16 @@ static char tapcp_help_msg[] =
 "Available TAPCP commands:\n"
 "  /help    - this message\n"
 "  /listdev - list FPGA device info\n"
+#ifdef USE_XADC
 "  /temp    - get FPGA temperature\n"
+#endif
+#ifdef USE_ICAP
 "  /progdev - Boot FPGA from flash.\n"
+#endif
+#ifdef USE_SPI
 "  /flash.OFFSET[.LENGTH] - access flash memory\n"
 "  /flashcmd[.LEN].CMD - low level flash commands\n"
+#endif
 "  [/dev/]DEVNAME[.OFFSET[.LENGTH]] - access DEVNAME\n"
 "  /fpga.OFFSET[.LENGTH] - access FPGA memory space\n"
 "  /cpu.OFFSET[.LENGTH]  - access CPU memory space\n"

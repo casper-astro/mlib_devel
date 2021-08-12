@@ -538,6 +538,7 @@ class onegbe_vcu118(onegbe):
 class onegbe_snap(onegbe):
     def initialize(self):
         self.typecode = TYPECODE_ETHCORE
+        version = self.platform.version # shortcut
     
         self.add_source('onegbe/*.v')
         self.add_source('onegbe/*.xci')
@@ -551,19 +552,22 @@ class onegbe_snap(onegbe):
             self.provides += ['cpu_ethernet']
 
         if self.platform.name in ['snap2']:
-            self.use_lvds = True
+            if version == 1:
+                self.refclk_freq = 625.0
+                self.use_lvds = True
+                self.use_autonegotiation = False
+            else:
+                self.use_lvds = False
+                self.use_autonegotiation = True
+                self.refclk_freq = 125.0
         else:
+            if self.platform.name in ['mx175']:
+                self.use_autonegotiation = True
+            else:
+                self.use_autonegotiation = False
             self.use_lvds = False
-
-        if self.platform.name in ['snap2_v2', 'mx175']:
-            self.use_autonegotiation = True
-        else:
-            self.use_autonegotiation = False
-
-        if self.platform.name == 'snap2':
-            self.refclk_freq = 625.0
-        else:
             self.refclk_freq = 125.0
+
     def _instantiate_udp(self, top):
         gbe_udp = top.get_instance(entity='gbe_udp', name=self.fullname, comment=self.fullname)
         gbe_udp.add_parameter('LOCAL_ENABLE',   '%d' % int(self.local_en))
@@ -805,6 +809,11 @@ class onegbe_snap(onegbe):
         consts += [RawConstraint('create_clock -period 8.000 -name gbe_userclk2_out -waveform {0.000 4.000} [get_nets {gbe_userclk2_out}]')]
         consts += [RawConstraint('set_clock_groups -name asyncclocks_onegbe -asynchronous -group [get_clocks -include_generated_clocks sys_clk_p_CLK] -group [get_clocks -include_generated_clocks gbe_userclk2_out]')]
         consts += [RawConstraint('set_clock_groups -name asyncclocks_onegbe_usr_clk -asynchronous -group [get_clocks -of_objects [get_cells -hierarchical -filter {name=~*clk_counter*}]] -group [get_clocks -include_generated_clocks gbe_userclk2_out]')]
+
+        if self.platform.name in ['snap2']:
+            # In vivado 2019.1.3 the placer does something mad with an IDELAY block, putting it in the wrong SLR, which stops the design meeting timing.
+            # Force it to a reasonable place here.
+            consts += [RawConstraint('set_property LOC BITSLICE_RX_TX_X2Y86 [get_cells %s_pcs_pma/U0/pcs_pma_block_i/lvds_transceiver_mw/serdes_1_to_10_ser8_i/idelay_cal]' % self.fullname)]
 
         if (not self.use_lvds) and (self.platform.name in ['snap']):
             consts += [PortConstraint(self.fullname+'_sfp_disable', 'sfp_disable')]

@@ -35,7 +35,8 @@ entity ska_forty_gb_eth is
         FABRIC_ENABLE     : std_logic;
         TTL               : std_logic_vector(7 downto 0);
         PROMISC_MODE      : integer;
-        RX_CRC_CHK_ENABLE : integer);
+        RX_CRC_CHK_ENABLE : integer;
+        RX_2B_SWAP        : boolean := false);
     port (
         clk : in std_logic;
         rst : in std_logic;
@@ -125,18 +126,19 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
         FABRIC_GATEWAY  : std_logic_vector(7 downto 0);
         FABRIC_ENABLE   : std_logic;
         MC_RECV_IP      : std_logic_vector(31 downto 0);
-        MC_RECV_IP_MASK : std_logic_vector(31 downto 0));
+        MC_RECV_IP_MASK : std_logic_vector(31 downto 0);
+        RX_2B_SWAP      : boolean := false);
     port (
-        CLK_I : in  std_logic;
-        RST_I : in  std_logic;
-        DAT_I : in  std_logic_vector(31 downto 0);
-        DAT_O : out std_logic_vector(31 downto 0);
-        ACK_O : out std_logic;
-        ADR_I : in  std_logic_vector(31 downto 0);
-        CYC_I : in  std_logic;
-        SEL_I : in  std_logic_vector(3 downto 0);
-        STB_I : in  std_logic;
-        WE_I  : in  std_logic;
+        wb_clk_i : in  std_logic;
+        wb_rst_i : in  std_logic;
+        wb_dat_i : in  std_logic_vector(31 downto 0);
+        wb_dat_o : out std_logic_vector(31 downto 0);
+        wb_ack_o : out std_logic;
+        wb_adr_i : in  std_logic_vector(15 downto 0);
+        wb_cyc_i : in  std_logic;
+        wb_sel_i : in  std_logic_vector(3 downto 0);
+        wb_stb_i : in  std_logic;
+        wb_we_i  : in  std_logic;
         cpu_tx_buffer_addr    : out std_logic_vector(10 downto 0);
         cpu_tx_buffer_rd_data : in  std_logic_vector(63 downto 0);
         cpu_tx_buffer_wr_data : out std_logic_vector(63 downto 0);
@@ -504,23 +506,17 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
     --signal dbg_rx_dest_port    : std_logic_vector(15 downto 0);
  -- Mark Debug ILA Testing
     
-    --attribute MARK_DEBUG of dbg_rx_valid        : signal is "TRUE";
-    --attribute MARK_DEBUG of dbg_rx_end_of_frame : signal is "TRUE";
-    --attribute MARK_DEBUG of dbg_rx_data         : signal is "TRUE";
-    --attribute MARK_DEBUG of dbg_rx_source_ip    : signal is "TRUE";
-    --attribute MARK_DEBUG of dbg_rx_source_port  : signal is "TRUE"; 
-    --attribute MARK_DEBUG of dbg_rx_dest_ip      : signal is "TRUE";    
-    --attribute MARK_DEBUG of dbg_rx_dest_port    : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_rx_valid        : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_rx_end_of_frame : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_rx_data         : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_rx_source_ip    : signal is "TRUE";
+    attribute MARK_DEBUG of dbg_rx_source_port  : signal is "TRUE"; 
+    attribute MARK_DEBUG of dbg_rx_dest_ip      : signal is "TRUE";    
+    attribute MARK_DEBUG of dbg_rx_dest_port    : signal is "TRUE";
 
-    --attribute MARK_DEBUG of tx_valid_r2        : signal is "TRUE";
-    --attribute MARK_DEBUG of tx_end_of_frame_r2 : signal is "TRUE";
+    attribute MARK_DEBUG of mac_rx_data        : signal is "TRUE";
+    attribute MARK_DEBUG of mac_rx_data_valid  : signal is "TRUE";
 
-    --attribute MARK_DEBUG of rx_valid_r2        : signal is "TRUE";
-    --attribute MARK_DEBUG of rx_end_of_frame_r2 : signal is "TRUE";
-    
-    --attribute MARK_DEBUG of mac_rx_data        : signal is "TRUE";
-    --attribute MARK_DEBUG of mac_rx_data_valid  : signal is "TRUE";
-     
 begin
 
 --ILA Assignments
@@ -716,18 +712,19 @@ begin
         FABRIC_GATEWAY  => FABRIC_GATEWAY,
         FABRIC_ENABLE   => FABRIC_ENABLE,
         MC_RECV_IP      => X"FFFFFFFF",
-        MC_RECV_IP_MASK => X"FFFFFFFF")
+        MC_RECV_IP_MASK => X"FFFFFFFF",
+        RX_2B_SWAP      => RX_2B_SWAP)
     port map(
-        CLK_I => CLK_I,
-        RST_I => RST_I,
-        DAT_I => DAT_I,
-        DAT_O => DAT_O,
-        ACK_O => ACK_O,
-        ADR_I => ADR_I,
-        CYC_I => CYC_I,
-        SEL_I => SEL_I,
-        STB_I => STB_I,
-        WE_I  => WE_I,
+        wb_clk_i => CLK_I,
+        wb_rst_i => RST_I,
+        wb_dat_i => DAT_I,
+        wb_dat_o => DAT_O,
+        wb_ack_o => ACK_O,
+        wb_adr_i => ADR_I,
+        wb_cyc_i => CYC_I,
+        wb_sel_i => SEL_I,
+        wb_stb_i => STB_I,
+        wb_we_i  => WE_I,
         cpu_tx_buffer_addr    => cpu_tx_buffer_addr,
         cpu_tx_buffer_rd_data => cpu_tx_buffer_rd_data,
         cpu_tx_buffer_wr_data => cpu_tx_buffer_wr_data,

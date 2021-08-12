@@ -45,7 +45,7 @@ end
 %
 % Parse mask variable index from matched portion of MaskVariables.
 % (Is there a better way to do this?)
-mv_idx = str2double(regexp(mv_match, '\d+', 'match', 'once'));
+mv_idx = str2double(regexp(mv_match, '(?<=@)\d+', 'match', 'once'));
 % Get cell array of all mask styles
 mask_styles = get_param(blk, 'MaskStyles');
 if ~strcmp(mask_styles{mv_idx}, 'edit')

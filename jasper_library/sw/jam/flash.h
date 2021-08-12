@@ -26,6 +26,8 @@
 #define FLASH_READ_LOCK_REG 0xe8
 #define FLASH_WRITE_LOCK_REG 0xe5
 #define FLASH_READ_FLAG_STATUS_REG 0x70
+#define FLASH_WRITE_NON_VOLATILE_CONFIG_REG 0xB1
+#define FLASH_READ_NON_VOLATILE_CONFIG_REG 0xB5
 // Program Operations
 #define FLASH_PAGE_PROGRAM 0x02
 // Erase Operations
@@ -42,10 +44,11 @@
 #define FLASH_WRITE_EXTENDED_ADDR_REG 0xc5
 #define FLASH_READ_EXTENDED_ADDR_REG 0xc8
 
-
 int flash_erase_sector(uint32_t addr);
 int flash_write_page(uint32_t addr, uint8_t *p, int len);
 int flash_read(uint32_t addr, uint8_t *p, int len);
-int flash_read_id(uint8_t *p);
+int flash_read_id(uint8_t *p, int len);
+void flash_enter_4b_non_volatile();
+void flash_exit_4b_non_volatile();
 
 #endif // _FLASH_H_

@@ -1,0 +1,240 @@
+name: adm_pcie_9h7
+manufacturer: Xilinx
+fpga: xcvu37p-fsvh2892-2-e
+family: ultrascaleplus
+backend_target: vivado
+mmbus_architecture: AXI4-Lite
+mmbus_base_address: 0x10000000
+# How to address each 32-bit (i.e. 4 indicates byte-addressable)
+mmbus_address_alignment: 4
+sources: []
+constraints: []
+pcie:
+  loc: PCIE4C_X1Y0
+  use_pr: True
+onehundredgbe:
+  refclk_freq_str: "161.1328125"
+  cmac_loc:
+    - CMACE4_X0Y3
+    - CMACE4_X0Y4
+    - CMACE4_X0Y5
+provides:
+  - qsfp0
+  - qsfp1
+  - qsfp2
+  - qsfp3
+pins:
+  sys_clk_p:
+    loc: BJ9
+    iostd: LVDS
+  sys_clk_n:
+    loc: BK9
+    iostd: LVDS
+  # Use GPIO 9,10,11,12 for SPI
+  miso:
+    loc: BJ29
+    iostd: LVCMOS18
+  mosi:
+    loc: BG32
+    iostd: LVCMOS18
+  sclk:
+    loc: BF32
+    iostd: LVCMOS18
+  cs_n:
+    loc: BK30
+    iostd: LVCMOS18
+  led:
+    iostd: LVCMOS18
+    loc:
+      - BF53
+      - BG48
+      - BG49
+      - BE54
+      - BE53
+  # PCI Express lanes
+  pcie_rst_n:
+    loc: BF41
+    iostd: LVCMOS18
+  qsfp_mgt_ref_clk_p:
+    loc:
+      - AJ15
+      - AD13
+      - AG40
+      - AB42
+  qsfp_mgt_ref_clk_n:
+    loc:
+      - AJ14
+      - AD12
+      - AG41
+      - AB43
+  qsfp_mgt_rx_p:
+    loc:
+      - AL6
+      - AK4
+      - AJ2
+      - AH4
+      - AG2
+      - AF4
+      - AE2
+      - AE6
+      - AD4
+      - AC2
+      - AC6
+      - AB4
+      - AA2
+      - Y4
+      - W2
+      - V4
+  qsfp_mgt_rx_n:
+    loc:
+      - AL5
+      - AK3
+      - AJ1
+      - AH3
+      - AG1
+      - AF3
+      - AE1
+      - AE5
+      - AD3
+      - AC1
+      - AC5
+      - AB3
+      - AA1
+      - Y3
+      - W1
+      - V3
+  qsfp_mgt_tx_p:
+    loc:
+      - AK9
+      - AJ7
+      - AJ11
+      - AH9
+      - AG7
+      - AG11
+      - AF9
+      - AE11
+      - AD9
+      - AC11
+      - AB9
+      - AA7
+      - AA11
+      - Y9
+      - W7
+      - W11
+  qsfp_mgt_tx_n:
+    loc:
+      - AK8
+      - AJ6
+      - AJ10
+      - AH8
+      - AG6
+      - AG10
+      - AF8
+      - AE10
+      - AD8
+      - AC10
+      - AB8
+      - AA6
+      - AA10
+      - Y8
+      - W6
+      - W10
+  qsfp_modprsl_ls:
+    iostd: LVCMOS18
+    loc: [BN35, BN34, BP34, BL32]
+  qsfp_sda:
+    iostd: LVCMOS18
+    loc: [BN30, BM30, BP32, BM34]
+  qsfp_scl:
+    iostd: LVCMOS18
+    loc: [BN29, BL30, BN32, BM32]
+  pcie_refclk_p:
+    loc: AR15
+  pcie_gty_rx_p:
+    loc:
+      - AL2
+      - AM4
+      - AN6
+      - AN2
+      - AP4
+      - AR2
+      - AT4
+      - AU2
+      - AV4
+      - AW6
+      - AW2
+      - AY4
+      - BA6
+      - BA2
+      - BB4
+      - BC2
+  pcie_gty_tx_p:
+    loc:
+      - AL11
+      - AM9
+      - AN11
+      - AP9
+      - AR11
+      - AR7
+      - AT9
+      - AU11
+      - AU7
+      - AV9
+      - AW11
+      - AY9
+      - BA11
+      - BB9
+      - BC11
+      - BC7
+  # DTS pins
+  dts_gty_rx_p:
+    loc:
+      # bank 125. Firefly 0
+      - AY51
+      - AW53
+      - AW49
+      - AV51
+      # bank 124. Firefly 1
+      - BC53
+      - BB51
+      - BA53
+      - BA49
+      # bank 126. Firefly 2
+      - AU53
+      - AT51
+      - AR53
+      - AP51
+  dts_gty_tx_p:
+    loc:
+      # bank 125. Firefly 0
+      - AY46
+      - AW44
+      - AV46
+      - AU44
+      # bank 124. Firefly 1
+      - BC48
+      - BC44
+      - BB46
+      - BA44
+      # bank 126. Firefly 2
+      - AU48
+      - AT46
+      - AR48
+      - AR44
+  dts_gty_refclk_p:
+    loc:
+      # bank 125. Clocks banks 124/125
+      - AR40
+      # bank 126.
+      - AN40
+  dts_qsfp_modprsl:
+    iostd: LVCMOS18
+    loc:
+      # Firefly 0
+      - BG10
+      # Firefly 1
+      - BG9
+      # Firefly 2
+      - BF12
+
+

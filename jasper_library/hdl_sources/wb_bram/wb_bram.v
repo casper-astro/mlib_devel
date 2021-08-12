@@ -40,9 +40,9 @@ module wb_bram  #(
     // user interface
     input user_clk,
     input [USER_ADDR_BITS-1:0] user_addr,
-    input [USER_WIDTH-1:0] user_din,
+    input [(1 << LOG_USER_WIDTH)-1:0] user_din,
     input user_we,
-    output [USER_WIDTH-1:0] user_dout
+    output [(1 << LOG_USER_WIDTH)-1:0] user_dout
     );
     
     localparam USER_WIDTH = 1 << LOG_USER_WIDTH;
