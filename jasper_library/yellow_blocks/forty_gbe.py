@@ -18,7 +18,12 @@ class forty_gbe(YellowBlock):
         # Wishbone memory for status registers / ARP table
         
         # request a wishbone offset that is a multiple of the port number
-        req_offset = 0x16000 * self.port
+        if self.platform.name == 'skarab':
+            # This is liable to break if multiple 40GBE blocks don't have their
+            # WB interfaces processed in address order
+            req_offset = 0x16000 * self.port
+        else:
+            req_offset = -1 # Let the toolflow decide
         inst.add_wb_interface(self.unique_name, mode='rw', nbytes=0x16000, req_offset=req_offset, typecode=TYPECODE_ETHCORE)
 
         # forty gbe specific parameters
