@@ -141,6 +141,7 @@ class Toolflow(object):
         self.logger.info('Generating HDL')
         self.build_top()
         self.generate_hdl()
+        self.check_templates()
         # Generate constraints (not yet xilinx standard)
         self.generate_consts()
         # Generate software cores file
@@ -219,8 +220,53 @@ class Toolflow(object):
         self._instantiate_periphs()
         self.logger.info('instantiating user_ip')
         self._instantiate_user_ip()
+        self.logger.info('Finalizing top-level design')
+        self._finalize_top()
         self.logger.info('regenerating top')
         self.regenerate_top()
+        self.logger.info('generating auxiliary HDL')
+        self.generate_peripheral_hdl()
+
+    def generate_peripheral_hdl(self):
+        """
+        Create each yellowblock's custom hdl files and add them to the projects sources
+        """
+        self.logger.info('Generating yellow block custom hdl files')
+        for obj in self.periph_objs:
+            c = obj.gen_custom_hdl()
+            for key, val in c.items():
+                # create file and write the source string to it
+                filename = '%s/%s' % (self.compile_dir, key)
+                with open(filename, 'w') as fh:
+                    fh.write(val)
+                    self.sources += [fh.name]
+                # Also add other sources the yellow blocks
+                # think we should have
+                for files in obj.add_build_dir_source():
+                    self.sources += glob.glob(os.path.join(self.compile_dir, files['files']))
+
+    def check_templates(self):
+        """
+        Check for any yellow blocks marked with a non-None value of the
+        `template_project` attribute.
+        a) Blocks must not have complicting `template_project` values.
+        b) If any of the `template_project` values are non-None, the
+           specified `template_project` should be a valid file.
+        """
+        self.template_project = None
+        for block in self.periph_objs:
+            if block.template_project is None:
+                continue
+            else:
+               if not os.path.exists(block.template_project):
+                   self.logger.error("Missing template project %s, required"
+                      " by yellow block %s" % (block.template_project, block.name))
+                   raise RuntimeError 
+               if self.template_project is None:
+                   self.template_project = block.template_project
+                   self.logger.info("Block %s specifies template project %s" % (block.name, block.template_project))
+               if self.template_project != block.template_project:
+                   self.logger.error("Incompatible template project specified: (%s by block %s)" % (block.template_project, block.name))
 
     def _parse_periph_file(self):
         """
@@ -307,6 +353,8 @@ class Toolflow(object):
         Constructs an associated VerilogModule instance ready to be
         modified.
         """
+        #TODO: These weird try/except clauses seem to do odd SKARAB-specific stuff
+        # and probably shouldn't be here. Why not in the SKARAB yellow block?
         try:
             # generate multiboot, golden or tooflow image based on yaml file
             self.hdl_filename = '%s/skarab_infr/%s_parameters.vhd' % (os.getenv('HDL_ROOT'), self.plat.name)
@@ -314,7 +362,7 @@ class Toolflow(object):
             if os.path.isfile(self.hdl_filename):
                 self._gen_hdl_version(filename_hdl=self.hdl_filename)
         except KeyError:
-            s = ""
+            s = "" #?!
         # check to see if entity file exists. Some platforms may not use this. This function overwrites incorrectly
         # generated sysgen hdl files
         #if self.platform.conf['bit_reversal']==True:
@@ -326,7 +374,7 @@ class Toolflow(object):
                 self._gen_hdl_simulink(hdl_sysgen_filename=self.hdl_sysgen_filename)
         # just ignore if key is not present as only some platforms will have the key.
         except KeyError:
-            s = ""
+            s = "" #?!
         self.topfile = self.compile_dir+'/top.v'
         # delete top.v file if it exists, otherwise synthesis will fail
         if os.path.exists(self.topfile):
@@ -414,16 +462,27 @@ class Toolflow(object):
             self.sources += obj.sources
             self.ips += obj.ips
         # add AXI4-Lite architecture specfic stuff, which must be called after all yellow blocks have modified top.
-        if self.plat.mmbus_architecture == 'AXI4-Lite':
+        if 'AXI4-Lite' in self.plat.mmbus_architecture:
             # Make an AXI4-Lite interconnect yellow block and let it modify top
             axi4lite_interconnect = yellow_block.YellowBlock.make_block(
                 {'tag': 'xps:axi4lite_interconnect', 'name': 'axi4lite_interconnect', 
                 'fullpath': list(sorted(self.user_modules.keys()))[0] +'/axi4lite_interconnect'}, self.plat)
             axi4lite_interconnect.modify_top(self.top)
+            self.sources += axi4lite_interconnect.sources
+            self.ips += axi4lite_interconnect.ips
             # Generate xml2vhdl
             self.xml2vhdl()
             # add the AXI4lite yellowblock to the peripherals manually
             self.periph_objs.append(axi4lite_interconnect)
+
+    def _finalize_top(self):
+        """
+        Call every Yellow Block's `finalize_top` method, in case
+        any of them want to modify the design now all the peripherals
+        and user IP have been instantiated.
+        """
+        for obj in self.periph_objs:
+            self.top = obj.finalize_top(self.top)
 
     def _instantiate_user_ip(self):
         """
@@ -454,13 +513,13 @@ class Toolflow(object):
             #        self.tcl_sources += glob.glob(source)
 
     def write_core_info(self):
-        if self.plat.mmbus_architecture == 'AXI4-Lite':
+        self.cores = []
+        if 'AXI4-Lite' in self.plat.mmbus_architecture:
             # get list of all axi4lite_devices in self.top.memory_map dict
-            self.cores = []
             for val in list(self.top.memory_map.values()):
                 self.cores += val['axi4lite_devices']
-        else:
-            self.cores = self.top.wb_devices
+        if 'wishbone' in self.plat.mmbus_architecture:
+            self.cores += self.top.wb_devices
         basefile = '%s/%s/core_info.tab' % (os.getenv('HDL_ROOT'),
                                             self.plat.name)
         newfile = '%s/core_info.tab' % self.compile_dir
@@ -491,13 +550,13 @@ class Toolflow(object):
             fh.write(s)
 
     def write_core_jam_info(self):
-        if self.plat.mmbus_architecture == 'AXI4-Lite':
+        self.cores = []
+        if 'AXI4-Lite' in self.plat.mmbus_architecture:
             # get list of all axi4lite_devices in self.top.memory_map dict
-            self.cores = []
             for val in list(self.top.memory_map.values()):
                 self.cores += val['axi4lite_devices']
-        else:
-            self.cores = self.top.wb_devices
+        if 'wishbone' in self.plat.mmbus_architecture:
+            self.cores += self.top.wb_devices
         basefile = '%s/%s/core_info.jam.tab' % (os.getenv('HDL_ROOT'), self.plat.name)
         newfile = '%s/core_info.jam.tab' % self.compile_dir
         self.logger.debug('Opening %s' % basefile)
@@ -547,9 +606,9 @@ class Toolflow(object):
             self.top.max_devices_per_arb = self.plat.conf['max_devices_per_arbiter']
             self.logger.debug("Found max_devices_per_arbiter: %s" % self.top.max_devices_per_arb)
         # Check for memory map bus architecture, added to support AXI4-Lite
-        if self.plat.mmbus_architecture == 'AXI4-Lite':
+        if 'AXI4-Lite' in self.plat.mmbus_architecture:
             pass
-        else:
+        if 'wishbone' in self.plat.mmbus_architecture:
             self.top.wb_compute(self.plat.dsp_wb_base_address,
                             self.plat.dsp_wb_base_address_alignment)
         # Write top module file
@@ -574,18 +633,24 @@ class Toolflow(object):
         self.check_attr_exists('periph_objs', 'gen_periph_objs()')
         self.constraints = []
         for obj in self.periph_objs:
-            c = obj.gen_constraints()
-            if c is not None:
-                self.constraints += c
+            self.logger.info('Getting constraints for block %s' % obj.name)
+            constraints = obj.gen_constraints()
+            if constraints is None:
+                # If there are no constraints, move on
+                continue
+            for constraint in constraints:
+                #if isinstance(constraint, PortConstraint) and self.template_project is not None:
+                #    self.logger.info('Skipping PortConstraint because this is a PR run')
+                #    # Partial reconfiguration projects have pin constraints
+                #    # defined at the top-level. If we're in PR mode, skip them
+                #    continue
+                self.constraints += [constraint]
         self.logger.info('Generating physical constraints')
         for constraint in self.constraints:
             try:
                 constraint.gen_physical_const(self.plat)
             except AttributeError:
                 pass  # some constraints don't have this method
-        # check for any funny business
-        # used_pins = []
-        # for constraint in self.constraints:
 
     def constraints_rule_check(self):
         """
@@ -610,7 +675,7 @@ class Toolflow(object):
         """
         import castro
 
-        c = castro.Castro('top', self.sources, self.ips)
+        c = castro.Castro(self.top.name, self.sources, self.ips, template_project=self.template_project)
 
         # build castro standard pin constraints
         pin_constraints = []
@@ -633,6 +698,7 @@ class Toolflow(object):
                     portname_indices=const.port_index,
                     symbolic_indices=const.iogroup_index,
                     io_standard=const.iostd,
+                    drive_strength=const.drive_strength,
                     location=const.loc
                     )]
             elif isinstance(const, ClockConstraint):
@@ -721,7 +787,7 @@ class Toolflow(object):
         c.synthesis.pin_map = self.plat._pins
 
         mm_slaves = []
-        if self.plat.mmbus_architecture == 'AXI4-Lite':
+        if 'AXI4-Lite' in self.plat.mmbus_architecture:
             for dev in self.top.axi4lite_devices:
                 if dev.mode == 'rw':
                     mode = 3
@@ -733,7 +799,7 @@ class Toolflow(object):
                     mode = 1
                 mm_slaves += [castro.mm_slave(dev.regname, mode, dev.base_addr,
                                             dev.nbytes)]
-        else:
+        if 'wishbone' in self.plat.mmbus_architecture:
             for dev in self.top.wb_devices:
                 if dev.mode == 'rw':
                     mode = 3
@@ -852,10 +918,13 @@ class Toolflow(object):
         """
         Generate xml interconnect file that represent top-level AXI4-Lite interconnect for Oxford's xml2vhdl.
         """
+        #TODO: Fix the above docstring to be more descriptive. And maybe give some hint about what the heck
+        # `memory_map` is supposed to be.
+
         # loop over interfaces, sort by address, make interconnect
         xml_root = ET.Element('node')
         xml_root.set('id', 'axi4lite_top')
-        xml_root.set('address', hex(self.plat.mmbus_base_address))
+        xml_root.set('address', hex(self.plat.axi_ic_base_address))
         xml_root.set('hw_type', 'ic')
         for interface in list(sorted(memory_map.keys())):
             # add a child to parent node
@@ -927,6 +996,9 @@ class Toolflow(object):
             the compile directory
         :type filename_bin: str
         """
+        # TODO: this is most certainly part of the backend, not the middleware, since it is only applicable
+        # to certain Xilinx versions. It should also come with a HUGE warning. If this code gets called
+        # and it shouldn't have been, then it is SILENTLY BREAKING YOUR DESIGN.
         stringToMatch_ver = '2018.2'
         stringToMatchS = '_xldpram'
         stringToMatchA = 'latency_test: if (latency > 6) generate'
@@ -974,6 +1046,7 @@ class Toolflow(object):
             with open(hdl_sysgen_filename, 'w') as fh2:
                 fh2.writelines(lines)
             fh2.close()
+            self.logger("CRITICAL WARNING: 'correcting' bad sysgen code. This is an awful lot of trust to put in the toolflow")
             self.logger.debug('File written. Vivado version is 2018.2: %s. Dual Port RAM exists: %s'
                              % (ver_exists, dpram_exists))
         else:
@@ -1053,12 +1126,9 @@ class ToolflowBackend(object):
         self.output_dir = compile_dir + '/outputs'
         self.plat = plat
         self.castro = None
-        if plat:
-            self.initialize(plat)
 
-    def initialize(self, plat):
+    def initialize(self):
         """
-
         :param plat:
         """
         raise NotImplementedError
@@ -1105,6 +1175,7 @@ class ToolflowBackend(object):
     def import_from_castro(self, filename):
         import castro
         self.castro = castro.Castro.load(filename)
+        self.template_project = self.castro.template_project
         existing_sources = []
         for source in self.castro.src_files:
             if source not in existing_sources:
@@ -1136,6 +1207,7 @@ class ToolflowBackend(object):
             numindices = len(const.symbolic_indices)
             const.location = [pins[idx].loc for idx in range(numindices)]
             const.io_standard = [pins[idx].iostd for idx in range(numindices)]
+            const.drive_strength = [pins[idx].drive_strength for idx in range(numindices)]
             const.is_vector = const.portname_indices != []
 
         self.gen_constraint_file(
@@ -1558,37 +1630,10 @@ class VivadoBackend(ToolflowBackend):
         self.project_name = 'myproj'
         self.periph_objs = periph_objs
         self.tcl_cmd = ''
-        # if project mode is enabled
-        if plat.project_mode:
-            self.binary_loc = '%s/%s/%s.runs/impl_1/top.bin' % (
-                self.compile_dir, self.project_name, self.project_name)
-            self.hex_loc = '%s/%s/%s.runs/impl_1/top.hex' % (
-                self.compile_dir, self.project_name, self.project_name)
-            self.mcs_loc = '%s/%s/%s.runs/impl_1/top.mcs' % (
-                self.compile_dir, self.project_name, self.project_name)
-            self.prm_loc = '%s/%s/%s.runs/impl_1/top.prm' % (
-                self.compile_dir, self.project_name, self.project_name)
-            self.xsa_loc = '%s/%s/top.xsa' % (self.compile_dir,
-                self.project_name)
-
-        # if non-project mode is enabled
-        else:
-            self.binary_loc = '%s/%s/top.bin' % (
-                self.compile_dir, self.project_name)
-            self.hex_loc = '%s/%s/top.hex' % (
-                self.compile_dir, self.project_name)
-            self.mcs_loc = '%s/%s/top.mcs' % (
-                self.compile_dir, self.project_name)
-            self.prm_loc = '%s/%s/top.prm' % (
-                self.compile_dir, self.project_name)
-            self.xsa_loc = '%s/%s/top.xsa' % (
-                self.compile_dir, self.project_name)
 
         self.name = 'vivado'
         self.npm_sources = []
         ToolflowBackend.__init__(self, plat=plat, compile_dir=compile_dir)
-
-    def initialize(self, plat):
         self.tcl_cmds = {
             'init'        : '',
             'pre_synth'   : '',
@@ -1603,19 +1648,112 @@ class VivadoBackend(ToolflowBackend):
             'promgen'     : '',
         }
 
+    def initialize(self):
+        plat = self.plat
+
         if plat.manufacturer.lower() != self.manufacturer.lower():
             self.logger.error('Trying to compile a %s FPGA using %s %s' % (
                 plat.manufacturer, self.manufacturer, self.name))
 
+        # if project mode is enabled
+        if plat.project_mode:
+            if self.template_project is None:
+                prefix = '%s/%s/%s.runs/impl_1' % (self.compile_dir, self.project_name, self.project_name)
+            else:
+                prefix = '%s/%s/%s.runs/impl-toolflow' % (self.compile_dir, self.project_name, self.project_name)
+        else:
+            prefix = '%s/%s' % (self.compile_dir, self.project_name)
+
+        self.add_tcl_cmd('set impl_dir "%s"'%prefix, stage='init')
+
+        if self.template_project is None:
+            self.bin_loc = '%s/top.bin' % (prefix)
+            self.bit_loc = '%s/top.bit' % (prefix)
+            self.hex_loc = '%s/top.hex' % (prefix)
+            self.mcs_loc = '%s/top.mcs' % (prefix)
+            self.prm_loc = '%s/top.prm' % (prefix)
+            self.xsa_loc = '%s/top.xsa' % (prefix)
+
+        else:
+            self.bin_loc = '%s/user_top_inst_user_top-toolflow_partial.bin' % (prefix)
+            self.bit_loc = '%s/user_top_inst_user_top-toolflow_partial.bit' % (prefix)
+            self.hex_loc = '%s/user_top_inst_user_top-toolflow_partial.hex' % (prefix)
+            self.mcs_loc = '%s/user_top_inst_user_top-toolflow_partial.mcs' % (prefix)
+            self.prm_loc = '%s/user_top_inst_user_top-toolflow_partial.prm' % (prefix)
+            self.xsa_loc = '%s/user_top_inst_user_top-toolflow_partial.xsa' % (prefix)
+
+        self.add_tcl_cmd('set bin_file "%s"'%self.bin_loc, stage='init')
+        self.add_tcl_cmd('set bit_file "%s"'%self.bit_loc, stage='init')
+        self.add_tcl_cmd('set hex_file "%s"'%self.hex_loc, stage='init')
+        self.add_tcl_cmd('set mcs_file "%s"'%self.mcs_loc, stage='init')
+        self.add_tcl_cmd('set prm_file "%s"'%self.prm_loc, stage='init')
+
+        # A function to print timing errors
+
+        check_timing = """
+proc check_timing {run} {
+  if { [get_property STATS.WNS [get_runs $run] ] < 0 } {
+    send_msg_id "CASPER-1" {CRITICAL WARNING} "ERROR: Found timing violations => Worst Negative Slack: [get_property STATS.WNS [get_runs $run]] ns"
+  } else {
+    puts "No timing violations => Worst Negative Slack: [get_property STATS.WNS [get_runs $run]] ns"
+  }
+
+  if { [get_property STATS.TNS [get_runs $run] ] < 0 } {
+    send_msg_id "CASPER-1" {CRITICAL WARNING} "ERROR: Found timing violations => Total Negative Slack: [get_property STATS.TNS [get_runs $run]] ns"
+  }
+
+  if { [get_property STATS.WHS [get_runs $run] ] < 0 } {
+    send_msg_id "CASPER-1" {CRITICAL WARNING} "ERROR: Found timing violations => Worst Hold Slack: [get_property STATS.WHS [get_runs $run]] ns"
+  } else {
+    puts "No timing violations => Worst Hold Slack: [get_property STATS.WHS [get_runs $run]] ns"
+  }
+
+  if { [get_property STATS.THS [get_runs $run] ] < 0 } {
+    send_msg_id "CASPER-1" {CRITICAL WARNING} "ERROR: Found timing violations => Total Hold Slack: [get_property STATS.THS [get_runs $run]] ns"
+  }
+}
+"""
+        self.add_tcl_cmd(check_timing, stage='init')
+        check_zero_critical = """
+proc check_zero_critical {count mess} {
+  if {$count > 0} {
+    puts "************************************************"
+    send_msg_id "CASPER-2" {CRITICAL WARNING} "$mess critical warning count: $count"
+    puts "************************************************"
+  }
+}
+"""
+        self.add_tcl_cmd(check_zero_critical, stage='init')
+        puts_red = """
+proc puts_red {s} {
+  puts -nonewline "\033\[1;31m"; #RED
+  puts $s
+  puts -nonewline "\033\[0m";# Reset
+}
+"""
+        self.add_tcl_cmd(puts_red, stage='init')
+
         self.add_tcl_cmd('puts "Starting tcl script"', stage='init')
         # Create Vivado Project in project mode only
         if plat.project_mode:
-            self.add_tcl_cmd('create_project -f %s %s/%s -part %s' % (
-                self.project_name, self.compile_dir, self.project_name,
-                plat.fpga),
-                stage='init')
+            # Create a project or use a template if provided
+            self.add_tcl_cmd('cd %s' % self.compile_dir, stage='init')
+            if self.template_project is None:
+                self.add_tcl_cmd('create_project -f %s %s -part %s' % (
+                    self.project_name, self.project_name,
+                    plat.fpga), stage='init')
+            else:
+                self.add_tcl_cmd('exec cp %s .' % (self.template_project), stage='init')
+                template_basename = os.path.basename(self.template_project)
+                if template_basename.endswith('.zip'):
+                    self.add_tcl_cmd('exec unzip %s' % template_basename, stage='init')
+                    self.add_tcl_cmd('cd myproj', stage='init')
+                    self.add_tcl_cmd('open_project myproj', stage='init')
         # Create the part in non-project mode (project runs in memory only)
         else:
+            if self.template_project is not None:
+                self.logger.error("Can't build from a template project in non-project mode!")
+                raise RuntimeError
             self.add_tcl_cmd('file mkdir %s/%s' % (self.compile_dir,
                                                    self.project_name))
             self.add_tcl_cmd('set_part %s' % plat.fpga)
@@ -1647,7 +1785,11 @@ class VivadoBackend(ToolflowBackend):
         self.logger.debug('Adding source file: %s' % source)
         # Project Mode is enabled
         if plat.project_mode:
-            self.add_tcl_cmd('import_files -force %s' % source)
+            #TODO: This assumes that using a template => PR.
+            if self.template_project is not None:
+                self.add_tcl_cmd('import_files -force -of_objects [get_reconfig_modules user_top-toolflow] %s' % source)
+            else:
+                self.add_tcl_cmd('import_files -force %s' % source)
         # Non-Project Mode is enabled
         else:
             if os.path.basename(source) == 'top.v':
@@ -1711,7 +1853,11 @@ class VivadoBackend(ToolflowBackend):
             self.logger.debug('Adding constraint file: %s' % constfile)
             # Project Mode is enabled
             if self.plat.project_mode:
-                self.add_tcl_cmd('import_files -force -fileset constrs_1 %s' %
+                if self.template_project is not None:
+                    self.add_tcl_cmd('import_files -force  -of_objects [get_reconfig_modules user_top-toolflow] %s' %
+                                 constfile)
+                else:
+                    self.add_tcl_cmd('import_files -force -fileset constrs_1 %s' %
                                  constfile)
             # Non-Project Mode is enabled
             else:
@@ -1744,6 +1890,77 @@ class VivadoBackend(ToolflowBackend):
         s += self.tcl_cmds['promgen']
         return s
 
+    def add_compile_cmds_pr(self, cores=8, plat=None, synth_strat=None, impl_strat=None):
+        """
+        Add the tcl commands for compiling the design, and then launch
+        vivado in batch mode
+        """
+        impl_run = "[get_runs impl-toolflow]"
+        synth_run = "[get_runs user_top-toolflow_synth_1]"
+        tcl = self.add_tcl_cmd # shortcut for less typing
+
+        # The synthesis run seems to want to lock all IP, but doesn't bother generating it first.
+        # Manually do so...
+        tcl("generate_target all [get_files %s]" % os.path.join(self.compile_dir, "myproj/myproj.srcs/user_top-toolflow/ip/*/*.xci"), stage='pre_synth')
+
+        # add the upgrade_ip command to the tcl file if the yaml file requests it
+        # Default to upgrading the IP
+        if plat.conf.get('upgrade_ip', True):
+            #TODO tcl('upgrade_ip -quiet [get_ips *]', stage='pre_synth')
+            self.logger.debug('adding the upgrade_ip command to the tcl script')
+        else:
+            self.logger.debug('The upgrade_ip command is not being added to the tcl script')
+
+        # Pre-Synthesis Commands
+        if synth_strat is not None:
+            # synth_strat must be error-checked before arriving here
+            tcl('set_property strategy {0} {1}'.format(synth_strat, synth_run), stage='pre_synth')
+
+        # Synthesis Commands
+        tcl('reset_run {0}'.format(synth_run), stage='synth')
+        tcl('launch_runs {0} -jobs {1}'.format(synth_run, cores), stage='synth')
+        tcl('wait_on_run {0}'.format(synth_run), stage='synth')
+
+        # Post-Synthesis Commands
+        tcl('open_run {0}'.format(synth_run), stage='post_synth')
+        self.add_tcl_cmd('set synth_critical_count [get_msg_config -count -severity {CRITICAL WARNING}]', stage='post_synth')
+
+        # Pre-Implementation Commands
+        if impl_strat is not None:
+            # impl_strat must be error-checked before arriving here
+            tcl('set_property strategy {0} {1}'.format(impl_strat, impl_run), stage='pre_impl')
+        tcl('set_property STEPS.WRITE_BITSTREAM.ARGS.BIN_FILE true {0}'.format(impl_run), stage='pre_impl')
+        tcl('set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true {0}'.format(impl_run), stage='pre_impl')
+        tcl('set_property STEPS.POST_ROUTE_PHYS_OPT_DESIGN.IS_ENABLED true {0}'.format(impl_run), stage='pre_impl')
+
+        # Implementation Commands
+        tcl('launch_runs {0} -jobs {1}'.format(impl_run, cores), stage='impl')
+        tcl('wait_on_run {0}'.format(impl_run), stage='impl')
+
+        # Post-Implementation Commands
+        tcl('open_run {0}'.format(impl_run), stage='post_impl')
+        self.add_tcl_cmd('set impl_critical_count [get_msg_config -count -severity {CRITICAL WARNING}]', stage='post_impl')
+
+        # Pre-Bitgen Commands
+        # Platform yellow blocks should insert their settings here
+
+        # Bitgen Commands
+        tcl('launch_runs {0} -to_step write_bitstream'.format(impl_run), stage='bitgen')
+        tcl('wait_on_run {0}'.format(impl_run), stage='bitgen')
+        tcl('cd [get_property DIRECTORY [current_project]]', stage='bitgen')
+
+        # Post-Bitgen Commands
+        # PROM generation is generally very platform specific.
+        # write_cfgmem commands should be part of yellow block modules. (see, eg, SNAP)
+
+        # Let Yellow Blocks add their own tcl commands
+        self.gen_yellowblock_tcl_cmds()
+
+        # Determine if the design meets timing or not
+        self.add_tcl_cmd('check_timing {0}'.format(impl_run), stage='promgen') # promgen so the error comes last
+        self.add_tcl_cmd('check_zero_critical $impl_critical_count implementation', stage='promgen') # promgen so the error comes last
+        self.add_tcl_cmd('check_zero_critical $synth_critical_count synthesis', stage='promgen') # promgen so the error comes last
+
     def add_compile_cmds(self, cores=8, plat=None, synth_strat=None, impl_strat=None):
         """
         Add the tcl commands for compiling the design, and then launch
@@ -1762,8 +1979,9 @@ class VivadoBackend(ToolflowBackend):
             self.add_tcl_cmd('file copy -force {*}[glob [get_property directory [current_project]]/myproj.srcs/sources_1/imports/*.coe] [get_property directory [current_project]]/myproj.srcs/sources_1/ip/', stage='pre_synth')
             self.add_tcl_cmd('}', stage='pre_synth')
 
-            # add the upgrade_ip command to the tcl file if the yaml file requrests it, default to upgrading the IP
-            if "upgrade_ip" not in list(sorted(plat.conf.keys())) or plat.conf['upgrade_ip'] == True:
+            # add the upgrade_ip command to the tcl file if the yaml file requests it
+            # Default to upgrading the IP
+            if plat.conf.get('upgrade_ip', True):
                 self.add_tcl_cmd('upgrade_ip -quiet [get_ips *]', stage='pre_synth')
                 self.logger.debug('adding the upgrade_ip command to the tcl script')
             else:
@@ -1783,6 +2001,7 @@ class VivadoBackend(ToolflowBackend):
 
             # Post-Synthesis Commands
             self.add_tcl_cmd('open_run synth_1', stage='post_synth')
+            self.add_tcl_cmd('set synth_critical_count [get_msg_config -count -severity {CRITICAL WARNING}]', stage='post_synth')
 
             # Pre-Implementation Commands
             if impl_strat is not None:
@@ -1798,6 +2017,7 @@ class VivadoBackend(ToolflowBackend):
 
             # Post-Implementation Commands
             self.add_tcl_cmd('open_run impl_1', stage='post_impl')
+            self.add_tcl_cmd('set impl_critical_count [get_msg_config -count -severity {CRITICAL WARNING}]', stage='post_impl')
 
             # Pre-Bitgen Commands
 
@@ -1813,7 +2033,7 @@ class VivadoBackend(ToolflowBackend):
                 if plat.conf['bit_reversal'] == True:
                     self.add_tcl_cmd('write_cfgmem -force -format bin -interface bpix8 -size 128 -loadbit "up 0x0 '
                                   '%s/%s/%s.runs/impl_1/top.bit" -file %s'
-                                   % (self.compile_dir, self.project_name, self.project_name, self.binary_loc), stage='post_bitgen')
+                                   % (self.compile_dir, self.project_name, self.project_name, self.bin_loc), stage='post_bitgen')
             # just ignore if key is not present as only some platforms will have the key.
             except KeyError:
                 s = ""
@@ -1839,46 +2059,13 @@ class VivadoBackend(ToolflowBackend):
             except KeyError:
                 s = ""
 
-            # Determine if the design meets timing or not
-            # Look for Worst Negative Slack
-            self.add_tcl_cmd('if { [get_property STATS.WNS [get_runs impl_1] ] < 0 } {', stage='post_bitgen')
-            self.add_tcl_cmd('puts "Found timing violations => Worst Negative Slack:'
-                             ' [get_property STATS.WNS [get_runs impl_1]] ns" ', stage='post_bitgen')
-            self.add_tcl_cmd('} else {', stage='post_bitgen')
-            self.add_tcl_cmd('puts "No timing violations => Worst Negative Slack:'
-                             ' [get_property STATS.WNS [get_runs impl_1]] ns" ', stage='post_bitgen')
-            self.add_tcl_cmd('}', stage='post_bitgen')
-            # Look for Total Negative Slack
-            self.add_tcl_cmd('if { [get_property STATS.TNS [get_runs impl_1] ] < 0 } {', stage='post_bitgen')
-            self.add_tcl_cmd('puts "Found timing violations => Total Negative Slack:'
-                             ' [get_property STATS.TNS [get_runs impl_1]] ns" ', stage='post_bitgen')
-            self.add_tcl_cmd('} else {', stage='post_bitgen')
-            self.add_tcl_cmd('puts "No timing violations => Total Negative Slack:'
-                             ' [get_property STATS.TNS [get_runs impl_1]] ns" ', stage='post_bitgen')
-            self.add_tcl_cmd('}', stage='post_bitgen')
-            # Look for Worst Hold Slack
-            self.add_tcl_cmd('if { [get_property STATS.WHS [get_runs impl_1] ] < 0 } {', stage='post_bitgen')
-            self.add_tcl_cmd('puts "Found timing violations => Worst Hold Slack:'
-                             ' [get_property STATS.WHS [get_runs impl_1]] ns" ', stage='post_bitgen')
-            self.add_tcl_cmd('} else {', stage='post_bitgen')
-            self.add_tcl_cmd('puts "No timing violations => Worst Hold Slack:'
-                             ' [get_property STATS.WHS [get_runs impl_1]] ns" ', stage='post_bitgen')
-            self.add_tcl_cmd('}', stage='post_bitgen')
-            # Look for Total Hold Slack
-            self.add_tcl_cmd('if { [get_property STATS.THS [get_runs impl_1] ] < 0 } {', stage='post_bitgen')
-            self.add_tcl_cmd('puts "Found timing violations => Total Hold Slack:'
-                             ' [get_property STATS.THS [get_runs impl_1]] ns" ', stage='post_bitgen')
-            self.add_tcl_cmd('} else {', stage='post_bitgen')
-            self.add_tcl_cmd('puts "No timing violations => Total Hold Slack:'
-                             ' [get_property STATS.THS [get_runs impl_1]] ns" ', stage='post_bitgen')
-            self.add_tcl_cmd('}', stage='post_bitgen')
-
             # Let Yellow Blocks add their own tcl commands
             self.gen_yellowblock_tcl_cmds()
-            # Let Yellow Blocks add their own HDL files
-            self.gen_yellowblock_custom_hdl()
-            # add source files to the project from the compile directory
-            self.gen_add_compile_dir_source_tcl_cmds()
+
+            # Determine if the design meets timing or not
+            self.add_tcl_cmd('check_timing impl_1', stage='promgen') # promgen so the error comes last
+            self.add_tcl_cmd('check_zero_critical $impl_critical_count implementation', stage='promgen') # promgen so the error comes last
+            self.add_tcl_cmd('check_zero_critical $synth_critical_count synthesis', stage='promgen') # promgen so the error comes last
 
         # Non-Project mode is enabled
         # Options can be added to the *_design commands to change strategies
@@ -1933,7 +2120,7 @@ class VivadoBackend(ToolflowBackend):
                     tcl('write_cfgmem -force -format bin -interface bpix8 '
                         '-size 128 -loadbit "up 0x0 %s/%s/top.bit" -file %s' % (
                             self.compile_dir, self.project_name,
-                            self.binary_loc))
+                            self.bin_loc))
             # just ignore if key is not present as only some platforms
             # will have the key.
             except KeyError as e:
@@ -1998,7 +2185,10 @@ class VivadoBackend(ToolflowBackend):
         :param impl_strat: Implementation Strategy to use when
                             carrying out the implementation run 'impl'
         """
-        self.add_compile_cmds(cores=cores, plat=plat, synth_strat=synth_strat, impl_strat=impl_strat)
+        if self.template_project is None:
+            self.add_compile_cmds(cores=cores, plat=plat, synth_strat=synth_strat, impl_strat=impl_strat)
+        else:
+            self.add_compile_cmds_pr(cores=cores, plat=plat, synth_strat=synth_strat, impl_strat=impl_strat)
         # write tcl command to file
         tcl_file = self.compile_dir+'/gogogo.tcl'
         helpers.write_file(tcl_file, self.eval_tcl())
@@ -2036,6 +2226,16 @@ class VivadoBackend(ToolflowBackend):
                     self.logger.debug('IOSTD constraint found: %s' % iostd)
                     user_const += self.format_const(
                         'IOSTANDARD', iostd, const.portname,
+                        index=const.portname_indices[idx]
+                        if const.portname_indices else None)
+
+            for idx, p in enumerate(const.symbolic_indices):
+                self.logger.debug('Getting drive_strength for port index %d' % idx)
+                drive_strength = const.drive_strength[idx]
+                if drive_strength is not None:
+                    self.logger.debug('DRIVE_STRENGTH constraint found: %s' % drive_strength)
+                    user_const += self.format_const(
+                        'DRIVE', drive_strength, const.portname,
                         index=const.portname_indices[idx]
                         if const.portname_indices else None)
 
@@ -2211,21 +2411,6 @@ class VivadoBackend(ToolflowBackend):
                 # add the tcl command to add the source to the project
                 self.add_source('%s/%s' %(self.compile_dir, key), self.plat)
 
-    def gen_add_compile_dir_source_tcl_cmds(self):
-        """
-        Run each blocks add_compile_dir_source functions and add them to the projects sources
-        """
-        self.logger.info('Generating yellow block custom hdl files')
-        for obj in self.periph_objs:
-            c = obj.add_build_dir_source()
-            for d in c:
-                #self.add_source('%s/%s' %(self.compile_dir, d['files']), self.plat)
-                self.add_tcl_cmd('import_files %s/%s' %(self.compile_dir, d['files']), stage='pre_synth')
-                #if d['library'] != '':
-                    # add the source to a library if the library key exists
-                #    self.add_tcl_cmd('set_property library %s [get_files  {%s/%s%s}]' %(d['library'], self.compile_dir, d['files'], '*' if d['files'][-1]=='/' else ''), stage='pre_synth')
-        self.add_tcl_cmd('update_compile_order -fileset sources_1')
-
     def gen_constraint_file(self, constraints):
         """
         Pass this method a toolflow-standard list of constraints
@@ -2259,9 +2444,22 @@ class ISEBackend(VivadoBackend):
         self.manufacturer = 'xilinx'
         self.project_name = 'myproj'
         self.name = 'ise'
-        self.binary_loc = '%s/%s/%s.runs/impl_1/top.bin' % (
+        self.bin_loc = '%s/%s/%s.runs/impl_1/top.bin' % (
             self.compile_dir, self.project_name, self.project_name)
         ToolflowBackend.__init__(self, plat=plat, compile_dir=compile_dir)
+        self.tcl_cmds = {
+            'init'        : '',
+            'pre_synth'   : '',
+            'synth'       : '',
+            'post_synth'  : '',
+            'pre_impl'    : '',
+            'impl'        : '',
+            'post_impl'   : '',
+            'pre_bitgen'  : '',
+            'bitgen'      : '',
+            'post_bitgen' : '',
+            'promgen'     : '',
+        }
 
     def add_compile_cmds(self, cores=8, plat=None):
         """

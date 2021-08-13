@@ -52,7 +52,6 @@ class YellowBlock(object):
             # This seems a little dubious
             # Import the yellow block from the same package
             # that this YellowBlock class lives
-            print(blk['tag'][4:])
             clsfile = __import__(__package__+'.'+blk['tag'][4:])
             cls = clsfile.__getattribute__(blk['tag'][4:])
             cls = cls.__getattribute__(blk['tag'][4:]) # don't understand
@@ -127,9 +126,13 @@ class YellowBlock(object):
         self.blk = blk
         #: Stores the `platform` parameter, passed into this block's constructor
         self.platform = platform
+        #: Stores the path to a template project which should be the starting point
+        #: for instantiating this block. None indicates no template is needed.
+        self.template_project = None
         #: A friendly name for this block, generated from the `tag` entry in the `self.blk` dictionary
         #: and `self.inst_id`. Eg. "sw_reg5", or "ten_gbe0"
-        self.name = self.blk['tag'] + '%d'%self.inst_id #this can get overwritten by copy_attrs
+        #: Be sure to throw away the `xps:` from the tag before using it to make a name
+        self.name = self.blk['tag'].split(':')[-1] + '%d'%self.inst_id #this can get overwritten by copy_attrs
         #: A unique typecode indicating the type of yellow block this is. See `yellow_block_typecodes.py`.
         #: This code gets baked into a memory-map in the FPGA binary, and allows embedded software to figure out
         #: what type of devices are on the CPU bus.
@@ -139,9 +142,10 @@ class YellowBlock(object):
             self.fullname = self.fullpath.replace('/','_')
             self.unique_name = self.fullpath.split('/',1)[1].replace('/','_')
         except AttributeError:
-            self.fullpath = self.tag + '%d'%self.inst_id
-            self.fullname = self.tag + '%d'%self.inst_id
-            self.unique_name = self.tag + '%d'%self.inst_id
+            makeshift_name = self.tag.split(':')[-1] + '%d'%self.inst_id
+            self.fullpath = makeshift_name
+            self.fullname = makeshift_name
+            self.unique_name = makeshift_name
             self.logger.warning("%r doesn't have an attribute 'fullpath'"%self)
         self.initialize()
         self.check_support()
@@ -211,6 +215,20 @@ class YellowBlock(object):
                     of an HDL design into which this block should instantiate itself.
         """
         pass
+
+    def finalize_top(self, top):
+        """
+        A final opportunity for a block to modify VerilogModule instance `top` after all
+        other YellowBlocks have called their `modify_top` methods.
+        Unlike `modify_top`, `finalize_top` returns a new top-level VerilogModule.
+        This method was added to facilitate blocks which might need to do elaborate things,
+        such as wrap an entire user-level design so that it can be used with (eg) partial
+        reconfiguration.
+
+        :param top: A VerilogModule instance, defining the top-level of the user's design.
+        Returns: A new `VerilogModule` instance, definining the top-level of the user's design.
+        """
+        return top
 
     def gen_constraints(self):
         """

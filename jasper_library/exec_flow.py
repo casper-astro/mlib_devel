@@ -201,6 +201,7 @@ if __name__ == '__main__':
         tf.gen_periph_objs()
         tf.build_top()
         tf.generate_hdl()
+        tf.check_templates()
         tf.generate_consts()
         tf.write_core_info()
         tf.write_core_jam_info()
@@ -224,6 +225,7 @@ if __name__ == '__main__':
                                             compile_dir=tf.compile_dir,
                                             periph_objs=tf.periph_objs)
             backend.import_from_castro(backend.compile_dir + '/castro.yml')
+            backend.initialize()
 
             # launch vivado via the generated .tcl file
             backend.compile(cores=opts.jobs, plat=platform,
@@ -236,6 +238,7 @@ if __name__ == '__main__':
             platform.project_mode = opts.nonprojectmode
             backend = toolflow.ISEBackend(plat=platform, compile_dir=tf.compile_dir)
             backend.import_from_castro(backend.compile_dir + '/castro.yml')
+            backend.initialize()
             # launch ISE via the generated .tcl file
             backend.compile()
         # Default to vivado for compile
@@ -247,12 +250,13 @@ if __name__ == '__main__':
             backend = toolflow.VivadoBackend(plat=platform,
                                             compile_dir=tf.compile_dir)
             backend.import_from_castro(backend.compile_dir + '/castro.yml')
+            backend.initialize()
             # launch vivado via the generated .tcl file
             backend.compile(cores=opts.jobs, plat=platform,
                             synth_strat=opts.synth_strat, impl_strat=opts.impl_strat)
 
         if opts.software:
-            binary = backend.binary_loc
+            binary = backend.bin_loc
             hex_file = backend.hex_loc
             mcs_file = backend.mcs_loc
             prm_file = backend.prm_loc
@@ -297,14 +301,6 @@ if __name__ == '__main__':
                     tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
                     tf.start_time.tm_hour, tf.start_time.tm_min)
                 os.system('cp %s %s/top.bin' % (binary, backend.compile_dir))
-                mkbof_cmd = '%s/jasper_library/mkbof_64 -o %s/%s -s %s/core_info.tab ' \
-                            '-t 3 %s/top.bin' % (os.getenv('MLIB_DEVEL_PATH'),
-                                            backend.output_dir,
-                                            backend.output_bof,
-                                            backend.compile_dir,
-                                            backend.compile_dir)
-                os.system(mkbof_cmd)
-                print('Created %s/%s' % (backend.output_dir, backend.output_bof))
                 backend.mkfpg(binary, backend.output_fpg)
                 print('Created %s/%s' % (backend.output_dir, backend.output_fpg))
 

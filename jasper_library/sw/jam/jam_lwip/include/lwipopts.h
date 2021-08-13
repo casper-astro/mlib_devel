@@ -49,7 +49,7 @@
  * MEM_SIZE: the size of the heap memory. If the application will send
  * a lot of data that needs to be copied, this should be set high.
  */
-#define MEM_SIZE                        4096
+#define MEM_SIZE                        1600
 
 /**
  * MEM_USE_POOLS==1: Use an alternative to malloc() by allocating from a set
@@ -66,7 +66,7 @@
  * bigger pool - WARNING: THIS MIGHT WASTE MEMORY but it can make a system more
  * reliable. */
 // Sure, let's try it.
-#define MEM_USE_POOLS_TRY_BIGGER_POOL   1
+#define MEM_USE_POOLS_TRY_BIGGER_POOL   0
 
 /**
  * MEMP_USE_CUSTOM_POOLS==1: whether to include a user file lwippools.h
@@ -96,7 +96,7 @@
  * per active UDP "connection".
  * (requires the LWIP_UDP option)
  */
-#define MEMP_NUM_UDP_PCB                8
+#define MEMP_NUM_UDP_PCB                4
 
 /**
  * MEMP_NUM_TCP_PCB: the number of simultaneously active TCP connections.
@@ -138,7 +138,7 @@
  * (requires the ARP_QUEUEING option)
  */
 // TODO 30 is the default, which is probably OK, could even be made larger maybe
-#define MEMP_NUM_ARP_QUEUE             30
+#define MEMP_NUM_ARP_QUEUE             16
 
 /**
  * MEMP_NUM_IGMP_GROUP: The number of multicast groups whose network interfaces
@@ -218,13 +218,13 @@
  * startup time. Set this to 1 if you know your application sends more than one
  * packet in a row to an IP address that is not in the ARP cache.
  */
-#define ARP_QUEUEING                    1
+#define ARP_QUEUEING                    0
 
 /** The maximum number of packets which may be queued for each
  *  unresolved address by other network layers. Defaults to 3, 0 means disabled.
  *  Old packets are dropped, new packets are queued.
  */
-#define ARP_QUEUE_LEN                   5
+#define ARP_QUEUE_LEN                   2
 
 /**
  * IP_REASSEMBLY==1: Reassemble incoming fragmented IP packets. Note that
@@ -326,7 +326,7 @@
  */
 // Not sure what's best, but the default of 20 is definitely too short for our
 // needs so let's go with 256 until it needs to be bigger.
-#define TFTP_MAX_FILENAME_LEN 256
+#define TFTP_MAX_FILENAME_LEN 128
 
 /**
  * Disable TFTP debug messages

@@ -17,18 +17,14 @@ class sys_block(YellowBlock):
             Register('sys_clkcounter', mode='r',  offset=0x14),
         ]
     def modify_top(self,top):
-        if self.platform.mmbus_architecture == 'AXI4-Lite':
-            # TODO: Something about this is broken... differs from Jacks branch too... the wire that gets added has `xps:sys_clkcounter_...`
-            # in the name making for invalid verilog. The `fullpath` var is not set and seems to cause the problem.
-
-            #inst = top.get_instance('sys_block_counter', 'sys_block_counter_inst')          
-            #inst.add_parameter('DATA_WIDTH', 32)
-            #inst.add_port('user_clk', 'user_clk')
-            #inst.add_port('user_rst', 'user_rst')
-            #inst.add_port('en', '1')           
-            #design_name = self.fullname.replace("_"+self.fullpath, "")
-            #inst.add_port('we',  signal='%s_sys_clkcounter_we' % design_name, dir='out', width=1)
-            #inst.add_port('count_out', signal='%s_sys_clkcounter_in' % design_name, dir='out', width=32)
+        if self.platform.mmbus_architecture[0] == 'AXI4-Lite':
+            inst = top.get_instance('sys_block_counter', 'sys_block_counter_inst')          
+            inst.add_parameter('DATA_WIDTH', 32)
+            inst.add_port('user_clk', 'user_clk')
+            inst.add_port('user_rst', 'user_rst')
+            inst.add_port('en', '1')           
+            inst.add_port('we',  signal='sys_block_sys_clkcounter_we', dir='out', width=1)
+            inst.add_port('count_out', signal='sys_block_sys_clkcounter_in', dir='out', width=32)
             top.add_axi4lite_interface('sys_block', mode='r', nbytes=32, memory_map=self.memory_map, typecode=self.typecode)                    
 
         else:
