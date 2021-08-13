@@ -1798,7 +1798,7 @@ proc puts_red {s} {
         self.add_tcl_cmd('check_zero_critical $impl_critical_count implementation', stage='promgen') # promgen so the error comes last
         self.add_tcl_cmd('check_zero_critical $synth_critical_count synthesis', stage='promgen') # promgen so the error comes last
 
-    def add_compile_cmds(self, cores=8, plat=None, synth_strat=None, impl_strat=None):
+    def add_compile_cmds(self, cores=8, plat=None, synth_strat=None, impl_strat=None, threads='multi'):
         """
         Add the tcl commands for compiling the design, and then launch
         vivado in batch mode
