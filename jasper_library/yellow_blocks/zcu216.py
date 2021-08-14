@@ -41,7 +41,7 @@ class zcu216(YellowBlock):
 
         # generate clock parameters to use pl_clk to drive as the user IP clock
         # TODO: will need to make changes when other user ip clk source options provided
-        clkparams = clk_factors(self.pl_clk_mhz, self.platform.user_clk_rate)
+        clkparams = clk_factors(self.pl_clk_mhz, self.platform.user_clk_rate, vco_min=800.0, vco_max=1600.0)
 
         inst_infr = top.get_instance('zcu216_clk_infrastructure', 'zcu216_clk_infr_inst')
         inst_infr.add_parameter('PERIOD', "{:0.3f}".format(self.T_pl_clk_ns))
@@ -148,7 +148,9 @@ class zcu216(YellowBlock):
 
         # export hardware design xsa for software
         tcl_cmds['post_bitgen'] = []
-        tcl_cmds['post_bitgen'] += ['write_hw_platform -fixed -include_bit -force -file [get_property directory [current_project]]/top.xsa']
+        # TODO: $xsa_file comes from the backends class. Could re-write the path here but $xsa_file exists, use it instead.
+        # This then begs the question as to if there should be some sort of known tcl variables to check against
+        tcl_cmds['post_bitgen'] += ['write_hw_platform -fixed -include_bit -force -file $xsa_file']
 
         return tcl_cmds
 

@@ -1687,6 +1687,7 @@ class VivadoBackend(ToolflowBackend):
         self.add_tcl_cmd('set hex_file "%s"'%self.hex_loc, stage='init')
         self.add_tcl_cmd('set mcs_file "%s"'%self.mcs_loc, stage='init')
         self.add_tcl_cmd('set prm_file "%s"'%self.prm_loc, stage='init')
+        self.add_tcl_cmd('set xsa_file "%s"'%self.xsa_loc, stage='init')
 
         # A function to print timing errors
 

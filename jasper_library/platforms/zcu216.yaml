@@ -139,6 +139,7 @@ pins:
 # color have the same voltage standard. Not sure how the tools can handle this
 # if at all (probably just named custom io group)
   led_red:
+    drive_strength: 8
     iostd: LVCMOS12
     loc:
       - AN14
@@ -150,10 +151,12 @@ pins:
       - BB12
       - E25
   led_green:
+    drive_strength: 8
     iostd: [LVCMOS18, LVCMOS12]
     loc: [[C13, D14, D12, D13], [AW18, AV18, BA19, AP21]] #LED position 0-7
 
   led_blue:
+    drive_strength: 8
     iostd: LVCMOS12
     loc:
       - B26
@@ -166,6 +169,7 @@ pins:
       - AR21
 
   led:
+    drive_strength: 8 #HP banks don't support the default of 12
     iostd: LVCMOS12
     loc:
       # red

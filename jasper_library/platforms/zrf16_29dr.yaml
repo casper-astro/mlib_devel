@@ -33,7 +33,6 @@ rfdc:
     adc_clk_src: 3
 
 onehundredgbe:
-  # TODO: determine freq and cmac loc for 
   refclk_freq_str: "156.25"
   include_rs_fec: 1
   # transceiver interface signals that the core/manages directly from the fpga.

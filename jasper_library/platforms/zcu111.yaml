@@ -111,6 +111,7 @@ pins:
     loc: [AA39, W39, U39, R39]
 
   led:
+    drive_strength: 8 #HP banks don't support the default of 12
     iostd: LVCMOS18
     loc:
        - AR13

@@ -80,6 +80,7 @@ pins:
     loc: AP11
 
   led:
+    drive_strength: 8
     iostd: LVCMOS18
     loc:
       - AW11 # blue
@@ -94,10 +95,12 @@ pins:
       - AU12 # white
 
   lmk_reset:
+    drive_strength: 8
     iostd: LVCMOS18
     loc: AT9
 
   button:
+    drive_strength: 8
     iostd: LVCMOS18
     loc:
       - AM7 # PB0
@@ -106,6 +109,7 @@ pins:
       - AP8 # PB3
 
   switch:
+    drive_strength: 8
     iostd: LVCMOS18
     loc:
       - AT10 # SW1
