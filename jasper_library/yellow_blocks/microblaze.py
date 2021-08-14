@@ -36,6 +36,10 @@ class microblaze(YellowBlock):
             self.memfile= 'executable_casia_k7.mem'
            # self.memfile = 'executable.mem'
             self.blkdiagram = 'microblaze_wb_casia_k7.tcl'
+        elif self.platform.conf.get('family', None) == 'ultrascaleplus':
+            self.memfile = 'executable_us_plus.mem'
+            self.blkdiagram = 'microblaze_wb_us_plus_hbm.tcl'
+            self.include_spi_ports = False
         else:
             self.memfile = 'executable.mem'
             self.blkdiagram = 'microblaze_wb.tcl'
