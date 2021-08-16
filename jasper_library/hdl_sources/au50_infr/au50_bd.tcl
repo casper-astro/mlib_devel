@@ -39,11 +39,11 @@ if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
 
 # If there is no project opened, this script will create a
 # project, but make sure you do not have an existing project
-# <./myproj/project_1.xpr> in the current working folder.
+# <./myproj/myproj.xpr> in the current working folder.
 
 set list_projs [get_projects -quiet]
 if { $list_projs eq "" } {
-   create_project project_1 myproj -part xcu50-fsvh2104-2-e
+   create_project my_proj myproj -part xcu50-fsvh2104-2-e -force
    set_property BOARD_PART xilinx.com:au50:part0:1.2 [current_project]
 }
 

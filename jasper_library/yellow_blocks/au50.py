@@ -93,16 +93,30 @@ class au50(YellowBlock):
         4. Add the wrapper HDL file to project.
         """
 
+        # import the xdc files associated with the au50 block diagram, pin outs and bit stream generation
         tcl_cmds['pre_synth'] += ['import_files -force -fileset constrs_1 %s/au50_infr/au50_bd.xdc'%os.getenv('HDL_ROOT')]
         tcl_cmds['pre_synth'] += ['import_files -force -fileset constrs_1 %s/au50_infr/au50_bitstream.xdc'%os.getenv('HDL_ROOT')]
 
+        # run the block diagram generation script
         tcl_cmds['pre_synth'] += ['source {}'.format(self.hdl_root + '/au50_infr/au50_bd.tcl')]
-        tcl_cmds['pre_synth'] += ['generate_target all [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/bd/bd.bd]']        
-        tcl_cmds['pre_synth'] += ['make_wrapper -files [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/bd/bd.bd] -top']
-        #tcl_cmds['pre_synth'] += ['add_files -norecurse [get_property directory [current_project]]/myproj.srcs/sources_1/bd/bd/hdl/bd_wrapper.v']
+
+        # the follow commands open up the block diagram, set the clk_wiz to the user specified clock, then save and close the block diagram
+        # this is a new mechanism, previously this was accomplished by a python script working out the multiply/divide factors and passing
+        # them as parameters to a verilog generated MMCM. Now it is all handled in the block diagram without the need to calculate these
+        # factors
+        # there wasn't a way to parameterize this in the initial block diagram script, so we have to do it this way, blah!!
+        tcl_cmds['pre_synth'] += ['open_bd_design [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/au50_bd/au50_bd.bd]']
+        tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {%s} CONFIG.CLKOUT2_REQUESTED_OUT_FREQ {%s} CONFIG.CLKOUT3_REQUESTED_OUT_FREQ {%s} CONFIG.CLKOUT4_REQUESTED_OUT_FREQ {%s}] [get_bd_cells clk_wiz_0]'%(self.platform.user_clk_rate,self.platform.user_clk_rate,self.platform.user_clk_rate,self.platform.user_clk_rate)]
+        tcl_cmds['pre_synth'] += ['save_bd_design']
+        tcl_cmds['pre_synth'] += ['close_bd_design [get_bd_designs au50_bd]']
+
+        # generate the output files associated with the block diagram
+        tcl_cmds['pre_synth'] += ['generate_target all [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/au50_bd/au50_bd.bd]']
+        #tcl_cmds['pre_synth'] += ['make_wrapper -files [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/au50_bd/au50_bd.bd] -top']
         tcl_cmds['pre_synth'] += ['update_compile_order -fileset sources_1']
 
+        # it is probably better to add this to constraints files. We will come back to this as there will be more similar constraints ;)
+        # we will just need to add these to an xdc file that runs post synth.
         tcl_cmds['pre_impl'] += ['set_clock_groups -asynchronous -group [get_clocks axi_bram_ctrl_lmb_BRAM_PORTA_CLK] -group [get_clocks clk_out1_au50_bd_clk_wiz_0_0]']
-
 
         return tcl_cmds
