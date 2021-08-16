@@ -121,6 +121,8 @@ class onehundredgbe_usplus(onehundred_gbe):
         self.add_source('onehundred_gbe/ip/axis_data_fifo/axis_data_fifo_0.xci')
         self.add_source('onehundred_gbe/ip/EthMACPHY100GQSFP4x/EthMACPHY100GQSFP4x.xci')
         self.add_source('onehundred_gbe/ip/dest_address_fifo/dest_address_fifo.xci')
+        if self.platform.mmbus_architecture[0] == 'wishbone':
+            self.add_source('onehundred_gbe/casper100g_wb_attach.v')
 
         ## TODO: remove this when we're done debugging
         if self.platform in ['vcu118']:
@@ -159,11 +161,15 @@ class onehundredgbe_usplus(onehundred_gbe):
     def modify_top(self, top):
         inst = top.get_instance(entity='casper100g_noaxi', name=self.fullname+'_inst')
 
-        # The below call doesn't (yet) add any AXI ports to `inst`, which is required
-        # for anything useful to happen.
-        # But the 100G core doesn't (yet) have an axi interface exposed in the HDL anyway!
-        top.add_axi4lite_interface(regname=self.unique_name, mode='rw', nbytes=65536,
-                                    typecode=self.typecode, memory_map=self.memory_map)
+        if self.platform.mmbus_architecture[0] == 'wishbone':
+            ctrl = top.get_instance(entity='casper100g_wb_attach', name=self.fullname+'_wb_attach_inst')
+            ctrl.add_wb_interface(self.unique_name, mode='rw', nbytes=0xF000)
+        else:
+            # The below call doesn't (yet) add any AXI ports to `inst`, which is required
+            # for anything useful to happen.
+            # But the 100G core doesn't (yet) have an axi interface exposed in the HDL anyway!
+            top.add_axi4lite_interface(regname=self.unique_name, mode='rw', nbytes=65536,
+                                        typecode=self.typecode, memory_map=self.memory_map)
 
         # Set defaults at startup. The AXI registers above (which have defaults) won't
         # automatically propagate because until they are written externally their write-enable
@@ -234,16 +240,25 @@ class onehundredgbe_usplus(onehundred_gbe):
                 continue
             if not reg.ram:
                 if 'w' in reg.mode:
-                    # NOONE KNOWS HOW THE AXI INTERCONNECT IS GENERATED, SO THE BELOW
-                    # PORT NAMES WERE DETERMINED BY TRIAL AND ERROR
-                    inst.add_port(reg.name, self.unique_name+'_'+reg.name+'_out', width=32)
-                    inst.add_port(reg.name+'_we', self.unique_name+'_'+reg.name+'_out_we', width=1)
+                    if self.platform.mmbus_architecture[0] == 'wishbone':
+                        ctrl.add_port(reg.name, self.unique_name+'_'+reg.name, width=32)
+                        inst.add_port(reg.name, self.unique_name+'_'+reg.name, width=32)
+                        inst.add_port(reg.name+'_we', "1'b1")
+                    else:
+                        # NOONE KNOWS HOW THE AXI INTERCONNECT IS GENERATED, SO THE BELOW
+                        # PORT NAMES WERE DETERMINED BY TRIAL AND ERROR
+                        inst.add_port(reg.name, self.unique_name+'_'+reg.name+'_out', width=32)
+                        inst.add_port(reg.name+'_we', self.unique_name+'_'+reg.name+'_out_we', width=1)
                 else:
-                    inst.add_port(reg.name, self.unique_name+'_'+reg.name+'_in', width=32)
-                    # Read-only ports on the AXI interconnect have a write enable input. Tie it high.
-                    # The sys_clkcounter reg doesn't seem to do this, so who knows how it works.
-                    # Maybe it doesn't.
-                    top.assign_signal(self.unique_name+'_'+reg.name+'_in_we', "1'b1")
+                    if self.platform.mmbus_architecture[0] == 'wishbone':
+                        ctrl.add_port(reg.name, self.unique_name+'_'+reg.name, width=32)
+                        inst.add_port(reg.name, self.unique_name+'_'+reg.name, width=32)
+                    else:
+                        inst.add_port(reg.name, self.unique_name+'_'+reg.name+'_in', width=32)
+                        # Read-only ports on the AXI interconnect have a write enable input. Tie it high.
+                        # The sys_clkcounter reg doesn't seem to do this, so who knows how it works.
+                        # Maybe it doesn't.
+                        top.assign_signal(self.unique_name+'_'+reg.name+'_in_we', "1'b1")
 
     def gen_constraints(self):
         consts = []
