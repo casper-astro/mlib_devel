@@ -559,6 +559,11 @@ class tengbaser_xilinx_usplus(ten_gbe):
         inst.add_port('dclk', 'sys_clk')
         inst.add_port('tx_reset_0', "1'b0")
         inst.add_port('rx_reset_0', "1'b0")
+        # Need to connect bit 0 of xaui_status to an active-high "link detected"
+        # This is used by the uBlaze to detect change in link state (i.e.,
+        # plugging or removing an SFP)
+        inst.add_port('stat_rx_status_0', 'stat_rx_status_0_%d'%self.port)
+        top.assign_signal('xaui_status%d[0]'%self.port, 'stat_rx_status_0_%d'%self.port)
 
     def gen_constraints(self):
         num = self.infrastructure_id
