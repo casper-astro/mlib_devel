@@ -14,8 +14,6 @@ dsp_wb_base_address: 0x00010000
 mmbus_address_alignment: 4
 sources: []
 constraints: []
-tengbe:
-  gt_quad: "X1Y4"
 onehundredgbe:
   refclk_freq_str: "156.25"
   cmac_loc:
@@ -63,10 +61,10 @@ pins:
       - BE53
   usb_tx:
     iostd: LVCMOS18
-    loc: BH32
+    loc: BF32
   usb_rx:
     iostd: LVCMOS18
-    loc: BF35
+    loc: BK30
   gpio:
     iostd: LVCMOS18
     loc:
