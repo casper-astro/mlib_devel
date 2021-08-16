@@ -21,48 +21,48 @@ class onehundredgbe_usplus(onehundred_gbe):
         self.requires.append('sys_clk') # used for 100G RefClk100MHz (init_clk)
         self.missing_registers = ['gmac_reg_bytes_rdy']
         self.memory_map = [
-            Register('gmac_reg_core_type',            mode='r',  offset=0x00),
-            Register('gmac_reg_buffer_max_size',      mode='r',  offset=0x04),
-            Register('gmac_reg_word_size',            mode='r',  offset=0x08),
-            Register('gmac_reg_mac_address_h',        mode='rw', offset=0x0C, default_val=(self.fab_mac & 0xffffffff)),
-            Register('gmac_reg_mac_address_l',        mode='rw', offset=0x10, default_val=(self.fab_mac >> 32)),
-            Register('gmac_reg_local_ip_address',     mode='rw', offset=0x14, default_val=self.fab_ip),
-            Register('gmac_reg_gateway_ip_address',   mode='rw', offset=0x18, default_val=self.fab_gate),
+            Register('gmac_reg_core_type_%d' % self.port, mode='r',  offset=0x00),
+            Register('gmac_reg_buffer_max_size_%d'    % self.port, mode='r',  offset=0x04),
+            Register('gmac_reg_word_size_%d'          % self.port, mode='r',  offset=0x08),
+            Register('gmac_reg_mac_address_h_%d'      % self.port, mode='rw', offset=0x0C, default_val=(self.fab_mac & 0xffffffff)),
+            Register('gmac_reg_mac_address_l_%d'      % self.port, mode='rw', offset=0x10, default_val=(self.fab_mac >> 32)),
+            Register('gmac_reg_local_ip_address_%d'   % self.port, mode='rw', offset=0x14, default_val=self.fab_ip),
+            Register('gmac_reg_gateway_ip_address_%d' % self.port, mode='rw', offset=0x18, default_val=self.fab_gate),
 
-            Register('gmac_reg_local_ip_netmask',     mode='rw', offset=0x1C),
-            Register('gmac_reg_multicast_ip_address', mode='rw', offset=0x20, default_val=0),
-            Register('gmac_reg_multicast_ip_mask',    mode='rw', offset=0x24, default_val=0),
-            Register('gmac_reg_bytes_rdy',            mode='rw', offset=0x28),
-            Register('gmac_reg_core_ctrl',            mode='rw', offset=0x2C, default_val=int(self.fab_en)),
-            Register('gmac_reg_udp_port',             mode='rw', offset=0x30, default_val=self.fab_udp),
-            Register('gmac_reg_phy_status_h',         mode='r',  offset=0x34),
-            Register('gmac_reg_phy_status_l',         mode='r',  offset=0x38),
-            Register('gmac_reg_phy_control_h',        mode='rw', offset=0x3C, default_val=0),
-            Register('gmac_reg_phy_control_l',        mode='rw', offset=0x40, default_val=0),
-            Register('gmac_reg_arp_size',             mode='r',  offset=0x44),
-            Register('gmac_reg_tx_packet_rate',       mode='r',  offset=0x48),
-            Register('gmac_reg_tx_packet_count',      mode='r',  offset=0x4C),
-            Register('gmac_reg_tx_valid_rate',        mode='r',  offset=0x50),
-            Register('gmac_reg_tx_valid_count',       mode='r',  offset=0x54),
-            Register('gmac_reg_tx_overflow_count',    mode='r',  offset=0x58),
-            Register('gmac_reg_tx_almost_full_count', mode='r',  offset=0x5C),
-            Register('gmac_reg_rx_packet_rate',       mode='r',  offset=0x60),
-            Register('gmac_reg_rx_packet_count',      mode='r',  offset=0x64),
-            Register('gmac_reg_rx_valid_rate',        mode='r',  offset=0x68),
-            Register('gmac_reg_rx_valid_count',       mode='r',  offset=0x6C),
-            Register('gmac_reg_rx_overflow_count',    mode='r',  offset=0x70),
-            Register('gmac_reg_rx_bad_packet_count',  mode='r',  offset=0x74),
-            Register('gmac_reg_count_reset',          mode='rw', offset=0x78, default_val=0),
+            Register('gmac_reg_local_ip_netmask_%d'     % self.port, mode='rw', offset=0x1C),
+            Register('gmac_reg_multicast_ip_address_%d' % self.port, mode='rw', offset=0x20, default_val=0),
+            Register('gmac_reg_multicast_ip_mask_%d'    % self.port, mode='rw', offset=0x24, default_val=0),
+            Register('gmac_reg_bytes_rdy_%d'            % self.port, mode='rw', offset=0x28),
+            Register('gmac_reg_core_ctrl_%d'            % self.port, mode='rw', offset=0x2C, default_val=int(self.fab_en)),
+            Register('gmac_reg_udp_port_%d'             % self.port, mode='rw', offset=0x30, default_val=self.fab_udp),
+            Register('gmac_reg_phy_status_h_%d'         % self.port, mode='r',  offset=0x34),
+            Register('gmac_reg_phy_status_l_%d'         % self.port, mode='r',  offset=0x38),
+            Register('gmac_reg_phy_control_h_%d'        % self.port, mode='rw', offset=0x3C, default_val=0),
+            Register('gmac_reg_phy_control_l_%d'        % self.port, mode='rw', offset=0x40, default_val=0),
+            Register('gmac_reg_arp_size_%d'             % self.port, mode='r',  offset=0x44),
+            Register('gmac_reg_tx_packet_rate_%d'       % self.port, mode='r',  offset=0x48),
+            Register('gmac_reg_tx_packet_count_%d'      % self.port, mode='r',  offset=0x4C),
+            Register('gmac_reg_tx_valid_rate_%d'        % self.port, mode='r',  offset=0x50),
+            Register('gmac_reg_tx_valid_count_%d'       % self.port, mode='r',  offset=0x54),
+            Register('gmac_reg_tx_overflow_count_%d'    % self.port, mode='r',  offset=0x58),
+            Register('gmac_reg_tx_almost_full_count_%d' % self.port, mode='r',  offset=0x5C),
+            Register('gmac_reg_rx_packet_rate_%d'       % self.port, mode='r',  offset=0x60),
+            Register('gmac_reg_rx_packet_count_%d'      % self.port, mode='r',  offset=0x64),
+            Register('gmac_reg_rx_valid_rate_%d'        % self.port, mode='r',  offset=0x68),
+            Register('gmac_reg_rx_valid_count_%d'       % self.port, mode='r',  offset=0x6C),
+            Register('gmac_reg_rx_overflow_count_%d'    % self.port, mode='r',  offset=0x70),
+            Register('gmac_reg_rx_bad_packet_count_%d'  % self.port, mode='r',  offset=0x74),
+            Register('gmac_reg_count_reset_%d'          % self.port, mode='rw', offset=0x78, default_val=0),
 
             # The 100G core doesn't have an interface for the ARP cache which will work with the
             # AXI infrastructure we currently have, so make a new one and deal with it in software :-S
             #Register('gmac_reg_arp_cache',            mode='rw', offset=0x1000, ram=True, ram_size=8*256, data_width=32),
-            Register('gmac_arp_cache_write_enable',   mode='rw', offset=0x1000, default_val=0),
-            Register('gmac_arp_cache_read_enable',    mode='rw', offset=0x1004, default_val=0),
-            Register('gmac_arp_cache_write_data',     mode='rw', offset=0x1008, default_val=0),
-            Register('gmac_arp_cache_write_address',  mode='rw', offset=0x100C, default_val=0),
-            Register('gmac_arp_cache_read_address',   mode='rw', offset=0x1010, default_val=0),
-            Register('gmac_arp_cache_read_data',      mode='r',  offset=0x1014),
+            Register('gmac_arp_cache_write_enable_%d'  % self.port, mode='rw', offset=0x1000, default_val=0),
+            Register('gmac_arp_cache_read_enable_%d'   % self.port, mode='rw', offset=0x1004, default_val=0),
+            Register('gmac_arp_cache_write_data_%d'    % self.port, mode='rw', offset=0x1008, default_val=0),
+            Register('gmac_arp_cache_write_address_%d' % self.port, mode='rw', offset=0x100C, default_val=0),
+            Register('gmac_arp_cache_read_address_%d'  % self.port, mode='rw', offset=0x1010, default_val=0),
+            Register('gmac_arp_cache_read_data_%d'     % self.port, mode='r',  offset=0x1014),
 
             # Ignore RX/TX buffers for now -- do these actually work in the 100G core as per the mem map?
             #Register('gmac_reg_tx_buf',    mode='rw', offset=0x4000, ram=True, ram_size=2048),
@@ -265,17 +265,18 @@ class onehundredgbe_usplus(onehundred_gbe):
         inst.add_port('gbe_tx_byte_enable',   self.fullname+'_tx_byte_enable', width=64)
 
         # Register interfaces
+        # port number added to register memory map name, but removed by [:-2] slice here to correctly wire instance
         for reg in self.memory_map:
-            if reg.name in self.missing_registers:
+            if reg.name[:-2] in self.missing_registers:
                 continue
             if not reg.ram:
                 if 'w' in reg.mode:
                     # NOONE KNOWS HOW THE AXI INTERCONNECT IS GENERATED, SO THE BELOW
                     # PORT NAMES WERE DETERMINED BY TRIAL AND ERROR
-                    inst.add_port(reg.name, self.unique_name+'_'+reg.name+'_out', width=32)
-                    inst.add_port(reg.name+'_we', self.unique_name+'_'+reg.name+'_out_we', width=1)
+                    inst.add_port(reg.name[:-2], self.unique_name+'_'+reg.name+'_out', width=32)
+                    inst.add_port(reg.name[:-2]+'_we', self.unique_name+'_'+reg.name+'_out_we', width=1)
                 else:
-                    inst.add_port(reg.name, self.unique_name+'_'+reg.name+'_in', width=32)
+                    inst.add_port(reg.name[:-2], self.unique_name+'_'+reg.name+'_in', width=32)
                     # Read-only ports on the AXI interconnect have a write enable input. Tie it high.
                     # The sys_clkcounter reg doesn't seem to do this, so who knows how it works.
                     # Maybe it doesn't.
