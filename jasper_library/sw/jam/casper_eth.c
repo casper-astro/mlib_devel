@@ -324,6 +324,12 @@ casper_lwip_init()
     xil_printf("Flash UID read fail: too long (%d bytes)\n", flash_id_rv);
   }
 #endif
+  // If the magic MAC address register exists, use it for the
+  // lower 4 bytes of the MAC
+  uint32_t *mac_reg_ptr = (uint32_t *)casper_find_dev(MAC_ADDRESS_REGNAME, NULL);
+  if (mac_reg_ptr) {
+    buf[3] = *mac_reg_ptr;
+  }
   ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_1] = buf[2] & 0x02ff;
   ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_0] = buf[3];
   xil_printf("MAC 0x%04x%08x\n", buf[2] & 0x02ff, buf[3]);
