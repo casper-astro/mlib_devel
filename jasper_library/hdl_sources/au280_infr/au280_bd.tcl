@@ -1,6 +1,6 @@
 
 ################################################################
-# This is a generated script based on design: au50_bd
+# This is a generated script based on design: au280_bd
 #
 # Though there are limitations about the generated script,
 # the main purpose of this utility is to make learning
@@ -35,7 +35,7 @@ if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
 ################################################################
 
 # To test this script, run the following commands from Vivado Tcl console:
-# source au50_bd_script.tcl
+# source au280_bd_script.tcl
 
 # If there is no project opened, this script will create a
 # project, but make sure you do not have an existing project
@@ -43,14 +43,14 @@ if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
 
 set list_projs [get_projects -quiet]
 if { $list_projs eq "" } {
-   create_project project_1 myproj -part xcu50-fsvh2104-2-e
-   set_property BOARD_PART xilinx.com:au50:part0:1.2 [current_project]
+   create_project project_1 myproj -part xcu280-fsvh2892-2L-e
+   set_property BOARD_PART xilinx.com:au280:part0:1.1 [current_project]
 }
 
 
 # CHANGE DESIGN NAME HERE
 variable design_name
-set design_name au50_bd
+set design_name au280_bd
 
 # If you do not already have an existing IP Integrator design open,
 # you can create a design using the following command:
@@ -211,13 +211,10 @@ proc create_root_design { parentCell } {
    CONFIG.PROTOCOL {AXI4LITE} \
    ] $M04_AXI_0
 
-  set cmc_clk [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 cmc_clk ]
+  set sysclk0 [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 sysclk0 ]
   set_property -dict [ list \
    CONFIG.FREQ_HZ {100000000} \
-   ] $cmc_clk
-
-  set hbm_cattrip [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 hbm_cattrip ]
-
+   ] $sysclk0
   set pci_express_x1 [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:pcie_7x_mgt_rtl:1.0 pci_express_x1 ]
 
   set pcie_refclk [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 pcie_refclk ]
@@ -238,9 +235,9 @@ proc create_root_design { parentCell } {
    CONFIG.ASSOCIATED_BUSIF {M04_AXI_0} \
  ] $s_axi_aclk
   set s_axi_areset_n [ create_bd_port -dir O -type rst s_axi_areset_n ]
-  set satellite_gpio_0 [ create_bd_port -dir I -from 1 -to 0 -type intr satellite_gpio_0 ]
+  set satellite_gpio_0 [ create_bd_port -dir I -from 2 -to 0 -type intr satellite_gpio_0 ]
   set_property -dict [ list \
-   CONFIG.PortWidth {2} \
+   CONFIG.PortWidth {4} \
    CONFIG.SENSITIVITY {EDGE_RISING} \
  ] $satellite_gpio_0
   set sys_clk [ create_bd_port -dir O -type clk sys_clk ]
@@ -253,7 +250,6 @@ proc create_root_design { parentCell } {
   set axi_gpio_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio_0 ]
   set_property -dict [ list \
    CONFIG.C_DOUT_DEFAULT {0x00000001} \
-   CONFIG.GPIO_BOARD_INTERFACE {hbm_cattrip} \
    CONFIG.USE_BOARD_FLOW {true} \
  ] $axi_gpio_0
 
@@ -291,7 +287,7 @@ proc create_root_design { parentCell } {
    CONFIG.CLKOUT4_PHASE_ERROR {87.180} \
    CONFIG.CLKOUT4_REQUESTED_PHASE {270.000} \
    CONFIG.CLKOUT4_USED {true} \
-   CONFIG.CLK_IN1_BOARD_INTERFACE {cmc_clk} \
+   CONFIG.CLK_IN1_BOARD_INTERFACE {sysclk0} \
    CONFIG.MMCM_CLKOUT0_DIVIDE_F {12.000} \
    CONFIG.MMCM_CLKOUT1_DIVIDE {12} \
    CONFIG.MMCM_CLKOUT1_PHASE {90.000} \
@@ -300,6 +296,7 @@ proc create_root_design { parentCell } {
    CONFIG.MMCM_CLKOUT3_DIVIDE {12} \
    CONFIG.MMCM_CLKOUT3_PHASE {270.000} \
    CONFIG.NUM_OUT_CLKS {4} \
+   CONFIG.PRIM_SOURCE {Differential_clock_capable_pin} \
    CONFIG.USE_BOARD_FLOW {true} \
  ] $clk_wiz_0
 
@@ -338,7 +335,7 @@ proc create_root_design { parentCell } {
  ] $xdma_0
 
   # Create interface connections
-  connect_bd_intf_net -intf_net axi_gpio_0_GPIO [get_bd_intf_ports hbm_cattrip] [get_bd_intf_pins axi_gpio_0/GPIO]
+
   connect_bd_intf_net -intf_net axi_interconnect_0_M00_AXI [get_bd_intf_pins axi_gpio_0/S_AXI] [get_bd_intf_pins axi_interconnect_0/M00_AXI]
   connect_bd_intf_net -intf_net axi_interconnect_0_M01_AXI [get_bd_intf_pins axi_gpio_1/S_AXI] [get_bd_intf_pins axi_interconnect_0/M01_AXI]
   connect_bd_intf_net -intf_net axi_interconnect_0_M02_AXI [get_bd_intf_pins axi_intc_0/s_axi] [get_bd_intf_pins axi_interconnect_0/M02_AXI]
@@ -348,7 +345,7 @@ proc create_root_design { parentCell } {
   connect_bd_intf_net -intf_net pcie_refclk_1 [get_bd_intf_ports pcie_refclk] [get_bd_intf_pins util_ds_buf_0/CLK_IN_D]
   connect_bd_intf_net -intf_net xdma_0_M_AXI_LITE [get_bd_intf_pins axi_interconnect_0/S00_AXI] [get_bd_intf_pins xdma_0/M_AXI_LITE]
   connect_bd_intf_net -intf_net xdma_0_pcie_mgt [get_bd_intf_ports pci_express_x1] [get_bd_intf_pins xdma_0/pcie_mgt]
-  connect_bd_intf_net -intf_net cmc_clk_1 [get_bd_intf_ports cmc_clk] [get_bd_intf_pins clk_wiz_0/CLK_IN1_D]
+  connect_bd_intf_net -intf_net sysclk0_1 [get_bd_intf_ports sysclk0] [get_bd_intf_pins clk_wiz_0/CLK_IN1_D]
   # Create port connections
   connect_bd_net -net axi_intc_0_irq [get_bd_pins axi_intc_0/irq] [get_bd_pins xdma_0/usr_irq_req]
   connect_bd_net -net clk_wiz_0_clk_out1 [get_bd_ports sys_clk] [get_bd_pins clk_wiz_0/clk_out1]
