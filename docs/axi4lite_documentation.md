@@ -168,7 +168,7 @@ The raw AXI4-Lite implementation in the toolflow follows the philosophy illustra
 ####   i. Simulink Block
 The developer needs to create a raw AXI simulink block based on the tutorial found at https://casper-toolflow.readthedocs.io/projects/tutorials/en/latest/tutorials/snap/tut_gpio_bidir.html?highlight=gpio. However, for testing purposes only, one may want to use the software register found in .../mlib_devel/xps_library/xps_models. In this case, we change the tag of the sw_reg block to something else that represents the raw AXI device eg raw_axi as follows:
 
-![raw_AXI_device_simulink_block.png](../../mlib_devel/docs/_static/img/raw_AXI_device_simulink_block.png)
+![raw_AXI_device_simulink_block.png](_static/img/raw_axi_register_simulink_block.png)
 
 ####   ii Yellow Block Python Script (raw_axi.py)
 It is important to name the yellow block python script and yellow_block class as the simulink block tag. The yellow block script code is similar to that of the software register except that the code under the 'From Processor' is replaced by the code block below. Note that the code has only been tested for the 'From Processor' configured software register, that has 'rw' permissions.
