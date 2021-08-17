@@ -16,6 +16,15 @@ if strcmp(jasper_backend, 'vivado') || isempty(jasper_backend)
   if ~isempty(getenv('DSP_HDL_SL_PATH'))
     addpath(getenv('DSP_HDL_SL_PATH'));
   end
+%if vitis back end is to be used
+elseif strcmp(jasper_backend, 'vitis')
+  disp('Starting Vivado/Vitis Sysgen')
+  addpath([getenv('MLIB_DEVEL_PATH'), '/casper_library']);
+  addpath([getenv('MLIB_DEVEL_PATH'), '/xps_library']);
+  addpath([getenv('MLIB_DEVEL_PATH'), '/jasper_library']);
+  if ~isempty(getenv('DSP_HDL_SL_PATH'))
+    addpath(getenv('DSP_HDL_SL_PATH'));
+  end
 %if ISE is to be used  
 elseif strcmp(jasper_backend, 'ise')
   disp('Starting ISE Sysgen')

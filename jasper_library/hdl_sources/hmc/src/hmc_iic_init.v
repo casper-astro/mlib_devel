@@ -298,27 +298,27 @@ localparam IIC_IO_EXPANDER_CONFIG = 16'b000_0011_1001_0111; //Port Configuration
   reg [1:0] hmc_post_doneR;
   reg post_done_latch,post_done_latchR;
   
-  (* mark_debug = "true" *) wire dbg_hmc_iic_init_tx_phy_reset_done;
-  (* mark_debug = "true" *) wire dbg_hmc_iic_init_rx_phy_reset_done;  
-  (* mark_debug = "true" *) wire dbg_hmc_iic_init_tx_phy_reset;
-  (* mark_debug = "true" *) wire dbg_hmc_iic_init_rx_phy_reset;
-  (* mark_debug = "true" *) wire dbg_hmc_iic_init_hmc_iic_init_done_i;
-  (* mark_debug = "true" *) wire dbg_hmc_iic_init_hmc_iic_done_start_timer_i;
-  (* mark_debug = "true" *) wire [31:0] dbg_hmc_iic_init_init_done_time;
+  //(* mark_debug = "true" *) wire dbg_hmc_iic_init_tx_phy_reset_done;
+  //(* mark_debug = "true" *) wire dbg_hmc_iic_init_rx_phy_reset_done;  
+  //(* mark_debug = "true" *) wire dbg_hmc_iic_init_tx_phy_reset;
+  //(* mark_debug = "true" *) wire dbg_hmc_iic_init_rx_phy_reset;
+  //(* mark_debug = "true" *) wire dbg_hmc_iic_init_hmc_iic_init_done_i;
+  //(* mark_debug = "true" *) wire dbg_hmc_iic_init_hmc_iic_done_start_timer_i;
+  //(* mark_debug = "true" *) wire [31:0] dbg_hmc_iic_init_init_done_time;
   
-  assign dbg_hmc_iic_init_tx_phy_reset = tx_phy_reset;
-  assign dbg_hmc_iic_init_rx_phy_reset = rx_phy_reset;
-  assign dbg_hmc_iic_init_hmc_iic_init_done_i = hmc_iic_init_done_i;
-  assign dbg_hmc_iic_init_hmc_iic_done_start_timer_i = hmc_iic_done_start_timer_i;
-  assign dbg_hmc_iic_init_init_done_time = init_done_time; 
-  assign dbg_hmc_iic_init_tx_phy_reset_done = TX_PHY_RESET_DONE; 
-  assign dbg_hmc_iic_init_rx_phy_reset_done = RX_PHY_RESET_DONE;        
+  //assign dbg_hmc_iic_init_tx_phy_reset = tx_phy_reset;
+  //assign dbg_hmc_iic_init_rx_phy_reset = rx_phy_reset;
+  //assign dbg_hmc_iic_init_hmc_iic_init_done_i = hmc_iic_init_done_i;
+  //assign dbg_hmc_iic_init_hmc_iic_done_start_timer_i = hmc_iic_done_start_timer_i;
+  //assign dbg_hmc_iic_init_init_done_time = init_done_time; 
+  //assign dbg_hmc_iic_init_tx_phy_reset_done = TX_PHY_RESET_DONE; 
+  //assign dbg_hmc_iic_init_rx_phy_reset_done = RX_PHY_RESET_DONE;        
   
   
   
-  (* mark_debug = "true" *) wire [63:0] data_rx_flit_cnt_link2,data_rx_flit_cnt_link3;
-  (* mark_debug = "true" *) wire [63:0] data_rx_err_flit_cnt_link2,data_rx_err_flit_cnt_link3;
-  wire data_err_detect_link2,data_err_detect_link3;
+  //(* mark_debug = "true" *) wire [63:0] data_rx_flit_cnt_link2,data_rx_flit_cnt_link3;
+  //(* mark_debug = "true" *) wire [63:0] data_rx_err_flit_cnt_link2,data_rx_err_flit_cnt_link3;
+  //wire data_err_detect_link2,data_err_detect_link3;
 
 // ******************************************************************************************************************************************************************************************
 // HMC IIC initialization state machine
