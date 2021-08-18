@@ -172,7 +172,7 @@ module casper100g_wb_attach #(
   
   assign wb_err_o = 1'b0;
 
-  reg [7:0] opb_data_src;
+  reg [15:0] opb_data_src;
 
   /* RX/TX Buffer Control regs */
 
@@ -188,7 +188,7 @@ module casper100g_wb_attach #(
     opb_ack          <= 1'b0;
 
     if (wb_rst_i) begin
-      opb_data_src      <= 8'b0;
+      opb_data_src      <= 16'b0;
 
       local_mac_reg     <= FABRIC_MAC;
       local_ip_reg      <= FABRIC_IP;
@@ -216,9 +216,9 @@ module casper100g_wb_attach #(
 
       // registers
       if (reg_sel) begin
-        opb_data_src <= reg_addr[9:2];
+        opb_data_src <= reg_addr[17:2];
         if (wb_we_i) begin
-          case (reg_addr[9:2])
+          case (reg_addr[17:2])
             REG_CORE_TYPE: begin
             end
             REG_TX_RX_MAX_BUF: begin
