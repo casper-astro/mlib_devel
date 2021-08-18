@@ -182,8 +182,12 @@ class onehundredgbe_usplus(onehundred_gbe):
         
         inst.add_port('RefClk100MHz', 'sys_clk') # sys_clk is decreed to be 100 MHz.
         inst.add_port('RefClkLocked', '~sys_rst', parent_sig=False)
-        inst.add_port('aximm_clk', 'axil_clk')
-        inst.add_port('icap_clk', 'axil_clk')
+        if self.platform.mmbus_architecture[0] == 'wishbone':
+            inst.add_port('aximm_clk', 'wb_clk_i')
+            inst.add_port('icap_clk', 'wb_clk_i')
+        else:
+            inst.add_port('aximm_clk', 'axil_clk')
+            inst.add_port('icap_clk', 'axil_clk')
         inst.add_port('axis_reset', "1'b0")#'axil_rst')
         # MGT connections
         inst.add_port('mgt_qsfp_clock_p', self.portbase+'_refclk_p', dir='in', parent_port=True)
