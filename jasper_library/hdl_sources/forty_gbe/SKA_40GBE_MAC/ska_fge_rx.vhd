@@ -27,7 +27,8 @@ use ieee.numeric_std.all;
 
 entity ska_fge_rx is
     generic (
-    PROMISC_MODE    : integer);
+    PROMISC_MODE    : integer;
+    USE_CPU_RX      : integer := 1);
 
     port (
     -- Local parameters
@@ -772,24 +773,30 @@ begin
     cpu_buffer_addra(7 downto 0) <= cpu_rx_buffer_addr(9 downto 2);
 
 
-    cpu_rx_buffer_rd_data <=
-    cpu_buffer_douta(63 downto 0) when (cpu_rx_buffer_addr(1 downto 0) = "00") else
-    cpu_buffer_douta(127 downto 64) when (cpu_rx_buffer_addr(1 downto 0) = "01") else
-    cpu_buffer_douta(191 downto 128) when (cpu_rx_buffer_addr(1 downto 0) = "10") else
-    cpu_buffer_douta(255 downto 192);
+    generate_cpu_rx : if USE_CPU_RX = 1 generate
+      cpu_rx_buffer_rd_data <=
+      cpu_buffer_douta(63 downto 0) when (cpu_rx_buffer_addr(1 downto 0) = "00") else
+      cpu_buffer_douta(127 downto 64) when (cpu_rx_buffer_addr(1 downto 0) = "01") else
+      cpu_buffer_douta(191 downto 128) when (cpu_rx_buffer_addr(1 downto 0) = "10") else
+      cpu_buffer_douta(255 downto 192);
 
-    ska_cpu_buffer_0 : ska_cpu_buffer
-    port map(
-        clka    => cpu_clk,
-        wea     => (others => '0'),
-        addra   => cpu_buffer_addra,
-        dina    => (others => '0'),
-        douta   => cpu_buffer_douta,
-        clkb    => mac_clk,
-        web     => cpu_buffer_web,
-        addrb   => cpu_buffer_addrb,
-        dinb    => cpu_buffer_dinb,
-        doutb   => open);
+      ska_cpu_buffer_0 : ska_cpu_buffer
+      port map(
+          clka    => cpu_clk,
+          wea     => (others => '0'),
+          addra   => cpu_buffer_addra,
+          dina    => (others => '0'),
+          douta   => cpu_buffer_douta,
+          clkb    => mac_clk,
+          web     => cpu_buffer_web,
+          addrb   => cpu_buffer_addrb,
+          dinb    => cpu_buffer_dinb,
+          doutb   => open);
+    end generate generate_cpu_rx;
+
+    generate_nocpu_rx : if USE_CPU_RX = 0 generate
+      cpu_rx_buffer_rd_data <= (others => '0');
+    end generate generate_nocpu_rx;
 
     cpu_buffer_web(0) <= cpu_dvld;
 

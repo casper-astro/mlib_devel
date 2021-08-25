@@ -35,6 +35,10 @@ class forty_gbe(YellowBlock):
         inst.add_parameter('FABRIC_ENABLE',  " 1'b%x"%self.fab_en)
         inst.add_parameter('TTL',            " 8'h%x"%self.ttl)
         inst.add_parameter('PROMISC_MODE',   " 1'b%x"%self.promisc_mode)
+        use_cpu_tx = self.cpu_tx_en == 'on'
+        use_cpu_rx = self.cpu_rx_en == 'on'
+        inst.add_parameter('USE_CPU_RX',   " 1'b%x"%int(use_cpu_rx))
+        inst.add_parameter('USE_CPU_TX',   " 1'b%x"%int(use_cpu_tx))
         if self.platform.name == 'skarab':
             inst.add_parameter('RX_2B_SWAP',   "true") # SKARAB Microblaze requires some swizzling of RX data read via wishbone
 
