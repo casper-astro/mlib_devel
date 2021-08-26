@@ -423,7 +423,7 @@ module ads5296x4_interface_demux2 #(
   reg syncRR_sclk;
   reg fifo_we_reg;
   reg fifo_rst_reg;
-  (* max_fanout = 2 *) reg fifo_rst_regR;
+  (* max_fanout = 4 *) reg fifo_rst_regR;
   assign fifo_rst = fifo_rst_regR;
   assign fifo_we = fifo_we_reg;
   always @(posedge sclk_in) begin
