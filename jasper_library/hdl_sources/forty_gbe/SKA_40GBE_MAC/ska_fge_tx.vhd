@@ -641,6 +641,7 @@ begin
 
     --AI: Deassert write when FIFO full and reset asserted
     app_tx_data_wrreq <= app_tx_any_valid and (not app_tx_data_full) and (not app_rst);
+    app_tx_data_overflow <= app_tx_any_valid and app_tx_data_full;
 
     gen_app_tx_data_wrreq_latched : process(app_rst, app_clk)
     begin
@@ -663,7 +664,7 @@ begin
         rd_en       => app_tx_data_rdreq,
         dout        => app_tx_data_dout,
         full        => app_tx_data_full,
-        overflow    => app_tx_data_overflow,
+        overflow    => open,
         empty       => app_tx_data_empty,
         prog_full   => app_tx_data_afull);
 
