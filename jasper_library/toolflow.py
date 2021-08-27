@@ -699,7 +699,8 @@ class Toolflow(object):
                     symbolic_indices=const.iogroup_index,
                     io_standard=const.iostd,
                     drive_strength=const.drive_strength,
-                    location=const.loc
+                    location=const.loc,
+                    diff_term=const.diff_term
                     )]
             elif isinstance(const, ClockConstraint):
                 clk_constraints += [castro.ClkConstraint(
@@ -1208,6 +1209,7 @@ class ToolflowBackend(object):
             const.location = [pins[idx].loc for idx in range(numindices)]
             const.io_standard = [pins[idx].iostd for idx in range(numindices)]
             const.drive_strength = [pins[idx].drive_strength for idx in range(numindices)]
+            const.diff_term = [pins[idx].diff_term for idx in range(numindices)]
             const.is_vector = const.portname_indices != []
 
         self.gen_constraint_file(
@@ -2239,6 +2241,17 @@ proc puts_red {s} {
                         'DRIVE', drive_strength, const.portname,
                         index=const.portname_indices[idx]
                         if const.portname_indices else None)
+
+            for idx, p in enumerate(const.symbolic_indices):
+                self.logger.debug('Getting diff_term for port index %d' % idx)
+                self.logger.debug('with port name %s' % const.portname)
+                diff_term = const.diff_term[idx]
+                if diff_term is not None:
+                  self.logger.debug('DIFF_TERM constraint found: %s' % diff_term)
+                  user_const += self.format_const(
+                    'DIFF_TERM_ADV', diff_term, const.portname,
+                    index=const.portname_indices[idx]
+                    if const.portname_indices else None)
 
         if isinstance(const, castro.ClkConstraint):
             self.logger.debug('New Clock constraint found')

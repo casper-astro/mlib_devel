@@ -78,6 +78,7 @@ pins:
 
   # SYSREF_FPGA_C_N/P on bank 64
   pl_sysref_p:
+    diff_term: TERM_100
     iostd: LVDS
     loc: AK17
   pl_sysref_n:
@@ -86,6 +87,7 @@ pins:
 
   #`FPGA_REFCLK_OUT_C_N/P` on bank 64   
   pl_clk_p:
+    diff_term: TERM_100
     iostd: LVDS
     loc: AL16
   pl_clk_n:
