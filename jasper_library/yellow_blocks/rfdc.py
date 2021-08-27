@@ -13,13 +13,14 @@ class rfdc(YellowBlock):
   tile_attr_map = {
     # removed the enable object to be handled higher the class abstraction as this indexing [224-227] is incosistent with [0-3]
     #'enable'         : 'ADC{:d}_En',# ADC suffix {:d} is 224-227
-    'sample_rate'    : {'param' : 'ADC{:d}_Sampling_Rate', 'fmt' : "{{:.5f}}"}, # ADC suffix {:d} is 0-3 # TODO: how many digits to add? was 3, upped to 5 for zcu111 tests
-    'ref_clk'        : {'param' : 'ADC{:d}_Refclk_Freq'  , 'fmt' : "{{:.3f}}"},
-    'clk_out'        : {'param' : 'ADC{:d}_Outclk_Freq'  , 'fmt' : "{{:.3f}}"},
-    'axi_stream_clk' : {'param' : 'ADC{:d}_Fabric_Freq'  , 'fmt' : "{{:.3f}}"},
-    'enable_pll'     : {'param' : 'ADC{:d}_PLL_Enable'   , 'fmt' : "{{}}"},
-    'clk_dist'       : {'param' : 'ADC{:d}_Clock_Dist'   , 'fmt' : "{{:d}}"},
-    'clk_src'        : {'param' : 'ADC{:d}_Clock_Source' , 'fmt' : "{{:d}}"}
+    'sample_rate'    : {'param' : 'ADC{:d}_Sampling_Rate',   'fmt' : "{{:.5f}}"}, # ADC suffix {:d} is 0-3 # TODO: how many digits to add? was 3, upped to 5 for zcu111 tests
+    'ref_clk'        : {'param' : 'ADC{:d}_Refclk_Freq',     'fmt' : "{{:.3f}}"},
+    'clk_out'        : {'param' : 'ADC{:d}_Outclk_Freq',     'fmt' : "{{:.3f}}"},
+    'axi_stream_clk' : {'param' : 'ADC{:d}_Fabric_Freq',     'fmt' : "{{:.3f}}"},
+    'enable_pll'     : {'param' : 'ADC{:d}_PLL_Enable',      'fmt' : "{{}}"},
+    'enable_mts'     : {'param' : 'ADC{:d}_Multi_Tile_Sync', 'fmt' : "{{}}"},
+    'clk_dist'       : {'param' : 'ADC{:d}_Clock_Dist',      'fmt' : "{{:d}}"},
+    'clk_src'        : {'param' : 'ADC{:d}_Clock_Source',    'fmt' : "{{:d}}"}
   }
 
   adc_attr_map = {
@@ -99,9 +100,6 @@ class rfdc(YellowBlock):
     self.adcs          = []
 
     self.typecode = TYPECODE_RFDC
-
-    # TODO: sources for mts and other
-    # self.add_source('')
 
     self.rfdc_conf = self.platform.conf['rfdc']
 
@@ -204,6 +202,7 @@ class rfdc(YellowBlock):
     self.requires.append('sysref_in')
 
     if self.enable_mts:
+      self.add_source('infrastructure/mts_pl_sysref_sync.sv')
       self.requires.append('pl_sysref')
 
     for a in self.enabled_adcs:
@@ -253,18 +252,22 @@ class rfdc(YellowBlock):
 
     bd_inst.add_port('irq', 'rfdc_irq') #self.fullname+'_irq'
 
-    # TODO: pins most likely need to be added in platform files for sysref
-    bd_inst.add_port('sysref_in_p', 'sysref_in_p', dir='in', parent_port=True) #self.fullname+'_sysref_in_p',
-    bd_inst.add_port('sysref_in_n', 'sysref_in_n', dir='in', parent_port=True) #self.fullname+'_sysref_in_n',
+    bd_inst.add_port('sysref_in_p', 'sysref_in_p', dir='in', parent_port=True)
+    bd_inst.add_port('sysref_in_n', 'sysref_in_n', dir='in', parent_port=True)
 
     bd_inst.add_port('s_axi_aclk', 'axil_clk')
     bd_inst.add_port('s_axi_aresetn', 'axil_rst_n')
 
     if self.enable_mts:
-      # TODO: add instance of PL capture synchronizer, get port name correct
-      # I think it just dawned on me that in order to to do sysref on something like the zcu216 it will require the DAC 228 tile being
-      # programmed since this is where the SYSREF comes into the fabric (this will most likely be similar for other platforms too...)
-      bd_inst.add_port('user_adc_sysref', 'user_adc_sysref', dir='in')
+      # instance mts cdc synchronization module
+      mts_inst = top.get_instance('mts_pl_sysref_sync', 'mts_pl_sysref_sync_inst')
+      mts_inst.add_parameter('SYNC_FFS', 3)
+      mts_inst.add_port('pl_sysref_p', 'pl_sysref_p', dir='in', parent_port=True)
+      mts_inst.add_port('pl_sysref_n', 'pl_sysref_n', dir='in', parent_port=True)
+      mts_inst.add_port('pl_clk', 'user_clk')
+      mts_inst.add_port('user_sysref_adc', 'user_sysref_adc')
+      # add port to pass to board design
+      bd_inst.add_port('user_sysref_adc', 'user_sysref_adc', dir='in')
 
     # generate tile/slice interface ports
     for tidx in self.enabled_tiles:
@@ -337,9 +340,10 @@ class rfdc(YellowBlock):
     #cons.append(PortConstraint('vin00_p', 'vin00_p'))
     #cons.append(PortConstraint('vin00_n', 'vin00_n'))
 
-    # TODO: will be needed with MTS
-    #cons.append(PortConstraint('pl_sysref_p', 'pl_sysref_p'))
     cons = []
+    cons.append(PortConstraint('pl_sysref_p', 'pl_sysref_p'))
+    # TODO: designs do not generally need to add a clock constraint for the pl_sysref, but never hurts
+    #cons.append(ClockConstraint('pl_sysref_p', 'pl_sysref_p', period=self.T_pl_sysref_ns, port_en=True, virtual_en=False))
 
     return cons
 
@@ -474,15 +478,14 @@ class rfdc(YellowBlock):
               tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('m{:d}{:d}_axis_tvalid'.format(tidx, aidx), port_dir='out'))
               tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('m{:d}{:d}_axis_tready'.format(tidx, aidx), port_dir='in'))
 
-      # TODO: implement mts
-      # if self.enable_mts:
-      # TODO: also add ports for anything needed for PL capture synchronizer
-
     # create IRQ output port
     tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('irq', port_dir='out', port_type='intr'))
 
     tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('sysref_in_p', port_dir='in'))
     tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('sysref_in_n', port_dir='in'))
+
+    if self.enable_mts:
+      tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('user_sysref_adc', port_dir='in'))
 
     return tcl_cmds
 

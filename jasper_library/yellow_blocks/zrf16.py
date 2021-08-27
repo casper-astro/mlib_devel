@@ -102,7 +102,6 @@ class zrf16(YellowBlock):
         cons.append(PortConstraint('pl_clk_p', 'pl_clk_p'))
         # TODO: tweak this until we have the right reference clocks
         cons.append(ClockGroupConstraint('clk_pl_0', 'pl_clk_mmcm', 'asynchronous'))
-        # TODO: will need to add pl_sysref constraint under MTS
         cons.append(RawConstraint('set_property -dict { PACKAGE_PIN AR12 IOSTANDARD LVCMOS33 } [get_ports { mmcm_locked }]'))
 
         # TODO: extend to provide other onboard clocks

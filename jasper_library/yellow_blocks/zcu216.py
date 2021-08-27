@@ -104,7 +104,7 @@ class zcu216(YellowBlock):
         cons.append(PortConstraint('pl_clk_p', 'pl_clk_p'))
         # TODO: tweak this until we have the right reference clocks
         cons.append(ClockGroupConstraint('clk_pl_0', 'pl_clk_mmcm', 'asynchronous'))
-        # TODO: will need to add pl_sysref constraint under MTS
+
         cons.append(RawConstraint('set_property -dict { PACKAGE_PIN G10 IOSTANDARD LVCMOS18 } [get_ports { clk104_spi_mux_sel[0] }]'))
         cons.append(RawConstraint('set_property -dict { PACKAGE_PIN H11 IOSTANDARD LVCMOS18 } [get_ports { clk104_spi_mux_sel[1] }]'))
         cons.append(RawConstraint('set_property -dict { PACKAGE_PIN B26 IOSTANDARD LVCMOS12 } [get_ports { mmcm_locked }]'))

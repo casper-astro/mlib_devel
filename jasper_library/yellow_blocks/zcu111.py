@@ -102,7 +102,6 @@ class zcu111(YellowBlock):
         # TODO: tweak this until we have the right reference clocks
         cons.append(ClockGroupConstraint('clk_pl_0', 'pl_clk_mmcm', 'asynchronous'))
 
-        # TODO: will need to add pl_sysref constraint under MTS
         cons.append(RawConstraint('set_property -dict { PACKAGE_PIN AV15 IOSTANDARD LVCMOS18 } [get_ports { mmcm_locked }]'))
 
         # TODO: extend to provide other onboard clocks
