@@ -10,6 +10,8 @@ class ten_gbe(YellowBlock):
             return tengbaser_xilinx_k7(blk, plat, hdl_root)
         elif plat.fpga.startswith('xc7v'):
             return tengbaser_xilinx_k7(blk, plat, hdl_root, use_gth=plat.name=='mx175')
+        elif plat.conf.get('family', '').endswith('plus'):
+            return tengbaser_xilinx_usplus(blk, plat, hdl_root)
         elif plat.fpga.startswith('xcvu'):
             return tengbaser_xilinx_k7(blk, plat, hdl_root, use_gth=plat.name=='vcu118')
         elif plat.fpga.startswith('xcku'):
@@ -499,4 +501,85 @@ class tengbaser_xilinx_ku7(ten_gbe):
 
 
 
+        return cons
+
+
+class tengbaser_xilinx_usplus(ten_gbe):
+    def initialize(self):
+        self.typecode = TYPECODE_ETHCORE
+        self.exc_requirements = ['tge%d'%self.slot]
+        self.add_source('kat_ten_gb_eth/*')
+        self.add_source('tengbaser_phy/ten_gig_pcs_pma_usplus.xci')
+
+        self.port = 0 # Only allow 1 port of 10g on US+. FIXME
+        self.infrastructure_id = self.port // 4
+
+        self.provides = ['ethernet']
+        if self.cpu_rx_en and self.cpu_tx_en:
+            self.provides += ['cpu_ethernet']
+
+    def modify_top(self,top):
+        self.instantiate_pcs(top, self.port)
+        self.instantiate_ktge(top, self.port)
+
+    def instantiate_pcs(self, top, num):
+        inst = top.get_instance('ten_gig_pcs_pma_usplus', 'ten_gig_pcm_pma_inst')
+        inst.add_port('gt_refclk_n', 'ref_clk_n%d'%num, parent_port=True, dir='in')
+        inst.add_port('gt_refclk_p', 'ref_clk_p%d'%num, parent_port=True, dir='in')
+        inst.add_port('gt_txp_out_0', 'mgt_tx_p%d'%self.port, parent_port=True, dir='out')
+        inst.add_port('gt_txn_out_0', 'mgt_tx_n%d'%self.port, parent_port=True, dir='out')
+        inst.add_port('gt_rxp_in_0', 'mgt_rx_p%d'%self.port, parent_port=True, dir='in')
+        inst.add_port('gt_rxn_in_0', 'mgt_rx_n%d'%self.port, parent_port=True, dir='in')
+        inst.add_port('tx_mii_d_0', 'xgmii_txd%d'%self.port, width=64)
+        inst.add_port('tx_mii_c_0', 'xgmii_txc%d'%self.port, width=8)
+        inst.add_port('rx_mii_d_0', 'xgmii_rxd%d'%self.port, width=64)
+        inst.add_port('rx_mii_c_0', 'xgmii_rxc%d'%self.port, width=8)
+        inst.add_port('tx_mii_clk_0', 'core_clk_156_%d'%num)
+        inst.add_port('rx_core_clk_0', 'core_clk_156_%d'%num)
+
+
+        inst.add_port('ctl_rx_data_pattern_select_0', "1'b0")
+        inst.add_port('ctl_rx_prbs31_test_pattern_enable_0', "1'b0")
+        inst.add_port('ctl_rx_test_pattern_0', "1'b0")
+        inst.add_port('ctl_rx_test_pattern_enable_0', "1'b0")
+        inst.add_port('ctl_tx_test_pattern_0', "1'b0")
+        inst.add_port('ctl_tx_test_pattern_enable_0', "1'b0")
+        inst.add_port('ctl_tx_test_pattern_select_0', "1'b0")
+        inst.add_port('ctl_tx_data_pattern_select_0', "1'b0")
+        inst.add_port('ctl_tx_test_pattern_seed_a_0', "58'b0")
+        inst.add_port('ctl_tx_test_pattern_seed_b_0', "58'b0")
+        inst.add_port('ctl_tx_prbs31_test_pattern_enable_0', "1'b0")
+        inst.add_port('gt_loopback_in_0', "3'b0")
+
+        inst.add_port('txoutclksel_in_0', "3'b101")
+        inst.add_port('rxoutclksel_in_0', "3'b101")
+        inst.add_port('gtwiz_reset_tx_datapath_0', "1'b0")
+        inst.add_port('gtwiz_reset_rx_datapath_0', "1'b0")
+        inst.add_port('sys_reset', 'sys_rst')
+        inst.add_port('dclk', 'sys_clk')
+        inst.add_port('tx_reset_0', "1'b0")
+        inst.add_port('rx_reset_0', "1'b0")
+        # Need to connect bit 0 of xaui_status to an active-high "link detected"
+        # This is used by the uBlaze to detect change in link state (i.e.,
+        # plugging or removing an SFP)
+        inst.add_port('stat_rx_status_0', 'stat_rx_status_0_%d'%self.port)
+        top.assign_signal('xaui_status%d[0]'%self.port, 'stat_rx_status_0_%d'%self.port)
+
+    def gen_constraints(self):
+        num = self.infrastructure_id
+        cons = []
+        cons.append(PortConstraint('ref_clk_p%d'%num, 'eth_clk_p',iogroup_index=num))
+        cons.append(PortConstraint('ref_clk_n%d'%num, 'eth_clk_n',iogroup_index=num))
+        cons.append(PortConstraint('mgt_tx_p%d'%self.port, 'mgt_tx_p', iogroup_index=self.port))
+        cons.append(PortConstraint('mgt_tx_n%d'%self.port, 'mgt_tx_n', iogroup_index=self.port))
+        cons.append(PortConstraint('mgt_rx_p%d'%self.port, 'mgt_rx_p', iogroup_index=self.port))
+        cons.append(PortConstraint('mgt_rx_n%d'%self.port, 'mgt_rx_n', iogroup_index=self.port))
+
+        cons.append(ClockConstraint('ref_clk_p%d'%num, name='ethclk%d'%num, freq=156.25))
+
+        # make the ethernet core clock async relative to whatever the user is using as user_clk
+        # Find the clock of *clk_counter* to determine what source user_clk comes from. This is fragile.
+        
+        cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d -asynchronous -group [get_clocks -include_generated_clocks -of_objects [get_nets user_clk]] -group [get_clocks -include_generated_clocks ethclk%d]'%(num,num)))
+        cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d -asynchronous -group [get_clocks -include_generated_clocks -of_objects [get_nets sys_clk]] -group [get_clocks -include_generated_clocks ethclk%d]'%(num,num)))
         return cons

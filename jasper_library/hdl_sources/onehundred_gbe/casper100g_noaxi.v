@@ -195,9 +195,6 @@ module casper100g_noaxi#(
     end
 
     casper100gethernetblock_no_cpu #(
-        .FABRIC_MAC(FABRIC_MAC),
-        .FABRIC_IP(FABRIC_IP),
-        .FABRIC_PORT(FABRIC_PORT),
         .G_INCLUDE_ICAP(1'b0),
         .G_AXI_DATA_WIDTH(512),
         .G_NUM_STREAMING_DATA_SERVERS(1),

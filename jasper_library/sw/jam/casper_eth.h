@@ -6,6 +6,8 @@
 
 #include "lwip/netif.h"
 
+#define MAC_ADDRESS_REGNAME "microblaze_mac"
+
 // Useful constants for working with CASPER Ethernet devices via an
 // AXI/Wishbone gateway.  The AXI (e.g. Microblaze) side is little endian and
 // the WB side is big endian.  The AXI/WB gateway does a sensible job of
