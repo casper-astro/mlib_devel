@@ -25,8 +25,7 @@ class sys_block(YellowBlock):
             inst.add_port('en', '1')           
             inst.add_port('we',  signal='sys_block_sys_clkcounter_we', dir='out', width=1)
             inst.add_port('count_out', signal='sys_block_sys_clkcounter_in', dir='out', width=32)
-            top.add_axi4lite_interface('sys_block', mode='r', nbytes=32, memory_map=self.memory_map, typecode=self.typecode)                    
-
+            top.add_axi4lite_interface('sys', mode='r', nbytes=32, memory_map=self.memory_map, typecode=self.typecode)                    
         else:
             inst = top.get_instance('sys_block', 'sys_block_inst')
             inst.add_parameter('BOARD_ID', self.board_id)
