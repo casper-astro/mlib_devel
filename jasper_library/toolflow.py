@@ -543,8 +543,10 @@ class Toolflow(object):
             s += format_str.format(core.regname, modemap[core.mode],
                                    core.base_addr, core.nbytes)
             # add aliases if the WB Devices have them
+            # Add the core's register name as a prefix, because memory map
+            # names need not be unique!
             for reg in core.memory_map:
-                s += format_str.format(reg.name, modemap[reg.mode],
+                s += format_str.format(core.regname + '_' + reg.name, modemap[reg.mode],
                                        core.base_addr + reg.offset, reg.nbytes)
             # s += '%s\t%d\t%x\t%x\n'%(core.regname, modemap[core.mode],
             #                          core.base_addr, core.nbytes)
