@@ -5,6 +5,7 @@ from .yellow_block_typecodes import *
 from os.path import join
 from memory import Register
 
+
 class onehundred_gbe(YellowBlock):
     @staticmethod
     def factory(blk, plat, hdl_root=None):
@@ -156,6 +157,13 @@ class onehundredgbe_usplus(onehundred_gbe):
             raise
         except IndexError:
             self.logger.error("Missing entry for port %d in onehundredgbe `cmac_loc` parameter" % self.port)
+        try:
+            self.gt_group = ethconf["gt_group"][self.port]
+        except KeyError:
+            self.logger.error("Missing onehundredgbe `gt_group` parameter in YAML file")
+            raise
+        except IndexError:
+            self.logger.error("Missing entry for port %d in onehundredgbe `gt_group` parameter" % self.port)
             raise
 
     def modify_top(self, top):
@@ -179,6 +187,7 @@ class onehundredgbe_usplus(onehundred_gbe):
         inst.add_parameter("FABRIC_PORT", "16'h%x" % self.fab_udp)
         inst.add_parameter("FABRIC_GATEWAY", "32'h%x" % self.fab_gate)
         inst.add_parameter("FABRIC_ENABLE_ON_START", "1'b%d" % int(self.fab_en))
+        inst.add_parameter("INSTANCE_ID", self.inst_id)
         
         inst.add_port('RefClk100MHz', 'sys_clk') # sys_clk is decreed to be 100 MHz.
         inst.add_port('RefClkLocked', '~sys_rst', parent_sig=False)
@@ -268,10 +277,10 @@ class onehundredgbe_usplus(onehundred_gbe):
         consts = []
         consts += [PortConstraint(self.portbase+'_refclk_p', 'qsfp_mgt_ref_clk_p', iogroup_index=self.port)]
         consts += [PortConstraint(self.portbase+'_refclk_n', 'qsfp_mgt_ref_clk_n', iogroup_index=self.port)]
-        consts += [PortConstraint(self.portbase+'_qsfp_mgt_rx_p', 'qsfp_mgt_rx_p', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
-        consts += [PortConstraint(self.portbase+'_qsfp_mgt_rx_n', 'qsfp_mgt_rx_n', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
-        consts += [PortConstraint(self.portbase+'_qsfp_mgt_tx_p', 'qsfp_mgt_tx_p', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
-        consts += [PortConstraint(self.portbase+'_qsfp_mgt_tx_n', 'qsfp_mgt_tx_n', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
+        #consts += [PortConstraint(self.portbase+'_qsfp_mgt_rx_p', 'qsfp_mgt_rx_p', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
+        #consts += [PortConstraint(self.portbase+'_qsfp_mgt_rx_n', 'qsfp_mgt_rx_n', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
+        #consts += [PortConstraint(self.portbase+'_qsfp_mgt_tx_p', 'qsfp_mgt_tx_p', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
+        #consts += [PortConstraint(self.portbase+'_qsfp_mgt_tx_n', 'qsfp_mgt_tx_n', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
 
         if self.platform.name in ['vcu118']:
             consts += [PortConstraint(self.portbase+'_qsfp_modsell_ls', 'qsfp_modsell_ls', iogroup_index=self.port)]
@@ -293,12 +302,15 @@ class onehundredgbe_usplus(onehundred_gbe):
 
     def gen_tcl_cmds(self):
         tcl_cmds = {}
-        # Override the IP reference clock frequency
-        tcl_cmds['pre_synth'] = ['set_property -dict [list CONFIG.GT_REF_CLK_FREQ {%s}] [get_ips EthMACPHY100GQSFP4x]' % self.refclk_freq_str]
+        tcl_cmds['pre_synth'] = []
+        # Override the IP settings
+        tcl_cmds['pre_synth'] += ['copy_ip -name EthMACPHY100GQSFP4x%d [get_ips EthMACPHY100GQSFP4x]' % self.inst_id]
+        tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.CMAC_CORE_SELECT {%s} CONFIG.GT_REF_CLK_FREQ {%s} CONFIG.GT_GROUP_SELECT {%s} CONFIG.RX_GT_BUFFER {1} CONFIG.GT_RX_BUFFER_BYPASS {0}] [get_ips EthMACPHY100GQSFP4x%d]' % (self.cmac_loc, self.refclk_freq_str, self.gt_group, self.inst_id)]
+        #tcl_cmds['pre_synth'] = ['set_property -dict [list CONFIG.GT_GROUP_SELECT {%s} CONFIG.LANE1_GT_LOC {%s} CONFIG.LANE2_GT_LOC {%s} CONFIG.LANE3_GT_LOC {%s} CONFIG.LANE4_GT_LOC {%s} CONFIG.RX_GT_BUFFER {1} CONFIG.GT_RX_BUFFER_BYPASS {0}] [get_ips EthMACPHY100GQSFP4x%d' % (self.gt_group, gts[0, gts[1], gts[2], gts[3], self.inst_id)]
 
-        # The LOCs seem to get overriden by the user constraints above, but we need to manually unplace the CMAC blocks
-        # Unplace all CMACs post_synth, then place all pre_impl, to avoid situations where we try to place on a site already being used
-        tcl_cmds['pre_impl'] = []
-        tcl_cmds['pre_impl'] += ['unplace_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s_inst/*" }]' % self.fullname]
-        tcl_cmds['pre_impl'] += ['place_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s_inst/*" }] %s' % (self.fullname, self.cmac_loc)]
+        ## The LOCs seem to get overriden by the user constraints above, but we need to manually unplace the CMAC blocks
+        ## Unplace all CMACs post_synth, then place all pre_impl, to avoid situations where we try to place on a site already being used
+        #tcl_cmds['pre_impl'] = []
+        #tcl_cmds['pre_impl'] += ['unplace_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s_inst/*" }]' % self.fullname]
+        #tcl_cmds['pre_impl'] += ['place_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s_inst/*" }] %s' % (self.fullname, self.cmac_loc)]
         return tcl_cmds

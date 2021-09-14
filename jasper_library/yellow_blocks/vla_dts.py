@@ -92,8 +92,8 @@ class vla_dts(YellowBlock):
             cons.append(PortConstraint(self.portbase+'_mgtclk_n', pinname+'_n', port_index=i, iogroup_index=pinindex))
             clockconst = ClockConstraint(self.portbase+'_mgtclk_p[%d]'%i, '%s_dts_clk%d' % (self.fullname, i), freq=float(self.dtsconf['reffreq']))
             cons.append(clockconst)
-            cons.append(RawConstraint('set_clock_groups -name async_sysclk_dts%d -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks -of_objects [get_nets sys_clk]]' % (i, clockconst.name)))
-            cons.append(RawConstraint('set_clock_groups -name async_axiclk_dts%d -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks -of_objects [get_nets axil_clk]]' % (i, clockconst.name)))
+            cons.append(RawConstraint('set_clock_groups -name async_sysclk_dts_%s -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks -of_objects [get_nets sys_clk]]' % (self.unique_name, clockconst.name)))
+            cons.append(RawConstraint('set_clock_groups -name async_axiclk_dts_%s -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks -of_objects [get_nets axil_clk]]' % (self.unique_name, clockconst.name)))
 
         #cons.append(PortConstraint(self.portbase+'_modprsl', 'dts_qsfp_modprsl', port_index=range(3), iogroup_index=range(3)))
 
@@ -108,6 +108,8 @@ class vla_dts(YellowBlock):
         config = {
             'channel_enable': ' '.join(pc['channel']),
             'tx_line_rate': self.dtsconf['linerate'],
+            'tx_qpll_fracn_numerator': self.dtsconf['qpll_numerator'],
+            'rx_qpll_fracn_numerator': self.dtsconf['qpll_numerator'],
             'tx_refclk_frequency': self.dtsconf['reffreq'],
             'tx_user_data_width': '160',
             'tx_int_data_width': '80',
