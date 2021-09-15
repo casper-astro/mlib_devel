@@ -33,7 +33,7 @@ module wb_register_ppc2simulink #(
 
   reg register_readyR;
   reg register_readyRR;
-  reg [31:0] user_data_out_reg;
+  reg [31:0] user_data_out_reg = INIT_VAL;
 
   assign user_data_out = user_data_out_reg;
 
