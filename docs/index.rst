@@ -114,6 +114,7 @@ Documentation
 ---------------
 
 * `CASPER Tutorials <http://casper-tutorials.readthedocs.io/en/latest/>`__
+* :doc:`AXI Documentation <axi4lite_documentation>`
 * :doc:`Block Documentation <blockdocumentation>`
 * :doc:`Toolflow Documentation <jasper_documentation>`
 * :doc:`Toolflow Sourcecode <src/jasper_library_modules/modules>`
@@ -125,6 +126,7 @@ Documentation
     :caption: Documentation
 
     CASPER Tutorials <http://casper-tutorials.readthedocs.io/en/latest/>
+    axi4lite_documentation
     blockdocumentation
     jasper_documentation
     Toolflow Sourcecode <src/jasper_library_modules/modules>
