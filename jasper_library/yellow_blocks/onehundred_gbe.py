@@ -216,7 +216,9 @@ class onehundredgbe_usplus(onehundred_gbe):
         else:
             inst.add_port('qsfp_modsell_ls', '') #self.portbase+'_qsfp_modsell_ls')
             inst.add_port('qsfp_resetl_ls',  '') #self.portbase+'_qsfp_resetl_ls')
-            inst.add_port('qsfp_modprsl_ls', self.portbase+'_qsfp_modprsl_ls', dir='in', parent_port=True)
+            # Core doesn't actually use modprs, and it causes annoying PR issues on the ADM-PCIe-9H7. 
+            #inst.add_port('qsfp_modprsl_ls', self.portbase+'_qsfp_modprsl_ls', dir='in', parent_port=True)
+            inst.add_port('qsfp_modprsl_ls', '1\'b0')
             inst.add_port('qsfp_intl_ls',    '1\'b1') #self.portbase+'_qsfp_intl_ls')
             inst.add_port('qsfp_lpmode_ls',  '') #self.portbase+'_qsfp_lpmode_ls')
 
@@ -288,7 +290,9 @@ class onehundredgbe_usplus(onehundred_gbe):
             consts += [PortConstraint(self.portbase+'_qsfp_modprsl_ls', 'qsfp_modprsl_ls', iogroup_index=self.port)]
             consts += [PortConstraint(self.portbase+'_qsfp_lpmode_ls',  'qsfp_lpmode_ls', iogroup_index=self.port)]
         else:
-            consts += [PortConstraint(self.portbase+'_qsfp_modprsl_ls', 'qsfp_modprsl_ls', iogroup_index=self.port)]
+            # Core doesn't actually use modprs, and it causes annoying PR issues on the ADM-PCIe-9H7. 
+            #consts += [PortConstraint(self.portbase+'_qsfp_modprsl_ls', 'qsfp_modprsl_ls', iogroup_index=self.port)]
+            pass
 
         clkname = self.portbase+'_refclk_p' # defined by IP
         #self.myclk = ClockConstraint(self.portbase+'_refclk_p', freq=self.refclk_freq)
@@ -306,6 +310,11 @@ class onehundredgbe_usplus(onehundred_gbe):
         # Override the IP settings
         tcl_cmds['pre_synth'] += ['copy_ip -name EthMACPHY100GQSFP4x%d [get_ips EthMACPHY100GQSFP4x]' % self.inst_id]
         tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.CMAC_CORE_SELECT {%s} CONFIG.GT_REF_CLK_FREQ {%s} CONFIG.GT_GROUP_SELECT {%s} CONFIG.RX_GT_BUFFER {1} CONFIG.GT_RX_BUFFER_BYPASS {0}] [get_ips EthMACPHY100GQSFP4x%d]' % (self.cmac_loc, self.refclk_freq_str, self.gt_group, self.inst_id)]
+        try:
+            if self.platform.use_pr:
+                tcl_cmds['pre_synth'] += ['move_files -of_objects [get_reconfig_modules user_top-toolflow] [get_files EthMACPHY100GQSFP4x%d.xci]' % self.inst_id]
+        except AttributeError:
+            pass
         #tcl_cmds['pre_synth'] = ['set_property -dict [list CONFIG.GT_GROUP_SELECT {%s} CONFIG.LANE1_GT_LOC {%s} CONFIG.LANE2_GT_LOC {%s} CONFIG.LANE3_GT_LOC {%s} CONFIG.LANE4_GT_LOC {%s} CONFIG.RX_GT_BUFFER {1} CONFIG.GT_RX_BUFFER_BYPASS {0}] [get_ips EthMACPHY100GQSFP4x%d' % (self.gt_group, gts[0, gts[1], gts[2], gts[3], self.inst_id)]
 
         ## The LOCs seem to get overriden by the user constraints above, but we need to manually unplace the CMAC blocks
