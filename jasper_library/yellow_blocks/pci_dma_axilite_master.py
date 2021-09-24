@@ -211,6 +211,17 @@ class pci_dma_axilite_master(YellowBlock):
         top.add_port('M_AXI_wready', 'M_AXI_wready', parent_sig=False, dir='out')
         top.add_port('M_AXI_wstrb', 'M_AXI_wstrb', width=4, parent_sig=False, dir='in')
         top.add_port('M_AXI_wvalid', 'M_AXI_wvalid', parent_sig=False, dir='in')
+        if self.enable_wishbone:
+            top.add_port('wbm_cyc_o', 'wbm_cyc_o', parent_sig=False, dir='in')
+            top.add_port('wbm_stb_o', 'wbm_stb_o', parent_sig=False, dir='in')
+            top.add_port('wbm_we_o ', 'wbm_we_o ', parent_sig=False, dir='in')
+            top.add_port('wbm_sel_o', 'wbm_sel_o', parent_sig=False, dir='in', width=4)
+            top.add_port('wbm_adr_o', 'wbm_adr_o', parent_sig=False, dir='in', width=32)
+            top.add_port('wbm_dat_o', 'wbm_dat_o', parent_sig=False, dir='in', width=32)
+            top.add_port('wbm_dat_i', 'wbm_dat_i', parent_sig=False, dir='out', width=32)
+            top.add_port('wbm_ack_i', 'wbm_ack_i', parent_sig=False, dir='out')
+            top.add_port('wb_clk_i', 'wb_clk_i', parent_sig=False, dir='in')
+            top.add_port('wb_rst_i', 'wb_rst_i', parent_sig=False, dir='in')
         top.instantiate_child_ports()
         # With PR, we're not going to be using this module as top. Instead, let's
         # rename is `user_top` which will be instantiated within a high-level static top-level.
