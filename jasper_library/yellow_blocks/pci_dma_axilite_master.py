@@ -151,8 +151,8 @@ class pci_dma_axilite_master(YellowBlock):
             return cons
         cons.append(ClockGroupConstraint('-include_generated_clocks sys_clk_p_CLK', '-include_generated_clocks -of_objects [get_nets axil_clk]', 'asynchronous'))
         cons.append(ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets user_clk]', '-include_generated_clocks -of_objects [get_nets axil_clk]', 'asynchronous'))
-        cons.append(PortConstraint(self.fullname+'_rx_p', 'pcie_gty_rx_p', port_index=[0], iogroup_index=[0]))
-        cons.append(PortConstraint(self.fullname+'_tx_p', 'pcie_gty_tx_p', port_index=[0], iogroup_index=[0]))
+        cons.append(PortConstraint(self.fullname+'_rx_p', 'pcie_gty_rx_p', port_index=range(1), iogroup_index=range(1)))
+        cons.append(PortConstraint(self.fullname+'_tx_p', 'pcie_gty_tx_p', port_index=range(1), iogroup_index=range(1)))
         cons.append(PortConstraint('pcie_rst_n', 'pcie_rst_n'))
         cons.append(PortConstraint('pcie_refclk_p', 'pcie_refclk_p'))
         pcie_clkconst = ClockConstraint('pcie_refclk_p', freq=100.0)

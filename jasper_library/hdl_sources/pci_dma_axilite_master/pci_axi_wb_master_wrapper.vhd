@@ -43,10 +43,10 @@ entity pci_axi_wb_master_wrapper is
     m_axil_wready : in STD_LOGIC;
     m_axil_wstrb : out STD_LOGIC_VECTOR ( 3 downto 0 );
     m_axil_wvalid : out STD_LOGIC;
-    pci_exp_rxn : in STD_LOGIC_VECTOR ( 0 to 0 );
-    pci_exp_rxp : in STD_LOGIC_VECTOR ( 0 to 0 );
-    pci_exp_txn : out STD_LOGIC_VECTOR ( 0 to 0 );
-    pci_exp_txp : out STD_LOGIC_VECTOR ( 0 to 0 );
+    pci_exp_rxn : in STD_LOGIC_VECTOR ( 0 downto 0 );
+    pci_exp_rxp : in STD_LOGIC_VECTOR ( 0 downto 0 );
+    pci_exp_txn : out STD_LOGIC_VECTOR ( 0 downto 0 );
+    pci_exp_txp : out STD_LOGIC_VECTOR ( 0 downto 0 );
     sys_clk : in STD_LOGIC;
     sys_clk_gt : in STD_LOGIC;
     sys_rst_n : in STD_LOGIC;
@@ -68,10 +68,10 @@ architecture STRUCTURE of pci_axi_wb_master_wrapper is
     WE_O : out STD_LOGIC;
     axi_aclk : out STD_LOGIC;
     axi_aresetn : out STD_LOGIC;
-    pci_exp_rxn : in STD_LOGIC_VECTOR ( 0 to 0 );
-    pci_exp_rxp : in STD_LOGIC_VECTOR ( 0 to 0 );
-    pci_exp_txn : out STD_LOGIC_VECTOR ( 0 to 0 );
-    pci_exp_txp : out STD_LOGIC_VECTOR ( 0 to 0 );
+    pci_exp_rxn : in STD_LOGIC_VECTOR ( 0 downto 0 );
+    pci_exp_rxp : in STD_LOGIC_VECTOR ( 0 downto 0 );
+    pci_exp_txn : out STD_LOGIC_VECTOR ( 0 downto 0 );
+    pci_exp_txp : out STD_LOGIC_VECTOR ( 0 downto 0 );
     sys_clk : in STD_LOGIC;
     sys_clk_gt : in STD_LOGIC;
     sys_rst_n : in STD_LOGIC;
@@ -130,10 +130,10 @@ pci_axi_wb_master_i: component pci_axi_wb_master
       m_axil_wready => m_axil_wready,
       m_axil_wstrb(3 downto 0) => m_axil_wstrb(3 downto 0),
       m_axil_wvalid => m_axil_wvalid,
-      pci_exp_rxn(0) => pci_exp_rxn(0),
-      pci_exp_rxp(0) => pci_exp_rxp(0),
-      pci_exp_txn(0) => pci_exp_txn(0),
-      pci_exp_txp(0) => pci_exp_txp(0),
+      pci_exp_rxn(0 downto 0) => pci_exp_rxn(0 downto 0),
+      pci_exp_rxp(0 downto 0) => pci_exp_rxp(0 downto 0),
+      pci_exp_txn(0 downto 0) => pci_exp_txn(0 downto 0),
+      pci_exp_txp(0 downto 0) => pci_exp_txp(0 downto 0),
       sys_clk => sys_clk,
       sys_clk_gt => sys_clk_gt,
       sys_rst_n => sys_rst_n,
