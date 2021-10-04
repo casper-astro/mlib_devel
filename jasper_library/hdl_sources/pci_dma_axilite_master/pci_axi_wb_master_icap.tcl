@@ -127,6 +127,7 @@ peralex.com:user:axi_slave_wishbone_classic_master:1.0\
 xilinx.com:ip:smartconnect:1.0\
 xilinx.com:ip:axis_data_fifo:2.0\
 xilinx.com:ip:axis_dwidth_converter:1.1\
+xilinx.com:ip:util_vector_logic:2.0\
 xilinx.com:ip:xdma:4.1\
 "
 
@@ -220,7 +221,8 @@ proc create_root_design { parentCell } {
    CONFIG.ASSOCIATED_BUSIF {m_axil} \
    CONFIG.FREQ_HZ {62500000} \
  ] $axi_aclk
-  set axi_aresetn [ create_bd_port -dir O -type rst axi_aresetn ]
+  set axi_aresetn [ create_bd_port -dir O -from 0 -to 0 -type rst axi_aresetn ]
+  set axilite_rst_n [ create_bd_port -dir I -from 0 -to 0 axilite_rst_n ]
   set pci_exp_rxn [ create_bd_port -dir I -from 0 -to 0 pci_exp_rxn ]
   set pci_exp_rxp [ create_bd_port -dir I -from 0 -to 0 pci_exp_rxp ]
   set pci_exp_txn [ create_bd_port -dir O -from 0 -to 0 pci_exp_txn ]
@@ -250,6 +252,14 @@ proc create_root_design { parentCell } {
    CONFIG.M_TDATA_NUM_BYTES {4} \
  ] $axis_dwidth_converter_0
 
+  # Create instance: util_vector_logic_0, and set properties
+  set util_vector_logic_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:util_vector_logic:2.0 util_vector_logic_0 ]
+  set_property -dict [ list \
+   CONFIG.C_OPERATION {and} \
+   CONFIG.C_SIZE {1} \
+   CONFIG.LOGO_FILE {data/sym_andgate.png} \
+ ] $util_vector_logic_0
+
   # Create instance: xdma_0, and set properties
   set xdma_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xdma:4.1 xdma_0 ]
   set_property -dict [ list \
@@ -257,7 +267,7 @@ proc create_root_design { parentCell } {
    CONFIG.PF2_DEVICE_ID_mqdma {9011} \
    CONFIG.PF3_DEVICE_ID_mqdma {9011} \
    CONFIG.axilite_master_en {true} \
-   CONFIG.axilite_master_size {8} \
+   CONFIG.axilite_master_size {64} \
    CONFIG.axisten_freq {62.5} \
    CONFIG.cfg_mgmt_if {false} \
    CONFIG.mode_selection {Advanced} \
@@ -288,6 +298,7 @@ proc create_root_design { parentCell } {
   # Create port connections
   connect_bd_net -net ACK_I_0_1 [get_bd_ports ACK_I] [get_bd_pins axi_slave_wishbone_c_0/ACK_I]
   connect_bd_net -net DAT_I_0_1 [get_bd_ports DAT_I] [get_bd_pins axi_slave_wishbone_c_0/DAT_I]
+  connect_bd_net -net Op1_0_1 [get_bd_ports axilite_rst_n] [get_bd_pins util_vector_logic_0/Op1]
   connect_bd_net -net axi_slave_wishbone_c_0_ADR_O [get_bd_ports ADR_O] [get_bd_pins axi_slave_wishbone_c_0/ADR_O]
   connect_bd_net -net axi_slave_wishbone_c_0_CYC_O [get_bd_ports CYC_O] [get_bd_pins axi_slave_wishbone_c_0/CYC_O]
   connect_bd_net -net axi_slave_wishbone_c_0_DAT_O [get_bd_ports DAT_O] [get_bd_pins axi_slave_wishbone_c_0/DAT_O]
@@ -301,8 +312,9 @@ proc create_root_design { parentCell } {
   connect_bd_net -net sys_clk_gt_1 [get_bd_ports sys_clk_gt] [get_bd_pins xdma_0/sys_clk_gt]
   connect_bd_net -net sys_rst_n_1 [get_bd_ports sys_rst_n] [get_bd_pins xdma_0/sys_rst_n]
   connect_bd_net -net usr_irq_req_1 [get_bd_ports usr_irq_req] [get_bd_pins xdma_0/usr_irq_req]
+  connect_bd_net -net util_vector_logic_0_Res [get_bd_ports axi_aresetn] [get_bd_pins axi_slave_wishbone_c_0/S_AXI_ARESETN] [get_bd_pins axi_smc/aresetn] [get_bd_pins util_vector_logic_0/Res]
   connect_bd_net -net xdma_0_axi_aclk [get_bd_ports axi_aclk] [get_bd_pins axi_slave_wishbone_c_0/S_AXI_ACLK] [get_bd_pins axi_smc/aclk] [get_bd_pins axis_data_fifo_0/s_axis_aclk] [get_bd_pins axis_dwidth_converter_0/aclk] [get_bd_pins xdma_0/axi_aclk]
-  connect_bd_net -net xdma_0_axi_aresetn [get_bd_ports axi_aresetn] [get_bd_pins axi_slave_wishbone_c_0/S_AXI_ARESETN] [get_bd_pins axi_smc/aresetn] [get_bd_pins axis_data_fifo_0/s_axis_aresetn] [get_bd_pins axis_dwidth_converter_0/aresetn] [get_bd_pins xdma_0/axi_aresetn]
+  connect_bd_net -net xdma_0_axi_aresetn [get_bd_pins axis_data_fifo_0/s_axis_aresetn] [get_bd_pins axis_dwidth_converter_0/aresetn] [get_bd_pins util_vector_logic_0/Op2] [get_bd_pins xdma_0/axi_aresetn]
   connect_bd_net -net xdma_0_pci_exp_txn [get_bd_ports pci_exp_txn] [get_bd_pins xdma_0/pci_exp_txn]
   connect_bd_net -net xdma_0_pci_exp_txp [get_bd_ports pci_exp_txp] [get_bd_pins xdma_0/pci_exp_txp]
   connect_bd_net -net xdma_0_user_lnk_up [get_bd_ports user_lnk_up] [get_bd_pins xdma_0/user_lnk_up]

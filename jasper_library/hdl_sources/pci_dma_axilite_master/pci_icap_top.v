@@ -58,7 +58,7 @@ module pci_top(
    output [31:0] wb_adr_o,
    output wb_cyc_o,
    input [31:0] wb_dat_i,
-   input [31:0] wb_dat_o,
+   output [31:0] wb_dat_o,
    output wb_rst_o,
    output [3:0] wb_sel_o,
    output wb_stb_o,
@@ -81,6 +81,7 @@ module pci_top(
   
   wire PRDONE;
   wire PRERROR;
+  reg axi_rst_reg = 1'b0;
   
 
   pci_axi_wb_master pcie_master_inst (
@@ -110,6 +111,7 @@ module pci_top(
     .m_axil_wvalid(m_axil_wvalid),
     .axi_aclk(axi_aclk),
     .axi_aresetn(axi_aresetn),
+    .axilite_rst_n(~axi_rst_reg),
     .pci_exp_rxn(pci_exp_rxn),
     .pci_exp_rxp(pci_exp_rxp),
     .pci_exp_txn(pci_exp_txn),
@@ -144,6 +146,22 @@ module pci_top(
      .I        (M_AXIS_0_tdata),        // 32-bit input: Configuration data input bus
      .RDWRB    (1'b0)     // 1-bit input: Read/Write Select input
   );
+  
+  reg [16:0] axi_rst_ctr;
+  always @(posedge axi_aclk) begin
+    if (!PRDONE) begin
+      axi_rst_ctr <= 17'b0;
+      axi_rst_reg <= 1'b1;
+    end else begin
+      if (axi_rst_ctr == {17{1'b1}}) begin
+        axi_rst_reg <= 1'b0;
+      end else begin
+        axi_rst_reg <= 1'b1;
+        axi_rst_ctr <= axi_rst_ctr + 1'b1;
+      end
+    end
+  end 
+    
 
 
 //  ila_0 ila_i (
