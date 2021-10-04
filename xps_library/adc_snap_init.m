@@ -30,6 +30,7 @@ try
     'adc_resolution', adc_resolution, ...
     'block_name', blk, ...
   };
+  defaults
   if same_state(blk, 'defaults', defaults, varargin{:}), return, end
   clog('adc_snap_init: post same_state','trace');
 

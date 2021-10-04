@@ -1,4 +1,4 @@
-function [] = validate_digital_data(gcb)
+function [] = validate_digital_data(gcb,tile)
 
   msk = Simulink.Mask.get(gcb);
 
@@ -13,12 +13,12 @@ function [] = validate_digital_data(gcb)
   end
 
   for a = adc_slices
-    digital_mode_param = [prefix, '_adc', num2str(a), '_digital_output'];
-    mixer_type_param = [prefix, '_adc', num2str(a), '_mixer_type'];
-    mixer_mode_param = [prefix, '_adc', num2str(a), '_mixer_mode'];
-    nco_freq_param  = [prefix, '_adc', num2str(a), '_nco_freq'];
-    nco_phase_param = [prefix, '_adc', num2str(a), '_nco_phase'];
-    coarse_freq_param = [prefix, '_adc', num2str(a), '_coarse_freq'];
+    digital_mode_param = ['t', num2str(tile), '_', prefix, '_adc', num2str(a), '_digital_output'];
+    mixer_type_param = ['t', num2str(tile), '_', prefix, '_adc', num2str(a), '_mixer_type'];
+    mixer_mode_param = ['t', num2str(tile), '_', prefix, '_adc', num2str(a), '_mixer_mode'];
+    nco_freq_param  = ['t', num2str(tile), '_', prefix, '_adc', num2str(a), '_nco_freq'];
+    nco_phase_param = ['t', num2str(tile), '_', prefix, '_adc', num2str(a), '_nco_phase'];
+    coarse_freq_param = ['t', num2str(tile), '_', prefix, '_adc', num2str(a), '_coarse_freq'];
 
     if chk_param(gcb, digital_mode_param, 'Real')
       msk.getParameter(mixer_type_param).TypeOptions = {'Bypassed'};

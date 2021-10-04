@@ -1,4 +1,4 @@
-function [] = mixertype_callback(gcb)
+function [] = mixertype_callback(gcb, tile)
 
   msk = Simulink.Mask.get(gcb);
 
@@ -12,11 +12,20 @@ function [] = mixertype_callback(gcb)
     prefix = 'DT';
   end
 
-  for a = adc_slices
-    mixer_type_param = [prefix, '_adc', num2str(a), '_mixer_type'];
-    nco_freq_param  = [prefix, '_adc', num2str(a), '_nco_freq'];
-    nco_phase_param = [prefix, '_adc', num2str(a), '_nco_phase'];
-    coarse_freq_param = [prefix, '_adc', num2str(a), '_coarse_freq'];
+  if tile < 228
+    slicename = '_adc';
+    num_slices = adc_slices;
+  else
+    slicename = '_dac';
+    num_slices = 0:3;
+  end
+
+  if ~(strcmp(tile_arch, 'dual') && (tile > 229))
+  for a = num_slices
+    mixer_type_param = ['t', num2str(tile), '_', prefix, slicename, num2str(a), '_mixer_type'];
+    nco_freq_param  = ['t', num2str(tile), '_', prefix, slicename, num2str(a), '_nco_freq'];
+    nco_phase_param = ['t', num2str(tile), '_', prefix, slicename, num2str(a), '_nco_phase'];
+    coarse_freq_param = ['t', num2str(tile), '_', prefix, slicename, num2str(a), '_coarse_freq'];
 
     if chk_param(gcb, mixer_type_param, 'Fine')
       % TODO: need to validate nco freq value, here is probably not the best
@@ -44,5 +53,6 @@ function [] = mixertype_callback(gcb)
       set_param(gcb, coarse_freq_param, '0');
       msk.getParameter(coarse_freq_param).Visible = 'off';
     end
+  end
   end
 end
