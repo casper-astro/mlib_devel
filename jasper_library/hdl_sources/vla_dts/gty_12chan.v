@@ -39,6 +39,7 @@ module gty_12chan #(
     input [11:0] gearbox_slip,
     
     output clkout,
+    output locked,
     output [12*160 - 1 : 0] dout
 
     //output [63:0] status
@@ -171,7 +172,7 @@ module gty_12chan #(
         .gtyrxn_in(rx_n[11:0]),                           // input wire [11 : 0] gtyrxn_in
         .gtyrxp_in(rx_p[11:0]),                           // input wire [11 : 0] gtyrxp_in
         .rxslide_in(bitslip_signal),                      // input wire [11 : 0] rxgearboxslip_in
-        .txpd_in({23{1'b1}}),                             // input wire [23 : 0] txpd_in
+        .txpd_in({24{1'b1}}),                             // input wire [23 : 0] txpd_in
         .gtpowergood_out(status_int_a[12+4-1:4]),         // output wire [11 : 0] gtpowergood_out
         .gtytxn_out(tx_n[11:0]),                          // output wire [11 : 0] gtytxn_out
         .gtytxp_out(tx_p[11:0]),                          // output wire [11 : 0] gtytxp_out
@@ -219,6 +220,8 @@ module gty_12chan #(
       );
     end
   endcase
+
+assign locked = status_int_a[12+36-1:36] == {12{1'b1}};
 
 
 // Bit cludgy

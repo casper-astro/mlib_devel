@@ -53,7 +53,8 @@ module wb_dts_attach(
     // Artificially create a bit error
     output [11:0] induce_error,
     // Other control signals
-    input [11:0] locked
+    input [11:0] def_locked,
+    input [11:0] gt_locked
   );
   
 
@@ -200,7 +201,7 @@ module wb_dts_attach(
                                                                                                                                                              
     if (register_read_requestRR && !register_read_ready) begin                                                                                                                           
       register_read_ready <= 1'b1;                                                                                                                                                       
-      user_data_in_reg <= {8'b0, 4'b0, locked, data_in};
+      user_data_in_reg <= {gt_locked, def_locked, data_in};
     end 
   end
 endmodule
