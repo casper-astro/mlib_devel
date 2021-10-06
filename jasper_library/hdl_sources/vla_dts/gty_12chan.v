@@ -39,7 +39,7 @@ module gty_12chan #(
     input [11:0] gearbox_slip,
     
     output clkout,
-    output locked,
+    output [11:0] locked,
     output [12*160 - 1 : 0] dout
 
     //output [63:0] status
@@ -221,7 +221,7 @@ module gty_12chan #(
     end
   endcase
 
-assign locked = status_int_a[12+36-1:36] == {12{1'b1}};
+assign locked = status_int_a[12+36-1:36];
 
 
 // Bit cludgy
