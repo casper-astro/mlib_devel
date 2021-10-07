@@ -152,15 +152,17 @@ module wb_dts_attach(
           3: mux_control_reg_wb[47:32] <= wb_dat_i[15:0];
           4: is_three_bit_reg_wb <= wb_dat_i[0];
           5: induce_error_reg_wb <= wb_dat_i[11:0];
+          //6: read only
         endcase
       end else begin
         case (wb_adr_i[5:2])
-          0: wb_dat_reg <= user_data_in_reg_wb;
+          0: wb_dat_reg <= control_reg_wb;
           1: wb_dat_reg <= delay_control_reg_wb;
           2: wb_dat_reg <= mux_control_reg_wb[31:0];
           3: wb_dat_reg <= {16'b0, mux_control_reg_wb[47:32]};
           4: wb_dat_reg <= {31'b0, is_three_bit_reg_wb};
           5: wb_dat_reg <= {20'b0, induce_error_reg_wb};
+          6: wb_dat_reg <= user_data_in_reg_wb;
         endcase
       end
     end
