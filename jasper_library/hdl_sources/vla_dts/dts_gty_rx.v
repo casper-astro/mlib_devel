@@ -303,7 +303,8 @@ wb_dts_attach wb_dts_attach_inst(
                         def_data_out_multi[8*8-1:7*8] |
                         def_data_out_multi[9*8-1:8*8] |
                         def_data_out_multi[10*8-1:9*8] |
-                        def_data_out_multi[11*8-1:10*8];
+                        def_data_out_multi[11*8-1:10*8] |
+                        def_data_out_multi[12*8-1:11*8] |;
 
   wire [N_INPUTS*OUTPUT_DWIDTH-1:0] reorder_frame_out;
   wire [N_INPUTS-1:0] reorder_one_sec_out;
