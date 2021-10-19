@@ -1,4 +1,5 @@
 function [] = update_rfdc_clocking(gcb,tile)
+
   msk = Simulink.Mask.get(gcb);
 
   fs_mask = msk.getParameter(['t', num2str(tile), '_', 'sample_rate']).Value;

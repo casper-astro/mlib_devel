@@ -113,12 +113,13 @@ class rfdc(YellowBlock):
 
   class  dac_slice(object):
     def __init__(self, gen):
+        ### WARNING: These value maps haven't actually been verified
         self.analog_output_value_map = { 'Real' : 0, 'I/Q'  : 1 }
 
         self.mixer_mode_value_map = {
           'Real -> Real' : 2,
           'I/Q -> I/Q'   : 1,
-          'Real -> I/Q'  : 0
+          'I/Q -> Real'  : 0
         }
 
         self.mixer_type_value_map = {
@@ -150,25 +151,26 @@ class rfdc(YellowBlock):
           '40x' : 40
         }
 
-        self.coarse_freq_value_map = {'Fs/2' : 0, 'Fs/4' : 1, '-Fs/4' : 2, 0 : 3}
-        self.nyquist_zone_value_map = { 'Zone 1' : 0, 'Zone 2' : 1}
-        self.decode_mode_value_map = { 'SNR Optimized' : 0, 'Linearity Optimized': 1}
+        self.coarse_freq_value_map  = { 'Fs/2' : 0, 'Fs/4' : 1, '-Fs/4' : 2, 0 : 3 }
+        self.nyquist_zone_value_map = { 'Zone 1' : 0, 'Zone 2' : 1 }
+        self.decode_mode_value_map  = { 'SNR Optimized' : 0, 'Linearity Optimized': 1 }
 
   def initialize(self):
     # IP generation and configuration parameters
     self.tile_arch     = None
     self.num_adc_slice = None
-    self.num_dac_slice = 4 # TODO: should proably determine this as `num_adc_slice` does
+    self.num_dac_slice = 4
     self.enabled_adc_tiles = []
     self.enabled_dac_tiles = []
     self.enabled_adcs  = []
     self.enabled_dacs  = []
-    self.tiles         = []
-    # current support configures all adcs to be the same in each enabled tiles. Future support
-    # would extend each tile to have its own set of adc objects allowing for different cross
-    # tile configuration
-    self.adcs          = []
-    self.dacs          = []
+    # the enabled adcs/dacs lits are indicies XY (e.g., '00', '02' representing the tile and slice within the tile
+    # and are used to pull the corresponding `adc/dac_slice` from the list during yb configuration. Perhaps future work would
+    # fully encapsulate the object oriented approach where each tile object was given a type and had its corresponding slices
+    # list as part of the object
+    self.tiles         = [] # tile() objects
+    self.adcs          = [] # adc_slice() objects
+    self.dacs          = [] # dac_slice() objects
 
     self.typecode = TYPECODE_RFDC
 
@@ -192,9 +194,11 @@ class rfdc(YellowBlock):
     if   designator[1] == '8':
       self.tile_arch = 'DT'
       self.num_adc_slice = 2
+      lastTile = 230
     elif designator[1] == '9':
       self.tile_arch = 'QT'
       self.num_adc_slice = 4
+      lastTile = 232
 
     # build tile and adc slice objects for IP instantiation and configuration
     # determine enabled adc tiles
@@ -204,7 +208,7 @@ class rfdc(YellowBlock):
         self.enabled_adc_tiles.append(tidx-224)
 
     # determine enabled dac tiles
-    for tidx in range(228,232):
+    for tidx in range(228,lastTile):
       if self.blk['Tile{:d}_enable'.format(tidx)]:
         print("adding Tile {:d} to enabled DAC tiles".format(tidx))
         self.enabled_dac_tiles.append(tidx-228)
@@ -238,15 +242,15 @@ class rfdc(YellowBlock):
         print("platform clk rate={:.3f}, rfdc clk={:.3f}".format(self.platform.user_clk_rate, t.axi_stream_clk))
         if (t.axi_stream_clk != self.platform.user_clk_rate):
           s = '\n\n'
-          s += 'ERROR: expected rfdc core axi stream clock rate {:.3f} MHz does not match platform selected clock\n'
+          s += 'ERROR: expected rfdc core axi stream clock rate {:.3f} MHz on tile {:d} does not match platform selected clock\n'
           s += 'rate of {:.3f} MHz.\n'
-          s = s.format(t.axi_stream_clk, self.platform.user_clk_rate)
+          s = s.format(t.axi_stream_clk, tidx, self.platform.user_clk_rate)
           self.throw_error(s)
 
       self.tiles.append(t)
 
     # build dac tile objects
-    for tidx in range(228, 232):
+    for tidx in range(228, lastTile):
       t = self.tile()
       t.enable = (tidx-228 in self.enabled_dac_tiles)
 
@@ -257,8 +261,6 @@ class rfdc(YellowBlock):
 
       t.has_clk_src = self.blk['t{:d}_has_dac_clk'.format(tidx)]
       t.clk_src     = self.blk['t{:d}_dac_clk_src'.format(tidx)] - 224
-      # t.has_clk_src = self.rfdc_conf['tile{:d}'.format(tidx)]['has_dac_clk']
-      # t.clk_src     = self.rfdc_conf['tile{:d}'.format(tidx)]['dac_clk_src']
 
       # TODO: enable all tile PLLs and forward low freq reference or enable PLL for source tile
       # and distribute the output of the PLL
@@ -266,19 +268,20 @@ class rfdc(YellowBlock):
       # Right now this implementation would be compatible and treat both gen1+2 and gen3 devices
       # with similar capability. That the reference clock is input to the tile RF-PLL and out as
       # sample clk
-      if (t.clk_src == tidx-224):   ####### need to check this # TODO: what are we checking?
+      if (t.clk_src == tidx-224):
         t.clk_dist = 1 # distribute: input reference clock
       else:
         t.clk_dist = 0 # distribute: off
 
       # validate platform user clk against expected core axi stream clk
-      print("platform clk rate={:.3f}, rfdc clk={:.3f}".format(self.platform.user_clk_rate, t.axi_stream_clk))
-      if (t.axi_stream_clk != self.platform.user_clk_rate):
-        s = '\n\n'
-        s += 'ERROR: expected rfdc core axi stream clock rate {:.3f} MHz does not match platform selected clock\n'
-        s += 'rate of {:.3f} MHz.\n'
-        s = s.format(t.axi_stream_clk, self.platform.user_clk_rate)
-        self.throw_error(s)
+      if self.blk['Tile{:d}_enable'.format(tidx)]:
+        print("platform clk rate={:.3f}, rfdc clk={:.3f}".format(self.platform.user_clk_rate, t.axi_stream_clk))
+        if (t.axi_stream_clk != self.platform.user_clk_rate):
+          s = '\n\n'
+          s += 'ERROR: expected rfdc core axi stream clock rate {:.3f} MHz on tile {:d} does not match platform selected clock\n'
+          s += 'rate of {:.3f} MHz.\n'
+          s = s.format(t.axi_stream_clk, tidx, self.platform.user_clk_rate)
+          self.throw_error(s)
 
       self.tiles.append(t)
 
@@ -302,7 +305,7 @@ class rfdc(YellowBlock):
         for adc_attr, _ in iteritems(self.adc_attr_map):
           attr_key = adc_mask_fmt.format(tidx, self.tile_arch, aidx, adc_attr)
           if attr_key in self.blk:
-            setattr(a, adc_attr, self.blk[attr_key])      ####################### pulling from MATLAB simulink mask
+            setattr(a, adc_attr, self.blk[attr_key])
 
         self.adcs.append(a)
 
@@ -313,7 +316,7 @@ class rfdc(YellowBlock):
           print("adding Slice {:d} to DAC tile {:d}".format(didx, tidx+228))
           self.enabled_dacs.append(str(tidx)+str(didx))
 
-    for tidx in range(228,232):
+    for tidx in range(228,lastTile):
       # build dac objects
       dac_mask_fmt = 't{:d}_{:s}_dac{:d}_{:s}'
       for didx in range(0, self.num_dac_slice):
@@ -326,7 +329,7 @@ class rfdc(YellowBlock):
         self.dacs.append(d)
 
     """
-    mcb: how do we now handle clock distribution validation? Is it in the mask now?
+    how do we now handle clock distribution validation? should/will it be in the mask now?
     """
     # # validate tile clocking distribution
     # if (False in [(t.clk_src in self.enabled_adc_tiles) for t in self.tiles]):
@@ -352,6 +355,7 @@ class rfdc(YellowBlock):
     for a in self.enabled_adcs:
       # TODO: should these be renamed to something like "rfdc_clkX", since "adc_clk" is a dominant name else where in the toolflow
       self.provides.append('adc_clk{:s}'.format(a[0]))
+
 
   def modify_top(self, top):
     # instantiate rfdc
@@ -423,7 +427,9 @@ class rfdc(YellowBlock):
       # else:
       #   mts_inst.add_port('user_sysref_dac', '')
 
-    # generate tile/slice interface ports
+    """
+    adc tile/slice interfaces
+    """
     for tidx in self.enabled_adc_tiles:
       # maxis clk, reset and output clock (when using mts, this output clock is not typically used)
       bd_inst.add_port('m{:d}_axis_aclk'.format(tidx), 'm{:d}_axis_aclk'.format(tidx))       #self.fullname+'_m0_axis_aclk'
@@ -435,66 +441,55 @@ class rfdc(YellowBlock):
 
       #Tile source information from simulink
       if (self.blk['t{:d}_adc_clk_src'.format(tidx+224)]-224 == tidx):
-      #if (self.tilestidx].clk_src == tidx):
         bd_inst.add_port('adc{:d}_clk_p'.format(tidx), 'adc{:d}_clk_p'.format(tidx), dir='in', parent_port=True)
         bd_inst.add_port('adc{:d}_clk_n'.format(tidx), 'adc{:d}_clk_n'.format(tidx), dir='in', parent_port=True)
 
       for aidx in self.enabled_adcs:
-        # TODO: is this the best way to allow for different tile configurations?
-        #need this becuase of enabled_adcs stores ALL enabled slices across all ADC tiles, we only want the adcs associated with this tile
-        if int(aidx[0]) == tidx:
-          # TODO: I vaguely remember we are OK here, but do need to make sure that between QT and DT architectures that the fact that
-          # streams are split out on a seperate interface doesn't mess with the actual data width and needing to multiply by two anywhere...
+        if int(aidx[0]) == tidx: # need this becuase of enabled_adcs stores ALL enabled slices across all adc tiles, we only want the adcs associated with this tile
           n_aidx = int(aidx[1])
 
-          print("adding vin and axis ports for ADC Tile {:d} Slice {:d}".format(tidx, n_aidx))
-          a = self.adcs[n_aidx+4*int(aidx[0])]
-          data_width = 16*a.sample_per_cycle
           if self.tile_arch == 'QT':
+            a = self.adcs[n_aidx+4*int(aidx[0])] # 4 adc slices for each DT tile
+            data_width = 16*a.sample_per_cycle
             # vin ports
             bd_inst.add_port('vin{:d}{:d}_p'.format(tidx, n_aidx), 'vin{:d}{:d}_p'.format(tidx, n_aidx),  dir='in', parent_port=True)
             bd_inst.add_port('vin{:d}{:d}_n'.format(tidx, n_aidx), 'vin{:d}{:d}_n'.format(tidx, n_aidx),  dir='in', parent_port=True)
             # maxis data ports
             bd_inst.add_port('m{:d}{:d}_axis_tdata'.format(tidx, n_aidx), '{:s}_m{:d}{:d}_axis_tdata'.format(self.fullname, tidx, n_aidx), width=data_width)
             bd_inst.add_port('m{:d}{:d}_axis_tready'.format(tidx, n_aidx), "1'b1",)
-            # TODO: tvalid currently not exposed in simulink rfdc yellow block, can be extended
             bd_inst.add_port('m{:d}{:d}_axis_tvalid'.format(tidx, n_aidx), 'm{:d}{:d}_axis_tvalid'.format(tidx, n_aidx))
           else: # Dual tile architecture
+            a = self.adcs[n_aidx+2*int(aidx[0])] # 2 adc slices for each DT tile
+            data_width = 16*a.sample_per_cycle
             # vin ports
-            dt_aidx = n_aidx # TODO: why the temporary variable? Is it still needed?
-            bd_inst.add_port('vin{:d}_{:d}{:d}_p'.format(tidx, 2*dt_aidx, 2*dt_aidx+1), 'vin{:d}_{:d}{:d}_p'.format(tidx, 2*dt_aidx, 2*dt_aidx+1), dir='in', parent_port=True)
-            bd_inst.add_port('vin{:d}_{:d}{:d}_n'.format(tidx, 2*dt_aidx, 2*dt_aidx+1), 'vin{:d}_{:d}{:d}_n'.format(tidx, 2*dt_aidx, 2*dt_aidx+1), dir='in', parent_port=True)
+            bd_inst.add_port('vin{:d}_{:d}{:d}_p'.format(tidx, 2*n_aidx, 2*n_aidx+1), 'vin{:d}_{:d}{:d}_p'.format(tidx, 2*n_aidx, 2*n_aidx+1), dir='in', parent_port=True)
+            bd_inst.add_port('vin{:d}_{:d}{:d}_n'.format(tidx, 2*n_aidx, 2*n_aidx+1), 'vin{:d}_{:d}{:d}_n'.format(tidx, 2*n_aidx, 2*n_aidx+1), dir='in', parent_port=True)
             # maxis ports-dual architecture rfsocs the I/Q streams are output on seperate maxis interfaces needing different rules depending on the configuration
             if a.digital_output == 'Real':
-              bd_inst.add_port('m{:d}{:d}_axis_tdata'.format(tidx, 2*dt_aidx), '{:s}_m{:d}{:d}_axis_tdata'.format(self.fullname, tidx, 2*dt_aidx), width=data_width)
-              bd_inst.add_port('m{:d}{:d}_axis_tready'.format(tidx, 2*dt_aidx), "1'b1",)
-              # TODO: tvalid currently not exposed in simulink rfdc yellow block, can be extended
-              bd_inst.add_port('m{:d}{:d}_axis_tvalid'.format(tidx, 2*dt_aidx), 'm{:d}{:d}_axis_tvalid'.format(tidx, dt_aidx))
+              bd_inst.add_port('m{:d}{:d}_axis_tdata'.format(tidx, 2*n_aidx), '{:s}_m{:d}{:d}_axis_tdata'.format(self.fullname, tidx, 2*n_aidx), width=data_width)
+              bd_inst.add_port('m{:d}{:d}_axis_tready'.format(tidx, 2*n_aidx), "1'b1",)
+              bd_inst.add_port('m{:d}{:d}_axis_tvalid'.format(tidx, 2*n_aidx), 'm{:d}{:d}_axis_tvalid'.format(tidx, n_aidx))
             else: # digital mode is I/Q
               if a.mixer_mode == 'Real -> I/Q':
                 # I data
-                bd_inst.add_port('m{:d}{:d}_axis_tdata'.format(tidx, 2*dt_aidx),   '{:s}_m{:d}{:d}_axis_tdata'.format(self.fullname, tidx, 2*dt_aidx), width=data_width)
-                bd_inst.add_port('m{:d}{:d}_axis_tready'.format(tidx, 2*dt_aidx), "1'b1",)
-                # TODO: tvalid currently not exposed in simulink rfdc yellow block, can be extended
-                bd_inst.add_port('m{:d}{:d}_axis_tvalid'.format(tidx, 2*dt_aidx), 'm{:d}{:d}_axis_tvalid'.format(tidx, dt_aidx))
+                bd_inst.add_port('m{:d}{:d}_axis_tdata'.format(tidx, 2*n_aidx),   '{:s}_m{:d}{:d}_axis_tdata'.format(self.fullname, tidx, 2*n_aidx), width=data_width)
+                bd_inst.add_port('m{:d}{:d}_axis_tready'.format(tidx, 2*n_aidx), "1'b1",)
+                bd_inst.add_port('m{:d}{:d}_axis_tvalid'.format(tidx, 2*n_aidx), 'm{:d}{:d}_axis_tvalid'.format(tidx, n_aidx))
                 # Q data
-                bd_inst.add_port('m{:d}{:d}_axis_tdata'.format(tidx, 2*dt_aidx+1), '{:s}_m{:d}{:d}_axis_tdata'.format(self.fullname, tidx, 2*dt_aidx+1), width=data_width)
-                bd_inst.add_port('m{:d}{:d}_axis_tready'.format(tidx, 2*dt_aidx+1), "1'b1",)
-                # TODO: tvalid currently not exposed in simulink rfdc yellow block, can be extended
-                bd_inst.add_port('m{:d}{:d}_axis_tvalid'.format(tidx, 2*dt_aidx+1), 'm{:d}{:d}_axis_tvalid'.format(tidx, dt_aidx))
+                bd_inst.add_port('m{:d}{:d}_axis_tdata'.format(tidx, 2*n_aidx+1), '{:s}_m{:d}{:d}_axis_tdata'.format(self.fullname, tidx, 2*n_aidx+1), width=data_width)
+                bd_inst.add_port('m{:d}{:d}_axis_tready'.format(tidx, 2*n_aidx+1), "1'b1",)
+                bd_inst.add_port('m{:d}{:d}_axis_tvalid'.format(tidx, 2*n_aidx+1), 'm{:d}{:d}_axis_tvalid'.format(tidx, n_aidx))
               else: # mixer mode is 'I/Q -> I/Q'
                 # in this case ADC 1 better be also set or we are in trouble so here we are assuming that the logic is correct and that
                 # enabled adcs is both [0, 1]
-                bd_inst.add_port('m{:d}{:d}_axis_tdata'.format(tidx, dt_aidx), '{:s}_m{:d}{:d}_axis_tdata'.format(self.fullname, tidx, dt_aidx), width=data_width)
-                bd_inst.add_port('m{:d}{:d}_axis_tready'.format(tidx, dt_aidx), "1'b1",)
-                # TODO: tvalid currently not exposed in simulink rfdc yellow block, can be extended
-                bd_inst.add_port('m{:d}{:d}_axis_tvalid'.format(tidx, dt_aidx), 'm{:d}{:d}_axis_tvalid'.format(tidx, dt_aidx))
+                bd_inst.add_port('m{:d}{:d}_axis_tdata'.format(tidx, n_aidx), '{:s}_m{:d}{:d}_axis_tdata'.format(self.fullname, tidx, n_aidx), width=data_width)
+                bd_inst.add_port('m{:d}{:d}_axis_tready'.format(tidx, n_aidx), "1'b1",)
+                bd_inst.add_port('m{:d}{:d}_axis_tvalid'.format(tidx, n_aidx), 'm{:d}{:d}_axis_tvalid'.format(tidx, n_aidx))
 
     """
-      dac data interfaces
+    dac tile/slice interfaces
     """
     for tidx in self.enabled_dac_tiles:
-      print("generating interface ports for enabled DAC tile {:d}".format(tidx))
       # maxis clk, reset and output clock (when using mts, this output clock is not typically used)
       bd_inst.add_port('s{:d}_axis_aclk'.format(tidx), 's{:d}_axis_aclk'.format(tidx))       #self.fullname+'_m0_axis_aclk'
       bd_inst.add_port('s{:d}_axis_aresetn'.format(tidx), 'axil_rst_n') #'m{:d}_axis_aresetn'.format(tidx)) #self.fullname+'_m0_axis_aresetn'
@@ -503,18 +498,14 @@ class rfdc(YellowBlock):
       # wire these ports to supporting infrastructure
       top.assign_signal('s{:d}_axis_aclk'.format(tidx), 'adc_clk')
 
-      # For now tile source information comes from the board platform file configuration, later support could extend this to get
-      # information from simulink, but the platform would need to support it (current gen3 xilinx eval boards don't for example)
+      # gen3 parts support clock forwarding, user provides information about provided clock to the board sources in simulink mask (e.g.,
+      # current gen3 xilinx eval boards only have clocks coming to 2 adc and 2 dac tiles, requiring clocks to be forwarded)
       if (self.blk['t{:d}_dac_clk_src'.format(tidx+228)]-224 == tidx+4):
-      #if (self.tilestidx].clk_src == tidx):
         bd_inst.add_port('dac{:d}_clk_p'.format(tidx), 'dac{:d}_clk_p'.format(tidx), dir='in', parent_port=True)
         bd_inst.add_port('dac{:d}_clk_n'.format(tidx), 'dac{:d}_clk_n'.format(tidx), dir='in', parent_port=True)
 
       for didx in self.enabled_dacs:
-        # TODO: is this the best way to allow for different tile configurations?
-        if int(didx[0]) == tidx: #need this becuase of enabled_dacs stores ALL enabled slices across all DAC tiles, we only want the adcs associated with this tile
-          # TODO: I vaguely remember we are OK here, but do need to make sure that between QT and DT architectures that the fact that
-          # streams are split out on a seperate interface doesn't mess with the actual data width and needing to multiply by two anywhere...
+        if int(didx[0]) == tidx: # need this becuase of enabled_dacs stores ALL enabled slices across all dac tiles, we only want the adcs associated with this tile
           d = self.dacs[int(didx[1])+4*int(didx[0])]
           data_width = 16*d.sample_per_cycle
           
@@ -526,7 +517,6 @@ class rfdc(YellowBlock):
             # maxis data ports
             bd_inst.add_port('s{:s}_axis_tdata'.format(didx), '{:s}_s{:s}_axis_tdata'.format(self.fullname, didx), width=data_width)
             bd_inst.add_port('s{:s}_axis_tready'.format(didx), "1'b1",)
-            # TODO: tvalid currently not exposed in simulink rfdc yellow block, can be extended
             bd_inst.add_port('s{:s}_axis_tvalid'.format(didx), 's{:s}_axis_tvalid'.format(didx))
           else: # Dual tile architecture
             # vin ports
@@ -537,26 +527,22 @@ class rfdc(YellowBlock):
             if d.analog_output == 'Real':
               bd_inst.add_port('s{:d}{:d}_axis_tdata'.format(tidx, 2*n_didx), '{:s}_s{:d}{:d}_axis_tdata'.format(self.fullname, tidx, 2*n_didx), width=data_width)
               bd_inst.add_port('s{:d}{:d}_axis_tready'.format(tidx, 2*n_didx), "1'b1",)
-              # TODO: tvalid currently not exposed in simulink rfdc yellow block, can be extended
               bd_inst.add_port('s{:d}{:d}_axis_tvalid'.format(tidx, 2*n_didx), 's{:d}{:d}_axis_tvalid'.format(tidx, n_didx))
             else: # analog mode is I/Q
               if d.mixer_mode == 'Real -> I/Q':
                 # I data
-                bd_inst.add_port('s{:d}{:d}_axis_tdata'.format(tidx, 2*n_didx),   '{:s}_s{:d}{:d}_axis_tdata'.format(self.fullname, tidx, 2*n_didx), width=data_width)
+                bd_inst.add_port('s{:d}{:d}_axis_tdata'.format(tidx, 2*n_didx),  '{:s}_s{:d}{:d}_axis_tdata'.format(self.fullname, tidx, 2*n_didx), width=data_width)
                 bd_inst.add_port('s{:d}{:d}_axis_tready'.format(tidx, 2*n_didx), "1'b1",)
-                # TODO: tvalid currently not exposed in simulink rfdc yellow block, can be extended
                 bd_inst.add_port('s{:d}{:d}_axis_tvalid'.format(tidx, 2*n_didx), 's{:d}{:d}_axis_tvalid'.format(tidx, n_didx))
                 # Q data
-                bd_inst.add_port('s{:d}{:d}_axis_tdata'.format(tidx, 2*n_didx+1), '{:s}_s{:d}{:d}_axis_tdata'.format(self.fullname, tidx, 2*n_didx+1), width=data_width)
+                bd_inst.add_port('s{:d}{:d}_axis_tdata'.format(tidx, 2*n_didx+1),  '{:s}_s{:d}{:d}_axis_tdata'.format(self.fullname, tidx, 2*n_didx+1), width=data_width)
                 bd_inst.add_port('s{:d}{:d}_axis_tready'.format(tidx, 2*n_didx+1), "1'b1",)
-                # TODO: tvalid currently not exposed in simulink rfdc yellow block, can be extended
                 bd_inst.add_port('s{:d}{:d}_axis_tvalid'.format(tidx, 2*n_didx+1), 's{:d}{:d}_axis_tvalid'.format(tidx, n_didx))
               else: # mixer mode is 'I/Q -> I/Q'
                 # in this case ADC 1 better be also set or we are in trouble so here we are assuming that the logic is correct and that
                 # enabled adcs is both [0, 1]
                 bd_inst.add_port('s{:d}{:d}_axis_tdata'.format(tidx, n_didx), '{:s}_s{:d}{:d}_axis_tdata'.format(self.fullname, tidx, n_didx), width=data_width)
                 bd_inst.add_port('s{:d}{:d}_axis_tready'.format(tidx, n_didx), "1'b1",)
-                # TODO: tvalid currently not exposed in simulink rfdc yellow block, can be extended
                 bd_inst.add_port('s{:d}{:d}_axis_tvalid'.format(tidx, n_didx), 's{:d}{:d}_axis_tvalid'.format(tidx, n_didx))
 
 
@@ -650,11 +636,13 @@ class rfdc(YellowBlock):
       tcl_cmds['pre_synth'] += self.build_config_cmd(t, self.adc_tile_attr_map, tidx)
 
       for aidx in self.enabled_adcs:
-        # TODO: is this the best way to allow for different tile configurations?
         if int(aidx[0]) == tidx:
 
           n_aidx = int(aidx[1])
-          a = self.adcs[n_aidx+4*int(aidx[0])]
+          if self.tile_arch == 'QT':
+            a = self.adcs[n_aidx+4*int(aidx[0])]
+          elif self.tile_arch == 'DT':
+            a = self.adcs[n_aidx+2*int(aidx[0])]
           tcl_cmds['pre_synth'] += self.build_config_cmd(a, self.adc_attr_map, tidx, n_aidx)
 
     for tidx in self.enabled_dac_tiles:
@@ -662,7 +650,6 @@ class rfdc(YellowBlock):
       tcl_cmds['pre_synth'] += self.build_config_cmd(t, self.dac_tile_attr_map, tidx)
 
       for didx in self.enabled_dacs:
-        # TODO: is this the best way to allow for different tile configurations?
         if int(didx[0]) == tidx:
           n_didx = int(didx[1])
           d = self.dacs[n_didx+4*int(didx[0])]
@@ -672,8 +659,8 @@ class rfdc(YellowBlock):
     # create board interface ports for axis data/clk/reset pins and adc tile output clock for each enabled tile
     for tidx in self.enabled_adc_tiles:
       t = self.tiles[tidx]
-      # For now tile source information comes from the board platform file configuration, later support could extend this to get
-      # information from simulink, but the platform would need to support it (current gen3 xilinx eval boards don't for example)
+      # gen3 parts support clock forwarding, user provides information about provided clock to the board sources in simulink mask (e.g.,
+      # current gen3 xilinx eval boards only have clocks coming to 2 adc and 2 dac tiles, requiring clocks to be forwarded)
       if (self.blk['t{:d}_adc_clk_src'.format(tidx+224)]-224 == tidx):
         # create port for input sample clock
         tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('adc{:d}_clk_n'.format(tidx), port_dir='in', port_type='clk', clk_freq_hz=t.ref_clk*1e6))
@@ -689,7 +676,10 @@ class rfdc(YellowBlock):
       for aidx in self.enabled_adcs:
         if tidx == int(aidx[0]):
           n_aidx = int(aidx[1])
-          a = self.adcs[n_aidx+4*int(aidx[0])]
+          if self.tile_arch == 'QT':
+            a = self.adcs[n_aidx+4*int(aidx[0])]
+          elif self.tile_arch == 'DT':
+            a = self.adcs[n_aidx+2*int(aidx[0])]
           data_width = 16*a.sample_per_cycle
           if self.tile_arch == 'QT':
             # vin ports
@@ -728,8 +718,8 @@ class rfdc(YellowBlock):
     # create board interface ports for axis data/clk/reset pins and dac tile output clock for each enabled tile
     for tidx in self.enabled_dac_tiles:
       t = self.tiles[tidx]
-      # For now tile source information comes from the board platform file configuration, later support could extend this to get
-      # information from simulink, but the platform would need to support it (current gen3 xilinx eval boards don't for example)
+      # gen3 parts support clock forwarding, user provides information about provided clock to the board sources in simulink mask (e.g.,
+      # current gen3 xilinx eval boards only have clocks coming to 2 adc and 2 dac tiles, requiring clocks to be forwarded)
       if (self.blk['t{:d}_dac_clk_src'.format(tidx+228)]-224 == tidx+4):
         # create port for input sample clock
         tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('dac{:d}_clk_n'.format(tidx), port_dir='in', port_type='clk', clk_freq_hz=t.ref_clk*1e6))
@@ -1036,7 +1026,7 @@ class rfdc(YellowBlock):
     dtstr = []
     dtstr.append('/* AUTOMATICALLY GENERATED */\n\n')
     dtstr.append('/dts-v1/;')
-    # TODO: only one `/plugin/` directive can be present will need to remove this when combining with xlnx
+    # TODO: only one `/plugin/` directive can be present will need to remove this when combining with xlnx dt products
     dtstr.append('/plugin/;')
     dtstr.append('/ {')
     # TODO: if when jasper has more software needs for dt will need to pass bus-id in to this method, see

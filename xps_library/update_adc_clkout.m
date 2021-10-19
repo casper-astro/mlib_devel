@@ -34,5 +34,4 @@ function [adc_clkout] = update_adc_clkout(gcb, tile)
     set_param(gcb, ['t', num2str(tile), '_', 'clk_out'], num2str(adc_clkout(1)));
   end
 
-
 end

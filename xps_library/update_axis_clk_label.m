@@ -3,15 +3,15 @@ function [] = update_axis_clk_label(gcb,tile)
   [~, tile_arch, ~, ~] = get_rfsoc_properties(gcb);
   if strcmp(tile_arch, 'quad')
     adc_slices = 0:3;
+    dac_slices = 0:3;
     prefix = 'QT';
     QuadTile = 1;
   elseif strcmp(tile_arch, 'dual')
     adc_slices = 0:1;
+    dac_slices = 0:3;
     prefix = 'DT';
     QuadTile = 0;
   end
-  % TODO: needs to be determined like ADC parameters, from the rfsoc chip/gen
-  dac_slices = 0:3;
 
   msk = Simulink.Mask.get(gcb);
 
@@ -65,7 +65,6 @@ function [] = update_axis_clk_label(gcb,tile)
       end
     end
   end
-
   axis_clks_valid = validate_tile_clocking(gcb, tile);
 
 end

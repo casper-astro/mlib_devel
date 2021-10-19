@@ -1,27 +1,27 @@
-function [] = mixertype_callback(gcb, tile)
+function [] = mixertype_callback(gcb, tile, slice, arch)
 
   msk = Simulink.Mask.get(gcb);
 
   [~, tile_arch, ~, ~] = get_rfsoc_properties(gcb);
 
   if strcmp(tile_arch, 'quad')
-    adc_slices = 0:3;
     prefix = 'QT';
   elseif strcmp(tile_arch, 'dual')
-    adc_slices = 0:1;
     prefix = 'DT';
   end
 
+  % only run the function if the architecture matches
+  if (arch ~= prefix), return, end
+
   if tile < 228
     slicename = '_adc';
-    num_slices = adc_slices;
   else
     slicename = '_dac';
-    num_slices = 0:3;
   end
 
+  a = slice;
+
   if ~(strcmp(tile_arch, 'dual') && (tile > 229))
-  for a = num_slices
     mixer_type_param = ['t', num2str(tile), '_', prefix, slicename, num2str(a), '_mixer_type'];
     nco_freq_param  = ['t', num2str(tile), '_', prefix, slicename, num2str(a), '_nco_freq'];
     nco_phase_param = ['t', num2str(tile), '_', prefix, slicename, num2str(a), '_nco_phase'];
@@ -53,6 +53,5 @@ function [] = mixertype_callback(gcb, tile)
       set_param(gcb, coarse_freq_param, '0');
       msk.getParameter(coarse_freq_param).Visible = 'off';
     end
-  end
   end
 end

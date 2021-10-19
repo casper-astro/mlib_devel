@@ -7,15 +7,15 @@ function [] = update_axis_clk(gcb,tile)
 
   if strcmp(tile_arch, 'quad')
     adc_slices = 0:3;
+    dac_slices = 0:3;
     prefix = 'QT';
     QuadTile = 1;
   elseif strcmp(tile_arch, 'dual')
     adc_slices = 0:1;
+    dac_slices = 0:3;
     prefix = 'DT';
     QuadTile = 0;
   end
-  % TODO: should be determined like the adc parameters by the RFSoC chip
-  dac_slices = 0:3;
 
   sample_rate_mhz = str2double(get_param(gcb, ['t',num2str(tile),'_','sample_rate']));
 
@@ -41,6 +41,7 @@ function [] = update_axis_clk(gcb,tile)
       factor  = str2double(decmode(1));
 
       sys_clk_mhz = (sample_rate_mhz/factor)./w;
+
       if QuadTile
         if chk_param(gcb, ['t', num2str(tile), '_', prefix, '_adc', num2str(a), '_digital_output'], 'I/Q')
           sys_clk_mhz = 2*sys_clk_mhz;
@@ -59,17 +60,17 @@ function [] = update_axis_clk(gcb,tile)
       msk.getParameter(['t', num2str(tile), '_', prefix, '_adc', num2str(a), '_sample_per_cycle']).TypeOptions = compose('%d', w(I));
     end
 
-  % need to add case for DACs
+  % DAC case
   elseif ~(~QuadTile && tile > 229)
     for a = dac_slices
       % determine choices for samples per clock
       if (gen < 2)
         w = 1:8;
       else
-        w = 1:12;
+        w = 1:16;
       end
 
-      % PG269, quad tiles adcs have I/Q data appear on the same interface in complex
+      % PG269, quad tiles dacs have I/Q data appear on the same interface in complex
       % pairs. E.g., 2 samples is one I and one Q sample
       if QuadTile
         if chk_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_analog_output'], 'I/Q')
@@ -99,7 +100,6 @@ function [] = update_axis_clk(gcb,tile)
       msk.getParameter(['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_sample_per_cycle']).TypeOptions = compose('%d', w(I));
     end
   end
-
   update_axis_clk_label(gcb, tile);
 
 end

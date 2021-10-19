@@ -80,5 +80,4 @@ else
     % tile 230 or 231 and the config is DT (these tiles don't exist for DT)
     axis_clks_valid = true;
 end
-    
 end

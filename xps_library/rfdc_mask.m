@@ -50,7 +50,6 @@ function [] = rfdc_mask(gcb)
 
   [gen, tile_arch, fs_max, fs_min] = get_rfsoc_properties(gcb);
 
-  disp(tile_arch);
   adcbits = 16;
   gw_arith_type = 'Signed';
   gw_bin_pt = 0;
@@ -74,10 +73,6 @@ function [] = rfdc_mask(gcb)
   end
 
   %for each tile check tile number and change visibility
-
-  %save_state(gcb,'TileArch',tile_arch)
-
-  %if strcmp(tile_arch, 'quad')
   %get both enabled tiles and disabled tiles
   %tiles represents all 8 tiles in order, 1 is on, 0 is off
   tiles = zeros(8,1);
@@ -202,13 +197,12 @@ function [] = rfdc_mask(gcb)
             %if chk_mask_param(msk, [prefix, '_adc', num2str(a), '_enable'], 'on') - looping only enabled adcs now
 
             if QuadTile
+              %only draw the gw if this is not an odd tile configured in IQ->IQ mode
               maxis = sprintf(maxis_template, t-224, a);
               [ypos, port_num] = add_gw(gcb, base_gw_name, gw_arith_type, n_bits, gw_bin_pt, maxis, port_num, xpos, ypos, adc_gate);
             else
-              % TODO: make the below todo a comment describing what is happening tested
-              % TODO: If not a quad tile we need to look at the mixer/digital output
-              % to determine what ports to activate. The quad tile outputs IQ on the
-              % same stream. The Dual tile uses the alternate adc path
+              % If not a quad tile we need to look at the mixer/digital output to determine what ports to activate.
+              % The quad tile outputs IQ on the same stream. The Dual tile uses the alternate adc path
               digital_mode_param = ['t', num2str(t), '_', prefix, '_adc', num2str(a), '_digital_output'];
               mixer_mode_param   = ['t', num2str(t), '_', prefix, '_adc', num2str(a), '_mixer_mode'];
               if chk_param(gcb, digital_mode_param, 'Real')
@@ -217,22 +211,31 @@ function [] = rfdc_mask(gcb)
 
               else % digital mode is I/Q
                 if chk_param(gcb, mixer_mode_param, 'Real -> I/Q')
+                  %only need to draw the one port, not two at a time
                   maxis = sprintf(maxis_template, t-224, 2*a);
                   [ypos, port_num] = add_gw(gcb, base_gw_name, gw_arith_type, n_bits, gw_bin_pt, maxis, port_num, xpos, ypos, adc_gate);
 
-                  maxis = sprintf(maxis_template, t-224, 2*a+1);
-                  [ypos, port_num] = add_gw(gcb, base_gw_name, gw_arith_type, n_bits, gw_bin_pt, maxis, port_num, xpos, ypos, adc_gate);
+                  %maxis = sprintf(maxis_template, t-224, 2*a+1);
+                  %[ypos, port_num] = add_gw(gcb, base_gw_name, gw_arith_type, n_bits, gw_bin_pt, maxis, port_num, xpos, ypos, adc_gate);
 
                 elseif chk_param(gcb, mixer_mode_param, 'I/Q -> I/Q')
-                  % In this case ADC 1 must be enabled so here we are assuming that
-                  % the gui logic has been correct to pass adc = [0 ,1] and the both
-                  % interfaces will be subsequently created
+                  % In this case ADC 1 must be enabled so here we are assuming that the gui logic has been
+                  % correct to pass adc = [0 ,1] and the both interfaces will be subsequently created
                   maxis = sprintf(maxis_template, t-224, a);
                   [ypos, port_num] = add_gw(gcb, base_gw_name, gw_arith_type, n_bits, gw_bin_pt, maxis, port_num, xpos, ypos, adc_gate);
 
                 else
-                  errstr = 'Unexpected value %s for Mixer Mode detected when ADC Ditital Ouput is I/Q mode, this is a bug';
-                  error(sprintf(errstr, get_param(gcb, mixer_mode_param)));
+                  if mod(a,2) %if odd slice, might have mixer mode mode 'off'
+                    if chk_param(gcb, ['t', num2str(t), '_', prefix, '_adc', num2str(a-1), '_mixer_mode'], 'I/Q -> I/Q')
+                        %good to go, don't need to make a gw for this
+                    else
+                      errstr = 'Unexpected value %s for Odd Slice Mixer Mode detected when ADC Ditital Ouput is I/Q mode, this is a bug';
+                      error(sprintf(errstr, get_param(gcb, mixer_mode_param)));
+                    end
+                  else
+                    errstr = 'Unexpected value %s for Even Slice Mixer Mode detected when ADC Ditital Ouput is I/Q mode, this is a bug';
+                    error(sprintf(errstr, get_param(gcb, mixer_mode_param)));
+                  end
                 end
               end
             end % QuadTile: add gw's/draw ports
@@ -254,35 +257,19 @@ function [] = rfdc_mask(gcb)
             if QuadTile
               maxis = sprintf(saxis_template, t-228, a);
               [ypos, port_num] = add_gw(gcb, base_gw_name, gw_arith_type, n_bits, gw_bin_pt, maxis, port_num, xpos, ypos, dac_gate);
-            else
-              % TODO: make the below todo a comment describing what is happening tested
-              % TODO: If not a quad tile we need to look at the mixer/digital output
-              % to determine what ports to activate. The quad tile outputs IQ on the
-              % same stream. The Dual tile uses the alternate adc path
+            else %dual tile stuff
+
               analog_mode_param = ['t', num2str(t), '_', prefix, '_dac', num2str(a), '_analog_output'];
               mixer_mode_param   = ['t', num2str(t), '_', prefix, '_dac', num2str(a), '_mixer_mode'];
               if chk_param(gcb, analog_mode_param, 'Real')
-                maxis = sprintf(saxis_template, t-228, 2*a);
+                maxis = sprintf(saxis_template, t-228, a);
                 [ypos, port_num] = add_gw(gcb, base_gw_name, gw_arith_type, n_bits, gw_bin_pt, maxis, port_num, xpos, ypos, dac_gate);
 
               else % analog mode is I/Q
-                if chk_param(gcb, mixer_mode_param, 'Real -> I/Q')
-                  maxis = sprintf(saxis_template, t-228, 2*a);
+                %only the base slice (0 or 2) gets created
+                if (a == 0 || a == 2)
+                  maxis = sprintf(saxis_template, t-228, a);
                   [ypos, port_num] = add_gw(gcb, base_gw_name, gw_arith_type, n_bits, gw_bin_pt, maxis, port_num, xpos, ypos, dac_gate);
-
-                  maxis = sprintf(saxis_template, t-228, 2*a+1);
-                  [ypos, port_num] = add_gw(gcb, base_gw_name, gw_arith_type, n_bits, gw_bin_pt, maxis, port_num, xpos, ypos, dac_gate);
-
-                elseif chk_param(gcb, mixer_mode_param, 'I/Q -> I/Q')
-                  % In this case ADC 1 must be enabled so here we are assuming that
-                  % the gui logic has been correct to pass adc = [0 ,1] and the both
-                  % interfaces will be subsequently created
-                  maxis = sprintf(saxis_template, t-227, a);
-                  [ypos, port_num] = add_gw(gcb, base_gw_name, gw_arith_type, n_bits, gw_bin_pt, maxis, port_num, xpos, ypos, dac_gate);
-
-                else
-                  errstr = 'Unexpected value %s for Mixer Mode detected when DAC Analog Ouput is I/Q mode, this is a bug';
-                  error(sprintf(errstr, get_param(gcb, mixer_mode_param)));
                 end
               end
             end % QuadTile: add gw's/draw ports
