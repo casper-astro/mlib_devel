@@ -52,7 +52,7 @@ module dts_gty_rx #(
     input rst,
     input [2:0] qsfp_modprsl,
     
-    output clkout,
+    input  clkout,
     output [((12*128) >> MUX_FACTOR_BITS) - 1 : 0] dout,
     output [12*2 - 1 : 0] dvld,
     output [12 - 1 : 0] locked,
@@ -78,6 +78,8 @@ module dts_gty_rx #(
   (* mark_debug = "true" *) wire all_qsfp_present = ~|qsfp_modprsl;
   
   (* mark_debug = "true" *) wire [N_INPUTS-1:0] bitslip_int;
+  wire [11:0] induce_error;
+  wire [11:0] gt_locked;
   gty_12chan #(
     .N_REFCLOCKS(N_REFCLOCKS),
     .REFCLOCK_0(REFCLOCK_0),
@@ -91,13 +93,17 @@ module dts_gty_rx #(
     .tx_n(tx_n),
     .mgtrefclk_p(mgtrefclk_p),
     .mgtrefclk_n(mgtrefclk_n),
+    .induce_error(induce_error),
     .clk50(clk_50),
     .rst(rst),
     .gearbox_slip(bitslip_int),
    
     .clkout(gt_clkout),
+    .locked(gt_locked),
     .dout(gt_dout)
   );
+
+  
   
   wire clk_fb_int, clk_fb;
   wire clk_mux_0_int;
@@ -243,13 +249,16 @@ wb_dts_attach wb_dts_attach_inst(
     .wrst_out(def_wrst),
     .rdst_out(def_rdst),
     .unmute_out(def_unmute),
-    .locked({9'b0, def_locked_out}),
+    .def_locked(def_locked_out),
+    .gt_locked(gt_locked),
     .shift_advance(shift_advance),
     .shift_delay(shift_delay),
     .shift_rst(shift_rst),
     .mux_control(mux_control),
+    .induce_error(induce_error),
     .is_three_bit(is_three_bit)
   );
+
   
   wire [N_INPUTS*8 - 1 : 0] def_data_out_multi;
   wire [N_INPUTS*OUTPUT_DWIDTH-1:0] def_frame_out;
@@ -264,7 +273,7 @@ wb_dts_attach wb_dts_attach_inst(
     .one_sec(def_one_sec_out), //  1 pps
     .ten_sec(def_ten_sec_out), // .1 pps
     .f_clock(f_clock),         // Frame clock derived from input. This is just rx_inclock
-    .locked(def_locked_out),       // deformatter has locked
+    .locked(def_locked_out),   // deformatter has locked
 
     // Monitor and control related ports
     .din(def_data_in),
@@ -294,7 +303,8 @@ wb_dts_attach wb_dts_attach_inst(
                         def_data_out_multi[8*8-1:7*8] |
                         def_data_out_multi[9*8-1:8*8] |
                         def_data_out_multi[10*8-1:9*8] |
-                        def_data_out_multi[11*8-1:10*8];
+                        def_data_out_multi[11*8-1:10*8] |
+                        def_data_out_multi[12*8-1:11*8];
 
   wire [N_INPUTS*OUTPUT_DWIDTH-1:0] reorder_frame_out;
   wire [N_INPUTS-1:0] reorder_one_sec_out;
@@ -358,7 +368,6 @@ wb_dts_attach wb_dts_attach_inst(
     .din(offsetter_dout),
     .dout(dout)
   );
-  
-  assign locked = reorder_locked_out;
 
+  assign locked = {12{1'b1}}; // TODO: Remove this port.
 endmodule

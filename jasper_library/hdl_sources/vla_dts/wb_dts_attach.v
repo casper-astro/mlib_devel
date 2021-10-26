@@ -50,8 +50,11 @@ module wb_dts_attach(
     // Mux control
     output [47:0] mux_control,
     output is_three_bit,
+    // Artificially create a bit error
+    output [11:0] induce_error,
     // Other control signals
-    input [11:0] locked
+    input [11:0] def_locked,
+    input [11:0] gt_locked
   );
   
 
@@ -60,6 +63,7 @@ module wb_dts_attach(
   reg [31:0] delay_control_reg_wb;
   reg [47:0] mux_control_reg_wb;
   reg is_three_bit_reg_wb;
+  reg [11:0] induce_error_reg_wb;
   
   /* Handshake signal from OPB to application indicating data is ready to be latched */
   reg register_ready;
@@ -105,6 +109,7 @@ module wb_dts_attach(
 
   assign mux_control = mux_control_reg_wb;
   assign is_three_bit = is_three_bit_reg_wb;
+  assign induce_error = induce_error_reg_wb;
   
   reg [31:0] wb_dat_reg;
   assign wb_dat_o = wb_dat_reg;
@@ -146,14 +151,18 @@ module wb_dts_attach(
           2: mux_control_reg_wb[31:0] <= wb_dat_i;
           3: mux_control_reg_wb[47:32] <= wb_dat_i[15:0];
           4: is_three_bit_reg_wb <= wb_dat_i[0];
+          5: induce_error_reg_wb <= wb_dat_i[11:0];
+          //6: read only
         endcase
       end else begin
         case (wb_adr_i[5:2])
-          0: wb_dat_reg <= user_data_in_reg_wb;
+          0: wb_dat_reg <= control_reg_wb;
           1: wb_dat_reg <= delay_control_reg_wb;
           2: wb_dat_reg <= mux_control_reg_wb[31:0];
           3: wb_dat_reg <= {16'b0, mux_control_reg_wb[47:32]};
           4: wb_dat_reg <= {31'b0, is_three_bit_reg_wb};
+          5: wb_dat_reg <= {20'b0, induce_error_reg_wb};
+          6: wb_dat_reg <= user_data_in_reg_wb;
         endcase
       end
     end
@@ -194,7 +203,7 @@ module wb_dts_attach(
                                                                                                                                                              
     if (register_read_requestRR && !register_read_ready) begin                                                                                                                           
       register_read_ready <= 1'b1;                                                                                                                                                       
-      user_data_in_reg <= {8'b0, 4'b0, locked, data_in};
+      user_data_in_reg <= {gt_locked, def_locked, data_in};
     end 
   end
 endmodule
