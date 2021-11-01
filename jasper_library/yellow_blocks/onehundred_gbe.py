@@ -138,22 +138,23 @@ class onehundredgbe_usplus(onehundred_gbe):
         self.portbase = '{blocktype}{port}'.format(blocktype=self.blocktype, port=self.port)
 
         try:
-            ethconf = self.platform.conf["onehundredgbe"]
+            self.ethconf = self.platform.conf["onehundredgbe"]
         except KeyError:
             self.logger.exception("Failed to find `onehundredgbe` configuration in platform's YAML file")
             raise
         
         try:
-            self.refclk_freq_str = ethconf["refclk_freq_str"]
+            self.refclk_freq_str = self.ethconf["refclk_freq_str"]
         except KeyError:
             self.logger.error("Missing onehundredgbe `refclk_freq_str` parameter in YAML file")
             raise
         self.refclk_freq = float(self.refclk_freq_str)
 
         try:
-            self.include_rs_fec = ethconf["include_rs_fec"]
+            self.include_rs_fec = self.ethconf["include_rs_fec"]
         except KeyError:
             self.logger.warning("Missing `include_rs_fec` parameter in YAML file. Defaulting to 0")
+            self.include_rs_fec = 0
 
         if self.include_rs_fec:
             self.cmac_ip_name = 'EthMACPHY100GQSFP4x_rsfec'
@@ -163,14 +164,14 @@ class onehundredgbe_usplus(onehundred_gbe):
             self.add_source('onehundred_gbe/ip/EthMACPHY100GQSFP4x/EthMACPHY100GQSFP4x.xci')
 
         try:
-            self.cmac_loc = ethconf["cmac_loc"][self.port]
+            self.cmac_loc = self.ethconf["cmac_loc"][self.port]
         except KeyError:
             self.logger.error("Missing onehundredgbe `cmac_loc` parameter in YAML file")
             raise
         except IndexError:
             self.logger.error("Missing entry for port %d in onehundredgbe `cmac_loc` parameter" % self.port)
         try:
-            self.gt_group = ethconf["gt_group"][self.port]
+            self.gt_group = self.ethconf["gt_group"][self.port]
         except KeyError:
             self.logger.error("Missing onehundredgbe `gt_group` parameter in YAML file")
             raise
@@ -322,8 +323,8 @@ class onehundredgbe_usplus(onehundred_gbe):
         tcl_cmds = {}
         tcl_cmds['pre_synth'] = []
         # Override the IP settings
-        tcl_cmds['pre_synth'] += ['copy_ip -name EthMACPHY100GQSFP4x%d [get_ips EthMACPHY100GQSFP4x]' % self.inst_id]
-        tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.CMAC_CORE_SELECT {%s} CONFIG.GT_REF_CLK_FREQ {%s} CONFIG.GT_GROUP_SELECT {%s} CONFIG.RX_GT_BUFFER {1} CONFIG.GT_RX_BUFFER_BYPASS {0}] [get_ips EthMACPHY100GQSFP4x%d]' % (self.cmac_loc, self.refclk_freq_str, self.gt_group, self.inst_id)]
+        tcl_cmds['pre_synth'] += ['copy_ip -name %s%d [get_ips %s]' % (self.cmac_ip_name, self.inst_id, self.cmac_ip_name)]
+        tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.CMAC_CORE_SELECT {%s} CONFIG.GT_REF_CLK_FREQ {%s} CONFIG.GT_GROUP_SELECT {%s} CONFIG.RX_GT_BUFFER {1} CONFIG.GT_RX_BUFFER_BYPASS {0}] [get_ips %s%d]' % (self.cmac_loc, self.refclk_freq_str, self.gt_group, self.cmac_ip_name, self.inst_id)]
         try:
             if self.platform.use_pr:
                 tcl_cmds['pre_synth'] += ['move_files -of_objects [get_reconfig_modules user_top-toolflow] [get_files EthMACPHY100GQSFP4x%d.xci]' % self.inst_id]
@@ -332,8 +333,10 @@ class onehundredgbe_usplus(onehundred_gbe):
         #tcl_cmds['pre_synth'] = ['set_property -dict [list CONFIG.GT_GROUP_SELECT {%s} CONFIG.LANE1_GT_LOC {%s} CONFIG.LANE2_GT_LOC {%s} CONFIG.LANE3_GT_LOC {%s} CONFIG.LANE4_GT_LOC {%s} CONFIG.RX_GT_BUFFER {1} CONFIG.GT_RX_BUFFER_BYPASS {0}] [get_ips EthMACPHY100GQSFP4x%d' % (self.gt_group, gts[0, gts[1], gts[2], gts[3], self.inst_id)]
 
         ## The LOCs seem to get overriden by the user constraints above, but we need to manually unplace the CMAC blocks
-        ## Unplace all CMACs post_synth, then place all pre_impl, to avoid situations where we try to place on a site already being used
-        #tcl_cmds['pre_impl'] = []
-        #tcl_cmds['pre_impl'] += ['unplace_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s_inst/*" }]' % self.fullname]
-        #tcl_cmds['pre_impl'] += ['place_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s_inst/*" }] %s' % (self.fullname, self.cmac_loc)]
+        if self.ethconf.get("override_cmac_placement", False):
+            ## Unplace all CMACs post_synth, then place all pre_impl, to avoid situations where we try to place on a site already being used
+            tcl_cmds['pre_impl'] = []
+            tcl_cmds['pre_impl'] += ['unplace_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s_inst/*" }]' % self.fullname]
+            forced_cmac_loc = self.ethconf["override_cmac_placement"][self.port]
+            tcl_cmds['pre_impl'] += ['place_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s_inst/*" }] %s' % (self.fullname, forced_cmac_loc)]
         return tcl_cmds
