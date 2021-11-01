@@ -334,9 +334,10 @@ class onehundredgbe_usplus(onehundred_gbe):
 
         ## The LOCs seem to get overriden by the user constraints above, but we need to manually unplace the CMAC blocks
         if self.ethconf.get("override_cmac_placement", False):
-            ## Unplace all CMACs post_synth, then place all pre_impl, to avoid situations where we try to place on a site already being used
+            # Unplace CMACs post_synth, then place all pre_impl, to avoid situations where we try to place on a site already being used
             tcl_cmds['pre_impl'] = []
-            tcl_cmds['pre_impl'] += ['unplace_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s_inst/*" }]' % self.fullname]
+            tcl_cmds['post_synth'] = []
+            tcl_cmds['post_synth'] += ['unplace_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s_inst/*" }]' % self.fullname]
             forced_cmac_loc = self.ethconf["override_cmac_placement"][self.port]
             tcl_cmds['pre_impl'] += ['place_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s_inst/*" }] %s' % (self.fullname, forced_cmac_loc)]
         return tcl_cmds

@@ -148,6 +148,8 @@ class htg_zrf16(YellowBlock):
             cons.append(ClockGroupConstraint('-of_objects [get_pins htg_zrf16_infr_inst/user_clk_mmcm_inst/CLKOUT0]', '-of_objects [get_pins htg_zrf16_inst/zynq_ultra_ps_e_0/U0/PS8_i/PLCLK[0]]', 'asynchronous'))
         cons.append(ClockGroupConstraint('-of_objects [get_pins htg_zrf16_infr_inst/sys_clk_mmcm_inst/CLKOUT0]', '-of_objects [get_pins htg_zrf16_inst/zynq_ultra_ps_e_0/U0/PS8_i/PLCLK[0]]', 'asynchronous'))
         #cons.append(ClockGroupConstraint('-of_objects [get_pins htg_zrf16_inst/zynq_ultra_ps_e_0/U0/PS8_i/PLCLK[0]]', '-of_objects [get_pins htg_zrf16_infr_inst/user_clk_mmcm_inst/CLKOUT0]', 'asynchronous'))
+        cons.append(RawConstraint("set_property BITSTREAM.CONFIG.OVERTEMPSHUTDOWN Enable [current_design]"))
+
         return cons
     def gen_tcl_cmds(self):
         tcl_cmds = {}
