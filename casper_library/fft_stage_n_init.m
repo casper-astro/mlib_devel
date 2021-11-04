@@ -161,7 +161,7 @@ end
 
 %calculate data path width so that mux latency can be increased if needed
 n_bits_dp = input_bit_width * n_inputs * 2;
-if n_bits_dp < 200, mux_latency = 1;
+if n_bits_dp <= 200, mux_latency = 1;
 else mux_latency = 2;
 end
 
