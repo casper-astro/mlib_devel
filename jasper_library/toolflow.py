@@ -1610,6 +1610,8 @@ proc puts_red {s} {
         Add an ip core from a library
         """
         self.add_tcl_cmd('create_ip -name %s -vendor %s -library %s -version %s -module_name %s' % (ip['name'], ip['vendor'], ip['library'], ip['version'], ip['module_name']))
+        if self.template_project is not None:
+            self.add_tcl_cmd('move_files -of_objects [get_reconfig_modules user_top-toolflow] [get_files %s.xci]' % ip['module_name'])
 
     def add_source(self, source, plat):
         """
