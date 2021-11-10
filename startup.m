@@ -42,11 +42,13 @@ else
   end
 end
 
-load_system('casper_library');
-load_system('xps_library');
-if ~isempty(getenv('DSP_HDL_SL_PATH'))
-  load_system('hdl_library');
-end
+% The load_system function causes a segfault when run with the Matlab 2021a and Vivado 2021.1
+% but the libraries are still accessable even without loading them.
+%load_system('casper_library');
+%load_system('xps_library');
+%if ~isempty(getenv('DSP_HDL_SL_PATH'))
+%  load_system('hdl_library');
+%end
 
 casper_startup_dir = getenv('CASPER_STARTUP_DIR');
 if ~isempty(casper_startup_dir)
