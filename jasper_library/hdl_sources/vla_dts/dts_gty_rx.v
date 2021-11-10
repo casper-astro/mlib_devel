@@ -341,7 +341,7 @@ wb_dts_attach wb_dts_attach_inst(
      .MUX_FACTOR_BITS(MUX_FACTOR_BITS)
   ) dts_offseter_inst[N_INPUTS-1:0] (
     .clk_in(gt_clkout),
-    .clk_out(clk_mux_0),
+    .clk_out(clkout),
     .rst(shift_rst),
     .din(reorder_frame_out),
     .din_one_sec(reorder_one_sec_out),
