@@ -89,7 +89,6 @@ class onehundredgbe_usplus(onehundred_gbe):
         self.add_source(kdir + '/macphy/macaxissender.vhd')
         self.add_source(kdir + '/macphy/macaxisdecoupler.vhd')
         self.add_source(kdir + '/macphy/macaxisreceiver.vhd')
-        self.add_source(kdir + '/macphy/gmacqsfptop2.vhd')
         self.add_source(kdir + '/ringbuffer/cpudualportpacketringbuffer.vhd')
         self.add_source(kdir + '/ringbuffer/packetringbuffer.vhd')
         self.add_source(kdir + '/ringbuffer/dualportpacketringbuffer.vhd')
@@ -162,6 +161,11 @@ class onehundredgbe_usplus(onehundred_gbe):
         else:
             self.cmac_ip_name = 'EthMACPHY100GQSFP4x'
             self.add_source('onehundred_gbe/ip/EthMACPHY100GQSFP4x/EthMACPHY100GQSFP4x.xci')
+
+        if self.ethconf.get('use_2020_ip', True):
+            self.add_source(kdir + '/macphy/gmacqsfptop2.vhd')
+        else:
+            self.add_source(kdir + '/macphy/gmacqsfptop.vhd')
 
         try:
             self.cmac_loc = self.ethconf["cmac_loc"][self.port]

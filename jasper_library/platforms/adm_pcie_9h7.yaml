@@ -114,7 +114,9 @@ pcie:
   loc: PCIE4C_X1Y0
   use_pr: True
 onehundredgbe:
+  use_2020_ip: False
   refclk_freq_str: "156.25"
+  include_rs_fec: 1
   cmac_loc:
     - CMACE4_X0Y2
     - CMACE4_X0Y3
