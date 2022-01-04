@@ -190,31 +190,31 @@ architecture Behavioral of IEEE802_3_XL_PHY is
 		);
 	end component XL_PMA_RX_RESET_CLOCKING_CONTROLLER;
 
-	component IEEE802_3_XL_VIO
-		port(
-			clk        : in  std_logic;
-			probe_in0  : in  std_logic_vector(3 downto 0);
-			probe_in1  : in  std_logic_vector(3 downto 0);
-			probe_in2  : in  std_logic_vector(3 downto 0);
-			probe_in3  : in  std_logic_vector(3 downto 0);
-			probe_in4  : in  std_logic_vector(0 downto 0);
-			probe_in5  : in  std_logic_vector(15 downto 0);
-			probe_in6  : in  std_logic_vector(31 downto 0);
-			probe_in7  : in  std_logic_vector(31 downto 0);
-			probe_in8  : in  std_logic_vector(31 downto 0);
-			probe_in9  : in  std_logic_vector(31 downto 0);
-			probe_in10 : in  std_logic_vector(3 downto 0);
-			probe_in11 : in  std_logic_vector(3 downto 0);
-			probe_in12 : in  std_logic_vector(3 downto 0);
-			probe_in13 : in  std_logic_vector(3 downto 0);
-			probe_in14 : in  std_logic_vector(31 downto 0);
-			probe_in15 : in  std_logic_vector(31 downto 0);
-			probe_out0 : out std_logic_vector(0 downto 0);
-			probe_out1 : out std_logic_vector(0 downto 0);
-			probe_out2 : out std_logic_vector(0 downto 0);
-			probe_out3 : out std_logic_vector(0 downto 0)
-		);
-	end component;
+	--component IEEE802_3_XL_VIO
+	--	port(
+	--		clk        : in  std_logic;
+	--		probe_in0  : in  std_logic_vector(3 downto 0);
+	--		probe_in1  : in  std_logic_vector(3 downto 0);
+	--		probe_in2  : in  std_logic_vector(3 downto 0);
+	--		probe_in3  : in  std_logic_vector(3 downto 0);
+	--		probe_in4  : in  std_logic_vector(0 downto 0);
+	--		probe_in5  : in  std_logic_vector(15 downto 0);
+	--		probe_in6  : in  std_logic_vector(31 downto 0);
+	--		probe_in7  : in  std_logic_vector(31 downto 0);
+	--		probe_in8  : in  std_logic_vector(31 downto 0);
+	--		probe_in9  : in  std_logic_vector(31 downto 0);
+	--		probe_in10 : in  std_logic_vector(3 downto 0);
+	--		probe_in11 : in  std_logic_vector(3 downto 0);
+	--		probe_in12 : in  std_logic_vector(3 downto 0);
+	--		probe_in13 : in  std_logic_vector(3 downto 0);
+	--		probe_in14 : in  std_logic_vector(31 downto 0);
+	--		probe_in15 : in  std_logic_vector(31 downto 0);
+	--		probe_out0 : out std_logic_vector(0 downto 0);
+	--		probe_out1 : out std_logic_vector(0 downto 0);
+	--		probe_out2 : out std_logic_vector(0 downto 0);
+	--		probe_out3 : out std_logic_vector(0 downto 0)
+	--	);
+	--end component;
 
 	signal PMA_soft_reset_cpu          : std_logic;
 	signal PMA_soft_reset_chipscope    : std_logic;
@@ -619,41 +619,41 @@ begin
 
 	TEST_PATTERN_ERROR_COUNT_O <= std_logic_vector(test_pattern_error_count);
 
-	generate_DEBUG_VIO_inst : if USE_CHIPSCOPE = 1 generate
+	--generate_DEBUG_VIO_inst : if USE_CHIPSCOPE = 1 generate
 
-	DEBUG_VIO_inst : IEEE802_3_XL_VIO
-		port map(
-			clk           => SYS_CLK_I,
-			probe_in0     => GT_TX_READY,
-			probe_in1     => GT_RX_READY,
-			probe_in2     => block_lock,
-			probe_in3     => am_lock,
-			probe_in4(0)  => align_status,
-			probe_in5     => std_logic_vector(test_pattern_error_count),
-			probe_in6     => encoder_start_detected_count,
-			probe_in7     => encoder_terminate_detected_count,
-			probe_in8     => decoder_start_detected_count,
-			probe_in9     => decoder_terminate_detected_count,
-			probe_in10    => tx_ready_fault,
-			probe_in11    => rx_ready_fault,
-			probe_in12    => block_lock_fault,
-			probe_in13    => am_lock_fault,
-			probe_in14    => rx_frame_count,
-			probe_in15    => rx_frame_error_count,
-			probe_out0(0) => test_pattern_en_chipscope,
-			probe_out1(0) => test_pattern_error_count_rst_chipscope,
-			probe_out2(0) => start_terminate_detected_count_rst,
-			probe_out3(0) => PMA_soft_reset_chipscope
-		);
+	--DEBUG_VIO_inst : IEEE802_3_XL_VIO
+	--	port map(
+	--		clk           => SYS_CLK_I,
+	--		probe_in0     => GT_TX_READY,
+	--		probe_in1     => GT_RX_READY,
+	--		probe_in2     => block_lock,
+	--		probe_in3     => am_lock,
+	--		probe_in4(0)  => align_status,
+	--		probe_in5     => std_logic_vector(test_pattern_error_count),
+	--		probe_in6     => encoder_start_detected_count,
+	--		probe_in7     => encoder_terminate_detected_count,
+	--		probe_in8     => decoder_start_detected_count,
+	--		probe_in9     => decoder_terminate_detected_count,
+	--		probe_in10    => tx_ready_fault,
+	--		probe_in11    => rx_ready_fault,
+	--		probe_in12    => block_lock_fault,
+	--		probe_in13    => am_lock_fault,
+	--		probe_in14    => rx_frame_count,
+	--		probe_in15    => rx_frame_error_count,
+	--		probe_out0(0) => test_pattern_en_chipscope,
+	--		probe_out1(0) => test_pattern_error_count_rst_chipscope,
+	--		probe_out2(0) => start_terminate_detected_count_rst,
+	--		probe_out3(0) => PMA_soft_reset_chipscope
+	--	);
 
-	end generate generate_DEBUG_VIO_inst;
+	--end generate generate_DEBUG_VIO_inst;
 
-	not_generate_DEBUG_VIO_inst : if USE_CHIPSCOPE = 0 generate
-		test_pattern_en_chipscope              <= '0';
-		test_pattern_error_count_rst_chipscope <= '0';
-		start_terminate_detected_count_rst     <= '0';
-		PMA_soft_reset_chipscope               <= '0';
-	end generate not_generate_DEBUG_VIO_inst;
+	--not_generate_DEBUG_VIO_inst : if USE_CHIPSCOPE = 0 generate
+	test_pattern_en_chipscope              <= '0';
+	test_pattern_error_count_rst_chipscope <= '0';
+	start_terminate_detected_count_rst     <= '0';
+	PMA_soft_reset_chipscope               <= '0';
+	--end generate not_generate_DEBUG_VIO_inst;
 
 	lanes : for i in 0 to 3 generate
 	begin

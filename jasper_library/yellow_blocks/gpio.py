@@ -1,9 +1,11 @@
 from .yellow_block import YellowBlock
-from constraints import PortConstraint, MaxDelayConstraint, MinDelayConstraint, FalsePathConstraint
+from constraints import PortConstraint, MaxDelayConstraint, MinDelayConstraint, FalsePathConstraint, RawConstraint
 from helpers import to_int_list
 
 class gpio(YellowBlock):
     def initialize(self):
+        if not hasattr(self, 'use_iodelay'):
+            self.use_iodelay = False
 
         if self.arith_type == 'Boolean':
             # The yellow block will set a value for bitwidth,
@@ -48,6 +50,18 @@ class gpio(YellowBlock):
         self.portbase = "{blocktype}_{iotype}_{start}_{end}".format(
             blocktype=self.blocktype, iotype=self.io_group, start=start_pin, end=end_pin)
 
+    def gen_children(self):
+        if self.use_iodelay:
+            self.ctrl_reg = YellowBlock.make_block({
+                          'tag': 'xps:sw_reg',
+                          'io_dir': 'From Processor',
+                          'name': self.fullname + '_delay_ctrl',
+                          'fullpath': self.fullpath + '_delay_ctrl',
+                       }, self.platform)
+            return [self.ctrl_reg]
+        else:
+            return []
+
     def modify_top(self,top):
         instance_name = self.fullname
         gateway_name = '{}_gateway'.format(self.fullname)
@@ -68,6 +82,13 @@ class gpio(YellowBlock):
         inst.add_port('clk', signal='user_clk', parent_sig=False)
         inst.add_port('clk90', signal='user_clk90', parent_sig=False)
         inst.add_port('gateway', signal=gateway_name, width=self.bitwidth)
+        if self.use_iodelay:
+            inst.add_port('delay_load_en', signal="%s_user_data_out[24]"%self.ctrl_reg.fullname, parent_sig=False)
+            inst.add_port('delay_rst', signal="%s_user_data_out[16]"%self.ctrl_reg.fullname, parent_sig=False)
+            inst.add_port('delay_val', signal="%s_user_data_out[8:0]"%self.ctrl_reg.fullname, width=9, parent_sig=False)
+            inst.add_parameter('USE_DELAY', 1)
+        else:
+            inst.add_parameter('USE_DELAY', 0)
         inst.add_parameter('WIDTH', str(self.bitwidth))
         inst.add_parameter('DDR', '1' if self.use_ddr  else '0')
         inst.add_parameter('REG_IOB', '"true"' if self.reg_iob else '"false"')
@@ -147,6 +168,8 @@ class gpio(YellowBlock):
                 const += [MaxDelayConstraint(sourcepath='[get_ports {%s_ext[*]}]' % self.portbase, constdelay_ns=1.0)]
                 const += [MinDelayConstraint(sourcepath='[get_ports {%s_ext[*]}]' % self.portbase, constdelay_ns=1.0)]
                 const += [FalsePathConstraint(sourcepath='[get_ports {%s_ext[*]}]' % self.portbase)]
+                if self.termination is not None:
+                    const += [RawConstraint('set_property PULLTYPE %s [get_ports %s_ext[*]]' % (self.termination.upper(), self.portbase))]
             elif self.io_dir == 'out':
                 const += [MaxDelayConstraint(destpath='[get_ports {%s_ext[*]}]' % self.portbase, constdelay_ns=1.0)]
                 const += [MinDelayConstraint(destpath='[get_ports {%s_ext[*]}]' % self.portbase, constdelay_ns=1.0)]

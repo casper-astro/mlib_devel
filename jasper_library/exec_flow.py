@@ -133,6 +133,12 @@ if __name__ == '__main__':
 
     logger.info('Starting compile')
 
+    logger.info('Adding .gitignore')
+    with open(os.path.join(builddir, '.gitignore'), 'w') as fh:
+        fh.write('*\n')
+        fh.write('*/\n')
+        fh.write('!outputs/\n')
+
     if opts.be == 'vivado':
         os.environ['SYSGEN_SCRIPT'] = os.environ['MLIB_DEVEL_PATH'] + '/startsg'
 

@@ -33,6 +33,9 @@ function pfb_fir_real_init(blk, varargin)
 % TotalTaps = Total number of taps in the PFB
 % WindowType = The type of windowing function to use.
 % n_inputs = The number of parallel inputs
+% n_pol_blocks = The number of independent polarizations, input serially
+%            (PFBSize samples of pol0, followed by PFBSize samples of
+%             pol1, ... etc)
 % MakeBiplex = Double up the PFB to feed a biplex FFT
 % BitWidthIn = Input Bitwidth
 % BitWidthOut = Output Bitwidth (0 == as needed)
@@ -57,6 +60,7 @@ defaults = {'PFBSize', 5, 'TotalTaps', 2, ...
     'quantization', 'Round  (unbiased: +/- Inf)', ...
     'fwidth', 1, 'mult_spec', [2 2], ...
     'adder_folding', 'on', 'adder_imp', 'Fabric', ...
+    'n_pol_blocks', 1, ...
     'coeffs_share', 'off', 'coeffs_fold', 'off'};
 
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
@@ -68,6 +72,7 @@ PFBSize = get_var('PFBSize', 'defaults', defaults, varargin{:});
 TotalTaps = get_var('TotalTaps', 'defaults', defaults, varargin{:});
 WindowType = get_var('WindowType', 'defaults', defaults, varargin{:});
 n_inputs = get_var('n_inputs', 'defaults', defaults, varargin{:});
+n_pol_blocks = get_var('n_pol_blocks', 'defaults', defaults, varargin{:});
 MakeBiplex = get_var('MakeBiplex', 'defaults', defaults, varargin{:});
 BitWidthIn = get_var('BitWidthIn', 'defaults', defaults, varargin{:});
 BitWidthOut = get_var('BitWidthOut', 'defaults', defaults, varargin{:});
@@ -214,7 +219,7 @@ for p=1:pols,
                      'data_width', tostring(BitWidthIn), ...
                     'coeff_width', tostring(CoeffBitWidth), ...
                     'coeff_frac_width', tostring(CoeffBitWidth-1), ...
-                    'delay', tostring(2^(PFBSize-n_inputs)), ...
+                    'delay', tostring(2^(PFBSize-n_inputs) * n_pol_blocks), ...
                     'Position', [150*(t+1) 50*portnum*TotalTaps 150*(t+1)+100 50*portnum*TotalTaps+30]);
             end
         end

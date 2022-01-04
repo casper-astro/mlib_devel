@@ -9,7 +9,7 @@ from memory import Register
 class onehundred_gbe(YellowBlock):
     @staticmethod
     def factory(blk, plat, hdl_root=None):
-        if plat.name in ['vcu118', 'vcu128'] or plat.conf.get('family', None) in ["ultrascaleplus"]:
+        if plat.name in ['vcu118', 'vcu128'] or plat.conf.get('family', None) in ["ultrascaleplus", "rfsoc"]:
             return onehundredgbe_usplus(blk, plat, hdl_root)
         else:
             raise RuntimeError("Don't know how to implement 100GbE for this board/FPGA")
@@ -89,7 +89,7 @@ class onehundredgbe_usplus(onehundred_gbe):
         self.add_source(kdir + '/macphy/macaxissender.vhd')
         self.add_source(kdir + '/macphy/macaxisdecoupler.vhd')
         self.add_source(kdir + '/macphy/macaxisreceiver.vhd')
-        self.add_source(kdir + '/macphy/gmacqsfptop.vhd')
+        self.add_source(kdir + '/macphy/gmacqsfptop2.vhd')
         self.add_source(kdir + '/ringbuffer/cpudualportpacketringbuffer.vhd')
         self.add_source(kdir + '/ringbuffer/packetringbuffer.vhd')
         self.add_source(kdir + '/ringbuffer/dualportpacketringbuffer.vhd')
@@ -120,7 +120,6 @@ class onehundredgbe_usplus(onehundred_gbe):
         self.add_source('onehundred_gbe/ip/axispacketbufferfifo/axispacketbufferfifo.xci')
         self.add_source('onehundred_gbe/ip/async_fifo_513b_512deep/async_fifo_513b_512deep.xci')
         self.add_source('onehundred_gbe/ip/axis_data_fifo/axis_data_fifo_0.xci')
-        self.add_source('onehundred_gbe/ip/EthMACPHY100GQSFP4x/EthMACPHY100GQSFP4x.xci')
         self.add_source('onehundred_gbe/ip/dest_address_fifo/dest_address_fifo.xci')
         if self.platform.mmbus_architecture[0] == 'wishbone':
             self.add_source('onehundred_gbe/casper100g_wb_attach.v')
@@ -139,26 +138,40 @@ class onehundredgbe_usplus(onehundred_gbe):
         self.portbase = '{blocktype}{port}'.format(blocktype=self.blocktype, port=self.port)
 
         try:
-            ethconf = self.platform.conf["onehundredgbe"]
+            self.ethconf = self.platform.conf["onehundredgbe"]
         except KeyError:
             self.logger.exception("Failed to find `onehundredgbe` configuration in platform's YAML file")
             raise
         
         try:
-            self.refclk_freq_str = ethconf["refclk_freq_str"]
+            self.refclk_freq_str = self.ethconf["refclk_freq_str"]
         except KeyError:
             self.logger.error("Missing onehundredgbe `refclk_freq_str` parameter in YAML file")
             raise
         self.refclk_freq = float(self.refclk_freq_str)
+
         try:
-            self.cmac_loc = ethconf["cmac_loc"][self.port]
+            self.include_rs_fec = self.ethconf["include_rs_fec"]
+        except KeyError:
+            self.logger.warning("Missing `include_rs_fec` parameter in YAML file. Defaulting to 0")
+            self.include_rs_fec = 0
+
+        if self.include_rs_fec:
+            self.cmac_ip_name = 'EthMACPHY100GQSFP4x_rsfec'
+            self.add_source('onehundred_gbe/ip/EthMACPHY100GQSFP4x_rsfec/EthMACPHY100GQSFP4x_rsfec.xci')
+        else:
+            self.cmac_ip_name = 'EthMACPHY100GQSFP4x'
+            self.add_source('onehundred_gbe/ip/EthMACPHY100GQSFP4x/EthMACPHY100GQSFP4x.xci')
+
+        try:
+            self.cmac_loc = self.ethconf["cmac_loc"][self.port]
         except KeyError:
             self.logger.error("Missing onehundredgbe `cmac_loc` parameter in YAML file")
             raise
         except IndexError:
             self.logger.error("Missing entry for port %d in onehundredgbe `cmac_loc` parameter" % self.port)
         try:
-            self.gt_group = ethconf["gt_group"][self.port]
+            self.gt_group = self.ethconf["gt_group"][self.port]
         except KeyError:
             self.logger.error("Missing onehundredgbe `gt_group` parameter in YAML file")
             raise
@@ -187,6 +200,7 @@ class onehundredgbe_usplus(onehundred_gbe):
         inst.add_parameter("FABRIC_PORT", "16'h%x" % self.fab_udp)
         inst.add_parameter("FABRIC_GATEWAY", "32'h%x" % self.fab_gate)
         inst.add_parameter("FABRIC_ENABLE_ON_START", "1'b%d" % int(self.fab_en))
+        inst.add_parameter("USE_RS_FEC", "1'b%d" % int(self.include_rs_fec))
         inst.add_parameter("INSTANCE_ID", self.inst_id)
         
         inst.add_port('RefClk100MHz', 'sys_clk') # sys_clk is decreed to be 100 MHz.
@@ -197,7 +211,7 @@ class onehundredgbe_usplus(onehundred_gbe):
         else:
             inst.add_port('aximm_clk', 'axil_clk')
             inst.add_port('icap_clk', 'axil_clk')
-        inst.add_port('axis_reset', "1'b0")#'axil_rst')
+        inst.add_port('axis_reset', self.fullname+'_rst')
         # MGT connections
         inst.add_port('mgt_qsfp_clock_p', self.portbase+'_refclk_p', dir='in', parent_port=True)
         inst.add_port('mgt_qsfp_clock_n', self.portbase+'_refclk_n', dir='in', parent_port=True)
@@ -248,6 +262,7 @@ class onehundredgbe_usplus(onehundred_gbe):
         inst.add_port('gbe_tx_data',          self.fullname+'_tx_data',        width=512)
         inst.add_port('gbe_tx_valid',         self.fullname+'_tx_valid',       width=4)
         inst.add_port('gbe_tx_end_of_frame',  self.fullname+'_tx_end_of_frame')
+        inst.add_port('gbe_tx_byte_enable',   self.fullname+'_tx_byte_enable', width=64)
 
         # Register interfaces
         for reg in self.memory_map:
@@ -298,7 +313,7 @@ class onehundredgbe_usplus(onehundred_gbe):
         #self.myclk = ClockConstraint(self.portbase+'_refclk_p', freq=self.refclk_freq)
         #consts += [self.myclk]
         # Set the 100G clock to be asynchronous to both the user clock and the system clock / axi clk
-        consts += [ClockGroupConstraint('-include_generated_clocks -of_objects [get_ports sys_clk_p]', '-include_generated_clocks %s' % clkname, 'asynchronous')]
+        consts += [ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets sys_clk]', '-include_generated_clocks %s' % clkname, 'asynchronous')]
         consts += [ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets user_clk]', '-include_generated_clocks %s' % clkname, 'asynchronous')]
         consts += [ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets axil_clk]', '-include_generated_clocks %s' % clkname, 'asynchronous')]
 
@@ -308,8 +323,8 @@ class onehundredgbe_usplus(onehundred_gbe):
         tcl_cmds = {}
         tcl_cmds['pre_synth'] = []
         # Override the IP settings
-        tcl_cmds['pre_synth'] += ['copy_ip -name EthMACPHY100GQSFP4x%d [get_ips EthMACPHY100GQSFP4x]' % self.inst_id]
-        tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.CMAC_CORE_SELECT {%s} CONFIG.GT_REF_CLK_FREQ {%s} CONFIG.GT_GROUP_SELECT {%s} CONFIG.RX_GT_BUFFER {1} CONFIG.GT_RX_BUFFER_BYPASS {0}] [get_ips EthMACPHY100GQSFP4x%d]' % (self.cmac_loc, self.refclk_freq_str, self.gt_group, self.inst_id)]
+        tcl_cmds['pre_synth'] += ['copy_ip -name %s%d [get_ips %s]' % (self.cmac_ip_name, self.inst_id, self.cmac_ip_name)]
+        tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.CMAC_CORE_SELECT {%s} CONFIG.GT_REF_CLK_FREQ {%s} CONFIG.GT_GROUP_SELECT {%s} CONFIG.RX_GT_BUFFER {1} CONFIG.GT_RX_BUFFER_BYPASS {0}] [get_ips %s%d]' % (self.cmac_loc, self.refclk_freq_str, self.gt_group, self.cmac_ip_name, self.inst_id)]
         try:
             if self.platform.use_pr:
                 tcl_cmds['pre_synth'] += ['move_files -of_objects [get_reconfig_modules user_top-toolflow] [get_files EthMACPHY100GQSFP4x%d.xci]' % self.inst_id]
@@ -318,8 +333,11 @@ class onehundredgbe_usplus(onehundred_gbe):
         #tcl_cmds['pre_synth'] = ['set_property -dict [list CONFIG.GT_GROUP_SELECT {%s} CONFIG.LANE1_GT_LOC {%s} CONFIG.LANE2_GT_LOC {%s} CONFIG.LANE3_GT_LOC {%s} CONFIG.LANE4_GT_LOC {%s} CONFIG.RX_GT_BUFFER {1} CONFIG.GT_RX_BUFFER_BYPASS {0}] [get_ips EthMACPHY100GQSFP4x%d' % (self.gt_group, gts[0, gts[1], gts[2], gts[3], self.inst_id)]
 
         ## The LOCs seem to get overriden by the user constraints above, but we need to manually unplace the CMAC blocks
-        ## Unplace all CMACs post_synth, then place all pre_impl, to avoid situations where we try to place on a site already being used
-        #tcl_cmds['pre_impl'] = []
-        #tcl_cmds['pre_impl'] += ['unplace_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s_inst/*" }]' % self.fullname]
-        #tcl_cmds['pre_impl'] += ['place_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s_inst/*" }] %s' % (self.fullname, self.cmac_loc)]
+        if self.ethconf.get("override_cmac_placement", False):
+            # Unplace CMACs post_synth, then place all pre_impl, to avoid situations where we try to place on a site already being used
+            tcl_cmds['pre_impl'] = []
+            tcl_cmds['post_synth'] = []
+            tcl_cmds['post_synth'] += ['unplace_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s_inst/*" }]' % self.fullname]
+            forced_cmac_loc = self.ethconf["override_cmac_placement"][self.port]
+            tcl_cmds['pre_impl'] += ['place_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s_inst/*" }] %s' % (self.fullname, forced_cmac_loc)]
         return tcl_cmds

@@ -1,0 +1,6 @@
+# compile vhdl design source files
+vhdl xpm  "C:/Xilinx/Vivado/2016.2/data/ip/xpm/xpm_VCOMP.vhd"
+vhdl fifo_generator_v13_1_1  "../../../ADC08D1520_core.ip_user_files/ipstatic/fifo_generator_v13_1_1/hdl/fifo_generator_v13_1_rfs.vhd"
+
+# Do not sort compile order
+nosort

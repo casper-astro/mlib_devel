@@ -54,7 +54,7 @@ entity forty_gbe is
         qsfp_gtrefclk    : out std_logic;
         qsfp_soft_reset  : in  std_logic;
 
-        eth_if_present   : out std_logic;
+        fgbe_if_present   : out std_logic;
 
         xlgmii_txled     : out std_logic_vector(1 downto 0);
         xlgmii_rxled     : out std_logic_vector(1 downto 0);
@@ -148,7 +148,7 @@ architecture arch_forty_gbe of forty_gbe is
         DAT_I  : in std_logic_vector(31 downto 0);
         DAT_O  : out std_logic_vector(31 downto 0);
         ACK_O  : out std_logic;
-        ADR_I  : in std_logic_vector(15 downto 0);
+        ADR_I  : in std_logic_vector(31 downto 0);
         CYC_I  : in std_logic;
         SEL_I  : in std_logic_vector(3 downto 0);
         STB_I  : in std_logic;
@@ -211,8 +211,8 @@ architecture arch_forty_gbe of forty_gbe is
         );
     end component IEEE802_3_XL_PHY_top;
     
-    attribute mark_debug : string;
-    
+    --attribute mark_debug : string;
+    attribute ASYNC_REG : string; 
     signal xlgmii_tx_valid        : std_logic_vector(3 downto 0);
     signal xlgmii_tx_end_of_frame : std_logic;
     signal xlgmii_tx_data         : std_logic_vector(255 downto 0);
@@ -239,9 +239,9 @@ architecture arch_forty_gbe of forty_gbe is
     signal xlgmii_txd : std_logic_vector(255 downto 0);
     signal xlgmii_txc : std_logic_vector(31 downto 0);
     signal xlgmii_rxd : std_logic_vector(255 downto 0);
-    attribute mark_debug of xlgmii_rxd: signal is "true";
+    --attribute mark_debug of xlgmii_rxd: signal is "true";
     signal xlgmii_rxc : std_logic_vector(31 downto 0);
-    attribute mark_debug of xlgmii_rxc: signal is "true";
+    --attribute mark_debug of xlgmii_rxc: signal is "true";
 
     signal xlgmii_txled_sig : std_logic_vector(1 downto 0);
     signal xlgmii_rxled_sig : std_logic_vector(1 downto 0);
@@ -274,7 +274,30 @@ architecture arch_forty_gbe of forty_gbe is
     signal rx_start_count_3 : std_logic_vector(15 downto 0);
 
     signal qsfp_gtrefclk_pb : std_logic;
-
+    
+    signal sXlGmiiRxLedD2 : std_logic;
+    signal sXlGmiiRxLedD1 : std_logic;
+    attribute ASYNC_REG of sXlGmiiRxLedD1 : signal is "TRUE";
+    attribute ASYNC_REG of sXlGmiiRxLedD2 : signal is "TRUE";       
+    
+    signal sXlGmiiTxLedD2 : std_logic;
+    signal sXlGmiiTxLedD1 : std_logic;
+    attribute ASYNC_REG of sXlGmiiTxLedD1 : signal is "TRUE";
+    attribute ASYNC_REG of sXlGmiiTxLedD2 : signal is "TRUE";       
+    
+    signal sPhyRxUpSigD2 : std_logic;
+    signal sPhyRxUpSigD1 : std_logic;
+    attribute ASYNC_REG of sPhyRxUpSigD1 : signal is "TRUE";
+    attribute ASYNC_REG of sPhyRxUpSigD2 : signal is "TRUE"; 
+    
+    --signal sFortyGbeRstD2 : std_logic;
+    --signal sFortyGbeRstD1 : std_logic;
+    --attribute ASYNC_REG of sFortyGbeRstD1 : signal is "TRUE";
+    --attribute ASYNC_REG of sFortyGbeRstD2 : signal is "TRUE"; 
+    
+    --signal sUserCombRst : std_logic;
+    --signal sSysCombRst : std_logic;
+   
 begin
 
     xlgmii_tx_valid        <= forty_gbe_tx_valid;
@@ -296,6 +319,18 @@ begin
     forty_gbe_rx_dest_port    <= xlgmii_rx_dest_port;
     forty_gbe_rx_bad_frame    <= xlgmii_rx_bad_frame;
     forty_gbe_rx_overrun      <= xlgmii_rx_overrun;
+    
+    
+    --pCDC40GbEResetSynchroniser : process(sys_clk)
+    --begin
+    --   if (rising_edge(sys_clk))then
+    --       sFortyGbeRstD2 <= sFortyGbeRstD1;
+    --       sFortyGbeRstD1 <= forty_gbe_rst;                    
+    --   end if;
+    --end process pCDC40GbEResetSynchroniser; 
+    
+    --sUserCombRst <= user_rst or forty_gbe_rst;
+    --sSysCombRst <= sys_rst or sFortyGbeRstD2;
 
     -- WISHBONE SLAVE 10 - 40GBE MAC 0
     ska_forty_gb_eth_0 : ska_forty_gb_eth
@@ -311,8 +346,8 @@ begin
         RX_CRC_CHK_ENABLE => RX_CRC_CHK_ENABLE,
         RX_2B_SWAP        => RX_2B_SWAP)
     port map(
-        clk => user_clk, --forty_gb_eth_clk,
-        rst => user_rst,--user_rst, --forty_gb_eth_rst,
+        clk => user_clk,
+        rst => user_rst,
         tx_valid            => xlgmii_tx_valid,
         tx_end_of_frame     => xlgmii_tx_end_of_frame,
         tx_data             => xlgmii_tx_data,
@@ -336,7 +371,7 @@ begin
         DAT_I => wb_dat_i,
         DAT_O => wb_dat_o,
         ACK_O => wb_ack_o,
-        ADR_I => wb_adr_i(15 downto 0),
+        ADR_I => wb_adr_i,
         CYC_I => wb_cyc_i,
         SEL_I => wb_sel_i,
         STB_I => wb_stb_i,
@@ -415,9 +450,30 @@ begin
 
     xlgmii_rx_overrun_ack  <= forty_gbe_rx_overrun_ack;
     xlgmii_rx_ack          <= forty_gbe_rx_ack;
-    forty_gbe_led_rx <= xlgmii_rxled_sig(1); -- xlgmii_rxled(0)(1) is activity, xlgmii_rxled(0)(0) is phy rx up
-    forty_gbe_led_tx <= xlgmii_txled_sig(1); -- xlgmii_txled(0)(1) is activity, xlgmii_txled(0)(0) is phy tx up
-    forty_gbe_led_up <= phy_rx_up_sig;
+    
+    pCDCLedSynchroniser : process(user_rst, user_clk)
+    begin
+       if (user_rst = '1')then
+           sXlGmiiRxLedD1 <= '0';
+           sXlGmiiRxLedD2 <= '0';      
+           sXlGmiiTxLedD1 <= '0';
+           sXlGmiiTxLedD2 <= '0';
+           sPhyRxUpSigD1 <= '0';
+           sPhyRxUpSigD2 <= '0';
+       elsif (rising_edge(user_clk))then
+           sXlGmiiRxLedD2 <= sXlGmiiRxLedD1;
+           sXlGmiiRxLedD1 <= xlgmii_rxled_sig(1);
+           sXlGmiiTxLedD2 <= sXlGmiiTxLedD1;
+           sXlGmiiTxLedD1 <= xlgmii_txled_sig(1);
+           sPhyRxUpSigD2 <= sPhyRxUpSigD1;
+           sPhyRxUpSigD1 <= phy_rx_up_sig;                     
+       end if;
+    end process pCDCLedSynchroniser;        
+    
+    
+    forty_gbe_led_rx <= sXlGmiiRxLedD2; -- xlgmii_rxled(0)(1) is activity, xlgmii_rxled(0)(0) is phy rx up
+    forty_gbe_led_tx <= sXlGmiiTxLedD2; -- xlgmii_txled(0)(1) is activity, xlgmii_txled(0)(0) is phy tx up
+    forty_gbe_led_up <= sPhyRxUpSigD2;
 
     IEEE802_3_XL_PHY_0 : component IEEE802_3_XL_PHY_top
         port map(
@@ -440,7 +496,7 @@ begin
             TEST_PATTERN_ERROR_O => open
         );
 
-        eth_if_present <= '1';
+        fgbe_if_present <= '1';
         phy_rx_up    <= phy_rx_up_sig;
         xlgmii_txled <= xlgmii_txled_sig;
         xlgmii_rxled <= xlgmii_rxled_sig;

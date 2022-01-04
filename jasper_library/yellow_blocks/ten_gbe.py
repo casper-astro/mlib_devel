@@ -16,6 +16,8 @@ class ten_gbe(YellowBlock):
             return tengbaser_xilinx_k7(blk, plat, hdl_root, use_gth=plat.name=='vcu118')
         elif plat.fpga.startswith('xcku'):
             return tengbaser_xilinx_ku7(blk, plat, hdl_root)
+        elif plat.fpga.startswith('xczu'):
+            return tengbaser_xilinx_ultrascale(blk, plat, hdl_root)
         else:
             return tengbe_v2_xilinx_v6(blk, plat, hdl_root)
 
@@ -582,4 +584,315 @@ class tengbaser_xilinx_usplus(ten_gbe):
         
         cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d -asynchronous -group [get_clocks -include_generated_clocks -of_objects [get_nets user_clk]] -group [get_clocks -include_generated_clocks ethclk%d]'%(num,num)))
         cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d -asynchronous -group [get_clocks -include_generated_clocks -of_objects [get_nets sys_clk]] -group [get_clocks -include_generated_clocks ethclk%d]'%(num,num)))
+        return cons
+
+
+class tengbaser_xilinx_ultrascale(ten_gbe):
+    def __init__(self, blk, plat, hdl_root):
+        ten_gbe.__init__(self, blk, plat, hdl_root)
+    def initialize(self):
+        self.typecode = TYPECODE_ETHCORE
+        self.exc_requirements = ['tge%d'%self.slot]
+        self.add_source('kat_ten_gb_eth/*')
+        #self.add_source('tengbaser_phy_ultrascale/tengbaser_phy_ultrascale.v')
+        self.add_source('tengbaser_phy_ultrascale/tengbaser_phy_ultrascale.xci')
+        self.add_source('tengbaser_infrastructure_ultrascale/*')
+
+        self.port = self.port_r1
+        self.infrastructure_id = self.port // 4
+        self.provides = ['ethernet']
+        if self.cpu_rx_en and self.cpu_tx_en:
+            self.provides += ['cpu_ethernet']
+
+    def modify_top(self,top):
+        # An infrastructure instance is good for 4 SFPs. Assuming the ports are numbered
+        # so that instance0 serves ports 0-3, instance1 serves ports 4-7, etc. decide
+        # whether to instantiate a new infrastrucure block
+        if top.has_instance('tengbaser_infra%d_inst'%self.infrastructure_id):
+            pass
+        else:
+            self.instantiate_infra(top, self.infrastructure_id)
+            
+        self.instantiate_phy(top, self.infrastructure_id)
+        self.instantiate_ktge(top, self.infrastructure_id)
+        self._instantiate_wbToaxi4lite(top,self.infrastructure_id)
+
+    def instantiate_infra(self, top, num):
+        infra = top.get_instance('tengbaser_infrastructure_ultrascale', 'tengbaser_infra%d_inst'%num)
+        infra.add_port('gt_refclk_n', 'ref_clk_n%d'%num, parent_port=True, dir='in')
+        infra.add_port('gt_refclk_p', 'ref_clk_p%d'%num, parent_port=True, dir='in')
+        #infra.add_port('qpll0reset','gtwiz_reset_qpll0reset_out'%num)
+        infra.add_port('qpll0reset',"1'b0")
+        infra.add_port('qpll0lock','gtwiz_reset_qpll0lock_in%d'%num)
+        infra.add_port('qpll0outclk','qpll0clk_in%d'%num)
+        infra.add_port('qpll0outrefclk','qpll0refclk_in%d'%num)
+        #infra.add_port('qpll1reset','gtwiz_reset_qpll1reset_out'%num)
+        infra.add_port('qpll1reset',"1'b0")
+        infra.add_port('qpll1lock','gtwiz_reset_qpll1lock_in%d'%num)
+        infra.add_port('qpll1outclk','qpll1clk_in%d'%num)
+        infra.add_port('qpll1outrefclk','qpll1refclk_in%d'%num)
+        
+    def instantiate_phy(self, top, num):
+        phy = top.get_instance('tengbaser_phy_ultrascale', 'tengbaser_phy%d'%self.port)
+        #GT_0 signals
+        phy.add_port('gt_txp_out_0', 'mgt_tx_p%d'%self.port, parent_port=True, dir='out')
+        phy.add_port('gt_txn_out_0', 'mgt_tx_n%d'%self.port, parent_port=True, dir='out')
+        phy.add_port('gt_rxp_in_0', 'mgt_rx_p%d'%self.port, parent_port=True, dir='in')
+        phy.add_port('gt_rxn_in_0', 'mgt_rx_n%d'%self.port, parent_port=True, dir='in')
+        phy.add_port('tx_mii_clk_0','tx_mii_clk%d'%self.port)
+        #phy.add_port('rx_core_clk_0','rx_clk_out%d'%self.port)
+        phy.add_port('rx_core_clk_0','tx_mii_clk%d'%self.port)
+        phy.add_port('rx_clk_out_0','rx_clk_out%d'%self.port)
+        phy.add_port('gt_loopback_in_0',"3'b000")
+        #RX_0 Signals
+        phy.add_port('rx_reset_0','rx_core_reset_out%d'%self.port)
+        phy.add_port('rxrecclkout_0','')
+        #RX_0 User Interface  Signals
+        phy.add_port('rx_mii_d_0','xgmii_rxd%d'%self.port, width=64)
+        phy.add_port('rx_mii_c_0','xgmii_rxc%d'%self.port, width=8)
+        #RX_0 Control Signals
+        phy.add_port('ctl_rx_test_pattern_0',"1'b0")
+        phy.add_port('ctl_rx_test_pattern_enable_0',"1'b0")
+        phy.add_port('ctl_rx_data_pattern_select_0',"1'b0")
+        phy.add_port('ctl_rx_prbs31_test_pattern_enable_0',"1'b0")
+        #RX_0 Stats Signals
+        phy.add_port('stat_rx_block_lock_0','stat_rx_block_lock%d'%self.port)
+        phy.add_port('stat_rx_framing_err_valid_0','')
+        phy.add_port('stat_rx_framing_err_0','')
+        phy.add_port('stat_rx_hi_ber_0','')
+        phy.add_port('stat_rx_valid_ctrl_code_0','')
+        phy.add_port('stat_rx_bad_code_0','')
+        phy.add_port('stat_rx_bad_code_valid_0','')
+        phy.add_port('stat_rx_error_valid_0','')
+        phy.add_port('stat_rx_error_0','')
+        phy.add_port('stat_rx_fifo_error_0','')
+        phy.add_port('stat_rx_local_fault_0','')
+        phy.add_port('stat_rx_status_0','')
+        #TX_0 Signals
+        phy.add_port('tx_reset_0','tx_core_reset_out%d'%self.port)
+        #TX_0 User Interface  Signals
+        phy.add_port('tx_mii_d_0','xgmii_txd%d'%self.port, width=64)
+        phy.add_port('tx_mii_c_0','xgmii_txc%d'%self.port, width=8)
+        #TX_0 Control Signals
+        phy.add_port('ctl_tx_test_pattern_0',"1'b0")
+        phy.add_port('ctl_tx_test_pattern_enable_0',"1'b0")
+        phy.add_port('ctl_tx_test_pattern_select_0',"1'b0")
+        phy.add_port('ctl_tx_data_pattern_select_0',"1'b0")
+        phy.add_port('ctl_tx_test_pattern_seed_a_0',"58'b0")
+        phy.add_port('ctl_tx_test_pattern_seed_b_0',"58'b0")
+        phy.add_port('ctl_tx_prbs31_test_pattern_enable_0',"1'b0")
+        #TX_0 Stats Signals
+        phy.add_port('stat_tx_local_fault_0','')
+        #power good signal
+        phy.add_port('gtpowergood_out_0','')
+        #clk sel
+        phy.add_port('txoutclksel_in_0',"3'b101")
+        phy.add_port('rxoutclksel_in_0',"3'b101")
+        #reset signals
+        phy.add_port('rx_serdes_reset_0','rx_serdes_reset%d'%self.port)
+        phy.add_port('gt_reset_all_in_0','gt_reset_all%d'%self.port)
+        #phy.add_port('gt_tx_reset_in_0',"1'b0")
+        #phy.add_port('gt_rx_reset_in_0',"1'b0")
+        phy.add_port('gt_tx_reset_in_0','sys_rst')
+        phy.add_port('gt_rx_reset_in_0','sys_rst')
+        phy.add_port('gt_reset_tx_done_out_0','gt_reset_tx_done_out%d'%self.port)
+        phy.add_port('gt_reset_rx_done_out_0','gt_reset_rx_done_out%d'%self.port)
+        #clk signals
+        phy.add_port('qpll0clk_in','qpll0clk_in%d'%num)
+        phy.add_port('qpll0refclk_in','qpll0refclk_in%d'%num)
+        phy.add_port('qpll1clk_in','qpll1clk_in%d'%num)
+        phy.add_port('qpll1refclk_in','qpll1refclk_in%d'%num)
+        phy.add_port('gtwiz_reset_qpll0lock_in','gtwiz_reset_qpll0lock_in%d'%num)
+        phy.add_port('gtwiz_reset_qpll1lock_in','gtwiz_reset_qpll1lock_in%d'%num)
+        #phy.add_port('gtwiz_reset_qpll0reset_out','gtwiz_reset_qpll0reset_out'%num)
+        #phy.add_port('gtwiz_reset_qpll1reset_out','gtwiz_reset_qpll1reset_out'%num)
+        phy.add_port('gtwiz_reset_qpll0reset_out','')
+        phy.add_port('gtwiz_reset_qpll1reset_out','')
+        #sys reset
+        phy.add_port('sys_reset','sys_rst')
+        #dclk we use 128MHz for the dclk
+        phy.add_port('dclk','clk_128M')
+        
+        phy_reset = top.get_instance('tengbaser_phy_ultrascale_reset', 'tengbaser_phy_reset%d'%self.port)
+        phy_reset.add_port('gt_txusrclk2','tx_mii_clk%d'%self.port)
+        phy_reset.add_port('gt_rxusrclk2','rx_clk_out%d'%self.port)
+        phy_reset.add_port('rx_core_clk','rx_clk_out%d'%self.port)
+        phy_reset.add_port('gt_tx_reset_in','gt_reset_tx_done_out%d'%self.port)
+        phy_reset.add_port('gt_rx_reset_in','gt_reset_rx_done_out%d'%self.port)
+        phy_reset.add_port('tx_core_reset_in',"1'b0")
+        phy_reset.add_port('rx_core_reset_in',"1'b0")
+        phy_reset.add_port('tx_core_reset_out','tx_core_reset_out%d'%self.port)
+        phy_reset.add_port('rx_core_reset_out','rx_core_reset_out%d'%self.port)
+        phy_reset.add_port('rx_serdes_reset_out','rx_serdes_reset%d'%self.port)
+        phy_reset.add_port('usr_tx_reset','')
+        phy_reset.add_port('usr_rx_reset','')
+        phy_reset.add_port('gtwiz_reset_all','gt_reset_all%d'%self.port)
+        phy_reset.add_port('sys_reset','sys_rst')
+		
+    def instantiate_ktge(self, top, num=None):
+        ktge = top.get_instance(name=self.fullname, entity='kat_ten_gb_eth')
+        ktge.add_parameter('FABRIC_MAC', "48'h%x"%self.fab_mac)
+        ktge.add_parameter('FABRIC_IP', "32'h%x"%self.fab_ip)
+        ktge.add_parameter('FABRIC_PORT', self.fab_udp)
+        ktge.add_parameter('FABRIC_GATEWAY', "8'h%x"%self.fab_gate)
+        ktge.add_parameter('FABRIC_ENABLE', int(self.fab_en))
+        ktge.add_parameter('LARGE_PACKETS', int(self.large_frames))
+        ktge.add_parameter('RX_DIST_RAM', int(self.rx_dist_ram))
+        ktge.add_parameter('CPU_RX_ENABLE', int(self.cpu_rx_en))
+        ktge.add_parameter('CPU_TX_ENABLE', int(self.cpu_tx_en))
+        ktge.add_parameter('TTL', self.ttl)
+
+        # PHY CONF interface
+        ktge.add_port('mgt_txpostemphasis', 'mgt_txpostemphasis%d'%(self.port), width=5)
+        ktge.add_port('mgt_txpreemphasis', 'mgt_txpreemphasis%d'%(self.port), width=4)
+        ktge.add_port('mgt_txdiffctrl', 'mgt_txdiffctrl%d'%(self.port), width=4)
+        ktge.add_port('mgt_rxeqmix', 'mgt_rxeqmix%d'%(self.port), width=3)
+
+        # XGMII interface
+        if num is None:
+            ktge.add_port('xaui_clk', 'xaui_clk')
+        else:
+            ktge.add_port('xaui_clk', 'tx_mii_clk%d'%self.port)
+        ktge.add_port('xaui_reset', 'sys_rst', parent_sig=False)
+        ktge.add_port('xgmii_txd', 'xgmii_txd%d'%self.port, width=64)
+        ktge.add_port('xgmii_txc', 'xgmii_txc%d'%self.port, width=8)
+        ktge.add_port('xgmii_rxd', 'xgmii_rxd%d'%self.port, width=64)
+        ktge.add_port('xgmii_rxc', 'xgmii_rxc%d'%self.port, width=8)
+
+        # XAUI CONF interface
+        ktge.add_port('xaui_status', "{7'b0,stat_rx_block_lock%d}"%self.port,parent_sig=False)
+
+        ktge.add_port('clk', 'user_clk', parent_sig=False)
+
+        # Simulink ports
+        ktge.add_port('rst', '%s_rst'%self.fullname)
+        # tx
+        ktge.add_port('tx_valid       ', '%s_tx_valid'%self.fullname)
+        ktge.add_port('tx_afull       ', '%s_tx_afull'%self.fullname)
+        ktge.add_port('tx_overflow    ', '%s_tx_overflow'%self.fullname)
+        ktge.add_port('tx_end_of_frame', '%s_tx_end_of_frame'%self.fullname)
+        ktge.add_port('tx_data        ', '%s_tx_data'%self.fullname, width=64)
+        ktge.add_port('tx_dest_ip     ', '%s_tx_dest_ip'%self.fullname, width=32)
+        ktge.add_port('tx_dest_port   ', '%s_tx_dest_port'%self.fullname, width=16)
+        # rx
+        ktge.add_port('rx_valid', '%s_rx_valid'%self.fullname)
+        ktge.add_port('rx_end_of_frame', '%s_rx_end_of_frame'%self.fullname)
+        ktge.add_port('rx_data',         '%s_rx_data'%self.fullname, width=64)
+        ktge.add_port('rx_source_ip',    '%s_rx_source_ip'%self.fullname, width=32)
+        ktge.add_port('rx_source_port',  '%s_rx_source_port'%self.fullname, width=16)
+        ktge.add_port('rx_bad_frame',    '%s_rx_bad_frame'%self.fullname)
+        ktge.add_port('rx_overrun',      '%s_rx_overrun'%self.fullname)
+        ktge.add_port('rx_overrun_ack',  '%s_rx_overrun_ack'%self.fullname)
+        ktge.add_port('rx_ack', '%s_rx_ack'%self.fullname)
+
+        # Status LEDs
+        ktge.add_port('led_up', '%s_led_up'%self.fullname)
+        ktge.add_port('led_rx', '%s_led_rx'%self.fullname)
+        ktge.add_port('led_tx', '%s_led_tx'%self.fullname)
+
+        # Wishbone memory for status registers / ARP table
+        #ktge.add_wb_interface(self.unique_name, mode='rw', nbytes=0xF000, typecode=self.typecode) # as in matlab code
+        top.add_axi4lite_interface(regname=self.unique_name, mode='rw', nbytes=0xF000, typecode=self.typecode, axi4lite_mode='raw')
+        # add wb ports
+        ktge.add_port('wb_clk_i','axil_clk')
+        ktge.add_port('wb_rst_i',self.fullname + 'wb_rst')#
+        ktge.add_port('wb_stb_i', self.fullname + '_wb_stb')#
+        ktge.add_port('wb_cyc_i', self.fullname + '_wb_cyc')#
+        ktge.add_port('wb_we_i' , self.fullname + '_wb_we')#
+        ktge.add_port('wb_adr_i' , self.fullname + 'wb_adr', width=32)#
+        ktge.add_port('wb_dat_i' , self.fullname + 'wb_dat_i', width=32)#
+        ktge.add_port('wb_sel_i' , self.fullname + 'wb_sel', width=4)#
+        ktge.add_port('wb_dat_o' , self.fullname + 'wb_dat_o', width=32)#
+        ktge.add_port('wb_err_o' , self.fullname + 'wb_err')
+        ktge.add_port('wb_ack_o' , self.fullname + 'wb_ack')#
+
+    def _instantiate_wbToaxi4lite(self,top,num=None):
+        gbe_wb2axi4lite = top.get_instance(entity='axi_slave_wishbone_classic_master', name=self.fullname+'_wb2axi4lite')
+        #add parameter
+        gbe_wb2axi4lite.add_parameter('C_S_AXI_ID_WIDTH', value=1)
+        gbe_wb2axi4lite.add_parameter('C_S_AXI_DATA_WIDTH',value=32)
+        gbe_wb2axi4lite.add_parameter('C_S_AXI_ADDR_WIDTH',value=32)
+        gbe_wb2axi4lite.add_parameter('C_S_AXI_AWUSER_WIDTH',value=1)
+        gbe_wb2axi4lite.add_parameter('C_S_AXI_ARUSER_WIDTH',value=1)
+        gbe_wb2axi4lite.add_parameter('C_S_AXI_WUSER_WIDTH',value=1)
+        gbe_wb2axi4lite.add_parameter('C_S_AXI_RUSER_WIDTH',value=1)
+        gbe_wb2axi4lite.add_parameter('C_S_AXI_BUSER_WIDTH',value=1)
+        #wb interface
+        gbe_wb2axi4lite.add_port('RST_O',self.fullname + 'wb_rst')
+        gbe_wb2axi4lite.add_port('DAT_O',self.fullname + 'wb_dat_i', width=32)
+        gbe_wb2axi4lite.add_port('DAT_I',self.fullname + 'wb_dat_o', width=32)
+        gbe_wb2axi4lite.add_port('ACK_I',self.fullname + 'wb_ack')
+        gbe_wb2axi4lite.add_port('ADR_O',self.fullname + 'wb_adr', width=32)
+        gbe_wb2axi4lite.add_port('CYC_O',self.fullname + '_wb_cyc')
+        gbe_wb2axi4lite.add_port('SEL_O',self.fullname + 'wb_sel', width=4)
+        gbe_wb2axi4lite.add_port('STB_O',self.fullname + '_wb_stb')
+        gbe_wb2axi4lite.add_port('WE_O',self.fullname + '_wb_we')
+        #axi4lite interface
+        gbe_wb2axi4lite.add_port('S_AXI_ACLK','axil_clk')
+        gbe_wb2axi4lite.add_port('S_AXI_ARESETN','axil_rst_n')
+        gbe_wb2axi4lite.add_port('S_AXI_AWREADY','m_axi4lite_%s_awready' %self.unique_name)
+        gbe_wb2axi4lite.add_port('S_AXI_WREADY','m_axi4lite_%s_wready' %self.unique_name)
+        gbe_wb2axi4lite.add_port('S_AXI_BRESP','m_axi4lite_%s_bresp' %self.unique_name, width=2)
+        gbe_wb2axi4lite.add_port('S_AXI_BVALID','m_axi4lite_%s_bvalid'%self.unique_name)
+        gbe_wb2axi4lite.add_port('S_AXI_ARREADY','m_axi4lite_%s_arready'%self.unique_name)
+        gbe_wb2axi4lite.add_port('S_AXI_RRESP','m_axi4lite_%s_rresp'%self.unique_name, width=2)
+        gbe_wb2axi4lite.add_port('S_AXI_RDATA','m_axi4lite_%s_rdata'%self.unique_name, width=32)
+        gbe_wb2axi4lite.add_port('S_AXI_RVALID','m_axi4lite_%s_rvalid'%self.unique_name)
+        gbe_wb2axi4lite.add_port('S_AXI_AWADDR','m_axi4lite_%s_awaddr'%self.unique_name, width=32)
+        gbe_wb2axi4lite.add_port('S_AXI_AWVALID','m_axi4lite_%s_awvalid'%self.unique_name)
+        gbe_wb2axi4lite.add_port('S_AXI_WDATA','m_axi4lite_%s_wdata'%self.unique_name, width=32)
+        gbe_wb2axi4lite.add_port('S_AXI_WVALID','m_axi4lite_%s_wvalid'%self.unique_name)
+        gbe_wb2axi4lite.add_port('S_AXI_WSTRB','m_axi4lite_%s_wstrb'%self.unique_name, width=4)
+        gbe_wb2axi4lite.add_port('S_AXI_ARADDR','m_axi4lite_%s_araddr'%self.unique_name, width=32)
+        gbe_wb2axi4lite.add_port('S_AXI_ARVALID','m_axi4lite_%s_arvalid'%self.unique_name)
+        gbe_wb2axi4lite.add_port('S_AXI_RREADY','m_axi4lite_%s_rready'%self.unique_name)
+        gbe_wb2axi4lite.add_port('S_AXI_BREADY', 'm_axi4lite_%s_bready'%self.unique_name)
+        #axi4 compatibility
+        gbe_wb2axi4lite.add_port('S_AXI_WLAST','1\'b1',parent_sig=False)
+        gbe_wb2axi4lite.add_port('S_AXI_AWID','0',parent_sig=False)
+        gbe_wb2axi4lite.add_port('S_AXI_ARID','0',parent_sig=False)
+        gbe_wb2axi4lite.add_port('S_AXI_AWSIZE','3\'b010',parent_sig=False)
+        gbe_wb2axi4lite.add_port('S_AXI_ARSIZE','3\'b010',parent_sig=False)
+        gbe_wb2axi4lite.add_port('S_AXI_AWLEN','0',parent_sig=False)
+        gbe_wb2axi4lite.add_port('S_AXI_ARLEN','0',parent_sig=False)
+        gbe_wb2axi4lite.add_port('S_AXI_AWBURST','2\'b01',parent_sig=False)
+        gbe_wb2axi4lite.add_port('S_AXI_ARBURST','2\'b01',parent_sig=False)
+        gbe_wb2axi4lite.add_port('S_AXI_AWLOCK','0',parent_sig=False)
+        gbe_wb2axi4lite.add_port('S_AXI_ARLOCK','0',parent_sig=False)
+        gbe_wb2axi4lite.add_port('S_AXI_AWPROT','0',parent_sig=False)
+        gbe_wb2axi4lite.add_port('S_AXI_ARPROT','0',parent_sig=False)
+        gbe_wb2axi4lite.add_port('S_AXI_AWQOS','0',parent_sig=False)
+        gbe_wb2axi4lite.add_port('S_AXI_ARQOS','0',parent_sig=False)
+        gbe_wb2axi4lite.add_port('S_AXI_ARREGION','0',parent_sig=False)
+        gbe_wb2axi4lite.add_port('S_AXI_AWREGION','0',parent_sig=False)
+        gbe_wb2axi4lite.add_port('S_AXI_ARCACHE','0',parent_sig=False)
+        gbe_wb2axi4lite.add_port('S_AXI_AWCACHE','0',parent_sig=False)
+        #not used
+        gbe_wb2axi4lite.add_port('S_AXI_AWUSER','0',parent_sig=False)
+        gbe_wb2axi4lite.add_port('S_AXI_WUSER','0',parent_sig=False)
+        gbe_wb2axi4lite.add_port('S_AXI_ARUSER','0',parent_sig=False)
+        gbe_wb2axi4lite.add_port('S_AXI_BUSER','')
+        gbe_wb2axi4lite.add_port('S_AXI_RUSER','')
+        #fixed output, not used
+        gbe_wb2axi4lite.add_port('S_AXI_BID','')
+        gbe_wb2axi4lite.add_port('S_AXI_RID','')
+        #not useful
+        gbe_wb2axi4lite.add_port('S_AXI_RLAST','')
+
+    def gen_constraints(self):
+        num = self.infrastructure_id
+        cons = []
+        cons.append(PortConstraint('ref_clk_p%d'%num, 'eth_clk_p',iogroup_index=num))
+        cons.append(PortConstraint('ref_clk_n%d'%num, 'eth_clk_n',iogroup_index=num))
+        cons.append(PortConstraint('mgt_tx_p%d'%self.port, 'mgt_tx_p', iogroup_index=self.port))
+        cons.append(PortConstraint('mgt_tx_n%d'%self.port, 'mgt_tx_n', iogroup_index=self.port))
+        cons.append(PortConstraint('mgt_rx_p%d'%self.port, 'mgt_rx_p', iogroup_index=self.port))
+        cons.append(PortConstraint('mgt_rx_n%d'%self.port, 'mgt_rx_n', iogroup_index=self.port))
+
+        #cons.append(PortConstraint('tx_disable%d'%self.port, 'sfp_disable', iogroup_index=self.port))
+
+        cons.append(ClockConstraint('ref_clk_p%d'%num, name='ethclk%d'%num, freq=156.25))
+        cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth0 -asynchronous -group [get_clocks -include_generated_clocks clk_128_p] -group [get_clocks -include_generated_clocks ethclk0]'))
+        cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth1 -asynchronous -group [get_clocks -of_objects [get_pins zcu111_inst/zynq_ultra_ps_e_0/U0/PS8_i/PLCLK[0]]] -group [get_clocks -include_generated_clocks ethclk0]'))
+        cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth2 -asynchronous -group [get_clocks -of_objects [get_pins zcu111_inst/zynq_ultra_ps_e_0/U0/PS8_i/PLCLK[0]]] -group [get_clocks -include_generated_clocks clk_128_p]'))
         return cons

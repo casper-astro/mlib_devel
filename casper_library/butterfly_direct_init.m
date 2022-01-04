@@ -187,13 +187,13 @@ function butterfly_direct_init(blk, varargin)
   % Validate input fields.
 
   if strcmp(bitgrowth, 'on') || strcmp(hardcode_shifts, 'on'), mux_latency = 0;
-  else mux_latency = 2;
+  else mux_latency = 1;
   end
 
   %TODO
   if use_dsp48_adders,
-      set_param(blk, 'add_latency', '4');
-      add_latency = 4;
+      set_param(blk, 'add_latency', '2');
+      add_latency = 2;
   end
 
   % Optimize twiddle for coeff = 0, 1, or alternating 0-1

@@ -121,6 +121,25 @@ try
   add_line(blk, ['rst',  '/1'], [gateway_name, '/1']);
   add_line(blk, [gateway_name,  '/1'], ['rst_term', '/1']);
   
+  % snapshot trigger input
+
+  gateway_name = sprintf('%s_snapshot_ext_trigger', gw_name);
+  port_num = num2str(4*board_count*4 + 2);
+  inport_pos  = [x+ 20, y,   x+ 20+30, y+14];
+  gateway_pos = [x+100, y-3, x+100+70, y+17];
+  term_pos = [x+190, y-3, x+200, y+17];
+  y = y + 50;
+  reuse_block(blk, 'snapshot_trig', 'built-in/inport', ...
+        'Port', port_num, ...
+        'Position', inport_pos);
+  reuse_block(blk, gateway_name, 'xbsIndex_r4/Gateway Out', ...
+        'Position', gateway_pos);
+  reuse_block(blk, 'snapshot_trig_term', 'built-in/terminator', ...
+        'Position', term_pos);
+
+  add_line(blk, ['snapshot_trig',  '/1'], [gateway_name, '/1']);
+  add_line(blk, [gateway_name,  '/1'], ['snapshot_trig_term', '/1']);
+  
   % sync out
   
   gateway_name = sprintf('%s_adc_sync_out', gw_name);

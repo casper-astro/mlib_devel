@@ -356,7 +356,7 @@ class Toolflow(object):
         # and probably shouldn't be here. Why not in the SKARAB yellow block?
         try:
             # generate multiboot, golden or tooflow image based on yaml file
-            self.hdl_filename = '%s/infrastructure/%s_parameters.vhd' % (os.getenv('HDL_ROOT'), self.plat.name)
+            self.hdl_filename = '%s/skarab_infr/%s_parameters.vhd' % (os.getenv('HDL_ROOT'), self.plat.name)
             # check to see if parameter file exists. Some platforms may not use this.
             if os.path.isfile(self.hdl_filename):
                 self._gen_hdl_version(filename_hdl=self.hdl_filename)
@@ -517,8 +517,12 @@ class Toolflow(object):
             # get list of all axi4lite_devices in self.top.memory_map dict
             for val in list(self.top.memory_map.values()):
                 self.cores += val['axi4lite_devices']
+            for val in self.top.rfdc_devices:
+                self.cores += [val]
         if 'wishbone' in self.plat.mmbus_architecture:
             self.cores += self.top.wb_devices
+        for val in self.top.xil_axi4lite_devices:
+            self.cores += [val]
         basefile = '%s/%s/core_info.tab' % (os.getenv('HDL_ROOT'),
                                             self.plat.name)
         newfile = '%s/core_info.tab' % self.compile_dir
@@ -1873,6 +1877,7 @@ proc puts_red {s} {
             self.add_tcl_cmd('set synth_critical_count [get_msg_config -count -severity {CRITICAL WARNING}]', stage='post_synth')
 
             # Pre-Implementation Commands
+            self.add_tcl_cmd('set_property STEPS.POST_PLACE_POWER_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]', stage='pre_impl')
             if impl_strat is not None:
                 # impl_strat must be error-checked before arriving here
                 self.add_tcl_cmd('set_property strategy {} [get_runs impl_1]'.format(impl_strat), stage='pre_impl')

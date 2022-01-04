@@ -1,0 +1,12 @@
+0.6
+2019.1
+May 24 2019
+15:06:07
+C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/src/clk_wiz_0/clk_wiz_0.v,1574810965,verilog,,C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/src/data_rx.v,,clk_wiz_0,,,../../../../../src/clk_wiz_0,,,,,
+C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/src/clk_wiz_0/clk_wiz_0_clk_wiz.v,1574810965,verilog,,C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/src/clk_wiz_0/clk_wiz_0.v,,clk_wiz_0_clk_wiz,,,../../../../../src/clk_wiz_0,,,,,
+C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/src/data_rx.v,1574890214,verilog,,C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/src/decode_10B8B.v,,data_rx,,,../../../../../src/clk_wiz_0,,,,,
+C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/src/data_rx_tb.v,1574903825,verilog,,,,data_rx_tb,,,../../../../../src/clk_wiz_0,,,,,
+C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/src/decode_10B8B.v,1521241306,verilog,,C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/src/sync_iinput.v,,decode_10B8B,,,../../../../../src/clk_wiz_0,,,,,
+C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/src/fifo_generator_0/sim/fifo_generator_0.v,1574815298,verilog,,C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/src/clk_wiz_0/clk_wiz_0_clk_wiz.v,,fifo_generator_0,,,../../../../../src/clk_wiz_0,,,,,
+C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/src/sync_iinput.v,1521241306,verilog,,C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/src/data_rx_tb.v,,sync_input,,,../../../../../src/clk_wiz_0,,,,,
+C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/tp3_data_rx_sim/tp3_data_rx_sim.sim/sim_1/behav/xsim/glbl.v,1558713910,verilog,,,,glbl,,,,,,,,

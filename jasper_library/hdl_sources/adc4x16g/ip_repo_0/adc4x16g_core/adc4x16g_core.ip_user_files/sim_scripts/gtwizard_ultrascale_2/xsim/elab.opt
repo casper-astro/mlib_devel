@@ -1,0 +1,1 @@
+--relax --debug typical --mt auto -L gtwizard_ultrascale_v1_7_7 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot gtwizard_ultrascale_2 xil_defaultlib.gtwizard_ultrascale_2 xil_defaultlib.glbl -log elaborate.log

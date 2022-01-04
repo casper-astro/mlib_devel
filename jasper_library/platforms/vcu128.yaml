@@ -161,3 +161,169 @@ pins:
       - AY15
       - AY14
       - AY13
+  #GTY Transciever bank connected to FMCP: BANK124-BANK129
+  fmcp_gty_clk_p:
+    loc:
+      - AV42
+      - AR40
+      - AN40
+      - AL40
+      - AJ40
+      - AG40
+  fmcp_gty_clk_n:
+    loc:
+      - AV43
+      - AR41
+      - AN41
+      - AL41
+      - AJ41
+      - AG41
+  fmcp_gty_tx_p:
+    loc:
+      - BC48
+      - BC44
+      - BB46
+      - BA44
+      - AY46
+      - AW44
+      - AV46
+      - AU44
+      - AU48
+      - AT46
+      - AR48
+      - AR44
+      - AP46
+      - AN44
+      - AM46
+      - AL44
+      - AK46
+      - AJ48
+      - AJ44
+      - AH46
+      - AG48
+      - AG44
+      - AF46
+      - AE44
+  fmcp_gty_tx_n:
+    loc:
+      - BC49
+      - BC45
+      - BB47
+      - BA45
+      - AY47
+      - AW45
+      - AV47
+      - AU45
+      - AU49
+      - AT47
+      - AR49
+      - AR45
+      - AP47
+      - AN45
+      - AM47
+      - AL45
+      - AK47
+      - AJ49
+      - AJ45
+      - AH47
+      - AG49
+      - AG45
+      - AF47
+      - AE45
+  fmcp_gty_rx_p:
+    loc:
+      - BC53
+      - BB51
+      - BA53
+      - BA49
+      - AY51
+      - AW53
+      - AW49
+      - AV51
+      - AU53
+      - AT51
+      - AR53
+      - AP51
+      - AN53
+      - AN49
+      - AM51
+      - AL53
+      - AL49
+      - AK51
+      - AJ53
+      - AH51
+      - AG53
+      - AF51
+      - AE53
+      - AE49
+  fmcp_gty_rx_n:
+    loc:
+      - BC54
+      - BB52
+      - BA54
+      - BA50
+      - AY52
+      - AW54
+      - AW50
+      - AV52
+      - AU54
+      - AT52
+      - AR54
+      - AP52
+      - AN54
+      - AN50
+      - AM52
+      - AL54
+      - AL50
+      - AK52
+      - AJ54
+      - AH52
+      - AG54
+      - AF52
+      - AE54
+      - AE50
+  #adc4x16 ctrl signals
+  adc4x16g_asnt_ctrl_0:
+    iostd: LVCMOS18
+    loc:
+      - H19
+      - K24
+      - E27
+      - B16
+  adc4x16g_asnt_ctrl_1:
+    iostd: LVCMOS18
+    loc:
+      - H18
+      - A21
+      - J22
+      - D20
+  adc4x16g_asnt_ctrl_2:
+    iostd: LVCMOS18
+    loc:
+      - H27
+      - E18
+      - E21
+      - D21
+  adc4x16g_asnt_ctrl_3:
+    iostd: LVCMOS18
+    loc:
+      - A25
+      - G27
+      - E26
+      - D26
+  adc4x16g_mosi:
+    iostd: LVCMOS18
+    loc: H17
+  adc4x16g_miso:
+    iostd: LVCMOS18
+    loc: B22
+  adc4x16g_sck:
+    iostd: LVCMOS18
+    loc: G16
+  adc4x16g_sselb:
+    iostd: LVCMOS18
+    loc:
+      - K21
+      - E22
+      - D22
+      - B23
