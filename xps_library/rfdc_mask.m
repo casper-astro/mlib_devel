@@ -40,7 +40,7 @@
 % design is ready. Also, problems are typically handled and reported through
 % the IRQ.
 
-function [] = rfdc_mask(gcb)
+function [] = rfdc_mask(gcb,force)
   if strcmp(bdroot, 'xps_library')
     % exit early as to not run initialization for building out xps_library models
     return
@@ -122,7 +122,7 @@ function [] = rfdc_mask(gcb)
   end
 
   % check if the state has changed
-  if ~same_state(gcb,'Tiles',tiles,'Slices',slices,'TileArch',tile_arch)
+  if ~same_state(gcb,'Tiles',tiles,'Slices',slices,'TileArch',tile_arch) || force
     for tile = 224:231
       QTConf = msk.getDialogControl(sprintf('t%d_QuadTileConfig',tile));
       DTConf = msk.getDialogControl(sprintf('t%d_DualTileConfig',tile));
@@ -191,15 +191,18 @@ function [] = rfdc_mask(gcb)
         %for a = adc_slices %[0,1,2,3] % 4 ADCs per tile
         for a = 0:length(slices(1,:))-1 % only need to go over the adcs activated now
           if slices(t-223,a+1) %check if the slice is on
-            samples_per_cycle = msk.getParameter(['t', num2str(t), '_', prefix, '_adc', num2str(a), '_sample_per_cycle']).Value;
+            samples_per_cycle = get_param(gcb, ['t', num2str(t), '_', prefix, '_adc', num2str(a), '_sample_per_cycle']);
             n_bits = str2double(samples_per_cycle)*adcbits;
             %maxis = ['m', num2str(t), num2str(a), '_axis_tdata'];
             %if chk_mask_param(msk, [prefix, '_adc', num2str(a), '_enable'], 'on') - looping only enabled adcs now
 
             if QuadTile
               %only draw the gw if this is not an odd tile configured in IQ->IQ mode
-              maxis = sprintf(maxis_template, t-224, a);
-              [ypos, port_num] = add_gw(gcb, base_gw_name, gw_arith_type, n_bits, gw_bin_pt, maxis, port_num, xpos, ypos, adc_gate);
+              mixertype = get_param(gcb, ['t', num2str(t), '_', prefix, '_adc', num2str(a), '_mixer_type']);
+              if ~strcmp(mixertype,'Off')
+                maxis = sprintf(maxis_template, t-224, a);
+                [ypos, port_num] = add_gw(gcb, base_gw_name, gw_arith_type, n_bits, gw_bin_pt, maxis, port_num, xpos, ypos, adc_gate);
+              end
             else
               % If not a quad tile we need to look at the mixer/digital output to determine what ports to activate.
               % The quad tile outputs IQ on the same stream. The Dual tile uses the alternate adc path
@@ -215,8 +218,8 @@ function [] = rfdc_mask(gcb)
                   maxis = sprintf(maxis_template, t-224, 2*a);
                   [ypos, port_num] = add_gw(gcb, base_gw_name, gw_arith_type, n_bits, gw_bin_pt, maxis, port_num, xpos, ypos, adc_gate);
 
-                  %maxis = sprintf(maxis_template, t-224, 2*a+1);
-                  %[ypos, port_num] = add_gw(gcb, base_gw_name, gw_arith_type, n_bits, gw_bin_pt, maxis, port_num, xpos, ypos, adc_gate);
+                  maxis = sprintf(maxis_template, t-224, 2*a+1);
+                  [ypos, port_num] = add_gw(gcb, base_gw_name, gw_arith_type, n_bits, gw_bin_pt, maxis, port_num, xpos, ypos, adc_gate);
 
                 elseif chk_param(gcb, mixer_mode_param, 'I/Q -> I/Q')
                   % In this case ADC 1 must be enabled so here we are assuming that the gui logic has been
@@ -255,8 +258,12 @@ function [] = rfdc_mask(gcb)
             %if chk_mask_param(msk, [prefix, '_adc', num2str(a), '_enable'], 'on') - looping only enabled adcs now
 
             if QuadTile
-              maxis = sprintf(saxis_template, t-228, a);
-              [ypos, port_num] = add_gw(gcb, base_gw_name, gw_arith_type, n_bits, gw_bin_pt, maxis, port_num, xpos, ypos, dac_gate);
+              % only make port if this is not a odd slice used in IQ->IQ
+              mixertype = get_param(gcb, ['t', num2str(t), '_', prefix, '_dac', num2str(a), '_mixer_type']);
+              if ~strcmp(mixertype,'Off')
+                maxis = sprintf(saxis_template, t-228, a);
+                [ypos, port_num] = add_gw(gcb, base_gw_name, gw_arith_type, n_bits, gw_bin_pt, maxis, port_num, xpos, ypos, dac_gate);
+              end
             else %dual tile stuff
 
               analog_mode_param = ['t', num2str(t), '_', prefix, '_dac', num2str(a), '_analog_output'];

@@ -51,10 +51,10 @@ function [] = update_axis_clk_label(gcb,tile)
       axisamp = str2double(axisamp);
 
       sys_clk_mhz = sample_rate_mhz/factor/axisamp;
-      if QuadTile
-        if chk_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_analog_output'], 'I/Q')
-          sys_clk_mhz = 2*sys_clk_mhz;
-        end
+      check_IQIQ = chk_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_analog_output'], 'I/Q');
+      check_IQReal = chk_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_mixer_mode'], 'I/Q -> Real');
+      if check_IQIQ || check_IQReal
+        sys_clk_mhz = 2*sys_clk_mhz;
       end
       sys_clk_mhz = round(sys_clk_mhz, 3);
 
@@ -67,5 +67,10 @@ function [] = update_axis_clk_label(gcb,tile)
   end
   axis_clks_valid = validate_tile_clocking(gcb, tile);
 
+  % This function is called whenever there is a potential change in port size,
+  % so we need to update the port sizes
+  if chk_param(gcb,'runinit','1') %only run if this isn't during the mask opening
+    set_param(gcb,'forceredraw','1'); %force the mask to redraw itself
+  end
 end
 

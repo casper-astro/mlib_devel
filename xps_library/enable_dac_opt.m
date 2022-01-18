@@ -10,7 +10,6 @@ function [] = enable_dac_opt(gcb,tile,slicenum)
   end
 
   if ~(strcmp(tile_arch, 'dual') && (tile > 229))
-      
     DataDialog   = msk.getDialogControl(['t', num2str(tile), '_', prefix, '_dac', num2str(slicenum), '_DataSettings']);
     MixerDialog  = msk.getDialogControl(['t', num2str(tile), '_', prefix, '_dac', num2str(slicenum), '_MixerSettings']);
     AnalogDialog = msk.getDialogControl(['t', num2str(tile), '_', prefix, '_dac', num2str(slicenum), '_AnalogSettings']);
@@ -21,7 +20,7 @@ function [] = enable_dac_opt(gcb,tile,slicenum)
       DataDialog.Enabled   = 'on';
       MixerDialog.Enabled  = 'on';
       AnalogDialog.Enabled = 'on';
-          
+
       %manually changing the parameter value
       %msk.getParameter(['t', num2str(tile), '_', prefix, '_dac', num2str(slicenum), '_enable']).Value = 'on';
       %set_param(gcb, ['t', num2str(tile), '_', prefix, '_dac',  num2str(slicenum), '_enable'], 'on');
@@ -33,7 +32,9 @@ function [] = enable_dac_opt(gcb,tile,slicenum)
         %turning the slice on and it is already I/Q->I/Q, need to copy and
         %set the neighbor slice appropriately
         mixer_callback(gcb,tile,slicenum,prefix);
-        mixertype_callback(gcb,tile,slicenum+1,prefix);
+        if ~mod(slicenum,2) %only do this for an even slice
+          mixertype_callback(gcb,tile,slicenum+1,prefix);
+        end
       end
 
     else

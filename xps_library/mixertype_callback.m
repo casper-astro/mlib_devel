@@ -11,7 +11,7 @@ function [] = mixertype_callback(gcb, tile, slice, arch)
   end
 
   % only run the function if the architecture matches
-  if (arch ~= prefix), return, end
+  if (arch == prefix)
 
   if tile < 228
     slicename = '_adc';
@@ -43,7 +43,7 @@ function [] = mixertype_callback(gcb, tile, slice, arch)
       msk.getParameter(coarse_freq_param).TypeOptions = {'Fs/2', 'Fs/4', '-Fs/4'};
       msk.getParameter(coarse_freq_param).Visible = 'on';
 
-    else % Bypassed
+    elseif chk_param(gcb, mixer_type_param, 'Bypassed')
       set_param(gcb, nco_freq_param, '0');
       set_param(gcb, nco_phase_param, '0');
       msk.getParameter(nco_freq_param).Visible = 'off';
@@ -52,6 +52,11 @@ function [] = mixertype_callback(gcb, tile, slice, arch)
       msk.getParameter(coarse_freq_param).TypeOptions = {'0'};
       set_param(gcb, coarse_freq_param, '0');
       msk.getParameter(coarse_freq_param).Visible = 'off';
+    else
+      msk.getParameter(nco_freq_param).Visible = 'off';
+      msk.getParameter(nco_phase_param).Visible = 'off';
+      msk.getParameter(coarse_freq_param).Visible = 'off';
     end
+  end
   end
 end

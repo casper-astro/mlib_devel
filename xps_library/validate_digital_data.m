@@ -10,7 +10,7 @@ function [] = validate_digital_data(gcb,tile,slice,arch)
   end
 
   % only run the function if the architecture matches
-  if (arch ~= prefix), return, end
+  if (arch == prefix)
 
   a = slice;
 
@@ -47,11 +47,14 @@ function [] = validate_digital_data(gcb,tile,slice,arch)
       end
     end
   else
-    msk.getParameter(mixer_type_param).TypeOptions = {'Fine', 'Coarse'};
-    if mod(a,2) % an odd slice
+    if ~mod(a,2)
+      msk.getParameter(mixer_type_param).TypeOptions = {'Fine', 'Coarse'};
+      msk.getParameter(mixer_mode_param).TypeOptions = {'Real -> I/Q'; 'I/Q -> I/Q'};
+    else % an odd slice
+      msk.getParameter(mixer_type_param).TypeOptions = {'Fine', 'Coarse', 'Off'};
       % only allow odd slices to select R2C when output is C
-      msk.getParameter(mixer_mode_param).TypeOptions = {'Real -> I/Q'};
-    else
+      %msk.getParameter(mixer_mode_param).TypeOptions = {'Real -> I/Q'};
+    %else
       msk.getParameter(mixer_mode_param).TypeOptions = {'Real -> I/Q'; 'I/Q -> I/Q'};
     end
 
@@ -84,6 +87,7 @@ function [] = validate_digital_data(gcb,tile,slice,arch)
       set_param(gcb, coarse_freq_param, '0');
       msk.getParameter(coarse_freq_param).Visible = 'on';
     end
+  end
   end
 end
 

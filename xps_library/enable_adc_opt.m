@@ -1,5 +1,4 @@
 function [] = enable_adc_opt(gcb,tile,slicenum)
-
   msk = Simulink.Mask.get(gcb);
 
   [~, tile_arch, ~, ~] = get_rfsoc_properties(gcb);
@@ -54,7 +53,9 @@ function [] = enable_adc_opt(gcb,tile,slicenum)
         %turning the slice on and it is already I/Q->I/Q, need to copy and
         %set the neighbor slice appropriately
         mixer_callback(gcb,tile,slicenum,prefix);
-        mixertype_callback(gcb,tile,slicenum+1,prefix);
+        if ~mod(slicenum,2)
+          mixertype_callback(gcb,tile,slicenum+1,prefix);
+        end
       end
     end
   end

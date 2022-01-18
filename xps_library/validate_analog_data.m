@@ -11,7 +11,7 @@ function [] = validate_analog_data(gcb,tile,slice,arch)
   end
 
   % only run the function if the architecture matches
-  if (arch ~= prefix), return, end
+  if (arch == prefix)
 
   a = slice;
 
@@ -79,9 +79,8 @@ function [] = validate_analog_data(gcb,tile,slice,arch)
     end
 
   else %mode is IQ
-    if ~mod(slice,2) % even slices can turn to IQ
+    if ~mod(a,2)
       msk.getParameter(mixer_type_param).TypeOptions = {'Fine', 'Coarse'};
-
       msk.getParameter(mixer_mode_param).TypeOptions = {'I/Q -> I/Q'};
 
       % NCO visibility
@@ -124,6 +123,7 @@ function [] = validate_analog_data(gcb,tile,slice,arch)
       end
     end
 
+  end
   end
 end
 
