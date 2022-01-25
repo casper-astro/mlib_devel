@@ -130,11 +130,14 @@ function [] = rfdc_mask(gcb,force)
       if QuadTile
         QTConf.Visible = 'on';
         DTConf.Visible = 'off';
-        SystemClocking.Visible = 'on';
       else
         QTConf.Visible = 'off';
         DTConf.Visible = 'on';
-        SystemClocking.Visible = 'off';
+      end
+      if gen > 1
+          SystemClocking.Visible = 'on';
+      else
+          SystemClocking.Visible = 'off';
       end
       if tile > 229
         QTDACtile = msk.getDialogControl(sprintf('Tile%d_container',tile));
