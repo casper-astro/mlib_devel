@@ -39,7 +39,7 @@ class onehundredgbe_usplus(onehundred_gbe):
             Register('gmac_reg_phy_status_l',         mode='r',  offset=0x38),
             Register('gmac_reg_phy_control_h',        mode='rw', offset=0x3C, default_val=0),
             Register('gmac_reg_phy_control_l',        mode='rw', offset=0x40, default_val=0),
-            Register('gmac_reg_arp_size',             mode='r',  offset=0x44),
+            Register('gmac_reg_arp_size',             mode='r',  offset=0x44, default_val=9),
             Register('gmac_reg_tx_packet_rate',       mode='r',  offset=0x48),
             Register('gmac_reg_tx_packet_count',      mode='r',  offset=0x4C),
             Register('gmac_reg_tx_valid_rate',        mode='r',  offset=0x50),
