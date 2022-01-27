@@ -167,7 +167,7 @@ entity deformatter_seti is
     lockdet    : in  std_logic;         -- demux locked.
     def_out    : out std_logic_vector(127 downto 0);  -- one frame
                                                       -- of bits
-    index      : out std_logic;         -- 10 ms metaframe index
+    index      : out std_logic;         -- 50 ms metaframe index
     one_sec    : out std_logic;         -- 1 pps
     ten_sec    : out std_logic;         -- .1 pps
     f_clock    : out std_logic;         -- frame clock derived from input.
@@ -328,7 +328,7 @@ begin
   def_out <= temp when unmute = '1' else t_zeros;
   data_source <= '1' when unmute = '0' else data_source_i;
   
-  index   <= frame_indexn;
+  index   <= frame_index; --frame_indexn; --Use raw 50ms from DTS, not generated 10ms
   one_sec <= one_seci;
   ten_sec <= ten_seci;
   locked  <= nsync;
