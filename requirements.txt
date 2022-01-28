@@ -1,5 +1,6 @@
 numpy<1.9
 colorlog
+PyYAML<=5.4.1
 pyaml
 odict
 #xml2vhdl requirements
