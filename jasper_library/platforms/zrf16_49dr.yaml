@@ -57,6 +57,9 @@ pins:
   clk_100_n:
     iostd: LVDS_25
     loc: G11
+  sync_in:
+    iostd: LVCMOS33
+    loc: D11
 
 # NOTE: most of the IO constraints and clocking constraints are taken care of by
 # the RFDC IP itself. Vivado has that baked into the output products of teh IP
