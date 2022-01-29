@@ -228,7 +228,7 @@ class rfdc(YellowBlock):
         tile_n_attr = 't{:d}_'.format(tidx) + tile_attr
         if tile_n_attr in self.blk:
           setattr(t, tile_attr, self.blk[tile_n_attr])
-      if self.tile_arch == 'DT':
+      if self.gen < 2:
         t.has_clk_src = self.rfdc_conf['tile{:d}'.format(tidx)]['has_adc_clk']
         t.clk_src     = self.rfdc_conf['tile{:d}'.format(tidx)]['adc_clk_src']
       else:
@@ -267,11 +267,11 @@ class rfdc(YellowBlock):
         tile_n_attr = 't{:d}_'.format(tidx) + tile_attr
         if tile_n_attr in self.blk:
           setattr(t, tile_attr, self.blk[tile_n_attr])
-      if self.tile_arch == 'DT': # load clk source stuff from yaml, these aren't configurabe for DT systems
-        print("grabbing data from yaml, this is a DT part")
+      if self.gen < 2 : # load clk source stuff from yaml, these aren't configurabe for gen 1 systems
+        print("grabbing data from yaml, this is a gen 1 part")
         t.has_clk_src = self.rfdc_conf['tile{:d}'.format(tidx)]['has_dac_clk']
         t.clk_src     = self.rfdc_conf['tile{:d}'.format(tidx)]['dac_clk_src']
-      else: # QT system, load clk source stuff from block
+      else: # Not gen 1 part, load clk source stuff from block
         t.has_clk_src = self.blk['t{:d}_has_dac_clk'.format(tidx)]
         t.clk_src     = self.blk['t{:d}_dac_clk_src'.format(tidx)] - 224
 
@@ -453,7 +453,7 @@ class rfdc(YellowBlock):
       top.assign_signal('m{:d}_axis_aclk'.format(tidx), 'adc_clk')
 
       #Tile source information from simulink
-      if self.tile_arch == 'QT':
+      if self.gen > 1:
         if (self.blk['t{:d}_adc_clk_src'.format(tidx+224)]-224 == tidx):
           bd_inst.add_port('adc{:d}_clk_p'.format(tidx), 'adc{:d}_clk_p'.format(tidx), dir='in', parent_port=True)
           bd_inst.add_port('adc{:d}_clk_n'.format(tidx), 'adc{:d}_clk_n'.format(tidx), dir='in', parent_port=True)
@@ -467,7 +467,7 @@ class rfdc(YellowBlock):
           n_aidx = int(aidx[1])
 
           if self.tile_arch == 'QT':
-            a = self.adcs[n_aidx+4*int(aidx[0])] # 4 adc slices for each DT tile
+            a = self.adcs[n_aidx+4*int(aidx[0])] # 4 adc slices for each QT tile
             data_width = 16*a.sample_per_cycle
             # vin ports
             bd_inst.add_port('vin{:d}{:d}_p'.format(tidx, n_aidx), 'vin{:d}{:d}_p'.format(tidx, n_aidx),  dir='in', parent_port=True)
@@ -519,7 +519,7 @@ class rfdc(YellowBlock):
 
       # gen3 parts support clock forwarding, user provides information about provided clock to the board sources in simulink mask (e.g.,
       # current gen3 xilinx eval boards only have clocks coming to 2 adc and 2 dac tiles, requiring clocks to be forwarded)
-      if self.tile_arch == 'QT':
+      if self.gen > 1:
         if (self.blk['t{:d}_dac_clk_src'.format(tidx+228)]-224 == tidx+4):
           bd_inst.add_port('dac{:d}_clk_p'.format(tidx), 'dac{:d}_clk_p'.format(tidx), dir='in', parent_port=True)
           bd_inst.add_port('dac{:d}_clk_n'.format(tidx), 'dac{:d}_clk_n'.format(tidx), dir='in', parent_port=True)
@@ -683,7 +683,7 @@ class rfdc(YellowBlock):
       t = self.tiles[tidx]
       # gen3 parts support clock forwarding, user provides information about provided clock to the board sources in simulink mask (e.g.,
       # current gen3 xilinx eval boards only have clocks coming to 2 adc and 2 dac tiles, requiring clocks to be forwarded)
-      if self.tile_arch == 'QT':
+      if self.gen > 1:
         if (self.blk['t{:d}_adc_clk_src'.format(tidx+224)]-224 == tidx):
           # create port for input sample clock
           tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('adc{:d}_clk_n'.format(tidx), port_dir='in', port_type='clk', clk_freq_hz=t.ref_clk*1e6))
@@ -748,7 +748,7 @@ class rfdc(YellowBlock):
       t = self.tiles[tidx]
       # gen3 parts support clock forwarding, user provides information about provided clock to the board sources in simulink mask (e.g.,
       # current gen3 xilinx eval boards only have clocks coming to 2 adc and 2 dac tiles, requiring clocks to be forwarded)
-      if self.tile_arch == 'QT':
+      if self.gen > 1:
         if (self.blk['t{:d}_dac_clk_src'.format(tidx+228)]-224 == tidx+4):
           # create port for input sample clock
           tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('dac{:d}_clk_n'.format(tidx), port_dir='in', port_type='clk', clk_freq_hz=t.ref_clk*1e6))
