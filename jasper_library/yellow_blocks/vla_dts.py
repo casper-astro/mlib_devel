@@ -54,7 +54,7 @@ class vla_dts(YellowBlock):
 
         # ports which go to simulink
         inst.add_port('rst',     self.fullname+'_rst')
-        inst.add_port('dout',    self.fullname+'_frame_out', width=128*12)
+        inst.add_port('dout',    self.fullname+'_frame_out', width=128*12//(2**self.mux_factor_bits))
         inst.add_port('index',   self.fullname+'_index', width=12)
         inst.add_port('one_sec', self.fullname+'_one_sec', width=12)
         inst.add_port('ten_sec', self.fullname+'_ten_sec', width=12)
