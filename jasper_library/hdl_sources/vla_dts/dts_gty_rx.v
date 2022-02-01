@@ -337,19 +337,37 @@ wb_dts_attach wb_dts_attach_inst(
 
   wire [N_INPUTS*POST_MUX_OUTPUT_DWIDTH-1:0] offsetter_dout;
 
+  // CDC
+  (* async_reg = "true" *) reg [N_INPUTS-1:0] shift_advance_unstable;
+  (* async_reg = "true" *) reg [N_INPUTS-1:0] shift_delay_unstable;
+  (* async_reg = "true" *) reg [N_INPUTS-1:0] shift_advance_stable;
+  (* async_reg = "true" *) reg [N_INPUTS-1:0] shift_delay_stable;
+  (* async_reg = "true" *) reg shift_rst_unstable;
+  (* async_reg = "true" *) reg shift_rst_stable;
+  always @(posedge gt_clkout) begin
+    shift_advance_unstable <= shift_advance;
+    shift_advance_stable <= shift_advance_unstable;
+  end
+  always @(posedge clkout) begin
+    shift_delay_unstable <= shift_delay;
+    shift_delay_stable <= shift_delay_unstable;
+    shift_rst_unstable <= shift_rst;
+    shift_rst_stable <= shift_rst_unstable;
+  end
+
   dts_offsetter #(
      .MUX_FACTOR_BITS(MUX_FACTOR_BITS)
   ) dts_offseter_inst[N_INPUTS-1:0] (
     .clk_in(gt_clkout),
     .clk_out(clkout),
-    .rst(shift_rst),
+    .rst(shift_rst_stable),
     .din(reorder_frame_out),
     .din_one_sec(reorder_one_sec_out),
     .din_ten_sec(reorder_ten_sec_out),
     .din_index(reorder_index_out),
     .din_sync(reorder_sync_out),
-    .advance(shift_advance),
-    .delay(shift_delay),
+    .advance(shift_advance_stable),
+    .delay(shift_delay_stable),
     .almost_full(),
     .almost_empty(),
     .overflow(),
