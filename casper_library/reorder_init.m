@@ -89,7 +89,24 @@ map_length = length(map);
 map_bits = ceil(log2(map_length));
 if strcmp('on', software_controlled),
     double_buffer = 1;
-    map_latency = 3; %turn on full shared bram pipeline options
+    if map_latency < 1,
+        error('map_latency must be >=1');
+    end
+    if map_latency == 1
+        reg_prim_output = 'off';
+        reg_core_output = 'off';
+    end
+    if map_latency == 2
+        reg_prim_output = 'on';
+        reg_core_output = 'off';
+    end
+    if map_latency == 3
+        reg_prim_output = 'on';
+        reg_core_output = 'on';
+    end
+    if map_latency > 3,
+        error('map_latency must be <=3 when using a software-defined memory map');
+    end
 end
 if double_buffer == 1, order = 2;
 else, order = compute_order(map);
@@ -446,8 +463,8 @@ else, %TODO fanout for signals into wr_addr and rw_mode for many inputs not hand
     mapname = 'map1';
     if strcmp('on', software_controlled),
         reuse_block(blk, mapname, 'xps_library/Memory/shared_bram', ...
-            'addr_width', num2str(ceil(log2(map_length))), 'init_vals', 'map', 'reg_prim_output', 'on', ...
-            'reg_core_output', 'on', 'addr_width', num2str(map_bits), 'data_width', '32', ...
+            'addr_width', num2str(ceil(log2(map_length))), 'init_vals', 'map', 'reg_prim_output', reg_prim_output, ...
+            'reg_core_output', reg_core_output, 'addr_width', num2str(map_bits), 'data_width', '32', ...
             'arith_type', 'Unsigned', 'data_bin_pt', '0', 'Position', [230  base+15+70   300    base+70+70], ...
             'desc_str', ['Determines the remapping of input samples to output samples. I.e., if ' ...
             ' the first entry is ``5``, then the first sample into the reorder will come out 5th'], ...
