@@ -33,8 +33,7 @@ module wb_register_ppc2simulink #(
 
   (* ASYNC_REG = "true" *) reg register_readyR;
   (* ASYNC_REG = "true" *) reg register_readyRR;
-    
-  reg [31:0] user_data_out_reg;
+  reg [31:0] user_data_out_reg = INIT_VAL;
 
   assign user_data_out = user_data_out_reg;
 
