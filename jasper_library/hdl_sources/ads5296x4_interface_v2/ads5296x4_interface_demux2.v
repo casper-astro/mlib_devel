@@ -1,9 +1,12 @@
 module ads5296x4_interface_demux2 #(
-    parameter G_NUM_UNITS = 4,
-    parameter G_NUM_FCLKS = 4,
-    parameter G_FCLK_MASTER = 0,
-    parameter G_IS_MASTER = 1'b1
+    parameter G_NUM_UNITS = 4,          // Number of ADC chips. Only tested for 4
+    parameter G_NUM_FCLKS = 4,          // Number of FCLKs routed to this interface
+    parameter G_FCLK_MASTER = 0,        // Index of the FCLK vector to use for clock generation
+    parameter G_IS_MASTER = 1'b1,       // If 1, generate output clocks in this core
+    parameter G_SNAPSHOT_ADDR_BITS = 9, // log2 ADC sample snapshot depth
+    parameter G_VERSION = 1             // Interface revision. Used only for runtime readback
  )(
+    // Control signals from Simulink
     input rst,
     input sync,
     // Line clocks
@@ -12,24 +15,35 @@ module ads5296x4_interface_demux2 #(
     // Frame clocks
     input [G_NUM_FCLKS - 1 : 0] fclk_p,
     input [G_NUM_FCLKS - 1 : 0] fclk_n,
-    // If not a master -- use this clock
-    input sclk2_in,
-    input sclk_in,
-    input sclk5_in,
+    // Clocks
+    input sclk2_in, // Sample clock x2 (i.e. interleaved sample clock)
+    input sclk_in,  // Sample clock (per ADC lane)
+    input sclk5_in, // Sample clock x5 (i.e. bit clock)
     // Data inputs
     input [4*2*G_NUM_UNITS - 1:0] din_p,
     input [4*2*G_NUM_UNITS - 1:0] din_n,
     // Deserialized outputs
     output [10*4*G_NUM_UNITS - 1:0] dout,
-    output sclk2_out,
-    output sclk_out,
-    output sclk5_out,
-    output sync_out,
+    // Generate these clocks if G_IS_MASTER=1; otherwise tie to 0
+    output sclk2_out, // Sample clock x2 (i.e. interleaved sample clock)
+    output sclk_out,  // Sample clock (per ADC lane)
+    output sclk5_out, // Sample clock x5 (i.e. bit clock)
+    output sync_out,     // To Simulink
+    output ext_sync_out, // To ADC pin
     
-    input  fclk_in,
+    // Pre-buffered Frame clock inputs. Software control allows either of 
+    // these to be used to generate sclk*_out if G_IS_MASTER=1
+    input  [1:0] fclk_in,
+    // Frame clock output. Buffered fclk_p/n[G_FCLK_MASTER]
     output fclk_out,
 
     // Software register interface
+   
+    // external snapshot control
+    
+    input         snapshot_ext_trigger,
+    output        snapshot_we,
+    output [G_SNAPSHOT_ADDR_BITS-1:0] snapshot_addr,
 
     // Wishbone interface
     input         wb_clk_i,
@@ -45,9 +59,9 @@ module ads5296x4_interface_demux2 #(
     input         wb_stb_i
   );
 
-  (* mark_debug = "true" *) wire [4*2*G_NUM_UNITS - 1 + 1: 0]  delay_load;
-  (* mark_debug = "true" *) wire [4*2*G_NUM_UNITS - 1 + 1: 0]  delay_rst;
-  (* mark_debug = "true" *) wire [4*2*G_NUM_UNITS - 1 + 1: 0] delay_en_vtc;
+  (* mark_debug = "true" *) wire [4*2*G_NUM_UNITS - 1 + 2: 0]  delay_load;
+  (* mark_debug = "true" *) wire [4*2*G_NUM_UNITS - 1 + 2: 0]  delay_rst;
+  (* mark_debug = "true" *) wire [4*2*G_NUM_UNITS - 1 + 2: 0] delay_en_vtc;
   (* mark_debug = "true" *) wire [8 : 0] delay_val;
 
   // Clocks
@@ -67,11 +81,14 @@ module ads5296x4_interface_demux2 #(
   reg [31:0] fclk3_ctr;
   reg [31:0] lclk_ctr;
   wire [4*G_NUM_UNITS - 1 : 0] bitslip;
+  wire [2:0] slip_index;
+  wire snapshot_trigger;
   wire wb_user_clk;
   wb_ads5296_attach #( 
     .G_NUM_UNITS(G_NUM_UNITS),
     .G_IS_MASTER(G_IS_MASTER),
-    .G_NUM_FCLKS(1) // Only bother controlling 1 fclk
+    .G_NUM_FCLKS(1), // Only bother controlling 1 fclk
+    .G_VERSION(G_VERSION)
   ) wb_ads5296_attach_inst (
     .wb_clk_i(wb_clk_i),
     .wb_rst_i(wb_rst_i),
@@ -91,6 +108,7 @@ module ads5296x4_interface_demux2 #(
     .fclk2_cnt(fclk2_ctr),
     .fclk3_cnt(fclk3_ctr),
     .bitslip(bitslip),
+    .slip_index(slip_index),
     .fclk_err_cnt(fclk_err_cnt),
     .delay_load(delay_load),
     .delay_rst(delay_rst),
@@ -99,8 +117,41 @@ module ads5296x4_interface_demux2 #(
     .iserdes_rst(iserdes_rst_wb),
     .mmcm_rst(mmcm_rst),
     .mmcm_locked(mmcm_locked),
-    .mmcm_clksel(mmcm_clksel)
+    .mmcm_clksel(mmcm_clksel),
+    .snapshot_trigger(snapshot_trigger)
   );
+
+  (* async_reg = "true" *) reg snapshot_trigger_unstable;
+  (* async_reg = "true" *) reg snapshot_trigger_stable;
+  reg snapshot_trigger_stableR;
+  wire snapshot_trigger_pulse = snapshot_trigger_stable & ~snapshot_trigger_stableR;
+  reg snapshot_ext_triggerR;
+  wire snapshot_ext_trigger_pulse = snapshot_ext_trigger & ~snapshot_ext_triggerR;
+  reg [G_SNAPSHOT_ADDR_BITS-1:0] snapshot_addr_reg;
+  assign snapshot_addr = snapshot_addr_reg;
+  reg snapshot_we_reg;
+  assign snapshot_we = snapshot_we_reg;
+  reg snapshot_pending = 1'b0;
+  always @(posedge sclk2_in) begin
+    snapshot_addr_reg <= snapshot_addr_reg + 1'b1;
+    snapshot_trigger_unstable <= snapshot_trigger;
+    snapshot_trigger_stable <= snapshot_trigger_unstable;
+    snapshot_trigger_stableR <= snapshot_trigger_stable;
+    snapshot_ext_triggerR <= snapshot_ext_trigger;
+    if (snapshot_trigger_pulse || snapshot_ext_trigger_pulse) begin
+      snapshot_pending <= 1'b1;
+    end
+    if (&snapshot_addr_reg) begin
+      snapshot_we_reg <= 1'b0;
+    end
+    if (snapshot_pending && sync_out) begin
+      snapshot_we_reg <= 1'b1;
+      snapshot_addr_reg <= {G_SNAPSHOT_ADDR_BITS{1'b0}};
+      snapshot_pending <= 1'b0;
+    end
+  end
+    
+    
 
   // Buffer the differential inputs
   wire [4*2*G_NUM_UNITS - 1:0] din;
@@ -147,11 +198,6 @@ module ads5296x4_interface_demux2 #(
   // FCLK   (The rate at which samples are clocked into the FIFO)
   // 2*FCLK (Two ADC lanes interleaved -- the rate at which samples are clocked out of the FIFO)
   // 5*FCLK (The (DDR) bit clock
-  //
-  // Make 2*FCLK (used for the main FPGA clock) 180 degrees out of phase. This means there is always
-  // 2.5 ns between a 2*FCLK and an FCLK posedge. The goal here is to make sure we can pass data from
-  // a common 2*FCLK control domain to a (different, per ADC board) FCLK domain on the same FCLK edge.
-  // TODO: think about this much more.
   
     wire sclk_mmcm;
     wire sclk_fb_mmcm;
@@ -181,20 +227,16 @@ module ads5296x4_interface_demux2 #(
       .CLKFBOUT_MULT_F(20.000),
       .CLKOUT0_DIVIDE_F(10.0),
       .CLKOUT1_DIVIDE(5),
-      //.CLKOUT1_PHASE(90),
+      //.CLKOUT0_PHASE(36), // Advance 1 bit time (empirically determined)
+      //.CLKOUT1_PHASE(72), // Advance 1
+      //.CLKOUT2_PHASE(180), // Advance 1
       .CLKOUT2_DIVIDE(2),
       .CLKIN1_PERIOD(10.000)
     ) mmcm_inst (
-      .CLKIN1(fclk_in),   // 2.5 fs
-      .CLKIN2(fclk),
+      .CLKIN1(fclk_in[1]),   // 2.5 fs
+      .CLKIN2(fclk_in[0]),
       .CLKINSEL(mmcm_clksel), // mmcm_clksel=0 => use CLK2
       .RST(mmcm_rst),
-      // Use inverted clocks so all clocks are in phase,
-      // But sclk5 is out of phase with data transitions
-      //.CLKOUT0B(sclk_mmcm),  // fs
-      //.CLKOUT1B(sclk2_mmcm),
-      //.CLKOUT2B(sclk5_mmcm),
-      
       .CLKOUT0(sclk_mmcm),  // fs
       .CLKOUT1(sclk2_mmcm),
       .CLKOUT2(sclk5_mmcm),
@@ -233,11 +275,11 @@ module ads5296x4_interface_demux2 #(
 
   wire delay_clk = wb_clk_i;
 
-  (* async_reg = "true" *) reg [4*2*G_NUM_UNITS : 0] delay_loadR;
-  (* async_reg = "true" *) reg [4*2*G_NUM_UNITS : 0] delay_loadRR;
-  (* async_reg = "true" *) reg [4*2*G_NUM_UNITS : 0] delay_loadRRR;
+  (* async_reg = "true" *) reg [4*2*G_NUM_UNITS + 2 - 1: 0] delay_loadR;
+  (* async_reg = "true" *) reg [4*2*G_NUM_UNITS + 2 - 1: 0] delay_loadRR;
+  (* async_reg = "true" *) reg [4*2*G_NUM_UNITS + 2 - 1: 0] delay_loadRRR;
 
-  wire [4*2*G_NUM_UNITS : 0] delay_load_strobe = delay_loadRR & ~delay_loadRRR;
+  wire [4*2*G_NUM_UNITS + 2 - 1: 0] delay_load_strobe = delay_loadRR & ~delay_loadRRR;
   always @(posedge sclk_in) begin
     delay_loadR <= delay_load;
     delay_loadRR <= delay_loadR;
@@ -265,16 +307,18 @@ module ads5296x4_interface_demux2 #(
   end
   
 
+  wire [4*2*G_NUM_UNITS - 1:0] delay_casc_out;
+  wire [4*2*G_NUM_UNITS - 1:0] delay_casc_return;
   IDELAYE3 #(
     .DELAY_TYPE("VAR_LOAD"),
     .DELAY_FORMAT("COUNT"),//("TIME"),
     .UPDATE_MODE("ASYNC"),
     .DELAY_SRC("IDATAIN"),
     //.DELAY_VALUE(1100),
-    .CASCADE("NONE"),
+    .CASCADE("MASTER"),
     .SIM_DEVICE("ULTRASCALE"),
     .REFCLK_FREQUENCY(200.0)
-  ) iodelay_in [ 4*2*G_NUM_UNITS - 1: 0] (
+  ) idelay_in [ 4*2*G_NUM_UNITS - 1: 0] (
     .CLK     (sclk_in), // Not using CLKDIV in an ISERDES, so what are the rules here?
     .LOAD    (delay_load_strobe[ 4*2*G_NUM_UNITS - 1: 0]),
     .DATAIN  (1'b0),
@@ -287,6 +331,30 @@ module ads5296x4_interface_demux2 #(
     .DATAOUT (din_delayed),
     .EN_VTC(1'b0),//(delay_en_vtc),
     .CASC_IN(),
+    .CASC_OUT(delay_casc_out),
+    .CASC_RETURN(delay_casc_return)
+  );
+
+  ODELAYE3 #(
+    .DELAY_TYPE("VAR_LOAD"),
+    .DELAY_FORMAT("COUNT"),//("TIME"),
+    .UPDATE_MODE("ASYNC"),
+    //.DELAY_VALUE(1100),
+    .CASCADE("SLAVE_END"),
+    .SIM_DEVICE("ULTRASCALE"),
+    .REFCLK_FREQUENCY(200.0)
+  ) odelay_in [ 4*2*G_NUM_UNITS - 1: 0] (
+    .CLK     (sclk_in), // Not using CLKDIV in an ISERDES, so what are the rules here?
+    .LOAD    (delay_load_strobe[ 4*2*G_NUM_UNITS - 1: 0]),
+    .ODATAIN (),
+    .CNTVALUEIN(delay_val),
+    .CNTVALUEOUT(),
+    .INC     (1'b0),
+    .CE      (1'b0),
+    .RST     (idelay_rst),
+    .DATAOUT (delay_casc_return),
+    .EN_VTC(1'b0),//(delay_en_vtc),
+    .CASC_IN(delay_casc_out),
     .CASC_OUT(),
     .CASC_RETURN()
   );
@@ -331,15 +399,17 @@ module ads5296x4_interface_demux2 #(
   assign sync_out = sync_out_multi[0];
   wire fifo_we;
   wire fifo_re;
+  wire fifo_rst;
   
   ads5296_unit adc_unit_inst[4*G_NUM_UNITS - 1:0] (
     .lclk(sclk5_in),
     .clk_in(sclk_in),
     .din_rise(din_rise),
     .din_fall(din_fall),
-   // .bitslip(bitslip),
+    .bitslip(bitslip),
+    .slip_index(slip_index),
     .wr_en(fifo_we),
-    .rst(rst),
+    .rst(fifo_rst),
     .clk_out(sclk2_in),
     .rd_en(fifo_re),
     .dout(dout),
@@ -347,18 +417,25 @@ module ads5296x4_interface_demux2 #(
   );
   
 
-  // Deserializers
-  (* async_reg = "true" *) reg syncR;
-  (* async_reg = "true" *) reg syncRR;
+  // Generate FIFO control signals from sclk, to guard
+  // against phase ambiguities
+  reg syncR_sclk;
+  reg syncRR_sclk;
   reg fifo_we_reg;
+  reg fifo_rst_reg;
+  (* max_fanout = 4 *) reg fifo_rst_regR;
+  assign fifo_rst = fifo_rst_regR;
   assign fifo_we = fifo_we_reg;
   always @(posedge sclk_in) begin
-    syncR <= sync;
-    syncRR <= syncR;
+    syncR_sclk <= sync;
+    syncRR_sclk <= syncR_sclk;
+    fifo_rst_regR <= fifo_rst_reg;
     if (rst) begin
       fifo_we_reg <= 1'b0;
+      fifo_rst_reg <= 1'b1;
     end else begin
-      if (syncR & ~syncRR) begin
+      fifo_rst_reg <= 1'b0;
+      if (syncR_sclk & ~syncRR_sclk) begin
         fifo_we_reg <= 1'b1;
       end
     end
@@ -367,16 +444,57 @@ module ads5296x4_interface_demux2 #(
   reg [10:0] fifo_re_sr;
   reg fifo_re_reg;
   assign fifo_re = fifo_re_sr[10];
-  reg syncR_sclk;
-  reg syncRR_sclk;
   always @(posedge sclk2_in) begin
-    syncR_sclk <= sync;
-    syncRR_sclk <= syncR_sclk;
     if (rst) begin
       fifo_re_sr <= 11'b0;
     end else if ( ~fifo_re ) begin
-      fifo_re_sr <= {fifo_re_sr[9:0], syncR_sclk & ~ syncRR_sclk};
+      fifo_re_sr <= {fifo_re_sr[9:0], fifo_we_reg};
     end
   end
+
+  generate
+  if (G_IS_MASTER) begin
+    // Sync output delay
+    wire sync_out_delay_load = delay_load[4*2*G_NUM_UNITS + 2 - 1];
+    (* async_reg = "true" *) reg sync_out_delay_loadR;
+    (* async_reg = "true" *) reg sync_out_delay_loadRR;
+    reg sync_out_delay_loadRRR;
+    wire sync_out_delay_load_strobe = sync_out_delay_loadRR & ~sync_out_delay_loadRRR;
+    (* async_reg = "true" *) reg sync_out_delay_rstR;
+    (* async_reg = "true" *) reg sync_out_delay_rstRR;
+    always @(posedge sclk_in) begin
+      sync_out_delay_loadR <= sync_out_delay_load;
+      sync_out_delay_loadRR <= sync_out_delay_loadR;
+      sync_out_delay_loadRRR <= sync_out_delay_loadRR;
+      sync_out_delay_rstR <= delay_rst[4*2*G_NUM_UNITS + 2 - 1];
+      sync_out_delay_rstRR <= sync_out_delay_rstR;
+    end
+    ODELAYE3 #(
+      .DELAY_TYPE("VAR_LOAD"),
+      .DELAY_FORMAT("COUNT"),//("TIME"),
+      .UPDATE_MODE("ASYNC"),
+      //.DELAY_VALUE(1100),
+      .CASCADE("NONE"),
+      .SIM_DEVICE("ULTRASCALE"),
+      .REFCLK_FREQUENCY(200.0)
+    ) odelay_in (
+      .CLK     (sclk2_in), // Not using CLKDIV in an ISERDES, so what are the rules here?
+      .LOAD    (sync_out_delay_load_strobe),
+      .ODATAIN (sync),
+      .CNTVALUEIN(delay_val),
+      .CNTVALUEOUT(),
+      .INC     (1'b0),
+      .CE      (1'b0),
+      .RST     (sync_out_delay_rstRR),
+      .DATAOUT (ext_sync_out),
+      .EN_VTC(1'b0),//(delay_en_vtc),
+      .CASC_IN(),
+      .CASC_OUT(),
+      .CASC_RETURN()
+    );
+  end else begin
+    assign ext_sync_out = sync;
+  end
+  endgenerate
 
 endmodule

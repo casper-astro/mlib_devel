@@ -46,7 +46,7 @@ if length(forty_gbe_xsg_blks) > 1
     end
 
     if currPort  >= length(forty_gbe_xsg_blks)
-      error(strcat('forty gbe ports needs to be contiguous starting with 0. Please select a port less than ,',num2str(length(forty_gbe_xsg_blks)),' for Block:',gcb));  
+      warning(strcat('on SKARAB forty gbe ports needs to be contiguous starting with 0. Please select a port less than ,',num2str(length(forty_gbe_xsg_blks)),' for Block:',gcb));  
       return;
    end
 end

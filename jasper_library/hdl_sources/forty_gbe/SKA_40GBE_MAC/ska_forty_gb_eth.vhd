@@ -36,7 +36,9 @@ entity ska_forty_gb_eth is
         TTL               : std_logic_vector(7 downto 0);
         PROMISC_MODE      : integer;
         RX_CRC_CHK_ENABLE : integer;
-        RX_2B_SWAP        : boolean := false);
+        RX_2B_SWAP        : boolean := false;
+        USE_CPU_RX        : integer := 1;
+        USE_CPU_TX        : integer := 1);
     port (
         clk : in std_logic;
         rst : in std_logic;
@@ -127,7 +129,9 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
         FABRIC_ENABLE   : std_logic;
         MC_RECV_IP      : std_logic_vector(31 downto 0);
         MC_RECV_IP_MASK : std_logic_vector(31 downto 0);
-        RX_2B_SWAP      : boolean := false);
+        RX_2B_SWAP      : boolean := false;
+        CPU_RX_ENABLE   : integer;
+        CPU_TX_ENABLE   : integer);
     port (
         wb_clk_i : in  std_logic;
         wb_rst_i : in  std_logic;
@@ -182,7 +186,8 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
 
     component ska_fge_tx
     generic (
-        TTL             : std_logic_vector(7 downto 0));
+        TTL             : std_logic_vector(7 downto 0);
+        USE_CPU_TX      : integer);
     port (
         local_enable          : in  std_logic;
         local_mac             : in  std_logic_vector(47 downto 0);
@@ -302,7 +307,8 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
 
     component ska_fge_rx
     generic (
-        PROMISC_MODE    : integer);
+        PROMISC_MODE    : integer;
+        USE_CPU_RX      : integer);
     port (
         local_enable          : in  std_logic;
         local_mac             : in  std_logic_vector(47 downto 0);
@@ -669,7 +675,9 @@ begin
         FABRIC_ENABLE   => FABRIC_ENABLE,
         MC_RECV_IP      => X"FFFFFFFF",
         MC_RECV_IP_MASK => X"FFFFFFFF",
-        RX_2B_SWAP      => RX_2B_SWAP)
+        RX_2B_SWAP      => RX_2B_SWAP,
+        CPU_RX_ENABLE   => USE_CPU_RX,
+        CPU_TX_ENABLE   => USE_CPU_TX)
     port map(
         wb_clk_i => CLK_I,
         wb_rst_i => RST_I,
@@ -728,7 +736,8 @@ begin
 
     ska_fge_tx_0 : ska_fge_tx
     generic map (
-        TTL            => TTL)
+        TTL            => TTL,
+        USE_CPU_TX     => USE_CPU_TX)
     port map(
         local_enable          => local_enable,
         local_mac             => local_mac,
@@ -989,7 +998,8 @@ begin
 
     ska_fge_rx_0 : ska_fge_rx
     generic map(
-        PROMISC_MODE => PROMISC_MODE)
+        PROMISC_MODE => PROMISC_MODE,
+        USE_CPU_RX   => USE_CPU_RX)
     port map(
         local_enable          => local_enable,
         local_mac             => local_mac,

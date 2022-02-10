@@ -1839,6 +1839,7 @@ proc puts_red {s} {
             self.add_tcl_cmd('set synth_critical_count [get_msg_config -count -severity {CRITICAL WARNING}]', stage='post_synth')
 
             # Pre-Implementation Commands
+            self.add_tcl_cmd('set_property STEPS.POST_PLACE_POWER_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]', stage='pre_impl')
             if impl_strat is not None:
                 # impl_strat must be error-checked before arriving here
                 self.add_tcl_cmd('set_property strategy {} [get_runs impl_1]'.format(impl_strat), stage='pre_impl')

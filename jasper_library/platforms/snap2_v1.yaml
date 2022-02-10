@@ -1223,3 +1223,21 @@ pins:
       - AE32
       - AM17
       - AM16
+  qsfp_mod_seln:
+    iostd: LVCMOS18
+    loc: [J14, V12, AN19, T15]
+  qsfp_lp_mod:
+    iostd: LVCMOS18
+    loc: [V14, U12, AN18, T14]
+  qsfp_mod_prsn:
+    iostd: LVCMOS18
+    loc: [V11, W10, AL17, T10]
+  qsfp_mod_rstn:
+    iostd: LVCMOS18
+    loc: [U14, W11, AK17, U10]
+  qsfp_scl:
+    iostd: LVCMOS18
+    loc: H14
+  qsfp_sda:
+    iostd: LVCMOS18
+    loc: G14

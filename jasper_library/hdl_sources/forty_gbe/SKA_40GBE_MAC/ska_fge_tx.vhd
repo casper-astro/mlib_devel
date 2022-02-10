@@ -27,7 +27,8 @@ use ieee.numeric_std.all;
 
 entity ska_fge_tx is
     generic (
-    TTL             : std_logic_vector(7 downto 0));
+    TTL             : std_logic_vector(7 downto 0);
+    USE_CPU_TX      : integer := 1);
 
     port (
     local_enable    : in std_logic;
@@ -640,6 +641,7 @@ begin
 
     --AI: Deassert write when FIFO full and reset asserted
     app_tx_data_wrreq <= app_tx_any_valid and (not app_tx_data_full) and (not app_rst);
+    app_tx_data_overflow <= app_tx_any_valid and app_tx_data_full;
 
     gen_app_tx_data_wrreq_latched : process(app_rst, app_clk)
     begin
@@ -662,7 +664,7 @@ begin
         rd_en       => app_tx_data_rdreq,
         dout        => app_tx_data_dout,
         full        => app_tx_data_full,
-        overflow    => app_tx_data_overflow,
+        overflow    => open,
         empty       => app_tx_data_empty,
         prog_full   => app_tx_data_afull);
 
@@ -902,18 +904,25 @@ begin
         end if;
     end process;
 
-    ska_cpu_buffer_0 : ska_cpu_buffer
-    port map(
-        clka    => cpu_clk,
-        wea     => cpu_tx_buffer_wea,
-        addra   => cpu_tx_buffer_addra,
-        dina    => cpu_tx_buffer_dina,
-        douta   => cpu_tx_buffer_douta,
-        clkb    => mac_clk,
-        web     => (others => '0'),
-        addrb   => cpu_tx_buffer_addrb,
-        dinb    => (others => '0'),
-        doutb   => cpu_tx_buffer_doutb);
+    generate_cpu_tx : if USE_CPU_TX = 1 generate
+      ska_cpu_buffer_0 : ska_cpu_buffer
+      port map(
+          clka    => cpu_clk,
+          wea     => cpu_tx_buffer_wea,
+          addra   => cpu_tx_buffer_addra,
+          dina    => cpu_tx_buffer_dina,
+          douta   => cpu_tx_buffer_douta,
+          clkb    => mac_clk,
+          web     => (others => '0'),
+          addrb   => cpu_tx_buffer_addrb,
+          dinb    => (others => '0'),
+          doutb   => cpu_tx_buffer_doutb);
+    end generate generate_cpu_tx;
+
+    generate_nocpu_tx : if USE_CPU_TX = 0 generate
+      cpu_tx_buffer_douta <= (others => '0');
+      cpu_tx_buffer_doutb <= (others => '0');
+    end generate generate_nocpu_tx;
 
     --cpu_tx_buffer_addrb(8 downto 7) <= (others => '0');
     --cpu_tx_buffer_addrb(6) <= not cpu_buf_select;

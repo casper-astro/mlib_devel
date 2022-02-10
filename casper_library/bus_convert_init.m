@@ -25,6 +25,8 @@ function bus_convert_init(blk, varargin)
   
   check_mask_type(blk, 'bus_convert');
 
+  USE_XILINX = 1;
+
   if same_state(blk, 'defaults', defaults, varargin{:}), return, end
   munge_block(blk, varargin{:});
 
@@ -240,7 +242,7 @@ function bus_convert_init(blk, varargin)
         'Position', position);
     else
       %CASPER converts can't increase binary points so use generic Xilinx
-      if pt_out > pt_in
+      if USE_XILINX == 1 || pt_out > pt_in
         reuse_block(blk, conv_name, 'xbsIndex_r4/Convert', ...
           'arith_type', 'Signed  (2''s comp)', ...
           'n_bits', num2str(bits_out), 'bin_pt', num2str(pt_out), 'latency', num2str(latency), ...

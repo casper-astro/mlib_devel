@@ -51,6 +51,9 @@ log_group = 'fft_stage_n_init_debug';
 
 clog('entering fft_stage_n_init', {log_group, 'trace'});
 
+% Don't use BRAMs with fanout control
+USE_DUMB_BRAMS = 1;
+
 % Set default vararg values.
 % reg_retiming is not an actual parameter of this block, but it is included
 % in defaults so that same_state will return false for blocks drawn prior to
@@ -126,6 +129,10 @@ use_embedded      = get_var('use_embedded', 'defaults', defaults, varargin{:});
 hardcode_shifts   = get_var('hardcode_shifts', 'defaults', defaults, varargin{:});
 dsp48_adders      = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
 
+if USE_DUMB_BRAMS == 1 && strcmp(async, 'on'),
+  error('Unable to use dumb brams for an ASYNC FFT!');
+end
+
 delete_lines(blk);
 
 %default state for library
@@ -154,7 +161,7 @@ end
 
 %calculate data path width so that mux latency can be increased if needed
 n_bits_dp = input_bit_width * n_inputs * 2;
-if n_bits_dp < 50, mux_latency = 1;
+if n_bits_dp < 200, mux_latency = 1;
 else mux_latency = 2;
 end
 
@@ -170,7 +177,7 @@ reuse_block(blk, 'shift', 'built-in/Inport', 'Port', '5', 'Position', [630 418 6
 
 % registers to control fanout for signals into delay buffers
 
-if strcmp(delays_bram, 'on'),
+if USE_DUMB_BRAMS == 0 && strcmp(delays_bram, 'on'),
   % if we have a 'large' delay buffer in bram, add appropriate delay
   % based on an approximation of the number of BRAMs required from bit width and buffer depth
   %TODO this should be a separate function based on architecture, bit width etc
@@ -190,10 +197,12 @@ if strcmp(delays_bram, 'on'),
 
   fan_latency = max(1, ceil(log2(n_brams)));
   clog(['Using input latency of ', num2str(fan_latency), ' for ', num2str(n_brams),' bram/s in biplex core stage ', num2str(FFTStage)], log_group);
+  bram_latency_comp = bram_latency;
 else,
   %otherwise we control fanout based on the number of input streams
   fan_latency = max(0, ceil(log2(n_inputs/max_fanout)));
   clog(['Using input latency of ', num2str(fan_latency), ' for ', num2str(n_inputs),' streams in biplex core stage ', num2str(FFTStage)], log_group);
+  bram_latency_comp = 0;
 end
 
 reuse_block(blk, 'din0', 'xbsIndex_r4/Delay', 'latency', num2str(fan_latency), 'reg_retiming', 'on', 'Position', [95 85 125 105]);
@@ -205,7 +214,7 @@ add_line(blk, 'sync/1', 'dsync0/1');
 if strcmp(async, 'on'), 
   reuse_block(blk, 'en', 'built-in/Inport', 'Port', '6', 'Position', [5 458 35 472]);
 
-  if strcmp(delays_bram, 'on'), latency = fan_latency + bram_latency;
+  if strcmp(delays_bram, 'on'), latency = fan_latency + bram_latency_comp;
   else, latency = fan_latency;
   end  
 
@@ -241,7 +250,7 @@ reuse_block(blk, 'mux0', 'xbsIndex_r4/Mux', ...
         'Position', [465 157 490 253]);
 add_line(blk, 'slice1/1', 'mux0/1');
 
-if strcmp(delays_bram, 'on'), latency = bram_latency + fan_latency;
+if strcmp(delays_bram, 'on'), latency = bram_latency_comp + fan_latency;
 else, latency = fan_latency;
 end
 
@@ -251,7 +260,7 @@ add_line(blk, 'mux0/1', 'dmux0/1');
 
 latency = mux_latency;
 if strcmp(async, 'off'), 
-  if strcmp(delays_bram, 'on'), latency = mux_latency + fan_latency + bram_latency;
+  if strcmp(delays_bram, 'on'), latency = mux_latency + fan_latency + bram_latency_comp;
   else, latency = mux_latency + fan_latency;
   end
 end
@@ -278,12 +287,12 @@ end
 
 if strcmp(delays_bram, 'on'),
 
-  reuse_block(blk, 'dsync2', 'xbsIndex_r4/Delay', 'latency', num2str(bram_latency), 'reg_retiming', 'on', 'Position', [225 295 255 315]);
+  reuse_block(blk, 'dsync2', 'xbsIndex_r4/Delay', 'latency', num2str(bram_latency_comp), 'reg_retiming', 'on', 'Position', [225 295 255 315]);
   add_line(blk, 'dsync0/1', 'dsync2/1');
   add_line(blk, 'dsync2/1', 'dsync1/1');
   add_line(blk, 'dsync2/1', 'counter/1');
 
-  reuse_block(blk, 'din1', 'xbsIndex_r4/Delay', 'latency', num2str(bram_latency), 'reg_retiming', 'on', 'Position', [225 85 255 105]);
+  reuse_block(blk, 'din1', 'xbsIndex_r4/Delay', 'latency', num2str(bram_latency_comp), 'reg_retiming', 'on', 'Position', [225 85 255 105]);
   add_line(blk, 'din0/1', 'din1/1');
   add_line(blk, 'din1/1', 'mux1/2');
   add_line(blk, 'din1/1', 'mux0/3');
@@ -296,40 +305,47 @@ if strcmp(delays_bram, 'on'),
     delay = ['delay', num2str(n-1)];
     addr = ['addr', num2str(n-1)];
     we = ['we', num2str(n-1)];
+    if USE_DUMB_BRAMS == 0
+      reuse_block(blk, addr, 'xbsIndex_r4/Counter', ...
+        'cnt_type', 'Free Running', 'n_bits', num2str(FFTSize-FFTStage), 'bin_pt', '0', ...
+        'en', async, 'use_behavioral_HDL', 'off', 'implementation', 'Fabric', ...
+        'Position', apos{n});
 
-    reuse_block(blk, addr, 'xbsIndex_r4/Counter', ...
-      'cnt_type', 'Free Running', 'n_bits', num2str(FFTSize-FFTStage), 'bin_pt', '0', ...
-      'en', async, 'use_behavioral_HDL', 'off', 'implementation', 'Fabric', ...
-      'Position', apos{n});
+      if strcmp(async, 'on'), we_implementation = 'core';
+      else, we_implementation = 'behavioral';
+      end
 
-    if strcmp(async, 'on'), we_implementation = 'core';
-    else, we_implementation = 'behavioral';
-    end
+      reuse_block(blk, delay, 'casper_library_bus/bus_single_port_ram', ...
+        'n_bits', mat2str(repmat(input_bit_width, 1, n_inputs*2)), ...
+        'bin_pts', mat2str(repmat(bin_pt_in, 1, n_inputs*2)), ...
+        'init_vector', ['zeros(2^', num2str(FFTSize-FFTStage),', ',num2str(n_inputs*2),')'], ...
+        'max_fanout', num2str(max_fanout), 'mem_type', 'Block RAM', 'bram_optimization', 'Speed', ...
+        'async', 'off', 'misc', 'off', ...
+        'bram_latency', num2str(bram_latency), 'fan_latency', num2str(fan_latency), ...
+        'addr_register', 'on', 'addr_implementation', 'core', ...
+        'en_register', 'off', 'en_implementation', 'behavioral', ...
+        'we_register', 'on', 'we_implementation', we_implementation, ...
+        'din_register', 'on', 'din_implementation', 'behavioral', ...
+        'Position', dpos{n}); 
 
-    reuse_block(blk, delay, 'casper_library_bus/bus_single_port_ram', ...
-      'n_bits', mat2str(repmat(input_bit_width, 1, n_inputs*2)), ...
-      'bin_pts', mat2str(repmat(bin_pt_in, 1, n_inputs*2)), ...
-      'init_vector', ['zeros(2^', num2str(FFTSize-FFTStage),', ',num2str(n_inputs*2),')'], ...
-      'max_fanout', num2str(max_fanout), 'mem_type', 'Block RAM', 'bram_optimization', 'Speed', ...
-      'async', 'off', 'misc', 'off', ...
-      'bram_latency', num2str(bram_latency), 'fan_latency', num2str(fan_latency), ...
-      'addr_register', 'on', 'addr_implementation', 'core', ...
-      'en_register', 'off', 'en_implementation', 'behavioral', ...
-      'we_register', 'on', 'we_implementation', we_implementation, ...
-      'din_register', 'on', 'din_implementation', 'behavioral', ...
-      'Position', dpos{n}); 
+      add_line(blk, [addr, '/1'], [delay, '/1']);
 
-    add_line(blk, [addr, '/1'], [delay, '/1']);
-
-    if strcmp(async, 'off')
-      reuse_block(blk, we, 'xbsIndex_r4/Constant', ...
-          'arith_type', 'Boolean', 'const', '1', ...
-          'n_bits', '1', 'bin_pt', '0', ...
-          'explicit_period', 'on', 'period', '1', ...
-          'Position', wpos{n});
-      add_line(blk, [we, '/1'], [delay, '/3']);
-    end %if
-
+      if strcmp(async, 'off')
+        reuse_block(blk, we, 'xbsIndex_r4/Constant', ...
+            'arith_type', 'Boolean', 'const', '1', ...
+            'n_bits', '1', 'bin_pt', '0', ...
+            'explicit_period', 'on', 'period', '1', ...
+            'Position', wpos{n});
+        add_line(blk, [we, '/1'], [delay, '/3']);
+      end %if
+    else
+      reuse_block(blk, delay, 'casper_library_delays/delay_bram', ...
+        'async', async, ...
+        'bram_latency', num2str(bram_latency), ...
+        'use_dsp48', 'off', ...
+        'DelayLen', num2str(2^(FFTSize-FFTStage)), ...
+        'Position', dpos{n}); 
+    end % USE_DUMB_BRAMS
   end %for
   
   if strcmp(async, 'on'),
@@ -339,8 +355,13 @@ if strcmp(delays_bram, 'on'),
     add_line(blk, 'bus_expand1/1', 'delay1/3');
   end
 
-  add_line(blk, 'in2/1', 'delay0/2');
-  add_line(blk, 'mux1/1', 'delay1/2');
+  if USE_DUMB_BRAMS == 0
+    add_line(blk, 'in2/1', 'delay0/2');
+    add_line(blk, 'mux1/1', 'delay1/2');
+  else
+    add_line(blk, 'in2/1', 'delay0/1');
+    add_line(blk, 'mux1/1', 'delay1/1');
+  end
 
 else,
   add_line(blk, 'din0/1', 'mux1/2');
@@ -399,7 +420,7 @@ add_line(blk, 'dsync1/1', 'sync_delay/1');
 
 if strcmp(async, 'on'),
 
-  if strcmp(delays_bram, 'on'), latency = bram_latency + fan_latency;
+  if strcmp(delays_bram, 'on'), latency = bram_latency_comp + fan_latency;
   else, latency = fan_latency;
   end
   reuse_block(blk, 'logical0', 'xbsIndex_r4/Logical', ...
@@ -408,7 +429,7 @@ if strcmp(async, 'on'),
   add_line(blk, 'sync_delay/1', 'logical0/1');
   add_line(blk, 'bus_expand1/3', 'logical0/2');
 
-  if strcmp(delays_bram, 'on'), latency = bram_latency + fan_latency;
+  if strcmp(delays_bram, 'on'), latency = bram_latency_comp + fan_latency;
   else, latency = fan_latency;
   end
   reuse_block(blk, 'delay4', 'xbsIndex_r4/Delay', 'latency', num2str(latency), ...
