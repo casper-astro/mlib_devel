@@ -356,7 +356,7 @@ class Toolflow(object):
         # and probably shouldn't be here. Why not in the SKARAB yellow block?
         try:
             # generate multiboot, golden or tooflow image based on yaml file
-            self.hdl_filename = '%s/infrastructure/%s_parameters.vhd' % (os.getenv('HDL_ROOT'), self.plat.name)
+            self.hdl_filename = '%s/skarab_infr/%s_parameters.vhd' % (os.getenv('HDL_ROOT'), self.plat.name)
             # check to see if parameter file exists. Some platforms may not use this.
             if os.path.isfile(self.hdl_filename):
                 self._gen_hdl_version(filename_hdl=self.hdl_filename)
@@ -461,7 +461,7 @@ class Toolflow(object):
             self.sources += obj.sources
             self.ips += obj.ips
         # add AXI4-Lite architecture specfic stuff, which must be called after all yellow blocks have modified top.
-        if self.plat.mmbus_architecture == 'AXI4-Lite':
+        if 'AXI4-Lite' in self.plat.mmbus_architecture:
             # Make an AXI4-Lite interconnect yellow block and let it modify top
             axi4lite_interconnect = yellow_block.YellowBlock.make_block(
                 {'tag': 'xps:axi4lite_interconnect', 'name': 'axi4lite_interconnect', 
@@ -512,13 +512,17 @@ class Toolflow(object):
             #        self.tcl_sources += glob.glob(source)
 
     def write_core_info(self):
-        if self.plat.mmbus_architecture == 'AXI4-Lite':
+        self.cores = []
+        if 'AXI4-Lite' in self.plat.mmbus_architecture:
             # get list of all axi4lite_devices in self.top.memory_map dict
-            self.cores = []
             for val in list(self.top.memory_map.values()):
                 self.cores += val['axi4lite_devices']
-        else:
-            self.cores = self.top.wb_devices
+            for val in self.top.rfdc_devices:
+                self.cores += [val]
+        if 'wishbone' in self.plat.mmbus_architecture:
+            self.cores += self.top.wb_devices
+        for val in self.top.xil_axi4lite_devices:
+            self.cores += [val]
         basefile = '%s/%s/core_info.tab' % (os.getenv('HDL_ROOT'),
                                             self.plat.name)
         newfile = '%s/core_info.tab' % self.compile_dir
@@ -539,8 +543,10 @@ class Toolflow(object):
             s += format_str.format(core.regname, modemap[core.mode],
                                    core.base_addr, core.nbytes)
             # add aliases if the WB Devices have them
+            # Add the core's register name as a prefix, because memory map
+            # names need not be unique!
             for reg in core.memory_map:
-                s += format_str.format(reg.name, modemap[reg.mode],
+                s += format_str.format(core.regname + '_' + reg.name, modemap[reg.mode],
                                        core.base_addr + reg.offset, reg.nbytes)
             # s += '%s\t%d\t%x\t%x\n'%(core.regname, modemap[core.mode],
             #                          core.base_addr, core.nbytes)
@@ -549,13 +555,13 @@ class Toolflow(object):
             fh.write(s)
 
     def write_core_jam_info(self):
-        if self.plat.mmbus_architecture == 'AXI4-Lite':
+        self.cores = []
+        if 'AXI4-Lite' in self.plat.mmbus_architecture:
             # get list of all axi4lite_devices in self.top.memory_map dict
-            self.cores = []
             for val in list(self.top.memory_map.values()):
                 self.cores += val['axi4lite_devices']
-        else:
-            self.cores = self.top.wb_devices
+        if 'wishbone' in self.plat.mmbus_architecture:
+            self.cores += self.top.wb_devices
         basefile = '%s/%s/core_info.jam.tab' % (os.getenv('HDL_ROOT'), self.plat.name)
         newfile = '%s/core_info.jam.tab' % self.compile_dir
         self.logger.debug('Opening %s' % basefile)
@@ -605,9 +611,9 @@ class Toolflow(object):
             self.top.max_devices_per_arb = self.plat.conf['max_devices_per_arbiter']
             self.logger.debug("Found max_devices_per_arbiter: %s" % self.top.max_devices_per_arb)
         # Check for memory map bus architecture, added to support AXI4-Lite
-        if self.plat.mmbus_architecture == 'AXI4-Lite':
+        if 'AXI4-Lite' in self.plat.mmbus_architecture:
             pass
-        else:
+        if 'wishbone' in self.plat.mmbus_architecture:
             self.top.wb_compute(self.plat.dsp_wb_base_address,
                             self.plat.dsp_wb_base_address_alignment)
         # Write top module file
@@ -786,7 +792,7 @@ class Toolflow(object):
         c.synthesis.pin_map = self.plat._pins
 
         mm_slaves = []
-        if self.plat.mmbus_architecture == 'AXI4-Lite':
+        if 'AXI4-Lite' in self.plat.mmbus_architecture:
             for dev in self.top.axi4lite_devices:
                 if dev.mode == 'rw':
                     mode = 3
@@ -798,7 +804,7 @@ class Toolflow(object):
                     mode = 1
                 mm_slaves += [castro.mm_slave(dev.regname, mode, dev.base_addr,
                                             dev.nbytes)]
-        else:
+        if 'wishbone' in self.plat.mmbus_architecture:
             for dev in self.top.wb_devices:
                 if dev.mode == 'rw':
                     mode = 3
@@ -926,7 +932,7 @@ class Toolflow(object):
         # loop over interfaces, sort by address, make interconnect
         xml_root = ET.Element('node')
         xml_root.set('id', 'axi4lite_top')
-        xml_root.set('address', hex(self.plat.mmbus_base_address))
+        xml_root.set('address', hex(self.plat.axi_ic_base_address))
         xml_root.set('hw_type', 'ic')
         for interface in list(sorted(memory_map.keys())):
             # add a child to parent node
@@ -1608,6 +1614,8 @@ proc puts_red {s} {
         Add an ip core from a library
         """
         self.add_tcl_cmd('create_ip -name %s -vendor %s -library %s -version %s -module_name %s' % (ip['name'], ip['vendor'], ip['library'], ip['version'], ip['module_name']))
+        if self.template_project is not None:
+            self.add_tcl_cmd('move_files -of_objects [get_reconfig_modules user_top-toolflow] [get_files %s.xci]' % ip['module_name'])
 
     def add_source(self, source, plat):
         """
@@ -1734,17 +1742,26 @@ proc puts_red {s} {
         synth_run = "[get_runs user_top-toolflow_synth_1]"
         tcl = self.add_tcl_cmd # shortcut for less typing
 
-        # The synthesis run seems to want to lock all IP, but doesn't bother generating it first.
-        # Manually do so...
-        tcl("generate_target all [get_files %s]" % os.path.join(self.compile_dir, "myproj/myproj.srcs/user_top-toolflow/ip/*/*.xci"), stage='pre_synth')
+        # Don't go deeper than [glob-like] .../ip/*/*.xci
+        # Vivado will match the above glob as .../ip/*/*/.../*/*.xci
+        # These files may not be manually generated, since they should be generated by the parents
+        ip_regexp = os.path.join(self.compile_dir, "myproj/myproj.srcs/user_top-toolflow/ip/[^/]+/[^/]+\.xci")
 
         # add the upgrade_ip command to the tcl file if the yaml file requests it
         # Default to upgrading the IP
         if plat.conf.get('upgrade_ip', True):
-            #TODO tcl('upgrade_ip -quiet [get_ips *]', stage='pre_synth')
+            # Ideally we'd upgrade only IPs from the user partition.
+            # But, adding "-of_objects [get_reconfig_modules user_top-toolflow]"
+            # to the get_ips call isn't allowed.
+            # Instead, just update everything. OK?
+            tcl('upgrade_ip -quiet [get_ips *]', stage='pre_synth')
             self.logger.debug('adding the upgrade_ip command to the tcl script')
         else:
             self.logger.debug('The upgrade_ip command is not being added to the tcl script')
+
+        # The synthesis run seems to want to lock all IP, but doesn't bother generating it first.
+        # Manually do so...
+        tcl("generate_target all [get_files -regexp {%s}]" % ip_regexp, stage='pre_synth')
 
         # Pre-Synthesis Commands
         if synth_strat is not None:
@@ -1768,7 +1785,28 @@ proc puts_red {s} {
         tcl('set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true {0}'.format(impl_run), stage='pre_impl')
         tcl('set_property STEPS.POST_ROUTE_PHYS_OPT_DESIGN.IS_ENABLED true {0}'.format(impl_run), stage='pre_impl')
 
+        # Some [Possibly just the 100G block] mess with the placement of things after synthesis,
+        # in order to abuse a single IP core (which includes placement constraints) to be
+        # used multiple times.
+        # In PR mode, the synthesized black box "user_top" doesn't include resolved black boxes, so
+        # trying to manipulate things inside them doesn't work.
+        # Try --
+        # 1. Implementing to opt_design
+        # 2. Opening design checkpoint
+        # 3. Allowing yellow blocks to mess with placement with their "pre_impl" tcl commands
+        # 4. Running the rest of implementation.
+        #
+        # This could well have unintended side effects, depending on what yellow blocks
+        # Try to do, and how they assume things about when pre_impl commands are run.
+        tcl('launch_runs {0} -jobs {1} -to_step opt_design'.format(impl_run, cores), stage='pre_impl')
+        tcl('wait_on_run {0}'.format(impl_run), stage='pre_impl')
+        tcl('open_checkpoint $impl_dir/top_opt.dcp ', stage='pre_impl')
+        # Yellow block pre_impl commands run here....
+        # Then save the checkpoint, below.
+
         # Implementation Commands
+        tcl('write_checkpoint $impl_dir/top_opt.dcp -force', stage='impl')
+        tcl('close_design', stage='impl')
         tcl('launch_runs {0} -jobs {1}'.format(impl_run, cores), stage='impl')
         tcl('wait_on_run {0}'.format(impl_run), stage='impl')
 

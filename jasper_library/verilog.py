@@ -45,7 +45,7 @@ class WbDevice(object):
     """
     A class to encapsulate the parameters (name, size, etc.) of a wishbone slave device.
     """
-    def __init__(self, regname, nbytes, mode, hdl_suffix='', hdl_candr_suffix='', memory_map=[], typecode=0xff, req_offset=-1):
+    def __init__(self, regname, nbytes, mode, hdl_suffix='', hdl_candr_suffix='', memory_map=[], typecode=0xff, req_offset=-1, id=''):
         """
         Class constructor.
 
@@ -93,22 +93,24 @@ class AXI4LiteDevice(object):
         """
         Class constructor.
 
-        :param regname: Name of register (this name is the string used to access the register from software)
+        :param regname: Name of register (this name is the string used to access the register from software).
         :type regname: String
         :param nbytes: Number of bytes in this slave's memory space.
         :type nbytes: Integer
-        :param mode: Permissions ('r': readable, 'w': writable, 'rw': read/writeable)
+        :param mode: Permissions ('r': readable, 'w': writable, 'rw': read/writeable).
         :type mode: String
-        :param hdl_suffix: Suffix given to wishbone port names. Eg. if `hdl_suffix = foo`, ports have the form `wbs_dat_i_foo`
+        :param hdl_suffix: Suffix given to wishbone port names. Eg. if `hdl_suffix = foo`, ports have the form `wbs_dat_i_foo`.
         :type hdl_suffix: String
-        :param hdl_candr_suffix: Suffix given to wishbone clock and reset port names. Eg. if `hdl_suffix = foo`, ports have the form `wbs_clk_i_foo`
+        :param hdl_candr_suffix: Suffix given to wishbone clock and reset port names. Eg. if `hdl_suffix = foo`, ports have the form `wbs_clk_i_foo`.
         :type hdl_candr_suffix: String
         :param memory_map: A list or `Register` instances defining the contents of sub-blocks of this device's memory.
         :type memory_map: list
-        :param typecode: Typecode number (0-255) identifying the type of this block. See `yellow_block_typecodes.py`
+        :param typecode: Typecode number (0-255) identifying the type of this block. See `yellow_block_typecodes.py`.
         :type typecode: Integer
-        :param data_width: Width of the data to be stored in this device
+        :param data_width: Width of the data to be stored in this device.
         :type data_width: Integer
+        :param axi4lite_mode: Mode of the axi4lite interface. Eg. axi4lite_mode = 'raw', instantiates a raw axi4lite device.
+        :type axi4lite_mode: String
         """
         self.typecode = typecode
         self.regname = regname
@@ -616,6 +618,12 @@ class VerilogModule(object):
         self.axi4lite_devices = []
         self.n_axi4lite_interfaces = 0 # axi4lite interfaces to this module
         self.memory_map = {}
+        self.rfdc_devices = [] #this is for rfdc core on RFSOC, such as zcu111 platform
+        self.n_rfdc_interfaces = 0
+        # this is for xilinx axi4lite devices.
+        # in some applications, we add some axi-spi or axi-gpio, which are not casper axi4lite devices
+        self.xil_axi4lite_devices = []      
+        self.n_xil_axi4lite_devices = 0
         # sourcefiles required by the module (this is currently NOT
         # how the jasper toolflow implements source management)
         self.sourcefiles = []
@@ -690,7 +698,7 @@ class VerilogModule(object):
                         logger.debug("Found new WB slave for instance %s"%inst.name)
                         wb_dev.base_addr = wb_offset + wb_dev.req_offset
                         wb_dev.high_addr = wb_offset + wb_dev.req_offset + (alignment*int(ceil(wb_dev.nbytes/float(alignment)))) - 1
-                        self.add_localparam(name=inst.wb_ids[n], value=self.n_wb_slaves+self.base_wb_slaves)
+                        wb_dev.id = inst.wb_ids[n]
                         if wb_dev.high_addr > base_addr:
                             print(hex(base_addr))
                             print(hex(wb_dev.high_addr))
@@ -700,7 +708,7 @@ class VerilogModule(object):
                         print("Req offset: %s Base addr: %s High Addr: %s"%(hex(wb_dev.req_offset), hex(base_addr), hex(wb_dev.high_addr)))
         
         # 2nd iteration adds devices that have not requested an offset
-        for block in list(self.instances.keys()):
+        for block in list(sorted(self.instances.keys())):
             for instname, inst in list(self.instances[block].items()):
                 logger.debug("Looking for WB slaves for instance %s"%inst.name)
                 for n, wb_dev in enumerate(inst.wb_devices):
@@ -718,16 +726,21 @@ class VerilogModule(object):
                         logger.debug("Found new WB slave for instance %s"%inst.name)
                         wb_dev.base_addr = base_addr
                         wb_dev.high_addr = base_addr + (alignment*int(ceil(wb_dev.nbytes/float(alignment)))) - 1
-                        self.add_localparam(name=inst.wb_ids[n], value=self.n_wb_slaves+self.base_wb_slaves)
+                        wb_dev.id = inst.wb_ids[n]
                         base_addr = wb_dev.high_addr + 1
                         self.n_wb_slaves += 1
                         self.wb_devices += [wb_dev]
-
 
         # sort the wb_devices by descending order of addresses, otherwise the 
         # arbiter could get the addresses out of order and it doesnt like that.
         self.wb_devices = sorted(self.wb_devices, key = lambda i:i.base_addr)  
         
+        # add the localparams wishbone IDs to top.v for each wb_device
+        # this used to be done in the for loops above but since we are now sorting
+        # the list before using them further we need to generate it after the sort
+        for n, wb_dev in enumerate(self.wb_devices):
+            self.add_localparam(name=wb_dev.id, value=n)
+
         # If we are starting a file from scratch, we need the wishbone parameters
         # otherwise we assume they are in the file and rewrite_module_file will
         # modify them.
@@ -1416,7 +1429,10 @@ class VerilogModule(object):
             n_ports = len(self.ports[block])
             n = 0
             for pn, port in sorted(self.ports[block].items()):
-                s += '    .%s(%s)'%(port.name, port.signal.rstrip(' '))
+                try:
+                    s += '    .%s(%s)'%(port.name, port.signal.rstrip(' '))
+                except:
+                    logger.error("Could't instantiate port %s connected to signal %s" % (port.name, port.signal))
                 if n != (n_ports - 1):
                     s += ',\n'
                 else:
@@ -1487,8 +1503,31 @@ class VerilogModule(object):
         This function returns the AXI4LiteDevice object, so the caller can mess with it's memory map
         if they so desire.
 
-        Added the (optional) data_width parameter to make provision for variable-size BRAMs
+        Added the (optional) data_width parameter to make provision for variable-size BRAMs.
+        Added the (optional) axi4lite_mode parameter. Eg. axi4lite_mode = 'raw' instantiates a raw axi4lite device.
+              
+
+        :param regname: Name of register (this name is the string used to access the register from software).
+        :type regname: String
+        :param nbytes: Number of bytes in this slave's memory space.
+        :type nbytes: Integer
+        :param mode: Permissions ('r': readable, 'w': writable, 'rw': read/writeable).
+        :type mode: String
+        :param suffix: Suffix given to port names.
+        :type suffix: String
+        :param candr_suffix: Suffix given to clock and reset port names.
+        :type candr_suffix: String
+        :param memory_map: A list or `Register` instances defining the contents of sub-blocks of this device's memory.
+        :type memory_map: list
+        :param typecode: Typecode number (0-255) identifying the type of this block. See `yellow_block_typecodes.py`.
+        :type typecode: Integer
+        :param data_width: Width of the data to be stored in this device.
+        :type data_width: Integer
+        :param axi4lite_mode: Mode of the axi4lite interface. Eg. axi4lite_mode = 'raw', instantiates a raw axi4lite device.
+        :type axi4lite_mode: String
+
         """
+
         if regname in [axi_dev.regname for axi_dev in self.axi4lite_devices]:
             return
         else:
@@ -1506,7 +1545,68 @@ class VerilogModule(object):
             self.n_axi4lite_interfaces += 1
             return axi4lite_device
 
+    def add_axi_interface(self, regname, mode, nbytes=4,
+                               default_val=0, suffix='',
+                               candr_suffix='', memory_map=[],
+                               typecode=0xff, data_width=32, axi4lite_mode=''):
 
+        if axi4lite_mode == 'raw':
+                 # axi4l miso signals
+           self.add_port('s_axi4lite_awready', signal='m_axi4lite_%s_awready' %regname, width=1, dir='out')
+           self.add_port('s_axi4lite_wready', signal='m_axi4lite_%s_wready' %regname, width=1, dir='out')
+           self.add_port('s_axi4lite_bresp',  signal='m_axi4lite_%s_bresp' %regname,  width=2, dir='out')
+           self.add_port('s_axi4lite_bvalid', signal='m_axi4lite_%s_bvalid'%regname, width=1, dir='out')
+           self.add_port('s_axi4lite_arready', signal='m_axi4lite_%s_arready'%regname, width=1, dir='out')
+           self.add_port('s_axi4lite_rresp',  signal='m_axi4lite_%s_rresp' %regname,  width=2, dir='out')
+           self.add_port('s_axi4lite_rdata',  signal='m_axi4lite_%s_rdata' %regname, width=32, dir='out')
+           self.add_port('s_axi4lite_rvalid', signal='m_axi4lite_%s_rvalid' %regname, width=1, dir='out')
+                # axi4l mosi signals
+           self.add_port('s_axi4lite_awaddr', signal='m_axi4lite_%s_awaddr' %regname, width=32, dir='out')
+           self.add_port('s_axi4lite_awvalid', signal='m_axi4lite_%s_awvalid' %regname, width=1, dir='out')
+           self.add_port('s_axi4lite_wdata',  signal='m_axi4lite_%s_wdata' %regname, width=32, dir='out')
+           self.add_port('s_axi4lite_wvalid', signal='m_axi4lite_%s_wvalid' %regname, width=1, dir='out')
+           self.add_port('s_axi4lite_wstrb',  signal='m_axi4lite_%s_wstrb' %regname, width=4, dir='out')
+           self.add_port('s_axi4lite_araddr', signal='m_axi4lite_%s_araddr' %regname, width=32, dir='out')
+           self.add_port('s_axi4lite_arvalid', signal='m_axi4lite_%s_arvalid' %regname, width=1, dir='out')
+           self.add_port('s_axi4lite_rready', signal='m_axi4lite_%s_rready' %regname, width=1, dir='out')
+           self.add_port('s_axi4lite_bready', signal='m_axi4lite_%s_bready' %regname, width=1, dir='out')
+
+    def add_rfdc_interface(self, regname, mode, nbytes=4, default_val=0, suffix='', candr_suffix='', memory_map=[], typecode=0xff):
+        """
+        Add the ports necessary for rfdc core, which is a special AXILite4 device
+
+        This function returns the AXI4LiteDevice object, so the caller can mess with it's memory map
+        if they so desire.
+        """
+        if regname in [axi_dev.regname for axi_dev in self.rfdc_devices]:
+            return
+        else:
+            # Make single register in memory_map if memory_map is empty
+            if not memory_map:
+                memory_map = [Register(regname, nbytes=nbytes, offset=0, mode=mode, default_val=default_val, ram_size=nbytes if typecode==4 else -1, ram=True if typecode==4 else False)]
+            rfdc_device = AXI4LiteDevice(regname, nbytes=nbytes, mode=mode, hdl_suffix=suffix, hdl_candr_suffix=candr_suffix, memory_map=memory_map, typecode=typecode)
+            self.rfdc_devices += [rfdc_device]
+            self.n_rfdc_interfaces += 1
+            return rfdc_device
+
+    def add_xil_axi4lite_interface(self, regname, mode, nbytes=4, default_val=0, suffix='', candr_suffix='', memory_map=[], typecode=0xff):
+        """
+        Add the ports necessary for xilinx axi4lite cores, which are not casper AXILite4 devices
+
+        This function returns the AXI4LiteDevice object, so the caller can mess with it's memory map
+        if they so desire.
+        """
+        if regname in [axi_dev.regname for axi_dev in self.xil_axi4lite_devices]:
+            return
+        else:
+            # Make single register in memory_map if memory_map is empty
+            #if not memory_map:
+            #    memory_map = [Register(regname, nbytes=nbytes, offset=0, mode=mode, default_val=default_val, ram_size=nbytes if typecode==4 else -1, ram=True if typecode==4 else False)]
+            xil_axi4lite_device = AXI4LiteDevice(regname, nbytes=nbytes, mode=mode, hdl_suffix=suffix, hdl_candr_suffix=candr_suffix, memory_map=memory_map, typecode=typecode)
+            self.xil_axi4lite_devices += [xil_axi4lite_device]
+            self.n_xil_axi4lite_devices += 1
+            return xil_axi4lite_device
+            
     def search_dict_for_name(self, dict, name):
         """
         This helper function searches each top level dictionary

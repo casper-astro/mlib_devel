@@ -1,0 +1,7 @@
+0.6
+2019.1
+May 24 2019
+15:06:07
+C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/tp3_data_rx_sim/tp3_data_rx_sim.ip_user_files/ipstatic/hdl/fifo_generator_v13_2_rfs.v,1574811136,verilog,,,,fifo_generator_v13_2_4,,,../../../../../src/clk_wiz_0,,,,,
+C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/tp3_data_rx_sim/tp3_data_rx_sim.ip_user_files/ipstatic/hdl/fifo_generator_v13_2_rfs.vhd,1574811136,vhdl,,,,axi_reg_slice;bin_cntr;bram_fifo_rstlogic;bram_sync_reg;builtin_extdepth;builtin_extdepth_low_latency;builtin_extdepth_v6;builtin_prim;builtin_prim_v6;builtin_top;builtin_top_v6;clk_x_pntrs_builtin;delay;fifo_generator_top;fifo_generator_v13_2_4_builtin;fifo_generator_v13_2_4_pkg;fifo_generator_v13_2_4_synth;input_blk;logic_builtin;output_blk;rd_pe_as;rd_pe_ss;reset_blk_ramfifo;reset_builtin;shft_ram;shft_wrapper;synchronizer_ff;wr_pf_as;wr_pf_ss,,,,,,,,
+C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/tp3_data_rx_sim/tp3_data_rx_sim.ip_user_files/ipstatic/simulation/fifo_generator_vlog_beh.v,1574811136,verilog,,C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/tp3_data_rx_sim/tp3_data_rx_sim.ip_user_files/ipstatic/hdl/fifo_generator_v13_2_rfs.v,,fifo_generator_v13_2_4_CONV_VER;fifo_generator_v13_2_4_axic_reg_slice;fifo_generator_v13_2_4_beh_ver_ll_afifo;fifo_generator_v13_2_4_bhv_ver_as;fifo_generator_v13_2_4_bhv_ver_preload0;fifo_generator_v13_2_4_bhv_ver_ss;fifo_generator_v13_2_4_sync_stage;fifo_generator_vlog_beh,,,../../../../../src/clk_wiz_0,,,,,

@@ -40,6 +40,8 @@ for ctr = 1 : length(gateway_ins)
         set_param(gw, 'Name', clear_name([cursys, '_ten_sec']));
     elseif regexp(get_param(gw, 'Name'), '_locked$')
         set_param(gw, 'Name', clear_name([cursys, '_locked']));
+    elseif regexp(get_param(gw, 'Name'), '_sync$')
+        set_param(gw, 'Name', clear_name([cursys, '_sync']));
     else
         errordlg(['Unknown gateway: ', get_param(gw, 'Parent'), '/', ...
             get_param(gw, 'Name')]);

@@ -47,7 +47,8 @@ use ieee.numeric_std.all;
 entity parity_counter is
   port(
     wstb   : in    std_logic;           -- write strobe
-    d      : inout std_logic_vector(7 downto 0);
+    din    : in    std_logic_vector(7 downto 0);
+    dout   : out   std_logic_vector(7 downto 0);
     rstb   : in    std_logic;           -- read strobe
     sel    : in    std_logic;           -- register select
     cs     : in    std_logic;           -- chip select
@@ -117,13 +118,13 @@ begin
 
 
 -- reset pipeline logic
-  process(sel, cs, wstb, d, reset3)
+  process(sel, cs, wstb, din, reset3)
   begin
     if reset3 = '1' then
       reset <= '0';
     elsif wstb'event and wstb = '1' then
       if sel = '1' and cs = '0' then
-        reset <= d(0);
+        reset <= din(0);
       end if;
     end if;
   end process;
@@ -235,6 +236,6 @@ begin
     holding(7 downto 0)           when "1000",
     "00000000"                    when others;
 
-  d <= data when drb = '1' else "ZZZZZZZZ";
+  dout <= data when drb = '1' else "00000000";
 
 end behavioral;

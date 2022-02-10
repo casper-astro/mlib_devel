@@ -235,41 +235,45 @@ wire [4:0]                  rf_irtry_to_send;
 wire                        rf_run_length_enable;
 
 //Debug OpenHMC Registers
-(* mark_debug = "true" *) wire dbg_hmc_fifo_tx_full; //Virtual test probe for the logic analyser
-(* mark_debug = "true" *) wire dbg_hmc_fifo_tx_almost_full; //Virtual test probe for the logic analyser
-(* mark_debug = "true" *) wire dbg_hmc_fifo_tx_almost4_full; //Virtual test probe for the logic analyser
-(* mark_debug = "true" *) wire dbg_hmc_fifo_rx_full; //Virtual test probe for the logic analyser
-(* mark_debug = "true" *) wire dbg_hmc_fifo_rx_almost_full; //Virtual test probe for the logic analyser
-(* mark_debug = "true" *) wire dbg_hmc_fifo_tx_empty; //Virtual test probe for the logic analyser
-(* mark_debug = "true" *) wire dbg_hmc_fifo_tx_almost_empty; //Virtual test probe for the logic analyser
-(* mark_debug = "true" *) wire dbg_hmc_fifo_rx_empty; //Virtual test probe for the logic analyser
-(* mark_debug = "true" *) wire dbg_hmc_fifo_rx_almost_empty; //Virtual test probe for the logic analyser
-(* mark_debug = "true" *) wire dbg_hmc_fifo_tx_shift_out; //Virtual test probe for the logic analyser
-(* mark_debug = "true" *) wire dbg_hmc_fifo_tx_shift_in; //Virtual test probe for the logic analyser
+//(* mark_debug = "true" *) wire dbg_hmc_fifo_tx_full; //Virtual test probe for the logic analyser
+wire hmc_fifo_tx_full;
+//(* mark_debug = "true" *) wire dbg_hmc_fifo_tx_almost_full; //Virtual test probe for the logic analyser
+wire hmc_fifo_tx_almost_full;
+//(* mark_debug = "true" *) wire dbg_hmc_fifo_tx_almost4_full; //Virtual test probe for the logic analyser
+//(* mark_debug = "true" *) wire dbg_hmc_fifo_rx_full; //Virtual test probe for the logic analyser
+wire hmc_fifo_rx_full;
+//(* mark_debug = "true" *) wire dbg_hmc_fifo_rx_almost_full; //Virtual test probe for the logic analyser
+//(* mark_debug = "true" *) wire dbg_hmc_fifo_tx_empty; //Virtual test probe for the logic analyser
+//(* mark_debug = "true" *) wire dbg_hmc_fifo_tx_almost_empty; //Virtual test probe for the logic analyser
+//(* mark_debug = "true" *) wire dbg_hmc_fifo_rx_empty; //Virtual test probe for the logic analyser
+//(* mark_debug = "true" *) wire dbg_hmc_fifo_rx_almost_empty; //Virtual test probe for the logic analyser
+wire hmc_fifo_rx_almost_empty;
+//(* mark_debug = "true" *) wire dbg_hmc_fifo_tx_shift_out; //Virtual test probe for the logic analyser
+//(* mark_debug = "true" *) wire dbg_hmc_fifo_tx_shift_in; //Virtual test probe for the logic analyser
 
 //AI: FIFO TX and RX status monitoring
-assign fifo_tx_flag_status[0] = dbg_hmc_fifo_tx_full;
+assign fifo_tx_flag_status[0] = hmc_fifo_tx_full;
 assign fifo_tx_flag_status[1] = s_axis_tx_TREADY_n;
-assign fifo_tx_flag_status[2] = dbg_hmc_fifo_tx_almost_full;
+assign fifo_tx_flag_status[2] = hmc_fifo_tx_almost_full;
 assign fifo_tx_flag_status[3] = tx_empty;
 assign fifo_tx_flag_status[4] = tx_a_empty;
 assign fifo_tx_flag_status[7:5] = 3'd0;
 
-assign fifo_rx_flag_status[0] = dbg_hmc_fifo_rx_full;
+assign fifo_rx_flag_status[0] = hmc_fifo_rx_full;
 assign fifo_rx_flag_status[1] = rx_a_full;
 assign fifo_rx_flag_status[2] = rx_a_full;
 assign fifo_rx_flag_status[3] = m_axis_rx_TVALID_n;
-assign fifo_rx_flag_status[4] = dbg_hmc_fifo_rx_almost_empty;
+assign fifo_rx_flag_status[4] = hmc_fifo_rx_almost_empty;
 assign fifo_rx_flag_status[7:5] = 3'd0;
   
-assign dbg_hmc_fifo_tx_almost4_full = s_axis_tx_TREADY_n;
-assign dbg_hmc_fifo_tx_empty = tx_empty;  
-assign dbg_hmc_fifo_tx_almost_empty = tx_a_empty;
-assign dbg_hmc_fifo_rx_almost_full = rx_a_full; 
+//assign dbg_hmc_fifo_tx_almost4_full = s_axis_tx_TREADY_n;
+//assign dbg_hmc_fifo_tx_empty = tx_empty;  
+//assign dbg_hmc_fifo_tx_almost_empty = tx_a_empty;
+//assign dbg_hmc_fifo_rx_almost_full = rx_a_full; 
 //assign dbg_hmc_fifo_rx_almost4_full = rf_read_en_i;  
-assign dbg_hmc_fifo_rx_empty = m_axis_rx_TVALID_n;  
-assign dbg_hmc_fifo_tx_shift_out = tx_shift_out; 
-assign dbg_hmc_fifo_tx_shift_in = s_axis_tx_TVALID && s_axis_tx_TREADY; 
+//assign dbg_hmc_fifo_rx_empty = m_axis_rx_TVALID_n;  
+//assign dbg_hmc_fifo_tx_shift_out = tx_shift_out; 
+//assign dbg_hmc_fifo_tx_shift_in = s_axis_tx_TVALID && s_axis_tx_TREADY; 
 
 
 assign phy_init_cont_set = rf_hmc_init_cont_set;
@@ -319,9 +323,9 @@ generate
             //AI: Critical to only shift in using TVALID, otherwise packets will be lost
             .shift_in(s_axis_tx_TVALID),
             // Mod Henno: Move TX ready to FIFO almost full - must accept last write
-            .full(dbg_hmc_fifo_tx_full),//HK.full(s_axis_tx_TREADY_n),
+            .full(hmc_fifo_tx_full),//HK.full(s_axis_tx_TREADY_n),
             .almost_full4(s_axis_tx_TREADY_n), //.almost_full(),
-            .almost_full(dbg_hmc_fifo_tx_almost_full),            
+            .almost_full(hmc_fifo_tx_almost_full),            
             //.full(s_axis_tx_TREADY_n),
             //.almost_full(),
 
@@ -571,14 +575,14 @@ generate
             //To RX LINK Logic
             .d_in({rx_d_in_ctrl,rx_d_in_data}),
             .shift_in(rx_shift_in),
-            .full(dbg_hmc_fifo_rx_full),
+            .full(hmc_fifo_rx_full),
             .almost_full(rx_a_full),
 
             //AXI-4 RX IF
             .d_out({m_axis_rx_TUSER_temp,m_axis_rx_TDATA}),
             .shift_out(m_axis_rx_TVALID && m_axis_rx_TREADY),
             .empty(m_axis_rx_TVALID_n),
-            .almost_empty(dbg_hmc_fifo_rx_almost_empty)
+            .almost_empty(hmc_fifo_rx_almost_empty)
 
         );
     end else begin : synchronous_axi4_rx_fifo

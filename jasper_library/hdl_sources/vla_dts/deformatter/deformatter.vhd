@@ -154,11 +154,11 @@ use ieee.std_logic_arith.all;
 
 entity deformatter is
   generic(
-    cr_address : unsigned(7 downto 0) := X"00";
-    pc_address : unsigned(7 downto 0) := X"00";
-    sc_address : unsigned(7 downto 0) := X"00";
-    md_address : unsigned(7 downto 0) := X"00";
-    tm_address : unsigned(7 downto 0) := X"00"
+    cr_address : unsigned(7 downto 0) := X"00"; --control register
+    pc_address : unsigned(7 downto 0) := X"01"; --parity register
+    sc_address : unsigned(7 downto 0) := X"02"; --scramble code register
+    md_address : unsigned(7 downto 0) := X"03"; --meta-data register
+    tm_address : unsigned(7 downto 0) := X"04"  --timing register
     );
   port(
     rx_in      : in  std_logic_vector(15 downto 0);   -- raw lvds

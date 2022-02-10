@@ -1,0 +1,12 @@
+xpm_cdc.sv,systemverilog,xil_defaultlib,../../../../../../Xilinx/Vivado/2016.2/data/ip/xpm/xpm_cdc/hdl/xpm_cdc.sv,incdir="$ref_dir/../../../ipstatic/clk_wiz_v5_3_1"incdir="../../../ipstatic/clk_wiz_v5_3_1"
+xpm_memory_base.sv,systemverilog,xil_defaultlib,../../../../../../Xilinx/Vivado/2016.2/data/ip/xpm/xpm_memory/hdl/xpm_memory_base.sv,incdir="$ref_dir/../../../ipstatic/clk_wiz_v5_3_1"incdir="../../../ipstatic/clk_wiz_v5_3_1"
+xpm_memory_dpdistram.sv,systemverilog,xil_defaultlib,../../../../../../Xilinx/Vivado/2016.2/data/ip/xpm/xpm_memory/hdl/xpm_memory_dpdistram.sv,incdir="$ref_dir/../../../ipstatic/clk_wiz_v5_3_1"incdir="../../../ipstatic/clk_wiz_v5_3_1"
+xpm_memory_dprom.sv,systemverilog,xil_defaultlib,../../../../../../Xilinx/Vivado/2016.2/data/ip/xpm/xpm_memory/hdl/xpm_memory_dprom.sv,incdir="$ref_dir/../../../ipstatic/clk_wiz_v5_3_1"incdir="../../../ipstatic/clk_wiz_v5_3_1"
+xpm_memory_sdpram.sv,systemverilog,xil_defaultlib,../../../../../../Xilinx/Vivado/2016.2/data/ip/xpm/xpm_memory/hdl/xpm_memory_sdpram.sv,incdir="$ref_dir/../../../ipstatic/clk_wiz_v5_3_1"incdir="../../../ipstatic/clk_wiz_v5_3_1"
+xpm_memory_spram.sv,systemverilog,xil_defaultlib,../../../../../../Xilinx/Vivado/2016.2/data/ip/xpm/xpm_memory/hdl/xpm_memory_spram.sv,incdir="$ref_dir/../../../ipstatic/clk_wiz_v5_3_1"incdir="../../../ipstatic/clk_wiz_v5_3_1"
+xpm_memory_sprom.sv,systemverilog,xil_defaultlib,../../../../../../Xilinx/Vivado/2016.2/data/ip/xpm/xpm_memory/hdl/xpm_memory_sprom.sv,incdir="$ref_dir/../../../ipstatic/clk_wiz_v5_3_1"incdir="../../../ipstatic/clk_wiz_v5_3_1"
+xpm_memory_tdpram.sv,systemverilog,xil_defaultlib,../../../../../../Xilinx/Vivado/2016.2/data/ip/xpm/xpm_memory/hdl/xpm_memory_tdpram.sv,incdir="$ref_dir/../../../ipstatic/clk_wiz_v5_3_1"incdir="../../../ipstatic/clk_wiz_v5_3_1"
+xpm_VCOMP.vhd,vhdl,xpm,../../../../../../Xilinx/Vivado/2016.2/data/ip/xpm/xpm_VCOMP.vhd,incdir="$ref_dir/../../../ipstatic/clk_wiz_v5_3_1"incdir="../../../ipstatic/clk_wiz_v5_3_1"
+clk_wiz_0_clk_wiz.v,verilog,xil_defaultlib,../../../../ADC08D1520_core.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0_clk_wiz.v,incdir="$ref_dir/../../../ipstatic/clk_wiz_v5_3_1"incdir="../../../ipstatic/clk_wiz_v5_3_1"
+clk_wiz_0.v,verilog,xil_defaultlib,../../../../ADC08D1520_core.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.v,incdir="$ref_dir/../../../ipstatic/clk_wiz_v5_3_1"incdir="../../../ipstatic/clk_wiz_v5_3_1"
+glbl.v,Verilog,xil_defaultlib,glbl.v

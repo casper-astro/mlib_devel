@@ -1,0 +1,484 @@
+{
+  "design": {
+    "design_info": {
+      "boundary_crc": "0xACF3B5A55BE86474",
+      "device": "xcvu37p-fsvh2892-2-e",
+      "name": "pcie_master",
+      "synth_flow_mode": "Hierarchical",
+      "tool_version": "2019.1.3",
+      "validated": "true"
+    },
+    "design_tree": {
+      "xdma_0": "",
+      "axis_dwidth_converter_0": "",
+      "axis_data_fifo_0": ""
+    },
+    "interface_ports": {
+      "M_AXIS_0": {
+        "mode": "Master",
+        "vlnv": "xilinx.com:interface:axis_rtl:1.0",
+        "parameters": {
+          "CLK_DOMAIN": {
+            "value": "pcie_master_xdma_0_0_axi_aclk",
+            "value_src": "default_prop"
+          },
+          "FREQ_HZ": {
+            "value": "125000000"
+          },
+          "HAS_TKEEP": {
+            "value": "1",
+            "value_src": "default_prop"
+          },
+          "HAS_TLAST": {
+            "value": "1",
+            "value_src": "default_prop"
+          },
+          "HAS_TREADY": {
+            "value": "1",
+            "value_src": "default"
+          },
+          "HAS_TSTRB": {
+            "value": "0",
+            "value_src": "default"
+          },
+          "INSERT_VIP": {
+            "value": "0",
+            "value_src": "default"
+          },
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          },
+          "PHASE": {
+            "value": "0.000",
+            "value_src": "default"
+          },
+          "TDATA_NUM_BYTES": {
+            "value": "4",
+            "value_src": "default_prop"
+          },
+          "TDEST_WIDTH": {
+            "value": "0",
+            "value_src": "default"
+          },
+          "TID_WIDTH": {
+            "value": "0",
+            "value_src": "default"
+          },
+          "TUSER_WIDTH": {
+            "value": "0",
+            "value_src": "default"
+          }
+        }
+      },
+      "pcie_mgt_0": {
+        "mode": "Master",
+        "vlnv": "xilinx.com:interface:pcie_7x_mgt_rtl:1.0"
+      },
+      "M_AXI_LITE_0": {
+        "mode": "Master",
+        "vlnv": "xilinx.com:interface:aximm_rtl:1.0",
+        "parameters": {
+          "ADDR_WIDTH": {
+            "value": "32"
+          },
+          "ARUSER_WIDTH": {
+            "value": "0",
+            "value_src": "auto_prop"
+          },
+          "AWUSER_WIDTH": {
+            "value": "0",
+            "value_src": "auto_prop"
+          },
+          "BUSER_WIDTH": {
+            "value": "0",
+            "value_src": "const_prop"
+          },
+          "CLK_DOMAIN": {
+            "value": "pcie_master_xdma_0_0_axi_aclk",
+            "value_src": "default_prop"
+          },
+          "DATA_WIDTH": {
+            "value": "32"
+          },
+          "FREQ_HZ": {
+            "value": "125000000"
+          },
+          "HAS_BRESP": {
+            "value": "1",
+            "value_src": "auto_prop"
+          },
+          "HAS_BURST": {
+            "value": "0"
+          },
+          "HAS_CACHE": {
+            "value": "0"
+          },
+          "HAS_LOCK": {
+            "value": "0"
+          },
+          "HAS_PROT": {
+            "value": "1",
+            "value_src": "auto_prop"
+          },
+          "HAS_QOS": {
+            "value": "0"
+          },
+          "HAS_REGION": {
+            "value": "0"
+          },
+          "HAS_RRESP": {
+            "value": "1",
+            "value_src": "auto_prop"
+          },
+          "HAS_WSTRB": {
+            "value": "1",
+            "value_src": "auto_prop"
+          },
+          "ID_WIDTH": {
+            "value": "0",
+            "value_src": "const_prop"
+          },
+          "INSERT_VIP": {
+            "value": "0",
+            "value_src": "default"
+          },
+          "MAX_BURST_LENGTH": {
+            "value": "1",
+            "value_src": "default"
+          },
+          "NUM_READ_OUTSTANDING": {
+            "value": "1",
+            "value_src": "const_prop"
+          },
+          "NUM_READ_THREADS": {
+            "value": "1",
+            "value_src": "default"
+          },
+          "NUM_WRITE_OUTSTANDING": {
+            "value": "1",
+            "value_src": "const_prop"
+          },
+          "NUM_WRITE_THREADS": {
+            "value": "1",
+            "value_src": "default"
+          },
+          "PHASE": {
+            "value": "0.000",
+            "value_src": "default"
+          },
+          "PROTOCOL": {
+            "value": "AXI4LITE"
+          },
+          "READ_WRITE_MODE": {
+            "value": "READ_WRITE",
+            "value_src": "auto_prop"
+          },
+          "RUSER_BITS_PER_BYTE": {
+            "value": "0",
+            "value_src": "default"
+          },
+          "RUSER_WIDTH": {
+            "value": "0",
+            "value_src": "const_prop"
+          },
+          "SUPPORTS_NARROW_BURST": {
+            "value": "0",
+            "value_src": "const_prop"
+          },
+          "WUSER_BITS_PER_BYTE": {
+            "value": "0",
+            "value_src": "default"
+          },
+          "WUSER_WIDTH": {
+            "value": "0",
+            "value_src": "const_prop"
+          }
+        }
+      }
+    },
+    "ports": {
+      "user_lnk_up_0": {
+        "direction": "O"
+      },
+      "sys_rst_n_0": {
+        "type": "rst",
+        "direction": "I",
+        "parameters": {
+          "INSERT_VIP": {
+            "value": "0",
+            "value_src": "default"
+          },
+          "POLARITY": {
+            "value": "ACTIVE_LOW",
+            "value_src": "default"
+          }
+        }
+      },
+      "sys_clk_gt_0": {
+        "type": "clk",
+        "direction": "I",
+        "parameters": {
+          "CLK_DOMAIN": {
+            "value": "pcie_master_sys_clk_gt_0",
+            "value_src": "default"
+          },
+          "FREQ_HZ": {
+            "value": "100000000",
+            "value_src": "default"
+          },
+          "INSERT_VIP": {
+            "value": "0",
+            "value_src": "default"
+          },
+          "PHASE": {
+            "value": "0.000",
+            "value_src": "default"
+          }
+        }
+      },
+      "sys_clk_0": {
+        "type": "clk",
+        "direction": "I",
+        "parameters": {
+          "CLK_DOMAIN": {
+            "value": "pcie_master_sys_clk_0",
+            "value_src": "default"
+          },
+          "FREQ_HZ": {
+            "value": "100000000",
+            "value_src": "default"
+          },
+          "INSERT_VIP": {
+            "value": "0",
+            "value_src": "default"
+          },
+          "PHASE": {
+            "value": "0.000",
+            "value_src": "default"
+          }
+        }
+      },
+      "usr_irq_req_0": {
+        "direction": "I",
+        "left": "0",
+        "right": "0"
+      },
+      "axi_aclk_0": {
+        "type": "clk",
+        "direction": "O",
+        "parameters": {
+          "ASSOCIATED_BUSIF": {
+            "value": "M_AXI_LITE_0:M_AXIS_0"
+          },
+          "CLK_DOMAIN": {
+            "value": "pcie_master_xdma_0_0_axi_aclk",
+            "value_src": "default_prop"
+          },
+          "FREQ_HZ": {
+            "value": "125000000"
+          },
+          "INSERT_VIP": {
+            "value": "0",
+            "value_src": "default"
+          },
+          "PHASE": {
+            "value": "0.000",
+            "value_src": "default"
+          }
+        }
+      },
+      "axi_aresetn_0": {
+        "type": "rst",
+        "direction": "O",
+        "parameters": {
+          "INSERT_VIP": {
+            "value": "0",
+            "value_src": "default"
+          },
+          "POLARITY": {
+            "value": "ACTIVE_LOW",
+            "value_src": "const_prop"
+          }
+        }
+      }
+    },
+    "components": {
+      "xdma_0": {
+        "vlnv": "xilinx.com:ip:xdma:4.1",
+        "xci_name": "pcie_master_xdma_0_0",
+        "parameters": {
+          "axilite_master_en": {
+            "value": "true"
+          },
+          "axilite_master_size": {
+            "value": "64"
+          },
+          "axisten_freq": {
+            "value": "125"
+          },
+          "cfg_mgmt_if": {
+            "value": "false"
+          },
+          "mode_selection": {
+            "value": "Advanced"
+          },
+          "pcie_blk_locn": {
+            "value": "PCIE4C_X1Y0"
+          },
+          "pcie_extended_tag": {
+            "value": "false"
+          },
+          "pciebar2axibar_axil_master": {
+            "value": "0x10000000"
+          },
+          "pf0_link_status_slot_clock_config": {
+            "value": "false"
+          },
+          "pf0_msi_enabled": {
+            "value": "false"
+          },
+          "xdma_axi_intf_mm": {
+            "value": "AXI_Stream"
+          },
+          "xdma_axilite_slave": {
+            "value": "false"
+          },
+          "xdma_rnum_chnl": {
+            "value": "2"
+          }
+        }
+      },
+      "axis_dwidth_converter_0": {
+        "vlnv": "xilinx.com:ip:axis_dwidth_converter:1.1",
+        "xci_name": "pcie_master_axis_dwidth_converter_0_0",
+        "parameters": {
+          "M_TDATA_NUM_BYTES": {
+            "value": "4"
+          }
+        }
+      },
+      "axis_data_fifo_0": {
+        "vlnv": "xilinx.com:ip:axis_data_fifo:2.0",
+        "xci_name": "pcie_master_axis_data_fifo_0_0"
+      }
+    },
+    "interface_nets": {
+      "axis_data_fifo_0_M_AXIS": {
+        "interface_ports": [
+          "axis_data_fifo_0/M_AXIS",
+          "axis_dwidth_converter_0/S_AXIS"
+        ]
+      },
+      "xdma_0_M_AXIS_H2C_0": {
+        "interface_ports": [
+          "xdma_0/M_AXIS_H2C_0",
+          "xdma_0/S_AXIS_C2H_0"
+        ]
+      },
+      "xdma_0_M_AXI_LITE": {
+        "interface_ports": [
+          "M_AXI_LITE_0",
+          "xdma_0/M_AXI_LITE"
+        ]
+      },
+      "axis_dwidth_converter_0_M_AXIS": {
+        "interface_ports": [
+          "M_AXIS_0",
+          "axis_dwidth_converter_0/M_AXIS"
+        ]
+      },
+      "xdma_0_pcie_mgt": {
+        "interface_ports": [
+          "pcie_mgt_0",
+          "xdma_0/pcie_mgt"
+        ]
+      },
+      "xdma_0_M_AXIS_H2C_1": {
+        "interface_ports": [
+          "xdma_0/M_AXIS_H2C_1",
+          "axis_data_fifo_0/S_AXIS"
+        ]
+      }
+    },
+    "nets": {
+      "xdma_0_user_lnk_up": {
+        "ports": [
+          "xdma_0/user_lnk_up",
+          "user_lnk_up_0"
+        ]
+      },
+      "sys_rst_n_0_1": {
+        "ports": [
+          "sys_rst_n_0",
+          "xdma_0/sys_rst_n"
+        ]
+      },
+      "sys_clk_gt_0_1": {
+        "ports": [
+          "sys_clk_gt_0",
+          "xdma_0/sys_clk_gt"
+        ]
+      },
+      "sys_clk_0_1": {
+        "ports": [
+          "sys_clk_0",
+          "xdma_0/sys_clk"
+        ]
+      },
+      "usr_irq_req_0_1": {
+        "ports": [
+          "usr_irq_req_0",
+          "xdma_0/usr_irq_req"
+        ]
+      },
+      "xdma_0_axi_aclk": {
+        "ports": [
+          "xdma_0/axi_aclk",
+          "axi_aclk_0",
+          "axis_data_fifo_0/s_axis_aclk",
+          "axis_dwidth_converter_0/aclk"
+        ]
+      },
+      "xdma_0_axi_aresetn": {
+        "ports": [
+          "xdma_0/axi_aresetn",
+          "axi_aresetn_0",
+          "axis_data_fifo_0/s_axis_aresetn",
+          "axis_dwidth_converter_0/aresetn"
+        ]
+      }
+    },
+    "addressing": {
+      "/": {
+        "memory_maps": {
+          "M_AXI_LITE_0": {
+            "address_blocks": {
+              "Reg": {
+                "base_address": "0",
+                "range": "64K",
+                "width": "32",
+                "usage": "memory"
+              }
+            }
+          }
+        }
+      },
+      "/xdma_0": {
+        "address_spaces": {
+          "M_AXI_LITE": {
+            "range": "4G",
+            "width": "32",
+            "segments": {
+              "SEG_M_AXI_LITE_0_Reg": {
+                "address_block": "/M_AXI_LITE_0/Reg",
+                "offset": "0x00000000",
+                "range": "64M"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

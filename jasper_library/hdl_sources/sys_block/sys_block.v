@@ -36,8 +36,8 @@ module sys_block #(
   /* OPB clock domain data buffer */
   reg [31:0] register_buffer;
 
-  reg register_readyR;
-  reg register_readyRR;
+  (* ASYNC_REG = "true" *) reg register_readyR;
+  (* ASYNC_REG = "true" *) reg register_readyRR;
 
   always @(posedge wb_clk_i) begin
     //single cycle signals
@@ -93,8 +93,8 @@ module sys_block #(
     end
   end
 
-  reg register_requestR;
-  reg register_requestRR;
+  (* ASYNC_REG = "true" *) reg register_requestR;
+  (* ASYNC_REG = "true" *) reg register_requestRR;
 
   always @(posedge user_clk) begin
     clk_counter_reg <= clk_counter_reg + 1;

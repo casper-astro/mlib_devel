@@ -1,0 +1,131 @@
+name: htg_zrf16
+manufacturer: Xilinx
+fpga: OVERRIDDEN_BY_HTG_ZRF16_YELLOW_BLOCK
+#fpga: xczu29dr-ffvf1760-2-e
+family: rfsoc
+config_voltage: 1.8
+cfgbvs: GND
+backend_target: vivado
+#mmbus_architecture: AXI4-Lite
+mmbus_architecture: ['AXI4-Lite', 'wishbone']
+mmbus_base_address: 0xA1000000
+mmbus_rfdc_base_address: 0xA0000000
+dsp_wb_base_address: 0xA0100000
+# How to address each 32-bit (i.e. 4 indicates byte-addressable)
+mmbus_address_alignment: 4
+sources: []
+constraints: []
+onehundredgbe:
+  refclk_freq_str: "156.25" # Needs configuring by programming PLL
+  include_rs_fec: 1
+  override_cmac_placement:
+    - CMACE4_X0Y1
+    - CMACE4_X0Y0
+  # See UG1075; Fig 1-40
+  cmac_loc:
+    - CMACE4_X0Y1
+    - CMACE4_X0Y1 # Change this to X0Y0 post-synth (Why did HTG layout the board this way?!)
+  gt_group:
+    - X0Y12~X0Y15
+    - X0Y16~X0Y19
+provides:
+  - sys_clk
+  - qsfp0
+  - qsfp1
+pins:
+  clk_300_p:
+    iostd: LVDS
+    loc: H26
+  clk_300_n:
+    iostd: LVDS
+    loc: G26
+  pl_sysref_p:
+    iostd: LVDS
+    loc: AK17
+  pl_sysref_n:
+    iostd: LVDS
+    loc: AK16
+  sync_in:
+    iostd: LVCMOS33
+    loc: D11
+  led:
+    iostd: LVCMOS33
+    loc:
+      # Green
+      - AR10 #D1
+      - AV11 #D2
+      # Red
+      - AR12 #D3
+      # Bicolor, Green?
+      - AT12 #D54
+      # Bicolor, Red?
+      - H11 #D54
+      # Bicolor, Green?
+      - G10 #D43
+      # Bicolor, Red?
+      - A10 #D43
+  gpio:
+    # pulled up through 10k resistor to 3V3
+    iostd: LVCMOS33
+    loc: [A12, B12, D12, A13, B13, D13, C14, C15]
+     
+# QSFP28 ports
+  qsfp_mgt_ref_clk_p:
+    loc:
+      - P34 # GTY 130
+      - K34 # GTY 131
+  qsfp_mgt_ref_clk_n:
+    loc:
+      - P35 # GTY_130
+      - K35 # GTY 131
+  qsfp_mgt_rx_p:
+    loc: [L41, G41, J41, F39, E41, C41, D39, B39]
+  qsfp_mgt_rx_n:
+    loc: [L42, G42, J42, F40, E42, C42, D40, B40]
+  qsfp_mgt_tx_p:
+    loc: [K38, H38, J36, G36, F34, C36, E36, A36]
+  qsfp_mgt_tx_n:
+    loc: [K39, H39, J37, G37, F35, C37, E37, A37]
+  qsfp_modprsl_ls:
+    iostd: LVCMOS33
+    loc: [E14, B15]
+  qsfp_sda:
+    iostd: LVCMOS18
+    loc: [None, None]
+  qsfp_scl:
+    iostd: LVCMOS18
+    loc: [None, None]
+  qsfp_intl:
+    iostd: LVCMOS33
+    loc: [F13, E12]
+  qsfp_rst_l:
+    iostd: LVCMOS33
+    loc: [AT10, AP10]
+  qsfp_lpmode:
+    iostd: LVCMOS33
+    loc: [B16, F12]
+  rfsoc_vin_p:
+    loc:
+      - AU5
+      - AU2
+      - AR5
+      - AR2
+      - AN5
+      - AN2
+      - AL5
+      - AL2
+      - AJ5
+      - AJ2
+      - AG5
+      - AG2
+      - AE5
+      - AE2
+      - AC5
+      - AC2
+  rfsoc_refclk_p:
+    loc: [BA3, AW4, BA5, AW6]
+  rfsoc_sysref_p:
+    loc: [D2]
+  i2c:
+    loc: [AP11, AR11] #SDA, SCL
+    iostd: LVCMOS33

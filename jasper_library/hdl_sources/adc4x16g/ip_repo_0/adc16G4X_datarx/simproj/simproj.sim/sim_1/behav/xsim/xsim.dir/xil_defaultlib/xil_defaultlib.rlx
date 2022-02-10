@@ -1,0 +1,15 @@
+0.6
+2019.2
+Nov  6 2019
+21:57:16
+C:/XilinxProjects/ip_repo/adc16G4X_datarx/simproj/simproj.sim/sim_1/behav/xsim/glbl.v,1573089660,verilog,,,,glbl,,,,,,,,
+C:/XilinxProjects/ip_repo/adc16G4X_datarx/simproj/simproj.srcs/sim_1/imports/sim/gty_wrapper_t.v,1578531419,verilog,,,,gty_wrapper_t,,,,,,,,
+C:/XilinxProjects/ip_repo/adc16G4X_datarx/simproj/simproj.srcs/sources_1/imports/src/sync_it.v,1577574813,verilog,,C:/XilinxProjects/ip_repo/adc16G4X_datarx/simproj/simproj.srcs/sim_1/imports/sim/gty_wrapper_t.v,,sync_it,,,,,,,,
+C:/XilinxProjects/ip_repo/adc16G4X_datarx/simproj/simproj.srcs/sources_1/ip/gtwizard_ultrascale_0/sim/gtwizard_ultrascale_0.v,1577574360,verilog,,C:/XilinxProjects/ip_repo/adc16G4X_datarx/src/gty_wrapper_0.v,,gtwizard_ultrascale_0,,,,,,,,
+C:/XilinxProjects/ip_repo/adc16G4X_datarx/simproj/simproj.srcs/sources_1/ip/gtwizard_ultrascale_0/sim/gtwizard_ultrascale_0_gtwizard_gtye4.v,1577574359,verilog,,C:/XilinxProjects/ip_repo/adc16G4X_datarx/simproj/simproj.srcs/sources_1/ip/gtwizard_ultrascale_0/sim/gtwizard_ultrascale_0_gtwizard_top.v,,gtwizard_ultrascale_0_gtwizard_gtye4,,,,,,,,
+C:/XilinxProjects/ip_repo/adc16G4X_datarx/simproj/simproj.srcs/sources_1/ip/gtwizard_ultrascale_0/sim/gtwizard_ultrascale_0_gtwizard_top.v,1577574360,verilog,,C:/XilinxProjects/ip_repo/adc16G4X_datarx/simproj/simproj.srcs/sources_1/ip/gtwizard_ultrascale_0/sim/gtwizard_ultrascale_0.v,,gtwizard_ultrascale_0_gtwizard_top,,,,,,,,
+C:/XilinxProjects/ip_repo/adc16G4X_datarx/simproj/simproj.srcs/sources_1/ip/gtwizard_ultrascale_0/sim/gtwizard_ultrascale_0_gtye4_channel_wrapper.v,1578536839,verilog,,C:/XilinxProjects/ip_repo/adc16G4X_datarx/simproj/simproj.srcs/sources_1/ip/gtwizard_ultrascale_0/sim/gtwizard_ultrascale_v1_7_gtye4_common.v,,gtwizard_ultrascale_0_gtye4_channel_wrapper,,,,,,,,
+C:/XilinxProjects/ip_repo/adc16G4X_datarx/simproj/simproj.srcs/sources_1/ip/gtwizard_ultrascale_0/sim/gtwizard_ultrascale_0_gtye4_common_wrapper.v,1577574359,verilog,,C:/XilinxProjects/ip_repo/adc16G4X_datarx/simproj/simproj.srcs/sources_1/ip/gtwizard_ultrascale_0/sim/gtwizard_ultrascale_0_gtwizard_gtye4.v,,gtwizard_ultrascale_0_gtye4_common_wrapper,,,,,,,,
+C:/XilinxProjects/ip_repo/adc16G4X_datarx/simproj/simproj.srcs/sources_1/ip/gtwizard_ultrascale_0/sim/gtwizard_ultrascale_v1_7_gtye4_channel.v,1578536838,verilog,,C:/XilinxProjects/ip_repo/adc16G4X_datarx/simproj/simproj.srcs/sources_1/ip/gtwizard_ultrascale_0/sim/gtwizard_ultrascale_0_gtye4_channel_wrapper.v,,gtwizard_ultrascale_v1_7_7_gtye4_channel,,,,,,,,
+C:/XilinxProjects/ip_repo/adc16G4X_datarx/simproj/simproj.srcs/sources_1/ip/gtwizard_ultrascale_0/sim/gtwizard_ultrascale_v1_7_gtye4_common.v,1578536839,verilog,,C:/XilinxProjects/ip_repo/adc16G4X_datarx/simproj/simproj.srcs/sources_1/ip/gtwizard_ultrascale_0/sim/gtwizard_ultrascale_0_gtye4_common_wrapper.v,,gtwizard_ultrascale_v1_7_7_gtye4_common,,,,,,,,
+C:/XilinxProjects/ip_repo/adc16G4X_datarx/src/gty_wrapper_0.v,1578338961,verilog,,C:/XilinxProjects/ip_repo/adc16G4X_datarx/simproj/simproj.srcs/sources_1/imports/src/sync_it.v,,gty_wrapper_0,,,,,,,,

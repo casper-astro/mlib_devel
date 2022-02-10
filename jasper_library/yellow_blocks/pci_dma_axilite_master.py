@@ -3,6 +3,7 @@ from verilog import VerilogModule, wrap_instance
 from constraints import PortConstraint, ClockConstraint, RawConstraint, ClockGroupConstraint
 
 import os
+from os import environ as env
 
 """
 Requires the following pins defined in an appropriate platform.yaml:
@@ -19,7 +20,6 @@ pcie:
 
 class pci_dma_axilite_master(YellowBlock):
     def initialize(self):
-        self.module_name = 'pci_dma_axilite_master'
         if not hasattr(self, 'use_pr'): self.use_pr = False
         if self.use_pr:
             if not hasattr(self, 'template_project') or self.template_project == None:
@@ -34,7 +34,22 @@ class pci_dma_axilite_master(YellowBlock):
             self.pcie_loc = None
         else:
             # PCIe core is already in the static top-level
-            self.add_source('pci_dma_axilite_master/*.xci')
+            if self.enable_wishbone:
+                self.module_name = 'pci_axi_wb_master_wrapper'
+                self.pci_ip_name = 'pci_axi_wb_master_xdma_0_0' 
+                self.add_source('pci_dma_axilite_master/pci_axi_wb_master_wrapper.vhd')
+                self.blkdiagram = 'pci_axi_wb_master.tcl'
+                self.ips = [{'path':'%s/axi_wb_bridge/ip_repo' % env['HDL_ROOT'],
+                     'name':'axi_slave_wishbone_classic_master',
+                     'vendor':'peralex.com',
+                     'library':'user',
+                     'version':'1.0',
+                    }]
+            else:
+                self.module_name = 'pci_dma_axilite_master'
+                self.pci_ip_name = 'pci_dma_axilite_master'
+                self.blkdiagram = None
+                self.add_source('pci_dma_axilite_master/*.xci')
         self.add_source('utils/cdc_synchroniser.vhd')
 
     def modify_top(self,top):
@@ -46,7 +61,8 @@ class pci_dma_axilite_master(YellowBlock):
             return
         inst = top.get_instance(entity=self.module_name, name=self.module_name+'_inst')
 
-        inst.add_port('axi_aclk',   'axil_clk')
+        inst.add_port('axi_aclk',   'axil_clk', parent_signal=False)
+        top.add_signal('axil_clk', attributes={'keep': '"true"'}) # keep so we can use for constraints
         inst.add_port('axi_aresetn', 'axil_rst_n')
         # Create a non-inverted clock too. 
         top.add_signal('axil_rst')
@@ -73,21 +89,37 @@ class pci_dma_axilite_master(YellowBlock):
         inst.add_port('m_axil_wstrb', 'M_AXI_wstrb', width=4)
         inst.add_port('m_axil_wvalid', 'M_AXI_wvalid')
 
-        # AXI MM Master interface. We don't use this so tie inputs
-        # It might be better/easier to only use the MM interface
-        # and convert it to AXI-Lite, since the MM interface always
-        # exists in the IP, but the lite interface above is an option.
-        inst.add_port('m_axi_arready', "1'b1")
-        inst.add_port('m_axi_awready', "1'b1")
-        inst.add_port('m_axi_bid',     "3'b0")
-        inst.add_port('m_axi_bresp',   "2'b0")
-        inst.add_port('m_axi_bvalid',  "1'b0")
-        inst.add_port('m_axi_rdata',  "64'b0")
-        inst.add_port('m_axi_rid',     "3'b0")
-        inst.add_port('m_axi_rlast',   "1'b0")
-        inst.add_port('m_axi_rresp',   "2'b0")
-        inst.add_port('m_axi_rvalid',  "1'b0")
-        inst.add_port('m_axi_wready',  "1'b1")
+        if not self.enable_wishbone:
+            # AXI MM Master interface. We don't use this so tie inputs
+            # It might be better/easier to only use the MM interface
+            # and convert it to AXI-Lite, since the MM interface always
+            # exists in the IP, but the lite interface above is an option.
+            inst.add_port('m_axi_arready', "1'b1")
+            inst.add_port('m_axi_awready', "1'b1")
+            inst.add_port('m_axi_bid',     "3'b0")
+            inst.add_port('m_axi_bresp',   "2'b0")
+            inst.add_port('m_axi_bvalid',  "1'b0")
+            inst.add_port('m_axi_rdata',  "64'b0")
+            inst.add_port('m_axi_rid',     "3'b0")
+            inst.add_port('m_axi_rlast',   "1'b0")
+            inst.add_port('m_axi_rresp',   "2'b0")
+            inst.add_port('m_axi_rvalid',  "1'b0")
+            inst.add_port('m_axi_wready',  "1'b1")
+        else:
+            # Wishbone ports
+            inst.add_port('CYC_O', 'wbm_cyc_o')
+            inst.add_port('STB_O', 'wbm_stb_o')
+            inst.add_port('WE_O ', 'wbm_we_o ')
+            inst.add_port('SEL_O', 'wbm_sel_o', width=4)
+            inst.add_port('ADR_O', 'wbm_adr_o', width=32)
+            inst.add_port('DAT_O', 'wbm_dat_o', width=32)
+            inst.add_port('DAT_I', 'wbm_dat_i', width=32)
+            inst.add_port('ACK_I', 'wbm_ack_i')
+            inst.add_port('RST_O', 'wbm_rst_o')
+            top.add_signal('wb_clk_i')
+            top.add_signal('wb_rst_i')
+            top.assign_signal('wb_clk_i', 'axil_clk')
+            top.assign_signal('wb_rst_i', 'axil_rst')
 
         # External ports
         inst.add_port('pci_exp_rxp', self.fullname+'_rx_p', width=1, parent_port=True, dir='in')
@@ -119,8 +151,8 @@ class pci_dma_axilite_master(YellowBlock):
             return cons
         cons.append(ClockGroupConstraint('-include_generated_clocks sys_clk_p_CLK', '-include_generated_clocks -of_objects [get_nets axil_clk]', 'asynchronous'))
         cons.append(ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets user_clk]', '-include_generated_clocks -of_objects [get_nets axil_clk]', 'asynchronous'))
-        cons.append(PortConstraint(self.fullname+'_rx_p', 'pcie_gty_rx_p', port_index=[0], iogroup_index=[0]))
-        cons.append(PortConstraint(self.fullname+'_tx_p', 'pcie_gty_tx_p', port_index=[0], iogroup_index=[0]))
+        cons.append(PortConstraint(self.fullname+'_rx_p', 'pcie_gty_rx_p', port_index=range(1), iogroup_index=range(1)))
+        cons.append(PortConstraint(self.fullname+'_tx_p', 'pcie_gty_tx_p', port_index=range(1), iogroup_index=range(1)))
         cons.append(PortConstraint('pcie_rst_n', 'pcie_rst_n'))
         cons.append(PortConstraint('pcie_refclk_p', 'pcie_refclk_p'))
         pcie_clkconst = ClockConstraint('pcie_refclk_p', freq=100.0)
@@ -132,9 +164,15 @@ class pci_dma_axilite_master(YellowBlock):
         tcl_cmds['pre_synth'] = []
         tcl_cmds['post_synth'] = []
         tcl_cmds['promgen'] = []
+
+        if not self.use_pr:
+            if self.blkdiagram is not None:
+                tcl_cmds['pre_synth'] += ['source %s/pci_dma_axilite_master/%s' % (env['HDL_ROOT'], self.blkdiagram)]
+
         # Update the PCIe block location if the platform's config yaml specified one
         if self.pcie_loc is not None:
-            tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.pcie_blk_locn {%s}] [get_ips %s]' % (self.pcie_loc, self.module_name)]
+            tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.pcie_blk_locn {%s}] [get_ips %s]' % (self.pcie_loc, self.pci_ip_name)]
+
 
         if self.use_pr:
             tcl_cmds['pre_synth'] += ['set_property SCOPED_TO_REF {user_top} [get_files user_const.xdc]']
@@ -173,6 +211,17 @@ class pci_dma_axilite_master(YellowBlock):
         top.add_port('M_AXI_wready', 'M_AXI_wready', parent_sig=False, dir='out')
         top.add_port('M_AXI_wstrb', 'M_AXI_wstrb', width=4, parent_sig=False, dir='in')
         top.add_port('M_AXI_wvalid', 'M_AXI_wvalid', parent_sig=False, dir='in')
+        if self.enable_wishbone:
+            top.add_port('wbm_cyc_o', 'wbm_cyc_o', parent_sig=False, dir='in')
+            top.add_port('wbm_stb_o', 'wbm_stb_o', parent_sig=False, dir='in')
+            top.add_port('wbm_we_o ', 'wbm_we_o ', parent_sig=False, dir='in')
+            top.add_port('wbm_sel_o', 'wbm_sel_o', parent_sig=False, dir='in', width=4)
+            top.add_port('wbm_adr_o', 'wbm_adr_o', parent_sig=False, dir='in', width=32)
+            top.add_port('wbm_dat_o', 'wbm_dat_o', parent_sig=False, dir='in', width=32)
+            top.add_port('wbm_dat_i', 'wbm_dat_i', parent_sig=False, dir='out', width=32)
+            top.add_port('wbm_ack_i', 'wbm_ack_i', parent_sig=False, dir='out')
+            top.add_port('wb_clk_i', 'wb_clk_i', parent_sig=False, dir='in')
+            top.add_port('wb_rst_i', 'wb_rst_i', parent_sig=False, dir='in')
         top.instantiate_child_ports()
         # With PR, we're not going to be using this module as top. Instead, let's
         # rename is `user_top` which will be instantiated within a high-level static top-level.

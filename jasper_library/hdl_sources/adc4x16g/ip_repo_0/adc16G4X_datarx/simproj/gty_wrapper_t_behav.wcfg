@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="gty_wrapper_t_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="gty_wrapper_t" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="10576283988fs"></ZoomEndTime>
+      <Cursor1Time time="11000000000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="447"></NameColumnWidth>
+      <ValueColumnWidth column_width="90"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="29" />
+   <wvobject fp_name="/gty_wrapper_t/refclk" type="logic">
+      <obj_property name="ElementShortName">refclk</obj_property>
+      <obj_property name="ObjectShortName">refclk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/refclk_p" type="logic">
+      <obj_property name="ElementShortName">refclk_p</obj_property>
+      <obj_property name="ObjectShortName">refclk_p</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/refclk_n" type="logic">
+      <obj_property name="ElementShortName">refclk_n</obj_property>
+      <obj_property name="ObjectShortName">refclk_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/clk100" type="logic">
+      <obj_property name="ElementShortName">clk100</obj_property>
+      <obj_property name="ObjectShortName">clk100</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/gtwiz_reset_all_in" type="logic">
+      <obj_property name="ElementShortName">gtwiz_reset_all_in</obj_property>
+      <obj_property name="ObjectShortName">gtwiz_reset_all_in</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/gty_data" type="logic">
+      <obj_property name="ElementShortName">gty_data</obj_property>
+      <obj_property name="ObjectShortName">gty_data</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/gtyrxp_in" type="array">
+      <obj_property name="ElementShortName">gtyrxp_in[3:0]</obj_property>
+      <obj_property name="ObjectShortName">gtyrxp_in[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/gtyrxn_in" type="array">
+      <obj_property name="ElementShortName">gtyrxn_in[3:0]</obj_property>
+      <obj_property name="ObjectShortName">gtyrxn_in[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/gearbox_slip" type="logic">
+      <obj_property name="ElementShortName">gearbox_slip</obj_property>
+      <obj_property name="ObjectShortName">gearbox_slip</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/rxslide" type="logic">
+      <obj_property name="ElementShortName">rxslide</obj_property>
+      <obj_property name="ObjectShortName">rxslide</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/UUT/testflop" type="logic">
+      <obj_property name="ElementShortName">testflop</obj_property>
+      <obj_property name="ObjectShortName">testflop</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/UUT/clkout" type="logic">
+      <obj_property name="ElementShortName">clkout</obj_property>
+      <obj_property name="ObjectShortName">clkout</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/UUT/GTY_quad_0/rxpmaresetdone_out" type="array">
+      <obj_property name="ElementShortName">rxpmaresetdone_out[3:0]</obj_property>
+      <obj_property name="ObjectShortName">rxpmaresetdone_out[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/UUT/GTY_quad_0/gtpowergood_out" type="array">
+      <obj_property name="ElementShortName">gtpowergood_out[3:0]</obj_property>
+      <obj_property name="ObjectShortName">gtpowergood_out[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/UUT/GTY_quad_0/rxdatavalid_out" type="array">
+      <obj_property name="ElementShortName">rxdatavalid_out[7:0]</obj_property>
+      <obj_property name="ObjectShortName">rxdatavalid_out[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/UUT/gtwiz_reset_rx_cdr_stable_out" type="logic">
+      <obj_property name="ElementShortName">gtwiz_reset_rx_cdr_stable_out</obj_property>
+      <obj_property name="ObjectShortName">gtwiz_reset_rx_cdr_stable_out</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/UUT/gtwiz_userclk_rx_active_out" type="logic">
+      <obj_property name="ElementShortName">gtwiz_userclk_rx_active_out</obj_property>
+      <obj_property name="ObjectShortName">gtwiz_userclk_rx_active_out</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/UUT/GTY_quad_0/inst/\gen_gtwizard_gtye4_top.gtwizard_ultrascale_0_gtwizard_gtye4_inst /\gen_gtwizard_gtye4.gen_common.gen_common_container[2].gen_enabled_common.gtye4_common_wrapper_inst /common_inst/GTYE4_COMMON_QPLL0LOCK" type="array">
+      <obj_property name="ElementShortName">GTYE4_COMMON_QPLL0LOCK[0:0]</obj_property>
+      <obj_property name="ObjectShortName">GTYE4_COMMON_QPLL0LOCK[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/UUT/GTY_quad_0/inst/\gen_gtwizard_gtye4_top.gtwizard_ultrascale_0_gtwizard_gtye4_inst /\gen_gtwizard_gtye4.gen_reset_controller_internal.gen_single_instance.gtwiz_reset_inst /gtwiz_reset_clk_freerun_in" type="logic">
+      <obj_property name="ElementShortName">gtwiz_reset_clk_freerun_in</obj_property>
+      <obj_property name="ObjectShortName">gtwiz_reset_clk_freerun_in</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/UUT/GTY_quad_0/inst/\gen_gtwizard_gtye4_top.gtwizard_ultrascale_0_gtwizard_gtye4_inst /\gen_gtwizard_gtye4.gen_reset_controller_internal.gen_single_instance.gtwiz_reset_inst /gtwiz_reset_all_in" type="logic">
+      <obj_property name="ElementShortName">gtwiz_reset_all_in</obj_property>
+      <obj_property name="ObjectShortName">gtwiz_reset_all_in</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/UUT/GTY_quad_0/inst/\gen_gtwizard_gtye4_top.gtwizard_ultrascale_0_gtwizard_gtye4_inst /\gen_gtwizard_gtye4.gen_reset_controller_internal.gen_single_instance.gtwiz_reset_inst /gtwiz_reset_tx_pll_and_datapath_in" type="logic">
+      <obj_property name="ElementShortName">gtwiz_reset_tx_pll_and_datapath_in</obj_property>
+      <obj_property name="ObjectShortName">gtwiz_reset_tx_pll_and_datapath_in</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/UUT/GTY_quad_0/inst/\gen_gtwizard_gtye4_top.gtwizard_ultrascale_0_gtwizard_gtye4_inst /\gen_gtwizard_gtye4.gen_reset_controller_internal.gen_single_instance.gtwiz_reset_inst /gtwiz_reset_tx_datapath_in" type="logic">
+      <obj_property name="ElementShortName">gtwiz_reset_tx_datapath_in</obj_property>
+      <obj_property name="ObjectShortName">gtwiz_reset_tx_datapath_in</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/UUT/GTY_quad_0/inst/\gen_gtwizard_gtye4_top.gtwizard_ultrascale_0_gtwizard_gtye4_inst /\gen_gtwizard_gtye4.gen_reset_controller_internal.gen_single_instance.gtwiz_reset_inst /gtwiz_reset_rx_pll_and_datapath_in" type="logic">
+      <obj_property name="ElementShortName">gtwiz_reset_rx_pll_and_datapath_in</obj_property>
+      <obj_property name="ObjectShortName">gtwiz_reset_rx_pll_and_datapath_in</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/UUT/GTY_quad_0/inst/\gen_gtwizard_gtye4_top.gtwizard_ultrascale_0_gtwizard_gtye4_inst /\gen_gtwizard_gtye4.gen_reset_controller_internal.gen_single_instance.gtwiz_reset_inst /gtwiz_reset_rx_datapath_in" type="logic">
+      <obj_property name="ElementShortName">gtwiz_reset_rx_datapath_in</obj_property>
+      <obj_property name="ObjectShortName">gtwiz_reset_rx_datapath_in</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/UUT/GTY_quad_0/inst/\gen_gtwizard_gtye4_top.gtwizard_ultrascale_0_gtwizard_gtye4_inst /\gen_gtwizard_gtye4.gen_reset_controller_internal.gen_single_instance.gtwiz_reset_inst /gtwiz_reset_rx_cdr_stable_out" type="logic">
+      <obj_property name="ElementShortName">gtwiz_reset_rx_cdr_stable_out</obj_property>
+      <obj_property name="ObjectShortName">gtwiz_reset_rx_cdr_stable_out</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/UUT/GTY_quad_0/inst/\gen_gtwizard_gtye4_top.gtwizard_ultrascale_0_gtwizard_gtye4_inst /\gen_gtwizard_gtye4.gen_reset_controller_internal.gen_single_instance.gtwiz_reset_inst /gtwiz_reset_tx_done_out" type="logic">
+      <obj_property name="ElementShortName">gtwiz_reset_tx_done_out</obj_property>
+      <obj_property name="ObjectShortName">gtwiz_reset_tx_done_out</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/UUT/GTY_quad_0/inst/\gen_gtwizard_gtye4_top.gtwizard_ultrascale_0_gtwizard_gtye4_inst /\gen_gtwizard_gtye4.gen_reset_controller_internal.gen_single_instance.gtwiz_reset_inst /gtwiz_reset_rx_done_out" type="logic">
+      <obj_property name="ElementShortName">gtwiz_reset_rx_done_out</obj_property>
+      <obj_property name="ObjectShortName">gtwiz_reset_rx_done_out</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/UUT/GTY_quad_0/inst/\gen_gtwizard_gtye4_top.gtwizard_ultrascale_0_gtwizard_gtye4_inst /\gen_gtwizard_gtye4.gen_reset_controller_internal.gen_single_instance.gtwiz_reset_inst /gtwiz_reset_userclk_tx_active_in" type="logic">
+      <obj_property name="ElementShortName">gtwiz_reset_userclk_tx_active_in</obj_property>
+      <obj_property name="ObjectShortName">gtwiz_reset_userclk_tx_active_in</obj_property>
+   </wvobject>
+   <wvobject fp_name="/gty_wrapper_t/UUT/GTY_quad_0/inst/\gen_gtwizard_gtye4_top.gtwizard_ultrascale_0_gtwizard_gtye4_inst /\gen_gtwizard_gtye4.gen_reset_controller_internal.gen_single_instance.gtwiz_reset_inst /gtwiz_reset_userclk_rx_active_in" type="logic">
+      <obj_property name="ElementShortName">gtwiz_reset_userclk_rx_active_in</obj_property>
+      <obj_property name="ObjectShortName">gtwiz_reset_userclk_rx_active_in</obj_property>
+   </wvobject>
+</wave_config>

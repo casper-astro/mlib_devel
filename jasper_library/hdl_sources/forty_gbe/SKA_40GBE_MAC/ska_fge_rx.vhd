@@ -100,7 +100,8 @@ architecture arch_ska_fge_rx of ska_fge_rx is
 
     component cross_clock_fifo_36x16
     port (
-        rst     : in std_logic;
+        wr_rst  : in std_logic;
+        rd_rst  : in std_logic;
         wr_clk  : in std_logic;
         rd_clk  : in std_logic;
         din     : in std_logic_vector(35 downto 0);
@@ -127,7 +128,8 @@ architecture arch_ska_fge_rx of ska_fge_rx is
 
     component ska_rx_packet_fifo
     port (
-        rst         : in std_logic;
+        wr_rst      : in std_logic;
+        rd_rst      : in std_logic;
         wr_clk      : in std_logic;
         rd_clk      : in std_logic;
         din         : in std_logic_vector(262 downto 0);
@@ -141,7 +143,8 @@ architecture arch_ska_fge_rx of ska_fge_rx is
 
     component ska_rx_packet_ctrl_fifo
     port (
-        rst         : in std_logic;
+        wr_rst      : in std_logic;
+        rd_rst      : in std_logic;
         wr_clk      : in std_logic;
         rd_clk      : in std_logic;
         din         : in std_logic_vector(47 downto 0);
@@ -155,7 +158,8 @@ architecture arch_ska_fge_rx of ska_fge_rx is
 
     component cpu_rx_packet_size
     port (
-        rst             : in std_logic;
+        wr_rst          : in std_logic;
+        rd_rst          : in std_logic;
         wr_clk          : in std_logic;
         rd_clk          : in std_logic;
         din             : in std_logic_vector(10 downto 0);
@@ -167,6 +171,7 @@ architecture arch_ska_fge_rx of ska_fge_rx is
         wr_data_count   : out std_logic_vector(3 downto 0));
     end component;
 
+    attribute ASYNC_REG : string;
     signal cpu_mac_cross_clock_count : std_logic_vector(3 downto 0);
     signal cpu_mac_cross_clock_fifo_din : std_logic_vector(35 downto 0);
     signal cpu_mac_cross_clock_fifo_wrreq : std_logic;
@@ -282,11 +287,20 @@ architecture arch_ska_fge_rx of ska_fge_rx is
     signal txctrl_fifo_rd_data : std_logic_vector(47 downto 0);
 
     signal current_app_state : T_APP_STATE;
+    signal sCDCCurrentAppState : T_APP_STATE;
+    signal sBusValidD1 : std_logic;
+    signal sBusValidD2 : std_logic;
+    attribute ASYNC_REG of sBusValidD1 : signal is "TRUE";
+    attribute ASYNC_REG of sBusValidD2 : signal is "TRUE";    
+    
     signal first_word : std_logic;
 
     signal overrun_ack_retimed : std_logic;
     signal overrun_ack_z1 : std_logic;
+    attribute ASYNC_REG of overrun_ack_retimed : signal is "TRUE";
+    attribute ASYNC_REG of overrun_ack_z1 : signal is "TRUE";       
     signal app_overrun_ack : std_logic;
+    
 
     signal overrun_z1 : std_logic;
     signal overrun_z2 : std_logic;
@@ -423,7 +437,8 @@ begin
 
     cross_clock_fifo_36x16_0 : cross_clock_fifo_36x16
     port map(
-        rst     => cpu_rst,
+        wr_rst  => cpu_rst,
+        rd_rst  => mac_rst,
         wr_clk  => cpu_clk,
         rd_clk  => mac_clk,
         din     => cpu_mac_cross_clock_fifo_din,
@@ -433,7 +448,7 @@ begin
         full    => cpu_mac_cross_clock_fifo_full,
         empty   => cpu_mac_cross_clock_fifo_empty);
 
-    cpu_mac_cross_clock_fifo_rdreq <= (not cpu_mac_cross_clock_fifo_empty) and (not cpu_rst);
+    cpu_mac_cross_clock_fifo_rdreq <= (not cpu_mac_cross_clock_fifo_empty) and (not mac_rst);
 
     gen_cpu_mac_cross_clock_fifo_rdreq_z : process(mac_clk)
     begin
@@ -671,14 +686,14 @@ begin
         end if;
     end process;
 
-    app_dvld <= (payload0_val or payload1_val or payload2_val or payload3_val) when (app_rst = '0') else '0';
+    app_dvld <= (payload0_val or payload1_val or payload2_val or payload3_val) when (mac_rst = '0') else '0';
     app_goodframe <=
-    (application_frame and app_rx_good_frame_latched) when ((app_dvld = '0')and(app_dvld_z1 = '1')and(app_rst = '0')) else '0';
+    (application_frame and app_rx_good_frame_latched) when ((app_dvld = '0')and(app_dvld_z1 = '1')and(mac_rst = '0')) else '0';
     --app_badframe <=
     --(application_frame and app_rx_bad_frame_latched) when ((app_dvld = '0')and(app_dvld_z1 = '1')and(app_rst = '0')) else '0';
     --AI: Allow bad frames to be routed through
     app_badframe <=
-    (app_rx_bad_frame_latched) when ((app_dvld = '0')and(app_dvld_z1 = '1')and(app_rst = '0')) else '0';
+    (app_rx_bad_frame_latched) when ((app_dvld = '0')and(app_dvld_z1 = '1')and(mac_rst = '0')) else '0';
 
 
     gen_app_dvld_z1 : process(mac_clk)
@@ -906,7 +921,8 @@ begin
 
     cpu_rx_packet_size_0 : cpu_rx_packet_size
     port map(
-        rst             => mac_rst,
+        wr_rst          => mac_rst,
+        rd_rst          => cpu_rst,
         wr_clk          => mac_clk,
         rd_clk          => cpu_clk,
         din             => cpu_rx_packet_size_din,
@@ -962,7 +978,7 @@ begin
     end process;
 
     cpu_rx_packet_size_rdreq <= '1' when (current_cpu_read_state = CPU_READ_LATENCY) else '0';
-    cpu_rx_packet_size_rdreq_1 <= cpu_rx_packet_size_rdreq and (not mac_rst) and (not cpu_rx_packet_size_empty);
+    cpu_rx_packet_size_rdreq_1 <= cpu_rx_packet_size_rdreq and (not cpu_rst) and (not cpu_rx_packet_size_empty);
 
 
     cpu_rx_size <= cpu_size;
@@ -1006,10 +1022,10 @@ begin
     rx_eof <= '1' when
     (((app_goodframe = '1')or
     (app_badframe = '1')or
-    ((app_dvld = '1')and((packet_fifo_almost_full = '1')or(ctrl_fifo_almost_full = '1')or(txctrl_fifo_almost_full = '1'))))and(app_rst = '0')) else '0';
-    rx_bad <= app_badframe when (app_rst = '0') else '0';
+    ((app_dvld = '1')and((packet_fifo_almost_full = '1')or(ctrl_fifo_almost_full = '1')or(txctrl_fifo_almost_full = '1'))))and(mac_rst = '0')) else '0';
+    rx_bad <= app_badframe when (mac_rst = '0') else '0';
     -- This really shouldnt be called rx_over, it is actually almost full
-    rx_over <= (packet_fifo_almost_full or ctrl_fifo_almost_full or txctrl_fifo_almost_full) when (app_rst = '0') else '0';
+    rx_over <= (packet_fifo_almost_full or ctrl_fifo_almost_full or txctrl_fifo_almost_full) when (mac_rst = '0') else '0';
     -- this wont work becaus the fifo will be full and this signal wont get through the fifo.
     -- rx_over <= packet_fifo_full
 
@@ -1025,11 +1041,12 @@ begin
     --AI: Alway deassert FIFO write when reset is asserted
     packet_fifo_wr_en <= '1' when
     ((app_dvld_z1  = '1')and
-    (current_app_state = APP_RUN) and (app_rst = '0') and (packet_fifo_full = '0')) else '0';
+    (current_app_state = APP_RUN) and (mac_rst = '0') and (packet_fifo_full = '0')) else '0';
 
     ska_rx_packet_fifo_0 : ska_rx_packet_fifo
     port map(
-        rst         => app_rst,
+        wr_rst      => mac_rst,
+        rd_rst      => app_rst,
         wr_clk      => mac_clk,
         rd_clk      => app_clk,
         din         => packet_fifo_wr_data,
@@ -1051,13 +1068,14 @@ begin
 
     ctrl_fifo_wr_data <= app_source_port & app_source_ip;
     --AI: Alway deassert FIFO write when reset is asserted
-    ctrl_fifo_wr_en   <= '1' when ((app_dvld = '1')and(first_word = '1')and(current_app_state = APP_RUN)and(app_rst = '0')and(ctrl_fifo_full = '0')) else '0';
+    ctrl_fifo_wr_en   <= '1' when ((app_dvld = '1')and(first_word = '1')and(current_app_state = APP_RUN)and(mac_rst = '0')and(ctrl_fifo_full = '0')) else '0';
     txctrl_fifo_wr_data <= destination_port & destination_ip;
     --txctrl_fifo_wr_en   <= '1' when ((app_dvld = '1')and(first_word = '1')and(current_app_state = APP_RUN)) else '0';
 
     ska_rx_packet_ctrl_fifo_0 : ska_rx_packet_ctrl_fifo
     port map(
-        rst         => app_rst,
+        wr_rst      => mac_rst,
+        rd_rst      => app_rst,
         wr_clk      => mac_clk,
         rd_clk      => app_clk,
         din         => ctrl_fifo_wr_data,
@@ -1076,7 +1094,8 @@ begin
 
     ska_rx_packet_ctrl_fifo_1 : ska_rx_packet_ctrl_fifo
     port map(
-        rst         => app_rst,
+        wr_rst      => mac_rst,
+        rd_rst      => app_rst,
         wr_clk      => mac_clk,
         rd_clk      => app_clk,
         din         => txctrl_fifo_wr_data,
@@ -1136,6 +1155,21 @@ begin
             end case;
         end if;
     end process;
+    
+    pCDCAppStateSynchroniser : process(app_rst, app_clk)
+    begin
+       if (app_rst = '1')then
+           sCDCCurrentAppState <= APP_RUN;
+           sBusValidD1 <= '0';
+           sBusValidD2 <= '0';           
+       elsif (rising_edge(app_clk))then
+           sBusValidD2 <= sBusValidD1;
+           sBusValidD1 <= '1';
+             if (sBusValidD2 = '1') then
+               sCDCCurrentAppState <= current_app_state;
+             end if;  
+       end if;
+    end process pCDCAppStateSynchroniser;      
 
     gen_app_overrun_ack : process(app_rst, app_clk)
     begin
@@ -1143,7 +1177,7 @@ begin
             app_overrun_ack <= '1';
             overrun_z1 <= '0';
         elsif (rising_edge(app_clk))then
-            if (current_app_state = APP_OVER)then
+            if (sCDCCurrentAppState = APP_OVER)then
                 overrun_z1 <= '1';
             else
                 overrun_z1 <= '0';
