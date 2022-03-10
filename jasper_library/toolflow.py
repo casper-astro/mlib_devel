@@ -280,7 +280,7 @@ class Toolflow(object):
             self.logger.error('Peripherals file doesn\'t exist!')
             raise Exception('Peripherals file doesn\'t exist!')
         with open(self.periph_file, 'r') as fh:
-            yaml_dict = yaml.load(fh, Loader=yaml.SafeLoader)
+            yaml_dict = yaml.load(fh, Loader=yaml.Loader)
         self.peripherals = yaml_dict['yellow_blocks']
         self.user_modules = yaml_dict['user_modules']
 
