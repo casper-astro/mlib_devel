@@ -1,6 +1,7 @@
 from .yellow_block import YellowBlock
 from math import log
 from .yellow_block_typecodes import *
+import IPython
 
 class bram(YellowBlock):
     def initialize(self):
@@ -30,7 +31,6 @@ class bram(YellowBlock):
     def modify_top(self,top):
         # axi4lite bram
         if self.platform.mmbus_architecture == 'AXI4-Lite':
-
             top.add_axi4lite_interface(regname=self.unique_name,
                                 mode='rw', nbytes=self.depth*self.data_width//8,
                                 typecode=self.typecode,
