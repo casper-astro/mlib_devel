@@ -1,6 +1,6 @@
 # How to install casperfpga
 
-This section explains how to install `casperfpga`, a python library used to interact with CASPER hardware.
+This section explains how to install `casperfpga`, a python library used to interact with CASPER hardware. The `casperfpga` library currently works fully with Python 2.7, with efforts underway to port it to Python 3.
 
 Once you have cloned the casperfpga repository, ensure that you are on the correct branch (usually **master** unless you are a contributor) and always pull regularly to make sure you have the latest version of casperfpga.
 
@@ -43,7 +43,7 @@ $ sudo python setup.py install
 
 ### Testing that the installation worked
 
-To check that casperfpga has been installed correctly open an ipython session and import casperfpga. To avoid errors, move out of your cloned casperfpga repository directory before doing this test. `casperfpga.__version__` will output the build and githash version of your casperfpga library.
+To check that casperfpga has been installed correctly open an ipython session and import casperfpga. **To avoid errors, move out of your cloned casperfpga repository directory before doing this test.** `casperfpga.__version__` will output the build and githash version of your casperfpga library.
 
 ```shell
 $ cd ..
