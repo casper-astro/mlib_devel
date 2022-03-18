@@ -19,7 +19,7 @@ _(Note that official support for ROACH plaforms is no longer provided, however [
 |ZCU111          | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |  Python 3        |
 |SNAP2           | Ubuntu 16.04        |  2016b             |  Vivado 2016.4     |  branch: `master`               |  Python 3        |
 
-Other software combinations may work, but these are the tested configurations. Please see the [Note on Operating Systems](../index.html#a-note-on-operating-systems) for information on which alternative OS versions _may_ work with the tools.
+Other software combinations may work, but these are the tested configurations. Please see the [Note on Operating Systems](https://casper-toolflow.readthedocs.io/en/latest/index.html#a-note-on-operating-systems) for information on which alternative OS versions _may_ work with the tools.
 
 The master branch is usually updated once a year. Between updates, code with newer features can be found in the `casper-astro-soak-test` branch. This branch can usually be used in place of the `master` branch for platforms which support `master`. However, be aware that `casper-astro-soak-test` is likely to be less stable. Please report any bugs you encounter via github's issue tracker.
 
