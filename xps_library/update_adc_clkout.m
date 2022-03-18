@@ -1,11 +1,11 @@
-function [adc_clkout] = update_adc_clkout(gcb, parent)
+function [adc_clkout] = update_adc_clkout(gcb, tile)
   % compute output adc clk options and update mask list
 
   [gen, tile_arch, fs_max, fs_min] = get_rfsoc_properties(gcb);
 
   msk = Simulink.Mask.get(gcb);
 
-  sample_rate_mhz = str2double(get_param(gcb, 'sample_rate'));
+  sample_rate_mhz = str2double(get_param(gcb, ['t', num2str(tile), '_', 'sample_rate']));
 
   adc_clkout = [];
   min_adc_clkout_mhz = 10.0;
@@ -28,11 +28,10 @@ function [adc_clkout] = update_adc_clkout(gcb, parent)
   % So, only update the PLL if the list of refclk is not up to date. There is
   % probably a smarter way to organize all the logic to be more efficent.
   % TODO: this is the same as `update_pll.m`
-  current_clkout_list = msk.getParameter('clk_out').TypeOptions;
+  current_clkout_list = msk.getParameter(['t', num2str(tile), '_', 'clk_out']).TypeOptions;
   if ~isempty( setdiff(adc_clkout_list, current_clkout_list) )
-    msk.getParameter('clk_out').TypeOptions = adc_clkout_list;
-    set_param(gcb, 'clk_out', num2str(adc_clkout(1)));
+    msk.getParameter(['t', num2str(tile), '_', 'clk_out']).TypeOptions = adc_clkout_list;
+    set_param(gcb, ['t', num2str(tile), '_', 'clk_out'], num2str(adc_clkout(1)));
   end
-
 
 end
