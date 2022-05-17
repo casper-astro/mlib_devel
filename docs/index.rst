@@ -84,7 +84,19 @@ The current compatibility matrix is below:
 |SNAP2           | Ubuntu 16.04        |  2016b             |  Vivado 2016.4     |  branch: `master`               |   Python 3        |
 +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
 
-The recommended OS is Ubuntu as it is what the majority of the collaboration are using. This makes it easier for us to support you. If you are so inclined, you could also use Red Hat, but we definitely do not support Windows. You are welcome to try but you will be on your own. You could always run Linux in a VM although this will increase your compile times. 
+A Note on Operating Systems
+"""""""""""""""""""""""""""
+
+The recommended OS is Ubuntu as this is what the majority of the collaboration are using. This makes it easier for us to support you. If you are so inclined, you could also use Red Hat, but we definitely do not support Windows. You are welcome to try but you will be on your own. You could always run Linux in a VM although this will increase your compile times. 
+
+With the exception of ROACH1/2, all CASPER hardware mentioned above has been fully tested using the Ubuntu 16.04 LTS distribution. However, while the above combinations have not been fully tested using Ubuntu 18.04 LTS (and it is therefore not yet an officially supported OS), it is possible to get the toolflow working on this OS with a few tweaks. 
+
+Some common issues encountered in running the tools on 18.04 include missing packages and incompatibilities between the libraries used to build older versions of Matlab/Vivado and the libraries that come with Ubuntu 18.04. Some tips on fixing these issues:
+
+- If you encounter System Generator socket timeout errors when trying to open a model in Simulink, or are faced with errors about GUI function call recursion when double-clicking Xilinx blocks, installing KDE (``sudo apt install kde-full``) may solve this.
+- If you encounter an error along the lines of `"MATLABWindow application failed to launch. Unable to launch the MATLABWindow application"`, this is due to library incompatibilities between 18.04 and Matlab R2018a and can be solved using `this workaround <https://www.mathworks.com/matlabcentral/answers/397138-why-do-i-get-a-matlabwindow-application-failed-to-launch-error-when-launching-live-editor-app-des>`__.
+- For more detailed information on debugging library clashes/missing libraries, `this blog post <https://strath-sdr.github.io/tools/matlab/sysgen/vivado/linux/2021/01/28/sysgen-on-20-04.html>`__ by Craig Ramsay very kindly steps through the debugging process of getting System Generator working on Ubuntu 20.04 and contains information that is equally applicable to debugging on 18.04 (such as using the ``ldd`` command to find missing/incorrect library dependencies, and then installing/excluding the relevant libraries as needed). 
+ 
 
 Please refer to the setup links below for more information on setting up the toolflow.
 
@@ -94,8 +106,9 @@ Setup Links
 1. :doc:`Installing the Toolflow <src/Installing-the-Toolflow>`
 2. :doc:`Installing Matlab <src/How-to-install-Matlab>`
 3. :doc:`Installing Xilinx Vivado <src/How-to-install-Xilinx-Vivado>`
-4. :doc:`Configuring the Toolflow <src/Configuring-the-Toolflow>`
-5. :doc:`Running the Toolflow <src/Running-the-Toolflow>`
+4. :doc:`Installing casperfpga <src/How-to-install-casperfpga>`
+5. :doc:`Configuring the Toolflow <src/Configuring-the-Toolflow>`
+6. :doc:`Running the Toolflow <src/Running-the-Toolflow>`
 
 ..  toctree::
     :hidden:
@@ -105,6 +118,7 @@ Setup Links
     src/Installing-the-Toolflow
     src/How-to-install-Matlab
     src/How-to-install-Xilinx-Vivado
+    src/How-to-install-casperfpga
     src/Configuring-the-Toolflow
     src/Running-the-Toolflow
 
@@ -112,6 +126,7 @@ Documentation
 ---------------
 
 * `CASPER Tutorials <http://casper-tutorials.readthedocs.io/en/latest/>`__
+* :doc:`AXI Documentation <axi4lite_documentation>`
 * :doc:`Block Documentation <blockdocumentation>`
 * :doc:`Toolflow Documentation <jasper_documentation>`
 * :doc:`Toolflow Sourcecode <src/jasper_library_modules/modules>`
@@ -123,6 +138,7 @@ Documentation
     :caption: Documentation
 
     CASPER Tutorials <http://casper-tutorials.readthedocs.io/en/latest/>
+    axi4lite_documentation
     blockdocumentation
     jasper_documentation
     Toolflow Sourcecode <src/jasper_library_modules/modules>
