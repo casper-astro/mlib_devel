@@ -48,6 +48,8 @@ end IEEE802_3_XL_PCS_BLK_DIST;
 architecture Behavioral of IEEE802_3_XL_PCS_BLK_DIST is
 	-- Counter to point to lane (Round-Robin)
 	signal lane_en_sr : unsigned(3 downto 0);
+  attribute max_fanout : integer;
+  attribute max_fanout of lane_en_sr : signal is 20;
 
 	signal pcs_block_valid_d1 : NIBBLE_t;
 	signal pcs_block_d1       : BLOCK_t;

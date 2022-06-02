@@ -19,7 +19,8 @@ _(Note that official support for ROACH plaforms is no longer provided, however [
 |ZCU111          | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |  Python 3        |
 |SNAP2           | Ubuntu 16.04        |  2016b             |  Vivado 2016.4     |  branch: `master`               |  Python 3        |
 
-Other software combinations may work, but these are the tested configurations.
+Other software combinations may work, but these are the tested configurations. Please see the [Note on Operating Systems](https://casper-toolflow.readthedocs.io/en/latest/index.html#a-note-on-operating-systems) for information on which alternative OS versions _may_ work with the tools.
+
 The master branch is usually updated once a year. Between updates, code with newer features can be found in the `casper-astro-soak-test` branch. This branch can usually be used in place of the `master` branch for platforms which support `master`. However, be aware that `casper-astro-soak-test` is likely to be less stable. Please report any bugs you encounter via github's issue tracker.
 
 
@@ -44,17 +45,22 @@ The master branch is usually updated once a year. Between updates, code with new
     To create a Python 3 virtual environment:
 
     ```bash
+    # install the python3-venv package
+    sudo apt install python3-venv
     # change directory to where you want the virtual environment to live
     cd /home/user/work
-    # install virtualenv using pip3
-    sudo pip3 install virtualenv
     # create a Python 3 virtual environment
-    virtualenv -p python3 casper_venv
+    python3 -m venv casper_venv
     # to activate the virtual environment:
     source casper_venv/bin/activate
     # to deactivate the virtual environment:
     deactivate
     ```
+4. casperfpga
+    
+    `casperfpga` is a python library used to interact and interface with [**CASPER** Hardware](https://github.com/casper-astro/casper-hardware). Functionality includes being able to reconfigure firmware, as well as read and write registers across the various communication interfaces.
+
+    You will need to install this library to interface with CASPER hardware. Installation instructions can be found [here](https://casper-toolflow.readthedocs.io/en/latest/src/How-to-install-casperfpga.html).
 
 ## Obtaining the Toolflow
 Clone the toolflow from the [mlib_devel](https://github.com/casper-astro/mlib_devel) git repository. 
@@ -78,6 +84,8 @@ pip3 install -r requirements.txt
 ```
 
 You may need to run the `pip3 install` command as an administrator if you are using the system-maintained python installation instead of a virtual environment.
+
+**Note: there appears to be an incompability between pip3 v21.3.1 and xml2vhdl (one of the dependencies listing in the requirements file) that results in errors when installing requirements.txt. If you encounter an issue in fetching xml2vhdl when running `pip3 install -r requirements.txt`, try install pip3 v18.1 or earlier and use that instead (this is one of those things best done in a virtual environment, so as to not mess around with the system verson of python)**  
 
 ## Configuring the toolflow
 

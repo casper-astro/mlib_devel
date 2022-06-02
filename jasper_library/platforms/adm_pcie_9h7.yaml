@@ -14,12 +14,16 @@ mmbus_address_alignment: 4
 sources: []
 constraints: []
 dts:
-  linerate: '10.24'
-  reffreq: '163.84'
+  linerate: '10.24' # Gb/s
+  #reffreq: '163.84' # MHz
+  reffreq: '156.2500001' # MHz (Not a very good ref freq, but also supports 100GbE)
+  qpll_numerator: '8992587'
   ports:
     # GT pins when using QSFPs A through C
     qsfp_a_b_c:
-      phys_clocks: [[qsfp_mgt_ref_clk, 0], [qsfp_mgt_ref_clk, 1], [qsfp_mgt_ref_clk, 1]]
+      # List of clocks for 3 channels, each entry is a tuple: [pin name in this file, index of this pin]
+      # Can use clocks multiple times if necessary
+      phys_clocks: [[qsfp_mgt_ref_clk, 0], [qsfp_mgt_ref_clk, 0], [qsfp_mgt_ref_clk, 0]]
       channel:
         - X1Y16
         - X1Y17
@@ -38,10 +42,70 @@ dts:
         - 'clk0'
         - 'clk0'
         - 'clk0'
+        - 'clk0-1'
+        - 'clk0-1'
+        - 'clk0-1'
+        - 'clk0-1'
+        - 'clk0-2'
+        - 'clk0-2'
+        - 'clk0-2'
+        - 'clk0-2'
+    firefly0:
+      # Clock from banks 125, 125, 125
+      phys_clocks: [[firefly_ref_clk, 0], [firefly_ref_clk, 0], [firefly_ref_clk, 0]]
+      channel:
+        # bank 124, 125, 126
+        - X0Y0
+        - X0Y1
+        - X0Y2
+        - X0Y3
+        - X0Y4
+        - X0Y5
+        - X0Y6
+        - X0Y7
+        - X0Y8
+        - X0Y9
+        - X0Y10
+        - X0Y11
+      clock:
         - 'clk0+1'
         - 'clk0+1'
         - 'clk0+1'
         - 'clk0+1'
+        - 'clk0'
+        - 'clk0'
+        - 'clk0'
+        - 'clk0'
+        - 'clk0-1'
+        - 'clk0-1'
+        - 'clk0-1'
+        - 'clk0-1'
+    firefly1: # WONT WORK -- can't split paths from different sides of the chip!
+      # Clock from banks 234, 234, 135
+      phys_clocks: [[firefly_ref_clk, 2], [firefly_ref_clk, 2], [firefly_ref_clk, 3]]
+      channel:
+        # bank 234, 235, 135
+        - X1Y40
+        - X1Y41
+        - X1Y42
+        - X1Y43
+        - X1Y44
+        - X1Y45
+        - X1Y46
+        - X1Y47
+        - X0Y44
+        - X0Y45
+        - X0Y46
+        - X0Y47
+      clock:
+        - 'clk0'
+        - 'clk0'
+        - 'clk0'
+        - 'clk0'
+        - 'clk0-1'
+        - 'clk0-1'
+        - 'clk0-1'
+        - 'clk0-1'
         - 'clk0'
         - 'clk0'
         - 'clk0'
@@ -50,11 +114,35 @@ pcie:
   loc: PCIE4C_X1Y0
   use_pr: True
 onehundredgbe:
-  refclk_freq_str: "161.1328125"
+  use_2020_ip: False
+  refclk_freq_str: "156.25"
+  include_rs_fec: 1
   cmac_loc:
+    - CMACE4_X0Y2
     - CMACE4_X0Y3
     - CMACE4_X0Y4
+    - CMACE4_X0Y4
+    - CMACE4_X0Y0
+    - CMACE4_X0Y0
+    - CMACE4_X0Y1
+    - CMACE4_X0Y1
     - CMACE4_X0Y5
+    - CMACE4_X0Y5
+    - CMACE4_X0Y6
+    - CMACE4_X0Y7
+  gt_group:
+    - X1Y16~X1Y19
+    - X1Y20~X1Y23
+    - X1Y24~X1Y27
+    - X1Y28~X1Y31
+    - X0Y4~X0Y7
+    - X0Y0~X0Y3
+    - X0Y8~X0Y11
+    - X0Y12~X0Y15
+    - X1Y40~X1Y43
+    - X1Y44~X1Y47
+    - X0Y44~X0Y47
+    - X0Y40~X0Y43
 provides:
   - qsfp0
   - qsfp1
@@ -88,22 +176,82 @@ pins:
       - BG49
       - BE54
       - BE53
+  gpio:
+    iostd: LVCMOS18
+    loc:
+      # 0_p
+      - BH32
+      # 1_p
+      - BF35
+      # 2_p
+      - BH34
+      # 3, 4, ... 12
+      - BG29
+      - BG33
+      - BH29
+      - BG30
+      - BF31
+      - BH30
+      - BJ29
+      - BG32
+      - BF32
+      - BK30
   # PCI Express lanes
   pcie_rst_n:
     loc: BF41
     iostd: LVCMOS18
+  firefly_ref_clk_p:
+    loc:
+      # FIREFLY_CLK_0_PIN bank 125
+      - AR40
+      # FIREFLY_CLK_1_PIN bank 126
+      - AN40
+      # FIREFLY_CLK_2_PIN bank 234
+      - T13
+      # FIREFLY_CLK_3_PIN bank 135
+      - P42
+  firefly_ref_clk_n:
+    loc:
+      # FIREFLY_CLK_0_PIN bank 125
+      - AR41
+      # FIREFLY_CLK_1_PIN bank 126
+      - AN41
+      # FIREFLY_CLK_2_PIN bank 234
+      - T12
+      # FIREFLY_CLK_3_PIN bank 135
+      - P43
   qsfp_mgt_ref_clk_p:
     loc:
       - AJ15
+      - AJ15
       - AD13
-      - AG40
-      - AB42
+      - AD13
+      - AR40
+      - AR40
+      - AN40
+      - AN40
+      - T13
+      - T13
+      - P42
+      - P42
+      #- AG40
+      #- AB42
   qsfp_mgt_ref_clk_n:
     loc:
       - AJ14
+      - AJ14
       - AD12
-      - AG41
-      - AB43
+      - AD12
+      - AR41
+      - AR41
+      - AN41
+      - AN41
+      - T12
+      - T12
+      - P43
+      - P43
+      #- AG41
+      #- AB43
   qsfp_mgt_rx_p:
     loc:
       - AL6
@@ -178,13 +326,13 @@ pins:
       - W10
   qsfp_modprsl_ls:
     iostd: LVCMOS18
-    loc: [BN35, BN34, BP34, BL32]
+    loc: [BN35, BN34, BP34, BL32, BG10, BG9, BF12, BF11, BE11, BF10, BE10, BE9]
   qsfp_sda:
     iostd: LVCMOS18
-    loc: [BN30, BM30, BP32, BM34]
+    loc: [BN30, BM30, BP32, BM34, BP12, BP14, BM12, BN15, BM14, BL15, BN11, BP8]
   qsfp_scl:
     iostd: LVCMOS18
-    loc: [BN29, BL30, BN32, BM32]
+    loc: [BN29, BL30, BN32, BM32, BP11, BP13, BN12, BN14, BM13, BM15, BP9, BM10]
   ff_modprsl_ls:
     iostd: LVCMOS18
     loc: [BG10, BG9, BF12, BF11, BE11, BF10, BE10, BE9]

@@ -35,7 +35,9 @@ entity wishbone_forty_gb_eth_attach is
         FABRIC_ENABLE   : std_logic;
         MC_RECV_IP      : std_logic_vector(31 downto 0);
         MC_RECV_IP_MASK : std_logic_vector(31 downto 0);
-        RX_2B_SWAP      : boolean := false);
+        RX_2B_SWAP      : boolean := false;
+        CPU_RX_ENABLE      : integer := true;
+        CPU_TX_ENABLE      : integer := true);
     port (
         -- WISHBONE CLASSIC SIGNALS
         wb_clk_i : in  std_logic;
@@ -373,7 +375,7 @@ begin
 
     reg_data_int <=
     -- CPU TX/RX enabled. Version 1. 40GbE Core
-    (X"01010104")                                                                when (reg_data_src = REG_CORE_TYPE)        else
+    (b"0000000" & (CPU_TX_ENABLE!=0) & b"0000000" & (CPU_RX_ENABLE!=0) & X"0104") when (reg_data_src = REG_CORE_TYPE)        else
     -- TX/RX buffer sizes = 16384 bytes
     (X"40004000")                                                                when (reg_data_src = REG_MAX_BUF_SIZE)     else
     -- TX/RX word size = 64 bits

@@ -18,6 +18,7 @@ end
 sys = gcs;
 fprintf('Current system is: %s\n', sys);
 
+
 % find sysgen block
 disp('Searching for sysgen block');
 sysgen_blk      = find_system(sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'SearchDepth', 1, 'Tag', 'genX');
@@ -37,9 +38,19 @@ end
 
 fprintf('Setting output directory to: %s\n', xsg_path);
 
+% Using compile to IP catalog breaks current black box
+% inputs. This is a work around until the black box path
+% issues can be corrected.
+
+RUN_IP=0;
+
 % Use xlsetparam rather than set_param to configure Sysgen block properties
 % Set compilation type *before* compile directory location
-xlsetparam(xsg_blk, 'compilation_display', 'HDL Netlist', 'compilation', 'HDL Netlist', 'directory', xsg_path);
+if RUN_IP == 1
+    xlsetparam(xsg_blk, 'compilation_display', 'IP Catalog', 'compilation', 'IP Catalog', 'directory', xsg_path);
+else
+    xlsetparam(xsg_blk, 'compilation_display', 'HDL Netlist', 'compilation', 'HDL Netlist', 'directory', xsg_path);
+end
 
 
 if update == 1

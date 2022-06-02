@@ -76,6 +76,12 @@ class snap2(YellowBlock):
 
     def gen_tcl_cmds(self):
         tcl_cmds = {}
+
+        # Turn on power optimization before place / route.
+        # TODO: This may be detrimental to timing, so probably should be an option somewhere.
+        tcl_cmds['pre_impl'] = []
+        tcl_cmds['pre_impl'] += ['set_property STEPS.POWER_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]']
+
         # After generating bitstream write PROM file
         # Write both mcs and bin files. The latter are good for remote programming via microblaze. And makes sure the
         # microblaze code makes it into top.bin, and hence top.bof

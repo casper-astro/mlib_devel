@@ -37,12 +37,8 @@ module ads5296_unit (
    */
   (* shreg_extract = "no" *) reg [1:0] din_riseR;
   (* shreg_extract = "no" *) reg [1:0] din_fallR;
-   reg [1:0] din_riseRR;
-   reg [1:0] din_fallRR;
-   reg [1:0] din_riseRRR;
-   reg [1:0] din_fallRRR;
-  (* shreg_extract = "no" *) reg [1:0] din_riseRRRR;
-  (* shreg_extract = "no" *) reg [1:0] din_fallRRRR;
+  reg [1:0] din_riseRR;
+  reg [1:0] din_fallRR;
 
   reg [9:0] shreg0;
   reg [9:0] shreg1;
@@ -69,11 +65,6 @@ module ads5296_unit (
     din_fallR <= din_fall;
     din_riseRR <= din_riseR;
     din_fallRR <= din_fallR;
-    
-    din_riseRRR <= din_riseRR;
-    din_fallRRR <= din_fallRR;
-    din_riseRRRR <= din_riseRRR;
-    din_fallRRRR <= din_fallRRR;
     //TODO Is this latency right? Seems to work in hardware
     shreg0 <= {din_fallRR[0], din_riseRR[0], shreg0[9:2]};
     shreg1 <= {din_fallRR[1], din_riseRR[1], shreg1[9:2]};
@@ -91,20 +82,24 @@ module ads5296_unit (
   // Copy the shift register again into the FIFO write clock domain.
   // We could use lclk for this domain with a multicycle constraint
   // to achieve the same 5x timing relaxation. 
-  (* mark_debug = "true" *) reg [9:0] shreg0RR;
-  (* mark_debug = "true" *) reg [9:0] shreg1RR;
+  // Abuse the ASYNC_REG attribute to encourage the placer to keep
+  // a short path between these registers. In reality, the path
+  // is synchronous (though _is_ inter-clock) but has a challenging timing
+  // constraint
+  (* async_reg = "true" *) reg [9:0] shreg0RR;
+  (* async_reg = "true" *) reg [9:0] shreg1RR;
   always @(posedge clk_in) begin
     shreg0RR <= shreg0R;
     shreg1RR <= shreg1R;
   end
   
-  (* mark_debug = "true" *) wire [15:0] fifo_dout;
+  wire [15:0] fifo_dout;
   assign dout = fifo_dout[9:0];
   assign sync_out = fifo_dout[15];
-  (* mark_debug = "true" *) wire fifo_full;
-  (* mark_debug = "true" *) wire fifo_empty;
-  (* mark_debug = "true" *) wire fifo_wr_en;
-  (* mark_debug = "true" *) wire fifo_rd_en;
+  wire fifo_full;
+  wire fifo_empty;
+  wire fifo_wr_en;
+  wire fifo_rd_en;
   assign fifo_rd_en = rd_en;
   assign fifo_wr_en = wr_en;
   data_fifo data_fifo_inst(

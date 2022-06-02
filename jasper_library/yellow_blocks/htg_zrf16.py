@@ -38,7 +38,7 @@ class htg_zrf16(YellowBlock):
         self.provides.append('sys_clk270')
         self.provides.append('sys_clk_rst')
 
-        self.add_source('sysmon/sysmon_usplus.v')
+        #self.add_source('sysmon/sysmon_usplus.v')
 
     def modify_top(self,top):
         inst = top.get_instance('htg_zrf16', 'htg_zrf16_inst')
@@ -101,9 +101,9 @@ class htg_zrf16(YellowBlock):
             top.assign_signal('wb_clk_i', 'axil_clk')
             top.assign_signal('wb_rst_i', 'axil_rst')
 
-            sysmon = top.get_instance(entity='sysmon', name='sysmon_inst')
-            sysmon.add_parameter('SIM_DEVICE', '"ZYNQ_ULTRASCALE"')
-            sysmon.add_wb_interface(regname='sysmon', mode='rw', nbytes=1024)
+            #sysmon = top.get_instance(entity='sysmon', name='sysmon_inst')
+            #sysmon.add_parameter('SIM_DEVICE', '"ZYNQ_ULTRASCALE"')
+            #sysmon.add_wb_interface(regname='sysmon', mode='rw', nbytes=1024)
 
         inst_infr = top.get_instance('htg_zrf16_infrastructure', 'htg_zrf16_infr_inst')
         if self.clk_src == "arb_clk":
@@ -148,6 +148,8 @@ class htg_zrf16(YellowBlock):
             cons.append(ClockGroupConstraint('-of_objects [get_pins htg_zrf16_infr_inst/user_clk_mmcm_inst/CLKOUT0]', '-of_objects [get_pins htg_zrf16_inst/zynq_ultra_ps_e_0/U0/PS8_i/PLCLK[0]]', 'asynchronous'))
         cons.append(ClockGroupConstraint('-of_objects [get_pins htg_zrf16_infr_inst/sys_clk_mmcm_inst/CLKOUT0]', '-of_objects [get_pins htg_zrf16_inst/zynq_ultra_ps_e_0/U0/PS8_i/PLCLK[0]]', 'asynchronous'))
         #cons.append(ClockGroupConstraint('-of_objects [get_pins htg_zrf16_inst/zynq_ultra_ps_e_0/U0/PS8_i/PLCLK[0]]', '-of_objects [get_pins htg_zrf16_infr_inst/user_clk_mmcm_inst/CLKOUT0]', 'asynchronous'))
+        cons.append(RawConstraint("set_property BITSTREAM.CONFIG.OVERTEMPSHUTDOWN Enable [current_design]"))
+
         return cons
     def gen_tcl_cmds(self):
         tcl_cmds = {}

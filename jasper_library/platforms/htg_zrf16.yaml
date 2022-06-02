@@ -18,10 +18,16 @@ constraints: []
 onehundredgbe:
   refclk_freq_str: "156.25" # Needs configuring by programming PLL
   include_rs_fec: 1
+  override_cmac_placement:
+    - CMACE4_X0Y1
+    - CMACE4_X0Y0
   # See UG1075; Fig 1-40
   cmac_loc:
-    - CMACE4_X0Y0
     - CMACE4_X0Y1
+    - CMACE4_X0Y1 # Change this to X0Y0 post-synth (Why did HTG layout the board this way?!)
+  gt_group:
+    - X0Y12~X0Y15
+    - X0Y16~X0Y19
 provides:
   - sys_clk
   - qsfp0

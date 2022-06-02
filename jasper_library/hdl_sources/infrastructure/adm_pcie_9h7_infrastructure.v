@@ -36,6 +36,7 @@ module adm_pcie_9h7_infrastructure(
   wire sys_clk180_dcm;
   wire sys_clk270_dcm;
   wire clk_200_dcm;
+  wire clk_50_dcm;
 
   wire clk_fb;
 

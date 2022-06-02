@@ -2,15 +2,28 @@ name: vcu128
 manufacturer: Xilinx
 fpga: xcvu37p-fsvh2892-2L-e
 backend_target: vivado
+#mmbus_architecture: ['wishbone', 'AXI4-Lite']
+#mmbus_architecture: ['AXI4-Lite', 'wishbone']
+mmbus_architecture: 'wishbone'
+# wishbone at address 0; AXI offset = 1MB
+mmbus_base_address: 0x00100000
+#axi_ic_base_address: 0x44A00000
+dsp_wb_base_address: 0x00010000
+# How to address each 32-bit (i.e. 4 indicates byte-addressable)
+mmbus_address_alignment: 4
 sources: []
 constraints: []
 onehundredgbe:
+     use_2020_ip: False
      refclk_freq_str: "156.25"
+     include_rs_fec: 0
      cmac_loc:
         - CMACE4_X0Y7
      # - X0Y0
      # - X0Y0
      # - X0Y0
+     gt_group:
+        - X0Y44~X0Y47
 provides:
     - qsfp1
     #- qsfp2

@@ -5,6 +5,7 @@ from .yellow_block_typecodes import *
 from os.path import join
 from memory import Register
 
+
 class onehundred_gbe(YellowBlock):
     @staticmethod
     def factory(blk, plat, hdl_root=None):
@@ -38,7 +39,7 @@ class onehundredgbe_usplus(onehundred_gbe):
             Register('gmac_reg_phy_status_l',         mode='r',  offset=0x38),
             Register('gmac_reg_phy_control_h',        mode='rw', offset=0x3C, default_val=0),
             Register('gmac_reg_phy_control_l',        mode='rw', offset=0x40, default_val=0),
-            Register('gmac_reg_arp_size',             mode='r',  offset=0x44),
+            Register('gmac_reg_arp_size',             mode='r',  offset=0x44, default_val=9),
             Register('gmac_reg_tx_packet_rate',       mode='r',  offset=0x48),
             Register('gmac_reg_tx_packet_count',      mode='r',  offset=0x4C),
             Register('gmac_reg_tx_valid_rate',        mode='r',  offset=0x50),
@@ -88,7 +89,6 @@ class onehundredgbe_usplus(onehundred_gbe):
         self.add_source(kdir + '/macphy/macaxissender.vhd')
         self.add_source(kdir + '/macphy/macaxisdecoupler.vhd')
         self.add_source(kdir + '/macphy/macaxisreceiver.vhd')
-        self.add_source(kdir + '/macphy/gmacqsfptop2.vhd')
         self.add_source(kdir + '/ringbuffer/cpudualportpacketringbuffer.vhd')
         self.add_source(kdir + '/ringbuffer/packetringbuffer.vhd')
         self.add_source(kdir + '/ringbuffer/dualportpacketringbuffer.vhd')
@@ -120,6 +120,8 @@ class onehundredgbe_usplus(onehundred_gbe):
         self.add_source('onehundred_gbe/ip/async_fifo_513b_512deep/async_fifo_513b_512deep.xci')
         self.add_source('onehundred_gbe/ip/axis_data_fifo/axis_data_fifo_0.xci')
         self.add_source('onehundred_gbe/ip/dest_address_fifo/dest_address_fifo.xci')
+        if self.platform.mmbus_architecture[0] == 'wishbone':
+            self.add_source('onehundred_gbe/casper100g_wb_attach.v')
 
         ## TODO: remove this when we're done debugging
         if self.platform in ['vcu118']:
@@ -135,22 +137,23 @@ class onehundredgbe_usplus(onehundred_gbe):
         self.portbase = '{blocktype}{port}'.format(blocktype=self.blocktype, port=self.port)
 
         try:
-            ethconf = self.platform.conf["onehundredgbe"]
+            self.ethconf = self.platform.conf["onehundredgbe"]
         except KeyError:
             self.logger.exception("Failed to find `onehundredgbe` configuration in platform's YAML file")
             raise
         
         try:
-            self.refclk_freq_str = ethconf["refclk_freq_str"]
+            self.refclk_freq_str = self.ethconf["refclk_freq_str"]
         except KeyError:
             self.logger.error("Missing onehundredgbe `refclk_freq_str` parameter in YAML file")
             raise
         self.refclk_freq = float(self.refclk_freq_str)
 
         try:
-            self.include_rs_fec = ethconf["include_rs_fec"]
+            self.include_rs_fec = self.ethconf["include_rs_fec"]
         except KeyError:
             self.logger.warning("Missing `include_rs_fec` parameter in YAML file. Defaulting to 0")
+            self.include_rs_fec = 0
 
         if self.include_rs_fec:
             self.cmac_ip_name = 'EthMACPHY100GQSFP4x_rsfec'
@@ -159,23 +162,39 @@ class onehundredgbe_usplus(onehundred_gbe):
             self.cmac_ip_name = 'EthMACPHY100GQSFP4x'
             self.add_source('onehundred_gbe/ip/EthMACPHY100GQSFP4x/EthMACPHY100GQSFP4x.xci')
 
+        if self.ethconf.get('use_2020_ip', True):
+            self.add_source(kdir + '/macphy/gmacqsfptop2.vhd')
+        else:
+            self.add_source(kdir + '/macphy/gmacqsfptop.vhd')
+
         try:
-            self.cmac_loc = ethconf["cmac_loc"][self.port]
+            self.cmac_loc = self.ethconf["cmac_loc"][self.port]
         except KeyError:
             self.logger.error("Missing onehundredgbe `cmac_loc` parameter in YAML file")
             raise
         except IndexError:
             self.logger.error("Missing entry for port %d in onehundredgbe `cmac_loc` parameter" % self.port)
+        try:
+            self.gt_group = self.ethconf["gt_group"][self.port]
+        except KeyError:
+            self.logger.error("Missing onehundredgbe `gt_group` parameter in YAML file")
+            raise
+        except IndexError:
+            self.logger.error("Missing entry for port %d in onehundredgbe `gt_group` parameter" % self.port)
             raise
 
     def modify_top(self, top):
         inst = top.get_instance(entity='casper100g_noaxi', name=self.fullname+'_inst')
 
-        # The below call doesn't (yet) add any AXI ports to `inst`, which is required
-        # for anything useful to happen.
-        # But the 100G core doesn't (yet) have an axi interface exposed in the HDL anyway!
-        top.add_axi4lite_interface(regname=self.unique_name, mode='rw', nbytes=65536,
-                                    typecode=self.typecode, memory_map=self.memory_map)
+        if self.platform.mmbus_architecture[0] == 'wishbone':
+            ctrl = top.get_instance(entity='casper100g_wb_attach', name=self.fullname+'_wb_attach_inst')
+            ctrl.add_wb_interface(self.unique_name, mode='rw', nbytes=0xF000)
+        else:
+            # The below call doesn't (yet) add any AXI ports to `inst`, which is required
+            # for anything useful to happen.
+            # But the 100G core doesn't (yet) have an axi interface exposed in the HDL anyway!
+            top.add_axi4lite_interface(regname=self.unique_name, mode='rw', nbytes=65536,
+                                        typecode=self.typecode, memory_map=self.memory_map)
 
         # Set defaults at startup. The AXI registers above (which have defaults) won't
         # automatically propagate because until they are written externally their write-enable
@@ -186,13 +205,17 @@ class onehundredgbe_usplus(onehundred_gbe):
         inst.add_parameter("FABRIC_GATEWAY", "32'h%x" % self.fab_gate)
         inst.add_parameter("FABRIC_ENABLE_ON_START", "1'b%d" % int(self.fab_en))
         inst.add_parameter("USE_RS_FEC", "1'b%d" % int(self.include_rs_fec))
+        inst.add_parameter("INSTANCE_ID", self.inst_id)
         
         inst.add_port('RefClk100MHz', 'sys_clk') # sys_clk is decreed to be 100 MHz.
         inst.add_port('RefClkLocked', '~sys_rst', parent_sig=False)
-        inst.add_port('aximm_clk', 'axil_clk')
-        inst.add_port('icap_clk', 'axil_clk')
-        #inst.add_port('axis_reset', 'axil_rst')
-        inst.add_port('axis_reset',              self.fullname+'_rst')
+        if self.platform.mmbus_architecture[0] == 'wishbone':
+            inst.add_port('aximm_clk', 'wb_clk_i')
+            inst.add_port('icap_clk', 'wb_clk_i')
+        else:
+            inst.add_port('aximm_clk', 'axil_clk')
+            inst.add_port('icap_clk', 'axil_clk')
+        inst.add_port('axis_reset', self.fullname+'_rst')
         # MGT connections
         inst.add_port('mgt_qsfp_clock_p', self.portbase+'_refclk_p', dir='in', parent_port=True)
         inst.add_port('mgt_qsfp_clock_n', self.portbase+'_refclk_n', dir='in', parent_port=True)
@@ -211,7 +234,9 @@ class onehundredgbe_usplus(onehundred_gbe):
         else:
             inst.add_port('qsfp_modsell_ls', '') #self.portbase+'_qsfp_modsell_ls')
             inst.add_port('qsfp_resetl_ls',  '') #self.portbase+'_qsfp_resetl_ls')
-            inst.add_port('qsfp_modprsl_ls', self.portbase+'_qsfp_modprsl_ls', dir='in', parent_port=True)
+            # Core doesn't actually use modprs, and it causes annoying PR issues on the ADM-PCIe-9H7. 
+            #inst.add_port('qsfp_modprsl_ls', self.portbase+'_qsfp_modprsl_ls', dir='in', parent_port=True)
+            inst.add_port('qsfp_modprsl_ls', '1\'b0')
             inst.add_port('qsfp_intl_ls',    '1\'b1') #self.portbase+'_qsfp_intl_ls')
             inst.add_port('qsfp_lpmode_ls',  '') #self.portbase+'_qsfp_lpmode_ls')
 
@@ -249,25 +274,34 @@ class onehundredgbe_usplus(onehundred_gbe):
                 continue
             if not reg.ram:
                 if 'w' in reg.mode:
-                    # NOONE KNOWS HOW THE AXI INTERCONNECT IS GENERATED, SO THE BELOW
-                    # PORT NAMES WERE DETERMINED BY TRIAL AND ERROR
-                    inst.add_port(reg.name, self.unique_name+'_'+reg.name+'_out', width=32)
-                    inst.add_port(reg.name+'_we', self.unique_name+'_'+reg.name+'_out_we', width=1)
+                    if self.platform.mmbus_architecture[0] == 'wishbone':
+                        ctrl.add_port(reg.name, self.unique_name+'_'+reg.name, width=32)
+                        inst.add_port(reg.name, self.unique_name+'_'+reg.name, width=32)
+                        inst.add_port(reg.name+'_we', "1'b1")
+                    else:
+                        # NOONE KNOWS HOW THE AXI INTERCONNECT IS GENERATED, SO THE BELOW
+                        # PORT NAMES WERE DETERMINED BY TRIAL AND ERROR
+                        inst.add_port(reg.name, self.unique_name+'_'+reg.name+'_out', width=32)
+                        inst.add_port(reg.name+'_we', self.unique_name+'_'+reg.name+'_out_we', width=1)
                 else:
-                    inst.add_port(reg.name, self.unique_name+'_'+reg.name+'_in', width=32)
-                    # Read-only ports on the AXI interconnect have a write enable input. Tie it high.
-                    # The sys_clkcounter reg doesn't seem to do this, so who knows how it works.
-                    # Maybe it doesn't.
-                    top.assign_signal(self.unique_name+'_'+reg.name+'_in_we', "1'b1")
+                    if self.platform.mmbus_architecture[0] == 'wishbone':
+                        ctrl.add_port(reg.name, self.unique_name+'_'+reg.name, width=32)
+                        inst.add_port(reg.name, self.unique_name+'_'+reg.name, width=32)
+                    else:
+                        inst.add_port(reg.name, self.unique_name+'_'+reg.name+'_in', width=32)
+                        # Read-only ports on the AXI interconnect have a write enable input. Tie it high.
+                        # The sys_clkcounter reg doesn't seem to do this, so who knows how it works.
+                        # Maybe it doesn't.
+                        top.assign_signal(self.unique_name+'_'+reg.name+'_in_we', "1'b1")
 
     def gen_constraints(self):
         consts = []
         consts += [PortConstraint(self.portbase+'_refclk_p', 'qsfp_mgt_ref_clk_p', iogroup_index=self.port)]
         consts += [PortConstraint(self.portbase+'_refclk_n', 'qsfp_mgt_ref_clk_n', iogroup_index=self.port)]
-        consts += [PortConstraint(self.portbase+'_qsfp_mgt_rx_p', 'qsfp_mgt_rx_p', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
-        consts += [PortConstraint(self.portbase+'_qsfp_mgt_rx_n', 'qsfp_mgt_rx_n', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
-        consts += [PortConstraint(self.portbase+'_qsfp_mgt_tx_p', 'qsfp_mgt_tx_p', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
-        consts += [PortConstraint(self.portbase+'_qsfp_mgt_tx_n', 'qsfp_mgt_tx_n', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
+        #consts += [PortConstraint(self.portbase+'_qsfp_mgt_rx_p', 'qsfp_mgt_rx_p', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
+        #consts += [PortConstraint(self.portbase+'_qsfp_mgt_rx_n', 'qsfp_mgt_rx_n', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
+        #consts += [PortConstraint(self.portbase+'_qsfp_mgt_tx_p', 'qsfp_mgt_tx_p', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
+        #consts += [PortConstraint(self.portbase+'_qsfp_mgt_tx_n', 'qsfp_mgt_tx_n', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
 
         if self.platform.name in ['vcu118']:
             consts += [PortConstraint(self.portbase+'_qsfp_modsell_ls', 'qsfp_modsell_ls', iogroup_index=self.port)]
@@ -275,7 +309,9 @@ class onehundredgbe_usplus(onehundred_gbe):
             consts += [PortConstraint(self.portbase+'_qsfp_modprsl_ls', 'qsfp_modprsl_ls', iogroup_index=self.port)]
             consts += [PortConstraint(self.portbase+'_qsfp_lpmode_ls',  'qsfp_lpmode_ls', iogroup_index=self.port)]
         else:
-            consts += [PortConstraint(self.portbase+'_qsfp_modprsl_ls', 'qsfp_modprsl_ls', iogroup_index=self.port)]
+            # Core doesn't actually use modprs, and it causes annoying PR issues on the ADM-PCIe-9H7. 
+            #consts += [PortConstraint(self.portbase+'_qsfp_modprsl_ls', 'qsfp_modprsl_ls', iogroup_index=self.port)]
+            pass
 
         clkname = self.portbase+'_refclk_p' # defined by IP
         #self.myclk = ClockConstraint(self.portbase+'_refclk_p', freq=self.refclk_freq)
@@ -289,11 +325,23 @@ class onehundredgbe_usplus(onehundred_gbe):
 
     def gen_tcl_cmds(self):
         tcl_cmds = {}
-        # Override the IP reference clock frequency
-        tcl_cmds['pre_synth'] = ['set_property -dict [list CONFIG.GT_REF_CLK_FREQ {%s}] [get_ips %s]' % (self.refclk_freq_str, self.cmac_ip_name)]
+        tcl_cmds['pre_synth'] = []
+        # Override the IP settings
+        tcl_cmds['pre_synth'] += ['copy_ip -name %s%d [get_ips %s]' % (self.cmac_ip_name, self.inst_id, self.cmac_ip_name)]
+        tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.CMAC_CORE_SELECT {%s} CONFIG.GT_REF_CLK_FREQ {%s} CONFIG.GT_GROUP_SELECT {%s} CONFIG.RX_GT_BUFFER {1} CONFIG.GT_RX_BUFFER_BYPASS {0}] [get_ips %s%d]' % (self.cmac_loc, self.refclk_freq_str, self.gt_group, self.cmac_ip_name, self.inst_id)]
+        try:
+            if self.platform.use_pr:
+                tcl_cmds['pre_synth'] += ['move_files -of_objects [get_reconfig_modules user_top-toolflow] [get_files %s%d.xci]' % (self.cmac_ip_name, self.inst_id)]
+        except AttributeError:
+            pass
+        #tcl_cmds['pre_synth'] = ['set_property -dict [list CONFIG.GT_GROUP_SELECT {%s} CONFIG.LANE1_GT_LOC {%s} CONFIG.LANE2_GT_LOC {%s} CONFIG.LANE3_GT_LOC {%s} CONFIG.LANE4_GT_LOC {%s} CONFIG.RX_GT_BUFFER {1} CONFIG.GT_RX_BUFFER_BYPASS {0}] [get_ips EthMACPHY100GQSFP4x%d' % (self.gt_group, gts[0, gts[1], gts[2], gts[3], self.inst_id)]
 
-        # The LOCs seem to get overriden by the user constraints above, but we need to manually unplace the CMAC blocks
-        # Unplace all CMACs post_synth, then place all pre_impl, to avoid situations where we try to place on a site already being used
-        tcl_cmds['post_synth'] = ['unplace_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s_inst/*" }]' % self.fullname]
-        tcl_cmds['pre_impl'] = ['place_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s_inst/*" }] %s' % (self.fullname, self.cmac_loc)]
+        ## The LOCs seem to get overriden by the user constraints above, but we need to manually unplace the CMAC blocks
+        if self.ethconf.get("override_cmac_placement", False):
+            # Unplace CMACs post_synth, then place all pre_impl, to avoid situations where we try to place on a site already being used
+            tcl_cmds['pre_impl'] = []
+            tcl_cmds['post_synth'] = []
+            tcl_cmds['post_synth'] += ['unplace_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s_inst/*" }]' % self.fullname]
+            forced_cmac_loc = self.ethconf["override_cmac_placement"][self.port]
+            tcl_cmds['pre_impl'] += ['place_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s_inst/*" }] %s' % (self.fullname, forced_cmac_loc)]
         return tcl_cmds

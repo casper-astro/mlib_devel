@@ -15,9 +15,11 @@ class vla_dts(YellowBlock):
         #self.add_source('vla_dts/dts_offset_fifo.xci')
 
         self.requires = []
-        self.provides = ['dts_500_clk', 'dts_500_clk90', 'dts_500_clk180', 'dts_500_clk270']
+        if self.is_master:
+            self.provides = ['dts_clk', 'dts_clk90', 'dts_clk180', 'dts_clk270']
         # Create a standard port name prefix to make PR simpler between models
-        self.portbase = 'vla_dts'
+        # Depends on block configuration (i.e. port choice), but not on block name
+        self.portbase = 'vla_dts_' + self.port
         try:
             self.dtsconf = self.platform.conf['dts']
         except KeyError:
@@ -47,9 +49,12 @@ class vla_dts(YellowBlock):
         inst.add_parameter('INSTANCE_NUMBER', self.inst_id)
         inst.add_parameter('MUX_FACTOR_BITS', self.mux_factor_bits)
 
+        # Output clock for the data fifo.
+        inst.add_port('clkout', 'user_clk')
+
         # ports which go to simulink
         inst.add_port('rst',     self.fullname+'_rst')
-        inst.add_port('dout',    self.fullname+'_frame_out', width=128*12)
+        inst.add_port('dout',    self.fullname+'_frame_out', width=128*12//(2**self.mux_factor_bits))
         inst.add_port('index',   self.fullname+'_index', width=12)
         inst.add_port('one_sec', self.fullname+'_one_sec', width=12)
         inst.add_port('ten_sec', self.fullname+'_ten_sec', width=12)
@@ -68,10 +73,16 @@ class vla_dts(YellowBlock):
 
         # Internal ports
         inst.add_port('clk_50', 'clk_50')
-        inst.add_port('clk_mux_0', 'dts_500_clk')
-        inst.add_port('clk_mux_90', 'dts_500_clk90')
-        inst.add_port('clk_mux_180', 'dts_500_clk180')
-        inst.add_port('clk_mux_270', 'dts_500_clk270')
+        if self.is_master:
+            inst.add_port('clk_mux_0', 'dts_clk')
+            inst.add_port('clk_mux_90', 'dts_clk90')
+            inst.add_port('clk_mux_180', 'dts_clk180')
+            inst.add_port('clk_mux_270', 'dts_clk270')
+        else:
+            inst.add_port('clk_mux_0', '')
+            inst.add_port('clk_mux_90', '')
+            inst.add_port('clk_mux_180', '')
+            inst.add_port('clk_mux_270', '')
 
     def gen_constraints(self):
         cons = []
@@ -81,8 +92,8 @@ class vla_dts(YellowBlock):
             cons.append(PortConstraint(self.portbase+'_mgtclk_n', pinname+'_n', port_index=i, iogroup_index=pinindex))
             clockconst = ClockConstraint(self.portbase+'_mgtclk_p[%d]'%i, '%s_dts_clk%d' % (self.fullname, i), freq=float(self.dtsconf['reffreq']))
             cons.append(clockconst)
-            cons.append(RawConstraint('set_clock_groups -name async_sysclk_dts%d -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks -of_objects [get_nets sys_clk]]' % (i, clockconst.name)))
-            cons.append(RawConstraint('set_clock_groups -name async_axiclk_dts%d -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks -of_objects [get_nets axil_clk]]' % (i, clockconst.name)))
+            cons.append(RawConstraint('set_clock_groups -name async_sysclk_dts_%s -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks -of_objects [get_nets sys_clk]]' % (self.unique_name, clockconst.name)))
+            cons.append(RawConstraint('set_clock_groups -name async_axiclk_dts_%s -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks -of_objects [get_nets axil_clk]]' % (self.unique_name, clockconst.name)))
 
         #cons.append(PortConstraint(self.portbase+'_modprsl', 'dts_qsfp_modprsl', port_index=range(3), iogroup_index=range(3)))
 
@@ -97,6 +108,8 @@ class vla_dts(YellowBlock):
         config = {
             'channel_enable': ' '.join(pc['channel']),
             'tx_line_rate': self.dtsconf['linerate'],
+            'tx_qpll_fracn_numerator': self.dtsconf['qpll_numerator'],
+            'rx_qpll_fracn_numerator': self.dtsconf['qpll_numerator'],
             'tx_refclk_frequency': self.dtsconf['reffreq'],
             'tx_user_data_width': '160',
             'tx_int_data_width': '80',
@@ -136,9 +149,15 @@ class vla_dts(YellowBlock):
         }  
 
         commands = []
-        commands += ['create_ip -name gtwizard_ultrascale -vendor xilinx.com -library ip -version 1.7 -module_name gtwizard_dts_gtyx12_%d' % self.inst_id]
+        # Create IP using -quiet to hide "already exists" errors (likely in PR mode)
+        commands += ['create_ip -quiet -name gtwizard_ultrascale -vendor xilinx.com -library ip -version 1.7 -module_name gtwizard_dts_gtyx12_%d' % self.inst_id]
         param_str = ' '.join(['CONFIG.%s {%s}' % (k,v) for k,v in config.items()])
         commands += ['set_property -dict [list %s] [get_ips gtwizard_dts_gtyx12_%d]' % (param_str, self.inst_id)]
+        try:
+            if self.platform.use_pr:
+                commands += ['move_files -of_objects [get_reconfig_modules user_top-toolflow] [get_files gtwizard_dts_gtyx12_%d.xci]' % self.inst_id]
+        except AttributeError:
+            pass
 
         # OUTPUT FIFO
 
@@ -165,8 +184,14 @@ class vla_dts(YellowBlock):
 
         # Only need to create this FIFO once for all yellow blocks
         if self.i_am_the_first:
-            commands += ['create_ip -name fifo_generator -vendor xilinx.com -library ip -version 13.2 -module_name dts_offset_fifo']
+            # Create IP using -quiet to hide "already exists" errors (likely in PR mode)
+            commands += ['create_ip -quiet -name fifo_generator -vendor xilinx.com -library ip -version 13.2 -module_name dts_offset_fifo']
             param_str = ' '.join(['CONFIG.%s {%s}' % (k,v) for k,v in config.items()])
             commands += ['set_property -dict [list %s] [get_ips dts_offset_fifo]' % (param_str)]
+            try:
+                if self.platform.use_pr:
+                    commands += ['move_files -of_objects [get_reconfig_modules user_top-toolflow] [get_files dts_offset_fifo.xci]']
+            except AttributeError:
+                pass
 
         return commands
