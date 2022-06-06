@@ -302,6 +302,7 @@ always @(posedge clk)
                 endcase
             end
     end
+
 ////gtwiz_reset_all_in
 always @(posedge clk)
     begin
@@ -353,8 +354,12 @@ always @(posedge clk)
                 endcase
             end
     end
-
-////pattern_match_enable
+/*
+assign gtwiz_reset_all_in0 = gtwiz_reset_all_in;
+assign gtwiz_reset_all_in1 = gtwiz_reset_all_in;
+assign gtwiz_reset_all_in2 = gtwiz_reset_all_in;
+assign gtwiz_reset_all_in3 = gtwiz_reset_all_in;
+*/
 always @(posedge clk)
     begin
         if(rst)
