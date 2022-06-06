@@ -16,7 +16,7 @@ class microblaze(YellowBlock):
             return microblaze_k7(blk, plat, hdl_root)
 
     def initialize(self):
-        self.include_spi_ports = True
+        self.include_spi_ports = False
         if self.platform.name in ['snap2']:
             if self.platform.version == 1:
                 self.memfile= 'executable_no_xadc.mem'
