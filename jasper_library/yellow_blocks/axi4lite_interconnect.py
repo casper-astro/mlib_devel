@@ -1,4 +1,3 @@
-import IPython
 import math
 from .yellow_block import YellowBlock
 from .yellow_block_typecodes import *
@@ -79,7 +78,6 @@ class axi4lite_interconnect(YellowBlock):
         print('axi interconnect')
         print(self.fullname)
         print(self.design_name)
-        IPython.embed()
 
         for key, val in list(self.memory_map.items()):
             for reg in val["memory_map"]:
