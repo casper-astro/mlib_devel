@@ -548,8 +548,6 @@ class Toolflow(object):
             for reg in core.memory_map:
                 s += format_str.format(core.regname + '_' + reg.name, modemap[reg.mode],
                                        core.base_addr + reg.offset, reg.nbytes)
-            # s += '%s\t%d\t%x\t%x\n'%(core.regname, modemap[core.mode],
-            #                          core.base_addr, core.nbytes)
         self.logger.debug('Opening %s' % basefile)
         with open(newfile, 'w') as fh:
             fh.write(s)
@@ -580,8 +578,7 @@ class Toolflow(object):
             s += format_str.format(core.regname, modemap[core.mode], core.base_addr, core.nbytes, core.typecode)
             # add aliases if the WB Devices have them
             for reg in core.memory_map:
-                s += format_str.format(reg.name, modemap[reg.mode], core.base_addr + reg.offset, reg.nbytes, core.typecode)
-            # s += '%s\t%d\t%x\t%x\n'%(core.regname, modemap[core.mode], core.base_addr, core.nbytes)
+                s += format_str.format(core.regname + '_' + reg.name, modemap[reg.mode], core.base_addr + reg.offset, reg.nbytes, core.typecode)
         self.logger.debug('Opening %s' % basefile)
         with open(newfile, 'w') as fh:
             fh.write(s)
