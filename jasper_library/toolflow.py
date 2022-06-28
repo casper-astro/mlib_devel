@@ -560,6 +560,8 @@ class Toolflow(object):
                 self.cores += val['axi4lite_devices']
         if 'wishbone' in self.plat.mmbus_architecture:
             self.cores += self.top.wb_devices
+        for val in self.top.xil_axi4lite_devices:
+            self.cores += [val]
         basefile = '%s/%s/core_info.jam.tab' % (os.getenv('HDL_ROOT'), self.plat.name)
         newfile = '%s/core_info.jam.tab' % self.compile_dir
         self.logger.debug('Opening %s' % basefile)

@@ -335,8 +335,10 @@ class onegbe_vcu128(onegbe):
             consts += [FalsePathConstraint('[get_clocks -of_objects [get_pins %s_pcs_pma/inst/clock_reset_i/Clk_Rst_I_Plle3_Tx/CLKOUT1]]'%self.fullname, '[get_clocks -of_objects [get_pins vcu128_infrastructure_inst/MMCM_BASE_inst/CLKOUT4]]')]
             consts += [FalsePathConstraint('[get_clocks -of_objects [get_pins vcu128_infrastructure_inst/MMCM_BASE_inst/CLKOUT1]]','[get_clocks -of_objects [get_pins vcu128_infrastructure_inst/MMCM_BASE_inst/CLKOUT4]]')]
             consts += [FalsePathConstraint('[get_clocks -of_objects [get_pins vcu128_infrastructure_inst/MMCM_BASE_inst/CLKOUT4]]','[get_clocks -of_objects [get_pins vcu128_infrastructure_inst/MMCM_BASE_inst/CLKOUT1]]')]
+            # better just an async between adc_100g_gbe_one_refclk625_p and sys_clk_p_CLK?
+            consts += [RawConstraint('set_clock_groups -name asyncclocks_gbe -asynchronous -group [get_clocks -include_generated_clocks sys_clk_p_CLK] -group [get_clocks -include_generated_clocks %s_refclk625_p]' %self.fullname)]
             return consts
-
+        
 
 class onegbe_vcu118(onegbe):
     def initialize(self):

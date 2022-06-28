@@ -320,6 +320,10 @@ class onehundredgbe_usplus(onehundred_gbe):
         consts += [ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets sys_clk]', '-include_generated_clocks %s' % clkname, 'asynchronous')]
         consts += [ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets user_clk]', '-include_generated_clocks %s' % clkname, 'asynchronous')]
         consts += [ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets axil_clk]', '-include_generated_clocks %s' % clkname, 'asynchronous')]
+        if self.platform.name in ['vcu128']:
+            consts += [ClockGroupConstraint('-include_generated_clocks sys_clk_p_CLK', '-include_generated_clocks %s' % clkname, 'asynchronous')]
+            consts += [ClockGroupConstraint('-include_generated_clocks adcclk0', '-include_generated_clocks %s' % clkname, 'asynchronous')]
+        
 
         return consts
 
