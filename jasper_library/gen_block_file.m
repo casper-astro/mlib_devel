@@ -158,7 +158,7 @@ end
 % Setting to run in HDL mode until the resulting path
 % issue can be fixed.
 
-RUN_IP=1;
+RUN_IP=0;
 
 if RUN_IP==1
     % Add The IP which sysgen is about to build. We could do this through

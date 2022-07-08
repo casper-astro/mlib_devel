@@ -259,6 +259,7 @@ if __name__ == '__main__':
 
         if opts.software:
             binary = backend.bin_loc
+            bit_file = backend.bit_loc
             hex_file = backend.hex_loc
             mcs_file = backend.mcs_loc
             prm_file = backend.prm_loc
@@ -303,6 +304,7 @@ if __name__ == '__main__':
                     tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
                     tf.start_time.tm_hour, tf.start_time.tm_min)
                 os.system('cp %s %s/top.bin' % (binary, backend.compile_dir))
+                os.system('cp %s %s/top.bit' % (bit_file, backend.compile_dir))
                 backend.mkfpg(binary, backend.output_fpg)
                 print('Created %s/%s' % (backend.output_dir, backend.output_fpg))
 

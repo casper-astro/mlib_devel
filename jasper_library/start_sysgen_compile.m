@@ -42,7 +42,7 @@ fprintf('Setting output directory to: %s\n', xsg_path);
 % inputs. This is a work around until the black box path
 % issues can be corrected.
 
-RUN_IP=1;
+RUN_IP=0;
 
 % Use xlsetparam rather than set_param to configure Sysgen block properties
 % Set compilation type *before* compile directory location
