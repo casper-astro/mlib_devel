@@ -221,6 +221,11 @@ class adc_4x16g_asnt(YellowBlock):
         cons.append(PortConstraint('adc4x16g_sselb', 'adc4x16g_sselb',port_index=list(range(4)),iogroup_index=list(range(4))))
         cons.append(ClockConstraint('refclk%d_p'%num, name='adcclk%d'%num, freq=500))
         cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d -asynchronous -group [get_clocks -include_generated_clocks sys_clk_p_CLK] -group [get_clocks -include_generated_clocks adcclk%d]'%(num,num)))
+        cons.append(RawConstraint('set_clock_groups -name asyncclocks_dcm -asynchronous -group [get_clocks -include_generated_clocks sys_clk0_dcm] -group [get_clocks -include_generated_clocks mb_clk_dcm]'))
+        cons.append(RawConstraint('set_clock_groups -name async_dcm_two -asynchronous -group [get_clocks -of_objects [get_pins vcu128_infrastructure_inst/MMCM_BASE_inst/CLKOUT1]] -group [get_clocks -of_objects [get_pins vcu128_infrastructure_inst/MMCM_BASE_inst/CLKOUT4]]'))
+        #[get_clocks -of_objects [get_pins vcu128_infrastructure_inst/MMCM_BASE_inst/CLKOUT1]]
+        #[get_clocks -of_objects [get_pins vcu128_infrastructure_inst/MMCM_BASE_inst/CLKOUT4]]
+
         return cons
         
     def gen_tcl_cmds(self):
