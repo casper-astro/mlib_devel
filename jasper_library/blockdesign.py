@@ -3,10 +3,18 @@ import re
 from six import iteritems
 
 class BlockDesign(object):
+  """
+  A crude, brute force way to put a vivado block design (.bd) together
+  """
 
   interface_type_map = {
     'axi4': 'aximm_rtl:1.0',
   }
+
+  class axi4_interface(object):
+    axi4_attr_map = {
+      'addr_width': {'param': 'ADDR_WIDTH', 'fmt': "{{:d}}"},
+    }
 
   def __init__(self, name=''):
 
@@ -15,28 +23,43 @@ class BlockDesign(object):
     else:
       raise ValueError("'name' must be a string of non-zero length")
 
-    self.bd_tcl_cmds = {}
-    self.bd_tcl_cmds['build_bd'] = []
+    # TODO what about a 'place_bd_ip' stage and a 'build_bd' stage? This allows for placing all IP and then wiring it up.
+    # could this help more with getting interfaces correct?
+    self.bd_tcl_cmds = {
+      'place_bd_ip': [],
+      'build_bd'   : []
+    }
+    #self.bd_tcl_cmds = {}
+    #self.bd_tcl_cmds['build_bd'] = []
 
     # not sure if this list will be helpful, or what needs to be added to be helpful
     self.design_ips = []
 
-  def add_ip_blk(self, ip, inst_name):
-    self.bd_tcl_cmds['build_bd'] += ['create_bd_cell -type ip -vlnv xilinx.com:ip:{:s}:* {:s}'.format(ip, inst_name)]
+  def create_axi4_intf(self, name, mode, config_dict):
+      self.create_intf_port(name, mode, 'axi4')
+
+  def create_cell(self, ip, inst_name):
+    self.bd_tcl_cmds['place_bd_ip'] += ['create_bd_cell -type ip -vlnv xilinx.com:ip:{:s}:* {:s}'.format(ip, inst_name)]
     self.design_ips.append(ip)
 
-  def add_net(self, net_name): # add optional values like type=clk and then add to list of internal provides nets?
+  def create_net(self, net_name): # add optional values like type=clk and then add to list of internal provides nets?
     self.bd_tcl_cmds['build_bd'] += ['create_bd_net {:s}'.format(net_name)]
 
   def connect_net(self, src_net, dest_net):
     self.bd_tcl_cmds['build_bd'] += ['connect_bd_net -net {:s} [get_bd_pins {:s}]'.format(src_net, dest_net)]
 
+  # TODO, could combine with above method
   def connect_port(self, net, port):
     self.bd_tcl_cmds['build_bd'] += ['connect_bd_net -net {:s} [get_bd_ports {:s}]'.format(net, port)]
 
   def create_intf_port(self, name, mode, intf_type):
     vivado_if_type = self.interface_type_map[intf_type]
     self.bd_tcl_cmds['build_bd'] += ['create_bd_intf_port -mode {:s} -vlnv xilinx.com:interface:{:s} {:s}'.format(mode, vivado_if_type, name)]
+
+  #def connect_intf_net(self, intf_pin, intf_port):
+  #  self.bd_tcl_cmds['build_bd'] += ['connect_bd_intf_net [get_bd_intf_pins {:s}] [get_bd_intf_ports {:s}]'.format(intf_pin, intf_port)]
+  def connect_intf_net(self, src_intf, dest_intf):
+    self.bd_tcl_cmds['build_bd'] += ['connect_bd_intf_net [get_bd_intf_pins {:s}] [get_bd_intf_pins {:s}]'.format(src_intf, dest_intf)]
 
   def add_port(self, name, port_dir, port_type=None, width=None, clk_freq_hz=None):
     # check for valid board design port specification
@@ -97,5 +120,7 @@ class BlockDesign(object):
   def gen_tcl(self):
     print("building tclfile...")
     s = ''
-    s = '\n'.join(self.bd_tcl_cmds['build_bd'])
+    s += '\n'.join(self.bd_tcl_cmds['place_bd_ip'])
+    s += '\n'
+    s += '\n'.join(self.bd_tcl_cmds['build_bd'])
     return s
