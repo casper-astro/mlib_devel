@@ -1279,7 +1279,10 @@ class ToolflowBackend(object):
             #    SpartanChecksum when upload_to_ram()
             #   - Need to give it the chunk size being used in upload_to_ram
             #   - This alters how the SPARTAN calculates the checksum
-            flash_write_checksum = self.calculate_checksum_using_bitstream(
+            # bin file header identifier - '\xff' * 32
+            header_end_index = bitstream.find(b'\xff' * 32)
+            if not header_end_index:
+               flash_write_checksum = self.calculate_checksum_using_bitstream(
                 bitstream, packet_size=MAX_IMAGE_CHUNK_SIZE)
 
         # add the md5sums, checksum and ?quit to the extended info file
@@ -1289,7 +1292,8 @@ class ToolflowBackend(object):
             fh.write("?meta\t" + line)
             line = '77777\t77777\tmd5_bitstream\t' + md5_bitstream + '\n'
             fh.write("?meta\t" + line)
-            line = '77777\t77777\tflash_write_checksum\t' + \
+            if not header_end_index:
+               line = '77777\t77777\tflash_write_checksum\t' + \
                    str(flash_write_checksum) + '_' + str(MAX_IMAGE_CHUNK_SIZE) + '\n'
             fh.write("?meta\t" + line)
             fh.write('?quit\n')
@@ -1468,6 +1472,31 @@ class VivadoBackend(ToolflowBackend):
         self.project_name = 'myproj'
         self.periph_objs = periph_objs
         self.tcl_cmd = ''
+        # if project mode is enabled
+        if plat.project_mode:
+            self.binary_loc = '%s/%s/%s.runs/impl_1/top.bin' % (
+                self.compile_dir, self.project_name, self.project_name)
+            self.hex_loc = '%s/%s/%s.runs/impl_1/top.hex' % (
+                self.compile_dir, self.project_name, self.project_name)
+            self.mcs_loc = '%s/%s/%s.runs/impl_1/top.mcs' % (
+                self.compile_dir, self.project_name, self.project_name)
+            self.prm_loc = '%s/%s/%s.runs/impl_1/top.prm' % (
+                self.compile_dir, self.project_name, self.project_name)
+            self.bitstream_loc = '%s/%s/%s.runs/impl_1/top.bit' % (
+                self.compile_dir, self.project_name, self.project_name)
+
+        # if non-project mode is enabled
+        else:
+            self.binary_loc = '%s/%s/top.bin' % (
+                self.compile_dir, self.project_name)
+            self.hex_loc = '%s/%s/top.hex' % (
+                self.compile_dir, self.project_name)
+            self.mcs_loc = '%s/%s/top.mcs' % (
+                self.compile_dir, self.project_name)
+            self.prm_loc = '%s/%s/top.prm' % (
+                self.compile_dir, self.project_name)
+            self.bitstream_loc = '%s/%s/top.bit' % (
+                self.compile_dir, self.project_name)
 
         self.name = 'vivado'
         self.npm_sources = []
