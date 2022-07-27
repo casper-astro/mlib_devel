@@ -324,7 +324,7 @@ proc create_root_design { parentCell } {
    CONFIG.SYS_RST_N_BOARD_INTERFACE {pcie_perstn} \
    CONFIG.axilite_master_en {true} \
    CONFIG.axilite_master_scale {Megabytes} \
-   CONFIG.axilite_master_size {32} \
+   CONFIG.axilite_master_size {256} \
    CONFIG.axisten_freq {125} \
    CONFIG.en_gt_selection {true} \
    CONFIG.mode_selection {Advanced} \
