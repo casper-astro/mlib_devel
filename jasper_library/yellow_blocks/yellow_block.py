@@ -216,6 +216,16 @@ class YellowBlock(object):
         """
         pass
 
+    def modify_bd(self, bd):
+        """
+        EXPERIMENTAL
+
+        Modify the block design
+
+        :param bd: A Vivado block design
+        """
+        pass
+
     def finalize_top(self, top):
         """
         A final opportunity for a block to modify VerilogModule instance `top` after all

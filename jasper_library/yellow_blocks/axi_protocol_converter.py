@@ -27,7 +27,7 @@ class axi_protocol_converter(YellowBlock):
       setattr(self, attr, self.blk[attr])
 
     self.requires.append('pl_sys_clk')
-    self.requires.append('axil_arstn')
+    self.requires.append('axil_arst_n')
 
   def modify_top(self, top):
     pass
@@ -40,14 +40,15 @@ class axi_protocol_converter(YellowBlock):
     bd.create_cell('axi_protocol_converter', ip_name)
 
     bd.connect_net('pl_sys_clk', '{:s}/{:s}'.format(ip_name, 'aclk'))
-    bd.connect_net('axil_arstn', '{:s}/{:s}'.format(ip_name, 'aresetn'))
+    bd.connect_net('axil_arst_n', '{:s}/{:s}'.format(ip_name, 'aresetn'))
 
     bd.connect_intf_net(self.blk['saxi_ifpath'], '{:s}/{:s}'.format(ip_name,'S_AXI'))
 
     # make M AXI external
+    port_name = self.blk['maxi_ifpath']
     bd.add_raw_cmd('make_bd_intf_pins_external [get_bd_intf_pins axi_proto_conv/M_AXI]')
-    bd.add_raw_cmd('set_property NAME M_AXI_PROTO [get_bd_intf_ports M_AXI_0]')
-    bd.add_raw_cmd('set_property CONFIG.FREQ_HZ $ps_freq_hz [get_bd_intf_ports M_AXI_PROTO]')
+    bd.add_raw_cmd('set_property NAME {:s} [get_bd_intf_ports M_AXI_0]'.format(port_name))
+    bd.add_raw_cmd('set_property CONFIG.FREQ_HZ $ps_freq_hz [get_bd_intf_ports {:s}]'.format(port_name))
 
     # apply configurations
     bd.add_raw_cmd('set_property -dict [list \\')
@@ -68,9 +69,7 @@ class axi_protocol_converter(YellowBlock):
   def gen_tcl_cmds(self):
     tcl_cmds = {}
     tcl_cmds['init'] = []
-
+    tcl_cmds['create_bd'] = []
     tcl_cmds['pre_synth'] = []
-    tcl_cmds['pre_synth'] += ['puts "I am an axi protocol converter teapot"']
-
     return tcl_cmds
 
