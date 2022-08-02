@@ -3,12 +3,12 @@ from constraints import ClockConstraint, PortConstraint, RawConstraint
 
 class htg9200(YellowBlock):
     def initialize(self):
-        self.add_source('infrastructure/adm_pcie_9h7_infrastructure.v')
+        self.add_source('infrastructure/htg9200_infrastructure.v')
         self.add_source('wbs_arbiter')
         self.provides = ['sys_clk', 'sys_clk90', 'sys_clk180', 'sys_clk270']
 
     def modify_top(self,top):
-        inst = top.get_instance('adm_pcie_9h7_infrastructure', 'adm_pcie_9h7_infrastructure_inst')
+        inst = top.get_instance('htg9200_infrastructure', 'htg9200_infrastructure_inst')
         inst.add_port('sys_clk_buf_n', 'sys_clk_n', parent_port=True, dir='in')
         inst.add_port('sys_clk_buf_p', 'sys_clk_p', parent_port=True, dir='in')
         inst.add_port('sys_clk0     ', 'sys_clk   ')
@@ -16,12 +16,19 @@ class htg9200(YellowBlock):
         inst.add_port('sys_clk270   ', 'sys_clk270')
         inst.add_port('clk_200      ', 'clk_200   ')
         inst.add_port('clk_50       ', 'clk_50    ')
+        inst.add_port('clk_250      ', 'clk_250   ')
+        inst.add_port('clk_250270   ', 'clk_250270')
         inst.add_port('sys_rst      ', 'sys_rst   ')
         inst.add_port('idelay_rdy   ', 'idelay_rdy')
         inst.add_port('sys_clk_rst_sync', 'sys_clk_rst_sync')
 
         top.add_signal('sys_clk90')
         top.assign_signal('sys_clk90', '~sys_clk270')
+        top.add_signal('clk_25090')
+        top.assign_signal('clk_25090','~clk_250270')
+        top.add_signal('clk_250180')
+        top.assign_signal('clk_250180','~clk_250')
+    
 
         # Connect microblaze MAC LSBs to GPIO
         if self.use_microblaze:
@@ -73,5 +80,5 @@ class htg9200(YellowBlock):
     def gen_tcl_cmds(self):
        tcl_cmds = {}
        #TODO is this right for HTG?
-       tcl_cmds['promgen'] = ['write_cfgmem  -format mcs -size 64 -interface SPIx8 -loadbit "up 0x0 $bit_file " -checksum -file "$mcs_file" -force']
+       tcl_cmds['promgen'] = ['write_cfgmem  -format mcs -size 128 -interface SPIx8 -loadbit "up 0x0 $bit_file " -checksum -file "$mcs_file" -force']
        return tcl_cmds

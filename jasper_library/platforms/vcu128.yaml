@@ -16,7 +16,7 @@ constraints: []
 onehundredgbe:
      use_2020_ip: True
      refclk_freq_str: "156.25"
-     include_rs_fec: 1
+     include_rs_fec: 0
      cmac_loc:
         - CMACE4_X0Y7
      # - X0Y0
