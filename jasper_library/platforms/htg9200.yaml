@@ -18,6 +18,7 @@ tengbe:
   gt_quad: "X0Y9"
 onehundredgbe:
   refclk_freq_str: "156.25"
+  use_2020_ip: True
   include_rs_fec: 1
   cmac_loc:
     - CMACE4_X0Y9 
@@ -27,6 +28,16 @@ onehundredgbe:
     - CMACE4_X0Y6
     - CMACE4_X0Y5
     - CMACE4_X0Y4
+  gt_group:
+    # HTG Docs say: 133, 132, 131, 130, 129, 128, 127, 126, 125
+    # Actual Pins say: 133, 131, 130, 129, 128, 127, 126, 125, 124
+    - X0Y52~X0Y55
+    - X0Y44~X0Y47
+    - X0Y40~X0Y43
+    - X0Y36~X0Y39
+    - X0Y32~X0Y35
+    - X0Y28~X0Y31
+    - X0Y24~X0Y27
 provides:
   - qsfp0
   - qsfp1
