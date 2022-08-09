@@ -375,7 +375,7 @@ class rfdc(YellowBlock):
     #rfdc_inst = top.get_instance('rfdc', 'rfdc_inst')
 
     # get block design reference from platform info to be able to add rfdc relevant ports
-    blkdesign = '{:s}_base'.format(self.platform.conf['name'])
+    blkdesign = '{:s}_bd'.format(self.platform.conf['name'])
     bd_inst = top.get_instance(blkdesign, '{:s}_inst'.format(blkdesign))
 
     top.add_axi4lite_interface(regname="rfdc", mode='rw', nbytes=0x40000, typecode=self.typecode, axi4lite_mode='raw') #self.unique_name

@@ -1985,6 +1985,12 @@ proc puts_red {s} {
             # Assemble the board design
             self.gen_bd_tcl_cmds()
 
+            # TODO save, validate, and export block design must be done in the `pre_synth` stage after all the yellow blocks
+            # have a chance to run `gen_tcl_cmds`. This is because the rfdc has not been migrated to having a `modify_bd`
+            # command and implements all of its additions in `gen_tcl_cmds` using the `pre_synth` stage. Either the rfdc needs
+            # to be migrated or evaluate the utility of having the block design built out using the seperate `create_bd` stage
+            # and with its own `gen_bd_tcl_cmds` or if this functionality instead needs to be pulled into `gen_tcl_cmds`
+            """
             # save, validate, and generate output producets for the board design
             self.add_tcl_cmd('save_bd_design', stage='create_bd')
             self.add_tcl_cmd('validate_bd_design', stage='create_bd')
@@ -1995,6 +2001,7 @@ proc puts_red {s} {
             self.add_tcl_cmd('add_files -norecurse [get_property directory '
                 '[current_project]]/myproj.srcs/sources_1/bd/%s/hdl/%s_wrapper.vhd' % (self.bd_name, self.bd_name), stage='create_bd')
             self.add_tcl_cmd('update_compile_order -fileset sources_1', stage='create_bd')
+            """
 
             # Pre-Synthesis Commands
             self.add_tcl_cmd('set_property top top [current_fileset]', stage='pre_synth')
@@ -2088,6 +2095,21 @@ proc puts_red {s} {
 
             # Let Yellow Blocks add their own tcl commands
             self.gen_yellowblock_tcl_cmds()
+
+            # TODO potentially temporary place holder for save, validate, and export block design.
+            # This is because the rfdc has not been migrated to having a `modify_bd` command implementation and instead
+            # its additions are in `gen_tcl_cmds` using the `pre_synth` stage. We need to then capture those additions first.
+            # Also, either rfdc needs to be migrated using a `modify_bd` method or determine if it better that all block
+            # design implementation work be contained within `gen_tcl_cmds`
+            self.add_tcl_cmd('save_bd_design', stage='pre_synth')
+            self.add_tcl_cmd('validate_bd_design', stage='pre_synth')
+            self.add_tcl_cmd('generate_target all [get_files [get_property directory '
+                '[current_project]]/myproj.srcs/sources_1/bd/%s/%s.bd]' % (self.bd_name, self.bd_name), stage='pre_synth')
+            self.add_tcl_cmd('make_wrapper -files [get_files [get_property directory '
+                '[current_project]]/myproj.srcs/sources_1/bd/%s/%s.bd] -top' % (self.bd_name, self.bd_name), stage='pre_synth')
+            self.add_tcl_cmd('add_files -norecurse [get_property directory '
+                '[current_project]]/myproj.srcs/sources_1/bd/%s/hdl/%s_wrapper.vhd' % (self.bd_name, self.bd_name), stage='pre_synth')
+            self.add_tcl_cmd('update_compile_order -fileset sources_1', stage='pre_synth')
 
             # Determine if the design meets timing or not
             self.add_tcl_cmd('check_timing impl_1', stage='promgen') # promgen so the error comes last
@@ -2434,15 +2456,17 @@ proc puts_red {s} {
                     for v in val:
                         self.add_tcl_cmd(v, stage=key)
 
-
     def gen_bd_tcl_cmds(self):
+        """
+        Allow each yellowblock to generate tcl commands specific to creating
+        a block design
+        """
         self.logger.info('Assembling the block design from'
                          ' yellow block peripherals')
         for obj in self.periph_objs:
             c = obj.modify_bd(self.bd)
 
         self.add_tcl_cmd(self.bd.gen_tcl(), stage='create_bd')
-
 
     def gen_yellowblock_custom_hdl(self):
         """

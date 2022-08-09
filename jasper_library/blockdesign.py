@@ -23,15 +23,11 @@ class BlockDesign(object):
     else:
       raise ValueError("'name' must be a string of non-zero length")
 
-    # TODO what about a 'place_bd_ip' stage and a 'build_bd' stage? This allows for placing all IP and then wiring it up.
-    # could this help more with getting interfaces correct?
     self.bd_tcl_cmds = {
       'place_bd_ip'     : [],
       'build_bd'        : [],
       'assign_bd_addrs' : []
     }
-    #self.bd_tcl_cmds = {}
-    #self.bd_tcl_cmds['build_bd'] = []
 
     # not sure if this list will be helpful, or what needs to be added to be helpful
     self.design_ips = []
@@ -85,7 +81,8 @@ class BlockDesign(object):
     self.bd_tcl_cmds['build_bd'] += ['create_bd_port {:s} {:s}'.format(opt_str, name)]
 
   def assign_address(self, addr_space, addr_seg, offset, range):
-    #self.bd_tcl_cmds['assign_bd_addrs'] += ['assign_bd_address -offset 0xA0000000 -range 0x00010000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs M_AXI/Reg] -force
+    #self.bd_tcl_cmds['assign_bd_addrs'] += ['assign_bd_address -offset 0xA0000000 -range 0x00010000 -target_address_space
+    #[get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs M_AXI/Reg] -force
     self.bd_tcl_cmds['assign_bd_addrs'] += ['assign_bd_address -offset {:s}'
                                             ' -range {:s}'
                                             ' -target_address_space [get_bd_addr_spaces {:s}]'
@@ -122,8 +119,8 @@ class BlockDesign(object):
     self.bd_tcl_cmds['build_bd'] += cmds
     
 
-  def add_raw_cmd(self, cmd):
-    self.bd_tcl_cmds['build_bd'] += [cmd]
+  def add_raw_cmd(self, cmd, stage='build_bd'):
+    self.bd_tcl_cmds[stage] += [cmd]
 
   def gen_tcl(self):
     print("building tclfile...")

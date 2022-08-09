@@ -9,7 +9,7 @@ class zcu208(YellowBlock):
         self.add_source('infrastructure/zcu216_clk_infrastructure.sv')
         self.add_source('utils/cdc_synchroniser.vhd')
 
-        self.blkdesign = '{:s}_base'.format(self.platform.conf['name'])
+        self.blkdesign = '{:s}_bd'.format(self.platform.conf['name'])
 
         self.pl_clk_mhz = self.blk['pl_clk_rate']
         self.T_pl_clk_ns = 1.0/self.pl_clk_mhz*1000
