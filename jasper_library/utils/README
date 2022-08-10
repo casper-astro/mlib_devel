@@ -1,0 +1,23 @@
+
+Notes when using make_fpg.py utility
+
+This utility is used to generate an fpg file from a .bin or a .bit bitstream found in a CASPER Toolflow compile directory "where the Vivado Backend has already been run and generated "
+
+The following guidelines (copied from the '__main__' section of the file are useful:
+
+("-d", "--compile_dir", dest="compile_dir", type=str, default=None, help="Absolute path to compile directory, where the project files and generated bitstreams are located"
+("-f", "--fpg_name", dest="fpg", type=str, default=None, help="Name (excluding extension) for the output fpg file. Timestamp and extension will be appended to this. Defaults to the project name from the compile directory name.")
+("-i", "--implementation", dest="impl", type=str, default=['1'], nargs='*', help="Which implementation run should be used? Can pass multiple values and an fpg file will be generated for each. Provide only implementation numbers as a space separated list "Defaults to 'impl_1'")
+("-p", "--platform", dest='platform', type=str, default='s', help="Which hardware platform is being targeted? Affects the data formatting of the .bin file. The SKARAB [s] is the default hardware platform. Other options: Red Pitya [rp]. Note that only the abbreviations for the platforms should be specified")
+("-b", "--fpg_format", dest='fpg_format', type=str, default='bin', help="Which bitstream format does the generated fpg contain - bin or bit? Other options: [bit]. Xilinx alveo card (and more) requires .bit file for programming while other platforms require .bin file")
+
+For example, when generating an fpg file from a .bin bitstream and targeting the red pitaya, type the following:
+
+python make_fpg.py -d <compile_dir> -f <fpg_name> -p rp
+
+
+For example, when generating an fpg file from a .bit bitstream and targeting the alveo, type the following:
+
+python make_fpg.py -d <compile_dir> -f <fpg_name> -b bit
+
+
