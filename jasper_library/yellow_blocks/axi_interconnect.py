@@ -8,7 +8,7 @@ class axi_interconnect(YellowBlock):
   attr_map = { 
     'num_mi' : {'param': 'NUM_MI', 'fmt': '{{:d}}'},
     'num_si' : {'param': 'NUM_SI', 'fmt': '{{:d}}'},
-    # a whole ton more params depending on config and advanced config
+    # TODO ton more params to add depending on config and advanced config
   }
 
   class axi_interface(object):
@@ -31,6 +31,7 @@ class axi_interconnect(YellowBlock):
 
 
   def initialize(self):
+    # deserialize block from its parameter attribute map
     for attr, _ in iteritems(self.attr_map):
       setattr(self, attr, self.blk[attr])
 
@@ -66,8 +67,6 @@ class axi_interconnect(YellowBlock):
 
     # if the path for the connection is not in the current block design a port
     # must be made and the top module must expose it
-    # TODO COMPARE with how it is done with other classes/ybs, like `zynq_usplus` and
-    # is there a way to settle on common reusable approach
     for m in self.maxi:
       if len(m.dest.split('/')) == 1:
         top_intf_prefix = m.dest.lower()
@@ -94,7 +93,6 @@ class axi_interconnect(YellowBlock):
 
 
   def modify_bd(self, bd):
-    print("***** {:s}, modify block design *****".format(self.name))
     bd.create_cell(self.blocktype, self.name)
 
     # apply configurations
@@ -109,7 +107,6 @@ class axi_interconnect(YellowBlock):
 
     # connect slave interfaces
     for s in self.saxi:
-      print('adding saxi clocks')
       bd.connect_net(s.clk_src, '{:s}/{:s}'.format(self.name, s.clk_net_name))
       bd.connect_net(s.rst_src, '{:s}/{:s}'.format(self.name, s.rst_net_name))
       bd.connect_intf_net(s.dest, '{:s}/{:s}'.format(self.name, s.port_net_name))
@@ -120,7 +117,7 @@ class axi_interconnect(YellowBlock):
       bd.connect_net(m.rst_src, '{:s}/{:s}'.format(self.name, m.rst_net_name))
 
       # make M AXI external
-      if len(m.dest.split('/')) == 1: # hueristic used to know when to make pins external to bd
+      if len(m.dest.split('/')) == 1: # assumption used to know when to make pins external to bd
         intf_pin_name = '{:s}/{:s}'.format(self.name, m.port_net_name)
         ext_intf_name = m.dest
 
@@ -146,17 +143,14 @@ class axi_interconnect(YellowBlock):
         bd.connect_intf_net('{:s}'.format(intf_pin_name), ext_intf_name)
       #else:
         # assume slave will make connection
-    
 
   def gen_children(self):
     children = []
     return children
 
-
   def gen_constraints(self):
     cons = []
     return cons
-
 
   def gen_tcl_cmds(self):
     tcl_cmds = {}

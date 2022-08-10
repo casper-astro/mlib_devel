@@ -45,15 +45,13 @@ class zynq_usplus(YellowBlock):
 
   @staticmethod
   def factory(blk, plat, hdl_root=None):
-    if plat.fpga.startswith('xczu'):
-      #return zynq_usplus_rfsoc(blk, plat, hdl_root)
+    if plat.conf.get('family', None) in ["ultrascaleplus", "rfsoc"]:
       return zynq_ultra_ps_e(blk, plat, hdl_root)
     else:
-      self.throw_error("ERROR: factory method does not implement a generator for this part")
+      self.throw_error("ERROR: this part cannot instance an MPSoC")
       pass
 
 
-#class zynq_usplus_rfsoc(zynq_usplus):
 class zynq_ultra_ps_e(zynq_usplus):
   def initialize(self):
     # TODO change path to zynq_mpsoc
@@ -69,11 +67,6 @@ class zynq_ultra_ps_e(zynq_usplus):
       for attr, _ in iteritems(self.maxi_attr_map):
         if attr in mconf:
           setattr(m, attr, mconf[attr])
-
-      #for attr, _ in iteritems(self.maxi_attr_map):
-      #  maxi_n_attr = "maxi{:d}_{:s}".format(midx, attr)
-      #  if maxi_n_attr in self.blk:
-      #    setattr(m, attr, self.blk[maxi_n_attr])
 
       mintf = self.blk['maxi_{:d}'.format(midx)]['intf']
       for k,v in mintf.items():
@@ -91,7 +84,6 @@ class zynq_ultra_ps_e(zynq_usplus):
 
 
   def modify_top(self, top):
-    # So far, assuming a bd with this name is best way I know how to get done what I need to
     blkdesign = '{:s}_bd'.format(self.platform.conf['name'])
     bd_inst = top.get_instance(blkdesign, '{:s}_inst'.format(blkdesign))
 
@@ -128,7 +120,6 @@ class zynq_ultra_ps_e(zynq_usplus):
 
 
   def modify_bd(self, bd):
-    print("***** {:s}, modify block design *****".format(self.name))
     bd.create_cell(self.blocktype, self.name)
 
     # apply mpsoc platform presets
@@ -149,9 +140,9 @@ class zynq_ultra_ps_e(zynq_usplus):
     """
     THERE IS A BUG IN VIVADO PARAMETER PROPAGATION -- need to read the value from the mpsoc and convert to Hz
     to reproduce bug:
-      - show the set value, prints 100
+      - show the set value, (should print 100)
       - validate the block design with -quiet, no fail
-      - print again, still 100.
+      - print again (still 100)
       - no open in Vivado run the same sequence, works fine
     bd.add_raw_cmd('puts [get_property CONFIG.FREQ_HZ [get_bd_intf_pins mpsoc/M_AXI_HPM0_FPD]]')
     bd.add_raw_cmd('validate_bd_design -quiet')

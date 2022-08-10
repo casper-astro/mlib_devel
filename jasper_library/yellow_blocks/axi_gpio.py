@@ -30,8 +30,8 @@ class axi_gpio(YellowBlock):
       self.clk_src = 'pl_sys_clk'
       self.rst_src = 'axil_arst_n'
       self.clk_net_name  = 's_axi_aclk'
-      self.port_net_name = 'S_AXI'
       self.rst_net_name  = 's_axi_aresetn'
+      self.port_net_name = 'S_AXI'
 
   class gpio_interface(object):
     def __init__(self, mode, interface_idx, dest=None):
@@ -45,7 +45,7 @@ class axi_gpio(YellowBlock):
       self.port_net_name = 'gpio_io_o'
 
   def initialize(self):
-
+    # deserialize block from its parameter attribute map
     for attr, _ in iteritems(self.attr_map):
       setattr(self, attr, self.blk[attr])
 
@@ -60,9 +60,6 @@ class axi_gpio(YellowBlock):
       # current approach to get vivado is g.mode[0].upper()
       g = self.gpio_interface('out', idx, dest=intf['dest'])
       self.gpio.append(g)
-
-    # provides TODO
-    #self.provides.append('{:s}/{:s}'.format(self.name, self.gpio.dest))
 
     # requires
     self.requires.append('pl_sys_clk')
@@ -81,7 +78,6 @@ class axi_gpio(YellowBlock):
         bd_inst.add_port('{:s}'.format(top_intf_prefix), '{:s}'.format(bd_intf_prefix),  width=self.gpio_width, dir=g.mode, parent_port=True)
 
   def modify_bd(self, bd):
-    print("***** {:s}, modify block design *****".format(self.name))
     bd.create_cell(self.blocktype, self.name)
 
     # apply configurations
@@ -98,7 +94,7 @@ class axi_gpio(YellowBlock):
 
     for g in self.gpio:
       # make external
-      if len(g.dest.split('/')) == 1: # hueristic used to know when to make pins external to bd
+      if len(g.dest.split('/')) == 1: # assumption used to know when to make pins external to bd
         intf_pin_name = '{:s}/{:s}'.format(self.name, g.port_net_name)
         ext_port_name = g.dest
 
@@ -107,21 +103,14 @@ class axi_gpio(YellowBlock):
       #else:
         # assume slave will make connection
 
-    ## TODO make dynamic
-    #ext_port_name = self.gpio_intf['dest']
-    #bd.add_raw_cmd('create_bd_port -dir {:s} -from {:d} -to {:d} {:s}'.format('O', 1, 0, ext_port_name))
-    #bd.add_raw_cmd('connect_bd_net [get_bd_ports {:s}] [get_bd_pins {:s}/{:s}]'.format(ext_port_name, self.name, 'gpio_io_o'))
-
 
   def gen_children(self):
     children = []
     return children
 
-
   def gen_constraints(self):
     cons = []
     return cons
-
 
   def gen_tcl_cmds(self):
     tcl_cmds = {}

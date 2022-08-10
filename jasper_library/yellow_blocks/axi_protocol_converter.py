@@ -6,44 +6,50 @@ from .yellow_block import YellowBlock
 
 class axi_protocol_converter(YellowBlock):
   attr_map = {
-   'aruser_wid'      : {'param': 'ARUSER_WIDTH',     'fmt': "{{:d}}"},
-   'awuser_wid'      : {'param': 'AWUSER_WIDTH',     'fmt': "{{:d}}"},
-   'buser_wid'       : {'param': 'BUSER_WIDTH',      'fmt': "{{:d}}"},
-   'data_wid'        : {'param': 'DATA_WIDTH',       'fmt': "{{:d}}"},
-   'id_wid'          : {'param': 'ID_WIDTH',         'fmt': "{{:d}}"},
-   'mi_protocol'     : {'param': 'MI_PROTOCOL',      'fmt': "{{:s}}"},
-   'rw_mode'         : {'param': 'READ_WRITE_MODE',  'fmt': "{{:s}}"},
-   'ruser_wid'       : {'param': 'RUSER_WIDTH',      'fmt': "{{:d}}"},
-   'si_protocol'     : {'param': 'SI_PROTOCOL',      'fmt': "{{:s}}"},
-   'translation_mode': {'param': 'TRANSLATION_MODE', 'fmt': "{{:d}}"}, #2 \\'] # split incompatible burts into multiple transactions
-   'wuser_wid'       : {'param': 'WUSER_WIDTH',      'fmt': "{{:d}}"}
+    'aruser_wid'      : {'param': 'ARUSER_WIDTH',     'fmt': "{{:d}}"},
+    'awuser_wid'      : {'param': 'AWUSER_WIDTH',     'fmt': "{{:d}}"},
+    'buser_wid'       : {'param': 'BUSER_WIDTH',      'fmt': "{{:d}}"},
+    'data_wid'        : {'param': 'DATA_WIDTH',       'fmt': "{{:d}}"},
+    'id_wid'          : {'param': 'ID_WIDTH',         'fmt': "{{:d}}"},
+    'mi_protocol'     : {'param': 'MI_PROTOCOL',      'fmt': "{{:s}}"},
+    'rw_mode'         : {'param': 'READ_WRITE_MODE',  'fmt': "{{:s}}"},
+    'ruser_wid'       : {'param': 'RUSER_WIDTH',      'fmt': "{{:d}}"},
+    'si_protocol'     : {'param': 'SI_PROTOCOL',      'fmt': "{{:s}}"},
+    'translation_mode': {'param': 'TRANSLATION_MODE', 'fmt': "{{:d}}"}, #2 \\'] # split incompatible burts into multiple transactions
+    'wuser_wid'       : {'param': 'WUSER_WIDTH',      'fmt': "{{:d}}"}
   }
 
-  #class axi_interface(object):
-  #  def __init__(self):
-  #    self.type = None
-  #    self.mode = None
-  #    self.clk_src = None
-  #    self.rst_src = None
-  #    self.clk_net_name = None
-  #    self.rst_net_name = None
-  #    self.port_net_name = None
+  class axi_interface(object):
+    def __init__(self, mode, interface_idx=None, dest=None):
+      self.type = None
+      self.mode = mode
+      self.idx = interface_idx
+      self.dest = dest
+
+      self.clk_src = 'pl_sys_clk'
+      self.rst_src = 'axil_arst_n'
+      self.clk_net_name = 'aclk'
+      self.rst_net_name = 'aresetn'
+      self.port_net_name = 'S_AXI'
 
   def initialize(self):
-
+    # deserialize block from its parameter attribute map
     for attr, _ in iteritems(self.attr_map):
       setattr(self, attr, self.blk[attr])
 
-    self.maxi_intf = self.blk['maxi_intf']
-    self.saxi_intf = self.blk['saxi_intf']
+    saxi_intf = self.blk['saxi_intf']
+    self.saxi = self.axi_interface('Slave', 0, dest=saxi_intf['dest'])
+
+    maxi_intf = self.blk['maxi_intf']
+    self.maxi = self.axi_interface('Master', 0, dest=maxi_intf['dest'])
 
     # provides
-    self.provides.append(self.maxi_intf['dest'])
+    self.provides.append(self.maxi.dest)
 
     # requires
-    self.requires.append('pl_sys_clk')
-    self.requires.append('axil_arst_n')
-    self.requires.append(self.saxi_intf['dest'])
+    self.requires.append(self.saxi.clk_src)
+    self.requires.append(self.saxi.rst_src)
+    self.requires.append(self.saxi.dest)
 
   def modify_top(self, top):
     blkdesign = '{:s}_bd'.format(self.platform.conf['name'])
@@ -51,8 +57,6 @@ class axi_protocol_converter(YellowBlock):
 
     # if the path for the connection is not in the current block design a port
     # must be made and the top module must expose it
-    # TODO COMPARE `maxi_intf['dest']` with how it is done with a class in `zynq_usplus`
-    # would be better settle on common approach
     if len(self.maxi_intf['dest'].split('/')) == 1:
       top_intf_prefix = self.maxi_intf['dest'].lower()
       bd_intf_prefix = self.maxi_intf['dest']
@@ -78,21 +82,23 @@ class axi_protocol_converter(YellowBlock):
 
 
   def modify_bd(self, bd):
-    print("***** {:s}, modify block design *****".format(self.name))
     bd.create_cell(self.blocktype, self.name)
 
-    bd.connect_net('pl_sys_clk', '{:s}/{:s}'.format(self.name, 'aclk'))
-    bd.connect_net('axil_arst_n', '{:s}/{:s}'.format(self.name, 'aresetn'))
+    # apply configurations
+    bd.add_raw_cmd('set_property -dict [list \\')
+    bd.build_config_cmd(self, self.attr_map, None)
+    bd.add_raw_cmd('] [get_bd_cells {:s}]'.format(self.name))
 
-    # TODO what about external ports coming into the block design?
-    bd.connect_intf_net(self.saxi_intf['dest'], '{:s}/{:s}'.format(self.name,'S_AXI'))
+    bd.connect_net(self.saxi.clk_src, '{:s}/{:s}'.format(self.name, self.saxi.clk_net_name))
+    bd.connect_net(self.saxi.rst_src, '{:s}/{:s}'.format(self.name, self.saxi.rst_net_name))
+
+    bd.connect_intf_net(self.saxi.dest, '{:s}/{:s}'.format(self.name, self.saxi.port_net_name))
 
     # make M AXI external
-    if len(self.maxi_intf['dest'].split('/')) == 1:
-      intf_pin_name = '{:s}/{:s}'.format(self.name, 'M_AXI') # TODO Make M_AXI not magic string
-      ext_intf_name = self.maxi_intf['dest']
+    if len(self.maxi.dest.split('/')) == 1: # assumption used to know when to make pins external to bd
+      intf_pin_name = '{:s}/{:s}'.format(self.name, self.maxi.dest)
+      ext_intf_name = self.maxi.dest
 
-      # approach 2
       bd.create_intf_port(ext_intf_name, 'Master', 'axi4')
 
       bd.add_raw_cmd('set_property -dict [list \\')
@@ -113,29 +119,16 @@ class axi_protocol_converter(YellowBlock):
       bd.add_raw_cmd('] [get_bd_intf_ports {:s}]'.format(ext_intf_name))
 
       bd.connect_intf_net('{:s}'.format(intf_pin_name), ext_intf_name)
-
-      # approach 2 -- assumes already will know the deterministic naming of the ports
-      #bd.add_raw_cmd('make_bd_intf_pins_external [get_bd_intf_pins axi_proto_conv/M_AXI]')
-      #bd.add_raw_cmd('set_property NAME {:s} [get_bd_intf_ports M_AXI_0]'.format(port_name))
-      #bd.add_raw_cmd('set_property CONFIG.FREQ_HZ $ps_freq_hz [get_bd_intf_ports {:s}]'.format(port_name))
     #else:
       # assume the slave makes the connection
-
-    # apply configurations
-    bd.add_raw_cmd('set_property -dict [list \\')
-    bd.build_config_cmd(self, self.attr_map, None)
-    bd.add_raw_cmd('] [get_bd_cells {:s}]'.format(self.name))
-
 
   def gen_children(self):
     children = []
     return children
 
-
   def gen_constraints(self):
     cons = []
     return cons
-
 
   def gen_tcl_cmds(self):
     tcl_cmds = {}

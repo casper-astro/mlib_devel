@@ -78,7 +78,6 @@ class rfsoc4x2(YellowBlock):
         #bd_inst = top.get_instance(self.blkdesign, '{:s}_inst'.format(self.blkdesign))
 
     def modify_bd(self, bd):
-      print("***** {:s}, modify block design *****".format(self.name))
       # interesting that nothing ends up here? is that a problem?
       # perhaps, it seems this is where we need wire everything up?
 
@@ -88,7 +87,7 @@ class rfsoc4x2(YellowBlock):
       # it is just a manual specification when setting up the platform file
       # and to some extent, this might keep all the interface stuff out of the block constructor and can just be a
       # platform-level block design api thing.
-
+      pass
 
     def gen_children(self):
         children = []
