@@ -9,16 +9,6 @@ class rfsoc4x2(YellowBlock):
         self.add_source('utils/cdc_synchroniser.vhd')
 
         # create reference to block design name
-        """
-        If I continue to remain uneasy about this approach to integration of a block design consider then the
-        thought I had about giving the block design a name in the the platform simulink yb. Either hardcode it there
-        as a place holder or allow it to even be text field that the user can chose to select its name.
-
-        wait... because the above not my work. So, i guess the real hangup I have is that that the platform.conf and the xsg platform yellowblock
-        have two different origins and scopes. With the platform.conf coming from the yaml and accessible from all instanced yellowblocks.  whereas
-        the information from xsg platform yb can only be accessed in this moment here. And so it is a choice about where to put block design
-        naming/source information and tradeoffs associated with tat
-        """
         self.blkdesign = '{:s}_bd'.format(self.platform.conf['name'])
 
         self.pl_clk_mhz = self.blk['pl_clk_rate']
@@ -42,7 +32,7 @@ class rfsoc4x2(YellowBlock):
         # rfsocs use the requires/provides for to check for `sysref` and `pl_sysref` for MTS
         self.provides.append('pl_sysref') # rfsoc platform/infrastructure provides so rfdc can require
 
-        # TODO? probably needs to add a requires "M_AXI"???
+        self.requires.append('M_AXI') # axi4lite interface from block design
 
     def modify_top(self, top):
         top.assign_signal('axil_clk', 'pl_sys_clk')
@@ -54,7 +44,7 @@ class rfsoc4x2(YellowBlock):
         # generate clock parameters to use pl_clk to drive as the user IP clock
         # TODO: will need to make changes when other user ip clk source options provided
         clkparams = clk_factors(self.pl_clk_mhz, self.platform.user_clk_rate, vco_min=800.0, vco_max=1600.0)
-        print("clkparam", clkparams)
+
         inst_infr = top.get_instance('zcu216_clk_infrastructure', 'zcu216_clk_infr_inst')
         inst_infr.add_parameter('PERIOD', "{:0.3f}".format(self.T_pl_clk_ns))
         inst_infr.add_parameter('MULTIPLY', clkparams[0])
@@ -69,54 +59,20 @@ class rfsoc4x2(YellowBlock):
         inst_infr.add_port('adc_clk270', 'adc_clk270')
         inst_infr.add_port('mmcm_locked', 'mmcm_locked', dir='out', parent_port=True)
 
-        # TODO these were moved to the zynq_usplus design but it is clear that there is a choice
-        # to be made about how ports that are to be made external need to be known at the time of modify top
-        # and so this makes an argument for the platform file being the one where we wire everything up
-        # because we are making the decisions about what is being placed or not
-
-        # this platform will use a Vivado block design, create an instance of the block design wrapper in the top
-        #bd_inst = top.get_instance(self.blkdesign, '{:s}_inst'.format(self.blkdesign))
-
-    def modify_bd(self, bd):
-      # interesting that nothing ends up here? is that a problem?
-      # perhaps, it seems this is where we need wire everything up?
-
-      # there is an argument that the board design should add the external ports (back to wiring everything up)
-      # because take the zcu216 where we send the GPIO output two two places (to the spi mux and just some LEDs)
-      # this seems like it could be challenging to get the GPIO to programmatically handle this instead of knowing
-      # it is just a manual specification when setting up the platform file
-      # and to some extent, this might keep all the interface stuff out of the block constructor and can just be a
-      # platform-level block design api thing.
-      pass
-
     def gen_children(self):
         children = []
-        children.append(YellowBlock.make_block({'tag': 'xps:sys_block', 'board_id': '160', 'rev_maj': '2', 'rev_min': '0', 'rev_rcs': '1'}, self.platform))
+        children.append(YellowBlock.make_block({'tag': 'xps:sys_block', 'board_id': '166', 'rev_maj': '2', 'rev_min': '0', 'rev_rcs': '1'}, self.platform))
 
-        """
-        intf = {
-          # most interfaces will be aware to create type, mode, path
-          'type': # aware
-          'mode': # aware
-          'port_net_name'/'path': # aware
-          'dest': # must be specified
-          'clk_src': # default to `pl_sys_clk` unless overridden
-          'clk_net_name': #aware
-          'rst_src': # default to `axil_rstn` unless overriden
-          'rst_net_name': # aware
-        }
-        """
+        # instance block design containing mpsoc, and axi protocol converter for casper
+        # mermory map (HPM0)
         zynq_blk = {
             'tag'     : 'xps:zynq_usplus',
             'name'    : 'mpsoc',
             'presets' : 'rfsoc4x2_mpsoc',
             'maxi_0'  : {'conf': {'enable': 1, 'data_width': 32},  'intf': {'dest': 'axi_proto_conv/S_AXI'}},
-            'maxi_1'  : {'conf': {'enable': 0, 'data_width': 128}, 'intf': {'dest': 'axi_interconnect/S00_AXI'}},
+            'maxi_1'  : {'conf': {'enable': 0, 'data_width': 128}, 'intf': {}},
             'maxi_2'  : {'conf': {'enable': 0, 'data_width': 128}, 'intf': {}}
             #'maxi_2'  : {'conf': {'enable': 1, 'data_width': 128}, 'intf': {'dest': 'M_AXI_0'}}
-            #'maxi_0'  : {'enable': 1, 'dest_intf': 'axi_proto_conv/S_AXI', 'data_width': 32},
-            #'maxi_1'  : {'enable': 1, 'dest_intf': 'axi_interconnect/S00_AXI', 'data_width': 128},
-            #'maxi_2'  : {'enable': 1, 'dest_intf': 'M_AXI_0', 'data_width': 128}
         }
         children.append(YellowBlock.make_block(zynq_blk, self.platform))
 
@@ -138,38 +94,6 @@ class rfsoc4x2(YellowBlock):
             'wuser_wid'       : 0
         }
         children.append(YellowBlock.make_block(proto_conv_blk, self.platform))
-
-       ## test adding an AXI GPIO for when adding to the zcu216/208
-       # axi_icx_blk = {
-       #   'tag'      : 'xps:axi_interconnect',
-       #   'name'     : 'axi_icx',
-       #   'saxi_intf': [{'dest': 'mpsoc/M_AXI_HPM1_FPD'}],
-       #   'maxi_intf': [{'dest': 'gpio/S_AXI'}],
-       #   'num_mi'   : 1,
-       #   'num_si'   : 1
-       # }
-       # children.append(YellowBlock.make_block(axi_icx_blk, self.platform))
-
-       # axi_gpio_blk = {
-       #   'tag'         : 'xps:axi_gpio',
-       #   'name'        : 'gpio',
-       #   'saxi_intf'   : {'dest': 'axi_icx/M00_AXI'},
-       #   'gpio_intf'   : [{'dest': 'mux_led'}, {'dest': 'clk104_spi_mux_sel'}],
-       #   'enable_dual' : 0,
-       #   'enable_intr' : 0,
-       #   'all_inputs'  : 0,
-       #   'all_outputs' : 1,
-       #   'gpio_width'  : 2,
-       #   'default_val' : 0x00000003,
-       #   'tri_default' : 0xffffffff,
-       #   'all_inputs2' : 0,
-       #   'all_outputs2': 0,
-       #   'default_val2': 0x00000000,
-       #   'gpio_width2' : 32,
-       #   'tri_default2': 0xffffffff
-       # }
-       # children.append(YellowBlock.make_block(axi_gpio_blk, self.platform))
-
         return children
 
 

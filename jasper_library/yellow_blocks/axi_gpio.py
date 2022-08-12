@@ -103,6 +103,8 @@ class axi_gpio(YellowBlock):
       #else:
         # assume slave will make connection
 
+    # TODO hard coded information, needs to be made dynamic
+    bd.assign_address('mpsoc/Data', '{:s}/{:s}/Reg'.format(self.name, self.saxi.port_net_name), '0xB0040000', '0x00010000')
 
   def gen_children(self):
     children = []

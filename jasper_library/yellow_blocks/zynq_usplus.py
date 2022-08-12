@@ -55,7 +55,8 @@ class zynq_usplus(YellowBlock):
 class zynq_ultra_ps_e(zynq_usplus):
   def initialize(self):
     # TODO change path to zynq_mpsoc
-    self.mpsoc_presets_path = '{:s}/zynq/{:s}.tcl'.format(self.hdl_root, 'mpsoc_rfsoc4x2')
+    self.presets = self.blk['presets']
+    self.mpsoc_presets_path = '{:s}/zynq/{:s}.tcl'.format(self.hdl_root, self.presets)
 
     # build maxi interfaces
     self.num_maxi = 3
@@ -217,31 +218,12 @@ class zynq_ultra_ps_e(zynq_usplus):
     bd.connect_port('axil_arst_n', 'axil_arst_n')
 
     # assign address spaces
+    # TODO hard coded information needs to be dynamic
     bd.assign_address('mpsoc/Data', 'M_AXI/Reg', '0xA0000000', '0x00010000')
 
 
   def gen_children(self):
     children = []
-
-    #if self.generate_axi_protocol_converter:
-    #  proto_conv_blk = {
-    #      'tag'             : 'xps:axi_protocol_converter',
-    #      'saxi_ifpath'     : 'mpsoc/M_AXI_HPM0_FPD',
-    #      'maxi_ifpath'     : 'M_AXI',
-    #      'aruser_wid'      : 0,
-    #      'awuser_wid'      : 0,
-    #      'buser_wid'       : 0,
-    #      'data_wid'        : 32,
-    #      'id_wid'          : 16,
-    #      'mi_protocol'     : 'AXI4LITE',
-    #      'rw_mode'         : 'READ_WRITE',
-    #      'ruser_wid'       : 0,
-    #      'si_protocol'     : 'AXI4',
-    #      'translation_mode': 2,
-    #      'wuser_wid'       : 0,
-    #  }
-    #  children.append(YellowBlock.make_block(proto_conv_blk, self.platform))
-
     return children
 
 
