@@ -164,11 +164,11 @@ class onehundredgbe_usplus(onehundred_gbe):
             self.include_rs_fec = 0
 
         if self.include_rs_fec:
-            self.cmac_ip_name = 'EthMACPHY100GQSFP4x_rsfec'
+            self.cmac_ip_name = 'cmac_usplus_core_support'
             self.add_source('onehundred_gbe/ip/EthMACPHY100GQSFP4x_rsfec/EthMACPHY100GQSFP4x_rsfec.xci')
             self.add_source('onehundred_gbe/cmac_shared/cmac_usplus_core_support.sv')
         else:
-            self.cmac_ip_name = 'EthMACPHY100GQSFP4x'
+            self.cmac_ip_name = 'cmac_usplus_core_support_norsfec'
             self.add_source('onehundred_gbe/ip/EthMACPHY100GQSFP4x/EthMACPHY100GQSFP4x.xci')
             self.add_source('onehundred_gbe/cmac_shared/cmac_usplus_core_support_norsfec.sv')
 
