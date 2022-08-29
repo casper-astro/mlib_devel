@@ -1,4 +1,13 @@
-def clk_factors (clk_freq, target_freq):
+def clk_factors (clk_freq, target_freq, vco_min=650.0, vco_max=1150):
+    """
+    PLLs/MMCM VCOs freq have a constrained target frequency range
+
+    The vco_min/max defaults are legacy from virtex 6 with the following note:
+    The vco is required to be between 600 and 1200 for the -1
+    speed grade vitrex 6, but it was found being close to the boundaries
+    causes issues, so the VCO is constrained to between 650 and 1150.
+    """
+
     bestM  = 1
     bestD  = 1
     bestDD = 1
@@ -16,13 +25,10 @@ def clk_factors (clk_freq, target_freq):
     else:
         DD = list(range(1,81,1))
     # x = [x 100*M(i)/D(j)/DD(k)];
-    # the VCO freq is required to be between 600 and 1200 for the -1
-    # speed grade vitrex 6, but it was found being close to the boundaries
-    # causes issues, so the VCO is constrained to between 650 and 1150.
     for i in M:
         for j in D:
             for k in DD:
-                if (clk_freq*i/k < 1150 and clk_freq*i/k > 650):
+                if (clk_freq*i/k < vco_max and clk_freq*i/k > vco_min):
                     diff = abs(clk_freq*i/j/k - target_freq);
                     if diff < bestDiff:
                          bestDiff = diff;

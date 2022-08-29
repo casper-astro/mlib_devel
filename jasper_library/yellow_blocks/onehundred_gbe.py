@@ -1,5 +1,5 @@
 from .yellow_block import YellowBlock
-from constraints import PortConstraint, ClockConstraint, ClockGroupConstraint
+from constraints import PortConstraint, ClockConstraint, ClockGroupConstraint, RawConstraint
 from helpers import to_int_list
 from .yellow_block_typecodes import *
 from os.path import join
@@ -19,6 +19,7 @@ class onehundred_gbe(YellowBlock):
 
 class onehundredgbe_usplus(onehundred_gbe):
     def initialize(self):
+        self.requires.append('sys_clk') # used for 100G RefClk100MHz (init_clk)
         self.missing_registers = ['gmac_reg_bytes_rdy']
         self.memory_map = [
             Register('gmac_reg_core_type',            mode='r',  offset=0x00),
@@ -57,12 +58,12 @@ class onehundredgbe_usplus(onehundred_gbe):
             # The 100G core doesn't have an interface for the ARP cache which will work with the
             # AXI infrastructure we currently have, so make a new one and deal with it in software :-S
             #Register('gmac_reg_arp_cache',            mode='rw', offset=0x1000, ram=True, ram_size=8*256, data_width=32),
-            Register('gmac_arp_cache_write_enable',   mode='rw', offset=0x1000, default_val=0),
-            Register('gmac_arp_cache_read_enable',    mode='rw', offset=0x1004, default_val=0),
-            Register('gmac_arp_cache_write_data',     mode='rw', offset=0x1008, default_val=0),
-            Register('gmac_arp_cache_write_address',  mode='rw', offset=0x100C, default_val=0),
-            Register('gmac_arp_cache_read_address',   mode='rw', offset=0x1010, default_val=0),
-            Register('gmac_arp_cache_read_data',      mode='r',  offset=0x1014),
+            Register('gmac_arp_cache_write_enable_%d'  % self.port, mode='rw', offset=0x1000, default_val=0),
+            Register('gmac_arp_cache_read_enable_%d'   % self.port, mode='rw', offset=0x1004, default_val=0),
+            Register('gmac_arp_cache_write_data_%d'    % self.port, mode='rw', offset=0x1008, default_val=0),
+            Register('gmac_arp_cache_write_address_%d' % self.port, mode='rw', offset=0x100C, default_val=0),
+            Register('gmac_arp_cache_read_address_%d'  % self.port, mode='rw', offset=0x1010, default_val=0),
+            Register('gmac_arp_cache_read_data_%d'     % self.port, mode='r',  offset=0x1014),
 
             # Ignore RX/TX buffers for now -- do these actually work in the 100G core as per the mem map?
             #Register('gmac_reg_tx_buf',    mode='rw', offset=0x4000, ram=True, ram_size=2048),
@@ -74,6 +75,13 @@ class onehundredgbe_usplus(onehundred_gbe):
 
         self.add_source('onehundred_gbe/casper100g_noaxi.v')
         self.add_source('onehundred_gbe/async.v')
+        # modules shared between cmac platform implementations (gt ref clk buffers, COMMON primitives, gt resets)
+        self.add_source('onehundred_gbe/cmac_shared/cmac_shared_logic.sv')
+        self.add_source('onehundred_gbe/cmac_shared/cmac_usplus_reset_wrapper.sv')
+        self.add_source('onehundred_gbe/cmac_shared/gt_refclk_buf_wrapper.sv')
+        self.add_source('onehundred_gbe/cmac_shared/gt_usplus_gtye4_common_wrapper.sv')
+        self.add_source('onehundred_gbe/cmac_shared/cmac_usplus_0_gt_gtye4_common_wrapper.v')
+        self.add_source('onehundred_gbe/cmac_shared/gtwizard_ultrascale_v1_7_gtye4_common.v')
         self.add_source(kdir + '/preconfig/protocolchecksumprconfigsm.vhd')
         self.add_source(kdir + '/preconfig/prconfigcontroller.vhd')
         self.add_source(kdir + '/preconfig/icapwritersm.vhd')
@@ -158,14 +166,23 @@ class onehundredgbe_usplus(onehundred_gbe):
         if self.include_rs_fec:
             self.cmac_ip_name = 'EthMACPHY100GQSFP4x_rsfec'
             self.add_source('onehundred_gbe/ip/EthMACPHY100GQSFP4x_rsfec/EthMACPHY100GQSFP4x_rsfec.xci')
+            self.add_source('onehundred_gbe/cmac_shared/cmac_usplus_core_support.sv')
         else:
             self.cmac_ip_name = 'EthMACPHY100GQSFP4x'
             self.add_source('onehundred_gbe/ip/EthMACPHY100GQSFP4x/EthMACPHY100GQSFP4x.xci')
+            self.add_source('onehundred_gbe/cmac_shared/cmac_usplus_core_support_norsfec.sv')
 
         if self.ethconf.get('use_2020_ip', True):
             self.add_source(kdir + '/macphy/gmacqsfptop2.vhd')
         else:
             self.add_source(kdir + '/macphy/gmacqsfptop.vhd')
+
+        # on platforms like zcu216 4 GTYs split between 2 banks, need to instance multiple GTYE_COMMON primitives
+        try:
+          self.ncommon = ethconf['ncommon']
+        except KeyError:
+          self.logger.warning("Missing `ncommon` parameter in platform YAML file. Defaulting to 1")
+          self.ncommon = 1
 
         try:
             self.cmac_loc = self.ethconf["cmac_loc"][self.port]
@@ -216,6 +233,7 @@ class onehundredgbe_usplus(onehundred_gbe):
             inst.add_port('aximm_clk', 'axil_clk')
             inst.add_port('icap_clk', 'axil_clk')
         inst.add_port('axis_reset', self.fullname+'_rst')
+        inst.add_parameter("N_COMMON", "32'd%d" % int(self.ncommon))
         # MGT connections
         inst.add_port('mgt_qsfp_clock_p', self.portbase+'_refclk_p', dir='in', parent_port=True)
         inst.add_port('mgt_qsfp_clock_n', self.portbase+'_refclk_n', dir='in', parent_port=True)
@@ -224,26 +242,26 @@ class onehundredgbe_usplus(onehundred_gbe):
         inst.add_port('qsfp_mgt_rx_n', self.portbase+'_qsfp_mgt_rx_n', dir='in', width=4, parent_port=True)
         inst.add_port('qsfp_mgt_tx_p', self.portbase+'_qsfp_mgt_tx_p', dir='out', width=4, parent_port=True)
         inst.add_port('qsfp_mgt_tx_n', self.portbase+'_qsfp_mgt_tx_n', dir='out', width=4, parent_port=True)
-        # QSFP config interface
-        if self.platform.name in ['vcu118']:
-            inst.add_port('qsfp_modsell_ls', self.portbase+'_qsfp_modsell_ls', dir='out', parent_port=True)
-            inst.add_port('qsfp_resetl_ls',  self.portbase+'_qsfp_resetl_ls',  dir='out', parent_port=True)
-            inst.add_port('qsfp_modprsl_ls', self.portbase+'_qsfp_modprsl_ls', dir='in',  parent_port=True)
-            inst.add_port('qsfp_lpmode_ls',  self.portbase+'_qsfp_lpmode_ls',  dir='out', parent_port=True)
-            inst.add_port('qsfp_intl_ls',    '1\'b1') #self.portbase+'_qsfp_intl_ls')
-        else:
-            inst.add_port('qsfp_modsell_ls', '') #self.portbase+'_qsfp_modsell_ls')
-            inst.add_port('qsfp_resetl_ls',  '') #self.portbase+'_qsfp_resetl_ls')
-            # Core doesn't actually use modprs, and it causes annoying PR issues on the ADM-PCIe-9H7. 
-            #inst.add_port('qsfp_modprsl_ls', self.portbase+'_qsfp_modprsl_ls', dir='in', parent_port=True)
-            inst.add_port('qsfp_modprsl_ls', '1\'b0')
-            inst.add_port('qsfp_intl_ls',    '1\'b1') #self.portbase+'_qsfp_intl_ls')
-            inst.add_port('qsfp_lpmode_ls',  '') #self.portbase+'_qsfp_lpmode_ls')
+
+        # Transceiver cage managment interface - determine supported pins that the 100g core will manage from yaml file
+        # other pins may be managed by gpios in user design, these are not added here
+        qsfp_mgt_ports = self.platform.conf['onehundredgbe']['management_interface']
+        mgt_ports_list = ['modsell_ls', 'resetl_ls', 'modprsl_ls', 'intl_ls', 'lpmode_ls']
+        mgt_port_dir = ['out', 'out', 'in', 'out', 'in']
+
+        for (m, d) in zip(mgt_ports_list, mgt_port_dir):
+          if m in qsfp_mgt_ports:
+            if m == 'intl_ls':
+              inst.add_port('qsfp_{:s}'.format(m), '1\'b1')
+            else:
+              inst.add_port('qsfp_{:s}'.format(m), '{:s}_qsfp_{:s}'.format(self.portbase, m), dir=d, parent_port=True)
+          else:
+            inst.add_port('qsfp_{:s}'.format(m), '')
 
         inst.add_port('user_clk', 'user_clk')
 
         # Simulink Interfaces
-        inst.add_port('gbe_tx_afull',         self.fullname+'_tx_afull')        
+        inst.add_port('gbe_tx_afull',         self.fullname+'_tx_afull')
         inst.add_port('gbe_tx_overflow',      self.fullname+'_tx_overflow')
         inst.add_port('gbe_rx_data',          self.fullname+'_rx_data',        width=512)
         inst.add_port('gbe_rx_valid',         self.fullname+'_rx_valid')
@@ -269,8 +287,9 @@ class onehundredgbe_usplus(onehundred_gbe):
         inst.add_port('gbe_tx_byte_enable',   self.fullname+'_tx_byte_enable', width=64)
 
         # Register interfaces
+        # port number added to register memory map name, but removed by [:-2] slice here to correctly wire instance
         for reg in self.memory_map:
-            if reg.name in self.missing_registers:
+            if reg.name[:-2] in self.missing_registers:
                 continue
             if not reg.ram:
                 if 'w' in reg.mode:
@@ -293,25 +312,24 @@ class onehundredgbe_usplus(onehundred_gbe):
                         # The sys_clkcounter reg doesn't seem to do this, so who knows how it works.
                         # Maybe it doesn't.
                         top.assign_signal(self.unique_name+'_'+reg.name+'_in_we', "1'b1")
-
     def gen_constraints(self):
         consts = []
+
+        consts += [ClockConstraint(self.portbase+'_refclk_p', self.portbase+'_refclk_p', period=6.4)]
         consts += [PortConstraint(self.portbase+'_refclk_p', 'qsfp_mgt_ref_clk_p', iogroup_index=self.port)]
         consts += [PortConstraint(self.portbase+'_refclk_n', 'qsfp_mgt_ref_clk_n', iogroup_index=self.port)]
         #consts += [PortConstraint(self.portbase+'_qsfp_mgt_rx_p', 'qsfp_mgt_rx_p', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
         #consts += [PortConstraint(self.portbase+'_qsfp_mgt_rx_n', 'qsfp_mgt_rx_n', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
         #consts += [PortConstraint(self.portbase+'_qsfp_mgt_tx_p', 'qsfp_mgt_tx_p', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
         #consts += [PortConstraint(self.portbase+'_qsfp_mgt_tx_n', 'qsfp_mgt_tx_n', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
+        # constrain relevant managment interface connected to FPGA pins - determine supported pins that the 100g core will manage from yaml file
+        # other pins may be managed by gpios in user design, these are not added here
+        mgt_ports_list = ['modsell_ls', 'resetl_ls', 'modprsl_ls', 'lpmode_ls']
+        qsfp_mgt_ports = self.platform.conf['onehundredgbe']['management_interface']
 
-        if self.platform.name in ['vcu118']:
-            consts += [PortConstraint(self.portbase+'_qsfp_modsell_ls', 'qsfp_modsell_ls', iogroup_index=self.port)]
-            consts += [PortConstraint(self.portbase+'_qsfp_resetl_ls',  'qsfp_resetl_ls', iogroup_index=self.port)]
-            consts += [PortConstraint(self.portbase+'_qsfp_modprsl_ls', 'qsfp_modprsl_ls', iogroup_index=self.port)]
-            consts += [PortConstraint(self.portbase+'_qsfp_lpmode_ls',  'qsfp_lpmode_ls', iogroup_index=self.port)]
-        else:
-            # Core doesn't actually use modprs, and it causes annoying PR issues on the ADM-PCIe-9H7. 
-            #consts += [PortConstraint(self.portbase+'_qsfp_modprsl_ls', 'qsfp_modprsl_ls', iogroup_index=self.port)]
-            pass
+        for m in mgt_ports_list:
+          if m in qsfp_mgt_ports:
+            consts += [PortConstraint('{:s}_qsfp_{:s}'.format(self.portbase, m), 'qsfp_{:s}'.format(m), iogroup_index=self.port)]
 
         clkname = self.portbase+'_refclk_p' # defined by IP
         #self.myclk = ClockConstraint(self.portbase+'_refclk_p', freq=self.refclk_freq)
@@ -320,10 +338,13 @@ class onehundredgbe_usplus(onehundred_gbe):
         consts += [ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets sys_clk]', '-include_generated_clocks %s' % clkname, 'asynchronous')]
         consts += [ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets user_clk]', '-include_generated_clocks %s' % clkname, 'asynchronous')]
         consts += [ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets axil_clk]', '-include_generated_clocks %s' % clkname, 'asynchronous')]
+        # Consider moving this to the platform yellow block. Also, use non-specific clock names.
         if self.platform.name in ['vcu128']:
             consts += [ClockGroupConstraint('-include_generated_clocks sys_clk_p_CLK', '-include_generated_clocks %s' % clkname, 'asynchronous')]
             consts += [ClockGroupConstraint('-include_generated_clocks adcclk0', '-include_generated_clocks %s' % clkname, 'asynchronous')]
         
+        # ignore cdc boundaries within core support logic
+        consts += [RawConstraint('set_false_path -to [get_pins -leaf -of_objects [get_cells -hier *cdc_to* -filter {is_sequential}] -filter {NAME=~*cmac_cdc*/*/D}]')]
 
         return consts
 

@@ -1,0 +1,184 @@
+name: zrf16_49dr
+manufacturer: Xilinx
+fpga: xczu49dr-ffvf1760-2-e
+family: rfsoc
+config_voltage: 1.8
+cfgbvs: GND
+backend_target: vivado
+mmbus_architecture: AXI4-Lite
+mmbus_base_address: 0xA0000000
+# How to address each 32-bit (i.e. 4 indicates byte-addressable)
+mmbus_address_alignment: 4
+sources: []
+constraints: []
+
+rfdc:
+  # gen3 devices can internally route their input refclk or the output of the RFPLL
+  # as the sample clock for adjacent tiles. See PG269. For such configurations,
+  # tile 225 is the preferred tile when available. The zcu216/208 eval boards only
+  # have the sample clock connected to tile 255.
+  #
+  # For gen1 and gen2 devices the `adc_clk_src` is the same as the tile index
+  tile224:
+    has_adc_clk: True
+    adc_clk_src: 0
+  tile225:
+    has_adc_clk: True
+    adc_clk_src: 1
+  tile226:
+    has_adc_clk: True
+    adc_clk_src: 2
+  tile227:
+    has_adc_clk: True
+    adc_clk_src: 3
+
+onehundredgbe:
+  refclk_freq_str: "156.25"
+  include_rs_fec: 1
+  # transceiver interface signals that the core/manages directly from the fpga.
+  # Other signals may also be managed by fpga gpios are not included here e.g., reset_ls
+  # but are within the user design
+  management_interface: [modprsl_ls, intl_ls]
+  # UG1075 v1.9 Fig. 1-54
+  cmac_loc:
+    - CMACE4_X0Y0
+    - CMACE4_X0Y1
+  ncommon: 1
+
+provides:
+  - adc_clk
+  - axil_clk
+  - sysref_in
+
+pins:
+  clk_100_p:
+    iostd: LVDS_25
+    loc: G12
+  clk_100_n:
+    iostd: LVDS_25
+    loc: G11
+  sync_in:
+    iostd: LVCMOS33
+    loc: D11
+
+# NOTE: most of the IO constraints and clocking constraints are taken care of by
+# the RFDC IP itself. Vivado has that baked into the output products of teh IP
+# core. The only necessary pins below are the fabirc clocking related to
+# multi-tile sync Adding additional pins and constraints would not hurt anything
+# but provide more transparent less 'hand-wavy'
+# RFDC clocking
+
+  # LMK04832 Clk 10. Fabric copy of PL copy used as the user sysref used for multi-tile sync. 
+  pl_sysref_p:
+    iostd: LVDS
+    loc: AP22
+  pl_sysref_n:
+    iostd: LVDS
+    loc: AR22
+
+  # IP clock, `FPGA_REFCLK_OUT` LMK04828 clk 8
+  pl_clk_p:
+    iostd: LVDS_25
+    loc: AU12
+  pl_clk_n:
+    iostd: LVDS_25
+    loc: AU11
+
+  # `SYSREF_P/N_228` on bank 228
+  # constraints determined by rfdc ip, iostandard and loc not set by user
+  sysref_p:
+    iostd: LVDS_25
+    loc: D2
+  sysref_n:
+    iostd: LVDS_25
+    loc: D1
+
+  # Do not instantiate clock buffer inputs in the user design, part of the RF-ADC [PG269 v2.4 pg.153]
+  adc_clk_224_p:
+    loc: BA3
+  adc_clk_224_n:
+    loc: BB3
+
+  # naming changes between quad- and dual-tile adcs
+  # quad tile vinXZ
+  vin00_p:
+    loc: AU5
+  vin00_n:
+    loc: AU4
+
+# 100 GbE
+  qsfp_mgt_ref_clk_p:
+    loc:
+      - P34 # QSFP28_A, GTY bank 130
+      - K34 # QSFP28_B, GTY bank 131
+  qsfp_mgt_ref_clk_n:
+    loc:
+      - P35 # QSFP28_A, GTY bank 130
+      - K35 # QSFP28_B, GTY bank 131
+
+  qsfp_mgt_tx_p:
+         # QSFP28_A           # QSFP28_B
+    loc: [K38, H38, J36, G36, F34, C36, E36, A36]
+  qsfp_mgt_tx_n:
+         # QSFP28_A           # QSFP28_B
+    loc: [K39, H39, J37, G37, F35, C37, E37, A37]
+  qsfp_mgt_rx_p:
+         # QSFP28_A           # QSFP28_B
+    loc: [L41, G41, J41, F39, E41, C41, D39, B39]
+  qsfp_mgt_rx_n:
+         # QSFP28_A           # QSFP28_B
+    loc: [L42, G42, J42, F40, E42, C42, D40, B40]
+
+  qsfp_modprsl_ls:
+    iostd: LVCMOS33
+    loc: [E14, B15]
+  qsfp_sda:
+    iostd: LVCMOS18
+    loc: [None, None]
+  qsfp_scl:
+    iostd: LVCMOS18
+    loc: [None, None]
+  qsfp_intl_ls:
+    iostd: LVCMOS33
+    loc: [F13, E12]
+  qsfp_reset_ls:
+    iostd: LVCMOS33
+    loc: [AT10, AP10]
+  qsfp_lpmode_ls:
+    iostd: LVCMOS33
+    loc: [B16, F12]
+
+  led:
+    iostd: LVCMOS33
+    loc:
+      # green 
+      - AR10 # PL_USER_LED1
+      - AV11 # PL_USER_LED2
+      - G10  # PL_USER_LED6
+      - B10  # PL_USER_LED8
+      #red
+      - AR12 # PL_USER_LED3
+      - AT12 # PL_USER_LED4
+      - H11  # PL_USER_LED5
+      - A10  # PL_USER_LED7
+
+  gpio:
+    iostd: LVCMOS18
+    loc:
+      # user defined
+      - A12  # PL_USER_IO1
+      - B12  # PL_USER_IO2
+      - D12  # PL_USER_IO3
+      - A13  # PL_USER_IO4
+      - B13  # PL_USER_IO5
+      - D13  # PL_USER_IO6
+      - C14  # PL_USER_IO7
+      - C15  # PL_USER_IO8
+      # switches
+      - BA25 # PL_USER_SW1
+      - BB25 # PL_USER_SW2
+      - BB23 # PL_USER_SW3
+      - BB22 # PL_USER_SW4
+      # button
+      - AU10 # PL_USER_PB
+      

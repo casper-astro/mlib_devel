@@ -1,6 +1,6 @@
 class Register(object):
     def __init__(self, name, nbytes=4, offset=0, mode='r',
-                default_val=None, ram=False, ram_size=-1, data_width=32, axi4lite_mode=''):
+                default_val=0, ram=False, ram_size=-1, data_width=32, axi4lite_mode=''):
         """
         A class to encapsulate a register's parameters. This is used when
         instantiating a device with a large address space, but it is desirable
@@ -55,17 +55,23 @@ class Register(object):
         self.offset = offset
         self.mode = mode
         self.ram = ram
-        # Downstream the default value seems to be interpretted as a hex string, so
-        # convert here
-        if default_val is None:
-            self.default_val = None
+        #self.ram_size = ram_size
+
+        # Generation for `hw_rst` values of AXI4-Lite registers in XML2VHDL are interpreted as hex strings.
+        # Make some checks, prepare, and convert
+        if isinstance(default_val, int):
+          if default_val > ((1 << data_width) - 1):
+            raise RuntimeError("register `default_val` {:x} greater than represented width {:d}".format(hex(default_val), data_width))
+
+          self.default_val = "{:x}".format(default_val)
+        elif isinstance(default_val, str):
+          if int(default_val, 16) > ((1 << data_width) - 1):
+            raise RuntimeError("register `default_val` {:x} greater than represented width {:d}".format(hex(default_val), data_width))
+
+          self.default_val = "{:s}".format(default_val)
+
         else:
-            if isinstance(default_val, int):
-                self.default_val = "%x" % default_val
-            elif isinstance(default_val, str):
-                self.default_val = default_val
-            else:
-                raise RuntimeError("Default value should be an integer or a hex string!")
+          raise RuntimeError("`default_val` for Register must be an integer or hex string literal")
 
         # Addded to make provision for variable-size BRAMs in AXI4-Lite devices
         # - Placing here for now because toolflow.py:generate_xml_memory_map

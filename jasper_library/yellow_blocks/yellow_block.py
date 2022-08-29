@@ -216,6 +216,16 @@ class YellowBlock(object):
         """
         pass
 
+    def modify_bd(self, bd):
+        """
+        EXPERIMENTAL
+
+        Modify the block design
+
+        :param bd: A Vivado block design
+        """
+        pass
+
     def finalize_top(self, top):
         """
         A final opportunity for a block to modify VerilogModule instance `top` after all
@@ -259,6 +269,19 @@ class YellowBlock(object):
         :return: Dictionary of tcl command lists. Default {}
         """
         return {}
+
+    def gen_xsct_tcl_cmds(self, jdts_dir):
+        """
+        :param jdts_dir:
+
+        :return: A list of xsct tcl cmds, None if no commands to add
+        """
+        return None
+
+    def gen_dt_node(self, mmap_info, jdts_dir):
+        """
+        """
+        return None
 
     def add_build_dir_source(self):
         """

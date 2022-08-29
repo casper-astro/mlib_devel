@@ -2,6 +2,7 @@ function [gen, tile_arch, fs_max, fs_min] = get_rfsoc_properties(gcb)
   % get configuration information from the current rfsoc fpga part so that
   % callbacks and initializations can use this to setup and determine the
   % correct options
+
   % TODO: there has got to be a better way to store and fetch this info instead
   % of getting the xsg block everytime. Could the mask workspace be used? how do
   % callbacks access those workspace values?

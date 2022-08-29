@@ -1,9 +1,9 @@
 name: zcu111
 manufacturer: Xilinx
 fpga: xczu28dr-ffvg1517-2-e
-family: zynq-ultrascaleplus-rfsoc
-config_voltage: 1.8 # not used?
-cfgbvs: GND         # not used?
+family: rfsoc
+config_voltage: 1.8
+cfgbvs: GND
 backend_target: vivado
 mmbus_architecture: AXI4-Lite
 mmbus_base_address: 0xA0000000
@@ -21,28 +21,37 @@ rfdc:
   # For gen1 and gen2 devices the `adc_clk_src` is the same as the tile index
   tile224:
     has_adc_clk: True
-    adc_clk_src: 1
+    adc_clk_src: 0
   tile225:
     has_adc_clk: True
-    adc_clk_src: 2
+    adc_clk_src: 1
   tile226:
     has_adc_clk: True
-    adc_clk_src: 3
+    adc_clk_src: 2
   tile227:
     has_adc_clk: True
-    adc_clk_src: 4
+    adc_clk_src: 3
+  tile228:
+    has_dac_clk: True
+    dac_clk_src: 4
+  tile229:
+    has_dac_clk: True
+    dac_clk_src: 5
 
 onehundredgbe:
-  # does the freq matter much?
   refclk_freq_str: "156.25"
+  include_rs_fec: 1
+  ncommon: 1
+  management_interface: []
+  # UG1075 v1.9 Fig. 1-39
   cmac_loc:
+    # xczu28dr has 2 cmac locations, zcu111 can support a second through FMC
+    - CMACE4_X0Y0
     - CMACE4_X0Y1
 
 provides:
-  - sys_clk
-  - axil_clk # keep this? come from pl_clk? or use clk100?
-# TODO: does name matter? Jack's 100G block should list what the provides therefore this matters
-  - sfp4x25
+  - adc_clk
+  - axil_clk
   - sysref_in
 
 pins:
@@ -52,6 +61,12 @@ pins:
   clk_100_n:
     iostd: LVDS
     loc: AN15
+  clk_125_p:
+    iostd: LVDS
+    loc: AL17
+  clk_125_n:
+    iostd: LVDS
+    loc: AM17
 
 # NOTE: most of the IO constraints and clocking constraints are taken care of by
 # the RFDC IP itself. Vivado has that baked into the output products of teh IP
@@ -68,8 +83,8 @@ pins:
     loc: U4
 
   # SYSREF_FPGA_C_N/P on bank 64
-  # TODO: add DIFF_TERM_ADV TERM_100
   pl_sysref_p:
+    diff_term: TERM_100
     iostd: LVDS
     loc: AK17
   pl_sysref_n:
@@ -77,15 +92,34 @@ pins:
     loc: AK16
 
   #`FPGA_REFCLK_OUT_C_N/P` on bank 64   
-  # TODO: add DIFF_TERM_ADV TERM_100
   pl_clk_p:
-    iostd: LVDS
-    loc: AL15
-  pl_clk_n:
+    diff_term: TERM_100
     iostd: LVDS
     loc: AL16
- 
+  pl_clk_n:
+    iostd: LVDS
+    loc: AL15
+
+# 100 GbE
+  # Programmable MGT SI5382 chip GTY bank 128
+  qsfp_mgt_ref_clk_p:
+    loc:
+      - Y31
+  qsfp_mgt_ref_clk_n:
+    loc:
+      - Y32
+  # SFP connected to MGT bank 128
+  qsfp_mgt_tx_p: 
+    loc: [Y35, V35, T35, R33]
+  qsfp_mgt_tx_n:
+    loc: [Y36, V36, T36, R34]
+  qsfp_mgt_rx_p:
+    loc: [AA38, W38, U38, R38]
+  qsfp_mgt_rx_n:
+    loc: [AA39, W39, U39, R39]
+
   led:
+    drive_strength: 8 #HP banks don't support the default of 12
     iostd: LVCMOS18
     loc:
        - AR13
@@ -97,36 +131,3 @@ pins:
        - AN17
        - AV15
 
-# 100 GbE
-  # Programmable MGT SI570 chip GTY bank 129
-  mgt_ref_clk_p:
-    loc:
-      - V31
-  mgt_ref_clk_n:
-    loc:
-      - V32
-  # SFP connected to MGT bank 130
-  qsfp_mgt_tx_p: 
-    loc:
-      - Y35
-      - V35
-      - T35
-      - R33
-  qsfp_mgt_tx_n:
-    loc:
-      - Y36
-      - V36
-      - T36
-      - R34
-  qsfp_mgt_rx_p:
-    loc:
-      - AA38
-      - W38
-      - U38
-      - R38
-  qsfp_mgt_rx_n:
-    loc:
-      - AA39
-      - W39
-      - U39
-      - R39

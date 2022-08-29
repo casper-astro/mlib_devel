@@ -104,7 +104,7 @@ class PinConstraint(object):
     '''
     Class to hold a pin constraint
     '''
-    def __init__(self, portname, symbolic_name, portname_indices=None, symbolic_indices=None, location='', drive_strength=None, slew_rate=0, io_standard='', termination=''):
+    def __init__(self, portname, symbolic_name, portname_indices=None, symbolic_indices=None, location='', drive_strength=None, slew_rate=0, io_standard='', diff_term=None):
         # toplevel portname
         self.portname = portname # HDL Top level entity port name
         # symbolic name for a pin
@@ -121,8 +121,9 @@ class PinConstraint(object):
         self.slew_rate = slew_rate
         # pin io standard
         self.io_standard = io_standard
-        # pin termination
-        self.termination = termination
+        # pin differential termination for lvds
+        self.diff_term = diff_term
+
 
 class ClkConstraint(object):
     '''

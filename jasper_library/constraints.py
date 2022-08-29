@@ -16,7 +16,7 @@ class PortConstraint(object):
     "BC27" LOC and "LVCMOS18" is determined by the platform yaml file, which contains all the platform top level
     ports and LOC assignments.
     """
-    def __init__(self, portname, iogroup, port_index=[], iogroup_index=[0], loc=None, iostd=None, drive_strength=None):
+    def __init__(self, portname, iogroup, port_index=[], iogroup_index=[0], loc=None, iostd=None, drive_strength=None, diff_term=None):
         """
         Construct a PortConstraint instance.
 
@@ -35,6 +35,8 @@ class PortConstraint(object):
         :type loc: list
         :param drive_strength: Specify a drive strength to construct a physical constraint, forgoing the abstract names. Experimental.
         :type loc: list of ints
+        :param diff_term: specify the use of internal 100 ohm termination for lvds pins. set to `TERM_100` or `TERM_NONE` (default). Experimental.
+        :type diff_term: list of str
         """
         logger.debug('new PortConstraint:')
         logger.debug('  portname: %s'%portname)
@@ -44,6 +46,7 @@ class PortConstraint(object):
         logger.debug('  loc: %s'%loc)
         logger.debug('  iostd: %s'%iostd)
         logger.debug('  drive_strength: %s'%drive_strength)
+        logger.debug('  diff_term: %s'%diff_term)
 
         if port_index == []:
             self.is_vector = False
@@ -57,12 +60,14 @@ class PortConstraint(object):
         if isinstance(loc, range): loc = list(loc)
         if isinstance(iostd, range): iostd = list(iostd)
         if isinstance(drive_strength, range): drive_strength = list(drive_strength)
+        if isinstance(diff_term, range): diff_term = list(diff_term)
 
         if type(port_index) != list: port_index = [port_index]
         if type(iogroup_index) != list: iogroup_index = [iogroup_index]
         if type(loc) != list: loc = [loc]
         if type(iostd) != list: iostd = [iostd]
         if type(drive_strength) != list: drive_strength = [drive_strength]
+        if type(diff_term) != list: diff_term = [diff_term]
 
         self.portname = portname.strip(' ') #clear out whitespace
         self.port_index = port_index
@@ -72,6 +77,7 @@ class PortConstraint(object):
         self.iostd = iostd
         self.drive_strength = drive_strength
         self.width = len(iogroup_index)
+        self.diff_term = diff_term
 
         if (port_index != []) and (len(port_index) != len(iogroup_index)):
             raise ValueError("Tried to constrain a multidimensional signal with iogroup with different dimensions!")
@@ -90,6 +96,12 @@ class PortConstraint(object):
             self.drive_strength *= self.width
         elif len(self.drive_strength) != self.width:
             raise ValueError("Tried to constrain a multidimensional signal with a list of drive strengths with different dimensions!")
+
+        if len(self.diff_term) == 1:
+            self.diff_term *= self.width
+        elif len(self.diff_term) != self.width:
+            raise ValueError("Tried to constrain a multidimensional signal with a list of differential terminations with different dimensions!")
+
 
     def __str__(self):
         """
