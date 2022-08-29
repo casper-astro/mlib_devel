@@ -8,7 +8,8 @@ class zcu216(YellowBlock):
         self.add_source('infrastructure/zcu216_clk_infrastructure.sv')
         self.add_source('utils/cdc_synchroniser.vhd')
 
-        self.blkdesign = '{:s}_base'.format(self.platform.conf['name'])
+        # create reference to block design name
+        self.blkdesign = '{:s}_bd'.format(self.platform.conf['name'])
 
         self.pl_clk_mhz = self.blk['pl_clk_rate']
         self.T_pl_clk_ns = 1.0/self.pl_clk_mhz*1000
@@ -31,13 +32,14 @@ class zcu216(YellowBlock):
         # rfsocs use the requires/provides for to check for `sysref` and `pl_sysref` for MTS
         self.provides.append('pl_sysref') # rfsoc platform/infrastructure provides so rfdc can require
 
+        self.requires.append('M_AXI') # axi4lite interface from block design
 
     def modify_top(self, top):
-        top.assign_signal('axil_clk', 'pl_clk0')
-        top.assign_signal('axil_rst', 'peripheral_reset')
-        top.assign_signal('axil_rst_n', 'peripheral_aresetn')
-        top.assign_signal('sys_clk', 'pl_clk0')
-        top.assign_signal('sys_rst', '~peripheral_aresetn')
+        top.assign_signal('axil_clk', 'pl_sys_clk')
+        #top.assign_signal('axil_rst', 'axil_rst')
+        top.assign_signal('axil_rst_n', 'axil_arst_n') # TODO RENAME the board design one `axil_arst_n`
+        top.assign_signal('sys_clk', 'pl_sys_clk')
+        top.assign_signal('sys_rst', '~axil_arst_n')
 
         # generate clock parameters to use pl_clk to drive as the user IP clock
         # TODO: will need to make changes when other user ip clk source options provided
@@ -57,43 +59,72 @@ class zcu216(YellowBlock):
         inst_infr.add_port('adc_clk270', 'adc_clk270')
         inst_infr.add_port('mmcm_locked', 'mmcm_locked', dir='out', parent_port=True)
 
-        # instance block design containing mpsoc, and axi protocol converter for casper mermory map (HPM0), axi gpio for software clk104
-        # config (HPM1), and RFDC Xilinx IP (HPM1) that the rfdc yellow block will update based on user configuration
-        bd_inst = top.get_instance(self.blkdesign, '{:s}_inst'.format(self.blkdesign))
-
-        bd_inst.add_port('m_axi_awaddr',  'M_AXI_awaddr', width=40)
-        bd_inst.add_port('m_axi_awprot',  'M_AXI_awprot', width=3)
-        bd_inst.add_port('m_axi_awvalid', 'M_AXI_awvalid')
-        bd_inst.add_port('m_axi_awready', 'M_AXI_awready')
-        bd_inst.add_port('m_axi_wdata',   'M_AXI_wdata', width=32)
-        bd_inst.add_port('m_axi_wstrb',   'M_AXI_wstrb', width=4)
-        bd_inst.add_port('m_axi_wvalid',  'M_AXI_wvalid')
-        bd_inst.add_port('m_axi_wready',  'M_AXI_wready')
-        bd_inst.add_port('m_axi_bresp',   'M_AXI_bresp', width=2)
-        bd_inst.add_port('m_axi_bvalid',  'M_AXI_bvalid')
-        bd_inst.add_port('m_axi_bready',  'M_AXI_bready')
-        bd_inst.add_port('m_axi_araddr',  'M_AXI_araddr', width=40)
-        bd_inst.add_port('m_axi_arprot',  'M_AXI_arprot', width=3)
-        bd_inst.add_port('m_axi_arvalid', 'M_AXI_arvalid')
-        bd_inst.add_port('m_axi_arready', 'M_AXI_arready')
-        bd_inst.add_port('m_axi_rdata',   'M_AXI_rdata', width=32)
-        bd_inst.add_port('m_axi_rresp',   'M_AXI_rresp', width=2)
-        bd_inst.add_port('m_axi_rvalid',  'M_AXI_rvalid')
-        bd_inst.add_port('m_axi_rready',  'M_AXI_rready')
-
-        bd_inst.add_port('clk104_spi_mux_sel', 'clk104_spi_mux_sel', width=2, dir='out', parent_port=True)
-
-        bd_inst.add_port('pl_clk0', 'pl_clk0')
-        bd_inst.add_port('peripheral_reset', 'peripheral_reset')
-        bd_inst.add_port('peripheral_aresetn', 'peripheral_aresetn')
-
-        bd_inst.add_port('mux_led', 'mux_led', width=2, dir='out', parent_port=True)
-
 
     def gen_children(self):
         children = []
         children.append(YellowBlock.make_block({'tag': 'xps:sys_block', 'board_id': '160', 'rev_maj': '2', 'rev_min': '0', 'rev_rcs': '1'}, self.platform))
 
+        # instance block design containing mpsoc, and axi protocol converter for casper
+        # mermory map (HPM0), axi gpio for software clk104 config (HPM1)
+        zynq_blk = {
+            'tag'     : 'xps:zynq_usplus',
+            'name'    : 'mpsoc',
+            'presets' : 'zcu216_mpsoc',
+            'maxi_0'  : {'conf': {'enable': 1, 'data_width': 32},  'intf': {'dest': 'axi_proto_conv/S_AXI'}},
+            'maxi_1'  : {'conf': {'enable': 1, 'data_width': 128}, 'intf': {'dest': 'axi_interconnect/S00_AXI'}},
+            'maxi_2'  : {'conf': {'enable': 0, 'data_width': 128}, 'intf': {}}
+            #'maxi_2'  : {'conf': {'enable': 1, 'data_width': 128}, 'intf': {'dest': 'M_AXI_0'}}
+        }
+        children.append(YellowBlock.make_block(zynq_blk, self.platform))
+
+        proto_conv_blk = {
+            'tag'             : 'xps:axi_protocol_converter',
+            'name'            : 'axi_proto_conv',
+            'saxi_intf'       : {'dest': 'mpsoc/M_AXI_HPM0_FPD'},
+            'maxi_intf'       : {'dest': 'M_AXI'},
+            'aruser_wid'      : 0,
+            'awuser_wid'      : 0,
+            'buser_wid'       : 0,
+            'data_wid'        : 32,
+            'id_wid'          : 16,
+            'mi_protocol'     : 'AXI4LITE',
+            'rw_mode'         : 'READ_WRITE',
+            'ruser_wid'       : 0,
+            'si_protocol'     : 'AXI4',
+            'translation_mode': 2,
+            'wuser_wid'       : 0
+        }
+        children.append(YellowBlock.make_block(proto_conv_blk, self.platform))
+
+        axi_icx_blk = {
+          'tag'      : 'xps:axi_interconnect',
+          'name'     : 'axi_icx',
+          'saxi_intf': [{'dest': 'mpsoc/M_AXI_HPM1_FPD'}],
+          'maxi_intf': [{'dest': 'gpio/S_AXI'}],
+          'num_mi'   : 1,
+          'num_si'   : 1
+        }
+        children.append(YellowBlock.make_block(axi_icx_blk, self.platform))
+
+        axi_gpio_blk = {
+          'tag'         : 'xps:axi_gpio',
+          'name'        : 'gpio',
+          'saxi_intf'   : {'dest': 'axi_icx/M00_AXI'},
+          'gpio_intf'   : [{'dest': 'mux_led'}, {'dest': 'clk104_spi_mux_sel'}],
+          'enable_dual' : 0,
+          'enable_intr' : 0,
+          'all_inputs'  : 0,
+          'all_outputs' : 1,
+          'gpio_width'  : 2,
+          'default_val' : 0x00000003,
+          'tri_default' : 0xffffffff,
+          'all_inputs2' : 0,
+          'all_outputs2': 0,
+          'default_val2': 0x00000000,
+          'gpio_width2' : 32,
+          'tri_default2': 0xffffffff
+        }
+        children.append(YellowBlock.make_block(axi_gpio_blk, self.platform))
         return children
 
 
@@ -123,27 +154,9 @@ class zcu216(YellowBlock):
     def gen_tcl_cmds(self):
         tcl_cmds = {}
         tcl_cmds['init'] = []
-        # source tcl script building out the base block design that other yellow blocks (e.g., rfdc can access and
-        # update based on user configuration
-        tcl_cmds['init'] += ['source {:s}/infrastructure/{:s}.tcl'.format(self.hdl_root, self.blkdesign)]
-        """
-        Add a block design to project with wrapper via its exported tcl script.
-          - Validate and save board design against all edits children yb made
-          - Generate output products for all IP in block design
-          - Have vivado make an HDL wrapper around the block design.
-          - Add the wrapper HDL file to project.
-        """
-        tcl_cmds['pre_synth'] = []
-        tcl_cmds['pre_synth'] += ['validate_bd_design']
-        tcl_cmds['pre_synth'] += ['save_bd_design']
-        tcl_cmds['pre_synth'] += ['generate_target all [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/{:s}/{:s}.bd]'.format(self.blkdesign, self.blkdesign)]
-        tcl_cmds['pre_synth'] += ['make_wrapper -files [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/{:s}/{:s}.bd] -top'.format(self.blkdesign, self.blkdesign)]
-        tcl_cmds['pre_synth'] += ['add_files -norecurse [get_property directory [current_project]]/myproj.srcs/sources_1/bd/{:s}/hdl/{:s}_wrapper.vhd'.format(self.blkdesign, self.blkdesign)]
-        tcl_cmds['pre_synth'] += ['update_compile_order -fileset sources_1']
 
         tcl_cmds['post_synth'] = []
         # TODO: make note of how to use HD bank clocks to drive an MMCM on US+
-        #tcl_cmds['post_synth'] += ['set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets clk_100_p]']
         tcl_cmds['post_synth'] += ['set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pl_clk_p]']
 
         # export hardware design xsa for software
@@ -153,5 +166,3 @@ class zcu216(YellowBlock):
         tcl_cmds['post_bitgen'] += ['write_hw_platform -fixed -include_bit -force -file $xsa_file']
 
         return tcl_cmds
-
-

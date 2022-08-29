@@ -1,7 +1,7 @@
 name: rfsoc2x2 
 manufacturer: Xilinx
 fpga: xczu28dr-ffvg1517-2-e
-family: zynq-ultrascaleplus-rfsoc
+family: rfsoc
 config_voltage: 1.8
 cfgbvs: GND
 backend_target: vivado

@@ -3,7 +3,7 @@ from clk_factors import clk_factors
 from constraints import ClockConstraint, ClockGroupConstraint, PortConstraint, RawConstraint
 
 
-class zcu111(YellowBlock):
+class rfsoc4x2(YellowBlock):
     def initialize(self):
         self.add_source('infrastructure/zcu216_clk_infrastructure.sv')
         self.add_source('utils/cdc_synchroniser.vhd')
@@ -25,7 +25,7 @@ class zcu111(YellowBlock):
 
         # TODO: is a bug that `axi4lite_interconnect` does not make a `requires` on `axil_clk`.
         # Looking into this more: the `_drc` check on YB requires/provides is done in `gen_periph_objs` but the `axi4lite_interconnect`
-        # is not done until later within `generate_hdl > _instantiate_periphs` there fore by-passing any checks done
+        # is not done until later within `generate_hdl > _instantiate_periphs`, therefore, by-passing any checks done.
         self.provides.append('axil_clk')    # from block design
         self.provides.append('axil_rst_n')  # from block desgin
 
@@ -59,20 +59,20 @@ class zcu111(YellowBlock):
         inst_infr.add_port('adc_clk270', 'adc_clk270')
         inst_infr.add_port('mmcm_locked', 'mmcm_locked', dir='out', parent_port=True)
 
-
     def gen_children(self):
         children = []
-        children.append(YellowBlock.make_block({'tag': 'xps:sys_block', 'board_id': '162', 'rev_maj': '2', 'rev_min': '0', 'rev_rcs': '1'}, self.platform))
+        children.append(YellowBlock.make_block({'tag': 'xps:sys_block', 'board_id': '166', 'rev_maj': '2', 'rev_min': '0', 'rev_rcs': '1'}, self.platform))
 
         # instance block design containing mpsoc, and axi protocol converter for casper
         # mermory map (HPM0)
         zynq_blk = {
             'tag'     : 'xps:zynq_usplus',
             'name'    : 'mpsoc',
-            'presets' : 'zcu111_mpsoc',
+            'presets' : 'rfsoc4x2_mpsoc',
             'maxi_0'  : {'conf': {'enable': 1, 'data_width': 32},  'intf': {'dest': 'axi_proto_conv/S_AXI'}},
             'maxi_1'  : {'conf': {'enable': 0, 'data_width': 128}, 'intf': {}},
             'maxi_2'  : {'conf': {'enable': 0, 'data_width': 128}, 'intf': {}}
+            #'maxi_2'  : {'conf': {'enable': 1, 'data_width': 128}, 'intf': {'dest': 'M_AXI_0'}}
         }
         children.append(YellowBlock.make_block(zynq_blk, self.platform))
 
@@ -99,26 +99,21 @@ class zcu111(YellowBlock):
 
     def gen_constraints(self):
         cons = []
-
         cons.append(ClockConstraint('pl_clk_p', 'pl_clk_p', period=self.T_pl_clk_ns, port_en=True, virtual_en=False))
         cons.append(PortConstraint('pl_clk_p', 'pl_clk_p'))
-        # TODO: tweak this until we have the right reference clocks
+
         cons.append(ClockGroupConstraint('clk_pl_0', 'pl_clk_mmcm', 'asynchronous'))
 
-        cons.append(RawConstraint('set_property -dict { PACKAGE_PIN AV15 IOSTANDARD LVCMOS18 } [get_ports { mmcm_locked }]'))
+        cons.append(RawConstraint('set_property -dict { PACKAGE_PIN AU10 IOSTANDARD LVCMOS18 } [get_ports { mmcm_locked }]'))
 
-        # TODO: extend to provide other onboard clocks
-        #cons.append(PortConstraint('clk_100_p', 'clk_100_p'))
-        #cons.append(ClockConstraint('clk_100_p','clk_100_p', period=10.0, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=5.0))
-        #cons.append(ClockGroupConstraint('clk_pl_0', 'clk_100_p', 'asynchronous'))
-        #cons.append(ClockGroupConstraint('clk_100_p', 'clk_pl_0', 'asynchronous'))
         return cons
 
 
     def gen_tcl_cmds(self):
         tcl_cmds = {}
         tcl_cmds['init'] = []
-        tcl_cmds['post_synth'] = []
+        tcl_cmds['create_bd'] = []
+        tcl_cmds['pre_synth'] = []
 
         # export hardware design xsa for software
         tcl_cmds['post_bitgen'] = []
@@ -127,5 +122,3 @@ class zcu111(YellowBlock):
         tcl_cmds['post_bitgen'] += ['write_hw_platform -fixed -include_bit -force -file $xsa_file']
 
         return tcl_cmds
-
-

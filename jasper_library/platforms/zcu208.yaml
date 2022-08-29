@@ -1,7 +1,7 @@
 name: zcu208
 manufacturer: Xilinx
 fpga: xczu48dr-fsvg1517-2-e-es1
-family: zynq-ultrascaleplus-rfsoc
+family: rfsoc
 config_voltage: 1.8
 cfgbvs: GND
 backend_target: vivado

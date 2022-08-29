@@ -179,7 +179,7 @@ CONFIG.PSU__CRF_APB__TOPSW_LSBUS_CTRL__SRCSEL {IOPLL}\
 CONFIG.PSU__CRF_APB__TOPSW_LSBUS_CTRL__FREQMHZ {100}\
 CONFIG.PSU__CRF_APB__DP_VIDEO_REF_CTRL__SRCSEL {VPLL}\
 CONFIG.PSU__MAXIGP0__DATA_WIDTH {32}\
-] [get_ips mpsoc]
+] [get_bd_cells mpsoc]
 
 # CONFIG.PSU__MAXIGP0__DATA_WIDTH {32}\ default of 128, changed because of
 # previous error when first porting ZCU111 that casperfpga would read off the

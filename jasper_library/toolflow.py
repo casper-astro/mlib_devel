@@ -9,6 +9,7 @@ import logging
 import os
 import casper_platform as platform
 import yellow_blocks.yellow_block as yellow_block
+import blockdesign
 import verilog
 from constraints import PortConstraint, ClockConstraint, GenClockConstraint, \
     ClockGroupConstraint, InputDelayConstraint, OutputDelayConstraint, MaxDelayConstraint, \
@@ -1632,12 +1633,14 @@ class VivadoBackend(ToolflowBackend):
         self.project_name = 'myproj'
         self.periph_objs = periph_objs
         self.tcl_cmd = ''
+        self.bd = None
 
         self.name = 'vivado'
         self.npm_sources = []
         ToolflowBackend.__init__(self, plat=plat, compile_dir=compile_dir)
         self.tcl_cmds = {
             'init'        : '',
+            'create_bd'   : '',
             'pre_synth'   : '',
             'synth'       : '',
             'post_synth'  : '',
@@ -1691,8 +1694,12 @@ class VivadoBackend(ToolflowBackend):
         self.add_tcl_cmd('set prm_file "%s"'%self.prm_loc, stage='init')
         self.add_tcl_cmd('set xsa_file "%s"'%self.xsa_loc, stage='init')
 
-        # A function to print timing errors
+        # block design setup. TODO: consider moving around
+        self.bd_name = '%s_bd' % self.plat.conf['name']
+        self.add_tcl_cmd('set jbd_name "%s"'%self.bd_name, stage='init')
+        self.bd = blockdesign.BlockDesign(name=self.bd_name)
 
+        # A function to print timing errors
         check_timing = """
 proc check_timing {run} {
   if { [get_property STATS.WNS [get_runs $run] ] < 0 } {
@@ -1745,6 +1752,8 @@ proc puts_red {s} {
                 self.add_tcl_cmd('create_project -f %s %s -part %s' % (
                     self.project_name, self.project_name,
                     plat.fpga), stage='init')
+                self.add_tcl_cmd('create_bd_design $jbd_name', stage='init')
+                self.add_tcl_cmd('current_bd_design $jbd_name', stage='init')
             else:
                 self.add_tcl_cmd('exec cp %s .' % (self.template_project), stage='init')
                 template_basename = os.path.basename(self.template_project)
@@ -1761,7 +1770,7 @@ proc puts_red {s} {
                                                    self.project_name))
             self.add_tcl_cmd('set_part %s' % plat.fpga)
         # Set the project to default to vhdl    
-        self.add_tcl_cmd('set_property target_language VHDL [current_project]')    
+        self.add_tcl_cmd('set_property target_language VHDL [current_project]', stage='init')
 
     def add_library(self, path):
         """
@@ -1881,6 +1890,7 @@ proc puts_red {s} {
     def eval_tcl(self):
         s = ''
         s += self.tcl_cmds['init']
+        s += self.tcl_cmds['create_bd']
         s += self.tcl_cmds['pre_synth']
         s += self.tcl_cmds['synth']
         s += self.tcl_cmds['post_synth']
@@ -1972,6 +1982,27 @@ proc puts_red {s} {
         tcl = self.add_tcl_cmd
         # Project Mode is enabled
         if plat.project_mode:
+            # Assemble the board design
+            self.gen_bd_tcl_cmds()
+
+            # TODO save, validate, and export block design must be done in the `pre_synth` stage after all the yellow blocks
+            # have a chance to run `gen_tcl_cmds`. This is because the rfdc has not been migrated to having a `modify_bd`
+            # command and implements all of its additions in `gen_tcl_cmds` using the `pre_synth` stage. Either the rfdc needs
+            # to be migrated or evaluate the utility of having the block design built out using the seperate `create_bd` stage
+            # and with its own `gen_bd_tcl_cmds` or if this functionality instead needs to be pulled into `gen_tcl_cmds`
+            """
+            # save, validate, and generate output producets for the board design
+            self.add_tcl_cmd('save_bd_design', stage='create_bd')
+            self.add_tcl_cmd('validate_bd_design', stage='create_bd')
+            self.add_tcl_cmd('generate_target all [get_files [get_property directory '
+                '[current_project]]/myproj.srcs/sources_1/bd/%s/%s.bd]' % (self.bd_name, self.bd_name), stage='create_bd')
+            self.add_tcl_cmd('make_wrapper -files [get_files [get_property directory '
+                '[current_project]]/myproj.srcs/sources_1/bd/%s/%s.bd] -top' % (self.bd_name, self.bd_name), stage='create_bd')
+            self.add_tcl_cmd('add_files -norecurse [get_property directory '
+                '[current_project]]/myproj.srcs/sources_1/bd/%s/hdl/%s_wrapper.vhd' % (self.bd_name, self.bd_name), stage='create_bd')
+            self.add_tcl_cmd('update_compile_order -fileset sources_1', stage='create_bd')
+            """
+
             # Pre-Synthesis Commands
             self.add_tcl_cmd('set_property top top [current_fileset]', stage='pre_synth')
             self.add_tcl_cmd('update_compile_order -fileset sources_1', stage='pre_synth')
@@ -2064,6 +2095,21 @@ proc puts_red {s} {
 
             # Let Yellow Blocks add their own tcl commands
             self.gen_yellowblock_tcl_cmds()
+
+            # TODO potentially temporary place holder for save, validate, and export block design.
+            # This is because the rfdc has not been migrated to having a `modify_bd` command implementation and instead
+            # its additions are in `gen_tcl_cmds` using the `pre_synth` stage. We need to then capture those additions first.
+            # Also, either rfdc needs to be migrated using a `modify_bd` method or determine if it better that all block
+            # design implementation work be contained within `gen_tcl_cmds`
+            self.add_tcl_cmd('save_bd_design', stage='pre_synth')
+            self.add_tcl_cmd('validate_bd_design', stage='pre_synth')
+            self.add_tcl_cmd('generate_target all [get_files [get_property directory '
+                '[current_project]]/myproj.srcs/sources_1/bd/%s/%s.bd]' % (self.bd_name, self.bd_name), stage='pre_synth')
+            self.add_tcl_cmd('make_wrapper -files [get_files [get_property directory '
+                '[current_project]]/myproj.srcs/sources_1/bd/%s/%s.bd] -top' % (self.bd_name, self.bd_name), stage='pre_synth')
+            self.add_tcl_cmd('add_files -norecurse [get_property directory '
+                '[current_project]]/myproj.srcs/sources_1/bd/%s/hdl/%s_wrapper.vhd' % (self.bd_name, self.bd_name), stage='pre_synth')
+            self.add_tcl_cmd('update_compile_order -fileset sources_1', stage='pre_synth')
 
             # Determine if the design meets timing or not
             self.add_tcl_cmd('check_timing impl_1', stage='promgen') # promgen so the error comes last
@@ -2409,6 +2455,18 @@ proc puts_red {s} {
                 if val is not None:
                     for v in val:
                         self.add_tcl_cmd(v, stage=key)
+
+    def gen_bd_tcl_cmds(self):
+        """
+        Allow each yellowblock to generate tcl commands specific to creating
+        a block design
+        """
+        self.logger.info('Assembling the block design from'
+                         ' yellow block peripherals')
+        for obj in self.periph_objs:
+            c = obj.modify_bd(self.bd)
+
+        self.add_tcl_cmd(self.bd.gen_tcl(), stage='create_bd')
 
     def gen_yellowblock_custom_hdl(self):
         """
