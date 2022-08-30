@@ -20,6 +20,7 @@ onehundredgbe:
   refclk_freq_str: "156.25"
   use_2020_ip: True
   include_rs_fec: 1
+  management_interface: [modprsl_ls]
   cmac_loc:
     - CMACE4_X0Y9 
     - CMACE4_X0Y8

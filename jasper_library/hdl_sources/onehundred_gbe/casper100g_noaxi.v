@@ -5,7 +5,7 @@ module casper100g_noaxi#(
     parameter FABRIC_GATEWAY = 32'h1,
     parameter FABRIC_ENABLE_ON_START = 1'b0,
     parameter USE_RS_FEC = 1'b0,
-    parameter INSTANCE_ID = 1'b0
+    parameter INSTANCE_ID = 1'b0,
     parameter N_COMMON = 32'd1
    ) (
         // 100MHz reference clock needed by 100G Ethernet PHY
@@ -204,7 +204,7 @@ module casper100g_noaxi#(
         .G_NUM_STREAMING_DATA_SERVERS(1),
         .G_SLOT_WIDTH(2),
         .G_USE_RS_FEC(USE_RS_FEC),
-        .G_MAC_INSTANCE(INSTANCE_ID)
+        .G_MAC_INSTANCE(INSTANCE_ID),
         .G_N_COMMON(N_COMMON)
     ) casper100gethernetblock_inst (
         .RefClk100MHz(RefClk100MHz),

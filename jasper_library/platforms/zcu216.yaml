@@ -53,6 +53,9 @@ onehundredgbe:
   # It must be toggled by an fpga pin gpio (not yet in yaml), or use the onboard jumpers
   management_interface: []
   # UG1075 v1.9 Fig. 1-54
+  gt_group: 
+    - X0Y0~X0Y4
+    - X0Y0~X0Y4
   cmac_loc:
     # xczu49dr has 2 cmac locations, zcu216 can support a second through FMC+
     - CMACE4_X0Y0

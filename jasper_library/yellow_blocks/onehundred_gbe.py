@@ -164,11 +164,11 @@ class onehundredgbe_usplus(onehundred_gbe):
             self.include_rs_fec = 0
 
         if self.include_rs_fec:
-            self.cmac_ip_name = 'cmac_usplus_core_support'
+            self.cmac_ip_name = 'EthMACPHY100GQSFP4x_rsfec'
             self.add_source('onehundred_gbe/ip/EthMACPHY100GQSFP4x_rsfec/EthMACPHY100GQSFP4x_rsfec.xci')
             self.add_source('onehundred_gbe/cmac_shared/cmac_usplus_core_support.sv')
         else:
-            self.cmac_ip_name = 'cmac_usplus_core_support_norsfec'
+            self.cmac_ip_name = 'EthMACPHY100GQSFP4x'
             self.add_source('onehundred_gbe/ip/EthMACPHY100GQSFP4x/EthMACPHY100GQSFP4x.xci')
             self.add_source('onehundred_gbe/cmac_shared/cmac_usplus_core_support_norsfec.sv')
 
@@ -178,11 +178,13 @@ class onehundredgbe_usplus(onehundred_gbe):
             self.add_source(kdir + '/macphy/gmacqsfptop.vhd')
 
         # on platforms like zcu216 4 GTYs split between 2 banks, need to instance multiple GTYE_COMMON primitives
+        self.remap_cmac = 0
         try:
-          self.ncommon = ethconf['ncommon']
+          self.ncommon = self.ethconf['ncommon']
         except KeyError:
           self.logger.warning("Missing `ncommon` parameter in platform YAML file. Defaulting to 1")
           self.ncommon = 1
+          self.remap_cmac = 1
 
         try:
             self.cmac_loc = self.ethconf["cmac_loc"][self.port]
@@ -353,7 +355,10 @@ class onehundredgbe_usplus(onehundred_gbe):
         tcl_cmds['pre_synth'] = []
         # Override the IP settings
         tcl_cmds['pre_synth'] += ['copy_ip -name %s%d [get_ips %s]' % (self.cmac_ip_name, self.inst_id, self.cmac_ip_name)]
-        tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.CMAC_CORE_SELECT {%s} CONFIG.GT_REF_CLK_FREQ {%s} CONFIG.GT_GROUP_SELECT {%s} CONFIG.RX_GT_BUFFER {1} CONFIG.GT_RX_BUFFER_BYPASS {0}] [get_ips %s%d]' % (self.cmac_loc, self.refclk_freq_str, self.gt_group, self.cmac_ip_name, self.inst_id)]
+        if self.remap_cmac:
+            tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.CMAC_CORE_SELECT {%s} CONFIG.GT_REF_CLK_FREQ {%s} CONFIG.GT_GROUP_SELECT {%s} CONFIG.RX_GT_BUFFER {1} CONFIG.GT_RX_BUFFER_BYPASS {0}] [get_ips %s%d]' % (self.cmac_loc, self.refclk_freq_str, self.gt_group, self.cmac_ip_name, self.inst_id)]
+        else:
+           tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.GT_REF_CLK_FREQ {%s}] [get_ips %s%d]' % (self.refclk_freq_str, self.cmac_ip_name, self.inst_id)] 
         try:
             if self.platform.use_pr:
                 tcl_cmds['pre_synth'] += ['move_files -of_objects [get_reconfig_modules user_top-toolflow] [get_files %s%d.xci]' % (self.cmac_ip_name, self.inst_id)]
