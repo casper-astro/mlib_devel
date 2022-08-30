@@ -291,7 +291,7 @@ class onehundredgbe_usplus(onehundred_gbe):
         # Register interfaces
         # port number added to register memory map name, but removed by [:-2] slice here to correctly wire instance
         for reg in self.memory_map:
-            if reg.name[:-2] in self.missing_registers:
+            if reg.name in self.missing_registers:
                 continue
             if not reg.ram:
                 if 'w' in reg.mode:
