@@ -58,12 +58,12 @@ class onehundredgbe_usplus(onehundred_gbe):
             # The 100G core doesn't have an interface for the ARP cache which will work with the
             # AXI infrastructure we currently have, so make a new one and deal with it in software :-S
             #Register('gmac_reg_arp_cache',            mode='rw', offset=0x1000, ram=True, ram_size=8*256, data_width=32),
-            Register('gmac_arp_cache_write_enable_%d'  % self.port, mode='rw', offset=0x1000, default_val=0),
-            Register('gmac_arp_cache_read_enable_%d'   % self.port, mode='rw', offset=0x1004, default_val=0),
-            Register('gmac_arp_cache_write_data_%d'    % self.port, mode='rw', offset=0x1008, default_val=0),
-            Register('gmac_arp_cache_write_address_%d' % self.port, mode='rw', offset=0x100C, default_val=0),
-            Register('gmac_arp_cache_read_address_%d'  % self.port, mode='rw', offset=0x1010, default_val=0),
-            Register('gmac_arp_cache_read_data_%d'     % self.port, mode='r',  offset=0x1014),
+            Register('gmac_arp_cache_write_enable',  mode='rw', offset=0x1000, default_val=0),
+            Register('gmac_arp_cache_read_enable',   mode='rw', offset=0x1004, default_val=0),
+            Register('gmac_arp_cache_write_data',    mode='rw', offset=0x1008, default_val=0),
+            Register('gmac_arp_cache_write_address', mode='rw', offset=0x100C, default_val=0),
+            Register('gmac_arp_cache_read_address',  mode='rw', offset=0x1010, default_val=0),
+            Register('gmac_arp_cache_read_data',     mode='r',  offset=0x1014),
 
             # Ignore RX/TX buffers for now -- do these actually work in the 100G core as per the mem map?
             #Register('gmac_reg_tx_buf',    mode='rw', offset=0x4000, ram=True, ram_size=2048),
