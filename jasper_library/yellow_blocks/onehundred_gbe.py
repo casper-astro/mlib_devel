@@ -9,7 +9,7 @@ from memory import Register
 class onehundred_gbe(YellowBlock):
     @staticmethod
     def factory(blk, plat, hdl_root=None):
-        if plat.name in ['vcu118', 'vcu128'] or plat.conf.get('family', None) in ["ultrascaleplus", "rfsoc"]:
+        if plat.name in ['vcu118', 'vcu128'] or plat.conf.get('family', None) in ["ultrascaleplus"]:
             return onehundredgbe_usplus(blk, plat, hdl_root)
         elif plat.conf.get('family', None) in ["rfsoc"]:
             return onehundredgbe_rfsoc(blk, plt, hdl_root)
