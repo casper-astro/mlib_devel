@@ -479,6 +479,7 @@ class onehundredgbe_rfsoc(onehundred_gbe):
         self.add_source(kdir + '/udp/macinterface/cpuinterface/cpumacifudpreceiver.vhd')
         self.add_source(kdir + '/udp/macinterface/cpuinterface/cpumacifethernetreceiver.vhd')
         self.add_source(kdir + '/udp/macinterface/cpuinterface/cpumacifudpsender.vhd')
+        self.add_source(kdir + '/macphy/gmacqsfptop2_rfsoc.vhd')
         self.add_source('onehundred_gbe/ip/axispacketbufferfifo/axispacketbufferfifo.xci')
         self.add_source('onehundred_gbe/ip/async_fifo_513b_512deep/async_fifo_513b_512deep.xci')
         self.add_source('onehundred_gbe/ip/axis_data_fifo/axis_data_fifo_0.xci')
@@ -527,10 +528,6 @@ class onehundredgbe_rfsoc(onehundred_gbe):
             self.add_source('onehundred_gbe/ip/EthMACPHY100GQSFP4x/EthMACPHY100GQSFP4x.xci')
             self.add_source('onehundred_gbe/cmac_shared/cmac_usplus_core_support_norsfec.sv')
 
-        if self.ethconf.get('use_2020_ip', True):
-            self.add_source(kdir + '/macphy/gmacqsfptop2_rfsoc.vhd')
-        else:
-            self.add_source(kdir + '/macphy/gmacqsfptop_rfsoc.vhd')
 
         # on platforms like zcu216 4 GTYs split between 2 banks, need to instance multiple GTYE_COMMON primitives
         try:
