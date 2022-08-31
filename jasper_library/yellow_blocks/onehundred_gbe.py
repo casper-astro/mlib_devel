@@ -521,11 +521,11 @@ class onehundredgbe_rfsoc(onehundred_gbe):
 
         if self.include_rs_fec:
             self.cmac_ip_name = 'EthMACPHY100GQSFP4x_rsfec'
-            self.add_source('onehundred_gbe/ip/EthMACPHY100GQSFP4x_rsfec/EthMACPHY100GQSFP4x_rsfec.xci')
+            self.add_source('onehundred_gbe/ip/EthMACPHY100GQSFP4x_rsfec_rfsoc/EthMACPHY100GQSFP4x_rsfec.xci')
             self.add_source('onehundred_gbe/cmac_shared/cmac_usplus_core_support.sv')
         else:
             self.cmac_ip_name = 'EthMACPHY100GQSFP4x'
-            self.add_source('onehundred_gbe/ip/EthMACPHY100GQSFP4x/EthMACPHY100GQSFP4x.xci')
+            self.add_source('onehundred_gbe/ip/EthMACPHY100GQSFP4x_rfsoc/EthMACPHY100GQSFP4x.xci')
             self.add_source('onehundred_gbe/cmac_shared/cmac_usplus_core_support_norsfec.sv')
 
 
