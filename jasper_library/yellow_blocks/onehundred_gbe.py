@@ -700,7 +700,6 @@ class onehundredgbe_rfsoc(onehundred_gbe):
         tcl_cmds = {}
         tcl_cmds['pre_synth'] = []
         # Override the IP settings
-        tcl_cmds['pre_synth'] += ['copy_ip -name %s [get_ips %s]' % (self.cmac_ip_name, self.cmac_ip_name)]
         tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.GT_REF_CLK_FREQ {%s}] [get_ips %s]' % (self.refclk_freq_str, self.cmac_ip_name)] 
         #tcl_cmds['pre_synth'] = ['set_property -dict [list CONFIG.GT_GROUP_SELECT {%s} CONFIG.LANE1_GT_LOC {%s} CONFIG.LANE2_GT_LOC {%s} CONFIG.LANE3_GT_LOC {%s} CONFIG.LANE4_GT_LOC {%s} CONFIG.RX_GT_BUFFER {1} CONFIG.GT_RX_BUFFER_BYPASS {0}] [get_ips EthMACPHY100GQSFP4x%d' % (self.gt_group, gts[0, gts[1], gts[2], gts[3], self.inst_id)]
 
