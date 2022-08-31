@@ -543,14 +543,6 @@ class onehundredgbe_rfsoc(onehundred_gbe):
             raise
         except IndexError:
             self.logger.error("Missing entry for port %d in onehundredgbe `cmac_loc` parameter" % self.port)
-        try:
-            self.gt_group = self.ethconf["gt_group"][self.port]
-        except KeyError:
-            self.logger.error("Missing onehundredgbe `gt_group` parameter in YAML file")
-            raise
-        except IndexError:
-            self.logger.error("Missing entry for port %d in onehundredgbe `gt_group` parameter" % self.port)
-            raise
 
     def modify_top(self, top):
         inst = top.get_instance(entity='casper100g_noaxi', name=self.fullname+'_inst')
