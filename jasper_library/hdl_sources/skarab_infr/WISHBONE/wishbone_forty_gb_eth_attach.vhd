@@ -100,14 +100,14 @@ end wishbone_forty_gb_eth_attach;
 
 architecture arch_wishbone_forty_gb_eth_attach of wishbone_forty_gb_eth_attach is
 
-    constant REGISTERS_OFFSET : std_logic_vector(15 downto 0) := X"0000";
-    constant REGISTERS_HIGH   : std_logic_vector(15 downto 0) := X"0FFF";
-    constant ARP_CACHE_OFFSET : std_logic_vector(15 downto 0) := X"1000";
-    constant ARP_CACHE_HIGH   : std_logic_vector(15 downto 0) := X"3FFF";
-    constant TX_BUFFER_OFFSET : std_logic_vector(15 downto 0) := X"4000";
-    constant TX_BUFFER_HIGH   : std_logic_vector(15 downto 0) := X"7FFF";
-    constant RX_BUFFER_OFFSET : std_logic_vector(15 downto 0) := X"8000";
-    constant RX_BUFFER_HIGH   : std_logic_vector(15 downto 0) := X"BFFF";
+    constant REGISTERS_OFFSET : std_logic_vector(16 downto 0) := B"0" & X"0000";
+    constant REGISTERS_HIGH   : std_logic_vector(16 downto 0) := B"0" & X"0FFF";
+    constant ARP_CACHE_OFFSET : std_logic_vector(16 downto 0) := B"0" & X"1000";
+    constant ARP_CACHE_HIGH   : std_logic_vector(16 downto 0) := B"0" & X"3FFF";
+    constant TX_BUFFER_OFFSET : std_logic_vector(16 downto 0) := B"0" & X"4000";
+    constant TX_BUFFER_HIGH   : std_logic_vector(16 downto 0) := B"0" & X"7FFF";
+    constant RX_BUFFER_OFFSET : std_logic_vector(16 downto 0) := B"0" & X"8000";
+    constant RX_BUFFER_HIGH   : std_logic_vector(16 downto 0) := B"0" & X"BFFF";
 
     constant REG_CORE_TYPE       : std_logic_vector(7 downto 0) := X"00";
     constant REG_MAX_BUF_SIZE    : std_logic_vector(7 downto 0) := X"01";
@@ -137,6 +137,9 @@ architecture arch_wishbone_forty_gb_eth_attach of wishbone_forty_gb_eth_attach i
     constant REG_RX_OVERFLOW_CNT  : std_logic_vector(7 downto 0) := X"1C";
     constant REG_RX_BAD_FRAME_CNT : std_logic_vector(7 downto 0) := X"1D";
     constant REG_CNT_RESET        : std_logic_vector(7 downto 0) := X"1E"; -- obviously writable
+    
+    --Reset Synchroniser and user reset signals
+    attribute ASYNC_REG : string;    
 
     signal STB_I_z  : std_logic;
     signal STB_I_z2 : std_logic;
@@ -148,10 +151,10 @@ architecture arch_wishbone_forty_gb_eth_attach of wishbone_forty_gb_eth_attach i
     signal arp_sel      : std_logic;
     signal reg_data_src : std_logic_vector(7 downto 0);
 
-    signal reg_addr   : std_logic_vector(15 downto 0);
-    signal rxbuf_addr : std_logic_vector(15 downto 0);
-    signal txbuf_addr : std_logic_vector(15 downto 0);
-    signal arp_addr   : std_logic_vector(15 downto 0);
+    signal reg_addr   : std_logic_vector(16 downto 0);
+    signal rxbuf_addr : std_logic_vector(16 downto 0);
+    signal txbuf_addr : std_logic_vector(16 downto 0);
+    signal arp_addr   : std_logic_vector(16 downto 0);
 
     signal local_mac_reg             : std_logic_vector(47 downto 0);
     signal local_ip_reg              : std_logic_vector(31 downto 0);
@@ -197,48 +200,19 @@ architecture arch_wishbone_forty_gb_eth_attach of wishbone_forty_gb_eth_attach i
     signal reg_ack : std_logic;
 
     signal reg_sel_z1 : std_logic;
-
-    signal dbg_adr_i : std_logic_vector(15 downto 0);
-    signal dbg_dat_i : std_logic_vector(31 downto 0);
-    signal dbg_dat_o : std_logic_vector(31 downto 0);
-    signal dbg_stb_i : std_logic;
-    signal dbg_we_i  : std_logic;
-    signal dbg_cyc_i : std_logic;
-    signal dbg_ack_o : std_logic;
-    signal dbg_reg_sel : std_logic;
-    signal dbg_arp_sel : std_logic;
-    signal dbg_tx_sel  : std_logic;
-    signal dbg_rx_sel  : std_logic;
-    attribute MARK_DEBUG : string;
-    attribute MARK_DEBUG of dbg_adr_i : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_dat_i : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_dat_o : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_stb_i : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_we_i  : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_cyc_i : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_ack_o  : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_reg_sel : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_arp_sel : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_tx_sel  : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_rx_sel  : signal is "TRUE";
-
-    signal dbg_local_mac : std_logic_vector(47 downto 0);
-    signal dbg_local_ip : std_logic_vector(31 downto 0);
-    signal dbg_cpu_rx_buffer_addr : std_logic_vector(10 downto 0);
-    signal dbg_cpu_rx_buffer_rd_data : std_logic_vector(63 downto 0);
-    signal dbg_cpu_rx_size : std_logic_vector(10 downto 0);
-    signal dbg_cpu_rx_ack : std_logic;
-    signal dbg_tx_rx_sizes : std_logic_vector(31 downto 0);
-    attribute MARK_DEBUG of dbg_local_mac : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_local_ip : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_cpu_rx_buffer_addr : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_cpu_rx_buffer_rd_data : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_cpu_rx_size : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_cpu_rx_ack : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_tx_rx_sizes : signal is "TRUE";
-
+    
+    signal sBusRegValidD1 : std_logic;
+    signal sBusRegValid : std_logic;
+    attribute ASYNC_REG of sBusRegValid : signal is "TRUE";
+    attribute ASYNC_REG of sBusRegValidD1 : signal is "TRUE";    
+    signal sSoftResetAck : std_logic;
+    signal sSoftResetAckD1 : std_logic;
+    attribute ASYNC_REG of sSoftResetAck : signal is "TRUE";
+    attribute ASYNC_REG of sSoftResetAckD1 : signal is "TRUE";    
+         
 
 begin
+
     local_mac             <= local_mac_reg;
     local_ip              <= local_ip_reg;
     local_gateway         <= local_gateway_reg;
@@ -249,18 +223,6 @@ begin
     local_mc_recv_ip      <= local_mc_recv_ip_reg;
     local_mc_recv_ip_mask <= local_mc_recv_ip_mask_reg;
 
-    tx_pkt_rate_reg       <= tx_pkt_rate;
-    tx_pkt_cnt_reg        <= tx_pkt_cnt;
-    tx_valid_rate_reg     <= tx_valid_rate;
-    tx_valid_cnt_reg      <= tx_valid_cnt;
-    tx_overflow_cnt_reg   <= tx_overflow_cnt;
-    tx_afull_cnt_reg      <= tx_afull_cnt;
-    rx_pkt_rate_reg       <= rx_pkt_rate;
-    rx_pkt_cnt_reg        <= rx_pkt_cnt;
-    rx_valid_rate_reg     <= rx_valid_rate;
-    rx_valid_cnt_reg      <= rx_valid_cnt;
-    rx_overflow_cnt_reg   <= rx_overflow_cnt;
-    rx_bad_frame_cnt_reg  <= rx_bad_frame_cnt;
     cnt_reset             <= cnt_reset_reg;
 
     cpu_tx_size  <= cpu_tx_size_reg;
@@ -273,7 +235,51 @@ begin
     cpu_tx_buffer_wr_data <= write_data;
     cpu_tx_buffer_wr_en   <= tx_buffer_we;
     cpu_rx_buffer_addr    <= rxbuf_addr(13 downto 3);
-    dbg_cpu_rx_buffer_addr <= rxbuf_addr(13 downto 3);
+    
+--------------------------------------------------------------------------------
+-- CDC Synchronisation
+--------------------------------------------------------------------------------    
+    
+    pCDCRegSynchroniser : process(RST_I, CLK_I)
+    begin
+       if (RST_I = '1')then
+           tx_pkt_rate_reg <= (others => '0');
+           tx_pkt_cnt_reg <= (others => '0');
+           tx_valid_rate_reg <= (others => '0');
+           tx_valid_cnt_reg <= (others => '0');
+           tx_overflow_cnt_reg <= (others => '0');
+           tx_afull_cnt_reg <= (others => '0');
+           rx_pkt_rate_reg <= (others => '0');
+           rx_pkt_cnt_reg <= (others => '0');
+           rx_valid_rate_reg <= (others => '0');
+           rx_valid_cnt_reg <= (others => '0');
+           rx_overflow_cnt_reg <= (others => '0');
+           rx_bad_frame_cnt_reg <= (others => '0');          
+           sBusRegValidD1 <= '0';
+           sBusRegValid <= '0'; 
+           sSoftResetAck <= '0';
+           sSoftResetAckD1 <= '0';
+       elsif (rising_edge(CLK_I))then
+           sBusRegValidD1 <= sBusRegValid;
+           sBusRegValid <= '1';
+           sSoftResetAckD1 <= sSoftResetAck;
+           sSoftResetAck <= soft_reset_ack;
+             if (sBusRegValidD1 = '1') then
+               tx_pkt_rate_reg  <= tx_pkt_rate;
+               tx_pkt_cnt_reg <= tx_pkt_cnt;
+               tx_valid_rate_reg <= tx_valid_rate;
+               tx_valid_cnt_reg <= tx_valid_cnt;
+               tx_overflow_cnt_reg <= tx_overflow_cnt;
+               tx_afull_cnt_reg  <= tx_afull_cnt;
+               rx_pkt_rate_reg  <= rx_pkt_rate;
+               rx_pkt_cnt_reg  <= rx_pkt_cnt;
+               rx_valid_rate_reg <= rx_valid_rate;
+               rx_valid_cnt_reg  <= rx_valid_cnt;
+               rx_overflow_cnt_reg <= rx_overflow_cnt;
+               rx_bad_frame_cnt_reg  <= rx_bad_frame_cnt;                          
+             end if;  
+       end if;
+    end process pCDCRegSynchroniser;     
 
 --------------------------------------------------------------------------------
 -- WISHBONE ACK GENERATION
@@ -357,7 +363,6 @@ begin
     local_mc_recv_ip_reg(31 downto 0)                                            when (reg_data_src = REG_MC_RECV_IP)       else
     local_mc_recv_ip_mask_reg(31 downto 0)                                       when (reg_data_src = REG_MC_RECV_IP_MASK)  else
     ("00000" & cpu_tx_size_reg & "00000" & cpu_rx_size_int)                      when (reg_data_src = REG_BUFFER_SIZES)     else
-    --X"A5A5A5A5"                      when (reg_data_src = REG_BUFFER_SIZES)     else
     (X"00" & "0000000" & soft_reset_reg & X"00" & "0000000" & local_enable_reg)  when (reg_data_src = REG_PROMISC_RST_EN)   else
     (X"0000" & local_port_reg)                                                   when (reg_data_src = REG_VALID_PORTS)      else
 
@@ -384,8 +389,11 @@ begin
     rx_data_int  when (rxbuf_sel = '1') else
     reg_data_int;
     
+    --AI: latch data out when wishbone ack is asserted
     DAT_O <= reg_dat_o_int when (reg_ack = '1') else x"00000000";
     ACK_O <= reg_ack;
+    
+          
 --------------------------------------------------------------------------------
 -- REGISTER HANDLING
 --------------------------------------------------------------------------------
@@ -401,7 +409,7 @@ begin
             local_enable_reg          <= FABRIC_ENABLE;
             local_mc_recv_ip_reg      <= MC_RECV_IP;
             local_mc_recv_ip_mask_reg <= MC_RECV_IP_MASK;
-            cnt_reset_reg             <= (others => '0');
+            cnt_reset_reg             <= (others => '1');
             cpu_tx_size_reg           <= (others => '0');
             cpu_rx_ack_reg            <= '0';
             soft_reset_reg            <= '0';
@@ -417,7 +425,7 @@ begin
                 cpu_rx_ack_reg <= '0';
             end if;
 
-            if (soft_reset_ack = '1')then
+            if (sSoftResetAckD1 = '1')then
                 soft_reset_reg <= '0';
             end if;
 

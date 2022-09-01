@@ -15,9 +15,6 @@ entity skarab_infr is
         DIVIDE   : REAL    := 6.0;
         DIVCLK   : INTEGER := 1);
     port(
-        adc_clk_sel_i   : in std_logic;
-        adc_clk_i       : in std_logic;
-        adc_rst_i       : in std_logic;    
         user_clk_o      : out std_logic;
         user_rst_o      : out std_logic;
         board_clk_o     : out std_logic;
@@ -509,7 +506,6 @@ architecture arch_skarab_infr of skarab_infr is
     
     signal sys_mmcm_locked : std_logic;
     signal user_mmcm_locked : std_logic;
-    signal user_mmcm_locked_1 : std_logic; 
 
     --Reset Synchroniser and user reset signals
     attribute ASYNC_REG : string;
@@ -895,9 +891,6 @@ architecture arch_skarab_infr of skarab_infr is
     attribute ASYNC_REG of sGmiiResetDoneD1: signal is "TRUE";
     signal sGmiiResetDone : std_logic;
     
-    --ADC Signals
-    signal adc_select : std_logic;
-    
                      
 begin
     --Mezzanine 3 ID and Present (this should be part of the 40GbE yellow block, but is part of the BSP for now)
@@ -958,7 +951,7 @@ begin
         CLKOUT1   => bsp_clk_mmcm,
         CLKFBOUT  => sys_clk_mmcm_fb,  -- Feedback clock output
         LOCKED    => sys_mmcm_locked,
-        --LOCKED    => user_mmcm_locked_1,
+        --LOCKED    => user_mmcm_locked,
         CLKIN1    => refclk_0,         -- Main clock input
         PWRDWN    => '0',
         RST       => not FPGA_RESET_N,--'0',              -- fpga_reset,
@@ -992,26 +985,17 @@ begin
     port map (
         CLKOUT0   => user_clk_mmcm,
         CLKFBOUT  => user_clk_mmcm_fb,  -- Feedback clock output
-        LOCKED    => user_mmcm_locked_1,
+        LOCKED    => user_mmcm_locked,
         CLKIN1    => refclk_0,          -- Main clock input
         PWRDWN    => '0',
         RST       => not sys_mmcm_locked,   --fpga_reset,
         CLKFBIN   => user_clk_mmcm_fb   -- Feedback clock input
     );
-    
-    --NB: the user will need to make sure the ADC yellow block and module is present in order for the clock to be generated
-    --correctly.
-    -- if the user selects the adc_clk via the SKARAB platform yellow block then adc_clk_sel_i will be set high else low
-    adc_select <= '0' when (adc_clk_sel_i /= '1') else
-                  '1';    
-    
-    -- If any of the ADC modules are pesent then we must use the adc_clk else we must use the user_clk_mmcm
-    user_clk_BUFG_inst : BUFGMUX
+
+    user_clk_BUFG_inst : BUFG
     port map (
-        S => adc_select,     -- determines which clock to select
-        I0 => user_clk_mmcm, -- Clock input 1
-        I1 => adc_clk_i,     -- Clock input 2
-        O => user_clk        -- Clock output
+        I => user_clk_mmcm, -- Clock input
+        O => user_clk       -- Clock output
     );
 
     --signal qsfp_gtrefclk : std_logic;
@@ -1022,16 +1006,9 @@ begin
         I => FPGA_EMCCLK2, -- Clock input
         O => emcclk2       -- Clock output
     );
-    
 
-    -- NB: if the user selects the adc_clk via the SKARAB platform yellow block then user_mmcm_locked will be driven by the adc_rst_i signal
-    -- and not the user_mmcm_locked_1 signal. The user needs to ensure that the SKARAB ADC yellow block and module is added in order to drive this signal 
-    --correctly
-    user_mmcm_locked <= user_mmcm_locked_1 when (adc_clk_sel_i /= '1') else
-                        not(adc_rst_i); 
-                        
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(0) <= ((not MEZZANINE_0_PRESENT_N) and MEZZ0_PRESENT);
-    brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(3 downto 1) <= MEZZ0_ID;                        
+
+
     --user_clk <= sys_clk;
 
     --sys_clk    <= refclk_0;
@@ -1047,9 +1024,9 @@ begin
 -- RESETS
 ---------------------------------------------------------------------------
 
-    pSysResetSynchroniser : process(user_mmcm_locked_1, sys_clk)
+    pSysResetSynchroniser : process(user_mmcm_locked, sys_clk)
     begin
-       if (user_mmcm_locked_1 = '0')then
+       if (user_mmcm_locked = '0')then
            sys_fpga_rst <= '1';
            sync_sys_fpga_rst <= '1';
        elsif (rising_edge(sys_clk))then
@@ -1079,9 +1056,9 @@ begin
        end if;
     end process;
     
-   pBspResetSynchroniser : process(user_mmcm_locked_1, bsp_clk)
+   pBspResetSynchroniser : process(user_mmcm_locked, bsp_clk)
     begin
-        if (user_mmcm_locked_1 = '0')then
+        if (user_mmcm_locked = '0')then
             bsp_fpga_rst <= '1';
             sync_bsp_fpga_rst <= '1';
         elsif (rising_edge(bsp_clk))then
@@ -1099,9 +1076,9 @@ begin
     --user_rst <= user_fpga_rst;
     bsp_rst <=  bsp_fpga_rst;
  
-    --pFpgaResetAuxSynchroniser : process(user_mmcm_locked_1, aux_clk)
+    --pFpgaResetAuxSynchroniser : process(user_mmcm_locked, aux_clk)
     --begin
-    --    if (user_mmcm_locked_1 = '0')then
+    --    if (user_mmcm_locked = '0')then
     --        sync_aux_fpga_rst <= '1';
     --        aux_fpga_rst <= '1';
     --    elsif (rising_edge(aux_clk))then
@@ -1110,9 +1087,9 @@ begin
     --    end if;
     --end process; 
 
-    pFpgaResetGmiiSynchroniser : process(user_mmcm_locked_1, gmii_clk)
+    pFpgaResetGmiiSynchroniser : process(user_mmcm_locked, gmii_clk)
     begin
-        if (user_mmcm_locked_1 = '0')then
+        if (user_mmcm_locked = '0')then
             sync_gmii_fpga_rst <= '1';
             gmii_fpga_rst <= '1';
         elsif (rising_edge(gmii_clk))then
@@ -1121,9 +1098,9 @@ begin
         end if;
     end process;
 
-    --pFpgaResetQsfpSynchroniser : process(user_mmcm_locked_1, qsfp_gtrefclk)
+    --pFpgaResetQsfpSynchroniser : process(user_mmcm_locked, qsfp_gtrefclk)
     --begin
-    --    if (user_mmcm_locked_1 = '0')then
+    --    if (user_mmcm_locked = '0')then
     --        sync_qsfp_fpga_rst <= '1';
     --        qsfp_fpga_rst <= '1';
     --    elsif (rising_edge(qsfp_gtrefclk))then
@@ -1132,9 +1109,9 @@ begin
     --    end if;
     --end process; 
     
-    --pFpgaResetEmcclkSynchroniser : process(user_mmcm_locked_1, FPGA_EMCCLK2)
+    --pFpgaResetEmcclkSynchroniser : process(user_mmcm_locked, FPGA_EMCCLK2)
     --begin
-    --    if (user_mmcm_locked_1 = '0')then
+    --    if (user_mmcm_locked = '0')then
     --        sync_emcclk_fpga_rst <= '1';
     --        emcclk_fpga_rst <= '1';
     --    elsif (rising_edge(FPGA_EMCCLK2))then
@@ -1152,9 +1129,9 @@ begin
         end if;
     end process;
 
-    gen_host_reset_count : process(user_mmcm_locked_1, bsp_clk)
+    gen_host_reset_count : process(user_mmcm_locked, bsp_clk)
     begin
-        if (user_mmcm_locked_1 = '0')then
+        if (user_mmcm_locked = '0')then
             host_reset_count <= (others => '1');
         elsif (rising_edge(bsp_clk))then
             if ((host_reset_req_z = '0')and(host_reset_req = '1'))then
@@ -1479,10 +1456,10 @@ begin
     brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(30) <= fgbe_if_2_present;
     brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(31) <= fgbe_if_3_present;  
 
-    brd_user_read_regs(C_RD_40GBE_IF_0_OFFSET_ADDR) <= X"50000";
-    brd_user_read_regs(C_RD_40GBE_IF_1_OFFSET_ADDR) <= X"01";
-    brd_user_read_regs(C_RD_40GBE_IF_2_OFFSET_ADDR) <= X"01";
-    brd_user_read_regs(C_RD_40GBE_IF_3_OFFSET_ADDR) <= X"01";
+    brd_user_read_regs(C_RD_40GBE_IF_0_OFFSET_ADDR) <= X"00050000";
+    brd_user_read_regs(C_RD_40GBE_IF_1_OFFSET_ADDR) <= X"00000001";
+    brd_user_read_regs(C_RD_40GBE_IF_2_OFFSET_ADDR) <= X"00000001";
+    brd_user_read_regs(C_RD_40GBE_IF_3_OFFSET_ADDR) <= X"00000001";
     
     mezzanine_enable_delay_0 : mezzanine_enable_delay
     port map(
@@ -1619,7 +1596,7 @@ begin
         UART_rxd    => microblaze_uart_rxd,
         UART_txd    => microblaze_uart_txd,
         WE_O        => WB_MST_WE_O,
-        dcm_locked  => user_mmcm_locked_1);
+        dcm_locked  => user_mmcm_locked);
         
 
 
@@ -2173,5 +2150,5 @@ begin
 
     board_clk_o <= sys_clk;
     board_clk_rst_o <= sys_rst;
-    --user_mmcm_locked_o <= user_mmcm_locked_1;
+    --user_mmcm_locked_o <= user_mmcm_locked;
 end arch_skarab_infr;
