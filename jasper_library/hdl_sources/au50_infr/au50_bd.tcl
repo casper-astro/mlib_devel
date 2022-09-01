@@ -252,7 +252,7 @@ proc create_root_design { parentCell } {
   # Create instance: axi_gpio_0, and set properties
   set axi_gpio_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio_0 ]
   set_property -dict [ list \
-   CONFIG.C_DOUT_DEFAULT {0x00000001} \
+   CONFIG.C_DOUT_DEFAULT {0x00000000} \
    CONFIG.GPIO_BOARD_INTERFACE {hbm_cattrip} \
    CONFIG.USE_BOARD_FLOW {true} \
  ] $axi_gpio_0
