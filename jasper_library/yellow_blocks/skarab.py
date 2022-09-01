@@ -42,10 +42,7 @@ class skarab(YellowBlock):
         inst.add_parameter('MULTIPLY', self.clkparams[0])
         inst.add_parameter('DIVIDE',   self.clkparams[1])
         inst.add_parameter('DIVCLK',   self.clkparams[2])
-        
-        inst.add_port('adc_clk_i',        'adc_clk',          dir='in')
-        inst.add_port('adc_rst_i',        'adc_rst',          dir='in')
-        inst.add_port('adc_clk_sel_i',    'adc_clk_sel',      dir='in')        
+
         inst.add_port('user_clk_o',       'sys_clk',          dir='out')
         inst.add_port('user_rst_o',       'sys_rst',          dir='out')
         inst.add_port('hmc_clk_o',        'hmc_clk',          dir='out')
@@ -883,7 +880,7 @@ class skarab(YellowBlock):
     def gen_tcl_cmds(self):
         tcl_cmds = []
         tcl_cmds.append('set_property SCOPED_TO_REF cont_microblaze [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/imports/cont_microblaze/EMB123701U1R1.elf]')
-        tcl_cmds.append('set_property SCOPED_TO_REF cont_microblaze [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/cont_microblaze/cont_microblaze.bmm]')
+        tcl_cmds.append('set_property SCOPED_TO_REF cont_microblaze [get_files [get_property directory [current_project]]/myproj.gen/sources_1/bd/cont_microblaze/cont_microblaze.bmm]')
         tcl_cmds.append('set_property SCOPED_TO_CELLS microblaze_0 [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/imports/cont_microblaze/EMB123701U1R1.elf]')
         tcl_cmds.append('import_files -force -fileset constrs_1 %s/skarab_infr/Constraints/soc_version.xdc'%os.getenv('HDL_ROOT'))
         #Allows the microblaze to be edited
