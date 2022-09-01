@@ -19,16 +19,23 @@ onehundredgbe:
      include_rs_fec: 1
      cmac_loc:
         - CMACE4_X0Y7
-     # - X0Y0
-     # - X0Y0
-     # - X0Y0
+        - CMACE4_X0Y6
+        - CMACE4_X0Y5
+        - CMACE4_X0Y4
      gt_group:
         - X0Y44~X0Y47
+        - X0Y40~X0Y43
+        - X0Y32~X0Y35
+        - X0Y28~X0Y31
 provides:
+    # 135
     - qsfp1
-    #- qsfp2
-    #- qsfp3
-    #- qsfp4
+    # 134
+    - qsfp2
+    # 132
+    - qsfp3
+    # 131
+    - qsfp4
 pins:
   sys_clk_p:
     loc: F35
@@ -36,22 +43,6 @@ pins:
   sys_clk_n:
     loc: F36
     iostd: DIFF_SSTL12
-    #  qsfp1_clk156_p:
-    #    loc: P42
-    #  qsfp1_clk156_n:
-    #    loc: P43
-    #  qsfp2_clk156_p:
-    #    loc: T42
-    #  qsfp2_clk156_n:
-    #    loc: T43
-    #  qsfp3_clk156_p:
-    #    loc: Y42
-    #  qsfp3_clk156_n:
-    #    loc: Y43
-    #  qsfp4_clk156_p:
-    #    loc: AB42
-    #  qsfp4_clk156_n:
-    #    loc: AB43
   usb_tx:
     iostd: LVCMOS18
     loc: BP26
@@ -111,56 +102,128 @@ pins:
   qsfp_mgt_ref_clk_p: 
     loc: 
       - P42
+      - T42
+      - Y42
+      - AB42
   qsfp_mgt_ref_clk_n:
     loc: 
-      - P43    
+      - P43
+      - T43
+      - Y43 
+      - AB43   
   sfp_disable:
     loc:
       - BN25
+      - BN6
+      - BL6
+      - BK24
   qsfp_mgt_tx_p:
     loc:
       - G48
       - E48
       - C48
       - A49
+      - L48
+      - L44
+      - K46
+      - J48
+      - V46
+      - U44
+      - T46
+      - R44
+      - AA44
+      - Y46
+      - W48
+      - W44
   qsfp_mgt_tx_n:
     loc:
       - G49
       - E49
       - C49 
-      - A50 
+      - A50
+      - L49
+      - L45
+      - K47
+      - J49
+      - V47
+      - U45
+      - T47
+      - R45 
+      - AA45
+      - Y47
+      - W49
+      - W45
   qsfp_mgt_rx_p:
     loc:
       - G53
       - F51 
       - E53 
-      - D51 
+      - D51
+      - L53
+      - K51
+      - J53
+      - H51 
+      - U53
+      - U49
+      - T51
+      - R53
+      - AA53
+      - Y51
+      - W53
+      - V51
   qsfp_mgt_rx_n:
     loc:
       - G54
       - F52 
       - E54 
-      - D52 
+      - D52
+      - L54
+      - K52
+      - J54
+      - H52 
+      - U54
+      - U50
+      - T52
+      - R54
+      - AA54
+      - Y52
+      - W54
+      - V52
   qsfp_modprsl_ls:      
     iostd: LVCMOS18
     loc:
       - BM25
+      - BN7
+      - BM7
+      - BL22
   qsfp_modsell_ls:
     iostd: LVCMOS18
     loc:
       - BM24
+      - BN5
+      - BM5
+      - BK23
   qsfp_resetl_ls:
     iostd: LVCMOS18
     loc:
       - BN25
+      - BN6
+      - BL6
+      - BK24
   qsfp_intl_ls:
     iostd: LVCMOS18
     loc:
       - BP24
+      - BP6
+      - BL7
+      - BH21
   qsfp_lpmode_ls:
     iostd: LVCMOS18
     loc:
       - BN24
+      - BP7
+      - BN4
+      - BH21
   spi_flash_csn:
     iostd: LVCMOS18
     loc: BC15
