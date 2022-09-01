@@ -33,8 +33,10 @@ The master branch is usually updated once a year. Between updates, code with new
 
 2. Xilinx Vivado
 
-    This is available from [xilinx.com](https://www.xilinx.com) and will require a license. If you are part of an academic institution you may be eligible for free licenses via the [Xilinx University Program](https://www.xilinx.com/support/university.html).
+    Vivado is available from [xilinx.com](https://www.xilinx.com) and will require a license. You will also need a license for Model Composer, which as of 2021 is now part of a separate product called *Vitis Model Composer*. If you are part of an academic institution you may be eligible for free licenses via the [Xilinx University Program](https://www.xilinx.com/support/university.html).
     Vivado install instructions are available [here](https://casper-toolflow.readthedocs.io/en/latest/src/How-to-install-Xilinx-Vivado.html).
+    
+    Licenses for Vivado/Vitis are backwards-compatible with older versions. For example, a license for *Vivado ML Edition* (2022) should work with *Xilinx tools Vivado Design Suite - HLx Editions* (2016-2020). Note that you may still need a Vitis license (for Model Composer), even if using an older version of Vivado released before Vitis existed!
 
 3. Python
 
