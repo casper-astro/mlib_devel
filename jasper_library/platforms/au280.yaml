@@ -1,0 +1,33 @@
+name: au280
+manufacturer: Xilinx
+fpga: xcu280-fsvh2892-2L-e
+board: xilinx.com:au280:part0:1.1
+config_voltage: 1.8
+cfgbvs: GND
+backend_target: vivado
+mmbus_architecture: AXI4-Lite
+mmbus_base_address: 0x00000000
+# How to address each 32-bit (i.e. 4 indicates byte-addressable)
+mmbus_address_alignment: 4
+sources: []
+constraints:
+  - au280.xdc
+provides:
+  - sys_clk
+  - sys_clk90
+  - sys_clk180
+  - sys_clk270
+  - adc_clk
+  - adc_clk90
+  - adc_clk180
+  - adc_clk270
+pins:
+  led:
+    iostd: LVCMOS18
+    loc:
+       - E18
+       - E16
+       - F17
+       - F15
+       - E15
+       - E17

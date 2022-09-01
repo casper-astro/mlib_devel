@@ -239,7 +239,6 @@ architecture arch_wishbone_forty_gb_eth_attach of wishbone_forty_gb_eth_attach i
 
 
 begin
-
     local_mac             <= local_mac_reg;
     local_ip              <= local_ip_reg;
     local_gateway         <= local_gateway_reg;
@@ -385,11 +384,8 @@ begin
     rx_data_int  when (rxbuf_sel = '1') else
     reg_data_int;
     
-    --AI: latch data out when wishbone ack is asserted
     DAT_O <= reg_dat_o_int when (reg_ack = '1') else x"00000000";
     ACK_O <= reg_ack;
-    
-          
 --------------------------------------------------------------------------------
 -- REGISTER HANDLING
 --------------------------------------------------------------------------------
@@ -405,6 +401,7 @@ begin
             local_enable_reg          <= FABRIC_ENABLE;
             local_mc_recv_ip_reg      <= MC_RECV_IP;
             local_mc_recv_ip_mask_reg <= MC_RECV_IP_MASK;
+            cnt_reset_reg             <= (others => '0');
             cpu_tx_size_reg           <= (others => '0');
             cpu_rx_ack_reg            <= '0';
             soft_reset_reg            <= '0';
