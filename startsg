@@ -81,6 +81,16 @@ then
   $on_error 1
 fi
 
+if ! [ -n "${COMPOSER_PATH}" ]
+then
+  echo "ERROR: COMPOSER_PATH is not defined in the current environment."
+  $on_error 1
+elif ! [ -d "${COMPOSER_PATH}" -a -r "${COMPOSER_PATH}" ]
+then
+  echo "ERROR: COMPOSER_PATH '${COMPOSER_PATH}' is not a readable directory."
+  $on_error 1
+fi
+
 if ! [ -n "${XILINX_PATH}" ]
 then
   echo "ERROR: XILINX_PATH is not defined in the current environment."
@@ -152,6 +162,7 @@ fi
 
 # Make sure that these variables are exported
 export XILINX_PATH
+export COMPOSER_PATH
 export MATLAB_PATH
 export PLATFORM
 export MLIB_DEVEL_PATH
@@ -161,6 +172,7 @@ export HDL_DSP_DEVEL_PATH
 # Show environment essentials
 echo "Using MATLAB_PATH=${MATLAB_PATH}"
 echo "Using XILINX_PATH=${XILINX_PATH}"
+echo "Using COMPOSER_PATH=${COMPOSER_PATH}"
 echo "Using PLATFORM=${PLATFORM}"
 echo "Using MLIB_DEVEL_PATH=${MLIB_DEVEL_PATH}"
 echo "Using JASPER_BACKEND=${JASPER_BACKEND}"
@@ -176,11 +188,11 @@ export MATLAB="$MATLAB_PATH"
 export CASPER_BASE_PATH="$MLIB_DEVEL_PATH"
 export HDL_ROOT="$CASPER_BASE_PATH/jasper_library/hdl_sources"
 
-if [ -f "${XILINX_PATH}/settings64.sh" ]
+if [ -f "${COMPOSER_PATH}/settings64.sh" ]
 then
-  source "${XILINX_PATH}/settings64.sh" > /dev/null
+  source "${COMPOSER_PATH}/settings64.sh" > /dev/null
 else
-  echo "ERROR: Xilink settings script '${XILINX_PATH}/settings64.sh' not found."
+  echo "ERROR: Xilink settings script '${COMPOSER_PATH}/settings64.sh' not found."
   $on_error 1
 fi
 
@@ -189,16 +201,21 @@ export PATH="${MATLAB_PATH}/bin:${PATH}"
 # Set umask to allow group writes
 umask 002
 
+unset MYVIVADO
+
 if [ "$0" == "${BASH_SOURCE[0]}" ]
 then
   # Save start-up directory (if defined, startup.m will cd there)
   export CASPER_STARTUP_DIR=`pwd`
 
+
+  echo "Changing to directory: ${MLIB_DEVEL_PATH}"
   # Change into the MLIB_DEVEL_PATH directory
   # (so MATLAB will find our startup.m file).
   cd "${MLIB_DEVEL_PATH}"
 
   # Start sysgen in OPENGL graphics mode to prevent java errors
-  "${MODEL_COMPOSER_PATH}/bin/model_composer"
-
+  echo "Starting model_composer"
+  #"${COMPOSER_PATH}/bin/model_composer" 
+  model_composer
 fi
