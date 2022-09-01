@@ -81,7 +81,7 @@ then
   $on_error 1
 fi
 
-if ! [ -n "${MODEL_COMPOSER_PATH}" ]
+if ! [ -n "${COMPOSER_PATH}" ]
 then
   echo "ERROR: COMPOSER_PATH is not defined in the current environment."
   $on_error 1

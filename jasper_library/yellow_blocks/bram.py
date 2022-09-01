@@ -1,7 +1,6 @@
 from .yellow_block import YellowBlock
 from math import log
 from .yellow_block_typecodes import *
-import IPython
 
 class bram(YellowBlock):
     def initialize(self):
