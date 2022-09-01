@@ -1,0 +1,7 @@
+Running: xsim.dir/gty_wrapper_t_behav/xsimk.exe -simmode gui -wdb gty_wrapper_t_behav.wdb -simrunnum 0 -socket 56311
+Design successfully loaded
+Design Loading Memory Usage: 169740 KB (Peak: 169740 KB)
+Design Loading CPU Usage: 624 ms
+Simulation completed
+Simulation Memory Usage: 214536 KB (Peak: 214536 KB)
+Simulation CPU Usage: 39030 ms

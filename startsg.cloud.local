@@ -1,0 +1,5 @@
+export XILINX_PATH=/tools/Xilinx/Vivado/2019.1
+export MATLAB_PATH=/usr/local/MATLAB/R2019a
+export LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libstdc++.so.6"
+export PLATFORM=lin64
+export JASPER_BACKEND=vivado

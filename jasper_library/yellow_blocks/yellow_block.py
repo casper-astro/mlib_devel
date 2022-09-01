@@ -185,7 +185,7 @@ class YellowBlock(object):
         if self.platform_support == 'all':
             pass
         elif self.platform.name not in self.platform_support:
-            throw_error('Unsupported hardware system %s'%self.platform)
+            self.throw_error('Unsupported hardware system %s'%self.platform.name)
 
     def initialize(self):
         """
@@ -213,6 +213,16 @@ class YellowBlock(object):
 
         :param top: A VerilogModule instance, defining the top-level
                     of an HDL design into which this block should instantiate itself.
+        """
+        pass
+
+    def modify_bd(self, bd):
+        """
+        EXPERIMENTAL
+
+        Modify the block design
+
+        :param bd: A Vivado block design
         """
         pass
 
@@ -259,6 +269,19 @@ class YellowBlock(object):
         :return: Dictionary of tcl command lists. Default {}
         """
         return {}
+
+    def gen_xsct_tcl_cmds(self, jdts_dir):
+        """
+        :param jdts_dir:
+
+        :return: A list of xsct tcl cmds, None if no commands to add
+        """
+        return None
+
+    def gen_dt_node(self, mmap_info, jdts_dir):
+        """
+        """
+        return None
 
     def add_build_dir_source(self):
         """

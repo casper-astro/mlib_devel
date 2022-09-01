@@ -51,11 +51,17 @@ pins:
     loc: AV27
     iostd: LVCMOS25
   sync_in_p:
-    iostd: DIFF_HSTL_I_18
+    iostd: LVDS
     loc: AT14
   sync_in_n:
-    iostd: DIFF_HSTL_I_18
+    iostd: LVDS
     loc: AT13
+  trig: # Schematic net TRIG_EXT
+    iostd: LVCMOS18
+    loc: AU20
+  trig_oe: # Schemantic net TRIG_IO
+    iostd: LVCMOS18
+    loc: BA20
   gpio:
     iostd: LVCMOS25
     loc:
@@ -1255,3 +1261,27 @@ pins:
       - AE32
       - AM17
       - AM16
+  qsfp_mod_seln:
+    iostd: LVCMOS18
+    loc: [J14, V12, AN19, T15]
+  qsfp_lp_mod:
+    iostd: LVCMOS18
+    loc: [V14, U12, AN18, T14]
+  qsfp_mod_prsn:
+    iostd: LVCMOS18
+    loc: [V11, W10, AL17, T10]
+  qsfp_mod_rstn:
+    iostd: LVCMOS18
+    loc: [U14, W11, AK17, U10]
+  qsfp_scl:
+    iostd: LVCMOS18
+    loc: H14
+  qsfp_sda:
+    iostd: LVCMOS18
+    loc: G14
+  f_z7_link_p:
+    iostd: LVCMOS25
+    loc: [AV26, BC24, AY26, AW28]
+  f_z7_link_n:
+    iostd: LVCMOS25
+    loc: [AV27, BD24, BA27, AY28]

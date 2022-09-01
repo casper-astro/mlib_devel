@@ -1,20 +1,19 @@
+
 module zcu111_infrastructure #(
-        parameter MULTIPLY = 1,
-        parameter DIVIDE   = 1,
-        parameter DIVCLK   = 1
-    ) (
+  parameter MULTIPLY = 1,
+  parameter DIVIDE   = 1,
+  parameter DIVCLK   = 1
+) (
+  input clk_100_n,
+  input clk_100_p,
 
-        input clk_100_n,
-	input clk_100_p,
+  output sys_clk,
+  output sys_clk90,
+  output sys_clk180,
+  output sys_clk270,
 
-	output sys_clk,
-	output sys_clk90,
-	output sys_clk180,
-	output sys_clk270,
-
-        output sys_clk_rst
-
-    );
+  output sys_clk_rst
+);
 
     wire clk_100;
     wire user_clk_mmcm_fb;

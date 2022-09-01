@@ -19,7 +19,8 @@ entity metadata_readout is
     cs    : in    std_logic;
     rdstb : in    std_logic;
     sel   : in    std_logic_vector(7 downto 0);
-    data  : inout std_logic_vector(7 downto 0));
+    dout  : out   std_logic_vector(7 downto 0));
+
 
 end metadata_readout;
 
@@ -43,7 +44,7 @@ architecture behavioral of metadata_readout is
   
 begin  -- behavioral
 
-  data     <= result when drivebus = '1' else "ZZZZZZZZ";
+  dout     <= result when drivebus = '1' else "00000000";
   drivebus <= '1'    when selected = '1'
               and cs = '0' and rdstb = '0' else '0';
   selected <= '1' when sel = address else '0';

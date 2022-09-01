@@ -1,0 +1,14 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/src/fifo_generator_0/sim/fifo_generator_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module fifo_generator_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/src/clk_wiz_0/clk_wiz_0_clk_wiz.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module clk_wiz_0_clk_wiz
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/src/clk_wiz_0/clk_wiz_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module clk_wiz_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/src/data_rx.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module data_rx
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/src/decode_10B8B.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module decode_10B8B
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/src/sync_iinput.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module sync_input
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/src/data_rx_tb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module data_rx_tb

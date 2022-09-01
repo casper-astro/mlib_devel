@@ -145,7 +145,7 @@ catch
 end
 valid_source = 'rx_dv_or';
 
-function draw_counter(sys, xpos, ypos, targetname, sourcename)
+function draw_counter(sys, xpos, ypos, targetname, sourcename, description)
     ctr_name = [targetname, '_ctr'];
     delay_name = [targetname, '_del'];
     delete_block_lines_s([sys, '/', targetname]);
@@ -170,7 +170,8 @@ function draw_counter(sys, xpos, ypos, targetname, sourcename)
         reuse_block(sys, targetname, 'xps_library/Memory/software_register', ...
             'io_dir', 'To Processor', 'arith_types', '0', ...
             'io_delay', '1', 'bitwidths', debug_ctr_width, ...
-            'sim_port', 'no', 'Position', [xpos+150 ypos xpos+200 ypos+20]);
+            'sim_port', 'no', 'Position', [xpos+150 ypos xpos+200 ypos+20], ...
+            'desc_str', description);
         reuse_block(sys, ctr_name, 'xbsIndex_r4/Counter', ...
             'arith_type', 'Unsigned', 'n_bits', debug_ctr_width, ...
             'explicit_period', 'on', 'period', '1', ...
@@ -187,7 +188,7 @@ function draw_counter(sys, xpos, ypos, targetname, sourcename)
     end
 end
 
-function draw_errorcounter(sys, xpos, ypos, targetname, frame_len, sourceeof, sourcevalid)
+function draw_errorcounter(sys, xpos, ypos, targetname, frame_len, sourceeof, sourcevalid, description)
     ctr_name = [targetname, '_ctr'];
     nobad_name = [targetname, '_nobad'];
     errchk_name = [targetname, '_errchk'];
@@ -216,7 +217,8 @@ function draw_errorcounter(sys, xpos, ypos, targetname, frame_len, sourceeof, so
         reuse_block(sys, targetname, 'xps_library/Memory/software_register', ...
             'io_dir', 'To Processor', 'arith_types', '0', ...
             'io_delay', '1', 'bitwidths', debug_ctr_width, ...
-            'sim_port', 'no', 'Position', [xpos+150 ypos xpos+200 ypos+20]);
+            'sim_port', 'no', 'Position', [xpos+150 ypos xpos+200 ypos+20], ...
+            'desc_str', description);
         reuse_block(sys, errchk_name, 'casper_library_communications/frame_len_checker', ...
             'frame_len', frame_len, ...
             'Position', [xpos-100, ypos, xpos, ypos+45]);
@@ -244,7 +246,7 @@ function draw_errorcounter(sys, xpos, ypos, targetname, frame_len, sourceeof, so
     end
 end
 
-function draw_rxcounter(sys, xpos, ypos, targetname, sourceeof, sourcevalid)
+function draw_rxcounter(sys, xpos, ypos, targetname, sourceeof, sourcevalid, description)
     ctr_name = [targetname, '_ctr'];
     and_name = [targetname, '_and'];
     ed_name = [targetname, '_ed'];
@@ -268,7 +270,8 @@ function draw_rxcounter(sys, xpos, ypos, targetname, sourceeof, sourcevalid)
         reuse_block(sys, targetname, 'xps_library/Memory/software_register', ...
             'io_dir', 'To Processor', 'arith_types', '0', ...
             'io_delay', '1', 'bitwidths', debug_ctr_width, ...
-            'sim_port', 'no', 'Position', [xpos+350 ypos xpos+400 ypos+20]);
+            'sim_port', 'no', 'Position', [xpos+350 ypos xpos+400 ypos+20], ...
+            'desc_str', description);
         reuse_block(sys, and_name, 'xbsIndex_r4/Logical', ...
             'arith_type', 'Unsigned', 'logical_function', 'AND', 'inputs', '2', ...
             'latency', '1', 'Position', [xpos+50 ypos xpos+100 ypos+45]);
@@ -302,54 +305,65 @@ end
 
 % tx counter
 starty = 850;
-draw_rxcounter(cursys, 400, starty, 'txctr', 'tx_end_of_frame', 'tx_valid');
+draw_rxcounter(cursys, 400, starty, 'txctr', 'tx_end_of_frame', 'tx_valid', ...
+  'Counter which increments each time a valid end-of-frame is seen on a packet to be transmitted');
 
 % tx error counter
 starty = starty + 50;
-draw_errorcounter(cursys, 400, starty, 'txerrctr', get_param(cursys, 'txerrctr_len'), 'tx_end_of_frame', 'tx_valid');
+draw_errorcounter(cursys, 400, starty, 'txerrctr', get_param(cursys, 'txerrctr_len'), 'tx_end_of_frame', 'tx_valid', ...
+  'Counter which increments each time a TX packet error is detected');
 
 % tx overflow counter
 starty = starty + 50;
-draw_counter(cursys, 400, starty, 'txofctr', clear_name([pipe_no_pipe, '_tx_overflow']));
+draw_counter(cursys, 400, starty, 'txofctr', clear_name([pipe_no_pipe, '_tx_overflow']), ...
+  'Counter which increments on every transmission overflow event');
 
 % tx full counter
 starty = starty + 50;
-draw_counter(cursys, 400, starty, 'txfullctr', clear_name([pipe_no_pipe, '_tx_afull']));
+draw_counter(cursys, 400, starty, 'txfullctr', clear_name([pipe_no_pipe, '_tx_afull']), ...
+  'Counter which increments every time the transmission buffer is full');
 
 % tx valid counter
 starty = starty + 50;
-draw_counter(cursys, 400, starty, 'txvldctr', 'tx_valid')
+draw_counter(cursys, 400, starty, 'txvldctr', 'tx_valid', ...
+  'Counter which increments with every valid word of data input to the core')
 
 % draw all the tx registers
 
 % rx counter
 starty = 130;
 % draw_rxcounter(cursys, 1400, starty, 'rxctr', clear_name([cursys, '_rx_end_of_frame']), valid_source)
-draw_rxcounter(cursys, 1400, starty, 'rxctr', clear_name([pipe_no_pipe, '_rx_end_of_frame']), valid_source)
+draw_rxcounter(cursys, 1400, starty, 'rxctr', clear_name([pipe_no_pipe, '_rx_end_of_frame']), valid_source, ...
+  'Counter which increments on every valid packet end-of-frame signal')
 
 % rx error counter
 starty = starty + 50;
 % draw_errorcounter(cursys, 1400, starty, 'rxerrctr', get_param(cursys, 'rxerrctr_len'), clear_name([cursys, '_rx_end_of_frame']), valid_source);
-draw_errorcounter(cursys, 1400, starty, 'rxerrctr', get_param(cursys, 'rxerrctr_len'), clear_name([pipe_no_pipe, '_rx_end_of_frame']), valid_source);
+draw_errorcounter(cursys, 1400, starty, 'rxerrctr', get_param(cursys, 'rxerrctr_len'), clear_name([pipe_no_pipe, '_rx_end_of_frame']), valid_source, ...
+  'Counter which increments each time an RX packet error is detected');
 
 % rx overflow counter
 starty = starty + 50;
 % draw_counter(cursys, 1400, starty, 'rxofctr', clear_name([cursys, '_rx_overrun']));
-draw_counter(cursys, 1400, starty, 'rxofctr', clear_name([pipe_no_pipe, '_rx_overrun']));
+draw_counter(cursys, 1400, starty, 'rxofctr', clear_name([pipe_no_pipe, '_rx_overrun']), ...
+  'Counter which increments every time an RX buffer overflow is detected');
 
 % rx bad frame counter
 starty = starty + 50;
 % draw_counter(cursys, 1400, starty, 'rxbadctr', clear_name([cursys, '_rx_bad_frame']));
-draw_counter(cursys, 1400, starty, 'rxbadctr', clear_name([pipe_no_pipe, '_rx_bad_frame']));
+draw_counter(cursys, 1400, starty, 'rxbadctr', clear_name([pipe_no_pipe, '_rx_bad_frame']), ...
+  'Counter which increments every time a bad RX frame is detected');
 
 % rx valid counter
 starty = starty + 50;
-draw_counter(cursys, 1400, starty, 'rxvldctr', valid_source);
+draw_counter(cursys, 1400, starty, 'rxvldctr', valid_source, ...
+  'Counter which increments with every received word marked valid');
 
 % rx eof counter
 starty = starty + 50;
 % draw_counter(cursys, 1400, starty, 'rxeofctr', clear_name([cursys, '_rx_end_of_frame']));
-draw_counter(cursys, 1400, starty, 'rxeofctr', clear_name([pipe_no_pipe, '_rx_end_of_frame']));
+draw_counter(cursys, 1400, starty, 'rxeofctr', clear_name([pipe_no_pipe, '_rx_end_of_frame']), ...
+  'Counter which increments with every received packet end-of-frame marked valid');
 
 % rx snapshot
 forty_gbe_mask_draw_rxsnap(cursys, pipe_no_pipe);

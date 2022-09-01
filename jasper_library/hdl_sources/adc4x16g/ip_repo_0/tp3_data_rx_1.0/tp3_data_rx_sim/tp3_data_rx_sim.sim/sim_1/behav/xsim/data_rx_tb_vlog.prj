@@ -1,0 +1,15 @@
+# compile verilog/system verilog design source files
+verilog xil_defaultlib  --include "../../../../../src/clk_wiz_0" \
+"../../../../../src/fifo_generator_0/sim/fifo_generator_0.v" \
+"../../../../../src/clk_wiz_0/clk_wiz_0_clk_wiz.v" \
+"../../../../../src/clk_wiz_0/clk_wiz_0.v" \
+"../../../../../src/data_rx.v" \
+"../../../../../src/decode_10B8B.v" \
+"../../../../../src/sync_iinput.v" \
+"../../../../../src/data_rx_tb.v" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort

@@ -1,0 +1,1118 @@
+name: htg940
+manufacturer: HTG
+fpga: xcvu13p-fhgb2104-2-e
+family: ultrascaleplus
+backend_target: vivado
+#mmbus_architecture: ['wishbone', 'AXI4-Lite']
+#mmbus_architecture: ['AXI4-Lite', 'wishbone']
+mmbus_architecture: 'wishbone'
+# wishbone at address 0; AXI offset = 1MB
+mmbus_base_address: 0x00100000
+#axi_ic_base_address: 0x44A00000
+dsp_wb_base_address: 0x00010000
+# How to address each 32-bit (i.e. 4 indicates byte-addressable)
+mmbus_address_alignment: 4
+sources: []
+constraints: []
+tengbe:
+  gt_quad: "X0Y9"
+microblaze:
+  use_uart: False
+onehundredgbe:
+  refclk_freq_str: "156.25"
+  include_rs_fec: 1
+  cmac_loc:
+    - CMACE4_X0Y9
+    - CMACE4_X0Y1 
+    - CMACE4_X0Y2
+    - CMACE4_X0Y3
+    - CMACE4_X0Y4
+    - CMACE4_X0Y5
+provides:
+  - qsfp0
+  - qsfp1
+  - qsfp2
+  - qsfp3
+  - qsfp4
+  - qsfp5
+pins:
+  sys_clk_p:
+    loc: C38 
+    iostd: LVDS
+  sys_clk_n:
+    loc: C39
+    iostd: LVDS
+
+# ddr4 200mhz sysclk
+  sys_clk_200_p:
+    loc: BA34
+    iostd: DIFF_HSTL_I_12
+  sys_clk_200_n:
+    loc: BB34
+    iostd: DIFF_HSTL_I_12
+
+    
+
+
+  # Use GPIO 9,10,11,12 for SPI
+#  miso:
+#    loc: BJ29
+#    iostd: LVCMOS18
+#  mosi:
+#    loc: BG32
+#    iostd: LVCMOS18
+#  sclk:
+#    loc: BF32
+#    iostd: LVCMOS18
+#  cs_n:
+#    loc: BK30
+#    iostd: LVCMOS18
+  led:
+    iostd: LVCMOS18
+    loc:
+      - AP28
+      - AN28
+      - AP26
+      - AP25
+      - AR28
+      - AR27
+      - AT28
+      - AR25
+  usb_tx:
+    iostd: LVCMOS18
+    loc: R15
+  usb_rx:
+    iostd: LVCMOS18
+    loc: P15
+  usb_cts:
+    iostd: LVCMOS18
+    loc: D14
+  usb_rts:
+    iostd: LVCMOS18
+    loc: L15
+  sync_in:
+    iostd: LVCMOS18
+    loc:
+      - AV26
+  gpio:
+    iostd: LVCMOS18
+    loc:
+#      # 0_p
+      - BF33
+#      # 1_p
+      - AK27
+#      # 2_p
+      - AR32
+#      # 3, 4, ... 12
+      - AR31
+#      - BG33
+#      - BH29
+#      - BG30
+#      - BF31
+#      - BH30
+#      - BJ29
+#      - BG32
+#      - BF32
+#      - BK30
+#
+#  940 1gbe interface
+#  gbe_rgmii_rxd:
+#    iostd: LVCMOS25
+#    loc:
+#      - A20
+#      - D21
+#      - E21
+#      - C21
+#  gbe_rgmii_txd:
+#    iostd: LVCMOS25
+#    loc:
+#      - D20
+#      - A19
+#      - B19
+#      - E20
+#  gbe_rgmii_tx_ctl:
+#    iostd: LVCMOS25
+#    loc: G21
+#  gbe_rgmii_rx_ctl:
+#    iostd: LVCMOS25
+#    loc: B21
+#  gbe_rgmii_txc:
+#    iostd: LVCMOS25
+#    loc: G20
+#  gbe_phy_mdio:
+#    iostd: LVCMOS18
+#    loc: G19
+#  gbe_phy_mdc:
+#    iostd: LVCMOS18
+#    loc: A18
+#  gbe_rx_clk:
+#    iostd: 
+#    loc: G20
+#  gbe_tx_clk:
+#    iostd:
+#    loc: G21
+
+
+
+#
+#  gbe_phy_power_down_n:
+#    iostd: LVCMOS18
+#    loc: BF22
+  #gbe_phy_rst_n:
+  #  iostd: LVCMOS18
+  #  loc: U65.19 #TODO
+
+  eth_clk_p:
+    loc:
+      - L36
+#      - AD13
+#      - AG40
+#      - AB42
+  eth_clk_n:
+    loc:
+      - L37
+#      - AD12
+#      - AG41
+#      - AB43
+  mgt_rx_p:
+    loc:
+      - J45
+      - F45
+      - H43
+      - D45
+  mgt_rx_n:
+    loc:
+      - J46
+      - F46
+      - H44
+      - D46
+  mgt_tx_p:
+    loc:
+      - G40
+      - C42
+      - E42
+      - A42
+  mgt_tx_n:
+    loc:
+      - G41
+      - C43
+      - E43
+      - A43
+
+  qsfp_mgt_ref_clk_p:
+    loc:
+      - L36
+      - AV11
+      - AF11
+      - AK11
+      - AB11
+      - AP11
+  qsfp_mgt_ref_clk_n:
+    loc:
+      - L37
+      - AV10
+      - AF10
+      - AK10
+      - AB10
+      - AP10
+  qsfp_mgt_rx_p:
+    loc:
+      - J45
+      - F45
+      - H43
+      - D45
+       #DP 0, 2, 1, 3
+      - AV2
+      - BA2
+      - AW4
+      - BC2
+       # DP 15, 14, 12, 13
+      - AF2
+      - AG4
+      - AH2
+      - AJ4
+       # DP 11, 10 , 9, 8
+      - AN4
+      - AK2
+      - AL4
+      - AM2
+       # DP 19, 17, 18, 16
+      - AE4
+      - AC4
+      - AD2
+      - AB2
+       # DP 5, 4, 6, 7
+      - AU4
+      - AR4
+      - AT2
+      - AP2
+  qsfp_mgt_rx_n:
+    loc:
+      - J46
+      - F46
+      - H44
+      - D46
+       #DP 0, 2, 1, 3
+      - AV1
+      - BA1
+      - AW3
+      - BC1
+       # DP 15, 14, 12, 13
+      - AF1
+      - AG3
+      - AH1
+      - AJ3
+       # DP 11, 10 , 9, 8
+      - AN3
+      - AK1
+      - AL3
+      - AM1
+       # DP 19, 17, 18, 16
+      - AE3
+      - AC3
+      - AD1
+      - AB1
+       # DP 5, 4, 6, 7
+      - AU3
+      - AR3
+      - AT1
+      - AP1
+  qsfp_mgt_tx_p:
+    loc:
+      - G40
+      - C42
+      - E42
+      - A42
+       #DP 0, 2, 1, 3
+      - AV7
+      - BD5
+      - BB5
+      - BF5
+       # DP 15, 14, 12, 13
+      - AF7
+      - AG9
+      - AH7
+      - AJ9
+       # DP 11, 10 , 9, 8
+      - AN9
+      - AK7
+      - AL9
+      - AM7
+       # DP 19, 17, 18, 16
+      - AE9
+      - AC9
+      - AD7
+      - AB7
+       # DP 5, 4, 6, 7
+      - AU9
+      - AR9
+      - AT7
+      - AP7
+  qsfp_mgt_tx_n:
+    loc:
+      - G41
+      - C43
+      - E43
+      - A43
+       #DP 0, 2, 1, 3
+      - AV6
+      - BD4
+      - BB4
+      - BF4
+       # DP 15, 14, 12, 13
+      - AF6
+      - AG8
+      - AH6
+      - AJ8
+       # DP 11, 10 , 9, 8
+      - AN8
+      - AK6
+      - AL8
+      - AM6
+       # DP 19, 17, 18, 16
+      - AE8
+      - AC6
+      - AD6
+      - AB6
+       # DP 5, 4, 6, 7
+      - AU8
+      - AR8
+      - AT6
+      - AP6
+  qsfp_modprsl_ls:
+    iostd: LVCMOS18
+    loc: [B32, AP15, AY15, AU13, BB12, AM15]
+  qsfp_lpmode:
+    iostd: LVCMOS18
+    loc: [B31, AW16, AV16, AP13, AY11, AN14]
+#  qsfp_sda:
+#    iostd: LVCMOS18
+#    loc: [BN30, BM30, BP32, BM34]
+#  qsfp_scl:
+#    iostd: LVCMOS18
+#    loc: [BN29, BL30, BN32, BM32]
+  i2c:
+    iostd: LVCMOS18 
+    loc: [AV28, AU27] #SDA, SCL
+#  qsfp_sda:
+#    iostd: LVCMOS18
+#    loc: [BN30, BM30, BP32, BM34]
+#  qsfp_scl:
+#    iostd: LVCMOS18
+#    loc: [BN29, BL30, BN32, BM32]
+  i2c:
+    iostd: LVCMOS18 
+    loc: [AV28, AU27] #SDA, SCL
+  fmc_a_clk_m2c_p:
+    iostd: LVDS
+    loc:
+      - K18
+  fmc_a_clk_m2c_n:
+    iostd: LVDS
+    loc:
+      - J18
+  fmc_a_dp_c2m_p:
+    iostd: LVDS
+    loc:
+      - A9
+      - D7
+      - E9
+      - C9
+      - F7
+      - J9
+      - H7
+      - G9
+      - N9
+      - K7
+      - L9
+      - M7
+      - P7
+      - T7
+      - R9
+      - U9
+      - W9
+      - V7
+      - Y7
+      - AA9
+  fmc_a_dp_c2m_n:
+    iostd: LVDS
+    loc:
+      - A8
+      - D6
+      - E8
+      - C8
+      - F6
+      - J8
+      - H6
+      - G8
+      - N8
+      - K6
+      - L8
+      - M6
+      - P6
+      - T6
+      - R8
+      - U8
+      - W8
+      - V6
+      - Y6
+      - AA8
+  fmc_a_gbtclk_m2c_n:
+    loc:
+      - D10
+      - H10
+      - M10
+      - T10
+      - Y10
+  fmc_a_gbtclk_m2c_p:
+    loc:
+      - D11
+      - H11
+      - M11
+      - T11
+      - Y11
+  fmc_a_ha_p:
+    iostd: LVDS
+    loc:
+      - J23
+      - J24
+      - C26
+      - B25
+      - C24
+      - B24
+      - E25
+      - D24
+      - C22
+      - A23
+      - L22
+      - K25
+      - G22
+      - E23
+      - M25
+      - L23
+      - L25
+      - G25
+      - F24
+      - N22
+      - P23
+      - R25
+      - P24
+      - R21
+  fmc_a_ha_n:
+    iostd: LVDS
+    loc:
+      - H23
+      - H24
+      - B26
+      - A25
+      - C23
+      - A24
+      - D25
+      - D23
+      - B22
+      - A22
+      - K22
+      - J25
+      - F22
+      - E22
+      - M24
+      - K23
+      - L24
+      - G24
+      - F23
+      - M22
+      - N23
+      - P25
+      - N24
+      - P21
+  fmc_a_la_p:
+    iostd: LVDS
+    loc:
+      - J20
+      - H19
+      - J21
+      - D19
+      - F18
+      - E18
+      - D18
+      - N17
+      - N21
+      - F20
+      - L20
+      - P18
+      - M20
+      - L17
+      - L19
+      - R20
+      - P19
+      - G15
+      - B17
+      - A14
+      - C16
+      - E15
+      - C14
+      - B15
+      - G17
+      - F13
+      - D13
+      - E16
+      - J13
+      - H17
+      - L13
+      - K16
+      - N16
+      - M14
+  fmc_a_la_n:
+    iostd: LVDS
+    loc:
+      - J19
+      - H18
+      - H21
+      - C19
+      - F17
+      - E17
+      - C18
+      - M17
+      - M21
+      - F19
+      - K20
+      - N18
+      - M19
+      - K17
+      - L18
+      - P20
+      - N19
+      - F15
+      - A17
+      - A13
+      - B16
+      - D15
+      - B14
+      - A15
+      - G16
+      - E13
+      - C13
+      - D16
+      - H13
+      - H16
+      - K13
+      - K15
+      - M16
+      - L14
+  fmc_a_refclk_m2c_p:
+    iostd: LVDS
+    loc:
+      - J14
+  fmc_a_refclk_m2c_n:
+    iostd: LVDS
+    loc:
+      - H14
+  fmc_a_sync_m2c_p:
+    iostd: LVDS
+    loc:
+      - J16
+  fmc_a_sync_m2c_n:
+    iostd: LVDS
+    loc:
+      - J15
+  fmc_a_user_def0_p:
+    iostd: LVDS
+    loc:
+      - P14
+  fmc_a_user_def0_n:
+    iostd: LVDS
+    loc:
+      - N14
+  fmc_b_clk_m2c_p:
+    iostd: LVDS
+    loc:
+      - E38
+  fmc_b_clk_m2c_n:
+    iostd: LVDS
+    loc:
+      - D38
+  fmc_b_dp_c2m_p:
+    iostd: LVDS
+    loc:
+      - AE40
+      - AB38
+      - AD38
+      - AC40
+      - W40
+      - Y38
+      - V38
+      - AA40
+      - P38
+      - T38
+      - U40
+      - R40
+      - L40
+      - J40
+      - N40
+      - M38
+  fmc_b_dp_c2m_n:
+    iostd: LVDS
+    loc:
+      - AE41
+      - AB39
+      - AD39
+      - AC41
+      - W41
+      - Y39
+      - V39
+      - AA41
+      - P39
+      - T39
+      - U41
+      - R41
+      - L41
+      - J41
+      - N41
+      - M39
+  fmc_b_gbtclk_m2c_n:
+    loc:
+      - AG37
+      - AC37
+      - W37
+      - R37
+  fmc_b_gbtclk_m2c_p:
+    loc:
+      - AG36
+      - AC36
+      - W36
+      - R36
+  fmc_b_la_p:
+    iostd: LVDS
+    loc:
+      - E36
+      - C36
+      - H34
+      - E40
+      - H36
+      - A37
+      - E35
+      - B40
+      - E39
+      - B36
+      - B35
+      - J35
+      - B39
+      - B34
+      - D34
+      - D33
+      - A32
+      - M31
+      - L32
+      - R31
+      - U32
+      - L33
+      - P34
+      - M34
+      - H31
+      - H32
+      - J33
+      - K31
+      - F32
+      - F33
+      - G30
+      - K30
+      - U30
+      - R30
+  fmc_b_la_n:
+    iostd: LVDS
+    loc:
+      - D36
+      - C37
+      - G34
+      - D40
+      - G36
+      - A38
+      - D35
+      - A40
+      - D39
+      - B37
+      - A35
+      - J36
+      - A39
+      - A34
+      - C34
+      - C33
+      - A33
+      - M32
+      - K32
+      - R32
+      - T32
+      - K33
+      - N34
+      - L34
+      - G31
+      - G32
+      - H33
+      - J31
+      - E32
+      - E33
+      - F30
+      - J30
+      - T30
+      - P30
+  fmc_b_refclk_m2c_p:
+    iostd: LVDS
+    loc:
+      - P31
+  fmc_b_refclk_m2c_n:
+    iostd: LVDS
+    loc:
+      - N31
+  fmc_b_sync_m2c_p:
+    iostd: LVDS
+    loc:
+      - N32
+  fmc_b_sync_m2c_n:
+    iostd: LVDS
+    loc:
+      - N33
+  fmc_b_user_def0_p:
+    iostd: LVDS
+    loc:
+      - T33
+  fmc_b_user_def0_n:
+    iostd: LVDS
+    loc:
+      - R33
+  fmc_c_clk_m2c_p:
+    iostd: LVDS
+    loc:
+      - AY23
+  fmc_c_clk_m2c_n:
+    iostd: LVDS
+    loc:
+      - BA23
+  fmc_c_dp_c2m_p:
+    iostd: LVDS
+    loc:
+      - AW40
+      - BF42
+      - BD42
+      - BB42
+      - AR40
+      - AT38
+      - AP38
+      - AU40
+      - AL40
+      - AM38
+      - AK38
+      - AN40
+      - AJ40
+      - AG40
+      - AH38
+      - AF38
+  fmc_c_dp_c2m_n:
+    iostd: LVDS
+    loc:
+      - AW41
+      - BF43
+      - BD43
+      - BB43
+      - AR41
+      - AT39
+      - AP39
+      - AU41
+      - AL41
+      - AM39
+      - AK39
+      - AN41
+      - AJ41
+      - AG41
+      - AH39
+      - AF39
+  fmc_c_gbtclk_m2c_n:
+    loc:
+      - BA41
+      - AV39
+      - AR37
+      - AL37
+  fmc_c_gbtclk_m2c_p:
+    loc:
+      - BA40
+      - AV38
+      - AR36
+      - AL36
+  fmc_c_la_p:
+    iostd: LVDS
+    loc:
+      - AY22
+      - BD23
+      - BD21
+      - BE22
+      - BC24
+      - BA24
+      - BB21
+      - AU22
+      - BA20
+      - AT24
+      - AR22
+      - AL21
+      - AN22
+      - AN24
+      - AN23
+      - AL22
+      - AL24
+      - AT19
+      - BB19
+      - BF19
+      - BD18
+      - AW20
+      - AY18
+      - AY17
+      - AN19
+      - AP20
+      - AP18
+      - AT18
+      - AL20
+      - AR17
+      - AN18
+      - AL19
+      - AM16
+      - AL17
+  fmc_c_la_n:
+    iostd: LVDS
+    loc:
+      - BA22
+      - BE23
+      - BE21
+      - BF22
+      - BD24
+      - BB24
+      - BC21
+      - AV22
+      - BB20
+      - AU24
+      - AT22
+      - AM21
+      - AN21
+      - AP24
+      - AP23
+      - AM22
+      - AM24
+      - AU19
+      - BC18
+      - BF18
+      - BE18
+      - AY20
+      - BA18
+      - BA17
+      - AP19
+      - AR20
+      - AR18
+      - AU17
+      - AM20
+      - AT17
+      - AN17
+      - AM19
+      - AN16
+      - AM17
+  fmc_c_refclk_m2c_p:
+    iostd: LVDS
+    loc:
+      - AV24
+  fmc_c_refclk_m2c_n:
+    iostd: LVDS
+    loc:
+      - AW24
+  fmc_c_sync_m2c_p:
+    iostd: LVDS
+    loc:
+      - AV23
+  fmc_c_sync_m2c_n:
+    iostd: LVDS
+    loc:
+      - AW23
+  fmc_c_user_def0_p:
+    iostd: LVDS
+    loc:
+      - AV21
+  fmc_c_user_def0_n:
+    iostd: LVDS
+    loc:
+      - AW21
+  fmc_d_clk_m2c_p:
+    iostd: LVDS
+    loc:
+      - BA15
+  fmc_d_clk_m2c_n:
+    iostd: LVDS
+    loc:
+      - BA14
+  fmc_d_dp_c2m_p:
+    iostd: LVDS
+    loc:
+      - AV7
+      - BB5
+      - BD5
+      - BF5
+      - AR9
+      - AU9
+      - AT7
+      - AP7
+      - AM7
+      - AL9
+      - AK7
+      - AN9
+      - AH7
+      - AJ9
+      - AG9
+      - AF7
+      - AB7
+      - AC9
+      - AD7
+      - AE9
+  fmc_d_dp_c2m_n:
+    iostd: LVDS
+    loc:
+      - AV6
+      - BB4
+      - BD4
+      - BF4
+      - AR8
+      - AU8
+      - AT6
+      - AP6
+      - AM6
+      - AL8
+      - AK6
+      - AN8
+      - AH6
+      - AJ8
+      - AG8
+      - AF6
+      - AB6
+      - AC8
+      - AD6
+      - AE8
+  fmc_d_gbtclk_m2c_n:
+    loc:
+      - AW8
+      - AT10
+      - AM10
+      - AH10
+      - AD10
+  fmc_d_gbtclk_m2c_p:
+    loc:
+      - AW9
+      - AT11
+      - AM11
+      - AH11
+      - AD11
+  fmc_d_ha_p:
+    iostd: LVDS
+    loc:
+      - J28
+      - H27
+      - B29
+      - C27
+      - F27
+      - K26
+      - A27
+      - D29
+      - E28
+      - L28
+      - B30
+      - M27
+      - P28
+      - M29
+      - H29
+      - E30
+      - F28
+      - J26
+      - G26
+      - P29
+      - T27
+      - T28
+      - T26
+      - P26
+  fmc_d_ha_n:
+    iostd: LVDS
+    loc:
+      - J29
+      - H28
+      - A29
+      - B27
+      - E27
+      - K27
+      - A28
+      - C29
+      - D28
+      - K28
+      - A30
+      - L27
+      - N28
+      - L29
+      - G29
+      - D30
+      - F29
+      - H26
+      - G27
+      - N29
+      - R27
+      - R28
+      - R26
+      - N26
+  fmc_d_la_p:
+    iostd: LVDS
+    loc:
+      - AW16
+      - AP15
+      - AL15
+      - AL14
+      - AN14
+      - AT15
+      - AR16
+      - AU13
+      - AP13
+      - AU14
+      - AU16
+      - BA12
+      - AY12
+      - AY16
+      - BC14
+      - BB15
+      - BD16
+      - AY13
+      - BD13
+      - BD15
+      - BE15
+      - BF14
+      - BB9
+      - BA7
+      - BE12
+      - BC8
+      - BA9
+      - BB11
+      - BE11
+      - BD9
+      - BF10
+      - BE7
+      - BC12
+      - BE8
+  fmc_d_la_n:
+    iostd: LVDS
+    loc:
+      - AW15
+      - AP14
+      - AM15
+      - AM14
+      - AN13
+      - AU15
+      - AR15
+      - AV13
+      - AR13
+      - AV14
+      - AV16
+      - BB12
+      - AY11
+      - AY15
+      - BC13
+      - BB14
+      - BE16
+      - BA13
+      - BE13
+      - BD14
+      - BF15
+      - BF13
+      - BC9
+      - BB7
+      - BF12
+      - BC7
+      - BA8
+      - BB10
+      - BE10
+      - BD8
+      - BF9
+      - BF7
+      - BC11
+      - BF8
+  fmc_d_refclk_m2c_p:
+    iostd: LVDS
+    loc:
+      - AV18
+  fmc_d_refclk_m2c_n:
+    iostd: LVDS
+    loc:
+      - AW18
+  fmc_d_sync_m2c_p:
+    iostd: LVDS
+    loc:
+      - AV19
+  fmc_d_sync_m2c_n:
+    iostd: LVDS
+    loc:
+      - AW19
+  fmc_d_user_def0_p:
+    iostd: LVDS
+    loc:
+      - BB17
+  fmc_d_user_def0_n:
+    iostd: LVDS
+    loc:
+      - BC17
+

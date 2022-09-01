@@ -32,24 +32,23 @@ class snap2(YellowBlock):
         top.add_signal('clk_250MHz180')
         top.assign_signal('clk_250MHz180', '~clk_250MHz')
 
-        top.add_signal('clk200')
+        top.add_signal('clk_200')
         # HACK: these clocks aren't at the phases they claim.
         # I hope you're not using them!
-        top.add_signal('clk20090')
-        top.assign_signal('clk20090', 'clk200')
-        top.add_signal('clk200180')
-        top.assign_signal('clk200180', '~clk200')
-        top.add_signal('clk200270')
-        top.assign_signal('clk200270', '~clk200')
+        top.add_signal('clk_20090')
+        top.assign_signal('clk_20090', 'clk_200')
+        top.add_signal('clk_200180')
+        top.assign_signal('clk_200180', '~clk_200')
+        top.add_signal('clk_200270')
+        top.assign_signal('clk_200270', '~clk_200')
 
     def gen_children(self):
         children = [YellowBlock.make_block({'tag':'xps:sys_block', 'board_id':'13', 'rev_maj':'1', 'rev_min':'0', 'rev_rcs':'32'}, self.platform)]
+        children += [YellowBlock.make_block({'tag':'xps:sysmon'}, self.platform)]
         if self.use_microblaze:
             children.append(YellowBlock.make_block({'tag':'xps:microblaze'}, self.platform))
         else:
             children.append(YellowBlock.make_block({'tag':'xps:spi_wb_bridge'}, self.platform))
-            # XADC is embedded in the microblaze core, so don't include another one unless we're not microblazin'
-            #children.append(YellowBlock.make_block({'tag':'xps:xadc'}, self.platform))
         return children
 
     def gen_constraints(self):
@@ -71,11 +70,18 @@ class snap2(YellowBlock):
             RawConstraint('set_property BITSTREAM.CONFIG.SPI_32BIT_ADDR Yes [current_design]'),
             #RawConstraint('set_property BITSTREAM.CONFIG.TIMER_CFG 20000000 [current_design]'),
             RawConstraint('set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]'),
+            RawConstraint("set_property BITSTREAM.CONFIG.OVERTEMPSHUTDOWN Enable [current_design]"),
             ]
 
 
     def gen_tcl_cmds(self):
         tcl_cmds = {}
+
+        # Turn on power optimization before place / route.
+        # TODO: This may be detrimental to timing, so probably should be an option somewhere.
+        tcl_cmds['pre_impl'] = []
+        tcl_cmds['pre_impl'] += ['set_property STEPS.POWER_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]']
+
         # After generating bitstream write PROM file
         # Write both mcs and bin files. The latter are good for remote programming via microblaze. And makes sure the
         # microblaze code makes it into top.bin, and hence top.bof

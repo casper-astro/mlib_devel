@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<document>
+<!--The data in this file is primarily intended for consumption by Xilinx tools.
+The structure and the elements are likely to change over the next few releases.
+This means code written to parse this file will need to be revisited each subsequent release.-->
+<application name="pa" timeStamp="Tue Aug 16 10:02:25 2016">
+<section name="Project Information" visible="false">
+<property name="ProjectID" value="d281bd8aca354eddb455c504de7c7dcf" type="ProjectID"/>
+<property name="ProjectIteration" value="1" type="ProjectIteration"/>
+</section>
+<section name="PlanAhead Usage" visible="true">
+<item name="Project Data">
+<property name="SrcSetCount" value="1" type="SrcSetCount"/>
+<property name="ConstraintSetCount" value="1" type="ConstraintSetCount"/>
+<property name="DesignMode" value="RTL" type="DesignMode"/>
+<property name="SynthesisStrategy" value="Vivado Synthesis Defaults" type="SynthesisStrategy"/>
+<property name="ImplStrategy" value="Vivado Implementation Defaults" type="ImplStrategy"/>
+</item>
+<item name="Java Command Handlers">
+<property name="AddSources" value="7" type="JavaHandler"/>
+<property name="AutoConnectPort" value="1" type="JavaHandler"/>
+<property name="AutoConnectTarget" value="1" type="JavaHandler"/>
+<property name="CloseProject" value="3" type="JavaHandler"/>
+<property name="CoreView" value="5" type="JavaHandler"/>
+<property name="CustomizeCore" value="2" type="JavaHandler"/>
+<property name="CustomizeRSBBlock" value="1" type="JavaHandler"/>
+<property name="EditCopy" value="1" type="JavaHandler"/>
+<property name="EditDelete" value="2" type="JavaHandler"/>
+<property name="EditPaste" value="2" type="JavaHandler"/>
+<property name="IPPackagerHandler" value="9" type="JavaHandler"/>
+<property name="IPPackagerWizardHandler" value="1" type="JavaHandler"/>
+<property name="LeaveFeedback" value="2" type="JavaHandler"/>
+<property name="NewExportHardware" value="1" type="JavaHandler"/>
+<property name="NewLaunchHardware" value="2" type="JavaHandler"/>
+<property name="OpenBlockDesign" value="3" type="JavaHandler"/>
+<property name="OpenHardwareManager" value="1" type="JavaHandler"/>
+<property name="ProjectSettingsCmdHandler" value="8" type="JavaHandler"/>
+<property name="RecustomizeCore" value="2" type="JavaHandler"/>
+<property name="ReportClockNetworks" value="2" type="JavaHandler"/>
+<property name="ReportMethodology" value="1" type="JavaHandler"/>
+<property name="ReportTimingSummary" value="3" type="JavaHandler"/>
+<property name="RunSynthesis" value="1" type="JavaHandler"/>
+<property name="SaveDesign" value="4" type="JavaHandler"/>
+<property name="SaveRSBDesign" value="1" type="JavaHandler"/>
+<property name="SetTargetConstrFile" value="1" type="JavaHandler"/>
+<property name="ShowView" value="5" type="JavaHandler"/>
+<property name="SimulationRelaunch" value="6" type="JavaHandler"/>
+<property name="SimulationRestart" value="5" type="JavaHandler"/>
+<property name="SimulationRun" value="1" type="JavaHandler"/>
+<property name="SimulationRunForTime" value="10" type="JavaHandler"/>
+<property name="TclStore" value="1" type="JavaHandler"/>
+<property name="ToolsTemplates" value="2" type="JavaHandler"/>
+<property name="WriteCheckpoint" value="1" type="JavaHandler"/>
+<property name="XdcSetClockGroups" value="2" type="JavaHandler"/>
+<property name="XdcSetFalsePath" value="1" type="JavaHandler"/>
+</item>
+<item name="Gui Resources Info">
+<property name="ADC_core_block.v, 0, 448" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 0, 452" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 0, 460" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 0, 466" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 0, 484" value="2" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 0, 512" value="2" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 1, 418" value="2" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 1, 450" value="2" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 1, 466" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 1, 485" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 1, 499" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 1, 533" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 109, 213" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 109, 213, false, false, false, false, true" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 109, 481" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 121, 113, false, false, false, false, true" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 121, 114" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 160, 199" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 160, 199, false, false, false, false, true" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 191, 233" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 191, 233, false, false, false, false, true" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 2, 464" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 2, 467" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 2, 550" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 212, 367" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 214, 656" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 214, 656, false, false, false, false, true" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 222, 229" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 222, 229, false, false, false, false, true" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 238, 163" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 249, 156" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 249, 156, false, false, false, false, true" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 286, 109" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 286, 109, false, false, false, false, true" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 289, 173" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 292, 159" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 294, 586" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 306, 518" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 311, 159" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 311, 159, false, false, false, false, true" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 318, 571" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 322, 199" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 322, 199, false, false, false, false, true" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 330, 227" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 340, 228" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 417, 311" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 419, 304" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 481, 450" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 481, 462" value="1" type="GuiResourceData"/>
+<property name="ADC_core_block.v, 53, 484" value="1" type="GuiResourceData"/>
+<property name="Din Down To, 17" value="1" type="GuiResourceData"/>
+<property name="Din From, 17" value="1" type="GuiResourceData"/>
+<property name="PAResourceAtoD.AbstractFileView_RELOAD, Reload" value="1" type="GuiResourceData"/>
+<property name="PAResourceAtoD.ClockGroupSpecifierPanel_SPECIFY_CLOCKS, (String" value="2" type="GuiResourceData"/>
+<property name="PAResourceAtoD.ClockGroupsCreationPanel_GROUP_NAME, fifo_clks" value="1" type="GuiResourceData"/>
+<property name="PAResourceAtoD.ClockNetworksReportView_CLOCK_NETWORK_TREE, [top objects, clk_fpga_0 (50.00 MHz" value="1" type="GuiResourceData"/>
+<property name="PAResourceAtoD.ClockNetworksReportView_CLOCK_NETWORK_TREE, [top objects, dataclk (250.00 MHz" value="5" type="GuiResourceData"/>
+<property name="PAResourceAtoD.CmdMsgDialog_OK, OK" value="1" type="GuiResourceData"/>
+<property name="PAResourceAtoD.CmdMsgTreeDialog_OK, OK" value="1" type="GuiResourceData"/>
+<property name="PAResourceCommand.PACommandNames_AUTO_CONNECT_PORTS, Make External" value="1" type="GuiResourceData"/>
+<property name="PAResourceCommand.PACommandNames_AUTO_CONNECT_TARGET, Auto Connect" value="1" type="GuiResourceData"/>
+<property name="PAResourceCommand.PACommandNames_AUTO_UPDATE_HIER, Hierarchy Update" value="1" type="GuiResourceData"/>
+<property name="PAResourceCommand.PACommandNames_EXPORT_HARDWARE, Export Hardware..." value="1" type="GuiResourceData"/>
+<property name="PAResourceCommand.PACommandNames_LAUNCH_HARDWARE, Launch SDK" value="2" type="GuiResourceData"/>
+<property name="PAResourceCommand.PACommandNames_SAVE_DESIGN, save_design" value="5" type="GuiResourceData"/>
+<property name="PAResourceCommand.PACommandNames_SET_TARGET_UCF, Set as Target Constraint File" value="1" type="GuiResourceData"/>
+<property name="PAResourceCommand.PACommandNames_WRITE_CHECKPOINT, Write Checkpoint..." value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.EditCreateClockTablePanel_EDIT_CREATE_CLOCK_TABLE, 10 ; dataclk ; 4.0 ;  ;  ; false ; [get_ports DCLK_P] ; C:/XilinxProjects/CubeSat/CubeSat_2/CubeSat_2/CubeSat_2.srcs/constrs_1/new/timing.xdc ;  ; , 2, 10, 0" value="4" type="GuiResourceData"/>
+<property name="PAResourceEtoH.EditCreateClockTablePanel_EDIT_CREATE_CLOCK_TABLE, 10 ; dataclk ; 4.0 ;  ;  ; false ; [get_ports DCLK_P] ; C:/XilinxProjects/CubeSat/CubeSat_2/CubeSat_2/CubeSat_2.srcs/constrs_1/new/timing.xdc ;  ; , 2, dataclk, 1" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.EditCreateClockTablePanel_EDIT_CREATE_CLOCK_TABLE, 5 ;  ; 4.0 ;  ;  ; false ; [get_ports DCLK_P] ; C:/XilinxProjects/CubeSat/CubeSat_2/CubeSat_2/CubeSat_2.srcs/sources_1/bd/design_1/ip/design_1_ADC08D1520_core_0_0/ip/clk_wiz_0/clk_wiz_0.xdc ; design_1_i/ADC08D1520_core_0/inst/MMCM_DATACLK/inst ; , 1, 5, 0" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.EditCreateClockTablePanel_EDIT_CREATE_CLOCK_TABLE, dataclk, 2, Clock Name, 1" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.EditSetClockGroupsTablePanel_EDIT_SET_CLOCK_GROUPS_TABLE,  ;  ;  ;  ;  ;  ; , 1, (String" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.EditSetClockGroupsTablePanel_EDIT_SET_CLOCK_GROUPS_TABLE, 21 ;  ; unknown ; asynchronous ; c:/XilinxProjects/CubeSat/CubeSat_2/CubeSat_2/CubeSat_2.runs/impl_1/.Xil/Vivado-6892-RixLaptop2010/dbg_hub_CV.0/out/xsdbm.xdc ; dbg_hub/inst ; dbg_hub/inst, 0, 21, 0" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.EditSetClockGroupsTablePanel_EDIT_SET_CLOCK_GROUPS_TABLE, 21 ;  ; unknown ; asynchronous ; c:/XilinxProjects/CubeSat/CubeSat_2/CubeSat_2/CubeSat_2.runs/impl_1/.Xil/Vivado-6892-RixLaptop2010/dbg_hub_CV.0/out/xsdbm.xdc ; dbg_hub/inst ; dbg_hub/inst, 0, 21, 0, false, false, false, false, true" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.EditSetClockGroupsTablePanel_EDIT_SET_CLOCK_GROUPS_TABLE, 21 ;  ; unknown ; asynchronous ; c:/XilinxProjects/CubeSat/CubeSat_2/CubeSat_2/CubeSat_2.runs/impl_1/.Xil/Vivado-6892-RixLaptop2010/dbg_hub_CV.0/out/xsdbm.xdc ; dbg_hub/inst ; dbg_hub/inst, 0, [Ljava.lang.String;@291f2126, 2" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.EditSetClockGroupsTablePanel_EDIT_SET_CLOCK_GROUPS_TABLE, 70 ; fifo_clks ; unknown ; asynchronous ; C:/XilinxProjects/CubeSat/CubeSat_2/CubeSat_2/CubeSat_2.srcs/constrs_1/new/timing.xdc ;  ; , 1, 70, 0" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.EditSetClockGroupsTablePanel_EDIT_SET_CLOCK_GROUPS_TABLE, 70 ; fifo_clks ; unknown ; asynchronous ; C:/XilinxProjects/CubeSat/CubeSat_2/CubeSat_2/CubeSat_2.srcs/constrs_1/new/timing.xdc ;  ; , 1, [Ljava.lang.String;@6d02216c, 2" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.EditXdcPanel_EDIT_FROM_THRU_TO_TABLE, 3 ;  ;  ; false ;  ;  ; [Lui.views.N.e.c.b;@5943ad75 ; [get_pins -hier *cdc_to*/D] ; rise/fall ; C:/XilinxProjects/CubeSat/CubeSat_2/CubeSat_2/CubeSat_2.srcs/sources_1/bd/design_1/ip/design_1_rst_processing_system7_0_50M_0/design_1_rst_processing_system7_0_50M_0.xdc ; design_1_i/rst_processing_system7_0_50M/U0 ; design_1_i/rst_processing_system7_0_50M/U0, 0, 3, 0" value="2" type="GuiResourceData"/>
+<property name="PAResourceEtoH.EditXdcPanel_EDIT_FROM_THRU_TO_TABLE, 4 ;  ;  ; false ;  ;  ; [Lui.views.N.e.c.b;@6484de4d ; [get_pins -hier *cdc_to*/D] ; rise/fall ; C:/XilinxProjects/CubeSat/CubeSat_2/CubeSat_2/CubeSat_2.srcs/sources_1/bd/design_1/ip/design_1_axi_gpio_0_0/design_1_axi_gpio_0_0.xdc ; design_1_i/GPIO_ADC_IN/U0 ; design_1_i/GPIO_ADC_IN/U0, 1, 4, 0" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.EditXdcPanel_EDIT_FROM_THRU_TO_TABLE, 8 ;  ;  ; false ; [get_cells -hierarchical -filter {NAME =~ *rstblk*/*rst_reg_reg[*]}] ; rise/fall ; [Lui.views.N.e.c.b;@5ce26b34 ;  ;  ; C:/XilinxProjects/CubeSat/CubeSat_2/CubeSat_2/CubeSat_2.srcs/sources_1/bd/design_1/ip/design_1_ADC08D1520_core_0_0/ip/fifo_generator_0/fifo_generator_0/fifo_generator_0.xdc ; design_1_i/ADC08D1520_core_0/inst/DATA_FIFO/U0 ; design_1_i/ADC08D1520_core_0/inst/DATA_FIFO/U0, 3, (String" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.EditXdcPanel_EDIT_FROM_THRU_TO_TABLE, Position, 0" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, [root, Constraints, constrs_1, pinout_a.xdc], 23, false" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, [root, Constraints, constrs_1, timing.xdc], 24, false" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, [root, Constraints, constrs_1, timing.xdc], 24, false, false, false, false, false, true" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, [root, Constraints, constrs_1, timing.xdc], 30, false" value="4" type="GuiResourceData"/>
+<property name="PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, [root, Constraints, constrs_1, timing.xdc], 30, false, false, false, false, false, true" value="2" type="GuiResourceData"/>
+<property name="PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, [root, Constraints, constrs_1, timing.xdc], 30, false, false, false, false, true, false" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, [root, Constraints, constrs_1], 22, true, false, false, false, false, true" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, [root, Constraints, constrs_1], 28" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, [root, Constraints], 27" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, [root, Design Sources, ADC_core_block (ADC_core_block.v" value="3" type="GuiResourceData"/>
+<property name="PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, [root, Design Sources, design_1_wrapper (design_1_wrapper.v" value="19" type="GuiResourceData"/>
+<property name="PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, [, IP Integrator, Open Block Design], 7, false" value="2" type="GuiResourceData"/>
+<property name="PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, [, Implementation, Implemented Design, Edit Timing Constraints], 24, false" value="3" type="GuiResourceData"/>
+<property name="PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, [, Implementation, Implemented Design, Report Clock Networks], 26, false" value="2" type="GuiResourceData"/>
+<property name="PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, [, Implementation, Implemented Design, Report Timing Summary], 25, false" value="2" type="GuiResourceData"/>
+<property name="PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, [, Implementation, Open Implemented Design, Report Timing Summary], 25, false" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, [, Implementation, Open Implemented Design], 22" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, [, Program and Debug, Hardware Manager, Add Configuration Memory Device], 38, false" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, [, Program and Debug, Hardware Manager, Add Configuration Memory Device], 38, false, false, false, false, false, true" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, [, Program and Debug, Open Hardware Manager], 36" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, [, Program and Debug, Open Hardware Manager], 36, true" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, [, Project Manager, Package IP], 5, false" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.FromTargetSpecifierPanel_SPECIFY_START_POINTS, (String" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.GetObjectsDialog_FIND, Find" value="4" type="GuiResourceData"/>
+<property name="PAResourceEtoH.GetObjectsPanel_SET, Set" value="1" type="GuiResourceData"/>
+<property name="PAResourceEtoH.GettingStartedView_RECENT_PROJECTS, C:/XilinxProjects/CubeSat/CubeSat_2/CubeSat_2/CubeSat_2.xpr, 1" value="1" type="GuiResourceData"/>
+<property name="PAResourceItoN.MainMenuMgr_EDIT, Edit" value="4" type="GuiResourceData"/>
+<property name="PAResourceItoN.MainMenuMgr_EXPORT, Export" value="3" type="GuiResourceData"/>
+<property name="PAResourceItoN.MainMenuMgr_FILE, File" value="12" type="GuiResourceData"/>
+<property name="PAResourceItoN.MainMenuMgr_FLOW, Flow" value="4" type="GuiResourceData"/>
+<property name="PAResourceItoN.MainMenuMgr_IMPORT, Import" value="4" type="GuiResourceData"/>
+<property name="PAResourceItoN.MainMenuMgr_OPEN_RECENT_CHECKPOINT, Open Recent Checkpoint" value="2" type="GuiResourceData"/>
+<property name="PAResourceItoN.MainMenuMgr_OPEN_RECENT_FILE, Open Recent File" value="5" type="GuiResourceData"/>
+<property name="PAResourceItoN.MainMenuMgr_OPEN_RECENT_PROJECT, C:/XilinxProjects/ip_repo/ADC08D1520_core/ADC08D1520_core.xpr" value="1" type="GuiResourceData"/>
+<property name="PAResourceItoN.MainMenuMgr_OPEN_RECENT_PROJECT, Open Recent Project" value="3" type="GuiResourceData"/>
+<property name="PAResourceItoN.MainMenuMgr_TOOLS, Tools" value="2" type="GuiResourceData"/>
+<property name="PAResourceItoN.MsgView_INFORMATION_MESSAGES, (String" value="1" type="GuiResourceData"/>
+<property name="PAResourceItoN.MsgView_WARNING_MESSAGES, (String" value="1" type="GuiResourceData"/>
+<property name="PAResourceItoN.NavigableTimingReportTab_TIMING_REPORT_NAVIGATION_TREE, [Root, Check Timing], 4" value="2" type="GuiResourceData"/>
+<property name="PAResourceItoN.NavigableTimingReportTab_TIMING_REPORT_NAVIGATION_TREE, [Root, Inter-Clock Paths, clk_fpga_0 to clk_out1_clk_wiz_0_1, Setup -5.129 ns], 9, false" value="4" type="GuiResourceData"/>
+<property name="PAResourceItoN.NavigableTimingReportTab_TIMING_REPORT_NAVIGATION_TREE, [Root, Inter-Clock Paths, clk_fpga_0 to clk_out1_clk_wiz_0_1], 8" value="4" type="GuiResourceData"/>
+<property name="PAResourceItoN.NavigableTimingReportTab_TIMING_REPORT_NAVIGATION_TREE, [Root, Inter-Clock Paths, clk_fpga_0 to clk_out1_clk_wiz_0_1], 8, true" value="3" type="GuiResourceData"/>
+<property name="PAResourceItoN.NavigableTimingReportTab_TIMING_REPORT_NAVIGATION_TREE, [Root, Inter-Clock Paths, dataclk to clk_out1_clk_wiz_0_1, Hold 0.998 ns], 10, false" value="2" type="GuiResourceData"/>
+<property name="PAResourceItoN.NavigableTimingReportTab_TIMING_REPORT_NAVIGATION_TREE, [Root, Inter-Clock Paths, dataclk to clk_out1_clk_wiz_0_1, Setup -2.383 ns], 10, false" value="1" type="GuiResourceData"/>
+<property name="PAResourceItoN.NavigableTimingReportTab_TIMING_REPORT_NAVIGATION_TREE, [Root, Inter-Clock Paths, dataclk to clk_out1_clk_wiz_0_1, Setup -2.383 ns], 12, false" value="1" type="GuiResourceData"/>
+<property name="PAResourceItoN.NavigableTimingReportTab_TIMING_REPORT_NAVIGATION_TREE, [Root, Inter-Clock Paths, dataclk to clk_out1_clk_wiz_0_1, Setup -2.383 ns], 9, false" value="3" type="GuiResourceData"/>
+<property name="PAResourceItoN.NavigableTimingReportTab_TIMING_REPORT_NAVIGATION_TREE, [Root, Inter-Clock Paths, dataclk to clk_out1_clk_wiz_0_1], 11" value="1" type="GuiResourceData"/>
+<property name="PAResourceItoN.NavigableTimingReportTab_TIMING_REPORT_NAVIGATION_TREE, [Root, Inter-Clock Paths, dataclk to clk_out1_clk_wiz_0_1], 11, true" value="1" type="GuiResourceData"/>
+<property name="PAResourceItoN.NavigableTimingReportTab_TIMING_REPORT_NAVIGATION_TREE, [Root, Inter-Clock Paths, dataclk to clk_out1_clk_wiz_0_1], 8" value="1" type="GuiResourceData"/>
+<property name="PAResourceItoN.NavigableTimingReportTab_TIMING_REPORT_NAVIGATION_TREE, [Root, Inter-Clock Paths, dataclk to clk_out1_clk_wiz_0_1], 8, true" value="1" type="GuiResourceData"/>
+<property name="PAResourceItoN.NavigableTimingReportTab_TIMING_REPORT_NAVIGATION_TREE, [Root, Inter-Clock Paths, dataclk to clk_out1_clk_wiz_0_1], 9" value="1" type="GuiResourceData"/>
+<property name="PAResourceItoN.NavigableTimingReportTab_TIMING_REPORT_NAVIGATION_TREE, [Root, Inter-Clock Paths, dataclk to clk_out1_clk_wiz_0_1], 9, true" value="1" type="GuiResourceData"/>
+<property name="PAResourceItoN.NavigableTimingReportTab_TIMING_REPORT_NAVIGATION_TREE, [Root, Inter-Clock Paths], 6" value="3" type="GuiResourceData"/>
+<property name="PAResourceItoN.NavigableTimingReportTab_TIMING_REPORT_NAVIGATION_TREE, [Root, User Ignored Paths], 13" value="2" type="GuiResourceData"/>
+<property name="PAResourceItoN.NewExportHardwareDialog_INCLUDE_BITSTREAM, Include bitstream, true" value="1" type="GuiResourceData"/>
+<property name="PAResourceOtoP.OverwriteConstraintsDialog_CANCEL, Cancel" value="1" type="GuiResourceData"/>
+<property name="PAResourceOtoP.OverwriteConstraintsDialog_OVERWRITE, Overwrite" value="2" type="GuiResourceData"/>
+<property name="PAResourceOtoP.PAViews_CODE, Code" value="6" type="GuiResourceData"/>
+<property name="PAResourceOtoP.PAViews_DASHBOARD, hw_ila_1" value="1" type="GuiResourceData"/>
+<property name="PAResourceOtoP.PAViews_PATH_TABLE, Path Table" value="6" type="GuiResourceData"/>
+<property name="PAResourceOtoP.PAViews_TIMING_CONSTRAINTS, Timing Constraints" value="1" type="GuiResourceData"/>
+<property name="PAResourceOtoP.PackagerStepsPanel_PACKAGER_STEPS_LIST, File Groups, 2" value="1" type="GuiResourceData"/>
+<property name="PAResourceOtoP.PackagerStepsPanel_PACKAGER_STEPS_LIST, Review and Package, 7" value="2" type="GuiResourceData"/>
+<property name="PAResourceOtoP.PathReportTableView_DESCRIPTION, Name ; Path 73, 0, Path 73, 1" value="1" type="GuiResourceData"/>
+<property name="PAResourceOtoP.PathReportTableView_DESCRIPTION, Path Group ; clk_out1_clk_wiz_0_1, 4, clk_out1_clk_wiz_0_1, 1" value="2" type="GuiResourceData"/>
+<property name="PAResourceOtoP.PathReportTableView_DESCRIPTION, Source ; design_1_i/ADC08D1520_core_0/inst/DATA_FIFO/U0/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gr1.gr1_int.rfwft/empty_fwft_i_reg/C   (rising edge-triggered cell FDPE clocked by clk_fpga_0  {rise@0.000ns fall@10.000ns period=20.000ns}" value="3" type="GuiResourceData"/>
+<property name="PAResourceOtoP.ProgramDebugTab_OPEN_TARGET, Open target" value="1" type="GuiResourceData"/>
+<property name="PAResourceQtoS.RSBExternalPortPropPanels_NAME, LCL_RUN_STB" value="1" type="GuiResourceData"/>
+<property name="PAResourceQtoS.ReviewContentPanel_RE_PACKAGE_IP, Re-Package IP" value="1" type="GuiResourceData"/>
+<property name="PAResourceQtoS.SrcMenu_IP_HIERARCHY, IP Hierarchy" value="1" type="GuiResourceData"/>
+<property name="PAResourceQtoS.SystemBuilderView_EXPAND_COLLAPSE, Expand/Collapse" value="1" type="GuiResourceData"/>
+<property name="PAResourceTtoZ.TaskBanner_CLOSE, (String" value="5" type="GuiResourceData"/>
+<property name="PAResourceTtoZ.TimingItemFlatTablePanel_TABLE, Path 73 ; -2.3826947 ; 1 ; 1 ; DQD_P[7] ; design_1_i/ADC08D1520_core_0/inst/DQD_IN[7].IDDR_inst/D ; 1.0813199 ; 1.0813199 ; 0.0 ; 0.9999999 ; dataclk ; clk_out1_clk_wiz_0_1 ; , 0, Path 73, 0" value="1" type="GuiResourceData"/>
+<property name="PAResourceTtoZ.TimingItemFlatTablePanel_TABLE, Path 73 ; -2.3826947 ; 1 ; 1 ; DQD_P[7] ; design_1_i/ADC08D1520_core_0/inst/DQD_IN[7].IDDR_inst/D ; 1.0813199 ; 1.0813199 ; 0.0 ; 0.9999999 ; dataclk ; clk_out1_clk_wiz_0_1 ; , 0, design_1_i/ADC08D1520_core_0/inst/DQD_IN[7].IDDR_inst/D, 5" value="1" type="GuiResourceData"/>
+<property name="PAResourceTtoZ.TimingItemFlatTablePanel_TABLE, Path 73 ; -2.3826947 ; 1 ; 1 ; DQD_P[7] ; design_1_i/ADC08D1520_core_0/inst/DQD_IN[7].IDDR_inst/D ; 1.0813199 ; 1.0813199 ; 0.0 ; 0.9999999 ; dataclk ; clk_out1_clk_wiz_0_1 ; , 0, design_1_i/ADC08D1520_core_0/inst/DQD_IN[7].IDDR_inst/D, 5, false, false, false, false, true" value="1" type="GuiResourceData"/>
+<property name="PAResourceTtoZ.TimingItemFlatTablePanel_TABLE, Path 73 ; -5.1288915 ; 0 ; 3 ; design_1_i/ADC08D1520_core_0/inst/DATA_FIFO/U0/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gr1.gr1_int.rfwft/empty_fwft_i_reg/C ; design_1_i/ADC08D1520_core_0/inst/EMPTY_SYNC/sreg_reg[0]/D ; 0.5140717 ; 0.269 ; 0.24507132 ; 1.0 ; clk_fpga_0 ; clk_out1_clk_wiz_0_1 ; , 0, -5.1288915, 1" value="1" type="GuiResourceData"/>
+<property name="PAResourceTtoZ.TimingItemFlatTablePanel_TABLE, Path 73 ; -5.1288915 ; 0 ; 3 ; design_1_i/ADC08D1520_core_0/inst/DATA_FIFO/U0/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gr1.gr1_int.rfwft/empty_fwft_i_reg/C ; design_1_i/ADC08D1520_core_0/inst/EMPTY_SYNC/sreg_reg[0]/D ; 0.5140717 ; 0.269 ; 0.24507132 ; 1.0 ; clk_fpga_0 ; clk_out1_clk_wiz_0_1 ; , 0, -5.1288915, 1, false, false, false, false, true" value="1" type="GuiResourceData"/>
+<property name="PAResourceTtoZ.TimingItemFlatTablePanel_TABLE, Path 73 ; -5.1288915 ; 0 ; 3 ; design_1_i/ADC08D1520_core_0/inst/DATA_FIFO/U0/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gr1.gr1_int.rfwft/empty_fwft_i_reg/C ; design_1_i/ADC08D1520_core_0/inst/EMPTY_SYNC/sreg_reg[0]/D ; 0.5140717 ; 0.269 ; 0.24507132 ; 1.0 ; clk_fpga_0 ; clk_out1_clk_wiz_0_1 ; , 0, 0, 2" value="2" type="GuiResourceData"/>
+<property name="PAResourceTtoZ.TimingItemFlatTablePanel_TABLE, Path 73 ; -5.1288915 ; 0 ; 3 ; design_1_i/ADC08D1520_core_0/inst/DATA_FIFO/U0/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gr1.gr1_int.rfwft/empty_fwft_i_reg/C ; design_1_i/ADC08D1520_core_0/inst/EMPTY_SYNC/sreg_reg[0]/D ; 0.5140717 ; 0.269 ; 0.24507132 ; 1.0 ; clk_fpga_0 ; clk_out1_clk_wiz_0_1 ; , 0, 0, 2, false, false, false, false, true" value="1" type="GuiResourceData"/>
+<property name="PAResourceTtoZ.TimingItemFlatTablePanel_TABLE, Path 73 ; -5.1288915 ; 0 ; 3 ; design_1_i/ADC08D1520_core_0/inst/DATA_FIFO/U0/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gr1.gr1_int.rfwft/empty_fwft_i_reg/C ; design_1_i/ADC08D1520_core_0/inst/EMPTY_SYNC/sreg_reg[0]/D ; 0.5140717 ; 0.269 ; 0.24507132 ; 1.0 ; clk_fpga_0 ; clk_out1_clk_wiz_0_1 ; , 0, design_1_i/ADC08D1520_core_0/inst/DATA_FIFO/U0/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gr1.gr1_int.rfwft/empty_fwft_i_reg/C, 4" value="4" type="GuiResourceData"/>
+<property name="PAResourceTtoZ.TimingItemFlatTablePanel_TABLE, Path 73 ; -5.1288915 ; 0 ; 3 ; design_1_i/ADC08D1520_core_0/inst/DATA_FIFO/U0/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gr1.gr1_int.rfwft/empty_fwft_i_reg/C ; design_1_i/ADC08D1520_core_0/inst/EMPTY_SYNC/sreg_reg[0]/D ; 0.5140717 ; 0.269 ; 0.24507132 ; 1.0 ; clk_fpga_0 ; clk_out1_clk_wiz_0_1 ; , 0, design_1_i/ADC08D1520_core_0/inst/DATA_FIFO/U0/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gr1.gr1_int.rfwft/empty_fwft_i_reg/C, 4, false, false, false, false, true" value="2" type="GuiResourceData"/>
+<property name="PAResourceTtoZ.TimingItemFlatTablePanel_TABLE, Path 74 ; -4.9851017 ; 0 ; 1 ; design_1_i/axi_gpio_0/U0/gpio_core_1/Not_Dual.gpio_Data_Out_reg[26]/C ; design_1_i/ADC08D1520_core_0/inst/FAKE_EN_SYNC/sreg_reg[0]/D ; 0.4072822 ; 0.269 ; 0.13828212 ; 1.0 ; clk_fpga_0 ; clk_out1_clk_wiz_0_1 ; , 1, Path 74, 0" value="1" type="GuiResourceData"/>
+<property name="PAResourceTtoZ.TimingItemFlatTablePanel_TABLE, Path 74 ; -4.9851017 ; 0 ; 1 ; design_1_i/axi_gpio_0/U0/gpio_core_1/Not_Dual.gpio_Data_Out_reg[26]/C ; design_1_i/ADC08D1520_core_0/inst/FAKE_EN_SYNC/sreg_reg[0]/D ; 0.4072822 ; 0.269 ; 0.13828212 ; 1.0 ; clk_fpga_0 ; clk_out1_clk_wiz_0_1 ; , 1, Path 74, 0, false, false, false, false, true" value="1" type="GuiResourceData"/>
+<property name="PAResourceTtoZ.TimingItemFlatTablePanel_TABLE, Path 85 ; -2.3826947 ; 1 ; 1 ; DQD_P[7] ; design_1_i/ADC08D1520_core_0/inst/DQD_IN[7].IDDR_inst/D ; 1.0813199 ; 1.0813199 ; 0.0 ; 0.9999999 ; dataclk ; clk_out1_clk_wiz_0_1 ; , 0, DQD_P[7], 4" value="1" type="GuiResourceData"/>
+<property name="PAResourceTtoZ.TimingItemFlatTablePanel_TABLE, Path 85 ; -2.3826947 ; 1 ; 1 ; DQD_P[7] ; design_1_i/ADC08D1520_core_0/inst/DQD_IN[7].IDDR_inst/D ; 1.0813199 ; 1.0813199 ; 0.0 ; 0.9999999 ; dataclk ; clk_out1_clk_wiz_0_1 ; , 0, DQD_P[7], 4, false, false, false, false, true" value="1" type="GuiResourceData"/>
+<property name="PAResourceTtoZ.TimingItemFlatTablePanel_TABLE, Path 85 ; -2.3826947 ; 1 ; 1 ; DQD_P[7] ; design_1_i/ADC08D1520_core_0/inst/DQD_IN[7].IDDR_inst/D ; 1.0813199 ; 1.0813199 ; 0.0 ; 0.9999999 ; dataclk ; clk_out1_clk_wiz_0_1 ; , 0, design_1_i/ADC08D1520_core_0/inst/DQD_IN[7].IDDR_inst/D, 5" value="1" type="GuiResourceData"/>
+<property name="PAResourceTtoZ.TimingItemFlatTablePanel_TABLE, Path 85 ; -2.3826947 ; 1 ; 1 ; DQD_P[7] ; design_1_i/ADC08D1520_core_0/inst/DQD_IN[7].IDDR_inst/D ; 1.0813199 ; 1.0813199 ; 0.0 ; 0.9999999 ; dataclk ; clk_out1_clk_wiz_0_1 ; , 0, design_1_i/ADC08D1520_core_0/inst/DQD_IN[7].IDDR_inst/D, 5, false, false, false, false, true" value="1" type="GuiResourceData"/>
+<property name="PAResourceTtoZ.XdcCategoryTree_XDC_CATEGORY_TREE, [All Categories (69" value="3" type="GuiResourceData"/>
+<property name="PAResourceTtoZ.XdcCategoryTree_XDC_CATEGORY_TREE, [All Categories (70" value="2" type="GuiResourceData"/>
+<property name="PAResourceTtoZ.XdcEditorView_APPLY_ALL_CHANGES_TO_XDC_CONSTRAINTS, Apply" value="1" type="GuiResourceData"/>
+<property name="PAResourceTtoZ.XdcTableEditorsPanel_CREATE_NEW_TIMING_CONSTRAINT, (String" value="3" type="GuiResourceData"/>
+<property name="PAResourceTtoZ.XdcTableEditorsPanel_REMOVE_SELECTED_ROW, (String" value="1" type="GuiResourceData"/>
+<property name="PAResourceTtoZ.XdcViewerTreeTablePanel_XDC_VIEWER_TREE_TABLE, 9 ; set_false_path -from [get_clocks clk_fpga_0] -to [get_clocks [get_clocks -of_objects [get_pins design_1_i/ADC08D1520_core_0/inst/MMCM_DATACLK/inst/mmcm_adv_inst/CLKOUT0]]] ; , 14, set_false_path -from [get_clocks clk_fpga_0] -to [get_clocks [get_clocks -of_objects [get_pins design_1_i/ADC08D1520_core_0/inst/MMCM_DATACLK/inst/mmcm_adv_inst/CLKOUT0]]], 1, false" value="1" type="GuiResourceData"/>
+<property name="RDIResource.BaseDialog_CANCEL, Cancel" value="7" type="GuiResourceData"/>
+<property name="RDIResource.BaseDialog_OK, OK" value="11" type="GuiResourceData"/>
+<property name="RDIResource.BaseReportTab_RERUN, Rerun" value="3" type="GuiResourceData"/>
+<property name="RDIResource.CommandsInput_TYPE_TCL_COMMAND_HERE, (String" value="1" type="GuiResourceData"/>
+<property name="RDIResource.CommandsInput_TYPE_TCL_COMMAND_HERE, set_false_path -from [get_clocks clk_fpga_0] -to [get_clocks [get_clocks -of_objects [get_pins design_1_i/ADC08D1520_core_0/inst/MMCM_DATACLK/inst/mmcm_adv_inst/CLKOUT0]]], true" value="1" type="GuiResourceData"/>
+<property name="RDIResource.HCodeEditor_SEARCH_TEXT_COMBO_BOX, DCLK_P" value="1" type="GuiResourceData"/>
+<property name="RDIResource.HDualList_FIND_RESULTS, clk_fpga_0, 0" value="1" type="GuiResourceData"/>
+<property name="RDIResource.HDualList_FIND_RESULTS, clk_out1_clk_wiz_0_1, 0" value="1" type="GuiResourceData"/>
+<property name="RDIResource.HDualList_MOVE_SELECTED_ITEMS_TO_RIGHT, moveRight" value="2" type="GuiResourceData"/>
+<property name="RDIResource.MessageWithOptionDialog_DONT_SHOW_THIS_DIALOG_AGAIN, Don't show this dialog again, true" value="1" type="GuiResourceData"/>
+<property name="RDIResourceCommand.RDICommands_LINE_COMMENT, (String" value="1" type="GuiResourceData"/>
+<property name="RDIResourceCommand.RDICommands_SAVE_FILE, (String" value="4" type="GuiResourceData"/>
+<property name="clk_wiz_0_clk_wiz.v, 266, 234" value="1" type="GuiResourceData"/>
+<property name="clk_wiz_0_clk_wiz.v, 266, 234, false, false, false, false, true" value="1" type="GuiResourceData"/>
+<property name="pa.Finder.Clocks_filter_1, *clk_wiz*" value="1" type="GuiResourceData"/>
+<property name="pa.Finder.Clocks_filter_1, *fabric" value="1" type="GuiResourceData"/>
+<property name="pa.Finder.Clocks_filter_1, *fabric*" value="1" type="GuiResourceData"/>
+<property name="pa.Finder.Clocks_filter_1, *fpga*" value="1" type="GuiResourceData"/>
+<property name="pinout_a.xdc, 0, 198" value="1" type="GuiResourceData"/>
+<property name="pinout_a.xdc, 1, 158" value="1" type="GuiResourceData"/>
+<property name="pinout_a.xdc, 1, 96" value="1" type="GuiResourceData"/>
+<property name="pinout_a.xdc, 12, 159" value="1" type="GuiResourceData"/>
+<property name="pinout_a.xdc, 409, 175" value="1" type="GuiResourceData"/>
+<property name="timing.xdc, 0, 63" value="1" type="GuiResourceData"/>
+<property name="timing.xdc, 1, 47" value="1" type="GuiResourceData"/>
+<property name="timing.xdc, 1, 5" value="1" type="GuiResourceData"/>
+<property name="timing.xdc, 1, 8" value="1" type="GuiResourceData"/>
+<property name="timing.xdc, 114, 132" value="1" type="GuiResourceData"/>
+<property name="timing.xdc, 2, 211" value="2" type="GuiResourceData"/>
+<property name="timing.xdc, 200, 5" value="1" type="GuiResourceData"/>
+<property name="timing.xdc, 200, 6" value="1" type="GuiResourceData"/>
+<property name="timing.xdc, 200, 6, false, false, false, false, true" value="1" type="GuiResourceData"/>
+<property name="timing.xdc, 3, 16" value="1" type="GuiResourceData"/>
+<property name="timing.xdc, 383, 36, false, false, false, false, true" value="1" type="GuiResourceData"/>
+<property name="timing.xdc, 383, 36, false, true, false, false, false" value="1" type="GuiResourceData"/>
+<property name="timing.xdc, 384, 36" value="1" type="GuiResourceData"/>
+<property name="timing.xdc, 389, 44" value="1" type="GuiResourceData"/>
+<property name="timing.xdc, 389, 44, false, false, false, false, true" value="1" type="GuiResourceData"/>
+<property name="timing.xdc, 5, 21" value="1" type="GuiResourceData"/>
+<property name="timing.xdc, 84, 20" value="1" type="GuiResourceData"/>
+</item>
+<item name="Other">
+<property name="GuiMode" value="34" type="GuiMode"/>
+<property name="BatchMode" value="0" type="BatchMode"/>
+<property name="TclMode" value="29" type="TclMode"/>
+</item>
+</section>
+</application>
+</document>

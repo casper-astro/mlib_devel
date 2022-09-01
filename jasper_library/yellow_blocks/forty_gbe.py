@@ -18,7 +18,12 @@ class forty_gbe(YellowBlock):
         # Wishbone memory for status registers / ARP table
         
         # request a wishbone offset that is a multiple of the port number
-        req_offset = 0x16000 * self.port
+        if self.platform.name == 'skarab':
+            # This is liable to break if multiple 40GBE blocks don't have their
+            # WB interfaces processed in address order
+            req_offset = 0x16000 * self.port
+        else:
+            req_offset = -1 # Let the toolflow decide
         inst.add_wb_interface(self.unique_name, mode='rw', nbytes=0x16000, req_offset=req_offset, typecode=TYPECODE_ETHCORE)
 
         # forty gbe specific parameters
@@ -30,6 +35,10 @@ class forty_gbe(YellowBlock):
         inst.add_parameter('FABRIC_ENABLE',  " 1'b%x"%self.fab_en)
         inst.add_parameter('TTL',            " 8'h%x"%self.ttl)
         inst.add_parameter('PROMISC_MODE',   " 1'b%x"%self.promisc_mode)
+        use_cpu_tx = self.cpu_tx_en == 'on'
+        use_cpu_rx = self.cpu_rx_en == 'on'
+        inst.add_parameter('USE_CPU_RX',   " 1'b%x"%int(use_cpu_rx))
+        inst.add_parameter('USE_CPU_TX',   " 1'b%x"%int(use_cpu_tx))
         if self.platform.name == 'skarab':
             inst.add_parameter('RX_2B_SWAP',   "true") # SKARAB Microblaze requires some swizzling of RX data read via wishbone
 
@@ -110,29 +119,29 @@ class forty_gbe(YellowBlock):
         self.add_source('forty_gbe/*.v')
         self.add_source("forty_gbe/arp_cache/arp_cache.coe")
         #self.add_source("forty_gbe/cont_microblaze/ip/cont_microblaze_axi_slave_wishbone_classic_master_0_0/cont_microblaze_axi_slave_wishbone_classic_master_0_0.upgrade_log")
-        #self.add_source("forty_gbe/gmii_to_sgmii/*.xci")
-        #self.add_source("forty_gbe/isp_spi_buffer/*.xci")
-        #self.add_source("forty_gbe/tx_packet_fifo/*.xci")
-        #self.add_source("forty_gbe/tx_packet_ctrl_fifo/*.xci")
-        #self.add_source("forty_gbe/tx_fifo_ext/*.xci")
-        #self.add_source("forty_gbe/tx_data_fifo_ext/*.xci")
-        #self.add_source("forty_gbe/rx_packet_fifo_bram/*.xci")
-        #self.add_source("forty_gbe/rx_packet_ctrl_fifo/*.xci")
-        #self.add_source("forty_gbe/cpu_buffer/*.xci")
-        #self.add_source("forty_gbe/arp_cache/*.xci")
-        #self.add_source("forty_gbe/xaui_to_gmii_fifo/*.xci")
-        #self.add_source("forty_gbe/gmii_to_xaui_fifo/*.xci")
-        #self.add_source("forty_gbe/packet_byte_count_fifo/*.xci")
+        self.add_source("forty_gbe/gmii_to_sgmii/*.xci")
+        self.add_source("forty_gbe/isp_spi_buffer/*.xci")
+        self.add_source("forty_gbe/cross_clock_fifo_67x16/*.xci")
+        self.add_source("forty_gbe/tx_packet_fifo/*.xci")
+        self.add_source("forty_gbe/tx_packet_ctrl_fifo/*.xci")
+        self.add_source("forty_gbe/tx_fifo_ext/*.xci")
+        self.add_source("forty_gbe/tx_data_fifo_ext/*.xci")
+        self.add_source("forty_gbe/rx_packet_fifo_bram/*.xci")
+        self.add_source("forty_gbe/rx_packet_ctrl_fifo/*.xci")
+        self.add_source("forty_gbe/cpu_buffer/*.xci")
+        self.add_source("forty_gbe/arp_cache/*.xci")
+        self.add_source("forty_gbe/xaui_to_gmii_fifo/*.xci")
+        self.add_source("forty_gbe/gmii_to_xaui_fifo/*.xci")
+        self.add_source("forty_gbe/packet_byte_count_fifo/*.xci")
         self.add_source("forty_gbe/ska_tx_packet_fifo/*.xci")
         self.add_source("forty_gbe/ska_tx_packet_ctrl_fifo/*.xci")
         self.add_source("forty_gbe/ska_rx_packet_fifo/*.xci")
         self.add_source("forty_gbe/ska_rx_packet_ctrl_fifo/*.xci")
-        #self.add_source("forty_gbe/ska_cpu_buffer/*.xci")
-        #self.add_source("forty_gbe/cross_clock_fifo_36x16/*.xci")
-        #self.add_source("forty_gbe/cross_clock_fifo_259x16/*.xci")
-        #self.add_source("forty_gbe/common_clock_fifo_32x16/*.xci")
-        #self.add_source("forty_gbe/cross_clock_fifo_67x16/*.xci")
-        #self.add_source("forty_gbe/cross_clock_fifo_wb_out_73x16/*.xci")
+        self.add_source("forty_gbe/ska_cpu_buffer/*.xci")
+        self.add_source("forty_gbe/cross_clock_fifo_36x16/*.xci")
+        self.add_source("forty_gbe/cross_clock_fifo_259x16/*.xci")
+        self.add_source("forty_gbe/common_clock_fifo_32x16/*.xci")
+        self.add_source("forty_gbe/cross_clock_fifo_wb_out_73x16/*.xci")
         self.add_source("forty_gbe/overlap_buffer/*.xci")
         self.add_source("forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PCS/ip/fifo_dual_clk/*.xci")
         self.add_source("forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PCS/ip/XGMII_FIFO_DUAL_SYNC/*.xci")

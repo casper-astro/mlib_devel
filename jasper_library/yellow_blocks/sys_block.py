@@ -9,14 +9,14 @@ class sys_block(YellowBlock):
         if not hasattr(self, 'scratchpad'): self.scratchpad = 0
         # the internal memory_map
         self.memory_map = [
-            Register('sys_board_id',   mode='r',  offset=0, default_val=self.board_id),
-            Register('sys_rev',        mode='r',  offset=0x4, default_val=str((int(self.rev_maj) << 16) + int(self.rev_min))),
-            Register('sys_rev_rcs',    mode='r',  offset=0xc, default_val=self.rev_rcs),
-            Register('sys_scratchpad', mode='rw', offset=0x10, default_val=self.scratchpad),
-            Register('sys_clkcounter', mode='r',  offset=0x14),
+            Register('board_id',   mode='r',  offset=0, default_val=self.board_id),
+            Register('rev',        mode='r',  offset=0x4, default_val=str((int(self.rev_maj) << 16) + int(self.rev_min))),
+            Register('rev_rcs',    mode='r',  offset=0xc, default_val=self.rev_rcs),
+            Register('scratchpad', mode='rw', offset=0x10, default_val=self.scratchpad),
+            Register('clkcounter', mode='r',  offset=0x14),
         ]
     def modify_top(self,top):
-        if self.platform.mmbus_architecture == 'AXI4-Lite':            
+        if 'wishbone' not in self.platform.mmbus_architecture:
             inst = top.get_instance('sys_block_counter', 'sys_block_counter_inst')          
             inst.add_parameter('DATA_WIDTH', 32)
             inst.add_port('user_clk', 'user_clk')
@@ -43,5 +43,5 @@ class sys_block(YellowBlock):
             inst.add_parameter('REV_MIN', self.rev_min)
             inst.add_parameter('REV_RCS', self.rev_rcs)
             inst.add_port('user_clk', 'user_clk', parent_port=False, parent_sig=False)
-            inst.add_wb_interface('sys_block', mode='r', nbytes=32, memory_map=self.memory_map, typecode=self.typecode)
+            inst.add_wb_interface('sys', mode='r', nbytes=32, memory_map=self.memory_map, typecode=self.typecode)
       

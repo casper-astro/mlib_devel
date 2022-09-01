@@ -1,0 +1,220 @@
+name: zcu216
+manufacturer: Xilinx
+fpga: xczu49dr-ffvf1760-2-e-es1
+family: rfsoc
+config_voltage: 1.8
+cfgbvs: GND
+backend_target: vivado
+mmbus_architecture: AXI4-Lite
+mmbus_base_address: 0xA0000000
+# How to address each 32-bit (i.e. 4 indicates byte-addressable)
+mmbus_address_alignment: 4
+sources: []
+constraints: []
+
+rfdc:
+  # gen3 devices can internally route their input refclk or the output of the RFPLL
+  # as the sample clock for adjacent tiles. See PG269. For such configurations,
+  # tile 225 is the preferred tile when available. The zcu216/208 eval boards only
+  # have the sample clock connected to tile 255.
+  #
+  # For gen1 and gen2 devices the `adc_clk_src` is the same as the tile index
+  tile224:
+    has_adc_clk: False
+    adc_clk_src: 2
+  tile225:
+    has_adc_clk: True
+    adc_clk_src: 2
+  tile226:
+    has_adc_clk: True
+    adc_clk_src: 2
+  tile227:
+    has_adc_clk: False
+    adc_clk_src: 2
+
+  tile228:
+    has_dac_clk: False
+    dac_clk_src: 6
+  tile229:
+    has_dac_clk: True
+    dac_clk_src: 6
+  tile228:
+    has_dac_clk: True
+    dac_clk_src: 6
+  tile229:
+    has_dac_clk: False
+    dac_clk_src: 6
+
+onehundredgbe:
+  refclk_freq_str: "156.25"
+  include_rs_fec: 1
+  ncommon: 2
+  # modprs pin strapped, sfp tx enable not supported to be managed by 100g core.
+  # It must be toggled by an fpga pin gpio (not yet in yaml), or use the onboard jumpers
+  management_interface: []
+  # UG1075 v1.9 Fig. 1-54
+  gt_group: 
+    - X0Y0~X0Y4
+    - X0Y0~X0Y4
+  cmac_loc:
+    # xczu49dr has 2 cmac locations, zcu216 can support a second through FMC+
+    - CMACE4_X0Y0
+    - CMACE4_X0Y1
+    
+provides:
+  - adc_clk
+  - axil_clk
+  - sysref_in
+
+pins:
+  clk_100_p:
+    iostd: LVDS_25
+    loc: G12
+  clk_100_n:
+    iostd: LVDS_25
+    loc: G11
+  clk_125_p:
+    iostd: LVDS_25
+    loc: A13
+  clk_125_n:
+    iostd: LVDS_25
+    loc: A12
+  sync_in:
+    iostd: LVCMOS18
+    loc: L15
+
+# NOTE: most of the IO constraints and clocking constraints are taken care of by
+# the RFDC IP itself. Vivado has that baked into the output products of teh IP
+# core. The only necessary pins below are the fabirc clocking related to
+# multi-tile sync Adding additional pins and constraints would not hurt anything
+# but provide more transparent less 'hand-wavy'
+# RFDC clocking
+
+  # `SYSREF_P/N_228` on bank 228
+  # constraints determined by rfdc ip, iostandard and loc not set by user
+  sysref_p:
+    loc: D2
+  sysref_n:
+    loc: D1
+
+  # `CLK104_PL_SYSREF_P/N` on HD bank 89, VCCO is 1.8 but LVDS_25 still
+  # supported, see UG571 SelectIO Resources table 3-2 and DS926 tables 23, 24,
+  # and 2
+  pl_sysref_p:
+    iostd: LVDS_25
+    loc: E11
+  pl_sysref_n:
+    iostd: LVDS_25
+    loc: D11
+
+  # `CLK104_PL_CLK_P/N` on HD bank 89
+  pl_clk_p:
+    iostd: LVDS_25
+    loc: E10
+  pl_clk_n:
+    iostd: LVDS_25
+    loc: E9
+
+  # Do not instantiate clock buffer inputs in the user design, part of the RF-ADC [PG269 v2.4 pg.153]
+  adc_clk_224_p:
+    loc: BA3
+  adc_clk_224_n:
+    loc: BB3
+
+  # naming changes between quad- and dual-tile adcs
+  # quad tile vinXZ
+  # dual tile vinX_ZZ
+  # X-tile location, Z refers to adc location in the tile (0-3), ZZ-is either 01
+  # for lower ADC or 23 for upper
+  vin00_p:
+    loc: AU5
+  vin00_n:
+    loc: AU4
+
+# 100 GbE
+  # The 4 GTY lanes are split, 2 to bank 128, 2 to bank 129
+  # IDT 8A34001 output Q7, refclk1 GTY bank 129 P T34 N T35
+  # IDT 8A34001 output Q11 refclk1 GTY bank 128 P Y34 N Y35
+  qsfp_mgt_ref_clk_p:
+    loc:
+      - Y34
+  qsfp_mgt_ref_clk_n:
+    loc:
+      - Y35
+  qsfp_mgt_tx_p:
+         # bank 128 SFP[0:1] # bank 129 SFP[2:3]
+    loc: [V38, U36, P38, N36]
+  qsfp_mgt_tx_n:
+         # bank 128  # bank 129
+    loc: [V39, U37,  P39, N37]
+  qsfp_mgt_rx_p:
+         # bank 128   # bank 129
+    loc: [AC41, AB39, W41, U41]
+  qsfp_mgt_rx_n:
+         # bank 128   # bank 129
+    loc: [AC42, AB40, W42, U42]
+
+# zcu216 has 8 RGB LEDs (24 total) however, not all of the LEDs of the same
+# color have the same voltage standard. Not sure how the tools can handle this
+# if at all (probably just named custom io group)
+  led_red:
+    drive_strength: 8
+    iostd: LVCMOS12
+    loc:
+      - AN14
+      - AP16
+      - AP14
+      - AU16
+      - AW12
+      - AY16
+      - BB12
+      - E25
+  led_green:
+    drive_strength: 8
+    iostd: [LVCMOS18, LVCMOS12]
+    loc: [[C13, D14, D12, D13], [AW18, AV18, BA19, AP21]] #LED position 0-7
+
+  led_blue:
+    drive_strength: 8
+    iostd: LVCMOS12
+    loc:
+      - B26
+      - E24
+      - G26
+      - J23
+      - L24
+      - P21
+      - AV21
+      - AR21
+
+  led:
+    drive_strength: 8 #HP banks don't support the default of 12
+    iostd: LVCMOS12
+    loc:
+      # red
+      - AN14
+      - AP16
+      - AP14
+      - AU16
+      - AW12
+      - AY16
+      - BB12
+      - E25
+      # green - remaining 4 green leds are lvcmos18
+      - AW18
+      - AV18
+      - BA19
+      - AP21
+      # blue
+      - B26
+      - E24
+      - G26
+      - J23
+      - L24
+      - P21
+      - AV21
+      - AR21
+
+  adc_io:
+    iostd: LVCMOS18
+    loc: [AP10, AP11, AR11, AP12, AT10, AR10, AT12, AR12, AU11, AU12, AV10, AU10, AW9, AV9, AW11, AV11]

@@ -128,7 +128,8 @@ use IEEE.STD_LOGIC_1164.all;
 
 entity cdc_synchroniser is
 	 generic(	
-	      G_BUS_WIDTH : integer := 8   --default width of bus	
+	      G_BUS_WIDTH : integer := 8;   --default width of bus
+	      G_OP_INITIAL_VAL: std_logic_vector := X"00000000"  --value of the output after reset
 	        );		
 	 port(
 		 IP_CLK : in STD_LOGIC;
@@ -145,15 +146,9 @@ end cdc_synchroniser;
 
 architecture cdc_synchroniser of cdc_synchroniser is
 
-attribute ASYNC_REG : string;
-signal sBusValidD1 : std_logic;
-signal sBusValidD2 : std_logic;
-attribute ASYNC_REG of sBusValidD1: signal is "TRUE";
-attribute ASYNC_REG of sBusValidD2: signal is "TRUE";
-signal sSyncTriggerD1 : std_logic;
-signal sSyncTriggerD2 : std_logic;
-attribute ASYNC_REG of sSyncTriggerD1: signal is "TRUE";
-attribute ASYNC_REG of sSyncTriggerD2: signal is "TRUE";
+
+signal sSyncTrigger : std_logic;
+signal sBusValid : std_logic;
 signal sBus : std_logic_vector(G_BUS_WIDTH-1 downto 0);
 
 begin
@@ -169,13 +164,14 @@ begin
 --            Enter Notes here
 -- ***********************************************************************
 pTriggerSynchroniser: process(IP_CLK, IP_RESET)
+variable vTrigTmp : std_logic;
 begin
     if ( IP_RESET = '1' ) then
-        sSyncTriggerD1 <= '0';
-        sSyncTriggerD2 <= '0';
+        vTrigTmp := '0';
+        sSyncTrigger <= '0';
     elsif ( rising_edge(IP_CLK) ) then
-        sSyncTriggerD2 <= sSyncTriggerD1;
-        sSyncTriggerD1 <= IP_TRIGGER;
+        sSyncTrigger <= vTrigTmp;
+        vTrigTmp := IP_TRIGGER;
     end if;
 end process pTriggerSynchroniser;
 
@@ -190,22 +186,23 @@ end process pTriggerSynchroniser;
 --            Enter Notes here
 -- ***********************************************************************
 pBusSynchroniser: process(IP_CLK, IP_RESET)
+variable vBusValidTmp : std_logic;
 begin
     if ( IP_RESET = '1' ) then
-        sBusValidD2 <= '0';
-        sBusValidD1 <= '0';
-        sBus <= (others => '0');
+        vBusValidTmp := '0';
+        sBusValid <= '0';
+        sBus <= G_OP_INITIAL_VAL(G_BUS_WIDTH-1 to 0);
     elsif ( rising_edge(IP_CLK) ) then
-        sBusValidD2 <= sBusValidD1;
-        sBusValidD1 <= IP_BUS_VALID;
-        if (sBusValidD2 = '1') then
-          sBus <= IP_BUS;
-        end if;	
+        sBusValid <= vBusValidTmp;
+        vBusValidTmp := IP_BUS_VALID;
+		if (sBusValid = '1') then
+			sBus <= IP_BUS;
+		end if;	
     end if;
 end process pBusSynchroniser;
 
 --Output Signals
 
-OP_TRIGGER <= sSyncTriggerD2;
+OP_TRIGGER <= sSyncTrigger;
 OP_BUS <= sBus;
 end cdc_synchroniser;

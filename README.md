@@ -72,6 +72,6 @@ See the installation instructions for more information
 </dl>
 
 ## Getting Involved
-If you are a CASPER collaborator, or you’re just interested in what we’re up to, feel free to join our mailing list by sending a blank email [here.](casper+subscribe@lists.berkeley.edu)
+If you are a CASPER collaborator, or you’re just interested in what we’re up to, feel free to join our mailing list by sending a blank email [here.](mailto:casper+subscribe@lists.berkeley.edu)
 
-If would like to get involved in the development of the tools, please join our dev mailing list by sending a blank email [here.](casper-dev+subscribe@lists.berkeley.edu)
+If would like to get involved in the development of the tools, please join our dev mailing list by sending a blank email [here.](mailto:casper-dev+subscribe@lists.berkeley.edu)

@@ -618,6 +618,12 @@ class VerilogModule(object):
         self.axi4lite_devices = []
         self.n_axi4lite_interfaces = 0 # axi4lite interfaces to this module
         self.memory_map = {}
+        self.rfdc_devices = [] #this is for rfdc core on RFSOC, such as zcu111 platform
+        self.n_rfdc_interfaces = 0
+        # this is for xilinx axi4lite devices.
+        # in some applications, we add some axi-spi or axi-gpio, which are not casper axi4lite devices
+        self.xil_axi4lite_devices = []      
+        self.n_xil_axi4lite_devices = 0
         # sourcefiles required by the module (this is currently NOT
         # how the jasper toolflow implements source management)
         self.sourcefiles = []
@@ -1424,7 +1430,10 @@ class VerilogModule(object):
             n = 0
 
             for pn, port in sorted(self.ports[block].items()):
-                s += '    .%s(%s)'%(port.name, port.signal.rstrip(' '))
+                try:
+                    s += '    .%s(%s)'%(port.name, port.signal.rstrip(' '))
+                except:
+                    logger.error("Could't instantiate port %s connected to signal %s" % (port.name, port.signal))
                 if n != (n_ports - 1):
                     s += ',\n'
                 else:
@@ -1486,7 +1495,7 @@ class VerilogModule(object):
         self.add_port('wb_err_o'+suffix, signal='wbs_err_i[%s]'%wb_id,parent_sig=False)
 
     def add_axi4lite_interface(self, regname, mode, nbytes=4,
-                               default_val=None, suffix='',
+                               default_val=0, suffix='',
                                candr_suffix='', memory_map=[],
                                typecode=0xff, data_width=32, axi4lite_mode=''):
         """
@@ -1537,7 +1546,68 @@ class VerilogModule(object):
             self.n_axi4lite_interfaces += 1
             return axi4lite_device
 
+    def add_axi_interface(self, regname, mode, nbytes=4,
+                               default_val=0, suffix='',
+                               candr_suffix='', memory_map=[],
+                               typecode=0xff, data_width=32, axi4lite_mode=''):
 
+        if axi4lite_mode == 'raw':
+                 # axi4l miso signals
+           self.add_port('s_axi4lite_awready', signal='m_axi4lite_%s_awready' %regname, width=1, dir='out')
+           self.add_port('s_axi4lite_wready', signal='m_axi4lite_%s_wready' %regname, width=1, dir='out')
+           self.add_port('s_axi4lite_bresp',  signal='m_axi4lite_%s_bresp' %regname,  width=2, dir='out')
+           self.add_port('s_axi4lite_bvalid', signal='m_axi4lite_%s_bvalid'%regname, width=1, dir='out')
+           self.add_port('s_axi4lite_arready', signal='m_axi4lite_%s_arready'%regname, width=1, dir='out')
+           self.add_port('s_axi4lite_rresp',  signal='m_axi4lite_%s_rresp' %regname,  width=2, dir='out')
+           self.add_port('s_axi4lite_rdata',  signal='m_axi4lite_%s_rdata' %regname, width=32, dir='out')
+           self.add_port('s_axi4lite_rvalid', signal='m_axi4lite_%s_rvalid' %regname, width=1, dir='out')
+                # axi4l mosi signals
+           self.add_port('s_axi4lite_awaddr', signal='m_axi4lite_%s_awaddr' %regname, width=32, dir='out')
+           self.add_port('s_axi4lite_awvalid', signal='m_axi4lite_%s_awvalid' %regname, width=1, dir='out')
+           self.add_port('s_axi4lite_wdata',  signal='m_axi4lite_%s_wdata' %regname, width=32, dir='out')
+           self.add_port('s_axi4lite_wvalid', signal='m_axi4lite_%s_wvalid' %regname, width=1, dir='out')
+           self.add_port('s_axi4lite_wstrb',  signal='m_axi4lite_%s_wstrb' %regname, width=4, dir='out')
+           self.add_port('s_axi4lite_araddr', signal='m_axi4lite_%s_araddr' %regname, width=32, dir='out')
+           self.add_port('s_axi4lite_arvalid', signal='m_axi4lite_%s_arvalid' %regname, width=1, dir='out')
+           self.add_port('s_axi4lite_rready', signal='m_axi4lite_%s_rready' %regname, width=1, dir='out')
+           self.add_port('s_axi4lite_bready', signal='m_axi4lite_%s_bready' %regname, width=1, dir='out')
+
+    def add_rfdc_interface(self, regname, mode, nbytes=4, default_val=0, suffix='', candr_suffix='', memory_map=[], typecode=0xff):
+        """
+        Add the ports necessary for rfdc core, which is a special AXILite4 device
+
+        This function returns the AXI4LiteDevice object, so the caller can mess with it's memory map
+        if they so desire.
+        """
+        if regname in [axi_dev.regname for axi_dev in self.rfdc_devices]:
+            return
+        else:
+            # Make single register in memory_map if memory_map is empty
+            if not memory_map:
+                memory_map = [Register(regname, nbytes=nbytes, offset=0, mode=mode, default_val=default_val, ram_size=nbytes if typecode==4 else -1, ram=True if typecode==4 else False)]
+            rfdc_device = AXI4LiteDevice(regname, nbytes=nbytes, mode=mode, hdl_suffix=suffix, hdl_candr_suffix=candr_suffix, memory_map=memory_map, typecode=typecode)
+            self.rfdc_devices += [rfdc_device]
+            self.n_rfdc_interfaces += 1
+            return rfdc_device
+
+    def add_xil_axi4lite_interface(self, regname, mode, nbytes=4, default_val=0, suffix='', candr_suffix='', memory_map=[], typecode=0xff):
+        """
+        Add the ports necessary for xilinx axi4lite cores, which are not casper AXILite4 devices
+
+        This function returns the AXI4LiteDevice object, so the caller can mess with it's memory map
+        if they so desire.
+        """
+        if regname in [axi_dev.regname for axi_dev in self.xil_axi4lite_devices]:
+            return
+        else:
+            # Make single register in memory_map if memory_map is empty
+            #if not memory_map:
+            #    memory_map = [Register(regname, nbytes=nbytes, offset=0, mode=mode, default_val=default_val, ram_size=nbytes if typecode==4 else -1, ram=True if typecode==4 else False)]
+            xil_axi4lite_device = AXI4LiteDevice(regname, nbytes=nbytes, mode=mode, hdl_suffix=suffix, hdl_candr_suffix=candr_suffix, memory_map=memory_map, typecode=typecode)
+            self.xil_axi4lite_devices += [xil_axi4lite_device]
+            self.n_xil_axi4lite_devices += 1
+            return xil_axi4lite_device
+            
     def search_dict_for_name(self, dict, name):
         """
         This helper function searches each top level dictionary

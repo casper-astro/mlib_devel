@@ -1,0 +1,14 @@
+#-----------------------------------------------------------
+# Vivado v2019.2 (64-bit)
+# SW Build 2708876 on Wed Nov  6 21:40:23 MST 2019
+# IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
+# Start of session at: Fri Feb 14 09:07:32 2020
+# Process ID: 9196
+# Current directory: C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/tp3_data_rx_v1_0_project
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent19588 C:\XilinxProjects\ip_repo\tp3_data_rx_1.0\tp3_data_rx_v1_0_project\tp3_data_rx_v1_0_project.xpr
+# Log file: C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/tp3_data_rx_v1_0_project/vivado.log
+# Journal file: C:/XilinxProjects/ip_repo/tp3_data_rx_1.0/tp3_data_rx_v1_0_project\vivado.jou
+#-----------------------------------------------------------
+start_gui
+exit
+INFO: [Common 17-206] Exiting Vivado at Fri Feb 14 09:07:55 2020...

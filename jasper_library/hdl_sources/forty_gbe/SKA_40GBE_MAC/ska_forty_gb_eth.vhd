@@ -36,7 +36,9 @@ entity ska_forty_gb_eth is
         TTL               : std_logic_vector(7 downto 0);
         PROMISC_MODE      : integer;
         RX_CRC_CHK_ENABLE : integer;
-        RX_2B_SWAP        : boolean := false);
+        RX_2B_SWAP        : boolean := false;
+        USE_CPU_RX        : integer := 1;
+        USE_CPU_TX        : integer := 1);
     port (
         clk : in std_logic;
         rst : in std_logic;
@@ -68,7 +70,7 @@ entity ska_forty_gb_eth is
         DAT_I : in  std_logic_vector(31 downto 0);
         DAT_O : out std_logic_vector(31 downto 0);
         ACK_O : out std_logic;
-        ADR_I : in  std_logic_vector(31 downto 0);
+        ADR_I : in  std_logic_vector(15 downto 0);
         CYC_I : in  std_logic;
         SEL_I : in  std_logic_vector(3 downto 0);
         STB_I : in  std_logic;
@@ -127,7 +129,9 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
         FABRIC_ENABLE   : std_logic;
         MC_RECV_IP      : std_logic_vector(31 downto 0);
         MC_RECV_IP_MASK : std_logic_vector(31 downto 0);
-        RX_2B_SWAP      : boolean := false);
+        RX_2B_SWAP      : boolean := false;
+        CPU_RX_ENABLE   : integer;
+        CPU_TX_ENABLE   : integer);
     port (
         wb_clk_i : in  std_logic;
         wb_rst_i : in  std_logic;
@@ -183,9 +187,7 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
     component ska_fge_tx
     generic (
         TTL             : std_logic_vector(7 downto 0);
-        FABRIC_IP       : std_logic_vector(31 downto 0);
-        FABRIC_NETMASK  : std_logic_vector(31 downto 0);
-        FABRIC_GATEWAY  : std_logic_vector( 7 downto 0));
+        USE_CPU_TX      : integer);
     port (
         local_enable          : in  std_logic;
         local_mac             : in  std_logic_vector(47 downto 0);
@@ -305,7 +307,8 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
 
     component ska_fge_rx
     generic (
-        PROMISC_MODE    : integer);
+        PROMISC_MODE    : integer;
+        USE_CPU_RX      : integer);
     port (
         local_enable          : in  std_logic;
         local_mac             : in  std_logic_vector(47 downto 0);
@@ -342,9 +345,7 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
         phy_rx_up           : in std_logic;
         debug_port : out std_logic_vector(7 downto 0));
     end component;
-    
-    
-    attribute ASYNC_REG : string;
+
     signal cpu_tx_buffer_addr    : std_logic_vector(10 downto 0);
     signal cpu_tx_buffer_rd_data : std_logic_vector(63 downto 0);
     signal cpu_tx_buffer_wr_data : std_logic_vector(63 downto 0);
@@ -352,15 +353,15 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
     signal cpu_tx_size           : std_logic_vector(10 downto 0);
     signal cpu_tx_ready          : std_logic;
     signal cpu_tx_done           : std_logic;
-    --attribute MARK_DEBUG : string;
+    attribute MARK_DEBUG : string;
     signal cpu_rx_buffer_addr    : std_logic_vector(10 downto 0);
-    --attribute MARK_DEBUG of cpu_rx_buffer_addr        : signal is "TRUE";
+    attribute MARK_DEBUG of cpu_rx_buffer_addr        : signal is "TRUE";
     signal cpu_rx_buffer_rd_data : std_logic_vector(63 downto 0);
-    --attribute MARK_DEBUG of cpu_rx_buffer_rd_data        : signal is "TRUE";
+    attribute MARK_DEBUG of cpu_rx_buffer_rd_data        : signal is "TRUE";
     signal cpu_rx_size           : std_logic_vector(10 downto 0);
-    --attribute MARK_DEBUG of cpu_rx_size        : signal is "TRUE";
+    attribute MARK_DEBUG of cpu_rx_size        : signal is "TRUE";
     signal cpu_rx_ack            : std_logic;
-    --attribute MARK_DEBUG of cpu_rx_ack        : signal is "TRUE";
+    attribute MARK_DEBUG of cpu_rx_ack        : signal is "TRUE";
     signal arp_cache_addr        : std_logic_vector(7 downto 0);
     signal arp_cache_rd_data     : std_logic_vector(47 downto 0);
     signal arp_cache_wr_data     : std_logic_vector(47 downto 0);
@@ -374,11 +375,6 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
     signal local_mc_recv_ip      : std_logic_vector(31 downto 0);
     signal local_mc_recv_ip_mask : std_logic_vector(31 downto 0);
     signal soft_reset            : std_logic;
-    signal sSoftResetD1          : std_logic;
-    signal sSoftResetD2          : std_logic;
-    attribute ASYNC_REG of sSoftResetD1 : signal is "TRUE";
-    attribute ASYNC_REG of sSoftResetD2 : signal is "TRUE"; 
-    
     signal soft_reset_ack        : std_logic;
 
 
@@ -411,14 +407,9 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
     signal mac_rst_ack    : std_logic;
     signal mac_rst_ack_z1 : std_logic;
     signal mac_rst_ack_z2 : std_logic;
-    attribute ASYNC_REG of mac_rst_ack_z1 : signal is "TRUE";
-    attribute ASYNC_REG of mac_rst_ack_z2 : signal is "TRUE";    
     signal mac_rst_req    : std_logic;
     signal mac_rst_req_z1 : std_logic;
     signal mac_rst_req_z2 : std_logic;
-    attribute ASYNC_REG of mac_rst_req_z1 : signal is "TRUE";
-    attribute ASYNC_REG of mac_rst_req_z2 : signal is "TRUE";    
-    
     signal current_mac_reset_state : T_MAC_RESET_STATE;
 
     signal mac_tx_data       : std_logic_vector(255 downto 0);
@@ -497,37 +488,7 @@ architecture arch_ska_forty_gb_eth of ska_forty_gb_eth is
     attribute ASYNC_REG of sCntResetbD1 : signal is "TRUE";
     attribute ASYNC_REG of sCntResetbD2 : signal is "TRUE";	
       
-    --signal dbg_rx_valid        : std_logic_vector(3 downto 0);
-    --signal dbg_rx_end_of_frame : std_logic;
-    --signal dbg_rx_data         : std_logic_vector(255 downto 0);
-    --signal dbg_rx_source_ip    : std_logic_vector(31 downto 0);
-    --signal dbg_rx_source_port  : std_logic_vector(15 downto 0);
-    --signal dbg_rx_dest_ip      : std_logic_vector(31 downto 0);
-    --signal dbg_rx_dest_port    : std_logic_vector(15 downto 0);
- -- Mark Debug ILA Testing
-    
-    attribute MARK_DEBUG of dbg_rx_valid        : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_rx_end_of_frame : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_rx_data         : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_rx_source_ip    : signal is "TRUE";
-    attribute MARK_DEBUG of dbg_rx_source_port  : signal is "TRUE"; 
-    attribute MARK_DEBUG of dbg_rx_dest_ip      : signal is "TRUE";    
-    attribute MARK_DEBUG of dbg_rx_dest_port    : signal is "TRUE";
-
-    attribute MARK_DEBUG of mac_rx_data        : signal is "TRUE";
-    attribute MARK_DEBUG of mac_rx_data_valid  : signal is "TRUE";
-
 begin
-
---ILA Assignments
-
-    --dbg_rx_valid        <= rx_valid_sig        ;
-    --dbg_rx_end_of_frame <= rx_end_of_frame_sig ;
-    --dbg_rx_data         <= rx_data_sig         ;
-    --dbg_rx_source_ip    <= rx_source_ip_sig    ;
-    --dbg_rx_source_port  <= rx_source_port_sig  ;
-    --dbg_rx_dest_ip      <= rx_dest_ip_sig      ;
-    --dbg_rx_dest_port    <= rx_dest_port_sig    ;
 
     rx_data             <= rx_data_sig         ;
     rx_source_ip        <= rx_source_ip_sig    ;
@@ -610,35 +571,25 @@ begin
 --        end if;
 --    end process;
 
-    pSoftResetynchroniser : process(clk)
-    begin
-       if (rising_edge(clk))then
-         sSoftResetD2 <= sSoftResetD1;
-         sSoftResetD1 <= soft_reset;                              
-       end if;
-    end process pSoftResetynchroniser; 
-
     gen_current_cpu_reset_state :  process(rst, clk)
     begin
         if (rst = '1')then
             soft_reset_ack <= '0';
             mac_rst_ack_z1 <= '0';
             mac_rst_ack_z2 <= '0';
-            mac_rst_req <= '0';
             current_cpu_reset_state <= CPU_RESET_IDLE;
         elsif (rising_edge(clk))then
             soft_reset_ack <= '0';
             mac_rst_ack_z1 <= mac_rst_ack;
             mac_rst_ack_z2 <= mac_rst_ack_z1;
-            
+
             case current_cpu_reset_state is
                 when CPU_RESET_IDLE =>
                 current_cpu_reset_state <= CPU_RESET_IDLE;
 
-                if (sSoftResetD2 = '1')then
+                if (soft_reset = '1')then
                     current_cpu_reset_state <= CPU_RESET_WAIT_FOR_MAC_START;
                 end if;
-                mac_rst_req <= '0';
 
                 when CPU_RESET_WAIT_FOR_MAC_START =>
                 current_cpu_reset_state <= CPU_RESET_WAIT_FOR_MAC_START;
@@ -646,7 +597,6 @@ begin
                 if (mac_rst_ack_z2 = '1')then
                     current_cpu_reset_state <= CPU_RESET_WAIT_FOR_MAC_FINISH;
                 end if;
-                mac_rst_req <= '1';
 
                 when CPU_RESET_WAIT_FOR_MAC_FINISH =>
                 current_cpu_reset_state <= CPU_RESET_WAIT_FOR_MAC_FINISH;
@@ -655,13 +605,12 @@ begin
                     soft_reset_ack <= '1';
                     current_cpu_reset_state <= CPU_RESET_IDLE;
                 end if;
-                mac_rst_req <= '0';
 
             end case;
         end if;
     end process;
 
-    --mac_rst_req <= '1' when (current_cpu_reset_state = CPU_RESET_WAIT_FOR_MAC_START) else '0';
+    mac_rst_req <= '1' when (current_cpu_reset_state = CPU_RESET_WAIT_FOR_MAC_START) else '0';
 
     gen_current_mac_reset_state : process(xlgmii_txrst, xlgmii_txclk)
     begin
@@ -713,7 +662,9 @@ begin
         FABRIC_ENABLE   => FABRIC_ENABLE,
         MC_RECV_IP      => X"FFFFFFFF",
         MC_RECV_IP_MASK => X"FFFFFFFF",
-        RX_2B_SWAP      => RX_2B_SWAP)
+        RX_2B_SWAP      => RX_2B_SWAP,
+        CPU_RX_ENABLE   => USE_CPU_RX,
+        CPU_TX_ENABLE   => USE_CPU_TX)
     port map(
         wb_clk_i => CLK_I,
         wb_rst_i => RST_I,
@@ -773,9 +724,7 @@ begin
     ska_fge_tx_0 : ska_fge_tx
     generic map (
         TTL            => TTL,
-        FABRIC_IP      => FABRIC_IP,
-        FABRIC_NETMASK  => FABRIC_NETMASK,
-        FABRIC_GATEWAY  => FABRIC_GATEWAY)
+        USE_CPU_TX     => USE_CPU_TX)
     port map(
         local_enable          => local_enable,
         local_mac             => local_mac,
@@ -1036,7 +985,8 @@ begin
 
     ska_fge_rx_0 : ska_fge_rx
     generic map(
-        PROMISC_MODE => PROMISC_MODE)
+        PROMISC_MODE => PROMISC_MODE,
+        USE_CPU_RX   => USE_CPU_RX)
     port map(
         local_enable          => local_enable,
         local_mac             => local_mac,

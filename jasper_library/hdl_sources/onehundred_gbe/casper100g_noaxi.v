@@ -3,7 +3,10 @@ module casper100g_noaxi#(
     parameter FABRIC_IP = 32'hc0a805c8,
     parameter FABRIC_PORT = 16'h2710,
     parameter FABRIC_GATEWAY = 32'h1,
-    parameter FABRIC_ENABLE_ON_START = 1'b0
+    parameter FABRIC_ENABLE_ON_START = 1'b0,
+    parameter USE_RS_FEC = 1'b0,
+    parameter INSTANCE_ID = 1'b0,
+    parameter N_COMMON = 32'd1
    ) (
         // 100MHz reference clock needed by 100G Ethernet PHY
         // This must be a stable 100MHz clock as per the 100G PHY requirements 
@@ -118,6 +121,7 @@ module casper100g_noaxi#(
         input [15:0] gbe_tx_dest_port,
         input [511:0] gbe_tx_data,
         input [3:0] gbe_tx_valid,
+        input [63:0] gbe_tx_byte_enable,
         input gbe_tx_end_of_frame
         
     );
@@ -195,13 +199,13 @@ module casper100g_noaxi#(
     end
 
     casper100gethernetblock_no_cpu #(
-        .FABRIC_MAC(FABRIC_MAC),
-        .FABRIC_IP(FABRIC_IP),
-        .FABRIC_PORT(FABRIC_PORT),
         .G_INCLUDE_ICAP(1'b0),
         .G_AXI_DATA_WIDTH(512),
         .G_NUM_STREAMING_DATA_SERVERS(1),
-        .G_SLOT_WIDTH(2)
+        .G_SLOT_WIDTH(2),
+        .G_USE_RS_FEC(USE_RS_FEC),
+        .G_MAC_INSTANCE(INSTANCE_ID),
+        .G_N_COMMON(N_COMMON)
     ) casper100gethernetblock_inst (
         .RefClk100MHz(RefClk100MHz),
         .RefClkLocked(RefClkLocked),
@@ -292,10 +296,8 @@ module casper100g_noaxi#(
         .axis_streaming_data_tx_tvalid(tx_valid_int),
         // TUSER is (I think) a discard flag
         .axis_streaming_data_tx_tuser(32'b0),
-        // Could expose byte enables to user to allow finer payload control.
-        // BUT, need to check what patterns are actually allowed. Eg. valid
-        // bytes must be a contiguous block in the LSBs
-        .axis_streaming_data_tx_tkeep(64'hffffffffffffffff),
+        // Valid bytes must be a contiguous block in the LSBs
+        .axis_streaming_data_tx_tkeep(gbe_tx_byte_enable),
         .axis_streaming_data_tx_tlast(gbe_tx_end_of_frame),
         .axis_streaming_data_tx_tready(gbe_tx_overflow)
     );

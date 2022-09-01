@@ -9,6 +9,7 @@ import logging
 import os
 import casper_platform as platform
 import yellow_blocks.yellow_block as yellow_block
+import blockdesign
 import verilog
 from constraints import PortConstraint, ClockConstraint, GenClockConstraint, \
     ClockGroupConstraint, InputDelayConstraint, OutputDelayConstraint, MaxDelayConstraint, \
@@ -21,6 +22,7 @@ import time
 import hashlib  # Added to calculate md5hash of .bin bitstream and add it to the .fpg header
 import pickle   # Used to dump the pickle of the generated VerilogModule to the build directory for debugging
 import struct   # Used to append a binary checksum to a bitstream
+import csv      # read core_info.tab to populate device tree nodes in VitisBackend
 # For xml2vhdl generation from Oxford
 import xml.dom.minidom
 import xml.etree.ElementTree as ET
@@ -461,7 +463,7 @@ class Toolflow(object):
             self.sources += obj.sources
             self.ips += obj.ips
         # add AXI4-Lite architecture specfic stuff, which must be called after all yellow blocks have modified top.
-        if self.plat.mmbus_architecture == 'AXI4-Lite':
+        if 'AXI4-Lite' in self.plat.mmbus_architecture:
             # Make an AXI4-Lite interconnect yellow block and let it modify top
             axi4lite_interconnect = yellow_block.YellowBlock.make_block(
                 {'tag': 'xps:axi4lite_interconnect', 'name': 'axi4lite_interconnect', 
@@ -512,13 +514,17 @@ class Toolflow(object):
             #        self.tcl_sources += glob.glob(source)
 
     def write_core_info(self):
-        if self.plat.mmbus_architecture == 'AXI4-Lite':
+        self.cores = []
+        if 'AXI4-Lite' in self.plat.mmbus_architecture:
             # get list of all axi4lite_devices in self.top.memory_map dict
-            self.cores = []
             for val in list(self.top.memory_map.values()):
                 self.cores += val['axi4lite_devices']
-        else:
-            self.cores = self.top.wb_devices
+            for val in self.top.rfdc_devices:
+                self.cores += [val]
+        if 'wishbone' in self.plat.mmbus_architecture:
+            self.cores += self.top.wb_devices
+        for val in self.top.xil_axi4lite_devices:
+            self.cores += [val]
         basefile = '%s/%s/core_info.tab' % (os.getenv('HDL_ROOT'),
                                             self.plat.name)
         newfile = '%s/core_info.tab' % self.compile_dir
@@ -539,23 +545,25 @@ class Toolflow(object):
             s += format_str.format(core.regname, modemap[core.mode],
                                    core.base_addr, core.nbytes)
             # add aliases if the WB Devices have them
+            # Add the core's register name as a prefix, because memory map
+            # names need not be unique!
             for reg in core.memory_map:
-                s += format_str.format(reg.name, modemap[reg.mode],
+                s += format_str.format(core.regname + '_' + reg.name, modemap[reg.mode],
                                        core.base_addr + reg.offset, reg.nbytes)
-            # s += '%s\t%d\t%x\t%x\n'%(core.regname, modemap[core.mode],
-            #                          core.base_addr, core.nbytes)
         self.logger.debug('Opening %s' % basefile)
         with open(newfile, 'w') as fh:
             fh.write(s)
 
     def write_core_jam_info(self):
-        if self.plat.mmbus_architecture == 'AXI4-Lite':
+        self.cores = []
+        if 'AXI4-Lite' in self.plat.mmbus_architecture:
             # get list of all axi4lite_devices in self.top.memory_map dict
-            self.cores = []
             for val in list(self.top.memory_map.values()):
                 self.cores += val['axi4lite_devices']
-        else:
-            self.cores = self.top.wb_devices
+        if 'wishbone' in self.plat.mmbus_architecture:
+            self.cores += self.top.wb_devices
+        for val in self.top.xil_axi4lite_devices:
+            self.cores += [val]
         basefile = '%s/%s/core_info.jam.tab' % (os.getenv('HDL_ROOT'), self.plat.name)
         newfile = '%s/core_info.jam.tab' % self.compile_dir
         self.logger.debug('Opening %s' % basefile)
@@ -574,8 +582,7 @@ class Toolflow(object):
             s += format_str.format(core.regname, modemap[core.mode], core.base_addr, core.nbytes, core.typecode)
             # add aliases if the WB Devices have them
             for reg in core.memory_map:
-                s += format_str.format(reg.name, modemap[reg.mode], core.base_addr + reg.offset, reg.nbytes, core.typecode)
-            # s += '%s\t%d\t%x\t%x\n'%(core.regname, modemap[core.mode], core.base_addr, core.nbytes)
+                s += format_str.format(core.regname + '_' + reg.name, modemap[reg.mode], core.base_addr + reg.offset, reg.nbytes, core.typecode)
         self.logger.debug('Opening %s' % basefile)
         with open(newfile, 'w') as fh:
             fh.write(s)
@@ -605,9 +612,9 @@ class Toolflow(object):
             self.top.max_devices_per_arb = self.plat.conf['max_devices_per_arbiter']
             self.logger.debug("Found max_devices_per_arbiter: %s" % self.top.max_devices_per_arb)
         # Check for memory map bus architecture, added to support AXI4-Lite
-        if self.plat.mmbus_architecture == 'AXI4-Lite':
+        if 'AXI4-Lite' in self.plat.mmbus_architecture:
             pass
-        else:
+        if 'wishbone' in self.plat.mmbus_architecture:
             self.top.wb_compute(self.plat.dsp_wb_base_address,
                             self.plat.dsp_wb_base_address_alignment)
         # Write top module file
@@ -698,7 +705,8 @@ class Toolflow(object):
                     symbolic_indices=const.iogroup_index,
                     io_standard=const.iostd,
                     drive_strength=const.drive_strength,
-                    location=const.loc
+                    location=const.loc,
+                    diff_term=const.diff_term
                     )]
             elif isinstance(const, ClockConstraint):
                 clk_constraints += [castro.ClkConstraint(
@@ -786,7 +794,7 @@ class Toolflow(object):
         c.synthesis.pin_map = self.plat._pins
 
         mm_slaves = []
-        if self.plat.mmbus_architecture == 'AXI4-Lite':
+        if 'AXI4-Lite' in self.plat.mmbus_architecture:
             for dev in self.top.axi4lite_devices:
                 if dev.mode == 'rw':
                     mode = 3
@@ -798,7 +806,7 @@ class Toolflow(object):
                     mode = 1
                 mm_slaves += [castro.mm_slave(dev.regname, mode, dev.base_addr,
                                             dev.nbytes)]
-        else:
+        if 'wishbone' in self.plat.mmbus_architecture:
             for dev in self.top.wb_devices:
                 if dev.mode == 'rw':
                     mode = 3
@@ -877,11 +885,11 @@ class Toolflow(object):
                 node.set('permission', reg.mode)               
                 node.set('axi4lite_mode', reg.axi4lite_mode)
                 if reg.mode == 'r':
-                    if reg.default_val is not None:
+                    if int(reg.default_val,16) != 0:
                        # Populate defaults of readable registers which
                        # Aren't driven by the fabric. I.e., static compile-time
                        # registers.
-                       node.set('hw_rst', str(reg.default_val))
+                       node.set('hw_rst', reg.default_val)
                     else:
                        # "Normal" read-only registers get written to from the
                        # fabric every cycle.
@@ -891,10 +899,7 @@ class Toolflow(object):
                        node.set('hw_permission', 'w')
                 else:
                     # Only for a From Processor register (control)
-                    if reg.default_val is not None:
-                        node.set('hw_rst', str(reg.default_val))
-                    else:
-                        node.set('hw_rst', str(0))
+                    node.set('hw_rst', reg.default_val)
                 # Best we can currently do for a description...? haha
                 node.set('description', str(interface + "_" + reg.name))
                 # set bram size and 
@@ -926,7 +931,7 @@ class Toolflow(object):
         # loop over interfaces, sort by address, make interconnect
         xml_root = ET.Element('node')
         xml_root.set('id', 'axi4lite_top')
-        xml_root.set('address', hex(self.plat.mmbus_base_address))
+        xml_root.set('address', hex(self.plat.axi_ic_base_address))
         xml_root.set('hw_type', 'ic')
         for interface in list(sorted(memory_map.keys())):
             # add a child to parent node
@@ -1209,6 +1214,7 @@ class ToolflowBackend(object):
             const.location = [pins[idx].loc for idx in range(numindices)]
             const.io_standard = [pins[idx].iostd for idx in range(numindices)]
             const.drive_strength = [pins[idx].drive_strength for idx in range(numindices)]
+            const.diff_term = [pins[idx].diff_term for idx in range(numindices)]
             const.is_vector = const.portname_indices != []
 
         self.gen_constraint_file(
@@ -1445,6 +1451,169 @@ class SimulinkFrontend(ToolflowFrontend):
         self.logger.info('Running terminal command: %s' % term_cmd)
         os.system(term_cmd)
 
+
+class VitisBackend(ToolflowBackend):
+    """
+    Incantations of a Vitis flow
+
+    Uses the hardware platform (.xsa) exported from Vivado to generate a software platform. Here
+    we start by building the device tree
+    """
+    def __init__(self, xsa, plat=None, compile_dir='/tmp', periph_objs=None):
+        """
+        """
+        self.logger = logging.getLogger('jasper.toolflow.backend')
+        self.compile_dir = compile_dir
+        self.jdts_project_name = 'jdts'
+        self.jdtspath = os.path.join(self.compile_dir, self.jdts_project_name)
+        self.dtsiname = 'jasper.dtsi'
+        self.dtsi_loc = os.path.join(self.jdtspath, self.dtsiname)
+        self.periph_objs = periph_objs
+
+        self.xsa_loc = xsa
+        try:
+            os.path.getsize(self.xsa_loc)
+        except OSError as e:
+            self.logger.error('.xsa file does not exist or was not specified')
+            raise e
+
+        # device tree gen requires this new env requirement when generating xilinx device tree products
+        # if continue to only manager our own (as in the case of the rfdc) we can omit this requirment.
+        # The goal however is to get to this point where the full xilinx and jasper dt are combined.
+        # The potential complication here is that the user needs to make sure to checkout the branch
+        # version of the xlnx device tree matching the version of vivado/xsct that is being used.
+        self.xlnx_dt_path = os.getenv('XLNX_DT_REPO_PATH')
+        if self.xlnx_dt_path is None:
+            raise RuntimeError('The enviornment variable `XLNX_DT_REPO_PATH` is not on the path.')
+
+        self.name = 'vitis'
+        ToolflowBackend.__init__(self, plat=plat, compile_dir=compile_dir)
+
+
+    def compile(self):
+        """
+        This will break plain ole fpga's (non xlnx zynq soc's). This is a temporary implementation
+        placeholder. Will be moving to seperate back end class.
+
+        The general idea here is to run Vitis (xsct) with the platform hardware (.xsa) to generate
+        supporting software products to create a device tree overlay. The following:
+          1. makes a `jdts` dir in the `compile_dir` to hold the build products
+          2. create an empty `xsct_gogogo.tcl` (similar to the Vivado jasper flow) so that:
+            a. can build xilinx device tree (requiring the xlnx-device-tree repo)
+            b. allow each peripheral device (yellow block) to also add xsct commands to
+               generate whatever they need. In the case of the `rfdc` it is not explicitly
+               added to the MPSoC and there is no mmap path managed by Vivado. This excludes
+               the rfdc from being auto-magically included as part of the exported drivers
+               from the xlnx device tree driver information. However, the IP and its
+               configuration is still present within the `.xsa` hardware project and we can
+               instead manually build the device tree to match what xrfdc driver expects.
+          3. run `xsct` against the generated `xsct_gogogo.tcl` file
+          4. take all of the products generated and build one complete `jasper.dtsi` device
+             tree overaly description that is later compiled with `dtc` producing a compatible
+             overlay.
+        """
+        xsct_cmds = []
+
+        self.logger.info('Building xsct script')
+        xsct_cmds.append('puts "starting jasper device tree generation"')
+        # add directory to create dt build directory
+        xsct_cmds.append('set jdts_dir {:s}'.format(os.path.join(self.jdtspath, 'xil')))
+        xsct_cmds.append('file mkdir $jdts_dir')
+        xsct_cmds.append('hsi::open_hw_design {:s}'.format(self.xsa_loc))
+        #tclpath = os.path.join(os.getenv('MLIB_DEVEL_PATH'), os.path.join('jasper_library', 'hsi_plnx'))
+        #xsct_cmds.append('set tclpath "{:s}"'format(tclpath))
+
+        # Use xsct (vitis) to generate software products for the platform/hardware in our projects
+        # board design. Until the device tree overlay is more fully accepted in the toolflow we do not
+        # even need to generate the xilinx products
+        xsct_cmds.append('')
+        xsct_cmds.append('# generate xilinx device tree products from xsa/block design')
+        xsct_cmds.append('hsi::set_repo_path {:s}'.format(self.xlnx_dt_path))
+        xsct_cmds.append('set processor [hsi::get_cells * -filter {IP_TYPE==PROCESSOR}]')
+        xsct_cmds.append('set processor [lindex $processor 0]')
+        xsct_cmds.append('hsi::create_sw_design device-tree -os device_tree -proc $processor')
+        xsct_cmds.append('hsi::set_property CONFIG.dt_overlay true [hsi::get_os]')
+        xsct_cmds.append('hsi::generate_target -dir $jdts_dir')
+        #################################################################################
+
+        # Allow jasper blocks to generate xsct tcl to create any needed products
+        for p in self.periph_objs:
+            cmds = p.gen_xsct_tcl_cmds(jdts_dir=self.jdtspath)
+            if cmds is not None:
+                for c in cmds:
+                    xsct_cmds.append(c)
+
+        xsct_cmds.append('hsi::close_hw_design [hsi::current_hw_design]')
+
+        xc = '\n'.join(xsct_cmds)
+        xsct_tcl = os.path.join(self.compile_dir, 'xsct_gogogo.tcl')
+        helpers.write_file(xsct_tcl, xc)
+
+        rv = os.system('xsct {:s}'.format(xsct_tcl))
+        if rv:
+            raise Exception('xsct (Vitis) failed!')
+
+        """
+        With software products generated from everything in our hardware platform we can Now make another pass
+        to piece results together. In this case, build a dtsi incorporating xlnx and jasper generated products
+        """
+        self.logger.info('Assembling jasper dt node')
+        # assemble dt node
+        dtstr = []
+        dtstr.append('/* AUTOMATICALLY GENERATED */\n\n')
+        dtstr.append('/dts-v1/;')
+        dtstr.append('/plugin/;')
+        dtstr.append('')
+
+        # ideally, we would also include the xilinx provided dtsi and then include the casper
+        # built fragments, this allows to easily build a complete dto
+        # dtstr.append('/include/ "xil/pl.dtsi"')
+
+        # ideally,this would be replaced with direct access to mmap addrs, if at all possible
+        # this is also dependent on `core_info.tab` not changing names
+        coreinfo = os.path.join(self.compile_dir, "core_info.tab")
+        fcsv = open(coreinfo, 'r')
+        fields = ['core', 'rw', 'baseaddr', 'size']
+        rdr = csv.DictReader(fcsv, fieldnames=fields, delimiter=" ", skipinitialspace=True)
+
+        mmap = {}
+        for row in rdr:
+            c = row.pop('core')
+            mmap[c] = row
+        fcsv.close()
+
+        # TODO: pass additional build information for dt generation methods. The dt overlay fragment
+        # syntax is not required to be
+        #   `fragment<#>@<address>`
+        # the only thing that is required is the `__overlay__` node directive. This makes augmenting
+        # xilinx dt generation to include a jasper one straightforward because we do not need to
+        # parse that tree to know the number of `fragment<#>@<address>`. So, we can start with just a
+        # jasper node `jasper<#>@<address>` and when this is included as part of the high-level dtsi
+        # the jasper nodes will co-exist with xlnx created fragment nodes.
+        # To do this requires that we manage the assembly process needing to extend each peripherals
+        # `gen_dt_node()` method to include the ability to pass node information in the dt generation
+        # process (or at least use dt aliases so the nodes can be added just by their name)
+        for p in self.periph_objs:
+            if p.name in mmap:
+                dt = p.gen_dt_node(mmap_info=mmap[p.name], jdts_dir=self.jdtspath)
+                if dt is not None:
+                    dtstr.append('/include/ "{:s}/{:s}-overlay-fragment.dtsi"'.format(p.name, p.name))
+
+        dtstr.append('/{')
+        dtstr.append('};')
+
+        dtsi = '\n'.join(dtstr)
+        helpers.write_file(self.dtsi_loc, dtsi)
+
+
+    def mkdtbo(self, dtsi_file, dtbo_file):
+        """
+        """
+        rv = os.system('dtc -I dts {:s} -O dtb -b 0 -@ -o {:s}'.format(dtsi_file, dtbo_file))
+        if rv:
+            raise Exception('dtc failed!')
+
+
 class VivadoBackend(ToolflowBackend):
     """
 
@@ -1497,12 +1666,14 @@ class VivadoBackend(ToolflowBackend):
                 self.compile_dir, self.project_name)
             self.bitstream_loc = '%s/%s/top.bit' % (
                 self.compile_dir, self.project_name)
+        self.bd = None
 
         self.name = 'vivado'
         self.npm_sources = []
         ToolflowBackend.__init__(self, plat=plat, compile_dir=compile_dir)
         self.tcl_cmds = {
             'init'        : '',
+            'create_bd'   : '',
             'pre_synth'   : '',
             'synth'       : '',
             'post_synth'  : '',
@@ -1539,21 +1710,29 @@ class VivadoBackend(ToolflowBackend):
             self.hex_loc = '%s/top.hex' % (prefix)
             self.mcs_loc = '%s/top.mcs' % (prefix)
             self.prm_loc = '%s/top.prm' % (prefix)
+            self.xsa_loc = '%s/top.xsa' % (prefix)
+
         else:
             self.bin_loc = '%s/user_top_inst_user_top-toolflow_partial.bin' % (prefix)
             self.bit_loc = '%s/user_top_inst_user_top-toolflow_partial.bit' % (prefix)
             self.hex_loc = '%s/user_top_inst_user_top-toolflow_partial.hex' % (prefix)
             self.mcs_loc = '%s/user_top_inst_user_top-toolflow_partial.mcs' % (prefix)
             self.prm_loc = '%s/user_top_inst_user_top-toolflow_partial.prm' % (prefix)
+            self.xsa_loc = '%s/user_top_inst_user_top-toolflow_partial.xsa' % (prefix)
 
         self.add_tcl_cmd('set bin_file "%s"'%self.bin_loc, stage='init')
         self.add_tcl_cmd('set bit_file "%s"'%self.bit_loc, stage='init')
         self.add_tcl_cmd('set hex_file "%s"'%self.hex_loc, stage='init')
         self.add_tcl_cmd('set mcs_file "%s"'%self.mcs_loc, stage='init')
         self.add_tcl_cmd('set prm_file "%s"'%self.prm_loc, stage='init')
+        self.add_tcl_cmd('set xsa_file "%s"'%self.xsa_loc, stage='init')
+
+        # block design setup. TODO: consider moving around
+        self.bd_name = '%s_bd' % self.plat.conf['name']
+        self.add_tcl_cmd('set jbd_name "%s"'%self.bd_name, stage='init')
+        self.bd = blockdesign.BlockDesign(name=self.bd_name)
 
         # A function to print timing errors
-
         check_timing = """
 proc check_timing {run} {
   if { [get_property STATS.WNS [get_runs $run] ] < 0 } {
@@ -1606,6 +1785,8 @@ proc puts_red {s} {
                 self.add_tcl_cmd('create_project -f %s %s -part %s' % (
                     self.project_name, self.project_name,
                     plat.fpga), stage='init')
+                self.add_tcl_cmd('create_bd_design $jbd_name', stage='init')
+                self.add_tcl_cmd('current_bd_design $jbd_name', stage='init')
             else:
                 self.add_tcl_cmd('exec cp %s .' % (self.template_project), stage='init')
                 template_basename = os.path.basename(self.template_project)
@@ -1624,7 +1805,7 @@ proc puts_red {s} {
                                                    self.project_name))
             self.add_tcl_cmd('set_part %s' % plat.fpga)
         # Set the project to default to vhdl    
-        self.add_tcl_cmd('set_property target_language VHDL [current_project]')    
+        self.add_tcl_cmd('set_property target_language VHDL [current_project]', stage='init')
 
     def add_library(self, path):
         """
@@ -1639,6 +1820,8 @@ proc puts_red {s} {
         Add an ip core from a library
         """
         self.add_tcl_cmd('create_ip -name %s -vendor %s -library %s -version %s -module_name %s' % (ip['name'], ip['vendor'], ip['library'], ip['version'], ip['module_name']))
+        if self.template_project is not None:
+            self.add_tcl_cmd('move_files -of_objects [get_reconfig_modules user_top-toolflow] [get_files %s.xci]' % ip['module_name'])
 
     def add_source(self, source, plat):
         """
@@ -1744,6 +1927,7 @@ proc puts_red {s} {
     def eval_tcl(self):
         s = ''
         s += self.tcl_cmds['init']
+        s += self.tcl_cmds['create_bd']
         s += self.tcl_cmds['pre_synth']
         s += self.tcl_cmds['synth']
         s += self.tcl_cmds['post_synth']
@@ -1765,17 +1949,26 @@ proc puts_red {s} {
         synth_run = "[get_runs user_top-toolflow_synth_1]"
         tcl = self.add_tcl_cmd # shortcut for less typing
 
-        # The synthesis run seems to want to lock all IP, but doesn't bother generating it first.
-        # Manually do so...
-        tcl("generate_target all [get_files %s]" % os.path.join(self.compile_dir, "myproj/myproj.srcs/user_top-toolflow/ip/*/*.xci"), stage='pre_synth')
+        # Don't go deeper than [glob-like] .../ip/*/*.xci
+        # Vivado will match the above glob as .../ip/*/*/.../*/*.xci
+        # These files may not be manually generated, since they should be generated by the parents
+        ip_regexp = os.path.join(self.compile_dir, "myproj/myproj.srcs/user_top-toolflow/ip/[^/]+/[^/]+\.xci")
 
         # add the upgrade_ip command to the tcl file if the yaml file requests it
         # Default to upgrading the IP
         if plat.conf.get('upgrade_ip', True):
-            #TODO tcl('upgrade_ip -quiet [get_ips *]', stage='pre_synth')
+            # Ideally we'd upgrade only IPs from the user partition.
+            # But, adding "-of_objects [get_reconfig_modules user_top-toolflow]"
+            # to the get_ips call isn't allowed.
+            # Instead, just update everything. OK?
+            tcl('upgrade_ip -quiet [get_ips *]', stage='pre_synth')
             self.logger.debug('adding the upgrade_ip command to the tcl script')
         else:
             self.logger.debug('The upgrade_ip command is not being added to the tcl script')
+
+        # The synthesis run seems to want to lock all IP, but doesn't bother generating it first.
+        # Manually do so...
+        tcl("generate_target all [get_files -regexp {%s}]" % ip_regexp, stage='pre_synth')
 
         # Pre-Synthesis Commands
         if synth_strat is not None:
@@ -1799,7 +1992,28 @@ proc puts_red {s} {
         tcl('set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true {0}'.format(impl_run), stage='pre_impl')
         tcl('set_property STEPS.POST_ROUTE_PHYS_OPT_DESIGN.IS_ENABLED true {0}'.format(impl_run), stage='pre_impl')
 
+        # Some [Possibly just the 100G block] mess with the placement of things after synthesis,
+        # in order to abuse a single IP core (which includes placement constraints) to be
+        # used multiple times.
+        # In PR mode, the synthesized black box "user_top" doesn't include resolved black boxes, so
+        # trying to manipulate things inside them doesn't work.
+        # Try --
+        # 1. Implementing to opt_design
+        # 2. Opening design checkpoint
+        # 3. Allowing yellow blocks to mess with placement with their "pre_impl" tcl commands
+        # 4. Running the rest of implementation.
+        #
+        # This could well have unintended side effects, depending on what yellow blocks
+        # Try to do, and how they assume things about when pre_impl commands are run.
+        tcl('launch_runs {0} -jobs {1} -to_step opt_design'.format(impl_run, cores), stage='pre_impl')
+        tcl('wait_on_run {0}'.format(impl_run), stage='pre_impl')
+        tcl('open_checkpoint $impl_dir/top_opt.dcp ', stage='pre_impl')
+        # Yellow block pre_impl commands run here....
+        # Then save the checkpoint, below.
+
         # Implementation Commands
+        tcl('write_checkpoint $impl_dir/top_opt.dcp -force', stage='impl')
+        tcl('close_design', stage='impl')
         tcl('launch_runs {0} -jobs {1}'.format(impl_run, cores), stage='impl')
         tcl('wait_on_run {0}'.format(impl_run), stage='impl')
 
@@ -1835,6 +2049,27 @@ proc puts_red {s} {
         tcl = self.add_tcl_cmd
         # Project Mode is enabled
         if plat.project_mode:
+            # Assemble the board design
+            self.gen_bd_tcl_cmds()
+
+            # TODO save, validate, and export block design must be done in the `pre_synth` stage after all the yellow blocks
+            # have a chance to run `gen_tcl_cmds`. This is because the rfdc has not been migrated to having a `modify_bd`
+            # command and implements all of its additions in `gen_tcl_cmds` using the `pre_synth` stage. Either the rfdc needs
+            # to be migrated or evaluate the utility of having the block design built out using the seperate `create_bd` stage
+            # and with its own `gen_bd_tcl_cmds` or if this functionality instead needs to be pulled into `gen_tcl_cmds`
+            """
+            # save, validate, and generate output producets for the board design
+            self.add_tcl_cmd('save_bd_design', stage='create_bd')
+            self.add_tcl_cmd('validate_bd_design', stage='create_bd')
+            self.add_tcl_cmd('generate_target all [get_files [get_property directory '
+                '[current_project]]/myproj.srcs/sources_1/bd/%s/%s.bd]' % (self.bd_name, self.bd_name), stage='create_bd')
+            self.add_tcl_cmd('make_wrapper -files [get_files [get_property directory '
+                '[current_project]]/myproj.srcs/sources_1/bd/%s/%s.bd] -top' % (self.bd_name, self.bd_name), stage='create_bd')
+            self.add_tcl_cmd('add_files -norecurse [get_property directory '
+                '[current_project]]/myproj.srcs/sources_1/bd/%s/hdl/%s_wrapper.vhd' % (self.bd_name, self.bd_name), stage='create_bd')
+            self.add_tcl_cmd('update_compile_order -fileset sources_1', stage='create_bd')
+            """
+
             # Pre-Synthesis Commands
             self.add_tcl_cmd('set_property top top [current_fileset]', stage='pre_synth')
             self.add_tcl_cmd('update_compile_order -fileset sources_1', stage='pre_synth')
@@ -1878,6 +2113,7 @@ proc puts_red {s} {
             self.add_tcl_cmd('set synth_critical_count [get_msg_config -count -severity {CRITICAL WARNING}]', stage='post_synth')
 
             # Pre-Implementation Commands
+            self.add_tcl_cmd('set_property STEPS.POST_PLACE_POWER_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]', stage='pre_impl')
             if impl_strat is not None:
                 # impl_strat must be error-checked before arriving here
                 self.add_tcl_cmd('set_property strategy {} [get_runs impl_1]'.format(impl_strat), stage='pre_impl')
@@ -1935,6 +2171,21 @@ proc puts_red {s} {
 
             # Let Yellow Blocks add their own tcl commands
             self.gen_yellowblock_tcl_cmds()
+
+            # TODO potentially temporary place holder for save, validate, and export block design.
+            # This is because the rfdc has not been migrated to having a `modify_bd` command implementation and instead
+            # its additions are in `gen_tcl_cmds` using the `pre_synth` stage. We need to then capture those additions first.
+            # Also, either rfdc needs to be migrated using a `modify_bd` method or determine if it better that all block
+            # design implementation work be contained within `gen_tcl_cmds`
+            self.add_tcl_cmd('save_bd_design', stage='pre_synth')
+            self.add_tcl_cmd('validate_bd_design', stage='pre_synth')
+            self.add_tcl_cmd('generate_target all [get_files [get_property directory '
+                '[current_project]]/myproj.srcs/sources_1/bd/%s/%s.bd]' % (self.bd_name, self.bd_name), stage='pre_synth')
+            self.add_tcl_cmd('make_wrapper -files [get_files [get_property directory '
+                '[current_project]]/myproj.srcs/sources_1/bd/%s/%s.bd] -top' % (self.bd_name, self.bd_name), stage='pre_synth')
+            self.add_tcl_cmd('add_files -norecurse [get_property directory '
+                '[current_project]]/myproj.srcs/sources_1/bd/%s/hdl/%s_wrapper.vhd' % (self.bd_name, self.bd_name), stage='pre_synth')
+            self.add_tcl_cmd('update_compile_order -fileset sources_1', stage='pre_synth')
 
             # Determine if the design meets timing or not
             self.add_tcl_cmd('check_timing impl_1', stage='promgen') # promgen so the error comes last
@@ -2113,6 +2364,17 @@ proc puts_red {s} {
                         index=const.portname_indices[idx]
                         if const.portname_indices else None)
 
+            for idx, p in enumerate(const.symbolic_indices):
+                self.logger.debug('Getting diff_term for port index %d' % idx)
+                self.logger.debug('with port name %s' % const.portname)
+                diff_term = const.diff_term[idx]
+                if diff_term is not None:
+                  self.logger.debug('DIFF_TERM constraint found: %s' % diff_term)
+                  user_const += self.format_const(
+                    'DIFF_TERM_ADV', diff_term, const.portname,
+                    index=const.portname_indices[idx]
+                    if const.portname_indices else None)
+
         if isinstance(const, castro.ClkConstraint):
             self.logger.debug('New Clock constraint found')
             user_const += self.format_clock_const(const)
@@ -2269,6 +2531,18 @@ proc puts_red {s} {
                 if val is not None:
                     for v in val:
                         self.add_tcl_cmd(v, stage=key)
+
+    def gen_bd_tcl_cmds(self):
+        """
+        Allow each yellowblock to generate tcl commands specific to creating
+        a block design
+        """
+        self.logger.info('Assembling the block design from'
+                         ' yellow block peripherals')
+        for obj in self.periph_objs:
+            c = obj.modify_bd(self.bd)
+
+        self.add_tcl_cmd(self.bd.gen_tcl(), stage='create_bd')
 
     def gen_yellowblock_custom_hdl(self):
         """

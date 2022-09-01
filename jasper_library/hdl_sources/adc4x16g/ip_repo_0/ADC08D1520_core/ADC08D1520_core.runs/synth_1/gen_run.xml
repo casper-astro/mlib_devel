@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenRun Id="synth_1" LaunchPart="xc7z100ffg900-1" LaunchTime="1468708270">
+  <File Type="RDS-PROPCONSTRS" Name="ADC_core_block_drc_synth.rpt"/>
+  <File Type="PA-TCL" Name="ADC_core_block.tcl"/>
+  <File Type="RDS-RDS" Name="ADC_core_block.vds"/>
+  <File Type="RDS-UTIL" Name="ADC_core_block_utilization_synth.rpt"/>
+  <File Type="RDS-UTIL-PB" Name="ADC_core_block_utilization_synth.pb"/>
+  <File Type="RDS-DCP" Name="ADC_core_block.dcp"/>
+  <File Type="VDS-TIMINGSUMMARY" Name="ADC_core_block_timing_summary_synth.rpt"/>
+  <File Type="VDS-TIMING-PB" Name="ADC_core_block_timing_summary_synth.pb"/>
+  <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1">
+    <Filter Type="Srcs"/>
+    <File Path="$PSRCDIR/sources_1/imports/src/async_input_sync.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../ip_repo_from_elsewhere/src/async_input_sync.v"/>
+        <Attr Name="ImportTime" Val="1467858571"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/ip/clk_wiz_0/clk_wiz_0.xci">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../ip_repo_from_elsewhere/src/clk_wiz_0/clk_wiz_0.xci"/>
+        <Attr Name="ImportTime" Val="1467846127"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/ip/fifo_generator_0/fifo_generator_0.xci">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../ip_repo_from_elsewhere/src/fifo_generator_0/fifo_generator_0.xci"/>
+        <Attr Name="ImportTime" Val="1467848130"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/src/ADC_core_block.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../ip_repo_from_elsewhere/src/ADC_core_block.v"/>
+        <Attr Name="ImportTime" Val="1467863246"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/component.xml">
+      <FileInfo SFType="IPXACT"/>
+    </File>
+    <File Path="$PPRDIR/fake_data.coe">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="DesignMode" Val="RTL"/>
+      <Option Name="TopModule" Val="ADC_core_block"/>
+      <Option Name="TopAutoSet" Val="TRUE"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="constrs_in" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1">
+    <Filter Type="Constrs"/>
+    <Config>
+      <Option Name="ConstrsType" Val="XDC"/>
+    </Config>
+  </FileSet>
+  <Strategy Version="1" Minor="2">
+    <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
+    <Step Id="synth_design"/>
+  </Strategy>
+  <BlockFileSet Type="BlockSrcs" Name="blk_mem_gen_0"/>
+</GenRun>

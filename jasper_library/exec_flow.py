@@ -32,6 +32,10 @@ if __name__ == '__main__':
                     default=False, help="Run backend compilation")
     parser.add_argument("--software", dest="software", action='store_true',
                     default=False, help="Run software compilation")
+    parser.add_argument("--vitis", dest="vitis", action='store_true',
+                    default=False, help="[EXPERIMENTAL] Run xsct (Vitis) to generate dtbo")
+    parser.add_argument("--xsa", dest="xsa", type=str, default='',
+                    help="location of xsa file, uses backend generated if ran with backend option")
     parser.add_argument("--be", dest="be", type=str, default='vivado',
                     help="Backend to use. Default: vivado")
     parser.add_argument("--sysgen", dest="sysgen", type=str, default='',
@@ -134,6 +138,12 @@ if __name__ == '__main__':
     logger.addHandler(ch)
 
     logger.info('Starting compile')
+
+    logger.info('Adding .gitignore')
+    with open(os.path.join(builddir, '.gitignore'), 'w') as fh:
+        fh.write('*\n')
+        fh.write('*/\n')
+        fh.write('!outputs/\n')
 
     if opts.be == 'vivado':
         os.environ['SYSGEN_SCRIPT'] = os.environ['MLIB_DEVEL_PATH'] + '/startsg'
@@ -255,6 +265,7 @@ if __name__ == '__main__':
 
         if opts.software:
             binary = backend.bin_loc
+            bit_file = backend.bit_loc
             hex_file = backend.hex_loc
             mcs_file = backend.mcs_loc
             prm_file = backend.prm_loc
@@ -300,6 +311,7 @@ if __name__ == '__main__':
                     tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
                     tf.start_time.tm_hour, tf.start_time.tm_min)
                 os.system('cp %s %s/top.bin' % (binary, backend.compile_dir))
+                os.system('cp %s %s/top.bit' % (bit_file, backend.compile_dir))
                 if platform.name.startswith("au"):
                    backend.mkfpg(bitstream, backend.output_fpg)
                 else:
@@ -322,3 +334,25 @@ if __name__ == '__main__':
                 print('Created prm file: %s/%s' % (backend.output_dir, backend.output_prm))
 
     # end
+
+    if opts.vitis:
+        if opts.backend:
+            xsa_loc = backend.xsa_loc
+        else:
+            if opts.xsa != '':
+                xsa_loc = opts.xsa
+            else:
+                raise RuntimeError('--xsa option must be provided when not running with the backend option')
+
+        vitis = toolflow.VitisBackend(xsa=xsa_loc, plat=None, compile_dir=tf.compile_dir, periph_objs=tf.periph_objs)
+        vitis.compile()
+
+        # running this seperate of `--backend` will require work of the user. The rfdc in casperfpga is currently
+        # expecting the `.dtbo` and `.fpg` live in the same place with the same name (different ext) and so a
+        # separate compilation will require the user to change the name of the `.dtbo` to match the `.fpg`
+        vitis.output_dtbo = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d.dtbo' % (
+            tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
+            tf.start_time.tm_hour, tf.start_time.tm_min)
+
+        vitis.mkdtbo(vitis.dtsi_loc, os.path.join(vitis.output_dir, vitis.output_dtbo))
+        print('Created %s/%s' % (vitis.output_dir, vitis.output_dtbo))

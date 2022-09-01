@@ -18,6 +18,7 @@ class vcu128(YellowBlock):
         inst.add_port('sys_rst      ', 'sys_rst   ')
         inst.add_port('idelay_rdy   ', 'idelay_rdy')
         inst.add_port('sys_clk_rst_sync', 'sys_clk_rst_sync')
+        inst.add_port('mb_clk', 'mb_clk')
 
         top.add_signal('sys_clk90')
         top.assign_signal('sys_clk90', '~sys_clk270')
@@ -36,6 +37,7 @@ class vcu128(YellowBlock):
         return [
             PortConstraint('sys_clk_n', 'sys_clk_n'),
             PortConstraint('sys_clk_p', 'sys_clk_p'),
+            #ClockConstraint('sys_clk_p', period=10),
             ClockConstraint('sys_clk_p', period=10),
             RawConstraint('set_property CONFIG_VOLTAGE 1.8 [current_design]'),
             #RawConstraint('set_property CFGBVS GND [current_design]'),

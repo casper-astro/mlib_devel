@@ -1,0 +1,172 @@
+name: zcu208
+manufacturer: Xilinx
+fpga: xczu48dr-fsvg1517-2-e-es1
+family: rfsoc
+config_voltage: 1.8
+cfgbvs: GND
+backend_target: vivado
+mmbus_architecture: AXI4-Lite
+mmbus_base_address: 0xA0000000
+# How to address each 32-bit (i.e. 4 indicates byte-addressable)
+mmbus_address_alignment: 4
+sources: []
+constraints: []
+
+rfdc:
+  # gen3 devices can internally route their input refclk or the output of the RFPLL
+  # as the sample clock for adjacent tiles. See PG269. For such configurations,
+  # tile 225 is the preferred tile when available. The zcu216/208 eval boards only
+  # have the sample clock connected to tile 255.
+  #
+  # For gen1 and gen2 devices the `adc_clk_src` is the same as the tile index
+  tile224:
+    has_adc_clk: False
+    adc_clk_src: 2
+  tile225:
+    has_adc_clk: True
+    adc_clk_src: 2
+  tile226:
+    has_adc_clk: True
+    adc_clk_src: 2
+  tile227:
+    has_adc_clk: False
+    adc_clk_src: 2
+
+onehundredgbe:
+  refclk_freq_str: "156.25"
+  include_rs_fec: 1
+  ncommon: 2
+  # modprs pin strapped, sfp tx enable not supported to be managed by 100g core.
+  # It must be toggled by an fpga pin gpio (not yet in yaml), or use the onboard jumpers
+  management_interface: []
+  # UG1075 v1.9 Fig. 1-54
+  cmac_loc:
+    # xczu48dr has 2 cmac locations, zcu111 can support a second through FMC
+    - CMACE4_X0Y0
+    - CMACE4_X0Y1
+    
+provides:
+  - adc_clk
+  - axil_clk
+  - sysref_in
+
+pins:
+  clk_100_p:
+    iostd: LVDS
+    loc: G12
+  clk_100_n:
+    iostd: LVDS
+    loc: G11
+  clk_125_p:
+    iostd: LVDS
+    loc: A13
+  clk_125_n:
+    iostd: LVDS
+    loc: A12
+
+# NOTE: most of the IO constraints and clocking constraints are taken care of by
+# the RFDC IP itself. Vivado has that baked into the output products of teh IP
+# core. The only necessary pins below are the fabirc clocking related to
+# multi-tile sync Adding additional pins and constraints would not hurt anything
+# but provide more transparent less 'hand-wavy'
+# RFDC clocking
+
+  # `SYSREF_P/N_228` on bank 228
+  # constraints determined by rfdc ip, iostandard and loc not set by user
+  sysref_p:
+    loc: U5
+  sysref_n:
+    loc: U4
+
+  # `CLK104_PL_SYSREF_P/N` on HD bank 87, VCCO is 1.8 but LVDS_25 still
+  # supported, see UG571 SelectIO Resources table 3-2 and DS926 tables 23, 24,
+  # and 2
+  pl_sysref_p:
+    iostd: LVDS_25
+    loc: B10
+  pl_sysref_n:
+    iostd: LVDS_25
+    loc: B9
+
+  # `CLK104_PL_CLK_P/N` on HD bank 87
+  pl_clk_p:
+    iostd: LVDS_25
+    loc: B8
+  pl_clk_n:
+    iostd: LVDS_25
+    loc: B7
+
+  # Do not instantiate clock buffer inputs in the user design, part of the RF-ADC [PG269 v2.4 pg.153]
+  adc_clk_224_p:
+    loc: AF5
+  adc_clk_224_n:
+    loc: AF4
+
+  # naming changes between quad- and dual-tile adcs
+  # quad tile vinXZ
+  # dual tile vinX_ZZ
+  # X-tile location, Z refers to adc location in the tile (0-3), ZZ-is either 01
+  # for lower ADC or 23 for upper
+  vin0_01_p:
+    loc: AP2
+  vin_01_n:
+    loc: AP1
+
+# 100 GbE
+  # IDT 8A34001 output Q7, refclk1 GTY bank 129
+  mgt_ref_clk_p:
+    loc:
+      - V31
+  mgt_ref_clk_n:
+    loc:
+      - V32
+  qsfp_mgt_tx_p:
+    loc:
+      # bank 128 SFP[0:1]
+      - Y35
+      - V35
+      # bank 129 SFP[2:3]
+      - P35
+      - N33
+  qsfp_mgt_tx_n:
+    loc:
+      # bank 128
+      - Y36
+      - V36
+      # bank 129
+      - P36
+      - N34
+  qsfp_mgt_rx_p:
+    loc:
+      # bank 128
+      - AA38
+      - W38
+      # bank 129
+      - N38
+      - M36
+  qsfp_mgt_rx_n:
+    loc:
+      # bank 128
+      - AA39
+      - W39
+      # bank 129
+      - N39
+      - M37
+
+  # TODO: what do we do here? These pins are strapped?
+  #qsfp_modprs:
+
+# zcu208 has access 8 sets of 3 green single color LEDs (24 total)
+  led:
+    drive_strength: 8 #HP banks don't support the default of 12
+    iostd: LVCMOS12
+    loc:
+      - AR19
+      - AT17
+      - AR17
+      - AU19
+      - AU20
+      - AW21
+      - AV21
+      - AV17
+

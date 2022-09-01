@@ -85,8 +85,8 @@ module wb_attach #(
 
   wire opb_sel = wb_stb_i;
 
-  wire [31:0] local_addr = wb_adr_i;
-
+ // wire [31:0] local_addr = wb_adr_i;
+  wire [31:0] local_addr = {16'b0,wb_adr_i[15:0]};
   localparam REGISTERS_OFFSET = 32'h0000;
   localparam REGISTERS_HIGH   = 32'h0FFF;
   localparam ARP_CACHE_OFFSET = 32'h1000;
