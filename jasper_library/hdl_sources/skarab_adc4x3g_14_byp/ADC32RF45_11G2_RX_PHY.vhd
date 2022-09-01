@@ -1,13 +1,23 @@
-----------------------------------------------------------------------------------
--- Company: Peralex
--- Engineers: Francois Tolmie
--- Create Date: 21/11/2018
--- Last Modified Date: 21/11/2018
--- Module Name: ADC32RF45_11G2_RX_PHY
--- Project Name: FRM123701U1R4
--- Target Device: xc7vx690tffg1927-2
--- Description: JESD204B receiver PHY for ADC32RF45 (LMFS=82820, 2.8 GSPS)
-----------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+-- FILE NAME            : ADC32RF45_11G2_RX_PHY.vhd
+------------------------------------------------------------------------------
+-- COMPANY              : PERALEX ELECTRONICS (PTY) LTD
+------------------------------------------------------------------------------
+-- COPYRIGHT NOTICE :
+--
+-- The copyright, manufacturing and patent rights stemming from this document
+-- in any form are vested in PERALEX ELECTRONICS (PTY) LTD.
+--
+-- (c) PERALEX ELECTRONICS (PTY) LTD 2021
+--
+-- PERALEX ELECTRONICS (PTY) LTD has ceded these rights to its clients
+-- where contractually agreed.
+------------------------------------------------------------------------------
+-- DESCRIPTION :
+--	 This component is a JESD204B receiver PHY for the ADC32RF45 (LMFS=82820,
+--   2.8 GSPS)
+--   Target Device: xc7vx690tffg1927-2
+------------------------------------------------------------------------------
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -32,10 +42,18 @@ port(GTREFCLK_IN              : in  std_logic;
      LANE1_RX_DATA_IS_K_O     : out std_logic_vector(3 downto 0);
      LANE2_RX_DATA_IS_K_O     : out std_logic_vector(3 downto 0);
      LANE3_RX_DATA_IS_K_O     : out std_logic_vector(3 downto 0);
-     RX_DATA_K28_0_DETECTED_O : out std_logic_vector(3 downto 0);
-     GT_BYTE_ALIGNED_O        : out std_logic_vector(3 downto 0);
-     GT_RX_READY_O            : out std_logic_vector(3 downto 0);
-     GT_RXUSRCLK2_O           : out std_logic);
+     GT_RXUSRCLK2_O           : out std_logic;	 
+     -- GT_K28P0_DETECTED_O      : out std_logic_vector(3  downto 0);
+     GT_RXFSMRESETDONE_O      : out std_logic_vector(3  downto 0);
+	 GT_RXBUFSTATUS_O         : out std_logic_vector(11 downto 0);
+	 GT_RXDISPERR_O           : out std_logic_vector(15 downto 0);
+	 GT_RXNOTINTABLE_O        : out std_logic_vector(15 downto 0);
+	 GT_EYESCANDATAERROR_O    : out std_logic_vector(3  downto 0);
+	 GT_RXBYTEISALIGNED_O     : out std_logic_vector(3  downto 0);
+	 -- GT_RXCHANISALIGNED_O     : out std_logic_vector(3  downto 0);
+	 GT_RXRESETDONE_O         : out std_logic_vector(3  downto 0);
+	 GT_QPLLLOCK_O            : out std_logic;                   
+	 GT_QPLLREFCLKLOST_O      : out std_logic);
 end ADC32RF45_11G2_RX_PHY;
     
 architecture RTL of ADC32RF45_11G2_RX_PHY is
@@ -620,28 +638,31 @@ architecture RTL of ADC32RF45_11G2_RX_PHY is
   signal gt2_rxfsmresetdone_i : std_logic;
   signal gt3_txfsmresetdone_i : std_logic;
   signal gt3_rxfsmresetdone_i : std_logic;
+
+  
+  --<DEBUG
+  
+  COMPONENT vio_4
+    PORT (
+      clk : IN STD_LOGIC;
+      probe_in0 : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+      probe_in1 : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+      probe_in2 : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+      probe_in3 : IN STD_LOGIC_VECTOR(0 DOWNTO 0)
+    );
+  END COMPONENT;
+  
+  --DEBUG>
   
 begin
 
-  GT_RXUSRCLK2_O           <= gt0_rxusrclk2_i;
-  soft_reset_i             <= SOFT_RESET_IN; 
-  LANE0_RX_DATA_O          <= gt0_rxdata_i;
-  LANE1_RX_DATA_O          <= gt1_rxdata_i;
-  LANE2_RX_DATA_O          <= gt2_rxdata_i;
-  LANE3_RX_DATA_O          <= gt3_rxdata_i;
-  LANE0_RX_DATA_IS_K_O     <= gt0_rxcharisk_i;
-  LANE1_RX_DATA_IS_K_O     <= gt1_rxcharisk_i;
-  LANE2_RX_DATA_IS_K_O     <= gt2_rxcharisk_i;
-  LANE3_RX_DATA_IS_K_O     <= gt3_rxcharisk_i;
-  RX_DATA_K28_0_DETECTED_O <= gt3_rxchanbondseq_i   & gt2_rxchanbondseq_i   & gt1_rxchanbondseq_i   & gt0_rxchanbondseq_i;
-  GT_BYTE_ALIGNED_O        <= gt3_rxbyteisaligned_i & gt2_rxbyteisaligned_i & gt1_rxbyteisaligned_i & gt0_rxbyteisaligned_i;
-  GT_RX_READY_O            <= gt3_rxfsmresetdone_i  & gt2_rxfsmresetdone_i  & gt1_rxfsmresetdone_i  & gt0_rxfsmresetdone_i ;
+
 
   jesd204b_11200_rx_support_i : jesd204b_11200_rx_support generic map (
       EXAMPLE_SIM_GTRESET_SPEEDUP     => EXAMPLE_SIM_GTRESET_SPEEDUP,
       STABLE_CLOCK_PERIOD             => STABLE_CLOCK_PERIOD)
   port map (
-    SOFT_RESET_RX_IN            => soft_reset_i,
+    SOFT_RESET_RX_IN            => SOFT_RESET_IN,
     DONT_RESET_ON_DATA_ERROR_IN => '0',
     Q0_CLK1_GTREFCLK_PAD_N_IN   => '0',
     GTREFCLK_IN                 => GTREFCLK_IN,
@@ -685,22 +706,22 @@ begin
     gt0_rxcommadet_out          => gt0_rxcommadet_i,
     gt0_rxmcommaalignen_in      => '1',
     gt0_rxpcommaalignen_in      => '1',
-    gt0_rxchanbondseq_out       => gt0_rxchanbondseq_i,
-    gt0_rxchbonden_in           => '1',
-    gt0_rxchbondlevel_in        => "000",
-    gt0_rxchbondmaster_in       => '0',
-    gt0_rxchbondo_out           => gt0_rxchbondo_i,
-    gt0_rxchbondslave_in        => '1',
-    gt0_rxchanisaligned_out     => gt0_rxchanisaligned_i,
-    gt0_rxchanrealign_out       => gt0_rxchanrealign_i,
+    gt0_rxchanbondseq_out       => open,  --gt0_rxchanbondseq_i,
+    gt0_rxchbonden_in           => '0',   --'1',
+    gt0_rxchbondlevel_in        => "000", --"000",
+    gt0_rxchbondmaster_in       => '0',   --'0',
+    gt0_rxchbondo_out           => open,  --gt0_rxchbondo_i,
+    gt0_rxchbondslave_in        => '0',   --'1',
+    gt0_rxchanisaligned_out     => open,  --gt0_rxchanisaligned_i,
+    gt0_rxchanrealign_out       => open,  --gt0_rxchanrealign_i,
     gt0_rxmonitorout_out        => gt0_rxmonitorout_i,
     gt0_rxmonitorsel_in         => "00",
     gt0_rxoutclkfabric_out      => gt0_rxoutclkfabric_i,
-    gt0_gtrxreset_in            => SOFT_RESET_IN,
+    gt0_gtrxreset_in            => '0',
     gt0_rxpolarity_in           => RX_POLARITY_INVERT(0),
     gt0_rxchariscomma_out       => gt0_rxchariscomma_i,
     gt0_rxcharisk_out           => gt0_rxcharisk_i,
-    gt0_rxchbondi_in            => gt1_rxchbondo_i,
+    gt0_rxchbondi_in            => "00000", --gt1_rxchbondo_i,
     gt0_gthrxp_in               => RXP_IN(0),
     gt0_rxresetdone_out         => gt0_rxresetdone_i,
     gt0_gttxreset_in            => '0',
@@ -725,22 +746,22 @@ begin
     gt1_rxcommadet_out          => gt1_rxcommadet_i,
     gt1_rxmcommaalignen_in      => '1',
     gt1_rxpcommaalignen_in      => '1',
-    gt1_rxchanbondseq_out       => gt1_rxchanbondseq_i,
-    gt1_rxchbonden_in           => '1',
-    gt1_rxchbondlevel_in        => "001",
-    gt1_rxchbondmaster_in       => '0',
-    gt1_rxchbondo_out           => gt1_rxchbondo_i,
-    gt1_rxchbondslave_in        => '1',
-    gt1_rxchanisaligned_out     => gt1_rxchanisaligned_i,
-    gt1_rxchanrealign_out       => gt1_rxchanrealign_i,
+    gt1_rxchanbondseq_out       => open,  --gt1_rxchanbondseq_i,
+    gt1_rxchbonden_in           => '0',   --'1',
+    gt1_rxchbondlevel_in        => "000", --"001",
+    gt1_rxchbondmaster_in       => '0',   --'0',
+    gt1_rxchbondo_out           => open,  --gt1_rxchbondo_i,
+    gt1_rxchbondslave_in        => '0',   --'1',
+    gt1_rxchanisaligned_out     => open,  --gt1_rxchanisaligned_i,
+    gt1_rxchanrealign_out       => open,  --gt1_rxchanrealign_i,
     gt1_rxmonitorout_out        => gt1_rxmonitorout_i,
     gt1_rxmonitorsel_in         => "00",
     gt1_rxoutclkfabric_out      => gt1_rxoutclkfabric_i,
-    gt1_gtrxreset_in            => SOFT_RESET_IN,
+    gt1_gtrxreset_in            => '0',
     gt1_rxpolarity_in           => RX_POLARITY_INVERT(1),
     gt1_rxchariscomma_out       => gt1_rxchariscomma_i,
     gt1_rxcharisk_out           => gt1_rxcharisk_i,
-    gt1_rxchbondi_in            => gt2_rxchbondo_i,
+    gt1_rxchbondi_in            => "00000", --gt2_rxchbondo_i,
     gt1_gthrxp_in               => RXP_IN(1),
     gt1_rxresetdone_out         => gt1_rxresetdone_i,
     gt1_gttxreset_in            => '0',
@@ -765,22 +786,22 @@ begin
     gt2_rxcommadet_out          => gt2_rxcommadet_i,
     gt2_rxmcommaalignen_in      => '1',
     gt2_rxpcommaalignen_in      => '1',
-    gt2_rxchanbondseq_out       => gt2_rxchanbondseq_i,
-    gt2_rxchbonden_in           => '1',
-    gt2_rxchbondlevel_in        => "010",
-    gt2_rxchbondmaster_in       => '1',
-    gt2_rxchbondo_out           => gt2_rxchbondo_i,
-    gt2_rxchbondslave_in        => '0',
-    gt2_rxchanisaligned_out     => gt2_rxchanisaligned_i,
-    gt2_rxchanrealign_out       => gt2_rxchanrealign_i,
+    gt2_rxchanbondseq_out       => open,  --gt2_rxchanbondseq_i,
+    gt2_rxchbonden_in           => '0',   --'1',
+    gt2_rxchbondlevel_in        => "000", --"010",
+    gt2_rxchbondmaster_in       => '0',   --'1',
+    gt2_rxchbondo_out           => open,  --gt2_rxchbondo_i,
+    gt2_rxchbondslave_in        => '0',   --'0',
+    gt2_rxchanisaligned_out     => open,  --gt2_rxchanisaligned_i,
+    gt2_rxchanrealign_out       => open,  --gt2_rxchanrealign_i,
     gt2_rxmonitorout_out        => gt2_rxmonitorout_i,
     gt2_rxmonitorsel_in         => "00",
     gt2_rxoutclkfabric_out      => gt2_rxoutclkfabric_i,
-    gt2_gtrxreset_in            => SOFT_RESET_IN, 
+    gt2_gtrxreset_in            => '0', 
     gt2_rxpolarity_in           => RX_POLARITY_INVERT(2),
     gt2_rxchariscomma_out       => gt2_rxchariscomma_i,
     gt2_rxcharisk_out           => gt2_rxcharisk_i,
-    gt2_rxchbondi_in            => "00000",
+    gt2_rxchbondi_in            => "00000", --"00000",
     gt2_gthrxp_in               => RXP_IN(2),
     gt2_rxresetdone_out         => gt2_rxresetdone_i,
     gt2_gttxreset_in            => '0',
@@ -805,31 +826,59 @@ begin
     gt3_rxcommadet_out          => gt3_rxcommadet_i,
     gt3_rxmcommaalignen_in      => '1',
     gt3_rxpcommaalignen_in      => '1',
-    gt3_rxchanbondseq_out       => gt3_rxchanbondseq_i,
-    gt3_rxchbonden_in           => '1',
-    gt3_rxchbondlevel_in        => "001",
-    gt3_rxchbondmaster_in       => '0',
-    gt3_rxchbondo_out           => gt3_rxchbondo_i,
-    gt3_rxchbondslave_in        => '1',
-    gt3_rxchanisaligned_out     => gt3_rxchanisaligned_i,
-    gt3_rxchanrealign_out       => gt3_rxchanrealign_i,
+    gt3_rxchanbondseq_out       => open,  --gt3_rxchanbondseq_i,
+    gt3_rxchbonden_in           => '0',   --'1',
+    gt3_rxchbondlevel_in        => "000", --"001",
+    gt3_rxchbondmaster_in       => '0',   --'0',
+    gt3_rxchbondo_out           => open,  --gt3_rxchbondo_i,
+    gt3_rxchbondslave_in        => '0',   --'1',
+    gt3_rxchanisaligned_out     => open,  --gt3_rxchanisaligned_i,
+    gt3_rxchanrealign_out       => open,  --gt3_rxchanrealign_i,
     gt3_rxmonitorout_out        => gt3_rxmonitorout_i,
     gt3_rxmonitorsel_in         => "00",
     gt3_rxoutclkfabric_out      => gt3_rxoutclkfabric_i,
-    gt3_gtrxreset_in            => SOFT_RESET_IN,
+    gt3_gtrxreset_in            => '0',
     gt3_rxpolarity_in           => RX_POLARITY_INVERT(3),
     gt3_rxchariscomma_out       => gt3_rxchariscomma_i,
     gt3_rxcharisk_out           => gt3_rxcharisk_i,
-    gt3_rxchbondi_in            => gt2_rxchbondo_i,
-    gt3_gthrxp_in               => RXP_IN(3),
+    gt3_rxchbondi_in            => "00000", --gt2_rxchbondo_i,
+    gt3_gthrxp_in               => RXP_IN(3), 
     gt3_rxresetdone_out         => gt3_rxresetdone_i,
     gt3_gttxreset_in            => '0',
     gt3_txbufstatus_out         => gt3_txbufstatus_i,
     gt3_txpcsreset_in           => '0',
-    GT0_QPLLLOCK_OUT            => open,
-    GT0_QPLLREFCLKLOST_OUT      => open,
+    GT0_QPLLLOCK_OUT            => gt0_qplllock_i,
+    GT0_QPLLREFCLKLOST_OUT      => gt0_qpllrefclklost_i,
     GT0_QPLLOUTCLK_OUT          => open,
     GT0_QPLLOUTREFCLK_OUT       => open,
     sysclk_in                   => SYSCLK_IN);
+
+	--------------------------------------------
+	-- OUTPUT PORT CONNECTIONS
+	--------------------------------------------
+	-- RXUSRCLK2
+	GT_RXUSRCLK2_O <= gt0_rxusrclk2_i;
+
+	-- DATA SIGNALS
+	LANE0_RX_DATA_O       <= gt0_rxdata_i;
+	LANE1_RX_DATA_O       <= gt1_rxdata_i;
+	LANE2_RX_DATA_O       <= gt2_rxdata_i;
+	LANE3_RX_DATA_O       <= gt3_rxdata_i;
+	LANE0_RX_DATA_IS_K_O  <= gt0_rxcharisk_i;
+	LANE1_RX_DATA_IS_K_O  <= gt1_rxcharisk_i;
+	LANE2_RX_DATA_IS_K_O  <= gt2_rxcharisk_i;
+	LANE3_RX_DATA_IS_K_O  <= gt3_rxcharisk_i;
+	-- GT_K28P0_DETECTED_O   <= gt3_rxchanbondseq_i    & gt2_rxchanbondseq_i    & gt1_rxchanbondseq_i    & gt0_rxchanbondseq_i;
+
+	GT_RXFSMRESETDONE_O   <= gt3_rxfsmresetdone_i   & gt2_rxfsmresetdone_i   & gt1_rxfsmresetdone_i   & gt0_rxfsmresetdone_i;   -- Should be "1111"  after successful reset
+	GT_RXBUFSTATUS_O      <= gt3_rxbufstatus_i      & gt2_rxbufstatus_i      & gt1_rxbufstatus_i      & gt0_rxbufstatus_i;      -- Should be x"000"  after successful reset
+	GT_RXDISPERR_O        <= gt3_rxdisperr_i        & gt2_rxdisperr_i        & gt1_rxdisperr_i        & gt0_rxdisperr_i;        -- Should be x"0000" after successful reset
+	GT_RXNOTINTABLE_O     <= gt3_rxnotintable_i     & gt2_rxnotintable_i     & gt1_rxnotintable_i     & gt0_rxnotintable_i;     -- Should be x"0000" after successful reset
+	GT_EYESCANDATAERROR_O <= gt3_eyescandataerror_i & gt2_eyescandataerror_i & gt1_eyescandataerror_i & gt0_eyescandataerror_i; -- Should be "0000"  after successful reset
+	GT_RXBYTEISALIGNED_O  <= gt3_rxbyteisaligned_i  & gt2_rxbyteisaligned_i  & gt1_rxbyteisaligned_i  & gt0_rxbyteisaligned_i;  -- Should be "1111"  after successful reset
+	--GT_RXCHANISALIGNED_O  <= gt3_rxchanisaligned_i  & gt2_rxchanisaligned_i  & gt1_rxchanisaligned_i  & gt0_rxchanisaligned_i;  -- Should be "1111"  after successful reset
+	GT_RXRESETDONE_O      <= gt3_rxresetdone_i      & gt2_rxresetdone_i      & gt1_rxresetdone_i      & gt0_rxresetdone_i;      -- Should be "1111"  after successful reset
+	GT_QPLLLOCK_O         <= gt0_qplllock_i;                                                                                    -- Should be '1'     after successful reset
+	GT_QPLLREFCLKLOST_O   <= gt0_qpllrefclklost_i;                                                                              -- Should be '0'     after successful reset
 
 end RTL;

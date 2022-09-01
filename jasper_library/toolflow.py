@@ -596,7 +596,7 @@ class Toolflow(object):
         ret = os.system('python %s/jasper_library/cit2csl.py %s > %s.mem' % (os.getenv('MLIB_DEVEL_PATH'), newfile, newfile))
         if ret != 0:
             errmsg = 'Failed to generate xilinx-style file {}.mem, error code {}.'.format(newfile,ret)
-            self.logger.error(msg)
+            self.logger.error(errmsg)
             raise Exception(errmsg)
 
     def regenerate_top(self):
@@ -1285,7 +1285,10 @@ class ToolflowBackend(object):
             #    SpartanChecksum when upload_to_ram()
             #   - Need to give it the chunk size being used in upload_to_ram
             #   - This alters how the SPARTAN calculates the checksum
-            flash_write_checksum = self.calculate_checksum_using_bitstream(
+            # bin file header identifier - '\xff' * 32
+            header_end_index = bitstream.find(b'\xff' * 32)
+            if not header_end_index:
+               flash_write_checksum = self.calculate_checksum_using_bitstream(
                 bitstream, packet_size=MAX_IMAGE_CHUNK_SIZE)
 
         # add the md5sums, checksum and ?quit to the extended info file
@@ -1295,7 +1298,8 @@ class ToolflowBackend(object):
             fh.write("?meta\t" + line)
             line = '77777\t77777\tmd5_bitstream\t' + md5_bitstream + '\n'
             fh.write("?meta\t" + line)
-            line = '77777\t77777\tflash_write_checksum\t' + \
+            if not header_end_index:
+               line = '77777\t77777\tflash_write_checksum\t' + \
                    str(flash_write_checksum) + '_' + str(MAX_IMAGE_CHUNK_SIZE) + '\n'
             fh.write("?meta\t" + line)
             fh.write('?quit\n')
@@ -1637,6 +1641,31 @@ class VivadoBackend(ToolflowBackend):
         self.project_name = 'myproj'
         self.periph_objs = periph_objs
         self.tcl_cmd = ''
+        # if project mode is enabled
+        if plat.project_mode:
+            self.binary_loc = '%s/%s/%s.runs/impl_1/top.bin' % (
+                self.compile_dir, self.project_name, self.project_name)
+            self.hex_loc = '%s/%s/%s.runs/impl_1/top.hex' % (
+                self.compile_dir, self.project_name, self.project_name)
+            self.mcs_loc = '%s/%s/%s.runs/impl_1/top.mcs' % (
+                self.compile_dir, self.project_name, self.project_name)
+            self.prm_loc = '%s/%s/%s.runs/impl_1/top.prm' % (
+                self.compile_dir, self.project_name, self.project_name)
+            self.bitstream_loc = '%s/%s/%s.runs/impl_1/top.bit' % (
+                self.compile_dir, self.project_name, self.project_name)
+
+        # if non-project mode is enabled
+        else:
+            self.binary_loc = '%s/%s/top.bin' % (
+                self.compile_dir, self.project_name)
+            self.hex_loc = '%s/%s/top.hex' % (
+                self.compile_dir, self.project_name)
+            self.mcs_loc = '%s/%s/top.mcs' % (
+                self.compile_dir, self.project_name)
+            self.prm_loc = '%s/%s/top.prm' % (
+                self.compile_dir, self.project_name)
+            self.bitstream_loc = '%s/%s/top.bit' % (
+                self.compile_dir, self.project_name)
         self.bd = None
 
         self.name = 'vivado'
@@ -1765,6 +1794,8 @@ proc puts_red {s} {
                     self.add_tcl_cmd('exec unzip %s' % template_basename, stage='init')
                     self.add_tcl_cmd('cd myproj', stage='init')
                     self.add_tcl_cmd('open_project myproj', stage='init')
+            if hasattr(plat, 'board'):
+                self.add_tcl_cmd('set_property board_part %s [current_project]' % plat.board)
         # Create the part in non-project mode (project runs in memory only)
         else:
             if self.template_project is not None:
@@ -2010,7 +2041,7 @@ proc puts_red {s} {
         self.add_tcl_cmd('check_zero_critical $impl_critical_count implementation', stage='promgen') # promgen so the error comes last
         self.add_tcl_cmd('check_zero_critical $synth_critical_count synthesis', stage='promgen') # promgen so the error comes last
 
-    def add_compile_cmds(self, cores=8, plat=None, synth_strat=None, impl_strat=None):
+    def add_compile_cmds(self, cores=8, plat=None, synth_strat=None, impl_strat=None, threads='multi'):
         """
         Add the tcl commands for compiling the design, and then launch
         vivado in batch mode
@@ -2066,6 +2097,14 @@ proc puts_red {s} {
 
             # Synthesis Commands
             self.add_tcl_cmd('reset_run synth_1', stage='synth')
+            try:
+                if threads == 'single':
+                    # This enables single threading, which is guaranteed to produce repeatable Vivado placement,
+                    # routing and timing closure for designs that do not change.
+                    self.add_tcl_cmd('set_param general.MaxThreads 1', stage='synth')
+            # just ignore if key is not present as only some platforms will have the key.
+            except KeyError:
+                s = ""
             self.add_tcl_cmd('launch_runs synth_1 -jobs %d' % cores, stage='synth')
             self.add_tcl_cmd('wait_on_run synth_1', stage='synth')
 
@@ -2263,7 +2302,7 @@ proc puts_red {s} {
                 '-hold]] ns" ')
             tcl('}')
 
-    def compile(self, cores, plat, synth_strat=None, impl_strat=None):
+    def compile(self, cores, plat, synth_strat=None, impl_strat=None, threads='multi'):
         """
 
         :param cores:

@@ -47,9 +47,14 @@ class Platform(object):
         #: FPGA model. Should be the full version ready to pass to the
         #: vendor tools. Eg., xc7k325tffg900-2
         self.fpga = self.conf['fpga']
+        #: FPGA board (needed along with FPGA model for accelerator cards)
+        #: eg. xilinx.com:au50:part0:1.2 for Alveo U50
+        if 'board' in self.conf:
+            self.board = self.conf['board']
         #: backend target -- used to decide what compiler to use
         self.backend_target = self.conf['backend_target']
         #: boot image --used to determine whether a toolflow, multiboot or golden image
+
         try:
             self.boot_image = self.conf['boot_image']
         except KeyError:

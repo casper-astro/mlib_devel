@@ -42,6 +42,8 @@ if __name__ == '__main__':
                     help="Specify a specific sysgen startup script.")
     parser.add_argument("--jobs", dest="jobs", type=int, default=4,
                     help="Number of cores to run compiles with. Default=4")
+    parser.add_argument("--threads", dest="threads", type=str, default='multi',
+                    help="Processor threads to use for compiling - either multi or single. Default: multi")
     parser.add_argument("--nonprojectmode", dest="nonprojectmode",
                     action='store_false', default=True,
                     help="Project Mode is enabled by default/Non Project Mode "
@@ -235,7 +237,7 @@ if __name__ == '__main__':
 
             # launch vivado via the generated .tcl file
             backend.compile(cores=opts.jobs, plat=platform,
-                            synth_strat=opts.synth_strat, impl_strat=opts.impl_strat)
+                            synth_strat=opts.synth_strat, impl_strat=opts.impl_strat, threads=opts.threads)
         # if ISE is selected to compile
         elif opts.be == 'ise':
             platform.backend_target = 'ise'
@@ -259,7 +261,7 @@ if __name__ == '__main__':
             backend.initialize()
             # launch vivado via the generated .tcl file
             backend.compile(cores=opts.jobs, plat=platform,
-                            synth_strat=opts.synth_strat, impl_strat=opts.impl_strat)
+                            synth_strat=opts.synth_strat, impl_strat=opts.impl_strat, threads=opts.threads)
 
         if opts.software:
             binary = backend.bin_loc
@@ -267,6 +269,7 @@ if __name__ == '__main__':
             hex_file = backend.hex_loc
             mcs_file = backend.mcs_loc
             prm_file = backend.prm_loc
+            bitstream = backend.bitstream_loc
 
             backend.output_fpg = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d.fpg' % (
                 tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
@@ -309,7 +312,10 @@ if __name__ == '__main__':
                     tf.start_time.tm_hour, tf.start_time.tm_min)
                 os.system('cp %s %s/top.bin' % (binary, backend.compile_dir))
                 os.system('cp %s %s/top.bit' % (bit_file, backend.compile_dir))
-                backend.mkfpg(binary, backend.output_fpg)
+                if platform.name.startswith("au"):
+                   backend.mkfpg(bitstream, backend.output_fpg)
+                else:
+                   backend.mkfpg(binary, backend.output_fpg)
                 print('Created %s/%s' % (backend.output_dir, backend.output_fpg))
 
             # Only generate the hex and mcs files if a golden image or multiboot image

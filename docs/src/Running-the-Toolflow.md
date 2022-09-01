@@ -54,6 +54,7 @@ This command will execute the middleware, which calls the yellow block construct
         - `--software` - This runs the software compilation - generates a *.bof and *.fpg file. If not specified, then this process will not be run.
         - `--be` - This specifies the type of backend to be run. This is “--be vivado”, but provision has been made for other backends. If this is not specified, then the default is the Vivado backend.
         - `--jobs` - The number of processor cores to run the compile with. If this is not specified, the default is 4. You need to make sure that your processor has at least 4 threads if this is to work.
+        - `--threads` - Processor threads to use for compiling - either multi or single. Default: multi e.g. "--threads single" will select single threaded compilation. This will ensure repeatable compile outputs for designs that don't change.
         - `-m` - The absolute path and filename of the *.slx file (Simulink model) to compile. If not specified, the default is “/tools/mlib_devel/jasper_library/test_models/test.slx”. I would suggest always specifying this.
         - `-c` - This is the build directory. The default is the same directory as the *.slx file (Simulink model). I don’t normally specify this.
         - `--synth_strat` - Specify a Synthesis Strategy for your compile. The options are as follows, as provided by Vivado 2019.1.1:
