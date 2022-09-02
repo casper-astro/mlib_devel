@@ -1,23 +1,24 @@
 # How to install casperfpga
 
-This section explains how to install `casperfpga`, a python library used to interact with CASPER hardware. The `casperfpga` library currently works fully with Python 2.7, with efforts underway to port it to Python 3.
+This section explains how to install `casperfpga`, a python library used to interact with CASPER hardware. The `casperfpga` library currently works fully with Python 3.8.
 
-Once you have cloned the casperfpga repository, ensure that you are on the correct branch (usually **master** unless you are a contributor) and always pull regularly to make sure you have the latest version of casperfpga.
+Once you have cloned the casperfpga repository, ensure that you are on the correct branch (usually **py38** unless you are a contributor) and always pull regularly to make sure you have the latest version of casperfpga.
 
-## Installing casperfpga
+## Installing casperfpga using a virtual environment
 
-[`casperfpga`](https://pypi.org/project/casperfpga/) is now available on the Python Package Index (PyPI) and can be installed via [`pip`](https://pip.pypa.io/en/stable/). However, should you need to interface with a SNAP board, your installation workflow involves the extra step of installing against `casperfpga's requirements.txt`.
+<!---[`casperfpga`](https://pypi.org/project/casperfpga/) is now available on the Python Package Index (PyPI) and can be installed via [`pip`](https://pip.pypa.io/en/stable/). However, should you need to interface with a SNAP board, your installation workflow involves the extra step of installing against `casperfpga's requirements.txt`.--->
 
 ```shell
+$ python3.8 -m venv ./cfpga_venv
+$ source ./cfpga_venv/bin/activate
 $ git clone https://github.com/casper-astro/casperfpga
 $ cd casperfpga/
-$ git checkout master
-$ sudo apt-get install python-pip
-$ sudo pip install -r requirements.txt
-$ sudo pip install casperfpga
+$ git checkout py38 
+$ pip install -r requirements.txt
+$ pip install .
 ```
 
-The distribution on the Python Package Index is, of course, a built-distribution; this contains an already-compiled version of the SKARAB programming utility `progska`, written in `C`. Operating Systems tested using `pip install casperfpga` include:
+<!--The distribution on the Python Package Index is, of course, a built-distribution; this contains an already-compiled version of the SKARAB programming utility `progska`, written in `C`. Operating Systems tested using `pip install casperfpga` include:
 
 1. Ubuntu 14.04 LTS
 2. Ubuntu 16.04 LTS
@@ -37,7 +38,7 @@ $ git clone https://github.com/casper-astro/casperfpga.git
 $ cd casperfpga
 $ git checkout master
 $ sudo pip install -r requirements.txt
-$ sudo python setup.py install
+$ sudo python setup.py install-->
 ```
 
 
