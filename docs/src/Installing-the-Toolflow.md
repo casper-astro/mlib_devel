@@ -16,7 +16,12 @@ _(Note that official support for ROACH plaforms is no longer provided, however [
 |Red Pitaya      | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |  Python 3        |
 |VCU118          | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |  Python 3        |
 |VCU128          | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |  Python 3        |
+|ZCU216          | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |  Python 3        |
+|ZCU208          | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |  Python 3        |
 |ZCU111          | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |  Python 3        |
+|PYNQ RFSoC 2x2  | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |  Python 3        |
+|HTG ZRF16-29DR  | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |  Python 3        |
+|HTG ZRF16-49DR  | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |  Python 3        |
 |SNAP2           | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |  Python 3        |
 
 Other software combinations may work, but these are the tested configurations. Please see the [Note on Operating Systems](https://casper-toolflow.readthedocs.io/en/latest/index.html#a-note-on-operating-systems) for information on which alternative OS versions _may_ work with the tools.
