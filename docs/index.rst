@@ -69,19 +69,19 @@ The current compatibility matrix is below:
 +================+=====================+====================+====================+=================================+===================+
 |ROACH1/2        | Ubuntu 14.04        |  2013b             |  ISE 14.7          |  branch: `roach`                |   Python 2.7      |
 +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
-|SKARAB          | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |   Python 3        |
+|SKARAB          | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |   Python 3.8      |
 +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
-|SNAP            | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |   Python 3        |
+|SNAP            | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |   Python 3.8      |
 +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
-|Red Pitaya      | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |   Python 3        |
+|Red Pitaya      | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |   Python 3.8      |
 +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
-|VCU118          | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |   Python 3        |
+|VCU118          | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |   Python 3.8      |
 +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
-|VCU128          | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |   Python 3        |
+|VCU128          | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |   Python 3.8      |
 +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
-|ZCU111          | Ubuntu 16.04        |  2018a             |  Vivado 2019.1.1   |  branch: `master`               |   Python 3        |
+|ZCU111          | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |   Python 3.8      |
 +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
-|SNAP2           | Ubuntu 16.04        |  2016b             |  Vivado 2016.4     |  branch: `master`               |   Python 3        |
+|SNAP2           | Ubuntu 20.04        |  2021b             |  Vivado 2021.1     |  branch: `m2021a`               |   Python 3.8      |
 +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
 
 A Note on Operating Systems
@@ -89,7 +89,9 @@ A Note on Operating Systems
 
 The recommended OS is Ubuntu as this is what the majority of the collaboration are using. This makes it easier for us to support you. If you are so inclined, you could also use Red Hat, but we definitely do not support Windows. You are welcome to try but you will be on your own. You could always run Linux in a VM although this will increase your compile times. 
 
-With the exception of ROACH1/2, all CASPER hardware mentioned above has been fully tested using the Ubuntu 16.04 LTS distribution. However, while the above combinations have not been fully tested using Ubuntu 18.04 LTS (and it is therefore not yet an officially supported OS), it is possible to get the toolflow working on this OS with a few tweaks. 
+With the exception of ROACH1/2, all CASPER hardware mentioned above has been fully tested using an Ubuntu 18.04 and 20.04 LTS distribution. However, both operating systems require a few tweaks to work properly.
+
+Ubuntu 18.04:
 
 Some common issues encountered in running the tools on 18.04 include missing packages and incompatibilities between the libraries used to build older versions of Matlab/Vivado and the libraries that come with Ubuntu 18.04. Some tips on fixing these issues:
 
@@ -97,6 +99,13 @@ Some common issues encountered in running the tools on 18.04 include missing pac
 - If you encounter an error along the lines of `"MATLABWindow application failed to launch. Unable to launch the MATLABWindow application"`, this is due to library incompatibilities between 18.04 and Matlab R2018a and can be solved using `this workaround <https://www.mathworks.com/matlabcentral/answers/397138-why-do-i-get-a-matlabwindow-application-failed-to-launch-error-when-launching-live-editor-app-des>`__.
 - For more detailed information on debugging library clashes/missing libraries, `this blog post <https://strath-sdr.github.io/tools/matlab/sysgen/vivado/linux/2021/01/28/sysgen-on-20-04.html>`__ by Craig Ramsay very kindly steps through the debugging process of getting System Generator working on Ubuntu 20.04 and contains information that is equally applicable to debugging on 18.04 (such as using the ``ldd`` command to find missing/incorrect library dependencies, and then installing/excluding the relevant libraries as needed). 
  
+Ubuntu 20.04:
+
+For Ubuntu 20.04, there are a few limitations:
+
+- You must install gcc-6.x or alternatively create the links suggested in the installation documentation found `here <https://docs.xilinx.com/r/2021.2-English/ug1483-model-composer-sys-gen-user-guide/Supported-MATLAB-Versions-and-Operating-Systems>`__
+- If you find the System Generator gets stuck during initialization or when compiling: There are some toolboxes that can cause this. We recommend only having the required toolboxes installed. See also `this thread <https://support.xilinx.com/s/question/0D52E00006vF6FOSA0/model-composer-v20212-matlab-r2021a-gets-stuck-at-initialization-stage-on-ubuntu-20041?language=en_US>`__, for more information.
+- If you find that you cannot simulate without getting gcc errors, you may need to update the Xilinx version of `as` to run the operating system version. This can be done by changing the link at `/tools/Xilinx/Vivado/2021.1/tps/lnx64/binutils-2.26/bin/as` to point to `/usr/bin/as` instead.
 
 Please refer to the setup links below for more information on setting up the toolflow.
 
