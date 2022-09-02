@@ -20,8 +20,10 @@ class red_pitaya(YellowBlock):
             "sysclk_270",
         ]
 
+        self.blkdesign = '{:s}_bd'.format(self.platform.conf['name'])
+
     def modify_top(self,top):
-        inst = top.get_instance('red_pitaya', 'red_pitaya_inst')
+        inst = top.get_instance(self.blkdesign, '%s_inst' % self.blkdesign)
         inst.add_port('axil_clk',   'axil_clk')
         inst.add_port('axil_rst',   'axil_rst')
         inst.add_port('axil_rst_n', 'axil_rst_n')
@@ -123,8 +125,8 @@ class red_pitaya(YellowBlock):
 
         cons.append(PortConstraint('ADC_CLK_IN_P', 'ADC_CLK_IN_P'))
         cons.append(ClockConstraint('ADC_CLK_IN_P','ADC_CLK_IN_P', period=8.0, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=4.0))
-        cons.append(ClockGroupConstraint('-of_objects [get_pins red_pitaya_infr_inst/dsp_clk_mmcm_inst/CLKOUT0]', '-of_objects [get_pins red_pitaya_inst/processing_system7_0/inst/PS7_i/FCLKCLK[0]]', 'asynchronous'))
-        cons.append(ClockGroupConstraint('-of_objects [get_pins red_pitaya_inst/processing_system7_0/inst/PS7_i/FCLKCLK[0]]', '-of_objects [get_pins red_pitaya_infr_inst/dsp_clk_mmcm_inst/CLKOUT0]', 'asynchronous'))
+        cons.append(ClockGroupConstraint('-of_objects [get_pins red_pitaya_infr_inst/dsp_clk_mmcm_inst/CLKOUT0]', '-of_objects [get_pins %s_inst/processing_system7_0/inst/PS7_i/FCLKCLK[0]]' % self.blkdesign, 'asynchronous'))
+        cons.append(ClockGroupConstraint('-of_objects [get_pins %s_inst/processing_system7_0/inst/PS7_i/FCLKCLK[0]]' % self.blkdesign, '-of_objects [get_pins red_pitaya_infr_inst/dsp_clk_mmcm_inst/CLKOUT0]', 'asynchronous'))
 
         return cons
         #const_list = [
@@ -155,8 +157,8 @@ class red_pitaya(YellowBlock):
         4. Add the wrapper HDL file to project.
         """
         tcl_cmds['pre_synth'] += ['source {}'.format(self.hdl_root + '/infrastructure/red_pitaya.tcl')]
-        tcl_cmds['pre_synth'] += ['generate_target all [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/red_pitaya/red_pitaya.bd]']        
-        tcl_cmds['pre_synth'] += ['make_wrapper -files [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/red_pitaya/red_pitaya.bd] -top']
-        tcl_cmds['pre_synth'] += ['add_files -norecurse [get_property directory [current_project]]/myproj.srcs/sources_1/bd/red_pitaya/hdl/red_pitaya_wrapper.vhd']
+        tcl_cmds['pre_synth'] += ['generate_target all [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/%s/%s.bd]' % (self.blkdesign, self.blkdesign)]
+        tcl_cmds['pre_synth'] += ['make_wrapper -files [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/%s/%s.bd] -top' % (self.blkdesign, self.blkdesign)]
+        tcl_cmds['pre_synth'] += ['add_files -norecurse [get_property directory [current_project]]/myproj.srcs/sources_1/bd/%s/hdl/%s_wrapper.vhd' % (self.blkdesign, self.blkdesign)]
         tcl_cmds['pre_synth'] += ['update_compile_order -fileset sources_1']
         return tcl_cmds
