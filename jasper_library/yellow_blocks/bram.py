@@ -39,11 +39,6 @@ class bram(YellowBlock):
             top.add_signal(self.fullname + '_data_in', width=self.data_width)
             top.add_signal(self.fullname + '_data_out', width=self.data_width)
             top.add_signal(self.fullname + '_we', width=1)
-            # Weird assignments. TODO: figure out what on earth the naming convention is with AXI generation.
-            top.assign_signal(self.fullname + '_addr',     self.unique_name + '_' + self.unique_name + '_addr')
-            top.assign_signal(self.fullname + '_data_in',  self.unique_name + '_' + self.unique_name + '_data_in')
-            top.assign_signal(self.fullname + '_data_out', self.unique_name + '_' + self.unique_name + '_data_out')
-            top.assign_signal(self.fullname + '_we',       self.unique_name + '_' + self.unique_name + '_we')
 
         else:
             module = 'wb_bram'
