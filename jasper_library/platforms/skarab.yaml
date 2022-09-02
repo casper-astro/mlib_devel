@@ -24,6 +24,7 @@ constraints:
   - skarab.xdc
 provides:
   - sys_clk
+  - adc_clk
   - mezz0
   - mezz1
   - mezz2

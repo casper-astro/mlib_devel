@@ -1456,10 +1456,10 @@ begin
     brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(30) <= fgbe_if_2_present;
     brd_user_read_regs(C_RD_MEZZANINE_STAT_1_ADDR)(31) <= fgbe_if_3_present;  
 
-    brd_user_read_regs(C_RD_40GBE_IF_0_OFFSET_ADDR) <= X"50000";
-    brd_user_read_regs(C_RD_40GBE_IF_1_OFFSET_ADDR) <= X"01";
-    brd_user_read_regs(C_RD_40GBE_IF_2_OFFSET_ADDR) <= X"01";
-    brd_user_read_regs(C_RD_40GBE_IF_3_OFFSET_ADDR) <= X"01";
+    brd_user_read_regs(C_RD_40GBE_IF_0_OFFSET_ADDR) <= X"00050000";
+    brd_user_read_regs(C_RD_40GBE_IF_1_OFFSET_ADDR) <= X"00000001";
+    brd_user_read_regs(C_RD_40GBE_IF_2_OFFSET_ADDR) <= X"00000001";
+    brd_user_read_regs(C_RD_40GBE_IF_3_OFFSET_ADDR) <= X"00000001";
     
     mezzanine_enable_delay_0 : mezzanine_enable_delay
     port map(

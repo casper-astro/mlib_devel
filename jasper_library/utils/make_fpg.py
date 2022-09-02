@@ -104,6 +104,10 @@ if __name__ == '__main__':
                         help="Which hardware platform is being targeted? Affects the data formatting of the .bin file. "
                              "The SKARAB [s] is the default hardware platform. Other options: Red Pitya [rp]. Note that"
                              "only the abbreviations for the platforms should be specified")
+    parser.add_argument("-b", "--fpg_format", dest='fpg_format', type=str, default='bin',
+                        help="Which bitstream format does the generated fpg contain - bin or bit? Other options: [bit]"
+                             "Xilinx alveo card (and more) requires .bit file for programming while other platforms require"
+                             ".bin file")
 
     args = parser.parse_args()
 
@@ -166,14 +170,18 @@ if __name__ == '__main__':
 
                 # convert the .bit file to a .bin file using Python function
 
-                bin_file_path = bitstream_path[:-7] + 'top_python.bin'
+                if args.fpg_format == 'bit':
+                    bit_file_path = bitstream_path[:-7] + 'top.bit'
+                else:
+                    bin_file_path = bitstream_path[:-7] + 'top_python.bin'
 
                 if args.platform == 's':
                     bit_reversal = True
                 else:
                     bit_reversal = False
 
-                make_bin(input_bit_file=bitstream_path, output_bin_file=bin_file_path, reverse_bits=bit_reversal)
+                if args.fpg_format != 'bit':
+                    make_bin(input_bit_file=bitstream_path, output_bin_file=bin_file_path, reverse_bits=bit_reversal)
 
                 # set the name of the output fpg file
                 fpg_name = base_name + impl_idx + timestamp
@@ -182,7 +190,10 @@ if __name__ == '__main__':
 
                 # generate the fpg file using the toolflow module
                 tf_backend = tf.ToolflowBackend(plat=None, compile_dir=compile_dir)
-                tf_backend.mkfpg(bin_file_path, fpg_name)
+                if args.fpg_format == 'bit':        
+                    tf_backend.mkfpg(bit_file_path, fpg_name)
+                else:
+                    tf_backend.mkfpg(bin_file_path, fpg_name)
 
         print('\nSuccess! fpg generation completed. fpg files available in {} '
               '\nGenerated files: {}'.format(compile_dir+'outputs/', outputs))

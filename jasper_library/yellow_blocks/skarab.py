@@ -880,7 +880,7 @@ class skarab(YellowBlock):
     def gen_tcl_cmds(self):
         tcl_cmds = []
         tcl_cmds.append('set_property SCOPED_TO_REF cont_microblaze [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/imports/cont_microblaze/EMB123701U1R1.elf]')
-        tcl_cmds.append('set_property SCOPED_TO_REF cont_microblaze [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/cont_microblaze/cont_microblaze.bmm]')
+        tcl_cmds.append('set_property SCOPED_TO_REF cont_microblaze [get_files [get_property directory [current_project]]/myproj.gen/sources_1/bd/cont_microblaze/cont_microblaze.bmm]')
         tcl_cmds.append('set_property SCOPED_TO_CELLS microblaze_0 [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/imports/cont_microblaze/EMB123701U1R1.elf]')
         tcl_cmds.append('import_files -force -fileset constrs_1 %s/skarab_infr/Constraints/soc_version.xdc'%os.getenv('HDL_ROOT'))
         #Allows the microblaze to be edited

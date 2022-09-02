@@ -48,6 +48,7 @@ class xsg(YellowBlock):
         if self.platform.name == 'skarab':
             self.requires.append(self.clk_src)  # we need something to provide the clock we plan to use
             self.provides.append('user_clk')
+            self.provides.append('adc_clk_sel')            
         else:
             self.requires.append(self.clk_src)
             self.requires.append(self.clk_src+'90')
@@ -67,7 +68,14 @@ class xsg(YellowBlock):
     def modify_top(self,top):
         if self.platform.name == 'skarab':
             top.add_signal('user_clk')
+            top.add_signal('adc_clk_sel')            
             top.assign_signal('user_clk', self.clk_src)
+            # if adc_clk is selected then the adc_clk_sel signal is tied high else it is tied low
+            if self.clk_src == 'adc_clk':
+                top.assign_signal('adc_clk_sel', '1\'b1')
+            else:
+                top.assign_signal('adc_clk_sel', '1\'b0')	      
+	              
         else:
             top.add_signal('sys_clk', attributes={'keep': '"true"'})
 

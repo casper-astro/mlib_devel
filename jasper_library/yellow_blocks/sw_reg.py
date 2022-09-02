@@ -49,8 +49,8 @@ class sw_reg(YellowBlock):
                 inst.add_parameter('G_OP_INITIAL_VAL', value="32'h%x" % self.init_val)
                 inst.add_port('IP_CLK',       signal='user_clk', parent_sig=False)
                 inst.add_port('IP_RESET',     signal='user_rst', parent_sig=False)
-                inst.add_port('IP_BUS_VALID', signal='sw_reg_%s_out_we'%self.unique_name, parent_sig=False)
-                inst.add_port('IP_BUS',       signal='sw_reg_%s_out'%self.unique_name, width=32, parent_sig=True)
+                inst.add_port('IP_BUS_VALID', signal='%s_out_we'%self.fullname, parent_sig=False)
+                inst.add_port('IP_BUS',       signal='%s_out'%self.fullname, width=32, parent_sig=True)
                 inst.add_port('OP_BUS',       signal='%s_user_data_out'%self.fullname, width=32, parent_sig=True)
             else:
                 module = 'wb_register_ppc2simulink'
