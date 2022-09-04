@@ -67,7 +67,7 @@ class zrf16(YellowBlock):
           board_id = '163'
         else:
           board_id = '164'
-        children.append(YellowBlock.make_block({'tag': 'xps:sys_block', 'board_id': board_id, 'rev_maj': '2', 'rev_min': '0', 'rev_rcs': '1'}, self.platform))
+        children.append(YellowBlock.make_block({'fullpath': self.fullpath, 'tag': 'xps:sys_block', 'board_id': board_id, 'rev_maj': '2', 'rev_min': '0', 'rev_rcs': '1'}, self.platform))
 
 
         # instance block design containing mpsoc, and axi protocol converter for casper

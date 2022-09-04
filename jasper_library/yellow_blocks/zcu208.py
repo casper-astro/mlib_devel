@@ -62,7 +62,7 @@ class zcu208(YellowBlock):
 
     def gen_children(self):
         children = []
-        children.append(YellowBlock.make_block({'tag': 'xps:sys_block', 'board_id': '161', 'rev_maj': '2', 'rev_min': '0', 'rev_rcs': '1'}, self.platform))
+        children.append(YellowBlock.make_block({'fullpath': self.fullpath, 'tag': 'xps:sys_block', 'board_id': '161', 'rev_maj': '2', 'rev_min': '0', 'rev_rcs': '1'}, self.platform))
 
         # instance block design containing mpsoc, and axi protocol converter for casper
         # mermory map (HPM0), axi gpio for software clk104 config (HPM1)
