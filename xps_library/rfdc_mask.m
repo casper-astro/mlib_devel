@@ -47,7 +47,7 @@ function [] = rfdc_mask(gcb,force)
   end
 
   % Disable link
-  set_param(blk, 'LinkStatus', 'inactive');
+  set_param(gcb, 'LinkStatus', 'inactive');
 
   msk = Simulink.Mask.get(gcb);
 
