@@ -21,7 +21,8 @@ The script does not require that the Matlab and Xilinx tools be installed in spe
 Two essential variables are:
 
 - `MATLAB_PATH` - the path to the directory where MATLAB was installed
-- `XILINX_PATH` - the path to the directory where Xilinx tools were installed
+- `XILINX_PATH` - the path to the directory where Xilinx Vivado is installed
+- `COMPOSER_PATH` - the path to the directory where the Xilinx Model Compose is installed
 
 Optional variables:
 
@@ -36,8 +37,9 @@ Depending on your operating system, and MATLAB / Xilinx quirks, you may need to 
 Here is a sample `startsg.local` file:
 
 ```bash
-    export XILINX_PATH=/opt/Xilinx/Vivado/2019.1
-    export MATLAB_PATH=/usr/local/MATLAB/R2018a
+    export XILINX_PATH=/opt/Xilinx/Vivado/2021.1
+    export COMPOSER_PATH=/opt/Xilinx/Model_Composer/2021.1
+    export MATLAB_PATH=/usr/local/MATLAB/R2021a
     export PLATFORM=lin64
     export JASPER_BACKEND=vivado
 
