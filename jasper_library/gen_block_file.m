@@ -166,11 +166,11 @@ if RUN_IP==1
     % where the IP is going to get created. YellowBlocks don't
     % (aren't supposed to?) know what the sysgen compile directory was.
     fprintf(fid, '  sysgen_ip:\n');
-    fprintf(fid, '    %s: %s\n', 'name', 'sysgen_ip')
-    fprintf(fid, '    %s: %s\n', 'fullpath', [this_sys, '/sysgen_ip'])
-    fprintf(fid, '    %s: %s\n', 'tag', 'xps:ip')
-    fprintf(fid, '    %s: %s\n', 'lib_path', [compile_dir, '/sysgen'])
-    fprintf(fid, '    %s: %s\n', 'ip_name', this_sys)
+    fprintf(fid, '    %s: %s\n', 'name', 'sysgen_ip');
+    fprintf(fid, '    %s: %s\n', 'fullpath', [this_sys, '/sysgen_ip']);
+    fprintf(fid, '    %s: %s\n', 'tag', 'xps:ip');
+    fprintf(fid, '    %s: %s\n', 'lib_path', [compile_dir, '/sysgen']);
+    fprintf(fid, '    %s: %s\n', 'ip_name', this_sys);
 end
 
 % Write the names of all ports
@@ -194,13 +194,14 @@ else
     fprintf(fid, '    clock_enable: ce_1\n');
 end
 fprintf(fid, '    ports:\n');
-    
+
 for n = 1:length(gateway_ins)
     if ~any(strcmp(dummy_parents, get_param(gateway_ins{n}, 'Parent')))
         get_param(gateway_ins{n}, 'Name');
         fprintf(fid, '      - %s\n', get_param(gateway_ins{n}, 'Name'));
     end
 end 
+
 for n = 1:length(gateway_outs)
     % if the gateway out is tagged to not be an HDL port, ignore it.
     if strcmp(get_param(gateway_outs{n}, 'hdl_port'), 'on')
