@@ -10,7 +10,7 @@ This section explains How To install Matlab R2013b and R2016b.
 4. Terminal: You will now need to backup file “libstdc++.so.6” and link to file “libstdc++.so.6.0.13”. Type in `​cd ~/Installs/Matlab2013b/bin/glnxa64` and press enter.
 5. Terminal: Type `sudo mv libstdc++.so.6 libstdc++.so.6_bu` and enter. The file should now be backed up.
 6. Terminal: Type `sudo ln -s libstdc++.so.6.0.13 libstdc++.so.6` and press enter. The file should now be linked.
-7. Terminal: set the matlab environment variable to call java 7. Type `​export MATLAB_JAVA=”/usr/lib/jvm/java-7-openjdk-amd64/jre` and press enter. Type `​echo $MATLAB_JAVA` to make sure the new path is set.
+7. Terminal: set the matlab environment variable to call java 7. Type `​export Matlab_JAVA=”/usr/lib/jvm/java-7-openjdk-amd64/jre` and press enter. Type `​echo $Matlab_JAVA` to make sure the new path is set.
 8. Terminal: Make sure the java is executable. Type `​cd ~/Installs/Matlab2013b` and press enter. Type `​chmod +x sys/java/jre/glnxa64/jre/bin/java` and press enter.
 9. Terminal: You will now need to invoke the installer. Type `​sudo ./install -javadir /usr/lib/jvm/java-7-openjdk-amd64/jre` at the prompt and press enter.
 10. The MathWorks Installer GUI should pop up. Select “Install without using the Internet” and select “Next”.
@@ -26,13 +26,12 @@ This section explains How To install Matlab R2013b and R2016b.
 20. Open another terminal and navigate to the “opt” folder and remember to change user and group to your username with the following command: `sudo chown <username>:<username> Matlab -R`
 21. Terminal: Navigate to the “home” folder and remember to change user and group to your username with the following command: `sudo chown <username>:<username> .matlab -R`
 22. It will be a good idea to create an Matlab R2013b startup script file on your Desktop with the following lines:
-```bash
-#!/bin/bash
-cd /opt/Matlab/R2013b/bin/
-./matlab
-```
-NB: Make sure the file is executable and that the nautilius documentation
-navigator is set to run the script.
+    ```bash
+    #!/bin/bash
+    cd /opt/Matlab/R2013b/bin/
+    ./matlab
+    ```
+    NB: Make sure the file is executable and that the nautilius documentation navigator is set to run the script.
 
 23. Run the script and the Matlab IDE will launch. You can now select the required Matlab m files (*.m) and continue.
 24. In order to run the ISE-flow of the CASPER tools, please see [here](https://casper.berkeley.edu/wiki/MSSGE_Setup_with_Xilinx_14.x_and_Matlab_2012b)
@@ -40,21 +39,21 @@ navigator is set to run the script.
 ## [Current Vivado flow] How To install R2021a
 
 1. Required OS: Ubuntu 20.04 LTS.
-2. Download the MATLAB installer [here](https://www.mathworks.com/downloads/). Select the `2021a` install, and the `Download for Linux` option.
+2. Download the Matlab installer [here](https://www.mathworks.com/downloads/). Select the `2021a` install, and the `Download for Linux` option.
 3. Run the following in the terminal:
-```bash
-cd /path/to/matlab/download/matlab_R2021a_glnxa64.zip
-mkdir matlab_R2021a
-unzip matlab_R2021a_glnxa64.zip -d matlab_R2021a
-cd matlab_R2021a
-sudo ./install
-```
-4. The above will launch the MathWorks product installer and you will be prompted to sign into your MathWorks account. Sign in, accept the licensing agreement, link your MATLAB license and select your installation path in the prompts that follow.
+    ```bash
+    cd /path/to/matlab/download/matlab_R2021a_glnxa64.zip
+    mkdir matlab_R2021a
+    unzip matlab_R2021a_glnxa64.zip -d matlab_R2021a
+    cd matlab_R2021a
+    sudo ./install
+    ```
+4. The above will launch the MathWorks product installer and you will be prompted to sign into your MathWorks account. Sign in, accept the licensing agreement, link your Matlab license and select your installation path in the prompts that follow.
 5. Select the following toolboxes for installation:
 
     ![toolboxes.png](../_static/img/toolboxes.png)
 
-    *[Note: issues have been encountered where the Xilinx System Generator MATLAB tool may sit indefinitely while generating sysgen IP. This has tentatively been narrowed down to issues in some MATLAB toolboxes, so if your work requires any toolboxes other than the above, please check against the list further down in [this](https://support.xilinx.com/s/question/0D52E00006vF6FOSA0/model-composer-v20212-matlab-r2021a-gets-stuck-at-initialization-stage-on-ubuntu-20041?language=en_US) for any potential conflicts.]* 
+    *[Note: issues have been encountered where the Xilinx System Generator Matlab tool may sit indefinitely while generating sysgen IP. This has tentatively been narrowed down to issues in some Matlab toolboxes, so if your work requires any toolboxes other than the above, please check against the list further down in [this](https://support.xilinx.com/s/question/0D52E00006vF6FOSA0/model-composer-v20212-matlab-r2021a-gets-stuck-at-initialization-stage-on-ubuntu-20041?language=en_US) for any potential conflicts.]* 
 
 6. Click through the rest of the installation, confirm your selections and begin the install.
 7. In order to run the Vivado flow of the CASPER tools, please see [here](https://casper-toolflow.readthedocs.io/en/latest/src/Configuring-the-Toolflow.html).
