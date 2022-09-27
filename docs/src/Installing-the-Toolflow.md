@@ -31,10 +31,10 @@ The main toolflow branches are usually updated once a year. Between updates, cod
 
 ## Pre-requisites
 
-1. MATLAB
+1. Matlab
 
-    MATLAB installation instructions are available [here](https://casper-toolflow.readthedocs.io/en/latest/src/How-to-install-Matlab.html), or, contact whoever manages your software installations.
-    You will need to install both MATLAB and Simulink.
+    Matlab installation instructions are available [here](https://casper-toolflow.readthedocs.io/en/latest/src/How-to-install-Matlab.html), or, contact whoever manages your software installations.
+    You will need to install both Matlab and Simulink.
 
 2. Xilinx Vivado
 
