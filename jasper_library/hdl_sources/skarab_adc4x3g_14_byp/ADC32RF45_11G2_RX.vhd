@@ -1132,7 +1132,7 @@ begin
 					-- Check for k28p3 frequency errors
 					for i in 0 to 3 loop
 						if chbnd_detk28p3_z1(i) = '1' then
-							chbnd_plsfreq_cnt(i) <= to_unsigned(0, 8);
+							chbnd_plsfreq_cnt(i) <= (others=>'0'),(others=>'0'),(others=>'0'),(others=>'0');
 						else
 							if chbnd_plsfreq_cnt(i) <= 31 then -- count up to 32
 								chbnd_plsfreq_cnt(i) <= chbnd_plsfreq_cnt(i) + 1;

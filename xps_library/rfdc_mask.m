@@ -46,6 +46,9 @@ function [] = rfdc_mask(gcb,force)
     return
   end
 
+  % Disable link
+  set_param(gcb, 'LinkStatus', 'inactive');
+
   msk = Simulink.Mask.get(gcb);
 
   [gen, tile_arch, fs_max, fs_min] = get_rfsoc_properties(gcb);

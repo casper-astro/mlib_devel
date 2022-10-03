@@ -1549,6 +1549,10 @@ class VitisBackend(ToolflowBackend):
         xsct_tcl = os.path.join(self.compile_dir, 'xsct_gogogo.tcl')
         helpers.write_file(xsct_tcl, xc)
 
+        # TODO removing `XILINX_PATH` here is a hack for now to work updating Vitis 2020.2 to Vitis 2021.1
+        # for newer versions of the tools `XILINX_PATH` is an env var that Xilinx uses for their Vitis tool
+        # and our library env var clobbers it causing xsct to fail when starting
+        del os.environ['XILINX_PATH']
         rv = os.system('xsct {:s}'.format(xsct_tcl))
         if rv:
             raise Exception('xsct (Vitis) failed!')

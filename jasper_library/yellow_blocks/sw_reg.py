@@ -32,7 +32,7 @@ class sw_reg(YellowBlock):
                 inst.add_port('IP_RESET',     signal='axil_rst', parent_sig=False)                
                 inst.add_port('IP_BUS_VALID', signal='1\'b1', parent_sig=False)
                 inst.add_port('IP_BUS',       signal='%s_user_data_in'%self.fullname, width=32, parent_sig=True)
-                inst.add_port('OP_BUS',       signal='sw_reg_%s_in'%self.unique_name, width=32, parent_sig=True)
+                inst.add_port('OP_BUS',       signal='%s_in'%self.fullname, width=32, parent_sig=True)
             else:
                 module = 'wb_register_simulink2ppc'
                 inst = top.get_instance(entity=module, name=self.fullname)
