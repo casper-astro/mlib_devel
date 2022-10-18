@@ -50,6 +50,13 @@ class au50(YellowBlock):
         inst.add_port('satellite_uart_0_rxd', 'satellite_uart_0_rxd', dir='in',  parent_port=True)
         inst.add_port('satellite_uart_0_txd', 'satellite_uart_0_txd', dir='out', parent_port=True)
         
+        inst.add_port('gt_ref_clk_0_clk_n',   'gt_ref_clk_0_clk_n',    dir='in',  parent_port=True)
+        inst.add_port('gt_ref_clk_0_clk_p',   'gt_ref_clk_0_clk_p',    dir='in',  parent_port=True)
+        inst.add_port('gt_serial_port_0_grx_n', 'gt_serial_port_0_grx_n',    dir='in',  parent_port=True, width=4)
+        inst.add_port('gt_serial_port_0_grx_p', 'gt_serial_port_0_grx_p',    dir='in',  parent_port=True, width=4)
+        inst.add_port('gt_serial_port_0_gtx_n', 'gt_serial_port_0_gtx_n',    dir='out',  parent_port=True, width=4)
+        inst.add_port('gt_serial_port_0_gtx_p', 'gt_serial_port_0_gtx_p',    dir='out',  parent_port=True, width=4)
+        
         inst.add_port('M04_AXI_0_araddr',  'M_AXI_araddr',   dir='out', width=32)
         inst.add_port('M04_AXI_0_arready', 'M_AXI_arready',  dir='out', width=1)
         inst.add_port('M04_AXI_0_arvalid', 'M_AXI_arvalid',  dir='out', width=1)
