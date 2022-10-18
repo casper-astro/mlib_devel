@@ -7,6 +7,10 @@ import os
 class au50(YellowBlock):
     def initialize(self):
         self.add_source('utils/cdc_synchroniser.vhd')
+        self.add_source('serial_pipe')
+        self.add_source('dsp_send')
+        self.add_source('utils/dna_wrapper.vhd')
+        self.add_source('alveo_onehundred_gbe/')
         self.add_source('au50')
         self.provides = [
             "sys_clk",
@@ -26,6 +30,8 @@ class au50(YellowBlock):
         inst.add_port('sys_rst_n',            'sys_rst_n',     dir='out')
         inst.add_port('cmc_clk_clk_n',        'cmc_clk_clk_n', dir='in', parent_port=True)
         inst.add_port('cmc_clk_clk_p',        'cmc_clk_clk_p', dir='in', parent_port=True)
+        inst.add_port('hbm_clk_clk_n',        'hbm_clk_clk_n', dir='in',  parent_port=True)
+        inst.add_port('hbm_clk_clk_p',        'hmb_clk_clk_p', dir='in',  parent_port=True)
         inst.add_port('s_axi_aclk',           'axil_clk',      dir='out')
         inst.add_port('s_axi_areset_n',       'axil_rst_n',    dir='out')
 
@@ -96,6 +102,25 @@ class au50(YellowBlock):
         # import the xdc files associated with the au50 block diagram, pin outs and bit stream generation
         tcl_cmds['pre_synth'] += ['import_files -force -fileset constrs_1 %s/au50_infr/au50_bd.xdc'%os.getenv('HDL_ROOT')]
         tcl_cmds['pre_synth'] += ['import_files -force -fileset constrs_1 %s/au50_infr/au50_bitstream.xdc'%os.getenv('HDL_ROOT')]
+        tcl_cmds['pre_synth'] += ['import_files -force -fileset constrs_1 %s/au50_infr/au50_const.xdc'%os.getenv('HDL_ROOT')]
+
+        # add the dsp_send IP to the IP catalog
+        # add the udp core user IP to the IP catalog
+        tcl_cmds['pre_synth'] += ['set repos [get_property ip_repo_paths [current_project]]']
+        tcl_cmds['pre_synth'] += ['set_property ip_repo_paths "$repos %s/dsp_send/" [current_project]'%os.getenv('HDL_ROOT')]
+        tcl_cmds['pre_synth'] += ['set repos [get_property ip_repo_paths [current_project]]']
+        tcl_cmds['pre_synth'] += ['set_property ip_repo_paths "$repos %s/serial_pipe/" [current_project]'%os.getenv('HDL_ROOT')]
+        tcl_cmds['pre_synth'] += ['set repos [get_property ip_repo_paths [current_project]]']
+        tcl_cmds['pre_synth'] += ['set_property ip_repo_paths "$repos %s/alveo_onehundred_gbe/" [current_project]'%os.getenv('HDL_ROOT')]
+        tcl_cmds['pre_synth'] += ['update_ip_catalog']
+
+        tcl_cmds['pre_synth'] += ['import_files -force -norecurse %s/alveo_onehundred_gbe/src/common_stfc_lib/'%os.getenv('HDL_ROOT')]
+        #tcl_cmds['pre_synth'] += ['set_property library common_stfc_lib [get_files  %s/alveo_onehundred_gbe/src/common_stfc_lib/]'%os.getenv('HDL_ROOT')]
+        tcl_cmds['pre_synth'] += ['set_property library common_mem_lib [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/imports/src/common_mem_lib/*.vhd]']
+        tcl_cmds['pre_synth'] += ['set_property library common_ox_lib [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/imports/src/common_ox_lib/*.vhd]']
+        tcl_cmds['pre_synth'] += ['set_property library common_stfc_lib [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/imports/src/common_stfc_lib/*.vhd]']
+        tcl_cmds['pre_synth'] += ['set_property library axi4_lite [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/imports/axi4_lite/*.vhd]']
+
 
         # run the block diagram generation script
         tcl_cmds['pre_synth'] += ['source {}'.format(self.hdl_root + '/au50_infr/au50_bd.tcl')]

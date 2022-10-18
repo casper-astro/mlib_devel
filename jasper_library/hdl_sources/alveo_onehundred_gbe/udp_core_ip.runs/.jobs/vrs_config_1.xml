@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<Runs Version="1" Minor="0">
+	<Run Id="synth_1" LaunchDir="/home/rvw/work/mydev/alveo/ref_designs/udp_core/timing_vivado_2021_1_DRP_Init_250MHz_28_9_2021/project_1/project_1.ipdefs/rtl_kernel_wizard_1_ex/rtl_kernel_wizard_1_ex.ipdefs/ip_repo2/udp_core_ip.runs/synth_1" FlowId="Vivado_Synthesis" FromStepId="vivado" ToStepId="vivado"/>
+	<Parameters>
+		<Parameter Name="runs.monitorLSFJobs" Val="true" Type="bool"/>
+		<Parameter Name="runs.enableClusterConf" Val="true" Type="bool"/>
+	</Parameters>
+</Runs>
+
