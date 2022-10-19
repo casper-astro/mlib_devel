@@ -138,7 +138,9 @@ class au50(YellowBlock):
         # factors
         # there wasn't a way to parameterize this in the initial block diagram script, so we have to do it this way, blah!!
         tcl_cmds['pre_synth'] += ['open_bd_design [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/au50_bd/au50_bd.bd]']
-        tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {%s} CONFIG.CLKOUT2_REQUESTED_OUT_FREQ {%s} CONFIG.CLKOUT3_REQUESTED_OUT_FREQ {%s} CONFIG.CLKOUT4_REQUESTED_OUT_FREQ {%s}] [get_bd_cells clk_wiz_0]'%(self.platform.user_clk_rate,self.platform.user_clk_rate,self.platform.user_clk_rate,self.platform.user_clk_rate)]
+        tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {%s} CONFIG.CLKOUT2_REQUESTED_OUT_FREQ {%s} CONFIG.CLKOUT3_REQUESTED_OUT_FREQ {%s} CONFIG.CLKOUT4_REQUESTED_OUT_FREQ {%s} CONFIG.CLKOUT5_REQUESTED_OUT_FREQ {%s} CONFIG.CLKOUT6_REQUESTED_OUT_FREQ {%s}] [get_bd_cells clk_wiz_0]'%(self.platform.user_clk_rate, self.platform.user_clk_rate, self.platform.user_clk_rate,self.platform.user_clk_rate, self.platform.user_clk_rate, self.platform.user_clk_rate)]
+        # because the HBM also relies on this sys_clk, we need to configure the clock frequency it expects as well.
+        tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.USER_AXI_INPUT_CLK_FREQ {%s} CONFIG.USER_AXI_INPUT_CLK1_FREQ {%s}] [get_bd_cells hbm/hbm_0]'%(self.platform.user_clk_rate,self.platform.user_clk_rate)]
         #tcl_cmds['pre_synth'] += ['save_bd_design']
         #tcl_cmds['pre_synth'] += ['close_bd_design [get_bd_designs au50_bd]']
 
