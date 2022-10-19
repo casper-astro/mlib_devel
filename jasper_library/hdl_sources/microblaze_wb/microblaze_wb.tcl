@@ -295,7 +295,7 @@ proc create_root_design { parentCell } {
 
   # Create ports
   set ACK_I [ create_bd_port -dir I ACK_I ]
-  set ADR_O [ create_bd_port -dir O -from 19 -to 0 ADR_O ]
+  set ADR_O [ create_bd_port -dir O -from 21 -to 0 ADR_O ]
   set CYC_O [ create_bd_port -dir O CYC_O ]
   set Clk [ create_bd_port -dir I -type clk -freq_hz 100000000 Clk ]
   set DAT_I [ create_bd_port -dir I -from 31 -to 0 DAT_I ]
@@ -428,7 +428,7 @@ proc create_root_design { parentCell } {
 
   # Create address segments
   assign_bd_address -offset 0x40200000 -range 0x00010000 -target_address_space [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_hwicap_0/S_AXI_LITE/Reg] -force
-  assign_bd_address -offset 0x44A00000 -range 0x00100000 -target_address_space [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_slave_wishbone_classic_master_0/S_AXI/reg0] -force
+  assign_bd_address -offset 0x44C00000 -range 0x00400000 -target_address_space [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_slave_wishbone_classic_master_0/S_AXI/reg0] -force
   assign_bd_address -offset 0x41A00000 -range 0x00010000 -target_address_space [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_timebase_wdt_0/S_AXI/Reg] -force
   assign_bd_address -offset 0x41C00000 -range 0x00010000 -target_address_space [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_timer_0/S_AXI/Reg] -force
   assign_bd_address -offset 0x40600000 -range 0x00010000 -target_address_space [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_uartlite_0/S_AXI/Reg] -force
@@ -439,7 +439,7 @@ proc create_root_design { parentCell } {
 
   # Restore current instance
   current_bd_instance $oldCurInst
-
+  validate_bd_design
   save_bd_design
 }
 # End of create_root_design()
@@ -450,7 +450,3 @@ proc create_root_design { parentCell } {
 ##################################################################
 
 create_root_design ""
-
-
-common::send_gid_msg -ssname BD::TCL -id 2053 -severity "WARNING" "This Tcl script was generated from a block design that has not been validated. It is possible that design <$design_name> may result in errors during validation."
-
