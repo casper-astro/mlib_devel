@@ -124,6 +124,7 @@ set bCheckIPs 1
 if { $bCheckIPs == 1 } {
    set list_check_ips "\ 
 xilinx.com:ip:axi_hwicap:3.0\
+xilinx.com:ip:axi_quad_spi:3.2\
 peralex.com:user:axi_slave_wishbone_classic_master:1.0\
 xilinx.com:ip:axi_timebase_wdt:3.0\
 xilinx.com:ip:axi_timer:2.0\
@@ -132,6 +133,7 @@ xilinx.com:ip:mdm:3.2\
 xilinx.com:ip:microblaze:11.0\
 xilinx.com:ip:axi_intc:4.1\
 xilinx.com:ip:proc_sys_reset:5.0\
+xilinx.com:ip:xadc_wiz:3.3\
 xilinx.com:ip:xlconcat:2.1\
 xilinx.com:ip:lmb_bram_if_cntlr:4.0\
 xilinx.com:ip:lmb_v10:3.0\
