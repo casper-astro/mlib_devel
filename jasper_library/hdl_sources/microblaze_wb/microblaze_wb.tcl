@@ -293,7 +293,7 @@ proc create_root_design { parentCell } {
 
   # Create interface ports
   set UART [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:uart_rtl:1.0 UART ]
-
+  set spi_rtl [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:spi_rtl:1.0 spi_rtl ]
 
   # Create ports
   set ACK_I [ create_bd_port -dir I ACK_I ]
