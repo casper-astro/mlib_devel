@@ -8,7 +8,7 @@ The toolflow is very sensitive to mis-matching software versions. The current co
 
 _(Note that official support for ROACH plaforms is no longer provided, however [this version](https://github.com/casper-astro/mlib_devel/tree/d77999047d2f0dc53e1c1e6e516e6ef3cdd45632/docs) of `mlib_devel` contains all ROACH related documentation and ROACH tutorials can be found [here](https://casper-tutorials.readthedocs.io/en/latest/tutorials/roach/tut_intro.html))_
 
-|  Hardware      |   Operating System  |    Matlab Version  |    Xilinx Version  |    mlib_devel branch / commit   |  Python Version  |
+|  Hardware      |   Operating System  |    MATLAB Version  |    Xilinx Version  |    mlib_devel branch / commit   |  Python Version  |
 |----------------|---------------------|--------------------|--------------------|---------------------------------|------------------|
 |ROACH1/2        | Ubuntu 14.04        |  2013b             |  ISE 14.7          |  branch: `roach2`               |  Python 2.7      |
 |SKARAB          | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |  Python 3        |
@@ -31,10 +31,10 @@ The main toolflow branches are usually updated once a year. Between updates, cod
 
 ## Pre-requisites
 
-1. Matlab
+1. MATLAB
 
-    Matlab installation instructions are available [here](https://casper-toolflow.readthedocs.io/en/latest/src/How-to-install-Matlab.html), or, contact whoever manages your software installations.
-    You will need to install both Matlab and Simulink.
+    MATLAB installation instructions are available [here](https://casper-toolflow.readthedocs.io/en/latest/src/How-to-install-Matlab.html), or, contact whoever manages your software installations.
+    You will need to install both MATLAB and Simulink.
 
 2. Xilinx Vivado
 
