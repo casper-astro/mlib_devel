@@ -47,6 +47,9 @@ class microblaze(YellowBlock):
                      'library':'user',
                      'version':'1.0',
                     }]
+
+        self.bd_inst_name = '{:s}_bd'.format(self.platform.conf['name'])
+
         #self.requires = ['cpu_ethernet']
 
 class microblaze_k7(microblaze):
@@ -66,7 +69,7 @@ class microblaze_k7(microblaze):
         inst.add_port('%s_t' % name, '%s_t' % name)
 
     def modify_top(self,top):
-        inst = top.get_instance(entity='cont_microblaze', name='cont_microblaze_inst', comment='%s: Microblaze Control and Monitoring subsystem' % self.fullname)
+        inst = top.get_instance(entity=self.bd_inst_name, name='%s_inst' % self.bd_inst_name, comment='%s: Microblaze Control and Monitoring subsystem' % self.fullname)
         inst.add_port('Clk', 'wb_clk_i')
         inst.add_port('Reset', 'wb_rst_i')
         inst.add_port('dcm_locked', '1\'b1')
@@ -124,7 +127,7 @@ class microblaze_k7(microblaze):
         # overwrite top.bit with version that includes microblaze code
         # ignorestderr because this command fails even though it appears to work.
         # Flags an awk error: see https://forums.xilinx.com/t5/Installation-and-Licensing/Vivado-2016-4-on-Ubuntu-16-04-LTS-quot-awk-symbol-lookup-error/m-p/747165
-        tcl_cmds['post_bitgen'] += ['exec -ignorestderr updatemem -bit ./myproj.runs/impl_1/top.bit -meminfo ./myproj.runs/impl_1/top.mmi -data ../executable_core_info.mem  -proc cont_microblaze_inst/microblaze_0 -out ./myproj.runs/impl_1/top.bit -force']
+        tcl_cmds['post_bitgen'] += ['exec -ignorestderr updatemem -bit ./myproj.runs/impl_1/top.bit -meminfo ./myproj.runs/impl_1/top.mmi -data ../executable_core_info.mem  -proc %s_inst/microblaze_0 -out ./myproj.runs/impl_1/top.bit -force' % self.bd_inst_name]
         return tcl_cmds
 
 class microblaze_ku7(microblaze):
@@ -144,7 +147,7 @@ class microblaze_ku7(microblaze):
         inst.add_port('%s_t' % name, '%s_t' % name)
 
     def modify_top(self,top):
-        inst = top.get_instance(entity='cont_microblaze', name='cont_microblaze_inst', comment='%s: Microblaze Control and Monitoring subsystem' % self.fullname)
+        inst = top.get_instance(entity=self.bd_inst_name, name='%s_inst' % self.bd_inst_name, comment='%s: Microblaze Control and Monitoring subsystem' % self.fullname)
         inst.add_port('Clk', 'wb_clk_i')
         inst.add_port('Reset', 'wb_rst_i')
         inst.add_port('dcm_locked', '1\'b1')
@@ -200,5 +203,5 @@ class microblaze_ku7(microblaze):
         # overwrite top.bit with version that includes microblaze code
         # ignorestderr because this command fails even though it appears to work.
         # Flags an awk error: see https://forums.xilinx.com/t5/Installation-and-Licensing/Vivado-2016-4-on-Ubuntu-16-04-LTS-quot-awk-symbol-lookup-error/m-p/747165
-        tcl_cmds['post_bitgen'] += ['exec -ignorestderr updatemem -bit ./myproj.runs/impl_1/top.bit -meminfo ./myproj.runs/impl_1/top.mmi -data ../executable_core_info.mem  -proc cont_microblaze_inst/microblaze_0 -out ./myproj.runs/impl_1/top.bit -force']
+        tcl_cmds['post_bitgen'] += ['exec -ignorestderr updatemem -bit ./myproj.runs/impl_1/top.bit -meminfo ./myproj.runs/impl_1/top.mmi -data ../executable_core_info.mem  -proc %s_inst/microblaze_0 -out ./myproj.runs/impl_1/top.bit -force' % self.bd_inst_name]
         return tcl_cmds
