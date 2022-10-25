@@ -1,6 +1,31 @@
 # How to install Xilinx Tools
 
-This section explains How To install Vivado 2016.2, 2016.4 and 2018.2.
+This section explains how to install Xilinx Vivado and ISE (for the ISE legacy flow).
+
+## [Current Vivado flow] How to install 2021.1
+
+1. Required OS: Ubuntu 2.04 LTS
+2. Download the Xilinx Vivado installer [here](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2021-1.html), signing in as prompted and selecting the 2021.1 Linux Self Extracting Web Installer option.
+3. Run the following to make the newly downloaded file executable:
+```bash
+cd /path/to/Xilinx_Unified_2021.1_0610_2318_Lin64.bin
+chmod +x Xilinx_Unified_2021.1_0610_2318_Lin64.bin
+```
+4. Sign into your Xilinx account as prompted.
+5. Select *Vivado* on the *Select Product to Install* page.
+6. Select *Vivado ML Enterprise* on the *Select Edition to Install* page.
+7. On the next page, ensure that all checkboxes for *Design Tools* are selected, that you are installing the devices needed for your work, and that you will acquire/manage a license key post-install.
+8. Agree to the licensing agreement and select  your installation paths in the prompts that follow.
+9. Click through the rest of the installation, confirm your selections and begin the install.
+10. Once the install is complete, you will be asked if you'd like to open the Vivado License Manager to load/manage licenses - do so, go to *Help > Manage License* and input the path to your *Xilinx.lic* license.
+11. Click on *View License Status* and ensure that the list of Tools/IP that comes up is valid.
+*[Note: ensure that your license has been generated for Vivado ML edition and Model Composer.]*
+12. In order to run the Vivado flow of the CASPER tools, please see [here](https://casper-toolflow.readthedocs.io/en/latest/src/Configuring-the-Toolflow.html).
+ 
+### Optional: Install USB Drivers for JTAG
+
+*[Note: this will only be used by toolflow/yellow block developers and is not required for standard use of the toolflow.]*
+1. Please see the Vivado 2021.1 installation guide [here](https://docs.xilinx.com/r/2021.1-English/ug973-vivado-release-notes-install-license/Installing-Cable-Drivers) on how to install cable drivers.
 
 ## [ISE legacy flow, ROACH2] How to install Xilinx ISE
 1. Required OS: Ubuntu 14.04 LTS. Xilinx now supports Ubuntu 14.04 LTS. Ubuntu 16.04 LTS can also be used (with tweaks)
@@ -107,27 +132,3 @@ The tweaks required to get 14.7 working with Ubuntu 16.04 can vary based on spec
 
       (Some alternative methods for dealing with this can be found on the CASPER mailing list archive)
 
-## [Current Vivado flow] How to install 2021.1
-
-1. Required OS: Ubuntu 2.04 LTS
-2. Download the Xilinx Vivado installer [here](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2021-1.html), signing in as prompted and selecting the 2021.1 Linux Self Extracting Web Installer option.
-3. Run the following to make the newly downloaded file executable:
-```bash
-cd /path/to/Xilinx_Unified_2021.1_0610_2318_Lin64.bin
-chmod +x Xilinx_Unified_2021.1_0610_2318_Lin64.bin
-```
-4. Sign into your Xilinx account as prompted.
-5. Select *Vivado* on the *Select Product to Install* page.
-6. Select *Vivado ML Enterprise* on the *Select Edition to Install* page.
-7. On the next page, ensure that all checkboxes for *Design Tools* are selected, that you are installing the devices needed for your work, and that you will acquire/manage a license key post-install.
-8. Agree to the licensing agreement and select  your installation paths in the prompts that follow.
-9. Click through the rest of the installation, confirm your selections and begin the install.
-10. Once the install is complete, you will be asked if you'd like to open the Vivado License Manager to load/manage licenses - do so, go to *Help > Manage License* and input the path to your *Xilinx.lic* license.
-11. Click on *View License Status* and ensure that the list of Tools/IP that comes up is valid.
-*[Note: ensure that your license has been generated for Vivado ML edition and Model Composer.]*
-12. In order to run the Vivado flow of the CASPER tools, please see [here](https://casper-toolflow.readthedocs.io/en/latest/src/Configuring-the-Toolflow.html).
- 
-### Optional: Install USB Drivers for JTAG
-
-*[Note: this will only be used by toolflow/yellow block developers and is not required for standard use of the toolflow.]*
-1. Please see the Vivado 2021.1 installation guide [here](https://docs.xilinx.com/r/2021.1-English/ug973-vivado-release-notes-install-license/Installing-Cable-Drivers) on how to install cable drivers.

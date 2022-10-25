@@ -1,26 +1,26 @@
 # Configuring the Toolflow
 
 If you have successully installed the toolflow and its dependencies, it is now time to configure the flow to suit your specific environment.
-The toolflow needs to know where dependencies like Matlab and Xilinx tools have been installed. Other site-dependent parameters may also need to be defined.
+The toolflow needs to know where dependencies like MATLAB and Xilinx tools have been installed. Other site-dependent parameters may also need to be defined.
 
 ## The `startsg` script
 
 A startup script -- `startsg` -- is provided as part of the toolflow repository. This script can be used in two ways:
 
-- If _executed_ (i.e. `/path/to/mlib_devel/startsg`): start Matlab with the correctly defined library paths. 
-- If _sourced_ (i.e. `source /path/to/mlib_devel/startsg`): configure software paths without starting Matlab.
+- If _executed_ (i.e. `/path/to/mlib_devel/startsg`): start MATLAB with the correctly defined library paths. 
+- If _sourced_ (i.e. `source /path/to/mlib_devel/startsg`): configure software paths without starting MATLAB.
 
 The former method is what you should do if you want to start a Simulink design, or open an existing one.
 
-The latter method is useful if you want to run parts of the toolflow outside of Matlab (eg. `exec_flow.py`) or run Xilinx tools (eg. `vivado`) directly from the command line.
+The latter method is useful if you want to run parts of the toolflow outside of MATLAB (eg. `exec_flow.py`) or run Xilinx tools (eg. `vivado`) directly from the command line.
 
 ### Specifying local details
 
 The `startsg` script is generic. You should not need to modify it.
-The script does not require that the Matlab and Xilinx tools be installed in specific locations, but it does require that you provide it with a few details about your local installation.  This is done by creating a `startsg.local` file that defines a few key variables needed by `startsg`.
+The script does not require that the MATLAB and Xilinx tools be installed in specific locations, but it does require that you provide it with a few details about your local installation.  This is done by creating a `startsg.local` file that defines a few key variables needed by `startsg`.
 Two essential variables are:
 
-- `MATLAB_PATH` - the path to the directory where Matlab was installed
+- `MATLAB_PATH` - the path to the directory where MATLAB was installed
 - `XILINX_PATH` - the path to the directory where Xilinx Vivado is installed
 - `COMPOSER_PATH` - the path to the directory where the Xilinx Model Compose is installed
 
@@ -32,18 +32,18 @@ Optional variables:
 - `CASPER_PYTHON_VENV_ON_START` - The path to your Python virtual environment (if one is being used). This will activate the virtual environment on load.
 
 Other variables:
-Depending on your operating system, and Matlab / Xilinx quirks, you may need to specify other generic OS variables. For example, with Matlab 2018a and Ubuntu 16.04, it is necessary to over-ride the default Matlab libexpat library to a newer version. To do this you can set the `LD_PRELOAD` variable.
+Depending on your operating system, and MATLAB / Xilinx quirks, you may need to specify other generic OS variables. For example, with MATLAB 2018a and Ubuntu 16.04, it is necessary to over-ride the default MATLAB libexpat library to a newer version. To do this you can set the `LD_PRELOAD` variable.
 
 Here is a sample `startsg.local` file:
 
 ```bash
     export XILINX_PATH=/opt/Xilinx/Vivado/2021.1
     export COMPOSER_PATH=/opt/Xilinx/Model_Composer/2021.1
-    export MATLAB_PATH=/usr/local/Matlab/R2021a
+    export MATLAB_PATH=/usr/local/MATLAB/R2021a
     export PLATFORM=lin64
     export JASPER_BACKEND=vivado
 
-    # over-ride the Matlab libexpat version with the OS's one.
+    # over-ride the MATLAB libexpat version with the OS's one.
     # Using LD_PRELOAD=${LD_PRELOAD}:"..." rather than just LD_PRELOAD="..."
     # ensures that we preserve any other settings already configured
     export LD_PRELOAD=${LD_PRELOAD}:"/usr/lib/x86_64-linux-gnu/libexpat.so"
@@ -58,7 +58,7 @@ If you really want to commit your local configuration file, you can do this, but
 ### Using `startsg`
 By default, executing (or sourcing) the `startsg` script will use variables defined in the configuration file `startsg.local` residing in the same directory as `startsg`.
 However, you can use a specific configuration by specifying one as an argument to `startsg`.
-This can be useful if you want to store configurations for multiple versions of Matlab / Xilinx tools.
+This can be useful if you want to store configurations for multiple versions of MATLAB / Xilinx tools.
 
 For example:
 ```bash
@@ -71,9 +71,9 @@ For example:
 
 ### Symlink for convenience
 
-Running `startsg` from the `mlib_devel` directory (where it lives) will start Matlab with `mlib_devel` as the current directory.
-Hopefully you store your models somewhere outside `mlib_devel` (which should contain only the CASPER _libraries_), in which case after running `startsg` you will need to navigate within Matlab to the directory where your model files live.
-To avoid this minor annoyance, you can create a symbolic link to `startsg` in your application directory (i.e.  where your model file lives).  When running `startsg` via this symlink, Matlab will start up with your application directory as the current directory and also run the optional `casper_startup.m` file if one exists.
+Running `startsg` from the `mlib_devel` directory (where it lives) will start MATLAB with `mlib_devel` as the current directory.
+Hopefully you store your models somewhere outside `mlib_devel` (which should contain only the CASPER _libraries_), in which case after running `startsg` you will need to navigate within MATLAB to the directory where your model files live.
+To avoid this minor annoyance, you can create a symbolic link to `startsg` in your application directory (i.e.  where your model file lives).  When running `startsg` via this symlink, MATLAB will start up with your application directory as the current directory and also run the optional `casper_startup.m` file if one exists.
 
 To configure such a symlink you should run
 

@@ -1,9 +1,9 @@
 # Running the Toolflow
 
-There are a few ways of working with the Vivado-based CASPER toolflow. You can do this initially with the Matlab GUI to compile the front end and then handle the middleware and backend generation using Python or you can run everything in Python. The former is more for design and debugging and the later stage is for the final tested and working design. This how-to will cover both methods.
+There are a few ways of working with the Vivado-based CASPER toolflow. You can do this initially with the MATLAB GUI to compile the front end and then handle the middleware and backend generation using Python or you can run everything in Python. The former is more for design and debugging and the later stage is for the final tested and working design. This how-to will cover both methods.
 
-## Matlab/Python method 
-There are two ways to use this method. The first is to run the command `jasper_frontend` within Matlab and run the rest of the flow in a terminal separately. The second is to run the command `jasper` within Matlab and have everything be done automatically in the Matlab terminal.
+## MATLAB/Python method 
+There are two ways to use this method. The first is to run the command `jasper_frontend` within MATLAB and run the rest of the flow in a terminal separately. The second is to run the command `jasper` within MATLAB and have everything be done automatically in the MATLAB terminal.
 
 ### jasper_frontend:
 
@@ -13,20 +13,20 @@ There are two ways to use this method. The first is to run the command `jasper_f
     ./startsg startsg.local.xxxx
     ```
     
-    This script will source all the relevant Matlab and Xilinx paths (as specified in your `startsg.local.xxxx` file), run matlab and start Xilinx system generator. Wait until the Matlab GUI has opened and Matlab is ready.
+    This script will source all the relevant MATLAB and Xilinx paths (as specified in your `startsg.local.xxxx` file), run matlab and start Xilinx system generator. Wait until the MATLAB GUI has opened and MATLAB is ready.
 
 
-2. In the Matlab command window, type `simulink`. This will start simulink. Wait until the Simulink window has opened. 
+2. In the MATLAB command window, type `simulink`. This will start simulink. Wait until the Simulink window has opened. 
 
 3. In the Simulink Library Browser, click on the “open model or library” icon in the tab and select where your desired simulink file is (*.slx). There are some test files under “jasper_library/test_models”. The test model “test_snap.slx” is used for this how-to. Once the file has been selected, click “Open”. The “test_snap” design should open in the Simulink window.
 
 4. Click the simulink design window (“test_snap”) and press `ctrl + D`. 
 This will update the simulink model and check for warnings or errors. Make sure there are no errors or warnings. A window should pop up if this is the case.
 
-5. Save the design, and then in the Matlab command window terminal type `jasper_frontend`.
-This will generate the yellow block peripheral file and run the system generator. Wait until the “XSG generation complete. Complete. Run ‘exec_flow.py -m ….” message is displayed in the Matlab command window. 
+5. Save the design, and then in the MATLAB command window terminal type `jasper_frontend`.
+This will generate the yellow block peripheral file and run the system generator. Wait until the “XSG generation complete. Complete. Run ‘exec_flow.py -m ….” message is displayed in the MATLAB command window. 
 
-6. In the Matlab Command Window, cut the following text:
+6. In the MATLAB Command Window, cut the following text:
 
     ```
     python ../exec_flow.py -m … --middleware --backend --software ... 
@@ -40,7 +40,7 @@ This will generate the yellow block peripheral file and run the system generator
     source startsg startsg.local.xxxx
     ```
 
-8. In the terminal above, paste the “python exec_flow.py….” command that was cut earlier from Matlab. In the terminal:
+8. In the terminal above, paste the “python exec_flow.py….” command that was cut earlier from MATLAB. In the terminal:
     ```bash 
     python exec_flow.py -m … --middleware --backend --software
     ```
@@ -63,7 +63,7 @@ This will generate the yellow block peripheral file and run the system generator
     ```
 2. Follow steps 2 - 4 as in the section above.
 
-3. In the Matlab command window terminal type `jasper`. This will run all that was described above without you needing to explictly run `exec_flow.py` yourself. All display output will be routed through the Matlab command window, and the project and output files will still end up in the same place as above. 
+3. In the MATLAB command window terminal type `jasper`. This will run all that was described above without you needing to explictly run `exec_flow.py` yourself. All display output will be routed through the MATLAB command window, and the project and output files will still end up in the same place as above. 
 
 ## Python method 
 
@@ -72,8 +72,8 @@ This method allows the user to run the toolflow in a similar way as above, while
 * The `exec_flow`, which stands for “execution flow” can either run the whole flow or just parts of the flow depending on the needs of the user.
 * The Vivado compile is done using project mode only.
 * I have already explained the `--middleware`, `--backend` and `--software` arguments in _step 9_ above. 
-* There is also a `--perfile` and `--frontend` argument, which is not needed in the Matlab/Python method, but is required for the Python method.
-* The `--perfile` and `--frontend` arguments run the yellow block peripheral file generation and the system generator compile, respectively. It is identical to running `jasper_frontend` from the command window in Matlab - see Matlab/Python method above. 
+* There is also a `--perfile` and `--frontend` argument, which is not needed in the MATLAB/Python method, but is required for the Python method.
+* The `--perfile` and `--frontend` arguments run the yellow block peripheral file generation and the system generator compile, respectively. It is identical to running `jasper_frontend` from the command window in MATLAB - see MATLAB/Python method above. 
 * Below is a list of the `exec_flow` arguments:
     - `--perfile` - Runs the front end peripheral file generation. If not specified, then it won’t generate the peripheral file.
     - `--frontend` - This compiles the front end IP, which basically runs the system generator. If not specified, then the compile will not be run.

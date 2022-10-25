@@ -65,7 +65,7 @@ The current compatibility matrix is below:
 (Note that official support for ROACH plaforms is no longer provided, however `this version <https://github.com/casper-astro/mlib_devel/tree/d77999047d2f0dc53e1c1e6e516e6ef3cdd45632/docs>`__ of `mlib_devel` contains all ROACH related documentation and ROACH tutorials can be found `here <https://casper-tutorials.readthedocs.io/en/latest/tutorials/roach/tut_intro.html>`__)
 
 +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
-|  Hardware      |   Operating System  |    Matlab Version  |    Xilinx Version  |    mlib_devel branch / commit   |   Python Version  |
+|  Hardware      |   Operating System  |    MATLAB Version  |    Xilinx Version  |    mlib_devel branch / commit   |   Python Version  |
 +================+=====================+====================+====================+=================================+===================+
 |ROACH1/2        | Ubuntu 14.04        |  2013b             |  ISE 14.7          |  branch: `roach`                |   Python 2.7      |
 +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
@@ -103,10 +103,10 @@ With the exception of ROACH1/2, all CASPER hardware mentioned above has been ful
 
 Ubuntu 18.04:
 
-Some common issues encountered in running the tools on 18.04 include missing packages and incompatibilities between the libraries used to build older versions of Matlab/Vivado and the libraries that come with Ubuntu 18.04. Some tips on fixing these issues:
+Some common issues encountered in running the tools on 18.04 include missing packages and incompatibilities between the libraries used to build older versions of MATLAB/Vivado and the libraries that come with Ubuntu 18.04. Some tips on fixing these issues:
 
 - If you encounter System Generator socket timeout errors when trying to open a model in Simulink, or are faced with errors about GUI function call recursion when double-clicking Xilinx blocks, installing KDE (``sudo apt install kde-full``) may solve this.
-- If you encounter an error along the lines of `"MATLABWindow application failed to launch. Unable to launch the MATLABWindow application"`, this is due to library incompatibilities between 18.04 and Matlab R2018a and can be solved using `this workaround <https://www.mathworks.com/matlabcentral/answers/397138-why-do-i-get-a-matlabwindow-application-failed-to-launch-error-when-launching-live-editor-app-des>`__.
+- If you encounter an error along the lines of `"MATLABWindow application failed to launch. Unable to launch the MATLABWindow application"`, this is due to library incompatibilities between 18.04 and MATLAB R2018a and can be solved using `this workaround <https://www.mathworks.com/matlabcentral/answers/397138-why-do-i-get-a-matlabwindow-application-failed-to-launch-error-when-launching-live-editor-app-des>`__.
 - For more detailed information on debugging library clashes/missing libraries, `this blog post <https://strath-sdr.github.io/tools/matlab/sysgen/vivado/linux/2021/01/28/sysgen-on-20-04.html>`__ by Craig Ramsay very kindly steps through the debugging process of getting System Generator working on Ubuntu 20.04 and contains information that is equally applicable to debugging on 18.04 (such as using the ``ldd`` command to find missing/incorrect library dependencies, and then installing/excluding the relevant libraries as needed). 
  
 Ubuntu 20.04:
@@ -123,7 +123,7 @@ Setup Links
 """""""""""
 
 1. :doc:`Installing the Toolflow <src/Installing-the-Toolflow>`
-2. :doc:`Installing Matlab <src/How-to-install-Matlab>`
+2. :doc:`Installing MATLAB <src/How-to-install-Matlab>`
 3. :doc:`Installing Xilinx Vivado <src/How-to-install-Xilinx-Vivado>`
 4. :doc:`Installing casperfpga <src/How-to-install-casperfpga>`
 5. :doc:`Configuring the Toolflow <src/Configuring-the-Toolflow>`
