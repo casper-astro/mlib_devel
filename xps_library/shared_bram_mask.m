@@ -80,14 +80,15 @@ else
     init_vals_sized = init_vals;
 end
 
+% Not sure why this was included, but it seems to break bram simulation something awful:
 % And do some 32-bit munging of simulation values
-for ii=1:2^addr_width
-    temp = 0;
-    for jj=1:ceil(data_width/32)
-      temp = temp + 2^(32*(jj-1)) * mod(init_vals_sized(ii) / 2^(32*(ceil(data_width/32)-jj)), 2^32);
-    end
-    init_vals_sized(ii) = temp;
-end
+%for ii=1:2^addr_width
+%    temp = 0;
+%    for jj=1:ceil(data_width/32)
+%      temp = temp + 2^(32*(jj-1)) * mod(init_vals_sized(ii) / 2^(32*(ceil(data_width/32)-jj)), 2^32);
+%    end
+%    init_vals_sized(ii) = temp;
+%end
 
 latency = 1;
 if strcmp(get_param(c_sys, 'reg_prim_output'), 'on')
