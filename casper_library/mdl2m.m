@@ -7,7 +7,9 @@
 %  mode		  - mode to open initialization script in ('a'-append, ['w']-overwrite)
 %  file		  - pass file pointer (created with fopen) directly
 %  subsystem      - the system is a subsystem (so don't generate system parameters etc) ('on', ['off'])
-%  reuse          - generated script uses reuse_block instead of add_block for more efficient drawing 
+%  
+%e.g run mdl2m(gcb, 'subsystem', 'on') with a Subsystem in focus and check in casper_library for
+%the script generated.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
