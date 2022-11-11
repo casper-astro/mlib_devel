@@ -52,7 +52,7 @@ log_group = 'fft_stage_n_init_debug';
 clog('entering fft_stage_n_init', {log_group, 'trace'});
 
 % Don't use BRAMs with fanout control
-USE_DUMB_BRAMS = 1;
+USE_DUMB_BRAMS = 0;
 
 % Set default vararg values.
 % reg_retiming is not an actual parameter of this block, but it is included
@@ -177,6 +177,11 @@ reuse_block(blk, 'shift', 'built-in/Inport', 'Port', '5', 'Position', [630 418 6
 
 % registers to control fanout for signals into delay buffers
 
+%if we don't like fanout at all, then force a minimum of 1 latency, otherwise allow it to go down
+%to 0 to minimise resource use.
+min_latency = 0;
+if max_fanout <= 1, min_latency = 1; end
+
 if USE_DUMB_BRAMS == 0 && strcmp(delays_bram, 'on'),
   % if we have a 'large' delay buffer in bram, add appropriate delay
   % based on an approximation of the number of BRAMs required from bit width and buffer depth
@@ -195,12 +200,13 @@ if USE_DUMB_BRAMS == 0 && strcmp(delays_bram, 'on'),
   % number of BRAMs to handle input width
   n_brams = ceil((n_inputs * input_bit_width * 2)/word_size);
 
-  fan_latency = max(1, ceil(log2(n_brams)));
+  %we work out how much latency is required to control fanout 
+  fan_latency = max(min_latency, ceil(log2(n_brams)/max(1, log2(max_fanout)))-1);
   clog(['Using input latency of ', num2str(fan_latency), ' for ', num2str(n_brams),' bram/s in biplex core stage ', num2str(FFTStage)], log_group);
   bram_latency_comp = bram_latency;
 else,
   %otherwise we control fanout based on the number of input streams
-  fan_latency = max(0, ceil(log2(n_inputs/max_fanout)));
+  fan_latency = max(min_latency, ceil(log2(n_inputs)/max(1, log2(max_fanout)))-1);
   clog(['Using input latency of ', num2str(fan_latency), ' for ', num2str(n_inputs),' streams in biplex core stage ', num2str(FFTStage)], log_group);
   bram_latency_comp = 0;
 end
