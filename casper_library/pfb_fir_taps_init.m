@@ -286,8 +286,7 @@ function pfb_fir_taps_init(blk, varargin)
         add_line(blk, 'always/1', 'tap_delays/6');
       end
   end
-  reuse_block(blk, 'arnold', 'built-
-  /Terminator', 'Position', [580 325 600 345]);
+  reuse_block(blk, 'arnold', 'built-in/Terminator', 'Position', [580 325 600 345]);
   add_line(blk, 'tap_delays/2', 'arnold/1');
 
   add_line(blk,'tap_delays/1', 'mult_din/2', 'autorouting', 'on');
