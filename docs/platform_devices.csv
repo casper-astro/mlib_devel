@@ -1,0 +1,22 @@
+Platform,Device,Family,Ultra RAM
+ADM_PCIE_9H7,xcvu37p,UltraScalePlus,Yes
+AU280,xcu280,UltraScalePlus,Yes
+AU50,xcu50,UltraScalePlus,Yes
+CASIA_K7,xc7k325t,Kintex7,No
+CASIA_K7_21CMA,xc7k325t,Kintex7,No
+HTG9200,xcvu13p,UltraScalePlus,Yes
+HTG940,xcvu13p,UltraScalePlus,Yes
+htg_zrf16,xczu49dr,UltraScalePlus,Yes
+MX175,xc7vx690t,Virtex7,No
+RED_PITAYA_10,xc7z010,Zynq,No
+rfsoc2x2,xczu28dr,Zynq UltraScalePlus,Yes
+rfsoc4x2,xczu48dr,Zynq UltraScalePlus,Yes
+SKARAB,xc7vx690t,Virtex7,No
+SNAP,xc7k160t,Kintex7,No
+SNAP2_v1,xcku115,Kintex UltraScale,No
+VCU118,xcvu9p,Virtex UltraScalePlus,Yes
+VCU128,xcvu37p,Virtex UltraScalePlus,Yes
+ZCU111,xczu28dr,Zynq UltraScalePlus,Yes
+ZCU208,xczu48dr,Zynq UltraScalePlus,Yes
+ZCU216,xczu49dr,Zynq UltraScalePlus,Yes
+ZRF16_49DR,xczu49dr,Zynq UltraScalePlus,Yes

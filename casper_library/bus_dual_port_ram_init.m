@@ -96,7 +96,7 @@ function bus_dual_port_ram_init(blk, varargin)
   enb_implementation        = get_var('enb_implementation', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
-
+  
   %default state, do nothing 
   if (n_bits(1) == 0),
     clean_blocks(blk);
@@ -105,6 +105,34 @@ function bus_dual_port_ram_init(blk, varargin)
     return;
   end
 
+    %get hardware platform from XSG block
+  try
+    xsg_blk = find_system(bdroot, 'SearchDepth', 1,'FollowLinks','on','LookUnderMasks','all','Tag','xps:xsg');
+    hw_sys = xps_get_hw_plat(get_param(xsg_blk{1},'hw_sys'));
+  
+    platform_devices = readtable('docs/platform_devices.csv','ReadVariableNames',false);
+    
+    for idx = 1:height(platform_devices),
+        if strcmp(hw_sys, platform_devices{idx,1})
+            fpga_family = platform_devices{idx,3};
+        end
+    end %end for device_table
+
+    if ~strcmp(fpga_family, 'UltraScalePlus')
+      if strcmp(mem_type,'Ultra RAM')
+        clog('Ultra RAM selected for a non-UltraScale+ device. This can result in error.', {log_group});
+        warning('bus_dual_port_ram_init: Ultra RAM selected for a non-UltraScale+ device. This can result in error.');
+        warndlg('bus_dual_port_ram_init: Ultra RAM selected for a non-UltraScale+ device. This can result in error.','Warning');
+      end
+    end
+    
+  catch,
+    clog('Could not find hardware platform - is there an XSG block in this model? Defaulting platform to ROACH.', {log_group});
+    warning('bus_dual_port_ram_init: Could not find hardware platform - is there an XSG block in this model? Defaulting platform to ROACH.');
+    fpga_family = 'Virtex';
+    hw_sys = 'ROACH';
+  end %try/catch
+  
   [riv, civ]  = size(init_vector);
   [rnb, cnb]  = size(n_bits);
   [rbp, cbp]  = size(bin_pts);
@@ -404,7 +432,7 @@ function bus_dual_port_ram_init(blk, varargin)
     add_line(blk, 'concata/1', 'prom_wea/1'); 
     ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
     
-    if strcmp(mem_type, 'Block RAM'),
+    if strcmp(mem_type, 'Block RAM')||strcmp(mem_type, 'Ultra RAM'),
       ypos_tmp  = ypos_tmp + yinc + bus_expand_d*ctiv; %dinb
       ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
       reuse_block(blk, 'prom_web', 'xbsIndex_r4/ROM', ...
@@ -480,7 +508,7 @@ function bus_dual_port_ram_init(blk, varargin)
     add_line(blk, 'prom_wea/1', 'debus_wea/1'); 
     ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
   
-    if strcmp(mem_type, 'Block RAM'),
+    if strcmp(mem_type, 'Block RAM')||strcmp(mem_type, 'Ultra RAM'),
       ypos_tmp  = ypos_tmp + yinc + bus_expand_d*ctiv; %dinb
       ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
       reuse_block(blk, 'debus_web', 'casper_library_flow_control/bus_expand', ...
@@ -593,7 +621,7 @@ function bus_dual_port_ram_init(blk, varargin)
     end % if banks
     ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
 
-    if strcmp(mem_type, 'Block RAM'),
+    if strcmp(mem_type, 'Block RAM')||strcmp(mem_type, 'Ultra RAM'),
       % delay dinb
       if strcmp(dinb_implementation, 'core'), reg_retiming = 'off';
       else, reg_retiming = 'on';
@@ -737,7 +765,7 @@ function bus_dual_port_ram_init(blk, varargin)
     %space for addrb slice
 %    ypos_tmp  = ypos_tmp + yinc + slice_d;
      
-    if strcmp(mem_type, 'Block RAM'),
+    if strcmp(mem_type, 'Block RAM')||strcmp(mem_type, 'Ultra RAM'),
       % debus dinb
       ypos_tmp        = ypos_tmp + bus_expand_d*ctiv/2;
       reuse_block(blk, ['debus_dinb',num2str(bank_index)], 'casper_library_flow_control/bus_expand', ...
@@ -860,7 +888,7 @@ function bus_dual_port_ram_init(blk, varargin)
       add_line(blk, ['debus_addrb', num2str(bank_index), '/', num2str(rep_index)], [bram_name, '/4']);
   
       port_index = 4;
-      if strcmp(mem_type, 'Block RAM'),
+      if strcmp(mem_type, 'Block RAM')||strcmp(mem_type, 'Ultra RAM'),
         add_line(blk, ['debus_dinb', num2str(bank_index), '/', num2str(bram_index)], [bram_name, '/5']);
         add_line(blk, ['debus_web', num2str(bank_index), '/', num2str(rep_index)], [bram_name, '/6']);
         port_index = 6;
