@@ -49,6 +49,7 @@ function pfb_fir_generic_init(blk, varargin)
     'fanout', 4, ...
     'coeffs_bram_optimization', 'Area', ... %'Speed', 'Area'
     'delays_bram_optimization', 'Area', ...%'Speed', 'Area'
+    'mem_type', 'Block RAM', ...
   };
   
   check_mask_type(blk, 'pfb_fir_generic');
@@ -82,6 +83,7 @@ function pfb_fir_generic_init(blk, varargin)
   multiplier_implementation   = get_var('multiplier_implementation', 'defaults', defaults, varargin{:});
   coeffs_bram_optimization    = get_var('coeffs_bram_optimization', 'defaults', defaults, varargin{:});
   delays_bram_optimization    = get_var('delays_bram_optimization', 'defaults', defaults, varargin{:});
+  mem_type                    = get_var('mem_type', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
   
@@ -296,6 +298,7 @@ function pfb_fir_generic_init(blk, varargin)
           'fan_latency', num2str(fan_latency), ...
           'multiplier_implementation', 'behavioral HDL', ...
           'bram_optimization', delays_bram_optimization, ...
+          'mem_type', mem_type, ...
           'Position', [675 32 765 198]);
       
   add_line(blk, 'pfb_fir_coeff_gen/2', 'pfb_fir_taps/2');
