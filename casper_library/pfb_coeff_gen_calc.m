@@ -63,13 +63,13 @@ else
         end
     end
     try
-        total_coeffs = windowval .* sinc(fwidth * ([0:alltaps-1]/(2^PFBSize)-TotalTaps/2));
+        total_coeffs = windowval .* sinc(fwidth * ([0.5:1:alltaps-0.5]/(2^PFBSize)-TotalTaps/2));
     catch err
         switch err.identifier
             case 'MATLAB:UndefinedFunction'
                 warning('sinc function undefined in MATLAB. Attempting to use python variant')
                 try
-                    total_coeffs = windowval .* cellfun(@double, cell(py.window.sinc(py.list(fwidth * ([0:alltaps-1]/(2^PFBSize)-TotalTaps/2)))));
+                    total_coeffs = windowval .* cellfun(@double, cell(py.window.sinc(py.list(fwidth * ([0.5:alltaps-0.5]/(2^PFBSize)-TotalTaps/2)))));
                 catch
                     error('Python call to sinc() failed!')
                 end
