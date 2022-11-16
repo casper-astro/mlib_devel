@@ -137,7 +137,7 @@ class microblaze_k7(microblaze):
         # overwrite top.bit with version that includes microblaze code
         # ignorestderr because this command fails even though it appears to work.
         # Flags an awk error: see https://forums.xilinx.com/t5/Installation-and-Licensing/Vivado-2016-4-on-Ubuntu-16-04-LTS-quot-awk-symbol-lookup-error/m-p/747165
-        tcl_cmds['post_bitgen'] += ['exec -ignorestderr updatemem -bit ./myproj.runs/impl_1/top.bit -meminfo ./myproj.runs/impl_1/top.mmi -data ../executable_core_info.mem  -proc %s/microblaze_0 -out ./myproj.runs/impl_1/top.bit -force' % self.bd_inst_name]
+        tcl_cmds['post_bitgen'] += ['exec -ignorestderr updatemem -bit ./myproj.runs/impl_1/top.bit -meminfo ./myproj.runs/impl_1/top.mmi -data ../executable_core_info.mem  -proc %s_inst/microblaze_0 -out ./myproj.runs/impl_1/top.bit -force' % self.bd_inst_name]
         return tcl_cmds
 
 class microblaze_ku7(microblaze):
