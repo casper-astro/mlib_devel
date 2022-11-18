@@ -128,6 +128,47 @@ function pfb_fir_generic_init(blk, varargin)
     return;
   end
 
+  % Check if Ultra RAM allowed based on HW platform
+  sg_blk = '';
+  try
+    sysgen_blk = find_system(bdroot, 'SearchDepth', 1,'FollowLinks','on','LookUnderMasks','all');
+    
+    for idx = 1:height(sysgen_blk),
+        split_entry = split(sysgen_blk{idx,1}, '/');
+        
+        for idx_entry =  1:height(split_entry)
+            if strcmp(split_entry{idx_entry,1}, ' System Generator') %note: space before 'System' required
+                sg_blk = sysgen_blk{idx,1};
+                break
+            end
+        end
+        if ~strcmp(sg_blk,'') %end search when System Generator label found.
+            break
+        end
+    end %end for device_table
+    
+    fpga_params = xlgetparams(sg_blk);
+
+    %note: New platform block must be dragged into design for xsg_blk to be
+    %updated
+    if ~strcmp(fpga_params.xilinxfamily, 'virtexuplusHBM') && ...
+            ~strcmp(fpga_params.xilinxfamily, 'virtexuplus') && ...
+            ~strcmp(fpga_params.xilinxfamily, 'zynquplusRFSOC') && ...
+            ~strcmp(fpga_params.xilinxfamily, 'zynquplusRFSOCes1')
+
+      if strcmp(mem_type,'Ultra RAM')
+        warning('bus_dual_port_ram_init: Ultra RAM selected for a non-UltraScale+ device. This can result in error. Defaulting to Block RAM');
+        mem_type = 'Block RAM';
+      end
+    end
+    
+  catch
+    warning('bus_dual_port_ram_init: Could not find hardware platform - is there an XSG block in this model?');
+  end %try/catch
+  
+  
+  
+  
   %check parameters
   if TotalTaps < 3,
     clog('need at least 3 taps', {'error', 'pfb_fir_generic_init_debug'});
