@@ -255,7 +255,7 @@ function bus_dual_port_ram_init(blk, varargin)
 
   port_index = 5;
   %if we are using Block RAM, then need ports for dinb and web
-  if strcmp(mem_type, 'Block RAM'),
+  if strcmp(mem_type, 'Block RAM')||strcmp(mem_type, 'Ultra RAM'),
     ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2;
     reuse_block(blk, 'dinb', 'built-in/inport', ...
       'Port', num2str(port_index), 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
@@ -334,7 +334,7 @@ function bus_dual_port_ram_init(blk, varargin)
     ypos_tmp = ypos_tmp + yinc + bus_expand_d*replication/2;
     add_line(blk, 'wea/1', 'wea_slice/1'); 
 
-    if strcmp(mem_type, 'Block RAM'),
+    if strcmp(mem_type, 'Block RAM')||strcmp(mem_type, 'Ultra RAM'),
       ypos_tmp  = ypos_tmp + yinc + bus_expand_d*ctiv; %dinb
       ypos_tmp = ypos_tmp + bus_expand_d*replication/2;
       reuse_block(blk, 'web_slice', 'xbsIndex_r4/Slice', ...
@@ -390,7 +390,7 @@ function bus_dual_port_ram_init(blk, varargin)
     add_line(blk, 'wea_slice/1', 'concata/1');
     add_line(blk, 'amsbs_slice/1', 'concata/2'); 
   
-    if strcmp(mem_type, 'Block RAM'),
+    if strcmp(mem_type, 'Block RAM')||strcmp(mem_type, 'Ultra RAM'),
       ypos_tmp = ypos_tmp + yinc + bus_expand_d*ctiv; %dinb
       ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
       reuse_block(blk, 'concatb', 'xbsIndex_r4/Concat', ...
