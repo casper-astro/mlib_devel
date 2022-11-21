@@ -159,6 +159,7 @@ function pfb_fir_generic_init(blk, varargin)
       if strcmp(mem_type,'Ultra RAM')
         warning('bus_dual_port_ram_init: Ultra RAM selected for a non-UltraScale+ device. This can result in error. Defaulting to Block RAM');
         mem_type = 'Block RAM';
+        set_param(blk, 'mem_type', 'Block RAM');
       end
     end
     
