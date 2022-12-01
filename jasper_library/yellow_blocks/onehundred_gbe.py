@@ -725,8 +725,19 @@ class onehundredgbe_alveo(onehundred_gbe):
         self.add_source('serial_pipe/hdl/serial_pipe.vhd')
         self.add_source('dsp_send/dsp_send.vhd')
 
+        self.memory_map = [
+            Register('gbe',   mode='rw', offset=0x0, default_val=self.fab_gate)]
+
+
     def modify_top(self, top):
         #inst = top.get_instance(entity='casper100g_noaxi', name=self.fullname+'_inst')
+        
+        # The below call doesn't (yet) add any AXI ports to `inst`, which is required
+        # for anything useful to happen.
+        # But the 100G core doesn't (yet) have an axi interface exposed in the HDL anyway!
+        top.add_axi4lite_interface(regname=self.unique_name, mode='rw', nbytes=65536,
+                                    typecode=self.typecode, memory_map=self.memory_map)
+
         # Adding the wires for the signals to 
         top.add_raw_string('wire [511:0] %s_tx_data;\n' %self.fullname)
         top.add_raw_string('wire [0:0]   %s_tx_valid;\n' %self.fullname)
