@@ -726,8 +726,7 @@ class onehundredgbe_alveo(onehundred_gbe):
         self.add_source('dsp_send/dsp_send.vhd')
 
         self.memory_map = [
-            Register('gbe',   mode='rw', offset=0x0, default_val=self.fab_gate)]
-
+            Register('gmac_reg_core_type', mode='r',  offset=0x00)]
 
     def modify_top(self, top):
         #inst = top.get_instance(entity='casper100g_noaxi', name=self.fullname+'_inst')
