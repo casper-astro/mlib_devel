@@ -36,8 +36,8 @@ function pfb_fir_coeff_gen_init(blk, varargin)
     'fan_latency', 2, ...
     'add_latency', 1, ...
     'max_fanout', 1, ...
-    'bram_optimization', 'Area', ...
-    'mem_type', 'Block RAM', ...
+    'bram_optimization', 'Area', ... %'Speed'
+    'mem_type', 'Block RAM', ... %'Ultra RAM'
   };
   
   check_mask_type(blk, 'pfb_fir_coeff_gen');
@@ -104,49 +104,6 @@ function pfb_fir_coeff_gen_init(blk, varargin)
   end %switch
 
   yoff = 226;
-
-  % Check if Ultra RAM allowed based on HW platform
-  sg_blk = '';
-  try
-    sysgen_blk = find_system(bdroot, 'SearchDepth', 1,'FollowLinks','on','LookUnderMasks','all');
-    
-    for idx = 1:height(sysgen_blk),
-        split_entry = split(sysgen_blk{idx,1}, '/');
-        
-        for idx_entry =  1:height(split_entry)
-            if strcmp(split_entry{idx_entry,1}, ' System Generator') %note: space before 'System' required
-                sg_blk = sysgen_blk{idx,1};
-                break
-            end
-        end
-        if ~strcmp(sg_blk,'') %end search when System Generator label found.
-            break
-        end
-    end %end for device_table
-    
-    fpga_params = xlgetparams(sg_blk);
-
-    %note: New platform block must be dragged into design for xsg_blk to be
-    %updated
-    if ~strcmp(fpga_params.xilinxfamily, 'virtexuplusHBM') && ...
-            ~strcmp(fpga_params.xilinxfamily, 'virtexuplus') && ...
-            ~strcmp(fpga_params.xilinxfamily, 'zynquplusRFSOC') && ...
-            ~strcmp(fpga_params.xilinxfamily, 'zynquplusRFSOCes1')
-
-      if strcmp(mem_type,'Ultra RAM')
-        clog('Ultra RAM selected for a non-UltraScale+ device. This can result in error. Defaulting to Block RAM', {log_group});
-        warning('bus_dual_port_ram_init: Ultra RAM selected for a non-UltraScale+ device. This can result in error. Defaulting to Block RAM');
-        mem_type = 'Block RAM';
-      end
-    end
-    
-  catch
-    clog('Could not find hardware platform - is there an XSG block in this model?', {log_group});
-    warning('bus_dual_port_ram_init: Could not find hardware platform - is there an XSG block in this model?');
-  end %try/catch
-  
-  
-  
   
   %%%%%%%%%%%%%%%%%
   % sync pipeline %

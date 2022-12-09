@@ -44,9 +44,9 @@ function pfb_fir_taps_init(blk, varargin)
     'add_latency', 2, ...
     'fan_latency', 2, ... 
     'bram_latency', 2, ...
-    'multiplier_implementation', 'behavioral HDL', ... 'embedded multiplier core' 'standard core' ...
-    'bram_optimization', 'Area', ... 'Speed', 'Area'
-    'memory_type', 'Block RAM', ...
+    'multiplier_implementation', 'behavioral HDL', ... %'embedded multiplier core', 'standard core' ...
+    'bram_optimization', 'Area', ... %'Speed'
+    'mem_type', 'Block RAM', ... %'Ultra RAM'
   };
   
   check_mask_type(blk, 'pfb_fir_taps');
@@ -83,7 +83,6 @@ function pfb_fir_taps_init(blk, varargin)
   n_outputs = (2^n_inputs)*n_streams;
 
   delete_lines(blk);
-  
   
   % sanity check for old block that has not been updated for floating point
   if (strcmp(floating_point, 'on'))  
@@ -130,8 +129,6 @@ function pfb_fir_taps_init(blk, varargin)
 
   reuse_block(blk, 'dsync0', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
     'latency', num2str(fan_latency+bram_latency), 'Position', [415 40 450 60]);
-  
-
 
   if (fixed_float_latency > 0)
     reuse_block(blk, 'dsync_ffl', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
@@ -195,8 +192,6 @@ function pfb_fir_taps_init(blk, varargin)
           'latency', num2str(mult_latency), 'Position', [695 95 730 115]);
         add_line(blk, 'den0/1', 'den1/1');        
     end
-       
-
     
     reuse_block(blk, 'den2', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
       'latency', num2str(ceil(log2(n_taps))*add_latency), 'Position', [925 95 960 115]);
@@ -293,8 +288,6 @@ function pfb_fir_taps_init(blk, varargin)
   add_line(blk,'tap_delays/1', 'youngest/1', 'autorouting', 'on');
 
   %multiplication of tap coefficients with data
-  
-  
   if (floating_point == 1)
 
     %multipliers
@@ -325,8 +318,6 @@ function pfb_fir_taps_init(blk, varargin)
         add_line(blk, 'mult_din/1', 'bus_mult/1');        
     end
 
-      
-
       reuse_block(blk, 'coeff_float_conv', 'casper_library_misc/fixed_to_float', ...
         'float_type', float_type_sel, ...
         'n_bits_in', num2str(n_bits_coeff), ...
@@ -338,7 +329,6 @@ function pfb_fir_taps_init(blk, varargin)
       add_line(blk, 'coeff_float_conv/1', 'bus_mult/2');           
           
       %add_line(blk, 'dcoeffs/1', 'bus_mult/2');      
-      
 
       reuse_block(blk, 'tap_split', 'casper_library_flow_control/bus_expand', ...
         'mode', 'divisions of equal size', ...
@@ -363,7 +353,6 @@ function pfb_fir_taps_init(blk, varargin)
       for n = 0:n_taps-1,
         add_line(blk, ['tap_split/', num2str(n+1)], ['bus_adder_tree/', num2str(n+1)]);
       end
-      
       
   else
       reuse_block(blk, 'bus_mult', 'casper_library_bus/bus_mult', ...
@@ -407,7 +396,6 @@ function pfb_fir_taps_init(blk, varargin)
         add_line(blk, ['tap_split/', num2str(n+1)], ['bus_adder_tree/', num2str(n+1)]);
       end      
   end
-
   
   reuse_block(blk, 'dout', 'built-in/Outport', 'Port', '2', 'Position', [1065 453 1095 467]);
   add_line(blk, 'bus_adder_tree/1', 'dout/1');
