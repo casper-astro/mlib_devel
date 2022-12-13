@@ -29,6 +29,7 @@ function delay_bram_prog_dp_init(blk, varargin)
   defaults = { ...
     'ram_bits', 10, ...
     'bram_latency', 2, ...
+    'distributed_mem', 'Block RAM', ...
     'async', 'off'};  
   
   check_mask_type(blk, 'delay_bram_prog_dp');
@@ -39,6 +40,7 @@ function delay_bram_prog_dp_init(blk, varargin)
   ram_bits                   = get_var('ram_bits', 'defaults', defaults, varargin{:});
   bram_latency               = get_var('bram_latency', 'defaults', defaults, varargin{:});
   async                      = get_var('async', 'defaults', defaults, varargin{:});
+  mem_type                   = get_var('distributed_mem', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
 
@@ -81,7 +83,7 @@ function delay_bram_prog_dp_init(blk, varargin)
   reuse_block(blk, 'Dual Port RAM', 'xbsIndex_r4/Dual Port RAM', ...
     'depth', '2^ram_bits', 'initVector', '0', ...
     'latency', 'bram_latency', 'write_mode_B', 'Read Before Write', ...
-    'optimize', 'Area', 'Position', [315 26 385 119]);
+    'optimize', 'Area', 'distributed_mem', 'Block RAM', 'Position', [315 26 385 119]);
   add_line(blk, 'din/1', 'Dual Port RAM/2');
   add_line(blk, 'din/1', 'Dual Port RAM/5');
   add_line(blk, 'wr_addr/1', 'Dual Port RAM/1');
