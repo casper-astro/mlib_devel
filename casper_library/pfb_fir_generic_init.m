@@ -21,7 +21,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function pfb_fir_generic_init(blk, varargin)
-  clog('entering pfb_fir_generic_init', 'trace');
+  log_group = 'pfb_fir_generic_init_debug';	
+  clog('entering pfb_fir_generic_init', {log_group, 'trace'});
 
   defaults = { ...
     'n_streams', 1, ...
@@ -48,7 +49,9 @@ function pfb_fir_generic_init(blk, varargin)
     'fwidth', 1, ...
     'fanout', 4, ...
     'coeffs_bram_optimization', 'Area', ... %'Speed', 'Area'
-    'delays_bram_optimization', 'Area', ...%'Speed', 'Area'
+    'delays_bram_optimization', 'Area', ... %'Speed', 'Area'
+    'coeff_mem_type', 'Block RAM', ... %'Ultra RAM'
+    'tap_mem_type', 'Block RAM', ... %'Ultra RAM'
   };
   
   check_mask_type(blk, 'pfb_fir_generic');
@@ -71,7 +74,7 @@ function pfb_fir_generic_init(blk, varargin)
   float_type                  = get_var('float_type', 'defaults', defaults, varargin{:});
   exp_width                   = get_var('exp_width', 'defaults', defaults, varargin{:});
   frac_width                  = get_var('frac_width', 'defaults', defaults, varargin{:});   
-  fixed_float_latency      = get_var('fixed_float_latency', 'defaults', defaults, varargin{:});   
+  fixed_float_latency         = get_var('fixed_float_latency', 'defaults', defaults, varargin{:});   
   mult_latency                = get_var('mult_latency', 'defaults', defaults, varargin{:});
   add_latency                 = get_var('add_latency', 'defaults', defaults, varargin{:});
   bram_latency                = get_var('bram_latency', 'defaults', defaults, varargin{:});
@@ -82,9 +85,10 @@ function pfb_fir_generic_init(blk, varargin)
   multiplier_implementation   = get_var('multiplier_implementation', 'defaults', defaults, varargin{:});
   coeffs_bram_optimization    = get_var('coeffs_bram_optimization', 'defaults', defaults, varargin{:});
   delays_bram_optimization    = get_var('delays_bram_optimization', 'defaults', defaults, varargin{:});
+  coeff_mem_type              = get_var('coeff_mem_type', 'defaults', defaults, varargin{:});
+  tap_mem_type                = get_var('tap_mem_type', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
-  
   
   % sanity check for old block that has not been updated for floating point
   if (strcmp(floating_point, 'on'))  
@@ -115,27 +119,25 @@ function pfb_fir_generic_init(blk, varargin)
       fixed_float_latency = 0; % Disable if floating point not selected
   end
   
-  
-  
   % default empty block for storage in library
   if TotalTaps == 0,
     clean_blocks(blk);
     set_param(blk, 'AttributesFormatString', '');
     save_state(blk, 'defaults', defaults, varargin{:});  % Save and back-populate mask parameter values
-    clog('exiting pfb_fir_generic_init','trace');
+    clog('exiting pfb_fir_generic_init', {log_group, 'trace'});
     return;
   end
-
+  
   %check parameters
   if TotalTaps < 3,
-    clog('need at least 3 taps', {'error', 'pfb_fir_generic_init_debug'});
-    error('need at least 3 taps');
+    clog('need at least 3 taps', {log_group, 'error'});
+    error('pfb_fir_generic_init: need at least 3 taps');
     return;
   end
     
   if strcmp(async, 'on') && fan_latency < 1,
-    clog('fanout latency must be at least 1 for asynchonrous operation', {'error', 'pfb_fir_generic_init_debug'});
-    error('fanout latency must be at least 1 for asynchonrous operation');
+    clog('fanout latency must be at least 1 for asynchonrous operation', {log_group, 'error'});
+    error('pfb_fir_generic_init: fanout latency must be at least 1 for asynchonrous operation');
     return;
   end
 
@@ -249,6 +251,7 @@ function pfb_fir_generic_init(blk, varargin)
           'fan_latency', num2str(fan_latency), ...
           'add_latency', num2str(add_latency), ...
           'bram_optimization', coeffs_bram_optimization, ...
+          'mem_type', coeff_mem_type, ...
           'Position', [285 33 380 197]);
   add_line(blk, 'bus_create/1', 'pfb_fir_coeff_gen/2'); 
 
@@ -296,6 +299,7 @@ function pfb_fir_generic_init(blk, varargin)
           'fan_latency', num2str(fan_latency), ...
           'multiplier_implementation', 'behavioral HDL', ...
           'bram_optimization', delays_bram_optimization, ...
+          'mem_type', tap_mem_type, ...
           'Position', [675 32 765 198]);
       
   add_line(blk, 'pfb_fir_coeff_gen/2', 'pfb_fir_taps/2');
@@ -363,9 +367,6 @@ function pfb_fir_generic_init(blk, varargin)
       add_line(blk, 'sync_delay/1', 'sync_out/1');
   end
 
-  
-
-
   % asynchronous infrastructure
 
   yoff = 115;
@@ -395,7 +396,7 @@ function pfb_fir_generic_init(blk, varargin)
   clean_blocks(blk);
   set_param(blk, 'AttributesFormatString', '');
   save_state(blk, 'defaults', defaults, varargin{:});  % Save and back-populate mask parameter values
-  clog('exiting pfb_fir_generic_init','trace');
+  clog('exiting pfb_fir_generic_init', {log_group, 'trace'});
 
 end % pfb_fir_generic_init
 
