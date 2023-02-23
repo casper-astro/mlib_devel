@@ -40,7 +40,7 @@ if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
 
 # The design that will be created by this Tcl script contains the following 
 # module references:
-# device_dna, dsp_send, serial_pipe
+# device_dna
 
 # Please add the sources of those modules before sourcing this Tcl script.
 
@@ -51,7 +51,7 @@ if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
 set list_projs [get_projects -quiet]
 if { $list_projs eq "" } {
    create_project project_1 myproj -part xcu50-fsvh2104-2-e
-   set_property BOARD_PART xilinx.com:au50:part0:1.2 [current_project]
+   set_property BOARD_PART xilinx.com:au50:part0:1.3 [current_project]
 }
 
 
@@ -145,7 +145,6 @@ xilinx.com:ip:hbm:1.0\
 xilinx.com:ip:rama:1.1\
 xilinx.com:ip:util_vector_logic:2.0\
 xilinx.com:ip:axis_clock_converter:1.1\
-xilinx.com:ip:axis_dwidth_converter:1.1\
 xilinx.com:ip:cmac_usplus:3.1\
 xilinx.com:ip:proc_sys_reset:5.0\
 user.org:user:udp_core_100g_ip:1.1\
@@ -176,8 +175,6 @@ set bCheckModules 1
 if { $bCheckModules == 1 } {
    set list_check_mods "\ 
 device_dna\
-dsp_send\
-serial_pipe\
 "
 
    set list_mods_missing ""
@@ -241,10 +238,6 @@ proc create_hier_cell_hgbe { parentCell nameHier } {
   current_bd_instance $hier_obj
 
   # Create interface pins
-  create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 M_AXIS
-
-  create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 M_AXIS1
-
   create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 M_AXIS_0
 
   create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 S_AXIS
@@ -275,42 +268,6 @@ proc create_hier_cell_hgbe { parentCell nameHier } {
    CONFIG.TUSER_WIDTH {32} \
  ] $axis_clock_converter_0
 
-  # Create instance: axis_clock_converter_1, and set properties
-  set axis_clock_converter_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axis_clock_converter:1.1 axis_clock_converter_1 ]
-  set_property -dict [ list \
-   CONFIG.HAS_TKEEP {1} \
-   CONFIG.HAS_TLAST {1} \
-   CONFIG.TID_WIDTH {8} \
-   CONFIG.TUSER_WIDTH {32} \
- ] $axis_clock_converter_1
-
-  # Create instance: axis_clock_converter_2, and set properties
-  set axis_clock_converter_2 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axis_clock_converter:1.1 axis_clock_converter_2 ]
-  set_property -dict [ list \
-   CONFIG.HAS_TKEEP {1} \
-   CONFIG.HAS_TLAST {1} \
-   CONFIG.TID_WIDTH {8} \
-   CONFIG.TUSER_WIDTH {32} \
- ] $axis_clock_converter_2
-
-  # Create instance: axis_clock_converter_3, and set properties
-  set axis_clock_converter_3 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axis_clock_converter:1.1 axis_clock_converter_3 ]
-  set_property -dict [ list \
-   CONFIG.HAS_TKEEP {1} \
-   CONFIG.HAS_TLAST {1} \
-   CONFIG.TID_WIDTH {0} \
-   CONFIG.TUSER_WIDTH {1} \
- ] $axis_clock_converter_3
-
-  # Create instance: axis_clock_converter_4, and set properties
-  set axis_clock_converter_4 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axis_clock_converter:1.1 axis_clock_converter_4 ]
-  set_property -dict [ list \
-   CONFIG.HAS_TKEEP {1} \
-   CONFIG.HAS_TLAST {1} \
-   CONFIG.TID_WIDTH {8} \
-   CONFIG.TUSER_WIDTH {32} \
- ] $axis_clock_converter_4
-
   # Create instance: axis_clock_converter_7, and set properties
   set axis_clock_converter_7 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axis_clock_converter:1.1 axis_clock_converter_7 ]
   set_property -dict [ list \
@@ -320,76 +277,6 @@ proc create_hier_cell_hgbe { parentCell nameHier } {
    CONFIG.TID_WIDTH {0} \
    CONFIG.TUSER_WIDTH {32} \
  ] $axis_clock_converter_7
-
-  # Create instance: axis_clock_converter_8, and set properties
-  set axis_clock_converter_8 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axis_clock_converter:1.1 axis_clock_converter_8 ]
-  set_property -dict [ list \
-   CONFIG.TDATA_NUM_BYTES {64} \
- ] $axis_clock_converter_8
-
-  # Create instance: axis_clock_converter_9, and set properties
-  set axis_clock_converter_9 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axis_clock_converter:1.1 axis_clock_converter_9 ]
-  set_property -dict [ list \
-   CONFIG.HAS_TKEEP {1} \
-   CONFIG.HAS_TLAST {1} \
-   CONFIG.TDATA_NUM_BYTES {64} \
-   CONFIG.TID_WIDTH {0} \
-   CONFIG.TUSER_WIDTH {0} \
- ] $axis_clock_converter_9
-
-  # Create instance: axis_dwidth_converter_1, and set properties
-  set axis_dwidth_converter_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axis_dwidth_converter:1.1 axis_dwidth_converter_1 ]
-  set_property -dict [ list \
-   CONFIG.HAS_MI_TKEEP {1} \
-   CONFIG.HAS_TKEEP {1} \
-   CONFIG.HAS_TLAST {1} \
-   CONFIG.M_TDATA_NUM_BYTES {64} \
-   CONFIG.TID_WIDTH {0} \
-   CONFIG.TUSER_BITS_PER_BYTE {0} \
- ] $axis_dwidth_converter_1
-
-  # Create instance: axis_dwidth_converter_2, and set properties
-  set axis_dwidth_converter_2 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axis_dwidth_converter:1.1 axis_dwidth_converter_2 ]
-  set_property -dict [ list \
-   CONFIG.HAS_MI_TKEEP {1} \
-   CONFIG.HAS_TKEEP {1} \
-   CONFIG.HAS_TLAST {1} \
-   CONFIG.M_TDATA_NUM_BYTES {64} \
-   CONFIG.TID_WIDTH {0} \
-   CONFIG.TUSER_BITS_PER_BYTE {0} \
- ] $axis_dwidth_converter_2
-
-  # Create instance: axis_dwidth_converter_4, and set properties
-  set axis_dwidth_converter_4 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axis_dwidth_converter:1.1 axis_dwidth_converter_4 ]
-  set_property -dict [ list \
-   CONFIG.HAS_MI_TKEEP {0} \
-   CONFIG.HAS_TKEEP {1} \
-   CONFIG.HAS_TLAST {1} \
-   CONFIG.M_TDATA_NUM_BYTES {8} \
-   CONFIG.S_TDATA_NUM_BYTES {64} \
-   CONFIG.TID_WIDTH {8} \
-   CONFIG.TUSER_BITS_PER_BYTE {0} \
- ] $axis_dwidth_converter_4
-
-  # Create instance: axis_dwidth_converter_5, and set properties
-  set axis_dwidth_converter_5 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axis_dwidth_converter:1.1 axis_dwidth_converter_5 ]
-  set_property -dict [ list \
-   CONFIG.HAS_MI_TKEEP {0} \
-   CONFIG.HAS_TKEEP {1} \
-   CONFIG.HAS_TLAST {1} \
-   CONFIG.M_TDATA_NUM_BYTES {8} \
-   CONFIG.S_TDATA_NUM_BYTES {64} \
-   CONFIG.TID_WIDTH {8} \
-   CONFIG.TUSER_BITS_PER_BYTE {0} \
- ] $axis_dwidth_converter_5
-
-  # Create instance: clk_wiz_1, and set properties
-  set clk_wiz_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wiz_1 ]
-  set_property -dict [ list \
-   CONFIG.CLKOUT1_JITTER {110.107} \
-   CONFIG.CLKOUT1_PHASE_ERROR {142.589} \
-   CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {200.0028} \
- ] $clk_wiz_1
 
   # Create instance: cmac_usplus_0, and set properties
   set cmac_usplus_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:cmac_usplus:3.1 cmac_usplus_0 ]
@@ -419,63 +306,19 @@ proc create_hier_cell_hgbe { parentCell nameHier } {
    CONFIG.USER_INTERFACE {AXIS} \
  ] $cmac_usplus_0
 
-  # Create instance: dsp_send_0, and set properties
-  set block_name dsp_send
-  set block_cell_name dsp_send_0
-  if { [catch {set dsp_send_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
-     catch {common::send_gid_msg -ssname BD::TCL -id 2095 -severity "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
-     return 1
-   } elseif { $dsp_send_0 eq "" } {
-     catch {common::send_gid_msg -ssname BD::TCL -id 2096 -severity "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
-     return 1
-   }
-  
   # Create instance: proc_sys_reset_0, and set properties
   set proc_sys_reset_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_0 ]
 
-  # Create instance: serial_pipe_0, and set properties
-  set block_name serial_pipe
-  set block_cell_name serial_pipe_0
-  if { [catch {set serial_pipe_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
-     catch {common::send_gid_msg -ssname BD::TCL -id 2095 -severity "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
-     return 1
-   } elseif { $serial_pipe_0 eq "" } {
-     catch {common::send_gid_msg -ssname BD::TCL -id 2096 -severity "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
-     return 1
-   }
-  
   # Create instance: udp_core_100g_ip_1, and set properties
   set udp_core_100g_ip_1 [ create_bd_cell -type ip -vlnv user.org:user:udp_core_100g_ip:1.1 udp_core_100g_ip_1 ]
   set_property -dict [ list \
-   CONFIG.G_CORE_FREQ_KHZ {2000028} \
-   CONFIG.G_EXT_CLK_FIFOS {true} \
+   CONFIG.G_CORE_FREQ_KHZ {322265625} \
+   CONFIG.G_EXT_CLK_FIFOS {false} \
+   CONFIG.G_INC_ETH {false} \
+   CONFIG.G_INC_IPV4 {false} \
    CONFIG.G_RX_INPUT_PIPE_STAGES {4} \
    CONFIG.G_UDP_CLK_FIFOS {true} \
  ] $udp_core_100g_ip_1
-
-  # Create instance: util_vector_logic_0, and set properties
-  set util_vector_logic_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:util_vector_logic:2.0 util_vector_logic_0 ]
-  set_property -dict [ list \
-   CONFIG.C_OPERATION {not} \
-   CONFIG.C_SIZE {1} \
-   CONFIG.LOGO_FILE {data/sym_notgate.png} \
- ] $util_vector_logic_0
-
-  # Create instance: util_vector_logic_1, and set properties
-  set util_vector_logic_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:util_vector_logic:2.0 util_vector_logic_1 ]
-  set_property -dict [ list \
-   CONFIG.C_OPERATION {not} \
-   CONFIG.C_SIZE {1} \
-   CONFIG.LOGO_FILE {data/sym_notgate.png} \
- ] $util_vector_logic_1
-
-  # Create instance: util_vector_logic_2, and set properties
-  set util_vector_logic_2 [ create_bd_cell -type ip -vlnv xilinx.com:ip:util_vector_logic:2.0 util_vector_logic_2 ]
-  set_property -dict [ list \
-   CONFIG.C_OPERATION {not} \
-   CONFIG.C_SIZE {1} \
-   CONFIG.LOGO_FILE {data/sym_notgate.png} \
- ] $util_vector_logic_2
 
   # Create instance: util_vector_logic_3, and set properties
   set util_vector_logic_3 [ create_bd_cell -type ip -vlnv xilinx.com:ip:util_vector_logic:2.0 util_vector_logic_3 ]
@@ -484,54 +327,6 @@ proc create_hier_cell_hgbe { parentCell nameHier } {
    CONFIG.C_SIZE {1} \
    CONFIG.LOGO_FILE {data/sym_notgate.png} \
  ] $util_vector_logic_3
-
-  # Create instance: util_vector_logic_4, and set properties
-  set util_vector_logic_4 [ create_bd_cell -type ip -vlnv xilinx.com:ip:util_vector_logic:2.0 util_vector_logic_4 ]
-  set_property -dict [ list \
-   CONFIG.C_OPERATION {not} \
-   CONFIG.C_SIZE {1} \
-   CONFIG.LOGO_FILE {data/sym_notgate.png} \
- ] $util_vector_logic_4
-
-  # Create instance: util_vector_logic_5, and set properties
-  set util_vector_logic_5 [ create_bd_cell -type ip -vlnv xilinx.com:ip:util_vector_logic:2.0 util_vector_logic_5 ]
-  set_property -dict [ list \
-   CONFIG.C_OPERATION {not} \
-   CONFIG.C_SIZE {1} \
-   CONFIG.LOGO_FILE {data/sym_notgate.png} \
- ] $util_vector_logic_5
-
-  # Create instance: util_vector_logic_6, and set properties
-  set util_vector_logic_6 [ create_bd_cell -type ip -vlnv xilinx.com:ip:util_vector_logic:2.0 util_vector_logic_6 ]
-  set_property -dict [ list \
-   CONFIG.C_OPERATION {not} \
-   CONFIG.C_SIZE {1} \
-   CONFIG.LOGO_FILE {data/sym_notgate.png} \
- ] $util_vector_logic_6
-
-  # Create instance: util_vector_logic_7, and set properties
-  set util_vector_logic_7 [ create_bd_cell -type ip -vlnv xilinx.com:ip:util_vector_logic:2.0 util_vector_logic_7 ]
-  set_property -dict [ list \
-   CONFIG.C_OPERATION {not} \
-   CONFIG.C_SIZE {1} \
-   CONFIG.LOGO_FILE {data/sym_notgate.png} \
- ] $util_vector_logic_7
-
-  # Create instance: util_vector_logic_8, and set properties
-  set util_vector_logic_8 [ create_bd_cell -type ip -vlnv xilinx.com:ip:util_vector_logic:2.0 util_vector_logic_8 ]
-  set_property -dict [ list \
-   CONFIG.C_OPERATION {and} \
-   CONFIG.C_SIZE {1} \
-   CONFIG.LOGO_FILE {data/sym_andgate.png} \
- ] $util_vector_logic_8
-
-  # Create instance: util_vector_logic_12, and set properties
-  set util_vector_logic_12 [ create_bd_cell -type ip -vlnv xilinx.com:ip:util_vector_logic:2.0 util_vector_logic_12 ]
-  set_property -dict [ list \
-   CONFIG.C_OPERATION {or} \
-   CONFIG.C_SIZE {1} \
-   CONFIG.LOGO_FILE {data/sym_orgate.png} \
- ] $util_vector_logic_12
 
   # Create instance: xlconstant_0, and set properties
   set xlconstant_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_0 ]
@@ -564,80 +359,31 @@ proc create_hier_cell_hgbe { parentCell nameHier } {
    CONFIG.RST_ACTIVE_HIGH {true} \
  ] $xpm_cdc_gen_1
 
-  # Create instance: xpm_cdc_gen_2, and set properties
-  set xpm_cdc_gen_2 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xpm_cdc_gen:1.0 xpm_cdc_gen_2 ]
-  set_property -dict [ list \
-   CONFIG.CDC_TYPE {xpm_cdc_async_rst} \
-   CONFIG.DEST_SYNC_FF {2} \
-   CONFIG.RST_ACTIVE_HIGH {true} \
- ] $xpm_cdc_gen_2
-
-  # Create instance: xpm_cdc_gen_3, and set properties
-  set xpm_cdc_gen_3 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xpm_cdc_gen:1.0 xpm_cdc_gen_3 ]
-  set_property -dict [ list \
-   CONFIG.CDC_TYPE {xpm_cdc_async_rst} \
-   CONFIG.DEST_SYNC_FF {2} \
-   CONFIG.RST_ACTIVE_HIGH {true} \
- ] $xpm_cdc_gen_3
-
   # Create interface connections
   connect_bd_intf_net -intf_net Conn1 [get_bd_intf_pins M_AXIS_0] [get_bd_intf_pins axis_clock_converter_0/M_AXIS]
   connect_bd_intf_net -intf_net Conn2 [get_bd_intf_pins S_AXIS_0] [get_bd_intf_pins axis_clock_converter_7/S_AXIS]
   connect_bd_intf_net -intf_net axi_interconnect_0_M00_AXI [get_bd_intf_pins axi4lite] [get_bd_intf_pins udp_core_100g_ip_1/axi4lite]
-  connect_bd_intf_net -intf_net axis_clock_converter_1_M_AXIS [get_bd_intf_pins axis_clock_converter_1/M_AXIS] [get_bd_intf_pins axis_dwidth_converter_4/S_AXIS]
-  connect_bd_intf_net -intf_net axis_clock_converter_2_M_AXIS [get_bd_intf_pins axis_clock_converter_2/M_AXIS] [get_bd_intf_pins axis_dwidth_converter_5/S_AXIS]
-  connect_bd_intf_net -intf_net axis_clock_converter_3_M_AXIS [get_bd_intf_pins axis_clock_converter_3/M_AXIS] [get_bd_intf_pins udp_core_100g_ip_1/rx_axis_s]
-  connect_bd_intf_net -intf_net axis_clock_converter_4_M_AXIS [get_bd_intf_pins axis_clock_converter_4/M_AXIS] [get_bd_intf_pins cmac_usplus_0/axis_tx]
   connect_bd_intf_net -intf_net axis_clock_converter_7_M_AXIS [get_bd_intf_pins axis_clock_converter_7/M_AXIS] [get_bd_intf_pins udp_core_100g_ip_1/udp_axis_s]
-  connect_bd_intf_net -intf_net axis_clock_converter_8_M_AXIS [get_bd_intf_pins axis_clock_converter_8/M_AXIS] [get_bd_intf_pins udp_core_100g_ip_1/ipv4_axis_s]
-  connect_bd_intf_net -intf_net axis_clock_converter_9_M_AXIS [get_bd_intf_pins axis_clock_converter_9/M_AXIS] [get_bd_intf_pins udp_core_100g_ip_1/eth_axis_s]
-  connect_bd_intf_net -intf_net axis_dwidth_converter_1_M_AXIS [get_bd_intf_pins axis_clock_converter_8/S_AXIS] [get_bd_intf_pins axis_dwidth_converter_1/M_AXIS]
-  connect_bd_intf_net -intf_net axis_dwidth_converter_2_M_AXIS [get_bd_intf_pins axis_clock_converter_9/S_AXIS] [get_bd_intf_pins axis_dwidth_converter_2/M_AXIS]
-  connect_bd_intf_net -intf_net axis_dwidth_converter_4_M_AXIS [get_bd_intf_pins M_AXIS] [get_bd_intf_pins axis_dwidth_converter_4/M_AXIS]
-  connect_bd_intf_net -intf_net axis_dwidth_converter_5_M_AXIS [get_bd_intf_pins M_AXIS1] [get_bd_intf_pins axis_dwidth_converter_5/M_AXIS]
-  connect_bd_intf_net -intf_net cmac_usplus_0_axis_rx [get_bd_intf_pins axis_clock_converter_3/S_AXIS] [get_bd_intf_pins cmac_usplus_0/axis_rx]
+  connect_bd_intf_net -intf_net cmac_usplus_0_axis_rx [get_bd_intf_pins cmac_usplus_0/axis_rx] [get_bd_intf_pins udp_core_100g_ip_1/rx_axis_s]
   connect_bd_intf_net -intf_net cmac_usplus_1_gt_serial_port [get_bd_intf_pins gt_serial_port_0] [get_bd_intf_pins cmac_usplus_0/gt_serial_port]
   connect_bd_intf_net -intf_net gt_ref_clk_0_1 [get_bd_intf_pins gt_ref_clk_0] [get_bd_intf_pins cmac_usplus_0/gt_ref_clk]
-  connect_bd_intf_net -intf_net udp_core_100g_ip_1_eth_axis_m [get_bd_intf_pins axis_clock_converter_2/S_AXIS] [get_bd_intf_pins udp_core_100g_ip_1/eth_axis_m]
-  connect_bd_intf_net -intf_net udp_core_100g_ip_1_ipv4_axis_m [get_bd_intf_pins axis_clock_converter_1/S_AXIS] [get_bd_intf_pins udp_core_100g_ip_1/ipv4_axis_m]
-  connect_bd_intf_net -intf_net udp_core_100g_ip_1_tx_axis_m [get_bd_intf_pins axis_clock_converter_4/S_AXIS] [get_bd_intf_pins udp_core_100g_ip_1/tx_axis_m]
+  connect_bd_intf_net -intf_net udp_core_100g_ip_1_tx_axis_m [get_bd_intf_pins cmac_usplus_0/axis_tx] [get_bd_intf_pins udp_core_100g_ip_1/tx_axis_m]
   connect_bd_intf_net -intf_net udp_core_100g_ip_1_udp_axis_m [get_bd_intf_pins axis_clock_converter_0/S_AXIS] [get_bd_intf_pins udp_core_100g_ip_1/udp_axis_m]
-  connect_bd_intf_net -intf_net xdma_0_M_AXIS_H2C_1 [get_bd_intf_pins S_AXIS] [get_bd_intf_pins axis_dwidth_converter_1/S_AXIS]
-  connect_bd_intf_net -intf_net xdma_0_M_AXIS_H2C_2 [get_bd_intf_pins S_AXIS1] [get_bd_intf_pins axis_dwidth_converter_2/S_AXIS]
 
   # Create port connections
-  connect_bd_net -net Net [get_bd_pins cmac_usplus_0/stat_rx_aligned] [get_bd_pins dsp_send_0/stat_rx_aligned] [get_bd_pins util_vector_logic_0/Op1]
-  connect_bd_net -net Net1 [get_bd_pins udp_core_100g_ip_1/rx_axis_s_rst] [get_bd_pins udp_core_100g_ip_1/tx_axis_m_rst] [get_bd_pins xpm_cdc_gen_3/dest_arst]
-  connect_bd_net -net Net2 [get_bd_pins serial_pipe_0/en] [get_bd_pins serial_pipe_0/rst_s_n] [get_bd_pins xlconstant_0/dout]
-  connect_bd_net -net axi4lite_aclk_0_1 [get_bd_pins s_axi_aclk] [get_bd_pins axis_clock_converter_1/m_axis_aclk] [get_bd_pins axis_clock_converter_2/m_axis_aclk] [get_bd_pins axis_clock_converter_8/s_axis_aclk] [get_bd_pins axis_clock_converter_9/s_axis_aclk] [get_bd_pins axis_dwidth_converter_1/aclk] [get_bd_pins axis_dwidth_converter_2/aclk] [get_bd_pins axis_dwidth_converter_4/aclk] [get_bd_pins axis_dwidth_converter_5/aclk] [get_bd_pins cmac_usplus_0/drp_clk] [get_bd_pins cmac_usplus_0/init_clk] [get_bd_pins proc_sys_reset_0/slowest_sync_clk] [get_bd_pins udp_core_100g_ip_1/axi4lite_aclk]
-  connect_bd_net -net axi4lite_aresetn_0_1 [get_bd_pins s_axi_areset_n] [get_bd_pins axis_clock_converter_1/m_axis_aresetn] [get_bd_pins axis_clock_converter_2/m_axis_aresetn] [get_bd_pins axis_clock_converter_8/s_axis_aresetn] [get_bd_pins axis_clock_converter_9/s_axis_aresetn] [get_bd_pins axis_dwidth_converter_1/aresetn] [get_bd_pins axis_dwidth_converter_2/aresetn] [get_bd_pins axis_dwidth_converter_4/aresetn] [get_bd_pins axis_dwidth_converter_5/aresetn] [get_bd_pins udp_core_100g_ip_1/axi4lite_aresetn] [get_bd_pins util_vector_logic_4/Op1] [get_bd_pins util_vector_logic_8/Op2]
-  connect_bd_net -net clk_wiz_0_clk_out1 [get_bd_pins axis_clock_converter_0/s_axis_aclk] [get_bd_pins axis_clock_converter_1/s_axis_aclk] [get_bd_pins axis_clock_converter_2/s_axis_aclk] [get_bd_pins axis_clock_converter_3/m_axis_aclk] [get_bd_pins axis_clock_converter_4/s_axis_aclk] [get_bd_pins axis_clock_converter_7/m_axis_aclk] [get_bd_pins axis_clock_converter_8/m_axis_aclk] [get_bd_pins axis_clock_converter_9/m_axis_aclk] [get_bd_pins clk_wiz_1/clk_out1] [get_bd_pins udp_core_100g_ip_1/eth_axis_m_clk] [get_bd_pins udp_core_100g_ip_1/eth_axis_s_clk] [get_bd_pins udp_core_100g_ip_1/ipv4_axis_m_clk] [get_bd_pins udp_core_100g_ip_1/ipv4_axis_s_clk] [get_bd_pins udp_core_100g_ip_1/rx_axis_s_clk] [get_bd_pins udp_core_100g_ip_1/rx_core_clk] [get_bd_pins udp_core_100g_ip_1/tx_axis_m_clk] [get_bd_pins udp_core_100g_ip_1/tx_core_clk] [get_bd_pins udp_core_100g_ip_1/udp_axis_m_clk] [get_bd_pins udp_core_100g_ip_1/udp_axis_s_clk] [get_bd_pins xpm_cdc_gen_2/dest_clk] [get_bd_pins xpm_cdc_gen_3/dest_clk]
-  connect_bd_net -net clk_wiz_0_locked [get_bd_pins sys_rst_n] [get_bd_pins axis_clock_converter_0/m_axis_aresetn] [get_bd_pins axis_clock_converter_7/s_axis_aresetn] [get_bd_pins util_vector_logic_8/Op1]
-  connect_bd_net -net cmac_usplus_0_gt_ref_clk_out [get_bd_pins clk_wiz_1/clk_in1] [get_bd_pins cmac_usplus_0/gt_ref_clk_out]
-  connect_bd_net -net cmac_usplus_0_gt_txusrclk2 [get_bd_pins axis_clock_converter_3/s_axis_aclk] [get_bd_pins axis_clock_converter_4/m_axis_aclk] [get_bd_pins cmac_usplus_0/gt_txusrclk2] [get_bd_pins cmac_usplus_0/rx_clk] [get_bd_pins dsp_send_0/clk] [get_bd_pins serial_pipe_0/clk] [get_bd_pins xpm_cdc_gen_1/dest_clk]
-  connect_bd_net -net cmac_usplus_1_usr_rx_reset1 [get_bd_pins cmac_usplus_0/usr_rx_reset] [get_bd_pins dsp_send_0/usr_rx_xr] [get_bd_pins util_vector_logic_7/Op1]
-  connect_bd_net -net cmac_usplus_1_usr_tx_reset [get_bd_pins cmac_usplus_0/usr_tx_reset] [get_bd_pins dsp_send_0/usr_tx_xr] [get_bd_pins util_vector_logic_5/Op1]
-  connect_bd_net -net dsp_send_0_core_xeset [get_bd_pins dsp_send_0/core_xeset] [get_bd_pins util_vector_logic_6/Op1]
-  connect_bd_net -net dsp_send_0_ctl_rx_exable [get_bd_pins cmac_usplus_0/ctl_rx_enable] [get_bd_pins dsp_send_0/ctl_rx_exable]
-  connect_bd_net -net dsp_send_0_ctl_tx_exable [get_bd_pins cmac_usplus_0/ctl_tx_enable] [get_bd_pins dsp_send_0/ctl_tx_exable]
-  connect_bd_net -net dsp_send_0_ctl_tx_send_rfi [get_bd_pins cmac_usplus_0/ctl_tx_send_rfi] [get_bd_pins dsp_send_0/ctl_tx_send_rfi]
-  connect_bd_net -net proc_sys_reset_0_peripheral_reset [get_bd_pins proc_sys_reset_0/peripheral_reset] [get_bd_pins util_vector_logic_12/Op2]
+  connect_bd_net -net axi4lite_aclk_0_1 [get_bd_pins s_axi_aclk] [get_bd_pins cmac_usplus_0/drp_clk] [get_bd_pins cmac_usplus_0/init_clk] [get_bd_pins proc_sys_reset_0/slowest_sync_clk] [get_bd_pins udp_core_100g_ip_1/axi4lite_aclk]
+  connect_bd_net -net axi4lite_aresetn_0_1 [get_bd_pins s_axi_areset_n] [get_bd_pins proc_sys_reset_0/ext_reset_in] [get_bd_pins udp_core_100g_ip_1/axi4lite_aresetn]
+  connect_bd_net -net clk_wiz_0_locked [get_bd_pins sys_rst_n] [get_bd_pins axis_clock_converter_0/m_axis_aresetn] [get_bd_pins axis_clock_converter_7/s_axis_aresetn]
+  connect_bd_net -net cmac_usplus_0_gt_txusrclk2 [get_bd_pins axis_clock_converter_0/s_axis_aclk] [get_bd_pins axis_clock_converter_7/m_axis_aclk] [get_bd_pins cmac_usplus_0/gt_txusrclk2] [get_bd_pins cmac_usplus_0/rx_clk] [get_bd_pins udp_core_100g_ip_1/eth_axis_m_clk] [get_bd_pins udp_core_100g_ip_1/eth_axis_s_clk] [get_bd_pins udp_core_100g_ip_1/ipv4_axis_m_clk] [get_bd_pins udp_core_100g_ip_1/ipv4_axis_s_clk] [get_bd_pins udp_core_100g_ip_1/rx_axis_s_clk] [get_bd_pins udp_core_100g_ip_1/rx_core_clk] [get_bd_pins udp_core_100g_ip_1/tx_axis_m_clk] [get_bd_pins udp_core_100g_ip_1/tx_core_clk] [get_bd_pins udp_core_100g_ip_1/udp_axis_m_clk] [get_bd_pins udp_core_100g_ip_1/udp_axis_s_clk] [get_bd_pins xpm_cdc_gen_1/dest_clk]
+  connect_bd_net -net cmac_usplus_1_usr_tx_reset [get_bd_pins cmac_usplus_0/usr_tx_reset] [get_bd_pins xpm_cdc_gen_1/src_arst]
+  connect_bd_net -net proc_sys_reset_0_peripheral_reset [get_bd_pins cmac_usplus_0/sys_reset] [get_bd_pins proc_sys_reset_0/peripheral_reset]
   connect_bd_net -net s_axis_aclk_1 [get_bd_pins s_axis_aclk] [get_bd_pins axis_clock_converter_0/m_axis_aclk] [get_bd_pins axis_clock_converter_7/s_axis_aclk]
-  connect_bd_net -net serial_pipe_0_serial_out [get_bd_pins serial_pipe_0/serial_out] [get_bd_pins xpm_cdc_gen_3/src_arst]
-  connect_bd_net -net util_vector_logic_0_Res [get_bd_pins serial_pipe_0/serial_in] [get_bd_pins util_vector_logic_0/Res]
-  connect_bd_net -net util_vector_logic_12_Res [get_bd_pins clk_wiz_1/reset] [get_bd_pins cmac_usplus_0/sys_reset] [get_bd_pins util_vector_logic_1/Op1] [get_bd_pins util_vector_logic_12/Res]
-  connect_bd_net -net util_vector_logic_2_Res [get_bd_pins axis_clock_converter_0/s_axis_aresetn] [get_bd_pins axis_clock_converter_1/s_axis_aresetn] [get_bd_pins axis_clock_converter_2/s_axis_aresetn] [get_bd_pins axis_clock_converter_3/m_axis_aresetn] [get_bd_pins axis_clock_converter_4/s_axis_aresetn] [get_bd_pins axis_clock_converter_7/m_axis_aresetn] [get_bd_pins axis_clock_converter_8/m_axis_aresetn] [get_bd_pins axis_clock_converter_9/m_axis_aresetn] [get_bd_pins udp_core_100g_ip_1/eth_axis_m_reset] [get_bd_pins udp_core_100g_ip_1/eth_axis_s_reset] [get_bd_pins udp_core_100g_ip_1/ipv4_axis_m_reset] [get_bd_pins udp_core_100g_ip_1/ipv4_axis_s_reset] [get_bd_pins util_vector_logic_3/Res]
-  connect_bd_net -net util_vector_logic_2_Res1 [get_bd_pins util_vector_logic_2/Res] [get_bd_pins xpm_cdc_gen_2/src_arst]
-  connect_bd_net -net util_vector_logic_4_Res [get_bd_pins util_vector_logic_12/Op1] [get_bd_pins util_vector_logic_4/Res] [get_bd_pins xpm_cdc_gen_1/src_arst]
-  connect_bd_net -net util_vector_logic_5_Res [get_bd_pins axis_clock_converter_4/m_axis_aresetn] [get_bd_pins util_vector_logic_5/Res]
-  connect_bd_net -net util_vector_logic_6_Res [get_bd_pins proc_sys_reset_0/ext_reset_in] [get_bd_pins util_vector_logic_6/Res]
-  connect_bd_net -net util_vector_logic_7_Res [get_bd_pins axis_clock_converter_3/s_axis_aresetn] [get_bd_pins util_vector_logic_7/Res]
-  connect_bd_net -net util_vector_logic_8_Res [get_bd_pins util_vector_logic_2/Op1] [get_bd_pins util_vector_logic_8/Res]
+  connect_bd_net -net util_vector_logic_2_Res [get_bd_pins axis_clock_converter_0/s_axis_aresetn] [get_bd_pins axis_clock_converter_7/m_axis_aresetn] [get_bd_pins udp_core_100g_ip_1/eth_axis_m_reset] [get_bd_pins udp_core_100g_ip_1/eth_axis_s_reset] [get_bd_pins udp_core_100g_ip_1/ipv4_axis_m_reset] [get_bd_pins udp_core_100g_ip_1/ipv4_axis_s_reset] [get_bd_pins util_vector_logic_3/Res]
+  connect_bd_net -net xlconstant_0_dout [get_bd_pins cmac_usplus_0/ctl_rx_enable] [get_bd_pins cmac_usplus_0/ctl_tx_enable] [get_bd_pins xlconstant_0/dout]
   connect_bd_net -net xlconstant_3_dout [get_bd_pins udp_core_100g_ip_1/use_ext_addr] [get_bd_pins xlconstant_3/dout]
   connect_bd_net -net xlconstant_4_dout [get_bd_pins udp_core_100g_ip_1/ext_ip_addr] [get_bd_pins xlconstant_4/dout]
   connect_bd_net -net xlconstant_6_dout [get_bd_pins udp_core_100g_ip_1/ext_mac_addr] [get_bd_pins xlconstant_6/dout]
-  connect_bd_net -net xpm_cdc_gen_1_dest_arst [get_bd_pins dsp_send_0/xst] [get_bd_pins xpm_cdc_gen_1/dest_arst]
-  connect_bd_net -net xpm_cdc_gen_2_dest_arst [get_bd_pins udp_core_100g_ip_1/udp_axis_m_reset] [get_bd_pins udp_core_100g_ip_1/udp_axis_s_reset] [get_bd_pins util_vector_logic_3/Op1] [get_bd_pins xpm_cdc_gen_2/dest_arst]
+  connect_bd_net -net xpm_cdc_gen_1_dest_arst [get_bd_pins udp_core_100g_ip_1/rx_axis_s_rst] [get_bd_pins udp_core_100g_ip_1/tx_axis_m_rst] [get_bd_pins udp_core_100g_ip_1/udp_axis_m_reset] [get_bd_pins udp_core_100g_ip_1/udp_axis_s_reset] [get_bd_pins util_vector_logic_3/Op1] [get_bd_pins xpm_cdc_gen_1/dest_arst]
 
   # Restore current instance
   current_bd_instance $oldCurInst
@@ -771,16 +517,16 @@ proc create_hier_cell_hbm { parentCell nameHier } {
   # Create instance: hbm_0, and set properties
   set hbm_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:hbm:1.0 hbm_0 ]
   set_property -dict [ list \
-   CONFIG.HBM_MMCM1_FBOUT_MULT0 {15} \
-   CONFIG.HBM_MMCM_FBOUT_MULT0 {15} \
-   CONFIG.USER_AXI_INPUT_CLK1_FREQ {240} \
-   CONFIG.USER_AXI_INPUT_CLK1_NS {4.167} \
-   CONFIG.USER_AXI_INPUT_CLK1_PS {4166} \
-   CONFIG.USER_AXI_INPUT_CLK1_XDC {4.167} \
-   CONFIG.USER_AXI_INPUT_CLK_FREQ {240} \
-   CONFIG.USER_AXI_INPUT_CLK_NS {4.167} \
-   CONFIG.USER_AXI_INPUT_CLK_PS {4166} \
-   CONFIG.USER_AXI_INPUT_CLK_XDC {4.167} \
+   CONFIG.HBM_MMCM1_FBOUT_MULT0 {45} \
+   CONFIG.HBM_MMCM_FBOUT_MULT0 {45} \
+   CONFIG.USER_AXI_INPUT_CLK1_FREQ {160} \
+   CONFIG.USER_AXI_INPUT_CLK1_NS {6.250} \
+   CONFIG.USER_AXI_INPUT_CLK1_PS {6250} \
+   CONFIG.USER_AXI_INPUT_CLK1_XDC {6.250} \
+   CONFIG.USER_AXI_INPUT_CLK_FREQ {160} \
+   CONFIG.USER_AXI_INPUT_CLK_NS {6.250} \
+   CONFIG.USER_AXI_INPUT_CLK_PS {6250} \
+   CONFIG.USER_AXI_INPUT_CLK_XDC {6.250} \
    CONFIG.USER_CLK_SEL_LIST0 {AXI_01_ACLK} \
    CONFIG.USER_CLK_SEL_LIST1 {AXI_17_ACLK} \
    CONFIG.USER_DEBUG_EN {FALSE} \
@@ -1050,11 +796,11 @@ proc create_hier_cell_DNA_reg { parentCell nameHier } {
    CONFIG.C_ALL_INPUTS {1} \
    CONFIG.C_ALL_INPUTS_2 {1} \
    CONFIG.C_ALL_OUTPUTS_2 {0} \
-   CONFIG.C_DOUT_DEFAULT {0xC0FFEE09} \
+   CONFIG.C_DOUT_DEFAULT {0x00000000} \
    CONFIG.C_DOUT_DEFAULT_2 {0x00000000} \
    CONFIG.C_GPIO2_WIDTH {32} \
    CONFIG.C_IS_DUAL {1} \
-   CONFIG.C_TRI_DEFAULT {0xDECADE09} \
+   CONFIG.C_TRI_DEFAULT {0xFFFFFFFF} \
    CONFIG.GPIO2_BOARD_INTERFACE {Custom} \
    CONFIG.USE_BOARD_FLOW {true} \
  ] $axi_gpio_1
@@ -1495,48 +1241,48 @@ proc create_root_design { parentCell } {
   # Create instance: clk_wiz_0, and set properties
   set clk_wiz_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wiz_0 ]
   set_property -dict [ list \
-   CONFIG.CLKOUT1_JITTER {98.767} \
-   CONFIG.CLKOUT1_PHASE_ERROR {87.180} \
-   CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {240} \
-   CONFIG.CLKOUT2_JITTER {98.767} \
-   CONFIG.CLKOUT2_PHASE_ERROR {87.180} \
-   CONFIG.CLKOUT2_REQUESTED_OUT_FREQ {240} \
+   CONFIG.CLKOUT1_JITTER {202.092} \
+   CONFIG.CLKOUT1_PHASE_ERROR {303.392} \
+   CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {160} \
+   CONFIG.CLKOUT2_JITTER {202.092} \
+   CONFIG.CLKOUT2_PHASE_ERROR {303.392} \
+   CONFIG.CLKOUT2_REQUESTED_OUT_FREQ {160} \
    CONFIG.CLKOUT2_REQUESTED_PHASE {90} \
    CONFIG.CLKOUT2_USED {true} \
-   CONFIG.CLKOUT3_JITTER {98.767} \
-   CONFIG.CLKOUT3_PHASE_ERROR {87.180} \
-   CONFIG.CLKOUT3_REQUESTED_OUT_FREQ {240} \
+   CONFIG.CLKOUT3_JITTER {202.092} \
+   CONFIG.CLKOUT3_PHASE_ERROR {303.392} \
+   CONFIG.CLKOUT3_REQUESTED_OUT_FREQ {160} \
    CONFIG.CLKOUT3_REQUESTED_PHASE {180} \
    CONFIG.CLKOUT3_USED {true} \
-   CONFIG.CLKOUT4_JITTER {98.767} \
-   CONFIG.CLKOUT4_PHASE_ERROR {87.180} \
-   CONFIG.CLKOUT4_REQUESTED_OUT_FREQ {240} \
+   CONFIG.CLKOUT4_JITTER {202.092} \
+   CONFIG.CLKOUT4_PHASE_ERROR {303.392} \
+   CONFIG.CLKOUT4_REQUESTED_OUT_FREQ {160} \
    CONFIG.CLKOUT4_REQUESTED_PHASE {270} \
    CONFIG.CLKOUT4_USED {true} \
-   CONFIG.CLKOUT5_JITTER {98.767} \
-   CONFIG.CLKOUT5_PHASE_ERROR {87.180} \
-   CONFIG.CLKOUT5_REQUESTED_OUT_FREQ {240} \
+   CONFIG.CLKOUT5_JITTER {202.092} \
+   CONFIG.CLKOUT5_PHASE_ERROR {303.392} \
+   CONFIG.CLKOUT5_REQUESTED_OUT_FREQ {160} \
    CONFIG.CLKOUT5_USED {true} \
-   CONFIG.CLKOUT6_JITTER {98.767} \
-   CONFIG.CLKOUT6_PHASE_ERROR {87.180} \
-   CONFIG.CLKOUT6_REQUESTED_OUT_FREQ {240} \
+   CONFIG.CLKOUT6_JITTER {202.092} \
+   CONFIG.CLKOUT6_PHASE_ERROR {303.392} \
+   CONFIG.CLKOUT6_REQUESTED_OUT_FREQ {160} \
    CONFIG.CLKOUT6_USED {true} \
    CONFIG.CLK_IN1_BOARD_INTERFACE {cmc_clk} \
    CONFIG.CLK_IN2_BOARD_INTERFACE {Custom} \
    CONFIG.ENABLE_CLOCK_MONITOR {false} \
-   CONFIG.MMCM_CLKFBOUT_MULT_F {12.000} \
+   CONFIG.MMCM_CLKFBOUT_MULT_F {56.000} \
    CONFIG.MMCM_CLKIN1_PERIOD {10.000} \
    CONFIG.MMCM_CLKIN2_PERIOD {10.000} \
-   CONFIG.MMCM_CLKOUT0_DIVIDE_F {5.000} \
-   CONFIG.MMCM_CLKOUT1_DIVIDE {5} \
+   CONFIG.MMCM_CLKOUT0_DIVIDE_F {7.000} \
+   CONFIG.MMCM_CLKOUT1_DIVIDE {7} \
    CONFIG.MMCM_CLKOUT1_PHASE {90.000} \
-   CONFIG.MMCM_CLKOUT2_DIVIDE {5} \
+   CONFIG.MMCM_CLKOUT2_DIVIDE {7} \
    CONFIG.MMCM_CLKOUT2_PHASE {180.000} \
-   CONFIG.MMCM_CLKOUT3_DIVIDE {5} \
+   CONFIG.MMCM_CLKOUT3_DIVIDE {7} \
    CONFIG.MMCM_CLKOUT3_PHASE {270.000} \
-   CONFIG.MMCM_CLKOUT4_DIVIDE {5} \
-   CONFIG.MMCM_CLKOUT5_DIVIDE {5} \
-   CONFIG.MMCM_DIVCLK_DIVIDE {1} \
+   CONFIG.MMCM_CLKOUT4_DIVIDE {7} \
+   CONFIG.MMCM_CLKOUT5_DIVIDE {7} \
+   CONFIG.MMCM_DIVCLK_DIVIDE {5} \
    CONFIG.NUM_OUT_CLKS {6} \
    CONFIG.PRIMITIVE {MMCM} \
    CONFIG.PRIM_SOURCE {Differential_clock_capable_pin} \
@@ -1621,8 +1367,6 @@ proc create_root_design { parentCell } {
   connect_bd_intf_net -intf_net axi_interconnect_0_M05_AXI [get_bd_intf_pins axi_interconnect_0/M05_AXI] [get_bd_intf_pins hbm/S_AXI]
   connect_bd_intf_net -intf_net axi_interconnect_0_M06_AXI [get_bd_intf_pins axi_interconnect_0/M06_AXI] [get_bd_intf_pins hbm/S_AXI1]
   connect_bd_intf_net -intf_net axi_interconnect_0_M07_AXI [get_bd_intf_pins DNA_reg/S_AXI] [get_bd_intf_pins axi_interconnect_0/M07_AXI]
-  connect_bd_intf_net -intf_net axis_dwidth_converter_4_M_AXIS [get_bd_intf_pins hgbe/M_AXIS] [get_bd_intf_pins xdma_0/S_AXIS_C2H_1]
-  connect_bd_intf_net -intf_net axis_dwidth_converter_5_M_AXIS [get_bd_intf_pins hgbe/M_AXIS1] [get_bd_intf_pins xdma_0/S_AXIS_C2H_2]
   connect_bd_intf_net -intf_net cmac_usplus_1_gt_serial_port [get_bd_intf_ports gt_serial_port_0] [get_bd_intf_pins hgbe/gt_serial_port_0]
   connect_bd_intf_net -intf_net cmc_clk_1 [get_bd_intf_ports cmc_clk] [get_bd_intf_pins clk_wiz_0/CLK_IN1_D]
   connect_bd_intf_net -intf_net cms_subsystem_0_satellite_uart [get_bd_intf_ports satellite_uart_0] [get_bd_intf_pins cms_subsystem_0/satellite_uart]
