@@ -712,7 +712,8 @@ class onehundredgbe_alveo(onehundred_gbe):
         # For partial reconfig, it is useful to have statically-named top-level ports
         # which don't depend on model name. Generate a prefix which will probably
         # be unique
-        self.portbase = '{blocktype}{port}'.format(blocktype=self.blocktype, port=self.port)
+        # currently the au50 doesnt support multiple 100gbe ports, relook at this is the au280 is ever supported
+        #self.portbase = '{blocktype}{port}'.format(blocktype=self.blocktype, port=self.port)
 
         try:
             ethconf = self.platform.conf["onehundredgbe"]
