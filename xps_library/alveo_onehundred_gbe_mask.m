@@ -90,6 +90,8 @@ for ctr = 1 : length(gateway_outs)
         set_param(gw, 'Name', clear_name([cursys, '_tx_byte_en']));
     elseif regexp(get_param(gw, 'Name'), '_tx_src_port$')
         set_param(gw, 'Name', clear_name([cursys, '_tx_src_port']));
+    elseif regexp(get_param(gw, 'Name'), '_tx_ip_index$')
+        set_param(gw, 'Name', clear_name([cursys, '_tx_ip_index']));
     elseif regexp(get_param(gw, 'Name'), '_tx_valid$')
         set_param(gw, 'Name', clear_name([cursys, '_tx_valid']));
     elseif regexp(get_param(gw, 'Name'), '_rx_ack$')

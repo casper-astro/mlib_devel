@@ -274,7 +274,7 @@ proc create_hier_cell_hgbe { parentCell nameHier } {
    CONFIG.HAS_TKEEP {1} \
    CONFIG.HAS_TLAST {1} \
    CONFIG.TDATA_NUM_BYTES {64} \
-   CONFIG.TID_WIDTH {0} \
+   CONFIG.TID_WIDTH {8} \
    CONFIG.TUSER_WIDTH {32} \
  ] $axis_clock_converter_7
 
@@ -905,8 +905,8 @@ proc create_root_design { parentCell } {
    CONFIG.LAYERED_METADATA {undef} \
    CONFIG.TDATA_NUM_BYTES {64} \
    CONFIG.TDEST_WIDTH {0} \
-   CONFIG.TID_WIDTH {0} \
-   CONFIG.TUSER_WIDTH {0} \
+   CONFIG.TID_WIDTH {8} \
+   CONFIG.TUSER_WIDTH {32} \
    ] $S_AXIS_0
 
   set cmc_clk [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 cmc_clk ]

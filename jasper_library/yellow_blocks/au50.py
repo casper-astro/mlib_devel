@@ -91,6 +91,7 @@ class au50(YellowBlock):
         #inst.add_port('S_AXIS_0_tid',    'S_AXIS_0_tid',    dir='out', width=8)
         inst.add_port('S_AXIS_0_tlast',  'S_AXIS_0_tlast',  dir='out', width=1)
         inst.add_port('S_AXIS_0_tready', 'S_AXIS_0_tready', dir='out', width=1)
+        inst.add_port('S_AXIS_0_tid',    'S_AXIS_0_tid',    dir='out', width=8)
         inst.add_port('S_AXIS_0_tvalid', 'S_AXIS_0_tvalid', dir='in',  width=1)
 
         top.assign_signal('user_rst', '!sys_rst_n')

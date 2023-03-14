@@ -762,6 +762,7 @@ class onehundredgbe_alveo(onehundred_gbe):
         top.assign_signal('%s_tx_dest_port' %self.fullname,       'S_AXIS_0_tuser[31:16]')
         top.assign_signal('%s_tx_src_port' %self.fullname,        'S_AXIS_0_tuser[15:0]')
         top.assign_signal('%s_tx_ack' %self.fullname,             'S_AXIS_0_tready')
+        top.assign_signal('%s_tx_ip_index' %self.fullname,        'S_AXIS_0_tid')
         
         top.assign_signal('%s_rx_data' %self.fullname,            'M_AXIS_0_tdata')
         top.assign_signal('%s_rx_valid' %self.fullname,           'M_AXIS_0_tvalid')
