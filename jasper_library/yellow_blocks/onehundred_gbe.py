@@ -11,7 +11,7 @@ class onehundred_gbe(YellowBlock):
     def factory(blk, plat, hdl_root=None):
         if plat.name in ['vcu118', 'vcu128'] or plat.conf.get('family', None) in ["ultrascaleplus"]:
             return onehundredgbe_usplus(blk, plat, hdl_root)
-        if plat.name in ['au50'] or plat.conf.get('family', None) in ["ultrascaleplus"]:
+        if plat.name in ['au50'] or plat.name in ['au280'] or plat.conf.get('family', None) in ["ultrascaleplus"]:
             return onehundredgbe_alveo(blk, plat, hdl_root)
         else:
             raise RuntimeError("Don't know how to implement 100GbE for this board/FPGA")

@@ -147,7 +147,7 @@ xilinx.com:ip:util_vector_logic:2.0\
 xilinx.com:ip:axis_clock_converter:1.1\
 xilinx.com:ip:cmac_usplus:3.1\
 xilinx.com:ip:proc_sys_reset:5.0\
-user.org:user:udp_core_100g_ip:1.1\
+user.org:user:udp_core_100g_ip:1.0\
 xilinx.com:ip:xlconstant:1.1\
 "
 
@@ -310,7 +310,7 @@ proc create_hier_cell_hgbe { parentCell nameHier } {
   set proc_sys_reset_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_0 ]
 
   # Create instance: udp_core_100g_ip_1, and set properties
-  set udp_core_100g_ip_1 [ create_bd_cell -type ip -vlnv user.org:user:udp_core_100g_ip:1.1 udp_core_100g_ip_1 ]
+  set udp_core_100g_ip_1 [ create_bd_cell -type ip -vlnv user.org:user:udp_core_100g_ip:1.0 udp_core_100g_ip_1 ]
   set_property -dict [ list \
    CONFIG.G_CORE_FREQ_KHZ {322265625} \
    CONFIG.G_EXT_CLK_FIFOS {false} \
