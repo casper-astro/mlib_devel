@@ -36,7 +36,8 @@ function pfb_fir_coeff_gen_init(blk, varargin)
     'fan_latency', 2, ...
     'add_latency', 1, ...
     'max_fanout', 1, ...
-    'bram_optimization', 'Area', ...
+    'bram_optimization', 'Area', ... %'Speed'
+    'mem_type', 'Block RAM', ... %'Ultra RAM'
   };
   
   check_mask_type(blk, 'pfb_fir_coeff_gen');
@@ -58,6 +59,7 @@ function pfb_fir_coeff_gen_init(blk, varargin)
   add_latency                 = get_var('add_latency', 'defaults', defaults, varargin{:});
   max_fanout                  = get_var('max_fanout', 'defaults', defaults, varargin{:});
   bram_optimization           = get_var('bram_optimization', 'defaults', defaults, varargin{:});
+  mem_type                    = get_var('mem_type', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
 
@@ -83,7 +85,7 @@ function pfb_fir_coeff_gen_init(blk, varargin)
     return;
   end
     
-  %get hardware platform from XSG block
+  % get hardware platform from XSG block
   try
     xsg_blk = find_system(bdroot, 'SearchDepth', 1,'FollowLinks','on','LookUnderMasks','all','Tag','xps:xsg');
     hw_sys = xps_get_hw_plat(get_param(xsg_blk{1},'hw_sys'));
@@ -102,7 +104,7 @@ function pfb_fir_coeff_gen_init(blk, varargin)
   end %switch
 
   yoff = 226;
-
+  
   %%%%%%%%%%%%%%%%%
   % sync pipeline %
   %%%%%%%%%%%%%%%%%
@@ -172,7 +174,7 @@ function pfb_fir_coeff_gen_init(blk, varargin)
           'bin_pts', mat2str(repmat(n_bits_coeff-1, 1, outputs_required)), ...
           'init_vector', ['[', init_vector, ']'], ...
           'max_fanout', num2str(max_fanout), ...
-          'mem_type', 'Block RAM', 'bram_optimization', bram_optimization, ...
+          'mem_type', mem_type, 'bram_optimization', bram_optimization, ...
           'async_a', 'off', 'async_b', 'off', 'misc', 'off', ...
           'bram_latency', num2str(bram_latency), ...
           'fan_latency', num2str(fan_latency), ...
