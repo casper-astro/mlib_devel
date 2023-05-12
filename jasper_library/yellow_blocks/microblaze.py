@@ -49,6 +49,7 @@ class microblaze(YellowBlock):
         else:
             self.memfile = 'executable.mem'
             self.blkdiagram = 'microblaze_wb.tcl'
+            self.include_spi_ports = True
 
         #self.add_source('microblaze_wb/%s' % self.elf)
         self.ips = [{'path':'%s/axi_wb_bridge/ip_repo' % env['HDL_ROOT'],

@@ -61,7 +61,7 @@ The ``sync_gen`` block computes the sync pulse period as:
 |SyncPeriod|
 
 This formula is derived in `Memo
-#25 <http://casper.berkeley.edu/memos/sync_memo_v1.pdf>`__.
+#25 <https://github.com/casper-astro/publications/blob/master/Memos/files/sync_memo_v1.pdf>`__.
 
 .. |SyncPeriod| image:: ../../_static/img/sync_period.png
    :class: tex
