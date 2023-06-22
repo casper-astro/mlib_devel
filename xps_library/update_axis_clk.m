@@ -61,7 +61,7 @@ function [] = update_axis_clk(gcb,tile)
     end
 
   % DAC case
-  elseif ~(~QuadTile && tile > 229)
+  elseif ~(~QuadTile && tile > 231)
     for a = dac_slices
       % determine choices for samples per clock
       if (gen < 2)

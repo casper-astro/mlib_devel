@@ -9,7 +9,7 @@ function [] = enable_dac_opt(gcb,tile,slicenum)
     prefix = 'DT';
   end
 
-  if ~(strcmp(tile_arch, 'dual') && (tile > 229))
+  if ~(strcmp(tile_arch, 'dual') && (tile > 231))
     DataDialog   = msk.getDialogControl(['t', num2str(tile), '_', prefix, '_dac', num2str(slicenum), '_DataSettings']);
     MixerDialog  = msk.getDialogControl(['t', num2str(tile), '_', prefix, '_dac', num2str(slicenum), '_MixerSettings']);
     AnalogDialog = msk.getDialogControl(['t', num2str(tile), '_', prefix, '_dac', num2str(slicenum), '_AnalogSettings']);

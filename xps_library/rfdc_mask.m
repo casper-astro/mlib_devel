@@ -51,7 +51,7 @@ function [] = rfdc_mask(gcb,force)
 
   msk = Simulink.Mask.get(gcb);
 
-  [gen, tile_arch, fs_max, fs_min] = get_rfsoc_properties(gcb);
+  [gen, adc_tile_arch, dac_tile_arch, adc_num_tile, dac_num_tile, fs_max, fs_min] = get_rfsoc_properties(gcb);
 
   adcbits = 16;
   gw_arith_type = 'Signed';
@@ -63,16 +63,30 @@ function [] = rfdc_mask(gcb,force)
   adc_gate = 1;
   dac_gate = 0;
 
-  if strcmp(tile_arch, 'quad')
-    adc_slices = 0:3;
-    dac_slices = 0:3;
+% ADC tile/slices configuration
+  if strcmp(adc_tile_arch, 'quad')
     prefix = 'QT';
-    QuadTile = 1;
-  elseif strcmp(tile_arch, 'dual')
-    adc_slices = 0:1;
-    dac_slices = 0:3;
+    adc_slices = 0:3;
+  elseif strcmp(adc_tile_arch, 'dual')
     prefix = 'DT';
-    QuadTile = 0;
+    adc_slices = 0:1;
+  end
+
+% DAC tiles/slices configuration
+  if strcmp(dac_tile_arch, 'quad')
+    dac_slices = 0:3;
+    if (dac_num_tile == 4)
+        Four_Tiles = 1;
+    elseif (dac_num_tile == 2)
+        Four_Tiles = 0;
+    end
+  elseif strcmp(dac_tile_arch, 'dual')
+    dac_slices = 0:1;
+    if (dac_num_tile == 4)
+        Four_Tiles = 1;
+    elseif (dac_num_tile == 2)
+        Four_Tiles = 0;
+    end
   end
 
   %for each tile check tile number and change visibility
@@ -80,7 +94,7 @@ function [] = rfdc_mask(gcb,force)
   %tiles represents all 8 tiles in order, 1 is on, 0 is off
   tiles = zeros(8,1);
   %DT config only has 2 DAC tiles
-  if QuadTile
+  if Four_Tiles
     lastTile = 231;
   else
     lastTile = 229;
@@ -125,12 +139,12 @@ function [] = rfdc_mask(gcb,force)
   end
 
   % check if the state has changed
-  if ~same_state(gcb,'Tiles',tiles,'Slices',slices,'TileArch',tile_arch) || force
+  if ~same_state(gcb,'Tiles',tiles,'Slices',slices,'ADCTileArch',adc_tile_arch,'DACTileArch',dac_tile_arch) || force
     for tile = 224:231
       QTConf = msk.getDialogControl(sprintf('t%d_QuadTileConfig',tile));
       DTConf = msk.getDialogControl(sprintf('t%d_DualTileConfig',tile));
       SystemClocking = msk.getDialogControl('SystemClocking');
-      if QuadTile
+      if strcmp(adc_tile_arch, 'quad')
         QTConf.Visible = 'on';
         DTConf.Visible = 'off';
       else
@@ -142,18 +156,25 @@ function [] = rfdc_mask(gcb,force)
       else
           SystemClocking.Visible = 'off';
       end
+      if tile > 227
+          DacDTConf = msk.getDialogControl(sprintf('t%d_DACPair23_DT', tile));
+          if strcmp(dac_tile_arch, 'dual')
+              DacDTConf.Visible = 'off';
+          else
+              DacDTConf.Visible = 'on';
+          end
+      end
       if tile > 229
-        QTDACtile = msk.getDialogControl(sprintf('Tile%d_container',tile));
-        if QuadTile
+        FourDACtile = msk.getDialogControl(sprintf('Tile%d_container',tile));
+        if Four_Tiles
           %turn on tiles 230 and 231
-          QTDACtile.Visible = 'on';
+          FourDACtile.Visible = 'on';
         else
           %turn off tiles 230 and 231
-          QTDACtile.Visible = 'off';
+          FourDACtile.Visible = 'off';
         end
       end
     end
-
     % validate use of MTS for each tile
     % adc tiles
     mts_adc = zeros(4,1);
@@ -202,7 +223,7 @@ function [] = rfdc_mask(gcb,force)
             %maxis = ['m', num2str(t), num2str(a), '_axis_tdata'];
             %if chk_mask_param(msk, [prefix, '_adc', num2str(a), '_enable'], 'on') - looping only enabled adcs now
 
-            if QuadTile
+            if strcmp(adc_tile_arch, 'quad')
               %only draw the gw if this is not an odd tile configured in IQ->IQ mode
               mixertype = get_param(gcb, ['t', num2str(t), '_', prefix, '_adc', num2str(a), '_mixer_type']);
               if ~strcmp(mixertype,'Off')
@@ -247,7 +268,7 @@ function [] = rfdc_mask(gcb,force)
                   end
                 end
               end
-            end % QuadTile: add gw's/draw ports
+            end % Four_Tiles: add gw's/draw ports
           end
         end % a = adcs
       end
@@ -263,7 +284,7 @@ function [] = rfdc_mask(gcb,force)
             %maxis = ['m', num2str(t), num2str(a), '_axis_tdata'];
             %if chk_mask_param(msk, [prefix, '_adc', num2str(a), '_enable'], 'on') - looping only enabled adcs now
 
-            if QuadTile
+            if strcmp(dac_tile_arch, 'quad')
               % only make port if this is not a odd slice used in IQ->IQ
               mixertype = get_param(gcb, ['t', num2str(t), '_', prefix, '_dac', num2str(a), '_mixer_type']);
               if ~strcmp(mixertype,'Off')
@@ -285,14 +306,14 @@ function [] = rfdc_mask(gcb,force)
                   [ypos, port_num] = add_gw(gcb, base_gw_name, gw_arith_type, n_bits, gw_bin_pt, maxis, port_num, xpos, ypos, dac_gate);
                 end
               end
-            end % QuadTile: add gw's/draw ports
+            end % Four_Tiles: add gw's/draw ports
           end
         end % a = adcs
       end
     end % t = tiles
 
     % save 'tiles' and 'slices' as a state to compare against later
-    save_state(gcb,'Tiles',tiles,'Slices',slices,'TileArch',tile_arch);
+    save_state(gcb,'Tiles',tiles,'Slices',slices,'ADCTileArch',adc_tile_arch,'DACTileArch',dac_tile_arch);
 
     % delete interfaces for disabled tiles
     clean_blocks(gcb);

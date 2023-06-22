@@ -42,7 +42,7 @@ function [] = update_axis_clk_label(gcb,tile)
     end
 
   %case for dac
-  elseif ~(tile > 229 && (strcmp(tile_arch, 'dual')))
+  elseif ~(tile > 231 && (strcmp(tile_arch, 'dual')))
     for a = dac_slices
       intermode = get_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_inter_mode']);
       axisamp = get_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_sample_per_cycle']);

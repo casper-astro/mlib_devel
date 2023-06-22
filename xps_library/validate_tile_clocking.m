@@ -45,7 +45,7 @@ if tile < 228
         axis_clks_valid = true;
     end
     
-elseif ~(strcmp(tile_arch, 'dual') && (tile > 229))
+elseif ~(strcmp(tile_arch, 'dual') && (tile > 231))
     enabled_dacs = [];
     for a = dac_slices
         if chk_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_enable'], 'on')
