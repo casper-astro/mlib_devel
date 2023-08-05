@@ -1,14 +1,19 @@
-function [] = update_axis_clk_label(gcb,tile)
+function [] = update_axis_clk_label(gcb, tile)
 
-  [~, tile_arch, ~, ~] = get_rfsoc_properties(gcb);
+  [gen, adc_tile_arch, dac_tile_arch, adc_num_tile, dac_num_tile, fs_max, fs_min] = get_rfsoc_properties(gcb);
+
+  if tile < 228
+    tile_arch = adc_tile_arch;
+  else
+    tile_arch = dac_tile_arch;
+  end
+
   if strcmp(tile_arch, 'quad')
-    adc_slices = 0:3;
-    dac_slices = 0:3;
+    n_slices = 0:3;
     prefix = 'QT';
     QuadTile = 1;
   elseif strcmp(tile_arch, 'dual')
-    adc_slices = 0:1;
-    dac_slices = 0:3;
+    n_slices = 0:1;
     prefix = 'DT';
     QuadTile = 0;
   end
@@ -17,9 +22,8 @@ function [] = update_axis_clk_label(gcb,tile)
 
   sample_rate_mhz = str2double(get_param(gcb, ['t', num2str(tile), '_', 'sample_rate']));
 
-  %case with adc
-  if tile < 228
-    for a = adc_slices
+  if tile < 228 % adc
+    for a = n_slices
       decmode = get_param(gcb, ['t', num2str(tile), '_', prefix, '_adc', num2str(a), '_dec_mode']);
       axisamp = get_param(gcb, ['t', num2str(tile), '_', prefix, '_adc', num2str(a), '_sample_per_cycle']);
 
@@ -41,9 +45,8 @@ function [] = update_axis_clk_label(gcb,tile)
       end
     end
 
-  %case for dac
-  elseif ~(tile > 231 && (strcmp(tile_arch, 'dual')))
-    for a = dac_slices
+  else % dac
+    for a = n_slices
       intermode = get_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_inter_mode']);
       axisamp = get_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_sample_per_cycle']);
 
