@@ -18,44 +18,48 @@ function [] = enable_adc_opt(gcb, tile, slice, arch)
     MixerDialog  = msk.getDialogControl(['t', num2str(tile), '_', prefix, '_adc', num2str(slice), '_MixerSettings']);
     AnalogDialog = msk.getDialogControl(['t', num2str(tile), '_', prefix, '_adc', num2str(slice), '_AnalogSettings']);
 
-    % check what the value was before it was clicked
-    % (the value after click only happens after you press the apply button, so
-    % we're checking what it was before)
-
-    if strcmp(get_param(gcb,['t', num2str(tile), '_', prefix, '_adc', num2str(slice), '_enable']), 'off')
+    EnableStatus = get_param(gcb, ['t', num2str(tile), '_', prefix, '_adc', num2str(slice), '_enable']);
+    if strcmp(EnableStatus, 'off')
       DataDialog.Enabled   = 'off';
       MixerDialog.Enabled  = 'off';
       AnalogDialog.Enabled = 'off';
       if ~mod(slice,2)
-        if (strcmp(msk.getParameter(['t', num2str(tile), '_', prefix, '_adc', num2str(slice+1), '_enable']).Enabled, 'off'))
-          % If the neighboring slice enable is 'off' , then the neighbor needs to be reenabled and turned to a valid config
+        neighborEnableStatus = msk.getParameter(['t', num2str(tile), '_', prefix, '_adc', num2str(slice+1), '_enable']).Enabled;
+        if strcmp(neighborEnableStatus, 'off')
+          % If the neighboring slice checkbox dialog is 'off' (greyed out) when turning the even slice off, then the
+          % neighbor needs to be re-enabled removing the I/Q -> I/Q mixer setting and replacing with a valid config
           msk.getParameter(['t', num2str(tile), '_', prefix, '_adc', num2str(slice+1), '_enable']).Enabled = 'on';
           msk.getParameter(['t', num2str(tile), '_', prefix, '_adc', num2str(slice+1), '_mixer_mode']).TypeOptions = {'Real -> I/Q'};
           msk.getParameter(['t', num2str(tile), '_', prefix, '_adc', num2str(slice+1), '_mixer_type']).TypeOptions = {'Fine', 'Coarse'};
           set_param(gcb, ['t', num2str(tile), '_', prefix, '_adc', num2str(slice+1), '_mixer_mode'], 'Real -> I/Q');
+          % update mixer
+          %mixer_callback(gcb, tile, slice+1, prefix);
+          mixertype_callback(gcb, tile, slice+1, prefix);
+
+          % re-enable the neighbors (odd slice) configuration dialogs (un-grey them)
           msk.getDialogControl(['t', num2str(tile), '_', prefix, '_adc', num2str(slice+1), '_DataSettings']).Enabled = 'on';
           msk.getDialogControl(['t', num2str(tile), '_', prefix, '_adc', num2str(slice+1), '_MixerSettings']).Enabled = 'on';
           msk.getDialogControl(['t', num2str(tile), '_', prefix, '_adc', num2str(slice+1), '_AnalogSettings']).Enabled = 'on';
-          % update mixer
-          mixer_callback(gcb, tile, slice+1, prefix);
-          mixertype_callback(gcb, tile, slice+1, prefix);
         end
       end
-    else
-      DataDialog.Enabled   = 'on';
-      MixerDialog.Enabled  = 'on';
-      AnalogDialog.Enabled = 'on';
-      % validate clocking when bringing slice back up
-      update_axis_clk(gcb, tile);
-
-      if (strcmp(get_param(gcb, ['t', num2str(tile), '_', prefix, '_adc', num2str(slice), '_mixer_mode']), 'I/Q -> I/Q'))
-        % turning the slice on and it is already I/Q->I/Q, need to copy and set the neighbor slice appropriately
+    else % EnableStatus is 'on' (checked)
+      if ~mod(slice, 2) % an even slice
+        DataDialog.Enabled   = 'on';
+        MixerDialog.Enabled  = 'on';
+        AnalogDialog.Enabled = 'on';
         mixer_callback(gcb,tile,slice,prefix);
-        if ~mod(slice,2)
-          mixertype_callback(gcb, tile, slice+1, prefix);
-        end
+      else % odd slice
+        mixer_mode_param = ['t', num2str(tile), '_', prefix, '_adc', num2str(slice), '_mixer_mode'];
+        if ~chk_param(gcb, mixer_mode_param, 'I/Q -> I/Q')
+          DataDialog.Enabled   = 'on';
+          MixerDialog.Enabled  = 'on';
+          AnalogDialog.Enabled = 'on';
+        end % else configured in I/Q->I/Q mode and the dialog should remain disabled (greyed out)
       end
+
     end % strcmp()
+    % validate clocking when bringing slices up and down
+    update_axis_clk(gcb, tile);
   end % tile < 228
 end % function
 
