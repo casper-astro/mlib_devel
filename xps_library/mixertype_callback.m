@@ -21,13 +21,11 @@ function [] = mixertype_callback(gcb, tile, slice, arch)
 
   msk = Simulink.Mask.get(gcb);
 
-  a = slice;
-
-  mixer_type_param  = ['t', num2str(tile), '_', prefix, slicename, num2str(a), '_mixer_type'];
-  mixer_mode_param  = ['t', num2str(tile), '_', prefix, slicename, num2str(a), '_mixer_mode'];
-  nco_freq_param    = ['t', num2str(tile), '_', prefix, slicename, num2str(a), '_nco_freq'];
-  nco_phase_param   = ['t', num2str(tile), '_', prefix, slicename, num2str(a), '_nco_phase'];
-  coarse_freq_param = ['t', num2str(tile), '_', prefix, slicename, num2str(a), '_coarse_freq'];
+  mixer_type_param  = ['t', num2str(tile), '_', prefix, slicename, num2str(slice), '_mixer_type'];
+  mixer_mode_param  = ['t', num2str(tile), '_', prefix, slicename, num2str(slice), '_mixer_mode'];
+  nco_freq_param    = ['t', num2str(tile), '_', prefix, slicename, num2str(slice), '_nco_freq'];
+  nco_phase_param   = ['t', num2str(tile), '_', prefix, slicename, num2str(slice), '_nco_phase'];
+  coarse_freq_param = ['t', num2str(tile), '_', prefix, slicename, num2str(slice), '_coarse_freq'];
 
   if tile < 228 % indicates an adc
     if chk_param(gcb, mixer_type_param, 'Fine')
@@ -61,21 +59,31 @@ function [] = mixertype_callback(gcb, tile, slice, arch)
     end
 
   else % is a dac
+    analog_mode_param = ['t', num2str(tile), '_', prefix, '_dac', num2str(slice), '_analog_output'];
+
     if chk_param(gcb, mixer_type_param, 'Fine')
       msk.getParameter(nco_freq_param).Visible = 'on';
       msk.getParameter(nco_phase_param).Visible = 'on';
       msk.getParameter(coarse_freq_param).Visible = 'off';
 
-      msk.getParameter(mixer_mode_param).TypeOptions = {'I/Q -> Real'};
+      if ~chk_param(gcb, analog_mode_param, 'I/Q')
+        msk.getParameter(mixer_mode_param).TypeOptions = {'I/Q -> Real'};
+      end
+
     elseif chk_param(gcb, mixer_type_param, 'Coarse')
       set_param(gcb, nco_freq_param, '0'); % not exactly necessary to reset to zero
       set_param(gcb, nco_phase_param, '0');
       msk.getParameter(nco_freq_param).Visible = 'off';
       msk.getParameter(nco_phase_param).Visible = 'off';
 
-      msk.getParameter(mixer_mode_param).TypeOptions = {'Real -> Real', 'I/Q -> Real'};
+      if ~chk_param(gcb, analog_mode_param, 'I/Q')
+        msk.getParameter(mixer_mode_param).TypeOptions = {'Real -> Real', 'I/Q -> Real'};
+      end % else don't change it from what it is as I/Q, which is I/Q -> I/Q
+
       if chk_param(gcb, mixer_mode_param, 'I/Q -> Real')
         msk.getParameter(coarse_freq_param).TypeOptions = {'Fs/2', 'Fs/4', '-Fs/4'};
+      elseif chk_param(gcb, mixer_mode_param, 'I/Q -> I/Q')
+        msk.getParameter(coarse_freq_param).TypeOptions = {'Fs/2', 'Fs/4', '-Fs/4', '0'};
       else
         msk.getParameter(coarse_freq_param).TypeOptions = {'0'};
       end

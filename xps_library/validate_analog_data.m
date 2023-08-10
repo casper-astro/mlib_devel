@@ -24,19 +24,32 @@ function [] = validate_analog_data(gcb, tile, slice, arch)
 
   if chk_param(gcb, analog_mode_param, 'Real')
     msk.getParameter(mixer_type_param).TypeOptions = {'Fine', 'Coarse'};
-    if chk_param(gcb, mixer_mode_param, 'I/Q -> I/Q')
-      set_param(gcb, mixer_mode_param, 'Real -> Real');
-    end
+    mixertype_callback(gcb, tile, slice, arch);
 
-    if ~mod(slice,2) % an even slice
-      if (chk_param(gcb,['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_analog_output'], 'I/Q'))
+    if ~mod(slice,2) % we are an even slice, get the neighbor slice and ensure valid configuration
+      neighbor_analog_mode_param = ['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_analog_output'];
+      if (chk_param(gcb, neighbor_analog_mode_param, 'I/Q')) % we are coming out of I/Q mode on the even slice and need to also fix the neighbor (odd) slice
+        % the enable check box should be greyed out, need to turn it back
+        neighbor_enable_param = ['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_enable'];
+        msk.getParameter(neighbor_enable_param).Enabled = 'on';
         % even slice is Real, so odd slice can't be I/Q
-        set_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_analog_output'], 'Real');
-        mixer_callback(gcb,tile,slice,arch); % need to run this to copy IQ stuff over
+        msk.getParameter(neighbor_analog_mode_param).TypeOptions = {'Real'};
+        set_param(gcb, neighbor_analog_mode_param, 'Real');
+
+        % turn mixer back on (remove 'Off' setting)
+        neighbor_mixer_type_param = ['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_mixer_type'];
+        msk.getParameter(neighbor_mixer_type_param).TypeOptions = {'Coarse', 'Fine'};
+        set_param(gcb, neighbor_mixer_type_param, 'Coarse');
+        mixertype_callback(gcb, tile, a+1, arch);
+
+        % re-enable the configuration dialogs (un-grey them)
+        neighborDataDialog   = msk.getDialogControl(['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_DataSettings']);
+        neighborMixerDialog  = msk.getDialogControl(['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_MixerSettings']);
+        neighborAnalogDialog = msk.getDialogControl(['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_AnalogSettings']);
+        neighborDataDialog.Enabled  = 'on';
+        neighborMixerDialog.Enabled = 'on';
+        neighborAnalogDialog.Enabled= 'on';
       end
-    else
-      % Odd slices only show 'Real' option, becoming 'I/Q' is set when even slices select I/Q
-      msk.getParameter(analog_mode_param).TypeOptions = {'Real'};
     end
 
   else % analog output mode is IQ
@@ -61,7 +74,9 @@ function [] = validate_analog_data(gcb, tile, slice, arch)
         msk.getParameter(coarse_freq_param).Visible = 'on';
       end
 
-      mixer_callback(gcb, tile, slice, arch); % need to run this to copy IQ stuff over
+      % run mixer callback to populate and setup the neighbor tile that has
+      % to be enabled and configured when in I/Q output mode
+      mixer_callback(gcb, tile, slice, arch);
     end
   end
 end

@@ -82,50 +82,53 @@ function [] = mixer_callback(gcb, tile, slice, arch)
     if chk_param(gcb, analog_mode_param, 'I/Q')
       % override if an even slice is C output with C2C mixer
       if ~mod(a,2) % an even slice
-        DataDialog  = msk.getDialogControl(['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_DataSettings']);
-        MixerDialog = msk.getDialogControl(['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_MixerSettings']);
-        AnalogDialog= msk.getDialogControl(['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_AnalogSettings']);
-
-        % no need to check if ditial output is C because C2C only an option if already C
+        % no need to check if digital output is C because C2C only an option if already C
         mixer_mode_param = ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_mixer_mode'];
         if chk_param(gcb, mixer_mode_param, 'I/Q -> I/Q')
-          set_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_enable'], 'on');
-          msk.getParameter(['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_enable']).Enabled = 'off';
+          % force enable (check the box) the neighboring tile and grey out the checkbox
+          oddslice_enable_param = ['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_enable'];
+          set_param(gcb, oddslice_enable_param, 'on');
+          msk.getParameter(oddslice_enable_param).Enabled = 'off';
 
-          set_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_analog_output'], 'I/Q');
+          % force the analog output to be I/Q and turn off mixer type and modes
+          oddslice_analog_mode_param = ['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_analog_output'];
+          msk.getParameter(oddslice_analog_mode_param).TypeOptions = {'I/Q'};
+          set_param(gcb, oddslice_analog_mode_param, 'I/Q');
 
-          msk.getParameter(['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_mixer_type']).TypeOptions = {'Off'};
-          set_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_mixer_type'], 'Off');
+          oddslice_mixer_type_param = ['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_mixer_type'];
+          msk.getParameter(oddslice_mixer_type_param).TypeOptions = {'Off'};
+          set_param(gcb, oddslice_mixer_type_param, 'Off');
 
-          msk.getParameter(['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_mixer_mode']).TypeOptions = {'I/Q -> I/Q'};
-          set_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_mixer_mode'], 'I/Q -> I/Q');
+          oddslice_mixer_mode_param = ['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_mixer_mode'];
+          msk.getParameter(oddslice_mixer_mode_param).TypeOptions = {'I/Q -> I/Q'};
+          set_param(gcb, oddslice_mixer_mode_param, 'I/Q -> I/Q');
 
-          set_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_inter_mode'],...
-                    get_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_inter_mode']));
+          % copy interpolation factor, samples per cycle, nyquist zone, and decode mode from even slice to odd slice
+          oddslice_inter_mode_param  = ['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_inter_mode'];
+          evenslice_inter_mode_param = ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_inter_mode'];
+          set_param(gcb, oddslice_inter_mode_param, get_param(gcb, evenslice_inter_mode_param));
 
-          set_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_sample_per_cycle'],...
-                    get_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_sample_per_cycle']));
+          oddslice_samp_per_cycle  = ['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_sample_per_cycle'];
+          evenslice_samp_per_cycle = ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_sample_per_cycle'];
+          set_param(gcb, oddslice_samp_per_cycle, get_param(gcb, evenslice_samp_per_cycle));
 
-          set_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_nyquist_zone'],...
-                    get_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_nyquist_zone']));
+          oddslice_nyquist_zone  = ['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_nyquist_zone'];
+          evenslice_nyquist_zone = ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_nyquist_zone'];
+          set_param(gcb, oddslice_nyquist_zone, get_param(gcb, evenslice_nyquist_zone ));
 
-          set_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_decode_mode'],...
-                    get_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_decode_mode']));
+          oddslice_decode_mode  = ['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_decode_mode'];
+          evenslice_decode_mode = ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_decode_mode'];
+          set_param(gcb, oddslice_decode_mode, get_param(gcb, evenslice_decode_mode));
 
+          % mixertype_callback(gcb,tile,slice+1,arch);
+
+          % disable configuration dialogs
+          DataDialog   = msk.getDialogControl(['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_DataSettings']);
+          MixerDialog  = msk.getDialogControl(['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_MixerSettings']);
+          AnalogDialog = msk.getDialogControl(['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_AnalogSettings']);
           DataDialog.Enabled  = 'off';
           MixerDialog.Enabled = 'off';
           AnalogDialog.Enabled= 'off';
-          mixertype_callback(gcb,tile,slice+1,arch);
-        else % mixer mode is IQ -> Real
-          msk.getParameter(['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_enable']).Enabled = 'on';
-          msk.getParameter(['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_mixer_mode']).TypeOptions = {'Real -> Real', 'I/Q -> Real'}; %
-          msk.getParameter(['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_mixer_type']).TypeOptions = {'Fine', 'Coarse'};
-          if strcmp(get_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_enable']),'on')
-            DataDialog.Enabled  = 'on';
-            MixerDialog.Enabled = 'on';
-            AnalogDialog.Enabled= 'on';
-          end
-          mixertype_callback(gcb, tile, slice, arch)
         end
       end % is an even slice
 
