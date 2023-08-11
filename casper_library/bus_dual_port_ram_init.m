@@ -96,7 +96,7 @@ function bus_dual_port_ram_init(blk, varargin)
   enb_implementation        = get_var('enb_implementation', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
-
+  
   %default state, do nothing 
   if (n_bits(1) == 0),
     clean_blocks(blk);
@@ -105,6 +105,47 @@ function bus_dual_port_ram_init(blk, varargin)
     return;
   end
 
+  % Check if Ultra RAM allowed based on HW platform
+  sg_blk = '';
+  try
+    sysgen_blk = find_system(bdroot, 'SearchDepth', 1,'FollowLinks','on','LookUnderMasks','all');
+    
+    for idx = 1:height(sysgen_blk),
+        split_entry = split(sysgen_blk{idx,1}, '/');
+        
+        for idx_entry =  1:height(split_entry)
+            if strcmp(split_entry{idx_entry,1}, ' System Generator') %note: space before 'System' required
+                sg_blk = sysgen_blk{idx,1};
+                break
+            end
+        end
+        if ~strcmp(sg_blk,'') %end search when System Generator label found.
+            break
+        end
+    end %end for device_table
+    
+    fpga_params = xlgetparams(sg_blk);
+
+    %note: New platform block must be dragged into design for xsg_blk to be
+    %updated
+    if ~strcmp(fpga_params.xilinxfamily, 'virtexuplusHBM') && ...
+            ~strcmp(fpga_params.xilinxfamily, 'virtexuplus') && ...
+            ~strcmp(fpga_params.xilinxfamily, 'zynquplusRFSOC') && ...
+            ~strcmp(fpga_params.xilinxfamily, 'zynquplusRFSOCes1')
+
+      if strcmp(mem_type,'Ultra RAM')
+        clog('Ultra RAM selected for a non-UltraScale+ device. This can result in error. Defaulting to Block RAM', {log_group});
+        warning('bus_dual_port_ram_init: Ultra RAM selected for a non-UltraScale+ device. This can result in error. Defaulting to Block RAM');
+        warndlg('bus_dual_port_ram_init: Ultra RAM selected for a non-UltraScale+ device. This can result in error. Defaulting to Block RAM','Warning');
+        mem_type = 'Block RAM';
+      end
+    end
+    
+  catch
+    clog('Could not find hardware platform - is there an XSG block in this model?', {log_group});
+    warning('bus_dual_port_ram_init: Could not find hardware platform - is there an XSG block in this model?');
+  end %try/catch
+  
   [riv, civ]  = size(init_vector);
   [rnb, cnb]  = size(n_bits);
   [rbp, cbp]  = size(bin_pts);
@@ -214,7 +255,7 @@ function bus_dual_port_ram_init(blk, varargin)
 
   port_index = 5;
   %if we are using Block RAM, then need ports for dinb and web
-  if strcmp(mem_type, 'Block RAM'),
+  if strcmp(mem_type, 'Block RAM')||strcmp(mem_type, 'Ultra RAM'),
     ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2;
     reuse_block(blk, 'dinb', 'built-in/inport', ...
       'Port', num2str(port_index), 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
@@ -293,7 +334,7 @@ function bus_dual_port_ram_init(blk, varargin)
     ypos_tmp = ypos_tmp + yinc + bus_expand_d*replication/2;
     add_line(blk, 'wea/1', 'wea_slice/1'); 
 
-    if strcmp(mem_type, 'Block RAM'),
+    if strcmp(mem_type, 'Block RAM')||strcmp(mem_type, 'Ultra RAM'),
       ypos_tmp  = ypos_tmp + yinc + bus_expand_d*ctiv; %dinb
       ypos_tmp = ypos_tmp + bus_expand_d*replication/2;
       reuse_block(blk, 'web_slice', 'xbsIndex_r4/Slice', ...
@@ -349,7 +390,7 @@ function bus_dual_port_ram_init(blk, varargin)
     add_line(blk, 'wea_slice/1', 'concata/1');
     add_line(blk, 'amsbs_slice/1', 'concata/2'); 
   
-    if strcmp(mem_type, 'Block RAM'),
+    if strcmp(mem_type, 'Block RAM')||strcmp(mem_type, 'Ultra RAM'),
       ypos_tmp = ypos_tmp + yinc + bus_expand_d*ctiv; %dinb
       ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
       reuse_block(blk, 'concatb', 'xbsIndex_r4/Concat', ...
@@ -404,7 +445,7 @@ function bus_dual_port_ram_init(blk, varargin)
     add_line(blk, 'concata/1', 'prom_wea/1'); 
     ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
     
-    if strcmp(mem_type, 'Block RAM'),
+    if strcmp(mem_type, 'Block RAM')||strcmp(mem_type, 'Ultra RAM'),
       ypos_tmp  = ypos_tmp + yinc + bus_expand_d*ctiv; %dinb
       ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
       reuse_block(blk, 'prom_web', 'xbsIndex_r4/ROM', ...
@@ -480,7 +521,7 @@ function bus_dual_port_ram_init(blk, varargin)
     add_line(blk, 'prom_wea/1', 'debus_wea/1'); 
     ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
   
-    if strcmp(mem_type, 'Block RAM'),
+    if strcmp(mem_type, 'Block RAM')||strcmp(mem_type, 'Ultra RAM'),
       ypos_tmp  = ypos_tmp + yinc + bus_expand_d*ctiv; %dinb
       ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
       reuse_block(blk, 'debus_web', 'casper_library_flow_control/bus_expand', ...
@@ -593,7 +634,7 @@ function bus_dual_port_ram_init(blk, varargin)
     end % if banks
     ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
 
-    if strcmp(mem_type, 'Block RAM'),
+    if strcmp(mem_type, 'Block RAM')||strcmp(mem_type, 'Ultra RAM'),
       % delay dinb
       if strcmp(dinb_implementation, 'core'), reg_retiming = 'off';
       else, reg_retiming = 'on';
@@ -737,7 +778,7 @@ function bus_dual_port_ram_init(blk, varargin)
     %space for addrb slice
 %    ypos_tmp  = ypos_tmp + yinc + slice_d;
      
-    if strcmp(mem_type, 'Block RAM'),
+    if strcmp(mem_type, 'Block RAM')||strcmp(mem_type, 'Ultra RAM'),
       % debus dinb
       ypos_tmp        = ypos_tmp + bus_expand_d*ctiv/2;
       reuse_block(blk, ['debus_dinb',num2str(bank_index)], 'casper_library_flow_control/bus_expand', ...
@@ -860,7 +901,7 @@ function bus_dual_port_ram_init(blk, varargin)
       add_line(blk, ['debus_addrb', num2str(bank_index), '/', num2str(rep_index)], [bram_name, '/4']);
   
       port_index = 4;
-      if strcmp(mem_type, 'Block RAM'),
+      if strcmp(mem_type, 'Block RAM')||strcmp(mem_type, 'Ultra RAM'),
         add_line(blk, ['debus_dinb', num2str(bank_index), '/', num2str(bram_index)], [bram_name, '/5']);
         add_line(blk, ['debus_web', num2str(bank_index), '/', num2str(rep_index)], [bram_name, '/6']);
         port_index = 6;
