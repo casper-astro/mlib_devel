@@ -1,39 +1,11 @@
 % Known work to do and issues to fix:
 
-% TODO: the lag in opening the mask is back after triming, drawing, cleaning is
-% added because the initialization is ran every time the mask is re-opened. Need
-% to either optimize base on how the callbacks are structured or implement a
-% sort of state. Explored this with my own struct, but couldn't see how to make
-% it persistent. I see the casper_library `save_state`/`same_state` methods.
-% This might help here? May get worse as the sample rate check is now done every
-% time
-
-% TODO: make sure DT spliting data interfaces for complex doesn't mess with the
-% computed data widths from number of samples per cycle (already double checked
-% that it is right with regard to QT and since that works I recall that DT
-% should be too).
-
 % TODO: Sanitize and validate NCO freq range for fine mixer mode
 
 % TODO: there is only a specific range of suggested tested frequencies for
 % the fbdiv parameter that is tested within the specification given on
 % DS926. These should be the ones that Vivado displays a warning when
 % selected. Extend the same warning here. Need to figure out that range.
-
-% TODO: Enabling I/Q -> I/Q and then chaning the decimation factor and axi
-% samples per clock results in an invalid axi clocking configuration. This
-% should not happen because the odd slice configuration is now dependent on
-% the even slice.
-
-% TODO: Enabling I/Q -> I/Q disables the odd slice ADC but when you hit OK and
-% bring up the rfdc mask again the field is enabled. This is a symptom of the
-% 'Enabled Checkbox being on' but not checking the even slice data mode
-% correctly. (or it does check the mode correctly, but the callback appears
-% in th wrong order).
-
-% TODO: There are decimator capability improvements between rfsoc generations.
-% Right now this yellow block only implements a common subset of the full
-% capability. [1x,2x,4x,8x]
 
 % NOTE: Only maxis_tdata field implemented. The ADC ignores tready and it is
 % reasonably accurate to assume that the data will be valid before the user
@@ -51,7 +23,7 @@ function [] = rfdc_mask(gcb,force)
 
   msk = Simulink.Mask.get(gcb);
 
-  [gen, tile_arch, fs_max, fs_min] = get_rfsoc_properties(gcb);
+  [gen, adc_tile_arch, dac_tile_arch, adc_num_tile, dac_num_tile, fs_max, fs_min] = get_rfsoc_properties(gcb);
 
   adcbits = 16;
   gw_arith_type = 'Signed';
@@ -63,24 +35,37 @@ function [] = rfdc_mask(gcb,force)
   adc_gate = 1;
   dac_gate = 0;
 
-  if strcmp(tile_arch, 'quad')
-    adc_slices = 0:3;
-    dac_slices = 0:3;
+% ADC tile/slices configuration
+  if strcmp(adc_tile_arch, 'quad')
     prefix = 'QT';
-    QuadTile = 1;
-  elseif strcmp(tile_arch, 'dual')
-    adc_slices = 0:1;
-    dac_slices = 0:3;
+    adc_slices = 0:3;
+  elseif strcmp(adc_tile_arch, 'dual')
     prefix = 'DT';
-    QuadTile = 0;
+    adc_slices = 0:1;
   end
 
-  %for each tile check tile number and change visibility
-  %get both enabled tiles and disabled tiles
-  %tiles represents all 8 tiles in order, 1 is on, 0 is off
+% DAC tiles/slices configuration
+  if strcmp(dac_tile_arch, 'quad')
+    dac_slices = 0:3;
+    if (dac_num_tile == 4)
+        Four_Tiles = 1;
+    elseif (dac_num_tile == 2)
+        Four_Tiles = 0;
+    end
+  elseif strcmp(dac_tile_arch, 'dual')
+    dac_slices = 0:1;
+    if (dac_num_tile == 4)
+        Four_Tiles = 1;
+    elseif (dac_num_tile == 2)
+        Four_Tiles = 0;
+    end
+  end
+
+  % for each tile check tile number and change visibility get both enabled tiles
+  % and disabled tiles tiles represents all 8 tiles in order, 1 is on, 0 is off
   tiles = zeros(8,1);
   %DT config only has 2 DAC tiles
-  if QuadTile
+  if Four_Tiles
     lastTile = 231;
   else
     lastTile = 229;
@@ -124,13 +109,16 @@ function [] = rfdc_mask(gcb,force)
       end
   end
 
+  % gateway name for the block
+  base_gw_name = clear_name(gcb);
+
   % check if the state has changed
-  if ~same_state(gcb,'Tiles',tiles,'Slices',slices,'TileArch',tile_arch) || force
+  if ~same_state(gcb,'Tiles',tiles,'Slices',slices,'ADCTileArch',adc_tile_arch,'DACTileArch',dac_tile_arch,'ModelName',base_gw_name) || force
     for tile = 224:231
       QTConf = msk.getDialogControl(sprintf('t%d_QuadTileConfig',tile));
       DTConf = msk.getDialogControl(sprintf('t%d_DualTileConfig',tile));
       SystemClocking = msk.getDialogControl('SystemClocking');
-      if QuadTile
+      if strcmp(adc_tile_arch, 'quad')
         QTConf.Visible = 'on';
         DTConf.Visible = 'off';
       else
@@ -142,18 +130,25 @@ function [] = rfdc_mask(gcb,force)
       else
           SystemClocking.Visible = 'off';
       end
+      if tile > 227
+          DacDTConf = msk.getDialogControl(sprintf('t%d_DACPair23_DT', tile));
+          if strcmp(dac_tile_arch, 'dual')
+              DacDTConf.Visible = 'off';
+          else
+              DacDTConf.Visible = 'on';
+          end
+      end
       if tile > 229
-        QTDACtile = msk.getDialogControl(sprintf('Tile%d_container',tile));
-        if QuadTile
+        FourDACtile = msk.getDialogControl(sprintf('Tile%d_container',tile));
+        if Four_Tiles
           %turn on tiles 230 and 231
-          QTDACtile.Visible = 'on';
+          FourDACtile.Visible = 'on';
         else
           %turn off tiles 230 and 231
-          QTDACtile.Visible = 'off';
+          FourDACtile.Visible = 'off';
         end
       end
     end
-
     % validate use of MTS for each tile
     % adc tiles
     mts_adc = zeros(4,1);
@@ -185,12 +180,8 @@ function [] = rfdc_mask(gcb,force)
 
     % trim lines to begin to reuse or delete blocks
     delete_lines(gcb);
-    % gateway name for the block
-    base_gw_name = clear_name(gcb);
-    % interface name mXY_axis: X-Tile index, Y-ADC index TODO can possibly explain
-    % Dual tile interface here instead of marked in todo block below
-    % update interfaces for selected tiles
 
+    % update interfaces for selected tiles, interface name mXY_axis: X-Tile index, Y-ADC index
     % update ADC tiles
     for t = 224:227
       if tiles(t-223) %check if the tile is on
@@ -202,7 +193,7 @@ function [] = rfdc_mask(gcb,force)
             %maxis = ['m', num2str(t), num2str(a), '_axis_tdata'];
             %if chk_mask_param(msk, [prefix, '_adc', num2str(a), '_enable'], 'on') - looping only enabled adcs now
 
-            if QuadTile
+            if strcmp(adc_tile_arch, 'quad')
               %only draw the gw if this is not an odd tile configured in IQ->IQ mode
               mixertype = get_param(gcb, ['t', num2str(t), '_', prefix, '_adc', num2str(a), '_mixer_type']);
               if ~strcmp(mixertype,'Off')
@@ -247,8 +238,9 @@ function [] = rfdc_mask(gcb,force)
                   end
                 end
               end
-            end % QuadTile: add gw's/draw ports
+            end % Four_Tiles: add gw's/draw ports
           end
+          dec_interp_opts(gcb, t, a)
         end % a = adcs
       end
     end % t = tiles
@@ -263,7 +255,7 @@ function [] = rfdc_mask(gcb,force)
             %maxis = ['m', num2str(t), num2str(a), '_axis_tdata'];
             %if chk_mask_param(msk, [prefix, '_adc', num2str(a), '_enable'], 'on') - looping only enabled adcs now
 
-            if QuadTile
+            if strcmp(dac_tile_arch, 'quad')
               % only make port if this is not a odd slice used in IQ->IQ
               mixertype = get_param(gcb, ['t', num2str(t), '_', prefix, '_dac', num2str(a), '_mixer_type']);
               if ~strcmp(mixertype,'Off')
@@ -285,14 +277,17 @@ function [] = rfdc_mask(gcb,force)
                   [ypos, port_num] = add_gw(gcb, base_gw_name, gw_arith_type, n_bits, gw_bin_pt, maxis, port_num, xpos, ypos, dac_gate);
                 end
               end
-            end % QuadTile: add gw's/draw ports
+            end % Four_Tiles: add gw's/draw ports
           end
+          dec_interp_opts(gcb, t, a)
         end % a = adcs
       end
     end % t = tiles
 
+    rfdc_system_clocking_config(gcb);
+
     % save 'tiles' and 'slices' as a state to compare against later
-    save_state(gcb,'Tiles',tiles,'Slices',slices,'TileArch',tile_arch);
+    save_state(gcb,'Tiles',tiles,'Slices',slices,'ADCTileArch',adc_tile_arch,'DACTileArch',dac_tile_arch,'ModelName',base_gw_name);
 
     % delete interfaces for disabled tiles
     clean_blocks(gcb);

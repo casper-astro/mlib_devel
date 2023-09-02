@@ -1,7 +1,7 @@
 function [adc_clkout] = update_adc_clkout(gcb, tile)
   % compute output adc clk options and update mask list
 
-  [gen, tile_arch, fs_max, fs_min] = get_rfsoc_properties(gcb);
+  [gen, ~, ~, ~, ~, fs_max, fs_min] = get_rfsoc_properties(gcb);
 
   msk = Simulink.Mask.get(gcb);
 

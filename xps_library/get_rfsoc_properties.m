@@ -1,4 +1,4 @@
-function [gen, tile_arch, fs_max, fs_min] = get_rfsoc_properties(gcb)
+function [gen, adc_tile_arch, dac_tile_arch, adc_num_tiles, dac_num_tiles, fs_max, fs_min] = get_rfsoc_properties(gcb)
   % get configuration information from the current rfsoc fpga part so that
   % callbacks and initializations can use this to setup and determine the
   % correct options
@@ -34,27 +34,43 @@ function [gen, tile_arch, fs_max, fs_min] = get_rfsoc_properties(gcb)
       gen = 3;
   end % generation
 
+  % Please Note: The architecture names "dual" and "quad" do not mean that
+  % There are 2 tiles for dual and 4 tiles for quad. Dual and quad refer
+  % to the number of ADCs/DACs per tile.
+
   switch gen % architecture configuration
     case 1
       switch designator(2)
         case '8'
           fs_max = 4096;
           fs_min = 1000;
-          tile_arch = 'dual';
+          adc_tile_arch = 'dual';
+          adc_num_tiles = 4;
+          dac_tile_arch = 'quad';
+          dac_num_tiles = 2;
         case '9'
           fs_max = 2058;
           fs_min = 500;
-          tile_arch = 'quad';
+          adc_tile_arch = 'quad';
+          adc_num_tiles = 4;
+          dac_tile_arch = 'quad';
+          dac_num_tiles = 4;
       end
     case 3
       fs_min = 500;
       switch designator(2)
         case '8'
           fs_max = 5000;
-          tile_arch = 'dual';
+          adc_tile_arch = 'dual';
+          adc_num_tiles = 4;
+          dac_tile_arch = 'dual';
+          dac_num_tiles = 4;
         case '9'
           fs_max = 2500;
-          tile_arch = 'quad';
+          adc_tile_arch = 'quad';
+          adc_num_tiles = 4;
+          dac_tile_arch = 'quad';
+          dac_num_tiles = 4;
       end
   end
 
