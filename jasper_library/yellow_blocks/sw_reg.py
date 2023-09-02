@@ -32,7 +32,7 @@ class sw_reg(YellowBlock):
                 inst.add_port('IP_RESET',     signal='axil_rst', parent_sig=False)                
                 inst.add_port('IP_BUS_VALID', signal='1\'b1', parent_sig=False)
                 inst.add_port('IP_BUS',       signal='%s_user_data_in'%self.fullname, width=32, parent_sig=True)
-                inst.add_port('OP_BUS',       signal='%s_in'%self.fullname, width=32, parent_sig=True)
+                inst.add_port('OP_BUS',       signal='%s_%s_in' % (self.blocktype, self.unique_name), width=32, parent_sig=True)
             else:
                 module = 'wb_register_simulink2ppc'
                 inst = top.get_instance(entity=module, name=self.fullname)
@@ -49,16 +49,17 @@ class sw_reg(YellowBlock):
                 inst.add_parameter('G_OP_INITIAL_VAL', value="32'h%x" % self.init_val)
                 inst.add_port('IP_CLK',       signal='user_clk', parent_sig=False)
                 inst.add_port('IP_RESET',     signal='user_rst', parent_sig=False)
-                inst.add_port('IP_BUS_VALID', signal='%s_out_we'%self.fullname, parent_sig=False)
-                inst.add_port('IP_BUS',       signal='%s_out'%self.fullname, width=32, parent_sig=True)
+                inst.add_port('IP_BUS_VALID', signal='%s_%s_out_we' % (self.blocktype, self.unique_name), parent_sig=False)
                 inst.add_port('OP_BUS',       signal='%s_user_data_out'%self.fullname, width=32, parent_sig=True)
+                inst.add_port('IP_BUS',       signal='%s_%s_out'%(self.blocktype, self.unique_name), width=32, parent_sig=True)
+
             else:
                 module = 'wb_register_ppc2simulink'
                 inst = top.get_instance(entity=module, name=self.fullname)
                 inst.add_parameter('INIT_VAL', "32'h%x"%self.init_val)
                 inst.add_wb_interface(regname=self.unique_name, mode='rw', nbytes=4, typecode=self.typecode)
                 inst.add_port('user_clk', signal='user_clk', parent_sig=False)
-                inst.add_port('user_data_out', signal='%s_user_data_out'%self.fullname, width=32)
+                inst.add_port('user_data_out', signal='%s_user_data_out'%self.unique_name, width=32)
 
     #def gen_constraints(self):
     #    if self.platform.mmbus_architecture[0] == 'AXI4-Lite':

@@ -74,28 +74,23 @@ class axi4lite_interconnect(YellowBlock):
                    inst.add_port('m_axi4lite_%s_rready' %reg.name,  'm_axi4lite_%s_rready' %reg.name,  dir='in',  width=1,  parent_sig=False)
                    inst.add_port('m_axi4lite_%s_bready' %reg.name,  'm_axi4lite_%s_bready' %reg.name,  dir='in',  width=1,  parent_sig=False)
 
-        self.design_name = self.fullname.replace("_ip_axi4lite_interconnect","")
-        print('axi interconnect')
-        print(self.fullname)
-        print(self.design_name)
-
         for key, val in list(self.memory_map.items()):
             for reg in val["memory_map"]:
                 if reg.axi4lite_mode != 'raw':
                    if reg.ram == True:
-                      inst.add_port('axi4lite_%s_%s_add'      %(key, reg.name), '%s_%s_addr'     %(self.design_name, reg.name), dir='in',  width=int(math.log2((reg.nbytes * 8)/reg.data_width)), parent_sig=True)
-                      inst.add_port('axi4lite_%s_%s_data_in'  %(key, reg.name), '%s_%s_data_in'  %(self.design_name, reg.name), dir='in',  width=reg.data_width,           parent_sig=True)
-                      inst.add_port('axi4lite_%s_%s_data_out' %(key, reg.name), '%s_%s_data_out' %(self.design_name, reg.name), dir='out', width=reg.data_width,           parent_sig=True)
-                      inst.add_port('axi4lite_%s_%s_we'       %(key, reg.name), '%s_%s_we'       %(self.design_name, reg.name), dir='in',  width=1,                        parent_sig=True)
+                      inst.add_port('axi4lite_%s_%s_add'      %(key, reg.name), '%s_%s_addr'     %(key, reg.name), dir='in',  width=int(math.log2((reg.nbytes * 8)/reg.data_width)), parent_sig=True)
+                      inst.add_port('axi4lite_%s_%s_data_in'  %(key, reg.name), '%s_%s_data_in'  %(key, reg.name), dir='in',  width=reg.data_width,           parent_sig=True)
+                      inst.add_port('axi4lite_%s_%s_data_out' %(key, reg.name), '%s_%s_data_out' %(key, reg.name), dir='out', width=reg.data_width,           parent_sig=True)
+                      inst.add_port('axi4lite_%s_%s_we'       %(key, reg.name), '%s_%s_we'       %(key, reg.name), dir='in',  width=1,                        parent_sig=True)
                       inst.add_port('axi4lite_%s_%s_en'       %(key, reg.name), '1\'b1'                                       , dir='in',  width=1,                        parent_sig=False, parent_port=False)
                       inst.add_port('axi4lite_%s_%s_clk'      %(key, reg.name), 'user_clk'                                    , dir='in',  width=1,                        parent_sig=False, parent_port=False)
                    else:
                       if (reg.mode == "r"):
-                         inst.add_port('axi4lite_%s_%s_in'     %(key, reg.name), '%s_%s_in'     %(self.design_name, reg.name), dir='out', width=32, parent_sig=True)
-                         inst.add_port('axi4lite_%s_%s_in_we'  %(key, reg.name), '%s_%s_in_we'  %(self.design_name, reg.name), dir='out', width=1)
+                         inst.add_port('axi4lite_%s_%s_in'     %(key, reg.name), '%s_%s_in'     %(key, reg.name), dir='out', width=32, parent_sig=True)
+                         inst.add_port('axi4lite_%s_%s_in_we'  %(key, reg.name), '%s_%s_in_we'  %(key, reg.name), dir='out', width=1)
                       if (reg.mode == "rw"):
-                         inst.add_port('axi4lite_%s_%s_out'    %(key, reg.name), '%s_%s_out'    %(self.design_name, reg.name), dir='in', width=32, parent_sig=True)
-                         inst.add_port('axi4lite_%s_%s_out_we' %(key, reg.name), '%s_%s_out_we' %(self.design_name, reg.name), dir='in', width=1)
+                         inst.add_port('axi4lite_%s_%s_out'    %(key, reg.name), '%s_%s_out'    %(key, reg.name), dir='in', width=32, parent_sig=True)
+                         inst.add_port('axi4lite_%s_%s_out_we' %(key, reg.name), '%s_%s_out_we' %(key, reg.name), dir='in', width=1)
            
 
     def gen_tcl_cmds(self):
@@ -180,10 +175,10 @@ class axi4lite_interconnect(YellowBlock):
             for reg in val["memory_map"]:
                 if reg.axi4lite_mode != 'raw':
                    if reg.ram==True:
-                      axi4lite_wrapper.add_port('axi4lite_%s_%s_add'      %(key, reg.name), '%s_%s_add'      %(self.design_name, reg.name), dir='in',  width=int(math.log2((reg.nbytes * 8)/reg.data_width)), parent_sig=True)
-                      axi4lite_wrapper.add_port('axi4lite_%s_%s_data_in'  %(key, reg.name), '%s_%s_data_in'  %(self.design_name, reg.name), dir='in',  width=reg.data_width,           parent_sig=True)
-                      axi4lite_wrapper.add_port('axi4lite_%s_%s_data_out' %(key, reg.name), '%s_%s_data_out' %(self.design_name, reg.name), dir='out', width=reg.data_width,           parent_sig=True)
-                      axi4lite_wrapper.add_port('axi4lite_%s_%s_we'       %(key, reg.name), '%s_%s_we'       %(self.design_name, reg.name), dir='in',  width=1,            parent_sig=True)
+                      axi4lite_wrapper.add_port('axi4lite_%s_%s_add'      %(key, reg.name), '%s_%s_add'      %(key, reg.name), dir='in',  width=int(math.log2((reg.nbytes * 8)/reg.data_width)), parent_sig=True)
+                      axi4lite_wrapper.add_port('axi4lite_%s_%s_data_in'  %(key, reg.name), '%s_%s_data_in'  %(key, reg.name), dir='in',  width=reg.data_width,           parent_sig=True)
+                      axi4lite_wrapper.add_port('axi4lite_%s_%s_data_out' %(key, reg.name), '%s_%s_data_out' %(key, reg.name), dir='out', width=reg.data_width,           parent_sig=True)
+                      axi4lite_wrapper.add_port('axi4lite_%s_%s_we'       %(key, reg.name), '%s_%s_we'       %(key, reg.name), dir='in',  width=1,            parent_sig=True)
                       axi4lite_wrapper.add_port('axi4lite_%s_%s_en'       %(key, reg.name), '1\'b1'                                       , dir='in',  width=1,            parent_sig=False, parent_port=False)
                       axi4lite_wrapper.add_port('axi4lite_%s_%s_clk'      %(key, reg.name), 'user_clk'                                    , dir='in',  width=1,            parent_sig=False, parent_port=False)
                       pass
@@ -191,15 +186,15 @@ class axi4lite_interconnect(YellowBlock):
                    else:
                       if (reg.mode == "rw"):
                          # add ports
-                         axi4lite_wrapper.add_port('axi4lite_%s_%s_out'      %(key, reg.name), '%s_out_%s_user_data_in'    %(self.design_name, reg.name), dir='out', width=32, parent_sig=True)
-                         axi4lite_wrapper.add_port('axi4lite_%s_%s_out_we'   %(key, reg.name), '%s_out_we_%s'              %(self.design_name, reg.name), dir='out',   width=1)
+                         axi4lite_wrapper.add_port('axi4lite_%s_%s_out'      %(key, reg.name), '%s_out_%s_user_data_in'    %(key, reg.name), dir='out', width=32, parent_sig=True)
+                         axi4lite_wrapper.add_port('axi4lite_%s_%s_out_we'   %(key, reg.name), '%s_out_we_%s'              %(key, reg.name), dir='out',   width=1)
                          # add signals
                          axi4lite_wrapper.add_assign('axi4lite_%s_%s_out'    %(key, reg.name), 'axi4lite_%s_out.%s'    %(key, reg.name))
                          axi4lite_wrapper.add_assign('axi4lite_%s_%s_out_we' %(key, reg.name), 'axi4lite_%s_out_we.%s' %(key, reg.name))
                       if (reg.mode == "r"):
                          # add ports
-                         axi4lite_wrapper.add_port('axi4lite_%s_%s_in'       %(key, reg.name), '%s_in_%s_user_data_in'    %(self.design_name, reg.name), dir='in', width=32, parent_sig=True)
-                         axi4lite_wrapper.add_port('axi4lite_%s_%s_in_we'    %(key, reg.name), '%s_in_we_%s'              %(self.design_name, reg.name), dir='in',  width=1)
+                         axi4lite_wrapper.add_port('axi4lite_%s_%s_in'       %(key, reg.name), '%s_in_%s_user_data_in'    %(key, reg.name), dir='in', width=32, parent_sig=True)
+                         axi4lite_wrapper.add_port('axi4lite_%s_%s_in_we'    %(key, reg.name), '%s_in_we_%s'              %(key, reg.name), dir='in',  width=1)
                          # add signals
                          axi4lite_wrapper.add_assign('axi4lite_%s_in.%s'     %(key, reg.name), 'axi4lite_%s_%s_in'     %(key, reg.name))
                          axi4lite_wrapper.add_assign('axi4lite_%s_in_we.%s'  %(key, reg.name), 'axi4lite_%s_%s_in_we'  %(key, reg.name))
