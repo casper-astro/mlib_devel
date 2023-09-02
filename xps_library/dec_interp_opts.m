@@ -27,8 +27,8 @@ function dec_interp_opts(gcb, tile, slice)
     param = ['t', num2str(tile), '_', prefix, '_adc', num2str(slice), '_dec_mode'];
   else % is dac
     param  = ['t', num2str(tile), '_', prefix, '_dac', num2str(slice), '_inter_mode'];
-    analog_mode_param  = ['t', num2str(tile), '_', prefix, '_dac', num2str(slice), '_analog_output'];
-    if chk_param(gcb, analog_mode_param, 'I/Q')
+    mixer_mode_param  = ['t', num2str(tile), '_', prefix, '_dac', num2str(slice), '_mixer_mode'];
+    if ~chk_param(gcb, mixer_mode_param, 'Real -> Real')
       opts = opts(2:end);
     end
   end
