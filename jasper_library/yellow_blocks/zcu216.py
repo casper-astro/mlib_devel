@@ -143,6 +143,9 @@ class zcu216(YellowBlock):
         cons.append(RawConstraint('set_property -dict { PACKAGE_PIN AV21 IOSTANDARD LVCMOS12 } [get_ports { mux_led[0] }]'))
         cons.append(RawConstraint('set_property -dict { PACKAGE_PIN AR21 IOSTANDARD LVCMOS12 } [get_ports { mux_led[1] }]'))
 
+        # Force MMCM to a better location near the incoming pin/buffer, improving clock structure (improved timing overhead, generally lower skew)
+        cons.append(RawConstraint('set_property LOC MMCM_X0Y5 [get_cells zcu216_clk_infr_inst/pl_clk_mmcm_inst]'))
+
         # TODO: extend to provide other onboard clocks
         #cons.append(PortConstraint('clk_100_p', 'clk_100_p'))
         #cons.append(ClockConstraint('clk_100_p','clk_100_p', period=10.0, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=5.0))
