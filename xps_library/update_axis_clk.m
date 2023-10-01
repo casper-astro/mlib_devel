@@ -40,8 +40,10 @@ function [] = update_axis_clk(gcb, tile)
         end
       end
 
-      decmode = get_param(gcb, ['t', num2str(tile), '_', prefix, '_adc', num2str(a), '_dec_mode']);
-      factor  = str2double(decmode(1));
+      decmode_str = get_param(gcb, ['t', num2str(tile), '_', prefix, '_adc', num2str(a), '_dec_mode']);
+      dec_match = regexp(decmode_str, '([0-9]*)x', 'tokens');
+      % do not check if empty match, assuming a valid factor will be matched
+      factor  = str2double(dec_match{1}{1});
 
       sys_clk_mhz = (sample_rate_mhz/factor)./w;
 
@@ -80,8 +82,10 @@ function [] = update_axis_clk(gcb, tile)
         end
       end
 
-      intermode = get_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_inter_mode']);
-      factor  = str2double(intermode(1));
+      intermode_str = get_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_inter_mode']);
+      inter_match = regexp(intermode_str, '([0-9]*)x', 'tokens');
+      % do not check if empty match, assuming a valid factor will be matched
+      factor  = str2double(inter_match{1}{1});
 
       sys_clk_mhz = (sample_rate_mhz/factor)./w;
       if QuadTile

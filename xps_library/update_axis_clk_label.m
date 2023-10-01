@@ -24,11 +24,13 @@ function [] = update_axis_clk_label(gcb, tile)
 
   if tile < 228 % adc
     for a = n_slices
-      decmode = get_param(gcb, ['t', num2str(tile), '_', prefix, '_adc', num2str(a), '_dec_mode']);
-      axisamp = get_param(gcb, ['t', num2str(tile), '_', prefix, '_adc', num2str(a), '_sample_per_cycle']);
+      decmode_str = get_param(gcb, ['t', num2str(tile), '_', prefix, '_adc', num2str(a), '_dec_mode']);
+      dec_match = regexp(decmode_str, '([0-9]*)x', 'tokens');
+      % do not check if empty match, assuming a valid factor will be matched
+      factor  = str2double(dec_match{1}{1});
 
-      factor  = str2double(decmode(1));
-      axisamp = str2double(axisamp);
+      axisamp_str = get_param(gcb, ['t', num2str(tile), '_', prefix, '_adc', num2str(a), '_sample_per_cycle']);
+      axisamp = str2double(axisamp_str);
 
       sys_clk_mhz = sample_rate_mhz/factor/axisamp;
       if QuadTile
@@ -47,11 +49,13 @@ function [] = update_axis_clk_label(gcb, tile)
 
   else % dac
     for a = n_slices
-      intermode = get_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_inter_mode']);
-      axisamp = get_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_sample_per_cycle']);
+      intermode_str = get_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_inter_mode']);
+      inter_match = regexp(intermode_str, '([0-9]*)x', 'tokens');
+      % do not check if empty match, assuming a valid factor will be matched
+      factor  = str2double(inter_match{1}{1});
 
-      factor  = str2double(intermode(1));
-      axisamp = str2double(axisamp);
+      axisamp_str = get_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_sample_per_cycle']);
+      axisamp = str2double(axisamp_str);
 
       sys_clk_mhz = sample_rate_mhz/factor/axisamp;
       check_IQIQ = chk_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_analog_output'], 'I/Q');
