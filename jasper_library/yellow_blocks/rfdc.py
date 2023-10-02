@@ -620,12 +620,11 @@ class rfdc(YellowBlock):
 
     # place the rfdc
     rfdc_bd_name = 'usp_rf_data_converter_0'#rfdc'
-    # TODO better handle version information, the version string was manually increasesd when testing for > Vivado 2020.2
-    tcl_cmds['pre_synth'] += ['create_bd_cell -type ip -vlnv xilinx.com:ip:usp_rf_data_converter:2.5 {:s}'.format(rfdc_bd_name)]
+    # the '*' imports the latest version of the IP, there should only exist a single rfdc version
+    tcl_cmds['pre_synth'] += ['create_bd_cell -type ip -vlnv xilinx.com:ip:usp_rf_data_converter:* {:s}'.format(rfdc_bd_name)]
 
     # get a reference to the rfdc in the block design, currently assume that only one rfdc is in the design (decent assumption)
     tcl_cmds['pre_synth'] += ['set rfdc [get_bd_cells -filter { NAME =~ *usp_rf_data_converter*}]']
-    #tcl_cmds['pre_synth'] += ['set rfdc [get_bd_cells -filter { NAME == rfdc}]']
 
     # create bd s axi intf port
     s_axi_ifport = 'RFDC'
