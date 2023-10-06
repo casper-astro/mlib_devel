@@ -207,7 +207,7 @@ class rfdc(YellowBlock):
         self.num_adc_slice = 2
         self.dac_tiles = range(228,230)
         self.dac_tile_arch = 'QT'
-        self.num_adc_slice = 4
+        self.num_dac_slice = 4
       elif designator[1] == '9':
         self.adc_tiles = range(224, 228)
         self.adc_tile_arch = 'QT'

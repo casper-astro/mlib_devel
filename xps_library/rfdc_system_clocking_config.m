@@ -18,7 +18,6 @@ function [] = rfdc_system_clocking_config(gcb)
   t230_has_clk = sprintf(has_clk_param_str, 230, 'dac');
   t231_has_clk = sprintf(has_clk_param_str, 231, 'dac');
 
-
   switch platform
     case 'rfsoc4x2'
       set_param(gcb, t224_has_clk, 'on');
@@ -74,5 +73,23 @@ function [] = rfdc_system_clocking_config(gcb)
       msk.getParameter(t229_has_clk).Enabled = 'on';
       msk.getParameter(t230_has_clk).Enabled = 'off';
       msk.getParameter(t231_has_clk).Enabled = 'off';
+    case 'ZRF16_49DR'
+      set_param(gcb, t224_has_clk, 'on');
+      set_param(gcb, t225_has_clk, 'on');
+      set_param(gcb, t226_has_clk, 'on');
+      set_param(gcb, t227_has_clk, 'on');
+      msk.getParameter(t224_has_clk).Enabled = 'on';
+      msk.getParameter(t225_has_clk).Enabled = 'on';
+      msk.getParameter(t226_has_clk).Enabled = 'on';
+      msk.getParameter(t227_has_clk).Enabled = 'on';
+
+      set_param(gcb, t228_has_clk, 'on');
+      set_param(gcb, t229_has_clk, 'on');
+      set_param(gcb, t230_has_clk, 'on');
+      set_param(gcb, t231_has_clk, 'on');
+      msk.getParameter(t228_has_clk).Enabled = 'on';
+      msk.getParameter(t229_has_clk).Enabled = 'on';
+      msk.getParameter(t230_has_clk).Enabled = 'on';
+      msk.getParameter(t231_has_clk).Enabled = 'on';
   end
 

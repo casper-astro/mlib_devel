@@ -31,6 +31,12 @@ rfdc:
   tile227:
     has_adc_clk: False
     adc_clk_src: 3
+  tile228:
+    has_dac_clk: True
+    dac_clk_src: 4
+  tile229:
+    has_dac_clk: True
+    dac_clk_src: 5
 
 provides:
   - adc_clk

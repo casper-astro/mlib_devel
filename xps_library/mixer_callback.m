@@ -62,14 +62,17 @@ function [] = mixer_callback(gcb, tile, slice, arch)
           MixerDialog.Enabled = 'off';
           AnalogDialog.Enabled= 'off';
           mixertype_callback(gcb,tile,slice+1,arch);
-        else % mixer mode is not IQ->IQ
+        else % mixer mode on the odd slice is not IQ->IQ, make changes to setup the odd slice appropriately
           msk.getParameter(['t', num2str(tile), '_', prefix, '_adc', num2str(a+1), '_enable']).Enabled = 'on';
-          msk.getParameter(['t', num2str(tile), '_', prefix, '_adc', num2str(a+1), '_mixer_mode']).TypeOptions = {'Real -> I/Q'};
-          msk.getParameter(['t', num2str(tile), '_', prefix, '_adc', num2str(a+1), '_mixer_type']).TypeOptions = {'Fine', 'Coarse'};
           if strcmp(get_param(gcb, ['t', num2str(tile), '_', prefix, '_adc', num2str(a+1), '_enable']),'on')
             DataDialog.Enabled  = 'on';
             MixerDialog.Enabled = 'on';
             AnalogDialog.Enabled= 'on';
+            if ~chk_param(gcb, ['t', num2str(tile), '_', prefix, '_adc', num2str(a+1), '_digital_output'], 'Real')
+              % only edit the mixer mode if the odd slice is not real digital output
+              msk.getParameter(['t', num2str(tile), '_', prefix, '_adc', num2str(a+1), '_mixer_mode']).TypeOptions = {'Real -> I/Q'};
+              msk.getParameter(['t', num2str(tile), '_', prefix, '_adc', num2str(a+1), '_mixer_type']).TypeOptions = {'Fine', 'Coarse'};
+            end
           end
           mixertype_callback(gcb, tile, slice+1, arch);
         end % chk_param() I/Q -> I/Q
