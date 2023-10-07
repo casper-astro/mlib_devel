@@ -163,9 +163,12 @@ class rfdc(YellowBlock):
 
   def initialize(self):
     # IP generation and configuration parameters
-    self.tile_arch     = None
+    self.adc_tiles = None
+    self.dac_tiles = None
+    self.adc_tile_arch = None
+    self.dac_tile_arch = None
     self.num_adc_slice = None
-    self.num_dac_slice = 4
+    self.num_dac_slice = None
     self.enabled_adc_tiles = []
     self.enabled_dac_tiles = []
     self.enabled_adcs  = []
@@ -189,38 +192,62 @@ class rfdc(YellowBlock):
 
     # first digit from part designator indicates part generation (e.g., xczu28dr is gen 1)
     designator = m.group(0)
-    if   designator[0] == '4':
+    if designator[0] == '4':
       self.gen = 3
     elif designator[0] == '3':
       self.gen = 2
     elif designator[0] == '2':
       self.gen = 1
 
-    # second digit from part designator indicates RF tile architecture (e.g., xczu28dr is a Dual-Tile arch)
-    if   designator[1] == '8':
-      self.tile_arch = 'DT'
-      self.num_adc_slice = 2
-      lastTile = 230
-    elif designator[1] == '9':
-      self.tile_arch = 'QT'
-      self.num_adc_slice = 4
-      lastTile = 232
+    if self.gen == 1:
+      # second digit from part designator indicates RF tile architecture (e.g., xczu28dr is a Dual-Tile arch)
+      if designator[1] == '8':
+        self.adc_tiles = range(224, 228)
+        self.adc_tile_arch = 'DT'
+        self.num_adc_slice = 2
+        self.dac_tiles = range(228,230)
+        self.dac_tile_arch = 'QT'
+        self.num_dac_slice = 4
+      elif designator[1] == '9':
+        self.adc_tiles = range(224, 228)
+        self.adc_tile_arch = 'QT'
+        self.num_adc_slice = 4
+        self.dac_tiles = range(228, 232)
+        self.dac_tile_arch = 'QT'
+        self.num_dac_slice = 4
+    elif self.gen == 2:
+      raise NotImplemented
+    elif self.gen == 3:
+      if designator[1] == '8':
+        self.adc_tiles = range(224, 228)
+        self.adc_tile_arch = 'DT'
+        self.num_adc_slice = 2
+        self.dac_tiles = range(228, 232)
+        self.dac_tile_arch = 'DT'
+        self.num_dac_slice = 2
+      elif designator[1] == '9':
+        self.adc_tiles = range(224, 228)
+        self.adc_tile_arch = 'QT'
+        self.num_adc_slice = 4
+        self.dac_tiles = range(228, 232)
+        self.dac_tile_arch = 'QT'
+        self.num_dac_slice = 4
 
     # build tile and adc slice objects for IP instantiation and configuration
     # determine enabled adc tiles
-    for tidx in range(224,228):
+    for tidx in self.adc_tiles:
       if self.blk['Tile{:d}_enable'.format(tidx)]:
         print("adding Tile {:d} to enabled ADC tiles".format(tidx))
         self.enabled_adc_tiles.append(tidx-224)
 
     # determine enabled dac tiles
-    for tidx in range(228,lastTile):
+    for tidx in self.dac_tiles:
       if self.blk['Tile{:d}_enable'.format(tidx)]:
         print("adding Tile {:d} to enabled DAC tiles".format(tidx))
         self.enabled_dac_tiles.append(tidx-228)
 
     # build adc tile objects
-    for tidx in range(224, 228):
+    for tidx in self.adc_tiles:
       t = self.tile()
       t.enable = (tidx-224 in self.enabled_adc_tiles)
 
@@ -259,7 +286,7 @@ class rfdc(YellowBlock):
       self.tiles.append(t)
 
     # build dac tile objects
-    for tidx in range(228, lastTile):
+    for tidx in self.dac_tiles:
       t = self.tile()
       t.enable = (tidx-228 in self.enabled_dac_tiles)
 
@@ -306,17 +333,17 @@ class rfdc(YellowBlock):
     for tidx in self.enabled_adc_tiles:
       # determine enabled adcs
       for aidx in range(0, self.num_adc_slice):
-        if self.blk['t{:d}_{:s}_adc{:d}_enable'.format(tidx+224, self.tile_arch, aidx)]:
+        if self.blk['t{:d}_{:s}_adc{:d}_enable'.format(tidx+224, self.adc_tile_arch, aidx)]:
           print("adding Slice {:d} to ADC tile {:d}".format(aidx, tidx+224))
           self.enabled_adcs.append(str(tidx)+str(aidx))
 
-    for tidx in range(224,228):
+    for tidx in self.adc_tiles:
       # build adc objects
       adc_mask_fmt = 't{:d}_{:s}_adc{:d}_{:s}'
       for aidx in range(0, self.num_adc_slice):
         a = self.adc_slice(self.gen)
         for adc_attr, _ in iteritems(self.adc_attr_map):
-          attr_key = adc_mask_fmt.format(tidx, self.tile_arch, aidx, adc_attr)
+          attr_key = adc_mask_fmt.format(tidx, self.adc_tile_arch, aidx, adc_attr)
           if attr_key in self.blk:
             setattr(a, adc_attr, self.blk[attr_key])
 
@@ -325,17 +352,17 @@ class rfdc(YellowBlock):
     for tidx in self.enabled_dac_tiles:
       # determine enabled dacs
       for didx in range(0, self.num_dac_slice):
-        if self.blk['t{:d}_{:s}_dac{:d}_enable'.format(tidx+228, self.tile_arch, didx)]:
+        if self.blk['t{:d}_{:s}_dac{:d}_enable'.format(tidx+228, self.dac_tile_arch, didx)]:
           print("adding Slice {:d} to DAC tile {:d}".format(didx, tidx+228))
           self.enabled_dacs.append(str(tidx)+str(didx))
 
-    for tidx in range(228,lastTile):
+    for tidx in self.dac_tiles:
       # build dac objects
       dac_mask_fmt = 't{:d}_{:s}_dac{:d}_{:s}'
       for didx in range(0, self.num_dac_slice):
         d = self.dac_slice(self.gen)
         for dac_attr, _ in iteritems(self.dac_attr_map):
-          attr_key = dac_mask_fmt.format(tidx, self.tile_arch, didx, dac_attr)
+          attr_key = dac_mask_fmt.format(tidx, self.dac_tile_arch, didx, dac_attr)
           if attr_key in self.blk:
             setattr(d, dac_attr, self.blk[attr_key])
 
@@ -463,10 +490,10 @@ class rfdc(YellowBlock):
           bd_inst.add_port('adc{:d}_clk_n'.format(tidx), 'adc{:d}_clk_n'.format(tidx), dir='in', parent_port=True)
 
       for aidx in self.enabled_adcs:
-        if int(aidx[0]) == tidx: # need this becuase of enabled_adcs stores ALL enabled slices across all adc tiles, we only want the adcs associated with this tile
+        if int(aidx[0]) == tidx: # need this becuase enabled_adcs stores ALL enabled slices across all adc tiles, we only want the adcs associated with this tile
           n_aidx = int(aidx[1])
 
-          if self.tile_arch == 'QT':
+          if self.adc_tile_arch == 'QT':
             a = self.adcs[n_aidx+4*int(aidx[0])] # 4 adc slices for each QT tile
             data_width = 16*a.sample_per_cycle
             # vin ports
@@ -531,12 +558,13 @@ class rfdc(YellowBlock):
           bd_inst.add_port('dac{:d}_clk_n'.format(tidx), 'dac{:d}_clk_n'.format(tidx), dir='in', parent_port=True)
 
       for didx in self.enabled_dacs:
-        if int(didx[0]) == tidx: # need this becuase of enabled_dacs stores ALL enabled slices across all dac tiles, we only want the adcs associated with this tile
-          d = self.dacs[int(didx[1])+4*int(didx[0])]
-          data_width = 16*d.sample_per_cycle
-          
-          if self.tile_arch == 'QT':
+        if int(didx[0]) == tidx: # need this becuase enabled_dacs stores ALL enabled slices across all dac tiles, we only want the dacs associated with this tile
+          n_didx = int(didx[1])
+
+          if self.dac_tile_arch == 'QT':
             print("adding vin and axis ports for DAC Tile {:d} Slice {:d}".format(int(didx[0]), int(didx[1])))
+            d = self.dacs[n_didx+4*int(didx[0])] # 4 dac slices for each QT tile
+            data_width = 16*d.sample_per_cycle
             # vout ports
             bd_inst.add_port('vout{:s}_p'.format(didx), 'vout{:s}_p'.format(didx),  dir='out', parent_port=True)
             bd_inst.add_port('vout{:s}_n'.format(didx), 'vout{:s}_n'.format(didx),  dir='out', parent_port=True)
@@ -546,8 +574,10 @@ class rfdc(YellowBlock):
               bd_inst.add_port('s{:s}_axis_tready'.format(didx), "1'b1",)
               bd_inst.add_port('s{:s}_axis_tvalid'.format(didx), 's{:s}_axis_tvalid'.format(didx))
           else: # Dual tile architecture
+            d = self.dacs[n_didx+2*int(didx[0])] # 2 dac slices for each QT tile
+            data_width = 16*d.sample_per_cycle
             # vin ports
-            n_didx = int(didx[1])
+            # n_didx = int(didx[1])
             bd_inst.add_port('vout{:s}_p'.format(didx), 'vout{:s}_p'.format(didx),  dir='out', parent_port=True)
             bd_inst.add_port('vout{:s}_n'.format(didx), 'vout{:s}_n'.format(didx),  dir='out', parent_port=True)
             # maxis ports-dual architecture rfsocs the I/Q streams are output on seperate maxis interfaces needing different rules depending on the configuration
@@ -590,12 +620,11 @@ class rfdc(YellowBlock):
 
     # place the rfdc
     rfdc_bd_name = 'usp_rf_data_converter_0'#rfdc'
-    # TODO better handle version information, the version string was manually increasesd when testing for > Vivado 2020.2
-    tcl_cmds['pre_synth'] += ['create_bd_cell -type ip -vlnv xilinx.com:ip:usp_rf_data_converter:2.5 {:s}'.format(rfdc_bd_name)]
+    # the '*' imports the latest version of the IP, there should only exist a single rfdc version
+    tcl_cmds['pre_synth'] += ['create_bd_cell -type ip -vlnv xilinx.com:ip:usp_rf_data_converter:* {:s}'.format(rfdc_bd_name)]
 
     # get a reference to the rfdc in the block design, currently assume that only one rfdc is in the design (decent assumption)
     tcl_cmds['pre_synth'] += ['set rfdc [get_bd_cells -filter { NAME =~ *usp_rf_data_converter*}]']
-    #tcl_cmds['pre_synth'] += ['set rfdc [get_bd_cells -filter { NAME == rfdc}]']
 
     # create bd s axi intf port
     s_axi_ifport = 'RFDC'
@@ -659,24 +688,29 @@ class rfdc(YellowBlock):
         if int(aidx[0]) == tidx:
 
           n_aidx = int(aidx[1])
-          if self.tile_arch == 'QT':
+          if self.adc_tile_arch == 'QT':
             a = self.adcs[n_aidx+4*int(aidx[0])]
             tcl_cmds['pre_synth'] += self.build_config_cmd(a, self.adc_attr_map, tidx, n_aidx)
-          elif self.tile_arch == 'DT':
+          elif self.adc_tile_arch == 'DT':
             a = self.adcs[n_aidx+2*int(aidx[0])]
             tcl_cmds['pre_synth'] += self.build_config_cmd(a, self.adc_attr_map, tidx, 2*n_aidx)
             tcl_cmds['pre_synth'] += self.build_config_cmd(a, self.adc_attr_map, tidx, 2*n_aidx+1)
 
     for tidx in self.enabled_dac_tiles:
-      t = self.tiles[tidx+4] #need to check this vor various enabled/disabled tiles
+      t = self.tiles[tidx+4] # need to check this vor various enabled/disabled tiles
       # if I remember right, .tiles has every tile, regardless of whether it's enabled, so it might just be tidx+4
       tcl_cmds['pre_synth'] += self.build_config_cmd(t, self.dac_tile_attr_map, tidx)
 
       for didx in self.enabled_dacs:
         if int(didx[0]) == tidx:
           n_didx = int(didx[1])
-          d = self.dacs[n_didx+4*int(didx[0])]
-          tcl_cmds['pre_synth'] += self.build_config_cmd(d, self.dac_attr_map, tidx, n_didx)
+          if self.dac_tile_arch == 'QT':
+            d = self.dacs[n_didx+4*int(didx[0])]
+            tcl_cmds['pre_synth'] += self.build_config_cmd(d, self.dac_attr_map, tidx, n_didx)
+          elif self.dac_tile_arch == 'DT':
+            d = self.dacs[n_didx+2*int(didx[0])]
+            tcl_cmds['pre_synth'] += self.build_config_cmd(d, self.dac_attr_map, tidx, 2*n_didx)
+            tcl_cmds['pre_synth'] += self.build_config_cmd(d, self.dac_attr_map, tidx, 2*n_didx+1)
 
     tcl_cmds['pre_synth'] += ['] [get_bd_cells $rfdc]']
     # create board interface ports for axis data/clk/reset pins and adc tile output clock for each enabled tile
@@ -704,12 +738,12 @@ class rfdc(YellowBlock):
       for aidx in self.enabled_adcs:
         if tidx == int(aidx[0]):
           n_aidx = int(aidx[1])
-          if self.tile_arch == 'QT':
+          if self.adc_tile_arch == 'QT':
             a = self.adcs[n_aidx+4*int(aidx[0])]
-          elif self.tile_arch == 'DT':
+          elif self.adc_tile_arch == 'DT':
             a = self.adcs[n_aidx+2*int(aidx[0])]
           data_width = 16*a.sample_per_cycle
-          if self.tile_arch == 'QT':
+          if self.adc_tile_arch == 'QT':
             # vin ports
             tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('vin{:d}{:d}_n'.format(tidx, n_aidx), port_dir='in'))
             tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('vin{:d}{:d}_p'.format(tidx, n_aidx), port_dir='in'))
@@ -746,7 +780,7 @@ class rfdc(YellowBlock):
 
     # create board interface ports for axis data/clk/reset pins and dac tile output clock for each enabled tile
     for tidx in self.enabled_dac_tiles:
-      t = self.tiles[tidx]
+      t = self.tiles[tidx] # is this wrong? shouldn't it be offset by the num of adc tiles? See line 708 (because see how the wrong tile may be used in line 798?
       # gen3 parts support clock forwarding, user provides information about provided clock to the board sources in simulink mask (e.g.,
       # current gen3 xilinx eval boards only have clocks coming to 2 adc and 2 dac tiles, requiring clocks to be forwarded)
       if self.gen > 1:
@@ -769,9 +803,12 @@ class rfdc(YellowBlock):
       for didx in self.enabled_dacs:
         if tidx == int(didx[0]):
           n_didx = int(didx[1])
-          d = self.dacs[n_didx+4*int(didx[0])]
+          if self.dac_tile_arch == 'QT':
+            d = self.dacs[n_didx+4*int(didx[0])]
+          elif self.dac_tile_arch == 'DT':
+            d = self.dacs[n_didx+2*int(didx[0])]
           data_width = 16*d.sample_per_cycle
-          if self.tile_arch == 'QT':
+          if self.dac_tile_arch == 'QT':
             # vout ports
             tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('vout{:d}{:d}_n'.format(tidx, n_didx), port_dir='out'))
             tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('vout{:d}{:d}_p'.format(tidx, n_didx), port_dir='out'))

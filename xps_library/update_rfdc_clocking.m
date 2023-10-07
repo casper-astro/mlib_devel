@@ -5,16 +5,15 @@ function [] = update_rfdc_clocking(gcb,tile)
   fs_mask = msk.getParameter(['t', num2str(tile), '_', 'sample_rate']).Value;
   fs_value = get_param(gcb, ['t', num2str(tile), '_', 'sample_rate']);
 
-  [gen, tile_arch, fs_max, fs_min] = get_rfsoc_properties(gcb);
-  %case for adcs
-  if tile < 228
+  [gen, adc_tile_arch, dac_tile_arch, adc_num_tile, dac_num_tile, fs_max, fs_min] = get_rfsoc_properties(gcb);
+
+  if tile < 228 % adc tile
     if (str2num(fs_value) > fs_max)
       error(['Maximum sample rate for this ADC is ', num2str(fs_max), ' Msps']);
     elseif (str2num(fs_value) < fs_min)
       error(['Minimum sample rate for this ADC is ', num2str(fs_min), ' Msps']);
     end
-  %case for dacs
-  elseif ~(tile > 229 && (strcmp(tile_arch, 'dual')))
+  else % dac tile
     % TODO: store max DAC sample rates for platforms so we can read them here
   end
 

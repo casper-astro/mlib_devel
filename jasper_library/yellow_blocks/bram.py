@@ -35,10 +35,21 @@ class bram(YellowBlock):
                                 typecode=self.typecode,
                                 data_width=self.data_width) #width is in bits
 
+            top.add_signal(self.unique_name + '_' + self.unique_name + '_addr', width=self.addr_width)
+            top.add_signal(self.unique_name + '_' + self.unique_name + '_data_in', width=self.data_width)
+            top.add_signal(self.unique_name + '_' + self.unique_name + '_data_out', width=self.data_width)
+            top.add_signal(self.unique_name + '_' + self.unique_name + '_we', width=1)
+
             top.add_signal(self.fullname + '_addr', width=self.addr_width)
             top.add_signal(self.fullname + '_data_in', width=self.data_width)
             top.add_signal(self.fullname + '_data_out', width=self.data_width)
             top.add_signal(self.fullname + '_we', width=1)
+
+            top.assign_signal(self.unique_name + '_' + self.unique_name + '_addr',      self.fullname + '_addr')
+            top.assign_signal(self.unique_name + '_' + self.unique_name + '_data_in',   self.fullname + '_data_in')
+            top.assign_signal(self.unique_name + '_' + self.unique_name + '_data_out',  self.fullname + '_data_out')
+            top.assign_signal(self.unique_name + '_' + self.unique_name + '_we',        self.fullname + '_we')
+
 
         else:
             module = 'wb_bram'

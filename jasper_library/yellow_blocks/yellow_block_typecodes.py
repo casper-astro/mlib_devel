@@ -20,5 +20,4 @@ TYPECODE_ETHCORE   = 1
 TYPECODE_ADC16CTRL = 2
 TYPECODE_SYSBLOCK  = 3
 TYPECODE_BRAM      = 4
-# mcb: seems appropriate to include as the RFSoC is run-time configurable
 TYPECODE_RFDC      = 5
