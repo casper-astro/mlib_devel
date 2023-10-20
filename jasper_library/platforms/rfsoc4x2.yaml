@@ -82,6 +82,12 @@ pins:
   qsfp_refclk_p:    # 156.25 MHz
     iostd: LVDS
     loc: AM17
+  irig_trig:
+    iostd: LVCMOS18
+    loc: AH13
+  irig_comp:
+    iostd: LVCMOS18
+    loc: AJ13
 
 # RFDC
   sysref_p:
