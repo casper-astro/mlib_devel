@@ -32,6 +32,20 @@ rfdc:
     has_adc_clk: False
     adc_clk_src: 2
 
+  tile228:
+    has_dac_clk: True
+    dac_clk_src: 4
+  tile229:
+    has_dac_clk: False
+    dac_clk_src: 4
+  tile230:
+    has_dac_clk: True
+    dac_clk_src: 4
+  tile231:
+    has_dac_clk: False
+    dac_clk_src: 4
+
+
 onehundredgbe:
   refclk_freq_str: "156.25"
   include_rs_fec: 1
@@ -41,7 +55,7 @@ onehundredgbe:
   management_interface: []
   # UG1075 v1.9 Fig. 1-54
   cmac_loc:
-    # xczu48dr has 2 cmac locations, zcu111 can support a second through FMC
+    # xczu48dr has 2 cmac locations, can support a second through FMC+
     - CMACE4_X0Y0
     - CMACE4_X0Y1
     
@@ -52,17 +66,20 @@ provides:
 
 pins:
   clk_100_p:
-    iostd: LVDS
-    loc: G12
+    iostd: LVDS_25
+    loc: AU4
   clk_100_n:
-    iostd: LVDS
-    loc: G11
+    iostd: LVDS_25
+    loc: AU3
   clk_125_p:
-    iostd: LVDS
+    iostd: LVDS_25
     loc: A13
   clk_125_n:
-    iostd: LVDS
-    loc: A12
+    iostd: LVDS_25
+    loc: C7
+  sync_in:
+    iostd: LVCMOS18
+    loc: C8
 
 # NOTE: most of the IO constraints and clocking constraints are taken care of by
 # the RFDC IP itself. Vivado has that baked into the output products of teh IP
@@ -113,48 +130,28 @@ pins:
     loc: AP1
 
 # 100 GbE
-  # IDT 8A34001 output Q7, refclk1 GTY bank 129
-  mgt_ref_clk_p:
+  # The 4 GTY lanes are split, 2 to bank 128, 2 to bank 129
+  # IDT 8A34001 output Q11 refclk1 GTY bank 128 P Y31 N Y32
+  # IDT 8A34001 output Q7, refclk1 GTY bank 129 P V31 N V32
+  qsfp_mgt_ref_clk_p:
     loc:
-      - V31
-  mgt_ref_clk_n:
+      - Y31
+  qsfp_mgt_ref_clk_n:
     loc:
-      - V32
+      - Y32
   qsfp_mgt_tx_p:
-    loc:
-      # bank 128 SFP[0:1]
-      - Y35
-      - V35
-      # bank 129 SFP[2:3]
-      - P35
-      - N33
+         # bank 128 SFP[0:1] # bank 129 SFP[2:3]
+    loc: [Y35, V35, P35, N33]
   qsfp_mgt_tx_n:
-    loc:
-      # bank 128
-      - Y36
-      - V36
-      # bank 129
-      - P36
-      - N34
+         # bank 128  # bank 129
+    loc: [Y36, V36,  P36, N34]
   qsfp_mgt_rx_p:
     loc:
-      # bank 128
-      - AA38
-      - W38
-      # bank 129
-      - N38
-      - M36
+         # bank 128  # bank 129
+    loc: [AA38, W38, N38, M36]
   qsfp_mgt_rx_n:
-    loc:
-      # bank 128
-      - AA39
-      - W39
-      # bank 129
-      - N39
-      - M37
-
-  # TODO: what do we do here? These pins are strapped?
-  #qsfp_modprs:
+         # bank 128  # bank 129
+    loc: [AA39, W39, N39, M37]
 
 # zcu208 has access 8 sets of 3 green single color LEDs (24 total)
   led:
@@ -170,3 +167,10 @@ pins:
       - AV21
       - AV17
 
+  adc_io:
+    iostd: LVCMOS18
+    loc: [AP5, AP6, AR6, AR7, AV7, AU7, AV8, AU8, AT6, AT7, AU5, AT5, AW4, AW3, AV2, AV3]
+
+  dac_io:
+    iostd: LVCMOS18
+    loc: [A9, A10, A6, A7, A5, B5, C5, C6, C10, D10, D6, E7, E8, E9, E6, F6]

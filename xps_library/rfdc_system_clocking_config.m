@@ -65,13 +65,13 @@ function [] = rfdc_system_clocking_config(gcb)
       msk.getParameter(t226_has_clk).Enabled = 'off';
       msk.getParameter(t227_has_clk).Enabled = 'off';
 
-      set_param(gcb, t228_has_clk, 'off');
-      set_param(gcb, t229_has_clk, 'on');
+      set_param(gcb, t228_has_clk, 'on');
+      set_param(gcb, t229_has_clk, 'off');
       set_param(gcb, t230_has_clk, 'on');
       set_param(gcb, t231_has_clk, 'off');
-      msk.getParameter(t228_has_clk).Enabled = 'off';
-      msk.getParameter(t229_has_clk).Enabled = 'on';
-      msk.getParameter(t230_has_clk).Enabled = 'off';
+      msk.getParameter(t228_has_clk).Enabled = 'on';
+      msk.getParameter(t229_has_clk).Enabled = 'off';
+      msk.getParameter(t230_has_clk).Enabled = 'on';
       msk.getParameter(t231_has_clk).Enabled = 'off';
     case 'ZRF16_49DR'
       set_param(gcb, t224_has_clk, 'on');
