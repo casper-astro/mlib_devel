@@ -68,11 +68,7 @@ function [] = update_axis_clk(gcb, tile)
   else % dac
     for a = n_slices
       % determine choices for samples per clock
-      if (gen < 2)
-        w = 1:8;
-      else
-        w = 1:16;
-      end
+      w = 1:16;
 
       % PG269, quad tiles dacs have I/Q data appear on the same interface in complex
       % pairs. E.g., 2 samples is one I and one Q sample

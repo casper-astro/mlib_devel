@@ -59,6 +59,7 @@ class rfdc(YellowBlock):
     'coarse_freq'     : {'param' : 'DAC_Coarse_Mixer_Freq{:d}{:d}',   'fmt' : "{{:d}}"},
     'nyquist_zone'    : {'param' : 'DAC_Nyquist{:d}{:d}',             'fmt' : "{{:d}}"},
     'decode_mode'     : {'param' : 'DAC_Decoder_Mode{:d}{:d}',        'fmt' : "{{:d}}"}
+#   'datapath_mode'   : {'param' : 'DAC_Mode{:d}{:d}',                'fmt' : "{{:d}}"} # TODO: add implementation details for DAC DUC datapath mode
   }
 
   """
@@ -562,7 +563,6 @@ class rfdc(YellowBlock):
           n_didx = int(didx[1])
 
           if self.dac_tile_arch == 'QT':
-            print("adding vin and axis ports for DAC Tile {:d} Slice {:d}".format(int(didx[0]), int(didx[1])))
             d = self.dacs[n_didx+4*int(didx[0])] # 4 dac slices for each QT tile
             data_width = 16*d.sample_per_cycle
             # vout ports
@@ -578,21 +578,21 @@ class rfdc(YellowBlock):
             data_width = 16*d.sample_per_cycle
             # vin ports
             # n_didx = int(didx[1])
-            bd_inst.add_port('vout{:s}_p'.format(didx), 'vout{:s}_p'.format(didx),  dir='out', parent_port=True)
-            bd_inst.add_port('vout{:s}_n'.format(didx), 'vout{:s}_n'.format(didx),  dir='out', parent_port=True)
+            bd_inst.add_port('vout{:d}{:d}_p'.format(tidx, 2*n_didx), 'vout{:d}{:d}_p'.format(tidx, 2*n_didx),  dir='out', parent_port=True) # DAC location is 0 or 2
+            bd_inst.add_port('vout{:d}{:d}_n'.format(tidx, 2*n_didx), 'vout{:d}{:d}_n'.format(tidx, 2*n_didx),  dir='out', parent_port=True)
             # maxis ports-dual architecture rfsocs the I/Q streams are output on seperate maxis interfaces needing different rules depending on the configuration
             if d.analog_output == 'Real':
               # no difference between Real -> Real and I/Q -> Real
-              bd_inst.add_port('s{:d}{:d}_axis_tdata'.format(tidx, n_didx), '{:s}_s{:d}{:d}_axis_tdata'.format(self.fullname, tidx, n_didx), width=data_width)
-              bd_inst.add_port('s{:d}{:d}_axis_tready'.format(tidx, n_didx), "1'b1",)
-              bd_inst.add_port('s{:d}{:d}_axis_tvalid'.format(tidx, n_didx), 's{:d}{:d}_axis_tvalid'.format(tidx, n_didx))
+              bd_inst.add_port('s{:d}{:d}_axis_tdata'.format(tidx, 2*n_didx), '{:s}_s{:d}{:d}_axis_tdata'.format(self.fullname, tidx, n_didx), width=data_width)
+              bd_inst.add_port('s{:d}{:d}_axis_tready'.format(tidx, 2*n_didx), "1'b1",)
+              bd_inst.add_port('s{:d}{:d}_axis_tvalid'.format(tidx, 2*n_didx), 's{:d}{:d}_axis_tvalid'.format(tidx, n_didx))
             else: # analog mode is I/Q
               # mixer mode is 'I/Q -> I/Q'
               # enabled adcs is both [0, 1]
               if d.mixer_type != 'Off' and d.mixer_type != False: #only add the even slices for s_axis ports
-                bd_inst.add_port('s{:d}{:d}_axis_tdata'.format(tidx, n_didx), '{:s}_s{:d}{:d}_axis_tdata'.format(self.fullname, tidx, n_didx), width=data_width)
-                bd_inst.add_port('s{:d}{:d}_axis_tready'.format(tidx, n_didx), "1'b1",)
-                bd_inst.add_port('s{:d}{:d}_axis_tvalid'.format(tidx, n_didx), 's{:d}{:d}_axis_tvalid'.format(tidx, n_didx))
+                bd_inst.add_port('s{:d}{:d}_axis_tdata'.format(tidx, 2*n_didx), '{:s}_s{:d}{:d}_axis_tdata'.format(self.fullname, tidx, n_didx), width=data_width)
+                bd_inst.add_port('s{:d}{:d}_axis_tready'.format(tidx, 2*n_didx), "1'b1",)
+                bd_inst.add_port('s{:d}{:d}_axis_tvalid'.format(tidx, 2*n_didx), 's{:d}{:d}_axis_tvalid'.format(tidx, n_didx))
 
 
   def gen_constraints(self):
@@ -819,21 +819,21 @@ class rfdc(YellowBlock):
               tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tready'.format(tidx, n_didx), port_dir='out'))
           else: # Dual tile architecture
             # vout ports
-            tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('vout{:d}{:d}_n'.format(tidx, n_didx), port_dir='out'))
-            tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('vout{:d}{:d}_p'.format(tidx, n_didx), port_dir='out'))
+            tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('vout{:d}{:d}_n'.format(tidx, 2*n_didx), port_dir='out')) # Dual tile uses only DAC locations 0 and 2
+            tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('vout{:d}{:d}_p'.format(tidx, 2*n_didx), port_dir='out'))
             # maxis ports-dual architecture rfsocs the I/Q streams are output on seperate maxis interfaces needing different rules depending on the configuration
             if d.analog_output == 'Real': # no difference between Real -> Real and I/Q -> Real
-              tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tdata'.format(tidx, n_didx), port_dir='in', width=data_width))
-              tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tvalid'.format(tidx, n_didx), port_dir='in'))
-              tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tready'.format(tidx, n_didx), port_dir='out'))
+              tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tdata'.format(tidx, 2*n_didx), port_dir='in', width=data_width))
+              tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tvalid'.format(tidx, 2*n_didx), port_dir='in'))
+              tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tready'.format(tidx, 2*n_didx), port_dir='out'))
             else: # digital mode is I/Q
               # mixer mode is 'I/Q -> I/Q
               # in this case ADC 1 better be also set or we are in trouble so here we are assuming that the logic is correct and that
               # enabled adcs is both [0, 1]
               if d.mixer_type != 'Off' and d.mixer_type != False: #only add the even slices for s_axis ports
-                tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tdata'.format(tidx, n_didx), port_dir='in', width=data_width))
-                tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tvalid'.format(tidx, n_didx), port_dir='in'))
-                tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tready'.format(tidx, int(didx[1])), port_dir='out'))
+                tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tdata'.format(tidx, 2*n_didx), port_dir='in', width=data_width))
+                tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tvalid'.format(tidx, 2*n_didx), port_dir='in'))
+                tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tready'.format(tidx, 2*n_didx), port_dir='out'))
     # create IRQ output port
     tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('irq', port_dir='out', port_type='intr'))
 

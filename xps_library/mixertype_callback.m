@@ -1,6 +1,6 @@
 function [] = mixertype_callback(gcb, tile, slice, arch)
 
-  [~, adc_tile_arch, dac_tile_arch, ~, ~, ~, ~] = get_rfsoc_properties(gcb);
+  [gen, adc_tile_arch, dac_tile_arch, ~, ~, ~, ~] = get_rfsoc_properties(gcb);
 
   if tile < 228
     tile_arch = adc_tile_arch;
@@ -61,7 +61,13 @@ function [] = mixertype_callback(gcb, tile, slice, arch)
   else % is a dac
     analog_mode_param = ['t', num2str(tile), '_', prefix, '_dac', num2str(slice), '_analog_output'];
 
-    if chk_param(gcb, mixer_type_param, 'Fine')
+    if chk_param(gcb, mixer_type_param, 'Bypassed') % only gen 2 dac option
+      msk.getParameter(nco_freq_param).Visible = 'off';
+      msk.getParameter(nco_phase_param).Visible = 'off';
+      msk.getParameter(coarse_freq_param).Visible = 'off';
+      msk.getParameter(mixer_mode_param).TypeOptions = {'Real -> Real'};
+
+    elseif chk_param(gcb, mixer_type_param, 'Fine')
       msk.getParameter(nco_freq_param).Visible = 'on';
       msk.getParameter(nco_phase_param).Visible = 'on';
       msk.getParameter(coarse_freq_param).Visible = 'off';
@@ -77,7 +83,12 @@ function [] = mixertype_callback(gcb, tile, slice, arch)
       msk.getParameter(nco_phase_param).Visible = 'off';
 
       if ~chk_param(gcb, analog_mode_param, 'I/Q')
-        msk.getParameter(mixer_mode_param).TypeOptions = {'Real -> Real', 'I/Q -> Real'};
+        if (gen < 2)
+          mixer_mode_options = {'I/Q -> Real'};
+        else
+          mixer_mode_options = {'Real -> Real', 'I/Q -> Real'};
+        end
+        msk.getParameter(mixer_mode_param).TypeOptions = mixer_mode_options;
       end % else don't change it from what it is as I/Q, which is I/Q -> I/Q
 
       if chk_param(gcb, mixer_mode_param, 'I/Q -> Real')
@@ -88,6 +99,8 @@ function [] = mixertype_callback(gcb, tile, slice, arch)
         msk.getParameter(coarse_freq_param).TypeOptions = {'0'};
       end
       msk.getParameter(coarse_freq_param).Visible = 'on';
-
   end
+  % apply changes to interpolator options and update required axis clock when switching modes
+  dec_interp_opts(gcb, tile, slice);
+  update_axis_clk(gcb, tile);
 end
