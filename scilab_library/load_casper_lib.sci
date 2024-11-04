@@ -9,6 +9,7 @@ exec('scilab_library/scilab_blocks/utils/gen_port_suffix.sci');
 exec('scilab_library/scilab_blocks/utils/get_port_width.sci');
 exec('scilab_library/scilab_blocks/utils/search_for_src_blk.sci');
 exec('scilab_library/scilab_blocks/utils/check_block_type.sci');
+exec('scilab_library/run_simulation.sci');
 
 // TODO: load the xps and dsp blocks automatically
 // all of the blocks in the scilab_library/casper_xps and 

@@ -1,9 +1,16 @@
-function [] = casper_simulation(fn)
+function [cmd] = casper_simulation(fn)
+    // run jasper_fontend first, to get the IP core info.
+    build_cmd = jasper_frontend(fn);
     // create a dir for the project
     [path, name, ext] = fileparts(fn);
     // chdir(path);
     mkdir(path+name);
-    // chdir(name);
+    // we also need to create an IP core project for simulation.
+    // If the project already exists, we will skip this step.
+    // TODO: we may need to build the dsp project every time, as users may upate their design.
+    if isdir(path+name+'/dspproj') == %F then
+        unix_s(build_cmd('dsp'));
+    end
     // disp some info
     disp('Starting simulation for model: '+ name);
 
@@ -76,4 +83,9 @@ function [] = casper_simulation(fn)
     end
     st('link_info') = link_info;
     toJSON(st, 'jasper.sim', 4);
+    // run python script to start simulation
+    python_path = 'python';
+    // create a build_cmd for the dsp project
+    jasper_python = [getenv('MLIB_DEVEL_PATH')+'/scilab_library/casper_simulation.py'];
+    cmd = python_path + ' ' + jasper_python + ' '+ '-m ' + modelpath;
 endfunction
