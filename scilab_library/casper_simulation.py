@@ -29,3 +29,4 @@ logger.info('Starting Simulation')
 
 sim = simulation()
 sim.get_ip_core_info()
+sim.get_sim_info()

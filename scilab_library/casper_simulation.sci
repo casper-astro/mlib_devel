@@ -32,6 +32,7 @@ function [cmd] = casper_simulation(fn)
     end
     // create a struct for each sim block
     st = struct();
+    link_info = list();
     st('project') = struct('tag', 'proj', 'filename', fn);
     blkid = 1;
     linkid = 1;

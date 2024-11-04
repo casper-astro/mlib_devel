@@ -41,5 +41,5 @@ jasper.json
 .Xil/
 log.log
 jasper.sim
-
+scilab_library/*.ipynb
 
