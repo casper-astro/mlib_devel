@@ -5,7 +5,7 @@ from sim_blocks.sim_block import SimBlock
 This class generates a simulation object,
  that can be used for casper simulations.
 """
-class CasperSimulation(object):
+class SIMflow(object):
     def __init__(self, ip_core_json='jasper.json', sim_json='jasper.sim'):
         """
         The input files are the jasper.json and jasper.sim files.
