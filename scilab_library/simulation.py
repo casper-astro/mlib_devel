@@ -1,10 +1,11 @@
 import json
 import logging
+from sim_blocks.sim_block import SimBlock
 """
 This class generates a simulation object,
  that can be used for casper simulations.
 """
-class simulation(object):
+class CasperSimulation(object):
     def __init__(self, ip_core_json='jasper.json', sim_json='jasper.sim'):
         """
         The input files are the jasper.json and jasper.sim files.
@@ -15,7 +16,8 @@ class simulation(object):
         self.ip_core_info = json.load(open(ip_core_json))
         self.sim_info = json.load(open(sim_json))
         self.ip_core={}
-        self.sim_blocks={}
+        self.sim_blocks=[]
+        self.sim_objs=[]
 
     def _get_blk_by_id(self, id):
         """
@@ -104,10 +106,12 @@ class simulation(object):
                 port = self._get_port_by_id(dst_blk_id, 'dst')
                 sim_blk_name = slink['src_blk_name']
                 # TODO: we may need to collect more info for the sim blocks.
-                self.sim_blocks[sim_blk_name] = {}
-                self.sim_blocks[sim_blk_name]['port'] = port
-                sim_blk = self._get_blk_by_id(src_blk_id)
-                self.sim_blocks[sim_blk_name]['tag'] = sim_blk['tag']
+                sim_blk = {}
+                sim_blk['name'] = sim_blk_name
+                sim_blk['port'] = port
+                blk = self._get_blk_by_id(src_blk_id)
+                sim_blk['tag'] = blk['tag']
+                self.sim_blocks.append(sim_blk)
                 # log it
                 self.logger.info('-- Sim Block: %s, Port: %s, Tag: %s' % (sim_blk_name, port['name'], sim_blk['tag']))
             if slink['link_type'].endswith('_sim'):
@@ -116,10 +120,20 @@ class simulation(object):
                 dst_blk_id = slink['dst_blk_id']
                 port = self._get_port_by_id(src_blk_id, 'src')
                 sim_blk_name = slink['dst_blk_name']
-                self.sim_blocks[sim_blk_name] = {}
-                self.sim_blocks[sim_blk_name]['port'] = port
-                sim_blk = self._get_blk_by_id(dst_blk_id)
-                self.sim_blocks[sim_blk_name]['tag'] = sim_blk['tag']
+                sim_blk = {}
+                sim_blk['name'] = sim_blk_name
+                sim_blk['port'] = port
+                blk = self._get_blk_by_id(dst_blk_id)
+                sim_blk['tag'] = blk['tag']
+                self.sim_blocks.append(sim_blk)
                 # log it
                 self.logger.info('-- Sim Block: %s, Port: %s, Tag: %s' % (sim_blk_name, port['name'], sim_blk['tag']))
-        
+    
+    def gen_sim_objs(self):
+        """
+        Generate the simulation data for the casper simulation.
+        sim_blk_info is a dict with the sim block name, port name and width.
+        """
+        for sim_block in self.sim_blocks:
+            self.logger.info('Creating simulation obj: %s' % sim_block['tag'])
+            self.sim_objs.append(SimBlock.make_block(sim_block))

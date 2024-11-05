@@ -3,5 +3,5 @@
 // Not sure why.
 function [] = run_simulation(fn)
     cmd = casper_simulation(fn);
-    unix_s(cmd);
+    unix_w(cmd);
 endfunction

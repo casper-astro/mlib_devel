@@ -1,7 +1,7 @@
 import os
 import logging
 from argparse import ArgumentParser
-from simulation import simulation
+from simulation import CasperSimulation
 
 parser = ArgumentParser(prog=os.path.basename(__file__))
                             
@@ -27,6 +27,7 @@ ch.setLevel(logging.INFO)
 logger.addHandler(ch)
 logger.info('Starting Simulation')
 
-sim = simulation()
+sim = CasperSimulation()
 sim.get_ip_core_info()
 sim.get_sim_info()
+sim.gen_sim_objs()
