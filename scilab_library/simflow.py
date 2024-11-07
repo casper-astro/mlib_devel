@@ -192,14 +192,17 @@ class SIMflow(object):
         clk_period = 10
         tb = []
         tb.append('module %s_tb;' % self.ip_core['name'])
+        tb.append('')
         tb.append('reg clk = 0;')
         tb.append('always #%d clk = ~clk;' % int(clk_period/2))
         tb.append('integer i;')
+        tb.append('')
         # add ports to the testbench
         for iport in self.ip_core['iports']:
             tb.append('reg [%d:0] %s;' % (iport['width']-1, iport['name']))
         for oport in self.ip_core['oports']:
             tb.append('wire [%d:0] %s;' % (oport['width']-1, oport['name']))
+        tb.append('')
         # read data from the simulation files, and use them as the input data
         for sim_blk in self.sim_blocks:
             # we only need to do it for the source sim blocks.
@@ -214,6 +217,16 @@ class SIMflow(object):
                 tb.append('     %s <= %s[i];' % (sim_blk['port']['name'], sim_blk['name']))
                 tb.append('  end')
                 tb.append('end')
+                tb.append('')
+        # instantiate the IP core
+        tb.append('%s %s_inst(' % (self.ip_core['name'], self.ip_core['name']))
+        tb.append('  .clk(clk)')
+        for iport in self.ip_core['iports']:
+            tb.append('  .%s(%s),' % (iport['name'], iport['name']))
+        for oport in self.ip_core['oports']:
+            tb.append('  .%s(%s),' % (oport['name'], oport['name']))
+        tb.append(');')
+        tb.append('')
         tb.append('endmodule')
         # write the testbench into a file
         dir = self.sim_info['project']['filename'].split('.')[0] + '/simulation'
