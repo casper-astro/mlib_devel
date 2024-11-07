@@ -220,7 +220,7 @@ class VivadoDSPBackend(VivadoBackend):
                                                    self.project_name))
             self.add_tcl_cmd('set_part %s' % plat.fpga)
         # Set the project to default to vhdl    
-        self.add_tcl_cmd('set_property target_language VHDL [current_project]', stage='init')
+        self.add_tcl_cmd('set_property target_language Verilog [current_project]', stage='init')
 
     def add_compile_cmds(self, cores=8, plat=None, synth_strat=None, impl_strat=None, threads='multi'):
         """

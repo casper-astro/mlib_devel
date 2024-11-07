@@ -21,6 +21,7 @@ class SIMflow(object):
         self.ip_core={}
         self.sim_blocks=[]
         self.sim_objs=[]
+        self.builddir = self.sim_info['project']['filename'].split('.')[0]
 
     def _get_blk_by_id(self, id):
         """
@@ -86,29 +87,30 @@ class SIMflow(object):
         """
         self.logger.info('-- Getting IP core information')
         # get the ip core name
-        self.ip_core['name'] = self.ip_core_info['project']['filename'].split('/')[-1].split('.')[0] + '_ip'
+        self.ip_core['name'] = self.ip_core_info['project']['filename'].split('/')[-1].split('.')[0] + '_core'
         # log it
         self.logger.info('IP Core Name: %s' % self.ip_core['name'])
         # get the input ports and output ports info
         self.ip_core['iports'] = []
         self.ip_core['oports'] = []
         link_objs = self.ip_core_info['link_info']
-        port = {}
         for link in link_objs:
             if link['link_type'] == 'xps_dsp':
+                port = {}
                 # this is an input port for the IP core
-                port['name'] = link['dst_port_name']
-                port['width'] = link['dst_port_width']
-                self.ip_core['iports'].append(port) 
-                # log it
-                self.logger.info('-- Input port: %s, Width: %s' % (link['dst_port_name'], link['dst_port_width']))
-            elif link['link_type'] == 'dsp_xps':
-                # this is an output port for the IP core
                 port['name'] = link['src_port_name']
                 port['width'] = link['src_port_width']
+                self.ip_core['iports'].append(port) 
+                # log it
+                self.logger.info('-- Input port: %s, Width: %s' % (link['src_port_name'], link['src_port_width']))
+            elif link['link_type'] == 'dsp_xps':
+                port = {}
+                # this is an output port for the IP core
+                port['name'] = link['dst_port_name']
+                port['width'] = link['dst_port_width']
                 self.ip_core['oports'].append(port)
                 # log it
-                self.logger.info('-- Output port: %s, Width: %s' % (link['src_port_name'], link['src_port_width']))
+                self.logger.info('-- Output port: %s, Width: %s' % (link['dst_port_name'], link['dst_port_width']))
 
     def get_sim_info(self):
         """
@@ -118,7 +120,7 @@ class SIMflow(object):
         self.logger.info('Getting simulation blocks information')
         sim_link_objs = self.sim_info['link_info']
         # get the dir for the sim data file storage.
-        sim_dir = self.sim_info['project']['filename'].split('.')[0] + '/simulation'
+        sim_dir = self.builddir + '/simulation'
         for slink in sim_link_objs:
             if slink['link_type'].startswith('sim_'):
                 # this should be a source sim block, like a signal generator
@@ -191,6 +193,8 @@ class SIMflow(object):
         self.logger.info('Generating testbench')
         clk_period = 10
         tb = []
+        tb.append('`timescale 1ns/1ps')
+        tb.append('')
         tb.append('module %s_tb;' % self.ip_core['name'])
         tb.append('')
         tb.append('reg clk = 0;')
@@ -220,7 +224,7 @@ class SIMflow(object):
                 tb.append('')
         # instantiate the IP core
         tb.append('%s %s_inst(' % (self.ip_core['name'], self.ip_core['name']))
-        tb.append('  .clk(clk)')
+        tb.append('  .clk(clk),')
         for iport in self.ip_core['iports']:
             tb.append('  .%s(%s),' % (iport['name'], iport['name']))
         for oport in self.ip_core['oports']:
@@ -235,3 +239,40 @@ class SIMflow(object):
         with open(tb_filename, 'w') as f:
             for line in tb:
                 f.write(line + '\n')
+
+    def gen_sim_tcl(self):
+        """
+        Generate the simulation tcl file for the casper simulation.
+        """
+        self.logger.info('Generating simulation tcl file')
+        tcl = []
+        # add tcl commands to the tcl file
+        tcl.append('open_project %s/dspproj/dspproj.xpr' % self.builddir)
+        tcl.append('set_property SOURCE_SET source_1 [get_filesets sim_1]')
+        tcl.append('add_files -fileset sim_1 %s/simulation/%s_tb.v' % (self.builddir, self.ip_core['name']))
+        tcl.append('update_compile_order -fileset sim_1')
+        # TODO: do we have to run this command twice?
+        tcl.append('update_compile_order -fileset sim_1')
+        # TODO: By default, this xx_tb.v is the top module, but we may need to set it to top manually.
+        #tcl.append('launch_simulation -mode behavioral -source [get_files %s_tb.v]' % self.ip_core['name'])
+        tcl.append('set_property top %s_tb [get_filesets sim_1]' % self.ip_core['name'])
+        tcl.append('set_property top_lib xil_defaultlib [get_filesets sim_1]')
+        tcl.append('update_compile_order -fileset sim_1')
+        tcl.append('launch_simulation -mode behavioral')
+        tcl.append('open_vcd %s/simulation/%s_tb.vcd' % (self.builddir, self.ip_core['name']))
+        tcl.append('log_vcd /%s/*' % self.ip_core['name'])
+        tcl.append('restart')
+        # the time unit is 1ns 
+        # TODO:
+        sim_time = 1000
+        tcl.append('run %s ns' % sim_time)
+        tcl.append('close_vcd')
+        tcl.append('close_simulation')
+        tcl.append('close_project')
+        # write the tcl file into a file
+        tcl_filename = self.builddir + '/simulation/simulation.tcl'
+        self.logger.info('Writing tcl file into %s' % tcl_filename)
+        with open(tcl_filename, 'w') as f:
+            for line in tcl:
+                f.write(line + '\n')
+        
