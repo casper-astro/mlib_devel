@@ -1,4 +1,6 @@
 import numpy as np
+import logging
+import os
 
 """
 The SimData class is used to generate the simulation data.
@@ -23,7 +25,15 @@ class SimBlock(object):
         """
         The each block has its own parameters.
         """
-        pass
+        self.logger = logging.getLogger('jasper-sim.sim_block')
+        self.width = blk['port']['width']
+        self.name = blk['name']
+        self.dir = blk['dir']
+        self.val = blk['val']
+        # check if the dir exists
+        # if not, create the dir
+        if not os.path.exists(self.dir):
+            os.makedirs(self.dir)
     
     def gen_sim_data(self):
         """

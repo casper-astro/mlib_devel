@@ -1,20 +1,23 @@
 import json
 import logging
 from sim_blocks.sim_block import SimBlock
+import numpy as np
+
 """
 This class generates a simulation object,
  that can be used for casper simulations.
 """
 class SIMflow(object):
-    def __init__(self, ip_core_json='jasper.json', sim_json='jasper.sim'):
+    def __init__(self, ip_core_json='jasper.json', sim_json='jasper.sim', blk_template_json='scilab_library/block_info_template.json'):
         """
         The input files are the jasper.json and jasper.sim files.
         In the jasper.json file, we have the IP core information.
         In the jasper.sim file, we have the simulation information.
         """
-        self.logger = logging.getLogger('jasper-sim.simulation')
+        self.logger = logging.getLogger('jasper-sim.simflow')
         self.ip_core_info = json.load(open(ip_core_json))
         self.sim_info = json.load(open(sim_json))
+        self.blk_template = json.load(open(blk_template_json))
         self.ip_core={}
         self.sim_blocks=[]
         self.sim_objs=[]
@@ -33,7 +36,24 @@ class SIMflow(object):
             if blk['blkid'] == id:
                 return blk
         self.logger.error('Block not found for blk id: %d' % id)
-            
+
+    def _get_key_by_id(self, tag, id, val):
+        """
+        Get the key by the tag and id from the block template.
+        """
+        # TODO: Is putting the keys in the block_info_template.json a good idea?
+        # I think it would be great to get all of the values from the scilab block itself.
+        self.logger.info('-- Getting key information for tag: %s' % tag)
+        template = self.blk_template[tag]
+        kv = {}
+        keys = list(template.keys())
+        for i in range(len(id)):
+            k = keys[id[i]]
+            v = val[i]
+            kv[k] = v
+            self.logger.info('---- Key: %s, Value: %s' % (k, v))
+        return kv
+                          
     def _get_port_by_id(self, id, blk_type):
         """
         Get the port information by the blk id.
@@ -97,6 +117,8 @@ class SIMflow(object):
         """
         self.logger.info('Getting simulation blocks information')
         sim_link_objs = self.sim_info['link_info']
+        # get the dir for the sim data file storage.
+        sim_dir = self.sim_info['project']['filename'].split('.')[0] + '/simulation'
         for slink in sim_link_objs:
             if slink['link_type'].startswith('sim_'):
                 # this should be a source sim block, like a signal generator
@@ -107,13 +129,21 @@ class SIMflow(object):
                 sim_blk_name = slink['src_blk_name']
                 # TODO: we may need to collect more info for the sim blocks.
                 sim_blk = {}
+                # TODO: we should have a way to set the length for the sim data.
+                sim_blk['length'] = 1000
+                sim_blk['type'] = 'source'
                 sim_blk['name'] = sim_blk_name
                 sim_blk['port'] = port
+                sim_blk['dir'] = sim_dir
                 blk = self._get_blk_by_id(src_blk_id)
                 sim_blk['tag'] = blk['tag']
+                sid = np.array(blk['id']).flatten().tolist()
+                sval = np.array(blk['val']).flatten().tolist()
+                val = self._get_key_by_id(sim_blk['tag'], sid, sval)
+                sim_blk['val'] = val
                 self.sim_blocks.append(sim_blk)
                 # log it
-                self.logger.info('-- Sim Block: %s, Port: %s, Tag: %s' % (sim_blk_name, port['name'], sim_blk['tag']))
+                self.logger.info('-- Sim Source Block: %s, Port: %s, Tag: %s' % (sim_blk_name, port['name'], sim_blk['tag']))
             if slink['link_type'].endswith('_sim'):
                 # this should be a destination sim block, like a scope
                 src_blk_id = slink['src_blk_id']
@@ -121,13 +151,21 @@ class SIMflow(object):
                 port = self._get_port_by_id(src_blk_id, 'src')
                 sim_blk_name = slink['dst_blk_name']
                 sim_blk = {}
+                # TODO: we should have a way to set the length for the sim data.
+                sim_blk['length'] = 1000
+                sim_blk['type'] = 'destination'
                 sim_blk['name'] = sim_blk_name
                 sim_blk['port'] = port
+                sim_blk['dir'] = sim_dir
                 blk = self._get_blk_by_id(dst_blk_id)
                 sim_blk['tag'] = blk['tag']
+                sid = np.array(blk['id']).flatten().tolist()
+                sval = np.array(blk['val']).flatten().tolist()
+                val = self._get_key_by_id(sim_blk['tag'], sid, sval)
+                sim_blk['val'] = val
                 self.sim_blocks.append(sim_blk)
                 # log it
-                self.logger.info('-- Sim Block: %s, Port: %s, Tag: %s' % (sim_blk_name, port['name'], sim_blk['tag']))
+                self.logger.info('-- Sim Dest Block: %s, Port: %s, Tag: %s' % (sim_blk_name, port['name'], sim_blk['tag']))
     
     def gen_sim_objs(self):
         """
@@ -137,3 +175,50 @@ class SIMflow(object):
         for sim_block in self.sim_blocks:
             self.logger.info('Creating simulation obj: %s' % sim_block['tag'])
             self.sim_objs.append(SimBlock.make_block(sim_block))
+    
+    def gen_sim_data(self):
+        """
+        Generate the simulation data for the casper simulation.
+        """
+        self.logger.info('Generating simulation data')
+        for sim_obj in self.sim_objs:
+            sim_obj.gen_sim_data()
+
+    def gen_testbench(self):
+        """
+        Generate the testbench for the casper simulation.
+        """
+        self.logger.info('Generating testbench')
+        clk_period = 10
+        tb = []
+        tb.append('module %s_tb;' % self.ip_core['name'])
+        tb.append('reg clk = 0;')
+        tb.append('always #%d clk = ~clk;' % int(clk_period/2))
+        tb.append('integer i;')
+        # add ports to the testbench
+        for iport in self.ip_core['iports']:
+            tb.append('reg [%d:0] %s;' % (iport['width']-1, iport['name']))
+        for oport in self.ip_core['oports']:
+            tb.append('wire [%d:0] %s;' % (oport['width']-1, oport['name']))
+        # read data from the simulation files, and use them as the input data
+        for sim_blk in self.sim_blocks:
+            # we only need to do it for the source sim blocks.
+            self.logger.info('Sim Block Type: %s' % sim_blk['type'])
+            if sim_blk['type'] == 'source':
+                self.logger.info('Reading data from %s/%s.dat' % (sim_blk['dir'], sim_blk['name']))
+                tb.append('reg [%d:0] %s [0:%d];' % (sim_blk['port']['width']-1, sim_blk['name'], sim_blk['length']-1))
+                tb.append('initial begin')
+                tb.append('  $readmemh("%s/%s.dat", %s);' % (sim_blk['dir'], sim_blk['name'], sim_blk['name']))
+                tb.append('  for (i=0; i<%d; i=i+1) begin' % sim_blk['length'])
+                tb.append('     #%d'%(clk_period/2))
+                tb.append('     %s <= %s[i];' % (sim_blk['port']['name'], sim_blk['name']))
+                tb.append('  end')
+                tb.append('end')
+        tb.append('endmodule')
+        # write the testbench into a file
+        dir = self.sim_info['project']['filename'].split('.')[0] + '/simulation'
+        tb_filename = dir + '/' + self.ip_core['name'] + '_tb.v'
+        self.logger.info('Writing testbench into %s' % tb_filename)
+        with open(tb_filename, 'w') as f:
+            for line in tb:
+                f.write(line + '\n')

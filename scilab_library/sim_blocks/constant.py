@@ -6,7 +6,7 @@ class constant(SimBlock):
         """
         The input parameters are the data width and data length.
         """
-        self.width = blk['port']['width']
+        super().__init__(blk)
         # TODO: we need the length parameter from the block in scilab.
         try:
             self.length = blk['length']
@@ -15,7 +15,14 @@ class constant(SimBlock):
         
     def gen_sim_data(self):
         """
-        Generate the constant data.
+        Generate the constant data, and write it into a file.
         """
-        self.data = np.ones(self.length) * 2**self.width/2
-        return self.data
+        self.logger.info('Generating constant data under %s/%s.dat' %(self.dir,self.name))
+        self.logger.info('The data length is %d' % self.length)
+        value = int(self.val['const_val'])
+        self.logger.info('The constant value is %d' % value)
+        data = np.ones(self.length).astype(np.uint32) * value
+        # write the data into a file
+        filename = self.dir + '/' + self.name + '.dat'
+        np.savetxt(filename, data, fmt='%x')
+        
