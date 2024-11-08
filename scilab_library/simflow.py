@@ -191,15 +191,15 @@ class SIMflow(object):
         Generate the testbench for the casper simulation.
         """
         self.logger.info('Generating testbench')
-        clk_period = 10
+        clk_period = 1.0
         tb = []
         tb.append('`timescale 1ns/1ps')
         tb.append('')
         tb.append('module %s_tb;' % self.ip_core['name'])
         tb.append('')
         tb.append('reg clk = 0;')
-        tb.append('always #%d clk = ~clk;' % int(clk_period/2))
-        tb.append('integer i;')
+        tb.append('always #%f clk = ~clk;' % float(clk_period/2))
+        # tb.append('integer i;')
         tb.append('')
         # add ports to the testbench
         for iport in self.ip_core['iports']:
@@ -216,7 +216,7 @@ class SIMflow(object):
                 tb.append('reg [%d:0] %s [0:%d];' % (sim_blk['port']['width']-1, sim_blk['name'], sim_blk['length']-1))
                 tb.append('initial begin')
                 tb.append('  $readmemh("%s/%s.dat", %s);' % (sim_blk['dir'], sim_blk['name'], sim_blk['name']))
-                tb.append('  for (i=0; i<%d; i=i+1) begin' % sim_blk['length'])
+                tb.append('  for (integer i=0; i<%d; i=i+1) begin' % sim_blk['length'])
                 tb.append('     #%d'%(clk_period/2))
                 tb.append('     %s <= %s[i];' % (sim_blk['port']['name'], sim_blk['name']))
                 tb.append('  end')
@@ -257,12 +257,14 @@ class SIMflow(object):
         tcl.append('set_property top_lib xil_defaultlib [get_filesets sim_1]')
         tcl.append('update_compile_order -fileset sim_1')
         tcl.append('launch_simulation -mode behavioral')
-        tcl.append('open_vcd %s/simulation/%s_tb.vcd' % (self.builddir, self.ip_core['name']))
-        tcl.append('log_vcd /%s_tb/*' % self.ip_core['name'])
+        #tcl.append('open_vcd %s/simulation/%s_tb.vcd' % (self.builddir, self.ip_core['name']))
+        tcl.append('open_vcd %s/simulation/simulation.vcd' % self.builddir)
+        tcl.append('log_vcd /%s_tb/%s_inst/*' % (self.ip_core['name'],self.ip_core['name']))
         tcl.append('restart')
         # the time unit is 1ns 
-        # TODO:
-        sim_time = 1000
+        # TODO: we need to get the sim time from the scilab block.
+        clk_period = 1.0
+        sim_time = 1000 * clk_period
         tcl.append('run %s ns' % sim_time)
         tcl.append('close_vcd')
         tcl.append('close_sim')
