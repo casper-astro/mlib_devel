@@ -71,12 +71,12 @@ class SIMflow(object):
                     # same blk in src blk field in link objs,
                     # then we need to put the dst port info in the port dict.
                     # It means the sim block should connec to this port.
-                    port['name'] = link['dst_port_name']
-                    port['width'] = link['dst_port_width']
-            elif blk_type == 'src':
-                if link['dst_blk_id'] == id:
                     port['name'] = link['src_port_name']
                     port['width'] = link['src_port_width']
+            elif blk_type == 'src':
+                if link['dst_blk_id'] == id:
+                    port['name'] = link['dst_port_name']
+                    port['width'] = link['dst_port_width']
         self.logger.info('---- Port Name: %s, Width: %s' % (port['name'], port['width']))
         return port
                     
@@ -229,6 +229,7 @@ class SIMflow(object):
             tb.append('  .%s(%s),' % (iport['name'], iport['name']))
         for oport in self.ip_core['oports']:
             tb.append('  .%s(%s),' % (oport['name'], oport['name']))
+        tb[-1] = tb[-1][:-1]
         tb.append(');')
         tb.append('')
         tb.append('endmodule')
@@ -248,26 +249,23 @@ class SIMflow(object):
         tcl = []
         # add tcl commands to the tcl file
         tcl.append('open_project %s/dspproj/dspproj.xpr' % self.builddir)
-        tcl.append('set_property SOURCE_SET source_1 [get_filesets sim_1]')
-        tcl.append('add_files -fileset sim_1 %s/simulation/%s_tb.v' % (self.builddir, self.ip_core['name']))
+        tcl.append('update_compile_order -fileset sources_1')
+        tcl.append('set_property SOURCE_SET sources_1 [get_filesets sim_1]')
+        tcl.append('add_files -fileset sim_1 -norecurse %s/simulation/%s_tb.v' % (self.builddir, self.ip_core['name']))
         tcl.append('update_compile_order -fileset sim_1')
-        # TODO: do we have to run this command twice?
-        tcl.append('update_compile_order -fileset sim_1')
-        # TODO: By default, this xx_tb.v is the top module, but we may need to set it to top manually.
-        #tcl.append('launch_simulation -mode behavioral -source [get_files %s_tb.v]' % self.ip_core['name'])
         tcl.append('set_property top %s_tb [get_filesets sim_1]' % self.ip_core['name'])
         tcl.append('set_property top_lib xil_defaultlib [get_filesets sim_1]')
         tcl.append('update_compile_order -fileset sim_1')
         tcl.append('launch_simulation -mode behavioral')
         tcl.append('open_vcd %s/simulation/%s_tb.vcd' % (self.builddir, self.ip_core['name']))
-        tcl.append('log_vcd /%s/*' % self.ip_core['name'])
+        tcl.append('log_vcd /%s_tb/*' % self.ip_core['name'])
         tcl.append('restart')
         # the time unit is 1ns 
         # TODO:
         sim_time = 1000
         tcl.append('run %s ns' % sim_time)
         tcl.append('close_vcd')
-        tcl.append('close_simulation')
+        tcl.append('close_sim')
         tcl.append('close_project')
         # write the tcl file into a file
         tcl_filename = self.builddir + '/simulation/simulation.tcl'
