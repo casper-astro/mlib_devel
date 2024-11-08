@@ -2,6 +2,7 @@ import json
 import logging
 from sim_blocks.sim_block import SimBlock
 import numpy as np
+import os
 
 """
 This class generates a simulation object,
@@ -275,4 +276,33 @@ class SIMflow(object):
         with open(tcl_filename, 'w') as f:
             for line in tcl:
                 f.write(line + '\n')
-        
+    
+    def run_sim(self):
+        """
+        Run the simulation.
+        """
+        self.logger.info('Running simulation')
+        os.system('cd %s; vivado -mode batch -source simulation/simulation.tcl  >/dev/null 2>&1' % self.builddir)
+        self.logger.info('Simulation finished')
+    
+    def get_sim_data(self):
+        """
+        Get the simulation data.
+        """
+        self.logger.info('Getting simulation data')
+        simdata = []
+        for sim_obj in self.sim_objs:
+            self.logger.info('Getting simulation data for %s' % sim_obj.name)
+            info = {}
+            info['name'] = sim_obj.name
+            info['data'] = sim_obj.get_sim_data()
+            simdata.append(info)
+        return simdata
+    
+    def plot_sim_data(self):
+        """
+        Show the simulation data.
+        """
+        self.logger.info('Plotting simulation data')
+        for sim_obj in self.sim_objs:
+            sim_obj.plot_sim_data()

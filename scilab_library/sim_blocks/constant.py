@@ -1,12 +1,13 @@
 from .sim_block import SimBlock
 import numpy as np
-
+import logging
 class constant(SimBlock):
     def __init__(self, blk):
         """
         The input parameters are the data width and data length.
         """
         super().__init__(blk)
+        self.logger = logging.getLogger('jasper-sim.sim_block.constant')
         # TODO: we need the length parameter from the block in scilab.
         try:
             self.length = blk['length']

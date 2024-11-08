@@ -11,8 +11,6 @@ function [cmd] = casper_simulation(fn)
     if isdir(path+name+'/dspproj') == %F then
         unix_s(build_cmd('dsp'));
     end
-    // disp some info
-    disp('Starting simulation for model: '+ name);
 
     // get the model path
     modelpath = fn;
