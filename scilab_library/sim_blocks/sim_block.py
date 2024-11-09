@@ -8,6 +8,11 @@ The SimData class is used to generate the simulation data.
 We will have different kinds of simulation blocks, including constant, sine wave, white noise...
 """
 class SimBlock(object):
+    # This is a class attributes, which will be used by all the instances of the class
+    sim_length = 1000
+    # If we found a sim instance, the sim_instance will be set to True. 
+    sim_instance = False
+
     def make_block(blk):
         """
         Make a block from a dictionary.

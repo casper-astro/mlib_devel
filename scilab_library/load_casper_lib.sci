@@ -54,13 +54,16 @@ disp('------Loading CASPER SIM...------');
 // load the xps blocks
 exec('scilab_library/scilab_blocks/casper_sim/constant.sci');
 exec('scilab_library/scilab_blocks/casper_sim/scope.sci');
+exec('scilab_library/scilab_blocks/casper_sim/sim.sci');
 // create the blocks
 constant_inst = constant("define");
 scope_inst = scope("define");
+sim_inst = sim("define");  
 cur_dir = pwd();
 sim_fig_dir = cur_dir + '/scilab_library/scilab_blocks/casper_sim/figures/';
 pal = xcosPal("CASPER SIM");
 pal = xcosPalAddBlock(pal, constant_inst, sim_fig_dir + 'constant.png', sim_fig_dir + 'constant.png');
 pal = xcosPalAddBlock(pal, scope_inst, sim_fig_dir + 'scope.png', sim_fig_dir + 'scope.png');
+pal = xcosPalAddBlock(pal, sim_inst, sim_fig_dir + 'sim.png', sim_fig_dir + 'sim.png');
 xcosPalAdd(pal);
 disp('------ CASPER SIM loaded --------');

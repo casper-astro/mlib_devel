@@ -132,8 +132,6 @@ class SIMflow(object):
                 sim_blk_name = slink['src_blk_name']
                 # TODO: we may need to collect more info for the sim blocks.
                 sim_blk = {}
-                # TODO: we should have a way to set the length for the sim data.
-                sim_blk['length'] = 1000
                 sim_blk['type'] = 'source'
                 sim_blk['name'] = sim_blk_name
                 sim_blk['port'] = port
@@ -154,8 +152,6 @@ class SIMflow(object):
                 port = self._get_port_by_id(src_blk_id, 'src')
                 sim_blk_name = slink['dst_blk_name']
                 sim_blk = {}
-                # TODO: we should have a way to set the length for the sim data.
-                sim_blk['length'] = 1000
                 sim_blk['type'] = 'destination'
                 sim_blk['name'] = sim_blk_name
                 sim_blk['port'] = port
@@ -169,6 +165,17 @@ class SIMflow(object):
                 self.sim_blocks.append(sim_blk)
                 # log it
                 self.logger.info('-- Sim Dest Block: %s, Port: %s, Tag: %s' % (sim_blk_name, port['name'], sim_blk['tag']))
+        # we also need to add sim block(if we have one in the design) into the sim_blocks list.
+        # TODO: we may need to improve this part.
+        for k,v in self.sim_info.items():
+            if k.startswith('blk') and v['tag'] == 'sim':
+                sim_blk = {}
+                sim_blk['tag'] = v['tag']
+                sim_blk['name'] = v['val'][0][0]
+                sim_blk['sim_length'] = int(v['val'][1][0])
+                sim_blk['type'] = None
+                self.sim_blocks.append(sim_blk)
+                self.logger.info('-- Sim Info Block: %s, Length: %d' % (sim_blk['name'], sim_blk['sim_length']))
     
     def gen_sim_objs(self):
         """
@@ -178,6 +185,9 @@ class SIMflow(object):
         for sim_block in self.sim_blocks:
             self.logger.info('Creating simulation obj: %s' % sim_block['tag'])
             self.sim_objs.append(SimBlock.make_block(sim_block))
+        if SimBlock.sim_instance == False:
+            self.logger.error('No simulation block found')
+            exit(1)
     
     def gen_sim_data(self):
         """
@@ -209,15 +219,16 @@ class SIMflow(object):
             tb.append('wire [%d:0] %s;' % (oport['width']-1, oport['name']))
         tb.append('')
         # read data from the simulation files, and use them as the input data
+        sim_length = SimBlock.sim_length
         for sim_blk in self.sim_blocks:
             # we only need to do it for the source sim blocks.
             self.logger.info('Sim Block Type: %s' % sim_blk['type'])
             if sim_blk['type'] == 'source':
                 self.logger.info('Reading data from %s/%s.dat' % (sim_blk['dir'], sim_blk['name']))
-                tb.append('reg [%d:0] %s [0:%d];' % (sim_blk['port']['width']-1, sim_blk['name'], sim_blk['length']-1))
+                tb.append('reg [%d:0] %s [0:%d];' % (sim_blk['port']['width']-1, sim_blk['name'], sim_length - 1))
                 tb.append('initial begin')
                 tb.append('  $readmemh("%s/%s.dat", %s);' % (sim_blk['dir'], sim_blk['name'], sim_blk['name']))
-                tb.append('  for (integer i=0; i<%d; i=i+1) begin' % sim_blk['length'])
+                tb.append('  for (integer i=0; i<%d; i=i+1) begin' % sim_length)
                 tb.append('     #%d'%(clk_period/2))
                 tb.append('     %s <= %s[i];' % (sim_blk['port']['name'], sim_blk['name']))
                 tb.append('  end')
@@ -263,9 +274,8 @@ class SIMflow(object):
         tcl.append('log_vcd /%s_tb/%s_inst/*' % (self.ip_core['name'],self.ip_core['name']))
         tcl.append('restart')
         # the time unit is 1ns 
-        # TODO: we need to get the sim time from the scilab block.
         clk_period = 1.0
-        sim_time = 1000 * clk_period
+        sim_time = SimBlock.sim_length * clk_period
         tcl.append('run %s ns' % sim_time)
         tcl.append('close_vcd')
         tcl.append('close_sim')

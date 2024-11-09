@@ -8,16 +8,15 @@ class constant(SimBlock):
         """
         super().__init__(blk)
         self.logger = logging.getLogger('jasper-sim.sim_block.constant')
-        # TODO: we need the length parameter from the block in scilab.
-        try:
-            self.length = blk['length']
-        except:
-            self.length = 1000
-        
+        self.length = 0
+
     def gen_sim_data(self):
         """
         Generate the constant data, and write it into a file.
         """
+        # before we run the gen_sim_data, 
+        # the SimBlock.sim_length should be set in the sim.__init__ function.
+        self.length = SimBlock.sim_length
         self.logger.info('Generating constant data under %s/%s.dat' %(self.dir,self.name))
         self.logger.info('The data length is %d' % self.length)
         value = int(self.val['const_val'])

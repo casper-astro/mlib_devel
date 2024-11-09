@@ -10,6 +10,7 @@ class scope(SimBlock):
         super().__init__(blk)
         self.logger = logging.getLogger('jasper-sim.sim_block.scope')
         self.simdata = 0
+        self.length = 0
     
     def get_sim_data(self):
         """
@@ -22,6 +23,7 @@ class scope(SimBlock):
     
     def plot_sim_data(self):
         self.logger.info('Plotting simulation data for  %s' % self.name)
+        self.length = SimBlock.sim_length
         data = self.simdata['data']
         # data is a list, and each element is also a list,
         # which contains the time and the value.
@@ -34,8 +36,8 @@ class scope(SimBlock):
                 # TODO: for the unknown value, can we set it to 0?
                 r.append(0)
         # if the data length is less than 1000, extend the last value to 1000
-        if len(r) < 1000:
-            r = np.append(r, np.ones(1000-len(r))*r[-1])
+        if len(r) < self.length:
+            r = np.append(r, np.ones(self.length - len(r))*r[-1])
         # plot the data
         fig = plt.figure()
         subfig = fig.add_subplot(111)

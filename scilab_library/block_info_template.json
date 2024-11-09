@@ -69,5 +69,12 @@
         "fullpath": "",
         "tag": "sim:scope",
         "channels": 1
+    },
+    "sim":
+    {
+        "name": "sim",
+        "fullpath": "",
+        "tag": "sim:sim",
+        "sim_length": 1000
     }
 }

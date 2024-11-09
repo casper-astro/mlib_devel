@@ -6,6 +6,7 @@ function [] = run_simulation(fn)
     // disp some info
     disp('Starting simulation for model: '+ name);
     cmd = casper_simulation(fn);
+    disp(cmd);
     unix_w(cmd);
     disp('Simulation finished for model: '+ name);
 endfunction
