@@ -44,7 +44,7 @@ function [x, y, typ]= sim(job, arg1, arg2)
         // TODO: track the source code of scicos_new() in c++.
         model.label = "sim";
         x=standard_define([2 2],model,exprs,gr_i)
-        disp('sim block loaded...')
+        debug_info('sim block loaded...')
     end
   endfunction
   

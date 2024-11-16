@@ -1,0 +1,36 @@
+{
+    "parameters":{
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "io_dir",
+            "io_delay",
+            "init_val",
+            "sample_period",
+            "names",
+            "bitwidths",
+            "bin_pts",
+            "arith_types",
+            "sim_port",
+            "show_format"
+        ],
+        "values": [
+            "wreg",
+            "",
+            "xps:sw_reg",
+            "From Processor",
+            0,
+            0,
+            1,
+            "reg",
+            1,
+            0,
+            2,
+            "on",
+            "on"
+        ]
+    },
+    "inputs": ["gateway"],
+    "outputs": ["gateway"]
+}

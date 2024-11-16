@@ -1,0 +1,21 @@
+{
+    "parameters":
+    {
+        "keys":
+        [
+            "name",
+            "fullpath",
+            "tag",
+            "channels"
+        ],
+        "values":
+        [
+            "scope",
+            "",
+            "sim:scope",
+            1
+        ]
+    },
+    "inputs": [],
+    "outputs": []
+}

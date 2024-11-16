@@ -65,6 +65,6 @@ function [x, y, typ]= rfsoc4x2(job, arg1, arg2)
       // set block tag
       model.label = "xps";
       x=standard_define([4 4],model,exprs,gr_i)
-      disp('rfsoc4x2 block loaded...')
+      debug_info('rfsoc4x2 block loaded...')
   end
 endfunction

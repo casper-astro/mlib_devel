@@ -1,0 +1,25 @@
+{
+    "parameters":
+    {
+        "keys":
+        [
+            "name",
+            "fullpath",
+            "tag",
+            "constant_val",
+            "constant_bitwidth",
+            "constant_bin_pt"
+        ],
+        "values":
+        [
+            "constant",
+            "",
+            "sim:constant",
+            0,
+            32,
+            0
+        ]
+    },
+    "inputs": [],
+    "outputs": []
+}

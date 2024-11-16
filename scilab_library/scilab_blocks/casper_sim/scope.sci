@@ -43,7 +43,7 @@ function [x, y, typ]= scope(job, arg1, arg2)
       // TODO: track the source code of scicos_new() in c++.
       model.label = "sim";
       x=standard_define([2 2],model,exprs,gr_i)
-      disp('scope block loaded...')
+      debug_info('scope block loaded...')
   end
 endfunction
 

@@ -1,0 +1,46 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "io_group",
+            "io_group_real",
+            "io_group_custom",
+            "io_dir",
+            "arith_type",
+            "bitwidth",
+            "bin_pt",
+            "bit_index",
+            "sample_period",
+            "use_single_ended",
+            "use_ddr",
+            "reg_iob",
+            "reg_clk_phase",
+            "termination",
+            "use_iodelay"
+        ],
+        "values": [
+            "gpio",
+            "",
+            "xps:gpio",
+            "ROACH:led",
+            "gpio",
+            0,
+            "out",
+            "Boolean",
+            1,
+            0,
+            0,
+            1,
+            "off",
+            "off",
+            "on",
+            0,
+            "None",
+            "off"
+        ]
+    },
+    "inputs": ["user_data_in"],
+    "outputs": ["user_data_out"]
+}

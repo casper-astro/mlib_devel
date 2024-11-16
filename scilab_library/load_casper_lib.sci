@@ -1,6 +1,7 @@
 loadXcosLibs;
 
 // load the scilab functions
+exec('scilab_library/scilab_blocks/utils/debug_info.sci');
 exec('scilab_library/jasper.sci');
 exec('scilab_library/jasper_frontend.sci');
 exec('scilab_library/casper_simulation.sci');
@@ -16,7 +17,7 @@ exec('scilab_library/run_simulation.sci');
 // scilab_library/casper_dsp directories should be loaded autocaically
 
 // add casper xps blocks
-disp('------Loading CASPER XPS...------');
+debug_info('------Loading CASPER XPS...------');
 // load the xps blocks
 exec('scilab_library/scilab_blocks/casper_xps/rfsoc4x2.sci');
 exec('scilab_library/scilab_blocks/casper_xps/gpio.sci');
@@ -34,10 +35,10 @@ pal = xcosPalAddBlock(pal, gpio_inst, xps_fig_dir + 'gpio.png', xps_fig_dir + 'g
 pal = xcosPalAddBlock(pal, swreg_out_inst, xps_fig_dir + 'swreg.png',xps_fig_dir + 'swreg.png');
 //pal = xcosPalAddBlock(pal, swreg_out_inst);
 xcosPalAdd(pal);
-disp('------ CASPER XPS loaded --------');
+debug_info('------ CASPER XPS loaded --------');
 
 // add casper dsp blocks
-disp('------Loading CASPER DSP...------');
+debug_info('------Loading CASPER DSP...------');
 // load the xps blocks
 exec('scilab_library/scilab_blocks/casper_dsp/adder.sci');
 // create the blocks
@@ -47,10 +48,10 @@ dsp_fig_dir = cur_dir + '/scilab_library/scilab_blocks/casper_dsp/figures/';
 pal = xcosPal("CASPER DSP");
 pal = xcosPalAddBlock(pal, adder_inst, dsp_fig_dir + 'adder.png', dsp_fig_dir + 'adder.png');
 xcosPalAdd(pal);
-disp('------ CASPER DSP loaded --------');
+debug_info('------ CASPER DSP loaded --------');
 
 // add casper sim blocks
-disp('------Loading CASPER SIM...------');
+debug_info('------Loading CASPER SIM...------');
 // load the xps blocks
 exec('scilab_library/scilab_blocks/casper_sim/constant.sci');
 exec('scilab_library/scilab_blocks/casper_sim/scope.sci');
@@ -66,4 +67,4 @@ pal = xcosPalAddBlock(pal, constant_inst, sim_fig_dir + 'constant.png', sim_fig_
 pal = xcosPalAddBlock(pal, scope_inst, sim_fig_dir + 'scope.png', sim_fig_dir + 'scope.png');
 pal = xcosPalAddBlock(pal, sim_inst, sim_fig_dir + 'sim.png', sim_fig_dir + 'sim.png');
 xcosPalAdd(pal);
-disp('------ CASPER SIM loaded --------');
+debug_info('------ CASPER SIM loaded --------');

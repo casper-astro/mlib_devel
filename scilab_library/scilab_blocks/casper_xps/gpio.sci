@@ -102,7 +102,7 @@ function [x, y, typ]= gpio(job, arg1, arg2)
       // set block tag
       model.label = "xps";
       x=standard_define([4 2],model,exprs,gr_i)
-      disp('gpio block loaded...')
+      debug_info('gpio block loaded...')
   end
 endfunction
 

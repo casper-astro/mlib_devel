@@ -48,7 +48,7 @@ function [x, y, typ]= adder(job, arg1, arg2)
       // TODO: track the source code of scicos_new() in c++.
       model.label = "dsp";
       x=standard_define([2 4],model,exprs,gr_i)
-      disp('adder block loaded...')
+      debug_info('adder block loaded...')
   end
 endfunction
 

@@ -93,6 +93,6 @@
       x.graphics.out_label = ['out'];
       x.graphics.in_label = ['sim_in'];
       x.graphics.style = 'shape=rectangle;fillColor=yellow';
-      disp('swreg block loaded...')
+      debug_info('swreg block loaded...')
   end
   endfunction
