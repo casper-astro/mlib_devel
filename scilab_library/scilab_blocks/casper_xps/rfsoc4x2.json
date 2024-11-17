@@ -26,6 +26,6 @@
         ]
 
     },
-    "inputs": [],
-    "outputs": []
+    "input_ports": [],
+    "output_ports": []
 }

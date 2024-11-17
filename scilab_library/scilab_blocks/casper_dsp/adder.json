@@ -20,6 +20,12 @@
             32
         ]
     },
-    "inputs": ["in0", "in1"],
-    "outputs": ["out"]
+    "input_ports": {
+        "name": ["in0", "in1"],
+        "width_id": [3, 4]
+    },
+    "output_ports": {
+        "name": ["out"],
+        "width_id": [5]
+    }
 }

@@ -16,6 +16,12 @@
             1
         ]
     },
-    "inputs": [],
-    "outputs": []
+    "input_ports": {
+        "name": ["scope_in"],
+        "width_id": [-1]
+    },
+    "output_ports": {
+        "name": [],
+        "width_id": []
+    }
 }

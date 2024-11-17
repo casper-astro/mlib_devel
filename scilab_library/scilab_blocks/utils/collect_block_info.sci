@@ -33,8 +33,7 @@ for i = 1:n_objs
         // the type should be on of "xps", "dsp", "sim"
         // the tag is the "swreg", "gpio", etc.
         // each block has a template, which contains the paramters info and input/output ports info
-        template_path = scilab_block_path + 'casper_' + type + '/' + tag + '.json';
-        template = fromJSON(template_path, "file");
+        template = get_block_template(type, tag);
         // create a new struct for the block info
         keys = template('parameters')('keys');
         vals = template('parameters')('values');
@@ -76,25 +75,60 @@ for i = 1:n_objs
 
 // go through all of the link objs, 
 // and generate the port names for each blk_obj based on the link objs.
-// the port info is stored in a struct.
-port_info = list();
-// create a struct for each blk_obj
-// some of the blk_objs are link objs, we don't need to generate port names for them
-for i = 1:n_objs
-    port_info(i) = struct();
-    port_info(i)('in') = list();
-    port_info(i)('out') = list();
-end
 st('link_info') = list();
-ind = 1;
-// go through all of the objs, and get the link objs
-// we will generate the port info based on the link objs
+link_info = struct();
+link_info_id = 1;
 for i = 1:n_objs
     obj = scs_m.objs(i);
     // check the obj type
     // if it's a link obj, we used generate port name based on this obj
     if typeof(obj) == 'Link' then
-        port_info = gen_port_info(projname, scs_m.objs, obj);
+        debug_info('link obj: ' + string(i));
+        link = get_link_info_by_link_obj(scs_m.objs, obj);
+        // collect the src block info
+        src_blk = link('src_obj');
+        src_blk_name = get_block_name(link('src_obj'));
+        debug_info('    src_blk_name: ' + src_blk_name);
+        src_blk_tag = get_block_tag(link('src_obj'));
+        debug_info('    src_blk_tag: ' + src_blk_tag);
+        src_blk_type = get_block_type(link('src_obj'));
+        debug_info('    src_blk_type: ' + src_blk_type); 
+        src_template = get_block_template(src_blk_type, src_blk_tag);
+        src_port_name = projname + '_' + src_blk_name + '_' + src_template('output_ports')("name")(link('src_port_id'));
+        debug_info('    src_port_name: ' + src_port_name);
+        debug_info('    src_port_id: ' + string(link('src_port_id')));
+        src_port_width_id = src_template('output_ports')("width_id")(link('src_port_id'));
+        debug_info('    src_port_width_id: ' + string(src_port_width_id));
+        // we have collected the block info in st, so we can get the port width from st
+        src_port_width = get_port_width(st, src_blk, src_port_width_id);
+        debug_info('    src_port_width: ' + string(src_port_width));
+        // collect the dst block info
+        dst_blk = link('dst_obj');
+        dst_blk_name = get_block_name(link('dst_obj'));
+        debug_info('    dst_blk_name: ' + dst_blk_name);
+        dst_blk_tag = get_block_tag(link('dst_obj'));
+        debug_info('    dst_blk_tag: ' + dst_blk_tag);
+        dst_blk_type = get_block_type(link('dst_obj'));
+        debug_info('    dst_blk_type: ' + dst_blk_type);
+        dst_template = get_block_template(dst_blk_type, dst_blk_tag);
+        dst_port_name = projname + '_' + dst_blk_name + '_' +dst_template('input_ports')("name")(link('dst_port_id'));
+        debug_info('    dst_port_name: ' + dst_port_name);
+        debug_info('    dst_port_id: ' + string(link('dst_port_id')));
+        dst_port_width_id = dst_template('input_ports')("width_id")(link('dst_port_id'));
+        debug_info('    dst_port_width_id: ' + string(dst_port_width_id));
+        // we have collected the block info in st, so we can get the port width from st
+        dst_port_width = get_port_width(st, dst_blk, dst_port_width_id);
+        debug_info('    dst_port_width: ' + string(dst_port_width));
+        // write the link info to the struct
+        link_info('src_blk_name') = src_blk_name;
+        link_info('src_port_name') = src_port_name;
+        link_info('src_port_width') = src_port_width;
+        link_info('dst_blk_name') = dst_blk_name;
+        link_info('dst_port_name') = dst_port_name;
+        link_info('dst_port_width') = dst_port_width;
+        link_info('link_type') = src_blk_type + '_' + dst_blk_type;
+        st('link_info')(link_info_id) = link_info;
+        link_info_id = link_info_id + 1;
     end
 end
 

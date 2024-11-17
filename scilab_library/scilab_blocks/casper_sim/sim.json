@@ -16,6 +16,6 @@
             1000
         ]
     },
-    "inputs": [],
-    "outputs": []
+    "input_ports": [],
+    "output_ports": []
 }

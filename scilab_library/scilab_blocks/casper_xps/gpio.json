@@ -41,6 +41,12 @@
             "off"
         ]
     },
-    "inputs": ["user_data_in"],
-    "outputs": ["user_data_out"]
+    "input_ports": {
+        "name":["user_data_in"],
+        "width_id": [8]
+    },
+    "output_ports": {
+        "name": ["user_data_out"],
+        "width_id": [8]
+    }
 }

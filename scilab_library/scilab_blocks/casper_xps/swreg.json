@@ -31,6 +31,12 @@
             "on"
         ]
     },
-    "inputs": ["gateway"],
-    "outputs": ["gateway"]
+    "input_ports": {
+        "name": ["gateway"],
+        "width_id": [8]
+    },
+    "output_ports": {
+        "name": ["gateway"],
+        "width_id": [8]
+    }
 }
