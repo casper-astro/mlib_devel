@@ -7,4 +7,5 @@ function [src_tag, dst_tag] = check_block_type(blk_objs, link_obj)
     obj_to = blk_objs(obj_to_id);
     src_tag = obj_from.graphics.id;
     dst_tag = obj_to.graphics.id;
+    
 endfunction
