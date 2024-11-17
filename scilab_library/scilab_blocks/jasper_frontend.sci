@@ -16,14 +16,14 @@ function [build_cmd] = jasper_frontend(fn)
     // not sure why we have to clear the variables
     // if we don't do it, the python script will not work...
     // execute a python script to read the json file and generate jasper.per
+    python_path = 'python';
     disp('****************************************');
     disp('*  Frontend python script is running...*');
     scilab_library_path = getenv('MLIB_DEVEL_PATH')+'/scilab_library';
-    //unix_s(scilab_library_path+'/jasper_frontend.py');
+    //unix_s(scilab_library_path+'/jasper_frontend.py' + ' ' + '-m ' + modelpath);
     disp('*  Frontend python script complete!    *');
     disp('****************************************');
     build_cmd = struct();
-    python_path = 'python';
     // create a build_cmd for the dsp project
     jasper_python = [getenv('MLIB_DEVEL_PATH')+'/scilab_library/gen_dsp_ip.py'];
     build_cmd('dsp') = python_path + ' ' + jasper_python + ' '+ '-m ' + modelpath;

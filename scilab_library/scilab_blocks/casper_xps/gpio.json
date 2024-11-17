@@ -42,11 +42,11 @@
         ]
     },
     "input_ports": {
-        "name":["user_data_in"],
+        "name":["gateway"],
         "width_id": [8]
     },
     "output_ports": {
-        "name": ["user_data_out"],
+        "name": ["gateway"],
         "width_id": [8]
     }
 }

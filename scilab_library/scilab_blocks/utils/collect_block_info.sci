@@ -126,10 +126,12 @@ for i = 1:n_objs
         // write the link info to the struct
         link_info('src_blk_name') = src_blk_name;
         link_info('src_port_name') = src_port_name;
-        link_info('src_port_width') = src_port_width;
+        link_info('src_port_width') = strtod(src_port_width);
+        link_info('src_port_id') = link('src_port_id');
         link_info('dst_blk_name') = dst_blk_name;
         link_info('dst_port_name') = dst_port_name;
-        link_info('dst_port_width') = dst_port_width;
+        link_info('dst_port_width') = strtod(dst_port_width);
+        link_info('dst_port_id') = link('dst_port_id');
         link_info('link_type') = src_blk_type + '_' + dst_blk_type;
         st('link_info')(link_info_id) = link_info;
         link_info_id = link_info_id + 1;

@@ -25,7 +25,7 @@
         "width_id": [3, 4]
     },
     "output_ports": {
-        "name": ["out"],
+        "name": ["out0"],
         "width_id": [5]
     }
 }

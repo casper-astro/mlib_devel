@@ -47,33 +47,21 @@ def gen_glue_module(link_info,file_dir='./'):
     bitwidth = link_info['src_port_width']
     gen_verilog_module(module_name, in_port, out_port, bitwidth, file_dir)
 
-# write the blkinfo to the dict
-def write_blkinfo_to_dict(blk_info, blk_tmp):
-    # make a copy of the dict
-    template = blk_tmp.copy()
-    keys = list(template.keys())
-    index = blk_info['id']
-    for i in range(len(index)):
+# try to convert the value to int or float
+def val_format_conv(obj):
+    for k, v in obj.items():
         try:
-            template[keys[index[i][0]]] = int(blk_info['val'][i][0])
+            obj[k] = int(v)
         except:
             try:
-                template[keys[index[i][0]]] = float(blk_info['val'][i][0])
+                obj[k] = float(v)
             except:
-                if blk_info['val'][i][0] == 'on':
-                    template[keys[index[i][0]]] = True
-                elif blk_info['val'][i][0] == 'off':
-                    template[keys[index[i][0]]] = False
-                else:
-                    template[keys[index[i][0]]] = blk_info['val'][i][0]
-    # go through all of the k-v pairs in the template, 
-    # and modify all of the 'on' to True and 'off' to False
-    for k, v in template.items():
-        if v == 'on':
-            template[k] = True
-        elif v == 'off':
-            template[k] = False
-    return template
+                if v == 'on':
+                    v = True
+                elif v == 'off':
+                    v = False
+                obj[k] = v
+    return obj
 
 # dump the jasper_dict to jasper.per
 def dump_jasper(jasper_per, fn = 'jasper.per'):

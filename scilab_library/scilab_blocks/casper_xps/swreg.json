@@ -32,11 +32,11 @@
         ]
     },
     "input_ports": {
-        "name": ["gateway"],
+        "name": ["user_data_in"],
         "width_id": [8]
     },
     "output_ports": {
-        "name": ["gateway"],
+        "name": ["user_data_out"],
         "width_id": [8]
     }
 }
