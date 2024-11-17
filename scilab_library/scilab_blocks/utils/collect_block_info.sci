@@ -85,6 +85,10 @@ for i = 1:n_objs
     if typeof(obj) == 'Link' then
         debug_info('link obj: ' + string(i));
         link = get_link_info_by_link_obj(scs_m.objs, obj);
+        if link == 'skip' then
+            debug_info('    skip this case.');
+            continue;
+        end
         // collect the src block info
         src_blk = link('src_obj');
         src_blk_name = get_block_name(link('src_obj'));
