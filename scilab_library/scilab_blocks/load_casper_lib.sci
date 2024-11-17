@@ -10,10 +10,10 @@ exec('scilab_library/scilab_blocks/utils/get_port_width.sci');
 exec('scilab_library/scilab_blocks/utils/get_block_template.sci');
 exec('scilab_library/scilab_blocks/utils/get_link_info_by_link_obj.sci');
 exec('scilab_library/scilab_blocks/utils/search_for_real_src_blk.sci');
-exec('scilab_library/jasper.sci');
-exec('scilab_library/jasper_frontend.sci');
-exec('scilab_library/casper_simulation.sci');
-exec('scilab_library/run_simulation.sci');
+exec('scilab_library/scilab_blocks/jasper.sci');
+exec('scilab_library/scilab_blocks/jasper_frontend.sci');
+exec('scilab_library/scilab_blocks/casper_simulation.sci');
+exec('scilab_library/scilab_blocks/run_simulation.sci');
 
 // TODO: load the xps and dsp blocks automatically
 // all of the blocks in the scilab_library/casper_xps and 
