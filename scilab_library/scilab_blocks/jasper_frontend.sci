@@ -10,17 +10,17 @@ function [build_cmd] = jasper_frontend(fn)
 
     // generate a fake modelpath for exec_flow.py
     modelpath = fn;
-    // collect the block info, and generate the json file
+    // collect the block info, and generate the jasper.json file
     collect_block_info(fn);
-    // BUG: this looks like a bug in scilab
-    // not sure why we have to clear the variables
-    // if we don't do it, the python script will not work...
-    // execute a python script to read the json file and generate jasper.per
+    
+    // execute a python script to read the json file and generate jasper.per and jasper.dsp
     python_path = 'python';
     disp('****************************************');
     disp('*  Frontend python script is running...*');
     scilab_library_path = getenv('MLIB_DEVEL_PATH')+'/scilab_library';
-    //unix_s(scilab_library_path+'/jasper_frontend.py' + ' ' + '-m ' + modelpath);
+    cmd = scilab_library_path+'/jasper_frontend.py' + ' ' + '-m ' + modelpath
+    debug_info('Frontend python script: ' + cmd);
+    unix_s(cmd);
     disp('*  Frontend python script complete!    *');
     disp('****************************************');
     build_cmd = struct();

@@ -22,8 +22,10 @@ class DSPflow(Toolflow):
         self.logger.info('Starting DSPflow!')
         # set the compile directory
         self.compile_dir = compile_dir.rstrip('/')
-        # set the periph file
+        # set the jasper.dsp file
         self.dsp_file = self.compile_dir + '/jasper.dsp'
+        # set the model_info_file
+        self.model_info_file = self.compile_dir + '/jasper.json'
         # set the vars
         self.cores = None
         self.topfile = None
@@ -87,7 +89,7 @@ class DSPflow(Toolflow):
                 continue
             self.logger.debug('Generating DSP Block: %s' % pk)
             self.dsp_objs.append(dsp_block.DSPBlock.make_block(
-                self.dsp_modules[pk], self.plat))
+                self.dsp_modules[pk], self.plat, model_info_file=self.model_info_file))
         self._expand_children(self.dsp_objs)
         # some methods in yellow_block class use the peripherals attribute,
         # so we have to set it to dsp_modules

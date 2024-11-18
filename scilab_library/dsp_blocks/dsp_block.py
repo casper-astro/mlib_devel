@@ -17,7 +17,7 @@ class DSPBlock(YellowBlock):
     # 2. the initialize method
     # 3. the modify method 
     # 4. make_block method, as the tag for dsp blocks is different
-    def __init__(self, blk, platform, hdl_root=None, link_info_file = mlib_devel_path+'/jasper.json'):
+    def __init__(self, blk, platform, hdl_root=None, model_info_file = 'jasper.json'):
         # The __init__ method of the DSPBlock class takes in the following arguments:
         # 1. self
         # 2. blk
@@ -26,7 +26,7 @@ class DSPBlock(YellowBlock):
         # 5. link_info_file
         # The __init__ method of the DSPBlock class initializes
         super(DSPBlock, self).__init__(blk, platform, hdl_root=hdl_root)
-        self.link_info_file = link_info_file
+        self.model_info_file = model_info_file
         # populate the parent ports
         self._get_parent_ports_info()
 
@@ -37,7 +37,7 @@ class DSPBlock(YellowBlock):
         pass
     
     @staticmethod
-    def make_block(blk, platform, hdl_root=None):
+    def make_block(blk, platform, hdl_root=None, model_info_file='jasper.json'):
         if blk['tag'].startswith('dsp:'):
             # This seems a little dubious
             # Import the yellow block from the same package
@@ -49,16 +49,16 @@ class DSPBlock(YellowBlock):
             # (possibly platform dependent) yellow block instance
             # Else just return an instance of the class.
             if isinstance(getattr(cls, 'factory', None), collections.Callable):
-                return cls.factory(blk, platform, hdl_root=hdl_root)
+                return cls.factory(blk, platform, hdl_root=hdl_root, model_info_file=model_info_file)
             else:
-                return cls(blk,platform,hdl_root=hdl_root)
+                return cls(blk,platform,hdl_root=hdl_root, model_info_file=model_info_file)
         else:
             # Don't do anything for non-xps blocks.
             pass
     
     def _get_parent_ports_info(self):
         # we need to get the link info here
-        with open(self.link_info_file) as f:
+        with open(self.model_info_file) as f:
             blkinfo = json.load(f)
             self.link_info = blkinfo['link_info']
         self.parent_ports = {}
