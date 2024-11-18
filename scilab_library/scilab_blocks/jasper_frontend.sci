@@ -4,7 +4,7 @@ function [build_cmd] = jasper_frontend(fn)
     // disp some info
     disp('Starting jasper for model: '+ name);
 
-    // generate a fake modelpath for exec_flow.py
+    // set the modelpath
     modelpath = fn;
     // collect the block info, and generate the jasper.json file
     collect_block_info(fn);

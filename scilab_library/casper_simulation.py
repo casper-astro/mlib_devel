@@ -27,7 +27,7 @@ ch.setLevel(logging.INFO)
 logger.addHandler(ch)
 logger.info('Starting Simulation')
 
-sim = simflow.SIMflow()
+sim = simflow.SIMflow(builddir)
 sim.get_ip_core_info()
 sim.get_sim_info()
 sim.gen_sim_objs()

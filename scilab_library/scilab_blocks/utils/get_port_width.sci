@@ -4,7 +4,7 @@ function [width] = get_port_width(st, obj, width_id)
     // if the width_id is -1, it means we don't have width for this port.
     // so just return 0.
     if width_id == -1 then
-        width = 0;
+        width = '0';
         return;
     end
     // get the block name, type and tag

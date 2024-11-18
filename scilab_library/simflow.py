@@ -9,78 +9,56 @@ This class generates a simulation object,
  that can be used for casper simulations.
 """
 class SIMflow(object):
-    def __init__(self, ip_core_json='jasper.json', sim_json='jasper.sim', blk_template_json='scilab_library/block_info_template.json'):
+    def __init__(self, builddir, model_info_file='jasper.json'):
         """
         The input files are the jasper.json and jasper.sim files.
         In the jasper.json file, we have the IP core information.
         In the jasper.sim file, we have the simulation information.
         """
         self.logger = logging.getLogger('jasper-sim.simflow')
-        self.ip_core_info = json.load(open(ip_core_json))
-        self.sim_info = json.load(open(sim_json))
-        self.blk_template = json.load(open(blk_template_json))
+        self.model_info = json.load(open(builddir+'/'+model_info_file))
         self.ip_core={}
         self.sim_blocks=[]
         self.sim_objs=[]
-        self.builddir = self.sim_info['project']['filename'].split('.')[0]
-
-    def _get_blk_by_id(self, id):
-        """
-        Get the block information by the blk id.
-        """
-        self.logger.info('-- Getting block information for blk id: %d' % id)
-        blk_objs = []
-        for k,v in self.sim_info.items():
-            if k.startswith('blk'):
-                if v['tag'].startswith('scilab-blk') == False:
-                    blk_objs.append(v)
-        for blk in blk_objs:
-            if blk['blkid'] == id:
-                return blk
-        self.logger.error('Block not found for blk id: %d' % id)
-
-    def _get_key_by_id(self, tag, id, val):
-        """
-        Get the key by the tag and id from the block template.
-        """
-        # TODO: Is putting the keys in the block_info_template.json a good idea?
-        # I think it would be great to get all of the values from the scilab block itself.
-        self.logger.info('-- Getting key information for tag: %s' % tag)
-        template = self.blk_template[tag]
-        kv = {}
-        keys = list(template.keys())
-        for i in range(len(id)):
-            k = keys[id[i]]
-            v = val[i]
-            kv[k] = v
-            self.logger.info('---- Key: %s, Value: %s' % (k, v))
-        return kv
+        self.builddir = builddir
                           
-    def _get_port_by_id(self, id, blk_type):
+    def _get_sim_blk_by_name(self, blkname):
         """
-        Get the port information by the blk id.
-        If the blk_type is 'dst', we need to get the dst port;
-        otherwise, we need to get the src port.
+        Get the simulation block information by the block name.
         """
-        self.logger.info('-- Getting port information for blk id: %d , blk type: %s' % (id, blk_type))
-        port = {}
-        link_objs = self.ip_core_info['link_info']
-        for link in link_objs:
-            if blk_type == 'dst':
-                if link['src_blk_id'] == id:
-                    # If the blk is a dst blk, we need to find the 
-                    # same blk in src blk field in link objs,
-                    # then we need to put the dst port info in the port dict.
-                    # It means the sim block should connec to this port.
-                    port['name'] = link['src_port_name']
-                    port['width'] = link['src_port_width']
-            elif blk_type == 'src':
-                if link['dst_blk_id'] == id:
-                    port['name'] = link['dst_port_name']
-                    port['width'] = link['dst_port_width']
-        self.logger.info('---- Port Name: %s, Width: %s' % (port['name'], port['width']))
-        return port
+        self.logger.info('-- Getting block information for blk name: %s' % blkname)
+        sim_blocks = self.model_info['sim_blocks']
+        blk_info = {}
+        for block in sim_blocks:
+            if block['name'] == blkname:
+                for k,v in block.items():
+                    # we already know the name
+                    if k == 'name':
+                        continue
+                    # tag is important, so we move it out from the dict
+                    if k == 'tag':
+                        tag = v.split(':')[1]
+                        continue
+                    blk_info[k] = v
+        return tag, blk_info
                     
+            
+    def _get_port_from_link_by_name(self, blkname, dir):
+        """
+        Get the port information from the link dict by the blk name and direction.
+        """
+        blk_name = dir + '_blk_name'
+        port_name = dir + '_port_name'
+        port_width = dir + '_port_width'
+        link_info = self.model_info['link_info']
+        for link in link_info:
+            if link[blk_name] == blkname:
+                port = {}
+                port['name'] = link[port_name]
+                port['width'] = link[port_width]
+                return port
+        self.logger.info('---- Port Name: %s, Width: %s' % (port['name'], port['width']))
+
     def get_ip_core_info(self):
         """
         Get the IP core info from the jasper.json.
@@ -88,13 +66,13 @@ class SIMflow(object):
         """
         self.logger.info('-- Getting IP core information')
         # get the ip core name
-        self.ip_core['name'] = self.ip_core_info['project']['filename'].split('/')[-1].split('.')[0] + '_core'
+        self.ip_core['name'] = self.model_info['project']['filename'].split('/')[-1].split('.')[0] + '_core'
         # log it
         self.logger.info('IP Core Name: %s' % self.ip_core['name'])
         # get the input ports and output ports info
         self.ip_core['iports'] = []
         self.ip_core['oports'] = []
-        link_objs = self.ip_core_info['link_info']
+        link_objs = self.model_info['link_info']
         for link in link_objs:
             if link['link_type'] == 'xps_dsp':
                 port = {}
@@ -119,60 +97,54 @@ class SIMflow(object):
         We need to figure out each simulation block is connected to which IP core port.
         """
         self.logger.info('Getting simulation blocks information')
-        sim_link_objs = self.sim_info['link_info']
+        sim_link_objs = self.model_info['link_info']
         # get the dir for the sim data file storage.
         sim_dir = self.builddir + '/simulation'
         for slink in sim_link_objs:
             if slink['link_type'].startswith('sim_'):
                 # this should be a source sim block, like a signal generator
                 # TODO: is it possible to connect a source sim block ot a dsp block??
-                dst_blk_id = slink['dst_blk_id']
-                src_blk_id = slink['src_blk_id']
-                port = self._get_port_by_id(dst_blk_id, 'dst')
+                dst_blk_name = slink['dst_blk_name']
+                port = self._get_port_from_link_by_name(dst_blk_name, 'src')
                 sim_blk_name = slink['src_blk_name']
-                # TODO: we may need to collect more info for the sim blocks.
+                # get the port info, which is from the IP core.
+                # Here, we should know which IP core port the sim block is connected to.
                 sim_blk = {}
                 sim_blk['type'] = 'source'
                 sim_blk['name'] = sim_blk_name
                 sim_blk['port'] = port
                 sim_blk['dir'] = sim_dir
-                blk = self._get_blk_by_id(src_blk_id)
-                sim_blk['tag'] = blk['tag']
-                sid = np.array(blk['id']).flatten().tolist()
-                sval = np.array(blk['val']).flatten().tolist()
-                val = self._get_key_by_id(sim_blk['tag'], sid, sval)
+                [tag, val] = self._get_sim_blk_by_name(sim_blk_name)
+                sim_blk['tag'] = tag
                 sim_blk['val'] = val
                 self.sim_blocks.append(sim_blk)
                 # log it
                 self.logger.info('-- Sim Source Block: %s, Port: %s, Tag: %s' % (sim_blk_name, port['name'], sim_blk['tag']))
             if slink['link_type'].endswith('_sim'):
                 # this should be a destination sim block, like a scope
-                src_blk_id = slink['src_blk_id']
-                dst_blk_id = slink['dst_blk_id']
-                port = self._get_port_by_id(src_blk_id, 'src')
+                src_blk_name = slink['src_blk_name']
+                port = self._get_port_from_link_by_name(src_blk_name, 'dst')
                 sim_blk_name = slink['dst_blk_name']
                 sim_blk = {}
                 sim_blk['type'] = 'destination'
                 sim_blk['name'] = sim_blk_name
                 sim_blk['port'] = port
                 sim_blk['dir'] = sim_dir
-                blk = self._get_blk_by_id(dst_blk_id)
-                sim_blk['tag'] = blk['tag']
-                sid = np.array(blk['id']).flatten().tolist()
-                sval = np.array(blk['val']).flatten().tolist()
-                val = self._get_key_by_id(sim_blk['tag'], sid, sval)
+                [tag, val] = self._get_sim_blk_by_name(sim_blk_name)
+                sim_blk['tag'] = tag
                 sim_blk['val'] = val
                 self.sim_blocks.append(sim_blk)
                 # log it
                 self.logger.info('-- Sim Dest Block: %s, Port: %s, Tag: %s' % (sim_blk_name, port['name'], sim_blk['tag']))
-        # we also need to add sim block(if we have one in the design) into the sim_blocks list.
+        # sim:sim block is a very special block, as it's not connected to any blocks.
+        # So we need to handle it separately.
         # TODO: we may need to improve this part.
-        for k,v in self.sim_info.items():
-            if k.startswith('blk') and v['tag'] == 'sim':
+        for blk in self.model_info['sim_blocks']:
+            if blk['tag'] == 'sim:sim':
                 sim_blk = {}
-                sim_blk['tag'] = v['tag']
-                sim_blk['name'] = v['val'][0][0]
-                sim_blk['sim_length'] = int(v['val'][1][0])
+                sim_blk['name'] = blk['name']
+                sim_blk['tag'] = blk['tag'].split(':')[1]
+                sim_blk['sim_length'] = int(blk['sim_length'])
                 sim_blk['type'] = None
                 self.sim_blocks.append(sim_blk)
                 self.logger.info('-- Sim Info Block: %s, Length: %d' % (sim_blk['name'], sim_blk['sim_length']))
@@ -246,7 +218,7 @@ class SIMflow(object):
         tb.append('')
         tb.append('endmodule')
         # write the testbench into a file
-        dir = self.sim_info['project']['filename'].split('.')[0] + '/simulation'
+        dir = self.model_info['project']['filename'].split('.')[0] + '/simulation'
         tb_filename = dir + '/' + self.ip_core['name'] + '_tb.v'
         self.logger.info('Writing testbench into %s' % tb_filename)
         with open(tb_filename, 'w') as f:

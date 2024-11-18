@@ -12,10 +12,6 @@ function [] = collect_block_info(fn)
     // query the block information
     st = struct();
     st('project') = struct('tag', 'proj', 'filename', fn);
-    // st('xps_blocks') = struct();
-    // st('dsp_blocks') = struct();
-    // st('sim_blocks') = struct();
-    // st('link_info') = struct();
     st('xps_blocks') = list();
     st('dsp_blocks') = list();
     st('sim_blocks') = list();
