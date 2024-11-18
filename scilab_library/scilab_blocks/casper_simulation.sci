@@ -4,6 +4,18 @@ function [cmd] = casper_simulation(fn)
     modelpath = fn;
     // run collect_block_info to generate jasper.json
     collect_block_info(fn);
+
+    // execute a python script to read the json file and generate jasper.per and jasper.dsp
+    python_path = 'python';
+    disp('****************************************');
+    disp('*  Frontend python script is running...*');
+    scilab_library_path = getenv('MLIB_DEVEL_PATH')+'/scilab_library';
+    cmd = scilab_library_path+'/jasper_frontend.py' + ' ' + '-m ' + modelpath
+    debug_info('Frontend python script: ' + cmd);
+    unix_s(cmd);
+    disp('*  Frontend python script complete!    *');
+    disp('****************************************');
+    
     // create the cmd for the IP core generation
     // we also need to create an IP core project for simulation.
     // If the project already exists, we will skip this step.

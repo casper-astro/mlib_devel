@@ -55,7 +55,7 @@ class SimBlock(object):
         return r
     
     @staticmethod
-    def _get_val_by_name(dic, name):
+    def _get_sim_data_by_port_name(dic, name):
         """
         Get the val by name from the dict generated from simulation.vcd.
         """
@@ -64,7 +64,7 @@ class SimBlock(object):
             val = dic
         elif 'children' in dic.keys():
             for child in dic['children']:
-                val = SimBlock._get_val_by_name(child, name)
+                val = SimBlock._get_sim_data_by_port_name(child, name)
                 if val != None:
                     break
         return val

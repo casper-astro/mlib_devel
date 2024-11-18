@@ -3,6 +3,7 @@ import logging
 from sim_blocks.sim_block import SimBlock
 import numpy as np
 import os
+from matplotlib import pyplot as plt
 
 """
 This class generates a simulation object,
@@ -16,12 +17,13 @@ class SIMflow(object):
         In the jasper.sim file, we have the simulation information.
         """
         self.logger = logging.getLogger('jasper-sim.simflow')
+        self.builddir = builddir
         self.model_info = json.load(open(builddir+'/'+model_info_file))
         self.ip_core={}
         self.sim_blocks=[]
         self.sim_objs=[]
-        self.builddir = builddir
-                          
+        self.simdata = []
+                         
     def _get_sim_blk_by_name(self, blkname):
         """
         Get the simulation block information by the block name.
@@ -70,8 +72,12 @@ class SIMflow(object):
         # log it
         self.logger.info('IP Core Name: %s' % self.ip_core['name'])
         # get the input ports and output ports info
-        self.ip_core['iports'] = []
-        self.ip_core['oports'] = []
+        self.ip_core['iports'] = {}
+        self.ip_core['iports']['name'] = []
+        self.ip_core['iports']['width'] = []
+        self.ip_core['oports'] = {}
+        self.ip_core['oports']['name'] = []
+        self.ip_core['oports']['width'] = []
         link_objs = self.model_info['link_info']
         for link in link_objs:
             if link['link_type'] == 'xps_dsp':
@@ -79,7 +85,9 @@ class SIMflow(object):
                 # this is an input port for the IP core
                 port['name'] = link['src_port_name']
                 port['width'] = link['src_port_width']
-                self.ip_core['iports'].append(port) 
+                if port['name'] not in self.ip_core['iports']['name']:
+                    self.ip_core['iports']['name'].append(port['name'])
+                    self.ip_core['iports']['width'].append(port['width'])
                 # log it
                 self.logger.info('-- Input port: %s, Width: %s' % (link['src_port_name'], link['src_port_width']))
             elif link['link_type'] == 'dsp_xps':
@@ -87,7 +95,9 @@ class SIMflow(object):
                 # this is an output port for the IP core
                 port['name'] = link['dst_port_name']
                 port['width'] = link['dst_port_width']
-                self.ip_core['oports'].append(port)
+                if port['name'] not in self.ip_core['oports']['name']:
+                    self.ip_core['oports']['name'].append(port['name'])
+                    self.ip_core['oports']['width'].append(port['width'])
                 # log it
                 self.logger.info('-- Output port: %s, Width: %s' % (link['dst_port_name'], link['dst_port_width']))
 
@@ -184,11 +194,17 @@ class SIMflow(object):
         tb.append('always #%f clk = ~clk;' % float(clk_period/2))
         # tb.append('integer i;')
         tb.append('')
-        # add ports to the testbench
-        for iport in self.ip_core['iports']:
-            tb.append('reg [%d:0] %s;' % (iport['width']-1, iport['name']))
-        for oport in self.ip_core['oports']:
-            tb.append('wire [%d:0] %s;' % (oport['width']-1, oport['name']))
+        iport_num = len(self.ip_core['iports']['name'])
+        oport_num = len(self.ip_core['oports']['name'])
+        for i in range(iport_num):
+            name = self.ip_core['iports']['name'][i]
+            width = self.ip_core['iports']['width'][i]
+            tb.append('reg [%d:0] %s;' % (width-1, name))
+        for i in range(oport_num):
+            name = self.ip_core['oports']['name'][i]
+            width = self.ip_core['oports']['width'][i]
+            tb.append('wire [%d:0] %s;' % (width-1, name))
+
         tb.append('')
         # read data from the simulation files, and use them as the input data
         sim_length = SimBlock.sim_length
@@ -209,10 +225,12 @@ class SIMflow(object):
         # instantiate the IP core
         tb.append('%s %s_inst(' % (self.ip_core['name'], self.ip_core['name']))
         tb.append('  .clk(clk),')
-        for iport in self.ip_core['iports']:
-            tb.append('  .%s(%s),' % (iport['name'], iport['name']))
-        for oport in self.ip_core['oports']:
-            tb.append('  .%s(%s),' % (oport['name'], oport['name']))
+        for i in range(iport_num):
+            name = self.ip_core['iports']['name'][i]
+            tb.append('  .%s(%s),' % (name, name))
+        for i in range(oport_num):
+            name = self.ip_core['oports']['name'][i]
+            tb.append('  .%s(%s),' % (name, name))
         tb[-1] = tb[-1][:-1]
         tb.append(');')
         tb.append('')
@@ -272,19 +290,40 @@ class SIMflow(object):
         Get the simulation data.
         """
         self.logger.info('Getting simulation data')
-        simdata = []
         for sim_obj in self.sim_objs:
             self.logger.info('Getting simulation data for %s' % sim_obj.name)
             info = {}
-            info['name'] = sim_obj.name
-            info['data'] = sim_obj.get_sim_data()
-            simdata.append(info)
-        return simdata
+            data = sim_obj.get_sim_data()
+            # the source sim blocks(like constant) won't return the data, so the data will be None.
+            # We don't need to store the data for the source sim blocks.
+            if data is not None:
+                info['name'] = sim_obj.name
+                info['data'] = data
+                self.simdata.append(info)
+        # actually, we don't have to return the simdata, 
+        # as we don't use the return data so far 
+        return self.simdata
     
     def plot_sim_data(self):
         """
         Show the simulation data.
         """
         self.logger.info('Plotting simulation data')
-        for sim_obj in self.sim_objs:
-            sim_obj.plot_sim_data()
+        # for sim_obj in self.sim_objs:
+        #     sim_obj.plot_sim_data()
+        
+        # As matplotlib will be blocked after we call plot_sim_data() first time,
+        # we'are going to create plots here
+        fig_num = len(self.simdata)
+        fig = np.zeros(fig_num, dtype=object)
+        subfig = np.zeros(fig_num, dtype=object)
+        for i in range(fig_num):
+            fig[i] = plt.figure()
+            subfig[i] = fig[i].add_subplot(111)
+            subfig[i].plot(self.simdata[i]['data'])
+            subfig[i].set_title(self.simdata[i]['name'])
+            subfig[i].set_xlabel('Time/ns')
+            subfig[i].set_ylabel('Value')
+            subfig[i].grid(True)
+            subfig[i].legend()
+        plt.show()
