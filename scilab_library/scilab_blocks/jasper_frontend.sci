@@ -1,10 +1,6 @@
 function [build_cmd] = jasper_frontend(fn)
     // create a dir for the project
     [path, name, ext] = fileparts(fn);
-    dir = path + '/' + name;
-    if ~isdir(dir) then
-        mkdir(dir);
-    end
     // disp some info
     disp('Starting jasper for model: '+ name);
 
