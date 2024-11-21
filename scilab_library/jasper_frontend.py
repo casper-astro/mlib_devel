@@ -80,8 +80,6 @@ if __name__ == '__main__':
     jasper_per = {}
     jasper_per['yellow_blocks'] = xps_blocks
     jasper_per['user_modules'] = xps_user_modules
-    #jasper_per_str = json.dumps(jasper_per, indent=2)
-    #print(jasper_per_str)
     dump_jasper(jasper_per, fn='%s/jasper.per'%(builddir)) 
 
     """

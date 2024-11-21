@@ -6,7 +6,7 @@ import sys
 # add the jasper_library to the path
 sys.path.append('jasper_library')
 sys.path.append('jasper_library/yellow_blocks')
-print(os.getcwd())
+
 import collections
 from yellow_block import YellowBlock
 
