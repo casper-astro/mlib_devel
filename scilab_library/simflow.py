@@ -133,7 +133,13 @@ class SIMflow(object):
             if slink['link_type'].endswith('_sim'):
                 # this should be a destination sim block, like a scope
                 src_blk_name = slink['src_blk_name']
-                port = self._get_port_from_link_by_name(src_blk_name, 'dst')
+                # two possible cases: xps_sim and sim_xps
+                if slink['link_type'] == 'xps_sim':
+                    port = self._get_port_from_link_by_name(src_blk_name, 'dst')
+                elif slink['link_type'] == 'dsp_sim':
+                    port = {}
+                    port['name'] = slink['src_port_name']
+                    port['width'] = slink['src_port_width']
                 sim_blk_name = slink['dst_blk_name']
                 sim_blk = {}
                 sim_blk['type'] = 'destination'

@@ -1,9 +1,13 @@
 function [] = collect_block_info(fn)
     [path, projname, ext] = fileparts(fn);
     dir = path + '/' + name;
-        if ~isdir(dir) then
-            mkdir(dir);
-        end
+    if ~isdir(dir) then
+        mkdir(dir);
+    end
+    glue_dir = dir + '/glues';
+    if ~isdir(glue_dir) then
+        mkdir(glue_dir);
+    end
     // load the diagram file
     scs_m = xcosDiagramToScilab(fn);
     // get the number of objs
