@@ -47,10 +47,7 @@
           graphics.out_label = ['sim_out'];
           graphics.in_label = ['in'];
         end
-        // generate rpar
-        //rpar = [io_delay, init_val, sample_period, bitfield_name_r, bitfield_width, bitfield_bp, bitfield_types];
-        // update model
-        // model.rpar = rpar;
+        graphics.style = 'shape=rectangle;fillColor=yellow';
         graphics.exprs = exprs;
         x.graphics = graphics;
         x.model = model;
@@ -89,7 +86,7 @@
       gr_i = [];
       //set the block tag
       model.label = "xps";
-      x=standard_define([5 1.4],model,exprs,gr_i)
+      x=standard_define([6 1.4],model,exprs,gr_i)
       x.graphics.out_label = ['out'];
       x.graphics.in_label = ['sim_in'];
       x.graphics.style = 'shape=rectangle;fillColor=yellow';
