@@ -50,12 +50,24 @@ debug_info('------ CASPER XPS loaded --------');
 debug_info('------Loading CASPER DSP...------');
 // load the xps blocks
 exec('scilab_library/scilab_blocks/casper_dsp/adder.sci');
+exec('scilab_library/scilab_blocks/casper_dsp/edge_detect.sci');
+exec('scilab_library/scilab_blocks/casper_dsp/counter.sci');
+exec('scilab_library/scilab_blocks/casper_dsp/pulse_ext.sci');
+exec('scilab_library/scilab_blocks/casper_dsp/slice.sci');
 // create the blocks
 adder_inst = adder("define");
+edge_detect_inst = edge_detect("define");
+counter_inst = counter("define");
+pulse_ext_inst = pulse_ext("define");
+slice_inst = slice("define");
 cur_dir = pwd();
 dsp_fig_dir = cur_dir + '/scilab_library/scilab_blocks/casper_dsp/figures/';
 pal = xcosPal("CASPER DSP");
 pal = xcosPalAddBlock(pal, adder_inst, dsp_fig_dir + 'adder.png', dsp_fig_dir + 'adder.png');
+pal = xcosPalAddBlock(pal, pulse_ext_inst);
+pal = xcosPalAddBlock(pal, edge_detect_inst);
+pal = xcosPalAddBlock(pal, counter_inst);
+pal = xcosPalAddBlock(pal, slice_inst);
 xcosPalAdd(pal);
 debug_info('------ CASPER DSP loaded --------');
 

@@ -1,0 +1,29 @@
+{
+    "parameters":
+    {
+        "keys":
+        [
+            "name",
+            "fullpath",
+            "tag",
+            "length"
+        ],
+        "values":
+        [
+            "pulse_ext",
+            "",
+            "dsp:pulse_ext",
+            1024
+        ]
+    },
+    "input_ports": {
+        "name": ["in"],
+        "width_id": [-1],
+        "width_default": [1]
+    },
+    "output_ports": {
+        "name": ["out"],
+        "width_id": [-1],
+        "width_default": [1]
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "parameters":
+    {
+        "keys":
+        [
+            "name",
+            "fullpath",
+            "tag",
+            "bit_width"
+        ],
+        "values":
+        [
+            "counter",
+            "",
+            "dsp:counter",
+            10
+        ]
+    },
+    "input_ports": {
+        "name": ["rst", "en"],
+        "width_id": [-1, -1],
+        "width_default": [1, 1]
+    },
+    "output_ports": {
+        "name": ["out"],
+        "width_id": [3],
+        "width_default": [-1]
+    }
+}

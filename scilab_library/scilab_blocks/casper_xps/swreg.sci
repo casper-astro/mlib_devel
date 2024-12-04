@@ -32,22 +32,22 @@
       if ok then
         // TODO: figure out how to set string in the model
         if io_direction == 'From Processor' then
-          model.in = 1;
-          model.in2 = 1;
-          model.out = 1;
-          model.out2 = 1;
-          graphics.out_label = ['out'];
-          graphics.in_label = ['sim_in'];
-          graphics.style = 'shape=rectangle;fillColor=yellow'
+            model.in = 1;
+            model.in2 = 1;
+            model.out = 1;
+            model.out2 = 1;
+            graphics.out_label = ['out'];
+            graphics.in_label = ['sim_in'];
+            graphics.style = 'shape=rectangle;fillColor=yellow'
         elseif io_direction == 'To Processor' then
-          model.in = 1;
-          model.in2 = 1;
-          model.out = 1;
-          model.out2 = 1;
-          graphics.out_label = ['sim_out'];
-          graphics.in_label = ['in'];
+            model.in = 1;
+            model.in2 = 1;
+            model.out = 1;
+            model.out2 = 1;
+            graphics.out_label = ['sim_out'];
+            graphics.in_label = ['in'];
+            graphics.style = 'shape=rectangle;fillColor=yellow';
         end
-        graphics.style = 'shape=rectangle;fillColor=yellow';
         graphics.exprs = exprs;
         x.graphics = graphics;
         x.model = model;

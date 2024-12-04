@@ -1,0 +1,31 @@
+{
+    "parameters":
+    {
+        "keys":
+        [
+            "name",
+            "fullpath",
+            "tag",
+            "bit_width"
+        ],
+        "values":
+        [
+            "slice",
+            "",
+            "dsp:slice",
+            32,
+            1,
+            0
+        ]
+    },
+    "input_ports": {
+        "name": ["in"],
+        "width_id": [3],
+        "width_default": [-1]
+    },
+    "output_ports": {
+        "name": ["out"],
+        "width_id": [4],
+        "width_default": [-1]
+    }
+}
