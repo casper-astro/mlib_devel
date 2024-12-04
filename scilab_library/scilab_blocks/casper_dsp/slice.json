@@ -6,7 +6,9 @@
             "name",
             "fullpath",
             "tag",
-            "bit_width"
+            "input_width",
+            "output_width",
+            "slice_start"
         ],
         "values":
         [

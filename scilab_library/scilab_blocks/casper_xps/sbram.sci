@@ -36,7 +36,7 @@ function [x, y, typ] = sbram(job, arg1, arg2)
       model.sim = list('sbram_out',4);
       model.blocktype = 'c';
       // Type : column vector of real numbers.
-      model.rpar = [0, 3, 4, 5, 6, 7, 8, 9, 10];
+      model.rpar = [0, 4, 5];
       // TODO: do we have to set out2??
       model.out = [1];
       model.out2 = [];
