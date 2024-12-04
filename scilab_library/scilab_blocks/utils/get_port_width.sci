@@ -1,10 +1,9 @@
 // get port width
 // TODO: we may need to store the port width in other fields
-function [width] = get_port_width(st, obj, width_id)
-    // if the width_id is -1, it means we don't have width for this port.
-    // so just return 0.
+function [width] = get_port_width(st, obj, width_id, width_default)
+    // if the width_id is -1, it means we will use the defalut width.
     if width_id == -1 then
-        width = '0';
+        width = string(width_default);
         return;
     end
     // get the block name, type and tag

@@ -106,9 +106,10 @@ function [] = collect_block_info(fn)
             debug_info('    src_port_name: ' + src_port_name);
             debug_info('    src_port_id: ' + string(link('src_port_id')));
             src_port_width_id = src_template('output_ports')("width_id")(link('src_port_id'));
+            src_port_width_default = src_template('output_ports')("width_default")(link('src_port_id'));
             debug_info('    src_port_width_id: ' + string(src_port_width_id));
             // we have collected the block info in st, so we can get the port width from st
-            src_port_width = get_port_width(st, src_blk, src_port_width_id);
+            src_port_width = get_port_width(st, src_blk, src_port_width_id, src_port_width_default);
             debug_info('    src_port_width: ' + string(src_port_width));
             // collect the dst block info
             dst_blk = link('dst_obj');
@@ -123,9 +124,10 @@ function [] = collect_block_info(fn)
             debug_info('    dst_port_name: ' + dst_port_name);
             debug_info('    dst_port_id: ' + string(link('dst_port_id')));
             dst_port_width_id = dst_template('input_ports')("width_id")(link('dst_port_id'));
+            dst_port_width_default = dst_template('input_ports')("width_default")(link('dst_port_id'));
             debug_info('    dst_port_width_id: ' + string(dst_port_width_id));
             // we have collected the block info in st, so we can get the port width from st
-            dst_port_width = get_port_width(st, dst_blk, dst_port_width_id);
+            dst_port_width = get_port_width(st, dst_blk, dst_port_width_id, dst_port_width_default);
             debug_info('    dst_port_width: ' + string(dst_port_width));
             // write the link info to the struct
             link_info('src_blk_name') = src_blk_name;

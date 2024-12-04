@@ -22,10 +22,12 @@
     },
     "input_ports": {
         "name": [],
-        "width_id": []
+        "width_id": [],
+        "width_default": []
     },
     "output_ports": {
         "name": ["constant_out"],
-        "width_id": [4]
+        "width_id": [4],
+        "width_default": [32]
     }
 }

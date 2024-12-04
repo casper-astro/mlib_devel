@@ -43,10 +43,12 @@
     },
     "input_ports": {
         "name":["gateway"],
-        "width_id": [8]
+        "width_id": [8],
+        "width": [1]
     },
     "output_ports": {
         "name": ["gateway"],
-        "width_id": [8]
+        "width_id": [8],
+        "width": [1]
     }
 }

@@ -1367,10 +1367,12 @@
     },
     "input_ports": {
         "name":[],
-        "width_id": []
+        "width_id": [],
+        "width_default": []
     },
     "output_ports": {
         "name": ["m00_axis_tdata", "m02_axis_tdata", "m10_axis_tdata", "m12_axis_tdata", "m20_axis_tdata", "m22_axis_tdata", "m30_axis_tdata", "m32_axis_tdata"],
-        "width_id": [679, 679, 679, 679, 679, 679, 679, 679]
+        "width_id": [679, 679, 679, 679, 679, 679, 679, 679],
+        "width_default": [16, 16, 16, 16, 16, 16, 16, 16]
     }
 }
