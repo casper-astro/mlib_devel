@@ -19,7 +19,7 @@ function [x, y, typ]= pulse_ext(job, arg1, arg2)
         if ok then
             graphics.out_label = ['out'];
             graphics.in_label = ['in'];
-            graphics.style = 'shape=rectangle;fillColor=grey';
+            graphics.style = 'shape=rectangle;fillColor=green';
             //graphics.id = '<p style=""margin-top: 0"">      my edge detect     </p>';
             graphics.exprs = exprs;
             x.graphics = graphics;
@@ -50,7 +50,7 @@ function [x, y, typ]= pulse_ext(job, arg1, arg2)
         x=standard_define([5 1],model,exprs,gr_i)
         x.graphics.out_label = ['out'];
         x.graphics.in_label = ['in'];
-        x.graphics.style = 'shape=rectangle;fillColor=grey';
+        x.graphics.style = 'shape=rectangle;fillColor=green';
         //x.graphics.id = '<p style=""margin-top: 0"">      my edge detect     </p>';
         debug_info('pulse ext block loaded...')
     end
