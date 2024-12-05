@@ -21,10 +21,15 @@ def gen_design_info(yellow_blocks, proj_name,  fn='design_info.tab'):
                 if sk == 'fullpath' or sk == 'name' or sk == 'tag':
                     continue
                 else:
-                    if type(sv) == str:
-                        design_info.append('%s %s %s %s\n'%(name, tag, sk, sv.replace(' ', '\_')))
+                    if v['tag'] == 'xps:bram' and sk == 'init_vals':
+                        # this is a very special case
+                        # TODO: we have to deal with this case in a better way
+                        design_info.append('%s %s %s [0:2^%d-1]\n'%(name, tag, sk, v['addr_width']))
                     else:
-                        design_info.append('%s %s %s %d\n'%(name, tag, sk, sv))
+                        if type(sv) == str:
+                            design_info.append('%s %s %s %s\n'%(name, tag, sk, sv.replace(' ', '\_')))
+                        else:
+                            design_info.append('%s %s %s %d\n'%(name, tag, sk, sv))
     # not sure where the following data is from
     # TODO: this piece of code has to be improved
     d = '77777 77777 tags ' + used_tags[0]
