@@ -13,7 +13,7 @@ class edge_detect(DSPBlock):
         module = 'edge_detect'
         inst = top.get_instance(entity=module, name=self.fullname)
         # add parameters
-        inst.add_parameter("EDGE", "%s" % self.edge)
+        inst.add_parameter("EDGE", "\"%s\"" % self.edge_type)
         # add ports
         # we need to check if the port is in parent_ports
         inst.add_port('clk', 'user_clk', dir='in')

@@ -1,4 +1,4 @@
-module edge_det#(
+module edge_detect#(
     parameter EDGE = "rising"
 )(
     input clk,

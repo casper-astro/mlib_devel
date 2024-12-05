@@ -1,7 +1,8 @@
 
 from datetime import datetime
 
-tag_list = ['xps:xsg', 'xps:sw_reg']
+# TODO: we may not need this list, and just write all the tags in the design_info.tab??
+tag_list = ['xps:xsg', 'xps:sw_reg', 'xps:rfdc', 'xps:bram']
 
 def gen_design_info(yellow_blocks, proj_name,  fn='design_info.tab'):
     used_tags = []

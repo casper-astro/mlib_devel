@@ -679,13 +679,12 @@
             "t230_clk_dist",
             "t231_has_dac_clk",
             "t231_dac_clk_src",
-            "t231_clk_dist",
-            "bitwidth"
+            "t231_clk_dist"
         ],
         "values": [
             "rfdc",
-            "rfsoc4x2_tut_rfdc_real/rfdc",
-            "xps",
+            "",
+            "xps:rfdc",
             "on",
             "off",
             3932.16,
@@ -1007,8 +1006,8 @@
             2000,
             125,
             "on",
-            250,
-            "[]",
+            125,
+            255,
             20,
             "on",
             "Real",
@@ -1091,8 +1090,8 @@
             2000,
             125,
             "on",
+            125,
             250,
-            "[]",
             20,
             "on",
             "Real",
@@ -1175,8 +1174,8 @@
             2000,
             125,
             "on",
+            125,
             250,
-            "[]",
             20,
             "on",
             "Real",
@@ -1259,8 +1258,8 @@
             2000,
             125,
             "on",
+            125,
             250,
-            "[]",
             20,
             "on",
             "Real",
@@ -1361,8 +1360,7 @@
             "Input Refclk",
             "off",
             230,
-            "None",
-            12
+            "None"
         ]
     },
     "input_ports": {
@@ -1372,7 +1370,7 @@
     },
     "output_ports": {
         "name": ["m00_axis_tdata", "m02_axis_tdata", "m10_axis_tdata", "m12_axis_tdata", "m20_axis_tdata", "m22_axis_tdata", "m30_axis_tdata", "m32_axis_tdata"],
-        "width_id": [679, 679, 679, 679, 679, 679, 679, 679],
-        "width_default": [16, 16, 16, 16, 16, 16, 16, 16]
+        "width_id": [-1, -1, -1, -1, -1, -1, -1, -1],
+        "width_default": [128, 128, 128, 128, 128, 128, 128, 128]
     }
 }

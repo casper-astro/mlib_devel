@@ -44,11 +44,11 @@
     "input_ports": {
         "name":["gateway"],
         "width_id": [8],
-        "width": [1]
+        "width_default": [1]
     },
     "output_ports": {
         "name": ["gateway"],
         "width_id": [8],
-        "width": [1]
+        "width_default": [1]
     }
 }

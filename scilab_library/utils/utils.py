@@ -42,8 +42,7 @@ def gen_glue_module(link_info,file_dir='./'):
     in_port = link_info['src_port_name']
     out_port = link_info['dst_port_name']
     if link_info['src_port_width'] != link_info['dst_port_width']:
-        print('port width not match')
-        return
+        raise Exception('gen_glue_module: port width not match')
     bitwidth = link_info['src_port_width']
     gen_verilog_module(module_name, in_port, out_port, bitwidth, file_dir)
 
