@@ -37,7 +37,7 @@ function [x, y, typ]= counter(job, arg1, arg2)
         model.out = [1];
         model.out2 = [];
         // Type : column vector of strings.
-        exprs = ['counter'; '1024'];
+        exprs = ['counter'; '10'];
         gr_i = [];
         // we use model.label as the block tag.
         // the best place to set the tag should be graphics.gr_i/id.
