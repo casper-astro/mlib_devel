@@ -19,5 +19,5 @@ class counter(DSPBlock):
         inst.add_port('clk', 'user_clk', dir='in')
         inst.add_port('rst', self.fullname+'_rst', parent_port=False, width=1, dir='in')
         inst.add_port('en', self.fullname+'_en', parent_port=False, width=1, dir='in')
-        inst.add_port('out', self.fullname+'_out', parent_port=False, width=self.bit_width - 1, dir='out')
+        inst.add_port('out', self.fullname+'_out', parent_port=False, width=self.bit_width, dir='out')
 

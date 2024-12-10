@@ -19,6 +19,6 @@ class slice(DSPBlock):
         # add ports
         # we need to check if the port is in parent_ports
         inst.add_port('clk', 'user_clk', dir='in')
-        inst.add_port('in', self.fullname+'_in', parent_port=False, width=self.input_width - 1, dir='in')
-        inst.add_port('out', self.fullname+'_out', parent_port=False, width=self.output_width - 1, dir='out')
+        inst.add_port('in', self.fullname+'_in', parent_port=False, width=self.input_width, dir='in')
+        inst.add_port('out', self.fullname+'_out', parent_port=False, width=self.output_width, dir='out')
 

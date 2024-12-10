@@ -1,0 +1,35 @@
+{
+    "parameters":
+    {
+        "keys":
+        [
+            "name",
+            "fullpath",
+            "tag",
+            "total_bits",
+            "divisions",
+            "size_bits",
+            "packing_order"
+        ],
+        "values":
+        [
+            "munge",
+            "",
+            "dsp:munge",
+            128,
+            4,
+            32,
+            "{3,2,1,0}"
+        ]
+    },
+    "input_ports": {
+        "name": ["din"],
+        "width_id": [3],
+        "width_default": [-1]
+    },
+    "output_ports": {
+        "name": ["dout"],
+        "width_id": [3],
+        "width_default": [-1]
+    }
+}
