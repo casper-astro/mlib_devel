@@ -38,7 +38,7 @@ function [] = collect_block_info(fn)
             // the type should be on of "xps", "dsp", "sim"
             // the tag is the "swreg", "gpio", etc.
             // each block has a config, which contains the paramters info and input/output ports info
-            block_config = get_block_config(type, tag);
+            block_config = get_block_config(name, type, tag);
             // create a new struct for the block info
             keys = block_config('parameters')('keys');
             vals = block_config('parameters')('values');
@@ -102,7 +102,7 @@ function [] = collect_block_info(fn)
             debug_info('    src_blk_tag: ' + src_blk_tag);
             src_blk_type = get_block_type(link('src_obj'));
             debug_info('    src_blk_type: ' + src_blk_type); 
-            src_config = get_block_config(src_blk_type, src_blk_tag);
+            src_config = get_block_config(src_blk_name, src_blk_type, src_blk_tag);
             src_port_name = projname + '_' + src_blk_name + '_' + src_config('output_ports')("name")(link('src_port_id'));
             debug_info('    src_port_name: ' + src_port_name);
             debug_info('    src_port_id: ' + string(link('src_port_id')));
@@ -120,7 +120,7 @@ function [] = collect_block_info(fn)
             debug_info('    dst_blk_tag: ' + dst_blk_tag);
             dst_blk_type = get_block_type(link('dst_obj'));
             debug_info('    dst_blk_type: ' + dst_blk_type);
-            dst_config = get_block_config(dst_blk_type, dst_blk_tag);
+            dst_config = get_block_config(dst_blk_name, dst_blk_type, dst_blk_tag);
             dst_port_name = projname + '_' + dst_blk_name + '_' +dst_config('input_ports')("name")(link('dst_port_id'));
             debug_info('    dst_port_name: ' + dst_port_name);
             debug_info('    dst_port_id: ' + string(link('dst_port_id')));
@@ -144,7 +144,9 @@ function [] = collect_block_info(fn)
             link_info_id = link_info_id + 1;
         end
     end
-
+    clear link_info;
+    clear block_info;
     // create a big struct
-    toJSON(st, path + name + '/jasper.json', 4);
+    debug_info('Writing struct to ' + path + projname + '/jasper.json');
+    toJSON(st, path + projname + '/jasper.json', 4);
 endfunction

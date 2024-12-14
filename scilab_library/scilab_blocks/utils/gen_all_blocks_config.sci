@@ -11,6 +11,9 @@ function [] = gen_all_blocks_config(fn)
     if ~isdir(configdir) then
         mkdir(configdir);
     end
+    // set the configdir to environment variable,
+    // so that we can use it in the get_block_config function.
+    setenv('CONFIG_DIR', configdir);
     // go through the diagram file, and generate the block config file
     scs_m = xcosDiagramToScilab(fn);
     n_objs = length(scs_m.objs);

@@ -11,7 +11,7 @@ function [width] = get_port_width(st, obj, width_id, width_default)
     tag = get_block_tag(obj);
     name = get_block_name(obj);
     // open the config, and get the key for the bit width
-    config = get_block_config(type, tag);
+    config = get_block_config(name, type, tag);
     key = config('parameters')('keys')(width_id + 1);
     // get the width from st
     blks_st = st(type+'_blocks');
