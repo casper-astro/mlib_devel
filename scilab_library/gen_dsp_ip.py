@@ -40,7 +40,6 @@ if __name__ == '__main__':
     builddir = opts.builddir or opts.model.split('.')[0]
 
     # create the build directory, and log file
-    os.system('mkdir -p %s/glues' % builddir)
     logger = logging.getLogger('jasper')
     logger.setLevel(logging.DEBUG)
     handler = logging.FileHandler('%s/jasper-dsp.log' % builddir, mode='w')

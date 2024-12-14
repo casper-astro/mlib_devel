@@ -1,4 +1,4 @@
-import yaml
+import yaml, os
 
 def gen_verilog_module(module_name, in_port, out_port, bitwidth = 1, path = './'):
     '''
@@ -36,6 +36,8 @@ def gen_verilog_module(module_name, in_port, out_port, bitwidth = 1, path = './'
         f.write('\n'.join(src_str))
 
 def gen_glue_module(link_info,file_dir='./'):
+    if os.path.exists(file_dir) == False:
+        os.makedirs(file_dir)
     module_name = link_info['link_type'] + '_' + link_info['src_blk_name'] + '_' \
         + 'out%d_'%(link_info['src_port_id'] - 1) + link_info['dst_blk_name'] + '_' \
         + 'in%d'%(link_info['dst_port_id'] - 1)

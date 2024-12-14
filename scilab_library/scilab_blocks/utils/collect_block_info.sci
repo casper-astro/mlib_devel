@@ -4,10 +4,10 @@ function [] = collect_block_info(fn)
     if ~isdir(builddir) then
         mkdir(builddir);
     end
-    glue_dir = builddir + '/glues';
-    if ~isdir(glue_dir) then
-        mkdir(glue_dir);
-    end
+    // glue_dir = builddir + '/glues';
+    // if ~isdir(glue_dir) then
+    //     mkdir(glue_dir);
+    // end
     // load the diagram file
     scs_m = xcosDiagramToScilab(fn);
     // get the number of objs
