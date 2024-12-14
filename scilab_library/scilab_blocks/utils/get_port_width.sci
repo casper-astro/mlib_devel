@@ -10,9 +10,9 @@ function [width] = get_port_width(st, obj, width_id, width_default)
     type = get_block_type(obj);
     tag = get_block_tag(obj);
     name = get_block_name(obj);
-    // open the template, and get the key for the bit width
-    template = get_block_template(type, tag);
-    key = template('parameters')('keys')(width_id + 1);
+    // open the config, and get the key for the bit width
+    config = get_block_config(type, tag);
+    key = config('parameters')('keys')(width_id + 1);
     // get the width from st
     blks_st = st(type+'_blocks');
     for i = 1:length(blks_st)

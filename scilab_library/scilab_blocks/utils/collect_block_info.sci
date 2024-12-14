@@ -1,10 +1,10 @@
 function [] = collect_block_info(fn)
     [path, projname, ext] = fileparts(fn);
-    dir = path + '/' + name;
-    if ~isdir(dir) then
-        mkdir(dir);
+    builddir = path + '/' + projname;
+    if ~isdir(builddir) then
+        mkdir(builddir);
     end
-    glue_dir = dir + '/glues';
+    glue_dir = builddir + '/glues';
     if ~isdir(glue_dir) then
         mkdir(glue_dir);
     end
@@ -36,14 +36,14 @@ function [] = collect_block_info(fn)
             // get the block type and block tag
             // the type should be on of "xps", "dsp", "sim"
             // the tag is the "swreg", "gpio", etc.
-            // each block has a template, which contains the paramters info and input/output ports info
-            template = get_block_template(type, tag);
+            // each block has a config, which contains the paramters info and input/output ports info
+            block_config = get_block_config(type, tag);
             // create a new struct for the block info
-            keys = template('parameters')('keys');
-            vals = template('parameters')('values');
+            keys = block_config('parameters')('keys');
+            vals = block_config('parameters')('values');
             block_info = struct();
-            // set the default value from the template
-            debug_info('block_template: ' + tag);
+            // set the default value from the block_config
+            debug_info('block_config: ' + tag);
             for j = 1:size(keys)(2)
                 block_info(keys(j)) = vals(j);
                 debug_info('    key: ' + string(keys(j)) + ' val: ' + string(vals(j)));
@@ -101,12 +101,12 @@ function [] = collect_block_info(fn)
             debug_info('    src_blk_tag: ' + src_blk_tag);
             src_blk_type = get_block_type(link('src_obj'));
             debug_info('    src_blk_type: ' + src_blk_type); 
-            src_template = get_block_template(src_blk_type, src_blk_tag);
-            src_port_name = projname + '_' + src_blk_name + '_' + src_template('output_ports')("name")(link('src_port_id'));
+            src_config = get_block_config(src_blk_type, src_blk_tag);
+            src_port_name = projname + '_' + src_blk_name + '_' + src_config('output_ports')("name")(link('src_port_id'));
             debug_info('    src_port_name: ' + src_port_name);
             debug_info('    src_port_id: ' + string(link('src_port_id')));
-            src_port_width_id = src_template('output_ports')("width_id")(link('src_port_id'));
-            src_port_width_default = src_template('output_ports')("width_default")(link('src_port_id'));
+            src_port_width_id = src_config('output_ports')("width_id")(link('src_port_id'));
+            src_port_width_default = src_config('output_ports')("width_default")(link('src_port_id'));
             debug_info('    src_port_width_id: ' + string(src_port_width_id));
             // we have collected the block info in st, so we can get the port width from st
             src_port_width = get_port_width(st, src_blk, src_port_width_id, src_port_width_default);
@@ -119,12 +119,12 @@ function [] = collect_block_info(fn)
             debug_info('    dst_blk_tag: ' + dst_blk_tag);
             dst_blk_type = get_block_type(link('dst_obj'));
             debug_info('    dst_blk_type: ' + dst_blk_type);
-            dst_template = get_block_template(dst_blk_type, dst_blk_tag);
-            dst_port_name = projname + '_' + dst_blk_name + '_' +dst_template('input_ports')("name")(link('dst_port_id'));
+            dst_config = get_block_config(dst_blk_type, dst_blk_tag);
+            dst_port_name = projname + '_' + dst_blk_name + '_' +dst_config('input_ports')("name")(link('dst_port_id'));
             debug_info('    dst_port_name: ' + dst_port_name);
             debug_info('    dst_port_id: ' + string(link('dst_port_id')));
-            dst_port_width_id = dst_template('input_ports')("width_id")(link('dst_port_id'));
-            dst_port_width_default = dst_template('input_ports')("width_default")(link('dst_port_id'));
+            dst_port_width_id = dst_config('input_ports')("width_id")(link('dst_port_id'));
+            dst_port_width_default = dst_config('input_ports')("width_default")(link('dst_port_id'));
             debug_info('    dst_port_width_id: ' + string(dst_port_width_id));
             // we have collected the block info in st, so we can get the port width from st
             dst_port_width = get_port_width(st, dst_blk, dst_port_width_id, dst_port_width_default);

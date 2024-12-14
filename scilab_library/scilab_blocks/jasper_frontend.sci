@@ -6,6 +6,10 @@ function [build_cmd] = jasper_frontend(fn)
 
     // set the modelpath
     modelpath = fn;
+
+    // generate the block config files first
+    gen_all_blocks_config(fn);
+    
     // collect the block info, and generate the jasper.json file
     collect_block_info(fn);
     
