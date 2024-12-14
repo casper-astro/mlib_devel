@@ -16,8 +16,8 @@ ENTITY munge is
     clk   : in std_logic := '1';
     ce    : in std_logic := '1';
 
-    din   : in std_logic_vector;
-    dout  : out std_logic_vector
+    din   : in std_logic_vector(g_number_of_divisions * g_division_size_bits - 1 downto 0);
+    dout  : out std_logic_vector(g_number_of_divisions * g_division_size_bits - 1 downto 0)
   );
 end ENTITY;
 

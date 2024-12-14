@@ -249,5 +249,21 @@ class VivadoDSPBackend(VivadoBackend):
             self.add_tcl_cmd('ipx::save_core [ipx::current_core]', stage='pre_synth')
             self.add_tcl_cmd('set_property  ip_repo_paths %s/dspproj/dspproj.srcs [current_project]'%(self.compile_dir), stage='pre_synth')
             self.add_tcl_cmd('update_ip_catalog', stage='pre_synth')
+            self.gen_dspblock_tcl_cmds()
         else:
             pass
+    
+    def gen_dspblock_tcl_cmds(self):
+        """
+        Compose a list of tcl commands from each dsp block.
+        To be added to the final tcl script.
+        Actually, the code is the same as gen_yellowblock_tcl_cmds.
+        The only difference is that the log info is different.
+        """
+        self.logger.info('Extracting dsp block tcl commands from peripherals')
+        for obj in self.periph_objs:
+            c = obj.gen_tcl_cmds()
+            for key, val in c.items():
+                if val is not None:
+                    for v in val:
+                        self.add_tcl_cmd(v, stage=key)

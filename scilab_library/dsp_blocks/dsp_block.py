@@ -27,6 +27,10 @@ class DSPBlock(YellowBlock):
         # The __init__ method of the DSPBlock class initializes
         super(DSPBlock, self).__init__(blk, platform, hdl_root=hdl_root)
         self.model_info_file = model_info_file
+        with open(self.model_info_file) as f:
+            blkinfo = json.load(f)
+            self.link_info = blkinfo['link_info']
+            self.fullpath = blkinfo['project']['filename'].split('.')[0]
         # populate the parent ports
         self._get_parent_ports_info()
 
@@ -58,9 +62,9 @@ class DSPBlock(YellowBlock):
     
     def _get_parent_ports_info(self):
         # we need to get the link info here
-        with open(self.model_info_file) as f:
-            blkinfo = json.load(f)
-            self.link_info = blkinfo['link_info']
+        # with open(self.model_info_file) as f:
+        #     blkinfo = json.load(f)
+        #     self.link_info = blkinfo['link_info']
         self.parent_ports = {}
         self.parent_ports['in'] = []
         self.parent_ports['out'] = []
