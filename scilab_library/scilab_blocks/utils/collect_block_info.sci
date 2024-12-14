@@ -29,6 +29,7 @@ function [] = collect_block_info(fn)
         if typeof(obj) == 'Block' then
             tag = get_block_tag(obj);
             type = get_block_type(obj);
+            name = get_block_name(obj);
             // if it's a split_f block, we don't need to get the info
             if tag == 'SPLIT_f' then
                 continue;

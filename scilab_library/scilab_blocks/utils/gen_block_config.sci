@@ -10,14 +10,34 @@ function [] = gen_block_config(configdir, obj)
     name = get_block_name(obj);
     // get the config file path
     scilab_block_path = getenv('MLIB_DEVEL_PATH')+'/scilab_library/scilab_blocks/';
-    config_src = scilab_block_path + 'casper_' + type + '/' + tag + '.json';
-    config_dst = configdir + '/' + name + '.json';
+    config_src_path = scilab_block_path + 'casper_' + type + '/' + tag + '.json';
+    config_dst_path = configdir + '/' + name + '.json';
     // check if the config exists or not.
     // if not exist, let's copy the config file to configdir
     // TODO: do we need to check if the file exists or not?
     //       or just overwrite it?
-    if isfile(config_dst) == %F then
+    if isfile(config_dst_path) == %F then
         debug_info('generated config file: ' + name + '.json');
-        copyfile(config_src, config_dst);
+        // copyfile(config_src_path, config_dst_path);
+
+        // it seems impossible to get the keys and vals by index in scilab, 
+        // so I put keys/vals into different fields in the default config file.
+        // because of the above reason, it's not convenient for the user to modify the config file. 
+        // we need to merge the keys and vals into a single field, which is more convenient for the user.
+        // TODO: how to get key/val by index in scilab?? 
+        config_src = fromJSON(config_src_path, "file");
+        keys = config_src('parameters')('keys');
+        vals = config_src('parameters')('values');
+        parameters = struct()
+        for i = 1:size(keys)(2)
+            parameters(keys(i)) = string(vals(i));
+        end
+        config_dst = struct()
+        config_dst('parameters') = parameters;
+        // we shouldn't expose the input/output ports to the user,
+        // in case users modify the ports info by mistake.
+        //config_dst('input_ports') = config_src('input_ports');
+        //config_dst('output_ports') = config_src('output_ports');
+        toJSON(config_dst, config_dst_path, 4);
     end
 endfunction
