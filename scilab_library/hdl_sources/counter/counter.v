@@ -8,7 +8,7 @@ module counter#(
 );
 
 // TODO: add more parameters, like step, initial value, etc.
-reg [BIT_WIDTH - 1:0] counter;
+reg [BIT_WIDTH - 1:0] counter = 0;
 always @(posedge clk)
 begin
     if (rst)

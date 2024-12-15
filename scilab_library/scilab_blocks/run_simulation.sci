@@ -3,6 +3,8 @@
 // Not sure why.
 function [] = run_simulation(fn)
     [path, name, ext] = fileparts(fn);
+    // generate config files
+    gen_all_blocks_config(fn);
     // disp some info
     disp('Starting simulation for model: '+ name);
     cmd = casper_simulation(fn);
