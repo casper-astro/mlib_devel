@@ -255,7 +255,7 @@ class SIMflow(object):
                 self.logger.info('Reading data from %s/%s.dat' % (sim_blk['dir'], sim_blk['name']))
                 tb.append('reg [%d:0] %s [0:%d];' % (sim_blk['port']['width']-1, sim_blk['name'], sim_length - 1))
                 tb.append('initial begin')
-                tb.append('  $readmemh("%s/%s.dat", %s);' % (sim_blk['dir'], sim_blk['name'], sim_blk['name']))
+                tb.append('  $readmemb("%s/%s.dat", %s);' % (sim_blk['dir'], sim_blk['name'], sim_blk['name']))
                 """
                 tb.append('  for (integer i=0; i<%d; i=i+1) begin' % sim_length)
                 tb.append('     #%d'%(clk_period/2))

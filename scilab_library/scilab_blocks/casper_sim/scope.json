@@ -6,14 +6,16 @@
             "name",
             "fullpath",
             "tag",
-            "channels"
+            "channels",
+            "dtype"
         ],
         "values":
         [
             "scope",
             "",
             "sim:scope",
-            1
+            1,
+            16
         ]
     },
     "input_ports": {

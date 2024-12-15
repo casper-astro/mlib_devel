@@ -19,10 +19,17 @@ class constant(SimBlock):
         self.length = SimBlock.sim_length
         self.logger.info('Generating constant data under %s/%s.dat' %(self.dir,self.name))
         self.logger.info('The data length is %d' % self.length)
-        value = int(self.val['constant_val'])
+        value = int(self.val['val'])
+        bitwidth = int(self.val['bitwidth'])
         self.logger.info('The constant value is %d' % value)
         data = np.ones(self.length).astype(np.uint32) * value
         # write the data into a file
         filename = self.dir + '/' + self.name + '.dat'
-        np.savetxt(filename, data, fmt='%x')
+        # np.savetxt(filename, data, fmt='%x')
+        with open(filename, 'w') as f:
+            for d in data:
+                # Convert the original code into the complement code
+                # TODO: if the output data is unsigned, we don't need to convert it.
+                b = np.binary_repr(d, width=bitwidth)
+                f.write(b + '\n')
         

@@ -34,6 +34,10 @@ class scope(SimBlock):
         # if the data length is less than 1000, extend the last value to 1000
         if len(self.simdata) < self.length:
             self.simdata = np.append(self.simdata, np.ones(self.length - len(self.simdata))*self.simdata[-1])
+        else:
+            self.simdata = np.array(self.simdata)
+        dtype = self.val['dtype']
+        self.simdata = self.simdata.astype(dtype)
         return self.simdata
     
     def plot_sim_data(self):

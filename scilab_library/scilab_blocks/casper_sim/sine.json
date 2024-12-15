@@ -9,17 +9,19 @@
             "amplitude",
             "frequency",
             "phase",
-            "sampling_rate"
+            "sampling_rate",
+            "output_bit_width"
         ],
         "values":
         [
             "sine",
             "",
             "sim:sine",
-            8,
+            2047,
             16,
             0,
-            1024
+            1024,
+            16
         ]
     },
     "input_ports": {
@@ -29,7 +31,7 @@
     },
     "output_ports": {
         "name": ["sine_out"],
-        "width_id": [3],
+        "width_id": [7],
         "width_default": [8]
     }
 }

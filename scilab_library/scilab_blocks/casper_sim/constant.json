@@ -6,9 +6,9 @@
             "name",
             "fullpath",
             "tag",
-            "constant_val",
-            "constant_bitwidth",
-            "constant_bin_pt"
+            "val",
+            "bitwidth",
+            "bin_pt"
         ],
         "values":
         [

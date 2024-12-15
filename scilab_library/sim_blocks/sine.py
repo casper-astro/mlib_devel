@@ -20,20 +20,29 @@ class sine(SimBlock):
         self.length = SimBlock.sim_length
         self.logger.info('Generating sine wave data under %s/%s.dat' %(self.dir,self.name))
         self.logger.info('The data length is %d' % self.length)
-        amplitude = int(self.val['amplitude'])
-        # TODO: the var name has to be changed, to make it clear
-        amplitude = 2**(amplitude - 1) - 1
-        self.logger.info('The amplitude is %d' % amplitude)
-        frequency = float(self.val['frequency'])
-        self.logger.info('The frequency is %f' % frequency)
+        amp = int(self.val['amplitude'])
+        self.logger.info('The amplitude is %d' % amp)
+        freq = float(self.val['frequency'])
+        self.logger.info('The frequency is %f' % freq)
         phase = float(self.val['phase'])
         self.logger.info('The phase is %f' % phase)
-        sampling_rate = float(self.val['sampling_rate'])
-        self.logger.info('The sampling rate is %f' % sampling_rate)
+        fs = float(self.val['sampling_rate'])
+        self.logger.info('The sampling rate is %f' % fs)
+        output_width = int(self.val['output_bit_width'])
+        self.logger.info('The output bit width is %d' % output_width)
 
         t = np.arange(0, self.length, 1)
-        data = np.round(amplitude*np.sin(np.pi*2*16/1024*t))
+        data = np.round(amp*np.sin(np.pi*2*freq/fs*t + phase))
+        # TODO: the max bit width in numpy is 64.
+        #       how to handle the data width larger than 64?
         data = data.astype(np.int64)
         # write the data into a file
         filename = self.dir + '/' + self.name + '.dat'
-        np.savetxt(filename, np.abs(data), fmt='%032x')
+        # np.savetxt(filename, np.abs(data), fmt='%032x')
+        with open(filename, 'w') as f:
+            for d in data:
+                # Convert the original code into the complement code
+                # TODO: if the output data is unsigned, we don't need to convert it.
+                b = np.binary_repr(d, width=output_width)
+                f.write(b + '\n')
+
