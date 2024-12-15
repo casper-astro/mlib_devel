@@ -28,8 +28,8 @@ class munge(DSPBlock):
         # we need to check if the port is in parent_ports
         inst.add_port('clk', 'user_clk', dir='in')
         inst.add_port('ce', '1', dir='in')
-        inst.add_port('din', self.fullname+'_din', parent_port=False, width=self.total_bits, dir='in')
-        inst.add_port('dout', self.fullname+'_dout', parent_port=False, width=self.total_bits, dir='out')
+        inst.add_port('in', self.fullname+'_in', parent_port=False, width=self.total_bits, dir='in')
+        inst.add_port('out', self.fullname+'_out', parent_port=False, width=self.total_bits, dir='out')
 
     def gen_tcl_cmds(self):
         # tcl_cmds = []

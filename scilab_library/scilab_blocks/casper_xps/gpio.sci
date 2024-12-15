@@ -37,30 +37,16 @@ function [x, y, typ]= gpio(job, arg1, arg2)
           model.in2 = [];
           model.out = 1;
           model.out2 = 1;
+          graphics.out_label = ['gateway'];
         elseif io_dir == 'out' then
           io_dir_r = 1;
           model.in = 1;
           model.in2 = 1;
           model.out = [];
           model.out2 = [];
+          graphics.in_label = ['gateway'];
         end
-        // if io_group == 'custom' then
-        //   io_group_r = 0;
-        // end
-        // if custom_io_group == 'gpio' then
-        //   custom_io_group_r = 0;
-        // end
-        // if d_type == 'boolean' then
-        //   d_type_r = 0;
-        // elseif d_type == 'ufix' then
-        //   d_type_r = 1;
-        // elseif d_type == 'fix' then
-        //   d_type_r = 2;
-        // end
-        // generate rpar
-        // rpar = [io_group_r, custom_io_group_r, io_dir_r, d_type_r, d_bw, d_bp, gpio_bi, sample_period];
-        // update model
-        // model.rpar = rpar;
+        graphics.style = 'shape=rectangle;fillColor=yellow'
         graphics.exprs = exprs;
         x.graphics = graphics;
         x.model = model;
@@ -102,6 +88,8 @@ function [x, y, typ]= gpio(job, arg1, arg2)
       // set block tag
       model.label = "xps";
       x=standard_define([4 2],model,exprs,gr_i)
+      x.graphics.in_label = ['gateway'];
+        x.graphics.style = 'shape=rectangle;fillColor=yellow'
       debug_info('gpio block loaded...')
   end
 endfunction

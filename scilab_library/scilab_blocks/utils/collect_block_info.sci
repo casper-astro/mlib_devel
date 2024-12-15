@@ -103,7 +103,9 @@ function [] = collect_block_info(fn)
             src_blk_type = get_block_type(link('src_obj'));
             debug_info('    src_blk_type: ' + src_blk_type); 
             src_config = get_block_config(src_blk_name, src_blk_type, src_blk_tag);
-            src_port_name = projname + '_' + src_blk_name + '_' + src_config('output_ports')("name")(link('src_port_id'));
+            //src_port_name = projname + '_' + src_blk_name + '_' + src_config('output_ports')("name")(link('src_port_id'));
+            port_name = get_port_name(link('src_obj'), link('src_port_id'), 'out');
+            src_port_name = projname + '_' + src_blk_name + '_' + port_name;
             debug_info('    src_port_name: ' + src_port_name);
             debug_info('    src_port_id: ' + string(link('src_port_id')));
             src_port_width_id = src_config('output_ports')("width_id")(link('src_port_id'));
@@ -121,7 +123,9 @@ function [] = collect_block_info(fn)
             dst_blk_type = get_block_type(link('dst_obj'));
             debug_info('    dst_blk_type: ' + dst_blk_type);
             dst_config = get_block_config(dst_blk_name, dst_blk_type, dst_blk_tag);
-            dst_port_name = projname + '_' + dst_blk_name + '_' +dst_config('input_ports')("name")(link('dst_port_id'));
+            //dst_port_name = projname + '_' + dst_blk_name + '_' +dst_config('input_ports')("name")(link('dst_port_id'));
+            port_name = get_port_name(link('dst_obj'), link('dst_port_id'), 'in');
+            dst_port_name = projname + '_' + dst_blk_name + '_' + port_name;
             debug_info('    dst_port_name: ' + dst_port_name);
             debug_info('    dst_port_id: ' + string(link('dst_port_id')));
             dst_port_width_id = dst_config('input_ports')("width_id")(link('dst_port_id'));

@@ -6,10 +6,10 @@ module munge#(
 )(
     input clk,
     input ce,
-    input [total_bits - 1 : 0] din,
-    output [total_bits - 1 : 0] dout
+    input [total_bits - 1 : 0] in,
+    output [total_bits - 1 : 0] out
 );
 
-assign dout = {din[31:0], din[63:32], din[95:64], din[127:96]};
+assign out = {in[31:0], in[63:32], in[95:64], in[127:96]};
 
 endmodule

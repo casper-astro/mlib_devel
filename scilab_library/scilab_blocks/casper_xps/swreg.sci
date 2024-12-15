@@ -36,7 +36,7 @@
             model.in2 = 1;
             model.out = 1;
             model.out2 = 1;
-            graphics.out_label = ['out'];
+            graphics.out_label = ['user_data_out'];
             graphics.in_label = ['sim_in'];
             graphics.style = 'shape=rectangle;fillColor=yellow'
         elseif io_direction == 'To Processor' then
@@ -45,7 +45,7 @@
             model.out = 1;
             model.out2 = 1;
             graphics.out_label = ['sim_out'];
-            graphics.in_label = ['in'];
+            graphics.in_label = ['user_data_in'];
             graphics.style = 'shape=rectangle;fillColor=yellow';
         end
         graphics.exprs = exprs;
@@ -87,7 +87,7 @@
       //set the block tag
       model.label = "xps";
       x=standard_define([6 1.4],model,exprs,gr_i)
-      x.graphics.out_label = ['out'];
+      x.graphics.out_label = ['user_data_out'];
       x.graphics.in_label = ['sim_in'];
       x.graphics.style = 'shape=rectangle;fillColor=yellow';
       debug_info('swreg block loaded...')

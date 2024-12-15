@@ -23,12 +23,12 @@
         ]
     },
     "input_ports": {
-        "name": ["din"],
+        "name": ["in"],
         "width_id": [3],
         "width_default": [-1]
     },
     "output_ports": {
-        "name": ["dout"],
+        "name": ["out"],
         "width_id": [3],
         "width_default": [-1]
     }
