@@ -2,7 +2,7 @@ import json
 import logging
 from sim_blocks.sim_block import SimBlock
 import numpy as np
-import os
+import os, math
 from matplotlib import pyplot as plt
 
 """
@@ -244,6 +244,8 @@ class SIMflow(object):
             tb.append('wire [%d:0] %s;' % (width-1, name))
 
         tb.append('')
+        sim_length = SimBlock.sim_length
+        sim_length_bit = round(math.log2(sim_length))
         # read data from the simulation files, and use them as the input data
         sim_length = SimBlock.sim_length
         for sim_blk in self.sim_blocks:
@@ -254,12 +256,22 @@ class SIMflow(object):
                 tb.append('reg [%d:0] %s [0:%d];' % (sim_blk['port']['width']-1, sim_blk['name'], sim_length - 1))
                 tb.append('initial begin')
                 tb.append('  $readmemh("%s/%s.dat", %s);' % (sim_blk['dir'], sim_blk['name'], sim_blk['name']))
+                """
                 tb.append('  for (integer i=0; i<%d; i=i+1) begin' % sim_length)
                 tb.append('     #%d'%(clk_period/2))
                 tb.append('     %s <= %s[i];' % (sim_blk['port']['name'], sim_blk['name']))
                 tb.append('  end')
+                """
                 tb.append('end')
                 tb.append('')
+                # assign the input data to the IP core input ports
+                tb.append('reg [%d:0] %s_i = 0;' % (sim_length_bit-1, sim_blk['name']))
+                tb.append('always @(posedge clk) begin')
+                tb.append('  %s <= %s[%s_i];' % (sim_blk['port']['name'], sim_blk['name'], sim_blk['name']))
+                tb.append('  %s_i <= %s_i + 1;'%(sim_blk['name'], sim_blk['name']))
+                tb.append('end')
+                tb.append('')
+
         # instantiate the IP core
         tb.append('%s %s_inst(' % (self.ip_core['name'], self.ip_core['name']))
         tb.append('  .clk(clk),')
