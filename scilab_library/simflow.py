@@ -28,7 +28,7 @@ class SIMflow(object):
         """
         Get the simulation block information by the block name.
         """
-        self.logger.info('-- Getting block information for blk name: %s' % blkname)
+        self.logger.info('Getting block information for blk name: %s' % blkname)
         sim_blocks = self.model_info['sim_blocks']
         blk_info = {}
         for block in sim_blocks:
@@ -45,28 +45,50 @@ class SIMflow(object):
         return tag, blk_info
                     
             
-    def _get_port_from_link_by_name(self, blkname, dir):
+    def _get_port_from_link_by_dst_blk_name(self, blkname):
         """
-        Get the port information from the link dict by the blk name and direction.
+        Get the port information from the link dict by the dst blk name.
+        Only one port should be found, as the dst block should only be driven by one blk.
         """
-        blk_name = dir + '_blk_name'
-        port_name = dir + '_port_name'
-        port_width = dir + '_port_width'
+        self.logger.info('Searching src port information for blk : %s' % blkname)
+        blk_name = 'src_blk_name'
+        port_name = 'src_port_name'
+        port_width = 'src_port_width'
         link_info = self.model_info['link_info']
         for link in link_info:
             if link[blk_name] == blkname:
                 port = {}
                 port['name'] = link[port_name]
                 port['width'] = link[port_width]
+                self.logger.info('Port Name: %s, Width: %s' % (port['name'], port['width']))
                 return port
-        self.logger.info('---- Port Name: %s, Width: %s' % (port['name'], port['width']))
+
+    def _get_port_from_link_by_src_blk_name(self, blkname):
+        """
+        Get the port information from the link dict by the src blk name.
+        You may get more than one port, as the src block may drive more than one dst blocks.
+        """
+        self.logger.info('Searching dst port information for blk : %s' % blkname)
+        blk_name = 'src_blk_name'
+        port_name = 'src_port_name'
+        port_width = 'src_port_width'
+        port_list = []
+        link_info = self.model_info['link_info']
+        for link in link_info:
+            if link[blk_name] == blkname:
+                port = {}
+                port['name'] = link[port_name]
+                port['width'] = link[port_width]
+                self.logger.info('Port Name: %s, Width: %s' % (port['name'], port['width']))
+                port_list.append(port)
+        return port_list
 
     def get_ip_core_info(self):
         """
         Get the IP core info from the jasper.json.
         We need port name and width information for the IP core.
         """
-        self.logger.info('-- Getting IP core information')
+        self.logger.info('Getting IP core information')
         # get the ip core name
         self.ip_core['name'] = self.model_info['project']['filename'].split('/')[-1].split('.')[0] + '_core'
         # log it
@@ -89,7 +111,7 @@ class SIMflow(object):
                     self.ip_core['iports']['name'].append(port['name'])
                     self.ip_core['iports']['width'].append(port['width'])
                 # log it
-                self.logger.info('-- Input port: %s, Width: %s' % (link['src_port_name'], link['src_port_width']))
+                self.logger.info('Input port: %s, Width: %s' % (link['src_port_name'], link['src_port_width']))
             elif link['link_type'] == 'dsp_xps':
                 port = {}
                 # this is an output port for the IP core
@@ -99,7 +121,7 @@ class SIMflow(object):
                     self.ip_core['oports']['name'].append(port['name'])
                     self.ip_core['oports']['width'].append(port['width'])
                 # log it
-                self.logger.info('-- Output port: %s, Width: %s' % (link['dst_port_name'], link['dst_port_width']))
+                self.logger.info('Output port: %s, Width: %s' % (link['dst_port_name'], link['dst_port_width']))
 
     def get_sim_info(self):
         """
@@ -115,7 +137,7 @@ class SIMflow(object):
                 # this should be a source sim block, like a signal generator
                 # TODO: is it possible to connect a source sim block ot a dsp block??
                 dst_blk_name = slink['dst_blk_name']
-                port = self._get_port_from_link_by_name(dst_blk_name, 'src')
+                port = self._get_port_from_link_by_dst_blk_name(dst_blk_name)
                 sim_blk_name = slink['src_blk_name']
                 # get the port info, which is from the IP core.
                 # Here, we should know which IP core port the sim block is connected to.
@@ -129,13 +151,23 @@ class SIMflow(object):
                 sim_blk['val'] = val
                 self.sim_blocks.append(sim_blk)
                 # log it
-                self.logger.info('-- Sim Source Block: %s, Port: %s, Tag: %s' % (sim_blk_name, port['name'], sim_blk['tag']))
+                self.logger.info('Sim Source Block: %s, Port: %s, Tag: %s' % (sim_blk_name, port['name'], sim_blk['tag']))
             if slink['link_type'].endswith('_sim'):
                 # this should be a destination sim block, like a scope
                 src_blk_name = slink['src_blk_name']
                 # two possible cases: xps_sim and sim_xps
                 if slink['link_type'] == 'xps_sim':
-                    port = self._get_port_from_link_by_name(src_blk_name, 'dst')
+                    port_list = self._get_port_from_link_by_src_blk_name(src_blk_name)
+                    # we may get more than one port.
+                    # we just need to use the port, whose name is not the same as the dst port name.
+                    port = {}
+                    for p in port_list:
+                        if p['name'] != slink['dst_port_name']:
+                            port = p
+                            break
+                    if port is None:
+                        self.logger.error('No port found for the destination sim block: %s' % slink['dst_blk_name'])
+                        exit(1)
                 elif slink['link_type'] == 'dsp_sim':
                     port = {}
                     port['name'] = slink['src_port_name']
@@ -151,7 +183,7 @@ class SIMflow(object):
                 sim_blk['val'] = val
                 self.sim_blocks.append(sim_blk)
                 # log it
-                self.logger.info('-- Sim Dest Block: %s, Port: %s, Tag: %s' % (sim_blk_name, port['name'], sim_blk['tag']))
+                self.logger.info('Sim Dest Block: %s, Port: %s, Tag: %s' % (sim_blk_name, port['name'], sim_blk['tag']))
         # sim:sim block is a very special block, as it's not connected to any blocks.
         # So we need to handle it separately.
         # TODO: we may need to improve this part.
@@ -163,7 +195,7 @@ class SIMflow(object):
                 sim_blk['sim_length'] = int(blk['sim_length'])
                 sim_blk['type'] = None
                 self.sim_blocks.append(sim_blk)
-                self.logger.info('-- Sim Info Block: %s, Length: %d' % (sim_blk['name'], sim_blk['sim_length']))
+                self.logger.info('Sim Info Block: %s, Length: %d' % (sim_blk['name'], sim_blk['sim_length']))
     
     def gen_sim_objs(self):
         """

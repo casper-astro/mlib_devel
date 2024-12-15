@@ -1,0 +1,35 @@
+{
+    "parameters":
+    {
+        "keys":
+        [
+            "name",
+            "fullpath",
+            "tag",
+            "amplitude",
+            "frequency",
+            "phase",
+            "sampling_rate"
+        ],
+        "values":
+        [
+            "sine",
+            "",
+            "sim:sine",
+            8,
+            16,
+            0,
+            1024
+        ]
+    },
+    "input_ports": {
+        "name": [],
+        "width_id": [],
+        "width_default": []
+    },
+    "output_ports": {
+        "name": ["sine_out"],
+        "width_id": [3],
+        "width_default": [8]
+    }
+}

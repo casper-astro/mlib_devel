@@ -2,7 +2,7 @@
 function [config] = get_block_config(name, type, tag)
     scilab_block_path = getenv('MLIB_DEVEL_PATH')+'/scilab_library/scilab_blocks/';
     config_path = scilab_block_path + 'casper_' + type + '/' + tag + '.json';
-    debug_info('config_path: ' + config_path);
+    // debug_info('config_path: ' + config_path);
     config = fromJSON(config_path, "file");
     keys = config('parameters')('keys');
     //vals = config('parameters')('values');
