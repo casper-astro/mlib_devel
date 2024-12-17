@@ -50,8 +50,10 @@ function [] = collect_block_info(fn)
                 debug_info('    key: ' + string(keys(j)) + ' val: ' + string(vals(j)));
             end
             // get the values from the scilab block
-            blk_val = obj.graphics.exprs;
-            blk_vindex = obj.model.rpar;
+            // blk_val = obj.graphics.exprs;
+            // blk_vindex = obj.model.rpar;
+            blk_val = get_block_vals(obj);
+            blk_vindex = get_block_vindex(obj);
             debug_info('blk_name: ' + blk_val(1))
             for j = 1:length(blk_vindex)
                 id = blk_vindex(j) + 1;
@@ -60,6 +62,8 @@ function [] = collect_block_info(fn)
             end
             // set "fullpath", which should be the project name + block name
             block_info('fullpath') = projname + '/' + block_info('name');
+            // update the block config in the user defined config file
+            update_block_config(block_info, block_info('name'));
             // write the block info to the struct
             if type == 'xps' then
                 st('xps_blocks')(xps_blocks_id) = block_info;
