@@ -15,11 +15,5 @@
             "dsp:pulse_ext",
             1024
         ]
-    },
-    "input_ports": {
-        "width_default": [1]
-    },
-    "output_ports": {
-        "width_default": [1]
     }
 }

@@ -30,11 +30,5 @@
             "on",
             "on"
         ]
-    },
-    "input_ports": {
-        "width_default": []
-    },
-    "output_ports": {
-        "width_default": []
     }
 }

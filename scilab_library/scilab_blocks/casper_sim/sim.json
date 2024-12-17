@@ -15,7 +15,5 @@
             "sim:sim",
             1000
         ]
-    },
-    "input_ports": [],
-    "output_ports": []
+    }
 }

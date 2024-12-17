@@ -17,11 +17,5 @@
             1,
             16
         ]
-    },
-    "input_ports": {
-        "width_default": [0]
-    },
-    "output_ports": {
-        "width_default": []
     }
 }

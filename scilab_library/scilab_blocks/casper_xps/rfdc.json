@@ -1362,11 +1362,5 @@
             230,
             "None"
         ]
-    },
-    "input_ports": {
-        "width_default": []
-    },
-    "output_ports": {
-        "width_default": []
     }
 }

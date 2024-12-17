@@ -15,11 +15,5 @@
             "dsp:edge_detect",
             "rising"
         ]
-    },
-    "input_ports": {
-        "width_default": [1]
-    },
-    "output_ports": {
-        "width_default": [1]
     }
 }

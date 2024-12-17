@@ -21,11 +21,5 @@
             32,
             "{3,2,1,0}"
         ]
-    },
-    "input_ports": {
-        "width_default": []
-    },
-    "output_ports": {
-        "width_default": []
     }
 }
