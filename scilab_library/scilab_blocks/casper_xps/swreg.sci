@@ -33,17 +33,17 @@
         // TODO: figure out how to set string in the model
         if io_direction == 'From Processor' then
             model.in = 1;
-            model.in2 = 1;
+            model.in2 = 8;
             model.out = 1;
-            model.out2 = 1;
+            model.out2 = 8;
             graphics.out_label = ['user_data_out'];
             graphics.in_label = ['sim_in'];
             graphics.style = 'shape=rectangle;fillColor=yellow'
         elseif io_direction == 'To Processor' then
             model.in = 1;
-            model.in2 = 1;
+            model.in2 = 8;
             model.out = 1;
-            model.out2 = 1;
+            model.out2 = 8;
             graphics.out_label = ['sim_out'];
             graphics.in_label = ['user_data_in'];
             graphics.style = 'shape=rectangle;fillColor=yellow';
@@ -78,9 +78,9 @@
       model.rpar = [0, 3, 4, 5, 6, 7, 8, 9, 10];
       // TODO: do we have to set out2??
       model.out = 1;
-      model.out2 = 1;
+      model.out2 = 8;
       model.in = 1;
-      model.in2 = 1;
+      model.in2 = 8;
       // Type : column vector of strings.
       exprs = ['swreg'; 'From Processor';'0'; '0'; '1'; 'reg'; '1'; '0'; '2'];
       gr_i = [];

@@ -28,13 +28,11 @@
         ]
     },
     "input_ports": {
-        "name": ["addr", "data_in", "we"],
-        "width_id": [4, 5, -1],
-        "width_default": [10, 128, 1]
+        "width_id": [],
+        "width_default": [1]
     },
     "output_ports": {
-        "name": ["data_out"],
-        "width_id": [5],
-        "width_default": [128]
+        "width_id": [],
+        "width_default": []
     }
 }

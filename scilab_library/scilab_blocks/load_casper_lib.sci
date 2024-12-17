@@ -13,6 +13,7 @@ exec('scilab_library/scilab_blocks/utils/gen_block_config.sci');
 exec('scilab_library/scilab_blocks/utils/get_link_info_by_link_obj.sci');
 exec('scilab_library/scilab_blocks/utils/search_for_real_src_blk.sci');
 exec('scilab_library/scilab_blocks/utils/get_port_name.sci');
+exec('scilab_library/scilab_blocks/utils/get_port_width_id.sci');
 exec('scilab_library/scilab_blocks/jasper.sci');
 exec('scilab_library/scilab_blocks/jasper_frontend.sci');
 exec('scilab_library/scilab_blocks/casper_simulation.sci');

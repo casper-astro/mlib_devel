@@ -18,9 +18,9 @@ function [x, y, typ]= rfdc(job, arg1, arg2)
                           exprs);
         if ok then
             model.out = [1, 2, 3, 4, 5, 6, 7, 8];
-            model.out2 = [];
+            model.out2 = [-128, -128, -128, -128, -128, -128, -128, -128];
             model.in = [1, 2, 3, 4, 5, 6, 7, 8];
-            model.in2 = [];
+            model.in2 = [-128, -128, -128, -128, -128, -128, -128, -128];
             graphics.out_label = ['m00_axis_tdata', 'm02_axis_tdata', 'm10_axis_tdata', 'm12_axis_tdata', 'm20_axis_tdata', 'm22_axis_tdata', 'm30_axis_tdata', 'm32_axis_tdata'];
             graphics.in_label = ['m00_axis_tdata_sim', 'm02_axis_tdata_sim', 'm10_axis_tdata_sim', 'm12_axis_tdata_sim', 'm20_axis_tdata_sim', 'm22_axis_tdata_sim', 'm30_axis_tdata_sim', 'm32_axis_tdata_sim'];
             graphics.style = 'shape=rectangle;fillColor=yellow'
@@ -36,9 +36,9 @@ function [x, y, typ]= rfdc(job, arg1, arg2)
         model.rpar = [0, 5];
         // TODO: do we have to set in2??
         model.in = [1, 2, 3, 4, 5, 6, 7, 8];
-        model.in2 = [1, 2, 3, 4, 5, 6, 7, 8];
+        model.in2 = [-128, -128, -128, -128, -128, -128, -128, -128];
         model.out = [1, 2, 3, 4, 5, 6, 7, 8];
-        model.out2 = [1, 2, 3, 4, 5, 6, 7, 8];
+        model.out2 = [-128, -128, -128, -128, -128, -128, -128, -128];
         // Type : column vector of strings.
         exprs = ['rfdc', '3932.16'];
         gr_i = [];

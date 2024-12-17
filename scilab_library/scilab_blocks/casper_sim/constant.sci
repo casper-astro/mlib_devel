@@ -21,6 +21,10 @@ function [x, y, typ]= constant(job, arg1, arg2)
                         list("str", 1, "str",1 ,"str",1, "str",1),...
                         exprs);
       if ok then
+        model.in = [];
+        model.in2 = [];
+        model.out = 1;
+        model.out2 = 4;
         graphics.exprs = exprs;
         x.graphics = graphics;
         x.model = model;
@@ -35,7 +39,7 @@ function [x, y, typ]= constant(job, arg1, arg2)
       model.in = [];
       model.in2 = [];
       model.out = 1;
-      model.out2 = [];
+      model.out2 = 4;
       // Type : column vector of strings.
       exprs = ['constant'; '0'; '32'; '0'];
       gr_i = [];

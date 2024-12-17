@@ -8,6 +8,8 @@ function [] = gen_block_config(configdir, obj)
     tag = get_block_tag(obj);
     type  = get_block_type(obj);
     name = get_block_name(obj);
+    iport_width_id = get_port_width_id(obj, 'in');
+    oport_width_id = get_port_width_id(obj, 'out');
     // get the config file path
     scilab_block_path = getenv('MLIB_DEVEL_PATH')+'/scilab_library/scilab_blocks/';
     config_src_path = scilab_block_path + 'casper_' + type + '/' + tag + '.json';
@@ -34,10 +36,10 @@ function [] = gen_block_config(configdir, obj)
         end
         config_dst = struct()
         config_dst('parameters') = parameters;
-        // we shouldn't expose the input/output ports to the user,
-        // in case users modify the ports info by mistake.
-        //config_dst('input_ports') = config_src('input_ports');
-        //config_dst('output_ports') = config_src('output_ports');
+        config_dst('input_ports') = struct();
+        config_dst('input_ports')('width_id') = iport_width_id;
+        config_dst('output_ports') = struct();
+        config_dst('output_ports')('width_id') = oport_width_id;
         toJSON(config_dst, config_dst_path, 4);
     end
 endfunction

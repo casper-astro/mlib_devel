@@ -32,13 +32,11 @@
         ]
     },
     "input_ports": {
-        "name": ["user_data_in"],
-        "width_id": [8],
-        "width_default": [1]
+        "width_id": [],
+        "width_default": []
     },
     "output_ports": {
-        "name": ["user_data_out"],
-        "width_id": [8],
-        "width_default": [1]
+        "width_id": [],
+        "width_default": []
     }
 }

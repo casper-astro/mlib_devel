@@ -1364,13 +1364,11 @@
         ]
     },
     "input_ports": {
-        "name":["m00_axis_tdata_sim", "m02_axis_tdata_sim", "m10_axis_tdata_sim", "m12_axis_tdata_sim", "m20_axis_tdata_sim", "m22_axis_tdata_sim", "m30_axis_tdata_sim", "m32_axis_tdata_sim"],
-        "width_id": [-1, -1, -1, -1, -1, -1, -1, -1],
-        "width_default": [128, 128, 128, 128, 128, 128, 128, 128]
+        "width_id": [],
+        "width_default": [128]
     },
     "output_ports": {
-        "name": ["m00_axis_tdata", "m02_axis_tdata", "m10_axis_tdata", "m12_axis_tdata", "m20_axis_tdata", "m22_axis_tdata", "m30_axis_tdata", "m32_axis_tdata"],
-        "width_id": [-1, -1, -1, -1, -1, -1, -1, -1],
-        "width_default": [128, 128, 128, 128, 128, 128, 128, 128]
+        "width_id": [],
+        "width_default": [128]
     }
 }

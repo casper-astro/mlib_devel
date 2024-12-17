@@ -20,7 +20,7 @@ function [x, y, typ] = sbram(job, arg1, arg2)
       if ok then
         // TODO: figure out how to set string in the model
         model.in = [1, 2, 3];
-        model.in2 = [];
+        model.in2 = [4, 5, -1];
         model.out = [1];
         model.out2 = [];
         graphics.in_label = ['addr', 'data_in', 'we'];
@@ -38,10 +38,10 @@ function [x, y, typ] = sbram(job, arg1, arg2)
       // Type : column vector of real numbers.
       model.rpar = [0, 4, 5];
       // TODO: do we have to set out2??
+      model.in = [1, 2, 3];
+      model.in2 = [4, 5, -1];
       model.out = [1];
       model.out2 = [];
-      model.in = [1, 2, 3];
-      model.in2 = [];
       // Type : column vector of strings.
       exprs = ['sbram'; '10';'32'];
       gr_i = [];

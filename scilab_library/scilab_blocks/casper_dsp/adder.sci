@@ -23,6 +23,10 @@ function [x, y, typ]= adder(job, arg1, arg2)
       if ok then
         graphics.exprs = exprs;
         x.graphics = graphics;
+        model.in = [1, 2];
+        model.in2 = [3, 4];
+        model.out = 1;
+        model.out2 = [5];
         x.model = model;
       end
     case 'define' then
@@ -33,9 +37,9 @@ function [x, y, typ]= adder(job, arg1, arg2)
       model.rpar = [0, 3, 4, 5];
       // TODO: do we have to set in2??
       model.in = [1, 2];
-      model.in2 = [];
+      model.in2 = [3, 4];
       model.out = 1;
-      model.out2 = [];
+      model.out2 = [5];
       // Type : column vector of strings.
       exprs = ['adder'; '32'; '32'; '32'];
       gr_i = [];

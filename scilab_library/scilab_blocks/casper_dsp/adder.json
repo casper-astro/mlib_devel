@@ -21,13 +21,9 @@
         ]
     },
     "input_ports": {
-        "name": ["in0", "in1"],
-        "width_id": [3, 4],
-        "width_default": [32, 32]
+        "width_default": []
     },
     "output_ports": {
-        "name": ["out0"],
-        "width_id": [5],
-        "width_default": [32]
+        "width_default": []
     }
 }

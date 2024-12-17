@@ -29,6 +29,10 @@ function [x, y, typ]= munge(job, arg1, arg2)
             //graphics.id = '<p style=""margin-top: 0"">      my edge detect     </p>';
             graphics.exprs = exprs;
             x.graphics = graphics;
+            model.in = [1];
+            model.in2 = [3];
+            model.out = [1];
+            model.out2 = [3];
             x.model = model;
         end
       case 'define' then
@@ -39,9 +43,9 @@ function [x, y, typ]= munge(job, arg1, arg2)
         model.rpar = [0, 3, 4, 5, 6];
         // TODO: do we have to set in2??
         model.in = [1];
-        model.in2 = [];
+        model.in2 = [3];
         model.out = [1];
-        model.out2 = [];
+        model.out2 = [3];
         // Type : column vector of strings.
         exprs = ['munge'; '128'; '4'; '32'; '{3, 2, 1, 0}'];
         gr_i = [];

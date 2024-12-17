@@ -36,12 +36,12 @@ function [x, y, typ]= gpio(job, arg1, arg2)
           model.in = [];
           model.in2 = [];
           model.out = 1;
-          model.out2 = 1;
+          model.out2 = 8;
           graphics.out_label = ['gateway'];
         elseif io_dir == 'out' then
           io_dir_r = 1;
           model.in = 1;
-          model.in2 = 1;
+          model.in2 = 8;
           model.out = [];
           model.out2 = [];
           graphics.in_label = ['gateway'];
@@ -49,6 +49,8 @@ function [x, y, typ]= gpio(job, arg1, arg2)
         graphics.style = 'shape=rectangle;fillColor=yellow'
         graphics.exprs = exprs;
         x.graphics = graphics;
+        model.in = 1;
+        model.in2 = 8;
         x.model = model;
       end
     case 'define' then
@@ -81,7 +83,8 @@ function [x, y, typ]= gpio(job, arg1, arg2)
       model.rpar = [0, 4, 5, 6, 7, 8, 9, 10, 11];
       // TODO: do we have to set in2??
       model.in = 1;
-      model.in2 = 1;
+      model.in2 = 8;
+      // this is the id of the port width in the config file
       // Type : column vector of strings.
       exprs = ['gpio'; 'custom'; '0'; 'out'; 'boolean'; '1'; '0'; '0'; '1'];
       gr_i = [];
@@ -89,7 +92,7 @@ function [x, y, typ]= gpio(job, arg1, arg2)
       model.label = "xps";
       x=standard_define([4 2],model,exprs,gr_i)
       x.graphics.in_label = ['gateway'];
-        x.graphics.style = 'shape=rectangle;fillColor=yellow'
+      x.graphics.style = 'shape=rectangle;fillColor=yellow'
       debug_info('gpio block loaded...')
   end
 endfunction

@@ -107,12 +107,16 @@ function [] = collect_block_info(fn)
             port_name = get_port_name(link('src_obj'), link('src_port_id'), 'out');
             src_port_name = projname + '_' + src_blk_name + '_' + port_name;
             debug_info('    src_port_name: ' + src_port_name);
-            debug_info('    src_port_id: ' + string(link('src_port_id')));
-            src_port_width_id = src_config('output_ports')("width_id")(link('src_port_id'));
-            src_port_width_default = src_config('output_ports')("width_default")(link('src_port_id'));
-            debug_info('    src_port_width_id: ' + string(src_port_width_id));
+            src_port_id = link('src_port_id');
+            debug_info('    src_port_id: ' + string(src_port_id));
+            // src_port_width_id = src_config('output_ports')("width_id")(link('src_port_id'));
+            // src_port_width_default = src_config('output_ports')("width_default")(link('src_port_id'));
+            // src_port_width_id = get_port_width_id(src_blk, link('src_port_id'), 'out');
+            // debug_info('    src_port_width_id: ' + string(src_port_width_id));
             // we have collected the block info in st, so we can get the port width from st
-            src_port_width = get_port_width(st, src_blk, src_port_width_id, src_port_width_default);
+            // src_port_width = get_port_width(st, src_blk, src_port_width_id, src_port_width_default);
+            // src_port_width = get_port_width(src_blk, src_port_width_id, 'out');
+            src_port_width = get_port_width(src_blk, src_port_id, 'out');
             debug_info('    src_port_width: ' + string(src_port_width));
             // collect the dst block info
             dst_blk = link('dst_obj');
@@ -127,21 +131,27 @@ function [] = collect_block_info(fn)
             port_name = get_port_name(link('dst_obj'), link('dst_port_id'), 'in');
             dst_port_name = projname + '_' + dst_blk_name + '_' + port_name;
             debug_info('    dst_port_name: ' + dst_port_name);
-            debug_info('    dst_port_id: ' + string(link('dst_port_id')));
-            dst_port_width_id = dst_config('input_ports')("width_id")(link('dst_port_id'));
-            dst_port_width_default = dst_config('input_ports')("width_default")(link('dst_port_id'));
-            debug_info('    dst_port_width_id: ' + string(dst_port_width_id));
+            dst_port_id = link('dst_port_id');
+            debug_info('    dst_port_id: ' + string(dst_port_id));
+            //dst_port_width_id = dst_config('input_ports')("width_id")(link('dst_port_id'));
+            //dst_port_width_default = dst_config('input_ports')("width_default")(link('dst_port_id'));
+            //dst_port_width_id = get_port_width_id(dst_blk, link('dst_port_id'), 'in');
+            //debug_info('    dst_port_width_id: ' + string(dst_port_width_id));
             // we have collected the block info in st, so we can get the port width from st
-            dst_port_width = get_port_width(st, dst_blk, dst_port_width_id, dst_port_width_default);
+            // dst_port_width = get_port_width(st, dst_blk, dst_port_width_id, dst_port_width_default);
+            // dst_port_width = get_port_width(dst_blk, dst_port_width_id, 'in');
+            dst_port_width = get_port_width(dst_blk, dst_port_id, 'in');
             debug_info('    dst_port_width: ' + string(dst_port_width));
             // write the link info to the struct
             link_info('src_blk_name') = src_blk_name;
             link_info('src_port_name') = src_port_name;
-            link_info('src_port_width') = strtod(src_port_width);
+            //link_info('src_port_width') = strtod(src_port_width);
+            link_info('src_port_width') = src_port_width;
             link_info('src_port_id') = link('src_port_id');
             link_info('dst_blk_name') = dst_blk_name;
             link_info('dst_port_name') = dst_port_name;
-            link_info('dst_port_width') = strtod(dst_port_width);
+            //link_info('dst_port_width') = strtod(dst_port_width);
+            link_info('dst_port_width') = dst_port_width;
             link_info('dst_port_id') = link('dst_port_id');
             link_info('link_type') = src_blk_type + '_' + dst_blk_type;
             st('link_info')(link_info_id) = link_info;

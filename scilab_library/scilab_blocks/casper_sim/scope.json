@@ -19,13 +19,9 @@
         ]
     },
     "input_ports": {
-        "name": ["scope_in"],
-        "width_id": [-1],
         "width_default": [0]
     },
     "output_ports": {
-        "name": [],
-        "width_id": [],
         "width_default": []
     }
 }

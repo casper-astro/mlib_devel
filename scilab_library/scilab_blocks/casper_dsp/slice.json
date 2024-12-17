@@ -21,13 +21,9 @@
         ]
     },
     "input_ports": {
-        "name": ["in"],
-        "width_id": [3],
-        "width_default": [-1]
+        "width_default": []
     },
     "output_ports": {
-        "name": ["out"],
-        "width_id": [4],
-        "width_default": [-1]
+        "width_default": []
     }
 }
