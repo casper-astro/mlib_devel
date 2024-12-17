@@ -32,11 +32,9 @@
         ]
     },
     "input_ports": {
-        "width_id": [],
         "width_default": []
     },
     "output_ports": {
-        "width_id": [],
         "width_default": []
     }
 }
