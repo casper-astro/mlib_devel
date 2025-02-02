@@ -16,11 +16,17 @@ function [x, y, typ]= wbfft(job, arg1, arg2)
                           txt,...
                           list("str", 1, "str",1 ),...
                           exprs);
+        evtin = [];
+        evtout = [];
+        //[model,graphics,ok] = set_io(model, graphics, list(in,intype), list(out, outype), evtin, evtout);
         if ok then
             // convert the string to decimal
             nstream = strtod(nstream);
             [iports_index, iports_label] = wbfft_create_iports(nstream);
             [oports_index, oports_label] = wbfft_create_oports(nstream);
+            io_in = [iports_index;iports_index];
+            io_out = [oports_index;oports_index];
+            [model,graphics,ok] = set_io(model, graphics, list(io_in', iports_index), list(io_out', oports_index), evtin, evtout);
             model.in = iports_index;
             model.in2 = iports_index;
             model.out = oports_index;
