@@ -2,7 +2,10 @@
 function [x, y, typ]= wbfft(job, arg1, arg2)
     x=[];y=[];typ=[];
     blkname = 'wbfft';
-    nstream = 1;
+    wb_factor = 1;
+    in_dat_w = 16;
+    out_dat_w = 18;
+    nof_points = 128;
     select job
       case 'set' then
         x=arg1;
@@ -11,22 +14,28 @@ function [x, y, typ]= wbfft(job, arg1, arg2)
         model = arg1.model;
         //[io_group, custom_io_group, io_dir, d_type, d_bw, d_bp, gpio_bi, sample_period] = create_gpio();
         txt = [ 'Block Name (any string)';...
-                'Stream Number';];
-        [ok, blkname, nstream, exprs] = scicos_getvalue("Set wbfft block parameters",...
+                'Input data widht';...
+                'Output data width';...
+                'Number of Stream';...
+                'Number of FFT points';];
+        [ok, blkname, in_dat_w, out_dat_w, wb_factor, nof_points, exprs] = scicos_getvalue("Set wbfft block parameters",...
                           txt,...
-                          list("str", 1, "str",1 ),...
+                          list("str", 1, "str",1, "str",1, "str",1, "str",1 ),...
                           exprs);
         evtin = [];
         evtout = [];
         //[model,graphics,ok] = set_io(model, graphics, list(in,intype), list(out, outype), evtin, evtout);
         if ok then
             // convert the string to decimal
-            nstream = strtod(nstream);
-            [iports_index, iports_label] = wbfft_create_iports(nstream);
-            [oports_index, oports_label] = wbfft_create_oports(nstream);
+            wb_factor = strtod(wb_factor);
+            [iports_index, iports_label] = wbfft_create_iports(wb_factor);
+            [oports_index, oports_label] = wbfft_create_oports(wb_factor);
+            // it seems like we don't care about the io type here.
             io_in = [iports_index;iports_index];
             io_out = [oports_index;oports_index];
-            [model,graphics,ok] = set_io(model, graphics, list(io_in', iports_index), list(io_out', oports_index), evtin, evtout);
+            io_in_type = ones(1, length(iports_index));
+            io_out_type = ones(1, length(oports_index));
+            [model,graphics,ok] = set_io(model, graphics, list(io_in', io_in_type), list(io_out', io_out_type), evtin, evtout);
             model.in = iports_index;
             model.in2 = iports_index;
             model.out = oports_index;
@@ -45,12 +54,12 @@ function [x, y, typ]= wbfft(job, arg1, arg2)
         // Type : column vector of real numbers.
         model.rpar = [0, 3];
         // Type : column vector of strings.
-        exprs = ['wbfft'; '1'];
+        exprs = ['wbfft'; '16'; '18'; '1'; '128'];
         gr_i = [];
-        [iports_index, iports_label] = wbfft_create_iports(nstream);
+        [iports_index, iports_label] = wbfft_create_iports(wb_factor);
         model.in = iports_index;
         model.in2 = iports_index;
-        [oports_index, oports_label] = wbfft_create_oports(nstream);
+        [oports_index, oports_label] = wbfft_create_oports(wb_factor);
         model.out = oports_index;
         model.out2 = oports_index;
         // we use model.label as the block tag.
@@ -70,10 +79,10 @@ function [x, y, typ]= wbfft(job, arg1, arg2)
 endfunction
 
 // create input ports index and labels
-function [ports_index, ports_label] = wbfft_create_iports(nstream)
+function [ports_index, ports_label] = wbfft_create_iports(wb_factor)
     ports_label = ['in_sync', 'in_valid', 'shiftreg'];
     ports_index = [1, 2, 3];
-    for i = 1:nstream
+    for i = 1:wb_factor
         ports_label = [ports_label, 'in_re' + string(i - 1)];
         ports_index = [ports_index, 2*i + 2];
         ports_label = [ports_label, 'in_im' + string(i - 1)];
@@ -82,10 +91,10 @@ function [ports_index, ports_label] = wbfft_create_iports(nstream)
 endfunction
 
 // create output ports index and labels
-function [ports_index, ports_label] = wbfft_create_oports(nstream)
+function [ports_index, ports_label] = wbfft_create_oports(wb_factor)
     ports_label = ['out_sync', 'out_valid', 'ovflw'];
     ports_index = [1, 2, 3];
-    for i = 1:nstream
+    for i = 1:wb_factor
         ports_label = [ports_label, 'out_re' + string(i - 1)];
         ports_index = [ports_index, 2*i + 2];
         ports_label = [ports_label, 'out_im' + string(i - 1)];
