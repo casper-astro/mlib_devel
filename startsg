@@ -225,13 +225,15 @@ then
       # start model composer
       echo "Starting model_composer"
       model_composer
-  elif [ ${FRONTEND} == "scilab" ]
+  #elif [ ${FRONTEND} == "scilab*" ]
+  elif [[ ${FRONTEND} == scilab* ]]
   then
       # start scilab
       echo "Starting scilab"
       # For scilab, we don't need to preload the stdc++ library, which crashes scilab
       export LD_PRELOAD=""
-      scilab -f scilab_library/scilab_blocks/load_casper_lib.sci
+      # scilab -f scilab_library/scilab_blocks/load_casper_lib.sci
+      ${FRONTEND} -f scilab_library/scilab_blocks/load_casper_lib.sci
   else
       echo "Frontend should be model_composer or modeler"
   fi
