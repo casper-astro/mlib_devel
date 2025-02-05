@@ -80,7 +80,7 @@ endfunction
 
 // create input ports index and labels
 function [ports_index, ports_label] = wbfft_create_iports(wb_factor)
-    ports_label = ['in_sync', 'in_valid', 'shiftreg'];
+    ports_label = ['in_sync', 'in_valid', 'in_shiftreg'];
     ports_index = [1, 2, 3];
     for i = 1:wb_factor
         ports_label = [ports_label, 'in_re' + string(i - 1)];
@@ -92,7 +92,7 @@ endfunction
 
 // create output ports index and labels
 function [ports_index, ports_label] = wbfft_create_oports(wb_factor)
-    ports_label = ['out_sync', 'out_valid', 'ovflw'];
+    ports_label = ['out_sync', 'out_valid', 'out_ovflw'];
     ports_index = [1, 2, 3];
     for i = 1:wb_factor
         ports_label = [ports_label, 'out_re' + string(i - 1)];

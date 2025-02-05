@@ -1,4 +1,5 @@
 import os, json
+import shutil
 from glob import glob
 mlib_devel_path = os.getenv('MLIB_DEVEL_PATH')
 
@@ -33,6 +34,13 @@ class DSPBlock(YellowBlock):
             self.fullpath = blkinfo['project']['filename'].split('.')[0]
         # populate the parent ports
         self._get_parent_ports_info()
+        # create dir for hdl wrapper
+        self.hdl_wrapper_dir = os.path.join(self.fullpath, 'hdl_wrapper')
+        # if the directory exists, remove it.
+        # we need to create a new one every time.
+        if os.path.exists(self.hdl_wrapper_dir):
+            shutil.rmtree(self.hdl_wrapper_dir)
+        os.makedirs(self.hdl_wrapper_dir)
 
     def initialize(self):
         pass
