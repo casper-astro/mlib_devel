@@ -63,6 +63,8 @@ exec('scilab_library/scilab_blocks/casper_dsp/pulse_ext.sci');
 exec('scilab_library/scilab_blocks/casper_dsp/slice.sci');
 exec('scilab_library/scilab_blocks/casper_dsp/munge.sci');
 exec('scilab_library/scilab_blocks/casper_dsp/wbfft.sci');
+exec('scilab_library/scilab_blocks/casper_dsp/bus_expand.sci');
+exec('scilab_library/scilab_blocks/casper_dsp/constant.sci');
 
 // create the blocks
 adder_inst = adder("define");
@@ -72,6 +74,8 @@ pulse_ext_inst = pulse_ext("define");
 slice_inst = slice("define");
 munge_inst = munge("define");
 wbfft_inst = wbfft("define");
+bus_expand_inst = bus_expand("define");
+dsp_constant_inst = dsp_constant("define");
 cur_dir = pwd();
 dsp_fig_dir = cur_dir + '/scilab_library/scilab_blocks/casper_dsp/figures/';
 pal = xcosPal("CASPER DSP");
@@ -82,6 +86,8 @@ pal = xcosPalAddBlock(pal, counter_inst);
 pal = xcosPalAddBlock(pal, slice_inst);
 pal = xcosPalAddBlock(pal, munge_inst);
 pal = xcosPalAddBlock(pal, wbfft_inst);
+pal = xcosPalAddBlock(pal, bus_expand_inst);
+pal = xcosPalAddBlock(pal, dsp_constant_inst);
 xcosPalAdd(pal);
 debug_info('------ CASPER DSP loaded --------');
 
@@ -93,14 +99,14 @@ exec('scilab_library/scilab_blocks/casper_sim/scope.sci');
 exec('scilab_library/scilab_blocks/casper_sim/sim.sci');
 exec('scilab_library/scilab_blocks/casper_sim/sine.sci');
 // create the blocks
-constant_inst = constant("define");
+sim_constant_inst = sim_constant("define");
 scope_inst = scope("define");
 sim_inst = sim("define");  
 sine_inst = sine("define");
 cur_dir = pwd();
 sim_fig_dir = cur_dir + '/scilab_library/scilab_blocks/casper_sim/figures/';
 pal = xcosPal("CASPER SIM");
-pal = xcosPalAddBlock(pal, constant_inst, sim_fig_dir + 'constant.png', sim_fig_dir + 'constant.png');
+pal = xcosPalAddBlock(pal, sim_constant_inst, sim_fig_dir + 'constant.png', sim_fig_dir + 'constant.png');
 pal = xcosPalAddBlock(pal, scope_inst, sim_fig_dir + 'scope.png', sim_fig_dir + 'scope.png');
 pal = xcosPalAddBlock(pal, sine_inst, sim_fig_dir + 'sine.png', sim_fig_dir + 'sine.png');
 pal = xcosPalAddBlock(pal, sim_inst, sim_fig_dir + 'sim.png', sim_fig_dir + 'sim.png');

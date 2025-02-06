@@ -1,5 +1,5 @@
 //Create a simple custom block.
-function [x, y, typ]= constant(job, arg1, arg2)
+function [x, y, typ]= sim_constant(job, arg1, arg2)
   x=[];y=[];typ=[];
   blkname = 'constant';
   constant_val = 0;

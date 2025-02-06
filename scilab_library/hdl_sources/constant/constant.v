@@ -1,0 +1,10 @@
+module constant#(
+    parameter OUT = 1023,
+    parameter BIT_WIDTH = 10
+)(
+    output  [BIT_WIDTH - 1:0] out
+);
+
+assign out = OUT;
+
+endmodule

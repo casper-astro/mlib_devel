@@ -1,0 +1,21 @@
+{
+    "parameters":
+    {
+        "keys":
+        [
+            "name",
+            "fullpath",
+            "tag",
+            "ndivision",
+            "bit_division"
+        ],
+        "values":
+        [
+            "bus_expand",
+            "",
+            "dsp:bus_expand",
+            4,
+            [8,8,8,8]
+        ]
+    }
+}

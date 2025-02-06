@@ -154,13 +154,9 @@ class wbfft(DSPBlock):
         if os.path.exists(self.hdl_wrapper_dir + "/twids"):
             os.system(f"rm -rf {self.hdl_wrapper_dir}/twids")
         # the twids dir will be created automatically
-        _generate_twids(self.hdl_root + "/casper_dspdevel/wrappers/simulink/sdf_fft_twid_create.py", \
-                        self.hdl_wrapper_dir + "/twids", \
-                        self.nof_points, \
-                        self.wb_factor, \
-                        self.twiddle_dat_w)
+        self._generate_twids(self.hdl_root + "/casper_dspdevel/wrappers/simulink/sdf_fft_twid_create.py")
         # generate hdl wrapper
-        _generate_vhdl_wrapper(self.wb_factor, self.hdl_wrapper_dir, self.hdl_wrapper_dir + "/twids")
+        self._generate_vhdl_wrapper(self.wb_factor, self.hdl_wrapper_dir, self.hdl_wrapper_dir + "/twids")
 
     def modify_top(self,top):
         # let's populate the parent ports first
@@ -216,12 +212,15 @@ class wbfft(DSPBlock):
                 tcl_cmds.append('set_property LIBRARY %s [get_files %s/f]\n'%(k, self.hdl_root))
         return {'pre_synth': tcl_cmds}
 
-def _generate_vhdl_wrapper(wb_factor, hdl_wrapper_dir, twids_dir):
-    # this piece of code is terriable!
-    # we need to think about how to improve it!
-    # TODO: we may have two wideband fft blocks in the same desgin,
-    #       these two blocks may have different parameters.
-    vhdl_template = f"""
+    def _generate_vhdl_wrapper(self):
+        # this piece of code is terriable!
+        # we need to think about how to improve it!
+        # TODO: we may have two wideband fft blocks in the same desgin,
+        #       these two blocks may have different parameters.
+        wb_factor = self.wb_factor
+        hdl_wrapper_dir = self.hdl_wrapper_dir
+        twids_dir = self.hdl_wrapper_dir + "/twids"
+        vhdl_template = f"""
 library ieee,casper_wb_fft_lib, r2sdf_fft_lib, common_pkg_lib;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
@@ -266,10 +265,10 @@ port(
     out_sync       : out std_logic:='0';
     out_valid      : out std_logic:='0';
     """
-    vhdl_template += "    ".join(f"in_im_{i}        : in std_logic_vector(in_dat_w-1 downto 0);\n    in_re_{i}        : in std_logic_vector(in_dat_w-1 downto 0);\n" for i in range(wb_factor))
-    vhdl_template += "    "
-    vhdl_template += "    ".join(f"out_im_{i}       : in std_logic_vector(out_dat_w-1 downto 0);\n    out_re_{i}       : in std_logic_vector(out_dat_w-1 downto 0);\n" for i in range(wb_factor))
-    vhdl_template += f"""
+        vhdl_template += "    ".join(f"in_im_{i}        : in std_logic_vector(in_dat_w-1 downto 0);\n    in_re_{i}        : in std_logic_vector(in_dat_w-1 downto 0);\n" for i in range(wb_factor))
+        vhdl_template += "    "
+        vhdl_template += "    ".join(f"out_im_{i}       : in std_logic_vector(out_dat_w-1 downto 0);\n    out_re_{i}       : in std_logic_vector(out_dat_w-1 downto 0);\n" for i in range(wb_factor))
+        vhdl_template += f"""
     );
 end entity wideband_fft_top;
 
@@ -311,23 +310,28 @@ begin
             out_valid   <=out_fft_sosi_arr(k).valid;
         end generate;
 """
-    vhdl_template += "        "
-    vhdl_template += "        ".join(f"in_fft_sosi_arr({i}).re <= RESIZE_SVEC(in_re_{i}, in_fft_sosi_arr({i}).re'length);\n" for i in range(wb_factor))   
-    vhdl_template += "        "
-    vhdl_template += "        ".join(f"in_fft_sosi_arr({i}).im <= RESIZE_SVEC(in_im_{i}, in_fft_sosi_arr({i}).im'length);\n" for i in range(wb_factor)) 
-    vhdl_template += "        "
-    vhdl_template += "        ".join(f"out_re_{i} <= RESIZE_SVEC(out_fft_sosi_arr({i}).re,out_dat_w);\n" for i in range(wb_factor)) 
-    vhdl_template += "        "
-    vhdl_template += "        ".join(f"out_im_{i} <= RESIZE_SVEC(out_fft_sosi_arr({i}).im,out_dat_w);\n" for i in range(wb_factor)) 
-    vhdl_template += f"""
+        vhdl_template += "        "
+        vhdl_template += "        ".join(f"in_fft_sosi_arr({i}).re <= RESIZE_SVEC(in_re_{i}, in_fft_sosi_arr({i}).re'length);\n" for i in range(wb_factor))   
+        vhdl_template += "        "
+        vhdl_template += "        ".join(f"in_fft_sosi_arr({i}).im <= RESIZE_SVEC(in_im_{i}, in_fft_sosi_arr({i}).im'length);\n" for i in range(wb_factor)) 
+        vhdl_template += "        "
+        vhdl_template += "        ".join(f"out_re_{i} <= RESIZE_SVEC(out_fft_sosi_arr({i}).re,out_dat_w);\n" for i in range(wb_factor)) 
+        vhdl_template += "        "
+        vhdl_template += "        ".join(f"out_im_{i} <= RESIZE_SVEC(out_fft_sosi_arr({i}).im,out_dat_w);\n" for i in range(wb_factor)) 
+        vhdl_template += f"""
 end architecture rtl;
 """
-    with open(hdl_wrapper_dir + "/casper_wideband_fft.vhd", "w", encoding="utf-8") as file:
-        file.write(vhdl_template)
+        with open(hdl_wrapper_dir + "/casper_wideband_fft.vhd", "w", encoding="utf-8") as file:
+            file.write(vhdl_template)
 
-def _generate_twids(script, twids_dir, nof_points, wb_factor, twid_dat_w, vendor = 0):
-    # generate twids for the wideband fft
-    # we call the script directly: casper_dspdevel/wrappers/simulink/sdf_fft_twid_create.py
-    # TODO: we may need to improve this piece of code
-    python_cmd = f"python3 {script} -o {twids_dir} -g 1 -p {nof_points} -w {wb_factor} -c {twid_dat_w} -v {vendor} -V 0"
-    os.system(python_cmd)
+    def _generate_twids(self, script):
+        # generate twids for the wideband fft
+        # we call the script directly: casper_dspdevel/wrappers/simulink/sdf_fft_twid_create.py
+        # TODO: we may need to improve this piece of code
+        twids_dir = self.hdl_wrapper_dir + "/twids"
+        nof_points = self.nof_points
+        wb_factor = self.wb_factor
+        twid_dat_w = self.twiddle_dat_w
+        vendor = self.vendor
+        python_cmd = f"python3 {script} -o {twids_dir} -g 1 -p {nof_points} -w {wb_factor} -c {twid_dat_w} -v {vendor} -V 0"
+        os.system(python_cmd)

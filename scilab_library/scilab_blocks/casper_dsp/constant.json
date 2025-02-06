@@ -1,0 +1,21 @@
+{
+    "parameters":
+    {
+        "keys":
+        [
+            "name",
+            "fullpath",
+            "tag",
+            "bit_width",
+            "value"
+        ],
+        "values":
+        [
+            "constant",
+            "",
+            "dsp:constant",
+            10,
+            1023
+        ]
+    }
+}
