@@ -33,9 +33,13 @@ function [x, y, typ]= bus_expand(job, arg1, arg2)
             io_out_type = ones(1, length(oports_index));
             [model,graphics,ok] = set_io(model, graphics, list(io_in', io_in_type), list(io_out', io_out_type), evtin, evtout);
             model.in = iports_index;
-            model.in2 = iports_index;
+            //model.in2 = iports_index;
+            // TODO: how to set in2?
+            model.in2 = [-128]
             model.out = oports_index;
-            model.out2 = oports_index;
+            //model.out2 = oports_index;
+            // TODO: how to set out2?
+            model.out2 = [-16, -16, -16, -16, -16, -16, -16, -16];
             graphics.in_label = iports_label;
             graphics.out_label = oports_label;
             graphics.style = 'shape=rectangle;fillColor=green'
@@ -54,10 +58,10 @@ function [x, y, typ]= bus_expand(job, arg1, arg2)
         gr_i = [];
         [iports_index, iports_label] = create_iports(ndivision);
         model.in = iports_index;
-        model.in2 = iports_index;
+        model.in2 = [-32];
         [oports_index, oports_label] = create_oports(ndivision);
         model.out = oports_index;
-        model.out2 = oports_index;
+        model.out2 = [-8, -8, -8, -8];
         // we use model.label as the block tag.
         // the best place to set the tag should be graphics.gr_i/id.
         // However, I can't set graphics.gr_i/id...not sure why.

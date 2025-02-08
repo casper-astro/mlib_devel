@@ -64,7 +64,7 @@ exec('scilab_library/scilab_blocks/casper_dsp/slice.sci');
 exec('scilab_library/scilab_blocks/casper_dsp/munge.sci');
 exec('scilab_library/scilab_blocks/casper_dsp/wbfft.sci');
 exec('scilab_library/scilab_blocks/casper_dsp/bus_expand.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/constant.sci');
+exec('scilab_library/scilab_blocks/casper_dsp/dsp_constant.sci');
 
 // create the blocks
 adder_inst = adder("define");
@@ -94,7 +94,7 @@ debug_info('------ CASPER DSP loaded --------');
 // add casper sim blocks
 debug_info('------Loading CASPER SIM...------');
 // load the xps blocks
-exec('scilab_library/scilab_blocks/casper_sim/constant.sci');
+exec('scilab_library/scilab_blocks/casper_sim/sim_constant.sci');
 exec('scilab_library/scilab_blocks/casper_sim/scope.sci');
 exec('scilab_library/scilab_blocks/casper_sim/sim.sci');
 exec('scilab_library/scilab_blocks/casper_sim/sine.sci');

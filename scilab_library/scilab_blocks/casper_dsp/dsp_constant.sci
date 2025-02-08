@@ -27,8 +27,8 @@ function [x, y, typ]= dsp_constant(job, arg1, arg2)
             x.graphics = graphics;
             model.in = [];
             model.in2 = [];
-            model.out = [1];
-            model.out2 = [1];
+            model.out = 1;
+            model.out2 = 3;
             x.model = model;
         end
       case 'define' then
@@ -40,8 +40,8 @@ function [x, y, typ]= dsp_constant(job, arg1, arg2)
         // TODO: do we have to set in2??
         model.in = [];
         model.in2 = [];
-        model.out = [1];
-        model.out2 = [1];
+        model.out = 1;
+        model.out2 = 3;
         // Type : column vector of strings.
         exprs = ['constant', '10', '1023'];
         gr_i = [];
