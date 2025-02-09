@@ -35,7 +35,7 @@ class munge(DSPBlock):
         # tcl_cmds = []
         # for f in self.vhdl_lib:
         #     f = f.split('/')[-1]
-        #     tcl_cmds.append('set_property library common_pkg_lib [get_files /%s/dspproj/dspproj.srcs/sources_1/imports/common_pkg/%s]'%(self.fullpath, f))
+        #     tcl_cmds.append('set_property library common_pkg_lib [get_files /%s/dspproj/dspproj.srcs/sources_1/imports/common_pkg/%s]'%(self.builddir, f))
         # tcl_cmds.append('update_compile_order -fileset sources_1')
         # tcl_cmds.append('set_property FILE_TYPE {VHDL 2008} [get_files *.vhd]')
         # return {'pre_synth': tcl_cmds}

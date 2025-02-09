@@ -1,6 +1,5 @@
 // open the block config file from builddir/bconfig/xx.json, and get the parameters from the file.
 function [config] = get_block_config(name, type, tag)
-    disp('name:', name);
     scilab_block_path = getenv('MLIB_DEVEL_PATH')+'/scilab_library/scilab_blocks/';
     config_path = scilab_block_path + 'casper_' + type + '/' + tag + '.json';
     // debug_info('config_path: ' + config_path);

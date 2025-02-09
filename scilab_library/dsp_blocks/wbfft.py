@@ -23,6 +23,9 @@ wbfft_libs['ip_xpm_ram_lib'] = []
 
 class wbfft(DSPBlock):
     def initialize(self):
+        # create the hdl wrapper directory
+        self.create_hdl_dir()
+        # add the source files
         self.add_source('casper_dspdevel/common_pkg/fixed_float_types_c.vhd')
         wbfft_libs['common_pkg_lib'].append('casper_dspdevel/common_pkg/fixed_float_types_c.vhd')
         self.add_source('casper_dspdevel/common_pkg/fixed_pkg_c.vhd')
@@ -156,7 +159,7 @@ class wbfft(DSPBlock):
         # the twids dir will be created automatically
         self._generate_twids(self.hdl_root + "/casper_dspdevel/wrappers/simulink/sdf_fft_twid_create.py")
         # generate hdl wrapper
-        self._generate_vhdl_wrapper(self.wb_factor, self.hdl_wrapper_dir, self.hdl_wrapper_dir + "/twids")
+        self._generate_vhdl_wrapper()
 
     def modify_top(self,top):
         # let's populate the parent ports first
@@ -328,7 +331,7 @@ end architecture rtl;
         # generate twids for the wideband fft
         # we call the script directly: casper_dspdevel/wrappers/simulink/sdf_fft_twid_create.py
         # TODO: we may need to improve this piece of code
-        twids_dir = self.hdl_wrapper_dir + "/twids"
+        twids_dir = self.hdl_wrapper_dir
         nof_points = self.nof_points
         wb_factor = self.wb_factor
         twid_dat_w = self.twiddle_dat_w

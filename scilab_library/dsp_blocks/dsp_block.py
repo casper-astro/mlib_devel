@@ -26,21 +26,14 @@ class DSPBlock(YellowBlock):
         # 4. hdl_root
         # 5. link_info_file
         # The __init__ method of the DSPBlock class initializes
-        super(DSPBlock, self).__init__(blk, platform, hdl_root=hdl_root)
         self.model_info_file = model_info_file
         with open(self.model_info_file) as f:
             blkinfo = json.load(f)
             self.link_info = blkinfo['link_info']
-            self.fullpath = blkinfo['project']['filename'].split('.')[0]
+            self.builddir = blkinfo['project']['filename'].split('.')[0]
+        super(DSPBlock, self).__init__(blk, platform, hdl_root=hdl_root)
         # populate the parent ports
         self._get_parent_ports_info()
-        # create dir for hdl wrapper
-        self.hdl_wrapper_dir = os.path.join(self.fullpath, 'hdl_wrapper')
-        # if the directory exists, remove it.
-        # we need to create a new one every time.
-        if os.path.exists(self.hdl_wrapper_dir):
-            shutil.rmtree(self.hdl_wrapper_dir)
-        os.makedirs(self.hdl_wrapper_dir)
 
     def initialize(self):
         pass
@@ -48,6 +41,18 @@ class DSPBlock(YellowBlock):
     def modify(self, design, top_module):
         pass
     
+    def create_hdl_dir(self):
+        # the self.hdl_wrapper_dir will be used in self.initialize,
+        # but self.unique_name is defined in super.__init__.
+        # so we create this method, and call in at the beginning of self.initialize.
+        # create the hdl wrapper directory
+        self.hdl_wrapper_dir = os.path.join(self.builddir, 'hdl_wrapper',self.unique_name)
+        # if the directory exists, remove it.
+        # we need to create a new one every time.
+        if os.path.exists(self.hdl_wrapper_dir):
+            shutil.rmtree(self.hdl_wrapper_dir)
+        os.makedirs(self.hdl_wrapper_dir)
+
     @staticmethod
     def make_block(blk, platform, hdl_root=None, model_info_file='jasper.json'):
         if blk['tag'].startswith('dsp:'):

@@ -26,6 +26,7 @@ function [x, y, typ]= wbfft(job, arg1, arg2)
         evtout = [];
         //[model,graphics,ok] = set_io(model, graphics, list(in,intype), list(out, outype), evtin, evtout);
         if ok then
+            model.rpar = [0, 9, 10, 7, 8];
             // convert the string to decimal
             wb_factor = strtod(wb_factor);
             in_dat_w = strtod(in_dat_w);

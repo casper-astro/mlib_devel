@@ -25,7 +25,8 @@
             "use_dsp",
             "ovflw_behav",
             "use_round",
-            "ram_primitive"
+            "ram_primitive",
+            "vendor"
         ],
         "values":
         [
@@ -51,7 +52,8 @@
             "yes",
             "WARP",
             1,
-            "block"
+            "block",
+            0
         ]
     }
 }

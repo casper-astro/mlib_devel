@@ -5,10 +5,8 @@ import ast
 
 class bus_expand(DSPBlock):
     def initialize(self):
-        # we don't have source files for this block
-        # the hdl code is generated dynamically
-        # TODO: Is this a good idea?
-        self._generate_hdl_wrapper()
+        # create the hdl wrapper directory
+        self.create_hdl_dir()
         # convert string here to list
         self.bit_division = ast.literal_eval(self.bit_division)
         # calculate the total number of bits
@@ -16,6 +14,10 @@ class bus_expand(DSPBlock):
         # check if the ndivision maches the length of bit_division
         if self.ndivision != len(self.bit_division):
             raise Exception("Length of ndivision should match the length of bit_division")
+        # we don't have source files for this block
+        # the hdl code is generated dynamically
+        # TODO: Is this a good idea?
+        self._generate_hdl_wrapper()
 
     def modify_top(self,top):
         # let's populate the parent ports first
@@ -30,7 +32,7 @@ class bus_expand(DSPBlock):
         inst.add_port('ce', '1', parent_port=False, width=1, dir='in')
         inst.add_port('i_data', self.fullname+'_i_data', parent_port=False, width=self.total_bits, dir='in')
         for i in range(self.ndivision):
-            inst.add_port(f'o_data_{i}', self.fullname+f'_o_data_{i}', parent_port=False, width=self.ndivision[i], dir='out')
+            inst.add_port(f'o_data_{i}', self.fullname+f'_o_data_{i}', parent_port=False, width=self.bit_division[i], dir='out')
 
     def _generate_hdl_wrapper(self):
         # get the paramters from the bus_expand obj
