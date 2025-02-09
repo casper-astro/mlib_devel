@@ -18,12 +18,14 @@ class bus_expand(DSPBlock):
         # the hdl code is generated dynamically
         # TODO: Is this a good idea?
         self._generate_hdl_wrapper()
+        # add the generated wrapper
+        self.add_source(self.hdl_wrapper_dir + "/bus_expand_arbitrary.vhd")
 
     def modify_top(self,top):
         # let's populate the parent ports first
         self._populate_parent_ports(top)
         # create a verilog module
-        module = 'adder'
+        module = 'bus_expand_arbitrary'
         inst = top.get_instance(entity=module, name=self.fullname)
         # TODO: add parameters
         # add ports
@@ -35,6 +37,7 @@ class bus_expand(DSPBlock):
             inst.add_port(f'o_data_{i}', self.fullname+f'_o_data_{i}', parent_port=False, width=self.bit_division[i], dir='out')
 
     def _generate_hdl_wrapper(self):
+        hdl_wrapper_dir = self.hdl_wrapper_dir
         # get the paramters from the bus_expand obj
         bit_division = self.bit_division
         division = len(bit_division)
@@ -60,7 +63,8 @@ port (
 
     i_data   : in std_logic_vector;
     """
-        vhdl_template += "    ".join(f"o_data_{i}   : out std_logic_vector;\n" for i in range(division))
+        vhdl_template += "    ".join(f"o_data_{i}   : out std_logic_vector;\n" for i in range(division - 1))
+        vhdl_template += f"    o_data_{division - 1}   : out std_logic_vector\n"
         vhdl_template += f"""
 );
 end ENTITY;
@@ -81,5 +85,5 @@ begin
 
 end ARCHITECTURE;
     """
-        with open("generated_bus_expand.vhd", "w", encoding="utf-8") as file:
+        with open(hdl_wrapper_dir +"/bus_expand_arbitrary.vhd", "w", encoding="utf-8") as file:
             file.write(vhdl_template)

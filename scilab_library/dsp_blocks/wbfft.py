@@ -150,8 +150,6 @@ class wbfft(DSPBlock):
         wbfft_libs['ip_xpm_ram_lib'].append('casper_dspdevel/ip_xpm/ram/ip_xpm_rom_r.vhd')
         self.add_source('casper_dspdevel/ip_xpm/ram/ip_xpm_rom_r_r.vhd')
         wbfft_libs['ip_xpm_ram_lib'].append('casper_dspdevel/ip_xpm/ram/ip_xpm_rom_r_r.vhd')
-        # add the generated wrapper
-        self.add_source(self.hdl_wrapper_dir + "/casper_wideband_fft.vhd")
         # generate twiddle coefficients
         # delete the twids dir, if it exists
         if os.path.exists(self.hdl_wrapper_dir + "/twids"):
@@ -160,6 +158,8 @@ class wbfft(DSPBlock):
         self._generate_twids(self.hdl_root + "/casper_dspdevel/wrappers/simulink/sdf_fft_twid_create.py")
         # generate hdl wrapper
         self._generate_vhdl_wrapper()
+        # add the generated wrapper
+        self.add_source(self.hdl_wrapper_dir + "/casper_wideband_fft.vhd")
 
     def modify_top(self,top):
         # let's populate the parent ports first
@@ -183,11 +183,15 @@ class wbfft(DSPBlock):
         inst.add_parameter("guard_w", self.guard_w)
         inst.add_parameter("guard_enable", self.guard_enable)
         inst.add_parameter("pipe_reo_in_place", self.pipe_reo_in_place)
-        inst.add_parameter("use_variant", self.use_variant)
-        inst.add_parameter("use_dsp", self.use_dsp)
-        inst.add_parameter("ovflw_behav", self.ovflw_behav)
+        # string type
+        inst.add_parameter("use_variant", "\"%s\""%self.use_variant)
+        # string type
+        inst.add_parameter("use_dsp", "\"%s\""%self.use_dsp)
+        # string type
+        inst.add_parameter("ovflw_behav", "\"%s\""%self.ovflw_behav)
         inst.add_parameter("use_round", self.use_round)
-        inst.add_parameter("ram_primitive", self.ram_primitive)
+        # string type
+        inst.add_parameter("ram_primitive", "\"%s\""%self.ram_primitive)
         # add ports
         # input ports
         inst.add_port('clk', 'user_clk', dir='in')
@@ -270,7 +274,9 @@ port(
     """
         vhdl_template += "    ".join(f"in_im_{i}        : in std_logic_vector(in_dat_w-1 downto 0);\n    in_re_{i}        : in std_logic_vector(in_dat_w-1 downto 0);\n" for i in range(wb_factor))
         vhdl_template += "    "
-        vhdl_template += "    ".join(f"out_im_{i}       : in std_logic_vector(out_dat_w-1 downto 0);\n    out_re_{i}       : in std_logic_vector(out_dat_w-1 downto 0);\n" for i in range(wb_factor))
+        vhdl_template += "    ".join(f"out_im_{i}       : in std_logic_vector(out_dat_w-1 downto 0);\n    out_re_{i}       : in std_logic_vector(out_dat_w-1 downto 0);\n" for i in range(wb_factor - 1))
+        vhdl_template += f"    out_im_{wb_factor-1}       : in std_logic_vector(out_dat_w-1 downto 0);\n    out_re_{wb_factor-1}       : in std_logic_vector(out_dat_w-1 downto 0)\n"
+
         vhdl_template += f"""
     );
 end entity wideband_fft_top;
