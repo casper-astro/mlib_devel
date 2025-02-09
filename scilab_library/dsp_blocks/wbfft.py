@@ -216,7 +216,9 @@ class wbfft(DSPBlock):
         for k in wbfft_libs.keys():
             for f in wbfft_libs[k]:
                 tcl_cmds.append('update_compile_order -fileset sources_1\n')
-                tcl_cmds.append('set_property LIBRARY %s [get_files %s/f]\n'%(k, self.hdl_root))
+                # VHDL lib is a little annoying here...
+                f_parts = f.split('/')
+                tcl_cmds.append('set_property LIBRARY %s [get_files %s/dspproj/dspproj.srcs/sources_1/imports/%s/%s]\n'%(k, self.builddir, f_parts[-2], f_parts[-1]))
         return {'pre_synth': tcl_cmds}
 
     def _generate_vhdl_wrapper(self):
