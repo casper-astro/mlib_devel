@@ -276,8 +276,8 @@ port(
     """
         vhdl_template += "    ".join(f"in_im_{i}        : in std_logic_vector(in_dat_w-1 downto 0);\n    in_re_{i}        : in std_logic_vector(in_dat_w-1 downto 0);\n" for i in range(wb_factor))
         vhdl_template += "    "
-        vhdl_template += "    ".join(f"out_im_{i}       : in std_logic_vector(out_dat_w-1 downto 0);\n    out_re_{i}       : in std_logic_vector(out_dat_w-1 downto 0);\n" for i in range(wb_factor - 1))
-        vhdl_template += f"    out_im_{wb_factor-1}       : in std_logic_vector(out_dat_w-1 downto 0);\n    out_re_{wb_factor-1}       : in std_logic_vector(out_dat_w-1 downto 0)\n"
+        vhdl_template += "    ".join(f"out_im_{i}       : out std_logic_vector(out_dat_w-1 downto 0);\n    out_re_{i}       : out std_logic_vector(out_dat_w-1 downto 0);\n" for i in range(wb_factor - 1))
+        vhdl_template += f"    out_im_{wb_factor-1}       : out std_logic_vector(out_dat_w-1 downto 0);\n    out_re_{wb_factor-1}       : out std_logic_vector(out_dat_w-1 downto 0)\n"
 
         vhdl_template += f"""
     );

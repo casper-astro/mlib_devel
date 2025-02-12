@@ -222,7 +222,8 @@ class VivadoDSPBackend(VivadoBackend):
                                                    self.project_name))
             self.add_tcl_cmd('set_part %s' % plat.fpga)
         # Set the project to default to vhdl    
-        self.add_tcl_cmd('set_property target_language Verilog [current_project]', stage='init')
+        # self.add_tcl_cmd('set_property target_language Verilog [current_project]', stage='init')
+        self.add_tcl_cmd('set_property target_language VHDL [current_project]', stage='init')
 
     def add_compile_cmds(self, cores=8, plat=None, synth_strat=None, impl_strat=None, threads='multi'):
         """
@@ -236,19 +237,23 @@ class VivadoDSPBackend(VivadoBackend):
             # Pre-Synthesis Commands
             self.add_tcl_cmd('set_property top %s [current_fileset]'%(self.top_module_name), stage='pre_synth')
             self.add_tcl_cmd('update_compile_order -fileset sources_1', stage='pre_synth')
-            self.add_tcl_cmd('ipx::package_project -root_dir %s/%s/%s.srcs -vendor user.org -library user -taxonomy /UserIP'%(self.compile_dir, self.project_name, self.project_name), stage='pre_synth')
-            self.add_tcl_cmd('set_property vendor User_Company [ipx::current_core]', stage='pre_synth') 
-            self.add_tcl_cmd('set_property library SysGen [ipx::current_core]', stage='pre_synth') 
-            self.add_tcl_cmd('set_property name %s [ipx::current_core]'%(self.top_module_name), stage='pre_synth') 
-            self.add_tcl_cmd('set_property display_name %s [ipx::current_core]'%(self.top_module_name), stage='pre_synth') 
-            self.add_tcl_cmd('set_property description %s [ipx::current_core]'%(self.top_module_name), stage='pre_synth') 
-            self.add_tcl_cmd('set_property core_revision 2 [ipx::current_core]', stage='pre_synth')
-            self.add_tcl_cmd('ipx::create_xgui_files [ipx::current_core]', stage='pre_synth')
-            self.add_tcl_cmd('ipx::update_checksums [ipx::current_core]', stage='pre_synth')
-            self.add_tcl_cmd('ipx::check_integrity [ipx::current_core]', stage='pre_synth') 
-            self.add_tcl_cmd('ipx::save_core [ipx::current_core]', stage='pre_synth')
-            self.add_tcl_cmd('set_property  ip_repo_paths %s/dspproj/dspproj.srcs [current_project]'%(self.compile_dir), stage='pre_synth')
-            self.add_tcl_cmd('update_ip_catalog', stage='pre_synth')
+            # we need to move the IP core generation commands from pre_synth to synth
+            self.add_tcl_cmd('ipx::package_project -root_dir %s/%s/%s.srcs -vendor user.org -library user -taxonomy /UserIP'%(self.compile_dir, self.project_name, self.project_name), stage='synth')
+            self.add_tcl_cmd('set_property vendor User_Company [ipx::current_core]', stage='synth') 
+            self.add_tcl_cmd('set_property library SysGen [ipx::current_core]', stage='synth') 
+            self.add_tcl_cmd('set_property name %s [ipx::current_core]'%(self.top_module_name), stage='synth') 
+            self.add_tcl_cmd('set_property display_name %s [ipx::current_core]'%(self.top_module_name), stage='synth') 
+            self.add_tcl_cmd('set_property description %s [ipx::current_core]'%(self.top_module_name), stage='synth') 
+            self.add_tcl_cmd('set_property core_revision 2 [ipx::current_core]', stage='synth')
+            self.add_tcl_cmd('ipx::create_xgui_files [ipx::current_core]', stage='synth')
+            self.add_tcl_cmd('ipx::update_checksums [ipx::current_core]', stage='synth')
+            self.add_tcl_cmd('ipx::check_integrity [ipx::current_core]', stage='synth') 
+            self.add_tcl_cmd('ipx::save_core [ipx::current_core]', stage='synth')
+            self.add_tcl_cmd('set_property  ip_repo_paths %s/dspproj/dspproj.srcs [current_project]'%(self.compile_dir), stage='synth')
+            self.add_tcl_cmd('update_ip_catalog', stage='synth')
+            # it looks like we have to synthesize the design before packaging it,
+            # or we will have lib issues.
+            # self.add_tcl_cmd('launch_runs synth_1 -jobs %d' % cores, stage='synth')
             self.gen_dspblock_tcl_cmds()
         else:
             pass
