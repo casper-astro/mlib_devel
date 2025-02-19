@@ -15,7 +15,7 @@ end
 generate
     if (EDGE == "rising") 
         begin
-            assign out = in & in_delay;
+            assign out = in & ~in_delay;
         end 
     else if(EDGE == "falling")
         begin
