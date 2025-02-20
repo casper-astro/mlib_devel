@@ -63,8 +63,8 @@ port (
 
     i_data   : in std_logic_vector({self.total_bits-1} downto 0);
     """
-        vhdl_template += "    ".join(f"o_data_{i}   : out std_logic_vector({self.bit_division[i]-1} to 0);\n" for i in range(division - 1))
-        vhdl_template += f"    o_data_{division - 1}   : out std_logic_vector({self.bit_division[-1]-1} to 0)\n"
+        vhdl_template += "    ".join(f"o_data_{i}   : out std_logic_vector({self.bit_division[i]-1} downto 0);\n" for i in range(division - 1))
+        vhdl_template += f"    o_data_{division - 1}   : out std_logic_vector({self.bit_division[-1]-1} downto 0)\n"
         vhdl_template += f"""
 );
 end ENTITY;
