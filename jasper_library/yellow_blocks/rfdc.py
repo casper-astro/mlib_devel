@@ -369,6 +369,14 @@ class rfdc(YellowBlock):
 
         self.dacs.append(d)
 
+    if self.blk['ADCRTS']:
+      self.adc_rts_o = ['over_range', 'over_threshold1', 'over_threshold2', 'over_voltage']
+      self.adc_rts_i = ["pl_event", "clear_or"];
+      if self.gen == 3:
+        self.adc_rts_o.append('cm_over_voltage')
+        self.adc_rts_o.append('cm_under_voltage')
+        self.adc_rts_i.append('clear_ov')
+
     """
     how do we now handle clock distribution validation? should/will it be in the mask now?
     """
@@ -480,7 +488,7 @@ class rfdc(YellowBlock):
       # wire these ports to supporting infrastructure
       top.assign_signal('m{:d}_axis_aclk'.format(tidx), 'adc_clk')
 
-      #Tile source information from simulink
+      # Tile source information from simulink
       if self.gen > 1:
         if (self.blk['t{:d}_adc_clk_src'.format(tidx+224)]-224 == tidx):
           bd_inst.add_port('adc{:d}_clk_p'.format(tidx), 'adc{:d}_clk_p'.format(tidx), dir='in', parent_port=True)
@@ -532,6 +540,20 @@ class rfdc(YellowBlock):
                 bd_inst.add_port('m{:d}{:d}_axis_tdata'.format(tidx, n_aidx), '{:s}_m{:d}{:d}_axis_tdata'.format(self.fullname, tidx, n_aidx), width=data_width)
                 bd_inst.add_port('m{:d}{:d}_axis_tready'.format(tidx, n_aidx), "1'b1",)
                 bd_inst.add_port('m{:d}{:d}_axis_tvalid'.format(tidx, n_aidx), 'm{:d}{:d}_axis_tvalid'.format(tidx, n_aidx))
+          """
+          adc rts ports
+          """
+          if self.blk['ADCRTS']:
+            for p in self.adc_rts_o:
+              bd_inst.add_port('adc{:d}{:d}_{:s}'.format(tidx, n_aidx, p), '{:s}_adc{:d}{:d}_{:s}'.format(self.fullname, tidx, n_aidx, p), width=1)
+            for p in self.adc_rts_i:
+              bd_inst.add_port('adc{:d}{:d}_{:s}'.format(tidx, n_aidx, p), '{:s}_adc{:d}{:d}_{:s}'.format(self.fullname, tidx, n_aidx, p), width=1)
+
+      """ gen 3 parts have an additional input/output, one per enabled tile """
+      if self.blk['ADCRTS'] and self.gen > 1:
+        bd_inst.add_port('adc{:d}_{:s}'.format(tidx, 'sync_out'), '{:s}_adc{:d}_{:s}'.format(self.fullname, tidx, 'sync_out'), width=1)
+        bd_inst.add_port('adc{:d}_{:s}'.format(tidx, 'sysref_gate'), '{:s}_adc{:d}_{:s}'.format(self.fullname, tidx, 'sysref_gate'), width=1)
+
 
     """
     dac tile/slice interfaces
@@ -712,6 +734,10 @@ class rfdc(YellowBlock):
             tcl_cmds['pre_synth'] += self.build_config_cmd(d, self.dac_attr_map, tidx, 2*n_didx)
             tcl_cmds['pre_synth'] += self.build_config_cmd(d, self.dac_attr_map, tidx, 2*n_didx+1)
 
+    # enable adc rts ports
+    if self.blk['ADCRTS']:
+      tcl_cmds['pre_synth'].append(vivado_cmd.format('ADC_RTS', 'true'))
+
     tcl_cmds['pre_synth'] += ['] [get_bd_cells $rfdc]']
     # create board interface ports for axis data/clk/reset pins and adc tile output clock for each enabled tile
     for tidx in self.enabled_adc_tiles:
@@ -777,6 +803,18 @@ class rfdc(YellowBlock):
                 tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('m{:d}{:d}_axis_tdata'.format(tidx, n_aidx), port_dir='out', width=data_width))
                 tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('m{:d}{:d}_axis_tvalid'.format(tidx, n_aidx), port_dir='out'))
                 tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('m{:d}{:d}_axis_tready'.format(tidx, n_aidx), port_dir='in'))
+          """ adc rts ports """
+          if self.blk['ADCRTS']:
+            for p in self.adc_rts_o:
+              tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('adc{:d}{:d}_{:s}'.format(tidx, n_aidx, p), port_dir='out'))
+            for p in self.adc_rts_i:
+              tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('adc{:d}{:d}_{:s}'.format(tidx, n_aidx, p), port_dir='in'))
+
+      """ gen 3 parts have an additional input/output, one per enabled tile """
+      if self.blk['ADCRTS'] and self.gen > 1:
+        tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('adc{:d}_{:s}'.format(tidx, 'sync_out'), port_dir='out'))
+        tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('adc{:d}_{:s}'.format(tidx, 'sysref_gate'), port_dir='in'))
+
 
     # create board interface ports for axis data/clk/reset pins and dac tile output clock for each enabled tile
     for tidx in self.enabled_dac_tiles:

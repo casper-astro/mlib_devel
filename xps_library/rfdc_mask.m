@@ -107,8 +107,14 @@ function [] = rfdc_mask(gcb,force)
     end % t < 228
   end % t = 224:lastTile
 
+  if chk_param(gcb, 'ADCRTS', 'on')
+    rts_ports = 1;
+  else
+    rts_ports = 0;
+  end
+
   % check if the mask state has changed
-  if ~same_state(gcb,'Tiles',tiles,'ADCSlices',adc_slices,'DACSlices',dac_slices,'ADCTileArch',adc_tile_arch,'DACTileArch',dac_tile_arch,'ModelName',base_gw_name) || force
+  if ~same_state(gcb,'RTSPorts',rts_ports,'Tiles',tiles,'ADCSlices',adc_slices,'DACSlices',dac_slices,'ADCTileArch',adc_tile_arch,'DACTileArch',dac_tile_arch,'ModelName',base_gw_name) || force
     for tile = 224:231
       QTConf = msk.getDialogControl(sprintf('t%d_QuadTileConfig', tile));
       DTConf = msk.getDialogControl(sprintf('t%d_DualTileConfig', tile));
@@ -170,6 +176,7 @@ function [] = rfdc_mask(gcb,force)
     % initial position offsets for drawing
     xpos = 0;
     ypos = 40;
+    ypos_rts = 40;
     port_num = 1;
 
     % trim lines to begin to reuse or delete blocks
@@ -230,10 +237,15 @@ function [] = rfdc_mask(gcb,force)
               end
             end % strcmp(adc_tile_arc, 'qaud')
           end
-          dec_interp_opts(gcb, t, a)
+          dec_interp_opts(gcb, t, a);
         end % a = adcs
       end
     end % t = tiles
+
+    if rts_ports
+      % rts ports ground the simulation inputs; do not update the global `port_num` to not have ghost input ports
+      add_rts_ports(gcb, gen, num_adc_slices, tiles, adc_slices, port_num);
+    end
 
     % update DAC tiles
     for t = 228:lastTile
@@ -276,7 +288,7 @@ function [] = rfdc_mask(gcb,force)
     rfdc_system_clocking_config(gcb);
 
     % save state to compare against on next call to the mask
-    save_state(gcb,'Tiles',tiles,'ADCSlices',adc_slices,'DACSlices',dac_slices,'ADCTileArch',adc_tile_arch,'DACTileArch',dac_tile_arch,'ModelName',base_gw_name);
+    save_state(gcb,'RTSPorts',rts_ports,'Tiles',tiles,'ADCSlices',adc_slices,'DACSlices',dac_slices,'ADCTileArch',adc_tile_arch,'DACTileArch',dac_tile_arch,'ModelName',base_gw_name);
 
     % delete interfaces for disabled tiles
     clean_blocks(gcb);
