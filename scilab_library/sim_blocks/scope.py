@@ -23,19 +23,30 @@ class scope(SimBlock):
         # which contains the time and the value.
         # We only need the value.
         data = data['data']
-        self.simdata = []
+        self.simdata = np.zeros(SimBlock.sim_length + 1)
+        # filled is the tag to indicate if the data is filled
+        filled = np.zeros(SimBlock.sim_length + 1)
         for d in data:
+            # the timescale for the simulation data is 1ns/1ps,
+            # so the unit is ps, and the clk rising edge is at 500ps, 1500ps, 2500ps, ...
+            t = int((d[0] + 500)/1000)
+            # if the sim data is just 1 bit, it won't have the 'b' prefix
+            if len(d[1]) == 1:
+                s = d[1][0]
+            else:
+                s = d[1][1:]
             try:
-                self.simdata.append(int(d[1][1:],2))
+                self.simdata[t] = int(s,2)
             except:
                 # TODO: for the unknown value, can we set it to 0?
-                self.simdata.append(0)
-        self.length = SimBlock.sim_length
-        # if the data length is less than 1000, extend the last value to 1000
-        if len(self.simdata) < self.length:
-            self.simdata = np.append(self.simdata, np.ones(self.length - len(self.simdata))*self.simdata[-1])
-        else:
-            self.simdata = np.array(self.simdata)
+                self.simdata[t] = 0
+            filled[t] = 1
+        # fill the empty data
+        for i in range(SimBlock.sim_length):
+            if filled[i] == 0:
+                self.simdata[i] = self.simdata[i-1]
+                filled[i] = 1
+        # convert the data type
         dtype = self.val['dtype']
         self.simdata = self.simdata.astype(dtype)
         return self.simdata
