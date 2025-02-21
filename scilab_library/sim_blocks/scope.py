@@ -42,7 +42,7 @@ class scope(SimBlock):
                 self.simdata[t] = 0
             filled[t] = 1
         # fill the empty data
-        for i in range(SimBlock.sim_length):
+        for i in range(SimBlock.sim_length + 1):
             if filled[i] == 0:
                 self.simdata[i] = self.simdata[i-1]
                 filled[i] = 1
