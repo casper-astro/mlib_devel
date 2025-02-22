@@ -19,7 +19,7 @@ exec('scilab_library/scilab_blocks/utils/get_block_vals.sci');
 exec('scilab_library/scilab_blocks/utils/get_block_vindex.sci');
 exec('scilab_library/scilab_blocks/jasper.sci');
 exec('scilab_library/scilab_blocks/jasper_frontend.sci');
-exec('scilab_library/scilab_blocks/casper_simulation.sci');
+exec('scilab_library/scilab_blocks/jasper_simulation.sci');
 exec('scilab_library/scilab_blocks/run_simulation.sci');
 
 // TODO: load the xps and dsp blocks automatically
