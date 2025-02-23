@@ -24,9 +24,9 @@ function [x, y, typ]= pulse_ext(job, arg1, arg2)
             graphics.exprs = exprs;
             x.graphics = graphics;
             model.in = [1];
-            model.in2 = [-1];
+            model.in2 = [1];
             model.out = [1];
-            model.out2 = [-1];
+            model.out2 = [1];
             x.model = model;
         end
       case 'define' then
@@ -37,9 +37,9 @@ function [x, y, typ]= pulse_ext(job, arg1, arg2)
         model.rpar = [0, 3];
         // TODO: do we have to set in2??
         model.in = [1];
-        model.in2 = [-1];
+        model.in2 = [1];
         model.out = [1];
-        model.out2 = [-1];
+        model.out2 = [1];
         // Type : column vector of strings.
         exprs = ['pulse_ext'; '1024'];
         gr_i = [];

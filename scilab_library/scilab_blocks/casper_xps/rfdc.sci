@@ -36,9 +36,9 @@ function [x, y, typ]= rfdc(job, arg1, arg2)
         model.rpar = [0, 5];
         // TODO: do we have to set in2??
         model.in = [1, 2, 3, 4, 5, 6, 7, 8];
-        model.in2 = [-128, -128, -128, -128, -128, -128, -128, -128];
+        model.in2 = [128, 128, 128, 128, 128, 128, 128, 128];
         model.out = [1, 2, 3, 4, 5, 6, 7, 8];
-        model.out2 = [-128, -128, -128, -128, -128, -128, -128, -128];
+        model.out2 = [128, 128, 128, 128, 128, 128, 128, 128];
         // Type : column vector of strings.
         exprs = ['rfdc', '3932.16'];
         gr_i = [];

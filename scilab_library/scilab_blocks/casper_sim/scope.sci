@@ -21,7 +21,7 @@ function [x, y, typ]= scope(job, arg1, arg2)
         graphics.exprs = exprs;
         x.graphics = graphics;
         model.in = [1];
-        model.in2 = [-1];
+        model.in2 = [1];
         model.out = [];
         model.out2 = [];
         x.model = model;
@@ -34,7 +34,7 @@ function [x, y, typ]= scope(job, arg1, arg2)
       model.rpar = [0, 3, 4];
       // TODO: do we have to set in2??
       model.in = [1];
-      model.in2 = [-1];
+      model.in2 = [1];
       model.out = [];
       model.out2 = [];
       // Type : column vector of strings.

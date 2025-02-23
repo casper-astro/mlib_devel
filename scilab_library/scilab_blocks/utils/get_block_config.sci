@@ -16,8 +16,8 @@ function [config] = get_block_config(name, type, tag)
         v = user_config('parameters')(k);
         config('parameters')('values')(i) = string(v);
     end
-    config('input_ports') = struct();
-    config('input_ports') = user_config('input_ports');
-    config('output_ports') = struct();
-    config('output_ports') = user_config('output_ports');
+    // config('input_ports') = struct();
+    // config('input_ports') = user_config('input_ports');
+    // config('output_ports') = struct();
+    // config('output_ports') = user_config('output_ports');
 endfunction

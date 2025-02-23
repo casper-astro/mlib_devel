@@ -41,12 +41,9 @@ function [x, y, typ]= wbfft(job, arg1, arg2)
             io_out_type = ones(1, length(oports_index));
             [model,graphics,ok] = set_io(model, graphics, list(io_in', io_in_type), list(io_out', io_out_type), evtin, evtout);
             model.in = iports_index;
-            // model.in2 = iports_index;
-            iport_width_id = [-1, -1, -1*log2(nof_points), -1*in_dat_w*ones(1, 2*wb_factor)];
-            model.in2 = iport_width_id;
+            model.in2 = [1, 1, 1*log2(nof_points), 1*in_dat_w*ones(1, 2*wb_factor)];
             model.out = oports_index;
-            // model.out2 = oports_index;
-            model.out2 = [-1, -1, -1*log2(nof_points), -1*out_dat_w*ones(1, 2*wb_factor)];
+            model.out2 = [1, 1, 1*log2(nof_points), 1*out_dat_w*ones(1, 2*wb_factor)];
             graphics.in_label = iports_label;
             graphics.out_label = oports_label;
             graphics.style = 'shape=rectangle;fillColor=green'
@@ -65,16 +62,10 @@ function [x, y, typ]= wbfft(job, arg1, arg2)
         gr_i = [];
         [iports_index, iports_label] = wbfft_create_iports(wb_factor);
         model.in = iports_index;
-        // model.in2 = iports_index;
-        // model.in2 is used for specifying the port width id
-        iport_width_id = [-1, -1, -7, -16, -16];
-        model.in2 = iport_width_id;
+        model.in2 = [1, 1, 7, 16, 16];
         [oports_index, oports_label] = wbfft_create_oports(wb_factor);
         model.out = oports_index;
-        // model.out2 = oports_index;
-        // model.out2 is used for specifying the port width id
-        oport_width_id = [-1, -1, -7, -18, -18];
-        model.out2 = oport_width_id;
+        model.out2 = [1, 1, 7, 18, 18];
         // we use model.label as the block tag.
         // the best place to set the tag should be graphics.gr_i/id.
         // However, I can't set graphics.gr_i/id...not sure why.

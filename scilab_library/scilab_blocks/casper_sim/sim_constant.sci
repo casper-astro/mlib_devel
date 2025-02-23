@@ -21,10 +21,11 @@ function [x, y, typ]= sim_constant(job, arg1, arg2)
                         list("str", 1, "str",1 ,"str",1, "str",1),...
                         exprs);
       if ok then
+        const_bitwidth = strtod(const_bitwidth);
         model.in = [];
         model.in2 = [];
-        model.out = 1;
-        model.out2 = 4;
+        model.out = [1];
+        model.out2 = [const_bitwidth];
         graphics.exprs = exprs;
         x.graphics = graphics;
         x.model = model;
@@ -38,8 +39,8 @@ function [x, y, typ]= sim_constant(job, arg1, arg2)
       // TODO: do we have to set in2??
       model.in = [];
       model.in2 = [];
-      model.out = 1;
-      model.out2 = 4;
+      model.out = [1];
+      model.out2 = [32];
       // Type : column vector of strings.
       exprs = ['constant'; '0'; '32'; '0'];
       gr_i = [];

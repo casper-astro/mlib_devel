@@ -19,6 +19,7 @@ function [x, y, typ]= dsp_constant(job, arg1, arg2)
                           list("str", 1, "str",1 , "str",1 ),...
                           exprs);
         if ok then
+            bit_width = strtod(bit_width);
             graphics.out_label = ['out'];
             graphics.in_label = [];
             graphics.style = 'shape=rectangle;fillColor=grey';
@@ -28,7 +29,7 @@ function [x, y, typ]= dsp_constant(job, arg1, arg2)
             model.in = [];
             model.in2 = [];
             model.out = 1;
-            model.out2 = 3;
+            model.out2 = [bit_width];
             x.model = model;
         end
       case 'define' then
@@ -41,7 +42,7 @@ function [x, y, typ]= dsp_constant(job, arg1, arg2)
         model.in = [];
         model.in2 = [];
         model.out = 1;
-        model.out2 = 3;
+        model.out2 = 10;
         // Type : column vector of strings.
         exprs = ['constant', '10', '1023'];
         gr_i = [];

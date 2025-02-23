@@ -1,7 +1,7 @@
 function [x, y, typ] = sbram(job, arg1, arg2)
     x=[];y=[];typ=[];
     blkname = 'sbram';
-    bit_widths = '32';
+    bit_width = '32';
     addr_width = 10;
     select job
     case 'set' then
@@ -13,14 +13,16 @@ function [x, y, typ] = sbram(job, arg1, arg2)
               'addr_width(2^x)';...
               'Bitwidth(8, 16, 32, 64, 128)';...
             ];
-      [ok, blkname, bit_widths, addr_width, exprs] = scicos_getvalue("Set SBRAM block parameters",...
+      [ok, blkname, bit_width, addr_width, exprs] = scicos_getvalue("Set SBRAM block parameters",...
                           txt,...
                           list("str", 1, "str", 1, "str",1 ),...
                           exprs);
       if ok then
+        bit_width = strtod(bit_width);
+        addr_width = strtod(addr_width);
         // TODO: figure out how to set string in the model
         model.in = [1, 2, 3];
-        model.in2 = [4, 5, -1];
+        model.in2 = [bit_width, addr_width, 1];
         model.out = [1];
         model.out2 = [];
         graphics.in_label = ['addr', 'data_in', 'we'];
@@ -39,7 +41,7 @@ function [x, y, typ] = sbram(job, arg1, arg2)
       model.rpar = [0, 4, 5];
       // TODO: do we have to set out2??
       model.in = [1, 2, 3];
-      model.in2 = [4, 5, -1];
+      model.in2 = [10, 32, 1];
       model.out = [1];
       model.out2 = [];
       // Type : column vector of strings.

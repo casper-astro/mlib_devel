@@ -69,9 +69,12 @@ class SIMflow(object):
         You may get more than one port, as the src block may drive more than one dst blocks.
         """
         self.logger.info('Searching dst port information for blk : %s' % blkname)
-        blk_name = 'src_blk_name'
-        port_name = 'src_port_name'
-        port_width = 'src_port_width'
+        #blk_name = 'src_blk_name'
+        #port_name = 'src_port_name'
+        #port_width = 'src_port_width'
+        blk_name = 'dst_blk_name'
+        port_name = 'dst_port_name'
+        port_width = 'dst_port_width'
         port_list = []
         link_info = self.model_info['link_info']
         for link in link_info:

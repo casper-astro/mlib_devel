@@ -21,6 +21,8 @@ function [x, y, typ]= slice(job, arg1, arg2)
                           list("str", 1, "str",1 , "str",1 , "str",1 ),...
                           exprs);
         if ok then
+            input_width = strtod(input_width);
+            output_width = strtod(output_width);
             graphics.out_label = ['out'];
             graphics.in_label = ['in'];
             graphics.style = 'shape=rectangle;fillColor=grey';
@@ -28,9 +30,9 @@ function [x, y, typ]= slice(job, arg1, arg2)
             graphics.exprs = exprs;
             x.graphics = graphics;
             model.in = [1];
-            model.in2 = [3];
+            model.in2 = [input_width];
             model.out = [1];
-            model.out2 = [4];
+            model.out2 = [output_width];
             x.model = model;
         end
       case 'define' then
@@ -41,9 +43,9 @@ function [x, y, typ]= slice(job, arg1, arg2)
         model.rpar = [0, 3, 4, 5];
         // TODO: do we have to set in2??
         model.in = [1];
-        model.in2 = [3];
+        model.in2 = [32];
         model.out = [1];
-        model.out2 = [4];
+        model.out2 = [1];
         // Type : column vector of strings.
         exprs = ['slice', '32', '1', '0'];
         gr_i = [];

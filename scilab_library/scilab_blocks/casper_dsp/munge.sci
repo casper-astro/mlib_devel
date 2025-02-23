@@ -23,6 +23,7 @@ function [x, y, typ]= munge(job, arg1, arg2)
                           list("str", 1, "str", 1, "str",1 , "str",1, "str",1),...
                           exprs);
         if ok then
+            total_bits = strtod(total_bits);
             graphics.out_label = ['out'];
             graphics.in_label = ['in'];
             graphics.style = 'shape=rectangle;fillColor=green';
@@ -30,9 +31,9 @@ function [x, y, typ]= munge(job, arg1, arg2)
             graphics.exprs = exprs;
             x.graphics = graphics;
             model.in = [1];
-            model.in2 = [3];
+            model.in2 = [total_bits];
             model.out = [1];
-            model.out2 = [3];
+            model.out2 = [total_bits];
             x.model = model;
         end
       case 'define' then
@@ -43,9 +44,9 @@ function [x, y, typ]= munge(job, arg1, arg2)
         model.rpar = [0, 3, 4, 5, 6];
         // TODO: do we have to set in2??
         model.in = [1];
-        model.in2 = [3];
+        model.in2 = [128];
         model.out = [1];
-        model.out2 = [3];
+        model.out2 = [128];
         // Type : column vector of strings.
         exprs = ['munge'; '128'; '4'; '32'; '{3, 2, 1, 0}'];
         gr_i = [];

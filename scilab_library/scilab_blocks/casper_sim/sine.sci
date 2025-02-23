@@ -25,12 +25,13 @@ function [x, y, typ]= sine(job, arg1, arg2)
                           list("str", 1, "str",1 ,"str",1, "str",1, "str",1, "str",1),...
                           exprs);
         if ok then
+          output_bit_width = strtod(output_bit_width);
           graphics.exprs = exprs;
           x.graphics = graphics;
           model.in = [];
           model.in2 = [];
           model.out = 1;
-          model.out2 = 7;
+          model.out2 = output_bit_width;
           x.model = model;
         end
       case 'define' then
@@ -43,7 +44,7 @@ function [x, y, typ]= sine(job, arg1, arg2)
         model.in = [];
         model.in2 = [];
         model.out = 1;
-        model.out2 = 7;
+        model.out2 = 16;
         // Type : column vector of strings.
         exprs = ['sine'; '2047'; '16'; '0'; '1024'; '16'];
         gr_i = [];

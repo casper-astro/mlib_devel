@@ -27,23 +27,24 @@
             ];
       [ok, blkname, io_direction, io_delay, init_val, sample_period, bitfield_name, bitfield_width, bitfield_bp, bitfield_types, exprs] = scicos_getvalue("Set SWREG block parameters",...
                           txt,...
-                          list("str", 1, "str", 1, "vec",1 ,"vec",1,"vec",1,"str",1,"vec",1,"vec",1,"vec",1),...
+                          list("str", 1, "str", 1, "str",1 ,"str",1,"str",1,"str",1,"str",1,"str",1,"str",1),...
                           exprs);
       if ok then
+        bitfield_width = strtod(bitfield_width);
         // TODO: figure out how to set string in the model
         if io_direction == 'From Processor' then
-            model.in = 1;
-            model.in2 = 8;
-            model.out = 1;
-            model.out2 = 8;
+            model.in = [1];
+            model.in2 = [bitfield_width];
+            model.out = [1];
+            model.out2 = [bitfield_width];
             graphics.out_label = ['user_data_out'];
             graphics.in_label = ['sim_in'];
             graphics.style = 'shape=rectangle;fillColor=yellow'
         elseif io_direction == 'To Processor' then
-            model.in = 1;
-            model.in2 = 8;
-            model.out = 1;
-            model.out2 = 8;
+            model.in = [1];
+            model.in2 = [bitfield_width];
+            model.out = [1];
+            model.out2 = [bitfield_width];
             graphics.out_label = ['sim_out'];
             graphics.in_label = ['user_data_in'];
             graphics.style = 'shape=rectangle;fillColor=yellow';
@@ -77,16 +78,16 @@
       // Type : column vector of real numbers.
       model.rpar = [0, 3, 4, 5, 6, 7, 8, 9, 10];
       // TODO: do we have to set out2??
-      model.out = 1;
-      model.out2 = 8;
-      model.in = 1;
-      model.in2 = 8;
+      model.out = [1];
+      model.out2 = [1];
+      model.in = [1];
+      model.in2 = [1];
       // Type : column vector of strings.
       exprs = ['swreg'; 'From Processor';'0'; '0'; '1'; 'reg'; '1'; '0'; '2'];
       gr_i = [];
       //set the block tag
       model.label = "xps";
-      x=standard_define([6 1.4],model,exprs,gr_i)
+      x=standard_define([10 1.4],model,exprs,gr_i)
       x.graphics.out_label = ['user_data_out'];
       x.graphics.in_label = ['sim_in'];
       x.graphics.style = 'shape=rectangle;fillColor=yellow';

@@ -31,17 +31,18 @@ function [x, y, typ]= gpio(job, arg1, arg2)
                         list("str", 1, "str",1 ,"str",1,"str",1,"str",1,"vec",1,"vec",1,"vec",1, "vec", 1),...
                         exprs);
       if ok then
+        d_bw = strtod(d_bw);
         if io_dir == 'in' then
           io_dir_r = 0;
           model.in = [];
           model.in2 = [];
-          model.out = 1;
-          model.out2 = 8;
+          model.out = [1];
+          model.out2 = [d_bw];
           graphics.out_label = ['gateway'];
         elseif io_dir == 'out' then
           io_dir_r = 1;
-          model.in = 1;
-          model.in2 = 8;
+          model.in = [1];
+          model.in2 = [d_bw];
           model.out = [];
           model.out2 = [];
           graphics.in_label = ['gateway'];
@@ -82,8 +83,8 @@ function [x, y, typ]= gpio(job, arg1, arg2)
       // Type : column vector of real numbers.
       model.rpar = [0, 4, 5, 6, 7, 8, 9, 10, 11];
       // TODO: do we have to set in2??
-      model.in = 1;
-      model.in2 = 8;
+      model.in = [1];
+      model.in2 = [1];
       // this is the id of the port width in the config file
       // Type : column vector of strings.
       exprs = ['gpio'; 'custom'; '0'; 'out'; 'boolean'; '1'; '0'; '0'; '1'];
