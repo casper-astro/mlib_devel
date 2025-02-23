@@ -50,8 +50,8 @@ function [x, y, typ] = sbram(job, arg1, arg2)
       //set the block tag
       model.label = "xps";
       x=standard_define([8 5.5],model,exprs,gr_i)
-      graphics.in_label = ['addr', 'data_in', 'we'];
-      graphics.out_label = ['data_out'];
+      x.graphics.in_label = ['addr', 'data_in', 'we'];
+      x.graphics.out_label = ['data_out'];
       x.graphics.style = 'shape=rectangle;fillColor=yellow';
       debug_info('sbram block loaded...')
   end
