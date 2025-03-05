@@ -65,6 +65,9 @@ exec('scilab_library/scilab_blocks/casper_dsp/munge.sci');
 exec('scilab_library/scilab_blocks/casper_dsp/wbfft.sci');
 exec('scilab_library/scilab_blocks/casper_dsp/bus_expand.sci');
 exec('scilab_library/scilab_blocks/casper_dsp/dsp_constant.sci');
+exec('scilab_library/scilab_blocks/casper_dsp/delay.sci');
+exec('scilab_library/scilab_blocks/casper_dsp/simple_bram_vacc.sci');
+exec('scilab_library/scilab_blocks/casper_dsp/power_cal.sci');
 
 // create the blocks
 adder_inst = adder("define");
@@ -76,6 +79,9 @@ munge_inst = munge("define");
 wbfft_inst = wbfft("define");
 bus_expand_inst = bus_expand("define");
 dsp_constant_inst = dsp_constant("define");
+delay_inst = delay("define");
+simple_bram_vacc_inst = simple_bram_vacc("define");
+power_cal_inst = power_cal("define");
 cur_dir = pwd();
 dsp_fig_dir = cur_dir + '/scilab_library/scilab_blocks/casper_dsp/figures/';
 pal = xcosPal("CASPER DSP");
@@ -88,6 +94,9 @@ pal = xcosPalAddBlock(pal, munge_inst);
 pal = xcosPalAddBlock(pal, wbfft_inst);
 pal = xcosPalAddBlock(pal, bus_expand_inst);
 pal = xcosPalAddBlock(pal, dsp_constant_inst);
+pal = xcosPalAddBlock(pal, delay_inst);
+pal = xcosPalAddBlock(pal, simple_bram_vacc_inst);
+pal = xcosPalAddBlock(pal, power_cal_inst);
 xcosPalAdd(pal);
 debug_info('------ CASPER DSP loaded --------');
 

@@ -1,0 +1,23 @@
+{
+    "parameters":
+    {
+        "keys":
+        [
+            "name",
+            "fullpath",
+            "tag",
+            "vector_len",
+            "in_bitwidth",
+            "out_bitwidth"
+        ],
+        "values":
+        [
+            "simple_bram_vacc",
+            "",
+            "dsp:simple_bram_vacc",
+            1024,
+            16,
+            32
+        ]
+    }
+}
