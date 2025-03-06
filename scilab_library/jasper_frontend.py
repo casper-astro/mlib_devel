@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 from utils.design_info import gen_design_info
 from utils.git_info import gen_git_info
-from utils.utils import gen_glue_module, dump_jasper, val_format_conv
+from utils.utils import gen_glue_module, dump_jasper, val_format_conv, check_bit_width
 from argparse import ArgumentParser
 
 if __name__ == '__main__':
@@ -30,7 +30,13 @@ if __name__ == '__main__':
         model_info = json.load(f)
     
     """
-    Step 2: generate jasper.per, which contains the yellow(xps) block info and user module info 
+    Step 2: check bit witdh for each link
+    """
+    match = check_bit_width(model_info)
+    if match == False:
+        print('port width not match')
+    """
+    Step 3: generate jasper.per, which contains the yellow(xps) block info and user module info 
     """
     # yellow(xps) blocks
     xps_blocks = {}
@@ -83,7 +89,7 @@ if __name__ == '__main__':
     dump_jasper(jasper_per, fn='%s/jasper.per'%(builddir)) 
 
     """
-    Step 3: generate jasper.dsp, which contains the dsp blocks info and user module info 
+    Step 4: generate jasper.dsp, which contains the dsp blocks info and user module info 
     """
     # dsp blocks
     dsp_blocks = {}
@@ -121,7 +127,7 @@ if __name__ == '__main__':
     dump_jasper(jasper_dsp, fn='%s/jasper.dsp'%(builddir))
 
     """
-    generate design_info.tab and git_info.tab
+    Step 5: generate design_info.tab and git_info.tab
     """
     # generate design_info.tab
     gen_design_info(xps_blocks, model_name, fn='%s/design_info.tab'%(builddir))

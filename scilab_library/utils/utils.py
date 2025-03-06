@@ -69,3 +69,18 @@ def dump_jasper(jasper_per, fn = 'jasper.per'):
     f = open(fn, 'w+')
     yaml.dump(jasper_per, f, sort_keys=False)
     f.close()
+
+# check the bit width of each link
+def check_bit_width(model_info):
+    match = True
+    link_info = model_info['link_info']
+    for link in link_info:
+        if link['src_port_width'] != link['dst_port_width']:
+            print('port width not match ')
+            print('src_blk_name: %s, dst_blk_name: %s'%(link['src_blk_name'], link['dst_blk_name']))
+            print('src_port_name: %s, dst_port_name: %s'%(link['src_port_name'], link['dst_port_name']))
+            print('src_port_width: %d, dst_port_width: %d'%(link['src_port_width'], link['dst_port_width']))
+            print('  ')
+            match = False
+    return match
+    

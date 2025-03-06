@@ -50,8 +50,6 @@ function [x, y, typ]= gpio(job, arg1, arg2)
         graphics.style = 'shape=rectangle;fillColor=yellow'
         graphics.exprs = exprs;
         x.graphics = graphics;
-        model.in = 1;
-        model.in2 = 8;
         x.model = model;
       end
     case 'define' then
