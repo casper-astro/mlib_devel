@@ -1,6 +1,9 @@
 function [] = jasper(fn)
     // run jasper_fontend
     build_cmd = jasper_frontend(fn);
+    if isempty(build_cmd) then
+        return;
+    end
     disp('****************************************')
     disp('*  Frontend complete!                  *')
     disp('*  Running Backend generation          *')

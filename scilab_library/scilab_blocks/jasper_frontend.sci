@@ -1,4 +1,17 @@
 function [build_cmd] = jasper_frontend(fn)
+    // check the block names
+    [duplicated, duplicated_blocks] = check_block_names(fn);
+    if duplicated then
+        disp('****************************************')
+        disp('*  The following blocks are duplicated *')
+        disp('****************************************')
+        keys = fieldnames(duplicated_blocks);
+        for i = 1:size(keys)(1)
+            disp(keys(i) + ' : ' + string(duplicated_blocks(keys(i))));
+        end
+        build_cmd = struct();
+        return;
+    end
     // create a dir for the project
     [path, name, ext] = fileparts(fn);
     // disp some info
