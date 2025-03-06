@@ -17,17 +17,27 @@ function [x, y, typ]= edge_detect(job, arg1, arg2)
                           list("str", 1, "str",1 ),...
                           exprs);
         if ok then
-            graphics.out_label = ['out'];
-            graphics.in_label = ['in'];
-            graphics.style = 'shape=rectangle;fillColor=green';
-            //graphics.id = '<p style=""margin-top: 0"">      my edge detect     </p>';
-            graphics.exprs = exprs;
-            x.graphics = graphics;
-            model.in = [1];
-            model.in2 = [1];
-            model.out = [1];
-            model.out2 = [1];
-            x.model = model;
+          // check if the block name contains '-'
+          error = check_block_name(blkname);
+          if error == 1 then
+              return;
+          end
+          // check if the parameters are set correctly
+          error = check_para(edge_type);
+          if error == 1 then
+              return;
+          end
+          graphics.out_label = ['out'];
+          graphics.in_label = ['in'];
+          graphics.style = 'shape=rectangle;fillColor=green';
+          //graphics.id = '<p style=""margin-top: 0"">      my edge detect     </p>';
+          graphics.exprs = exprs;
+          x.graphics = graphics;
+          model.in = [1];
+          model.in2 = [1];
+          model.out = [1];
+          model.out2 = [1];
+          x.model = model;
         end
       case 'define' then
         model = scicos_model();
@@ -60,5 +70,24 @@ function [x, y, typ]= edge_detect(job, arg1, arg2)
     end
   endfunction
   
-  
+// check if the parameters are set correctly
+function [error] = check_para(edge_type)
+    error = 0;
+    if edge_type ~= "rising" & edge_type ~= "falling" then
+       messagebox("Edge type should be either ""rising"" or ""falling""", "Error", "error");
+        error = 1;
+    end
+endfunction
+
+// check if the block name contains '-'
+function [error] = check_block_name(name)
+  error = 0;
+  r = strindex(name, '-');
+  if isempty(r) then
+    error = 0;
+  else
+    messagebox("It is not allowed to use ""-"" for the block name.", "Error", "error");
+    error = 1;
+  end
+endfunction
   
