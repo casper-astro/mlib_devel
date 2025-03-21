@@ -64,7 +64,7 @@ class rfsoc4x2(YellowBlock):
         children.append(YellowBlock.make_block({'fullpath': self.fullpath, 'tag': 'xps:sys_block', 'board_id': '166', 'rev_maj': '2', 'rev_min': '0', 'rev_rcs': '1'}, self.platform))
 
         # instance block design containing mpsoc, and axi protocol converter for casper
-        # mermory map (HPM0)
+        # memory map (HPM0)
         zynq_blk = {
             'tag'     : 'xps:zynq_usplus',
             'name'    : 'mpsoc',
