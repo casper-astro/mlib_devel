@@ -5,6 +5,7 @@ function [x, y, typ]= simple_bram_vacc(job, arg1, arg2)
   vector_len = 1024;
   in_bitwidth = 16;
   out_bitwidth = 32;
+  out_type = 'unsigned';
   select job
     case 'set' then
       x=arg1;
@@ -14,10 +15,11 @@ function [x, y, typ]= simple_bram_vacc(job, arg1, arg2)
       txt = [ 'Block Name (any string)';...
               'Vector Length';...
               'Input Bit Width';...
-              'Output Bit Width'];
-      [ok, blkname, vector_len, in_bitwidth, out_bitwidth, exprs] = scicos_getvalue("Set Simple Bram Vacc block parameters",...
+              'Output Bit Width';...
+              'Output Type (unsigned/signed)'];
+      [ok, blkname, vector_len, in_bitwidth, out_bitwidth, out_type, exprs] = scicos_getvalue("Set Simple Bram Vacc block parameters",...
                         txt,...
-                        list("str", 1, "str", 1, "str", 1, "str", 1),...
+                        list("str", 1, "str", 1, "str", 1, "str", 1, "str", 1),...
                         exprs);
       if ok then
         // convert string to decimal
@@ -39,14 +41,14 @@ function [x, y, typ]= simple_bram_vacc(job, arg1, arg2)
       model.sim = list('simple_bram_vacc',4);
       model.blocktype = 'c';
       // Type : column vector of real numbers.
-      model.rpar = [0, 3, 4, 5];
+      model.rpar = [0, 3, 4, 5, 6];
       // TODO: do we have to set in2??
       model.in = [1, 2];
       model.in2 = [1, 16];
       model.out = [1, 2];
       model.out2 = [1, 32];
       // Type : column vector of strings.
-      exprs = ['simple_bran_vacc'; '1024'; ' 16'; '32'];
+      exprs = ['simple_bram_vacc'; '1024'; '16'; '32'; 'unsigned'];
       gr_i = [];
       // we use model.label as the block tag.
       // the best place to set the tag should be graphics.gr_i/id.
