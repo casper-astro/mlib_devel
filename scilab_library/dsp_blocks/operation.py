@@ -2,22 +2,22 @@ import sys
 from .dsp_block import DSPBlock
 from verilog import VerilogModule
 
-class power_cal(DSPBlock):
+class operation(DSPBlock):
     def initialize(self):
-        self.add_source('power_cal/*')
+        self.add_source('operation/*')
 
     def modify_top(self,top):
         # let's populate the parent ports first
         self._populate_parent_ports(top)
         # create a verilog module
-        module = 'power_cal'
+        module = 'operation'
         inst = top.get_instance(entity=module, name=self.fullname)
         # TODO: add parameters
-        inst.add_parameter('BIT_WIDTH', self.bitwidth)
+        inst.add_parameter('OP',  "\"%s\"" %self.op)
         # add ports
         # we need to check if the port is in parent_ports
         inst.add_port('clk', 'user_clk', dir='in')
-        inst.add_port('re', self.fullname+'_re', parent_port=False, width=self.bitwidth, dir='in')
-        inst.add_port('im', self.fullname+'_im', parent_port=False, width=self.bitwidth, dir='in')
-        inst.add_port('pwr', self.fullname+'_pwr', parent_port=False, width=self.bitwidth*2+1, dir='out')
+        inst.add_port('in0', self.fullname+'_in0', parent_port=False, width=1, dir='in')
+        inst.add_port('in1', self.fullname+'_in1', parent_port=False, width=1, dir='in')
+        inst.add_port('out', self.fullname+'_out', parent_port=False, width=1, dir='out')
 

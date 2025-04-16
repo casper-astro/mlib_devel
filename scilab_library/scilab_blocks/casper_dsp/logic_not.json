@@ -1,0 +1,16 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "delay_val"
+        ],
+        "values": [
+            "logic_not",
+            "",
+            "dsp:logic_not",
+            1
+        ]
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "op"
+        ],
+        "values": [
+            "operation",
+            "",
+            "dsp:operation",
+            "and"
+        ]
+    }
+}

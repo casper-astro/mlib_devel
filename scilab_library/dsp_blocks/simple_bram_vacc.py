@@ -48,11 +48,12 @@ class simple_bram_vacc(DSPBlock):
         self.add_source('casper_dspdevel/casper_counter/common_counter.vhd')
         module_libs['casper_counter_lib'].append('casper_dspdevel/casper_counter/common_counter.vhd')
 
-        self.add_source('casper_dspdevel/casper_counter/free_run_down_counter.vhd')
-        module_libs['casper_counter_lib'].append('casper_dspdevel/casper_counter/free_run_down_counter.vhd')
-
-        self.add_source('casper_dspdevel/casper_counter/free_run_up_counter.vhd')
-        module_libs['casper_counter_lib'].append('casper_dspdevel/casper_counter/free_run_up_counter.vhd')
+        # free_run_down_counter.vhd
+        self.add_source('casper_dspdevel/casper_counter/free_run_counter.vhd')
+        module_libs['casper_counter_lib'].append('casper_dspdevel/casper_counter/free_run_counter.vhd')
+        # free_run_up_counter
+        #self.add_source('casper_dspdevel/casper_counter/free_run_up_counter.vhd')
+        #module_libs['casper_counter_lib'].append('casper_dspdevel/casper_counter/free_run_up_counter.vhd')
 
         self.add_source('casper_dspdevel/casper_accumulators/simple_bram_vacc.vhd')
         module_libs['xil_defaultlib'].append('casper_dspdevel/casper_accumulators/simple_bram_vacc.vhd')
@@ -116,7 +117,7 @@ class simple_bram_vacc(DSPBlock):
         inst = top.get_instance(entity=module, name=self.fullname)
         # add parameters
         inst.add_parameter("g_vector_length", self.vector_len)
-        inst.add_parameter("g_output_type", self.output_type)
+        inst.add_parameter("g_output_type",  "\"%s\"" %self.output_type)
         inst.add_parameter("g_bit_w", self.out_bitwidth)
         # add ports
         # we need to check if the port is in parent_ports
@@ -124,7 +125,7 @@ class simple_bram_vacc(DSPBlock):
         inst.add_port('ce', '1', parent_port=False, width=1, dir='in')
         inst.add_port('new_acc', self.fullname+'_new_acc', parent_port=False, width=1, dir='in')
         inst.add_port('din', self.fullname+'_din', parent_port=False, width=self.in_bitwidth, dir='in')
-        inst.add_port('out', self.fullname+'_out', parent_port=False, width=self.out_bitwidth, dir='out')
+        inst.add_port('dout', self.fullname+'_dout', parent_port=False, width=self.out_bitwidth, dir='out')
         inst.add_port('valid', self.fullname+'_valid', parent_port=False, width=1, dir='out')
     
     def gen_tcl_cmds(self):

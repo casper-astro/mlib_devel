@@ -46,7 +46,12 @@ class SimBlock(object):
     @staticmethod
     def _parse_sim_file(vcdfile):
         """
-        Parse the simulation file, which should be a vcd file.
+        Description:
+            Parse the simulation file, which should be a vcd file.
+        Input:
+            vcdfile(str): the vcd file name.
+        Output:
+            r(dict): simulation data.
         """
         with open(vcdfile) as vf:
             vcd = VcdParser()
