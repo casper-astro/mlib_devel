@@ -1,4 +1,4 @@
-function [port_num] = add_rts_ports(gcb, gen, num_adc_slices, tiles, adc_slices, port_num)
+function [port_num] = add_rts_ports(gcb, gen, mts_enabled, adc_tile_arch, num_adc_slices, tiles, adc_slices, port_num)
 
   base_name = clear_name(gcb);
   xil_gw_out = 'xbsIndex_r4/Gateway Out';
@@ -15,11 +15,16 @@ function [port_num] = add_rts_ports(gcb, gen, num_adc_slices, tiles, adc_slices,
     adc_rts_o(end+1) = "_cm_over_voltage";
     adc_rts_o(end+1) = "_cm_under_voltage";
     adc_rts_i(end+1) = "_clear_ov";
-    % gen3 have only one instance per enabled tile of "_sync_out" as an
-    % output and "_sysref_gate" as an input. Instead of append to rts_o/i we
-    % just augment the number of ports and handle adding it separately.
-    num_obus_ports = length(adc_rts_o)*enabled_adc_per_tile + 1;
-    num_ibus_ports = length(adc_rts_i)*enabled_adc_per_tile + 1;
+    num_obus_ports = length(adc_rts_o)*enabled_adc_per_tile;
+    num_ibus_ports = length(adc_rts_i)*enabled_adc_per_tile;
+    if mts_enabled == 1
+      % gen3 have one instance per enabled tile of "_sync_out" as an
+      % output and "_sysref_gate" as an input when MTS is enabled.
+      % Instead of append to rts_o/i we just augment the number of ports and
+      % handle adding it separately.
+      num_obus_ports = num_obus_ports + 1;
+      num_ibus_ports = num_ibus_ports + 1;
+    end
   else
     num_obus_ports = length(adc_rts_o)*enabled_adc_per_tile;
     num_ibus_ports = length(adc_rts_i)*enabled_adc_per_tile;
@@ -41,9 +46,9 @@ function [port_num] = add_rts_ports(gcb, gen, num_adc_slices, tiles, adc_slices,
         'Position', bus_pos);
 
       % ground simulation inputs
-      % TODO could add inputs for simulation support. An implementation would look similar to how `sw_reg`
-      % handles "from processor" sim inputs. Grounding for now is because it doesn't seem much use would
-      % come from supporting simulation on these ports.
+      % Could add inputs for simulation support. An implementation would look similar to how `sw_reg`
+      % handles "from processor" sim inputs. Grounding for now because not much use would probably come
+      % simulation support on these ports.
       gnd_xpos = xpos_origin + 250;
       gnd_ypos = ypos_origin;
       gnd_pos = [gnd_xpos, gnd_ypos, gnd_xpos+30, gnd_ypos+15];
@@ -72,9 +77,20 @@ function [port_num] = add_rts_ports(gcb, gen, num_adc_slices, tiles, adc_slices,
         if adc_slices(t-223,a+1) % check if the slice is on
           for rts_port_idx = 1:length(adc_rts_o) % add gw for each rts signal, and connect to bus
             rts_port_suffix = adc_rts_o(rts_port_idx);
-            gwname = [base_name, '_adc', num2str(t-224), num2str(a), char(rts_port_suffix)];
-            gw_pos = [gw_xpos, gw_ypos, gw_xpos+70, gw_ypos+20];
+            if strcmp(adc_tile_arch, 'quad')
+              gwname = [base_name, '_adc', num2str(t-224), num2str(a), char(rts_port_suffix)];
+            else % dual tile
+              X = num2str(t-224);
+              ZZ = '';
+              if a == 0
+                ZZ = '_01';
+              else
+                ZZ = '_23';
+              end
+              gwname = [base_name, '_adc', X, ZZ, char(rts_port_suffix)];
+            end % strcmp('quad') interface port rules
 
+            gw_pos = [gw_xpos, gw_ypos, gw_xpos+70, gw_ypos+20];
             reuse_block(gcb, gwname, xil_gw_in, ...
               'arith_type', arith_type, ...
               'n_bits', num2str(n_bits), ...
@@ -90,9 +106,23 @@ function [port_num] = add_rts_ports(gcb, gen, num_adc_slices, tiles, adc_slices,
 
           for rts_iport_idx = 1:length(adc_rts_i) % add gw for each input rts signal
             rts_port_suffix = adc_rts_i(rts_iport_idx);
-            gwname = [base_name, '_adc', num2str(t-224), num2str(a), char(rts_port_suffix)];
-            gw_pos = [gw_xpos, gw_ypos, gw_xpos+70, gw_ypos+20];
+            if strcmp(adc_tile_arch, 'quad')
+              gwname = [base_name, '_adc', num2str(t-224), num2str(a), char(rts_port_suffix)];
+            else
+              if strcmp(rts_port_suffix, '_pl_event')
+                gwname = [base_name, '_adc', num2str(t-224), num2str(a), char(rts_port_suffix)];
+              elseif strcmp(rts_port_suffix, '_clear_or' ) || strcmp(rts_port_suffix, '_clear_ov')
+                X = num2str(t-224);
+                if a == 0
+                  ZZ = '_01';
+                else
+                  ZZ = '_23';
+                end
+                gwname = [base_name, '_adc', X, ZZ, char(rts_port_suffix)];
+              end % if pl_event
+            end % strcmp('quad')
 
+            gw_pos = [gw_xpos, gw_ypos, gw_xpos+70, gw_ypos+20];
             reuse_block(gcb, gwname, xil_gw_out, ...
               'Position', gw_pos);
 
@@ -112,11 +142,10 @@ function [port_num] = add_rts_ports(gcb, gen, num_adc_slices, tiles, adc_slices,
       end % a = adcs
 
       % add gen3 specific ports where there is to only be one per enabled tile
-      if gen > 1
+      if gen > 1 && mts_enabled
         % add sync out
         gwname = [base_name, '_adc', num2str(t-224), '_sync_out'];
         gw_pos = [gw_xpos, gw_ypos, gw_xpos+70, gw_ypos+20];
-
         reuse_block(gcb, gwname, xil_gw_in, ...
           'arith_type', arith_type, ...
           'n_bits', num2str(n_bits), ...
@@ -131,11 +160,10 @@ function [port_num] = add_rts_ports(gcb, gen, num_adc_slices, tiles, adc_slices,
         % add sysref gate
         gwname = [base_name, '_adc', num2str(t-224), '_sysref_gate'];
         gw_pos = [gw_xpos, gw_ypos, gw_xpos+70, gw_ypos+20];
-
         reuse_block(gcb, gwname, xil_gw_out, ...
           'Position', gw_pos);
 
-        % terminate simulation input signals
+        % terminate sysref gate simulation input signals
         term_pos = gw_pos + [90, 0, 95, 0];
         term_name = ['term_', 'adc', num2str(t-224), '_rts_',num2str(exp_port_num)];
         reuse_block(gcb, term_name, 'simulink/Commonly Used Blocks/Terminator', ...
@@ -146,7 +174,7 @@ function [port_num] = add_rts_ports(gcb, gen, num_adc_slices, tiles, adc_slices,
 
         gw_ypos = gw_ypos+80;
         exp_port_num = exp_port_num+1;
-      end % gen > 1
+      end % gen > 1 && mts enabled
 
       oport_xpos = xpos_origin + 800;
       oport_ypos = ypos_origin;
@@ -174,4 +202,3 @@ function [port_num] = add_rts_ports(gcb, gen, num_adc_slices, tiles, adc_slices,
     end % tile enabled
   end % t = tiles
 end % function [] add_rts_ports
-

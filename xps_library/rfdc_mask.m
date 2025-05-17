@@ -162,6 +162,7 @@ function [] = rfdc_mask(gcb,force)
       error('Tile 224 must be enabled with Multi-Tile Synchronization on when using MTS on ADC tiles');
       return
     end
+    mts_adc_enabled = mts_adc(1);
 
     % validate MTS for dac tile
     mts_dac = zeros(dac_num_tile,1);
@@ -172,6 +173,7 @@ function [] = rfdc_mask(gcb,force)
       error('Tile 228 must be enabled with Multi-Tile Synchronization on when using MTS on DAC tiles');
       return
     end
+    mts_dac_enabled = mts_dac(1);
 
     % initial position offsets for drawing
     xpos = 0;
@@ -244,7 +246,7 @@ function [] = rfdc_mask(gcb,force)
 
     if rts_ports
       % rts ports ground the simulation inputs; do not update the global `port_num` to not have ghost input ports
-      add_rts_ports(gcb, gen, num_adc_slices, tiles, adc_slices, port_num);
+      add_rts_ports(gcb, gen, mts_adc_enabled, adc_tile_arch, num_adc_slices, tiles, adc_slices, port_num);
     end
 
     % update DAC tiles
