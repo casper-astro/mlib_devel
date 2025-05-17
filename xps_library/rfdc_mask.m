@@ -26,7 +26,7 @@ function [] = rfdc_mask(gcb,force)
   [gen, adc_tile_arch, dac_tile_arch, adc_num_tile, dac_num_tile, fs_max, fs_min] = get_rfsoc_properties(gcb);
 
   adcbits = 16;
-  gw_arith_type = 'Signed';
+  gw_arith_type = 'Unsigned';
   gw_bin_pt = 0;
 
   % gateway name for the block
