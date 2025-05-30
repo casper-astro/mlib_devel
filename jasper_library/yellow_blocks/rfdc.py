@@ -463,18 +463,22 @@ class rfdc(YellowBlock):
       mts_inst.add_port('pl_sysref_n', 'pl_sysref_n', dir='in', parent_port=True)
       mts_inst.add_port('pl_clk', 'user_clk')
       if self.enable_mts_adc:
+        mts_inst.add_parameter('ADC_SYSREF', 1)
         mts_inst.add_port('user_sysref_adc', 'user_sysref_adc')
         # add port to pass to board design
         bd_inst.add_port('user_sysref_adc', 'user_sysref_adc', dir='in')
       else:
+        mts_inst.add_parameter('ADC_SYSREF', 0)
         mts_inst.add_port('user_sysref_adc', '')
-      # TODO: add DAC MTS support
-      # if self.enable_mts_dac:
-      #   mts_inst.add_port('user_sysref_dac', 'user_sysref_dac')
-      #   # add port to pass to board design
-      #   bd_inst.add_port('user_sysref_dac', 'user_sysref_dac', dir='in')
-      # else:
-      #   mts_inst.add_port('user_sysref_dac', '')
+
+      if self.enable_mts_dac:
+        mts_inst.add_parameter('DAC_SYSREF', 1)
+        mts_inst.add_port('user_sysref_dac', 'user_sysref_dac')
+        # add port to pass to board design
+        bd_inst.add_port('user_sysref_dac', 'user_sysref_dac', dir='in')
+      else:
+        mts_inst.add_parameter('DAC_SYSREF', 0)
+        mts_inst.add_port('user_sysref_dac', '')
 
     """
     adc tile/slice interfaces
