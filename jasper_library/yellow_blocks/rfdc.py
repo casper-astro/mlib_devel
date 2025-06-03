@@ -1,7 +1,7 @@
 
 from .yellow_block import YellowBlock
 from .yellow_block_typecodes import TYPECODE_RFDC
-from constraints import PortConstraint, ClockConstraint, RawConstraint
+from constraints import PortConstraint, ClockConstraint, RawConstraint, ClockGroupConstraint
 
 import os
 import struct
@@ -59,6 +59,7 @@ class rfdc(YellowBlock):
     'coarse_freq'     : {'param' : 'DAC_Coarse_Mixer_Freq{:d}{:d}',   'fmt' : "{{:d}}"},
     'nyquist_zone'    : {'param' : 'DAC_Nyquist{:d}{:d}',             'fmt' : "{{:d}}"},
     'decode_mode'     : {'param' : 'DAC_Decoder_Mode{:d}{:d}',        'fmt' : "{{:d}}"}
+#   'datapath_mode'   : {'param' : 'DAC_Mode{:d}{:d}',                'fmt' : "{{:d}}"} # TODO: add implementation details for DAC DUC datapath mode
   }
 
   """
@@ -368,6 +369,14 @@ class rfdc(YellowBlock):
 
         self.dacs.append(d)
 
+    if self.blk['ADCRTS']:
+      self.adc_rts_o = ['over_range', 'over_threshold1', 'over_threshold2', 'over_voltage']
+      self.adc_rts_i = ["pl_event", "clear_or"];
+      if self.gen == 3:
+        self.adc_rts_o.append('cm_over_voltage')
+        self.adc_rts_o.append('cm_under_voltage')
+        self.adc_rts_i.append('clear_ov')
+
     """
     how do we now handle clock distribution validation? should/will it be in the mask now?
     """
@@ -438,7 +447,7 @@ class rfdc(YellowBlock):
     bd_inst.add_port('rfdc_rvalid',  'm_axi4lite_rfdc_rvalid')
     bd_inst.add_port('rfdc_rready',  'm_axi4lite_rfdc_rready')
 
-    bd_inst.add_port('irq', 'rfdc_irq') #self.fullname+'_irq'
+    bd_inst.add_port('irq', 'rfdc_irq')
 
     bd_inst.add_port('sysref_in_p', 'sysref_in_p', dir='in', parent_port=True)
     bd_inst.add_port('sysref_in_n', 'sysref_in_n', dir='in', parent_port=True)
@@ -454,32 +463,36 @@ class rfdc(YellowBlock):
       mts_inst.add_port('pl_sysref_n', 'pl_sysref_n', dir='in', parent_port=True)
       mts_inst.add_port('pl_clk', 'user_clk')
       if self.enable_mts_adc:
+        mts_inst.add_parameter('ADC_SYSREF', 1)
         mts_inst.add_port('user_sysref_adc', 'user_sysref_adc')
         # add port to pass to board design
         bd_inst.add_port('user_sysref_adc', 'user_sysref_adc', dir='in')
       else:
+        mts_inst.add_parameter('ADC_SYSREF', 0)
         mts_inst.add_port('user_sysref_adc', '')
-      # TODO: add DAC MTS support
-      # if self.enable_mts_dac:
-      #   mts_inst.add_port('user_sysref_dac', 'user_sysref_dac')
-      #   # add port to pass to board design
-      #   bd_inst.add_port('user_sysref_dac', 'user_sysref_dac', dir='in')
-      # else:
-      #   mts_inst.add_port('user_sysref_dac', '')
+
+      if self.enable_mts_dac:
+        mts_inst.add_parameter('DAC_SYSREF', 1)
+        mts_inst.add_port('user_sysref_dac', 'user_sysref_dac')
+        # add port to pass to board design
+        bd_inst.add_port('user_sysref_dac', 'user_sysref_dac', dir='in')
+      else:
+        mts_inst.add_parameter('DAC_SYSREF', 0)
+        mts_inst.add_port('user_sysref_dac', '')
 
     """
     adc tile/slice interfaces
     """
     for tidx in self.enabled_adc_tiles:
       # maxis clk, reset and output clock (when using mts, this output clock is not typically used)
-      bd_inst.add_port('m{:d}_axis_aclk'.format(tidx), 'm{:d}_axis_aclk'.format(tidx))       #self.fullname+'_m0_axis_aclk'
-      bd_inst.add_port('m{:d}_axis_aresetn'.format(tidx), 'axil_rst_n') #'m{:d}_axis_aresetn'.format(tidx)) #self.fullname+'_m0_axis_aresetn'
-      bd_inst.add_port('clk_adc{:d}'.format(tidx), 'clk_adc{:d}'.format(tidx), dir='out') #self.fullname+'_clk_adc0'
+      bd_inst.add_port('m{:d}_axis_aclk'.format(tidx), 'm{:d}_axis_aclk'.format(tidx))
+      bd_inst.add_port('m{:d}_axis_aresetn'.format(tidx), 'axil_rst_n')
+      bd_inst.add_port('clk_adc{:d}'.format(tidx), 'clk_adc{:d}'.format(tidx), dir='out')
 
       # wire these ports to supporting infrastructure
       top.assign_signal('m{:d}_axis_aclk'.format(tidx), 'adc_clk')
 
-      #Tile source information from simulink
+      # Tile source information from simulink
       if self.gen > 1:
         if (self.blk['t{:d}_adc_clk_src'.format(tidx+224)]-224 == tidx):
           bd_inst.add_port('adc{:d}_clk_p'.format(tidx), 'adc{:d}_clk_p'.format(tidx), dir='in', parent_port=True)
@@ -500,8 +513,8 @@ class rfdc(YellowBlock):
             bd_inst.add_port('vin{:d}{:d}_p'.format(tidx, n_aidx), 'vin{:d}{:d}_p'.format(tidx, n_aidx),  dir='in', parent_port=True)
             bd_inst.add_port('vin{:d}{:d}_n'.format(tidx, n_aidx), 'vin{:d}{:d}_n'.format(tidx, n_aidx),  dir='in', parent_port=True)
             # maxis data ports
-            if a.mixer_type != 'Off' and a.mixer_type != False: #only add slices that aren't odd and in a IQ->IQ config
-              bd_inst.add_port('m{:d}{:d}_axis_tdata'.format(tidx, n_aidx), '{:s}_m{:d}{:d}_axis_tdata'.format(self.fullname, tidx, n_aidx), width=data_width)
+            if a.mixer_type != 'Off' and a.mixer_type != False: # only add slices that aren't odd and in a IQ->IQ config
+              bd_inst.add_port('m{:d}{:d}_axis_tdata'.format(tidx, n_aidx),  '{:s}_m{:d}{:d}_axis_tdata'.format(self.fullname, tidx, n_aidx), width=data_width)
               bd_inst.add_port('m{:d}{:d}_axis_tready'.format(tidx, n_aidx), "1'b1",)
               bd_inst.add_port('m{:d}{:d}_axis_tvalid'.format(tidx, n_aidx), 'm{:d}{:d}_axis_tvalid'.format(tidx, n_aidx))
           else: # Dual tile architecture
@@ -512,34 +525,140 @@ class rfdc(YellowBlock):
             bd_inst.add_port('vin{:d}_{:d}{:d}_n'.format(tidx, 2*n_aidx, 2*n_aidx+1), 'vin{:d}_{:d}{:d}_n'.format(tidx, 2*n_aidx, 2*n_aidx+1), dir='in', parent_port=True)
             # maxis ports-dual architecture rfsocs the I/Q streams are output on seperate maxis interfaces needing different rules depending on the configuration
             if a.digital_output == 'Real':
-              bd_inst.add_port('m{:d}{:d}_axis_tdata'.format(tidx, 2*n_aidx), '{:s}_m{:d}{:d}_axis_tdata'.format(self.fullname, tidx, 2*n_aidx), width=data_width)
+              bd_inst.add_port('m{:d}{:d}_axis_tdata'.format(tidx, 2*n_aidx),  '{:s}_m{:d}{:d}_axis_tdata'.format(self.fullname, tidx, 2*n_aidx), width=data_width)
               bd_inst.add_port('m{:d}{:d}_axis_tready'.format(tidx, 2*n_aidx), "1'b1",)
               bd_inst.add_port('m{:d}{:d}_axis_tvalid'.format(tidx, 2*n_aidx), 'm{:d}{:d}_axis_tvalid'.format(tidx, n_aidx))
             else: # digital mode is I/Q
               if a.mixer_mode == 'Real -> I/Q':
                 # I data
-                bd_inst.add_port('m{:d}{:d}_axis_tdata'.format(tidx, 2*n_aidx),   '{:s}_m{:d}{:d}_axis_tdata'.format(self.fullname, tidx, 2*n_aidx), width=data_width)
+                bd_inst.add_port('m{:d}{:d}_axis_tdata'.format(tidx, 2*n_aidx),  '{:s}_m{:d}{:d}_axis_tdata'.format(self.fullname, tidx, 2*n_aidx), width=data_width)
                 bd_inst.add_port('m{:d}{:d}_axis_tready'.format(tidx, 2*n_aidx), "1'b1",)
                 bd_inst.add_port('m{:d}{:d}_axis_tvalid'.format(tidx, 2*n_aidx), 'm{:d}{:d}_axis_tvalid'.format(tidx, n_aidx))
                 # Q data
-                bd_inst.add_port('m{:d}{:d}_axis_tdata'.format(tidx, 2*n_aidx+1), '{:s}_m{:d}{:d}_axis_tdata'.format(self.fullname, tidx, 2*n_aidx+1), width=data_width)
+                bd_inst.add_port('m{:d}{:d}_axis_tdata'.format(tidx, 2*n_aidx+1),  '{:s}_m{:d}{:d}_axis_tdata'.format(self.fullname, tidx, 2*n_aidx+1), width=data_width)
                 bd_inst.add_port('m{:d}{:d}_axis_tready'.format(tidx, 2*n_aidx+1), "1'b1",)
                 bd_inst.add_port('m{:d}{:d}_axis_tvalid'.format(tidx, 2*n_aidx+1), 'm{:d}{:d}_axis_tvalid'.format(tidx, n_aidx))
               else: # mixer mode is 'I/Q -> I/Q'
                 # in this case ADC 1 better be also set or we are in trouble so here we are assuming that the logic is correct and that
                 # enabled adcs is both [0, 1]
-                bd_inst.add_port('m{:d}{:d}_axis_tdata'.format(tidx, n_aidx), '{:s}_m{:d}{:d}_axis_tdata'.format(self.fullname, tidx, n_aidx), width=data_width)
+                bd_inst.add_port('m{:d}{:d}_axis_tdata'.format(tidx, n_aidx),  '{:s}_m{:d}{:d}_axis_tdata'.format(self.fullname, tidx, n_aidx), width=data_width)
                 bd_inst.add_port('m{:d}{:d}_axis_tready'.format(tidx, n_aidx), "1'b1",)
                 bd_inst.add_port('m{:d}{:d}_axis_tvalid'.format(tidx, n_aidx), 'm{:d}{:d}_axis_tvalid'.format(tidx, n_aidx))
+          """
+          adc rts ports
+          """
+          if self.blk['ADCRTS']:
+            """ output rts ports """
+            for p in self.adc_rts_o:
+              if self.adc_tile_arch == 'QT':
+                rts_port_name = 'adc{:d}{:d}_{:s}'.format(tidx, n_aidx, p)
+                rts_net_name  = '{:s}_adc{:d}{:d}_{:s}'.format(self.fullname, tidx, n_aidx, p)
+              else:
+                rts_port_name = 'adc{:d}_{:s}_{:s}'.format(tidx, ('01' if n_aidx==0 else '23'), p)
+                rts_net_name = '{:s}_adc{:d}_{:s}_{:s}'.format(self.fullname, tidx, ('01' if n_aidx == 0 else '23'), p)
+
+              """ add synchronizer for port signals orginating from a different domain """
+              if p in ['over_threshold1', 'over_threshold2']:
+                rts_cdc_wire = rts_net_name+"_cdc_sync"
+                cdc_mod  = 'xpm_cdc_single'
+                cdc_inst = top.get_instance(entity=cdc_mod, name=(rts_port_name+"_cdc_sync"))
+
+                cdc_inst.add_parameter('DEST_SYNC_FF',   value=2)
+                cdc_inst.add_parameter('INIT_SYNC_FF',   value=1)
+                cdc_inst.add_parameter('SIM_ASSERT_CHK', value=1)
+                cdc_inst.add_parameter('SRC_INPUT_REG',  value=0)
+                cdc_inst.add_port('dest_out', signal=rts_net_name, parent_sig=False)
+                cdc_inst.add_port('dest_clk', signal='user_clk', parent_sig=False)
+                cdc_inst.add_port('src_clk',  signal='clk_adc{:d}'.format(tidx), parent_sig=False)
+                cdc_inst.add_port('src_in',   signal=rts_cdc_wire, width=1, parent_sig=False)
+
+                bd_inst.add_port(rts_port_name, rts_cdc_wire, width=1)
+              else:
+                bd_inst.add_port(rts_port_name, rts_net_name, width=1)
+
+            """ input rts ports """
+            for p in self.adc_rts_i:
+              if self.adc_tile_arch == 'QT':
+                rts_port_name = 'adc{:d}{:d}_{:s}'.format(tidx, n_aidx, p)
+                rts_net_name  = '{:s}_adc{:d}{:d}_{:s}'.format(self.fullname, tidx, n_aidx, p)
+                # bd_inst.add_port('adc{:d}{:d}_{:s}'.format(tidx, n_aidx, p), '{:s}_adc{:d}{:d}_{:s}'.format(self.fullname, tidx, n_aidx, p), width=1)
+              else:
+                if p == "pl_event":
+                  rts_port_name = 'adc{:d}{:d}_{:s}'.format(tidx, n_aidx, p)
+                  rts_net_name  = '{:s}_adc{:d}{:d}_{:s}'.format(self.fullname, tidx, n_aidx, p)
+                  #bd_inst.add_port('adc{:d}{:d}_{:s}'.format(tidx, n_aidx, p), '{:s}_adc{:d}{:d}_{:s}'.format(self.fullname, tidx, n_aidx, p), width=1)
+                elif p == "clear_or" or p == "clear_ov":
+                  rts_port_name = 'adc{:d}_{:s}_{:s}'.format(tidx, ('01' if n_aidx==0 else '23'), p)
+                  rts_net_name  = '{:s}_adc{:d}_{:s}_{:s}'.format(self.fullname, tidx, ('01' if n_aidx == 0 else '23'), p)
+                  #bd_inst.add_port('adc{:d}_{:s}_{:s}'.format(tidx, ('01' if n_aidx==0 else '23'), p), '{:s}_adc{:d}_{:s}_{:s}'.format(self.fullname, tidx, ('01' if n_aidx == 0 else '23'), p), width=1)
+
+              """ add synchronizer for port signals destined for a different domain """
+              if p == "pl_event": # pl_event destination clock is clk_adcX
+                rts_cdc_wire = rts_net_name+"_cdc_sync"
+                cdc_mod  = 'xpm_cdc_single'
+                cdc_inst = top.get_instance(entity=cdc_mod, name=(rts_port_name+"_cdc_sync"))
+
+                cdc_inst.add_parameter('DEST_SYNC_FF',   value=2)
+                cdc_inst.add_parameter('INIT_SYNC_FF',   value=1)
+                cdc_inst.add_parameter('SIM_ASSERT_CHK', value=1)
+                cdc_inst.add_parameter('SRC_INPUT_REG',  value=0)
+                cdc_inst.add_port('dest_out', signal=rts_cdc_wire, parent_sig=False)
+                cdc_inst.add_port('dest_clk', signal='clk_adc{:d}'.format(tidx), parent_sig=False)
+                cdc_inst.add_port('src_clk',  signal='user_clk', parent_sig=False)
+                cdc_inst.add_port('src_in',   signal=rts_net_name, width=1, parent_sig=False)
+
+                bd_inst.add_port(rts_port_name, rts_cdc_wire, width=1)
+              elif p in ["clear_or", "clear_ov"]: # clear sticky signals destination is axi4lite clock
+                rts_cdc_wire = rts_net_name+"_cdc_sync"
+                cdc_mod  = 'xpm_cdc_single'
+                cdc_inst = top.get_instance(entity=cdc_mod, name=(rts_port_name+"_cdc_sync"))
+
+                cdc_inst.add_parameter('DEST_SYNC_FF',   value=2)
+                cdc_inst.add_parameter('INIT_SYNC_FF',   value=1)
+                cdc_inst.add_parameter('SIM_ASSERT_CHK', value=1)
+                cdc_inst.add_parameter('SRC_INPUT_REG',  value=0)
+                cdc_inst.add_port('dest_out', signal=rts_cdc_wire, parent_sig=False)
+                cdc_inst.add_port('dest_clk', signal='axil_clk', parent_sig=False)
+                cdc_inst.add_port('src_clk',  signal='user_clk', parent_sig=False)
+                cdc_inst.add_port('src_in',   signal=rts_net_name, width=1, parent_sig=False)
+
+                bd_inst.add_port(rts_port_name, rts_cdc_wire, width=1)
+              else:
+                bd_inst.add_port(rts_port_name, rts_net_name, width=1)
+
+      """ gen 3 parts have an additional input/output, one per enabled tile """
+      if self.blk['ADCRTS'] and self.gen > 1 and self.enable_mts_adc:
+        bd_inst.add_port('adc{:d}_{:s}'.format(tidx, 'sysref_gate'), '{:s}_adc{:d}_{:s}'.format(self.fullname, tidx, 'sysref_gate'), width=1)
+
+        """ add synchronizer for sync_out """
+        rts_port_name = 'adc{:d}_{:s}'.format(tidx, 'sync_out')
+        rts_net_name  = '{:s}_adc{:d}_{:s}'.format(self.fullname, tidx, 'sync_out')
+
+        rts_cdc_wire = rts_net_name+"_cdc_sync"
+        cdc_mod  = 'xpm_cdc_single'
+        cdc_inst = top.get_instance(entity=cdc_mod, name=(rts_port_name+"_cdc_sync"))
+
+        cdc_inst.add_parameter('DEST_SYNC_FF',   value=2)
+        cdc_inst.add_parameter('INIT_SYNC_FF',   value=1)
+        cdc_inst.add_parameter('SIM_ASSERT_CHK', value=1)
+        cdc_inst.add_parameter('SRC_INPUT_REG',  value=0)
+        cdc_inst.add_port('dest_out', signal=rts_net_name, parent_sig=False)
+        cdc_inst.add_port('dest_clk', signal='user_clk', parent_sig=False)
+        cdc_inst.add_port('src_clk',  signal='clk_adc{:d}'.format(tidx), parent_sig=False)
+        cdc_inst.add_port('src_in',   signal=rts_cdc_wire, width=1, parent_sig=False)
+
+        bd_inst.add_port(rts_port_name, rts_cdc_wire, width=1)
+        #bd_inst.add_port('adc{:d}_{:s}'.format(tidx, 'sync_out'), '{:s}_adc{:d}_{:s}'.format(self.fullname, tidx, 'sync_out'), width=1)
+
 
     """
     dac tile/slice interfaces
     """
     for tidx in self.enabled_dac_tiles:
       # maxis clk, reset and output clock (when using mts, this output clock is not typically used)
-      bd_inst.add_port('s{:d}_axis_aclk'.format(tidx), 's{:d}_axis_aclk'.format(tidx))       #self.fullname+'_m0_axis_aclk'
-      bd_inst.add_port('s{:d}_axis_aresetn'.format(tidx), 'axil_rst_n') #'m{:d}_axis_aresetn'.format(tidx)) #self.fullname+'_m0_axis_aresetn'
-      bd_inst.add_port('clk_dac{:d}'.format(tidx), 'clk_dac{:d}'.format(tidx), dir='out') #self.fullname+'_clk_adc0'
+      bd_inst.add_port('s{:d}_axis_aclk'.format(tidx), 's{:d}_axis_aclk'.format(tidx))
+      bd_inst.add_port('s{:d}_axis_aresetn'.format(tidx), 'axil_rst_n')
+      bd_inst.add_port('clk_dac{:d}'.format(tidx), 'clk_dac{:d}'.format(tidx), dir='out')
 
       # wire these ports to supporting infrastructure
       top.assign_signal('s{:d}_axis_aclk'.format(tidx), 'adc_clk')
@@ -562,7 +681,6 @@ class rfdc(YellowBlock):
           n_didx = int(didx[1])
 
           if self.dac_tile_arch == 'QT':
-            print("adding vin and axis ports for DAC Tile {:d} Slice {:d}".format(int(didx[0]), int(didx[1])))
             d = self.dacs[n_didx+4*int(didx[0])] # 4 dac slices for each QT tile
             data_width = 16*d.sample_per_cycle
             # vout ports
@@ -578,21 +696,21 @@ class rfdc(YellowBlock):
             data_width = 16*d.sample_per_cycle
             # vin ports
             # n_didx = int(didx[1])
-            bd_inst.add_port('vout{:s}_p'.format(didx), 'vout{:s}_p'.format(didx),  dir='out', parent_port=True)
-            bd_inst.add_port('vout{:s}_n'.format(didx), 'vout{:s}_n'.format(didx),  dir='out', parent_port=True)
+            bd_inst.add_port('vout{:d}{:d}_p'.format(tidx, 2*n_didx), 'vout{:d}{:d}_p'.format(tidx, 2*n_didx),  dir='out', parent_port=True) # DAC location is 0 or 2
+            bd_inst.add_port('vout{:d}{:d}_n'.format(tidx, 2*n_didx), 'vout{:d}{:d}_n'.format(tidx, 2*n_didx),  dir='out', parent_port=True)
             # maxis ports-dual architecture rfsocs the I/Q streams are output on seperate maxis interfaces needing different rules depending on the configuration
             if d.analog_output == 'Real':
               # no difference between Real -> Real and I/Q -> Real
-              bd_inst.add_port('s{:d}{:d}_axis_tdata'.format(tidx, n_didx), '{:s}_s{:d}{:d}_axis_tdata'.format(self.fullname, tidx, n_didx), width=data_width)
-              bd_inst.add_port('s{:d}{:d}_axis_tready'.format(tidx, n_didx), "1'b1",)
-              bd_inst.add_port('s{:d}{:d}_axis_tvalid'.format(tidx, n_didx), 's{:d}{:d}_axis_tvalid'.format(tidx, n_didx))
+              bd_inst.add_port('s{:d}{:d}_axis_tdata'.format(tidx, 2*n_didx), '{:s}_s{:d}{:d}_axis_tdata'.format(self.fullname, tidx, n_didx), width=data_width)
+              bd_inst.add_port('s{:d}{:d}_axis_tready'.format(tidx, 2*n_didx), "1'b1",)
+              bd_inst.add_port('s{:d}{:d}_axis_tvalid'.format(tidx, 2*n_didx), 's{:d}{:d}_axis_tvalid'.format(tidx, n_didx))
             else: # analog mode is I/Q
               # mixer mode is 'I/Q -> I/Q'
               # enabled adcs is both [0, 1]
               if d.mixer_type != 'Off' and d.mixer_type != False: #only add the even slices for s_axis ports
-                bd_inst.add_port('s{:d}{:d}_axis_tdata'.format(tidx, n_didx), '{:s}_s{:d}{:d}_axis_tdata'.format(self.fullname, tidx, n_didx), width=data_width)
-                bd_inst.add_port('s{:d}{:d}_axis_tready'.format(tidx, n_didx), "1'b1",)
-                bd_inst.add_port('s{:d}{:d}_axis_tvalid'.format(tidx, n_didx), 's{:d}{:d}_axis_tvalid'.format(tidx, n_didx))
+                bd_inst.add_port('s{:d}{:d}_axis_tdata'.format(tidx, 2*n_didx), '{:s}_s{:d}{:d}_axis_tdata'.format(self.fullname, tidx, n_didx), width=data_width)
+                bd_inst.add_port('s{:d}{:d}_axis_tready'.format(tidx, 2*n_didx), "1'b1",)
+                bd_inst.add_port('s{:d}{:d}_axis_tvalid'.format(tidx, 2*n_didx), 's{:d}{:d}_axis_tvalid'.format(tidx, n_didx))
 
 
   def gen_constraints(self):
@@ -605,9 +723,18 @@ class rfdc(YellowBlock):
     #cons.append(PortConstraint('vin00_n', 'vin00_n'))
 
     const = []
-    const.append(PortConstraint('pl_sysref_p', 'pl_sysref_p'))
-    # TODO: designs do not generally need to add a clock constraint for the pl_sysref, but never hurts
-    #const.append(ClockConstraint('pl_sysref_p', 'pl_sysref_p', period=self.T_pl_sysref_ns, port_en=True, virtual_en=False))
+    if self.enable_mts_adc or self.enable_mts_dac:
+        const.append(PortConstraint('pl_sysref_p', 'pl_sysref_p'))
+        # TODO: designs do not generally need to add a clock constraint for the pl_sysref, but never hurts
+        #const.append(ClockConstraint('pl_sysref_p', 'pl_sysref_p', period=self.T_pl_sysref_ns, port_en=True, virtual_en=False))
+
+    # Add RFDC output clocks and make them asynchronous to sys_clk
+    for tidx in self.enabled_adc_tiles:
+        t = self.tiles[tidx]
+        const.append(ClockGroupConstraint('RFADC{:d}_CLK'.format(tidx), 'pl_clk_mmcm', 'asynchronous'))
+    for tidx in self.enabled_dac_tiles:
+        t = self.tiles[tidx]
+        const.append(ClockGroupConstraint('RFDAC{:d}_CLK'.format(tidx), 'pl_clk_mmcm', 'asynchronous'))
 
     return const
 
@@ -712,6 +839,10 @@ class rfdc(YellowBlock):
             tcl_cmds['pre_synth'] += self.build_config_cmd(d, self.dac_attr_map, tidx, 2*n_didx)
             tcl_cmds['pre_synth'] += self.build_config_cmd(d, self.dac_attr_map, tidx, 2*n_didx+1)
 
+    # enable adc rts ports
+    if self.blk['ADCRTS']:
+      tcl_cmds['pre_synth'].append(vivado_cmd.format('ADC_RTS', 'true'))
+
     tcl_cmds['pre_synth'] += ['] [get_bd_cells $rfdc]']
     # create board interface ports for axis data/clk/reset pins and adc tile output clock for each enabled tile
     for tidx in self.enabled_adc_tiles:
@@ -777,6 +908,27 @@ class rfdc(YellowBlock):
                 tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('m{:d}{:d}_axis_tdata'.format(tidx, n_aidx), port_dir='out', width=data_width))
                 tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('m{:d}{:d}_axis_tvalid'.format(tidx, n_aidx), port_dir='out'))
                 tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('m{:d}{:d}_axis_tready'.format(tidx, n_aidx), port_dir='in'))
+          """ adc rts ports """
+          if self.blk['ADCRTS']:
+            for p in self.adc_rts_o:
+              if self.adc_tile_arch == 'QT':
+                tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('adc{:d}{:d}_{:s}'.format(tidx, n_aidx, p), port_dir='out'))
+              else:
+                tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('adc{:d}_{:s}_{:s}'.format(tidx, ('01' if n_aidx == 0 else '23'), p), port_dir='out'))
+            for p in self.adc_rts_i:
+              if self.adc_tile_arch == 'QT':
+                tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('adc{:d}{:d}_{:s}'.format(tidx, n_aidx, p), port_dir='in'))
+              else:
+                if p == "pl_event":
+                  tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('adc{:d}{:d}_{:s}'.format(tidx, n_aidx, p), port_dir='in'))
+                elif p == "clear_or" or p == "clear_ov":
+                  tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('adc{:d}_{:s}_{:s}'.format(tidx, ('01' if n_aidx == 0 else '23'), p), port_dir='in'))
+
+      """ gen 3 parts have an additional input/output, one per enabled tile """
+      if self.blk['ADCRTS'] and self.gen > 1 and self.enable_mts_adc:
+        tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('adc{:d}_{:s}'.format(tidx, 'sync_out'), port_dir='out'))
+        tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('adc{:d}_{:s}'.format(tidx, 'sysref_gate'), port_dir='in'))
+
 
     # create board interface ports for axis data/clk/reset pins and dac tile output clock for each enabled tile
     for tidx in self.enabled_dac_tiles:
@@ -819,21 +971,21 @@ class rfdc(YellowBlock):
               tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tready'.format(tidx, n_didx), port_dir='out'))
           else: # Dual tile architecture
             # vout ports
-            tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('vout{:d}{:d}_n'.format(tidx, n_didx), port_dir='out'))
-            tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('vout{:d}{:d}_p'.format(tidx, n_didx), port_dir='out'))
+            tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('vout{:d}{:d}_n'.format(tidx, 2*n_didx), port_dir='out')) # Dual tile uses only DAC locations 0 and 2
+            tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('vout{:d}{:d}_p'.format(tidx, 2*n_didx), port_dir='out'))
             # maxis ports-dual architecture rfsocs the I/Q streams are output on seperate maxis interfaces needing different rules depending on the configuration
             if d.analog_output == 'Real': # no difference between Real -> Real and I/Q -> Real
-              tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tdata'.format(tidx, n_didx), port_dir='in', width=data_width))
-              tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tvalid'.format(tidx, n_didx), port_dir='in'))
-              tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tready'.format(tidx, n_didx), port_dir='out'))
+              tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tdata'.format(tidx, 2*n_didx), port_dir='in', width=data_width))
+              tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tvalid'.format(tidx, 2*n_didx), port_dir='in'))
+              tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tready'.format(tidx, 2*n_didx), port_dir='out'))
             else: # digital mode is I/Q
               # mixer mode is 'I/Q -> I/Q
               # in this case ADC 1 better be also set or we are in trouble so here we are assuming that the logic is correct and that
               # enabled adcs is both [0, 1]
               if d.mixer_type != 'Off' and d.mixer_type != False: #only add the even slices for s_axis ports
-                tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tdata'.format(tidx, n_didx), port_dir='in', width=data_width))
-                tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tvalid'.format(tidx, n_didx), port_dir='in'))
-                tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tready'.format(tidx, int(didx[1])), port_dir='out'))
+                tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tdata'.format(tidx, 2*n_didx), port_dir='in', width=data_width))
+                tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tvalid'.format(tidx, 2*n_didx), port_dir='in'))
+                tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s{:d}{:d}_axis_tready'.format(tidx, 2*n_didx), port_dir='out'))
     # create IRQ output port
     tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('irq', port_dir='out', port_type='intr'))
 
