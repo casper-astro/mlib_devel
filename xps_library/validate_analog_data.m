@@ -1,7 +1,7 @@
 function [] = validate_analog_data(gcb, tile, slice, arch)
   % this function should only be called for dac tiles
 
-  [~, ~, dac_tile_arch, ~, ~, ~, ~] = get_rfsoc_properties(gcb);
+  [gen, ~, dac_tile_arch, ~, ~, ~, ~] = get_rfsoc_properties(gcb);
   if strcmp(dac_tile_arch, 'quad')
     prefix = 'QT';
   elseif strcmp(dac_tile_arch, 'dual')
@@ -15,15 +15,27 @@ function [] = validate_analog_data(gcb, tile, slice, arch)
 
   a = slice;
 
-  analog_mode_param = ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_analog_output'];
-  mixer_type_param  = ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_mixer_type'];
-  mixer_mode_param  = ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_mixer_mode'];
-  nco_freq_param    = ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_nco_freq'];
-  nco_phase_param   = ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_nco_phase'];
-  coarse_freq_param = ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_coarse_freq'];
+  analog_mode_param   = ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_analog_output'];
+  mixer_type_param    = ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_mixer_type'];
+  mixer_mode_param    = ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_mixer_mode'];
+  nco_freq_param      = ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_nco_freq'];
+  nco_phase_param     = ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_nco_phase'];
+  coarse_freq_param   = ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_coarse_freq'];
+  datapath_mode_param = ['t', num2str(tile), '_', prefix, '_dac', num2str(a),'_datapath_mode'];
+
+  % datapath mode only a gen 3 option
+  if (gen < 2)
+    mixer_type_options = {'Bypassed', 'Coarse', 'Fine'};
+    msk.getParameter(datapath_mode_param).Visible = 'off';
+  else
+    mixer_type_options = {'Coarse', 'Fine'};
+    % TODO: force DUC to always be enabled. Need to implement mask behavior in 'mixer_callback()' to handle datapath mode cases
+    msk.getParameter(datapath_mode_param).Visible = 'on';
+    msk.getParameter(datapath_mode_param).TypeOptions = {'DUC 0 to Fs/2'}; %, 'DUC 0 to Fs/4', 'DUC Fs/4 to Fs/2', 'No DUC 0 to Fs/2'};
+  end
 
   if chk_param(gcb, analog_mode_param, 'Real')
-    msk.getParameter(mixer_type_param).TypeOptions = {'Fine', 'Coarse'};
+    msk.getParameter(mixer_type_param).TypeOptions = mixer_type_options;
     mixertype_callback(gcb, tile, slice, arch);
 
     if ~mod(slice,2) % we are an even slice, get the neighbor slice and ensure valid configuration
@@ -38,7 +50,7 @@ function [] = validate_analog_data(gcb, tile, slice, arch)
 
         % turn mixer back on (remove 'Off' setting)
         neighbor_mixer_type_param = ['t', num2str(tile), '_', prefix, '_dac', num2str(a+1), '_mixer_type'];
-        msk.getParameter(neighbor_mixer_type_param).TypeOptions = {'Coarse', 'Fine'};
+        msk.getParameter(neighbor_mixer_type_param).TypeOptions = mixer_type_options;
         set_param(gcb, neighbor_mixer_type_param, 'Coarse');
         mixertype_callback(gcb, tile, a+1, arch);
 

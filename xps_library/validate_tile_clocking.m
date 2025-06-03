@@ -36,7 +36,7 @@ function [axis_clks_valid] = validate_tile_clocking(gcb, tile)
       if ~isempty(axis_clks)
           axis_clks_valid = all(axis_clks == axis_clks(1));
           if ~axis_clks_valid
-              label_txt = '*Axis Clockign Invalid*';
+              label_txt = '*Axis Clocking Invalid*';
           else
               label_txt = num2str(axis_clks(1));
           end

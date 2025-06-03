@@ -1,5 +1,5 @@
 from .yellow_block import YellowBlock
-from constraints import PortConstraint, ClockConstraint, RawConstraint
+from constraints import PortConstraint, ClockConstraint, RawConstraint, ClockGroupConstraint
 from itertools import count
 from .yellow_block_typecodes import *
 
@@ -710,8 +710,8 @@ class tengbaser_xilinx_ultrascale(ten_gbe):
         phy.add_port('gtwiz_reset_qpll1reset_out','')
         #sys reset
         phy.add_port('sys_reset','sys_rst')
-        #dclk we use 128MHz for the dclk
-        phy.add_port('dclk','clk_128M')
+        # TODO likely not user_clk, what should this be?
+        phy.add_port('dclk','user_clk')
         
         phy_reset = top.get_instance('tengbaser_phy_ultrascale_reset', 'tengbaser_phy_reset%d'%self.port)
         phy_reset.add_port('gt_txusrclk2','tx_mii_clk%d'%self.port)
@@ -882,17 +882,19 @@ class tengbaser_xilinx_ultrascale(ten_gbe):
     def gen_constraints(self):
         num = self.infrastructure_id
         cons = []
-        cons.append(PortConstraint('ref_clk_p%d'%num, 'eth_clk_p',iogroup_index=num))
-        cons.append(PortConstraint('ref_clk_n%d'%num, 'eth_clk_n',iogroup_index=num))
-        cons.append(PortConstraint('mgt_tx_p%d'%self.port, 'mgt_tx_p', iogroup_index=self.port))
-        cons.append(PortConstraint('mgt_tx_n%d'%self.port, 'mgt_tx_n', iogroup_index=self.port))
-        cons.append(PortConstraint('mgt_rx_p%d'%self.port, 'mgt_rx_p', iogroup_index=self.port))
-        cons.append(PortConstraint('mgt_rx_n%d'%self.port, 'mgt_rx_n', iogroup_index=self.port))
+        cons.append(PortConstraint('ref_clk_p%d'%num, 'qsfp_mgt_ref_clk_p',iogroup_index=num))
+        cons.append(PortConstraint('ref_clk_n%d'%num, 'qsfp_mgt_ref_clk_n',iogroup_index=num))
+        cons.append(PortConstraint('mgt_tx_p%d'%self.port, 'qsfp_mgt_tx_p', iogroup_index=self.port))
+        cons.append(PortConstraint('mgt_tx_n%d'%self.port, 'qsfp_mgt_tx_n', iogroup_index=self.port))
+        cons.append(PortConstraint('mgt_rx_p%d'%self.port, 'qsfp_mgt_rx_p', iogroup_index=self.port))
+        cons.append(PortConstraint('mgt_rx_n%d'%self.port, 'qsfp_mgt_rx_n', iogroup_index=self.port))
 
-        #cons.append(PortConstraint('tx_disable%d'%self.port, 'sfp_disable', iogroup_index=self.port))
+        cons.append(ClockConstraint('ref_clk_p%d'%num, name='ref_clk_p%d'%num, freq=156.25))
 
-        cons.append(ClockConstraint('ref_clk_p%d'%num, name='ethclk%d'%num, freq=156.25))
-        cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth0 -asynchronous -group [get_clocks -include_generated_clocks clk_128_p] -group [get_clocks -include_generated_clocks ethclk0]'))
-        cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth1 -asynchronous -group [get_clocks -of_objects [get_pins zcu111_inst/zynq_ultra_ps_e_0/U0/PS8_i/PLCLK[0]]] -group [get_clocks -include_generated_clocks ethclk0]'))
-        cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth2 -asynchronous -group [get_clocks -of_objects [get_pins zcu111_inst/zynq_ultra_ps_e_0/U0/PS8_i/PLCLK[0]]] -group [get_clocks -include_generated_clocks clk_128_p]'))
+        # Set the 10G clocks to be asynchronous to both the user clock and the system clock / axi clk
+        clkname = 'ref_clk_p%d'%num
+        cons.append(ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets sys_clk]',  '-include_generated_clocks %s' % clkname, 'asynchronous'))
+        cons.append(ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets user_clk]', '-include_generated_clocks %s' % clkname, 'asynchronous'))
+        cons.append(ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets axil_clk]', '-include_generated_clocks %s' % clkname, 'asynchronous'))
+
         return cons
