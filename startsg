@@ -233,7 +233,8 @@ then
       # For scilab, we don't need to preload the stdc++ library, which crashes scilab
       export LD_PRELOAD=""
       # scilab -f scilab_library/scilab_blocks/load_casper_lib.sci
-      ${FRONTEND} -f scilab_library/scilab_blocks/load_casper_lib.sci
+      #${FRONTEND} -f scilab_library/scilab_blocks/load_casper_lib.sci
+      /data/Tools/scilab-2024.0.0/bin/scilab -f scilab_library/scilab_blocks/load_casper_lib.sci
   else
       echo "Frontend should be model_composer or modeler"
   fi

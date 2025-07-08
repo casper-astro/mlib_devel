@@ -44,11 +44,11 @@ function [x, y, typ]= adder(job, arg1, arg2)
       model.rpar = [0, 3, 4, 5];
       // TODO: do we have to set in2??
       model.in = [1, 2];
-      model.in2 = [32, 32];
+      model.in2 = [64, 64];
       model.out = 1;
-      model.out2 = [32];
+      model.out2 = [64];
       // Type : column vector of strings.
-      exprs = ['adder'; '32'; '32'; '32'];
+      exprs = ['adder'; '64'; '64'; '64'];
       gr_i = [];
       // we use model.label as the block tag.
       // the best place to set the tag should be graphics.gr_i/id.

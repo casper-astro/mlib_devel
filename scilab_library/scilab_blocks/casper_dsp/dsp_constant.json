@@ -14,7 +14,7 @@
             "constant",
             "",
             "dsp:constant",
-            10,
+            64,
             1023
         ]
     }

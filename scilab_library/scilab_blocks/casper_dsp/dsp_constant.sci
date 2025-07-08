@@ -2,7 +2,7 @@
 function [x, y, typ]= dsp_constant(job, arg1, arg2)
     x=[];y=[];typ=[];
     blkname = 'constant';
-    bit_width = 10;
+    bit_width = 64;
     value = 1023;
     select job
       case 'set' then
@@ -42,9 +42,9 @@ function [x, y, typ]= dsp_constant(job, arg1, arg2)
         model.in = [];
         model.in2 = [];
         model.out = 1;
-        model.out2 = 10;
+        model.out2 = 64;
         // Type : column vector of strings.
-        exprs = ['constant', '10', '1023'];
+        exprs = ['constant', '64', '1023'];
         gr_i = [];
         // we use model.label as the block tag.
         // the best place to set the tag should be graphics.gr_i/id.
