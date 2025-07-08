@@ -34,6 +34,8 @@ if __name__ == '__main__':
                     default=False, help="Run software compilation")
     parser.add_argument("--vitis", dest="vitis", action='store_true',
                     default=False, help="[EXPERIMENTAL] Run xsct (Vitis) to generate dtbo")
+    parser.add_argument("--quartus", dest="quartus", action='store_true',
+                    default=False, help="[EXPERIMENTAL] quartus to generate rbf file")
     parser.add_argument("--xsa", dest="xsa", type=str, default='',
                     help="location of xsa file, uses backend generated if ran with backend option")
     parser.add_argument("--be", dest="be", type=str, default='vivado',
@@ -119,8 +121,7 @@ if __name__ == '__main__':
 
     # get build directory
     # use user defined directory else use a directory with same name as model
-    # builddir = opts.builddir or opts.model[:-4]
-    builddir = opts.builddir or opts.model.split('.')[0]
+    builddir = opts.builddir or opts.model[:-4]
 
     # logging stuff...
     os.system('mkdir -p %s' % builddir)
@@ -191,7 +192,7 @@ if __name__ == '__main__':
     if opts.sysgen != '':
         os.environ['SYSGEN_SCRIPT'] = opts.sysgen
 
-    if not os.path.isfile(os.environ['SYSGEN_SCRIPT']):
+    if opts.be in ['vivado', 'ise'] and not os.path.isfile(os.environ.get('SYSGEN_SCRIPT', '')):
         raise RuntimeError('Could not find sysgen startup script: '
                         '%s' % os.environ['SYSGEN_SCRIPT'])
 
@@ -251,6 +252,12 @@ if __name__ == '__main__':
             # launch ISE via the generated .tcl file
             backend.compile()
         # Default to vivado for compile
+        elif opts.be == 'quartus':
+            platform.backend_target = 'quartus'
+            backend = toolflow.QuartusBackend(plat=platform, compile_dir=tf.compile_dir, periph_objs=tf.periph_objs)
+            backend.import_from_castro(backend.compile_dir + '/castro.yml')
+            backend.initialize()
+            backend.compile(cores=opts.jobs, plat=platform)
         else:
             platform.backend_target = 'vivado'
             # Project Mode assignment (True = Project Mode,
@@ -272,8 +279,7 @@ if __name__ == '__main__':
             prm_file = backend.prm_loc
             bitstream = backend.bitstream_loc
 
-            #backend.output_fpg = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d.fpg' % (
-            backend.output_fpg = tf.frontend_target_base.split('.')[0] + '_%d-%02d-%02d_%02d%02d.fpg' % (
+            backend.output_fpg = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d.fpg' % (
                 tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
                 tf.start_time.tm_hour, tf.start_time.tm_min)
 
@@ -352,8 +358,7 @@ if __name__ == '__main__':
         # running this seperate of `--backend` will require work of the user. The rfdc in casperfpga is currently
         # expecting the `.dtbo` and `.fpg` live in the same place with the same name (different ext) and so a
         # separate compilation will require the user to change the name of the `.dtbo` to match the `.fpg`
-        #vitis.output_dtbo = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d.dtbo' % (
-        vitis.output_dtbo = tf.frontend_target_base.split('.')[0] + '_%d-%02d-%02d_%02d%02d.dtbo' % (
+        vitis.output_dtbo = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d.dtbo' % (
             tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
             tf.start_time.tm_hour, tf.start_time.tm_min)
 

@@ -57,11 +57,13 @@ xps_xsg_blks    = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', '
 %     set_param(xps_blks{n}, fields{1}, val)
 % end 
 
+gwi_name = 'Gateway In Block';
+gwo_name = 'Gateway Out Block';
 
 sysgen_blk      = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'SearchDepth', 1,   'Tag', 'genX');
 casper_blks     = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'RegExp', 'on',      'Tag', '^casper:');
-gateway_ins     = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all',     'MaskType', 'Xilinx Gateway In Block');
-gateway_outs    = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all',     'MaskType', 'Xilinx Gateway Out Block');
+gateway_ins     = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all',     'MaskType', gwi_name);
+gateway_outs    = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all',     'MaskType', gwo_name);
 disregards      = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all',                    'Tag', 'discardX');
 
 % parents of disregard blocks -- i.e., blocks we should ignore
@@ -94,7 +96,7 @@ else
 end
 
 % comb for gateway in blocks that aren't part of a yellow block
-gateways_blk = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'masktype', 'Xilinx Gateway In Block');
+gateways_blk = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'masktype', gwi_name);
 for i = 1:length(gateways_blk)
     found_xps_tag = 0;
     parent = get_param(gateways_blk(i), 'parent');
@@ -177,10 +179,22 @@ end
 % Maybe in future also include data types, but these are not trivially available
 % from the gateway out block parameters, which inherit type.
 
+% Determine whether to keep '_ip' suffix based on environment
+jasper_backend = getenv('JASPER_BACKEND');
+if strcmpi(jasper_backend, 'quartus')
+    use_ip_suffix = false;
+else
+    use_ip_suffix = true;
+end
+
 fprintf(fid, '\nuser_modules:\n');
 
 if RUN_IP==1
-    fprintf(fid, '  %s:\n', [bdroot, '_ip']);
+    if use_ip_suffix
+        fprintf(fid, '  %s:\n', [bdroot, '_ip']);
+    else
+        fprintf(fid, '  %s:\n', bdroot);
+    end
 else
     fprintf(fid, '  %s:\n', bdroot);
 end
@@ -227,20 +241,72 @@ end
 % Vivado puts the compiled vhd netlist in a different place than earlier
 % sysgen versions, so accommodate for that here.
 
-if RUN_IP==0
-    fprintf(fid, '    sources:\n');
-end
+fprintf(fid, '    sources:\n');
 
 xlver = str2double(xilinx.environment.getversion('sysgen'));
+jasper_backend = getenv('JASPER_BACKEND');
+
 if xlver > 14.7
-    if RUN_IP==0
-        fprintf(fid, sprintf('      - %s\n', [compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/imports/sysgen']));
-        fprintf(fid, sprintf('      - %s\n', [compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/ip/*.coe']));
-        fprintf(fid, sprintf('      - %s\n', [compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/ip/*/*.xci']));
-        fprintf(fid, sprintf('      - %s\n', [compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/imports/sysgen/*.mem']));
-    else        
-        fprintf(fid, '    sources: []'); % Include SysGen compile as IP, via xsg YellowBlock
-    end
+    if RUN_IP == 0
+        fprintf(fid, '      - %s\n', [compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/imports/sysgen']);
+        fprintf(fid, '      - %s\n', [compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/ip/*.coe']);
+        fprintf(fid, '      - %s\n', [compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/ip/*/*.xci']);
+        fprintf(fid, '      - %s\n', [compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/imports/sysgen/*.mem']);
+    else
+        if strcmpi(jasper_backend, 'quartus')
+            % --- YAML emit: only include HDL files we want Quartus to compile
+            fprintf(fid, '    sources:\n');
+            sysgen_dir = fullfile(compile_dir, 'sysgen', 'sysgen');
+            extensions = {'*.vhd', '*.vhdl', '*.vho'};
+
+            fprintf('Patching VHDL files: xil_defaultlib -> work\n');
+
+            for e = 1:length(extensions)
+                files = dir(fullfile(sysgen_dir, extensions{e}));
+                for i = 1:length(files)
+                    fpath = fullfile(sysgen_dir, files(i).name);
+
+                    % Skip stub or declaration files
+                    if endsWith(fpath, '_stub.vhd') || ...
+                       endsWith(fpath, '_stub.vhdl') || ...
+                       endsWith(fpath, '_stub.v') || ...
+                       contains(fpath, '_entity_declarations') || ...
+                       endsWith(fpath, '.vho')
+                        continue;
+                    end
+
+                    try
+                        txt = fileread(fpath);
+                        patched = txt;
+
+                        % Patch 'library xil_defaultlib;'
+                        patched = regexprep(patched, '(?i)^\s*library\s+xil_defaultlib\s*;', 'library work;', 'lineanchors');
+
+                        % Patch 'use xil_defaultlib.xyz.all;'
+                        patched = regexprep(patched, '(?i)(^\s*use\s+)xil_defaultlib\.', '$1work.', 'lineanchors');
+
+                        % Patch entity references: 'entity xil_defaultlib.xyz'
+                        patched = regexprep(patched, '\<xil_defaultlib\>\.', 'work.');
+
+                        if ~strcmp(txt, patched)
+                            fid_patch = fopen(fpath, 'w');
+                            fwrite(fid_patch, patched);
+                            fclose(fid_patch);
+                            fprintf('  Patched: %s\n', fpath);
+                        end
+
+                        % Emit into YAML
+                        fprintf(fid, '      - %s\n', fpath);
+
+                    catch ME
+                        warning('Failed to patch %s: %s', fpath, ME.message);
+                    end
+                end
+            end
+            cmd = 'find /data/DesignFiles/decontrolb/sysgen/sysgen -type f \( -name ''*.vhd'' -o -name ''*.vhdl'' -o -name ''*.vho'' \) -exec sed -i ''s/\\<xil_defaultlib\\>\\./work./g'' {} +';
+            status = system(cmd);
+        end
+    end    
 else
     if RUN_IP==0
         fprintf(fid, sprintf('      - %s\n', [compile_dir '/sysgen/' bdroot '.vhd']));
@@ -250,6 +316,9 @@ else
     end
 end
 
-fprintf('Closing output file: %s\n', output_fname);
-fclose(fid);
-
+if fid > 0
+    fprintf('Closing output file: %s\n', output_fname);
+    fclose(fid);
+else
+    warning('Output file was never opened or already closed: %s', output_fname);
+end

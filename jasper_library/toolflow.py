@@ -80,8 +80,7 @@ class Toolflow(object):
         self.periph_file = self.compile_dir + '/jasper.per'
         self.git_info_file = self.compile_dir + '/git_info.tab'
         self.frontend_target = frontend_target
-        # self.modelname = frontend_target.split('/')[-1][:-4]  # strip off extension
-        self.modelname = frontend_target.split('/')[-1].split('.')[0]  # strip off extension
+        self.modelname = frontend_target.split('/')[-1][:-4]  # strip off extension
         self.frontend_target_base = os.path.basename(frontend_target)
 
         self.cores = None
@@ -318,12 +317,16 @@ class Toolflow(object):
             for req_list in [obj.requires, obj.exc_requires]:
                 for req in req_list:
                     self.logger.debug('%s requires %s' % (obj.name, req))
+                    # Skip known Vivado-only phase clocks when using Quartus
+                    if req in ['fpga_clk1_5090', 'fpga_clk1_50180', 'fpga_clk1_50270'] and self.plat.backend_target == 'quartus':
+                        self.logger.warning(f"Skipping DRC check for {req} on Quartus backend")
+                        continue
                     if req not in provisions:
                         self.logger.error('NOT SATISFIED: %s requires %s' % (
                             obj.name, req))
-                        raise Exception('DRC FAIL! %s (required by %s) not '
+                        raise Exception('DRC FAIL! %s (required by %s) in %s not '
                                         'provided by platform or any '
-                                        'peripheral' % (req, obj.name))
+                                        'peripheral' % (req, obj.name, str(req_list)))
         # check for overallocation of resources
         used = []
         for obj in self.periph_objs:
@@ -589,12 +592,12 @@ class Toolflow(object):
             fh.write(s)
         # generate the binary and xilinx-style .mem versions of this table,
         # using Python script [TODO convert to a callable function?].
-        ret = os.system('python %s/jasper_library/cit2csl.py -b %s > %s.bin' % (os.getenv('MLIB_DEVEL_PATH'), newfile, newfile))
+        ret = os.system('python -E %s/jasper_library/cit2csl.py -b %s > %s.bin' % (os.getenv('MLIB_DEVEL_PATH'), newfile, newfile))
         if ret != 0:
             errmsg = 'Failed to generate binary file {}.bin, error code {}.'.format(newfile,ret)
             self.logger.error(errmsg)
             raise Exception(errmsg)
-        ret = os.system('python %s/jasper_library/cit2csl.py %s > %s.mem' % (os.getenv('MLIB_DEVEL_PATH'), newfile, newfile))
+        ret = os.system('python -E %s/jasper_library/cit2csl.py %s > %s.mem' % (os.getenv('MLIB_DEVEL_PATH'), newfile, newfile))
         if ret != 0:
             errmsg = 'Failed to generate xilinx-style file {}.mem, error code {}.'.format(newfile,ret)
             self.logger.error(errmsg)
@@ -975,6 +978,7 @@ class Toolflow(object):
         try:
             # Xml2VhdlGenerate takes arguments as attributes of an args class
             args = helper.arguments.Arguments()
+            args.backend = 'quartus' if self.plat.manufacturer.lower() == 'intel' else 'vivado'
             # see the help of the xml2vhdl.py script
             args.input_folder  = [self.xml_source_dir] # Needs to be a list (can be multiple directories)
             args.vhdl_output   = self.hdl_output_dir
@@ -1453,6 +1457,478 @@ class SimulinkFrontend(ToolflowFrontend):
         os.system(term_cmd)
 
 
+class QuartusBackend(ToolflowBackend):
+    """
+
+    """
+    def __init__(self, plat=None, compile_dir='/tmp', periph_objs=None):
+        """
+
+        :param plat:
+        :param compile_dir:
+        :param periph_objs:
+        """
+        self.logger = logging.getLogger('jasper.toolflow.backend')
+        self.compile_dir = compile_dir
+        self.const_file_ext = 'qsf'
+        self.timing_file_ext = 'sdc'
+        # src_file parameters for non-project mode only
+        self.src_file_vhdl_ext = 'vhd'
+        #self.src_file_ip_ext = 'xci'
+        self.src_file_verilog_ext = 'v'
+        self.src_file_sys_verilog_ext = 'sv'
+        #self.src_file_block_diagram_ext = 'bd'
+        self.src_file_elf_ext = 'elf'
+        self.manufacturer = 'intel'
+        self.project_name = 'myproj'
+        self.periph_objs = periph_objs
+        self.tcl_cmds = ''
+        self.output_dir = os.path.join(self.compile_dir, 'outputs')
+        os.makedirs(self.output_dir, exist_ok=True)
+        self.bitstream_loc = os.path.join(self.output_dir, 'top.sof')
+        self.binary_loc = os.path.join(self.output_dir, 'top.rbf')
+        self.bd = None
+
+        self.name = 'quartus'
+        self.npm_sources = []
+        ToolflowBackend.__init__(self, plat=plat, compile_dir=compile_dir)
+        self.tcl_cmds = {
+            'init'        : '',
+            'create_bd'   : '',
+            'pre_synth'   : '',
+            'synth'       : '',
+            'post_synth'  : '',
+            'pre_impl'    : '',
+            'impl'        : '',
+            'post_impl'   : '',
+            'pre_bitgen'  : '',
+            'bitgen'      : '',
+            'post_bitgen' : '',
+            'promgen'     : '',
+        }
+        self.add_source(self.output_dir, self.plat)
+        # Link the platform to this backend so yellow blocks know
+
+    def initialize(self):
+        plat = self.plat
+
+        if plat.manufacturer.lower() != self.manufacturer.lower():
+            self.logger.error('Trying to compile a %s FPGA using %s %s' % (
+                plat.manufacturer, self.manufacturer, self.name))
+
+
+        self.logger.debug(f'Initializing Quartus project: {self.project_name}')
+        prefix = os.path.join(self.compile_dir, self.project_name)
+
+        self.add_tcl_cmd('set impl_dir "%s"'%prefix, stage='init')
+
+        # Just use project path prefix
+        prefix = os.path.join(self.compile_dir, self.project_name)
+
+        self.add_tcl_cmd('load_package flow', stage='init')
+        os.makedirs(os.path.join(self.compile_dir, self.project_name), exist_ok=True)
+        self.add_tcl_cmd(f'cd {prefix}', stage='init')
+        self.add_tcl_cmd(f'project_new {self.project_name} -overwrite', stage='init')
+
+        # Set FPGA part
+        self.add_tcl_cmd(f'set_global_assignment -name FAMILY "{plat.family}"', stage='init')
+        self.logger.debug(f'Using FPGA: {plat.fpga} in family: {plat.family}')
+        self.add_tcl_cmd(f'set_global_assignment -name DEVICE {plat.fpga}', stage='init')
+
+        # Output paths
+        self.bitstream_loc = os.path.join(self.output_dir, 'top.sof')
+        self.logger.debug(f'Set bitstream output location to: {self.bitstream_loc}')
+        self.binary_loc = os.path.join(self.output_dir, 'top.rbf')
+        self.logger.debug(f'Set rbf output location to: {self.binary_loc}')
+
+        #self.add_tcl_cmd(f'set_global_assignment -name OUTPUT_DIRECTORY {self.output_dir}', stage='init')
+        self.logger.debug(f'Top level output directory is: {self.output_dir}')
+
+        # Any top-level file setup
+        self.add_tcl_cmd(f'set_global_assignment -name TOP_LEVEL_ENTITY top', stage='init')
+        #self.add_tcl_cmd('set_global_assignment -name DESIGN_ENTRY "VHDL"', stage='init')
+
+    def add_library(self, path):
+        """ERROR: Illegal assignment: DESIGN_ENTRY. Specify a legal assignment name.
+
+        while executing
+        "set_global_assignment -name DESIGN_ENTRY "VHDL""
+        (file "/data/DesignFiles/de10_test3/gogogo.tcl" line 7)
+
+        Add a library at <path>
+        """
+        #self.add_tcl_cmd('set repos [get_property ip_repo_paths [current_project]]')
+        #self.add_tcl_cmd('set_property ip_repo_paths "$repos %s" [current_project]' % path)
+        #self.add_tcl_cmd('update_ip_catalog')
+        """
+        No-op for Quartus ? IP library paths not needed.
+        """
+        self.logger.debug(f'Ignoring IP repo path {path} in Quartus backend')
+        return
+
+    def add_ip(self, ip):
+        """
+        Add an ip core from a library
+        """
+        #self.add_tcl_cmd('create_ip -name %s -vendor %s -library %s -version %s -module_name %s' % (ip['name'], ip['vendor'], ip['library'], ip['version'], ip['module_name']))
+        #if self.template_project is not None:
+        #    self.add_tcl_cmd('move_files -of_objects [get_reconfig_modules user_top-toolflow] [get_files %s.xci]' % ip['module_name'])
+        """
+        No-op for Quartus ? IP cores must be instantiated manually or via Platform Designer.
+        """
+        self.logger.debug(f'Ignoring IP instantiation of {ip.get("name", "unknown")} in Quartus backend')
+        return
+
+    def add_source(self, source, plat):
+        """
+        Add HDL source file(s) to Quartus project via set_global_assignment.
+        Supports individual files or directories containing VHDL, Verilog, and SystemVerilog.
+        """
+        self.logger.debug(f'Adding source: {source}')
+        print(f"[QUARTUS BACKEND] add_source() called for: {source}")
+        print("[DEBUG] HDL output dir contents:")
+        for f in os.listdir(self.output_dir):
+            print("    -", f)
+        
+        if os.path.isdir(source):
+            # Source is a directory ? add all supported HDL files
+            for fname in sorted(os.listdir(source)):
+                full_path = os.path.join(source, fname)
+                if fname.lower().endswith('.vhd') or fname.lower().endswith('.vhdl'):
+                    self.add_tcl_cmd(f'set_global_assignment -name VHDL_FILE "{full_path}"')
+                elif fname.lower().endswith('.v'):
+                    self.add_tcl_cmd(f'set_global_assignment -name VERILOG_FILE "{full_path}"')
+                elif fname.lower().endswith('.sv'):
+                    self.add_tcl_cmd(f'set_global_assignment -name SYSTEMVERILOG_FILE "{full_path}"')
+                else:
+                    self.logger.debug(f'Skipping non-HDL file: {fname}')
+        elif os.path.isfile(source):
+            # Source is a single file
+            ext = os.path.splitext(source)[-1].lower()
+            if ext == '.vhd' or ext == '.vhdl':
+                self.add_tcl_cmd(f'set_global_assignment -name VHDL_FILE "{source}"')
+            elif ext == '.v':
+                self.add_tcl_cmd(f'set_global_assignment -name VERILOG_FILE "{source}"')
+            elif ext == '.sv':
+                self.add_tcl_cmd(f'set_global_assignment -name SYSTEMVERILOG_FILE "{source}"')
+            else:
+                self.logger.warning(f"Unknown or unsupported source type: {source}")
+        else:
+            self.logger.error(f"add_source called with unknown path: {source}")
+
+    def add_const_file(self, constfile):
+        """
+        Add a constraint file to the project. via a tcl incantation.
+        In non-project mode, it is important to note that copies are not made
+        of files. The files are read from their source directory. Project
+        mode copies files from their source directory and adds them to the
+        a new compile directory.
+
+        :param constfile:
+        """
+        """
+        if constfile.split('.')[-1] == self.const_file_ext:
+            self.logger.debug('Adding constraint file: %s' % constfile)
+            # Project Mode is enabled
+            if self.plat.project_mode:
+                if self.template_project is not None:
+                    self.add_tcl_cmd('import_files -force  -of_objects [get_reconfig_modules user_top-toolflow] %s' %
+                                 constfile)
+                else:
+                    self.add_tcl_cmd('import_files -force -fileset constrs_1 %s' %
+                                 constfile)
+            # Non-Project Mode is enabled
+            else:
+                self.add_tcl_cmd('read_xdc %s' % constfile)
+        else:
+            self.logger.debug('Ignore constraint file: %s, with wrong file '
+                              'extension' % constfile)
+
+        """
+        """
+        Add a constraint file to the Quartus project.
+        Assumes .qsf or .sdc file type.
+        """
+        ext = os.path.splitext(constfile)[-1].lower()
+
+        if ext == '.qsf':
+            self.logger.debug(f'Adding QSF constraint file: {constfile}')
+            self.add_tcl_cmd(f'source "{constfile}"', stage='pre_synth')
+
+        elif ext == '.sdc':
+            self.logger.debug(f'Adding SDC constraint file: {constfile}')
+            self.add_tcl_cmd(f'set_global_assignment -name SDC_FILE "{constfile}"', stage='init')
+
+        else:
+            self.logger.warning(f'Ignoring constraint file with unknown extension: {constfile}')
+    def add_tcl_cmd(self, cmd, stage='pre_synth'):
+        """
+        Add a command to the tcl command list with
+        a trailing newline.
+        """
+        self.logger.debug('Adding tcl command: %s' % cmd)
+        print('Adding tcl command: %s at stage %s' %(cmd, str(stage)))
+        self.tcl_cmds[stage] += cmd
+        self.tcl_cmds[stage] += '\n'
+
+    def eval_tcl(self):
+        s = ''
+        s += self.tcl_cmds['init']
+        s += self.tcl_cmds['create_bd']
+        s += self.tcl_cmds['pre_synth']
+        s += self.tcl_cmds['synth']
+        s += self.tcl_cmds['post_synth']
+        s += self.tcl_cmds['pre_impl']
+        s += self.tcl_cmds['impl']
+        s += self.tcl_cmds['post_impl']
+        s += self.tcl_cmds['pre_bitgen']
+        s += self.tcl_cmds['bitgen']
+        s += self.tcl_cmds['post_bitgen']
+        s += self.tcl_cmds['promgen']
+        return s
+    
+    def add_compile_cmds_pr(self, cores=8, plat=None, synth_strat=None, impl_strat=None):
+        """
+        Add the tcl commands for compiling the design using Quartus tools
+        """
+
+        tcl = self.add_tcl_cmd  # shorthand
+
+        # Step 1: Analysis & Synthesis
+        tcl(f'execute_flow -compile', stage='synth')  # shortcut for map, fit, asm
+
+        # Or manual steps (for debug granularity):
+        # tcl(f'quartus_map --read_settings_files=on --write_settings_files=off {self.project_name}', stage='synth')
+        # tcl(f'quartus_fit --read_settings_files=on --write_settings_files=off {self.project_name}', stage='impl')
+        # tcl(f'quartus_asm --read_settings_files=on --write_settings_files=off {self.project_name}', stage='bitgen')
+
+        # Step 2: TimeQuest Timing Analysis
+        tcl(f'quartus_sta {self.project_name}', stage='post_impl')
+
+        # Step 3: Generate .rbf (raw binary file)
+        rbf_output = self.binary_loc
+        sof_input = self.bitstream_loc
+        tcl(f'quartus_cpf -c {sof_input} {rbf_output}', stage='post_bitgen')
+
+        # Step 4: Yellow block hooks, timing checks, etc.
+        self.gen_yellowblock_tcl_cmds()
+
+        # Optional: check for timing failures (you may need to parse .sta.rpt manually)
+        tcl('puts "Compilation and RBF generation complete."', stage='promgen')
+
+
+    def compile(self, cores, plat, synth_strat=None, impl_strat=None, threads='multi'):
+        """
+        Compile the design using Quartus tools.
+
+        :param cores: Number of parallel cores to use
+        :param plat: Platform object (with .fpga, .family, etc.)
+        :param synth_strat: (unused for now)
+        :param impl_strat: (unused for now)
+        """
+        # Add tcl commands
+        self.add_compile_cmds_pr(cores=cores, plat=plat)
+
+        # Write full TCL script to file
+        tcl_file = os.path.join(self.compile_dir, 'gogogo.tcl')
+        helpers.write_file(tcl_file, self.eval_tcl())
+
+        self.logger.info(f'Invoking Quartus shell with TCL script: {tcl_file}')
+
+        # Run Quartus in batch mode
+        rv = os.system(f'quartus_sh -t {tcl_file}')
+        if rv:
+            raise Exception('Quartus compilation failed!')
+
+
+    def get_tcl_const(self, const):
+    
+    #Generate Quartus-compatible .qsf-style constraints
+    #from a PinConstraint object (location and IO standard only).
+        user_const = ''
+        if isinstance(const, castro.PinConstraint):
+            self.logger.debug('Processing PinConstraint: %s -> %s' % (const.portname, const.symbolic_name))
+            for idx, _ in enumerate(const.symbolic_indices):
+                port_idx = f'[{const.portname_indices[idx]}]' if const.portname_indices else ''
+                full_portname = f'{const.portname}{port_idx}'
+
+                loc = const.location[idx]
+                if loc:
+                    user_const += f'set_location_assignment {loc} -to {full_portname}\n'
+
+                io_std = const.io_standard[idx]
+                if io_std:
+                    user_const += f'set_instance_assignment -name IO_STANDARD "{io_std}" -to {full_portname}\n'
+
+        return user_const
+
+
+    @staticmethod
+    def format_clock_const(c):
+        if c.virtual_en:
+            return 'create_clock -period %4.3f -name %s -waveform {%4.3f ' \
+                   '%4.3f}\n' % (c.period_ns, c.clkname, c.waveform_min_ns,
+                                 c.waveform_max_ns)
+        elif c.port_en:
+            return 'create_clock -period %4.3f -name %s -waveform {%4.3f ' \
+                   '%4.3f} [get_ports {%s}]\n' % (c.period_ns, c.clkname,
+                                                  c.waveform_min_ns,
+                                                  c.waveform_max_ns, c.portname)
+        else:
+            return 'create_clock -period %4.3f -name %s -waveform {%4.3f ' \
+                   '%4.3f} [get_pins {%s}]\n' % (c.period_ns, c.clkname,
+                                                 c.waveform_min_ns,
+                                                 c.waveform_max_ns, c.portname)
+
+        @staticmethod
+        def format_gen_clock_const(c):
+            return 'create_generated_clock -name %s -source [get_pins {%s}] ' \
+                '-divide_by %d [get_pins {%s}]\n' % (c.clkname, c.clksource,
+                                                        c.divide_by, c.pinname)
+
+        @staticmethod
+        def format_clock_group_const(c):
+            return 'set_clock_groups -%s -group [get_clocks %s] -group ' \
+                '[get_clocks %s]\n' % (c.clkdomaintype, c.clknamegrp1,
+                                        c.clknamegrp2)
+
+        @staticmethod
+        def format_input_delay_const(c):
+            if c.add_delay_en:
+                return 'set_input_delay -clock [get_clocks %s] -%s -add_delay ' \
+                    '%4.3f [get_ports {%s}]\n' % (c.clkname, c.consttype,
+                                                    c.constdelay_ns, c.portname)
+            else:
+                return 'set_input_delay -clock [get_clocks %s] -%s %4.3f ' \
+                    '[get_ports {%s}]\n' % (c.clkname, c.consttype,
+                                            c.constdelay_ns, c.portname)
+
+        @staticmethod
+        def format_output_delay_const(c):
+            if c.add_delay_en:
+                return 'set_output_delay -clock [get_clocks %s] -%s -add_delay ' \
+                    '%4.3f [get_ports {%s}]\n' % (c.clkname, c.consttype,
+                                                    c.constdelay_ns, c.portname)
+            else:
+                return 'set_output_delay -clock [get_clocks %s] -%s %4.3f ' \
+                    '[get_ports {%s}]\n' % (c.clkname, c.consttype,
+                                            c.constdelay_ns, c.portname)
+
+        @staticmethod
+        def format_max_delay_const(c):
+            #if c.sourcepath is None:
+            #    return 'set_max_delay %s -to %s\n' % (c.constdelay_ns, c.destpath)
+            #elif c.destpath is None:
+            #    return 'set_max_delay %s -from %s\n' % (c.constdelay_ns, c.sourcepath)
+            #else:
+            #    return 'set_max_delay %s -from %s -to %s\n' % (c.constdelay_ns, c.sourcepath, c.destpath)
+            return ' '
+        @staticmethod
+        def format_min_delay_const(c):
+            #if c.sourcepath is None:
+            #    return 'set_min_delay %s -to %s\n' % (c.constdelay_ns, c.destpath)
+            #elif c.destpath is None:
+            #    return 'set_min_delay %s -from %s\n' % (c.constdelay_ns, c.sourcepath)
+            #else:
+            #    return 'set_min_delay %s -from %s -to %s\n' % (c.constdelay_ns, c.sourcepath, c.destpath)
+            return ' '
+
+        @staticmethod
+        def format_false_path_const(c):
+            #if c.sourcepath is None:
+            #    return 'set_false_path -to %s\n' % c.destpath
+            #elif c.destpath is None:
+            #    return 'set_false_path -from %s\n' % c.sourcepath
+            #else:
+            #    return 'set_false_path -from %s -to %s\n' % (c.sourcepath,
+            #                                               c.destpath)
+            return ' '
+        
+        @staticmethod
+        def format_multi_cycle_const(c):
+            #return 'set_multicycle_path -%s -from [%s] -to [%s] %d\n' % (
+            #    c.multicycletype, c.sourcepath, c.destpath, c.multicycledelay)
+            return ' '
+
+        @staticmethod
+        def format_const(attribute, val, port, index=None):
+            """
+            Generate a tcl syntax command from an attribute, value and port
+            (with indexing if required)
+            """
+            #return 'set_property %s %s [get_ports %s%s]\n' % (
+            #        attribute, val, port,
+            #        '[%d]' % index if index is not None else '')
+            return ' '
+        @staticmethod
+        def format_cfg_const(attribute, val):
+            """
+            Generate a configuration tcl syntax command from an attribute and value
+            """
+            #return 'set_property %s %s [current_design]\n' % (attribute, val)
+            return ' '
+
+    def gen_yellowblock_tcl_cmds(self):
+        """
+        Compose a list of tcl commands from each yellow block.
+        To be added to the final tcl script.
+        """
+        self.logger.info('Extracting yellow block tcl commands'
+                         ' from peripherals')
+        for obj in self.periph_objs:
+            c = obj.gen_tcl_cmds()
+            for key, val in c.items():
+                if val is not None:
+                    for v in val:
+                        self.add_tcl_cmd(v, stage=key)
+
+    def gen_bd_tcl_cmds(self):
+        self.logger.info('No block design generation needed for Quartus.')
+        pass
+        """
+        Allow each yellowblock to generate tcl commands specific to creating
+        a block design
+        """
+        self.logger.info('Assembling the block design from'
+                         ' yellow block peripherals')
+        for obj in self.periph_objs:
+            c = obj.modify_bd(self.bd)
+
+        self.add_tcl_cmd(self.bd.gen_tcl(), stage='create_bd')
+
+    def gen_yellowblock_custom_hdl(self):
+        """
+        Create each yellowblock's custom hdl files and add them to the projects sources
+        """
+        self.logger.info('Generating yellow block custom hdl files')
+        for obj in self.periph_objs:
+            c = obj.gen_custom_hdl()
+            for key, val in c.items():
+                self.logger.debug(f'Wrote yellow block HDL file: {key}')
+                # create file and write the source string to it
+                f = open('%s/%s' %(self.compile_dir, key),"w")
+                f.write(val)
+                f.close()
+                # add the tcl command to add the source to the project
+                self.add_source('%s/%s' %(self.compile_dir, key), self.plat)
+
+    def gen_constraint_file(self, constraints):
+        """
+        Pass this method a toolflow-standard list of constraints
+        which have already had their physical parameters calculated
+        and it will generate a constraint file and add it to the
+        current project.
+        """
+        constfile = '%s/user_const.qsf' % self.compile_dir
+        user_const = ''
+        for constraint in constraints:
+            self.logger.info('parsing constraint %s' % constraint)
+            user_const += self.get_tcl_const(constraint)
+        self.logger.info("Constraints: %s" % user_const)
+        helpers.write_file(constfile, user_const)
+        self.logger.info('Finished writing constraints file: %s' % constfile)
+        self.add_const_file(constfile)
+  
 class VitisBackend(ToolflowBackend):
     """
     Incantations of a Vitis flow

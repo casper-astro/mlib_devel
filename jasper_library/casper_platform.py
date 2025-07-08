@@ -1,3 +1,4 @@
+import sys
 import yaml
 import os
 
@@ -24,6 +25,10 @@ class Platform(object):
             self.conf = yaml.load(fh.read(), Loader=yaml.Loader)
 
         print(self.conf)
+        print(f"[PLATFORM DEBUG] Using platform YAML: {conffile}")
+        print(f"[PLATFORM DEBUG] YAML keys: {self.conf.keys()}")
+        print(f"[PLATFORM DEBUG] YAML family: {self.conf.get('family')}")
+
         #: A dictionary of pin names associated with the platform.
         self._pins = {}
         for pinname, val in self.conf['pins'].items():
@@ -47,6 +52,10 @@ class Platform(object):
         #: FPGA model. Should be the full version ready to pass to the
         #: vendor tools. Eg., xc7k325tffg900-2
         self.fpga = self.conf['fpga']
+
+        self.family = self.conf['family']
+        #self.manufacturer = self.conf.get('manufacturer', 'intel')
+        
         #: FPGA board (needed along with FPGA model for accelerator cards)
         #: eg. xilinx.com:au50:part0:1.2 for Alveo U50
         if 'board' in self.conf:
