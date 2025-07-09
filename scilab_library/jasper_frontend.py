@@ -88,6 +88,7 @@ if __name__ == '__main__':
     jasper_per['user_modules'] = xps_user_modules
     dump_jasper(jasper_per, fn='%s/jasper.per'%(builddir)) 
 
+    print('JASPER.PER GENERATED')
     """
     Step 4: generate jasper.dsp, which contains the dsp blocks info and user module info 
     """
@@ -132,4 +133,7 @@ if __name__ == '__main__':
     # generate design_info.tab
     gen_design_info(xps_blocks, model_name, fn='%s/design_info.tab'%(builddir))
     # generate git_info.tab
+    print('MODEL NAME: ' + str(model_name))
+    print('BUILD DIRECTORY: ' + str(builddir))
     gen_git_info(model_name, fn='%s/git_info.tab'%(builddir))
+

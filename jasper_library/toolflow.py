@@ -2802,6 +2802,7 @@ proc puts_red {s} {
         rv = os.system('vivado -jou {cdir}/vivado.jou -log {cdir}/vivado.log '
                        '-mode batch -source '
                        '{cfile}'.format(cdir=self.compile_dir, cfile=tcl_file))
+        print('DANGUS: ' + str(rv))
         if rv:
             raise Exception('Vivado failed!')
 
