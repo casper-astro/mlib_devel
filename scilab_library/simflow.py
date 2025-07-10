@@ -84,7 +84,21 @@ class SIMflow(object):
                 self.logger.info('Port Name: %s, Width: %s' % (port['name'], port['width']))
                 port_list.append(port)
         return port_list
-
+    
+    def _get_link_objs_by_src_blk(self, blkname):
+        """
+        A src blk connects to several dst blks.
+        This function returns a list of link objs.
+        """
+        self.logger.info('Searching dst blks by src blk : %s' % blkname)
+        blk_name = 'src_blk_name'
+        link_objs = []
+        link_info = self.model_info['link_info']
+        for link in link_info:
+            if link[blk_name] == blkname:
+                link_objs.append(link)
+        return link_objs
+    
     def get_ip_core_info(self):
         """
         Get the IP core info from the jasper.json.
@@ -137,23 +151,24 @@ class SIMflow(object):
         for slink in sim_link_objs:
             if slink['link_type'].startswith('sim_'):
                 # this should be a source sim block, like a signal generator
-                # TODO: is it possible to connect a source sim block ot a dsp block??
-                dst_blk_name = slink['dst_blk_name']
-                port = self._get_port_from_link_by_dst_blk_name(dst_blk_name)
-                sim_blk_name = slink['src_blk_name']
-                # get the port info, which is from the IP core.
-                # Here, we should know which IP core port the sim block is connected to.
-                sim_blk = {}
-                sim_blk['type'] = 'source'
-                sim_blk['name'] = sim_blk_name
-                sim_blk['port'] = port
-                sim_blk['dir'] = sim_dir
-                [tag, val] = self._get_sim_blk_by_name(sim_blk_name)
-                sim_blk['tag'] = tag
-                sim_blk['val'] = val
-                self.sim_blocks.append(sim_blk)
-                # log it
-                self.logger.info('Sim Source Block: %s, Port: %s, Tag: %s' % (sim_blk_name, port['name'], sim_blk['tag']))
+                # TODO: is it possible to connect a source sim block to a dsp block??
+                if slink['link_type'] != 'sim_sim':
+                    dst_blk_name = slink['dst_blk_name']
+                    port = self._get_port_from_link_by_dst_blk_name(dst_blk_name)
+                    sim_blk_name = slink['src_blk_name']
+                    # get the port info, which is from the IP core.
+                    # Here, we should know which IP core port the sim block is connected to.
+                    sim_blk = {}
+                    sim_blk['type'] = 'source'
+                    sim_blk['name'] = sim_blk_name
+                    sim_blk['port'] = port
+                    sim_blk['dir'] = sim_dir
+                    [tag, val] = self._get_sim_blk_by_name(sim_blk_name)
+                    sim_blk['tag'] = tag
+                    sim_blk['val'] = val
+                    self.sim_blocks.append(sim_blk)
+                    # log it
+                    self.logger.info('Sim Source Block: %s, Port: %s, Tag: %s' % (sim_blk_name, port['name'], sim_blk['tag']))
             if slink['link_type'].endswith('_sim'):
                 # this should be a destination sim block, like a scope
                 src_blk_name = slink['src_blk_name']
@@ -174,6 +189,24 @@ class SIMflow(object):
                     port = {}
                     port['name'] = slink['src_port_name']
                     port['width'] = slink['src_port_width']
+                elif slink['link_type'] == 'sim_sim':
+                    # we have to find a yellow block connect to the same source block
+                    # the src blk is a blk like constant or sine wave etc,
+                    # the dst blk should be scope.
+                    # so, we need to find out the src blk is connected to which xps blk
+                    self.logger.info('Find sim_sim link: src blk - %s dst blk - %s'
+                                    %(slink['src_blk_name'], slink['dst_blk_name']))
+                    link_objs = self._get_link_objs_by_src_blk(slink['src_blk_name'])
+                    for obj in link_objs:
+                        if slink['dst_blk_name'] != obj['dst_blk_name']:
+                            break
+                    # the link obj's src blk is the same blk. but the dst blk is a xps blk.
+                    # we will find the port by this xps blk. 
+                    dst_blk_name = obj['dst_blk_name']
+                    #self.logger.info('Change link to: src blk - %s, dst blk - %s'
+                    #                %(obj['src_blk_name'], obj['dst_blk_name']))
+                    port = self._get_port_from_link_by_dst_blk_name(dst_blk_name)
+                    #self.logger.info('Find the port for sim_sim link: %s'%port)
                 sim_blk_name = slink['dst_blk_name']
                 sim_blk = {}
                 sim_blk['type'] = 'destination'
