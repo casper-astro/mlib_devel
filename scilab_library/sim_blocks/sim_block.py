@@ -1,7 +1,117 @@
 import numpy as np
 import logging
 import os
+
+from io import StringIO
+from datetime import datetime
 from pyDigitalWaveTools.vcd.parser import VcdParser
+from pyDigitalWaveTools.vcd.common import VCD_SIG_TYPE, VcdVarScope
+from pyDigitalWaveTools.vcd.parser import VcdParser, VcdVarParsingInfo
+from pyDigitalWaveTools.vcd.value_format import VcdBitsFormatter, LogValueFormatter
+from pyDigitalWaveTools.vcd.writer import VcdWriter, VcdVarWritingScope
+
+'''
+Interal use in VcdWriter
+'''
+class MaskedValue():
+
+    def __init__(self, val, vld_mask):
+        self.val = val
+        self.vld_mask = vld_mask
+
+"""
+The VcdWriter class implments some methods for the vcd file generation.
+"""
+class CasperVcdWriter(object):
+    def __init__(self, data, nsamples, tick=500, filename='casper_simulation.vcd'):
+        self.data = data
+        self.tick = tick
+        self.filename = filename
+        self.nsamples = nsamples
+        self.logger = logging.getLogger('jasper-sim.vcdwriter')
+        self.logger.info('nsamples is %d'%nsamples)
+        self.logger.info('tick is %d'%tick)
+
+    def get_val_mask(self, d, w):
+        '''
+        This function converts str to binary, 
+        and also returns a mask for future use.
+        '''
+        self.logger.debug('getting val and mask: d - %s w - %d'%(d, w))
+        if not d.startswith('b'):
+            return int(d,2), 1
+        else:
+            val = ''
+            mask= ''
+            for i in range(w):
+                try:
+                    b = d[i+1]
+                    if b == 'x':
+                        val += '0'
+                        mask += '0'
+                    else:
+                        val += b
+                        mask += '1'
+                except:
+                    mask += '1'
+            return int(val, 2), int(mask, 2)
+        
+    def expand_vcd_vals(self, val):
+        self.logger.debug('expand vcd vals')
+        tmp = np.zeros(self.nsamples, dtype=object)
+        last_i = 0
+        last_v = val[0][1]
+        tmp[0] = last_v
+        if len(val) == 1:
+            tmp[1:] = dout[0]
+        else:
+            for d in val[1:]:
+                cur_i = d[0]//self.tick
+                tmp[last_i + 1: cur_i] = tmp[last_i]
+                tmp[cur_i] = d[1]
+                last_i = cur_i
+        tmp[last_i:self.nsamples] = tmp[last_i]
+        dout = []
+        for i in range(self.nsamples):
+            dout.append((i*self.tick, tmp[i]))
+        return dout
+    
+    def WriteVcd(self):
+        out = StringIO()
+        vcdout = VcdWriter(out)
+        # record the current time 
+        date = datetime.now()
+        vcdout.date(date)
+        vcdout.timescale(1)
+        vals = self.data
+        with vcdout.varScope("casper_simumation") as sim:
+            for val in vals:
+                # get signal info
+                sig = val['name']
+                print('name', sig)
+                bitwidth = val['type']['width']
+                sig_type = val['type']['name']
+                # add the signal
+                # TODO: the type is always WIRE.
+                #       I dont think we will have other types here, as this is a scope??
+                sim.addVar(sig, sig, VCD_SIG_TYPE.WIRE, bitwidth, VcdBitsFormatter())
+                # expand the data filed
+                # we should have nsamples simulation data for each signal
+                tmp = self.expand_vcd_vals(val['data'])
+                val['data'] = tmp
+            
+            for i in range(self.nsamples):
+                for val in vals:
+                    sig = val['name']
+                    bitwidth = val['type']['width']
+                    d = val['data'][i]
+                    t = d[0]
+                    v,m = self.get_val_mask(d[1], bitwidth)
+                    vcdout.logChange(t, sig, MaskedValue(v,m), None)
+        self.logger.info('Writing simulation into %s'%self.filename)
+        with open(self.filename, mode='w') as f:
+            f.write(out.getvalue())
+
 
 """
 The SimData class is used to generate the simulation data.

@@ -1,9 +1,8 @@
 import json
 import logging
-from sim_blocks.sim_block import SimBlock
+from sim_blocks.sim_block import SimBlock, CasperVcdWriter
 import numpy as np
 import os, math
-from matplotlib import pyplot as plt
 
 """
 This class generates a simulation object,
@@ -342,41 +341,33 @@ class SIMflow(object):
         """
         Get the simulation data.
         """
-        self.logger.info('Getting simulation data')
+        # let's get clock first
+        vcdfile = self.sim_objs[0].vcdfile
+        self.logger.info('Getting simulation data for user_clk')
+        r = SimBlock._parse_sim_file(vcdfile)
+        data = SimBlock._get_sim_data_by_port_name(r, 'user_clk')
+        self.simdata.append(data)
+        # get simulation data for user's blocks
+        self.logger.info('Getting simulation data for user\'s blocks')
         for sim_obj in self.sim_objs:
             self.logger.info('Getting simulation data for %s' % sim_obj.name)
-            info = {}
             data = sim_obj.get_sim_data()
-            # the source sim blocks(like constant) won't return the data, so the data will be None.
-            # We don't need to store the data for the source sim blocks.
-            if data is not None:
-                info['name'] = sim_obj.name
-                info['data'] = data
-                self.simdata.append(info)
+            # we get the raw data, and will pass the data to CasperVcdWriter.
+            if data != None:
+                self.simdata.append(data)
         # actually, we don't have to return the simdata, 
         # as we don't use the return data so far 
         return self.simdata
     
-    def plot_sim_data(self):
+    def show_sim_data(self):
         """
         Show the simulation data.
         """
-        self.logger.info('Plotting simulation data')
-        # for sim_obj in self.sim_objs:
-        #     sim_obj.plot_sim_data()
+        self.logger.info('Writing simulation data into a file...')
+        vcdfilename = dir = self.model_info['project']['filename'].split('.')[0] + '/simulation/casper_simulation.vcd'
+        vcdw = CasperVcdWriter(self.simdata, SimBlock.sim_length*2+1, filename=vcdfilename)
+        vcdw.WriteVcd()
+        self.logger.info('Call gtkwave to show the simulation data')
+        cmd = 'gtkwave %s &'%vcdfilename
+        os.system(cmd)
         
-        # As matplotlib will be blocked after we call plot_sim_data() first time,
-        # we'are going to create plots here
-        fig_num = len(self.simdata)
-        fig = np.zeros(fig_num, dtype=object)
-        subfig = np.zeros(fig_num, dtype=object)
-        for i in range(fig_num):
-            fig[i] = plt.figure()
-            subfig[i] = fig[i].add_subplot(111)
-            subfig[i].plot(self.simdata[i]['data'])
-            subfig[i].set_title(self.simdata[i]['name'])
-            subfig[i].set_xlabel('Time/ns')
-            subfig[i].set_ylabel('Value')
-            subfig[i].grid(True)
-            subfig[i].legend()
-        plt.show()
