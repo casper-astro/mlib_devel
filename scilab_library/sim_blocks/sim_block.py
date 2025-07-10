@@ -88,7 +88,7 @@ class CasperVcdWriter(object):
             for val in vals:
                 # get signal info
                 sig = val['name']
-                print('name', sig)
+                self.logger.info('sig name: %s'%sig)
                 bitwidth = val['type']['width']
                 sig_type = val['type']['name']
                 # add the signal
