@@ -62,7 +62,7 @@ def main():
         figs[i] = plt.figure()
         subfig = figs[i].add_subplot()
         subfig.plot(x,y)
-        subfig.set_xlabel('us')
+        subfig.set_xlabel('ns')
         subfig.set_title(name)
         subfig.grid(True)
     plt.show()
