@@ -1,4 +1,4 @@
-function [cmd] = run_simulation(fn, gui)
+function [cmd] = run_simulation(fn, gui, use_vivado)
     [path, name, ext] = fileparts(fn);
     // set the model path
     modelpath = fn;
@@ -28,6 +28,14 @@ function [cmd] = run_simulation(fn, gui)
     end
     // run python script to start simulation
     jasper_python = [getenv('MLIB_DEVEL_PATH')+'/scilab_library/run_simulation.py'];
-    cmd = python_path + ' ' + jasper_python + ' '+ '-m ' + modelpath + ' ' + '-g ' + gui;
+    if use_vivado == 'True' then
+        sv = ''
+    elseif use_vivado == 'False'
+        sv = '--use-vivado'
+    else
+        disp('Invalid `use_vivado` option. It should be `True` or `False`');
+        abort
+    end
+    cmd = python_path + ' ' + jasper_python + ' '+ '-m ' + modelpath + ' ' + '-g ' + gui + ' ' + sv;
     debug_info('Simulation python script: ' + cmd);
 endfunction
