@@ -1,6 +1,7 @@
 import json
 import logging
-from sim_blocks.sim_block import SimBlock, CasperVcdWriter
+from sim_blocks.sim_block import SimBlock
+from sim_blocks.sim_block import CasperGTKWave, CasperRawData, CasperPyplot
 import numpy as np
 import os, math
 
@@ -392,15 +393,25 @@ class SIMflow(object):
         # as we don't use the return data so far 
         return self.simdata
     
-    def show_sim_data(self):
+    def show_sim_data(self, gui='gtkwave'):
         """
         Show the simulation data.
         """
-        self.logger.info('Writing simulation data into a file...')
-        vcdfilename = dir = self.model_info['project']['filename'].split('.')[0] + '/simulation/casper_simulation.vcd'
-        vcdw = CasperVcdWriter(self.simdata, SimBlock.sim_length*2+1, filename=vcdfilename)
-        vcdw.WriteVcd()
-        self.logger.info('Call gtkwave to show the simulation data')
-        cmd = 'gtkwave %s &'%vcdfilename
-        os.system(cmd)
+        self.logger.info('Show simulation data in the GUI: %s.'%gui)
+        simdir = self.model_info['project']['filename'].split('.')[0]
+        # recored/show sim data in different ways
+        if gui == 'raw':
+            filename = simdir + '/simulation/casper_simulation.json'
+            simgui = CasperRawData(self.simdata, SimBlock.sim_length*2+1, filename=filename)
+        elif gui == 'gtkwave':
+            filename = simdir + '/simulation/casper_simulation.vcd'
+            simgui = CasperGTKWave(self.simdata, SimBlock.sim_length*2+1, filename=filename)
+        elif gui == 'pyplot':
+            filename = simdir + '/simulation/casper_simulation.json'
+            simgui = CasperPyplot(self.simdata, SimBlock.sim_length*2+1, filename=filename)
+        else:
+            print('   * Warning: GUI %s not supported.'%gui)
+            return
+        simgui.WriteSimData()
+        simgui.ShowSimData()
         

@@ -11,6 +11,9 @@ parser.add_argument("-c", "--builddir", dest="builddir", type=str,
 parser.add_argument("-m", "--model", dest="model", type=str,
             default='/tools/mlib_devel/jasper_library/test_models/test.slx',
             help="model to compile")
+parser.add_argument("-g", "--gui", dest="gui", type=str,
+            default='gtkwave',
+            help="The GUI for showing the simulation data.")
 
 opts = parser.parse_args()
 builddir = opts.builddir or opts.model.split('.')[0]
@@ -34,6 +37,6 @@ sim.gen_sim_objs()
 sim.gen_sim_data()
 sim.gen_testbench()
 sim.gen_sim_tcl()
-sim.run_sim()
+#sim.run_sim()
 sim.get_sim_data()
-sim.show_sim_data()
+sim.show_sim_data(opts.gui)

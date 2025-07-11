@@ -87,7 +87,7 @@ class DSPflow(Toolflow):
             # so we have to skip it.
             if self.dsp_modules[pk]['tag'].startswith('xps:'):
                 continue
-            self.logger.debug('Generating DSP Block: %s' % pk)
+            self.logger.info('Generating DSP Block: %s' % pk)
             self.dsp_objs.append(dsp_block.DSPBlock.make_block(
                 self.dsp_modules[pk], self.plat, model_info_file=self.model_info_file))
         self._expand_children(self.dsp_objs)
@@ -131,7 +131,7 @@ class DSPflow(Toolflow):
         """
         self.logger.info('top: %s' % self.topfile)
         for obj in self.periph_objs:
-            self.logger.debug('modifying top for obj %s' % obj.name)
+            self.logger.info('modifying top for obj %s' % obj.name)
             # self.top.set_cur_blk(obj.fullname)
             if '/' in obj.fullpath:
                 obj.fullpath = obj.fullpath.partition('/')[2]

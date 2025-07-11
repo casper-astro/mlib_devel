@@ -1,6 +1,7 @@
 import numpy as np
 import logging
 import os
+import json
 
 from io import StringIO
 from datetime import datetime
@@ -19,16 +20,56 @@ class MaskedValue():
         self.val = val
         self.vld_mask = vld_mask
 
+def _expand_vals(val, tick, nsamples):
+    logger = logging.getLogger('jasper-sim.expand_vals')
+    logger.info('expand vcd vals')
+    tmp = np.zeros(nsamples, dtype=object)
+    last_i = 0
+    last_v = val[0][1]
+    tmp[0] = last_v
+    if len(val) == 1:
+        tmp[1:] = dout[0]
+    else:
+        for d in val[1:]:
+            cur_i = d[0]//tick
+            tmp[last_i + 1: cur_i] = tmp[last_i]
+            tmp[cur_i] = d[1]
+            last_i = cur_i
+    tmp[last_i:nsamples] = tmp[last_i]
+    dout = []
+    for i in range(nsamples):
+        dout.append((i*tick, tmp[i]))
+    return dout
+
 """
-The VcdWriter class implments some methods for the vcd file generation.
+The SimDataWriter is a base class
 """
-class CasperVcdWriter(object):
-    def __init__(self, data, nsamples, tick=500, filename='casper_simulation.vcd'):
+class SimDataGUI(object):
+    def __init__(self, data, nsamples, tick, filename):
         self.data = data
         self.tick = tick
         self.filename = filename
         self.nsamples = nsamples
-        self.logger = logging.getLogger('jasper-sim.vcdwriter')
+    
+    def WriteSimData(self):
+        '''
+        Write Sim data into file.
+        '''
+        pass
+
+    def ShowSimData(self):
+        '''
+        Show Sim data.
+        '''
+        pass
+
+"""
+The VcdWriter class implments some methods for the vcd file generation.
+"""
+class CasperGTKWave(SimDataGUI):
+    def __init__(self, data, nsamples, tick=500, filename='casper_simulation.vcd'):
+        super().__init__(data, nsamples, tick, filename)
+        self.logger = logging.getLogger('jasper-sim.sim_gtkwave')
         self.logger.info('nsamples is %d'%nsamples)
         self.logger.info('tick is %d'%tick)
 
@@ -56,27 +97,7 @@ class CasperVcdWriter(object):
                     mask += '1'
             return int(val, 2), int(mask, 2)
         
-    def expand_vcd_vals(self, val):
-        self.logger.debug('expand vcd vals')
-        tmp = np.zeros(self.nsamples, dtype=object)
-        last_i = 0
-        last_v = val[0][1]
-        tmp[0] = last_v
-        if len(val) == 1:
-            tmp[1:] = dout[0]
-        else:
-            for d in val[1:]:
-                cur_i = d[0]//self.tick
-                tmp[last_i + 1: cur_i] = tmp[last_i]
-                tmp[cur_i] = d[1]
-                last_i = cur_i
-        tmp[last_i:self.nsamples] = tmp[last_i]
-        dout = []
-        for i in range(self.nsamples):
-            dout.append((i*self.tick, tmp[i]))
-        return dout
-    
-    def WriteVcd(self):
+    def WriteSimData(self):
         out = StringIO()
         vcdout = VcdWriter(out)
         # record the current time 
@@ -97,7 +118,7 @@ class CasperVcdWriter(object):
                 sim.addVar(sig, sig, VCD_SIG_TYPE.WIRE, bitwidth, VcdBitsFormatter())
                 # expand the data filed
                 # we should have nsamples simulation data for each signal
-                tmp = self.expand_vcd_vals(val['data'])
+                tmp = _expand_vals(val['data'], self.tick, self.nsamples)
                 val['data'] = tmp
             
             for i in range(self.nsamples):
@@ -111,7 +132,57 @@ class CasperVcdWriter(object):
         self.logger.info('Writing simulation into %s'%self.filename)
         with open(self.filename, mode='w') as f:
             f.write(out.getvalue())
+    
+    def ShowSimData(self):
+        cmd = 'gtkwave %s &'%self.filename
+        os.system(cmd)
 
+"""
+The CasperRawData class implments some methods for the raw sim data file generation.
+"""
+class CasperRawData(SimDataGUI):
+    def __init__(self, data, nsamples, tick=500, filename='casper_simulation.json'):
+        super().__init__(data, nsamples, tick, filename)
+        self.logger = logging.getLogger('jasper-sim.sim_rawdata')
+        self.logger.info('nsamples is %d'%nsamples)
+        self.logger.info('tick is %d'%tick)
+    
+    def WriteSimData(self):
+        for val in self.data:
+            # get signal info
+            sig = val['name']
+            self.logger.info('sig name: %s'%sig)
+            # expand the data filed
+            # we should have nsamples simulation data for each signal
+            tmp = _expand_vals(val['data'], self.tick, self.nsamples)
+            val['data'] = tmp
+        simdata = {}
+        simdata['simdata'] = self.data
+        with open(self.filename, 'w', encoding='utf-8') as f:
+            json.dump(simdata, f, indent=4)
+
+"""
+The CasperPyplot class implments a method to use matplotlib to show the sim data.
+"""
+class CasperPyplot(CasperRawData):
+    def __init__(self, data, nsamples, tick=500, filename='casper_simulation.json'):
+        super().__init__(data, nsamples, tick, filename)
+        self.logger = logging.getLogger('jasper-sim.sim_pyplot')
+        self.logger.info('nsamples is %d'%nsamples)
+        self.logger.info('tick is %d'%tick)
+    
+    def WriteSimData(self):
+        return super().WriteSimData()
+    
+    def ShowSimData(self):
+        '''
+        call sim_guis/sim_pyplot.py to show the sim data.
+        '''
+        self.logger.info('Show sim data with pyplot.')
+        mlib_devel_path = os.getenv('MLIB_DEVEL_PATH')
+        script_path = '%s/scilab_library/sim_guis/sim_pyplot.py'%mlib_devel_path
+        cmd = 'python %s -f %s &'%(script_path, self.filename)
+        os.system(cmd)
 
 """
 The SimData class is used to generate the simulation data.

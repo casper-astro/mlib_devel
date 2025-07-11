@@ -1,4 +1,4 @@
-function [cmd] = run_simulation(fn)
+function [cmd] = run_simulation(fn, gui)
     [path, name, ext] = fileparts(fn);
     // set the model path
     modelpath = fn;
@@ -27,7 +27,7 @@ function [cmd] = run_simulation(fn)
         unix_s(cmd);
     end
     // run python script to start simulation
-    jasper_python = [getenv('MLIB_DEVEL_PATH')+'/scilab_library/casper_simulation.py'];
-    cmd = python_path + ' ' + jasper_python + ' '+ '-m ' + modelpath;
+    jasper_python = [getenv('MLIB_DEVEL_PATH')+'/scilab_library/run_simulation.py'];
+    cmd = python_path + ' ' + jasper_python + ' '+ '-m ' + modelpath + ' ' + '-g ' + gui;
     debug_info('Simulation python script: ' + cmd);
 endfunction
