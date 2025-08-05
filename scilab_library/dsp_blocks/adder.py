@@ -5,7 +5,6 @@ from verilog import VerilogModule
 class adder(DSPBlock):
     def initialize(self):
         self.add_source('adder/*')
-
     def modify_top(self,top):
         # let's populate the parent ports first
         self._populate_parent_ports(top)

@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+ <html>
+ <head>
+   <style type="text/css" id="repstyle">
+   div.banner { position: relative;
+                background:  no-repeat scroll -1px -1px; 
+                height: 199px;
+                font: 10pt Arial, Sans-serif;}
+   html { background: silver; padding: 8px;}
+   body { font: 100% Arial, Sans-serif; 
+          padding: 0; margin: 0;
+          color: #000; background: rgb(100%,100%,100%);
+          max-width: 1280px; min-width: 500px; 
+          width:100%;
+          border: 1px solid rgb(0,0,100);
+          height: 100%} 
+   div { padding: 0px;
+         background-color: rgb(255,255,255);
+         page-break-inside: avoid;}
+   .width100 {width:100%;}     
+   .hidden {overflow:hidden;} 
+   div.floater { border: 1px solid rgb(0,0,100); 
+                 position:absolute; 
+                 padding: 1px 5px 1px 5px; 
+                 font-size:90%; }
+   div.view {font-size: 8pt;
+             margin: 0px 0px -10px 2px;
+             }  
+   div.entry { border-bottom: 1px solid silver; 
+               padding: 0.8em 0.8em 0.8em 0.8em;
+               margin-top: 5px; 
+               margin-left: 20px; 
+               margin-right:10px;}   
+   .blue { color: rgb(40,60,160);}   
+   .red { color: rgb(160,60,40);}
+   h1 { font-size:15pt;color: rgb(40,60,160);}
+   a { text-decoration: none;} 
+   </style>
+   <style type="text/css" id="tablestyle">
+   </style>
+   
+   <script language="JavaScript" type="text/javascript">
+   <!--
+       
+       var sgBanner = new Image();
+       // ** Insert data **
+       sgBanner.src='File:////data/Tools/Xilinx/Vivado/2023.1/data/sysgen/images/sgbanner.jpg';
+       var modelName = 'simple_bram_vacc_blk_test';
+var jTblExternally_Connected_Blocks = new Array();
+ jTblExternally_Connected_Blocks[0] = { val1:"simple_bram_vacc_blk_test/simple_bram_vacc/Mux",act1:"matlab:load_system('xbsIndex');xlHiliteOne('simple_bram_vacc_blk_test/simple_bram_vacc/Mux');",val2:"y",act2:"" };
+ jTblExternally_Connected_Blocks[1] = { val1:"simple_bram_vacc_blk_test/simple_bram_vacc/pulse_ext/Constant5",act1:"matlab:load_system('xbsIndex');xlHiliteOne('simple_bram_vacc_blk_test/simple_bram_vacc/pulse_ext/Constant5');",val2:"op",act2:"" };
+ jTblExternally_Connected_Blocks[2] = { val1:"simple_bram_vacc_blk_test/simple_bram_vacc/pulse_ext/Counter3",act1:"matlab:load_system('xbsIndex');xlHiliteOne('simple_bram_vacc_blk_test/simple_bram_vacc/pulse_ext/Counter3');",val2:"op",act2:"" };
+ jTblExternally_Connected_Blocks[3] = { val1:"simple_bram_vacc_blk_test/simple_bram_vacc/pulse_ext/Relational5",act1:"matlab:load_system('xbsIndex');xlHiliteOne('simple_bram_vacc_blk_test/simple_bram_vacc/pulse_ext/Relational5');",val2:"op",act2:"" };
+ 
+       var maxStrLen = 35; 
+       var displaymode = 0;
+       var mx;
+       var my;
+      
+       var IE = (navigator.appName.indexOf("Internet Explorer")!=-1);
+       if (!IE) { document.captureEvents(Event.MOUSEMOVE) } 
+       document.onmousemove = mousemoved;            
+ 
+       function startup() {
+       setTableStyle();   
+       renderPage();
+       setTimeout("renderBanner()",100);    
+       }
+ 
+       function mousemoved(e) {
+         if (IE) { 
+             mx = event.clientX + document.body.scrollLeft;
+             my = event.clientY + document.body.scrollTop;
+           } else { 
+             mx = e.pageX
+             my = e.pageY
+           }  
+       }
+       
+       function tip(s) { 
+         var main = document.getElementById('main')
+         var tipdiv = document.createElement('div');
+         tipdiv.setAttribute('id','tipdiv');
+         tipdiv.className='floater';
+         tipdiv.style.top = my+10+"px";
+         tipdiv.style.left = mx-20+"px";
+         tipdiv.innerHTML = s;
+         main.appendChild(tipdiv);
+       } 
+       
+       function untip() {
+         var main = document.getElementById('main')
+         var tipdiv = document.getElementById('tipdiv')
+         main.removeChild(tipdiv);
+       }
+       
+       function renderPage() {
+ setTimeout("renderParaExternally_Connected_Blocks('paraExternally_Connected_Blocks')",0);
+ setTimeout("renderTableExternally_Connected_Blocks('tableExternally_Connected_Blocks')",0);
+ setTimeout("renderParaRemoved('paraRemoved')",0);
+           setTimeout("renderParaReport('paraReport')",0);          
+       }
+       
+       function renderBanner(){
+           if (sgBanner.complete) {
+               tdiv = document.getElementById('banner');
+               img = document.createElement("img");
+               img.src=sgBanner.src;
+               tdiv.appendChild(img)
+           }
+               
+       }
+ function renderTableExternally_Connected_Blocks(id) {
+            
+           if (jTblExternally_Connected_Blocks.length == 0) return;
+ 
+           tdiv = document.getElementById(id);
+           tdiv.innerHTML=''
+           
+           thead = document.createElement("thead");
+           tr = document.createElement("tr");
+            td1 = document.createElement("th");
+              td1.innerHTML = "Block Instance";
+            td2 = document.createElement("th");
+              td2.innerHTML = "Externally Connected Ports";
+tr.appendChild(td1);
+tr.appendChild(td2);
+thead.appendChild(tr);
+           
+           tbody = document.createElement("tbody");
+           // Create the rows
+           for (var l=0; l < jTblExternally_Connected_Blocks.length; l++) {
+               tr = document.createElement("tr");              
+td1 = document.createElement("td");
+               txt = formATagHTML(jTblExternally_Connected_Blocks[l].act1,jTblExternally_Connected_Blocks[l].val1);
+               td1.innerHTML = txt;
+               tr.appendChild(td1);
+td2 = document.createElement("td");
+               txt = formATagHTML(jTblExternally_Connected_Blocks[l].act2,jTblExternally_Connected_Blocks[l].val2);
+               td2.innerHTML = txt;
+               tr.appendChild(td2);
+    tbody.appendChild(tr);
+           }
+           ttable=document.createElement("table");
+           ttable.appendChild(thead);
+           ttable.appendChild(tbody);
+           tdiv.appendChild(ttable);
+       }
+      function formATagHTML(act,val) {
+           var t;
+           if (act.length == 0) return val;
+           var needmouseover = (val.length > maxStrLen);
+           if ((needmouseover) && (displaymode==0)){
+               var pathparts = val.split('/');
+               var shortval = '';
+               for (var l = pathparts.length; l>=1; l=l-1){
+                   shortval =  '/' + pathparts[l-1] + shortval;
+                   if (shortval.length >=(maxStrLen-3)) break;
+               }
+               shortval = '...' + shortval;
+               t = '<a href="' + act + '" onmouseover="tip(\'' + val + '\')" onmouseout="untip();"' +' >' + shortval + '</a>';
+           }else {
+               t = '<a href="' + act + '">' + val + '</a>';
+           }
+           
+          return t;
+       }
+      
+       function renderParaReport(id) {
+           p = document.getElementById('paraReport');
+           p.innerHTML = "<div>The model <a href=\"matlab:open_system('"+ modelName + "')\">" + modelName +  "</a> uses features of System Generator that have been removed or will be removed(deprecated) in future releases. Each of the sections below describes the removed or deprecated feature in detail and also suggests a course of action to sanitize the model.</div>";
+       }
+ 
+  function renderParaExternally_Connected_Blocks(id) {
+           if (jTblExternally_Connected_Blocks.length == 0) return;
+           p = document.getElementById('paraExternally_Connected_Blocks');
+           p.innerHTML = "<div><h3>Externally Connected Blocks</h3>Externally connected blocks are defined as blocks that directly drive native Simulink blocks without going through a gateway. An example is the output port of a Model Composer block connected to the input port of a Simulink Scope. Modify the design by inserting Gateway Out blocks with 'Translate into output port' turned off. Also, Model Composer blocks with ports that have Signal Logging turned on are classified as Externally connected blocks.</div>";
+       }
+     
+      function toggleView() {
+          p = document.getElementById('view');
+          if (displaymode==0) {
+              p.innerHTML="Screen View";
+              displaymode=1;
+          } else {
+              p.innerHTML="Print View";
+              displaymode=0;
+          }
+          setTableStyle();
+          renderPage();
+      }
+     
+    
+       function setTableStyle() {
+           if (IE) {
+             p=document.styleSheets[1];
+             for (var l=p.rules.length-1;l>-1;l--){p.removeRule(l);}          
+             if (displaymode==0) {
+               p.addRule('table','border: 0px; text-align:center; width: 100%; background-color:rgb(100%,100%,100%); font-size:90%;');
+               p.addRule('th','border: 0px; padding: 5px 15px 5px 15px; background-color: rgb(82%,85%,92%);');  
+               p.addRule('td','border: 0px; padding: 5px 15px 5px 15px;');
+               p.addRule('tr','border: 0px; padding: 5px 5px 5px 5px; background-color: rgb(92%,95%,100%);');
+             } else {
+               p.addRule('table','border-spacing: 0px; border: 2px solid; text-align:center; width: 100%; font-size:90%;');
+               p.addRule('th','border: 1px; border-style: none none solid none; padding: 5px 15px 5px 15px;');  
+               p.addRule('td','border: 1px dotted; border-style: none none dotted none; padding: 2px 2px 2px 2px;');
+             }
+           } else {
+             p = document.getElementById('tablestyle');
+             if (displaymode==0) {
+               p.innerHTML = 'table {border: 0px; text-align:center; width: 100%; background-color:rgb(100%,100%,100%); font-size:90%;} th { border: 0px; padding: 5px 15px 5px 15px; background-color: rgb(82%,85%,92%);} td { border: 0px; padding: 5px 15px 5px 15px;} tr { border: 0px; padding: 5px 5px 5px 5px; background-color: rgb(92%,95%,100%);}';
+             } else {
+               p.innerHTML = 'table {border-spacing: 0px; border: 2px solid; text-align:center; width: 100%; font-size:90%;} th {border: 1px; border-style: none none solid none; padding: 5px 15px 5px 15px;}\n  td { border: 1px dotted; border-style: none none dotted none; padding: 2px 2px 2px 2px;}';
+             }
+           }
+      }
+   // -->
+   </script>
+   
+ <title>System Generator Deprecation Report</title>
+ </head>
+ <body onLoad="startup();">
+     <div class="width100">
+     <div class="width100 hidden" id="banner"></div>
+     <div class="view"><a href="javascript:toggleView()" id="view">Print View</a></div>
+      <div id="main" class="entry">
+       <h1>Deprecation Report</h1>
+       <div id="paraReport"></div>      
+  <br/>  
+       <div id="paraExternally_Connected_Blocks"></div>
+       <div id="tableExternally_Connected_Blocks"></div>
+     </div>
+     </div>
+ </body>
+ </html>

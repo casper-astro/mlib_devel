@@ -1,0 +1,23 @@
+#-----------------------------------------------------------
+# Vivado v2021.1 (64-bit)
+# SW Build 3247384 on Thu Jun 10 19:36:07 MDT 2021
+# IP Build 3246043 on Fri Jun 11 00:30:35 MDT 2021
+# Start of session at: Fri Jul 25 16:09:02 2025
+# Process ID: 886511
+# Current directory: /home/bgodfrey/CASPER/mlib_devel
+# Command line: vivado
+# Log file: /home/bgodfrey/CASPER/mlib_devel/vivado.log
+# Journal file: /home/bgodfrey/CASPER/mlib_devel/vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project /data/DesignFiles/scilabdemo_rfsoc/myproj/myproj.xpr
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/data/DesignFiles/scilabdemo_rfsoc/dspproj/dspproj.srcs'.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/data/Tools/Xilinx/Vivado/2021.1/data/ip'.
+INFO: [IP_Flow 19-3899] Cannot get the environment domain name variable for the component vendor name. Setting the vendor name to 'user.org'.
+open_project: Time (s): cpu = 00:00:18 ; elapsed = 00:00:07 . Memory (MB): peak = 7636.992 ; gain = 89.082 ; free physical = 24496 ; free virtual = 44086
+update_compile_order -fileset sources_1
+exit
+INFO: [Common 17-206] Exiting Vivado at Mon Jul 28 19:01:12 2025...

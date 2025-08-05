@@ -121,8 +121,8 @@ if __name__ == '__main__':
 
     # get build directory
     # use user defined directory else use a directory with same name as model
-    builddir = opts.builddir or opts.model[:-4]
-
+    #builddir = opts.builddir or opts.model[:-4]
+    builddir = opts.builddir or opts.model.split('.')[0]
     # logging stuff...
     os.system('mkdir -p %s' % builddir)
     logger = logging.getLogger('jasper')
@@ -279,9 +279,14 @@ if __name__ == '__main__':
             prm_file = backend.prm_loc
             bitstream = backend.bitstream_loc
 
-            backend.output_fpg = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d.fpg' % (
-                tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
-                tf.start_time.tm_hour, tf.start_time.tm_min)
+            if opts.be == 'quartus':
+                 backend.output_fpg = tf.frontend_target_base[:-5] + '_%d-%02d-%02d_%02d%02d.fpg' % (
+                    tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
+                    tf.start_time.tm_hour, tf.start_time.tm_min)
+            else:
+                backend.output_fpg = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d.fpg' % (
+                    tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
+                    tf.start_time.tm_hour, tf.start_time.tm_min)
 
             #Generate the hex timestamp for the golden and multiboot images, if selected
             if platform.boot_image == 'golden':

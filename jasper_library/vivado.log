@@ -1,0 +1,26 @@
+#-----------------------------------------------------------
+# Vivado v2021.1 (64-bit)
+# SW Build 3247384 on Thu Jun 10 19:36:07 MDT 2021
+# IP Build 3246043 on Fri Jun 11 00:30:35 MDT 2021
+# Start of session at: Tue Jul  8 18:20:48 2025
+# Process ID: 2185341
+# Current directory: /home/bgodfrey/CASPER/mlib_devel/jasper_library
+# Command line: vivado
+# Log file: /home/bgodfrey/CASPER/mlib_devel/jasper_library/vivado.log
+# Journal file: /home/bgodfrey/CASPER/mlib_devel/jasper_library/vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project /data/DesignFiles/scilabdemo_rfsoc/myproj/myproj.xpr
+WARNING: [filemgmt 56-3] IP Repository Path: Could not find the directory '/data/DesignFiles/scilabdemo_rfsoc/dspproj/dspproj.srcs'.
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+WARNING: [IP_Flow 19-2248] Failed to load user IP repository '/data/DesignFiles/scilabdemo_rfsoc/dspproj/dspproj.srcs'; Can't find the specified path.
+If this directory should no longer be in your list of user repositories, go to the IP Settings dialog and remove it.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/data/Tools/Xilinx/Vivado/2021.1/data/ip'.
+INFO: [IP_Flow 19-3899] Cannot get the environment domain name variable for the component vendor name. Setting the vendor name to 'user.org'.
+open_project: Time (s): cpu = 00:00:18 ; elapsed = 00:00:06 . Memory (MB): peak = 7616.773 ; gain = 73.352 ; free physical = 3882 ; free virtual = 25032
+update_compile_order -fileset sources_1
+update_compile_order -fileset sources_1
+exit
+INFO: [Common 17-206] Exiting Vivado at Tue Jul  8 18:32:59 2025...

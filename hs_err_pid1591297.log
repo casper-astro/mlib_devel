@@ -1,0 +1,12 @@
+#
+# An unexpected error has occurred (11)
+#
+Stack:
+/lib/x86_64-linux-gnu/libc.so.6(+0x43090) [0x7f49f741c090]
+/data/Tools/Xilinx/Vivado/2023.1//lib/lnx64.o/librdi_device.so(+0xf488d8) [0x7f49e19a08d8]
+/lib/x86_64-linux-gnu/libc.so.6(+0x468a7) [0x7f49f741f8a7]
+/lib/x86_64-linux-gnu/libc.so.6(on_exit+0) [0x7f49f741fa60]
+/data/Tools/Xilinx/Vivado/2023.1//lib/lnx64.o/librdi_dsp.so(+0x8f137) [0x7f49dff47137]
+/data/Tools/Xilinx/Vivado/2023.1//lib/lnx64.o/libboost_thread.so(+0x155e7) [0x7f49f68bd5e7]
+/lib/x86_64-linux-gnu/libpthread.so.0(+0x8609) [0x7f49f73be609]
+/lib/x86_64-linux-gnu/libc.so.6(clone+0x43) [0x7f49f74f8353]

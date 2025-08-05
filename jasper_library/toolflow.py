@@ -7,6 +7,7 @@ A work in progress.
 """
 import logging
 import os
+import subprocess
 import casper_platform as platform
 import yellow_blocks.yellow_block as yellow_block
 import blockdesign
@@ -234,6 +235,7 @@ class Toolflow(object):
         """
         self.logger.info('Generating yellow block custom hdl files')
         for obj in self.periph_objs:
+            print('PERIPHERAL OBJECT: ' + str(obj))
             c = obj.gen_custom_hdl()
             for key, val in c.items():
                 # create file and write the source string to it
@@ -352,6 +354,7 @@ class Toolflow(object):
         return provisions
 
     def build_top(self):
+        print('BUILDING TOP IN TOOLFLOW')
         """
         Copies the base top-level verilog file (which is platform
         dependent) to the compile directory.
@@ -458,6 +461,7 @@ class Toolflow(object):
         """
         self.logger.info('top: %s' % self.topfile)
         for obj in self.periph_objs:
+            print('modifying top for obj %s' % obj.name)
             self.logger.debug('modifying top for obj %s' % obj.name)
             # self.top.set_cur_blk(obj.fullname)
             if '/' in obj.fullpath:
@@ -466,8 +470,11 @@ class Toolflow(object):
             obj.modify_top(self.top)
             self.sources += obj.sources
             self.ips += obj.ips
+        print('ARCHITECTURE IS: ' + str(self.plat.mmbus_architecture))
+        print('PLATFORM IS: ' + str(self.plat))
         # add AXI4-Lite architecture specfic stuff, which must be called after all yellow blocks have modified top.
         if 'AXI4-Lite' in self.plat.mmbus_architecture:
+            print('\n\nAXI4-Lite FOUND IN ARCHITECTURE\n\n')
             # Make an AXI4-Lite interconnect yellow block and let it modify top
             axi4lite_interconnect = yellow_block.YellowBlock.make_block(
                 {'tag': 'xps:axi4lite_interconnect', 'name': 'axi4lite_interconnect', 
@@ -475,11 +482,18 @@ class Toolflow(object):
             axi4lite_interconnect.modify_top(self.top)
             self.sources += axi4lite_interconnect.sources
             self.ips += axi4lite_interconnect.ips
+            print('AXI IPs: ' + str(self.sources))
             # Generate xml2vhdl
             self.xml2vhdl()
             # add the AXI4lite yellowblock to the peripherals manually
             self.periph_objs.append(axi4lite_interconnect)
-
+            print('BASE ADDRESS IS: ' + str(axi4lite_interconnect.platform.mmbus_base_address))
+        
+        print('Checking something: ' + str(type((self.top.axi4lite_devices)[0])))
+        for dev in self.top.axi4lite_devices:
+            print('Set platform for... ' + str(dev))
+            dev.platform = self.plat
+    
     def _finalize_top(self):
         """
         Call every Yellow Block's `finalize_top` method, in case
@@ -495,6 +509,7 @@ class Toolflow(object):
         VerilogModule instance.
         """
         for name, usermodule in list(self.user_modules.items()):
+            print('INSTANTIATING USER IP ' + str(name))
             inst = self.top.get_instance(entity=name, name='%s_inst' % name)
             self.top.set_cur_blk('usermodule: %s'%name)
             # internal = False --> we assume that other yellow
@@ -544,10 +559,15 @@ class Toolflow(object):
             longest_name = max([len(core.regname) for core in self.cores])
             format_str = '{0:%d} {1:1} {2:<16x} {3:<16x}\n' % longest_name
         for core in self.cores:
+            print('CORE NAME IS: ' + str(core.regname))
+            print('CORE MODE IS: ' + str(core.mode))
+            print('CORE BASE ADDRESS IS: ' + str(core.base_addr))
+            print('CORE BYTES IS: ' + str(core.nbytes))
             self.logger.debug('Adding core_info.tab entry for '
                               '%s' % core.regname)
             s += format_str.format(core.regname, modemap[core.mode],
                                    core.base_addr, core.nbytes)
+
             # add aliases if the WB Devices have them
             # Add the core's register name as a prefix, because memory map
             # names need not be unique!
@@ -620,11 +640,13 @@ class Toolflow(object):
             pass
         if 'wishbone' in self.plat.mmbus_architecture:
             self.top.wb_compute(self.plat.dsp_wb_base_address,
-                            self.plat.dsp_wb_base_address_alignment)
+                              self.plat.dsp_wb_base_address_alignment)
+        
         # Write top module file
         self.top.gen_module_file(filename=self.compile_dir+'/top.v')
         # Write any submodule files required for the compile. This is probably
         # only the hierarchical WB arbiter, or nothing at all
+        print('WRITING TOP!!!!')
         for key, val in self.top.generated_sub_modules.items():
             self.logger.info("Writing sub module file %s.v" % key)
             with open(self.compile_dir+'/%s.v'%key, 'w') as fh:
@@ -798,18 +820,47 @@ class Toolflow(object):
         c.synthesis.pin_map = self.plat._pins
 
         mm_slaves = []
+        backend = self.plat.backend_target.lower()
         if 'AXI4-Lite' in self.plat.mmbus_architecture:
+            seen_regs = set()
             for dev in self.top.axi4lite_devices:
-                if dev.mode == 'rw':
-                    mode = 3
-                elif dev.mode == 'r':
-                    mode = 1
-                elif dev.mode == 'w':
-                    mode = 2
-                else:
-                    mode = 1
-                mm_slaves += [castro.mm_slave(dev.regname, mode, dev.base_addr,
-                                            dev.nbytes)]
+                print('ON DEVICE: ' + str(dev.regname))    
+                for reg in dev.memory_map:
+                    print('ON REGISTER: ' + str(reg.name))
+                    # Deduplicate by register name and offset (conservative)
+                    key = (reg.name, getattr(reg, 'offset', None))
+                    if key in seen_regs:
+                        continue
+                    seen_regs.add(key)
+
+                    if reg.mode == 'rw':
+                        mode = 3
+                    elif reg.mode == 'r':
+                        mode = 1
+                    elif reg.mode == 'w':
+                        mode = 2
+                    else:
+                        mode = 1
+
+                    if backend == 'quartus': 
+                        mode = reg.mode if hasattr(reg, 'mode') else 'rw'
+                        if dev.base_addr is None:
+                            # Compute base_addr from platform base + offset
+                            if hasattr(dev, 'platform') and hasattr(reg, 'offset'):
+                                #print(vars((dev.memory_map)[0]))
+                                #offset = (dev.memory_map[0]).offset
+                                #nbytes = (dev.memory_map[0]).nbytes
+                                #base = dev.platform.mmbus_base_address + offset
+                                base = dev.platform.mmbus_base_address + reg.offset
+                            else:
+                                raise RuntimeError(f"Cannot determine base address for device {reg.name}")
+                        else:
+                            base = dev.base_addr + reg.offset
+                            #nbytes = dev.nbytes
+                    else:
+                         base = dev.base_addr + reg.offset
+                    mm_slaves += [castro.mm_slave(reg.name, mode, base,
+                                                reg.nbytes)]
         if 'wishbone' in self.plat.mmbus_architecture:
             for dev in self.top.wb_devices:
                 if dev.mode == 'rw':
@@ -874,6 +925,7 @@ class Toolflow(object):
         """
         # Generate memory map xml file for each interface in memory_map
 
+        print('MEMORY MAP FILE: ' + str(memory_map))
         for interface in list(sorted(memory_map.keys())):
             xml_root = ET.Element('node')
             xml_root.set('id', interface)
@@ -948,10 +1000,12 @@ class Toolflow(object):
         myxml = xml.dom.minidom.parseString(ET.tostring(xml_root))
         xml_base_name = "axi4lite_top_ic_memory_map.xml"
         xml_file_name = os.path.join(self.xml_source_dir, xml_base_name)
+        print('THE FILE NAME IS: ' + str(xml_file_name))
         xml_file = open(xml_file_name, "w")
         xml_text = myxml.toprettyxml()
         xml_text += "<!-- This file has been automatically generated by generate_xml_memory_map function." + " /!-->\n"
         xml_file.write(xml_text)
+        print(xml_text)
         xml_file.close()
 
     def xml2vhdl(self):
@@ -970,6 +1024,12 @@ class Toolflow(object):
         if not os.path.exists(self.hdl_output_dir):
             os.makedirs(self.hdl_output_dir)
         # generate xml memory maps for input
+        print('TOP MEMORY MAP: ' + str(self.top.memory_map))
+        print('\tAXI MEMORY MAP: ') 
+        print('\t\tSYS: ' + str(vars((self.top.memory_map)['sys']['axi4lite_devices'][0])))
+        for counter, dev in enumerate((self.top.memory_map)['sw_reg']['axi4lite_devices']):
+            print('\t\tSW_REG ' + str(counter) + ': ' + str(vars(dev)))
+
         self.generate_xml_memory_map(self.top.memory_map)
         # generate xml interconnect for input
         self.generate_xml_ic(self.top.memory_map)
@@ -1309,16 +1369,31 @@ class ToolflowBackend(object):
             fh.write("?meta\t" + line)
             fh.write('?quit\n')
 
-        # copy binary file from binary file location and rename to system.bin
-        mkfpg_cmd1 = 'cp %s %s/system.bin' % (filename_bin, self.compile_dir)
+        
+        if self.name == 'quartus':
+            print('Making .rbf file')
+            mkfpg_cmd1 = 'cp %s %s/system.rbf' % (filename_bin, self.compile_dir)
+        else:
+            # copy binary file from binary file location and rename to system.bin
+            mkfpg_cmd1 = 'cp %s %s/system.bin' % (filename_bin, self.compile_dir)
+        
         os.system(mkfpg_cmd1)
-        # compress binary file in new location
-        mkfpg_cmd2 = 'gzip -c %s/system.bin > %s/system.bin.gz' % (
-            self.compile_dir, self.compile_dir)
+        if self.name == 'quartus':
+            mkfpg_cmd2 = 'gzip -c %s/system.rbf > %s/system.rbf.gz' % (self.compile_dir, self.compile_dir)
+        else:
+            mkfpg_cmd2 = 'gzip -c %s/system.bin > %s/system.bin.gz' % (self.compile_dir, self.compile_dir)
+        
+
+        #mkfpg_cmd1 = 'cp %s %s/system.bin' % (filename_bin, self.compile_dir)
+        #os.system(mkfpg_cmd1)
+        #mkfpg_cmd2 = 'gzip -c %s/system.bin > %s/system.bin.gz' % (self.compile_dir, self.compile_dir)
         os.system(mkfpg_cmd2)
         # append the compressed binary file to the extended_info.kcpfpg file
-        mkfpg_cmd3 = 'cat %s/system.bin.gz >> %s/extended_info.kcpfpg' % (
-            self.compile_dir, self.compile_dir)
+        if self.name == 'quartus':
+            mkfpg_cmd3 = 'cat %s/system.rbf.gz >> %s/extended_info.kcpfpg' % (self.compile_dir, self.compile_dir)
+        else:            
+            mkfpg_cmd3 = 'cat %s/system.bin.gz >> %s/extended_info.kcpfpg' % (self.compile_dir, self.compile_dir)
+        
         os.system(mkfpg_cmd3)
         # copy extended_info.kcpfpg and rename to time stamped file and
         # place in output directory with the bof file
@@ -1485,10 +1560,15 @@ class QuartusBackend(ToolflowBackend):
         self.tcl_cmds = ''
         self.output_dir = os.path.join(self.compile_dir, 'outputs')
         os.makedirs(self.output_dir, exist_ok=True)
+        self.bit_loc = os.path.join(self.output_dir, 'top.bit')
+        self.bin_loc = os.path.join(self.output_dir, 'top.rbf')
         self.bitstream_loc = os.path.join(self.output_dir, 'top.sof')
-        self.binary_loc = os.path.join(self.output_dir, 'top.rbf')
-        self.bd = None
+        self.hex_loc = os.path.join(self.output_dir, 'top.hex')
+        self.mcs_loc = os.path.join(self.output_dir, 'top.mcs')
+        self.prm_loc = os.path.join(self.output_dir, 'top.prm')
 
+        self.bd = None
+        self.first_clock = True
         self.name = 'quartus'
         self.npm_sources = []
         ToolflowBackend.__init__(self, plat=plat, compile_dir=compile_dir)
@@ -1520,6 +1600,7 @@ class QuartusBackend(ToolflowBackend):
         self.logger.debug(f'Initializing Quartus project: {self.project_name}')
         prefix = os.path.join(self.compile_dir, self.project_name)
 
+        self.add_tcl_cmd('load_package flow', stage='init')
         self.add_tcl_cmd('set impl_dir "%s"'%prefix, stage='init')
 
         # Just use project path prefix
@@ -1536,21 +1617,36 @@ class QuartusBackend(ToolflowBackend):
         self.add_tcl_cmd(f'set_global_assignment -name DEVICE {plat.fpga}', stage='init')
 
         # Output paths
-        self.bitstream_loc = os.path.join(self.output_dir, 'top.sof')
-        self.logger.debug(f'Set bitstream output location to: {self.bitstream_loc}')
-        self.binary_loc = os.path.join(self.output_dir, 'top.rbf')
-        self.logger.debug(f'Set rbf output location to: {self.binary_loc}')
+        #self.bitstream_loc = os.path.join(self.output_dir, 'top.sof')
+        #self.logger.debug(f'Set bitstream output location to: {self.bitstream_loc}')
+        #self.binary_loc = os.path.join(self.output_dir, 'top.rbf')
+        #self.logger.debug(f'Set rbf output location to: {self.binary_loc}')
 
         #self.add_tcl_cmd(f'set_global_assignment -name OUTPUT_DIRECTORY {self.output_dir}', stage='init')
         self.logger.debug(f'Top level output directory is: {self.output_dir}')
 
         # Any top-level file setup
         self.add_tcl_cmd(f'set_global_assignment -name TOP_LEVEL_ENTITY top', stage='init')
+
+        #print('ALL ALLTRIBUTES: ' + str(vars(self)))
+
+        core_basename = os.path.basename(self.compile_dir) 
+        core_name = os.path.join(self.compile_dir, core_basename + '_ip.v')
+
+        self.add_tcl_cmd(f'set_global_assignment -name VERILOG_FILE {core_name}')
+        #for root, _, files in os.walk(self.compile_dir):
+        #    for f in files:
+        #        if f.endswith((".vhd", ".vhdl")):
+        #            self.add_tcl_cmd(f'set_global_assignment -name VHDL_FILE {os.path.join(root, f)}', stage='init')
+        #        elif f.endswith(".v"):
+        #            self.add_tcl_cmd(f'set_global_assignment -name VERILOG_FILE {os.path.join(root, f)}', stage='init')
+
+        #self.add_tcl_cmd(f'set_global_assignment -name OUTPUT_DIRECTORY /data/DesignFiles/scilabdemo/scilabdemo/')
         #self.add_tcl_cmd('set_global_assignment -name DESIGN_ENTRY "VHDL"', stage='init')
 
     def add_library(self, path):
         """ERROR: Illegal assignment: DESIGN_ENTRY. Specify a legal assignment name.
-
+/home/bgodfrey/CASPER/mlib_devel
         while executing
         "set_global_assignment -name DESIGN_ENTRY "VHDL""
         (file "/data/DesignFiles/de10_test3/gogogo.tcl" line 7)
@@ -1617,38 +1713,6 @@ class QuartusBackend(ToolflowBackend):
             self.logger.error(f"add_source called with unknown path: {source}")
 
     def add_const_file(self, constfile):
-        """
-        Add a constraint file to the project. via a tcl incantation.
-        In non-project mode, it is important to note that copies are not made
-        of files. The files are read from their source directory. Project
-        mode copies files from their source directory and adds them to the
-        a new compile directory.
-
-        :param constfile:
-        """
-        """
-        if constfile.split('.')[-1] == self.const_file_ext:
-            self.logger.debug('Adding constraint file: %s' % constfile)
-            # Project Mode is enabled
-            if self.plat.project_mode:
-                if self.template_project is not None:
-                    self.add_tcl_cmd('import_files -force  -of_objects [get_reconfig_modules user_top-toolflow] %s' %
-                                 constfile)
-                else:
-                    self.add_tcl_cmd('import_files -force -fileset constrs_1 %s' %
-                                 constfile)
-            # Non-Project Mode is enabled
-            else:
-                self.add_tcl_cmd('read_xdc %s' % constfile)
-        else:
-            self.logger.debug('Ignore constraint file: %s, with wrong file '
-                              'extension' % constfile)
-
-        """
-        """
-        Add a constraint file to the Quartus project.
-        Assumes .qsf or .sdc file type.
-        """
         ext = os.path.splitext(constfile)[-1].lower()
 
         if ext == '.qsf':
@@ -1656,8 +1720,9 @@ class QuartusBackend(ToolflowBackend):
             self.add_tcl_cmd(f'source "{constfile}"', stage='pre_synth')
 
         elif ext == '.sdc':
-            self.logger.debug(f'Adding SDC constraint file: {constfile}')
-            self.add_tcl_cmd(f'set_global_assignment -name SDC_FILE "{constfile}"', stage='init')
+            self.logger.debug(f'Assuming SDC constraint file was already added in qsf file: {constfile}')
+            pass
+            #self.add_tcl_cmd(f'set_global_assignment -name SDC_FILE "{constfile}"', stage='init')
 
         else:
             self.logger.warning(f'Ignoring constraint file with unknown extension: {constfile}')
@@ -1696,25 +1761,34 @@ class QuartusBackend(ToolflowBackend):
 
         # Step 1: Analysis & Synthesis
         tcl(f'execute_flow -compile', stage='synth')  # shortcut for map, fit, asm
+        
+        frontend = os.getenv('FRONTEND').lower()
+        if frontend and frontend == 'scilab':
+            search_dir = os.path.join(os.getenv('MLIB_DEVEL_PATH'), 'scilab_library')
+            for root, dirs, files in os.walk(search_dir):
+                tcl(f'set_global_assignment -name SEARCH_PATH {root}', stage='init')
+                #self.add_tcl_cmd(f'set_global_assignment -name SEARCH_PATH {search_dir}', stage='init')
+        tcl(f'file copy -force {self.project_name}.sof {self.output_dir}/top.sof', stage='post_bitgen')
 
         # Or manual steps (for debug granularity):
         # tcl(f'quartus_map --read_settings_files=on --write_settings_files=off {self.project_name}', stage='synth')
         # tcl(f'quartus_fit --read_settings_files=on --write_settings_files=off {self.project_name}', stage='impl')
         # tcl(f'quartus_asm --read_settings_files=on --write_settings_files=off {self.project_name}', stage='bitgen')
 
+        # Note: Have to run these as a subprocess
         # Step 2: TimeQuest Timing Analysis
-        tcl(f'quartus_sta {self.project_name}', stage='post_impl')
+        # tcl(f'quartus_sta {self.project_name}', stage='post_impl')
 
         # Step 3: Generate .rbf (raw binary file)
-        rbf_output = self.binary_loc
-        sof_input = self.bitstream_loc
-        tcl(f'quartus_cpf -c {sof_input} {rbf_output}', stage='post_bitgen')
+        #rbf_output = self.binary_loc
+        #sof_input = self.bitstream_loc
+        #tcl(f'quartus_cpf -c {sof_input} {rbf_output}', stage='post_bitgen')
 
         # Step 4: Yellow block hooks, timing checks, etc.
         self.gen_yellowblock_tcl_cmds()
 
         # Optional: check for timing failures (you may need to parse .sta.rpt manually)
-        tcl('puts "Compilation and RBF generation complete."', stage='promgen')
+        tcl('puts "Compilation complete."', stage='promgen')
 
 
     def compile(self, cores, plat, synth_strat=None, impl_strat=None, threads='multi'):
@@ -1739,28 +1813,73 @@ class QuartusBackend(ToolflowBackend):
         rv = os.system(f'quartus_sh -t {tcl_file}')
         if rv:
             raise Exception('Quartus compilation failed!')
+        
+        # Step 2: TimeQuest Timing Analysis
+        # tcl(f'quartus_sta {self.project_name}', stage='post_impl')
 
+        # Step 3: Generate .rbf (raw binary file)
+        rbf_output = self.bin_loc
+        sof_input = self.bitstream_loc
+
+        subprocess_basename = os.path.basename(self.compile_dir) 
+        subprocess_sof = self.bitstream_loc #os.path.join(self.compile_dir, subprocess_basename, subprocess_basename + '.sof')
+        subprocess_rbf = self.bin_loc #os.path.join(self.compile_dir, subprocess_basename, subprocess_basename + '.rbf')
+        print('SOF LOCATION: ' + str(subprocess_sof))
+        print('RBF LOCATION: ' + str(subprocess_rbf))
+        subprocess.run([f'quartus_cpf', '-c', subprocess_sof, subprocess_rbf], check = True)
 
     def get_tcl_const(self, const):
-    
-    #Generate Quartus-compatible .qsf-style constraints
-    #from a PinConstraint object (location and IO standard only).
         user_const = ''
-        if isinstance(const, castro.PinConstraint):
-            self.logger.debug('Processing PinConstraint: %s -> %s' % (const.portname, const.symbolic_name))
-            for idx, _ in enumerate(const.symbolic_indices):
-                port_idx = f'[{const.portname_indices[idx]}]' if const.portname_indices else ''
-                full_portname = f'{const.portname}{port_idx}'
+        print('I DISCOVERED A CONSTRAINT: ' + str(const))
+        # Handle port/pin constraints
+        if isinstance(const, (PortConstraint, castro.PinConstraint)):
+            print(vars(const))
+            portname = getattr(const, 'portname', None)
+            port_index = getattr(const, 'port_index', None) or getattr(const, 'portname_indices', [])
+            locs = getattr(const, 'loc', None) or getattr(const, 'location', [])
+            iostds = getattr(const, 'iostd', None) or getattr(const, 'io_standard', [])
 
-                loc = const.location[idx]
-                if loc:
-                    user_const += f'set_location_assignment {loc} -to {full_portname}\n'
 
-                io_std = const.io_standard[idx]
-                if io_std:
-                    user_const += f'set_instance_assignment -name IO_STANDARD "{io_std}" -to {full_portname}\n'
+            self.logger.debug(f'Processing PinConstraint: {portname}')
+            self.logger.debug(f'\tLocs are : {locs}')
+            self.logger.debug(f'\tIostds are : {iostds}')
+
+            for idx in range(len(locs)):
+                port_idx = f'[{port_index[idx]}]' if port_index else ''
+                full_portname = f'{portname}{port_idx}'
+
+                if locs[idx]:
+                    qsf_line = f'set_location_assignment {locs[idx]} -to {full_portname}\n'
+                    self.logger.debug(f'Generated QSF line: {qsf_line}')
+                    #user_const += f'set_location_assignment {locs[idx]} -to {full_portname}\n'
+                    user_const += qsf_line
+    
+                if iostds[idx]:
+                    qsf_line = f'set_instance_assignment -name IO_STANDARD \"{iostds[idx]}\" -to {full_portname}\n'
+                    self.logger.debug(f'Generated QSF line: {qsf_line}')
+                    #user_const += f'set_instance_assignment -name IO_STANDARD \"{iostds[idx]}\" -to {full_portname}\n'
+                    user_const += qsf_line
+
+        # Handle clock constraints
+        elif isinstance(const, (ClockConstraint, castro.ClkConstraint)):
+            print('DISCOVERED A CLOCK CONSTRAINT')
+            clk_name = getattr(const, 'name', getattr(const, 'clkname', None))
+            clk_port = getattr(const, 'port', getattr(const, 'portname', None))
+            clk_period = getattr(const, 'period', getattr(const, 'period_ns', None))
+
+            self.logger.debug(f'Processing ClockConstraint: {clk_name} -> {clk_port}')
+            if clk_port and clk_period:
+                if self.first_clock:
+                    user_const += f'create_clock -name {clk_name} -period {clk_period} [get_ports {{ {clk_port} }}]\n'
+                    self.first_clock = False
+                else: 
+                    user_const += f'create_clock -name {clk_name} -period {clk_period} -add [get_ports {{ {clk_port} }}]\n'
+
+        # Extend this with other constraint types as needed (e.g. ClockGroupConstraint)
 
         return user_const
+
+
 
 
     @staticmethod
@@ -1902,6 +2021,7 @@ class QuartusBackend(ToolflowBackend):
         """
         self.logger.info('Generating yellow block custom hdl files')
         for obj in self.periph_objs:
+            print('PERIPH OBJECT: ' + str(obj))
             c = obj.gen_custom_hdl()
             for key, val in c.items():
                 self.logger.debug(f'Wrote yellow block HDL file: {key}')
@@ -1912,22 +2032,49 @@ class QuartusBackend(ToolflowBackend):
                 # add the tcl command to add the source to the project
                 self.add_source('%s/%s' %(self.compile_dir, key), self.plat)
 
+
     def gen_constraint_file(self, constraints):
         """
-        Pass this method a toolflow-standard list of constraints
-        which have already had their physical parameters calculated
-        and it will generate a constraint file and add it to the
-        current project.
+        Generate .qsf and .sdc files from the CASPER-standard constraint objects
+        or castro equivalents.
         """
-        constfile = '%s/user_const.qsf' % self.compile_dir
-        user_const = ''
+
+        proj_dir = os.path.join(self.compile_dir, self.project_name)
+        qsf_file = os.path.join(proj_dir, 'user_const.qsf')
+        sdc_file = os.path.join(proj_dir, 'user_const.sdc')
+        qsf_lines = ''
+        sdc_lines = ''
+
+        # Example: set number of processors for Quartus
+        total_cores = os.cpu_count()
+        cpu_count = 1 if not(int(0.75*total_cores)) else int(0.75*total_cores) 
+        
+        qsf_lines += f'set_global_assignment -name NUM_PARALLEL_PROCESSORS {cpu_count}\n'
+
         for constraint in constraints:
-            self.logger.info('parsing constraint %s' % constraint)
-            user_const += self.get_tcl_const(constraint)
-        self.logger.info("Constraints: %s" % user_const)
-        helpers.write_file(constfile, user_const)
-        self.logger.info('Finished writing constraints file: %s' % constfile)
-        self.add_const_file(constfile)
+            self.logger.info(f'Parsing constraint: {constraint}')
+            tcl_line = self.get_tcl_const(constraint)
+
+            if isinstance(constraint, (ClockConstraint, ClockGroupConstraint)) or \
+               constraint.__class__.__name__ in ['ClkConstraint', 'ClkGrpConstraint']:
+                self.logger.debug(f'  ? SDC constraint: {constraint}')
+                sdc_lines += tcl_line
+            else:
+                self.logger.debug(f'  ? QSF constraint: {constraint}')
+                qsf_lines += tcl_line
+
+        
+        qsf_lines += f'set_global_assignment -name SDC_FILE {os.path.basename(sdc_file)}\n'
+        # Write constraint files
+        helpers.write_file(qsf_file, qsf_lines)
+        helpers.write_file(sdc_file, sdc_lines)
+
+        self.logger.info(f'Wrote constraint files:\n  QSF: {qsf_file}\n  SDC: {sdc_file}')
+
+        # Register with the Quartus toolchain
+        self.add_const_file(qsf_file)
+        self.add_const_file(sdc_file)
+        
   
 class VitisBackend(ToolflowBackend):
     """
@@ -2802,7 +2949,6 @@ proc puts_red {s} {
         rv = os.system('vivado -jou {cdir}/vivado.jou -log {cdir}/vivado.log '
                        '-mode batch -source '
                        '{cfile}'.format(cdir=self.compile_dir, cfile=tcl_file))
-        print('DANGUS: ' + str(rv))
         if rv:
             raise Exception('Vivado failed!')
 
@@ -3057,6 +3203,8 @@ proc puts_red {s} {
         helpers.write_file(constfile, user_const)
         self.logger.info('Finished writing constraints file: %s' % constfile)
         self.add_const_file(constfile)
+
+
 
 class ISEBackend(VivadoBackend):
     """

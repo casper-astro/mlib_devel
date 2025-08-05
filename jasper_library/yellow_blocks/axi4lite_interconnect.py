@@ -1,4 +1,5 @@
 import math
+import os
 from .yellow_block import YellowBlock
 from .yellow_block_typecodes import *
 
@@ -14,14 +15,16 @@ class axi4lite_interconnect(YellowBlock):
         This yellow block class must be after all other yellow blocks!
     """
     def initialize(self):
+        print('\n\n\nINITIALIZING AXI4LITE_INTERCONNECT\n\n\n')
         self.platform_support = 'all'
         self.add_source('axi4_lite/*.vhd')
+        self.connected = False
 
     def modify_top(self,top):
         # Make a memory map for all axi4lite interfaces/slaves
-        top.axi4lite_memory_map(self.platform.mmbus_base_address, self.platform.mmbus_address_alignment)
+        top.axi4lite_memory_map(self.platform.mmbus_base_address, self.platform.mmbus_address_alignment, self.platform)
         self.memory_map = top.memory_map
-
+        print('MODIFYING TOP: ' + str(top.name))
         inst = top.get_instance(name=self.name, entity='axi4lite_ic_wrapper')
         # instantiate axi4lite wrapper
         # clk and rst signals
@@ -49,8 +52,11 @@ class axi4lite_interconnect(YellowBlock):
         inst.add_port('s_axi4lite_rready',  'M_AXI_rready',  dir='out', width=1,  parent_sig=False)
         inst.add_port('s_axi4lite_bready',  'M_AXI_bready',  dir='out', width=1,  parent_sig=False)
 
+        print('MEMORY MAP: ' + str(self))
         for key, val in list(self.memory_map.items()):
             for reg in val["memory_map"]:
+                print(vars(reg))
+                print(f"[axi4lite_interconnect] Register: {reg.name}, Block: {key}, Mode: {reg.mode}")
                 if reg.axi4lite_mode=='raw':
 
                    # raw axi4l miso signals
@@ -98,8 +104,14 @@ class axi4lite_interconnect(YellowBlock):
         print('=====================')
         tcl_cmds = {}
         tcl_cmds['pre_synth'] = []
-        tcl_cmds['pre_synth'] += ['import_files {%s/axi4_lite/axi4lite_slave_logic.vhd %s/axi4_lite/axi4lite_pkg.vhd}' %(self.hdl_root, self.hdl_root)]
-        tcl_cmds['pre_synth'] += ['update_compile_order -fileset sources_1']
+        if self.platform.backend_target == 'vivado':
+            tcl_cmds['pre_synth'] += ['import_files {%s/axi4_lite/axi4lite_slave_logic.vhd %s/axi4_lite/axi4lite_pkg.vhd}' %(self.hdl_root, self.hdl_root)]
+            tcl_cmds['pre_synth'] += ['update_compile_order -fileset sources_1']
+        else:
+            for filename in ['axi4lite_slave_logic.vhd', 'axi4lite_pkg.vhd']:
+                full_path = os.path.join(self.hdl_root, 'axi4_lite', filename)
+                tcl_cmds['pre_synth'].append(f'set_global_assignment -name VHDL_FILE "{full_path}"')
+
         return tcl_cmds
 
     def add_build_dir_source(self):

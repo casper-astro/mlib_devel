@@ -1,0 +1,38 @@
+name: de10nano
+manufacturer: Intel
+fpga: 5CSEBA6U23I7
+family: "Cyclone V"
+config_voltage: 3.3
+backend_target: quartus
+sources: []
+mmbus_architecture: AXI4-Lite
+mmbus_base_address: 0xC0000000
+mmbus_address_alignment: 4
+constraints: []
+
+
+provides:
+  - fpga_clk1_50
+  - fpga_clk2_50
+  - fpga_clk3_50
+
+
+pins:
+  fpga_clk1_50:
+    iostd: "3.3-V LVTTL"
+    loc: PIN_V11
+  fpga_clk2_50:
+    iostd: "3.3-V LVTTL"
+    loc: PIN_Y13
+  fpga_clk3_50:
+    iostd: "3.3-V LVTTL"
+    loc: PIN_E11
+  led:
+    iostd: "3.3-V LVTTL"
+    loc: [PIN_AA23, PIN_Y16, PIN_AE26, PIN_AF26, PIN_V15, PIN_V16, PIN_AA24, PIN_W15]
+  sw:
+    iostd: "3.3-V LVTTL"
+    loc: [PIN_Y24, PIN_W24, PIN_W21, PIN_W20]
+  oct_rzqin:
+    iostd: "SSTL-15"
+    loc: PIN_D25

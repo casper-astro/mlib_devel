@@ -48,6 +48,7 @@ class YellowBlock(object):
                   to instantiate this block. This root directory is used as a base from which block's
                   source files are defined.
         """
+        print('BUILDING THE BLOCK: ' + str(blk))
         if blk['tag'].startswith('xps:'):
             # This seems a little dubious
             # Import the yellow block from the same package
@@ -55,14 +56,21 @@ class YellowBlock(object):
             clsfile = __import__(__package__+'.'+blk['tag'][4:])
             cls = clsfile.__getattribute__(blk['tag'][4:])
             cls = cls.__getattribute__(blk['tag'][4:]) # don't understand
+            print('cls IS: ' + str(cls))
             # If the class has a factory method, call that. This should return some
             # (possibly platform dependent) yellow block instance
             # Else just return an instance of the class.
             if isinstance(getattr(cls, 'factory', None), collections.Callable):
+                print('CALLING FACTORY')
                 return cls.factory(blk, platform, hdl_root=hdl_root)
             else:
+                print('RETURN CLASS INSTANCE...')
+                print('\tBLOCK IS: ' + str(blk))
+                print('\tPLATFORM IS: ' + str(platform.name))
+                print('\tHDL ROOT IS: ' + str(hdl_root))
                 return cls(blk,platform,hdl_root=hdl_root)
         else:
+            print('IGNORING NON-XPS BLOCK')
             # Don't do anything for non-xps blocks.
             pass
 
@@ -140,6 +148,7 @@ class YellowBlock(object):
         self.copy_attrs()
         try:
             self.fullname = self.fullpath.replace('/','_')
+            print('FULL NAME: ' + str(self.fullname))
             self.unique_name = self.fullpath.split('/',1)[1].replace('/','_')
         except AttributeError:
             makeshift_name = self.tag.split(':')[-1] + '%d'%self.inst_id
@@ -367,6 +376,7 @@ class YellowBlock(object):
         print(path, glob(fullpath))
         for fname in glob(fullpath):
             self.sources.append(fname)
+        print('SOURCES ARE: ' + str(self.sources))
         #if not os.path.exists(fullpath):
         #    self.throw_error("path %s does not exist"%path)
         #self.sources.append(fullpath)

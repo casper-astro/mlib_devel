@@ -89,7 +89,7 @@ class AXI4LiteDevice(object):
     def __init__(self, regname, nbytes, mode,
                 hdl_suffix='', hdl_candr_suffix='',
                 memory_map=[], typecode=0xff,
-                data_width=32, axi4lite_mode=''):
+                data_width=32, axi4lite_mode='', platform = None):
         """
         Class constructor.
 
@@ -127,6 +127,8 @@ class AXI4LiteDevice(object):
         self.hdl_candr_suffix = hdl_candr_suffix
         self.memory_map = memory_map
         self.axi4lite_mode = axi4lite_mode
+        self.platform = platform
+        self.connected = False
 
 class Port(ImmutableWithComments):
     """
@@ -630,6 +632,10 @@ class VerilogModule(object):
         # Gnerated submodules. A dictionary of module names and the verilog strings
         # which, if written to file, could be used to define them
         self.generated_sub_modules = {}
+        if not hasattr(self, '_swreg_registry'):
+            self._swreg_registry = set()
+
+        self.configured_axi = False
 
     def set_cur_blk(self, cur_blk):
         """
@@ -780,7 +786,8 @@ class VerilogModule(object):
             self.add_localparam('SLAVE_ADDR', base_addrs)
             self.add_localparam('SLAVE_HIGH', high_addrs)
 
-    def axi4lite_memory_map(self, base_addr=0x10000, alignment=4):
+    def axi4lite_memory_map(self, base_addr=0x10000, alignment=4, platform = None):
+        print('CALLED AXI4LITE_MEMORY_MAP...')
         """
         This function is only to be called by the 'top' verilog module after all other yellow blocks have called 'modify_top', but
         before the axi4lite_interconnect yellow block class has called 'modify_top' as that class requires the memory map this creates.
@@ -812,35 +819,80 @@ class VerilogModule(object):
         # Each Bram gets its own memory_map entry, with a name matching the one provided
         # when the ram was instantiated via YellowBlock.add_axi4lite_interface.
         
+        
         for dev in self.axi4lite_devices:
+            print('On device ' + str(dev.regname))
             # add all software registers to one memory mapped AXI4-Lite interface
             #FIXME Switching on the typecode and then on mode seems odd.
             # typecodes were never intended to be used for toolflow decision making.
             # Probably the swich should be if axi4lite_mode = reg|bram|raw
+            backend = '' if not(platform) else platform.backend_target.lower()
+            print('Looking at device ' + str(dev.regname) + ' with memory map ' + str(dev.memory_map))
             if dev.typecode == TYPECODE_SWREG:
+                #print('GOING THROUGH VERILOG.PY AND FOUND A SOFTWARE REGISTER: ' + str(vars(dev)))
                 # check to see if this is the first sw_reg in the memory_map dict
+                
+                #print('CHECKING SOMETHING: ' + str(self.platform))
+                #sys.exit(1)
                 if 'sw_reg' not in self.memory_map:
+                    print('THIS SHOULD BE THE FIRST SOFTWARE REGISTER')
+                    print('LOOKING AT... ' + str(dev.regname))
+                    print('THE MEMORY MAP IS: ' + str(dev.memory_map[0]))
+                    print('THE POSSIBLE VALUES OF THE MEMORY MAP ARE: ' + str(vars(dev.memory_map[0])))
                     # Make new interface dict for software registers
                     self.memory_map['sw_reg'] = {}
                     interface = self.memory_map['sw_reg']
                     interface['size'] = dev.nbytes
-                    interface['memory_map'] = dev.memory_map
+                    interface['memory_map'] = (dev.memory_map).copy()
                     # erase dev.memory_map so that core_info doesn't add sw_regs twice
                     # ?????
                     dev.memory_map = []
                     interface['axi4lite_devices'] = [dev]
+                    print('EMPTY MEMORY MAP FOUND FOR ' + str(dev.regname))
+                    dev.connected = True
                 else:
+                    '''
+                    for holder in self.axi4lite_devices:
+                        #print('CHECKING EXISTENCE: ' + str(dev.platform))
+                        if not hasattr(holder, 'memory_map') or not holder.memory_map:
+                            print(f"[ERROR] {holder.regname} has EMPTY memory_map! Typecode: {holder.typecode}")
+                        else:
+                            print(f"[OK] {holder.regname} has memory_map with {len(holder.memory_map)} entries.")
+                    '''
+                    print('LOOKING AT... ' + str(dev.regname))
                     # add another sw_reg to this interface dict
-                    interface = self.memory_map['sw_reg']
-                    # adjust offset of register
-                    dev.memory_map[0].offset = interface['size']
-                    # grow size of interface
-                    interface['size'] += dev.nbytes
-                    # append device memory_map
-                    interface['memory_map'] += dev.memory_map
-                    # # erase dev.memory_map so that core_info doesn't add sw_regs twice
-                    dev.memory_map = []
-                    interface['axi4lite_devices'] += [dev]
+                    if backend == 'quartus':
+                        if not(dev.connected):
+                            interface = self.memory_map['sw_reg']
+                            print('New software register connecting ' + str(dev.regname))
+                            print('Confirming connection status: ' + str(dev.connected))
+                            # adjust offset of register
+                            dev.memory_map[0].offset = interface['size']
+                            # grow size of interface
+                            interface['size'] += dev.nbytes
+                            # append device memory_map
+                            interface['memory_map'] += dev.memory_map
+                            # # erase dev.memory_map so that core_info doesn't add sw_regs twice
+                            dev.memory_map = []
+                            interface['axi4lite_devices'] += [dev]
+                            dev.connected = True
+                        else:
+                            print('Ignoring register ' + dev.regname)
+                            pass  
+                    else:
+                        interface = self.memory_map['sw_reg']
+                        print('INTERFACE: ' + str(interface))
+                        # adjust offset of register
+                        dev.memory_map[0].offset = interface['size']
+                        # grow size of interface
+                        interface['size'] += dev.nbytes
+                        # append device memory_map
+                        interface['memory_map'] += dev.memory_map
+                        # # erase dev.memory_map so that core_info doesn't add sw_regs twice
+                        #dev.memory_map = []
+                        dev.memory_map = []
+                        interface['axi4lite_devices'] += [dev]
+
             elif dev.typecode == TYPECODE_BRAM:
                 # tell the axi_ic to generate a bram
                 self.memory_map[dev.regname] = {}
@@ -862,57 +914,71 @@ class VerilogModule(object):
                 # erase dev.memory_map so that core_info doesn't add raw axi device twice
                 dev.memory_map = [] 
             else:
+                #for dev in self.axi4lite_devices:
+                #    print('INFO FOR...')
+                #    print(vars(dev))
                 # add all other yellow blocks to their own interface and make xml memory map
-                self.memory_map[dev.regname] = {}
-                interface = self.memory_map[dev.regname]
-                interface['size'] = dev.nbytes
-                interface['memory_map'] = dev.memory_map
-                interface['axi4lite_devices'] = [dev]
+                for reg in dev.memory_map:
+                    key = (reg.name, reg.offset)
+                    if key not in self._swreg_registry:
+                        print('ADDING KEY: ' + str(key))
+                        self._swreg_registry.add(key)
+                        self.memory_map[dev.regname] = {}
+                        interface = self.memory_map[dev.regname]
+                        interface['size'] = dev.nbytes
+                        interface['memory_map'] = dev.memory_map
+                        interface['axi4lite_devices'] = [dev]
+                dev.memory_map = [] 
 
-        relative_address = 0
-        # Now loop over interfaces in memory_map to determine addresses.
-        # A limitation / feature of the xml2vhdl axi generation code is that it expects
-        # all memory-mapped devices of size N-bytes to by aligned on N-byte boundaries.
-        # Thus, we can't put a 4-byte register at address 0x0, and then a 1kiB bram at address 0x4.
-        # Though not foolproof, we try and coerce an acceptable layout by placing the devices
-        # in size order with the largest first. Hopefully all the devices are 2^n bytes in size --
-        # this seems to be enforced by the xml2vhdl generator
 
-        # First *we* round up the sizes so we agree with xml2vhdl
-        for key in self.memory_map.keys():
-            self.memory_map[key]['size'] = 2**int(ceil(log(self.memory_map[key]['size'], 2)))
+        if not(self.configured_axi) or backend != 'quartus':
+            relative_address = 0
+            # Now loop over interfaces in memory_map to determine addresses.
+            # A limitation / feature of the xml2vhdl axi generation code is that it expects
+            # all memory-mapped devices of size N-bytes to by aligned on N-byte boundaries.
+            # Thus, we can't put a 4-byte register at address 0x0, and then a 1kiB bram at address 0x4.
+            # Though not foolproof, we try and coerce an acceptable layout by placing the devices
+            # in size order with the largest first. Hopefully all the devices are 2^n bytes in size --
+            # this seems to be enforced by the xml2vhdl generator
 
-        ordered_memory_map = odict.odict()
-        # quick sort be damned. Go slow.
-        while(len(self.memory_map) > 0):
-            max_size = 0
+            # First *we* round up the sizes so we agree with xml2vhdl
+            for key in self.memory_map.keys():
+                self.memory_map[key]['size'] = 2**int(ceil(log(self.memory_map[key]['size'], 2)))
+
+            ordered_memory_map = odict.odict()
+            # quick sort be damned. Go slow.
+            while(len(self.memory_map) > 0):
+                max_size = 0
+                for key,val in list(self.memory_map.items()):
+                    if val['size'] > max_size:
+                        max_size = val['size']
+                        max_key = key
+                ordered_memory_map[max_key] = self.memory_map.pop(max_key)
+
+            # Now replace the memory map with the ordered one and continue
+            self.memory_map = ordered_memory_map.copy()
+
+            # Now loop over interfaces in memory_map to determine addresses
             for key,val in list(self.memory_map.items()):
-                if val['size'] > max_size:
-                    max_size = val['size']
-                    max_key = key
-            ordered_memory_map[max_key] = self.memory_map.pop(max_key)
-
-        # Now replace the memory map with the ordered one and continue
-        self.memory_map = ordered_memory_map.copy()
-
-        # Now loop over interfaces in memory_map to determine addresses
-        for key,val in list(self.memory_map.items()):
-            val['relative_address'] = hex(relative_address)
-            # this is really gross, but didn't want to rewrite anything in core_info... Sorry.
-            if key == 'sw_reg':
-                # loop over registers and axi4lite_devices, assign correct dev.base_addr for core_info
-                # There could be a better python one-liner to do this but idk...
-                for reg in val['memory_map']:
-                    for dev in val['axi4lite_devices']:
-                        # if names match, set base_addr from interface's base_addr + core addr + register offset
-                        if reg.name == dev.regname:
-                            dev.base_addr = base_addr + relative_address + reg.offset
-            else:
-                # 'base_addr' for interface (for core_info to reference later)
-                val['axi4lite_devices'][0].base_addr = base_addr + relative_address
-            # adjust addresses for next loop
-            relative_address = relative_address + (alignment*int(ceil(val['size']/float(alignment))))
-
+                val['relative_address'] = hex(relative_address)
+                # this is really gross, but didn't want to rewrite anything in core_info... Sorry.
+                if key == 'sw_reg':
+                    # loop over registers and axi4lite_devices, assign correct dev.base_addr for core_info
+                    # There could be a better python one-liner to do this but idk...
+                    for reg in val['memory_map']:
+                        for dev in val['axi4lite_devices']:
+                            # if names match, set base_addr from interface's base_addr + core addr + register offset
+                            if reg.name == dev.regname:
+                                dev.base_addr = base_addr + relative_address + reg.offset
+                else:
+                    # 'base_addr' for interface (for core_info to reference later)
+                    val['axi4lite_devices'][0].base_addr = base_addr + relative_address
+                # adjust addresses for next loop
+                relative_address = relative_address + (alignment*int(ceil(val['size']/float(alignment))))
+            self.configured_axi = True
+        else:
+            print('ALREADY CONFIGURED AXI INTERCONNECT')
+            pass
 
 
     def get_base_wb_slaves(self):
@@ -1072,10 +1138,11 @@ class VerilogModule(object):
     def instantiate_child_ports(self):
         """
         Add ports and signals associated with child instances
-        """
+        """        
         for block in list(sorted(self.instances.keys())):
             self.set_cur_blk(block)
             for instname, inst in list(self.instances[block].items()):
+                print('On instance ' + str(vars(inst)))
                 logger.debug('Instantiating child ports for %s'%instname)
                 for blk in list(sorted(inst.ports.keys())):
                     for pname, port in list(inst.ports[blk].items()):
@@ -1096,6 +1163,8 @@ class VerilogModule(object):
 
     def gen_module_file(self, filename=None):
         self.instantiate_child_ports()
+        for val in self.axi4lite_devices:
+            print('WHAT THE HELL...' + str(vars(val)))
         if self.topfile is None:
             return self.write_new_module_file(filename=filename)
         else:
@@ -1240,6 +1309,9 @@ class VerilogModule(object):
         s = 'module %s (\n'%self.name
         s += self.gen_port_list()
         s += '  );\n'
+        if 'xsg: DE10-Nano' in self.ports:
+            if '[0:0]' in s:
+                s = s.replace('[0:0]', '')
         return s
 
     def gen_params_dec_str(self):
@@ -1290,6 +1362,7 @@ class VerilogModule(object):
             # sort by port type then alphabetically
             for port in sorted(list(self.ports[block].values()), key=operator.attrgetter('dir', 'name')):
                 logger.debug('Generating port %s'%port.name)
+                logger.debug('\tThe width of %s is %d'%(port.name, port.width))
                 if port.width == 0:
                     s += '    %s %s'%(kwm[port.dir],port.name)
                 else:
@@ -1370,6 +1443,7 @@ class VerilogModule(object):
         """
         s = ''
         for block in list(sorted(self.instances.keys())):
+            print('Writing block ' + str(block))
             n = 0
             n_inst = len(self.instances[block])
             s += self.gen_cur_blk_comment(block, self.instances[block])
@@ -1378,6 +1452,9 @@ class VerilogModule(object):
                 if n != (n_inst - 1):
                     s += '\n'
                 n += 1
+        print('/n/n/nLONG BLOCK INCOMING')
+        print(s)
+        print('\n\n\n')
         return s
     
     def gen_assignments_str(self):

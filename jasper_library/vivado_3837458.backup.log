@@ -1,0 +1,14 @@
+#-----------------------------------------------------------
+# Vivado v2021.1 (64-bit)
+# SW Build 3247384 on Thu Jun 10 19:36:07 MDT 2021
+# IP Build 3246043 on Fri Jun 11 00:30:35 MDT 2021
+# Start of session at: Thu Aug 22 15:18:40 2024
+# Process ID: 3837458
+# Current directory: /home/bgodfrey/CASPER/mlib_devel/jasper_library
+# Command line: vivado
+# Log file: /home/bgodfrey/CASPER/mlib_devel/jasper_library/vivado.log
+# Journal file: /home/bgodfrey/CASPER/mlib_devel/jasper_library/vivado.jou
+#-----------------------------------------------------------
+start_gui
+exit
+INFO: [Common 17-206] Exiting Vivado at Thu Aug 22 15:45:26 2024...

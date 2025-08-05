@@ -34,8 +34,7 @@ function [build_cmd] = jasper_frontend(fn)
     cmd = scilab_library_path+'/jasper_frontend.py' + ' ' + '-m ' + modelpath
     debug_info('Frontend python script: ' + cmd);
     //unix_s(cmd);
-    //disp('DONKEY!')
-    //unix_w(cmd);
+    unix_w(cmd);
     disp('*  Frontend python script complete!    *');
     disp('****************************************');
     build_cmd = struct();

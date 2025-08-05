@@ -13,15 +13,35 @@ class sw_reg(YellowBlock):
         self.typecode = TYPECODE_SWREG
         self.platform_support = 'all'
         self.requirements = ['wb_clk']
+        self.memory_map = []
+        backend = (self.platform).backend_target
+
         if not hasattr(self, 'init_val'):
             self.init_val = 0
+        
+        if self.platform.mmbus_architecture[0] == 'AXI4-Lite':
+            print('CREATING A MEMORY MAP FOR REGISTER: ' + str(self.unique_name))
+            self.memory_map = [Register(name=self.unique_name, mode='rw', offset=0, default_val=self.init_val)]
+
+
         if self.blk['io_dir'] == 'To Processor':
-            self.add_source('wb_register_simulink2ppc')
+            if backend == 'quartus':
+                self.add_source('wb_register_simulink2ppc_intel')
+            else:
+                self.add_source('wb_register_simulink2ppc')
         elif self.blk['io_dir'] == 'From Processor':
-            self.add_source('wb_register_ppc2simulink')
+            if backend == 'quartus':
+                self.add_source('wb_register_ppc2simulink_intel')
+            else:
+                self.add_source('wb_register_ppc2simulink')
+
 
     def modify_top(self,top):
+        print(f"IO DIRECTION OF BLOCK {self.blk['name']} IS {self.blk['io_dir']}")
         if self.blk['io_dir'] == 'To Processor':
+            print('TO PROCESSOR IO FOUND FOR BLOCK: ' + str(self.blk))
+            print('\tTHE MEMORY MAP IS: ' + str(vars(self.memory_map[0])))
+
             if self.platform.mmbus_architecture[0] == 'AXI4-Lite':
                 # Inst a module that sits on clock crossing boundary
                 module = 'cdc_synchroniser'
@@ -34,13 +54,16 @@ class sw_reg(YellowBlock):
                 inst.add_port('IP_BUS',       signal='%s_user_data_in'%self.fullname, width=32, parent_sig=True)
                 inst.add_port('OP_BUS',       signal='%s_%s_in' % (self.blocktype, self.unique_name), width=32, parent_sig=True)
             else:
-                module = 'wb_register_simulink2ppc'
+                
+                module = 'wb_register_simulink2ppc_intel' if self.platform == 'intel' else 'wb_register_simulink2ppc'
                 inst = top.get_instance(entity=module, name=self.fullname)
                 inst.add_wb_interface(regname=self.unique_name, mode='r', nbytes=4, typecode=self.typecode)
                 inst.add_port('user_clk', signal='user_clk', parent_sig=False)
                 inst.add_port('user_data_in', signal='%s_user_data_in'%self.fullname, width=32)
         elif self.blk['io_dir'] == 'From Processor':
             if self.platform.mmbus_architecture[0] == 'AXI4-Lite':
+                print('FROM PROCESSOR IO FOUND FOR BLOCK: ' + str(self.blk))
+                print('\tTHE MEMORY MAP IS: ' + str(vars(self.memory_map[0])))
                 # Inst a module that sits on clock crossing boundary
                 module = 'cdc_synchroniser'
                 top.add_axi4lite_interface(regname=self.unique_name, mode='rw', nbytes=4, default_val=self.init_val, typecode=self.typecode)
@@ -54,7 +77,7 @@ class sw_reg(YellowBlock):
                 inst.add_port('IP_BUS',       signal='%s_%s_out'%(self.blocktype, self.unique_name), width=32, parent_sig=True)
 
             else:
-                module = 'wb_register_ppc2simulink'
+                module = 'wb_register_ppc2simulink_intel' if self.platform == 'intel' else 'wb_register_ppc2simulink'
                 inst = top.get_instance(entity=module, name=self.fullname)
                 inst.add_parameter('INIT_VAL', "32'h%x"%self.init_val)
                 inst.add_wb_interface(regname=self.unique_name, mode='rw', nbytes=4, typecode=self.typecode)

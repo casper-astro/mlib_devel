@@ -58,10 +58,26 @@ if __name__ == '__main__':
     os.environ['HDL_ROOT'] = jasper_hdl_root
     # use Non-project mode to genenrate the vivado project
     # TODO: Do we need project mode to generate this project?
+    print('THE BACKEND IS: ' + str(opts.be))
     if opts.be == 'vivado':
         platform = tf.plat
         platform.project_mode = True
         backend = dspflow.VivadoDSPBackend(plat=platform,
+                                                compile_dir=tf.compile_dir,
+                                                periph_objs=tf.periph_objs)
+        backend.import_from_castro(backend.compile_dir + '/castro.yml')
+        # set a new project name, so that it's different from the original project(myproj)
+        backend.project_name = 'dspproj'
+        backend.initialize()
+        backend.compile(cores=opts.jobs, plat=platform)
+        # copy gogogo.tcl to dspproj.tcl, as  gogogo.tcl will be overwritten.
+        os.system('cp %s/gogogo.tcl %s/dspproj.tcl' % (backend.compile_dir, backend.compile_dir))
+        # let's delete gogogo.tcl, as it's not needed anymore
+        os.system('rm %s/gogogo.tcl' % backend.compile_dir)
+    elif opts.be == 'quartus':
+        platform = tf.plat
+        platform.project_mode = True
+        backend = dspflow.QuartusDSPBackend(plat=platform,
                                                 compile_dir=tf.compile_dir,
                                                 periph_objs=tf.periph_objs)
         backend.import_from_castro(backend.compile_dir + '/castro.yml')

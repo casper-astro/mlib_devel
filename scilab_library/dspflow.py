@@ -1,11 +1,12 @@
 import sys, os
-sys.path.append('jasper_library')
+sys.path.append(os.getenv('MLIB_DEVEL_PATH') + '/' + 'jasper_library')
 
 import logging
 import yaml
 import pickle
 from toolflow import Toolflow
 from toolflow import VivadoBackend
+from toolflow import QuartusBackend
 import dsp_blocks.dsp_block as dsp_block
 import verilog
 import castro
@@ -96,13 +97,17 @@ class DSPflow(Toolflow):
         self.periph_objs = self.dsp_objs
     
     def build_top(self):
+        print('BUILDING TOP IN DSP_FLOW')
         """
         This method is almost the same as the one in the Toolflow class.
         The difference is the two "try...except..." are removed.
         Not sure why the "try...except..." are used in the Toolflow class.
         """
         #self.topfile = self.compile_dir+'/top.v'
-        self.topfile = self.compile_dir+'/%s_core.v'%(self.top_module_name)
+
+        append_top = 'ip'
+        self.topfile = self.compile_dir+'/%s_%s.v'%(self.top_module_name, append_top)
+        
         # delete top.v file if it exists, otherwise synthesis will fail
         if os.path.exists(self.topfile):
             os.remove(self.topfile)
@@ -114,9 +119,9 @@ class DSPflow(Toolflow):
             self.const_files.append(os.getenv('HDL_ROOT') + '/%s/%s' % (
                 self.plat.name, source))
         if os.path.exists(self.topfile):
-            self.top = verilog.VerilogModule(name='%s_core'%(self.top_module_name), topfile=self.topfile)
+            self.top = verilog.VerilogModule(name='%s_%s'%(self.top_module_name, append_top), topfile=self.topfile)
         else:
-            self.top = verilog.VerilogModule(name='%s_core'%(self.top_module_name))
+            self.top = verilog.VerilogModule(name='%s_%s'%(self.top_module_name, append_top))
         # the IP core used in the full proj has the port clk, 
         # but it's user_clk used in the dsp proj
         # TODO: we may need to move the following code to somewhere else
@@ -149,7 +154,9 @@ class DSPflow(Toolflow):
         """
         # Write top module file
         #self.top.gen_module_file(filename=self.compile_dir+'/top.v')
-        self.top.gen_module_file(filename=self.compile_dir+'/%s_core.v'%(self.top_module_name))
+        append_top = 'ip'
+
+        self.top.gen_module_file(filename=self.compile_dir+'/%s_%s.v'%(self.top_module_name, append_top))
         # Write any submodule files required for the compile. This is probably
         # only the hierarchical WB arbiter, or nothing at all
         for key, val in self.top.generated_sub_modules.items():
@@ -158,7 +165,7 @@ class DSPflow(Toolflow):
                 fh.write(val)
                 self.sources.append(fh.name)
         self.logger.info("Dumping pickle of top-level Verilog module")
-        pickle.dump(self.top, open('%s/%s_core.pickle' %(self.compile_dir, self.top_module_name),'wb'))
+        pickle.dump(self.top, open('%s/%s_%s.pickle' %(self.compile_dir, self.top_module_name, append_top),'wb'))
 
     def dump_castro(self, filename):
         """
@@ -188,6 +195,7 @@ class VivadoDSPBackend(VivadoBackend):
         Simplify the initialize method.
         """
         # get the module name
+        print('INITIALIZING VIVADO DSP BACKEND')
         self.top_module_name = self.compile_dir.split('/')[-1]
         plat = self.plat
 
@@ -257,6 +265,115 @@ class VivadoDSPBackend(VivadoBackend):
             self.gen_dspblock_tcl_cmds()
         else:
             pass
+    
+    def gen_dspblock_tcl_cmds(self):
+        """
+        Compose a list of tcl commands from each dsp block.
+        To be added to the final tcl script.
+        Actually, the code is the same as gen_yellowblock_tcl_cmds.
+        The only difference is that the log info is different.
+        """
+        self.logger.info('Extracting dsp block tcl commands from peripherals')
+        for obj in self.periph_objs:
+            c = obj.gen_tcl_cmds()
+            for key, val in c.items():
+                if val is not None:
+                    for v in val:
+                        self.add_tcl_cmd(v, stage=key)
+
+class QuartusDSPBackend(QuartusBackend):
+    """
+    This class is used for generating a quartus project for DSP blocks.
+    An IP core will be created from this project, which only contains all of the dsp blocks.
+    """
+
+    def initialize(self):
+        """
+        Initialize Quartus project using commands equivalent to Vivado-based DSPflow.
+        """
+        # Set module and project name
+        self.top_module_name = self.compile_dir.split('/')[-1]
+        self.project_name = self.top_module_name
+        plat = self.plat
+
+        if plat.manufacturer.lower() != self.manufacturer.lower():
+            self.logger.error('Trying to compile a %s FPGA using %s %s' % (
+                plat.manufacturer, self.manufacturer, self.name))
+
+        self.logger.debug(f'Initializing Quartus project: {self.project_name}')
+        project_dir = os.path.join(self.compile_dir, self.project_name)
+
+        # Ensure directory exists
+        os.makedirs(project_dir, exist_ok=True)
+
+        # Begin Tcl commands for Quartus
+        self.add_tcl_cmd('puts "Starting Quartus Tcl script"', stage='init')
+        self.add_tcl_cmd(f'cd {project_dir}', stage='init')
+
+        # Import the flow package
+        self.add_tcl_cmd('load_package flow', stage='init')
+
+
+        # Create a new Quartus project
+        self.add_tcl_cmd(f'project_new {self.project_name} -overwrite', stage='init')
+
+        # Set device and family
+        self.add_tcl_cmd(f'set_global_assignment -name FAMILY "{plat.family}"', stage='init')
+        self.add_tcl_cmd(f'set_global_assignment -name DEVICE {plat.fpga}', stage='init')
+
+        # Set top-level design unit (important!)
+        #self.add_tcl_cmd(f'set_global_assignment -name TOP_LEVEL_ENTITY {self.top_module_name}_core', stage='init')
+        self.add_tcl_cmd(f'set_global_assignment -name TOP_LEVEL_ENTITY {self.top_module_name}_ip', stage='init')
+
+        # Force VHDL mode, if needed
+        self.add_tcl_cmd('set_global_assignment -name VHDL_FILE top.vhd', stage='init')  # dummy, overridden later
+        self.add_tcl_cmd('set_global_assignment -name VHDL_INPUT_VERSION VHDL_2008', stage='init')
+
+        # Track final binary locations
+        self.bitstream_loc = os.path.join(self.output_dir, f'{self.top_module_name}.sof')
+        self.binary_loc = os.path.join(self.output_dir, f'{self.top_module_name}.rbf')
+        self.logger.debug(f'Set output bitstream to {self.bitstream_loc}')
+        self.logger.debug(f'Set output rbf to {self.binary_loc}')
+
+
+    def add_compile_cmds(self, cores=8, plat=None, synth_strat=None, impl_strat=None, threads='multi'):
+        """
+        Add Quartus-compatible TCL commands for synthesizing and optionally packaging the design.
+        This version is adapted from the Vivado DSPflow IP core generation method.
+        """
+        tcl = self.add_tcl_cmd
+        proj_name = self.project_name
+        top_mod = f"{self.top_module_name}_core"
+        if plat.project_mode:
+            # Use the synthesis strategy if provided
+            if synth_strat:
+                tcl(f'set_global_assignment -name SYNTHESIS_STRATEGY "{synth_strat}"', stage='synth')
+
+            # Optional: Set parallel jobs
+            tcl(f'set_global_assignment -name NUM_PARALLEL_PROCESSORS {cores}', stage='synth')
+
+            # Run analysis and elaboration
+            tcl(f'exec quartus_map {proj_name} --analyze', stage='synth')
+
+            # Run synthesis (Map + Fit + Assembly up to SOF generation)
+            tcl(f'exec quartus_map {proj_name}', stage='synth')
+            tcl(f'exec quartus_fit {proj_name}', stage='synth')
+            tcl(f'exec quartus_asm {proj_name}', stage='synth')
+
+            # Optional: generate .rbf bitstream
+            tcl(f'exec quartus_cpf -c {proj_name}.sof {proj_name}.rbf', stage='synth')
+
+            # Optional: output QXP file (Quartus IP packaging)
+            # tcl(f'exec quartus_sh --flow compile {proj_name}', stage='synth')
+            # tcl(f'exec quartus_sh --archive {proj_name}.qxp', stage='synth')
+
+            # Optional: Update IP catalog (Qsys), if needed
+            # tcl(f'exec qsys-script --generate --project={proj_name}', stage='synth')
+
+            self.logger.debug("Added Quartus synthesis and bitstream generation commands")
+        else:
+            self.logger.warning("Non-project mode not supported for Quartus DSPflow yet.")
+
     
     def gen_dspblock_tcl_cmds(self):
         """

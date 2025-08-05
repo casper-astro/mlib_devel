@@ -1,0 +1,29 @@
+{
+    "parameters":{
+        "keys" : 
+        [
+            "name", 
+            "fullpath", 
+            "tag", 
+            "hw_sys", 
+            "clk_src", 
+            "clk_rate", 
+            "pl_clk_rate", 
+            "sample_period", 
+            "synthesis_tool"
+        ],
+        "values" : 
+        [
+            "de10nano", 
+            "",
+            "xps:xsg", 
+            "de10nano:5CSEBA6U23I7", 
+            "fpga_clk1_50", 
+            50, 
+            50, 
+            1, 
+            "XST"
+        ]
+
+    }
+}
