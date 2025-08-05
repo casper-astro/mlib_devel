@@ -1164,7 +1164,7 @@ class VerilogModule(object):
     def gen_module_file(self, filename=None):
         self.instantiate_child_ports()
         for val in self.axi4lite_devices:
-            print('WHAT THE HELL...' + str(vars(val)))
+            print('CHECKING AXI4LITE DEVICES IN GEN_MODULE_FILE...' + str(vars(val)))
         if self.topfile is None:
             return self.write_new_module_file(filename=filename)
         else:
