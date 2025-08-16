@@ -107,6 +107,20 @@ function [] = rfdc_mask(gcb,force)
     end % t < 228
   end % t = 224:lastTile
 
+  % get ADC and DAC MTS selection
+  mts_adc = zeros(adc_num_tile,1);
+  for t = 224:227
+    mts_adc(t-223) = chk_mask_param(msk, ['t',num2str(t),'_enable_mts'], 'on');
+  end
+  mts_adc_enabled = mts_adc(1);
+
+  mts_dac = zeros(dac_num_tile,1);
+  for t = 228:lastTile
+    mts_dac(t-227) = chk_mask_param(msk, ['t',num2str(t),'_enable_mts'], 'on');
+  end
+  mts_dac_enabled = mts_dac(1);
+
+  % get Real-time status port selection
   if chk_param(gcb, 'ADCRTS', 'on')
     rts_ports = 1;
   else
@@ -114,7 +128,9 @@ function [] = rfdc_mask(gcb,force)
   end
 
   % check if the mask state has changed
-  if ~same_state(gcb,'RTSPorts',rts_ports,'Tiles',tiles,'ADCSlices',adc_slices,'DACSlices',dac_slices,'ADCTileArch',adc_tile_arch,'DACTileArch',dac_tile_arch,'ModelName',base_gw_name) || force
+  if ~same_state(gcb, 'DACEnableMTS', mts_dac_enabled, 'ADCEnableMTS', mts_adc_enabled, 'RTSPorts', rts_ports, ...
+                      'Tiles',tiles,'ADCSlices',adc_slices,'DACSlices',dac_slices,'ADCTileArch',adc_tile_arch, ...
+                      'DACTileArch',dac_tile_arch,'ModelName',base_gw_name) || force
     for tile = 224:231
       QTConf = msk.getDialogControl(sprintf('t%d_QuadTileConfig', tile));
       DTConf = msk.getDialogControl(sprintf('t%d_DualTileConfig', tile));
@@ -154,26 +170,16 @@ function [] = rfdc_mask(gcb,force)
     end
 
     % validate MTS for adc tiles
-    mts_adc = zeros(adc_num_tile,1);
-    for t = 224:227
-      mts_adc(t-223) = chk_mask_param(msk, ['t',num2str(t),'_enable_mts'], 'on');
-    end
     if (mts_adc(1) && ~tiles(1))
       error('Tile 224 must be enabled with Multi-Tile Synchronization on when using MTS on ADC tiles');
       return
     end
-    mts_adc_enabled = mts_adc(1);
 
     % validate MTS for dac tile
-    mts_dac = zeros(dac_num_tile,1);
-    for t = 228:lastTile
-      mts_dac(t-227) = chk_mask_param(msk, ['t',num2str(t),'_enable_mts'], 'on');
-    end
     if (mts_dac(1) && ~tiles(5))
       error('Tile 228 must be enabled with Multi-Tile Synchronization on when using MTS on DAC tiles');
       return
     end
-    mts_dac_enabled = mts_dac(1);
 
     % initial position offsets for drawing
     xpos = 0;
@@ -290,7 +296,9 @@ function [] = rfdc_mask(gcb,force)
     rfdc_system_clocking_config(gcb);
 
     % save state to compare against on next call to the mask
-    save_state(gcb,'RTSPorts',rts_ports,'Tiles',tiles,'ADCSlices',adc_slices,'DACSlices',dac_slices,'ADCTileArch',adc_tile_arch,'DACTileArch',dac_tile_arch,'ModelName',base_gw_name);
+    save_state(gcb,'DACEnableMTS', mts_dac_enabled, 'ADCEnableMTS', mts_adc_enabled,'RTSPorts',rts_ports,...
+                    'Tiles',tiles,'ADCSlices',adc_slices,'DACSlices',dac_slices,'ADCTileArch',adc_tile_arch,...
+                    'DACTileArch',dac_tile_arch,'ModelName',base_gw_name);
 
     % delete interfaces for disabled tiles
     clean_blocks(gcb);
