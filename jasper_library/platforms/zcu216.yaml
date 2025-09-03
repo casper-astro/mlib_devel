@@ -48,16 +48,23 @@ rfdc:
 onehundredgbe:
   refclk_freq_str: "156.25"
   include_rs_fec: 1
-  ncommon: 2
+  ncommon: [2, 1, 1]
+
+  # zcu216 has 2 cmacs (UG1075 v1.9 Fig. 1-54). The 4x25G sfp cage (port 0) is
+  # the only onboard 100G connector using GTs. Two additional GT quads are
+  # accessible via FMC+ for use with the cmacs. Each array entry maps a port
+  # index to a cmac resource (e.g., port 0 → CMACE4_X0Y0). Using a supported
+  # FMC+ card extends the number of ports, but since only two cmacs exist, one
+  # cmac must be reused, so not all port pairings are possible.
+  cmac_loc:
+    - CMACE4_X0Y0 # port 0, 4x25 cage
+    - CMACE4_X0Y0 # port 1, FMC+ first port
+    - CMACE4_X0Y1 # port 2, FMC+ second port
+
   # modprs pin strapped, sfp tx enable not supported to be managed by 100g core.
   # It must be toggled by an fpga pin gpio (not yet in yaml), or use the onboard jumpers
   management_interface: []
-  # UG1075 v1.9 Fig. 1-54
-  cmac_loc:
-    # xczu49dr has 2 cmac locations, can support a second through FMC+
-    - CMACE4_X0Y0
-    - CMACE4_X0Y1
-    
+
 provides:
   - adc_clk
   - axil_clk
@@ -129,27 +136,102 @@ pins:
     loc: AU4
 
 # 100 GbE
-  # The 4 GTY lanes are split, 2 to bank 128, 2 to bank 129
+  # The 4 GTY lanes on the4x25 sfp cage are split, 2 to bank 128, 2 to bank 129
   # IDT 8A34001 output Q11 refclk1 GTY bank 128 P Y34 N Y35
   # IDT 8A34001 output Q7, refclk1 GTY bank 129 P T34 N T35
   qsfp_mgt_ref_clk_p:
     loc:
-      - Y34
+      - Y34 # bank 128, REFCLK1
+      - P34 # bank 130, REFCLK0
+      - K34 # bank 131, REFCLK0
   qsfp_mgt_ref_clk_n:
     loc:
-      - Y35
+      - Y35 # bank 128, REFCLK1
+      - P35 # bank 130, REFCLK0
+      - K35 # bank 131, REFCLK0
   qsfp_mgt_tx_p:
-         # bank 128 SFP[0:1] # bank 129 SFP[2:3]
-    loc: [V38, U36, P38, N36]
+    loc: [V38, U36, P38, N36,    # bank 128 SFP[0:1] # bank 129 SFP[2:3]
+          K38, J36, H38, G36,    # bank 130
+          F34, E36, A36, C36]    # bank 131
   qsfp_mgt_tx_n:
-         # bank 128  # bank 129
-    loc: [V39, U37,  P39, N37]
+    loc: [V39, U37, P39, N37,    # bank 128 SFP[0:1] # bank 129 SFP[2:3]
+          K39, J37, H39, G37,    # bank 130
+          F35, E37, A37, C37]    # bank 131
   qsfp_mgt_rx_p:
-         # bank 128   # bank 129
-    loc: [AC41, AB39, W41, U41]
+    loc: [AC41, AB39, W41, U41,  # bank 128 SFP[0:1] # bank 129 SFP[2:3]
+           L41,  J41, G41, F39,  # bank 130
+           E41,  D39, B39, C41]  # bank 131
   qsfp_mgt_rx_n:
-         # bank 128   # bank 129
-    loc: [AC42, AB40, W42, U42]
+     loc: [AC42, AB40, W42, U42, # bank 128 SFP[0:1] # bank 129 SFP[2:3]
+            L42,  J42, G42, F40, # bank 130
+            E42,  D40, B40, C42] # bank 131
+
+  # iWave Quad QSFP28 FMC+ Control Signal Pinout
+  # Note, this board has four ports, but only two are connected to fpga GTs:
+  # `qsfp1` (top-left), and `qsfp2` (bottom-right).
+  qsfp1_lpmode: # QSFP 1, top-left (stacked connector 1 top)
+    iostd: LVCMOS18
+    loc: [L28]
+  qsfp1_intL:
+    iostd: LVCMOS18
+    loc: [L29]
+  qsfp1_modprs:
+    iostd: LVCMOS18
+    loc: [F29]
+  qsfp1_modsel:
+    iostd: LVCMOS18
+    loc: [E27]
+  qsfp1_reset:
+    iostd: LVCMOS18
+    loc: [D27]
+
+  qsfp2_lpmode: # QSFP 2, bottom-right (stacked connector 2 bottom)
+    iostd: LVCMOS18
+    loc: [F28]
+  qsfp2_intL:
+    iostd: LVCMOS18
+    loc: [J27]
+  qsfp2_modprs:
+    iostd: LVCMOS18
+    loc: [J28]
+  qsfp2_modsel:
+    iostd: LVCMOS18
+    loc: [E29]
+  qsfp2_reset:
+    iostd: LVCMOS18
+    loc: [F27]
+
+  qsfp3_lpmode: # QSFP 3, top-right (stacked connector 2 top)
+    iostd: LVCMOS18
+    loc: [D29]
+  qsfp3_intL:
+    iostd: LVCMOS18
+    loc: [C29]
+  qsfp3_modprs:
+    iostd: LVCMOS18
+    loc: [A29]
+  qsfp3_modsel:
+    iostd: LVCMOS18
+    loc: [B30]
+  qsfp3_reset:
+    iostd: LVCMOS18
+    loc: [B31]
+
+  qsfp4_lpmode: # QSFP 4, bottom left (stacked connector 1 bottom)
+    iostd: LVCMOS18
+    loc: [A32]
+  qsfp4_intL:
+    iostd: LVCMOS18
+    loc: [C30]
+  qsfp4_modprs:
+    iostd: LVCMOS18
+    loc: [C31]
+  qsfp4_modsel:
+    iostd: LVCMOS18
+    loc: [A30]
+  qsfp4_reset:
+    iostd: LVCMOS18
+    loc: [B32]
 
 # zcu216 has 8 RGB LEDs (24 total) however, not all of the LEDs of the same
 # color have the same voltage standard. Not sure how the tools can handle this

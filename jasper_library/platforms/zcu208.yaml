@@ -49,7 +49,7 @@ rfdc:
 onehundredgbe:
   refclk_freq_str: "156.25"
   include_rs_fec: 1
-  ncommon: 2
+  ncommon: [2]
   # modprs pin strapped, sfp tx enable not supported to be managed by 100g core.
   # It must be toggled by an fpga pin gpio (not yet in yaml), or use the onboard jumpers
   management_interface: []

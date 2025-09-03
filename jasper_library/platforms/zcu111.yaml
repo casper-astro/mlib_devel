@@ -41,7 +41,7 @@ rfdc:
 onehundredgbe:
   refclk_freq_str: "156.25"
   include_rs_fec: 1
-  ncommon: 1
+  ncommon: [1]
   management_interface: []
   # UG1075 v1.9 Fig. 1-39
   cmac_loc:
