@@ -43,7 +43,7 @@ onehundredgbe:
   cmac_loc:
     - CMACE4_X0Y0
     - CMACE4_X0Y1
-  ncommon: 1
+  ncommon: [1]
 
 provides:
   - adc_clk

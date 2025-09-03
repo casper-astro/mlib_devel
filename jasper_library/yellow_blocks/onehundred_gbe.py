@@ -180,10 +180,12 @@ class onehundredgbe_usplus(onehundred_gbe):
         # on platforms like zcu216 4 GTYs split between 2 banks, need to instance multiple GTYE_COMMON primitives
         # this shouldn't be needed outside RFSoC, but doesn't hurt anything.
         try:
-          self.ncommon = self.ethconf['ncommon']
+          self.ncommon = self.ethconf['ncommon'][self.port]
         except KeyError:
           self.logger.warning("Missing `ncommon` parameter in platform YAML file. Defaulting to 1")
           self.ncommon = 1
+        except IndexError:
+            self.logger.error("Missing entry for port %d in onehundredgbe `ncommon` parameter" % self.port)
 
         try:
             self.cmac_loc = self.ethconf["cmac_loc"][self.port]
@@ -319,10 +321,7 @@ class onehundredgbe_usplus(onehundred_gbe):
         consts += [ClockConstraint(self.portbase+'_refclk_p', self.portbase+'_refclk_p', period=6.4)]
         consts += [PortConstraint(self.portbase+'_refclk_p', 'qsfp_mgt_ref_clk_p', iogroup_index=self.port)]
         consts += [PortConstraint(self.portbase+'_refclk_n', 'qsfp_mgt_ref_clk_n', iogroup_index=self.port)]
-        #consts += [PortConstraint(self.portbase+'_qsfp_mgt_rx_p', 'qsfp_mgt_rx_p', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
-        #consts += [PortConstraint(self.portbase+'_qsfp_mgt_rx_n', 'qsfp_mgt_rx_n', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
-        #consts += [PortConstraint(self.portbase+'_qsfp_mgt_tx_p', 'qsfp_mgt_tx_p', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
-        #consts += [PortConstraint(self.portbase+'_qsfp_mgt_tx_n', 'qsfp_mgt_tx_n', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
+
         # constrain relevant managment interface connected to FPGA pins - determine supported pins that the 100g core will manage from yaml file
         # other pins may be managed by gpios in user design, these are not added here
         mgt_ports_list = ['modsell_ls', 'resetl_ls', 'modprsl_ls', 'lpmode_ls']
@@ -333,8 +332,6 @@ class onehundredgbe_usplus(onehundred_gbe):
             consts += [PortConstraint('{:s}_qsfp_{:s}'.format(self.portbase, m), 'qsfp_{:s}'.format(m), iogroup_index=self.port)]
 
         clkname = self.portbase+'_refclk_p' # defined by IP
-        #self.myclk = ClockConstraint(self.portbase+'_refclk_p', freq=self.refclk_freq)
-        #consts += [self.myclk]
         # Set the 100G clock to be asynchronous to both the user clock and the system clock / axi clk
         consts += [ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets sys_clk]', '-include_generated_clocks %s' % clkname, 'asynchronous')]
         consts += [ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets user_clk]', '-include_generated_clocks %s' % clkname, 'asynchronous')]
@@ -354,13 +351,14 @@ class onehundredgbe_usplus(onehundred_gbe):
         tcl_cmds['pre_synth'] = []
         # Override the IP settings
         tcl_cmds['pre_synth'] += ['copy_ip -name %s%d [get_ips %s]' % (self.cmac_ip_name, self.inst_id, self.cmac_ip_name)]
-        tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.CMAC_CORE_SELECT {%s} CONFIG.GT_REF_CLK_FREQ {%s} CONFIG.GT_GROUP_SELECT {%s} CONFIG.RX_GT_BUFFER {1} CONFIG.GT_RX_BUFFER_BYPASS {0}] [get_ips %s%d]' % (self.cmac_loc, self.refclk_freq_str, self.gt_group, self.cmac_ip_name, self.inst_id)]
+        tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.CMAC_CORE_SELECT {%s} CONFIG.GT_REF_CLK_FREQ {%s} CONFIG.GT_GROUP_SELECT {%s} '
+                                  'CONFIG.RX_GT_BUFFER {1} CONFIG.GT_RX_BUFFER_BYPASS {0}] [get_ips %s%d]'
+                                  % (self.cmac_loc, self.refclk_freq_str, self.gt_group, self.cmac_ip_name, self.inst_id)]
         try:
             if self.platform.use_pr:
                 tcl_cmds['pre_synth'] += ['move_files -of_objects [get_reconfig_modules user_top-toolflow] [get_files %s%d.xci]' % (self.cmac_ip_name, self.inst_id)]
         except AttributeError:
             pass
-        #tcl_cmds['pre_synth'] = ['set_property -dict [list CONFIG.GT_GROUP_SELECT {%s} CONFIG.LANE1_GT_LOC {%s} CONFIG.LANE2_GT_LOC {%s} CONFIG.LANE3_GT_LOC {%s} CONFIG.LANE4_GT_LOC {%s} CONFIG.RX_GT_BUFFER {1} CONFIG.GT_RX_BUFFER_BYPASS {0}] [get_ips EthMACPHY100GQSFP4x%d' % (self.gt_group, gts[0, gts[1], gts[2], gts[3], self.inst_id)]
 
         ## The LOCs seem to get overriden by the user constraints above, but we need to manually unplace the CMAC blocks
         if self.ethconf.get("override_cmac_placement", False):
@@ -487,10 +485,6 @@ class onehundredgbe_rfsoc(onehundred_gbe):
         if self.platform.mmbus_architecture[0] == 'wishbone':
             self.add_source('onehundred_gbe/casper100g_wb_attach.v')
 
-        ## TODO: remove this when we're done debugging
-        if self.platform in ['vcu118']:
-            self.add_source('onehundred_gbe/debug.xdc')
-
         self.provides = ['ethernet']
         if self.cpu_rx_en and self.cpu_tx_en:
             self.provides += ['cpu_ethernet']
@@ -531,10 +525,12 @@ class onehundredgbe_rfsoc(onehundred_gbe):
 
         # on platforms like zcu216 4 GTYs split between 2 banks, need to instance multiple GTYE_COMMON primitives
         try:
-          self.ncommon = self.ethconf['ncommon']
+          self.ncommon = self.ethconf['ncommon'][self.port]
         except KeyError:
           self.logger.warning("Missing `ncommon` parameter in platform YAML file. Defaulting to 1")
           self.ncommon = 1
+        except IndexError:
+            self.logger.error("Missing entry for port %d in onehundredgbe `ncommon` parameter" % self.port)
 
         try:
             self.cmac_loc = self.ethconf["cmac_loc"][self.port]
@@ -666,6 +662,11 @@ class onehundredgbe_rfsoc(onehundred_gbe):
         consts += [PortConstraint(self.portbase+'_qsfp_mgt_rx_n', 'qsfp_mgt_rx_n', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
         consts += [PortConstraint(self.portbase+'_qsfp_mgt_tx_p', 'qsfp_mgt_tx_p', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
         consts += [PortConstraint(self.portbase+'_qsfp_mgt_tx_n', 'qsfp_mgt_tx_n', port_index=range(4), iogroup_index=range(4*self.port, 4*(self.port + 1)))]
+
+        # cmac locatoin placement added as constraint rather than as a tcl cmd to be ran `pre_synth`
+        consts += [RawConstraint('set_property LOC %s [get_cells -hierarchical -filter {PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s_inst/*"}]'
+                                  % (self.cmac_loc, self.fullname))]
+
         # constrain relevant managment interface connected to FPGA pins - determine supported pins that the 100g core will manage from yaml file
         # other pins may be managed by gpios in user design, these are not added here
         mgt_ports_list = ['modsell_ls', 'resetl_ls', 'modprsl_ls', 'lpmode_ls']
@@ -676,8 +677,6 @@ class onehundredgbe_rfsoc(onehundred_gbe):
             consts += [PortConstraint('{:s}_qsfp_{:s}'.format(self.portbase, m), 'qsfp_{:s}'.format(m), iogroup_index=self.port)]
 
         clkname = self.portbase+'_refclk_p' # defined by IP
-        #self.myclk = ClockConstraint(self.portbase+'_refclk_p', freq=self.refclk_freq)
-        #consts += [self.myclk]
         # Set the 100G clock to be asynchronous to both the user clock and the system clock / axi clk
         consts += [ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets sys_clk]', '-include_generated_clocks %s' % clkname, 'asynchronous')]
         consts += [ClockGroupConstraint('-include_generated_clocks -of_objects [get_nets user_clk]', '-include_generated_clocks %s' % clkname, 'asynchronous')]
@@ -692,15 +691,6 @@ class onehundredgbe_rfsoc(onehundred_gbe):
         tcl_cmds = {}
         tcl_cmds['pre_synth'] = []
         # Override the IP settings
-        tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.GT_REF_CLK_FREQ {%s}] [get_ips %s]' % (self.refclk_freq_str, self.cmac_ip_name)] 
-        #tcl_cmds['pre_synth'] = ['set_property -dict [list CONFIG.GT_GROUP_SELECT {%s} CONFIG.LANE1_GT_LOC {%s} CONFIG.LANE2_GT_LOC {%s} CONFIG.LANE3_GT_LOC {%s} CONFIG.LANE4_GT_LOC {%s} CONFIG.RX_GT_BUFFER {1} CONFIG.GT_RX_BUFFER_BYPASS {0}] [get_ips EthMACPHY100GQSFP4x%d' % (self.gt_group, gts[0, gts[1], gts[2], gts[3], self.inst_id)]
+        tcl_cmds['pre_synth'] += ['set_property -dict [list CONFIG.GT_REF_CLK_FREQ {%s}] [get_ips %s]' % (self.refclk_freq_str, self.cmac_ip_name)]
 
-        ## The LOCs seem to get overriden by the user constraints above, but we need to manually unplace the CMAC blocks
-        if self.ethconf.get("override_cmac_placement", False):
-            # Unplace CMACs post_synth, then place all pre_impl, to avoid situations where we try to place on a site already being used
-            tcl_cmds['pre_impl'] = []
-            tcl_cmds['post_synth'] = []
-            tcl_cmds['post_synth'] += ['unplace_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s_inst/*" }]' % self.fullname]
-            forced_cmac_loc = self.ethconf["override_cmac_placement"][self.port]
-            tcl_cmds['pre_impl'] += ['place_cell [get_cells -hierarchical -filter { PRIMITIVE_TYPE == ADVANCED.MAC.CMACE4 && NAME =~ "*%s_inst/*" }] %s' % (self.fullname, forced_cmac_loc)]
         return tcl_cmds
