@@ -1,0 +1,15 @@
+Hardware,Operating System,MATLAB Version,Xilinx Version,mlib_devel branch / commit,Python Version
+ROACH1/2,Ubuntu 14.04,2013b,ISE 14.7,branch: `roach`,Python 2.7
+SKARAB,Ubuntu 20.04,2021a,Vivado 2021.1,branch: `m2021a`,Python 3.8
+SNAP,Ubuntu 20.04,2021a,Vivado 2021.1,branch: `m2021a`,Python 3.8
+Red Pitaya,Ubuntu 20.04,2021a/2022a,Vivado 2021.1,branch: `m2021a`/`m2022a`,Python 3.8
+VCU118,Ubuntu 20.04,2021a,Vivado 2021.1,branch: `m2021a`,Python 3.8
+VCU128,Ubuntu 20.04,2021a,Vivado 2021.1,Branch :`m2021a`,Python 3.8
+ZCU216,Ubuntu 20.04,2021a/2022a,Vivado 2021.1/2023.1,branch: `m2021a`/`m2022a`,Python 3.8
+ZCU208,Ubuntu 20.04,2021a/2022a,Vivado 2021.1/2023.1,branch: `m2021a`/`m2022a`,Python 3.8
+ZCU111,Ubuntu 20.04,2021a/2022a,Vivado 2021.1/2023.1,branch: `m2021a`/`m2022a`,Python 3.8
+PYNQ RFSoC 2x2,Ubuntu 20.04,2021a/2022a,Vivado 2021.1/2023.1,Branch: `m2021a`/`m2022a`,Python 3.8
+PYNQ RFSoC 4x2,Ubuntu 20.04,2021a/2022a,Vivado 2021.1/2023.1,branch: `m2021a`/`m2022a`,Python 3.8
+HTG_ZRF16-29DR,Ubuntu 20.04,2021a,Vivado 2021.1,branch: `m2021a`,Python 3.8
+HTG_ZRF16-49DR,Ubuntu 20.04,2021a,Vivado 2021.1,branch: `m2021a`,Python 3.8
+SNAP2,Ubuntu 20.04,2021a,Vivado 2021.1,branch: `m2021a`,Python 3.8
