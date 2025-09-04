@@ -14,7 +14,7 @@
 #
 import os
 import sys
-from sphinx.apidoc import main as sphinx_apidoc_main
+#from sphinx.apidoc import main as sphinx_apidoc_main
 # add jasper_library directory to sys.path so autodoc can document its modules.
 jasper_library_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'jasper_library'))
 sys.path.insert(0, jasper_library_path)
@@ -38,6 +38,7 @@ author = 'Collaboration for Astronomy Signal Processing and Electronics Research
 version = ''
 # The full version, including alpha/beta/rc tags
 release = '0.1'
+
 
 # -- General configuration ---------------------------------------------------
 

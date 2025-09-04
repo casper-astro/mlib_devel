@@ -53,7 +53,7 @@ This script will resynchronize every CASPER block in your design with its latest
   `sw`
     Codebase for embedded software processors used by the toolflow
   `yellow_blocks`
-    Python classes for each yellow block in the simulink `xps_library`.
+    Python classes for each yellow block in the Simulink `xps_library`.
 
 Setup
 ------
@@ -62,37 +62,45 @@ The software stack you will require to use the toolflow will depend what hardwar
 
 The current compatibility matrix is below:
 
-(Note that official support for ROACH plaforms is no longer provided, however `this version <https://github.com/casper-astro/mlib_devel/tree/d77999047d2f0dc53e1c1e6e516e6ef3cdd45632/docs>`__ of `mlib_devel` contains all ROACH related documentation and ROACH tutorials can be found `here <https://casper-tutorials.readthedocs.io/en/latest/tutorials/roach/tut_intro.html>`__)
+(Note that official support for ROACH plaforms is no longer provided, however `this version <https://github.com/casper-astro/mlib_devel/tree/d77999047d2f0dc53e1c1e6e516e6ef3cdd45632/docs>`_ of `mlib_devel` contains all ROACH related documentation and ROACH tutorials can be found `here <https://casper-tutorials.readthedocs.io/en/latest/tutorials/roach/tut_intro.html>`_).
 
-+----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
-|  Hardware      |   Operating System  |    MATLAB Version  |    Xilinx Version  |    mlib_devel branch / commit   |   Python Version  |
-+================+=====================+====================+====================+=================================+===================+
-|ROACH1/2        | Ubuntu 14.04        |  2013b             |  ISE 14.7          |  branch: `roach`                |   Python 2.7      |
-+----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
-|SKARAB          | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |   Python 3.8      |
-+----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
-|SNAP            | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |   Python 3.8      |
-+----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
-|Red Pitaya      | Ubuntu 20.04        |  2021a/2022a       |Vivado 2021.1/2023.1|  branch: `m2021a`/'m2022a'      |   Python 3.8      |
-+----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
-|VCU118          | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |   Python 3.8      |
-+----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
-|VCU128          | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |   Python 3.8      |
-+----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
-|ZCU216          | Ubuntu 20.04        |  2021a/2022a       |Vivado 2021.1/2023.1|  branch: `m2021a`/'m2022a'      |   Python 3.8      |
-+----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
-|ZCU208          | Ubuntu 20.04        |  2021a/2022a       |Vivado 2021.1/2023.1|  branch: `m2021a`/'m2022a'      |   Python 3.8      |
-+----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
-|ZCU111          | Ubuntu 20.04        |  2021a/2022a       |Vivado 2021.1/2023.1|  branch: `m2021a`/'m2022a'      |   Python 3.8      |
-+----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
-|PYNQ RFSoC 2x2  | Ubuntu 20.04        |  2021a/2022a       |Vivado 2021.1/2023.1|  branch: `m2021a`/'m2022a'      |   Python 3.8      |
-+----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
-|HTG ZRF16-29DR  | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |   Python 3.8      |
-+----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
-|HTG ZRF16-49DR  | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |   Python 3.8      |
-+----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
-|SNAP2           | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |   Python 3.8      |
-+----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
+..
+    +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
+    |  Hardware      |   Operating System  |    MATLAB Version  |    Xilinx Version  |    mlib_devel branch / commit   |   Python Version  |
+    +================+=====================+====================+====================+=================================+===================+
+    |ROACH1/2        | Ubuntu 14.04        |  2013b             |  ISE 14.7          |  branch: `roach`                |   Python 2.7      |
+    +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
+    |SKARAB          | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |   Python 3.8      |
+    +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
+    |SNAP            | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |   Python 3.8      |
+    +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
+    |Red Pitaya      | Ubuntu 20.04        |  2021a/2022a       |Vivado 2021.1/2023.1|  branch: `m2021a`/`m2022a`      |   Python 3.8      |
+    +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
+    |VCU118          | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |   Python 3.8      |
+    +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
+    |VCU128          | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |   Python 3.8      |
+    +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
+    |ZCU216          | Ubuntu 20.04        |  2021a/2022a       |Vivado 2021.1/2023.1|  branch: `m2021a`/`m2022a`      |   Python 3.8      |
+    +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
+    |ZCU208          | Ubuntu 20.04        |  2021a/2022a       |Vivado 2021.1/2023.1|  branch: `m2021a`/`m2022a`      |   Python 3.8      |
+    +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
+    |ZCU111          | Ubuntu 20.04        |  2021a/2022a       |Vivado 2021.1/2023.1|  branch: `m2021a`/`m2022a`      |   Python 3.8      |
+    +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
+    |PYNQ RFSoC 2x2  | Ubuntu 20.04        |  2021a/2022a       |Vivado 2021.1/2023.1|  branch: `m2021a`/`m2022a`      |   Python 3.8      |
+    +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
+    |HTG ZRF16-29DR  | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |   Python 3.8      |
+    +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
+    |HTG ZRF16-49DR  | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |   Python 3.8      |
+    +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
+    |SNAP2           | Ubuntu 20.04        |  2021a             |  Vivado 2021.1     |  branch: `m2021a`               |   Python 3.8      |
+    +----------------+---------------------+--------------------+--------------------+---------------------------------+-------------------+
+    =======
+
+
+.. csv-table:: 
+   :file: _static/files/hardware-compatibility-matrix.csv
+   :widths: 16, 17, 16, 17, 17, 17
+   :header-rows: 1
 
 A Note on Operating Systems
 """""""""""""""""""""""""""
@@ -119,10 +127,10 @@ For Ubuntu 20.04, there are a few limitations:
 
 Ubuntu 24.04:
 
-Ubuntu 24.04 was released on April 25, 2024. It is not supported by either Matlab 2022a, Vivado 2023.1, nor Model Composer 2023.1. However, with a little tweaking, you can run the tools. Please note, that you do this at your own risk. This has not been thoroughly tested, is not the official toolflow, and also uses software not supported by the tools so getting support will be difficult. This is simply meant to offer some possible suggestions for those wishing to run on the newest long-term support release of Ubuntu.
+Ubuntu 24.04 was released on April 25, 2024. It is not supported by Matlab R2022a, Vivado 2023.1, nor Model Composer 2023.1. However, with a little tweaking, you can run the tools. Please note, that you do this at your own risk. This has not been thoroughly tested, is not the official toolflow, and also uses software not supported by the tools so getting support will be difficult. This is simply meant to offer some possible suggestions for those wishing to run on the newest long-term support release of Ubuntu.
 
 - Use the AMD Unified Installer instead of the Self Extracting Web Installer since the latter has a habit of hanging. By doing this, it greatly increases the amount of on-disk space required to ~300 GB (although a lot of it gets cleaned up). 
-- Make sure to install *Engineering Sample Devices* when you are installing Vivado
+- Make sure to install *Engineering Sample Devices* when you are installing Vivado.
 - You may need *libncurses5* and *libtinfo5*, which are packages no longer included in 24.04. You can install them by typing the following in the Terminal. Please note that, in general, installing out-of-date packages is a security risk.
 
   #. For *libtinfo5*: 
@@ -151,20 +159,21 @@ Ubuntu 24.04 was released on April 25, 2024. It is not supported by either Matla
           sudo apt install libcanberra-gtk-module
           sudo ln -s /usr/lib/x86_64-linux-gnu/gtk-2.0/modules/libcanberra-gtk-module.so /usr/lib/libcanberra-gtk-module.so
 
-     Source: `Matlabcentral <MatCent_>`_.
+     Source: `Matlabcentral <MatCent_>`_
 
 
 - Dealing with the *hogweed* error requires installation of qt4. Note that this is no longer included in Ubuntu 24.04, which includes qt6. Installing qt4 requires installation from a PPA. Two that seem to work are `rock-core <RockCore_>`_ and `ubuntuhandbook1 <UbuntuHandbook_>`_. Add the ppa repository using Ubuntu's Software and Update Center (outlined `here <UbuntuInfo_>`_). An example of entering this in the Terminal is given as:
 
      .. code-block:: bash
 
-          sudo add-apt-repository -S 'deb https://ppa.launchpadcontent.net/rock-core/qt4/ubuntu/ focal main`
+          sudo add-apt-repository -S 'deb https://ppa.launchpadcontent.net/rock-core/qt4/ubuntu/ focal main'
 
 
-  After this, you can then install *libqt4core4* via :code:`sudo apt-get install libqtcore4`
+  After this, you can then install *libqt4core4* via :code:`sudo apt-get install libqtcore4`.
 
 
-- As noted in the instructions for 20.04, Xilinx installs its own version of *binutils*, which is old than the one provided by Ubuntu. To fix this, you can symlink
+
+- As noted in the instructions for Ubuntu 20.04, Xilinx installs its own version of *binutils*, which is older than the one provided by Ubuntu. To fix this, you can symlink
 
      .. code-block:: bash
 
