@@ -1,6 +1,7 @@
 name: au50
 manufacturer: Xilinx
 fpga: xcu50-fsvh2104-2-e 
+family: alveo
 board: xilinx.com:au50:part0:1.3
 config_voltage: 1.8
 cfgbvs: GND
@@ -12,6 +13,11 @@ mmbus_address_alignment: 4
 sources: []
 constraints:
   - au50.xdc
+onehundredgbe:
+  refclk_freq_str: "156.25"
+  cmac_loc:
+    - CMACE4_X0Y7  # QSFP1 (qsfp0) is routed to X1Y48 to X1Y51 GTY QUAD 231
+    - CMACE4_X0Y8  # QSFP2 (qsfp1) is routed to X1Y52 to X1Y55 GTY QUAD 232
 provides:
   - sys_clk
   - sys_clk90

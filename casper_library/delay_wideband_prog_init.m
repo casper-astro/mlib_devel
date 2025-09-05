@@ -18,6 +18,7 @@ defaults = { ...
   'n_inputs_bits', 2, ...
   'bram_latency', 2, ...
   'bram_type', 'Dual Port', ...
+  'mem_type', 'Block RAM', ...
   'async', 'off'};
  
 % if parameter is changed then only it will redraw otherwise will exit
@@ -36,6 +37,7 @@ n_inputs_bits     = get_var('n_inputs_bits', 'defaults', defaults, varargin{:});
 ram_bits          = ceil(log2(max_delay/(2^n_inputs_bits)));
 bram_latency      = get_var('bram_latency', 'defaults', defaults, varargin{:});
 bram_type         = get_var('bram_type', 'defaults', defaults,varargin{:});
+mem_type          = get_var('mem_type', 'defaults', defaults, varargin{:});
 async             = get_var('async', 'defaults', defaults,varargin{:});
 
 if strcmp(async, 'on') && strcmp(bram_type, 'Single Port'),
@@ -43,6 +45,19 @@ if strcmp(async, 'on') && strcmp(bram_type, 'Single Port'),
   error('Delays must be implemented in dual port memories when in asynchronous mode in the delay_wideband_prog block'); 
 end
  
+% Convert integer value to string. This is needed laetr on when passing
+% value to delay_bram_prog_dp.
+if mem_type == 1
+    %clog('Block RAM selected.');
+    mem_type = 'Block RAM';
+elseif mem_type == 2
+    %clog('Ultra RAM selected.');
+    mem_type = 'Ultra RAM';
+else
+    %clog('Unknow memory type. Defaulting to Block RAM');
+    mem_type = 'Block RAM';    
+end
+
 % Begin redrawing
 delete_lines(blk);
 
@@ -208,6 +223,7 @@ if n_inputs_bits > 0,
       reuse_block(blk, delay_name, 'casper_library_delays/delay_bram_prog_dp', ...
         'Position',[705 y+5 745 y+45], ...
         'ram_bits', num2str(ram_bits), 'async', async, ...
+        'mem_type', mem_type, ...
         'bram_latency', num2str(bram_latency));
     end
     add_line(blk, [in_name, '/1'], [delay_name, '/1']); 
