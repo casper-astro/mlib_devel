@@ -1,0 +1,40 @@
+	soc_system u0 (
+		.axi_bridge_0_m0_awaddr  (<connected-to-axi_bridge_0_m0_awaddr>),  // axi_bridge_0_m0.awaddr
+		.axi_bridge_0_m0_awprot  (<connected-to-axi_bridge_0_m0_awprot>),  //                .awprot
+		.axi_bridge_0_m0_awvalid (<connected-to-axi_bridge_0_m0_awvalid>), //                .awvalid
+		.axi_bridge_0_m0_awready (<connected-to-axi_bridge_0_m0_awready>), //                .awready
+		.axi_bridge_0_m0_wdata   (<connected-to-axi_bridge_0_m0_wdata>),   //                .wdata
+		.axi_bridge_0_m0_wstrb   (<connected-to-axi_bridge_0_m0_wstrb>),   //                .wstrb
+		.axi_bridge_0_m0_wlast   (<connected-to-axi_bridge_0_m0_wlast>),   //                .wlast
+		.axi_bridge_0_m0_wvalid  (<connected-to-axi_bridge_0_m0_wvalid>),  //                .wvalid
+		.axi_bridge_0_m0_wready  (<connected-to-axi_bridge_0_m0_wready>),  //                .wready
+		.axi_bridge_0_m0_bresp   (<connected-to-axi_bridge_0_m0_bresp>),   //                .bresp
+		.axi_bridge_0_m0_bvalid  (<connected-to-axi_bridge_0_m0_bvalid>),  //                .bvalid
+		.axi_bridge_0_m0_bready  (<connected-to-axi_bridge_0_m0_bready>),  //                .bready
+		.axi_bridge_0_m0_araddr  (<connected-to-axi_bridge_0_m0_araddr>),  //                .araddr
+		.axi_bridge_0_m0_arprot  (<connected-to-axi_bridge_0_m0_arprot>),  //                .arprot
+		.axi_bridge_0_m0_arvalid (<connected-to-axi_bridge_0_m0_arvalid>), //                .arvalid
+		.axi_bridge_0_m0_arready (<connected-to-axi_bridge_0_m0_arready>), //                .arready
+		.axi_bridge_0_m0_rdata   (<connected-to-axi_bridge_0_m0_rdata>),   //                .rdata
+		.axi_bridge_0_m0_rresp   (<connected-to-axi_bridge_0_m0_rresp>),   //                .rresp
+		.axi_bridge_0_m0_rvalid  (<connected-to-axi_bridge_0_m0_rvalid>),  //                .rvalid
+		.axi_bridge_0_m0_rready  (<connected-to-axi_bridge_0_m0_rready>),  //                .rready
+		.clk_clk                 (<connected-to-clk_clk>),                 //             clk.clk
+		.memory_mem_a            (<connected-to-memory_mem_a>),            //          memory.mem_a
+		.memory_mem_ba           (<connected-to-memory_mem_ba>),           //                .mem_ba
+		.memory_mem_ck           (<connected-to-memory_mem_ck>),           //                .mem_ck
+		.memory_mem_ck_n         (<connected-to-memory_mem_ck_n>),         //                .mem_ck_n
+		.memory_mem_cke          (<connected-to-memory_mem_cke>),          //                .mem_cke
+		.memory_mem_cs_n         (<connected-to-memory_mem_cs_n>),         //                .mem_cs_n
+		.memory_mem_ras_n        (<connected-to-memory_mem_ras_n>),        //                .mem_ras_n
+		.memory_mem_cas_n        (<connected-to-memory_mem_cas_n>),        //                .mem_cas_n
+		.memory_mem_we_n         (<connected-to-memory_mem_we_n>),         //                .mem_we_n
+		.memory_mem_reset_n      (<connected-to-memory_mem_reset_n>),      //                .mem_reset_n
+		.memory_mem_dq           (<connected-to-memory_mem_dq>),           //                .mem_dq
+		.memory_mem_dqs          (<connected-to-memory_mem_dqs>),          //                .mem_dqs
+		.memory_mem_dqs_n        (<connected-to-memory_mem_dqs_n>),        //                .mem_dqs_n
+		.memory_mem_odt          (<connected-to-memory_mem_odt>),          //                .mem_odt
+		.memory_mem_dm           (<connected-to-memory_mem_dm>),           //                .mem_dm
+		.memory_oct_rzqin        (<connected-to-memory_oct_rzqin>)         //                .oct_rzqin
+	);
+

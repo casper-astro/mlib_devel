@@ -6,7 +6,7 @@ config_voltage: 3.3
 backend_target: quartus
 sources: []
 mmbus_architecture: AXI4-Lite
-mmbus_base_address: 0xC0000000
+mmbus_base_address: 0xFF200000
 mmbus_address_alignment: 4
 constraints: []
 

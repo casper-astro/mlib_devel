@@ -1,0 +1,51 @@
+Info: Starting: Create block symbol file (.bsf)
+Info: qsys-generate /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system.qsys --block-symbol-file --output-directory=/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system --family="Cyclone V" --part=5CSEBA6U23I7
+Progress: Loading de10nano/soc_system.qsys
+Progress: Reading input file
+Progress: Adding axi_bridge_0 [altera_axi_bridge 24.1]
+Progress: Parameterizing module axi_bridge_0
+Progress: Adding clk_0 [clock_source 24.1]
+Progress: Parameterizing module clk_0
+Progress: Adding hps_0 [altera_hps 24.1]
+Progress: Parameterizing module hps_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: soc_system.axi_bridge_0: Burst length BURST_LENGTH_WIDTH 8
+Info: soc_system.axi_bridge_0: Lock signals width LOCK_WIDTH 1
+Info: soc_system.hps_0: HPS Main PLL counter settings: n = 0  m = 63
+Info: soc_system.hps_0: HPS peripherial PLL counter settings: n = 0  m = 39
+Warning: soc_system.hps_0: HPS model no longer supports simulation for HPS FPGA Bridges.
+Warning: soc_system.hps_0: set_interface_assignment: Interface "hps_io" does not exist
+Info: qsys-generate succeeded.
+Info: Finished: Create block symbol file (.bsf)
+Info: 
+Info: Starting: Create HDL design files for synthesis
+Info: qsys-generate /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system.qsys --synthesis=VERILOG --output-directory=/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis --family="Cyclone V" --part=5CSEBA6U23I7
+Progress: Loading de10nano/soc_system.qsys
+Progress: Reading input file
+Progress: Adding axi_bridge_0 [altera_axi_bridge 24.1]
+Progress: Parameterizing module axi_bridge_0
+Progress: Adding clk_0 [clock_source 24.1]
+Progress: Parameterizing module clk_0
+Progress: Adding hps_0 [altera_hps 24.1]
+Progress: Parameterizing module hps_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: soc_system.axi_bridge_0: Burst length BURST_LENGTH_WIDTH 8
+Info: soc_system.axi_bridge_0: Lock signals width LOCK_WIDTH 1
+Info: soc_system.hps_0: HPS Main PLL counter settings: n = 0  m = 63
+Info: soc_system.hps_0: HPS peripherial PLL counter settings: n = 0  m = 39
+Warning: soc_system.hps_0: HPS model no longer supports simulation for HPS FPGA Bridges.
+Warning: soc_system.hps_0: set_interface_assignment: Interface "hps_io" does not exist
+Info: soc_system: Generating "soc_system" for QUARTUS_SYNTH
+Info: Interconnect is inserted between master hps_0.h2f_lw_axi_master and slave axi_bridge_0.s0 because the master is of type axi and the slave is of type axi4.
+Error: axi_bridge_0_s0_translator.m0: Cannot connect axi_bridge_0_s0_translator.clk_reset because axi_bridge_0.clk_reset is not connected. If axi_bridge_0.clk_reset is exported, connect it to a reset bridge and export the bridge's reset input instead.
+Error: hps_0_h2f_lw_axi_master_id_pad.m0: Cannot connect hps_0_h2f_lw_axi_master_id_pad.clk_reset because axi_bridge_0_s0_translator.clk_reset is not connected 
+Error: Generation stopped, 3 or more modules remaining
+Info: soc_system: Done "soc_system" with 4 modules, 1 files
+Error: qsys-generate failed with exit code 1: 3 Errors, 2 Warnings
+Info: Finished: Create HDL design files for synthesis

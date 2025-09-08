@@ -558,7 +558,7 @@ class Toolflow(object):
         if len(self.cores) != 0:
             longest_name = max([len(core.regname) for core in self.cores])
             format_str = '{0:%d} {1:1} {2:<16x} {3:<16x}\n' % longest_name
-        for core in self.cores:
+        for core in (self.cores)[::-1]:
             print('CORE NAME IS: ' + str(core.regname))
             print('CORE MODE IS: ' + str(core.mode))
             print('CORE BASE ADDRESS IS: ' + str(core.base_addr))
@@ -1026,7 +1026,7 @@ class Toolflow(object):
         # generate xml memory maps for input
         print('TOP MEMORY MAP: ' + str(self.top.memory_map))
         print('\tAXI MEMORY MAP: ') 
-        print('\t\tSYS: ' + str(vars((self.top.memory_map)['sys']['axi4lite_devices'][0])))
+        #print('\t\tSYS: ' + str(vars((self.top.memory_map)['sys']['axi4lite_devices'][0])))
         for counter, dev in enumerate((self.top.memory_map)['sw_reg']['axi4lite_devices']):
             print('\t\tSW_REG ' + str(counter) + ': ' + str(vars(dev)))
 
@@ -1379,7 +1379,8 @@ class ToolflowBackend(object):
         
         os.system(mkfpg_cmd1)
         if self.name == 'quartus':
-            mkfpg_cmd2 = 'gzip -c %s/system.rbf > %s/system.rbf.gz' % (self.compile_dir, self.compile_dir)
+            #mkfpg_cmd2 = 'gzip -c %s/system.rbf > %s/system.rbf.gz' % (self.compile_dir, self.compile_dir)
+            mkfpg_cmd2 = 'gzip -c %s/system.rbf >> %s/extended_info.kcpfpg' % (self.compile_dir, self.compile_dir)
         else:
             mkfpg_cmd2 = 'gzip -c %s/system.bin > %s/system.bin.gz' % (self.compile_dir, self.compile_dir)
         
@@ -1390,15 +1391,17 @@ class ToolflowBackend(object):
         os.system(mkfpg_cmd2)
         # append the compressed binary file to the extended_info.kcpfpg file
         if self.name == 'quartus':
-            mkfpg_cmd3 = 'cat %s/system.rbf.gz >> %s/extended_info.kcpfpg' % (self.compile_dir, self.compile_dir)
+            pass
+            #mkfpg_cmd3 = 'cat %s/system.rbf.gz >> %s/extended_info.kcpfpg' % (self.compile_dir, self.compile_dir)
         else:            
             mkfpg_cmd3 = 'cat %s/system.bin.gz >> %s/extended_info.kcpfpg' % (self.compile_dir, self.compile_dir)
-        
-        os.system(mkfpg_cmd3)
+            os.system(mkfpg_cmd3)
         # copy extended_info.kcpfpg and rename to time stamped file and
         # place in output directory with the bof file
-        mkfpg_cmd4 = 'cp %s/extended_info.kcpfpg %s/%s' % (
-            self.compile_dir, self.output_dir, filename_fpg)
+        if self.name == 'quartus':
+            mkfpg_cmd4 = 'cp %s/extended_info.kcpfpg %s/%s' % (self.compile_dir, self.output_dir, filename_fpg)
+        else:
+            mkfpg_cmd4 = 'cp %s/extended_info.kcpfpg %s/%s' % (self.compile_dir, self.output_dir, filename_fpg)
         os.system(mkfpg_cmd4)
 
     @staticmethod
@@ -1603,13 +1606,19 @@ class QuartusBackend(ToolflowBackend):
         self.add_tcl_cmd('load_package flow', stage='init')
         self.add_tcl_cmd('set impl_dir "%s"'%prefix, stage='init')
 
+
+
         # Just use project path prefix
         prefix = os.path.join(self.compile_dir, self.project_name)
 
         self.add_tcl_cmd('load_package flow', stage='init')
         os.makedirs(os.path.join(self.compile_dir, self.project_name), exist_ok=True)
         self.add_tcl_cmd(f'cd {prefix}', stage='init')
+
+        ddr_path = os.path.join(os.getenv('MLIB_DEVEL_PATH'), 'jasper_library/hdl_sources/de10nano/DDR')
+        self.add_tcl_cmd(f'set HPS_DDR_TCL_DIR "{ddr_path}"', stage = 'init') 
         self.add_tcl_cmd(f'project_new {self.project_name} -overwrite', stage='init')
+
 
         # Set FPGA part
         self.add_tcl_cmd(f'set_global_assignment -name FAMILY "{plat.family}"', stage='init')
@@ -1627,13 +1636,26 @@ class QuartusBackend(ToolflowBackend):
 
         # Any top-level file setup
         self.add_tcl_cmd(f'set_global_assignment -name TOP_LEVEL_ENTITY top', stage='init')
+        
+        proj_dir = os.path.join(self.compile_dir, self.project_name)
+        sdc_loc = os.path.join(proj_dir, 'user_const.sdc')
+        self.add_tcl_cmd(f'set_global_assignment -name SDC_FILE "{sdc_loc}"', stage = 'init')
+
+        hps_qsf = os.path.join(os.getenv('MLIB_DEVEL_PATH'), 'jasper_library/hdl_sources/de10nano/DE10_NANO_SoC_GHRD.qsf')
+        self.add_tcl_cmd(f'source "{hps_qsf}"')
+        self.add_tcl_cmd(f'set_global_assignment -name FAMILY "Cyclone V"')
+        self.add_tcl_cmd(f'set_global_assignment -name DEVICE 5CSEBA6U23I7')
+        self.add_tcl_cmd(f'set_global_assignment -name TOP_LEVEL_ENTITY top')
 
         #print('ALL ALLTRIBUTES: ' + str(vars(self)))
+
+        soc_qip = os.path.join(os.getenv('MLIB_DEVEL_PATH'), 'jasper_library/hdl_sources/de10nano/soc_system/synthesis/soc_system_parsed.qip')
+        self.add_tcl_cmd(f'set_global_assignment -name QIP_FILE "{soc_qip}"', stage = 'init')
 
         core_basename = os.path.basename(self.compile_dir) 
         core_name = os.path.join(self.compile_dir, core_basename + '_ip.v')
 
-        self.add_tcl_cmd(f'set_global_assignment -name VERILOG_FILE {core_name}')
+        self.add_tcl_cmd(f'set_global_assignment -name VERILOG_FILE "{core_name}"')
         #for root, _, files in os.walk(self.compile_dir):
         #    for f in files:
         #        if f.endswith((".vhd", ".vhdl")):
@@ -1690,25 +1712,27 @@ class QuartusBackend(ToolflowBackend):
             # Source is a directory ? add all supported HDL files
             for fname in sorted(os.listdir(source)):
                 full_path = os.path.join(source, fname)
-                if fname.lower().endswith('.vhd') or fname.lower().endswith('.vhdl'):
-                    self.add_tcl_cmd(f'set_global_assignment -name VHDL_FILE "{full_path}"')
-                elif fname.lower().endswith('.v'):
-                    self.add_tcl_cmd(f'set_global_assignment -name VERILOG_FILE "{full_path}"')
-                elif fname.lower().endswith('.sv'):
-                    self.add_tcl_cmd(f'set_global_assignment -name SYSTEMVERILOG_FILE "{full_path}"')
-                else:
-                    self.logger.debug(f'Skipping non-HDL file: {fname}')
+                if not('soc_system_hps_0.v' in fname.lower() or 'soc_system_hps_0_fpga_interfaces.sv' in fname.lower() or 'soc_system_hps_0_hps_io.v' in fname.lower()):
+                    if fname.lower().endswith('.vhd') or fname.lower().endswith('.vhdl'):
+                        self.add_tcl_cmd(f'set_global_assignment -name VHDL_FILE "{full_path}"')
+                    elif fname.lower().endswith('.v'):
+                        self.add_tcl_cmd(f'set_global_assignment -name VERILOG_FILE "{full_path}"')
+                    elif fname.lower().endswith('.sv'):
+                        self.add_tcl_cmd(f'set_global_assignment -name SYSTEMVERILOG_FILE "{full_path}"')
+                    else:
+                        self.logger.debug(f'Skipping non-HDL file: {fname}')
         elif os.path.isfile(source):
             # Source is a single file
-            ext = os.path.splitext(source)[-1].lower()
-            if ext == '.vhd' or ext == '.vhdl':
-                self.add_tcl_cmd(f'set_global_assignment -name VHDL_FILE "{source}"')
-            elif ext == '.v':
-                self.add_tcl_cmd(f'set_global_assignment -name VERILOG_FILE "{source}"')
-            elif ext == '.sv':
-                self.add_tcl_cmd(f'set_global_assignment -name SYSTEMVERILOG_FILE "{source}"')
-            else:
-                self.logger.warning(f"Unknown or unsupported source type: {source}")
+            if not('soc_system_hps_0.v' in source.lower() or 'soc_system_hps_0_fpga_interfaces.sv' in source.lower() or 'soc_system_hps_0_hps_io.v' in source.lower()):
+                ext = os.path.splitext(source)[-1].lower()
+                if ext == '.vhd' or ext == '.vhdl':
+                    self.add_tcl_cmd(f'set_global_assignment -name VHDL_FILE "{source}"')
+                elif ext == '.v':
+                    self.add_tcl_cmd(f'set_global_assignment -name VERILOG_FILE "{source}"')
+                elif ext == '.sv':
+                    self.add_tcl_cmd(f'set_global_assignment -name SYSTEMVERILOG_FILE "{source}"')
+                else:
+                    self.logger.warning(f"Unknown or unsupported source type: {source}")
         else:
             self.logger.error(f"add_source called with unknown path: {source}")
 
@@ -1760,15 +1784,51 @@ class QuartusBackend(ToolflowBackend):
         tcl = self.add_tcl_cmd  # shorthand
 
         # Step 1: Analysis & Synthesis
-        tcl(f'execute_flow -compile', stage='synth')  # shortcut for map, fit, asm
+
+        #qsf_loc = os.path.join(self.output_dir, 'user_const.qsf')
+        #tcl(f'source {qsf_loc}')
+        #sdc_loc = os.path.join(self.output_dir, 'user_const.sdc')
+        #tcl(f'set_global_assignment -name SDC_FILE {sdc_loc}')
         
+        #tcl(f'qsys-script --script="soc_system_gen.tcl"', stage='synth')
+        #tcl(f'qsys-generate soc_system.qsys --synthesis=VERILOG --output-directory="{self.output_dir}/soc_system"', stage='synth')
+        tcl(f'execute_flow -compile', stage='synth')  # shortcut for map, fit, asm
+        # ===== Build in stages so DDR Tcl can run under quartus_sta after map =====
+        #tcl(f'execute_module -tool map', stage = 'synth')
+
+        # Apply DDR pin database / I/O standard constraints (requires a mapped netlist & sdc_ext)
+        # This is the Intel-generated script you already have:
+        #   /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/DDR/hps_sdram_p0_pin_assignments.tcl
+        #assignment_loc = os.path.join(os.getenv('MLIB_DEVEL_PATH'), 'jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0_pin_assignments.tcl')
+        #tcl(f'quartus_sta -t "{assignment_loc}" "myproj"', stage = 'synth')
+
+        #tcl(f'set ddr_tcl "{assignment_loc}"')
+        #tcl('set sta_rc [catch { exec quartus_sta -t $ddr_tcl "myproj" } sta_out]')
+        #tcl('puts "DDR pin Tcl output:\n$sta_out"')
+        #tcl('if {$sta_rc} { post_message -type error "DDR pin Tcl failed"; qexit -error}')
+
+
+        # Continue the flow
+        #tcl(f'execute_module -tool fit', stage = 'synth')
+        #tcl(f'execute_module -tool asm', stage = 'synth')
+        #tcl(f'execute_module -tool sta', stage = 'synth')
+
+
+        sof_loc = os.path.join(self.output_dir, 'top.sof')
+        tcl(f'file copy -force "myproj.sof" "{sof_loc}"', stage ='synth')
+
+
         frontend = os.getenv('FRONTEND').lower()
         if frontend and frontend == 'scilab':
+            proj_dir = os.path.join(self.compile_dir, self.project_name)
+
             search_dir = os.path.join(os.getenv('MLIB_DEVEL_PATH'), 'scilab_library')
             for root, dirs, files in os.walk(search_dir):
                 tcl(f'set_global_assignment -name SEARCH_PATH {root}', stage='init')
                 #self.add_tcl_cmd(f'set_global_assignment -name SEARCH_PATH {search_dir}', stage='init')
-        tcl(f'file copy -force {self.project_name}.sof {self.output_dir}/top.sof', stage='post_bitgen')
+        
+
+        #tcl(f'file copy -force {self.project_name}.sof {self.output_dir}/top.sof', stage='post_bitgen')
 
         # Or manual steps (for debug granularity):
         # tcl(f'quartus_map --read_settings_files=on --write_settings_files=off {self.project_name}', stage='synth')
@@ -2017,7 +2077,7 @@ class QuartusBackend(ToolflowBackend):
 
     def gen_yellowblock_custom_hdl(self):
         """
-        Create each yellowblock's custom hdl files and add them to the projects sources
+        Create each yellowblock's custom hdl files and add them to the project's sources
         """
         self.logger.info('Generating yellow block custom hdl files')
         for obj in self.periph_objs:
@@ -2041,9 +2101,11 @@ class QuartusBackend(ToolflowBackend):
 
         proj_dir = os.path.join(self.compile_dir, self.project_name)
         qsf_file = os.path.join(proj_dir, 'user_const.qsf')
+        #qip_file = os.path.join(proj_dir, 'user_const.qip')
         sdc_file = os.path.join(proj_dir, 'user_const.sdc')
         qsf_lines = ''
         sdc_lines = ''
+        qip_lines = ''
 
         # Example: set number of processors for Quartus
         total_cores = os.cpu_count()
@@ -2063,9 +2125,39 @@ class QuartusBackend(ToolflowBackend):
                 self.logger.debug(f'  ? QSF constraint: {constraint}')
                 qsf_lines += tcl_line
 
-        
+        '''
         qsf_lines += f'set_global_assignment -name SDC_FILE {os.path.basename(sdc_file)}\n'
+
+        
+        for i in range(15):
+            qsf_lines += f'set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to HPS_DDR3_ADDR[{i}]\n'           
+
+        for i in range(3):
+            qsf_lines += f'set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to HPS_DDR3_BA[{i}]\n'
+
+        qsf_lines += 'set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to HPS_DDR3_CK_P\n'
+        qsf_lines += 'set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to HPS_DDR3_CK_N\n'
+
+        for n in ["HPS_DDR3_CKE","HPS_DDR3_CS_N","HPS_DDR3_RAS_N","HPS_DDR3_CAS_N","HPS_DDR3_WE_N",
+                  "HPS_DDR3_RESET_N","HPS_DDR3_ODT","HPS_DDR3_RZQ"]:
+            qsf_lines += f'set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to {n}\n'
+
+        for i in range(32):
+            qsf_lines += f'set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to HPS_DDR3_DQ[{i}]\n'
+
+        for i in range(4):
+            qsf_lines += f'set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to HPS_DDR3_DM[{i}]\n'
+            qsf_lines += f'set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to HPS_DDR3_DQS_P[{i}]\n'
+            qsf_lines += f'set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to HPS_DDR3_DQS_N[{i}]\n'
+
+        '''
+        
+        #with open(os.environ['MLIB_DEVEL_PATH'] + '/jasper_library/' + 'hps_constraints_de10.txt', 'r') as f:
+        #    for line in f:
+        #        qsf_lines += line
+
         # Write constraint files
+        #helpers.write_file(qip_file, qip_lines)
         helpers.write_file(qsf_file, qsf_lines)
         helpers.write_file(sdc_file, sdc_lines)
 
@@ -2073,6 +2165,7 @@ class QuartusBackend(ToolflowBackend):
 
         # Register with the Quartus toolchain
         self.add_const_file(qsf_file)
+        #self.add_const_file(qip_file)
         self.add_const_file(sdc_file)
         
   

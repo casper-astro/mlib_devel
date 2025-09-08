@@ -326,9 +326,9 @@ if __name__ == '__main__':
                 os.system('cp %s %s/top.bin' % (binary, backend.compile_dir))
                 os.system('cp %s %s/top.bit' % (bit_file, backend.compile_dir))
                 if platform.name.startswith("au"):
-                   backend.mkfpg(bitstream, backend.output_fpg)
+                    backend.mkfpg(bitstream, backend.output_fpg)
                 else:
-                   backend.mkfpg(binary, backend.output_fpg)
+                    backend.mkfpg(binary, backend.output_fpg)
                 print('Created %s/%s' % (backend.output_dir, backend.output_fpg))
 
             # Only generate the hex and mcs files if a golden image or multiboot image

@@ -1,8 +1,7 @@
 from .yellow_block import YellowBlock
 from clk_factors import clk_factors
-from constraints import ClockConstraint, ClockGroupConstraint, PortConstraint, RawConstraint
-import glob
-import os
+from constraints import ClockConstraint, PortConstraint
+import glob, os
 
 def signal_width(sig):
     if 'addr' in sig or 'data' in sig:
@@ -27,176 +26,155 @@ class de10nano(YellowBlock):
         self.pl_clk_mhz = self.blk['pl_clk_rate']
         self.T_pl_clk_ns = 1.0/self.pl_clk_mhz*1000
 
-        self.provides.append('sys_clk')
-        self.provides.append('sys_rst')
+        # what this platform offers to the rest of the design
+        for p in ['sys_clk','sys_rst','axil_clk','axil_rst_n','fpga_clk1_50','fpga_clk2_50','fpga_clk3_50','pl_sysref']:
+            self.provides.append(p)
 
-        self.provides.append('fpga_clk1_50')
-        self.provides.append('fpga_clk2_50')
-        self.provides.append('fpga_clk3_50')
+        # sources: CDC helper
         self.add_source('utils/cdc_synchroniser.vhd')
-        self.add_source('de10nano/de10nano.v')
-        self.add_source('de10nano/de10nano_hps_0_fpga_interfaces.sv')
-        #self.add_source('de10nano/de10nano_hps_0_hps_io.v')
-        #self.add_source('de10nano/de10nano_hps_0_hps_io_border.sv')
-        #self.add_source('de10nano/hps_sdram.v')
-        #self.add_source('de10nano/hps_sdram_pll.sv')
-        #self.add_source('de10nano/hps_sdram_p0.sv')
-        #source_dir = os.path.join(self.hdl_root, 'de10nano')
-        #for file in os.listdir(source_dir):
-        #    if file.endswith('.v') or file.endswith('.sv'):
-        #        self.add_source(os.path.join('de10nano', file))
 
-        # TODO: is a bug that `axi4lite_interconnect` does not make a `requires` on `axil_clk`.
-        # Looking into this more: the `_drc` check on YB requires/provides is done in `gen_periph_objs` but the `axi4lite_interconnect`
-        # is not done until later within `generate_hdl > _instantiate_periphs`, therefore, by-passing any checks done.
-        #self.provides.append('axil_clk')    # from block design
-        #self.provides.append('axil_rst_n')  # from block desgin
+        # HPS (Platform Designer) IP ? module names must match what you instantiate
+        # Use your actual filenames/paths, these are based on what you shared.
+        #self.add_source('de10nano/soc_system_hps_0.v')
+        #self.add_source('de10nano/de10nano_hps_0_fpga_interfaces.sv')
+        #self.add_source('de10nano/soc_system_hps_0_fpga_interfaces.sv')
+        #self.add_source('de10nano/soc_system_hps_0_hps_io.v')
 
-        # rfsocs use the requires/provides for to check for `sysref` and `pl_sysref` for MTS
-        self.provides.append('pl_sysref') # rfsoc platform/infrastructure provides so rfdc can require
-
-        #self.requires.append('M_AXI') # axi4lite interface from block design
+        # AXI4-Lite interconnect RTL so the instance created by the model can bind
+        # (adjust these globs to your repo layout)
+        hdl_root = getattr(self, 'hdl_root', os.getcwd())
+        for patt in [
+            'jasper_library/hdl_sources/axi4lite/*.v',
+            'jasper_library/hdl_sources/axi4lite/*.sv',
+            'jasper_library/hdl_sources/axi4lite_interconnect/*.v',
+            'jasper_library/hdl_sources/axi4lite_interconnect/*.sv',
+        ]:
+            for f in glob.glob(os.path.join(hdl_root, patt)):
+                rel = os.path.relpath(f, hdl_root)
+                try:
+                    self.add_source(rel)
+                except Exception:
+                    pass
 
     def modify_top(self, top):
-        # Declare and connect de10nano module
+        # --- Board clock (name must match the QSF/board pin) ---
+        top.add_port('FPGA_CLK1_50', dir='in')
 
-        # Clock input and basic signals
-        #top.add_port('oct_rzqin', dir='inout', width=0)  
 
-        top.add_port('fpga_clk1_50', dir='in', width=0)
+        # Alias for legacy/generated references that still use lowercase
+        top.add_signal('fpga_clk1_50')
+        top.add_raw_string("assign fpga_clk1_50 = FPGA_CLK1_50;")
 
-        # Declare internal signals
-        #top.add_signal('axil_clk', width=1)
-        #top.add_signal('axil_rst_n', width=1)
-        top.add_signal('sys_clk', width = 0)
-        top.add_signal('sys_rst')
-        top.add_signal("axil_rst", width=1)
-        top.add_signal('h2f_rst_n', width=1)
+        # Fabric clocks
+        top.add_signal('sys_clk')
+        #top.assign_signal('sys_clk', 'FPGA_CLK1_50')
 
-        #top.add_signal('user_clk', width = 1)
+        top.add_signal('axil_clk')
+        top.assign_signal('axil_clk', 'fpga_clk1_50 ')
 
-        # Assign fpga_clk1_50 to internal clocks
-        top.assign_signal('axil_clk', 'fpga_clk1_50')
-        top.assign_signal('sys_clk', 'fpga_clk1_50')  # for consistency
-        #top.assign_signal('user_clk', 'fpga_clk1_50')
-        top.assign_signal('axil_rst', 'sys_rst')
-        top.assign_signal('user_rst', '1\'b0')
-        top.assign_signal('sys_rst', "1'b0")
-        top.assign_signal('h2f_rst_n', "1'b1")
-
-        axi_names = [
-            'awaddr', 'awvalid', 'awready',
-            'wdata', 'wstrb', 'wvalid', 'wready',
-            'bresp', 'bvalid', 'bready',
-            'araddr', 'arvalid', 'arready',
-            'rdata', 'rresp', 'rvalid', 'rready'
+        # --- AXI-Lite master (internal nets only) ---
+        axi = [
+            ('M_AXI_awaddr', 32), ('M_AXI_awvalid', 1), ('M_AXI_awready', 1),
+            ('M_AXI_wdata',  32), ('M_AXI_wstrb',  4), ('M_AXI_wvalid', 1), ('M_AXI_wready', 1),
+            ('M_AXI_bresp',   2), ('M_AXI_bvalid', 1), ('M_AXI_bready', 1),
+            ('M_AXI_araddr', 32), ('M_AXI_arvalid', 1), ('M_AXI_arready', 1),
+            ('M_AXI_rdata',  32), ('M_AXI_rresp',  2), ('M_AXI_rvalid', 1), ('M_AXI_rready', 1),
         ]
+        for name, w in axi:
+            top.add_signal(name, width=w if w > 1 else None)
 
-        for sig in axi_names:
-            top.add_signal(f'M_AXI_{sig}', width=signal_width(sig))
+        # HPS uses 21-bit LW addresses; zero-extend to 32 for your fabric nets
+        top.add_signal('hps_awaddr_21', width=21)
+        top.add_signal('hps_araddr_21', width=21)
+        top.add_raw_string("assign M_AXI_awaddr = {11'b0, hps_awaddr_21};")
+        top.add_raw_string("assign M_AXI_araddr = {11'b0, hps_araddr_21};")
+
+        # --- soc_system instance ---
+        sys = top.get_instance('soc_system', 'soc_system')
+
+        # Clocks / resets (names must exist in your soc_system.v)
+        top.add_signal('h2f_rst_n')   # from HPS to fabric (active-high)
+        top.add_signal('axil_rst')    # active-high fabric reset
+        top.add_signal('axil_rst_n')
+        top.add_signal('user_rst')
 
 
-        # Declare and tie off constant PROT signals
-        top.add_signal('awprot_000', width=3)
-        top.assign_signal('awprot_000', "3'b000")
+        sys.add_port('clk_clk', 'axil_clk', dir='in')
+        sys.add_port('hps_0_h2f_reset_reset_n', 'h2f_rst_n', dir='out')
+        top.add_raw_string("assign axil_rst_n = h2f_rst_n;\n")
+        top.add_raw_string("assign axil_rst = ~h2f_rst_n;\n")
+        top.add_raw_string("assign user_rst = ~h2f_rst_n;\n")
 
-        top.add_signal('arprot_000', width=3)
-        top.assign_signal('arprot_000', "3'b000")
+        # If your soc_system.v exposes an external reset (optional):
+        # top.add_signal('soc_ext_reset_n')
+        # top.add_raw_string("assign soc_ext_reset_n = 1'b1;")
+        # sys.add_port('reset_reset_n', 'soc_ext_reset_n', dir='in')
 
-        top.add_raw_string("""
-        de10nano #(
-            .F2S_Width(1),
-            .S2F_Width(0)
-        ) de10nano_inst (
-            .f2h_axi_clk(axil_clk),
-            .f2h_AWVALID(M_AXI_awvalid),
-            .f2h_AWREADY(M_AXI_awready),
-            .h2f_lw_AWADDR(M_AXI_awaddr),
-            .h2f_lw_AWPROT(awprot_000),
-            .h2f_lw_WDATA(M_AXI_wdata),
-            .h2f_lw_WSTRB(M_AXI_wstrb),
-            .h2f_lw_WVALID(M_AXI_wvalid),
-            .h2f_lw_WREADY(M_AXI_wready),
-            .h2f_lw_BRESP(M_AXI_bresp),
-            .h2f_lw_BVALID(M_AXI_bvalid),
-            .h2f_lw_BREADY(M_AXI_bready),
-            .h2f_lw_ARADDR(M_AXI_araddr),
-            .h2f_lw_ARPROT(arprot_000),
-            .h2f_lw_ARVALID(M_AXI_arvalid),
-            .h2f_lw_ARREADY(M_AXI_arready),
-            .h2f_lw_RDATA(M_AXI_rdata),
-            .h2f_lw_RRESP(M_AXI_rresp),
-            .h2f_lw_RVALID(M_AXI_rvalid),
-            .h2f_lw_RREADY(M_AXI_rready),
-            .h2f_rst_n(h2f_rst_n),
-        );
-        """)
-   
+        # --- Export DDR to top (exact names match Terasic QSF) ---
+        sys.add_port('memory_mem_a',       'HPS_DDR3_ADDR',     dir='out',   width=15, parent_port=True)
+        sys.add_port('memory_mem_ba',      'HPS_DDR3_BA',       dir='out',   width=3,  parent_port=True)
+        sys.add_port('memory_mem_ck',      'HPS_DDR3_CK_P',     dir='out',               parent_port=True)
+        sys.add_port('memory_mem_ck_n',    'HPS_DDR3_CK_N',     dir='out',               parent_port=True)
+        sys.add_port('memory_mem_cke',     'HPS_DDR3_CKE',      dir='out',               parent_port=True)
+        sys.add_port('memory_mem_cs_n',    'HPS_DDR3_CS_N',     dir='out',               parent_port=True)
+        sys.add_port('memory_mem_ras_n',   'HPS_DDR3_RAS_N',    dir='out',               parent_port=True)
+        sys.add_port('memory_mem_cas_n',   'HPS_DDR3_CAS_N',    dir='out',               parent_port=True)
+        sys.add_port('memory_mem_we_n',    'HPS_DDR3_WE_N',     dir='out',               parent_port=True)
+        sys.add_port('memory_mem_reset_n', 'HPS_DDR3_RESET_N',  dir='out',               parent_port=True)
+        sys.add_port('memory_mem_dq',      'HPS_DDR3_DQ',       dir='inout', width=32,   parent_port=True)
+        sys.add_port('memory_mem_dqs',     'HPS_DDR3_DQS_P',    dir='inout', width=4,    parent_port=True)
+        sys.add_port('memory_mem_dqs_n',   'HPS_DDR3_DQS_N',    dir='inout', width=4,    parent_port=True)
+        sys.add_port('memory_mem_odt',     'HPS_DDR3_ODT',      dir='out',               parent_port=True)
+        sys.add_port('memory_mem_dm',      'HPS_DDR3_DM',       dir='out',   width=4,    parent_port=True)
+        sys.add_port('memory_oct_rzqin',   'HPS_DDR3_RZQ',      dir='in',                parent_port=True)
+
+
+        # --- HPS LW AXI master (names must match *your* soc_system.v exactly) ---
+        sys.add_port('hps_0_h2f_lw_axi_master_awaddr',  'hps_awaddr_21', dir='out', width=21)
+        sys.add_port('hps_0_h2f_lw_axi_master_awvalid', 'M_AXI_awvalid', dir='out')
+        sys.add_port('hps_0_h2f_lw_axi_master_awready', 'M_AXI_awready', dir='in')
+
+        sys.add_port('hps_0_h2f_lw_axi_master_wdata',   'M_AXI_wdata',   dir='out', width=32)
+        sys.add_port('hps_0_h2f_lw_axi_master_wstrb',   'M_AXI_wstrb',   dir='out', width=4)
+        sys.add_port('hps_0_h2f_lw_axi_master_wvalid',  'M_AXI_wvalid',  dir='out')
+        sys.add_port('hps_0_h2f_lw_axi_master_wready',  'M_AXI_wready',  dir='in')
+
+        sys.add_port('hps_0_h2f_lw_axi_master_bresp',   'M_AXI_bresp',   dir='in',  width=2)
+        sys.add_port('hps_0_h2f_lw_axi_master_bvalid',  'M_AXI_bvalid',  dir='in')
+        sys.add_port('hps_0_h2f_lw_axi_master_bready',  'M_AXI_bready',  dir='out')
+
+        sys.add_port('hps_0_h2f_lw_axi_master_araddr',  'hps_araddr_21', dir='out', width=21)
+        sys.add_port('hps_0_h2f_lw_axi_master_arvalid', 'M_AXI_arvalid', dir='out')
+        sys.add_port('hps_0_h2f_lw_axi_master_arready', 'M_AXI_arready', dir='in')
+
+        sys.add_port('hps_0_h2f_lw_axi_master_rdata',   'M_AXI_rdata',   dir='in',  width=32)
+        sys.add_port('hps_0_h2f_lw_axi_master_rresp',   'M_AXI_rresp',   dir='in',  width=2)
+        sys.add_port('hps_0_h2f_lw_axi_master_rvalid',  'M_AXI_rvalid',  dir='in')
+        sys.add_port('hps_0_h2f_lw_axi_master_rready',  'M_AXI_rready',  dir='out')
+
+
     def gen_children(self):
-        children = []
+        return []
+        # Add exactly one system block named 'sys' so memory_map['sys'] exists
+        #return [
+        #    YellowBlock.make_block({
+        #        'fullpath': self.fullpath,
+        #        'tag': 'xps:sys_block_intel',
+        #        'name': 'sys',        # <-- important
+        #        'board_id': '167',
+        #        'rev_maj': '1',
+        #        'rev_min': '0',
+        #        'rev_rcs': '0',
+        #    }, self.platform)
+        #]
 
-        # Add the sys_block ? this ensures sys_board_id shows up
-        
-        
-        children.append(YellowBlock.make_block({
-            'fullpath': self.fullpath,
-            'tag': 'xps:sys_block_intel',
-            'board_id': '167',  # or an actual board ID
-            'rev_maj': '1',
-            'rev_min': '0',
-            'rev_rcs': '0'
-        }, self.platform))
-        
-
-        
-        #axi_buffer_blk = {
-        #    'tag': 'xps:axi4lite_buffer',
-        #    'name': 'axi_passthrough'
-        #}
-        #children.append(YellowBlock.make_block(axi_buffer_blk, self.platform))
-        children.append(YellowBlock.make_block({'fullpath': self.fullpath, 'tag': 'xps:axi4lite_interconnect','name': 'axi_interconnect'}, self.platform))
-
-        return children
-
-    
     def gen_constraints(self):
         cons = []
-        cons.append(ClockConstraint('fpga_clk1_50', 'sys_clk', period=self.T_pl_clk_ns, port_en=True, virtual_en=False))
-        cons.append(ClockConstraint('fpga_clk1_50', 'axil_clk', period=self.T_pl_clk_ns, port_en=True, virtual_en=False))
-        cons.append(PortConstraint('fpga_clk1_50', 'fpga_clk1_50'))
-        #cons.append(PortConstraint('oct_rzqin', 'oct_rzqin'))
-        #cons.append(PortConstraint('fpga_clk2_50', 'fpga_clk2_50'))
-        #cons.append(PortConstraint('fpga_clk3_50', 'fpga_clk3_50'))
-        
+        # The auto-top uses fpga_clk1_50 for sys/axil clocks; give it a pin and a period.
+        cons.append(ClockConstraint('FPGA_CLK1_50', 'sys_clk', period=self.T_pl_clk_ns, port_en=True, virtual_en=False))
+        #cons.append(ClockConstraint('FPGA_CLK1_50', 'sys_clk', period=self.T_pl_clk_ns, port_en=True, virtual_en=False))
+        #cons.append(PortConstraint('fpga_clk1_50', 'FPGA_CLK1_50'))
         return cons
 
-
-def gen_tcl_cmds(self):
-    tcl_cmds = {}
-    
-    '''
-    tcl_cmds['init'] = []
-    tcl_cmds['create_bd'] = []
-    tcl_cmds['pre_synth'] = []
-
-    # Example: set number of processors for Quartus
-    total_cores = os.cpu_count()
-    cpu_count = 1 if not(int(0.75*total_cores)) else int(0.75*total_cores) 
-    
-    tcl_cmds['pre_synth'] += [
-        f'set_global_assignment -name NUM_PARALLEL_PROCESSORS {cpu_count}'
-    ]
-
-    # Example: pass Verilog defines
-    tcl_cmds['pre_synth'] += [
-        'set_global_assignment -name VERILOG_MACRO "HAS_REAL_AXI"',
-        'set_global_assignment -name VERILOG_MACRO "MY_OTHER_MACRO=1"'
-    ]
-
-    # Optionally post-bitgen commands (not always relevant for Quartus, but structure is there)
-    tcl_cmds['post_bitgen'] = []
-    '''
-
-    return tcl_cmds
-
-
+    def gen_tcl_cmds(self):
+        return {'init': [], 'create_bd': [], 'pre_synth': [], 'post_synth': [], 'post_bitgen': []}

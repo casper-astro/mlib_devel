@@ -17,12 +17,18 @@ class sys_block_intel(YellowBlock):
         ]
     def modify_top(self,top):
 
-        '''
+        
         # Declare user_clk only if it hasn't already been declared
-        if not top.does_signal_exist('user_clk'):
+        #if not top.does_signal_exist('user_clk'):
+
+        all_signals = [key for inner in (top.signals).values() for key in inner.keys()]
+        if not('user_clk' in all_signals):
             top.add_signal('user_clk', width=0)
-            top.assign_signal('user_clk', 'fpga_clk1_50')
-        '''
+            top.assign_signal('user_clk', 'axil_clk')          # same domain as AXI-Lite
+
+        if not('user_rst' in all_signals):
+            top.add_signal('user_rst', width=0)
+        top.assign_signal('user_rst', '~axil_rst_n') 
 
         if 'wishbone' not in self.platform.mmbus_architecture:
             inst = top.get_instance('sys_block_counter', 'sys_block_counter_inst')          
@@ -38,7 +44,7 @@ class sys_block_intel(YellowBlock):
             inst = top.get_instance(entity='cdc_synchroniser', name='sys_block_counter_cdc_inst')
             inst.add_parameter('G_BUS_WIDTH', value=32)
             inst.add_port('IP_CLK',       signal='axil_clk', parent_sig=False)
-            inst.add_port('IP_RESET',     signal='axil_rst', parent_sig=False)                
+            inst.add_port('IP_RESET',     signal='~axil_rst_n', parent_sig=False)                
             inst.add_port('IP_BUS_VALID', signal='1\'b1', parent_sig=False)
             inst.add_port('IP_BUS',       signal='%s_clkcounter_cdc'% 'sys', width=32, parent_sig=True)
             inst.add_port('OP_BUS',       signal='%s_clkcounter_in'% 'sys',  width=32, parent_sig=True)
@@ -50,5 +56,6 @@ class sys_block_intel(YellowBlock):
             inst.add_parameter('REV_MIN', self.rev_min)
             inst.add_parameter('REV_RCS', self.rev_rcs)
             inst.add_port('user_clk', 'user_clk', parent_port=False, parent_sig=False)
+            inst.add_port('IP_RESET', 'user_rst', parent_sig=False)
             inst.add_wb_interface('sys', mode='r', nbytes=32, memory_map=self.memory_map, typecode=self.typecode)
       

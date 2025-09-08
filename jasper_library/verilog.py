@@ -918,18 +918,23 @@ class VerilogModule(object):
                 #    print('INFO FOR...')
                 #    print(vars(dev))
                 # add all other yellow blocks to their own interface and make xml memory map
-                for reg in dev.memory_map:
-                    key = (reg.name, reg.offset)
-                    if key not in self._swreg_registry:
-                        print('ADDING KEY: ' + str(key))
-                        self._swreg_registry.add(key)
-                        self.memory_map[dev.regname] = {}
-                        interface = self.memory_map[dev.regname]
-                        interface['size'] = dev.nbytes
-                        interface['memory_map'] = dev.memory_map
-                        interface['axi4lite_devices'] = [dev]
-                dev.memory_map = [] 
-
+                #for reg in dev.memory_map:
+                #    key = (reg.name, reg.offset)
+                #    if key not in self._swreg_registry:
+                #        print('ADDING KEY OF TYPE: ' + str(dev.typecode))
+                #        print('ADDING KEY: ' + str(key))
+                #        self._swreg_registry.add(key)
+                #        self.memory_map[dev.regname] = {}
+                #        interface = self.memory_map[dev.regname]
+                #        interface['size'] = dev.nbytes
+                #        interface['memory_map'] = dev.memory_map
+                #        interface['axi4lite_devices'] = [dev]
+                #dev.memory_map = [] 
+                self.memory_map[dev.regname] = {}
+                interface = self.memory_map[dev.regname]
+                interface['size'] = dev.nbytes
+                interface['memory_map'] = dev.memory_map
+                interface['axi4lite_devices'] = [dev]
 
         if not(self.configured_axi) or backend != 'quartus':
             relative_address = 0
@@ -1452,7 +1457,7 @@ class VerilogModule(object):
                 if n != (n_inst - 1):
                     s += '\n'
                 n += 1
-        print('/n/n/nLONG BLOCK INCOMING')
+        print('\n\n\nLONG BLOCK INCOMING')
         print(s)
         print('\n\n\n')
         return s

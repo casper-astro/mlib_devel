@@ -1,5 +1,5 @@
 /home/bgodfrey/CASPER/mlib_devel/jasper_library/platforms/de10nano.yaml
-{'name': 'de10nano', 'manufacturer': 'Intel', 'fpga': '5CSEBA6U23I7', 'family': 'Cyclone V', 'config_voltage': 3.3, 'backend_target': 'quartus', 'sources': [], 'mmbus_architecture': 'AXI4-Lite', 'mmbus_base_address': 3221225472, 'mmbus_address_alignment': 4, 'constraints': ['de10nano.qsf'], 'provides': ['fpga_clk1_50', 'fpga_clk2_50', 'fpga_clk3_50'], 'pins': {'fpga_clk1_50': {'io_std': '3.3-V LVTTL', 'loc': 'PIN_V11'}, 'fpga_clk2_50': {'io_std': '3.3-V LVTTL', 'loc': 'PIN_Y13'}, 'fpga_clk3_50': {'io_std': '3.3-V LVTTL', 'loc': 'PIN_E11'}, 'led': {'io_std': '3.3-V LVTTL', 'loc': ['PIN_AA23', 'PIN_Y16', 'PIN_AE26', 'PIN_AF26', 'PIN_V15', 'PIN_V16', 'PIN_AA24', 'PIN_W15']}, 'sw': {'io_std': '3.3-V LVTTL', 'loc': ['PIN_Y24', 'PIN_W24', 'PIN_W21', 'PIN_W20']}}}
+{'name': 'de10nano', 'manufacturer': 'Intel', 'fpga': '5CSEBA6U23I7', 'family': 'Cyclone V', 'config_voltage': 3.3, 'backend_target': 'quartus', 'sources': [], 'mmbus_architecture': 'AXI4-Lite', 'mmbus_base_address': 3221225472, 'mmbus_address_alignment': 4, 'constraints': [], 'provides': ['fpga_clk1_50', 'fpga_clk2_50', 'fpga_clk3_50'], 'pins': {'fpga_clk1_50': {'iostd': '3.3-V LVTTL', 'loc': 'PIN_V11'}, 'fpga_clk2_50': {'iostd': '3.3-V LVTTL', 'loc': 'PIN_Y13'}, 'fpga_clk3_50': {'iostd': '3.3-V LVTTL', 'loc': 'PIN_E11'}, 'led': {'iostd': '3.3-V LVTTL', 'loc': ['PIN_AA23', 'PIN_Y16', 'PIN_AE26', 'PIN_AF26', 'PIN_V15', 'PIN_V16', 'PIN_AA24', 'PIN_W15']}, 'sw': {'iostd': '3.3-V LVTTL', 'loc': ['PIN_Y24', 'PIN_W24', 'PIN_W21', 'PIN_W20']}, 'oct_rzqin': {'iostd': 'SSTL-15', 'loc': 'PIN_D25'}}}
 [PLATFORM DEBUG] Using platform YAML: /home/bgodfrey/CASPER/mlib_devel/jasper_library/platforms/de10nano.yaml
 [PLATFORM DEBUG] YAML keys: dict_keys(['name', 'manufacturer', 'fpga', 'family', 'config_voltage', 'backend_target', 'sources', 'mmbus_architecture', 'mmbus_base_address', 'mmbus_address_alignment', 'constraints', 'provides', 'pins'])
 [PLATFORM DEBUG] YAML family: Cyclone V
@@ -17,8 +17,9 @@ RETURN CLASS INSTANCE...
 	PLATFORM IS: de10nano
 	HDL ROOT IS: None
 FULL NAME: scilabdemo_sum_a_b
-wb_register_simulink2ppc ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_simulink2ppc']
-SOURCES ARE: ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_simulink2ppc']
+CREATING A MEMORY MAP FOR REGISTER: sum_a_b
+wb_register_simulink2ppc_intel []
+SOURCES ARE: []
 BUILDING THE BLOCK: {'name': 'swreg_a', 'fullpath': 'scilabdemo/swreg_a', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
 cls IS: <class 'yellow_blocks.sw_reg.sw_reg'>
 RETURN CLASS INSTANCE...
@@ -26,8 +27,9 @@ RETURN CLASS INSTANCE...
 	PLATFORM IS: de10nano
 	HDL ROOT IS: None
 FULL NAME: scilabdemo_swreg_a
-wb_register_ppc2simulink ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_ppc2simulink']
-SOURCES ARE: ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_ppc2simulink']
+CREATING A MEMORY MAP FOR REGISTER: swreg_a
+wb_register_ppc2simulink_intel []
+SOURCES ARE: []
 BUILDING THE BLOCK: {'name': 'swreg_b', 'fullpath': 'scilabdemo/swreg_b', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
 cls IS: <class 'yellow_blocks.sw_reg.sw_reg'>
 RETURN CLASS INSTANCE...
@@ -35,8 +37,9 @@ RETURN CLASS INSTANCE...
 	PLATFORM IS: de10nano
 	HDL ROOT IS: None
 FULL NAME: scilabdemo_swreg_b
-wb_register_ppc2simulink ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_ppc2simulink']
-SOURCES ARE: ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_ppc2simulink']
+CREATING A MEMORY MAP FOR REGISTER: swreg_b
+wb_register_ppc2simulink_intel []
+SOURCES ARE: []
 BUILDING THE BLOCK: {'name': 'sysgen_ip', 'fullpath': 'scilabdemo/dspproj/dspproj.srcs', 'tag': 'xps:ip', 'lib_path': '/data/DesignFiles/scilabdemo/dspproj/dspproj.srcs', 'ip_name': 'scilabdemo'}
 cls IS: <class 'yellow_blocks.ip.ip'>
 RETURN CLASS INSTANCE...
@@ -53,15 +56,38 @@ RETURN CLASS INSTANCE...
 FULL NAME: scilabdemo_DE10-Nano
 utils/cdc_synchroniser.vhd ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd']
 SOURCES ARE: ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd']
-BUILDING THE BLOCK: {'tag': 'xps:axi4lite_buffer', 'name': 'axi_passthrough'}
-cls IS: <class 'yellow_blocks.axi4lite_buffer.axi4lite_buffer'>
+de10nano/de10nano.v ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/de10nano.v']
+SOURCES ARE: ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/de10nano.v']
+de10nano/de10nano_hps_0_fpga_interfaces.sv ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/de10nano_hps_0_fpga_interfaces.sv']
+SOURCES ARE: ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/de10nano.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/de10nano_hps_0_fpga_interfaces.sv']
+BUILDING THE BLOCK: {'fullpath': 'scilabdemo/DE10-Nano', 'tag': 'xps:sys_block_intel', 'board_id': '167', 'rev_maj': '1', 'rev_min': '0', 'rev_rcs': '0'}
+cls IS: <class 'yellow_blocks.sys_block_intel.sys_block_intel'>
 RETURN CLASS INSTANCE...
-	BLOCK IS: {'tag': 'xps:axi4lite_buffer', 'name': 'axi_passthrough'}
+	BLOCK IS: {'fullpath': 'scilabdemo/DE10-Nano', 'tag': 'xps:sys_block_intel', 'board_id': '167', 'rev_maj': '1', 'rev_min': '0', 'rev_rcs': '0'}
 	PLATFORM IS: de10nano
 	HDL ROOT IS: None
+FULL NAME: scilabdemo_DE10-Nano
+sys_block_intel ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/sys_block_intel']
+SOURCES ARE: ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/sys_block_intel']
 BUILDING TOP IN TOOLFLOW
+modifying top for obj DE10-Nano
+modifying top for obj sum_a_b
+IO DIRECTION OF BLOCK sum_a_b IS To Processor
+TO PROCESSOR IO FOUND FOR BLOCK: {'name': 'sum_a_b', 'fullpath': 'scilabdemo/sum_a_b', 'tag': 'xps:sw_reg', 'io_dir': 'To Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
+	THE MEMORY MAP IS: {'name': 'sum_a_b', 'nbytes': 4, 'offset': 0, 'mode': 'rw', 'ram': False, 'default_val': '0', 'data_width': 32, 'axi4lite_mode': ''}
+modifying top for obj swreg_a
+IO DIRECTION OF BLOCK swreg_a IS From Processor
+FROM PROCESSOR IO FOUND FOR BLOCK: {'name': 'swreg_a', 'fullpath': 'scilabdemo/swreg_a', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
+	THE MEMORY MAP IS: {'name': 'swreg_a', 'nbytes': 4, 'offset': 0, 'mode': 'rw', 'ram': False, 'default_val': '0', 'data_width': 32, 'axi4lite_mode': ''}
+modifying top for obj swreg_b
+IO DIRECTION OF BLOCK swreg_b IS From Processor
+FROM PROCESSOR IO FOUND FOR BLOCK: {'name': 'swreg_b', 'fullpath': 'scilabdemo/swreg_b', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
+	THE MEMORY MAP IS: {'name': 'swreg_b', 'nbytes': 4, 'offset': 0, 'mode': 'rw', 'ram': False, 'default_val': '0', 'data_width': 32, 'axi4lite_mode': ''}
+modifying top for obj sysgen_ip
+modifying top for obj de10nano
+modifying top for obj sys_block_intel0
 ARCHITECTURE IS: ['AXI4-Lite']
-PLATFORM IS: <casper_platform.Platform object at 0x7ff0e4f9b3d0>
+PLATFORM IS: <casper_platform.Platform object at 0x7ff7816043a0>
 
 
 AXI4-Lite FOUND IN ARCHITECTURE
@@ -83,13 +109,60 @@ INITIALIZING AXI4LITE_INTERCONNECT
 
 axi4_lite/*.vhd ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_pkg.vhd', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_slave_logic.vhd']
 SOURCES ARE: ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_pkg.vhd', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_slave_logic.vhd']
+CALLED AXI4LITE_MEMORY_MAP...
+On device sum_a_b
+Looking at device sum_a_b with memory map [<memory.Register object at 0x7ff7811396d0>]
+THIS SHOULD BE THE FIRST SOFTWARE REGISTER
+LOOKING AT... sum_a_b
+THE MEMORY MAP IS: <memory.Register object at 0x7ff7811396d0>
+THE POSSIBLE VALUES OF THE MEMORY MAP ARE: {'name': 'sum_a_b', 'nbytes': 4, 'offset': 0, 'mode': 'r', 'ram': False, 'default_val': '0', 'data_width': 32, 'axi4lite_mode': ''}
+EMPTY MEMORY MAP FOUND FOR sum_a_b
+On device swreg_a
+Looking at device swreg_a with memory map [<memory.Register object at 0x7ff781139be0>]
+LOOKING AT... swreg_a
+New software register connecting swreg_a
+Confirming connection status: False
+On device swreg_b
+Looking at device swreg_b with memory map [<memory.Register object at 0x7ff781139cd0>]
+LOOKING AT... swreg_b
+New software register connecting swreg_b
+Confirming connection status: False
+On device sys
+Looking at device sys with memory map [<memory.Register object at 0x7ff7811a03d0>, <memory.Register object at 0x7ff781139460>, <memory.Register object at 0x7ff781139160>, <memory.Register object at 0x7ff7811394f0>, <memory.Register object at 0x7ff781139040>]
 MODIFYING TOP: top
 MEMORY MAP: YellowBlock Object: {'tag': 'xps:axi4lite_interconnect', 'name': 'axi4lite_interconnect', 'fullpath': 'scilabdemo_ip/axi4lite_interconnect'} (scilabdemo_ip_axi4lite_interconnect)
+{'name': 'board_id', 'nbytes': 4, 'offset': 0, 'mode': 'r', 'ram': False, 'default_val': '167', 'data_width': 32, 'axi4lite_mode': ''}
+[axi4lite_interconnect] Register: board_id, Block: sys, Mode: r
+{'name': 'rev', 'nbytes': 4, 'offset': 4, 'mode': 'r', 'ram': False, 'default_val': '65536', 'data_width': 32, 'axi4lite_mode': ''}
+[axi4lite_interconnect] Register: rev, Block: sys, Mode: r
+{'name': 'rev_rcs', 'nbytes': 4, 'offset': 12, 'mode': 'r', 'ram': False, 'default_val': '0', 'data_width': 32, 'axi4lite_mode': ''}
+[axi4lite_interconnect] Register: rev_rcs, Block: sys, Mode: r
+{'name': 'scratchpad', 'nbytes': 4, 'offset': 16, 'mode': 'rw', 'ram': False, 'default_val': '0', 'data_width': 32, 'axi4lite_mode': ''}
+[axi4lite_interconnect] Register: scratchpad, Block: sys, Mode: rw
+{'name': 'clkcounter', 'nbytes': 4, 'offset': 20, 'mode': 'r', 'ram': False, 'default_val': '0', 'data_width': 32, 'axi4lite_mode': ''}
+[axi4lite_interconnect] Register: clkcounter, Block: sys, Mode: r
+{'name': 'sum_a_b', 'nbytes': 4, 'offset': 0, 'mode': 'r', 'ram': False, 'default_val': '0', 'data_width': 32, 'axi4lite_mode': ''}
 [axi4lite_interconnect] Register: sum_a_b, Block: sw_reg, Mode: r
+{'name': 'swreg_a', 'nbytes': 4, 'offset': 4, 'mode': 'rw', 'ram': False, 'default_val': '0', 'data_width': 32, 'axi4lite_mode': ''}
 [axi4lite_interconnect] Register: swreg_a, Block: sw_reg, Mode: rw
+{'name': 'swreg_b', 'nbytes': 4, 'offset': 8, 'mode': 'rw', 'ram': False, 'default_val': '0', 'data_width': 32, 'axi4lite_mode': ''}
 [axi4lite_interconnect] Register: swreg_b, Block: sw_reg, Mode: rw
-TOP MEMORY MAP: {'sw_reg': {'size': 16, 'memory_map': [<memory.Register object at 0x7ff0e4acd070>, <memory.Register object at 0x7ff0e4acd880>, <memory.Register object at 0x7ff0e4acdb50>], 'axi4lite_devices': [<verilog.AXI4LiteDevice object at 0x7ff0e4acd430>, <verilog.AXI4LiteDevice object at 0x7ff0e4acd670>, <verilog.AXI4LiteDevice object at 0x7ff0e4acdbb0>], 'relative_address': '0x0'}}
-MEMORY MAP FILE: {'sw_reg': {'size': 16, 'memory_map': [<memory.Register object at 0x7ff0e4acd070>, <memory.Register object at 0x7ff0e4acd880>, <memory.Register object at 0x7ff0e4acdb50>], 'axi4lite_devices': [<verilog.AXI4LiteDevice object at 0x7ff0e4acd430>, <verilog.AXI4LiteDevice object at 0x7ff0e4acd670>, <verilog.AXI4LiteDevice object at 0x7ff0e4acdbb0>], 'relative_address': '0x0'}}
+AXI IPs: ['/data/DesignFiles/scilabdemo/top.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/de10nano.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/de10nano_hps_0_fpga_interfaces.sv', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/sys_block_intel', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_pkg.vhd', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_slave_logic.vhd']
+TOP MEMORY MAP: {'sys': {'size': 32, 'memory_map': [<memory.Register object at 0x7ff7811a03d0>, <memory.Register object at 0x7ff781139460>, <memory.Register object at 0x7ff781139160>, <memory.Register object at 0x7ff7811394f0>, <memory.Register object at 0x7ff781139040>], 'axi4lite_devices': [<verilog.AXI4LiteDevice object at 0x7ff781141970>], 'relative_address': '0x0'}, 'sw_reg': {'size': 16, 'memory_map': [<memory.Register object at 0x7ff7811396d0>, <memory.Register object at 0x7ff781139be0>, <memory.Register object at 0x7ff781139cd0>], 'axi4lite_devices': [<verilog.AXI4LiteDevice object at 0x7ff7811397c0>, <verilog.AXI4LiteDevice object at 0x7ff781139700>, <verilog.AXI4LiteDevice object at 0x7ff781139c40>], 'relative_address': '0x20'}}
+	AXI MEMORY MAP: 
+		SYS: {'typecode': 3, 'regname': 'sys', 'nbytes': 32, 'data_width': 32, 'mode': 'r', 'base_addr': 3221225472, 'high_addr': None, 'hdl_suffix': '', 'hdl_candr_suffix': '', 'memory_map': [<memory.Register object at 0x7ff7811a03d0>, <memory.Register object at 0x7ff781139460>, <memory.Register object at 0x7ff781139160>, <memory.Register object at 0x7ff7811394f0>, <memory.Register object at 0x7ff781139040>], 'axi4lite_mode': '', 'platform': None, 'connected': False}
+		SW_REG 0: {'typecode': 0, 'regname': 'sum_a_b', 'nbytes': 4, 'data_width': 32, 'mode': 'r', 'base_addr': 3221225504, 'high_addr': None, 'hdl_suffix': '', 'hdl_candr_suffix': '', 'memory_map': [], 'axi4lite_mode': '', 'platform': None, 'connected': True}
+		SW_REG 1: {'typecode': 0, 'regname': 'swreg_a', 'nbytes': 4, 'data_width': 32, 'mode': 'rw', 'base_addr': 3221225508, 'high_addr': None, 'hdl_suffix': '', 'hdl_candr_suffix': '', 'memory_map': [], 'axi4lite_mode': '', 'platform': None, 'connected': True}
+		SW_REG 2: {'typecode': 0, 'regname': 'swreg_b', 'nbytes': 4, 'data_width': 32, 'mode': 'rw', 'base_addr': 3221225512, 'high_addr': None, 'hdl_suffix': '', 'hdl_candr_suffix': '', 'memory_map': [], 'axi4lite_mode': '', 'platform': None, 'connected': True}
+MEMORY MAP FILE: {'sys': {'size': 32, 'memory_map': [<memory.Register object at 0x7ff7811a03d0>, <memory.Register object at 0x7ff781139460>, <memory.Register object at 0x7ff781139160>, <memory.Register object at 0x7ff7811394f0>, <memory.Register object at 0x7ff781139040>], 'axi4lite_devices': [<verilog.AXI4LiteDevice object at 0x7ff781141970>], 'relative_address': '0x0'}, 'sw_reg': {'size': 16, 'memory_map': [<memory.Register object at 0x7ff7811396d0>, <memory.Register object at 0x7ff781139be0>, <memory.Register object at 0x7ff781139cd0>], 'axi4lite_devices': [<verilog.AXI4LiteDevice object at 0x7ff7811397c0>, <verilog.AXI4LiteDevice object at 0x7ff781139700>, <verilog.AXI4LiteDevice object at 0x7ff781139c40>], 'relative_address': '0x20'}}
+THE FILE NAME IS: /data/DesignFiles/scilabdemo/xml2vhdl_source/axi4lite_top_ic_memory_map.xml
+<?xml version="1.0" ?>
+<node id="axi4lite_top" address="0xc0000000" hw_type="ic">
+	<node id="sw_reg" address="0x20" link="sw_reg_memory_map_output.xml"/>
+	<node id="sys" address="0x0" link="sys_memory_map_output.xml"/>
+</node>
+<!-- This file has been automatically generated by generate_xml_memory_map function. /!-->
+
 [32m[INFO    ]: ********************************************************************************[0m
 [32m[INFO    ]: Loading Arguments from Command Line...[0m
 [32m[INFO    ]: ********************************************************************************[0m
@@ -104,6 +177,7 @@ MEMORY MAP FILE: {'sw_reg': {'size': 16, 'memory_map': [<memory.Register object 
 [32m[INFO    ]: --------------------------------------------------------------------------------[0m
 [32m[INFO    ]: Compile order:[0m
 [32m[INFO    ]: 	sw_reg[0m
+[32m[INFO    ]: 	sys[0m
 [32m[INFO    ]: 	axi4lite_top[0m
 [32m[INFO    ]: Analysing: /data/DesignFiles/scilabdemo/xml2vhdl_source/sw_reg_memory_map.xml[0m
 [32m[INFO    ]: Selected bus:[0m
@@ -128,9 +202,57 @@ MEMORY MAP FILE: {'sw_reg': {'size': 16, 'memory_map': [<memory.Register object 
 [32m[INFO    ]: default_reset...[0m
 [32m[INFO    ]: default_permission...[0m
 [32m[INFO    ]: Processing: /data/DesignFiles/scilabdemo/xml2vhdl_xml_output/sw_reg_memory_map_output.xml[0m
+START OF XML TEXT
+<?xml version="1.0" ?>
+<node id="sw_reg" byte_size="16">
+	<node id="sum_a_b" address="0x00000000" mask="0xffffffff" size="1" permission="r" hw_rst="0x0" description="sw_reg_sum_a_b"/>
+	<node id="swreg_a" address="0x00000004" mask="0xffffffff" size="1" permission="rw" hw_rst="0" description="sw_reg_swreg_a"/>
+	<node id="swreg_b" address="0x00000008" mask="0xffffffff" size="1" permission="rw" hw_rst="0" description="sw_reg_swreg_b"/>
+</node>
+
+END OF XML TEXT
 [32m[INFO    ]: Writing VHDL output file: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sw_reg_pkg.vhd[0m
 [32m[INFO    ]: Writing VHDL output file: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sw_reg.vhd[0m
 [32m[INFO    ]: Writing VHDL output file: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sw_reg_muxdemux.vhd[0m
+[32m[INFO    ]: Done![0m
+[32m[INFO    ]: --------------------------------------------------------------------------------[0m
+[32m[INFO    ]: Analysing: /data/DesignFiles/scilabdemo/xml2vhdl_source/sys_memory_map.xml[0m
+[32m[INFO    ]: Selected bus:[0m
+[32m[INFO    ]: 	name:  axi4lite[0m
+[32m[INFO    ]: 	width: 32 bit[0m
+[32m[INFO    ]: xml2vhdl.py version 1.16[0m
+[32m[INFO    ]: --------------------------------------------------------------------------------[0m
+[32m[INFO    ]: Analysing: "/data/DesignFiles/scilabdemo/xml2vhdl_source/sys_memory_map.xml"[0m
+[32m[INFO    ]: Hierarchical levels are 1[0m
+[32m[INFO    ]: Nodes are 6[0m
+[32m[INFO    ]: Checking reserved words...[0m
+[32m[INFO    ]: fill_child...[0m
+[32m[INFO    ]: fill_complete_id...[0m
+[32m[INFO    ]: fill_absolute_offset...[0m
+[32m[INFO    ]: fill_type...[0m
+[32m[INFO    ]: fill_addressable...[0m
+[32m[INFO    ]: check_offset...[0m
+[32m[INFO    ]: check_bitfield...[0m
+[32m[INFO    ]: fill_decoder_mask...[0m
+[32m[INFO    ]: Addresses are: 5[0m
+[32m[INFO    ]: propagate_reset_value...[0m
+[32m[INFO    ]: default_reset...[0m
+[32m[INFO    ]: default_permission...[0m
+[32m[INFO    ]: Processing: /data/DesignFiles/scilabdemo/xml2vhdl_xml_output/sys_memory_map_output.xml[0m
+START OF XML TEXT
+<?xml version="1.0" ?>
+<node id="sys" byte_size="32">
+	<node id="board_id" address="0x00000000" mask="0xffffffff" size="1" permission="r" hw_rst="167" description="sys_board_id"/>
+	<node id="rev" address="0x00000004" mask="0xffffffff" size="1" permission="r" hw_rst="65536" description="sys_rev"/>
+	<node id="rev_rcs" address="0x0000000c" mask="0xffffffff" size="1" permission="r" hw_rst="0x0" description="sys_rev_rcs"/>
+	<node id="scratchpad" address="0x00000010" mask="0xffffffff" size="1" permission="rw" hw_rst="0" description="sys_scratchpad"/>
+	<node id="clkcounter" address="0x00000014" mask="0xffffffff" size="1" permission="r" hw_rst="0x0" description="sys_clkcounter"/>
+</node>
+
+END OF XML TEXT
+[32m[INFO    ]: Writing VHDL output file: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys_pkg.vhd[0m
+[32m[INFO    ]: Writing VHDL output file: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd[0m
+[32m[INFO    ]: Writing VHDL output file: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys_muxdemux.vhd[0m
 [32m[INFO    ]: Done![0m
 [32m[INFO    ]: --------------------------------------------------------------------------------[0m
 [32m[INFO    ]: Analysing: /data/DesignFiles/scilabdemo/xml2vhdl_source/axi4lite_top_ic_memory_map.xml[0m
@@ -143,11 +265,12 @@ ROOT: axi4lite_top
 OPTIONS: /data/DesignFiles/scilabdemo/xml2vhdl_source/axi4lite_top_ic_memory_map
 [33m[WARNING ]: VHDL Top-Level not found: /data/DesignFiles/scilabdemo/xml2vhdl_source/axi4lite_top_ic_memory_map[0m
 [33m[WARNING ]: 	Using root node: axi4lite_top[0m
-VHDL START NODE: [<Element node at 0x7ff0e509cec0>]
-VHDL ADDRESS: [0]
-[32m[INFO    ]: Addresses are: 1[0m
-TREE DICT: {'-1v0': array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])}
+VHDL START NODE: [<Element node at 0x7ff7816874c0>, <Element node at 0x7ff78168d600>]
+VHDL ADDRESS: [32, 0]
+[32m[INFO    ]: Addresses are: 2[0m
+TREE DICT: {'-1v0': [], '-1v0_5v0': [array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_5v1': [array([0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])]}
 [32m[INFO    ]: Writing VHDL output file: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_axi4lite_top_mmap_pkg.vhd[0m
 [32m[INFO    ]: Writing VHDL output file: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic_pkg.vhd[0m
 [32m[INFO    ]: Writing VHDL output file: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic.vhd[0m
@@ -158,12 +281,161 @@ TREE DICT: {'-1v0': array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 [32m[INFO    ]: Done![0m
 [32m[INFO    ]: --------------------------------------------------------------------------------[0m
 [32m[INFO    ]: [][0m
+BASE ADDRESS IS: 3221225472
+Checking something: <class 'verilog.AXI4LiteDevice'>
+Set platform for... <verilog.AXI4LiteDevice object at 0x7ff7811397c0>
+Set platform for... <verilog.AXI4LiteDevice object at 0x7ff781139700>
+Set platform for... <verilog.AXI4LiteDevice object at 0x7ff781139c40>
+Set platform for... <verilog.AXI4LiteDevice object at 0x7ff781141970>
 [32m[INFO    ]: instantiating user_ip[0m
+INSTANTIATING USER IP scilabdemo_ip
 [32m[INFO    ]: Finalizing top-level design[0m
 [32m[INFO    ]: regenerating top[0m
+On instance {'name': 'cdc_synchroniser', 'topfile': None, 'ports': {'default': {'IP_CLK': <verilog.Port object at 0x7ff781139760>, 'IP_RESET': <verilog.Port object at 0x7ff781139a60>, 'IP_BUS_VALID': <verilog.Port object at 0x7ff781139820>, 'IP_BUS': <verilog.Port object at 0x7ff781139790>, 'OP_BUS': <verilog.Port object at 0x7ff781139a90>}}, 'parameters': {'default': {'G_BUS_WIDTH': <verilog.Parameter object at 0x7ff781139580>}}, 'localparams': {'default': {}}, 'signals': {'default': {}}, 'instances': {'default': {}}, 'assignments': {'default': {}}, 'raw_str': '', 'comment': None, 'cur_blk': 'default', 'n_sub_arbs': 0, 'n_wb_slaves': 0, 'wb_devices': [], 'n_wb_interfaces': 0, 'wb_ids': [], 'max_devices_per_arb': None, 'base_wb_slaves': 0, 'wb_base': [], 'wb_high': [], 'wb_name': [], 'n_axi4lite_slaves': 0, 'axi4lite_devices': [], 'n_axi4lite_interfaces': 0, 'memory_map': {}, 'rfdc_devices': [], 'n_rfdc_interfaces': 0, 'xil_axi4lite_devices': [], 'n_xil_axi4lite_devices': 0, 'sourcefiles': [], 'generated_sub_modules': {}, '_swreg_registry': set(), 'configured_axi': False}
+On instance {'name': 'cdc_synchroniser', 'topfile': None, 'ports': {'default': {'IP_CLK': <verilog.Port object at 0x7ff781139ca0>, 'IP_RESET': <verilog.Port object at 0x7ff781139a00>, 'IP_BUS_VALID': <verilog.Port object at 0x7ff781139b80>, 'OP_BUS': <verilog.Port object at 0x7ff7811399d0>, 'IP_BUS': <verilog.Port object at 0x7ff781139e20>}}, 'parameters': {'default': {'G_BUS_WIDTH': <verilog.Parameter object at 0x7ff781139910>, 'G_OP_INITIAL_VAL': <verilog.Parameter object at 0x7ff781139b50>}}, 'localparams': {'default': {}}, 'signals': {'default': {}}, 'instances': {'default': {}}, 'assignments': {'default': {}}, 'raw_str': '', 'comment': None, 'cur_blk': 'default', 'n_sub_arbs': 0, 'n_wb_slaves': 0, 'wb_devices': [], 'n_wb_interfaces': 0, 'wb_ids': [], 'max_devices_per_arb': None, 'base_wb_slaves': 0, 'wb_base': [], 'wb_high': [], 'wb_name': [], 'n_axi4lite_slaves': 0, 'axi4lite_devices': [], 'n_axi4lite_interfaces': 0, 'memory_map': {}, 'rfdc_devices': [], 'n_rfdc_interfaces': 0, 'xil_axi4lite_devices': [], 'n_xil_axi4lite_devices': 0, 'sourcefiles': [], 'generated_sub_modules': {}, '_swreg_registry': set(), 'configured_axi': False}
+On instance {'name': 'cdc_synchroniser', 'topfile': None, 'ports': {'default': {'IP_CLK': <verilog.Port object at 0x7ff781139e80>, 'IP_RESET': <verilog.Port object at 0x7ff781139f70>, 'IP_BUS_VALID': <verilog.Port object at 0x7ff781139fa0>, 'OP_BUS': <verilog.Port object at 0x7ff781139eb0>, 'IP_BUS': <verilog.Port object at 0x7ff781139e50>}}, 'parameters': {'default': {'G_BUS_WIDTH': <verilog.Parameter object at 0x7ff781139ee0>, 'G_OP_INITIAL_VAL': <verilog.Parameter object at 0x7ff781139d30>}}, 'localparams': {'default': {}}, 'signals': {'default': {}}, 'instances': {'default': {}}, 'assignments': {'default': {}}, 'raw_str': '', 'comment': None, 'cur_blk': 'default', 'n_sub_arbs': 0, 'n_wb_slaves': 0, 'wb_devices': [], 'n_wb_interfaces': 0, 'wb_ids': [], 'max_devices_per_arb': None, 'base_wb_slaves': 0, 'wb_base': [], 'wb_high': [], 'wb_name': [], 'n_axi4lite_slaves': 0, 'axi4lite_devices': [], 'n_axi4lite_interfaces': 0, 'memory_map': {}, 'rfdc_devices': [], 'n_rfdc_interfaces': 0, 'xil_axi4lite_devices': [], 'n_xil_axi4lite_devices': 0, 'sourcefiles': [], 'generated_sub_modules': {}, '_swreg_registry': set(), 'configured_axi': False}
+On instance {'name': 'sys_block_counter', 'topfile': None, 'ports': {'default': {'user_clk': <verilog.Port object at 0x7ff781141cd0>, 'user_rst': <verilog.Port object at 0x7ff781141af0>, 'en': <verilog.Port object at 0x7ff781141bb0>, 'we': <verilog.Port object at 0x7ff781141a60>, 'count_out': <verilog.Port object at 0x7ff781141b50>}}, 'parameters': {'default': {'DATA_WIDTH': <verilog.Parameter object at 0x7ff781141a90>}}, 'localparams': {'default': {}}, 'signals': {'default': {}}, 'instances': {'default': {}}, 'assignments': {'default': {}}, 'raw_str': '', 'comment': None, 'cur_blk': 'default', 'n_sub_arbs': 0, 'n_wb_slaves': 0, 'wb_devices': [], 'n_wb_interfaces': 0, 'wb_ids': [], 'max_devices_per_arb': None, 'base_wb_slaves': 0, 'wb_base': [], 'wb_high': [], 'wb_name': [], 'n_axi4lite_slaves': 0, 'axi4lite_devices': [], 'n_axi4lite_interfaces': 0, 'memory_map': {}, 'rfdc_devices': [], 'n_rfdc_interfaces': 0, 'xil_axi4lite_devices': [], 'n_xil_axi4lite_devices': 0, 'sourcefiles': [], 'generated_sub_modules': {}, '_swreg_registry': set(), 'configured_axi': False}
+On instance {'name': 'cdc_synchroniser', 'topfile': None, 'ports': {'default': {'IP_CLK': <verilog.Port object at 0x7ff781141d30>, 'IP_RESET': <verilog.Port object at 0x7ff781141b80>, 'IP_BUS_VALID': <verilog.Port object at 0x7ff781141ca0>, 'IP_BUS': <verilog.Port object at 0x7ff781141b20>, 'OP_BUS': <verilog.Port object at 0x7ff781141dc0>}}, 'parameters': {'default': {'G_BUS_WIDTH': <verilog.Parameter object at 0x7ff7811418e0>}}, 'localparams': {'default': {}}, 'signals': {'default': {}}, 'instances': {'default': {}}, 'assignments': {'default': {}}, 'raw_str': '', 'comment': None, 'cur_blk': 'default', 'n_sub_arbs': 0, 'n_wb_slaves': 0, 'wb_devices': [], 'n_wb_interfaces': 0, 'wb_ids': [], 'max_devices_per_arb': None, 'base_wb_slaves': 0, 'wb_base': [], 'wb_high': [], 'wb_name': [], 'n_axi4lite_slaves': 0, 'axi4lite_devices': [], 'n_axi4lite_interfaces': 0, 'memory_map': {}, 'rfdc_devices': [], 'n_rfdc_interfaces': 0, 'xil_axi4lite_devices': [], 'n_xil_axi4lite_devices': 0, 'sourcefiles': [], 'generated_sub_modules': {}, '_swreg_registry': set(), 'configured_axi': False}
+On instance {'name': 'axi4lite_ic_wrapper', 'topfile': None, 'ports': {'default': {'axi4lite_aclk': <verilog.Port object at 0x7ff781141e20>, 'axi4lite_aresetn': <verilog.Port object at 0x7ff7811aab20>, 's_axi4lite_awready': <verilog.Port object at 0x7ff7811aad90>, 's_axi4lite_wready': <verilog.Port object at 0x7ff7811aac10>, 's_axi4lite_bresp': <verilog.Port object at 0x7ff781148d60>, 's_axi4lite_bvalid': <verilog.Port object at 0x7ff781148d90>, 's_axi4lite_arready': <verilog.Port object at 0x7ff781148a30>, 's_axi4lite_rresp': <verilog.Port object at 0x7ff781148f40>, 's_axi4lite_rdata': <verilog.Port object at 0x7ff7811484c0>, 's_axi4lite_rvalid': <verilog.Port object at 0x7ff781148f70>, 's_axi4lite_awaddr': <verilog.Port object at 0x7ff7811486a0>, 's_axi4lite_awvalid': <verilog.Port object at 0x7ff781148e20>, 's_axi4lite_wdata': <verilog.Port object at 0x7ff781148e80>, 's_axi4lite_wvalid': <verilog.Port object at 0x7ff781148fa0>, 's_axi4lite_wstrb': <verilog.Port object at 0x7ff781148df0>, 's_axi4lite_araddr': <verilog.Port object at 0x7ff781148c10>, 's_axi4lite_arvalid': <verilog.Port object at 0x7ff781148e50>, 's_axi4lite_rready': <verilog.Port object at 0x7ff781148fd0>, 's_axi4lite_bready': <verilog.Port object at 0x7ff781148d30>, 'axi4lite_sys_board_id_in': <verilog.Port object at 0x7ff7810f7070>, 'axi4lite_sys_board_id_in_we': <verilog.Port object at 0x7ff7810f70a0>, 'axi4lite_sys_rev_in': <verilog.Port object at 0x7ff7810f70d0>, 'axi4lite_sys_rev_in_we': <verilog.Port object at 0x7ff7810f7100>, 'axi4lite_sys_rev_rcs_in': <verilog.Port object at 0x7ff7810f7130>, 'axi4lite_sys_rev_rcs_in_we': <verilog.Port object at 0x7ff7810f7160>, 'axi4lite_sys_scratchpad_out': <verilog.Port object at 0x7ff7810f7190>, 'axi4lite_sys_scratchpad_out_we': <verilog.Port object at 0x7ff7810f71c0>, 'axi4lite_sys_clkcounter_in': <verilog.Port object at 0x7ff7810f71f0>, 'axi4lite_sys_clkcounter_in_we': <verilog.Port object at 0x7ff7810f7220>, 'axi4lite_sw_reg_sum_a_b_in': <verilog.Port object at 0x7ff7810f7250>, 'axi4lite_sw_reg_sum_a_b_in_we': <verilog.Port object at 0x7ff7810f7280>, 'axi4lite_sw_reg_swreg_a_out': <verilog.Port object at 0x7ff7810f72b0>, 'axi4lite_sw_reg_swreg_a_out_we': <verilog.Port object at 0x7ff7810f72e0>, 'axi4lite_sw_reg_swreg_b_out': <verilog.Port object at 0x7ff7810f7310>, 'axi4lite_sw_reg_swreg_b_out_we': <verilog.Port object at 0x7ff7810f7340>}}, 'parameters': {'default': {}}, 'localparams': {'default': {}}, 'signals': {'default': {}}, 'instances': {'default': {}}, 'assignments': {'default': {}}, 'raw_str': '', 'comment': None, 'cur_blk': 'default', 'n_sub_arbs': 0, 'n_wb_slaves': 0, 'wb_devices': [], 'n_wb_interfaces': 0, 'wb_ids': [], 'max_devices_per_arb': None, 'base_wb_slaves': 0, 'wb_base': [], 'wb_high': [], 'wb_name': [], 'n_axi4lite_slaves': 0, 'axi4lite_devices': [], 'n_axi4lite_interfaces': 0, 'memory_map': {}, 'rfdc_devices': [], 'n_rfdc_interfaces': 0, 'xil_axi4lite_devices': [], 'n_xil_axi4lite_devices': 0, 'sourcefiles': [], 'generated_sub_modules': {}, '_swreg_registry': set(), 'configured_axi': False}
+On instance {'name': 'scilabdemo_ip', 'topfile': None, 'ports': {'default': {'clk': <verilog.Port object at 0x7ff7816f6bb0>, 'scilabdemo_swreg_a_user_data_out': <verilog.Port object at 0x7ff7816f6eb0>, 'scilabdemo_swreg_b_user_data_out': <verilog.Port object at 0x7ff7816f6b20>, 'scilabdemo_sum_a_b_user_data_in': <verilog.Port object at 0x7ff7816f6e50>}}, 'parameters': {'default': {}}, 'localparams': {'default': {}}, 'signals': {'default': {}}, 'instances': {'default': {}}, 'assignments': {'default': {}}, 'raw_str': '', 'comment': None, 'cur_blk': 'default', 'n_sub_arbs': 0, 'n_wb_slaves': 0, 'wb_devices': [], 'n_wb_interfaces': 0, 'wb_ids': [], 'max_devices_per_arb': None, 'base_wb_slaves': 0, 'wb_base': [], 'wb_high': [], 'wb_name': [], 'n_axi4lite_slaves': 0, 'axi4lite_devices': [], 'n_axi4lite_interfaces': 0, 'memory_map': {}, 'rfdc_devices': [], 'n_rfdc_interfaces': 0, 'xil_axi4lite_devices': [], 'n_xil_axi4lite_devices': 0, 'sourcefiles': [], 'generated_sub_modules': {}, '_swreg_registry': set(), 'configured_axi': False}
+CHECKING AXI4LITE DEVICES IN GEN_MODULE_FILE...{'typecode': 0, 'regname': 'sum_a_b', 'nbytes': 4, 'data_width': 32, 'mode': 'r', 'base_addr': 3221225504, 'high_addr': None, 'hdl_suffix': '', 'hdl_candr_suffix': '', 'memory_map': [], 'axi4lite_mode': '', 'platform': <casper_platform.Platform object at 0x7ff7816043a0>, 'connected': True}
+CHECKING AXI4LITE DEVICES IN GEN_MODULE_FILE...{'typecode': 0, 'regname': 'swreg_a', 'nbytes': 4, 'data_width': 32, 'mode': 'rw', 'base_addr': 3221225508, 'high_addr': None, 'hdl_suffix': '', 'hdl_candr_suffix': '', 'memory_map': [], 'axi4lite_mode': '', 'platform': <casper_platform.Platform object at 0x7ff7816043a0>, 'connected': True}
+CHECKING AXI4LITE DEVICES IN GEN_MODULE_FILE...{'typecode': 0, 'regname': 'swreg_b', 'nbytes': 4, 'data_width': 32, 'mode': 'rw', 'base_addr': 3221225512, 'high_addr': None, 'hdl_suffix': '', 'hdl_candr_suffix': '', 'memory_map': [], 'axi4lite_mode': '', 'platform': <casper_platform.Platform object at 0x7ff7816043a0>, 'connected': True}
+CHECKING AXI4LITE DEVICES IN GEN_MODULE_FILE...{'typecode': 3, 'regname': 'sys', 'nbytes': 32, 'data_width': 32, 'mode': 'r', 'base_addr': 3221225472, 'high_addr': None, 'hdl_suffix': '', 'hdl_candr_suffix': '', 'memory_map': [<memory.Register object at 0x7ff7811a03d0>, <memory.Register object at 0x7ff781139460>, <memory.Register object at 0x7ff781139160>, <memory.Register object at 0x7ff7811394f0>, <memory.Register object at 0x7ff781139040>], 'axi4lite_mode': '', 'platform': <casper_platform.Platform object at 0x7ff7816043a0>, 'connected': False}
+Writing block de10nano: DE10-Nano
+Writing block default
+Writing block ip: dspproj/dspproj.srcs
+Writing block sw_reg: sum_a_b
+Writing block sw_reg: swreg_a
+Writing block sw_reg: swreg_b
+Writing block sys_block_intel: DE10-Nano
+Writing block usermodule: scilabdemo_ip
+Writing block xsg: DE10-Nano
+
+
+
+LONG BLOCK INCOMING
+  // sw_reg: sum_a_b
+  cdc_synchroniser #(
+    .G_BUS_WIDTH(32)
+  ) scilabdemo_sum_a_b (
+    .IP_BUS(scilabdemo_sum_a_b_user_data_in),
+    .IP_BUS_VALID(1'b1),
+    .IP_CLK(axil_clk),
+    .IP_RESET(axil_rst),
+    .OP_BUS(sw_reg_sum_a_b_in)
+  );
+
+  // sw_reg: swreg_a
+  cdc_synchroniser #(
+    .G_BUS_WIDTH(32),
+    .G_OP_INITIAL_VAL(32'h0)
+  ) scilabdemo_swreg_a (
+    .IP_BUS(sw_reg_swreg_a_out),
+    .IP_BUS_VALID(sw_reg_swreg_a_out_we),
+    .IP_CLK(user_clk),
+    .IP_RESET(user_rst),
+    .OP_BUS(scilabdemo_swreg_a_user_data_out)
+  );
+
+  // sw_reg: swreg_b
+  cdc_synchroniser #(
+    .G_BUS_WIDTH(32),
+    .G_OP_INITIAL_VAL(32'h0)
+  ) scilabdemo_swreg_b (
+    .IP_BUS(sw_reg_swreg_b_out),
+    .IP_BUS_VALID(sw_reg_swreg_b_out_we),
+    .IP_CLK(user_clk),
+    .IP_RESET(user_rst),
+    .OP_BUS(scilabdemo_swreg_b_user_data_out)
+  );
+
+  // sys_block_intel: DE10-Nano
+  axi4lite_ic_wrapper  axi4lite_interconnect (
+    .axi4lite_aclk(axil_clk),
+    .axi4lite_aresetn(axil_rst_n),
+    .axi4lite_sw_reg_sum_a_b_in(sw_reg_sum_a_b_in),
+    .axi4lite_sw_reg_sum_a_b_in_we(sw_reg_sum_a_b_in_we),
+    .axi4lite_sw_reg_swreg_a_out(sw_reg_swreg_a_out),
+    .axi4lite_sw_reg_swreg_a_out_we(sw_reg_swreg_a_out_we),
+    .axi4lite_sw_reg_swreg_b_out(sw_reg_swreg_b_out),
+    .axi4lite_sw_reg_swreg_b_out_we(sw_reg_swreg_b_out_we),
+    .axi4lite_sys_board_id_in(sys_board_id_in),
+    .axi4lite_sys_board_id_in_we(sys_board_id_in_we),
+    .axi4lite_sys_clkcounter_in(sys_clkcounter_in),
+    .axi4lite_sys_clkcounter_in_we(sys_clkcounter_in_we),
+    .axi4lite_sys_rev_in(sys_rev_in),
+    .axi4lite_sys_rev_in_we(sys_rev_in_we),
+    .axi4lite_sys_rev_rcs_in(sys_rev_rcs_in),
+    .axi4lite_sys_rev_rcs_in_we(sys_rev_rcs_in_we),
+    .axi4lite_sys_scratchpad_out(sys_scratchpad_out),
+    .axi4lite_sys_scratchpad_out_we(sys_scratchpad_out_we),
+    .s_axi4lite_araddr(M_AXI_araddr),
+    .s_axi4lite_arready(M_AXI_arready),
+    .s_axi4lite_arvalid(M_AXI_arvalid),
+    .s_axi4lite_awaddr(M_AXI_awaddr),
+    .s_axi4lite_awready(M_AXI_awready),
+    .s_axi4lite_awvalid(M_AXI_awvalid),
+    .s_axi4lite_bready(M_AXI_bready),
+    .s_axi4lite_bresp(M_AXI_bresp),
+    .s_axi4lite_bvalid(M_AXI_bvalid),
+    .s_axi4lite_rdata(M_AXI_rdata),
+    .s_axi4lite_rready(M_AXI_rready),
+    .s_axi4lite_rresp(M_AXI_rresp),
+    .s_axi4lite_rvalid(M_AXI_rvalid),
+    .s_axi4lite_wdata(M_AXI_wdata),
+    .s_axi4lite_wready(M_AXI_wready),
+    .s_axi4lite_wstrb(M_AXI_wstrb),
+    .s_axi4lite_wvalid(M_AXI_wvalid)
+  );
+
+
+  scilabdemo_ip  scilabdemo_ip_inst (
+    .clk(user_clk),
+    .scilabdemo_sum_a_b_user_data_in(scilabdemo_sum_a_b_user_data_in),
+    .scilabdemo_swreg_a_user_data_out(scilabdemo_swreg_a_user_data_out),
+    .scilabdemo_swreg_b_user_data_out(scilabdemo_swreg_b_user_data_out)
+  );
+
+
+  cdc_synchroniser #(
+    .G_BUS_WIDTH(32)
+  ) sys_block_counter_cdc_inst (
+    .IP_BUS(sys_clkcounter_cdc),
+    .IP_BUS_VALID(1'b1),
+    .IP_CLK(axil_clk),
+    .IP_RESET(axil_rst),
+    .OP_BUS(sys_clkcounter_in)
+  );
+
+
+  sys_block_counter #(
+    .DATA_WIDTH(32)
+  ) sys_block_counter_inst (
+    .count_out(sys_clkcounter_cdc),
+    .en(1),
+    .user_clk(user_clk),
+    .user_rst(user_rst),
+    .we(sys_clkcounter_we)
+  );
+
+
+
+
+
+
+WRITING TOP!!!!
 [32m[INFO    ]: Dumping pickle of top-level Verilog module[0m
 [32m[INFO    ]: generating auxiliary HDL[0m
 [32m[INFO    ]: Generating yellow block custom hdl files[0m
+PERIPHERAL OBJECT: YellowBlock Object: {'name': 'DE10-Nano', 'fullpath': 'scilabdemo/DE10-Nano', 'tag': 'xps:xsg', 'hw_sys': 'de10nano:5CSEBA6U23I7', 'clk_src': 'fpga_clk1_50', 'clk_rate': 50, 'pl_clk_rate': 50, 'sample_period': 1, 'synthesis_tool': 'XST'} (scilabdemo_DE10-Nano)
+PERIPHERAL OBJECT: YellowBlock Object: {'name': 'sum_a_b', 'fullpath': 'scilabdemo/sum_a_b', 'tag': 'xps:sw_reg', 'io_dir': 'To Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True} (scilabdemo_sum_a_b)
+PERIPHERAL OBJECT: YellowBlock Object: {'name': 'swreg_a', 'fullpath': 'scilabdemo/swreg_a', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True} (scilabdemo_swreg_a)
+PERIPHERAL OBJECT: YellowBlock Object: {'name': 'swreg_b', 'fullpath': 'scilabdemo/swreg_b', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True} (scilabdemo_swreg_b)
+PERIPHERAL OBJECT: YellowBlock Object: {'name': 'sysgen_ip', 'fullpath': 'scilabdemo/dspproj/dspproj.srcs', 'tag': 'xps:ip', 'lib_path': '/data/DesignFiles/scilabdemo/dspproj/dspproj.srcs', 'ip_name': 'scilabdemo'} (scilabdemo_dspproj_dspproj.srcs)
+PERIPHERAL OBJECT: YellowBlock Object: {'name': 'DE10-Nano', 'fullpath': 'scilabdemo/DE10-Nano', 'tag': 'xps:de10nano', 'hw_sys': 'de10nano:5CSEBA6U23I7', 'clk_src': 'fpga_clk1_50', 'clk_rate': 50, 'pl_clk_rate': 50, 'sample_period': 1, 'synthesis_tool': 'XST'} (scilabdemo_DE10-Nano)
+PERIPHERAL OBJECT: YellowBlock Object: {'fullpath': 'scilabdemo/DE10-Nano', 'tag': 'xps:sys_block_intel', 'board_id': '167', 'rev_maj': '1', 'rev_min': '0', 'rev_rcs': '0'} (scilabdemo_DE10-Nano)
+PERIPHERAL OBJECT: YellowBlock Object: {'tag': 'xps:axi4lite_interconnect', 'name': 'axi4lite_interconnect', 'fullpath': 'scilabdemo_ip/axi4lite_interconnect'} (scilabdemo_ip_axi4lite_interconnect)
 [32m[INFO    ]: Extracting constraints from peripherals[0m
 [32m[INFO    ]: Getting constraints for block DE10-Nano[0m
 [32m[INFO    ]: Getting constraints for block sum_a_b[0m
@@ -171,213 +443,1723 @@ TREE DICT: {'-1v0': array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 [32m[INFO    ]: Getting constraints for block swreg_b[0m
 [32m[INFO    ]: Getting constraints for block sysgen_ip[0m
 [32m[INFO    ]: Getting constraints for block de10nano[0m
-[32m[INFO    ]: Getting constraints for block axi4lite_buffer[0m
+[32m[INFO    ]: Getting constraints for block sys_block_intel0[0m
 [32m[INFO    ]: Getting constraints for block axi4lite_interconnect[0m
 [32m[INFO    ]: Generating physical constraints[0m
-CORE NAME IS: sum_a_b
+CORE NAME IS: sys
 CORE MODE IS: r
 CORE BASE ADDRESS IS: 3221225472
+CORE BYTES IS: 32
+CORE NAME IS: sum_a_b
+CORE MODE IS: r
+CORE BASE ADDRESS IS: 3221225504
 CORE BYTES IS: 4
 CORE NAME IS: swreg_a
 CORE MODE IS: rw
-CORE BASE ADDRESS IS: 3221225476
+CORE BASE ADDRESS IS: 3221225508
 CORE BYTES IS: 4
 CORE NAME IS: swreg_b
 CORE MODE IS: rw
-CORE BASE ADDRESS IS: 3221225480
+CORE BASE ADDRESS IS: 3221225512
 CORE BYTES IS: 4
 [32m[INFO    ]: Carrying out constraints rule check[0m
 [32m[INFO    ]: Constraint rule check complete[0m
+ON DEVICE: sum_a_b
+ON DEVICE: swreg_a
+ON DEVICE: swreg_b
+ON DEVICE: sys
+ON REGISTER: board_id
+ON REGISTER: rev
+ON REGISTER: rev_rcs
+ON REGISTER: scratchpad
+ON REGISTER: clkcounter
 [QUARTUS BACKEND] add_source() called for: /data/DesignFiles/scilabdemo/outputs
 [DEBUG] HDL output dir contents:
     - scilabdemo_2025-07-22_1532.fpg
+    - scilabdemo_2025-07-25_0000.fpg
+    - scilabdemo_2025-07-23_2309.fpg
+    - scilabdemo_2025-07-23_1329.fpg
+    - scilabdemo_2025-07-24_2354.fpg
+    - scilabdemo_2025-07-24_2340.fpg
+    - scilabdemo_2025-07-23_1714.fpg
+    - scilabdemo_2025-07-22_2258.fpg
+    - scilabdemo_2025-07-24_0924.fpg
+    - scilabdemo_2025-07-28_2059.fpg
+    - scilabdemo_2025-07-22_2329.fpg
+    - scilabdemo_2025-07-24_2042.fpg
+    - scilabdemo_2025-07-23_0010.fpg
+    - scilabdemo_2025-08-06_1430.fpg
+    - scilabdemo_2025-07-24_0902.fpg
+    - scilabdemo_2025-07-22_2007.fpg
+    - scilabdemo_2025-07-28_2301.fpg
+    - scilabdemo_2025-07-28_1943.fpg
+    - scilabdemo_2025-07-28_2010.fpg
+    - scilabdemo_2025-07-25_1547.fpg
+    - scilabdemo_2025-07-24_1741.fpg
+    - scilabdemo_2025-07-25_1548.fpg
+    - scilabdemo_2025-07-22_2301.fpg
+    - scilabdemo_2025-07-28_2057.fpg
+    - scilabdemo_2025-07-22_2255.fpg
+    - scilabdemo_2025-07-25_1539.fpg
     - top.rbf
+    - scilabdemo_2025-07-23_2325.fpg
+    - scilabdemo_2025-07-24_0856.fpg
+    - scilabdemo_2025-07-23_2350.fpg
+    - scilabdemo_2025-07-23_1426.fpg
+    - scilabdemo_2025-07-23_1839.fpg
+    - scilabdemo_2025-08-06_1816.fpg
+    - scilabdemo_2025-07-23_1831.fpg
+    - scilabdemo_2025-07-23_1105.fpg
+    - scilabdemo_2025-07-23_1826.fpg
+    - scilabdemo_2025-07-23_1808.fpg
+    - scilabdemo_2025-07-28_2043.fpg
+    - scilabdemo_2025-07-23_1421.fpg
+    - scilabdemo_2025-07-23_1903.fpg
+    - scilabdemo_2025-07-28_2000.fpg
+    - scilabdemo_2025-07-23_1740.fpg
+    - scilabdemo_2025-07-24_0843.fpg
+    - scilabdemo_2025-07-28_2036.fpg
     - scilabdemo_2025-07-22_1322.fpg
+    - scilabdemo_2025-07-23_1819.fpg
+    - scilabdemo_2025-07-28_2012.fpg
+    - scilabdemo_2025-07-23_1127.fpg
+    - scilabdemo_2025-07-23_1219.fpg
+    - scilabdemo_2025-07-23_1418.fpg
+    - scilabdemo_2025-07-24_2334.fpg
+    - scilabdemo_2025-07-23_1929.fpg
     - scilabdemo_2025-07-22_1953.fpg
+    - scilabdemo_2025-07-23_1810.fpg
     - scilabdemo_2025-07-22_1654.fpg
     - scilabdemo_2025-07-22_1310.fpg
     - top.sof
+    - scilabdemo_2025-07-30_0002.fpg
+    - scilabdemo_2025-07-23_2326.fpg
+    - scilabdemo_2025-07-23_1807.fpg
+    - scilabdemo_2025-07-28_2006.fpg
+    - scilabdemo_2025-07-24_1738.fpg
     - scilabdemo_2025-07-22_1939.fpg
+    - scilabdemo_2025-07-25_0029.fpg
+    - scilabdemo_2025-07-24_0901.fpg
+    - scilabdemo_2025-07-23_2322.fpg
+    - scilabdemo_2025-07-23_1407.fpg
+    - scilabdemo_2025-07-28_2030.fpg
+    - scilabdemo_2025-07-28_1951.fpg
+    - scilabdemo_2025-08-06_1748.fpg
+    - scilabdemo_2025-07-25_1517.fpg
+    - scilabdemo_2025-07-30_0016.fpg
+    - scilabdemo_2025-07-23_1216.fpg
+    - scilabdemo_2025-07-24_0849.fpg
+    - scilabdemo_2025-07-28_1958.fpg
+    - scilabdemo_2025-07-23_1925.fpg
+    - scilabdemo_2025-07-22_2122.fpg
+    - scilabdemo_2025-07-23_2356.fpg
     - scilabdemo_2025-07-18_1849.fpg
+    - scilabdemo_2025-07-28_1933.fpg
+    - scilabdemo_2025-07-24_1748.fpg
+    - scilabdemo_2025-07-23_1931.fpg
+    - scilabdemo_2025-07-24_0916.fpg
+    - scilabdemo_2025-07-23_1829.fpg
+    - scilabdemo_2025-07-23_1226.fpg
+    - scilabdemo_2025-07-23_1827.fpg
+    - scilabdemo_2025-07-24_0859.fpg
+    - scilabdemo_2025-07-23_1433.fpg
     - scilabdemo_2025-07-22_1304.fpg
+    - scilabdemo_2025-07-23_1923.fpg
 [QUARTUS BACKEND] add_source() called for: /data/DesignFiles/scilabdemo/top.v
 [DEBUG] HDL output dir contents:
     - scilabdemo_2025-07-22_1532.fpg
+    - scilabdemo_2025-07-25_0000.fpg
+    - scilabdemo_2025-07-23_2309.fpg
+    - scilabdemo_2025-07-23_1329.fpg
+    - scilabdemo_2025-07-24_2354.fpg
+    - scilabdemo_2025-07-24_2340.fpg
+    - scilabdemo_2025-07-23_1714.fpg
+    - scilabdemo_2025-07-22_2258.fpg
+    - scilabdemo_2025-07-24_0924.fpg
+    - scilabdemo_2025-07-28_2059.fpg
+    - scilabdemo_2025-07-22_2329.fpg
+    - scilabdemo_2025-07-24_2042.fpg
+    - scilabdemo_2025-07-23_0010.fpg
+    - scilabdemo_2025-08-06_1430.fpg
+    - scilabdemo_2025-07-24_0902.fpg
+    - scilabdemo_2025-07-22_2007.fpg
+    - scilabdemo_2025-07-28_2301.fpg
+    - scilabdemo_2025-07-28_1943.fpg
+    - scilabdemo_2025-07-28_2010.fpg
+    - scilabdemo_2025-07-25_1547.fpg
+    - scilabdemo_2025-07-24_1741.fpg
+    - scilabdemo_2025-07-25_1548.fpg
+    - scilabdemo_2025-07-22_2301.fpg
+    - scilabdemo_2025-07-28_2057.fpg
+    - scilabdemo_2025-07-22_2255.fpg
+    - scilabdemo_2025-07-25_1539.fpg
     - top.rbf
+    - scilabdemo_2025-07-23_2325.fpg
+    - scilabdemo_2025-07-24_0856.fpg
+    - scilabdemo_2025-07-23_2350.fpg
+    - scilabdemo_2025-07-23_1426.fpg
+    - scilabdemo_2025-07-23_1839.fpg
+    - scilabdemo_2025-08-06_1816.fpg
+    - scilabdemo_2025-07-23_1831.fpg
+    - scilabdemo_2025-07-23_1105.fpg
+    - scilabdemo_2025-07-23_1826.fpg
+    - scilabdemo_2025-07-23_1808.fpg
+    - scilabdemo_2025-07-28_2043.fpg
+    - scilabdemo_2025-07-23_1421.fpg
+    - scilabdemo_2025-07-23_1903.fpg
+    - scilabdemo_2025-07-28_2000.fpg
+    - scilabdemo_2025-07-23_1740.fpg
+    - scilabdemo_2025-07-24_0843.fpg
+    - scilabdemo_2025-07-28_2036.fpg
     - scilabdemo_2025-07-22_1322.fpg
+    - scilabdemo_2025-07-23_1819.fpg
+    - scilabdemo_2025-07-28_2012.fpg
+    - scilabdemo_2025-07-23_1127.fpg
+    - scilabdemo_2025-07-23_1219.fpg
+    - scilabdemo_2025-07-23_1418.fpg
+    - scilabdemo_2025-07-24_2334.fpg
+    - scilabdemo_2025-07-23_1929.fpg
     - scilabdemo_2025-07-22_1953.fpg
+    - scilabdemo_2025-07-23_1810.fpg
     - scilabdemo_2025-07-22_1654.fpg
     - scilabdemo_2025-07-22_1310.fpg
     - top.sof
+    - scilabdemo_2025-07-30_0002.fpg
+    - scilabdemo_2025-07-23_2326.fpg
+    - scilabdemo_2025-07-23_1807.fpg
+    - scilabdemo_2025-07-28_2006.fpg
+    - scilabdemo_2025-07-24_1738.fpg
     - scilabdemo_2025-07-22_1939.fpg
+    - scilabdemo_2025-07-25_0029.fpg
+    - scilabdemo_2025-07-24_0901.fpg
+    - scilabdemo_2025-07-23_2322.fpg
+    - scilabdemo_2025-07-23_1407.fpg
+    - scilabdemo_2025-07-28_2030.fpg
+    - scilabdemo_2025-07-28_1951.fpg
+    - scilabdemo_2025-08-06_1748.fpg
+    - scilabdemo_2025-07-25_1517.fpg
+    - scilabdemo_2025-07-30_0016.fpg
+    - scilabdemo_2025-07-23_1216.fpg
+    - scilabdemo_2025-07-24_0849.fpg
+    - scilabdemo_2025-07-28_1958.fpg
+    - scilabdemo_2025-07-23_1925.fpg
+    - scilabdemo_2025-07-22_2122.fpg
+    - scilabdemo_2025-07-23_2356.fpg
     - scilabdemo_2025-07-18_1849.fpg
+    - scilabdemo_2025-07-28_1933.fpg
+    - scilabdemo_2025-07-24_1748.fpg
+    - scilabdemo_2025-07-23_1931.fpg
+    - scilabdemo_2025-07-24_0916.fpg
+    - scilabdemo_2025-07-23_1829.fpg
+    - scilabdemo_2025-07-23_1226.fpg
+    - scilabdemo_2025-07-23_1827.fpg
+    - scilabdemo_2025-07-24_0859.fpg
+    - scilabdemo_2025-07-23_1433.fpg
     - scilabdemo_2025-07-22_1304.fpg
+    - scilabdemo_2025-07-23_1923.fpg
 Adding tcl command: set_global_assignment -name VERILOG_FILE "/data/DesignFiles/scilabdemo/top.v" at stage pre_synth
-[QUARTUS BACKEND] add_source() called for: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_simulink2ppc
-[DEBUG] HDL output dir contents:
-    - scilabdemo_2025-07-22_1532.fpg
-    - top.rbf
-    - scilabdemo_2025-07-22_1322.fpg
-    - scilabdemo_2025-07-22_1953.fpg
-    - scilabdemo_2025-07-22_1654.fpg
-    - scilabdemo_2025-07-22_1310.fpg
-    - top.sof
-    - scilabdemo_2025-07-22_1939.fpg
-    - scilabdemo_2025-07-18_1849.fpg
-    - scilabdemo_2025-07-22_1304.fpg
-Adding tcl command: set_global_assignment -name VERILOG_FILE "/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_simulink2ppc/wb_register_simulink2ppc.v" at stage pre_synth
-[QUARTUS BACKEND] add_source() called for: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_ppc2simulink
-[DEBUG] HDL output dir contents:
-    - scilabdemo_2025-07-22_1532.fpg
-    - top.rbf
-    - scilabdemo_2025-07-22_1322.fpg
-    - scilabdemo_2025-07-22_1953.fpg
-    - scilabdemo_2025-07-22_1654.fpg
-    - scilabdemo_2025-07-22_1310.fpg
-    - top.sof
-    - scilabdemo_2025-07-22_1939.fpg
-    - scilabdemo_2025-07-18_1849.fpg
-    - scilabdemo_2025-07-22_1304.fpg
-Adding tcl command: set_global_assignment -name VERILOG_FILE "/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_ppc2simulink/wb_register_ppc2simulink.v" at stage pre_synth
 [QUARTUS BACKEND] add_source() called for: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd
 [DEBUG] HDL output dir contents:
     - scilabdemo_2025-07-22_1532.fpg
+    - scilabdemo_2025-07-25_0000.fpg
+    - scilabdemo_2025-07-23_2309.fpg
+    - scilabdemo_2025-07-23_1329.fpg
+    - scilabdemo_2025-07-24_2354.fpg
+    - scilabdemo_2025-07-24_2340.fpg
+    - scilabdemo_2025-07-23_1714.fpg
+    - scilabdemo_2025-07-22_2258.fpg
+    - scilabdemo_2025-07-24_0924.fpg
+    - scilabdemo_2025-07-28_2059.fpg
+    - scilabdemo_2025-07-22_2329.fpg
+    - scilabdemo_2025-07-24_2042.fpg
+    - scilabdemo_2025-07-23_0010.fpg
+    - scilabdemo_2025-08-06_1430.fpg
+    - scilabdemo_2025-07-24_0902.fpg
+    - scilabdemo_2025-07-22_2007.fpg
+    - scilabdemo_2025-07-28_2301.fpg
+    - scilabdemo_2025-07-28_1943.fpg
+    - scilabdemo_2025-07-28_2010.fpg
+    - scilabdemo_2025-07-25_1547.fpg
+    - scilabdemo_2025-07-24_1741.fpg
+    - scilabdemo_2025-07-25_1548.fpg
+    - scilabdemo_2025-07-22_2301.fpg
+    - scilabdemo_2025-07-28_2057.fpg
+    - scilabdemo_2025-07-22_2255.fpg
+    - scilabdemo_2025-07-25_1539.fpg
     - top.rbf
+    - scilabdemo_2025-07-23_2325.fpg
+    - scilabdemo_2025-07-24_0856.fpg
+    - scilabdemo_2025-07-23_2350.fpg
+    - scilabdemo_2025-07-23_1426.fpg
+    - scilabdemo_2025-07-23_1839.fpg
+    - scilabdemo_2025-08-06_1816.fpg
+    - scilabdemo_2025-07-23_1831.fpg
+    - scilabdemo_2025-07-23_1105.fpg
+    - scilabdemo_2025-07-23_1826.fpg
+    - scilabdemo_2025-07-23_1808.fpg
+    - scilabdemo_2025-07-28_2043.fpg
+    - scilabdemo_2025-07-23_1421.fpg
+    - scilabdemo_2025-07-23_1903.fpg
+    - scilabdemo_2025-07-28_2000.fpg
+    - scilabdemo_2025-07-23_1740.fpg
+    - scilabdemo_2025-07-24_0843.fpg
+    - scilabdemo_2025-07-28_2036.fpg
     - scilabdemo_2025-07-22_1322.fpg
+    - scilabdemo_2025-07-23_1819.fpg
+    - scilabdemo_2025-07-28_2012.fpg
+    - scilabdemo_2025-07-23_1127.fpg
+    - scilabdemo_2025-07-23_1219.fpg
+    - scilabdemo_2025-07-23_1418.fpg
+    - scilabdemo_2025-07-24_2334.fpg
+    - scilabdemo_2025-07-23_1929.fpg
     - scilabdemo_2025-07-22_1953.fpg
+    - scilabdemo_2025-07-23_1810.fpg
     - scilabdemo_2025-07-22_1654.fpg
     - scilabdemo_2025-07-22_1310.fpg
     - top.sof
+    - scilabdemo_2025-07-30_0002.fpg
+    - scilabdemo_2025-07-23_2326.fpg
+    - scilabdemo_2025-07-23_1807.fpg
+    - scilabdemo_2025-07-28_2006.fpg
+    - scilabdemo_2025-07-24_1738.fpg
     - scilabdemo_2025-07-22_1939.fpg
+    - scilabdemo_2025-07-25_0029.fpg
+    - scilabdemo_2025-07-24_0901.fpg
+    - scilabdemo_2025-07-23_2322.fpg
+    - scilabdemo_2025-07-23_1407.fpg
+    - scilabdemo_2025-07-28_2030.fpg
+    - scilabdemo_2025-07-28_1951.fpg
+    - scilabdemo_2025-08-06_1748.fpg
+    - scilabdemo_2025-07-25_1517.fpg
+    - scilabdemo_2025-07-30_0016.fpg
+    - scilabdemo_2025-07-23_1216.fpg
+    - scilabdemo_2025-07-24_0849.fpg
+    - scilabdemo_2025-07-28_1958.fpg
+    - scilabdemo_2025-07-23_1925.fpg
+    - scilabdemo_2025-07-22_2122.fpg
+    - scilabdemo_2025-07-23_2356.fpg
     - scilabdemo_2025-07-18_1849.fpg
+    - scilabdemo_2025-07-28_1933.fpg
+    - scilabdemo_2025-07-24_1748.fpg
+    - scilabdemo_2025-07-23_1931.fpg
+    - scilabdemo_2025-07-24_0916.fpg
+    - scilabdemo_2025-07-23_1829.fpg
+    - scilabdemo_2025-07-23_1226.fpg
+    - scilabdemo_2025-07-23_1827.fpg
+    - scilabdemo_2025-07-24_0859.fpg
+    - scilabdemo_2025-07-23_1433.fpg
     - scilabdemo_2025-07-22_1304.fpg
+    - scilabdemo_2025-07-23_1923.fpg
 Adding tcl command: set_global_assignment -name VHDL_FILE "/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd" at stage pre_synth
+[QUARTUS BACKEND] add_source() called for: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/de10nano.v
+[DEBUG] HDL output dir contents:
+    - scilabdemo_2025-07-22_1532.fpg
+    - scilabdemo_2025-07-25_0000.fpg
+    - scilabdemo_2025-07-23_2309.fpg
+    - scilabdemo_2025-07-23_1329.fpg
+    - scilabdemo_2025-07-24_2354.fpg
+    - scilabdemo_2025-07-24_2340.fpg
+    - scilabdemo_2025-07-23_1714.fpg
+    - scilabdemo_2025-07-22_2258.fpg
+    - scilabdemo_2025-07-24_0924.fpg
+    - scilabdemo_2025-07-28_2059.fpg
+    - scilabdemo_2025-07-22_2329.fpg
+    - scilabdemo_2025-07-24_2042.fpg
+    - scilabdemo_2025-07-23_0010.fpg
+    - scilabdemo_2025-08-06_1430.fpg
+    - scilabdemo_2025-07-24_0902.fpg
+    - scilabdemo_2025-07-22_2007.fpg
+    - scilabdemo_2025-07-28_2301.fpg
+    - scilabdemo_2025-07-28_1943.fpg
+    - scilabdemo_2025-07-28_2010.fpg
+    - scilabdemo_2025-07-25_1547.fpg
+    - scilabdemo_2025-07-24_1741.fpg
+    - scilabdemo_2025-07-25_1548.fpg
+    - scilabdemo_2025-07-22_2301.fpg
+    - scilabdemo_2025-07-28_2057.fpg
+    - scilabdemo_2025-07-22_2255.fpg
+    - scilabdemo_2025-07-25_1539.fpg
+    - top.rbf
+    - scilabdemo_2025-07-23_2325.fpg
+    - scilabdemo_2025-07-24_0856.fpg
+    - scilabdemo_2025-07-23_2350.fpg
+    - scilabdemo_2025-07-23_1426.fpg
+    - scilabdemo_2025-07-23_1839.fpg
+    - scilabdemo_2025-08-06_1816.fpg
+    - scilabdemo_2025-07-23_1831.fpg
+    - scilabdemo_2025-07-23_1105.fpg
+    - scilabdemo_2025-07-23_1826.fpg
+    - scilabdemo_2025-07-23_1808.fpg
+    - scilabdemo_2025-07-28_2043.fpg
+    - scilabdemo_2025-07-23_1421.fpg
+    - scilabdemo_2025-07-23_1903.fpg
+    - scilabdemo_2025-07-28_2000.fpg
+    - scilabdemo_2025-07-23_1740.fpg
+    - scilabdemo_2025-07-24_0843.fpg
+    - scilabdemo_2025-07-28_2036.fpg
+    - scilabdemo_2025-07-22_1322.fpg
+    - scilabdemo_2025-07-23_1819.fpg
+    - scilabdemo_2025-07-28_2012.fpg
+    - scilabdemo_2025-07-23_1127.fpg
+    - scilabdemo_2025-07-23_1219.fpg
+    - scilabdemo_2025-07-23_1418.fpg
+    - scilabdemo_2025-07-24_2334.fpg
+    - scilabdemo_2025-07-23_1929.fpg
+    - scilabdemo_2025-07-22_1953.fpg
+    - scilabdemo_2025-07-23_1810.fpg
+    - scilabdemo_2025-07-22_1654.fpg
+    - scilabdemo_2025-07-22_1310.fpg
+    - top.sof
+    - scilabdemo_2025-07-30_0002.fpg
+    - scilabdemo_2025-07-23_2326.fpg
+    - scilabdemo_2025-07-23_1807.fpg
+    - scilabdemo_2025-07-28_2006.fpg
+    - scilabdemo_2025-07-24_1738.fpg
+    - scilabdemo_2025-07-22_1939.fpg
+    - scilabdemo_2025-07-25_0029.fpg
+    - scilabdemo_2025-07-24_0901.fpg
+    - scilabdemo_2025-07-23_2322.fpg
+    - scilabdemo_2025-07-23_1407.fpg
+    - scilabdemo_2025-07-28_2030.fpg
+    - scilabdemo_2025-07-28_1951.fpg
+    - scilabdemo_2025-08-06_1748.fpg
+    - scilabdemo_2025-07-25_1517.fpg
+    - scilabdemo_2025-07-30_0016.fpg
+    - scilabdemo_2025-07-23_1216.fpg
+    - scilabdemo_2025-07-24_0849.fpg
+    - scilabdemo_2025-07-28_1958.fpg
+    - scilabdemo_2025-07-23_1925.fpg
+    - scilabdemo_2025-07-22_2122.fpg
+    - scilabdemo_2025-07-23_2356.fpg
+    - scilabdemo_2025-07-18_1849.fpg
+    - scilabdemo_2025-07-28_1933.fpg
+    - scilabdemo_2025-07-24_1748.fpg
+    - scilabdemo_2025-07-23_1931.fpg
+    - scilabdemo_2025-07-24_0916.fpg
+    - scilabdemo_2025-07-23_1829.fpg
+    - scilabdemo_2025-07-23_1226.fpg
+    - scilabdemo_2025-07-23_1827.fpg
+    - scilabdemo_2025-07-24_0859.fpg
+    - scilabdemo_2025-07-23_1433.fpg
+    - scilabdemo_2025-07-22_1304.fpg
+    - scilabdemo_2025-07-23_1923.fpg
+Adding tcl command: set_global_assignment -name VERILOG_FILE "/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/de10nano.v" at stage pre_synth
+[QUARTUS BACKEND] add_source() called for: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/de10nano_hps_0_fpga_interfaces.sv
+[DEBUG] HDL output dir contents:
+    - scilabdemo_2025-07-22_1532.fpg
+    - scilabdemo_2025-07-25_0000.fpg
+    - scilabdemo_2025-07-23_2309.fpg
+    - scilabdemo_2025-07-23_1329.fpg
+    - scilabdemo_2025-07-24_2354.fpg
+    - scilabdemo_2025-07-24_2340.fpg
+    - scilabdemo_2025-07-23_1714.fpg
+    - scilabdemo_2025-07-22_2258.fpg
+    - scilabdemo_2025-07-24_0924.fpg
+    - scilabdemo_2025-07-28_2059.fpg
+    - scilabdemo_2025-07-22_2329.fpg
+    - scilabdemo_2025-07-24_2042.fpg
+    - scilabdemo_2025-07-23_0010.fpg
+    - scilabdemo_2025-08-06_1430.fpg
+    - scilabdemo_2025-07-24_0902.fpg
+    - scilabdemo_2025-07-22_2007.fpg
+    - scilabdemo_2025-07-28_2301.fpg
+    - scilabdemo_2025-07-28_1943.fpg
+    - scilabdemo_2025-07-28_2010.fpg
+    - scilabdemo_2025-07-25_1547.fpg
+    - scilabdemo_2025-07-24_1741.fpg
+    - scilabdemo_2025-07-25_1548.fpg
+    - scilabdemo_2025-07-22_2301.fpg
+    - scilabdemo_2025-07-28_2057.fpg
+    - scilabdemo_2025-07-22_2255.fpg
+    - scilabdemo_2025-07-25_1539.fpg
+    - top.rbf
+    - scilabdemo_2025-07-23_2325.fpg
+    - scilabdemo_2025-07-24_0856.fpg
+    - scilabdemo_2025-07-23_2350.fpg
+    - scilabdemo_2025-07-23_1426.fpg
+    - scilabdemo_2025-07-23_1839.fpg
+    - scilabdemo_2025-08-06_1816.fpg
+    - scilabdemo_2025-07-23_1831.fpg
+    - scilabdemo_2025-07-23_1105.fpg
+    - scilabdemo_2025-07-23_1826.fpg
+    - scilabdemo_2025-07-23_1808.fpg
+    - scilabdemo_2025-07-28_2043.fpg
+    - scilabdemo_2025-07-23_1421.fpg
+    - scilabdemo_2025-07-23_1903.fpg
+    - scilabdemo_2025-07-28_2000.fpg
+    - scilabdemo_2025-07-23_1740.fpg
+    - scilabdemo_2025-07-24_0843.fpg
+    - scilabdemo_2025-07-28_2036.fpg
+    - scilabdemo_2025-07-22_1322.fpg
+    - scilabdemo_2025-07-23_1819.fpg
+    - scilabdemo_2025-07-28_2012.fpg
+    - scilabdemo_2025-07-23_1127.fpg
+    - scilabdemo_2025-07-23_1219.fpg
+    - scilabdemo_2025-07-23_1418.fpg
+    - scilabdemo_2025-07-24_2334.fpg
+    - scilabdemo_2025-07-23_1929.fpg
+    - scilabdemo_2025-07-22_1953.fpg
+    - scilabdemo_2025-07-23_1810.fpg
+    - scilabdemo_2025-07-22_1654.fpg
+    - scilabdemo_2025-07-22_1310.fpg
+    - top.sof
+    - scilabdemo_2025-07-30_0002.fpg
+    - scilabdemo_2025-07-23_2326.fpg
+    - scilabdemo_2025-07-23_1807.fpg
+    - scilabdemo_2025-07-28_2006.fpg
+    - scilabdemo_2025-07-24_1738.fpg
+    - scilabdemo_2025-07-22_1939.fpg
+    - scilabdemo_2025-07-25_0029.fpg
+    - scilabdemo_2025-07-24_0901.fpg
+    - scilabdemo_2025-07-23_2322.fpg
+    - scilabdemo_2025-07-23_1407.fpg
+    - scilabdemo_2025-07-28_2030.fpg
+    - scilabdemo_2025-07-28_1951.fpg
+    - scilabdemo_2025-08-06_1748.fpg
+    - scilabdemo_2025-07-25_1517.fpg
+    - scilabdemo_2025-07-30_0016.fpg
+    - scilabdemo_2025-07-23_1216.fpg
+    - scilabdemo_2025-07-24_0849.fpg
+    - scilabdemo_2025-07-28_1958.fpg
+    - scilabdemo_2025-07-23_1925.fpg
+    - scilabdemo_2025-07-22_2122.fpg
+    - scilabdemo_2025-07-23_2356.fpg
+    - scilabdemo_2025-07-18_1849.fpg
+    - scilabdemo_2025-07-28_1933.fpg
+    - scilabdemo_2025-07-24_1748.fpg
+    - scilabdemo_2025-07-23_1931.fpg
+    - scilabdemo_2025-07-24_0916.fpg
+    - scilabdemo_2025-07-23_1829.fpg
+    - scilabdemo_2025-07-23_1226.fpg
+    - scilabdemo_2025-07-23_1827.fpg
+    - scilabdemo_2025-07-24_0859.fpg
+    - scilabdemo_2025-07-23_1433.fpg
+    - scilabdemo_2025-07-22_1304.fpg
+    - scilabdemo_2025-07-23_1923.fpg
+Adding tcl command: set_global_assignment -name SYSTEMVERILOG_FILE "/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/de10nano_hps_0_fpga_interfaces.sv" at stage pre_synth
+[QUARTUS BACKEND] add_source() called for: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/sys_block_intel
+[DEBUG] HDL output dir contents:
+    - scilabdemo_2025-07-22_1532.fpg
+    - scilabdemo_2025-07-25_0000.fpg
+    - scilabdemo_2025-07-23_2309.fpg
+    - scilabdemo_2025-07-23_1329.fpg
+    - scilabdemo_2025-07-24_2354.fpg
+    - scilabdemo_2025-07-24_2340.fpg
+    - scilabdemo_2025-07-23_1714.fpg
+    - scilabdemo_2025-07-22_2258.fpg
+    - scilabdemo_2025-07-24_0924.fpg
+    - scilabdemo_2025-07-28_2059.fpg
+    - scilabdemo_2025-07-22_2329.fpg
+    - scilabdemo_2025-07-24_2042.fpg
+    - scilabdemo_2025-07-23_0010.fpg
+    - scilabdemo_2025-08-06_1430.fpg
+    - scilabdemo_2025-07-24_0902.fpg
+    - scilabdemo_2025-07-22_2007.fpg
+    - scilabdemo_2025-07-28_2301.fpg
+    - scilabdemo_2025-07-28_1943.fpg
+    - scilabdemo_2025-07-28_2010.fpg
+    - scilabdemo_2025-07-25_1547.fpg
+    - scilabdemo_2025-07-24_1741.fpg
+    - scilabdemo_2025-07-25_1548.fpg
+    - scilabdemo_2025-07-22_2301.fpg
+    - scilabdemo_2025-07-28_2057.fpg
+    - scilabdemo_2025-07-22_2255.fpg
+    - scilabdemo_2025-07-25_1539.fpg
+    - top.rbf
+    - scilabdemo_2025-07-23_2325.fpg
+    - scilabdemo_2025-07-24_0856.fpg
+    - scilabdemo_2025-07-23_2350.fpg
+    - scilabdemo_2025-07-23_1426.fpg
+    - scilabdemo_2025-07-23_1839.fpg
+    - scilabdemo_2025-08-06_1816.fpg
+    - scilabdemo_2025-07-23_1831.fpg
+    - scilabdemo_2025-07-23_1105.fpg
+    - scilabdemo_2025-07-23_1826.fpg
+    - scilabdemo_2025-07-23_1808.fpg
+    - scilabdemo_2025-07-28_2043.fpg
+    - scilabdemo_2025-07-23_1421.fpg
+    - scilabdemo_2025-07-23_1903.fpg
+    - scilabdemo_2025-07-28_2000.fpg
+    - scilabdemo_2025-07-23_1740.fpg
+    - scilabdemo_2025-07-24_0843.fpg
+    - scilabdemo_2025-07-28_2036.fpg
+    - scilabdemo_2025-07-22_1322.fpg
+    - scilabdemo_2025-07-23_1819.fpg
+    - scilabdemo_2025-07-28_2012.fpg
+    - scilabdemo_2025-07-23_1127.fpg
+    - scilabdemo_2025-07-23_1219.fpg
+    - scilabdemo_2025-07-23_1418.fpg
+    - scilabdemo_2025-07-24_2334.fpg
+    - scilabdemo_2025-07-23_1929.fpg
+    - scilabdemo_2025-07-22_1953.fpg
+    - scilabdemo_2025-07-23_1810.fpg
+    - scilabdemo_2025-07-22_1654.fpg
+    - scilabdemo_2025-07-22_1310.fpg
+    - top.sof
+    - scilabdemo_2025-07-30_0002.fpg
+    - scilabdemo_2025-07-23_2326.fpg
+    - scilabdemo_2025-07-23_1807.fpg
+    - scilabdemo_2025-07-28_2006.fpg
+    - scilabdemo_2025-07-24_1738.fpg
+    - scilabdemo_2025-07-22_1939.fpg
+    - scilabdemo_2025-07-25_0029.fpg
+    - scilabdemo_2025-07-24_0901.fpg
+    - scilabdemo_2025-07-23_2322.fpg
+    - scilabdemo_2025-07-23_1407.fpg
+    - scilabdemo_2025-07-28_2030.fpg
+    - scilabdemo_2025-07-28_1951.fpg
+    - scilabdemo_2025-08-06_1748.fpg
+    - scilabdemo_2025-07-25_1517.fpg
+    - scilabdemo_2025-07-30_0016.fpg
+    - scilabdemo_2025-07-23_1216.fpg
+    - scilabdemo_2025-07-24_0849.fpg
+    - scilabdemo_2025-07-28_1958.fpg
+    - scilabdemo_2025-07-23_1925.fpg
+    - scilabdemo_2025-07-22_2122.fpg
+    - scilabdemo_2025-07-23_2356.fpg
+    - scilabdemo_2025-07-18_1849.fpg
+    - scilabdemo_2025-07-28_1933.fpg
+    - scilabdemo_2025-07-24_1748.fpg
+    - scilabdemo_2025-07-23_1931.fpg
+    - scilabdemo_2025-07-24_0916.fpg
+    - scilabdemo_2025-07-23_1829.fpg
+    - scilabdemo_2025-07-23_1226.fpg
+    - scilabdemo_2025-07-23_1827.fpg
+    - scilabdemo_2025-07-24_0859.fpg
+    - scilabdemo_2025-07-23_1433.fpg
+    - scilabdemo_2025-07-22_1304.fpg
+    - scilabdemo_2025-07-23_1923.fpg
+Adding tcl command: set_global_assignment -name VERILOG_FILE "/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/sys_block_intel/sys_block_counter.v" at stage pre_synth
+Adding tcl command: set_global_assignment -name VERILOG_FILE "/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/sys_block_intel/sys_block_intel.v" at stage pre_synth
 [QUARTUS BACKEND] add_source() called for: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_pkg.vhd
 [DEBUG] HDL output dir contents:
     - scilabdemo_2025-07-22_1532.fpg
+    - scilabdemo_2025-07-25_0000.fpg
+    - scilabdemo_2025-07-23_2309.fpg
+    - scilabdemo_2025-07-23_1329.fpg
+    - scilabdemo_2025-07-24_2354.fpg
+    - scilabdemo_2025-07-24_2340.fpg
+    - scilabdemo_2025-07-23_1714.fpg
+    - scilabdemo_2025-07-22_2258.fpg
+    - scilabdemo_2025-07-24_0924.fpg
+    - scilabdemo_2025-07-28_2059.fpg
+    - scilabdemo_2025-07-22_2329.fpg
+    - scilabdemo_2025-07-24_2042.fpg
+    - scilabdemo_2025-07-23_0010.fpg
+    - scilabdemo_2025-08-06_1430.fpg
+    - scilabdemo_2025-07-24_0902.fpg
+    - scilabdemo_2025-07-22_2007.fpg
+    - scilabdemo_2025-07-28_2301.fpg
+    - scilabdemo_2025-07-28_1943.fpg
+    - scilabdemo_2025-07-28_2010.fpg
+    - scilabdemo_2025-07-25_1547.fpg
+    - scilabdemo_2025-07-24_1741.fpg
+    - scilabdemo_2025-07-25_1548.fpg
+    - scilabdemo_2025-07-22_2301.fpg
+    - scilabdemo_2025-07-28_2057.fpg
+    - scilabdemo_2025-07-22_2255.fpg
+    - scilabdemo_2025-07-25_1539.fpg
     - top.rbf
+    - scilabdemo_2025-07-23_2325.fpg
+    - scilabdemo_2025-07-24_0856.fpg
+    - scilabdemo_2025-07-23_2350.fpg
+    - scilabdemo_2025-07-23_1426.fpg
+    - scilabdemo_2025-07-23_1839.fpg
+    - scilabdemo_2025-08-06_1816.fpg
+    - scilabdemo_2025-07-23_1831.fpg
+    - scilabdemo_2025-07-23_1105.fpg
+    - scilabdemo_2025-07-23_1826.fpg
+    - scilabdemo_2025-07-23_1808.fpg
+    - scilabdemo_2025-07-28_2043.fpg
+    - scilabdemo_2025-07-23_1421.fpg
+    - scilabdemo_2025-07-23_1903.fpg
+    - scilabdemo_2025-07-28_2000.fpg
+    - scilabdemo_2025-07-23_1740.fpg
+    - scilabdemo_2025-07-24_0843.fpg
+    - scilabdemo_2025-07-28_2036.fpg
     - scilabdemo_2025-07-22_1322.fpg
+    - scilabdemo_2025-07-23_1819.fpg
+    - scilabdemo_2025-07-28_2012.fpg
+    - scilabdemo_2025-07-23_1127.fpg
+    - scilabdemo_2025-07-23_1219.fpg
+    - scilabdemo_2025-07-23_1418.fpg
+    - scilabdemo_2025-07-24_2334.fpg
+    - scilabdemo_2025-07-23_1929.fpg
     - scilabdemo_2025-07-22_1953.fpg
+    - scilabdemo_2025-07-23_1810.fpg
     - scilabdemo_2025-07-22_1654.fpg
     - scilabdemo_2025-07-22_1310.fpg
     - top.sof
+    - scilabdemo_2025-07-30_0002.fpg
+    - scilabdemo_2025-07-23_2326.fpg
+    - scilabdemo_2025-07-23_1807.fpg
+    - scilabdemo_2025-07-28_2006.fpg
+    - scilabdemo_2025-07-24_1738.fpg
     - scilabdemo_2025-07-22_1939.fpg
+    - scilabdemo_2025-07-25_0029.fpg
+    - scilabdemo_2025-07-24_0901.fpg
+    - scilabdemo_2025-07-23_2322.fpg
+    - scilabdemo_2025-07-23_1407.fpg
+    - scilabdemo_2025-07-28_2030.fpg
+    - scilabdemo_2025-07-28_1951.fpg
+    - scilabdemo_2025-08-06_1748.fpg
+    - scilabdemo_2025-07-25_1517.fpg
+    - scilabdemo_2025-07-30_0016.fpg
+    - scilabdemo_2025-07-23_1216.fpg
+    - scilabdemo_2025-07-24_0849.fpg
+    - scilabdemo_2025-07-28_1958.fpg
+    - scilabdemo_2025-07-23_1925.fpg
+    - scilabdemo_2025-07-22_2122.fpg
+    - scilabdemo_2025-07-23_2356.fpg
     - scilabdemo_2025-07-18_1849.fpg
+    - scilabdemo_2025-07-28_1933.fpg
+    - scilabdemo_2025-07-24_1748.fpg
+    - scilabdemo_2025-07-23_1931.fpg
+    - scilabdemo_2025-07-24_0916.fpg
+    - scilabdemo_2025-07-23_1829.fpg
+    - scilabdemo_2025-07-23_1226.fpg
+    - scilabdemo_2025-07-23_1827.fpg
+    - scilabdemo_2025-07-24_0859.fpg
+    - scilabdemo_2025-07-23_1433.fpg
     - scilabdemo_2025-07-22_1304.fpg
+    - scilabdemo_2025-07-23_1923.fpg
 Adding tcl command: set_global_assignment -name VHDL_FILE "/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_pkg.vhd" at stage pre_synth
 [QUARTUS BACKEND] add_source() called for: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_slave_logic.vhd
 [DEBUG] HDL output dir contents:
     - scilabdemo_2025-07-22_1532.fpg
+    - scilabdemo_2025-07-25_0000.fpg
+    - scilabdemo_2025-07-23_2309.fpg
+    - scilabdemo_2025-07-23_1329.fpg
+    - scilabdemo_2025-07-24_2354.fpg
+    - scilabdemo_2025-07-24_2340.fpg
+    - scilabdemo_2025-07-23_1714.fpg
+    - scilabdemo_2025-07-22_2258.fpg
+    - scilabdemo_2025-07-24_0924.fpg
+    - scilabdemo_2025-07-28_2059.fpg
+    - scilabdemo_2025-07-22_2329.fpg
+    - scilabdemo_2025-07-24_2042.fpg
+    - scilabdemo_2025-07-23_0010.fpg
+    - scilabdemo_2025-08-06_1430.fpg
+    - scilabdemo_2025-07-24_0902.fpg
+    - scilabdemo_2025-07-22_2007.fpg
+    - scilabdemo_2025-07-28_2301.fpg
+    - scilabdemo_2025-07-28_1943.fpg
+    - scilabdemo_2025-07-28_2010.fpg
+    - scilabdemo_2025-07-25_1547.fpg
+    - scilabdemo_2025-07-24_1741.fpg
+    - scilabdemo_2025-07-25_1548.fpg
+    - scilabdemo_2025-07-22_2301.fpg
+    - scilabdemo_2025-07-28_2057.fpg
+    - scilabdemo_2025-07-22_2255.fpg
+    - scilabdemo_2025-07-25_1539.fpg
     - top.rbf
+    - scilabdemo_2025-07-23_2325.fpg
+    - scilabdemo_2025-07-24_0856.fpg
+    - scilabdemo_2025-07-23_2350.fpg
+    - scilabdemo_2025-07-23_1426.fpg
+    - scilabdemo_2025-07-23_1839.fpg
+    - scilabdemo_2025-08-06_1816.fpg
+    - scilabdemo_2025-07-23_1831.fpg
+    - scilabdemo_2025-07-23_1105.fpg
+    - scilabdemo_2025-07-23_1826.fpg
+    - scilabdemo_2025-07-23_1808.fpg
+    - scilabdemo_2025-07-28_2043.fpg
+    - scilabdemo_2025-07-23_1421.fpg
+    - scilabdemo_2025-07-23_1903.fpg
+    - scilabdemo_2025-07-28_2000.fpg
+    - scilabdemo_2025-07-23_1740.fpg
+    - scilabdemo_2025-07-24_0843.fpg
+    - scilabdemo_2025-07-28_2036.fpg
     - scilabdemo_2025-07-22_1322.fpg
+    - scilabdemo_2025-07-23_1819.fpg
+    - scilabdemo_2025-07-28_2012.fpg
+    - scilabdemo_2025-07-23_1127.fpg
+    - scilabdemo_2025-07-23_1219.fpg
+    - scilabdemo_2025-07-23_1418.fpg
+    - scilabdemo_2025-07-24_2334.fpg
+    - scilabdemo_2025-07-23_1929.fpg
     - scilabdemo_2025-07-22_1953.fpg
+    - scilabdemo_2025-07-23_1810.fpg
     - scilabdemo_2025-07-22_1654.fpg
     - scilabdemo_2025-07-22_1310.fpg
     - top.sof
+    - scilabdemo_2025-07-30_0002.fpg
+    - scilabdemo_2025-07-23_2326.fpg
+    - scilabdemo_2025-07-23_1807.fpg
+    - scilabdemo_2025-07-28_2006.fpg
+    - scilabdemo_2025-07-24_1738.fpg
     - scilabdemo_2025-07-22_1939.fpg
+    - scilabdemo_2025-07-25_0029.fpg
+    - scilabdemo_2025-07-24_0901.fpg
+    - scilabdemo_2025-07-23_2322.fpg
+    - scilabdemo_2025-07-23_1407.fpg
+    - scilabdemo_2025-07-28_2030.fpg
+    - scilabdemo_2025-07-28_1951.fpg
+    - scilabdemo_2025-08-06_1748.fpg
+    - scilabdemo_2025-07-25_1517.fpg
+    - scilabdemo_2025-07-30_0016.fpg
+    - scilabdemo_2025-07-23_1216.fpg
+    - scilabdemo_2025-07-24_0849.fpg
+    - scilabdemo_2025-07-28_1958.fpg
+    - scilabdemo_2025-07-23_1925.fpg
+    - scilabdemo_2025-07-22_2122.fpg
+    - scilabdemo_2025-07-23_2356.fpg
     - scilabdemo_2025-07-18_1849.fpg
+    - scilabdemo_2025-07-28_1933.fpg
+    - scilabdemo_2025-07-24_1748.fpg
+    - scilabdemo_2025-07-23_1931.fpg
+    - scilabdemo_2025-07-24_0916.fpg
+    - scilabdemo_2025-07-23_1829.fpg
+    - scilabdemo_2025-07-23_1226.fpg
+    - scilabdemo_2025-07-23_1827.fpg
+    - scilabdemo_2025-07-24_0859.fpg
+    - scilabdemo_2025-07-23_1433.fpg
     - scilabdemo_2025-07-22_1304.fpg
+    - scilabdemo_2025-07-23_1923.fpg
 Adding tcl command: set_global_assignment -name VHDL_FILE "/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_slave_logic.vhd" at stage pre_synth
 [QUARTUS BACKEND] add_source() called for: /data/DesignFiles/scilabdemo/axi4lite_ic_wrapper.vhdl
 [DEBUG] HDL output dir contents:
     - scilabdemo_2025-07-22_1532.fpg
+    - scilabdemo_2025-07-25_0000.fpg
+    - scilabdemo_2025-07-23_2309.fpg
+    - scilabdemo_2025-07-23_1329.fpg
+    - scilabdemo_2025-07-24_2354.fpg
+    - scilabdemo_2025-07-24_2340.fpg
+    - scilabdemo_2025-07-23_1714.fpg
+    - scilabdemo_2025-07-22_2258.fpg
+    - scilabdemo_2025-07-24_0924.fpg
+    - scilabdemo_2025-07-28_2059.fpg
+    - scilabdemo_2025-07-22_2329.fpg
+    - scilabdemo_2025-07-24_2042.fpg
+    - scilabdemo_2025-07-23_0010.fpg
+    - scilabdemo_2025-08-06_1430.fpg
+    - scilabdemo_2025-07-24_0902.fpg
+    - scilabdemo_2025-07-22_2007.fpg
+    - scilabdemo_2025-07-28_2301.fpg
+    - scilabdemo_2025-07-28_1943.fpg
+    - scilabdemo_2025-07-28_2010.fpg
+    - scilabdemo_2025-07-25_1547.fpg
+    - scilabdemo_2025-07-24_1741.fpg
+    - scilabdemo_2025-07-25_1548.fpg
+    - scilabdemo_2025-07-22_2301.fpg
+    - scilabdemo_2025-07-28_2057.fpg
+    - scilabdemo_2025-07-22_2255.fpg
+    - scilabdemo_2025-07-25_1539.fpg
     - top.rbf
+    - scilabdemo_2025-07-23_2325.fpg
+    - scilabdemo_2025-07-24_0856.fpg
+    - scilabdemo_2025-07-23_2350.fpg
+    - scilabdemo_2025-07-23_1426.fpg
+    - scilabdemo_2025-07-23_1839.fpg
+    - scilabdemo_2025-08-06_1816.fpg
+    - scilabdemo_2025-07-23_1831.fpg
+    - scilabdemo_2025-07-23_1105.fpg
+    - scilabdemo_2025-07-23_1826.fpg
+    - scilabdemo_2025-07-23_1808.fpg
+    - scilabdemo_2025-07-28_2043.fpg
+    - scilabdemo_2025-07-23_1421.fpg
+    - scilabdemo_2025-07-23_1903.fpg
+    - scilabdemo_2025-07-28_2000.fpg
+    - scilabdemo_2025-07-23_1740.fpg
+    - scilabdemo_2025-07-24_0843.fpg
+    - scilabdemo_2025-07-28_2036.fpg
     - scilabdemo_2025-07-22_1322.fpg
+    - scilabdemo_2025-07-23_1819.fpg
+    - scilabdemo_2025-07-28_2012.fpg
+    - scilabdemo_2025-07-23_1127.fpg
+    - scilabdemo_2025-07-23_1219.fpg
+    - scilabdemo_2025-07-23_1418.fpg
+    - scilabdemo_2025-07-24_2334.fpg
+    - scilabdemo_2025-07-23_1929.fpg
     - scilabdemo_2025-07-22_1953.fpg
+    - scilabdemo_2025-07-23_1810.fpg
     - scilabdemo_2025-07-22_1654.fpg
     - scilabdemo_2025-07-22_1310.fpg
     - top.sof
+    - scilabdemo_2025-07-30_0002.fpg
+    - scilabdemo_2025-07-23_2326.fpg
+    - scilabdemo_2025-07-23_1807.fpg
+    - scilabdemo_2025-07-28_2006.fpg
+    - scilabdemo_2025-07-24_1738.fpg
     - scilabdemo_2025-07-22_1939.fpg
+    - scilabdemo_2025-07-25_0029.fpg
+    - scilabdemo_2025-07-24_0901.fpg
+    - scilabdemo_2025-07-23_2322.fpg
+    - scilabdemo_2025-07-23_1407.fpg
+    - scilabdemo_2025-07-28_2030.fpg
+    - scilabdemo_2025-07-28_1951.fpg
+    - scilabdemo_2025-08-06_1748.fpg
+    - scilabdemo_2025-07-25_1517.fpg
+    - scilabdemo_2025-07-30_0016.fpg
+    - scilabdemo_2025-07-23_1216.fpg
+    - scilabdemo_2025-07-24_0849.fpg
+    - scilabdemo_2025-07-28_1958.fpg
+    - scilabdemo_2025-07-23_1925.fpg
+    - scilabdemo_2025-07-22_2122.fpg
+    - scilabdemo_2025-07-23_2356.fpg
     - scilabdemo_2025-07-18_1849.fpg
+    - scilabdemo_2025-07-28_1933.fpg
+    - scilabdemo_2025-07-24_1748.fpg
+    - scilabdemo_2025-07-23_1931.fpg
+    - scilabdemo_2025-07-24_0916.fpg
+    - scilabdemo_2025-07-23_1829.fpg
+    - scilabdemo_2025-07-23_1226.fpg
+    - scilabdemo_2025-07-23_1827.fpg
+    - scilabdemo_2025-07-24_0859.fpg
+    - scilabdemo_2025-07-23_1433.fpg
     - scilabdemo_2025-07-22_1304.fpg
+    - scilabdemo_2025-07-23_1923.fpg
 Adding tcl command: set_global_assignment -name VHDL_FILE "/data/DesignFiles/scilabdemo/axi4lite_ic_wrapper.vhdl" at stage pre_synth
 [QUARTUS BACKEND] add_source() called for: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_axi4lite_top_mmap_pkg.vhd
 [DEBUG] HDL output dir contents:
     - scilabdemo_2025-07-22_1532.fpg
+    - scilabdemo_2025-07-25_0000.fpg
+    - scilabdemo_2025-07-23_2309.fpg
+    - scilabdemo_2025-07-23_1329.fpg
+    - scilabdemo_2025-07-24_2354.fpg
+    - scilabdemo_2025-07-24_2340.fpg
+    - scilabdemo_2025-07-23_1714.fpg
+    - scilabdemo_2025-07-22_2258.fpg
+    - scilabdemo_2025-07-24_0924.fpg
+    - scilabdemo_2025-07-28_2059.fpg
+    - scilabdemo_2025-07-22_2329.fpg
+    - scilabdemo_2025-07-24_2042.fpg
+    - scilabdemo_2025-07-23_0010.fpg
+    - scilabdemo_2025-08-06_1430.fpg
+    - scilabdemo_2025-07-24_0902.fpg
+    - scilabdemo_2025-07-22_2007.fpg
+    - scilabdemo_2025-07-28_2301.fpg
+    - scilabdemo_2025-07-28_1943.fpg
+    - scilabdemo_2025-07-28_2010.fpg
+    - scilabdemo_2025-07-25_1547.fpg
+    - scilabdemo_2025-07-24_1741.fpg
+    - scilabdemo_2025-07-25_1548.fpg
+    - scilabdemo_2025-07-22_2301.fpg
+    - scilabdemo_2025-07-28_2057.fpg
+    - scilabdemo_2025-07-22_2255.fpg
+    - scilabdemo_2025-07-25_1539.fpg
     - top.rbf
+    - scilabdemo_2025-07-23_2325.fpg
+    - scilabdemo_2025-07-24_0856.fpg
+    - scilabdemo_2025-07-23_2350.fpg
+    - scilabdemo_2025-07-23_1426.fpg
+    - scilabdemo_2025-07-23_1839.fpg
+    - scilabdemo_2025-08-06_1816.fpg
+    - scilabdemo_2025-07-23_1831.fpg
+    - scilabdemo_2025-07-23_1105.fpg
+    - scilabdemo_2025-07-23_1826.fpg
+    - scilabdemo_2025-07-23_1808.fpg
+    - scilabdemo_2025-07-28_2043.fpg
+    - scilabdemo_2025-07-23_1421.fpg
+    - scilabdemo_2025-07-23_1903.fpg
+    - scilabdemo_2025-07-28_2000.fpg
+    - scilabdemo_2025-07-23_1740.fpg
+    - scilabdemo_2025-07-24_0843.fpg
+    - scilabdemo_2025-07-28_2036.fpg
     - scilabdemo_2025-07-22_1322.fpg
+    - scilabdemo_2025-07-23_1819.fpg
+    - scilabdemo_2025-07-28_2012.fpg
+    - scilabdemo_2025-07-23_1127.fpg
+    - scilabdemo_2025-07-23_1219.fpg
+    - scilabdemo_2025-07-23_1418.fpg
+    - scilabdemo_2025-07-24_2334.fpg
+    - scilabdemo_2025-07-23_1929.fpg
     - scilabdemo_2025-07-22_1953.fpg
+    - scilabdemo_2025-07-23_1810.fpg
     - scilabdemo_2025-07-22_1654.fpg
     - scilabdemo_2025-07-22_1310.fpg
     - top.sof
+    - scilabdemo_2025-07-30_0002.fpg
+    - scilabdemo_2025-07-23_2326.fpg
+    - scilabdemo_2025-07-23_1807.fpg
+    - scilabdemo_2025-07-28_2006.fpg
+    - scilabdemo_2025-07-24_1738.fpg
     - scilabdemo_2025-07-22_1939.fpg
+    - scilabdemo_2025-07-25_0029.fpg
+    - scilabdemo_2025-07-24_0901.fpg
+    - scilabdemo_2025-07-23_2322.fpg
+    - scilabdemo_2025-07-23_1407.fpg
+    - scilabdemo_2025-07-28_2030.fpg
+    - scilabdemo_2025-07-28_1951.fpg
+    - scilabdemo_2025-08-06_1748.fpg
+    - scilabdemo_2025-07-25_1517.fpg
+    - scilabdemo_2025-07-30_0016.fpg
+    - scilabdemo_2025-07-23_1216.fpg
+    - scilabdemo_2025-07-24_0849.fpg
+    - scilabdemo_2025-07-28_1958.fpg
+    - scilabdemo_2025-07-23_1925.fpg
+    - scilabdemo_2025-07-22_2122.fpg
+    - scilabdemo_2025-07-23_2356.fpg
     - scilabdemo_2025-07-18_1849.fpg
+    - scilabdemo_2025-07-28_1933.fpg
+    - scilabdemo_2025-07-24_1748.fpg
+    - scilabdemo_2025-07-23_1931.fpg
+    - scilabdemo_2025-07-24_0916.fpg
+    - scilabdemo_2025-07-23_1829.fpg
+    - scilabdemo_2025-07-23_1226.fpg
+    - scilabdemo_2025-07-23_1827.fpg
+    - scilabdemo_2025-07-24_0859.fpg
+    - scilabdemo_2025-07-23_1433.fpg
     - scilabdemo_2025-07-22_1304.fpg
+    - scilabdemo_2025-07-23_1923.fpg
 Adding tcl command: set_global_assignment -name VHDL_FILE "/data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_axi4lite_top_mmap_pkg.vhd" at stage pre_synth
+[QUARTUS BACKEND] add_source() called for: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys_muxdemux.vhd
+[DEBUG] HDL output dir contents:
+    - scilabdemo_2025-07-22_1532.fpg
+    - scilabdemo_2025-07-25_0000.fpg
+    - scilabdemo_2025-07-23_2309.fpg
+    - scilabdemo_2025-07-23_1329.fpg
+    - scilabdemo_2025-07-24_2354.fpg
+    - scilabdemo_2025-07-24_2340.fpg
+    - scilabdemo_2025-07-23_1714.fpg
+    - scilabdemo_2025-07-22_2258.fpg
+    - scilabdemo_2025-07-24_0924.fpg
+    - scilabdemo_2025-07-28_2059.fpg
+    - scilabdemo_2025-07-22_2329.fpg
+    - scilabdemo_2025-07-24_2042.fpg
+    - scilabdemo_2025-07-23_0010.fpg
+    - scilabdemo_2025-08-06_1430.fpg
+    - scilabdemo_2025-07-24_0902.fpg
+    - scilabdemo_2025-07-22_2007.fpg
+    - scilabdemo_2025-07-28_2301.fpg
+    - scilabdemo_2025-07-28_1943.fpg
+    - scilabdemo_2025-07-28_2010.fpg
+    - scilabdemo_2025-07-25_1547.fpg
+    - scilabdemo_2025-07-24_1741.fpg
+    - scilabdemo_2025-07-25_1548.fpg
+    - scilabdemo_2025-07-22_2301.fpg
+    - scilabdemo_2025-07-28_2057.fpg
+    - scilabdemo_2025-07-22_2255.fpg
+    - scilabdemo_2025-07-25_1539.fpg
+    - top.rbf
+    - scilabdemo_2025-07-23_2325.fpg
+    - scilabdemo_2025-07-24_0856.fpg
+    - scilabdemo_2025-07-23_2350.fpg
+    - scilabdemo_2025-07-23_1426.fpg
+    - scilabdemo_2025-07-23_1839.fpg
+    - scilabdemo_2025-08-06_1816.fpg
+    - scilabdemo_2025-07-23_1831.fpg
+    - scilabdemo_2025-07-23_1105.fpg
+    - scilabdemo_2025-07-23_1826.fpg
+    - scilabdemo_2025-07-23_1808.fpg
+    - scilabdemo_2025-07-28_2043.fpg
+    - scilabdemo_2025-07-23_1421.fpg
+    - scilabdemo_2025-07-23_1903.fpg
+    - scilabdemo_2025-07-28_2000.fpg
+    - scilabdemo_2025-07-23_1740.fpg
+    - scilabdemo_2025-07-24_0843.fpg
+    - scilabdemo_2025-07-28_2036.fpg
+    - scilabdemo_2025-07-22_1322.fpg
+    - scilabdemo_2025-07-23_1819.fpg
+    - scilabdemo_2025-07-28_2012.fpg
+    - scilabdemo_2025-07-23_1127.fpg
+    - scilabdemo_2025-07-23_1219.fpg
+    - scilabdemo_2025-07-23_1418.fpg
+    - scilabdemo_2025-07-24_2334.fpg
+    - scilabdemo_2025-07-23_1929.fpg
+    - scilabdemo_2025-07-22_1953.fpg
+    - scilabdemo_2025-07-23_1810.fpg
+    - scilabdemo_2025-07-22_1654.fpg
+    - scilabdemo_2025-07-22_1310.fpg
+    - top.sof
+    - scilabdemo_2025-07-30_0002.fpg
+    - scilabdemo_2025-07-23_2326.fpg
+    - scilabdemo_2025-07-23_1807.fpg
+    - scilabdemo_2025-07-28_2006.fpg
+    - scilabdemo_2025-07-24_1738.fpg
+    - scilabdemo_2025-07-22_1939.fpg
+    - scilabdemo_2025-07-25_0029.fpg
+    - scilabdemo_2025-07-24_0901.fpg
+    - scilabdemo_2025-07-23_2322.fpg
+    - scilabdemo_2025-07-23_1407.fpg
+    - scilabdemo_2025-07-28_2030.fpg
+    - scilabdemo_2025-07-28_1951.fpg
+    - scilabdemo_2025-08-06_1748.fpg
+    - scilabdemo_2025-07-25_1517.fpg
+    - scilabdemo_2025-07-30_0016.fpg
+    - scilabdemo_2025-07-23_1216.fpg
+    - scilabdemo_2025-07-24_0849.fpg
+    - scilabdemo_2025-07-28_1958.fpg
+    - scilabdemo_2025-07-23_1925.fpg
+    - scilabdemo_2025-07-22_2122.fpg
+    - scilabdemo_2025-07-23_2356.fpg
+    - scilabdemo_2025-07-18_1849.fpg
+    - scilabdemo_2025-07-28_1933.fpg
+    - scilabdemo_2025-07-24_1748.fpg
+    - scilabdemo_2025-07-23_1931.fpg
+    - scilabdemo_2025-07-24_0916.fpg
+    - scilabdemo_2025-07-23_1829.fpg
+    - scilabdemo_2025-07-23_1226.fpg
+    - scilabdemo_2025-07-23_1827.fpg
+    - scilabdemo_2025-07-24_0859.fpg
+    - scilabdemo_2025-07-23_1433.fpg
+    - scilabdemo_2025-07-22_1304.fpg
+    - scilabdemo_2025-07-23_1923.fpg
+Adding tcl command: set_global_assignment -name VHDL_FILE "/data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys_muxdemux.vhd" at stage pre_synth
 [QUARTUS BACKEND] add_source() called for: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sw_reg_muxdemux.vhd
 [DEBUG] HDL output dir contents:
     - scilabdemo_2025-07-22_1532.fpg
+    - scilabdemo_2025-07-25_0000.fpg
+    - scilabdemo_2025-07-23_2309.fpg
+    - scilabdemo_2025-07-23_1329.fpg
+    - scilabdemo_2025-07-24_2354.fpg
+    - scilabdemo_2025-07-24_2340.fpg
+    - scilabdemo_2025-07-23_1714.fpg
+    - scilabdemo_2025-07-22_2258.fpg
+    - scilabdemo_2025-07-24_0924.fpg
+    - scilabdemo_2025-07-28_2059.fpg
+    - scilabdemo_2025-07-22_2329.fpg
+    - scilabdemo_2025-07-24_2042.fpg
+    - scilabdemo_2025-07-23_0010.fpg
+    - scilabdemo_2025-08-06_1430.fpg
+    - scilabdemo_2025-07-24_0902.fpg
+    - scilabdemo_2025-07-22_2007.fpg
+    - scilabdemo_2025-07-28_2301.fpg
+    - scilabdemo_2025-07-28_1943.fpg
+    - scilabdemo_2025-07-28_2010.fpg
+    - scilabdemo_2025-07-25_1547.fpg
+    - scilabdemo_2025-07-24_1741.fpg
+    - scilabdemo_2025-07-25_1548.fpg
+    - scilabdemo_2025-07-22_2301.fpg
+    - scilabdemo_2025-07-28_2057.fpg
+    - scilabdemo_2025-07-22_2255.fpg
+    - scilabdemo_2025-07-25_1539.fpg
     - top.rbf
+    - scilabdemo_2025-07-23_2325.fpg
+    - scilabdemo_2025-07-24_0856.fpg
+    - scilabdemo_2025-07-23_2350.fpg
+    - scilabdemo_2025-07-23_1426.fpg
+    - scilabdemo_2025-07-23_1839.fpg
+    - scilabdemo_2025-08-06_1816.fpg
+    - scilabdemo_2025-07-23_1831.fpg
+    - scilabdemo_2025-07-23_1105.fpg
+    - scilabdemo_2025-07-23_1826.fpg
+    - scilabdemo_2025-07-23_1808.fpg
+    - scilabdemo_2025-07-28_2043.fpg
+    - scilabdemo_2025-07-23_1421.fpg
+    - scilabdemo_2025-07-23_1903.fpg
+    - scilabdemo_2025-07-28_2000.fpg
+    - scilabdemo_2025-07-23_1740.fpg
+    - scilabdemo_2025-07-24_0843.fpg
+    - scilabdemo_2025-07-28_2036.fpg
     - scilabdemo_2025-07-22_1322.fpg
+    - scilabdemo_2025-07-23_1819.fpg
+    - scilabdemo_2025-07-28_2012.fpg
+    - scilabdemo_2025-07-23_1127.fpg
+    - scilabdemo_2025-07-23_1219.fpg
+    - scilabdemo_2025-07-23_1418.fpg
+    - scilabdemo_2025-07-24_2334.fpg
+    - scilabdemo_2025-07-23_1929.fpg
     - scilabdemo_2025-07-22_1953.fpg
+    - scilabdemo_2025-07-23_1810.fpg
     - scilabdemo_2025-07-22_1654.fpg
     - scilabdemo_2025-07-22_1310.fpg
     - top.sof
+    - scilabdemo_2025-07-30_0002.fpg
+    - scilabdemo_2025-07-23_2326.fpg
+    - scilabdemo_2025-07-23_1807.fpg
+    - scilabdemo_2025-07-28_2006.fpg
+    - scilabdemo_2025-07-24_1738.fpg
     - scilabdemo_2025-07-22_1939.fpg
+    - scilabdemo_2025-07-25_0029.fpg
+    - scilabdemo_2025-07-24_0901.fpg
+    - scilabdemo_2025-07-23_2322.fpg
+    - scilabdemo_2025-07-23_1407.fpg
+    - scilabdemo_2025-07-28_2030.fpg
+    - scilabdemo_2025-07-28_1951.fpg
+    - scilabdemo_2025-08-06_1748.fpg
+    - scilabdemo_2025-07-25_1517.fpg
+    - scilabdemo_2025-07-30_0016.fpg
+    - scilabdemo_2025-07-23_1216.fpg
+    - scilabdemo_2025-07-24_0849.fpg
+    - scilabdemo_2025-07-28_1958.fpg
+    - scilabdemo_2025-07-23_1925.fpg
+    - scilabdemo_2025-07-22_2122.fpg
+    - scilabdemo_2025-07-23_2356.fpg
     - scilabdemo_2025-07-18_1849.fpg
+    - scilabdemo_2025-07-28_1933.fpg
+    - scilabdemo_2025-07-24_1748.fpg
+    - scilabdemo_2025-07-23_1931.fpg
+    - scilabdemo_2025-07-24_0916.fpg
+    - scilabdemo_2025-07-23_1829.fpg
+    - scilabdemo_2025-07-23_1226.fpg
+    - scilabdemo_2025-07-23_1827.fpg
+    - scilabdemo_2025-07-24_0859.fpg
+    - scilabdemo_2025-07-23_1433.fpg
     - scilabdemo_2025-07-22_1304.fpg
+    - scilabdemo_2025-07-23_1923.fpg
 Adding tcl command: set_global_assignment -name VHDL_FILE "/data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sw_reg_muxdemux.vhd" at stage pre_synth
 [QUARTUS BACKEND] add_source() called for: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic.vhd
 [DEBUG] HDL output dir contents:
     - scilabdemo_2025-07-22_1532.fpg
+    - scilabdemo_2025-07-25_0000.fpg
+    - scilabdemo_2025-07-23_2309.fpg
+    - scilabdemo_2025-07-23_1329.fpg
+    - scilabdemo_2025-07-24_2354.fpg
+    - scilabdemo_2025-07-24_2340.fpg
+    - scilabdemo_2025-07-23_1714.fpg
+    - scilabdemo_2025-07-22_2258.fpg
+    - scilabdemo_2025-07-24_0924.fpg
+    - scilabdemo_2025-07-28_2059.fpg
+    - scilabdemo_2025-07-22_2329.fpg
+    - scilabdemo_2025-07-24_2042.fpg
+    - scilabdemo_2025-07-23_0010.fpg
+    - scilabdemo_2025-08-06_1430.fpg
+    - scilabdemo_2025-07-24_0902.fpg
+    - scilabdemo_2025-07-22_2007.fpg
+    - scilabdemo_2025-07-28_2301.fpg
+    - scilabdemo_2025-07-28_1943.fpg
+    - scilabdemo_2025-07-28_2010.fpg
+    - scilabdemo_2025-07-25_1547.fpg
+    - scilabdemo_2025-07-24_1741.fpg
+    - scilabdemo_2025-07-25_1548.fpg
+    - scilabdemo_2025-07-22_2301.fpg
+    - scilabdemo_2025-07-28_2057.fpg
+    - scilabdemo_2025-07-22_2255.fpg
+    - scilabdemo_2025-07-25_1539.fpg
     - top.rbf
+    - scilabdemo_2025-07-23_2325.fpg
+    - scilabdemo_2025-07-24_0856.fpg
+    - scilabdemo_2025-07-23_2350.fpg
+    - scilabdemo_2025-07-23_1426.fpg
+    - scilabdemo_2025-07-23_1839.fpg
+    - scilabdemo_2025-08-06_1816.fpg
+    - scilabdemo_2025-07-23_1831.fpg
+    - scilabdemo_2025-07-23_1105.fpg
+    - scilabdemo_2025-07-23_1826.fpg
+    - scilabdemo_2025-07-23_1808.fpg
+    - scilabdemo_2025-07-28_2043.fpg
+    - scilabdemo_2025-07-23_1421.fpg
+    - scilabdemo_2025-07-23_1903.fpg
+    - scilabdemo_2025-07-28_2000.fpg
+    - scilabdemo_2025-07-23_1740.fpg
+    - scilabdemo_2025-07-24_0843.fpg
+    - scilabdemo_2025-07-28_2036.fpg
     - scilabdemo_2025-07-22_1322.fpg
+    - scilabdemo_2025-07-23_1819.fpg
+    - scilabdemo_2025-07-28_2012.fpg
+    - scilabdemo_2025-07-23_1127.fpg
+    - scilabdemo_2025-07-23_1219.fpg
+    - scilabdemo_2025-07-23_1418.fpg
+    - scilabdemo_2025-07-24_2334.fpg
+    - scilabdemo_2025-07-23_1929.fpg
     - scilabdemo_2025-07-22_1953.fpg
+    - scilabdemo_2025-07-23_1810.fpg
     - scilabdemo_2025-07-22_1654.fpg
     - scilabdemo_2025-07-22_1310.fpg
     - top.sof
+    - scilabdemo_2025-07-30_0002.fpg
+    - scilabdemo_2025-07-23_2326.fpg
+    - scilabdemo_2025-07-23_1807.fpg
+    - scilabdemo_2025-07-28_2006.fpg
+    - scilabdemo_2025-07-24_1738.fpg
     - scilabdemo_2025-07-22_1939.fpg
+    - scilabdemo_2025-07-25_0029.fpg
+    - scilabdemo_2025-07-24_0901.fpg
+    - scilabdemo_2025-07-23_2322.fpg
+    - scilabdemo_2025-07-23_1407.fpg
+    - scilabdemo_2025-07-28_2030.fpg
+    - scilabdemo_2025-07-28_1951.fpg
+    - scilabdemo_2025-08-06_1748.fpg
+    - scilabdemo_2025-07-25_1517.fpg
+    - scilabdemo_2025-07-30_0016.fpg
+    - scilabdemo_2025-07-23_1216.fpg
+    - scilabdemo_2025-07-24_0849.fpg
+    - scilabdemo_2025-07-28_1958.fpg
+    - scilabdemo_2025-07-23_1925.fpg
+    - scilabdemo_2025-07-22_2122.fpg
+    - scilabdemo_2025-07-23_2356.fpg
     - scilabdemo_2025-07-18_1849.fpg
+    - scilabdemo_2025-07-28_1933.fpg
+    - scilabdemo_2025-07-24_1748.fpg
+    - scilabdemo_2025-07-23_1931.fpg
+    - scilabdemo_2025-07-24_0916.fpg
+    - scilabdemo_2025-07-23_1829.fpg
+    - scilabdemo_2025-07-23_1226.fpg
+    - scilabdemo_2025-07-23_1827.fpg
+    - scilabdemo_2025-07-24_0859.fpg
+    - scilabdemo_2025-07-23_1433.fpg
     - scilabdemo_2025-07-22_1304.fpg
+    - scilabdemo_2025-07-23_1923.fpg
 Adding tcl command: set_global_assignment -name VHDL_FILE "/data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic.vhd" at stage pre_synth
 [QUARTUS BACKEND] add_source() called for: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sw_reg_pkg.vhd
 [DEBUG] HDL output dir contents:
     - scilabdemo_2025-07-22_1532.fpg
+    - scilabdemo_2025-07-25_0000.fpg
+    - scilabdemo_2025-07-23_2309.fpg
+    - scilabdemo_2025-07-23_1329.fpg
+    - scilabdemo_2025-07-24_2354.fpg
+    - scilabdemo_2025-07-24_2340.fpg
+    - scilabdemo_2025-07-23_1714.fpg
+    - scilabdemo_2025-07-22_2258.fpg
+    - scilabdemo_2025-07-24_0924.fpg
+    - scilabdemo_2025-07-28_2059.fpg
+    - scilabdemo_2025-07-22_2329.fpg
+    - scilabdemo_2025-07-24_2042.fpg
+    - scilabdemo_2025-07-23_0010.fpg
+    - scilabdemo_2025-08-06_1430.fpg
+    - scilabdemo_2025-07-24_0902.fpg
+    - scilabdemo_2025-07-22_2007.fpg
+    - scilabdemo_2025-07-28_2301.fpg
+    - scilabdemo_2025-07-28_1943.fpg
+    - scilabdemo_2025-07-28_2010.fpg
+    - scilabdemo_2025-07-25_1547.fpg
+    - scilabdemo_2025-07-24_1741.fpg
+    - scilabdemo_2025-07-25_1548.fpg
+    - scilabdemo_2025-07-22_2301.fpg
+    - scilabdemo_2025-07-28_2057.fpg
+    - scilabdemo_2025-07-22_2255.fpg
+    - scilabdemo_2025-07-25_1539.fpg
     - top.rbf
+    - scilabdemo_2025-07-23_2325.fpg
+    - scilabdemo_2025-07-24_0856.fpg
+    - scilabdemo_2025-07-23_2350.fpg
+    - scilabdemo_2025-07-23_1426.fpg
+    - scilabdemo_2025-07-23_1839.fpg
+    - scilabdemo_2025-08-06_1816.fpg
+    - scilabdemo_2025-07-23_1831.fpg
+    - scilabdemo_2025-07-23_1105.fpg
+    - scilabdemo_2025-07-23_1826.fpg
+    - scilabdemo_2025-07-23_1808.fpg
+    - scilabdemo_2025-07-28_2043.fpg
+    - scilabdemo_2025-07-23_1421.fpg
+    - scilabdemo_2025-07-23_1903.fpg
+    - scilabdemo_2025-07-28_2000.fpg
+    - scilabdemo_2025-07-23_1740.fpg
+    - scilabdemo_2025-07-24_0843.fpg
+    - scilabdemo_2025-07-28_2036.fpg
     - scilabdemo_2025-07-22_1322.fpg
+    - scilabdemo_2025-07-23_1819.fpg
+    - scilabdemo_2025-07-28_2012.fpg
+    - scilabdemo_2025-07-23_1127.fpg
+    - scilabdemo_2025-07-23_1219.fpg
+    - scilabdemo_2025-07-23_1418.fpg
+    - scilabdemo_2025-07-24_2334.fpg
+    - scilabdemo_2025-07-23_1929.fpg
     - scilabdemo_2025-07-22_1953.fpg
+    - scilabdemo_2025-07-23_1810.fpg
     - scilabdemo_2025-07-22_1654.fpg
     - scilabdemo_2025-07-22_1310.fpg
     - top.sof
+    - scilabdemo_2025-07-30_0002.fpg
+    - scilabdemo_2025-07-23_2326.fpg
+    - scilabdemo_2025-07-23_1807.fpg
+    - scilabdemo_2025-07-28_2006.fpg
+    - scilabdemo_2025-07-24_1738.fpg
     - scilabdemo_2025-07-22_1939.fpg
+    - scilabdemo_2025-07-25_0029.fpg
+    - scilabdemo_2025-07-24_0901.fpg
+    - scilabdemo_2025-07-23_2322.fpg
+    - scilabdemo_2025-07-23_1407.fpg
+    - scilabdemo_2025-07-28_2030.fpg
+    - scilabdemo_2025-07-28_1951.fpg
+    - scilabdemo_2025-08-06_1748.fpg
+    - scilabdemo_2025-07-25_1517.fpg
+    - scilabdemo_2025-07-30_0016.fpg
+    - scilabdemo_2025-07-23_1216.fpg
+    - scilabdemo_2025-07-24_0849.fpg
+    - scilabdemo_2025-07-28_1958.fpg
+    - scilabdemo_2025-07-23_1925.fpg
+    - scilabdemo_2025-07-22_2122.fpg
+    - scilabdemo_2025-07-23_2356.fpg
     - scilabdemo_2025-07-18_1849.fpg
+    - scilabdemo_2025-07-28_1933.fpg
+    - scilabdemo_2025-07-24_1748.fpg
+    - scilabdemo_2025-07-23_1931.fpg
+    - scilabdemo_2025-07-24_0916.fpg
+    - scilabdemo_2025-07-23_1829.fpg
+    - scilabdemo_2025-07-23_1226.fpg
+    - scilabdemo_2025-07-23_1827.fpg
+    - scilabdemo_2025-07-24_0859.fpg
+    - scilabdemo_2025-07-23_1433.fpg
     - scilabdemo_2025-07-22_1304.fpg
+    - scilabdemo_2025-07-23_1923.fpg
 Adding tcl command: set_global_assignment -name VHDL_FILE "/data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sw_reg_pkg.vhd" at stage pre_synth
 [QUARTUS BACKEND] add_source() called for: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sw_reg.vhd
 [DEBUG] HDL output dir contents:
     - scilabdemo_2025-07-22_1532.fpg
+    - scilabdemo_2025-07-25_0000.fpg
+    - scilabdemo_2025-07-23_2309.fpg
+    - scilabdemo_2025-07-23_1329.fpg
+    - scilabdemo_2025-07-24_2354.fpg
+    - scilabdemo_2025-07-24_2340.fpg
+    - scilabdemo_2025-07-23_1714.fpg
+    - scilabdemo_2025-07-22_2258.fpg
+    - scilabdemo_2025-07-24_0924.fpg
+    - scilabdemo_2025-07-28_2059.fpg
+    - scilabdemo_2025-07-22_2329.fpg
+    - scilabdemo_2025-07-24_2042.fpg
+    - scilabdemo_2025-07-23_0010.fpg
+    - scilabdemo_2025-08-06_1430.fpg
+    - scilabdemo_2025-07-24_0902.fpg
+    - scilabdemo_2025-07-22_2007.fpg
+    - scilabdemo_2025-07-28_2301.fpg
+    - scilabdemo_2025-07-28_1943.fpg
+    - scilabdemo_2025-07-28_2010.fpg
+    - scilabdemo_2025-07-25_1547.fpg
+    - scilabdemo_2025-07-24_1741.fpg
+    - scilabdemo_2025-07-25_1548.fpg
+    - scilabdemo_2025-07-22_2301.fpg
+    - scilabdemo_2025-07-28_2057.fpg
+    - scilabdemo_2025-07-22_2255.fpg
+    - scilabdemo_2025-07-25_1539.fpg
     - top.rbf
+    - scilabdemo_2025-07-23_2325.fpg
+    - scilabdemo_2025-07-24_0856.fpg
+    - scilabdemo_2025-07-23_2350.fpg
+    - scilabdemo_2025-07-23_1426.fpg
+    - scilabdemo_2025-07-23_1839.fpg
+    - scilabdemo_2025-08-06_1816.fpg
+    - scilabdemo_2025-07-23_1831.fpg
+    - scilabdemo_2025-07-23_1105.fpg
+    - scilabdemo_2025-07-23_1826.fpg
+    - scilabdemo_2025-07-23_1808.fpg
+    - scilabdemo_2025-07-28_2043.fpg
+    - scilabdemo_2025-07-23_1421.fpg
+    - scilabdemo_2025-07-23_1903.fpg
+    - scilabdemo_2025-07-28_2000.fpg
+    - scilabdemo_2025-07-23_1740.fpg
+    - scilabdemo_2025-07-24_0843.fpg
+    - scilabdemo_2025-07-28_2036.fpg
     - scilabdemo_2025-07-22_1322.fpg
+    - scilabdemo_2025-07-23_1819.fpg
+    - scilabdemo_2025-07-28_2012.fpg
+    - scilabdemo_2025-07-23_1127.fpg
+    - scilabdemo_2025-07-23_1219.fpg
+    - scilabdemo_2025-07-23_1418.fpg
+    - scilabdemo_2025-07-24_2334.fpg
+    - scilabdemo_2025-07-23_1929.fpg
     - scilabdemo_2025-07-22_1953.fpg
+    - scilabdemo_2025-07-23_1810.fpg
     - scilabdemo_2025-07-22_1654.fpg
     - scilabdemo_2025-07-22_1310.fpg
     - top.sof
+    - scilabdemo_2025-07-30_0002.fpg
+    - scilabdemo_2025-07-23_2326.fpg
+    - scilabdemo_2025-07-23_1807.fpg
+    - scilabdemo_2025-07-28_2006.fpg
+    - scilabdemo_2025-07-24_1738.fpg
     - scilabdemo_2025-07-22_1939.fpg
+    - scilabdemo_2025-07-25_0029.fpg
+    - scilabdemo_2025-07-24_0901.fpg
+    - scilabdemo_2025-07-23_2322.fpg
+    - scilabdemo_2025-07-23_1407.fpg
+    - scilabdemo_2025-07-28_2030.fpg
+    - scilabdemo_2025-07-28_1951.fpg
+    - scilabdemo_2025-08-06_1748.fpg
+    - scilabdemo_2025-07-25_1517.fpg
+    - scilabdemo_2025-07-30_0016.fpg
+    - scilabdemo_2025-07-23_1216.fpg
+    - scilabdemo_2025-07-24_0849.fpg
+    - scilabdemo_2025-07-28_1958.fpg
+    - scilabdemo_2025-07-23_1925.fpg
+    - scilabdemo_2025-07-22_2122.fpg
+    - scilabdemo_2025-07-23_2356.fpg
     - scilabdemo_2025-07-18_1849.fpg
+    - scilabdemo_2025-07-28_1933.fpg
+    - scilabdemo_2025-07-24_1748.fpg
+    - scilabdemo_2025-07-23_1931.fpg
+    - scilabdemo_2025-07-24_0916.fpg
+    - scilabdemo_2025-07-23_1829.fpg
+    - scilabdemo_2025-07-23_1226.fpg
+    - scilabdemo_2025-07-23_1827.fpg
+    - scilabdemo_2025-07-24_0859.fpg
+    - scilabdemo_2025-07-23_1433.fpg
     - scilabdemo_2025-07-22_1304.fpg
+    - scilabdemo_2025-07-23_1923.fpg
 Adding tcl command: set_global_assignment -name VHDL_FILE "/data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sw_reg.vhd" at stage pre_synth
 [QUARTUS BACKEND] add_source() called for: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic_pkg.vhd
 [DEBUG] HDL output dir contents:
     - scilabdemo_2025-07-22_1532.fpg
+    - scilabdemo_2025-07-25_0000.fpg
+    - scilabdemo_2025-07-23_2309.fpg
+    - scilabdemo_2025-07-23_1329.fpg
+    - scilabdemo_2025-07-24_2354.fpg
+    - scilabdemo_2025-07-24_2340.fpg
+    - scilabdemo_2025-07-23_1714.fpg
+    - scilabdemo_2025-07-22_2258.fpg
+    - scilabdemo_2025-07-24_0924.fpg
+    - scilabdemo_2025-07-28_2059.fpg
+    - scilabdemo_2025-07-22_2329.fpg
+    - scilabdemo_2025-07-24_2042.fpg
+    - scilabdemo_2025-07-23_0010.fpg
+    - scilabdemo_2025-08-06_1430.fpg
+    - scilabdemo_2025-07-24_0902.fpg
+    - scilabdemo_2025-07-22_2007.fpg
+    - scilabdemo_2025-07-28_2301.fpg
+    - scilabdemo_2025-07-28_1943.fpg
+    - scilabdemo_2025-07-28_2010.fpg
+    - scilabdemo_2025-07-25_1547.fpg
+    - scilabdemo_2025-07-24_1741.fpg
+    - scilabdemo_2025-07-25_1548.fpg
+    - scilabdemo_2025-07-22_2301.fpg
+    - scilabdemo_2025-07-28_2057.fpg
+    - scilabdemo_2025-07-22_2255.fpg
+    - scilabdemo_2025-07-25_1539.fpg
     - top.rbf
+    - scilabdemo_2025-07-23_2325.fpg
+    - scilabdemo_2025-07-24_0856.fpg
+    - scilabdemo_2025-07-23_2350.fpg
+    - scilabdemo_2025-07-23_1426.fpg
+    - scilabdemo_2025-07-23_1839.fpg
+    - scilabdemo_2025-08-06_1816.fpg
+    - scilabdemo_2025-07-23_1831.fpg
+    - scilabdemo_2025-07-23_1105.fpg
+    - scilabdemo_2025-07-23_1826.fpg
+    - scilabdemo_2025-07-23_1808.fpg
+    - scilabdemo_2025-07-28_2043.fpg
+    - scilabdemo_2025-07-23_1421.fpg
+    - scilabdemo_2025-07-23_1903.fpg
+    - scilabdemo_2025-07-28_2000.fpg
+    - scilabdemo_2025-07-23_1740.fpg
+    - scilabdemo_2025-07-24_0843.fpg
+    - scilabdemo_2025-07-28_2036.fpg
     - scilabdemo_2025-07-22_1322.fpg
+    - scilabdemo_2025-07-23_1819.fpg
+    - scilabdemo_2025-07-28_2012.fpg
+    - scilabdemo_2025-07-23_1127.fpg
+    - scilabdemo_2025-07-23_1219.fpg
+    - scilabdemo_2025-07-23_1418.fpg
+    - scilabdemo_2025-07-24_2334.fpg
+    - scilabdemo_2025-07-23_1929.fpg
     - scilabdemo_2025-07-22_1953.fpg
+    - scilabdemo_2025-07-23_1810.fpg
     - scilabdemo_2025-07-22_1654.fpg
     - scilabdemo_2025-07-22_1310.fpg
     - top.sof
+    - scilabdemo_2025-07-30_0002.fpg
+    - scilabdemo_2025-07-23_2326.fpg
+    - scilabdemo_2025-07-23_1807.fpg
+    - scilabdemo_2025-07-28_2006.fpg
+    - scilabdemo_2025-07-24_1738.fpg
     - scilabdemo_2025-07-22_1939.fpg
+    - scilabdemo_2025-07-25_0029.fpg
+    - scilabdemo_2025-07-24_0901.fpg
+    - scilabdemo_2025-07-23_2322.fpg
+    - scilabdemo_2025-07-23_1407.fpg
+    - scilabdemo_2025-07-28_2030.fpg
+    - scilabdemo_2025-07-28_1951.fpg
+    - scilabdemo_2025-08-06_1748.fpg
+    - scilabdemo_2025-07-25_1517.fpg
+    - scilabdemo_2025-07-30_0016.fpg
+    - scilabdemo_2025-07-23_1216.fpg
+    - scilabdemo_2025-07-24_0849.fpg
+    - scilabdemo_2025-07-28_1958.fpg
+    - scilabdemo_2025-07-23_1925.fpg
+    - scilabdemo_2025-07-22_2122.fpg
+    - scilabdemo_2025-07-23_2356.fpg
     - scilabdemo_2025-07-18_1849.fpg
+    - scilabdemo_2025-07-28_1933.fpg
+    - scilabdemo_2025-07-24_1748.fpg
+    - scilabdemo_2025-07-23_1931.fpg
+    - scilabdemo_2025-07-24_0916.fpg
+    - scilabdemo_2025-07-23_1829.fpg
+    - scilabdemo_2025-07-23_1226.fpg
+    - scilabdemo_2025-07-23_1827.fpg
+    - scilabdemo_2025-07-24_0859.fpg
+    - scilabdemo_2025-07-23_1433.fpg
     - scilabdemo_2025-07-22_1304.fpg
+    - scilabdemo_2025-07-23_1923.fpg
 Adding tcl command: set_global_assignment -name VHDL_FILE "/data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic_pkg.vhd" at stage pre_synth
-[32m[INFO    ]: Parsing constraint: <castro.PinConstraint object at 0x7ff0bb81f190>[0m
-[32m[INFO    ]: Parsing constraint: <castro.PinConstraint object at 0x7ff0bb81f1c0>[0m
-[32m[INFO    ]: Parsing constraint: <castro.PinConstraint object at 0x7ff0bb81f1f0>[0m
-[32m[INFO    ]: Parsing constraint: <castro.ClkConstraint object at 0x7ff0bb81f100>[0m
-[32m[INFO    ]: Parsing constraint: <castro.ClkConstraint object at 0x7ff0bb81f130>[0m
+[QUARTUS BACKEND] add_source() called for: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys_pkg.vhd
+[DEBUG] HDL output dir contents:
+    - scilabdemo_2025-07-22_1532.fpg
+    - scilabdemo_2025-07-25_0000.fpg
+    - scilabdemo_2025-07-23_2309.fpg
+    - scilabdemo_2025-07-23_1329.fpg
+    - scilabdemo_2025-07-24_2354.fpg
+    - scilabdemo_2025-07-24_2340.fpg
+    - scilabdemo_2025-07-23_1714.fpg
+    - scilabdemo_2025-07-22_2258.fpg
+    - scilabdemo_2025-07-24_0924.fpg
+    - scilabdemo_2025-07-28_2059.fpg
+    - scilabdemo_2025-07-22_2329.fpg
+    - scilabdemo_2025-07-24_2042.fpg
+    - scilabdemo_2025-07-23_0010.fpg
+    - scilabdemo_2025-08-06_1430.fpg
+    - scilabdemo_2025-07-24_0902.fpg
+    - scilabdemo_2025-07-22_2007.fpg
+    - scilabdemo_2025-07-28_2301.fpg
+    - scilabdemo_2025-07-28_1943.fpg
+    - scilabdemo_2025-07-28_2010.fpg
+    - scilabdemo_2025-07-25_1547.fpg
+    - scilabdemo_2025-07-24_1741.fpg
+    - scilabdemo_2025-07-25_1548.fpg
+    - scilabdemo_2025-07-22_2301.fpg
+    - scilabdemo_2025-07-28_2057.fpg
+    - scilabdemo_2025-07-22_2255.fpg
+    - scilabdemo_2025-07-25_1539.fpg
+    - top.rbf
+    - scilabdemo_2025-07-23_2325.fpg
+    - scilabdemo_2025-07-24_0856.fpg
+    - scilabdemo_2025-07-23_2350.fpg
+    - scilabdemo_2025-07-23_1426.fpg
+    - scilabdemo_2025-07-23_1839.fpg
+    - scilabdemo_2025-08-06_1816.fpg
+    - scilabdemo_2025-07-23_1831.fpg
+    - scilabdemo_2025-07-23_1105.fpg
+    - scilabdemo_2025-07-23_1826.fpg
+    - scilabdemo_2025-07-23_1808.fpg
+    - scilabdemo_2025-07-28_2043.fpg
+    - scilabdemo_2025-07-23_1421.fpg
+    - scilabdemo_2025-07-23_1903.fpg
+    - scilabdemo_2025-07-28_2000.fpg
+    - scilabdemo_2025-07-23_1740.fpg
+    - scilabdemo_2025-07-24_0843.fpg
+    - scilabdemo_2025-07-28_2036.fpg
+    - scilabdemo_2025-07-22_1322.fpg
+    - scilabdemo_2025-07-23_1819.fpg
+    - scilabdemo_2025-07-28_2012.fpg
+    - scilabdemo_2025-07-23_1127.fpg
+    - scilabdemo_2025-07-23_1219.fpg
+    - scilabdemo_2025-07-23_1418.fpg
+    - scilabdemo_2025-07-24_2334.fpg
+    - scilabdemo_2025-07-23_1929.fpg
+    - scilabdemo_2025-07-22_1953.fpg
+    - scilabdemo_2025-07-23_1810.fpg
+    - scilabdemo_2025-07-22_1654.fpg
+    - scilabdemo_2025-07-22_1310.fpg
+    - top.sof
+    - scilabdemo_2025-07-30_0002.fpg
+    - scilabdemo_2025-07-23_2326.fpg
+    - scilabdemo_2025-07-23_1807.fpg
+    - scilabdemo_2025-07-28_2006.fpg
+    - scilabdemo_2025-07-24_1738.fpg
+    - scilabdemo_2025-07-22_1939.fpg
+    - scilabdemo_2025-07-25_0029.fpg
+    - scilabdemo_2025-07-24_0901.fpg
+    - scilabdemo_2025-07-23_2322.fpg
+    - scilabdemo_2025-07-23_1407.fpg
+    - scilabdemo_2025-07-28_2030.fpg
+    - scilabdemo_2025-07-28_1951.fpg
+    - scilabdemo_2025-08-06_1748.fpg
+    - scilabdemo_2025-07-25_1517.fpg
+    - scilabdemo_2025-07-30_0016.fpg
+    - scilabdemo_2025-07-23_1216.fpg
+    - scilabdemo_2025-07-24_0849.fpg
+    - scilabdemo_2025-07-28_1958.fpg
+    - scilabdemo_2025-07-23_1925.fpg
+    - scilabdemo_2025-07-22_2122.fpg
+    - scilabdemo_2025-07-23_2356.fpg
+    - scilabdemo_2025-07-18_1849.fpg
+    - scilabdemo_2025-07-28_1933.fpg
+    - scilabdemo_2025-07-24_1748.fpg
+    - scilabdemo_2025-07-23_1931.fpg
+    - scilabdemo_2025-07-24_0916.fpg
+    - scilabdemo_2025-07-23_1829.fpg
+    - scilabdemo_2025-07-23_1226.fpg
+    - scilabdemo_2025-07-23_1827.fpg
+    - scilabdemo_2025-07-24_0859.fpg
+    - scilabdemo_2025-07-23_1433.fpg
+    - scilabdemo_2025-07-22_1304.fpg
+    - scilabdemo_2025-07-23_1923.fpg
+Adding tcl command: set_global_assignment -name VHDL_FILE "/data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys_pkg.vhd" at stage pre_synth
+[QUARTUS BACKEND] add_source() called for: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd
+[DEBUG] HDL output dir contents:
+    - scilabdemo_2025-07-22_1532.fpg
+    - scilabdemo_2025-07-25_0000.fpg
+    - scilabdemo_2025-07-23_2309.fpg
+    - scilabdemo_2025-07-23_1329.fpg
+    - scilabdemo_2025-07-24_2354.fpg
+    - scilabdemo_2025-07-24_2340.fpg
+    - scilabdemo_2025-07-23_1714.fpg
+    - scilabdemo_2025-07-22_2258.fpg
+    - scilabdemo_2025-07-24_0924.fpg
+    - scilabdemo_2025-07-28_2059.fpg
+    - scilabdemo_2025-07-22_2329.fpg
+    - scilabdemo_2025-07-24_2042.fpg
+    - scilabdemo_2025-07-23_0010.fpg
+    - scilabdemo_2025-08-06_1430.fpg
+    - scilabdemo_2025-07-24_0902.fpg
+    - scilabdemo_2025-07-22_2007.fpg
+    - scilabdemo_2025-07-28_2301.fpg
+    - scilabdemo_2025-07-28_1943.fpg
+    - scilabdemo_2025-07-28_2010.fpg
+    - scilabdemo_2025-07-25_1547.fpg
+    - scilabdemo_2025-07-24_1741.fpg
+    - scilabdemo_2025-07-25_1548.fpg
+    - scilabdemo_2025-07-22_2301.fpg
+    - scilabdemo_2025-07-28_2057.fpg
+    - scilabdemo_2025-07-22_2255.fpg
+    - scilabdemo_2025-07-25_1539.fpg
+    - top.rbf
+    - scilabdemo_2025-07-23_2325.fpg
+    - scilabdemo_2025-07-24_0856.fpg
+    - scilabdemo_2025-07-23_2350.fpg
+    - scilabdemo_2025-07-23_1426.fpg
+    - scilabdemo_2025-07-23_1839.fpg
+    - scilabdemo_2025-08-06_1816.fpg
+    - scilabdemo_2025-07-23_1831.fpg
+    - scilabdemo_2025-07-23_1105.fpg
+    - scilabdemo_2025-07-23_1826.fpg
+    - scilabdemo_2025-07-23_1808.fpg
+    - scilabdemo_2025-07-28_2043.fpg
+    - scilabdemo_2025-07-23_1421.fpg
+    - scilabdemo_2025-07-23_1903.fpg
+    - scilabdemo_2025-07-28_2000.fpg
+    - scilabdemo_2025-07-23_1740.fpg
+    - scilabdemo_2025-07-24_0843.fpg
+    - scilabdemo_2025-07-28_2036.fpg
+    - scilabdemo_2025-07-22_1322.fpg
+    - scilabdemo_2025-07-23_1819.fpg
+    - scilabdemo_2025-07-28_2012.fpg
+    - scilabdemo_2025-07-23_1127.fpg
+    - scilabdemo_2025-07-23_1219.fpg
+    - scilabdemo_2025-07-23_1418.fpg
+    - scilabdemo_2025-07-24_2334.fpg
+    - scilabdemo_2025-07-23_1929.fpg
+    - scilabdemo_2025-07-22_1953.fpg
+    - scilabdemo_2025-07-23_1810.fpg
+    - scilabdemo_2025-07-22_1654.fpg
+    - scilabdemo_2025-07-22_1310.fpg
+    - top.sof
+    - scilabdemo_2025-07-30_0002.fpg
+    - scilabdemo_2025-07-23_2326.fpg
+    - scilabdemo_2025-07-23_1807.fpg
+    - scilabdemo_2025-07-28_2006.fpg
+    - scilabdemo_2025-07-24_1738.fpg
+    - scilabdemo_2025-07-22_1939.fpg
+    - scilabdemo_2025-07-25_0029.fpg
+    - scilabdemo_2025-07-24_0901.fpg
+    - scilabdemo_2025-07-23_2322.fpg
+    - scilabdemo_2025-07-23_1407.fpg
+    - scilabdemo_2025-07-28_2030.fpg
+    - scilabdemo_2025-07-28_1951.fpg
+    - scilabdemo_2025-08-06_1748.fpg
+    - scilabdemo_2025-07-25_1517.fpg
+    - scilabdemo_2025-07-30_0016.fpg
+    - scilabdemo_2025-07-23_1216.fpg
+    - scilabdemo_2025-07-24_0849.fpg
+    - scilabdemo_2025-07-28_1958.fpg
+    - scilabdemo_2025-07-23_1925.fpg
+    - scilabdemo_2025-07-22_2122.fpg
+    - scilabdemo_2025-07-23_2356.fpg
+    - scilabdemo_2025-07-18_1849.fpg
+    - scilabdemo_2025-07-28_1933.fpg
+    - scilabdemo_2025-07-24_1748.fpg
+    - scilabdemo_2025-07-23_1931.fpg
+    - scilabdemo_2025-07-24_0916.fpg
+    - scilabdemo_2025-07-23_1829.fpg
+    - scilabdemo_2025-07-23_1226.fpg
+    - scilabdemo_2025-07-23_1827.fpg
+    - scilabdemo_2025-07-24_0859.fpg
+    - scilabdemo_2025-07-23_1433.fpg
+    - scilabdemo_2025-07-22_1304.fpg
+    - scilabdemo_2025-07-23_1923.fpg
+Adding tcl command: set_global_assignment -name VHDL_FILE "/data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd" at stage pre_synth
+[32m[INFO    ]: Parsing constraint: <castro.PinConstraint object at 0x7ff757e98ac0>[0m
+I DISCOVERED A CONSTRAINT: <castro.PinConstraint object at 0x7ff757e98ac0>
+{'diff_term': [None], 'drive_strength': [None], 'io_standard': ['3.3-V LVTTL'], 'location': ['PIN_V11'], 'portname': 'fpga_clk1_50', 'portname_indices': [], 'slew_rate': 0, 'symbolic_indices': [0], 'symbolic_name': 'fpga_clk1_50', 'is_vector': False}
+[32m[INFO    ]: Parsing constraint: <castro.ClkConstraint object at 0x7ff757e98a30>[0m
+I DISCOVERED A CONSTRAINT: <castro.ClkConstraint object at 0x7ff757e98a30>
+DISCOVERED A CLOCK CONSTRAINT
+[32m[INFO    ]: Parsing constraint: <castro.ClkConstraint object at 0x7ff757e98a60>[0m
+I DISCOVERED A CONSTRAINT: <castro.ClkConstraint object at 0x7ff757e98a60>
+DISCOVERED A CLOCK CONSTRAINT
 [32m[INFO    ]: Wrote constraint files:
-  QSF: /data/DesignFiles/scilabdemo/user_const.qsf
-  SDC: /data/DesignFiles/scilabdemo/user_const.sdc[0m
-Adding tcl command: source "/data/DesignFiles/scilabdemo/user_const.qsf" at stage pre_synth
+  QSF: /data/DesignFiles/scilabdemo/myproj/user_const.qsf
+  SDC: /data/DesignFiles/scilabdemo/myproj/user_const.sdc[0m
+Adding tcl command: source "/data/DesignFiles/scilabdemo/myproj/user_const.qsf" at stage pre_synth
 Adding tcl command: load_package flow at stage init
 Adding tcl command: set impl_dir "/data/DesignFiles/scilabdemo/myproj" at stage init
 Adding tcl command: load_package flow at stage init
@@ -441,44 +2223,43 @@ Info: Running Quartus Prime Shell
     Info: Intel and sold by Intel or its authorized distributors.  Please
     Info: refer to the applicable agreement for further details, at
     Info: https://fpgasoftware.intel.com/eula.
-    Info: Processing started: Tue Jul 22 20:07:12 2025
+    Info: Processing started: Wed Aug  6 19:07:21 2025
 Info: Command: quartus_sh -t /data/DesignFiles/scilabdemo/gogogo.tcl
 Info (125061): Changed top-level design entity name to "top"
 Info: *******************************************************************
 Info: Running Quartus Prime Analysis & Synthesis
     Info: Version 23.1std.1 Build 993 05/14/2024 SC Lite Edition
-    Info: Processing started: Tue Jul 22 20:07:13 2025
+    Info: Processing started: Wed Aug  6 19:07:22 2025
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off myproj -c myproj
-Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
-Info (20030): Parallel compilation is enabled and will use 16 of the 16 processors detected
+Info (20032): Parallel compilation is enabled and will use up to 12 processors
+Warning (10275): Verilog HDL Module Instantiation warning at top.v(242): ignored dangling comma in List of Port Connections File: /data/DesignFiles/scilabdemo/top.v Line: 242
 Info (12021): Found 1 design units, including 1 entities, in source file /data/DesignFiles/scilabdemo/top.v
     Info (12023): Found entity 1: top File: /data/DesignFiles/scilabdemo/top.v Line: 7
-Warning (10335): Unrecognized synthesis attribute "ASYNC_REG" at /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_simulink2ppc/wb_register_simulink2ppc.v(33) File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_simulink2ppc/wb_register_simulink2ppc.v Line: 33
-Warning (10335): Unrecognized synthesis attribute "ASYNC_REG" at /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_simulink2ppc/wb_register_simulink2ppc.v(34) File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_simulink2ppc/wb_register_simulink2ppc.v Line: 34
-Warning (10335): Unrecognized synthesis attribute "ASYNC_REG" at /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_simulink2ppc/wb_register_simulink2ppc.v(75) File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_simulink2ppc/wb_register_simulink2ppc.v Line: 75
-Warning (10335): Unrecognized synthesis attribute "ASYNC_REG" at /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_simulink2ppc/wb_register_simulink2ppc.v(76) File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_simulink2ppc/wb_register_simulink2ppc.v Line: 76
-Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_simulink2ppc/wb_register_simulink2ppc.v
-    Info (12023): Found entity 1: wb_register_simulink2ppc File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_simulink2ppc/wb_register_simulink2ppc.v Line: 1
-Warning (10335): Unrecognized synthesis attribute "ASYNC_REG" at /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_ppc2simulink/wb_register_ppc2simulink.v(31) File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_ppc2simulink/wb_register_ppc2simulink.v Line: 31
-Warning (10335): Unrecognized synthesis attribute "ASYNC_REG" at /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_ppc2simulink/wb_register_ppc2simulink.v(32) File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_ppc2simulink/wb_register_ppc2simulink.v Line: 32
-Warning (10335): Unrecognized synthesis attribute "ASYNC_REG" at /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_ppc2simulink/wb_register_ppc2simulink.v(34) File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_ppc2simulink/wb_register_ppc2simulink.v Line: 34
-Warning (10335): Unrecognized synthesis attribute "ASYNC_REG" at /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_ppc2simulink/wb_register_ppc2simulink.v(35) File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_ppc2simulink/wb_register_ppc2simulink.v Line: 35
-Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_ppc2simulink/wb_register_ppc2simulink.v
-    Info (12023): Found entity 1: wb_register_ppc2simulink File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/wb_register_ppc2simulink/wb_register_ppc2simulink.v Line: 1
 Info (12021): Found 2 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd
     Info (12022): Found design unit 1: cdc_synchroniser-cdc_synchroniser File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd Line: 148
     Info (12023): Found entity 1: cdc_synchroniser File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd Line: 129
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/de10nano.v
+    Info (12023): Found entity 1: de10nano File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/de10nano.v Line: 9
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/de10nano_hps_0_fpga_interfaces.sv
+    Info (12023): Found entity 1: de10nano_hps_0_fpga_interfaces File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/de10nano_hps_0_fpga_interfaces.sv Line: 14
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/sys_block_intel/sys_block_counter.v
+    Info (12023): Found entity 1: sys_block_counter File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/sys_block_intel/sys_block_counter.v Line: 16
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/sys_block_intel/sys_block_intel.v
+    Info (12023): Found entity 1: sys_block_intel File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/sys_block_intel/sys_block_intel.v Line: 1
 Info (12021): Found 1 design units, including 0 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_pkg.vhd
     Info (12022): Found design unit 1: axi4lite_pkg File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_pkg.vhd Line: 44
 Info (12021): Found 2 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_slave_logic.vhd
     Info (12022): Found design unit 1: axi4lite_slave_logic-axi4lite_slave_logic_a File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_slave_logic.vhd Line: 66
     Info (12023): Found entity 1: axi4lite_slave_logic File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_slave_logic.vhd Line: 54
 Info (12021): Found 2 design units, including 1 entities, in source file /data/DesignFiles/scilabdemo/axi4lite_ic_wrapper.vhdl
-    Info (12022): Found design unit 1: axi4lite_ic_wrapper-struct File: /data/DesignFiles/scilabdemo/axi4lite_ic_wrapper.vhdl Line: 40
-    Info (12023): Found entity 1: axi4lite_ic_wrapper File: /data/DesignFiles/scilabdemo/axi4lite_ic_wrapper.vhdl Line: 10
+    Info (12022): Found design unit 1: axi4lite_ic_wrapper-struct File: /data/DesignFiles/scilabdemo/axi4lite_ic_wrapper.vhdl Line: 51
+    Info (12023): Found entity 1: axi4lite_ic_wrapper File: /data/DesignFiles/scilabdemo/axi4lite_ic_wrapper.vhdl Line: 11
 Info (12021): Found 2 design units, including 0 entities, in source file /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_axi4lite_top_mmap_pkg.vhd
     Info (12022): Found design unit 1: axi4lite_axi4lite_top_mmap_pkg File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_axi4lite_top_mmap_pkg.vhd Line: 24
-    Info (12022): Found design unit 2: axi4lite_axi4lite_top_mmap_pkg-body File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_axi4lite_top_mmap_pkg.vhd Line: 67
+    Info (12022): Found design unit 2: axi4lite_axi4lite_top_mmap_pkg-body File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_axi4lite_top_mmap_pkg.vhd Line: 68
+Info (12021): Found 2 design units, including 1 entities, in source file /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys_muxdemux.vhd
+    Info (12022): Found design unit 1: axi4lite_sys_muxdemux-axi4lite_sys_muxdemux_a File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys_muxdemux.vhd Line: 39
+    Info (12023): Found entity 1: axi4lite_sys_muxdemux File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys_muxdemux.vhd Line: 26
 Info (12021): Found 2 design units, including 1 entities, in source file /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sw_reg_muxdemux.vhd
     Info (12022): Found design unit 1: axi4lite_sw_reg_muxdemux-axi4lite_sw_reg_muxdemux_a File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sw_reg_muxdemux.vhd Line: 39
     Info (12023): Found entity 1: axi4lite_sw_reg_muxdemux File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sw_reg_muxdemux.vhd Line: 26
@@ -494,158 +2275,250 @@ Info (12021): Found 2 design units, including 1 entities, in source file /data/D
 Info (12021): Found 2 design units, including 0 entities, in source file /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic_pkg.vhd
     Info (12022): Found design unit 1: axi4lite_axi4lite_top_ic_pkg File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic_pkg.vhd Line: 24
     Info (12022): Found design unit 2: axi4lite_axi4lite_top_ic_pkg-body File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic_pkg.vhd Line: 50
+Info (12021): Found 2 design units, including 0 entities, in source file /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys_pkg.vhd
+    Info (12022): Found design unit 1: axi4lite_sys_pkg File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys_pkg.vhd Line: 24
+    Info (12022): Found design unit 2: axi4lite_sys_pkg-body File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys_pkg.vhd Line: 124
+Info (12021): Found 2 design units, including 1 entities, in source file /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd
+    Info (12022): Found design unit 1: axi4lite_sys-axi4lite_sys_a File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 42
+    Info (12023): Found entity 1: axi4lite_sys File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 27
 Info (12021): Found 1 design units, including 1 entities, in source file /data/DesignFiles/scilabdemo/scilabdemo_ip.v
     Info (12023): Found entity 1: scilabdemo_ip File: /data/DesignFiles/scilabdemo/scilabdemo_ip.v Line: 7
-Warning (10236): Verilog HDL Implicit Net warning at top.v(81): created implicit net for "M_AXI_araddr" File: /data/DesignFiles/scilabdemo/top.v Line: 81
-Warning (10236): Verilog HDL Implicit Net warning at top.v(82): created implicit net for "M_AXI_arready" File: /data/DesignFiles/scilabdemo/top.v Line: 82
-Warning (10236): Verilog HDL Implicit Net warning at top.v(83): created implicit net for "M_AXI_arvalid" File: /data/DesignFiles/scilabdemo/top.v Line: 83
-Warning (10236): Verilog HDL Implicit Net warning at top.v(84): created implicit net for "M_AXI_awaddr" File: /data/DesignFiles/scilabdemo/top.v Line: 84
-Warning (10236): Verilog HDL Implicit Net warning at top.v(85): created implicit net for "M_AXI_awready" File: /data/DesignFiles/scilabdemo/top.v Line: 85
-Warning (10236): Verilog HDL Implicit Net warning at top.v(86): created implicit net for "M_AXI_awvalid" File: /data/DesignFiles/scilabdemo/top.v Line: 86
-Warning (10236): Verilog HDL Implicit Net warning at top.v(87): created implicit net for "M_AXI_bready" File: /data/DesignFiles/scilabdemo/top.v Line: 87
-Warning (10236): Verilog HDL Implicit Net warning at top.v(88): created implicit net for "M_AXI_bresp" File: /data/DesignFiles/scilabdemo/top.v Line: 88
-Warning (10236): Verilog HDL Implicit Net warning at top.v(89): created implicit net for "M_AXI_bvalid" File: /data/DesignFiles/scilabdemo/top.v Line: 89
-Warning (10236): Verilog HDL Implicit Net warning at top.v(90): created implicit net for "M_AXI_rdata" File: /data/DesignFiles/scilabdemo/top.v Line: 90
-Warning (10236): Verilog HDL Implicit Net warning at top.v(91): created implicit net for "M_AXI_rready" File: /data/DesignFiles/scilabdemo/top.v Line: 91
-Warning (10236): Verilog HDL Implicit Net warning at top.v(92): created implicit net for "M_AXI_rresp" File: /data/DesignFiles/scilabdemo/top.v Line: 92
-Warning (10236): Verilog HDL Implicit Net warning at top.v(93): created implicit net for "M_AXI_rvalid" File: /data/DesignFiles/scilabdemo/top.v Line: 93
-Warning (10236): Verilog HDL Implicit Net warning at top.v(94): created implicit net for "M_AXI_wdata" File: /data/DesignFiles/scilabdemo/top.v Line: 94
-Warning (10236): Verilog HDL Implicit Net warning at top.v(95): created implicit net for "M_AXI_wready" File: /data/DesignFiles/scilabdemo/top.v Line: 95
-Warning (10236): Verilog HDL Implicit Net warning at top.v(96): created implicit net for "M_AXI_wstrb" File: /data/DesignFiles/scilabdemo/top.v Line: 96
-Warning (10236): Verilog HDL Implicit Net warning at top.v(97): created implicit net for "M_AXI_wvalid" File: /data/DesignFiles/scilabdemo/top.v Line: 97
-Warning (10236): Verilog HDL Implicit Net warning at top.v(115): created implicit net for "axil_rst" File: /data/DesignFiles/scilabdemo/top.v Line: 115
-Warning (10236): Verilog HDL Implicit Net warning at top.v(127): created implicit net for "user_rst" File: /data/DesignFiles/scilabdemo/top.v Line: 127
-Warning (10236): Verilog HDL Implicit Net warning at top.v(155): created implicit net for "M_AXI_ARADDR" File: /data/DesignFiles/scilabdemo/top.v Line: 155
-Warning (10236): Verilog HDL Implicit Net warning at top.v(156): created implicit net for "M_AXI_ARREADY" File: /data/DesignFiles/scilabdemo/top.v Line: 156
-Warning (10236): Verilog HDL Implicit Net warning at top.v(157): created implicit net for "M_AXI_ARVALID" File: /data/DesignFiles/scilabdemo/top.v Line: 157
-Warning (10236): Verilog HDL Implicit Net warning at top.v(158): created implicit net for "M_AXI_AWADDR" File: /data/DesignFiles/scilabdemo/top.v Line: 158
-Warning (10236): Verilog HDL Implicit Net warning at top.v(159): created implicit net for "M_AXI_AWREADY" File: /data/DesignFiles/scilabdemo/top.v Line: 159
-Warning (10236): Verilog HDL Implicit Net warning at top.v(160): created implicit net for "M_AXI_AWVALID" File: /data/DesignFiles/scilabdemo/top.v Line: 160
-Warning (10236): Verilog HDL Implicit Net warning at top.v(161): created implicit net for "M_AXI_BREADY" File: /data/DesignFiles/scilabdemo/top.v Line: 161
-Warning (10236): Verilog HDL Implicit Net warning at top.v(162): created implicit net for "M_AXI_BRESP" File: /data/DesignFiles/scilabdemo/top.v Line: 162
-Warning (10236): Verilog HDL Implicit Net warning at top.v(163): created implicit net for "M_AXI_BVALID" File: /data/DesignFiles/scilabdemo/top.v Line: 163
-Warning (10236): Verilog HDL Implicit Net warning at top.v(164): created implicit net for "M_AXI_RDATA" File: /data/DesignFiles/scilabdemo/top.v Line: 164
-Warning (10236): Verilog HDL Implicit Net warning at top.v(165): created implicit net for "M_AXI_RREADY" File: /data/DesignFiles/scilabdemo/top.v Line: 165
-Warning (10236): Verilog HDL Implicit Net warning at top.v(166): created implicit net for "M_AXI_RRESP" File: /data/DesignFiles/scilabdemo/top.v Line: 166
-Warning (10236): Verilog HDL Implicit Net warning at top.v(167): created implicit net for "M_AXI_RVALID" File: /data/DesignFiles/scilabdemo/top.v Line: 167
-Warning (10236): Verilog HDL Implicit Net warning at top.v(168): created implicit net for "M_AXI_WDATA" File: /data/DesignFiles/scilabdemo/top.v Line: 168
-Warning (10236): Verilog HDL Implicit Net warning at top.v(169): created implicit net for "M_AXI_WREADY" File: /data/DesignFiles/scilabdemo/top.v Line: 169
-Warning (10236): Verilog HDL Implicit Net warning at top.v(170): created implicit net for "M_AXI_WSTRB" File: /data/DesignFiles/scilabdemo/top.v Line: 170
-Warning (10236): Verilog HDL Implicit Net warning at top.v(171): created implicit net for "M_AXI_WVALID" File: /data/DesignFiles/scilabdemo/top.v Line: 171
 Info (12127): Elaborating entity "top" for the top level hierarchy
-Warning (10036): Verilog HDL or VHDL warning at top.v(155): object "M_AXI_ARADDR" assigned a value but never read File: /data/DesignFiles/scilabdemo/top.v Line: 155
-Warning (10036): Verilog HDL or VHDL warning at top.v(156): object "M_AXI_ARREADY" assigned a value but never read File: /data/DesignFiles/scilabdemo/top.v Line: 156
-Warning (10036): Verilog HDL or VHDL warning at top.v(157): object "M_AXI_ARVALID" assigned a value but never read File: /data/DesignFiles/scilabdemo/top.v Line: 157
-Warning (10036): Verilog HDL or VHDL warning at top.v(158): object "M_AXI_AWADDR" assigned a value but never read File: /data/DesignFiles/scilabdemo/top.v Line: 158
-Warning (10036): Verilog HDL or VHDL warning at top.v(159): object "M_AXI_AWREADY" assigned a value but never read File: /data/DesignFiles/scilabdemo/top.v Line: 159
-Warning (10036): Verilog HDL or VHDL warning at top.v(160): object "M_AXI_AWVALID" assigned a value but never read File: /data/DesignFiles/scilabdemo/top.v Line: 160
-Warning (10036): Verilog HDL or VHDL warning at top.v(161): object "M_AXI_BREADY" assigned a value but never read File: /data/DesignFiles/scilabdemo/top.v Line: 161
-Warning (10036): Verilog HDL or VHDL warning at top.v(162): object "M_AXI_BRESP" assigned a value but never read File: /data/DesignFiles/scilabdemo/top.v Line: 162
-Warning (10036): Verilog HDL or VHDL warning at top.v(163): object "M_AXI_BVALID" assigned a value but never read File: /data/DesignFiles/scilabdemo/top.v Line: 163
-Warning (10036): Verilog HDL or VHDL warning at top.v(164): object "M_AXI_RDATA" assigned a value but never read File: /data/DesignFiles/scilabdemo/top.v Line: 164
-Warning (10036): Verilog HDL or VHDL warning at top.v(165): object "M_AXI_RREADY" assigned a value but never read File: /data/DesignFiles/scilabdemo/top.v Line: 165
-Warning (10036): Verilog HDL or VHDL warning at top.v(166): object "M_AXI_RRESP" assigned a value but never read File: /data/DesignFiles/scilabdemo/top.v Line: 166
-Warning (10036): Verilog HDL or VHDL warning at top.v(167): object "M_AXI_RVALID" assigned a value but never read File: /data/DesignFiles/scilabdemo/top.v Line: 167
-Warning (10036): Verilog HDL or VHDL warning at top.v(168): object "M_AXI_WDATA" assigned a value but never read File: /data/DesignFiles/scilabdemo/top.v Line: 168
-Warning (10036): Verilog HDL or VHDL warning at top.v(169): object "M_AXI_WREADY" assigned a value but never read File: /data/DesignFiles/scilabdemo/top.v Line: 169
-Warning (10036): Verilog HDL or VHDL warning at top.v(170): object "M_AXI_WSTRB" assigned a value but never read File: /data/DesignFiles/scilabdemo/top.v Line: 170
-Warning (10036): Verilog HDL or VHDL warning at top.v(171): object "M_AXI_WVALID" assigned a value but never read File: /data/DesignFiles/scilabdemo/top.v Line: 171
-Warning (10858): Verilog HDL warning at top.v(28): object m_axi_araddr used but never assigned File: /data/DesignFiles/scilabdemo/top.v Line: 28
-Warning (10858): Verilog HDL warning at top.v(29): object m_axi_arready used but never assigned File: /data/DesignFiles/scilabdemo/top.v Line: 29
-Warning (10858): Verilog HDL warning at top.v(30): object m_axi_arvalid used but never assigned File: /data/DesignFiles/scilabdemo/top.v Line: 30
-Warning (10858): Verilog HDL warning at top.v(31): object m_axi_awaddr used but never assigned File: /data/DesignFiles/scilabdemo/top.v Line: 31
-Warning (10858): Verilog HDL warning at top.v(32): object m_axi_awready used but never assigned File: /data/DesignFiles/scilabdemo/top.v Line: 32
-Warning (10858): Verilog HDL warning at top.v(33): object m_axi_awvalid used but never assigned File: /data/DesignFiles/scilabdemo/top.v Line: 33
-Warning (10858): Verilog HDL warning at top.v(34): object m_axi_bready used but never assigned File: /data/DesignFiles/scilabdemo/top.v Line: 34
-Warning (10858): Verilog HDL warning at top.v(35): object m_axi_bresp used but never assigned File: /data/DesignFiles/scilabdemo/top.v Line: 35
-Warning (10858): Verilog HDL warning at top.v(36): object m_axi_bvalid used but never assigned File: /data/DesignFiles/scilabdemo/top.v Line: 36
-Warning (10858): Verilog HDL warning at top.v(37): object m_axi_rdata used but never assigned File: /data/DesignFiles/scilabdemo/top.v Line: 37
-Warning (10858): Verilog HDL warning at top.v(38): object m_axi_rready used but never assigned File: /data/DesignFiles/scilabdemo/top.v Line: 38
-Warning (10858): Verilog HDL warning at top.v(39): object m_axi_rresp used but never assigned File: /data/DesignFiles/scilabdemo/top.v Line: 39
-Warning (10858): Verilog HDL warning at top.v(40): object m_axi_rvalid used but never assigned File: /data/DesignFiles/scilabdemo/top.v Line: 40
-Warning (10858): Verilog HDL warning at top.v(41): object m_axi_wdata used but never assigned File: /data/DesignFiles/scilabdemo/top.v Line: 41
-Warning (10858): Verilog HDL warning at top.v(42): object m_axi_wready used but never assigned File: /data/DesignFiles/scilabdemo/top.v Line: 42
-Warning (10858): Verilog HDL warning at top.v(43): object m_axi_wstrb used but never assigned File: /data/DesignFiles/scilabdemo/top.v Line: 43
-Warning (10858): Verilog HDL warning at top.v(44): object m_axi_wvalid used but never assigned File: /data/DesignFiles/scilabdemo/top.v Line: 44
-Warning (10036): Verilog HDL or VHDL warning at top.v(60): object "sys_clk" assigned a value but never read File: /data/DesignFiles/scilabdemo/top.v Line: 60
-Warning (10230): Verilog HDL assignment warning at top.v(155): truncated value with size 32 to match size of target (1) File: /data/DesignFiles/scilabdemo/top.v Line: 155
-Warning (10230): Verilog HDL assignment warning at top.v(158): truncated value with size 32 to match size of target (1) File: /data/DesignFiles/scilabdemo/top.v Line: 158
-Warning (10230): Verilog HDL assignment warning at top.v(162): truncated value with size 2 to match size of target (1) File: /data/DesignFiles/scilabdemo/top.v Line: 162
-Warning (10230): Verilog HDL assignment warning at top.v(164): truncated value with size 32 to match size of target (1) File: /data/DesignFiles/scilabdemo/top.v Line: 164
-Warning (10230): Verilog HDL assignment warning at top.v(166): truncated value with size 2 to match size of target (1) File: /data/DesignFiles/scilabdemo/top.v Line: 166
-Warning (10230): Verilog HDL assignment warning at top.v(168): truncated value with size 32 to match size of target (1) File: /data/DesignFiles/scilabdemo/top.v Line: 168
-Warning (10230): Verilog HDL assignment warning at top.v(170): truncated value with size 4 to match size of target (1) File: /data/DesignFiles/scilabdemo/top.v Line: 170
-Info (12128): Elaborating entity "axi4lite_ic_wrapper" for hierarchy "axi4lite_ic_wrapper:axi4lite_interconnect" File: /data/DesignFiles/scilabdemo/top.v Line: 98
-Warning (10873): Using initial value X (don't care) for net "axi4lite_sw_reg_in_we.swreg_a" at axi4lite_ic_wrapper.vhdl(46) File: /data/DesignFiles/scilabdemo/axi4lite_ic_wrapper.vhdl Line: 46
-Warning (10873): Using initial value X (don't care) for net "axi4lite_sw_reg_in_we.swreg_b" at axi4lite_ic_wrapper.vhdl(46) File: /data/DesignFiles/scilabdemo/axi4lite_ic_wrapper.vhdl Line: 46
-Warning (10873): Using initial value X (don't care) for net "axi4lite_sw_reg_in.swreg_a" at axi4lite_ic_wrapper.vhdl(47) File: /data/DesignFiles/scilabdemo/axi4lite_ic_wrapper.vhdl Line: 47
-Warning (10873): Using initial value X (don't care) for net "axi4lite_sw_reg_in.swreg_b" at axi4lite_ic_wrapper.vhdl(47) File: /data/DesignFiles/scilabdemo/axi4lite_ic_wrapper.vhdl Line: 47
-Info (12128): Elaborating entity "axi4lite_axi4lite_top_ic" for hierarchy "axi4lite_ic_wrapper:axi4lite_interconnect|axi4lite_axi4lite_top_ic:axi4lite_axi4lite_ic_inst" File: /data/DesignFiles/scilabdemo/axi4lite_ic_wrapper.vhdl Line: 52
-Warning (10542): VHDL Variable Declaration warning at axi4lite_axi4lite_top_mmap_pkg.vhd(77): used initial value expression for variable "addr_i" because variable was never assigned a value File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_axi4lite_top_mmap_pkg.vhd Line: 77
-Info (12128): Elaborating entity "axi4lite_sw_reg" for hierarchy "axi4lite_ic_wrapper:axi4lite_interconnect|axi4lite_sw_reg:axi4lite_sw_reg_inst" File: /data/DesignFiles/scilabdemo/axi4lite_ic_wrapper.vhdl Line: 62
+Warning (10036): Verilog HDL or VHDL warning at top.v(77): object "sys_clk" assigned a value but never read File: /data/DesignFiles/scilabdemo/top.v Line: 77
+Info (12128): Elaborating entity "cdc_synchroniser" for hierarchy "cdc_synchroniser:scilabdemo_sum_a_b" File: /data/DesignFiles/scilabdemo/top.v Line: 97
+Info (12128): Elaborating entity "axi4lite_ic_wrapper" for hierarchy "axi4lite_ic_wrapper:axi4lite_interconnect" File: /data/DesignFiles/scilabdemo/top.v Line: 160
+Warning (10873): Using initial value X (don't care) for net "axi4lite_sys_in_we.scratchpad" at axi4lite_ic_wrapper.vhdl(57) File: /data/DesignFiles/scilabdemo/axi4lite_ic_wrapper.vhdl Line: 57
+Warning (10873): Using initial value X (don't care) for net "axi4lite_sys_in.scratchpad" at axi4lite_ic_wrapper.vhdl(58) File: /data/DesignFiles/scilabdemo/axi4lite_ic_wrapper.vhdl Line: 58
+Warning (10873): Using initial value X (don't care) for net "axi4lite_sw_reg_in_we.swreg_a" at axi4lite_ic_wrapper.vhdl(61) File: /data/DesignFiles/scilabdemo/axi4lite_ic_wrapper.vhdl Line: 61
+Warning (10873): Using initial value X (don't care) for net "axi4lite_sw_reg_in_we.swreg_b" at axi4lite_ic_wrapper.vhdl(61) File: /data/DesignFiles/scilabdemo/axi4lite_ic_wrapper.vhdl Line: 61
+Warning (10873): Using initial value X (don't care) for net "axi4lite_sw_reg_in.swreg_a" at axi4lite_ic_wrapper.vhdl(62) File: /data/DesignFiles/scilabdemo/axi4lite_ic_wrapper.vhdl Line: 62
+Warning (10873): Using initial value X (don't care) for net "axi4lite_sw_reg_in.swreg_b" at axi4lite_ic_wrapper.vhdl(62) File: /data/DesignFiles/scilabdemo/axi4lite_ic_wrapper.vhdl Line: 62
+Info (12128): Elaborating entity "axi4lite_axi4lite_top_ic" for hierarchy "axi4lite_ic_wrapper:axi4lite_interconnect|axi4lite_axi4lite_top_ic:axi4lite_axi4lite_ic_inst" File: /data/DesignFiles/scilabdemo/axi4lite_ic_wrapper.vhdl Line: 67
+Warning (10542): VHDL Variable Declaration warning at axi4lite_axi4lite_top_mmap_pkg.vhd(78): used initial value expression for variable "addr_i" because variable was never assigned a value File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_axi4lite_top_mmap_pkg.vhd Line: 78
+Info (12128): Elaborating entity "axi4lite_sys" for hierarchy "axi4lite_ic_wrapper:axi4lite_interconnect|axi4lite_sys:axi4lite_sys_inst" File: /data/DesignFiles/scilabdemo/axi4lite_ic_wrapper.vhdl Line: 77
+Warning (10542): VHDL Variable Declaration warning at axi4lite_sys_pkg.vhd(128): used initial value expression for variable "bus_addr_i" because variable was never assigned a value File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys_pkg.vhd Line: 128
+Warning (10542): VHDL Variable Declaration warning at axi4lite_sys_pkg.vhd(129): used initial value expression for variable "mask_i" because variable was never assigned a value File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys_pkg.vhd Line: 129
+Warning (10542): VHDL Variable Declaration warning at axi4lite_sys_pkg.vhd(130): used initial value expression for variable "reg_addr_i" because variable was never assigned a value File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys_pkg.vhd Line: 130
+Warning (10492): VHDL Process Statement warning at axi4lite_sys.vhd(125): signal "axi4lite_sys_int" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 125
+Warning (10492): VHDL Process Statement warning at axi4lite_sys.vhd(126): signal "axi4lite_sys_int" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 126
+Warning (10631): VHDL Process Statement warning at axi4lite_sys.vhd(88): inferring latch(es) for signal or variable "axi4lite_sys_int", which holds its previous value in one or more paths through the process File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[0]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[1]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[2]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[3]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[4]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[5]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[6]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[7]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[8]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[9]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[10]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[11]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[12]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[13]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[14]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[15]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[16]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[17]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[18]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[19]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[20]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[21]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[22]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[23]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[24]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[25]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[26]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[27]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[28]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[29]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[30]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.rev[31]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[0]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[1]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[2]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[3]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[4]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[5]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[6]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[7]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[8]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[9]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[10]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[11]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[12]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[13]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[14]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[15]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[16]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[17]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[18]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[19]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[20]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[21]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[22]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[23]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[24]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[25]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[26]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[27]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[28]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[29]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[30]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (10041): Inferred latch for "axi4lite_sys_int.board_id[31]" at axi4lite_sys.vhd(88) File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 88
+Info (12128): Elaborating entity "axi4lite_slave_logic" for hierarchy "axi4lite_ic_wrapper:axi4lite_interconnect|axi4lite_sys:axi4lite_sys_inst|axi4lite_slave_logic:axi4lite_slave_logic_inst" File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 58
+Info (12128): Elaborating entity "axi4lite_sys_muxdemux" for hierarchy "axi4lite_ic_wrapper:axi4lite_interconnect|axi4lite_sys:axi4lite_sys_inst|axi4lite_sys_muxdemux:axi4lite_sys_muxdemux_inst" File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sys.vhd Line: 70
+Info (12128): Elaborating entity "axi4lite_sw_reg" for hierarchy "axi4lite_ic_wrapper:axi4lite_interconnect|axi4lite_sw_reg:axi4lite_sw_reg_inst" File: /data/DesignFiles/scilabdemo/axi4lite_ic_wrapper.vhdl Line: 89
 Warning (10542): VHDL Variable Declaration warning at axi4lite_sw_reg_pkg.vhd(120): used initial value expression for variable "bus_addr_i" because variable was never assigned a value File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sw_reg_pkg.vhd Line: 120
 Warning (10542): VHDL Variable Declaration warning at axi4lite_sw_reg_pkg.vhd(121): used initial value expression for variable "mask_i" because variable was never assigned a value File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sw_reg_pkg.vhd Line: 121
 Warning (10542): VHDL Variable Declaration warning at axi4lite_sw_reg_pkg.vhd(122): used initial value expression for variable "reg_addr_i" because variable was never assigned a value File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sw_reg_pkg.vhd Line: 122
 Warning (10492): VHDL Process Statement warning at axi4lite_sw_reg.vhd(124): signal "axi4lite_sw_reg_int" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sw_reg.vhd Line: 124
 Warning (10492): VHDL Process Statement warning at axi4lite_sw_reg.vhd(125): signal "axi4lite_sw_reg_int" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sw_reg.vhd Line: 125
-Info (12128): Elaborating entity "axi4lite_slave_logic" for hierarchy "axi4lite_ic_wrapper:axi4lite_interconnect|axi4lite_sw_reg:axi4lite_sw_reg_inst|axi4lite_slave_logic:axi4lite_slave_logic_inst" File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sw_reg.vhd Line: 58
 Info (12128): Elaborating entity "axi4lite_sw_reg_muxdemux" for hierarchy "axi4lite_ic_wrapper:axi4lite_interconnect|axi4lite_sw_reg:axi4lite_sw_reg_inst|axi4lite_sw_reg_muxdemux:axi4lite_sw_reg_muxdemux_inst" File: /data/DesignFiles/scilabdemo/xml2vhdl_hdl_output/axi4lite_sw_reg.vhd Line: 70
-Info (12128): Elaborating entity "scilabdemo_ip" for hierarchy "scilabdemo_ip:scilabdemo_ip_inst" File: /data/DesignFiles/scilabdemo/top.v Line: 106
+Info (12128): Elaborating entity "scilabdemo_ip" for hierarchy "scilabdemo_ip:scilabdemo_ip_inst" File: /data/DesignFiles/scilabdemo/top.v Line: 168
 Warning (12125): Using design file /home/bgodfrey/CASPER/mlib_devel/scilab_library/hdl_sources/adder/adder.v, which is not specified as a design file for the current project, but contains definitions for 1 design units and 1 entities in project
     Info (12023): Found entity 1: adder File: /home/bgodfrey/CASPER/mlib_devel/scilab_library/hdl_sources/adder/adder.v Line: 1
 Info (12128): Elaborating entity "adder" for hierarchy "scilabdemo_ip:scilabdemo_ip_inst|adder:scilabdemo_summer" File: /data/DesignFiles/scilabdemo/scilabdemo_ip.v Line: 48
-Info (12128): Elaborating entity "cdc_synchroniser" for hierarchy "cdc_synchroniser:scilabdemo_sum_a_b" File: /data/DesignFiles/scilabdemo/top.v Line: 117
+Info (12128): Elaborating entity "sys_block_counter" for hierarchy "sys_block_counter:sys_block_counter_inst" File: /data/DesignFiles/scilabdemo/top.v Line: 190
+Info (12128): Elaborating entity "de10nano" for hierarchy "de10nano:de10nano_inst" File: /data/DesignFiles/scilabdemo/top.v Line: 242
+Info (12128): Elaborating entity "de10nano_hps_0_fpga_interfaces" for hierarchy "de10nano:de10nano_inst|de10nano_hps_0_fpga_interfaces:fpga_interfaces" File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/de10nano.v Line: 59
 Warning (12011): Net is missing source, defaulting to GND
-    Warning (12110): Net "user_rst" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 127
+    Warning (12110): Net "M_AXI_araddr[31]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[30]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[29]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[28]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[27]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[26]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[25]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[24]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[23]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[22]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[21]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_awaddr[31]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[30]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[29]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[28]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[27]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[26]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[25]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[24]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[23]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[22]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[21]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awvalid[0]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 31
 Warning (12011): Net is missing source, defaulting to GND
-    Warning (12110): Net "user_rst" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 127
+    Warning (12110): Net "M_AXI_araddr[31]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[30]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[29]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[28]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[27]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[26]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[25]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[24]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[23]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[22]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[21]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_awaddr[31]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[30]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[29]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[28]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[27]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[26]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[25]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[24]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[23]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[22]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[21]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awvalid[0]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 31
 Warning (12011): Net is missing source, defaulting to GND
-    Warning (12110): Net "user_rst" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 127
+    Warning (12110): Net "M_AXI_araddr[31]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[30]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[29]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[28]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[27]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[26]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[25]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[24]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[23]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[22]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[21]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_awaddr[31]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[30]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[29]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[28]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[27]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[26]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[25]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[24]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[23]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[22]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[21]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awvalid[0]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 31
 Warning (12011): Net is missing source, defaulting to GND
-    Warning (12110): Net "user_rst" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 127
-Warning (12241): 5 hierarchies have connectivity warnings - see the Connectivity Checks report folder
+    Warning (12110): Net "M_AXI_araddr[31]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[30]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[29]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[28]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[27]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[26]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[25]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[24]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[23]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[22]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_araddr[21]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 26
+    Warning (12110): Net "M_AXI_awaddr[31]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[30]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[29]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[28]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[27]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[26]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[25]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[24]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[23]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[22]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awaddr[21]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 29
+    Warning (12110): Net "M_AXI_awvalid[0]" is missing source, defaulting to GND File: /data/DesignFiles/scilabdemo/top.v Line: 31
+Warning (12241): 8 hierarchies have connectivity warnings - see the Connectivity Checks report folder
+Info (17049): 203 registers lost all their fanouts during netlist optimizations.
 Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
-    Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
-Warning (21074): Design contains 1 input pin(s) that do not drive logic
-    Warning (15610): No output dependent on input pin "fpga_clk1_50[0]" File: /data/DesignFiles/scilabdemo/top.v Line: 10
-Info (21057): Implemented 1 device resources after synthesis - the final resource count might be different
+    Info (16011): Adding 10 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
+Info (21057): Implemented 9 device resources after synthesis - the final resource count might be different
     Info (21058): Implemented 1 input pins
     Info (21059): Implemented 0 output pins
-Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 109 warnings
-    Info: Peak virtual memory: 472 megabytes
-    Info: Processing ended: Tue Jul 22 20:07:20 2025
+Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 118 warnings
+    Info: Peak virtual memory: 469 megabytes
+    Info: Processing ended: Wed Aug  6 19:07:29 2025
     Info: Elapsed time: 00:00:07
-    Info: Total CPU time (on all processors): 00:00:25
+    Info: Total CPU time (on all processors): 00:00:26
 Info: *******************************************************************
 Info: Running Quartus Prime Fitter
     Info: Version 23.1std.1 Build 993 05/14/2024 SC Lite Edition
-    Info: Processing started: Tue Jul 22 20:07:21 2025
+    Info: Processing started: Wed Aug  6 19:07:30 2025
 Info: Command: quartus_fit --read_settings_files=off --write_settings_files=off myproj -c myproj
 Info: qfit2_default_script.tcl version: #1
 Info: Project  = myproj
 Info: Revision = myproj
-Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
-Info (20030): Parallel compilation is enabled and will use 16 of the 16 processors detected
+Info (20032): Parallel compilation is enabled and will use up to 12 processors
 Info (119006): Selected device 5CSEBA6U23I7 for design "myproj"
 Info (21076): High junction temperature operating condition is not set. Assuming a default value of '100'.
 Info (21076): Low junction temperature operating condition is not set. Assuming a default value of '-40'.
 Info (171003): Fitter is performing an Auto Fit compilation, which may decrease Fitter effort to reduce compilation time
 Warning (292013): Feature LogicLock is only available with a valid subscription license. You can purchase a software subscription to gain full access to this feature.
-Warning (15714): Some pins have incomplete I/O assignments. Refer to the I/O Assignment Warnings report for details
-Critical Warning (169085): No exact pin location assignment(s) for 1 pins of 1 total pins. For the list of pins please refer to the I/O Assignment Warnings table in the fitter report.
 Info (184020): Starting Fitter periphery placement operations
 Info (184021): Fitter periphery placement operations ending: elapsed time is 00:00:00
 Info (176233): Starting register packing
 Info (176235): Finished register packing
     Extra Info (176219): No registers were packed into other blocks
 Info (11798): Fitter preparation operations ending: elapsed time is 00:00:09
-Critical Warning (332012): Synopsys Design Constraints File file not found: 'user_const.sdc'. A Synopsys Design Constraints File is required by the Timing Analyzer to get proper timing constraints. Without it, the Compiler will not properly optimize the design.
-Info (332144): No user constrained base clocks found in the design
-Info (332096): The command derive_clocks did not find any clocks to derive.  No clocks were created or changed.
-Warning (332068): No clocks defined in design.
+Info (332104): Reading SDC File: 'user_const.sdc'
 Info (332143): No user constrained clock uncertainty found in the design. Calling "derive_clock_uncertainty"
 Info (332154): The derive_clock_uncertainty command did not apply clock uncertainty to any clock-to-clock transfers.
-Info (332130): Timing requirements not specified -- quality metrics such as performance may be sacrificed to reduce compilation time.
+Info (332129): Detected timing requirements -- optimizing circuit to achieve only the specified requirements
+Info (332111): Found 2 clocks
+    Info (332111):   Period   Clock Name
+    Info (332111): ======== ============
+    Info (332111):   20.000     axil_clk
+    Info (332111):   20.000      sys_clk
 Info (170189): Fitter placement preparation operations beginning
 Info (14951): The Fitter is using Advanced Physical Optimization.
 Info (170190): Fitter placement preparation operations ending: elapsed time is 00:00:00
@@ -654,53 +2527,47 @@ Info (170137): Fitter placement was successful
 Info (170192): Fitter placement operations ending: elapsed time is 00:00:00
 Info (170193): Fitter routing operations beginning
 Info (170195): Router estimated average interconnect usage is 0% of the available device resources
-    Info (170196): Router estimated peak interconnect usage is 0% of the available device resources in the region that extends from location X0_Y23 to location X10_Y34
+    Info (170196): Router estimated peak interconnect usage is 0% of the available device resources in the region that extends from location X45_Y46 to location X55_Y57
 Info (170199): The Fitter performed an Auto Fit compilation.  Optimizations were skipped to reduce compilation time.
     Info (170201): Optimizations that may affect the design's routability were skipped
     Info (170200): Optimizations that may affect the design's timing were skipped
 Info (170194): Fitter routing operations ending: elapsed time is 00:00:00
-Info (11888): Total time spent on timing analysis during the Fitter is 0.12 seconds.
+Info (11888): Total time spent on timing analysis during the Fitter is 0.14 seconds.
 Info (334003): Started post-fitting delay annotation
 Info (334004): Delay annotation completed successfully
 Info (334003): Started post-fitting delay annotation
 Info (334004): Delay annotation completed successfully
 Info (11801): Fitter post-fit operations ending: elapsed time is 00:00:02
-Info: Quartus Prime Fitter was successful. 0 errors, 6 warnings
-    Info: Peak virtual memory: 2668 megabytes
-    Info: Processing ended: Tue Jul 22 20:07:43 2025
-    Info: Elapsed time: 00:00:22
-    Info: Total CPU time (on all processors): 00:01:14
+Info: Quartus Prime Fitter was successful. 0 errors, 1 warning
+    Info: Peak virtual memory: 2309 megabytes
+    Info: Processing ended: Wed Aug  6 19:07:53 2025
+    Info: Elapsed time: 00:00:23
+    Info: Total CPU time (on all processors): 00:01:03
 Info: *******************************************************************
 Info: Running Quartus Prime Assembler
     Info: Version 23.1std.1 Build 993 05/14/2024 SC Lite Edition
-    Info: Processing started: Tue Jul 22 20:07:44 2025
+    Info: Processing started: Wed Aug  6 19:07:54 2025
 Info: Command: quartus_asm --read_settings_files=off --write_settings_files=off myproj -c myproj
-Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (115030): Assembler is generating device programming files
-Info: Quartus Prime Assembler was successful. 0 errors, 1 warning
-    Info: Peak virtual memory: 512 megabytes
-    Info: Processing ended: Tue Jul 22 20:07:49 2025
+Info: Quartus Prime Assembler was successful. 0 errors, 0 warnings
+    Info: Peak virtual memory: 516 megabytes
+    Info: Processing ended: Wed Aug  6 19:07:59 2025
     Info: Elapsed time: 00:00:05
     Info: Total CPU time (on all processors): 00:00:05
 Info (293026): Skipped module Power Analyzer due to the assignment FLOW_ENABLE_POWER_ANALYZER
 Info: *******************************************************************
 Info: Running Quartus Prime Timing Analyzer
     Info: Version 23.1std.1 Build 993 05/14/2024 SC Lite Edition
-    Info: Processing started: Tue Jul 22 20:07:50 2025
+    Info: Processing started: Wed Aug  6 19:08:00 2025
 Info: Command: quartus_sta myproj -c myproj
 Info: qsta_default_script.tcl version: #1
-Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
-Info (20030): Parallel compilation is enabled and will use 16 of the 16 processors detected
+Info (20032): Parallel compilation is enabled and will use up to 12 processors
 Info (21076): High junction temperature operating condition is not set. Assuming a default value of '100'.
 Info (21076): Low junction temperature operating condition is not set. Assuming a default value of '-40'.
-Critical Warning (332012): Synopsys Design Constraints File file not found: 'user_const.sdc'. A Synopsys Design Constraints File is required by the Timing Analyzer to get proper timing constraints. Without it, the Compiler will not properly optimize the design.
-Info (332142): No user constrained base clocks found in the design. Calling "derive_clocks -period 1.0"
-Info (332096): The command derive_clocks did not find any clocks to derive.  No clocks were created or changed.
-Warning (332068): No clocks defined in design.
+Info (332104): Reading SDC File: 'user_const.sdc'
 Info (332143): No user constrained clock uncertainty found in the design. Calling "derive_clock_uncertainty"
 Info (332154): The derive_clock_uncertainty command did not apply clock uncertainty to any clock-to-clock transfers.
 Info: Found TIMING_ANALYZER_REPORT_SCRIPT_INCLUDE_DEFAULT_ANALYSIS = ON
-Info (332159): No clocks to report
 Info: Analyzing Slow 1100mV 100C Model
 Info (332140): No fmax paths to report
 Info (332140): No Setup paths to report
@@ -711,9 +2578,6 @@ Info (332140): No Minimum Pulse Width paths to report
 Info: Analyzing Slow 1100mV -40C Model
 Info (334003): Started post-fitting delay annotation
 Info (334004): Delay annotation completed successfully
-Info (332142): No user constrained base clocks found in the design. Calling "derive_clocks -period 1.0"
-Info (332096): The command derive_clocks did not find any clocks to derive.  No clocks were created or changed.
-Warning (332068): No clocks defined in design.
 Info (332154): The derive_clock_uncertainty command did not apply clock uncertainty to any clock-to-clock transfers.
 Info (332140): No fmax paths to report
 Info (332140): No Setup paths to report
@@ -724,9 +2588,6 @@ Info (332140): No Minimum Pulse Width paths to report
 Info: Analyzing Fast 1100mV 100C Model
 Info (334003): Started post-fitting delay annotation
 Info (334004): Delay annotation completed successfully
-Info (332142): No user constrained base clocks found in the design. Calling "derive_clocks -period 1.0"
-Info (332096): The command derive_clocks did not find any clocks to derive.  No clocks were created or changed.
-Warning (332068): No clocks defined in design.
 Info (332154): The derive_clock_uncertainty command did not apply clock uncertainty to any clock-to-clock transfers.
 Info (332140): No Setup paths to report
 Info (332140): No Hold paths to report
@@ -734,9 +2595,6 @@ Info (332140): No Recovery paths to report
 Info (332140): No Removal paths to report
 Info (332140): No Minimum Pulse Width paths to report
 Info: Analyzing Fast 1100mV -40C Model
-Info (332142): No user constrained base clocks found in the design. Calling "derive_clocks -period 1.0"
-Info (332096): The command derive_clocks did not find any clocks to derive.  No clocks were created or changed.
-Warning (332068): No clocks defined in design.
 Info (332154): The derive_clock_uncertainty command did not apply clock uncertainty to any clock-to-clock transfers.
 Info (332140): No Setup paths to report
 Info (332140): No Hold paths to report
@@ -745,19 +2603,19 @@ Info (332140): No Removal paths to report
 Info (332140): No Minimum Pulse Width paths to report
 Info (332101): Design is fully constrained for setup requirements
 Info (332101): Design is fully constrained for hold requirements
-Info: Quartus Prime Timing Analyzer was successful. 0 errors, 6 warnings
-    Info: Peak virtual memory: 939 megabytes
-    Info: Processing ended: Tue Jul 22 20:07:53 2025
-    Info: Elapsed time: 00:00:03
-    Info: Total CPU time (on all processors): 00:00:03
-Info (293000): Quartus Prime Full Compilation was successful. 0 errors, 122 warnings
+Info: Quartus Prime Timing Analyzer was successful. 0 errors, 0 warnings
+    Info: Peak virtual memory: 984 megabytes
+    Info: Processing ended: Wed Aug  6 19:08:04 2025
+    Info: Elapsed time: 00:00:04
+    Info: Total CPU time (on all processors): 00:00:04
+Info (293000): Quartus Prime Full Compilation was successful. 0 errors, 119 warnings
 Compilation complete.
 Info (23030): Evaluation of Tcl script /data/DesignFiles/scilabdemo/gogogo.tcl was successful
-Info: Quartus Prime Shell was successful. 0 errors, 122 warnings
+Info: Quartus Prime Shell was successful. 0 errors, 119 warnings
     Info: Peak virtual memory: 526 megabytes
-    Info: Processing ended: Tue Jul 22 20:07:54 2025
-    Info: Elapsed time: 00:00:42
-    Info: Total CPU time (on all processors): 00:01:48
+    Info: Processing ended: Wed Aug  6 19:08:05 2025
+    Info: Elapsed time: 00:00:44
+    Info: Total CPU time (on all processors): 00:01:40
 Info: *******************************************************************
 Info: Running Quartus Prime Convert_programming_file
     Info: Version 23.1std.1 Build 993 05/14/2024 SC Lite Edition
@@ -775,13 +2633,15 @@ Info: Running Quartus Prime Convert_programming_file
     Info: Intel and sold by Intel or its authorized distributors.  Please
     Info: refer to the applicable agreement for further details, at
     Info: https://fpgasoftware.intel.com/eula.
-    Info: Processing started: Tue Jul 22 20:07:54 2025
+    Info: Processing started: Wed Aug  6 19:08:05 2025
 Info: Command: quartus_cpf -c /data/DesignFiles/scilabdemo/outputs/top.sof /data/DesignFiles/scilabdemo/outputs/top.rbf
 Info: Quartus Prime Convert_programming_file was successful. 0 errors, 0 warnings
     Info: Peak virtual memory: 301 megabytes
-    Info: Processing ended: Tue Jul 22 20:07:55 2025
+    Info: Processing ended: Wed Aug  6 19:08:06 2025
     Info: Elapsed time: 00:00:01
     Info: Total CPU time (on all processors): 00:00:01
 SOF LOCATION: /data/DesignFiles/scilabdemo/outputs/top.sof
 RBF LOCATION: /data/DesignFiles/scilabdemo/outputs/top.rbf
-Created /data/DesignFiles/scilabdemo/outputs/scilabdemo_2025-07-22_2007.fpg
+CREATING AN .FPG FILE
+Making .rbf file
+Created /data/DesignFiles/scilabdemo/outputs/scilabdemo_2025-08-06_1907.fpg

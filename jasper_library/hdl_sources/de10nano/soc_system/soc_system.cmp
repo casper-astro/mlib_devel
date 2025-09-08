@@ -1,0 +1,42 @@
+	component soc_system is
+		port (
+			axi_bridge_0_m0_awaddr  : out   std_logic_vector(20 downto 0);                    -- awaddr
+			axi_bridge_0_m0_awprot  : out   std_logic_vector(2 downto 0);                     -- awprot
+			axi_bridge_0_m0_awvalid : out   std_logic;                                        -- awvalid
+			axi_bridge_0_m0_awready : in    std_logic                     := 'X';             -- awready
+			axi_bridge_0_m0_wdata   : out   std_logic_vector(31 downto 0);                    -- wdata
+			axi_bridge_0_m0_wstrb   : out   std_logic_vector(3 downto 0);                     -- wstrb
+			axi_bridge_0_m0_wlast   : out   std_logic;                                        -- wlast
+			axi_bridge_0_m0_wvalid  : out   std_logic;                                        -- wvalid
+			axi_bridge_0_m0_wready  : in    std_logic                     := 'X';             -- wready
+			axi_bridge_0_m0_bresp   : in    std_logic_vector(1 downto 0)  := (others => 'X'); -- bresp
+			axi_bridge_0_m0_bvalid  : in    std_logic                     := 'X';             -- bvalid
+			axi_bridge_0_m0_bready  : out   std_logic;                                        -- bready
+			axi_bridge_0_m0_araddr  : out   std_logic_vector(20 downto 0);                    -- araddr
+			axi_bridge_0_m0_arprot  : out   std_logic_vector(2 downto 0);                     -- arprot
+			axi_bridge_0_m0_arvalid : out   std_logic;                                        -- arvalid
+			axi_bridge_0_m0_arready : in    std_logic                     := 'X';             -- arready
+			axi_bridge_0_m0_rdata   : in    std_logic_vector(31 downto 0) := (others => 'X'); -- rdata
+			axi_bridge_0_m0_rresp   : in    std_logic_vector(1 downto 0)  := (others => 'X'); -- rresp
+			axi_bridge_0_m0_rvalid  : in    std_logic                     := 'X';             -- rvalid
+			axi_bridge_0_m0_rready  : out   std_logic;                                        -- rready
+			clk_clk                 : in    std_logic                     := 'X';             -- clk
+			memory_mem_a            : out   std_logic_vector(14 downto 0);                    -- mem_a
+			memory_mem_ba           : out   std_logic_vector(2 downto 0);                     -- mem_ba
+			memory_mem_ck           : out   std_logic;                                        -- mem_ck
+			memory_mem_ck_n         : out   std_logic;                                        -- mem_ck_n
+			memory_mem_cke          : out   std_logic;                                        -- mem_cke
+			memory_mem_cs_n         : out   std_logic;                                        -- mem_cs_n
+			memory_mem_ras_n        : out   std_logic;                                        -- mem_ras_n
+			memory_mem_cas_n        : out   std_logic;                                        -- mem_cas_n
+			memory_mem_we_n         : out   std_logic;                                        -- mem_we_n
+			memory_mem_reset_n      : out   std_logic;                                        -- mem_reset_n
+			memory_mem_dq           : inout std_logic_vector(31 downto 0) := (others => 'X'); -- mem_dq
+			memory_mem_dqs          : inout std_logic_vector(3 downto 0)  := (others => 'X'); -- mem_dqs
+			memory_mem_dqs_n        : inout std_logic_vector(3 downto 0)  := (others => 'X'); -- mem_dqs_n
+			memory_mem_odt          : out   std_logic;                                        -- mem_odt
+			memory_mem_dm           : out   std_logic_vector(3 downto 0);                     -- mem_dm
+			memory_oct_rzqin        : in    std_logic                     := 'X'              -- oct_rzqin
+		);
+	end component soc_system;
+
