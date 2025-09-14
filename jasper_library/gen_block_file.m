@@ -21,8 +21,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function [] = gen_block_file(compile_dir, output_fname, sys)
-% Output the parameters of all xps-tagged blocks to the text file "peripherals.txt"
-% so that they can be parsed by the reset of the toolflow
+% Output the parameters of all xps-tagged blocks to the text file
+% "peripherals.txt" so that they can be parsed by the rest of the toolflow
 
 %if no system name is supplied, use gcs
 if nargin > 2
@@ -71,7 +71,6 @@ dummy_parents = {};
 for ctr = 1 : numel(disregards)
     dummy_parents{ctr} = get_param(disregards{ctr}, 'Parent');
 end
-
 
 % check for improper xps or casper block names
 for ctr = 1 : numel(xps_blks)

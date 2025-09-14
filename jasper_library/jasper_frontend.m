@@ -56,11 +56,9 @@ jasper_python = [getenv('MLIB_DEVEL_PATH') '/jasper_library/exec_flow.py'];
 % 5) backend compile (the user should launch this afterwards from outside
 % matlab)
 
-% mcb: 2023.1 Vivado/MC sets PYTHONPATH and PYTHONHOME that conflict with CASPER
-% we need to unset these
-
+% Vivado/MC sets PYTHONPATH and PYTHONHOME and conflicts with CASPER
+% pass in our python env. Note, this may conflict with Vitis
 disp('Launching jasper flow middleware');
-% rv = system([jasper_python ' -m' modelpath ' -c' builddir ' --skipyb --skipfe --skipbe']);
 rv = system(['python ' '-E ' jasper_python ' -m' modelpath ' -c' builddir '']);
 
 if rv ~= 0
@@ -68,11 +66,12 @@ if rv ~= 0
     return;
 end
 
-disp('Launching System Generator compile');
+disp('Launching hardware compile');
 update_model = 0;
-xsg_result = start_sysgen_compile(modelpath, builddir, update_model);
-if xsg_result ~= 0
-    error('XSG generation failed!')
+
+compile_result = start_vmc_compile(modelpath, builddir, update_model);
+if compile_result ~= 0
+    error('Hardware generation failed!')
 end
 
 % figure out what the version of python being used by the toolflow is
