@@ -48,6 +48,7 @@ for ctr = 1 : length(gateway_ins)
             get_param(gw, 'Name')]);
     end
 end
+gwo_name = 'Gateway Out Block';
 gateway_outs = find_system(cursys, 'searchdepth', 1, ...
     'FollowLinks', 'on', 'lookundermasks', 'all', ...
     'masktype', gwo_name);

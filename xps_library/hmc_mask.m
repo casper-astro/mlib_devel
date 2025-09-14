@@ -34,8 +34,8 @@ end % end switch hw_sys
 %end
 
 
-gwi_name = 'Gateway In Block';
-gateway_outs = find_system(myname, 'searchdepth', 1, 'FollowLinks', 'on', 'lookundermasks', 'all', 'masktype', gwi_name);
+gwo_name = 'Gateway Out Block';
+gateway_outs = find_system(myname, 'searchdepth', 1, 'FollowLinks', 'on', 'lookundermasks', 'all', 'masktype', gwo_name);
 for i =1:length(gateway_outs)
     gw = gateway_outs{i};
     if regexp(get_param(gw, 'Name'), '(wr_en_link2)$')
@@ -82,8 +82,8 @@ for i =1:length(gateway_outs)
     end
 end
 
-gwo_name = 'Gateway Out Block';
-gateway_ins =find_system(myname, 'searchdepth', 1, 'FollowLinks', 'on', 'lookundermasks', 'all', 'masktype', gwo_name);
+gwi_name = 'Gateway In Block';
+gateway_ins =find_system(myname, 'searchdepth', 1, 'FollowLinks', 'on', 'lookundermasks', 'all', 'masktype', gwi_name);
 for i =1:length(gateway_ins)
     gw = gateway_ins{i};
     if regexp(get_param(gw, 'Name'), '(data_out_link2)$')
