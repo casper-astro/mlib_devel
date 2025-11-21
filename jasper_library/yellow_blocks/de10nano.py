@@ -31,28 +31,21 @@ class de10nano(YellowBlock):
             self.provides.append(p)
 
         # sources: CDC helper
-        self.add_source('utils/cdc_synchroniser.vhd')
-
-        # HPS (Platform Designer) IP ? module names must match what you instantiate
-        # Use your actual filenames/paths, these are based on what you shared.
-        #self.add_source('de10nano/soc_system_hps_0.v')
-        #self.add_source('de10nano/de10nano_hps_0_fpga_interfaces.sv')
-        #self.add_source('de10nano/soc_system_hps_0_fpga_interfaces.sv')
-        #self.add_source('de10nano/soc_system_hps_0_hps_io.v')
-
+        #self.add_source('utils/cdc_synchroniser.vhd')
+       
         # AXI4-Lite interconnect RTL so the instance created by the model can bind
         # (adjust these globs to your repo layout)
-        hdl_root = getattr(self, 'hdl_root', os.getcwd())
-        for patt in [
-            'jasper_library/hdl_sources/axi4lite/*.v',
-            'jasper_library/hdl_sources/axi4lite/*.sv',
-            'jasper_library/hdl_sources/axi4lite_interconnect/*.v',
-            'jasper_library/hdl_sources/axi4lite_interconnect/*.sv',
-        ]:
+        hdl_root = os.environ['HDL_ROOT']
+        for patt in ['utils/cdc_synchroniser.vhd', 'axi4_lite/*.v', 'axi4_lite/*.sv', 'axi4_register/*.v', 'axi4_register/*.sv', 'de10nano/axi_axil_adapter*.v', 'de10nano/*.v', 'de10nano/*.sv', 'de10nano/soc_system/synthesis/*.v',  'de10nano/soc_system/synthesis/*.sv']:
             for f in glob.glob(os.path.join(hdl_root, patt)):
                 rel = os.path.relpath(f, hdl_root)
+                print('Adding path for...' + str(rel))
                 try:
-                    self.add_source(rel)
+                    substr = f[f.rfind('/')+1:]
+                    if 'de10nano' not in substr:
+                        self.add_source(rel)
+                    else:
+                        print('Not adding ' + rel)
                 except Exception:
                     pass
 
@@ -68,29 +61,27 @@ class de10nano(YellowBlock):
         # Fabric clocks
         top.add_signal('sys_clk')
         #top.assign_signal('sys_clk', 'FPGA_CLK1_50')
+        top.assign_signal('sys_clk', 'fpga_clk1_50')
 
         top.add_signal('axil_clk')
-        top.assign_signal('axil_clk', 'fpga_clk1_50 ')
+        top.assign_signal('axil_clk', 'fpga_clk1_50')
 
         # --- AXI-Lite master (internal nets only) ---
         axi = [
-            ('M_AXI_awaddr', 32), ('M_AXI_awvalid', 1), ('M_AXI_awready', 1),
-            ('M_AXI_wdata',  32), ('M_AXI_wstrb',  4), ('M_AXI_wvalid', 1), ('M_AXI_wready', 1),
-            ('M_AXI_bresp',   2), ('M_AXI_bvalid', 1), ('M_AXI_bready', 1),
-            ('M_AXI_araddr', 32), ('M_AXI_arvalid', 1), ('M_AXI_arready', 1),
-            ('M_AXI_rdata',  32), ('M_AXI_rresp',  2), ('M_AXI_rvalid', 1), ('M_AXI_rready', 1),
-        ]
+            ('M_AXI_awaddr', 32), ('M_AXI_awprot', 3),
+            ('M_AXI_awvalid', 1), ('M_AXI_awready', 1),
+            ('M_AXI_wdata',  32), ('M_AXI_wstrb',  4),
+            ('M_AXI_wvalid', 1),  ('M_AXI_wready', 1),
+            ('M_AXI_bresp',   2), ('M_AXI_bvalid', 1), 
+            ('M_AXI_bready', 1),  ('M_AXI_araddr', 32), 
+            ('M_AXI_arprot', 3),  ('M_AXI_arvalid', 1), 
+            ('M_AXI_arready', 1), ('M_AXI_rdata',  32), 
+            ('M_AXI_rresp',  2),  ('M_AXI_rvalid', 1), ('M_AXI_rready', 1)]
         for name, w in axi:
             top.add_signal(name, width=w if w > 1 else None)
 
-        # HPS uses 21-bit LW addresses; zero-extend to 32 for your fabric nets
-        top.add_signal('hps_awaddr_21', width=21)
-        top.add_signal('hps_araddr_21', width=21)
-        top.add_raw_string("assign M_AXI_awaddr = {11'b0, hps_awaddr_21};")
-        top.add_raw_string("assign M_AXI_araddr = {11'b0, hps_araddr_21};")
-
         # --- soc_system instance ---
-        sys = top.get_instance('soc_system', 'soc_system')
+        sys = top.get_instance('soc_system', 'soc_system_inst')
 
         # Clocks / resets (names must exist in your soc_system.v)
         top.add_signal('h2f_rst_n')   # from HPS to fabric (active-high)
@@ -101,6 +92,174 @@ class de10nano(YellowBlock):
 
         sys.add_port('clk_clk', 'axil_clk', dir='in')
         sys.add_port('hps_0_h2f_reset_reset_n', 'h2f_rst_n', dir='out')
+        # --- HPS h2f_lw AXI master full AXI wires ---
+        '''
+        top.add_signal('hps_0_h2f_lw_axi_master_araddr', width=21)
+        top.add_signal('hps_0_h2f_lw_axi_master_arburst', width=2)
+        top.add_signal('hps_0_h2f_lw_axi_master_arcache', width=4)
+        top.add_signal('hps_0_h2f_lw_axi_master_arid', width=12)
+        top.add_signal('hps_0_h2f_lw_axi_master_arlen', width=4)
+        top.add_signal('hps_0_h2f_lw_axi_master_arlock', width=2)
+        top.add_signal('hps_0_h2f_lw_axi_master_arprot', width=3)
+        top.add_signal('hps_0_h2f_lw_axi_master_arready')
+        top.add_signal('hps_0_h2f_lw_axi_master_arsize', width=3)
+        top.add_signal('hps_0_h2f_lw_axi_master_arvalid')
+        top.add_signal('hps_0_h2f_lw_axi_master_awaddr', width=21)
+        top.add_signal('hps_0_h2f_lw_axi_master_awburst', width=2)
+        top.add_signal('hps_0_h2f_lw_axi_master_awcache', width=4)
+        top.add_signal('hps_0_h2f_lw_axi_master_awid', width=12)
+        top.add_signal('hps_0_h2f_lw_axi_master_awlen', width=4)
+        top.add_signal('hps_0_h2f_lw_axi_master_awlock', width=2)
+        top.add_signal('hps_0_h2f_lw_axi_master_awprot', width=3)
+        top.add_signal('hps_0_h2f_lw_axi_master_awready')
+        top.add_signal('hps_0_h2f_lw_axi_master_awsize', width=3)
+        top.add_signal('hps_0_h2f_lw_axi_master_awvalid')
+        top.add_signal('hps_0_h2f_lw_axi_master_bid', width=12)
+        top.add_signal('hps_0_h2f_lw_axi_master_bready')
+        top.add_signal('hps_0_h2f_lw_axi_master_bresp', width=2)
+        top.add_signal('hps_0_h2f_lw_axi_master_bvalid')
+        top.add_signal('hps_0_h2f_lw_axi_master_rdata', width=32)
+        top.add_signal('hps_0_h2f_lw_axi_master_rid', width=12)
+        top.add_signal('hps_0_h2f_lw_axi_master_rlast')
+        top.add_signal('hps_0_h2f_lw_axi_master_rready')
+        top.add_signal('hps_0_h2f_lw_axi_master_rresp', width=2)
+        top.add_signal('hps_0_h2f_lw_axi_master_rvalid')
+        top.add_signal('hps_0_h2f_lw_axi_master_wdata', width=32)
+        top.add_signal('hps_0_h2f_lw_axi_master_wid', width=12)
+        top.add_signal('hps_0_h2f_lw_axi_master_wlast')
+        top.add_signal('hps_0_h2f_lw_axi_master_wready')
+        top.add_signal('hps_0_h2f_lw_axi_master_wstrb', width=4)
+        top.add_signal('hps_0_h2f_lw_axi_master_wvalid')
+        '''
+        # Connect HPS LW AXI master ports on soc_system to these internal wires
+        sys.add_port('hps_0_h2f_lw_axi_master_araddr',   'hps_0_h2f_lw_axi_master_araddr', dir='out', width=21)
+        sys.add_port('hps_0_h2f_lw_axi_master_arburst',  'hps_0_h2f_lw_axi_master_arburst', dir='out', width=2)
+        sys.add_port('hps_0_h2f_lw_axi_master_arcache',  'hps_0_h2f_lw_axi_master_arcache', dir='out', width=4)
+        sys.add_port('hps_0_h2f_lw_axi_master_arid',     'hps_0_h2f_lw_axi_master_arid', dir='out', width=12)
+
+        sys.add_port('hps_0_h2f_lw_axi_master_arlen',    'hps_0_h2f_lw_axi_master_arlen', dir='out', width=4)
+        sys.add_port('hps_0_h2f_lw_axi_master_arlock',   'hps_0_h2f_lw_axi_master_arlock', dir='out', width=2)
+        sys.add_port('hps_0_h2f_lw_axi_master_arprot',   'hps_0_h2f_lw_axi_master_arprot', dir='out', width=3)
+        sys.add_port('hps_0_h2f_lw_axi_master_arready',  'hps_0_h2f_lw_axi_master_arready', dir='in')
+        sys.add_port('hps_0_h2f_lw_axi_master_arsize',   'hps_0_h2f_lw_axi_master_arsize', dir='out', width=3)
+        sys.add_port('hps_0_h2f_lw_axi_master_arvalid',  'hps_0_h2f_lw_axi_master_arvalid', dir='out')
+        sys.add_port('hps_0_h2f_lw_axi_master_awaddr',   'hps_0_h2f_lw_axi_master_awaddr', dir='out', width=21)
+        sys.add_port('hps_0_h2f_lw_axi_master_awburst',  'hps_0_h2f_lw_axi_master_awburst', dir='out', width=2)
+        sys.add_port('hps_0_h2f_lw_axi_master_awcache',  'hps_0_h2f_lw_axi_master_awcache', dir='out', width=4)
+        sys.add_port('hps_0_h2f_lw_axi_master_awid',     'hps_0_h2f_lw_axi_master_awid', dir='out', width=12)
+        sys.add_port('hps_0_h2f_lw_axi_master_awlen',    'hps_0_h2f_lw_axi_master_awlen', dir='out', width=4)
+        sys.add_port('hps_0_h2f_lw_axi_master_awlock',   'hps_0_h2f_lw_axi_master_awlock', dir='out', width=2)
+        sys.add_port('hps_0_h2f_lw_axi_master_awprot',   'hps_0_h2f_lw_axi_master_awprot', dir='out', width=3)
+        sys.add_port('hps_0_h2f_lw_axi_master_awready',  'hps_0_h2f_lw_axi_master_awready', dir='in')
+        sys.add_port('hps_0_h2f_lw_axi_master_awsize',   'hps_0_h2f_lw_axi_master_awsize', dir='out', width=3)
+        sys.add_port('hps_0_h2f_lw_axi_master_awvalid',  'hps_0_h2f_lw_axi_master_awvalid', dir='out')
+        sys.add_port('hps_0_h2f_lw_axi_master_bid',      'hps_0_h2f_lw_axi_master_bid', dir='in', width=12)
+        sys.add_port('hps_0_h2f_lw_axi_master_bready',   'hps_0_h2f_lw_axi_master_bready', dir='out')
+        sys.add_port('hps_0_h2f_lw_axi_master_bresp',    'hps_0_h2f_lw_axi_master_bresp', dir='in', width=2)
+        sys.add_port('hps_0_h2f_lw_axi_master_bvalid',   'hps_0_h2f_lw_axi_master_bvalid', dir='in')
+        sys.add_port('hps_0_h2f_lw_axi_master_rdata',    'hps_0_h2f_lw_axi_master_rdata', dir='in', width=32)
+        sys.add_port('hps_0_h2f_lw_axi_master_rid',      'hps_0_h2f_lw_axi_master_rid', dir='in', width=12)
+        sys.add_port('hps_0_h2f_lw_axi_master_rlast',    'hps_0_h2f_lw_axi_master_rlast', dir='in')
+        sys.add_port('hps_0_h2f_lw_axi_master_rready',   'hps_0_h2f_lw_axi_master_rready', dir='out')
+        sys.add_port('hps_0_h2f_lw_axi_master_rresp',    'hps_0_h2f_lw_axi_master_rresp', dir='in', width=2)
+        sys.add_port('hps_0_h2f_lw_axi_master_rvalid',   'hps_0_h2f_lw_axi_master_rvalid', dir='in')
+        sys.add_port('hps_0_h2f_lw_axi_master_wdata',    'hps_0_h2f_lw_axi_master_wdata', dir='out', width=32)
+        sys.add_port('hps_0_h2f_lw_axi_master_wid',      'hps_0_h2f_lw_axi_master_wid', dir='out', width=12)
+        sys.add_port('hps_0_h2f_lw_axi_master_wlast',    'hps_0_h2f_lw_axi_master_wlast', dir='out')
+        sys.add_port('hps_0_h2f_lw_axi_master_wready',   'hps_0_h2f_lw_axi_master_wready', dir='in')
+        sys.add_port('hps_0_h2f_lw_axi_master_wstrb',    'hps_0_h2f_lw_axi_master_wstrb', dir='out', width=4)
+        sys.add_port('hps_0_h2f_lw_axi_master_wvalid',   'hps_0_h2f_lw_axi_master_wvalid', dir='out')
+
+
+        # --- Helper reduced-width/bool signals for AXI?AXI-Lite adapter ---
+        top.add_signal('awlen8', width=8)
+        top.add_signal('arlen8', width=8)
+        top.add_signal('awlock1')
+        top.add_signal('arlock1')
+
+        top.add_raw_string("assign awlen8  = {4'b0000, hps_0_h2f_lw_axi_master_awlen};")
+        top.add_raw_string("assign arlen8  = {4'b0000, hps_0_h2f_lw_axi_master_arlen};")
+        top.add_raw_string("assign awlock1 = (hps_0_h2f_lw_axi_master_awlock == 2'b01);")
+        top.add_raw_string("assign arlock1 = (hps_0_h2f_lw_axi_master_arlock == 2'b01);")
+
+        # --- AXI (HPS) ? AXI-Lite (M_AXI_*) bridge instance ---
+        bridge = top.get_instance('axi_axil_adapter', 'axi_axil_adapter')
+        bridge.add_parameter('AXI_ID_WIDTH',   12)
+        bridge.add_parameter('ADDR_WIDTH',     21)
+        bridge.add_parameter('AXI_DATA_WIDTH', 32)
+        bridge.add_parameter('AXIL_DATA_WIDTH',32)
+
+        # Clock/reset for the bridge: assumes axil_clk/axil_rst already defined
+        bridge.add_port('clk', 'axil_clk')
+        bridge.add_port('rst', 'axil_rst')
+
+        # Slave AXI interface (from HPS h2f_lw master)
+        bridge.add_port('s_axi_awid',   'hps_0_h2f_lw_axi_master_awid',     width = 12)
+        bridge.add_port('s_axi_awaddr', 'hps_0_h2f_lw_axi_master_awaddr',   width = 21)
+        bridge.add_port('s_axi_awlen',  'awlen8',                           width = 8)
+        bridge.add_port('s_axi_awsize', 'hps_0_h2f_lw_axi_master_awsize',   width = 3)
+        bridge.add_port('s_axi_awburst','hps_0_h2f_lw_axi_master_awburst',  width = 2)
+        bridge.add_port('s_axi_awlock', 'awlock1')
+        bridge.add_port('s_axi_awcache','hps_0_h2f_lw_axi_master_awcache',  width = 4)
+        bridge.add_port('s_axi_awprot', 'hps_0_h2f_lw_axi_master_awprot',   width = 3)
+        bridge.add_port('s_axi_awvalid','hps_0_h2f_lw_axi_master_awvalid')
+        bridge.add_port('s_axi_awready','hps_0_h2f_lw_axi_master_awready')
+
+        bridge.add_port('s_axi_wdata', 'hps_0_h2f_lw_axi_master_wdata',     width = 32)
+        bridge.add_port('s_axi_wstrb', 'hps_0_h2f_lw_axi_master_wstrb',     width = 4)
+        bridge.add_port('s_axi_wlast', 'hps_0_h2f_lw_axi_master_wlast')
+        bridge.add_port('s_axi_wvalid','hps_0_h2f_lw_axi_master_wvalid')
+        bridge.add_port('s_axi_wready','hps_0_h2f_lw_axi_master_wready')
+
+        bridge.add_port('s_axi_bid',   'hps_0_h2f_lw_axi_master_bid',       width = 12)
+        bridge.add_port('s_axi_bresp', 'hps_0_h2f_lw_axi_master_bresp',     width = 2)
+        bridge.add_port('s_axi_bvalid','hps_0_h2f_lw_axi_master_bvalid')
+        bridge.add_port('s_axi_bready','hps_0_h2f_lw_axi_master_bready')
+
+        bridge.add_port('s_axi_arid',   'hps_0_h2f_lw_axi_master_arid',     width = 12)
+        bridge.add_port('s_axi_araddr', 'hps_0_h2f_lw_axi_master_araddr',   width = 21)
+        bridge.add_port('s_axi_arlen',  'arlen8',                           width = 8)
+        bridge.add_port('s_axi_arsize', 'hps_0_h2f_lw_axi_master_arsize',   width = 3)
+        bridge.add_port('s_axi_arburst','hps_0_h2f_lw_axi_master_arburst',  width = 2)
+        bridge.add_port('s_axi_arlock', 'arlock1')
+        bridge.add_port('s_axi_arcache','hps_0_h2f_lw_axi_master_arcache',  width = 4)
+        bridge.add_port('s_axi_arprot', 'hps_0_h2f_lw_axi_master_arprot',   width = 3)
+        bridge.add_port('s_axi_arvalid','hps_0_h2f_lw_axi_master_arvalid')
+        bridge.add_port('s_axi_arready','hps_0_h2f_lw_axi_master_arready')
+
+        bridge.add_port('s_axi_rid',   'hps_0_h2f_lw_axi_master_rid',       width = 12)
+        bridge.add_port('s_axi_rdata', 'hps_0_h2f_lw_axi_master_rdata',     width = 32)
+        bridge.add_port('s_axi_rresp', 'hps_0_h2f_lw_axi_master_rresp',     width = 2)
+        bridge.add_port('s_axi_rlast', 'hps_0_h2f_lw_axi_master_rlast')
+        bridge.add_port('s_axi_rvalid','hps_0_h2f_lw_axi_master_rvalid')
+        bridge.add_port('s_axi_rready','hps_0_h2f_lw_axi_master_rready')
+
+        # AXI-Lite master interface towards CASPER axi4lite_interconnect (M_AXI_*)
+        bridge.add_port('m_axil_awaddr', 'M_AXI_awaddr',                   width = 32)
+        bridge.add_port('m_axil_awprot', 'M_AXI_awprot',                   width = 3)
+        bridge.add_port('m_axil_awvalid','M_AXI_awvalid')
+        bridge.add_port('m_axil_awready','M_AXI_awready')
+
+        bridge.add_port('m_axil_wdata', 'M_AXI_wdata',                     width = 32)
+        bridge.add_port('m_axil_wstrb', 'M_AXI_wstrb',                     width = 4)
+        bridge.add_port('m_axil_wvalid','M_AXI_wvalid')
+        bridge.add_port('m_axil_wready','M_AXI_wready')
+
+        bridge.add_port('m_axil_bresp', 'M_AXI_bresp',                     width= 2)
+        bridge.add_port('m_axil_bvalid','M_AXI_bvalid')
+        bridge.add_port('m_axil_bready','M_AXI_bready')
+
+        bridge.add_port('m_axil_araddr', 'M_AXI_araddr',                   width = 32)
+        bridge.add_port('m_axil_arprot', 'M_AXI_arprot',                   width = 3)
+        bridge.add_port('m_axil_arvalid','M_AXI_arvalid')
+        bridge.add_port('m_axil_arready','M_AXI_arready')
+
+        bridge.add_port('m_axil_rdata', 'M_AXI_rdata',                     width = 32)
+        bridge.add_port('m_axil_rresp', 'M_AXI_rresp',                     width = 2)
+        bridge.add_port('m_axil_rvalid','M_AXI_rvalid')
+        bridge.add_port('m_axil_rready','M_AXI_rready')
+
+
         top.add_raw_string("assign axil_rst_n = h2f_rst_n;\n")
         top.add_raw_string("assign axil_rst = ~h2f_rst_n;\n")
         top.add_raw_string("assign user_rst = ~h2f_rst_n;\n")
@@ -128,31 +287,7 @@ class de10nano(YellowBlock):
         sys.add_port('memory_mem_dm',      'HPS_DDR3_DM',       dir='out',   width=4,    parent_port=True)
         sys.add_port('memory_oct_rzqin',   'HPS_DDR3_RZQ',      dir='in',                parent_port=True)
 
-
-        # --- HPS LW AXI master (names must match *your* soc_system.v exactly) ---
-        sys.add_port('hps_0_h2f_lw_axi_master_awaddr',  'hps_awaddr_21', dir='out', width=21)
-        sys.add_port('hps_0_h2f_lw_axi_master_awvalid', 'M_AXI_awvalid', dir='out')
-        sys.add_port('hps_0_h2f_lw_axi_master_awready', 'M_AXI_awready', dir='in')
-
-        sys.add_port('hps_0_h2f_lw_axi_master_wdata',   'M_AXI_wdata',   dir='out', width=32)
-        sys.add_port('hps_0_h2f_lw_axi_master_wstrb',   'M_AXI_wstrb',   dir='out', width=4)
-        sys.add_port('hps_0_h2f_lw_axi_master_wvalid',  'M_AXI_wvalid',  dir='out')
-        sys.add_port('hps_0_h2f_lw_axi_master_wready',  'M_AXI_wready',  dir='in')
-
-        sys.add_port('hps_0_h2f_lw_axi_master_bresp',   'M_AXI_bresp',   dir='in',  width=2)
-        sys.add_port('hps_0_h2f_lw_axi_master_bvalid',  'M_AXI_bvalid',  dir='in')
-        sys.add_port('hps_0_h2f_lw_axi_master_bready',  'M_AXI_bready',  dir='out')
-
-        sys.add_port('hps_0_h2f_lw_axi_master_araddr',  'hps_araddr_21', dir='out', width=21)
-        sys.add_port('hps_0_h2f_lw_axi_master_arvalid', 'M_AXI_arvalid', dir='out')
-        sys.add_port('hps_0_h2f_lw_axi_master_arready', 'M_AXI_arready', dir='in')
-
-        sys.add_port('hps_0_h2f_lw_axi_master_rdata',   'M_AXI_rdata',   dir='in',  width=32)
-        sys.add_port('hps_0_h2f_lw_axi_master_rresp',   'M_AXI_rresp',   dir='in',  width=2)
-        sys.add_port('hps_0_h2f_lw_axi_master_rvalid',  'M_AXI_rvalid',  dir='in')
-        sys.add_port('hps_0_h2f_lw_axi_master_rready',  'M_AXI_rready',  dir='out')
-
-
+        print('Made it to the end')
     def gen_children(self):
         return []
         # Add exactly one system block named 'sys' so memory_map['sys'] exists

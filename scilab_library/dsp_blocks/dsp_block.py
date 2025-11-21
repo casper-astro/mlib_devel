@@ -5,8 +5,8 @@ mlib_devel_path = os.getenv('MLIB_DEVEL_PATH')
 
 import sys
 # add the jasper_library to the path
-sys.path.append('jasper_library')
-sys.path.append('jasper_library/yellow_blocks')
+sys.path.append(mlib_devel_path + '/jasper_library')
+sys.path.append(mlib_devel_path + '/jasper_library/yellow_blocks')
 
 import collections
 from yellow_block import YellowBlock

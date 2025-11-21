@@ -9,38 +9,20 @@
    categories="System" />
  <parameter name="bonusData"><![CDATA[bonusData 
 {
-   element axi_bridge_0
-   {
-      datum _sortIndex
-      {
-         value = "2";
-         type = "int";
-      }
-   }
    element clk_0
-   {
-      datum _sortIndex
-      {
-         value = "1";
-         type = "int";
-      }
-      datum sopceditor_expanded
-      {
-         value = "1";
-         type = "boolean";
-      }
-   }
-   element hps_0
    {
       datum _sortIndex
       {
          value = "0";
          type = "int";
       }
-      datum sopceditor_expanded
+   }
+   element hps_0
+   {
+      datum _sortIndex
       {
          value = "1";
-         type = "boolean";
+         type = "int";
       }
    }
 }
@@ -57,95 +39,25 @@
  <parameter name="hideFromIPCatalog" value="false" />
  <parameter name="lockedInterfaceDefinition" value="" />
  <parameter name="maxAdditionalLatency" value="1" />
- <parameter name="projectName" value="" />
+ <parameter name="projectName" value="axi4lite_test.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="0" />
  <parameter name="testBenchDutName" value="" />
  <parameter name="timeStamp" value="0" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
- <interface
-   name="axi_bridge_0_m0"
-   internal="axi_bridge_0.m0"
-   type="axi4"
-   dir="start" />
  <interface name="clk" internal="clk_0.clk_in" type="clock" dir="end" />
- <interface name="hps_0_f2h_cold_reset_req" internal="hps_0.f2h_cold_reset_req" />
- <interface name="hps_0_f2h_debug_reset_req" internal="hps_0.f2h_debug_reset_req" />
- <interface name="hps_0_f2h_stm_hw_events" internal="hps_0.f2h_stm_hw_events" />
- <interface name="hps_0_f2h_warm_reset_req" internal="hps_0.f2h_warm_reset_req" />
- <interface name="hps_0_h2f_user0_clock" internal="hps_0.h2f_user0_clock" />
- <interface name="hps_0_hps_io" internal="hps_0.hps_io" />
+ <interface
+   name="clk_0_clk_reset"
+   internal="clk_0.clk_reset"
+   type="reset"
+   dir="start" />
+ <interface
+   name="hps_0_h2f_lw_axi_master"
+   internal="hps_0.h2f_lw_axi_master"
+   type="axi"
+   dir="start" />
  <interface name="memory" internal="hps_0.memory" type="conduit" dir="end" />
- <module
-   name="axi_bridge_0"
-   kind="altera_axi_bridge"
-   version="24.1"
-   enabled="1">
-  <parameter name="ADDR_WIDTH" value="21" />
-  <parameter name="AXI_VERSION" value="AXI4" />
-  <parameter name="COMBINED_ACCEPTANCE_CAPABILITY" value="16" />
-  <parameter name="COMBINED_ISSUING_CAPABILITY" value="16" />
-  <parameter name="DATA_WIDTH" value="32" />
-  <parameter name="M0_ID_WIDTH" value="12" />
-  <parameter name="READ_ACCEPTANCE_CAPABILITY" value="16" />
-  <parameter name="READ_ADDR_USER_WIDTH" value="64" />
-  <parameter name="READ_DATA_REORDERING_DEPTH" value="1" />
-  <parameter name="READ_DATA_USER_WIDTH" value="64" />
-  <parameter name="READ_ISSUING_CAPABILITY" value="16" />
-  <parameter name="S0_ID_WIDTH" value="12" />
-  <parameter name="USE_M0_ARBURST" value="0" />
-  <parameter name="USE_M0_ARCACHE" value="0" />
-  <parameter name="USE_M0_ARID" value="0" />
-  <parameter name="USE_M0_ARLEN" value="0" />
-  <parameter name="USE_M0_ARLOCK" value="0" />
-  <parameter name="USE_M0_ARQOS" value="0" />
-  <parameter name="USE_M0_ARREGION" value="0" />
-  <parameter name="USE_M0_ARSIZE" value="0" />
-  <parameter name="USE_M0_ARUSER" value="0" />
-  <parameter name="USE_M0_AWBURST" value="0" />
-  <parameter name="USE_M0_AWCACHE" value="0" />
-  <parameter name="USE_M0_AWID" value="0" />
-  <parameter name="USE_M0_AWLEN" value="0" />
-  <parameter name="USE_M0_AWLOCK" value="0" />
-  <parameter name="USE_M0_AWQOS" value="0" />
-  <parameter name="USE_M0_AWREGION" value="0" />
-  <parameter name="USE_M0_AWSIZE" value="0" />
-  <parameter name="USE_M0_AWUSER" value="0" />
-  <parameter name="USE_M0_BID" value="0" />
-  <parameter name="USE_M0_BRESP" value="1" />
-  <parameter name="USE_M0_BUSER" value="0" />
-  <parameter name="USE_M0_RID" value="0" />
-  <parameter name="USE_M0_RLAST" value="0" />
-  <parameter name="USE_M0_RRESP" value="1" />
-  <parameter name="USE_M0_RUSER" value="0" />
-  <parameter name="USE_M0_WSTRB" value="1" />
-  <parameter name="USE_M0_WUSER" value="0" />
-  <parameter name="USE_PIPELINE" value="1" />
-  <parameter name="USE_S0_ARCACHE" value="1" />
-  <parameter name="USE_S0_ARLOCK" value="1" />
-  <parameter name="USE_S0_ARPROT" value="1" />
-  <parameter name="USE_S0_ARQOS" value="1" />
-  <parameter name="USE_S0_ARREGION" value="1" />
-  <parameter name="USE_S0_ARUSER" value="0" />
-  <parameter name="USE_S0_AWCACHE" value="1" />
-  <parameter name="USE_S0_AWLOCK" value="1" />
-  <parameter name="USE_S0_AWPROT" value="1" />
-  <parameter name="USE_S0_AWQOS" value="1" />
-  <parameter name="USE_S0_AWREGION" value="1" />
-  <parameter name="USE_S0_AWUSER" value="0" />
-  <parameter name="USE_S0_BRESP" value="1" />
-  <parameter name="USE_S0_BUSER" value="0" />
-  <parameter name="USE_S0_RRESP" value="1" />
-  <parameter name="USE_S0_RUSER" value="0" />
-  <parameter name="USE_S0_WLAST" value="1" />
-  <parameter name="USE_S0_WUSER" value="0" />
-  <parameter name="WRITE_ACCEPTANCE_CAPABILITY" value="16" />
-  <parameter name="WRITE_ADDR_USER_WIDTH" value="64" />
-  <parameter name="WRITE_DATA_USER_WIDTH" value="64" />
-  <parameter name="WRITE_ISSUING_CAPABILITY" value="16" />
-  <parameter name="WRITE_RESP_USER_WIDTH" value="64" />
- </module>
  <module name="clk_0" kind="clock_source" version="24.1" enabled="1">
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="clockFrequencyKnown" value="true" />
@@ -205,8 +117,8 @@
   <parameter name="CTL_DYNAMIC_BANK_NUM" value="4" />
   <parameter name="CTL_ECC_AUTO_CORRECTION_ENABLED" value="false" />
   <parameter name="CTL_ECC_ENABLED" value="false" />
-  <parameter name="CTL_ENABLE_BURST_INTERRUPT" value="true" />
-  <parameter name="CTL_ENABLE_BURST_TERMINATE" value="true" />
+  <parameter name="CTL_ENABLE_BURST_INTERRUPT" value="false" />
+  <parameter name="CTL_ENABLE_BURST_TERMINATE" value="false" />
   <parameter name="CTL_HRB_ENABLED" value="false" />
   <parameter name="CTL_LOOK_AHEAD_DEPTH" value="4" />
   <parameter name="CTL_SELF_REFRESH_EN" value="false" />
@@ -289,10 +201,10 @@
   <parameter name="FPGA_PERIPHERAL_INPUT_CLOCK_FREQ_SPIS1_SCLK_IN" value="100" />
   <parameter name="FPGA_PERIPHERAL_INPUT_CLOCK_FREQ_USB0_CLK_IN" value="100" />
   <parameter name="FPGA_PERIPHERAL_INPUT_CLOCK_FREQ_USB1_CLK_IN" value="100" />
-  <parameter name="FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_EMAC0_GTX_CLK" value="100" />
-  <parameter name="FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_EMAC0_MD_CLK" value="100.0" />
-  <parameter name="FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_EMAC1_GTX_CLK" value="100" />
-  <parameter name="FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_EMAC1_MD_CLK" value="100.0" />
+  <parameter name="FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_EMAC0_GTX_CLK" value="125" />
+  <parameter name="FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_EMAC0_MD_CLK" value="2.5" />
+  <parameter name="FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_EMAC1_GTX_CLK" value="125" />
+  <parameter name="FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_EMAC1_MD_CLK" value="2.5" />
   <parameter name="FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_I2C0_CLK" value="100" />
   <parameter name="FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_I2C1_CLK" value="100" />
   <parameter name="FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_I2C2_CLK" value="100" />
@@ -331,8 +243,8 @@
   <parameter name="LRDIMM_EXTENDED_CONFIG">0x000000000000000000</parameter>
   <parameter name="LWH2F_Enable" value="true" />
   <parameter name="MARGIN_VARIATION_TEST" value="false" />
-  <parameter name="MAX_PENDING_RD_CMD" value="16" />
-  <parameter name="MAX_PENDING_WR_CMD" value="8" />
+  <parameter name="MAX_PENDING_RD_CMD" value="32" />
+  <parameter name="MAX_PENDING_WR_CMD" value="16" />
   <parameter name="MEM_ASR" value="Manual" />
   <parameter name="MEM_ATCL" value="Disabled" />
   <parameter name="MEM_AUTO_LEVELING_MODE" value="true" />
@@ -502,7 +414,7 @@
   <parameter name="S2FCLK_USER0CLK_Enable" value="false" />
   <parameter name="S2FCLK_USER1CLK_Enable" value="false" />
   <parameter name="S2FCLK_USER1CLK_FREQ" value="100.0" />
-  <parameter name="S2FCLK_USER2CLK" value="4" />
+  <parameter name="S2FCLK_USER2CLK" value="5" />
   <parameter name="S2FCLK_USER2CLK_Enable" value="false" />
   <parameter name="S2FCLK_USER2CLK_FREQ" value="100.0" />
   <parameter name="S2FINTERRUPT_CAN_Enable" value="false" />
@@ -628,7 +540,7 @@
   <parameter name="desired_l4_sp_clk_mhz" value="100.0" />
   <parameter name="desired_mpu_clk_mhz" value="800.0" />
   <parameter name="desired_nand_clk_mhz" value="12.5" />
-  <parameter name="desired_qspi_clk_mhz" value="370.0" />
+  <parameter name="desired_qspi_clk_mhz" value="400.0" />
   <parameter name="desired_sdmmc_clk_mhz" value="200.0" />
   <parameter name="desired_spi_m_clk_mhz" value="200.0" />
   <parameter name="desired_usb_mp_clk_mhz" value="200.0" />
@@ -683,16 +595,6 @@
   <parameter name="use_default_mpu_clk" value="true" />
  </module>
  <connection
-   kind="avalon"
-   version="24.1"
-   start="hps_0.h2f_lw_axi_master"
-   end="axi_bridge_0.s0">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection kind="clock" version="24.1" start="clk_0.clk" end="axi_bridge_0.clk" />
- <connection
    kind="clock"
    version="24.1"
    start="clk_0.clk"
@@ -702,11 +604,8 @@
    version="24.1"
    start="hps_0.h2f_reset"
    end="clk_0.clk_in_reset" />
- <connection
-   kind="reset"
-   version="24.1"
-   start="hps_0.h2f_reset"
-   end="axi_bridge_0.clk_reset" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
+ <interconnectRequirement for="$system" name="qsys_mm.enableEccProtection" value="FALSE" />
+ <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="FALSE" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
 </system>

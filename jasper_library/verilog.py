@@ -1144,17 +1144,21 @@ class VerilogModule(object):
         """
         Add ports and signals associated with child instances
         """        
+        print('All the keys are: ' + str(self.instances.keys()))
         for block in list(sorted(self.instances.keys())):
             self.set_cur_blk(block)
             for instname, inst in list(self.instances[block].items()):
-                print('On instance ' + str(vars(inst)))
                 logger.debug('Instantiating child ports for %s'%instname)
+                print('Instantiating child ports for %s'%instname)
                 for blk in list(sorted(inst.ports.keys())):
                     for pname, port in list(inst.ports[blk].items()):
                         if port.parent_sig:
                             logger.debug('  Adding instance port %s as signal %s to top'%(port.name, port.signal))
+                            print('  Adding instance port %s as signal %s to top'%(port.name, port.signal))
                             if not hasattr(port, 'width'):
+                                print('Setting width to 0')
                                 port.width = 0 #default to non-vector signal
+                            print('The width should be %d'%port.width)
                             self.add_signal(port.signal, width=port.width)
                         if port.parent_port:
                             logger.debug('  Adding instance port %s to top'%port.name)

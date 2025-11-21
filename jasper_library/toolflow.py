@@ -632,13 +632,17 @@ class Toolflow(object):
         """
         # Decide if we're going to use a hierarchical arbiter.
         self.logger.debug("Looking for a max_devices_per_arbiter spec")
+        print("Looking for a max_devices_per_arbiter spec")
         if 'max_devices_per_arbiter' in self.plat.conf:
             self.top.max_devices_per_arb = self.plat.conf['max_devices_per_arbiter']
             self.logger.debug("Found max_devices_per_arbiter: %s" % self.top.max_devices_per_arb)
+            print("Found max_devices_per_arbiter: %s" % self.top.max_devices_per_arb)
         # Check for memory map bus architecture, added to support AXI4-Lite
         if 'AXI4-Lite' in self.plat.mmbus_architecture:
+            print('AXI4-Lite found in mmbus architecture')
             pass
         if 'wishbone' in self.plat.mmbus_architecture:
+            print('Wishbone found in mmbus architecture')
             self.top.wb_compute(self.plat.dsp_wb_base_address,
                               self.plat.dsp_wb_base_address_alignment)
         
@@ -1633,6 +1637,7 @@ class QuartusBackend(ToolflowBackend):
 
         #self.add_tcl_cmd(f'set_global_assignment -name OUTPUT_DIRECTORY {self.output_dir}', stage='init')
         self.logger.debug(f'Top level output directory is: {self.output_dir}')
+        print(f'Top level output directory is: {self.output_dir}')
 
         # Any top-level file setup
         self.add_tcl_cmd(f'set_global_assignment -name TOP_LEVEL_ENTITY top', stage='init')
@@ -1649,7 +1654,9 @@ class QuartusBackend(ToolflowBackend):
 
         #print('ALL ALLTRIBUTES: ' + str(vars(self)))
 
-        soc_qip = os.path.join(os.getenv('MLIB_DEVEL_PATH'), 'jasper_library/hdl_sources/de10nano/soc_system/synthesis/soc_system_parsed.qip')
+#        soc_qip = os.path.join(os.getenv('MLIB_DEVEL_PATH'), 'jasper_library/hdl_sources/de10nano/soc_system/synthesis/soc_system_parsed.qip')
+        soc_qip = os.path.join(os.getenv('MLIB_DEVEL_PATH'), 'jasper_library/hdl_sources/de10nano/soc_system/synthesis/soc_system.qip')
+
         self.add_tcl_cmd(f'set_global_assignment -name QIP_FILE "{soc_qip}"', stage = 'init')
 
         core_basename = os.path.basename(self.compile_dir) 
@@ -1704,6 +1711,7 @@ class QuartusBackend(ToolflowBackend):
         """
         self.logger.debug(f'Adding source: {source}')
         print(f"[QUARTUS BACKEND] add_source() called for: {source}")
+        print(f"[DEBUG] OUTPUT DIR: {self.output_dir}")
         print("[DEBUG] HDL output dir contents:")
         for f in os.listdir(self.output_dir):
             print("    -", f)
@@ -1712,7 +1720,7 @@ class QuartusBackend(ToolflowBackend):
             # Source is a directory ? add all supported HDL files
             for fname in sorted(os.listdir(source)):
                 full_path = os.path.join(source, fname)
-                if not('soc_system_hps_0.v' in fname.lower() or 'soc_system_hps_0_fpga_interfaces.sv' in fname.lower() or 'soc_system_hps_0_hps_io.v' in fname.lower()):
+                if True: #not('soc_system_hps_0.v' in fname.lower() or 'soc_system_hps_0_fpga_interfaces.sv' in fname.lower() or 'soc_system_hps_0_hps_io.v' in fname.lower()):
                     if fname.lower().endswith('.vhd') or fname.lower().endswith('.vhdl'):
                         self.add_tcl_cmd(f'set_global_assignment -name VHDL_FILE "{full_path}"')
                     elif fname.lower().endswith('.v'):
@@ -1723,7 +1731,7 @@ class QuartusBackend(ToolflowBackend):
                         self.logger.debug(f'Skipping non-HDL file: {fname}')
         elif os.path.isfile(source):
             # Source is a single file
-            if not('soc_system_hps_0.v' in source.lower() or 'soc_system_hps_0_fpga_interfaces.sv' in source.lower() or 'soc_system_hps_0_hps_io.v' in source.lower()):
+            if True: #not('soc_system_hps_0.v' in source.lower() or 'soc_system_hps_0_fpga_interfaces.sv' in source.lower() or 'soc_system_hps_0_hps_io.v' in source.lower()):
                 ext = os.path.splitext(source)[-1].lower()
                 if ext == '.vhd' or ext == '.vhdl':
                     self.add_tcl_cmd(f'set_global_assignment -name VHDL_FILE "{source}"')
@@ -1814,8 +1822,9 @@ class QuartusBackend(ToolflowBackend):
         #tcl(f'execute_module -tool sta', stage = 'synth')
 
 
-        sof_loc = os.path.join(self.output_dir, 'top.sof')
-        tcl(f'file copy -force "myproj.sof" "{sof_loc}"', stage ='synth')
+        sof_orig = os.path.join(self.compile_dir, self.project_name, "output_files", self.project_name + ".sof") 
+        
+        #tcl(f'file copy -force "{sof_orig}" "{sof_loc}"', stage ='synth')
 
 
         frontend = os.getenv('FRONTEND').lower()
@@ -1828,7 +1837,7 @@ class QuartusBackend(ToolflowBackend):
                 #self.add_tcl_cmd(f'set_global_assignment -name SEARCH_PATH {search_dir}', stage='init')
         
 
-        #tcl(f'file copy -force {self.project_name}.sof {self.output_dir}/top.sof', stage='post_bitgen')
+        tcl(f'file copy -force {self.project_name}.sof {self.output_dir}/top.sof', stage='post_bitgen')
 
         # Or manual steps (for debug granularity):
         # tcl(f'quartus_map --read_settings_files=on --write_settings_files=off {self.project_name}', stage='synth')
@@ -1840,15 +1849,17 @@ class QuartusBackend(ToolflowBackend):
         # tcl(f'quartus_sta {self.project_name}', stage='post_impl')
 
         # Step 3: Generate .rbf (raw binary file)
-        #rbf_output = self.binary_loc
-        #sof_input = self.bitstream_loc
-        #tcl(f'quartus_cpf -c {sof_input} {rbf_output}', stage='post_bitgen')
+        #rbf_output = os.path.join(self.compile_dir, self.project_name, "output_files", self.project_name + ".rbf")
+        #subprocess.run([f'quartus_cpf', '-c', sof_orig, rbf_output], check = True)
 
         # Step 4: Yellow block hooks, timing checks, etc.
-        self.gen_yellowblock_tcl_cmds()
+        #self.gen_yellowblock_tcl_cmds()
 
         # Optional: check for timing failures (you may need to parse .sta.rpt manually)
         tcl('puts "Compilation complete."', stage='promgen')
+
+        #fpg_output = os.path.join(self.compile_dir, self.project_name, "output_files", self.project_name + ".fpg")
+        #self.mkfpg(rbf_output, fpg_output)
 
 
     def compile(self, cores, plat, synth_strat=None, impl_strat=None, threads='multi'):
@@ -1887,6 +1898,15 @@ class QuartusBackend(ToolflowBackend):
         print('SOF LOCATION: ' + str(subprocess_sof))
         print('RBF LOCATION: ' + str(subprocess_rbf))
         subprocess.run([f'quartus_cpf', '-c', subprocess_sof, subprocess_rbf], check = True)
+
+
+        # Step 4: Yellow block hooks, timing checks, etc.
+        self.gen_yellowblock_tcl_cmds()
+
+        # Step 5: Generate .fpg file
+        fpg_output = os.path.join(self.compile_dir, self.project_name, "output_files", self.project_name + ".fpg")
+        self.mkfpg(rbf_output, fpg_output)
+
 
     def get_tcl_const(self, const):
         user_const = ''
@@ -1938,6 +1958,8 @@ class QuartusBackend(ToolflowBackend):
         # Extend this with other constraint types as needed (e.g. ClockGroupConstraint)
 
         return user_const
+
+
 
 
 
