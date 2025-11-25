@@ -3,6 +3,7 @@ from clk_factors import clk_factors
 from constraints import ClockConstraint, PortConstraint
 import glob, os
 
+# Infer signal width based on common AXI naming conventions
 def signal_width(sig):
     if 'addr' in sig or 'data' in sig:
         return 32
@@ -15,26 +16,35 @@ def signal_width(sig):
 
 class de10nano(YellowBlock):
     def initialize(self):
+    """
+    Called once when the platform block is created.
+    Defines board-level parameters, available resources, and HDL sources.
+    """
         self.name = 'de10nano'
         self.fpga = '5CSEBA6U23I7'
         self.family = 'Cyclone V'
         self.manufacturer = 'intel'
+        
+        # Quartus requires project-mode operation for IP handling
         self.project_mode = True
+        
+        # For compatibility with CASPER naming conventions
         self.blkdesign = '{:s}_bd'.format(self.platform.conf['name'])
         self.backend_name = 'quartus'
 
+        # Clock frequency from YAML platform config
         self.pl_clk_mhz = self.blk['pl_clk_rate']
         self.T_pl_clk_ns = 1.0/self.pl_clk_mhz*1000
 
-        # what this platform offers to the rest of the design
+        # Exported board-level signals that other YellowBlocks may request
         for p in ['sys_clk','sys_rst','axil_clk','axil_rst_n','fpga_clk1_50','fpga_clk2_50','fpga_clk3_50','pl_sysref']:
             self.provides.append(p)
 
-        # sources: CDC helper
-        #self.add_source('utils/cdc_synchroniser.vhd')
        
-        # AXI4-Lite interconnect RTL so the instance created by the model can bind
-        # (adjust these globs to your repo layout)
+        # ------------------------------------------------------------------
+        # Add HDL sources: AXI4-Lite, registers, bridges, CDC, soc_system.v
+        # ------------------------------------------------------------------
+        
         hdl_root = os.environ['HDL_ROOT']
         for patt in ['utils/cdc_synchroniser.vhd', 'axi4_lite/*.v', 'axi4_lite/*.sv', 'axi4_register/*.v', 'axi4_register/*.sv', 'de10nano/axi_axil_adapter*.v', 'de10nano/*.v', 'de10nano/*.sv', 'de10nano/soc_system/synthesis/*.v',  'de10nano/soc_system/synthesis/*.sv']:
             for f in glob.glob(os.path.join(hdl_root, patt)):
@@ -49,7 +59,21 @@ class de10nano(YellowBlock):
                 except Exception:
                     pass
 
+    # ----------------------------------------------------------------------
+    # modify_top(): CASPER auto-top builder calls this to populate top.v
+    # ----------------------------------------------------------------------
+
     def modify_top(self, top):
+    """
+    Wire:
+    - Device pins
+    - clocks
+    - AXI-Lite nets
+    - soc_system (HPS subsystem) ports
+    - AXI to AXI-Lite bridge instance
+    - DDR3 interface to top-level pins
+    """
+
         # --- Board clock (name must match the QSF/board pin) ---
         top.add_port('FPGA_CLK1_50', dir='in')
 
@@ -63,10 +87,13 @@ class de10nano(YellowBlock):
         #top.assign_signal('sys_clk', 'FPGA_CLK1_50')
         top.assign_signal('sys_clk', 'fpga_clk1_50')
 
+        # AXI-Lite interconnect operates on the same clock
         top.add_signal('axil_clk')
         top.assign_signal('axil_clk', 'fpga_clk1_50')
 
-        # --- AXI-Lite master (internal nets only) ---
+        # ------------------------------------------------------------------
+        # Internal AXI-Lite master bus (from axi_axil_adapter)
+        # ------------------------------------------------------------------
         axi = [
             ('M_AXI_awaddr', 32), ('M_AXI_awprot', 3),
             ('M_AXI_awvalid', 1), ('M_AXI_awready', 1),
@@ -80,10 +107,12 @@ class de10nano(YellowBlock):
         for name, w in axi:
             top.add_signal(name, width=w if w > 1 else None)
 
-        # --- soc_system instance ---
+        # -------------------------------------------------------------------
+        # soc_system_inst ? the Platform Designer / Qsys-generated HPS system
+        # -------------------------------------------------------------------        
         sys = top.get_instance('soc_system', 'soc_system_inst')
 
-        # Clocks / resets (names must exist in your soc_system.v)
+        # # Basic HPS/fabric clocks + reset
         top.add_signal('h2f_rst_n')   # from HPS to fabric (active-high)
         top.add_signal('axil_rst')    # active-high fabric reset
         top.add_signal('axil_rst_n')
@@ -92,46 +121,12 @@ class de10nano(YellowBlock):
 
         sys.add_port('clk_clk', 'axil_clk', dir='in')
         sys.add_port('hps_0_h2f_reset_reset_n', 'h2f_rst_n', dir='out')
-        # --- HPS h2f_lw AXI master full AXI wires ---
-        '''
-        top.add_signal('hps_0_h2f_lw_axi_master_araddr', width=21)
-        top.add_signal('hps_0_h2f_lw_axi_master_arburst', width=2)
-        top.add_signal('hps_0_h2f_lw_axi_master_arcache', width=4)
-        top.add_signal('hps_0_h2f_lw_axi_master_arid', width=12)
-        top.add_signal('hps_0_h2f_lw_axi_master_arlen', width=4)
-        top.add_signal('hps_0_h2f_lw_axi_master_arlock', width=2)
-        top.add_signal('hps_0_h2f_lw_axi_master_arprot', width=3)
-        top.add_signal('hps_0_h2f_lw_axi_master_arready')
-        top.add_signal('hps_0_h2f_lw_axi_master_arsize', width=3)
-        top.add_signal('hps_0_h2f_lw_axi_master_arvalid')
-        top.add_signal('hps_0_h2f_lw_axi_master_awaddr', width=21)
-        top.add_signal('hps_0_h2f_lw_axi_master_awburst', width=2)
-        top.add_signal('hps_0_h2f_lw_axi_master_awcache', width=4)
-        top.add_signal('hps_0_h2f_lw_axi_master_awid', width=12)
-        top.add_signal('hps_0_h2f_lw_axi_master_awlen', width=4)
-        top.add_signal('hps_0_h2f_lw_axi_master_awlock', width=2)
-        top.add_signal('hps_0_h2f_lw_axi_master_awprot', width=3)
-        top.add_signal('hps_0_h2f_lw_axi_master_awready')
-        top.add_signal('hps_0_h2f_lw_axi_master_awsize', width=3)
-        top.add_signal('hps_0_h2f_lw_axi_master_awvalid')
-        top.add_signal('hps_0_h2f_lw_axi_master_bid', width=12)
-        top.add_signal('hps_0_h2f_lw_axi_master_bready')
-        top.add_signal('hps_0_h2f_lw_axi_master_bresp', width=2)
-        top.add_signal('hps_0_h2f_lw_axi_master_bvalid')
-        top.add_signal('hps_0_h2f_lw_axi_master_rdata', width=32)
-        top.add_signal('hps_0_h2f_lw_axi_master_rid', width=12)
-        top.add_signal('hps_0_h2f_lw_axi_master_rlast')
-        top.add_signal('hps_0_h2f_lw_axi_master_rready')
-        top.add_signal('hps_0_h2f_lw_axi_master_rresp', width=2)
-        top.add_signal('hps_0_h2f_lw_axi_master_rvalid')
-        top.add_signal('hps_0_h2f_lw_axi_master_wdata', width=32)
-        top.add_signal('hps_0_h2f_lw_axi_master_wid', width=12)
-        top.add_signal('hps_0_h2f_lw_axi_master_wlast')
-        top.add_signal('hps_0_h2f_lw_axi_master_wready')
-        top.add_signal('hps_0_h2f_lw_axi_master_wstrb', width=4)
-        top.add_signal('hps_0_h2f_lw_axi_master_wvalid')
-        '''
-        # Connect HPS LW AXI master ports on soc_system to these internal wires
+        
+
+        # ------------------------------------------------------------------
+        # Add ALL HPS?Fabric full AXI ports (21b addr, full bursts, etc.)
+        # These ports are consumed by axi_axil_adapter.
+        # ------------------------------------------------------------------
         sys.add_port('hps_0_h2f_lw_axi_master_araddr',   'hps_0_h2f_lw_axi_master_araddr', dir='out', width=21)
         sys.add_port('hps_0_h2f_lw_axi_master_arburst',  'hps_0_h2f_lw_axi_master_arburst', dir='out', width=2)
         sys.add_port('hps_0_h2f_lw_axi_master_arcache',  'hps_0_h2f_lw_axi_master_arcache', dir='out', width=4)
@@ -171,7 +166,9 @@ class de10nano(YellowBlock):
         sys.add_port('hps_0_h2f_lw_axi_master_wvalid',   'hps_0_h2f_lw_axi_master_wvalid', dir='out')
 
 
-        # --- Helper reduced-width/bool signals for AXI?AXI-Lite adapter ---
+        # ------------------------------------------------------------------
+        # Helper reduced-width conversion required by axi_axil_adapter
+        # ------------------------------------------------------------------
         top.add_signal('awlen8', width=8)
         top.add_signal('arlen8', width=8)
         top.add_signal('awlock1')
@@ -182,7 +179,9 @@ class de10nano(YellowBlock):
         top.add_raw_string("assign awlock1 = (hps_0_h2f_lw_axi_master_awlock == 2'b01);")
         top.add_raw_string("assign arlock1 = (hps_0_h2f_lw_axi_master_arlock == 2'b01);")
 
-        # --- AXI (HPS) ? AXI-Lite (M_AXI_*) bridge instance ---
+        # ------------------------------------------------------------------
+        # AXI?AXI-Lite adapter instance
+        # ------------------------------------------------------------------
         bridge = top.get_instance('axi_axil_adapter', 'axi_axil_adapter')
         bridge.add_parameter('AXI_ID_WIDTH',   12)
         bridge.add_parameter('ADDR_WIDTH',     21)
@@ -193,7 +192,6 @@ class de10nano(YellowBlock):
         bridge.add_port('clk', 'axil_clk')
         bridge.add_port('rst', 'axil_rst')
 
-        # Slave AXI interface (from HPS h2f_lw master)
         bridge.add_port('s_axi_awid',   'hps_0_h2f_lw_axi_master_awid',     width = 12)
         bridge.add_port('s_axi_awaddr', 'hps_0_h2f_lw_axi_master_awaddr',   width = 21)
         bridge.add_port('s_axi_awlen',  'awlen8',                           width = 8)
@@ -234,7 +232,7 @@ class de10nano(YellowBlock):
         bridge.add_port('s_axi_rvalid','hps_0_h2f_lw_axi_master_rvalid')
         bridge.add_port('s_axi_rready','hps_0_h2f_lw_axi_master_rready')
 
-        # AXI-Lite master interface towards CASPER axi4lite_interconnect (M_AXI_*)
+        # AXI-Lite host interface towards CASPER axi4lite_interconnect (M_AXI_*)
         bridge.add_port('m_axil_awaddr', 'M_AXI_awaddr',                   width = 32)
         bridge.add_port('m_axil_awprot', 'M_AXI_awprot',                   width = 3)
         bridge.add_port('m_axil_awvalid','M_AXI_awvalid')
@@ -259,17 +257,18 @@ class de10nano(YellowBlock):
         bridge.add_port('m_axil_rvalid','M_AXI_rvalid')
         bridge.add_port('m_axil_rready','M_AXI_rready')
 
+        # ------------------------------------------------------------------
+        # Reset mapping
+        # ------------------------------------------------------------------
 
         top.add_raw_string("assign axil_rst_n = h2f_rst_n;\n")
         top.add_raw_string("assign axil_rst = ~h2f_rst_n;\n")
         top.add_raw_string("assign user_rst = ~h2f_rst_n;\n")
 
-        # If your soc_system.v exposes an external reset (optional):
-        # top.add_signal('soc_ext_reset_n')
-        # top.add_raw_string("assign soc_ext_reset_n = 1'b1;")
-        # sys.add_port('reset_reset_n', 'soc_ext_reset_n', dir='in')
-
-        # --- Export DDR to top (exact names match Terasic QSF) ---
+        # ------------------------------------------------------------------
+        # Expose DDR3 pins on top-level to soc_system
+        # Names must exactly match DE10-Nano QSF pin names
+        # ------------------------------------------------------------------
         sys.add_port('memory_mem_a',       'HPS_DDR3_ADDR',     dir='out',   width=15, parent_port=True)
         sys.add_port('memory_mem_ba',      'HPS_DDR3_BA',       dir='out',   width=3,  parent_port=True)
         sys.add_port('memory_mem_ck',      'HPS_DDR3_CK_P',     dir='out',               parent_port=True)

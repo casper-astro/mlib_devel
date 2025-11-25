@@ -1540,20 +1540,35 @@ class SimulinkFrontend(ToolflowFrontend):
 
 
 class QuartusBackend(ToolflowBackend):
-    """
+   """
+    Quartus backend for the CASPER jasper toolflow.
+    This backend:
+      * Creates a temporary Quartus project in `compile_dir/self.project_name`
+      * Adds HDL sources and constraint files (.qsf, .sdc)
+      * Calls Quartus in batch mode via a generated TCL script
+      * Copies the resulting .sof (SRAM object file) into `self.output_dir/top.sof`
+      * Converts .sof -> .rbf via quartus_cpf into `self.output_dir/top.rbf`
+      * Wraps the .rbf into a CASPER .fpg container via `self.mkfpg`
 
+    It is intentionally minimal and assumes:
+      * A DE10-Nano Platform Designer system (`soc_system.qip`)
+      * A CASPER-generated core HDL file named `<basename(compile_dir)>_ip.v`
+      * MLIB_DEVEL_PATH is set and points to the jasper_library tree
     """
     def __init__(self, plat=None, compile_dir='/tmp', periph_objs=None):
         """
-
-        :param plat:
-        :param compile_dir:
-        :param periph_objs:
+        :param plat: CASPER platform object (e.g., DE10-Nano platform)
+        :param compile_dir: Directory where the Quartus project will be created
+        :param periph_objs: List of yellow-block peripheral objects
         """
         self.logger = logging.getLogger('jasper.toolflow.backend')
         self.compile_dir = compile_dir
+        
+        # These extensions are used by the generic toolflow infrastructure when it asks the backend what kinds of constraint / source files it uses.
         self.const_file_ext = 'qsf'
         self.timing_file_ext = 'sdc'
+
+
         # src_file parameters for non-project mode only
         self.src_file_vhdl_ext = 'vhd'
         #self.src_file_ip_ext = 'xci'
@@ -1564,20 +1579,32 @@ class QuartusBackend(ToolflowBackend):
         self.manufacturer = 'intel'
         self.project_name = 'myproj'
         self.periph_objs = periph_objs
+        
+
+
+        # Bins up the TCL in different stages so yellow blocks / backend can inject commands at specific points in the flow.
         self.tcl_cmds = ''
+        
+
+        # Output directory where to put final data products (sof/rbf/fpg/etc)
         self.output_dir = os.path.join(self.compile_dir, 'outputs')
         os.makedirs(self.output_dir, exist_ok=True)
-        self.bit_loc = os.path.join(self.output_dir, 'top.bit')
-        self.bin_loc = os.path.join(self.output_dir, 'top.rbf')
-        self.bitstream_loc = os.path.join(self.output_dir, 'top.sof')
+        
+
+        # Standard CASPER-style paths for downstream tooling to find the files
+        self.bit_loc = os.path.join(self.output_dir, 'top.bit')  # not used by Quartus, kept for interface compatibility (produces an .rbf instead)
+        self.bin_loc = os.path.join(self.output_dir, 'top.rbf')  # .rbf produced by quartus_cpf
+        self.bitstream_loc = os.path.join(self.output_dir, 'top.sof') # main Quartus programming file
         self.hex_loc = os.path.join(self.output_dir, 'top.hex')
         self.mcs_loc = os.path.join(self.output_dir, 'top.mcs')
         self.prm_loc = os.path.join(self.output_dir, 'top.prm')
 
-        self.bd = None
-        self.first_clock = True
+        self.bd = None # Block design; not used for QuartusBackend right now
+        self.first_clock = True  # help avoid duplicate create_clock without -add
         self.name = 'quartus'
         self.npm_sources = []
+
+        # Call base class constructor
         ToolflowBackend.__init__(self, plat=plat, compile_dir=compile_dir)
         self.tcl_cmds = {
             'init'        : '',
@@ -1593,38 +1620,54 @@ class QuartusBackend(ToolflowBackend):
             'post_bitgen' : '',
             'promgen'     : '',
         }
+
+        # Add the compile_dir itself as a source root (for yellow-block generated HDL)
         self.add_source(self.output_dir, self.plat)
         # Link the platform to this backend so yellow blocks know
 
     def initialize(self):
+        """
+        Initialize a fresh Quartus project and hook in the DE10-Nano HPS system
+        plus the CASPER-generated core.
+
+        This function:
+          * Creates the project directory
+          * Sets the family/device
+          * Sets the TOP_LEVEL_ENTITY ("top")
+          * Sources the Terasic DE10-Nano base .qsf
+            Note: This can be generalized to more platforms; this is really convenient because it contains
+                  all of the entity-level assignments and settings for the Golden Hardware Reference design which 
+           * Adds the Platform Designer system (soc_system.qip)
+          * Adds the CASPER-generated core HDL (`<compile_dir_basename>_ip.v`)
+          * Registers a user SDC file that we will later generate
+        """
         plat = self.plat
 
         if plat.manufacturer.lower() != self.manufacturer.lower():
-            self.logger.error('Trying to compile a %s FPGA using %s %s' % (
-                plat.manufacturer, self.manufacturer, self.name))
-
+            self.logger.error('Trying to compile a %s FPGA using %s %s' % (plat.manufacturer, self.manufacturer, self.name))
 
         self.logger.debug(f'Initializing Quartus project: {self.project_name}')
         prefix = os.path.join(self.compile_dir, self.project_name)
-
+        
+        # Quartus TCL relies on "flow" package
         self.add_tcl_cmd('load_package flow', stage='init')
         self.add_tcl_cmd('set impl_dir "%s"'%prefix, stage='init')
 
 
 
-        # Just use project path prefix
-        prefix = os.path.join(self.compile_dir, self.project_name)
-
-        self.add_tcl_cmd('load_package flow', stage='init')
+        # Ensure project directory exists and cd into it               
         os.makedirs(os.path.join(self.compile_dir, self.project_name), exist_ok=True)
         self.add_tcl_cmd(f'cd {prefix}', stage='init')
 
+        # Not being used right now
         ddr_path = os.path.join(os.getenv('MLIB_DEVEL_PATH'), 'jasper_library/hdl_sources/de10nano/DDR')
         self.add_tcl_cmd(f'set HPS_DDR_TCL_DIR "{ddr_path}"', stage = 'init') 
+        
+        # Start a new Quartus project (overwrite any previous one with same name)
         self.add_tcl_cmd(f'project_new {self.project_name} -overwrite', stage='init')
 
 
-        # Set FPGA part
+        # Set FPGA family and device from the platform object
         self.add_tcl_cmd(f'set_global_assignment -name FAMILY "{plat.family}"', stage='init')
         self.logger.debug(f'Using FPGA: {plat.fpga} in family: {plat.family}')
         self.add_tcl_cmd(f'set_global_assignment -name DEVICE {plat.fpga}', stage='init')
@@ -1635,79 +1678,70 @@ class QuartusBackend(ToolflowBackend):
         #self.binary_loc = os.path.join(self.output_dir, 'top.rbf')
         #self.logger.debug(f'Set rbf output location to: {self.binary_loc}')
 
-        #self.add_tcl_cmd(f'set_global_assignment -name OUTPUT_DIRECTORY {self.output_dir}', stage='init')
+        # Set the top-level entity name that Quartus should treat as the root design
         self.logger.debug(f'Top level output directory is: {self.output_dir}')
         print(f'Top level output directory is: {self.output_dir}')
 
         # Any top-level file setup
         self.add_tcl_cmd(f'set_global_assignment -name TOP_LEVEL_ENTITY top', stage='init')
         
+        # User SDC file that is generated later from CASPER constraints
         proj_dir = os.path.join(self.compile_dir, self.project_name)
         sdc_loc = os.path.join(proj_dir, 'user_const.sdc')
         self.add_tcl_cmd(f'set_global_assignment -name SDC_FILE "{sdc_loc}"', stage = 'init')
 
+        # Base DE10-Nano .qsf with pin assignments, I/O standards, and HPS related assignments
         hps_qsf = os.path.join(os.getenv('MLIB_DEVEL_PATH'), 'jasper_library/hdl_sources/de10nano/DE10_NANO_SoC_GHRD.qsf')
+        
+        # Source the board's reference design assignments
         self.add_tcl_cmd(f'source "{hps_qsf}"')
+
+        # Explicitly override family/device if needed (Terasic reference might already set these)
         self.add_tcl_cmd(f'set_global_assignment -name FAMILY "Cyclone V"')
         self.add_tcl_cmd(f'set_global_assignment -name DEVICE 5CSEBA6U23I7')
         self.add_tcl_cmd(f'set_global_assignment -name TOP_LEVEL_ENTITY top')
 
-        #print('ALL ALLTRIBUTES: ' + str(vars(self)))
-
-#        soc_qip = os.path.join(os.getenv('MLIB_DEVEL_PATH'), 'jasper_library/hdl_sources/de10nano/soc_system/synthesis/soc_system_parsed.qip')
+        # Platform Designer system (soc_system.qsys -> soc_system.qip)
+        # This contains HPS, DDR, and lightweight AXI bridges.
         soc_qip = os.path.join(os.getenv('MLIB_DEVEL_PATH'), 'jasper_library/hdl_sources/de10nano/soc_system/synthesis/soc_system.qip')
-
         self.add_tcl_cmd(f'set_global_assignment -name QIP_FILE "{soc_qip}"', stage = 'init')
 
+        # CASPER-generated core HDL file (e.g. <core_name>_ip.v) from $MLIB_DEVEL/scilab_library/gen_dsp_ip.py
         core_basename = os.path.basename(self.compile_dir) 
         core_name = os.path.join(self.compile_dir, core_basename + '_ip.v')
 
+        # This is the main design produced by jasper_frontend / xml2vhdl -> top wrapper
         self.add_tcl_cmd(f'set_global_assignment -name VERILOG_FILE "{core_name}"')
-        #for root, _, files in os.walk(self.compile_dir):
-        #    for f in files:
-        #        if f.endswith((".vhd", ".vhdl")):
-        #            self.add_tcl_cmd(f'set_global_assignment -name VHDL_FILE {os.path.join(root, f)}', stage='init')
-        #        elif f.endswith(".v"):
-        #            self.add_tcl_cmd(f'set_global_assignment -name VERILOG_FILE {os.path.join(root, f)}', stage='init')
-
-        #self.add_tcl_cmd(f'set_global_assignment -name OUTPUT_DIRECTORY /data/DesignFiles/scilabdemo/scilabdemo/')
-        #self.add_tcl_cmd('set_global_assignment -name DESIGN_ENTRY "VHDL"', stage='init')
-
+       
     def add_library(self, path):
-        """ERROR: Illegal assignment: DESIGN_ENTRY. Specify a legal assignment name.
-/home/bgodfrey/CASPER/mlib_devel
-        while executing
-        "set_global_assignment -name DESIGN_ENTRY "VHDL""
-        (file "/data/DesignFiles/de10_test3/gogogo.tcl" line 7)
+         """ 
+         Not used for Quartus.
 
-        Add a library at <path>
-        """
-        #self.add_tcl_cmd('set repos [get_property ip_repo_paths [current_project]]')
-        #self.add_tcl_cmd('set_property ip_repo_paths "$repos %s" [current_project]' % path)
-        #self.add_tcl_cmd('update_ip_catalog')
-        """
-        No-op for Quartus ? IP library paths not needed.
+        In the Xilinx flow we would add IP repositories here. For Quartus we
+        currently assume IP is either:
+          * Hand-instantiated in HDL, or
+          * Coming via Platform Designer (QIP/QSYS) that we explicitly reference.
         """
         self.logger.debug(f'Ignoring IP repo path {path} in Quartus backend')
         return
 
     def add_ip(self, ip):
         """
-        Add an ip core from a library
-        """
-        #self.add_tcl_cmd('create_ip -name %s -vendor %s -library %s -version %s -module_name %s' % (ip['name'], ip['vendor'], ip['library'], ip['version'], ip['module_name']))
-        #if self.template_project is not None:
-        #    self.add_tcl_cmd('move_files -of_objects [get_reconfig_modules user_top-toolflow] [get_files %s.xci]' % ip['module_name'])
-        """
-        No-op for Quartus ? IP cores must be instantiated manually or via Platform Designer.
+        Not used for Quartus. For Quartus, IP must be instantiated manually or through Platform Designer.
+        :param ip: Dictionary describing an IP core (ignored).
         """
         self.logger.debug(f'Ignoring IP instantiation of {ip.get("name", "unknown")} in Quartus backend')
         return
 
     def add_source(self, source, plat):
         """
-        Add HDL source file(s) to Quartus project via set_global_assignment.
-        Supports individual files or directories containing VHDL, Verilog, and SystemVerilog.
+        Add HDL source file(s) to the Quartus project via set_global_assignment.
+
+        Supports:
+          * A directory: walk it, adding any .vhd/.vhdl/.v/.sv files
+          * A single file: add it based on extension
+
+        Non-HDL extensions are logged and skipped.
         """
         self.logger.debug(f'Adding source: {source}')
         print(f"[QUARTUS BACKEND] add_source() called for: {source}")
@@ -1720,6 +1754,7 @@ class QuartusBackend(ToolflowBackend):
             # Source is a directory ? add all supported HDL files
             for fname in sorted(os.listdir(source)):
                 full_path = os.path.join(source, fname)
+                # NOTE: Currently do NOT filter out Platform Designer auto-generated files here
                 if True: #not('soc_system_hps_0.v' in fname.lower() or 'soc_system_hps_0_fpga_interfaces.sv' in fname.lower() or 'soc_system_hps_0_hps_io.v' in fname.lower()):
                     if fname.lower().endswith('.vhd') or fname.lower().endswith('.vhdl'):
                         self.add_tcl_cmd(f'set_global_assignment -name VHDL_FILE "{full_path}"')
@@ -1745,6 +1780,13 @@ class QuartusBackend(ToolflowBackend):
             self.logger.error(f"add_source called with unknown path: {source}")
 
     def add_const_file(self, constfile):
+         """
+        Register a constraint file with the Quartus project.
+
+        For this backend:
+          * .qsf files are 'sourced' (they can contain Tcl / assignments)
+          * .sdc are assumed to be already referenced from the .qsf
+        """
         ext = os.path.splitext(constfile)[-1].lower()
 
         if ext == '.qsf':
@@ -1759,9 +1801,11 @@ class QuartusBackend(ToolflowBackend):
         else:
             self.logger.warning(f'Ignoring constraint file with unknown extension: {constfile}')
     def add_tcl_cmd(self, cmd, stage='pre_synth'):
-        """
-        Add a command to the tcl command list with
-        a trailing newline.
+         """
+        Append a Tcl command (with newline) into the given stage buffer.
+
+        :param cmd:  Tcl command string (without trailing newline)
+        :param stage: One of the keys in self.tcl_cmds
         """
         self.logger.debug('Adding tcl command: %s' % cmd)
         print('Adding tcl command: %s at stage %s' %(cmd, str(stage)))
@@ -1769,6 +1813,10 @@ class QuartusBackend(ToolflowBackend):
         self.tcl_cmds[stage] += '\n'
 
     def eval_tcl(self):
+        """
+        Concatenate all Tcl stage buffers into one script string.
+        This is what gets written to gogogo.tcl and given to quartus_sh.
+        """
         s = ''
         s += self.tcl_cmds['init']
         s += self.tcl_cmds['create_bd']
@@ -1786,47 +1834,28 @@ class QuartusBackend(ToolflowBackend):
     
     def add_compile_cmds_pr(self, cores=8, plat=None, synth_strat=None, impl_strat=None):
         """
-        Add the tcl commands for compiling the design using Quartus tools
+        Add the Tcl commands needed to run a full Quartus compile and generate
+        the .sof in the project directory.
+
+        Currently we use `execute_flow -compile`, which wraps map/fit/asm/sta.
+
+        After compilation:
+          * A later step (in `compile`) copies `myproj.sof` to `outputs/top.sof`
         """
 
         tcl = self.add_tcl_cmd  # shorthand
 
-        # Step 1: Analysis & Synthesis
-
-        #qsf_loc = os.path.join(self.output_dir, 'user_const.qsf')
-        #tcl(f'source {qsf_loc}')
-        #sdc_loc = os.path.join(self.output_dir, 'user_const.sdc')
-        #tcl(f'set_global_assignment -name SDC_FILE {sdc_loc}')
         
-        #tcl(f'qsys-script --script="soc_system_gen.tcl"', stage='synth')
-        #tcl(f'qsys-generate soc_system.qsys --synthesis=VERILOG --output-directory="{self.output_dir}/soc_system"', stage='synth')
+        # Single-line command that runs the full compile flow
         tcl(f'execute_flow -compile', stage='synth')  # shortcut for map, fit, asm
-        # ===== Build in stages so DDR Tcl can run under quartus_sta after map =====
-        #tcl(f'execute_module -tool map', stage = 'synth')
-
-        # Apply DDR pin database / I/O standard constraints (requires a mapped netlist & sdc_ext)
-        # This is the Intel-generated script you already have:
-        #   /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/DDR/hps_sdram_p0_pin_assignments.tcl
-        #assignment_loc = os.path.join(os.getenv('MLIB_DEVEL_PATH'), 'jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0_pin_assignments.tcl')
-        #tcl(f'quartus_sta -t "{assignment_loc}" "myproj"', stage = 'synth')
-
-        #tcl(f'set ddr_tcl "{assignment_loc}"')
-        #tcl('set sta_rc [catch { exec quartus_sta -t $ddr_tcl "myproj" } sta_out]')
-        #tcl('puts "DDR pin Tcl output:\n$sta_out"')
-        #tcl('if {$sta_rc} { post_message -type error "DDR pin Tcl failed"; qexit -error}')
-
-
-        # Continue the flow
-        #tcl(f'execute_module -tool fit', stage = 'synth')
-        #tcl(f'execute_module -tool asm', stage = 'synth')
-        #tcl(f'execute_module -tool sta', stage = 'synth')
+        
 
 
         sof_orig = os.path.join(self.compile_dir, self.project_name, "output_files", self.project_name + ".sof") 
         
         #tcl(f'file copy -force "{sof_orig}" "{sof_loc}"', stage ='synth')
 
-
+        # Add search paths so Quartus can find Scilab HDL
         frontend = os.getenv('FRONTEND').lower()
         if frontend and frontend == 'scilab':
             proj_dir = os.path.join(self.compile_dir, self.project_name)
@@ -1835,43 +1864,29 @@ class QuartusBackend(ToolflowBackend):
             for root, dirs, files in os.walk(search_dir):
                 tcl(f'set_global_assignment -name SEARCH_PATH {root}', stage='init')
                 #self.add_tcl_cmd(f'set_global_assignment -name SEARCH_PATH {search_dir}', stage='init')
-        
-
+                
+        # Copy final .sof into the output directory as top.sof
         tcl(f'file copy -force {self.project_name}.sof {self.output_dir}/top.sof', stage='post_bitgen')
 
-        # Or manual steps (for debug granularity):
-        # tcl(f'quartus_map --read_settings_files=on --write_settings_files=off {self.project_name}', stage='synth')
-        # tcl(f'quartus_fit --read_settings_files=on --write_settings_files=off {self.project_name}', stage='impl')
-        # tcl(f'quartus_asm --read_settings_files=on --write_settings_files=off {self.project_name}', stage='bitgen')
 
-        # Note: Have to run these as a subprocess
-        # Step 2: TimeQuest Timing Analysis
-        # tcl(f'quartus_sta {self.project_name}', stage='post_impl')
-
-        # Step 3: Generate .rbf (raw binary file)
-        #rbf_output = os.path.join(self.compile_dir, self.project_name, "output_files", self.project_name + ".rbf")
-        #subprocess.run([f'quartus_cpf', '-c', sof_orig, rbf_output], check = True)
-
-        # Step 4: Yellow block hooks, timing checks, etc.
-        #self.gen_yellowblock_tcl_cmds()
-
-        # Optional: check for timing failures (you may need to parse .sta.rpt manually)
+         # Final message at the end of the flow
         tcl('puts "Compilation complete."', stage='promgen')
 
-        #fpg_output = os.path.join(self.compile_dir, self.project_name, "output_files", self.project_name + ".fpg")
-        #self.mkfpg(rbf_output, fpg_output)
-
+        # NOTE: .rbf and .fpg generation is handled in `compile()` after the quartus_sh run, using subprocess and `self.mkfpg`.
 
     def compile(self, cores, plat, synth_strat=None, impl_strat=None, threads='multi'):
         """
-        Compile the design using Quartus tools.
+        Run the full Quartus compile flow:
 
-        :param cores: Number of parallel cores to use
-        :param plat: Platform object (with .fpga, .family, etc.)
-        :param synth_strat: (unused for now)
-        :param impl_strat: (unused for now)
+          1) Build the stage-wise Tcl script (init, synth, etc.)
+          2) Write it to `gogogo.tcl`
+          3) Invoke `quartus_sh -t gogogo.tcl`
+          4) Convert resulting `top.sof` to `top.rbf` via quartus_cpf
+          5) Build a .fpg wrapper from the .rbf via `self.mkfpg`
+          6) Ask yellow blocks to generate any board-specific Tcl (post compile)
         """
-        # Add tcl commands
+
+        # Populate Tcl with the compile commands        
         self.add_compile_cmds_pr(cores=cores, plat=plat)
 
         # Write full TCL script to file
@@ -1884,33 +1899,46 @@ class QuartusBackend(ToolflowBackend):
         rv = os.system(f'quartus_sh -t {tcl_file}')
         if rv:
             raise Exception('Quartus compilation failed!')
-        
-        # Step 2: TimeQuest Timing Analysis
-        # tcl(f'quartus_sta {self.project_name}', stage='post_impl')
 
-        # Step 3: Generate .rbf (raw binary file)
-        rbf_output = self.bin_loc
-        sof_input = self.bitstream_loc
+        # Generate .rbf (raw binary file)
+        rbf_output = self.bin_loc # e.g. /tmp/<design>/outputs/top.rbf
+        sof_input = self.bitstream_loc # e.g. /tmp/<design>/outputs/top.sof
 
         subprocess_basename = os.path.basename(self.compile_dir) 
         subprocess_sof = self.bitstream_loc #os.path.join(self.compile_dir, subprocess_basename, subprocess_basename + '.sof')
         subprocess_rbf = self.bin_loc #os.path.join(self.compile_dir, subprocess_basename, subprocess_basename + '.rbf')
         print('SOF LOCATION: ' + str(subprocess_sof))
         print('RBF LOCATION: ' + str(subprocess_rbf))
+
+        # Convert SOF -> RBF (passive parallel / default config settings)
         subprocess.run([f'quartus_cpf', '-c', subprocess_sof, subprocess_rbf], check = True)
 
 
-        # Step 4: Yellow block hooks, timing checks, etc.
+        # Yellow block hooks, timing checks, etc.
         self.gen_yellowblock_tcl_cmds()
 
-        # Step 5: Generate .fpg file
+        # Generate .fpg file
         fpg_output = os.path.join(self.compile_dir, self.project_name, "output_files", self.project_name + ".fpg")
         self.mkfpg(rbf_output, fpg_output)
 
 
     def get_tcl_const(self, const):
+        """
+        Convert a CASPER constraint object (or castro equivalent) into
+        a Quartus Tcl string for either:
+
+          * Pin/IO constraints     -> QSF lines
+          * Clock constraints      -> SDC lines
+
+        The caller decides whether the resulting text goes into .qsf or .sdc
+        based on the type of constraint.
+
+        :param const: A ClockConstraint, ClockGroupConstraint, PortConstraint, etc.
+        :return: String of one or more Tcl lines (no trailing newline)
+        """
         user_const = ''
-        print('I DISCOVERED A CONSTRAINT: ' + str(const))
+        self.logger.debug('I DISCOVERED A CONSTRAINT: ' + str(const))
+        
         # Handle port/pin constraints
         if isinstance(const, (PortConstraint, castro.PinConstraint)):
             print(vars(const))
@@ -1966,6 +1994,9 @@ class QuartusBackend(ToolflowBackend):
 
     @staticmethod
     def format_clock_const(c):
+        """
+        Legacy formatting for ClockConstraint-style objects. Currently not used by the Quartus flow, but kept for compatibility.
+        """
         if c.virtual_en:
             return 'create_clock -period %4.3f -name %s -waveform {%4.3f ' \
                    '%4.3f}\n' % (c.period_ns, c.clkname, c.waveform_min_ns,
@@ -1983,18 +2014,27 @@ class QuartusBackend(ToolflowBackend):
 
         @staticmethod
         def format_gen_clock_const(c):
+        """
+        Legacy helper for create_generated_clock syntax (unused here).
+        """
             return 'create_generated_clock -name %s -source [get_pins {%s}] ' \
                 '-divide_by %d [get_pins {%s}]\n' % (c.clkname, c.clksource,
                                                         c.divide_by, c.pinname)
 
         @staticmethod
         def format_clock_group_const(c):
+        """
+        Legacy helper for grouping clocks (unused here).        
+        """
             return 'set_clock_groups -%s -group [get_clocks %s] -group ' \
                 '[get_clocks %s]\n' % (c.clkdomaintype, c.clknamegrp1,
                                         c.clknamegrp2)
 
         @staticmethod
         def format_input_delay_const(c):
+        """
+        Legacy helper for set_input_delay (unused here).
+        """
             if c.add_delay_en:
                 return 'set_input_delay -clock [get_clocks %s] -%s -add_delay ' \
                     '%4.3f [get_ports {%s}]\n' % (c.clkname, c.consttype,
@@ -2006,6 +2046,9 @@ class QuartusBackend(ToolflowBackend):
 
         @staticmethod
         def format_output_delay_const(c):
+        """
+        Legacy helper for set_output_delay (unused here).
+        """
             if c.add_delay_en:
                 return 'set_output_delay -clock [get_clocks %s] -%s -add_delay ' \
                     '%4.3f [get_ports {%s}]\n' % (c.clkname, c.consttype,
@@ -2017,62 +2060,55 @@ class QuartusBackend(ToolflowBackend):
 
         @staticmethod
         def format_max_delay_const(c):
-            #if c.sourcepath is None:
-            #    return 'set_max_delay %s -to %s\n' % (c.constdelay_ns, c.destpath)
-            #elif c.destpath is None:
-            #    return 'set_max_delay %s -from %s\n' % (c.constdelay_ns, c.sourcepath)
-            #else:
-            #    return 'set_max_delay %s -from %s -to %s\n' % (c.constdelay_ns, c.sourcepath, c.destpath)
+        """
+        Legacy stub for set_max_delay (unused).
+        """
             return ' '
+        
         @staticmethod
         def format_min_delay_const(c):
-            #if c.sourcepath is None:
-            #    return 'set_min_delay %s -to %s\n' % (c.constdelay_ns, c.destpath)
-            #elif c.destpath is None:
-            #    return 'set_min_delay %s -from %s\n' % (c.constdelay_ns, c.sourcepath)
-            #else:
-            #    return 'set_min_delay %s -from %s -to %s\n' % (c.constdelay_ns, c.sourcepath, c.destpath)
+        """
+        Legacy stub for set_min_delay (unused).
+        """
             return ' '
 
         @staticmethod
         def format_false_path_const(c):
-            #if c.sourcepath is None:
-            #    return 'set_false_path -to %s\n' % c.destpath
-            #elif c.destpath is None:
-            #    return 'set_false_path -from %s\n' % c.sourcepath
-            #else:
-            #    return 'set_false_path -from %s -to %s\n' % (c.sourcepath,
-            #                                               c.destpath)
+        """
+        Legacy stub for set_false_path (unused).
+        """
             return ' '
         
         @staticmethod
         def format_multi_cycle_const(c):
-            #return 'set_multicycle_path -%s -from [%s] -to [%s] %d\n' % (
-            #    c.multicycletype, c.sourcepath, c.destpath, c.multicycledelay)
+        """
+        Legacy stub for set_multicycle_path (unused).
+        """
             return ' '
 
         @staticmethod
         def format_const(attribute, val, port, index=None):
-            """
-            Generate a tcl syntax command from an attribute, value and port
-            (with indexing if required)
-            """
-            #return 'set_property %s %s [get_ports %s%s]\n' % (
-            #        attribute, val, port,
-            #        '[%d]' % index if index is not None else '')
+        """
+        Legacy stub for generic port property formatting (unused).
+        """
             return ' '
         @staticmethod
+
         def format_cfg_const(attribute, val):
-            """
-            Generate a configuration tcl syntax command from an attribute and value
-            """
-            #return 'set_property %s %s [current_design]\n' % (attribute, val)
+        """
+        Legacy stub for generic design property formatting (unused).
+        """
             return ' '
 
     def gen_yellowblock_tcl_cmds(self):
         """
-        Compose a list of tcl commands from each yellow block.
-        To be added to the final tcl script.
+        Ask each yellow-block peripheral to contribute extra Tcl commands.
+
+        This is the hook where per-board / per-block Quartus tweaks can be
+        injected, for example:
+          * Assigning additional I/O standards
+          * Adding debug cores
+          * Setting Quartus project options
         """
         self.logger.info('Extracting yellow block tcl commands'
                          ' from peripherals')
@@ -2084,14 +2120,20 @@ class QuartusBackend(ToolflowBackend):
                         self.add_tcl_cmd(v, stage=key)
 
     def gen_bd_tcl_cmds(self):
+        """
+        Block design generation is not needed for Quartus.
+
+        Vivado relies on a Tcl-generated block design; Quartus relies on HDL
+        + Qsys/Platform Designer (handled through soc_system.qip).
+        """
+
         self.logger.info('No block design generation needed for Quartus.')
         pass
         """
         Allow each yellowblock to generate tcl commands specific to creating
         a block design
         """
-        self.logger.info('Assembling the block design from'
-                         ' yellow block peripherals')
+        self.logger.info('Assembling the block design from yellow block peripherals')
         for obj in self.periph_objs:
             c = obj.modify_bd(self.bd)
 
@@ -2099,7 +2141,13 @@ class QuartusBackend(ToolflowBackend):
 
     def gen_yellowblock_custom_hdl(self):
         """
-        Create each yellowblock's custom hdl files and add them to the project's sources
+        Ask each yellow block to generate any custom HDL and add it to the
+        Quartus project.
+
+        The yellow block returns a dict mapping filenames -> HDL source text.
+        We:
+          * Write each file into compile_dir
+          * Call add_source() so Quartus sees it
         """
         self.logger.info('Generating yellow block custom hdl files')
         for obj in self.periph_objs:
@@ -2116,9 +2164,16 @@ class QuartusBackend(ToolflowBackend):
 
 
     def gen_constraint_file(self, constraints):
-        """
-        Generate .qsf and .sdc files from the CASPER-standard constraint objects
-        or castro equivalents.
+       """
+        Generate Quartus constraint files from CASPER-standard constraint objects.
+
+        Outputs:
+          * user_const.qsf  : pin assignments, IO standards, misc assignments
+          * user_const.sdc  : timing (create_clock, etc.)
+
+        We also:
+          * Set NUM_PARALLEL_PROCESSORS based on host CPU count
+          * Register the files with the Quartus project via add_const_file()
         """
 
         proj_dir = os.path.join(self.compile_dir, self.project_name)
@@ -2135,6 +2190,8 @@ class QuartusBackend(ToolflowBackend):
         
         qsf_lines += f'set_global_assignment -name NUM_PARALLEL_PROCESSORS {cpu_count}\n'
 
+        
+        # Go through each constraint and route it to QSF or SDC based on type
         for constraint in constraints:
             self.logger.info(f'Parsing constraint: {constraint}')
             tcl_line = self.get_tcl_const(constraint)
@@ -2147,47 +2204,15 @@ class QuartusBackend(ToolflowBackend):
                 self.logger.debug(f'  ? QSF constraint: {constraint}')
                 qsf_lines += tcl_line
 
-        '''
-        qsf_lines += f'set_global_assignment -name SDC_FILE {os.path.basename(sdc_file)}\n'
-
-        
-        for i in range(15):
-            qsf_lines += f'set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to HPS_DDR3_ADDR[{i}]\n'           
-
-        for i in range(3):
-            qsf_lines += f'set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to HPS_DDR3_BA[{i}]\n'
-
-        qsf_lines += 'set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to HPS_DDR3_CK_P\n'
-        qsf_lines += 'set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to HPS_DDR3_CK_N\n'
-
-        for n in ["HPS_DDR3_CKE","HPS_DDR3_CS_N","HPS_DDR3_RAS_N","HPS_DDR3_CAS_N","HPS_DDR3_WE_N",
-                  "HPS_DDR3_RESET_N","HPS_DDR3_ODT","HPS_DDR3_RZQ"]:
-            qsf_lines += f'set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to {n}\n'
-
-        for i in range(32):
-            qsf_lines += f'set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to HPS_DDR3_DQ[{i}]\n'
-
-        for i in range(4):
-            qsf_lines += f'set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to HPS_DDR3_DM[{i}]\n'
-            qsf_lines += f'set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to HPS_DDR3_DQS_P[{i}]\n'
-            qsf_lines += f'set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to HPS_DDR3_DQS_N[{i}]\n'
-
-        '''
-        
-        #with open(os.environ['MLIB_DEVEL_PATH'] + '/jasper_library/' + 'hps_constraints_de10.txt', 'r') as f:
-        #    for line in f:
-        #        qsf_lines += line
-
-        # Write constraint files
-        #helpers.write_file(qip_file, qip_lines)
+       
+        # Write constraint files out
         helpers.write_file(qsf_file, qsf_lines)
         helpers.write_file(sdc_file, sdc_lines)
 
         self.logger.info(f'Wrote constraint files:\n  QSF: {qsf_file}\n  SDC: {sdc_file}')
 
-        # Register with the Quartus toolchain
+        # Register with the Quartus project
         self.add_const_file(qsf_file)
-        #self.add_const_file(qip_file)
         self.add_const_file(sdc_file)
         
   
