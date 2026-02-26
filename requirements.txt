@@ -3,6 +3,7 @@ colorlog
 pyaml
 odict
 six
+katversion
 #xml2vhdl requirements
 lxml
 -e git+https://github.com/casper-astro/xml2vhdl#egg=xml2vhdl_ox&subdirectory=scripts/python/xml2vhdl-ox
