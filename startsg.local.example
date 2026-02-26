@@ -1,8 +1,9 @@
-export XILINX_PATH=/data/Xilinx/Vivado/2023.1
-export MATLAB_PATH=/data/matlab/R2022a
-export COMPOSER_PATH=/data/Xilinx/Model_Composer/2023.1
+export XILINX_PATH=/data/Xilinx/2025.1/Vivado
+export MATLAB_PATH=/data/matlab/R2025a
+export COMPOSER_PATH=/data/Xilinx/2025.1/Model_Composer
 export PLATFORM=lin64
-export JASPER_BACKEND=vivado
+export JASPER_BACKEND=vitis
+export XLNX_DT_REPO_PATH=/data/xilinx/device-tree-xlnx
 #export LD_PRELOAD=${LD_PRELOAD}:"/usr/lib/x86_64-linux-gnu/libexpat.so"
 
 # Activate a python3 virtual-environment on load
