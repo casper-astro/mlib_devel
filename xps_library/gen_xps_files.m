@@ -540,7 +540,7 @@ if run_edkgen,
     end
 
     % shanly and mark's new format - generated from core_info and design_info
-    if strcmp(hw_sys, 'ROACH') || strcmp(hw_sys, 'ROACH2') || strcmp(hw_sys, 'SKARAB'),
+    if strcmp(hw_sys, 'ROACH') || strcmp(hw_sys, 'ROACH2'),
         kcpfpg_fid = fopen([xps_path, slash, 'extended_info.kcpfpg'], 'w');
         fprintf(kcpfpg_fid, '#!/bin/kcpfpg\n');
         fprintf(kcpfpg_fid, '?uploadbin\n');

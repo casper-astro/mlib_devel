@@ -87,19 +87,4 @@ switch hw_sys
             % end otherwise
         end % switch myclksrc
     % end case 'KC705'
-    case 'SKARAB'
-        maskobj = get_param(gcb, 'MaskObject');
-        params = maskobj.Parameters(2);
-        params.TypeOptions = {'sys_clk', 'aux_clk'};
-        switch myclksrc
-            case 'sys_clk'
-                set_param(xsgblk, 'MaskVisibilities', {'on','on','on','on','on'});
-                set_param(xsgblk, 'MaskEnables', {'on','on','on','on','on'});
-            % end case 'sys_clk'
-            otherwise
-                set_param(xsgblk, 'MaskVisibilities', {'on','on','on','on','on'});
-                set_param(xsgblk, 'MaskEnables', {'on','on','on','on','on'});
-            % end otherwise
-        end % switch myclksrc
-    % end case 'SNAP'
 end % switch get_param(xsgblk,'hw_sys')

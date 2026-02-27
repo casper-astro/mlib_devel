@@ -115,17 +115,6 @@ switch hw_sys
         end % switch hw_subsys
     % end case 'MX175'
 
-    case 'SKARAB'
-        switch hw_subsys
-            case 'xc7vx690t'
-                xlsetparam(xsg_blk, 'xilinxfamily', 'Virtex7',...
-                    'part', 'xc7vx690t',...
-                    'speed', '-2',...
-                    'testbench', 'off',...
-                    'package', 'ffg1927');
-            % end case
-        end % switch hw_subsys
-    % end case 'SKARAB'
     otherwise
         errordlg(['Unsupported hardware system: ', hw_sys]);
     % end 'otherwise'
@@ -150,7 +139,7 @@ switch clk_src
             errordlg(['Invalid clock source ', clk_src, ' for hardware platform: ', hw_sys]);
         end
     case {'aux_clk'}
-        if (strcmp(hw_sys,{'ROACH', 'ROACH2', 'SKARAB'}))
+        if (strcmp(hw_sys,{'ROACH', 'ROACH2'}))
             errordlg(['Invalid clock source ', clk_src, ' for hardware platform: ', hw_sys]);
         end
     case {'aux0_clk' 'aux1_clk' 'aux0_clk2x' 'aux1_clk2x' 'arb_clk'}
@@ -158,7 +147,7 @@ switch clk_src
             errordlg(['Invalid clock source ', clk_src, ' for hardware platform: ', hw_sys]);
         end
     case {'adc0_clk' 'adc1_clk' 'dac0_clk' 'dac1_clk'}
-        if isempty(find(strcmp(hw_sys,{'ROACH', 'ROACH2', 'SNAP', 'MX175', 'SKARAB'}), 1))
+        if isempty(find(strcmp(hw_sys,{'ROACH', 'ROACH2', 'SNAP', 'MX175'}), 1))
             errordlg(['Invalid clock source ', clk_src, ' for hardware platform: ', hw_sys]);
         end
     case {'adc_clk'}
