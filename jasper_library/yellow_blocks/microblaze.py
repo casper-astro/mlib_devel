@@ -34,14 +34,6 @@ class microblaze(YellowBlock):
             #this is the new tcl, in which we added two axi-gpio and axi-spi modules for adc4x16g initalization
             self.blkdiagram = 'microblaze_wb_us_plus_hbm_vu_plus.tcl'
             self.include_spi_ports = False
-        elif self.platform.name == 'casia_k7':
-            self.memfile= 'executable_casia_k7.mem'
-           # self.memfile = 'executable.mem'
-            self.blkdiagram = 'microblaze_wb_casia_k7.tcl'
-        elif self.platform.name == 'casia_k7_21cma':
-            self.memfile= 'executable_casia_k7.mem'
-           # self.memfile = 'executable.mem'
-            self.blkdiagram = 'microblaze_wb_casia_k7.tcl'
         elif self.platform.conf.get('family', None) == 'ultrascaleplus':
             self.memfile = 'executable_us_plus.mem'
             self.blkdiagram = 'microblaze_wb_us_plus_hbm.tcl'
