@@ -560,13 +560,6 @@ class onegbe_snap(onegbe):
                 self.use_lvds = False
                 self.use_autonegotiation = True
                 self.refclk_freq = 125.0
-        else:
-            if self.platform.name in ['mx175']:
-                self.use_autonegotiation = True
-            else:
-                self.use_autonegotiation = False
-            self.use_lvds = False
-            self.refclk_freq = 125.0
 
     def _instantiate_udp(self, top):
         gbe_udp = top.get_instance(entity='gbe_udp', name=self.fullname, comment=self.fullname)

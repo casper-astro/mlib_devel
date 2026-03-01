@@ -15,13 +15,6 @@ adc16
     :members:
     :undoc-members:
 
-adc20g
-----------------------------
-
-.. automodule:: yellow_blocks.adc20g
-    :members:
-    :undoc-members:
-
 adc5g
 ---------------------------
 
