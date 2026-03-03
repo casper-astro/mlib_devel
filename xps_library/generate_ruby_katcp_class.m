@@ -157,13 +157,6 @@ function generate_ruby_katcp_class(sys, varargin)
           case {'xps:onegbe', 'xps:tengbe', 'xps:tengbe_v2'}
               type = ':tenge';
 
-          % adc16
-          case 'xps:adc16'
-              % Change katcp require to adc16
-              opts.requires{strcmp(opts.requires, 'katcp')} = 'adc16';
-              opts.superclass = 'ADC16';
-              continue
-
           % Specific block tags to ignore
           case {'xps:xsg', 'xps:pcore', 'xps:gpio', 'xps:block_name'}
               % Ignore

@@ -8,13 +8,6 @@ adc
     :members:
     :undoc-members:
 
-adc16
----------------------------
-
-.. automodule:: yellow_blocks.adc16
-    :members:
-    :undoc-members:
-
 bram
 --------------------------
 
