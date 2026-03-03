@@ -92,13 +92,6 @@ onegbe
     :members:
     :undoc-members:
 
-skarab
-----------------------------
-
-.. automodule:: yellow_blocks.skarab
-    :members:
-    :undoc-members:
-
 snap
 --------------------------
 
