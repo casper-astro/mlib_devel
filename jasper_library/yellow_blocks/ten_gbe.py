@@ -8,8 +8,6 @@ class ten_gbe(YellowBlock):
     def factory(blk, plat, hdl_root=None):
         if plat.fpga.startswith('xc7k'):
             return tengbaser_xilinx_k7(blk, plat, hdl_root)
-        elif plat.fpga.startswith('xc7v'):
-            return tengbaser_xilinx_k7(blk, plat, hdl_root, use_gth=plat.name=='mx175')
         elif plat.conf.get('family', '').endswith('plus'):
             return tengbaser_xilinx_usplus(blk, plat, hdl_root)
         elif plat.fpga.startswith('xcvu'):
@@ -229,16 +227,7 @@ class tengbaser_xilinx_k7(ten_gbe):
             self.provides += ['cpu_ethernet']
 
     def gen_children(self):
-        """
-        The mx175 clocks the gth from a clock which is passed through the FPGA and through
-        a jitter cleaner (si5324) back into the GTH clock port. The first ten gig core
-        needs to make sure this pass through is instantiated.
-        """
-        if self.i_am_the_first and (self.name == 'mx175'):
-            pt = YellowBlock.make_block({'tag':'xps:clock_passthrough', 'fullpath':'%s/clock_passthrough'%self.name, 'name':'clock_passthrough'}, self.platform)
-            return [pt]
-        else:
-            return []
+        return []
 
     def modify_top(self,top):
         # An infrastructure instance is good for 4 SFPs. Assuming the ports are numbered
@@ -386,16 +375,7 @@ class tengbaser_xilinx_ku7(ten_gbe):
             self.provides += ['cpu_ethernet']
 
     def gen_children(self):
-        """
-        The mx175 clocks the gth from a clock which is passed through the FPGA and through
-        a jitter cleaner (si5324) back into the GTH clock port. The first ten gig core
-        needs to make sure this pass through is instantiated.
-        """
-        if self.i_am_the_first and (self.name == 'mx175'):
-            pt = YellowBlock.make_block({'tag':'xps:clock_passthrough', 'fullpath':'%s/clock_passthrough'%self.name, 'name':'clock_passthrough'}, self.platform)
-            return [pt]
-        else:
-            return []
+        return []
 
     def modify_top(self,top):
         # An infrastructure instance is good for 4 SFPs. Assuming the ports are numbered

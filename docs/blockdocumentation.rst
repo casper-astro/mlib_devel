@@ -205,8 +205,6 @@ System Blocks
 
 :doc:`adc <src/blockdocs/Adc>`     (ADC)
 
-:doc:`x64_adc <src/blockdocs/X64_adc>`     (64 Channel, 12 bit ADC: `64ADCx64-12 <src/blockdocs/64ADCx64-12.html>`__)
-
 :doc:`dac <src/blockdocs/Dac>` (DAC)
 
 :doc:`dram <src/blockdocs/Dram>`       (DRAM)
@@ -239,8 +237,6 @@ System Blocks
     :caption: System Blocks
 
     src/blockdocs/Adc
-    src/blockdocs/X64_adc
-    src/blockdocs/64ADCx64-12
     src/blockdocs/Dac
     src/blockdocs/Dram
     src/blockdocs/gpio_bidir

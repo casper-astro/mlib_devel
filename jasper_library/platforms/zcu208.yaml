@@ -1,6 +1,6 @@
 name: zcu208
 manufacturer: Xilinx
-fpga: xczu48dr-fsvg1517-2-e-es1
+fpga: xczu48dr-fsvg1517-2-e
 family: rfsoc
 config_voltage: 1.8
 cfgbvs: GND

@@ -4,7 +4,6 @@ from constraints import PortConstraint, ClockConstraint
 class clock_passthrough(YellowBlock):
     def initialize(self):
         self.add_source('clock_passthrough')
-        self.platform_support = ['mx175']
 
     def modify_top(self, top):
         module = 'clock_passthrough'
@@ -16,10 +15,11 @@ class clock_passthrough(YellowBlock):
 
     def gen_constraints(self):
         cons = []
-        if self.platform.name == 'mx175':
-            cons.append(PortConstraint('pt_clk_in_p', 'user_clock_p'))
-            cons.append(PortConstraint('pt_clk_in_n', 'user_clock_n'))
-            cons.append(PortConstraint('pt_clk_out_p', 'si5324_out_p'))
-            cons.append(PortConstraint('pt_clk_out_n', 'si5324_out_n'))
-            cons.append(ClockConstraint('pt_clk_in_p', name='pt_clk_in_p_clk', freq=156.25))
+        # TODO update to yb is required. The output pin name (si5324_out_p/n)
+        # was a platform dependent name for a deprecated platform
+        cons.append(PortConstraint('pt_clk_in_p', 'user_clock_p'))
+        cons.append(PortConstraint('pt_clk_in_n', 'user_clock_n'))
+        cons.append(PortConstraint('pt_clk_out_p', 'si5324_out_p'))
+        cons.append(PortConstraint('pt_clk_out_n', 'si5324_out_n'))
+        cons.append(ClockConstraint('pt_clk_in_p', name='pt_clk_in_p_clk', freq=156.25))
         return cons

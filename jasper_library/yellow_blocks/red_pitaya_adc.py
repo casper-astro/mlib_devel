@@ -103,10 +103,5 @@ class red_pitaya_adc(YellowBlock):
         
     def gen_tcl_cmds(self):
         tcl_cmds = []
-
-        #tcl_cmds.append('import_files -force -fileset constrs_1 %s/skarab_adc4x3g_14/JESD204B_4LaneRX_7500MHz.xdc'%os.getenv('HDL_ROOT'))
-        #tcl_cmds.append('set_property SCOPED_TO_REF JESD204B_4LaneRX_7500MHz [get_files [get_property directory [current_project]]/myproj.srcs/constrs_1/imports/skarab_adc4x3g_14/JESD204B_4LaneRX_7500MHz.xdc]')
-        #tcl_cmds.append('set_property processing_order LATE [get_files [get_property directory [current_project]]/myproj.srcs/constrs_1/imports/skarab_adc4x3g_14/JESD204B_4LaneRX_7500MHz.xdc]')
-
         return {'pre_synth': tcl_cmds}
 

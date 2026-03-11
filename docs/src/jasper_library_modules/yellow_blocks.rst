@@ -8,27 +8,6 @@ adc
     :members:
     :undoc-members:
 
-adc16
----------------------------
-
-.. automodule:: yellow_blocks.adc16
-    :members:
-    :undoc-members:
-
-adc20g
-----------------------------
-
-.. automodule:: yellow_blocks.adc20g
-    :members:
-    :undoc-members:
-
-adc5g
----------------------------
-
-.. automodule:: yellow_blocks.adc5g
-    :members:
-    :undoc-members:
-
 bram
 --------------------------
 
@@ -110,13 +89,6 @@ onegbe
 ----------------------------
 
 .. automodule:: yellow_blocks.onegbe
-    :members:
-    :undoc-members:
-
-skarab
-----------------------------
-
-.. automodule:: yellow_blocks.skarab
     :members:
     :undoc-members:
 

@@ -41,9 +41,9 @@ end
 path_and_filename = get_param(sysname, 'filename');
 
 % get the git info for the system slx file
-[status, result] = system(['python ', python_script,' --fpgstring --katversion ', path_and_filename]);
+[status, result] = system(['python -E ', python_script,' --fpgstring --katversion ', path_and_filename]);
 if status ~= 0
-    [status, result] = system(['python ', python_script,' --fpgstring ', path_and_filename]);
+    [status, result] = system(['python -E ', python_script,' --fpgstring ', path_and_filename]);
     if status ~= 0
         warning(['Could not get GIT info for system: ', path_and_filename]);
         result = ['#giterror: could not get GIT info for system "', sysname,'": ', path_and_filename, '\n'];
@@ -52,9 +52,9 @@ end
 git_info_struct.sys_info = result;
 
 % get the git info for the casper library
-[status, result] = system(['python ', python_script,' --fpgstring --katversion ', getenv('MLIB_DEVEL_PATH')]);
+[status, result] = system(['python -E ', python_script,' --fpgstring --katversion ', getenv('MLIB_DEVEL_PATH')]);
 if status ~= 0
-    [status, result] = system(['python ', python_script,' --fpgstring ', getenv('MLIB_DEVEL_PATH')]);
+    [status, result] = system(['python -E ', python_script,' --fpgstring ', getenv('MLIB_DEVEL_PATH')]);
     if status ~= 0
         warning(['Could not get GIT info for mlib_devel: ', getenv('MLIB_DEVEL_PATH')]);
         result = ['#giterror: Could not get GIT info for mlib_devel: ', getenv('MLIB_DEVEL_PATH'), '\n'];

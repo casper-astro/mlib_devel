@@ -1,6 +1,6 @@
 name: zcu216
 manufacturer: Xilinx
-fpga: xczu49dr-ffvf1760-2-e-es1
+fpga: xczu49dr-ffvf1760-2-e
 family: rfsoc
 config_voltage: 1.8
 cfgbvs: GND
