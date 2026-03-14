@@ -64,6 +64,7 @@ vmchub_set_param(vmchub, sys, 'ExportDirectory', export_path);
 % what the rest of the toolflow where this string is expected to appear.
 % Consider generalizing or fully converting all of the name references (castro.py?)
 vmchub_set_param(vmchub, sys, 'IPLibrary', 'SysGen');
+vmchub_set_param(vmchub, gcs, 'IPName', gcs);
 
 % Using compile to IP catalog breaks current black box
 % inputs. This is a work around until the black box path
