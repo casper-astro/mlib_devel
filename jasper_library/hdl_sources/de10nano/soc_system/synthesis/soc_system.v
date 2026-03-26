@@ -136,6 +136,26 @@ soc_system_hps_0 #(
     .h2f_lw_WREADY  (hps_0_h2f_lw_axi_master_wready),
 
     // Write Response
-    .h2f_lw_BID     (hps_0_h2f_lw_axi_master_bid),
-    .h2f_lw_BRESP   (hps_0_h2f_lw_axi_master_bresp),
-    .h2f_lw
+    .h2f_lw_BID     (hps_0_h2f_lw_axi_master_bid),     //.bid
+    .h2f_lw_BRESP (hps_0_h2f_lw_axi_master_bresp),     //.bresp 
+    .h2f_lw_BVALID (hps_0_h2f_lw_axi_master_bvalid),   //.bvalid 
+    .h2f_lw_BREADY (hps_0_h2f_lw_axi_master_bready),   //.bready 
+    .h2f_lw_ARID (hps_0_h2f_lw_axi_master_arid),       //.arid 
+    .h2f_lw_ARADDR (hps_0_h2f_lw_axi_master_araddr),   //.araddr 
+    .h2f_lw_ARLEN (hps_0_h2f_lw_axi_master_arlen),     //.arlen
+    .h2f_lw_ARSIZE (hps_0_h2f_lw_axi_master_arsize),   //.arsize 
+    .h2f_lw_ARBURST (hps_0_h2f_lw_axi_master_arburst), //.arburst 
+    .h2f_lw_ARLOCK (hps_0_h2f_lw_axi_master_arlock),   //.arlock 
+    .h2f_lw_ARCACHE (hps_0_h2f_lw_axi_master_arcache), //.arcache 
+    .h2f_lw_ARPROT (hps_0_h2f_lw_axi_master_arprot),   //.arprot 
+    .h2f_lw_ARVALID (hps_0_h2f_lw_axi_master_arvalid), //.arvalid 
+    .h2f_lw_ARREADY (hps_0_h2f_lw_axi_master_arready), //.arready 
+    .h2f_lw_RID (hps_0_h2f_lw_axi_master_rid),         //.rid 
+    .h2f_lw_RDATA (hps_0_h2f_lw_axi_master_rdata),     //.rdata 
+    .h2f_lw_RRESP (hps_0_h2f_lw_axi_master_rresp),     //.rresp 
+    .h2f_lw_RLAST (hps_0_h2f_lw_axi_master_rlast),     //.rlast 
+    .h2f_lw_RVALID (hps_0_h2f_lw_axi_master_rvalid),   //.rvalid 
+    .h2f_lw_RREADY (hps_0_h2f_lw_axi_master_rready)    //.rready  
+);
+endmodule
+

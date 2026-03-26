@@ -16,10 +16,10 @@ def signal_width(sig):
 
 class de10nano(YellowBlock):
     def initialize(self):
-    """
-    Called once when the platform block is created.
-    Defines board-level parameters, available resources, and HDL sources.
-    """
+        """
+        Called once when the platform block is created.
+        Defines board-level parameters, available resources, and HDL sources.
+        """
         self.name = 'de10nano'
         self.fpga = '5CSEBA6U23I7'
         self.family = 'Cyclone V'
@@ -64,15 +64,15 @@ class de10nano(YellowBlock):
     # ----------------------------------------------------------------------
 
     def modify_top(self, top):
-    """
-    Wire:
-    - Device pins
-    - clocks
-    - AXI-Lite nets
-    - soc_system (HPS subsystem) ports
-    - AXI to AXI-Lite bridge instance
-    - DDR3 interface to top-level pins
-    """
+        """
+        Wire:
+        - Device pins
+        - clocks
+        - AXI-Lite nets
+        - soc_system (HPS subsystem) ports
+        - AXI to AXI-Lite bridge instance
+        - DDR3 interface to top-level pins
+        """
 
         # --- Board clock (name must match the QSF/board pin) ---
         top.add_port('FPGA_CLK1_50', dir='in')
