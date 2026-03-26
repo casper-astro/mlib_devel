@@ -1551,7 +1551,7 @@ class QuartusBackend(ToolflowBackend):
       * Wraps the .rbf into a CASPER .fpg container via `self.mkfpg`
 
     It is intentionally minimal and assumes:
-      * A DE10-Nano Platform Designer system (`soc_system.qip`)
+      * Board-specific paths (reference_qsf, soc_qip, ddr_hdl_path) are set in the platform YAML
       * A CASPER-generated core HDL file named `<basename(compile_dir)>_ip.v`
       * MLIB_DEVEL_PATH is set and points to the jasper_library tree
     """
@@ -1627,17 +1627,19 @@ class QuartusBackend(ToolflowBackend):
 
     def initialize(self):
         """
-        Initialize a fresh Quartus project and hook in the DE10-Nano HPS system
+        Initialize a fresh Quartus project and hook in the board's HPS system
         plus the CASPER-generated core.
+
+        Board-specific assets (reference QSF, Platform Designer QIP, DDR HDL)
+        are located via paths in the platform YAML (reference_qsf, soc_qip,
+        ddr_hdl_path).  These are resolved relative to MLIB_DEVEL_PATH/jasper_library/.
 
         This function:
           * Creates the project directory
-          * Sets the family/device
+          * Sets the family/device from the platform object
           * Sets the TOP_LEVEL_ENTITY ("top")
-          * Sources the Terasic DE10-Nano base .qsf
-            Note: This can be generalized to more platforms; this is really convenient because it contains
-                  all of the entity-level assignments and settings for the Golden Hardware Reference design which 
-           * Adds the Platform Designer system (soc_system.qip)
+          * Sources the board's reference .qsf (pin assignments, HPS settings)
+          * Adds the Platform Designer system (soc_system.qip)
           * Adds the CASPER-generated core HDL (`<compile_dir_basename>_ip.v`)
           * Registers a user SDC file that we will later generate
         """
@@ -1659,9 +1661,13 @@ class QuartusBackend(ToolflowBackend):
         os.makedirs(os.path.join(self.compile_dir, self.project_name), exist_ok=True)
         self.add_tcl_cmd(f'cd {prefix}', stage='init')
 
-        # Not being used right now
-        ddr_path = os.path.join(os.getenv('MLIB_DEVEL_PATH'), 'jasper_library/hdl_sources/de10nano/DDR')
-        self.add_tcl_cmd(f'set HPS_DDR_TCL_DIR "{ddr_path}"', stage = 'init') 
+        # DDR TCL directory (board-specific, from platform YAML)
+        jasper_root = os.path.join(os.getenv('MLIB_DEVEL_PATH'), 'jasper_library')
+        if plat.ddr_hdl_path:
+            ddr_path = os.path.join(jasper_root, plat.ddr_hdl_path)
+            self.add_tcl_cmd(f'set HPS_DDR_TCL_DIR "{ddr_path}"', stage = 'init')
+        else:
+            self.logger.warning('No ddr_hdl_path specified in platform YAML; skipping HPS_DDR_TCL_DIR')
         
         # Start a new Quartus project (overwrite any previous one with same name)
         self.add_tcl_cmd(f'project_new {self.project_name} -overwrite', stage='init')
@@ -1690,21 +1696,25 @@ class QuartusBackend(ToolflowBackend):
         sdc_loc = os.path.join(proj_dir, 'user_const.sdc')
         self.add_tcl_cmd(f'set_global_assignment -name SDC_FILE "{sdc_loc}"', stage = 'init')
 
-        # Base DE10-Nano .qsf with pin assignments, I/O standards, and HPS related assignments
-        hps_qsf = os.path.join(os.getenv('MLIB_DEVEL_PATH'), 'jasper_library/hdl_sources/de10nano/DE10_NANO_SoC_GHRD.qsf')
-        
-        # Source the board's reference design assignments
-        self.add_tcl_cmd(f'source "{hps_qsf}"')
+        # Board reference .qsf with pin assignments, I/O standards, HPS assignments
+        if plat.reference_qsf:
+            hps_qsf = os.path.join(jasper_root, plat.reference_qsf)
+            self.add_tcl_cmd(f'source "{hps_qsf}"')
+        else:
+            self.logger.warning('No reference_qsf specified in platform YAML; skipping board QSF source')
 
-        # Explicitly override family/device if needed (Terasic reference might already set these)
-        self.add_tcl_cmd(f'set_global_assignment -name FAMILY "Cyclone V"')
-        self.add_tcl_cmd(f'set_global_assignment -name DEVICE 5CSEBA6U23I7')
+        # Re-assert family/device/top after sourcing reference QSF (it may override them)
+        self.add_tcl_cmd(f'set_global_assignment -name FAMILY "{plat.family}"')
+        self.add_tcl_cmd(f'set_global_assignment -name DEVICE {plat.fpga}')
         self.add_tcl_cmd(f'set_global_assignment -name TOP_LEVEL_ENTITY top')
 
-        # Platform Designer system (soc_system.qsys -> soc_system.qip)
-        # This contains HPS, DDR, and lightweight AXI bridges.
-        soc_qip = os.path.join(os.getenv('MLIB_DEVEL_PATH'), 'jasper_library/hdl_sources/de10nano/soc_system/synthesis/soc_system.qip')
-        self.add_tcl_cmd(f'set_global_assignment -name QIP_FILE "{soc_qip}"', stage = 'init')
+        # Platform Designer system (.qsys -> .qip)
+        # Contains HPS, DDR, and lightweight AXI bridges.
+        if plat.soc_qip:
+            soc_qip = os.path.join(jasper_root, plat.soc_qip)
+            self.add_tcl_cmd(f'set_global_assignment -name QIP_FILE "{soc_qip}"', stage = 'init')
+        else:
+            self.logger.warning('No soc_qip specified in platform YAML; skipping Platform Designer QIP')
 
         # CASPER-generated core HDL file (e.g. <core_name>_ip.v) from $MLIB_DEVEL/scilab_library/gen_dsp_ip.py
         core_basename = os.path.basename(self.compile_dir) 
