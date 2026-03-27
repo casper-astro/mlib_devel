@@ -46,7 +46,7 @@ class de10nano(YellowBlock):
         # ------------------------------------------------------------------
         
         hdl_root = os.environ['HDL_ROOT']
-        for patt in ['utils/cdc_synchroniser.vhd', 'axi4_lite/*.v', 'axi4_lite/*.sv', 'axi4_register/*.v', 'axi4_register/*.sv', 'de10nano/axi_axil_adapter*.v', 'de10nano/*.v', 'de10nano/*.sv', 'de10nano/soc_system/synthesis/*.v',  'de10nano/soc_system/synthesis/*.sv']:
+        for patt in ['utils/cdc_synchroniser.vhd', 'axi4_lite/*.v', 'axi4_lite/*.sv', 'axi4_register/*.v', 'axi4_register/*.sv', 'intel_common/axi_axil_adapter*.v', 'de10nano/*.v', 'de10nano/*.sv', 'de10nano/soc_system/synthesis/*.v',  'de10nano/soc_system/synthesis/*.sv']:
             for f in glob.glob(os.path.join(hdl_root, patt)):
                 rel = os.path.relpath(f, hdl_root)
                 print('Adding path for...' + str(rel))

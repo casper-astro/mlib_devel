@@ -1,0 +1,18 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "sample_rate",
+            "channel"
+        ],
+        "values": [
+            "ltc2308",
+            "",
+            "pd:ltc2308",
+            500000,
+            0
+        ]
+    }
+}

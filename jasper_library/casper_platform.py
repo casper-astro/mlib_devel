@@ -116,6 +116,13 @@ class Platform(object):
         except KeyError:
             self.mmbus_xil_base_address = []
 
+        # Board-specific paths for Intel/Quartus backends.
+        # These are relative to MLIB_DEVEL_PATH/jasper_library/ and resolved
+        # at use time by QuartusBackend.initialize().
+        self.reference_qsf = self.conf.get('reference_qsf', None)
+        self.soc_qip = self.conf.get('soc_qip', None)
+        self.ddr_hdl_path = self.conf.get('ddr_hdl_path', None)
+
     def add_pins(self, name, iostd, loc, drive_strength=None, diff_term=None):
         """
         Add a pin to the platform. Generally for use in constructors

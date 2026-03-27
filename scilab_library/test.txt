@@ -1,0 +1,159 @@
+/home/bgodfrey/CASPER/mlib_devel/jasper_library/platforms/de10nano.yaml
+{'name': 'de10nano', 'manufacturer': 'Intel', 'fpga': '5CSEBA6U23I7', 'family': 'Cyclone V', 'config_voltage': 3.3, 'backend_target': 'quartus', 'sources': [], 'mmbus_architecture': 'AXI4-Lite', 'mmbus_base_address': 4280287232, 'mmbus_address_alignment': 4, 'constraints': [], 'provides': ['fpga_clk1_50', 'fpga_clk2_50', 'fpga_clk3_50'], 'pins': {'fpga_clk1_50': {'iostd': '3.3-V LVTTL', 'loc': 'PIN_V11'}, 'fpga_clk2_50': {'iostd': '3.3-V LVTTL', 'loc': 'PIN_Y13'}, 'fpga_clk3_50': {'iostd': '3.3-V LVTTL', 'loc': 'PIN_E11'}, 'led': {'iostd': '3.3-V LVTTL', 'loc': ['PIN_AA23', 'PIN_Y16', 'PIN_AE26', 'PIN_AF26', 'PIN_V15', 'PIN_V16', 'PIN_AA24', 'PIN_W15']}, 'sw': {'iostd': '3.3-V LVTTL', 'loc': ['PIN_Y24', 'PIN_W24', 'PIN_W21', 'PIN_W20']}, 'oct_rzqin': {'iostd': 'SSTL-15', 'loc': 'PIN_D25'}}}
+[PLATFORM DEBUG] Using platform YAML: /home/bgodfrey/CASPER/mlib_devel/jasper_library/platforms/de10nano.yaml
+[PLATFORM DEBUG] YAML keys: dict_keys(['name', 'manufacturer', 'fpga', 'family', 'config_voltage', 'backend_target', 'sources', 'mmbus_architecture', 'mmbus_base_address', 'mmbus_address_alignment', 'constraints', 'provides', 'pins'])
+[PLATFORM DEBUG] YAML family: Cyclone V
+BUILDING THE BLOCK: {'name': 'DE10-Nano', 'fullpath': 'scilabdemo_adc4/DE10-Nano', 'tag': 'xps:xsg', 'hw_sys': 'de10nano:5CSEBA6U23I7', 'clk_src': 'fpga_clk1_50', 'clk_rate': 50, 'pl_clk_rate': 50, 'sample_period': 1, 'synthesis_tool': 'XST'}
+CLS FILE: <module 'yellow_blocks' from '/home/bgodfrey/CASPER/mlib_devel/jasper_library/yellow_blocks/__init__.py'>
+BUILDING THE BLOCK: {'name': 'a', 'fullpath': 'scilabdemo_adc4/a', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
+CLS FILE: <module 'yellow_blocks' from '/home/bgodfrey/CASPER/mlib_devel/jasper_library/yellow_blocks/__init__.py'>
+BUILDING THE BLOCK: {'name': 'b', 'fullpath': 'scilabdemo_adc4/b', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
+CLS FILE: <module 'yellow_blocks' from '/home/bgodfrey/CASPER/mlib_devel/jasper_library/yellow_blocks/__init__.py'>
+BUILDING THE BLOCK: {'name': 'c', 'fullpath': 'scilabdemo_adc4/c', 'tag': 'xps:sw_reg', 'io_dir': 'To Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
+CLS FILE: <module 'yellow_blocks' from '/home/bgodfrey/CASPER/mlib_devel/jasper_library/yellow_blocks/__init__.py'>
+BUILDING THE BLOCK: {'name': 'ltc2308', 'fullpath': 'scilabdemo_adc4/ltc2308', 'tag': 'pd:ltc2308', 'sample_rate': 500000, 'channel': 0}
+RETURN CLASS INSTANCE...
+	BLOCK IS: {'name': 'ltc2308', 'fullpath': 'scilabdemo_adc4/ltc2308', 'tag': 'pd:ltc2308', 'sample_rate': 500000, 'channel': 0}
+	PLATFORM IS: de10nano
+	HDL ROOT IS: None
+/home/bgodfrey/CASPER/mlib_devel/jasper_library/platforms/de10nano.yaml
+{'name': 'de10nano', 'manufacturer': 'Intel', 'fpga': '5CSEBA6U23I7', 'family': 'Cyclone V', 'config_voltage': 3.3, 'backend_target': 'quartus', 'sources': [], 'mmbus_architecture': 'AXI4-Lite', 'mmbus_base_address': 4280287232, 'mmbus_address_alignment': 4, 'constraints': [], 'provides': ['fpga_clk1_50', 'fpga_clk2_50', 'fpga_clk3_50'], 'pins': {'fpga_clk1_50': {'iostd': '3.3-V LVTTL', 'loc': 'PIN_V11'}, 'fpga_clk2_50': {'iostd': '3.3-V LVTTL', 'loc': 'PIN_Y13'}, 'fpga_clk3_50': {'iostd': '3.3-V LVTTL', 'loc': 'PIN_E11'}, 'led': {'iostd': '3.3-V LVTTL', 'loc': ['PIN_AA23', 'PIN_Y16', 'PIN_AE26', 'PIN_AF26', 'PIN_V15', 'PIN_V16', 'PIN_AA24', 'PIN_W15']}, 'sw': {'iostd': '3.3-V LVTTL', 'loc': ['PIN_Y24', 'PIN_W24', 'PIN_W21', 'PIN_W20']}, 'oct_rzqin': {'iostd': 'SSTL-15', 'loc': 'PIN_D25'}}}
+[PLATFORM DEBUG] Using platform YAML: /home/bgodfrey/CASPER/mlib_devel/jasper_library/platforms/de10nano.yaml
+[PLATFORM DEBUG] YAML keys: dict_keys(['name', 'manufacturer', 'fpga', 'family', 'config_voltage', 'backend_target', 'sources', 'mmbus_architecture', 'mmbus_base_address', 'mmbus_address_alignment', 'constraints', 'provides', 'pins'])
+[PLATFORM DEBUG] YAML family: Cyclone V
+BUILDING THE BLOCK: {'name': 'DE10-Nano', 'fullpath': 'scilabdemo_adc4/DE10-Nano', 'tag': 'xps:xsg', 'hw_sys': 'de10nano:5CSEBA6U23I7', 'clk_src': 'fpga_clk1_50', 'clk_rate': 50, 'pl_clk_rate': 50, 'sample_period': 1, 'synthesis_tool': 'XST'}
+CLS FILE: <module 'yellow_blocks' from '/home/bgodfrey/CASPER/mlib_devel/jasper_library/yellow_blocks/__init__.py'>
+RETURN CLASS INSTANCE...
+	BLOCK IS: {'name': 'DE10-Nano', 'fullpath': 'scilabdemo_adc4/DE10-Nano', 'tag': 'xps:xsg', 'hw_sys': 'de10nano:5CSEBA6U23I7', 'clk_src': 'fpga_clk1_50', 'clk_rate': 50, 'pl_clk_rate': 50, 'sample_period': 1, 'synthesis_tool': 'XST'}
+	PLATFORM IS: de10nano
+	HDL ROOT IS: None
+FULL NAME: scilabdemo_adc4_DE10-Nano
+BUILDING THE BLOCK: {'name': 'a', 'fullpath': 'scilabdemo_adc4/a', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
+CLS FILE: <module 'yellow_blocks' from '/home/bgodfrey/CASPER/mlib_devel/jasper_library/yellow_blocks/__init__.py'>
+RETURN CLASS INSTANCE...
+	BLOCK IS: {'name': 'a', 'fullpath': 'scilabdemo_adc4/a', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
+	PLATFORM IS: de10nano
+	HDL ROOT IS: None
+FULL NAME: scilabdemo_adc4_a
+CREATING A MEMORY MAP FOR REGISTER: a
+wb_register_ppc2simulink_intel []
+SOURCES ARE: []
+BUILDING THE BLOCK: {'name': 'b', 'fullpath': 'scilabdemo_adc4/b', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
+CLS FILE: <module 'yellow_blocks' from '/home/bgodfrey/CASPER/mlib_devel/jasper_library/yellow_blocks/__init__.py'>
+RETURN CLASS INSTANCE...
+	BLOCK IS: {'name': 'b', 'fullpath': 'scilabdemo_adc4/b', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
+	PLATFORM IS: de10nano
+	HDL ROOT IS: None
+FULL NAME: scilabdemo_adc4_b
+CREATING A MEMORY MAP FOR REGISTER: b
+wb_register_ppc2simulink_intel []
+SOURCES ARE: []
+BUILDING THE BLOCK: {'name': 'c', 'fullpath': 'scilabdemo_adc4/c', 'tag': 'xps:sw_reg', 'io_dir': 'To Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
+CLS FILE: <module 'yellow_blocks' from '/home/bgodfrey/CASPER/mlib_devel/jasper_library/yellow_blocks/__init__.py'>
+RETURN CLASS INSTANCE...
+	BLOCK IS: {'name': 'c', 'fullpath': 'scilabdemo_adc4/c', 'tag': 'xps:sw_reg', 'io_dir': 'To Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
+	PLATFORM IS: de10nano
+	HDL ROOT IS: None
+FULL NAME: scilabdemo_adc4_c
+CREATING A MEMORY MAP FOR REGISTER: c
+wb_register_simulink2ppc_intel []
+SOURCES ARE: []
+BUILDING THE BLOCK: {'name': 'ltc2308', 'fullpath': 'scilabdemo_adc4/ltc2308', 'tag': 'pd:ltc2308', 'sample_rate': 500000, 'channel': 0}
+/home/bgodfrey/CASPER/mlib_devel/jasper_library/platforms/de10nano.yaml
+{'name': 'de10nano', 'manufacturer': 'Intel', 'fpga': '5CSEBA6U23I7', 'family': 'Cyclone V', 'config_voltage': 3.3, 'backend_target': 'quartus', 'sources': [], 'mmbus_architecture': 'AXI4-Lite', 'mmbus_base_address': 4280287232, 'mmbus_address_alignment': 4, 'constraints': [], 'provides': ['fpga_clk1_50', 'fpga_clk2_50', 'fpga_clk3_50'], 'pins': {'fpga_clk1_50': {'iostd': '3.3-V LVTTL', 'loc': 'PIN_V11'}, 'fpga_clk2_50': {'iostd': '3.3-V LVTTL', 'loc': 'PIN_Y13'}, 'fpga_clk3_50': {'iostd': '3.3-V LVTTL', 'loc': 'PIN_E11'}, 'led': {'iostd': '3.3-V LVTTL', 'loc': ['PIN_AA23', 'PIN_Y16', 'PIN_AE26', 'PIN_AF26', 'PIN_V15', 'PIN_V16', 'PIN_AA24', 'PIN_W15']}, 'sw': {'iostd': '3.3-V LVTTL', 'loc': ['PIN_Y24', 'PIN_W24', 'PIN_W21', 'PIN_W20']}, 'oct_rzqin': {'iostd': 'SSTL-15', 'loc': 'PIN_D25'}}}
+[PLATFORM DEBUG] Using platform YAML: /home/bgodfrey/CASPER/mlib_devel/jasper_library/platforms/de10nano.yaml
+[PLATFORM DEBUG] YAML keys: dict_keys(['name', 'manufacturer', 'fpga', 'family', 'config_voltage', 'backend_target', 'sources', 'mmbus_architecture', 'mmbus_base_address', 'mmbus_address_alignment', 'constraints', 'provides', 'pins'])
+[PLATFORM DEBUG] YAML family: Cyclone V
+BUILDING THE BLOCK: {'name': 'DE10-Nano', 'fullpath': 'scilabdemo_adc4/DE10-Nano', 'tag': 'xps:xsg', 'hw_sys': 'de10nano:5CSEBA6U23I7', 'clk_src': 'fpga_clk1_50', 'clk_rate': 50, 'pl_clk_rate': 50, 'sample_period': 1, 'synthesis_tool': 'XST'}
+CLS FILE: <module 'yellow_blocks' from '/home/bgodfrey/CASPER/mlib_devel/jasper_library/yellow_blocks/__init__.py'>
+RETURN CLASS INSTANCE...
+	BLOCK IS: {'name': 'DE10-Nano', 'fullpath': 'scilabdemo_adc4/DE10-Nano', 'tag': 'xps:xsg', 'hw_sys': 'de10nano:5CSEBA6U23I7', 'clk_src': 'fpga_clk1_50', 'clk_rate': 50, 'pl_clk_rate': 50, 'sample_period': 1, 'synthesis_tool': 'XST'}
+	PLATFORM IS: de10nano
+	HDL ROOT IS: None
+FULL NAME: scilabdemo_adc4_DE10-Nano
+BUILDING THE BLOCK: {'name': 'a', 'fullpath': 'scilabdemo_adc4/a', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
+CLS FILE: <module 'yellow_blocks' from '/home/bgodfrey/CASPER/mlib_devel/jasper_library/yellow_blocks/__init__.py'>
+RETURN CLASS INSTANCE...
+	BLOCK IS: {'name': 'a', 'fullpath': 'scilabdemo_adc4/a', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
+	PLATFORM IS: de10nano
+	HDL ROOT IS: None
+FULL NAME: scilabdemo_adc4_a
+CREATING A MEMORY MAP FOR REGISTER: a
+wb_register_ppc2simulink_intel []
+SOURCES ARE: []
+BUILDING THE BLOCK: {'name': 'b', 'fullpath': 'scilabdemo_adc4/b', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
+CLS FILE: <module 'yellow_blocks' from '/home/bgodfrey/CASPER/mlib_devel/jasper_library/yellow_blocks/__init__.py'>
+RETURN CLASS INSTANCE...
+	BLOCK IS: {'name': 'b', 'fullpath': 'scilabdemo_adc4/b', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
+	PLATFORM IS: de10nano
+	HDL ROOT IS: None
+FULL NAME: scilabdemo_adc4_b
+CREATING A MEMORY MAP FOR REGISTER: b
+wb_register_ppc2simulink_intel []
+SOURCES ARE: []
+BUILDING THE BLOCK: {'name': 'c', 'fullpath': 'scilabdemo_adc4/c', 'tag': 'xps:sw_reg', 'io_dir': 'To Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
+CLS FILE: <module 'yellow_blocks' from '/home/bgodfrey/CASPER/mlib_devel/jasper_library/yellow_blocks/__init__.py'>
+RETURN CLASS INSTANCE...
+	BLOCK IS: {'name': 'c', 'fullpath': 'scilabdemo_adc4/c', 'tag': 'xps:sw_reg', 'io_dir': 'To Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
+	PLATFORM IS: de10nano
+	HDL ROOT IS: None
+FULL NAME: scilabdemo_adc4_c
+CREATING A MEMORY MAP FOR REGISTER: c
+wb_register_simulink2ppc_intel []
+SOURCES ARE: []
+BUILDING THE BLOCK: {'name': 'ltc2308', 'fullpath': 'scilabdemo_adc4/ltc2308', 'tag': 'pd:ltc2308', 'sample_rate': 500000, 'channel': 0}
+RETURN CLASS INSTANCE...
+	BLOCK IS: {'name': 'ltc2308', 'fullpath': 'scilabdemo_adc4/ltc2308', 'tag': 'pd:ltc2308', 'sample_rate': 500000, 'channel': 0}
+	PLATFORM IS: de10nano
+	HDL ROOT IS: None
+/home/bgodfrey/CASPER/mlib_devel/jasper_library/platforms/de10nano.yaml
+{'name': 'de10nano', 'manufacturer': 'Intel', 'fpga': '5CSEBA6U23I7', 'family': 'Cyclone V', 'config_voltage': 3.3, 'backend_target': 'quartus', 'sources': [], 'mmbus_architecture': 'AXI4-Lite', 'mmbus_base_address': 4280287232, 'mmbus_address_alignment': 4, 'constraints': [], 'provides': ['fpga_clk1_50', 'fpga_clk2_50', 'fpga_clk3_50'], 'pins': {'fpga_clk1_50': {'iostd': '3.3-V LVTTL', 'loc': 'PIN_V11'}, 'fpga_clk2_50': {'iostd': '3.3-V LVTTL', 'loc': 'PIN_Y13'}, 'fpga_clk3_50': {'iostd': '3.3-V LVTTL', 'loc': 'PIN_E11'}, 'led': {'iostd': '3.3-V LVTTL', 'loc': ['PIN_AA23', 'PIN_Y16', 'PIN_AE26', 'PIN_AF26', 'PIN_V15', 'PIN_V16', 'PIN_AA24', 'PIN_W15']}, 'sw': {'iostd': '3.3-V LVTTL', 'loc': ['PIN_Y24', 'PIN_W24', 'PIN_W21', 'PIN_W20']}, 'oct_rzqin': {'iostd': 'SSTL-15', 'loc': 'PIN_D25'}}}
+[PLATFORM DEBUG] Using platform YAML: /home/bgodfrey/CASPER/mlib_devel/jasper_library/platforms/de10nano.yaml
+[PLATFORM DEBUG] YAML keys: dict_keys(['name', 'manufacturer', 'fpga', 'family', 'config_voltage', 'backend_target', 'sources', 'mmbus_architecture', 'mmbus_base_address', 'mmbus_address_alignment', 'constraints', 'provides', 'pins'])
+[PLATFORM DEBUG] YAML family: Cyclone V
+BUILDING THE BLOCK: {'name': 'DE10-Nano', 'fullpath': 'scilabdemo_adc4/DE10-Nano', 'tag': 'xps:xsg', 'hw_sys': 'de10nano:5CSEBA6U23I7', 'clk_src': 'fpga_clk1_50', 'clk_rate': 50, 'pl_clk_rate': 50, 'sample_period': 1, 'synthesis_tool': 'XST'}
+CLS FILE: <module 'yellow_blocks' from '/home/bgodfrey/CASPER/mlib_devel/jasper_library/yellow_blocks/__init__.py'>
+RETURN CLASS INSTANCE...
+	BLOCK IS: {'name': 'DE10-Nano', 'fullpath': 'scilabdemo_adc4/DE10-Nano', 'tag': 'xps:xsg', 'hw_sys': 'de10nano:5CSEBA6U23I7', 'clk_src': 'fpga_clk1_50', 'clk_rate': 50, 'pl_clk_rate': 50, 'sample_period': 1, 'synthesis_tool': 'XST'}
+	PLATFORM IS: de10nano
+	HDL ROOT IS: None
+	CLS IS: <class 'yellow_blocks.xsg.xsg'>
+FULL NAME: scilabdemo_adc4_DE10-Nano
+BUILDING THE BLOCK: {'name': 'a', 'fullpath': 'scilabdemo_adc4/a', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
+CLS FILE: <module 'yellow_blocks' from '/home/bgodfrey/CASPER/mlib_devel/jasper_library/yellow_blocks/__init__.py'>
+RETURN CLASS INSTANCE...
+	BLOCK IS: {'name': 'a', 'fullpath': 'scilabdemo_adc4/a', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
+	PLATFORM IS: de10nano
+	HDL ROOT IS: None
+	CLS IS: <class 'yellow_blocks.sw_reg.sw_reg'>
+FULL NAME: scilabdemo_adc4_a
+CREATING A MEMORY MAP FOR REGISTER: a
+wb_register_ppc2simulink_intel []
+SOURCES ARE: []
+BUILDING THE BLOCK: {'name': 'b', 'fullpath': 'scilabdemo_adc4/b', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
+CLS FILE: <module 'yellow_blocks' from '/home/bgodfrey/CASPER/mlib_devel/jasper_library/yellow_blocks/__init__.py'>
+RETURN CLASS INSTANCE...
+	BLOCK IS: {'name': 'b', 'fullpath': 'scilabdemo_adc4/b', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
+	PLATFORM IS: de10nano
+	HDL ROOT IS: None
+	CLS IS: <class 'yellow_blocks.sw_reg.sw_reg'>
+FULL NAME: scilabdemo_adc4_b
+CREATING A MEMORY MAP FOR REGISTER: b
+wb_register_ppc2simulink_intel []
+SOURCES ARE: []
+BUILDING THE BLOCK: {'name': 'c', 'fullpath': 'scilabdemo_adc4/c', 'tag': 'xps:sw_reg', 'io_dir': 'To Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
+CLS FILE: <module 'yellow_blocks' from '/home/bgodfrey/CASPER/mlib_devel/jasper_library/yellow_blocks/__init__.py'>
+RETURN CLASS INSTANCE...
+	BLOCK IS: {'name': 'c', 'fullpath': 'scilabdemo_adc4/c', 'tag': 'xps:sw_reg', 'io_dir': 'To Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 0, 'sim_port': True, 'show_format': True}
+	PLATFORM IS: de10nano
+	HDL ROOT IS: None
+	CLS IS: <class 'yellow_blocks.sw_reg.sw_reg'>
+FULL NAME: scilabdemo_adc4_c
+CREATING A MEMORY MAP FOR REGISTER: c
+wb_register_simulink2ppc_intel []
+SOURCES ARE: []
+BUILDING THE BLOCK: {'name': 'ltc2308', 'fullpath': 'scilabdemo_adc4/ltc2308', 'tag': 'pd:ltc2308', 'sample_rate': 500000, 'channel': 0}
+RETURN CLASS INSTANCE...
+	BLOCK IS: {'name': 'ltc2308', 'fullpath': 'scilabdemo_adc4/ltc2308', 'tag': 'pd:ltc2308', 'sample_rate': 500000, 'channel': 0}
+	PLATFORM IS: de10nano
+	HDL ROOT IS: None

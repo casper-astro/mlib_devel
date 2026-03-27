@@ -1,0 +1,1031 @@
+/home/bgodfrey/CASPER/mlib_devel/jasper_library/platforms/de10nano.yaml
+{'name': 'de10nano', 'manufacturer': 'Intel', 'fpga': '5CSEBA6U23I7', 'family': 'Cyclone V', 'config_voltage': 3.3, 'backend_target': 'quartus', 'sources': [], 'mmbus_architecture': 'AXI4-Lite', 'mmbus_base_address': 4280287232, 'mmbus_address_alignment': 4, 'constraints': [], 'provides': ['fpga_clk1_50', 'fpga_clk2_50', 'fpga_clk3_50'], 'pins': {'fpga_clk1_50': {'iostd': '3.3-V LVTTL', 'loc': 'PIN_V11'}, 'fpga_clk2_50': {'iostd': '3.3-V LVTTL', 'loc': 'PIN_Y13'}, 'fpga_clk3_50': {'iostd': '3.3-V LVTTL', 'loc': 'PIN_E11'}, 'led': {'iostd': '3.3-V LVTTL', 'loc': ['PIN_AA23', 'PIN_Y16', 'PIN_AE26', 'PIN_AF26', 'PIN_V15', 'PIN_V16', 'PIN_AA24', 'PIN_W15']}, 'sw': {'iostd': '3.3-V LVTTL', 'loc': ['PIN_Y24', 'PIN_W24', 'PIN_W21', 'PIN_W20']}, 'oct_rzqin': {'iostd': 'SSTL-15', 'loc': 'PIN_D25'}}}
+[PLATFORM DEBUG] Using platform YAML: /home/bgodfrey/CASPER/mlib_devel/jasper_library/platforms/de10nano.yaml
+[PLATFORM DEBUG] YAML keys: dict_keys(['name', 'manufacturer', 'fpga', 'family', 'config_voltage', 'backend_target', 'sources', 'mmbus_architecture', 'mmbus_base_address', 'mmbus_address_alignment', 'constraints', 'provides', 'pins'])
+[PLATFORM DEBUG] YAML family: Cyclone V
+BUILDING THE BLOCK: {'name': 'DE10-Nano', 'fullpath': 'scilabdemo_adc3/DE10-Nano', 'tag': 'xps:xsg', 'hw_sys': 'de10nano:5CSEBA6U23I7', 'clk_src': 'fpga_clk1_50', 'clk_rate': 50, 'pl_clk_rate': 50, 'sample_period': 1, 'synthesis_tool': 'XST'}
+cls IS: <class 'yellow_blocks.xsg.xsg'>
+RETURN CLASS INSTANCE...
+	BLOCK IS: {'name': 'DE10-Nano', 'fullpath': 'scilabdemo_adc3/DE10-Nano', 'tag': 'xps:xsg', 'hw_sys': 'de10nano:5CSEBA6U23I7', 'clk_src': 'fpga_clk1_50', 'clk_rate': 50, 'pl_clk_rate': 50, 'sample_period': 1, 'synthesis_tool': 'XST'}
+	PLATFORM IS: de10nano
+	HDL ROOT IS: None
+FULL NAME: scilabdemo_adc3_DE10-Nano
+BUILDING THE BLOCK: {'name': 'a', 'fullpath': 'scilabdemo_adc3/a', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 2, 'sim_port': True, 'show_format': True}
+cls IS: <class 'yellow_blocks.sw_reg.sw_reg'>
+RETURN CLASS INSTANCE...
+	BLOCK IS: {'name': 'a', 'fullpath': 'scilabdemo_adc3/a', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 2, 'sim_port': True, 'show_format': True}
+	PLATFORM IS: de10nano
+	HDL ROOT IS: None
+FULL NAME: scilabdemo_adc3_a
+CREATING A MEMORY MAP FOR REGISTER: a
+wb_register_ppc2simulink_intel []
+SOURCES ARE: []
+BUILDING THE BLOCK: {'name': 'b', 'fullpath': 'scilabdemo_adc3/b', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 2, 'sim_port': True, 'show_format': True}
+cls IS: <class 'yellow_blocks.sw_reg.sw_reg'>
+RETURN CLASS INSTANCE...
+	BLOCK IS: {'name': 'b', 'fullpath': 'scilabdemo_adc3/b', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 2, 'sim_port': True, 'show_format': True}
+	PLATFORM IS: de10nano
+	HDL ROOT IS: None
+FULL NAME: scilabdemo_adc3_b
+CREATING A MEMORY MAP FOR REGISTER: b
+wb_register_ppc2simulink_intel []
+SOURCES ARE: []
+BUILDING THE BLOCK: {'name': 'c', 'fullpath': 'scilabdemo_adc3/c', 'tag': 'xps:sw_reg', 'io_dir': 'To Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 64, 'bin_pts': 0, 'arith_types': 2, 'sim_port': True, 'show_format': True}
+cls IS: <class 'yellow_blocks.sw_reg.sw_reg'>
+RETURN CLASS INSTANCE...
+	BLOCK IS: {'name': 'c', 'fullpath': 'scilabdemo_adc3/c', 'tag': 'xps:sw_reg', 'io_dir': 'To Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 64, 'bin_pts': 0, 'arith_types': 2, 'sim_port': True, 'show_format': True}
+	PLATFORM IS: de10nano
+	HDL ROOT IS: None
+FULL NAME: scilabdemo_adc3_c
+CREATING A MEMORY MAP FOR REGISTER: c
+wb_register_simulink2ppc_intel []
+SOURCES ARE: []
+BUILDING THE BLOCK: {'name': 'sysgen_ip', 'fullpath': 'scilabdemo_adc3/dspproj/dspproj.srcs', 'tag': 'xps:ip', 'lib_path': '/data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/dspproj/dspproj.srcs', 'ip_name': 'scilabdemo_adc3'}
+cls IS: <class 'yellow_blocks.ip.ip'>
+RETURN CLASS INSTANCE...
+	BLOCK IS: {'name': 'sysgen_ip', 'fullpath': 'scilabdemo_adc3/dspproj/dspproj.srcs', 'tag': 'xps:ip', 'lib_path': '/data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/dspproj/dspproj.srcs', 'ip_name': 'scilabdemo_adc3'}
+	PLATFORM IS: de10nano
+	HDL ROOT IS: None
+FULL NAME: scilabdemo_adc3_dspproj_dspproj.srcs
+BUILDING THE BLOCK: {'name': 'DE10-Nano', 'fullpath': 'scilabdemo_adc3/DE10-Nano', 'tag': 'xps:de10nano', 'hw_sys': 'de10nano:5CSEBA6U23I7', 'clk_src': 'fpga_clk1_50', 'clk_rate': 50, 'pl_clk_rate': 50, 'sample_period': 1, 'synthesis_tool': 'XST'}
+cls IS: <class 'yellow_blocks.de10nano.de10nano'>
+RETURN CLASS INSTANCE...
+	BLOCK IS: {'name': 'DE10-Nano', 'fullpath': 'scilabdemo_adc3/DE10-Nano', 'tag': 'xps:de10nano', 'hw_sys': 'de10nano:5CSEBA6U23I7', 'clk_src': 'fpga_clk1_50', 'clk_rate': 50, 'pl_clk_rate': 50, 'sample_period': 1, 'synthesis_tool': 'XST'}
+	PLATFORM IS: de10nano
+	HDL ROOT IS: None
+FULL NAME: scilabdemo_adc3_DE10-Nano
+Adding path for...utils/cdc_synchroniser.vhd
+utils/cdc_synchroniser.vhd ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd']
+SOURCES ARE: ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd']
+Adding path for...axi4_register/axi4_reg.v
+axi4_register/axi4_reg.v ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_register/axi4_reg.v']
+SOURCES ARE: ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_register/axi4_reg.v']
+Adding path for...de10nano/axi_axil_adapter_rd.v
+de10nano/axi_axil_adapter_rd.v ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_rd.v']
+SOURCES ARE: ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_register/axi4_reg.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_rd.v']
+Adding path for...de10nano/axi_axil_adapter.v
+de10nano/axi_axil_adapter.v ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter.v']
+SOURCES ARE: ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_register/axi4_reg.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_rd.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter.v']
+Adding path for...de10nano/axi_axil_adapter_wr.v
+de10nano/axi_axil_adapter_wr.v ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_wr.v']
+SOURCES ARE: ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_register/axi4_reg.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_rd.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_wr.v']
+Adding path for...de10nano/axi_axil_adapter_rd.v
+de10nano/axi_axil_adapter_rd.v ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_rd.v']
+SOURCES ARE: ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_register/axi4_reg.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_rd.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_wr.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_rd.v']
+Adding path for...de10nano/axi_axil_adapter.v
+de10nano/axi_axil_adapter.v ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter.v']
+SOURCES ARE: ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_register/axi4_reg.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_rd.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_wr.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_rd.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter.v']
+Adding path for...de10nano/de10nano.v
+Not adding de10nano/de10nano.v
+Adding path for...de10nano/axi_axil_adapter_wr.v
+de10nano/axi_axil_adapter_wr.v ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_wr.v']
+SOURCES ARE: ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_register/axi4_reg.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_rd.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_wr.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_rd.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_wr.v']
+Adding path for...de10nano/soc_system/synthesis/soc_system.v
+de10nano/soc_system/synthesis/soc_system.v ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/soc_system.v']
+SOURCES ARE: ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_register/axi4_reg.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_rd.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_wr.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_rd.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_wr.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/soc_system.v']
+BUILDING TOP IN TOOLFLOW
+modifying top for obj DE10-Nano
+modifying top for obj a
+IO DIRECTION OF BLOCK a IS From Processor
+FROM PROCESSOR IO FOUND FOR BLOCK: {'name': 'a', 'fullpath': 'scilabdemo_adc3/a', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 2, 'sim_port': True, 'show_format': True}
+	THE MEMORY MAP IS: {'name': 'a', 'nbytes': 4, 'offset': 0, 'mode': 'rw', 'ram': False, 'default_val': '0', 'data_width': 32, 'axi4lite_mode': ''}
+modifying top for obj b
+IO DIRECTION OF BLOCK b IS From Processor
+FROM PROCESSOR IO FOUND FOR BLOCK: {'name': 'b', 'fullpath': 'scilabdemo_adc3/b', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 2, 'sim_port': True, 'show_format': True}
+	THE MEMORY MAP IS: {'name': 'b', 'nbytes': 4, 'offset': 0, 'mode': 'rw', 'ram': False, 'default_val': '0', 'data_width': 32, 'axi4lite_mode': ''}
+modifying top for obj c
+IO DIRECTION OF BLOCK c IS To Processor
+TO PROCESSOR IO FOUND FOR BLOCK: {'name': 'c', 'fullpath': 'scilabdemo_adc3/c', 'tag': 'xps:sw_reg', 'io_dir': 'To Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 64, 'bin_pts': 0, 'arith_types': 2, 'sim_port': True, 'show_format': True}
+	THE MEMORY MAP IS: {'name': 'c', 'nbytes': 4, 'offset': 0, 'mode': 'rw', 'ram': False, 'default_val': '0', 'data_width': 32, 'axi4lite_mode': ''}
+modifying top for obj sysgen_ip
+modifying top for obj de10nano
+Made it to the end
+ARCHITECTURE IS: ['AXI4-Lite']
+PLATFORM IS: <casper_platform.Platform object at 0x7f67c4b34340>
+
+
+AXI4-Lite FOUND IN ARCHITECTURE
+
+
+BUILDING THE BLOCK: {'tag': 'xps:axi4lite_interconnect', 'name': 'axi4lite_interconnect', 'fullpath': 'scilabdemo_adc3_ip/axi4lite_interconnect'}
+cls IS: <class 'yellow_blocks.axi4lite_interconnect.axi4lite_interconnect'>
+RETURN CLASS INSTANCE...
+	BLOCK IS: {'tag': 'xps:axi4lite_interconnect', 'name': 'axi4lite_interconnect', 'fullpath': 'scilabdemo_adc3_ip/axi4lite_interconnect'}
+	PLATFORM IS: de10nano
+	HDL ROOT IS: None
+FULL NAME: scilabdemo_adc3_ip_axi4lite_interconnect
+
+
+
+INITIALIZING AXI4LITE_INTERCONNECT
+
+
+
+axi4_lite/*.vhd ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_pkg.vhd', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_slave_logic.vhd']
+SOURCES ARE: ['/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_pkg.vhd', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_slave_logic.vhd']
+CALLED AXI4LITE_MEMORY_MAP...
+On device a
+Looking at device a with memory map [<memory.Register object at 0x7f67c46664c0>]
+THIS SHOULD BE THE FIRST SOFTWARE REGISTER
+LOOKING AT... a
+THE MEMORY MAP IS: <memory.Register object at 0x7f67c46664c0>
+THE POSSIBLE VALUES OF THE MEMORY MAP ARE: {'name': 'a', 'nbytes': 4, 'offset': 0, 'mode': 'rw', 'ram': False, 'default_val': '0', 'data_width': 32, 'axi4lite_mode': ''}
+EMPTY MEMORY MAP FOUND FOR a
+On device b
+Looking at device b with memory map [<memory.Register object at 0x7f67c46669a0>]
+LOOKING AT... b
+New software register connecting b
+Confirming connection status: False
+On device c
+Looking at device c with memory map [<memory.Register object at 0x7f67c4666a90>]
+LOOKING AT... c
+New software register connecting c
+Confirming connection status: False
+MODIFYING TOP: top
+MEMORY MAP: YellowBlock Object: {'tag': 'xps:axi4lite_interconnect', 'name': 'axi4lite_interconnect', 'fullpath': 'scilabdemo_adc3_ip/axi4lite_interconnect'} (scilabdemo_adc3_ip_axi4lite_interconnect)
+{'name': 'a', 'nbytes': 4, 'offset': 0, 'mode': 'rw', 'ram': False, 'default_val': '0', 'data_width': 32, 'axi4lite_mode': ''}
+[axi4lite_interconnect] Register: a, Block: sw_reg, Mode: rw
+{'name': 'b', 'nbytes': 4, 'offset': 4, 'mode': 'rw', 'ram': False, 'default_val': '0', 'data_width': 32, 'axi4lite_mode': ''}
+[axi4lite_interconnect] Register: b, Block: sw_reg, Mode: rw
+{'name': 'c', 'nbytes': 4, 'offset': 8, 'mode': 'r', 'ram': False, 'default_val': '0', 'data_width': 32, 'axi4lite_mode': ''}
+[axi4lite_interconnect] Register: c, Block: sw_reg, Mode: r
+AXI IPs: ['/data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/top.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_register/axi4_reg.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_rd.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_wr.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_rd.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_wr.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/soc_system.v', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_pkg.vhd', '/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_slave_logic.vhd']
+TOP MEMORY MAP: {'sw_reg': {'size': 16, 'memory_map': [<memory.Register object at 0x7f67c46664c0>, <memory.Register object at 0x7f67c46669a0>, <memory.Register object at 0x7f67c4666a90>], 'axi4lite_devices': [<verilog.AXI4LiteDevice object at 0x7f67c46662e0>, <verilog.AXI4LiteDevice object at 0x7f67c46663d0>, <verilog.AXI4LiteDevice object at 0x7f67c4666a60>], 'relative_address': '0x0'}}
+	AXI MEMORY MAP: 
+		SW_REG 0: {'typecode': 0, 'regname': 'a', 'nbytes': 4, 'data_width': 32, 'mode': 'rw', 'base_addr': 4280287232, 'high_addr': None, 'hdl_suffix': '', 'hdl_candr_suffix': '', 'memory_map': [], 'axi4lite_mode': '', 'platform': None, 'connected': True}
+		SW_REG 1: {'typecode': 0, 'regname': 'b', 'nbytes': 4, 'data_width': 32, 'mode': 'rw', 'base_addr': 4280287236, 'high_addr': None, 'hdl_suffix': '', 'hdl_candr_suffix': '', 'memory_map': [], 'axi4lite_mode': '', 'platform': None, 'connected': True}
+		SW_REG 2: {'typecode': 0, 'regname': 'c', 'nbytes': 4, 'data_width': 32, 'mode': 'r', 'base_addr': 4280287240, 'high_addr': None, 'hdl_suffix': '', 'hdl_candr_suffix': '', 'memory_map': [], 'axi4lite_mode': '', 'platform': None, 'connected': True}
+MEMORY MAP FILE: {'sw_reg': {'size': 16, 'memory_map': [<memory.Register object at 0x7f67c46664c0>, <memory.Register object at 0x7f67c46669a0>, <memory.Register object at 0x7f67c4666a90>], 'axi4lite_devices': [<verilog.AXI4LiteDevice object at 0x7f67c46662e0>, <verilog.AXI4LiteDevice object at 0x7f67c46663d0>, <verilog.AXI4LiteDevice object at 0x7f67c4666a60>], 'relative_address': '0x0'}}
+THE FILE NAME IS: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_source/axi4lite_top_ic_memory_map.xml
+<?xml version="1.0" ?>
+<node id="axi4lite_top" address="0xff200000" hw_type="ic">
+	<node id="sw_reg" address="0x0" link="sw_reg_memory_map_output.xml"/>
+</node>
+<!-- This file has been automatically generated by generate_xml_memory_map function. /!-->
+
+[32m[INFO    ]: ********************************************************************************[0m
+[32m[INFO    ]: Loading Arguments from Command Line...[0m
+[32m[INFO    ]: ********************************************************************************[0m
+[32m[INFO    ]: Trying to generate AXI HDL from XML[0m
+[32m[INFO    ]:   Input directory: ['/data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_source'][0m
+[32m[INFO    ]:   Output XML directory: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_xml_output[0m
+[32m[INFO    ]:   Output directory: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output[0m
+[32m[INFO    ]:   Slave library: xil_defaultlib[0m
+[32m[INFO    ]:   Bus library: xil_defaultlib[0m
+[32m[INFO    ]: [xml2vhdl] Backend set to: Quartus[0m
+[xml2vhdl] Parsed backend: quartus
+[32m[INFO    ]: --------------------------------------------------------------------------------[0m
+[32m[INFO    ]: Compile order:[0m
+[32m[INFO    ]: 	sw_reg[0m
+[32m[INFO    ]: 	axi4lite_top[0m
+[32m[INFO    ]: Analysing: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_source/sw_reg_memory_map.xml[0m
+[32m[INFO    ]: Selected bus:[0m
+[32m[INFO    ]: 	name:  axi4lite[0m
+[32m[INFO    ]: 	width: 32 bit[0m
+[32m[INFO    ]: xml2vhdl.py version 1.16[0m
+[32m[INFO    ]: --------------------------------------------------------------------------------[0m
+[32m[INFO    ]: Analysing: "/data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_source/sw_reg_memory_map.xml"[0m
+[32m[INFO    ]: Hierarchical levels are 1[0m
+[32m[INFO    ]: Nodes are 4[0m
+[32m[INFO    ]: Checking reserved words...[0m
+[32m[INFO    ]: fill_child...[0m
+[32m[INFO    ]: fill_complete_id...[0m
+[32m[INFO    ]: fill_absolute_offset...[0m
+[32m[INFO    ]: fill_type...[0m
+[32m[INFO    ]: fill_addressable...[0m
+[32m[INFO    ]: check_offset...[0m
+[32m[INFO    ]: check_bitfield...[0m
+[32m[INFO    ]: fill_decoder_mask...[0m
+[32m[INFO    ]: Addresses are: 3[0m
+[32m[INFO    ]: propagate_reset_value...[0m
+[32m[INFO    ]: default_reset...[0m
+[32m[INFO    ]: default_permission...[0m
+[32m[INFO    ]: Processing: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_xml_output/sw_reg_memory_map_output.xml[0m
+START OF XML TEXT
+<?xml version="1.0" ?>
+<node id="sw_reg" byte_size="16">
+	<node id="a" address="0x00000000" mask="0xffffffff" size="1" permission="rw" hw_rst="0" description="sw_reg_a"/>
+	<node id="b" address="0x00000004" mask="0xffffffff" size="1" permission="rw" hw_rst="0" description="sw_reg_b"/>
+	<node id="c" address="0x00000008" mask="0xffffffff" size="1" permission="r" hw_rst="0x0" description="sw_reg_c"/>
+</node>
+
+END OF XML TEXT
+[32m[INFO    ]: Writing VHDL output file: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_sw_reg_pkg.vhd[0m
+[32m[INFO    ]: Writing VHDL output file: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_sw_reg.vhd[0m
+[32m[INFO    ]: Writing VHDL output file: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_sw_reg_muxdemux.vhd[0m
+[32m[INFO    ]: Done![0m
+[32m[INFO    ]: --------------------------------------------------------------------------------[0m
+[32m[INFO    ]: Analysing: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_source/axi4lite_top_ic_memory_map.xml[0m
+[32m[INFO    ]: --------------------------------------------------------------------------------[0m
+[32m[INFO    ]: xml2ic.py version 1.8"[0m
+[32m[INFO    ]: Processing Paths:[0m
+[32m[INFO    ]: 	/data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_xml_output[0m
+[32m[INFO    ]: Searching for VHDL Top-Level: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_source/axi4lite_top_ic_memory_map[0m
+ROOT: axi4lite_top
+OPTIONS: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_source/axi4lite_top_ic_memory_map
+[33m[WARNING ]: VHDL Top-Level not found: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_source/axi4lite_top_ic_memory_map[0m
+[33m[WARNING ]: 	Using root node: axi4lite_top[0m
+VHDL START NODE: [<Element node at 0x7f67c4bc64c0>]
+VHDL ADDRESS: [0]
+[32m[INFO    ]: Addresses are: 1[0m
+TREE DICT: {'-1v0': array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])}
+[32m[INFO    ]: Writing VHDL output file: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_axi4lite_top_mmap_pkg.vhd[0m
+[32m[INFO    ]: Writing VHDL output file: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic_pkg.vhd[0m
+[32m[INFO    ]: Writing VHDL output file: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic.vhd[0m
+[32m[INFO    ]: Writing VHDL output file: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_axi4lite_top_example.vho[0m
+[32m[INFO    ]: Writing XML output file: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_xml_output/axi4lite_top_ic_memory_map_output.xml[0m
+[32m[INFO    ]: Generating HTML Tables from: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_xml_output/axi4lite_top_ic_memory_map_output.xml[0m
+[32m[INFO    ]: Generated HTML File: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_xml_output/html/axi4lite_top_ic_memory_map_output.html[0m
+[32m[INFO    ]: Done![0m
+[32m[INFO    ]: --------------------------------------------------------------------------------[0m
+[32m[INFO    ]: [][0m
+BASE ADDRESS IS: 4280287232
+Checking something: <class 'verilog.AXI4LiteDevice'>
+Set platform for... <verilog.AXI4LiteDevice object at 0x7f67c46662e0>
+Set platform for... <verilog.AXI4LiteDevice object at 0x7f67c46663d0>
+Set platform for... <verilog.AXI4LiteDevice object at 0x7f67c4666a60>
+[32m[INFO    ]: instantiating user_ip[0m
+INSTANTIATING USER IP scilabdemo_adc3_ip
+[32m[INFO    ]: Finalizing top-level design[0m
+[32m[INFO    ]: regenerating top[0m
+Looking for a max_devices_per_arbiter spec
+AXI4-Lite found in mmbus architecture
+All the keys are: dict_keys(['default', 'xsg: DE10-Nano', 'sw_reg: a', 'sw_reg: b', 'sw_reg: c', 'ip: dspproj/dspproj.srcs', 'de10nano: DE10-Nano', 'usermodule: scilabdemo_adc3_ip'])
+Instantiating child ports for soc_system_inst
+  Adding instance port clk_clk as signal fpga_clk1_50 to top
+The width should be 0
+  Adding instance port reset_reset_n as signal sys_reset_n to top
+The width should be 0
+  Adding instance port clock_bridge_0_out_clk_clk as signal pll_clk_40 to top
+The width should be 0
+  Adding instance port hps_0_h2f_reset_reset_n as signal h2f_rst_n to top
+The width should be 0
+  Adding instance port hps_0_h2f_lw_axi_master_araddr as signal hps_0_h2f_lw_axi_master_araddr to top
+The width should be 21
+  Adding instance port hps_0_h2f_lw_axi_master_arburst as signal hps_0_h2f_lw_axi_master_arburst to top
+The width should be 2
+  Adding instance port hps_0_h2f_lw_axi_master_arcache as signal hps_0_h2f_lw_axi_master_arcache to top
+The width should be 4
+  Adding instance port hps_0_h2f_lw_axi_master_arid as signal hps_0_h2f_lw_axi_master_arid to top
+The width should be 12
+  Adding instance port hps_0_h2f_lw_axi_master_arlen as signal hps_0_h2f_lw_axi_master_arlen to top
+The width should be 4
+  Adding instance port hps_0_h2f_lw_axi_master_arlock as signal hps_0_h2f_lw_axi_master_arlock to top
+The width should be 2
+  Adding instance port hps_0_h2f_lw_axi_master_arprot as signal hps_0_h2f_lw_axi_master_arprot to top
+The width should be 3
+  Adding instance port hps_0_h2f_lw_axi_master_arready as signal hps_0_h2f_lw_axi_master_arready to top
+The width should be 0
+  Adding instance port hps_0_h2f_lw_axi_master_arsize as signal hps_0_h2f_lw_axi_master_arsize to top
+The width should be 3
+  Adding instance port hps_0_h2f_lw_axi_master_arvalid as signal hps_0_h2f_lw_axi_master_arvalid to top
+The width should be 0
+  Adding instance port hps_0_h2f_lw_axi_master_awaddr as signal hps_0_h2f_lw_axi_master_awaddr to top
+The width should be 21
+  Adding instance port hps_0_h2f_lw_axi_master_awburst as signal hps_0_h2f_lw_axi_master_awburst to top
+The width should be 2
+  Adding instance port hps_0_h2f_lw_axi_master_awcache as signal hps_0_h2f_lw_axi_master_awcache to top
+The width should be 4
+  Adding instance port hps_0_h2f_lw_axi_master_awid as signal hps_0_h2f_lw_axi_master_awid to top
+The width should be 12
+  Adding instance port hps_0_h2f_lw_axi_master_awlen as signal hps_0_h2f_lw_axi_master_awlen to top
+The width should be 4
+  Adding instance port hps_0_h2f_lw_axi_master_awlock as signal hps_0_h2f_lw_axi_master_awlock to top
+The width should be 2
+  Adding instance port hps_0_h2f_lw_axi_master_awprot as signal hps_0_h2f_lw_axi_master_awprot to top
+The width should be 3
+  Adding instance port hps_0_h2f_lw_axi_master_awready as signal hps_0_h2f_lw_axi_master_awready to top
+The width should be 0
+  Adding instance port hps_0_h2f_lw_axi_master_awsize as signal hps_0_h2f_lw_axi_master_awsize to top
+The width should be 3
+  Adding instance port hps_0_h2f_lw_axi_master_awvalid as signal hps_0_h2f_lw_axi_master_awvalid to top
+The width should be 0
+  Adding instance port hps_0_h2f_lw_axi_master_bid as signal hps_0_h2f_lw_axi_master_bid to top
+The width should be 12
+  Adding instance port hps_0_h2f_lw_axi_master_bready as signal hps_0_h2f_lw_axi_master_bready to top
+The width should be 0
+  Adding instance port hps_0_h2f_lw_axi_master_bresp as signal hps_0_h2f_lw_axi_master_bresp to top
+The width should be 2
+  Adding instance port hps_0_h2f_lw_axi_master_bvalid as signal hps_0_h2f_lw_axi_master_bvalid to top
+The width should be 0
+  Adding instance port hps_0_h2f_lw_axi_master_rdata as signal hps_0_h2f_lw_axi_master_rdata to top
+The width should be 32
+  Adding instance port hps_0_h2f_lw_axi_master_rid as signal hps_0_h2f_lw_axi_master_rid to top
+The width should be 12
+  Adding instance port hps_0_h2f_lw_axi_master_rlast as signal hps_0_h2f_lw_axi_master_rlast to top
+The width should be 0
+  Adding instance port hps_0_h2f_lw_axi_master_rready as signal hps_0_h2f_lw_axi_master_rready to top
+The width should be 0
+  Adding instance port hps_0_h2f_lw_axi_master_rresp as signal hps_0_h2f_lw_axi_master_rresp to top
+The width should be 2
+  Adding instance port hps_0_h2f_lw_axi_master_rvalid as signal hps_0_h2f_lw_axi_master_rvalid to top
+The width should be 0
+  Adding instance port hps_0_h2f_lw_axi_master_wdata as signal hps_0_h2f_lw_axi_master_wdata to top
+The width should be 32
+  Adding instance port hps_0_h2f_lw_axi_master_wid as signal hps_0_h2f_lw_axi_master_wid to top
+The width should be 12
+  Adding instance port hps_0_h2f_lw_axi_master_wlast as signal hps_0_h2f_lw_axi_master_wlast to top
+The width should be 0
+  Adding instance port hps_0_h2f_lw_axi_master_wready as signal hps_0_h2f_lw_axi_master_wready to top
+The width should be 0
+  Adding instance port hps_0_h2f_lw_axi_master_wstrb as signal hps_0_h2f_lw_axi_master_wstrb to top
+The width should be 4
+  Adding instance port hps_0_h2f_lw_axi_master_wvalid as signal hps_0_h2f_lw_axi_master_wvalid to top
+The width should be 0
+Instantiating child ports for axi_axil_adapter
+  Adding instance port clk as signal axil_clk to top
+The width should be 0
+  Adding instance port rst as signal axil_rst to top
+The width should be 0
+  Adding instance port s_axi_awid as signal hps_0_h2f_lw_axi_master_awid to top
+The width should be 12
+  Adding instance port s_axi_awaddr as signal hps_0_h2f_lw_axi_master_awaddr to top
+The width should be 21
+  Adding instance port s_axi_awlen as signal awlen8 to top
+The width should be 8
+  Adding instance port s_axi_awsize as signal hps_0_h2f_lw_axi_master_awsize to top
+The width should be 3
+  Adding instance port s_axi_awburst as signal hps_0_h2f_lw_axi_master_awburst to top
+The width should be 2
+  Adding instance port s_axi_awlock as signal awlock1 to top
+The width should be 0
+  Adding instance port s_axi_awcache as signal hps_0_h2f_lw_axi_master_awcache to top
+The width should be 4
+  Adding instance port s_axi_awprot as signal hps_0_h2f_lw_axi_master_awprot to top
+The width should be 3
+  Adding instance port s_axi_awvalid as signal hps_0_h2f_lw_axi_master_awvalid to top
+The width should be 0
+  Adding instance port s_axi_awready as signal hps_0_h2f_lw_axi_master_awready to top
+The width should be 0
+  Adding instance port s_axi_wdata as signal hps_0_h2f_lw_axi_master_wdata to top
+The width should be 32
+  Adding instance port s_axi_wstrb as signal hps_0_h2f_lw_axi_master_wstrb to top
+The width should be 4
+  Adding instance port s_axi_wlast as signal hps_0_h2f_lw_axi_master_wlast to top
+The width should be 0
+  Adding instance port s_axi_wvalid as signal hps_0_h2f_lw_axi_master_wvalid to top
+The width should be 0
+  Adding instance port s_axi_wready as signal hps_0_h2f_lw_axi_master_wready to top
+The width should be 0
+  Adding instance port s_axi_bid as signal hps_0_h2f_lw_axi_master_bid to top
+The width should be 12
+  Adding instance port s_axi_bresp as signal hps_0_h2f_lw_axi_master_bresp to top
+The width should be 2
+  Adding instance port s_axi_bvalid as signal hps_0_h2f_lw_axi_master_bvalid to top
+The width should be 0
+  Adding instance port s_axi_bready as signal hps_0_h2f_lw_axi_master_bready to top
+The width should be 0
+  Adding instance port s_axi_arid as signal hps_0_h2f_lw_axi_master_arid to top
+The width should be 12
+  Adding instance port s_axi_araddr as signal hps_0_h2f_lw_axi_master_araddr to top
+The width should be 21
+  Adding instance port s_axi_arlen as signal arlen8 to top
+The width should be 8
+  Adding instance port s_axi_arsize as signal hps_0_h2f_lw_axi_master_arsize to top
+The width should be 3
+  Adding instance port s_axi_arburst as signal hps_0_h2f_lw_axi_master_arburst to top
+The width should be 2
+  Adding instance port s_axi_arlock as signal arlock1 to top
+The width should be 0
+  Adding instance port s_axi_arcache as signal hps_0_h2f_lw_axi_master_arcache to top
+The width should be 4
+  Adding instance port s_axi_arprot as signal hps_0_h2f_lw_axi_master_arprot to top
+The width should be 3
+  Adding instance port s_axi_arvalid as signal hps_0_h2f_lw_axi_master_arvalid to top
+The width should be 0
+  Adding instance port s_axi_arready as signal hps_0_h2f_lw_axi_master_arready to top
+The width should be 0
+  Adding instance port s_axi_rid as signal hps_0_h2f_lw_axi_master_rid to top
+The width should be 12
+  Adding instance port s_axi_rdata as signal hps_0_h2f_lw_axi_master_rdata to top
+The width should be 32
+  Adding instance port s_axi_rresp as signal hps_0_h2f_lw_axi_master_rresp to top
+The width should be 2
+  Adding instance port s_axi_rlast as signal hps_0_h2f_lw_axi_master_rlast to top
+The width should be 0
+  Adding instance port s_axi_rvalid as signal hps_0_h2f_lw_axi_master_rvalid to top
+The width should be 0
+  Adding instance port s_axi_rready as signal hps_0_h2f_lw_axi_master_rready to top
+The width should be 0
+  Adding instance port m_axil_awaddr as signal M_AXI_awaddr to top
+The width should be 32
+  Adding instance port m_axil_awprot as signal M_AXI_awprot to top
+The width should be 3
+  Adding instance port m_axil_awvalid as signal M_AXI_awvalid to top
+The width should be 0
+  Adding instance port m_axil_awready as signal M_AXI_awready to top
+The width should be 0
+  Adding instance port m_axil_wdata as signal M_AXI_wdata to top
+The width should be 32
+  Adding instance port m_axil_wstrb as signal M_AXI_wstrb to top
+The width should be 4
+  Adding instance port m_axil_wvalid as signal M_AXI_wvalid to top
+The width should be 0
+  Adding instance port m_axil_wready as signal M_AXI_wready to top
+The width should be 0
+  Adding instance port m_axil_bresp as signal M_AXI_bresp to top
+The width should be 2
+  Adding instance port m_axil_bvalid as signal M_AXI_bvalid to top
+The width should be 0
+  Adding instance port m_axil_bready as signal M_AXI_bready to top
+The width should be 0
+  Adding instance port m_axil_araddr as signal M_AXI_araddr to top
+The width should be 32
+  Adding instance port m_axil_arprot as signal M_AXI_arprot to top
+The width should be 3
+  Adding instance port m_axil_arvalid as signal M_AXI_arvalid to top
+The width should be 0
+  Adding instance port m_axil_arready as signal M_AXI_arready to top
+The width should be 0
+  Adding instance port m_axil_rdata as signal M_AXI_rdata to top
+The width should be 32
+  Adding instance port m_axil_rresp as signal M_AXI_rresp to top
+The width should be 2
+  Adding instance port m_axil_rvalid as signal M_AXI_rvalid to top
+The width should be 0
+  Adding instance port m_axil_rready as signal M_AXI_rready to top
+The width should be 0
+Instantiating child ports for axi4lite_interconnect
+  Adding instance port axi4lite_aclk as signal axil_clk to top
+The width should be 0
+  Adding instance port axi4lite_aresetn as signal axil_rst_n to top
+The width should be 0
+  Adding instance port axi4lite_sw_reg_a_out as signal sw_reg_a_out to top
+The width should be 32
+  Adding instance port axi4lite_sw_reg_a_out_we as signal sw_reg_a_out_we to top
+The width should be 1
+  Adding instance port axi4lite_sw_reg_b_out as signal sw_reg_b_out to top
+The width should be 32
+  Adding instance port axi4lite_sw_reg_b_out_we as signal sw_reg_b_out_we to top
+The width should be 1
+  Adding instance port axi4lite_sw_reg_c_in as signal sw_reg_c_in to top
+The width should be 32
+  Adding instance port axi4lite_sw_reg_c_in_we as signal sw_reg_c_in_we to top
+The width should be 1
+Instantiating child ports for scilabdemo_adc3_ip_inst
+Instantiating child ports for scilabdemo_adc3_a
+  Adding instance port OP_BUS as signal scilabdemo_adc3_a_user_data_out to top
+The width should be 32
+  Adding instance port IP_BUS as signal sw_reg_a_out to top
+The width should be 32
+Instantiating child ports for scilabdemo_adc3_b
+  Adding instance port OP_BUS as signal scilabdemo_adc3_b_user_data_out to top
+The width should be 32
+  Adding instance port IP_BUS as signal sw_reg_b_out to top
+The width should be 32
+Instantiating child ports for scilabdemo_adc3_c
+  Adding instance port IP_BUS as signal scilabdemo_adc3_c_user_data_in to top
+The width should be 32
+  Adding instance port OP_BUS as signal sw_reg_c_in to top
+The width should be 32
+CHECKING AXI4LITE DEVICES IN GEN_MODULE_FILE...{'typecode': 0, 'regname': 'a', 'nbytes': 4, 'data_width': 32, 'mode': 'rw', 'base_addr': 4280287232, 'high_addr': None, 'hdl_suffix': '', 'hdl_candr_suffix': '', 'memory_map': [], 'axi4lite_mode': '', 'platform': <casper_platform.Platform object at 0x7f67c4b34340>, 'connected': True}
+CHECKING AXI4LITE DEVICES IN GEN_MODULE_FILE...{'typecode': 0, 'regname': 'b', 'nbytes': 4, 'data_width': 32, 'mode': 'rw', 'base_addr': 4280287236, 'high_addr': None, 'hdl_suffix': '', 'hdl_candr_suffix': '', 'memory_map': [], 'axi4lite_mode': '', 'platform': <casper_platform.Platform object at 0x7f67c4b34340>, 'connected': True}
+CHECKING AXI4LITE DEVICES IN GEN_MODULE_FILE...{'typecode': 0, 'regname': 'c', 'nbytes': 4, 'data_width': 32, 'mode': 'r', 'base_addr': 4280287240, 'high_addr': None, 'hdl_suffix': '', 'hdl_candr_suffix': '', 'memory_map': [], 'axi4lite_mode': '', 'platform': <casper_platform.Platform object at 0x7f67c4b34340>, 'connected': True}
+Writing block de10nano: DE10-Nano
+Writing block default
+Writing block ip: dspproj/dspproj.srcs
+Writing block sw_reg: a
+Writing block sw_reg: b
+Writing block sw_reg: c
+Writing block usermodule: scilabdemo_adc3_ip
+Writing block xsg: DE10-Nano
+
+
+
+LONG BLOCK INCOMING
+  // de10nano: DE10-Nano
+  axi4lite_ic_wrapper  axi4lite_interconnect (
+    .axi4lite_aclk(axil_clk),
+    .axi4lite_aresetn(axil_rst_n),
+    .axi4lite_sw_reg_a_out(sw_reg_a_out),
+    .axi4lite_sw_reg_a_out_we(sw_reg_a_out_we),
+    .axi4lite_sw_reg_b_out(sw_reg_b_out),
+    .axi4lite_sw_reg_b_out_we(sw_reg_b_out_we),
+    .axi4lite_sw_reg_c_in(sw_reg_c_in),
+    .axi4lite_sw_reg_c_in_we(sw_reg_c_in_we),
+    .s_axi4lite_araddr(M_AXI_araddr),
+    .s_axi4lite_arready(M_AXI_arready),
+    .s_axi4lite_arvalid(M_AXI_arvalid),
+    .s_axi4lite_awaddr(M_AXI_awaddr),
+    .s_axi4lite_awready(M_AXI_awready),
+    .s_axi4lite_awvalid(M_AXI_awvalid),
+    .s_axi4lite_bready(M_AXI_bready),
+    .s_axi4lite_bresp(M_AXI_bresp),
+    .s_axi4lite_bvalid(M_AXI_bvalid),
+    .s_axi4lite_rdata(M_AXI_rdata),
+    .s_axi4lite_rready(M_AXI_rready),
+    .s_axi4lite_rresp(M_AXI_rresp),
+    .s_axi4lite_rvalid(M_AXI_rvalid),
+    .s_axi4lite_wdata(M_AXI_wdata),
+    .s_axi4lite_wready(M_AXI_wready),
+    .s_axi4lite_wstrb(M_AXI_wstrb),
+    .s_axi4lite_wvalid(M_AXI_wvalid)
+  );
+
+
+  axi_axil_adapter #(
+    .ADDR_WIDTH(21),
+    .AXIL_DATA_WIDTH(32),
+    .AXI_DATA_WIDTH(32),
+    .AXI_ID_WIDTH(12)
+  ) axi_axil_adapter (
+    .clk(axil_clk),
+    .m_axil_araddr(M_AXI_araddr),
+    .m_axil_arprot(M_AXI_arprot),
+    .m_axil_arready(M_AXI_arready),
+    .m_axil_arvalid(M_AXI_arvalid),
+    .m_axil_awaddr(M_AXI_awaddr),
+    .m_axil_awprot(M_AXI_awprot),
+    .m_axil_awready(M_AXI_awready),
+    .m_axil_awvalid(M_AXI_awvalid),
+    .m_axil_bready(M_AXI_bready),
+    .m_axil_bresp(M_AXI_bresp),
+    .m_axil_bvalid(M_AXI_bvalid),
+    .m_axil_rdata(M_AXI_rdata),
+    .m_axil_rready(M_AXI_rready),
+    .m_axil_rresp(M_AXI_rresp),
+    .m_axil_rvalid(M_AXI_rvalid),
+    .m_axil_wdata(M_AXI_wdata),
+    .m_axil_wready(M_AXI_wready),
+    .m_axil_wstrb(M_AXI_wstrb),
+    .m_axil_wvalid(M_AXI_wvalid),
+    .rst(axil_rst),
+    .s_axi_araddr(hps_0_h2f_lw_axi_master_araddr),
+    .s_axi_arburst(hps_0_h2f_lw_axi_master_arburst),
+    .s_axi_arcache(hps_0_h2f_lw_axi_master_arcache),
+    .s_axi_arid(hps_0_h2f_lw_axi_master_arid),
+    .s_axi_arlen(arlen8),
+    .s_axi_arlock(arlock1),
+    .s_axi_arprot(hps_0_h2f_lw_axi_master_arprot),
+    .s_axi_arready(hps_0_h2f_lw_axi_master_arready),
+    .s_axi_arsize(hps_0_h2f_lw_axi_master_arsize),
+    .s_axi_arvalid(hps_0_h2f_lw_axi_master_arvalid),
+    .s_axi_awaddr(hps_0_h2f_lw_axi_master_awaddr),
+    .s_axi_awburst(hps_0_h2f_lw_axi_master_awburst),
+    .s_axi_awcache(hps_0_h2f_lw_axi_master_awcache),
+    .s_axi_awid(hps_0_h2f_lw_axi_master_awid),
+    .s_axi_awlen(awlen8),
+    .s_axi_awlock(awlock1),
+    .s_axi_awprot(hps_0_h2f_lw_axi_master_awprot),
+    .s_axi_awready(hps_0_h2f_lw_axi_master_awready),
+    .s_axi_awsize(hps_0_h2f_lw_axi_master_awsize),
+    .s_axi_awvalid(hps_0_h2f_lw_axi_master_awvalid),
+    .s_axi_bid(hps_0_h2f_lw_axi_master_bid),
+    .s_axi_bready(hps_0_h2f_lw_axi_master_bready),
+    .s_axi_bresp(hps_0_h2f_lw_axi_master_bresp),
+    .s_axi_bvalid(hps_0_h2f_lw_axi_master_bvalid),
+    .s_axi_rdata(hps_0_h2f_lw_axi_master_rdata),
+    .s_axi_rid(hps_0_h2f_lw_axi_master_rid),
+    .s_axi_rlast(hps_0_h2f_lw_axi_master_rlast),
+    .s_axi_rready(hps_0_h2f_lw_axi_master_rready),
+    .s_axi_rresp(hps_0_h2f_lw_axi_master_rresp),
+    .s_axi_rvalid(hps_0_h2f_lw_axi_master_rvalid),
+    .s_axi_wdata(hps_0_h2f_lw_axi_master_wdata),
+    .s_axi_wlast(hps_0_h2f_lw_axi_master_wlast),
+    .s_axi_wready(hps_0_h2f_lw_axi_master_wready),
+    .s_axi_wstrb(hps_0_h2f_lw_axi_master_wstrb),
+    .s_axi_wvalid(hps_0_h2f_lw_axi_master_wvalid)
+  );
+
+
+  scilabdemo_adc3_ip  scilabdemo_adc3_ip_inst (
+    .clk(user_clk),
+    .scilabdemo_adc3_a_user_data_out(scilabdemo_adc3_a_user_data_out),
+    .scilabdemo_adc3_b_user_data_out(scilabdemo_adc3_b_user_data_out),
+    .scilabdemo_adc3_c_user_data_in(scilabdemo_adc3_c_user_data_in)
+  );
+
+
+  soc_system  soc_system_inst (
+    .clk_clk(fpga_clk1_50),
+    .clock_bridge_0_out_clk_clk(pll_clk_40),
+    .hps_0_h2f_lw_axi_master_araddr(hps_0_h2f_lw_axi_master_araddr),
+    .hps_0_h2f_lw_axi_master_arburst(hps_0_h2f_lw_axi_master_arburst),
+    .hps_0_h2f_lw_axi_master_arcache(hps_0_h2f_lw_axi_master_arcache),
+    .hps_0_h2f_lw_axi_master_arid(hps_0_h2f_lw_axi_master_arid),
+    .hps_0_h2f_lw_axi_master_arlen(hps_0_h2f_lw_axi_master_arlen),
+    .hps_0_h2f_lw_axi_master_arlock(hps_0_h2f_lw_axi_master_arlock),
+    .hps_0_h2f_lw_axi_master_arprot(hps_0_h2f_lw_axi_master_arprot),
+    .hps_0_h2f_lw_axi_master_arready(hps_0_h2f_lw_axi_master_arready),
+    .hps_0_h2f_lw_axi_master_arsize(hps_0_h2f_lw_axi_master_arsize),
+    .hps_0_h2f_lw_axi_master_arvalid(hps_0_h2f_lw_axi_master_arvalid),
+    .hps_0_h2f_lw_axi_master_awaddr(hps_0_h2f_lw_axi_master_awaddr),
+    .hps_0_h2f_lw_axi_master_awburst(hps_0_h2f_lw_axi_master_awburst),
+    .hps_0_h2f_lw_axi_master_awcache(hps_0_h2f_lw_axi_master_awcache),
+    .hps_0_h2f_lw_axi_master_awid(hps_0_h2f_lw_axi_master_awid),
+    .hps_0_h2f_lw_axi_master_awlen(hps_0_h2f_lw_axi_master_awlen),
+    .hps_0_h2f_lw_axi_master_awlock(hps_0_h2f_lw_axi_master_awlock),
+    .hps_0_h2f_lw_axi_master_awprot(hps_0_h2f_lw_axi_master_awprot),
+    .hps_0_h2f_lw_axi_master_awready(hps_0_h2f_lw_axi_master_awready),
+    .hps_0_h2f_lw_axi_master_awsize(hps_0_h2f_lw_axi_master_awsize),
+    .hps_0_h2f_lw_axi_master_awvalid(hps_0_h2f_lw_axi_master_awvalid),
+    .hps_0_h2f_lw_axi_master_bid(hps_0_h2f_lw_axi_master_bid),
+    .hps_0_h2f_lw_axi_master_bready(hps_0_h2f_lw_axi_master_bready),
+    .hps_0_h2f_lw_axi_master_bresp(hps_0_h2f_lw_axi_master_bresp),
+    .hps_0_h2f_lw_axi_master_bvalid(hps_0_h2f_lw_axi_master_bvalid),
+    .hps_0_h2f_lw_axi_master_rdata(hps_0_h2f_lw_axi_master_rdata),
+    .hps_0_h2f_lw_axi_master_rid(hps_0_h2f_lw_axi_master_rid),
+    .hps_0_h2f_lw_axi_master_rlast(hps_0_h2f_lw_axi_master_rlast),
+    .hps_0_h2f_lw_axi_master_rready(hps_0_h2f_lw_axi_master_rready),
+    .hps_0_h2f_lw_axi_master_rresp(hps_0_h2f_lw_axi_master_rresp),
+    .hps_0_h2f_lw_axi_master_rvalid(hps_0_h2f_lw_axi_master_rvalid),
+    .hps_0_h2f_lw_axi_master_wdata(hps_0_h2f_lw_axi_master_wdata),
+    .hps_0_h2f_lw_axi_master_wid(hps_0_h2f_lw_axi_master_wid),
+    .hps_0_h2f_lw_axi_master_wlast(hps_0_h2f_lw_axi_master_wlast),
+    .hps_0_h2f_lw_axi_master_wready(hps_0_h2f_lw_axi_master_wready),
+    .hps_0_h2f_lw_axi_master_wstrb(hps_0_h2f_lw_axi_master_wstrb),
+    .hps_0_h2f_lw_axi_master_wvalid(hps_0_h2f_lw_axi_master_wvalid),
+    .hps_0_h2f_reset_reset_n(h2f_rst_n),
+    .memory_mem_a(HPS_DDR3_ADDR),
+    .memory_mem_ba(HPS_DDR3_BA),
+    .memory_mem_cas_n(HPS_DDR3_CAS_N),
+    .memory_mem_ck(HPS_DDR3_CK_P),
+    .memory_mem_ck_n(HPS_DDR3_CK_N),
+    .memory_mem_cke(HPS_DDR3_CKE),
+    .memory_mem_cs_n(HPS_DDR3_CS_N),
+    .memory_mem_dm(HPS_DDR3_DM),
+    .memory_mem_dq(HPS_DDR3_DQ),
+    .memory_mem_dqs(HPS_DDR3_DQS_P),
+    .memory_mem_dqs_n(HPS_DDR3_DQS_N),
+    .memory_mem_odt(HPS_DDR3_ODT),
+    .memory_mem_ras_n(HPS_DDR3_RAS_N),
+    .memory_mem_reset_n(HPS_DDR3_RESET_N),
+    .memory_mem_we_n(HPS_DDR3_WE_N),
+    .memory_oct_rzqin(HPS_DDR3_RZQ),
+    .reset_reset_n(sys_reset_n)
+  );
+
+  // sw_reg: a
+  cdc_synchroniser #(
+    .G_BUS_WIDTH(32),
+    .G_OP_INITIAL_VAL(32'h0)
+  ) scilabdemo_adc3_a (
+    .IP_BUS(sw_reg_a_out),
+    .IP_BUS_VALID(sw_reg_a_out_we),
+    .IP_CLK(axil_clk),
+    .IP_RESET(axil_rst),
+    .OP_BUS(scilabdemo_adc3_a_user_data_out)
+  );
+
+  // sw_reg: b
+  cdc_synchroniser #(
+    .G_BUS_WIDTH(32),
+    .G_OP_INITIAL_VAL(32'h0)
+  ) scilabdemo_adc3_b (
+    .IP_BUS(sw_reg_b_out),
+    .IP_BUS_VALID(sw_reg_b_out_we),
+    .IP_CLK(axil_clk),
+    .IP_RESET(axil_rst),
+    .OP_BUS(scilabdemo_adc3_b_user_data_out)
+  );
+
+  // sw_reg: c
+  cdc_synchroniser #(
+    .G_BUS_WIDTH(32)
+  ) scilabdemo_adc3_c (
+    .IP_BUS(scilabdemo_adc3_c_user_data_in),
+    .IP_BUS_VALID(1'b1),
+    .IP_CLK(user_clk),
+    .IP_RESET(user_rst),
+    .OP_BUS(sw_reg_c_in)
+  );
+
+
+
+
+
+
+WRITING TOP!!!!
+[32m[INFO    ]: Dumping pickle of top-level Verilog module[0m
+[32m[INFO    ]: generating auxiliary HDL[0m
+[32m[INFO    ]: Generating yellow block custom hdl files[0m
+PERIPHERAL OBJECT: YellowBlock Object: {'name': 'DE10-Nano', 'fullpath': 'scilabdemo_adc3/DE10-Nano', 'tag': 'xps:xsg', 'hw_sys': 'de10nano:5CSEBA6U23I7', 'clk_src': 'fpga_clk1_50', 'clk_rate': 50, 'pl_clk_rate': 50, 'sample_period': 1, 'synthesis_tool': 'XST'} (scilabdemo_adc3_DE10-Nano)
+PERIPHERAL OBJECT: YellowBlock Object: {'name': 'a', 'fullpath': 'scilabdemo_adc3/a', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 2, 'sim_port': True, 'show_format': True} (scilabdemo_adc3_a)
+PERIPHERAL OBJECT: YellowBlock Object: {'name': 'b', 'fullpath': 'scilabdemo_adc3/b', 'tag': 'xps:sw_reg', 'io_dir': 'From Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 32, 'bin_pts': 0, 'arith_types': 2, 'sim_port': True, 'show_format': True} (scilabdemo_adc3_b)
+PERIPHERAL OBJECT: YellowBlock Object: {'name': 'c', 'fullpath': 'scilabdemo_adc3/c', 'tag': 'xps:sw_reg', 'io_dir': 'To Processor', 'io_delay': 0, 'init_val': 0, 'sample_period': 1, 'names': 'reg', 'bitwidths': 64, 'bin_pts': 0, 'arith_types': 2, 'sim_port': True, 'show_format': True} (scilabdemo_adc3_c)
+PERIPHERAL OBJECT: YellowBlock Object: {'name': 'sysgen_ip', 'fullpath': 'scilabdemo_adc3/dspproj/dspproj.srcs', 'tag': 'xps:ip', 'lib_path': '/data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/dspproj/dspproj.srcs', 'ip_name': 'scilabdemo_adc3'} (scilabdemo_adc3_dspproj_dspproj.srcs)
+PERIPHERAL OBJECT: YellowBlock Object: {'name': 'DE10-Nano', 'fullpath': 'scilabdemo_adc3/DE10-Nano', 'tag': 'xps:de10nano', 'hw_sys': 'de10nano:5CSEBA6U23I7', 'clk_src': 'fpga_clk1_50', 'clk_rate': 50, 'pl_clk_rate': 50, 'sample_period': 1, 'synthesis_tool': 'XST'} (scilabdemo_adc3_DE10-Nano)
+PERIPHERAL OBJECT: YellowBlock Object: {'tag': 'xps:axi4lite_interconnect', 'name': 'axi4lite_interconnect', 'fullpath': 'scilabdemo_adc3_ip/axi4lite_interconnect'} (scilabdemo_adc3_ip_axi4lite_interconnect)
+[32m[INFO    ]: Extracting constraints from peripherals[0m
+[32m[INFO    ]: Getting constraints for block DE10-Nano[0m
+[32m[INFO    ]: Getting constraints for block a[0m
+[32m[INFO    ]: Getting constraints for block b[0m
+[32m[INFO    ]: Getting constraints for block c[0m
+[32m[INFO    ]: Getting constraints for block sysgen_ip[0m
+[32m[INFO    ]: Getting constraints for block de10nano[0m
+[32m[INFO    ]: Getting constraints for block axi4lite_interconnect[0m
+[32m[INFO    ]: Generating physical constraints[0m
+CORE NAME IS: c
+CORE MODE IS: r
+CORE BASE ADDRESS IS: 4280287240
+CORE BYTES IS: 4
+CORE NAME IS: b
+CORE MODE IS: rw
+CORE BASE ADDRESS IS: 4280287236
+CORE BYTES IS: 4
+CORE NAME IS: a
+CORE MODE IS: rw
+CORE BASE ADDRESS IS: 4280287232
+CORE BYTES IS: 4
+[32m[INFO    ]: Carrying out constraints rule check[0m
+[33m[WARNING ]: Port FPGA_CLK1_50 (instantiated by de10nano: DE10-Nano) has no constraints![0m
+[33m[WARNING ]: Port HPS_DDR3_ADDR (instantiated by de10nano: DE10-Nano) has no constraints![0m
+[33m[WARNING ]: Port HPS_DDR3_BA (instantiated by de10nano: DE10-Nano) has no constraints![0m
+[33m[WARNING ]: Port HPS_DDR3_CK_P (instantiated by de10nano: DE10-Nano) has no constraints![0m
+[33m[WARNING ]: Port HPS_DDR3_CK_N (instantiated by de10nano: DE10-Nano) has no constraints![0m
+[33m[WARNING ]: Port HPS_DDR3_CKE (instantiated by de10nano: DE10-Nano) has no constraints![0m
+[33m[WARNING ]: Port HPS_DDR3_CS_N (instantiated by de10nano: DE10-Nano) has no constraints![0m
+[33m[WARNING ]: Port HPS_DDR3_RAS_N (instantiated by de10nano: DE10-Nano) has no constraints![0m
+[33m[WARNING ]: Port HPS_DDR3_CAS_N (instantiated by de10nano: DE10-Nano) has no constraints![0m
+[33m[WARNING ]: Port HPS_DDR3_WE_N (instantiated by de10nano: DE10-Nano) has no constraints![0m
+[33m[WARNING ]: Port HPS_DDR3_RESET_N (instantiated by de10nano: DE10-Nano) has no constraints![0m
+[33m[WARNING ]: Port HPS_DDR3_DQ (instantiated by de10nano: DE10-Nano) has no constraints![0m
+[33m[WARNING ]: Port HPS_DDR3_DQS_P (instantiated by de10nano: DE10-Nano) has no constraints![0m
+[33m[WARNING ]: Port HPS_DDR3_DQS_N (instantiated by de10nano: DE10-Nano) has no constraints![0m
+[33m[WARNING ]: Port HPS_DDR3_ODT (instantiated by de10nano: DE10-Nano) has no constraints![0m
+[33m[WARNING ]: Port HPS_DDR3_DM (instantiated by de10nano: DE10-Nano) has no constraints![0m
+[33m[WARNING ]: Port HPS_DDR3_RZQ (instantiated by de10nano: DE10-Nano) has no constraints![0m
+[32m[INFO    ]: Constraint rule check complete[0m
+ON DEVICE: a
+ON DEVICE: b
+ON DEVICE: c
+MAKING A DIRECTORY AT : /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/myproj
+[QUARTUS BACKEND] add_source() called for: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/outputs
+[DEBUG] OUTPUT DIR: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/outputs
+[DEBUG] HDL output dir contents:
+    - top.sof
+[QUARTUS BACKEND] add_source() called for: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/top.v
+[DEBUG] OUTPUT DIR: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/outputs
+[DEBUG] HDL output dir contents:
+    - top.sof
+Adding tcl command: set_global_assignment -name VERILOG_FILE "/data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/top.v" at stage pre_synth
+[QUARTUS BACKEND] add_source() called for: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd
+[DEBUG] OUTPUT DIR: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/outputs
+[DEBUG] HDL output dir contents:
+    - top.sof
+Adding tcl command: set_global_assignment -name VHDL_FILE "/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd" at stage pre_synth
+[QUARTUS BACKEND] add_source() called for: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_register/axi4_reg.v
+[DEBUG] OUTPUT DIR: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/outputs
+[DEBUG] HDL output dir contents:
+    - top.sof
+Adding tcl command: set_global_assignment -name VERILOG_FILE "/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_register/axi4_reg.v" at stage pre_synth
+[QUARTUS BACKEND] add_source() called for: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_rd.v
+[DEBUG] OUTPUT DIR: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/outputs
+[DEBUG] HDL output dir contents:
+    - top.sof
+Adding tcl command: set_global_assignment -name VERILOG_FILE "/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_rd.v" at stage pre_synth
+[QUARTUS BACKEND] add_source() called for: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter.v
+[DEBUG] OUTPUT DIR: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/outputs
+[DEBUG] HDL output dir contents:
+    - top.sof
+Adding tcl command: set_global_assignment -name VERILOG_FILE "/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter.v" at stage pre_synth
+[QUARTUS BACKEND] add_source() called for: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_wr.v
+[DEBUG] OUTPUT DIR: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/outputs
+[DEBUG] HDL output dir contents:
+    - top.sof
+Adding tcl command: set_global_assignment -name VERILOG_FILE "/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_wr.v" at stage pre_synth
+[QUARTUS BACKEND] add_source() called for: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/soc_system.v
+[DEBUG] OUTPUT DIR: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/outputs
+[DEBUG] HDL output dir contents:
+    - top.sof
+Adding tcl command: set_global_assignment -name VERILOG_FILE "/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/soc_system.v" at stage pre_synth
+[QUARTUS BACKEND] add_source() called for: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_pkg.vhd
+[DEBUG] OUTPUT DIR: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/outputs
+[DEBUG] HDL output dir contents:
+    - top.sof
+Adding tcl command: set_global_assignment -name VHDL_FILE "/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_pkg.vhd" at stage pre_synth
+[QUARTUS BACKEND] add_source() called for: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_slave_logic.vhd
+[DEBUG] OUTPUT DIR: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/outputs
+[DEBUG] HDL output dir contents:
+    - top.sof
+Adding tcl command: set_global_assignment -name VHDL_FILE "/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_slave_logic.vhd" at stage pre_synth
+[QUARTUS BACKEND] add_source() called for: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/axi4lite_ic_wrapper.vhdl
+[DEBUG] OUTPUT DIR: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/outputs
+[DEBUG] HDL output dir contents:
+    - top.sof
+Adding tcl command: set_global_assignment -name VHDL_FILE "/data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/axi4lite_ic_wrapper.vhdl" at stage pre_synth
+[QUARTUS BACKEND] add_source() called for: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_axi4lite_top_mmap_pkg.vhd
+[DEBUG] OUTPUT DIR: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/outputs
+[DEBUG] HDL output dir contents:
+    - top.sof
+Adding tcl command: set_global_assignment -name VHDL_FILE "/data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_axi4lite_top_mmap_pkg.vhd" at stage pre_synth
+[QUARTUS BACKEND] add_source() called for: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_sw_reg_muxdemux.vhd
+[DEBUG] OUTPUT DIR: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/outputs
+[DEBUG] HDL output dir contents:
+    - top.sof
+Adding tcl command: set_global_assignment -name VHDL_FILE "/data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_sw_reg_muxdemux.vhd" at stage pre_synth
+[QUARTUS BACKEND] add_source() called for: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic.vhd
+[DEBUG] OUTPUT DIR: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/outputs
+[DEBUG] HDL output dir contents:
+    - top.sof
+Adding tcl command: set_global_assignment -name VHDL_FILE "/data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic.vhd" at stage pre_synth
+[QUARTUS BACKEND] add_source() called for: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_sw_reg_pkg.vhd
+[DEBUG] OUTPUT DIR: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/outputs
+[DEBUG] HDL output dir contents:
+    - top.sof
+Adding tcl command: set_global_assignment -name VHDL_FILE "/data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_sw_reg_pkg.vhd" at stage pre_synth
+[QUARTUS BACKEND] add_source() called for: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_sw_reg.vhd
+[DEBUG] OUTPUT DIR: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/outputs
+[DEBUG] HDL output dir contents:
+    - top.sof
+Adding tcl command: set_global_assignment -name VHDL_FILE "/data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_sw_reg.vhd" at stage pre_synth
+[QUARTUS BACKEND] add_source() called for: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic_pkg.vhd
+[DEBUG] OUTPUT DIR: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/outputs
+[DEBUG] HDL output dir contents:
+    - top.sof
+Adding tcl command: set_global_assignment -name VHDL_FILE "/data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic_pkg.vhd" at stage pre_synth
+[32m[INFO    ]: Parsing constraint: <castro.ClkConstraint object at 0x7f679b39bb50>[0m
+DISCOVERED A CLOCK CONSTRAINT
+[32m[INFO    ]: Parsing constraint: <castro.ClkConstraint object at 0x7f679b39ba90>[0m
+DISCOVERED A CLOCK CONSTRAINT
+[32m[INFO    ]: Wrote constraint files:
+  QSF: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/myproj/user_const.qsf
+  SDC: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/myproj/user_const.sdc[0m
+Adding tcl command: source "/data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/myproj/user_const.qsf" at stage pre_synth
+Adding tcl command: load_package flow at stage init
+Adding tcl command: set impl_dir "/data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/myproj" at stage init
+Adding tcl command: cd /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/myproj at stage init
+Adding tcl command: set HPS_DDR_TCL_DIR "/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/DDR" at stage init
+Adding tcl command: project_new myproj -overwrite at stage init
+Adding tcl command: set_global_assignment -name FAMILY "Cyclone V" at stage init
+Adding tcl command: set_global_assignment -name DEVICE 5CSEBA6U23I7 at stage init
+Top level output directory is: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/outputs
+Adding tcl command: set_global_assignment -name TOP_LEVEL_ENTITY top at stage init
+Adding tcl command: set_global_assignment -name SDC_FILE "/data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/myproj/user_const.sdc" at stage init
+Adding tcl command: source "/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/DE10_NANO_SoC_GHRD.qsf" at stage pre_synth
+Adding tcl command: set_global_assignment -name FAMILY "Cyclone V" at stage pre_synth
+Adding tcl command: set_global_assignment -name DEVICE 5CSEBA6U23I7 at stage pre_synth
+Adding tcl command: set_global_assignment -name TOP_LEVEL_ENTITY top at stage pre_synth
+Adding tcl command: set_global_assignment -name QIP_FILE "/home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/soc_system.qip" at stage init
+Adding tcl command: set_global_assignment -name VERILOG_FILE "/data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/scilabdemo_adc3_ip.v" at stage pre_synth
+Adding tcl command: execute_flow -compile at stage synth
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/dsp_blocks at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/dsp_blocks/__pycache__ at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/sim_blocks at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/hdl_sources at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/hdl_sources/power_cal at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/hdl_sources/logic_not at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/hdl_sources/counter at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/hdl_sources/slice at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/hdl_sources/constant at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/hdl_sources/edge_detect at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/hdl_sources/pulse_ext at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/hdl_sources/adder at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/hdl_sources/delay at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/hdl_sources/munge at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/hdl_sources/ltc2308 at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/hdl_sources/operation at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/hdl_sources/common_pkg at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/utils at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/utils/__pycache__ at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/scilab_blocks at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/scilab_blocks/casper_dsp at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/scilab_blocks/casper_dsp/figures at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/scilab_blocks/utils at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/scilab_blocks/casper_sim at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/scilab_blocks/casper_sim/figures at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/scilab_blocks/casper_pd at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/scilab_blocks/casper_pd/figures at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/scilab_blocks/casper_xps at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/scilab_blocks/casper_xps/figures at stage init
+Adding tcl command: set_global_assignment -name SEARCH_PATH /home/bgodfrey/CASPER/mlib_devel/scilab_library/__pycache__ at stage init
+Adding tcl command: file copy -force myproj.sof /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/outputs/top.sof at stage post_bitgen
+Adding tcl command: puts "Compilation complete." at stage promgen
+[32m[INFO    ]: Invoking Quartus shell with TCL script: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/gogogo.tcl[0m
+Info: *******************************************************************
+Info: Running Quartus Prime Shell
+    Info: Version 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
+    Info: Copyright (C) 2025  Altera Corporation. All rights reserved.
+    Info: Your use of Altera Corporation's design tools, logic functions 
+    Info: and other software and tools, and any partner logic 
+    Info: functions, and any output files from any of the foregoing 
+    Info: (including device programming or simulation files), and any 
+    Info: associated documentation or information are expressly subject 
+    Info: to the terms and conditions of the Altera Program License 
+    Info: Subscription Agreement, the Altera Quartus Prime License Agreement,
+    Info: the Altera IP License Agreement, or other applicable license
+    Info: agreement, including, without limitation, that your use is for
+    Info: the sole purpose of programming logic devices manufactured by
+    Info: Altera and sold by Altera or its authorized distributors.  Please
+    Info: refer to the Altera Software License Subscription Agreements 
+    Info: on the Quartus Prime software download page.
+    Info: Processing started: Sun Jan  4 14:07:57 2026
+Info: Command: quartus_sh -t /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/gogogo.tcl
+Info (125061): Changed top-level design entity name to "top"
+Info: *******************************************************************
+Info: Running Quartus Prime Analysis & Synthesis
+    Info: Version 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
+    Info: Processing started: Sun Jan  4 14:08:03 2026
+Info: Command: quartus_map --read_settings_files=on --write_settings_files=off myproj -c myproj
+Info (20032): Parallel compilation is enabled and will use up to 12 processors
+Error (10171): Verilog HDL syntax error at soc_system.v(141) near end of file ;  expecting ")" File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/soc_system.v Line: 141
+Info (12021): Found 0 design units, including 0 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/soc_system.v
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/soc_system_hps_0.v
+    Info (12023): Found entity 1: soc_system_hps_0 File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/soc_system_hps_0.v Line: 9
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/soc_system_hps_0_hps_io.v
+    Info (12023): Found entity 1: soc_system_hps_0_hps_io File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/soc_system_hps_0_hps_io.v Line: 9
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram.v
+    Info (12023): Found entity 1: hps_sdram File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram.v Line: 9
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0_iss_probe.v
+    Info (12023): Found entity 1: hps_sdram_p0_iss_probe File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0_iss_probe.v Line: 17
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0_acv_hard_io_pads.v
+    Info (12023): Found entity 1: hps_sdram_p0_acv_hard_io_pads File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0_acv_hard_io_pads.v Line: 17
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0_acv_hard_memphy.v
+    Info (12023): Found entity 1: hps_sdram_p0_acv_hard_memphy File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0_acv_hard_memphy.v Line: 21
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0_phy_csr.sv
+    Info (12023): Found entity 1: hps_sdram_p0_phy_csr File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0_phy_csr.sv Line: 31
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0_acv_hard_addr_cmd_pads.v
+    Info (12023): Found entity 1: hps_sdram_p0_acv_hard_addr_cmd_pads File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0_acv_hard_addr_cmd_pads.v Line: 17
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0_reset.v
+    Info (12023): Found entity 1: hps_sdram_p0_reset File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0_reset.v Line: 18
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0_generic_ddio.v
+    Info (12023): Found entity 1: hps_sdram_p0_generic_ddio File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0_generic_ddio.v Line: 17
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_pll.sv
+    Info (12023): Found entity 1: hps_sdram_pll File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_pll.sv Line: 25
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/altera_mem_if_dll_cyclonev.sv
+    Info (12023): Found entity 1: altera_mem_if_dll_cyclonev File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/altera_mem_if_dll_cyclonev.sv Line: 23
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0_acv_ldc.v
+    Info (12023): Found entity 1: hps_sdram_p0_acv_ldc File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0_acv_ldc.v Line: 17
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0_reset_sync.v
+    Info (12023): Found entity 1: hps_sdram_p0_reset_sync File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0_reset_sync.v Line: 17
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/altdq_dqs2_acv_connect_to_hard_phy_cyclonev.sv
+    Info (12023): Found entity 1: altdq_dqs2_acv_connect_to_hard_phy_cyclonev File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/altdq_dqs2_acv_connect_to_hard_phy_cyclonev.sv Line: 19
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/altera_mem_if_oct_cyclonev.sv
+    Info (12023): Found entity 1: altera_mem_if_oct_cyclonev File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/altera_mem_if_oct_cyclonev.sv Line: 23
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/altera_mem_if_hard_memory_controller_top_cyclonev.sv
+    Info (12023): Found entity 1: altera_mem_if_hard_memory_controller_top_cyclonev File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/altera_mem_if_hard_memory_controller_top_cyclonev.sv Line: 18
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0.sv
+    Info (12023): Found entity 1: hps_sdram_p0 File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0.sv Line: 18
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0_altdqdqs.v
+    Info (12023): Found entity 1: hps_sdram_p0_altdqdqs File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0_altdqdqs.v Line: 17
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/altera_mem_if_hhp_qseq_synth_top.v
+    Info (12023): Found entity 1: altera_mem_if_hhp_qseq_synth_top File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/altera_mem_if_hhp_qseq_synth_top.v Line: 15
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0_clock_pair_generator.v
+    Info (12023): Found entity 1: hps_sdram_p0_clock_pair_generator File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/hps_sdram_p0_clock_pair_generator.v Line: 29
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/soc_system_hps_0_hps_io_border.sv
+    Info (12023): Found entity 1: soc_system_hps_0_hps_io_border File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/soc_system_hps_0_hps_io_border.sv Line: 14
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/soc_system_hps_0_fpga_interfaces.sv
+    Info (12023): Found entity 1: soc_system_hps_0_fpga_interfaces File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/soc_system/synthesis/submodules/soc_system_hps_0_fpga_interfaces.sv Line: 14
+Info (12021): Found 1 design units, including 1 entities, in source file /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/top.v
+    Info (12023): Found entity 1: top File: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/top.v Line: 7
+Info (12021): Found 2 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd
+    Info (12022): Found design unit 1: cdc_synchroniser-cdc_synchroniser File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd Line: 148
+    Info (12023): Found entity 1: cdc_synchroniser File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd Line: 129
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_register/axi4_reg.v
+    Info (12023): Found entity 1: axi4_reg File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_register/axi4_reg.v Line: 4
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_rd.v
+    Info (12023): Found entity 1: axi_axil_adapter_rd File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_rd.v Line: 34
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter.v
+    Info (12023): Found entity 1: axi_axil_adapter File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter.v Line: 34
+Info (12021): Found 1 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_wr.v
+    Info (12023): Found entity 1: axi_axil_adapter_wr File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/de10nano/axi_axil_adapter_wr.v Line: 34
+Info (12021): Found 1 design units, including 0 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_pkg.vhd
+    Info (12022): Found design unit 1: axi4lite_pkg File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_pkg.vhd Line: 44
+Info (12021): Found 2 design units, including 1 entities, in source file /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_slave_logic.vhd
+    Info (12022): Found design unit 1: axi4lite_slave_logic-axi4lite_slave_logic_a File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_slave_logic.vhd Line: 66
+    Info (12023): Found entity 1: axi4lite_slave_logic File: /home/bgodfrey/CASPER/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_slave_logic.vhd Line: 54
+Info (12021): Found 2 design units, including 1 entities, in source file /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/axi4lite_ic_wrapper.vhdl
+    Info (12022): Found design unit 1: axi4lite_ic_wrapper-struct File: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/axi4lite_ic_wrapper.vhdl Line: 40
+    Info (12023): Found entity 1: axi4lite_ic_wrapper File: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/axi4lite_ic_wrapper.vhdl Line: 10
+Info (12021): Found 2 design units, including 0 entities, in source file /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_axi4lite_top_mmap_pkg.vhd
+    Info (12022): Found design unit 1: axi4lite_axi4lite_top_mmap_pkg File: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_axi4lite_top_mmap_pkg.vhd Line: 24
+    Info (12022): Found design unit 2: axi4lite_axi4lite_top_mmap_pkg-body File: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_axi4lite_top_mmap_pkg.vhd Line: 67
+Info (12021): Found 2 design units, including 1 entities, in source file /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_sw_reg_muxdemux.vhd
+    Info (12022): Found design unit 1: axi4lite_sw_reg_muxdemux-axi4lite_sw_reg_muxdemux_a File: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_sw_reg_muxdemux.vhd Line: 39
+    Info (12023): Found entity 1: axi4lite_sw_reg_muxdemux File: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_sw_reg_muxdemux.vhd Line: 26
+Info (12021): Found 2 design units, including 1 entities, in source file /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic.vhd
+    Info (12022): Found design unit 1: axi4lite_axi4lite_top_ic-behav File: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic.vhd Line: 43
+    Info (12023): Found entity 1: axi4lite_axi4lite_top_ic File: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic.vhd Line: 27
+Info (12021): Found 2 design units, including 0 entities, in source file /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_sw_reg_pkg.vhd
+    Info (12022): Found design unit 1: axi4lite_sw_reg_pkg File: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_sw_reg_pkg.vhd Line: 24
+    Info (12022): Found design unit 2: axi4lite_sw_reg_pkg-body File: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_sw_reg_pkg.vhd Line: 116
+Info (12021): Found 2 design units, including 1 entities, in source file /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_sw_reg.vhd
+    Info (12022): Found design unit 1: axi4lite_sw_reg-axi4lite_sw_reg_a File: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_sw_reg.vhd Line: 42
+    Info (12023): Found entity 1: axi4lite_sw_reg File: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_sw_reg.vhd Line: 27
+Info (12021): Found 2 design units, including 0 entities, in source file /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic_pkg.vhd
+    Info (12022): Found design unit 1: axi4lite_axi4lite_top_ic_pkg File: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic_pkg.vhd Line: 24
+    Info (12022): Found design unit 2: axi4lite_axi4lite_top_ic_pkg-body File: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic_pkg.vhd Line: 50
+Warning (12019): Can't analyze file -- file axi_axil_adapter.v is missing
+Warning (12019): Can't analyze file -- file axi4_reg.v is missing
+Warning (12019): Can't analyze file -- file FIFO2.v is missing
+Warning (12019): Can't analyze file -- file mkaxi2axil_bridge.v is missing
+Warning (12019): Can't analyze file -- file axi4_to_axi4lite.v is missing
+Warning (12019): Can't analyze file -- file top.v is missing
+Warning (12019): Can't analyze file -- file axi4_lite_reg.v is missing
+Info (12021): Found 1 design units, including 1 entities, in source file /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/scilabdemo_adc3_ip.v
+    Info (12023): Found entity 1: scilabdemo_adc3_ip File: /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/scilabdemo_adc3_ip.v Line: 7
+Info (144001): Generated suppressed messages file /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/myproj/output_files/myproj.map.smsg
+Error: Quartus Prime Analysis & Synthesis was unsuccessful. 1 error, 7 warnings
+    Error: Peak virtual memory: 481 megabytes
+    Error: Processing ended: Sun Jan  4 14:10:54 2026
+    Error: Elapsed time: 00:02:51
+    Error: Total CPU time (on all processors): 00:03:08
+Error (293001): Quartus Prime Full Compilation was unsuccessful. 3 errors, 7 warnings
+Error (23031): Evaluation of Tcl script /data/DesignFiles/scilabdemo_adc3/scilabdemo_adc3/gogogo.tcl unsuccessful
+Error: Quartus Prime Shell was unsuccessful. 8 errors, 7 warnings
+    Error: Peak virtual memory: 538 megabytes
+    Error: Processing ended: Sun Jan  4 14:10:54 2026
+    Error: Elapsed time: 00:02:57
+    Error: Total CPU time (on all processors): 00:03:14

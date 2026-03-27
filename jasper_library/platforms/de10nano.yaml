@@ -10,6 +10,12 @@ mmbus_base_address: 0xFF200000
 mmbus_address_alignment: 4
 constraints: []
 
+# Board-specific paths (relative to MLIB_DEVEL_PATH/jasper_library/)
+# These are used by QuartusBackend.initialize() to locate board HDL assets.
+reference_qsf: hdl_sources/de10nano/DE10_NANO_SoC_GHRD.qsf
+soc_qip: hdl_sources/de10nano/soc_system/synthesis/soc_system.qip
+ddr_hdl_path: hdl_sources/de10nano/DDR
+
 
 provides:
   - fpga_clk1_50
