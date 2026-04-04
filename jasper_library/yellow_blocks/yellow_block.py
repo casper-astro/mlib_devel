@@ -1,7 +1,11 @@
 import os
 import logging
 from glob import glob
-import collections
+
+try:
+    from collections.abc import Callable
+except ImportError: 
+    from collections import Callable
 
 class YellowBlock(object):
     """
@@ -60,7 +64,7 @@ class YellowBlock(object):
             # If the class has a factory method, call that. This should return some
             # (possibly platform dependent) yellow block instance
             # Else just return an instance of the class.
-            if isinstance(getattr(cls, 'factory', None), collections.Callable):
+            if isinstance(getattr(cls, 'factory', None), Callable):
                 print('CALLING FACTORY')
                 return cls.factory(blk, platform, hdl_root=hdl_root)
             else:

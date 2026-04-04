@@ -8,7 +8,13 @@ import sys
 sys.path.append(mlib_devel_path + '/jasper_library')
 sys.path.append(mlib_devel_path + '/jasper_library/yellow_blocks')
 
-import collections
+
+try:
+    from collections.abc import Callable
+except ImportError:  # Python < 3.3 (very old)
+    from collections import Callable
+
+
 from yellow_block import YellowBlock
 
 class DSPBlock(YellowBlock):
@@ -65,7 +71,7 @@ class DSPBlock(YellowBlock):
             # If the class has a factory method, call that. This should return some
             # (possibly platform dependent) yellow block instance
             # Else just return an instance of the class.
-            if isinstance(getattr(cls, 'factory', None), collections.Callable):
+            if isinstance(getattr(cls, 'factory', None), Callable):
                 return cls.factory(blk, platform, hdl_root=hdl_root, model_info_file=model_info_file)
             else:
                 return cls(blk,platform,hdl_root=hdl_root, model_info_file=model_info_file)

@@ -21,9 +21,7 @@ module sys_block_intel #(
   reg [31:0] scratchpad;
   reg [31:0] clk_counter_reg = 32'b0;
 
-  /* Handshake signal from OPB to application indicating new data should be latched */
   reg register_request;
-  /* Handshake signal from application to OPB indicating data has been latched */
   reg register_ready;
 
   assign wb_err_o  = 1'b0;
@@ -33,7 +31,6 @@ module sys_block_intel #(
 
   /* Application clock domain data buffer */
   reg [31:0] user_data_in_reg;
-  /* OPB clock domain data buffer */
   reg [31:0] register_buffer;
 
   (* altera_attribute = "-name SYNCHRONIZER_IDENTIFICATION FORCED_IF_ASYNCHRONOUS" *) reg register_readyR;
@@ -48,6 +45,9 @@ module sys_block_intel #(
 
     if (wb_rst_i) begin
       register_request <= 1'b0;
+      scratchpad <= 32'b0;
+      register_buffer <= 32'b0;
+      wb_ack_o_reg <= 1'b0;
     end else if (wb_stb_i && wb_cyc_i && !wb_ack_o_reg) begin
       wb_ack_o_reg <= 1'b1;
       if (wb_we_i) begin
@@ -78,17 +78,15 @@ module sys_block_intel #(
 
   always @(*) begin
     if (!wb_ack_o_reg) begin
-      wb_dat_o_reg <= 32'b0;
+      wb_dat_o_reg = 32'b0;
     end else begin
       case (wb_adr_i[6:2])
-        5'h0:   wb_dat_o_reg <= BOARD_ID;
-        5'h1:   wb_dat_o_reg <= REV_MAJ;
-        5'h2:   wb_dat_o_reg <= REV_MIN;
-        5'h3:   wb_dat_o_reg <= REV_RCS;
-        5'h4:   wb_dat_o_reg <= scratchpad;
-        5'h5:   wb_dat_o_reg <= register_buffer + 1;
-        default:
-                wb_dat_o_reg <= 32'b0;
+        5'h0:   wb_dat_o_reg = BOARD_ID;
+        5'h1:   wb_dat_o_reg = ((REV_MAJ & 32'hFFFF) << 16) | (REV_MIN & 32'hFFFF);
+        5'h3:   wb_dat_o_reg = REV_RCS;
+        5'h4:   wb_dat_o_reg = scratchpad;
+        5'h5:   wb_dat_o_reg = register_buffer;
+        default: wb_dat_o_reg = 32'b0;
       endcase
     end
   end

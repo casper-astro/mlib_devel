@@ -174,10 +174,10 @@ class de10nano(YellowBlock):
         top.add_signal('awlock1')
         top.add_signal('arlock1')
 
-        top.add_raw_string("assign awlen8  = {4'b0000, hps_0_h2f_lw_axi_master_awlen};")
-        top.add_raw_string("assign arlen8  = {4'b0000, hps_0_h2f_lw_axi_master_arlen};")
-        top.add_raw_string("assign awlock1 = (hps_0_h2f_lw_axi_master_awlock == 2'b01);")
-        top.add_raw_string("assign arlock1 = (hps_0_h2f_lw_axi_master_arlock == 2'b01);")
+        top.add_raw_string("assign awlen8  = {4'b0000, hps_0_h2f_lw_axi_master_awlen};\n")
+        top.add_raw_string("assign arlen8  = {4'b0000, hps_0_h2f_lw_axi_master_arlen};\n")
+        top.add_raw_string("assign awlock1 = (hps_0_h2f_lw_axi_master_awlock == 2'b01);\n")
+        top.add_raw_string("assign arlock1 = (hps_0_h2f_lw_axi_master_arlock == 2'b01);\n")
 
         # ------------------------------------------------------------------
         # AXI?AXI-Lite adapter instance
@@ -288,7 +288,20 @@ class de10nano(YellowBlock):
 
         print('Made it to the end')
     def gen_children(self):
-        return []
+
+        #return []
+        
+        children = []
+        children.append(YellowBlock.make_block({
+            'fullpath': self.fullpath,
+            'tag': 'xps:sys_block_intel',
+            'board_id': 243,  # or an actual board ID
+            'rev_maj': 1,
+            'rev_min': 0,
+            'rev_rcs': 0
+        }, self.platform))
+        return children
+        
         # Add exactly one system block named 'sys' so memory_map['sys'] exists
         #return [
         #    YellowBlock.make_block({
@@ -301,7 +314,7 @@ class de10nano(YellowBlock):
         #        'rev_rcs': '0',
         #    }, self.platform)
         #]
-
+    
     def gen_constraints(self):
         cons = []
         # The auto-top uses fpga_clk1_50 for sys/axil clocks; give it a pin and a period.
