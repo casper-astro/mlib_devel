@@ -21,6 +21,7 @@ xps_base/*/pcores/opb_ipif_v*/
 xps_base/*/pcores/opb_opb_lite_v*/
 xps_base/*/pcores/opb_v20_v*/
 xps_base/*/pcores/proc_common_v*/
+jasper_library/log.log
 
 # Ignore all files that start with "startsg." (e.g. startsg.local)
 startsg.*
