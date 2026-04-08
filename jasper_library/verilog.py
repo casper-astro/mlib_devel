@@ -786,6 +786,16 @@ class VerilogModule(object):
             self.add_localparam('SLAVE_ADDR', base_addrs)
             self.add_localparam('SLAVE_HIGH', high_addrs)
 
+    def does_signal_exist(self, name: str) -> bool:
+        if not hasattr(self, "signals"):
+            return False
+
+        for block_signals in self.signals.values():
+            if isinstance(block_signals, dict) and name in block_signals:
+                return True
+
+        return False
+
     def axi4lite_memory_map(self, base_addr=0x10000, alignment=4, platform = None):
         print('CALLED AXI4LITE_MEMORY_MAP...')
         """

@@ -23,12 +23,13 @@ class sys_block_intel(YellowBlock):
 		# Declare user_clk only if it hasn't already been declared
 		#if not top.does_signal_exist('user_clk'):
 
-		all_signals = [key for inner in (top.signals).values() for key in inner.keys()]
-		if not('user_clk' in all_signals):
+		#all_signals = [key for inner in (top.signals).values() for key in inner.keys()]
+
+		if not top.does_signal_exist('user_clk'):
 			top.add_signal('user_clk', width=0)
 			top.assign_signal('user_clk', 'axil_clk')          # same domain as AXI-Lite
 
-		if not('user_rst' in all_signals):
+		if not top.does_signal_exist('user_rst'):
 			top.add_signal('user_rst', width=0)
 			top.assign_signal('user_rst', '~axil_rst_n') 
 

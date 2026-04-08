@@ -36,27 +36,42 @@ module sys_block_intel #(
   (* altera_attribute = "-name SYNCHRONIZER_IDENTIFICATION FORCED_IF_ASYNCHRONOUS" *) reg register_readyR;
   (* altera_attribute = "-name SYNCHRONIZER_IDENTIFICATION FORCED_IF_ASYNCHRONOUS" *) reg register_readyRR;
 
+  
+
   always @(posedge wb_clk_i) begin
-    //single cycle signals
-    wb_ack_o_reg  <= 1'b0;
+  wb_ack_o_reg <= 1'b0;
 
-    register_readyR  <= register_ready;
-    register_readyRR <= register_readyR;
+  register_readyR  <= register_ready;
+  register_readyRR <= register_readyR;
 
-    if (wb_rst_i) begin
-      register_request <= 1'b0;
-      scratchpad <= 32'b0;
-      register_buffer <= 32'b0;
-      wb_ack_o_reg <= 1'b0;
-    end else if (wb_stb_i && wb_cyc_i && !wb_ack_o_reg) begin
+  if (wb_rst_i) begin
+    register_request <= 1'b0;
+    scratchpad <= 32'b0;
+    register_buffer <= 32'b0;
+  end else begin
+    if (wb_stb_i && wb_cyc_i && !wb_ack_o_reg) begin
       wb_ack_o_reg <= 1'b1;
       if (wb_we_i) begin
-        // Scratchpad write
         if (wb_adr_i[6:2] == 5'h4) begin
           scratchpad <= wb_dat_i;
         end
       end
     end
+
+    if (register_readyRR) begin
+      register_request <= 1'b0;
+    end
+
+    if (register_readyRR && register_request) begin
+      register_buffer <= user_data_in_reg;
+    end
+
+    if (!register_readyRR) begin
+      register_request <= 1'b1;
+    end
+  end
+end
+  
 
     if (register_readyRR) begin
       register_request <= 1'b0;
