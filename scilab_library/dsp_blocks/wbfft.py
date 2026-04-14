@@ -20,153 +20,230 @@ wbfft_libs['r2sdf_fft_lib'] = []
 wbfft_libs['ip_xpm_mult_lib'] = []
 wbfft_libs['ip_xpm_fifo_lib'] = []
 wbfft_libs['ip_xpm_ram_lib'] = []
+wbfft_libs['ip_stratixiv_mult_lib'] = []
+wbfft_libs['ip_stratixiv_ram_lib'] = []
+wbfft_libs['ip_stratixiv_fifo_lib'] = []
 
 class wbfft(DSPBlock):
     def initialize(self):
         # create the hdl wrapper directory
         self.create_hdl_dir()
-        # add the source files
-        self.add_source('casper_dspdevel/common_pkg/fixed_float_types_c.vhd')
-        wbfft_libs['common_pkg_lib'].append('casper_dspdevel/common_pkg/fixed_float_types_c.vhd')
-        self.add_source('casper_dspdevel/common_pkg/fixed_pkg_c.vhd')
-        wbfft_libs['common_pkg_lib'].append('casper_dspdevel/common_pkg/fixed_pkg_c.vhd')
-        self.add_source('casper_dspdevel/common_pkg/common_pkg.vhd')
-        wbfft_libs['common_pkg_lib'].append('casper_dspdevel/common_pkg/common_pkg.vhd')
-        self.add_source('casper_dspdevel/common_components/common_pipeline.vhd')
-        wbfft_libs['common_components_lib'].append('casper_dspdevel/common_components/common_pipeline.vhd')
-        self.add_source('casper_dspdevel/casper_adder/common_add_sub.vhd')
-        wbfft_libs['casper_adder_lib'].append('casper_dspdevel/casper_adder/common_add_sub.vhd')
-        self.add_source('casper_dspdevel/common_components/common_async.vhd')
-        wbfft_libs['common_components_lib'].append('casper_dspdevel/common_components/common_async.vhd')
-        self.add_source('casper_dspdevel/common_components/common_areset.vhd')
-        wbfft_libs['common_components_lib'].append('casper_dspdevel/common_components/common_areset.vhd')
-        self.add_source('casper_dspdevel/common_components/common_bit_delay.vhd')
-        wbfft_libs['common_components_lib'].append('casper_dspdevel/common_components/common_bit_delay.vhd')
-        self.add_source('casper_dspdevel/common_components/common_pipeline_sl.vhd')
-        wbfft_libs['common_components_lib'].append('casper_dspdevel/common_components/common_pipeline_sl.vhd')
-        self.add_source('casper_dspdevel/casper_multiplier/tech_mult_component.vhd')
-        wbfft_libs['casper_multiplier_lib'].append('casper_dspdevel/casper_multiplier/tech_mult_component.vhd')
-        self.add_source('casper_dspdevel/casper_multiplier/tech_agilex_versal_cmult.vhd')
-        wbfft_libs['casper_multiplier_lib'].append('casper_dspdevel/casper_multiplier/tech_agilex_versal_cmult.vhd')
-        self.add_source('casper_dspdevel/technology/technology_select_pkg.vhd')
-        wbfft_libs['technology_lib'].append('casper_dspdevel/technology/technology_select_pkg.vhd')
-        self.add_source('casper_dspdevel/casper_multiplier/tech_complex_mult.vhd')
-        wbfft_libs['casper_multiplier_lib'].append('casper_dspdevel/casper_multiplier/tech_complex_mult.vhd')
-        self.add_source('casper_dspdevel/casper_multiplier/common_complex_mult.vhd')
-        wbfft_libs['casper_multiplier_lib'].append('casper_dspdevel/casper_multiplier/common_complex_mult.vhd')
-        self.add_source('casper_dspdevel/casper_counter/common_counter.vhd')
-        wbfft_libs['casper_counter_lib'].append('casper_dspdevel/casper_counter/common_counter.vhd')
-        self.add_source('casper_dspdevel/common_components/common_delay.vhd')
-        wbfft_libs['common_components_lib'].append('casper_dspdevel/common_components/common_delay.vhd')
-        self.add_source('casper_dspdevel/casper_fifo/common_rl_decrease.vhd')
-        wbfft_libs['casper_fifo_lib'].append('casper_dspdevel/casper_fifo/common_rl_decrease.vhd')
-        self.add_source('casper_dspdevel/casper_fifo/common_fifo_rd.vhd')
-        wbfft_libs['casper_fifo_lib'].append('casper_dspdevel/casper_fifo/common_fifo_rd.vhd')
-        self.add_source('casper_dspdevel/casper_fifo/tech_fifo_component_pkg.vhd')
-        wbfft_libs['casper_fifo_lib'].append('casper_dspdevel/casper_fifo/tech_fifo_component_pkg.vhd')
-        self.add_source('casper_dspdevel/casper_fifo/tech_fifo_sc.vhd')
-        wbfft_libs['casper_fifo_lib'].append('casper_dspdevel/casper_fifo/tech_fifo_sc.vhd')
-        self.add_source('casper_dspdevel/casper_fifo/common_fifo_sc.vhd')
-        wbfft_libs['casper_fifo_lib'].append('casper_dspdevel/casper_fifo/common_fifo_sc.vhd')
-        self.add_source('casper_dspdevel/casper_ram/common_ram_pkg.vhd')
-        wbfft_libs['casper_ram_lib'].append('casper_dspdevel/casper_ram/common_ram_pkg.vhd')
-        self.add_source('casper_dspdevel/casper_ram/tech_memory_component_pkg.vhd')
-        wbfft_libs['casper_ram_lib'].append('casper_dspdevel/casper_ram/tech_memory_component_pkg.vhd')
-        self.add_source('casper_dspdevel/casper_ram/tech_memory_ram_crw_crw.vhd')
-        wbfft_libs['casper_ram_lib'].append('casper_dspdevel/casper_ram/tech_memory_ram_crw_crw.vhd')
-        self.add_source('casper_dspdevel/casper_ram/tech_memory_ram_cr_cw.vhd')
-        wbfft_libs['casper_ram_lib'].append('casper_dspdevel/casper_ram/tech_memory_ram_cr_cw.vhd')
-        self.add_source('casper_dspdevel/casper_ram/common_ram_crw_crw.vhd')
-        wbfft_libs['casper_ram_lib'].append('casper_dspdevel/casper_ram/common_ram_crw_crw.vhd')
-        self.add_source('casper_dspdevel/casper_ram/common_paged_ram_crw_crw.vhd')
-        wbfft_libs['casper_ram_lib'].append('casper_dspdevel/casper_ram/common_paged_ram_crw_crw.vhd')
-        self.add_source('casper_dspdevel/casper_ram/common_paged_ram_rw_rw.vhd')
-        wbfft_libs['casper_ram_lib'].append('casper_dspdevel/casper_ram/common_paged_ram_rw_rw.vhd')
-        self.add_source('casper_dspdevel/casper_ram/common_paged_ram_r_w.vhd')
-        wbfft_libs['casper_ram_lib'].append('casper_dspdevel/casper_ram/common_paged_ram_r_w.vhd')
-        self.add_source('casper_dspdevel/casper_requantize/common_round.vhd')
-        wbfft_libs['casper_requantize_lib'].append('casper_dspdevel/casper_requantize/common_round.vhd')
-        self.add_source('casper_dspdevel/casper_requantize/common_resize.vhd')
-        wbfft_libs['casper_requantize_lib'].append('casper_dspdevel/casper_requantize/common_resize.vhd')
-        self.add_source('casper_dspdevel/casper_requantize/common_requantize.vhd')
-        wbfft_libs['casper_requantize_lib'].append('casper_dspdevel/casper_requantize/common_requantize.vhd')
-        self.add_source('casper_dspdevel/casper_ram/tech_memory_rom_r_r.vhd')
-        wbfft_libs['casper_ram_lib'].append('casper_dspdevel/casper_ram/tech_memory_rom_r_r.vhd')
-        self.add_source('casper_dspdevel/casper_ram/tech_memory_rom_r.vhd')
-        wbfft_libs['casper_ram_lib'].append('casper_dspdevel/casper_ram/tech_memory_rom_r.vhd')
-        self.add_source('casper_dspdevel/casper_ram/common_rom_r_r.vhd')
-        wbfft_libs['casper_ram_lib'].append('casper_dspdevel/casper_ram/common_rom_r_r.vhd')
-        self.add_source('casper_dspdevel/common_pkg/common_str_pkg.vhd')
-        wbfft_libs['common_pkg_lib'].append('casper_dspdevel/common_pkg/common_str_pkg.vhd')
-        self.add_source('casper_dspdevel/casper_multiplexer/common_zip.vhd')
-        wbfft_libs['casper_multiplexer_lib'].append('casper_dspdevel/casper_multiplexer/common_zip.vhd')
-        # self.add_source('casper_dspdevel/casper_wb_fft/fft_gnrcs_intrfcs_pkg.vhd')
-        # wbfft_libs['casper_wb_fft_lib'].append('casper_dspdevel/casper_wb_fft/fft_gnrcs_intrfcs_pkg.vhd')
-        self.add_source('casper_dspdevel/r2sdf_fft/twiddlesPkg.vhd')
-        wbfft_libs['r2sdf_fft_lib'].append('casper_dspdevel/r2sdf_fft/twiddlesPkg.vhd')
-        # self.add_source('casper_dspdevel/r2sdf_fft/rTwoSDFPkg.vhd')
-        # wbfft_libs['r2sdf_fft_lib'].append('casper_dspdevel/r2sdf_fft/rTwoSDFPkg.vhd')
-        self.add_source('casper_dspdevel/r2sdf_fft/rTwoBF.vhd')
-        wbfft_libs['r2sdf_fft_lib'].append('casper_dspdevel/r2sdf_fft/rTwoBF.vhd')
-        self.add_source('casper_dspdevel/casper_requantize/r_shift_requantize.vhd')
-        wbfft_libs['casper_requantize_lib'].append('casper_dspdevel/casper_requantize/r_shift_requantize.vhd')
-        self.add_source('casper_dspdevel/r2sdf_fft/rTwoWMul.vhd')
-        wbfft_libs['r2sdf_fft_lib'].append('casper_dspdevel/r2sdf_fft/rTwoWMul.vhd')
-        self.add_source('casper_dspdevel/casper_wb_fft/fft_r2_bf_par.vhd')
-        wbfft_libs['casper_wb_fft_lib'].append('casper_dspdevel/casper_wb_fft/fft_r2_bf_par.vhd')
-        self.add_source('casper_dspdevel/casper_wb_fft/fft_r2_par.vhd')
-        wbfft_libs['casper_wb_fft_lib'].append('casper_dspdevel/casper_wb_fft/fft_r2_par.vhd')
-        self.add_source('casper_dspdevel/r2sdf_fft/rTwoBFStage.vhd')
-        wbfft_libs['r2sdf_fft_lib'].append('casper_dspdevel/r2sdf_fft/rTwoBFStage.vhd')
-        self.add_source('casper_dspdevel/r2sdf_fft/rTwoWeights.vhd')
-        wbfft_libs['r2sdf_fft_lib'].append('casper_dspdevel/r2sdf_fft/rTwoWeights.vhd')
-        self.add_source('casper_dspdevel/r2sdf_fft/rTwoSDFStage.vhd')
-        wbfft_libs['r2sdf_fft_lib'].append('casper_dspdevel/r2sdf_fft/rTwoSDFStage.vhd')
-        self.add_source('casper_dspdevel/casper_wb_fft/fft_sepa.vhd')
-        wbfft_libs['casper_wb_fft_lib'].append('casper_dspdevel/casper_wb_fft/fft_sepa.vhd')
-        self.add_source('casper_dspdevel/casper_wb_fft/fft_reorder_sepa_pipe.vhd')
-        wbfft_libs['casper_wb_fft_lib'].append('casper_dspdevel/casper_wb_fft/fft_reorder_sepa_pipe.vhd')
-        self.add_source('casper_dspdevel/casper_wb_fft/fft_r2_pipe.vhd')
-        wbfft_libs['casper_wb_fft_lib'].append('casper_dspdevel/casper_wb_fft/fft_r2_pipe.vhd')
-        self.add_source('casper_dspdevel/casper_wb_fft/fft_sepa_wide.vhd')
-        wbfft_libs['casper_wb_fft_lib'].append('casper_dspdevel/casper_wb_fft/fft_sepa_wide.vhd')
-        self.add_source('casper_dspdevel/casper_wb_fft/fft_r2_wide.vhd')
-        wbfft_libs['casper_wb_fft_lib'].append('casper_dspdevel/casper_wb_fft/fft_r2_wide.vhd')
-        self.add_source('casper_dspdevel/casper_wb_fft/fft_wide_unit_control.vhd')
-        wbfft_libs['casper_wb_fft_lib'].append('casper_dspdevel/casper_wb_fft/fft_wide_unit_control.vhd')
-        self.add_source('casper_dspdevel/casper_wb_fft/fft_wide_unit.vhd')
-        wbfft_libs['casper_wb_fft_lib'].append('casper_dspdevel/casper_wb_fft/fft_wide_unit.vhd')
-        self.add_source('casper_dspdevel/ip_xpm/mult/ip_cmult_rtl_3dsp.vhd')
-        wbfft_libs['ip_xpm_mult_lib'].append('casper_dspdevel/ip_xpm/mult/ip_cmult_rtl_3dsp.vhd')
-        self.add_source('casper_dspdevel/ip_xpm/mult/ip_cmult_rtl_4dsp.vhd')
-        wbfft_libs['ip_xpm_mult_lib'].append('casper_dspdevel/ip_xpm/mult/ip_cmult_rtl_4dsp.vhd')
-        self.add_source('casper_dspdevel/ip_xpm/fifo/ip_xilinx_fifo_sc.vhd')
-        wbfft_libs['ip_xpm_fifo_lib'].append('casper_dspdevel/ip_xpm/fifo/ip_xilinx_fifo_sc.vhd')
-        self.add_source('casper_dspdevel/ip_xpm/ram/ip_xpm_ram_cr_cw.vhd')
-        wbfft_libs['ip_xpm_ram_lib'].append('casper_dspdevel/ip_xpm/ram/ip_xpm_ram_cr_cw.vhd')
-        self.add_source('casper_dspdevel/ip_xpm/ram/ip_xpm_ram_crw_crw.vhd')
-        wbfft_libs['ip_xpm_ram_lib'].append('casper_dspdevel/ip_xpm/ram/ip_xpm_ram_crw_crw.vhd')
-        self.add_source('casper_dspdevel/ip_xpm/ram/ip_xpm_rom_r.vhd')
-        wbfft_libs['ip_xpm_ram_lib'].append('casper_dspdevel/ip_xpm/ram/ip_xpm_rom_r.vhd')
-        self.add_source('casper_dspdevel/ip_xpm/ram/ip_xpm_rom_r_r.vhd')
-        wbfft_libs['ip_xpm_ram_lib'].append('casper_dspdevel/ip_xpm/ram/ip_xpm_rom_r_r.vhd')
+        for k in wbfft_libs:
+            wbfft_libs[k].clear()
+        jasper_backend = os.environ.get("JASPER_BACKEND", "").lower()
+        is_intel = (jasper_backend == "quartus")
+        self.is_intel = is_intel
+        self.vendor = "Altera" if is_intel else "Xilinx"
+        print(f"[wbfft] JASPER_BACKEND={jasper_backend}, is_intel={is_intel}, vendor={self.vendor}")
+        
+        #self.add_source(os.path.join(self.hdl_root_scilab,'casper_dspdevel/common_pkg/fixed_float_types_c.vhd'))
+        wbfft_libs['common_pkg_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/common_pkg/fixed_float_types_c.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/common_pkg/fixed_pkg_c.vhd'))
+        wbfft_libs['common_pkg_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/common_pkg/fixed_pkg_c.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/common_components/common_pipeline.vhd'))
+        wbfft_libs['common_components_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/common_components/common_pipeline.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_adder/common_add_sub.vhd'))
+        wbfft_libs['casper_adder_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_adder/common_add_sub.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/common_components/common_async.vhd'))
+        wbfft_libs['common_components_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/common_components/common_async.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/common_components/common_areset.vhd'))
+        wbfft_libs['common_components_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/common_components/common_areset.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/common_components/common_bit_delay.vhd'))
+        wbfft_libs['common_components_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/common_components/common_bit_delay.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/common_components/common_pipeline_sl.vhd'))
+        wbfft_libs['common_components_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/common_components/common_pipeline_sl.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_multiplier/tech_mult_component.vhd'))
+        wbfft_libs['casper_multiplier_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_multiplier/tech_mult_component.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_multiplier/tech_agilex_versal_cmult.vhd'))
+        wbfft_libs['casper_multiplier_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_multiplier/tech_agilex_versal_cmult.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/technology/technology_select_pkg.vhd'))
+        self._generate_technology_select_pkg(self.family_to_tech_select(self.vendor))
+        wbfft_libs['technology_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/technology/technology_select_pkg.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_multiplier/tech_complex_mult.vhd'))
+        wbfft_libs['casper_multiplier_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_multiplier/tech_complex_mult.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_multiplier/common_complex_mult.vhd'))
+        wbfft_libs['casper_multiplier_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_multiplier/common_complex_mult.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_counter/common_counter.vhd'))
+        wbfft_libs['casper_counter_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_counter/common_counter.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/common_components/common_delay.vhd'))
+        wbfft_libs['common_components_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/common_components/common_delay.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_fifo/common_rl_decrease.vhd'))
+        wbfft_libs['casper_fifo_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_fifo/common_rl_decrease.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_fifo/common_fifo_rd.vhd'))
+        wbfft_libs['casper_fifo_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_fifo/common_fifo_rd.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_fifo/tech_fifo_component_pkg.vhd'))
+        wbfft_libs['casper_fifo_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_fifo/tech_fifo_component_pkg.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_fifo/tech_fifo_sc.vhd'))
+        wbfft_libs['casper_fifo_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_fifo/tech_fifo_sc.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_fifo/common_fifo_sc.vhd'))
+        wbfft_libs['casper_fifo_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_fifo/common_fifo_sc.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_ram/common_ram_pkg.vhd'))
+        wbfft_libs['casper_ram_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_ram/common_ram_pkg.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_ram/tech_memory_component_pkg.vhd'))
+        wbfft_libs['casper_ram_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_ram/tech_memory_component_pkg.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_ram/tech_memory_ram_crw_crw.vhd'))
+        wbfft_libs['casper_ram_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_ram/tech_memory_ram_crw_crw.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_ram/tech_memory_ram_cr_cw.vhd'))
+        wbfft_libs['casper_ram_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_ram/tech_memory_ram_cr_cw.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_ram/common_ram_crw_crw.vhd'))
+        wbfft_libs['casper_ram_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_ram/common_ram_crw_crw.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_ram/common_paged_ram_crw_crw.vhd'))
+        wbfft_libs['casper_ram_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_ram/common_paged_ram_crw_crw.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_ram/common_paged_ram_rw_rw.vhd'))
+        wbfft_libs['casper_ram_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_ram/common_paged_ram_rw_rw.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_ram/common_paged_ram_r_w.vhd'))
+        wbfft_libs['casper_ram_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_ram/common_paged_ram_r_w.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_requantize/common_round.vhd'))
+        wbfft_libs['casper_requantize_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_requantize/common_round.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_requantize/common_resize.vhd'))
+        wbfft_libs['casper_requantize_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_requantize/common_resize.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_requantize/common_requantize.vhd'))
+        wbfft_libs['casper_requantize_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_requantize/common_requantize.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_ram/tech_memory_rom_r_r.vhd'))
+        wbfft_libs['casper_ram_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_ram/tech_memory_rom_r_r.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_ram/tech_memory_rom_r.vhd'))
+        wbfft_libs['casper_ram_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_ram/tech_memory_rom_r.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_ram/common_rom_r_r.vhd'))
+        wbfft_libs['casper_ram_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_ram/common_rom_r_r.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/common_pkg/common_str_pkg.vhd'))
+        wbfft_libs['common_pkg_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/common_pkg/common_str_pkg.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_multiplexer/common_zip.vhd'))
+        wbfft_libs['casper_multiplexer_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_multiplexer/common_zip.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_dp_pkg/dp_stream_pkg.vhd'))
+        #wbfft_libs['casper_wb_fft_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_dp_pkg/dp_stream_pkg.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_wb_fft/fft_gnrcs_intrfcs_pkg.vhd'))
+        #wbfft_libs['casper_wb_fft_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_wb_fft/fft_gnrcs_intrfcs_pkg.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/r2sdf_fft/twiddlesPkg.vhd'))
+        wbfft_libs['r2sdf_fft_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/r2sdf_fft/twiddlesPkg.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/r2sdf_fft/rTwoSDFPkg.vhd')
+        #wbfft_libs['r2sdf_fft_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/r2sdf_fft/rTwoSDFPkg.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/r2sdf_fft/rTwoBF.vhd'))
+        wbfft_libs['r2sdf_fft_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/r2sdf_fft/rTwoBF.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_requantize/r_shift_requantize.vhd'))
+        wbfft_libs['casper_requantize_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_requantize/r_shift_requantize.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/r2sdf_fft/rTwoWMul.vhd'))
+        wbfft_libs['r2sdf_fft_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/r2sdf_fft/rTwoWMul.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_wb_fft/fft_r2_bf_par.vhd'))
+        wbfft_libs['casper_wb_fft_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_wb_fft/fft_r2_bf_par.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_wb_fft/fft_r2_par.vhd'))
+        wbfft_libs['casper_wb_fft_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_wb_fft/fft_r2_par.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/r2sdf_fft/rTwoBFStage.vhd'))
+        wbfft_libs['r2sdf_fft_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/r2sdf_fft/rTwoBFStage.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/r2sdf_fft/rTwoWeights.vhd'))
+        wbfft_libs['r2sdf_fft_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/r2sdf_fft/rTwoWeights.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/r2sdf_fft/rTwoSDFStage.vhd'))
+        wbfft_libs['r2sdf_fft_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/r2sdf_fft/rTwoSDFStage.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_wb_fft/fft_sepa.vhd'))
+        wbfft_libs['casper_wb_fft_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_wb_fft/fft_sepa.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_wb_fft/fft_reorder_sepa_pipe.vhd'))
+        wbfft_libs['casper_wb_fft_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_wb_fft/fft_reorder_sepa_pipe.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_wb_fft/fft_r2_pipe.vhd'))
+        wbfft_libs['casper_wb_fft_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_wb_fft/fft_r2_pipe.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_wb_fft/fft_sepa_wide.vhd'))
+        wbfft_libs['casper_wb_fft_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_wb_fft/fft_sepa_wide.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_wb_fft/fft_r2_wide.vhd'))
+        wbfft_libs['casper_wb_fft_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_wb_fft/fft_r2_wide.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_wb_fft/fft_wide_unit_control.vhd'))
+        #wbfft_libs['casper_wb_fft_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_wb_fft/fft_wide_unit_control.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_wb_fft/fft_wide_unit.vhd'))
+        wbfft_libs['casper_wb_fft_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/casper_wb_fft/fft_wide_unit.vhd'))
+        #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/common_pkg/common_pkg.vhd'))
+        wbfft_libs['common_pkg_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/common_pkg/common_pkg.vhd'))
+
+        # ----------------------------
+            # Vendor-specific sources
+        # ----------------------------
+
+        
+        if is_intel:
+            
+            #mult
+            #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_stratixiv/mult/ip_stratixiv_complex_mult_rtl.vhd'))
+            wbfft_libs['ip_stratixiv_mult_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_stratixiv/mult/ip_stratixiv_complex_mult_rtl.vhd'))
+
+            #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_stratixiv/mult/ip_stratixiv_complex_mult.vhd'))
+            wbfft_libs['ip_stratixiv_mult_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_stratixiv/mult/ip_stratixiv_complex_mult.vhd'))
+
+            #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_stratixiv/mult/ip_stratixiv_mult_add2_rtl.vhd'))
+            wbfft_libs['ip_stratixiv_mult_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_stratixiv/mult/ip_stratixiv_mult_add2_rtl.vhd'))
+
+            #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_stratixiv/mult/ip_stratixiv_mult_add4_rtl.vhd'))
+            wbfft_libs['ip_stratixiv_mult_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_stratixiv/mult/ip_stratixiv_mult_add4_rtl.vhd'))
+
+            # RAM
+
+            #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_stratixiv/ram/ip_stratixiv_ram_cr_cw.vhd'))
+            wbfft_libs['ip_stratixiv_ram_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_stratixiv/ram/ip_stratixiv_ram_cr_cw.vhd'))
+
+            #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_stratixiv/ram/ip_stratixiv_ram_crw_crw.vhd'))
+            wbfft_libs['ip_stratixiv_ram_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_stratixiv/ram/ip_stratixiv_ram_crw_crw.vhd'))
+
+            #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_stratixiv/ram/ip_stratixiv_ram_crwk_crw.vhd'))
+            wbfft_libs['ip_stratixiv_ram_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_stratixiv/ram/ip_stratixiv_ram_crwk_crw.vhd'))
+
+            #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_stratixiv/ram/ip_stratixiv_ram_r_w.vhd'))
+            wbfft_libs['ip_stratixiv_ram_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_stratixiv/ram/ip_stratixiv_ram_r_w.vhd'))
+
+            #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_stratixiv/ram/ip_stratixiv_rom_r.vhd'))
+            wbfft_libs['ip_stratixiv_ram_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_stratixiv/ram/ip_stratixiv_rom_r.vhd'))
+
+            
+
+            # FIFO
+            #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_stratixiv/fifo/ip_stratixiv_fifo_dc_mixed_widths.vhd'))
+            wbfft_libs['ip_stratixiv_fifo_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_stratixiv/fifo/ip_stratixiv_fifo_dc_mixed_widths.vhd'))
+
+            #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_stratixiv/fifo/ip_stratixiv_fifo_dc.vhd'))
+            wbfft_libs['ip_stratixiv_fifo_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_stratixiv/fifo/ip_stratixiv_fifo_dc.vhd'))
+
+            #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_stratixiv/fifo/ip_stratixiv_fifo_sc.vhd'))
+            wbfft_libs['ip_stratixiv_fifo_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_stratixiv/fifo/ip_stratixiv_fifo_sc.vhd'))
+
+        else:
+            # add the source files
+            #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_xpm/mult/ip_cmult_rtl_3dsp.vhd'))
+            wbfft_libs['ip_xpm_mult_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_xpm/mult/ip_cmult_rtl_3dsp.vhd'))
+            #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_xpm/mult/ip_cmult_rtl_4dsp.vhd'))
+            wbfft_libs['ip_xpm_mult_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_xpm/mult/ip_cmult_rtl_4dsp.vhd'))
+            #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_xpm/fifo/ip_xilinx_fifo_sc.vhd'))
+            wbfft_libs['ip_xpm_fifo_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_xpm/fifo/ip_xilinx_fifo_sc.vhd'))
+            #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_xpm/ram/ip_xpm_ram_cr_cw.vhd'))
+            wbfft_libs['ip_xpm_ram_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_xpm/ram/ip_xpm_ram_cr_cw.vhd'))
+            #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_xpm/ram/ip_xpm_ram_crw_crw.vhd'))
+            wbfft_libs['ip_xpm_ram_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_xpm/ram/ip_xpm_ram_crw_crw.vhd'))
+            #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_xpm/ram/ip_xpm_rom_r.vhd'))
+            wbfft_libs['ip_xpm_ram_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_xpm/ram/ip_xpm_rom_r.vhd'))
+            #self.add_source(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_xpm/ram/ip_xpm_rom_r_r.vhd'))
+            wbfft_libs['ip_xpm_ram_lib'].append(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/ip_xpm/ram/ip_xpm_rom_r_r.vhd'))
+
         # generate twiddle coefficients
         # delete the twids dir, if it exists
         if os.path.exists(self.hdl_wrapper_dir + "/twids"):
             os.system(f"rm -rf {self.hdl_wrapper_dir}/twids")
         # the twids dir will be created automatically
-        self._generate_twids(self.hdl_root + "/casper_dspdevel/wrappers/simulink/sdf_fft_twid_create.py")
+        self._generate_twids(self.hdl_root_scilab + "/casper_dspdevel/wrappers/simulink/sdf_fft_twid_create.py")
         # generate hdl wrapper, and add it to the project
         self._generate_vhdl_wrapper()
-        self.add_source(self.hdl_wrapper_dir + "/casper_wideband_fft.vhd")
+        #wbfft_libs['casper_wb_fft_lib'].append(f'{self.hdl_wrapper_dir}/casper_wideband_fft.vhd')
+        if  is_intel:
+            wbfft_libs['casper_wb_fft_lib'].append(f'{self.hdl_wrapper_dir}/casper_wideband_fft.vhd')
+        else:
+            self.add_source(self.hdl_wrapper_dir + "/casper_wideband_fft.vhd")
         # generate fft_gnrcs_intrfcs_pkg, and add it to the project
         self._generate_fft_gnrcs_intrfcs_pkg()
-        wbfft_libs['casper_wb_fft_lib'].append(f'{self.hdl_wrapper_dir}/fft_gnrcs_intrfcs_pkg.vhd')
-        self.add_source(self.hdl_wrapper_dir + "/fft_gnrcs_intrfcs_pkg.vhd")
+        
+        if is_intel:
+            wbfft_libs['casper_wb_fft_lib'].append(f'{self.hdl_wrapper_dir}/fft_gnrcs_intrfcs_pkg.vhd')        
+        else: 
+            self.add_source(self.hdl_wrapper_dir + "/fft_gnrcs_intrfcs_pkg.vhd")
         # generate rTwoSDFPkg
         self._generate_rTwoSDFPkg()
-        wbfft_libs['r2sdf_fft_lib'].append(f'{self.hdl_wrapper_dir}/rTwoSDFPkg.vhd')
-        self.add_source(f'{self.hdl_wrapper_dir}/rTwoSDFPkg.vhd')
+
+        if is_intel:
+            wbfft_libs['r2sdf_fft_lib'].append(f'{self.hdl_wrapper_dir}/rTwoSDFPkg.vhd')
+        else:
+            #wbfft_libs['r2sdf_fft_lib'].append(f'{self.hdl_wrapper_dir}/rTwoSDFPkg.vhd')
+            self.add_source(f'{self.hdl_wrapper_dir}/rTwoSDFPkg.vhd')
 
     def modify_top(self,top):
         # let's populate the parent ports first
@@ -220,13 +297,112 @@ class wbfft(DSPBlock):
 
     def gen_tcl_cmds(self):
         tcl_cmds = []
+
         for k in wbfft_libs.keys():
             for f in wbfft_libs[k]:
-                tcl_cmds.append('update_compile_order -fileset sources_1\n')
                 # VHDL lib is a little annoying here...
                 f_parts = f.split('/')
-                tcl_cmds.append('set_property LIBRARY %s [get_files %s/dspproj/dspproj.srcs/sources_1/imports/%s/%s]\n'%(k, self.builddir, f_parts[-2], f_parts[-1]))
+                if self.is_intel:
+                    if os.path.isabs(f):
+                        full_path = f
+                    else:
+                        full_path = os.path.abspath(os.path.join(self.hdl_root_scilab, f))
+
+                    print(f"[wbfft quartus] lib={k} file={full_path}")
+                    # Quartus: add the file and assign its VHDL library
+                    #full_path = f"{self.builddir}/dspproj/dspproj.srcs/sources_1/imports/{f_parts[-2]}/{f_parts[-1]}"
+                    tcl_cmds.append(f'set_global_assignment -name VHDL_FILE "{full_path}" -library {k}\n')
+                else:
+                    # Vivado
+                    tcl_cmds.append('update_compile_order -fileset sources_1\n')
+                    tcl_cmds.append('set_property LIBRARY %s [get_files %s/dspproj/dspproj.srcs/sources_1/imports/%s/%s]\n' % (k, self.builddir, f_parts[-2], f_parts[-1]))
+
+        '''
+        if self.is_intel:
+            wrapper_path = os.path.abspath(
+                os.path.join(self.builddir, "hdl_wrapper", "wbfft", "casper_wideband_fft.vhd")
+            )
+            print(f"[wbfft quartus] adding wrapper: {wrapper_path}")
+
+            tcl_cmds.append(f'set_global_assignment -name VHDL_FILE "{wrapper_path}"\n')
+        '''
         return {'pre_synth': tcl_cmds}
+
+    def family_to_tech_select(self, family: str) -> str:
+        f = family.lower()
+        if "versal" in f:
+            return "c_tech_versal"
+        if any(x in f for x in ["cyclone", "stratix", "arria", "agilex", "max 10", "altera"]):
+            return "c_tech_stratixiv"
+        return "c_tech_xpm"
+
+    def _generate_technology_select_pkg(self, tech_select: str):
+        """
+        Generate the technology_select_pkg VHDL file as a string.
+
+        Parameters
+        ----------
+        tech_select : str
+            One of:
+                "c_tech_stratixiv"
+                "c_tech_xpm"
+                "c_tech_agilex"
+                "c_tech_versal"
+        """
+
+        valid = {
+            "c_tech_stratixiv",
+            "c_tech_xpm",
+            "c_tech_agilex",
+            "c_tech_versal",
+        }
+
+        if tech_select not in valid:
+            raise ValueError(f"Invalid tech_select: {tech_select}")
+
+        hdl_design =  f"""-------------------------------------------------------------------------------
+--
+-- Copyright (C) 2014
+-- ASTRON (Netherlands Institute for Radio Astronomy) <http://www.astron.nl/>
+-- P.O.Box 2, 7990 AA Dwingeloo, The Netherlands
+--
+-- This program is free software: you can redistribute it and/or modify
+-- it under the terms of the GNU General Public License as published by
+-- the Free Software Foundation, either version 3 of the License, or
+-- (at your option) any later version.
+--
+-- This program is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- GNU General Public License for more details.
+--
+-- You should have received a copy of the GNU General Public License
+-- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+--
+-------------------------------------------------------------------------------
+
+-- Purpose: Define default technology selection value for g_technology.
+-- Description:
+--   In case g_technology is not overruled by the application design then the
+--   g_technology defaults to c_tech_select_default.
+
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+
+PACKAGE technology_select_pkg IS
+  -- Technology identifiers
+  CONSTANT c_tech_stratixiv          : INTEGER := 0;   -- e.g. used on UniBoard1
+  CONSTANT c_tech_xpm                : INTEGER := 1;   -- e.g. used for Xilinx in Casper
+  CONSTANT c_tech_agilex             : INTEGER := 2;   -- For use with Intel AgileX
+  constant c_tech_versal             : INTEGER := 3;   -- For use with Xilinx Versal
+
+  --CONSTANT c_tech_select_default : INTEGER := c_tech_stratixiv;
+  CONSTANT c_tech_select_default : INTEGER := {tech_select};
+END technology_select_pkg;
+"""
+        with open(os.path.join(self.hdl_root_scilab, 'casper_dspdevel/technology/technology_select_pkg.vhd'), "w", encoding="utf-8") as file:
+            file.write(hdl_design)
+
 
     def _generate_vhdl_wrapper(self):
         # I really don't want to generate the vhdl code from python.
@@ -245,10 +421,10 @@ use r2sdf_fft_lib.rTwoSDFPkg.all;
 --Purpose: A Simulink necessary wrapper for the fft_wide_unit. Serves to expose all signals and generics individually.
 entity wideband_fft_top is
 	generic(
-        use_reorder    : boolean; -- = false for bit-reversed output, true for normal output
-        use_fft_shift  : boolean; -- = false for [0, pos, neg] bin frequencies order, true for [neg, 0, pos] bin frequencies order in case of complex input
-        use_separate   : boolean; -- = false for complex input, true for two real inputs
-        alt_output     : boolean;
+        use_reorder    : natural; -- = false for bit-reversed output, true for normal output
+        use_fft_shift  : natural; -- = false for [0, pos, neg] bin frequencies order, true for [neg, 0, pos] bin frequencies order in case of complex input
+        use_separate   : natural; -- = false for complex input, true for two real inputs
+        alt_output     : natural;
         wb_factor      : natural; -- = default 1, wideband factor
         nof_points     : natural; -- = 1024, N point FFT
         in_dat_w       : natural; -- = 8,  number of input bits
@@ -260,10 +436,10 @@ entity wideband_fft_top is
         guard_w        : natural; -- = 2, guard used to avoid overflow in first FFT stage, compensated in last guard_w nof FFT stages. 
                                 --   on average the gain per stage is 2 so guard_w = 1, but the gain can be 1+sqrt(2) [Lyons section
                                 --   12.3.2], therefore use input guard_w = 2.
-        guard_enable   : boolean; -- = true when input needs guarding, false when input requires no guarding but scaling must be
+        guard_enable   : natural; -- = true when input needs guarding, false when input requires no guarding but scaling must be
                                 --   skipped at the last stage(s) compensate for input guard (used in wb fft with pipe fft section
                                 --   doing the input guard and par fft section doing the output compensation)
-        pipe_reo_in_place : boolean;
+        pipe_reo_in_place : natural;
         use_variant    : string;  -- = "4DSP" or "3DSP" for 3 or 4 mult cmult.
         use_dsp        : string;  -- = "yes" or "no"
         ovflw_behav    : string;  -- = "WRAP" or "SATURATE" will default to WRAP if invalid option used
@@ -291,7 +467,32 @@ end entity wideband_fft_top;
 
 architecture rtl of wideband_fft_top is
     constant round_mode : t_rounding_mode := t_rounding_mode'val(use_round);
-    constant cc_fft : t_fft := (use_reorder,use_fft_shift,use_separate,0,wb_factor,nof_points,in_dat_w,out_dat_w,out_gain_w,stage_dat_w,twiddle_dat_w,max_addr_w,guard_w,guard_enable, 56, 2, pipe_reo_in_place);
+    constant c_use_reorder       : boolean := (use_reorder /= 0);
+    constant c_use_fft_shift     : boolean := (use_fft_shift /= 0);
+    constant c_use_separate      : boolean := (use_separate /= 0);
+    constant c_alt_output        : boolean := (alt_output /= 0);
+    constant c_guard_enable      : boolean := (guard_enable /= 0);
+    constant c_pipe_reo_in_place : boolean := (pipe_reo_in_place /= 0);
+
+    constant cc_fft : t_fft := (
+        c_use_reorder,
+        c_use_fft_shift,
+        c_use_separate,
+        0,
+        wb_factor,
+        nof_points,
+        in_dat_w,
+        out_dat_w,
+        out_gain_w,
+        stage_dat_w,
+        twiddle_dat_w,
+        max_addr_w,
+        guard_w,
+        c_guard_enable,
+        56,
+        2,
+        c_pipe_reo_in_place
+    );
     signal in_fft_sosi_arr : t_fft_sosi_arr_in(wb_factor - 1 downto 0);
     signal out_fft_sosi_arr : t_fft_sosi_arr_out(wb_factor - 1 downto 0);
     constant c_pft_pipeline : t_fft_pipeline := c_fft_pipeline;
@@ -302,7 +503,7 @@ begin
             g_fft               => cc_fft,
             g_pft_pipeline      => c_pft_pipeline,
             g_fft_pipeline      => c_fft_pipeline,
-            g_alt_output        => alt_output,
+            g_alt_output        => c_alt_output,
             g_use_variant       => use_variant,
             g_use_dsp           => use_dsp,
             g_ovflw_behav       => ovflw_behav,
@@ -349,7 +550,7 @@ end architecture rtl;
         nof_points = self.nof_points
         wb_factor = self.wb_factor
         twid_dat_w = self.twiddle_dat_w
-        vendor = self.vendor
+        vendor = '1' if self.is_intel else 0
         python_cmd = f"python3 {script} -o {twids_dir} -g 1 -p {nof_points} -w {wb_factor} -c {twid_dat_w} -v {vendor} -V 0"
         os.system(python_cmd)
 

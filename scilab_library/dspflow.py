@@ -1,9 +1,11 @@
+from typing import Iterable, List, Optional
 import sys, os
 sys.path.append(os.getenv('MLIB_DEVEL_PATH') + '/' + 'jasper_library')
 
 import logging
 import yaml
 import pickle
+import re
 from toolflow import Toolflow
 from toolflow import VivadoBackend
 from toolflow import QuartusBackend
@@ -281,12 +283,34 @@ class VivadoDSPBackend(VivadoBackend):
                     for v in val:
                         self.add_tcl_cmd(v, stage=key)
 
+
 class QuartusDSPBackend(QuartusBackend):
     """
     This class is used for generating a quartus project for DSP blocks.
     An IP core will be created from this project, which only contains all of the dsp blocks.
     """
 
+    def _iter_stage_cmds(self, stages=None):
+        if stages is None:
+            stages = ("pre_synth", "synth")
+            #stages = ("init", "pre_synth", "synth", "post_synth", "promgen")
+
+        print('STAGING COMMANDS: ' + str(self.tcl_cmds))
+
+        cmds = []
+        for stage in stages:
+            stage_cmds = self.tcl_cmds.get(stage, [])
+            if not stage_cmds:
+                continue
+
+            if isinstance(stage_cmds, str):
+                cmds.extend(stage_cmds.splitlines())
+            else:
+                cmds.extend(stage_cmds)
+
+        return cmds
+
+    
     def initialize(self):
         """
         Initialize Quartus project using commands equivalent to Vivado-based DSPflow.
@@ -343,7 +367,7 @@ class QuartusDSPBackend(QuartusBackend):
         """
         tcl = self.add_tcl_cmd
         proj_name = self.project_name
-        top_mod = f"{self.top_module_name}_core"
+       
         if plat.project_mode:
             # Use the synthesis strategy if provided
             if synth_strat:
@@ -351,6 +375,12 @@ class QuartusDSPBackend(QuartusBackend):
 
             # Optional: Set parallel jobs
             tcl(f'set_global_assignment -name NUM_PARALLEL_PROCESSORS {cores}', stage='synth')
+
+            # Collect per-block Tcl first.
+            self.gen_dspblock_tcl_cmds()
+
+            # Persist only the source-related assignments for later reuse by exec_flow.
+            self.write_dsp_source_manifest()
 
             # Run analysis and elaboration
             tcl(f'exec quartus_map {proj_name} --analyze', stage='synth')
@@ -383,9 +413,99 @@ class QuartusDSPBackend(QuartusBackend):
         The only difference is that the log info is different.
         """
         self.logger.info('Extracting dsp block tcl commands from peripherals')
+
         for obj in self.periph_objs:
             c = obj.gen_tcl_cmds()
-            for key, val in c.items():
-                if val is not None:
-                    for v in val:
-                        self.add_tcl_cmd(v, stage=key)
+            if not c:
+                continue
+
+            for stage, val in c.items():
+                if val is None:
+                    continue
+
+                # Normalize to list of lines
+                if isinstance(val, str):
+                    cmds = val.splitlines()
+                else:
+                    cmds = val
+
+                for cmd in cmds:
+                    if not isinstance(cmd, str):
+                        continue
+
+                    stripped = cmd.strip()
+                    if not stripped:
+                        continue
+
+                    self.add_tcl_cmd(stripped, stage=stage)
+
+
+
+    def write_dsp_source_manifest(self, manifest_path: Optional[str] = None, stages: Optional[Iterable[str]] = None) -> str:
+        """
+        Write a Quartus Tcl fragment containing only HDL source assignments
+        discovered during DSP IP generation.
+
+        This is intended to be sourced later by the top-level exec_flow build.
+
+        Parameters
+        ----------
+        manifest_path:
+            Output path for the generated Tcl manifest.
+            Defaults to <compile_dir>/dspproj_sources.tcl
+        stages:
+            Tcl stages to scan. Defaults to init/pre_synth/synth/post_synth/promgen.
+
+        Returns
+        -------
+        str
+            Absolute path to the generated manifest file.
+        """
+        print('Writing dsp source manifest')
+        if manifest_path is None:
+            manifest_path = os.path.join(self.compile_dir, "dspproj_sources.tcl")
+
+        os.makedirs(os.path.dirname(os.path.abspath(manifest_path)), exist_ok=True)
+        print(f'Manifest path is {os.path.dirname(os.path.abspath(manifest_path))}')
+        # Match only source-file assignments we want to replay later.
+        source_cmd_re = re.compile(
+            r'^\s*set_global_assignment\s+-name\s+'
+            r'(VHDL_FILE|VERILOG_FILE|SYSTEMVERILOG_FILE)\b',
+            re.IGNORECASE,
+        )
+
+        # You may optionally exclude obvious non-IP-generated files here.
+        # For now we keep all source assignments emitted by the DSP flow.
+        raw_cmds = self._iter_stage_cmds(stages=stages)
+
+        filtered_cmds: List[str] = []
+        seen = set()
+
+        for cmd in raw_cmds:
+            if not isinstance(cmd, str):
+                continue
+
+            stripped = cmd.strip()
+            if not stripped:
+                continue
+
+            if not source_cmd_re.match(stripped):
+                continue
+
+            # Normalize trailing newline handling and deduplicate.
+            normalized = stripped
+            if normalized not in seen:
+                seen.add(normalized)
+                filtered_cmds.append(normalized)
+
+        with open(manifest_path, "w", encoding="utf-8") as fh:
+            fh.write('# Auto-generated by QuartusDSPBackend.write_dsp_source_manifest()\n')
+            fh.write('# Contains only HDL source assignments required by the DSP IP.\n\n')
+            for cmd in filtered_cmds:
+                fh.write(cmd + "\n")
+
+        self.logger.info("Wrote DSP source manifest: %s", manifest_path)
+        self.logger.info("Manifest contains %d source assignment(s).", len(filtered_cmds))
+
+        return os.path.abspath(manifest_path)
+

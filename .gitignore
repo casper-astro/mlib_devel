@@ -37,6 +37,7 @@ docs/_build/
 
 src/*
 workspace/*
+scilab_library/hdl_sources/casper_dspdevel/*
 
 jasper.json
 .Xil/

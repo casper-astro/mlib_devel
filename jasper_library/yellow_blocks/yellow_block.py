@@ -101,6 +101,8 @@ class YellowBlock(object):
         # Get the hdl_root path from env variable if possible
         if hdl_root is None:
             self.hdl_root = os.getenv('HDL_ROOT').rstrip('/') #: The base directory from which source file's locations are specified
+            self.hdl_root_scilab = os.getenv('HDL_ROOT_SCILAB').rstrip('/') #: The base directory from which source file's locations are specified
+
         else:
             self.hdl_root = hdl_root.rstrip('/')
         if self.hdl_root is not None:

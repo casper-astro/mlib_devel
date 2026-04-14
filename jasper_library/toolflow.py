@@ -1840,11 +1840,44 @@ class QuartusBackend(ToolflowBackend):
 
 	def add_ip(self, ip):
 		"""
+		Quartus-side handling for CASPER/SysGen IP entries.
+
+		We do not have a Vivado-style IP catalog flow here.
+		Instead, use the IP entry as a cue to add generated HDL
+		artifacts that live in the build directory.
+		"""
+		self.logger.debug(f'Handling Quartus IP: {ip}')
+
+		ip_lib = ip.get('library', '')
+		ip_path = ip.get('path', '')
+
+		# Keep this conservative: only do the extra handling for SysGen-style IP
+		if ip_lib == 'SysGen':
+			wrapper_dir = os.path.join(self.compile_dir, 'hdl_wrapper')
+			glue_dir = os.path.join(self.compile_dir, 'glues')
+
+			if os.path.isdir(wrapper_dir):
+				self.logger.debug(f'Adding Quartus wrapper sources from {wrapper_dir}')
+				self.add_source(wrapper_dir, self.plat)
+
+			if os.path.isdir(glue_dir):
+				self.logger.debug(f'Adding Quartus glue sources from {glue_dir}')
+				self.add_source(glue_dir, self.plat)
+
+			# Optional: if the IP path actually exists and contains HDL/QIP, add it too
+			if ip_path and os.path.isdir(ip_path):
+				self.logger.debug(f'Adding Quartus IP source tree from {ip_path}')
+				self.add_source(ip_path, self.plat)
+
+		return
+
+		#self.logger.debug(f'Ignoring unsupported Quartus IP entry: {ip}')
+		"""
 		Not used for Quartus. For Quartus, IP must be instantiated manually or through Platform Designer.
 		:param ip: Dictionary describing an IP core (ignored).
 		"""
-		self.logger.debug(f'Ignoring IP instantiation of {ip.get("name", "unknown")} in Quartus backend')
-		return
+		#self.logger.debug(f'Ignoring IP instantiation of {ip.get("name", "unknown")} in Quartus backend')
+		#return
 
 	def add_source(self, source, plat):
 		"""
@@ -1865,7 +1898,35 @@ class QuartusBackend(ToolflowBackend):
 			- Platform Designer-generated files are not filtered
 		"""
 		self.logger.debug(f'Adding source: {source}')
-	
+
+		if os.path.isdir(source):
+			for root, dirs, files in os.walk(source):
+				for fname in sorted(files):
+					full_path = os.path.join(root, fname)
+					ext = os.path.splitext(fname)[-1].lower()
+
+					if ext in ['.vhd', '.vhdl']:
+						self.add_tcl_cmd(f'set_global_assignment -name VHDL_FILE "{full_path}"')
+					elif ext == '.v':
+						self.add_tcl_cmd(f'set_global_assignment -name VERILOG_FILE "{full_path}"')
+					elif ext == '.sv':
+						self.add_tcl_cmd(f'set_global_assignment -name SYSTEMVERILOG_FILE "{full_path}"')
+					else:
+						self.logger.debug(f'Skipping non-HDL file: {full_path}')
+
+		elif os.path.isfile(source):
+			ext = os.path.splitext(source)[-1].lower()
+			if ext in ['.vhd', '.vhdl']:
+				self.add_tcl_cmd(f'set_global_assignment -name VHDL_FILE "{source}"')
+			elif ext == '.v':
+				self.add_tcl_cmd(f'set_global_assignment -name VERILOG_FILE "{source}"')
+			elif ext == '.sv':
+				self.add_tcl_cmd(f'set_global_assignment -name SYSTEMVERILOG_FILE "{source}"')
+			else:
+				self.logger.warning(f"Unknown or unsupported source type: {source}")
+		else:
+			self.logger.error(f"add_source called with unknown path: {source}")
+	'''
 		if os.path.isdir(source):
 			# Source is a directory ? add all supported HDL files
 			for fname in sorted(os.listdir(source)):
@@ -1881,6 +1942,7 @@ class QuartusBackend(ToolflowBackend):
 						self.add_tcl_cmd(f'set_global_assignment -name SYSTEMVERILOG_FILE "{full_path}"')
 					else:
 						self.logger.debug(f'Skipping non-HDL file: {fname}')
+
 		elif os.path.isfile(source):
 			# Source is a single file
 			if True: #not('soc_system_hps_0.v' in source.lower() or 'soc_system_hps_0_fpga_interfaces.sv' in source.lower() or 'soc_system_hps_0_hps_io.v' in source.lower()):
@@ -1896,7 +1958,7 @@ class QuartusBackend(ToolflowBackend):
 					self.logger.warning(f"Unknown or unsupported source type: {source}")
 		else:
 			self.logger.error(f"add_source called with unknown path: {source}")
-
+	'''
 	def add_const_file(self, constfile):
 		"""
 		Register a constraint file with the Quartus project.
@@ -1989,12 +2051,15 @@ class QuartusBackend(ToolflowBackend):
 
 			search_dir = os.path.join(os.getenv('MLIB_DEVEL_PATH'), 'scilab_library')
 			for root, dirs, files in os.walk(search_dir):
+				dirs[:] = [d for d in dirs if d != "casper_dspdevel"]
 				tcl(f'set_global_assignment -name SEARCH_PATH {root}', stage='init')
 			search_dir = os.path.join(os.getenv('MLIB_DEVEL_PATH'), 'jasper_library')
 			for root, dirs, files in os.walk(search_dir):
 				tcl(f'set_global_assignment -name SEARCH_PATH {root}', stage='init')
 				#self.add_tcl_cmd(f'set_global_assignment -name SEARCH_PATH {search_dir}', stage='init')
-				
+			#search_dir = os.path.join(os.getenv('MLIB_DEVEL_PATH'), 'scilab_library', 'hdl_sources', 'casper_dspdevel')	
+			#for root, dirs, files in os.walk(search_dir):
+			#	tcl(f'set_global_assignment -name SEARCH_PATH {root}', stage='init')
 		# Copy final .sof into the output directory as top.sof
 		#comp_dir = f"{self.output_dir}/'..'/myproj/outputs/"
 		#tcl(f'file copy -force {comp_dir}/myproj.sof {self.output_dir}/top.sof', stage='post_bitgen')
@@ -2033,6 +2098,10 @@ class QuartusBackend(ToolflowBackend):
 		"""
 		# Add any peripheral Tcl before generating the script
 		self.gen_yellowblock_tcl_cmds()
+
+		
+		# Add Quartus DSP IP manifests before compile commands are emitted
+		self.add_dsp_ip_manifests()
 
 		# Populate Tcl with compile commands
 		self.add_compile_cmds_pr(cores=cores, plat=plat)
@@ -2258,12 +2327,28 @@ class QuartusBackend(ToolflowBackend):
 		"""
 		self.logger.info('Extracting yellow block tcl commands'
 						 ' from peripherals')
+
 		for obj in self.periph_objs:
 			c = obj.gen_tcl_cmds()
+			if not c:
+				continue
+
 			for key, val in c.items():
-				if val is not None:
-					for v in val:
-						self.add_tcl_cmd(v, stage=key)
+				if val is None:
+					continue
+
+				if isinstance(val, str):
+					cmds = val.splitlines()
+				else:
+					cmds = val
+
+				for v in cmds:
+					if not isinstance(v, str):
+						continue
+					v = v.strip()
+					if not v:
+						continue
+					self.add_tcl_cmd(v, stage=key)
 
 	def gen_bd_tcl_cmds(self):
 		"""
@@ -2370,6 +2455,37 @@ class QuartusBackend(ToolflowBackend):
 		self.add_const_file(qsf_file)
 		self.add_const_file(sdc_file)
   
+	def add_dsp_ip_manifests(self):
+		"""
+		Add Quartus DSP IP source manifests for any xps:ip blocks.
+
+		This replays the exact HDL file/library assignments generated during
+		gen_dsp_ip.py into the top-level Quartus project.
+		"""
+		self.logger.info('Looking for Quartus DSP IP source manifests')
+		seen_manifests = set()
+
+		for obj in self.periph_objs:
+			tag = getattr(obj, 'tag', '')
+			if tag != 'xps:ip':
+				continue
+
+			# For Quartus, do NOT trust the old Vivado-style dspproj.srcs path.
+			# Instead, look for the manifest we now generate explicitly.
+			manifest_path = os.path.join(self.compile_dir, 'dspproj_sources.tcl')
+			manifest_path = os.path.abspath(manifest_path)
+
+			if not os.path.isfile(manifest_path):
+				self.logger.warning(f'DSP source manifest not found: {manifest_path}')
+				continue
+
+			if manifest_path in seen_manifests:
+				continue
+
+			self.logger.info(f'Adding DSP source manifest: {manifest_path}')
+			self.add_tcl_cmd(f'source "{manifest_path}"', stage='pre_synth')
+			seen_manifests.add(manifest_path)	
+
 class VitisBackend(ToolflowBackend):
 	"""
 	Incantations of a Vitis flow

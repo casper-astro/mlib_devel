@@ -51,6 +51,7 @@ if __name__ == '__main__':
 
     tf = dspflow.DSPflow(builddir, opts.jobs)
     tf.gen_dsp_objs()
+
     tf.build_top()
     tf.generate_hdl()
     tf.dump_castro(tf.compile_dir+'/castro.yml')
@@ -84,7 +85,15 @@ if __name__ == '__main__':
         # set a new project name, so that it's different from the original project(myproj)
         backend.project_name = 'dspproj'
         backend.initialize()
+
+
+        # Explicitly collect DSP block Tcl and write the reusable source manifest
+        backend.gen_dspblock_tcl_cmds()
+        backend.write_dsp_source_manifest()
+
+        print('Starting compilation')
         backend.compile(cores=opts.jobs, plat=platform)
+        print('Finished compilation')
         # copy gogogo.tcl to dspproj.tcl, as  gogogo.tcl will be overwritten.
         os.system('cp %s/gogogo.tcl %s/dspproj.tcl' % (backend.compile_dir, backend.compile_dir))
         # let's delete gogogo.tcl, as it's not needed anymore
