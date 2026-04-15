@@ -2,15 +2,15 @@ import sys
 from .dsp_block import DSPBlock
 from verilog import VerilogModule
 
-class edge_detect(DSPBlock):
+class edge_detect_new(DSPBlock):
     def initialize(self):
-        self.add_source('edge_detect/*')
+        self.add_source('edge_detect_new/*')
 
     def modify_top(self,top):
         # let's populate the parent ports first
         self._populate_parent_ports(top)
         # create a verilog module
-        module = 'edge_detect'
+        module = 'edge_detect_new'
         inst = top.get_instance(entity=module, name=self.fullname)
         # add parameters
         inst.add_parameter("EDGE", "\"%s\"" % self.edge_type)

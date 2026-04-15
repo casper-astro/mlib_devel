@@ -1,7 +1,7 @@
 //Create a simple custom block.
-function [x, y, typ]= edge_detect(job, arg1, arg2)
+function [x, y, typ]= edge_detect_new(job, arg1, arg2)
     x=[];y=[];typ=[];
-    blkname = 'edge_detect';
+    blkname = 'edge_detect_new';
     edge_type = "rising";
     select job
       case 'set' then
@@ -41,7 +41,7 @@ function [x, y, typ]= edge_detect(job, arg1, arg2)
         end
       case 'define' then
         model = scicos_model();
-        model.sim = list('edge_detect',4);
+        model.sim = list('edge_detect_new',4);
         model.blocktype = 'c';
         // Type : column vector of real numbers.
         model.rpar = [0, 3];
@@ -51,7 +51,7 @@ function [x, y, typ]= edge_detect(job, arg1, arg2)
         model.out = [1];
         model.out2 = [1];
         // Type : column vector of strings.
-        exprs = ['edge_detect'; 'rising'];
+        exprs = ['edge_detect_new'; 'rising'];
         gr_i = [];
         // we use model.label as the block tag.
         // the best place to set the tag should be graphics.gr_i/id.

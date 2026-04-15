@@ -10,9 +10,9 @@
         ],
         "values":
         [
-            "edge_detect",
+            "edge_detect_new",
             "",
-            "dsp:edge_detect",
+            "dsp:edge_detect_new",
             "rising"
         ]
     }
