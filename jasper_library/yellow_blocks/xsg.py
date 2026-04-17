@@ -77,9 +77,7 @@ class xsg(YellowBlock):
                 top.assign_signal('adc_clk_sel', '1\'b0')	      
         elif (self.platform.manufacturer).lower() == 'intel': 
             top.add_signal('user_clk', attributes={'keep': '"true"'})
-            top.add_signal('sys_clk', attributes={'keep': '"true"'})
             top.assign_signal('user_clk', self.clk_src)
-            top.assign_signal('sys_clk',  self.clk_src)
         else:
             top.add_signal('sys_clk', attributes={'keep': '"true"'})
 

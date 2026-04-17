@@ -11,7 +11,7 @@ function [x, y, typ]= ltc2308(job, arg1, arg2)
         graphics = arg1.graphics;
         exprs = graphics.exprs;
         model = arg1.model;
-        
+
         txt = [ 'Block Name (any string)';...
                 'Channel (0 to 7)';...
                 'FFT frame length';...
@@ -45,12 +45,12 @@ function [x, y, typ]= ltc2308(job, arg1, arg2)
         model.in = [1, 2];
         model.in2 = [1, 1];
         model.out = [1, 2, 3];
-        model.out2 = [18, 1, 8];
+        model.out2 = [16, 1, 8];
         // Type : column vector of strings.
-        exprs = ['ltc2308', '0', '1024', '18'];
+        exprs = ['ltc2308', '0', '1024', '16'];
         gr_i = ["xstringb(orig(1),orig(2),''LTC2308'',sz(1),sz(2),''fill'');"];
         // set block tag
-        model.label = "pd";
+        model.label = "xps";
         x=standard_define([14 14],model,exprs,gr_i)
         x.graphics.out_label = ['sample_data'; 'sample_valid'; 'sample_sync'];
         x.graphics.in_label = ['enable'; 'rst_n'];
@@ -58,6 +58,4 @@ function [x, y, typ]= ltc2308(job, arg1, arg2)
         debug_info('ltc2308 block loaded...')
     end
   endfunction
-  
-  
-  
+

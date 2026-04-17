@@ -2198,6 +2198,10 @@ class QuartusBackend(ToolflowBackend):
 				else: 
 					user_const += f'create_clock -name {clk_name} -period {clk_period} -add [get_ports {{ {clk_port} }}]\n'
 
+		elif isinstance(const, (RawConstraint, castro.RawConstraint)):
+			self.logger.debug('Processing RawConstraint')
+			user_const += const.raw
+
 		# Extend this with other constraint types as needed (e.g. ClockGroupConstraint)
 
 		return user_const

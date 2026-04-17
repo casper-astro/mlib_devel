@@ -37,6 +37,7 @@ exec('scilab_library/scilab_blocks/casper_xps/swreg.sci');
 exec('scilab_library/scilab_blocks/casper_xps/rfdc.sci');
 exec('scilab_library/scilab_blocks/casper_xps/sbram.sci');
 exec('scilab_library/scilab_blocks/casper_xps/sbram_intel.sci');
+exec('scilab_library/scilab_blocks/casper_xps/ltc2308.sci');
 // create the blocks
 rfsoc4x2_inst = rfsoc4x2("define");
 de10nano_inst = de10nano("define");
@@ -45,17 +46,20 @@ swreg_out_inst = swreg("define");
 rfdc_inst = rfdc("define");
 sbram_inst = sbram("define");
 sbram_intel_inst = sbram_intel("define");
+ltc2308_inst = ltc2308("define");
 // add the blocks to the palette
 cur_dir = pwd();
 xps_fig_dir = cur_dir + '/scilab_library/scilab_blocks/casper_xps/figures/';
 pal = xcosPal("CASPER XPS");
 pal = xcosPalAddBlock(pal, rfsoc4x2_inst, xps_fig_dir + 'rfsoc4x2.png', xps_fig_dir + 'rfsoc4x2.png');
 pal = xcosPalAddBlock(pal, de10nano_inst, xps_fig_dir + 'de10nano.png', xps_fig_dir + 'de10nano.png');
+
 pal = xcosPalAddBlock(pal, gpio_inst);
 pal = xcosPalAddBlock(pal, swreg_out_inst);
 pal = xcosPalAddBlock(pal, rfdc_inst);
 pal = xcosPalAddBlock(pal, sbram_inst);
 pal = xcosPalAddBlock(pal, sbram_intel_inst, xps_fig_dir + 'simple_bram_intel.png', xps_fig_dir + 'simple_bram_intel.png');
+pal = xcosPalAddBlock(pal, ltc2308_inst, cur_dir + '/scilab_library/scilab_blocks/casper_pd/figures/ltc2308.png', cur_dir + '/scilab_library/scilab_blocks/casper_pd/figures/ltc2308.png');
 //pal = xcosPalAddBlock(pal, swreg_out_inst);
 xcosPalAdd(pal);
 debug_info('------ CASPER XPS loaded --------');
@@ -77,6 +81,7 @@ exec('scilab_library/scilab_blocks/casper_dsp/simple_bram_vacc.sci');
 exec('scilab_library/scilab_blocks/casper_dsp/power_cal.sci');
 exec('scilab_library/scilab_blocks/casper_dsp/operation.sci');
 exec('scilab_library/scilab_blocks/casper_dsp/logic_not.sci');
+
 // create the blocks
 adder_inst = adder("define");
 edge_detect_new_inst = edge_detect_new("define");
@@ -109,8 +114,11 @@ pal = xcosPalAddBlock(pal, simple_bram_vacc_inst);
 pal = xcosPalAddBlock(pal, power_cal_inst);
 pal = xcosPalAddBlock(pal, operation_inst);
 pal = xcosPalAddBlock(pal, logic_not_inst);
+
 xcosPalAdd(pal);
 debug_info('------ CASPER DSP loaded --------');
+
+
 
 // add casper sim blocks
 debug_info('------Loading CASPER SIM...------');
