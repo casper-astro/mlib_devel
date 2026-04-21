@@ -1,0 +1,209 @@
+module adc_ltc2308(
+    input  wire        clk,
+    input  wire        rst_n,
+
+    input  wire        measure_start,
+    input  wire [2:0]  measure_ch,
+
+    output reg         measure_done,
+    output reg  [11:0] measure_dataread,
+
+    output reg         ADC_CONVST,
+    output reg         ADC_SCK,
+    output reg         ADC_SDI,
+    input  wire        ADC_SDO
+);
+
+    localparam integer CONVST_HIGH_CYC = 2;
+    localparam integer CONV_WAIT_CYC   = 64;
+    // Allow extra acquisition time between conversions. This mirrors the
+    // older Terasic-style controller and helps when the analog source has
+    // non-negligible impedance.
+    localparam integer ACQ_HOLD_CYC    = 320;
+
+    localparam integer CMD_BITS  = 6;
+    localparam integer DATA_BITS = 12;
+    localparam integer READ_BITS = DATA_BITS + 1;
+
+    localparam UNI_MODE = 1'b1;
+    localparam SLP_MODE = 1'b0;
+
+    function [3:0] ch_to_nibble;
+        input [2:0] ch;
+        begin
+            case (ch)
+                3'd0: ch_to_nibble = 4'h8;
+                3'd1: ch_to_nibble = 4'hC;
+                3'd2: ch_to_nibble = 4'h9;
+                3'd3: ch_to_nibble = 4'hD;
+                3'd4: ch_to_nibble = 4'hA;
+                3'd5: ch_to_nibble = 4'hE;
+                3'd6: ch_to_nibble = 4'hB;
+                3'd7: ch_to_nibble = 4'hF;
+                default: ch_to_nibble = 4'hF;
+            endcase
+        end
+    endfunction
+
+    // edge detect start
+    reg pre_start;
+    wire start_pulse = measure_start & ~pre_start;
+
+    localparam [2:0]
+        ST_IDLE        = 3'd0,
+        ST_CONVST_HIGH = 3'd1,
+        ST_CONV_WAIT   = 3'd2,
+        ST_SHIFT       = 3'd3,
+        ST_ACQ_HOLD    = 3'd4,
+        ST_DONE        = 3'd5;
+
+    reg [2:0] state;
+    integer   wait_cnt;
+
+    // 12-bit shift control
+    reg [1:0] shift_phase; // 0: low/setup, 1: rise, 2: high/sample, 3: fall
+    integer   bit_idx;     // 0..12, increments once per FULL SCK
+
+    reg [5:0]  cmd_sr;     // {S/D, O/S, S1, S0, UNI, SLP}
+    reg [11:0] rd_sr;
+    
+     always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            pre_start        <= 1'b0;
+            state            <= ST_IDLE;
+            wait_cnt         <= 0;
+
+            ADC_CONVST       <= 1'b0;
+            ADC_SCK          <= 1'b0;
+            ADC_SDI          <= 1'b0;
+
+            measure_done     <= 1'b0;
+            measure_dataread <= 12'd0;
+
+            shift_phase      <= 2'd0;
+            bit_idx          <= 0;
+            cmd_sr           <= 6'd0;
+            rd_sr            <= 12'd0;
+        end else begin
+            measure_done <= 1'b0;
+            measure_done <= 1'b0;
+            pre_start    <= measure_start;
+
+            case (state)
+                ST_IDLE: begin
+                    ADC_CONVST <= 1'b0;
+                    ADC_SCK    <= 1'b0;
+                    ADC_SDI    <= 1'b0;
+                    shift_phase <= 2'd0;
+
+                    if (start_pulse) begin
+                        cmd_sr     <= { ch_to_nibble(measure_ch), UNI_MODE, SLP_MODE };
+                        ADC_CONVST <= 1'b1;
+                        wait_cnt   <= 0;
+                        state      <= ST_CONVST_HIGH;
+                    end
+                end
+
+                ST_CONVST_HIGH: begin
+                    if (wait_cnt >= (CONVST_HIGH_CYC-1)) begin
+                        ADC_CONVST <= 1'b0;
+                        wait_cnt   <= 0;
+                        state      <= ST_CONV_WAIT;
+                    end else begin
+                        wait_cnt <= wait_cnt + 1;
+                    end
+                end
+
+                ST_CONV_WAIT: begin
+                    if (wait_cnt >= (CONV_WAIT_CYC-1)) begin
+                        wait_cnt  <= 0;
+
+                        ADC_SCK   <= 1'b0;
+                        shift_phase <= 2'd0;
+                        bit_idx   <= 0;
+                        rd_sr     <= 12'd0;
+	
+                        // SDI must be valid BEFORE the first rising edge:
+                        // drive cmd[5] now; then cmd[4..0] after each falling edge.
+                        ADC_SDI   <= cmd_sr[5];
+                        state     <= ST_SHIFT;
+                    end else begin
+                        wait_cnt <= wait_cnt + 1;
+                    end
+                end
+
+                ST_SHIFT: begin
+                    case (shift_phase)
+                        2'd0: begin
+                            // Hold SCK low and keep SDI stable before the next rise.
+                            ADC_SCK     <= 1'b0;
+                            shift_phase <= 2'd1;
+                        end
+
+                        2'd1: begin
+                            // Create the rising edge. Do not sample on the same fabric cycle.
+                            ADC_SCK     <= 1'b1;
+                            shift_phase <= 2'd2;
+                        end
+
+                        2'd2: begin
+                            // Hold SCK high for a full clk to let SDO settle, then sample.
+                            ADC_SCK <= 1'b1;
+                            // The first observed SDO level after the clock burst starts
+                            // is often still the ADC's idle/turn-on state. Discard that
+                            // sample and keep the following 12 bits as the conversion word.
+                            if (bit_idx != 0) begin
+                                rd_sr[DATA_BITS - bit_idx] <= ADC_SDO;
+                            end
+                            shift_phase <= 2'd3;
+                        end
+
+                        default: begin
+                            // Falling edge completes this SCK pulse.
+                            ADC_SCK <= 1'b0;
+
+                            // Prepare SDI for the next rising edge.
+                            // For SCK pulses 0..5, drive cmd_sr[5..0] (MSB first).
+                            // For pulses 6..11, SDI must be 0.
+                            if (bit_idx < (CMD_BITS - 1)) begin
+                                ADC_SDI <= cmd_sr[CMD_BITS-2 - bit_idx];
+                            end else begin
+                                ADC_SDI <= 1'b0;
+                            end
+
+                            if (bit_idx == (READ_BITS-1)) begin
+                                wait_cnt    <= 0;
+                                shift_phase <= 2'd0;
+                                state       <= ST_ACQ_HOLD;
+                            end else begin
+                                bit_idx     <= bit_idx + 1;
+                                shift_phase <= 2'd0;
+                            end
+                        end
+                    endcase
+                end
+
+                ST_ACQ_HOLD: begin
+                    ADC_SCK <= 1'b0;
+                    ADC_SDI <= 1'b0;
+                    if (wait_cnt >= (ACQ_HOLD_CYC-1)) begin
+                        state <= ST_DONE;
+                    end else begin
+                        wait_cnt <= wait_cnt + 1;
+                    end
+                end
+
+                ST_DONE: begin
+                    ADC_SCK          <= 1'b0;
+                    ADC_SDI          <= 1'b0;
+                    measure_dataread <= rd_sr;
+                    measure_done     <= 1'b1;
+                    state            <= ST_IDLE;
+                end
+
+                default: state <= ST_IDLE;
+            endcase
+        end
+    end
+
+endmodule
