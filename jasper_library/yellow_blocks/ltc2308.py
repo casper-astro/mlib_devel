@@ -13,6 +13,7 @@ class ltc2308(YellowBlock):
 
         self.add_source(os.path.join(hdl_source, 'adc_ltc2308_stream.v'))
         self.add_source(os.path.join(hdl_source, 'adc_ltc2308.v'))
+        self.add_source(os.path.join(hdl_source, 'adc_ltc2308_pll_40mhz.v'))
 
         try:
             self.channel = int(self.channel)
@@ -34,6 +35,21 @@ class ltc2308(YellowBlock):
     def modify_top(self, top):
         inst_name = f"{self.fullpath.replace('/','_')}_adc"
         signal_base = self.fullname
+        user_clk_sig = 'user_clk' if top.does_signal_exist('user_clk') else 'sys_clk'
+
+        top.add_signal(f'{signal_base}_adc_clk')
+        top.add_signal(f'{signal_base}_pll_locked')
+        top.add_signal(f'{signal_base}_stream_rst_n')
+
+        pll = top.get_instance('adc_ltc2308_pll_40mhz', f'{inst_name}_pll')
+        pll.add_port('refclk', 'fpga_clk1_50', dir='in')
+        pll.add_port('rst', "1'b0", dir='in')
+        pll.add_port('outclk_0', f'{signal_base}_adc_clk', dir='out')
+        pll.add_port('locked', f'{signal_base}_pll_locked', dir='out')
+
+        top.add_raw_string(
+            f"assign {signal_base}_stream_rst_n = {signal_base}_rst_n & {signal_base}_pll_locked;\n"
+        )
 
         u = top.get_instance('adc_ltc2308_stream', inst_name)
 
@@ -44,8 +60,9 @@ class ltc2308(YellowBlock):
         u.add_parameter('CENTER_DATA', 1)
 
         # Internal clock and CASPER-managed control signals
-        u.add_port('clk', 'sys_clk', dir='in')
-        u.add_port('rst_n', f'{signal_base}_rst_n', dir='in')
+        u.add_port('clk', user_clk_sig, dir='in')
+        u.add_port('adc_clk', f'{signal_base}_adc_clk', dir='in')
+        u.add_port('rst_n', f'{signal_base}_stream_rst_n', dir='in')
         u.add_port('enable', f'{signal_base}_enable', dir='in')
 
         # Stream outputs

@@ -1,5 +1,6 @@
 from typing import Iterable, List, Optional
 import sys, os
+import glob
 sys.path.append(os.getenv('MLIB_DEVEL_PATH') + '/' + 'jasper_library')
 
 import logging
@@ -144,7 +145,14 @@ class DSPflow(Toolflow):
                 obj.fullpath = obj.fullpath.partition('/')[2]
             self.top.set_cur_blk('%s: %s'%(obj.tag.split(':')[1], obj.fullpath))
             obj.modify_top(self.top)
-            self.sources += obj.sources
+            for source in obj.sources:
+                if os.path.isabs(source):
+                    resolved = sorted(glob.glob(source))
+                    self.sources += resolved or [source]
+                else:
+                    rooted = os.path.join(os.getenv('HDL_ROOT'), source)
+                    resolved = sorted(glob.glob(rooted))
+                    self.sources += resolved or [rooted]
             self.ips += obj.ips
                     
     def regenerate_top(self):
@@ -317,7 +325,8 @@ class QuartusDSPBackend(QuartusBackend):
         """
         # Set module and project name
         self.top_module_name = self.compile_dir.split('/')[-1]
-        self.project_name = self.top_module_name
+        if not getattr(self, 'project_name', None):
+            self.project_name = self.top_module_name
         plat = self.plat
 
         if plat.manufacturer.lower() != self.manufacturer.lower():
@@ -360,10 +369,16 @@ class QuartusDSPBackend(QuartusBackend):
         self.logger.debug(f'Set output rbf to {self.binary_loc}')
 
 
-    def add_compile_cmds(self, cores=8, plat=None, synth_strat=None, impl_strat=None, threads='multi'):
+    def _add_dsp_compile_cmds(self, cores=8, plat=None, synth_strat=None, impl_strat=None):
         """
-        Add Quartus-compatible TCL commands for synthesizing and optionally packaging the design.
-        This version is adapted from the Vivado DSPflow IP core generation method.
+        Add Quartus-compatible Tcl commands for validating/synthesizing the DSP-only wrapper.
+
+        Unlike the top-level Quartus flow, the DSP project is an internal IP-style wrapper
+        with many interface ports that are not intended to be placed onto package pins.
+        Running fit/asm on this wrapper causes Quartus to treat those ports as real board
+        I/O and can easily exceed the device I/O count. For DSPflow we therefore stop at
+        analysis/elaboration and synthesis (quartus_map) and only emit the HDL-source
+        manifest that the top-level build will later source.
         """
         tcl = self.add_tcl_cmd
         proj_name = self.project_name
@@ -382,16 +397,11 @@ class QuartusDSPBackend(QuartusBackend):
             # Persist only the source-related assignments for later reuse by exec_flow.
             self.write_dsp_source_manifest()
 
-            # Run analysis and elaboration
-            tcl(f'exec quartus_map {proj_name} --analyze', stage='synth')
-
-            # Run synthesis (Map + Fit + Assembly up to SOF generation)
-            tcl(f'exec quartus_map {proj_name}', stage='synth')
-            tcl(f'exec quartus_fit {proj_name}', stage='synth')
-            tcl(f'exec quartus_asm {proj_name}', stage='synth')
-
-            # Optional: generate .rbf bitstream
-            tcl(f'exec quartus_cpf -c {proj_name}.sof {proj_name}.rbf', stage='synth')
+            # Persist assignments, then run synthesis in the same Quartus Tcl session.
+            # Forking a fresh quartus_map process can lose the in-session project state and
+            # fall back to the revision name as the top-level entity.
+            tcl('export_assignments', stage='synth')
+            tcl('execute_module -tool map', stage='synth')
 
             # Optional: output QXP file (Quartus IP packaging)
             # tcl(f'exec quartus_sh --flow compile {proj_name}', stage='synth')
@@ -400,9 +410,33 @@ class QuartusDSPBackend(QuartusBackend):
             # Optional: Update IP catalog (Qsys), if needed
             # tcl(f'exec qsys-script --generate --project={proj_name}', stage='synth')
 
-            self.logger.debug("Added Quartus synthesis and bitstream generation commands")
+            self.logger.debug("Added Quartus DSP synthesis commands (no fit/asm)")
         else:
             self.logger.warning("Non-project mode not supported for Quartus DSPflow yet.")
+
+    def add_compile_cmds_pr(self, cores=8, plat=None, synth_strat=None, impl_strat=None):
+        """
+        QuartusBackend.compile() calls add_compile_cmds_pr(), so DSPflow must override that
+        hook rather than the generic add_compile_cmds() helper used by other backends.
+        """
+        self._add_dsp_compile_cmds(
+            cores=cores,
+            plat=plat,
+            synth_strat=synth_strat,
+            impl_strat=impl_strat,
+        )
+
+    def add_compile_cmds(self, cores=8, plat=None, synth_strat=None, impl_strat=None, threads='multi'):
+        """
+        Keep the generic hook aligned with the project-mode hook for any callers that
+        invoke add_compile_cmds() directly.
+        """
+        self._add_dsp_compile_cmds(
+            cores=cores,
+            plat=plat,
+            synth_strat=synth_strat,
+            impl_strat=impl_strat,
+        )
 
     
     def gen_dspblock_tcl_cmds(self):
@@ -414,7 +448,17 @@ class QuartusDSPBackend(QuartusBackend):
         """
         self.logger.info('Extracting dsp block tcl commands from peripherals')
 
+        # Some simple DSP blocks contribute HDL only via obj.sources and do not
+        # emit any explicit Tcl. Add those source files here so the DSP wrapper
+        # project can compile even if castro.yml omitted them.
+        seen_sources = set()
         for obj in self.periph_objs:
+            for source in getattr(obj, 'sources', []):
+                if source in seen_sources:
+                    continue
+                seen_sources.add(source)
+                self.add_source(source, self.plat)
+
             c = obj.gen_tcl_cmds()
             if not c:
                 continue
@@ -508,4 +552,3 @@ class QuartusDSPBackend(QuartusBackend):
         self.logger.info("Manifest contains %d source assignment(s).", len(filtered_cmds))
 
         return os.path.abspath(manifest_path)
-

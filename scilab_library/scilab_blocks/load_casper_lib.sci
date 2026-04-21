@@ -1,27 +1,32 @@
 loadXcosLibs;
 
+mlib_dir = getenv("MLIB_DEVEL_PATH")
+if part(mlib_dir, length(mlib_dir)) <> "/" then
+    mlib_dir = mlib_dir + "/";
+end
+
 // load the scilab functions
-exec('scilab_library/scilab_blocks/utils/debug_info.sci');
-exec('scilab_library/scilab_blocks/utils/collect_block_info.sci');
-exec('scilab_library/scilab_blocks/utils/get_block_tag.sci');
-exec('scilab_library/scilab_blocks/utils/get_block_type.sci');
-exec('scilab_library/scilab_blocks/utils/get_block_name.sci');
-exec('scilab_library/scilab_blocks/utils/get_port_width.sci');
-exec('scilab_library/scilab_blocks/utils/get_block_config.sci');
-exec('scilab_library/scilab_blocks/utils/gen_all_blocks_config.sci');
-exec('scilab_library/scilab_blocks/utils/gen_block_config.sci');
-exec('scilab_library/scilab_blocks/utils/get_link_info_by_link_obj.sci');
-exec('scilab_library/scilab_blocks/utils/search_for_real_src_blk.sci');
-exec('scilab_library/scilab_blocks/utils/get_port_name.sci');
-exec('scilab_library/scilab_blocks/utils/get_port_width_id.sci');
-exec('scilab_library/scilab_blocks/utils/update_block_config.sci');
-exec('scilab_library/scilab_blocks/utils/get_block_vals.sci');
-exec('scilab_library/scilab_blocks/utils/get_block_vindex.sci');
-exec('scilab_library/scilab_blocks/jasper.sci');
-exec('scilab_library/scilab_blocks/jasper_frontend.sci');
-exec('scilab_library/scilab_blocks/jasper_simulation.sci');
-exec('scilab_library/scilab_blocks/run_simulation.sci');
-exec('scilab_library/scilab_blocks/utils/check_block_names.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/utils/debug_info.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/utils/collect_block_info.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/utils/get_block_tag.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/utils/get_block_type.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/utils/get_block_name.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/utils/get_port_width.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/utils/get_block_config.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/utils/gen_all_blocks_config.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/utils/gen_block_config.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/utils/get_link_info_by_link_obj.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/utils/search_for_real_src_blk.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/utils/get_port_name.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/utils/get_port_width_id.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/utils/update_block_config.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/utils/get_block_vals.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/utils/get_block_vindex.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/jasper.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/jasper_frontend.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/jasper_simulation.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/run_simulation.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/utils/check_block_names.sci');
 
 // TODO: load the xps and dsp blocks automatically
 // all of the blocks in the scilab_library/casper_xps and 
@@ -30,14 +35,14 @@ exec('scilab_library/scilab_blocks/utils/check_block_names.sci');
 // add casper xps blocks
 debug_info('------Loading CASPER XPS...------');
 // load the xps blocks
-exec('scilab_library/scilab_blocks/casper_xps/rfsoc4x2.sci');
-exec('scilab_library/scilab_blocks/casper_xps/de10nano.sci');
-exec('scilab_library/scilab_blocks/casper_xps/gpio.sci');
-exec('scilab_library/scilab_blocks/casper_xps/swreg.sci');
-exec('scilab_library/scilab_blocks/casper_xps/rfdc.sci');
-exec('scilab_library/scilab_blocks/casper_xps/sbram.sci');
-exec('scilab_library/scilab_blocks/casper_xps/sbram_intel.sci');
-exec('scilab_library/scilab_blocks/casper_xps/ltc2308.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_xps/rfsoc4x2.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_xps/de10nano.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_xps/gpio.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_xps/swreg.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_xps/rfdc.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_xps/sbram.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_xps/sbram_intel.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_xps/ltc2308.sci');
 // create the blocks
 rfsoc4x2_inst = rfsoc4x2("define");
 de10nano_inst = de10nano("define");
@@ -49,7 +54,7 @@ sbram_intel_inst = sbram_intel("define");
 ltc2308_inst = ltc2308("define");
 // add the blocks to the palette
 cur_dir = pwd();
-xps_fig_dir = cur_dir + '/scilab_library/scilab_blocks/casper_xps/figures/';
+xps_fig_dir = mlib_dir + '/scilab_library/scilab_blocks/casper_xps/figures/';
 pal = xcosPal("CASPER XPS");
 pal = xcosPalAddBlock(pal, rfsoc4x2_inst, xps_fig_dir + 'rfsoc4x2.png', xps_fig_dir + 'rfsoc4x2.png');
 pal = xcosPalAddBlock(pal, de10nano_inst, xps_fig_dir + 'de10nano.png', xps_fig_dir + 'de10nano.png');
@@ -67,20 +72,20 @@ debug_info('------ CASPER XPS loaded --------');
 // add casper dsp blocks
 debug_info('------Loading CASPER DSP...------');
 // load the xps blocks
-exec('scilab_library/scilab_blocks/casper_dsp/adder.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/edge_detect_new.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/counter.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/pulse_ext.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/slice.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/munge.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/wbfft.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/bus_expand.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/dsp_constant.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/delay.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/simple_bram_vacc.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/power_cal.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/operation.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/logic_not.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_dsp/adder.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_dsp/edge_detect_new.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_dsp/counter.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_dsp/pulse_ext.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_dsp/slice.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_dsp/munge.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_dsp/wbfft.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_dsp/bus_expand.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_dsp/dsp_constant.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_dsp/delay.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_dsp/simple_bram_vacc.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_dsp/power_cal.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_dsp/operation.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_dsp/logic_not.sci');
 
 // create the blocks
 adder_inst = adder("define");
@@ -123,10 +128,10 @@ debug_info('------ CASPER DSP loaded --------');
 // add casper sim blocks
 debug_info('------Loading CASPER SIM...------');
 // load the xps blocks
-exec('scilab_library/scilab_blocks/casper_sim/sim_constant.sci');
-exec('scilab_library/scilab_blocks/casper_sim/scope.sci');
-exec('scilab_library/scilab_blocks/casper_sim/sim.sci');
-exec('scilab_library/scilab_blocks/casper_sim/sine.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_sim/sim_constant.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_sim/scope.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_sim/sim.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_sim/sine.sci');
 // create the blocks
 sim_constant_inst = sim_constant("define");
 scope_inst = scope("define");

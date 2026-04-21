@@ -30,16 +30,26 @@ if __name__ == '__main__':
     # this method will use the HDL_ROOT to get the hdl files.
     mlib_devel_path = os.getenv('MLIB_DEVEL_PATH')
     jasper_hdl_root = os.getenv('HDL_ROOT')
+    jasper_hdl_root_scilab = os.getenv('HDL_ROOT_SCILAB')
+    scilab_hdl_root = os.getenv('SCILAB_HDL_ROOT')
     dsp_hdl_root = os.getenv('DSP_HDL_ROOT')
-    if dsp_hdl_root is None:
-        os.environ['HDL_ROOT'] = mlib_devel_path+'/scilab_library/hdl_sources'
-    else:
-        os.environ['HDL_ROOT'] = dsp_hdl_root
-    # get build directory
-    # use user defined directory else use a directory with same name as model
-    builddir = opts.builddir or opts.model.split('.')[0]
 
-    # create the build directory, and log file
+    # Prefer the long-standing HDL_ROOT_SCILAB variable first, then accept the
+    # newer aliases for backward compatibility.
+    effective_scilab_hdl_root = (
+        jasper_hdl_root_scilab
+        or scilab_hdl_root
+        or dsp_hdl_root
+        or (mlib_devel_path + '/scilab_library/hdl_sources')
+    )
+
+    os.environ['HDL_ROOT'] = effective_scilab_hdl_root
+    os.environ['HDL_ROOT_SCILAB'] = effective_scilab_hdl_root
+    # get build directory
+    # use user defined gen_dsp_ip directory else use a directory with same name as model
+    builddir = opts.builddir or opts.model.split('.')[0]
+    # create the build directory before opening the log file
+    os.makedirs(builddir, exist_ok=True)
     logger = logging.getLogger('jasper')
     logger.setLevel(logging.DEBUG)
     handler = logging.FileHandler('%s/jasper-dsp.log' % builddir, mode='w')
@@ -56,7 +66,15 @@ if __name__ == '__main__':
     tf.generate_hdl()
     tf.dump_castro(tf.compile_dir+'/castro.yml')
     # let's set the HDL_ROOT back to the original value
-    os.environ['HDL_ROOT'] = jasper_hdl_root
+    if jasper_hdl_root is None:
+        os.environ.pop('HDL_ROOT', None)
+    else:
+        os.environ['HDL_ROOT'] = jasper_hdl_root
+
+    if jasper_hdl_root_scilab is None:
+        os.environ.pop('HDL_ROOT_SCILAB', None)
+    else:
+        os.environ['HDL_ROOT_SCILAB'] = jasper_hdl_root_scilab
     # use Non-project mode to genenrate the vivado project
     # TODO: Do we need project mode to generate this project?
     print('THE BACKEND IS: ' + str(opts.be))
@@ -86,6 +104,16 @@ if __name__ == '__main__':
         backend.project_name = 'dspproj'
         backend.initialize()
 
+        # Belt-and-suspenders: explicitly add the DSPflow source list to the Quartus
+        # wrapper project. Some simple DSP blocks (e.g. counter/slice) have been
+        # observed to fall out of castro/manifests in the generated build directory.
+        seen_sources = set()
+        for source in tf.sources:
+            if source in seen_sources:
+                continue
+            seen_sources.add(source)
+            if source.lower().endswith(('.v', '.sv', '.vhd', '.vhdl')):
+                backend.add_source(source, platform)
 
         # Explicitly collect DSP block Tcl and write the reusable source manifest
         backend.gen_dspblock_tcl_cmds()

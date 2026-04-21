@@ -17,6 +17,8 @@ class axi4lite_interconnect(YellowBlock):
 	def initialize(self):
 		print('\n\n\nINITIALIZING AXI4LITE_INTERCONNECT\n\n\n')
 		self.platform_support = 'all'
+		self.axi4lite_hdl_root = os.path.join(
+			os.environ['MLIB_DEVEL_PATH'], 'jasper_library', 'hdl_sources', 'axi4_lite')
 		self.add_source('axi4_lite/*.vhd')
 		self.connected = False
 
@@ -106,7 +108,7 @@ class axi4lite_interconnect(YellowBlock):
 			tcl_cmds['pre_synth'] += ['update_compile_order -fileset sources_1']
 		else:
 			for filename in ['axi4lite_slave_logic.vhd', 'axi4lite_pkg.vhd']:
-				full_path = os.path.join(self.hdl_root, 'axi4_lite', filename)
+				full_path = os.path.join(self.axi4lite_hdl_root, filename)
 				tcl_cmds['pre_synth'].append(f'set_global_assignment -name VHDL_FILE "{full_path}"')
 
 		return tcl_cmds

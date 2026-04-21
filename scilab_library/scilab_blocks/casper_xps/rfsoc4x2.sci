@@ -42,29 +42,41 @@ function [x, y, typ]= rfsoc4x2(job, arg1, arg2)
       end
     case 'define' then
       model = scicos_model();
-      model.sim = list('rfsoc',4);
+      model.sim = list('rfsoc', 4);
       model.blocktype = 'c';
-      // we put the index of the related item in block_info.json into rpar
-      // model.rpar = [0,0,256,128,1];
-      //   "RFSoC4x2":{
-      //     "name": "RFSoC4x2",      
-      //     "fullpath": "",
-      //     "tag": "xps:xsg",
-      //     "hw_sys": "rfsoc4x2:xczu48dr",   -- 3
-      //     "clk_src": "adc_clk",            -- 4
-      //     "clk_rate": 245.76,              -- 5
-      //     "pl_clk_rate": 122.88,           -- 6
-      //     "sample_period": 1,              -- 7
-      //     "synthesis_tool": "XST"
-      // }
-      // Type : column vector of real numbers.
-      model.rpar = [0, 3, 4, 5, 6, 7];
-      // Type : column vector of strings.
-      exprs = ['RFSoC4x2';'rfsoc4x2:xczu48dr'; 'adc_clk'; '245.76'; '122.88'; '1'];
+
+      model.in     = [];
+      model.in2    = [];
+      model.intyp  = [];
+
+      model.out    = [];
+      model.out2   = [];
+      model.outtyp = [];
+
+      model.evtin  = [];
+      model.evtout = [];
+
+      model.state   = [];
+      model.dstate  = [];
+      model.odstate = list();
+      model.ipar    = [];
+      model.opar    = list();
+      model.firing  = [];
+      model.dep_ut  = [%f %f];
+
+      model.rpar = [0; 3; 4; 5; 6; 7];
+
+      exprs = ['RFSoC4x2';
+               'rfsoc4x2:xczu48dr';
+               'adc_clk';
+               '245.76';
+               '122.88';
+               '1'];
+
       gr_i = [];
-      // set block tag
       model.label = "xps";
-      x=standard_define([4 4],model,exprs,gr_i)
-      debug_info('rfsoc4x2 block loaded...')
+
+      x = standard_define([4 4], model, exprs, gr_i);
+      debug_info('rfsoc4x2 block loaded...');
   end
 endfunction

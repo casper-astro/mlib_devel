@@ -33,6 +33,8 @@ function [x, y, typ] = simple_bram_intel(job, arg1, arg2)
           graphics.style = 'shape=rectangle;fillColor=yellow';
         else
           icon_path = block_path + '/scilab_library/scilab_blocks/casper_xps/figures/simple_bram_intel.png';
+          disp('ICON PATH')
+          disp(icon_path)
           graphics.style = 'image=' + icon_path;
         end
         graphics.style = 'image=' + icon_path;
