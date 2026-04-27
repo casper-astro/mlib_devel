@@ -218,16 +218,15 @@ class axi4lite_interconnect(YellowBlock):
 		axi4lite_wrapper.add_signal('axi4lite_miso',     't_axi4lite_miso')
 
 		for key, val in list(self.memory_map.items()):
-			# for reg in val["memory_map"]:
-			#     if reg.ram==True:
-			if val['memory_map'][-1].axi4lite_mode != 'raw':
-				if val['memory_map'][-1].ram==True:
-					pass
-				else:
-					axi4lite_wrapper.add_signal('axi4lite_%s_in_we'  %key, 't_axi4lite_%s_decoded' %key)
-					axi4lite_wrapper.add_signal('axi4lite_%s_in'     %key, 't_axi4lite_%s'         %key)
-					axi4lite_wrapper.add_signal('axi4lite_%s_out_we' %key, 't_axi4lite_%s_decoded' %key)
-					axi4lite_wrapper.add_signal('axi4lite_%s_out'    %key, 't_axi4lite_%s'         %key)
+			regs = [reg for reg in val["memory_map"] if (reg.axi4lite_mode != 'raw') and (not reg.ram)]
+			has_in_regs = any(reg.mode == "r" for reg in regs)
+			has_out_regs = any(reg.mode != "r" for reg in regs)
+			if has_in_regs:
+				axi4lite_wrapper.add_signal('axi4lite_%s_in_we'  %key, 't_axi4lite_%s_decoded' %key)
+				axi4lite_wrapper.add_signal('axi4lite_%s_in'     %key, 't_axi4lite_%s'         %key)
+			if has_out_regs:
+				axi4lite_wrapper.add_signal('axi4lite_%s_out_we' %key, 't_axi4lite_%s_decoded' %key)
+				axi4lite_wrapper.add_signal('axi4lite_%s_out'    %key, 't_axi4lite_%s'         %key)
 
 		# ports for interconnect instance
 		self.ic_ports = []
@@ -243,61 +242,37 @@ class axi4lite_interconnect(YellowBlock):
 
 		# ports for devices
 		for key, val in list(self.memory_map.items()):
-			if val['memory_map'][-1].axi4lite_mode != 'raw':
-				if val['memory_map'][-1].ram:
-					regname = val['memory_map'][-1].name
-					self.ic_ports = []
-					self.ic_ports.append(Port('axi4lite_aclk',             'axi4lite_aclk'))
-					self.ic_ports.append(Port('axi4lite_aresetn',          'axi4lite_aresetn'))
-					self.ic_ports.append(Port('axi4lite_mosi',             'axi4lite_mosi_arr(axi4lite_mmap_get_id(id_%s))'      %key))
-					self.ic_ports.append(Port('axi4lite_miso',             'axi4lite_miso_arr(axi4lite_mmap_get_id(id_%s))'      %key))
-				
+			active_regs = [reg for reg in val["memory_map"] if reg.axi4lite_mode != 'raw']
+			if not active_regs:
+				continue
+
+			self.ic_ports = []
+			self.ic_ports.append(Port('axi4lite_aclk', 'axi4lite_aclk'))
+			self.ic_ports.append(Port('axi4lite_aresetn', 'axi4lite_aresetn'))
+			self.ic_ports.append(Port('axi4lite_mosi', 'axi4lite_mosi_arr(axi4lite_mmap_get_id(id_%s))' % key))
+			self.ic_ports.append(Port('axi4lite_miso', 'axi4lite_miso_arr(axi4lite_mmap_get_id(id_%s))' % key))
+
+			regs = [reg for reg in active_regs if not reg.ram]
+			has_in_regs = any(reg.mode == "r" for reg in regs)
+			has_out_regs = any(reg.mode != "r" for reg in regs)
+			if has_in_regs:
+				self.ic_ports.append(Port('axi4lite_%s_in_we' % key, 'axi4lite_%s_in_we' % key))
+				self.ic_ports.append(Port('axi4lite_%s_in'    % key, 'axi4lite_%s_in'    % key))
+			if has_out_regs:
+				self.ic_ports.append(Port('axi4lite_%s_out_we' % key, 'axi4lite_%s_out_we' % key))
+				self.ic_ports.append(Port('axi4lite_%s_out'    % key, 'axi4lite_%s_out'    % key))
+
+			for reg in active_regs:
+				if reg.ram:
+					regname = reg.name
 					self.ic_ports.append(Port('%s_%s_add'  % (key, regname), 'axi4lite_%s_%s_addr'     % (key, regname)))
 					self.ic_ports.append(Port('%s_%s_wdat' % (key, regname), 'axi4lite_%s_%s_data_in'  % (key, regname)))
 					self.ic_ports.append(Port('%s_%s_rdat' % (key, regname), 'axi4lite_%s_%s_data_out' % (key, regname)))
 					self.ic_ports.append(Port('%s_%s_clk'  % (key, regname), 'axi4lite_%s_%s_clk'      % (key, regname)))
 					self.ic_ports.append(Port('%s_%s_en'   % (key, regname), 'axi4lite_%s_%s_en'       % (key, regname)))
-					self.ic_ports.append(Port('%s_%s_we'   % (key, regname), 'axi4lite_%s_%s_we'       % (key, regname)))					
-					'''
-					self.ic_ports.append(Port('%s_%s_addr' %(key, regname), 'axi4lite_%s_%s_addr' %(key, regname)))	
-					self.ic_ports.append(Port('%s_%s_clk'  %(key, regname), 'axi4lite_%s_%s_clk'                                %(key, regname)))
-					self.ic_ports.append(Port('%s_%s_en'   %(key, regname), 'axi4lite_%s_%s_en'               					 %(key, regname)))
-					self.ic_ports.append(Port('%s_%s_we'   %(key, regname), 'axi4lite_%s_%s_we'                                      %(key, regname)))				 
-					self.ic_ports.append(Port('%s_%s_add'  %(key, key), 'axi4lite_%s_%s_add'                                %(key, key)))
-					self.ic_ports.append(Port('%s_%s_wdat' %(key, key), 'axi4lite_%s_%s_data_in'                            %(key, key)))
-					self.ic_ports.append(Port('%s_%s_rdat' %(key, key), 'axi4lite_%s_%s_data_out'                           %(key, key)))
-					self.ic_ports.append(Port('%s_%s_clk'  %(key, key), 'axi4lite_%s_%s_clk'                                %(key, key)))
-					self.ic_ports.append(Port('%s_%s_en'   %(key, key), 'axi4lite_%s_%s_en'                                 %(key, key)))
-					self.ic_ports.append(Port('%s_%s_we'   %(key, key), 'axi4lite_%s_%s_we'                                 %(key, key)))
-					'''
+					self.ic_ports.append(Port('%s_%s_we'   % (key, regname), 'axi4lite_%s_%s_we'       % (key, regname)))
 
-					# add interconnect instance
-					axi4lite_wrapper.add_instance('axi4lite_%s_inst'%key, 'entity xil_defaultlib.axi4lite_%s'%key, self.ic_ports)
-				else:
-					self.ic_ports = []
-					self.ic_ports.append(Port('axi4lite_aclk', 'axi4lite_aclk'))
-					self.ic_ports.append(Port('axi4lite_aresetn', 'axi4lite_aresetn'))
-					self.ic_ports.append(Port('axi4lite_mosi', 'axi4lite_mosi_arr(axi4lite_mmap_get_id(id_%s))'%key))
-					self.ic_ports.append(Port('axi4lite_miso', 'axi4lite_miso_arr(axi4lite_mmap_get_id(id_%s))'%key))
-					has_r  = any(reg.mode == "r"  for reg in val["memory_map"])
-					has_rw = any(reg.mode == "rw" for reg in val["memory_map"])
-
-					if has_r:
-						self.ic_ports.append(Port('axi4lite_%s_in_we' % key, 'axi4lite_%s_in_we' % key))
-						self.ic_ports.append(Port('axi4lite_%s_in'    % key, 'axi4lite_%s_in'    % key))
-
-					if has_rw:
-						self.ic_ports.append(Port('axi4lite_%s_out_we' % key, 'axi4lite_%s_out_we' % key))
-						self.ic_ports.append(Port('axi4lite_%s_out'    % key, 'axi4lite_%s_out'    % key))
-
-
-					#self.ic_ports.append(Port('axi4lite_%s_in_we'   %key,  'axi4lite_%s_in_we'%key))
-					#self.ic_ports.append(Port('axi4lite_%s_in'      %key,     'axi4lite_%s_in'%key))
-					#self.ic_ports.append(Port('axi4lite_%s_out_we'  %key, 'axi4lite_%s_out_we'%key))
-					#self.ic_ports.append(Port('axi4lite_%s_out'     %key,    'axi4lite_%s_out'%key))
-					
-					# add interconnect instance
-					axi4lite_wrapper.add_instance('axi4lite_%s_inst'%key, 'entity xil_defaultlib.axi4lite_%s'%key, self.ic_ports)
+			axi4lite_wrapper.add_instance('axi4lite_%s_inst' % key, 'entity xil_defaultlib.axi4lite_%s' % key, self.ic_ports)
 
 		# TODO: only generate signals for in or out not both 
 		# This should depend on the r/wr values of the registers

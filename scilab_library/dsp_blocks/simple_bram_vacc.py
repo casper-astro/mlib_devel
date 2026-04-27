@@ -163,6 +163,37 @@ class simple_bram_vacc(DSPBlock):
     def modify_top(self,top):
         # let's populate the parent ports first
         self._populate_parent_ports(top)
+
+        din_in_sig = self.fullname + '_din'
+        din_core_sig = din_in_sig + '_ext'
+
+        # The VHDL accumulator uses one width generic for both din and dout.
+        # When the user asks for a narrower input than output, widen the input
+        # explicitly before the instance so synthesis does not infer a partial
+        # connection.
+        top.add_signal(din_in_sig, width=self.in_bitwidth)
+        top.add_signal(din_core_sig, width=self.out_bitwidth)
+
+        if self.in_bitwidth < self.out_bitwidth:
+            pad_w = self.out_bitwidth - self.in_bitwidth
+            if str(self.output_type).upper() == "SIGNED":
+                top.assign_signal(
+                    din_core_sig,
+                    "{{{%d{%s[%d]}}}, %s}" % (pad_w, din_in_sig, self.in_bitwidth - 1, din_in_sig)
+                )
+            else:
+                top.assign_signal(
+                    din_core_sig,
+                    "{{%d{1'b0}}, %s}" % (pad_w, din_in_sig)
+                )
+        elif self.in_bitwidth > self.out_bitwidth:
+            top.assign_signal(
+                din_core_sig,
+                "%s[%d:0]" % (din_in_sig, self.out_bitwidth - 1)
+            )
+        else:
+            top.assign_signal(din_core_sig, din_in_sig)
+
         # create a verilog module
         module = 'simple_bram_vacc'
         inst = top.get_instance(entity=module, name=self.fullname)
@@ -173,9 +204,9 @@ class simple_bram_vacc(DSPBlock):
         # add ports
         # we need to check if the port is in parent_ports
         inst.add_port('clk', 'user_clk', dir='in')
-        inst.add_port('ce', '1', parent_port=False, width=1, dir='in')
+        inst.add_port('ce', "1'b1", parent_port=False, width=1, dir='in')
         inst.add_port('new_acc', self.fullname+'_new_acc', parent_port=False, width=1, dir='in')
-        inst.add_port('din', self.fullname+'_din', parent_port=False, width=self.in_bitwidth, dir='in')
+        inst.add_port('din', din_core_sig, parent_port=False, width=self.out_bitwidth, dir='in')
         inst.add_port('dout', self.fullname+'_dout', parent_port=False, width=self.out_bitwidth, dir='out')
         inst.add_port('valid', self.fullname+'_valid', parent_port=False, width=1, dir='out')
     

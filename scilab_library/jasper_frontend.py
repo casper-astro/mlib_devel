@@ -30,7 +30,7 @@ if __name__ == '__main__':
         model_info = json.load(f)
     
     """
-    Step 2: check bit witdh for each link
+    Step 2: check bit width for each link
     """
     match = check_bit_width(model_info)
     if match == False:

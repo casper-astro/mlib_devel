@@ -523,10 +523,10 @@ begin
             in_fft_sosi_arr(j).sync     <= in_sync;
             in_fft_sosi_arr(j).valid    <= in_valid;
         end generate;
-        otheroutprtmap: for k in 0 to wb_factor-1 generate
-            out_sync    <=out_fft_sosi_arr(k).sync;
-            out_valid   <=out_fft_sosi_arr(k).valid;
-        end generate;
+        -- fft_wide_unit replicates sync/valid across all lanes, so drive the
+        -- scalar wrapper ports from one representative lane only.
+        out_sync    <= out_fft_sosi_arr(0).sync;
+        out_valid   <= out_fft_sosi_arr(0).valid;
 """
         vhdl_template += "        "
         vhdl_template += "        ".join(f"in_fft_sosi_arr({i}).re <= RESIZE_SVEC(in_re_{i}, in_fft_sosi_arr({i}).re'length);\n" for i in range(wb_factor))   

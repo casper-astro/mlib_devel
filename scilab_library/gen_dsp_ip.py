@@ -1,11 +1,69 @@
 #! /usr/bin/env python
 
 import os, json
+import re
 import sys
 
 import logging
 from argparse import ArgumentParser
 import dspflow
+
+
+def _extract_assignment_path(cmd):
+    match = re.match(
+        r'^\s*set_global_assignment\s+-name\s+'
+        r'(?:VHDL_FILE|VERILOG_FILE|SYSTEMVERILOG_FILE)\s+"?([^"\n]+)"?',
+        cmd.strip(),
+        re.IGNORECASE,
+    )
+    if match:
+        return os.path.abspath(match.group(1))
+    return None
+
+
+def _sanitize_quartus_source_cmds(backend):
+    """
+    Remove raw work-library source assignments for files that are also added
+    via block-specific library-aware Tcl. This prevents duplicate design units
+    such as:
+
+      - work.pulse_ext          (from Castro/import_from_castro)
+      - casper_misc_lib.pulse_ext (from simple_bram_vacc/wbfft Tcl)
+
+    while still keeping plain HDL-only blocks like counter/slice available.
+    """
+    library_managed = set()
+    for stage_name, stage_cmds in backend.tcl_cmds.items():
+        if isinstance(stage_cmds, str):
+            stage_cmds = stage_cmds.splitlines()
+        for cmd in stage_cmds or []:
+            if ' -library ' not in cmd:
+                continue
+            source_path = _extract_assignment_path(cmd)
+            if source_path:
+                library_managed.add(source_path)
+
+    if not library_managed:
+        return
+
+    pre_synth_lines = backend.tcl_cmds.get('pre_synth', '').splitlines()
+    filtered_lines = []
+    removed = []
+
+    for line in pre_synth_lines:
+        source_path = _extract_assignment_path(line)
+        if source_path and source_path in library_managed and ' -library ' not in line:
+            removed.append(source_path)
+            continue
+        filtered_lines.append(line)
+
+    if removed:
+        logger = logging.getLogger('jasper')
+        for source_path in sorted(set(removed)):
+            logger.info('Removing raw Quartus source assignment superseded by library-managed Tcl: %s', source_path)
+        backend.tcl_cmds['pre_synth'] = '\n'.join(filtered_lines)
+        if filtered_lines:
+            backend.tcl_cmds['pre_synth'] += '\n'
 
 if __name__ == '__main__':
     parser = ArgumentParser(prog=os.path.basename(__file__))
@@ -102,22 +160,50 @@ if __name__ == '__main__':
         backend.import_from_castro(backend.compile_dir + '/castro.yml')
         # set a new project name, so that it's different from the original project(myproj)
         backend.project_name = 'dspproj'
-        backend.initialize()
 
         # Belt-and-suspenders: explicitly add the DSPflow source list to the Quartus
-        # wrapper project. Some simple DSP blocks (e.g. counter/slice) have been
-        # observed to fall out of castro/manifests in the generated build directory.
+        # wrapper project, but avoid re-adding files already managed by a block's
+        # library-aware gen_tcl_cmds() output. Re-injecting those files into the
+        # default work library can create duplicate design units (for example the
+        # VHDL casper_misc_lib.pulse_ext versus the standalone Verilog pulse_ext).
+        explicit_source_re = re.compile(
+            r'^\s*set_global_assignment\s+-name\s+'
+            r'(?:VHDL_FILE|VERILOG_FILE|SYSTEMVERILOG_FILE)\s+"?([^"\n]+)"?',
+            re.IGNORECASE,
+        )
+        explicit_sources = set()
+        for stage_cmds in backend.tcl_cmds.values():
+            if isinstance(stage_cmds, str):
+                stage_cmds = stage_cmds.splitlines()
+            for cmd in stage_cmds or []:
+                if not isinstance(cmd, str):
+                    continue
+                match = explicit_source_re.match(cmd.strip())
+                if match:
+                    explicit_sources.add(os.path.abspath(match.group(1)))
+
         seen_sources = set()
         for source in tf.sources:
-            if source in seen_sources:
+            if not source.lower().endswith(('.v', '.sv', '.vhd', '.vhdl')):
                 continue
-            seen_sources.add(source)
-            if source.lower().endswith(('.v', '.sv', '.vhd', '.vhdl')):
-                backend.add_source(source, platform)
 
-        # Explicitly collect DSP block Tcl and write the reusable source manifest
-        backend.gen_dspblock_tcl_cmds()
-        backend.write_dsp_source_manifest()
+            abs_source = os.path.abspath(source)
+            if abs_source in seen_sources or abs_source in explicit_sources:
+                continue
+
+            seen_sources.add(abs_source)
+            backend.add_source(abs_source, platform)
+
+        # Defensive guard: a valid Quartus Tcl script must begin with project
+        # initialization commands. If the init stage somehow ended up empty,
+        # re-run initialize() before compile instead of emitting a malformed
+        # gogogo.tcl that starts with bare source assignments.
+        if not backend.tcl_cmds.get('init', '').strip():
+            logger.warning('Quartus DSP backend init stage was empty before compile; re-running initialize().')
+            backend.initialize()
+
+        if not backend.tcl_cmds.get('init', '').strip():
+            raise RuntimeError('Quartus DSP backend init stage is empty; refusing to write malformed gogogo.tcl')
 
         print('Starting compilation')
         backend.compile(cores=opts.jobs, plat=platform)

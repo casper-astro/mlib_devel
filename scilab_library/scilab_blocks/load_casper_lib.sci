@@ -42,6 +42,7 @@ exec(mlib_dir + 'scilab_library/scilab_blocks/casper_xps/swreg.sci');
 exec(mlib_dir + 'scilab_library/scilab_blocks/casper_xps/rfdc.sci');
 exec(mlib_dir + 'scilab_library/scilab_blocks/casper_xps/sbram.sci');
 exec(mlib_dir + 'scilab_library/scilab_blocks/casper_xps/sbram_intel.sci');
+exec(mlib_dir + 'scilab_library/scilab_blocks/casper_xps/snapshot.sci');
 exec(mlib_dir + 'scilab_library/scilab_blocks/casper_xps/ltc2308.sci');
 // create the blocks
 rfsoc4x2_inst = rfsoc4x2("define");
@@ -51,6 +52,7 @@ swreg_out_inst = swreg("define");
 rfdc_inst = rfdc("define");
 sbram_inst = sbram("define");
 sbram_intel_inst = sbram_intel("define");
+snapshot_inst = snapshot("define");
 ltc2308_inst = ltc2308("define");
 // add the blocks to the palette
 cur_dir = pwd();
@@ -59,6 +61,7 @@ pal = xcosPal("CASPER XPS");
 pal = xcosPalAddBlock(pal, rfsoc4x2_inst, xps_fig_dir + 'rfsoc4x2.png', xps_fig_dir + 'rfsoc4x2.png');
 pal = xcosPalAddBlock(pal, de10nano_inst, xps_fig_dir + 'de10nano.png', xps_fig_dir + 'de10nano.png');
 
+pal = xcosPalAddBlock(pal, snapshot_inst)
 pal = xcosPalAddBlock(pal, gpio_inst);
 pal = xcosPalAddBlock(pal, swreg_out_inst);
 pal = xcosPalAddBlock(pal, rfdc_inst);

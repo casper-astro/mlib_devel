@@ -393,6 +393,7 @@ class QuartusDSPBackend(QuartusBackend):
 
             # Collect per-block Tcl first.
             self.gen_dspblock_tcl_cmds()
+            self._remove_library_managed_source_duplicates()
 
             # Persist only the source-related assignments for later reuse by exec_flow.
             self.write_dsp_source_manifest()
@@ -425,6 +426,60 @@ class QuartusDSPBackend(QuartusBackend):
             synth_strat=synth_strat,
             impl_strat=impl_strat,
         )
+
+    def _remove_library_managed_source_duplicates(self):
+        """
+        Remove raw work-library assignments for files that are also added with
+        an explicit Quartus library via a DSP block's gen_tcl_cmds().
+
+        Without this, files like casper_misc_lib.pulse_ext can be pulled in two
+        ways:
+          1. raw from Castro/import_from_castro -> compiled into work
+          2. library-qualified from block Tcl   -> compiled into casper_misc_lib
+
+        Quartus then sees duplicate design units with the same entity name.
+        """
+        source_cmd_re = re.compile(
+            r'^\s*set_global_assignment\s+-name\s+'
+            r'(?:VHDL_FILE|VERILOG_FILE|SYSTEMVERILOG_FILE)\s+"?([^"\n]+)"?',
+            re.IGNORECASE,
+        )
+
+        library_managed = set()
+        for stage_cmds in self.tcl_cmds.values():
+            if isinstance(stage_cmds, str):
+                stage_cmds = stage_cmds.splitlines()
+            for cmd in stage_cmds or []:
+                if not isinstance(cmd, str) or ' -library ' not in cmd:
+                    continue
+                match = source_cmd_re.match(cmd.strip())
+                if match:
+                    library_managed.add(os.path.abspath(match.group(1)))
+
+        if not library_managed:
+            return
+
+        pre_synth_lines = self.tcl_cmds.get('pre_synth', '').splitlines()
+        filtered_lines = []
+        removed = set()
+
+        for line in pre_synth_lines:
+            match = source_cmd_re.match(line.strip()) if isinstance(line, str) else None
+            source_path = os.path.abspath(match.group(1)) if match else None
+            if source_path and source_path in library_managed and ' -library ' not in line:
+                removed.add(source_path)
+                continue
+            filtered_lines.append(line)
+
+        if removed:
+            for source_path in sorted(removed):
+                self.logger.info(
+                    'Removing raw Quartus source assignment superseded by library-managed Tcl: %s',
+                    source_path,
+                )
+            self.tcl_cmds['pre_synth'] = '\n'.join(filtered_lines)
+            if filtered_lines:
+                self.tcl_cmds['pre_synth'] += '\n'
 
     def add_compile_cmds(self, cores=8, plat=None, synth_strat=None, impl_strat=None, threads='multi'):
         """
