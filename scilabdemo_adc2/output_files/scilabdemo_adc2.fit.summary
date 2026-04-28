@@ -1,0 +1,20 @@
+Fitter Status : Successful - Fri Dec  5 18:22:28 2025
+Quartus Prime Version : 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
+Revision Name : scilabdemo_adc2
+Top-level Entity Name : top
+Family : Cyclone V
+Device : 5CSEBA6U23I7
+Timing Models : Final
+Logic utilization (in ALMs) : 303 / 41,910 ( < 1 % )
+Total registers : 694
+Total pins : 77 / 314 ( 25 % )
+Total virtual pins : 0
+Total block memory bits : 24,576 / 5,662,720 ( < 1 % )
+Total RAM Blocks : 3 / 553 ( < 1 % )
+Total DSP Blocks : 0 / 112 ( 0 % )
+Total HSSI RX PCSs : 0
+Total HSSI PMA RX Deserializers : 0
+Total HSSI TX PCSs : 0
+Total HSSI PMA TX Serializers : 0
+Total PLLs : 1 / 6 ( 17 % )
+Total DLLs : 1 / 4 ( 25 % )

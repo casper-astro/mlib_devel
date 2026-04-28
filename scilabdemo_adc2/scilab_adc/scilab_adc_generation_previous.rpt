@@ -1,0 +1,72 @@
+Info: Starting: Create block symbol file (.bsf)
+Info: qsys-generate /data/DesignFiles/scilabdemo_adc2/scilab_adc.qsys --block-symbol-file --output-directory=/data/DesignFiles/scilabdemo_adc2/scilab_adc --family="Cyclone V" --part=5CSEBA6U23I7
+Progress: Loading scilabdemo_adc2/scilab_adc.qsys
+Progress: Reading input file
+Progress: Adding adc_ltc2308_0 [adc_ltc2308 1.0]
+Progress: Parameterizing module adc_ltc2308_0
+Progress: Adding clk_0 [clock_source 24.1]
+Progress: Parameterizing module clk_0
+Progress: Adding hps_0 [altera_hps 24.1]
+Progress: Parameterizing module hps_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: scilab_adc.hps_0: HPS Main PLL counter settings: n = 0  m = 63
+Info: scilab_adc.hps_0: HPS peripherial PLL counter settings: n = 0  m = 39
+Warning: scilab_adc.hps_0: HPS model no longer supports simulation for HPS FPGA Bridges.
+Warning: scilab_adc.hps_0: set_interface_assignment: Interface "hps_io" does not exist
+Info: qsys-generate succeeded.
+Info: Finished: Create block symbol file (.bsf)
+Info: 
+Info: Starting: Create HDL design files for synthesis
+Info: qsys-generate /data/DesignFiles/scilabdemo_adc2/scilab_adc.qsys --synthesis=VERILOG --output-directory=/data/DesignFiles/scilabdemo_adc2/scilab_adc/synthesis --family="Cyclone V" --part=5CSEBA6U23I7
+Progress: Loading scilabdemo_adc2/scilab_adc.qsys
+Progress: Reading input file
+Progress: Adding adc_ltc2308_0 [adc_ltc2308 1.0]
+Progress: Parameterizing module adc_ltc2308_0
+Progress: Adding clk_0 [clock_source 24.1]
+Progress: Parameterizing module clk_0
+Progress: Adding hps_0 [altera_hps 24.1]
+Progress: Parameterizing module hps_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: scilab_adc.hps_0: HPS Main PLL counter settings: n = 0  m = 63
+Info: scilab_adc.hps_0: HPS peripherial PLL counter settings: n = 0  m = 39
+Warning: scilab_adc.hps_0: HPS model no longer supports simulation for HPS FPGA Bridges.
+Warning: scilab_adc.hps_0: set_interface_assignment: Interface "hps_io" does not exist
+Info: scilab_adc: Generating "scilab_adc" for QUARTUS_SYNTH
+Info: Interconnect is inserted between master hps_0.h2f_lw_axi_master and slave adc_ltc2308_0.avalon_slave_0 because the master is of type axi and the slave is of type avalon.
+Info: adc_ltc2308_0: "scilab_adc" instantiated adc_ltc2308 "adc_ltc2308_0"
+Info: hps_0: "Running  for module: hps_0"
+Info: hps_0: HPS Main PLL counter settings: n = 0  m = 63
+Info: hps_0: HPS peripherial PLL counter settings: n = 0  m = 39
+Warning: hps_0: HPS model no longer supports simulation for HPS FPGA Bridges.
+Warning: hps_0: set_interface_assignment: Interface "hps_io" does not exist
+Info: hps_0: "scilab_adc" instantiated altera_hps "hps_0"
+Info: avalon_st_adapter: Inserting error_adapter: error_adapter_0
+Info: mm_interconnect_0: "scilab_adc" instantiated altera_mm_interconnect "mm_interconnect_0"
+Info: rst_controller: "scilab_adc" instantiated altera_reset_controller "rst_controller"
+Info: fpga_interfaces: "hps_0" instantiated altera_interface_generator "fpga_interfaces"
+Info: hps_io: "hps_0" instantiated altera_hps_io "hps_io"
+Info: adc_ltc2308_0_avalon_slave_0_translator: "mm_interconnect_0" instantiated altera_merlin_slave_translator "adc_ltc2308_0_avalon_slave_0_translator"
+Info: hps_0_h2f_lw_axi_master_agent: "mm_interconnect_0" instantiated altera_merlin_axi_master_ni "hps_0_h2f_lw_axi_master_agent"
+Info: adc_ltc2308_0_avalon_slave_0_agent: "mm_interconnect_0" instantiated altera_merlin_slave_agent "adc_ltc2308_0_avalon_slave_0_agent"
+Info: adc_ltc2308_0_avalon_slave_0_agent_rsp_fifo: "mm_interconnect_0" instantiated altera_avalon_sc_fifo "adc_ltc2308_0_avalon_slave_0_agent_rsp_fifo"
+Info: router: "mm_interconnect_0" instantiated altera_merlin_router "router"
+Info: router_002: "mm_interconnect_0" instantiated altera_merlin_router "router_002"
+Info: adc_ltc2308_0_avalon_slave_0_burst_adapter: "mm_interconnect_0" instantiated altera_merlin_burst_adapter "adc_ltc2308_0_avalon_slave_0_burst_adapter"
+Info: Reusing file /data/DesignFiles/scilabdemo_adc2/scilab_adc/synthesis/submodules/altera_merlin_address_alignment.sv
+Info: cmd_demux: "mm_interconnect_0" instantiated altera_merlin_demultiplexer "cmd_demux"
+Info: cmd_mux: "mm_interconnect_0" instantiated altera_merlin_multiplexer "cmd_mux"
+Info: rsp_demux: "mm_interconnect_0" instantiated altera_merlin_demultiplexer "rsp_demux"
+Info: rsp_mux: "mm_interconnect_0" instantiated altera_merlin_multiplexer "rsp_mux"
+Info: Reusing file /data/DesignFiles/scilabdemo_adc2/scilab_adc/synthesis/submodules/altera_merlin_arbitrator.sv
+Info: avalon_st_adapter: "mm_interconnect_0" instantiated altera_avalon_st_adapter "avalon_st_adapter"
+Info: border: "hps_io" instantiated altera_interface_generator "border"
+Info: error_adapter_0: "avalon_st_adapter" instantiated error_adapter "error_adapter_0"
+Info: scilab_adc: Done "scilab_adc" with 21 modules, 76 files
+Info: qsys-generate succeeded.
+Info: Finished: Create HDL design files for synthesis

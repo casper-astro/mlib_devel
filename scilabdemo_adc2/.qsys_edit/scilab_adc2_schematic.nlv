@@ -1,0 +1,68 @@
+# # File gsaved with Nlview version 6.3.8  2013-12-19 bk=1.2992 VDI=34 GEI=35
+# 
+preplace inst scilab_adc2.hps_0.timer -pg 1
+preplace inst scilab_adc2.hps_0.gmac0 -pg 1
+preplace inst scilab_adc2.hps_0.hps_io.border -pg 1
+preplace inst scilab_adc2.hps_0.gmac1 -pg 1
+preplace inst scilab_adc2.hps_0.wd_timer0 -pg 1
+preplace inst scilab_adc2.hps_0.eosc1 -pg 1
+preplace inst scilab_adc2.hps_0.bridges -pg 1
+preplace inst scilab_adc2.hps_0.scu -pg 1
+preplace inst scilab_adc2.hps_0.dcan0 -pg 1
+preplace inst scilab_adc2.hps_0.qspi -pg 1
+preplace inst scilab_adc2.hps_0.wd_timer1 -pg 1
+preplace inst scilab_adc2.hps_0.timer0 -pg 1
+preplace inst scilab_adc2.hps_0.rstmgr -pg 1
+preplace inst scilab_adc2.hps_0.eosc2 -pg 1
+preplace inst scilab_adc2.hps_0.axi_sdram -pg 1
+preplace inst scilab_adc2.hps_0.dcan1 -pg 1
+preplace inst scilab_adc2.hps_0.nand0 -pg 1
+preplace inst scilab_adc2.hps_0.timer1 -pg 1
+preplace inst scilab_adc2.clk_0 -pg 1 -lvl 1 -y 80
+preplace inst scilab_adc2.hps_0.timer2 -pg 1
+preplace inst scilab_adc2.hps_0.sysmgr -pg 1
+preplace inst scilab_adc2.hps_0.f2s_periph_ref_clk -pg 1
+preplace inst scilab_adc2.hps_0.timer3 -pg 1
+preplace inst scilab_adc2.hps_0.uart0 -pg 1
+preplace inst scilab_adc2.hps_0.spim0 -pg 1
+preplace inst scilab_adc2.hps_0.i2c0 -pg 1
+preplace inst scilab_adc2.hps_0.uart1 -pg 1
+preplace inst scilab_adc2.hps_0.usb0 -pg 1
+preplace inst scilab_adc2.hps_0.spim1 -pg 1
+preplace inst scilab_adc2.hps_0.i2c1 -pg 1
+preplace inst scilab_adc2.hps_0.gpio0 -pg 1
+preplace inst scilab_adc2.hps_0.dma -pg 1
+preplace inst scilab_adc2.hps_0.arm_a9_0 -pg 1
+preplace inst scilab_adc2.hps_0.clk_0 -pg 1
+preplace inst scilab_adc2.hps_0.usb1 -pg 1
+preplace inst scilab_adc2.hps_0.i2c2 -pg 1
+preplace inst scilab_adc2.hps_0.gpio1 -pg 1
+preplace inst scilab_adc2.hps_0.arm_a9_1 -pg 1
+preplace inst scilab_adc2.hps_0 -pg 1 -lvl 3 -y 180
+preplace inst scilab_adc2.adc_ltc2308_0 -pg 1 -lvl 3 -y 30
+preplace inst scilab_adc2.hps_0.axi_ocram -pg 1
+preplace inst scilab_adc2.hps_0.sdrctl -pg 1
+preplace inst scilab_adc2.hps_0.l3regs -pg 1
+preplace inst scilab_adc2.hps_0.i2c3 -pg 1
+preplace inst scilab_adc2.hps_0.gpio2 -pg 1
+preplace inst scilab_adc2.hps_0.L2 -pg 1
+preplace inst scilab_adc2.hps_0.f2s_sdram_ref_clk -pg 1
+preplace inst scilab_adc2 -pg 1 -lvl 1 -y 40 -regy -20
+preplace inst scilab_adc2.hps_0.hps_io -pg 1
+preplace inst scilab_adc2.pll_0 -pg 1 -lvl 2 -y 80
+preplace inst scilab_adc2.hps_0.sdmmc -pg 1
+preplace inst scilab_adc2.hps_0.fpgamgr -pg 1
+preplace inst scilab_adc2.hps_0.clkmgr -pg 1
+preplace inst scilab_adc2.hps_0.arm_gic_0 -pg 1
+preplace inst scilab_adc2.hps_0.fpga_interfaces -pg 1
+preplace netloc EXPORT<net_container>scilab_adc2</net_container>(SLAVE)scilab_adc2.memory,(SLAVE)hps_0.memory) 1 0 3 NJ 210 NJ 210 NJ
+preplace netloc EXPORT<net_container>scilab_adc2</net_container>(SLAVE)scilab_adc2.clk,(SLAVE)clk_0.clk_in) 1 0 1 NJ
+preplace netloc FAN_OUT<net_container>scilab_adc2</net_container>(SLAVE)adc_ltc2308_0.slave_reset,(SLAVE)pll_0.reset,(MASTER)clk_0.clk_reset) 1 1 2 400 170 710
+preplace netloc POINT_TO_POINT<net_container>scilab_adc2</net_container>(MASTER)clk_0.clk,(SLAVE)pll_0.refclk) 1 1 1 N
+preplace netloc EXPORT<net_container>scilab_adc2</net_container>(SLAVE)scilab_adc2.adc_ltc2308_0_adc_conduit,(SLAVE)adc_ltc2308_0.adc_conduit) 1 0 3 NJ 70 NJ 150 NJ
+preplace netloc POINT_TO_POINT<net_container>scilab_adc2</net_container>(MASTER)hps_0.h2f_lw_axi_master,(SLAVE)adc_ltc2308_0.avalon_slave_0) 1 2 2 730 140 1040
+preplace netloc FAN_OUT<net_container>scilab_adc2</net_container>(MASTER)pll_0.outclk0,(SLAVE)adc_ltc2308_0.slave_clk,(SLAVE)hps_0.h2f_lw_axi_clock) 1 2 1 690
+preplace netloc EXPORT<net_container>scilab_adc2</net_container>(SLAVE)clk_0.clk_in_reset,(SLAVE)scilab_adc2.reset) 1 0 1 NJ
+preplace netloc EXPORT<net_container>scilab_adc2</net_container>(MASTER)hps_0.h2f_reset,(MASTER)scilab_adc2.hps_0_h2f_reset) 1 3 1 N
+levelinfo -pg 1 0 170 1190
+levelinfo -hier scilab_adc2 180 210 540 850 1060

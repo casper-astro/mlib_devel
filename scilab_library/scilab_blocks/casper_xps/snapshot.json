@@ -1,0 +1,20 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "arith_type",
+            "addr_width",
+            "data_width"
+        ],
+        "values": [
+            "snapshot",
+            "",
+            "xps:snapshot",
+            "Unsigned",
+            10,
+            32
+        ]
+    }
+}

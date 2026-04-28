@@ -1,0 +1,17 @@
+Analysis & Synthesis Status : Successful - Fri Dec  5 18:21:22 2025
+Quartus Prime Version : 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
+Revision Name : scilabdemo_adc2
+Top-level Entity Name : top
+Family : Cyclone V
+Logic utilization (in ALMs) : N/A
+Total registers : 645
+Total pins : 77
+Total virtual pins : 0
+Total block memory bits : 24,576
+Total DSP Blocks : 0
+Total HSSI RX PCSs : 0
+Total HSSI PMA RX Deserializers : 0
+Total HSSI TX PCSs : 0
+Total HSSI PMA TX Serializers : 0
+Total PLLs : 1
+Total DLLs : 1

@@ -1,0 +1,17 @@
+<sld_project_info>
+  <project>
+    <hash md5_digest_80b="9350ba646ad9ef1dd888"/>
+  </project>
+  <file_info>
+    <file device="5CSEBA6U23I7" path="scilabdemo_adc2.sof" usercode="0xFFFFFFFF"/>
+  </file_info>
+  <sld_infos>
+    <sld_info hpath="scilab_adc2:u_system" name="u_system">
+      <assignment_values>
+        <assignment_value text="QSYS_NAME scilab_adc2 HAS_SOPCINFO 1 GENERATION_ID 1764875904"/>
+        <assignment_value text="QSYS_NAME scilab_adc2 HAS_SOPCINFO 1 GENERATION_ID 1764987638"/>
+      </assignment_values>
+      <parameters/>
+    </sld_info>
+  </sld_infos>
+</sld_project_info>

@@ -1,0 +1,23 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0x00007021256a5620, pid=3873746, tid=3873746
+#
+# JRE version: OpenJDK Runtime Environment Temurin-17.0.7+7 (17.0.7+7) (build 17.0.7+7)
+# Java VM: OpenJDK 64-Bit Server VM Temurin-17.0.7+7 (17.0.7+7, mixed mode, tiered, compressed oops, compressed class ptrs, g1 gc, linux-amd64)
+# Problematic frame:
+# C  [libsciscicos.so.2024+0xa5620]  org_scilab_modules_scicos::Model::getObject(long long) const+0x30
+#
+# Core dump will be written. Default location: Core dumps may be processed with "/usr/share/apport/apport -p%p -s%s -c%c -d%d -P%P -u%u -g%g -F%F -- %E" (or dumping to /home/bgodfrey/CASPER/mlib_devel/core.3873746)
+#
+# If you would like to submit a bug report, please visit:
+#   https://github.com/adoptium/adoptium-support/issues
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: -Djava.library.path= -Djava.system.class.loader=org.scilab.modules.jvm.ScilabClassLoader -Xshare:off --add-opens=java.desktop/sun.awt.X11=ALL-UNNAMED -Djdk.lang.processReaperUseDefaultStackSize=true --add-opens=java.desktop/javax.swing.plaf.basic=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/jdk.internal.loader=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED -Djava.util.logging.config.file=/home/bgodfrey/CASPER/Scilab/scilab-2024.1.0/share/scilab/etc/logging.properties -Xrs -Dawt.useSystemAAFontSettings=on -Djogamp.gluegen.UseTempJarCache=false 
+
+Host: 12th Gen Intel(R) Core(TM) i7-1270P, 16 cores, 30G, 

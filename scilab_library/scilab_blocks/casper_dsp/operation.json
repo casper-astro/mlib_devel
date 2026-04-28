@@ -4,13 +4,15 @@
             "name",
             "fullpath",
             "tag",
-            "op"
+            "op",
+            "bit_width"
         ],
         "values": [
             "operation",
             "",
             "dsp:operation",
-            "and"
+            "and",
+            1
         ]
     }
 }

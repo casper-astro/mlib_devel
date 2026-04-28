@@ -1,9 +1,10 @@
 module operation#(
-    parameter OP = "and"
+    parameter OP = "and",
+    parameter BIT_WIDTH = 1
 )(
     input clk,
-    input in0,
-    input in1,
+    input [BIT_WIDTH - 1:0] in0,
+    input [BIT_WIDTH - 1:0] in1,
     output out
 );
 
@@ -22,6 +23,12 @@ generate
         always @(posedge clk)
             out_reg <= in0 ^ in1;
         assign out = out_reg;
+    end else if (OP == "eq") begin
+        always @(posedge clk)
+            out_reg <= (in0 == in1);
+        assign out = out_reg;
+    end else if (OP == "eq_comb") begin
+        assign out = (in0 == in1);
     end else if (OP == "or_comb") begin
         assign out = in0 | in1;
     end

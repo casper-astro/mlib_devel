@@ -1,0 +1,92 @@
+Assembler report for scilabdemo_adc2
+Fri Dec  5 18:22:39 2025
+Quartus Prime Version 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Assembler Summary
+  3. Assembler Settings
+  4. Assembler Generated Files
+  5. Assembler Device Options: scilabdemo_adc2.sof
+  6. Assembler Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 2025  Altera Corporation. All rights reserved.
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and any partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, the Altera Quartus Prime License Agreement,
+the Altera IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Altera and sold by Altera or its authorized distributors.  Please
+refer to the Altera Software License Subscription Agreements 
+on the Quartus Prime software download page.
+
+
+
++---------------------------------------------------------------+
+; Assembler Summary                                             ;
++-----------------------+---------------------------------------+
+; Assembler Status      ; Successful - Fri Dec  5 18:22:39 2025 ;
+; Revision Name         ; scilabdemo_adc2                       ;
+; Top-level Entity Name ; top                                   ;
+; Family                ; Cyclone V                             ;
+; Device                ; 5CSEBA6U23I7                          ;
++-----------------------+---------------------------------------+
+
+
++----------------------------------+
+; Assembler Settings               ;
++--------+---------+---------------+
+; Option ; Setting ; Default Value ;
++--------+---------+---------------+
+
+
++--------------------------------------------------------------------+
+; Assembler Generated Files                                          ;
++--------------------------------------------------------------------+
+; File Name                                                          ;
++--------------------------------------------------------------------+
+; /data/DesignFiles/scilabdemo_adc2/output_files/scilabdemo_adc2.sof ;
++--------------------------------------------------------------------+
+
+
++-----------------------------------------------+
+; Assembler Device Options: scilabdemo_adc2.sof ;
++----------------+------------------------------+
+; Option         ; Setting                      ;
++----------------+------------------------------+
+; JTAG usercode  ; 0x00CB01A1                   ;
+; Checksum       ; 0x00CB01A1                   ;
++----------------+------------------------------+
+
+
++--------------------+
+; Assembler Messages ;
++--------------------+
+Info: *******************************************************************
+Info: Running Quartus Prime Assembler
+    Info: Version 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
+    Info: Processing started: Fri Dec  5 18:22:31 2025
+Info: Command: quartus_asm --read_settings_files=off --write_settings_files=off scilabdemo_adc2 -c scilabdemo_adc2
+Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
+Info (115030): Assembler is generating device programming files
+Info (11878): Hard Processor Subsystem configuration has not changed and a Preloader software update is not required
+Info: Quartus Prime Assembler was successful. 0 errors, 1 warning
+    Info: Peak virtual memory: 540 megabytes
+    Info: Processing ended: Fri Dec  5 18:22:39 2025
+    Info: Elapsed time: 00:00:08
+    Info: Total CPU time (on all processors): 00:00:08
+
+

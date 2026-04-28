@@ -45,3 +45,4 @@ log.log
 jasper.sim
 scilab_library/*.ipynb
 scilab_library/.ipynb_checkpoints/*
+scripts/
