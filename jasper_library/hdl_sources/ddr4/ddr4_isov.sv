@@ -141,6 +141,7 @@ assign mig_ui_ready = (~ddr4_ui_sync_rst) & ddr4_calib_complete;
 
 // Accept a write only when both command and write-data channels can take it.
 assign mig_accept_write = mig_ui_ready
+                        & app_en
                         & tx_cmd_is_write
                         & app_rdy
                         & app_wr_rdy;
@@ -148,13 +149,14 @@ assign mig_accept_write = mig_ui_ready
 // Accept a read only when command channel can take it
 // AND the RX FIFO can currently absorb returned data.
 assign mig_accept_read  = mig_ui_ready
+                        & app_en
                         & tx_cmd_is_read
                         & app_rdy;
 
 assign mig_accept = mig_accept_write | mig_accept_read;
 
 // Pop TX FIFO only when the command is actually accepted by the wrapper.
-assign m_axis_tready = mig_accept & app_en;
+assign m_axis_tready = mig_accept;
 
 // Only assert write-data strobes for an accepted write.
 assign app_wr_en   = mig_accept_write;
