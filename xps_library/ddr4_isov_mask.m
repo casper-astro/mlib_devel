@@ -56,9 +56,6 @@ for i =1:length(gateway_ins)
     elseif regexp(get_param(gw,'Name'),'(ddr4_out_vld)$')
         toks = regexp(get_param(gw,'Name'),'(ddr4_out_vld)$','tokens');
         set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));
-    elseif regexp(get_param(gw,'Name'),'(ddr4_out_last)$')
-        toks = regexp(get_param(gw,'Name'),'(ddr4_out_last)$','tokens');
-        set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));
     elseif regexp(get_param(gw,'Name'),'(ddr4_user_wr_ready)$')
         toks = regexp(get_param(gw,'Name'),'(ddr4_user_wr_ready)$','tokens');
         set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));

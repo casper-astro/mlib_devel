@@ -1,60 +1,6 @@
 `default_nettype none
 
-/* TODO
-  * consider not requiring the user to left shift the addr and take care of that internally here
-  * ddr sys_rst signal
-
-  mapping ddr control to axis fifo signals
-
-  the old input fifo accepted:
-     {cmd, addr, din}
-  on an `en`
-
-  This out_vld was output from the rd fifo out to the simulink design. This
-  would be `m_tvalid` of the new rd fifo
-
-  `assign ddr4_out_vld        = ~ddr4_fifo_out_empty;`
-
-  This was driving app_rdy
-
-  `assign ddr4_tx_fifo_rd_en  = ddr4_app_rdy & ddr4_app_wdf_rdy & ~ddr4_fifo_in_empty;`
-
-  `assign ddr4_wdf_wren       = ddr4_tx_fifo_rd_en & ~ddr4_cmd_fout[0];`
-
-  The write data fifo end was the same as write data fifo enable
-
-  `assign wdf_end = wdf_wren`
-
-  fifos
-  ---------
-  tdata  - data stream
-  tvalid - current data is valid
-  tkeep  - indicating valid bytes of a stream
-  tid    - indicating different streams of data
-  tdest  - routing information for the data stream
-
-  m_tvalid - data can be read (not empty)
-  s_tready - data can be written (not full)
-
-  m_tvalid
-
-  ddr
-  -----------
-  I - cmd  - s_tdata
-  I - en   - s_tvalid
-  O - rdy  - s_tready
-  I - addr - s_tdest?
-
-  I - wdf_data - s_tdata
-  I - wdf_wren - s_tvalid
-  O - wdf_rdy  - s_tready
-  I - wdf_end  - s_tlast
-
-  O - rd_data  - m_tdata
-  O - rd_valid - m_tvalid
-  I            - m_tready (the read has no ready, but would be the FIFO)
-  O - rd_end   - m_tlast
-*/
+// TODO consider not requiring the user to left shift the addr and take care of that internally here
 module ddr4_isov #(
   parameter DDR_ADDR_WID=32, // must be <32 and a multiple of 8. The actual width is 30
   parameter DDR_DATA_WID=512,
@@ -79,7 +25,6 @@ module ddr4_isov #(
   // simulink read side
   output logic [DDR_DATA_WID-1:0] user_rd_tdata, // simulink
   output logic user_rd_tvalid,                   // simulink
-  output logic user_rd_tlast,                    // simulink
   input wire logic user_rd_tready,               // simulink
   output logic ddr_fifo_ready,                   // simulink
 
@@ -201,7 +146,7 @@ tx_fifo_axis (
   .m_axis_tdata(app_wr_data),
   .m_axis_tvalid(app_en),
   .m_axis_tlast(),
-  .m_axis_tready(m_axis_tready), // TODO if not working, monitor how this is driven
+  .m_axis_tready(m_axis_tready),
 
   .m_axis_tdest(app_addr),
   .m_axis_tid(app_cmd),
@@ -249,16 +194,16 @@ xpm_fifo_axis #(
 rx_fifo_axis (
   // ddr side
   .s_aclk(ddr4_ui_clk),
-  .s_aresetn(~ddr4_ui_sync_rst), // active low TODO watch this and make sure this is right
+  .s_aresetn(~ddr4_ui_sync_rst),
   .s_axis_tdata(app_rd_data),
   .s_axis_tvalid(app_rd_valid),
   .s_axis_tlast(app_rd_end),
-  .s_axis_tready(rd_fifo_ready),     // TODO, rx fifo not full, reads need to stop if this fills (goes zero)
-  
+  .s_axis_tready(rd_fifo_ready),  // (output to simulink) rx fifo not full, if this goes to zero need to stop reads
+                                  // fifo is full and must assume data was dropped and reads need to be reissued.
   // simulink side
   .m_aclk(user_clk),
   .m_axis_tdata(user_rd_tdata),
-  .m_axis_tlast(user_rd_tlast),
+  .m_axis_tlast(),
   .m_axis_tvalid(user_rd_tvalid),
   .m_axis_tready(user_rd_tready),
 

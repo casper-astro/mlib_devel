@@ -13,7 +13,7 @@ sources: []
 constraints: []
 
 ddr4:
-  width: 64
+  bitwidth: 64
 
 rfdc:
   # gen3 devices can internally route their input refclk or the output of the RFPLL
