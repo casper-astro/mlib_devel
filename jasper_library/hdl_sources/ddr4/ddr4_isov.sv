@@ -232,7 +232,7 @@ rx_fifo_axis (
 );
 
 ddr4_core  ddr4_inst (
-  .c0_ddr4_app_en(app_en),
+  .c0_ddr4_app_en(mig_accept),
   .c0_ddr4_app_cmd(app_cmd),
   .c0_ddr4_app_rdy(app_rdy),
   .c0_ddr4_app_addr(app_addr),
