@@ -66,3 +66,20 @@ As always, **back up your designs before attempting such a major operation**. An
 If you are a CASPER collaborator, or you’re just interested in what we’re up to, feel free to join our mailing list by sending a blank email [here.](mailto:casper+subscribe@lists.berkeley.edu)
 
 If would like to get involved in the development of the tools, please join our dev mailing list by sending a blank email [here.](mailto:casper-dev+subscribe@lists.berkeley.edu)
+
+## scilab-m2021a-intel branch
+
+This branch contains experimental support for using the Scilab-based CASPER frontend with Intel/Quartus FPGA targets. It extends the standard CASPER toolflow with a Quartus backend and supporting HDL/software infrastructure needed to build, package, program, and interact with Intel SoC FPGA designs through the usual CASPER runtime interface.
+
+The intent of this branch is to preserve the normal CASPER workflow as much as possible:
+
+1. Create a block-diagram design in the Scilab frontend.
+2. Generate the intermediate CASPER design descriptions, including `jasper.json`, `jasper.per`, and DSP wrapper information.
+3. Run the Python toolflow to generate HDL, the AXI4-Lite register fabric, memory maps, and the Quartus project script.
+4. Compile the design with Quartus.
+5. Package the generated Intel programming image into a CASPER `.fpg` file.
+6. Program and control the design from Python using `casperfpga` and `KATCP` in the same style as existing CASPER platforms.
+
+For Intel SoC platforms, the generated design uses the HPS lightweight AXI interface, an AXI-to-AXI4-Lite adapter, and the CASPER AXI4-Lite register fabric generated from the design memory map. The final `.fpg` file contains the usual CASPER metadata plus a compressed Quartus-generated `.rbf` payload. On the target system, `tcpborphserver` extracts this payload and programs the FPGA fabric through Linux FPGA Manager.
+
+This branch is under active development. In particular, Intel-specific DSP library support, Scilab block coverage, and board support files may change as the toolflow is generalized. Designs built from this branch should be carefully validated before being used as reference instruments.
