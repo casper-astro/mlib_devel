@@ -2,3 +2,7 @@
 	path = jasper_library/hdl_sources/onehundred_gbe/kutleng_skarab2_bsp_firmware
 	url = https://github.com/casper-astro/kutleng_skarab2_bsp_firmware
         branch = mb_rtrs 
+[submodule "scilab_library/hdl_sources/casper_dspdevel"]
+	path = scilab_library/hdl_sources/casper_dspdevel
+	url = git@github.com:bgodfrey/casper_dspdevel.git
+	branch = scilab-dev
