@@ -23,14 +23,10 @@ This section explains how to install MATLAB.
 #. The above will launch the MathWorks product installer and you will be prompted to sign into your MathWorks account. Sign in, accept the licensing agreement, link your MATLAB license and select your installation path in the prompts that follow.
 #. 
    Select the following toolboxes for installation:
-
     
-   .. image:: ../_static/img/toolboxes.png
-      :target: ../_static/img/toolboxes.png
-      :alt: toolboxes.png
+.. image:: ../_static/img/toolboxes.png
 
-
-    *[Note: issues have been encountered where the Xilinx System Generator MATLAB tool may sit indefinitely while generating sysgen IP. This has tentatively been narrowed down to issues in some MATLAB toolboxes, so if your work requires any toolboxes other than the above, please check against the list further down in `this <https://support.xilinx.com/s/question/0D52E00006vF6FOSA0/model-composer-v20212-matlab-r2021a-gets-stuck-at-initialization-stage-on-ubuntu-20041?language=en_US>`_ for any potential conflicts.]* 
+*[Note: issues have been encountered where the Xilinx System Generator MATLAB tool may sit indefinitely while generating sysgen IP. This has tentatively been narrowed down to issues in some MATLAB toolboxes, so if your work requires any toolboxes other than the above, please check against the list further down in `this <https://support.xilinx.com/s/question/0D52E00006vF6FOSA0/model-composer-v20212-matlab-r2021a-gets-stuck-at-initialization-stage-on-ubuntu-20041?language=en_US>`_ for any potential conflicts.]* 
 
 #. 
    Click through the rest of the installation, confirm your selections and begin the install.
