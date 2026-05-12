@@ -35,7 +35,7 @@ class ddr4_isov(YellowBlock):
         inst.add_port('user_addr',      self.fullname+'_ddr4_addr',          width=self.addr_width)
         inst.add_port('user_valid',     self.fullname+'_ddr4_vld')
         inst.add_port('user_cmd',       self.fullname+'_ddr4_cmd',           width=3)
-        inst.add_port('user_ready',     self.fullname+'_ddr4_user_wr_ready')
+        inst.add_port('user_cmd_ready', self.fullname+'_ddr4_user_cmd_ready')
         inst.add_port('user_wr_data',   self.fullname+'_ddr4_din',           width=self.data_width)
         inst.add_port('user_wr_mask',   self.fullname+'_ddr4_din_mask',      width=self.ddr_mig_bitwidth)
         inst.add_port('user_rd_tdata',  self.fullname+'_ddr4_dout',          width=self.data_width)

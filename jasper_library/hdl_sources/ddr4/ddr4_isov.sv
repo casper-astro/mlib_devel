@@ -18,7 +18,7 @@ module ddr4_isov #(
   input wire logic [DDR_ADDR_WID-1:0] user_addr,      // simulink
   input wire logic user_valid,                        // simulink
   input wire logic [2:0] user_cmd,                    // simulink
-  output logic user_ready,                            // simulink
+  output logic user_cmd_ready,                        // simulink
   input wire logic [DDR_DATA_WID-1:0] user_wr_data,   // simulink 
   input wire logic [DDR_DATA_WID/8-1:0] user_wr_mask, // simulink
 
@@ -135,7 +135,7 @@ tx_fifo_axis (
   .s_axis_tdata(user_wr_data), // wr data
   .s_axis_tvalid(user_valid),  // app_en
   .s_axis_tlast(1'b0),
-  .s_axis_tready(user_ready),  // (output to simulink design - wr fifo not full, wr is ready)
+  .s_axis_tready(user_cmd_ready),  // (output to simulink design - cmd fifo not full, is ready)
 
   .s_axis_tdest(user_addr),    // addr
   .s_axis_tid(user_cmd),       // cmd
