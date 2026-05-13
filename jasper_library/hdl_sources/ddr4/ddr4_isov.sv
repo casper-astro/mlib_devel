@@ -67,9 +67,11 @@ logic app_rd_end;
 // cdc wire for ddr side read fifo's ready
 logic rd_fifo_ready;
 
-// TX FIFO pop signal
+// cmd fifo pop signal
+logic [DDR_ADDR_WID-1:0] cmd_fifo_tdest;
 logic m_axis_tready;
 
+localparam int ADDR_LSB_SHIFT = 3;
 localparam [2:0] WRITE_CMD = 3'b000;
 localparam [2:0] READ_CMD  = 3'b001;
 
@@ -107,6 +109,8 @@ assign m_axis_tready = mig_accept;
 assign app_wr_en   = mig_accept_write;
 assign app_wr_end  = mig_accept_write;
 
+assign app_addr    = (cmd_fifo_tdest << ADDR_LSB_SHIFT);
+
 xpm_fifo_axis #(
    .CASCADE_HEIGHT(0),
    .CDC_SYNC_STAGES(2),
@@ -128,7 +132,7 @@ xpm_fifo_axis #(
    .USE_ADV_FEATURES("1000"),
    .WR_DATA_COUNT_WIDTH(1)
 )
-tx_fifo_axis (
+cmd_fifo_axis (
   // simulink side
   .s_aclk(user_clk),
   .s_aresetn(~sys_rst),
@@ -148,7 +152,7 @@ tx_fifo_axis (
   .m_axis_tlast(),
   .m_axis_tready(m_axis_tready),
 
-  .m_axis_tdest(app_addr),
+  .m_axis_tdest(cmd_fifo_tdest),
   .m_axis_tid(app_cmd),
   .m_axis_tkeep(app_wr_mask),
 
