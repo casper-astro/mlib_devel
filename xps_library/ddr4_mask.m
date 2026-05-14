@@ -21,7 +21,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function ddr4_mask(myname)
 
-gateway_outs = find_system(myname,'searchdepth',1,'FollowLinks', 'on','lookundermasks','all','masktype','Gateway Out Block');
+gateway_outs = find_system(myname,'searchdepth',1,'FollowLinks', 'on','lookundermasks','all','masktype','Xilinx Gateway Out Block');
 for i =1:length(gateway_outs)
     gw = gateway_outs{i};
     if regexp(get_param(gw,'Name'),'(ddr4_din)$')
@@ -47,7 +47,7 @@ for i =1:length(gateway_outs)
     end
 end
 
-gateway_ins = find_system(myname,'searchdepth',1,'FollowLinks', 'on','lookundermasks','all','masktype','Gateway In Block');
+gateway_ins = find_system(myname,'searchdepth',1,'FollowLinks', 'on','lookundermasks','all','masktype','Xilinx Gateway In Block');
 for i =1:length(gateway_ins)
     gw = gateway_ins{i};
     if regexp(get_param(gw,'Name'),'(ddr4_dout)$')
