@@ -68,47 +68,48 @@ logic app_rd_end;
 logic rd_fifo_ready;
 
 // cmd fifo pop signal
+logic cmd_fifo_tvalid;
+logic cmd_fifo_tready;
 logic [DDR_ADDR_WID-1:0] cmd_fifo_tdest;
-logic m_axis_tready;
 
 localparam int ADDR_LSB_SHIFT = 3;
 localparam [2:0] WRITE_CMD = 3'b000;
 localparam [2:0] READ_CMD  = 3'b001;
 
+logic cmd_is_write;
+logic cmd_is_read;
 logic mig_ui_ready;
-logic tx_cmd_is_write;
-logic tx_cmd_is_read;
 logic mig_accept_write, mig_accept_read, mig_accept;
 
-assign tx_cmd_is_write = (app_cmd == WRITE_CMD);
-assign tx_cmd_is_read  = (app_cmd == READ_CMD);
+assign cmd_is_write = (app_cmd == WRITE_CMD);
+assign cmd_is_read  = (app_cmd == READ_CMD);
 
 // Only issue traffic once MIG UI is actually usable.
 assign mig_ui_ready = (~ddr4_ui_sync_rst) & ddr4_calib_complete;
 
 // Accept a write only when both command and write-data channels can take it.
 assign mig_accept_write = mig_ui_ready
-                        & app_en
-                        & tx_cmd_is_write
+                        & cmd_fifo_tvalid
+                        & cmd_is_write
                         & app_rdy
                         & app_wr_rdy;
 
 // Accept a read only when command channel can take it
-// AND the RX FIFO can currently absorb returned data.
+// AND the rx FIFO can currently accept returned data.
 assign mig_accept_read  = mig_ui_ready
-                        & app_en
-                        & tx_cmd_is_read
+                        & cmd_fifo_tvalid
+                        & cmd_is_read
                         & app_rdy;
 
 assign mig_accept = mig_accept_write | mig_accept_read;
 
-// Pop TX FIFO only when the command is actually accepted by the wrapper.
-assign m_axis_tready = mig_accept;
+// Pop cmd FIFO only when the command is actually accepted.
+assign cmd_fifo_tready = mig_accept;
 
-// Only assert write-data strobes for an accepted write.
+// Assert write-data strobes for an accepted write.
+assign app_en      = mig_accept;
 assign app_wr_en   = mig_accept_write;
 assign app_wr_end  = mig_accept_write;
-
 assign app_addr    = (cmd_fifo_tdest << ADDR_LSB_SHIFT);
 
 xpm_fifo_axis #(
@@ -136,21 +137,21 @@ cmd_fifo_axis (
   // simulink side
   .s_aclk(user_clk),
   .s_aresetn(~sys_rst),
-  .s_axis_tdata(user_wr_data), // wr data
-  .s_axis_tvalid(user_valid),  // app_en
+  .s_axis_tdata(user_wr_data),    // wr data
+  .s_axis_tvalid(user_valid),     // app_en
   .s_axis_tlast(1'b0),
-  .s_axis_tready(user_cmd_ready),  // (output to simulink design - cmd fifo not full, is ready)
+  .s_axis_tready(user_cmd_ready), // (output to simulink design - cmd fifo not full, is ready)
 
-  .s_axis_tdest(user_addr),    // addr
-  .s_axis_tid(user_cmd),       // cmd
-  .s_axis_tkeep(user_wr_mask), // mask
+  .s_axis_tdest(user_addr),       // addr
+  .s_axis_tid(user_cmd),          // cmd
+  .s_axis_tkeep(user_wr_mask),    // mask
 
   // ddr side
   .m_aclk(ddr4_ui_clk),
   .m_axis_tdata(app_wr_data),
-  .m_axis_tvalid(app_en),
+  .m_axis_tvalid(cmd_fifo_tvalid),
   .m_axis_tlast(),
-  .m_axis_tready(m_axis_tready),
+  .m_axis_tready(cmd_fifo_tready),
 
   .m_axis_tdest(cmd_fifo_tdest),
   .m_axis_tid(app_cmd),
@@ -236,7 +237,7 @@ rx_fifo_axis (
 );
 
 ddr4_core  ddr4_inst (
-  .c0_ddr4_app_en(mig_accept),
+  .c0_ddr4_app_en(app_en),
   .c0_ddr4_app_cmd(app_cmd),
   .c0_ddr4_app_rdy(app_rdy),
   .c0_ddr4_app_addr(app_addr),
