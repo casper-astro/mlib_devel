@@ -12,6 +12,9 @@ mmbus_address_alignment: 4
 sources: []
 constraints: []
 
+ddr4:
+  bitwidth: 64
+
 rfdc:
   # gen3 devices can internally route their input refclk or the output of the RFPLL
   # as the sample clock for adjacent tiles. See PG269. For such configurations,
@@ -222,3 +225,60 @@ pins:
     iostd: LVCMOS18
     # S16-S27
     loc: [B8, AR6, D6, AR7, C6, AU7, B5, AV7, A5, AU8, C5, AV8]
+
+
+  # DDR4
+  ddr4_0_sys_clk_p:
+    loc: [G13]
+    iostd: DIFF_SSTL12
+  ddr4_0_sys_clk_n:
+    loc: [G12]
+    iostd: DIFF_SSTL12
+  ddr4_0_reset_n:
+    loc: [E14]
+    iostd: LVCMOS12
+    drive_strength: 8
+  ddr4_0_ck_t:
+    loc: [J11]
+    iostd: DIFF_SSTL12_DCI
+  ddr4_0_ck_c:
+    loc: [J10]
+    iostd: DIFF_SSTL12_DCI
+  ddr4_0_dqs_c:
+    loc: [K18, L14, B17, F19, D24, H20, A22, K22]
+    iostd: DIFF_POD12_DCI
+  ddr4_0_dqs_t:
+    loc: [K19, L15, B18, G19, D23, J20, B22, K21]
+    iostd: DIFF_POD12_DCI
+  ddr4_0_cs_n:
+    loc: [E11]
+    iostd: SSTL12_DCI
+  ddr4_0_bg:
+    loc: [H12]
+    iostd: SSTL12_DCI
+  ddr4_0_act_n:
+    loc: [B14]
+    iostd: SSTL12_DCI
+  ddr4_0_ba:
+    loc: [A12, H10]
+    iostd: SSTL12_DCI
+  ddr4_0_cke:
+    loc: [F12]
+    iostd: SSTL12_DCI
+  ddr4_0_dm_dbi_n:
+    loc: [J15, N14, D18, G17, F21, J23, C23, N20]
+  ddr4_0_odt:
+    loc: [A15]
+    iostd: SSTL12_DCI
+  ddr4_0_adr:
+    # adr 0-16
+    loc: [B13, G6, A14, F10, D14, F11, J7, H13, A11, H6, C15, G7, D13, H11, K13, F14, E13]
+    iostd: SSTL12_DCI
+  ddr4_0_dq:
+    iostd: POD12_DCI
+    # c0_ddr4_dq 0-63
+    loc: [K17, J16, H17, H16, J18, K16, J19, L17, N17, N13, N15, L12, M17, M13,
+          M15, M12, D16, A17, C17, A19, D15, C16, B19, A16, G18, E16, F16, G15, H18, E17,
+          E18, F15, E24, D21, E22, E21, E23, F20, F24, G20, J21, G22, K24, G23, L24, H22,
+          H23, H21, C21, A24, B24, A20, C22, A21, C20, B20, M20, L20, L22, L21, N19, M19,
+          L23, L19]
