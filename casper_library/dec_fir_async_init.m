@@ -273,11 +273,11 @@ for ctr = 1:num_fir_col,
             add_line(blk, [prev_blk_name, '/1'], [blk_name, '/1']);
         end
         if coeff_sym,
-            add_line(blk, [blk_name, '/3'], ['real_sum/', num2str(ctr+1)]);
-            add_line(blk, [blk_name, '/4'], ['imag_sum/', num2str(ctr+1)]);
+            add_line(blk, [blk_name, '/3'], ['real_sum/', num2str(ctr+2)]);
+            add_line(blk, [blk_name, '/4'], ['imag_sum/', num2str(ctr+2)]);
         else
-            add_line(blk, [blk_name, '/2'], ['real_sum/', num2str(ctr+1)]);
-            add_line(blk, [blk_name, '/3'], ['imag_sum/', num2str(ctr+1)]);
+            add_line(blk, [blk_name, '/2'], ['real_sum/', num2str(ctr+2)]);
+            add_line(blk, [blk_name, '/3'], ['imag_sum/', num2str(ctr+2)]);
         end
         if async_ops,
             if coeff_sym,
