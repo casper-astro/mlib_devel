@@ -237,7 +237,7 @@ if n_inputs_bits > 0,
       name = ['Convert', num2str(n)];
       reuse_block(blk, name, 'xbsIndex_r4/Convert', ...
         'Position', [420 y+35 450 y+55], ...
-        'arith_type', 'Unsigned', 'n_bits', '1', 'bin_pt', '0') ; 
+        'arith_type', 'Unsigned', 'n_bits', '1', 'bin_pt', '0', 'latency', '1');
       add_line(blk, ['Relational', num2str(n), '/1'], ['Convert', num2str(n), '/1']);
 
       add_name = ['AddSub', num2str(n)];
