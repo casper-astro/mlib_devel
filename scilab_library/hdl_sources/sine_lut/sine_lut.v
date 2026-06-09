@@ -12,11 +12,10 @@ module sine_lut #(
     output reg signed [OUTPUT_WIDTH-1:0] out
 );
 
-    localparam [9:0] PHASE_STEP = TONE_BIN % 1024;
-    localparam signed [31:0] AMPLITUDE_SIGNED = AMPLITUDE;
-
-    reg [9:0] phase1024;
-    wire [1:0] quadrant = phase1024[9:8];
+    localparam signed [31:0] MAX_ROM_AMPLITUDE = 32'sd32767;
+    reg [31:0] sample_index;
+    wire [31:0] phase1024 = (sample_index * TONE_BIN) & 32'd1023;
+    wire [1:0] quadrant = phase1024[9:8];HPS lightweight AXI master
     wire [7:0] phase_in_quad = phase1024[7:0];
     wire [8:0] rom_addr = (quadrant[0] == 1'b0) ? {1'b0, phase_in_quad} : (9'd256 - {1'b0, phase_in_quad});
 
@@ -290,21 +289,21 @@ module sine_lut #(
 
     always @* begin
         signed_rom_value = quadrant[1] ? -$signed({1'b0, rom_value}) : $signed({1'b0, rom_value});
-        scaled_value = signed_rom_value * AMPLITUDE_SIGNED;
-        if (scaled_value < 0) begin
-            clipped_value = -(((-scaled_value) + 48'sd16384) >>> 15);
-        end else begin
-            clipped_value = (scaled_value + 48'sd16384) >>> 15;
-        end
+        scaled_value = signed_rom_value * AMPLITUDE;
+        clipped_value = scaled_value / MAX_ROM_AMPLITUDE;
     end
 
     always @(posedge clk) begin
         if (rst) begin
-            phase1024 <= 10'd0;
+            sample_index <= 32'd0;
             out <= {OUTPUT_WIDTH{1'b0}};
         end else if (en) begin
             out <= clipped_value[OUTPUT_WIDTH-1:0];
-            phase1024 <= phase1024 + PHASE_STEP;
+            if (sample_index == FFT_LENGTH - 1) begin
+                sample_index <= 32'd0;
+            end else begin
+                sample_index <= sample_index + 1'b1;
+            end
         end
     end
 

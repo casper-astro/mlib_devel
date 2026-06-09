@@ -420,12 +420,7 @@ class QuartusDSPBackend(QuartusBackend):
         QuartusBackend.compile() calls add_compile_cmds_pr(), so DSPflow must override that
         hook rather than the generic add_compile_cmds() helper used by other backends.
         """
-        self._add_dsp_compile_cmds(
-            cores=cores,
-            plat=plat,
-            synth_strat=synth_strat,
-            impl_strat=impl_strat,
-        )
+        self._add_dsp_compile_cmds(cores=cores, plat=plat, synth_strat=synth_strat, impl_strat=impl_strat)
 
     def _remove_library_managed_source_duplicates(self):
         """
