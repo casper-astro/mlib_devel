@@ -4,5 +4,5 @@
         branch = mb_rtrs 
 [submodule "scilab_library/hdl_sources/casper_dspdevel"]
 	path = scilab_library/hdl_sources/casper_dspdevel
-	url = git@github.com:bgodfrey/casper_dspdevel.git
-	branch = scilab-dev
+	url =git@github.com:casper-astro/casper_dspdevel.git
+	branch = scilab-dev-intel
