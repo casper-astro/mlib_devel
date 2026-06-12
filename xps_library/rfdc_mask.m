@@ -78,7 +78,10 @@ function [] = rfdc_mask(gcb,force)
     return
   end
 
-  % check which slices in a tile are enabeld: 1 is 'enabled', 0 is disabled `slices` 
+  % check which slices in a tile are enabeld: 1 is 'enabled', 0 is disabled `slices`
+  % also take note of their data mode for drawing updates (state comparison below)
+  adc_data_mode = cell(adc_num_tile,num_adc_slices);
+  dac_data_mode = cell(dac_num_tile,num_dac_slices);
   for t = 224:lastTile
     % check adc slices
     if t < 228
@@ -86,6 +89,7 @@ function [] = rfdc_mask(gcb,force)
         if chk_mask_param(msk, ['t', num2str(t), '_', adc_prefix, '_adc', num2str(a), '_enable'], 'on')
           adc_slices(t-223, a+1) = 1;
         end
+        adc_data_mode{t-223, a+1} = get_param(gcb, ['t', num2str(t), '_', adc_prefix, '_adc', num2str(a), '_digital_output']);
       end
       % enforce that a slice is enabled if the tile is
       if (tiles(t-223) == 1) && (max(adc_slices(t-223,:)) == 0)
@@ -98,6 +102,7 @@ function [] = rfdc_mask(gcb,force)
         if chk_mask_param(msk, ['t', num2str(t), '_', dac_prefix, '_dac', num2str(d), '_enable'], 'on')
           dac_slices(t-227, d+1) = 1;
         end
+        dac_data_mode{t-227, d+1} = get_param(gcb, ['t', num2str(t), '_', dac_prefix,'_dac', num2str(a), '_analog_output']);
       end
       % enforce that a slice is enabled if the tile is
       if (tiles(t-223) == 1) && (max(dac_slices(t-227,:)) == 0)
@@ -130,7 +135,8 @@ function [] = rfdc_mask(gcb,force)
   % check if the mask state has changed
   if ~same_state(gcb, 'DACEnableMTS', mts_dac_enabled, 'ADCEnableMTS', mts_adc_enabled, 'RTSPorts', rts_ports, ...
                       'Tiles',tiles,'ADCSlices',adc_slices,'DACSlices',dac_slices,'ADCTileArch',adc_tile_arch, ...
-                      'DACTileArch',dac_tile_arch,'ModelName',base_gw_name) || force
+                      'DACTileArch',dac_tile_arch,'ADCDigitalData',adc_data_mode,'DACAnalogData', dac_data_mode, ...
+                      'ModelName',base_gw_name) || force
     for tile = 224:231
       QTConf = msk.getDialogControl(sprintf('t%d_QuadTileConfig', tile));
       DTConf = msk.getDialogControl(sprintf('t%d_DualTileConfig', tile));
@@ -303,13 +309,6 @@ function [] = rfdc_mask(gcb,force)
     % delete interfaces for disabled tiles
     clean_blocks(gcb);
   end % ~same_state
-
-  % axis_clk_valid = validate_tile_clocking(gcb);
-  % if ~axis_clk_valid
-  %   error(['Current ADC configuration results in inconsistent axi-stream (system) clocking ',...
-  %          'between adc slices within a tile. Make sure data settings configuration results ',...
-  %          'in a consistent required axi-stream (system) clock across all slices.']);
-  % end
 
 end % function rfdc_mask
 
