@@ -74,10 +74,5 @@ function [] = update_axis_clk_label(gcb, tile)
   end
   axis_clks_valid = validate_tile_clocking(gcb, tile);
 
-  % This function is called whenever there is a potential change in port size,
-  % so we need to update the port sizes
-  if chk_param(gcb,'runinit','1') %only run if this isn't during the mask opening
-    set_param(gcb,'forceredraw','1'); %force the mask to redraw itself
-  end
 end
 

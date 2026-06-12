@@ -247,7 +247,7 @@ if strcmp(snap_value, 'on')
             'Position', [x_start + (x_size * 3.5), y_pos + 500 - (y_size * 0.5), x_start + (x_size * 3.5) + x_size, y_pos + 500 + (y_size * 0.5)]);
     end
     % cast the output of the buscreate to 32-bits for the snap extra val
-    reuse_block(blk, 'extracast', 'xbsIndex_r4/Convert', 'arith_type', 'Unsigned', 'n_bits', '32', 'bin_pt', '0', ...
+    reuse_block(blk, 'extracast', 'xbsIndex_r4/Convert', 'arith_type', 'Unsigned', 'n_bits', '32', 'bin_pt', '0', 'latency', '0', ...
         'Position', [x_start + (x_size * 6), y_pos + 500 - (y_size * 0.5), x_start + (x_size * 6) + x_size, y_pos + 500 + (y_size * 0.5)]);
     
     % connect them
