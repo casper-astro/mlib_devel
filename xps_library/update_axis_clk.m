@@ -62,7 +62,22 @@ function [] = update_axis_clk(gcb, tile)
       % TODO: AXI required clock is correct for at least one of the values in the
       % updated 'samples per cycle' popup. but when that popup is set it overrides
       % and so should default to the min and then set it in the popup.
-      msk.getParameter(['t', num2str(tile), '_', prefix, '_adc', num2str(a), '_sample_per_cycle']).TypeOptions = compose('%d', w(I));
+      spc_pname = ['t', num2str(tile), '_', prefix, '_adc', num2str(a), '_sample_per_cycle'];
+      newopts = compose('%d', w(I));
+      p_spc = msk.getParameter(spc_pname);
+      % R2025a re-resolves a popup selection by index when TypeOptions is
+      % reassigned, and the reassignment re-fires this callback. Only rewrite
+      % when the option list actually changes, then restore the selection by
+      % string so it cannot snap to a different value.
+      if ~isequal(reshape(newopts, 1, []), reshape(p_spc.TypeOptions, 1, []))
+        spc_val = get_param(gcb, spc_pname);      % user's current selection, captured before the rewrite
+        p_spc.TypeOptions = newopts;
+        if any(strcmp(spc_val, newopts))
+          set_param(gcb, spc_pname, spc_val);     % keep the user's choice if it is still valid
+        else
+          set_param(gcb, spc_pname, newopts{1});  % otherwise fall back to the smallest valid value
+        end
+      end
     end
 
   else % dac
@@ -99,7 +114,20 @@ function [] = update_axis_clk(gcb, tile)
       % TODO: AXI required clock is correct for at least one of the values in the
       % updated 'samples per cycle' popup. but when that popup is set it overrides
       % and so should default to the min and then set it in the popup.
-      msk.getParameter(['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_sample_per_cycle']).TypeOptions = compose('%d', w(I));
+      spc_pname = ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_sample_per_cycle'];
+      newopts = compose('%d', w(I));
+      p_spc = msk.getParameter(spc_pname);
+      % See ADC branch: guard the rewrite so R2025a cannot index-snap the
+      % selection or re-fire this callback when the list is unchanged.
+      if ~isequal(reshape(newopts, 1, []), reshape(p_spc.TypeOptions, 1, []))
+        spc_val = get_param(gcb, spc_pname);
+        p_spc.TypeOptions = newopts;
+        if any(strcmp(spc_val, newopts))
+          set_param(gcb, spc_pname, spc_val);
+        else
+          set_param(gcb, spc_pname, newopts{1});
+        end
+      end
     end
   end
   update_axis_clk_label(gcb, tile);
