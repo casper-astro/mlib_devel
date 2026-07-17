@@ -72,10 +72,10 @@ function [] = update_axis_clk(gcb, tile)
 
       % PG269, quad tiles dacs have I/Q data appear on the same interface in complex
       % pairs. E.g., 2 samples is one I and one Q sample
-      if QuadTile
-        if chk_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_analog_output'], 'I/Q')
-          w = w(2:2:end);
-        end
+      mixer_mode_str = get_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_mixer_mode']);
+      mixer_mode_is_IQ = strcmp(mixer_mode_str, 'I/Q -> Real') || strcmp(mixer_mode_str, 'I/Q -> I/Q');
+      if mixer_mode_is_IQ
+        w = w(2:2:end);
       end
 
       intermode_str = get_param(gcb, ['t', num2str(tile), '_', prefix, '_dac', num2str(a), '_inter_mode']);
