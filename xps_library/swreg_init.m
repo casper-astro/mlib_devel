@@ -101,7 +101,7 @@ function stype = type_to_string(arith_type)
             stype = 'Unsigned';
             return
         case 1
-            stype = 'Signed  (2''s comp)';
+            stype = 'Signed (2''s comp)';
             return
         case 2
             stype = 'Boolean';

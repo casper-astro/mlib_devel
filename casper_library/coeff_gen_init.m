@@ -174,15 +174,15 @@ function coeff_gen_init(blk, varargin)
   else,
     vlen = length(ActualCoeffs);
 
-    % Get FPGA part from System Generator block
+    % Get FPGA part from Model Composer block
     fpga = 'xc5v';
     try
-      xsg_blk = find_system(bdroot(blk), 'SearchDepth', 2, ...
-                    'MaskType','Xilinx System Generator Block');
-      fpga = get_param(xsg_blk{1},'part');
+      vmchub_blk = find_system(bdroot(blk), 'SearchDepth', 1,'FollowLinks','on','LookUnderMasks','all','Tag','genX');
+      vmchub = vmchub_blk{1};
+      fpga = vmchub_get_param(vmchub, bdroot(blk), 'SelectHardware');
     catch,
-      clog('Could not find FPGA part name - is there a System Generator block in this model?  Defaulting FPGA to Virtex5.', {'coeff_gen_init_debug'});
-      warning('coeff_gen_init: Could not find FPGA part name - is there a System Generator block in this model?  Defaulting FPGA to Virtex5.');
+      clog('Could not find FPGA part name - is there a Model Composer block in this model? Defaulting FPGA part to xc5v (Virtex5).', {'coeff_gen_init_debug'});
+      warning('coeff_gen_init: Could not find FPGA part name - is there a Model Composer block in this model? Defaulting FPGA part to xcv5 (Virtex5).');
     end %try/catch
 
     %parameters to decide optimisation parameters
@@ -582,7 +582,6 @@ function coeff_gen_init(blk, varargin)
       else, 
         if strcmp(async, 'off'), %if StepPeriod 0 but no enable, then create constant to enable always
           reuse_block(blk, 'en', 'xbsIndex_r4/Constant', ...
-            '',...
             'gui_display_data_type', 'Boolean', 'arith_type', 'Boolean', ...
             'const', '1', 'explicit_period', 'on', 'period', '1', ...
             'Position', [205 44 260 66]);
