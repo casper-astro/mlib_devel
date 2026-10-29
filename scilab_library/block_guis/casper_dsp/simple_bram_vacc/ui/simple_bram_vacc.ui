@@ -30,6 +30,24 @@
      <property name="text"><string>Binary point (output):</string></property>
     </widget>
        <widget class="QSpinBox" name="bin_pt"/>
+       <widget class="QLabel" name="label_input_type">
+     <property name="text"><string>Input (din) type -- Simulink inherits it from the input signal; set it here to the type of the signal driving din:</string></property>
+    </widget>
+       <widget class="QLabel" name="label_arith_type_in">
+     <property name="text"><string>Input arithmetic type:</string></property>
+    </widget>
+       <widget class="QComboBox" name="arith_type_in">
+     <item><property name="text"><string>Signed</string></property></item>
+     <item><property name="text"><string>Unsigned</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_n_bits_in">
+     <property name="text"><string>Bit width (input):</string></property>
+    </widget>
+       <widget class="QSpinBox" name="n_bits_in"/>
+       <widget class="QLabel" name="label_bin_pt_in">
+     <property name="text"><string>Binary point (input):</string></property>
+    </widget>
+       <widget class="QSpinBox" name="bin_pt_in"/>
   </widget>
  </widget>
  <resources/>

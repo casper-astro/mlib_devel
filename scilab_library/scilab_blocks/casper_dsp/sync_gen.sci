@@ -28,7 +28,7 @@ function [x, y, typ] = sync_gen(job, arg1, arg2)
         model.label = tag;
         x=standard_define([8.4 8.4],model,exprs,gr_i)
         x.graphics.in_label = [];
-        x.graphics.out_label = ['sync'];
+        x.graphics.out_label = ['sync_out'];
         x = init_exprs(x);
         x.graphics.style = sync_gen_build_style(x.graphics.exprs(1));
         debug_info('sync_gen block loaded...')
@@ -48,7 +48,7 @@ function [x] = sync_gen_update_ports(obj, bconfigfn)
     model.out = [1];
     model.out2 = [1];
     graphics.in_label = [];
-    graphics.out_label = ['sync'];
+    graphics.out_label = ['sync_out'];
     graphics.style = sync_gen_build_style(p('name'));
     x.graphics = graphics;
     x.model = model;

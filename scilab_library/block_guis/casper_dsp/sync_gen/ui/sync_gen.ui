@@ -37,6 +37,10 @@
      <property name="text"><string>Scale</string></property>
     </widget>
        <widget class="QSpinBox" name="scale"/>
+       <widget class="QLabel" name="label_period">
+     <property name="text"><string>Sync period (sync_period_sel = 0)</string></property>
+    </widget>
+       <widget class="QLabel" name="period"/>
   </widget>
  </widget>
  <resources/>

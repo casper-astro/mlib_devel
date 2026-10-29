@@ -18,7 +18,7 @@ function [x, y, typ] = power(job, arg1, arg2)
         model.rpar = [];
         exprs = [];
         gr_i = [];
-        // 'z' is complex (real+imag packed, width 2*bit_width); power
+        // 'c' is complex (real+imag packed, width 2*bit_width); power
         // output grows by 1 bit from squaring+adding (2*bit_width+1).
         model.in = [1];
         model.in2 = [36];
@@ -29,7 +29,7 @@ function [x, y, typ] = power(job, arg1, arg2)
         // get_block_type.sci via file-probe, so this is free to be the name.
         model.label = tag;
         x=standard_define([8.4 8.4],model,exprs,gr_i)
-        x.graphics.in_label = ['z'];
+        x.graphics.in_label = ['c'];
         x.graphics.out_label = ['power'];
         x = init_exprs(x);
         x.graphics.style = power_build_style(x.graphics.exprs(1));
@@ -50,7 +50,7 @@ function [x] = power_update_ports(obj, bconfigfn)
     model.in2 = [2*bw];
     model.out = [1];
     model.out2 = [2*bw+1];
-    graphics.in_label = ['z'];
+    graphics.in_label = ['c'];
     graphics.out_label = ['power'];
     graphics.style = power_build_style(p('name'));
     x.graphics = graphics;

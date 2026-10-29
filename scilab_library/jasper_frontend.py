@@ -1,10 +1,12 @@
 #! /usr/bin/env python
 import json
 import os
+import sys
 from datetime import datetime
 from utils.design_info import gen_design_info
 from utils.git_info import gen_git_info
 from utils.utils import gen_glue_module, dump_jasper, val_format_conv
+from utils.embedded_yellow import expand
 from argparse import ArgumentParser
 
 if __name__ == '__main__':
@@ -28,6 +30,20 @@ if __name__ == '__main__':
     # open jasper.json, which contains the block(xps, dsp, sim) info and link info
     with open('%s/jasper.json'%builddir) as f:
         model_info = json.load(f)
+
+    """
+    Step 2: add the yellow blocks that dsp blocks contain (e.g. sync_gen's
+    registers) and the yellow blocks' dsp-side interface blocks, see
+    utils/embedded_yellow.py. jasper.json is rewritten, as the DSP IP
+    generation reads its link info.
+    """
+    # the dsp block classes import jasper_library's YellowBlock
+    mlib_devel_path = os.getenv('MLIB_DEVEL_PATH') or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    sys.path.append(mlib_devel_path + '/jasper_library')
+    sys.path.append(mlib_devel_path + '/jasper_library/yellow_blocks')
+    expand(model_info, model_name)
+    with open('%s/jasper.json'%builddir, 'w') as f:
+        json.dump(model_info, f, indent=4)
     
     """
     Step 3: generate jasper.per, which contains the yellow(xps) block info and user module info
@@ -130,6 +146,9 @@ if __name__ == '__main__':
     Step 5: generate design_info.tab and git_info.tab
     """
     # generate design_info.tab
-    gen_design_info(xps_blocks, model_name, fn='%s/design_info.tab'%(builddir))
+    # plus the casper:* entries of the dsp blocks (e.g. casper:snapshot,
+    # which casperfpga needs to find a snapshot)
+    gen_design_info(xps_blocks, model_name, fn='%s/design_info.tab'%(builddir),
+                    extra=model_info.get('design_info', []))
     # generate git_info.tab
     gen_git_info(model_name, fn='%s/git_info.tab'%(builddir))

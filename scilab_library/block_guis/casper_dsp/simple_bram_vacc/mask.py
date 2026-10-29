@@ -40,6 +40,22 @@ SIMPLE_BRAM_VACC_CONFIG = {
         'get': 'get_bin_pt',
         'set': 'set_bin_pt'
     },
+    # din type (Simulink inherits it from the input; set by hand here)
+    'arith_type_in':
+    {
+        'get': 'get_arith_type_in',
+        'set': 'set_arith_type_in'
+    },
+    'n_bits_in':
+    {
+        'get': 'get_n_bits_in',
+        'set': 'set_n_bits_in'
+    },
+    'bin_pt_in':
+    {
+        'get': 'get_bin_pt_in',
+        'set': 'set_bin_pt_in'
+    },
 }
 
 
@@ -131,6 +147,32 @@ class SimpleBramVaccOperations(object):
         self.logger.debug(f'Set bin_pt to {val}')
         self.ui.bin_pt.setValue(int(val))
 
+    def get_arith_type_in(self):
+        text = self.ui.arith_type_in.currentText()
+        self.logger.debug(f'arith_type_in is {text}')
+        return text
+
+    def set_arith_type_in(self, text):
+        self.logger.debug(f'Set arith_type_in to {text}')
+        self.ui.arith_type_in.setCurrentText(str(text))
+
+    def get_n_bits_in(self):
+        val = self.ui.n_bits_in.value()
+        self.logger.debug(f'n_bits_in is {val}')
+        return str(val)
+
+    def set_n_bits_in(self, val):
+        self.logger.debug(f'Set n_bits_in to {val}')
+        self.ui.n_bits_in.setValue(int(val))
+
+    def get_bin_pt_in(self):
+        val = self.ui.bin_pt_in.value()
+        self.logger.debug(f'bin_pt_in is {val}')
+        return str(val)
+
+    def set_bin_pt_in(self, val):
+        self.logger.debug(f'Set bin_pt_in to {val}')
+        self.ui.bin_pt_in.setValue(int(val))
 
     # *******************************************************************
     # Validation
@@ -158,6 +200,8 @@ class SimpleBramVaccOperations(object):
         bin_pt = int(self.get_bin_pt())
         if bin_pt > n_bits:
             errors.append('Binary point (output): cannot be greater than the bit width.')
+        if int(self.get_bin_pt_in()) > int(self.get_n_bits_in()):
+            errors.append('Binary point (input): cannot be greater than the input bit width.')
         return errors
 
     # *******************************************************************

@@ -79,7 +79,9 @@
         "xeng_descramble": { "enabled": true, "category": "Correlator" },
         "xeng_descramble_4ant": { "enabled": true, "category": "Correlator" },
         "xeng": { "enabled": true, "category": "Correlator" },
-        "cross_multiplier": { "enabled": true, "category": "Correlator" }
+        "cross_multiplier": { "enabled": true, "category": "Correlator" },
+        "bitfield_snapshot": { "enabled": true, "category": "Scopes" },
+        "snapshot": { "enabled": true, "category": "Scopes" }
     },
     "casper_xps": {
         "gpio": { "enabled": true, "category": "IO" },

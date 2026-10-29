@@ -1,4 +1,5 @@
 import sys
+import re
 import logging
 import json
 from argparse import ArgumentParser
@@ -9,6 +10,13 @@ from sync_gen_ui import Ui_MainWindow
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from utils.utils import make_rich_logger, gen_bconfig
+# the vector parser and the period rules are shared with dsp_blocks/sync_gen.py;
+# they live in scilab_library/utils (not block_guis/utils, the "utils"
+# package above), so import them from that directory directly
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(
+    os.path.abspath(__file__))))), 'utils'))
+from matlab_vec import parse_vector
+from sync_gen_period import sync_gen_period
 
 # Mapping between the JSON parameter keys and the get/set methods used to
 # synchronize them with the Qt widgets defined in sync_gen_ui.py.
@@ -77,6 +85,7 @@ class SyncGenOperations(object):
         self.ui = winobj.ui
         self.load_config()
         self.setup_signal_functions()
+        self.update_status()
 
     def _convert_status(self, status):
         # checkbox status is saved as 'on'/'off', same convention as the
@@ -163,17 +172,45 @@ class SyncGenOperations(object):
     # *******************************************************************
     # Validation
     # *******************************************************************
+    # prompts of the parameters, to name them in the messages
+    LABELS = [(r'\bsim_acc_len\b', 'Simulation Accumulation Length'), (r'\bfft_size\b', 'FFT Size'),
+              (r'\bfft_simult_inputs\b', 'Simultaneous Inputs (FFT)'),
+              (r'\bpfb_fir_taps\b', 'Taps in pfb_fir'), (r'\breorder_vec\b', 'Reorder Orders'),
+              (r'\bscale\b', 'Scale')]
+
+    def _period(self):
+        """(period, constant) of the current values, or a list of error
+        messages. The rules are sync_gen.sv's $fatal checks (sync_gen_period):
+        the period must be an integer and period - 2 must fit the Signed
+        32-bit constant sync_gen_init.m writes."""
+        try:
+            reorder_vec = parse_vector(self.get_reorder_vec())
+        except ValueError as e:
+            return [f'Reorder Orders: {e} (use e.g. [2 2 2]).']
+        try:
+            return sync_gen_period(int(self.get_sim_acc_len()), int(self.get_fft_size()),
+                                   int(self.get_fft_simult_inputs()), int(self.get_pfb_fir_taps()),
+                                   reorder_vec, int(self.get_scale()))
+        except ValueError as e:
+            msg = str(e)
+            for key, label in self.LABELS:
+                msg = re.sub(key, label, msg)
+            return [msg[0].upper() + msg[1:] + '.']
+
     def validate_config(self):
         """
         Return a list of error messages. The list is empty if the config is valid.
-        TODO: this only checks that 'edit' fields are non-empty -- port over
-        the real validation rules from casper_library's *_init.m /
-        *_maskcheck.m for this block (see the skill's extracted mask info).
         """
-        errors = []
-        if str(self.get_reorder_vec()).strip() == '':
-            errors.append('Reorder Orders (e.g. [2 2 2]) must not be empty.')
-        return errors
+        period = self._period()
+        return period if isinstance(period, list) else []
+
+    def update_status(self):
+        """Show the sync period the current values give (or why they are invalid)."""
+        period = self._period()
+        if isinstance(period, list):
+            self.ui.period.setText('invalid: ' + ' '.join(period))
+        else:
+            self.ui.period.setText(f'{period[0]} cycles (constant {period[1]})')
 
     # *******************************************************************
     # Signal functions
@@ -204,6 +241,9 @@ class SyncGenOperations(object):
         self.ui.button_ok.clicked.connect(self.ButtonOK_Clicked)
         self.ui.button_cancel.clicked.connect(self.ButtonCancel_Clicked)
         self.ui.button_apply.clicked.connect(self.ButtonApply_Clicked)
+        for key in ('sim_acc_len', 'fft_size', 'fft_simult_inputs', 'pfb_fir_taps', 'scale'):
+            getattr(self.ui, key).valueChanged.connect(self.update_status)
+        self.ui.reorder_vec.textChanged.connect(self.update_status)
 
     # *******************************************************************
     # load/collect config functions

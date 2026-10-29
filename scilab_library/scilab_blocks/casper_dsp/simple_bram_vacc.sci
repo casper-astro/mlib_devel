@@ -21,14 +21,14 @@ function [x, y, typ] = simple_bram_vacc(job, arg1, arg2)
         model.in = [1, 2];
         model.in2 = [1, 32];
         model.out = [1, 2];
-        model.out2 = [1, 32];
+        model.out2 = [32, 1];
         // model.label doubles as the on-diagram display text (Scicos
         // aliases it with graphics.id); category is derived separately by
         // get_block_type.sci via file-probe, so this is free to be the name.
         model.label = tag;
         x=standard_define([8.4 4.8],model,exprs,gr_i)
         x.graphics.in_label = ['new_acc', 'din'];
-        x.graphics.out_label = ['valid', 'dout'];
+        x.graphics.out_label = ['dout', 'valid'];
         x = init_exprs(x);
         x.graphics.style = simple_bram_vacc_build_style(x.graphics.exprs(1));
         debug_info('simple_bram_vacc block loaded...')
@@ -44,11 +44,13 @@ function [x] = simple_bram_vacc_update_ports(obj, bconfigfn)
     graphics = x.graphics;
     model = x.model;
     model.in = [1, 2];
-    model.in2 = [1, strtod(p('n_bits'))];
+    // din has its own type (n_bits_in; inherited in Simulink), dout the
+    // accumulator type; port order as in Simulink: new_acc, din -> dout, valid
+    model.in2 = [1, strtod(p('n_bits_in'))];
     model.out = [1, 2];
-    model.out2 = [1, strtod(p('n_bits'))];
+    model.out2 = [strtod(p('n_bits')), 1];
     graphics.in_label = ['new_acc', 'din'];
-    graphics.out_label = ['valid', 'dout'];
+    graphics.out_label = ['dout', 'valid'];
     graphics.style = simple_bram_vacc_build_style(p('name'));
     x.graphics = graphics;
     x.model = model;
