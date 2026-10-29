@@ -1,99 +1,131 @@
-import sys
+import os
+import json
 from .dsp_block import DSPBlock
-from verilog import VerilogModule
-import ast
+
 
 class bus_expand(DSPBlock):
-    def initialize(self):
-        # create the hdl wrapper directory
-        self.create_hdl_dir()
-        # convert string here to list
-        self.bit_division = ast.literal_eval(self.bit_division)
-        # calculate the total number of bits
-        self.total_bits = sum(self.bit_division)
-        # check if the ndivision maches the length of bit_division
-        if self.ndivision != len(self.bit_division):
-            raise Exception("Length of ndivision should match the length of bit_division")
-        # we don't have source files for this block
-        # the hdl code is generated dynamically
-        # TODO: Is this a good idea?
-        self._generate_hdl_wrapper()
-        # add the generated wrapper
-        self.add_source(self.hdl_wrapper_dir + "/bus_expand_arbitrary.vhd")
+    # casper_library bus_expand on casper_dsp's FlowControl/bus_expand.sv:
+    # splits bus_in into OUTPUT_NUM slices of OUTPUT_WIDTH bits
+    # (combinational, no clock). bus_expand.sci labels the outputs
+    # out1..outN as Simulink does, out1 being the most significant slice;
+    # bus_expand.sv's bus_out[0] is the least significant one, so Xcos
+    # output k comes from bus_out[OUTPUT_NUM-k].
 
-    def modify_top(self,top):
+    # casper_dsp RTL files this block needs (relative to hdl_sources/casper_dsp)
+    RTL_FILES = [
+        'rtl/BasicModules/slice.v',
+        'rtl/FlowControl/bus_expand.sv',
+    ]
+
+    def initialize(self):
+        self.create_hdl_dir()
+        casper_dsp_root = os.path.join(self.hdl_root, 'casper_dsp')
+        for relpath in self._rtl_relpaths(casper_dsp_root):
+            self.add_source(os.path.join('casper_dsp', relpath))
+        self._generate_wrapper()
+        self.add_source(os.path.join(self.hdl_wrapper_dir, self.wrapper_module + '.sv'))
+
+    @classmethod
+    def _rtl_relpaths(cls, casper_dsp_root):
+        missing = [f for f in cls.RTL_FILES if not os.path.isfile(os.path.join(casper_dsp_root, f))]
+        if missing:
+            raise FileNotFoundError('%s: missing casper_dsp sources: %s' % (cls.__name__, ', '.join(missing)))
+        return list(cls.RTL_FILES)
+
+    def _output_num(self):
+        return int(float(self.ndivision))
+
+    def _widths(self):
+        """The bit_division vector ('[8,8]', or '{8,8}' as in MATLAB; a single
+        number means one output)."""
+        val = self.bit_division
+        if isinstance(val, (list, tuple)):
+            widths = list(val)
+        elif isinstance(val, (int, float)):
+            widths = [val]
+        else:
+            widths = json.loads(str(val).strip().replace('{', '[').replace('}', ']'))
+            if not isinstance(widths, list):
+                widths = [widths]
+        return [int(float(w)) for w in widths]
+
+    def _width(self):
+        """The common output width: bus_expand.sv splits the bus into
+        OUTPUT_NUM slices of one width OUTPUT_WIDTH ('divisions of equal
+        size'; Simulink's arbitrary divisions are not supported by the HDL)."""
+        n = self._output_num()
+        widths = self._widths()
+        if n < 1:
+            raise ValueError('bus_expand %s: ndivision must be >= 1 (got %d)' % (self.fullname, n))
+        if len(widths) != n:
+            raise ValueError('bus_expand %s: bit_division %s has %d entries, ndivision is %d'
+                             % (self.fullname, widths, len(widths), n))
+        if len(set(widths)) != 1 or widths[0] < 1:
+            raise ValueError('bus_expand %s: every output must have the same positive width '
+                             '(bus_expand.sv), got bit_division %s' % (self.fullname, widths))
+        return widths[0]
+
+    def out_ports(self):
+        """(name, width) of the output ports, in Xcos port order: out1..outN
+        (out1 = most significant slice), as bus_expand.sci labels them."""
+        width = self._width()
+        return [('out%d' % k, width) for k in range(1, self._output_num() + 1)]
+
+    def _generate_wrapper(self):
+        # bus_expand.sv's bus_out is a SystemVerilog unpacked array
+        # (bus_out[OUTPUT_NUM]); jasper_library/verilog.py's
+        # Instance.add_port() binds one named signal per port, so this
+        # per-instance wrapper exposes one flat port per Xcos port (bus_in,
+        # out1..outN).
+        n = self._output_num()
+        width = self._width()
+        self.wrapper_module = 'bus_expand_wrap_%s' % self.unique_name
+
+        L = []
+        L.append("// auto-generated per-instance wrapper -- see bus_expand.py's")
+        L.append("// _generate_wrapper() for why this exists. Regenerated on every")
+        L.append("// build, do not hand-edit.")
+        L.append("module %s (" % self.wrapper_module)
+        L.append("    input  logic [%d:0] bus_in," % (width * n - 1))
+        for k in range(1, n + 1):
+            L.append("    output logic [%d:0] out%d%s" % (width - 1, k, ',' if k < n else ''))
+        L.append(");")
+        L.append("    logic [%d:0] dout_arr [%d];" % (width - 1, n))
+        L.append("")
+        L.append("    bus_expand #(")
+        L.append("        .OUTPUT_NUM(%d)," % n)
+        L.append("        .OUTPUT_WIDTH(%d)" % width)
+        L.append("    ) u_bus_expand (")
+        L.append("        .bus_in(bus_in),")
+        L.append("        .bus_out(dout_arr)")
+        L.append("    );")
+        L.append("")
+        # Simulink out1 is the MSB slice, bus_expand.sv's bus_out[0] the LSB one
+        for k in range(1, n + 1):
+            L.append("    assign out%d = dout_arr[%d];" % (k, n - k))
+        L.append("endmodule")
+
+        with open(os.path.join(self.hdl_wrapper_dir, self.wrapper_module + '.sv'), 'w') as f:
+            f.write('\n'.join(L) + '\n')
+
+    def modify_top(self, top):
         # let's populate the parent ports first
         self._populate_parent_ports(top)
-        # create a verilog module
-        module = 'bus_expand_arbitrary'
-        inst = top.get_instance(entity=module, name=self.fullname)
-        # TODO: add parameters
-        # add ports
-        # we need to check if the port is in parent_ports
-        inst.add_port('clk', 'user_clk', dir='in')
-        inst.add_port('ce', '1', parent_port=False, width=1, dir='in')
-        inst.add_port('i_data', self.fullname+'_i_data', parent_port=False, width=self.total_bits, dir='in')
-        for i in range(self.ndivision):
-            inst.add_port(f'o_data_{i}', self.fullname+f'_o_data_{i}', parent_port=False, width=self.bit_division[i], dir='out')
+        inst = top.get_instance(entity=self.wrapper_module, name=self.fullname)
+        # port names match the wrapper's ports and bus_expand.sci's labels
+        inst.add_port('bus_in', self.fullname + '_bus_in', parent_port=False,
+                      width=self._width() * self._output_num(), dir='in')
+        for name, width in self.out_ports():
+            inst.add_port(name, self.fullname + '_' + name, parent_port=False, width=width, dir='out')
 
-    def _generate_hdl_wrapper(self):
-        hdl_wrapper_dir = self.hdl_wrapper_dir
-        # get the paramters from the bus_expand obj
-        bit_division = self.bit_division
-        division = len(bit_division)
-        # calculate bit start.
-        # For example, if bit_division = [1,2,3,4], the output bit range will be:
-        # out0 - 10-1 : 9;
-        # out1 -  9-8 : 7;
-        # out2 -  7-5 : 4;
-        # out3 -  4-1 : 0;
-        # So, bit_start = [10, 9, 7, 4, 0]
-        bit_start = []
-        bit_start.append(sum(bit_division))
-        for i in range(division):
-            bit_start.append(sum(bit_division[i+1:]))
-        vhdl_template = f"""
-LIBRARY IEEE;
-USE IEEE.std_logic_1164.all;
-
-ENTITY bus_expand_arbitrary is
-port (
-    clk   : in std_logic := '1';
-    ce    : in std_logic := '1';
-
-    i_data   : in std_logic_vector({self.total_bits-1} downto 0);
-    """
-        vhdl_template += "    ".join(f"o_data_{i}   : out std_logic_vector({self.bit_division[i]-1} downto 0);\n" for i in range(division - 1))
-        vhdl_template += f"    o_data_{division - 1}   : out std_logic_vector({self.bit_division[-1]-1} downto 0)\n"
-        vhdl_template += f"""
-);
-end ENTITY;
-
-ARCHITECTURE rtl of bus_expand_arbitrary is
-    alias a_data : STD_LOGIC_VECTOR (i_data'length-1 downto 0) is i_data;
-    """
-        vhdl_template += "    ".join(f"alias a_data_{i} : STD_LOGIC_VECTOR ({bit_division[i]}-1 downto 0) is o_data_{i};\n" for i in range(division))
-        vhdl_template += f"""
-begin
-
-  -- g_split : FOR I IN g_division_bit_widths'range GENERATE
-  -- begin
-    """
-        vhdl_template += "    ".join(f"a_data_{i} <= a_data({bit_start[i]}-1 downto {bit_start[i+1]});\n" for i in range(division))
-        vhdl_template += f"""
-  -- end GENERATE;
-
-end ARCHITECTURE;
-    """
-        with open(hdl_wrapper_dir +"/bus_expand_arbitrary.vhd", "w", encoding="utf-8") as file:
-            file.write(vhdl_template)
-    
     def generate_compile_order(self):
+        casper_dsp_root = os.path.join(self.hdl_root, 'casper_dsp')
+        modules = [os.path.join(casper_dsp_root, relpath)
+                   for relpath in self._rtl_relpaths(casper_dsp_root)]
+        modules.append(os.path.join(self.hdl_wrapper_dir, self.wrapper_module + '.sv'))
         co = {
             'lib': 'xil_defaultlib',
-            'modules': [
-                self.hdl_wrapper_dir + '/bus_expand_arbitrary.vhd'
-            ],
-            'fullpath': True
+            'modules': modules,
+            'fullpath': True,
         }
-        self.compile_order['vhdl'].append(co)
+        self.compile_order['verilog'].append(co)

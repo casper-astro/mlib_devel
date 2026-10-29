@@ -136,6 +136,11 @@ class BusExpandOperations(object):
                         f'(matching Number of Division), got {len(widths)}.')
                 if not all(isinstance(w, int) and w > 0 for w in widths):
                     errors.append('Bit width of each output: every value must be a positive integer.')
+                elif len(set(widths)) > 1:
+                    # casper_dsp's bus_expand.sv splits the bus into
+                    # OUTPUT_NUM slices of one width OUTPUT_WIDTH
+                    # (dsp_blocks/bus_expand.py)
+                    errors.append('Bit width of each output: all outputs must have the same width.')
             except (ValueError, TypeError):
                 errors.append(
                     'Bit width of each output: must be a bracketed vector of positive '
