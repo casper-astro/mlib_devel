@@ -76,7 +76,7 @@ function [x] = of_detect_bus_update_ports(obj, bconfigfn)
     evtout = [];
     [iports_index, iports_label] = of_detect_bus_create_iports(factor);
     [oports_index, oports_label] = of_detect_bus_create_oports(factor);
-    // port I/O type: 1 = REAL (see set_io() docs); this mirrors wbfft/bus_expand,
+    // port I/O type: 1 = REAL (see set_io() docs); this mirrors bus_expand,
     // which don't distinguish port datatypes any further
     io_in = [iports_index; iports_index];
     io_out = [oports_index; oports_index];

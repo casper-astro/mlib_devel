@@ -79,7 +79,7 @@ function [x] = bus_create_update_ports(obj, bconfigfn)
     evtout = [];
     [iports_index, iports_label] = bus_create_create_iports(factor);
     [oports_index, oports_label] = bus_create_create_oports(factor);
-    // port I/O type: 1 = REAL (see set_io() docs); this mirrors wbfft/bus_expand,
+    // port I/O type: 1 = REAL (see set_io() docs); this mirrors bus_expand,
     // which don't distinguish port datatypes any further
     io_in = [iports_index; iports_index];
     io_out = [oports_index; oports_index];
@@ -88,7 +88,7 @@ function [x] = bus_create_update_ports(obj, bconfigfn)
     [model, graphics, ok] = set_io(model, graphics, list(io_in', io_in_type), list(io_out', io_out_type), evtin, evtout);
     model.in = iports_index;
     // one bit width per input, read straight from the "bit_widths" vector
-    // (e.g. "[8,8]"); NOT a uniform width * factor like wbfft's data ports
+    // (e.g. "[8,8]"); NOT one uniform width for every port
     model.in2 = evstr(p('bit_widths'));
     model.out = oports_index;
     // output bus width is the sum of all input widths (concatenation)
