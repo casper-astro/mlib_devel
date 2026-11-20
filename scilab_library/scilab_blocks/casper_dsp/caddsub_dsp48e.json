@@ -1,0 +1,36 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "mode",
+            "n_bits_a",
+            "bin_pt_a",
+            "n_bits_b",
+            "bin_pt_b",
+            "full_precision",
+            "n_bits_c",
+            "bin_pt_c",
+            "quantization",
+            "overflow",
+            "cast_latency"
+        ],
+        "values": [
+            "caddsub_dsp48e",
+            "",
+            "dsp:caddsub_dsp48e",
+            "Addition",
+            "18",
+            "17",
+            "8",
+            "7",
+            "on",
+            "19",
+            "17",
+            "Truncate",
+            "Wrap",
+            "0"
+        ]
+    }
+}

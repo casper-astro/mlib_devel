@@ -1,0 +1,18 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "bit_num",
+            "n_adc_bits"
+        ],
+        "values": [
+            "of1",
+            "",
+            "dsp:of1",
+            "0",
+            "8"
+        ]
+    }
+}

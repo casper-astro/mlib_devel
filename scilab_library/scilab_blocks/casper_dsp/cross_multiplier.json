@@ -1,0 +1,36 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "streams",
+            "aggregation",
+            "bit_width_in",
+            "binary_point_in",
+            "bit_width_out",
+            "binary_point_out",
+            "mult_latency",
+            "add_latency",
+            "overflow",
+            "quantisation",
+            "conv_latency"
+        ],
+        "values": [
+            "cross_multiplier",
+            "",
+            "dsp:cross_multiplier",
+            "2",
+            "2",
+            "4",
+            "3",
+            "9",
+            "6",
+            "2",
+            "1",
+            "Wrap",
+            "Truncate",
+            "0"
+        ]
+    }
+}

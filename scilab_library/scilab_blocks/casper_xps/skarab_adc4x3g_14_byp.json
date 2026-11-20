@@ -1,0 +1,18 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "mez",
+            "sync_ms"
+        ],
+        "values": [
+            "skarab_adc4x3g_14_byp",
+            "",
+            "xps:skarab_adc4x3g_14_byp",
+            "2",
+            "Master"
+        ]
+    }
+}

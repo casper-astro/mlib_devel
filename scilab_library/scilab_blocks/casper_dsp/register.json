@@ -1,0 +1,26 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "init",
+            "rst",
+            "en",
+            "n_bits",
+            "arith_type",
+            "bin_pt"
+        ],
+        "values": [
+            "register",
+            "",
+            "dsp:register",
+            "0",
+            "off",
+            "off",
+            "8",
+            "Unsigned",
+            "0"
+        ]
+    }
+}

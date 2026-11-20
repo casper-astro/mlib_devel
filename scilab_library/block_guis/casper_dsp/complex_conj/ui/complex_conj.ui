@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Complex Conjugate</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_n_inputs">
+     <property name="text"><string>number simultaneous inputs</string></property>
+    </widget>
+       <widget class="QSpinBox" name="n_inputs"/>
+       <widget class="QLabel" name="label_n_bits">
+     <property name="text"><string>input bitwidth</string></property>
+    </widget>
+       <widget class="QSpinBox" name="n_bits"/>
+       <widget class="QLabel" name="label_bin_pt">
+     <property name="text"><string>input binary point</string></property>
+    </widget>
+       <widget class="QSpinBox" name="bin_pt"/>
+       <widget class="QLabel" name="label_csp_latency">
+     <property name="text"><string>latency</string></property>
+    </widget>
+       <widget class="QSpinBox" name="csp_latency"/>
+       <widget class="QLabel" name="label_overflow">
+     <property name="text"><string>overflow strategy</string></property>
+    </widget>
+       <widget class="QComboBox" name="overflow">
+     <item><property name="text"><string>Wrap</string></property></item>
+     <item><property name="text"><string>Saturate</string></property></item>
+     <item><property name="text"><string>Flag as error</string></property></item>
+    </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

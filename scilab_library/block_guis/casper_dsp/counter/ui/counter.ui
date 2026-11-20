@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Counter</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_counter_type">
+     <property name="text"><string>Counter type</string></property>
+    </widget>
+       <widget class="QComboBox" name="counter_type">
+     <item><property name="text"><string>Free Running</string></property></item>
+     <item><property name="text"><string>Count Limited</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_n_bits">
+     <property name="text"><string>Number of bits</string></property>
+    </widget>
+       <widget class="QSpinBox" name="n_bits"/>
+       <widget class="QLabel" name="label_count_to_val">
+     <property name="text"><string>Count to value (Count Limited only)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="count_to_val"/>
+       <widget class="QLabel" name="label_count_dir">
+     <property name="text"><string>Count direction</string></property>
+    </widget>
+       <widget class="QComboBox" name="count_dir">
+     <item><property name="text"><string>Up</string></property></item>
+     <item><property name="text"><string>Down</string></property></item>
+     <item><property name="text"><string>Up/Down</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_init_val">
+     <property name="text"><string>Initial value</string></property>
+    </widget>
+       <widget class="QLineEdit" name="init_val"/>
+       <widget class="QLabel" name="label_step">
+     <property name="text"><string>Step</string></property>
+    </widget>
+       <widget class="QLineEdit" name="step"/>
+       <widget class="QLabel" name="label_bin_pt">
+     <property name="text"><string>Binary point</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bin_pt"/>
+       <widget class="QLabel" name="label_enable_load">
+     <property name="text"><string>Provide load port</string></property>
+    </widget>
+       <widget class="QCheckBox" name="enable_load"/>
+       <widget class="QLabel" name="label_enable_sync_rst">
+     <property name="text"><string>Provide synchronous reset port</string></property>
+    </widget>
+       <widget class="QCheckBox" name="enable_sync_rst"/>
+       <widget class="QLabel" name="label_enable_enable">
+     <property name="text"><string>Gate counting on enable</string></property>
+    </widget>
+       <widget class="QCheckBox" name="enable_enable"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

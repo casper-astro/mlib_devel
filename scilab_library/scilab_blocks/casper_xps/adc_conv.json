@@ -1,0 +1,16 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "bit_width"
+        ],
+        "values": [
+            "adc_conv",
+            "",
+            "xps:adc_conv",
+            "8"
+        ]
+    }
+}

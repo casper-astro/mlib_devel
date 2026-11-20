@@ -1,0 +1,16 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "bitwidth"
+        ],
+        "values": [
+            "power_dsp48e",
+            "",
+            "dsp:power_dsp48e",
+            "18"
+        ]
+    }
+}

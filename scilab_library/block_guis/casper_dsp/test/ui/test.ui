@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Unit Test Interface</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name">
+     <property name="toolTip"><string>A name you choose for this block instance, e.g. to note what it's used for in this design. Shown below the block on the diagram.</string></property>
+    </widget>
+       <widget class="QLabel" name="label_tests_location">
+     <property name="text"><string>Location of unit tests</string></property>
+    </widget>
+       <widget class="QLineEdit" name="tests_location"/>
+       <widget class="QLabel" name="label_tests_file">
+     <property name="text"><string>Name of test file</string></property>
+    </widget>
+       <widget class="QLineEdit" name="tests_file"/>
+       <widget class="QLabel" name="label_test_type">
+     <property name="text"><string>Test type:</string></property>
+    </widget>
+       <widget class="QComboBox" name="test_type">
+     <item><property name="text"><string>all</string></property></item>
+     <item><property name="text"><string>section</string></property></item>
+     <item><property name="text"><string>section from block</string></property></item>
+     <item><property name="text"><string>unit</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_subsection">
+     <property name="text"><string>Library subsection:</string></property>
+    </widget>
+       <widget class="QLineEdit" name="subsection"/>
+       <widget class="QLabel" name="label_block">
+     <property name="text"><string>Library block</string></property>
+    </widget>
+       <widget class="QLineEdit" name="block"/>
+       <widget class="QLabel" name="label_stop_first_fail">
+     <property name="text"><string>Stop testing on first failure</string></property>
+    </widget>
+       <widget class="QCheckBox" name="stop_first_fail"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

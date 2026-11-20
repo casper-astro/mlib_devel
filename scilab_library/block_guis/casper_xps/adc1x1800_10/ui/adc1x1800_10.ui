@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>adc1x1800_10</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_adc_brd">
+     <property name="text"><string>ADC board</string></property>
+    </widget>
+       <widget class="QComboBox" name="adc_brd">
+     <item><property name="text"><string>adc0</string></property></item>
+     <item><property name="text"><string>adc1</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_adc_clk_rate">
+     <property name="text"><string>ADC clock rate (MHz)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="adc_clk_rate"/>
+       <widget class="QLabel" name="label_sample_period">
+     <property name="text"><string>Sample period</string></property>
+    </widget>
+       <widget class="QLineEdit" name="sample_period"/>
+       <widget class="QLabel" name="label_gray_en">
+     <property name="text"><string>Gray Code Enable</string></property>
+    </widget>
+       <widget class="QCheckBox" name="gray_en"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

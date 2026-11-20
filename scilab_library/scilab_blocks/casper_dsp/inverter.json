@@ -1,0 +1,20 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "n_bits",
+            "latency",
+            "en"
+        ],
+        "values": [
+            "inverter",
+            "",
+            "dsp:inverter",
+            "8",
+            "1",
+            "off"
+        ]
+    }
+}

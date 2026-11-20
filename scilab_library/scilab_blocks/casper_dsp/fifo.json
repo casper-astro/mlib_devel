@@ -1,0 +1,48 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "n_bits",
+            "mem_type",
+            "performance_options",
+            "embedded_registers",
+            "depth",
+            "percent_nbits",
+            "rst",
+            "rst_latency",
+            "en",
+            "use_dcount",
+            "use_percent_full_port",
+            "use_almost_empty",
+            "almost_empty_thresh",
+            "use_almost_full",
+            "use_rd_rst_busy",
+            "use_wr_rst_busy",
+            "almost_full_thresh"
+        ],
+        "values": [
+            "fifo",
+            "",
+            "dsp:fifo",
+            "8",
+            "Block RAM",
+            "Standard_FIFO",
+            "off",
+            "16",
+            "1",
+            "off",
+            "1",
+            "off",
+            "off",
+            "on",
+            "off",
+            "2",
+            "off",
+            "off",
+            "off",
+            "14"
+        ]
+    }
+}

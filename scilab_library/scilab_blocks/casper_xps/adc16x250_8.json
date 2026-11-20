@@ -1,0 +1,20 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "board_count",
+            "roach2_rev",
+            "zdok_rev"
+        ],
+        "values": [
+            "adc16x250_8",
+            "",
+            "xps:adc16",
+            "1",
+            "2",
+            "2"
+        ]
+    }
+}

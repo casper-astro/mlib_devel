@@ -1,0 +1,22 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "inputs",
+            "en",
+            "latency",
+            "n_bits"
+        ],
+        "values": [
+            "mux",
+            "",
+            "dsp:mux",
+            "2",
+            "off",
+            "1",
+            "8"
+        ]
+    }
+}

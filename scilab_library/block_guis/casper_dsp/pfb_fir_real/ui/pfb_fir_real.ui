@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>pfb_fir_real Configuration</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_PFBSize">
+     <property name="text"><string>Size of PFB: (2^? pnts)</string></property>
+    </widget>
+       <widget class="QSpinBox" name="PFBSize"/>
+       <widget class="QLabel" name="label_TotalTaps">
+     <property name="text"><string>Total Number of Taps:</string></property>
+    </widget>
+       <widget class="QSpinBox" name="TotalTaps"/>
+       <widget class="QLabel" name="label_WindowType">
+     <property name="text"><string>Windowing Function:</string></property>
+    </widget>
+       <widget class="QComboBox" name="WindowType">
+     <item><property name="text"><string>bartlett</string></property></item>
+     <item><property name="text"><string>barthannwin</string></property></item>
+     <item><property name="text"><string>blackman</string></property></item>
+     <item><property name="text"><string>blackmanharris</string></property></item>
+     <item><property name="text"><string>bohamwin</string></property></item>
+     <item><property name="text"><string>chebwin</string></property></item>
+     <item><property name="text"><string>flattopwin</string></property></item>
+     <item><property name="text"><string>gausswin</string></property></item>
+     <item><property name="text"><string>hamming</string></property></item>
+     <item><property name="text"><string>hann</string></property></item>
+     <item><property name="text"><string>kaiser</string></property></item>
+     <item><property name="text"><string>nuttallwin</string></property></item>
+     <item><property name="text"><string>parzenwin</string></property></item>
+     <item><property name="text"><string>rectwin</string></property></item>
+     <item><property name="text"><string>tukeywin</string></property></item>
+     <item><property name="text"><string>triang</string></property></item>
+     <item><property name="text"><string>userwindow</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_n_inputs">
+     <property name="text"><string>Number of Simultaneous Inputs: (2^?)</string></property>
+    </widget>
+       <widget class="QSpinBox" name="n_inputs"/>
+       <widget class="QLabel" name="label_n_pol_blocks">
+     <property name="text"><string>Number of independent input streams (I.e., number of different polarizations)</string></property>
+    </widget>
+       <widget class="QSpinBox" name="n_pol_blocks"/>
+       <widget class="QLabel" name="label_MakeBiplex">
+     <property name="text"><string>Make Biplex?</string></property>
+    </widget>
+       <widget class="QCheckBox" name="MakeBiplex"/>
+       <widget class="QLabel" name="label_BitWidthIn">
+     <property name="text"><string>Input Bitwidth:</string></property>
+    </widget>
+       <widget class="QSpinBox" name="BitWidthIn"/>
+       <widget class="QLabel" name="label_BitWidthOut">
+     <property name="text"><string>Output Bitwidth: (0 = auto, sized from bit-growth analysis)</string></property>
+    </widget>
+       <widget class="QSpinBox" name="BitWidthOut"/>
+       <widget class="QLabel" name="label_CoeffBitWidth">
+     <property name="text"><string>Coefficient Bitwidth:</string></property>
+    </widget>
+       <widget class="QSpinBox" name="CoeffBitWidth"/>
+       <widget class="QLabel" name="label_CoeffDistMem">
+     <property name="text"><string>Use Distributed Memory for Coeffs</string></property>
+    </widget>
+       <widget class="QCheckBox" name="CoeffDistMem"/>
+       <widget class="QLabel" name="label_add_latency">
+     <property name="text"><string>Add Latency</string></property>
+    </widget>
+       <widget class="QSpinBox" name="add_latency"/>
+       <widget class="QLabel" name="label_mult_latency">
+     <property name="text"><string>Mult Latency</string></property>
+    </widget>
+       <widget class="QSpinBox" name="mult_latency"/>
+       <widget class="QLabel" name="label_bram_latency">
+     <property name="text"><string>BRAM Latency</string></property>
+    </widget>
+       <widget class="QSpinBox" name="bram_latency"/>
+       <widget class="QLabel" name="label_fan_latency">
+     <property name="text"><string>Fanout latency</string></property>
+    </widget>
+       <widget class="QSpinBox" name="fan_latency"/>
+       <widget class="QLabel" name="label_conv_latency">
+     <property name="text"><string>Convert latency</string></property>
+    </widget>
+       <widget class="QSpinBox" name="conv_latency"/>
+       <widget class="QLabel" name="label_quantization">
+     <property name="text"><string>Quantization Behavior</string></property>
+    </widget>
+       <widget class="QComboBox" name="quantization">
+     <item><property name="text"><string>Truncate</string></property></item>
+     <item><property name="text"><string>Round  (unbiased: +/- Inf)</string></property></item>
+     <item><property name="text"><string>Round  (unbiased: Even Values)</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_fwidth">
+     <property name="text"><string>Bin Width Scaling (normal=1)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="fwidth"/>
+       <widget class="QLabel" name="label_mult_spec">
+     <property name="text"><string>Multiplier specification (0=core, 1=embedded, 2=behavioural) (left=1st tap, or just one value) (declared, not yet implemented by the HDL backend)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="mult_spec"/>
+       <widget class="QLabel" name="label_adder_folding">
+     <property name="text"><string>Fold adders into DSPs (declared, not yet implemented by the HDL backend)</string></property>
+    </widget>
+       <widget class="QCheckBox" name="adder_folding"/>
+       <widget class="QLabel" name="label_adder_imp">
+     <property name="text"><string>Adder implementation (declared, not yet implemented by the HDL backend)</string></property>
+    </widget>
+       <widget class="QComboBox" name="adder_imp">
+     <item><property name="text"><string>Behavioral</string></property></item>
+     <item><property name="text"><string>Fabric</string></property></item>
+     <item><property name="text"><string>DSP48</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_coeffs_share">
+     <property name="text"><string>Share coefficients between polarisations (use less BRAM)? (only applies when Make Biplex is on)</string></property>
+    </widget>
+       <widget class="QCheckBox" name="coeffs_share"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

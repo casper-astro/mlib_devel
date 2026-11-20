@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>QDR</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name">
+     <property name="toolTip"><string>A name you choose for this block instance, e.g. to note what it's used for in this design. Shown below the block on the diagram.</string></property>
+    </widget>
+       <widget class="QLabel" name="label_which_qdr">
+     <property name="text"><string>QDR Chip</string></property>
+    </widget>
+       <widget class="QComboBox" name="which_qdr">
+     <item><property name="text"><string>qdr0</string></property></item>
+     <item><property name="text"><string>qdr1</string></property></item>
+     <item><property name="text"><string>qdr2</string></property></item>
+     <item><property name="text"><string>qdr3</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_qdr_awidth">
+     <property name="text"><string>Simulation QDR address width</string></property>
+    </widget>
+       <widget class="QSpinBox" name="qdr_awidth"/>
+       <widget class="QLabel" name="label_use_sniffer">
+     <property name="text"><string>Include CPU Interface</string></property>
+    </widget>
+       <widget class="QCheckBox" name="use_sniffer"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

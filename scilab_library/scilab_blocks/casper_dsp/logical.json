@@ -1,0 +1,24 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "logical_function",
+            "inputs",
+            "en",
+            "latency",
+            "n_bits_in"
+        ],
+        "values": [
+            "logical",
+            "",
+            "dsp:logical",
+            "AND",
+            "2",
+            "off",
+            "1",
+            "8"
+        ]
+    }
+}

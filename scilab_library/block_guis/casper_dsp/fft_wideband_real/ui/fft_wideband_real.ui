@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>fft_wideband_real Configuration</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_n_streams">
+     <property name="text"><string>Number simultaneous streams</string></property>
+    </widget>
+       <widget class="QSpinBox" name="n_streams"/>
+       <widget class="QLabel" name="label_FFTSize">
+     <property name="text"><string>Size of FFT: (2^? pts)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="FFTSize"/>
+       <widget class="QLabel" name="label_n_inputs">
+     <property name="text"><string>Number of Simultaneous Inputs: (2^?)</string></property>
+    </widget>
+       <widget class="QSpinBox" name="n_inputs"/>
+       <widget class="QLabel" name="label_input_bit_width">
+     <property name="text"><string>Input Bit Width</string></property>
+    </widget>
+       <widget class="QSpinBox" name="input_bit_width"/>
+       <widget class="QLabel" name="label_bin_pt_in">
+     <property name="text"><string>Input binary point</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bin_pt_in"/>
+       <widget class="QLabel" name="label_coeff_bit_width">
+     <property name="text"><string>Coefficient Bit Width</string></property>
+    </widget>
+       <widget class="QSpinBox" name="coeff_bit_width"/>
+       <widget class="QLabel" name="label_unscramble">
+     <property name="text"><string>Unscramble output (ie, put channels in canonical order)</string></property>
+    </widget>
+       <widget class="QCheckBox" name="unscramble"/>
+       <widget class="QLabel" name="label_async">
+     <property name="text"><string>Asynchronous operation (not supported by the HDL backend yet -- must stay off)</string></property>
+    </widget>
+       <widget class="QCheckBox" name="async"/>
+       <widget class="QLabel" name="label_floating_point">
+     <property name="text"><string>floating point (not supported by the HDL backend yet -- must stay off)</string></property>
+    </widget>
+       <widget class="QCheckBox" name="floating_point"/>
+       <widget class="QLabel" name="label_float_type">
+     <property name="text"><string>float type</string></property>
+    </widget>
+       <widget class="QComboBox" name="float_type">
+     <item><property name="text"><string>single</string></property></item>
+     <item><property name="text"><string>custom</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_exp_width">
+     <property name="text"><string>exponent width</string></property>
+    </widget>
+       <widget class="QLineEdit" name="exp_width"/>
+       <widget class="QLabel" name="label_frac_width">
+     <property name="text"><string>fraction width</string></property>
+    </widget>
+       <widget class="QLineEdit" name="frac_width"/>
+       <widget class="QLabel" name="label_add_latency">
+     <property name="text"><string>Add Latency</string></property>
+    </widget>
+       <widget class="QSpinBox" name="add_latency"/>
+       <widget class="QLabel" name="label_mult_latency">
+     <property name="text"><string>Mult Latency</string></property>
+    </widget>
+       <widget class="QSpinBox" name="mult_latency"/>
+       <widget class="QLabel" name="label_bram_latency">
+     <property name="text"><string>BRAM Latency</string></property>
+    </widget>
+       <widget class="QSpinBox" name="bram_latency"/>
+       <widget class="QLabel" name="label_conv_latency">
+     <property name="text"><string>Convert Latency</string></property>
+    </widget>
+       <widget class="QSpinBox" name="conv_latency"/>
+       <widget class="QLabel" name="label_input_latency">
+     <property name="text"><string>Input Latency</string></property>
+    </widget>
+       <widget class="QSpinBox" name="input_latency"/>
+       <widget class="QLabel" name="label_biplex_direct_latency">
+     <property name="text"><string>Latency between biplexes and fft_direct</string></property>
+    </widget>
+       <widget class="QSpinBox" name="biplex_direct_latency"/>
+       <widget class="QLabel" name="label_add_pipe_latency">
+     <property name="text"><string>Add Interface Pipeline Latency (declared, not yet implemented by the HDL backend)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="add_pipe_latency"/>
+       <widget class="QLabel" name="label_mult_pipe_latency">
+     <property name="text"><string>CMult Pipeline Latency (declared, not yet implemented by the HDL backend)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="mult_pipe_latency"/>
+       <widget class="QLabel" name="label_quantization">
+     <property name="text"><string>Quantization Behavior</string></property>
+    </widget>
+       <widget class="QComboBox" name="quantization">
+     <item><property name="text"><string>Truncate</string></property></item>
+     <item><property name="text"><string>Round  (unbiased: +/- Inf)</string></property></item>
+     <item><property name="text"><string>Round  (unbiased: Even Values)</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_overflow">
+     <property name="text"><string>Overflow Behavior</string></property>
+    </widget>
+       <widget class="QComboBox" name="overflow">
+     <item><property name="text"><string>Wrap</string></property></item>
+     <item><property name="text"><string>Saturate</string></property></item>
+     <item><property name="text"><string>Error</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_delays_bit_limit">
+     <property name="text"><string>Number bits above which to store stage's delays in BRAM (2^? bits)</string></property>
+    </widget>
+       <widget class="QSpinBox" name="delays_bit_limit"/>
+       <widget class="QLabel" name="label_coeffs_bit_limit">
+     <property name="text"><string>Number bits above which to store stage's coefficients in BRAM (2^? bits)</string></property>
+    </widget>
+       <widget class="QSpinBox" name="coeffs_bit_limit"/>
+       <widget class="QLabel" name="label_coeff_sharing">
+     <property name="text"><string>BRAM sharing in coeff storage (declared, not yet implemented by the HDL backend)</string></property>
+    </widget>
+       <widget class="QCheckBox" name="coeff_sharing"/>
+       <widget class="QLabel" name="label_coeff_decimation">
+     <property name="text"><string>Store a fraction of coeff factors where useful (declared, not yet implemented by the HDL backend)</string></property>
+    </widget>
+       <widget class="QCheckBox" name="coeff_decimation"/>
+       <widget class="QLabel" name="label_coeff_generation">
+     <property name="text"><string>Generate coeffs with multipliers where useful (declared, not yet implemented by the HDL backend)</string></property>
+    </widget>
+       <widget class="QCheckBox" name="coeff_generation"/>
+       <widget class="QLabel" name="label_cal_bits">
+     <property name="text"><string>Number calibration locations when generating coeffs (2^?) (declared, not yet implemented by the HDL backend)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="cal_bits"/>
+       <widget class="QLabel" name="label_n_bits_rotation">
+     <property name="text"><string>Feedback rotation vector resolution (declared, not yet implemented by the HDL backend)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_bits_rotation"/>
+       <widget class="QLabel" name="label_mult_spec">
+     <property name="text"><string>Multiplier impl. (0=core, 1=embedded, 2=behavioural) (left=1st stage, or just one value) (declared, not yet implemented by the HDL backend)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="mult_spec"/>
+       <widget class="QLabel" name="label_max_fanout">
+     <property name="text"><string>Maximum fanout</string></property>
+    </widget>
+       <widget class="QSpinBox" name="max_fanout"/>
+       <widget class="QLabel" name="label_bitgrowth">
+     <property name="text"><string>Bitgrowth instead of shifting</string></property>
+    </widget>
+       <widget class="QCheckBox" name="bitgrowth"/>
+       <widget class="QLabel" name="label_max_bits">
+     <property name="text"><string>Max bits to grow to</string></property>
+    </widget>
+       <widget class="QSpinBox" name="max_bits"/>
+       <widget class="QLabel" name="label_hardcode_shifts">
+     <property name="text"><string>Hardcode shift schedule</string></property>
+    </widget>
+       <widget class="QCheckBox" name="hardcode_shifts"/>
+       <widget class="QLabel" name="label_shift_schedule">
+     <property name="text"><string>Shift schedule</string></property>
+    </widget>
+       <widget class="QLineEdit" name="shift_schedule"/>
+       <widget class="QLabel" name="label_dsp48_adders">
+     <property name="text"><string>DSP48 adders in butterfly (declared, not yet implemented by the HDL backend)</string></property>
+    </widget>
+       <widget class="QCheckBox" name="dsp48_adders"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

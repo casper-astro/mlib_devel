@@ -1,0 +1,26 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "n_bits",
+            "csp_latency",
+            "cmplx",
+            "enable",
+            "reg_retiming",
+            "misc"
+        ],
+        "values": [
+            "bus_delay",
+            "",
+            "dsp:bus_delay",
+            "8",
+            "-1",
+            "off",
+            "off",
+            "on",
+            "off"
+        ]
+    }
+}

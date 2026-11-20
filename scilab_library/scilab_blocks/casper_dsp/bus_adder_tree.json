@@ -1,0 +1,40 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "n_busses",
+            "n_bits",
+            "num_float_vec",
+            "bin_pts",
+            "dtypes",
+            "misc",
+            "floating_point",
+            "float_type",
+            "frac_width",
+            "exp_width",
+            "add_latency",
+            "first_stage_hdl",
+            "adder_imp"
+        ],
+        "values": [
+            "bus_adder_tree",
+            "",
+            "dsp:bus_adder_tree",
+            "0",
+            "8",
+            "1",
+            "0",
+            "0",
+            "off",
+            "off",
+            "single",
+            "0",
+            "0",
+            "1",
+            "on",
+            "Behavioral"
+        ]
+    }
+}

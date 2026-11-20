@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Bus Multiply-Add/Sub</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_n_bits_a">
+     <property name="text"><string>a input bit widths</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_bits_a"/>
+       <widget class="QLabel" name="label_bin_pt_a">
+     <property name="text"><string>a input binary points</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bin_pt_a"/>
+       <widget class="QLabel" name="label_type_a">
+     <property name="text"><string>a input type (Unsigned=0, Signed=1)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="type_a"/>
+       <widget class="QLabel" name="label_cmplx_a">
+     <property name="text"><string>a complex</string></property>
+    </widget>
+       <widget class="QCheckBox" name="cmplx_a"/>
+       <widget class="QLabel" name="label_n_bits_b">
+     <property name="text"><string>b input bit widths</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_bits_b"/>
+       <widget class="QLabel" name="label_bin_pt_b">
+     <property name="text"><string>b input binary points</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bin_pt_b"/>
+       <widget class="QLabel" name="label_type_b">
+     <property name="text"><string>b input type (Unsigned=0, Signed=1)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="type_b"/>
+       <widget class="QLabel" name="label_mult_latency">
+     <property name="text"><string>multiplier latency</string></property>
+    </widget>
+       <widget class="QLineEdit" name="mult_latency"/>
+       <widget class="QLabel" name="label_multiplier_implementation">
+     <property name="text"><string>multiplier implementation</string></property>
+    </widget>
+       <widget class="QComboBox" name="multiplier_implementation">
+     <item><property name="text"><string>behavioral HDL</string></property></item>
+     <item><property name="text"><string>standard core</string></property></item>
+     <item><property name="text"><string>embedded multiplier core</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_replication_ab">
+     <property name="text"><string>a and b input replication support</string></property>
+    </widget>
+       <widget class="QCheckBox" name="replication_ab"/>
+       <widget class="QLabel" name="label_opmode">
+     <property name="text"><string>mode</string></property>
+    </widget>
+       <widget class="QComboBox" name="opmode">
+     <item><property name="text"><string>Addition</string></property></item>
+     <item><property name="text"><string>Subtraction</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_n_bits_c">
+     <property name="text"><string>c input bit widths</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_bits_c"/>
+       <widget class="QLabel" name="label_bin_pt_c">
+     <property name="text"><string>c input binary points</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bin_pt_c"/>
+       <widget class="QLabel" name="label_type_c">
+     <property name="text"><string>c input type (Unsigned=0, Signed=1)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="type_c"/>
+       <widget class="QLabel" name="label_add_implementation">
+     <property name="text"><string>adder implementation</string></property>
+    </widget>
+       <widget class="QComboBox" name="add_implementation">
+     <item><property name="text"><string>behavioral HDL</string></property></item>
+     <item><property name="text"><string>fabric core</string></property></item>
+     <item><property name="text"><string>DSP48 core</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_add_latency">
+     <property name="text"><string>adder latency</string></property>
+    </widget>
+       <widget class="QLineEdit" name="add_latency"/>
+       <widget class="QLabel" name="label_async_add">
+     <property name="text"><string>asynchronous addition</string></property>
+    </widget>
+       <widget class="QCheckBox" name="async_add"/>
+       <widget class="QLabel" name="label_align_c">
+     <property name="text"><string>align c path with a and b</string></property>
+    </widget>
+       <widget class="QCheckBox" name="align_c"/>
+       <widget class="QLabel" name="label_replication_c">
+     <property name="text"><string>c input replication support</string></property>
+    </widget>
+       <widget class="QCheckBox" name="replication_c"/>
+       <widget class="QLabel" name="label_n_bits_out">
+     <property name="text"><string>output bit widths</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_bits_out"/>
+       <widget class="QLabel" name="label_bin_pt_out">
+     <property name="text"><string>output binary points</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bin_pt_out"/>
+       <widget class="QLabel" name="label_type_out">
+     <property name="text"><string>output type (Unsigned=0, Signed=1)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="type_out"/>
+       <widget class="QLabel" name="label_quantization">
+     <property name="text"><string>quantization strategy (Truncate=0, Round  (unbiased: +/- Inf)=1)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="quantization"/>
+       <widget class="QLabel" name="label_overflow">
+     <property name="text"><string>overflow strategy (Wrap=0, Saturate=1, Flag as error=2)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="overflow"/>
+       <widget class="QLabel" name="label_max_fanout">
+     <property name="text"><string>limit fanout to ?</string></property>
+    </widget>
+       <widget class="QLineEdit" name="max_fanout"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

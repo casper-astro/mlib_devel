@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>generic_adc</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_n_inputs">
+     <property name="text"><string>inputs</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_inputs"/>
+       <widget class="QLabel" name="label_n_outputs">
+     <property name="text"><string>outputs per input</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_outputs"/>
+       <widget class="QLabel" name="label_bits">
+     <property name="text"><string>adc bit width</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bits"/>
+       <widget class="QLabel" name="label_interleaved">
+     <property name="text"><string>interleaved mode</string></property>
+    </widget>
+       <widget class="QCheckBox" name="interleaved"/>
+       <widget class="QLabel" name="label_or_support">
+     <property name="text"><string>over-range support</string></property>
+    </widget>
+       <widget class="QCheckBox" name="or_support"/>
+       <widget class="QLabel" name="label_sync_support">
+     <property name="text"><string>sync support</string></property>
+    </widget>
+       <widget class="QCheckBox" name="sync_support"/>
+       <widget class="QLabel" name="label_dv_support">
+     <property name="text"><string>data valid support</string></property>
+    </widget>
+       <widget class="QCheckBox" name="dv_support"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

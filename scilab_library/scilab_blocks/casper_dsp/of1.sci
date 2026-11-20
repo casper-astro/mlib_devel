@@ -1,0 +1,71 @@
+// of1: Xcos block definition, PyQt6-mask pattern.
+// Port list confirmed against the real casper_library_misc.slx standalone
+// model (SID 86, Ports=[2,1]): its own top-level Inport/Outport blocks
+// (system_86.xml) are s0/s1 in, of out -- NOT the best-effort
+// [adc_data]->[of] guess this file previously had (missing the s1 input
+// entirely). s0/s1 both carry the mask's n_adc_bits width (two ADC sample
+// buses compared for overflow); of's OutDataTypeStr is literally
+// "boolean" in the real block, confirming the existing 1-bit width.
+function [x, y, typ] = of1(job, arg1, arg2)
+    x=[];y=[];typ=[];
+    select job
+    case 'set' then
+        x = arg1;
+        export_exprs_to_tmpdir(x);
+        bconfig = run_mask(x);
+        x = update_exprs_from_tmpdir(x);
+        x = of1_update_ports(x, bconfig);
+    case 'define' then
+        tag = 'of1';
+        model = scicos_model();
+        model.sim = list(tag, 4);
+        model.blocktype = 'c';
+        model.rpar = [];
+        exprs = [];
+        gr_i = [];
+        model.in = [1, 2];
+        model.in2 = [8, 8];
+        model.out = [1];
+        model.out2 = [1];
+        // model.label doubles as the on-diagram display text (Scicos
+        // aliases it with graphics.id); category is derived separately by
+        // get_block_type.sci via file-probe, so this is free to be the name.
+        model.label = tag;
+        x=standard_define([8.4 8.4],model,exprs,gr_i)
+        x.graphics.in_label = ['s0', 's1'];
+        x.graphics.out_label = ['of'];
+        x = init_exprs(x);
+        x.graphics.style = of1_build_style(x.graphics.exprs(1));
+        debug_info('of1 block loaded...')
+    end
+endfunction
+
+function [x] = of1_update_ports(obj, bconfigfn)
+    // fixed port count: only widths/labels change, no set_io() needed
+    // (same approach as swreg_update_ports)
+    x = obj;
+    bconfig = fromJSON(bconfigfn, 'file');
+    p = bconfig('parameters');
+    graphics = x.graphics;
+    model = x.model;
+    model.in = [1, 2];
+    model.in2 = [strtod(p('n_adc_bits')), strtod(p('n_adc_bits'))];
+    model.out = [1];
+    model.out2 = [1];
+    graphics.in_label = ['s0', 's1'];
+    graphics.out_label = ['of'];
+    graphics.style = of1_build_style(p('name'));
+    x.graphics = graphics;
+    x.model = model;
+endfunction
+
+/* build the graphics.style string for a given user-configurable block
+   name, showing it below the fill color (see displayedLabel). Strips
+   ';' and '=' from the name since those are the mxGraph style string's
+   own delimiter characters -- an unescaped one would corrupt every key
+   after it in the style string, not just truncate the label. */
+function [style] = of1_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=#90EE90;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
+endfunction

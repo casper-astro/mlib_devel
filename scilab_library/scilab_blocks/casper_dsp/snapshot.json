@@ -1,0 +1,40 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "storage",
+            "dram_dimm",
+            "dram_clock",
+            "nsamples",
+            "data_width",
+            "offset",
+            "circap",
+            "value",
+            "ext_arm",
+            "ext_circ",
+            "provide_outputs",
+            "use_dsp48",
+            "in_width"
+        ],
+        "values": [
+            "snapshot",
+            "",
+            "dsp:snapshot",
+            "bram",
+            "2",
+            "250",
+            "12",
+            "32",
+            "off",
+            "off",
+            "off",
+            "off",
+            "off",
+            "on",
+            "on",
+            "32"
+        ]
+    }
+}

@@ -1,0 +1,28 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "port",
+            "is_master",
+            "mux_factor_bits",
+            "data_width"
+        ],
+        "values": [
+            "vla_dts",
+            "",
+            "xps:vla_dts",
+            "qsfp_a_b_c",
+            "on",
+            "2",
+            "64"
+        ]
+    },
+    "evaluate": [
+        "mux_factor_bits"
+    ],
+    "frontend_only": [
+        "data_width"
+    ]
+}

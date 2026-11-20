@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Bus Convert</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_n_bits_in">
+     <property name="text"><string>input bit widths</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_bits_in"/>
+       <widget class="QLabel" name="label_bin_pt_in">
+     <property name="text"><string>input binary points</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bin_pt_in"/>
+       <widget class="QLabel" name="label_cmplx">
+     <property name="text"><string>input complex</string></property>
+    </widget>
+       <widget class="QCheckBox" name="cmplx"/>
+       <widget class="QLabel" name="label_n_bits_out">
+     <property name="text"><string>output bit widths</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_bits_out"/>
+       <widget class="QLabel" name="label_bin_pt_out">
+     <property name="text"><string>output binary points</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bin_pt_out"/>
+       <widget class="QLabel" name="label_quantization">
+     <property name="text"><string>quantization strategy (Truncate=0, Round  (unbiased: +/- Inf)=1, Round (unbiased: Even Values)=2)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="quantization"/>
+       <widget class="QLabel" name="label_overflow">
+     <property name="text"><string>overflow strategy (Wrap=0, Saturate=1, Flag as error=2)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="overflow"/>
+       <widget class="QLabel" name="label_csp_latency">
+     <property name="text"><string>latency</string></property>
+    </widget>
+       <widget class="QLineEdit" name="csp_latency"/>
+       <widget class="QLabel" name="label_of">
+     <property name="text"><string>overflow indication</string></property>
+    </widget>
+       <widget class="QCheckBox" name="of"/>
+       <widget class="QLabel" name="label_misc">
+     <property name="text"><string>misc support</string></property>
+    </widget>
+       <widget class="QCheckBox" name="misc"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

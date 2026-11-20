@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Bus Accumulator</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_reset">
+     <property name="text"><string>reset port</string></property>
+    </widget>
+       <widget class="QCheckBox" name="reset"/>
+       <widget class="QLabel" name="label_enable">
+     <property name="text"><string>enable port</string></property>
+    </widget>
+       <widget class="QCheckBox" name="enable"/>
+       <widget class="QLabel" name="label_n_bits_in">
+     <property name="text"><string>input bit widths</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_bits_in"/>
+       <widget class="QLabel" name="label_bin_pt_in">
+     <property name="text"><string>input binary points</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bin_pt_in"/>
+       <widget class="QLabel" name="label_type_in">
+     <property name="text"><string>input types (Unsigned=0, Signed=1)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="type_in"/>
+       <widget class="QLabel" name="label_cmplx">
+     <property name="text"><string>complex inputs</string></property>
+    </widget>
+       <widget class="QCheckBox" name="cmplx"/>
+       <widget class="QLabel" name="label_n_bits_out">
+     <property name="text"><string>output bit widths</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_bits_out"/>
+       <widget class="QLabel" name="label_overflow">
+     <property name="text"><string>overflow strategy (Wrap=0, Saturate=1, Flag as error=2)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="overflow"/>
+       <widget class="QLabel" name="label_misc">
+     <property name="text"><string>misc support</string></property>
+    </widget>
+       <widget class="QCheckBox" name="misc"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,31 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "hw_sys",
+            "clk_src",
+            "clk_rate",
+            "pl_clk_rate",
+            "sample_period",
+            "synthesis_tool"
+        ],
+        "values": [
+            "zcu216",
+            "",
+            "xps:xsg",
+            "ZCU216:xczu49dr",
+            "adc_clk",
+            "250",
+            "125",
+            "1",
+            "XST"
+        ]
+    },
+    "evaluate": [
+        "clk_rate",
+        "pl_clk_rate",
+        "sample_period"
+    ]
+}

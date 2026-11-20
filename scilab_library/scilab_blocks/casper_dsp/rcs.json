@@ -1,0 +1,20 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "app_src",
+            "lib_src",
+            "user_val"
+        ],
+        "values": [
+            "rcs",
+            "",
+            "dsp:rcs",
+            "timestamp",
+            "timestamp",
+            "0"
+        ]
+    }
+}

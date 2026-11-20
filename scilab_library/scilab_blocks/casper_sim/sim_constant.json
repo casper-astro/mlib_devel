@@ -1,8 +1,6 @@
 {
-    "parameters":
-    {
-        "keys":
-        [
+    "parameters": {
+        "keys": [
             "name",
             "fullpath",
             "tag",
@@ -10,14 +8,13 @@
             "bitwidth",
             "bin_pt"
         ],
-        "values":
-        [
+        "values": [
             "constant",
             "",
             "sim:constant",
-            0,
-            32,
-            0
+            "0",
+            "32",
+            "0"
         ]
     }
 }

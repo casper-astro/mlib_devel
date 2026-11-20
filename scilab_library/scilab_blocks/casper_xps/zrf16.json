@@ -1,0 +1,31 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "hw_sys",
+            "clk_src",
+            "clk_rate",
+            "pl_clk_rate",
+            "sample_period",
+            "synthesis_tool"
+        ],
+        "values": [
+            "zrf16",
+            "",
+            "xps:xsg",
+            "ZRF16_49DR:xczu49dr",
+            "adc_clk",
+            "250",
+            "125",
+            "1",
+            "XST"
+        ]
+    },
+    "evaluate": [
+        "clk_rate",
+        "pl_clk_rate",
+        "sample_period"
+    ]
+}

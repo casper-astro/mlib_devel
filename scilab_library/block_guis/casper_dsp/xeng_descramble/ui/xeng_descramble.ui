@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>xeng_descramble</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_num_ants">
+     <property name="text"><string>Number of Antennas</string></property>
+    </widget>
+       <widget class="QLineEdit" name="num_ants"/>
+       <widget class="QLabel" name="label_n_bits">
+     <property name="text"><string>Input Bitwidth</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_bits"/>
+       <widget class="QLabel" name="label_acc_len">
+     <property name="text"><string>X engine accumulation length</string></property>
+    </widget>
+       <widget class="QLineEdit" name="acc_len"/>
+       <widget class="QLabel" name="label_demux_factor">
+     <property name="text"><string>Demux Factor</string></property>
+    </widget>
+       <widget class="QLineEdit" name="demux_factor"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Sync Generator</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name">
+     <property name="toolTip"><string>A name you choose for this block instance, e.g. to note what it's used for in this design. Shown below the block on the diagram.</string></property>
+    </widget>
+       <widget class="QLabel" name="label_sim_acc_len">
+     <property name="text"><string>Simulation Accumulation Length</string></property>
+    </widget>
+       <widget class="QSpinBox" name="sim_acc_len"/>
+       <widget class="QLabel" name="label_fft_size">
+     <property name="text"><string>FFT Size</string></property>
+    </widget>
+       <widget class="QSpinBox" name="fft_size"/>
+       <widget class="QLabel" name="label_fft_simult_inputs">
+     <property name="text"><string>Simultaneous Inputs (FFT)</string></property>
+    </widget>
+       <widget class="QSpinBox" name="fft_simult_inputs"/>
+       <widget class="QLabel" name="label_pfb_fir_taps">
+     <property name="text"><string>Taps in pfb_fir (use 1 if no pfb_fir)</string></property>
+    </widget>
+       <widget class="QSpinBox" name="pfb_fir_taps"/>
+       <widget class="QLabel" name="label_reorder_vec">
+     <property name="text"><string>Reorder Orders (e.g. [2 2 2])</string></property>
+    </widget>
+       <widget class="QLineEdit" name="reorder_vec"/>
+       <widget class="QLabel" name="label_scale">
+     <property name="text"><string>Scale</string></property>
+    </widget>
+       <widget class="QSpinBox" name="scale"/>
+       <widget class="QLabel" name="label_period">
+     <property name="text"><string>Sync period (sync_period_sel = 0)</string></property>
+    </widget>
+       <widget class="QLabel" name="period"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

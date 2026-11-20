@@ -1,0 +1,18 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "inputNum",
+            "bit_widths"
+        ],
+        "values": [
+            "bus_create",
+            "",
+            "dsp:bus_create",
+            "2",
+            "[8,8]"
+        ]
+    }
+}

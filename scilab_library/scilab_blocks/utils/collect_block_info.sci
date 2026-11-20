@@ -4,16 +4,20 @@ function [] = collect_block_info(fn)
     if ~isdir(builddir) then
         mkdir(builddir);
     end
-    // glue_dir = builddir + '/glues';
-    // if ~isdir(glue_dir) then
-    //     mkdir(glue_dir);
-    // end
-    // load the diagram file
+
+    /* remove the bconfig dir, as we will re-create it in this function */
+    bconfigdir = sprintf("%s/bconfigs", builddir);
+    if isdir(bconfigdir) then
+        rmdir(bconfigdir, 's');
+        mkdir(bconfigdir);
+    end
+
+    /* load the diagram file */
     scs_m = xcosDiagramToScilab(fn);
-    // get the number of objs
+    /* get the number of objs */
     n_objs = length(scs_m.objs);
 
-    // query the block information
+    /* query the block information */
     st = struct();
     st('project') = struct('tag', 'proj', 'filename', fn);
     st('xps_blocks') = list();
@@ -22,54 +26,27 @@ function [] = collect_block_info(fn)
     xps_blocks_id = 1;
     dsp_blocks_id = 1;
     sim_blocks_id = 1;
-    scilab_block_path = getenv('MLIB_DEVEL_PATH')+'/scilab_library/scilab_blocks/';
     for i = 1:n_objs
         obj = scs_m.objs(i);
-        // if it's a block, get the block info
+        /* if it's a block, get the block info */
         if typeof(obj) == 'Block' then
             tag = get_block_tag(obj);
             btype = get_block_type(obj);
-            name = get_block_name(obj);
-            // if it's a split_f block, we don't need to get the info
+            /* if it's a split_f block, we don't need to get the info */
             if tag == 'SPLIT_f' then
                 continue;
             end
-            // get the block type and block tag
-            // the type should be on of "xps", "dsp", "sim"
-            // the tag is the "swreg", "gpio", etc.
-            // each block has a config, which contains the paramters info and input/output ports info
-            block_config = get_block_config(name, btype, tag);
-            // create a new struct for the block info
-            keys = block_config('parameters')('keys');
-            vals = block_config('parameters')('values');
-            block_info = struct();
-            // set the default value from the block_config
-            debug_info('block_config: ' + tag);
-            for j = 1:size(keys)(2)
-                block_info(keys(j)) = vals(j);
-                debug_info('    key: ' + string(keys(j)) + ' val: ' + string(vals(j)));
-            end
-            blk_val = get_block_vals(obj);
-            blk_vindex = get_block_vindex(obj);
-            debug_info('blk_name: ' + blk_val(1))
-            for j = 1:length(blk_vindex)
-                id = blk_vindex(j) + 1;
-                debug_info('    id: ' + string(id) + ' val: ' + string(blk_val(j)));
-                block_info(keys(id)) = blk_val(j);
-            end
-            // set "fullpath", which should be the project name + block name
-            block_info('fullpath') = projname + '/' + block_info('name');
-            // update the block config in the user defined config file
-            update_block_config(block_info, block_info('name'));
-            // write the block info to the struct
+            /* get block info */
+            block_config = gen_block_config(builddir, obj);
+            /* write the block info to the struct */
             if btype == 'xps' then
-                st('xps_blocks')(xps_blocks_id) = block_info;
+                st('xps_blocks')(xps_blocks_id) = block_config;
                 xps_blocks_id = xps_blocks_id + 1;
             elseif btype == 'dsp' then
-                st('dsp_blocks')(dsp_blocks_id) = block_info;
+                st('dsp_blocks')(dsp_blocks_id) = block_config;
                 dsp_blocks_id = dsp_blocks_id + 1;
             elseif btype == 'sim' then
-                st('sim_blocks')(sim_blocks_id) = block_info;
+                st('sim_blocks')(sim_blocks_id) = block_config;
                 sim_blocks_id = sim_blocks_id + 1;
             end
         end
@@ -97,13 +74,12 @@ function [] = collect_block_info(fn)
             end
             // collect the src block info
             src_blk = link('src_obj');
-            src_blk_name = get_block_name(link('src_obj'));
+            src_blk_name = get_block_name(bconfigdir, link('src_obj'));
             debug_info('    src_blk_name: ' + src_blk_name);
             src_blk_tag = get_block_tag(link('src_obj'));
             debug_info('    src_blk_tag: ' + src_blk_tag);
             src_blk_type = get_block_type(link('src_obj'));
             debug_info('    src_blk_type: ' + src_blk_type); 
-            src_config = get_block_config(src_blk_name, src_blk_type, src_blk_tag);
             port_name = get_port_name(link('src_obj'), link('src_port_id'), 'out');
             src_port_name = projname + '_' + src_blk_name + '_' + port_name;
             debug_info('    src_port_name: ' + src_port_name);
@@ -114,13 +90,12 @@ function [] = collect_block_info(fn)
             debug_info('    src_port_width: ' + string(src_port_width));
             // collect the dst block info
             dst_blk = link('dst_obj');
-            dst_blk_name = get_block_name(link('dst_obj'));
+            dst_blk_name = get_block_name(bconfigdir, link('dst_obj'));
             debug_info('    dst_blk_name: ' + dst_blk_name);
             dst_blk_tag = get_block_tag(link('dst_obj'));
             debug_info('    dst_blk_tag: ' + dst_blk_tag);
             dst_blk_type = get_block_type(link('dst_obj'));
             debug_info('    dst_blk_type: ' + dst_blk_type);
-            dst_config = get_block_config(dst_blk_name, dst_blk_type, dst_blk_tag);
             port_name = get_port_name(link('dst_obj'), link('dst_port_id'), 'in');
             dst_port_name = projname + '_' + dst_blk_name + '_' + port_name;
             debug_info('    dst_port_name: ' + dst_port_name);

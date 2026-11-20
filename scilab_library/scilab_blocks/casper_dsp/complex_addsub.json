@@ -1,0 +1,18 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "bit_width",
+            "add_latency"
+        ],
+        "values": [
+            "complex_addsub",
+            "",
+            "dsp:complex_addsub",
+            "18",
+            "1"
+        ]
+    }
+}

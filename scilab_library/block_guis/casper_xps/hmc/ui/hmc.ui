@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>HMC</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name">
+     <property name="toolTip"><string>A name you choose for this block instance, e.g. to note what it's used for in this design. Shown below the block on the diagram.</string></property>
+    </widget>
+       <widget class="QLabel" name="label_mez">
+     <property name="text"><string>Mezzanine slot</string></property>
+    </widget>
+       <widget class="QComboBox" name="mez">
+     <item><property name="text"><string>0</string></property></item>
+     <item><property name="text"><string>1</string></property></item>
+     <item><property name="text"><string>2</string></property></item>
+     <item><property name="text"><string>3</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_sim_depth">
+     <property name="text"><string>Depth (2^?)</string></property>
+    </widget>
+       <widget class="QSpinBox" name="sim_depth"/>
+       <widget class="QLabel" name="label_sim_latency">
+     <property name="text"><string>Latency</string></property>
+    </widget>
+       <widget class="QSpinBox" name="sim_latency"/>
+       <widget class="QLabel" name="label_sim_rand">
+     <property name="text"><string>Randomise</string></property>
+    </widget>
+       <widget class="QCheckBox" name="sim_rand"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

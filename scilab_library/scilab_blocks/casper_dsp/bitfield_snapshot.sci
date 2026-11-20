@@ -1,0 +1,74 @@
+// bitfield_snapshot: Xcos block definition, PyQt6-mask pattern
+// (casper_library_scopes bitfield_snapshot, mask type bitsnap, on
+// casper_dsp/rtl/Scopes/bitfield_snapshot.sv, see dsp_blocks/bitfield_snapshot.py).
+// Ports as in Simulink: in_<io name> (one io field, io_widths bits), we,
+// trig -> arm_out. The snapshot's ctrl / status registers and shared BRAM
+// are not drawn: the frontend adds them (utils/embedded_yellow.py).
+function [x, y, typ] = bitfield_snapshot(job, arg1, arg2)
+    x=[];y=[];typ=[];
+    select job
+    case 'set' then
+        x = arg1;
+        export_exprs_to_tmpdir(x);
+        bconfig = run_mask(x);
+        x = update_exprs_from_tmpdir(x);
+        x = bitfield_snapshot_update_ports(x, bconfig);
+    case 'define' then
+        tag = 'bitfield_snapshot';
+        model = scicos_model();
+        model.sim = list(tag, 4);
+        model.blocktype = 'c';
+        model.rpar = [];
+        exprs = [];
+        gr_i = [];
+        // the template defaults: io_names [d], io_widths [32]
+        model.in = [1; 2; 3];
+        model.in2 = [32; 1; 1];
+        model.out = [1];
+        model.out2 = [1];
+        // model.label doubles as the on-diagram display text (Scicos
+        // aliases it with graphics.id); category is derived separately by
+        // get_block_type.sci via file-probe, so this is free to be the name.
+        model.label = tag;
+        x=standard_define([9.6 18],model,exprs,gr_i)
+        x.graphics.in_label = ['in_d', 'we', 'trig'];
+        x.graphics.out_label = ['arm_out'];
+        x = init_exprs(x);
+        x.graphics.style = bitfield_snapshot_build_style(x.graphics.exprs(1));
+        debug_info('bitfield_snapshot block loaded...')
+    end
+endfunction
+
+function [x] = bitfield_snapshot_update_ports(obj, bconfigfn)
+    // fixed port count: only the in_<io name> label and width change, no
+    // set_io() needed (same approach as swreg_update_ports). The dialog
+    // only accepts one io field (utils/snapshot_check.py).
+    x = obj;
+    bconfig = fromJSON(bconfigfn, 'file');
+    p = bconfig('parameters');
+    graphics = x.graphics;
+    model = x.model;
+    io_name = strsubst(strsubst(strsubst(p('io_names'), '[', ''), ']', ''), ',', ' ');
+    io_name = tokens(stripblanks(io_name), ' ');
+    io_width = evstr(p('io_widths'));
+    model.in = [1; 2; 3];
+    model.in2 = [io_width(1); 1; 1];
+    model.out = [1];
+    model.out2 = [1];
+    graphics.in_label = ['in_' + io_name(1), 'we', 'trig'];
+    graphics.out_label = ['arm_out'];
+    graphics.style = bitfield_snapshot_build_style(p('name'));
+    x.graphics = graphics;
+    x.model = model;
+endfunction
+
+/* build the graphics.style string for a given user-configurable block
+   name, showing it below the fill color (see displayedLabel). Strips
+   ';' and '=' from the name since those are the mxGraph style string's
+   own delimiter characters -- an unescaped one would corrupt every key
+   after it in the style string, not just truncate the label. */
+function [style] = bitfield_snapshot_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=#90EE90;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
+endfunction

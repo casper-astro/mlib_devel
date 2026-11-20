@@ -2,6 +2,7 @@ import logging
 from rich.logging import RichHandler
 from pathlib import Path
 from datetime import datetime
+import json
 
 def make_rich_logger(name: str, clevel=logging.INFO, flevel=logging.DEBUG, mode='w', logdir='.') -> logging.Logger:
     """
@@ -58,3 +59,27 @@ def make_rich_logger(name: str, clevel=logging.INFO, flevel=logging.DEBUG, mode=
         logger.addHandler(file_handler)
 
     return logger
+
+def flat_config(template, target):
+    with open(template, 'r', encoding='utf-8') as f:
+            template_config = json.load(f)
+    target_config = {}
+    target_config['parameters'] = {}
+    for i in range(len(template_config['parameters']['keys'])):
+        k = template_config['parameters']['keys'][i]
+        v = template_config['parameters']['values'][i]
+        target_config['parameters'][k] = v
+    with open(target, "w", encoding="utf-8") as f:
+        json.dump(
+            target_config,
+            f,
+            indent=4,          
+            ensure_ascii=False
+        )
+
+def gen_bconfig(template, target):
+    p = Path(target)
+    # create the dir in case it doesn't exist
+    p.parent.mkdir(parents=True, exist_ok=True)
+    if not p.is_file():
+        flat_config(template, target)

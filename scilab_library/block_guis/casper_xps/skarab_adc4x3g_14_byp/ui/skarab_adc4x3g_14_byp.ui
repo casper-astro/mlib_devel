@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>SKARAB ADC4x3G-14 (Bypass)</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_mez">
+     <property name="text"><string>Mezzanine slot</string></property>
+    </widget>
+       <widget class="QComboBox" name="mez">
+     <item><property name="text"><string>0</string></property></item>
+     <item><property name="text"><string>1</string></property></item>
+     <item><property name="text"><string>2</string></property></item>
+     <item><property name="text"><string>3</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_sync_ms">
+     <property name="text"><string>Master/Slave</string></property>
+    </widget>
+       <widget class="QComboBox" name="sync_ms">
+     <item><property name="text"><string>Master</string></property></item>
+     <item><property name="text"><string>Slave</string></property></item>
+    </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

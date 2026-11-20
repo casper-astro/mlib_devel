@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Slice</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_n_bits_in">
+     <property name="text"><string>Input width (number of bits)</string></property>
+    </widget>
+       <widget class="QSpinBox" name="n_bits_in"/>
+       <widget class="QLabel" name="label_nbits">
+     <property name="text"><string>Width of slice (number of bits)</string></property>
+    </widget>
+       <widget class="QSpinBox" name="nbits"/>
+       <widget class="QLabel" name="label_mode">
+     <property name="text"><string>Specify range as</string></property>
+    </widget>
+       <widget class="QComboBox" name="mode">
+     <item><property name="text"><string>Two Bit Locations</string></property></item>
+     <item><property name="text"><string>Upper Bit Location + Width</string></property></item>
+     <item><property name="text"><string>Lower Bit Location + Width</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_bit1">
+     <property name="text"><string>Offset of top bit</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bit1"/>
+       <widget class="QLabel" name="label_base1">
+     <property name="text"><string>Relative to</string></property>
+    </widget>
+       <widget class="QComboBox" name="base1">
+     <item><property name="text"><string>LSB of Input</string></property></item>
+     <item><property name="text"><string>MSB of Input</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_bit0">
+     <property name="text"><string>Offset of bottom bit</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bit0"/>
+       <widget class="QLabel" name="label_base0">
+     <property name="text"><string>Relative to</string></property>
+    </widget>
+       <widget class="QComboBox" name="base0">
+     <item><property name="text"><string>LSB of Input</string></property></item>
+     <item><property name="text"><string>MSB of Input</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_selected_bits">
+     <property name="text"><string>Selected bits</string></property>
+    </widget>
+       <widget class="QLabel" name="selected_bits"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

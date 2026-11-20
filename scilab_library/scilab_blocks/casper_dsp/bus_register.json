@@ -1,0 +1,24 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "reset",
+            "enable",
+            "cmplx",
+            "n_bits",
+            "misc"
+        ],
+        "values": [
+            "bus_register",
+            "",
+            "dsp:bus_register",
+            "on",
+            "on",
+            "on",
+            "[]",
+            "on"
+        ]
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "lib_path",
+            "ip_name"
+        ],
+        "values": [
+            "ip",
+            "",
+            "xps:ip",
+            "",
+            ""
+        ]
+    },
+    "evaluate": [
+        "lib_path",
+        "ip_name"
+    ]
+}

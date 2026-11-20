@@ -1,0 +1,16 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "info"
+        ],
+        "values": [
+            "info_block",
+            "",
+            "dsp:info_block",
+            "Any information about this system that should be readable from software. See documentation."
+        ]
+    }
+}

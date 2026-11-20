@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>DRAM</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name">
+     <property name="toolTip"><string>A name you choose for this block instance, e.g. to note what it's used for in this design. Shown below the block on the diagram.</string></property>
+    </widget>
+       <widget class="QLabel" name="label_dimm">
+     <property name="text"><string>DIMM</string></property>
+    </widget>
+       <widget class="QComboBox" name="dimm">
+     <item><property name="text"><string>1</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_arith_type">
+     <property name="text"><string>Data Type</string></property>
+    </widget>
+       <widget class="QComboBox" name="arith_type">
+     <item><property name="text"><string>Boolean</string></property></item>
+     <item><property name="text"><string>Unsigned</string></property></item>
+     <item><property name="text"><string>Signed  (2's comp)</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_bin_pt">
+     <property name="text"><string>Data binary point</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bin_pt"/>
+       <widget class="QLabel" name="label_ip_clock">
+     <property name="text"><string>Datapath clock rate (MHz)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="ip_clock"/>
+       <widget class="QLabel" name="label_sample_period">
+     <property name="text"><string>Sample period</string></property>
+    </widget>
+       <widget class="QLineEdit" name="sample_period"/>
+       <widget class="QLabel" name="label_bram_fifos">
+     <property name="text"><string>Use BRAM FIFOs</string></property>
+    </widget>
+       <widget class="QCheckBox" name="bram_fifos"/>
+       <widget class="QLabel" name="label_disable_tag">
+     <property name="text"><string>Disable tag FIFO</string></property>
+    </widget>
+       <widget class="QCheckBox" name="disable_tag"/>
+       <widget class="QLabel" name="label_ram_depth">
+     <property name="text"><string>Simulation address width</string></property>
+    </widget>
+       <widget class="QSpinBox" name="ram_depth"/>
+       <widget class="QLabel" name="label_bank_mgt">
+     <property name="text"><string>Enable bank management</string></property>
+    </widget>
+       <widget class="QCheckBox" name="bank_mgt"/>
+       <widget class="QLabel" name="label_wide_data">
+     <property name="text"><string>Use wide data bus (288 bits)</string></property>
+    </widget>
+       <widget class="QCheckBox" name="wide_data"/>
+       <widget class="QLabel" name="label_half_burst">
+     <property name="text"><string>Use half-burst</string></property>
+    </widget>
+       <widget class="QCheckBox" name="half_burst"/>
+       <widget class="QLabel" name="label_use_sniffer">
+     <property name="text"><string>Include CPU Interface</string></property>
+    </widget>
+       <widget class="QCheckBox" name="use_sniffer"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

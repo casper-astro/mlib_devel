@@ -1,10 +1,12 @@
 #! /usr/bin/env python
 import json
 import os
+import sys
 from datetime import datetime
 from utils.design_info import gen_design_info
 from utils.git_info import gen_git_info
-from utils.utils import gen_glue_module, dump_jasper, val_format_conv, check_bit_width
+from utils.utils import gen_glue_module, dump_jasper, val_format_conv
+from utils.embedded_yellow import expand
 from argparse import ArgumentParser
 
 if __name__ == '__main__':
@@ -28,21 +30,29 @@ if __name__ == '__main__':
     # open jasper.json, which contains the block(xps, dsp, sim) info and link info
     with open('%s/jasper.json'%builddir) as f:
         model_info = json.load(f)
+
+    """
+    Step 2: add the yellow blocks that dsp blocks contain (e.g. sync_gen's
+    registers) and the yellow blocks' dsp-side interface blocks, see
+    utils/embedded_yellow.py. jasper.json is rewritten, as the DSP IP
+    generation reads its link info.
+    """
+    # the dsp block classes import jasper_library's YellowBlock
+    mlib_devel_path = os.getenv('MLIB_DEVEL_PATH') or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    sys.path.append(mlib_devel_path + '/jasper_library')
+    sys.path.append(mlib_devel_path + '/jasper_library/yellow_blocks')
+    expand(model_info, model_name)
+    with open('%s/jasper.json'%builddir, 'w') as f:
+        json.dump(model_info, f, indent=4)
     
     """
-    Step 2: check bit witdh for each link
-    """
-    match = check_bit_width(model_info)
-    if match == False:
-        print('port width not match')
-    """
-    Step 3: generate jasper.per, which contains the yellow(xps) block info and user module info 
+    Step 3: generate jasper.per, which contains the yellow(xps) block info and user module info
     """
     # yellow(xps) blocks
     xps_blocks = {}
     for block in model_info['xps_blocks']:
         key = model_name + '/' + block['name']
-        block = val_format_conv(block)
+        block = val_format_conv(block, empty_as_none=True)
         xps_blocks[key] = block
         # the xsg block will also be added to jasper.dsp
         if block['tag'] == 'xps:xsg':
@@ -73,16 +83,22 @@ if __name__ == '__main__':
             xps_user_modules[module_name]['sources'] = []
             xps_user_modules[module_name]['sources'].append('%s/glues/%s.v'%(builddir, module_name))
     # add ip core info to xps_user_modules
-    xps_user_modules['%s_ip'%(model_name)] = {}
-    xps_user_modules['%s_ip'%(model_name)]['clock'] = 'clk'
-    xps_user_modules['%s_ip'%(model_name)]['ports'] = []
-    for link in link_info:
-        if link['link_type'] == 'xps_dsp':
-            xps_user_modules['%s_ip'%(model_name)]['ports'].append(link['src_port_name'])
-        if link['link_type'] == 'dsp_xps':
-            xps_user_modules['%s_ip'%(model_name)]['ports'].append(link['dst_port_name'])
-    xps_user_modules['%s_ip'%(model_name)]['sources'] = []
-    # generate jasper.per
+    # we need to see if there is at least one dsp block used in the design
+    # if there is not dsp blocks used, we shouldn't add the ip core info to the xps_user_module
+    # or the ip core will be optimized during the Out-of-Context (OOC) Synthesis
+    # it will cause "Failed to stitch checkpoint 'xx_ip.dcp' at cell 'xx_ip_inst'."
+    dsp_blocks = model_info['dsp_blocks']
+    if len(dsp_blocks) > 0:
+        xps_user_modules['%s_ip'%(model_name)] = {}
+        xps_user_modules['%s_ip'%(model_name)]['clock'] = 'clk'
+        xps_user_modules['%s_ip'%(model_name)]['ports'] = []
+        for link in link_info:
+            if link['link_type'] == 'xps_dsp':
+                xps_user_modules['%s_ip'%(model_name)]['ports'].append(link['src_port_name'])
+            if link['link_type'] == 'dsp_xps':
+                xps_user_modules['%s_ip'%(model_name)]['ports'].append(link['dst_port_name'])
+        xps_user_modules['%s_ip'%(model_name)]['sources'] = []
+        # generate jasper.per
     jasper_per = {}
     jasper_per['yellow_blocks'] = xps_blocks
     jasper_per['user_modules'] = xps_user_modules
@@ -130,6 +146,9 @@ if __name__ == '__main__':
     Step 5: generate design_info.tab and git_info.tab
     """
     # generate design_info.tab
-    gen_design_info(xps_blocks, model_name, fn='%s/design_info.tab'%(builddir))
+    # plus the casper:* entries of the dsp blocks (e.g. casper:snapshot,
+    # which casperfpga needs to find a snapshot)
+    gen_design_info(xps_blocks, model_name, fn='%s/design_info.tab'%(builddir),
+                    extra=model_info.get('design_info', []))
     # generate git_info.tab
     gen_git_info(model_name, fn='%s/git_info.tab'%(builddir))

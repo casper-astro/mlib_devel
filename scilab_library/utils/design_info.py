@@ -4,11 +4,15 @@ from datetime import datetime
 # TODO: we may not need this list, and just write all the tags in the design_info.tab??
 tag_list = ['xps:xsg', 'xps:sw_reg', 'xps:rfdc', 'xps:bram']
 
-def gen_design_info(yellow_blocks, proj_name,  fn='design_info.tab'):
+def gen_design_info(yellow_blocks, proj_name,  fn='design_info.tab', extra=()):
+    """extra: further entries (dicts with name, tag and parameters), e.g.
+    the casper:* entries of dsp blocks; they are written whatever the tag."""
     used_tags = []
     design_info = []
-    for k,v in yellow_blocks.items():
-        if v['tag'] in tag_list:
+    entries = [(v, v['tag'] in tag_list) for v in yellow_blocks.values()]
+    entries += [(v, True) for v in extra]
+    for v, keep in entries:
+        if keep:
             # add the tag to used_tags
             if v['tag'] in used_tags:
                 pass
@@ -17,8 +21,9 @@ def gen_design_info(yellow_blocks, proj_name,  fn='design_info.tab'):
             name = v['name']
             tag = v['tag']
             for sk, sv in v.items():
-                # we don't need to wirte fullpath, name and tag
-                if sk == 'fullpath' or sk == 'name' or sk == 'tag':
+                # we don't need to wirte fullpath, name and tag, or an empty value
+                # nor the mark of a block added by utils/embedded_yellow.py
+                if sk in ('fullpath', 'name', 'tag', 'embedded_in') or sv is None:
                     continue
                 else:
                     if v['tag'] == 'xps:bram' and sk == 'init_vals':

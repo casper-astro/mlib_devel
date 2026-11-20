@@ -1,0 +1,22 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "vec_len",
+            "arith_type",
+            "n_bits",
+            "bin_pt"
+        ],
+        "values": [
+            "vacc_async",
+            "",
+            "dsp:vacc_async",
+            "8",
+            "Signed",
+            "64",
+            "32"
+        ]
+    }
+}

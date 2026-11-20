@@ -1,25 +1,24 @@
 {
-    "parameters":
-    {
-        "keys":
-        [
+    "parameters": {
+        "keys": [
             "name",
             "fullpath",
             "tag",
-            "total_bits",
             "divisions",
-            "size_bits",
-            "packing_order"
+            "div_size",
+            "order",
+            "arith_type_out",
+            "bin_pt_out"
         ],
-        "values":
-        [
+        "values": [
             "munge",
             "",
             "dsp:munge",
-            128,
-            4,
-            32,
-            "{3,2,1,0}"
+            "4",
+            "[32 0 16 16]",
+            "[3 0 1 2]",
+            "Unsigned",
+            "0"
         ]
     }
 }

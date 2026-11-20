@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>XAUI</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name">
+     <property name="toolTip"><string>A name you choose for this block instance, e.g. to note what it's used for in this design. Shown below the block on the diagram.</string></property>
+    </widget>
+       <widget class="QLabel" name="label_demux">
+     <property name="text"><string>Demux</string></property>
+    </widget>
+       <widget class="QComboBox" name="demux">
+     <item><property name="text"><string>1</string></property></item>
+     <item><property name="text"><string>2</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_port">
+     <property name="text"><string>Port</string></property>
+    </widget>
+       <widget class="QComboBox" name="port">
+     <item><property name="text"><string>ROACH:0</string></property></item>
+     <item><property name="text"><string>ROACH:1</string></property></item>
+     <item><property name="text"><string>ROACH:2</string></property></item>
+     <item><property name="text"><string>ROACH:3</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_open_phy">
+     <property name="text"><string>Use KAT open PHY</string></property>
+    </widget>
+       <widget class="QCheckBox" name="open_phy"/>
+       <widget class="QLabel" name="label_show_param">
+     <property name="text"><string>Show Implementation Parameters</string></property>
+    </widget>
+       <widget class="QCheckBox" name="show_param"/>
+       <widget class="QLabel" name="label_pre_emph">
+     <property name="text"><string>Pre-emphasis</string></property>
+    </widget>
+       <widget class="QComboBox" name="pre_emph">
+     <item><property name="text"><string>0</string></property></item>
+     <item><property name="text"><string>1</string></property></item>
+     <item><property name="text"><string>2</string></property></item>
+     <item><property name="text"><string>3</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_swing">
+     <property name="text"><string>Differential swing</string></property>
+    </widget>
+       <widget class="QComboBox" name="swing">
+     <item><property name="text"><string>400</string></property></item>
+     <item><property name="text"><string>500</string></property></item>
+     <item><property name="text"><string>600</string></property></item>
+     <item><property name="text"><string>700</string></property></item>
+     <item><property name="text"><string>800</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_data_width">
+     <property name="text"><string>Data Width (added for Xcos; not a casper_library mask param)</string></property>
+    </widget>
+       <widget class="QSpinBox" name="data_width"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

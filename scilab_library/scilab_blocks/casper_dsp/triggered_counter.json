@@ -1,0 +1,18 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "len",
+            "count_width"
+        ],
+        "values": [
+            "triggered_counter",
+            "",
+            "dsp:triggered_counter",
+            "1024",
+            "32"
+        ]
+    }
+}

@@ -1,0 +1,38 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "acc_len",
+            "n_bits_a",
+            "bin_pt_a",
+            "n_bits_b",
+            "bin_pt_b",
+            "quantization",
+            "overflow",
+            "mult_latency",
+            "add_latency",
+            "in_latency",
+            "conv_latency",
+            "multiplier_implementation"
+        ],
+        "values": [
+            "cmac",
+            "",
+            "dsp:cmac",
+            "128",
+            "4",
+            "3",
+            "4",
+            "3",
+            "Truncate",
+            "Wrap",
+            "1",
+            "1",
+            "0",
+            "0",
+            "embedded multiplier core"
+        ]
+    }
+}

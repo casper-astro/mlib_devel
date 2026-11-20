@@ -1,0 +1,28 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "bit_width_i",
+            "binary_point_i",
+            "bit_width_o",
+            "binary_point_o",
+            "quantization",
+            "overflow",
+            "csp_latency"
+        ],
+        "values": [
+            "convert_of",
+            "",
+            "dsp:convert_of",
+            "18",
+            "17",
+            "8",
+            "7",
+            "Truncate",
+            "Wrap",
+            "2"
+        ]
+    }
+}

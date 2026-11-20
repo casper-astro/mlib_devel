@@ -1,0 +1,28 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "demux",
+            "port",
+            "open_phy",
+            "show_param",
+            "pre_emph",
+            "swing",
+            "data_width"
+        ],
+        "values": [
+            "xaui",
+            "",
+            "xps:xaui",
+            "1",
+            "ROACH:0",
+            "on",
+            "off",
+            "3",
+            "800",
+            "8"
+        ]
+    }
+}

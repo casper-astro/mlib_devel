@@ -1,0 +1,28 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "n_bits_in",
+            "bin_pt_in",
+            "n_bits_out",
+            "bin_pt_out",
+            "quantization",
+            "overflow",
+            "csp_latency"
+        ],
+        "values": [
+            "complex_convert",
+            "",
+            "dsp:complex_convert",
+            "18",
+            "17",
+            "18",
+            "17",
+            "Truncate",
+            "Wrap",
+            "1"
+        ]
+    }
+}

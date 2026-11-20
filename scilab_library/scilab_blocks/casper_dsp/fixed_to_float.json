@@ -1,0 +1,24 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "float_type",
+            "n_bits_in",
+            "bin_pt",
+            "num_vec",
+            "csp_latency"
+        ],
+        "values": [
+            "fixed_to_float",
+            "",
+            "dsp:fixed_to_float",
+            "Single",
+            "18",
+            "17",
+            "1",
+            "1"
+        ]
+    }
+}

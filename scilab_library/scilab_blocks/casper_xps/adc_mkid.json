@@ -1,0 +1,18 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "adc_brd",
+            "adc_clk_rate"
+        ],
+        "values": [
+            "adc_mkid",
+            "",
+            "xps:adc_mkid",
+            "1",
+            "512"
+        ]
+    }
+}

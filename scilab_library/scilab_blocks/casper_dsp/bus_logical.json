@@ -1,0 +1,44 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "logical_function",
+            "align_bp",
+            "csp_latency",
+            "n_bits_a",
+            "bin_pt_a",
+            "type_a",
+            "n_bits_b",
+            "bin_pt_b",
+            "type_b",
+            "cmplx",
+            "en",
+            "misc",
+            "n_bits_out",
+            "bin_pt_out",
+            "type_out"
+        ],
+        "values": [
+            "bus_logical",
+            "",
+            "dsp:bus_logical",
+            "AND",
+            "on",
+            "1",
+            "[]",
+            "3",
+            "1",
+            "4",
+            "3",
+            "1",
+            "on",
+            "on",
+            "on",
+            "8",
+            "3",
+            "1"
+        ]
+    }
+}

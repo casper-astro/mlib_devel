@@ -1,0 +1,26 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "adc_brd",
+            "adc_clk_rate",
+            "adc_interleave",
+            "sample_period"
+        ],
+        "values": [
+            "adc",
+            "",
+            "xps:adc",
+            "adc0",
+            "800",
+            "off",
+            "4"
+        ]
+    },
+    "evaluate": [
+        "adc_clk_rate",
+        "sample_period"
+    ]
+}

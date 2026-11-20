@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Sample and Hold</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name">
+     <property name="toolTip"><string>A name you choose for this block instance, e.g. to note what it's used for in this design. Shown below the block on the diagram.</string></property>
+    </widget>
+       <widget class="QLabel" name="label_period">
+     <property name="text"><string>Sample period (clocks)</string></property>
+    </widget>
+       <widget class="QSpinBox" name="period"/>
+       <widget class="QLabel" name="label_n_bits">
+     <property name="text"><string>Bit Width (added for Xcos; not a casper_library mask param)</string></property>
+    </widget>
+       <widget class="QSpinBox" name="n_bits"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

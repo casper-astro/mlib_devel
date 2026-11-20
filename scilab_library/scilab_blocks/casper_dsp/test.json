@@ -1,0 +1,26 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "tests_location",
+            "tests_file",
+            "test_type",
+            "subsection",
+            "block",
+            "stop_first_fail"
+        ],
+        "values": [
+            "test",
+            "",
+            "dsp:test",
+            "/opt/casper_git_devel/casper_library/Tests",
+            "tester_input.txt",
+            "section from block",
+            "Downconverter",
+            "lo_osc",
+            "on"
+        ]
+    }
+}

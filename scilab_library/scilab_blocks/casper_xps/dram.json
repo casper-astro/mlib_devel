@@ -1,0 +1,38 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "dimm",
+            "arith_type",
+            "bin_pt",
+            "ip_clock",
+            "sample_period",
+            "bram_fifos",
+            "disable_tag",
+            "ram_depth",
+            "bank_mgt",
+            "wide_data",
+            "half_burst",
+            "use_sniffer"
+        ],
+        "values": [
+            "dram",
+            "",
+            "xps:dram",
+            "1",
+            "Unsigned",
+            "0",
+            "200",
+            "1",
+            "on",
+            "on",
+            "18",
+            "off",
+            "off",
+            "off",
+            "on"
+        ]
+    }
+}

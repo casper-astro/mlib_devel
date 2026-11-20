@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Bus Expand</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_ndivision">
+     <property name="text"><string>Number of Division:</string></property>
+    </widget>
+       <widget class="QSpinBox" name="ndivision"/>
+       <widget class="QLabel" name="label_bit_division">
+     <property name="text"><string>Bit width of each output (vector, length = Number of Division):</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bit_division"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

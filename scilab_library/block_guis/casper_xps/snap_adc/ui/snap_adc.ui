@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>SNAP ADC</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_sample_rate">
+     <property name="text"><string>Sample rate (MHz)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="sample_rate"/>
+       <widget class="QLabel" name="label_snap_inputs">
+     <property name="text"><string>Number of inputs per snap</string></property>
+    </widget>
+       <widget class="QComboBox" name="snap_inputs">
+     <item><property name="text"><string>3</string></property></item>
+     <item><property name="text"><string>6</string></property></item>
+     <item><property name="text"><string>12</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_adc_resolution">
+     <property name="text"><string>Resolution of ADC (number of bit)</string></property>
+    </widget>
+       <widget class="QComboBox" name="adc_resolution">
+     <item><property name="text"><string>8</string></property></item>
+     <item><property name="text"><string>12</string></property></item>
+    </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

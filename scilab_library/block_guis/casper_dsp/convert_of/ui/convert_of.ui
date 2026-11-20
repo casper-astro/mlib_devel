@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Convert with Overflow</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_bit_width_i">
+     <property name="text"><string>Bit Width In</string></property>
+    </widget>
+       <widget class="QSpinBox" name="bit_width_i"/>
+       <widget class="QLabel" name="label_binary_point_i">
+     <property name="text"><string>Binary Point In</string></property>
+    </widget>
+       <widget class="QSpinBox" name="binary_point_i"/>
+       <widget class="QLabel" name="label_bit_width_o">
+     <property name="text"><string>Bit Width Out</string></property>
+    </widget>
+       <widget class="QSpinBox" name="bit_width_o"/>
+       <widget class="QLabel" name="label_binary_point_o">
+     <property name="text"><string>Binary Point Out</string></property>
+    </widget>
+       <widget class="QSpinBox" name="binary_point_o"/>
+       <widget class="QLabel" name="label_quantization">
+     <property name="text"><string>Quantization Behaviour</string></property>
+    </widget>
+       <widget class="QComboBox" name="quantization">
+     <item><property name="text"><string>Truncate</string></property></item>
+     <item><property name="text"><string>Round  (unbiased: +/- Inf)</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_overflow">
+     <property name="text"><string>Overflow Behaviour</string></property>
+    </widget>
+       <widget class="QComboBox" name="overflow">
+     <item><property name="text"><string>Wrap</string></property></item>
+     <item><property name="text"><string>Saturate</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_csp_latency">
+     <property name="text"><string>Latency</string></property>
+    </widget>
+       <widget class="QSpinBox" name="csp_latency"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

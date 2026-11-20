@@ -1,19 +1,34 @@
 {
-    "parameters":
-    {
-        "keys":
-        [
+    "parameters": {
+        "keys": [
             "name",
             "fullpath",
             "tag",
-            "bit_width"
+            "counter_type",
+            "n_bits",
+            "count_to_val",
+            "count_dir",
+            "init_val",
+            "step",
+            "bin_pt",
+            "enable_load",
+            "enable_sync_rst",
+            "enable_enable"
         ],
-        "values":
-        [
+        "values": [
             "counter",
             "",
             "dsp:counter",
-            10
+            "Free Running",
+            "8",
+            "0",
+            "Up",
+            "0",
+            "1",
+            "0",
+            "off",
+            "off",
+            "off"
         ]
     }
 }

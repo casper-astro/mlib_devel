@@ -1,0 +1,22 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "vec_len",
+            "arith_type",
+            "n_bits",
+            "bin_pt"
+        ],
+        "values": [
+            "addr_bram_vacc",
+            "",
+            "dsp:addr_bram_vacc",
+            "16",
+            "Signed",
+            "32",
+            "0"
+        ]
+    }
+}

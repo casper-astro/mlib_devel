@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Mux</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of mux_ui.py, not a
+        full round-trip Designer file; it follows the Simulink "Xilinx Bus
+        Multiplexer" dialog (Basic and Output tabs). Edit both together. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_n_bits">
+     <property name="text"><string>Data width (bits, Simulink inherits it)</string></property>
+    </widget>
+       <widget class="QSpinBox" name="n_bits"/>
+   <widget class="QTabWidget" name="tabWidget">
+    <widget class="QWidget" name="basictab">
+     <attribute name="title"><string>Basic</string></attribute>
+       <widget class="QLabel" name="label_inputs">
+     <property name="text"><string>Number of inputs</string></property>
+    </widget>
+       <widget class="QComboBox" name="inputs"/>
+     <widget class="QGroupBox" name="oportetch">
+      <property name="title"><string>Optional Ports</string></property>
+       <widget class="QCheckBox" name="en">
+     <property name="text"><string>Provide enable port</string></property>
+    </widget>
+     </widget>
+       <widget class="QLabel" name="label_latency">
+     <property name="text"><string>Latency</string></property>
+    </widget>
+       <widget class="QLineEdit" name="latency"/>
+    </widget>
+    <widget class="QWidget" name="otype">
+     <attribute name="title"><string>Output</string></attribute>
+     <widget class="QGroupBox" name="precision">
+      <property name="title"><string>Precision</string></property>
+       <widget class="QRadioButton" name="precision_full">
+     <property name="text"><string>Full</string></property>
+    </widget>
+       <widget class="QRadioButton" name="precision_user">
+     <property name="text"><string>User defined</string></property>
+    </widget>
+     </widget>
+       <widget class="QLabel" name="precision_note"/>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

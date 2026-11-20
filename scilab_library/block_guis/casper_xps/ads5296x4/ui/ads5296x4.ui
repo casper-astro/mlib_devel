@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>ads5296x4</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_board_count">
+     <property name="text"><string>Number of quad-chip ADC Boards</string></property>
+    </widget>
+       <widget class="QComboBox" name="board_count">
+     <item><property name="text"><string>1</string></property></item>
+     <item><property name="text"><string>2</string></property></item>
+     <item><property name="text"><string>3</string></property></item>
+     <item><property name="text"><string>4</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_sample_rate">
+     <property name="text"><string>Sample Rate</string></property>
+    </widget>
+       <widget class="QLineEdit" name="sample_rate"/>
+       <widget class="QLabel" name="label_port">
+     <property name="text"><string>Which FMC port?</string></property>
+    </widget>
+       <widget class="QLineEdit" name="port"/>
+       <widget class="QLabel" name="label_clockport">
+     <property name="text"><string>Use clock from which FMC board?</string></property>
+    </widget>
+       <widget class="QLineEdit" name="clockport"/>
+       <widget class="QLabel" name="label_version">
+     <property name="text"><string>Which ADC board version?</string></property>
+    </widget>
+       <widget class="QLineEdit" name="version"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

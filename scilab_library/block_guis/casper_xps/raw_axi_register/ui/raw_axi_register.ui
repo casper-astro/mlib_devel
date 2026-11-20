@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Raw AXI Register</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name">
+     <property name="toolTip"><string>A name you choose for this block instance, e.g. to note what it's used for in this design. Shown below the block on the diagram.</string></property>
+    </widget>
+       <widget class="QLabel" name="label_io_dir">
+     <property name="text"><string>I/O direction</string></property>
+    </widget>
+       <widget class="QComboBox" name="io_dir">
+     <item><property name="text"><string>To Processor</string></property></item>
+     <item><property name="text"><string>From Processor</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_io_delay">
+     <property name="text"><string>I/O delay</string></property>
+    </widget>
+       <widget class="QLineEdit" name="io_delay"/>
+       <widget class="QLabel" name="label_init_val">
+     <property name="text"><string>Initial Value</string></property>
+    </widget>
+       <widget class="QLineEdit" name="init_val"/>
+       <widget class="QLabel" name="label_sample_period">
+     <property name="text"><string>Sample period</string></property>
+    </widget>
+       <widget class="QLineEdit" name="sample_period"/>
+       <widget class="QLabel" name="label_names">
+     <property name="text"><string>Bitfield names [msb...lsb]</string></property>
+    </widget>
+       <widget class="QLineEdit" name="names"/>
+       <widget class="QLabel" name="label_bitwidths">
+     <property name="text"><string>Bitfield widths</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bitwidths"/>
+       <widget class="QLabel" name="label_bin_pts">
+     <property name="text"><string>Bitfield binary pts</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bin_pts"/>
+       <widget class="QLabel" name="label_arith_types">
+     <property name="text"><string>Bitfield types, ufix=0, fix=1, bool=2</string></property>
+    </widget>
+       <widget class="QLineEdit" name="arith_types"/>
+       <widget class="QLabel" name="label_sim_port">
+     <property name="text"><string>Provide sim input/output?</string></property>
+    </widget>
+       <widget class="QCheckBox" name="sim_port"/>
+       <widget class="QLabel" name="label_show_format">
+     <property name="text"><string>Print format string?</string></property>
+    </widget>
+       <widget class="QCheckBox" name="show_format"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

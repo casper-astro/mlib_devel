@@ -1,0 +1,16 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "pulse_len"
+        ],
+        "values": [
+            "negedge_delay",
+            "",
+            "dsp:negedge_delay",
+            "4"
+        ]
+    }
+}

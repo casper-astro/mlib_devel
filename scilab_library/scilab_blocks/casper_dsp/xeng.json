@@ -1,0 +1,32 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "n_ants",
+            "n_bits",
+            "acc_len",
+            "demux_factor",
+            "add_latency",
+            "mult_latency",
+            "bram_latency",
+            "use_ded_mult",
+            "use_bram_delay"
+        ],
+        "values": [
+            "xeng",
+            "",
+            "dsp:xeng",
+            "8",
+            "4",
+            "128",
+            "4",
+            "1",
+            "1",
+            "2",
+            "1",
+            "1"
+        ]
+    }
+}

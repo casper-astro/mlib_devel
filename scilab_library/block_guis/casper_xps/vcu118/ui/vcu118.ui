@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>VCU118</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_hw_sys">
+     <property name="text"><string>Hardware Platform</string></property>
+    </widget>
+       <widget class="QComboBox" name="hw_sys">
+     <item><property name="text"><string>VCU118:xcvu9p</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_clk_src">
+     <property name="text"><string>User IP Clock source</string></property>
+    </widget>
+       <widget class="QComboBox" name="clk_src">
+     <item><property name="text"><string>sys_clk</string></property></item>
+     <item><property name="text"><string>clk_200mhz</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_clk_rate">
+     <property name="text"><string>User IP Clock Rate (MHz)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="clk_rate"/>
+       <widget class="QLabel" name="label_axi_master">
+     <property name="text"><string>Which type of control interface?</string></property>
+    </widget>
+       <widget class="QComboBox" name="axi_master">
+     <item><property name="text"><string>microblaze</string></property></item>
+     <item><property name="text"><string>pci</string></property></item>
+     <item><property name="text"><string>spi</string></property></item>
+     <item><property name="text"><string>jtag</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_sample_period">
+     <property name="text"><string>Sample Period</string></property>
+    </widget>
+       <widget class="QLineEdit" name="sample_period"/>
+       <widget class="QLabel" name="label_synthesis_tool">
+     <property name="text"><string>Synthesis Tool:</string></property>
+    </widget>
+       <widget class="QComboBox" name="synthesis_tool">
+     <item><property name="text"><string>Leonardo Spectrum</string></property></item>
+     <item><property name="text"><string>Synplify</string></property></item>
+     <item><property name="text"><string>Synplify Pro</string></property></item>
+     <item><property name="text"><string>XST</string></property></item>
+    </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,20 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "adc_clk_rate",
+            "spi",
+            "ctrl_gpio"
+        ],
+        "values": [
+            "x64_adc",
+            "",
+            "xps:x64_adc",
+            "12",
+            "off",
+            "GPIO_A"
+        ]
+    }
+}

@@ -1,19 +1,16 @@
 {
-    "parameters":
-    {
-        "keys":
-        [
+    "parameters": {
+        "keys": [
             "name",
             "fullpath",
             "tag",
             "sim_length"
         ],
-        "values":
-        [
+        "values": [
             "sim",
             "",
             "sim:sim",
-            1000
+            "1000"
         ]
     }
 }

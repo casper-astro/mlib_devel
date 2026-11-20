@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Delay</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_rst">
+     <property name="text"><string>Provide synchronous reset port</string></property>
+    </widget>
+       <widget class="QCheckBox" name="rst"/>
+       <widget class="QLabel" name="label_en">
+     <property name="text"><string>Provide enable port</string></property>
+    </widget>
+       <widget class="QCheckBox" name="en"/>
+       <widget class="QLabel" name="label_latency">
+     <property name="text"><string>Latency</string></property>
+    </widget>
+       <widget class="QLineEdit" name="latency"/>
+       <widget class="QLabel" name="label_n_bits">
+     <property name="text"><string>Data width (bits, Simulink inherits it)</string></property>
+    </widget>
+       <widget class="QSpinBox" name="n_bits"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

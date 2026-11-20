@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Adder Subtractor</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_opmode">
+     <property name="text"><string>Mode</string></property>
+    </widget>
+       <widget class="QComboBox" name="opmode">
+     <item><property name="text"><string>Addition</string></property></item>
+     <item><property name="text"><string>Subtraction</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_n_bits_a">
+     <property name="text"><string>a input bit width</string></property>
+    </widget>
+       <widget class="QSpinBox" name="n_bits_a"/>
+       <widget class="QLabel" name="label_bin_pt_a">
+     <property name="text"><string>a input binary point</string></property>
+    </widget>
+       <widget class="QSpinBox" name="bin_pt_a"/>
+       <widget class="QLabel" name="label_type_a">
+     <property name="text"><string>a input type</string></property>
+    </widget>
+       <widget class="QComboBox" name="type_a">
+     <item><property name="text"><string>Unsigned</string></property></item>
+     <item><property name="text"><string>Signed</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_n_bits_b">
+     <property name="text"><string>b input bit width</string></property>
+    </widget>
+       <widget class="QSpinBox" name="n_bits_b"/>
+       <widget class="QLabel" name="label_bin_pt_b">
+     <property name="text"><string>b input binary point</string></property>
+    </widget>
+       <widget class="QSpinBox" name="bin_pt_b"/>
+       <widget class="QLabel" name="label_type_b">
+     <property name="text"><string>b input type</string></property>
+    </widget>
+       <widget class="QComboBox" name="type_b">
+     <item><property name="text"><string>Unsigned</string></property></item>
+     <item><property name="text"><string>Signed</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_misc">
+     <property name="text"><string>Misc support</string></property>
+    </widget>
+       <widget class="QCheckBox" name="misc"/>
+       <widget class="QLabel" name="label_misc_width">
+     <property name="text"><string>misci / misco bit width (misc only)</string></property>
+    </widget>
+       <widget class="QSpinBox" name="misc_width"/>
+       <widget class="QLabel" name="label_async_op">
+     <property name="text"><string>Asynchronous operation</string></property>
+    </widget>
+       <widget class="QCheckBox" name="async_op"/>
+       <widget class="QLabel" name="label_n_bits_out">
+     <property name="text"><string>Output bit width</string></property>
+    </widget>
+       <widget class="QSpinBox" name="n_bits_out"/>
+       <widget class="QLabel" name="label_bin_pt_out">
+     <property name="text"><string>Output binary point</string></property>
+    </widget>
+       <widget class="QSpinBox" name="bin_pt_out"/>
+       <widget class="QLabel" name="label_type_out">
+     <property name="text"><string>Output type</string></property>
+    </widget>
+       <widget class="QComboBox" name="type_out">
+     <item><property name="text"><string>Unsigned</string></property></item>
+     <item><property name="text"><string>Signed</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_quantization">
+     <property name="text"><string>Quantization strategy</string></property>
+    </widget>
+       <widget class="QComboBox" name="quantization">
+     <item><property name="text"><string>Truncate</string></property></item>
+     <item><property name="text"><string>Round  (unbiased: +/- Inf)</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_overflow">
+     <property name="text"><string>Overflow strategy</string></property>
+    </widget>
+       <widget class="QComboBox" name="overflow">
+     <item><property name="text"><string>Wrap</string></property></item>
+     <item><property name="text"><string>Saturate</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_csp_latency">
+     <property name="text"><string>Latency</string></property>
+    </widget>
+       <widget class="QSpinBox" name="csp_latency"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

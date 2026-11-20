@@ -4,7 +4,6 @@ function [width] = get_port_width(obj, port_id, port_type)
     // get the block name, type and tag
     type = get_block_type(obj);
     tag = get_block_tag(obj);
-    name = get_block_name(obj);
     // get the port width from the block's model.in2/out2 field
     if port_type == 'in' then
         all_port_width = obj.model.in2';

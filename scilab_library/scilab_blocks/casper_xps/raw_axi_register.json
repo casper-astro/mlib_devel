@@ -1,0 +1,34 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "io_dir",
+            "io_delay",
+            "init_val",
+            "sample_period",
+            "names",
+            "bitwidths",
+            "bin_pts",
+            "arith_types",
+            "sim_port",
+            "show_format"
+        ],
+        "values": [
+            "raw_axi_register",
+            "",
+            "xps:raxi",
+            "To Processor",
+            "0",
+            "0",
+            "1",
+            "reg",
+            "32",
+            "0",
+            "0",
+            "on",
+            "on"
+        ]
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "vector_len"
+        ],
+        "values": [
+            "qdr_vacc",
+            "",
+            "dsp:qdr_vacc",
+            "139264"
+        ]
+    }
+}

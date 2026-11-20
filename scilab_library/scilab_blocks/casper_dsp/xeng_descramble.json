@@ -1,0 +1,22 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "num_ants",
+            "n_bits",
+            "acc_len",
+            "demux_factor"
+        ],
+        "values": [
+            "xeng_descramble",
+            "",
+            "dsp:xeng_descramble",
+            "8",
+            "4",
+            "128",
+            "8"
+        ]
+    }
+}

@@ -1,0 +1,32 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "reset",
+            "enable",
+            "n_bits_in",
+            "bin_pt_in",
+            "type_in",
+            "cmplx",
+            "n_bits_out",
+            "overflow",
+            "misc"
+        ],
+        "values": [
+            "bus_accumulator",
+            "",
+            "dsp:bus_accumulator",
+            "on",
+            "on",
+            "[]",
+            "3",
+            "1",
+            "on",
+            "16",
+            "1",
+            "on"
+        ]
+    }
+}

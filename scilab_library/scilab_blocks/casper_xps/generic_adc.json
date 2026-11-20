@@ -1,0 +1,28 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "n_inputs",
+            "n_outputs",
+            "bits",
+            "interleaved",
+            "or_support",
+            "sync_support",
+            "dv_support"
+        ],
+        "values": [
+            "generic_adc",
+            "",
+            "xps:generic_adc",
+            "1",
+            "4",
+            "8",
+            "off",
+            "off",
+            "on",
+            "off"
+        ]
+    }
+}
