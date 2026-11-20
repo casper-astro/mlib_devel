@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>adc16x250_8</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_board_count">
+     <property name="text"><string>Number of ADC16 Boards</string></property>
+    </widget>
+       <widget class="QComboBox" name="board_count">
+     <item><property name="text"><string>1</string></property></item>
+     <item><property name="text"><string>2</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_roach2_rev">
+     <property name="text"><string>ROACH2 Revision</string></property>
+    </widget>
+       <widget class="QComboBox" name="roach2_rev">
+     <item><property name="text"><string>1</string></property></item>
+     <item><property name="text"><string>2</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_zdok_rev">
+     <property name="text"><string>ZDOK Pinout Revision</string></property>
+    </widget>
+       <widget class="QComboBox" name="zdok_rev">
+     <item><property name="text"><string>1</string></property></item>
+     <item><property name="text"><string>2</string></property></item>
+    </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

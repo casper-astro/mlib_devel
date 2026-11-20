@@ -1,0 +1,26 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "acc_len",
+            "n_bits_in",
+            "bin_pt_in",
+            "mult_latency",
+            "add_latency",
+            "multiplier_implementation"
+        ],
+        "values": [
+            "dual_pol_cmac",
+            "",
+            "dsp:dual_pol_cmac",
+            "128",
+            "4",
+            "3",
+            "1",
+            "1",
+            "embedded multiplier core"
+        ]
+    }
+}

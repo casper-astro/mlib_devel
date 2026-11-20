@@ -1,0 +1,26 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "sim_acc_len",
+            "fft_size",
+            "fft_simult_inputs",
+            "pfb_fir_taps",
+            "reorder_vec",
+            "scale"
+        ],
+        "values": [
+            "sync_gen",
+            "",
+            "dsp:sync_gen",
+            "7",
+            "256",
+            "8",
+            "4",
+            "[2 2 2]",
+            "1"
+        ]
+    }
+}

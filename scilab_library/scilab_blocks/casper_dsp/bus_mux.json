@@ -1,0 +1,24 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "n_inputs",
+            "n_bits",
+            "cmplx",
+            "misc",
+            "mux_latency"
+        ],
+        "values": [
+            "bus_mux",
+            "",
+            "dsp:bus_mux",
+            "0",
+            "8",
+            "off",
+            "off",
+            "0"
+        ]
+    }
+}

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>cross_multiplier</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_streams">
+     <property name="text"><string>Number input streams</string></property>
+    </widget>
+       <widget class="QLineEdit" name="streams"/>
+       <widget class="QLabel" name="label_aggregation">
+     <property name="text"><string>Aggregation per stream</string></property>
+    </widget>
+       <widget class="QLineEdit" name="aggregation"/>
+       <widget class="QLabel" name="label_bit_width_in">
+     <property name="text"><string>Bit width in</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bit_width_in"/>
+       <widget class="QLabel" name="label_binary_point_in">
+     <property name="text"><string>Binary point in</string></property>
+    </widget>
+       <widget class="QLineEdit" name="binary_point_in"/>
+       <widget class="QLabel" name="label_bit_width_out">
+     <property name="text"><string>Bit width out</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bit_width_out"/>
+       <widget class="QLabel" name="label_binary_point_out">
+     <property name="text"><string>Binary point out</string></property>
+    </widget>
+       <widget class="QLineEdit" name="binary_point_out"/>
+       <widget class="QLabel" name="label_mult_latency">
+     <property name="text"><string>Multiplier latency</string></property>
+    </widget>
+       <widget class="QLineEdit" name="mult_latency"/>
+       <widget class="QLabel" name="label_add_latency">
+     <property name="text"><string>Adder latency</string></property>
+    </widget>
+       <widget class="QLineEdit" name="add_latency"/>
+       <widget class="QLabel" name="label_overflow">
+     <property name="text"><string>Overflow behaviour</string></property>
+    </widget>
+       <widget class="QComboBox" name="overflow">
+     <item><property name="text"><string>Wrap</string></property></item>
+     <item><property name="text"><string>Saturate</string></property></item>
+     <item><property name="text"><string>Error</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_quantisation">
+     <property name="text"><string>Quantisation behaviour</string></property>
+    </widget>
+       <widget class="QComboBox" name="quantisation">
+     <item><property name="text"><string>Truncate</string></property></item>
+     <item><property name="text"><string>Round  (unbiased: +/- Inf)</string></property></item>
+     <item><property name="text"><string>Round  (unbiased: even values)</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_conv_latency">
+     <property name="text"><string>Bit width conversion latency</string></property>
+    </widget>
+       <widget class="QLineEdit" name="conv_latency"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

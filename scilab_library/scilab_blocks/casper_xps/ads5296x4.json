@@ -1,0 +1,30 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "board_count",
+            "sample_rate",
+            "port",
+            "clockport",
+            "version"
+        ],
+        "values": [
+            "ads5296x4",
+            "",
+            "xps:ads5296x4",
+            "2",
+            "200",
+            "0",
+            "0",
+            "1"
+        ]
+    },
+    "evaluate": [
+        "sample_rate",
+        "port",
+        "clockport",
+        "version"
+    ]
+}

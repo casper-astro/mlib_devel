@@ -23,7 +23,7 @@ class Platform(object):
         with open(conffile, 'r') as fh:
             self.conf = yaml.load(fh.read(), Loader=yaml.Loader)
 
-        print(self.conf)
+        #print(self.conf)
         #: A dictionary of pin names associated with the platform.
         self._pins = {}
         for pinname, val in self.conf['pins'].items():

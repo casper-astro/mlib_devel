@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>dual_pol_cmac</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_acc_len">
+     <property name="text"><string>Number of accumulations</string></property>
+    </widget>
+       <widget class="QLineEdit" name="acc_len"/>
+       <widget class="QLabel" name="label_n_bits_in">
+     <property name="text"><string>Number of bits in</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_bits_in"/>
+       <widget class="QLabel" name="label_bin_pt_in">
+     <property name="text"><string>Binary point in</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bin_pt_in"/>
+       <widget class="QLabel" name="label_mult_latency">
+     <property name="text"><string>Multiplier latency</string></property>
+    </widget>
+       <widget class="QLineEdit" name="mult_latency"/>
+       <widget class="QLabel" name="label_add_latency">
+     <property name="text"><string>Adder latency</string></property>
+    </widget>
+       <widget class="QLineEdit" name="add_latency"/>
+       <widget class="QLabel" name="label_multiplier_implementation">
+     <property name="text"><string>Multiplier implementation</string></property>
+    </widget>
+       <widget class="QComboBox" name="multiplier_implementation">
+     <item><property name="text"><string>behavioral HDL</string></property></item>
+     <item><property name="text"><string>standard core</string></property></item>
+     <item><property name="text"><string>embedded multiplier core</string></property></item>
+    </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

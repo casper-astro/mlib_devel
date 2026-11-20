@@ -1,0 +1,20 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "bit_width",
+            "add_latency",
+            "mult_latency"
+        ],
+        "values": [
+            "power",
+            "",
+            "dsp:power",
+            "18",
+            "2",
+            "3"
+        ]
+    }
+}

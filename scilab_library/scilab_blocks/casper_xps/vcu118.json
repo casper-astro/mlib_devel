@@ -1,0 +1,30 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "hw_sys",
+            "clk_src",
+            "clk_rate",
+            "axi_master",
+            "sample_period",
+            "synthesis_tool"
+        ],
+        "values": [
+            "vcu118",
+            "",
+            "xps:xsg",
+            "VCU118:xcvu9p",
+            "clk_200mhz",
+            "200",
+            "jtag",
+            "1",
+            "XST"
+        ]
+    },
+    "evaluate": [
+        "clk_rate",
+        "sample_period"
+    ]
+}

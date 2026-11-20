@@ -1,140 +1,94 @@
-import sys
 from .dsp_block import DSPBlock
-from verilog import VerilogModule
-
-module_libs = {}
-module_libs['casper_misc_lib'] = []
-module_libs['common_pkg_lib'] = []
-module_libs['common_components_lib'] = []
-module_libs['casper_adder_lib'] = []
-module_libs['casper_counter_lib'] = []
-module_libs['xil_defaultlib'] = []
-module_libs['casper_ram_lib'] = []
-module_libs['technology_lib'] = []
-module_libs['casper_delay_lib'] = []
-module_libs['ip_xpm_ram_lib'] = []
-module_libs['ip_xpm_ram_lib'] = []
 
 
 class simple_bram_vacc(DSPBlock):
+    # casper_library simple_bram_vacc on casper_dsp's
+    # Accumulators/simple_bram_vacc.sv: pulse_ext(new_acc) -> valid, an adder
+    # looped through a delay_bram of VEC_LEN - 2 (bram latency 2), so dout
+    # shows the finished sums while valid is high.
+    # din has its own type (N_BITS_IN, BIN_PT_IN, TYPE_IN), which Simulink
+    # inherits from the input; Scilab has no type propagation, so it comes
+    # from the arith_type_in / n_bits_in / bin_pt_in keys (the din port width
+    # in simple_bram_vacc.sci is n_bits_in). PLATFORM is left at the RTL
+    # default "GENERIC" (inferred RAM).
+    # Every module simple_bram_vacc.sv instantiates, directly or not.
+    SRCS = [
+        'casper_dsp/rtl/BasicModules/constant.sv',
+        'casper_dsp/rtl/BasicModules/counter.sv',
+        'casper_dsp/rtl/BasicModules/relational.sv',
+        'casper_dsp/rtl/BasicModules/multiplexer.sv',
+        'casper_dsp/rtl/BasicModules/register.sv',
+        'casper_dsp/rtl/BasicModules/delay.sv',
+        'casper_dsp/rtl/Misc/edge_detect.v',
+        'casper_dsp/rtl/Misc/pulse_ext.sv',
+        'casper_dsp/rtl/Delays/delay_srl.sv',
+        'casper_dsp/rtl/Delays/pipeline.sv',
+        'casper_dsp/rtl/Delays/single_port_ram.sv',
+        'casper_dsp/rtl/Delays/delay_bram.sv',
+        'casper_dsp/rtl/Bus/convert.sv',
+        'casper_dsp/rtl/Bus/adder_subtractor.sv',
+        'casper_dsp/rtl/Accumulators/simple_bram_vacc.sv',
+    ]
+    # GUI popup text (the Simulink mask's options) -> ARITH_TYPE / TYPE_IN
+    ARITH_TYPES = {'Unsigned': 0, 'Signed': 1}
+
     def initialize(self):
-        self.add_source('casper_dspdevel/misc/c_to_ri.vhd')
-        module_libs['casper_misc_lib'].append('casper_dspdevel/misc/c_to_ri.vhd')
+        for src in self.SRCS:
+            self.add_source(src)
 
-        self.add_source('casper_dspdevel/common_pkg/fixed_pkg_c.vhd')
-        module_libs['common_pkg_lib'].append('casper_dspdevel/common_pkg/fixed_pkg_c.vhd')
+    def _type(self, key):
+        val = getattr(self, key)
+        if val not in self.ARITH_TYPES:
+            raise ValueError('simple_bram_vacc %s: %s %r not supported (use one of %s)'
+                             % (self.fullname, key, val, ', '.join(self.ARITH_TYPES)))
+        return self.ARITH_TYPES[val]
 
-        self.add_source('casper_dspdevel/common_pkg/float_pkg_c.vhd')
-        module_libs['common_pkg_lib'].append('casper_dspdevel/common_pkg/float_pkg_c.vhd')
+    def _int(self, key):
+        return int(float(getattr(self, key)))
 
-        self.add_source('casper_dspdevel/common_pkg/fixed_float_types_c.vhd')
-        module_libs['common_pkg_lib'].append('casper_dspdevel/common_pkg/fixed_float_types_c.vhd')
+    def params(self):
+        """simple_bram_vacc.sv parameters (name, value), in declaration order;
+        the RTL $fatal checks are repeated here so a bad value fails at
+        generation time with the block's name."""
+        vec_len, n_bits, bin_pt = self._int('vec_len'), self._int('n_bits'), self._int('bin_pt')
+        n_bits_in, bin_pt_in = self._int('n_bits_in'), self._int('bin_pt_in')
+        if vec_len < 6:
+            raise ValueError('simple_bram_vacc %s: vec_len = %d must be greater than 5' % (self.fullname, vec_len))
+        if n_bits < 1 or n_bits_in < 1:
+            raise ValueError('simple_bram_vacc %s: n_bits / n_bits_in must be greater than 0' % self.fullname)
+        if bin_pt > n_bits or bin_pt_in > n_bits_in:
+            raise ValueError('simple_bram_vacc %s: a binary point cannot be greater than its bit width'
+                             % self.fullname)
+        for link in self.link_info:
+            # the din link (Xcos input 2) must carry n_bits_in bits
+            if link['dst_blk_name'] == self.unique_name and link['dst_port_id'] == 2 \
+                    and int(link['dst_port_width']) != n_bits_in:
+                raise ValueError('simple_bram_vacc %s: din link is %s bits wide, n_bits_in is %d'
+                                 % (self.fullname, link['dst_port_width'], n_bits_in))
+        return [('VEC_LEN', vec_len), ('ARITH_TYPE', self._type('arith_type')),
+                ('N_BITS', n_bits), ('BIN_PT', bin_pt),
+                ('N_BITS_IN', n_bits_in), ('BIN_PT_IN', bin_pt_in),
+                ('TYPE_IN', self._type('arith_type_in'))]
 
-        self.add_source('casper_dspdevel/common_components/common_pipeline.vhd')
-        module_libs['common_components_lib'].append('casper_dspdevel/common_components/common_pipeline.vhd')
-
-        self.add_source('casper_dspdevel/casper_adder/common_add_sub.vhd')
-        module_libs['casper_adder_lib'].append('casper_dspdevel/casper_adder/common_add_sub.vhd')
-
-        self.add_source('casper_dspdevel/common_components/common_async.vhd')
-        module_libs['common_components_lib'].append('casper_dspdevel/common_components/common_async.vhd')
-
-        self.add_source('casper_dspdevel/common_components/common_areset.vhd')
-        module_libs['common_components_lib'].append('casper_dspdevel/common_components/common_areset.vhd')
-
-        self.add_source('casper_dspdevel/common_components/common_bit_delay.vhd')
-        module_libs['common_components_lib'].append('casper_dspdevel/common_components/common_bit_delay.vhd')
-
-        self.add_source('casper_dspdevel/casper_counter/common_counter.vhd')
-        module_libs['casper_counter_lib'].append('casper_dspdevel/casper_counter/common_counter.vhd')
-
-        # free_run_down_counter.vhd
-        self.add_source('casper_dspdevel/casper_counter/free_run_counter.vhd')
-        module_libs['casper_counter_lib'].append('casper_dspdevel/casper_counter/free_run_counter.vhd')
-        # free_run_up_counter
-        #self.add_source('casper_dspdevel/casper_counter/free_run_up_counter.vhd')
-        #module_libs['casper_counter_lib'].append('casper_dspdevel/casper_counter/free_run_up_counter.vhd')
-
-        self.add_source('casper_dspdevel/casper_accumulators/simple_bram_vacc.vhd')
-        module_libs['xil_defaultlib'].append('casper_dspdevel/casper_accumulators/simple_bram_vacc.vhd')
-
-        self.add_source('casper_dspdevel/common_pkg/common_pkg.vhd')
-        module_libs['common_pkg_lib'].append('casper_dspdevel/common_pkg/common_pkg.vhd')
-
-        self.add_source('casper_dspdevel/common_components/common_delay.vhd')
-        module_libs['common_components_lib'].append('casper_dspdevel/common_components/common_delay.vhd')
-
-        self.add_source('casper_dspdevel/misc/edge_detect.vhd')
-        module_libs['casper_misc_lib'].append('casper_dspdevel/misc/edge_detect.vhd')
-
-        self.add_source('casper_dspdevel/misc/pulse_ext.vhd')
-        module_libs['casper_misc_lib'].append('casper_dspdevel/misc/pulse_ext.vhd')
-
-        self.add_source('casper_dspdevel/common_components/common_pipeline.vhd')
-        module_libs['common_components_lib'].append('casper_dspdevel/common_components/common_pipeline.vhd')
-
-        self.add_source('casper_dspdevel/casper_adder/common_add_sub.vhd')
-        module_libs['casper_adder_lib'].append('casper_dspdevel/casper_adder/common_add_sub.vhd')
-
-        self.add_source('casper_dspdevel/casper_ram/common_ram_pkg.vhd')
-        module_libs['casper_ram_lib'].append('casper_dspdevel/casper_ram/common_ram_pkg.vhd')
-
-        self.add_source('casper_dspdevel/technology/technology_select_pkg.vhd')
-        module_libs['technology_lib'].append('casper_dspdevel/technology/technology_select_pkg.vhd')
-
-        self.add_source('casper_dspdevel/casper_ram/tech_memory_component_pkg.vhd')
-        module_libs['casper_ram_lib'].append('casper_dspdevel/casper_ram/tech_memory_component_pkg.vhd')
-
-        self.add_source('casper_dspdevel/casper_ram/tech_memory_ram_crw_crw.vhd')
-        module_libs['casper_ram_lib'].append('casper_dspdevel/casper_ram/tech_memory_ram_crw_crw.vhd')
-
-        self.add_source('casper_dspdevel/casper_ram/tech_memory_ram_cr_cw.vhd')
-        module_libs['casper_ram_lib'].append('casper_dspdevel/casper_ram/tech_memory_ram_cr_cw.vhd')
-
-        self.add_source('casper_dspdevel/casper_ram/common_ram_crw_crw.vhd')
-        module_libs['casper_ram_lib'].append('casper_dspdevel/casper_ram/common_ram_crw_crw.vhd')
-
-        self.add_source('casper_dspdevel/casper_ram/common_ram_rw_rw.vhd')
-        module_libs['casper_ram_lib'].append('casper_dspdevel/casper_ram/common_ram_rw_rw.vhd')
-
-        self.add_source('casper_dspdevel/casper_ram/common_ram_r_w.vhd')
-        module_libs['casper_ram_lib'].append('casper_dspdevel/casper_ram/common_ram_r_w.vhd')
-
-        self.add_source('casper_dspdevel/casper_delay/delay_bram.vhd')
-        module_libs['casper_delay_lib'].append('casper_dspdevel/casper_delay/delay_bram.vhd')
-
-        self.add_source('casper_dspdevel/ip_xpm/ram/ip_xpm_ram_cr_cw.vhd')
-        module_libs['ip_xpm_ram_lib'].append('casper_dspdevel/ip_xpm/ram/ip_xpm_ram_cr_cw.vhd')
-
-        self.add_source('casper_dspdevel/ip_xpm/ram/ip_xpm_ram_crw_crw.vhd')
-        module_libs['ip_xpm_ram_lib'].append('casper_dspdevel/ip_xpm/ram/ip_xpm_ram_crw_crw.vhd')
-
-    def modify_top(self,top):
+    def modify_top(self, top):
         # let's populate the parent ports first
         self._populate_parent_ports(top)
-        # create a verilog module
-        module = 'simple_bram_vacc'
-        inst = top.get_instance(entity=module, name=self.fullname)
-        # add parameters
-        inst.add_parameter("g_vector_length", self.vector_len)
-        inst.add_parameter("g_output_type",  "\"%s\"" %self.output_type)
-        inst.add_parameter("g_bit_w", self.out_bitwidth)
-        # add ports
-        # we need to check if the port is in parent_ports
+        inst = top.get_instance(entity='simple_bram_vacc', name=self.fullname)
+        params = dict(self.params())
+        for name, val in self.params():
+            inst.add_parameter(name, '%d' % val)
+        # ports -- simple_bram_vacc.sv / Simulink names
         inst.add_port('clk', 'user_clk', dir='in')
-        inst.add_port('ce', '1', parent_port=False, width=1, dir='in')
-        inst.add_port('new_acc', self.fullname+'_new_acc', parent_port=False, width=1, dir='in')
-        inst.add_port('din', self.fullname+'_din', parent_port=False, width=self.in_bitwidth, dir='in')
-        inst.add_port('dout', self.fullname+'_dout', parent_port=False, width=self.out_bitwidth, dir='out')
-        inst.add_port('valid', self.fullname+'_valid', parent_port=False, width=1, dir='out')
-    
-    def gen_tcl_cmds(self):
-        tcl_cmds = []
-        for k in module_libs.keys():
-            for f in module_libs[k]:
-                tcl_cmds.append('update_compile_order -fileset sources_1\n')
-                # VHDL lib is a little annoying here...
-                f_parts = f.split('/')
-                tcl_cmds.append('set_property LIBRARY %s [get_files %s/dspproj/dspproj.srcs/sources_1/imports/%s/%s]\n'%(k, self.builddir, f_parts[-2], f_parts[-1]))
-        return {'pre_synth': tcl_cmds}
+        inst.add_port('new_acc', self.fullname + '_new_acc', parent_port=False, width=1, dir='in')
+        inst.add_port('din', self.fullname + '_din', parent_port=False, width=params['N_BITS_IN'], dir='in')
+        inst.add_port('dout', self.fullname + '_dout', parent_port=False, width=params['N_BITS'], dir='out')
+        inst.add_port('valid', self.fullname + '_valid', parent_port=False, width=1, dir='out')
 
+    def generate_compile_order(self):
+        fullpath = self.hdl_root + '/'
+        co = {
+            'lib': 'xil_defaultlib',
+            'modules': [fullpath + src for src in self.SRCS],
+            'fullpath': True
+        }
+        self.compile_order['verilog'].append(co)

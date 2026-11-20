@@ -1,0 +1,20 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "dac_brd",
+            "dac_clk_rate",
+            "sample_period"
+        ],
+        "values": [
+            "dac_mkid",
+            "",
+            "xps:dac_mkid",
+            "0",
+            "512",
+            "1"
+        ]
+    }
+}

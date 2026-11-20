@@ -1,8 +1,6 @@
 {
-    "parameters":
-    {
-        "keys":
-        [
+    "parameters": {
+        "keys": [
             "name",
             "fullpath",
             "tag",
@@ -12,16 +10,15 @@
             "sampling_rate",
             "output_bit_width"
         ],
-        "values":
-        [
+        "values": [
             "sine",
             "",
             "sim:sine",
-            2047,
-            16,
-            0,
-            1024,
-            16
+            "2047",
+            "16",
+            "0",
+            "1024",
+            "16"
         ]
     }
 }

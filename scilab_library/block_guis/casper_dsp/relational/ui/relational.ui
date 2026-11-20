@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Relational</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of relational_ui.py,
+        not a full round-trip Designer file; it follows the Simulink "Xilinx
+        Arithmetic Relational Operator" dialog (Basic tab). Edit both
+        together. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_n_bits">
+     <property name="text"><string>Input width of a and b (bits, Simulink inherits it)</string></property>
+    </widget>
+       <widget class="QSpinBox" name="n_bits"/>
+       <widget class="QLabel" name="label_arith_type">
+     <property name="text"><string>Input arithmetic type (Simulink inherits it)</string></property>
+    </widget>
+       <widget class="QComboBox" name="arith_type"/>
+   <widget class="QTabWidget" name="tabWidget">
+   <!-- tab "Basic" -->
+       <widget class="QLabel" name="label_mode">
+     <property name="text"><string>Comparison:</string></property>
+    </widget>
+       <widget class="QComboBox" name="mode"/>
+   <widget class="QGroupBox" name="op_type_box">
+    <property name="title"><string>Output Type</string></property>
+   <widget class="QGroupBox" name="op_type">
+    <property name="title"><string>Output Type</string></property>
+       <widget class="QRadioButton" name="op_type_bool">
+     <property name="text"><string>Bool</string></property>
+    </widget>
+       <widget class="QRadioButton" name="op_type_ufix">
+     <property name="text"><string>Unsigned Fix</string></property>
+    </widget>
+   </widget>
+   </widget>
+   <widget class="QGroupBox" name="ports_box">
+    <property name="title"><string>Optional Ports</string></property>
+       <widget class="QCheckBox" name="en">
+     <property name="text"><string>Provide enable port</string></property>
+    </widget>
+   </widget>
+       <widget class="QLabel" name="label_latency">
+     <property name="text"><string>Latency</string></property>
+    </widget>
+       <widget class="QLineEdit" name="latency"/>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

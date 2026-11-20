@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Block Parameters: snapshot</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of snapshot_ui.py, not a full
+        round-trip Designer file; it follows the casper_library_scopes snapshot
+        mask. Edit both together. -->
+   <widget class="QGroupBox" name="desc_box">
+    <property name="title"><string>snapshot</string></property>
+    <widget class="QLabel" name="desc_label"/>
+   </widget>
+   <widget class="QLabel" name="label_name">
+    <property name="text"><string>Block name</string></property>
+   </widget>
+   <widget class="QLineEdit" name="name"/>
+   <widget class="QGroupBox" name="type_box">
+    <property name="title"><string>Input type -- Simulink inherits it from the din signal</string></property>
+    <widget class="QLabel" name="label_in_width">
+     <property name="text"><string>Input (din) bit width</string></property>
+    </widget>
+    <widget class="QSpinBox" name="in_width"/>
+   </widget>
+   <widget class="QGroupBox" name="params_box">
+    <property name="title"><string>Parameters</string></property>
+    <widget class="QLabel" name="label_storage">
+     <property name="text"><string>Storage medium</string></property>
+    </widget>
+    <widget class="QComboBox" name="storage">
+     <item><property name="text"><string>bram</string></property></item>
+     <item><property name="text"><string>dram</string></property></item>
+    </widget>
+    <widget class="QLabel" name="label_dram_dimm">
+     <property name="text"><string>DRAM dimm</string></property>
+    </widget>
+    <widget class="QComboBox" name="dram_dimm">
+     <item><property name="text"><string>1</string></property></item>
+     <item><property name="text"><string>2</string></property></item>
+     <item><property name="text"><string>3</string></property></item>
+     <item><property name="text"><string>4</string></property></item>
+    </widget>
+    <widget class="QLabel" name="label_dram_clock">
+     <property name="text"><string>DRAM clock rate</string></property>
+    </widget>
+    <widget class="QComboBox" name="dram_clock">
+     <item><property name="text"><string>200</string></property></item>
+     <item><property name="text"><string>250</string></property></item>
+     <item><property name="text"><string>266</string></property></item>
+     <item><property name="text"><string>300</string></property></item>
+     <item><property name="text"><string>333</string></property></item>
+    </widget>
+    <widget class="QLabel" name="label_nsamples">
+     <property name="text"><string>Number of Samples (2^?)</string></property>
+    </widget>
+    <widget class="QLineEdit" name="nsamples"/>
+    <widget class="QLabel" name="label_data_width">
+     <property name="text"><string>Data width</string></property>
+    </widget>
+    <widget class="QComboBox" name="data_width">
+     <item><property name="text"><string>8</string></property></item>
+     <item><property name="text"><string>16</string></property></item>
+     <item><property name="text"><string>32</string></property></item>
+     <item><property name="text"><string>64</string></property></item>
+     <item><property name="text"><string>128</string></property></item>
+    </widget>
+    <widget class="QCheckBox" name="offset">
+     <property name="text"><string>Start delay support</string></property>
+    </widget>
+    <widget class="QCheckBox" name="circap">
+     <property name="text"><string>Circular capture support</string></property>
+    </widget>
+    <widget class="QCheckBox" name="value">
+     <property name="text"><string>Extra value capture support</string></property>
+    </widget>
+    <widget class="QCheckBox" name="ext_arm">
+     <property name="text"><string>External arm support</string></property>
+    </widget>
+    <widget class="QCheckBox" name="ext_circ">
+     <property name="text"><string>External circular capture support</string></property>
+    </widget>
+    <widget class="QCheckBox" name="use_dsp48">
+     <property name="text"><string>Use DSP48s to implement counters</string></property>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="button_apply"><property name="text"><string>Apply</string></property></widget>
+   <widget class="QPushButton" name="button_ok"><property name="text"><string>OK</string></property></widget>
+   <widget class="QPushButton" name="button_cancel"><property name="text"><string>Cancel</string></property></widget>
+  </widget>
+ </widget>
+</ui>

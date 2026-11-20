@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Bus Adder Tree</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_n_busses">
+     <property name="text"><string>number of busses</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_busses"/>
+       <widget class="QLabel" name="label_n_bits">
+     <property name="text"><string>bus component bit widths</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_bits"/>
+       <widget class="QLabel" name="label_num_float_vec">
+     <property name="text"><string>number floating point vectors in bus</string></property>
+    </widget>
+       <widget class="QLineEdit" name="num_float_vec"/>
+       <widget class="QLabel" name="label_bin_pts">
+     <property name="text"><string>bus component binary points</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bin_pts"/>
+       <widget class="QLabel" name="label_dtypes">
+     <property name="text"><string>bus component data types</string></property>
+    </widget>
+       <widget class="QLineEdit" name="dtypes"/>
+       <widget class="QLabel" name="label_misc">
+     <property name="text"><string>misc support</string></property>
+    </widget>
+       <widget class="QCheckBox" name="misc"/>
+       <widget class="QLabel" name="label_floating_point">
+     <property name="text"><string>floating point</string></property>
+    </widget>
+       <widget class="QCheckBox" name="floating_point"/>
+       <widget class="QLabel" name="label_float_type">
+     <property name="text"><string>float type</string></property>
+    </widget>
+       <widget class="QComboBox" name="float_type">
+     <item><property name="text"><string>single</string></property></item>
+     <item><property name="text"><string>custom</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_frac_width">
+     <property name="text"><string>fraction width</string></property>
+    </widget>
+       <widget class="QLineEdit" name="frac_width"/>
+       <widget class="QLabel" name="label_exp_width">
+     <property name="text"><string>exponent width</string></property>
+    </widget>
+       <widget class="QLineEdit" name="exp_width"/>
+       <widget class="QLabel" name="label_add_latency">
+     <property name="text"><string>adder latency</string></property>
+    </widget>
+       <widget class="QLineEdit" name="add_latency"/>
+       <widget class="QLabel" name="label_first_stage_hdl">
+     <property name="text"><string>implement first stage in of adders in behavioral HDL?</string></property>
+    </widget>
+       <widget class="QCheckBox" name="first_stage_hdl"/>
+       <widget class="QLabel" name="label_adder_imp">
+     <property name="text"><string>adder implementation</string></property>
+    </widget>
+       <widget class="QComboBox" name="adder_imp">
+     <item><property name="text"><string>Behavioral</string></property></item>
+     <item><property name="text"><string>Fabric</string></property></item>
+     <item><property name="text"><string>DSP48</string></property></item>
+    </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,16 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "channel_sel"
+        ],
+        "values": [
+            "adc_16g_asnt",
+            "",
+            "xps:adc_4x16g_asnt",
+            "0"
+        ]
+    }
+}

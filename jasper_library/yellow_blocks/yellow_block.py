@@ -1,7 +1,6 @@
 import os
 import logging
 from glob import glob
-import collections
 
 class YellowBlock(object):
     """
@@ -58,7 +57,7 @@ class YellowBlock(object):
             # If the class has a factory method, call that. This should return some
             # (possibly platform dependent) yellow block instance
             # Else just return an instance of the class.
-            if isinstance(getattr(cls, 'factory', None), collections.Callable):
+            if callable(getattr(cls, 'factory', None)):
                 return cls.factory(blk, platform, hdl_root=hdl_root)
             else:
                 return cls(blk,platform,hdl_root=hdl_root)
@@ -364,7 +363,7 @@ class YellowBlock(object):
             fullpath = path
         else:
             fullpath = self.hdl_root + '/' + path
-        print(path, glob(fullpath))
+        #print(path, glob(fullpath))
         for fname in glob(fullpath):
             self.sources.append(fname)
         #if not os.path.exists(fullpath):

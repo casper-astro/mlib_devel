@@ -1,0 +1,16 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "count_width"
+        ],
+        "values": [
+            "stopwatch",
+            "",
+            "dsp:stopwatch",
+            "32"
+        ]
+    }
+}

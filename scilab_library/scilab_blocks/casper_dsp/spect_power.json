@@ -1,0 +1,24 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "bitwidth",
+            "add_latency",
+            "mult_latency",
+            "mode",
+            "n_inputs"
+        ],
+        "values": [
+            "spect_power",
+            "",
+            "dsp:spect_power",
+            "18",
+            "1",
+            "2",
+            "accumulate",
+            "1"
+        ]
+    }
+}

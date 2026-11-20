@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>FIFO</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of fifo_ui.py, not a
+        full round-trip Designer file; it follows the Simulink "Xilinx FIFO
+        Block" dialog (Basic tab). Edit both together. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_n_bits">
+     <property name="text"><string>Data width (bits, Simulink inherits it)</string></property>
+    </widget>
+       <widget class="QSpinBox" name="n_bits"/>
+   <widget class="QTabWidget" name="tabWidget">
+   <!-- tab "Basic" -->
+   <widget class="QGroupBox" name="implementation_box">
+    <property name="title"><string>FIFO Implementation</string></property>
+   <widget class="QGroupBox" name="mem_type">
+    <property name="title"><string>Memory Type</string></property>
+       <widget class="QRadioButton" name="mem_type_block_ram">
+     <property name="text"><string>Block RAM</string></property>
+    </widget>
+       <widget class="QRadioButton" name="mem_type_distributed_ram">
+     <property name="text"><string>Distributed RAM</string></property>
+    </widget>
+       <widget class="QRadioButton" name="mem_type_shift_register">
+     <property name="text"><string>Shift Register</string></property>
+    </widget>
+       <widget class="QRadioButton" name="mem_type_built_in_fifo">
+     <property name="text"><string>Built-in FIFO</string></property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="performance_options">
+    <property name="title"><string>Performance Options</string></property>
+       <widget class="QRadioButton" name="performance_options_standard_fifo">
+     <property name="text"><string>Standard FIFO</string></property>
+    </widget>
+       <widget class="QRadioButton" name="performance_options_first_word_fall_through">
+     <property name="text"><string>First Word Fall Through</string></property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="impl_options_box">
+    <property name="title"><string>Implementation Options</string></property>
+       <widget class="QCheckBox" name="embedded_registers">
+     <property name="text"><string>Use Embedded Registers(when possible)</string></property>
+    </widget>
+   </widget>
+   </widget>
+       <widget class="QLabel" name="label_depth">
+     <property name="text"><string>Depth</string></property>
+    </widget>
+       <widget class="QComboBox" name="depth"/>
+       <widget class="QLabel" name="label_percent_nbits">
+     <property name="text"><string>Bits of precision to use for %full signal</string></property>
+    </widget>
+       <widget class="QComboBox" name="percent_nbits"/>
+   <widget class="QGroupBox" name="ports_box">
+    <property name="title"><string>Optional Ports</string></property>
+       <widget class="QCheckBox" name="rst">
+     <property name="text"><string>Provide reset port</string></property>
+    </widget>
+       <widget class="QLabel" name="label_rst_latency">
+     <property name="text"><string>Reset Latency</string></property>
+    </widget>
+       <widget class="QComboBox" name="rst_latency"/>
+       <widget class="QCheckBox" name="en">
+     <property name="text"><string>Provide enable port</string></property>
+    </widget>
+       <widget class="QCheckBox" name="use_dcount">
+     <property name="text"><string>Provide data count port</string></property>
+    </widget>
+       <widget class="QCheckBox" name="use_percent_full_port">
+     <property name="text"><string>Provide percent full port</string></property>
+    </widget>
+       <widget class="QCheckBox" name="use_almost_empty">
+     <property name="text"><string>Provide almost empty port</string></property>
+    </widget>
+       <widget class="QLabel" name="label_almost_empty_thresh">
+     <property name="text"><string>Almost empty threshold</string></property>
+    </widget>
+       <widget class="QLineEdit" name="almost_empty_thresh"/>
+       <widget class="QCheckBox" name="use_almost_full">
+     <property name="text"><string>Provide almost full port</string></property>
+    </widget>
+       <widget class="QCheckBox" name="use_rd_rst_busy">
+     <property name="text"><string>Provide read reset busy port</string></property>
+    </widget>
+       <widget class="QCheckBox" name="use_wr_rst_busy">
+     <property name="text"><string>Provide write reset busy port</string></property>
+    </widget>
+       <widget class="QLabel" name="label_almost_full_thresh">
+     <property name="text"><string>Almost full threshold</string></property>
+    </widget>
+       <widget class="QLineEdit" name="almost_full_thresh"/>
+   </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

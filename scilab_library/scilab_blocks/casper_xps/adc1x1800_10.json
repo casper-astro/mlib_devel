@@ -1,0 +1,22 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "adc_brd",
+            "adc_clk_rate",
+            "sample_period",
+            "gray_en"
+        ],
+        "values": [
+            "adc1x1800_10",
+            "",
+            "xps:adc1x1800_10",
+            "adc0",
+            "1800",
+            "1",
+            "on"
+        ]
+    }
+}

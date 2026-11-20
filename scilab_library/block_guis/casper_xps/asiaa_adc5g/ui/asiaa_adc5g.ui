@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>asiaa_adc5g</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_input_mode">
+     <property name="text"><string>Input mode:</string></property>
+    </widget>
+       <widget class="QComboBox" name="input_mode">
+     <item><property name="text"><string>One-channel -- A</string></property></item>
+     <item><property name="text"><string>One-channel -- C</string></property></item>
+     <item><property name="text"><string>Two-channel -- A&amp;C</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_adc_brd">
+     <property name="text"><string>ADC Board</string></property>
+    </widget>
+       <widget class="QComboBox" name="adc_brd">
+     <item><property name="text"><string>ZDOK 0</string></property></item>
+     <item><property name="text"><string>ZDOK 1</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_demux">
+     <property name="text"><string>Internal demux</string></property>
+    </widget>
+       <widget class="QComboBox" name="demux">
+     <item><property name="text"><string>1:1</string></property></item>
+     <item><property name="text"><string>1:2</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_adc_bit_width">
+     <property name="text"><string>ADC Resolution (bits):</string></property>
+    </widget>
+       <widget class="QLineEdit" name="adc_bit_width"/>
+       <widget class="QLabel" name="label_adc_clk_rate">
+     <property name="text"><string>ADC Clock Rate (MHz):</string></property>
+    </widget>
+       <widget class="QLineEdit" name="adc_clk_rate"/>
+       <widget class="QLabel" name="label_using_ctrl">
+     <property name="text"><string>use control</string></property>
+    </widget>
+       <widget class="QCheckBox" name="using_ctrl"/>
+       <widget class="QLabel" name="label_test_ramp">
+     <property name="text"><string>start in test ramp mode</string></property>
+    </widget>
+       <widget class="QCheckBox" name="test_ramp"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Shared BRAM</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name">
+     <property name="toolTip"><string>A name you choose for this block instance, e.g. to note what it's used for in this design. Shown below the block on the diagram.</string></property>
+    </widget>
+       <widget class="QLabel" name="label_arith_type">
+     <property name="text"><string>Output Data Type</string></property>
+    </widget>
+       <widget class="QComboBox" name="arith_type">
+     <item><property name="text"><string>Unsigned</string></property></item>
+     <item><property name="text"><string>Signed  (2's comp)</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_addr_width">
+     <property name="text"><string>Address width</string></property>
+    </widget>
+       <widget class="QSpinBox" name="addr_width"/>
+       <widget class="QLabel" name="label_data_width">
+     <property name="text"><string>Data Width</string></property>
+    </widget>
+       <widget class="QComboBox" name="data_width">
+     <item><property name="text"><string>8</string></property></item>
+     <item><property name="text"><string>16</string></property></item>
+     <item><property name="text"><string>32</string></property></item>
+     <item><property name="text"><string>64</string></property></item>
+     <item><property name="text"><string>128</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_reg_prim_output">
+     <property name="text"><string>Register Primitive Output</string></property>
+    </widget>
+       <widget class="QCheckBox" name="reg_prim_output"/>
+       <widget class="QLabel" name="label_reg_core_output">
+     <property name="text"><string>Register Core Output</string></property>
+    </widget>
+       <widget class="QCheckBox" name="reg_core_output"/>
+       <widget class="QLabel" name="label_optimization">
+     <property name="text"><string>Optimization</string></property>
+    </widget>
+       <widget class="QComboBox" name="optimization">
+     <item><property name="text"><string>Minimum_Area</string></property></item>
+     <item><property name="text"><string>Low_Power</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_data_bin_pt">
+     <property name="text"><string>Data Binary Point</string></property>
+    </widget>
+       <widget class="QLineEdit" name="data_bin_pt"/>
+       <widget class="QLabel" name="label_init_vals">
+     <property name="text"><string>Initial values (simulation only)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="init_vals"/>
+       <widget class="QLabel" name="label_sample_rate">
+     <property name="text"><string>Sample rate</string></property>
+    </widget>
+       <widget class="QLineEdit" name="sample_rate"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

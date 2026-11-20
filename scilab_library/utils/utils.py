@@ -53,8 +53,13 @@ def gen_glue_module(link_info,file_dir='./'):
     gen_verilog_module(module_name, in_port, out_port, bitwidth, file_dir)
 
 # try to convert the value to int or float
-def val_format_conv(obj):
+# empty_as_none: an empty value becomes None (null in jasper.per), as an
+# empty field does in MATLAB's gen_block_file.m (used for the xps blocks)
+def val_format_conv(obj, empty_as_none=False):
     for k, v in obj.items():
+        if empty_as_none and v == '':
+            obj[k] = None
+            continue
         try:
             obj[k] = int(v)
         except:
@@ -73,18 +78,4 @@ def dump_jasper(jasper_per, fn = 'jasper.per'):
     f = open(fn, 'w+')
     yaml.dump(jasper_per, f, sort_keys=False)
     f.close()
-
-# check the bit width of each link
-def check_bit_width(model_info):
-    match = True
-    link_info = model_info['link_info']
-    for link in link_info:
-        if link['src_port_width'] != link['dst_port_width']:
-            print('port width not match ')
-            print('src_blk_name: %s, dst_blk_name: %s'%(link['src_blk_name'], link['dst_blk_name']))
-            print('src_port_name: %s, dst_port_name: %s'%(link['src_port_name'], link['dst_port_name']))
-            print('src_port_width: %d, dst_port_width: %d'%(link['src_port_width'], link['dst_port_width']))
-            print('  ')
-            match = False
-    return match
     

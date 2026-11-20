@@ -21,6 +21,7 @@ class scope(SimBlock):
         data = SimBlock._get_sim_data_by_port_name(r, self.port_name)
         # data is a dict, and 'name' is the port_name
         # rename the 'name' to the scope name
+        self.logger.info('Rename the port name to %s'%self.name)
         data['name'] = self.name
         return data
     

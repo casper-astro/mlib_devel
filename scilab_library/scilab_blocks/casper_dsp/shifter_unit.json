@@ -1,0 +1,18 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "data_width",
+            "pin_offset"
+        ],
+        "values": [
+            "shifter_unit",
+            "",
+            "dsp:shifter_unit",
+            "16",
+            "0"
+        ]
+    }
+}

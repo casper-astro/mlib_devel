@@ -1,0 +1,18 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "period",
+            "n_bits"
+        ],
+        "values": [
+            "sample_and_hold",
+            "",
+            "dsp:sample_and_hold",
+            "1",
+            "18"
+        ]
+    }
+}

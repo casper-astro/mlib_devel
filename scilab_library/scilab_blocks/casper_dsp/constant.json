@@ -1,0 +1,22 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "const",
+            "arith_type",
+            "n_bits",
+            "bin_pt"
+        ],
+        "values": [
+            "constant",
+            "",
+            "dsp:constant",
+            "1.0",
+            "Signed (2's comp)",
+            "16",
+            "14"
+        ]
+    }
+}

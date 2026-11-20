@@ -1,0 +1,26 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "n_bits",
+            "arith_type",
+            "mode",
+            "op_type",
+            "en",
+            "latency"
+        ],
+        "values": [
+            "relational",
+            "",
+            "dsp:relational",
+            "8",
+            "Unsigned",
+            "a=b",
+            "Bool",
+            "off",
+            "1"
+        ]
+    }
+}

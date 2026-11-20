@@ -1,0 +1,36 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "local_en",
+            "dis_cpu_rx",
+            "dis_cpu_tx",
+            "cpu_promiscuous",
+            "local_mac",
+            "local_ip",
+            "local_port",
+            "local_gateway"
+        ],
+        "values": [
+            "one_gbe",
+            "",
+            "xps:onegbe",
+            "on",
+            "off",
+            "off",
+            "on",
+            "hex2dec('123456789abc')",
+            "hex2dec('c0a8290a')",
+            "4321",
+            "1"
+        ]
+    },
+    "evaluate": [
+        "local_mac",
+        "local_ip",
+        "local_port",
+        "local_gateway"
+    ]
+}

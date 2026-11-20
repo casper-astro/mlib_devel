@@ -1,0 +1,23 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "sample_rate",
+            "snap_inputs",
+            "adc_resolution"
+        ],
+        "values": [
+            "snap_adc",
+            "",
+            "xps:snap_adc",
+            "250",
+            "12",
+            "8"
+        ]
+    },
+    "evaluate": [
+        "sample_rate"
+    ]
+}

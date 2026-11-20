@@ -1,96 +1,130 @@
   function [x, y, typ] = swreg(job, arg1, arg2)
     x=[];y=[];typ=[];
-    blkname = 'swreg';
-    io_direction = 'From Processor';
-    io_delay = 0;
-    init_val = 0;
-    sample_period = 1;
-    bitfield_name = 'reg';
-    bitfield_width = 1;
-    bitfield_bp = 0;
-    bitfield_types = 2;
     select job
     case 'set' then
       x = arg1;
-      graphics = arg1.graphics;
-      exprs = graphics.exprs;
-      model = arg1.model;
-      txt = [ 'Block Name (any string)';...
-              'IO direction(From Processor, To Processor)';...
-              'IO delay';...
-              'Initial Value'; ...
-              'Sample period';...
-              'Bitfield names[msb...lsb]';...
-              'Bitfield widths';...
-              'Bitfield binary point';...
-              'Bitfield types(ufix=0, fix=1, bool=2)';...
-            ];
-      [ok, blkname, io_direction, io_delay, init_val, sample_period, bitfield_name, bitfield_width, bitfield_bp, bitfield_types, exprs] = scicos_getvalue("Set SWREG block parameters",...
-                          txt,...
-                          list("str", 1, "str", 1, "str",1 ,"str",1,"str",1,"str",1,"str",1,"str",1,"str",1),...
-                          exprs);
-      if ok then
-        bitfield_width = strtod(bitfield_width);
-        // TODO: figure out how to set string in the model
-        if io_direction == 'From Processor' then
-            model.in = [1];
-            model.in2 = [bitfield_width];
-            model.out = [1];
-            model.out2 = [bitfield_width];
-            graphics.out_label = ['user_data_out'];
-            graphics.in_label = ['sim_in'];
-            graphics.style = 'shape=rectangle;fillColor=yellow'
-        elseif io_direction == 'To Processor' then
-            model.in = [1];
-            model.in2 = [bitfield_width];
-            model.out = [1];
-            model.out2 = [bitfield_width];
-            graphics.out_label = ['sim_out'];
-            graphics.in_label = ['user_data_in'];
-            graphics.style = 'shape=rectangle;fillColor=yellow';
-        end
-        graphics.exprs = exprs;
-        x.graphics = graphics;
-        x.model = model;
-      end
+      /* diagrams saved with the old scicos_getvalue dialog have 9 exprs */
+      x = swreg_upgrade_exprs(x);
+      /* configure the block with the pyqt GUI in block_guis/casper_xps/swreg */
+      export_exprs_to_tmpdir(x);
+      bconfig = run_mask(x);
+      x = update_exprs_from_tmpdir(x);
+      x = swreg_update_ports(x, bconfig);
     case 'define' then
       model = scicos_model();
       // what does this sim mean??
       model.sim = list('swreg_out',4);
       model.blocktype = 'c';
-      // we put the index of the related item in block_info.json into rpar
-      // model.rpar =  [0, 0, 1, 0, 1, 0, 2];
-      // "SWREG":{
-      //   "name": "wreg",              -- 0
-      //   "fullpath": "",
-      //   "tag": "xps:sw_reg",
-      //   "io_dir": "From Processor",  -- 3
-      //   "io_delay": 0,               -- 4
-      //   "init_val": 0,               -- 5
-      //   "sample_period": 1,          -- 6
-      //   "names": "reg",              -- 7
-      //   "bitwidths": 1,              -- 8
-      //   "bin_pts": 0,                -- 9
-      //   "arith_types": 2,            -- 10
-      //   "sim_port": "on",
-      //   "show_format": "on"
-      // }
-      // Type : column vector of real numbers.
-      model.rpar = [0, 3, 4, 5, 6, 7, 8, 9, 10];
-      // TODO: do we have to set out2??
+      // model.label doubles as the on-diagram display text (Scicos aliases
+      // it with graphics.id); category is derived separately by
+      // get_block_type.sci via file-probe, so this is free to be the name.
+      model.label = 'swreg';
+      model.rpar = [];
+      /* the port width is the total width of the bitfields
+         (swreg.json default: one 32-bit field, To Processor) */
       model.out = [1];
-      model.out2 = [1];
+      model.out2 = [32];
       model.in = [1];
-      model.in2 = [1];
-      // Type : column vector of strings.
-      exprs = ['swreg'; 'From Processor';'0'; '0'; '1'; 'reg'; '1'; '0'; '2'];
+      model.in2 = [32];
+      exprs = [];
       gr_i = [];
-      //set the block tag
-      model.label = "xps";
-      x=standard_define([10 1.4],model,exprs,gr_i)
-      x.graphics.out_label = ['user_data_out'];
-      x.graphics.in_label = ['sim_in'];
-      x.graphics.style = 'shape=rectangle;fillColor=yellow';
+      x=standard_define([12 1.7],model,exprs,gr_i)
+      x.graphics.out_label = ['sim_out'];
+      x.graphics.in_label = ['user_data_in'];
+      /* the parameters (including the default "name") are defined in
+         swreg.json -- populate exprs from it before building the style,
+         so the very first on-diagram label already shows the template's
+         default block name instead of the hardcoded tag. */
+      x = init_exprs(x);
+      // block name drawn BELOW the fill color instead of centered on top
+      // of it (verticalAlign=top;verticalLabelPosition=bottom; instead of
+      // verticalAlign=middle;), showing the user-configurable "name"
+      // parameter (swreg.json key "name", exprs(1)) rather than a fixed
+      // literal -- per direct user request, to compare against the
+      // Platforms-group centered-fixed-label look.
+      x.graphics.style = swreg_build_style(x.graphics.exprs(1));
       debug_info('swreg block loaded...')
   end
   endfunction
+
+/*
+convert the exprs of the old swreg block to the keys in swreg.json:
+old: [name, io_dir, io_delay, init_val, sample_period, names, bitwidths, bin_pts, arith_types]
+new: [name, fullpath, tag, io_dir, io_delay, init_val, sample_period, names, bitwidths, bin_pts, arith_types, sim_port, show_format]
+*/
+function [x] = swreg_upgrade_exprs(obj)
+    x = obj;
+    exprs = x.graphics.exprs;
+    /* exprs created by init_exprs is a list, which is already up to date */
+    if typeof(exprs) == 'list' then
+        return;
+    end
+    if size(exprs, '*') == 9 then
+        debug_info('upgrading the exprs of the old swreg block');
+        x.graphics.exprs = [exprs(1); ''; 'xps:sw_reg'; matrix(exprs(2:9), -1, 1); 'on'; 'on'];
+    end
+endfunction
+
+/* build the graphics.style string for a given user-configurable block
+   name, showing it below the yellow fill (see displayedLabel). Strips
+   ';' and '=' from the name since those are the mxGraph style string's
+   own delimiter characters -- an unescaped one would corrupt every key
+   after it in the style string, not just truncate the label. */
+function [style] = swreg_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
+endfunction
+
+/* convert a list string, e.g. "[a, b]" or "8 24", to a column of strings */
+function [items] = swreg_str_to_list(s)
+    s = string(s);
+    seps = ['[', ']', ',', ';', ascii(39), ascii(34)];
+    for i = 1:size(seps, '*')
+        s = strsubst(s, seps(i), ' ');
+    end
+    items = tokens(s, ' ');
+endfunction
+
+/*
+get the total width of the bitfields.
+bitwidths can be one value for all of the fields, or one value per field,
+which is the same as bitfield_maskcheck.m in casper_library.
+*/
+function [width] = swreg_total_width(names, bitwidths)
+    nfields = max(size(swreg_str_to_list(names), '*'), 1);
+    widths = strtod(swreg_str_to_list(bitwidths));
+    if size(widths, '*') == 0 then
+        width = 1;
+    elseif size(widths, '*') == 1 then
+        width = widths * nfields;
+    else
+        width = sum(widths);
+    end
+endfunction
+
+/* update the ports based on the bconfig file generated by the GUI */
+function [x] = swreg_update_ports(obj, bconfigfn)
+    x = obj;
+    bconfig = fromJSON(bconfigfn, 'file');
+    p = bconfig('parameters');
+    io_dir = string(p('io_dir'));
+    width = swreg_total_width(p('names'), p('bitwidths'));
+    debug_info('swreg port width: ' + string(width));
+    graphics = x.graphics;
+    model = x.model;
+    model.in = [1];
+    model.in2 = [width];
+    model.out = [1];
+    model.out2 = [width];
+    if io_dir == 'To Processor' then
+        graphics.out_label = ['sim_out'];
+        graphics.in_label = ['user_data_in'];
+    else
+        graphics.out_label = ['user_data_out'];
+        graphics.in_label = ['sim_in'];
+    end
+    graphics.style = swreg_build_style(p('name'));
+    x.graphics = graphics;
+    x.model = model;
+endfunction

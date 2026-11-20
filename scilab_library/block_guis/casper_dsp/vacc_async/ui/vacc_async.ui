@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Async Vector Accumulator</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_vec_len">
+     <property name="text"><string>Vector length (2^? samples):</string></property>
+    </widget>
+       <widget class="QLineEdit" name="vec_len"/>
+       <widget class="QLabel" name="label_arith_type">
+     <property name="text"><string>Output type:</string></property>
+    </widget>
+       <widget class="QComboBox" name="arith_type">
+     <item><property name="text"><string>Signed</string></property></item>
+     <item><property name="text"><string>Unsigned</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_n_bits">
+     <property name="text"><string>Bit width (output):</string></property>
+    </widget>
+       <widget class="QSpinBox" name="n_bits"/>
+       <widget class="QLabel" name="label_bin_pt">
+     <property name="text"><string>Binary point (output):</string></property>
+    </widget>
+       <widget class="QSpinBox" name="bin_pt"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,20 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "which_qdr",
+            "qdr_awidth",
+            "use_sniffer"
+        ],
+        "values": [
+            "qdr",
+            "",
+            "xps:qdr",
+            "qdr0",
+            "12",
+            "on"
+        ]
+    }
+}

@@ -1,21 +1,22 @@
 {
-    "parameters":
-    {
-        "keys":
-        [
+    "parameters": {
+        "keys": [
             "name",
             "fullpath",
             "tag",
-            "bitwidth",
-            "delay_val"
+            "latency",
+            "rst",
+            "en",
+            "n_bits"
         ],
-        "values":
-        [
-            "power_cal",
+        "values": [
+            "delay",
             "",
             "dsp:delay",
-            1,
-            1
+            "1",
+            "off",
+            "off",
+            "1"
         ]
     }
 }

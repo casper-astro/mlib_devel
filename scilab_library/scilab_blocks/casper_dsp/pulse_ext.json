@@ -1,19 +1,16 @@
 {
-    "parameters":
-    {
-        "keys":
-        [
+    "parameters": {
+        "keys": [
             "name",
             "fullpath",
             "tag",
             "length"
         ],
-        "values":
-        [
+        "values": [
             "pulse_ext",
             "",
             "dsp:pulse_ext",
-            1024
+            "1024"
         ]
     }
 }

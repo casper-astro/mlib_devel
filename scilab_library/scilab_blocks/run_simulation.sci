@@ -19,6 +19,7 @@ function [cmd] = run_simulation(fn, gui, use_vivado)
     // create the cmd for the IP core generation
     // we also need to create an IP core project for simulation.
     // If the project already exists, we will skip this step.
+    /*
     python_path = 'python';
     jasper_python = [getenv('MLIB_DEVEL_PATH')+'/scilab_library/gen_dsp_ip.py'];
     cmd = python_path + ' ' + jasper_python + ' '+ '-m ' + modelpath;
@@ -26,6 +27,7 @@ function [cmd] = run_simulation(fn, gui, use_vivado)
     if isdir(path+name+'/dspproj') == %F then
         unix_s(cmd);
     end
+    */
     // run python script to start simulation
     jasper_python = [getenv('MLIB_DEVEL_PATH')+'/scilab_library/run_simulation.py'];
     if use_vivado == 'True' then

@@ -1,0 +1,26 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "n_bits_in",
+            "bin_pt_in",
+            "type_in",
+            "cmplx",
+            "scale_factor",
+            "misc"
+        ],
+        "values": [
+            "bus_scale",
+            "",
+            "dsp:bus_scale",
+            "[]",
+            "8",
+            "1",
+            "off",
+            "2",
+            "on"
+        ]
+    }
+}

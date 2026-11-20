@@ -1,0 +1,26 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "n_inputs",
+            "csp_latency",
+            "adder_imp",
+            "first_stage_hdl",
+            "dvalid_en",
+            "bit_width"
+        ],
+        "values": [
+            "adder_tree",
+            "",
+            "dsp:adder_tree",
+            "3",
+            "1",
+            "Fabric",
+            "off",
+            "off",
+            "18"
+        ]
+    }
+}

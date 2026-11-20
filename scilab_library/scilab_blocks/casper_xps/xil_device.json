@@ -1,0 +1,24 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "baseaddr",
+            "memsize",
+            "devtype"
+        ],
+        "values": [
+            "xil_device",
+            "",
+            "xps:xil_device",
+            "1073741824",
+            "65535",
+            "axi_gpio"
+        ]
+    },
+    "evaluate": [
+        "baseaddr",
+        "memsize"
+    ]
+}

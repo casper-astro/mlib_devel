@@ -1,0 +1,24 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "n_inputs",
+            "n_bits",
+            "bin_pt",
+            "csp_latency",
+            "overflow"
+        ],
+        "values": [
+            "complex_conj",
+            "",
+            "dsp:complex_conj",
+            "1",
+            "18",
+            "17",
+            "1",
+            "Wrap"
+        ]
+    }
+}

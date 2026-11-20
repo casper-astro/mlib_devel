@@ -1,0 +1,28 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "hw_sys",
+            "clk_src",
+            "clk_rate",
+            "sample_period",
+            "synthesis_tool"
+        ],
+        "values": [
+            "skarab",
+            "",
+            "xps:xsg",
+            "SKARAB:xc7vx690t",
+            "adc_clk",
+            "230",
+            "1",
+            "XST"
+        ]
+    },
+    "evaluate": [
+        "clk_rate",
+        "sample_period"
+    ]
+}

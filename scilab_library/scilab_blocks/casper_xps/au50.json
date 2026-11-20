@@ -1,0 +1,28 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "hw_sys",
+            "clk_src",
+            "clk_rate",
+            "sample_period",
+            "synthesis_tool"
+        ],
+        "values": [
+            "au50",
+            "",
+            "xps:xsg",
+            "AU50:xcu50",
+            "sys_clk",
+            "156.25",
+            "1",
+            "XST"
+        ]
+    },
+    "evaluate": [
+        "clk_rate",
+        "sample_period"
+    ]
+}

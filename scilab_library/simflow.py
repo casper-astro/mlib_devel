@@ -2,15 +2,18 @@ import json
 import logging
 from sim_blocks.sim_block import SimBlock
 from sim_blocks.sim_block import CasperGTKWave, CasperRawData, CasperPyplot
+from dspflow import DSPflow
+from sim_backends.sim_backend import VivadoSimulator
 import numpy as np
 import os, math
+from glob import glob
 
 """
 This class generates a simulation object,
  that can be used for casper simulations.
 """
 class SIMflow(object):
-    def __init__(self, builddir, model_info_file='jasper.json'):
+    def __init__(self, builddir, simbackend='vivado_simulator', model_info_file='jasper.json'):
         """
         The input files are the jasper.json and jasper.sim files.
         In the jasper.json file, we have the IP core information.
@@ -19,10 +22,55 @@ class SIMflow(object):
         self.logger = logging.getLogger('jasper-sim.simflow')
         self.builddir = builddir
         self.model_info = json.load(open(builddir+'/'+model_info_file))
+        self.ip_core_name = self.model_info['project']['filename'].split('/')[-1].split('.')[0] + '_core'
+        # simdir, simtop, simoutput, simco and simlen are 
+        # the necessary parameters for the backend obj, 
+        # which will be created in gen_sim_proj
+        # The simdir name is a hard-coded string.
+        # It should be fine for now, but we may need to change it, 
+        # when we want to support more than one simulation backends.
+        self.simdir = builddir + '/' + 'simulation'
+        self.simtop = self.ip_core_name + '_tb.v'
+        self.simoutput = self.simdir + '/' + 'simulation.vcd'
+        # let's get the glue file to the co first
+        glues = glob(f'{self.builddir}/glues/*.v')
+        glues_co = {
+            'lib': 'xil_defaultlib',
+            'modules': glues
+        }
+        self.simco = {
+            'vhdl': [],
+            'verilog': [glues_co]
+        }
+        # clock period is 1.0 ns.
+        # TODO: we may need to make `clock_period` as var?
+        clock_period = 1.0
+        self.simlen = SimBlock.sim_length * clock_period
+        # create the backend object based on the initial string
+        if simbackend == 'vivado_simulator':
+            self.simbackend = VivadoSimulator(self.simdir, 
+                                              self.simtop, 
+                                              self.simlen, 
+                                              self.simco,
+                                              self.simoutput)
+        else:
+            # TODO: we will support more simulator backends later
+            raise NotImplemented
         self.ip_core={}
         self.sim_blocks=[]
         self.sim_objs=[]
         self.simdata = []
+        # get the xilinx dir.
+        # we will copy simulation files from this dir.
+        self.xildir = os.getenv('XILINX_PATH')
+        # we can use dspflow to get the dpsobjs
+        # TODO: set jobs to 1 is fine here, as we just need gen_dsp_objs
+        df = DSPflow(builddir, 1)
+        df.gen_dsp_objs()
+        df.build_top()
+        df.generate_hdl()
+        self.dsp_objs = df.dsp_objs
+        
                          
     def _get_sim_blk_by_name(self, blkname):
         """
@@ -107,7 +155,8 @@ class SIMflow(object):
         """
         self.logger.info('Getting IP core information')
         # get the ip core name
-        self.ip_core['name'] = self.model_info['project']['filename'].split('/')[-1].split('.')[0] + '_core'
+        #self.ip_core['name'] = self.model_info['project']['filename'].split('/')[-1].split('.')[0] + '_core'
+        self.ip_core['name'] = self.ip_core_name
         # log it
         self.logger.info('IP Core Name: %s' % self.ip_core['name'])
         # get the input ports and output ports info
@@ -148,7 +197,7 @@ class SIMflow(object):
         self.logger.info('Getting simulation blocks information')
         sim_link_objs = self.model_info['link_info']
         # get the dir for the sim data file storage.
-        sim_dir = self.builddir + '/simulation'
+        sim_dir = self.simdir
         for slink in sim_link_objs:
             if slink['link_type'].startswith('sim_'):
                 # this should be a source sim block, like a signal generator
@@ -322,47 +371,59 @@ class SIMflow(object):
         tb.append('')
         tb.append('endmodule')
         # write the testbench into a file
-        dir = self.model_info['project']['filename'].split('.')[0] + '/simulation'
-        tb_filename = dir + '/' + self.ip_core['name'] + '_tb.v'
+        tb_filename = self.simdir + '/' + self.ip_core['name'] + '_tb.v'
         self.logger.info('Writing testbench into %s' % tb_filename)
         with open(tb_filename, 'w') as f:
             for line in tb:
                 f.write(line + '\n')
 
-    def gen_sim_tcl(self):
-        """
-        Generate the simulation tcl file for the casper simulation.
-        """
-        self.logger.info('Generating simulation tcl file')
-        tcl = []
-        # add tcl commands to the tcl file
-        tcl.append('open_project %s/dspproj/dspproj.xpr' % self.builddir)
-        tcl.append('update_compile_order -fileset sources_1')
-        tcl.append('set_property SOURCE_SET sources_1 [get_filesets sim_1]')
-        tcl.append('add_files -fileset sim_1 -norecurse %s/simulation/%s_tb.v' % (self.builddir, self.ip_core['name']))
-        tcl.append('update_compile_order -fileset sim_1')
-        tcl.append('set_property top %s_tb [get_filesets sim_1]' % self.ip_core['name'])
-        tcl.append('set_property top_lib xil_defaultlib [get_filesets sim_1]')
-        tcl.append('update_compile_order -fileset sim_1')
-        tcl.append('launch_simulation -mode behavioral')
-        #tcl.append('open_vcd %s/simulation/%s_tb.vcd' % (self.builddir, self.ip_core['name']))
-        tcl.append('open_vcd %s/simulation/simulation.vcd' % self.builddir)
-        tcl.append('log_vcd /%s_tb/%s_inst/*' % (self.ip_core['name'],self.ip_core['name']))
-        tcl.append('restart')
-        # the time unit is 1ns 
-        clk_period = 1.0
-        sim_time = SimBlock.sim_length * clk_period
-        tcl.append('run %s ns' % sim_time)
-        tcl.append('close_vcd')
-        tcl.append('close_sim')
-        tcl.append('close_project')
-        # write the tcl file into a file
-        tcl_filename = self.builddir + '/simulation/simulation.tcl'
-        self.logger.info('Writing tcl file into %s' % tcl_filename)
-        with open(tcl_filename, 'w') as f:
-            for line in tcl:
-                f.write(line + '\n')
-    
+    # def gen_sim_tcl(self):
+    #     """
+    #     Generate the simulation tcl file for the casper simulation.
+    #     """
+    #     self.logger.info('Generating simulation tcl file')
+    #     tcl = []
+    #     # add tcl commands to the tcl file
+    #     tcl.append('open_project %s/dspproj/dspproj.xpr' % self.builddir)
+    #     tcl.append('update_compile_order -fileset sources_1')
+    #     tcl.append('set_property SOURCE_SET sources_1 [get_filesets sim_1]')
+    #     tcl.append('add_files -fileset sim_1 -norecurse %s/simulation/%s_tb.v' % (self.builddir, self.ip_core['name']))
+    #     tcl.append('update_compile_order -fileset sim_1')
+    #     tcl.append('set_property top %s_tb [get_filesets sim_1]' % self.ip_core['name'])
+    #     tcl.append('set_property top_lib xil_defaultlib [get_filesets sim_1]')
+    #     tcl.append('update_compile_order -fileset sim_1')
+    #     tcl.append('launch_simulation -mode behavioral')
+    #     #tcl.append('open_vcd %s/simulation/%s_tb.vcd' % (self.builddir, self.ip_core['name']))
+    #     tcl.append('open_vcd %s/simulation/simulation.vcd' % self.builddir)
+    #     tcl.append('log_vcd /%s_tb/%s_inst/*' % (self.ip_core['name'],self.ip_core['name']))
+    #     tcl.append('restart')
+    #     # the time unit is 1ns 
+    #     clk_period = 1.0
+    #     sim_time = SimBlock.sim_length * clk_period
+    #     tcl.append('run %s ns' % sim_time)
+    #     tcl.append('close_vcd')
+    #     tcl.append('close_sim')
+    #     tcl.append('close_project')
+    #     # write the tcl file into a file
+    #     tcl_filename = self.builddir + '/simulation/simulation.tcl'
+    #     self.logger.info('Writing tcl file into %s' % tcl_filename)
+    #     with open(tcl_filename, 'w') as f:
+    #         for line in tcl:
+    #             f.write(line + '\n')
+    def gen_sim_proj(self):
+        # generate compile order for each block first
+        for obj in self.dsp_objs:
+            obj.generate_compile_order()
+        # get the compile order to the simbackend obj
+        for obj in self.dsp_objs:
+            for k in obj.compile_order.keys():
+                for co in obj.compile_order[k]:
+                    self.simbackend.add_compile_order(co, k)
+        # write the compile order to files
+        self.simbackend.gen_co_file()
+        # generate sim scripts
+        self.simbackend.gen_sim_scripts()
+
     def run_sim(self):
         """
         Run the simulation.
@@ -398,16 +459,15 @@ class SIMflow(object):
         Show the simulation data.
         """
         self.logger.info('Show simulation data in the GUI: %s.'%gui)
-        simdir = self.model_info['project']['filename'].split('.')[0]
         # recored/show sim data in different ways
         if gui == 'raw':
-            filename = simdir + '/simulation/casper_simulation.json'
+            filename = self.simdir + '/casper_simulation.json'
             simgui = CasperRawData(self.simdata, SimBlock.sim_length*2+1, filename=filename)
         elif gui == 'gtkwave':
-            filename = simdir + '/simulation/casper_simulation.vcd'
+            filename = self.simdir + '/casper_simulation.vcd'
             simgui = CasperGTKWave(self.simdata, SimBlock.sim_length*2+1, filename=filename)
         elif gui == 'pyplot':
-            filename = simdir + '/simulation/casper_simulation.json'
+            filename = self.simdir + '/casper_simulation.json'
             simgui = CasperPyplot(self.simdata, SimBlock.sim_length*2+1, filename=filename)
         else:
             print('   * Warning: GUI %s not supported.'%gui)

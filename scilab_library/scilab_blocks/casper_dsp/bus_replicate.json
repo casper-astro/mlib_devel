@@ -1,0 +1,24 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "n_bits",
+            "replication",
+            "csp_latency",
+            "misc",
+            "implementation"
+        ],
+        "values": [
+            "bus_replicate",
+            "",
+            "dsp:bus_replicate",
+            "[8]",
+            "0",
+            "0",
+            "on",
+            "core"
+        ]
+    }
+}

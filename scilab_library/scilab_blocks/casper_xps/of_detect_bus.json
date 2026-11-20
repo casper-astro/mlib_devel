@@ -1,0 +1,18 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "nStreams",
+            "bit_width"
+        ],
+        "values": [
+            "of_detect_bus",
+            "",
+            "xps:of_detect_bus",
+            "8",
+            "8"
+        ]
+    }
+}

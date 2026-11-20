@@ -26,19 +26,26 @@
             "xps:gpio",
             "ROACH:led",
             "gpio",
-            0,
+            "0",
             "out",
             "Boolean",
-            1,
-            0,
-            0,
-            1,
+            "1",
+            "0",
+            "0",
+            "1",
             "off",
             "off",
             "on",
-            0,
+            "0",
             "None",
             "off"
         ]
-    }
+    },
+    "evaluate": [
+        "io_group_custom",
+        "bitwidth",
+        "bin_pt",
+        "bit_index",
+        "sample_period"
+    ]
 }

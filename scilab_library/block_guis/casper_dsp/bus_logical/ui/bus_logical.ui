@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Bus Logical</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_logical_function">
+     <property name="text"><string>logical function</string></property>
+    </widget>
+       <widget class="QComboBox" name="logical_function">
+     <item><property name="text"><string>AND</string></property></item>
+     <item><property name="text"><string>NAND</string></property></item>
+     <item><property name="text"><string>OR</string></property></item>
+     <item><property name="text"><string>NOR</string></property></item>
+     <item><property name="text"><string>XOR</string></property></item>
+     <item><property name="text"><string>XNOR</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_align_bp">
+     <property name="text"><string>align binary point</string></property>
+    </widget>
+       <widget class="QCheckBox" name="align_bp"/>
+       <widget class="QLabel" name="label_csp_latency">
+     <property name="text"><string>latency</string></property>
+    </widget>
+       <widget class="QLineEdit" name="csp_latency"/>
+       <widget class="QLabel" name="label_n_bits_a">
+     <property name="text"><string>a input bit widths</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_bits_a"/>
+       <widget class="QLabel" name="label_bin_pt_a">
+     <property name="text"><string>a input binary points</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bin_pt_a"/>
+       <widget class="QLabel" name="label_type_a">
+     <property name="text"><string>a input type (Unsigned=0, Signed=1)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="type_a"/>
+       <widget class="QLabel" name="label_n_bits_b">
+     <property name="text"><string>b input bit widths</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_bits_b"/>
+       <widget class="QLabel" name="label_bin_pt_b">
+     <property name="text"><string>b input binary points</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bin_pt_b"/>
+       <widget class="QLabel" name="label_type_b">
+     <property name="text"><string>b input type (Unsigned=0, Signed=1)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="type_b"/>
+       <widget class="QLabel" name="label_cmplx">
+     <property name="text"><string>complex</string></property>
+    </widget>
+       <widget class="QCheckBox" name="cmplx"/>
+       <widget class="QLabel" name="label_en">
+     <property name="text"><string>en port</string></property>
+    </widget>
+       <widget class="QCheckBox" name="en"/>
+       <widget class="QLabel" name="label_misc">
+     <property name="text"><string>misc support</string></property>
+    </widget>
+       <widget class="QCheckBox" name="misc"/>
+       <widget class="QLabel" name="label_n_bits_out">
+     <property name="text"><string>output bit widths</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_bits_out"/>
+       <widget class="QLabel" name="label_bin_pt_out">
+     <property name="text"><string>output binary points</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bin_pt_out"/>
+       <widget class="QLabel" name="label_type_out">
+     <property name="text"><string>output type (Unsigned=0, Signed=1)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="type_out"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

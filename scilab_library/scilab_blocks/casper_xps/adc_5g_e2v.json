@@ -1,0 +1,27 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "adc_mode",
+            "output_mode",
+            "chips_num",
+            "adc_loc",
+            "f_sample"
+        ],
+        "values": [
+            "adc_5g_e2v",
+            "",
+            "xps:adc_5g_e2v",
+            "4-Channel",
+            "normal mode",
+            "2",
+            "FMC1",
+            "1000"
+        ]
+    },
+    "evaluate": [
+        "f_sample"
+    ]
+}

@@ -7,7 +7,13 @@ import numpy as np
 def ParseData(d):
     x = d[0]/1000
     if len(d[1]) == 1:
-        y = int(d[1], 2)
+        # Sometimes, the data is `bx`.
+        # If so, we just set the value to 0.
+        try:
+            y = int(d[1], 2)
+        except:
+            y = 0
+
     else:
         # here, we assume the data is like this: 'b1100'
         # or 'bxx'

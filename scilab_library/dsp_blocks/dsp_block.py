@@ -8,7 +8,6 @@ import sys
 sys.path.append('jasper_library')
 sys.path.append('jasper_library/yellow_blocks')
 
-import collections
 from yellow_block import YellowBlock
 
 class DSPBlock(YellowBlock):
@@ -27,6 +26,12 @@ class DSPBlock(YellowBlock):
         # 5. link_info_file
         # The __init__ method of the DSPBlock class initializes
         self.model_info_file = model_info_file
+        # For some of the dsp modules, 
+        # there are specific compile order for the sub modules.
+        self.compile_order = {
+            'vhdl': [],
+            'verilog': []
+        }
         with open(self.model_info_file) as f:
             blkinfo = json.load(f)
             self.link_info = blkinfo['link_info']
@@ -39,6 +44,9 @@ class DSPBlock(YellowBlock):
         pass
     
     def modify(self, design, top_module):
+        pass
+    
+    def generate_compile_order(self):
         pass
     
     def create_hdl_dir(self):
@@ -65,7 +73,7 @@ class DSPBlock(YellowBlock):
             # If the class has a factory method, call that. This should return some
             # (possibly platform dependent) yellow block instance
             # Else just return an instance of the class.
-            if isinstance(getattr(cls, 'factory', None), collections.Callable):
+            if callable(getattr(cls, 'factory', None)):
                 return cls.factory(blk, platform, hdl_root=hdl_root, model_info_file=model_info_file)
             else:
                 return cls(blk,platform,hdl_root=hdl_root, model_info_file=model_info_file)

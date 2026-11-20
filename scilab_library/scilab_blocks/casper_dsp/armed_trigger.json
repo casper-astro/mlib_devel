@@ -1,0 +1,14 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag"
+        ],
+        "values": [
+            "armed_trigger",
+            "",
+            "dsp:armed_trigger"
+        ]
+    }
+}

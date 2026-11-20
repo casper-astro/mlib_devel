@@ -1,0 +1,18 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "pin_width",
+            "sout_width"
+        ],
+        "values": [
+            "parallel_to_serial_converter",
+            "",
+            "dsp:parallel_to_serial_converter",
+            "128",
+            "16"
+        ]
+    }
+}

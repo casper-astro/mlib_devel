@@ -1,0 +1,52 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "addr_width",
+            "n_bits",
+            "bin_pts",
+            "init_vector",
+            "max_fanout",
+            "mem_type",
+            "bram_optimization",
+            "async_op",
+            "misc",
+            "bram_latency",
+            "fan_latency",
+            "addr_register",
+            "addr_implementation",
+            "din_register",
+            "din_implementation",
+            "we_register",
+            "we_implementation",
+            "en_register",
+            "en_implementation"
+        ],
+        "values": [
+            "bus_single_port_ram",
+            "",
+            "dsp:bus_single_port_ram",
+            "10",
+            "0",
+            "17",
+            "[[-2:1/(2^10):2-(1/(2^10))]']",
+            "4",
+            "Block RAM",
+            "Speed",
+            "off",
+            "off",
+            "2",
+            "1",
+            "on",
+            "core",
+            "on",
+            "core",
+            "on",
+            "core",
+            "on",
+            "core"
+        ]
+    }
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Bus Replicate</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_n_bits">
+     <property name="text"><string>Bit Width (added for Xcos; not a casper_library mask param)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_bits"/>
+       <widget class="QLabel" name="label_replication">
+     <property name="text"><string>replication factor</string></property>
+    </widget>
+       <widget class="QLineEdit" name="replication"/>
+       <widget class="QLabel" name="label_csp_latency">
+     <property name="text"><string>latency</string></property>
+    </widget>
+       <widget class="QLineEdit" name="csp_latency"/>
+       <widget class="QLabel" name="label_misc">
+     <property name="text"><string>misc support</string></property>
+    </widget>
+       <widget class="QCheckBox" name="misc"/>
+       <widget class="QLabel" name="label_implementation">
+     <property name="text"><string>delay implementation</string></property>
+    </widget>
+       <widget class="QComboBox" name="implementation">
+     <item><property name="text"><string>core</string></property></item>
+     <item><property name="text"><string>behavioral</string></property></item>
+    </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

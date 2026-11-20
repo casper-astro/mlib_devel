@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Logical</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_logical_function">
+     <property name="text"><string>Logical function</string></property>
+    </widget>
+       <widget class="QComboBox" name="logical_function">
+     <item><property name="text"><string>AND</string></property></item>
+     <item><property name="text"><string>NAND</string></property></item>
+     <item><property name="text"><string>OR</string></property></item>
+     <item><property name="text"><string>NOR</string></property></item>
+     <item><property name="text"><string>XOR</string></property></item>
+     <item><property name="text"><string>XNOR</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_inputs">
+     <property name="text"><string>Number of inputs</string></property>
+    </widget>
+       <widget class="QSpinBox" name="inputs"/>
+       <widget class="QLabel" name="label_en">
+     <property name="text"><string>Provide enable port</string></property>
+    </widget>
+       <widget class="QCheckBox" name="en"/>
+       <widget class="QLabel" name="label_latency">
+     <property name="text"><string>Latency</string></property>
+    </widget>
+       <widget class="QSpinBox" name="latency"/>
+       <widget class="QLabel" name="label_n_bits_in">
+     <property name="text"><string>Input/output width (bits)</string></property>
+    </widget>
+       <widget class="QSpinBox" name="n_bits_in"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

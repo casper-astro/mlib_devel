@@ -1,0 +1,36 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "n_bits_in",
+            "bin_pt_in",
+            "cmplx",
+            "misc",
+            "floating_point",
+            "float_type",
+            "exp_width",
+            "frac_width",
+            "n_vectors",
+            "overflow",
+            "csp_latency"
+        ],
+        "values": [
+            "bus_negate",
+            "",
+            "dsp:bus_negate",
+            "0",
+            "8",
+            "off",
+            "off",
+            "on",
+            "single",
+            "8",
+            "24",
+            "1",
+            "1",
+            "2"
+        ]
+    }
+}

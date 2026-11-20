@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Block Parameters: bitfield_snapshot</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of bitfield_snapshot_ui.py, not a full
+        round-trip Designer file; it follows the casper_library_scopes bitfield_snapshot (bitsnap)
+        mask. Edit both together. -->
+   <widget class="QGroupBox" name="desc_box">
+    <property name="title"><string>bitsnap</string></property>
+    <widget class="QLabel" name="desc_label"/>
+   </widget>
+   <widget class="QLabel" name="label_name">
+    <property name="text"><string>Block name</string></property>
+   </widget>
+   <widget class="QLineEdit" name="name"/>
+   <widget class="QTabWidget" name="tabWidget">
+    <widget class="QWidget" name="inputs_tab">
+     <attribute name="title"><string>Inputs</string></attribute>
+     <widget class="QLabel" name="label_io_names">
+      <property name="text"><string>Names [msb...lsb]</string></property>
+     </widget>
+     <widget class="QLineEdit" name="io_names"/>
+     <widget class="QLabel" name="label_io_widths">
+      <property name="text"><string>Bitwidths [msb...lsb]</string></property>
+     </widget>
+     <widget class="QLineEdit" name="io_widths"/>
+     <widget class="QLabel" name="label_io_bps">
+      <property name="text"><string>Binary pts [msb...lsb]</string></property>
+     </widget>
+     <widget class="QLineEdit" name="io_bps"/>
+     <widget class="QLabel" name="label_io_types">
+      <property name="text"><string>Data types [msb...lsb], ufix=0, fix=1, bool=2</string></property>
+     </widget>
+     <widget class="QLineEdit" name="io_types"/>
+     <widget class="QCheckBox" name="show_format">
+      <property name="text"><string>Print format string?</string></property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="snapshot_tab">
+     <attribute name="title"><string>Snapshot</string></attribute>
+     <widget class="QLabel" name="label_snap_storage">
+      <property name="text"><string>Storage medium</string></property>
+     </widget>
+     <widget class="QComboBox" name="snap_storage">
+      <item><property name="text"><string>bram</string></property></item>
+      <item><property name="text"><string>dram</string></property></item>
+     </widget>
+     <widget class="QLabel" name="label_snap_dram_dimm">
+      <property name="text"><string>DRAM dimm</string></property>
+     </widget>
+     <widget class="QComboBox" name="snap_dram_dimm">
+      <item><property name="text"><string>1</string></property></item>
+      <item><property name="text"><string>2</string></property></item>
+      <item><property name="text"><string>3</string></property></item>
+      <item><property name="text"><string>4</string></property></item>
+     </widget>
+     <widget class="QLabel" name="label_snap_dram_clock">
+      <property name="text"><string>DRAM clock rate</string></property>
+     </widget>
+     <widget class="QComboBox" name="snap_dram_clock">
+      <item><property name="text"><string>200</string></property></item>
+      <item><property name="text"><string>250</string></property></item>
+      <item><property name="text"><string>266</string></property></item>
+      <item><property name="text"><string>300</string></property></item>
+      <item><property name="text"><string>333</string></property></item>
+     </widget>
+     <widget class="QLabel" name="label_snap_nsamples">
+      <property name="text"><string>Number of Samples (2^?)</string></property>
+     </widget>
+     <widget class="QLineEdit" name="snap_nsamples"/>
+     <widget class="QLabel" name="label_snap_data_width">
+      <property name="text"><string>Data width</string></property>
+     </widget>
+     <widget class="QComboBox" name="snap_data_width">
+      <item><property name="text"><string>8</string></property></item>
+      <item><property name="text"><string>16</string></property></item>
+      <item><property name="text"><string>32</string></property></item>
+      <item><property name="text"><string>64</string></property></item>
+      <item><property name="text"><string>128</string></property></item>
+     </widget>
+     <widget class="QCheckBox" name="snap_offset">
+      <property name="text"><string>Start delay support </string></property>
+     </widget>
+     <widget class="QCheckBox" name="snap_circap">
+      <property name="text"><string>Circular capture support</string></property>
+     </widget>
+     <widget class="QCheckBox" name="snap_value">
+      <property name="text"><string>Extra value capture support</string></property>
+     </widget>
+     <widget class="QCheckBox" name="snap_ext_arm">
+      <property name="text"><string>External arm support</string></property>
+     </widget>
+     <widget class="QCheckBox" name="snap_ext_circ">
+      <property name="text"><string>External circular capture support</string></property>
+     </widget>
+     <widget class="QCheckBox" name="snap_use_dsp48">
+      <property name="text"><string>Use DSP48s to implement counters</string></property>
+     </widget>
+     <widget class="QLabel" name="label_snap_delay">
+      <property name="text"><string>Pre-snapshot delay</string></property>
+     </widget>
+     <widget class="QLineEdit" name="snap_delay"/>
+    </widget>
+    <widget class="QWidget" name="extra_tab">
+     <attribute name="title"><string>Extra Value</string></attribute>
+     <widget class="QLabel" name="label_extra_names">
+      <property name="text"><string>Names [msb...lsb]</string></property>
+     </widget>
+     <widget class="QLineEdit" name="extra_names"/>
+     <widget class="QLabel" name="label_extra_widths">
+      <property name="text"><string>Widths [msb...lsb]</string></property>
+     </widget>
+     <widget class="QLineEdit" name="extra_widths"/>
+     <widget class="QLabel" name="label_extra_bps">
+      <property name="text"><string>Binary pts [msb...lsb]</string></property>
+     </widget>
+     <widget class="QLineEdit" name="extra_bps"/>
+     <widget class="QLabel" name="label_extra_types">
+      <property name="text"><string>Data types [msb...lsb], ufix=0, fix=1, bool=2</string></property>
+     </widget>
+     <widget class="QLineEdit" name="extra_types"/>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="button_apply"><property name="text"><string>Apply</string></property></widget>
+   <widget class="QPushButton" name="button_ok"><property name="text"><string>OK</string></property></widget>
+   <widget class="QPushButton" name="button_cancel"><property name="text"><string>Cancel</string></property></widget>
+  </widget>
+ </widget>
+</ui>

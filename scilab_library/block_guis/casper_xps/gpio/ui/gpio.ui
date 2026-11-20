@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>GPIO</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name">
+     <property name="toolTip"><string>A name you choose for this block instance, e.g. to note what it's used for in this design. Shown below the block on the diagram.</string></property>
+    </widget>
+       <widget class="QLabel" name="label_io_group">
+     <property name="text"><string>I/O group (legacy ROACH/ROACH2 platform selector)</string></property>
+    </widget>
+       <widget class="QComboBox" name="io_group">
+     <item><property name="text"><string>ROACH:aux0_clk</string></property></item>
+     <item><property name="text"><string>ROACH:aux1_clk</string></property></item>
+     <item><property name="text"><string>ROACH:led</string></property></item>
+     <item><property name="text"><string>ROACH:gpioa</string></property></item>
+     <item><property name="text"><string>ROACH:gpioa_oe_n</string></property></item>
+     <item><property name="text"><string>ROACH:gpiob</string></property></item>
+     <item><property name="text"><string>ROACH:gpiob_oe_n</string></property></item>
+     <item><property name="text"><string>ROACH:qsh</string></property></item>
+     <item><property name="text"><string>ROACH:zdok0</string></property></item>
+     <item><property name="text"><string>ROACH:zdok1</string></property></item>
+     <item><property name="text"><string>ROACH2:aux_clk</string></property></item>
+     <item><property name="text"><string>ROACH2:led</string></property></item>
+     <item><property name="text"><string>ROACH2:gpio</string></property></item>
+     <item><property name="text"><string>ROACH2:qsh</string></property></item>
+     <item><property name="text"><string>ROACH2:sync_in</string></property></item>
+     <item><property name="text"><string>ROACH2:sync_out</string></property></item>
+     <item><property name="text"><string>ROACH2:zdok0</string></property></item>
+     <item><property name="text"><string>ROACH2:zdok1</string></property></item>
+     <item><property name="text"><string>custom:custom</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_io_group_real">
+     <property name="text"><string>I/O group</string></property>
+    </widget>
+       <widget class="QComboBox" name="io_group_real">
+     <item><property name="text"><string>led</string></property></item>
+     <item><property name="text"><string>gpio</string></property></item>
+     <item><property name="text"><string>sync_in</string></property></item>
+     <item><property name="text"><string>sync_out</string></property></item>
+     <item><property name="text"><string>zdok0</string></property></item>
+     <item><property name="text"><string>zdok1</string></property></item>
+     <item><property name="text"><string>aux_clk_diff</string></property></item>
+     <item><property name="text"><string>custom</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_io_group_custom">
+     <property name="text"><string>Custom I/O group</string></property>
+    </widget>
+       <widget class="QLineEdit" name="io_group_custom"/>
+       <widget class="QLabel" name="label_io_dir">
+     <property name="text"><string>I/O direction</string></property>
+    </widget>
+       <widget class="QComboBox" name="io_dir">
+     <item><property name="text"><string>in</string></property></item>
+     <item><property name="text"><string>out</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_arith_type">
+     <property name="text"><string>Data Type</string></property>
+    </widget>
+       <widget class="QComboBox" name="arith_type">
+     <item><property name="text"><string>Boolean</string></property></item>
+     <item><property name="text"><string>Unsigned</string></property></item>
+     <item><property name="text"><string>Signed  (2's comp)</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_bitwidth">
+     <property name="text"><string>Data bitwidth</string></property>
+    </widget>
+       <widget class="QSpinBox" name="bitwidth"/>
+       <widget class="QLabel" name="label_bin_pt">
+     <property name="text"><string>Data binary point</string></property>
+    </widget>
+       <widget class="QSpinBox" name="bin_pt"/>
+       <widget class="QLabel" name="label_bit_index">
+     <property name="text"><string>GPIO bit index</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bit_index"/>
+       <widget class="QLabel" name="label_sample_period">
+     <property name="text"><string>Sample period</string></property>
+    </widget>
+       <widget class="QSpinBox" name="sample_period"/>
+       <widget class="QLabel" name="label_use_single_ended">
+     <property name="text"><string>Use as single-ended</string></property>
+    </widget>
+       <widget class="QCheckBox" name="use_single_ended"/>
+       <widget class="QLabel" name="label_use_ddr">
+     <property name="text"><string>Use DDR</string></property>
+    </widget>
+       <widget class="QCheckBox" name="use_ddr"/>
+       <widget class="QLabel" name="label_reg_iob">
+     <property name="text"><string>Pack register in the pad</string></property>
+    </widget>
+       <widget class="QCheckBox" name="reg_iob"/>
+       <widget class="QLabel" name="label_reg_clk_phase">
+     <property name="text"><string>Register clock phase</string></property>
+    </widget>
+       <widget class="QComboBox" name="reg_clk_phase">
+     <item><property name="text"><string>0</string></property></item>
+     <item><property name="text"><string>90</string></property></item>
+     <item><property name="text"><string>180</string></property></item>
+     <item><property name="text"><string>270</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_termination">
+     <property name="text"><string>Termination method</string></property>
+    </widget>
+       <widget class="QComboBox" name="termination">
+     <item><property name="text"><string>None</string></property></item>
+     <item><property name="text"><string>Pullup</string></property></item>
+     <item><property name="text"><string>Pulldown</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_use_iodelay">
+     <property name="text"><string>Include IODELAY</string></property>
+    </widget>
+       <widget class="QCheckBox" name="use_iodelay"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Register</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of register_ui.py, not
+        a full round-trip Designer file; it follows the Simulink "Xilinx
+        Register" dialog (Basic tab). Edit both together. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+   <widget class="QGroupBox" name="type_box">
+    <property name="title"><string>Type of d (Simulink inherits it from the input)</string></property>
+       <widget class="QLabel" name="label_n_bits">
+     <property name="text"><string>Number of bits</string></property>
+    </widget>
+       <widget class="QSpinBox" name="n_bits"/>
+       <widget class="QLabel" name="label_arith_type">
+     <property name="text"><string>Arithmetic type</string></property>
+    </widget>
+       <widget class="QComboBox" name="arith_type"/>
+       <widget class="QLabel" name="label_bin_pt">
+     <property name="text"><string>Binary point</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bin_pt"/>
+   </widget>
+   <widget class="QTabWidget" name="tabWidget">
+   <!-- tab "Basic" -->
+       <widget class="QLabel" name="label_init">
+     <property name="text"><string>Initial value</string></property>
+    </widget>
+       <widget class="QLineEdit" name="init"/>
+   <widget class="QGroupBox" name="ports_box">
+    <property name="title"><string>Optional Ports</string></property>
+       <widget class="QCheckBox" name="rst">
+     <property name="text"><string>Provide synchronous reset port</string></property>
+    </widget>
+       <widget class="QCheckBox" name="en">
+     <property name="text"><string>Provide enable port</string></property>
+    </widget>
+   </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

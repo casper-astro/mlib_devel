@@ -1,0 +1,24 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "vec_len",
+            "arith_type",
+            "bin_pt_in",
+            "n_bits_out",
+            "n_bits_in"
+        ],
+        "values": [
+            "dsp48e_bram_vacc",
+            "",
+            "dsp:dsp48e_bram_vacc",
+            "8",
+            "Signed  (2's comp)",
+            "0",
+            "32",
+            "32"
+        ]
+    }
+}

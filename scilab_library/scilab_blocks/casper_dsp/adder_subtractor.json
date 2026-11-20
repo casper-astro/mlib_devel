@@ -1,0 +1,46 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "opmode",
+            "n_bits_a",
+            "bin_pt_a",
+            "type_a",
+            "n_bits_b",
+            "bin_pt_b",
+            "type_b",
+            "misc",
+            "misc_width",
+            "async_op",
+            "n_bits_out",
+            "bin_pt_out",
+            "type_out",
+            "quantization",
+            "overflow",
+            "csp_latency"
+        ],
+        "values": [
+            "adder_subtractor",
+            "",
+            "dsp:adder_subtractor",
+            "Addition",
+            "8",
+            "3",
+            "Signed",
+            "4",
+            "3",
+            "Signed",
+            "off",
+            "1",
+            "off",
+            "8",
+            "3",
+            "Signed",
+            "Truncate",
+            "Saturate",
+            "1"
+        ]
+    }
+}

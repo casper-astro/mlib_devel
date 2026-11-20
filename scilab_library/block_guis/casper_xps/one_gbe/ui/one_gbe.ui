@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>One GbE</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name">
+     <property name="toolTip"><string>A name you choose for this block instance, e.g. to note what it's used for in this design. Shown below the block on the diagram.</string></property>
+    </widget>
+       <widget class="QLabel" name="label_local_en">
+     <property name="text"><string>Enable fabric on startup</string></property>
+    </widget>
+       <widget class="QCheckBox" name="local_en"/>
+       <widget class="QLabel" name="label_dis_cpu_rx">
+     <property name="text"><string>Disable CPU Rx</string></property>
+    </widget>
+       <widget class="QCheckBox" name="dis_cpu_rx"/>
+       <widget class="QLabel" name="label_dis_cpu_tx">
+     <property name="text"><string>Disable CPU Tx</string></property>
+    </widget>
+       <widget class="QCheckBox" name="dis_cpu_tx"/>
+       <widget class="QLabel" name="label_cpu_promiscuous">
+     <property name="text"><string>CPU Promiscuous</string></property>
+    </widget>
+       <widget class="QCheckBox" name="cpu_promiscuous"/>
+       <widget class="QLabel" name="label_local_mac">
+     <property name="text"><string>Fabric MAC Address</string></property>
+    </widget>
+       <widget class="QLineEdit" name="local_mac"/>
+       <widget class="QLabel" name="label_local_ip">
+     <property name="text"><string>Fabric IP Address</string></property>
+    </widget>
+       <widget class="QLineEdit" name="local_ip"/>
+       <widget class="QLabel" name="label_local_port">
+     <property name="text"><string>Fabric UDP Port</string></property>
+    </widget>
+       <widget class="QSpinBox" name="local_port"/>
+       <widget class="QLabel" name="label_local_gateway">
+     <property name="text"><string>Fabric Gateway</string></property>
+    </widget>
+       <widget class="QSpinBox" name="local_gateway"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

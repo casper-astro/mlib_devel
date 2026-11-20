@@ -1,25 +1,28 @@
 {
-    "parameters":
-    {
-        "keys":
-        [
+    "parameters": {
+        "keys": [
             "name",
             "fullpath",
             "tag",
-            "vector_len",
-            "in_bitwidth",
-            "out_bitwidth",
-            "output_type"
+            "vec_len",
+            "arith_type",
+            "n_bits",
+            "bin_pt",
+            "arith_type_in",
+            "n_bits_in",
+            "bin_pt_in"
         ],
-        "values":
-        [
+        "values": [
             "simple_bram_vacc",
             "",
             "dsp:simple_bram_vacc",
-            1024,
-            16,
-            32,
-            "unsigned"
+            "8",
+            "Signed",
+            "32",
+            "0",
+            "Signed",
+            "32",
+            "0"
         ]
     }
 }

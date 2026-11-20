@@ -1,0 +1,18 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "len",
+            "n_bits"
+        ],
+        "values": [
+            "vacc_tvg",
+            "",
+            "dsp:vacc_tvg",
+            "139264",
+            "32"
+        ]
+    }
+}

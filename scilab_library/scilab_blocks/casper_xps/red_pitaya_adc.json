@@ -1,0 +1,16 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "bits"
+        ],
+        "values": [
+            "red_pitaya_adc",
+            "",
+            "xps:red_pitaya_adc",
+            "14"
+        ]
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "nStreams",
+            "bit_width"
+        ],
+        "values": [
+            "adc_sim",
+            "",
+            "xps:adc_sim",
+            "8",
+            "8"
+        ]
+    }
+}

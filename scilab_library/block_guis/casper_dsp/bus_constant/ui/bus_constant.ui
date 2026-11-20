@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Bus Constant</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_values">
+     <property name="text"><string>values</string></property>
+    </widget>
+       <widget class="QLineEdit" name="values"/>
+       <widget class="QLabel" name="label_n_bits">
+     <property name="text"><string>bit widths</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_bits"/>
+       <widget class="QLabel" name="label_bin_pts">
+     <property name="text"><string>binary points</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bin_pts"/>
+       <widget class="QLabel" name="label_types">
+     <property name="text"><string>data type</string></property>
+    </widget>
+       <widget class="QLineEdit" name="types"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

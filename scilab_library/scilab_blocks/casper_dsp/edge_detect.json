@@ -6,14 +6,16 @@
             "name",
             "fullpath",
             "tag",
-            "edge_type"
+            "edge_type",
+            "polarity"
         ],
         "values":
         [
             "edge_detect",
             "",
             "dsp:edge_detect",
-            "rising"
+            "rising",
+            "active high"
         ]
     }
 }

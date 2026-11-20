@@ -1,0 +1,16 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "counter_bits"
+        ],
+        "values": [
+            "freeze_cntr",
+            "",
+            "dsp:freeze_cntr",
+            "32"
+        ]
+    }
+}

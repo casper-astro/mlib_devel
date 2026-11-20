@@ -1,21 +1,18 @@
 {
-    "parameters":
-    {
-        "keys":
-        [
+    "parameters": {
+        "keys": [
             "name",
             "fullpath",
             "tag",
             "channels",
             "dtype"
         ],
-        "values":
-        [
+        "values": [
             "scope",
             "",
             "sim:scope",
-            1,
-            16
+            "1",
+            "16"
         ]
     }
 }

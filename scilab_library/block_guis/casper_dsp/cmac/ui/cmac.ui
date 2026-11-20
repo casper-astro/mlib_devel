@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>cmac</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_acc_len">
+     <property name="text"><string>Number of Accumulations</string></property>
+    </widget>
+       <widget class="QLineEdit" name="acc_len"/>
+       <widget class="QLabel" name="label_n_bits_a">
+     <property name="text"><string>Number of bits 'a'</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_bits_a"/>
+       <widget class="QLabel" name="label_bin_pt_a">
+     <property name="text"><string>Binary point 'a'</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bin_pt_a"/>
+       <widget class="QLabel" name="label_n_bits_b">
+     <property name="text"><string>Number of bits 'b'</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_bits_b"/>
+       <widget class="QLabel" name="label_bin_pt_b">
+     <property name="text"><string>Binary point 'b'</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bin_pt_b"/>
+       <widget class="QLabel" name="label_quantization">
+     <property name="visible"><bool>false</bool></property>
+     <property name="text"><string>Quantisation</string></property>
+    </widget>
+       <widget class="QComboBox" name="quantization">
+     <property name="visible"><bool>false</bool></property>
+     <item><property name="text"><string>Truncate</string></property></item>
+     <item><property name="text"><string>Round  (unbiased: +/- Inf)</string></property></item>
+     <item><property name="text"><string>Round  (unbiased: Even Values)</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_overflow">
+     <property name="visible"><bool>false</bool></property>
+     <property name="text"><string>Overflow</string></property>
+    </widget>
+       <widget class="QComboBox" name="overflow">
+     <property name="visible"><bool>false</bool></property>
+     <item><property name="text"><string>Wrap</string></property></item>
+     <item><property name="text"><string>Saturate</string></property></item>
+     <item><property name="text"><string>Flag as error</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_mult_latency">
+     <property name="text"><string>Multiplier Latency</string></property>
+    </widget>
+       <widget class="QLineEdit" name="mult_latency"/>
+       <widget class="QLabel" name="label_add_latency">
+     <property name="text"><string>Adder Latency</string></property>
+    </widget>
+       <widget class="QLineEdit" name="add_latency"/>
+       <widget class="QLabel" name="label_in_latency">
+     <property name="visible"><bool>false</bool></property>
+     <property name="text"><string>Input Latency</string></property>
+    </widget>
+       <widget class="QLineEdit" name="in_latency">
+     <property name="visible"><bool>false</bool></property>
+    </widget>
+       <widget class="QLabel" name="label_conv_latency">
+     <property name="visible"><bool>false</bool></property>
+     <property name="text"><string>Convert Latency</string></property>
+    </widget>
+       <widget class="QLineEdit" name="conv_latency">
+     <property name="visible"><bool>false</bool></property>
+    </widget>
+       <widget class="QLabel" name="label_multiplier_implementation">
+     <property name="text"><string>Multiplier Implementation</string></property>
+    </widget>
+       <widget class="QComboBox" name="multiplier_implementation">
+     <item><property name="text"><string>behavioral HDL</string></property></item>
+     <item><property name="text"><string>standard core</string></property></item>
+     <item><property name="text"><string>embedded multiplier core</string></property></item>
+    </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

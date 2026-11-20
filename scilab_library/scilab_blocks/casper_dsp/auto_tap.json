@@ -1,0 +1,32 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "n_ants",
+            "n_simultan",
+            "n_bits",
+            "acc_len",
+            "add_latency",
+            "mult_latency",
+            "bram_latency",
+            "mult_type",
+            "use_bram_delay"
+        ],
+        "values": [
+            "auto_tap",
+            "",
+            "dsp:auto_tap",
+            "4",
+            "2",
+            "4",
+            "64",
+            "1",
+            "2",
+            "2",
+            "0",
+            "1"
+        ]
+    }
+}

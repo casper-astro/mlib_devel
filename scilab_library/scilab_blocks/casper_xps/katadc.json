@@ -1,0 +1,26 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "adc_brd",
+            "adc_interleave",
+            "bypass_auto",
+            "en_gain",
+            "adc_clk_rate",
+            "sample_period"
+        ],
+        "values": [
+            "katadc",
+            "",
+            "xps:katadc",
+            "adc0",
+            "off",
+            "off",
+            "on",
+            "800",
+            "1"
+        ]
+    }
+}

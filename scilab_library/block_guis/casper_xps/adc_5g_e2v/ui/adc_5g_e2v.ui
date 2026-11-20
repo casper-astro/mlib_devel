@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>adc_5g_e2v</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_adc_mode">
+     <property name="text"><string>ADC Work mode</string></property>
+    </widget>
+       <widget class="QComboBox" name="adc_mode">
+     <item><property name="text"><string>1-Channel</string></property></item>
+     <item><property name="text"><string>2-Channel</string></property></item>
+     <item><property name="text"><string>4-Channel</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_output_mode">
+     <property name="text"><string>ADC Output mode</string></property>
+    </widget>
+       <widget class="QComboBox" name="output_mode">
+     <item><property name="text"><string>normal mode</string></property></item>
+     <item><property name="text"><string>test mode</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_chips_num">
+     <property name="text"><string>Number of ADC chips</string></property>
+    </widget>
+       <widget class="QComboBox" name="chips_num">
+     <item><property name="text"><string>1</string></property></item>
+     <item><property name="text"><string>2</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_adc_loc">
+     <property name="text"><string>ADC board location</string></property>
+    </widget>
+       <widget class="QComboBox" name="adc_loc">
+     <item><property name="text"><string>FMC1</string></property></item>
+     <item><property name="text"><string>FMC2</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_f_sample">
+     <property name="text"><string>ADC Clock Rate(Mhz)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="f_sample"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

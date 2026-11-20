@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Bus Single Port RAM</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_addr_width">
+     <property name="text"><string>Address Width (added for Xcos; not a casper_library mask param)</string></property>
+    </widget>
+       <widget class="QSpinBox" name="addr_width"/>
+       <widget class="QLabel" name="label_n_bits">
+     <property name="text"><string>data word bit widths</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_bits"/>
+       <widget class="QLabel" name="label_bin_pts">
+     <property name="text"><string>data word binary points</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bin_pts"/>
+       <widget class="QLabel" name="label_init_vector">
+     <property name="text"><string>initial value vector</string></property>
+    </widget>
+       <widget class="QLineEdit" name="init_vector"/>
+       <widget class="QLabel" name="label_max_fanout">
+     <property name="text"><string>limit fanout to ?</string></property>
+    </widget>
+       <widget class="QLineEdit" name="max_fanout"/>
+       <widget class="QLabel" name="label_mem_type">
+     <property name="text"><string>memory type</string></property>
+    </widget>
+       <widget class="QComboBox" name="mem_type">
+     <item><property name="text"><string>Distributed memory</string></property></item>
+     <item><property name="text"><string>Block RAM</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_bram_optimization">
+     <property name="text"><string>memory optimization</string></property>
+    </widget>
+       <widget class="QComboBox" name="bram_optimization">
+     <item><property name="text"><string>Area</string></property></item>
+     <item><property name="text"><string>Speed</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_async_op">
+     <property name="text"><string>asynchronous</string></property>
+    </widget>
+       <widget class="QCheckBox" name="async_op"/>
+       <widget class="QLabel" name="label_misc">
+     <property name="text"><string>misc support</string></property>
+    </widget>
+       <widget class="QCheckBox" name="misc"/>
+       <widget class="QLabel" name="label_bram_latency">
+     <property name="text"><string>bram latency</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bram_latency"/>
+       <widget class="QLabel" name="label_fan_latency">
+     <property name="text"><string>input register latency</string></property>
+    </widget>
+       <widget class="QLineEdit" name="fan_latency"/>
+       <widget class="QLabel" name="label_addr_register">
+     <property name="text"><string>addr input register</string></property>
+    </widget>
+       <widget class="QCheckBox" name="addr_register"/>
+       <widget class="QLabel" name="label_addr_implementation">
+     <property name="text"><string>addr register implementation</string></property>
+    </widget>
+       <widget class="QComboBox" name="addr_implementation">
+     <item><property name="text"><string>core</string></property></item>
+     <item><property name="text"><string>behavioral</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_din_register">
+     <property name="text"><string>din input register</string></property>
+    </widget>
+       <widget class="QCheckBox" name="din_register"/>
+       <widget class="QLabel" name="label_din_implementation">
+     <property name="text"><string>din register implementation</string></property>
+    </widget>
+       <widget class="QComboBox" name="din_implementation">
+     <item><property name="text"><string>core</string></property></item>
+     <item><property name="text"><string>behavioral</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_we_register">
+     <property name="text"><string>we input register</string></property>
+    </widget>
+       <widget class="QCheckBox" name="we_register"/>
+       <widget class="QLabel" name="label_we_implementation">
+     <property name="text"><string>we register implementation</string></property>
+    </widget>
+       <widget class="QComboBox" name="we_implementation">
+     <item><property name="text"><string>core</string></property></item>
+     <item><property name="text"><string>behavioral</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_en_register">
+     <property name="text"><string>en input register</string></property>
+    </widget>
+       <widget class="QCheckBox" name="en_register"/>
+       <widget class="QLabel" name="label_en_implementation">
+     <property name="text"><string>en register implementation</string></property>
+    </widget>
+       <widget class="QComboBox" name="en_implementation">
+     <item><property name="text"><string>core</string></property></item>
+     <item><property name="text"><string>behavioral</string></property></item>
+    </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

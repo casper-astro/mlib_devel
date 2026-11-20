@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Polynomial</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name">
+     <property name="toolTip"><string>A name you choose for this block instance, e.g. to note what it's used for in this design. Shown below the block on the diagram.</string></property>
+    </widget>
+       <widget class="QLabel" name="label_n_polys">
+     <property name="text"><string>Number of polynomials</string></property>
+    </widget>
+       <widget class="QSpinBox" name="n_polys"/>
+       <widget class="QLabel" name="label_degree">
+     <property name="text"><string>Degree of polynomial</string></property>
+    </widget>
+       <widget class="QSpinBox" name="degree"/>
+       <widget class="QLabel" name="label_mult_latency">
+     <property name="text"><string>Multiplier latency</string></property>
+    </widget>
+       <widget class="QSpinBox" name="mult_latency"/>
+       <widget class="QLabel" name="label_bits_out">
+     <property name="text"><string>Output number of bits</string></property>
+    </widget>
+       <widget class="QSpinBox" name="bits_out"/>
+       <widget class="QLabel" name="label_bin_pt_out">
+     <property name="text"><string>Output binary point</string></property>
+    </widget>
+       <widget class="QSpinBox" name="bin_pt_out"/>
+       <widget class="QLabel" name="label_conv_latency">
+     <property name="text"><string>Convert latency</string></property>
+    </widget>
+       <widget class="QSpinBox" name="conv_latency"/>
+       <widget class="QLabel" name="label_quantization">
+     <property name="text"><string>Quantization behaviour</string></property>
+    </widget>
+       <widget class="QComboBox" name="quantization">
+     <item><property name="text"><string>Truncate</string></property></item>
+     <item><property name="text"><string>Round  (unbiased: +/- Inf)</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_overflow">
+     <property name="text"><string>Overflow behaviour</string></property>
+    </widget>
+       <widget class="QComboBox" name="overflow">
+     <item><property name="text"><string>Wrap</string></property></item>
+     <item><property name="text"><string>Saturate</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_bits_in">
+     <property name="text"><string>Bits in</string></property>
+    </widget>
+       <widget class="QSpinBox" name="bits_in"/>
+       <widget class="QLabel" name="label_bin_pt_in">
+     <property name="text"><string>Binary point in</string></property>
+    </widget>
+       <widget class="QSpinBox" name="bin_pt_in"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

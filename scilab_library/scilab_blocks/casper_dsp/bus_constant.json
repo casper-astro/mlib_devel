@@ -1,0 +1,22 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "values",
+            "n_bits",
+            "bin_pts",
+            "types"
+        ],
+        "values": [
+            "bus_constant",
+            "",
+            "dsp:bus_constant",
+            "[]",
+            "[8]",
+            "[7]",
+            "[1]"
+        ]
+    }
+}

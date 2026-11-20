@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Munge</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of munge_ui.py, not a
+        full round-trip Designer file; it follows the casper_library munge
+        mask. Edit both together. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_divisions">
+     <property name="text"><string>Number of divisions</string></property>
+    </widget>
+       <widget class="QLineEdit" name="divisions"/>
+       <widget class="QLabel" name="label_div_size">
+     <property name="text"><string>Division size (bits)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="div_size"/>
+       <widget class="QLabel" name="label_order">
+     <property name="text"><string>Division packing order</string></property>
+    </widget>
+       <widget class="QLineEdit" name="order"/>
+       <widget class="QLabel" name="label_arith_type_out">
+     <property name="text"><string>Output arithmetic type</string></property>
+    </widget>
+       <widget class="QComboBox" name="arith_type_out"/>
+       <widget class="QLabel" name="label_bin_pt_out">
+     <property name="text"><string>Output binary point</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bin_pt_out"/>
+       <widget class="QLabel" name="label_widths">
+     <property name="text"><string>Port widths (din / dout)</string></property>
+    </widget>
+       <widget class="QLabel" name="widths"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

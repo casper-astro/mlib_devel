@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>auto_tap</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_n_ants">
+     <property name="text"><string>Number of antennas (total inputs = n_ants*n_simultan below)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_ants"/>
+       <widget class="QLabel" name="label_n_simultan">
+     <property name="enabled"><bool>false</bool></property>
+     <property name="text"><string>Number of inputs fed-in simultaneously</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_simultan">
+     <property name="enabled"><bool>false</bool></property>
+    </widget>
+       <widget class="QLabel" name="label_n_bits">
+     <property name="text"><string>Number of input bits (per complex component)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_bits"/>
+       <widget class="QLabel" name="label_acc_len">
+     <property name="text"><string>Accumulation length</string></property>
+    </widget>
+       <widget class="QLineEdit" name="acc_len"/>
+       <widget class="QLabel" name="label_add_latency">
+     <property name="text"><string>Adder latency</string></property>
+    </widget>
+       <widget class="QLineEdit" name="add_latency"/>
+       <widget class="QLabel" name="label_mult_latency">
+     <property name="text"><string>Multiplier latency</string></property>
+    </widget>
+       <widget class="QLineEdit" name="mult_latency"/>
+       <widget class="QLabel" name="label_bram_latency">
+     <property name="text"><string>BRAM latency</string></property>
+    </widget>
+       <widget class="QLineEdit" name="bram_latency"/>
+       <widget class="QLabel" name="label_mult_type">
+     <property name="text"><string>Multiplier Type (0=behavioural HDL, 1=embedded, 2=core)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="mult_type"/>
+       <widget class="QLabel" name="label_use_bram_delay">
+     <property name="text"><string>Implementation: Delay type (0=SLR, 1=BRAM)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="use_bram_delay"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

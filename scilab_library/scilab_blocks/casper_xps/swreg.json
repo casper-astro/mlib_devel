@@ -1,5 +1,5 @@
 {
-    "parameters":{
+    "parameters": {
         "keys": [
             "name",
             "fullpath",
@@ -19,16 +19,25 @@
             "wreg",
             "",
             "xps:sw_reg",
-            "From Processor",
-            0,
-            0,
-            1,
+            "To Processor",
+            "0",
+            "0",
+            "1",
             "reg",
-            1,
-            0,
-            2,
+            "32",
+            "0",
+            "0",
             "on",
             "on"
         ]
-    }
+    },
+    "evaluate": [
+        "io_delay",
+        "init_val",
+        "sample_period",
+        "names",
+        "bitwidths",
+        "bin_pts",
+        "arith_types"
+    ]
 }

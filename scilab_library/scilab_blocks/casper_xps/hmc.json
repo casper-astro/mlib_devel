@@ -1,0 +1,26 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "mez",
+            "sim_depth",
+            "sim_latency",
+            "sim_rand"
+        ],
+        "values": [
+            "hmc",
+            "",
+            "xps:hmc",
+            "0",
+            "15",
+            "5",
+            "on"
+        ]
+    },
+    "evaluate": [
+        "sim_depth",
+        "sim_latency"
+    ]
+}

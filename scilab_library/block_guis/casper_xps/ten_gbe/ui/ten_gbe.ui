@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Ten GbE</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name">
+     <property name="toolTip"><string>A name you choose for this block instance, e.g. to note what it's used for in this design. Shown below the block on the diagram.</string></property>
+    </widget>
+       <!-- tab: Core -->
+       <widget class="QLabel" name="label_flavour">
+     <property name="text"><string>Mezzanine card flavour</string></property>
+    </widget>
+       <widget class="QComboBox" name="flavour">
+     <item><property name="text"><string>sfp+</string></property></item>
+     <item><property name="text"><string>cx4</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_slot">
+     <property name="text"><string>Card slot</string></property>
+    </widget>
+       <widget class="QComboBox" name="slot">
+     <item><property name="text"><string>0</string></property></item>
+     <item><property name="text"><string>1</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_port_r1">
+     <property name="text"><string>Port</string></property>
+    </widget>
+       <widget class="QComboBox" name="port_r1">
+     <item><property name="text"><string>0</string></property></item>
+     <item><property name="text"><string>1</string></property></item>
+     <item><property name="text"><string>2</string></property></item>
+     <item><property name="text"><string>3</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_port_r2_cx4">
+     <property name="text"><string>Port</string></property>
+    </widget>
+       <widget class="QComboBox" name="port_r2_cx4">
+     <item><property name="text"><string>0</string></property></item>
+     <item><property name="text"><string>1</string></property></item>
+     <item><property name="text"><string>2</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_port_r2_sfpp">
+     <property name="text"><string>Port</string></property>
+    </widget>
+       <widget class="QComboBox" name="port_r2_sfpp">
+     <item><property name="text"><string>0</string></property></item>
+     <item><property name="text"><string>1</string></property></item>
+     <item><property name="text"><string>2</string></property></item>
+     <item><property name="text"><string>3</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_rx_dist_ram">
+     <property name="text"><string>Shallow RX Fifo (Beware overruns!)</string></property>
+    </widget>
+       <widget class="QCheckBox" name="rx_dist_ram"/>
+       <widget class="QLabel" name="label_large_frames">
+     <property name="text"><string>Enable Large TX Frames (8k+512)</string></property>
+    </widget>
+       <widget class="QCheckBox" name="large_frames"/>
+       <widget class="QLabel" name="label_show_param">
+     <property name="text"><string>---------------------- Show Implementation Parameters -----------------------------------------------------------------------------------</string></property>
+    </widget>
+       <widget class="QCheckBox" name="show_param"/>
+       <widget class="QLabel" name="label_pre_emph_r2">
+     <property name="text"><string>Pre-emphasis (dB)</string></property>
+    </widget>
+       <widget class="QComboBox" name="pre_emph_r2">
+     <item><property name="text"><string>0.15</string></property></item>
+     <item><property name="text"><string>0.3</string></property></item>
+     <item><property name="text"><string>0.45</string></property></item>
+     <item><property name="text"><string>0.61</string></property></item>
+     <item><property name="text"><string>0.74</string></property></item>
+     <item><property name="text"><string>0.91</string></property></item>
+     <item><property name="text"><string>1.07</string></property></item>
+     <item><property name="text"><string>1.25</string></property></item>
+     <item><property name="text"><string>1.36</string></property></item>
+     <item><property name="text"><string>1.55</string></property></item>
+     <item><property name="text"><string>1.74</string></property></item>
+     <item><property name="text"><string>1.94</string></property></item>
+     <item><property name="text"><string>2.11</string></property></item>
+     <item><property name="text"><string>2.32</string></property></item>
+     <item><property name="text"><string>2.54</string></property></item>
+     <item><property name="text"><string>2.77</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_pre_emph">
+     <property name="text"><string>Pre-emphasis</string></property>
+    </widget>
+       <widget class="QComboBox" name="pre_emph">
+     <item><property name="text"><string>0</string></property></item>
+     <item><property name="text"><string>1</string></property></item>
+     <item><property name="text"><string>2</string></property></item>
+     <item><property name="text"><string>3</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_post_emph_r2">
+     <property name="text"><string>Post-emphasis (dB)</string></property>
+    </widget>
+       <widget class="QComboBox" name="post_emph_r2">
+     <item><property name="text"><string>0.18</string></property></item>
+     <item><property name="text"><string>0.19</string></property></item>
+     <item><property name="text"><string>0.2</string></property></item>
+     <item><property name="text"><string>0.39</string></property></item>
+     <item><property name="text"><string>0.63</string></property></item>
+     <item><property name="text"><string>0.82</string></property></item>
+     <item><property name="text"><string>1.07</string></property></item>
+     <item><property name="text"><string>1.32</string></property></item>
+     <item><property name="text"><string>1.6</string></property></item>
+     <item><property name="text"><string>1.65</string></property></item>
+     <item><property name="text"><string>1.94</string></property></item>
+     <item><property name="text"><string>2.21</string></property></item>
+     <item><property name="text"><string>2.52</string></property></item>
+     <item><property name="text"><string>2.76</string></property></item>
+     <item><property name="text"><string>3.08</string></property></item>
+     <item><property name="text"><string>3.41</string></property></item>
+     <item><property name="text"><string>3.77</string></property></item>
+     <item><property name="text"><string>3.97</string></property></item>
+     <item><property name="text"><string>4.36</string></property></item>
+     <item><property name="text"><string>4.73</string></property></item>
+     <item><property name="text"><string>5.16</string></property></item>
+     <item><property name="text"><string>5.47</string></property></item>
+     <item><property name="text"><string>5.93</string></property></item>
+     <item><property name="text"><string>6.38</string></property></item>
+     <item><property name="text"><string>6.89</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_rxeqmix_r2">
+     <property name="text"><string>Receive equalisation</string></property>
+    </widget>
+       <widget class="QComboBox" name="rxeqmix_r2">
+     <item><property name="text"><string>0</string></property></item>
+     <item><property name="text"><string>1</string></property></item>
+     <item><property name="text"><string>2</string></property></item>
+     <item><property name="text"><string>3</string></property></item>
+     <item><property name="text"><string>4</string></property></item>
+     <item><property name="text"><string>5</string></property></item>
+     <item><property name="text"><string>6</string></property></item>
+     <item><property name="text"><string>7</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_swing_r2">
+     <property name="text"><string>Driver Swing Control (mVppd)</string></property>
+    </widget>
+       <widget class="QComboBox" name="swing_r2">
+     <item><property name="text"><string>110</string></property></item>
+     <item><property name="text"><string>210</string></property></item>
+     <item><property name="text"><string>310</string></property></item>
+     <item><property name="text"><string>400</string></property></item>
+     <item><property name="text"><string>480</string></property></item>
+     <item><property name="text"><string>570</string></property></item>
+     <item><property name="text"><string>660</string></property></item>
+     <item><property name="text"><string>740</string></property></item>
+     <item><property name="text"><string>810</string></property></item>
+     <item><property name="text"><string>880</string></property></item>
+     <item><property name="text"><string>940</string></property></item>
+     <item><property name="text"><string>990</string></property></item>
+     <item><property name="text"><string>1040</string></property></item>
+     <item><property name="text"><string>1080</string></property></item>
+     <item><property name="text"><string>1110</string></property></item>
+     <item><property name="text"><string>1130</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_swing">
+     <property name="text"><string>Differential swing</string></property>
+    </widget>
+       <widget class="QComboBox" name="swing">
+     <item><property name="text"><string>400</string></property></item>
+     <item><property name="text"><string>500</string></property></item>
+     <item><property name="text"><string>600</string></property></item>
+     <item><property name="text"><string>700</string></property></item>
+     <item><property name="text"><string>800</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_fab_en">
+     <property name="text"><string>Enable fabric on startup</string></property>
+    </widget>
+       <widget class="QCheckBox" name="fab_en"/>
+       <widget class="QLabel" name="label_fab_mac">
+     <property name="text"><string>Fabric MAC Address</string></property>
+    </widget>
+       <widget class="QLineEdit" name="fab_mac"/>
+       <widget class="QLabel" name="label_fab_ip">
+     <property name="text"><string>Fabric IP Address</string></property>
+    </widget>
+       <widget class="QLineEdit" name="fab_ip"/>
+       <widget class="QLabel" name="label_fab_udp">
+     <property name="text"><string>Fabric UDP Port</string></property>
+    </widget>
+       <widget class="QLineEdit" name="fab_udp"/>
+       <widget class="QLabel" name="label_fab_gate">
+     <property name="text"><string>Fabric Gateway</string></property>
+    </widget>
+       <widget class="QLineEdit" name="fab_gate"/>
+       <widget class="QLabel" name="label_cpu_rx_en">
+     <property name="text"><string>Enable CPU RX</string></property>
+    </widget>
+       <widget class="QCheckBox" name="cpu_rx_en"/>
+       <widget class="QLabel" name="label_cpu_tx_en">
+     <property name="text"><string>Enable CPU TX</string></property>
+    </widget>
+       <widget class="QCheckBox" name="cpu_tx_en"/>
+       <widget class="QLabel" name="label_ttl">
+     <property name="text"><string>TTL</string></property>
+    </widget>
+       <widget class="QLineEdit" name="ttl"/>
+       <widget class="QLabel" name="label_promisc_mode">
+     <property name="text"><string>Promiscuous mode</string></property>
+    </widget>
+       <widget class="QCheckBox" name="promisc_mode"/>
+       <!-- tab: Debug counters -->
+       <widget class="QLabel" name="label_debug_ctr_width">
+     <property name="text"><string>Debug counter width</string></property>
+    </widget>
+       <widget class="QLineEdit" name="debug_ctr_width"/>
+       <widget class="QLabel" name="label_txctr">
+     <property name="text"><string>TX - core_txctr</string></property>
+    </widget>
+       <widget class="QCheckBox" name="txctr"/>
+       <widget class="QLabel" name="label_txerrctr">
+     <property name="text"><string>TX packet length error - core_txerrctr</string></property>
+    </widget>
+       <widget class="QCheckBox" name="txerrctr"/>
+       <widget class="QLabel" name="label_txerrctr_len">
+     <property name="text"><string>-- expected TX packet length</string></property>
+    </widget>
+       <widget class="QLineEdit" name="txerrctr_len"/>
+       <widget class="QLabel" name="label_txofctr">
+     <property name="text"><string>TX overflow - core_txofctr</string></property>
+    </widget>
+       <widget class="QCheckBox" name="txofctr"/>
+       <widget class="QLabel" name="label_txfullctr">
+     <property name="text"><string>TX full - core_txfullctr</string></property>
+    </widget>
+       <widget class="QCheckBox" name="txfullctr"/>
+       <widget class="QLabel" name="label_txvldctr">
+     <property name="text"><string>TX valid cycle - core_txvldctr</string></property>
+    </widget>
+       <widget class="QCheckBox" name="txvldctr"/>
+       <widget class="QLabel" name="label_txsnaplen">
+     <property name="text"><string>TX snapshot length</string></property>
+    </widget>
+       <widget class="QComboBox" name="txsnaplen">
+     <item><property name="text"><string>0 - no snap</string></property></item>
+     <item><property name="text"><string>256</string></property></item>
+     <item><property name="text"><string>512</string></property></item>
+     <item><property name="text"><string>1024</string></property></item>
+     <item><property name="text"><string>2048</string></property></item>
+     <item><property name="text"><string>4096</string></property></item>
+     <item><property name="text"><string>8192</string></property></item>
+     <item><property name="text"><string>16384</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_rxctr">
+     <property name="text"><string>RX - core_rxctr</string></property>
+    </widget>
+       <widget class="QCheckBox" name="rxctr"/>
+       <widget class="QLabel" name="label_rxerrctr">
+     <property name="text"><string>RX packet length error - core_rxerrctr</string></property>
+    </widget>
+       <widget class="QCheckBox" name="rxerrctr"/>
+       <widget class="QLabel" name="label_rxerrctr_len">
+     <property name="text"><string>-- expected RX packet length</string></property>
+    </widget>
+       <widget class="QLineEdit" name="rxerrctr_len"/>
+       <widget class="QLabel" name="label_rxofctr">
+     <property name="text"><string>RX overflow - core_rxofctr</string></property>
+    </widget>
+       <widget class="QCheckBox" name="rxofctr"/>
+       <widget class="QLabel" name="label_rxbadctr">
+     <property name="text"><string>RX bad - core_rxbadctr</string></property>
+    </widget>
+       <widget class="QCheckBox" name="rxbadctr"/>
+       <widget class="QLabel" name="label_rxvldctr">
+     <property name="text"><string>RX valid cycle - core_rxvldctr</string></property>
+    </widget>
+       <widget class="QCheckBox" name="rxvldctr"/>
+       <widget class="QLabel" name="label_rxeofctr">
+     <property name="text"><string>RX eof - core_rxeofctr</string></property>
+    </widget>
+       <widget class="QCheckBox" name="rxeofctr"/>
+       <widget class="QLabel" name="label_rxsnaplen">
+     <property name="text"><string>RX snapshot length</string></property>
+    </widget>
+       <widget class="QComboBox" name="rxsnaplen">
+     <item><property name="text"><string>0 - no snap</string></property></item>
+     <item><property name="text"><string>256</string></property></item>
+     <item><property name="text"><string>512</string></property></item>
+     <item><property name="text"><string>1024</string></property></item>
+     <item><property name="text"><string>2048</string></property></item>
+     <item><property name="text"><string>4096</string></property></item>
+     <item><property name="text"><string>8192</string></property></item>
+     <item><property name="text"><string>16384</string></property></item>
+    </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

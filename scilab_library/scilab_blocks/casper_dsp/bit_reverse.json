@@ -1,0 +1,16 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "n_bits"
+        ],
+        "values": [
+            "bit_reverse",
+            "",
+            "dsp:bit_reverse",
+            "8"
+        ]
+    }
+}

@@ -7,8 +7,6 @@ exec('scilab_library/scilab_blocks/utils/get_block_tag.sci');
 exec('scilab_library/scilab_blocks/utils/get_block_type.sci');
 exec('scilab_library/scilab_blocks/utils/get_block_name.sci');
 exec('scilab_library/scilab_blocks/utils/get_port_width.sci');
-exec('scilab_library/scilab_blocks/utils/get_block_config.sci');
-exec('scilab_library/scilab_blocks/utils/gen_all_blocks_config.sci');
 exec('scilab_library/scilab_blocks/utils/gen_block_config.sci');
 exec('scilab_library/scilab_blocks/utils/get_link_info_by_link_obj.sci');
 exec('scilab_library/scilab_blocks/utils/search_for_real_src_blk.sci');
@@ -17,114 +15,107 @@ exec('scilab_library/scilab_blocks/utils/get_port_width_id.sci');
 exec('scilab_library/scilab_blocks/utils/update_block_config.sci');
 exec('scilab_library/scilab_blocks/utils/get_block_vals.sci');
 exec('scilab_library/scilab_blocks/utils/get_block_vindex.sci');
+exec('scilab_library/scilab_blocks/utils/search_block_by_name.sci');
+exec('scilab_library/scilab_blocks/utils/run_mask.sci');
+exec('scilab_library/scilab_blocks/utils/gen_uid.sci');
 exec('scilab_library/scilab_blocks/jasper.sci');
 exec('scilab_library/scilab_blocks/jasper_frontend.sci');
 exec('scilab_library/scilab_blocks/jasper_simulation.sci');
 exec('scilab_library/scilab_blocks/run_simulation.sci');
-exec('scilab_library/scilab_blocks/utils/check_block_names.sci');
+exec('scilab_library/scilab_blocks/utils/update_bconfig.sci');
+exec('scilab_library/scilab_blocks/utils/gen_block_name.sci');
+exec('scilab_library/scilab_blocks/utils/get_blocks_by_uids.sci');
+exec('scilab_library/scilab_blocks/utils/init_exprs.sci');
+exec('scilab_library/scilab_blocks/utils/export_exprs.sci');
+exec('scilab_library/scilab_blocks/utils/export_exprs_to_tmpdir.sci');
+exec('scilab_library/scilab_blocks/utils/update_exprs.sci');
+exec('scilab_library/scilab_blocks/utils/update_exprs_from_tmpdir.sci');
+exec('scilab_library/scilab_blocks/utils/check_duplicate_names.sci');
+exec('scilab_library/scilab_blocks/utils/check_valid_filename.sci');
+exec('scilab_library/scilab_blocks/utils/pre_validate_design.sci');
+exec('scilab_library/scilab_blocks/utils/check_bit_width.sci');
+exec('scilab_library/scilab_blocks/utils/post_validate_design.sci');
+exec('scilab_library/scilab_blocks/utils/remove_tmpdir.sci');
+exec('scilab_library/scilab_blocks/utils/load_module_registry.sci');
+exec('scilab_library/scilab_blocks/utils/bus_vec_width.sci');
 
-// TODO: load the xps and dsp blocks automatically
-// all of the blocks in the scilab_library/casper_xps and 
-// scilab_library/casper_dsp directories should be loaded autocaically
+// Which casper_dsp/casper_xps/casper_sim modules get loaded and registered
+// into the Xcos palette -- and which category (sub-palette leaf) each one
+// belongs to -- is entirely data-driven from scilab_library/casper_modules.json,
+// not hand-edited here. See load_module_registry.sci and
+// casper_dsp_from_simulink/SKILL.md Step 3c for how to add/enable a module.
 
-// add casper xps blocks
+/* exec() each enabled module's <module>.sci here, at the file's OWN top
+   level -- NOT from inside load_casper_group() (or any other function)
+   below. A function definition loaded via exec() from inside another
+   function is local to that function's call frame and disappears once it
+   returns (confirmed by direct test: exec()-ing a file that defines `foo`
+   from inside a wrapper function leaves `exists('foo')` false as soon as
+   the wrapper returns). It must be global here because xcosPalAddBlock(),
+   for a block with no custom icon, calls generateBlockImage() to render
+   one on the fly, which re-invokes the block's own interface function by
+   name -- and can only find it if it's a global function, not a local one
+   hidden inside some other function's scope. */
+casper_module_registry = load_module_registry();
+casper_group_keys = ['casper_xps'; 'casper_dsp'; 'casper_sim'];
+for casper_g = 1:size(casper_group_keys, '*')
+    casper_group_key = casper_group_keys(casper_g);
+    casper_names = fieldnames(get_enabled_modules(casper_module_registry, casper_group_key));
+    for casper_i = 1:size(casper_names, '*')
+        exec(sprintf('scilab_library/scilab_blocks/%s/%s.sci', casper_group_key, casper_names(casper_i)));
+    end
+end
+clear casper_module_registry casper_group_keys casper_g casper_group_key casper_names casper_i;
+
+/* instantiate/register every module enabled=true under registry(group_key)
+   (e.g. group_key = 'casper_dsp'), grouping them into one Xcos sub-palette
+   per distinct "category" value, all nested under one top-level Category
+   folder named top_name (e.g. "CASPER DSP" -> "Basic Elements"/"Flow_Control"/
+   "Misc"). Every leaf here reuses the same top_name string for its
+   xcosPalAdd call, which is what merges them into one folder instead of
+   each spawning its own duplicate top-level entry (xcosPalAdd's category
+   argument creates/reuses a Category tree node by exact string match).
+   Every module's <module>.sci has already been exec()'d at top level
+   above, so the execstr() call below can just call it by name. */
+function [] = load_casper_group(group_key, top_name)
+    registry = load_module_registry();
+    enabled = get_enabled_modules(registry, group_key);
+    names = fieldnames(enabled);
+    fig_dir = pwd() + '/scilab_library/scilab_blocks/' + group_key + '/figures/';
+    pals = struct();
+    for i = 1:size(names, '*')
+        name = names(i);
+        entry = enabled(name);
+        // dynamic call-by-name: Scilab has no feval(name, ...) equivalent,
+        // so execstr() is the standard idiom -- assigns straight into the
+        // local variable "inst", no need to fetch it back afterward.
+        execstr('inst = ' + name + '(''define'')');
+        cat = entry('category');
+        if ~isfield(pals, cat) then
+            pals(cat) = xcosPal(cat);
+        end
+        icon = entry('icon');
+        if icon <> '' then
+            iconfn = fig_dir + icon;
+            pals(cat) = xcosPalAddBlock(pals(cat), inst, iconfn, iconfn);
+        else
+            pals(cat) = xcosPalAddBlock(pals(cat), inst);
+        end
+    end
+    cats = fieldnames(pals);
+    for i = 1:size(cats, '*')
+        xcosPalAdd(pals(cats(i)), top_name);
+    end
+endfunction
+
 debug_info('------Loading CASPER XPS...------');
-// load the xps blocks
-exec('scilab_library/scilab_blocks/casper_xps/rfsoc4x2.sci');
-exec('scilab_library/scilab_blocks/casper_xps/gpio.sci');
-exec('scilab_library/scilab_blocks/casper_xps/swreg.sci');
-exec('scilab_library/scilab_blocks/casper_xps/rfdc.sci');
-exec('scilab_library/scilab_blocks/casper_xps/sbram.sci');
-// create the blocks
-rfsoc4x2_inst = rfsoc4x2("define");
-gpio_inst = gpio("define");
-swreg_out_inst = swreg("define");
-rfdc_inst = rfdc("define");
-sbram_inst = sbram("define");
-// add the blocks to the palette
-cur_dir = pwd();
-xps_fig_dir = cur_dir + '/scilab_library/scilab_blocks/casper_xps/figures/';
-pal = xcosPal("CASPER XPS");
-pal = xcosPalAddBlock(pal, rfsoc4x2_inst, xps_fig_dir + 'rfsoc4x2.png', xps_fig_dir + 'rfsoc4x2.png');
-pal = xcosPalAddBlock(pal, gpio_inst);
-pal = xcosPalAddBlock(pal, swreg_out_inst);
-pal = xcosPalAddBlock(pal, rfdc_inst);
-pal = xcosPalAddBlock(pal, sbram_inst);
-//pal = xcosPalAddBlock(pal, swreg_out_inst);
-xcosPalAdd(pal);
+load_casper_group('casper_xps', 'CASPER XPS');
 debug_info('------ CASPER XPS loaded --------');
 
-// add casper dsp blocks
 debug_info('------Loading CASPER DSP...------');
-// load the xps blocks
-exec('scilab_library/scilab_blocks/casper_dsp/adder.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/edge_detect.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/counter.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/pulse_ext.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/slice.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/munge.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/wbfft.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/bus_expand.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/dsp_constant.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/delay.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/simple_bram_vacc.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/power_cal.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/operation.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/logic_not.sci');
-// create the blocks
-adder_inst = adder("define");
-edge_detect_inst = edge_detect("define");
-counter_inst = counter("define");
-pulse_ext_inst = pulse_ext("define");
-slice_inst = slice("define");
-munge_inst = munge("define");
-wbfft_inst = wbfft("define");
-bus_expand_inst = bus_expand("define");
-dsp_constant_inst = dsp_constant("define");
-delay_inst = delay("define");
-simple_bram_vacc_inst = simple_bram_vacc("define");
-power_cal_inst = power_cal("define");
-operation_inst = operation("define");
-logic_not_inst = logic_not("define");
-cur_dir = pwd();
-dsp_fig_dir = cur_dir + '/scilab_library/scilab_blocks/casper_dsp/figures/';
-pal = xcosPal("CASPER DSP");
-pal = xcosPalAddBlock(pal, adder_inst);
-pal = xcosPalAddBlock(pal, pulse_ext_inst);
-pal = xcosPalAddBlock(pal, edge_detect_inst);
-pal = xcosPalAddBlock(pal, counter_inst);
-pal = xcosPalAddBlock(pal, slice_inst);
-pal = xcosPalAddBlock(pal, munge_inst);
-pal = xcosPalAddBlock(pal, wbfft_inst);
-pal = xcosPalAddBlock(pal, bus_expand_inst);
-pal = xcosPalAddBlock(pal, dsp_constant_inst);
-pal = xcosPalAddBlock(pal, delay_inst);
-pal = xcosPalAddBlock(pal, simple_bram_vacc_inst);
-pal = xcosPalAddBlock(pal, power_cal_inst);
-pal = xcosPalAddBlock(pal, operation_inst);
-pal = xcosPalAddBlock(pal, logic_not_inst);
-xcosPalAdd(pal);
+load_casper_group('casper_dsp', 'CASPER DSP');
 debug_info('------ CASPER DSP loaded --------');
 
-// add casper sim blocks
 debug_info('------Loading CASPER SIM...------');
-// load the xps blocks
-exec('scilab_library/scilab_blocks/casper_sim/sim_constant.sci');
-exec('scilab_library/scilab_blocks/casper_sim/scope.sci');
-exec('scilab_library/scilab_blocks/casper_sim/sim.sci');
-exec('scilab_library/scilab_blocks/casper_sim/sine.sci');
-// create the blocks
-sim_constant_inst = sim_constant("define");
-scope_inst = scope("define");
-sim_inst = sim("define");  
-sine_inst = sine("define");
-cur_dir = pwd();
-sim_fig_dir = cur_dir + '/scilab_library/scilab_blocks/casper_sim/figures/';
-pal = xcosPal("CASPER SIM");
-pal = xcosPalAddBlock(pal, sim_constant_inst, sim_fig_dir + 'constant.png', sim_fig_dir + 'constant.png');
-pal = xcosPalAddBlock(pal, scope_inst, sim_fig_dir + 'scope.png', sim_fig_dir + 'scope.png');
-pal = xcosPalAddBlock(pal, sine_inst, sim_fig_dir + 'sine.png', sim_fig_dir + 'sine.png');
-pal = xcosPalAddBlock(pal, sim_inst, sim_fig_dir + 'sim.png', sim_fig_dir + 'sim.png');
-
-xcosPalAdd(pal);
+load_casper_group('casper_sim', 'CASPER SIM');
 debug_info('------ CASPER SIM loaded --------');

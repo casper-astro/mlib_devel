@@ -1,0 +1,18 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "n_bits",
+            "bin_pt"
+        ],
+        "values": [
+            "c_to_ri",
+            "",
+            "dsp:c_to_ri",
+            "18",
+            "17"
+        ]
+    }
+}

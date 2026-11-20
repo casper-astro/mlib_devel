@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Bus Mux</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_n_inputs">
+     <property name="text"><string>number of inputs</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_inputs"/>
+       <widget class="QLabel" name="label_n_bits">
+     <property name="text"><string>input bit widths</string></property>
+    </widget>
+       <widget class="QLineEdit" name="n_bits"/>
+       <widget class="QLabel" name="label_cmplx">
+     <property name="text"><string>complex data</string></property>
+    </widget>
+       <widget class="QCheckBox" name="cmplx"/>
+       <widget class="QLabel" name="label_misc">
+     <property name="text"><string>misc support</string></property>
+    </widget>
+       <widget class="QCheckBox" name="misc"/>
+       <widget class="QLabel" name="label_mux_latency">
+     <property name="text"><string>mux latency</string></property>
+    </widget>
+       <widget class="QLineEdit" name="mux_latency"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,32 +1,36 @@
 function [build_cmd] = jasper_frontend(fn)
-    // check the block names
-    [duplicated, duplicated_blocks] = check_block_names(fn);
-    if duplicated then
-        disp('****************************************')
-        disp('*  The following blocks are duplicated *')
-        disp('****************************************')
-        keys = fieldnames(duplicated_blocks);
-        for i = 1:size(keys)(1)
-            disp(keys(i) + ' : ' + string(duplicated_blocks(keys(i))));
-        end
+    /* validate the design */
+    validation = pre_validate_design(fn);
+    if validation ~= 'ok' then
+        disp(validation);
         build_cmd = struct();
         return;
     end
-    // create a dir for the project
+    /* get path, name and ext */
     [path, name, ext] = fileparts(fn);
-    // disp some info
+    
+    /* disp some info */
     disp('Starting jasper for model: '+ name);
 
-    // set the modelpath
+    /* set the modelpath */
     modelpath = fn;
-
-    // generate the block config files first
-    gen_all_blocks_config(fn);
     
-    // collect the block info, and generate the jasper.json file
+    /* bconfig tmp dir needs to be removed. */
+    /* in case more and more tmp files are created. */
+    remove_tmpdir();
+    
+    /* collect the block info, and generate the jasper.json file */
     collect_block_info(fn);
-    
-    // execute a python script to read the json file and generate jasper.per and jasper.dsp
+
+    /* validate the collected design (checks that need jasper.json) */
+    validation = post_validate_design(fn);
+    if validation ~= 'ok' then
+        disp(validation);
+        build_cmd = struct();
+        return;
+    end
+
+    /* execute a python script to read the json file and generate jasper.per and jasper.dsp */
     python_path = 'python';
     disp('****************************************');
     disp('*  Frontend python script is running...*');
@@ -38,10 +42,10 @@ function [build_cmd] = jasper_frontend(fn)
     disp('*  Frontend python script complete!    *');
     disp('****************************************');
     build_cmd = struct();
-    // create a build_cmd for the dsp project
+    /* create a build_cmd for the dsp project */
     jasper_python = [getenv('MLIB_DEVEL_PATH')+'/scilab_library/gen_dsp_ip.py'];
     build_cmd('dsp') = python_path + ' ' + jasper_python + ' '+ '-m ' + modelpath;
-    // create a build_cmd for the full project
+    /* create a build_cmd for the full project */
     jasper_python = [getenv('MLIB_DEVEL_PATH')+'/jasper_library/exec_flow.py'];
     build_cmd('full') = python_path + ' ' + jasper_python + ' '+ '-m ' + modelpath + ' --middleware --backend --software --vitis';
 
