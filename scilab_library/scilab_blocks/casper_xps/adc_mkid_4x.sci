@@ -40,15 +40,13 @@ function [x, y, typ] = adc_mkid_4x(job, arg1, arg2)
     end
 endfunction
 
-/* build the graphics.style string for a given user-configurable block
-   name, showing it below the yellow fill (see displayedLabel). Strips
-   ';' and '=' from the name since those are the mxGraph style string's
-   own delimiter characters -- an unescaped one would corrupt every key
-   after it in the style string, not just truncate the label. */
 function [style] = adc_mkid_4x_build_style(name)
-    name = strsubst(string(name), ';', '');
-    name = strsubst(name, '=', '');
-    style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
+    // displayedLabel=%s: Xcos formats it with the block's exprs, and
+    // exprs(1) is the block name, so the label follows the name whenever
+    // exprs change -- Scilab 2025.1 does not seem to re-apply a style returned
+    // by 'set', so a literal name in the style would stay stale there.
+    // name is unused now; kept so the callers stay unchanged.
+    style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=%s;whiteSpace=wrap;html=1;spacing=4;';
 endfunction
 
 function [x] = adc_mkid_4x_update_ports(obj, bconfigfn)

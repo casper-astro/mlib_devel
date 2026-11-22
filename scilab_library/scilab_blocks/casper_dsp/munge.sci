@@ -42,11 +42,12 @@ function [x, y, typ] = munge(job, arg1, arg2)
 endfunction
 
 function [style] = munge_build_style(name)
-    // strip mxGraph's own style-string delimiters so a user-typed
-    // name can never corrupt the rest of the style string
-    name = strsubst(string(name), ';', '');
-    name = strsubst(name, '=', '');
-    style = 'shape=rectangle;fillColor=#90EE90;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
+    // displayedLabel=%s: Xcos formats it with the block's exprs, and
+    // exprs(1) is the block name, so the label follows the name whenever
+    // exprs change -- Scilab 2025.1 does not seem to re-apply a style returned
+    // by 'set', so a literal name in the style would stay stale there.
+    // name is unused now; kept so the callers stay unchanged.
+    style = 'shape=rectangle;fillColor=#90EE90;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=%s;whiteSpace=wrap;html=1;spacing=4;';
 endfunction
 
 // MATLAB vector expression of a mask parameter ('[8 0 9 1]', '16*ones(1,16)',
