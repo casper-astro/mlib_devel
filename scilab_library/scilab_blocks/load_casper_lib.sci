@@ -99,7 +99,12 @@ function [] = load_casper_group(group_key, top_name)
             iconfn = fig_dir + icon;
             pals(cat) = xcosPalAddBlock(pals(cat), inst, iconfn, iconfn);
         else
-            pals(cat) = xcosPalAddBlock(pals(cat), inst);
+            // pass the block's own graphics.style as the palette style:
+            // without it Scilab 2024.1 gives a block dropped from the
+            // palette the default 'block' look (grey, rounded) until its
+            // dialog is first closed; Scilab 2025.1 already uses
+            // graphics.style. An empty pal_icon still generates the icon.
+            pals(cat) = xcosPalAddBlock(pals(cat), inst, [], inst.graphics.style);
         end
     end
     cats = fieldnames(pals);

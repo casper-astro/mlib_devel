@@ -30,7 +30,7 @@ function [x, y, typ] = adm_pcie_9h7(job, arg1, arg2)
         // displayedLabel (see Xcos-style.xml / XcosDiagram.getCellStyle)
         // instead of a fixed-pixel image -- reflows/recenters when the
         // block is resized, rather than staying a fixed bitmap size.
-        x.graphics.style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;noLabel=0;displayedLabel=ADM-PCIE-9H7;whiteSpace=wrap;html=1;';
+        x.graphics.style = 'shape=rectangle;rounded=0;gradientColor=none;strokeWidth=1;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;noLabel=0;displayedLabel=ADM-PCIE-9H7;whiteSpace=wrap;html=1;';
         x = init_exprs(x);
         debug_info('adm_pcie_9h7 block loaded...')
     end
@@ -41,6 +41,6 @@ function [x] = adm_pcie_9h7_refresh(obj, bconfigfn)
     // style consistent (mirrors every other casper_xps block's 'set' path).
     x = obj;
     graphics = x.graphics;
-    graphics.style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;noLabel=0;displayedLabel=ADM-PCIE-9H7;whiteSpace=wrap;html=1;';
+    graphics.style = 'shape=rectangle;rounded=0;gradientColor=none;strokeWidth=1;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;noLabel=0;displayedLabel=ADM-PCIE-9H7;whiteSpace=wrap;html=1;';
     x.graphics = graphics;
 endfunction
