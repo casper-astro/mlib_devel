@@ -30,10 +30,12 @@ function [cmd] = run_simulation(fn, gui, use_vivado)
     */
     // run python script to start simulation
     jasper_python = [getenv('MLIB_DEVEL_PATH')+'/scilab_library/run_simulation.py'];
+    // use_vivado = 'False' skips the Vivado simulation and shows the data
+    // of the previous run
     if use_vivado == 'True' then
         sv = ''
     elseif use_vivado == 'False'
-        sv = '--use-vivado'
+        sv = '--skip-sim'
     else
         disp('Invalid `use_vivado` option. It should be `True` or `False`');
         abort

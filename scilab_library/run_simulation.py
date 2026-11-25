@@ -14,9 +14,9 @@ parser.add_argument("-m", "--model", dest="model", type=str,
 parser.add_argument("-g", "--gui", dest="gui", type=str,
             default='gtkwave',
             help="The GUI for showing the simulation data.")
-parser.add_argument("--use-vivado", dest="use_vivado", action='store_false',
-            default=True,
-            help="Use Vivaod for the simulation, instead of using the old sim data.")
+parser.add_argument("--skip-sim", dest="skip_sim", action='store_true',
+            default=False,
+            help="Skip the Vivado simulation and show the data of the previous run (simulation/simulation.vcd).")
 
 opts = parser.parse_args()
 builddir = opts.builddir or opts.model.split('.')[0]
@@ -58,7 +58,7 @@ sim.gen_sim_objs()
 sim.gen_sim_data()
 sim.gen_testbench()
 sim.gen_sim_proj()
-if opts.use_vivado:
+if not opts.skip_sim:
     sim.simbackend.run_sim()
 sim.get_sim_data()
 sim.show_sim_data(opts.gui)
