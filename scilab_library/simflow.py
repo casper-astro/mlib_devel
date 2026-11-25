@@ -330,7 +330,7 @@ class SIMflow(object):
 
         tb.append('')
         sim_length = SimBlock.sim_length
-        sim_length_bit = round(math.log2(sim_length))
+        sim_length_bit = math.ceil(math.log2(sim_length))
         # read data from the simulation files, and use them as the input data
         sim_length = SimBlock.sim_length
         for sim_blk in self.sim_blocks:
