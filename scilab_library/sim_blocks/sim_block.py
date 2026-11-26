@@ -187,6 +187,28 @@ class CasperPyplot(CasperRawData):
         os.system(cmd)
 
 """
+The CasperScope class shows the sim data in the PyQt6 + pyqtgraph
+oscilloscope-style viewer (sim_guis/sim_scope.py).
+"""
+class CasperScope(CasperRawData):
+    def __init__(self, data, nsamples, tick=500, filename='casper_simulation.json'):
+        super().__init__(data, nsamples, tick, filename)
+        self.logger = logging.getLogger('jasper-sim.sim_scope')
+
+    def ShowSimData(self):
+        '''
+        start sim_guis/sim_scope.py in the background, with the Python the
+        block mask GUIs use (PYTHON_GUI), which has PyQt6.
+        '''
+        self.logger.info('Show sim data with the scope GUI.')
+        mlib_devel_path = os.getenv('MLIB_DEVEL_PATH')
+        script_path = '%s/scilab_library/sim_guis/sim_scope.py'%mlib_devel_path
+        python = os.getenv('PYTHON_GUI', 'python')
+        cmd = '%s %s -f %s &'%(python, script_path, self.filename)
+        self.logger.debug(f'cmd: {cmd}')
+        os.system(cmd)
+
+"""
 The SimData class is used to generate the simulation data.
 We will have different kinds of simulation blocks, including constant, sine wave, white noise...
 """

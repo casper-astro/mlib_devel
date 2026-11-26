@@ -12,8 +12,8 @@ parser.add_argument("-m", "--model", dest="model", type=str,
             default='/tools/mlib_devel/jasper_library/test_models/test.slx',
             help="model to compile")
 parser.add_argument("-g", "--gui", dest="gui", type=str,
-            default='gtkwave',
-            help="The GUI for showing the simulation data.")
+            default='scope',
+            help="The GUI for showing the simulation data: scope, pyplot, gtkwave or raw.")
 parser.add_argument("--skip-sim", dest="skip_sim", action='store_true',
             default=False,
             help="Skip the Vivado simulation and show the data of the previous run (simulation/simulation.vcd).")

@@ -1,7 +1,7 @@
 import json
 import logging
 from sim_blocks.sim_block import SimBlock
-from sim_blocks.sim_block import CasperGTKWave, CasperRawData, CasperPyplot
+from sim_blocks.sim_block import CasperGTKWave, CasperRawData, CasperPyplot, CasperScope
 from dspflow import DSPflow
 from sim_backends.sim_backend import VivadoSimulator
 import numpy as np
@@ -454,7 +454,7 @@ class SIMflow(object):
         # as we don't use the return data so far 
         return self.simdata
     
-    def show_sim_data(self, gui='gtkwave'):
+    def show_sim_data(self, gui='scope'):
         """
         Show the simulation data.
         """
@@ -466,6 +466,9 @@ class SIMflow(object):
         elif gui == 'gtkwave':
             filename = self.simdir + '/casper_simulation.vcd'
             simgui = CasperGTKWave(self.simdata, SimBlock.sim_length*2+1, filename=filename)
+        elif gui == 'scope':
+            filename = self.simdir + '/casper_simulation.json'
+            simgui = CasperScope(self.simdata, SimBlock.sim_length*2+1, filename=filename)
         elif gui == 'pyplot':
             filename = self.simdir + '/casper_simulation.json'
             simgui = CasperPyplot(self.simdata, SimBlock.sim_length*2+1, filename=filename)

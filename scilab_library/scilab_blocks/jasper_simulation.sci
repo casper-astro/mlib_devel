@@ -5,7 +5,7 @@ function [] = jasper_simulation(fn, gui, use_vivado)
     arguments
         /* default fn doesn't mean anything. */
         fn string = 'casper.zcos'
-        gui string = 'pyplot'
+        gui string = 'scope'
         use_vivado string = 'True'
     end
 
