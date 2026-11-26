@@ -9,8 +9,10 @@ function [] = collect_block_info(fn)
     bconfigdir = sprintf("%s/bconfigs", builddir);
     if isdir(bconfigdir) then
         rmdir(bconfigdir, 's');
-        mkdir(bconfigdir);
     end
+    // create it before the first gen_block_name: it writes
+    // bconfigs/block_list.json, and only export_exprs creates the dir
+    mkdir(bconfigdir);
 
     /* load the diagram file */
     scs_m = xcosDiagramToScilab(fn);
