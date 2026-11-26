@@ -30,19 +30,27 @@ class sine(SimBlock):
         self.logger.info('The sampling rate is %f' % fs)
         output_width = int(self.val['output_bit_width'])
         self.logger.info('The output bit width is %d' % output_width)
+        # blocks saved before arith_type existed are signed
+        arith_type = self.val.get('arith_type', 'signed').strip().lower()
+        if arith_type not in ('signed', 'unsigned'):
+            raise ValueError('sine %s: arith_type must be signed or unsigned, got %r'
+                             % (self.name, self.val['arith_type']))
+        self.logger.info('The arithmetic type is %s' % arith_type)
 
         t = np.arange(0, self.length, 1)
         data = np.round(amp*np.sin(np.pi*2*freq/fs*t + phase))
-        # TODO: the max bit width in numpy is 64.
-        #       how to handle the data width larger than 64?
-        data = data.astype(np.int64)
+        # signed: two's complement around 0;
+        # unsigned: offset binary, i.e. the sine around mid-scale 2^(width-1)
+        offset = 0 if arith_type == 'signed' else 2**(output_width-1)
+        lo, hi = -2**(output_width-1) + offset, 2**(output_width-1) - 1 + offset
+        words = [int(d) + offset for d in data]
+        if min(words) < lo or max(words) > hi:
+            raise ValueError('sine %s: amplitude %d does not fit in %d %s bits'
+                             % (self.name, amp, output_width, arith_type))
         # write the data into a file
         filename = self.dir + '/' + self.name + '.dat'
-        # np.savetxt(filename, np.abs(data), fmt='%032x')
+        mask = 2**output_width - 1
         with open(filename, 'w') as f:
-            for d in data:
-                # Convert the original code into the complement code
-                # TODO: if the output data is unsigned, we don't need to convert it.
-                b = np.binary_repr(d, width=output_width)
-                f.write(b + '\n')
+            for w in words:
+                f.write(format(w & mask, '0%db' % output_width) + '\n')
 

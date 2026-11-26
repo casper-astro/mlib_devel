@@ -4,7 +4,8 @@
    export_exprs uses to write them out.
    init_exprs stores the template values as a list; an exprs saved before
    the template layout has no fullpath and tag, so those two are filled in
-   from the template. */
+   from the template, and parameters missing at the end (added to the
+   template later) get their template default. */
 function [exprs] = template_exprs(obj)
     e = obj.graphics.exprs;
     exprs = [];
@@ -27,5 +28,10 @@ function [exprs] = template_exprs(obj)
     if size(exprs, '*') == nvals - 2 then
         debug_info('adding fullpath and tag to the exprs of ' + get_block_tag(obj));
         exprs = [exprs(1); string(vals(2)); string(vals(3)); exprs(2:$)];
+    end
+    // parameters added to the template later are appended at its end:
+    // give them their default value
+    for i = size(exprs, '*') + 1:nvals
+        exprs(i, 1) = string(vals(i));
     end
 endfunction

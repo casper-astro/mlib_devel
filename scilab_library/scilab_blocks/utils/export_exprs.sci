@@ -11,10 +11,22 @@ function [] = export_exprs(obj, targetfn)
     /* get keys from the default bconfig file */
     defbconfig = fromJSON(defbconfigfn, 'file');
     keys = defbconfig('parameters')('keys');
+    defvals = defbconfig('parameters')('values');
     vals = obj.graphics.exprs;
+    if typeof(vals) == 'list' then
+        nvals = size(vals);
+    else
+        nvals = size(vals, '*');
+    end
     for i = 1:size(keys)(2)
         k = keys(i);
-        v = vals(i);
+        if i <= nvals then
+            v = vals(i);
+        else
+            // a parameter added to the template after this block was
+            // saved: use its default value
+            v = defvals(i);
+        end
         st('parameters')(k) = v;
     end
     /* check if the target dir exists. */
