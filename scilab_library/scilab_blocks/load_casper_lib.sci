@@ -21,6 +21,7 @@ exec('scilab_library/scilab_blocks/utils/gen_uid.sci');
 exec('scilab_library/scilab_blocks/jasper.sci');
 exec('scilab_library/scilab_blocks/jasper_frontend.sci');
 exec('scilab_library/scilab_blocks/jasper_simulation.sci');
+exec('scilab_library/scilab_blocks/jasper_scope.sci');
 exec('scilab_library/scilab_blocks/run_simulation.sci');
 exec('scilab_library/scilab_blocks/utils/update_bconfig.sci');
 exec('scilab_library/scilab_blocks/utils/gen_block_name.sci');
@@ -38,6 +39,7 @@ exec('scilab_library/scilab_blocks/utils/post_validate_design.sci');
 exec('scilab_library/scilab_blocks/utils/remove_tmpdir.sci');
 exec('scilab_library/scilab_blocks/utils/load_module_registry.sci');
 exec('scilab_library/scilab_blocks/utils/bus_vec_width.sci');
+exec('scilab_library/scilab_blocks/utils/template_exprs.sci');
 
 // Which casper_dsp/casper_xps/casper_sim modules get loaded and registered
 // into the Xcos palette -- and which category (sub-palette leaf) each one
@@ -99,7 +101,12 @@ function [] = load_casper_group(group_key, top_name)
             iconfn = fig_dir + icon;
             pals(cat) = xcosPalAddBlock(pals(cat), inst, iconfn, iconfn);
         else
-            pals(cat) = xcosPalAddBlock(pals(cat), inst);
+            // pass the block's own graphics.style as the palette style:
+            // without it Scilab 2024.1 gives a block dropped from the
+            // palette the default 'block' look (grey, rounded) until its
+            // dialog is first closed; Scilab 2025.1 already uses
+            // graphics.style. An empty pal_icon still generates the icon.
+            pals(cat) = xcosPalAddBlock(pals(cat), inst, [], inst.graphics.style);
         end
     end
     cats = fieldnames(pals);

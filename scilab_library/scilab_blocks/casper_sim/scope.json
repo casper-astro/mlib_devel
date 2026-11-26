@@ -4,15 +4,15 @@
             "name",
             "fullpath",
             "tag",
-            "channels",
-            "dtype"
+            "arith_type",
+            "bin_pt"
         ],
         "values": [
             "scope",
             "",
             "sim:scope",
-            "1",
-            "16"
+            "Unsigned",
+            "0"
         ]
     }
 }

@@ -19,17 +19,21 @@ class constant(SimBlock):
         self.length = SimBlock.sim_length
         self.logger.info('Generating constant data under %s/%s.dat' %(self.dir,self.name))
         self.logger.info('The data length is %d' % self.length)
-        value = int(self.val['val'])
+        value = float(self.val['val'])
         bitwidth = int(self.val['bitwidth'])
-        self.logger.info('The constant value is %d' % value)
-        data = np.ones(self.length).astype(np.uint32) * value
+        bin_pt = int(self.val.get('bin_pt', 0))
+        self.logger.info('The constant value is %s (bitwidth %d, bin_pt %d)' % (value, bitwidth, bin_pt))
+        # fixed point: the word is value * 2^bin_pt, rounded to the nearest integer
+        word = int(round(value * 2**bin_pt))
+        # a negative value is written as its two's complement (signed),
+        # a positive one may use all bitwidth bits (unsigned)
+        if word < -2**(bitwidth-1) or word >= 2**bitwidth:
+            raise ValueError('sim_constant %s: value %s with bin_pt %d does not fit in %d bits'
+                             % (self.name, self.val['val'], bin_pt, bitwidth))
+        b = format(word & (2**bitwidth - 1), '0%db' % bitwidth)
         # write the data into a file
         filename = self.dir + '/' + self.name + '.dat'
-        # np.savetxt(filename, data, fmt='%x')
         with open(filename, 'w') as f:
-            for d in data:
-                # Convert the original code into the complement code
-                # TODO: if the output data is unsigned, we don't need to convert it.
-                b = np.binary_repr(d, width=bitwidth)
+            for _ in range(self.length):
                 f.write(b + '\n')
         

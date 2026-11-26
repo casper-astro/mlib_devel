@@ -1,0 +1,30 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "distribution",
+            "mean",
+            "std_dev",
+            "seed",
+            "output_bit_width",
+            "arith_type",
+            "bin_pt",
+            "overflow"
+        ],
+        "values": [
+            "noise",
+            "",
+            "sim:noise",
+            "Gaussian",
+            "0",
+            "100",
+            "0",
+            "16",
+            "signed",
+            "0",
+            "Saturate"
+        ]
+    }
+}

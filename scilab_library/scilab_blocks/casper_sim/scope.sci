@@ -2,30 +2,17 @@
 function [x, y, typ]= scope(job, arg1, arg2)
   x=[];y=[];typ=[];
   blkname = 'scope';
-  n_channels = 1;
-  dtype = 'int16'
   select job
     case 'set' then
-      x=arg1;
-      graphics = arg1.graphics;
-      exprs = graphics.exprs;
-      model = arg1.model;
-      txt = [ 'Block Name (any string)';...
-              'Channels'; ...
-              'Dtype';];
-      [ok, blkname, n_channels, dtype, exprs] = scicos_getvalue("Set scope block parameters",...
-                        txt,...
-                        list("str", 1, "str",1, "str", 1),...
-                        exprs);
-      if ok then
-        graphics.exprs = exprs;
-        x.graphics = graphics;
-        model.in = [1];
-        model.in2 = [1];
-        model.out = [];
-        model.out2 = [];
-        x.model = model;
-      end
+      x = arg1;
+      // a block saved before scope.json got its current keys may lack
+      // fullpath/tag or newer parameters; template_exprs fills them in
+      x = scope_upgrade_exprs(x);
+      x.graphics.exprs = template_exprs(x);
+      export_exprs_to_tmpdir(x);
+      bconfig = run_mask(x);
+      x = update_exprs_from_tmpdir(x);
+      x.graphics.style = scope_build_style(x.graphics.exprs(1));
     case 'define' then
       model = scicos_model();
       model.sim = list('scope',4);
@@ -37,8 +24,8 @@ function [x, y, typ]= scope(job, arg1, arg2)
       model.in2 = [1];
       model.out = [];
       model.out2 = [];
-      // Type : column vector of strings.
-      exprs = ['scope'; '1'; 'int16' ];
+      // the parameters come from scope.json, see init_exprs below
+      exprs = [];
       gr_i = [];
       // model.label doubles as the on-diagram display text (Scicos
       // aliases it with graphics.id); category is derived separately
@@ -46,8 +33,54 @@ function [x, y, typ]= scope(job, arg1, arg2)
       // the block's own name.
       model.label = blkname;
       x=standard_define([2.4 2.4],model,exprs,gr_i)
+      x = init_exprs(x);
+      x.graphics.style = scope_build_style(x.graphics.exprs(1));
       debug_info('scope block loaded...')
   end
 endfunction
 
+function [style] = scope_build_style(name)
+    // same scheme as the casper_dsp/casper_xps blocks: a flat fill color
+    // (#00B0F0 for casper_sim) with the block name below it.
+    // displayedLabel=%s: Xcos formats it with the block's exprs, and
+    // exprs(1) is the block name, so the label follows the name whenever
+    // exprs change -- Scilab 2025.1 does not seem to re-apply a style returned
+    // by 'set', so a literal name in the style would stay stale there.
+    // name is unused now; kept so the callers stay unchanged.
+    // rounded / gradientColor / strokeWidth are set explicitly: Scilab
+    // 2025.1 merges this style onto Xcos-style.xml's 'block' style, which
+    // has rounded=1, gradientColor=white and strokeWidth=0.5.
+    style = 'shape=rectangle;rounded=0;gradientColor=none;strokeWidth=1;fillColor=#00B0F0;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=%s;whiteSpace=wrap;html=1;spacing=4;';
+endfunction
 
+/* bring the exprs of a scope block saved with an older parameter set up
+   to [name; fullpath; tag; arith_type; bin_pt] (see scope.json):
+     [name; channels; dtype]                 old scicos_getvalue layout
+     [name; fullpath; tag; channels; dtype]  before channels was removed
+     [name; fullpath; tag; dtype]            before dtype became
+                                             arith_type + bin_pt
+   The old free-text dtype was never used, so these get the template
+   default Unsigned, binary point 0. */
+function [x] = scope_upgrade_exprs(obj)
+    x = obj;
+    e = x.graphics.exprs;
+    if typeof(e) == 'list' then
+        n = size(e);
+    else
+        n = size(e, '*');
+    end
+    if n == 5 then
+        if or(string(e(4)) == ['Unsigned', 'Signed']) then
+            return;    // already the current layout
+        end
+        head = [string(e(1)); string(e(2)); string(e(3))];
+    elseif n == 4 then
+        head = [string(e(1)); string(e(2)); string(e(3))];
+    elseif n == 3 then
+        head = [string(e(1)); ''; 'sim:scope'];
+    else
+        return;
+    end
+    debug_info('upgrading the exprs of scope block ' + string(e(1)));
+    x.graphics.exprs = [head; 'Unsigned'; '0'];
+endfunction

@@ -75,6 +75,10 @@ class VivadoSimulator(SimBackend):
         # generate vhdl compile order first
         with open(self.vhdl_cof, 'w') as f:
             for co in self.simco['vhdl']:
+                # a group without files (e.g. no glue modules) would be a
+                # 'vhdl <lib>' line with no file name, which xsim rejects
+                if not co['modules']:
+                    continue
                 f.write(f"vhdl {co['lib']} \\\n")
                 for m in co['modules']:
                     f.write(f"     \"{m}\" \\\n")
@@ -85,10 +89,13 @@ class VivadoSimulator(SimBackend):
         # generate verilog compile order
         with open(self.verilog_cof, 'w') as f:
             for co in self.simco['verilog']:
-                f.write(f"verilog {co['lib']} \\\n")
+                # one line per file: a SystemVerilog file (.sv, e.g. most of
+                # casper_dsp) must be listed as 'sv' for xvlog to parse it as
+                # SystemVerilog; a group without files (e.g. no glue modules)
+                # writes nothing, as a line without a file name is an error
                 for m in co['modules']:
-                    f.write(f"     \"{m}\" \\\n")
-                f.write('\n')
+                    ftype = 'sv' if m.endswith('.sv') else 'verilog'
+                    f.write(f"{ftype} {co['lib']} \"{m}\"\n")
             f.write('\n')
             # TODO: this is not a good way to get the path of dsptop...
             dspdir = self.simdir.split('/simulation')[0]
@@ -109,7 +116,10 @@ class VivadoSimulator(SimBackend):
         scripts.append('xvhdl_opts=\"--incr --relax \"\n\n')
         scripts.append('# Compile \n')
         scripts.append(f"xvlog $xvlog_opts -prj {self.verilog_cof} 2>&1 | tee compile_verilog.log\n")
-        scripts.append(f"xvhdl $xvhdl_opts -prj {self.vhdl_cof} 2>&1 | tee compile_vhdl.log\n\n")
+        # vhdl.prj has no files when the design has no VHDL; skip xvhdl then
+        if any(co['modules'] for co in self.simco['vhdl']):
+            scripts.append(f"xvhdl $xvhdl_opts -prj {self.vhdl_cof} 2>&1 | tee compile_vhdl.log\n")
+        scripts.append('\n')
         scripts.append('# Elaborate\n')
         scripts.append('xelab --incr --debug typical --relax --mt auto ')
         # get the lib names here
@@ -146,4 +156,4 @@ class VivadoSimulator(SimBackend):
     def run_sim(self):
         # go to the simdir, so all of the log files will be generate there
         os.chdir(self.simdir)
-        return os.system(f'sh {self.sim_script} > {self.simdir}/caspersim.log')
+        return os.system(f'bash {self.sim_script} > {self.simdir}/caspersim.log')

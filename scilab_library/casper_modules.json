@@ -150,9 +150,10 @@
         "zrf16": { "enabled": true, "category": "Platforms" }
     },
     "casper_sim": {
-        "sim_constant": { "enabled": true, "category": "General", "icon": "constant.png" },
-        "scope": { "enabled": true, "category": "General", "icon": "scope.png" },
-        "sim": { "enabled": true, "category": "General", "icon": "sim.png" },
-        "sine": { "enabled": true, "category": "General", "icon": "sine.png" }
+        "sim_constant": { "enabled": true, "category": "General" },
+        "scope": { "enabled": true, "category": "General" },
+        "sim": { "enabled": true, "category": "General" },
+        "sine": { "enabled": true, "category": "General" },
+        "noise": { "enabled": true, "category": "General" }
     }
 }

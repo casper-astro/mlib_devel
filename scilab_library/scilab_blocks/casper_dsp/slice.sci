@@ -40,11 +40,15 @@ function [x, y, typ] = slice(job, arg1, arg2)
 endfunction
 
 function [style] = slice_build_style(name)
-    // strip mxGraph's own style-string delimiters so a user-typed
-    // name can never corrupt the rest of the style string
-    name = strsubst(string(name), ';', '');
-    name = strsubst(name, '=', '');
-    style = 'shape=rectangle;fillColor=#BDCBE4;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
+    // displayedLabel=%s: Xcos formats it with the block's exprs, and
+    // exprs(1) is the block name, so the label follows the name whenever
+    // exprs change -- Scilab 2025.1 does not seem to re-apply a style returned
+    // by 'set', so a literal name in the style would stay stale there.
+    // name is unused now; kept so the callers stay unchanged.
+    // rounded / gradientColor / strokeWidth are set explicitly: Scilab
+    // 2025.1 merges this style onto Xcos-style.xml's 'block' style, which
+    // has rounded=1, gradientColor=white and strokeWidth=0.5.
+    style = 'shape=rectangle;rounded=0;gradientColor=none;strokeWidth=1;fillColor=#BDCBE4;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=%s;whiteSpace=wrap;html=1;spacing=4;';
 endfunction
 
 // absolute bit index (0 = LSB) of an offset relative to 'MSB of Input'

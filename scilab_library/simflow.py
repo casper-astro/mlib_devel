@@ -1,7 +1,7 @@
 import json
 import logging
 from sim_blocks.sim_block import SimBlock
-from sim_blocks.sim_block import CasperGTKWave, CasperRawData, CasperPyplot
+from sim_blocks.sim_block import CasperGTKWave, CasperRawData, CasperPyplot, CasperScope
 from dspflow import DSPflow
 from sim_backends.sim_backend import VivadoSimulator
 import numpy as np
@@ -330,7 +330,7 @@ class SIMflow(object):
 
         tb.append('')
         sim_length = SimBlock.sim_length
-        sim_length_bit = round(math.log2(sim_length))
+        sim_length_bit = math.ceil(math.log2(sim_length))
         # read data from the simulation files, and use them as the input data
         sim_length = SimBlock.sim_length
         for sim_blk in self.sim_blocks:
@@ -421,6 +421,12 @@ class SIMflow(object):
                     self.simbackend.add_compile_order(co, k)
         # write the compile order to files
         self.simbackend.gen_co_file()
+        # the simulation length set in __init__ is SimBlock's default: the
+        # sim block's sim_length is only read in gen_sim_objs, so set it
+        # again here, before the run time is written into the sim scripts
+        clock_period = 1.0
+        self.simlen = SimBlock.sim_length * clock_period
+        self.simbackend.simlen = self.simlen
         # generate sim scripts
         self.simbackend.gen_sim_scripts()
 
@@ -454,7 +460,7 @@ class SIMflow(object):
         # as we don't use the return data so far 
         return self.simdata
     
-    def show_sim_data(self, gui='gtkwave'):
+    def show_sim_data(self, gui='scope'):
         """
         Show the simulation data.
         """
@@ -466,6 +472,9 @@ class SIMflow(object):
         elif gui == 'gtkwave':
             filename = self.simdir + '/casper_simulation.vcd'
             simgui = CasperGTKWave(self.simdata, SimBlock.sim_length*2+1, filename=filename)
+        elif gui == 'scope':
+            filename = self.simdir + '/casper_simulation.json'
+            simgui = CasperScope(self.simdata, SimBlock.sim_length*2+1, filename=filename)
         elif gui == 'pyplot':
             filename = self.simdir + '/casper_simulation.json'
             simgui = CasperPyplot(self.simdata, SimBlock.sim_length*2+1, filename=filename)

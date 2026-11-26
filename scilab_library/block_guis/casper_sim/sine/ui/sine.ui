@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Sine Wave (simulation)</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_amplitude">
+     <property name="text"><string>Amplitude</string></property>
+    </widget>
+       <widget class="QLineEdit" name="amplitude"/>
+       <widget class="QLabel" name="label_frequency">
+     <property name="text"><string>Frequency (Hz)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="frequency"/>
+       <widget class="QLabel" name="label_phase">
+     <property name="text"><string>Phase (rad)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="phase"/>
+       <widget class="QLabel" name="label_sampling_rate">
+     <property name="text"><string>Sampling rate (Hz)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="sampling_rate"/>
+       <widget class="QLabel" name="label_output_bit_width">
+     <property name="text"><string>Output bit width</string></property>
+    </widget>
+       <widget class="QSpinBox" name="output_bit_width"/>
+       <widget class="QLabel" name="label_arith_type">
+     <property name="text"><string>Arithmetic type</string></property>
+    </widget>
+       <widget class="QComboBox" name="arith_type">
+     <item><property name="text"><string>signed</string></property></item>
+     <item><property name="text"><string>unsigned</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_bin_pt">
+     <property name="text"><string>Binary point</string></property>
+    </widget>
+       <widget class="QSpinBox" name="bin_pt"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

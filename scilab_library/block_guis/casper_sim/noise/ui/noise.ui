@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Noise (simulation)</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_name">
+     <property name="text"><string>Block name</string></property>
+    </widget>
+       <widget class="QLineEdit" name="name"/>
+       <widget class="QLabel" name="label_distribution">
+     <property name="text"><string>Distribution</string></property>
+    </widget>
+       <widget class="QComboBox" name="distribution">
+     <item><property name="text"><string>Gaussian</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_mean">
+     <property name="text"><string>Mean</string></property>
+    </widget>
+       <widget class="QLineEdit" name="mean"/>
+       <widget class="QLabel" name="label_std_dev">
+     <property name="text"><string>Standard deviation</string></property>
+    </widget>
+       <widget class="QLineEdit" name="std_dev"/>
+       <widget class="QLabel" name="label_seed">
+     <property name="text"><string>Seed</string></property>
+    </widget>
+       <widget class="QSpinBox" name="seed"/>
+       <widget class="QLabel" name="label_output_bit_width">
+     <property name="text"><string>Output bit width</string></property>
+    </widget>
+       <widget class="QSpinBox" name="output_bit_width"/>
+       <widget class="QLabel" name="label_arith_type">
+     <property name="text"><string>Arithmetic type</string></property>
+    </widget>
+       <widget class="QComboBox" name="arith_type">
+     <item><property name="text"><string>signed</string></property></item>
+     <item><property name="text"><string>unsigned</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_bin_pt">
+     <property name="text"><string>Binary point</string></property>
+    </widget>
+       <widget class="QSpinBox" name="bin_pt"/>
+       <widget class="QLabel" name="label_overflow">
+     <property name="text"><string>Overflow</string></property>
+    </widget>
+       <widget class="QComboBox" name="overflow">
+     <item><property name="text"><string>Saturate</string></property></item>
+     <item><property name="text"><string>Error</string></property></item>
+    </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

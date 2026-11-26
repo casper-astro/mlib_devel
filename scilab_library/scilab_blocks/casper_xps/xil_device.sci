@@ -32,14 +32,16 @@ function [x, y, typ] = xil_device(job, arg1, arg2)
     end
 endfunction
 
-/* build graphics.style for a given user-configurable block name, shown
-   below the yellow fill. Strips ';' and '=' since those are mxGraph's
-   own style-string delimiters -- an unescaped one would corrupt every
-   key after it in the string, not just the label text. */
 function [style] = xil_device_build_style(name)
-    name = strsubst(string(name), ';', '');
-    name = strsubst(name, '=', '');
-    style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
+    // displayedLabel=%s: Xcos formats it with the block's exprs, and
+    // exprs(1) is the block name, so the label follows the name whenever
+    // exprs change -- Scilab 2025.1 does not seem to re-apply a style returned
+    // by 'set', so a literal name in the style would stay stale there.
+    // name is unused now; kept so the callers stay unchanged.
+    // rounded / gradientColor / strokeWidth are set explicitly: Scilab
+    // 2025.1 merges this style onto Xcos-style.xml's 'block' style, which
+    // has rounded=1, gradientColor=white and strokeWidth=0.5.
+    style = 'shape=rectangle;rounded=0;gradientColor=none;strokeWidth=1;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=%s;whiteSpace=wrap;html=1;spacing=4;';
 endfunction
 
 
