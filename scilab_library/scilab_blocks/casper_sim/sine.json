@@ -9,7 +9,8 @@
             "phase",
             "sampling_rate",
             "output_bit_width",
-            "arith_type"
+            "arith_type",
+            "bin_pt"
         ],
         "values": [
             "sine",
@@ -20,7 +21,8 @@
             "0",
             "1024",
             "16",
-            "signed"
+            "signed",
+            "0"
         ]
     }
 }

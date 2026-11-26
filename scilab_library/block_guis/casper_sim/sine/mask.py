@@ -51,6 +51,11 @@ SINE_CONFIG = {
         'get': 'get_arith_type',
         'set': 'set_arith_type'
     },
+    'bin_pt':
+    {
+        'get': 'get_bin_pt',
+        'set': 'set_bin_pt'
+    },
 }
 
 
@@ -160,6 +165,15 @@ class SineOperations(object):
         self.logger.debug(f'Set arith_type to {text}')
         self.ui.arith_type.setCurrentText(str(text))
 
+    def get_bin_pt(self):
+        val = self.ui.bin_pt.value()
+        self.logger.debug(f'bin_pt is {val}')
+        return str(val)
+
+    def set_bin_pt(self, val):
+        self.logger.debug(f'Set bin_pt to {val}')
+        self.ui.bin_pt.setValue(int(val))
+
 
     # *******************************************************************
     # Validation
@@ -176,20 +190,23 @@ class SineOperations(object):
     def validate_config(self):
         """
         Return a list of error messages. The list is empty if the config is valid.
-        Mirrors sim_blocks/sine.py: the amplitude is an integer that must
-        fit in the output bit width (signed, or unsigned around mid-scale).
+        Mirrors sim_blocks/sine.py: the amplitude is a real value, written
+        as round(amplitude * 2^bin_pt), which must fit in the output bit
+        width as a signed word (unsigned is the same around mid-scale).
         """
         errors = []
         if str(self.get_name()).strip() == '':
             errors.append('Block name must not be empty.')
         amp = self._number(self.get_amplitude())
-        if amp is None or amp != int(amp) or amp < 0:
-            errors.append('Amplitude must be a non-negative integer.')
+        if amp is None or amp < 0:
+            errors.append('Amplitude must be a non-negative number.')
         else:
             bits = int(self.get_output_bit_width())
-            if amp > 2**(bits-1) - 1:
-                errors.append(f'Amplitude {int(amp)} does not fit in {bits} {self.get_arith_type()} bits '
-                              f'(at most {2**(bits-1) - 1}).')
+            bin_pt = int(self.get_bin_pt())
+            word = round(amp * 2**bin_pt)
+            if word > 2**(bits-1) - 1:
+                errors.append(f'Amplitude {self.get_amplitude()} with binary point {bin_pt} does not fit in '
+                              f'{bits} {self.get_arith_type()} bits (at most {(2**(bits-1) - 1) / 2**bin_pt:g}).')
         for label, text in [('Frequency (Hz)', self.get_frequency()),
                             ('Phase (rad)', self.get_phase()),
                             ('Sampling rate (Hz)', self.get_sampling_rate())]:

@@ -38,6 +38,10 @@
      <item><property name="text"><string>signed</string></property></item>
      <item><property name="text"><string>unsigned</string></property></item>
     </widget>
+       <widget class="QLabel" name="label_bin_pt">
+     <property name="text"><string>Binary point</string></property>
+    </widget>
+       <widget class="QSpinBox" name="bin_pt"/>
   </widget>
  </widget>
  <resources/>

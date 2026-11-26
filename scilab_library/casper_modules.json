@@ -153,6 +153,7 @@
         "sim_constant": { "enabled": true, "category": "General" },
         "scope": { "enabled": true, "category": "General" },
         "sim": { "enabled": true, "category": "General" },
-        "sine": { "enabled": true, "category": "General" }
+        "sine": { "enabled": true, "category": "General" },
+        "noise": { "enabled": true, "category": "General" }
     }
 }

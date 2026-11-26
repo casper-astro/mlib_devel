@@ -10,7 +10,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(560, 480)
+        MainWindow.resize(560, 520)
         self.centralwidget = QtWidgets.QWidget(parent=MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -92,6 +92,15 @@ class Ui_MainWindow(object):
         self.arith_type.addItem("")
         self.arith_type.addItem("")
         self.gridLayout.addWidget(self.arith_type, 7, 1, 1, 2)
+        self.label_bin_pt = QtWidgets.QLabel(parent=self.scrollAreaWidgetContents)
+        self.label_bin_pt.setObjectName("label_bin_pt")
+        self.label_bin_pt.setWordWrap(True)
+        self.label_bin_pt.setFixedWidth(150)
+        self.gridLayout.addWidget(self.label_bin_pt, 8, 0, 1, 1)
+        self.bin_pt = QtWidgets.QSpinBox(parent=self.scrollAreaWidgetContents)
+        self.bin_pt.setObjectName("bin_pt")
+        self.bin_pt.setRange(0, 4096)
+        self.gridLayout.addWidget(self.bin_pt, 8, 1, 1, 2)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.verticalLayout.addWidget(self.scrollArea)
 
@@ -120,7 +129,7 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Sine Wave (simulation)"))
         self.title_label.setText(_translate("MainWindow", "Sine Wave (simulation)"))
-        self.desc_label.setText(_translate("MainWindow", "Drives round(amplitude * sin(2*pi*frequency/sampling_rate*n + phase)); unsigned output is offset by 2^(bits-1)."))
+        self.desc_label.setText(_translate("MainWindow", "Drives amplitude * sin(2*pi*frequency/sampling_rate*n + phase) as a fixed-point number (amplitude in real units, binary point bin_pt); unsigned output is offset by 2^(bits-1)."))
         self.label_name.setText(_translate("MainWindow", "Block name"))
         self.label_amplitude.setText(_translate("MainWindow", "Amplitude"))
         self.label_frequency.setText(_translate("MainWindow", "Frequency (Hz)"))
@@ -130,6 +139,7 @@ class Ui_MainWindow(object):
         self.label_arith_type.setText(_translate("MainWindow", "Arithmetic type"))
         self.arith_type.setItemText(0, _translate("MainWindow", "signed"))
         self.arith_type.setItemText(1, _translate("MainWindow", "unsigned"))
+        self.label_bin_pt.setText(_translate("MainWindow", "Binary point"))
         self.button_apply.setText(_translate("MainWindow", "Apply"))
         self.button_ok.setText(_translate("MainWindow", "OK"))
         self.button_cancel.setText(_translate("MainWindow", "Cancel"))
