@@ -6,8 +6,8 @@ with the casper_simulation.json the simulation wrote.
     python sim_scope.py -f <builddir>/simulation/casper_simulation.json
 
 Each channel is one scope block's signal, sampled once per clock cycle on
-the rising edge of user_clk (see scope_gui/data.py), shown as an unsigned
-number for now.
+the rising edge of user_clk (see scope_gui/data.py) and shown against the
+sample index, as an unsigned number for now.
 """
 import os
 import sys
@@ -27,10 +27,10 @@ def channel_color(i):
     return pg.intColor(i, hues=9, values=1, maxValue=255, minValue=200, sat=200)
 
 
-def value_at(sig, vals, t):
-    """The sample shown at time t: the last rising edge at or before t."""
-    i = np.searchsorted(sig.t, t, side='right') - 1
-    if i < 0:
+def value_at(sig, vals, n):
+    """The value of sample n (NaN outside the data)."""
+    i = int(n)
+    if i < 0 or i >= len(vals):
         return np.nan
     return vals[i]
 
@@ -130,10 +130,7 @@ class ScopeWindow(QtWidgets.QMainWindow):
             self.cursor_label.setText('')
             self.readout.setRowCount(0)
             return
-        dt = b - a
-        freq = ('%.4g MHz' % (1e3 / abs(dt))) if dt else '-'
-        self.cursor_label.setText('A: %.3f ns    B: %.3f ns    \u0394T = %.3f ns    1/\u0394T = %s'
-                                  % (a, b, dt, freq))
+        self.cursor_label.setText('A: %d    B: %d    \u0394N = %d samples' % (a, b, b - a))
         chans = self._visible()
         self.readout.setRowCount(len(chans))
         for r, (sig, vals, color) in enumerate(chans):

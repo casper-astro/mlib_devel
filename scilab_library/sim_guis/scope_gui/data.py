@@ -9,7 +9,8 @@ period) and value strings as written in the VCD: 'b0101' for a bus, '0' or
 
 Each signal is sampled once per clock cycle, on the rising edges of
 user_clk: the value taken is the one just before the edge, i.e. what a
-register clocked by that edge captures.
+register clocked by that edge captures. The scope shows the samples by
+their index (0, 1, 2, ...), independent of the clock rate.
 """
 import json
 import numpy as np
@@ -27,11 +28,11 @@ def parse_value(text):
 
 
 class Signal(object):
-    """One sampled signal: t (ns of each rising edge) and raw unsigned words."""
-    def __init__(self, name, width, t, raw):
+    """One sampled signal: sample indices n and raw unsigned words."""
+    def __init__(self, name, width, n, raw):
         self.name = name
         self.width = width
-        self.t = t        # float64, ns
+        self.n = n        # float64, sample index 0, 1, 2, ...
         self.raw = raw    # float64, unsigned word value, NaN for x / z
 
     @property
@@ -82,7 +83,7 @@ def load(filename):
             continue
         t, raw = series[name]
         if edges is not None and len(edges):
-            # the value just before each edge; t is the edge time
-            t, raw = t[edges], raw[edges - 1]
-        signals.append(Signal(name, widths[name], t / 1000.0, raw))
+            # the value just before each edge
+            raw = raw[edges - 1]
+        signals.append(Signal(name, widths[name], np.arange(len(raw), dtype=np.float64), raw))
     return signals

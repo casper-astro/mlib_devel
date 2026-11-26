@@ -1,7 +1,8 @@
 """
 The waveform area of the scope window (pyqtgraph): the channels drawn as
 step traces, either all on one plot (overlay) or one plot per channel with
-a shared time axis (split), plus two movable time cursors A and B.
+a shared sample axis (split), plus two movable cursors A and B, which
+snap to whole samples.
 
 Mouse: wheel zooms, drag pans, right click -> View All; drag a cursor line
 to move it.
@@ -33,18 +34,18 @@ class PlotArea(pg.GraphicsLayoutWidget):
         self._lines = []
         if not channels:
             return
-        t_min = min(sig.t[0] for sig, _, _ in channels if len(sig.t))
-        t_max = max(sig.t[-1] for sig, _, _ in channels if len(sig.t))
+        n_min = min(sig.n[0] for sig, _, _ in channels if len(sig.n))
+        n_max = max(sig.n[-1] for sig, _, _ in channels if len(sig.n))
         for name in ('A', 'B'):
-            if self.cursor_pos[name] is None or not t_min <= self.cursor_pos[name] <= t_max:
+            if self.cursor_pos[name] is None or not n_min <= self.cursor_pos[name] <= n_max:
                 frac = 0.25 if name == 'A' else 0.75
-                self.cursor_pos[name] = t_min + frac * (t_max - t_min)
+                self.cursor_pos[name] = float(round(n_min + frac * (n_max - n_min)))
         if overlay:
             plot = self._new_plot(None)
             plot.addLegend(offset=(10, 10))
             for sig, vals, color in channels:
                 self._add_trace(plot, sig, vals, color, sig.name)
-            plot.setLabel('bottom', 'Time', units='ns')
+            plot.setLabel('bottom', 'Samples')
         else:
             for i, (sig, vals, color) in enumerate(channels):
                 plot = self._new_plot(self._plots[0] if self._plots else None)
@@ -53,10 +54,10 @@ class PlotArea(pg.GraphicsLayoutWidget):
                 if i < len(channels) - 1:
                     plot.getAxis('bottom').setStyle(showValues=False)
                 else:
-                    plot.setLabel('bottom', 'Time', units='ns')
+                    plot.setLabel('bottom', 'Samples')
                 self.nextRow()
         for plot in self._plots:
-            plot.setXRange(t_min, t_max, padding=0.02)
+            plot.setXRange(n_min, n_max + 1, padding=0.02)
             for name in ('A', 'B'):
                 line = pg.InfiniteLine(pos=self.cursor_pos[name], angle=90, movable=True,
                                        pen=CURSOR_PENS[name], label=name,
@@ -77,22 +78,22 @@ class PlotArea(pg.GraphicsLayoutWidget):
 
     @staticmethod
     def _add_trace(plot, sig, vals, color, name):
-        # one sample per clock cycle, held until the next one: a step trace;
-        # stepMode 'center' wants one more x than y, so close the last step
-        # one cycle after the last edge. NaN (x / z) leaves a gap.
-        t = sig.t
-        if len(t) > 1:
-            t_end = np.append(t, t[-1] + (t[-1] - t[-2]))
-        else:
-            t_end = np.append(t, t + 1.0)
-        plot.plot(t_end, vals, stepMode='center', pen=pg.mkPen(color, width=1.5),
+        # sample k is held from k to k + 1: a step trace; stepMode 'center'
+        # wants one more x than y. NaN (x / z) leaves a gap.
+        edges = np.append(sig.n, sig.n[-1] + 1.0) if len(sig.n) else sig.n
+        plot.plot(edges, vals, stepMode='center', pen=pg.mkPen(color, width=1.5),
                   name=name, connect='finite')
 
     def _cursor_dragged(self, name, line):
         if self._syncing:
             return
         self._syncing = True
-        pos = line.value()
+        # snap to the start of a sample
+        pos = float(round(line.value()))
+        if pos != line.value():
+            self._syncing = False
+            line.setValue(pos)   # re-enters with the snapped value
+            return
         self.cursor_pos[name] = pos
         for n, other in self._lines:
             if n == name and other is not line:
