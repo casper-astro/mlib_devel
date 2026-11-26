@@ -421,6 +421,12 @@ class SIMflow(object):
                     self.simbackend.add_compile_order(co, k)
         # write the compile order to files
         self.simbackend.gen_co_file()
+        # the simulation length set in __init__ is SimBlock's default: the
+        # sim block's sim_length is only read in gen_sim_objs, so set it
+        # again here, before the run time is written into the sim scripts
+        clock_period = 1.0
+        self.simlen = SimBlock.sim_length * clock_period
+        self.simbackend.simlen = self.simlen
         # generate sim scripts
         self.simbackend.gen_sim_scripts()
 
