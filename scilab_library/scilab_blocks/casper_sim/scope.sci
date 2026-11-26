@@ -2,34 +2,15 @@
 function [x, y, typ]= scope(job, arg1, arg2)
   x=[];y=[];typ=[];
   blkname = 'scope';
-  n_channels = 1;
-  dtype = 'int16'
   select job
     case 'set' then
-      x=arg1;
-      graphics = arg1.graphics;
-      // exprs follows scope.json's keys: name, fullpath, tag, then the
-      // parameters (see export_exprs); the dialog edits all but fullpath and tag
-      exprs = template_exprs(x);
-      idx = [1, 4:size(exprs, '*')];
-      model = arg1.model;
-      txt = [ 'Block Name (any string)';...
-              'Channels'; ...
-              'Dtype';];
-      [ok, blkname, n_channels, dtype, edited] = scicos_getvalue("Set scope block parameters",...
-                        txt,...
-                        list("str", 1, "str",1, "str", 1),...
-                        exprs(idx));
-      if ok then
-        exprs(idx) = edited;
-        graphics.exprs = exprs;
-        x.graphics = graphics;
-        model.in = [1];
-        model.in2 = [1];
-        model.out = [];
-        model.out2 = [];
-        x.model = model;
-      end
+      x = arg1;
+      // a block saved before scope.json got its current keys may lack
+      // fullpath/tag or newer parameters; template_exprs fills them in
+      x.graphics.exprs = template_exprs(x);
+      export_exprs_to_tmpdir(x);
+      bconfig = run_mask(x);
+      x = update_exprs_from_tmpdir(x);
     case 'define' then
       model = scicos_model();
       model.sim = list('scope',4);

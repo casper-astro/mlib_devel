@@ -2,47 +2,16 @@
 function [x, y, typ]= sine(job, arg1, arg2)
     x=[];y=[];typ=[];
     blkname = 'sine';
-    amplitude = 2047;
-    freq = 16;
-    phase = 0;
-    sampling_rate = 1024;
-    output_bit_width = 16;
     select job
       case 'set' then
-        x=arg1;
-        graphics = arg1.graphics;
-        // exprs follows sine.json's keys: name, fullpath, tag, then the
-        // parameters (see export_exprs); the dialog edits all but fullpath and tag
-        exprs = template_exprs(x);
-        idx = [1, 4:size(exprs, '*')];
-        model = arg1.model;
-        //[io_group, custom_io_group, io_dir, d_type, d_bw, d_bp, gpio_bi, sample_period] = create_gpio();
-        txt = [ 'Block Name (any string)';...
-                'Amplitude(2^x)';...
-                'Frequency(Hz)'; ...
-                'Phase';...
-                'Sampling rate(Hz)';...
-                'Output bit width';...
-                'Arithmetic type (signed/unsigned)';];
-        [ok, blkname, amplitude, freq, phase, sampling_rate, output_bit_width, arith_type, edited] = scicos_getvalue("Set sine block parameters",...
-                          txt,...
-                          list("str", 1, "str",1 ,"str",1, "str",1, "str",1, "str",1, "str",1),...
-                          exprs(idx));
-        if ok & ~or(convstr(stripblanks(arith_type)) == ['signed', 'unsigned']) then
-          messagebox('Arithmetic type must be signed or unsigned, got: ' + arith_type, 'sine', 'error');
-          ok = %f;
-        end
-        if ok then
-          output_bit_width = strtod(output_bit_width);
-          exprs(idx) = edited;
-          graphics.exprs = exprs;
-          x.graphics = graphics;
-          model.in = [];
-          model.in2 = [];
-          model.out = 1;
-          model.out2 = output_bit_width;
-          x.model = model;
-        end
+        x = arg1;
+        // a block saved before sine.json got its current keys may lack
+        // fullpath/tag or newer parameters; template_exprs fills them in
+        x.graphics.exprs = template_exprs(x);
+        export_exprs_to_tmpdir(x);
+        bconfig = run_mask(x);
+        x = update_exprs_from_tmpdir(x);
+        x = sine_update_ports(x, bconfig);
       case 'define' then
         model = scicos_model();
         model.sim = list('sine',4);
@@ -67,6 +36,14 @@ function [x, y, typ]= sine(job, arg1, arg2)
         debug_info('sine block loaded...')
     end
   endfunction
-  
-  
-  
+
+/* the output port width follows the output_bit_width parameter */
+function [x] = sine_update_ports(obj, bconfigfn)
+    x = obj;
+    bconfig = fromJSON(bconfigfn, 'file');
+    p = bconfig('parameters');
+    model = x.model;
+    model.out = 1;
+    model.out2 = strtod(p('output_bit_width'));
+    x.model = model;
+endfunction

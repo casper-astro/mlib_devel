@@ -2,29 +2,15 @@
 function [x, y, typ]= sim(job, arg1, arg2)
     x=[];y=[];typ=[];
     blkname = 'sim';
-    sim_length = 0;
     select job
       case 'set' then
-        x=arg1;
-        graphics = arg1.graphics;
-        // exprs follows sim.json's keys: name, fullpath, tag, then the
-        // parameters (see export_exprs); the dialog edits all but fullpath and tag
-        exprs = template_exprs(x);
-        idx = [1, 4:size(exprs, '*')];
-        model = arg1.model;
-        //[io_group, custom_io_group, io_dir, d_type, d_bw, d_bp, gpio_bi, sample_period] = create_gpio();
-        txt = [ 'Block Name (any string)';...
-                'Simulation Length'];
-        [ok, blkname, sim_length, edited] = scicos_getvalue("Set constant block parameters",...
-                          txt,...
-                          list("str", 1, "str",1 ),...
-                          exprs(idx));
-        if ok then
-          exprs(idx) = edited;
-          graphics.exprs = exprs;
-          x.graphics = graphics;
-          x.model = model;
-        end
+        x = arg1;
+        // a block saved before sim.json got its current keys may lack
+        // fullpath/tag or newer parameters; template_exprs fills them in
+        x.graphics.exprs = template_exprs(x);
+        export_exprs_to_tmpdir(x);
+        bconfig = run_mask(x);
+        x = update_exprs_from_tmpdir(x);
       case 'define' then
         model = scicos_model();
         model.sim = list('constant',4);
