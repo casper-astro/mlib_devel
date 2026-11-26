@@ -20,7 +20,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from scope_gui import data
-from scope_gui.channel_panel import ChannelPanel
+from scope_gui.channel_panel import ChannelPanel, swatch
 from scope_gui.plot_area import PlotArea
 
 
@@ -115,7 +115,7 @@ class ScopeWindow(QtWidgets.QMainWindow):
         out = []
         for r in self.panel.visible_rows():
             sig = self.signals[r]
-            out.append((sig, sig.values(*self.panel.row_format(r)), channel_color(r)))
+            out.append((sig, sig.values(*self.panel.row_format(r)), self.panel.row_color(r)))
         return out
 
     def redraw(self):
@@ -137,7 +137,7 @@ class ScopeWindow(QtWidgets.QMainWindow):
         for r, (sig, vals, color) in enumerate(chans):
             va, vb = value_at(sig, vals, a), value_at(sig, vals, b)
             name = QtWidgets.QTableWidgetItem(sig.name)
-            name.setForeground(QtGui.QBrush(color))
+            name.setIcon(swatch(color, 12))
             self.readout.setItem(r, 0, name)
             self.readout.setItem(r, 1, QtWidgets.QTableWidgetItem(fmt_value(va)))
             self.readout.setItem(r, 2, QtWidgets.QTableWidgetItem(fmt_value(vb)))
