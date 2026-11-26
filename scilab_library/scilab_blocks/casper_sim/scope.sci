@@ -7,6 +7,7 @@ function [x, y, typ]= scope(job, arg1, arg2)
       x = arg1;
       // a block saved before scope.json got its current keys may lack
       // fullpath/tag or newer parameters; template_exprs fills them in
+      x = scope_upgrade_exprs(x);
       x.graphics.exprs = template_exprs(x);
       export_exprs_to_tmpdir(x);
       bconfig = run_mask(x);
@@ -50,4 +51,25 @@ function [style] = scope_build_style(name)
     // 2025.1 merges this style onto Xcos-style.xml's 'block' style, which
     // has rounded=1, gradientColor=white and strokeWidth=0.5.
     style = 'shape=rectangle;rounded=0;gradientColor=none;strokeWidth=1;fillColor=#00B0F0;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=%s;whiteSpace=wrap;html=1;spacing=4;';
+endfunction
+
+/* drop the 'channels' parameter (one signal per scope block now) from the
+   exprs of a scope block saved before it was removed: [name; channels;
+   dtype] in the old scicos_getvalue layout, [name; fullpath; tag;
+   channels; dtype] in the template layout */
+function [x] = scope_upgrade_exprs(obj)
+    x = obj;
+    e = x.graphics.exprs;
+    if typeof(e) == 'list' then
+        n = size(e);
+    else
+        n = size(e, '*');
+    end
+    if n == 3 then
+        debug_info('removing channels from the exprs of scope block ' + string(e(1)));
+        x.graphics.exprs = [string(e(1)); ''; 'sim:scope'; string(e(3))];
+    elseif n == 5 then
+        debug_info('removing channels from the exprs of scope block ' + string(e(1)));
+        x.graphics.exprs = [string(e(1)); string(e(2)); string(e(3)); string(e(5))];
+    end
 endfunction

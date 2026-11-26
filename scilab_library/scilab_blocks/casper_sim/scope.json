@@ -4,14 +4,12 @@
             "name",
             "fullpath",
             "tag",
-            "channels",
             "dtype"
         ],
         "values": [
             "scope",
             "",
             "sim:scope",
-            "1",
             "16"
         ]
     }

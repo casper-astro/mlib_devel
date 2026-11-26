@@ -20,11 +20,6 @@ SCOPE_CONFIG = {
         'get': 'get_name',
         'set': 'set_name'
     },
-    'channels':
-    {
-        'get': 'get_channels',
-        'set': 'set_channels'
-    },
     'dtype':
     {
         'get': 'get_dtype',
@@ -85,15 +80,6 @@ class ScopeOperations(object):
         self.logger.debug(f'Set name to {val}')
         self.ui.name.setText(str(val))
 
-    def get_channels(self):
-        val = self.ui.channels.text()
-        self.logger.debug(f'channels is {val}')
-        return val
-
-    def set_channels(self, val):
-        self.logger.debug(f'Set channels to {val}')
-        self.ui.channels.setText(str(val))
-
     def get_dtype(self):
         val = self.ui.dtype.text()
         self.logger.debug(f'dtype is {val}')
@@ -114,8 +100,6 @@ class ScopeOperations(object):
         errors = []
         if str(self.get_name()).strip() == '':
             errors.append('Block name must not be empty.')
-        if str(self.get_channels()).strip() == '':
-            errors.append('Channels must not be empty.')
         if str(self.get_dtype()).strip() == '':
             errors.append('Data type must not be empty.')
         return errors
