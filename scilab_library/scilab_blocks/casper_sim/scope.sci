@@ -53,10 +53,14 @@ function [style] = scope_build_style(name)
     style = 'shape=rectangle;rounded=0;gradientColor=none;strokeWidth=1;fillColor=#00B0F0;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=%s;whiteSpace=wrap;html=1;spacing=4;';
 endfunction
 
-/* drop the 'channels' parameter (one signal per scope block now) from the
-   exprs of a scope block saved before it was removed: [name; channels;
-   dtype] in the old scicos_getvalue layout, [name; fullpath; tag;
-   channels; dtype] in the template layout */
+/* bring the exprs of a scope block saved with an older parameter set up
+   to [name; fullpath; tag; arith_type; bin_pt] (see scope.json):
+     [name; channels; dtype]                 old scicos_getvalue layout
+     [name; fullpath; tag; channels; dtype]  before channels was removed
+     [name; fullpath; tag; dtype]            before dtype became
+                                             arith_type + bin_pt
+   The old free-text dtype was never used, so these get the template
+   default Unsigned, binary point 0. */
 function [x] = scope_upgrade_exprs(obj)
     x = obj;
     e = x.graphics.exprs;
@@ -65,11 +69,18 @@ function [x] = scope_upgrade_exprs(obj)
     else
         n = size(e, '*');
     end
-    if n == 3 then
-        debug_info('removing channels from the exprs of scope block ' + string(e(1)));
-        x.graphics.exprs = [string(e(1)); ''; 'sim:scope'; string(e(3))];
-    elseif n == 5 then
-        debug_info('removing channels from the exprs of scope block ' + string(e(1)));
-        x.graphics.exprs = [string(e(1)); string(e(2)); string(e(3)); string(e(5))];
+    if n == 5 then
+        if or(string(e(4)) == ['Unsigned', 'Signed']) then
+            return;    // already the current layout
+        end
+        head = [string(e(1)); string(e(2)); string(e(3))];
+    elseif n == 4 then
+        head = [string(e(1)); string(e(2)); string(e(3))];
+    elseif n == 3 then
+        head = [string(e(1)); ''; 'sim:scope'];
+    else
+        return;
     end
+    debug_info('upgrading the exprs of scope block ' + string(e(1)));
+    x.graphics.exprs = [head; 'Unsigned'; '0'];
 endfunction

@@ -7,7 +7,8 @@ with the casper_simulation.json the simulation wrote.
 
 Each channel is one scope block's signal, sampled once per clock cycle on
 the rising edge of user_clk (see scope_gui/data.py) and shown against the
-sample index, as an unsigned number for now.
+sample index, in the number format set on its scope block (unsigned or
+signed, with a binary point).
 """
 import os
 import sys
@@ -38,7 +39,7 @@ def value_at(sig, vals, n):
 def fmt_value(v):
     if v is None or np.isnan(v):
         return 'x'
-    return '%d' % v if float(v).is_integer() else '%g' % v
+    return '%d' % v if float(v).is_integer() else '%.10g' % v
 
 
 class ScopeWindow(QtWidgets.QMainWindow):
@@ -91,7 +92,7 @@ class ScopeWindow(QtWidgets.QMainWindow):
         split.addWidget(self.panel)
         split.addWidget(right)
         split.setStretchFactor(1, 1)
-        split.setSizes([280, 920])
+        split.setSizes([400, 800])
 
         central = QtWidgets.QWidget()
         cl = QtWidgets.QVBoxLayout(central)
@@ -114,7 +115,7 @@ class ScopeWindow(QtWidgets.QMainWindow):
         out = []
         for r in self.panel.visible_rows():
             sig = self.signals[r]
-            out.append((sig, sig.values(self.panel.row_format(r)), channel_color(r)))
+            out.append((sig, sig.values(*self.panel.row_format(r)), channel_color(r)))
         return out
 
     def redraw(self):

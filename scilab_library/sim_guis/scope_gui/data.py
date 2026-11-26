@@ -5,7 +5,9 @@ scope GUI. Independent of Qt, so it can be tested without a display.
 The json holds {'simdata': [{'name', 'type': {'width', ...}, 'data':
 [[t_ps, value], ...]}, ...]}, with one value every `tick` ps (half a clock
 period) and value strings as written in the VCD: 'b0101' for a bus, '0' or
-'1' for a 1-bit signal, with 'x' / 'z' for unknown bits.
+'1' for a 1-bit signal, with 'x' / 'z' for unknown bits. A scope block's
+signal also has 'format': {'arith_type': 'unsigned' | 'signed', 'bin_pt'},
+the number format set on the block (unsigned, binary point 0 without it).
 
 Each signal is sampled once per clock cycle, on the rising edges of
 user_clk: the value taken is the one just before the edge, i.e. what a
@@ -27,24 +29,37 @@ def parse_value(text):
         return None
 
 
+ARITH_TYPES = ('unsigned', 'signed')
+
+
 class Signal(object):
-    """One sampled signal: sample indices n and raw unsigned words."""
-    def __init__(self, name, width, n, raw):
+    """One sampled signal: sample indices n and raw unsigned words, plus the
+    number format set on its scope block."""
+    def __init__(self, name, width, n, raw, arith_type='unsigned', bin_pt=0):
         self.name = name
         self.width = width
         self.n = n        # float64, sample index 0, 1, 2, ...
         self.raw = raw    # float64, unsigned word value, NaN for x / z
+        self.arith_type = arith_type if arith_type in ARITH_TYPES else 'unsigned'
+        self.bin_pt = max(int(bin_pt), 0)
 
     @property
     def is_bit(self):
         return self.width == 1
 
-    def values(self, fmt='unsigned'):
-        """The samples in the given number format (only 'unsigned' for now;
-        signed / fixed point come with the scope block's dtype)."""
-        if fmt == 'unsigned':
-            return self.raw
-        raise ValueError('number format %r is not supported yet' % fmt)
+    def values(self, arith_type=None, bin_pt=None):
+        """The samples as fixed-point numbers: signed reads the word as two's
+        complement, and the result is divided by 2^bin_pt. Defaults to the
+        format of the scope block."""
+        arith_type = self.arith_type if arith_type is None else arith_type
+        bin_pt = self.bin_pt if bin_pt is None else bin_pt
+        vals = self.raw.copy()
+        if arith_type == 'signed':
+            neg = vals >= 2.0**(self.width - 1)   # False for NaN
+            vals[neg] -= 2.0**self.width
+        elif arith_type != 'unsigned':
+            raise ValueError('arithmetic type %r is not unsigned or signed' % arith_type)
+        return vals / 2.0**bin_pt
 
 
 def _raw_series(entry):
@@ -68,11 +83,13 @@ def load(filename):
         simdata = json.load(f)['simdata']
     series = {}
     widths = {}
+    formats = {}
     order = []
     for entry in simdata:
         name = entry['name']
         series[name] = _raw_series(entry)
         widths[name] = int(entry.get('type', {}).get('width', 1))
+        formats[name] = entry.get('format', {})
         order.append(name)
     edges = None
     if CLOCK_NAME in series:
@@ -85,5 +102,7 @@ def load(filename):
         if edges is not None and len(edges):
             # the value just before each edge
             raw = raw[edges - 1]
-        signals.append(Signal(name, widths[name], np.arange(len(raw), dtype=np.float64), raw))
+        fmt = formats[name]
+        signals.append(Signal(name, widths[name], np.arange(len(raw), dtype=np.float64), raw,
+                              str(fmt.get('arith_type', 'unsigned')).lower(), fmt.get('bin_pt', 0)))
     return signals

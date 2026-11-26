@@ -1,22 +1,24 @@
 """
 The channel list on the left of the scope window: one row per signal with
-a show/hide checkbox, its trace color, name, width and number format.
+a show/hide checkbox, its trace color, name, width and number format
+(arithmetic type and binary point). The format starts as set on the scope
+block and can be changed here for viewing.
 """
 from PyQt6 import QtCore, QtGui, QtWidgets
 
-FORMATS = ['unsigned']  # signed / fixed point come with the scope block's dtype
+ARITH_TYPES = ['Unsigned', 'Signed']
 
 
 class ChannelPanel(QtWidgets.QWidget):
     # emitted whenever a channel is shown / hidden or its format changes
     changed = QtCore.pyqtSignal()
 
-    COL_SHOW, COL_NAME, COL_WIDTH, COL_FORMAT = range(4)
+    COL_SHOW, COL_NAME, COL_WIDTH, COL_TYPE, COL_BINPT = range(5)
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.table = QtWidgets.QTableWidget(0, 4, self)
-        self.table.setHorizontalHeaderLabels(['', 'Channel', 'Bits', 'Format'])
+        self.table = QtWidgets.QTableWidget(0, 5, self)
+        self.table.setHorizontalHeaderLabels(['', 'Channel', 'Bits', 'Type', 'Bin pt'])
         self.table.verticalHeader().setVisible(False)
         self.table.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.NoSelection)
         self.table.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.NoEditTriggers)
@@ -24,7 +26,8 @@ class ChannelPanel(QtWidgets.QWidget):
         hdr.setSectionResizeMode(self.COL_SHOW, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
         hdr.setSectionResizeMode(self.COL_NAME, QtWidgets.QHeaderView.ResizeMode.Stretch)
         hdr.setSectionResizeMode(self.COL_WIDTH, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
-        hdr.setSectionResizeMode(self.COL_FORMAT, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
+        hdr.setSectionResizeMode(self.COL_TYPE, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
+        hdr.setSectionResizeMode(self.COL_BINPT, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
         self.table.itemChanged.connect(self._item_changed)
 
         self.mode = QtWidgets.QComboBox(self)
@@ -40,7 +43,8 @@ class ChannelPanel(QtWidgets.QWidget):
         layout.addWidget(self.table)
         layout.addLayout(form)
         self._colors = []
-        self._formats = []
+        self._types = []
+        self._binpts = []
 
     def set_channels(self, signals, colors):
         """Fill the table; keeps the checked state of channels with the same
@@ -50,7 +54,8 @@ class ChannelPanel(QtWidgets.QWidget):
         self.table.blockSignals(True)
         self.table.setRowCount(len(signals))
         self._colors = list(colors)
-        self._formats = []
+        self._types = []
+        self._binpts = []
         for r, (sig, color) in enumerate(zip(signals, colors)):
             show = QtWidgets.QTableWidgetItem()
             show.setFlags(QtCore.Qt.ItemFlag.ItemIsUserCheckable | QtCore.Qt.ItemFlag.ItemIsEnabled)
@@ -62,19 +67,26 @@ class ChannelPanel(QtWidgets.QWidget):
             name.setIcon(self._swatch(color))
             self.table.setItem(r, self.COL_NAME, name)
             self.table.setItem(r, self.COL_WIDTH, QtWidgets.QTableWidgetItem(str(sig.width)))
-            fmt = QtWidgets.QComboBox()
-            fmt.addItems(FORMATS)
-            fmt.setEnabled(len(FORMATS) > 1)
-            fmt.currentIndexChanged.connect(lambda _: self.changed.emit())
-            self.table.setCellWidget(r, self.COL_FORMAT, fmt)
-            self._formats.append(fmt)
+            arith = QtWidgets.QComboBox()
+            arith.addItems(ARITH_TYPES)
+            arith.setCurrentText(sig.arith_type.capitalize())
+            arith.currentIndexChanged.connect(lambda _: self.changed.emit())
+            self.table.setCellWidget(r, self.COL_TYPE, arith)
+            self._types.append(arith)
+            binpt = QtWidgets.QSpinBox()
+            binpt.setRange(0, 4096)
+            binpt.setValue(sig.bin_pt)
+            binpt.valueChanged.connect(lambda _: self.changed.emit())
+            self.table.setCellWidget(r, self.COL_BINPT, binpt)
+            self._binpts.append(binpt)
         self.table.blockSignals(False)
 
     def visible_rows(self):
         return [r for r in range(self.table.rowCount()) if self._checked(r)]
 
     def row_format(self, row):
-        return self._formats[row].currentText()
+        """(arith_type, bin_pt) chosen for the row, as Signal.values takes them."""
+        return self._types[row].currentText().lower(), self._binpts[row].value()
 
     def overlay(self):
         return self.mode.currentText() == 'Overlay'

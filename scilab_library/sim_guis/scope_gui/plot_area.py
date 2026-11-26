@@ -70,6 +70,10 @@ class PlotArea(pg.GraphicsLayoutWidget):
     def _new_plot(self, xlink):
         plot = self.addPlot()
         plot.showGrid(x=True, y=True, alpha=0.3)
+        # show the values as they are, e.g. 0.5, not 500 with a 'x0.001'
+        # SI prefix on the axis label
+        plot.getAxis('left').enableAutoSIPrefix(False)
+        plot.getAxis('bottom').enableAutoSIPrefix(False)
         plot.setMouseEnabled(x=True, y=True)
         if xlink is not None:
             plot.setXLink(xlink)

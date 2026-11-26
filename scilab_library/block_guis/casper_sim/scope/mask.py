@@ -20,10 +20,15 @@ SCOPE_CONFIG = {
         'get': 'get_name',
         'set': 'set_name'
     },
-    'dtype':
+    'arith_type':
     {
-        'get': 'get_dtype',
-        'set': 'set_dtype'
+        'get': 'get_arith_type',
+        'set': 'set_arith_type'
+    },
+    'bin_pt':
+    {
+        'get': 'get_bin_pt',
+        'set': 'set_bin_pt'
     },
 }
 
@@ -80,14 +85,23 @@ class ScopeOperations(object):
         self.logger.debug(f'Set name to {val}')
         self.ui.name.setText(str(val))
 
-    def get_dtype(self):
-        val = self.ui.dtype.text()
-        self.logger.debug(f'dtype is {val}')
-        return val
+    def get_arith_type(self):
+        text = self.ui.arith_type.currentText()
+        self.logger.debug(f'arith_type is {text}')
+        return text
 
-    def set_dtype(self, val):
-        self.logger.debug(f'Set dtype to {val}')
-        self.ui.dtype.setText(str(val))
+    def set_arith_type(self, text):
+        self.logger.debug(f'Set arith_type to {text}')
+        self.ui.arith_type.setCurrentText(str(text))
+
+    def get_bin_pt(self):
+        val = self.ui.bin_pt.value()
+        self.logger.debug(f'bin_pt is {val}')
+        return str(val)
+
+    def set_bin_pt(self, val):
+        self.logger.debug(f'Set bin_pt to {val}')
+        self.ui.bin_pt.setValue(int(val))
 
 
     # *******************************************************************
@@ -100,8 +114,6 @@ class ScopeOperations(object):
         errors = []
         if str(self.get_name()).strip() == '':
             errors.append('Block name must not be empty.')
-        if str(self.get_dtype()).strip() == '':
-            errors.append('Data type must not be empty.')
         return errors
 
     # *******************************************************************
