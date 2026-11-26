@@ -146,4 +146,4 @@ class VivadoSimulator(SimBackend):
     def run_sim(self):
         # go to the simdir, so all of the log files will be generate there
         os.chdir(self.simdir)
-        return os.system(f'sh {self.sim_script} > {self.simdir}/caspersim.log')
+        return os.system(f'bash {self.sim_script} > {self.simdir}/caspersim.log')
