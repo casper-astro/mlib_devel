@@ -38,6 +38,7 @@ exec('scilab_library/scilab_blocks/utils/post_validate_design.sci');
 exec('scilab_library/scilab_blocks/utils/remove_tmpdir.sci');
 exec('scilab_library/scilab_blocks/utils/load_module_registry.sci');
 exec('scilab_library/scilab_blocks/utils/bus_vec_width.sci');
+exec('scilab_library/scilab_blocks/utils/template_exprs.sci');
 
 // Which casper_dsp/casper_xps/casper_sim modules get loaded and registered
 // into the Xcos palette -- and which category (sub-palette leaf) each one

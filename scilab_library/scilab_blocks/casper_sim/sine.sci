@@ -11,7 +11,10 @@ function [x, y, typ]= sine(job, arg1, arg2)
       case 'set' then
         x=arg1;
         graphics = arg1.graphics;
-        exprs = graphics.exprs;
+        // exprs follows sine.json's keys: name, fullpath, tag, then the
+        // parameters (see export_exprs); the dialog edits all but fullpath and tag
+        exprs = template_exprs(x);
+        idx = [1, 4:size(exprs, '*')];
         model = arg1.model;
         //[io_group, custom_io_group, io_dir, d_type, d_bw, d_bp, gpio_bi, sample_period] = create_gpio();
         txt = [ 'Block Name (any string)';...
@@ -20,12 +23,13 @@ function [x, y, typ]= sine(job, arg1, arg2)
                 'Phase';...
                 'Sampling rate(Hz)';...
                 'Output bit width';];
-        [ok, blkname, amplitude, freq, phase, sampling_rate, output_bit_width, exprs] = scicos_getvalue("Set sine block parameters",...
+        [ok, blkname, amplitude, freq, phase, sampling_rate, output_bit_width, edited] = scicos_getvalue("Set sine block parameters",...
                           txt,...
                           list("str", 1, "str",1 ,"str",1, "str",1, "str",1, "str",1),...
-                          exprs);
+                          exprs(idx));
         if ok then
           output_bit_width = strtod(output_bit_width);
+          exprs(idx) = edited;
           graphics.exprs = exprs;
           x.graphics = graphics;
           model.in = [];
@@ -45,8 +49,8 @@ function [x, y, typ]= sine(job, arg1, arg2)
         model.in2 = [];
         model.out = 1;
         model.out2 = 16;
-        // Type : column vector of strings.
-        exprs = ['sine'; '2047'; '16'; '0'; '1024'; '16'];
+        // the parameters come from sine.json, see init_exprs below
+        exprs = [];
         gr_i = [];
         // model.label doubles as the on-diagram display text (Scicos
         // aliases it with graphics.id); category is derived separately
@@ -54,6 +58,7 @@ function [x, y, typ]= sine(job, arg1, arg2)
         // the block's own name.
         model.label = blkname;
         x=standard_define([2.4 2.4],model,exprs,gr_i)
+        x = init_exprs(x);
         debug_info('sine block loaded...')
     end
   endfunction
